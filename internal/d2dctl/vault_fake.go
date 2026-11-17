@@ -305,3 +305,48 @@ var (
 	_ VaultAPI = (*Client)(nil)
 	_ VaultAPI = (*VaultFake)(nil)
 )
+
+// Identify turns a carried unidentified item into its identified form, the way the game's identify does: same item,
+// different bytes. Tests drive the real identify path (scroll, tome, Cain) outside the fake.
+func (f *VaultFake) Identify(id int) error {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	if err := f.gate(); err != nil {
+		return err
+	}
+	for i := range f.Carried {
+		it := &f.Carried[i]
+		if it.Rec.UnitID != id {
+			continue
+		}
+		if it.Rec.Identified {
+			return &VaultRefused{Code: VaultErrItem, Why: "identified already"}
+		}
+		raw, _ := hex.DecodeString(it.Rec.Norm)
+		norm := hex.EncodeToString(append(raw, []byte("+id")...))
+		unit := it.Rec.UnitID
+		it.Rec = recordFromNorm(norm)
+		it.Rec.UnitID, it.Rec.Identified = unit, true
+		return nil
+	}
+	return &VaultRefused{Code: VaultErrItem, Why: "no such item"}
+}
+
+// Remove deletes a carried item without returning it (the vendor bought it).
+func (f *VaultFake) Remove(id int) bool {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	for i, it := range f.Carried {
+		if it.Rec.UnitID == id {
+			f.Carried = append(f.Carried[:i], f.Carried[i+1:]...)
+			return true
+		}
+	}
+	return false
+}
+
+// IdentifiedForm is the bytes the fake's Identify produces for an unidentified norm.
+func IdentifiedForm(norm string) string {
+	raw, _ := hex.DecodeString(norm)
+	return hex.EncodeToString(append(raw, []byte("+id")...))
+}

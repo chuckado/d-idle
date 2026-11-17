@@ -465,7 +465,7 @@ function vaultPage(win, d, vis, cs) {
   }
   const ctl = [...root.querySelectorAll('button, a.d-btn, input, select')].filter(live);
   for (const n of ctl) { const r = n.getBoundingClientRect(); if (r.height < 43.5) o.small.push(nm(n) + ' is ' + Math.round(r.height) + ' px high'); }
-  const above = [head, root.querySelector('.vt-banner'), root.querySelector('.vt-filters'), root.querySelector('.vt-bar'), root.querySelector('.vt-msg')].filter((n) => n && live(n));
+  const above = [head, root.querySelector('.vt-banner'), root.querySelector('.vt-filters'), root.querySelector('.vt-bar'), root.querySelector('.vt-keeprow'), root.querySelector('.vt-actrow'), root.querySelector('.vt-promptrow'), root.querySelector('.vt-msg')].filter((n) => n && live(n));
   const mr = main.getBoundingClientRect(), edge = Math.max(...above.map((n) => n.getBoundingClientRect().bottom));
   if (mr.top < edge - 1) o.under = 'the list starts at ' + Math.round(mr.top) + ' px, under the parts above it that end at ' + Math.round(edge);
   for (const n of ctl) {

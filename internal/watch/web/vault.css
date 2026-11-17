@@ -54,6 +54,11 @@
   .vt-keeprow { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-2); padding: var(--d-sp-1) var(--d-sp-4); background: var(--d-state-bg-info); border-block-end: var(--d-bw) solid var(--d-line); }
   .vt-keeprow[hidden] { display: none; }
   .vt-keeprow .d-btn { align-items: center; }
+  .vt-costline { font-size: var(--d-fs-1); font-weight: 650; overflow-wrap: anywhere; }
+  .vt-promptrow { background: var(--d-state-bg-warn, var(--d-state-bg-info)); }
+  .vt-tag[data-tag^="reveal-"], .vt-tag[data-tag^="sell-"] { background: var(--d-state-bg-info); }
+  .vt-tag[data-tag="reveal-failed"], .vt-tag[data-tag="sell-failed"] { background: var(--d-state-bg-danger); }
+  .vt-tag[data-tag="sell-sold"] { background: var(--d-state-bg-ok); }
   .vt-keepline { flex: 1 1 14rem; min-inline-size: 0; font-size: var(--d-fs-1); overflow-wrap: anywhere; }
   .vt-dkeep { margin: 0; font-size: var(--d-fs-1); overflow-wrap: anywhere; }
   .vt-dkeep[data-keep="failed"] { color: var(--d-danger); font-weight: 650; }

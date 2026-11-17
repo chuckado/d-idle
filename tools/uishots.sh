@@ -162,7 +162,13 @@ keepingl vault=keeping&theme=light
 keepfull vault=keepfull&theme=dark
 kept vault=keeping&theme=dark ?[data-key=filters-toggle]|[data-key=chip-kept]
 keeppress vault=keeppress&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=keep]
-keepdead vault=keepdead&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=keep]" | while read -r pname pq pclick; do
+keepdead vault=keepdead&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=keep]
+revealing vault=revealing&theme=dark
+revealingl vault=revealing&theme=light
+revealpress vault=revealpress&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=reveal]
+revealnone vault=revealnone&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=reveal]
+revealcain vault=revealcain&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=reveal]
+sellsheet vault=revealpress&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=sell]" | while read -r pname pq pclick; do
 		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
 		for sz in ${sizes_only:-1914x930 1366x768 1280x620 412x780 360x640}; do
 			w=${sz%x*} h=${sz#*x}
@@ -561,6 +567,15 @@ vault-keepfull watch/vault?theme=dark&vault=keepfull
 vault-kept watch/vault?theme=dark&vault=keeping ?[data-key=filters-toggle]|[data-key=chip-kept] [data-key=chip-kept]
 vault-keep-press watch/vault?theme=dark&vault=keeppress [data-key=select-toggle]|.vt-cell|[data-key=keep] [data-key=select-toggle]
 vault-keep-dead watch/vault?theme=dark&vault=keepdead [data-key=select-toggle]|.vt-cell|[data-key=keep] [data-key=select-toggle]
+vault-revealing watch/vault?theme=dark&vault=revealing
+vault-revealing-light watch/vault?theme=light&vault=revealing
+vault-revealing-list watch/vault?theme=dark&vault=revealing [data-key=view-toggle] .vt-cell,[data-key=view-toggle]
+vault-reveal-press watch/vault?theme=dark&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-toggle]
+vault-reveal-none watch/vault?theme=dark&vault=revealnone [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-toggle]
+vault-reveal-cain watch/vault?theme=dark&vault=revealcain [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-toggle]
+vault-reveal-dead watch/vault?theme=dark&vault=revealdead [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-toggle]
+vault-sell-sheet watch/vault?theme=dark&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=sell] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
+vault-sell-sheet-light watch/vault?theme=light&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=sell] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-menu-entry watch?first=0&theme=dark&needs=0 #btn-more [data-key=vault-open]
 vault-more-entry watch?first=0&theme=dark&needs=0 [data-key=verb-more] [data-key=more-vault]
 vaultdefect-clip watch/vault?theme=dark&vault=pop&defect=vault-clip

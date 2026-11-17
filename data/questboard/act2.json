@@ -50,7 +50,8 @@
     "boss": "V docs/goals/execution.md s3",
     "handin.pick": "U",
     "minutes": "I",
-    "meta": "U placeholder"
+    "meta": "U placeholder",
+    "legacyFloor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)"
    },
    "requires": [
     "act1_done"
@@ -84,11 +85,16 @@
     "normal": 2,
     "nm": 3,
     "hell": 5
+   },
+   "legacyFloor": {
+    "melee": 14,
+    "caster": 16,
+    "summoner": 17
    }
   },
   {
    "id": "tainted_sun",
-   "taskId": "",
+   "taskId": "viper_amulet",
    "title": "The Tainted Sun",
    "blurb": "Find the Amulet of the Viper in the Claw Viper Temple.",
    "act": 2,
@@ -119,7 +125,8 @@
       "normal": 1,
       "nm": 2,
       "hell": 3
-     }
+     },
+     "handler": "viper_amulet"
     }
    ],
    "minutes": [
@@ -133,7 +140,8 @@
     "kind": "V docs/goals/execution.md s3 (Req item)",
     "steps": "V docs/goals/execution.md s3",
     "minutes": "I",
-    "meta": "U placeholder"
+    "meta": "U placeholder",
+    "legacyFloor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)"
    },
    "requires": [
     "act1_done"
@@ -155,6 +163,11 @@
     "normal": 5,
     "nm": 8,
     "hell": 12
+   },
+   "legacyFloor": {
+    "melee": 18,
+    "caster": 20,
+    "summoner": 21
    }
   },
   {
@@ -186,7 +199,8 @@
       "normal": 1,
       "nm": 2,
       "hell": 3
-     }
+     },
+     "handler": "horadric_cube"
     },
     {
      "id": "shaft",
@@ -205,7 +219,8 @@
       "normal": 1,
       "nm": 2,
       "hell": 3
-     }
+     },
+     "handler": "staff_of_kings"
     },
     {
      "id": "assemble",
@@ -223,13 +238,14 @@
       "tainted_sun"
      ],
      "handin": {
-      "npc": "Cain"
+      "npc": "Deckard Cain"
      },
      "steps": [
       "open_cube",
       "transmute",
       "talk_cain"
-     ]
+     ],
+     "unsupported": "no Cain hand-in step: internal/task staffNodes assembles the Staff and places it in the Canyon but never gives it to Deckard Cain (the quest word needs that talk)"
     }
    ],
    "minutes": [
@@ -240,11 +256,12 @@
    "autoStart": "allowed",
    "tags": {
     "requires": "S docs/goals/execution.md s3 (scroll gates the quest, V per that table)",
-    "chunks": "I design 1.2 (cube and shaft any order, assemble after both and the amulet)",
+    "chunks": "V internal/task/act2.go (cube, staff_of_kings, viper_amulet groups); assemble chunk U: no handler step for the Cain hand-in",
     "steps": "V docs/goals/execution.md s3",
     "handin.pick": "U",
     "minutes": "I",
-    "meta": "U placeholder"
+    "meta": "U placeholder",
+    "legacyFloor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)"
    },
    "requires": [
     "radament"
@@ -267,6 +284,12 @@
     "normal": 5,
     "nm": 8,
     "hell": 12
+   },
+   "softAfter": [],
+   "legacyFloor": {
+    "melee": 20,
+    "caster": 22,
+    "summoner": 23
    }
   },
   {
@@ -306,7 +329,8 @@
    "tags": {
     "requires": "U docs/goals/execution.md s3 (talk dialogs NEW); softAfter tainted_sun is a guess",
     "minutes": "I",
-    "meta": "U placeholder"
+    "meta": "U placeholder",
+    "legacyFloor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)"
    },
    "requires": [
     "act1_done"
@@ -318,6 +342,11 @@
     "normal": 2,
     "nm": 3,
     "hell": 5
+   },
+   "legacyFloor": {
+    "melee": 20,
+    "caster": 22,
+    "summoner": 23
    }
   },
   {
@@ -360,7 +389,8 @@
     "requires": "S docs/goals/execution.md s3 (needs the sanctuary; skippable for progression, U)",
     "boss": "V docs/goals/execution.md s3 (maze needs Teleport or long exploration)",
     "minutes": "I",
-    "meta": "U placeholder"
+    "meta": "U placeholder",
+    "legacyFloor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)"
    },
    "requires": [
     "arcane_sanctuary"
@@ -370,11 +400,16 @@
     "normal": 2,
     "nm": 3,
     "hell": 5
+   },
+   "legacyFloor": {
+    "melee": 24,
+    "caster": 26,
+    "summoner": 27
    }
   },
   {
    "id": "seven_tombs",
-   "taskId": "",
+   "taskId": "duriel",
    "title": "The Seven Tombs",
    "blurb": "Duriel waits in the tomb that holds the Horadric Staff.",
    "act": 2,
@@ -400,7 +435,8 @@
       "kill_duriel"
      ],
      "boss": "duriel",
-     "risk": "hazard"
+     "risk": "hazard",
+     "handler": "duriel"
     }
    ],
    "minutes": [
@@ -414,7 +450,8 @@
     "boss": "V docs/goals/execution.md s3 (right tomb per game, U)",
     "rewards": "V docs/goals/execution.md s3",
     "minutes": "I",
-    "meta": "U placeholder"
+    "meta": "U placeholder",
+    "legacyFloor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)"
    },
    "requires": [
     "horadric_staff"
@@ -430,11 +467,16 @@
     "normal": 5,
     "nm": 8,
     "hell": 12
+   },
+   "legacyFloor": {
+    "melee": 24,
+    "caster": 26,
+    "summoner": 27
    }
   },
   {
    "id": "act2_done",
-   "taskId": "",
+   "taskId": "act2_complete",
    "title": "Sail east to Act 3",
    "blurb": "Meshif sails you east once Duriel is dead.",
    "act": 2,
@@ -460,7 +502,9 @@
      "steps": [
       "travel_harbor",
       "talk_meshif"
-     ]
+     ],
+     "handler": "act2_hop",
+     "handInStep": "meshif"
     }
    ],
    "minutes": [

@@ -11,6 +11,7 @@ import (
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/questboard"
+	"d2lod-bot/internal/talk"
 	"d2lod-bot/internal/task"
 )
 
@@ -125,23 +126,38 @@ func TestBoardPlanHidesTheHandIn(t *testing.T) {
 	}
 	for _, id := range []string{"den_of_evil", "sisters_burial_grounds"} {
 		q, _ := b.Quest(id)
-		nodes, ok := handlerNodes(q)
+		c := q.Chunks[0]
+		nodes, ok := handlerNodes(q, c)
 		if !ok || len(nodes) == 0 {
 			t.Fatalf("%s: no handler nodes", id)
 		}
+		hand, has := handInNode(q, c)
+		if !has {
+			t.Fatalf("%s: no hand-in node", id)
+		}
 		for _, n := range nodes {
-			if isHandIn(n.Step) {
+			if n.Step.ID == hand.Step.ID {
 				t.Fatalf("%s keeps the hand-in step %s", id, n.Step.ID)
 			}
 		}
-		if _, ok := handInNode(q); !ok {
-			t.Fatalf("%s: no hand-in node", id)
-		}
 	}
-	// a quest with several chunks has no handler of its own before S7
+	// a chunk of a multi-chunk quest runs only its own steps (slice S7)
 	q, _ := b.Quest("search_for_cain")
-	if _, ok := handlerNodes(q); ok {
-		t.Fatal("a multi-chunk quest must not be runnable in S3")
+	scroll, _ := b.Chunk("search_for_cain", "scroll")
+	nodes, ok := handlerNodes(q, scroll)
+	if !ok || len(nodes) != 3 {
+		t.Fatalf("scroll chunk nodes = %d %v", len(nodes), ok)
+	}
+	read, _ := b.Chunk("search_for_cain", "read")
+	if nodes, ok := handlerNodes(q, read); !ok || len(nodes) != 0 {
+		t.Fatalf("read chunk field nodes = %d %v", len(nodes), ok)
+	}
+	if n, has := handInNode(q, read); !has || stepSuffix("search_for_cain", n.Step) != "read" {
+		t.Fatal("read chunk has no hand-in step")
+	}
+	report, _ := b.Chunk("search_for_cain", "report")
+	if _, ok := handlerNodes(q, report); ok {
+		t.Fatal("an unsupported chunk must have no handler")
 	}
 	_ = task.QDen
 }
@@ -227,5 +243,82 @@ func TestQuestBoardMakerBuildsPerHero(t *testing.T) {
 	g.r.e.Tune.Quests.Board = 0
 	if x3, _ := g.r.QuestBoard(); x3.Enabled() {
 		t.Fatal("the board did not follow the knob off")
+	}
+}
+
+// Every chunk of every act file either names a handler that exists in the task layer or says why it cannot run
+// (slice S7). The "evidence rule" of a chunk is its steps' own Done predicates plus the quest word.
+func TestEveryChunkHasAHandlerOrIsUnsupported(t *testing.T) {
+	b, err := questboard.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	npcs := talk.ByAct
+	for _, q := range b.Quests() {
+		if q.Accept != nil {
+			if _, ok := npcs[q.Accept.NPC]; !ok {
+				t.Errorf("%s: accept NPC %q is not in the talk tables", q.ID, q.Accept.NPC)
+			}
+		}
+		for _, c := range q.Chunks {
+			at := q.ID + "/" + c.ID
+			if c.Giver != nil {
+				if _, ok := npcs[c.Giver.NPC]; !ok {
+					t.Errorf("%s: hand-in NPC %q is not in the talk tables", at, c.Giver.NPC)
+				}
+			}
+			nodes, ok := handlerNodes(q, c)
+			if c.Unsupported != "" {
+				if ok {
+					t.Errorf("%s: unsupported but a handler runs it", at)
+				}
+				continue
+			}
+			if !ok {
+				t.Errorf("%s: no handler (group %q) and no unsupported reason", at, q.HandlerOf(c).Group)
+				continue
+			}
+			ref := q.HandlerOf(c)
+			have := map[string]bool{}
+			for _, n := range task.Handler(ref.Group) {
+				have[stepSuffix(ref.Group, n.Step)] = true
+			}
+			for _, n := range c.Nodes {
+				if !have[n] {
+					t.Errorf("%s: node %q is not a step of group %q", at, n, ref.Group)
+				}
+			}
+			for _, n := range nodes {
+				if n.Step.Need == nil {
+					t.Errorf("%s: step %s has no done check", at, n.Step.ID)
+				}
+			}
+			if c.Ends == "handin" {
+				if _, has := handInNode(q, c); !has {
+					t.Errorf("%s: ends handin but group %q has no turn-in step %q", at, ref.Group, ref.HandIn)
+				}
+			}
+		}
+	}
+}
+
+// A hand-in step reads done before its item exists (the bark is not in the pack yet): a part never counts done
+// before the parts it comes after.
+func TestCainChunkEvidenceFollowsTheChain(t *testing.T) {
+	b, _ := questboard.Load()
+	q, _ := b.Quest("search_for_cain")
+	chunk := func(id string) questboard.Chunk { c, _ := b.Chunk(q.ID, id); return c }
+	w := task.World{Items: map[string]int{}, Quests: map[string]task.QuestState{}}
+	if nodesDone(q, chunk("scroll"), w, 0) || nodesDone(q, chunk("read"), w, 0) {
+		t.Fatal("nothing fetched: no part is done")
+	}
+	w.Items[task.ItemBark] = 1
+	if !nodesDone(q, chunk("scroll"), w, 0) || nodesDone(q, chunk("read"), w, 0) {
+		t.Fatal("bark in the pack: the scroll part is done, the reading is not")
+	}
+	delete(w.Items, task.ItemBark)
+	w.Items[task.ItemCainSc] = 1
+	if !nodesDone(q, chunk("scroll"), w, 0) || !nodesDone(q, chunk("read"), w, 0) {
+		t.Fatal("Cain's scroll in the pack: both parts are done")
 	}
 }

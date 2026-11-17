@@ -1,10 +1,11 @@
 ---
 id: TASK-596
 title: 'quests5: Quest board S5, the watch UI'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T06:32:00Z'
+updated_date: '2026-11-17T08:22:00Z'
 labels:
   - watch
   - feature

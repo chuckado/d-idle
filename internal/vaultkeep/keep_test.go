@@ -72,6 +72,9 @@ type rig struct {
 	ready string
 	on    bool
 	per   int
+	tools *fakeTools
+	vend  *fakeVendor
+	ch    *chaos
 }
 
 func newRig(t *testing.T, class string) *rig {
@@ -99,6 +102,17 @@ func (r *rig) open() {
 		Save:   func(context.Context) error { r.saves++; return r.saveE },
 		Notice: func(s string) { r.notes = append(r.notes, s) }, Now: func() time.Time { return r.now },
 		PerVisit: func() int { return r.per },
+	}
+	if r.ch == nil {
+		r.ch = &chaos{limit: 1 << 30}
+	}
+	r.ch.reset()
+	r.k.API = chaosAPI{r.api, r.ch}
+	if r.tools != nil {
+		r.k.Tools = chaosTools{r.tools, r.ch}
+	}
+	if r.vend != nil {
+		r.k.Vendor = chaosVendor{r.vend, r.ch}
 	}
 }
 

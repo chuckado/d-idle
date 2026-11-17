@@ -252,9 +252,10 @@
 | quests4 | in-progress | - | `internal/questboard`<br>`internal/watch/questsapi.go`<br>`internal/watch/questsapi_test.go`<br>`internal/watch/glance.go`<br>`internal/watch/funwire.go`<br>`internal/watch/testdata/quests`<br>`internal/bot/runner.go`<br>`cmd/d2bot/survivalwire.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/questwire.go`<br>`cmd/d2bot/questwire_test.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_test.go`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
 | vaultv5 | in-progress | - | `internal/vaultkeep`<br>`internal/vault`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`docs/design/loot-vault-2026-11-16.md`<br>`docs/knobs.md`<br>`internal/watch/vaultapi_test.go`<br>`internal/watch/vaultui_test.go`<br>`internal/bot/vaultkeep.go`<br>`internal/bot/contracts.go`<br>`internal/bot/goal.go`<br>`internal/bot/runner.go`<br>`internal/bot/playeraction_test.go`<br>`internal/env/tuning_loot.go`<br>`cmd/d2bot/vaultpage.go`<br>`cmd/d2bot/vaultpage_test.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/live.go`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_vault.go`<br>`tools/uishots/fit.js` | - |
 | survreask | proposed | - | `internal/bot/zonemodel.go`<br>`internal/bot/zonereask_test.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/zoneshadow.go`<br>`internal/survival/controller.go`<br>`cmd/d2bot/survivalwire.go`<br>`docs/probes/survival-ab-reask-2026-11-17.md` | - |
-| quests5 | proposed | - | `internal/watch/web/panels/quest-strip`<br>`internal/watch/web/panels/quest-board`<br>`internal/watch/web/panels/quest-list`<br>`internal/watch/web/panels/video`<br>`internal/watch/web/panels/needs-you`<br>`internal/watch/web/panels/journey-strip`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/shell.json`<br>`internal/watch/web/layout.json`<br>`internal/watch/web/layouts/cockpit.json`<br>`internal/watch/glance.go`<br>`cmd/d2bot/questwire.go`<br>`internal/watch/questui_test.go`<br>`internal/watch/testdata/questui`<br>`tools/uishots`<br>`tools/uishots.sh`<br>`docs/questboard.md`<br>`docs/ui-quests.md` | - |
 | vaultv7b | proposed | - | `internal/ether`<br>`internal/watch/etherapi.go`<br>`cmd/d2bot/etherwire.go`<br>`docs/ether.md`<br>`data/vault/ether.json`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`tools/uishots/fixtures_vault.go`<br>`tools/uishots/fit.js`<br>`tools/uishots/fit.go`<br>`tools/uishots/fit_char_test.go`<br>`tools/uishots/serve.go`<br>`tools/uishots.sh`<br>`cmd/d2bot/vaultpage.go`<br>`cmd/d2bot/etherwire_test.go`<br>`internal/watch/etherapi_test.go`<br>`internal/watch/vaultether_test.go`<br>`internal/watch/testdata/vault_ether.mjs`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultui_test.go`<br>`internal/watch/hero.go`<br>`internal/watch/web/panels/hero-vitals/panel.js`<br>`docs/vault.md`<br>`docs/design/loot-vault-2026-11-16.md"exclusive: []` | - |
+| quests7 | proposed | - | `data/questboard`<br>`internal/questboard`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_test.go`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md`<br>`internal/watch/testdata/quests` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
+| vaultv6 | in-progress | - | `internal/vaultkeep`<br>`internal/vault`<br>`internal/d2dctl/vault_fake.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultapi_test.go`<br>`internal/watch/vaultui_test.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/testdata/vault_logic.mjs`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`cmd/d2bot/vaultact_test.go`<br>`internal/loot/vault.go`<br>`internal/loot/pickup.go`<br>`internal/loot/vault_test.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`docs/design/loot-vault-2026-11-16.md`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_vault.go`<br>`tools/uishots/fit.js` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -295,14 +296,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 09094d83f 11-17 03:28 `Merge agent/vaultv6: Merge origin/main into agent/vaultv6` (vaultv6)
+- 657fd78b5 11-17 03:25 `Merge origin/main into agent/vaultv6` (vaultv6)
+- 30634d75a 11-17 03:07 `Merge agent/quests7: Merge branch 'main' into quests7` (quests7)
+- 314405c9b 11-17 03:06 `Merge branch 'main' into quests7` (-)
 - ac2efcb0a 11-17 03:00 `Merge agent/quests5: Merge branch 'main' into quests5` (quests5)
 - 7f956136f 11-17 02:59 `Merge branch 'main' into quests5` (-)
 - 49bb8f3c7 11-17 02:50 `Merge agent/vaultv7b: Merge origin/main into vaultv7b (Keep UI and fixtures kept beside the wallet)` (vaultv7b)
 - 74abd9cc3 11-17 02:48 `Merge origin/main into vaultv7b (Keep UI and fixtures kept beside the wallet)` (vaultv7b)
 - 5bfc5ea2f 11-17 02:47 `Merge origin/main into quests5` (-)
 - f06eea089 11-17 02:32 `Merge agent/vaultv5: Merge origin/main into agent/vaultv5` (vaultv5)
-- 4411e33de 11-17 02:29 `Merge origin/main into agent/vaultv5` (-)
-- 4da5e8ded 11-17 02:12 `Merge agent/quests6: Merge branch 'main' into quests6` (quests6)
-- 22f2d7756 11-17 02:11 `Merge branch 'main' into quests6` (-)
-- c605f1467 11-17 01:52 `Merge agent/survreask: Merge branch 'main' into survreask` (survreask)
 <!-- statusgen:end -->
