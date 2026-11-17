@@ -322,6 +322,9 @@ default-question3 watch?first=0&theme=dark&needs=1&question=3
 default-question5-light watch?first=0&theme=light&needs=2&question=5
 quest-offer watch?first=0&theme=dark&needs=0&quests=offer
 quest-running watch?first=0&theme=dark&needs=0&quests=running
+quest-runlong watch?first=0&theme=dark&needs=0&quests=runlong
+quest-runlong-light watch?first=0&theme=light&needs=0&quests=runlong
+quest-runlong-pal watch?first=0&theme=dark&needs=0&quests=runlong&pal=1
 quest-awaiting watch?first=0&theme=dark&needs=0&quests=awaiting
 quest-handing watch?first=0&theme=dark&needs=0&quests=handing
 quest-confirming watch?first=0&theme=dark&needs=0&quests=confirming
