@@ -1,11 +1,12 @@
 // The lossless-feed path of web/panels/video/panel.js against a stub DOM and a fake PalFeed: used only when /api/config
 // has palFeedUrl, glance lists "palfeed" and the probe answers; a fatal stream error or three failures return to MJPEG.
 // Usage: node video_pal_panel.js path/to/panel.js
-const assert = require('assert'), { load, shellCtx } = require('./panel_harness.js');
+const assert = require('assert'), { load, shellCtx, controlsOf } = require('./panel_harness.js');
 const path = require('path');
 const M0 = load(path.join(path.dirname(process.argv[2]), '../../mjpeg.js'));
+const B = load(path.join(path.dirname(process.argv[2]), 'brightness.js'));
 const S = load(path.join(path.dirname(process.argv[2]), '../../streamstats.js'));
-const M = Object.assign({}, M0, S, { drawStats: S.draw });
+const M = Object.assign({}, M0, S, B, { drawStats: S.draw });
 const tick = (ms) => new Promise((r) => setTimeout(r, ms || 5));
 
 function env(formats, detectOK) {
@@ -38,7 +39,7 @@ async function mount(formats, detectOK, cfg, store) {
   m.players[0].o.onFrame();
   assert.strictEqual(m.cv.hidden, false); assert.strictEqual(m.shot.hidden, true); assert.strictEqual(m.s.c.st, 'ready');
   // the canvas fills the box (fractional scale, smooth) and Sharp pixels switches to hard edges; the button shows with the feed only
-  const sharpBtn = m.s.c.actions.children.find((b) => b.dataset && b.dataset.key === 'sharp');
+  const sharpBtn = controlsOf(m.s.c).find((b) => b.dataset && b.dataset.key === 'sharp');
   assert.ok(sharpBtn && sharpBtn.hidden === false, 'sharp button shown with the feed');
   assert.strictEqual(m.cv.style['--pal-w'], '933px'); assert.strictEqual(m.cv.dataset.smooth, '1');
   sharpBtn.fire('click'); assert.strictEqual(m.cv.dataset.smooth, '0'); assert.strictEqual(sharpBtn.attrs['aria-pressed'], 'true');
@@ -73,7 +74,7 @@ async function mount(formats, detectOK, cfg, store) {
   // Stats overlay: off by default; the button turns it on and remembers; Copy gives JSON with the timing context
   {
     const store = {}; m = await mount(['mjpeg', 'palfeed'], true, { build: 'v9' }, store);
-    const btn = m.s.c.actions.children.find((b) => b.dataset && b.dataset.key === 'stats'), cp = m.s.c.actions.children.find((b) => b.dataset && b.dataset.key === 'statscopy');
+    const btn = controlsOf(m.s.c).find((b) => b.dataset && b.dataset.key === 'stats'), cp = controlsOf(m.s.c).find((b) => b.dataset && b.dataset.key === 'statscopy');
     const ov = m.frame.children.find((e) => e.className === 'statsov');
     assert.ok(btn && cp && ov, 'stats button, copy button and canvas exist'); assert.strictEqual(ov.hidden, true); assert.strictEqual(cp.hidden, true);
     btn.fire('click'); assert.strictEqual(ov.hidden, false); assert.strictEqual(cp.hidden, false); assert.strictEqual(store.stats, '1');

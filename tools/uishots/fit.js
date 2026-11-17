@@ -98,8 +98,27 @@ export function measure(win, opts) {
     const t = r.querySelector('.o-t:not(.o-wide)'), re = r.querySelector('.o-r');
     return t && vis(t) && t.scrollWidth > t.clientWidth + 1 && re && re.clientWidth > 0;
   }).length;
+  // the video card (card videoctl): no control box (a button) may touch the caption or any other text of the card; the controls sit in a
+  // toolbar under the picture, and the picture's own corner text (caption, badge, rate line) must stay readable
+  const vpn = d.querySelector('[data-panel="video"]'), vo = [];
+  let vn = 0;
+  if (vpn && vis(vpn)) {
+    const hasText = (n) => [...n.childNodes].some((c) => c.nodeType === 3 && c.textContent.trim());
+    const ctls = [...vpn.querySelectorAll('button, [role="button"]')].filter((n) => vis(n) && cs(n).visibility !== 'hidden');
+    const txts = [...vpn.querySelectorAll('*')].filter((n) => hasText(n) && !n.closest('button') && vis(n) && cs(n).visibility !== 'hidden');
+    vn = ctls.length;
+    for (const c of ctls) {
+      const a = c.getBoundingClientRect();
+      for (const t of txts) {
+        if (t.contains(c) || c.contains(t)) continue;
+        const b = t.getBoundingClientRect();
+        if (a.left < b.right - 1 && a.right > b.left + 1 && a.top < b.bottom - 1 && a.bottom > b.top + 1) vo.push(name(c) + ' covers ' + name(t));
+      }
+    }
+  }
+  const video = { controls: vn, overlap: vo };
   return {
-    orderCut, zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, chars: chx, vault: vtx, empty, unready, slots,
+    video, orderCut, zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, chars: chx, vault: vtx, empty, unready, slots,
     covered: Math.round((covered * 100) / (cols * rows)), hole: best * cs2, holeAt: [(bx - best + 1) * cs2, (by - best + 1) * cs2],
   };
 }

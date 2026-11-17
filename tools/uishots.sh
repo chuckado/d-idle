@@ -224,6 +224,9 @@ default-question3 first=0&theme=dark&needs=1&question=3
 default-question5-light first=0&theme=light&needs=2&question=5
 quest-offer first=0&theme=dark&needs=0&quests=offer
 quest-running first=0&theme=dark&needs=0&quests=running
+quest-runlong first=0&theme=dark&needs=0&quests=runlong
+quest-runlong-light first=0&theme=light&needs=0&quests=runlong
+quest-runlong-pal first=0&theme=dark&needs=0&quests=runlong&pal=1&pfdebug=1
 quest-awaiting first=0&theme=dark&needs=0&quests=awaiting
 quest-handing first=0&theme=dark&needs=0&quests=handing
 quest-confirming first=0&theme=dark&needs=0&quests=confirming
@@ -322,6 +325,9 @@ default-question3 watch?first=0&theme=dark&needs=1&question=3
 default-question5-light watch?first=0&theme=light&needs=2&question=5
 quest-offer watch?first=0&theme=dark&needs=0&quests=offer
 quest-running watch?first=0&theme=dark&needs=0&quests=running
+quest-runlong watch?first=0&theme=dark&needs=0&quests=runlong
+quest-runlong-light watch?first=0&theme=light&needs=0&quests=runlong
+quest-runlong-pal watch?first=0&theme=dark&needs=0&quests=runlong&pal=1
 quest-awaiting watch?first=0&theme=dark&needs=0&quests=awaiting
 quest-handing watch?first=0&theme=dark&needs=0&quests=handing
 quest-confirming watch?first=0&theme=dark&needs=0&quests=confirming
@@ -355,6 +361,7 @@ quest-sheet-countdown watch?first=0&theme=dark&needs=0&quests=countdown #btn-mor
 quest-sheet-away watch?first=0&theme=dark&needs=0&quests=away #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 quest-sheet-away-sorceress watch?first=0&theme=dark&needs=0&quests=away&class=sorceress #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 quest-sheet-sorceress watch?first=0&theme=dark&needs=0&quests=offer&class=sorceress #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+viddefect-ctl watch?first=0&theme=dark&needs=0&quests=runlong&defect=vid-ctl
 questdefect-clip watch?first=0&theme=dark&needs=0&quests=offer&defect=q-clip #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 questdefect-small watch?first=0&theme=dark&needs=0&quests=offer&defect=q-small #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 questdefect-words watch?first=0&theme=dark&needs=0&quests=offer&defect=q-words #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]

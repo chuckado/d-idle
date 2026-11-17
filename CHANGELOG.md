@@ -8,6 +8,10 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-622 <!--sg:agent/brightness-->
+- Merge branch 'main' into TASK-625 <!--sg:agent/verifydecomp39-->
+- videoctl: video controls out of the picture, caption never covered, fit rule <!--sg:agent/videoctl-->
+- Merge branch 'main' into TASK-621 <!--sg:agent/gearabsorb3-->
 - Merge branch 'main' into TASK-619 <!--sg:agent/questrun-->
 - Merge branch 'main' into TASK-615 <!--sg:agent/labels-->
 - Merge branch 'main' into gowhole <!--sg:agent/gowhole-->

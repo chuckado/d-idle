@@ -422,6 +422,7 @@ docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tpreserve.md  live-agent  tpreserve-live
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed2
+docs/probes/viewer-brightness-2026-11-17.md  credit-runner  brightness
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
@@ -565,6 +566,7 @@ docs/vault.md  credit-runner  vaultv6
 docs/vault.md  credit-runner  vaultv7
 docs/vault.md  credit-runner  vaultv7b
 docs/video-feed.md  credit-runner  labels
+docs/video-feed.md  credit-runner  videoctl
 docs/video-feed.md  credit-runner  videofeed
 docs/video-feed.md  credit-runner  videofeed2
 docs/video-feed.md  credit-runner  videofeed4
@@ -1090,6 +1092,7 @@ internal/watch/palfeed  credit-runner  videofeed2
 internal/watch/palfeed  credit-runner  videofeed4
 internal/watch/palfeed.go  credit-runner  videofeed2
 internal/watch/palfeed.go  credit-runner  videofeed4
+internal/watch/palfeed/luma_test.go  credit-runner  brightness
 internal/watch/palfeed_test.go  credit-runner  videofeed2
 internal/watch/palfeed_test.go  credit-runner  videofeed4
 internal/watch/panels.go  credit-runner  uis6
@@ -1177,6 +1180,7 @@ internal/watch/testdata/onboarding_dom.txt  credit-runner  friendfb
 internal/watch/testdata/orderloop/  credit-runner  uib7
 internal/watch/testdata/orders_dom.js  credit-runner  uis4
 internal/watch/testdata/orders_dom.txt  credit-runner  uis4
+internal/watch/testdata/panel_harness.js  credit-runner  videoctl
 internal/watch/testdata/panel_harness.js  credit-runner  videofeed2
 internal/watch/testdata/panel_harness.js  credit-runner  videofeed4
 internal/watch/testdata/pause/  credit-runner  uib1
@@ -1204,9 +1208,14 @@ internal/watch/testdata/vault  credit-runner  vaultv4
 internal/watch/testdata/vault_ether.mjs  credit-runner  vaultv7b
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultv4
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultv6
+internal/watch/testdata/video_labels_panel.js  credit-runner  brightness
 internal/watch/testdata/video_labels_panel.js  credit-runner  labels
+internal/watch/testdata/video_pal_panel.js  credit-runner  brightness
+internal/watch/testdata/video_pal_panel.js  credit-runner  videoctl
 internal/watch/testdata/video_pal_panel.js  credit-runner  videofeed2
 internal/watch/testdata/video_pal_panel.js  credit-runner  videofeed4
+internal/watch/testdata/video_panel.js  credit-runner  brightness
+internal/watch/testdata/video_panel.js  credit-runner  videoctl
 internal/watch/testdata/video_panel.js  credit-runner  videofeed4
 internal/watch/testdata/video_panel.js  credit-runner  viewerfps
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
@@ -1330,9 +1339,13 @@ internal/watch/web/panels/quest-list  credit-runner  quests8
 internal/watch/web/panels/quest-strip  credit-runner  quests8
 internal/watch/web/panels/statusline/  credit-runner  uifix1
 internal/watch/web/panels/video  credit-runner  labels
+internal/watch/web/panels/video  credit-runner  videoctl
 internal/watch/web/panels/video  credit-runner  videofeed2
 internal/watch/web/panels/video  credit-runner  videofeed4
 internal/watch/web/panels/video  credit-runner  viewerfps
+internal/watch/web/panels/video/brightness.js  credit-runner  brightness
+internal/watch/web/panels/video/panel.css  credit-runner  brightness
+internal/watch/web/panels/video/panel.js  credit-runner  brightness
 internal/watch/web/panels/zone-map/  credit-runner  uifix1
 internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
@@ -1460,6 +1473,7 @@ tools/uilint/  credit-runner  uis1
 tools/uilint/lint.go  credit-runner  uis6
 tools/uishots  credit-runner  gearsets
 tools/uishots  credit-runner  lootwire3
+tools/uishots  credit-runner  videoctl
 tools/uishots  credit-runner  videofeed4
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
@@ -1479,6 +1493,7 @@ tools/uishots.sh  credit-runner  vaultv4
 tools/uishots.sh  credit-runner  vaultv5
 tools/uishots.sh  credit-runner  vaultv6
 tools/uishots.sh  credit-runner  vaultv7b
+tools/uishots.sh  credit-runner  videoctl
 tools/uishots.sh  credit-runner  videofeed4
 tools/uishots/  credit-runner  uic3
 tools/uishots/  credit-runner  uifix1
@@ -1528,7 +1543,10 @@ tools/uishots/serve.go  credit-runner  maptrail
 tools/uishots/serve.go  credit-runner  uis7
 tools/uishots/serve.go  credit-runner  vaultv4
 tools/uishots/serve.go  credit-runner  vaultv7b
+tools/videofeed  credit-runner  videoctl
 tools/videofeed  credit-runner  videofeed
 tools/videofeed  credit-runner  videofeed2
 tools/videofeed  credit-runner  videofeed4
+tools/videofeed/gamma_frames.py  credit-runner  brightness
+tools/videofeed/lumastat/  credit-runner  brightness
 # END GENERATED OWNERS

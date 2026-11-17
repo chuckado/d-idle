@@ -664,6 +664,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
 - [death-corpse-exp-body.md](upstream/bodies/death-corpse-exp-body.md): death-corpse-exp-body
 - [gamble-price-body.md](upstream/bodies/gamble-price-body.md): the d2d side needs D2_MPQ_DIR (as test_game); gamble_price.py game needs the emulator's game image and a...
+- [gear-absorb-body.md](upstream/bodies/gear-absorb-body.md): gear-absorb-body
 - [hitrec-interrupt-body.md](upstream/bodies/hitrec-interrupt-body.md): hitrec-interrupt-body
 - [hitrec-knock-in-hit-body.md](upstream/bodies/hitrec-knock-in-hit-body.md): hitrec-knock-in-hit-body
 - [hitrec-modes-body.md](upstream/bodies/hitrec-modes-body.md): hitrec-modes-body
@@ -731,6 +732,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier-decomp36-2026-11-16.md](upstream/verifier-decomp36-2026-11-16.md): Verifier: decomp36, the gamble price and MonUMod Multiple Shots (2026-11-16) (status: current, 2026-11-16 (card verifydecomp36, TASK-569, Opus, singly; independent verifier before posting)....)
 - [verifier-decomp37-2026-11-17.md](upstream/verifier-decomp37-2026-11-17.md): Verifier: decomp37, gear absorb and Open Wounds (2026-11-17) (status: current, 2026-11-17 (card verifydecomp37, TASK-613, Opus, singly; independent verifier before posting)....)
 - [verifier-decomp38-2026-11-17.md](upstream/verifier-decomp38-2026-11-17.md): Verifier: decomp38, a Mana Burn monster's hit (2026-11-17) (status: current, 2026-11-17 (card verifydecomp38, TASK-608, Opus, singly; independent verifier before posting)....)
+- [verifier-decomp39-2026-11-17.md](upstream/verifier-decomp39-2026-11-17.md): Verifier: decomp39, a player's melee reach and line (2026-11-17) (status: current, 2026-11-17 (card verifydecomp39, TASK-625, Opus, singly; independent verifier before posting)....)
 - [verifier-p02-2026-11-14.md](upstream/verifier-p02-2026-11-14.md): Verifier: P02 "a clicked warp's walk is planned to its tile unit" (2026-11-14) (status: current, 2026-11-15 (card verifyp02, TASK-476, Opus, independent of the author decomp23). Nothing posted,...)
 - [verifier-p03-p05-2026-11-14.md](upstream/verifier-p03-p05-2026-11-14.md): Verifier: P03 hit-recovery modes and P05 load gold clamp (2026-11-14) (status: current, 2026-11-14 (card verifyp03p05, TASK-444, Opus, independent of the author decomp21). Nothing...)
 - [verifier-p03b-2026-11-14.md](upstream/verifier-p03b-2026-11-14.md): Verifier: P03b "a hit never restarts a get-hit" (2026-11-14) (status: current, 2026-11-14 (card verifyp03c, TASK-468, Opus, independent of the author decomp22 and of the P03...)
@@ -1012,6 +1014,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
 - [vault-spike-2026-11-16.md](probes/vault-spike-2026-11-16.md): Ethereal Vault V0 spike: capture and create on the d2d fork (result) (status: RESULT, 2026-11-16 (task TASK-578). Design: `docs/design/loot-vault-2026-11-16.md` section 1.7. Tags: V =...)
 - [video-feed-2026-11-15.md](probes/video-feed-2026-11-15.md): Probe: lossless delta feed on real d2d frames (card videofeed, 2026-11-15)
+- [viewer-brightness-2026-11-17.md](probes/viewer-brightness-2026-11-17.md): Probe: why the watch viewer looks "a bit too bright" (card brightness, 2026-11-17)
 - [viewer-fps-2026-11-15.md](probes/viewer-fps-2026-11-15.md): Viewer game picture, fps report (2026-11-15)
 - [waits-audit.md](probes/waits-audit.md): Waits audit: wall-clock waits for the game (card waits-audit) (status: current. Offline audit of every wait in the bot, the d2d wiring and the d2d backends; fixes in the same...)
 - [warp-sandbox-2026-11-12.md](probes/warp-sandbox-2026-11-12.md): Warp-arrival fix on the play sandbox (devp4), 2026-11-12
