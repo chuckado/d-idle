@@ -1,11 +1,11 @@
 // The Ethereal Vault page (docs/vault.md, UI section; design docs/design/loot-vault-2026-11-16.md section 6, slice V4).
 // Read side plus Pin, Unpin, Discard and Keep (slice V5): GET /api/vault (watch.vault/1, paged, filtered on the server), GET
-// /api/vault/item/<id>, POST /api/vault/{pin,unpin,discard,keep} on the answer listener. Keep only QUEUES: the bot creates the item
+// /api/vault/item/<id>, POST /api/vault/{pin,unpin,discard,keep,reveal,sell,cancel} on the answer listener. Keep only QUEUES: the bot creates the item
 // at its next town visit, so the page shows the states queued, creating, kept and failed from the GET, never from the reply.
-// Reveal and Sell are not here (V6). The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
+// Reveal and Sell (slice V6) also only queue: the price is shown before the click (revealPlan) and the states come from the GET. The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
 // fed the rows as an inventory view); every text comes from /watch/vault.json or the API and goes in through textContent.
 // Every press is read back: the list is fetched again and what it says is what the page shows.
-import { PAGE, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, toQuery, toTipView, when } from '/watch/vault-logic.js';
+import { PAGE, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, revealPlan, sellPlan, toQuery, toTipView, when } from '/watch/vault-logic.js';
 
 export const ROUTE = '/api/vault';
 const POLL_MS = 6000;
@@ -95,12 +95,22 @@ export function mountVault(d) {
   const selAll = btn(T.selectAll, { key: 'select-all', variant: 'ghost' });
   const pinB = btn(T.pin, { key: 'pin' }), unpinB = btn(T.unpin, { key: 'unpin' }), discB = btn(T.discard, { key: 'discard', variant: 'danger' });
   const keepB = btn(T.keep, { key: 'keep' });
-  const acts = el('div', 'vt-acts'); acts.append(keepB, pinB, unpinB, discB);
+  const revealB = btn(T.reveal, { key: 'reveal' }), sellB = btn(T.sell, { key: 'sell' });
+  const acts = el('div', 'vt-acts'); acts.append(keepB, revealB, sellB, pinB, unpinB, discB);
   bar.append(selBtn, selText, selAll, acts);
   const keepRow = el('div', 'vt-keeprow'); keepRow.hidden = true;
   const keepLine = el('span', 'vt-keepline'); keepLine.setAttribute('role', 'status');
   const keepNowB = btn(T.keepNow, { key: 'keep-now', variant: 'ghost' }); keepNowB.title = T.keepNowWhy;
   keepRow.append(keepLine, keepNowB);
+  const actRow = el('div', 'vt-keeprow vt-actrow'); actRow.hidden = true;
+  const actLine = el('span', 'vt-keepline'); actLine.setAttribute('role', 'status');
+  const buyB = btn(T.buyScrolls, { key: 'buy-scrolls', variant: 'ghost' }); buyB.title = T.buyScrollsWhy; buyB.hidden = true;
+  const costLine = el('span', 'vt-costline'); costLine.setAttribute('role', 'status'); costLine.hidden = true;
+  actRow.append(costLine, actLine, buyB);
+  const promptRow = el('div', 'vt-keeprow vt-promptrow'); promptRow.hidden = true;
+  const promptLine = el('span', 'vt-keepline'); promptLine.setAttribute('role', 'status');
+  const promptYes = btn(T.promptYes, { key: 'prompt-yes' }), promptNo = btn(T.promptNo, { key: 'prompt-no', variant: 'ghost' });
+  promptRow.append(promptLine, promptYes, promptNo);
   const msg = el('p', 'vt-msg'); msg.hidden = true; msg.setAttribute('role', 'status');
 
   // ---- the list and the card ----
@@ -120,7 +130,7 @@ export function mountVault(d) {
   sheetWrap.appendChild(sheetCard);
 
   const page = el('div', 'vt-page');
-  page.append(head, banner, filters, bar, keepRow, msg, body);
+  page.append(head, banner, filters, bar, keepRow, actRow, promptRow, msg, body);
   root.replaceChildren ? root.replaceChildren(page, sheetWrap) : (root.appendChild(page), root.appendChild(sheetWrap));
 
   // ---- loading ----
@@ -163,7 +173,7 @@ export function mountVault(d) {
     const have = new Set(order());
     absorb(j, j.items.filter((i) => !have.has(i.id)), false);
   }
-  const sig = (j) => j.total + '|' + (j.capacity && j.capacity.count) + '|' + (j.items[0] && j.items[0].id) + '|' + j.mode + '|' + (j.capacity && j.capacity.pins) + '|' + (j.keep ? j.keep.queued + ',' + j.keep.creating + ',' + j.keep.done + ',' + j.keep.line : '');
+  const sig = (j) => j.total + '|' + (j.capacity && j.capacity.count) + '|' + (j.items[0] && j.items[0].id) + '|' + j.mode + '|' + (j.capacity && j.capacity.pins) + '|' + (j.keep ? j.keep.queued + ',' + j.keep.creating + ',' + j.keep.done + ',' + j.keep.line : '') + '|' + (j.act ? [j.act.reveal.queued, j.act.reveal.working, j.act.reveal.done, j.act.reveal.charges, j.act.reveal.free, j.act.sell.queued, j.act.sell.working, j.act.sell.sold, j.act.reveal.line, j.act.sell.line, j.act.prompt ? j.act.prompt.ids.length : 0].join(',') : '');
   async function poll() {
     if (!S.sheet) {
       const j = await d.get(ROUTE + toQuery(S.f, { limit: 1 }));
@@ -240,6 +250,30 @@ export function mountVault(d) {
     keepLine.textContent = k && k.line ? k.line : '';
     keepNowB.hidden = !(k && (k.queued + k.creating) > 0);
     keepNowB.disabled = ro || !k || !k.enabled;
+    drawAct(n, ro);
+  }
+  // Reveal and Sell: the buttons, the cost line for the selection, the queue sentences and the opt-in prompt
+  function drawAct(n, ro) {
+    const a = S.view && S.view.act, ids = S.sel.ids();
+    const rp = revealPlan(S.items, ids, a), sp = sellPlan(S.items, ids);
+    revealB.textContent = fmt(T.revealSel, { n: rp.n || n });
+    revealB.disabled = ro || !a || !a.reveal.enabled;
+    revealB.title = !a ? T.revealNote : (!a.reveal.enabled && a.reveal.why ? a.reveal.why : (!rp.n && n ? T.revealNone : ''));
+    sellB.textContent = fmt(T.sellSel, { n: sp.n || n });
+    sellB.disabled = ro || !a || !a.sell.enabled;
+    sellB.title = !a ? T.sellNote : (!a.sell.enabled && a.sell.why ? a.sell.why : (!sp.n && n ? T.sellNone : ''));
+    let cost = '';
+    if (a && n && rp.n) {
+      cost = (rp.n === 1 ? T.revealCostOne : fmt(T.revealCost, { n: rp.n, c: rp.charges })) + (rp.free ? T.revealFree : (rp.have >= 0 ? fmt(T.revealHave, { have: rp.have }) : '')) + (rp.short ? T.revealShort : '');
+    }
+    costLine.textContent = cost; costLine.hidden = !cost;
+    buyB.hidden = !(cost && rp.short); buyB.disabled = ro;
+    const line = a ? [a.reveal.line, a.sell.line].filter(Boolean).join(' · ') : '';
+    actLine.textContent = line;
+    actRow.hidden = !(cost || line);
+    const p = a && a.prompt;
+    promptRow.hidden = !p || ro;
+    promptLine.textContent = p ? fmt(T.promptText, { short: p.short, n: p.ids.length, gold: p.gold }) : '';
   }
 
   function cellLabel(it) {
@@ -249,6 +283,8 @@ export function mountVault(d) {
     if (it.ethereal) bits.push(T.ethTag);
     if (it.keep) bits.push(T.keepStates[it.keep] + (it.keep === 'failed' && it.reason ? ': ' + it.reason : ''));
     else if (it.state !== 'recorded') bits.push(it.state);
+    if (it.reveal) bits.push(T.revealStates[it.reveal] + (it.reveal === 'failed' && it.revealReason ? ': ' + it.revealReason : ''));
+    if (it.sell) bits.push(T.sellStates[it.sell] + (it.sell === 'failed' && it.sellReason ? ': ' + it.sellReason : ''));
     return bits.join(', ');
   }
   function cell(it, n) {
@@ -265,7 +301,9 @@ export function mountVault(d) {
     if (it.pin) { const t = el('b', 'vt-tag', 'P'); t.dataset.tag = 'pin'; tags.appendChild(t); }
     if (it.ethereal) { const t = el('b', 'vt-tag', 'E'); t.dataset.tag = 'eth'; tags.appendChild(t); }
     if (it.keep) { const t = el('b', 'vt-tag', { queued: 'Q', creating: '...', kept: 'K', failed: '!' }[it.keep] || 'K'); t.dataset.tag = 'keep-' + it.keep; tags.appendChild(t); }
-    else if (it.state !== 'recorded') { const t = el('b', 'vt-tag', it.state.slice(0, 1).toUpperCase()); t.dataset.tag = 'state'; tags.appendChild(t); }
+    else if (it.state !== 'recorded' && !it.sell) { const t = el('b', 'vt-tag', it.state.slice(0, 1).toUpperCase()); t.dataset.tag = 'state'; tags.appendChild(t); }
+    if (it.reveal) { const t = el('b', 'vt-tag', { queued: 'R', working: '...', failed: '!' }[it.reveal] || 'R'); t.dataset.tag = 'reveal-' + it.reveal; tags.appendChild(t); }
+    if (it.sell) { const t = el('b', 'vt-tag', { queued: '$', selling: '...', sold: '$', failed: '!' }[it.sell] || '$'); t.dataset.tag = 'sell-' + it.sell; tags.appendChild(t); }
     b.appendChild(tags);
     if (S.sel.has(it.id)) b.appendChild(el('span', 'vt-check-mark', '✓'));
     if (S.mode === 'list') {
@@ -273,6 +311,8 @@ export function mountVault(d) {
       if (it.area) meta.push(it.area);
       if (it.found) meta.push(when(it.found, now()));
       if (it.keep) meta.push(keepHint(it));
+      if (it.reveal) meta.push(revealHint(it));
+      if (it.sell) meta.push(sellHint(it));
       b.appendChild(el('span', 'vt-meta', meta.join(' · ')));
     }
     return b;
@@ -281,6 +321,13 @@ export function mountVault(d) {
     return it.keep === 'queued' ? T.keepQueuedHint : it.keep === 'creating' ? T.keepCreatingHint
       : it.keep === 'kept' ? fmt(T.keepKeptHint, { where: it.reason || (it.where === 'inv' ? 'backpack' : 'stash') })
       : fmt(T.keepFailedHint, { why: it.reason || '' });
+  }
+  function revealHint(it) {
+    return it.reveal === 'queued' ? T.revealQueuedHint : it.reveal === 'working' ? T.revealWorkingHint : fmt(T.revealFailedHint, { why: it.revealReason || '' });
+  }
+  function sellHint(it) {
+    return it.sell === 'queued' ? T.sellQueuedHint : it.sell === 'selling' ? T.sellWorkingHint
+      : it.sell === 'sold' ? (it.value ? fmt(T.sellSoldHint, { gold: it.value }) : T.sellSoldUnknown) : fmt(T.sellFailedHint, { why: it.sellReason || '' });
   }
   function drawList() {
     const tv = toTipView(S.items);
@@ -340,6 +387,8 @@ export function mountVault(d) {
     const st = el('p', 'vt-dstate', (T.qualities[it.q] || it.quality) + ' · ' + it.status);
     card.appendChild(st);
     if (it.keep) { const kp = el('p', 'vt-dkeep', T.keepStates[it.keep] + ': ' + keepHint(it)); kp.dataset.keep = it.keep; kp.setAttribute('role', 'status'); card.appendChild(kp); }
+    if (it.reveal) { const rv = el('p', 'vt-dkeep', T.revealStates[it.reveal] + ': ' + revealHint(it)); rv.dataset.keep = it.reveal === 'failed' ? 'failed' : it.reveal; rv.setAttribute('role', 'status'); card.appendChild(rv); }
+    if (it.sell) { const sl = el('p', 'vt-dkeep', T.sellStates[it.sell] + ': ' + sellHint(it)); sl.dataset.keep = it.sell === 'failed' ? 'failed' : it.sell; sl.setAttribute('role', 'status'); card.appendChild(sl); }
     const ul = el('ul', 'vt-dlines');
     lines(it, det).forEach((l) => ul.appendChild(el('li', '', l)));
     card.appendChild(ul);
@@ -352,6 +401,9 @@ export function mountVault(d) {
     row.append(it.pin ? mk(T.unpin, 'unpin', act.unpin, () => act1('/api/vault/unpin', [it.id])) : mk(T.pin, 'pin', act.pin, () => act1('/api/vault/pin', [it.id])),
       mk(T.discard, 'discard', act.discard, () => openDiscard([it.id], row.lastChild), 'danger'));
     row.appendChild(mk(T.keep, 'keep', act.keep, () => keepAct([it.id], false)));
+    row.appendChild(mk(T.reveal, 'reveal', act.reveal, () => revealAct([it.id], false)));
+    row.appendChild(mk(T.sell, 'sell', act.sell, () => openSell([it.id], row.lastChild)));
+    if (it.reveal === 'queued' || it.sell === 'queued' || it.keep === 'queued') row.appendChild(mk(T.cancelQueued, 'cancel', { ok: true }, () => act1('/api/vault/cancel', [it.id]), 'ghost'));
     card.appendChild(row);
     aside.appendChild(card);
   }
@@ -435,6 +487,7 @@ export function mountVault(d) {
   selAll.addEventListener('click', () => { S.sel.all(order()); drawBar(); drawList(); });
 
   // ---- presses ----
+  const REAL = /\/(keep|reveal|sell|cancel)$/;
   const CHUNK = 150; // the answer body is capped at 4 KiB: the server takes this many ids at a time
   async function act(route, ids, confirm, opts) {
     let j = null;
@@ -449,11 +502,13 @@ export function mountVault(d) {
       (r.done || []).forEach((x) => done.push(x));
       (r.failed || []).forEach((x) => failed.push(x));
       (r.already || []).forEach((x) => already.push(x));
-      if (!r.done && !r.failed) { if (r.error && route.endsWith('/keep')) failed.push(r); break; } // a refusal of the whole request (read only, bad body)
+      if (!r.done && !r.failed) { if (r.error && REAL.test(route)) failed.push(r); break; } // a refusal of the whole request (read only, bad body)
     }
     if (!j) { setMsg('bad', T.noAnswer); await reload(true); return false; }
-    const isKeep = route.endsWith('/keep');
-    const word = route.endsWith('/pin') ? T.okPin : route.endsWith('/unpin') ? T.okUnpin : isKeep ? (opts && opts.now ? T.okKeepNow : T.okKeep) : T.okDiscard;
+    const isKeep = REAL.test(route); // the queue routes name the real cause (the server's sentence)
+    const now = opts && opts.now;
+    const word = route.endsWith('/pin') ? T.okPin : route.endsWith('/unpin') ? T.okUnpin : route.endsWith('/keep') ? (now ? T.okKeepNow : T.okKeep)
+      : route.endsWith('/reveal') ? (now ? T.okRevealNow : T.okReveal) : route.endsWith('/sell') ? (now ? T.okSellNow : T.okSell) : route.endsWith('/cancel') ? T.okCancel : T.okDiscard;
     if (!failed.length && j.ok) {
       const al = already.length;
       setMsg('good', al && al === done.length ? fmt(T.okKeepAlready, { n: al }) : fmt(word, { n: done.length - al }) + (al ? ' ' + fmt(T.okKeepAlready, { n: al }) : ''));
@@ -470,10 +525,30 @@ export function mountVault(d) {
   }
   const act1 = (route, ids) => act(route, ids, false);
   const keepAct = (ids, now) => act('/api/vault/keep', ids, false, { now });
+  const revealAct = (ids, now) => act('/api/vault/reveal', ids, false, { now });
+  const sellAct = (ids, now) => act('/api/vault/sell', ids, true, { now });
   pinB.addEventListener('click', () => { if (S.sel.size) act1('/api/vault/pin', S.sel.ids()); });
   unpinB.addEventListener('click', () => { if (S.sel.size) act1('/api/vault/unpin', S.sel.ids()); });
   discB.addEventListener('click', () => { if (S.sel.size) openDiscard(S.sel.ids(), discB); });
   keepB.addEventListener('click', () => { if (S.sel.size && !keepB.disabled) keepAct(S.sel.ids(), false); });
+  revealB.addEventListener('click', () => {
+    if (!S.sel.size || revealB.disabled) return;
+    const p = revealPlan(S.items, S.sel.ids(), S.view && S.view.act);
+    if (!p.n) { setMsg('info', T.revealNone); return; }
+    revealAct(S.sel.ids(), false);
+  });
+  sellB.addEventListener('click', () => {
+    if (!S.sel.size || sellB.disabled) return;
+    const p = sellPlan(S.items, S.sel.ids());
+    if (!p.n) { setMsg('info', T.sellNone); return; }
+    openSell(S.sel.ids(), sellB);
+  });
+  buyB.addEventListener('click', async () => { // the manual Buy action of the inventory page: the bot never buys scrolls on its own
+    const r = await d.post('/api/inventory/buyid', {});
+    setMsg(r && !r.error ? 'good' : 'bad', r && !r.error ? T.okBuy : (r && r.error) || T.noAnswer);
+  });
+  promptYes.addEventListener('click', () => { const p = S.view && S.view.act && S.view.act.prompt; if (p) act('/api/vault/sell', p.ids, true, {}); });
+  promptNo.addEventListener('click', async () => { await d.post('/api/vault/sellprompt', { dismiss: true }); await reload(true); });
   keepNowB.addEventListener('click', async () => { // any queued id will do: the server only needs one that is queued to ask for the trip
     const q = S.items.find((i) => i.keep === 'queued' || i.keep === 'creating');
     const j = q ? null : await d.get(ROUTE + '?state=keepq&limit=1');
@@ -503,6 +578,23 @@ export function mountVault(d) {
     cancel.addEventListener('click', closeSheet);
     go.addEventListener('click', async () => { if (go.disabled) return; go.disabled = true; closeSheet(true); await act('/api/vault/discard', ids, true); });
     (input || cancel).focus();
+  }
+  // ---- the sell sheet: the count, the price and the pinned note; a queued sale can be cancelled before the visit ----
+  function openSell(ids, opener) {
+    sheetCard.replaceChildren();
+    const p = sellPlan(S.items, ids), n = p.n || ids.length;
+    sheetCard.setAttribute('aria-label', n === 1 ? T.sellOne : fmt(T.sellTitle, { n }));
+    sheetCard.appendChild(el('h2', '', n === 1 ? T.sellOne : fmt(T.sellTitle, { n })));
+    sheetCard.appendChild(el('p', '', fmt(T.sellBody, { gold: p.gold })));
+    if (p.pinned) sheetCard.appendChild(el('p', '', fmt(T.sellPinnedSkip, { n: p.pinned })));
+    const go = btn(n === 1 ? T.sellGoOne : fmt(T.sellGo, { n }), { key: 'sheet-go' });
+    const cancel = btn(T.cancel, { key: 'sheet-cancel', variant: 'ghost' });
+    const row = el('div', 'vt-row'); row.append(cancel, go); sheetCard.appendChild(row);
+    S.sheet = { opener, first: cancel };
+    sheetWrap.hidden = false;
+    cancel.addEventListener('click', closeSheet);
+    go.addEventListener('click', async () => { go.disabled = true; closeSheet(true); await sellAct(ids, false); });
+    cancel.focus();
   }
   function closeSheet(noFocus) {
     if (!S.sheet) return;
@@ -543,7 +635,7 @@ export function mountVault(d) {
     sc.onload = () => { if (S.tip && typeof CustomEvent !== 'undefined') doc.dispatchEvent(new CustomEvent('d2:inventory', { detail: S.tip.view })); };
     doc.body.appendChild(sc);
   }
-  return { start, reload, draw, state: S, changed, openDiscard, closeSheet, act, main, grid, loadTip };
+  return { start, reload, draw, state: S, changed, openDiscard, openSell, closeSheet, act, main, grid, loadTip };
 }
 
 // ---- the page in a browser ----

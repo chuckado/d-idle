@@ -106,4 +106,24 @@ ok('tip view numbers the rows and keeps the vault id', () => {
   assert.equal(tv.view.backpack[1].id, 2); assert.equal(tv.view.backpack[1].vid, 'v-b'); assert.equal(tv.byN.get(1), 'v-a');
 });
 ok('discard ask', () => { assert.equal(L.discardAsk(10, 10).typed, false); assert.equal(L.discardAsk(11, 10).typed, true); });
+ok('reveal plan: the price shown before the click', () => {
+  const items = [row({ id: 'a', identified: false }), row({ id: 'b', identified: false }), row({ id: 'c', identified: true }), row({ id: 'd', identified: false, reveal: 'queued' }), row({ id: 'e', identified: false, state: 'sold' })];
+  const act = (r) => ({ reveal: Object.assign({ charges: 5, free: false, perItem: 1 }, r) });
+  let p = L.revealPlan(items, ['a', 'b', 'c', 'd', 'e', 'zz'], act());
+  assert.deepEqual([p.n, p.charges, p.have, p.free, p.short], [2, 2, 5, false, false]);
+  p = L.revealPlan(items, ['a', 'b'], act({ charges: 1 }));
+  assert.equal(p.short, true);
+  p = L.revealPlan(items, ['a', 'b'], act({ charges: 0, free: true }));
+  assert.equal(p.short, false); assert.equal(p.free, true); // at Cain: no charge needed
+  p = L.revealPlan(items, ['a'], act({ charges: -1 }));
+  assert.equal(p.short, false); // unknown: the server decides
+  assert.equal(L.revealPlan(items, ['a'], null).n, 1);
+});
+ok('sell plan: pinned and queued items are skipped, the gold is the lower bound', () => {
+  const items = [row({ id: 'a', value: 30 }), row({ id: 'b', value: 12 }), row({ id: 'c', pin: true, value: 99 }), row({ id: 'd', sell: 'queued', value: 7 }), row({ id: 'e', state: 'kept', value: 1 })];
+  const p = L.sellPlan(items, ['a', 'b', 'c', 'd', 'e']);
+  assert.deepEqual([p.n, p.gold, p.pinned, p.skipped], [2, 42, 1, 3]);
+  assert.deepEqual(L.sellPlan(items, []), { n: 0, gold: 0, pinned: 0, skipped: 0 });
+});
+
 console.log('vault logic: ' + n + ' groups ok');

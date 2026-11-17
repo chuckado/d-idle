@@ -416,6 +416,9 @@ func (f actFace) Act(ctx context.Context) watch.VaultActView {
 	if !v.Reveal.Enabled {
 		v.Reveal.Code = gateCode(v.Reveal.Why)
 	}
+	if v.Reveal.Enabled && !p.Free && p.Charges == 0 {
+		v.Reveal.Enabled, v.Reveal.Code, v.Reveal.Why = false, "noscroll", vaultkeep.ReasonNoScroll
+	}
 	v.Sell.Enabled, v.Sell.Why = k.GateSell(ctx)
 	if !v.Sell.Enabled {
 		v.Sell.Code = gateCode(v.Sell.Why)
