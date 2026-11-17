@@ -259,7 +259,7 @@ the action bar sticks to the bottom.
 | V4 | `/api/vault` read side and the page (grid, filters, capacity meter, Drops feed chip) | M | watch UI golden tests; phone width by screenshot of the game-free page. **DONE offline (agent vaultv4, docs/vault.md UI section)**: pin, unpin, discard included; Keep and Upgrade drawn disabled |
 | V5 | Keep queue: stash chore step, errand button, states, failures | M | offline with fakes; then a lab drill: 20 drops, Keep 5, reload, items equal |
 | V6 | Reveal and Sell-from-vault, `sellWhenBroke` Needs-you row | M | offline; live on a throwaway hero (scroll consumed once) |
-| V7 | meta wallet: capacity table, upgrade API, wallet chips, ledger spend/refund | S | offline with the ledger fake; no live needed. **DONE offline (agent vaultv7, docs/ether.md)**: ETHER ledger, earn table, upgrade/refund, API; not wired into the bot |
+| V7 | meta wallet: capacity table, upgrade API, wallet chips, ledger spend/refund | S | offline with the ledger fake; no live needed. **DONE offline (agent vaultv7, docs/ether.md)**: ETHER ledger, earn table, upgrade/refund, API. **V7b DONE offline (agent vaultv7b)**: wired in cmd/d2bot behind loot.vault (per account, capacity and owned tiers feed the stores), gated POST routes, Vault page Upgrade/Refund and wallet chip, Hero tile chip, earn call sites for firsts, bosses, level and difficulty milestones and the kill trickle; the quest hand-in is S10 |
 | V8 | sandbox rollout, flags on for the sandbox hero only (runbook like item-verbs 14a), watch counts and keep failures | S | live on the sandbox, 24 h |
 | V9 | PACK-scope `vault` (deposit a carried item) and offline Option B recovery CLI | S | offline |
 

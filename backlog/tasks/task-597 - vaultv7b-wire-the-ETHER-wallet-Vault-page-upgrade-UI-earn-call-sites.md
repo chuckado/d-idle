@@ -16,7 +16,6 @@ card: "vaultv7b"
 owns:
   - "internal/ether"
   - "internal/watch/etherapi.go"
-  - "internal/watch/etherearn.go"
   - "cmd/d2bot/etherwire.go"
   - "docs/ether.md"
   - "data/vault/ether.json"
@@ -24,7 +23,22 @@ owns:
   - "internal/watch/web/vault.json"
   - "internal/watch/web/vault.css"
   - "tools/uishots/fixtures_vault.go"
-exclusive: []
+  - "tools/uishots/fit.js"
+  - "tools/uishots/fit.go"
+  - "tools/uishots/fit_char_test.go"
+  - "tools/uishots/serve.go"
+  - "tools/uishots.sh"
+  - "cmd/d2bot/vaultpage.go"
+  - "cmd/d2bot/etherwire_test.go"
+  - "internal/watch/etherapi_test.go"
+  - "internal/watch/vaultether_test.go"
+  - "internal/watch/testdata/vault_ether.mjs"
+  - "internal/watch/vaultapi.go"
+  - "internal/watch/vaultui_test.go"
+  - "internal/watch/hero.go"
+  - "internal/watch/web/panels/hero-vitals/panel.js"
+  - "docs/vault.md"
+  - "docs/design/loot-vault-2026-11-16.md"exclusive: []
 contracts: []
 ---
 
@@ -33,7 +47,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Why: TODO. Done when: TODO.
+Why: the V7 wallet was built but not wired; the player cannot earn or spend Ether. Done when: with loot.vault on the account wallet earns from firsts, bosses, milestones and a capped kill trickle, buys and refunds capacity from the Vault page, and nothing changes with the knob at 0 (docs/ether.md).
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
