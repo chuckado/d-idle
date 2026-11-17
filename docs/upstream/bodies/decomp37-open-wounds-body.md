@@ -48,7 +48,7 @@ Mutants of the claim (local, never pushed), each aborted by a test:
 
 `test_combat` pins game.exe's values: levels 1, 15, 16, 30, 61, 99 = 40, 166, 184, 436, 1,426, 3,136; halved at 1, 30, 61, 99 = 20, 218, 713, 1,568; level 0 as 1. The pins use no random number. `test_open_wounds` fails on the parent plus that test alone (V run).
 
-Build and tests (V run, GCC, Release, `-j2`, the builder): `test_combat` and `test_open_wounds` ok; full ctest 356 of 356 pass (two UI tests, `pad_controls_ux_d2d` and `coop_lobby_d2d`, failed once under builder load and pass alone).
+Build and tests (V run, GCC, Release, `-j2`, the builder): `test_combat` and `test_open_wounds` ok; full ctest 358 of 358 pass on the branch merged with upstream main `f1533770`.
 
 ## In play
 
@@ -66,7 +66,7 @@ Life taken from a plain monster over the 8 seconds, game.exe against the parent:
 ## Answers to the presubmit WARNs
 
 - Unit kinds: a merc (`merc_strike`: `player_blow` over its gear, its level) and a Shadow (the owner's fighter, the Shadow's level) wound through the same `player_blow` and `Fight::land`, so they take the new rule with their own level, as game.exe's handler reads the attacker's stat 12; a player struck is not modelled (no monster carries the property in d2d); a co-op partner's hero is a player (the same path).
-- `build`, `gcc`: built and ctest run (Release, GCC): 356 of 356 pass (two UI tests, `pad_controls_ux_d2d` and `coop_lobby_d2d`, failed once under builder load and pass alone).
+- `build`, `gcc`: built and ctest run (Release, GCC): 358 of 358 pass on the branch merged with upstream main `f1533770`.
 
 ## Claims
 
