@@ -53,6 +53,7 @@ type vaultState struct {
 	checked  bool   // caps were read
 	inert    string // why the feature is off for this process ("" = working)
 	blocked  time.Time
+	noticed  bool              // the full notice of this episode went out (cleared by the next record)
 	done     map[vaultKey]bool // recorded or duplicate: never walk to it again
 	fell     map[vaultKey]bool // peek or record failed: today's pickup decision applies
 	logged   map[string]bool
@@ -325,16 +326,17 @@ func (l *Looter) vaultOne(ctx context.Context, c cand, o PickOpts) (recorded boo
 	case err == nil:
 		v.done[keyOf(u)] = true
 		v.recorded++
+		v.noticed, v.blocked = false, time.Time{}
 		return true, nil
 	case errors.Is(err, vault.ErrDuplicate):
 		v.done[keyOf(u)] = true
 		v.dups++
 		return false, nil
 	case errors.Is(err, vault.ErrOverCapacity), errors.Is(err, vault.ErrFull):
-		first := v.blocked.IsZero() || !v.clock().Before(v.blocked)
 		v.blocked = v.clock().Add(vaultBlockedFor)
-		if first {
-			l.vaultOnce("full:"+v.blocked.Format(time.RFC3339), "vault full: new records are stopped until room is made", "err", err)
+		if !v.noticed {
+			v.noticed = true
+			l.e.Log.Info("vault full: new records are stopped until room is made", "err", err)
 			l.vaultNotice("The vault is full: new items are not recorded. Keep, sell or discard some to make room.")
 		}
 		return false, errVaultRetry

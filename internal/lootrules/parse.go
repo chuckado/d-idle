@@ -152,7 +152,7 @@ func legal(a, scope string) bool {
 	case PlaceGround:
 		return a == Pickup || a == Ignore || a == Vault
 	case PlacePack:
-		return a != Pickup
+		return a != Pickup && a != Vault
 	case PlaceStash:
 		return a == Keep || a == Sell || a == Ignore
 	case PlaceSell:

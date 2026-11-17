@@ -516,13 +516,13 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 				continue
 			}
 			shadow("pickup")
-			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
+			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class), false})
 			continue
 		}
 		shadow("pickup") // every filter above said yes; pack room below is not a loot decision
 		// Potions the belt will take (a same-kind column with room or an empty column, B2) do not need pack space.
 		if k := belt.PotionKind(b); k != belt.None && belt.WillBelt(l.e.Data, s.Inventory, k) {
-			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
+			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class), false})
 			continue
 		}
 		w, h := 1, 1
@@ -548,7 +548,7 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 				continue
 			}
 		}
-		out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
+		out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class), false})
 	}
 	sort.SliceStable(out, func(i, j int) bool {
 		if out[i].v.Prio != out[j].v.Prio {
