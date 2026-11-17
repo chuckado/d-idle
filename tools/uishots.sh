@@ -315,6 +315,9 @@ default-update-light watch?first=0&theme=light&needs=2&update=ready
 default-frozen watch?first=0&theme=dark&needs=2&pause=frozen&glance=full,paused expect=#pause-banner
 default-frozen-light watch?first=0&theme=light&needs=2&pause=frozen&glance=full,paused expect=#pause-banner
 default-pause-menu watch?first=0&theme=dark&needs=2&pause=can #btn-more
+default-labels watch?first=0&theme=dark&needs=2&labels=on
+default-labels-light watch?first=0&theme=light&needs=2&labels=off
+default-labels-menu watch?first=0&theme=dark&needs=2&labels=on #btn-more
 default-question3 watch?first=0&theme=dark&needs=1&question=3
 default-question5-light watch?first=0&theme=light&needs=2&question=5
 quest-offer watch?first=0&theme=dark&needs=0&quests=offer

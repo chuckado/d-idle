@@ -50,7 +50,9 @@ type DeskConfig struct {
 	// Meter words the mode and its readiness meter (slice S6); it gets the stored mode and the derived status. Without
 	// it the view carries the mode only.
 	Meter func(mode string, st Status) *Meter
-	Now   func() time.Time
+	// Queued says why an accepted chunk is not running yet ("" when it runs); the strip and the running card show it.
+	Queued func() string
+	Now    func() time.Time
 	// Ctx bounds the asynchronous hand-in goroutines (the process); default Background.
 	Ctx context.Context
 }
@@ -220,6 +222,7 @@ type RunView struct {
 	Failures   int       `json:"failures,omitempty"`
 	Deaths     int       `json:"deaths,omitempty"`
 	Auto       bool      `json:"auto,omitempty"` // the board started this chunk by itself
+	Queued     string    `json:"queued,omitempty"`
 }
 
 // StepRow is one step of the running chunk, by its data name; State is done, now or todo.
@@ -277,6 +280,7 @@ type Strip struct {
 	StepNo     int    `json:"stepNo,omitempty"`
 	StepCount  int    `json:"stepCount,omitempty"`
 	NPC        string `json:"npc,omitempty"`
+	Queued     string `json:"queued,omitempty"` // accepted but not running: the reason, never silent
 }
 
 // QuestRoute is the path of one quest's action.
@@ -316,6 +320,11 @@ func (d *Desk) build() View {
 	v := View{Schema: SchemaQuests, Mode: DefaultMode, Generated: d.cfg.Now().UTC(),
 		AutoStart: AutoView{Note: "Starts a quest by itself only when it is safe, the hero is calm and nobody paused a moment ago."},
 		Offers:    []OfferView{}, Quests: []QuestRow{}, History: []HistoryRow{}, Needs: []NeedRow{}}
+	// Read the hand-in outcome BEFORE the evidence: a "done" outcome then always comes with evidence read after it,
+	// so the history row is there (reading it last paired a fresh outcome with older evidence).
+	d.mu.Lock()
+	last := d.last
+	d.mu.Unlock()
 	x, st := d.exec()
 	if x == nil || st == nil {
 		v.Reason = "No hero is loaded yet."
@@ -399,6 +408,9 @@ func (d *Desk) build() View {
 	if a := status.Active; a != nil {
 		rv := d.run(*a)
 		rv.Auto = plan.autoRecord(status.Diff, a.Quest, a.Chunk)
+		if a.State == Accepted || a.State == InProgress {
+			rv.Queued = d.queued(a.State)
+		}
 		switch {
 		case a.State == Awaiting:
 			v.Awaiting = &rv
@@ -407,15 +419,13 @@ func (d *Desk) build() View {
 		default:
 			v.Running = &rv
 		}
-		v.Strip = &Strip{Quest: rv.Quest, QuestTitle: rv.QuestTitle, Chunk: rv.Chunk, Title: rv.Title, State: rv.State, Step: rv.Step, StepNo: rv.StepNo, StepCount: rv.StepCount, NPC: rv.NPC}
+		v.Strip = &Strip{Quest: rv.Quest, QuestTitle: rv.QuestTitle, Chunk: rv.Chunk, Title: rv.Title, State: rv.State, Step: rv.Step, StepNo: rv.StepNo, StepCount: rv.StepCount, NPC: rv.NPC, Queued: rv.Queued}
 	}
 	v.WhileAway = d.awayCard(x)
 	for _, r := range status.Extra {
 		v.Extra = append(v.Extra, r.String())
 	}
-	d.mu.Lock()
-	v.HandIn = d.last
-	d.mu.Unlock()
+	v.HandIn = last
 	v.Needs = d.needs(v)
 	return v
 }
@@ -951,4 +961,18 @@ func whyState(s State) string {
 func cleanErr(err error) string {
 	s := err.Error()
 	return strings.TrimPrefix(s, "questboard: ")
+}
+
+// queued is the reason an accepted chunk is not running: the bot's own words, or (for a chunk that has not started) a
+// generic line, so the strip never shows a Start the hero seems to ignore.
+func (d *Desk) queued(st State) string {
+	if d.cfg.Queued != nil {
+		if q := d.cfg.Queued(); q != "" {
+			return q
+		}
+	}
+	if st == Accepted {
+		return "Queued: starts at the hero's next free moment."
+	}
+	return ""
 }
