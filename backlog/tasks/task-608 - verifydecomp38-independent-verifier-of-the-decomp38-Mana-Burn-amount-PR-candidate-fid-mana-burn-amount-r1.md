@@ -1,10 +1,13 @@
 ---
 id: TASK-608
-title: 'verifydecomp38: independent verifier of the decomp38 Mana Burn amount PR candidate (fid/mana-burn-amount-r1)'
-status: Proposed
+title: >-
+  verifydecomp38: independent verifier of the decomp38 Mana Burn amount PR
+  candidate (fid/mana-burn-amount-r1)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T10:29:00Z'
+updated_date: '2026-11-17T13:08:00Z'
 labels:
   - d2d
   - readonly

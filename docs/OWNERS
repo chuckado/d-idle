@@ -542,7 +542,6 @@ docs/upstream/pr-queue.md  credit-runner  p06posted
 docs/upstream/pr-queue.md  credit-runner  prfix2
 docs/upstream/pr-queue.md  credit-runner  prfix3
 docs/upstream/pr-queue.md  credit-runner  prpipeline
-docs/upstream/verifier-decomp38-2026-11-17.md  credit-runner  verifydecomp38
 docs/upstream/verifier-p02-2026-11-14.md  credit-runner  verifyp02
 docs/upstream/verifier-p03-p05-2026-11-14.md  credit-runner  verifyp03p05
 docs/upstream/verifier-p03b-2026-11-14.md  live-agent  verifyp03c
@@ -1350,6 +1349,7 @@ internal/watch/web/vault.css  credit-runner  vaultv5
 internal/watch/web/vault.css  credit-runner  vaultv6
 internal/watch/web/vault.css  credit-runner  vaultv7b
 internal/watch/web/vault.html  credit-runner  vaultv4
+internal/watch/web/vault.js  credit-runner  vaultphone
 internal/watch/web/vault.js  credit-runner  vaultv4
 internal/watch/web/vault.js  credit-runner  vaultv5
 internal/watch/web/vault.js  credit-runner  vaultv6
@@ -1445,6 +1445,7 @@ tools/uishots.sh  credit-runner  uiphone
 tools/uishots.sh  credit-runner  uis3
 tools/uishots.sh  credit-runner  uis6
 tools/uishots.sh  credit-runner  uis7
+tools/uishots.sh  credit-runner  vaultphone
 tools/uishots.sh  credit-runner  vaultv4
 tools/uishots.sh  credit-runner  vaultv5
 tools/uishots.sh  credit-runner  vaultv6
