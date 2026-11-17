@@ -41,6 +41,24 @@ export function modeLine(mode) {
 export const shared = { handing: null, last: null, paid: new Set(), error: null };
 export function resetShared() { shared.handing = null; shared.last = null; shared.paid = new Set(); shared.error = null; }
 
+// The video card's quest line. quest-strip sets the text from each GET; the video panel shows it (it has no endpoint of its own).
+export const questCaption = { text: '', subs: new Set() };
+export function setCaption(t) {
+  if (questCaption.text === t) return;
+  questCaption.text = t;
+  questCaption.subs.forEach((f) => f(t));
+}
+
+// captionOf is the quest line for a view: the quest, what the hero does in words and who is next. Empty: no caption.
+export function captionOf(v) {
+  if (!v || !v.enabled) return '';
+  if (v.awaiting) return v.awaiting.questTitle + ': waiting for you at ' + (v.awaiting.npc || 'the quest giver');
+  if (v.blocked) return v.blocked.questTitle + ': stuck';
+  const r = v.running;
+  if (!r) return '';
+  return r.questTitle + ': ' + (r.step ? humanize(r.step).toLowerCase() : 'starting') + (r.npc ? ', next ' + r.npc : '');
+}
+
 const key = (q, c) => q + '/' + c;
 
 function chunkOf(v, quest, chunk) {

@@ -40,6 +40,12 @@ func glanceFixture(h *watch.Hub) http.HandlerFunc {
 			v.Needs = append([]watch.GlanceNeed{fixtureQuestion(qn)}, v.Needs...)
 		}
 		variant := words[0]
+		cls := q.Get("class")
+		if cls == "sorceress" {
+			cls = "Sorceress"
+		} else {
+			cls = "Paladin"
+		}
 		has := func(w string) bool {
 			for _, x := range words {
 				if x == w {
@@ -116,6 +122,7 @@ func glanceFixture(h *watch.Hub) http.HandlerFunc {
 		if has("paused") { // what glancewire_pause.go gives for the going-home state
 			v.Sentence.Tone, v.Sentence.Word, v.Sentence.Reason = "info", "Paused", "paused by you, going home first"
 		}
+		questGlance(&v, q.Get("quests"), cls)
 		js(w, v)
 	}
 }

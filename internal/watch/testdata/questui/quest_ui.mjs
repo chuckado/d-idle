@@ -315,13 +315,20 @@ for (const cls of ['paladin', 'sorceress']) {
   assert.equal(all(c.body, (x) => x.className === 'qb-box')[0].dataset.tab, '1');
 }
 
-// the video card's caption
+// the video card's caption: the strip publishes it, the video panel shows it
 {
-  const V = fs.readFileSync(path.join(dir, 'video/panel.js'), 'utf8');
-  const fn = new Function(V.match(/export function captionText[\s\S]*?\n}\n/)[0].replace('export ', '') + '; return captionText;')();
-  assert.equal(fn(null), '');
-  assert.equal(fn({ title: 'Den of Evil', state: 'in_progress', step: 'walk_blood_moor', npc: 'Akara' }), 'Den of Evil: walk blood moor, next Akara');
-  assert.equal(fn({ title: 'Den of Evil', state: 'awaiting_handin', npc: 'Akara' }), 'Den of Evil: waiting for you at Akara');
-  assert.equal(fn({ title: 'Den of Evil', state: 'blocked' }), 'Den of Evil: stuck');
+  fresh();
+  assert.equal(B.captionOf(null), '');
+  assert.equal(B.captionOf(gold('offers-paladin')), '', 'an offer is not a caption');
+  assert.equal(B.captionOf(gold('running-paladin')), 'Den of Evil: walk blood moor, next Akara');
+  assert.equal(B.captionOf(gold('awaiting-paladin')), 'Den of Evil: waiting for you at Akara');
+  const bl = gold('running-paladin'); bl.blocked = bl.running; bl.running = null;
+  assert.equal(B.captionOf(bl), 'Den of Evil: stuck');
+  const seen = []; B.questCaption.subs.add((t) => seen.push(t));
+  const c = ctxFor([], { ok: true });
+  const s = S.mount(node('div', 'd-panel'), c);
+  s.update(gold('running-paladin')); s.update(gold('running-paladin')); s.update(gold('awaiting-paladin')); s.update({ enabled: false });
+  assert.deepEqual(seen, ['Den of Evil: walk blood moor, next Akara', 'Den of Evil: waiting for you at Akara', ''], 'published on change only');
+  assert.doesNotMatch(fs.readFileSync(path.join(dir, 'video/panel.js'), 'utf8'), /fetch\(/);
 }
 console.log('quest ui ok');

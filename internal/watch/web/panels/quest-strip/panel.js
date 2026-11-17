@@ -3,7 +3,7 @@
 // [Hand in]; the tile then says "Handing in..." until the next GET shows the result. A stuck chunk: [Try again] [Stop]. With
 // the board off the tile hides itself and the Journey tile stays (the old strip goes in slice S9). The page decides what
 // happened from the GET; a refusal shows the reason the API gave. textContent only.
-import { stripModel, settle, act, shared, MODES, modeLine } from '../quest-board/panel.js';
+import { stripModel, settle, act, shared, MODES, modeLine, setCaption, captionOf } from '../quest-board/panel.js';
 
 export { stripModel };
 
@@ -90,6 +90,7 @@ export function mount(root, ctx) {
 
   return {
     update(v) {
+      setCaption(captionOf(v));
       const paid = settle(v);
       if (paid) ctx.toast('good', paid.text);
       if (!v) { if (!sig) ctx.hide(true); ctx.state('ready'); return; } // one failed poll keeps the tile as it was
