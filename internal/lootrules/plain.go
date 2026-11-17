@@ -8,7 +8,7 @@ import (
 
 var actionWords = map[string]string{
 	Pickup: "Pick up", Keep: "Keep", Stash: "Stash", Sell: "Sell", Drop: "Drop on the floor", Identify: "Identify",
-	Ignore: "Leave alone", Ask: "Ask you about", KeepMerc: "Keep for the mercenary",
+	Ignore: "Leave alone", Ask: "Ask you about", KeepMerc: "Keep for the mercenary", Vault: "Record in the vault",
 }
 
 var opWords = map[string]string{"eq": "is", "ne": "is not", "ge": "at least", "gt": "more than", "le": "at most", "lt": "less than", "in": "is one of", "contains": "contains"}

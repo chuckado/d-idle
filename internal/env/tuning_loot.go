@@ -33,6 +33,8 @@ type LootTuning struct {
 	GoldMaxDanger    int // highest pack danger (combat.Danger*) at which a mid-fight grab is still allowed
 	GoldMinLifePct   int // life percent under which gold is ignored (survival first)
 	GoldRetries      int // failed pickups of one pile (over all calls) before it is given up
+	Vault            int // 1: the Ethereal Vault preset decides the ground stage; vault items are recorded, not picked up (docs/vault.md); forced 0 in measured runs
+	VaultAll         int // 1: with Vault, every other non-gold item that is not a gem or a stack is recorded too
 	RulesEngine      int // loot rules engine stage: 0 off, 1 ground, 2 ground and tidy, 3 reserved (sell, needs a user decision; not implemented)
 }
 
@@ -54,6 +56,8 @@ func lootK(key, label, unit, desc string, def, min, max int, higher bool) Knob {
 func lootKnobs() []Knob {
 	d := DefaultLootTuning()
 	return []Knob{
+		lootK("vault", "Ethereal Vault recording", "0/1", "1: items the Vault preset (docs/vault.md) selects are peeked and recorded in the vault instead of being picked up; the bot walks to them as for a pickup, sends no pickup click and uses no pack space. Gold, potions, scrolls, keys, gems and stacks keep their own rules. Needs d2d started with --vault-verbs; without it the knob does nothing and a Needs-you info line says why. Forced off in measured runs (gates, soaks, baselines: D2BOT_RUN). 0 (default): today's pickit, byte-identical.", d.Vault, 0, 1, false),
+		lootK("vaultAll", "Record everything non-gold", "0/1", "1 (with loot.vault 1): every ground item that is not gold, a gem or a stack and that no other rule takes is recorded too, plain and low items included. 0 (default): the Vault preset only.", d.VaultAll, 0, 1, false),
 		lootK("pickRadius", "Pickup radius", "subtiles", "Ground items within this distance are considered.", d.PickRadius, 5, 60, true),
 		lootK("pickStrictness", "Filter strictness", "level", "0 loose (also items worth selling), 1 normal, 2 keepers only, 3 gold/runes/gems/uniques only.", d.PickStrictness, 0, 3, false),
 		lootK("pickTries", "Pickup attempts", "count", "Click attempts per item.", d.PickTries, 1, 6, true),

@@ -403,7 +403,9 @@ Sizes S/M/L as in the backlog scheme. Each slice is one PR family, offline-testa
 
 Order: S1 -> S2/S3 -> S4 -> S5 -> S6 -> S7 -> S8 -> S9 (S10 when the wallet exists).
 
-S1 is DONE (2026-11-16, card quests1, TASK-577): built offline, see [docs/questboard.md](../questboard.md); nothing imports it until S3.
+S1 is DONE (2026-11-16, card quests1, TASK-577): built offline, see [docs/questboard.md](../questboard.md).
+
+S3 is DONE offline (2026-11-16, card quests3, TASK-585): executor, hand-in action, retry/park/resume and the knob `quests.board` (default 0), see docs/questboard.md section Executor; the live drill is written there and NOT run (slice S3 acceptance stays open until it has).
 
 ## 7. Meta currency hooks
 
