@@ -34,6 +34,8 @@
   @media (max-height: 700px) {
     [data-panel="needs-you"]:is([data-cmode="phone"] *) .n-btn { block-size: 38px; min-block-size: 38px; }
     [data-panel="needs-you"]:is([data-cmode="phone"] *) .n-row { padding-block: 0; }
+    /* two or more rows: the first shows whole and the next peeks in; the list scrolls (it is the panel's data-scroll list) */
+    [data-panel="needs-you"]:is([data-cmode="phone"] *) .n-list:has(> .n-row:nth-child(2)) { max-block-size: 52px; }
     [data-panel="needs-you"]:is([data-cmode="phone"] *):has(.n-list > .n-row:only-child):not(:has(.n-dots[data-more="1"])) .n-head { display: none; }
   }
   [data-panel="needs-you"] .n-btn:hover { background: var(--d-surface-3); }

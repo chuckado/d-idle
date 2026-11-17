@@ -30,6 +30,13 @@ owns:
   - "docs/questboard.md"
   - "docs/design/quest-board-2026-11-16.md"
   - "docs/knobs.md"
+  - "internal/bot/playerpause.go"
+  - "internal/bot/playerreset.go"
+  - "internal/watch/testdata/quests"
+  - "internal/watch/web/panels/quest-list"
+  - "internal/watch/web/panels/needs-you"
+  - "internal/watch/web/panels/orders"
+  - "tools/uishots.sh"
 exclusive: []
 contracts: []
 ---
