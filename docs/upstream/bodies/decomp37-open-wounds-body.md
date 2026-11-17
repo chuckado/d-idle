@@ -75,8 +75,9 @@ Life taken from a plain monster over the 8 seconds, game.exe against the parent:
 |---|---|---|---|
 | `5e7a69b1` | the oracle: game.exe's wound value against d2d's rule | seed 7: 1,729 of 1,738 differ on the parent; seed 1: 16,463 of 16,526; seed 5001: 3,054 of 3,069 | `open_wounds.py compare ...` exits 1 on the parent |
 | `dabc3ff4` | special halves, 256ths a frame for 200 frames, `test_open_wounds`, `test_combat` pins | 0 differ on all three seeds; `test_open_wounds` aborts on the parent; mutants above all abort | `compare` exits 0; `ctest --test-dir build -R 'test_combat|test_open_wounds' --output-on-failure` |
+| `f951c339`, `accfd3ab` | a merge of upstream main `f1533770`; `compare` checks every field of the game record (CodeRabbit) | 358 of 358 ctest on the merged tree; 0 differ again on seeds 7, 5001, 1 | as above |
 
-## How to re-check
+## How to re-check## How to re-check
 
 ```sh
 python3 tools/pr_guard.py upstream/main HEAD
