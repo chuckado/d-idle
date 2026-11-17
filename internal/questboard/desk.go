@@ -316,6 +316,11 @@ func (d *Desk) build() View {
 	v := View{Schema: SchemaQuests, Mode: DefaultMode, Generated: d.cfg.Now().UTC(),
 		AutoStart: AutoView{Note: "Starts a quest by itself only when it is safe, the hero is calm and nobody paused a moment ago."},
 		Offers:    []OfferView{}, Quests: []QuestRow{}, History: []HistoryRow{}, Needs: []NeedRow{}}
+	// Read the hand-in outcome BEFORE the evidence: a "done" outcome then always comes with evidence read after it,
+	// so the history row is there (reading it last paired a fresh outcome with older evidence).
+	d.mu.Lock()
+	last := d.last
+	d.mu.Unlock()
 	x, st := d.exec()
 	if x == nil || st == nil {
 		v.Reason = "No hero is loaded yet."
@@ -413,9 +418,7 @@ func (d *Desk) build() View {
 	for _, r := range status.Extra {
 		v.Extra = append(v.Extra, r.String())
 	}
-	d.mu.Lock()
-	v.HandIn = d.last
-	d.mu.Unlock()
+	v.HandIn = last
 	v.Needs = d.needs(v)
 	return v
 }
