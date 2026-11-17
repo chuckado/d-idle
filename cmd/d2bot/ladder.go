@@ -306,6 +306,11 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		if stateDir != "" {
 			rig.Fun.LootRules = lootRulesAPI(stateDir, l.storeProfile(), l.knobValue)
 		}
+		if stateDir != "" {
+			if rig.Fun.Vault, err = vaultAPI(stateDir, vaultKnobOn(l.knobValue), func() string { return hub.Hero().Name }); err != nil {
+				return nil, nil, err
+			}
+		}
 		bindJourney(rig.Fun, l.journey)
 		if src == nil {
 			src = hub // a person answers: the Hub never answers by itself

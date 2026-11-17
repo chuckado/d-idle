@@ -7,6 +7,7 @@
 #   tools/uishots.sh --cockpit [--out DIR] [--only NAME]     pictures of the cockpit pages at the supported sizes (ck-NAME-WxH.png), no check, no golden set
 #   tools/uishots.sh --char --url '/watch?layout=cockpit-demo&theme=dark' --click '#btn-more|#btn-help' --sizes '1366x768 390x844' --tag NAME   the same for any /watch page (a cockpit sheet or drawer), after the clicks
 #   tools/uishots.sh --char [--out DIR] [--hover SEL | --ctx SEL | --click SEL] [--sizes 'WxH ...'] [--theme dark|light] [--fx VARIANT] [--tag NAME]   pictures of the character canvas (/watch/inventory) at the eight fit sizes, in the fit harness
+#   tools/uishots.sh --vt [--out DIR] [--only GLOB] [--sizes 'WxH ...']   pictures of the Ethereal Vault page (/watch/vault, fake vaults), vt-NAME-WxH.png, in the fit harness
 #   tools/uishots.sh --skills [--out DIR] [--sizes 'WxH ...'] [--tag NAME]   pictures of the Skills page (/watch/skills, fake trees) at a few sizes
 #   tools/uishots.sh --pics [--out DIR] [--only GLOB]   pictures of the cockpit (strip and Needs you variants) at the eight fit sizes, in the fit harness
 #   tools/uishots.sh --fit [--out DIR]                       the cockpit fit check (tools/uishots/fit.go), on the builder:
@@ -15,7 +16,7 @@
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 skills=0 charu= extra= sizes_only= theme=dark fx= tag= pics=0 pq= cs=0
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 skills=0 charu= extra= sizes_only= theme=dark fx= tag= pics=0 pq= cs=0 vt=0
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
@@ -26,6 +27,7 @@ while [ $# -gt 0 ]; do
 	--char) char=1; shift ;;
 	--pics) pics=1; shift ;;
 	--cs) cs=1; shift ;;
+	--vt) vt=1; shift ;;
 	--skills) skills=1; shift ;;
 	--url) charu=$(printf %s "$2" | sed 's/&/%26/g; s/?/%3F/g'); shift 2 ;;
 	--hover) extra="$extra&hover=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
@@ -123,6 +125,44 @@ cdeletel chars=8&theme=light [data-key=delete-Zapp]" | while read -r pname pq pc
 		done
 	done
 	ls "$out"/cs-* | wc -l
+	exit 0
+fi
+if [ "$vt" = 1 ]; then
+	# pictures of the Ethereal Vault page (docs/vault.md): name, query, optional click selectors or hover=SEL; vt-NAME-WxH.png, in the fit harness
+	mkdir -p "$out" && rm -f "$out"/vt-*
+	echo "pop vault=pop&theme=dark
+popl vault=pop&theme=light
+list vault=pop&theme=dark [data-key=view-toggle]
+warn vault=warn&theme=dark
+full vault=full&theme=dark
+over vault=over&theme=dark
+overl vault=over&theme=light
+empty vault=empty&theme=dark
+none vault=none&theme=dark
+off vault=off&theme=dark
+error vault=error&theme=dark
+big vault=big&theme=dark
+filters vault=pop&theme=dark [data-key=filters-toggle]
+select vault=pop&theme=dark [data-key=select-toggle]|.vt-cell|.vt-cell:nth-child(3)
+sheet vault=pop&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=discard]
+sheettyped vault=pop&theme=dark [data-key=select-toggle]|[data-key=select-all]|[data-key=discard]
+sheetl vault=pop&theme=light [data-key=select-toggle]|.vt-cell|[data-key=discard]
+tip vault=pop&theme=dark hover=.vt-cell:nth-child(3)" | while read -r pname pq pclick; do
+		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
+		for sz in ${sizes_only:-1914x930 1366x768 1280x620 412x780 360x640}; do
+			w=${sz%x*} h=${sz#*x}
+			ck=
+			case $pclick in
+			hover=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')" ;;
+			?*) ck="&click=$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g; s/|/%7C/g')" ;;
+			esac
+			prof=$(mktemp -d)
+			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+				--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/vt-$pname-$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/vault%3F$(printf %s "$pq" | sed 's/&/%26/g')&w=$w&h=$h$ck" >/dev/null 2>&1
+			rm -rf "${prof:?}"
+		done
+	done
+	ls "$out"/vt-* | wc -l
 	exit 0
 fi
 if [ "$skills" = 1 ]; then
@@ -393,7 +433,35 @@ charsdefect-under watch/characters?theme=dark&chars=3&defect=chars-under
 charsdefect-small watch/characters?theme=dark&chars=3&defect=chars-small
 charsdefect-hole watch/characters?theme=dark&chars=1&defect=chars-hole
 charsdefect-sheet watch/characters?theme=dark&chars=3&defect=chars-sheet [data-key=delete-Zapp] #cs-sheet,[data-key=sheet-go]
-charsdefect-covered watch/characters?theme=dark&chars=3&defect=chars-covered"
+charsdefect-covered watch/characters?theme=dark&chars=3&defect=chars-covered
+vault-pop watch/vault?theme=dark&vault=pop
+vault-pop-light watch/vault?theme=light&vault=pop
+vault-list watch/vault?theme=dark&vault=pop [data-key=view-toggle] .vt-cell,[data-key=view-toggle]
+vault-warn watch/vault?theme=dark&vault=warn
+vault-full watch/vault?theme=dark&vault=full
+vault-over watch/vault?theme=dark&vault=over
+vault-over-light watch/vault?theme=light&vault=over
+vault-empty watch/vault?theme=dark&vault=empty
+vault-none watch/vault?theme=dark&vault=none
+vault-off watch/vault?theme=dark&vault=off
+vault-error watch/vault?theme=dark&vault=error
+vault-big watch/vault?theme=dark&vault=big
+vault-filters watch/vault?theme=dark&vault=pop [data-key=filters-toggle] [data-key=filters-toggle],[data-key=search]
+vault-select watch/vault?theme=dark&vault=pop [data-key=select-toggle]|.vt-cell|.vt-cell:nth-child(3) [data-key=select-toggle],[data-key=pin],[data-key=discard]
+vault-sheet watch/vault?theme=dark&vault=pop [data-key=select-toggle]|.vt-cell|[data-key=discard] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
+vault-sheet-typed watch/vault?theme=dark&vault=pop [data-key=select-toggle]|[data-key=select-all]|[data-key=discard] .vt-sheet-card,[data-key=sheet-typed],[data-key=sheet-cancel]
+vault-sheet-light watch/vault?theme=light&vault=pop [data-key=select-toggle]|.vt-cell|[data-key=discard] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
+vault-tip watch/vault?theme=dark&vault=pop hover=.vt-cell:nth-child(3)
+vault-menu-entry watch?first=0&theme=dark&needs=0 #btn-more [data-key=vault-open]
+vault-more-entry watch?first=0&theme=dark&needs=0 [data-key=verb-more] [data-key=more-vault]
+vaultdefect-clip watch/vault?theme=dark&vault=pop&defect=vault-clip
+vaultdefect-wide watch/vault?theme=dark&vault=pop&defect=vault-wide
+vaultdefect-under watch/vault?theme=dark&vault=pop&defect=vault-under
+vaultdefect-small watch/vault?theme=dark&vault=pop&defect=vault-small
+vaultdefect-covered watch/vault?theme=dark&vault=pop&defect=vault-covered
+vaultdefect-sheet watch/vault?theme=dark&vault=pop&defect=vault-sheet [data-key=select-toggle]|.vt-cell|[data-key=discard] .vt-sheet-card,[data-key=sheet-cancel]
+vaultdefect-noname watch/vault?theme=dark&vault=pop&defect=vault-noname
+vaultdefect-enabled watch/vault?theme=dark&vault=pop&defect=vault-enabled"
 	# in a click or hit selector "_" stands for a space and a leading "?" makes a step optional (no switch on a wide rail);
 	# a third column hover=SEL or ctx=SEL hovers or right-clicks that cell before the measurement (the tooltip, the menu)
 	echo "$pages" | while read -r pname pq pclick phit; do
@@ -407,6 +475,9 @@ charsdefect-covered watch/characters?theme=dark&chars=3&defect=chars-covered"
 		phonedefect-*) szs="412x780 360x640" ;;
 		charsdefect-*) szs="1280x620 412x780 360x640" ;;
 		chars-*) szs="$sizes 412x780 360x640" ;;
+		vaultdefect-*) szs="1280x620 412x780 360x640" ;;
+		vault-menu-entry | vault-more-entry) ;;
+		vault-*) szs="$sizes 412x780 360x640" ;;
 		overlaydefect-two) szs="1366x768" ;; # the other tiles are not on screen on a phone: nothing to show
 		overlaydefect-*) szs="1366x768 412x780" ;;
 		overlay-*) szs="$sizes 412x780" ;;

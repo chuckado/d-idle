@@ -125,6 +125,7 @@ func serve(addr, class string) error {
 	m.Handle(watch.DropsRoute, watch.DropsHandler(drops, func() float64 { return 400 }))
 	m.Handle(watch.LogRoute, sim.Hub.LogHandler(m))
 	mountSkills(m)
+	mountVault(m)
 	if fogStage != "" {
 		pub, err := fogPublisher(fogStage)
 		if err != nil {

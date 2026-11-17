@@ -15,3 +15,4 @@
           <span class="when"> "<time>"
           <span class="txt"> "You said yes to the Den of Evil."
       <p class="note">
+      <a class="d-btn" data-key="vault-link" data-size="sm" data-variant="ghost" hidden> "Ethereal Vault: every recorded drop"

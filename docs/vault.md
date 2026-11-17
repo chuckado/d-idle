@@ -1,6 +1,6 @@
 # Ethereal Vault store (internal/vault) and its file formats
 
-> status: BUILT offline (slice V2 of docs/design/loot-vault-2026-11-16.md). Additive and unused until V3 (rules action) and V5 (keep queue) call it. Not run against a live game: every claim below is about the offline package (V: `go test ./internal/vault/`). Item hex comes from the fork codec later (V1); here it is opaque bytes.
+> status: BUILT offline (slices V2 and V4 of docs/design/loot-vault-2026-11-16.md; V4 is the read API and the page, section "UI and API" below). Additive and unused until V3 (rules action) and V5 (keep queue) call it. Not run against a live game: every claim below is about the offline package (V: `go test ./internal/vault/`). Item hex comes from the fork codec later (V1); here it is opaque bytes.
 
 ## Layout (per hero)
 
@@ -59,4 +59,40 @@ Insert about 8 us (10k and 50k); insert with trim at 10k about 0.6 ms; Open by f
 
 ## Not done here
 
-Log compaction (design 5: archive-then-replace at 3x live data); the trashed-list purge schedule (`PurgeArchive(before)` exists, nobody calls it); HTTP API and UI (V4); wallet (V7); the item codec that fills `Raw`, `Name`, `Chain` (V1).
+Log compaction (design 5: archive-then-replace at 3x live data); the trashed-list purge schedule (`PurgeArchive(before)` exists, nobody calls it); wallet (V7); the item codec that fills `Raw`, `Name`, `Chain` (V1).
+
+## UI and API (slice V4: `/watch/vault`, `/api/vault`)
+
+> status: BUILT offline, not seen live. V: `go test ./internal/watch/ -run Vault` (API against a 10k-item store), `go test ./cmd/d2bot/ -run Vault`, node tests of the page logic (`TestVaultLogicJS`), the fit pages of `tools/uishots.sh --fit` (pages `vault-*`, must-fail `vaultdefect-*`) and the pictures of `tools/uishots.sh --vt`, all on the worker host. The recorder (V3) does not exist yet, so on a real bot the page shows its empty state until a vault is on disk.
+
+What it is: a read side plus Pin, Unpin and Discard of the Ethereal Vault. No Keep, Reveal, Sell or Upgrade (V5, V6, V7): the Keep and Upgrade buttons are drawn, disabled, with the reason in text (`aria-disabled` and a description, never a dead press: pressing says why).
+
+Routes (code: `internal/watch/vaultapi.go`; bound in `cmd/d2bot/vaultwire.go`, mounted in `internal/watch/funwire.go` as `Fun.Vault`):
+
+| Route | Listener | What |
+|---|---|---|
+| `GET /api/vault` | viewer | schema `watch.vault/1`: `mode` (`on`, or `off` while knob `loot.vault` is 0), `exists`, `hero`, `total`, `offset`, `limit`, `items[]`, `capacity` (count, capacity, pins, pinLimit, percent, `level` ok/warn/full/over, `over`), `upgrade` (always `available:false` until V7, the next step and its price from `data/vault/capacity.json`, currency `Ether`), with `facets=1` also `kinds` and `types[]` (item types in the vault with counts) |
+| `GET /api/vault/item/<id>` | viewer | the row plus `where` (found time, area), `lines`, and `actions` (pin, unpin, discard, keep, reveal each `{ok, reason}`; keep and reveal are never ok here) |
+| `POST /api/vault/pin`, `/unpin`, `/discard` | answer | `{"ids":[...], "confirm":true}`; 1 to 150 ids (the answer body is capped at 4 KiB, the page sends longer selections in chunks); discard needs `confirm`; the store archives each record before it leaves (docs above). Reply `{ok, done[], failed[{id, code, error}]}`; 200 when something was done, 409 when nothing was; `409 off` while the vault is read only |
+| `GET /watch/vault` (+ `.js`, `-logic.js`, `.css`, `.json`) | viewer | the page and its files |
+
+Query of `GET /api/vault`: `q` (name substring, at most 64), `quality` (ids or words, comma list, any of), `kind` (one of `web/vault.json` `kinds`: unique, set, rune, jewel, charm; a quality set and/or item code prefixes, data not code), `type` (a member of the item's base type chain), `ilvlMin`, `ilvlMax`, `sockets` (exact), `eth`, `identified`, `pinned` (`1`/`0`), `state` (comma list; default the live states), `sort` (`new` default, `old`, `quality`, `ilvl`, `value`, `name`), `offset`, `limit` (default 60, at most 200). A bad value is a 400 `{code:"query"}` naming it. `vault.Filter` gained `CodePrefix`, the sorts `ilvl`, `quality`, `name`, and `Store.Facets()`.
+
+Read-only: with no desk the API answers 503 `off`; with no vault on disk (`exists:false`) or the knob at 0 the page opens, GET works (a vault that exists stays readable at knob 0) and every POST answers 409 `off`. The page never creates a vault. `cmd/d2bot` opens `<state dir>/<hero>/vault` only when its log exists, and `vaultHome.Store` is the one shared Store: the recorder of V3 must use it (two Stores over one log hold separate indexes).
+
+Unidentified items: the row carries the as-displayed name the recorder stored (the base for an unidentified item), quality word, item level; no property text exists in the row or the detail, and the tooltip adds "Unidentified" itself. U: the stored `Name` of an unidentified record must be the base name; V3's codec adapter has to guarantee it (the API cannot tell).
+
+The page (`internal/watch/web/vault.html`, `vault.js`, `vault-logic.js`, `vault.css`, texts `vault.json`):
+- Reuse: the cell look of `components.css` section 14 (quality border, tags), `inventory-tip.js` and `.css` unchanged (the grid is `id="pack"`, the rows are dispatched as an inventory view on `d2:inventory`, each row numbered), the Characters page frame (header, no page scroll, one scroll region, modal sheet), the "..." menu entry, Orders More entry, and a link in the Drops feed (Items tab of the Log drawer). Cells are slots, not footprints (design 2.4); art is not drawn (the cells show the name; U: item art needs the codec's `art` field).
+- Header: capacity meter (`role=meter`, count/capacity, colour at 80 and 100 percent, red when over capacity with the "discard N to resume, nothing is deleted" banner), pins used, the disabled Upgrade button with the next tier's gain and price and the text "arrives with the Ether wallet (V7)".
+- Filters: search, quality chips, kind, type, item level range, sockets, Ethereal, Unidentified only, Pinned only, state, sort, grid/list toggle. Below 1100 px wide or 700 px high the panel folds behind a Filters button (with the active count). The filters are in the address (`?quality=7&kind=rune`), so a link or reload keeps them; `#<id>` opens an item.
+- Selection: Select button, shift-click range, ctrl/meta-click, long press (500 ms), "Select all shown", Escape clears. Pin, Unpin, Discard act on the selection. Discard opens a modal (focus loop, Escape, default focus on Cancel); above 10 items the count must be typed. The Keep button is disabled with "Keep arrives with the Keep queue (V5)".
+- A wide window (900 px and up) shows the card of the open item beside the list (state, lines, where found, Pin or Unpin, Discard, disabled Keep). On a phone a tap shows the tooltip as a bottom sheet and actions go through Select.
+- States: loading, error (retry), empty vault (explains the Ethereal Vault), off (read only banner), nothing matches (clear filters), over capacity, full. The list polls every 6 s and reloads only when the total, count or first row changed; pages of 60, "Show more" and an end-of-list sentinel up to 600 rows (search narrows the rest).
+- Accessibility: every control has a name (the fit check fails one without), targets are at least 44 px, cells are buttons with a full label and `aria-pressed` for selection, arrows move between cells, no motion.
+
+Measured (V, `TestVaultPagingPerformance`, 10,000 records, 4-core box, GET handler in process, mean of 10): first page 2 ms, sort by value 5 ms, sort by name from offset 5000 16 ms, kind and ilvl sort under 1 ms, name search with sort 2 ms, facets 1 ms. The ceiling the test enforces is 150 ms.
+
+Fit and pictures: `tools/uishots.sh --fit` has the pages `vault-*` (states pop, warn, full, over, empty, none, off, error, big; list view; filters open; select; the confirm sheet with and without the typed number; tooltip hover; the menu and More entries) at the usual sizes plus 412x780 and 360x640, and the must-fail `vaultdefect-*` (clipped text, wide grid, list under the header, small target, covered control, cut sheet, unnamed control, enabled placeholder). `tools/uishots.sh --vt` writes the pictures (`vt-NAME-WxH.png`). Fixtures: `tools/uishots/fixtures_vault.go` (real stores, frozen drops).
+
+Dead ends and not done: no loading-state picture (headless Chrome's virtual time waits for the pending request, so the harness never sees it); the Keep, Reveal, Sell, Upgrade verbs; "Recently trimmed" list; property-text search (needs the codec's view); compare with the worn item (needs the inventory view on this page).

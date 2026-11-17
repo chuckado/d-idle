@@ -28,10 +28,14 @@ var overlayJS = map[string]string{
 
 func serveDefectJS(w http.ResponseWriter, r *http.Request) bool {
 	n, ok := strings.CutSuffix(strings.TrimPrefix(r.URL.Path, "/__fit/defect-"), ".js")
-	if !ok || overlayJS[n] == "" {
+	src := overlayJS[n]
+	if src == "" {
+		src = vaultJS[n]
+	}
+	if !ok || src == "" {
 		return false
 	}
 	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
-	w.Write([]byte(overlayJS[n]))
+	w.Write([]byte(src))
 	return true
 }

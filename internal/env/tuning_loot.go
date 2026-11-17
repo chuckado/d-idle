@@ -33,6 +33,7 @@ type LootTuning struct {
 	GoldMaxDanger    int // highest pack danger (combat.Danger*) at which a mid-fight grab is still allowed
 	GoldMinLifePct   int // life percent under which gold is ignored (survival first)
 	GoldRetries      int // failed pickups of one pile (over all calls) before it is given up
+	Vault            int // 1: record worthwhile drops in the Ethereal Vault (docs/vault.md, V3); 0: the vault page is read only and nothing new is recorded
 	RulesEngine      int // loot rules engine stage: 0 off, 1 ground, 2 ground and tidy, 3 reserved (sell, needs a user decision; not implemented)
 }
 
@@ -42,7 +43,7 @@ func DefaultLootTuning() LootTuning {
 		GoldMinStack: 10, GoldPileShare: 50, FreeCellsKeep: 2, PotionBuffer: 4, PotionBufferMana: 2, RejuvSpare: 3, LowGoldBelow: 2000, MinValuePerCell: 100, ValuableMinGold: 1500, ValuableMinPrio: 70, CarryValuables: 0, MaxPerCall: 30,
 		PoorGoldBelow: 300, PoorMinSell: 20,
 		MemEnabled: 1, MemMinGold: 20, MemMaxDist: 120, MemMaxTrips: 6, MemCap: 64,
-		GoldPriority: 1, GoldGrabDist: 20, GoldSafeDist: 8, GoldMaxDanger: 0, GoldMinLifePct: 60, GoldRetries: 4, RulesEngine: 0,
+		GoldPriority: 1, GoldGrabDist: 20, GoldSafeDist: 8, GoldMaxDanger: 0, GoldMinLifePct: 60, GoldRetries: 4, RulesEngine: 0, Vault: 0,
 	}
 }
 
@@ -84,6 +85,7 @@ func lootKnobs() []Knob {
 		lootK("goldMaxDanger", "Gold: max pack danger", "level", "Highest pack danger (0 none, 1 champions or shamans, 2 elite, 3 deadly) at which a mid-fight grab is still made.", d.GoldMaxDanger, 0, 3, true),
 		lootK("goldMinLifePct", "Gold: min life", "percent", "Below this life percent gold is ignored (survival comes first).", d.GoldMinLifePct, 0, 100, false),
 		lootK("rulesEngine", "Loot rules engine stage", "stage", "0: today's pickit and tidy table decide (default). 1: the loot rules engine (docs/lootrules.md) decides what to pick up from the ground, with today's strictness, minimum priority, per-cell and small-gold filters still applied on top. 2: ground and the tidy chore's stash and drop decisions. 3: plus the sell chore (the five sell decisions of docs/lootrules.md section 13: marks first, then the sell rules, then the ground rules as the pickit judges today). If the engine errors or panics, that one decision falls back to today's code and is logged once.", d.RulesEngine, 0, 3, false),
+		lootK("vault", "Ethereal Vault recording", "0/1", "1: worthwhile drops are recorded in the Ethereal Vault (docs/vault.md). 0 (default): nothing new is recorded and the Vault page is read only; what was recorded earlier stays readable. Forced off in measured runs.", d.Vault, 0, 1, false),
 		lootK("goldRetries", "Gold: pickup retries", "count", "Failed pickups of one pile, over all calls, before it is given up.", d.GoldRetries, 1, 10, true),
 		lootK("memCap", "Loot memory: size", "count", "Remembered drops kept at most; the lowest value is evicted.", d.MemCap, 4, 512, true),
 	}
