@@ -520,6 +520,14 @@ func (d *Desk) needs(v View) []NeedRow {
 				{Label: "Try again", Post: QuestRoute(b.Quest, "retry"), Body: map[string]any{"chunk": b.Chunk}},
 				{Label: "Stop", Post: QuestRoute(b.Quest, "cancel"), Body: map[string]any{"chunk": b.Chunk}}}})
 	}
+	if w := v.WhileAway; w != nil && len(w.Events) > 0 {
+		text := "While you were away: " + strings.ToLower(w.Events[0].Text[:1]) + w.Events[0].Text[1:]
+		if n := len(w.Events) - 1; n > 0 {
+			text += fmt.Sprintf(", and %d more", n)
+		}
+		out = append(out, NeedRow{ID: "quest:away", Kind: "quest_away", Sev: "info", Text: text,
+			Actions: []Verb{{Label: "Got it", Post: "/api/quests/away/dismiss"}}})
+	}
 	if c := v.AutoStart.Countdown; c != nil {
 		out = append(out, NeedRow{ID: "quest:auto:" + c.Quest + "/" + c.Chunk, Kind: "quest_auto", Sev: "event",
 			Text:    fmt.Sprintf("%s starts by itself in %d s", c.QuestTitle, c.SecondsLeft),

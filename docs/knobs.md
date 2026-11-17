@@ -494,6 +494,11 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
 | quests.board | 0 | 0..1 | bool | 0 | 1 | 1: a quest runs only after the player accepts its current chunk (Start); the bot does that chunk, walks to the NPC and stops, and the player taps Hand in. The planner then no longer starts quests by itself: between chunks the hero acts on the player's mode (Train levels toward the next quest, Idle parks in town, Farm farms loot and gold; docs/questboard.md Modes). 0 (default): today's planner behaviour, nothing changes. Off until the live drill of docs/questboard.md has run. |
+| quests.autoDelaySec | 20 | 0..300 | s | 20 | 1 | Seconds an opted-in quest counts down (shown on the page, with Cancel) before it starts by itself; 0 starts at once. Only a SAFE offer ever auto-starts. |
+| quests.awayMin | 10 | 1..240 | min | 10 | 1 | Minutes without any watch client asking for the board before the player counts as away: then a chunk the board started by itself is also handed in by the board. A present player taps Hand in. |
+| quests.autoHoldMin | 15 | 0..240 | min | 15 | 1 | No quest starts by itself this many minutes after the player paused or reset the bot. |
+| quests.autoGapMin | 30 | 0..600 | min | 30 | 1 | At least this long between two auto-started chunks (a bug can then not chain starts). |
+| quests.autoDayCap | 6 | 0..100 | count | 6 | 1 | At most this many auto-started chunks in 24 hours; 0 turns auto-start off. |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)
