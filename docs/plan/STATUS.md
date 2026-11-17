@@ -243,6 +243,7 @@
 | palfeedflaky | proposed | - | `internal/watch/palfeed` | - |
 | botcpulive | proposed | - | `docs/probes/bot-cpu-live-2026-11-16.md` | - |
 | vaultv2 | in-progress | - | `internal/vault`<br>`data/vault`<br>`docs/vault.md`<br>`docs/design/loot-vault-2026-11-16.md` | - |
+| quests2 | in-progress | - | `internal/questboard`<br>`data/questboard`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -285,6 +286,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- fe68b9807 11-16 23:28 `Merge agent/quests2: Merge branch 'main' into quests2` (quests2)
+- 511aec3a9 11-16 23:27 `Merge branch 'main' into quests2` (-)
 - 845438e37 11-16 23:22 `Merge agent/vaultv2: Merge branch 'main' into vaultv2` (vaultv2)
 - cb674bca4 11-16 23:21 `Merge branch 'main' into vaultv2` (-)
 - b1dd05d78 11-16 23:16 `Merge agent/vaultv1: Merge branch 'main' into vaultv1` (vaultv1)
@@ -293,6 +296,4 @@
 - a0b01f790 11-16 23:06 `Merge branch 'main' into pausemenufit` (-)
 - 51d8a1840 11-16 22:52 `Merge agent/botcpu: Merge branch 'main' into botcpu` (botcpu)
 - 020724c2c 11-16 22:51 `Merge branch 'main' into botcpu` (-)
-- c0acda8d2 11-16 22:50 `Merge agent/botcpulive: Merge branch 'main' into task-582` (botcpulive)
-- 92e27b85d 11-16 22:50 `Merge agent/vaultv0: Merge branch 'main' into vaultv0` (vaultv0)
 <!-- statusgen:end -->
