@@ -19,6 +19,11 @@ owns:
   - "cmd/d2bot/display.go"
   - "tools/uishots/fixtures_phone.go"
   - "docs/inventory-ui.md"
+  - "internal/watch/web/inventory-canvas.css"
+  - "internal/data/invfile_real_test.go"
+  - "cmd/d2bot/itemart_test.go"
+  - "tools/uishots/fit_char_test.go"
+result: "Cause (S, no install on the build hosts): the icon was already picked by base class; the game jewel art is untinted grey-white, so all jewels looked alike. Fix: status.Item.kind, jewel cells tinted by quality, type-letter fallback for items with no icon, console debug log once per code, fixture, TestRealIconAudit (not run: no install). Pictures viewed on the worker host, not live."
 exclusive: []
 contracts: []
 ---
@@ -33,8 +38,8 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Cause found and stated
-- [ ] #2 Jewels tinted by quality, missing icons show a type glyph, logged once in debug
-- [ ] #3 Audit of item codes against the icon set listed in docs
+- [x] #1 Cause found and stated
+- [x] #2 Jewels tinted by quality, missing icons show a type glyph, logged once in debug
+- [x] #3 Audit of item codes against the icon set listed in docs
 - [ ] #4 Pictures viewed at 1366x768 and 412x780, dark and light
 <!-- AC:END -->
