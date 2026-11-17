@@ -3,6 +3,7 @@ package watch
 import (
 	"context"
 	"crypto/subtle"
+	"d2lod-bot/internal/buildinfo"
 	"errors"
 	"fmt"
 	"net"
@@ -73,6 +74,7 @@ func (h *Hub) Serve(ctx context.Context, o ServeOptions) (Served, error) {
 	}
 	h.SetVideo(o.Video)
 	h.SetPalFeed(o.PalFeed)
+	h.SetBuild(buildinfo.Current())
 	vl, err := net.Listen("tcp", o.ViewAddr)
 	if err != nil {
 		return Served{}, err

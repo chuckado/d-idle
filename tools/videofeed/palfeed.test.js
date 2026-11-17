@@ -121,11 +121,12 @@ test('player: a frame is not shown before its due time and is shown after it', a
   r.p.start(); await settle2();
   r.clock.t = 5000;
   await r.push(patch(rd('key.pf'), 1, 0, 1000));
-  await r.frame(5001);          // due = game + (arrival - game) + delay: about 33 ms after arrival
+  await r.frame(5001);          // due = game + (arrival - game) + delay: about 66 ms (two frame intervals) after arrival
   assert.strictEqual(r.puts.length, 0, 'not due yet');
   assert.ok(r.rafs.length >= 1, 'asks for another animation frame');
   await r.frame(5016); assert.strictEqual(r.puts.length, 0);
-  await r.frame(5050); assert.strictEqual(r.puts.length, 1, 'due');
+  await r.frame(5050); assert.strictEqual(r.puts.length, 0, 'still inside the delay');
+  await r.frame(5080); assert.strictEqual(r.puts.length, 1, 'due');
   r.p.stop();
 });
 
@@ -165,9 +166,9 @@ test('player: the presentation clock evens out arrival jitter and bounds the del
   const sd = (v) => { const m = v.reduce((a, b) => a + b, 0) / v.length; return Math.sqrt(v.reduce((a, b) => a + (b - m) * (b - m), 0) / v.length); };
   assert.ok(st.delivered === N, 'delivered ' + st.delivered);
   assert.ok(st.presented >= N * 0.85 && st.presented <= N, 'presented ' + st.presented + ' of ' + N);
-  assert.ok(st.latencyMs <= 80, 'latency ' + st.latencyMs);
+  assert.ok(st.latencyMs <= 200, 'latency ' + st.latencyMs);
   assert.ok(st.jitterMs < sd(naive), 'jitter ' + st.jitterMs.toFixed(1) + ' ms against naive ' + sd(naive).toFixed(1) + ' ms');
-  assert.ok(st.delayMs >= 33 && st.delayMs <= 70, 'delay ' + st.delayMs);
+  assert.ok(st.delayMs >= 66 && st.delayMs <= 200, 'delay ' + st.delayMs);
   r.p.stop();
 });
 
@@ -226,4 +227,46 @@ test('fitFill fills the box at any scale, keeps 4:3, rounds to whole device pixe
   assert.ok(Number.isInteger(r.cssW * 2) && Number.isInteger(r.cssH * 2), JSON.stringify(r));
   assert.ok(r.cssW <= 801 + 1e-9 && r.cssH <= 700 + 1e-9);
   r = PF.fitFill(800, 600, 0, 0, 1);       assert.ok(r.cssW > 0, 'a hidden box gives a harmless size');
+});
+
+// Regression for the sandbox hitching: the container's CPU quota freezes everything for up to ~100 ms every second or two and the
+// backlog then arrives in a burst. After the buffer has seen one stall (warm-up) no presented gap may exceed 52 ms and there must
+// be no stall over 50 ms; the old present-on-arrival player shows them (the test checks that it does, so it can tell the difference).
+async function stallTrace(noClock) {
+  const r = rig({ noClock });
+  r.p.start(); await settle2();
+  const step = 1000 / 30, N = 600, stalls = [];                       // 20 s at 30 fps
+  const arr = [];
+  let freezeUntil = 0;
+  for (let k = 0; k < N; k++) {
+    const t = 2000 + k * step;
+    if (k > 0 && k % 45 === 0) freezeUntil = t + 95;                  // a 95 ms throttle freeze every 1.5 s
+    arr.push({ k, g: Math.round(k * step), at: Math.max(t, freezeUntil) });
+  }
+  for (let i = 1; i < arr.length; i++) arr[i].at = Math.max(arr[i].at, arr[i - 1].at);
+  let ai = 0; const draws = [];
+  for (let ts = 2000; ts < 2000 + N * step + 400; ts += 1000 / 60) {
+    while (ai < arr.length && arr[ai].at <= ts) { const a = arr[ai++]; r.clock.t = a.at; await r.push(a.k === 0 ? patch(rd('key.pf'), 1, 0, a.g) : patch(rd('delta.pf'), a.k + 1, a.k, a.g)); }
+    const before = r.puts.length; await r.frame(ts); if (r.puts.length > before) draws.push(ts);
+  }
+  const gaps = []; for (let i = 1; i < draws.length; i++) if (draws[i] > 2000 + 5000) gaps.push(draws[i] - draws[i - 1]);   // after a 5 s warm-up
+  return { gaps, max: Math.max.apply(null, gaps), over50: gaps.filter((g) => g > 52).length, st: r.p.stats(), draws: draws.length };
+}
+test('player: a 95 ms freeze every 1.5 s causes no presented gap over 52 ms after warm-up', async () => {
+  const withClock = await stallTrace(false), old = await stallTrace(true);
+  assert.ok(withClock.over50 === 0 && withClock.max <= 52, 'stalls over 50 ms: ' + withClock.over50 + ', max gap ' + withClock.max.toFixed(1));
+  assert.ok(withClock.draws >= 590 * 0.97, 'drawn ' + withClock.draws);
+  assert.ok(withClock.st.delayMs >= 66 && withClock.st.delayMs <= 200, 'delay ' + withClock.st.delayMs);
+  assert.ok(old.over50 >= 5, 'the old player must show the stalls the clock hides: ' + old.over50);
+});
+test('player: the delay does not breathe in steady arrival and relaxes slowly after a stall', async () => {
+  const r = rig(); r.p.start(); await settle2();
+  const step = 1000 / 30, ds = [];
+  for (let k = 0; k < 450; k++) {
+    const t = 2000 + k * step + (k === 60 ? 90 : 0);                   // one 90 ms stall at 2 s
+    r.clock.t = t; await r.push(k === 0 ? patch(rd('key.pf'), 1, 0, 0) : patch(rd('delta.pf'), k + 1, k, Math.round(k * step)));
+    await r.frame(t); if (k > 70 && k % 10 === 0) ds.push(r.p.stats().delayMs);
+  }
+  for (let i = 1; i < ds.length; i++) assert.ok(ds[i] <= ds[i - 1] + 0.01, 'delay only relaxes: ' + ds.join(','));
+  assert.ok(ds[0] - ds[ds.length - 1] < 60 && ds[ds.length - 1] >= 66, 'relaxes slowly: ' + ds[0] + ' to ' + ds[ds.length - 1]);
 });

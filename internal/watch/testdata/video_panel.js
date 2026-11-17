@@ -2,7 +2,9 @@
 // full screen on the panel. Usage: node video_panel.js path/to/panel.js
 const assert = require('assert'), { load, shellCtx } = require('./panel_harness.js');
 const path = require('path');
-const M = load(path.join(path.dirname(process.argv[2]), '../../mjpeg.js'));
+const M0 = load(path.join(path.dirname(process.argv[2]), '../../mjpeg.js'));
+const S = load(path.join(path.dirname(process.argv[2]), '../../streamstats.js'));
+const M = Object.assign({}, M0, S, { drawStats: S.draw });
 const P = load(process.argv[2], M);
 // no stream: the panel hides itself
 { const t = []; const { root, c } = shellCtx({}, {}, t); P.mount(root, c); assert.strictEqual(c.hidden, true); }
