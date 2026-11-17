@@ -72,6 +72,6 @@ ready-to-run check is `tools/videofeed/gamma_frames.py` (below).
 
 ## Re-check (ready to run, builder)
 
-`labrun tower -- sh -c 'python3 tools/videofeed/gamma_frames.py /tmp/brightness-fr "$D2D" /gamedata 155 100 120 && go run ./tools/videofeed/lumastat /tmp/brightness-fr/*.png'`
+`labrun <builder> -- sh -c 'python3 tools/videofeed/gamma_frames.py /tmp/brightness-fr "$D2D" /gamedata 155 100 120 && go run ./tools/videofeed/lumastat /tmp/brightness-fr/*.png'`
 records the same seeded town frame at gamma 155, 100 and 120 (d2d.cfg `gamma` via `D2D_USER_DIR`) and prints luma stats;
 expect mean(155) / mean(100) about 1.55 and the frames otherwise identical. Not run: the builder's main queue held six jobs.
