@@ -275,6 +275,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 75ec8348b 11-16 18:51 `Merge agent/videofeed3: videofeed3: lossless feed at 30 fps (ring divisor), presentation clock, fill-the-card fit` (videofeed3)
+- b0ad05793 11-16 18:48 `Merge remote-tracking branch 'origin/main' into agent/videofeed3` (-)
 - de151d37f 11-16 18:32 `Merge agent/survab8: Merge branch 'main' into survab8` (survab8)
 - 2aa3e5331 11-16 18:31 `Merge branch 'main' into survab8` (-)
 - 81cadbc15 11-16 18:08 `Merge agent/leechbody: leech PR body per verifier L1-L6` (leechbody)
@@ -283,6 +285,4 @@
 - f972f9707 11-16 17:05 `Merge agent/flakefix: Merge branch 'main' into flakefix` (flakefix)
 - 07ab5b25e 11-16 17:04 `Merge branch 'main' into flakefix` (-)
 - 14e155b0f 11-16 16:37 `Merge agent/survledger: Merge branch 'main' into TASK-566` (survledger)
-- f62adefc9 11-16 16:36 `Merge branch 'main' into TASK-566` (-)
-- d5151ba8b 11-16 16:06 `Merge agent/survrescreen: Merge branch 'main' into survrescreen` (survrescreen)
 <!-- statusgen:end -->

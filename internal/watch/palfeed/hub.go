@@ -71,7 +71,7 @@ type Options struct {
 	WriteTimeout time.Duration
 	// MaxBytesPerSec is the per-client bandwidth guard: after a message of n bytes the next one waits at least
 	// n / MaxBytesPerSec, so a heavy stretch (a key frame, a panel opening) lowers that client's rate instead of
-	// queueing bytes; the delta that follows is built from the newest frame (latest wins). Default 2 MiB/s (the
+	// queueing bytes; the delta that follows is built from the newest frame (latest wins). Default 4 MiB/s (the
 	// measured mean is 0.49 MB/s at 25 Hz, docs/video-feed.md section 5); negative: no guard.
 	MaxBytesPerSec int
 	// BigMsg is the size from which a message counts as key-sized (a panel open is 375 to 737 KB); after one the client
@@ -97,7 +97,7 @@ func (h *Hub) Stream(o Options) http.Handler {
 		o.WriteTimeout = 10 * time.Second
 	}
 	if o.MaxBytesPerSec == 0 {
-		o.MaxBytesPerSec = 2 << 20
+		o.MaxBytesPerSec = 4 << 20
 	}
 	if o.BigMsg <= 0 {
 		o.BigMsg = 200 << 10
@@ -184,18 +184,29 @@ func (h *Hub) Stream(o Options) http.Handler {
 			deltas++
 			h.msgs.Add(1)
 			h.bytes.Add(int64(len(m)) + 4)
-			gap := time.Second / time.Duration(fps)
+			// The pace is a schedule (the previous slot plus one period), not "now plus one period": the loop's own work
+			// (encode, write) would otherwise push every slot later and a frame would be skipped now and then (30 fps
+			// became 29 with judder). Behind schedule: restart from now, never catch up in a burst.
+			now := time.Now()
+			slot := next.Add(time.Second / time.Duration(fps))
+			if slot.Before(now) {
+				slot = now
+			}
+			var guard time.Duration
 			if len(m) >= o.BigMsg {
 				h.keys.Add(1)
-				gap = max(gap, o.BigGap)
+				guard = o.BigGap
 			}
 			if o.MaxBytesPerSec > 0 {
-				if g := time.Duration(int64(len(m)) * int64(time.Second) / int64(o.MaxBytesPerSec)); g > gap {
-					gap = g
+				if g := time.Duration(int64(len(m)) * int64(time.Second) / int64(o.MaxBytesPerSec)); g > time.Second/time.Duration(fps) {
+					guard = max(guard, g)
 					h.slow.Add(1)
 				}
 			}
-			next = time.Now().Add(gap)
+			next = slot
+			if g := now.Add(guard); g.After(next) {
+				next = g
+			}
 		}
 	})
 }

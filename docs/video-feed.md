@@ -216,3 +216,60 @@ Prerequisites: a sandbox d2d with the `framefeed` verb (fork 80cc7adc, already t
    the canvas, the card falls back to MJPEG with a blocked `DecompressionStream` (devtools override) and stays up. Waterfox.
 8. Verdict: keep the switch off (default), or ask the user to turn it on for the sandbox. Record the numbers in
    docs/probes/video-feed-<date>.md.
+
+## 11. Rate, presentation clock and fit (card videofeed3, 2026-11-16, after the first live look)
+
+User feedback on the sandbox (desktop Waterfox, ~1075 px window): "~14-15 fps", "sorta jittery", "does not fill the window"
+(a centred 800x600 with black bars on all four sides).
+
+1. Why 14-15 fps (V by test, cause read in `cmd/d2dview/frames.go`; the sandbox flags themselves were not looked at). d2dview asks
+   d2d for every k-th drawn frame (`divisor`): the smallest whole k whose period is at least the `-fps` target AND the back-off
+   budget of the JPEG encode (4 x cost). A whole k is kept so game time stays evenly spaced. That rule belongs to the JPEG
+   stream; the lossless feed inherited it. With `-fps 15` (or a JPEG cost of 15 to 20 ms on the sandbox's single core) k is 4 =
+   15 fps; `-fps 25` gives k = 3 = 20 fps because 25 fps (40 ms) rounds UP to every 3rd draw of a 60 Hz source. Nothing
+   downstream capped it: the hub paces at 60 fps per client, the guard is a byte cap, and the d2bot tap relay copies bytes
+   (`D2_VIDEO_FPS`/`D2BOT_WATCH_VIDEO_FPS` sets the ffmpeg or tap-capture rate of the MJPEG path only).
+   Fix: while a lossless viewer is connected (`Frames.palActive`, kept alive by `TouchPal`) the target is 33 ms (`palPeriod`):
+   every 2nd draw of a 60 Hz source = 30 fps, every draw of a 30 Hz one. The JPEG keeps its own cadence next to it
+   (`jpegWanted`: at most one encode per `-fps` gap), so a mixed audience does not raise the JPEG cost. The hub's pace is now a
+   schedule (previous slot plus one period) instead of "write time plus period": the loop's own work no longer slips a slot
+   every thirty frames (test `TestDeliversEveryFrameOfA30HzSource`, `TestDivisorFollowsRenderRateForPalViewers`).
+2. Jitter: presentation clock in `palfeed.js` (`Player`). Every message carries the d2d game time of its frame. The player
+   keeps the smallest (arrival - game time) of the last 2 s, presents frame g at g + that + D, with D = one frame interval +
+   1.5 x the measured jitter (clamped to 1 to 2 frames, at most 70 ms), decodes what is due in order and draws once per
+   animation frame (latest wins); a message older than 80 ms at presentation is not waited for; heartbeats (same game
+   time) are applied at once and ignored by the clock; a game clock that does not follow the wall clock (fast-forwarded
+   lockstep) degrades to "present on the next animation frame". Allocation per frame: the splitter keeps one growing
+   buffer (no per-chunk array), the decoder reuses two pixel buffers and one `ImageData` per buffer; the compressed message
+   is handed to the inflater at once (a Blob copies it) so the splitter buffer can be reused. Stats (`Player.stats()`, shown in the
+   card head while slow or with `?debug`): delivered, decoded, shown (draws), dropped (decoded and merged into a later draw),
+   draw-interval standard deviation, latency, current delay, main-thread work per animation frame.
+3. Fill: the canvas is sized by `PalFeed.fitFill` (contain, 4:3 kept, ANY fractional scale, rounded to whole device pixels,
+   `devicePixelRatio` aware, re-fitted by a `ResizeObserver` on the frame and in full screen). The old integer scale left
+   bars (1x in a 1000 px box). Scaling: nearest-neighbour only at a whole-number scale of 1x or more, smooth otherwise
+   (a fractional scale with nearest-neighbour shimmers while the picture scrolls); the card button "Sharp pixels" (remembered per
+   browser) forces nearest-neighbour. The MJPEG `<img>` already filled its 4:3 frame (`object-fit: contain`, panel.css); the
+   uishots pictures (`pal=1` fixtures, `tools/uishots`) show both.
+
+
+Measured (V, `tools/videofeed/run3.sh` on the builder, headless Chromium 156, animation frames every 16.67 ms; the real `Player`
+against `stream3.js`, a paced feed of 376 recorded frames at 25 Hz stamps with 0 to 25 ms of network-like jitter and 3 percent
+80 ms stalls with a burst after them, 15 s per phase). The 25 Hz source on a 60 Hz display has an unavoidable draw-interval
+spread of 8.2 ms (intervals alternate 33 and 50 ms: phase C, no jitter); a 30 Hz source on 60 Hz has none.
+
+| phase | delivered | drawn | merged (dropped) | draw fps | interval sd | delay | main thread per frame |
+|---|---|---|---|---|---|---|---|
+| A jitter, present on arrival (the old behaviour) | 376 | 357 | 18 | 23.6 | 17.3 ms | 9 ms | 2.65 ms |
+| B jitter, presentation clock | 376 | 373 | 1 | 24.8 | 10.5 ms | 64 ms | 1.23 ms |
+| C no jitter, presentation clock | 376 | 375 | 0 | 25.0 | 8.2 ms | 50 ms | 1.33 ms |
+
+So the clock removes 17 of 18 merged frames and cuts the interval spread from 17.3 to 10.5 ms (the floor is 8.2) for a
+presentation delay of one to two frames (64 ms here, bound 70 ms). Not measured: Firefox and Waterfox (not installed on the
+builder; the player uses only `fetch` streams, `DecompressionStream("deflate-raw")`, `ImageData` and `requestAnimationFrame`, all in
+Firefox 113+), a real GPU, the sandbox itself. The same node tests drive the clock on a fake rAF and fake time
+(`tools/videofeed/palfeed.test.js`: jitter 3.0 ms against 14.3 ms for present-on-arrival at 30 fps, delay 65 ms, 150 of 150
+frames drawn).
+
+A/B additions to section 10: with `?debug` the card head must show ~30 fps (not 14 to 15) and `dropped` near 0 while walking;
+`jitter` below 12 ms; the window must be filled (no black bars at 1075 px); the Sharp pixels button must appear only with the feed;
+the d2dview `-fps` flag is no longer the cap while a canvas viewer is connected.
