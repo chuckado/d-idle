@@ -1,10 +1,13 @@
 ---
 id: TASK-607
-title: 'decomp37: combat and skills lane C, a player''s gear absorb, Open Wounds and the magic resist (elemental pipeline)'
-status: Proposed
+title: >-
+  decomp37: combat and skills lane C, a player's gear absorb, Open Wounds and
+  the magic resist (elemental pipeline)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T10:09:00Z'
+updated_date: '2026-11-17T12:27:00Z'
 labels:
   - d2d
   - research
