@@ -31,7 +31,8 @@ type event struct {
 	Item   *Item     `json:"item,omitempty"`
 	Trim   string    `json:"trim,omitempty"` // add: the record this insert displaced (already archived)
 	Reason string    `json:"reason,omitempty"`
-	N      int       `json:"n,omitempty"` // sold: gold
+	N      int       `json:"n,omitempty"`     // sold: gold
+	Where  string    `json:"where,omitempty"` // keepq: the target, stash (default) or inv
 }
 
 // Options configure a Store. Zero values are usable except Capacity.
@@ -316,7 +317,7 @@ func (s *Store) apply(ev *event) error {
 		if err != nil {
 			return err
 		}
-		r.State, r.Reason, r.Updated = KeepQ, "", ev.T
+		r.State, r.Reason, r.Where, r.Updated = KeepQ, "", ev.Where, ev.T
 	case "kbegin":
 		r, err := need(KeepQ)
 		if err != nil {
@@ -338,6 +339,9 @@ func (s *Store) apply(ev *event) error {
 			return err
 		}
 		r.InFlight = false
+		if ev.Reason != "" { // where the item landed, e.g. "stash 3,5"
+			r.Reason = ev.Reason
+		}
 		s.leave(r, Kept, ev.T)
 	case "keepfail":
 		r, err := need(KeepQ)
@@ -587,6 +591,32 @@ func (s *Store) Unpin(id string) error { return s.op(id, event{Ev: "unpin"}) }
 
 // Keep queues a record for creation at the next town visit.
 func (s *Store) Keep(id string) error { return s.op(id, event{Ev: "keepq"}) }
+
+// KeepTo queues a record for creation in where (WhereStash or WhereInv; "" is the stash).
+func (s *Store) KeepTo(id, where string) error {
+	if where != "" && where != WhereStash && where != WhereInv {
+		return fmt.Errorf("%w: keep target %q", ErrInvalid, where)
+	}
+	return s.op(id, event{Ev: "keepq", Where: where})
+}
+
+// CompleteKeepAt marks the create confirmed and records where it landed (shown on the card).
+func (s *Store) CompleteKeepAt(id, place string) error {
+	return s.op(id, event{Ev: "kept", Reason: place})
+}
+
+// KeepQueued is the records waiting for a create (queued or in flight), oldest queued first (insertion order).
+func (s *Store) KeepQueued() []Rec {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	var out []Rec
+	for _, r := range s.recs {
+		if r.State == KeepQ {
+			out = append(out, *r)
+		}
+	}
+	return out
+}
 
 // CancelKeep returns a queued (not in flight) record to Recorded.
 func (s *Store) CancelKeep(id string) error { return s.op(id, event{Ev: "keepcancel"}) }

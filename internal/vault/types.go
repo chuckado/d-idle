@@ -23,6 +23,12 @@ const (
 	Trimmed   State = "trimmed"   // final, archived
 )
 
+// Keep targets.
+const (
+	WhereStash = "stash"
+	WhereInv   = "inv"
+)
+
 // Live states count against capacity.
 func (s State) Live() bool { return s == Recorded || s == KeepQ || s == SellQ }
 
@@ -61,6 +67,7 @@ type Rec struct {
 	Pin      bool      `json:"pin,omitempty"`
 	InFlight bool      `json:"inflight,omitempty"` // a keep create was started and not confirmed
 	Attempts int       `json:"attempts,omitempty"`
+	Where    string    `json:"where,omitempty"`  // keep target: "" or stash, inv
 	Reason   string    `json:"reason,omitempty"` // last failure or trim/discard reason
 	Gold     int       `json:"gold,omitempty"`   // sale price once sold
 	Updated  time.Time `json:"updated"`
