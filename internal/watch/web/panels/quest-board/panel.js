@@ -312,10 +312,9 @@ export function mountBoard(root, ctx, tab) {
       return;
     }
     const head = ctx.el('div', 'qb-head');
-    head.append(ctx.el('span', 'qb-act', m.actLabel));
-    if (!tab) head.append(modeBar(m)); // the phone's tile above the list has the switch
-    box.append(head);
-    if (m.now) {
+    head.append(ctx.el('span', 'qb-act', m.actLabel), modeBar(m));
+    box.append(head); // the phone's tab keeps the mode switch here (the tile above the list has no room for it) ...
+    if (m.now && !tab) { // ... and no Now row: the tile above the list is that row
       const n = ctx.el('div', 'qb-now');
       n.dataset.kind = m.now.kind;
       const t = ctx.el('span', 'qb-t');

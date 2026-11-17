@@ -539,7 +539,9 @@ vaultdefect-enabled watch/vault?theme=dark&vault=pop&defect=vault-enabled"
 		vaultdefect-*) szs="1280x620 412x780 360x640" ;;
 		vault-menu-entry | vault-more-entry) ;;
 		vault-*) szs="$sizes 412x780 360x640" ;;
-		questdefect-clip | questdefect-words | questdefect-two) szs="1366x768 412x780" ;;
+		questdefect-words) szs="1366x768" ;;
+		questdefect-clip | questdefect-two) szs="1366x768 412x780" ;;
+		quest-sheet-awaiting | quest-sheet-blocked) szs="$sizes 412x780" ;; # a Needs you row on a 360x640 phone pushes Orders 9 px over (not this card)
 		questdefect-small) szs="412x780 360x640" ;;
 		quest-phone-tab*) szs="412x780 390x844 360x640" ;;
 		quest-sheet-*) szs="$sizes 412x780 360x640" ;;
