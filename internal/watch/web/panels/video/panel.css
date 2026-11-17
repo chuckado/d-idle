@@ -7,9 +7,12 @@
   [data-panel="video"] canvas.shot { image-rendering: pixelated; image-rendering: crisp-edges; inline-size: var(--pal-w, 100%); block-size: var(--pal-h, 100%); }
   [data-panel="video"] canvas.shot[hidden] { display: none; }
   [data-panel="video"] canvas.shot[data-smooth="1"] { image-rendering: auto; }
+  /* the stream monitor: bottom-left (the buttons are at the top and wrap over it on a phone), never takes a click; it is a diagnostic, off by default, and may cover part of the game's HUD while it is on */
+  [data-panel="video"] canvas.statsov { position: absolute; inset-block-end: var(--d-sp-2); inset-inline-start: var(--d-sp-2); inline-size: var(--ov-w, 360px); block-size: var(--ov-h, 266px); pointer-events: none; border-radius: var(--d-r-2); }
+  [data-panel="video"] canvas.statsov[hidden] { display: none; }
   /* connection state over the picture: reconnecting, paused, stream down (with Retry); never a silent frozen frame */
   [data-panel="video"] .frame { position: relative; }
-  [data-panel="video"] .badge { position: absolute; inset-block-end: var(--d-sp-2); inset-inline-start: var(--d-sp-2); padding: 0.15rem var(--d-sp-2); border-radius: var(--d-r-2); background: var(--d-video-bg); color: var(--d-video-text); font-size: var(--d-fs-1); opacity: 0.9; }
+  [data-panel="video"] .badge { position: absolute; inset-block-end: var(--d-sp-2); inset-inline-end: 5.5rem; padding: 0.15rem var(--d-sp-2); border-radius: var(--d-r-2); background: var(--d-video-bg); color: var(--d-video-text); font-size: var(--d-fs-1); opacity: 0.9; }
   [data-panel="video"] .frame > .d-btn { position: absolute; inset-block-end: var(--d-sp-2); inset-inline-end: var(--d-sp-2); }
   [data-panel="video"] .badge[hidden], [data-panel="video"] .frame > .d-btn[hidden] { display: none; }
   [data-panel="video"]:fullscreen { overflow: auto; }

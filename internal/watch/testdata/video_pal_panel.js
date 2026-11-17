@@ -3,7 +3,9 @@
 // Usage: node video_pal_panel.js path/to/panel.js
 const assert = require('assert'), { load, shellCtx } = require('./panel_harness.js');
 const path = require('path');
-const M = load(path.join(path.dirname(process.argv[2]), '../../mjpeg.js'));
+const M0 = load(path.join(path.dirname(process.argv[2]), '../../mjpeg.js'));
+const S = load(path.join(path.dirname(process.argv[2]), '../../streamstats.js'));
+const M = Object.assign({}, M0, S, { drawStats: S.draw });
 const tick = (ms) => new Promise((r) => setTimeout(r, ms || 5));
 
 function env(formats, detectOK) {
@@ -67,6 +69,18 @@ async function mount(formats, detectOK, cfg, store) {
     m = await mount(f, ok, cfg);
     assert.strictEqual(m.players.length, 0);
     assert.ok(/^\/stream\.mjpg|^\/stream/.test(m.shot.src));
+  }
+  // Stats overlay: off by default; the button turns it on and remembers; Copy gives JSON with the timing context
+  {
+    const store = {}; m = await mount(['mjpeg', 'palfeed'], true, { build: 'v9' }, store);
+    const btn = m.s.c.actions.children.find((b) => b.dataset && b.dataset.key === 'stats'), cp = m.s.c.actions.children.find((b) => b.dataset && b.dataset.key === 'statscopy');
+    const ov = m.frame.children.find((e) => e.className === 'statsov');
+    assert.ok(btn && cp && ov, 'stats button, copy button and canvas exist'); assert.strictEqual(ov.hidden, true); assert.strictEqual(cp.hidden, true);
+    btn.fire('click'); assert.strictEqual(ov.hidden, false); assert.strictEqual(cp.hidden, false); assert.strictEqual(store.stats, '1');
+    assert.ok(ov.width > 100 && ov.height > 100, 'sized ' + ov.width + 'x' + ov.height);
+    btn.fire('click'); assert.strictEqual(ov.hidden, true); assert.strictEqual(store.stats, '0');
+    const m2 = await mount(['mjpeg', 'palfeed'], true, {}, { stats: '1' });
+    assert.strictEqual(m2.frame.children.find((e) => e.className === 'statsov').hidden, false, 'remembered');
   }
   console.log('ok');
 })().catch((e) => { console.error(e); process.exit(1); });
