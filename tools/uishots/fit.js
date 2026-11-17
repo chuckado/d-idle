@@ -130,7 +130,7 @@ export function overlayState(win) {
       else if (win.getComputedStyle(body, '::after').content === 'none') menuScroll.push('the menu scrolls but shows no hint that there is more');
     }
     for (const n of pop.querySelectorAll('.d-btn, .d-menu-gh')) {
-      if (n.scrollIntoView && body && body.contains(n)) n.scrollIntoView({ block: 'nearest' });
+      if (n.scrollIntoView && body && body.contains(n)) n.scrollIntoView({ block: 'center' });
       const r = vis(n);
       if (!r) continue;
       const at = d.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);

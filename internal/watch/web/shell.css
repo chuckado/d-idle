@@ -222,7 +222,7 @@
   /* the body: the primary row never scrolls, the groups scroll inside the window with a hint (shell.js groupMenu, docs/ui-overlays.md) */
   .d-menu-primary { flex: none; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(max-content, 1fr); gap: var(--d-sp-1); }
   .d-menu-primary > .d-btn { inline-size: 100%; white-space: nowrap; }
-  .d-menu-body { flex: 1 1 auto; min-block-size: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-gutter: stable; display: flex; flex-direction: column; gap: var(--d-sp-1); }
+  .d-menu-body { flex: 1 1 auto; min-block-size: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-gutter: stable; scroll-padding-block: 28px; display: flex; flex-direction: column; gap: var(--d-sp-1); }
   .d-menu-body[data-more="1"]::after { content: "\25BE  more"; position: sticky; inset-block-end: 0; flex: none; text-align: center; padding-block: 2px; font-size: var(--d-fs-0); color: var(--d-text-2); background: var(--d-surface-3); border-block-start: var(--d-bw) solid var(--d-line); }
   .d-menu-group { display: grid; gap: var(--d-sp-1); }
   .d-menu-gb { display: grid; gap: var(--d-sp-1); }
