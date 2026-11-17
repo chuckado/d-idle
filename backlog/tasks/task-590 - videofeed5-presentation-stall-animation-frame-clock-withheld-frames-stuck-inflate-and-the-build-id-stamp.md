@@ -1,10 +1,13 @@
 ---
 id: TASK-590
-title: 'videofeed5: presentation stall (animation-frame clock, withheld frames, stuck inflate) and the build id stamp'
-status: Proposed
+title: >-
+  videofeed5: presentation stall (animation-frame clock, withheld frames, stuck
+  inflate) and the build id stamp
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T04:56:00Z'
+updated_date: '2026-11-17T06:13:00Z'
 labels:
   - watch
   - bug
