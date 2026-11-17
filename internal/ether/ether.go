@@ -546,12 +546,12 @@ func (w *Wallet) Summary() Summary {
 	}
 	switch {
 	case len(owned) == 0:
-		s.Downgrade.Reason = "no capacity step is owned"
+		s.Downgrade.Reason = "No capacity step is owned."
 	default:
 		last := owned[len(owned)-1]
 		s.Downgrade.Step, s.Downgrade.Refund = last, w.owned[last]
 		if lower, n := t.Capacity(owned[:len(owned)-1], 0), w.content(); n > lower {
-			s.Downgrade.Reason = fmt.Sprintf("the vault holds %d records and the lower tier fits %d: discard %d first", n, lower, n-lower)
+			s.Downgrade.Reason = fmt.Sprintf("The vault holds %d records and the lower tier fits %d: discard %d first.", n, lower, n-lower)
 		} else {
 			s.Downgrade.Available = true
 		}

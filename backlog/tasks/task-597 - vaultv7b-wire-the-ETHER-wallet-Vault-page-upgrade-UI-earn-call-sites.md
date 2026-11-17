@@ -40,6 +40,7 @@ owns:
   - "docs/vault.md"
   - "docs/design/loot-vault-2026-11-16.md"exclusive: []
 contracts: []
+result: "Built and tested offline, not run live: the ETHER wallet is wired in cmd/d2bot behind loot.vault (per account, survives hero switches, feeds store capacity), gated POST routes, Vault page Upgrade/Refund with wallet chip and confirm sheet (node test, fit pages and pictures viewed on the builder), Hero tile chip, earn call sites (firsts, bosses, level and difficulty milestones, capped kill trickle). Quest hand-in earn stays S10."
 ---
 
 ## Description
@@ -52,7 +53,7 @@ Why: the V7 wallet was built but not wired; the player cannot earn or spend Ethe
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Wallet wired in cmd/d2bot behind loot.vault, per account, survives hero switches
-- [ ] #2 Vault page Upgrade/Downgrade/chip, fit and pictures
-- [ ] #3 Earn call sites idempotent, tests
+- [x] #1 Wallet wired in cmd/d2bot behind loot.vault, per account, survives hero switches
+- [x] #2 Vault page Upgrade/Downgrade/chip, fit and pictures
+- [x] #3 Earn call sites idempotent, tests
 <!-- AC:END -->
