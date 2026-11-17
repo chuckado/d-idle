@@ -43,6 +43,7 @@ export function mount(root, ctx) {
   // onClick, pressed}) (the Labels toggle uses it). Only Collapse stays in the card's title bar actions.
   const bar = ctx.el('div', 'vtools');
   bar.setAttribute('role', 'toolbar'); bar.setAttribute('aria-label', 'Video controls');
+  bar.setAttribute('data-hscroll', ''); // one row that scrolls sideways when the card is narrow: the picture keeps its height
   ctx.body.append(bar);
   const statLine = ctx.el('span', 'vstat', ''); // the rate line (was the card head's meta text, which sat over the picture)
   statLine.setAttribute('role', 'status'); statLine.hidden = true;
@@ -90,8 +91,12 @@ export function mount(root, ctx) {
   lowBtn.setAttribute('aria-pressed', String(low.get() === '1'));
   lowBtn.title = 'Smoother on a slow screen: about ' + LOW_FPS + ' pictures a second';
   bar.insertBefore ? bar.insertBefore(lowBtn, statLine) : bar.append(lowBtn);
-  const hint = ctx.el('p', 'd-empty', '');
+  // the low-fps hint: ONE line under the toolbar (text with an ellipsis, the button never cut), so it cannot squeeze the picture
+  const hint = ctx.el('div', 'vhint', '');
+  const hintT = ctx.el('span', 'vhint-t', '');
+  const hintBtn = ctx.el('button', 'd-btn', 'Use low-rate mode'); hintBtn.type = 'button'; hintBtn.dataset.size = 'sm';
   hint.hidden = true; hint.setAttribute('role', 'status');
+  hint.append(hintT, hintBtn);
   ctx.body.append(hint);
   let bytes = [];
   const mon = new StreamMonitor(); // the 30 s record the Stats overlay draws; both players feed it
@@ -102,6 +107,7 @@ export function mount(root, ctx) {
     ctl.reconnect();
   }
   lowBtn.addEventListener('click', () => setLow(low.get() !== '1'));
+  hintBtn.addEventListener('click', () => setLow(true));
   // measured here and shown in the card head (also read by window.d2video.stats(): a friend can screenshot it)
   function stats() {
     const now = Date.now();
@@ -130,10 +136,8 @@ export function mount(root, ctx) {
     }
     if (slow && !st.low) {
       if (Date.now() - slowAt >= 3000 && hint.hidden) {
-        hint.textContent = 'The picture runs at ' + Math.round(f) + ' fps here. Low-rate mode may look smoother. ';
-        const b = ctx.el('button', 'd-btn', 'Use low-rate mode'); b.type = 'button'; b.dataset.size = 'sm';
-        b.addEventListener('click', () => setLow(true));
-        hint.append(b); hint.hidden = false;
+        hintT.textContent = 'Runs at ' + Math.round(f) + ' fps here. Low rate may look smoother.';
+        hint.hidden = false;
       }
     } else if (!hint.hidden && !slow) hint.hidden = true;
     // the rate line shows while slow or with ?debug; a steady line elsewhere would only repaint the head
