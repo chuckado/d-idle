@@ -12,6 +12,7 @@ import (
 	"d2lod-bot/internal/goals"
 	"d2lod-bot/internal/leveler"
 	"d2lod-bot/internal/merc"
+	"d2lod-bot/internal/questboard"
 	"d2lod-bot/internal/resource"
 	"d2lod-bot/internal/watch"
 )
@@ -30,8 +31,9 @@ type glanceDeps struct {
 	Pause   func() string // the player pause state (bot.PauseRunning, PauseGoingHome, PausePaused)
 	PauseV  func() bot.PlayerPauseView
 	Reset   func() bot.ResetView
-	Stuck   func() time.Duration // how long the bot made no progress (the stall detector), 0 = not stuck
-	Beat    func() time.Time     // the loop's last finished iteration
+	Stuck   func() time.Duration    // how long the bot made no progress (the stall detector), 0 = not stuck
+	Beat    func() time.Time        // the loop's last finished iteration
+	Quests  func() *questboard.Desk // the quest board desk (questwire.go); nil result: none
 }
 
 // useGlance binds the bot's sources to the Hub. No rig, no Hub or no runner: nothing (the lights stay "unknown").
@@ -53,7 +55,12 @@ func useGlance(rig *ladderRig, r *bot.Runner, db *data.DB, levelerBuild string, 
 	}
 	deps := glanceDeps{Status: r.Status, Chapter: func() string { return journeyChapter(ref) },
 		Pause: func() string { return r.PlayerPauseView().State }, PauseV: r.PlayerPauseView,
-		Reset: r.ResetView, Stuck: r.StuckFor, Beat: r.LastStep}
+		Reset: r.ResetView, Stuck: r.StuckFor, Beat: r.LastStep, Quests: func() *questboard.Desk {
+			if ref == nil {
+				return nil
+			}
+			return ref.qd
+		}}
 	for _, f := range glanceExtra {
 		f(&src, deps)
 	}

@@ -176,7 +176,8 @@ type Fun struct {
 	// LootRules mounts GET (viewer) and PUT (answer listener) /api/lootrules (lootrulesapi.go); nil: no routes.
 	LootRules *LootRulesAPI
 	// GoldFarm mounts the Farm gold order routes (goldfarmapi.go); set it before Serve, nil: no routes.
-	GoldFarm *GoldFarmAPI
+	GoldFarm   *GoldFarmAPI
+	QuestBoard *QuestsAPI // the quest board routes (questsapi.go); nil: none
 	// Onboarding is the welcome card, first-30-minutes checklist and reconnect data (onboarding.go); always set by NewFun.
 	Onboarding *Onboarding
 	Campaign   *CampaignAPI // the guided journey (campaign.go); nil: no routes
@@ -781,6 +782,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.GoldFarm != nil {
 		m.Handle(GoldFarmRoute, f.GoldFarm.Handler())
 	}
+	if f.QuestBoard != nil {
+		m.Handle(QuestsRoute, f.QuestBoard.Handler())
+	}
 	if f.Campaign != nil {
 		m.Handle(CampaignRoute, f.Campaign.Handler())
 	}
@@ -891,6 +895,9 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	}
 	if f.GoldFarm != nil {
 		m.Handle(GoldFarmRoute, f.GoldFarm.PostHandler(o))
+	}
+	if f.QuestBoard != nil {
+		m.Handle(QuestsPrefix, f.QuestBoard.PostHandler(o))
 	}
 	if f.Campaign != nil {
 		m.Handle(CampaignIntentRoute, f.Campaign.PostHandler(o))

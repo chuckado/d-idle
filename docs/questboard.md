@@ -1,4 +1,4 @@
-# Quest board model (slice S1) and executor (slice S3)
+# Quest board model (slice S1), executor (S3) and API (S4)
 
 > status: S1 model built and tested offline (card quests1, TASK-577); S3 executor built and tested offline behind the knob `quests.board` (default 0; card quests3, TASK-585), NOT verified live (the drill below has not run). Design: [docs/design/quest-board-2026-11-16.md](design/quest-board-2026-11-16.md). Tags: V verified by the named test or file, S secondary, U unverified live, I design choice.
 
@@ -33,7 +33,7 @@ Known gaps (U): the hand-in picks of Akara, Atma, Cain, Charsi (`imbue`), Warriv
 
 ## For S2 to S4
 
-S3 builds `Facts` from `quest.Reader` (`Info.Status`, `Pending`, `Evidence` map to `Fact` and `Tier` by value: `EvProxy`=1, `EvSave`=2, `EvMemory`=3) and `ChunkFact` from the handler checks; S4 calls `CanStart` then `Store.Accept`. No knobs were added (the design's `quests.*` knobs belong to S3).
+S3 builds `Facts` from `quest.Reader` (`Info.Status`, `Pending`, `Evidence` map to `Fact` and `Tier` by value: `EvProxy`=1, `EvSave`=2, `EvMemory`=3) and `ChunkFact` from the handler checks; S4 (done, section "API and stores") calls `CanStart` then `Store.Accept` through `Desk`. No knobs were added (the design's `quests.*` knobs belong to S3).
 
 ## Executor (slice S3)
 
@@ -110,3 +110,51 @@ Throwaway character (test-characters rule: create it normally, no setup writes i
 - Unknown: no margin and no floor gives `Unknown`, an empty word, reason `no_data`; S1 keeps the chunk `available`, never offered (V `TestUnknownReadinessKeepsQuestAvailable`).
 - Tests (V, `internal/questboard/readiness_test.go`): Paladin and Sorceress on made-up zones sized to the logged outcomes (Cold Plains clvl 4 and 5 safe, Black Marsh clvl 4 too hard, clvl 12 with a merc safe, without a merc risky; docs/survival/README.md). The Sorceress rows are regression rows, not logged outcomes. A synthetic `survival.Ledger` with two merc deaths and a death in Black Marsh turns a safe word into a harder one. U: real zone and boss tables are not used (the install is on the worker host); no live run.
 - Not done (for S3): choosing the encounters per chunk. Quest rows carry only a `boss` id, not an area; S3 resolves `boss` through `danger.Table.FindBoss`/`power.BossPack` and passes the zone of the route, plus the dial from the hero's setting.
+
+## API and stores (slice S4)
+
+> Built and tested offline (card quests4). Behind the knob `quests.board` (default 0): with 0 every action answers `off` and the GET shows `enabled:false` with the reason; nothing else changes. NOT verified live; the curl list below has not run. No new knob (the design's `quests.*` knobs arrive with S6 to S8). Tags: tests are V (they ran), the hero's real margin words and the live behaviour are U.
+
+| piece | where |
+|---|---|
+| desk (the API face of `Exec`) | `internal/questboard/desk.go`: `Desk.View()`, `Start`, `HandIn`, `Cancel`, `Retry`, `SetMode`; every action returns a `Reply` |
+| routes | `internal/watch/questsapi.go`: GET on the viewer mux, POSTs on the answer mux (same `policyGate` as repair, pause and farm gold: origin list, token, JSON only, small body, unknown field refused) |
+| wiring | `cmd/d2bot/questwire.go` (`wireQuestBoard`, `bindQuests`, glance rows), called next to `wireJourney` in both backends; `bot.Runner.SetQuestBoardMaker`, `QuestBoard`, `QuestReadiness`, `SetQuestMargin` |
+| readiness | `bot.Deps.QuestMargin` (survival model, read only, `survivalShadow.questMargin`) feeds `questboard.Thresholds.Assess`; `bot.zoneModel` is untouched |
+| stores | `<state>/quests/<hero>.quests.json` + `.bak` (`internal/store.File`); mode stored in the same file (`Plan.Mode`, default `train`) |
+
+Routes (V `internal/watch/questsapi_test.go`, goldens in `internal/watch/testdata/quests/`):
+
+| method, path | body | reply |
+|---|---|---|
+| GET `/api/quests` | none | the view, `Cache-Control: no-store`, derived at most once per second (cached) |
+| POST `/api/quests/<id>/start` | `{}` or `{"chunk":"<id>"}` | accepts the CURRENT chunk (the offered one, never the next part). 200 |
+| POST `/api/quests/<id>/handin` | `{}` or `{"chunk":".."}` | 202 `pending:true`: the dialogue runs on the bot loop (can wait for a town trip or a recovery, bounded to 5 min); the outcome is `handIn` in the next GET |
+| POST `/api/quests/<id>/cancel` | same | stops an accepted chunk (record removed, chunk ready again) |
+| POST `/api/quests/<id>/retry` | same | clears the park of a blocked chunk ("Try again") |
+| POST `/api/quests/mode` | `{"mode":"train|idle|farm"}` | stored per hero; slice S6 gives it behaviour (`modeActs:false` until then) |
+
+Reply (every action): `{ok, already?, pending?, code?, reason?, quest, chunk, state, mode?}`. `ok:true` with `already:true` is a repeated press (idempotent). A refusal is `ok:false` with a `code` and a `reason` in words, never "could not do that" (the Pause bug of 2026-11-16: the page now reads state back from the GET and uses `ok`). Codes and HTTP status: `off` 409 (quests.board is 0), `no_hero` 503 (no snapshot yet), `paused` 409 (the player's pause is on), `busy` 409 (another chunk runs, named in the reason), `not_ready` 409 (not offered; the reason carries the evidence or readiness text), `not_awaiting` 409 (hand-in before the hero stands at the NPC), `done` 409, `unknown` 404, `bad_mode` 400; gate failures are 401 (token), 403 (origin), 405, 415, 400 (body), 503 (desk not bound).
+
+GET fields: `schema watch.quests/1`, `enabled`, `reason` (when off), `difficulty`, `paused`, `mode`, `modeActs`, `autoStart{available:false}` (stub until S8; the per-quest `auto` flag is read from the plan store), `offers[]` (quest, chunk, title, act, risk, `readiness` word, `reasons[]`, `legacyFloor`, `sentence`, `startable`, `why`, `auto`; `pays` is omitted until the wallet exists, S10), `quests[]` (every quest of the difficulty with its chunks and states), `running`, `awaiting`, `blocked`, `handIn` (running, done, confirming, blocked or failed), `history[]` (newest 20 chunks the board ran), `needs[]`, `strip`, `extra`. Words only: no numeric margin and no chapter counter anywhere (V `TestDeskViewJSONShape`).
+
+Glance (`/api/glance`): additive `quest{quest,title,chunk,part,state,step,npc}` for the video-card strip and Needs-you rows `quest_handin` ("Akara is waiting: hand in Den of Evil", button Hand in -> the handin route) and `quest_blocked` (Try again, Stop). The glance reads the same cached view.
+
+Decisions and gaps (I unless tagged):
+- The board is built per hero by the runner (the name is only known from the first snapshot): `SetQuestBoardMaker` opens `<hero>.quests.json`; a hero switch rebuilds it. The plan files carry the hero name, so `internal/charsel/perchar.json` does NOT list them (parking would hide the other hero's plan); V `TestQuestPlanFilesAreNotParkedBySwitch`.
+- Readiness: `Assess` replaces the legacy word where the margin query has data (boss from the danger table, hero readable). Where `Assess` answers Unknown the legacy word stands (a quest without a floor stays safe) so no quest vanishes from the board because of missing data. The boss margin is divided by the ledger's hero correction only (a boss has no zone key; U). Queries are throttled to once per 30 s per level and difficulty. The potion count is `unread` -> no "short of potions" reason.
+- "bot paused" is the player's pause (`PauseRunning` is the only running state), including the walk-home phase.
+- A POST needs a body (`{}`); an empty body is a 400 like the other control routes.
+- Auto-start flags, modes and meta awards are stubs: `autoStart.available:false`, `modeActs:false`, no `pays` (slices S6, S8, S10; the award keys are already idempotent per account in `Award.Key`, the ledger itself waits for the vault wallet).
+- Not done: the strip's step names are the board's descriptive names, not the handler's (S3 note); restart persistence of `accepted` is V offline (`TestDeskModeAndRestartPersistence`), not live.
+
+### Live check list for the API (NOT run; needs `quests.board` = 1 and a hidden instance, `tools/live.sh`)
+
+Replace `$H` with the watch address, `$T` with the answer token (never paste it into a log); POST bodies are JSON.
+
+1. `curl -s $H/api/quests | jq '{enabled,reason,mode,offers:[.offers[]|{quest,readiness,reasons,legacyFloor,startable}]}'` with the knob 0: `enabled:false`, reason names the knob. Set the knob to 1: offers appear; Den of Evil is `safe`; no number for a margin anywhere.
+2. `curl -s -X POST -H "Authorization: Bearer $T" -H 'Content-Type: application/json' -d '{}' $H/api/quests/den_of_evil/start`: `ok:true`, `state:accepted`. Repeat: `ok:true, already:true`. Start Blood Raven meanwhile: 409 `busy`, the reason names the Den.
+3. Poll `GET /api/quests` every 5 s: `running.step` moves, `strip.npc` is Akara, glance `quest` matches. Press Pause in the UI: `paused:true`; a Start then answers `paused`.
+4. When `awaiting` appears (and the Needs row `quest_handin`): POST `handin`: 202 `pending:true`; poll until `handIn.state` is `done` or `confirming`; a second POST answers `ok:true, already:true`; the dialogue ran once (log `talk Akara/reward` once).
+5. `POST /api/quests/mode {"mode":"farm"}` then restart the bot: GET shows `mode:farm`. Wrong token: 401; foreign `Origin`: 403.
+6. Restart the bot while a chunk runs and while awaiting: `running`/`awaiting` come back from the plan file and the evidence, the chunk is not redone. Writes after start must be 0.
