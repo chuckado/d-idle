@@ -668,6 +668,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [knock-in-gethit-body.md](upstream/bodies/knock-in-gethit-body.md): knock-in-gethit-body
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
 - [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
+- [mana-burn-amount-body.md](upstream/bodies/mana-burn-amount-body.md): mana-burn-amount-body
 - [missile-block-body.md](upstream/bodies/missile-block-body.md): missile-block-body
 - [seq-ias-body.md](upstream/bodies/seq-ias-body.md): seq-ias-body
 - [seq-ias-followup-body.md](upstream/bodies/seq-ias-followup-body.md): test: seq-rate fails when D2_PATCH_INSTALLER names a file that is not there
