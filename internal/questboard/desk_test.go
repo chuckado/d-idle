@@ -240,3 +240,25 @@ func TestDeskViewCached(t *testing.T) {
 		t.Fatal("the cache must expire")
 	}
 }
+
+// An accepted chunk the hero has not started never reads as silent: the strip and the card say why (the bot's reason
+// when it has one, else the generic queued line).
+func TestDeskQueuedReason(t *testing.T) {
+	for _, bd := range builds {
+		t.Run(bd.class, func(t *testing.T) {
+			r := newRig(t, bd.class, 6)
+			d := r.desk(nil)
+			if a := d.Start(den, ""); !a.OK {
+				t.Fatalf("start: %+v", a)
+			}
+			v := d.viewFresh()
+			if v.Running == nil || v.Strip == nil || !strings.Contains(v.Strip.Queued, "Queued") || v.Running.Queued != v.Strip.Queued {
+				t.Fatalf("queued line missing: %+v %+v", v.Running, v.Strip)
+			}
+			d.cfg.Queued = func() string { return "Starts when the fight is over." }
+			if v := d.viewFresh(); v.Strip.Queued != "Starts when the fight is over." {
+				t.Fatalf("bot reason: %+v", v.Strip)
+			}
+		})
+	}
+}

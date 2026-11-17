@@ -352,6 +352,30 @@ export function mount(root, ctx) {
     window.addEventListener('online', () => ctl.wake());
     window.addEventListener('pageshow', (e) => { if (e && e.persisted) ctl.reconnect(); else ctl.wake(); });
   }
+  // Item labels (docs/video-feed.md, "Item labels"): the game's ground item names, as with Alt held in D2. The button is hidden
+  // until GET /api/labels says the game can show them (never a dead button) and always shows what the game read back.
+  const labelsBtn = ctx.el('button', 'd-btn', 'Labels');
+  labelsBtn.type = 'button'; labelsBtn.dataset.size = 'sm'; labelsBtn.dataset.key = 'labels'; labelsBtn.hidden = true;
+  labelsBtn.title = 'Show the names of the items lying on the ground, as with Alt held in the game';
+  labelsBtn.setAttribute('aria-pressed', 'false');
+  bar.insertBefore ? bar.insertBefore(labelsBtn, statLine) : bar.append(labelsBtn);
+  let labelsOn = false, labelsBusy = false;
+  function labelsShow(j) {
+    if (!j || j.available !== true) { labelsBtn.hidden = true; return false; }
+    labelsBtn.hidden = false; labelsOn = j.on === true;
+    labelsBtn.setAttribute('aria-pressed', String(labelsOn));
+    return true;
+  }
+  const labelsRead = () => ctx.get('/api/labels').then(labelsShow);
+  labelsBtn.addEventListener('click', () => {
+    if (labelsBusy || !ctx.post) return;
+    labelsBusy = true; labelsBtn.disabled = true;
+    ctx.post('/api/labels', { on: !labelsOn }).then((j) => {
+      labelsShow(j);
+      if (j && j.ok === false && ctx.toast) ctx.toast('warn', j.reason || 'the game did not take it (code ' + (j.code || 'unknown') + ')');
+    }, () => { if (ctx.toast) ctx.toast('warn', 'Could not reach the bot'); }).then(() => { labelsBusy = false; labelsBtn.disabled = false; });
+  });
+  if (typeof ctx.get === 'function') (function labelsLoop() { labelsRead().then(() => ctx.later(labelsLoop, 20000)); })();
   registerVideo(ctl);
   if (typeof window !== 'undefined' && window.d2video) window.d2video.controls = { add: addControl };
   ctl.start();

@@ -65,6 +65,7 @@ export function mount(root, ctx) {
     return box;
   }
 
+  const opened = new Set(); // question rows the player expanded: a tap on the text shows all of it (a phone has no tooltip)
   function row(n) {
     const e = ctx.el('div', 'n-row');
     e.dataset.sev = sevOf(n);
@@ -75,6 +76,13 @@ export function mount(root, ctx) {
     const t = ctx.el('span', 'n-t');
     t.append(ctx.el('b', '', n.text));
     if (n.sub) t.append(ctx.el('span', 'n-s', ' ' + n.sub));
+    if (n.kind === 'question') {
+      if (opened.has(n.id)) e.dataset.open = '1';
+      t.addEventListener('click', () => {
+        if (opened.has(n.id)) opened.delete(n.id); else opened.add(n.id);
+        if (opened.has(n.id)) e.dataset.open = '1'; else delete e.dataset.open;
+      });
+    }
     e.append(ctx.el('span', 'n-shape'), t, acts(n));
     return e;
   }
