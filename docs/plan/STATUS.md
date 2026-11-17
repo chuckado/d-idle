@@ -265,6 +265,7 @@
 | resistorder | proposed | - | `docs/research/resistorder.md`<br>`internal/d2/resist.go`<br>`internal/combat/rules.go`<br>`internal/readiness/model.go`<br>`internal/power/margin.go` | - |
 | vaultphone | proposed | - | `internal/watch/web/vault.js`<br>`tools/uishots.sh` | - |
 | labels | proposed | - | `internal/d2dctl/labels.go`<br>`internal/d2dctl/labels_test.go`<br>`internal/watch/labelsapi.go`<br>`internal/watch/labelsapi_test.go`<br>`cmd/d2bot/labelswire.go`<br>`cmd/d2bot/labelswire_test.go`<br>`internal/watch/web/panels/video`<br>`internal/watch/testdata/video_labels_panel.js`<br>`tools/uishots/fixtures_commands.go`<br>`docs/video-feed.md`<br>`internal/watch/funwire.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/watchlayout_test.go`<br>`tools/uishots/serve.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`tools/uishots.sh` | - |
+| jewelicons | proposed | - | `internal/watch/web/inventory.js`<br>`internal/watch/web/components.css`<br>`internal/status/inventory.go`<br>`cmd/d2bot/display.go`<br>`tools/uishots/fixtures_phone.go`<br>`docs/inventory-ui.md`<br>`internal/watch/web/inventory-canvas.css`<br>`internal/data/invfile_real_test.go`<br>`cmd/d2bot/itemart_test.go`<br>`tools/uishots/fit_char_test.go` | - |
 | morefit | proposed | - | `internal/watch/web/panels/orders/panel.css`<br>`tools/uishots/fixtures_menu.go` | - |
 | owbody | proposed | - | `docs/upstream/bodies/decomp37-open-wounds-body.md` | - |
 | questrun | proposed | - | `internal/bot/questboard.go`<br>`internal/bot/questboard_goal_test.go`<br>`internal/bot/goal.go`<br>`internal/questboard/desk.go`<br>`internal/questboard/desk_test.go`<br>`internal/questboard/exec.go`<br>`cmd/d2bot/questwire.go`<br>`docs/questboard.md`<br>`internal/bot/routeguard.go`<br>`internal/bot/ladder_t0_test.go`<br>`internal/watch/web/panels/needs-you/panel.js`<br>`internal/watch/web/panels/needs-you/panel.css` | - |
@@ -310,6 +311,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 115106402 11-17 15:22 `Merge agent/jewelicons: watch: inventory DOM stub gets querySelector and the nopin goldens show the type-fallback glyph (the go-whole failure)` (jewelicons)
+- 1d11c9f28 11-17 14:58 `Merge origin/main into agent/jewelicons` (-)
 - 8680a6d2f 11-17 13:37 `Merge agent/brightness: Merge branch 'main' into TASK-622` (brightness)
 - 6dc47f0c5 11-17 13:36 `Merge branch 'main' into TASK-622` (-)
 - 1c3b12cf7 11-17 13:35 `Merge origin/main into agent/brightness; Brightness joins the video toolbar` (brightness)
@@ -318,6 +321,4 @@
 - f7c45a10b 11-17 13:28 `Merge agent/videoctl: videoctl: video controls out of the picture, caption never covered, fit rule` (videoctl)
 - bb49a0c07 11-17 13:27 `Merge branch 'main' into videoctl` (-)
 - 193c9b9f1 11-17 13:25 `Merge origin/main into videoctl; the Labels button joins the toolbar` (-)
-- 46f8198c6 11-17 13:24 `Merge agent/gearabsorb3: Merge branch 'main' into TASK-621` (gearabsorb3)
-- 91b85cadf 11-17 13:23 `Merge branch 'main' into TASK-621` (-)
 <!-- statusgen:end -->
