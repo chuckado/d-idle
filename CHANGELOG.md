@@ -8,6 +8,11 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into decomp37 <!--sg:agent/decomp37-->
+- Merge branch 'main' into boardmoderace <!--sg:agent/boardmoderace-->
+- survreask: doc counts <!--sg:agent/survreask2-->
+- Merge branch 'main' into TASK-606 <!--sg:agent/decomp38-->
+- Merge branch 'main' into vaultv6verify <!--sg:agent/vaultv6verify-->
 - Merge branch 'main' into TASK-601 <!--sg:agent/quests8-->
 - Merge branch 'main' into quests7b <!--sg:agent/quests7b-->
 - Merge branch 'main' into vaultv5verify <!--sg:agent/vaultv5verify-->
