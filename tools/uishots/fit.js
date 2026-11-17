@@ -160,8 +160,12 @@ export function overlayState(win) {
   for (const sh of d.querySelectorAll('.d-tilesheet')) {
     const r = vis(sh);
     if (!r) continue;
-    for (const it of sh.querySelectorAll('.o-items')) { // the Orders More sheet: a list taller than its sheet must scroll (card menufit2)
-      if (vis(it) && it.scrollHeight - it.clientHeight > 1 && !/auto|scroll/.test(win.getComputedStyle(it).overflowY)) menuScroll.push('the More list is ' + (it.scrollHeight - it.clientHeight) + ' px taller than its sheet and cannot scroll');
+    for (const it of sh.querySelectorAll('.o-items')) { // the Orders More sheet (card morefit): the list shows min(3, commands) rows in the sheet and never clips without a scroll
+      if (!vis(it)) continue;
+      const rows = [...it.querySelectorAll('.o-item')], sr = sh.getBoundingClientRect(), lr = it.getBoundingClientRect(), shown = rows.filter((x) => { const q = x.getBoundingClientRect(); return q.height > 0 && q.top >= Math.max(sr.top, lr.top) - 1 && q.bottom <= Math.min(sr.bottom, lr.bottom) + 1 && q.bottom <= win.innerHeight + 1; }).length;
+      if (shown < Math.min(3, rows.length)) menuScroll.push('the More list shows ' + shown + ' of ' + rows.length + ' commands in a sheet ' + Math.round(sr.height) + ' px high');
+      if (it.scrollHeight - it.clientHeight > 1 && !/auto|scroll/.test(win.getComputedStyle(it).overflowY)) menuScroll.push('the More list is ' + (it.scrollHeight - it.clientHeight) + ' px taller than its box and cannot scroll');
+      if (sh.scrollHeight - sh.clientHeight > 1 && !/auto|scroll/.test(win.getComputedStyle(sh).overflowY)) menuScroll.push('the More sheet is ' + (sh.scrollHeight - sh.clientHeight) + ' px taller than its tile and cannot scroll');
     }
     open.push('sheet:' + (sh.dataset.panel || '?'));
     if (r.top < bandBottom - 1 || r.bottom > win.innerHeight + 1) under.push((sh.dataset.panel || '?') + ' top ' + Math.round(r.top) + ' bottom ' + Math.round(r.bottom) + ' (header ends ' + Math.round(bandBottom) + ', window ' + win.innerHeight + ')');
