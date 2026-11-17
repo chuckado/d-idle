@@ -61,6 +61,7 @@ Life taken from a plain monster over the 8 seconds, game.exe against the parent:
 - The chance draw's place among the events of one blow (crush, Open Wounds) follows game.exe's property order; d2d draws the crush first, as before.
 - A second Open Wounds on a wounded monster refreshes it in d2d, as before; whether `FUN_0056e970` replaces or adds was not read.
 - An act boss (MonStats boss, not a placed unique) is `Boss::none` in d2d and takes the whole wound; whether game.exe's act-boss spawn sets bit 4 or 8 of the data word was not read.
+- In d2d's tick order `monster_dots` runs before the blows, so a wound applies 199 of its 200 updates in play (`test_open_wounds` starts at the hit tick and counts 200); where in a frame game.exe first applies the new regeneration was not run, and the end of poison and bleed (`<` against `<=`, and a monster left at one point with a fraction) is not changed here.
 - The consumer `FUN_005a6920` is read, not run; d2d's `monster_dots` is unchanged.
 
 ## Answers to the presubmit WARNs
