@@ -126,7 +126,12 @@ func TestFreshGameNeedsKnownOffenceAndMerc(t *testing.T) {
 				t.Fatalf("unread offence: %s", d.Line())
 			}
 			in.OffenceUnread, in.MercDead = false, true
-			if d, _ = NewLedger(e.p).Choose(in); d.Fresh || d.FreshRefused != "merc dead" {
+			if d, _ = NewLedger(e.p).Choose(in); d.FreshRefused != "" {
+				t.Fatalf("merc dead is no reason to refuse by default (freshNeedsMerc false): %s", d.Line())
+			}
+			strict := *e.p
+			strict.FreshNeedsMerc = true
+			if d, _ = NewLedger(&strict).Choose(in); d.Fresh || d.FreshRefused != "merc dead" {
 				t.Fatalf("merc dead: %s", d.Line())
 			}
 			in.Active = false // the shadow keeps its old behaviour

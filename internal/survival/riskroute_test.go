@@ -99,7 +99,7 @@ func TestRiskRouteCandidates(t *testing.T) {
 			if d := pick("cautious", tight, e.p); d.Area != 2 {
 				t.Errorf("cautious never pays for risk: %+v", d)
 			}
-			lost := cand(5, "Lost", 0.5, 0.3, 50, 440) // the bad pack is lost: under the floor
+			lost := cand(5, "Lost", 0.3, 0.2, 50, 440) // the bad pack is lost: under the floor
 			if d := pick("balanced", lost, e.p); d.Area != 2 {
 				t.Errorf("a lost bad pack stays out: %+v", d)
 			}
