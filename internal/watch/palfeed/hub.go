@@ -134,6 +134,8 @@ type Options struct {
 	// 200 KB and 150 ms.
 	BigMsg int
 	BigGap time.Duration
+	// Heartbeat is how long a stream waits for a new frame before it repeats the last one as an empty delta; default 1 s.
+	Heartbeat time.Duration
 	// Touch is called with each connection and about once a second while a client is served; the host uses it to keep
 	// the ring lease alive for pal-only viewers.
 	Touch func()
@@ -188,6 +190,9 @@ func (h *Hub) Stream(o Options) http.Handler {
 	if o.BigMsg <= 0 {
 		o.BigMsg = 200 << 10
 	}
+	if o.Heartbeat <= 0 {
+		o.Heartbeat = time.Second
+	}
 	if o.BigGap <= 0 {
 		o.BigGap = 150 * time.Millisecond
 	}
@@ -232,7 +237,7 @@ func (h *Hub) Stream(o Options) http.Handler {
 				case <-wake:
 					h.release(cur)
 					continue
-				case <-time.After(time.Second):
+				case <-time.After(o.Heartbeat):
 					// A paused game publishes nothing: an empty delta (the same frame again, a few dozen bytes) is the
 					// heartbeat that keeps the page's stall watchdog quiet and the write deadline honest.
 					if cur == nil || base == nil {
@@ -279,31 +284,43 @@ func (h *Hub) Stream(o Options) http.Handler {
 			deltas++
 			h.msgs.Add(1)
 			h.bytes.Add(int64(len(m)) + 4)
-			// The pace is a schedule (the previous slot plus one period), not "now plus one period": the loop's own work
-			// (encode, write) would otherwise push every slot later and a frame would be skipped now and then (30 fps
-			// became 29 with judder). Behind schedule: restart from now, never catch up in a burst.
-			now := time.Now()
-			slot := next.Add(time.Second / time.Duration(fps))
-			if slot.Before(now) {
-				slot = now
-			}
-			var guard time.Duration
-			if len(m) >= o.BigMsg {
+			var big, held bool
+			next, big, held = pace(next, time.Now(), time.Second/time.Duration(fps), len(m), o)
+			if big {
 				h.keys.Add(1)
-				guard = o.BigGap
 			}
-			if o.MaxBytesPerSec > 0 {
-				if g := time.Duration(int64(len(m)) * int64(time.Second) / int64(o.MaxBytesPerSec)); g > time.Second/time.Duration(fps) {
-					guard = max(guard, g)
-					h.slow.Add(1)
-				}
-			}
-			next = slot
-			if g := now.Add(guard); g.After(next) {
-				next = g
+			if held {
+				h.slow.Add(1)
 			}
 		}
 	})
+}
+
+// pace returns the earliest time of the next message after one of n bytes was written at now. The pace is a schedule (the
+// previous slot plus one period), not "now plus one period": the loop's own work (encode, write) would otherwise push every
+// slot later and a frame would be skipped now and then (30 fps became 29 with judder). Behind schedule: restart from now,
+// never catch up in a burst. Then the guard: a key-sized message (o.BigMsg) holds the client for at least o.BigGap, and a
+// message that took more than a period of the byte budget (o.MaxBytesPerSec) holds it for n / budget. Pure: no clock, no I/O.
+func pace(next, now time.Time, period time.Duration, n int, o Options) (slot time.Time, big, held bool) {
+	slot = next.Add(period)
+	if slot.Before(now) {
+		slot = now
+	}
+	var guard time.Duration
+	if n >= o.BigMsg {
+		big = true
+		guard = o.BigGap
+	}
+	if o.MaxBytesPerSec > 0 {
+		if g := time.Duration(int64(n) * int64(time.Second) / int64(o.MaxBytesPerSec)); g > period {
+			guard = max(guard, g)
+			held = true
+		}
+	}
+	if g := now.Add(guard); g.After(slot) {
+		slot = g
+	}
+	return
 }
 
 // Capability serves GET: {"paletteFeed":true,"version":1,"width":W,"height":H} once a frame exists, 503 before (the page
