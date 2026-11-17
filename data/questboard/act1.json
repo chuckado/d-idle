@@ -292,7 +292,7 @@
      ],
      "steps": [
       "travel_black_marsh",
-      "descend_tower",
+      "descend_to_cellar",
       "kill_countess"
      ],
      "boss": "countess",

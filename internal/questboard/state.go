@@ -201,7 +201,7 @@ func deriveChunk(b *Board, q Quest, c Chunk, fact Fact, in Input) ChunkView {
 	case fact.Known && fact.Done:
 		cv.State, cv.Tier, cv.Confirmed = Done, fact.Tier, fact.Tier.Exact()
 		return cv
-	case cf.Done:
+	case cf.Done && !memoryDenies(q, fact, cf):
 		cv.State, cv.Tier, cv.Confirmed = Done, cf.Tier, cf.Tier.Exact()
 		return cv
 	}
@@ -258,6 +258,13 @@ func deriveChunk(b *Board, q Quest, c Chunk, fact Fact, in Input) ChunkView {
 // lockedBy returns why the chunk cannot be offered, or "". Quest prerequisites unlock on T1/T2 only (T3 never
 // unlocks); chunk order accepts any evidence of the earlier chunk, because an offer skips no work and the handler
 // re-derives (I, documented in docs/questboard.md).
+// memoryDenies is the evidence conflict rule: for a single-chunk quest, a fresh T2 read that says "not done"
+// beats a proxy that says "done" (a reward item that was dropped, a kill by the merc). A multi-chunk part has
+// no quest bit of its own, so its proxy stands.
+func memoryDenies(q Quest, f Fact, cf ChunkFact) bool {
+	return len(q.Chunks) == 1 && f.Known && !f.Done && f.Tier == TierMemory && cf.Tier < TierSave
+}
+
 func lockedBy(b *Board, q Quest, c Chunk, in Input) string {
 	for _, id := range append(append([]string{}, q.Requires...), c.Requires...) {
 		f := in.Facts.Quest(in.Diff, id)
@@ -387,6 +394,7 @@ type Transition struct {
 
 // Transitions is the table of design 1.3 and 1.4. From "" means any state.
 var Transitions = []Transition{
+	{"", Locked, "start or a new difficulty: a prerequisite is not Done on T1/T2", TierNone},
 	{Locked, Available, "prerequisite quests Done", TierSave},
 	{Locked, Ready, "prerequisite quests Done, readiness safe or risky", TierSave},
 	{Available, Ready, "readiness word (model, no quest bit)", TierNone},
