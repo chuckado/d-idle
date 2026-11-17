@@ -73,7 +73,7 @@ Log compaction (design 5: archive-then-replace at 3x live data); the trashed-lis
 
 > status: BUILT offline, not seen live. V: `go test ./internal/watch/ -run Vault` (API against a 10k-item store), `go test ./cmd/d2bot/ -run Vault`, node tests of the page logic (`TestVaultLogicJS`), the fit pages of `tools/uishots.sh --fit` (pages `vault-*`, must-fail `vaultdefect-*`) and the pictures of `tools/uishots.sh --vt`, all on the worker host. The recorder (V3) writes a vault only with `loot.vault` 1 and a fork with the vault verbs, so on a bot with the default knob the page shows its empty state or the read-only banner.
 
-What it is: a read side plus Pin, Unpin and Discard of the Ethereal Vault (Keep since V5: section 'Keep (slice V5)'). No Reveal, Sell or Upgrade (V6, V7): the Upgrade button is drawn, disabled, with the reason in text (`aria-disabled` and a description, never a dead press: pressing says why).
+What it is: a read side plus Pin, Unpin and Discard of the Ethereal Vault (Keep since V5: section 'Keep (slice V5)'; Reveal and Sell since V6: section 'Reveal and Sell-from-vault'). No Upgrade (V7): the Upgrade button is drawn, disabled, with the reason in text (`aria-disabled` and a description, never a dead press: pressing says why).
 
 Routes (code: `internal/watch/vaultapi.go`; bound in `cmd/d2bot/vaultpage.go`, mounted in `internal/watch/funwire.go` as `Fun.Vault`):
 
@@ -139,6 +139,67 @@ Live drill checklist (not run; needs the d2d fork with `--vault-verbs`, a throwa
 6. Fill the stash, Keep one more: Needs-you row "Stash full", item stays queued, free a cell, next visit creates it.
 7. Dead hero: press Keep: the toast says the hero is dead; nothing queued.
 Record the `.bak` of the hero before step 3 and restore it if anything differs.
+## Reveal and Sell-from-vault (slice V6: `internal/vaultkeep`, `POST /api/vault/{reveal,sell,cancel}`)
+
+> status: BUILT offline, not run against a live game. V: `go test ./internal/vaultkeep/ ./internal/vault/ ./internal/watch/ ./internal/loot/ ./cmd/d2bot/` (executors against `d2dctl.VaultFake` on a Sorceress and a Paladin hero, fake clock, a "process dies after N game calls, with and without the last call taking effect, then restarts" test per flow), node tests of the page logic, a stub-DOM mount of the page (price line, buttons, sheet). NOT run: the fit pages `vault-reveal*`, `vault-sell*`, `vault-revealing*` and the pictures (`tools/uishots.sh --fit --only 'vault-*'`, `--vt --only 'reveal*'`): they need a browser, which only the Orion has and this slice may not touch. U: everything that needs the fork (item create and identify on a pack item, the town identify and sell chores acting on a created item, the purse read-back).
+
+Default off: nothing here runs unless `loot.vault` 1 and `loot.vaultKeep` 1 (the Keep switch is the kill switch of all three errands); forced off in measured runs (`D2BOT_RUN`). New knobs (docs/knobs.md): `loot.vaultSellPerVisit` (10), `loot.vaultSellPrompt` (0), `loot.vaultPoorPickup` (1).
+
+### Identify stays a step (user decision 2026-11-16)
+
+An unidentified record shows as unidentified. Reveal costs one identify scroll or one tome charge (the fork's identify verb or the town's click path checks it; the vault never keeps its own count) and is FREE when Deckard Cain stands in the town the hero is in (his Identify line; `Identifier.Free`, the same Cain test as the inventory page). The bot never buys scrolls for Reveal: with none the press is refused with `no scroll; buy on request` (code `noscroll`) and the page offers the existing manual Buy (`POST /api/inventory/buyid`). `town.identifyTome` stays 0.
+
+### Reveal flow
+
+`POST /api/vault/reveal {ids, now?}` only QUEUES (`Store.RevealWant`, flag `RevQ` on the record). Idempotent (queued: `already`), refusals: `state` (identified, sold, discarded), `noscroll` (more requests than charges, none at Cain), gate codes `off`, `dead`, `verbs`, `stopped`. The page shows the cost BEFORE the click from `GET /api/vault` (`act.reveal`: `charges`, `free`, `perItem`): "Reveal 3 items: 3 charges (free at Cain)" or "...(you have 1): no scroll, buy on request".
+
+Executor (`Keeper.runReveal`, same safe-moment rules, per-visit cap `loot.vaultKeepPerVisit` and 8 s budget as Keep). Per record, each stage logged BEFORE its game step (`Store.SetStage`):
+
+1. `rb`: `item create` of the recorded bytes into the PACK (`key=vr-<id>-<attempt>`), save backup before the first create of the process (as Keep), read-back must equal the record, a mismatch removes the copy and trips the keeper (nothing is created until restart).
+2. `rc`: identify the unit (scroll or tome charge, or Cain), read the item back: it must be identified with the same code, quality and item level.
+3. The vault record is superseded IN PLACE (`reveal` event: same id, new raw bytes and hash, `identified`, name from the town, value recomputed; no second record). Stage `rt`.
+4. `item vault <unit>` removes the temporary copy; stage cleared. No save is needed: the net change in the hero is zero.
+
+Keep and Reveal on one record are ONE flow: the Keep create is made into the backpack (identify works on pack items), identified there, the record is superseded and kept; one create, nothing removed (`TestRevealKeepIsOneFlow`). A Keep+Reveal item therefore lands in the backpack and the stash chore files it (docs/vault.md Keep says stash: this is the one exception).
+
+Failures (stored `reveal: <sentence>`, shown on the row and card): `no scroll; buy on request` (also if the charge disappeared while the request waited: nothing is created), `the game did not identify it: ...`, `the item is still unidentified`, `the game identified a different item`, an identical identified item already in the vault, pack full or hero dead or busy (stays queued), version or bad data. A failed identify removes the temporary copy and leaves the record exactly as recorded.
+
+Restart recovery (`TestRevealRestartAtEveryStep`, 2 classes x keep or not x last call lost or not x 14 cut points): the stage tells what may exist; `resumeReveal` looks at the hero. Copy of the old bytes present: identify it. An identified copy of the same code, quality, level, sockets and ethereal bit that no vault record owns (`adoptable`; ambiguous means none): adopt its bytes. Stage `rt`: remove the copy of the new bytes. Nothing found: the stage is cleared and the request stays queued. After an identify whose reply was lost the hero decides (read back), so a charge is never spent twice. U: two identical unidentified items carried by the hero make "present" ambiguous; the create key and the kept-record count are the only guards.
+
+### Sell-from-vault flow
+
+`POST /api/vault/sell {ids, confirm:true, now?}` (the page asks first in a sheet with the count and the lower-bound price) queues (`sellq`). Refusals: `pinned` (never sold: also enforced in the store, `ErrPinned`, and again by the executor), `state`, gate codes. `POST /api/vault/cancel {ids}` takes a queued Keep, Reveal or Sell back while no step of it ran.
+
+Executor (`Keeper.runSell`, cap `loot.vaultSellPerVisit`, 8 s budget), per record, one at a time:
+
+1. purse read, stage `sb` (with the purse) logged, `item create` into the pack (`key=vs-<id>-<attempt>`), read-back equal to the record (else removed and tripped), stage `sc`.
+2. `Seller.Sell`: the created item is marked sell on the inventory desk and the town's own sell chore runs (the same marked-items sale as "Sell now": real vendor, real price, nothing new decides what to sell; the chore also sells the player's own marks, which they asked for).
+3. Read-back, in the game: the copy must be gone AND the purse must have grown. Both: `sold` with the gold read from the purse. Copy still there: it is removed again; a refusal by the vendor ends the sale with the reason (`sell: <why>`, record back in the vault), a postponement (fight, busy panel: `ErrPostpone`) leaves it queued. Copy gone but no gold: the record is closed `sold` with 0 gold and a note, the keeper TRIPS (no more sales until restart) and a Needs-you row says so.
+
+Pack full: `the backpack is full`, stays queued, one Needs-you notice per episode. Restart: stage `sb` with no copy in the hero queues the sale again; a copy present continues at the sale; stage `sc` with no copy means it was sold, settled `sold` with the purse change as the gold (`TestSellRestartAtEveryStep`).
+
+### Gold flow and the prompt
+
+1. Poor-mode pickup (`loot.vaultPoorPickup`, default 1): with `loot.vault` 1 an item the Vault preset would only record is picked up instead when the hero has less than `loot.poorGoldBelow` gold and the item's `loot.SellValue` is at least `loot.poorMinSell` (today's poor-mode thresholds, no new numbers); an item the pickit keeps anyway keeps that verdict. `Looter.vaultPoorPick`, `TestVaultPoorModePicksSellableItems` (2 classes).
+2. Sell errand above: the player queues, the bot sells at the next visit.
+3. Opt-in prompt (`loot.vaultSellPrompt`, default 0): when `town.RepairEstimate + town.PlannedSpend - gold` is above 0 (the merc revive price is not in that sum: U), a Needs-you row offers "Short by N gold ...: sell K vault items (about G gold)?" with Sell them (`POST /api/vault/sell`) and Not now (`POST /api/vault/sellprompt {dismiss:true}`, muted 30 minutes). The list is the unpinned records of the lowest quality class present, up to quality magic (rare, set, unique and crafted are never offered), highest value first until the shortage is covered, at most 8. Nothing is sold without the answer. The same offer shows on the vault page.
+
+### Page
+
+Selection bar: "Reveal selected (n)" and "Sell selected (n)" next to Keep, the cost line (`act.reveal`, `revealPlan` in vault-logic.js), "Buy identify scrolls" when short, queue sentences ("Revealing 2 items: at your next town visit", "Selling 3 items: ..."), the prompt row. Rows: tags `R` (reveal queued), `...` (working), `$` (sale queued or sold), `!` (failed with the reason on the row, list and card); the card has Reveal, Sell and Cancel queued with the server's reason on a disabled button. Fit pages: `vault-revealing*`, `vault-reveal-{press,none,cain,dead}`, `vault-sell-sheet*` (`tools/uishots.sh`, fixtures `fixtureActor` in `tools/uishots/fixtures_vault.go`); the fit check counts the new rows above the list.
+
+### Live drill checklist (not run; d2d fork with `--vault-verbs`, a throwaway hero, `loot.vault` 1, NO `D2BOT_RUN`, `vault creates: N` declared, `writes after start: 0`)
+
+1. Record 10 drops with at least 3 unidentified magic items. Hero in town with 2 identify scrolls, no Cain in reach (Act 1 before the rescue). Select the 3: the line says "Reveal 3 items: 3 charges (you have 2): no scroll, buy on request"; press: refused `noscroll` for one, two queued.
+2. At the next town visit: two creates then two `item vault`, scrolls 2 -> 0, records identified with real names, `vault stats` creates 2 vaults 2, hero pack unchanged, unidentified record count 1.
+3. Rescue Cain (or use a hero past it), stand in town: the third reveals free, scrolls unchanged.
+4. Kill the bot between create and identify (and once between identify and the reveal event): after restart exactly one scroll is spent and the pack holds no stray copy.
+5. Keep + Reveal one unidentified item: one create, the item sits identified in the backpack, vault record `kept`.
+6. Sell: select 3 unpinned magic items, Sell: sheet shows the lower bound; at the visit three create/sell cycles, gold rises by the vendor price each time, rows turn sold with the gold; a pinned item cannot be queued. Kill between create and sale: after restart one sale, no stray item.
+7. Set the vendor out of reach (kill the sale mid-way): record returns to the vault with the reason, nothing stays in the pack.
+8. Poor mode: gold under 300, drop a sellable rare: it is picked up (pickup click) not recorded; the gold line recovers after the next sell visit. Prompt: `loot.vaultSellPrompt` 1 with repair due and too little gold: the Needs-you row appears, Not now hides it for 30 minutes.
+Record the `.bak` of the hero before step 2 and restore it if anything differs.
+
 ## Wallet (V7)
 
 The account wallet is ETHER, implemented in `internal/ether` and described in [ether.md](ether.md): it implements `vault.Account` and `vault.Wallet`, derives the owned capacity steps and the balance by ledger replay, and serves `GET /api/ether`, `POST /api/vault/upgrade` and `POST /api/vault/downgrade` (`internal/watch/etherapi.go`). The store's `Options.Capacity` is `wallet.Capacity(override)`; shrinking (refund of the last step) is allowed only while the active hero's count fits the lower tier. Offline only, not yet wired into the bot.
