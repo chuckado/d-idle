@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -17,6 +18,7 @@ type questRig struct {
 	x    *questboard.Exec
 	desk *questboard.Desk
 	api  *QuestsAPI
+	mu   sync.Mutex // guards now: the hand-in goroutine reads the clock
 	now  time.Time
 	post http.Handler
 	view http.Handler
@@ -63,7 +65,7 @@ func newQuestRigWith(t *testing.T, class string, clvl int, led questboard.Ledger
 	r.desk = questboard.NewDesk(b, questboard.DeskConfig{
 		Exec:  func() (*questboard.Exec, *questboard.Store) { return x, st },
 		Class: func() string { return class },
-		Now:   func() time.Time { return r.now },
+		Now:   func() time.Time { r.mu.Lock(); defer r.mu.Unlock(); return r.now },
 	})
 	r.api.Bind(r.desk)
 	o := AnswerOptions{Token: "tok", Origins: []string{"http://ok.test"}}
@@ -72,7 +74,9 @@ func newQuestRigWith(t *testing.T, class string, clvl int, led questboard.Ledger
 }
 
 func (r *questRig) get() string {
+	r.mu.Lock()
 	r.now = r.now.Add(2 * time.Second) // past the desk's one-second cache
+	r.mu.Unlock()
 	w := httptest.NewRecorder()
 	r.view.ServeHTTP(w, httptest.NewRequest("GET", QuestsRoute, nil))
 	if w.Code != 200 {
