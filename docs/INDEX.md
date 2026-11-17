@@ -202,6 +202,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [decomp35-leech-body.md](upstream/bodies/decomp35-leech-body.md): decomp35-leech-body
 - [decomp37-gear-absorb-body.md](upstream/bodies/decomp37-gear-absorb-body.md): decomp37-gear-absorb-body
 - [decomp37-open-wounds-body.md](upstream/bodies/decomp37-open-wounds-body.md): decomp37-open-wounds-body
+- [decomp39-melee-reach-body.md](upstream/bodies/decomp39-melee-reach-body.md): decomp39-melee-reach-body
 - [upstreamsync.md](upstreamsync.md): Upstream sync after #152 and #153 merged (2026-11-01) (status: current (card upstreamsync, 2026-11-01). Read-only measurement plus local rebases on the worker host;...)
 - [viewport.md](viewport.md): Viewport: capture and stream library (agent VIEWPORT)
 
@@ -842,6 +843,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [public-split.md](process/public-split.md): Public split: rules going forward (change `pubsplit`) (status: cut done 2026-10-31: GitHub `main` is primary; the the private forge steps below are the historical plan.)
 - [queuespeed.md](process/queuespeed.md): Queue speed changes (TASK-312) (status: current. Source: docs/research/merge-queue-profile-2026-11-11.md. Code lives in the ops repo...)
 - [retired-terms-20261104.md](process/retired-terms-20261104.md): Retired-terms banner pass (2026-11-04)
+- [sandbox-devp10.md](process/sandbox-devp10.md): Sandbox d2d build devp10 (2026-11-17) (status: current. Task: TASK-623 (sandbox3). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [sandbox-devp9.md](process/sandbox-devp9.md): Sandbox d2d build devp9 (2026-11-15) (status: current. Task: TASK-535 (sandbox2). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [spdx.md](process/spdx.md): SPDX header policy (ADR 0010)
 - [spec-apply-a-20261104.md](process/spec-apply-a-20261104.md): Spec apply A, 2026-11-04

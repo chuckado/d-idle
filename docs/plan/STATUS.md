@@ -264,7 +264,8 @@
 | menufit2 | proposed | - | `internal/watch/web/shell.css`<br>`tools/uishots/fixtures_menu.go`<br>`docs/ui-overlays.md` | - |
 | resistorder | proposed | - | `docs/research/resistorder.md`<br>`internal/d2/resist.go`<br>`internal/combat/rules.go`<br>`internal/readiness/model.go`<br>`internal/power/margin.go` | - |
 | vaultphone | proposed | - | `internal/watch/web/vault.js`<br>`tools/uishots.sh` | - |
-| verifydecomp37 | in-progress | - | `docs/upstream/verifier-decomp37-2026-11-17.md` | - |
+| morefit | proposed | - | `internal/watch/web/panels/orders/panel.css`<br>`tools/uishots/fixtures_menu.go` | - |
+| owbody | proposed | - | `docs/upstream/bodies/decomp37-open-wounds-body.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -305,14 +306,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 10dbc7735 11-17 09:51 `Merge agent/verifydecomp37: Merge branch 'main' into TASK-613` (verifydecomp37)
-- 6150eaf4e 11-17 09:50 `Merge branch 'main' into TASK-613` (-)
-- 4d6c263fd 11-17 08:16 `Merge agent/manaburnbody: Merge branch 'main' into TASK-614` (manaburnbody)
-- 8def47cdd 11-17 08:08 `Merge branch 'main' into TASK-614` (-)
-- b18e3627a 11-17 08:06 `Merge agent/vaultphone: Merge branch 'main' into vaultphone` (vaultphone)
-- 6d2cea9a8 11-17 08:05 `Merge branch 'main' into vaultphone` (-)
-- 1ca425356 11-17 08:04 `Merge agent/verifydecomp38: Merge branch 'main' into TASK-608` (verifydecomp38)
-- cedb3f753 11-17 07:59 `Merge branch 'main' into TASK-608` (-)
-- 104d37580 11-17 07:48 `Merge agent/menufit2: Merge branch 'main' into menufit2` (menufit2)
-- ae8632feb 11-17 07:47 `Merge branch 'main' into menufit2` (-)
+- a926509f9 11-17 12:40 `Merge agent/gowhole: Merge branch 'main' into gowhole` (gowhole)
+- 152abf8d7 11-17 12:39 `Merge branch 'main' into gowhole` (-)
+- 8f92bbf9b 11-17 11:58 `Merge agent/decomp39: decomp39: player melee through walls (FUN_00622c40 reach and line) and the DoT sub-point rule; docs only` (decomp39)
+- 5c7c7dce0 11-17 11:57 `Merge branch 'main' into TASK-624` (-)
+- 9924f480c 11-17 11:51 `Merge agent/sandbox3: Merge branch 'main' into sandbox3` (sandbox3)
+- 83379c803 11-17 11:50 `Merge branch 'main' into sandbox3` (-)
+- bc63d4199 11-17 11:13 `Merge agent/morefit: Merge branch 'main' into morefit` (morefit)
+- 19962e32b 11-17 11:12 `Merge branch 'main' into morefit` (-)
+- 81261627e 11-17 10:56 `Merge agent/owbody: Merge branch 'main' into TASK-618` (owbody)
+- 1d62e4d88 11-17 10:55 `Merge branch 'main' into TASK-618` (-)
 <!-- statusgen:end -->
