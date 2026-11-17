@@ -264,6 +264,7 @@
 | menufit2 | proposed | - | `internal/watch/web/shell.css`<br>`tools/uishots/fixtures_menu.go`<br>`docs/ui-overlays.md` | - |
 | resistorder | proposed | - | `docs/research/resistorder.md`<br>`internal/d2/resist.go`<br>`internal/combat/rules.go`<br>`internal/readiness/model.go`<br>`internal/power/margin.go` | - |
 | vaultphone | proposed | - | `internal/watch/web/vault.js`<br>`tools/uishots.sh` | - |
+| labels | proposed | - | `internal/d2dctl/labels.go`<br>`internal/d2dctl/labels_test.go`<br>`internal/watch/labelsapi.go`<br>`internal/watch/labelsapi_test.go`<br>`cmd/d2bot/labelswire.go`<br>`cmd/d2bot/labelswire_test.go`<br>`internal/watch/web/panels/video`<br>`internal/watch/testdata/video_labels_panel.js`<br>`tools/uishots/fixtures_commands.go`<br>`docs/video-feed.md`<br>`internal/watch/funwire.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/watchlayout_test.go`<br>`tools/uishots/serve.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`tools/uishots.sh` | - |
 | morefit | proposed | - | `internal/watch/web/panels/orders/panel.css`<br>`tools/uishots/fixtures_menu.go` | - |
 | owbody | proposed | - | `docs/upstream/bodies/decomp37-open-wounds-body.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -306,6 +307,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0e336ab05 11-17 12:59 `Merge agent/labels: Merge branch 'main' into TASK-615` (labels)
+- bd9bd1d06 11-17 12:58 `Merge branch 'main' into TASK-615` (-)
 - a926509f9 11-17 12:40 `Merge agent/gowhole: Merge branch 'main' into gowhole` (gowhole)
 - 152abf8d7 11-17 12:39 `Merge branch 'main' into gowhole` (-)
 - 8f92bbf9b 11-17 11:58 `Merge agent/decomp39: decomp39: player melee through walls (FUN_00622c40 reach and line) and the DoT sub-point rule; docs only` (decomp39)
@@ -314,6 +317,4 @@
 - 83379c803 11-17 11:50 `Merge branch 'main' into sandbox3` (-)
 - bc63d4199 11-17 11:13 `Merge agent/morefit: Merge branch 'main' into morefit` (morefit)
 - 19962e32b 11-17 11:12 `Merge branch 'main' into morefit` (-)
-- 81261627e 11-17 10:56 `Merge agent/owbody: Merge branch 'main' into TASK-618` (owbody)
-- 1d62e4d88 11-17 10:55 `Merge branch 'main' into TASK-618` (-)
 <!-- statusgen:end -->
