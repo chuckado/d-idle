@@ -451,7 +451,6 @@ docs/research/decomp30-mercai.md  credit-runner  decomp30
 docs/research/decomp31-drops.md  credit-runner  decomp31
 docs/research/decomp34-fallen-flee.md  credit-runner  decomp34
 docs/research/decomp35-combat.md  credit-runner  decomp35
-docs/research/decomp39-melee-walls.md  credit-runner  decomp39
 docs/research/design-brief-v1.md  credit-runner  designbrief
 docs/research/earlydeath13.md  pro-runner  earlydeath13
 docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
@@ -520,7 +519,6 @@ docs/upstream/bodies/  credit-runner  decomp34
 docs/upstream/bodies/  credit-runner  decomp36
 docs/upstream/bodies/decomp35-  credit-runner  decomp35
 docs/upstream/bodies/decomp37-open-wounds-body.md  credit-runner  owbody
-docs/upstream/bodies/decomp39-melee-reach-body.md  credit-runner  decomp39
 docs/upstream/bodies/gamble-price-body.md  credit-runner  decomp36bodies
 docs/upstream/bodies/hitrec-modes-body.md  credit-runner  prfix2
 docs/upstream/bodies/hitrec-norestart-body.md  credit-runner  prfix3
@@ -1395,8 +1393,6 @@ tools/emu/dc36_cmp.py  credit-runner  decomp36
 tools/emu/dc36_death.py  credit-runner  decomp36
 tools/emu/dc36_gamble.py  credit-runner  decomp36
 tools/emu/dc36_umod.py  credit-runner  decomp36
-tools/emu/dc39_dot.py  credit-runner  decomp39
-tools/emu/dc39_reach.py  credit-runner  decomp39
 tools/emu/dm_  credit-runner  decomp31
 tools/emu/dmg_model.py  credit-runner  dmgcheck
 tools/emu/mode_switch.py  credit-runner  decomp22
