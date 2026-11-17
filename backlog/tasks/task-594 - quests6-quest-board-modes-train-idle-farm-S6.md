@@ -1,10 +1,11 @@
 ---
 id: TASK-594
 title: 'quests6: quest board modes train idle farm (S6)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T06:28:00Z'
+updated_date: '2026-11-17T07:25:00Z'
 labels:
   - bot
   - feature
