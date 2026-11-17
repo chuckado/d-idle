@@ -237,6 +237,11 @@ quest-awaiting-light first=0&theme=light&needs=0&quests=awaiting
 quest-blocked-light first=0&theme=light&needs=0&quests=blocked
 quest-offer-sorceress first=0&theme=dark&needs=0&quests=offer&class=sorceress
 quest-needs3 first=0&theme=dark&needs=2&quests=awaiting
+quest-countdown first=0&theme=dark&needs=0&quests=countdown
+quest-countdown-sorceress first=0&theme=dark&needs=0&quests=countdown&class=sorceress
+quest-away first=0&theme=dark&needs=0&quests=away
+quest-away-light first=0&theme=light&needs=0&quests=away
+quest-phone-tab-away first=0&theme=dark&needs=0&quests=away&tab=Quests
 quest-phone-tab first=0&theme=dark&needs=0&quests=offer&tab=Quests
 quest-phone-tab-awaiting first=0&theme=dark&needs=0&quests=awaiting&tab=Quests
 quest-phone-tab-off first=0&theme=dark&needs=0&quests=off&tab=Quests
@@ -251,6 +256,9 @@ quest-sheet-off first=0&theme=dark&needs=0&quests=off #btn-more|[data-drawer-ope
 quest-sheet-training first=0&theme=dark&needs=0&quests=training #btn-more|[data-drawer-open=quest-board]
 quest-sheet-light first=0&theme=light&needs=0&quests=offer #btn-more|[data-drawer-open=quest-board]
 quest-sheet-auto-light first=0&theme=light&needs=0&quests=auto #btn-more|[data-drawer-open=quest-board]
+quest-sheet-countdown first=0&theme=dark&needs=0&quests=countdown #btn-more|[data-drawer-open=quest-board]
+quest-sheet-away first=0&theme=dark&needs=0&quests=away #btn-more|[data-drawer-open=quest-board]
+quest-sheet-away-sorceress first=0&theme=dark&needs=0&quests=away&class=sorceress #btn-more|[data-drawer-open=quest-board]
 quest-sheet-sorceress first=0&theme=dark&needs=0&quests=offer&class=sorceress #btn-more|[data-drawer-open=quest-board]
 overlay-menu-zone first=0&theme=dark&zone=cp&tab=Map #btn-more
 overlay-menu-zone-light first=0&theme=light&zone=cp&tab=Map #btn-more
@@ -317,6 +325,11 @@ quest-offer-light watch?first=0&theme=light&needs=0&quests=offer
 quest-awaiting-light watch?first=0&theme=light&needs=0&quests=awaiting
 quest-offer-sorceress watch?first=0&theme=dark&needs=0&quests=offer&class=sorceress
 quest-needs3 watch?first=0&theme=dark&needs=2&quests=awaiting
+quest-countdown watch?first=0&theme=dark&needs=0&quests=countdown
+quest-countdown-sorceress watch?first=0&theme=dark&needs=0&quests=countdown&class=sorceress
+quest-away watch?first=0&theme=dark&needs=0&quests=away
+quest-away-light watch?first=0&theme=light&needs=0&quests=away
+quest-phone-tab-away watch?first=0&theme=dark&needs=0&quests=away&tab=Quests
 quest-phone-tab watch?first=0&theme=dark&needs=0&quests=offer&tab=Quests
 quest-phone-tab-awaiting watch?first=0&theme=dark&needs=0&quests=awaiting&tab=Quests
 quest-phone-tab-off watch?first=0&theme=dark&needs=0&quests=off&tab=Quests
@@ -329,6 +342,9 @@ quest-sheet-mid watch?first=0&theme=dark&needs=0&quests=mid #btn-more|[data-draw
 quest-sheet-off watch?first=0&theme=dark&needs=0&quests=off #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 quest-sheet-training watch?first=0&theme=dark&needs=0&quests=training #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 quest-sheet-light watch?first=0&theme=light&needs=0&quests=offer #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+quest-sheet-countdown watch?first=0&theme=dark&needs=0&quests=countdown #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+quest-sheet-away watch?first=0&theme=dark&needs=0&quests=away #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+quest-sheet-away-sorceress watch?first=0&theme=dark&needs=0&quests=away&class=sorceress #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 quest-sheet-sorceress watch?first=0&theme=dark&needs=0&quests=offer&class=sorceress #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 questdefect-clip watch?first=0&theme=dark&needs=0&quests=offer&defect=q-clip #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 questdefect-small watch?first=0&theme=dark&needs=0&quests=offer&defect=q-small #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
@@ -591,16 +607,16 @@ vaultdefect-ethenabled watch/vault?theme=dark&vault=eth-short&defect=vault-ethen
 		vault-*) szs="$sizes 412x780 360x640" ;;
 		questdefect-words) szs="1366x768" ;;
 		questdefect-clip | questdefect-two) szs="1366x768 412x780" ;;
-		quest-sheet-awaiting | quest-sheet-blocked) szs="$sizes 412x780" ;; # a Needs you row on a 360x640 phone pushes Orders 9 px over (not this card)
 		questdefect-small) szs="412x780 360x640" ;;
 		quest-phone-tab*) szs="412x780 390x844 360x640" ;;
 		quest-sheet-*) szs="$sizes 412x780 360x640" ;;
-		quest-*) szs="$sizes 412x780" ;;
+		quest-*) szs="$sizes 412x780 360x640" ;; # the 360x640 phone too (the Needs you row of a waiting hand-in no longer pushes Orders over, slice S8)
 		overlaydefect-two) szs="1366x768" ;; # the other tiles are not on screen on a phone: nothing to show
 		overlaydefect-*) szs="1366x768 412x780" ;;
 		overlay-*) szs="$sizes 412x780" ;;
 		character-phone*) szs="$phonesizes" ;;
 		esac
+		[ -n "$sizes_only" ] && szs=$sizes_only # --sizes narrows a fit run to those sizes
 		for sz in $szs; do
 			w=${sz%x*} h=${sz#*x} ck=
 			enc() { printf %s "$1" | sed 's/_/ /g; s/#/%23/g; s/?/%3F/g; s/|/%7C/g; s/&/%26/g'; }

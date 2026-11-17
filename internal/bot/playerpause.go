@@ -78,6 +78,7 @@ func (r *Runner) PlayerPause(on bool) PlayerPauseView { return r.PlayerPauseMode
 // PlayerPauseMode is PlayerPause with the mode chosen: freeze nil means "freeze when the backend can", false the older
 // walk-home pause, true a freeze that is refused (view.Error) when the backend cannot.
 func (r *Runner) PlayerPauseMode(on bool, freeze *bool) PlayerPauseView {
+	r.noteQuestHold()
 	if !on {
 		if r.Frozen() {
 			if err := r.freezeOff(false, false); err != nil {

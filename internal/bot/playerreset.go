@@ -103,6 +103,7 @@ func (r *Runner) CanSoftReset() bool { return r.d.Cycler != nil }
 // PlayerReset starts a soft reset that begins on the very next loop tick: the running action is cancelled at once. A press
 // while one runs changes nothing (Already). wait:true (never the player's press) holds for a safe moment, at most resetPatience.
 func (r *Runner) PlayerReset(wait bool) ResetView {
+	r.noteQuestHold()
 	r.ForceThaw() // break glass: a frozen game thaws first (freeze.go)
 	force := !wait
 	r.mu.Lock()

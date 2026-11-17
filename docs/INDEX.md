@@ -668,6 +668,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [knock-in-gethit-body.md](upstream/bodies/knock-in-gethit-body.md): knock-in-gethit-body
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
 - [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
+- [mana-burn-amount-body.md](upstream/bodies/mana-burn-amount-body.md): mana-burn-amount-body
 - [missile-block-body.md](upstream/bodies/missile-block-body.md): missile-block-body
 - [seq-ias-body.md](upstream/bodies/seq-ias-body.md): seq-ias-body
 - [seq-ias-followup-body.md](upstream/bodies/seq-ias-followup-body.md): test: seq-rate fails when D2_PATCH_INSTALLER names a file that is not there
@@ -998,6 +999,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [shortdrills.md](probes/shortdrills.md): Short live drills for the g2e/g2f fixes (card shortdrills) (status: current (2026-11-06). Tags: V = run live on the worker host, S = secondary, U = unverified.)
 - [survival-ab-8seed-2026-11-16.md](probes/survival-ab-8seed-2026-11-16.md): Survival A/B 8-seed confirmation, Paladin, bot.zoneModel 0 vs 1, 2026-11-16 (status: current (TASK-568). Follows the 3-seed rescreen. Harness: ab-harness. Tags: V verified (run logs,...)
 - [survival-ab-8seed-rerun-2026-11-16.md](probes/survival-ab-8seed-rerun-2026-11-16.md): Survival A/B 8-seed rerun, Paladin (and a Sorceress screen), fixed harness and retuned controller, 2026-11-16 (status: current (TASK-572). Follows the 8-seed run (FAIL on XP). Harness: ab-harness sections 6 to 9. Tags: V...)
+- [survival-ab-reask-2026-11-17.md](probes/survival-ab-reask-2026-11-17.md): Survival A/B with the cost-event re-ask, Paladin 8 seeds, holdout, Sorceress screen, 2026-11-17 (status: current (TASK-595, card survreask). Follows the 8-seed rerun. Tags: V verified (run logs, `abreport...)
 - [survival-ab-rescreen-2026-11-16.md](probes/survival-ab-rescreen-2026-11-16.md): Survival A/B rescreen, Paladin, bot.zoneModel 0 vs 1 (3 seeds), 2026-11-16 (status: current (TASK-563). Rerun of the first screen after the clock fix of the merged survfix card (analysis)....)
 - [survival-ab-screen-2026-11-16.md](probes/survival-ab-screen-2026-11-16.md): Survival A/B screen, bot.zoneModel 0 vs 1 (3 seeds, Paladin and Sorceress), 2026-11-16 (status: current (TASK-554). Harness: ab-harness. Tags: V verified (the run logs and `abreport` output of this...)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)

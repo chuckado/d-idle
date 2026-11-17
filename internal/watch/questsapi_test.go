@@ -185,3 +185,36 @@ func TestGlanceCarriesTheQuestStrip(t *testing.T) {
 		t.Fatalf("glance quest: %+v", v.Quest)
 	}
 }
+
+// Slice S8: the opt-in route and the away card dismissal, for two builds.
+func TestQuestsAutoRoute(t *testing.T) {
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		r := newQuestRig(t, class, 6)
+		w := r.do("/api/quests/den_of_evil/auto", `{"on":true}`)
+		if w.Code != 200 || !strings.Contains(w.Body.String(), `"ok":true`) || strings.Contains(w.Body.String(), `"already"`) {
+			t.Fatalf("%s on: %d %s", class, w.Code, w.Body)
+		}
+		if !strings.Contains(r.get(), `"id":"den_of_evil","title":"Den of Evil","act":1,"state":"ready","auto":true`) {
+			t.Fatalf("%s: the row does not show the flag: %s", class, r.get())
+		}
+		if w = r.do("/api/quests/den_of_evil/auto", `{"on":true}`); w.Code != 200 || !strings.Contains(w.Body.String(), `"already":true`) {
+			t.Fatalf("%s again: %d %s", class, w.Code, w.Body)
+		}
+		if w = r.do("/api/quests/den_of_evil/auto", `{}`); w.Code != 400 {
+			t.Fatalf("%s no body: %d %s", class, w.Code, w.Body)
+		}
+		w = r.do("/api/quests/search_for_cain/auto", `{"on":true}`)
+		if w.Code != 409 || !strings.Contains(w.Body.String(), `"code":"auto_never"`) || !strings.Contains(w.Body.String(), "always needs you") {
+			t.Fatalf("%s never: %d %s", class, w.Code, w.Body)
+		}
+		if w = r.do("/api/quests/den_of_evil/auto", `{"on":false}`); w.Code != 200 || strings.Contains(r.get(), `"auto":true`) {
+			t.Fatalf("%s off: %d %s", class, w.Code, w.Body)
+		}
+		if w = r.do("/api/quests/away/dismiss", `{}`); w.Code != 200 || !strings.Contains(w.Body.String(), `"ok":true`) {
+			t.Fatalf("%s dismiss: %d %s", class, w.Code, w.Body)
+		}
+		if w = r.do("/api/quests/den_of_evil/bogus", `{}`); w.Code != 404 {
+			t.Fatalf("%s bogus: %d", class, w.Code)
+		}
+	}
+}
