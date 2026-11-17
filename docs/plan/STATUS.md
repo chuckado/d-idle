@@ -260,6 +260,7 @@
 | quests7b | proposed | - | `internal/task/act1.go`<br>`internal/task/act2.go`<br>`internal/task/act3.go`<br>`data/questboard`<br>`docs/questboard.md`<br>`internal/task/world.go`<br>`internal/task/s7b_test.go`<br>`internal/task/testdata`<br>`internal/talk/tables.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/questboard/chunks_test.go`<br>`internal/questboard/state_test.go` | - |
 | boardmoderace | proposed | - | `internal/bot/task.go`<br>`internal/bot/waypoints.go` | - |
 | quests10 | in-progress | - | `internal/questboard`<br>`internal/ether/earner.go`<br>`cmd/d2bot/questwire.go`<br>`internal/bot/questboard.go`<br>`internal/bot/runner.go`<br>`internal/watch/web/panels/quest-board`<br>`internal/watch/questsapi_test.go`<br>`internal/watch/testdata/quests`<br>`internal/watch/testdata/questui`<br>`tools/uishots/fixtures_quests.go`<br>`tools/uishots.sh`<br>`docs/questboard.md`<br>`docs/ether.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
+| verifydecomp38 | proposed | - | `docs/upstream/verifier-decomp38-2026-11-17.md` | - |
 | survrecover | proposed | - | `internal/bot/zonemodel.go`<br>`internal/bot/zonerecover_test.go`<br>`internal/bot/broke.go`<br>`docs/probes/survival-ab-recovery-2026-11-17.md`<br>`internal/bot/goal.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/zoneshadow.go` | - |
 | menufit2 | proposed | - | `internal/watch/web/shell.css`<br>`tools/uishots/fixtures_menu.go`<br>`docs/ui-overlays.md` | - |
 | resistorder | proposed | - | `docs/research/resistorder.md`<br>`internal/d2/resist.go`<br>`internal/combat/rules.go`<br>`internal/readiness/model.go`<br>`internal/power/margin.go` | - |
@@ -303,6 +304,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 1ca425356 11-17 08:04 `Merge agent/verifydecomp38: Merge branch 'main' into TASK-608` (verifydecomp38)
+- cedb3f753 11-17 07:59 `Merge branch 'main' into TASK-608` (-)
 - 104d37580 11-17 07:48 `Merge agent/menufit2: Merge branch 'main' into menufit2` (menufit2)
 - ae8632feb 11-17 07:47 `Merge branch 'main' into menufit2` (-)
 - c4ab423fc 11-17 07:40 `Merge agent/survrecover: Merge branch 'main' into survrecover` (survrecover)
@@ -311,6 +314,4 @@
 - 09b62142f 11-17 07:30 `Merge branch 'main' into TASK-611` (-)
 - 099e85f75 11-17 07:19 `Merge agent/quests10: Merge branch 'main' into quests10` (quests10)
 - 5429873f9 11-17 07:18 `Merge branch 'main' into quests10` (-)
-- 078468d0d 11-17 07:14 `Merge agent/decomp37: Merge branch 'main' into decomp37` (decomp37)
-- f81201d84 11-17 07:13 `Merge branch 'main' into decomp37` (-)
 <!-- statusgen:end -->
