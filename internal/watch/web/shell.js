@@ -126,6 +126,22 @@ function tileSheet(id, root, where) {
     return root;
   };
   const place = () => { const h = host(); if (sheet.parentElement !== h) h.appendChild(sheet); sheet.dataset.host = h === root ? 'self' : h.dataset.panel; return sheet.dataset.host; };
+  // A tile that a short window leaves only a few rows cannot hold its sheet (the Orders More list showed one row at 870x520, card
+  // morefit): the sheet then floats over the page at the tile's top-left (position: fixed is not clipped by the tile), at least
+  // FLOAT_MIN tall and never past the window; it keeps the tile's width. A tall enough tile keeps the sheet inside it.
+  const FLOAT_MIN = 232;
+  const fit = () => {
+    if (where === 'beside') return; // the zone menu has its own placement (it must not cover the zone buttons)
+    if (sheet.hidden) { sheet.removeAttribute('data-float'); sheet.style.removeProperty('--ts-top'); return; }
+    const r = sheet.parentElement ? sheet.parentElement.getBoundingClientRect() : null;
+    if (!r || r.height >= FLOAT_MIN) { sheet.removeAttribute('data-float'); return; }
+    const h = Math.min(FLOAT_MIN, window.innerHeight - 8), top = Math.max(0, Math.min(r.top, window.innerHeight - h - 4));
+    sheet.dataset.float = '1';
+    sheet.style.setProperty('--ts-top', Math.round(top) + 'px'); sheet.style.setProperty('--ts-left', Math.round(r.left) + 'px');
+    sheet.style.setProperty('--ts-w', Math.round(r.width) + 'px'); sheet.style.setProperty('--ts-h', Math.round(h) + 'px');
+  };
+  new MutationObserver(fit).observe(sheet, { attributes: true, attributeFilter: ['hidden'] });
+  window.addEventListener('resize', fit);
   return { el: sheet, place };
 }
 
@@ -805,6 +821,13 @@ function setupMenu(sel) {
   pop.addEventListener('click', (e) => { if (e.target.closest('button:not(.d-menu-gh)')) close(false); }); // a group header folds, it does not close the menu
   const tools = [], hero = [], presets = []; // the menu's groups (groupMenu): Hero, Tools and the layout presets
   for (const id of ['btn-layout', 'btn-help', 'btn-theme']) { const b = document.getElementById(id); if (b) tools.push(b); }
+  const labelsItem = ui.btn('Item labels', { size: 'sm', variant: 'ghost' }); // the video tile's Labels button, so a tile in a drawer or a phone tab is still one tap away
+  labelsItem.dataset.key = 'labels-menu';
+  labelsItem.setAttribute('aria-label', 'Item labels: show or hide the names of items on the ground');
+  labelsItem.hidden = true;
+  labelsItem.addEventListener('click', () => { const b = document.querySelector('[data-key="labels"]'); if (b && !b.hidden) b.click(); });
+  more.addEventListener('click', () => { const b = document.querySelector('[data-key="labels"]'); labelsItem.hidden = !b || b.hidden; if (b) labelsItem.setAttribute('aria-pressed', b.getAttribute('aria-pressed') || 'false'); });
+  tools.push(labelsItem);
   let chip = null, menuReturn = null;
   const retLink = document.getElementById('returnlink');
   for (const [id, text] of [['log', 'Log'], ['quest-board', 'Quests'], ['onboarding', 'Getting started']]) { // the drawers a cockpit has
@@ -948,6 +971,8 @@ function makeCtx(m, parts, cfg, answerBase, timers) {
     hide(on) { parts.root.hidden = !!on; syncBand(parts.root.parentElement); },
     state(st) { parts.root.dataset.state = st; },
     later(fn, ms) { const t = setTimeout(() => { timers.delete(t); fn(); }, ms); timers.add(t); return t; },
+    // one read of a viewer route outside the manifest poll (a panel's own state, e.g. the video card's Labels button); null when it fails
+    get: (path) => fetch(path + (qs.get('t') ? '?t=' + encodeURIComponent(qs.get('t')) : ''), { cache: 'no-store', credentials: 'same-origin' }).then((r) => r.json()).catch(() => null),
     post: (path, body) => postJSON(answerBase, path, body),
     askReset(from) { document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from } })); }, // the Reset confirm sheet (resetui.js)
     refresh() { if (theSched) theSched.poke(m.id); }, // poll this panel now (a drawer's tab changed)

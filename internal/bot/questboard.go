@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/goals"
 	"d2lod-bot/internal/questboard"
 	"d2lod-bot/internal/task"
 )
@@ -56,6 +57,7 @@ type boardRT struct {
 	noted    map[string]string    // visible-reason log lines already written
 	applied  string               // the between-chunks mode the hero acts on (boardmode.go); "" before the first tick
 	farming  bool                 // inside a farm-mode slice: the area choice farms
+	queued   string               // why an accepted chunk is not running yet ("" when it runs or none is accepted)
 }
 
 // NewQuestBoard builds the board executor of this runner and its hero's plan store and keeps it for boardStep. The S4
@@ -600,8 +602,13 @@ func (r *Runner) boardStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 	}
 	switch d.Kind {
 	case questboard.DecRun:
+		rt.setQueued("")
+		r.boardNote("run "+questboard.ChunkKey(d.Quest, d.Chunk), "quest board: starting chunk "+questboard.ChunkKey(d.Quest, d.Chunk))
 		return r.boardRun(ctx, snap, c, d)
 	case questboard.DecAwait:
+		rt.setQueued("")
+		k := questboard.ChunkKey(d.Quest, d.Chunk)
+		r.boardNote("awaiting "+k, "quest board: awaiting hand-in of "+k)
 		return r.boardAwait(ctx, snap, c, d)
 	case questboard.DecPaused, questboard.DecBusy:
 		return r.rest(ctx, snap, c)
@@ -652,6 +659,9 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		out = questboard.StepResult{Outcome: questboard.StepDied, Why: nonEmptyStr(whyOf(res), "died on the way")}
 	case res.Outcome == task.OutInterrupted || res.Outcome == task.OutWait:
 		out.Outcome = questboard.StepWaiting
+		if w := whyOf(res); w != "" {
+			r.boardNote("wait "+questboard.ChunkKey(d.Quest, d.Chunk), "quest board: waiting: "+w)
+		}
 	case res.Outcome == task.OutRetry || res.Outcome == task.OutBlocked:
 		out = questboard.StepResult{Outcome: questboard.StepFailed, Why: nonEmptyStr(whyOf(res), "the step was refused")}
 	case res.Outcome == task.OutRan && res.StepID == "":
@@ -708,6 +718,9 @@ func (r *Runner) boardSlice(ctx context.Context, snap *d2.Snapshot, c control, p
 		st, act = phaseState(step.Phase)
 		act += " (" + step.Title + ")"
 		l.task.stepTitle = step.Title
+		if bp, ok := pl.(boardPlan); ok && !bp.train {
+			r.boardNote("step", "quest board: step "+step.Title)
+		}
 	}
 	var res task.Result
 	l.task.err = nil
@@ -796,4 +809,68 @@ func nonNilErr(err error, msg string) error {
 		return err
 	}
 	return errors.New(msg)
+}
+
+func (rt *boardRT) setQueued(why string) {
+	rt.mu.Lock()
+	rt.queued = why
+	rt.mu.Unlock()
+}
+
+// QuestQueued is DeskConfig.Queued: why an accepted chunk is not running yet, in words ("" when it runs).
+func (r *Runner) QuestQueued() string {
+	rt := r.qbRT()
+	if rt == nil {
+		return ""
+	}
+	rt.mu.Lock()
+	defer rt.mu.Unlock()
+	return rt.queued
+}
+
+// boardPreempts is true when the Start tap of the player must run now although the goal is not a campaign: a farm area,
+// level or boss goal is the hero's standing order, but an accepted chunk (or a hand-in tap) is the newer one. Before this
+// the board only ran under a campaign goal, so the accept was recorded and nothing started (live 2026-11-17, goal
+// farm_area on Dark Wood, 13 minutes). A fight in the clear radius delays only the start of a chunk, never a hand-in; the
+// reason is shown as "queued". The Farm gold order and a recovery that has to refill the purse still come first.
+func (r *Runner) boardPreempts(snap *d2.Snapshot, c control) bool {
+	if !r.questBoardOn() || c.spec.camp != nil {
+		return false
+	}
+	switch c.spec.kind {
+	case goals.ReachLevel, goals.FarmArea, goals.KillBoss:
+	default:
+		return false
+	}
+	if r.goldFarmOn() || (r.recoveryActive() && !r.gearVerdict(snap).Gated) {
+		return false
+	}
+	rt := r.boardRTFor()
+	if rt == nil {
+		return false
+	}
+	d, err := rt.exec.Next()
+	if err != nil {
+		return false
+	}
+	k := questboard.ChunkKey(d.Quest, d.Chunk)
+	switch d.Kind {
+	case questboard.DecRun:
+		if !r.safeToPause(snap) {
+			rt.setQueued("Starts when the fight is over.")
+			r.boardNote("queued "+k, "quest board: "+k+" queued: waiting for the fight to end")
+			return false
+		}
+		return true
+	case questboard.DecAwait, questboard.DecBusy:
+		return true
+	case questboard.DecBlocked:
+		rt.setQueued("Parked: " + d.Why)
+		r.boardNote("blocked "+d.Quest, fmt.Sprintf("quest board: %s parked: %s", k, d.Why))
+	case questboard.DecPaused:
+		rt.setQueued("Paused: the hero starts it when you resume.")
+	default:
+		rt.setQueued("")
+	}
+	return false
 }

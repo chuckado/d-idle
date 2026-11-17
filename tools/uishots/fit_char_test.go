@@ -165,6 +165,15 @@ func TestFitPhoneRules(t *testing.T) {
 			}
 			continue
 		}
+		if rest, ok := strings.CutPrefix(name, "mf-"); ok { // the Orders More list: moredefect-NAME
+			if !strings.Contains(string(sh), "\nmoredefect-"+rest+" ") {
+				t.Errorf("no fit page moredefect-%s", rest)
+			}
+			if _, ok := mustFail["fit-moredefect-"+rest+"-"]; !ok {
+				t.Errorf("mustFail has no entry for moredefect-%s", rest)
+			}
+			continue
+		}
 		if rest, ok := strings.CutPrefix(name, "mn-"); ok { // the "..." menu: menudefect-NAME (fixtures_menu.go); mn-tall is the healthy tall menu
 			if rest == "tall" {
 				if !strings.Contains(string(sh), "\nmenu-tall ") {
