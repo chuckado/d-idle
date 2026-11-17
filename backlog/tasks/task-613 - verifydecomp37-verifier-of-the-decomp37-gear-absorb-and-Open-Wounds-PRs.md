@@ -11,7 +11,7 @@ labels:
 dependencies: []
 priority: medium
 ordinal: 309000
-result: ""
+result: "Verifier of decomp37 (docs/upstream/verifier-decomp37-2026-11-17.md). Gear absorb fid/gear-absorb-r2: FAIL, the reduction rule is exact (13,189 and 13,242 of 20,000 differ on the parent, 0 after) but game.exe also heals the defender by the absorbed amount (FUN_0057a980) and the merc is changed too; needs a worker r3 (A1..A6), nothing to post. Open Wounds r2 FAIL (tests and oracle miss the path), fid/open-wounds-r3 (oracle 5e7a69b1, claim dabc3ff4, pushed to the private fork) PASS WITH CHANGES W1..W7: new test_open_wounds through Fight::land and monster_dots fails on the parent, every mutant tried aborts, ctest 356/356 (two UI tests flaky under load), tidy 0. Builder and emulator runs, not live; nothing posted."
 card: "verifydecomp37"
 owns:
   - "docs/upstream/verifier-decomp37-2026-11-17.md"
@@ -29,6 +29,6 @@ Why: the two decomp37 PR candidates (fid/gear-absorb-r2, fid/open-wounds-r2; TAS
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Verdict per PR with required body changes and the exact branch and commits to post
-- [ ] #2 Rules re-derived from the decomp, mutants, reseed, ctest, tidy, presubmit run and recorded
+- [x] #1 Verdict per PR with required body changes and the exact branch and commits to post
+- [x] #2 Rules re-derived from the decomp, mutants, reseed, ctest, tidy, presubmit run and recorded
 <!-- AC:END -->

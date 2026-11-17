@@ -9,7 +9,7 @@ Tags: **V run** (run by this verifier today, NAS builder), **V read** (disassemb
 | PR | Verdict | Post |
 |---|---|---|
 | Gear absorb | **r2 FAIL (incomplete mechanic: the heal)** | nothing yet. The reduction rule is game.exe's and r2 implements it exactly, but game.exe also gives the absorbed amount back as life (`FUN_0057a980`); r2 does not model it and the body denies it. Needs an r3 by a worker (A1 to A6 below) |
-| Open Wounds | **r2 FAIL (tests), r3 PASS WITH CHANGES** | `fid/open-wounds-r3`: oracle `@@OWO@@`, claim `@@OWC@@`, on upstream `ed007569` (rebases clean on upstream main `84c86b40`); body after W1 to W7 |
+| Open Wounds | **r2 FAIL (tests), r3 PASS WITH CHANGES** | `fid/open-wounds-r3`: oracle `5e7a69b1`, claim `dabc3ff4`, on upstream `ed007569` (rebases clean on upstream main `84c86b40`); body after W1 to W7 |
 
 ### Gear absorb: why r2 cannot be posted
 
@@ -77,15 +77,28 @@ Local mutants only (never pushed). `test_combat` compiled alone against each tre
 | o5 / q5 halving rounded up | **passes** | 432 / 836 | `test_combat` aborts (`player_blow` pin, 24) |
 | o6 breakpoint 16 | aborts | 17 / 35 | |
 | o8 / q8 `player_blow` ignores `special` | **passes** | **0** (harness computes `special` itself) | `test_combat` aborts |
-| q2 a minion is special | **passes** (V read: no test builds a `Monster`) | **0** | @@Q2@@ |
-| q3 rate per 25 ms (per second confusion) | **passes** | **0** | @@Q3@@ |
-| q4 wound 200 x 25 ms | **passes** | **0** | @@Q4@@ |
-| q9 whole points a second (the parent's truncation in `Fight::land`) | **passes** | **0** | @@Q9@@ |
+| q2 a minion is special | **passes** (V read: no test builds a `Monster`) | **0** | `test_open_wounds` aborts (minion case) |
+| q3 rate per 25 ms (per second confusion) | **passes** | **0** | `test_open_wounds` aborts |
+| q4 wound 200 x 25 ms | **passes** | **0** | `test_open_wounds` aborts |
+| q9 whole points a second (the parent's truncation in `Fight::land`) | **passes** | **0** | `test_open_wounds` aborts |
 
 So r2's tests and oracles miss six of the gear and Open Wounds path mutants; r3's two tests abort every Open Wounds mutant tried.
 
 
-@@BUILD@@
+## Build, ctest, tidy (V run)
+
+Builder container, Release, GCC, tests and tools on, `-j2` under the builder's lane lock, ccache, jobs registered with `tools/agentrun.sh`; `D2_MPQ_DIR` and `D2_PATCH_INSTALLER` set for ctest.
+
+| Tree | Build | ctest / tests |
+|---|---|---|
+| upstream main `ed007569` | not rebuilt | 355 of 355 pass (S, `verifier-decomp38-2026-11-17.md`, same base and build) |
+| gear r2 claim `82eced5f` | full, rc 0 | **355 of 355 pass**; `test_combat` Passed |
+| Open Wounds r3 claim (before the include fix) | full, rc 0 | 354 of 356 in the `-j2` run: `pad_controls_ux_d2d` and `coop_lobby_d2d` failed (a d2d window's slow frames under load); both pass rerun alone (`ctest -j1 -R`), on the same binary. `test_combat` and `test_open_wounds` Passed |
+| Open Wounds r3 final `dabc3ff4` | `test_open_wounds`, `test_combat`, rc 0 | both rc 0 (`ok`); differs from the row above by one `#include <utility>` |
+| the parent `ed007569` plus r3's `test_open_wounds.cpp` only | rc 0 | **`test_open_wounds` aborts** (`lost == 200 * one.fine / 256`): the new test fails on the parent |
+
+clang-tidy-19 by file (`test_combat.cpp` on the gear claim; `test_open_wounds.cpp`, `test_combat.cpp`, `fight/strike.cpp` on r3 final): 0 findings. r3 before the fix had one, `misc-include-cleaner` (`std::move`, no `<utility>`), fixed in `dabc3ff4`. Positive control (`--checks=-*,readability-magic-numbers`): 1,526 and 3,849 reports, so the files are parsed. The `tools/tidy-pr-select.py` selection over every unit including `combat.hpp` / `ai.hpp` was not run (U; neither branch edits those units beyond the files above, and decomp35..38 saw only upstream's `std::erase_if` findings there).
+
 
 ## RNG luck
 
@@ -102,10 +115,10 @@ Neither rule draws: the gear grid is deterministic (`exact` records, no roll), a
 
 ## Required changes to the Open Wounds body (`decomp37-open-wounds-body.md`, for r3)
 
-- **W1 (high).** Commits and tree: "upstream `ed007569` plus `@@OWO@@` (oracle) and `@@OWC@@` (claim)". The claim also adds `tests/game/test_open_wounds.cpp` (a blow through `Fight::land` and `monster_dots` on a plain monster, a champion, a unique, a superunique and a minion; game.exe's life lost at levels 2, 30, 61) and the `player_blow` pins in `test_combat` (49, halved 24); ctest runs both. The oracle's compare exits 1 when no monster case is compared.
+- **W1 (high).** Commits and tree: "upstream `ed007569` plus `5e7a69b1` (oracle) and `dabc3ff4` (claim)". The claim also adds `tests/game/test_open_wounds.cpp` (a blow through `Fight::land` and `monster_dots` on a plain monster, a champion, a unique, a superunique and a minion; game.exe's life lost at levels 2, 30, 61) and the `player_blow` pins in `test_combat` (49, halved 24); ctest runs both. The oracle's compare exits 1 when no monster case is compared.
 - **W2 (high).** Counts: seed 7 "1,738 compared (244 player rows not compared): the parent differs in 1,729 (plain 849 of 858, special 880 of 880)"; seed 1 "16,526 compared (5,256 player rows not compared), 16,463 differ"; add the fresh seed 5001 row (3,069 compared, 3,054 differ, 0 after). Say the emulator compare's d2d side is the rule (`open_wounds_fine`), and `test_open_wounds` checks the path.
 - **W3 (high).** Mutants: r3's list (section Mutants) instead of the four, with the test that aborts each.
-- **W4 (medium, claims).** WARN answers: replace the unit-kinds line by "A merc (`merc_strike`: `player_blow` over its gear, its level) and a Shadow (the owner's fighter, the Shadow's level) wound through the same `player_blow` and `Fight::land`, so they take the new rule with their own level, as game.exe's handler reads the attacker's stat 12; a player struck is not modelled (no monster carries the property in d2d); a co-op partner's hero is a player (the same path)." `build` and `gcc`: "built and ctest run (Release, GCC): @@CTESTLINE@@".
+- **W4 (medium, claims).** WARN answers: replace the unit-kinds line by "A merc (`merc_strike`: `player_blow` over its gear, its level) and a Shadow (the owner's fighter, the Shadow's level) wound through the same `player_blow` and `Fight::land`, so they take the new rule with their own level, as game.exe's handler reads the attacker's stat 12; a player struck is not modelled (no monster carries the property in d2d); a co-op partner's hero is a player (the same path)." `build` and `gcc`: "built and ctest run (Release, GCC): 356 of 356 pass (two UI tests, `pad_controls_ux_d2d` and `coop_lobby_d2d`, failed once under builder load and pass alone)".
 - **W5 (medium, claims).** Limits: add "An act boss (MonStats boss, not a placed unique) is `Boss::none` in d2d and takes the whole wound; whether game.exe's act-boss spawn sets bit 4 or 8 of the data word was not read."
 - **W6 (low, template).** The template's Claims table (`Commit | Claim or change | Evidence | Re-check`, a row per commit) and Checklist, ticked: tests (`tests/test_combat.cpp`, `tests/game/test_open_wounds.cpp`), finding (`docs/research/re/combat.md`), `pr_guard` 0 FAIL 0 WARN. Re-check block: `ctest --test-dir build -R 'test_combat|test_open_wounds' --output-on-failure` (`D2_MPQ_DIR` set; `test_open_wounds` skips without the data).
 - **W7 (low).** "In play": add the halved line, e.g. level 30 over 8 s: 340 points on a plain monster, 170 on a unique (game.exe; d2d after r3 the same, V run by `test_open_wounds`).
@@ -115,7 +128,14 @@ Neither rule draws: the gear grid is deterministic (`exact` records, no roll), a
 - `decomp37-combat.md` section 5 and the TASK-607 result cite Open Wounds counts that r2's scripts do not reproduce (W2), and D6 there says the merc carries no gear stats: it does (`merc_fighter`).
 - Gear absorb r3 is a worker card (A1 to A6, Sonnet); this verifier's checklist then re-runs.
 
-@@HYGIENE@@
+## Hygiene (V run)
+
+- Identity: all four r2 commits and both r3 commits have the user's noreply identity as author and committer (not the scratch one), `Agent: Claude Code` the only parsed trailer, after a blank line (`git log --format`, `git interpret-trailers --parse`). r3's oracle commit keeps r2's author date.
+- `pr_guard.py upstream/main HEAD`: 0 FAIL, 0 WARN on both r2 heads and on r3. `presubmit.py --quick --base upstream/main`: gear r2 0 FAIL, 2 WARN (`build`, `gcc`); Open Wounds r2 and r3 0 FAIL, 3 WARN (`siblings`, `build`, `gcc`; answered by W4); r3's oracle commit 0 FAIL, 2 WARN.
+- Usage errors (V run, both scripts): no, unknown or short arguments print the usage and exit 1; an empty case file exits 1; a missing file is a traceback in r2 (`cannot read` in r3's Open Wounds script, still a traceback in `gear_absorb.py`, low). Hand-made files: unequal lengths, ids out of step and a malformed d2d line exit 1; the gear compare passes two files with the same junk values (it compares strings; low).
+- Diff: each oracle commit leaves `components/` untouched and builds alone; r3's claim adds `tests/game/test_open_wounds.cpp` and the `player_blow` pins. Both claims rebase with no conflict on upstream main `84c86b40`. The gear and Open Wounds claims conflict with each other (`combat.hpp`, `test_combat.cpp`, `combat.md` neighbouring lines, V run `git merge-tree`): whichever posts second needs a rebase.
+- No private-only code, host names or paths in the diffs (read).
+
 
 ## Not checked
 
@@ -123,4 +143,18 @@ Neither rule draws: the gear grid is deterministic (`exact` records, no roll), a
 - game.exe's consumer of the wound (`FUN_005a6920`) and the heal (`FUN_0057a980`) are read, not run under the emulator.
 - The act-boss data word, `FUN_0056e970`'s stacking rule, the order of crush and Open Wounds on one blow (decomp37 D7).
 
-@@RECHECK@@
+## Re-check commands (as run)
+
+Builder container, the emulator image of `docs/emu-image.md`; lab scripts `verifyd37/{bld,stage,emu,emuruns,harn,tcm,chain,chain2,fin}.sh` (lab only).
+
+```sh
+cd tools/emu
+python3 gear_absorb.py gen 20000 5001 > c.tsv; python3 gear_absorb.py game c.tsv > g.tsv
+g++ -O1 -std=c++23 -I../../components/rules -I../../components -I../../components/d2s -I../../components/txt -o h gear_absorb_harness.cpp
+./h < c.tsv > d.tsv; python3 gear_absorb.py compare c.tsv g.tsv d.tsv; echo $?    # parent 13,242 differ, 1; r2 claim 0, 0
+python3 open_wounds.py gen 2000 5001 > oc.tsv; python3 open_wounds.py game oc.tsv > og.tsv
+g++ ... -o oh open_wounds_harness.cpp && ./oh < oc.tsv > od.tsv
+python3 open_wounds.py compare oc.tsv og.tsv od.tsv; echo $?                       # oracle commit 3,054 differ, 1; claim 0, 0
+ctest --test-dir build -R 'test_combat|test_open_wounds' --output-on-failure      # r3: both pass; the parent plus the test: test_open_wounds aborts
+```
+
