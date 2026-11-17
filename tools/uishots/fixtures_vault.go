@@ -234,7 +234,7 @@ func init() {
 	defectCSS["vault-sheet"] = `.vt-sheet-card { max-block-size: 120px !important; overflow: hidden !important; }`
 	vaultJS["vault-noname"] = `new MutationObserver(function () { document.querySelectorAll('.vt [aria-label]').forEach(function (e) { e.removeAttribute('aria-label'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
 	vaultJS["vault-enabled"] = `new MutationObserver(function () { document.querySelectorAll('[data-key="upgrade"]').forEach(function (e) { e.removeAttribute('aria-disabled'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
-	vaultJS["vault-ethenabled"] = `new MutationObserver(function () { document.querySelectorAll('[data-key="upgrade"]').forEach(function (e) { e.setAttribute('aria-disabled', 'false'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
+	vaultJS["vault-ethenabled"] = `new MutationObserver(function () { document.querySelectorAll('[data-key="upgrade"]').forEach(function (e) { if (e.getAttribute('aria-disabled') !== 'false') e.setAttribute('aria-disabled', 'false'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
 }
 
 var vaultJS = map[string]string{}
