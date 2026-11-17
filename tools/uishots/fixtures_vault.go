@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -30,12 +31,19 @@ type vaultSet struct {
 	n, capacity, shrinkTo int
 	on                    bool
 	none                  bool
+	keep                  string // "": no Keep queue; ok, dead (the gate refuses: the hero is dead), full (a queue waiting for stash room)
+	preset                bool   // queued, creating, kept and failed rows are put in the store
 }
 
 var vaultModes = map[string]vaultSet{
 	"pop": {n: 140, capacity: 400, on: true}, "warn": {n: 140, capacity: 160, on: true}, "full": {n: 140, capacity: 140, on: true},
 	"over": {n: 140, capacity: 400, shrinkTo: 100, on: true}, "empty": {n: 0, capacity: 400, on: true}, "none": {none: true, on: true},
 	"off": {n: 140, capacity: 400, on: false}, "big": {n: 1200, capacity: 2400, on: true},
+	// the Keep queue (slice V5): its own stores, so a press on one page never changes another
+	"keeping":   {n: 140, capacity: 400, on: true, keep: "ok", preset: true},
+	"keeppress": {n: 140, capacity: 400, on: true, keep: "ok"},
+	"keepdead":  {n: 140, capacity: 400, on: true, keep: "dead"},
+	"keepfull":  {n: 140, capacity: 400, on: true, keep: "full", preset: true},
 }
 
 // vaultName makes the i-th drop: a base and a quality that cycle, with a few fixed long and awkward names among them.
@@ -119,6 +127,13 @@ func newVaultFor(mode string, dir string) *watch.VaultAPI {
 	if set.shrinkTo > 0 {
 		capacity = set.shrinkTo
 	}
+	if set.keep != "" {
+		k := &fixtureKeeper{st: s, mode: set.keep}
+		if set.preset {
+			k.preset(ids)
+		}
+		desk.Keep = k
+	}
 	desk.Store = func() *vault.Store { return s }
 	api.Bind(desk)
 	return api
@@ -162,6 +177,22 @@ func mountVault(m *http.ServeMux) {
 	for _, p := range watch.VaultRoutes {
 		m.Handle(p, h)
 	}
+	// the answer routes too (same origin here), so a press shows the real reply and the page reads the state back
+	for _, p := range watch.VaultPostRoutes {
+		route := p
+		m.HandleFunc(route, func(w http.ResponseWriter, r *http.Request) {
+			mode := "pop"
+			if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("vault") != "" {
+				mode = ref.Query().Get("vault")
+			}
+			api := vaultAPIs[mode]
+			if api == nil {
+				http.Error(w, "no such fixture", http.StatusNotFound)
+				return
+			}
+			api.PostHandler(watch.AnswerOptions{}, route).ServeHTTP(w, r)
+		})
+	}
 }
 
 // vaultDefect is, per name, the one defect put back on the Vault page. The fit pages vaultdefect-NAME must FAIL with the verdict
@@ -179,3 +210,74 @@ func init() {
 }
 
 var vaultJS = map[string]string{}
+
+// fixtureKeeper is the Keep queue of the fixture: it queues through the real store like internal/vaultkeep does; nothing creates
+// items here (the executor is exercised in internal/vaultkeep with the fake game).
+type fixtureKeeper struct {
+	st   *vault.Store
+	mode string
+}
+
+// preset puts a row in every Keep state: two queued, one creating, one failed with a real reason and two kept.
+func (k *fixtureKeeper) preset(ids []string) {
+	for _, i := range []int{1, 2, 4, 6} {
+		_ = k.st.KeepTo(ids[i], "")
+	}
+	_ = k.st.BeginKeep(ids[4])
+	if k.mode == "full" {
+		_ = k.st.RetryKeep(ids[1], "keep: the stash is full: free space or upgrade")
+	}
+	_ = k.st.FailKeep(ids[6], "keep: the game does not accept this item's data")
+	for _, i := range []int{9, 10} {
+		_ = k.st.KeepTo(ids[i], "")
+		_ = k.st.BeginKeep(ids[i])
+		_ = k.st.CompleteKeepAt(ids[i], "stash 2,3")
+	}
+}
+
+func (k *fixtureKeeper) Gate(context.Context) (bool, string, string) {
+	if k.mode == "dead" {
+		return false, "dead", "The hero is dead; Keep works again once it is alive and in town."
+	}
+	return true, "", ""
+}
+
+func (k *fixtureKeeper) Enqueue(_ context.Context, ids []string, target string, _ bool) []watch.VaultKeepResult {
+	var out []watch.VaultKeepResult
+	for _, id := range ids {
+		rec, ok := k.st.Get(id)
+		switch {
+		case !ok:
+			out = append(out, watch.VaultKeepResult{ID: id, Code: "missing", Why: "no such item"})
+		case rec.State == vault.KeepQ || rec.State == vault.Kept:
+			out = append(out, watch.VaultKeepResult{ID: id, OK: true, Already: true})
+		default:
+			if err := k.st.KeepTo(id, target); err != nil {
+				out = append(out, watch.VaultKeepResult{ID: id, Code: "state", Why: err.Error()})
+			} else {
+				out = append(out, watch.VaultKeepResult{ID: id, OK: true})
+			}
+		}
+	}
+	return out
+}
+
+func (k *fixtureKeeper) Progress() watch.VaultKeepView {
+	q := k.st.KeepQueued()
+	v := watch.VaultKeepView{Enabled: k.mode != "dead", Full: k.mode == "full"}
+	for _, r := range q {
+		if r.InFlight {
+			v.Creating++
+		} else {
+			v.Queued++
+		}
+	}
+	switch n := v.Queued + v.Creating; {
+	case n == 0:
+	case v.Full:
+		v.Line = fmt.Sprintf("Keeping %d items: the stash is full, free space or upgrade", n)
+	default:
+		v.Line = fmt.Sprintf("Keeping %d items: arrives at your next town visit", n)
+	}
+	return v
+}

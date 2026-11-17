@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"d2lod-bot/internal/vault"
+	"d2lod-bot/internal/vaultkeep"
 	"d2lod-bot/internal/watch"
 )
 
@@ -18,6 +19,7 @@ type vaultHome struct {
 	mu   sync.Mutex
 	hero string
 	st   *vault.Store
+	keep *vaultkeep.Keeper // the Keep queue (vaultkeep.go); nil until wireVaultKeep
 }
 
 var vaultHomes sync.Map // root -> *vaultHome
@@ -75,7 +77,7 @@ func vaultAPI(root string, on func() bool, hero func() string) (*watch.VaultAPI,
 	}
 	home := vaultHomeFor(root)
 	api := watch.NewVaultAPI()
-	api.Bind(watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }})
+	api.Bind(watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}})
 	return api, nil
 }
 

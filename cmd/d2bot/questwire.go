@@ -59,6 +59,7 @@ func wireQuestBoard(stateDir string, ref *runnerRef, r *bot.Runner, logf func(ms
 		Paused:  func() bool { return r.PlayerPauseView().State != bot.PauseRunning },
 		Explain: r.QuestReadiness,
 		Class:   r.QuestClass,
+		Meter:   r.QuestMeter,
 	})
 	ref.qd = d
 	return d

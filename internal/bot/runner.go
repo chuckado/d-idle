@@ -43,8 +43,10 @@ type Deps struct {
 	Gear    Gear    // nil: no equip, no gear shopping
 	// PlayerGear runs the player's queued equips at the gear step (in town); nil: none.
 	PlayerGear PlayerGear
-	Quester    Quester   // nil: quest rewards are not claimed
-	Task       *TaskDeps // nil: campaign goals are refused at Start
+	// VaultKeep creates the vault items the player kept (vaultkeep.go); nil: none.
+	VaultKeep VaultKeep
+	Quester   Quester   // nil: quest rewards are not claimed
+	Task      *TaskDeps // nil: campaign goals are refused at Start
 	// Prepare runs once, in a game with nothing hostile near, before the first goal action (hotkey binding). A failure is
 	// retried up to three times, then the bot carries on without.
 	Prepare func(ctx context.Context) error
@@ -188,6 +190,7 @@ type Runner struct {
 	merc           mercState            // sticky merc knowledge and chore backoff (resource.go)
 	drank          atomic.Int64         // potions drunk, counted from every EvPotion event (combat emits them live; the observer's own diff is off there)
 	playerCancelNs atomic.Int64         // clock of the last guard interrupt for a player command (playerDue)
+	parkedBoard    atomic.Bool          // quest board Idle mode: standing in town on purpose, the stall watchdog stays quiet (boardmode.go)
 	noTP           atomic.Bool          // the running task step has Constraints.NoTownPortal: no safety portal, no trip
 	farmMu         sync.Mutex           // guards farm
 	farm           farmProgress         // runs goal progress across farmStep restarts (farm.go)
@@ -266,6 +269,8 @@ type loopState struct {
 	playerWhyAt      time.Time // last "waits for a safe moment" log line (noteDelayed)
 	errandSkipUntil  time.Time // no errand trip before this (errandTripStep)
 	playerActAt      time.Time // last attempt of the player's queued item actions (playerActionStep)
+	vaultKeepNext    time.Time // no vault keep attempt before this while nothing changed (vaultKeepStep)
+	vaultKeepPend    int       // queue length at the last attempt: a change makes the next attempt immediate
 	// repair trip (repairtrip.go): when the wait for a safe moment began, retreat steps taken, loot pass done, no attempt before
 	repairWaitSince time.Time
 	repairRetreats  int

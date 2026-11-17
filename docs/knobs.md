@@ -191,7 +191,9 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
-| loot.vault | 0 | 0..1 | 0/1 | 1 | 5 | 1: items the Vault preset (docs/vault.md) selects are peeked and recorded in the vault instead of being picked up; the bot walks to them as for a pickup, sends no pickup click and uses no pack space. Gold, potions, scrolls, keys, gems and stacks keep their own rules. Needs d2d started with --vault-verbs; without it the knob does nothing and a Needs-you info line says why. Forced off in measured runs (gates, soaks, baselines: D2BOT_RUN). 0 (default): today's pickit, byte-identical. |
+| loot.vault | 0 | 0..1 | 0/1 | 1 | 6 | 1: items the Vault preset (docs/vault.md) selects are peeked and recorded in the vault instead of being picked up; the bot walks to them as for a pickup, sends no pickup click and uses no pack space. Gold, potions, scrolls, keys, gems and stacks keep their own rules. Needs d2d started with --vault-verbs; without it the knob does nothing and a Needs-you info line says why. Forced off in measured runs (gates, soaks, baselines: D2BOT_RUN). 0 (default): today's pickit, byte-identical. |
+| loot.vaultKeep | 1 | 0..1 | 0/1 | 1 | 1 | 1 (default, with loot.vault 1): the Keep button of the Ethereal Vault queues the item and the bot creates it in the hero's stash at the next safe moment in town, exactly as dropped (docs/vault.md, Keep). 0: the queue stops creating at once (kill switch); queued items stay queued. Needs d2d with --vault-verbs; forced off in measured runs (D2BOT_RUN). |
+| loot.vaultKeepPerVisit | 20 | 1..100 | items | 100 | 1 | Most items the Keep queue creates in one town visit, so a long queue does not stall the trip; the rest follows at the next safe moment. |
 | loot.vaultAll | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1): every ground item that is not gold, a gem or a stack and that no other rule takes is recorded too, plain and low items included. 0 (default): the Vault preset only. |
 | loot.pickRadius | 30 | 5..60 | subtiles | 5 | 2 | Ground items within this distance are considered. |
 | loot.pickStrictness | 1 | 0..3 | level | 3 | 4 | 0 loose (also items worth selling), 1 normal, 2 keepers only, 3 gold/runes/gems/uniques only. |
@@ -491,7 +493,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
-| quests.board | 0 | 0..1 | bool | 0 | 1 | 1: a quest runs only after the player accepts its current chunk (Start); the bot does that chunk, walks to the NPC and stops, and the player taps Hand in. The planner then no longer starts quests by itself: between chunks it levels (Train; the modes are a later slice). 0 (default): today's planner behaviour, nothing changes. Off until the live drill of docs/questboard.md has run. |
+| quests.board | 0 | 0..1 | bool | 0 | 1 | 1: a quest runs only after the player accepts its current chunk (Start); the bot does that chunk, walks to the NPC and stops, and the player taps Hand in. The planner then no longer starts quests by itself: between chunks the hero acts on the player's mode (Train levels toward the next quest, Idle parks in town, Farm farms loot and gold; docs/questboard.md Modes). 0 (default): today's planner behaviour, nothing changes. Off until the live drill of docs/questboard.md has run. |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)

@@ -330,6 +330,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [drillsfix.md](drillsfix.md): drillsfix: stash (DS) and tome (TM) drill repairs
 - [earlygame.md](earlygame.md): Early game: a fresh character, clvl 1 to 12 (agent EARLYGAME, 2026-10-30)
 - [emu-image.md](emu-image.md): The game.exe emulator image (status: current (2026-11-14, TASK-406). Rebuilt after the worker-host cleanup of 2026-11-13 removed the volatile...)
+- [ether.md](ether.md): ETHER: the account meta wallet of the Ethereal Vault (status: built offline 2026-11-17 (agent vaultv7, slice V7 of design/loot-vault-2026-11-16.md section 2.6). NOT...)
 - [exploredpct.md](exploredpct.md): Explored share: when a zone counts as explored (bot.exploredPct) (status: CURRENT. Tags: V = read from the code in this worktree and covered by a unit test, U = not run in a live game.)
 - [farm.md](farm.md): Farm runs (FARMRUNS, 2026-10-29)
 - [farmfallback.md](farmfallback.md): farmfallback: the gold farm as data, with a fallback
