@@ -238,6 +238,7 @@
 | decomp36bodies | proposed | - | `docs/upstream/bodies/gamble-price-body.md`<br>`docs/upstream/bodies/umod-multishot-body.md` | - |
 | vault | proposed | - | `docs/design/loot-vault-2026-11-16.md` | - |
 | quests1 | in-progress | - | `internal/questboard`<br>`data/questboard`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
+| vaultv0 | proposed | - | `docs/probes/vault-spike-2026-11-16.md` | `fork-branch:didle/vault-spike` |
 | palfeedflaky | proposed | - | `internal/watch/palfeed` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -281,6 +282,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 92e27b85d 11-16 22:50 `Merge agent/vaultv0: Merge branch 'main' into vaultv0` (vaultv0)
+- 9fd2f6066 11-16 22:48 `Merge branch 'main' into vaultv0` (-)
 - ba3a37a72 11-16 22:47 `Merge agent/palfeedflaky: palfeedflaky: deterministic palfeed guard tests (main CI red)` (palfeedflaky)
 - 31d647688 11-16 22:46 `Merge branch 'main' into palfeedflaky` (-)
 - cdc624907 11-16 22:03 `Merge agent/quests1: Merge branch 'main' into quests1` (quests1)
@@ -289,6 +292,4 @@
 - f2c1f6e8f 11-16 21:51 `Merge branch 'main' into survtune` (-)
 - 14c53adfe 11-16 21:45 `Merge agent/vaultdesign: Merge branch 'main' into vault` (vaultdesign)
 - bfe89b7e3 11-16 21:45 `Merge agent/questdesign: Merge branch 'main' into questdesign` (questdesign)
-- 3ca847cf2 11-16 21:43 `Merge branch 'main' into vault` (-)
-- 17de4f93e 11-16 21:43 `Merge branch 'main' into questdesign` (-)
 <!-- statusgen:end -->
