@@ -327,3 +327,13 @@ The tools row (Preview, Undo, Export, Import) sits under the mode buttons. Previ
 3. Open the sheet, change the rune knob, press Preview, read the headline, press Undo after a save, export, edit the file's name, import it.
 4. Switch the character in Character Select: the new hero shows the class preset, the old hero's set returns on the way back.
 5. Force an engine failure (a rule set the compiler refuses, by hand) and check one `loot rules engine failed` line and today's selling.
+
+## 14. Vault action (slice V3 of docs/design/loot-vault-2026-11-16.md)
+
+> status: BUILT offline, default OFF (knob `loot.vault` 0). U: never run against a live game. Store and file formats: docs/vault.md.
+
+- New action `vault`, ground scope only (a pack, stash or sell rule with it is refused by `Parse`). The engine answers `vault` instead of `pickup`: the looter walks to the item as for a pickup, PEEKS it (`ground full`, V1), records it and sends NO pickup click, so no pack space is used and the item stays on the floor (it is not taken: `ground take` is the later Keep slice). Needs no `confirm` or `ack` (non-destructive).
+- The Starter is NOT changed and never says `vault`. The preset `Vault` (`lootrules.VaultPreset(recordAll)`, id `vault`) is the Starter with the ground rules that stash or sell turned into `vault` (runes, charms, jewels, jewelry, uniques, sets, runeword bases, magic/rare/crafted gear); plain, low and superior gear and chipped/flawed gems become `ignore`; gold, potions, scrolls, keys, tomes, the gem rules, identify-needed charms and jewelry and the poor-mode junk-for-sale line keep their own rules. It is data built in Go from the Starter, not in the store's preset list yet (V4 UI).
+- `loot.vault` 1 makes the Vault preset decide the ground stage (any `loot.rulesEngine` value); `loot.vaultAll` 1 adds the catch-all `g-vault-all` (not gold, gem or stackable) and drops the junk rule. Min-priority and named-item overrides still apply; strictness and pack-room filters do not (no pickup).
+- Shadow: the pass expects `vault` only when `loot.vault` is working; otherwise a `vault` rule folds to `ignore`, so golden comparisons with knob 0 are byte-identical.
+- Safety: forced off while `D2BOT_RUN` is set (logged once), when the fork lacks `ground.full` (Needs-you info line, no stall), when the wiring is absent. A failed peek or record falls back to today's pickup decision for that unit (logged once). Over capacity (`vault.ErrFull` / `ErrOverCapacity`) stops new records: items are skipped as `vault full` for 2 minutes, then one insert is tried again; one notice per episode.

@@ -156,26 +156,33 @@ func phaseState(phase string) (State, string) {
 	return StateTraveling, "Quest step"
 }
 
+// ensureTaskExecutor creates the executor of goal generation c.gen once per goal; the quest board slices share it.
+func (r *Runner) ensureTaskExecutor(c control) {
+	l := &r.loop
+	if l.task.ex != nil && l.task.gen == c.gen {
+		return
+	}
+	ex := task.NewExecutor(taskEnv{r}, taskActs{r, c})
+	ex.Now = r.e.Clock.Now // strike expiry on the env clock: virtual under d2d lockstep (docs/d2d-determinism.md), wall on Game.exe as before
+	ex.Hooks.OnStart = func(s task.Step) { r.noTP.Store(s.Constraints.NoTownPortal) }
+	ex.Hooks.OnEnd = func(s task.Step, res task.Result) {
+		r.noTP.Store(false)
+		if res.Outcome == task.OutInterrupted {
+			return // the guard's safety and trip interrupts are routine
+		}
+		r.e.Log.Info("task step", "step", s.ID, "outcome", res.Outcome.String(), "kind", res.Kind.String(), "err", res.Err, "attention", res.Attention)
+	}
+	l.task = taskState{ex: ex, gen: c.gen}
+	r.obMu.Lock()
+	r.ob.taskRep = taskReport{}
+	r.obMu.Unlock()
+}
+
 // taskStep runs one executor tick of the campaign goal.
 func (r *Runner) taskStep(ctx context.Context, snap *d2.Snapshot, c control) bool {
 	l := &r.loop
 	camp := c.spec.camp
-	if l.task.ex == nil || l.task.gen != c.gen {
-		ex := task.NewExecutor(taskEnv{r}, taskActs{r, c})
-		ex.Now = r.e.Clock.Now // strike expiry on the env clock: virtual under d2d lockstep (docs/d2d-determinism.md), wall on Game.exe as before
-		ex.Hooks.OnStart = func(s task.Step) { r.noTP.Store(s.Constraints.NoTownPortal) }
-		ex.Hooks.OnEnd = func(s task.Step, res task.Result) {
-			r.noTP.Store(false)
-			if res.Outcome == task.OutInterrupted {
-				return // the guard's safety and trip interrupts are routine
-			}
-			r.e.Log.Info("task step", "step", s.ID, "outcome", res.Outcome.String(), "kind", res.Kind.String(), "err", res.Err, "attention", res.Attention)
-		}
-		l.task = taskState{ex: ex, gen: c.gen}
-		r.obMu.Lock()
-		r.ob.taskRep = taskReport{}
-		r.obMu.Unlock()
-	}
+	r.ensureTaskExecutor(c)
 	ex := l.task.ex
 	env := taskEnv{r}
 	w, err := env.World(ctx)

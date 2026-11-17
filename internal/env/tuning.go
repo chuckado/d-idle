@@ -22,6 +22,7 @@ type Tuning struct {
 	Senses   SensesTuning
 	Invdesk  InvdeskTuning
 	Watch    WatchTuning
+	Quests   QuestsTuning
 }
 
 // DefaultTuning returns the optimal profile.
@@ -41,6 +42,7 @@ func DefaultTuning() Tuning {
 		Senses:   DefaultSensesTuning(),
 		Invdesk:  DefaultInvdeskTuning(),
 		Watch:    DefaultWatchTuning(),
+		Quests:   DefaultQuestsTuning(),
 	}
 }
 
@@ -77,5 +79,6 @@ func Knobs() []Knob {
 	k = append(k, sensesKnobs()...)
 	k = append(k, invdeskKnobs()...)
 	k = append(k, watchKnobs()...)
+	k = append(k, questsKnobs()...)
 	return k
 }
