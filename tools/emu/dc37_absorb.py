@@ -1,10 +1,11 @@
+#!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""A player's gear absorb (stats 142..149) on one elemental or magic field: the oracle for `test_combat --absorb-gear`.
+"""A player's gear absorb (stats 142..149) on one elemental or magic field: the oracle for `monster_blow`'s element fields.
 
-    python3 gear_absorb.py gen 20000 7 > cases.tsv
-    python3 gear_absorb.py game cases.tsv > g.tsv          # game.exe, under the emulator
-    ../../build/tests/test_combat --absorb-gear < cases.tsv > d.tsv
-    python3 gear_absorb.py compare cases.tsv g.tsv d.tsv   # exit 1 on a difference, an empty file or a malformed line
+    uv run python gear_absorb.py gen 20000 7 > cases.tsv
+    uv run python gear_absorb.py game cases.tsv > g.tsv          # game.exe, under the emulator
+    g++ -O2 -std=c++23 -I../../components/rules -I../../components -I../../components/d2s -I../../components/txt -o gear_absorb_harness gear_absorb_harness.cpp && ./gear_absorb_harness < cases.tsv > d.tsv
+    uv run python gear_absorb.py compare cases.tsv g.tsv d.tsv   # exit 1 on a difference, an empty file or a malformed line
 
 A case line: `id type field res pct flat mdr`. `type` 0 fire, 1 lightning, 2 cold, 4 magic (d2d's element
 index); `field` the damage in whole points, written into the record's field (<< 8); `res` the defender's
@@ -23,7 +24,7 @@ import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import monster_damage  # noqa: E402  (upstream's tools/emu: the rig of the monster damage oracle)
+import monster_damage  # noqa: E402  (the rig of the monster damage oracle)
 
 # type -> (record offset, resist stat, max-resist stat, absorb percent stat, absorb flat stat)
 ROWS = {0: (0x10, 0x27, 0x28, 0x8E, 0x8F), 1: (0x1C, 0x29, 0x2A, 0x90, 0x91), 2: (0x24, 0x2B, 0x2C, 0x94, 0x95), 4: (0x20, 0x25, 0x26, 0x92, 0x93)}
