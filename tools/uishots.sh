@@ -495,6 +495,14 @@ overlay-charter-cockpit watch?layout=cockpit&theme=dark&zone=cp&charter=1&tab=Ma
 overlay-charter-menu watch?first=0&theme=dark&zone=cp&charter=1&tab=Map [data-panel=zone-map]_[data-key=go]|#btn-more #btn-more
 overlay-zone-sheet-light watch?first=0&theme=light&zone=cp&tab=Map
 overlay-zone-sheet-loop watch?first=0&theme=dark&zone=cp&loop=1&tab=Map
+menu-tall watch?first=0&theme=dark&defect=mn-tall #btn-more
+menu-tall-light watch?first=0&theme=light&defect=mn-tall #btn-more
+menu-tall-cockpit watch?layout=cockpit&theme=dark&defect=mn-tall #btn-more
+menudefect-noscroll watch?first=0&theme=dark&defect=mn-noscroll #btn-more
+menudefect-primary watch?first=0&theme=dark&defect=mn-primary #btn-more
+menudefect-hint watch?first=0&theme=dark&defect=mn-hint #btn-more
+menu-groups watch?first=0&theme=dark&needs=2&pause=can #btn-more|[data-group=layout]
+menu-groups-light watch?first=0&theme=light&needs=2&pause=can #btn-more|[data-group=layout]
 overlaydefect-under watch?first=0&theme=dark&zone=cp&defect=ov-under&tab=Map #btn-more #btn-more
 overlaydefect-clip watch?first=0&theme=dark&zone=cp&charter=1&defect=ov-clip&tab=Map [data-panel=zone-map]_[data-key=go] #btn-more
 overlaydefect-header watch?first=0&theme=dark&zone=cp&defect=ov-header&tab=Map
@@ -581,6 +589,8 @@ vault-revealing-list watch/vault?theme=dark&vault=revealing [data-key=view-toggl
 vault-reveal-press watch/vault?theme=dark&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-toggle]
 vault-reveal-none watch/vault?theme=dark&vault=revealnone [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-toggle]
 vault-reveal-cain watch/vault?theme=dark&vault=revealcain [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-toggle]
+vault-reveal-multi watch/vault?theme=dark&vault=revealcain [data-key=filters-toggle]|[data-key=unid]|[data-key=select-toggle]|.vt-cell:nth-child(1)|.vt-cell:nth-child(2)|.vt-cell:nth-child(3) [data-key=select-toggle],.vt-costline
+vault-reveal-multi-light watch/vault?theme=light&vault=revealcain [data-key=filters-toggle]|[data-key=unid]|[data-key=select-toggle]|.vt-cell:nth-child(1)|.vt-cell:nth-child(2)|.vt-cell:nth-child(3) [data-key=select-toggle],.vt-costline
 vault-reveal-dead watch/vault?theme=dark&vault=revealdead [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-toggle]
 vault-sell-sheet watch/vault?theme=dark&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=sell] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-sell-sheet-light watch/vault?theme=light&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=sell] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
@@ -617,6 +627,8 @@ vaultdefect-ethenabled watch/vault?theme=dark&vault=eth-short&defect=vault-ethen
 		quest-phone-tab*) szs="412x780 390x844 360x640" ;;
 		quest-sheet-*) szs="$sizes 412x780 360x640" ;;
 		quest-*) szs="$sizes 412x780 360x640" ;; # the 360x640 phone too (the Needs you row of a waiting hand-in no longer pushes Orders over, slice S8)
+		menudefect-*) szs="1280x620 412x780" ;;
+		menu-tall* | menu-groups*) szs="1280x620 1366x768 900x700 412x780 360x640" ;;
 		overlaydefect-two) szs="1366x768" ;; # the other tiles are not on screen on a phone: nothing to show
 		overlaydefect-*) szs="1366x768 412x780" ;;
 		overlay-*) szs="$sizes 412x780" ;;

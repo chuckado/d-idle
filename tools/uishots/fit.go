@@ -164,13 +164,14 @@ type fitResult struct {
 	Chars  *fitChars       `json:"chars"`
 	Vault  *fitVault       `json:"vault"`
 	Ov     *struct {
-		Open    []string `json:"open"`
-		Menu    []string `json:"menu"`
-		Cut     []string `json:"cut"`
-		Under   []string `json:"under"`
-		Charter []string `json:"charter"`
-		Small   []string `json:"small"`
-		Words   []string `json:"words"`
+		Open       []string `json:"open"`
+		Menu       []string `json:"menu"`
+		MenuScroll []string `json:"menuScroll"`
+		Cut        []string `json:"cut"`
+		Under      []string `json:"under"`
+		Charter    []string `json:"charter"`
+		Small      []string `json:"small"`
+		Words      []string `json:"words"`
 	} `json:"ov"`
 	CV *struct {
 		Zero  []string `json:"zero"`
@@ -345,6 +346,9 @@ func (r fitResult) judge() []string {
 		for _, x := range o.Menu {
 			bad = append(bad, "menu item "+x+" is covered by another layer")
 		}
+		for _, x := range o.MenuScroll {
+			bad = append(bad, "menu: "+x)
+		}
 		for _, x := range o.Cut {
 			bad = append(bad, "sheet text is cut, not wrapped: "+x)
 		}
@@ -502,6 +506,10 @@ var mustFail = map[string]string{
 	"fit-overlaydefect-clip-":   "sheet text is cut",
 	"fit-overlaydefect-header-": "leaves the free area",
 	"fit-overlaydefect-two-":    "more than one overlay is open",
+	// the "..." menu (card menufit2): one defect each, put back by defectCSS "mn-*" (fixtures_menu.go)
+	"fit-menudefect-noscroll-": "cannot scroll",
+	"fit-menudefect-primary-":  "is below the fold",
+	"fit-menudefect-hint-":     "shows no hint",
 	// the quest board (slice S5): one defect each, put back by defectCSS and overlayJS in fixtures_quests.go
 	"fit-questdefect-clip-":  "sheet text is cut",
 	"fit-questdefect-small-": "target under 44 px",
