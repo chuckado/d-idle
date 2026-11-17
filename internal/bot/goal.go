@@ -39,7 +39,7 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 	if r.playerPauseStep(ctx, snap, c) {
 		return true
 	}
-	if r.playerActionStep(ctx, snap, c) || r.errandTripStep(ctx, snap, c) {
+	if r.playerActionStep(ctx, snap, c) || r.errandTripStep(ctx, snap, c) || r.vaultKeepStep(ctx, snap, c) {
 		return true
 	}
 	if c.spec.kind == goals.Idle {
@@ -904,7 +904,7 @@ func (r *Runner) target0(s *d2.Snapshot, c control) (int, bool) {
 	p := s.Player
 	switch c.spec.kind {
 	case goals.ReachLevel:
-		if r.goldFarmOn() {
+		if r.goldFarmOn() || r.boardFarming() {
 			if a, ok, stop := r.goldFarmTarget(s); stop {
 				return 0, false
 			} else if ok {

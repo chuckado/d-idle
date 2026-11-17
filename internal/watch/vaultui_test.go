@@ -54,7 +54,7 @@ func TestVaultPageServedAndTexts(t *testing.T) {
 	if err != nil || json.Unmarshal(b, &tx) != nil {
 		t.Fatal("vault.json unreadable")
 	}
-	for _, code := range []string{"off", "state", "missing", "pincap", "confirm", "ids", "internal", "insufficient", "in-use", "out-of-order", "maxed", "nothing-to-refund", "wallet", "token", "origin", "content-type", "method", "body"} {
+	for _, code := range []string{"off", "state", "missing", "pincap", "confirm", "ids", "internal", "dead", "verbs", "stopped", "target", "insufficient", "in-use", "out-of-order", "maxed", "nothing-to-refund", "wallet", "token", "origin", "content-type", "method", "body"} {
 		if tx.Refusals[code] == "" {
 			t.Errorf("no text for the refusal code %q", code)
 		}
@@ -87,5 +87,24 @@ func TestVaultPageServedAndTexts(t *testing.T) {
 	}
 	if !strings.Contains(string(js), "grid.id = 'pack'") {
 		t.Error("the grid is not id pack, so inventory-tip.js would not wire it")
+	}
+}
+
+// vault.js parses as a module (the page itself runs in a browser: the fit pages press it, docs/vault.md).
+func TestVaultPageScriptParses(t *testing.T) {
+	node, err := exec.LookPath("node")
+	if err != nil {
+		t.Skip("no node")
+	}
+	js, err := webFS.ReadFile("web/vault.js")
+	if err != nil {
+		t.Fatal(err)
+	}
+	p := filepath.Join(t.TempDir(), "vault.mjs")
+	if err := os.WriteFile(p, js, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if out, err := exec.Command(node, "--check", p).CombinedOutput(); err != nil {
+		t.Fatalf("%v\n%s", err, out)
 	}
 }

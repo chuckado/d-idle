@@ -156,7 +156,13 @@ ethnofit vault=eth-nofit&theme=dark
 ethmax vault=eth-max&theme=dark
 ethsheet vault=eth&theme=dark [data-key=upgrade]
 ethsheetl vault=eth&theme=light [data-key=upgrade]
-ethrefund vault=eth-owned&theme=dark [data-key=downgrade]" | while read -r pname pq pclick; do
+ethrefund vault=eth-owned&theme=dark [data-key=downgrade]
+keeping vault=keeping&theme=dark
+keepingl vault=keeping&theme=light
+keepfull vault=keepfull&theme=dark
+kept vault=keeping&theme=dark ?[data-key=filters-toggle]|[data-key=chip-kept]
+keeppress vault=keeppress&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=keep]
+keepdead vault=keepdead&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=keep]" | while read -r pname pq pclick; do
 		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
 		for sz in ${sizes_only:-1914x930 1366x768 1280x620 412x780 360x640}; do
 			w=${sz%x*} h=${sz#*x}
@@ -471,6 +477,13 @@ vault-eth-max watch/vault?theme=dark&vault=eth-max
 vault-eth-upgrade watch/vault?theme=dark&vault=eth [data-key=upgrade] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-eth-upgrade-light watch/vault?theme=light&vault=eth [data-key=upgrade] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-eth-refund watch/vault?theme=dark&vault=eth-owned [data-key=downgrade] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
+vault-keeping watch/vault?theme=dark&vault=keeping
+vault-keeping-light watch/vault?theme=light&vault=keeping
+vault-keeping-list watch/vault?theme=dark&vault=keeping [data-key=view-toggle] .vt-cell,[data-key=view-toggle]
+vault-keepfull watch/vault?theme=dark&vault=keepfull
+vault-kept watch/vault?theme=dark&vault=keeping ?[data-key=filters-toggle]|[data-key=chip-kept] [data-key=chip-kept]
+vault-keep-press watch/vault?theme=dark&vault=keeppress [data-key=select-toggle]|.vt-cell|[data-key=keep] [data-key=select-toggle]
+vault-keep-dead watch/vault?theme=dark&vault=keepdead [data-key=select-toggle]|.vt-cell|[data-key=keep] [data-key=select-toggle]
 vault-menu-entry watch?first=0&theme=dark&needs=0 #btn-more [data-key=vault-open]
 vault-more-entry watch?first=0&theme=dark&needs=0 [data-key=verb-more] [data-key=more-vault]
 vaultdefect-clip watch/vault?theme=dark&vault=pop&defect=vault-clip

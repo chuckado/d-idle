@@ -7,6 +7,7 @@ import (
 	"sync/atomic"
 
 	"d2lod-bot/internal/vault"
+	"d2lod-bot/internal/vaultkeep"
 	"d2lod-bot/internal/watch"
 )
 
@@ -19,7 +20,8 @@ type vaultHome struct {
 	mu   sync.Mutex
 	hero string
 	st   *vault.Store
-	capf atomic.Value // func() int: the capacity the stores read at every insert (the ETHER wallet's owned tiers, etherwire.go)
+	capf atomic.Value      // func() int: the capacity the stores read at every insert (the ETHER wallet's owned tiers, etherwire.go)
+	keep *vaultkeep.Keeper // the Keep queue (vaultkeep.go); nil until wireVaultKeep
 }
 
 var vaultHomes sync.Map // root -> *vaultHome
@@ -99,7 +101,7 @@ func vaultAPIWith(root string, on func() bool, hero func() string, eh *etherHome
 	}
 	home := vaultHomeFor(root)
 	api := watch.NewVaultAPI()
-	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }}
+	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}}
 	if eh != nil {
 		desk.Owned = eh.owned
 	}

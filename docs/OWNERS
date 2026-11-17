@@ -135,6 +135,7 @@ cmd/d2bot/adapters.go  credit-runner  idfast
 cmd/d2bot/behaviors.go  credit-runner  campaign1
 cmd/d2bot/behaviors.go  credit-runner  gearsets
 cmd/d2bot/behaviors.go  credit-runner  quests4
+cmd/d2bot/behaviors.go  credit-runner  vaultv5
 cmd/d2bot/beltfill_adapter.go  credit-runner  beltfix
 cmd/d2bot/boss.go  pro-runner  levelplan3
 cmd/d2bot/charwire.go  credit-runner  charselect
@@ -157,6 +158,7 @@ cmd/d2bot/d2dbackend.go  credit-runner  vaultv4
 cmd/d2bot/d2dwire.go  credit-runner  gearsets
 cmd/d2bot/d2dwire.go  credit-runner  itemverbs2
 cmd/d2bot/d2dwire.go  credit-runner  vaultv3
+cmd/d2bot/d2dwire.go  credit-runner  vaultv5
 cmd/d2bot/dangerwire.go  credit-runner  survA
 cmd/d2bot/dangerwire.go  credit-runner  survB
 cmd/d2bot/funwire.go  credit-runner  maphistoryA
@@ -205,6 +207,7 @@ cmd/d2bot/live.go  credit-runner  survB
 cmd/d2bot/live.go  credit-runner  survfix
 cmd/d2bot/live.go  credit-runner  uib1
 cmd/d2bot/live.go  credit-runner  uib5
+cmd/d2bot/live.go  credit-runner  vaultv5
 cmd/d2bot/loopwire.go  credit-runner  uib7
 cmd/d2bot/loopwire_test.go  credit-runner  uib7
 cmd/d2bot/looteradapter_test.go  credit-runner  goldprio
@@ -252,9 +255,13 @@ cmd/d2bot/survivalwire.go  credit-runner  quests4
 cmd/d2bot/survivalwire.go  credit-runner  survC
 cmd/d2bot/survivalwire.go  credit-runner  survfix
 cmd/d2bot/survivalwire.go  credit-runner  survfix2
+cmd/d2bot/survivalwire.go  credit-runner  survreask
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
+cmd/d2bot/vaultkeep.go  credit-runner  vaultv5
 cmd/d2bot/vaultpage.go  credit-runner  vaultv4
+cmd/d2bot/vaultpage.go  credit-runner  vaultv5
 cmd/d2bot/vaultpage_test.go  credit-runner  vaultv4
+cmd/d2bot/vaultpage_test.go  credit-runner  vaultv5
 cmd/d2bot/vaultwire.go  credit-runner  vaultv3
 cmd/d2bot/vaultwire.go  credit-runner  vaultv4
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
@@ -291,6 +298,7 @@ docs/design/loot-vault-2026-11-16.md  credit-runner  vault
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv3
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv4
+docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv5
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv7
 docs/design/quest-board-2026-11-16.md  credit-runner  quests1
 docs/design/quest-board-2026-11-16.md  credit-runner  quests3
@@ -340,6 +348,7 @@ docs/knobs.md  credit-runner  survfix2
 docs/knobs.md  credit-runner  survsd
 docs/knobs.md  credit-runner  tidy
 docs/knobs.md  credit-runner  vaultv3
+docs/knobs.md  credit-runner  vaultv5
 docs/knobs.md  credit-runner  videofeed2
 docs/knobs.md  credit-runner  viewerfps
 docs/knobs.md  credit-runner  wiring2
@@ -380,6 +389,7 @@ docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/survival-ab-8seed-2026-11-16.md  credit-runner  survab8
 docs/probes/survival-ab-8seed-rerun-2026-11-16.md  credit-runner  survtune
+docs/probes/survival-ab-reask-2026-11-17.md  credit-runner  survreask
 docs/probes/test-characters.md  credit-runner  survab8
 docs/probes/test-characters.md  credit-runner  survtune
 docs/probes/test-characters.md  live-agent  fid-fixtures
@@ -516,6 +526,7 @@ docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
 docs/vault.md  credit-runner  vaultv2
 docs/vault.md  credit-runner  vaultv3
 docs/vault.md  credit-runner  vaultv4
+docs/vault.md  credit-runner  vaultv5
 docs/vault.md  credit-runner  vaultv7
 docs/video-feed.md  credit-runner  videofeed
 docs/video-feed.md  credit-runner  videofeed2
@@ -536,6 +547,7 @@ internal/bot/areaskip_test.go  credit-runner  staletarget
 internal/bot/areaskip_test.go  pro-runner  bounce3
 internal/bot/catalog.go  credit-runner  botcpu2
 internal/bot/contracts.go  credit-runner  goldprio
+internal/bot/contracts.go  credit-runner  vaultv5
 internal/bot/drought.go  credit-runner  freshstart
 internal/bot/exploredpct.go  credit-runner  exploredpct
 internal/bot/exploredpct_test.go  credit-runner  exploredpct
@@ -553,6 +565,7 @@ internal/bot/goal.go  credit-runner  repairtrip
 internal/bot/goal.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  survB
 internal/bot/goal.go  credit-runner  uib1
+internal/bot/goal.go  credit-runner  vaultv5
 internal/bot/goal.go  pro-runner  levelplan3
 internal/bot/goldfarm.go  credit-runner  repairtrip
 internal/bot/goldprio.go  credit-runner  goldprio
@@ -576,6 +589,7 @@ internal/bot/loop.go  credit-runner  hourfix
 internal/bot/loop.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  resetinstant
 internal/bot/loop.go  credit-runner  staletarget
+internal/bot/loop.go  credit-runner  survreask
 internal/bot/loop.go  pro-runner  bounce3
 internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  arrivalsettle
@@ -585,6 +599,7 @@ internal/bot/observe.go  credit-runner  intake
 internal/bot/observe.go  credit-runner  lockscan
 internal/bot/observe.go  credit-runner  passagebounce
 internal/bot/observe.go  credit-runner  staletarget
+internal/bot/observe.go  credit-runner  survreask
 internal/bot/observe.go  pro-runner  bounce3
 internal/bot/ordersguard.go  credit-runner  staletarget
 internal/bot/parkstep_test.go  credit-runner  botstuck
@@ -593,6 +608,7 @@ internal/bot/playeraction.go  credit-runner  idfast
 internal/bot/playeraction.go  credit-runner  uib1
 internal/bot/playeraction_test.go  credit-runner  botinstant
 internal/bot/playeraction_test.go  credit-runner  idfast
+internal/bot/playeraction_test.go  credit-runner  vaultv5
 internal/bot/playerpause.go  credit-runner  uib1
 internal/bot/playerpause_test.go  credit-runner  uib1
 internal/bot/playerreset.go  credit-runner  botreset
@@ -619,6 +635,7 @@ internal/bot/runner.go  credit-runner  resetinstant
 internal/bot/runner.go  credit-runner  staletarget
 internal/bot/runner.go  credit-runner  survB
 internal/bot/runner.go  credit-runner  uib1
+internal/bot/runner.go  credit-runner  vaultv5
 internal/bot/staletarget.go  credit-runner  botstuck
 internal/bot/staletarget.go  credit-runner  staletarget
 internal/bot/staletarget_test.go  credit-runner  staletarget
@@ -628,15 +645,19 @@ internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  quests3
 internal/bot/task.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  staletarget
+internal/bot/vaultkeep.go  credit-runner  vaultv5
 internal/bot/whyline.go  credit-runner  repairtrip
 internal/bot/whyline.go  credit-runner  staletarget
 internal/bot/whyline_test.go  credit-runner  uifix1
 internal/bot/zonemodel.go  credit-runner  survfix2
+internal/bot/zonemodel.go  credit-runner  survreask
 internal/bot/zonemodel_test.go  credit-runner  survfix2
+internal/bot/zonereask_test.go  credit-runner  survreask
 internal/bot/zoneshadow.go  credit-runner  intake
 internal/bot/zoneshadow.go  credit-runner  survB
 internal/bot/zoneshadow.go  credit-runner  survC
 internal/bot/zoneshadow.go  credit-runner  survfix2
+internal/bot/zoneshadow.go  credit-runner  survreask
 internal/bot/zoneshadow_test.go  credit-runner  survC
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
@@ -716,6 +737,7 @@ internal/env/tuning_loot.go  credit-runner  goldprio
 internal/env/tuning_loot.go  credit-runner  hourfix
 internal/env/tuning_loot.go  credit-runner  lootwire3
 internal/env/tuning_loot.go  credit-runner  vaultv3
+internal/env/tuning_loot.go  credit-runner  vaultv5
 internal/env/tuning_nav.go  credit-runner  pursuers
 internal/env/tuning_quests.go  credit-runner  quests3
 internal/env/tuning_resource.go  credit-runner  freshstart
@@ -850,6 +872,7 @@ internal/survival  credit-runner  survfix2
 internal/survival  credit-runner  survsd
 internal/survival  credit-runner  survtune
 internal/survival/  credit-runner  survC
+internal/survival/controller.go  credit-runner  survreask
 internal/survival/ledger.go  credit-runner  intake
 internal/survival/survival_test.go  credit-runner  survfix
 internal/task/campaign.go  credit-runner  campaign1
@@ -886,7 +909,9 @@ internal/town/town.go  credit-runner  itemverbs2
 internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
 internal/vault  credit-runner  vaultv2
+internal/vault  credit-runner  vaultv5
 internal/vault/index.go  credit-runner  vaultv4
+internal/vaultkeep  credit-runner  vaultv5
 internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/cardtext.go  credit-runner  friendfb
 internal/watch/charactersapi.go  credit-runner  charselect
@@ -1076,8 +1101,11 @@ internal/watch/testdata/video_panel.js  credit-runner  viewerfps
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
 internal/watch/vaultapi.go  credit-runner  vaultv4
+internal/watch/vaultapi.go  credit-runner  vaultv5
 internal/watch/vaultapi_test.go  credit-runner  vaultv4
+internal/watch/vaultapi_test.go  credit-runner  vaultv5
 internal/watch/vaultui_test.go  credit-runner  vaultv4
+internal/watch/vaultui_test.go  credit-runner  vaultv5
 internal/watch/video.go  credit-runner  videofeed2
 internal/watch/video.go  credit-runner  viewerfps
 internal/watch/videofps_test.go  credit-runner  viewerfps
@@ -1212,9 +1240,12 @@ internal/watch/web/tokens.css  credit-runner  uis7
 internal/watch/web/update.js  credit-runner  uis7
 internal/watch/web/vault-logic.js  credit-runner  vaultv4
 internal/watch/web/vault.css  credit-runner  vaultv4
+internal/watch/web/vault.css  credit-runner  vaultv5
 internal/watch/web/vault.html  credit-runner  vaultv4
 internal/watch/web/vault.js  credit-runner  vaultv4
+internal/watch/web/vault.js  credit-runner  vaultv5
 internal/watch/web/vault.json  credit-runner  vaultv4
+internal/watch/web/vault.json  credit-runner  vaultv5
 internal/watch/web/watch.html  credit-runner  uifix1
 internal/watch/whychange.json  credit-runner  uifix1
 internal/watch/whyline.json  credit-runner  repairtrip
@@ -1301,6 +1332,7 @@ tools/uishots.sh  credit-runner  uis3
 tools/uishots.sh  credit-runner  uis6
 tools/uishots.sh  credit-runner  uis7
 tools/uishots.sh  credit-runner  vaultv4
+tools/uishots.sh  credit-runner  vaultv5
 tools/uishots.sh  credit-runner  videofeed4
 tools/uishots/  credit-runner  uic3
 tools/uishots/  credit-runner  uifix1
@@ -1311,6 +1343,7 @@ tools/uishots/fit.go  credit-runner  resetinstant
 tools/uishots/fit.go  credit-runner  vaultv4
 tools/uishots/fit.js  credit-runner  uis7
 tools/uishots/fit.js  credit-runner  vaultv4
+tools/uishots/fit.js  credit-runner  vaultv5
 tools/uishots/fit_char_test.go  credit-runner  vaultv4
 tools/uishots/fixtures.go  credit-runner  uic2
 tools/uishots/fixtures.go  credit-runner  vaultv4
@@ -1322,6 +1355,7 @@ tools/uishots/fixtures_phone.go  credit-runner  resetinstant
 tools/uishots/fixtures_skills.go  credit-runner  friendfb
 tools/uishots/fixtures_update.go  credit-runner  uis7
 tools/uishots/fixtures_vault.go  credit-runner  vaultv4
+tools/uishots/fixtures_vault.go  credit-runner  vaultv5
 tools/uishots/fixtures_zoneclear.go  credit-runner  farmloop
 tools/uishots/fxviews.go  credit-runner  idfast
 tools/uishots/genlayouts.js  credit-runner  uis1
