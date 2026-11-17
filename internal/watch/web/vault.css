@@ -55,7 +55,7 @@
   .vt-keeprow .d-btn { align-items: center; }
   .vt-keepline { flex: 1 1 14rem; min-inline-size: 0; font-size: var(--d-fs-1); overflow-wrap: anywhere; }
   .vt-dkeep { margin: 0; font-size: var(--d-fs-1); overflow-wrap: anywhere; }
-  .vt-dkeep[data-keep="failed"] { color: var(--d-state-danger, inherit); font-weight: 650; }
+  .vt-dkeep[data-keep="failed"] { color: var(--d-danger); font-weight: 650; }
   .vt-tag[data-tag="keep-failed"] { background: var(--d-state-bg-danger); }
   .vt-tag[data-tag="keep-kept"] { background: var(--d-state-bg-ok); }
   .vt-msg { flex: none; margin: 0; padding: var(--d-sp-1) var(--d-sp-4); font-size: var(--d-fs-1); background: var(--d-state-bg-info); overflow-wrap: anywhere; }
