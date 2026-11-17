@@ -13,6 +13,7 @@ async function mount(get) {
   const fetch = (u) => /\/api\/labels/.test(u) ? Promise.resolve({ ok: true, json: () => Promise.resolve(get()) }) : Promise.resolve({ ok: true, json: () => Promise.resolve({ stream: { formats: ['mjpeg'] } }) });
   const P = load(process.argv[2], Object.assign({}, M, { fetch, console: { info() {} } }));
   const s = shellCtx({ frameUrl: '/stream.mjpg' }, {}, timers);
+  s.c.get = (u) => fetch(u).then((r) => r.json());
   s.c.post = (p, b) => { posts.push([p, b]); return Promise.resolve(s.answer(b)); };
   s.c.toast = (k, t) => toasts.push([k, t]);
   P.mount(s.root, s.c);

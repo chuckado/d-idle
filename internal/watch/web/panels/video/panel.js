@@ -336,10 +336,7 @@ export function mount(root, ctx) {
     labelsBtn.setAttribute('aria-pressed', String(labelsOn));
     return true;
   }
-  function labelsRead() {
-    const tq = ctx.token ? '?t=' + encodeURIComponent(ctx.token) : '';
-    return fetch('/api/labels' + tq, { cache: 'no-store', credentials: 'same-origin' }).then((r) => r.json(), () => null).then(labelsShow, () => false);
-  }
+  const labelsRead = () => ctx.get('/api/labels').then(labelsShow);
   labelsBtn.addEventListener('click', () => {
     if (labelsBusy || !ctx.post) return;
     labelsBusy = true; labelsBtn.disabled = true;
@@ -348,7 +345,7 @@ export function mount(root, ctx) {
       if (j && j.ok === false && ctx.toast) ctx.toast('warn', j.reason || 'the game did not take it (code ' + (j.code || 'unknown') + ')');
     }, () => { if (ctx.toast) ctx.toast('warn', 'Could not reach the bot'); }).then(() => { labelsBusy = false; labelsBtn.disabled = false; });
   });
-  if (typeof fetch === 'function') (function labelsLoop() { labelsRead().then(() => ctx.later(labelsLoop, 20000)); })();
+  if (typeof ctx.get === 'function') (function labelsLoop() { labelsRead().then(() => ctx.later(labelsLoop, 20000)); })();
   registerVideo(ctl);
   ctl.start();
   tryPal();
