@@ -160,6 +160,8 @@ ethrefund vault=eth-owned&theme=dark [data-key=downgrade]
 keeping vault=keeping&theme=dark
 keepingl vault=keeping&theme=light
 keepfull vault=keepfull&theme=dark
+keeplist vault=keeping&theme=dark [data-key=view-toggle]
+keeplistl vault=keeping&theme=light [data-key=view-toggle]
 kept vault=keeping&theme=dark ?[data-key=filters-toggle]|[data-key=chip-kept]
 keeppress vault=keeppress&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=keep]
 keepdead vault=keepdead&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=keep]" | while read -r pname pq pclick; do
