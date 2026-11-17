@@ -293,6 +293,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	// Rig and town copy the Env by value, before bot.New installs Env.Emit: they would emit into nothing (kills, potions,
 	// drops never reached the goal manager, summary 0 kills). Give them a forwarder bound to the runner later.
 	var feedFighter *combat.Fighter
+	var labels *labelsDesk
 	emit := &lateEmit{}
 	e.Emit = emit.send
 	if db != nil { // combat and town need the game tables; without them the "not yet" stubs stay
@@ -308,6 +309,15 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 			seams.Loot = st.seams().Loot
 		}
 		deps.Leveler, deps.Gear, deps.Quester, deps.Task, deps.Prepare = st.leveler, st.gear, st.quester, st.task, st.prepare
+		labels = newLabelsDesk(be.Client, ip.State(), func() string { return charName })
+		prepare := deps.Prepare
+		deps.Prepare = func(ctx context.Context) error {
+			_ = labels.Apply(ctx)
+			if prepare == nil {
+				return nil
+			}
+			return prepare(ctx)
+		}
 	} else {
 		log.Warn("no game tables (--gamedir): combat, town and campaign goals stay off on d2d")
 	}
@@ -362,6 +372,9 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	o.ladder.repair, o.ladder.farm, o.ladder.journey = ref.rep, ref.gf, ref.jc
 	o.ladder.quests = ref.qd
 	o.ladder.pause = pauseDesk(runner, ip.State())
+	if labels != nil {
+		o.ladder.labels = labels
+	}
 	o.ladder.reset = resetDesk(runner, ip.State())
 	var leave func(context.Context) error
 	if o.managed { // the bot owns this d2d: Save and Exit it (not Cycler.LeaveGame, which would re-enter the old character)

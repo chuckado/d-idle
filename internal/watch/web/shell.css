@@ -243,6 +243,7 @@
   /* a sheet over one tile (ctx.tileSheet): fills the tile it is in, scrolls inside, never leaves it */
   .d-tilesheet { position: absolute; inset: 0; min-inline-size: 0; overflow-x: hidden; overflow-wrap: anywhere; z-index: var(--d-z-sheet); display: flex; flex-direction: column; gap: var(--d-sp-1); padding: var(--d-sp-2); overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; background: var(--d-surface-2); border-radius: var(--d-r-2); }
   .d-tilesheet[hidden] { display: none; }
+  .d-tilesheet[data-float] { position: fixed; inset: auto; inset-block-start: var(--ts-top, 0); inset-inline-start: var(--ts-left, 0); inline-size: var(--ts-w, auto); block-size: var(--ts-h, 232px); box-shadow: var(--d-shadow-1); }
   /* a block of a sheet that stays at its bottom edge while the rest scrolls (the zone sheet's charter and "Pay and go") */
   .d-tilesheet > [data-pin="end"] { position: sticky; inset-block-end: 0; background: var(--d-surface-2); }
   .d-toasts { position: fixed; inset-block-start: var(--d-sp-3); inset-inline-end: var(--d-sp-3); z-index: var(--d-z-toast); display: grid; gap: var(--d-sp-2); max-inline-size: min(92vw, 380px); }
