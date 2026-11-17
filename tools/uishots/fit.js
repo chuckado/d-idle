@@ -106,7 +106,8 @@ export function measure(win, opts) {
 
 // The overlay policy (docs/ui-overlays.md): what is open now, and what is wrong with it.
 //  open:  the names of the visible transient overlays (the "..." menu, tile sheets, drawers, the Reset confirm); at most one
-//  menu:  menu items whose centre is not the item or inside it (covered by a sheet or clipped)
+//  menu:  menu items whose centre is not the item or inside it (covered by a sheet or clipped), each after scrolling to it
+//  menuScroll: the primary row below the fold, a menu taller than its window that cannot scroll or gives no hint (card menufit2)
 //  cut:   text in a tile sheet that is wider than its box (a line that is cut, not wrapped)
 //  under: a sheet whose top is above the header's bottom, or whose bottom is past the window
 //  charter: the "Pay and go" button of the zone sheet when it is not visible inside the sheet
@@ -114,15 +115,28 @@ export function overlayState(win) {
   const d = win.document, vis = (n) => { if (!n) return null; const r = n.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null; };
   const open = [], menu = [], cut = [], under = [], charter = [];
   const band = d.querySelector('.d-band-status'), bandBottom = band ? band.getBoundingClientRect().bottom : 0;
-  const pop = d.getElementById('menu-more');
+  const pop = d.getElementById('menu-more'), menuScroll = [];
   if (vis(pop)) {
     open.push('menu');
-    for (const n of pop.querySelectorAll(':scope > button, :scope > .d-btn')) {
+    // card menufit2: every entry must be reachable. The primary row (Pause, Reset) is on show without scrolling; when the groups
+    // are taller than the window the body must scroll and say so; then each entry is scrolled to and must be on top there.
+    const body = pop.querySelector('.d-menu-body'), pr = pop.getBoundingClientRect();
+    for (const n of pop.querySelectorAll('.d-menu-primary .d-btn')) {
+      const r = vis(n);
+      if (r && (r.bottom > pr.bottom + 0.5 || r.bottom > win.innerHeight)) menuScroll.push('primary action "' + (n.textContent || '?').trim() + '" is below the fold');
+    }
+    if (body && body.scrollHeight - body.clientHeight > 1) {
+      if (!/auto|scroll/.test(win.getComputedStyle(body).overflowY)) menuScroll.push('the menu is ' + (body.scrollHeight - body.clientHeight) + ' px taller than its window and cannot scroll');
+      else if (win.getComputedStyle(body, '::after').content === 'none') menuScroll.push('the menu scrolls but shows no hint that there is more');
+    }
+    for (const n of pop.querySelectorAll('.d-btn, .d-menu-gh')) {
+      if (n.scrollIntoView && body && body.contains(n)) n.scrollIntoView({ block: 'nearest' });
       const r = vis(n);
       if (!r) continue;
       const at = d.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
       if (!at || !(at === n || n.contains(at))) menu.push((n.textContent || n.id || '?').trim().slice(0, 20));
     }
+    if (body) body.scrollTop = 0;
   }
   for (const sh of d.querySelectorAll('.d-tilesheet')) {
     const r = vis(sh);
@@ -155,7 +169,7 @@ export function overlayState(win) {
     if (m) words.push(p.dataset.panel + ': "' + m[0] + '"');
   }
   if (vis(d.getElementById('reset-confirm'))) open.push('reset');
-  return { open, menu, cut, under, charter, small, words };
+  return { open, menu, menuScroll, cut, under, charter, small, words };
 }
 
 // An opened sheet must be hittable: the element at the centre of each target is the target or inside it.

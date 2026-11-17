@@ -214,11 +214,23 @@
   /* the "..." menu of the status band (Help, Edit layout, Theme, Layout) and the one-time layout note */
   .d-menu { position: relative; }
   /* a top-layer popover (shell.js setupMenu): above every tile, sheet and stacking context; placed by --menu-top / --menu-end */
-  .d-menu-pop { position: fixed; inset: auto; inset-block-start: var(--menu-top, 48px); inset-inline-end: var(--menu-end, 8px); margin: 0; z-index: var(--d-z-sheet); display: grid; gap: var(--d-sp-1); min-inline-size: 14rem; max-inline-size: calc(100vw - 16px);
-    max-block-size: calc(100dvh - var(--menu-top, 48px) - 8px); overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; padding: var(--d-sp-2); color: var(--d-text);
+  .d-menu-pop { position: fixed; inset: auto; inset-block-start: var(--menu-top, 48px); inset-inline-end: var(--menu-end, 8px); margin: 0; z-index: var(--d-z-sheet); display: flex; flex-direction: column; gap: var(--d-sp-1); min-inline-size: 14rem; max-inline-size: calc(100vw - 16px);
+    max-block-size: calc(100dvh - var(--menu-top, 48px) - 8px); overflow: hidden; overscroll-behavior: contain; box-sizing: border-box; padding: var(--d-sp-2); color: var(--d-text);
     background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
   .d-menu-pop[hidden] { display: none; }
   .d-menu-pop > .d-btn { inline-size: 100%; }
+  /* the body: the primary row never scrolls, the groups scroll inside the window with a hint (shell.js groupMenu, docs/ui-overlays.md) */
+  .d-menu-primary { flex: none; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(max-content, 1fr); gap: var(--d-sp-1); }
+  .d-menu-primary > .d-btn { inline-size: 100%; white-space: nowrap; }
+  .d-menu-body { flex: 1 1 auto; min-block-size: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-gutter: stable; display: flex; flex-direction: column; gap: var(--d-sp-1); }
+  .d-menu-body[data-more="1"]::after { content: "\25BE  more"; position: sticky; inset-block-end: 0; flex: none; text-align: center; padding-block: 2px; font-size: var(--d-fs-0); color: var(--d-text-2); background: var(--d-surface-3); border-block-start: var(--d-bw) solid var(--d-line); }
+  .d-menu-group { display: grid; gap: var(--d-sp-1); }
+  .d-menu-gb { display: grid; gap: var(--d-sp-1); }
+  .d-menu-gb[hidden] { display: none; }
+  .d-menu-gh { display: flex; align-items: center; gap: var(--d-sp-2); inline-size: 100%; min-block-size: 24px; padding: 0 var(--d-sp-1); border: 0; background: none; color: var(--d-text-2); font-size: var(--d-fs-0); text-transform: uppercase; letter-spacing: .06em; cursor: pointer; text-align: start; }
+  .d-menu-gh::before { content: "\25BE"; }
+  .d-menu-gh[aria-expanded="false"]::before { content: "\25B8"; }
+  .d-menu-gb > .d-btn { inline-size: 100%; }
   .d-menu-pair { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(max-content, 1fr); gap: var(--d-sp-1); }
   .d-menu-pair > .d-btn { inline-size: 100%; white-space: nowrap; }
   .d-menu-pop .d-menu-label { margin: var(--d-sp-1) var(--d-sp-1) 0; font-size: var(--d-fs-0); color: var(--d-text-2); text-transform: uppercase; letter-spacing: .06em; }
@@ -253,7 +265,7 @@
   /* the phone's band is two lines: the sentence on the first, the meters side by side and the count on the second; the band panels read these */
   .d-shell[data-cmode="phone"] { --c-sentence: 100%; --c-meterflex: 1 1 0; --c-meterflow: column; --c-meterbar: minmax(24px, 1fr); --c-meterlbl: 3.4em; --c-metergap: var(--d-sp-5); }
   /* S7: under a coarse pointer the controls outside the fixed frame (the "..." menu, the drawers, the layout note) are 44 px; the frame's own rows use --c-touch */
-  @media (pointer: coarse) { .d-menu-pop .d-btn, .d-drawer-head .d-btn, .d-layoutnote .d-btn { min-block-size: 44px; } }
+  @media (pointer: coarse) { .d-menu-pop .d-btn, .d-menu-gh, .d-drawer-head .d-btn, .d-layoutnote .d-btn { min-block-size: 44px; } }
 }
 
 @layer shell {
