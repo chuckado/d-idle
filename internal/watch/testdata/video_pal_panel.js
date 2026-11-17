@@ -4,8 +4,9 @@
 const assert = require('assert'), { load, shellCtx, controlsOf } = require('./panel_harness.js');
 const path = require('path');
 const M0 = load(path.join(path.dirname(process.argv[2]), '../../mjpeg.js'));
+const B = load(path.join(path.dirname(process.argv[2]), 'brightness.js'));
 const S = load(path.join(path.dirname(process.argv[2]), '../../streamstats.js'));
-const M = Object.assign({}, M0, S, { drawStats: S.draw });
+const M = Object.assign({}, M0, S, B, { drawStats: S.draw });
 const tick = (ms) => new Promise((r) => setTimeout(r, ms || 5));
 
 function env(formats, detectOK) {
