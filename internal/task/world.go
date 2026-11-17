@@ -24,9 +24,11 @@ const (
 
 // Quest ids follow docs/archive/goals-catalog.md ("quest.<id>").
 const (
-	QDen       = "den_of_evil"
-	QBurial    = "sisters_burial"
-	QCain      = "search_for_cain"
+	QDen    = "den_of_evil"
+	QBurial = "sisters_burial"
+	QCain   = "search_for_cain"
+	// QCainBoard is the board's own group for the report to Akara (slice S7b); the campaign never lists it.
+	QCainBoard = "search_for_cain_board"
 	QTower     = "forgotten_tower"
 	QTools     = "tools_of_the_trade"
 	QAndariel  = "sisters_to_slaughter"
