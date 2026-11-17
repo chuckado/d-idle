@@ -21,7 +21,7 @@ owns:
   - "docs/probes/test-characters.md"
 exclusive: []
 contracts: []
-result: "weapon read back (hax 3-6, src=skill dps 19.9, V on the lab) and d2d must be fork branch didle/rebase-20261115; Paladin 8 seeds with the shipped route (badFloor 0.4, freshNeedsMerc false): abreport PASS (XP ratio 1.002, deaths 0/0, chickens 4/1, writes after start 0); first route 0.895 INCONCLUSIVE; 4 fresh holdout seeds FAIL on chickens by one (3 vs 1+1, one death, XP 0.967); Sorceress 3 seeds INCONCLUSIVE 0.836; recommendation: do not flip bot.zoneModel yet, retune badFloor 0.5 to 0.65 on new seeds (docs/probes/survival-ab-8seed-rerun-2026-11-16.md); verified live on the lab, not game.exe"
+result: "weapon read back (hax 3-6, src=skill dps 19.9, V on the lab) and d2d must be fork branch didle/rebase-20261115; Paladin 8 seeds with the shipped route (badFloor 0.4, freshNeedsMerc false): abreport PASS (XP ratio 1.002, deaths 0/0, chickens 4/1, writes after start 0); first route 0.895 INCONCLUSIVE; 4 fresh holdout seeds FAIL on chickens by one (3 vs 1+1, one death, XP 0.967); Sorceress 3 seeds INCONCLUSIVE 0.836; badFloor 0.55 shipped: four new seeds PASS (1.031, chickens 4/3), holdout FAIL on chickens (7 vs 1, one seed 149 chicken storm, no death); recommendation: do not flip bot.zoneModel yet, make the bot re-ask the zone model after a cost event first (docs/probes/survival-ab-8seed-rerun-2026-11-16.md); verified live on the lab, not game.exe"
 ---
 
 ## Description

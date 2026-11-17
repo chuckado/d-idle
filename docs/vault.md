@@ -104,3 +104,7 @@ Measured (V, `TestVaultPagingPerformance`, 10,000 records, 4-core box, GET handl
 Fit and pictures: `tools/uishots.sh --fit` has the pages `vault-*` (states pop, warn, full, over, empty, none, off, error, big; list view; filters open; select; the confirm sheet with and without the typed number; tooltip hover; the menu and More entries) at the usual sizes plus 412x780 and 360x640, and the must-fail `vaultdefect-*` (clipped text, wide grid, list under the header, small target, covered control, cut sheet, unnamed control, enabled placeholder). `tools/uishots.sh --vt` writes the pictures (`vt-NAME-WxH.png`). Fixtures: `tools/uishots/fixtures_vault.go` (real stores, frozen drops).
 
 Dead ends and not done: no loading-state picture (headless Chrome's virtual time waits for the pending request, so the harness never sees it); the Keep, Reveal, Sell, Upgrade verbs; "Recently trimmed" list; property-text search (needs the codec's view); compare with the worn item (needs the inventory view on this page).
+
+## Wallet (V7)
+
+The account wallet is ETHER, implemented in `internal/ether` and described in [ether.md](ether.md): it implements `vault.Account` and `vault.Wallet`, derives the owned capacity steps and the balance by ledger replay, and serves `GET /api/ether`, `POST /api/vault/upgrade` and `POST /api/vault/downgrade` (`internal/watch/etherapi.go`). The store's `Options.Capacity` is `wallet.Capacity(override)`; shrinking (refund of the last step) is allowed only while the active hero's count fits the lower tier. Offline only, not yet wired into the bot.

@@ -12,3 +12,8 @@ var Capacity []byte
 //
 //go:embed value.json
 var Value []byte
+
+// Ether is ether.json (ETHER earn sources).
+//
+//go:embed ether.json
+var Ether []byte
