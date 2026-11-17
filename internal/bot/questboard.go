@@ -43,7 +43,7 @@ type boardRT struct {
 	snap     *d2.Snapshot // the snapshot the cached world was built from
 	w        task.World
 	class    string
-	ready    map[string]questboard.Readiness
+	ready    map[string]questboard.Word
 	handed   map[string]bool      // hand-in dialogue ran this process (T3 proxy until the save or memory agrees)
 	near     map[string]bool      // walked to the giver once this process
 	lastFail map[string]time.Time // chunk key: last failure that was counted
@@ -74,7 +74,7 @@ func taskID(q questboard.Quest) string {
 }
 
 // world returns the task world of the latest snapshot, built once per snapshot (the executor asks for every chunk).
-func (rt *boardRT) world() (task.World, string, map[string]questboard.Readiness) {
+func (rt *boardRT) world() (task.World, string, map[string]questboard.Word) {
 	rt.mu.Lock()
 	defer rt.mu.Unlock()
 	s := rt.r.latest()
@@ -219,7 +219,7 @@ func (e boardEnv) Chunk(q questboard.Quest, c questboard.Chunk) questboard.Chunk
 	return cf
 }
 
-func (e boardEnv) Ready(q questboard.Quest, c questboard.Chunk) questboard.Readiness {
+func (e boardEnv) Ready(q questboard.Quest, c questboard.Chunk) questboard.Word {
 	if _, ok := handlerNodes(q); !ok {
 		return questboard.ReadyUnknown // no handler for this quest or chunk yet (S7)
 	}

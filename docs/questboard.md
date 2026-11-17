@@ -49,7 +49,7 @@ Knob `quests.board` (default 0, docs/knobs.md). With 0 nothing here runs: `Exec`
 
 Flow (tests: `internal/questboard/exec_test.go` on a Paladin and a Sorceress with the Fake, `internal/bot/questboard_test.go` on the real runner with the campaign rig):
 
-1. `Offers` lists the Ready chunks (`Startable` false while a chunk is accepted). Readiness is `Board.LegacyReadiness` (the S1 legacy floor per class family, safe at the floor, risky within 2 levels) until S2.
+1. `Offers` lists the Ready chunks (`Startable` false while a chunk is accepted). Readiness is `Board.LegacyReadiness` (the S1 legacy floor per class family, safe at the floor, risky within 2 levels): the S2 model (`readiness.go`, a `Word` per chunk) is merged, but the bot adapter does not build its survival inputs yet, so wiring it into `Env.Ready` is a follow-up (U).
 2. `Accept` records the tap for the CURRENT chunk only. It refuses a chunk that is not Ready and a second accepted chunk, naming the one that runs (V `TestAcceptRunAwaitHandIn`, `TestTwoAcceptedRecordsNeverRun`, `TestStartCoversOnlyTheCurrentChunk`). The same tap twice is a no-op.
 3. The loop calls `Next`. Accepted or in progress: one slice of the quest's task-layer handler (`task.Handler`) minus its hand-in step, run by the shared task executor inside the runner's guard (same `r.do` reactions, death policy and watchdog as a campaign step). The chunk is awaiting when the quest stage reads Cleared or better and no needed handler step is left (`ChunkFact.Objective`), or on the pending bit with T1/T2.
 4. Awaiting: the hero walks to the giver (one open-and-close of the dialog, once per chunk and process) and rests in town. It never talks the reward by itself (V `TestQuestBoardAcceptRunStopHandIn`).

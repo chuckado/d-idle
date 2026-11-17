@@ -78,7 +78,7 @@ func (f *Fake) Chunk(q Quest, c Chunk) ChunkFact {
 	return cf
 }
 
-func (f *Fake) Ready(q Quest, c Chunk) Readiness {
+func (f *Fake) Ready(q Quest, c Chunk) Word {
 	r, err := f.board.LegacyReadiness(f.Class, f.Level)
 	if err != nil {
 		return ReadyUnknown

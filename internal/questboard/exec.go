@@ -38,7 +38,7 @@ type Env interface {
 	Diff() int                        // difficulty index of the running game
 	Facts() Facts                     // quest reader (T1 save, T2 memory, T3 proxy)
 	Chunk(q Quest, c Chunk) ChunkFact // handler checks and inventory read-back; Running and Blocked are set by Exec
-	Ready(q Quest, c Chunk) Readiness // the readiness word (S2; LegacyReadiness until then)
+	Ready(q Quest, c Chunk) Word      // the readiness word (S2; LegacyReadiness until then)
 }
 
 // Actions is the seam to the task layer (the bot adapter): HandIn is the hand-in dialogue only (it never
@@ -145,7 +145,7 @@ func (e *Exec) derive() ([]QuestView, Plan, int, error) {
 	}
 	diff := e.env.Diff()
 	in := Input{Diff: diff, Facts: e.env.Facts(), Plan: plan,
-		Chunks: map[string]ChunkFact{}, Ready: map[string]Readiness{}}
+		Chunks: map[string]ChunkFact{}, Ready: map[string]Word{}}
 	for _, q := range e.b.Quests() {
 		if !q.Exists(diff) {
 			continue
@@ -212,7 +212,7 @@ type Offer struct {
 	Title      string
 	Act        int
 	Risk       string
-	Readiness  Readiness
+	Readiness  Word
 	Minutes    [2]int
 	Ends       string
 	Startable  bool // false while another chunk is accepted (one at a time)
@@ -633,8 +633,8 @@ func chunkAwards(v QuestView, quest, chunk string) []Award {
 // LegacyReadiness is the transitional stand-in for the readiness model (slice S2): the legacy clvl floor per
 // class family, safe at the floor, risky within 2 levels, else too hard (design 1.1 "legacyFloor"). A quest
 // without a floor for the family is safe. An unknown class is an error naming it.
-func (b *Board) LegacyReadiness(class string, clvl int) (map[string]Readiness, error) {
-	out := map[string]Readiness{}
+func (b *Board) LegacyReadiness(class string, clvl int) (map[string]Word, error) {
+	out := map[string]Word{}
 	for _, q := range b.quests {
 		floor, ok, err := b.Floor(q, class)
 		if err != nil {
