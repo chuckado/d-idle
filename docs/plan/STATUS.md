@@ -264,6 +264,7 @@
 | menufit2 | proposed | - | `internal/watch/web/shell.css`<br>`tools/uishots/fixtures_menu.go`<br>`docs/ui-overlays.md` | - |
 | resistorder | proposed | - | `docs/research/resistorder.md`<br>`internal/d2/resist.go`<br>`internal/combat/rules.go`<br>`internal/readiness/model.go`<br>`internal/power/margin.go` | - |
 | vaultphone | proposed | - | `internal/watch/web/vault.js`<br>`tools/uishots.sh` | - |
+| owbody | proposed | - | `docs/upstream/bodies/decomp37-open-wounds-body.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -304,6 +305,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 81261627e 11-17 10:56 `Merge agent/owbody: Merge branch 'main' into TASK-618` (owbody)
+- 1d62e4d88 11-17 10:55 `Merge branch 'main' into TASK-618` (-)
 - 10dbc7735 11-17 09:51 `Merge agent/verifydecomp37: Merge branch 'main' into TASK-613` (verifydecomp37)
 - 6150eaf4e 11-17 09:50 `Merge branch 'main' into TASK-613` (-)
 - 4d6c263fd 11-17 08:16 `Merge agent/manaburnbody: Merge branch 'main' into TASK-614` (manaburnbody)
@@ -312,6 +315,4 @@
 - 6d2cea9a8 11-17 08:05 `Merge branch 'main' into vaultphone` (-)
 - 1ca425356 11-17 08:04 `Merge agent/verifydecomp38: Merge branch 'main' into TASK-608` (verifydecomp38)
 - cedb3f753 11-17 07:59 `Merge branch 'main' into TASK-608` (-)
-- 104d37580 11-17 07:48 `Merge agent/menufit2: Merge branch 'main' into menufit2` (menufit2)
-- ae8632feb 11-17 07:47 `Merge branch 'main' into menufit2` (-)
 <!-- statusgen:end -->
