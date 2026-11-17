@@ -123,7 +123,7 @@ ok('sell plan: pinned and queued items are skipped, the gold is the lower bound'
   const items = [row({ id: 'a', value: 30 }), row({ id: 'b', value: 12 }), row({ id: 'c', pin: true, value: 99 }), row({ id: 'd', sell: 'queued', value: 7 }), row({ id: 'e', state: 'kept', value: 1 })];
   const p = L.sellPlan(items, ['a', 'b', 'c', 'd', 'e']);
   assert.deepEqual([p.n, p.gold, p.pinned, p.skipped], [2, 42, 1, 3]);
-  assert.deepEqual(L.sellPlan(items, []), { n: 0, gold: 0, pinned: 0, skipped: 0 });
+  assert.deepEqual(L.sellPlan(items, []), { n: 0, ids: [], gold: 0, pinned: 0, skipped: 0 }); assert.deepEqual(p.ids, ['a', 'b']);
 });
 
 console.log('vault logic: ' + n + ' groups ok');

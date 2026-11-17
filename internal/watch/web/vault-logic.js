@@ -183,9 +183,10 @@ export function discardAsk(n, typedAbove) { return { n, typed: n > typedAbove };
 // short means the pack holds fewer charges than n (have -1: unknown, the server decides).
 export function revealPlan(items, ids, act) {
   const by = new Map((items || []).map((i) => [i.id, i]));
-  const n = (ids || []).filter((id) => { const it = by.get(id); return it && !it.identified && !it.reveal && (it.state === 'recorded' || it.state === 'keepq'); }).length;
+  const ok = (ids || []).filter((id) => { const it = by.get(id); return it && !it.identified && !it.reveal && (it.state === 'recorded' || it.state === 'keepq'); });
+  const n = ok.length;
   const r = (act && act.reveal) || {}, per = r.perItem || 1, have = typeof r.charges === 'number' ? r.charges : -1, free = !!r.free;
-  return { n, charges: n * per, have, free, short: !free && n > 0 && have >= 0 && have < n * per };
+  return { n, ids: ok, charges: n * per, have, free, short: !free && n > 0 && have >= 0 && have < n * per };
 }
 
 // sellPlan is what a Sell press would queue: live recorded items that are not pinned or queued; skipped counts the rest.
@@ -193,11 +194,12 @@ export function revealPlan(items, ids, act) {
 export function sellPlan(items, ids) {
   const by = new Map((items || []).map((i) => [i.id, i]));
   let n = 0, gold = 0, pinned = 0;
+  const ok = [];
   for (const id of ids || []) {
     const it = by.get(id);
     if (!it || it.state !== 'recorded' || it.sell) continue;
     if (it.pin) { pinned++; continue; }
-    n++; gold += it.value || 0;
+    n++; gold += it.value || 0; ok.push(id);
   }
-  return { n, gold, pinned, skipped: (ids || []).length - n };
+  return { n, ids: ok, gold, pinned, skipped: (ids || []).length - n };
 }

@@ -535,7 +535,7 @@ export function mountVault(d) {
     if (!S.sel.size || revealB.disabled) return;
     const p = revealPlan(S.items, S.sel.ids(), S.view && S.view.act);
     if (!p.n) { setMsg('info', T.revealNone); return; }
-    revealAct(S.sel.ids(), false);
+    revealAct(p.ids, false); // only what a reveal can still do something with; the server refuses the rest anyway
   });
   sellB.addEventListener('click', () => {
     if (!S.sel.size || sellB.disabled) return;
@@ -583,6 +583,7 @@ export function mountVault(d) {
   function openSell(ids, opener) {
     sheetCard.replaceChildren();
     const p = sellPlan(S.items, ids), n = p.n || ids.length;
+    if (p.n) ids = p.ids;
     sheetCard.setAttribute('aria-label', n === 1 ? T.sellOne : fmt(T.sellTitle, { n }));
     sheetCard.appendChild(el('h2', '', n === 1 ? T.sellOne : fmt(T.sellTitle, { n })));
     sheetCard.appendChild(el('p', '', fmt(T.sellBody, { gold: p.gold })));
