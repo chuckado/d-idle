@@ -463,8 +463,12 @@ func (e boardEnv) Chunk(q questboard.Quest, c questboard.Chunk) questboard.Chunk
 	// A part: the steps are the evidence. The group's own word (T1/T2) raises the tier when it says done.
 	if nodesDone(q, c, w, 0) || handed {
 		cf.Done, cf.Tier = true, questboard.TierProxy
-		if st := w.Quest(q.HandlerOf(c).Group); st.Stage >= task.StageDone && evTier(st.Ev).Exact() {
-			cf.Tier = evTier(st.Ev)
+		// The quest word of the handler group, or of the quest itself when the group is the board's own (S7b).
+		for _, id := range []string{q.HandlerOf(c).Group, taskID(q)} {
+			if st := w.Quest(id); st.Stage >= task.StageDone && evTier(st.Ev).Exact() {
+				cf.Tier = evTier(st.Ev)
+				break
+			}
 		}
 		return cf
 	}
