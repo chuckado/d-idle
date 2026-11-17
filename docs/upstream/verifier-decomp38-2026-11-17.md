@@ -68,7 +68,10 @@ Builder container, Release, GCC, tests and tools on, `-j2` under the builder's l
 | oracle `9136b9a0` (r2) | `test_mana_burn`, rc 0 | not run (only `tools/emu`, the README and the new test differ; the test skips without an argument: 77) |
 | claim `0243f24f` (r2) | full, rc 0 | **356 of 356 pass**; `test_mana_burn` Passed (the one added test) |
 
-TIDY-ROW
+| r3 oracle `dc6d881a` | `test_mana_burn`, rc 0 | no-argument run 77 (skip); oracle c1 / c2 1,750 / 1,600 outside, exit 1 |
+| r3 claim `177189d6` | `test_mana_burn`, rc 0 | no-argument run rc 0; oracle c1 / c2 0 / 0, exit 0 |
+
+clang-tidy-19 on the claim's changed translation units (`test_mana_burn.cpp`, `fight/tick.cpp`, `ai.cpp`; the headers through them): r2 **1 error** in its own test, `misc-include-cleaner`: no header providing `level_ids::kBloodMoor` (`test_mana_burn.cpp:58`; r1 has the same line); r3 (the include added): 0 in the test file, 0 in `tick.cpp` and `ai.cpp`. Positive control (`--checks=-*,readability-magic-numbers`): 12 reports in `test_mana_burn.cpp`, so it is parsed. The wider `tools/tidy-pr-select.py` selection (300 units through `uniques.hpp` / `ai.hpp`) was started with a time limit and covered only part of it before the report (first units: only upstream's `std::erase_if` include-cleaner errors in `debug_hero.cpp`, as P13, P17, P18, decomp35 and decomp36 saw); not complete (U for the rest, none of which this branch edits).
 
 ## RNG luck
 
