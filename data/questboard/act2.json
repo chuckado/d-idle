@@ -1,0 +1,482 @@
+{
+ "schema": "quests.def/1",
+ "act": 2,
+ "source": "merged from docs/goals/execution.md s3 and docs/progression/quests.md; no hint or giver table exists for Act 2; every row U until a live drill",
+ "quests": [
+  {
+   "id": "radament",
+   "taskId": "",
+   "title": "Radament's Lair",
+   "blurb": "Atma wants the creature in the sewers dead.",
+   "act": 2,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "radament",
+     "title": "Kill Radament, use the Book of Skill, report to Atma",
+     "ends": "handin",
+     "minutes": [
+      12,
+      25
+     ],
+     "handin": {
+      "npc": "Atma"
+     },
+     "steps": [
+      "talk_atma",
+      "travel_sewers",
+      "kill_radament",
+      "use_book",
+      "return_atma"
+     ],
+     "boss": "radament",
+     "risk": "boss"
+    }
+   ],
+   "minutes": [
+    12,
+    25
+   ],
+   "risk": "boss",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3 (act hop)",
+    "rewards": "V quest-points.json via docs/goals/execution.md s3 (skill point, repeats)",
+    "boss": "V docs/goals/execution.md s3",
+    "handin.pick": "U",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "act1_done"
+   ],
+   "accept": {
+    "npc": "Atma"
+   },
+   "items": [
+    {
+     "name": "Book of Skill",
+     "from": "Radament"
+    },
+    {
+     "name": "Horadric Scroll",
+     "from": "Radament's chest"
+    }
+   ],
+   "boss": "radament",
+   "rewards": [
+    {
+     "kind": "skill_point",
+     "amount": 1,
+     "repeats": [
+      "normal",
+      "nm",
+      "hell"
+     ]
+    }
+   ],
+   "meta": {
+    "normal": 2,
+    "nm": 3,
+    "hell": 5
+   }
+  },
+  {
+   "id": "tainted_sun",
+   "taskId": "",
+   "title": "The Tainted Sun",
+   "blurb": "Find the Amulet of the Viper in the Claw Viper Temple.",
+   "act": 2,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "amulet",
+     "title": "Take the Amulet of the Viper from the altar",
+     "ends": "item",
+     "minutes": [
+      15,
+      30
+     ],
+     "steps": [
+      "travel_lost_city",
+      "travel_claw_viper",
+      "kill_fangskin",
+      "take_amulet"
+     ],
+     "boss": "fangskin",
+     "risk": "boss",
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     }
+    }
+   ],
+   "minutes": [
+    15,
+    30
+   ],
+   "risk": "boss",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3 (act hop)",
+    "kind": "V docs/goals/execution.md s3 (Req item)",
+    "steps": "V docs/goals/execution.md s3",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "act1_done"
+   ],
+   "items": [
+    {
+     "name": "Amulet of the Viper",
+     "from": "Claw Viper Temple, level 2"
+    }
+   ],
+   "boss": "fangskin",
+   "rewards": [
+    {
+     "kind": "item",
+     "item": "amulet_of_the_viper"
+    }
+   ],
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   }
+  },
+  {
+   "id": "horadric_staff",
+   "taskId": "",
+   "title": "The Horadric Staff",
+   "blurb": "Cain's lead: the Cube, the Staff of Kings and the Amulet make the Horadric Staff.",
+   "act": 2,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "cube",
+     "title": "Fetch the Horadric Cube (Halls of the Dead)",
+     "ends": "item",
+     "minutes": [
+      10,
+      20
+     ],
+     "steps": [
+      "travel_halls_of_the_dead",
+      "take_cube"
+     ],
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     }
+    },
+    {
+     "id": "shaft",
+     "title": "Fetch the Staff of Kings (Maggot Lair)",
+     "ends": "item",
+     "minutes": [
+      15,
+      30
+     ],
+     "steps": [
+      "travel_far_oasis",
+      "travel_maggot_lair",
+      "take_shaft"
+     ],
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     }
+    },
+    {
+     "id": "assemble",
+     "title": "Assemble the Horadric Staff in the Cube and give it to Cain",
+     "ends": "handin",
+     "minutes": [
+      3,
+      6
+     ],
+     "after": [
+      "cube",
+      "shaft"
+     ],
+     "requires": [
+      "tainted_sun"
+     ],
+     "handin": {
+      "npc": "Cain"
+     },
+     "steps": [
+      "open_cube",
+      "transmute",
+      "talk_cain"
+     ]
+    }
+   ],
+   "minutes": [
+    30,
+    60
+   ],
+   "risk": "routine",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "S docs/goals/execution.md s3 (scroll gates the quest, V per that table)",
+    "chunks": "I design 1.2 (cube and shaft any order, assemble after both and the amulet)",
+    "steps": "V docs/goals/execution.md s3",
+    "handin.pick": "U",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "radament"
+   ],
+   "items": [
+    {
+     "name": "Horadric Cube",
+     "from": "Halls of the Dead 3"
+    },
+    {
+     "name": "Staff of Kings",
+     "from": "Maggot Lair 3"
+    },
+    {
+     "name": "Amulet of the Viper",
+     "from": "Claw Viper Temple"
+    }
+   ],
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   }
+  },
+  {
+   "id": "arcane_sanctuary",
+   "taskId": "",
+   "title": "The Arcane Sanctuary",
+   "blurb": "Jerhyn and Drognan point you to the sanctuary beyond the Palace Cellar.",
+   "act": 2,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "portal",
+     "title": "Find the portal in the Palace Cellar",
+     "ends": "auto",
+     "minutes": [
+      8,
+      15
+     ],
+     "steps": [
+      "talk_jerhyn",
+      "travel_palace_cellar",
+      "enter_arcane"
+     ]
+    }
+   ],
+   "minutes": [
+    8,
+    15
+   ],
+   "risk": "routine",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "U docs/goals/execution.md s3 (talk dialogs NEW); softAfter tainted_sun is a guess",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "act1_done"
+   ],
+   "softAfter": [
+    "tainted_sun"
+   ],
+   "meta": {
+    "normal": 2,
+    "nm": 3,
+    "hell": 5
+   }
+  },
+  {
+   "id": "summoner",
+   "taskId": "",
+   "title": "The Summoner",
+   "blurb": "The Summoner hides at the end of one arm of the sanctuary maze.",
+   "act": 2,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "kill_summoner",
+     "title": "Find and kill the Summoner",
+     "ends": "auto",
+     "minutes": [
+      15,
+      40
+     ],
+     "steps": [
+      "travel_arcane",
+      "find_summoner",
+      "kill_summoner"
+     ],
+     "boss": "summoner",
+     "risk": "boss"
+    }
+   ],
+   "minutes": [
+    15,
+    40
+   ],
+   "risk": "boss",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "S docs/goals/execution.md s3 (needs the sanctuary; skippable for progression, U)",
+    "boss": "V docs/goals/execution.md s3 (maze needs Teleport or long exploration)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "arcane_sanctuary"
+   ],
+   "boss": "summoner",
+   "meta": {
+    "normal": 2,
+    "nm": 3,
+    "hell": 5
+   }
+  },
+  {
+   "id": "seven_tombs",
+   "taskId": "",
+   "title": "The Seven Tombs",
+   "blurb": "Duriel waits in the tomb that holds the Horadric Staff.",
+   "act": 2,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "duriel",
+     "title": "Open the right tomb and kill Duriel",
+     "ends": "auto",
+     "minutes": [
+      10,
+      25
+     ],
+     "steps": [
+      "travel_canyon",
+      "find_tomb",
+      "place_staff",
+      "kill_duriel"
+     ],
+     "boss": "duriel",
+     "risk": "hazard"
+    }
+   ],
+   "minutes": [
+    10,
+    25
+   ],
+   "risk": "hazard",
+   "autoStart": "never",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3 (Req)",
+    "boss": "V docs/goals/execution.md s3 (right tomb per game, U)",
+    "rewards": "V docs/goals/execution.md s3",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "horadric_staff"
+   ],
+   "boss": "duriel",
+   "rewards": [
+    {
+     "kind": "act_access",
+     "item": "3"
+    }
+   ],
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   }
+  },
+  {
+   "id": "act2_done",
+   "taskId": "",
+   "title": "Sail east to Act 3",
+   "blurb": "Meshif sails you east once Duriel is dead.",
+   "act": 2,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "unlock",
+   "chunks": [
+    {
+     "id": "sail_east",
+     "title": "Talk to Meshif and sail east",
+     "ends": "handin",
+     "minutes": [
+      1,
+      3
+     ],
+     "handin": {
+      "npc": "Meshif",
+      "pick": "Sail East"
+     },
+     "steps": [
+      "travel_harbor",
+      "talk_meshif"
+     ]
+    }
+   ],
+   "minutes": [
+    1,
+    3
+   ],
+   "risk": "routine",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3",
+    "handin.pick": "U (dialog NEW in execution.md)",
+    "minutes": "I"
+   },
+   "requires": [
+    "seven_tombs"
+   ]
+  }
+ ]
+}

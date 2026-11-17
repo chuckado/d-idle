@@ -403,6 +403,8 @@ Sizes S/M/L as in the backlog scheme. Each slice is one PR family, offline-testa
 
 Order: S1 -> S2/S3 -> S4 -> S5 -> S6 -> S7 -> S8 -> S9 (S10 when the wallet exists).
 
+S1 is DONE (2026-11-16, card quests1, TASK-577): built offline, see [docs/questboard.md](../questboard.md); nothing imports it until S3.
+
 ## 7. Meta currency hooks
 
 User add (2026-11-16): an account-level meta currency (persists across heroes and runs, not hero gold) that upgrades things like the loot vault capacity (data-driven tiers). The wallet and its tiers are designed in the vault doc (agent/vaultdesign); this section is only the hook where quests earn it.
