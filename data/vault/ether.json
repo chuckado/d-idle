@@ -1,0 +1,11 @@
+{
+  "_note": "PLACEHOLDER numbers (design docs/design/loot-vault-2026-11-16.md section 2.6, user decisions 2026-11-16). ETHER earn sources as data: one row per source. Key of a credit is <id>/<sub>[/<difficulty>]; the same key never pays twice. Not earned from pressing Keep.",
+  "currency": "Ether",
+  "sources": [
+    {"id": "quest", "label": "Quest hand-in", "hook": true, "maxHook": 100, "byDifficulty": true},
+    {"id": "first", "label": "A first for this account", "amount": 5},
+    {"id": "boss", "label": "Boss kill", "byDifficulty": true, "difficulty": {"normal": 10, "nm": 15, "hell": 25}},
+    {"id": "milestone", "label": "Milestone", "rows": {"clvl10": 5, "clvl20": 10, "clvl30": 15, "clvl50": 25, "diff_nm": 20, "diff_hell": 40}},
+    {"id": "kills", "label": "Kill trickle", "amount": 1, "dailyCap": 10}
+  ]
+}
