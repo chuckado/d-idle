@@ -261,6 +261,7 @@
 | boardmoderace | proposed | - | `internal/bot/task.go`<br>`internal/bot/waypoints.go` | - |
 | quests10 | in-progress | - | `internal/questboard`<br>`internal/ether/earner.go`<br>`cmd/d2bot/questwire.go`<br>`internal/bot/questboard.go`<br>`internal/bot/runner.go`<br>`internal/watch/web/panels/quest-board`<br>`internal/watch/questsapi_test.go`<br>`internal/watch/testdata/quests`<br>`internal/watch/testdata/questui`<br>`tools/uishots/fixtures_quests.go`<br>`tools/uishots.sh`<br>`docs/questboard.md`<br>`docs/ether.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
 | survrecover | proposed | - | `internal/bot/zonemodel.go`<br>`internal/bot/zonerecover_test.go`<br>`internal/bot/broke.go`<br>`docs/probes/survival-ab-recovery-2026-11-17.md`<br>`internal/bot/goal.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/zoneshadow.go` | - |
+| menufit2 | proposed | - | `internal/watch/web/shell.css`<br>`tools/uishots/fixtures_menu.go`<br>`docs/ui-overlays.md` | - |
 | resistorder | proposed | - | `docs/research/resistorder.md`<br>`internal/d2/resist.go`<br>`internal/combat/rules.go`<br>`internal/readiness/model.go`<br>`internal/power/margin.go` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
@@ -302,6 +303,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 104d37580 11-17 07:48 `Merge agent/menufit2: Merge branch 'main' into menufit2` (menufit2)
+- ae8632feb 11-17 07:47 `Merge branch 'main' into menufit2` (-)
 - c4ab423fc 11-17 07:40 `Merge agent/survrecover: Merge branch 'main' into survrecover` (survrecover)
 - 2c6e8014f 11-17 07:39 `Merge branch 'main' into survrecover` (-)
 - cc0f96f57 11-17 07:31 `Merge agent/resistorder: Merge branch 'main' into TASK-611` (resistorder)
@@ -310,6 +313,4 @@
 - 5429873f9 11-17 07:18 `Merge branch 'main' into quests10` (-)
 - 078468d0d 11-17 07:14 `Merge agent/decomp37: Merge branch 'main' into decomp37` (decomp37)
 - f81201d84 11-17 07:13 `Merge branch 'main' into decomp37` (-)
-- 2c0e0487d 11-17 06:28 `Merge agent/boardmoderace: Merge branch 'main' into boardmoderace` (boardmoderace)
-- 6f32f71d2 11-17 06:27 `Merge branch 'main' into boardmoderace` (-)
 <!-- statusgen:end -->

@@ -503,6 +503,7 @@ docs/tidy.md  credit-runner  tidy
 docs/towntests.md  credit-runner  towntests
 docs/ui-design-system.md  credit-runner  nopins
 docs/ui-design-system.md  credit-runner  uic3
+docs/ui-overlays.md  credit-runner  menufit2
 docs/ui/friend-feedback-2026-11-15.md  credit-runner  friendfb
 docs/ui/redesign-2026-11-14/reviews/c2c3-review.md  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/c2c3/  credit-runner  uic23review
@@ -1314,6 +1315,7 @@ internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
 internal/watch/web/shell.css  credit-runner  lootwire3
+internal/watch/web/shell.css  credit-runner  menufit2
 internal/watch/web/shell.css  credit-runner  pausemenufit
 internal/watch/web/shell.css  credit-runner  resetinstant
 internal/watch/web/shell.css  credit-runner  uifix1
@@ -1467,6 +1469,7 @@ tools/uishots/fixtures.go  credit-runner  vaultv4
 tools/uishots/fixtures_chars.go  credit-runner  charui
 tools/uishots/fixtures_commands.go  credit-runner  uis4
 tools/uishots/fixtures_glance.go  credit-runner  uis7
+tools/uishots/fixtures_menu.go  credit-runner  menufit2
 tools/uishots/fixtures_overlay.go  credit-runner  vaultv4
 tools/uishots/fixtures_phone.go  credit-runner  resetinstant
 tools/uishots/fixtures_quests.go  credit-runner  quests10
