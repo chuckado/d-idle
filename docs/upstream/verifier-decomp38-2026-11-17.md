@@ -1,16 +1,16 @@
 # Verifier: decomp38, a Mana Burn monster's hit (2026-11-17)
 
-> status: current, 2026-11-17 (card verifydecomp38, TASK-608, Opus, singly; independent verifier before posting). Nothing posted. Subject: private fork branch `fid/mana-burn-amount-r1` (head `d7a97516`: oracle `a6093f9d`, claim `d7a97516`, on upstream `ed007569`), body `docs/upstream/bodies/mana-burn-amount-body.md`, trace `docs/research/dc38-lane-d.md` (TASK-606). Checklist from `verifier-decomp35-2026-11-16.md`, `verifier-decomp36-2026-11-16.md`, `verifier-p13-2026-11-16.md`, `verifier-p18-2026-11-15.md`. The fixed `fid/mana-burn-amount-r2` is on the private fork remote only.
+> status: current, 2026-11-17 (card verifydecomp38, TASK-608, Opus, singly; independent verifier before posting). Nothing posted. Subject: private fork branch `fid/mana-burn-amount-r1` (head `d7a97516`: oracle `a6093f9d`, claim `d7a97516`, on upstream `ed007569`), body `docs/upstream/bodies/mana-burn-amount-body.md`, trace `docs/research/dc38-lane-d.md` (TASK-606). Checklist from `verifier-decomp35-2026-11-16.md`, `verifier-decomp36-2026-11-16.md`, `verifier-p13-2026-11-16.md`, `verifier-p18-2026-11-15.md`. The fixed `fid/mana-burn-amount-r3` (and the superseded r2) are on the private fork remote only.
 
 Tags: **V run** (run by this verifier today, NAS builder), **V read** (disassembly or source read by this verifier), **I** (inferred), **S** (an earlier doc, named), **U** (unverified).
 
-## Verdict: r1 FAIL, r2 PASS WITH CHANGES
+## Verdict: r1 FAIL, r2 FAIL (tidy), r3 PASS WITH CHANGES
 
-Post **`fid/mana-burn-amount-r2`**: oracle `9136b9a0`, claim `0243f24f`, on upstream main `ed007569`; body after M1 to M8 below.
+Post **`fid/mana-burn-amount-r3`**: oracle `dc6d881a`, claim `177189d6`, on upstream main `ed007569`; body after M1 to M8 below. r3 is r2 (oracle `9136b9a0`, claim `0243f24f`) plus one line, `#include <level_ids.hpp>` in the test's oracle commit: clang-tidy's `misc-include-cleaner` flags `kBloodMoor` in `test_mana_burn.cpp:58` on r2 (r1 has the same line). Every run below was on r2; r3's tree differs only by that include (`git diff 0243f24f 177189d6`: 1 line).
 
 The rule is game.exe's and the claim implements it (re-derived below). The 256 times is not a unit artefact: the stat is stored shifted by 8, rolled shifted by 8 again, and taken off stat 8, which the same getter returns in 256ths. r1 cannot be posted:
 
-1. **No test pins the rule (blocker).** r1's `test_mana_burn` has oracle modes only; run alone (as ctest runs it) it prints `SKIP` and exits 77, so no mutant fails ctest. r2's claim adds a no-argument mode ctest runs: game.exe's own amounts for eight cases from the rule (no data needed), and with the data the player's mana after a burn through the real `Fight::hurt_side` and a Normal level 9 unique's hit end to end. All eight mutants below abort it.
+1. **No test pins the rule (blocker).** r1's `test_mana_burn` has oracle modes only; run alone (as ctest runs it) it prints `SKIP` and exits 77, so no mutant fails ctest. r2's and r3's claim adds a no-argument mode ctest runs: game.exe's own amounts for eight cases from the rule (no data needed), and with the data the player's mana after a burn through the real `Fight::hurt_side` and a Normal level 9 unique's hit end to end. All eight mutants below abort it.
 2. **The oracle measured the field, not the player's mana (high).** r1's d2d side printed `Foe::mana_burn` (shifted by 8 in the oracle commit, raw in the claim: the claim commit changed the oracle's own measurement). A mutant that keeps fight/tick.cpp's old `<< 8` on top of the new 256ths field takes 65,536 times the points off the player and passes r1's oracle (V run, `m6r1test` below). r2's d2d side runs the burn through `Fight::hurt_side` and prints the mana the player lost; the measuring code is the same in both commits.
 3. **presubmit fails (high).** r1: `ruff F401` (`import random` unused in `mana_burn.py`) and `short-names` (`lo`, `hi` at `uniques.hpp:447`): **2 FAIL** (V run, `presubmit.py --quick --base upstream/main`). r2: 0 FAIL, 3 WARN (answered by M5).
 4. **Usage errors and the README row (medium).** r1 `mana_burn.py` with no argument is an `IndexError`, `game` without a file likewise, a missing file a traceback, `cmp a b junk` silently runs the range compare; the README row sits in the "When it breaks" troubleshooting table. r2: `usage:` and exit 1 on no, unknown or short arguments and a bad flag, `cannot read` on a missing file, a malformed case line refused; the verb is `compare` as in the neighbouring rows; the row moved after the MonUMod row. Hand-made files (V run): empty, short, malformed, out of step, the parent's amounts: exit 1 each; equal files exit 0.
@@ -35,33 +35,55 @@ Game side `mana_burn.py game` (r2's script) on c1 (`gen`: 8 ranges x seeds 1..25
 
 | Tree | c1 range | c2 range | roll exact |
 |---|---|---|---|
-| oracle commit `9136b9a0` (parent d2d) | **1,750**, exit 1 | **1,600**, exit 1 | n/a |
-| claim `0243f24f` | 0, exit 0 | 0, exit 0 | c1 0 of 2,000, exit 0 |
+| oracle commit `9136b9a0` (r2; parent d2d) | **1,750**, exit 1 | **1,600**, exit 1 | n/a |
+| claim `0243f24f` (r2) | 0, exit 0 | 0, exit 0 | c1 0 of 2,000, exit 0 |
 
 Upstream main `ed007569` ctest (D2_MPQ_DIR and D2_PATCH_INSTALLER set): 355 of 355 pass. The claim's `test_mana_burn` with no argument: rc 0.
 
 ## Mutants (V run)
 
-PLACEHOLDER-MUT
+Local mutants on the r2 claim (never pushed). Rule mutants (`uniques.hpp`): the no-argument rule asserts of `test_mana_burn`, the same block compiled alone against each tree (`cpp/rule_harness.cpp`, the block `diff`ed equal to the test's), and its `--roll` output through `compare`. Subtract mutants (`fight/tick.cpp`): `test_mana_burn` built from each tree (Release, asserts on), the no-argument run and the oracle. "range" / "exact" = cases of 2,000 failing.
+
+| Mutant | test_mana_burn, no argument | c1 range / exact | c2 range / exact |
+|---|---|---|---|
+| m1 one shift (`<< 8`: the parent's amount in 256ths) | aborts (rule assert) | 1,750 / 1,750 | 1,600 / 1,799 |
+| m2 `<< 15` | aborts | 1,431 / 1,750 | 1,499 / 1,698 |
+| m3 no shift | aborts | 1,750 / 1,750 | 1,600 / 1,800 |
+| m4 wrong stat (max for both) | aborts | 1,500 / 1,500 | 1,600 / 1,600 |
+| m5 inclusive bound (`rng(high - low + 1)`) | aborts | **0** / 1,500 | **0** / 1,600 |
+| m6 tick.cpp keeps `<< 8` (65,536 x the points) | aborts (`mana == after`) | 1,750 | 1,799 |
+| m7 tick.cpp subtracts points (`>> 8`) | aborts (`mana == after`) | 1,750 | 1,600 |
+| m8 no clamp at 0 | aborts (`mana == after`) | **0** | **0** |
+| m6 with **r1's test** (`m6r1test`) | SKIP, 77 | **0, exit 0** | **0, exit 0** |
+
+Every mutant aborts r2's test. The range compare alone (r1's only check) misses m5 and m8, and r1's test misses m6 entirely.
 
 ## Build, ctest, tidy
 
-PLACEHOLDER-BUILD
+Builder container, Release, GCC, tests and tools on, `-j2` under the builder's lane lock, ccache; one job registered with `tools/agentrun.sh`; `D2_MPQ_DIR` and `D2_PATCH_INSTALLER` set for ctest (V run).
+
+| Tree | Build | ctest |
+|---|---|---|
+| upstream main `ed007569` | full, rc 0 | 355 of 355 pass |
+| oracle `9136b9a0` (r2) | `test_mana_burn`, rc 0 | not run (only `tools/emu`, the README and the new test differ; the test skips without an argument: 77) |
+| claim `0243f24f` (r2) | full, rc 0 | **356 of 356 pass**; `test_mana_burn` Passed (the one added test) |
+
+TIDY-ROW
 
 ## RNG luck
 
-PLACEHOLDER-RNG
+The pinned rule asserts are exact values on fixed seed states (no luck involved). The end-to-end parts draw from d2d's own monster rng, so the oracle reran them on a fresh seed set: c2, seeds 5001..5200 (200 per range) x 10 ranges, including the power-of-two bounds `(1, 2)` and `(0, 5)`, a fixed `(111, 111)` and Hell's `(60, 111)`: game.exe equals the model on 2,000 of 2,000, the claim's d2d amount lies in game.exe's range on 2,000 of 2,000 (the parent: 1,600 outside), and the rule alone equals game.exe's amount on 2,000 of 2,000. The no-argument end-to-end assert (seed 7, `(4, 7)`) is the same property as the 450 seeds of `(4, 7)` across c1 and c2.
 
 ## Required changes to the body (`mana-burn-amount-body.md`)
 
-- **M1 (high).** Commits and tree: "upstream `ed007569` plus `9136b9a0` (oracle) and `0243f24f` (claim)". "Two commits" paragraph: the oracle's d2d side is `monster_update` then the real `Fight::hurt_side` on a player with 60,000 mana (the mana lost, not the field); the claim also adds the `monsters.md` finding and the no-argument asserts in `test_mana_burn` (game.exe's amounts for eight cases; with the data the player's mana after a burn and a Normal level 9 unique's hit), which ctest runs.
+- **M1 (high).** Commits and tree: "upstream `ed007569` plus `dc6d881a` (oracle) and `177189d6` (claim)". "Two commits" paragraph: the oracle's d2d side is `monster_update` then the real `Fight::hurt_side` on a player with 60,000 mana (the mana lost, not the field); the claim also adds the `monsters.md` finding and the no-argument asserts in `test_mana_burn` (game.exe's amounts for eight cases; with the data the player's mana after a burn and a Normal level 9 unique's hit), which ctest runs.
 - **M2 (high).** Re-check block: `mana_burn.py compare` instead of `cmp` (`2000 cases: game.exe off its own rule 0, d2d outside game.exe's range 0`, `ok`; on the oracle commit 1,750 of 2,000, exit 1); `compare game.tsv roll.tsv exact` for the rule alone; the d2d side needs `D2_MPQ_DIR` and `D2_PATCH_INSTALLER` (the test skips without 1.14d's MonStats); add `ctest --test-dir build -R test_mana_burn`. Say compare exits 1 on an empty or unequal file, a malformed line or cases out of step.
 - **M3 (high, claims limited to proven).** Limits: "With Energy Shield, game.exe also takes the shield's calc1 % of the burn and pays `MulDiv(part, calc2, 16)` mana for it (`FUN_005ca6c0`: the table `0x6e30e0` lists the record's `+0x3c` with flag 1, taken only for a plain monster attacker, `0x5ca78d..0x5ca7ca`); d2d's shield works on the five damage fields only. Not changed here."
 - **M4 (medium).** "In play": add "MonUMod row 25 can be picked for a unique in every difficulty (upick 6 in Normal, Nightmare and Hell); its minions' constants are 0 in Normal, so in Normal only the unique burns." Keep the level 9 example (MonLvl L-DM 7 x 66 / 100 and x 100 / 100: 4..7 points).
 - **M5 (medium).** Answer presubmit's WARNs: `siblings` "game.exe's `FUN_0057aa60` takes any defender's stat 8; d2d applies a burn to the player only (`Fight::hurt_side` reads `side[0]`), so a merc's mana is not burned, before or after; pets have no mana; a co-op partner is a player and takes the new amount"; `build` and `gcc` "built and ctest run (Release, GCC): the same failures as upstream main".
 - **M6 (medium, claims limited to proven).** Limits: "`FUN_0057b7d0` has seven callers (the melee gate, `FUN_0056f070` and five skill functions); d2d burns only on a monster's melee swing. Whether a monster's missile or skill hit burns mana in game.exe is not run; nothing there is changed." Keep r1's "own melee caller not run" line.
 - **M7 (low, template).** Claims table with the counts of this file (parent 1,750 of 2,000 through `hurt_side`, claim 0; exact 2,000 of 2,000 twice; mutants abort `test_mana_burn`); tick the template's three checklist items (test `tests/game/test_mana_burn.cpp`; finding `docs/research/re/monsters.md`; `pr_guard` 0 FAIL 0 WARN). Drop "The whole test suite was not run on this branch".
-- **M8 (low).** The reseed row: seeds 5001..5200 x 10 ranges (including the power-of-two bounds `(1, 2)` and `(0, 5)`... and `(111, 111)`), PLACEHOLDER-RESEED.
+- **M8 (low).** The reseed row: seeds 5001..5200 x 10 ranges (including the power-of-two bounds `(1, 2)` and `(0, 5)`, `(111, 111)` and `(60, 111)`), 2,000 of 2,000 in range and exact on the claim, 1,600 outside on the parent.
 
 ## For the coordinator (not body changes)
 
@@ -70,8 +92,8 @@ PLACEHOLDER-RNG
 
 ## Hygiene (V run, r2)
 
-- Identity: both r2 commits have the user's noreply identity as author and committer, `Agent: Claude Code` the only parsed trailer.
-- `pr_guard.py upstream/main HEAD`: 0 FAIL, 0 WARN. `presubmit.py --quick --base upstream/main`: claim 0 FAIL, 3 WARN (`siblings`, `build`, `gcc`); oracle commit 0 FAIL, 2 WARN. r1: 2 FAIL (ruff F401, short-names).
+- Identity: both r2 and both r3 commits have the user's noreply identity as author and committer, `Agent: Claude Code` the only parsed trailer.
+- `pr_guard.py upstream/main HEAD`: 0 FAIL, 0 WARN (r2 and r3). `presubmit.py --quick --base upstream/main`: claim (r2 and r3) 0 FAIL, 3 WARN (`siblings`, `build`, `gcc`); oracle commit 0 FAIL, 2 WARN. r1: 2 FAIL (ruff F401, short-names).
 - Diff: oracle 3 files (`mana_burn.py`, `test_mana_burn.cpp`, a README row), no `components/` change, its test has no failing assert (bisect-safe); claim 7 files (`uniques.hpp`, `ai.cpp`, `ai.hpp`, `fight/tick.cpp`, `monsters.md`, the test, two docstring lines). No private-only code, no host names or paths (read of the diff).
 
 ## Not checked
