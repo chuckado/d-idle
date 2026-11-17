@@ -1,10 +1,11 @@
 ---
 id: TASK-621
 title: 'gearabsorb3: gear absorb r3 (heal-back, life oracle)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T15:03:00Z'
+updated_date: '2026-11-17T18:28:00Z'
 labels:
   - d2d
   - upstream-pr

@@ -268,7 +268,6 @@
 | morefit | proposed | - | `internal/watch/web/panels/orders/panel.css`<br>`tools/uishots/fixtures_menu.go` | - |
 | owbody | proposed | - | `docs/upstream/bodies/decomp37-open-wounds-body.md` | - |
 | questrun | proposed | - | `internal/bot/questboard.go`<br>`internal/bot/questboard_goal_test.go`<br>`internal/bot/goal.go`<br>`internal/questboard/desk.go`<br>`internal/questboard/desk_test.go`<br>`internal/questboard/exec.go`<br>`cmd/d2bot/questwire.go`<br>`docs/questboard.md`<br>`internal/bot/routeguard.go`<br>`internal/bot/ladder_t0_test.go`<br>`internal/watch/web/panels/needs-you/panel.js`<br>`internal/watch/web/panels/needs-you/panel.css` | - |
-| gearabsorb3 | proposed | - | `docs/upstream/bodies/gear-absorb-body.md`<br>`docs/research/gear-absorb-r3.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
