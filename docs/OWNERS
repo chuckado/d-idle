@@ -265,6 +265,7 @@ docs/charselect.md  credit-runner  charsup
 docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/contracts/merc-policy.md  credit-runner  mercrevive2
 docs/design/item-verbs.md  credit-runner  itemverbs2
+docs/design/loot-vault-2026-11-16.md  credit-runner  vault
 docs/design/quest-board-2026-11-16.md  credit-runner  questdesign
 docs/emu-image.md  credit-runner  emurebuild
 docs/exploredpct.md  credit-runner  exploredpct

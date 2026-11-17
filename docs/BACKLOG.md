@@ -981,6 +981,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - decomp36bodies: apply the verifier''s body changes to the gamble price and MonUMod PR bodies (TASK-574, merged 2026-11-16, acceptance 2 of 3): Bodies updated per the verifier (G1-G6, U1-U6); PRs posted in this run (not verified live, no game). <!--sg:agent/decomp36bodies-->
 - videofeed4: stream monitor overlay, stable presentation clock, lighter d2dview feed (cgroup-throttle hitching) (TASK-573, merged 2026-11-16, acceptance 4 of 4): Measured cause (read-only samples in the sandbox container): the 1-core CPU quota is saturated by the bot's own bursts (10-47 s at 64-71 percent of the core, 67-87 s apart), the container is throttled in 7-10 of 10 periods, d2d starves from 33 to 18-22 ... <!--sg:agent/videofeed4-->
 - questdesign: Quest board design (quests as events) (TASK-575, merged 2026-11-16, acceptance 2 of 2): Design doc docs/design/quest-board-2026-11-16.md written; docs only, nothing verified live. <!--sg:agent/questdesign-->
+- agent/vaultdesign: Merge branch 'main' into vault (merged 2026-11-16) <!--sg:agent/vaultdesign-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
