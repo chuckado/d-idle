@@ -1,10 +1,11 @@
 ---
 id: TASK-625
 title: 'verifydecomp39: verifier of the melee reach PR (fid/melee-reach-r1)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T17:01:00Z'
+updated_date: '2026-11-17T19:13:00Z'
 labels:
   - d2d
   - readonly
