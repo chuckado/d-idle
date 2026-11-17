@@ -21,6 +21,7 @@ owns:
   - "docs/probes/test-characters.md"
 exclusive: []
 contracts: []
+result: "branch 1 (code): prep reads the SETUP weapon back from dump stats (hax 3-6, bot reads dmg 3-6, zone shadow src=skill dps 19.9, verified on the lab, one 30 minute smoke), d2d must come from fork branch didle/rebase-20261115 (the Nov 6 lab build has no weapons key); pay-for-risk route in the dial (params.json typicalEnter/badFloor/riskValueMul, default zoneModel stays 0, tests on two archetypes); reruns and recommendation come on the docs branch"
 ---
 
 ## Description
