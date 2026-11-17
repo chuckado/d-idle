@@ -244,6 +244,7 @@
 | botcpulive | proposed | - | `docs/probes/bot-cpu-live-2026-11-16.md` | - |
 | vaultv2 | in-progress | - | `internal/vault`<br>`data/vault`<br>`docs/vault.md`<br>`docs/design/loot-vault-2026-11-16.md` | - |
 | botcpu2 | proposed | - | `internal/currency`<br>`internal/data/db.go`<br>`internal/bot/catalog.go`<br>`internal/watch/tallystrip.go`<br>`internal/watch/pprofapi.go`<br>`docs/probes/bot-cpu-fix-2026-11-16.md`<br>`internal/watch/serve.go`<br>`internal/watch/tallystrip_test.go`<br>`cmd/d2bot/ladder.go`<br>`docs/knobs.md` | - |
+| vaultv3 | in-progress | - | `internal/loot/vault.go`<br>`internal/loot/vault_test.go`<br>`internal/lootrules/vaultpreset.go`<br>`internal/lootrules/vaultpreset_test.go`<br>`cmd/d2bot/vaultwire.go`<br>`docs/vault.md`<br>`docs/lootrules.md`<br>`docs/design/loot-vault-2026-11-16.md`<br>`docs/knobs.md`<br>`internal/loot/pickup.go`<br>`internal/loot/loot.go`<br>`internal/loot/lootshadow.go`<br>`internal/lootrules/types.go`<br>`internal/lootrules/parse.go`<br>`internal/lootrules/eval.go`<br>`internal/lootrules/plain.go`<br>`internal/lootrules/schema.go`<br>`internal/env/tuning_loot.go`<br>`cmd/d2bot/d2dwire.go` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -286,6 +287,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ce672cdf4 11-16 23:49 `Merge agent/vaultv3: Merge branch 'main' into TASK-589` (vaultv3)
+- 4aaf84700 11-16 23:48 `Merge branch 'main' into TASK-589` (-)
 - e36453db0 11-16 23:34 `Merge agent/botcpu2: Merge branch 'main' into botcpu2` (botcpu2)
 - 2724bde25 11-16 23:33 `Merge branch 'main' into botcpu2` (-)
 - fe68b9807 11-16 23:28 `Merge agent/quests2: Merge branch 'main' into quests2` (quests2)
@@ -294,6 +297,4 @@
 - cb674bca4 11-16 23:21 `Merge branch 'main' into vaultv2` (-)
 - b1dd05d78 11-16 23:16 `Merge agent/vaultv1: Merge branch 'main' into vaultv1` (vaultv1)
 - 93fb23f21 11-16 23:16 `Merge branch 'main' into vaultv1` (-)
-- 2c31eefaf 11-16 23:07 `Merge agent/pausemenufit: Merge branch 'main' into pausemenufit` (pausemenufit)
-- a0b01f790 11-16 23:06 `Merge branch 'main' into pausemenufit` (-)
 <!-- statusgen:end -->
