@@ -27,12 +27,21 @@ Final version per seed (xp at the last minute line, start 90180): 101 40963 / 44
 Seeds 101 103 107: XP ratio **0.836**, interval [-20581, 14046], deaths 0 / 1 (seed 101 margin), chickens 7 / 7 (5 4 | 0 1 | 2 2), merc deaths equal: **INCONCLUSIVE** (3 seeds cannot show an XP effect under 30 percent, `docs/ab-design.md`). Per seed margin/legacy 1.24, 0.58, 0.69; seed 107's first margin run hit its wall-time cap at 110 minutes and was rerun with a longer cap (`107.short.log` kept). The Sorceress is not shown equal; the route was not tuned on her.
 
 ## Holdout (seeds never looked at)
-HOLDOUT_PLACEHOLDER
+Seeds 139 149 151 157 (Paladin, same binary and d2d, `AB_SPEED=3`, 8 runs, all `writes after start: 0`, none short): `abreport` **FAIL** (chickens 3 against 1 plus the slack of 1), XP ratio 0.967, interval [-15741, 12971] (spans the floor), deaths 0 / 1 (within the slack).
+
+| seed | arm | deaths | chickens | xp at the last minute (start 90180) |
+|---|---|---|---|---|
+| 139 | legacy / margin | 0 / 0 | 0 / 0 | 40781 / 52094 |
+| 149 | legacy / margin | 0 / 1 | 0 / 2 | 42326 / 30709 |
+| 151 | legacy / margin | 0 / 0 | 1 / 1 | 39824 / 39098 |
+| 157 | legacy / margin | 0 / 0 | 0 / 0 | 44989 / 39090 |
+
+Seed 149 is the whole safety difference: the margin arm took `pays_for_risk` picks at corrected best margins of 0.6 to 0.9 (`k` 2.9 to 3.4: Dark Wood, Black Marsh) after a hard event, lost its merc three times in 80 seconds and died once (V: `zone choice:` lines of `survhold/ab/margin/149.log`). So the 0.4 floor lets the route enter a zone the model itself calls lost-ish at the current `k`; on the eight tuning seeds that never ended in a death, on four fresh seeds it did once. Pooled over all twelve seeds (sums of the two reports): deaths 0 / 1, chickens 5 / 4, mean XP difference about -390 (ratio about 0.99).
 
 ## Recommendation (plain)
-1. **Paladin: the gate passes** (no more deaths, fewer chickens, XP equal within noise, 8 seeds, writes after start 0). **It does not show that the model is better**: with the weapon read and the new d2d the legacy arm is already safe (0 deaths, 4 chickens in 16 virtual hours), so the margin controller buys nothing measurable here; its value was safety against the old build's chickens. Do not flip `bot.zoneModel` on the strength of this alone.
+1. **Do not flip `bot.zoneModel` yet.** On the eight seeds the controller was tuned on, the Paladin gate passes (XP ratio 1.002, no more deaths, fewer chickens); on four fresh seeds it fails the chicken part by one (3 against 1 plus slack 1) with one death, and XP stays equal within noise (0.967). **Nothing here shows the model is better than the plan tables**: with the weapon read and the new d2d the legacy arm is already safe (0 deaths, 5 chickens in 24 virtual hours), so the margin controller buys no measurable safety; it only matches the legacy XP when allowed to take risks the legacy arm takes anyway. The first run's safety win (chickens 10 against 36) belonged to the old d2d build.
 2. **Do not flip for all classes**: the Sorceress screen is inconclusive and leans slower (0.836, one death in the margin arm). The knob is global, so a Paladin-only flip needs a per-class default first (not built).
-3. If the user wants the default on: flip `bot.zoneModel` only after the Sorceress 8-seed run on the same fork build is not FAIL, and keep the dial `balanced`; the route and `freshNeedsMerc` are data (`params.json`) and can be tuned per archetype without code.
+3. Next step if the user still wants the model on: raise the Paladin `badFloor` between 0.5 and 0.65 (the 0.7 version was safe and 0.895 on XP, 0.4 is 1.0 on XP and one death in twelve fresh-ish seeds) and judge on a NEW set of seeds, not on these twelve (the values were chosen with these seeds in view); `freshNeedsMerc` false is the part with a clear effect (seed 113 27k to 43k xp) and no safety cost seen. Both are data (`params.json`), tunable per archetype without code. The Sorceress needs its own 8 seeds first.
 4. Process: do not stop an `agentrun.sh` driver while its runs go (it killed three runs at minute 101 to 108 on 2026-11-16, `ab-harness.md` section 8); the queue driver is `tools/survival/abq.sh`.
 
 ## Provenance
