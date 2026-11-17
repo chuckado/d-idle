@@ -179,7 +179,25 @@ func palFixture() *watch.PalFeed {
 		}
 	}
 	hub.Publish(palfeed.Frame{W: 800, H: 600, Pix: pix, Seq: 1}, 0)
-	o := palfeed.Options{Auth: func(*http.Request) bool { return true }}
+	// a moving square at 30 fps, so the stream monitor (?pfdebug) has frames to count; and a steady host sample
+	go func() {
+		seq := uint32(1)
+		for range time.Tick(time.Second / 30) {
+			seq++
+			f := append([]byte(nil), pix...)
+			x := 100 + int(seq%300)
+			for y := 250; y < 290; y++ {
+				for xx := x; xx < x+40; xx++ {
+					o := (y*800 + xx) * 4
+					f[o], f[o+1], f[o+2] = 240, 240, 240
+				}
+			}
+			hub.Publish(palfeed.Frame{W: 800, H: 600, Pix: f, Seq: seq, GameMS: seq * 33}, 0)
+		}
+	}()
+	o := palfeed.Options{Auth: func(*http.Request) bool { return true }, Server: func() palfeed.ServerStats {
+		return palfeed.ServerStats{ThrottlePct: 35, CPUPct: 12, RingFPS: 30, AtMS: time.Now().UnixMilli()}
+	}}
 	stream := hub.Stream(o)
 	return &watch.PalFeed{
 		Capability: hub.Capability(o),

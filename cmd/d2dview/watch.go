@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"time"
 
+	"d2lod-bot/internal/buildinfo"
 	"d2lod-bot/internal/watch"
 )
 
@@ -43,6 +44,7 @@ func startWatch(ctx context.Context, o watchOpts, viewAddr, token string, open, 
 	if p, err := strconv.Atoi(port); err == nil {
 		sim.Hub.SetAnswerPort(p)
 	}
+	sim.Hub.SetBuild(buildinfo.Current())
 	if hasFrames {
 		sim.Hub.SetFrameURL("/stream.mjpg")
 		sim.Hub.SetPalFeed(o.pal)

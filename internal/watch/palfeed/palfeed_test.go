@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
 	"time"
 )
@@ -175,7 +176,7 @@ func TestStreamLatestFrameWinsAndAuth(t *testing.T) {
 	f2, f3 := synth(96, 64, 2, 2), synth(96, 64, 3, 3)
 	h.Publish(f2, 0)
 	h.Publish(f3, 0)
-	deadline := time.Now().Add(3 * time.Second)
+	deadline := time.Now().Add(60 * time.Second)
 	for dec.Frame.Seq != 3 && time.Now().Before(deadline) {
 		if err := dec.Apply(readMsg(t, br)); err != nil {
 			t.Fatal(err)
@@ -198,7 +199,7 @@ func TestCapability(t *testing.T) {
 		t.Fatalf("before a frame: %d", w.Code)
 	}
 	h.Publish(synth(800, 600, 1, 1), 0)
-	if w := get(); w.Code != 200 || w.Body.String() != `{"paletteFeed":true,"version":1,"width":800,"height":600}` {
+	if w := get(); w.Code != 200 || !strings.HasPrefix(w.Body.String(), `{"paletteFeed":true,"version":1,"width":800,"height":600,"stats":{`) {
 		t.Fatalf("%d %s", w.Code, w.Body)
 	}
 	if w := httptest.NewRecorder(); true {
@@ -325,12 +326,48 @@ func TestScrollIsFoundAndCheap(t *testing.T) {
 	}
 }
 
-// The guard: a key-sized message holds the client back (BigGap), bytes/s is capped, Touch and the client count work.
-func TestGuardPacesBigMessagesAndCountsClients(t *testing.T) {
+// pace is pure, so the guard's arithmetic is tested with fixed times: no sleeps, no wall clock.
+func TestPaceScheduleAndGuard(t *testing.T) {
+	t0 := time.Unix(1000, 0)
+	o := Options{BigMsg: 200 << 10, BigGap: 150 * time.Millisecond, MaxBytesPerSec: 4 << 20}
+	period := time.Second / 30
+	// on schedule: the slot is the previous slot plus one period, whatever the work took
+	slot, big, held := pace(t0, t0.Add(5*time.Millisecond), period, 20<<10, o)
+	if !slot.Equal(t0.Add(period)) || big || held {
+		t.Fatalf("on schedule: %v big %v held %v", slot.Sub(t0), big, held)
+	}
+	// behind schedule by more than a period: restart from now, no burst
+	now := t0.Add(500 * time.Millisecond)
+	if slot, _, _ = pace(t0, now, period, 20<<10, o); !slot.Equal(now) {
+		t.Fatalf("behind: %v", slot.Sub(t0))
+	}
+	// a key-sized message holds the client for BigGap from now
+	slot, big, held = pace(t0, t0.Add(10*time.Millisecond), period, 300<<10, o)
+	if !big || !slot.Equal(t0.Add(10*time.Millisecond+150*time.Millisecond)) {
+		t.Fatalf("big: %v big %v", slot.Sub(t0), big)
+	}
+	_ = held
+	// the byte budget: 600 KB at 100 KB/s holds for 6 s and is counted as a hold; below one period it is not
+	slow := Options{BigMsg: 1 << 30, MaxBytesPerSec: 100 << 10}
+	slot, big, held = pace(t0, t0, period, 600<<10, slow)
+	if big || !held || slot.Sub(t0) != 6*time.Second {
+		t.Fatalf("budget: %v big %v held %v", slot.Sub(t0), big, held)
+	}
+	if _, _, held = pace(t0, t0, period, 1<<10, slow); held {
+		t.Fatal("a small message counted as a hold")
+	}
+	// no guard when the cap is negative
+	if slot, _, held = pace(t0, t0, period, 600<<10, Options{BigMsg: 1 << 30, MaxBytesPerSec: -1}); held || !slot.Equal(t0.Add(period)) {
+		t.Fatalf("no guard: %v held %v", slot.Sub(t0), held)
+	}
+}
+
+// The stream counts clients and calls Touch; key-sized messages and guard holds are counted. No timing assertion.
+func TestStreamCountsClientsTouchAndBigMessages(t *testing.T) {
 	h := NewHub()
 	touched := make(chan struct{}, 8)
-	o := Options{Auth: func(*http.Request) bool { return true }, MaxFPS: 1000, BigMsg: 1 << 10, BigGap: 150 * time.Millisecond,
-		MaxBytesPerSec: -1, Touch: func() {
+	o := Options{Auth: func(*http.Request) bool { return true }, MaxFPS: 1000, BigMsg: 1 << 10, BigGap: time.Millisecond,
+		MaxBytesPerSec: 1 << 10, Touch: func() {
 			select {
 			case touched <- struct{}{}:
 			default:
@@ -345,62 +382,38 @@ func TestGuardPacesBigMessagesAndCountsClients(t *testing.T) {
 	}
 	defer resp.Body.Close()
 	br := bufio.NewReader(resp.Body)
-	t0 := time.Now()
-	readMsg(t, br) // the key frame (random pixels: well above BigMsg)
+	readMsg(t, br) // the key frame: random pixels, far above BigMsg
 	select {
 	case <-touched:
-	default:
+	case <-time.After(10 * time.Second):
 		t.Fatal("Touch not called on connect")
 	}
 	if h.Clients() != 1 {
 		t.Fatalf("clients %d", h.Clients())
 	}
-	h.Publish(synth(96, 64, 2, 2), 0) // a noise frame: key-sized delta, must wait out BigGap
-	readMsg(t, br)
-	if d := time.Since(t0); d < 130*time.Millisecond {
-		t.Fatalf("second big message after %v, want >= BigGap", d)
+	// the counters are updated right after the write that delivered the message; wait for them without a time bound that matters
+	for i := 0; i < 2000; i++ {
+		if _, _, big, slow := h.Stats(); big >= 1 && slow >= 1 {
+			break
+		}
+		time.Sleep(time.Millisecond)
 	}
-	if _, _, big, _ := h.Stats(); big < 2 {
-		t.Fatalf("big %d", big)
+	if _, _, big, slow := h.Stats(); big < 1 || slow < 1 {
+		t.Fatalf("big %d, guard holds %d", big, slow)
 	}
 	resp.Body.Close()
-	deadline := time.Now().Add(2 * time.Second)
-	for h.Clients() != 0 && time.Now().Before(deadline) {
-		time.Sleep(10 * time.Millisecond)
+	for i := 0; i < 5000 && h.Clients() != 0; i++ {
+		time.Sleep(time.Millisecond)
 	}
 	if h.Clients() != 0 {
 		t.Fatal("client not released")
 	}
 }
 
-func TestGuardByteCapSlowsClient(t *testing.T) {
-	h := NewHub()
-	o := Options{Auth: func(*http.Request) bool { return true }, MaxFPS: 1000, BigMsg: 1 << 30, MaxBytesPerSec: 50 << 10}
-	srv := httptest.NewServer(h.Stream(o))
-	defer srv.Close()
-	h.Publish(synth(96, 64, 1, 1), 0)
-	resp, err := http.Get(srv.URL)
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer resp.Body.Close()
-	br := bufio.NewReader(resp.Body)
-	t0 := time.Now()
-	m := readMsg(t, br)
-	h.Publish(synth(96, 64, 2, 2), 0)
-	readMsg(t, br)
-	want := time.Duration(len(m)) * time.Second / (50 << 10)
-	if d := time.Since(t0); d < want*8/10 {
-		t.Fatalf("second message after %v, cap wants about %v", d, want)
-	}
-	if _, _, _, slow := h.Stats(); slow == 0 {
-		t.Fatal("guard pause not counted")
-	}
-}
-
+// With an empty-delta heartbeat after 5 ms (Options.Heartbeat), a paused game still gets a message: tiny and applicable.
 func TestHeartbeatWhileNothingChanges(t *testing.T) {
 	h := NewHub()
-	srv := httptest.NewServer(h.Stream(Options{Auth: func(*http.Request) bool { return true }}))
+	srv := httptest.NewServer(h.Stream(Options{Auth: func(*http.Request) bool { return true }, Heartbeat: 5 * time.Millisecond}))
 	defer srv.Close()
 	f := synth(96, 64, 1, 1)
 	h.Publish(f, 0)
@@ -414,11 +427,7 @@ func TestHeartbeatWhileNothingChanges(t *testing.T) {
 	if err := dec.Apply(readMsg(t, br)); err != nil {
 		t.Fatal(err)
 	}
-	t0 := time.Now()
-	m := readMsg(t, br) // no new frame: the heartbeat comes after about a second
-	if d := time.Since(t0); d < 800*time.Millisecond || d > 3*time.Second {
-		t.Fatalf("heartbeat after %v", d)
-	}
+	m := readMsg(t, br) // no new frame: the heartbeat
 	if m[3]&FlagKey != 0 || len(m) > 200 {
 		t.Fatalf("heartbeat is %d bytes, key %v", len(m), m[3]&FlagKey != 0)
 	}
@@ -427,10 +436,11 @@ func TestHeartbeatWhileNothingChanges(t *testing.T) {
 	}
 }
 
-// A source at 30 Hz is delivered at 30 Hz: the pace is a schedule, so the loop's own work never skips a frame.
-func TestDeliversEveryFrameOfA30HzSource(t *testing.T) {
+// Lock-step: the source publishes the next frame only after the client has taken the previous one, so a client that is never
+// behind receives EVERY frame, in order, with no skip (the pace schedule itself is TestPaceScheduleAndGuard). No timing assertion.
+func TestEveryFrameArrivesWhenTheClientKeepsUp(t *testing.T) {
 	h := NewHub()
-	srv := httptest.NewServer(h.Stream(Options{Auth: func(*http.Request) bool { return true }}))
+	srv := httptest.NewServer(h.Stream(Options{Auth: func(*http.Request) bool { return true }, MaxFPS: 1000, MaxBytesPerSec: -1}))
 	defer srv.Close()
 	base := synth(96, 64, 1, 1)
 	h.Publish(base, 0)
@@ -439,36 +449,24 @@ func TestDeliversEveryFrameOfA30HzSource(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer resp.Body.Close()
-	stop := make(chan struct{})
-	const frames = 90
-	go func() {
-		tk := time.NewTicker(time.Second / 30)
-		defer tk.Stop()
-		for i := 2; i < 2+frames; i++ {
-			select {
-			case <-tk.C:
-				f := base
-				f.Pix = append([]byte(nil), base.Pix...)
-				f.Pix[(i*37)%len(f.Pix)] ^= 0xFF
-				f.Seq = uint32(i)
-				h.Publish(f, 0)
-			case <-stop:
-				return
-			}
-		}
-	}()
-	defer close(stop)
 	br := bufio.NewReader(resp.Body)
 	var dec Decoder
-	got := 0
-	deadline := time.Now().Add(5 * time.Second)
-	for dec.Frame.Seq < frames+1 && time.Now().Before(deadline) {
-		if err := dec.Apply(readMsg(t, br)); err != nil {
-			t.Fatal(err)
-		}
-		got++
+	if err := dec.Apply(readMsg(t, br)); err != nil {
+		t.Fatal(err)
 	}
-	if got < frames-3 {
-		t.Fatalf("%d of %d frames delivered at 30 Hz (the pace skipped frames)", got, frames)
+	for i := uint32(2); i < 60; i++ {
+		f := base
+		f.Pix = append([]byte(nil), base.Pix...)
+		f.Pix[(int(i)*37*4+1)%len(f.Pix)] ^= 0xFF // a colour byte (alpha is not on the wire)
+		f.Seq = i
+		h.Publish(f, 0)
+		for dec.Frame.Seq != i { // a heartbeat or the frame itself; never a skipped number
+			if err := dec.Apply(readMsg(t, br)); err != nil {
+				t.Fatal(err)
+			}
+		}
+		if !bytes.Equal(dec.Frame.Pix, f.Pix) {
+			t.Fatalf("frame %d differs", i)
+		}
 	}
 }

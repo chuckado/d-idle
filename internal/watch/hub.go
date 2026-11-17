@@ -74,6 +74,7 @@ type Hub struct {
 	base      time.Duration
 	video     *Video                            // nil: no game video
 	pal       *PalFeed                          // nil: MJPEG only (palfeed.go)
+	build     string                            // build id for the stream monitor's header
 	cur       atomic.Pointer[currency.Wallet]   // nil: no currencies (vanilla; internal/watch/currency.go)
 	placer    atomic.Pointer[placerBox]         // nil: orders go straight to Give (no charter sink)
 	why       *Whyline                          // the reason line (whyline.go)

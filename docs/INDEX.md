@@ -310,6 +310,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `design/`
 
 - [item-verbs.md](design/item-verbs.md): Item verbs: inventory, stash and equipment actions through d2d's own item handlers (TASK-367) (status: DESIGN plus the built verbs (equip, unequip, move, identify, drop, gold, `caps`), 2026-11-12; stage 2 and...)
+- [loot-vault-2026-11-16.md](design/loot-vault-2026-11-16.md): Ethereal Vault: a database of every drop, created in the game only on Keep (design and feasibility) (status: DESIGN, 2026-11-16. Nothing here was built or run; the fork was read, not changed. "Ethereal Vault" is the...)
+- [quest-board-2026-11-16.md](design/quest-board-2026-11-16.md): Quest board: quests as events the player takes part in (status: design proposal (2026-11-16, card questdesign, TASK-575), not built; waits for the user's answers (section...)
 - [desktop-app.md](desktop-app.md): Desktop app: d2idle-watch (status: the Go launcher is the FALLBACK; the main desktop app is now `apps/desktop-electron`...)
 - [desktop-electron.md](desktop-electron.md): Desktop app on Electron: d2idle-watch (status: built, not yet run on real desktops (TASK-289 skeleton, TASK-290 tray, autostart, hide-to-tray, update...)
 - [dev-reset.md](dev-reset.md): Reset the play sandbox to a fresh hero (status: CURRENT. Task: TASK-263 (devreset). Dev tooling for a DEV container such as `d2play-20261108`...)
@@ -483,6 +485,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [quest-givers.md](quest-givers.md): Quest givers in town (TASK-243) (status: decision logic, table and fixtures built and tested offline; the live part is U (checklist below). Tags:...)
 - [quest-hints.md](quest-hints.md): Quest hints in town (TASK-197) (status: built and tested offline (fixtures, no game). Tags: V verified by the tests named, SRC read in the repo,...)
 - [quest.md](quest.md): Quest layer: internal/quest (agent QUESTS, offline)
+- [questboard.md](questboard.md): Quest board model (slice S1) (status: built and tested offline (card quests1, TASK-577); not wired: no bot code imports it until slice S3....)
 - [questmem.md](questmem.md): In-memory quest and waypoint data (agent MEMQUEST, V-05)
 - [readiness.md](readiness.md): Readiness model: is this hero ready for that area (status: slice A of the friends beta (cards TASK-217 area table, TASK-218 model, TASK-220 meter feed in part)....)
 - [recovery.md](recovery.md): Recovery phase (broke character)

@@ -135,6 +135,18 @@
       .catch(function () { return null; });
   }
 
+  // poll: GET url every ms milliseconds (default 1000) while the returned stop function has not been called, handing the parsed
+  // JSON to cb; failures are skipped. The stream monitor uses it for the host's numbers (cheap, a few hundred bytes).
+  function poll(fetchFn, url, cb, ms) {
+    var stopped = false, t = null;
+    (function again() {
+      if (stopped) return;
+      fetchFn(url, { cache: 'no-store', credentials: 'same-origin' }).then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) { if (j && !stopped) cb(j); }, function () {}).then(function () { if (!stopped) t = setTimeout(again, ms || 1000); });
+    })();
+    return function () { stopped = true; if (t) clearTimeout(t); };
+  }
+
   function browserInflate(bytes) {
     var ds = new DecompressionStream('deflate-raw');
     return new Response(new Blob([bytes]).stream().pipeThrough(ds)).arrayBuffer().then(function (a) { return new Uint8Array(a); });
@@ -146,22 +158,27 @@
   // without it the player retries itself 3 times (a reconnect is a new key frame) and then calls onFallback. An error
   // carries .fatal when a retry cannot help (a broken stream: bad header, short payload, oversized message).
   //
-  // Presentation clock (docs/video-feed.md section 11). Messages arrive with network and GC jitter; showing each at its own
-  // arrival moment makes steady motion look uneven. Every message carries the d2d game time of its frame. The player keeps
-  // the smallest (arrival - gameMs) of the last 2 s, which is the transit of the least delayed message, and presents the
-  // frame of game time g at g + that + D, with D one frame interval plus 1.5 times the measured jitter, clamped to 1..2 frames
-  // (never above MAX_DELAY ms). A message that is due is decoded in order and ONE draw shows the newest of them (latest wins);
-  // a message older than MAX_AGE ms at presentation time is never waited for. When the game clock does not track the wall
-  // clock (a fast-forwarded lockstep game) the due time is capped at arrival + D, which is "present on the next animation
-  // frame". Counters: delivered messages, decoded, presented draws, dropped (decoded but never drawn on their own: merged
-  // into a later draw), and the standard deviation of the intervals between draws.
-  var MAX_DELAY = 70, MAX_AGE = 80, WINDOW_MS = 2000;
+  // Presentation clock (docs/video-feed.md sections 11 and 12). Messages arrive with network, GC and, on the sandbox, container
+  // CPU-throttle jitter (a throttled 100 ms period freezes the whole container, then the backlog arrives in a burst). Every
+  // message carries the d2d game time g of its frame. The player estimates
+  //   base: the transit time (arrival - g) of the least delayed messages: it follows a lower transit at once and creeps up
+  //         0.2 percent per message, so it tracks slow clock drift without the steps a sliding minimum makes;
+  //   late: how late the worst recent message was (arrival - g - base): it follows a later one at once and decays 0.2 percent
+  //         per message (half-life about 11 s at 30 fps), so one stall raises the buffer and the buffer then relaxes slowly
+  //         instead of chasing every arrival (the old 2 s window made the delay breathe);
+  // and presents the frame at g + base + D, with D = two frame intervals + 1.1 x late, clamped to MIN_DELAY..MAX_DELAY
+  // (66 to 200 ms: a watched game, nobody steers by this picture). A message that is due is decoded in order and ONE draw shows
+  // the newest of them (latest wins); a message older than MAX_AGE ms at presentation is never waited for (a long freeze
+  // catches up at once). When the game clock does not track the wall clock (a fast-forwarded lockstep game) the due time is
+  // capped at arrival + D, which is "present on the next animation frame". Counters: delivered, decoded, presented draws,
+  // dropped (decoded but merged into a later draw) and the standard deviation of the intervals between draws.
+  var MIN_DELAY = 66, MAX_DELAY = 200, MAX_AGE = 260;
   function Player(o) {
     this.o = o; this.dec = new Decoder(); this.ctx = o.canvas.getContext('2d', { alpha: false, desynchronized: true });
     this.stopped = false; this.pending = null; this.raf = o.raf || (root.requestAnimationFrame && root.requestAnimationFrame.bind(root));
     this.now = o.now || (root.performance && root.performance.now.bind(root.performance)) || Date.now;
     this.frames = 0; this.drawn = 0; this.bytes = 0; this.failures = 0; this.lowRate = false; this.ctl = null; this.gen = 0; this.imgs = [];
-    this.q = []; this.transits = []; this.jit = 0; this.step = 33; this.lastGame = -1; this.lastDraw = -1; this.ivs = [];
+    this.q = []; this.base = null; this.late = 0; this.step = 33; this.lastGame = -1; this.lastDraw = -1; this.ivs = [];
     this.work = 0; this.delivered = 0; this.decoded = 0; this.dropped = 0; this.lat = 0; this.rafOn = false;
   }
   Player.prototype.setLowRate = function (on) { this.lowRate = !!on; this._abort(); };
@@ -175,31 +192,28 @@
     if (n) mean /= n;
     for (i = 0; i < n; i++) sd += (this.ivs[i] - mean) * (this.ivs[i] - mean);
     return { delivered: this.delivered, decoded: this.decoded, presented: this.drawn, dropped: this.dropped, queue: this.q.length,
-             presentFps: mean ? 1000 / mean : 0, jitterMs: n ? Math.sqrt(sd / n) : 0, latencyMs: this.lat, delayMs: this._delay(), workMs: this.work };
+             presentFps: mean ? 1000 / mean : 0, jitterMs: n ? Math.sqrt(sd / n) : 0, lateMs: this.late, latencyMs: this.lat, delayMs: this._delay(), workMs: this.work };
   };
-  Player.prototype._delay = function () { return Math.max(this.step, Math.min(MAX_DELAY, this.step + 1.5 * this.jit)); };
+  Player.prototype._delay = function () { return Math.max(MIN_DELAY, Math.min(MAX_DELAY, 2 * this.step + 1.1 * this.late)); };
   // _arrive stamps a message with its due time. g is the frame's game time in ms.
   Player.prototype._arrive = function (h, at) {
-    var g = h.gameMs, T = this.transits;
+    var g = h.gameMs;
     if (this.o.noClock) return at;   // measurement only: present at the first animation frame after arrival (the old behaviour)
     if (this.lastGame >= 0 && g === this.lastGame) return at;   // a heartbeat repeats the last frame's time: nothing to schedule
     if (this.lastGame >= 0) {
-      if (g < this.lastGame - 1000) { T.length = 0; this.jit = 0; }   // a restarted d2d: a new clock
+      if (g < this.lastGame - 1000) { this.base = null; this.late = 0; }   // a restarted d2d: a new clock
       else if (g > this.lastGame) { var d = g - this.lastGame; if (d < 200) this.step += (Math.min(d, 70) - this.step) * 0.1; }
     }
     if (g > this.lastGame) this.lastGame = g;
     var tr = at - g;
-    T.push([at, tr]);
-    while (T.length && at - T[0][0] > WINDOW_MS) T.shift();
-    var m = tr;
-    for (var i = 0; i < T.length; i++) if (T[i][1] < m) m = T[i][1];
-    this.jit += (Math.abs(tr - m) - this.jit) * 0.05;
-    var due = g + m + this._delay();
-    return Math.min(due, at + MAX_DELAY);   // a game clock that does not follow the wall clock: present on the next frame
+    if (this.base === null || tr < this.base) this.base = tr; else this.base += (tr - this.base) * 0.002;
+    var lt = tr - this.base;
+    if (lt > this.late) this.late = lt; else this.late -= this.late * 0.002;
+    return Math.min(g + this.base + this._delay(), at + MAX_DELAY);   // a game clock that does not follow the wall clock: present on the next frame
   };
   Player.prototype._run = function () {
     var self = this, o = this.o, inflate = o.inflate || browserInflate, sp = new Splitter(), gen = ++this.gen;
-    this.dec = new Decoder(); this.pending = null; this.q = []; this.transits = []; this.lastGame = -1; // a new connection starts from a key frame
+    this.dec = new Decoder(); this.pending = null; this.q = []; this.base = null; this.late = 0; this.lastGame = -1; // a new connection starts from a key frame
     this.ctl = typeof AbortController === 'function' ? new AbortController() : { abort: function () {} };
     var url = o.url + (this.lowRate ? (o.url.indexOf('?') < 0 ? '?' : '&') + 'fps=10' : '');
     var f = o.fetch || root.fetch.bind(root);
@@ -214,6 +228,7 @@
             var m = msgs[i], h = parseHeader(m), e = { h: h, at: at, due: self._arrive(h, at), raw: null, err: null };
             self.bytes += m.length + 4; self.delivered++;
             if (o.onBytes) o.onBytes(m.length + 4);
+            if (o.mon) o.mon.arrive(m.length + 4, h.key || m.length > 200000);
             // inflate at once (a Blob copies the bytes synchronously, so the splitter may reuse its buffer); decoding waits for the due time
             self._inflate(e, inflate(m.subarray(HEADER)));
             self.q.push(e);
@@ -272,6 +287,7 @@
   };
   Player.prototype._fail = function (err) {
     this.q = [];
+    if (this.o.mon) this.o.mon.event('resync', String(err && err.message || err));
     if (this.o.log) this.o.log('palfeed: ' + (err && err.message || err));
     this.gen++; this._abort();   // this connection is over; the caller reconnects (a key frame) or falls back
     if (this.o.onEnd) this.o.onEnd(err);
@@ -289,6 +305,7 @@
     this.ctx.putImageData(img, 0, 0, p.x, p.y, p.w, p.h);
     this.drawn++;
     this.dropped += Math.max(0, applied - 1);
+    if (this.o.mon) { this.o.mon.shownFrame(); if (applied > 1) this.o.mon.dropped(applied - 1); this.o.mon.delay(this._delay()); }
     this.lat += ((ts - newest.at) - this.lat) * 0.1;
     if (this.lastDraw >= 0) { this.ivs.push(ts - this.lastDraw); if (this.ivs.length > 120) this.ivs.shift(); }
     this.lastDraw = ts;
@@ -298,6 +315,6 @@
     return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
   }
 
-  var api = { parseHeader: parseHeader, Decoder: Decoder, Splitter: Splitter, fit: fit, fitFill: fitFill, detect: detect, negotiate: negotiate, Player: Player, HEADER: HEADER };
+  var api = { parseHeader: parseHeader, Decoder: Decoder, Splitter: Splitter, fit: fit, fitFill: fitFill, detect: detect, negotiate: negotiate, poll: poll, Player: Player, HEADER: HEADER };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.PalFeed = api;
 })(typeof window !== 'undefined' ? window : globalThis);
