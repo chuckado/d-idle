@@ -72,7 +72,7 @@ func sortedKeys(m map[string]bool) []string {
 func ActionsFor(scope string) []string {
 	switch scope {
 	case PlaceGround:
-		return []string{Pickup, Ignore}
+		return []string{Pickup, Vault, Ignore}
 	case PlacePack:
 		return []string{Keep, KeepMerc, Stash, Sell, Drop, Identify, Ask, Ignore}
 	case PlaceStash:

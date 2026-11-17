@@ -102,8 +102,9 @@ type Looter struct {
 
 	build string // leveler build name; with the snapshot's difficulty it picks the belt columns (SetBuild)
 
-	shadow *Shadow // the loot rules shadow stage (lootshadow.go); nil = off
-	engine *Engine // the loot rules engine stages (rulesengine.go), switched by loot.rulesEngine
+	shadow *Shadow    // the loot rules shadow stage (lootshadow.go); nil = off
+	engine *Engine    // the loot rules engine stages (rulesengine.go), switched by loot.rulesEngine
+	vault  vaultState // the Ethereal Vault ground action (vault.go), switched by loot.vault; off by default
 
 	// Seams for tests.
 	snap  func() (*d2.Snapshot, error)

@@ -36,7 +36,7 @@ func (es Errors) Error() string {
 
 var qualities = map[string]bool{"low": true, "normal": true, "superior": true, "magic": true, "set": true, "rare": true, "unique": true, "crafted": true}
 var scopes = map[string]bool{PlaceGround: true, PlacePack: true, PlaceStash: true, PlaceSell: true}
-var actions = map[string]bool{Ask: true, KeepMerc: true, Pickup: true, Keep: true, Stash: true, Sell: true, Drop: true, Identify: true, Ignore: true}
+var actions = map[string]bool{Ask: true, KeepMerc: true, Pickup: true, Keep: true, Stash: true, Sell: true, Drop: true, Identify: true, Ignore: true, Vault: true}
 var needKinds = map[string]bool{"potion": true, "scroll": true, "tome": true, "key": true, "gold": true, "gem": true, "runeword": true, "emptyslot": true, "charmroom": true}
 
 // Parse reads and validates a rule set. A syntax error carries line and column; field errors carry the path of the field.
@@ -150,7 +150,7 @@ func fate(a string) bool { return a == Keep || a == KeepMerc || a == Stash || a 
 func legal(a, scope string) bool {
 	switch scope {
 	case PlaceGround:
-		return a == Pickup || a == Ignore
+		return a == Pickup || a == Ignore || a == Vault
 	case PlacePack:
 		return a != Pickup
 	case PlaceStash:
@@ -163,7 +163,7 @@ func legal(a, scope string) bool {
 
 func (r Rule) effScope() []string {
 	if len(r.Scope) == 0 {
-		if r.Action == Pickup {
+		if r.Action == Pickup || r.Action == Vault {
 			return []string{PlaceGround}
 		}
 		if r.Action == Identify {
