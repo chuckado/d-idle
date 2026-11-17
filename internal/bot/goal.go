@@ -904,7 +904,7 @@ func (r *Runner) target0(s *d2.Snapshot, c control) (int, bool) {
 	p := s.Player
 	switch c.spec.kind {
 	case goals.ReachLevel:
-		if r.goldFarmOn() {
+		if r.goldFarmOn() || r.boardFarming() {
 			if a, ok, stop := r.goldFarmTarget(s); stop {
 				return 0, false
 			} else if ok {

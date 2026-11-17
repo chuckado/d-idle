@@ -44,6 +44,9 @@ type DeskConfig struct {
 	Explain func(q Quest, c Chunk) (Readiness, bool)
 	// Class is the hero's class, for the legacy floor.
 	Class func() string
+	// Meter words the mode and its readiness meter (slice S6); it gets the stored mode and the derived status. Without
+	// it the view carries the mode only.
+	Meter func(mode string, st Status) *Meter
 	Now   func() time.Time
 	// Ctx bounds the asynchronous hand-in goroutines (the process); default Background.
 	Ctx context.Context
@@ -102,7 +105,8 @@ type View struct {
 	Difficulty string       `json:"difficulty,omitempty"`
 	Paused     bool         `json:"paused,omitempty"`
 	Mode       string       `json:"mode"`
-	ModeActs   bool         `json:"modeActs"` // false until slice S6 implements the modes; the choice is stored
+	ModeActs   bool         `json:"modeActs"` // the modes act (slice S6); true whenever the board is on
+	Meter      *Meter       `json:"meter,omitempty"`
 	AutoStart  AutoView     `json:"autoStart"`
 	Offers     []OfferView  `json:"offers"`
 	Quests     []QuestRow   `json:"quests"`
@@ -279,7 +283,10 @@ func (d *Desk) build() View {
 		v.Reason = "The quest board could not be read: " + err.Error()
 		return v
 	}
-	v.Enabled = true
+	v.Enabled, v.ModeActs = true, true
+	if d.cfg.Meter != nil {
+		v.Meter = d.cfg.Meter(v.Mode, status)
+	}
 	v.Difficulty = Difficulties[status.Diff]
 	plan, _, _ := st.Load()
 	busy := status.Active != nil
@@ -663,8 +670,7 @@ func (d *Desk) runHandIn(x *Exec, quest, chunk, k string) {
 	d.mu.Unlock()
 }
 
-// SetMode stores the between-chunks mode (train, idle, farm). Slice S6 gives it behaviour; until then it is
-// stored and echoed (View.ModeActs is false).
+// SetMode stores the between-chunks mode (train, idle, farm). The hero adopts it at the next safe moment (slice S6).
 func (d *Desk) SetMode(mode string) Reply {
 	x, st := d.exec()
 	if x == nil || st == nil {

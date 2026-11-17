@@ -39,7 +39,7 @@ func TestDeskStartRunHandIn(t *testing.T) {
 			r := newRig(t, bd.class, 6)
 			d := r.desk(nil)
 			v := d.View()
-			if !v.Enabled || len(v.Offers) == 0 || v.Mode != "train" || v.ModeActs {
+			if !v.Enabled || len(v.Offers) == 0 || v.Mode != "train" || !v.ModeActs {
 				t.Fatalf("view: %+v", v)
 			}
 			for _, o := range v.Offers {

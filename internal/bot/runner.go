@@ -188,6 +188,7 @@ type Runner struct {
 	merc           mercState            // sticky merc knowledge and chore backoff (resource.go)
 	drank          atomic.Int64         // potions drunk, counted from every EvPotion event (combat emits them live; the observer's own diff is off there)
 	playerCancelNs atomic.Int64         // clock of the last guard interrupt for a player command (playerDue)
+	parkedBoard    atomic.Bool          // quest board Idle mode: standing in town on purpose, the stall watchdog stays quiet (boardmode.go)
 	noTP           atomic.Bool          // the running task step has Constraints.NoTownPortal: no safety portal, no trip
 	farmMu         sync.Mutex           // guards farm
 	farm           farmProgress         // runs goal progress across farmStep restarts (farm.go)
