@@ -244,6 +244,7 @@
 | botcpulive | proposed | - | `docs/probes/bot-cpu-live-2026-11-16.md` | - |
 | vaultv2 | in-progress | - | `internal/vault`<br>`data/vault`<br>`docs/vault.md`<br>`docs/design/loot-vault-2026-11-16.md` | - |
 | quests2 | in-progress | - | `internal/questboard`<br>`data/questboard`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
+| botcpu2 | proposed | - | `internal/currency`<br>`internal/data/db.go`<br>`internal/bot/catalog.go`<br>`internal/watch/tallystrip.go`<br>`internal/watch/pprofapi.go`<br>`docs/probes/bot-cpu-fix-2026-11-16.md`<br>`internal/watch/serve.go`<br>`internal/watch/tallystrip_test.go`<br>`cmd/d2bot/ladder.go`<br>`docs/knobs.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -286,6 +287,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- e36453db0 11-16 23:34 `Merge agent/botcpu2: Merge branch 'main' into botcpu2` (botcpu2)
+- 2724bde25 11-16 23:33 `Merge branch 'main' into botcpu2` (-)
 - fe68b9807 11-16 23:28 `Merge agent/quests2: Merge branch 'main' into quests2` (quests2)
 - 511aec3a9 11-16 23:27 `Merge branch 'main' into quests2` (-)
 - 845438e37 11-16 23:22 `Merge agent/vaultv2: Merge branch 'main' into vaultv2` (vaultv2)
@@ -294,6 +297,4 @@
 - 93fb23f21 11-16 23:16 `Merge branch 'main' into vaultv1` (-)
 - 2c31eefaf 11-16 23:07 `Merge agent/pausemenufit: Merge branch 'main' into pausemenufit` (pausemenufit)
 - a0b01f790 11-16 23:06 `Merge branch 'main' into pausemenufit` (-)
-- 51d8a1840 11-16 22:52 `Merge agent/botcpu: Merge branch 'main' into botcpu` (botcpu)
-- 020724c2c 11-16 22:51 `Merge branch 'main' into botcpu` (-)
 <!-- statusgen:end -->
