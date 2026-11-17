@@ -78,6 +78,43 @@ type Chunk struct {
 	Minutes  [2]int   `json:"minutes"`
 	Risk     string   `json:"risk,omitempty"`
 	Meta     Meta     `json:"meta,omitempty"`
+
+	// The handler mapping (slice S7). Handler is the task-layer group the chunk runs (default: the quest's task
+	// id); Nodes are the step suffixes of that group the chunk runs in the field (a quest cut into chunks over one
+	// group must list them, a group of its own runs all but its hand-in); HandInStep is the suffix of the hand-in
+	// step ("reward" when empty). Unsupported is the reason no handler can run the chunk yet: the offer shows it
+	// and has no Start (never a dead button).
+	Handler     string   `json:"handler,omitempty"`
+	Nodes       []string `json:"nodes,omitempty"`
+	HandInStep  string   `json:"handInStep,omitempty"`
+	Unsupported string   `json:"unsupported,omitempty"`
+}
+
+// HandlerRef says which task-layer steps a chunk runs. All: every step of Group except the hand-in step; else
+// only Field. HandIn is the suffix of the hand-in step.
+type HandlerRef struct {
+	Group  string
+	All    bool
+	Field  []string
+	HandIn string
+}
+
+// HandlerOf resolves the handler of chunk c of q. The task id of the quest is the default group.
+func (q Quest) HandlerOf(c Chunk) HandlerRef {
+	g := c.Handler
+	if g == "" {
+		g = q.TaskID
+	}
+	if g == "" {
+		g = q.ID
+	}
+	h := c.HandInStep
+	if h == "" {
+		h = "reward"
+	}
+	// Over a shared group (several chunks, no group of its own) only the listed steps belong to the chunk.
+	shared := len(q.Chunks) > 1 && c.Handler == ""
+	return HandlerRef{Group: g, All: !shared && len(c.Nodes) == 0, Field: c.Nodes, HandIn: h}
 }
 
 // Meta is the meta currency column per difficulty (placeholders, U: tuned later, never a number in Go).
@@ -363,6 +400,14 @@ func (b *Board) validateQuest(q Quest) error {
 		}
 		if err := b.checkMeta(cat, c.Meta); err != nil {
 			return err
+		}
+		if c.HandInStep != "" && c.Ends != "handin" {
+			return fmt.Errorf("questboard: %s: handInStep needs ends handin", cat)
+		}
+		for _, n := range c.Nodes {
+			if n == "" {
+				return fmt.Errorf("questboard: %s: empty node name", cat)
+			}
 		}
 		for _, a := range c.After {
 			if !ids[a] || a == c.ID {
