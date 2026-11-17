@@ -523,7 +523,10 @@ export function mountVault(d) {
     const nx = cells[i + step];
     if (nx) { nx.focus(); e.preventDefault(); }
   });
-  selBtn.addEventListener('click', () => { if (S.sel.mode) S.sel.clear(); else S.sel.mode = true; drawBar(); drawList(); });
+  selBtn.addEventListener('click', () => {
+    if (S.sel.mode) S.sel.clear(); else { S.sel.mode = true; S.fopen = false; syncFilters(); } // the folded filter panel closes when selecting starts: on a phone it left no room for the list and the cost line
+    drawBar(); drawList();
+  });
   selAll.addEventListener('click', () => { S.sel.all(order()); drawBar(); drawList(); });
 
   // ---- presses ----
