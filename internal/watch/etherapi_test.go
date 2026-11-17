@@ -92,16 +92,17 @@ func TestEtherAPIFlow(t *testing.T) {
 // The POST routes sit behind the answer gate (token, JSON only); a missing wallet (loot.vault 0) is a read answer that says
 // enabled false and a 409 off on the POSTs, never a crash.
 func TestEtherAPIGateAndOff(t *testing.T) {
+	tok := strings.Repeat("k", 24)
 	count := 0
 	a, _ := etherSrv(t, &count)
 	gated := http.NewServeMux()
-	gated.Handle(UpgradeRoute, a.Upgrade(AnswerOptions{Token: "secret-secret-token"}))
+	gated.Handle(UpgradeRoute, a.Upgrade(AnswerOptions{Token: tok}))
 	if code, v := etherDo(gated, "POST", UpgradeRoute, "{}"); code != 401 || v["code"] != "token" {
 		t.Fatalf("no token: %d %v", code, v)
 	}
 	r := httptest.NewRequest("POST", UpgradeRoute, strings.NewReader("{}"))
 	r.Header.Set("Content-Type", "application/json")
-	r.Header.Set("Authorization", "Bearer secret-secret-token")
+	r.Header.Set("Authorization", "Bearer "+tok)
 	rec := httptest.NewRecorder()
 	gated.ServeHTTP(rec, r) // gate passes; the wallet is empty so the refusal is 402, not 401
 	if rec.Code != 402 {
