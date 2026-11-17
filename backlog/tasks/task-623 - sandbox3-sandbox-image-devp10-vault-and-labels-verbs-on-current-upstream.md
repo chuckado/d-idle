@@ -1,10 +1,11 @@
 ---
 id: TASK-623
 title: 'sandbox3: sandbox image devp10 (vault and labels verbs on current upstream)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T15:37:00Z'
+updated_date: '2026-11-17T16:57:00Z'
 labels:
   - docs
   - chore

@@ -266,7 +266,6 @@
 | vaultphone | proposed | - | `internal/watch/web/vault.js`<br>`tools/uishots.sh` | - |
 | morefit | proposed | - | `internal/watch/web/panels/orders/panel.css`<br>`tools/uishots/fixtures_menu.go` | - |
 | owbody | proposed | - | `docs/upstream/bodies/decomp37-open-wounds-body.md` | - |
-| sandbox3 | proposed | - | `docs/process/sandbox-devp10.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
