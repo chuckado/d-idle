@@ -73,6 +73,15 @@ func (r *Runner) newQuestBoard(b *questboard.Board, st *questboard.Store, hero s
 		Log:     func(msg string, kv ...any) { r.e.Log.Info(msg, kv...) },
 		Now:     r.e.Clock.Now,
 		Auto:    r.questAutoOptions(),
+		Ledger: func() questboard.Ledger {
+			r.qbMu.Lock()
+			f := r.qbLedger
+			r.qbMu.Unlock()
+			if f == nil {
+				return nil
+			}
+			return f()
+		},
 	})
 	if m, err := st.Mode(); err == nil {
 		rt.exec.SetMode(m)
@@ -85,6 +94,13 @@ func (r *Runner) newQuestBoard(b *questboard.Board, st *questboard.Store, hero s
 
 // QuestBoardMaker opens the board and the plan store of one hero (cmd/d2bot, per-hero file under the state directory).
 type QuestBoardMaker func(hero string) (*questboard.Board, *questboard.Store, error)
+
+// SetQuestLedger gives the board the account wallet (slice S10); the function may return nil while there is none.
+func (r *Runner) SetQuestLedger(f func() questboard.Ledger) {
+	r.qbMu.Lock()
+	r.qbLedger = f
+	r.qbMu.Unlock()
+}
 
 // SetQuestBoardMaker lets the runner build the board of the loaded hero by itself: the hero's name is only known from the
 // first snapshot, and a Character Select switch loads another hero (its plan file is <hero>.quests.json).

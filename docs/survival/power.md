@@ -14,7 +14,7 @@
 | Term | Original game (memory) | d2d backend (dump) | Used as |
 |---|---|---|---|
 | Max life, max mana | V `d2.Player` (24.8 fixed, read live many runs) | V (`player.life`, `dump_head_late.json`) | measured |
-| Resistances (fire, cold, light, poison) | stat ids U (`internal/d2/stats.go`) | V panel values; before or after the difficulty penalty is U (TASK-216) | derived |
+| Resistances (fire, cold, light, poison) | stat ids U (`internal/d2/stats.go`) | V panel values; before or after the difficulty penalty is U (TASK-216); cap is 75 + max-resist bonus and percent absorb is folded in (docs/research/resistorder.md) | derived |
 | Defence | stat 31 in the player stat vector: S (stat list is read for all stats; nothing read id 31 before) | `stats.defense` exists in `dump_head_late.json` (S: fixture, value semantics, Dexterity and buff share U); mapped to stat 31 now | measured when present, else default (`defence_default` flag) |
 | Block chance | stat 20 gear sum only: S | sandbox dump had no `gear` (docs/survival/herostats-2026-11-15.md); fork branch `sandbox-herostats` adds `gear` and `stats.hero.block` (shield base + class BlockFactor + gear + Dexterity, no skills; V as test arithmetic, U against the panel) | derived |
 | Weapon damage, to-hit, damage percent | stats 21/22/25/19: S (`internal/combat/melee.go`, drill R1 pending) | V live for an empty kit; with gear U (`docs/forkdbg.md`); mapped in `gearStats` since lab2-stats | derived; weapon skills need it (no weapon read: no estimate, `offence_weapon_unread`) |

@@ -615,6 +615,7 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 		if r.gateField(snap, t) {
 			return true
 		}
+		t.returnTo = r.zoneRecoverReturn(snap, t.returnTo)
 		if t.repair {
 			r.setWhy(WhyRepairTrip, "step", "returning to the field")
 		} else {

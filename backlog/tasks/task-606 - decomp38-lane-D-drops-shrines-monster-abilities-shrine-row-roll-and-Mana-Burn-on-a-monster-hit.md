@@ -1,10 +1,13 @@
 ---
 id: TASK-606
-title: 'decomp38: lane D drops/shrines/monster abilities: shrine row roll and Mana Burn on a monster hit'
-status: Proposed
+title: >-
+  decomp38: lane D drops/shrines/monster abilities: shrine row roll and Mana
+  Burn on a monster hit
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T10:03:00Z'
+updated_date: '2026-11-17T10:21:00Z'
 labels:
   - d2d
   - research
