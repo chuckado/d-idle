@@ -172,6 +172,12 @@ func (s *Store) update(f func(*Plan) error) error {
 // are validated and a second accepted chunk in the same difficulty is refused ("never two at once", design
 // 2.6). Repeating the same tap is a no-op.
 func (s *Store) Accept(quest, chunk string, diff int, mode string) error {
+	return s.AcceptIf(quest, chunk, diff, mode, nil)
+}
+
+// AcceptIf is Accept where a record for which finished returns true (a chunk that is done, kept as the
+// proof that the board ran it) no longer counts as running. A nil finished counts every record.
+func (s *Store) AcceptIf(quest, chunk string, diff int, mode string, finished func(Record) bool) error {
 	if diff < 0 || diff > 2 {
 		return fmt.Errorf("questboard: difficulty index %d out of range", diff)
 	}
@@ -185,6 +191,9 @@ func (s *Store) Accept(quest, chunk string, diff int, mode string) error {
 			}
 			if r.Quest == quest && r.Chunk == chunk {
 				return nil
+			}
+			if finished != nil && finished(r) {
+				continue
 			}
 			return fmt.Errorf("questboard: %s/%s is already accepted in %s", r.Quest, r.Chunk, r.Diff)
 		}
