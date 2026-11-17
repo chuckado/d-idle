@@ -44,6 +44,23 @@ type Plan struct {
 	Skipped  []SkipRecord `json:"skipped,omitempty"`
 	Auto     []AutoRecord `json:"autoStart,omitempty"`
 	Seen     []string     `json:"seen,omitempty"` // payoff toasts already shown
+	Mode     string       `json:"mode,omitempty"` // the between-chunks mode the player picked (S4 stores it, S6 acts on it)
+}
+
+// Modes are the between-chunks modes (user decision 2026-11-16); the default is Train.
+var Modes = []string{"train", "idle", "farm"}
+
+// DefaultMode is used while the player never picked one.
+const DefaultMode = "train"
+
+// ValidMode reports whether m is one of Modes.
+func ValidMode(m string) bool {
+	for _, x := range Modes {
+		if x == m {
+			return true
+		}
+	}
+	return false
 }
 
 func (p Plan) accepted(diff int, quest, chunk string) bool {
@@ -172,6 +189,12 @@ func (s *Store) update(f func(*Plan) error) error {
 // are validated and a second accepted chunk in the same difficulty is refused ("never two at once", design
 // 2.6). Repeating the same tap is a no-op.
 func (s *Store) Accept(quest, chunk string, diff int, mode string) error {
+	return s.AcceptIf(quest, chunk, diff, mode, nil)
+}
+
+// AcceptIf is Accept where a record for which finished returns true (a chunk that is done, kept as the
+// proof that the board ran it) no longer counts as running. A nil finished counts every record.
+func (s *Store) AcceptIf(quest, chunk string, diff int, mode string, finished func(Record) bool) error {
 	if diff < 0 || diff > 2 {
 		return fmt.Errorf("questboard: difficulty index %d out of range", diff)
 	}
@@ -185,6 +208,9 @@ func (s *Store) Accept(quest, chunk string, diff int, mode string) error {
 			}
 			if r.Quest == quest && r.Chunk == chunk {
 				return nil
+			}
+			if finished != nil && finished(r) {
+				continue
 			}
 			return fmt.Errorf("questboard: %s/%s is already accepted in %s", r.Quest, r.Chunk, r.Diff)
 		}
@@ -294,4 +320,24 @@ func (s *Store) checkIDs(quest, chunk string, diff int) error {
 	}
 	_, err := s.b.Chunk(quest, chunk)
 	return err
+}
+
+// Mode returns the stored mode, DefaultMode when none was picked.
+func (s *Store) Mode() (string, error) {
+	p, _, err := s.Load()
+	if err != nil {
+		return "", err
+	}
+	if p.Mode == "" {
+		return DefaultMode, nil
+	}
+	return p.Mode, nil
+}
+
+// SetMode stores the mode; an unknown one is an error naming it. Setting the stored mode again is a no-op write.
+func (s *Store) SetMode(m string) error {
+	if !ValidMode(m) {
+		return fmt.Errorf("questboard: unknown mode %q (train, idle or farm)", m)
+	}
+	return s.update(func(p *Plan) error { p.Mode = m; return nil })
 }

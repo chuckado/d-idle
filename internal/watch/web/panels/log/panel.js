@@ -33,8 +33,12 @@ export function mount(root, ctx) {
   });
   bar.append(...btns);
   wrap.append(bar, list, note);
+  // the Drops feed's way to the vault: the Items tab lists what was picked up, the vault page holds every recorded drop (docs/vault.md)
+  const vlink = el('a', 'd-btn', 'Ethereal Vault: every recorded drop');
+  vlink.href = '/watch/vault'; vlink.dataset.size = 'sm'; vlink.dataset.variant = 'ghost'; vlink.dataset.key = 'vault-link';
+  wrap.append(vlink);
   ctx.body.append(wrap);
-  function paintTabs() { btns.forEach((b, i) => { const on = TABS[i][0] === tab; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; }); }
+  function paintTabs() { vlink.hidden = tab !== 'items'; btns.forEach((b, i) => { const on = TABS[i][0] === tab; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; }); }
   function rows(v) {
     list.replaceChildren
       ? list.replaceChildren()

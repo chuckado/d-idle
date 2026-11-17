@@ -23,6 +23,7 @@ import (
 	"d2lod-bot/internal/leveler/townvendor"
 	"d2lod-bot/internal/loot"
 	"d2lod-bot/internal/nav"
+	"d2lod-bot/internal/questboard"
 	"d2lod-bot/internal/repair"
 	"d2lod-bot/internal/town"
 )
@@ -37,6 +38,7 @@ type runnerRef struct {
 	rep *repair.Controller        // the repair policy and request (repairwire.go); nil until newRepair
 	tw  atomic.Pointer[town.Town] // set by wireRepair, read by the gear readings
 	jc  *campaign.Controller      // the guided journey (journeywire.go); nil until wireJourney
+	qd  *questboard.Desk          // the quest board desk (questwire.go); nil until wireQuestBoard
 }
 
 // beat stamps the runner's watchdog heartbeat (a finished sub-step of a long restart); no-op before the runner exists.

@@ -15,3 +15,4 @@
           <span class="when"> "<time>"
           <span class="txt"> "picked up Short Staff (Cold Plains)"
       <p class="note">
+      <a class="d-btn" data-key="vault-link" data-size="sm" data-variant="ghost"> "Ethereal Vault: every recorded drop"

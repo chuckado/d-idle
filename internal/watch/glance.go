@@ -40,6 +40,9 @@ type GlanceView struct {
 	Health   GlanceHealth   `json:"health"`
 	Progress GlanceProgress `json:"progress"`
 	Journey  *GlanceJourney `json:"journey,omitempty"`
+	// Quest is the quest board's current chunk, step and NPC for the video card strip (slice S4); absent while the board
+	// is off or nothing is accepted.
+	Quest *GlanceQuest `json:"quest,omitempty"`
 	// Survival is the block of GET /api/survival (docs/survival/ledger.md, slice S-C) as the bot gave it, words only; absent
 	// while no source is bound (an old bot, S-C not merged).
 	Survival json.RawMessage `json:"survival,omitempty"`
@@ -153,6 +156,7 @@ type GlanceNextStep struct {
 type GlanceSources struct {
 	Needs    func() []GlanceNeed
 	Journey  func() (GlanceJourney, bool)
+	Quest    func() (GlanceQuest, bool)
 	Gear     func() (GlanceLight, bool)
 	Merc     func() (GlanceLight, bool)
 	Supplies func() (GlanceLight, bool)
@@ -279,6 +283,11 @@ func (h *Hub) Glance() GlanceView {
 		if j, ok := src.Journey(); ok {
 			j = cleanJourney(j)
 			v.Journey = &j
+		}
+	}
+	if src.Quest != nil {
+		if q, ok := src.Quest(); ok {
+			v.Quest = &q
 		}
 	}
 	return v

@@ -100,6 +100,7 @@ export function moreItems(rows) {
     { intent: 'farm_gold', label: farming ? 'Stop farming gold' : 'Farm gold', args: { on: !farming } },
     { intent: 'reset', label: 'Reset (leave the game and rejoin)', ask: true },
     { intent: 'characters', label: 'Characters (switch, create, delete)', go: '/watch/characters' }, // its own page (docs/charselect-ui.md)
+    { intent: 'vault', label: 'Ethereal Vault (every drop)', go: '/watch/vault' }, // its own page (docs/vault.md)
   ];
 }
 

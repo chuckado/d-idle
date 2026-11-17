@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"d2lod-bot/internal/campaign"
 	"d2lod-bot/internal/paths"
+	"d2lod-bot/internal/questboard"
 	"encoding/base64"
 	"errors"
 	"flag"
@@ -85,6 +86,7 @@ type ladderOptions struct {
 	repair        *repair.Controller   // the repair policy (repairwire.go); nil: none
 	farm          *goldfarm.Controller // the Farm gold order (repairwire.go); nil: none
 	journey       *campaign.Controller // the guided journey (journeywire.go); nil: none
+	quests        *questboard.Desk     // the quest board desk (questwire.go); nil: no routes
 	// riskFacts is the hero risk meter's reader (bot.Runner.RiskFacts); nil: no meter. monsters is the monster table
 	// for the bestiary; nil (no game tables): flavour-only cards.
 	riskFacts                              func(zone string) watch.RiskFacts
@@ -95,6 +97,7 @@ type ladderOptions struct {
 	supportKnobs                           func() any                            // the tuner's values for the support bundle (supportwire.go); nil: none
 	supportLayout                          paths.Layout                          // data directory layout of the support bundle's logs and saves
 	knobValue                              func(string) (float64, string, error) // the tuner's Value: the zone clear settings read through it
+	vaultRoot                              string                                // <data>/vaults, where the recorder keeps the hero vaults; empty: no Vault page routes (docs/vault.md)
 	explored                               watch.ExploredSource                  // the explored share of /api/hero (Runner.Explored); nil: none
 	heroStats                              watch.HeroStatsSource                 // the stats block of /api/hero (readywire.go); nil: none
 	awayMin, repeatCooldownMin, quietAfter int
@@ -306,7 +309,13 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		if stateDir != "" {
 			rig.Fun.LootRules = lootRulesAPI(stateDir, l.storeProfile(), l.knobValue)
 		}
+		if l.vaultRoot != "" {
+			if rig.Fun.Vault, err = vaultAPI(l.vaultRoot, vaultKnobOn(l.knobValue), func() string { return hub.Hero().Name }); err != nil {
+				return nil, nil, err
+			}
+		}
 		bindJourney(rig.Fun, l.journey)
+		bindQuests(rig.Fun, l.quests)
 		if src == nil {
 			src = hub // a person answers: the Hub never answers by itself
 		}
