@@ -178,6 +178,7 @@ cmd/d2bot/invwire.go  credit-runner  gearsets
 cmd/d2bot/invwire.go  credit-runner  tidy
 cmd/d2bot/invwire.go (your lines only)  credit-runner  botsell
 cmd/d2bot/journeywire.go  credit-runner  campaign1
+cmd/d2bot/ladder.go  credit-runner  botcpu2
 cmd/d2bot/ladder.go  credit-runner  exploredpct
 cmd/d2bot/ladder.go  credit-runner  gearsets
 cmd/d2bot/ladder.go  credit-runner  lootwireL4
@@ -251,6 +252,7 @@ data/onboarding/en.json  credit-runner  friendfb
 data/questboard  credit-runner  quests1
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
+data/vault  credit-runner  vaultv2
 deploy/d2d-container/entrypoint.sh  credit-runner  charsup
 deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 deploy/d2d-container/tester_image_test.go  credit-runner  charsup
@@ -267,9 +269,9 @@ docs/charselect.md  credit-runner  charselect
 docs/charselect.md  credit-runner  charsup
 docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/contracts/merc-policy.md  credit-runner  mercrevive2
-docs/d2d-vault-verbs.md  credit-runner  vaultv1
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vault
+docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv2
 docs/design/quest-board-2026-11-16.md  credit-runner  quests1
 docs/emu-image.md  credit-runner  emurebuild
 docs/exploredpct.md  credit-runner  exploredpct
@@ -298,6 +300,7 @@ docs/inventory-ui.md  credit-runner  charreq
 docs/inventory-ui.md  credit-runner  nopins
 docs/inventory-ui.md  credit-runner  uic2
 docs/inventory-ui.md  credit-runner  uic3
+docs/knobs.md  credit-runner  botcpu2
 docs/knobs.md  credit-runner  botinstant
 docs/knobs.md  credit-runner  botstuck
 docs/knobs.md  credit-runner  exploredpct
@@ -340,6 +343,7 @@ docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/probes/bot-cpu-2026-11-16.md  credit-runner  botcpu
+docs/probes/bot-cpu-fix-2026-11-16.md  credit-runner  botcpu2
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
 docs/probes/deploy-cockpit-2026-11-15.md  credit-runner  deploycockpit
 docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
@@ -480,6 +484,7 @@ docs/upstream/verifier-p04-2026-11-15.md  live-agent  verifyp04
 docs/upstream/verifier-p17-2026-11-15.md  credit-runner  verifyp17
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
 docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
+docs/vault.md  credit-runner  vaultv2
 docs/video-feed.md  credit-runner  videofeed
 docs/video-feed.md  credit-runner  videofeed2
 docs/video-feed.md  credit-runner  videofeed4
@@ -497,6 +502,7 @@ internal/bot/areametrics.go  credit-runner  intake
 internal/bot/areaskip_test.go  credit-runner  passagebounce
 internal/bot/areaskip_test.go  credit-runner  staletarget
 internal/bot/areaskip_test.go  pro-runner  bounce3
+internal/bot/catalog.go  credit-runner  botcpu2
 internal/bot/contracts.go  credit-runner  goldprio
 internal/bot/drought.go  credit-runner  freshstart
 internal/bot/exploredpct.go  credit-runner  exploredpct
@@ -623,10 +629,10 @@ internal/combat/packdrink_test.go  credit-runner  beltfix
 internal/combat/reach.go  credit-runner  maphistoryC
 internal/combat/safety.go  credit-runner  beltfix
 internal/combat/types.go  credit-runner  goldprio
+internal/currency  credit-runner  botcpu2
 internal/d2/merc.go  credit-runner  decomp30
 internal/d2/merc_test.go  credit-runner  decomp30
 internal/d2/stats.go  credit-runner  survB
-internal/d2dctl  credit-runner  vaultv1
 internal/d2dctl/item_verbs.go  credit-runner  itemverbs2
 internal/d2dctl/item_verbs_merc.go  credit-runner  uib9
 internal/d2dctl/item_verbs_merc_test.go  credit-runner  uib9
@@ -648,6 +654,7 @@ internal/danger  credit-runner  dangerfit2
 internal/danger/  credit-runner  survA
 internal/danger/areaunits.json  pro-runner  decomp28
 internal/danger/gapexport.go  credit-runner  survC
+internal/data/db.go  credit-runner  botcpu2
 internal/decide/firsts_act1.json  credit-runner  friendfb
 internal/decide/queue.go  credit-runner  qqueue
 internal/decide/queue_test.go  credit-runner  qqueue
@@ -821,6 +828,7 @@ internal/town/tidy_test.go  credit-runner  towntests
 internal/town/town.go  credit-runner  itemverbs2
 internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
+internal/vault  credit-runner  vaultv2
 internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/cardtext.go  credit-runner  friendfb
 internal/watch/charactersapi.go  credit-runner  charselect
@@ -902,6 +910,7 @@ internal/watch/pauseapi.go  credit-runner  pausefix
 internal/watch/pauseapi.go  credit-runner  uib1
 internal/watch/pauseapi_test.go  credit-runner  uib1
 internal/watch/pausefix_test.go  credit-runner  pausefix
+internal/watch/pprofapi.go  credit-runner  botcpu2
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
 internal/watch/resetapi.go  credit-runner  botreset
@@ -925,6 +934,7 @@ internal/watch/senses_test.go  credit-runner  maphistoryC
 internal/watch/senses_test.go  credit-runner  maphistoryD
 internal/watch/senses_test.go  credit-runner  maptrail
 internal/watch/senses_test.go  credit-runner  maptrail2
+internal/watch/serve.go  credit-runner  botcpu2
 internal/watch/serve.go  credit-runner  uis6
 internal/watch/serve.go  credit-runner  videofeed2
 internal/watch/skillsapi.go  credit-runner  skilltrees
@@ -933,6 +943,8 @@ internal/watch/skillsapi_test.go  credit-runner  skilltrees2
 internal/watch/skillsui.go  credit-runner  skilltrees
 internal/watch/survivalapi.go  credit-runner  survC
 internal/watch/survivalapi_test.go  credit-runner  survC
+internal/watch/tallystrip.go  credit-runner  botcpu2
+internal/watch/tallystrip_test.go  credit-runner  botcpu2
 internal/watch/testdata/  credit-runner  uifix1
 internal/watch/testdata/areamap/  credit-runner  uis6
 internal/watch/testdata/campaign  pro-runner  levelplan3

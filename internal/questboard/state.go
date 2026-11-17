@@ -39,15 +39,15 @@ func (t Tier) String() string { return [...]string{"none", "T3", "T1", "T2"}[t] 
 // Exact reports whether the tier may skip work or unlock a prerequisite (T1 or T2).
 func (t Tier) Exact() bool { return t >= TierSave }
 
-// Readiness is the word of the readiness model (slice S2). Unknown (the model is absent) never makes an
+// Word is the readiness word (slice S2, readiness.go). Unknown (the model is absent) never makes an
 // offer: the quest stays available (I: no offer without the model).
-type Readiness string
+type Word string
 
 const (
-	ReadyUnknown Readiness = ""
-	ReadySafe    Readiness = "safe"
-	ReadyRisky   Readiness = "risky"
-	ReadyTooHard Readiness = "too_hard"
+	ReadyUnknown Word = ""
+	ReadySafe    Word = "safe"
+	ReadyRisky   Word = "risky"
+	ReadyTooHard Word = "too_hard"
 )
 
 // Fact is what the quest reader says about one quest in one difficulty. S3 builds it from quest.Reader
@@ -85,7 +85,7 @@ type Input struct {
 	Diff   int
 	Facts  Facts
 	Chunks map[string]ChunkFact
-	Ready  map[string]Readiness // by ChunkKey
+	Ready  map[string]Word // by ChunkKey
 	Plan   Plan
 }
 
@@ -98,7 +98,7 @@ type ChunkView struct {
 	Step      int    // InProgress: index of the first unsatisfied step, else -1
 	StepName  string // Chunk.Steps[Step] when known
 	Why       string
-	Reason    Readiness
+	Reason    Word
 }
 
 // QuestView is the derived state of one quest.

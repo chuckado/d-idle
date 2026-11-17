@@ -1,10 +1,11 @@
 ---
 id: TASK-584
 title: 'vaultv1: vault verbs in the d2d fork and the d2dctl client'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T03:26:00Z'
+updated_date: '2026-11-17T04:27:00Z'
 labels:
   - d2d
   - feature

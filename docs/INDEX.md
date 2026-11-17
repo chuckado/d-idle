@@ -741,6 +741,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier2-p06-2026-11-15.md](upstream/verifier2-p06-2026-11-15.md): Verifier 2: P06 r4 recheck, a monster missile with no physical damage cannot be blocked (2026-11-15) (status: current, 2026-11-15 (card verifyp06b, TASK-496, Opus, singly; second pass after...)
 - [verifier3-p02-2026-11-15.md](upstream/verifier3-p02-2026-11-15.md): Verifier 3: P02 r3 recheck: the empty-path rule and the nondeterminism (2026-11-15) (status: current, 2026-11-15 (card verifyp02c, TASK-484, Opus; third pass after verifier2-p02-2026-11-15.md and...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
+- [vault.md](vault.md): Ethereal Vault store (internal/vault) and its file formats (status: BUILT offline (slice V2 of docs/design/loot-vault-2026-11-16.md). Additive and unused until V3 (rules...)
 - [video-feed.md](video-feed.md): Lossless delta frame feed for the watch video (card videofeed, 2026-11-15) (status: mounted behind the knob `watch.paletteFeed` (default OFF) by card videofeed2 (2026-11-16); not deployed....)
 - [viewer-fps.md](viewer-fps.md): Viewer game video at 12.5 to 25 fps (card viewerfps1, TASK-293, 2026-11-10)
 - [walksmooth.md](walksmooth.md): walksmooth: the stop-and-go walk (TASK-188) (status: offline fix merged-ready, NOT proven live. Tags: V verified (how stated), S read in code, U unverified.)
@@ -902,6 +903,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `probes/`
 
 - [bot-cpu-2026-11-16.md](probes/bot-cpu-2026-11-16.md): Bot CPU bursts in town walks (card botcpu, 2026-11-16) (status: partial. Offline profile only; the live repair-trip profile is a checklist (section 4). Trigger:...)
+- [bot-cpu-fix-2026-11-16.md](probes/bot-cpu-fix-2026-11-16.md): Bot CPU fixes after the live calm-window profile (2026-11-16) (status: current. Follows docs/probes/bot-cpu-live-2026-11-16.md (Ledger.load 30 percent, DB.IsA 14.5 percent). All...)
 - [bot-cpu-live-2026-11-16.md](probes/bot-cpu-live-2026-11-16.md): Bot CPU on the sandbox, live profile (card botcpulive, 2026-11-16) (status: partial. Calm-window profile captured (V); NO profile inside a burst (the built-in profiler is one-shot,...)
 - [classpacing.md](probes/classpacing.md): classpacing probe (status: see `docs/soaks/classpacing.md` (the result doc of TASK-147); scripts and per-minute data are in...)
 - [currency1.md](probes/currency1.md): Probe: currency slice 1, the Raven's Mark rows (TASK-63) (status: UNVERIFIED live, 2026-11-06. Offline checks passed; the live run was not started because Gate 2 seeds were...)

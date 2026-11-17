@@ -17,3 +17,8 @@ var Act1 []byte
 //
 //go:embed act2.json
 var Act2 []byte
+
+// Readiness is readiness.json (quests.readiness/1: dial lines, kit minimums, wording).
+//
+//go:embed readiness.json
+var Readiness []byte
