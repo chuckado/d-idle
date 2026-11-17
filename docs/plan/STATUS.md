@@ -242,6 +242,7 @@
 | pausemenufit | proposed | - | `internal/watch/web/pauseui.js`<br>`internal/watch/web/shell.css` | - |
 | palfeedflaky | proposed | - | `internal/watch/palfeed` | - |
 | botcpulive | proposed | - | `docs/probes/bot-cpu-live-2026-11-16.md` | - |
+| vaultv1 | proposed | - | `internal/d2dctl`<br>`docs/d2d-vault-verbs.md` | `fork-branch:didle/vault-verbs` |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -284,6 +285,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b1dd05d78 11-16 23:16 `Merge agent/vaultv1: Merge branch 'main' into vaultv1` (vaultv1)
+- 93fb23f21 11-16 23:16 `Merge branch 'main' into vaultv1` (-)
 - 2c31eefaf 11-16 23:07 `Merge agent/pausemenufit: Merge branch 'main' into pausemenufit` (pausemenufit)
 - a0b01f790 11-16 23:06 `Merge branch 'main' into pausemenufit` (-)
 - 51d8a1840 11-16 22:52 `Merge agent/botcpu: Merge branch 'main' into botcpu` (botcpu)
@@ -292,6 +295,4 @@
 - 92e27b85d 11-16 22:50 `Merge agent/vaultv0: Merge branch 'main' into vaultv0` (vaultv0)
 - 3c827471f 11-16 22:48 `Merge branch 'main' into task-582` (-)
 - 9fd2f6066 11-16 22:48 `Merge branch 'main' into vaultv0` (-)
-- ba3a37a72 11-16 22:47 `Merge agent/palfeedflaky: palfeedflaky: deterministic palfeed guard tests (main CI red)` (palfeedflaky)
-- 31d647688 11-16 22:46 `Merge branch 'main' into palfeedflaky` (-)
 <!-- statusgen:end -->

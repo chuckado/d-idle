@@ -114,6 +114,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [d2d-spike.md](d2d-spike.md): d2d feasibility spike (agent D2DSPIKE, 2026-10-30) (status: spike answered: d2d is the primary backend (ADR 0009, 2026-10-30; docs/plan/STATUS.md). Numbers here are...)
 - [d2d-tick-rate.md](d2d-tick-rate.md): d2d tick rate versus the 25 fps original (agent PROBES-D2D, 2026-10-30)
 - [d2d-town.md](d2d-town.md): Town layer on the d2d backend (agent D2DTOWN, 2026-10-30) (status: "Game.exe stays the acceptance target" is partly superseded: d2d is the product and game.exe the oracle;...)
+- [d2d-vault-verbs.md](d2d-vault-verbs.md): Vault verbs (d2d fork) and the d2dctl client, slice V1 (status: current, 2026-11-16 (task TASK-584). Design: `docs/design/loot-vault-2026-11-16.md`; V0 spike result:...)
 - [d2d-view.md](d2d-view.md): d2dview: watching the sped-up d2d bot (agent D2DVIEW, 2026-10-30) (status: demo ran 2026-10-30 16:18-16:33 EDT and was stopped; rerun `tools/d2dview-demo.sh --minutes 15 [--watch]`...)
 - [d2d-walk.md](d2d-walk.md): d2d end-to-end walk: cmd/d2dwalk (agent D2DWALK, 2026-10-30)
 - [d2d-wire.md](d2d-wire.md): Whole bot on d2d (agent D2DWIRE, 2026-10-30)
