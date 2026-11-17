@@ -3,7 +3,7 @@ id: TASK-613
 title: 'verifydecomp37: verifier of the decomp37 gear absorb and Open Wounds PRs'
 status: In Progress
 assignee:
-  - verifydecomp37
+  - credit-runner
 created_date: '2026-11-17T12:58:00Z'
 labels:
   - docs
