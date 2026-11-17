@@ -169,12 +169,15 @@ type Fun struct {
 	Characters *CharactersAPI
 	// Merc mounts the mercenary state and Revive mercenary routes (mercapi.go); set it before Serve, nil: no routes.
 	Merc *MercAPI
+	// Vault mounts the Ethereal Vault page and /api/vault (vaultapi.go, docs/vault.md); nil: no routes.
+	Vault *VaultAPI
 	// LootShadow mounts GET /api/lootrules/shadow (lootshadowapi.go); nil: no route.
 	LootShadow *LootShadowAPI
 	// LootRules mounts GET (viewer) and PUT (answer listener) /api/lootrules (lootrulesapi.go); nil: no routes.
 	LootRules *LootRulesAPI
 	// GoldFarm mounts the Farm gold order routes (goldfarmapi.go); set it before Serve, nil: no routes.
-	GoldFarm *GoldFarmAPI
+	GoldFarm   *GoldFarmAPI
+	QuestBoard *QuestsAPI // the quest board routes (questsapi.go); nil: none
 	// Onboarding is the welcome card, first-30-minutes checklist and reconnect data (onboarding.go); always set by NewFun.
 	Onboarding *Onboarding
 	Campaign   *CampaignAPI // the guided journey (campaign.go); nil: no routes
@@ -747,6 +750,11 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 		m.Handle(SupportDownloadRoute, f.Support.Handler())
 		m.Handle(SupportFileRoute, f.Support.Handler())
 	}
+	if f.Vault != nil {
+		for _, p := range VaultRoutes {
+			m.Handle(p, f.Vault.Handler())
+		}
+	}
 	if f.Characters != nil {
 		m.Handle(CharactersRoute, f.Characters.Handler())
 		m.Handle(CharactersRulesRoute, f.Characters.RulesHandler())
@@ -773,6 +781,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	}
 	if f.GoldFarm != nil {
 		m.Handle(GoldFarmRoute, f.GoldFarm.Handler())
+	}
+	if f.QuestBoard != nil {
+		m.Handle(QuestsRoute, f.QuestBoard.Handler())
 	}
 	if f.Campaign != nil {
 		m.Handle(CampaignRoute, f.Campaign.Handler())
@@ -854,6 +865,11 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 		m.Handle(SupportBundleRoute, f.Support.BundleHandler(o))
 		m.Handle(SupportSendRoute, f.Support.SendHandler(o))
 	}
+	if f.Vault != nil {
+		for _, p := range VaultPostRoutes {
+			m.Handle(p, f.Vault.PostHandler(o, p))
+		}
+	}
 	if f.Characters != nil {
 		for _, p := range CharactersPostRoutes {
 			m.Handle(p, f.Characters.PostHandler(o, p))
@@ -879,6 +895,9 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	}
 	if f.GoldFarm != nil {
 		m.Handle(GoldFarmRoute, f.GoldFarm.PostHandler(o))
+	}
+	if f.QuestBoard != nil {
+		m.Handle(QuestsPrefix, f.QuestBoard.PostHandler(o))
 	}
 	if f.Campaign != nil {
 		m.Handle(CampaignIntentRoute, f.Campaign.PostHandler(o))

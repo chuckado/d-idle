@@ -38,9 +38,10 @@ type Filter struct {
 	Eth        *bool
 	Identified *bool
 	Pinned     *bool
-	Name       string  // case-insensitive substring
-	States     []State // default: live states
-	Order      string  // "new" (default), "old", "value" (highest first)
+	CodePrefix []string // any of: the item code starts with one (runes r01..r33 by "r0","r1","r2","r3")
+	Name       string   // case-insensitive substring
+	States     []State  // default: live states
+	Order      string   // "new" (default), "old", "value", "ilvl", "quality" (highest first), "name" (A to Z)
 	Offset     int
 	Limit      int // 0 = all
 }
@@ -84,6 +85,9 @@ func (s *Store) Query(f Filter) ([]Rec, int) {
 		if f.Pinned != nil && r.Pin != *f.Pinned {
 			return false
 		}
+		if len(f.CodePrefix) > 0 && !hasPrefix(f.CodePrefix, r.Code) {
+			return false
+		}
 		return name == "" || strings.Contains(strings.ToLower(r.Name), name)
 	}
 	if cand == nil {
@@ -106,6 +110,28 @@ func (s *Store) Query(f Filter) ([]Rec, int) {
 		sort.SliceStable(hit, func(i, j int) bool {
 			if hit[i].Value != hit[j].Value {
 				return hit[i].Value > hit[j].Value
+			}
+			return hit[i].seq > hit[j].seq
+		})
+	case "ilvl":
+		sort.SliceStable(hit, func(i, j int) bool {
+			if hit[i].Ilvl != hit[j].Ilvl {
+				return hit[i].Ilvl > hit[j].Ilvl
+			}
+			return hit[i].seq > hit[j].seq
+		})
+	case "quality":
+		sort.SliceStable(hit, func(i, j int) bool {
+			if hit[i].Quality != hit[j].Quality {
+				return hit[i].Quality > hit[j].Quality
+			}
+			return hit[i].seq > hit[j].seq
+		})
+	case "name":
+		sort.SliceStable(hit, func(i, j int) bool {
+			a, b := strings.ToLower(hit[i].Name), strings.ToLower(hit[j].Name)
+			if a != b {
+				return a < b
 			}
 			return hit[i].seq > hit[j].seq
 		})
@@ -164,6 +190,15 @@ func hasInt(l []int, v int) bool {
 	}
 	return false
 }
+func hasPrefix(l []string, v string) bool {
+	for _, x := range l {
+		if strings.HasPrefix(v, x) {
+			return true
+		}
+	}
+	return false
+}
+
 func hasStr(l []string, v string) bool {
 	for _, x := range l {
 		if x == v {
@@ -179,4 +214,23 @@ func hasState(l []State, v State) bool {
 		}
 	}
 	return false
+}
+
+// Facets counts the live records by item type (every member of the base type chain) for the filter chips.
+type Facets struct {
+	Types map[string]int
+}
+
+func (s *Store) Facets() Facets {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	f := Facets{Types: map[string]int{}}
+	for t, l := range s.ix.chain {
+		for _, p := range l {
+			if s.recs[p].State.Live() {
+				f.Types[t]++
+			}
+		}
+	}
+	return f
 }
