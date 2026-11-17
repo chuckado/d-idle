@@ -67,6 +67,23 @@ func serve(addr, class string) error {
 	view := sim.Hub.ViewHandler()
 	m := http.NewServeMux()
 	m.Handle("/", view)
+	// ether=1 on the page: the Hero tile also carries the wallet chip (watch.HeroView.Ether), as with loot.vault on
+	m.HandleFunc(watch.HeroRoute, func(w http.ResponseWriter, r *http.Request) {
+		ref, _ := url.Parse(r.Referer())
+		if ref == nil || ref.Query().Get("ether") != "1" {
+			view.ServeHTTP(w, r)
+			return
+		}
+		rec := httptest.NewRecorder()
+		view.ServeHTTP(rec, r)
+		var hv map[string]any
+		if json.Unmarshal(rec.Body.Bytes(), &hv) != nil {
+			view.ServeHTTP(w, r)
+			return
+		}
+		hv["ether"] = "Ether 35"
+		js(w, hv)
+	})
 	// no live event stream: headless Chrome's virtual time waits for the network to go idle, and an open SSE request
 	// never does; the pages fall back to their polls
 	m.HandleFunc("/api/events", http.NotFound)

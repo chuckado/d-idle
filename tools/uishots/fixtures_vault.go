@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"d2lod-bot/internal/ether"
 	"d2lod-bot/internal/vault"
 	"d2lod-bot/internal/watch"
 )
@@ -30,13 +31,23 @@ type vaultSet struct {
 	n, capacity, shrinkTo int
 	on                    bool
 	none                  bool
+	// the Ether wallet of the page (the eth-* states): the balance left after buying `owned` steps. eth false: no wallet, the old placeholder
+	eth            bool
+	balance, owned int
 }
 
 var vaultModes = map[string]vaultSet{
 	"pop": {n: 140, capacity: 400, on: true}, "warn": {n: 140, capacity: 160, on: true}, "full": {n: 140, capacity: 140, on: true},
 	"over": {n: 140, capacity: 400, shrinkTo: 100, on: true}, "empty": {n: 0, capacity: 400, on: true}, "none": {none: true, on: true},
 	"off": {n: 140, capacity: 400, on: false}, "big": {n: 1200, capacity: 2400, on: true},
+	// the wallet states (V7b): enough Ether to buy, short, one step owned (the refund fits), one step owned and the vault too full for the lower tier, every step owned
+	"eth": {n: 140, on: true, eth: true, balance: 35}, "eth-short": {n: 140, on: true, eth: true, balance: 5},
+	"eth-owned": {n: 140, on: true, eth: true, balance: 15, owned: 1}, "eth-nofit": {n: 450, on: true, eth: true, balance: 15, owned: 1},
+	"eth-max": {n: 140, on: true, eth: true, balance: 12, owned: 6},
 }
+
+// vaultEthers holds the wallet of each wallet state, keyed like vaultAPIs; they answer /api/ether and the two POST routes.
+var vaultEthers = map[string]*watch.EtherAPI{}
 
 // vaultName makes the i-th drop: a base and a quality that cycle, with a few fixed long and awkward names among them.
 func vaultItem(i int, now time.Time) vault.Item {
@@ -98,8 +109,35 @@ func newVaultFor(mode string, dir string) *watch.VaultAPI {
 	if set.shrinkTo > 0 {
 		capacity = 1000
 	}
+	var wal *ether.Wallet
+	var s *vault.Store
+	if set.eth {
+		var err error
+		if wal, err = ether.Open(dir+"-ether", ether.Options{Tiers: tiers, Content: func() int { return s.Status().Count }}); err != nil {
+			log.Fatalf("uishots: ether %s: %v", mode, err)
+		}
+		earned := set.balance
+		for i := 0; i < set.owned; i++ {
+			earned += tiers.Steps[i].Price
+		}
+		for i := 0; earned > 0; i++ { // the hook pays at most 100 per quest
+			n := min(earned, 100)
+			if _, err := wal.Earn("quest", fmt.Sprintf("q%d", i), "normal", n); err != nil {
+				log.Fatalf("uishots: ether %s earn: %v", mode, err)
+			}
+			earned -= n
+		}
+		for i := 0; i < set.owned; i++ {
+			if _, err := wal.Upgrade(""); err != nil {
+				log.Fatalf("uishots: ether %s upgrade: %v", mode, err)
+			}
+		}
+		capacity = wal.Capacity(0)
+		desk.Owned = func() []string { o, _ := wal.OwnedSteps(); return o }
+		vaultEthers[mode] = &watch.EtherAPI{W: wal}
+	}
 	now := time.Now()
-	s, err := vault.OpenHero(dir, "Sorc", vault.Options{Capacity: func() int { return capacity }, NoSync: true})
+	s, err = vault.OpenHero(dir, "Sorc", vault.Options{Capacity: func() int { return capacity }, NoSync: true})
 	if err != nil {
 		log.Fatalf("uishots: vault %s: %v", mode, err)
 	}
@@ -162,6 +200,26 @@ func mountVault(m *http.ServeMux) {
 	for _, p := range watch.VaultRoutes {
 		m.Handle(p, h)
 	}
+	m.Handle(watch.EtherRoute, etherFixture(func(a *watch.EtherAPI) http.Handler { return a.Get() }))
+	m.Handle(watch.UpgradeRoute, etherFixture(func(a *watch.EtherAPI) http.Handler { return a.Upgrade(watch.AnswerOptions{}) }))
+	m.Handle(watch.DowngradeRoute, etherFixture(func(a *watch.EtherAPI) http.Handler { return a.Downgrade(watch.AnswerOptions{}) }))
+}
+
+// etherFixture routes the wallet calls of the page to the wallet of its state (the Referer's vault=); a state without a wallet answers
+// the way a bot with loot.vault 0 does (enabled false, and 409 off on a press).
+func etherFixture(h func(*watch.EtherAPI) http.Handler) http.Handler {
+	vaultFixture() // builds the states
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		mode := "pop"
+		if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("vault") != "" {
+			mode = ref.Query().Get("vault")
+		}
+		a := vaultEthers[mode]
+		if a == nil {
+			a = &watch.EtherAPI{}
+		}
+		h(a).ServeHTTP(w, r)
+	})
 }
 
 // vaultDefect is, per name, the one defect put back on the Vault page. The fit pages vaultdefect-NAME must FAIL with the verdict
@@ -176,6 +234,7 @@ func init() {
 	defectCSS["vault-sheet"] = `.vt-sheet-card { max-block-size: 120px !important; overflow: hidden !important; }`
 	vaultJS["vault-noname"] = `new MutationObserver(function () { document.querySelectorAll('.vt [aria-label]').forEach(function (e) { e.removeAttribute('aria-label'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
 	vaultJS["vault-enabled"] = `new MutationObserver(function () { document.querySelectorAll('[data-key="upgrade"]').forEach(function (e) { e.removeAttribute('aria-disabled'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
+	vaultJS["vault-ethenabled"] = `new MutationObserver(function () { document.querySelectorAll('[data-key="upgrade"]').forEach(function (e) { e.setAttribute('aria-disabled', 'false'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
 }
 
 var vaultJS = map[string]string{}
