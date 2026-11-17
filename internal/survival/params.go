@@ -65,6 +65,7 @@ type Params struct {
 	YieldMaxWeight      float64             `json:"yieldMaxWeight"`
 	StarveCasts         float64             `json:"starveCasts"`
 	StarveValueMul      float64             `json:"starveValueMul"`
+	FreshNeedsMerc      bool                `json:"freshNeedsMerc"`
 	Archetypes          map[string]ArchTune `json:"archetypes"`
 	Dials               map[string]StepDown `json:"dials"`
 	Tags                map[string]string   `json:"tags"`
