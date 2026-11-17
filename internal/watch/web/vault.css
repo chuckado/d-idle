@@ -49,8 +49,8 @@
 
   .vt-bar { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-2); padding: var(--d-sp-1) var(--d-sp-4); border-block-end: var(--d-bw) solid var(--d-line); }
   .vt-bar .d-btn { align-items: center; }
-  /* a short window: the selection bar (Keep, Reveal, Sell, Pin, Discard: six rows on a phone) scrolls inside itself, so the header stays and the list keeps room */
-  @media (max-height: 699px) { .vt-bar { max-block-size: 40dvh; overflow-y: auto; } }
+  /* a short window: the selection bar (Keep, Reveal, Sell, Pin, Discard: six rows on a phone) becomes one row that scrolls sideways, so the header stays and the list keeps room */
+  @media (max-height: 699px) { .vt-bar { flex-wrap: nowrap; overflow-x: auto; } .vt-bar > * { flex: none; } }
   .vt-seltext { font-weight: 650; }
   .vt-acts { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
   .vt-keeprow { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-2); padding: var(--d-sp-1) var(--d-sp-4); background: var(--d-state-bg-info); border-block-end: var(--d-bw) solid var(--d-line); }
