@@ -5,7 +5,7 @@ status: Proposed
 assignee:
   - credit-runner
 created_date: '2026-11-17T06:29:00Z'
-updated_date: '2026-11-17T06:37:00Z'
+updated_date: '2026-11-17T10:24:00Z'
 labels:
   - bot
   - feature
@@ -24,6 +24,7 @@ owns:
   - "docs/probes/survival-ab-reask-2026-11-17.md"
 exclusive: []
 contracts: []
+result: "Cost events (chicken, death, merc death, potion crisis) re-ask the zone model (bot.zoneModel 1 only, default 0 unchanged). Paladin 8-seed A/B PASS (XP 1.005, deaths 1/0, chickens 15/2); holdout FAIL on seed 149 (chickens from the recovery path, not reached by the re-ask); Sorceress inconclusive. Not flipped. Verified on lockstep d2d, not game.exe."
 ---
 
 ## Description
@@ -38,5 +39,5 @@ Why: TODO. Done when: TODO.
 <!-- AC:BEGIN -->
 - [x] #1 Cost event (chicken, death, merc death, potion crisis) makes the next pick re-ask the zone model, rate limited, logged as zone reask
 - [x] #2 Tests on two classes: leave after chicken, no flapping, knob off identical, seed-149 pattern leaves after at most 2
-- [ ] #3 Holdout seeds and Paladin 8-seed A/B rerun with abreport, doc written
+- [x] #3 Holdout seeds and Paladin 8-seed A/B rerun with abreport, doc written
 <!-- AC:END -->
