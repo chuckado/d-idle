@@ -248,6 +248,7 @@
 | vaultv4 | proposed | - | `internal/watch/vaultapi.go`<br>`internal/watch/vaultapi_test.go`<br>`internal/watch/vaultui_test.go`<br>`internal/watch/web/vault.html`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.json`<br>`internal/watch/testdata/vault`<br>`tools/uishots/fixtures_vault.go`<br>`docs/vault.md`<br>`internal/vault/index.go`<br>`internal/watch/funwire.go`<br>`internal/watch/testdata/vault_logic.mjs`<br>`internal/watch/testdata/logpanel`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/panels/orders/panel.js`<br>`internal/watch/web/panels/log`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/vaultpage.go`<br>`cmd/d2bot/vaultpage_test.go`<br>`cmd/d2bot/vaultwire.go`<br>`cmd/d2bot/d2dbackend.go`<br>`tools/uishots.sh`<br>`tools/uishots/fit.go`<br>`tools/uishots/fit.js`<br>`tools/uishots/fit_char_test.go`<br>`tools/uishots/fixtures.go`<br>`tools/uishots/fixtures_overlay.go`<br>`tools/uishots/serve.go`<br>`docs/design/loot-vault-2026-11-16.md` | - |
 | vaultv3 | in-progress | - | `internal/loot/vault.go`<br>`internal/loot/vault_test.go`<br>`internal/lootrules/vaultpreset.go`<br>`internal/lootrules/vaultpreset_test.go`<br>`cmd/d2bot/vaultwire.go`<br>`docs/vault.md`<br>`docs/lootrules.md`<br>`docs/design/loot-vault-2026-11-16.md`<br>`docs/knobs.md`<br>`internal/loot/pickup.go`<br>`internal/loot/loot.go`<br>`internal/loot/lootshadow.go`<br>`internal/lootrules/types.go`<br>`internal/lootrules/parse.go`<br>`internal/lootrules/eval.go`<br>`internal/lootrules/plain.go`<br>`internal/lootrules/schema.go`<br>`internal/env/tuning_loot.go`<br>`cmd/d2bot/d2dwire.go` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
+| quests4 | in-progress | - | `internal/questboard`<br>`internal/watch/questsapi.go`<br>`internal/watch/questsapi_test.go`<br>`internal/watch/glance.go`<br>`internal/watch/funwire.go`<br>`internal/watch/testdata/quests`<br>`internal/bot/runner.go`<br>`cmd/d2bot/survivalwire.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/questwire.go`<br>`cmd/d2bot/questwire_test.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_test.go`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
@@ -289,6 +290,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 3de5eeed7 11-17 01:14 `Merge agent/quests4: Merge branch 'main' into quests4` (quests4)
+- 08d2a0f92 11-17 01:13 `Merge branch 'main' into quests4` (-)
 - 3b40bbb8c 11-17 01:08 `Merge agent/vaultv4: Ethereal Vault V4: read API and /watch/vault page (filters, grid and list, multi-select, pin/unpin/discard, capacity meter, entry points)` (vaultv4)
 - 194a9f499 11-17 01:07 `Merge branch 'main' into vaultv4` (-)
 - 68632e714 11-17 00:38 `Merge origin/main into vaultv4: share V3's per-hero Store with the Vault page` (TASK-588)
@@ -297,6 +300,4 @@
 - ebde85899 11-17 00:29 `Merge agent/survtune3: survtune3: 8-seed rerun, holdout and Sorceress screen, recommendation (not yet)` (survtune3)
 - b0127c811 11-17 00:28 `Merge branch 'main' into survtune` (-)
 - 74aa84a91 11-17 00:11 `Merge agent/quests3: Merge branch 'main' into quests3` (quests3)
-- 212add0db 11-17 00:10 `Merge branch 'main' into quests3` (-)
-- 736ec54f7 11-16 23:50 `Merge origin/main into survtune3 (test-characters rows kept)` (-)
 <!-- statusgen:end -->

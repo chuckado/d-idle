@@ -486,7 +486,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [quest-givers.md](quest-givers.md): Quest givers in town (TASK-243) (status: decision logic, table and fixtures built and tested offline; the live part is U (checklist below). Tags:...)
 - [quest-hints.md](quest-hints.md): Quest hints in town (TASK-197) (status: built and tested offline (fixtures, no game). Tags: V verified by the tests named, SRC read in the repo,...)
 - [quest.md](quest.md): Quest layer: internal/quest (agent QUESTS, offline)
-- [questboard.md](questboard.md): Quest board model (slice S1) and executor (slice S3) (status: S1 model built and tested offline (card quests1, TASK-577); S3 executor built and tested offline behind...)
+- [questboard.md](questboard.md): Quest board model (slice S1), executor (S3) and API (S4) (status: S1 model built and tested offline (card quests1, TASK-577); S3 executor built and tested offline behind...)
 - [questmem.md](questmem.md): In-memory quest and waypoint data (agent MEMQUEST, V-05)
 - [readiness.md](readiness.md): Readiness model: is this hero ready for that area (status: slice A of the friends beta (cards TASK-217 area table, TASK-218 model, TASK-220 meter feed in part)....)
 - [recovery.md](recovery.md): Recovery phase (broke character)
