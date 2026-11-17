@@ -463,8 +463,8 @@ vault-keeping-light watch/vault?theme=light&vault=keeping
 vault-keeping-list watch/vault?theme=dark&vault=keeping [data-key=view-toggle] .vt-cell,[data-key=view-toggle]
 vault-keepfull watch/vault?theme=dark&vault=keepfull
 vault-kept watch/vault?theme=dark&vault=keeping ?[data-key=filters-toggle]|[data-key=chip-kept] [data-key=chip-kept]
-vault-keep-press watch/vault?theme=dark&vault=keeppress [data-key=select-toggle]|.vt-cell|[data-key=keep]
-vault-keep-dead watch/vault?theme=dark&vault=keepdead [data-key=select-toggle]|.vt-cell|[data-key=keep]
+vault-keep-press watch/vault?theme=dark&vault=keeppress [data-key=select-toggle]|.vt-cell|[data-key=keep] [data-key=select-toggle]
+vault-keep-dead watch/vault?theme=dark&vault=keepdead [data-key=select-toggle]|.vt-cell|[data-key=keep] [data-key=select-toggle]
 vault-menu-entry watch?first=0&theme=dark&needs=0 #btn-more [data-key=vault-open]
 vault-more-entry watch?first=0&theme=dark&needs=0 [data-key=verb-more] [data-key=more-vault]
 vaultdefect-clip watch/vault?theme=dark&vault=pop&defect=vault-clip
