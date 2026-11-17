@@ -43,6 +43,8 @@ type zoneState struct {
 	noted  string // merc note already logged
 	failed string // last error logged
 	reask  zoneReask
+	burn   map[int]zoneBurn // zones that just cost the hero something (zonerecover)
+	recov  map[int]zoneHold // answers of the recovery/return questions, kept for recoverHold
 }
 
 // Cost-event re-ask (card survreask). A chicken, a death, a merc death or a potion crisis feeds the ledger at once, but
@@ -113,7 +115,11 @@ func (r *Runner) zonePotion() {
 	z.reask.pots = keep
 	z.mu.Unlock()
 	if crisis {
-		r.zoneCost("potion_crisis")
+		area := 0
+		if ls := r.latest(); ls != nil && ls.Player != nil {
+			area = ls.Player.Area
+		}
+		r.zoneCostAt("potion_crisis", area)
 	}
 }
 
@@ -281,4 +287,135 @@ func splitLines(s string) []string {
 		s = s[i+1:]
 	}
 	return out
+}
+
+// Recovery and return decisions (card survrecover). A chicken, death or merc death sends the bot through town and, with
+// little gold, through the gold-farm recovery; neither path reaches Plan.Pick, so the model never saw the zone that had
+// just hurt the hero (holdout seed 149: the return portal took him straight back to Dark Wood). The two places that
+// choose where to go back to (the trip's return portal and the recovery farm area) now ask zoneRecover when the zone
+// they would use cost the hero something within burnWindow. The model's answer stands for recoverHold per zone, so two
+// asks in a row never flap; any error or silence leaves the legacy choice.
+const (
+	burnWindow  = 15 * time.Minute
+	recoverHold = 5 * time.Minute
+)
+
+type zoneBurn struct {
+	at     time.Time
+	reason string
+}
+
+type zoneHold struct {
+	until  time.Time
+	choice int
+}
+
+// zoneCostAt is zoneCost that also remembers the zone the event happened in.
+func (r *Runner) zoneCostAt(reason string, area int) {
+	if r.e == nil || !r.zoneModelOn() {
+		return
+	}
+	if area != 0 && !r.d.Plan.IsTown(area) {
+		z := &r.zst
+		z.mu.Lock()
+		if z.burn == nil {
+			z.burn = map[int]zoneBurn{}
+		}
+		z.burn[area] = zoneBurn{at: r.e.Clock.Now(), reason: reason}
+		z.mu.Unlock()
+	}
+	r.zoneCost(reason)
+}
+
+// zoneBurned is the reason of a cost event in area within burnWindow ("" when none or the model is off).
+func (r *Runner) zoneBurned(area int) string {
+	if !r.zoneModelOn() {
+		return ""
+	}
+	z := &r.zst
+	z.mu.Lock()
+	defer z.mu.Unlock()
+	if b, ok := z.burn[area]; ok && r.e.Clock.Now().Sub(b.at) < burnWindow {
+		return b.reason
+	}
+	return ""
+}
+
+// zoneRecover answers "go back to want?" among cands (area ids, want included): want when the zone is clean, the model
+// is off or fails, else the model's choice (which may still be want). Read-only: the ledger already holds the event.
+func (r *Runner) zoneRecover(s *d2.Snapshot, want int, cands []int, via string) int {
+	reason := r.zoneBurned(want)
+	if reason == "" || s == nil || s.Player == nil {
+		return want
+	}
+	now := r.e.Clock.Now()
+	z := &r.zst
+	z.mu.Lock()
+	if h, ok := z.recov[want]; ok && now.Before(h.until) {
+		z.mu.Unlock()
+		return h.choice
+	}
+	z.mu.Unlock()
+	diff := difficultyName(s.Player.Difficulty)
+	potions := -1
+	if healing, _, known := r.beltAndInv(s); known {
+		potions = healing
+	}
+	zc := make([]ZoneCand, 0, len(cands))
+	for _, a := range cands {
+		zc = append(zc, ZoneCand{Area: a})
+	}
+	v, err := r.d.ZoneDecide(s, s.Player.Area, diff, potions, r.zoneDial(), zc)
+	if err != nil {
+		z.mu.Lock()
+		first := z.failed != err.Error()
+		z.failed = err.Error()
+		z.mu.Unlock()
+		if first {
+			r.e.Log.Warn("zone recover: error, the legacy choice stands", "err", err)
+		}
+		return want
+	}
+	choice := want
+	for _, a := range cands {
+		if a == v.Area && !v.Fresh {
+			choice = a
+		}
+	}
+	z.mu.Lock()
+	if z.recov == nil {
+		z.recov = map[int]zoneHold{}
+	}
+	z.recov[want] = zoneHold{until: now.Add(recoverHold), choice: choice}
+	z.mu.Unlock()
+	act := "return"
+	if choice != want {
+		act = "alternative"
+	}
+	r.e.Log.Info(fmt.Sprintf("zone recover: reason=%s via=%s area %d margin=%s k %.2f choice %d (%s)", reason, via, want, v.Margin, v.K, choice, act))
+	return choice
+}
+
+// zoneRecoverReturn is zoneRecover for a trip's return portal: the candidates are the plan's zones this hero may enter.
+func (r *Runner) zoneRecoverReturn(s *d2.Snapshot, want int) int {
+	if want == 0 || r.zoneBurned(want) == "" || s == nil || s.Player == nil || r.gearVerdict(s).Gated || r.kitGateActive(s) {
+		return want // a gated hero has only the safe field: the gates decide
+	}
+	p := s.Player
+	t := r.e.Tune.Bot
+	ex := map[int]bool{}
+	for a := range r.avoidedNow() {
+		ex[a] = true
+	}
+	r.guardedAreas(s, ex)
+	o := PickOptions{Margin: t.LevelMargin, Slack: t.LeaveSlack, Acts: r.allowedActs(s), Exclude: ex, FullKit: r.fullKit(s), Melee: MeleeTank(p.Class), Class: planClass(p.Class), Merc: false}
+	cands := []int{want}
+	seen := map[int]bool{want: true}
+	for _, st := range r.d.Plan.eligible(difficultyName(p.Difficulty), p.Level, o, false) {
+		if !seen[st.Area] && st.entry(o)+o.Margin <= p.Level {
+			seen[st.Area] = true
+			cands = append(cands, st.Area)
+		}
+	}
+	return r.zoneRecover(s, want, cands, "return")
 }
