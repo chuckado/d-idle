@@ -8,6 +8,10 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- survtune3: 8-seed rerun, holdout and Sorceress screen, recommendation (not yet) <!--sg:agent/survtune3-->
+- Merge branch 'main' into quests3 <!--sg:agent/quests3-->
+- Merge branch 'main' into TASK-589 <!--sg:agent/vaultv3-->
+- Merge branch 'main' into botcpu2 <!--sg:agent/botcpu2-->
 - Merge branch 'main' into quests2 <!--sg:agent/quests2-->
 - Merge branch 'main' into vaultv2 <!--sg:agent/vaultv2-->
 - Merge branch 'main' into vaultv1 <!--sg:agent/vaultv1-->

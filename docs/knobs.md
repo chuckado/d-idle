@@ -191,10 +191,12 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
+| loot.vault | 0 | 0..1 | 0/1 | 1 | 5 | 1: items the Vault preset (docs/vault.md) selects are peeked and recorded in the vault instead of being picked up; the bot walks to them as for a pickup, sends no pickup click and uses no pack space. Gold, potions, scrolls, keys, gems and stacks keep their own rules. Needs d2d started with --vault-verbs; without it the knob does nothing and a Needs-you info line says why. Forced off in measured runs (gates, soaks, baselines: D2BOT_RUN). 0 (default): today's pickit, byte-identical. |
+| loot.vaultAll | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1): every ground item that is not gold, a gem or a stack and that no other rule takes is recorded too, plain and low items included. 0 (default): the Vault preset only. |
 | loot.pickRadius | 30 | 5..60 | subtiles | 5 | 2 | Ground items within this distance are considered. |
 | loot.pickStrictness | 1 | 0..3 | level | 3 | 4 | 0 loose (also items worth selling), 1 normal, 2 keepers only, 3 gold/runes/gems/uniques only. |
 | loot.pickTries | 3 | 1..6 | count | 1 | 1 | Click attempts per item. |
-| loot.walkDist | 4 | 2..8 | subtiles | 8 | 1 | Walk to within this distance before clicking an item. |
+| loot.walkDist | 4 | 2..8 | subtiles | 8 | 2 | Walk to within this distance before clicking an item. |
 | loot.confirmMs | 1500 | 400..4000 | ms | 400 | 1 | Wait after a click for the item to leave the ground. |
 | loot.gapMs | 150 | 0..1000 | ms | 1000 | 1 | Pause between two pickups. |
 | loot.goldMinStack | 10 | 0..2000 | gold | 2000 | 4 | Ignore gold piles smaller than this (a ceiling: see goldPileShare). |
@@ -484,6 +486,12 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
 | watch.paletteFeed | 0 | 0..1 | bool | 0 | env.PaletteFeedOn | 1: the viewer (d2dview, and the watch screen through the tap relay) also serves the lossless RGBA tile-delta feed of the game picture (/stream.pfeed; measured 0.4 to 0.7 MB/s against 1.8 MB/s of JPEG q72, docs/probes/video-feed-2026-11-15.md) and the page draws it on a canvas when the glance reply lists it; any decode trouble falls back to MJPEG. Needs the d2d framefeed ring. d2dview and the friends pack read the environment switch D2_PALETTE_FEED=1 (same meaning; the d2dview process has no tuning file). 0 (default): MJPEG only, nothing changes. Off until the live A/B has run (docs/video-feed.md section 9). |
+
+### quests.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| quests.board | 0 | 0..1 | bool | 0 | 1 | 1: a quest runs only after the player accepts its current chunk (Start); the bot does that chunk, walks to the NPC and stops, and the player taps Hand in. The planner then no longer starts quests by itself: between chunks it levels (Train; the modes are a later slice). 0 (default): today's planner behaviour, nothing changes. Off until the live drill of docs/questboard.md has run. |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)
@@ -537,6 +545,7 @@ Exactly one of `--sim`, `--attach`, `--managed` is required. Flags with an env f
 | `--soak-dir` | `D2BOT_SOAK_DIR` | off | dashboard shows the newest soak run read-only |
 | `--supervise` / `--supervise-max N` | `D2BOT_SUPERVISE` | off / 10 | restart as a child with backoff; give up after N restarts per hour |
 | `--clean-start` | - | off | managed: stop a leftover game first (set by --supervise on restarts) |
+| - | `D2BOT_PPROF_HTTP` | off | `1` mounts the on-demand CPU profile routes on the answer listener (docs/probes/bot-cpu-fix-2026-11-16.md) |
 | `--version` | - | - | print version |
 
 Boolean env values are true only for `1`, `true`, `yes`, `on` (`envBool`). Other env vars read elsewhere in the code (V):

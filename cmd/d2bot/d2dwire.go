@@ -109,6 +109,7 @@ func buildD2DStack(ctx context.Context, o options, be *d2denv.Backend, nv *nav.N
 	wireInv(ref, tw, lt, s.leveler, db)
 	wireSets(ref, e)
 	wireItemVerbs(ref, tw, s.leveler, be.Client, e)
+	wireVault(lt, be.Client, o.data, charName, log)
 	s.prepare = func(ctx context.Context) error {
 		applyClass(ctx, e.Snapshot, cb, tw, lt, cfg.LevelerBuild, db, log)
 		_, err := rig.BindSkills()

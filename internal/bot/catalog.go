@@ -2,6 +2,7 @@ package bot
 
 import (
 	"strings"
+	"sync/atomic"
 
 	"d2lod-bot/internal/data"
 )
@@ -48,10 +49,19 @@ type Catalog interface {
 	ExpToReach(level int) int64
 }
 
-type dataCatalog struct{ db *data.DB }
+type dataCatalog struct {
+	db   *data.DB
+	memo []atomic.Pointer[ItemMeta] // ItemMeta per class, filled on first use: the item table is immutable and Item runs per item per poll
+}
 
 // NewDataCatalog adapts the extracted game tables. A nil db yields an empty catalog.
-func NewDataCatalog(db *data.DB) Catalog { return dataCatalog{db} }
+func NewDataCatalog(db *data.DB) Catalog {
+	c := dataCatalog{db: db}
+	if db != nil {
+		c.memo = make([]atomic.Pointer[ItemMeta], len(db.Items))
+	}
+	return c
+}
 
 // goalTypes maps item type codes (and their ancestors) to the words used by goals.ItemFilter.
 // UNVERIFIED against the real itemtypes.txt: codes are from memory of the standard table.
@@ -65,6 +75,18 @@ func (c dataCatalog) Item(class int) (ItemMeta, bool) {
 	if c.db == nil || class < 0 || class >= len(c.db.Items) {
 		return ItemMeta{}, false
 	}
+	if class >= len(c.memo) {
+		return c.item(class), true
+	}
+	if p := c.memo[class].Load(); p != nil {
+		return *p, true
+	}
+	m := c.item(class)
+	c.memo[class].Store(&m)
+	return m, true
+}
+
+func (c dataCatalog) item(class int) ItemMeta {
 	b := c.db.Items[class]
 	m := ItemMeta{Name: b.Display, W: b.Width, H: b.Height, Cost: b.Cost, Antidote: b.Code == "yps"}
 	if m.Name == "" {
@@ -85,7 +107,7 @@ func (c dataCatalog) Item(class int) (ItemMeta, bool) {
 	case c.db.IsA(b.Type, "rpot"):
 		m.Potion = PotionRejuv
 	}
-	return m, true
+	return m
 }
 
 // InvFile is the inventory icon name of an item (data.DB.InvFile); ok is false when the tables do not name one.

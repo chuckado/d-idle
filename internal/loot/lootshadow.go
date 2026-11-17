@@ -332,6 +332,7 @@ type ShadowPass struct {
 	lowGold bool
 	shadow  bool // Observe records (bot.lootShadow); a pass made only for the engine does not
 	stage   int  // loot.rulesEngine at the start of the pass
+	vault   bool // loot.vault is working: the ground decision is the Vault preset's, and `vault` is an action the shadow expects
 }
 
 // SetGround tells the pass the strictness and low-gold mode of the pickup being judged, so the rule's tier is filtered
@@ -350,6 +351,8 @@ func (p *ShadowPass) groundFold(d lootrules.Decision) string {
 	case d.Action == lootrules.Pickup:
 	case d.Action == lootrules.Ignore && d.Fate == lootrules.Sell:
 		act = Sell
+	case d.Action == lootrules.Vault && p.vault:
+		return lootrules.Vault // only with loot.vault 1; otherwise a vault rule leaves the item (below)
 	default:
 		return lootrules.Ignore
 	}
@@ -363,8 +366,8 @@ func (p *ShadowPass) groundFold(d lootrules.Decision) string {
 // not). Returns nil when neither the shadow nor an engine stage is on, the snapshot has no player or the data tables
 // are missing. The pass shadows when bot.lootShadow is on and serves the engine when loot.rulesEngine is above 0.
 func (l *Looter) ShadowPass(s *d2.Snapshot, packPct, stashPct int) (p *ShadowPass) {
-	shadow, stage := l.ShadowEnabled(), l.EngineStage()
-	if !shadow && stage == 0 || s == nil || s.Player == nil || s.Inventory == nil || l.e.Data == nil {
+	shadow, stage, vlt := l.ShadowEnabled(), l.EngineStage(), l.vaultOn()
+	if !shadow && stage == 0 && !vlt || s == nil || s.Player == nil || s.Inventory == nil || l.e.Data == nil {
 		return nil
 	}
 	defer func() {
@@ -390,7 +393,7 @@ func (l *Looter) ShadowPass(s *d2.Snapshot, packPct, stashPct int) (p *ShadowPas
 		l.shadow.class = cx.Class
 		l.shadow.mu.Unlock()
 	}
-	p = &ShadowPass{l: l, a: a, cx: cx, snap: s, area: s.Player.Area, max: MaxBuyOf(s.Player), shadow: shadow, stage: stage}
+	p = &ShadowPass{l: l, a: a, cx: cx, snap: s, area: s.Player.Area, max: MaxBuyOf(s.Player), shadow: shadow, stage: stage, vault: vlt}
 	if l.shadow != nil {
 		l.shadow.mu.Lock()
 		l.shadow.lastPass = p

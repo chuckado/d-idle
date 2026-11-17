@@ -1,10 +1,11 @@
 ---
 id: TASK-586
 title: 'quests2: readiness words for the quest board (S2)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T03:29:00Z'
+updated_date: '2026-11-17T04:45:00Z'
 labels:
   - bot
   - feature
