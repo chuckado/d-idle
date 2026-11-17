@@ -13,7 +13,7 @@ import (
 
 func quiet(string, ...any) {}
 
-func lateReplies(t *testing.T) map[string]string {
+func lateReplies(t testing.TB) map[string]string {
 	r := sampleReplies()
 	r[headSections] = readFile(t, "dump_head_late.json") + "\nok\n"
 	r["dump items"] = readFile(t, "dump_items_late.json") + "\nok\n"

@@ -92,3 +92,21 @@ Throwaway character (test-characters rule: create it normally, no setup writes i
 6. One chunk at a time: with the Den running, `Accept` Blood Raven must be refused naming the Den.
 7. Evidence: note which tier (T1 save, T2 memory) answered at each step in the log, and whether the hero stood next to the NPC.
 8. Record in docs/probes: tiers, durations per chunk, whether the approach dialog opened, any parked chunk and its reason. Leave the hero in town, no panels open; stop the instance with `tools/game.sh stop`.
+
+## Readiness (slice S2)
+
+> Built and tested offline (card quests2, TASK-586). Pure query: no bot code imports it, `bot.zoneModel` stays 0 and nothing here changes zone choice. Tags as above.
+
+| piece | where |
+|---|---|
+| thresholds (data) | `data/questboard/readiness.json` (`quests.readiness/1`): dial lines `enter`/`stay` per cautious/balanced/bold, kit minimums (`minPotions`, `minResist` per difficulty, U), default dial |
+| core | `internal/questboard/readiness.go`: `Thresholds.Assess(AssessInput) Readiness`, reason codes, the sentence |
+| power adapter | `internal/questboard/readiness_power.go`: `HeroFrom(power.Hero)`, `EncounterFrom(name, kind, power.Result, k)` (k = survival ledger `KZoneFor * KHeroFor`, the same division the controller does) |
+
+- Word rule (V, same as `survival.word` and `power.ZoneMargin.Word`; a test compares them): `safe` when the Low margin is at or over the dial's `enter`, `risky` when Best is at or over `stay`, else `too hard`. The word of a chunk is the worst of its encounters (the boss, and the zone on the way when the caller passes it). The dial lines mirror `internal/power/profiles.json` (V `TestDialsMirrorThePowerProfiles`).
+- `Readiness{Word, Reasons, LegacyFloor, Unknown, FromLegacy, Sentence, Debug}`; the margin is only in `Debug` (tools), never in the sentence. The S1 string type `Readiness` is now `Word` (`ReadySafe`, `ReadyRisky`, `ReadyTooHard`, `ReadyUnknown`); `Input.Ready` maps chunk keys to `Word`.
+- Reason codes (closed): `level_under`, `no_merc`, `kit_potions`, `kit_resist`, `margin_low`, `margin_wall`, `offence_unread`, `legacy_only`, `no_data`. Order: fixable first (merc, kit), then level, then the margin, then offence. The level number appears only in `level_under` and is the legacy floor (user asked for it beside the margin).
+- Legacy floor fallback (I): where no encounter has a margin (boss missing from the tables, hero unread), the old clvl floor of the quest's family decides: at or over the floor `safe`, under it `risky`, never `too hard` (warn, never wall). `FromLegacy` is true so a later auto-start can refuse to trust that `safe`.
+- Unknown: no margin and no floor gives `Unknown`, an empty word, reason `no_data`; S1 keeps the chunk `available`, never offered (V `TestUnknownReadinessKeepsQuestAvailable`).
+- Tests (V, `internal/questboard/readiness_test.go`): Paladin and Sorceress on made-up zones sized to the logged outcomes (Cold Plains clvl 4 and 5 safe, Black Marsh clvl 4 too hard, clvl 12 with a merc safe, without a merc risky; docs/survival/README.md). The Sorceress rows are regression rows, not logged outcomes. A synthetic `survival.Ledger` with two merc deaths and a death in Black Marsh turns a safe word into a harder one. U: real zone and boss tables are not used (the install is on the worker host); no live run.
+- Not done (for S3): choosing the encounters per chunk. Quest rows carry only a `boss` id, not an area; S3 resolves `boss` through `danger.Table.FindBoss`/`power.BossPack` and passes the zone of the route, plus the dial from the hero's setting.

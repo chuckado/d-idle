@@ -238,6 +238,12 @@
 | decomp36bodies | proposed | - | `docs/upstream/bodies/gamble-price-body.md`<br>`docs/upstream/bodies/umod-multishot-body.md` | - |
 | vault | proposed | - | `docs/design/loot-vault-2026-11-16.md` | - |
 | quests1 | in-progress | - | `internal/questboard`<br>`data/questboard`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
+| botcpu | proposed | - | `docs/probes/bot-cpu-2026-11-16.md`<br>`internal/senses`<br>`cmd/d2bot/sensesfeed.go`<br>`cmd/d2bot/sensesfeed_test.go`<br>`internal/nav/cpuprobe_test.go`<br>`internal/d2dsrc/cpuprobe_test.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2dsrc/srv_test.go` | - |
+| pausemenufit | proposed | - | `internal/watch/web/pauseui.js`<br>`internal/watch/web/shell.css` | - |
+| palfeedflaky | proposed | - | `internal/watch/palfeed` | - |
+| botcpulive | proposed | - | `docs/probes/bot-cpu-live-2026-11-16.md` | - |
+| vaultv2 | in-progress | - | `internal/vault`<br>`data/vault`<br>`docs/vault.md`<br>`docs/design/loot-vault-2026-11-16.md` | - |
+| botcpu2 | proposed | - | `internal/currency`<br>`internal/data/db.go`<br>`internal/bot/catalog.go`<br>`internal/watch/tallystrip.go`<br>`internal/watch/pprofapi.go`<br>`docs/probes/bot-cpu-fix-2026-11-16.md`<br>`internal/watch/serve.go`<br>`internal/watch/tallystrip_test.go`<br>`cmd/d2bot/ladder.go`<br>`docs/knobs.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -280,14 +286,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- cdc624907 11-16 22:03 `Merge agent/quests1: Merge branch 'main' into quests1` (quests1)
-- 1cb530a5e 11-16 22:02 `Merge branch 'main' into quests1` (-)
-- f6a131582 11-16 21:52 `Merge agent/survtune2: survtune2: pay-for-risk floor 0.4, freshNeedsMerc false (fresh game with a dead merc)` (survtune2)
-- f2c1f6e8f 11-16 21:51 `Merge branch 'main' into survtune` (-)
-- 14c53adfe 11-16 21:45 `Merge agent/vaultdesign: Merge branch 'main' into vault` (vaultdesign)
-- bfe89b7e3 11-16 21:45 `Merge agent/questdesign: Merge branch 'main' into questdesign` (questdesign)
-- 3ca847cf2 11-16 21:43 `Merge branch 'main' into vault` (-)
-- 17de4f93e 11-16 21:43 `Merge branch 'main' into questdesign` (-)
-- 8f7f19e4a 11-16 21:24 `Merge agent/videofeed4: videofeed4: stream monitor overlay, stable presentation clock, throttle-aware feed, measured hitch cause` (videofeed4)
-- 56b9b9911 11-16 21:10 `Merge remote-tracking branch 'origin/main' into agent/videofeed4` (-)
+- e36453db0 11-16 23:34 `Merge agent/botcpu2: Merge branch 'main' into botcpu2` (botcpu2)
+- 2724bde25 11-16 23:33 `Merge branch 'main' into botcpu2` (-)
+- fe68b9807 11-16 23:28 `Merge agent/quests2: Merge branch 'main' into quests2` (quests2)
+- 511aec3a9 11-16 23:27 `Merge branch 'main' into quests2` (-)
+- 845438e37 11-16 23:22 `Merge agent/vaultv2: Merge branch 'main' into vaultv2` (vaultv2)
+- cb674bca4 11-16 23:21 `Merge branch 'main' into vaultv2` (-)
+- b1dd05d78 11-16 23:16 `Merge agent/vaultv1: Merge branch 'main' into vaultv1` (vaultv1)
+- 93fb23f21 11-16 23:16 `Merge branch 'main' into vaultv1` (-)
+- 2c31eefaf 11-16 23:07 `Merge agent/pausemenufit: Merge branch 'main' into pausemenufit` (pausemenufit)
+- a0b01f790 11-16 23:06 `Merge branch 'main' into pausemenufit` (-)
 <!-- statusgen:end -->

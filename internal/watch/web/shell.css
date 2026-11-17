@@ -218,7 +218,7 @@
     background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
   .d-menu-pop[hidden] { display: none; }
   .d-menu-pop > .d-btn { inline-size: 100%; }
-  .d-menu-pair { display: grid; grid-template-columns: auto 1fr; gap: var(--d-sp-1); }
+  .d-menu-pair { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(max-content, 1fr); gap: var(--d-sp-1); }
   .d-menu-pair > .d-btn { inline-size: 100%; white-space: nowrap; }
   .d-menu-pop .d-menu-label { margin: var(--d-sp-1) var(--d-sp-1) 0; font-size: var(--d-fs-0); color: var(--d-text-2); text-transform: uppercase; letter-spacing: .06em; }
   .d-menu-pop .d-btn[aria-checked="true"] { border-color: var(--d-accent); color: var(--d-accent-text); font-weight: 650; }
