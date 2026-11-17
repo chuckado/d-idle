@@ -3,8 +3,9 @@
 const assert = require('assert'), { load, shellCtx, controlsOf } = require('./panel_harness.js');
 const path = require('path');
 const M0 = load(path.join(path.dirname(process.argv[2]), '../../mjpeg.js'));
+const B = load(path.join(path.dirname(process.argv[2]), 'brightness.js'));
 const S = load(path.join(path.dirname(process.argv[2]), '../../streamstats.js'));
-const M = Object.assign({}, M0, S, { drawStats: S.draw });
+const M = Object.assign({}, M0, S, B, { drawStats: S.draw });
 const P = load(process.argv[2], M);
 // no stream: the panel hides itself
 { const t = []; const { root, c } = shellCtx({}, {}, t); P.mount(root, c); assert.strictEqual(c.hidden, true); }
@@ -27,6 +28,22 @@ assert.strictEqual(c.body.hidden, true); assert.strictEqual(store.collapsed, '1'
 col.fire('click');
 assert.strictEqual(c.body.hidden, false); assert.strictEqual(store.collapsed, '0');
 full.fire('click'); assert.ok(root.fullscreen, 'full screen asks the panel');
+
+// viewer-side Brightness: default leaves the picture alone, each press steps Darkest..Brightest, remembered per browser, wraps
+{
+  const st = {}, t = [];
+  const s3 = shellCtx({ frameUrl: '/stream' }, st, t); P.mount(s3.root, s3.c);
+  const fr = s3.c.body.children[0], b = s3.c.body.children.flatMap((e) => e.children || []).find((x) => x.dataset && x.dataset.key === 'brightness');
+  assert.ok(b, 'a Brightness button'); assert.strictEqual(b.textContent, 'Brightness: Default'); assert.strictEqual(fr.dataset.bright, '100');
+  assert.strictEqual(fr.style['--vid-bright'], '1'); assert.strictEqual(st.brightness, undefined, 'default is not stored');
+  b.fire('click'); assert.strictEqual(fr.dataset.bright, '115'); assert.strictEqual(fr.style['--vid-bright'], '1.15'); assert.strictEqual(st.brightness, '115');
+  b.fire('click'); b.fire('click'); assert.strictEqual(fr.dataset.bright, '70'); assert.strictEqual(b.textContent, 'Brightness: Darkest');
+  b.fire('click'); b.fire('click'); assert.strictEqual(fr.dataset.bright, '100', 'wraps to Default');
+  const s4 = shellCtx({ frameUrl: '/stream' }, { brightness: '85' }, []); P.mount(s4.root, s4.c);
+  assert.strictEqual(s4.c.body.children[0].dataset.bright, '85', 'restored'); 
+  const s5 = shellCtx({ frameUrl: '/stream' }, { brightness: 'junk' }, []); P.mount(s5.root, s5.c);
+  assert.strictEqual(s5.c.body.children[0].dataset.bright, '100', 'junk falls back to Default');
+}
 
 // the connection logic on a fake clock: stall -> reconnect with backoff, hidden -> closed, visible -> reopened
 {

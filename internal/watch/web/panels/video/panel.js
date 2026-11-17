@@ -1,5 +1,6 @@
 import { videoController, openStream, streamingSupported, registerVideo } from '../../mjpeg.js';
 import { questCaption } from '../quest-board/panel.js';
+import { mountBrightness } from './brightness.js';
 import { StreamMonitor, SlowGate, draw as drawStats, HEIGHT_FULL, HEIGHT_COMPACT } from '../../streamstats.js';
 
 // Game video (stage band), shown only when the server offers a stream (/api/config frameUrl). The stream is read by
@@ -91,6 +92,7 @@ export function mount(root, ctx) {
   lowBtn.setAttribute('aria-pressed', String(low.get() === '1'));
   lowBtn.title = 'Smoother on a slow screen: about ' + LOW_FPS + ' pictures a second';
   bar.insertBefore ? bar.insertBefore(lowBtn, statLine) : bar.append(lowBtn);
+  mountBrightness(ctx, frame, (b) => (bar.insertBefore ? bar.insertBefore(b, statLine) : bar.append(b)));
   // the low-fps hint: ONE line under the toolbar (text with an ellipsis, the button never cut), so it cannot squeeze the picture
   const hint = ctx.el('div', 'vhint', '');
   const hintT = ctx.el('span', 'vhint-t', '');
