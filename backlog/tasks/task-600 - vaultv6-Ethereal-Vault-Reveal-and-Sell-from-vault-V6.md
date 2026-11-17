@@ -12,7 +12,7 @@ dependencies: []
 priority: medium
 ordinal: 305000
 card: "vaultv6"
-result: "Built and tested OFFLINE (VaultFake, Sorceress and Paladin heroes, fake clock, restart at every call); NOT verified live and the fit pages and pictures were NOT run (no browser off the Orion). POST /api/vault/{reveal,sell,cancel,sellprompt}, Reveal (create into pack, identify, supersede in place, remove copy; free at Cain; no scroll refused with the buy hint; Keep+Reveal one flow), Sell-from-vault (create, sell chore, read back gold and item, pinned never, per-visit cap, mismatch trips), opt-in prompt loot.vaultSellPrompt, poor-mode pickup loot.vaultPoorPickup, page buttons with the cost line. Live drill is a checklist in docs/vault.md."
+result: "Built and tested OFFLINE (VaultFake, Sorceress and Paladin heroes, fake clock, restart at every call); NOT verified live and the fit pages and pictures were NOT run (no browser on the build hosts). POST /api/vault/{reveal,sell,cancel,sellprompt}, Reveal (create into pack, identify, supersede in place, remove copy; free at Cain; no scroll refused with the buy hint; Keep+Reveal one flow), Sell-from-vault (create, sell chore, read back gold and item, pinned never, per-visit cap, mismatch trips), opt-in prompt loot.vaultSellPrompt, poor-mode pickup loot.vaultPoorPickup, page buttons with the cost line. Live drill is a checklist in docs/vault.md."
 owns:
   - "internal/vaultkeep"
   - "internal/vault"
@@ -55,6 +55,6 @@ Slice V6 of docs/design/loot-vault-2026-11-16.md. Done when Reveal and Sell-from
 - [x] #1 Reveal: POST /api/vault/reveal, executor with identify through the real path, record superseded in place, restart-safe, no-scroll and free-at-Cain, Keep+Reveal one flow, tested on two classes
 - [x] #2 Sell-from-vault: POST /api/vault/sell, create-sell-read-back at the town visit, pinned never sold, per-visit cap, gold mismatch trips, restart-safe, two classes
 - [x] #3 Opt-in sell prompt (loot.vaultSellPrompt, default off) as a Needs-you row and the poor-mode pickup rule
-- [x] #4 Vault page Reveal and Sell buttons, cost line, states, fit fixtures and picture pages (not run: no browser off the Orion)
+- [x] #4 Vault page Reveal and Sell buttons, cost line, states, fit fixtures and picture pages (not run: no browser on the build hosts)
 - [x] #5 docs/vault.md sections and live drill checklist; design doc V6 marked done
 <!-- AC:END -->
