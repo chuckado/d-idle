@@ -269,6 +269,7 @@
 | owbody | proposed | - | `docs/upstream/bodies/decomp37-open-wounds-body.md` | - |
 | questrun | proposed | - | `internal/bot/questboard.go`<br>`internal/bot/questboard_goal_test.go`<br>`internal/bot/goal.go`<br>`internal/questboard/desk.go`<br>`internal/questboard/desk_test.go`<br>`internal/questboard/exec.go`<br>`cmd/d2bot/questwire.go`<br>`docs/questboard.md`<br>`internal/bot/routeguard.go`<br>`internal/bot/ladder_t0_test.go`<br>`internal/watch/web/panels/needs-you/panel.js`<br>`internal/watch/web/panels/needs-you/panel.css` | - |
 | videoctl | proposed | - | `internal/watch/web/panels/video`<br>`tools/uishots`<br>`tools/uishots.sh`<br>`tools/videofeed`<br>`docs/video-feed.md`<br>`internal/watch/testdata/video_panel.js`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/panel_harness.js` | - |
+| verifydecomp39 | proposed | - | `docs/upstream/verifier-decomp39-2026-11-17.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -309,6 +310,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 38292e12d 11-17 13:35 `Merge agent/verifydecomp39: Merge branch 'main' into TASK-625` (verifydecomp39)
+- 018de2bca 11-17 13:34 `Merge branch 'main' into TASK-625` (-)
 - f7c45a10b 11-17 13:28 `Merge agent/videoctl: videoctl: video controls out of the picture, caption never covered, fit rule` (videoctl)
 - bb49a0c07 11-17 13:27 `Merge branch 'main' into videoctl` (-)
 - 193c9b9f1 11-17 13:25 `Merge origin/main into videoctl; the Labels button joins the toolbar` (-)
@@ -317,6 +320,4 @@
 - b4e8a38ee 11-17 13:06 `Merge agent/questrun: Merge branch 'main' into TASK-619` (questrun)
 - 7b41d2c16 11-17 13:05 `Merge branch 'main' into TASK-619` (-)
 - 0e336ab05 11-17 12:59 `Merge agent/labels: Merge branch 'main' into TASK-615` (labels)
-- bd9bd1d06 11-17 12:58 `Merge branch 'main' into TASK-615` (-)
-- a926509f9 11-17 12:40 `Merge agent/gowhole: Merge branch 'main' into gowhole` (gowhole)
 <!-- statusgen:end -->
