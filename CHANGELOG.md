@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- verifier of gear absorb r3: r3 FAIL, r4 PASS WITH CHANGES (fid/gear-absorb-r4 ac5c3dd1+c05fa8e3) <!--sg:agent/verifygearabsorb3-->
 - watch: inventory DOM stub gets querySelector and the nopin goldens show the type-fallback glyph (the go-whole failure) <!--sg:agent/jewelicons-->
 - Merge branch 'main' into TASK-622 <!--sg:agent/brightness-->
 - Merge branch 'main' into TASK-625 <!--sg:agent/verifydecomp39-->
