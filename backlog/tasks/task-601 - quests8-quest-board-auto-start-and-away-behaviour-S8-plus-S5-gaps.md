@@ -37,6 +37,7 @@ owns:
   - "internal/watch/web/panels/needs-you"
   - "internal/watch/web/panels/orders"
   - "tools/uishots.sh"
+  - "internal/watch/web/utilities.css"
 exclusive: []
 contracts: []
 ---
