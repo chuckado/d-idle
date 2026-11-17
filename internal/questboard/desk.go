@@ -398,7 +398,7 @@ func (d *Desk) run(a Active) RunView {
 // needs are the Needs-you rows (design 4.6): the hand-in the hero waits at, a parked chunk. Offers are raised by
 // the page once per offer (S5); the "paused: you were away" row belongs to S8.
 func (d *Desk) needs(v View) []NeedRow {
-	var out []NeedRow
+	out := []NeedRow{}
 	if a := v.Awaiting; a != nil {
 		who := "The quest giver"
 		if a.NPC != "" {
