@@ -1,6 +1,9 @@
 package main
 
 import (
+	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/env"
+	"d2lod-bot/internal/vaultkeep"
 	"os"
 	"path/filepath"
 	"testing"
@@ -55,5 +58,50 @@ func TestVaultKnobOn(t *testing.T) {
 	val = 1
 	if !on() || vaultKnobOn(nil)() {
 		t.Error("knob 1 on, no knob off")
+	}
+}
+
+func TestKeepReadyAndKillSwitch(t *testing.T) {
+	town := &d2.Snapshot{Player: &d2.Player{Area: 1, Life: 50, MaxLife: 100}, Inventory: &d2.Inventory{}}
+	cases := []struct {
+		name string
+		mod  func(s *d2.Snapshot)
+		want string
+	}{
+		{"ready", func(*d2.Snapshot) {}, ""},
+		{"dead", func(s *d2.Snapshot) { s.Player.Life = 0 }, vaultkeep.ReasonDead},
+		{"field", func(s *d2.Snapshot) { s.Player.Area = 2 }, "not in town"},
+		{"cursor", func(s *d2.Snapshot) { s.Inventory.Cursor = &d2.Unit{} }, "an item is on the cursor"},
+	}
+	for _, c := range cases {
+		s := *town
+		p, inv := *town.Player, *town.Inventory
+		s.Player, s.Inventory = &p, &inv
+		c.mod(&s)
+		if got := keepReady(func() *d2.Snapshot { return &s })(); got != c.want {
+			t.Errorf("%s: %q want %q", c.name, got, c.want)
+		}
+	}
+	if keepReady(func() *d2.Snapshot { return nil })() != vaultkeep.ReasonNoGame {
+		t.Error("no snapshot is not ready")
+	}
+	e := &env.Env{Tune: &env.Tuning{}}
+	e.Tune.Loot = env.DefaultLootTuning()
+	on := keepOn(e)
+	if on() {
+		t.Error("loot.vault 0 must keep Keep off")
+	}
+	e.Tune.Loot.Vault = 1
+	if !on() {
+		t.Error("loot.vault 1 with loot.vaultKeep default 1 is on")
+	}
+	e.Tune.Loot.VaultKeep = 0
+	if on() {
+		t.Error("kill switch")
+	}
+	e.Tune.Loot.VaultKeep = 1
+	t.Setenv("D2BOT_RUN", "gate-x")
+	if on() {
+		t.Error("a measured run forces Keep off")
 	}
 }

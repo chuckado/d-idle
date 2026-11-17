@@ -201,6 +201,14 @@ type PlayerGear interface {
 	RunPending(ctx context.Context) []string
 }
 
+// VaultKeep creates the items the player marked Keep in the Ethereal Vault (internal/vaultkeep); optional (Deps.VaultKeep).
+// Run checks its own readiness (alive, in town, no panel, cursor free) and is bounded in time and items per call.
+type VaultKeep interface {
+	Pending() int                     // records waiting for a create
+	Run(ctx context.Context) []string // one log line per notable event
+	TripWanted() bool                 // the player pressed Keep now: walk home for it
+}
+
 // Gear equips and buys weapons and armor for the build. Optional. (leveler.Leveler through an adapter)
 type Gear interface {
 	// PendingSwaps is the pure check: how many equip swaps from the pack would Equip make?

@@ -42,8 +42,10 @@ type Deps struct {
 	Gear    Gear    // nil: no equip, no gear shopping
 	// PlayerGear runs the player's queued equips at the gear step (in town); nil: none.
 	PlayerGear PlayerGear
-	Quester    Quester   // nil: quest rewards are not claimed
-	Task       *TaskDeps // nil: campaign goals are refused at Start
+	// VaultKeep creates the vault items the player kept (vaultkeep.go); nil: none.
+	VaultKeep VaultKeep
+	Quester   Quester   // nil: quest rewards are not claimed
+	Task      *TaskDeps // nil: campaign goals are refused at Start
 	// Prepare runs once, in a game with nothing hostile near, before the first goal action (hotkey binding). A failure is
 	// retried up to three times, then the bot carries on without.
 	Prepare func(ctx context.Context) error
@@ -258,6 +260,8 @@ type loopState struct {
 	playerWhyAt      time.Time // last "waits for a safe moment" log line (noteDelayed)
 	errandSkipUntil  time.Time // no errand trip before this (errandTripStep)
 	playerActAt      time.Time // last attempt of the player's queued item actions (playerActionStep)
+	vaultKeepNext    time.Time // no vault keep attempt before this while nothing changed (vaultKeepStep)
+	vaultKeepPend    int       // queue length at the last attempt: a change makes the next attempt immediate
 	// repair trip (repairtrip.go): when the wait for a safe moment began, retreat steps taken, loot pass done, no attempt before
 	repairWaitSince time.Time
 	repairRetreats  int

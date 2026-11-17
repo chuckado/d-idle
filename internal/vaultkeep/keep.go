@@ -68,6 +68,29 @@ type Keeper struct {
 	info     Info
 	tripWant bool
 	noticed  map[string]bool
+	caps     d2dctl.VaultCaps // cached for capsTTL: the page polls, the socket is shared
+	capsAt   time.Time
+	capsOK   bool
+}
+
+const capsTTL = 60 * time.Second
+
+// vaultCaps answers from the cache when it is fresh. With fetch false it never touches the socket (the page's poll).
+func (k *Keeper) vaultCaps(ctx context.Context, fetch bool) (d2dctl.VaultCaps, bool, error) {
+	k.mu.Lock()
+	c, at, ok := k.caps, k.capsAt, k.capsOK
+	k.mu.Unlock()
+	if ok && k.now().Sub(at) < capsTTL || !fetch {
+		return c, ok, nil
+	}
+	c, err := k.API.VaultCaps(ctx)
+	if err != nil {
+		return c, false, err
+	}
+	k.mu.Lock()
+	k.caps, k.capsAt, k.capsOK = c, k.now(), true
+	k.mu.Unlock()
+	return c, true, nil
 }
 
 // Info is the visible state of the queue for the progress line and the Needs-you row.
@@ -137,7 +160,12 @@ func (k *Keeper) setWaiting(why string) {
 
 // Gate says whether a Keep press can be queued now. It refuses only what cannot become true by waiting for the next town
 // visit: Keep off, a dead hero, a build without the verbs. Not being in town is not a refusal (the item queues).
-func (k *Keeper) Gate(ctx context.Context) (ok bool, why string) {
+func (k *Keeper) Gate(ctx context.Context) (ok bool, why string) { return k.gate(ctx, true) }
+
+// Peek is Gate without any round trip: the cached capabilities (unknown counts as fine). The page's poll uses it.
+func (k *Keeper) Peek() (ok bool, why string) { return k.gate(context.Background(), false) }
+
+func (k *Keeper) gate(ctx context.Context, fetch bool) (ok bool, why string) {
 	k.mu.Lock()
 	t := k.tripped
 	k.mu.Unlock()
@@ -148,8 +176,7 @@ func (k *Keeper) Gate(ctx context.Context) (ok bool, why string) {
 		return false, ReasonOff
 	}
 	if k.API != nil {
-		caps, err := k.API.VaultCaps(ctx)
-		if err == nil && !caps.ItemCreate {
+		if caps, known, err := k.vaultCaps(ctx, fetch); err == nil && known && !caps.ItemCreate {
 			return false, ReasonVerbs
 		}
 	}
@@ -280,7 +307,7 @@ func (k *Keeper) Run(ctx context.Context) []string {
 			return nil
 		}
 	}
-	if caps, err := k.API.VaultCaps(ctx); err != nil {
+	if caps, _, err := k.vaultCaps(ctx, true); err != nil {
 		k.setWaiting(ReasonBusy)
 		return nil
 	} else if !caps.ItemCreate || !caps.ItemFull {
