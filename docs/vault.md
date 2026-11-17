@@ -1,6 +1,6 @@
 # Ethereal Vault store (internal/vault) and its file formats
 
-> status: BUILT offline (slice V2 of docs/design/loot-vault-2026-11-16.md). Additive and unused until V3 (rules action) and V5 (keep queue) call it. Not run against a live game: every claim below is about the offline package (V: `go test ./internal/vault/`). Item hex comes from the fork codec later (V1); here it is opaque bytes.
+> status: V2 store BUILT offline, V3 bot wiring BUILT offline (section 'Bot wiring (V3)' at the end) (slice V2 of docs/design/loot-vault-2026-11-16.md). Additive and unused until V3 (rules action) and V5 (keep queue) call it. Not run against a live game: every claim below is about the offline package (V: `go test ./internal/vault/`). Item hex comes from the fork codec later (V1); here it is opaque bytes.
 
 ## Layout (per hero)
 
@@ -60,3 +60,9 @@ Insert about 8 us (10k and 50k); insert with trim at 10k about 0.6 ms; Open by f
 ## Not done here
 
 Log compaction (design 5: archive-then-replace at 3x live data); the trashed-list purge schedule (`PurgeArchive(before)` exists, nobody calls it); HTTP API and UI (V4); wallet (V7); the item codec that fills `Raw`, `Name`, `Chain` (V1).
+
+## Bot wiring (V3, `internal/loot/vault.go`, `cmd/d2bot/vaultwire.go`)
+
+Offline only (U live). With `loot.vault` 1 the ground stage uses the Vault preset (docs/lootrules.md section 14); for a `vault` decision `Looter.vaultOne` walks like a pickup, calls `GroundFull` for the unit, builds a `vault.Item` from the fork's `norm` bytes (the create key) plus code, quality, ilvl, sockets, identified and ethereal as the fork reports them (an unidentified item keeps its roll and bit), and calls `Store.Add`. Outcomes: recorded; `ErrDuplicate` (counted, never revisited); full (blocked 2 min, one Needs-you line per episode, items skipped as `vault full`); anything else (peek refused, unit gone, store error) marks that unit as fallen back and today's pickup decision applies. `ErrVaultUnsupported` / `ErrVaultOff` also make the feature inert for the process. Records of one game are told apart by unit id plus spot, so a recorded drop is not walked to twice; the vault dedupes by content, so two identical stackable-like drops collapse into one record (see Identity above).
+`Looter.VaultInfo()` (active, inert reason, blocked, recorded, dups, fallback) is the visible state. `wireVault` opens `<data>/vaults/<hero>/vault` on the first record. Measured runs: `D2BOT_RUN` forces the knob to 0 (the same detection as gear policy and the item-verb fast lane).
+Not done: `ground take` after recording (Keep slice V5 creates from the record), the Needs-you row itself (V3 emits a log line through `VaultWiring.Notice`), the `/api/vault` page (V4), a Vault entry in the preset list of the store.
