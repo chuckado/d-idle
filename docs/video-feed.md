@@ -322,3 +322,27 @@ What changed:
    hold is 150 ms (was 400), the byte cap 4 MiB/s.
 Not fixed here (not this card's code): the bot's own CPU bursts. They are the root cause; the bot, d2d and d2dview share one
 core. A quota of 2 cores, or lower bot CPU in town (`nav.trace` at 10 Hz), would remove the stalls at the source.
+
+## 13. The presentation stall seen in the overlay, and the build id (card videofeed5, 2026-11-17)
+
+A user's Stats overlay (palette player, Waterfox) showed frames ARRIVING at 30 fps while nothing was shown for about 12 s, "dropped"
+spiking to 35-40 several times in that stretch, no delay line while it lasted and ~200 ms after: a client-side stall, not CPU.
+Reading `Player._tick`: it compared each message's due time with the animation frame's own timestamp, while the due times are built
+from `performance.now()`. A browser whose frame timestamps lag or jump against `performance.now()` (timer clamping, a throttled
+or occluded window) holds every frame back until the two clocks meet and then releases the backlog in one draw (the "dropped"
+spike); animation frames that are merely withheld do the same. Not confirmed on the user's machine (no data from it, U), but the three
+fixes below remove every mechanism of that shape and the new tests fail on the old player:
+1. `_tick` uses `this.now()` for every comparison (the animation frame's timestamp is only compared, to log `clock-skew`).
+2. A fallback timer (100 ms) drives ticks while animation frames are withheld; the monitor logs `raf-stall`.
+3. Watchdog: a head message still being inflated 500 ms after it arrived (a key frame stuck in the decompressor) reconnects for a
+   fresh key frame (`resync inflate stall N ms`); `delay-reset` is logged when a game-time jump back resets the clock estimate.
+Regression tests (`tools/videofeed/palfeed.test.js`, fake clock, fake animation frames, fake timers): timestamp skew of -4 s, 3 s
+without animation frames, a stuck key frame inflate, a game-time jump +10 s / -400 ms / -5 s, a 300 ms arrival pause; each asserts
+no gap between draws over 250 ms while frames arrive and shown >= 90 percent of delivered. The first, second and third fail on the
+player of #857.
+Build id: the page header said `a756ec2-dirty`, the commit of the checkout the dev update was started from on the worker host
+(a copied tree has no `.git`, a stale mirror's `.git` names the wrong commit; the go tool embeds whichever it finds). Now
+`tools/dev-update.sh` computes the id of the tree it ships (`<sha7>` of `--commit`, of the `--worktree`, or of this checkout; `-dirty` only
+when TRACKED files differ) and passes it with `--stamp` to `tools/dev-update-host.sh`, which links it as
+`-X d2lod-bot/internal/buildinfo.Version`; `deploy/d2d-container/context.sh` takes `BUILD_STAMP` the same way. Test:
+`internal/buildinfo/stamp_test.go` (a temp git repo: clean, named commit, tracked change, untracked file).

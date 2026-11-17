@@ -33,6 +33,16 @@ while [ $# -gt 0 ]; do
 done
 # tar -m: extracted files get the current time, else rsync (labrun) skips a file whose size and mtime match an older extraction
 src=. send=()
+# the build id of what is shipped, stamped into the binaries (internal/buildinfo.Version): the commit of the tree, "-dirty" only when
+# tracked files differ from it. Never the VCS info the go tool reads on the worker host: that is the mirror's .git (a stale commit).
+stamp_of() { # stamp_of DIR [REF]
+	local sha dirty=
+	sha=$(git -C "$1" rev-parse --short=7 "${2:-HEAD}" 2>/dev/null) || return 1
+	if [ -z "${2:-}" ] && [ -n "$(git -C "$1" status --porcelain --untracked-files=no 2>/dev/null)" ]; then dirty=-dirty; fi
+	echo "$sha$dirty"
+}
+if [ -n "$commit" ]; then stamp=$(stamp_of "$repo" "$commit"); elif [ -n "$wt" ]; then stamp=$(stamp_of "$wt"); else stamp=$(stamp_of "$repo"); fi
+[ -z "${stamp:-}" ] || host+=(--stamp "$stamp")
 if [ -n "$commit" ] || { [ -n "$wt" ] && [ "$(cd "$wt" && pwd)" != "$repo" ]; }; then
 	rm -rf .devupdate-src && mkdir .devupdate-src
 	if [ -n "$commit" ]; then git archive "$commit" | tar -x -m -C .devupdate-src || { echo "dev-update: cannot read $commit" >&2; exit 2; }
