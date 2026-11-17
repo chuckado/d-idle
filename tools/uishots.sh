@@ -591,6 +591,7 @@ vaultdefect-ethenabled watch/vault?theme=dark&vault=eth-short&defect=vault-ethen
 		overlay-*) szs="$sizes 412x780" ;;
 		character-phone*) szs="$phonesizes" ;;
 		esac
+		[ -n "$sizes_only" ] && szs=$sizes_only # --sizes narrows a fit run to those sizes
 		for sz in $szs; do
 			w=${sz%x*} h=${sz#*x} ck=
 			enc() { printf %s "$1" | sed 's/_/ /g; s/#/%23/g; s/?/%3F/g; s/|/%7C/g; s/&/%26/g'; }
