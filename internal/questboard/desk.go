@@ -27,6 +27,7 @@ const (
 	CodeUnknown   = "unknown"
 	CodeDone      = "done"
 	CodeBadMode   = "bad_mode"
+	CodeAutoNever = "auto_never"
 	CodeInternal  = "internal"
 	viewCacheTTL  = time.Second
 	handInTimeout = 5 * time.Minute
@@ -44,6 +45,8 @@ type DeskConfig struct {
 	Explain func(q Quest, c Chunk) (Readiness, bool)
 	// Class is the hero's class, for the legacy floor.
 	Class func() string
+	// Level is the hero's clvl, for "levels to go" on an offer that is not safe yet; nil: the field is left out.
+	Level func() int
 	// Meter words the mode and its readiness meter (slice S6); it gets the stored mode and the derived status. Without
 	// it the view carries the mode only.
 	Meter func(mode string, st Status) *Meter
@@ -117,14 +120,43 @@ type View struct {
 	History    []HistoryRow `json:"history"`
 	Needs      []NeedRow    `json:"needs"`
 	Strip      *Strip       `json:"strip,omitempty"`
-	Extra      []string     `json:"extra,omitempty"` // further accepted chunks in the plan file (never run)
+	Extra      []string     `json:"extra,omitempty"`     // further accepted chunks in the plan file (never run)
+	WhileAway  *AwayCard    `json:"whileAway,omitempty"` // what the board did by itself while the player was away (slice S8)
 	Generated  time.Time    `json:"generated"`
 }
 
-// AutoView is the auto-start block: a stub until slice S8 (the flags per quest are real, nothing acts on them).
+// AutoView is the auto-start block (slice S8). Available is true while the board is on; the per-quest flag is
+// QuestRow.Auto and the toggle posts to /api/quests/<id>/auto.
 type AutoView struct {
-	Available bool   `json:"available"`
-	Note      string `json:"note"`
+	Available bool       `json:"available"`
+	Note      string     `json:"note"`
+	DelaySec  int        `json:"delaySec"`
+	Why       string     `json:"why,omitempty"` // why an opted-in offer does not start by itself now, in words
+	Countdown *Countdown `json:"countdown,omitempty"`
+}
+
+// Countdown is an auto-start that waits out its delay; the page shows it and offers Cancel.
+type Countdown struct {
+	Quest       string    `json:"quest"`
+	QuestTitle  string    `json:"questTitle"`
+	Chunk       string    `json:"chunk"`
+	EndsAt      time.Time `json:"endsAt"`
+	SecondsLeft int       `json:"secondsLeft"`
+}
+
+// AwayCard is the "while you were away" summary: the controller's events since the player last dismissed it.
+type AwayCard struct {
+	Events []AwayEvent `json:"events"`
+}
+
+// AwayEvent is one line of the card; Text is in words, the page formats At.
+type AwayEvent struct {
+	At         time.Time `json:"at"`
+	Quest      string    `json:"quest"`
+	QuestTitle string    `json:"questTitle"`
+	Chunk      string    `json:"chunk"`
+	Kind       string    `json:"kind"` // started, handedIn, handInFailed
+	Text       string    `json:"text"`
 }
 
 // Pays is the meta payout of an offer; omitted until the vault wallet exists (slice S10).
@@ -148,6 +180,8 @@ type OfferView struct {
 	Startable   bool     `json:"startable"`
 	Why         string   `json:"why,omitempty"` // why Start is refused now
 	Auto        bool     `json:"auto"`
+	AutoOK      bool     `json:"autoOk"`               // the quest may be started by itself (autoStart data is not `never`)
+	LevelsToGo  int      `json:"levelsToGo,omitempty"` // by the legacy clvl floor; the page words it ("two levels to go"), never a number
 	Pays        *Pays    `json:"pays,omitempty"`
 }
 
@@ -158,6 +192,7 @@ type QuestRow struct {
 	Act    int        `json:"act"`
 	State  State      `json:"state"`
 	Auto   bool       `json:"auto"`
+	AutoOK bool       `json:"autoOk"` // false: the data says this quest always needs the player (hazard); the toggle is greyed
 	Chunks []ChunkRow `json:"chunks"`
 }
 
@@ -173,16 +208,26 @@ type ChunkRow struct {
 
 // RunView is the accepted chunk: running, awaiting the tap or parked.
 type RunView struct {
-	Quest      string `json:"quest"`
-	QuestTitle string `json:"questTitle"`
-	Chunk      string `json:"chunk"`
-	Title      string `json:"title"`
-	State      State  `json:"state"`
-	Step       string `json:"step,omitempty"`
-	NPC        string `json:"npc,omitempty"` // who the hero walks to or waits at
-	Why        string `json:"why,omitempty"`
-	Failures   int    `json:"failures,omitempty"`
-	Deaths     int    `json:"deaths,omitempty"`
+	Quest      string    `json:"quest"`
+	QuestTitle string    `json:"questTitle"`
+	Chunk      string    `json:"chunk"`
+	Title      string    `json:"title"`
+	State      State     `json:"state"`
+	Step       string    `json:"step,omitempty"`
+	StepNo     int       `json:"stepNo,omitempty"`    // 1-based position of the current step ("step 2 of 4")
+	StepCount  int       `json:"stepCount,omitempty"` // steps of the chunk definition
+	Steps      []StepRow `json:"steps,omitempty"`
+	NPC        string    `json:"npc,omitempty"` // who the hero walks to or waits at
+	Why        string    `json:"why,omitempty"`
+	Failures   int       `json:"failures,omitempty"`
+	Deaths     int       `json:"deaths,omitempty"`
+	Auto       bool      `json:"auto,omitempty"` // the board started this chunk by itself
+}
+
+// StepRow is one step of the running chunk, by its data name; State is done, now or todo.
+type StepRow struct {
+	Name  string `json:"name"`
+	State string `json:"state"`
 }
 
 // HandInView is the hand-in in flight or the last one that finished.
@@ -217,6 +262,7 @@ type NeedRow struct {
 	Kind    string `json:"kind"`
 	Sev     string `json:"sev"`
 	Text    string `json:"text"`
+	Sub     string `json:"sub,omitempty"` // the chip: the readiness word of an offer
 	Actions []Verb `json:"actions"`
 }
 
@@ -228,6 +274,8 @@ type Strip struct {
 	Title      string `json:"title"`
 	State      State  `json:"state"`
 	Step       string `json:"step,omitempty"`
+	StepNo     int    `json:"stepNo,omitempty"`
+	StepCount  int    `json:"stepCount,omitempty"`
 	NPC        string `json:"npc,omitempty"`
 }
 
@@ -247,6 +295,9 @@ func (d *Desk) invalidate() { d.mu.Lock(); d.cache = nil; d.mu.Unlock() }
 
 // View derives the board (cached for one second: the page polls, derive reads the game evidence).
 func (d *Desk) View() View {
+	if x, _ := d.exec(); x != nil {
+		x.Touch() // a client asking for the board is the player being present (slice S8, away detection)
+	}
 	d.mu.Lock()
 	if d.cache != nil && d.cfg.Now().Sub(d.cached) < viewCacheTTL {
 		v := *d.cache
@@ -263,7 +314,7 @@ func (d *Desk) View() View {
 
 func (d *Desk) build() View {
 	v := View{Schema: SchemaQuests, Mode: DefaultMode, Generated: d.cfg.Now().UTC(),
-		AutoStart: AutoView{Note: "Opt-in auto-start arrives with slice S8; the per-quest flag is stored but nothing acts on it."},
+		AutoStart: AutoView{Note: "Starts a quest by itself only when it is safe, the hero is calm and nobody paused a moment ago."},
 		Offers:    []OfferView{}, Quests: []QuestRow{}, History: []HistoryRow{}, Needs: []NeedRow{}}
 	x, st := d.exec()
 	if x == nil || st == nil {
@@ -284,6 +335,20 @@ func (d *Desk) build() View {
 		return v
 	}
 	v.Enabled, v.ModeActs = true, true
+	v.AutoStart.Available = true
+	as := x.AutoState()
+	v.AutoStart.DelaySec, v.AutoStart.Why = as.Opt.DelaySec, as.Why
+	if p := as.Pending; p != nil {
+		left := int(p.Ends.Sub(d.cfg.Now()).Seconds() + 0.999)
+		if left < 0 {
+			left = 0
+		}
+		v.AutoStart.Countdown = &Countdown{Quest: p.Quest, QuestTitle: p.Title, Chunk: p.Chunk, EndsAt: p.Ends.UTC(), SecondsLeft: left}
+	}
+	level := 0
+	if d.cfg.Level != nil {
+		level = d.cfg.Level()
+	}
 	if d.cfg.Meter != nil {
 		v.Meter = d.cfg.Meter(v.Mode, status)
 	}
@@ -299,7 +364,7 @@ func (d *Desk) build() View {
 		if qerr != nil {
 			continue
 		}
-		row := QuestRow{ID: qv.ID, Title: qv.Title, Act: q.Act, State: qv.State, Auto: plan.AutoStart(status.Diff, qv.ID), Chunks: []ChunkRow{}}
+		row := QuestRow{ID: qv.ID, Title: qv.Title, Act: q.Act, State: qv.State, Auto: plan.AutoStart(status.Diff, qv.ID), AutoOK: q.AutoStart == "allowed", Chunks: []ChunkRow{}}
 		for _, cv := range qv.Chunks {
 			c, cerr := d.b.Chunk(qv.ID, cv.ID)
 			if cerr != nil {
@@ -307,7 +372,7 @@ func (d *Desk) build() View {
 			}
 			row.Chunks = append(row.Chunks, ChunkRow{ID: cv.ID, Title: c.Title, State: cv.State, Readiness: cv.Reason, Why: cv.Why, Confirmed: cv.Confirmed})
 			if cv.State == Ready {
-				v.Offers = append(v.Offers, d.offer(q, c, cv, plan.AutoStart(status.Diff, qv.ID), !busy, class, v.Paused))
+				v.Offers = append(v.Offers, d.offer(q, c, cv, plan.AutoStart(status.Diff, qv.ID), !busy, class, level, v.Paused))
 			}
 			if cv.State == Done && plan.accepted(status.Diff, qv.ID, cv.ID) {
 				v.History = append(v.History, HistoryRow{Quest: qv.ID, Chunk: cv.ID, Title: c.Title, Accepted: acceptedAt(plan, status.Diff, qv.ID, cv.ID), Confirmed: cv.Confirmed})
@@ -324,6 +389,7 @@ func (d *Desk) build() View {
 	}
 	if a := status.Active; a != nil {
 		rv := d.run(*a)
+		rv.Auto = plan.autoRecord(status.Diff, a.Quest, a.Chunk)
 		switch {
 		case a.State == Awaiting:
 			v.Awaiting = &rv
@@ -332,8 +398,9 @@ func (d *Desk) build() View {
 		default:
 			v.Running = &rv
 		}
-		v.Strip = &Strip{Quest: rv.Quest, QuestTitle: rv.QuestTitle, Chunk: rv.Chunk, Title: rv.Title, State: rv.State, Step: rv.Step, NPC: rv.NPC}
+		v.Strip = &Strip{Quest: rv.Quest, QuestTitle: rv.QuestTitle, Chunk: rv.Chunk, Title: rv.Title, State: rv.State, Step: rv.Step, StepNo: rv.StepNo, StepCount: rv.StepCount, NPC: rv.NPC}
 	}
+	v.WhileAway = d.awayCard(x)
 	for _, r := range status.Extra {
 		v.Extra = append(v.Extra, r.String())
 	}
@@ -353,13 +420,13 @@ func acceptedAt(p Plan, diff int, quest, chunk string) time.Time {
 	return time.Time{}
 }
 
-func (d *Desk) offer(q Quest, c Chunk, cv ChunkView, auto, startable bool, class string, paused bool) OfferView {
+func (d *Desk) offer(q Quest, c Chunk, cv ChunkView, auto, startable bool, class string, level int, paused bool) OfferView {
 	risk := c.Risk
 	if risk == "" {
 		risk = q.Risk
 	}
 	o := OfferView{Quest: q.ID, QuestTitle: q.Title, Chunk: c.ID, Title: c.Title, Act: q.Act, Risk: risk,
-		Readiness: cv.Reason, Reasons: []Reason{}, Minutes: c.Minutes, Startable: startable && !paused, Auto: auto}
+		Readiness: cv.Reason, Reasons: []Reason{}, Minutes: c.Minutes, Startable: startable && !paused, Auto: auto, AutoOK: q.AutoStart == "allowed"}
 	if class != "" {
 		if f, ok, err := d.b.Floor(q, class); err == nil && ok {
 			o.LegacyFloor = f
@@ -376,6 +443,9 @@ func (d *Desk) offer(q Quest, c Chunk, cv ChunkView, auto, startable bool, class
 			}
 		}
 	}
+	if cv.Reason != ReadySafe && o.LegacyFloor > level && level > 0 {
+		o.LevelsToGo = o.LegacyFloor - level
+	}
 	switch {
 	case paused:
 		o.Why = "The bot is paused."
@@ -387,6 +457,27 @@ func (d *Desk) offer(q Quest, c Chunk, cv ChunkView, auto, startable bool, class
 
 func (d *Desk) run(a Active) RunView {
 	rv := RunView{Quest: a.Quest, Chunk: a.Chunk, State: a.State, Step: a.Step, Why: a.Why, Failures: a.Failures, Deaths: a.Deaths}
+	if c, err := d.b.Chunk(a.Quest, a.Chunk); err == nil && len(c.Steps) > 0 {
+		cur := a.StepIdx
+		if a.State == Awaiting || cur < 0 || cur > len(c.Steps) {
+			cur = len(c.Steps) // every step is done: the hero waits at the NPC
+		}
+		rv.StepCount = len(c.Steps)
+		rv.StepNo = cur + 1
+		if rv.StepNo > rv.StepCount {
+			rv.StepNo = rv.StepCount
+		}
+		for i, n := range c.Steps {
+			st := "todo"
+			switch {
+			case i < cur:
+				st = "done"
+			case i == cur:
+				st = "now"
+			}
+			rv.Steps = append(rv.Steps, StepRow{Name: n, State: st})
+		}
+	}
 	if q, err := d.b.Quest(a.Quest); err == nil {
 		rv.QuestTitle = q.Title
 		if c, err := d.b.Chunk(a.Quest, a.Chunk); err == nil {
@@ -426,12 +517,64 @@ func (d *Desk) needs(v View) []NeedRow {
 				{Label: "Try again", Post: QuestRoute(b.Quest, "retry"), Body: map[string]any{"chunk": b.Chunk}},
 				{Label: "Stop", Post: QuestRoute(b.Quest, "cancel"), Body: map[string]any{"chunk": b.Chunk}}}})
 	}
+	if c := v.AutoStart.Countdown; c != nil {
+		out = append(out, NeedRow{ID: "quest:auto:" + c.Quest + "/" + c.Chunk, Kind: "quest_auto", Sev: "event",
+			Text:    fmt.Sprintf("%s starts by itself in %d s", c.QuestTitle, c.SecondsLeft),
+			Actions: []Verb{{Label: "Cancel", Post: QuestRoute(c.Quest, "cancel"), Body: map[string]any{"chunk": c.Chunk}}}})
+	}
+	// An offer is a Needs-you row only while it stands: it goes when the chunk starts, the offer changes or the bot pauses.
+	if v.Strip == nil && !v.Paused && v.AutoStart.Countdown == nil {
+		var best *OfferView
+		for i := range v.Offers {
+			o := &v.Offers[i]
+			if !o.Startable {
+				continue
+			}
+			if best == nil || (best.Readiness != ReadySafe && o.Readiness == ReadySafe) {
+				best = o
+			}
+		}
+		if best != nil {
+			out = append(out, NeedRow{ID: "quest:offer:" + best.Quest + "/" + best.Chunk, Kind: "quest_offer", Sev: "event",
+				Text: best.QuestTitle + " is ready: Start", Sub: string(best.Readiness),
+				Actions: []Verb{{Label: "Start", Post: QuestRoute(best.Quest, "start"), Body: map[string]any{"chunk": best.Chunk}}}})
+		}
+	}
 	if h := v.HandIn; h != nil && (h.State == "blocked" || h.State == "failed") && v.Blocked == nil {
 		out = append(out, NeedRow{ID: "quest:handin-failed:" + h.Quest + "/" + h.Chunk, Kind: "quest_handin_failed", Sev: "warn",
 			Text:    "The hand-in did not go through: " + h.Reason,
 			Actions: []Verb{{Label: "Hand in", Post: QuestRoute(h.Quest, "handin"), Body: map[string]any{"chunk": h.Chunk}}}})
 	}
 	return out
+}
+
+// awayCard is the "while you were away" summary: nil when there is nothing to show.
+func (d *Desk) awayCard(x *Exec) *AwayCard {
+	evs, err := x.AwayEvents()
+	if err != nil || len(evs) == 0 {
+		return nil
+	}
+	card := &AwayCard{Events: []AwayEvent{}}
+	for _, ev := range evs {
+		t := d.title(ev.Quest)
+		a := AwayEvent{At: ev.At, Quest: ev.Quest, QuestTitle: t, Chunk: ev.Chunk}
+		switch ev.Kind {
+		case EvAutoStart:
+			a.Kind, a.Text = "started", "Started "+t+" by itself"
+		case EvAutoHandIn:
+			a.Kind, a.Text = "handedIn", "Handed in "+t
+			if ev.Note != "" {
+				a.Text += " (" + ev.Note + ")"
+			}
+		default:
+			a.Kind, a.Text = "handInFailed", "Could not hand in "+t
+			if ev.Note != "" {
+				a.Text += ": " + ev.Note
+			}
+		}
+		card.Events = append(card.Events, a)
+	}
+	return card
 }
 
 // ---- actions ---------------------------------------------------------------------------------------------
@@ -568,6 +711,10 @@ func (d *Desk) Cancel(quest, chunk string) Reply {
 	if bad != nil {
 		return *bad
 	}
+	if x.CancelAuto(quest, chunk) {
+		d.invalidate()
+		return Reply{OK: true, Quest: quest, Chunk: chunk, Status: http.StatusOK, Reason: d.title(quest) + " will not start by itself this time; your auto-start setting stays."}
+	}
 	chunk, state, bad := d.pick(x, quest, chunk, false)
 	if bad != nil {
 		return *bad
@@ -668,6 +815,72 @@ func (d *Desk) runHandIn(x *Exec, quest, chunk, k string) {
 	delete(d.hand, k)
 	d.last, d.cache = &hv, nil
 	d.mu.Unlock()
+}
+
+// SetAuto turns the opt-in for a quest on or off in the current difficulty (the page's auto switch). A quest whose data
+// says it always needs the player refuses with the reason.
+func (d *Desk) SetAuto(quest string, on bool) Reply {
+	x, st, bad := d.gate()
+	if bad != nil {
+		return *bad
+	}
+	q, err := d.b.Quest(quest)
+	if err != nil {
+		return refuse(http.StatusNotFound, CodeUnknown, "There is no quest %q.", quest)
+	}
+	base := Reply{Quest: quest}
+	if on && q.AutoStart != "allowed" {
+		return withBase(base, refuse(http.StatusConflict, CodeAutoNever, "%s always needs you; it cannot start by itself.", q.Title))
+	}
+	stt, err := x.State()
+	if err != nil {
+		return withBase(base, refuse(http.StatusInternalServerError, CodeInternal, "The board could not be read: %v", err))
+	}
+	plan, _, perr := st.Load()
+	if perr != nil {
+		return withBase(base, refuse(http.StatusInternalServerError, CodeInternal, "Could not read the plan: %v", perr))
+	}
+	if plan.AutoStart(stt.Diff, quest) == on {
+		base.OK, base.Already, base.Status = true, true, http.StatusOK
+		base.Reason = autoWords(q.Title, on, true)
+		return base
+	}
+	if err := st.SetAutoStart(quest, stt.Diff, on); err != nil {
+		return withBase(base, refuse(http.StatusInternalServerError, CodeInternal, "Could not save it: %v", err))
+	}
+	if !on {
+		x.CancelAuto(quest, "")
+	}
+	d.invalidate()
+	base.OK, base.Status, base.Reason = true, http.StatusOK, autoWords(q.Title, on, false)
+	return base
+}
+
+func autoWords(title string, on, already bool) string {
+	state := "on"
+	if !on {
+		state = "off"
+	}
+	if already {
+		return "Auto-start for " + title + " is already " + state + "."
+	}
+	if on {
+		return "Auto-start for " + title + " is on: it starts by itself when it is safe."
+	}
+	return "Auto-start for " + title + " is off."
+}
+
+// DismissAway clears the "while you were away" card.
+func (d *Desk) DismissAway() Reply {
+	_, st, bad := d.gate()
+	if bad != nil {
+		return *bad
+	}
+	if err := st.DismissAway(d.cfg.Now()); err != nil {
+		return refuse(http.StatusInternalServerError, CodeInternal, "Could not save it: %v", err)
+	}
+	d.invalidate()
+	return Reply{OK: true, Status: http.StatusOK, Reason: "Cleared."}
 }
 
 // SetMode stores the between-chunks mode (train, idle, farm). The hero adopts it at the next safe moment (slice S6).

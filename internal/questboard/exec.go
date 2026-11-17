@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+	"time"
 )
 
 // The executor hand-off (slice S3). An accepted plan record starts the existing chunk handler (the task layer's
@@ -60,6 +61,8 @@ type Options struct {
 	MaxHandIn   int    // dialogue attempts per HandIn call before it parks (default 3)
 	Mode        string // recorded on the plan record (train, idle, farm); default train
 	Log         func(msg string, kv ...any)
+	Now         func() time.Time // the clock of the auto-start controller (default time.Now); tests pass a fake
+	Auto        AutoOptions      // the auto-start limits (auto.go); the zero value never starts anything by itself
 }
 
 func (o Options) norm() Options {
@@ -74,6 +77,9 @@ func (o Options) norm() Options {
 	}
 	if o.Mode == "" {
 		o.Mode = "train"
+	}
+	if o.Now == nil {
+		o.Now = time.Now
 	}
 	if o.Log == nil {
 		o.Log = func(string, ...any) {}
@@ -104,11 +110,15 @@ type Exec struct {
 	rs      map[string]*runState
 	paused  bool
 	handing bool // a HandIn dialogue is in flight: Next answers Busy
+	ax      autoState
 }
 
 // NewExec builds the executor of one hero. env and act are the bot adapter (or the Fake in tests).
 func NewExec(b *Board, st *Store, env Env, act Actions, o Options) *Exec {
-	return &Exec{b: b, st: st, env: env, act: act, o: o.norm(), rs: map[string]*runState{}}
+	o = o.norm()
+	e := &Exec{b: b, st: st, env: env, act: act, o: o, rs: map[string]*runState{}}
+	e.ax.born = o.Now()
+	return e
 }
 
 // Enabled reports the knob.
@@ -267,6 +277,12 @@ func (e *Exec) Accept(quest, chunk string) error {
 	if err != nil {
 		return err
 	}
+	return e.acceptLocked(vs, plan, diff, quest, chunk, nil)
+}
+
+// acceptLocked records an accept; ev (the auto-start controller) makes it an auto record with its log line. Callers
+// hold e.mu and pass the views they just derived.
+func (e *Exec) acceptLocked(vs []QuestView, plan Plan, diff int, quest, chunk string, ev *AutoEvent) error {
 	if _, cur, ok := chunkView(vs, quest, chunk); ok && (cur.State == Accepted || cur.State == InProgress || cur.State == Awaiting) {
 		return nil // the same tap again is a no-op
 	}
@@ -280,7 +296,13 @@ func (e *Exec) Accept(quest, chunk string) error {
 		_, c, ok := chunkView(vs, r.Quest, r.Chunk)
 		return ok && (c.State == Done || c.State == Skipped)
 	}
-	if err := e.st.AcceptIf(quest, chunk, diff, e.o.Mode, finished); err != nil {
+	var err error
+	if ev != nil {
+		err = e.st.AcceptAuto(quest, chunk, diff, e.o.Mode, finished, *ev)
+	} else {
+		err = e.st.AcceptIf(quest, chunk, diff, e.o.Mode, finished)
+	}
+	if err != nil {
 		return err
 	}
 	delete(e.rs, ChunkKey(quest, chunk)) // a fresh start: no old counters or park
@@ -315,6 +337,7 @@ func (e *Exec) Cancel(quest, chunk string) error {
 // Reset cancels the running slice cleanly and forgets every counter and park. The plan records stay accepted:
 // the chunk resumes from the evidence at the next tick (the player's Reset, a new game, a knob switch off).
 func (e *Exec) Reset() {
+	e.NoteHold()
 	e.mu.Lock()
 	vs, plan, diff, err := e.derive()
 	var act []Ref
@@ -360,6 +383,7 @@ type Active struct {
 	State        State
 	Step         string
 	Why          string // the Needs-you reason of a blocked chunk
+	StepIdx      int    // index of the first open step in the chunk's list, -1 when none is open (waiting at the NPC)
 	Failures     int
 	Deaths       int
 }
@@ -382,7 +406,7 @@ func (e *Exec) State() (Status, error) {
 	}
 	r := o[0]
 	_, c, _ := chunkView(vs, r.Quest, r.Chunk)
-	a := &Active{Quest: r.Quest, Chunk: r.Chunk, State: c.State, Step: c.StepName, Why: c.Why}
+	a := &Active{Quest: r.Quest, Chunk: r.Chunk, State: c.State, Step: c.StepName, Why: c.Why, StepIdx: c.Step}
 	if rs := e.rs[ChunkKey(r.Quest, r.Chunk)]; rs != nil {
 		a.Failures, a.Deaths = rs.failures, rs.deaths
 	}

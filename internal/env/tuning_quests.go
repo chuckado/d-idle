@@ -3,9 +3,18 @@ package env
 // QuestsTuning holds the quest board switch (docs/questboard.md, design docs/design/quest-board-2026-11-16.md).
 type QuestsTuning struct {
 	Board int // 1: the quest board drives quests (player taps Start and Hand in); 0: the planner drives them as before
+
+	// Opt-in auto-start (slice S8); nothing here acts while Board is 0 or while no quest is marked auto.
+	AutoDelaySec int // countdown before an auto-start, in seconds; 0 starts at once
+	AwayMin      int // minutes without a watch client before the player counts as away
+	AutoHoldMin  int // minutes after the player paused or reset when nothing starts by itself
+	AutoGapMin   int // minutes between two auto-started chunks
+	AutoDayCap   int // auto-started chunks per 24 hours
 }
 
-func DefaultQuestsTuning() QuestsTuning { return QuestsTuning{} }
+func DefaultQuestsTuning() QuestsTuning {
+	return QuestsTuning{AutoDelaySec: 20, AwayMin: 10, AutoHoldMin: 15, AutoGapMin: 30, AutoDayCap: 6}
+}
 
 func questsKnobs() []Knob {
 	return []Knob{
