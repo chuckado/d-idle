@@ -17,6 +17,7 @@ owns:
 exclusive:
   - "fork-branch:didle/vault-spike"
 contracts: []
+result: "GO for V1. Fork didle/vault-spike (b4d2f861, pushed): ground full / item full / item create behind --vault-verbs. Builder drill 5 rounds: 860 of 860 captured, 820 of 820 created bytes-equal, 40 of 40 reload-equal and cross-hero equal, 0 failures; U1 settled (unidentified items carry the full roll); finding: uid is 0 on d2d items so the seed dup guard is useless. Verified on a headless d2d on the builder, not on Game.exe; oracle not run."
 ---
 
 ## Description
@@ -29,7 +30,7 @@ Why: prove the vault capture and create path (design docs/design/loot-vault-2026
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 fork stub ground full / item full / item create behind --vault-verbs pushed to the private remote
-- [ ] #2 lab drill on the builder with numbers (items, bytes equal, reload equal, failures)
-- [ ] #3 report docs/probes/vault-spike-2026-11-16.md with verb shapes and go/no-go for V1
+- [x] #1 fork stub ground full / item full / item create behind --vault-verbs pushed to the private remote
+- [x] #2 lab drill on the builder with numbers (items, bytes equal, reload equal, failures)
+- [x] #3 report docs/probes/vault-spike-2026-11-16.md with verb shapes and go/no-go for V1
 <!-- AC:END -->
