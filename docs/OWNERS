@@ -231,7 +231,6 @@ cmd/d2bot/powerwire_test.go  credit-runner  survB
 cmd/d2bot/powerwire_test.go  credit-runner  survC
 cmd/d2bot/powerwire_test.go  credit-runner  survfix
 cmd/d2bot/questwire.go  credit-runner  quests4
-cmd/d2bot/questwire.go  credit-runner  quests5
 cmd/d2bot/questwire_test.go  credit-runner  quests4
 cmd/d2bot/readywire.go  credit-runner  uic3
 cmd/d2bot/repairwire.go  credit-runner  repairtrip
@@ -415,7 +414,6 @@ docs/quest-hints.md  live-agent  questdrill
 docs/questboard.md  credit-runner  quests1
 docs/questboard.md  credit-runner  quests3
 docs/questboard.md  credit-runner  quests4
-docs/questboard.md  credit-runner  quests5
 docs/questboard.md  credit-runner  quests7
 docs/releases/0.1.0.md  credit-runner  cut010b
 docs/releases/0.1.0.md  credit-runner  cut010d
@@ -488,7 +486,6 @@ docs/tidy.md  credit-runner  tidy
 docs/towntests.md  credit-runner  towntests
 docs/ui-design-system.md  credit-runner  nopins
 docs/ui-design-system.md  credit-runner  uic3
-docs/ui-quests.md  credit-runner  quests5
 docs/ui/friend-feedback-2026-11-15.md  credit-runner  friendfb
 docs/ui/redesign-2026-11-14/reviews/c2c3-review.md  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/c2c3/  credit-runner  uic23review
@@ -954,7 +951,6 @@ internal/watch/funwire.go  credit-runner  vaultv4
 internal/watch/gearsets_test.go  credit-runner  gearsets
 internal/watch/glance.go  credit-runner  intake
 internal/watch/glance.go  credit-runner  quests4
-internal/watch/glance.go  credit-runner  quests5
 internal/watch/glance.go  credit-runner  uis7
 internal/watch/glance.go  credit-runner  videofeed2
 internal/watch/glance.go  credit-runner  viewerfps
@@ -1022,7 +1018,6 @@ internal/watch/pausefix_test.go  credit-runner  pausefix
 internal/watch/pprofapi.go  credit-runner  botcpu2
 internal/watch/questsapi.go  credit-runner  quests4
 internal/watch/questsapi_test.go  credit-runner  quests4
-internal/watch/questui_test.go  credit-runner  quests5
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
 internal/watch/resetapi.go  credit-runner  botreset
@@ -1101,7 +1096,6 @@ internal/watch/testdata/panel_harness.js  credit-runner  videofeed4
 internal/watch/testdata/pause/  credit-runner  uib1
 internal/watch/testdata/quests  credit-runner  quests4
 internal/watch/testdata/quests  credit-runner  quests7
-internal/watch/testdata/questui  credit-runner  quests5
 internal/watch/testdata/reset  credit-runner  botreset
 internal/watch/testdata/reset  credit-runner  resetinstant
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail
@@ -1185,12 +1179,10 @@ internal/watch/web/inventory.js  credit-runner  uiphone
 internal/watch/web/layout.js  credit-runner  uis1
 internal/watch/web/layout.js  credit-runner  uis6
 internal/watch/web/layout.js  credit-runner  uis7
-internal/watch/web/layout.json  credit-runner  quests5
 internal/watch/web/layout.json  credit-runner  uis1
 internal/watch/web/layout.json  credit-runner  uis7
 internal/watch/web/layouts/  credit-runner  uis1
 internal/watch/web/layouts/  credit-runner  uis7
-internal/watch/web/layouts/cockpit.json  credit-runner  quests5
 internal/watch/web/layouts/cockpit.json  credit-runner  uis6
 internal/watch/web/lootrulesui.js  credit-runner  lootwire3
 internal/watch/web/mjpeg.js  credit-runner  viewerfps
@@ -1206,7 +1198,6 @@ internal/watch/web/panels/gear  credit-runner  repairtrip
 internal/watch/web/panels/health/  credit-runner  uifix1
 internal/watch/web/panels/health/  credit-runner  uis3
 internal/watch/web/panels/hero-vitals/panel.js  credit-runner  vaultv7b
-internal/watch/web/panels/journey-strip  credit-runner  quests5
 internal/watch/web/panels/journey-strip/  credit-runner  uifix1
 internal/watch/web/panels/journey-strip/  credit-runner  uis3
 internal/watch/web/panels/log  credit-runner  friendfb
@@ -1220,7 +1211,6 @@ internal/watch/web/panels/map  credit-runner  maphistoryD
 internal/watch/web/panels/map  credit-runner  maptrail
 internal/watch/web/panels/map  credit-runner  maptrail2
 internal/watch/web/panels/map/  credit-runner  uis6
-internal/watch/web/panels/needs-you  credit-runner  quests5
 internal/watch/web/panels/needs-you/  credit-runner  uifix1
 internal/watch/web/panels/needs-you/  credit-runner  uis3
 internal/watch/web/panels/needs-you/panel.js  credit-runner  uis7
@@ -1233,11 +1223,7 @@ internal/watch/web/panels/orders/  credit-runner  uis4
 internal/watch/web/panels/orders/panel.js  credit-runner  pausefix
 internal/watch/web/panels/orders/panel.js  credit-runner  vaultv4
 internal/watch/web/panels/progress/  credit-runner  uis3
-internal/watch/web/panels/quest-board  credit-runner  quests5
-internal/watch/web/panels/quest-list  credit-runner  quests5
-internal/watch/web/panels/quest-strip  credit-runner  quests5
 internal/watch/web/panels/statusline/  credit-runner  uifix1
-internal/watch/web/panels/video  credit-runner  quests5
 internal/watch/web/panels/video  credit-runner  videofeed2
 internal/watch/web/panels/video  credit-runner  videofeed4
 internal/watch/web/panels/video  credit-runner  viewerfps
@@ -1258,14 +1244,12 @@ internal/watch/web/shell.css  credit-runner  uis6
 internal/watch/web/shell.css  credit-runner  uis7
 internal/watch/web/shell.js  credit-runner  friendfb
 internal/watch/web/shell.js  credit-runner  minimapfix
-internal/watch/web/shell.js  credit-runner  quests5
 internal/watch/web/shell.js  credit-runner  resetinstant
 internal/watch/web/shell.js  credit-runner  uifix1
 internal/watch/web/shell.js  credit-runner  uis1
 internal/watch/web/shell.js  credit-runner  uis6
 internal/watch/web/shell.js  credit-runner  uis7
 internal/watch/web/shell.js  credit-runner  vaultv4
-internal/watch/web/shell.json  credit-runner  quests5
 internal/watch/web/shell.json  credit-runner  uis1
 internal/watch/web/shell.json  credit-runner  uis6
 internal/watch/web/skills.css  credit-runner  friendfb
@@ -1362,11 +1346,9 @@ tools/uilint/  credit-runner  uis1
 tools/uilint/lint.go  credit-runner  uis6
 tools/uishots  credit-runner  gearsets
 tools/uishots  credit-runner  lootwire3
-tools/uishots  credit-runner  quests5
 tools/uishots  credit-runner  videofeed4
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
-tools/uishots.sh  credit-runner  quests5
 tools/uishots.sh  credit-runner  resetinstant
 tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3
