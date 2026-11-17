@@ -122,6 +122,7 @@ export function mount(root, ctx) {
   const plan = ctx.el('div', 'o-row o-plan');
   const why = ctx.el('div', 'o-why');
   why.hidden = true;
+  ctx.body.dataset.scroll = '1'; // a window too short for the verbs, the list and the plan scrolls the tile (fit 870x520 and 1280x480, card morefit)
   ctx.body.append(head, verbs, why, safety, list, plan);
   let view = null, down = false;
 
