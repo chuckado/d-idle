@@ -1,6 +1,6 @@
 # Verifier: decomp36, the gamble price and MonUMod Multiple Shots (2026-11-16)
 
-> status: current, 2026-11-16 (card verifydecomp36, TASK-569, Opus, singly; independent verifier before posting). Nothing posted. Subjects: private fork branches `fid/gamble-price-r1` (head `eba73ede`) and `fid/umod-can-take-r1` (head `6d1fc304`), both on upstream `b6e6940d`; bodies `docs/upstream/bodies/gamble-price-body.md` and `umod-multishot-body.md`; trace `docs/research/dc36-lane-b.md` (TASK-558). The third decomp36 branch (`fid/death-corpse-exp-r1`) is held, as decided, and was not verified. Checklist from `verifier-decomp35-2026-11-16.md`, `verifier-p13-2026-11-16.md`, `verifier-seq-followup-2026-11-16.md`. The fixed r2 branches are on the private fork remote only.
+> status: current, 2026-11-16 (card verifydecomp36, TASK-569, Opus, singly; independent verifier before posting). Nothing posted. Post `fid/gamble-price-r2` and `fid/umod-can-take-r3`. Subjects: private fork branches `fid/gamble-price-r1` (head `eba73ede`) and `fid/umod-can-take-r1` (head `6d1fc304`), both on upstream `b6e6940d`; bodies `docs/upstream/bodies/gamble-price-body.md` and `umod-multishot-body.md`; trace `docs/research/dc36-lane-b.md` (TASK-558). The third decomp36 branch (`fid/death-corpse-exp-r1`) is held, as decided, and was not verified. Checklist from `verifier-decomp35-2026-11-16.md`, `verifier-p13-2026-11-16.md`, `verifier-seq-followup-2026-11-16.md`. The fixed branches are on the private fork remote only.
 
 Tags: **V run** (run by this verifier today, NAS builder), **V read** (disassembly or source read by this verifier), **I** (inferred), **S** (an earlier doc, named), **U** (unverified).
 
@@ -9,11 +9,11 @@ Tags: **V run** (run by this verifier today, NAS builder), **V read** (disassemb
 | PR | Verdict | Post |
 |---|---|---|
 | Gamble price | **r1 FAIL (hygiene), r2 PASS WITH CHANGES** | `fid/gamble-price-r2`: oracle `f9a127e1`, claim `48d8f6ee`, on upstream main `def80df7`; body after G1 to G6 |
-| MonUMod Multiple Shots | **r1 FAIL (hygiene), r2 PASS WITH CHANGES** | `fid/umod-can-take-r2`: oracle `810b7508`, claim `a4988666`, on upstream main `def80df7`; body after U1 to U6 |
+| MonUMod Multiple Shots | **r1 FAIL (hygiene), r2 FAIL (tidy), r3 PASS WITH CHANGES** | `fid/umod-can-take-r3`: oracle `7bd3ddec`, claim `fdea73d1`, on upstream main `def80df7`; body after U1 to U6. `fid/umod-can-take-r2` is superseded (an unused include tidy flags) |
 
-The two PRs are independent (they share only neighbouring `tools/emu/README.md` rows); post in either order, gamble first by value. Both rules are game.exe's and both claims implement them (V read and V run below). Neither r1 can be posted:
+The two PRs are independent (they share only neighbouring `tools/emu/README.md` rows); post in either order, gamble first by value. Both rules are game.exe's and both claims implement them (the MonUMod post is r3, r2 plus one tidy fix) (V read and V run below). Neither r1 can be posted:
 
-1. **Identity and trailer (blocker, both).** All four r1 commits are authored and committed as the scratch `Claude <noreply@anthropic.com>` and carry no trailer (V run, `git log --format`). r2: the user's noreply identity as author and committer (as the merged `fid/tele-refund-r2`), `Agent: Claude Code` the only parsed trailer, after a blank line (`git interpret-trailers --parse`, all four).
+1. **Identity and trailer (blocker, both).** All four r1 commits are authored and committed as the scratch `Claude <noreply@anthropic.com>` and carry no trailer (V run, `git log --format`). r2 and r3: the user's noreply identity as author and committer (as the merged `fid/tele-refund-r2`), `Agent: Claude Code` the only parsed trailer, after a blank line (`git interpret-trailers --parse`, all six commits).
 2. **The compare is `diff` (high, both).** r1's README rows and bodies compare with `diff game.tsv d2d.tsv`: two empty files pass silently (exit 0), and nothing reports a count. r2 adds a `compare` verb to each oracle script: `N cases, M differ`, exit 1 on any difference, an empty or unequal file, a malformed line or ids out of step (V run on hand-made files, six cases each, both empty included).
 3. **Usage errors (medium, both).** r1 `gamble_price.py` with an unknown verb boots the emulator and exits 0, `game` without a file is an `IndexError`, and its docstring holds `\.` in a non-raw string (a `SyntaxWarning` on Python 3.12+, an error under `-W error`, V run). r1 `umod_can_take.py` runs the whole grid for any argument but `probe`, and fails presubmit's ruff (F841, unused `rows`): **presubmit 1 FAIL on r1** (V run). r2: `usage:` and exit 1 on no, unknown or short arguments; ruff clean.
 4. **The tests do not pin game.exe's values (high, both).** r1's gamble test asserts only `9ha == hax` (an exceptional base): a mutant that maps only exceptional bases to their normal code (elites still wrong) passes it. r1's umod test asserts only that vampire1 refuses the fPick 2 rows: a mutant that refuses every row for a nomultishot monster passes it (section Mutants). r2 pins game.exe's numbers from the oracle: `hax`, `9ha`, `7ha` at clvl 1, 30, 45 and 45 with 10 percent reduced; vampire1 and slinger5 take 40 of 43 rows, sk_archer1 41 and the Multiple Shots row.
@@ -40,15 +40,38 @@ The two PRs are independent (they share only neighbouring `tools/emu/README.md` 
 
 ## Differentials (V run)
 
-@@DIFF@@
+Case files: `gamble_price.py gen` (73,062 cases) and the extra grid (19,926 cases, reduced 1 to 99); `umod_can_take.py game` (31,562 pairs). d2d side: `test_gamble_price --gamble-price` and `test_umod_can_take --umod-can-take` built from each commit (Release, asserts on), compared with the r2 scripts' `compare` verb. "differ" = cases where d2d's answer is not game.exe's.
+
+| Tree | gamble 73,062 | gamble reduced 1..99, 19,926 | MonUMod 31,562 |
+|---|---|---|---|
+| oracle commit (the parent: gamble `f9a127e1`, MonUMod `7bd3ddec`) | **48,310**, exit 1 | **13,176**, exit 1 | **11** (row 29 on rows 131..135, 394, 395, 695..697, 731), exit 1 |
+| claim (gamble `48d8f6ee`, MonUMod `fdea73d1`) | 0, exit 0 | 0, exit 0 | 0, exit 0 |
+
+decomp36's counts reproduce exactly on upstream `def80df7` (48,310 and 11). The reduced-prices grid is new: d2d's truncation and game.exe's `MulDiv` agree on every value tried. The MonUMod r2 commits (`810b7508`, `a4988666`) give the same counts (11 and 0).
 
 ## Mutants (V run)
 
-@@MUT@@
+| Mutant (local only) | compare | r2 test (`test_gamble_price` / `test_umod_can_take`) | r1's test |
+|---|---|---|---|
+| gamble: parent rule under the claim's test | 48,310 / 13,176 differ | aborts (`gamble_price(.., code, 1) == 771`) | (r1's oracle commit already carried its assert) |
+| gamble: normcode only for an exceptional base (elites by their own record) | 24,156 / 6,588 differ | aborts (`== 771`, for `7ha`) | **passes** |
+| MonUMod: parent rule under the claim's test | 11 differ | aborts (vampire1 and slinger5 refuse the fPick 2 row) | aborts |
+| MonUMod: nomultishot refuses every row | 440 differ | aborts (`taken(vampire) == 40 ..`) | **passes** |
+
+So r1's tests let a half-fix through in both PRs; r2's pinned values catch every mutant tried. Each oracle commit's own test passes (no failing assert; V run: `test_gamble_price` and `test_umod_can_take` rc 0 on `f9a127e1` and `7bd3ddec`).
 
 ## Build, ctest, tidy
 
-@@BUILD@@
+Builder container, Release, GCC, tests and tools on, `-j2` under the builder's lane lock, ccache; all as one job registered with `tools/agentrun.sh` (V run).
+
+| Tree | Build | ctest |
+|---|---|---|
+| upstream main `def80df7` | full, rc 0 | 2 of 348 fail: `test_outdoor`, `smoke_d2d` |
+| gamble claim `48d8f6ee` | full, rc 0 | the same 2 of 349 fail; `test_gamble_price` Passed (the one added test); `test_rules`, `test_thief_mod` Passed |
+| MonUMod claim `a4988666` (r2) | full, rc 0 | the same 2 of 349 fail; `test_umod_can_take` Passed; `test_rules`, `test_thief_mod` Passed |
+| MonUMod r3 `7bd3ddec`, `fdea73d1` | test target on the r2 build (they differ from r2 only by one include line in the test) | `test_umod_can_take` rc 0 on both |
+
+clang-tidy-19 over the units `tools/tidy-pr-select.py` picks (gamble: `rules.hpp`, `test_gamble_price.cpp`, 321 units; MonUMod: `gamedata_load.cpp`, `montypes.hpp`, `uniques.hpp`, `test_umod_can_take.cpp`, 295 units): the gamble stack 5 findings, all upstream's `std::erase_if` include-cleaner errors (`debug_hero.cpp` twice, `test_akara_decipher.cpp`, `test_gibbet_portal.cpp`, `test_khalim_chest.cpp`, as P13, P17, P18 and decomp35 saw), 0 in its files. The MonUMod r2 stack: the same 5 plus **one in its own test, `misc-include-cleaner`: `rules.hpp` not used directly** (r1 has the same include). Fixed in **`fid/umod-can-take-r3`** (the include dropped in the oracle commit, the claim cherry-picked; tree otherwise equal to r2): 0 findings in `test_umod_can_take.cpp`. Positive control (`--checks=-*,readability-magic-numbers`, by absolute path): reports in both test files, so they are parsed. The oracle scripts are not in the CMake build (ruff via presubmit).
 
 ## RNG luck
 
@@ -65,8 +88,8 @@ Both grids are exhaustive and deterministic: every code a gamble tab can hold x 
 
 ## Required changes to the MonUMod body (`umod-multishot-body.md`)
 
-- **U1 (high).** Commits and tree: "upstream `def80df7` plus `810b7508` (oracle) and `a4988666` (claim)"; the claim adds the `monsters.md` finding and pins game.exe's counts in `test_umod_can_take` (vampire1 and slinger5 take 40 of 43 rows, sk_archer1 41; the Multiple Shots row refused for the first two, taken by the third).
-- **U2 (high, claims limited to proven).** Limits: drop "inferred from the equal count": the bit is read (bit 17 of MonStats `+0xc` equals the `nomultishot` column in all 734 rows, bit 1 equals `isMelee`; mask `[0x6ce26c]` = 2). State the effect as run: only random uniques (row 29 is no champion row and no superunique is of these classes), in Act 1 (Catacombs 3), Act 2 (Dry Hills, Lost City, the Tombs, the Arcane Sanctuary), Act 3, and Act 5 in Nightmare and Hell; the other mods of such a unique are drawn from a smaller total weight.
+- **U1 (high).** Commits and tree: "upstream `def80df7` plus `7bd3ddec` (oracle) and `fdea73d1` (claim)"; the claim adds the `monsters.md` finding and pins game.exe's counts in `test_umod_can_take` (vampire1 and slinger5 take 40 of 43 rows, sk_archer1 41; the Multiple Shots row refused for the first two, taken by the third).
+- **U2 (high, claims limited to proven; the trace said "Acts 3 to 5 only", which is wrong).** Limits: drop "inferred from the equal count": the bit is read (bit 17 of MonStats `+0xc` equals the `nomultishot` column in all 734 rows, bit 1 equals `isMelee`; mask `[0x6ce26c]` = 2). State the effect as run: only random uniques (row 29 is no champion row and no superunique is of these classes), in Act 1 (Catacombs 3), Act 2 (Dry Hills, Lost City, the Tombs, the Arcane Sanctuary), Act 3, and Act 5 in Nightmare and Hell; the other mods of such a unique are drawn from a smaller total weight.
 - **U3 (high).** Re-check block: `uv run python umod_can_take.py compare game.tsv d2d.tsv` instead of `diff` (`31562 pairs, 0 differ`; oracle commit 11 differ, exit 1); `D2_MPQ_DIR` for the d2d side.
 - **U4 (medium).** Answer presubmit's WARNs: `siblings` "no skill or hit path is touched: the change is the mod pick's eligibility, used by the champion, unique and superunique picks (FUN_005a0500; FUN_005a0600 from FUN_005a0760 and FUN_005a49b0; `pick` in d2d)"; `data-gating` as G5; `doc-claims` "every MonStats row x every MonUMod row: the grid is exhaustive (734 x 43)".
 - **U5 (medium, template).** As G5: four-column Claims table, the template's three checklist items ticked (test, `monsters.md`, `pr_guard`), `---` and `Agent: Claude Code`, no Screenshots section.
@@ -79,8 +102,8 @@ Both grids are exhaustive and deterministic: every code a gamble tab can hold x 
 
 ## Hygiene (V run, r2)
 
-- Identity: all four r2 commits have the user's noreply identity as author and committer (`git log --format`), `Agent: Claude Code` the only parsed trailer.
-- `pr_guard.py upstream/main HEAD`: 0 FAIL, 0 WARN on both heads. `presubmit.py --quick --base upstream/main`: gamble 0 FAIL, 3 WARN (`data-gating`, `build`, `gcc`); MonUMod 0 FAIL, 6 WARN (`siblings`, `data-gating`, two `doc-claims`, `build`, `gcc`); answered by G5 and U4. r1 against `b6e6940d`: gamble 0 FAIL, 3 WARN; MonUMod **1 FAIL** (ruff F841).
+- Identity: the gamble r2 and MonUMod r3 commits (and MonUMod r2) have the user's noreply identity as author and committer (`git log --format`), `Agent: Claude Code` the only parsed trailer.
+- `pr_guard.py upstream/main HEAD`: 0 FAIL, 0 WARN on the gamble r2, MonUMod r2 and r3 heads. `presubmit.py --quick --base upstream/main`: gamble 0 FAIL, 3 WARN (`data-gating`, `build`, `gcc`); MonUMod 0 FAIL, 6 WARN (`siblings`, `data-gating`, two `doc-claims`, `build`, `gcc`); answered by G5 and U4. r1 against `b6e6940d`: gamble 0 FAIL, 3 WARN; MonUMod **1 FAIL** (ruff F841).
 - Diff: gamble oracle 3 files (+166), claim 3 files (`rules.hpp` +6 -2, `store.md`, the test asserts); MonUMod oracle 3 files, claim 5 files (`gamedata_load.cpp`, `montypes.hpp`, `uniques.hpp`, `monsters.md`, the test asserts). Each oracle commit leaves `components/` untouched and its test has no failing assert (the asserts come with the claim), so each commit is bisect-safe. No private-only code, no host names or paths (read of the diffs).
 
 ## Not checked
