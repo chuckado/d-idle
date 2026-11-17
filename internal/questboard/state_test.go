@@ -54,9 +54,9 @@ func chunk(v QuestView, id string) ChunkView {
 
 // readinessFor stands in for slice S2: the transitional legacy floor per class family (design 1.1), safe at the
 // floor, risky within 2 levels, else too hard. It is what lets two builds see different offers.
-func readinessFor(t *testing.T, b *Board, class string, clvl int) map[string]Readiness {
+func readinessFor(t *testing.T, b *Board, class string, clvl int) map[string]Word {
 	t.Helper()
-	out := map[string]Readiness{}
+	out := map[string]Word{}
 	for _, q := range b.Quests() {
 		floor, ok, err := b.Floor(q, class)
 		if err != nil {
@@ -81,8 +81,8 @@ func readinessFor(t *testing.T, b *Board, class string, clvl int) map[string]Rea
 
 func TestStatesPerEvidence(t *testing.T) {
 	b := mustBoard(t)
-	allSafe := func(quest string) map[string]Readiness {
-		return map[string]Readiness{ChunkKey(quest, "clear_den"): ReadySafe}
+	allSafe := func(quest string) map[string]Word {
+		return map[string]Word{ChunkKey(quest, "clear_den"): ReadySafe}
 	}
 	act1Open := facts{0: {"act1_done": done(TierSave)}}
 	cases := []struct {
@@ -104,15 +104,15 @@ func TestStatesPerEvidence(t *testing.T) {
 		{name: "locked to available: prerequisite on T1, readiness unknown", quest: "radament", chunk: "radament", state: Available, whyHas: "readiness not known",
 			in: Input{Facts: act1Open}},
 		{name: "locked to ready: prerequisite on T2 and safe", quest: "radament", chunk: "radament", state: Ready,
-			in: Input{Facts: facts{0: {"act1_done": done(TierMemory)}}, Ready: map[string]Readiness{"radament/radament": ReadySafe}}},
+			in: Input{Facts: facts{0: {"act1_done": done(TierMemory)}}, Ready: map[string]Word{"radament/radament": ReadySafe}}},
 		{name: "available: too hard", quest: "den_of_evil", chunk: "clear_den", state: Available, whyHas: "too hard",
-			in: Input{Facts: facts{}, Ready: map[string]Readiness{"den_of_evil/clear_den": ReadyTooHard}}},
+			in: Input{Facts: facts{}, Ready: map[string]Word{"den_of_evil/clear_den": ReadyTooHard}}},
 		{name: "available: missing kit keeps it a readiness fact, not a failure", quest: "den_of_evil", chunk: "clear_den", state: Available, whyHas: "3 antidotes",
 			in: Input{Facts: facts{}, Ready: allSafe("den_of_evil"), Chunks: map[string]ChunkFact{"den_of_evil/clear_den": {Missing: "needs 3 antidotes"}}}},
 		{name: "ready: safe", quest: "den_of_evil", chunk: "clear_den", state: Ready,
 			in: Input{Facts: facts{}, Ready: allSafe("den_of_evil")}},
 		{name: "ready: risky still offers", quest: "den_of_evil", chunk: "clear_den", state: Ready,
-			in: Input{Facts: facts{}, Ready: map[string]Readiness{"den_of_evil/clear_den": ReadyRisky}}},
+			in: Input{Facts: facts{}, Ready: map[string]Word{"den_of_evil/clear_den": ReadyRisky}}},
 		{name: "accepted: the tap, handler not running", quest: "den_of_evil", chunk: "clear_den", state: Accepted,
 			in: Input{Facts: facts{}, Plan: Plan{Accepted: []Record{rec("den_of_evil", "clear_den", 0)}}}},
 		{name: "in progress: step is the first unsatisfied check", quest: "den_of_evil", chunk: "clear_den", state: InProgress,
@@ -164,7 +164,7 @@ func TestStatesPerEvidence(t *testing.T) {
 		{name: "blocked: the game failed the quest, no retry", quest: "den_of_evil", chunk: "clear_den", state: Blocked, whyHas: "failed in this game",
 			in: Input{Facts: facts{0: {"den_of_evil": {Known: true, Failed: true, Tier: TierMemory}}}}},
 		{name: "difficulty change: Normal done is not Nightmare done", quest: "den_of_evil", chunk: "clear_den", state: Ready,
-			in: Input{Diff: 1, Facts: facts{0: {"den_of_evil": done(TierSave)}}, Ready: map[string]Readiness{"den_of_evil/clear_den": ReadySafe}}},
+			in: Input{Diff: 1, Facts: facts{0: {"den_of_evil": done(TierSave)}}, Ready: map[string]Word{"den_of_evil/clear_den": ReadySafe}}},
 		{name: "difficulty change: Nightmare record does not accept Normal", quest: "den_of_evil", chunk: "clear_den", state: Available,
 			in: Input{Facts: facts{}, Plan: Plan{Accepted: []Record{rec("den_of_evil", "clear_den", 1)}}}},
 	}
@@ -216,7 +216,7 @@ func TestAwardKeyIsAccountWideAndPerDifficulty(t *testing.T) {
 // Cain's chain: A then B then C then D, a hard chain; out-of-order Start taps are refused.
 func TestChunkOrderChain(t *testing.T) {
 	b := mustBoard(t)
-	safe := map[string]Readiness{}
+	safe := map[string]Word{}
 	for _, c := range []string{"scroll", "read", "free_cain", "report"} {
 		safe[ChunkKey("search_for_cain", c)] = ReadySafe
 	}
@@ -261,7 +261,7 @@ func TestChunkOrderChain(t *testing.T) {
 // The Staff pieces are offered in parallel in any order; assembling waits for both and the amulet (T1/T2).
 func TestChunkOrderAnyThenAssemble(t *testing.T) {
 	b := mustBoard(t)
-	safe := map[string]Readiness{}
+	safe := map[string]Word{}
 	for _, c := range []string{"cube", "shaft", "assemble"} {
 		safe[ChunkKey("horadric_staff", c)] = ReadySafe
 	}
