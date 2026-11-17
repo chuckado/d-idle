@@ -289,6 +289,10 @@ type fixtureKeeper struct {
 
 // preset puts a row in every Keep state: two queued, one creating, one failed with a real reason and two kept.
 func (k *fixtureKeeper) preset(ids []string) {
+	// Newest first lists the last added items first: put the states there, so they are on the first screen of every picture
+	for i, j := 0, len(ids)-1; i < j; i, j = i+1, j-1 {
+		ids[i], ids[j] = ids[j], ids[i]
+	}
 	for _, i := range []int{1, 2, 4, 6} {
 		_ = k.st.KeepTo(ids[i], "")
 	}
