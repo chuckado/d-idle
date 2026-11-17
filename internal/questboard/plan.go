@@ -21,6 +21,7 @@ type Record struct {
 	Diff  string    `json:"difficulty"`
 	At    time.Time `json:"at"`
 	Mode  string    `json:"mode,omitempty"` // the mode that was active (train, idle, farm)
+	Auto  bool      `json:"auto,omitempty"` // the board started it by itself (slice S8): the only chunk it may hand in itself
 }
 
 // SkipRecord is a player Skip. Chunk "" skips the whole quest.
@@ -38,6 +39,27 @@ type AutoRecord struct {
 	Since time.Time `json:"since"`
 }
 
+// AutoEvent is one thing the auto-start controller did (slice S8): the rate limits count its starts and the "while you
+// were away" card lists those with Away set. Kind is autoStart, autoHandIn or autoHandInFailed.
+type AutoEvent struct {
+	At    time.Time `json:"at"`
+	Quest string    `json:"quest"`
+	Chunk string    `json:"chunk"`
+	Kind  string    `json:"kind"`
+	Away  bool      `json:"away,omitempty"` // no watch client had been seen for quests.awayMin
+	Note  string    `json:"note,omitempty"`
+}
+
+// Auto event kinds.
+const (
+	EvAutoStart        = "autoStart"
+	EvAutoHandIn       = "autoHandIn"
+	EvAutoHandInFailed = "autoHandInFailed"
+)
+
+// autoLogMax bounds the log: enough for the per-day cap and one away stretch.
+const autoLogMax = 100
+
 // Plan is the whole per-hero store: only the player's decisions, never derived progress.
 type Plan struct {
 	Accepted []Record     `json:"accepted,omitempty"`
@@ -45,6 +67,8 @@ type Plan struct {
 	Auto     []AutoRecord `json:"autoStart,omitempty"`
 	Seen     []string     `json:"seen,omitempty"` // payoff toasts already shown
 	Mode     string       `json:"mode,omitempty"` // the between-chunks mode the player picked (S4 stores it, S6 acts on it)
+	AutoLog  []AutoEvent  `json:"autoLog,omitempty"`
+	AwaySeen time.Time    `json:"awaySeen,omitempty"` // the player dismissed the "while you were away" card at this time
 }
 
 // Modes are the between-chunks modes (user decision 2026-11-16); the default is Train.
@@ -131,6 +155,11 @@ func (p Plan) check(b *Board) error {
 			return fmt.Errorf("plan autoStart: %w", err)
 		}
 	}
+	for _, e := range p.AutoLog {
+		if _, err := b.Chunk(e.Quest, e.Chunk); err != nil {
+			return fmt.Errorf("plan autoLog: %w", err)
+		}
+	}
 	return nil
 }
 
@@ -195,6 +224,16 @@ func (s *Store) Accept(quest, chunk string, diff int, mode string) error {
 // AcceptIf is Accept where a record for which finished returns true (a chunk that is done, kept as the
 // proof that the board ran it) no longer counts as running. A nil finished counts every record.
 func (s *Store) AcceptIf(quest, chunk string, diff int, mode string, finished func(Record) bool) error {
+	return s.accept(quest, chunk, diff, mode, finished, false)
+}
+
+// AcceptAuto is AcceptIf for the auto-start controller: the record carries Auto, and the start event is written in
+// the same save so a crash cannot leave a started chunk without its log line.
+func (s *Store) AcceptAuto(quest, chunk string, diff int, mode string, finished func(Record) bool, ev AutoEvent) error {
+	return s.accept(quest, chunk, diff, mode, finished, true, ev)
+}
+
+func (s *Store) accept(quest, chunk string, diff int, mode string, finished func(Record) bool, auto bool, ev ...AutoEvent) error {
 	if diff < 0 || diff > 2 {
 		return fmt.Errorf("questboard: difficulty index %d out of range", diff)
 	}
@@ -214,7 +253,10 @@ func (s *Store) AcceptIf(quest, chunk string, diff int, mode string, finished fu
 			}
 			return fmt.Errorf("questboard: %s/%s is already accepted in %s", r.Quest, r.Chunk, r.Diff)
 		}
-		p.Accepted = append(p.Accepted, Record{quest, chunk, Difficulties[diff], s.now().UTC(), mode})
+		p.Accepted = append(p.Accepted, Record{Quest: quest, Chunk: chunk, Diff: Difficulties[diff], At: s.now().UTC(), Mode: mode, Auto: auto})
+		for _, e := range ev {
+			p.addEvent(e)
+		}
 		return nil
 	})
 }
@@ -295,6 +337,23 @@ func (s *Store) SetAutoStart(quest string, diff int, on bool) error {
 		}
 		return nil
 	})
+}
+
+func (p *Plan) addEvent(e AutoEvent) {
+	p.AutoLog = append(p.AutoLog, e)
+	if n := len(p.AutoLog) - autoLogMax; n > 0 {
+		p.AutoLog = append([]AutoEvent(nil), p.AutoLog[n:]...)
+	}
+}
+
+// AddAutoEvent appends one controller event to the log.
+func (s *Store) AddAutoEvent(e AutoEvent) error {
+	return s.update(func(p *Plan) error { p.addEvent(e); return nil })
+}
+
+// DismissAway marks the "while you were away" card as read at t.
+func (s *Store) DismissAway(t time.Time) error {
+	return s.update(func(p *Plan) error { p.AwaySeen = t.UTC(); return nil })
 }
 
 // MarkSeen records that a payoff toast key was shown (so it is not shown again after a restart).

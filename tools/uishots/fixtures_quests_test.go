@@ -9,7 +9,7 @@ import (
 // Every quest fixture variant builds, in both builds, and shows the state its name says.
 func TestQuestFixtureVariants(t *testing.T) {
 	for _, class := range []string{"Paladin", "Sorceress"} {
-		for variant, want := range map[string]string{"offer": "offers", "running": "running", "awaiting": "awaiting", "handing": "handIn", "confirming": "handIn", "failed": "handIn", "blocked": "blocked", "training": "offers", "done": "offers", "auto": "offers", "mid": "offers"} {
+		for variant, want := range map[string]string{"offer": "offers", "running": "running", "awaiting": "awaiting", "handing": "handIn", "confirming": "handIn", "failed": "handIn", "blocked": "blocked", "training": "offers", "done": "offers", "auto": "autoOn", "countdown": "countdown", "away": "away", "mid": "offers"} {
 			v := questView(variant, class)
 			if !v.Enabled {
 				t.Fatalf("%s %s: the board is off", class, variant)
@@ -18,8 +18,21 @@ func TestQuestFixtureVariants(t *testing.T) {
 			switch want {
 			case "offers":
 				ok = len(v.Offers) > 0
+			case "autoOn":
+				for _, r := range v.Quests {
+					ok = ok || (r.ID == "den_of_evil" && r.Auto)
+				}
+			case "countdown":
+				ok = v.AutoStart.Countdown != nil && v.AutoStart.Countdown.SecondsLeft == 10 && v.AutoStart.Countdown.Quest == "den_of_evil"
+			case "away":
+				ok = v.WhileAway != nil && len(v.WhileAway.Events) == 2
+				has := false
+				for _, n := range v.Needs {
+					has = has || n.Kind == "quest_away"
+				}
+				ok = ok && has
 			case "running":
-				ok = v.Running != nil
+				ok = v.Running != nil && v.Running.StepCount > 1 && v.Running.StepNo >= 1
 			case "awaiting":
 				ok = v.Awaiting != nil && v.Awaiting.NPC != ""
 			case "handIn":
@@ -28,7 +41,7 @@ func TestQuestFixtureVariants(t *testing.T) {
 				ok = v.Blocked != nil && v.Blocked.Why != ""
 			}
 			if !ok {
-				t.Errorf("%s %s: view has no %s: %+v", class, variant, want, v)
+				t.Errorf("%s %s: view has no %s (needs %+v)", class, variant, want, v.Needs)
 			}
 		}
 		if v := questView("off", class); v.Enabled || v.Reason == "" {

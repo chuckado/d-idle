@@ -6,7 +6,7 @@
   [data-panel="quest-strip"] .qs-side { font-weight: 400; letter-spacing: 0; text-transform: none; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
   [data-panel="quest-strip"] .qs-line { font-size: var(--d-fs-1); font-weight: 650; color: var(--d-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
   [data-panel="quest-strip"] .qs-sub { font-size: var(--d-fs-0); color: var(--d-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
-  [data-panel="quest-strip"] [data-kind="awaiting"] .qs-label, [data-panel="quest-strip"] [data-kind="offer"] .qs-label { color: var(--d-accent-text); }
+  [data-panel="quest-strip"] [data-kind="awaiting"] .qs-label, [data-panel="quest-strip"] [data-kind="offer"] .qs-label, [data-panel="quest-strip"] [data-kind="countdown"] .qs-label { color: var(--d-accent-text); }
   [data-panel="quest-strip"] [data-kind="blocked"] .qs-label, [data-panel="quest-strip"] [data-kind="failed"] .qs-label { color: var(--d-warn); }
   [data-panel="quest-strip"] [data-kind="blocked"] .qs-sub, [data-panel="quest-strip"] [data-kind="failed"] .qs-sub { color: var(--d-warn); }
   [data-panel="quest-strip"] .qs-row { display: flex; align-items: center; justify-content: space-between; gap: var(--d-sp-2); min-inline-size: 0; }

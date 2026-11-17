@@ -53,7 +53,7 @@ for (const cls of ['paladin', 'sorceress']) {
   m = B.stripModel(running, L0);
   assert.equal(m.kind, 'running');
   assert.equal(m.head, 'Running: Den of Evil');
-  assert.equal(m.sub, 'Walk blood moor, next: Akara');
+  assert.equal(m.sub, 'step 2 of 4, Walk blood moor, next: Akara', 'the step list says where the hero is');
   assert.deepEqual([m.primary.label, m.primary.verb, m.primary.confirm], ['Stop', 'cancel', true], 'a stop asks first');
   m = B.stripModel(awaiting, L0);
   assert.equal(m.kind, 'awaiting');
@@ -269,8 +269,10 @@ for (const cls of ['paladin', 'sorceress']) {
   assert.match(t, /safe/);
   assert.match(t, /risky/);
   assert.match(t, /too hard/);
-  assert.match(t, /auto: coming/, 'the auto toggle is a stub until S8');
-  assert.ok(!byKey(c.body, 'auto-den_of_evil'), 'no live toggle while the API says unavailable');
+  assert.doesNotMatch(t, /auto: coming/, 'the auto switch is live now');
+  assert.ok(byKey(c.body, 'auto-den_of_evil'), 'a live switch while the API offers it');
+  assert.match(t, /auto: always you/, 'a quest the data keeps for the player is greyed with the reason');
+  assert.ok(!byKey(c.body, 'auto-search_for_cain'), 'no switch on a never quest');
   const rows = all(c.body, (x) => x.className === 'qb-row').map((x) => x.dataset.group);
   assert.ok(rows.indexOf('ready') < rows.indexOf('available') && rows.indexOf('available') < rows.indexOf('locked'), 'ready, then not yet, then locked');
   // every part has its own state; Start only where ready
@@ -280,12 +282,22 @@ for (const cls of ['paladin', 'sorceress']) {
   assert.deepEqual(posts[0], ['/api/quests/sisters_burial_grounds/start', { chunk: 'blood_raven' }]);
   byKey(c.body, 'mode-idle').click(); await tick();
   assert.deepEqual(posts.at(-1), ['/api/quests/mode', { mode: 'idle' }]);
-  // the auto toggle comes alive when the API offers it
-  const v2 = clone(v); v2.autoStart = { available: true, note: '' };
-  b.update(v2);
-  const sw = byKey(c.body, 'auto-den_of_evil');
+  // the auto switch posts {on} to the real route; the page reads the new flag from the next GET
+  let sw = byKey(c.body, 'auto-den_of_evil');
   assert.equal(sw.attrs.role, 'switch');
   assert.equal(sw.attrs['aria-checked'], 'false');
+  sw.click(); await tick();
+  assert.deepEqual(posts.at(-1), ['/api/quests/den_of_evil/auto', { on: true }]);
+  const v2 = clone(v); v2.quests.find((q) => q.id === 'den_of_evil').auto = true;
+  b.update(v2);
+  sw = byKey(c.body, 'auto-den_of_evil');
+  assert.equal(sw.attrs['aria-checked'], 'true');
+  sw.click(); await tick();
+  assert.deepEqual(posts.at(-1), ['/api/quests/den_of_evil/auto', { on: false }]);
+  // the board off: the cell says so, no switch
+  const v3 = clone(v); v3.autoStart = { available: false, note: '' };
+  b.update(v3);
+  assert.match(texts(c.body), /auto: off/);
   // running: the Now row, with the stop confirm
   b.update(gold('running-paladin'));
   assert.match(texts(c.body), /Running: Den of Evil/);
@@ -303,6 +315,66 @@ for (const cls of ['paladin', 'sorceress']) {
   // no answer
   b.update(null);
   assert.match(texts(c.body), /did not answer/);
+}
+
+// slice S8: the countdown of an auto-start, the levels to go in words, the away card, the step list
+{
+  const L0 = fresh();
+  const v = gold('offers-paladin');
+  v.autoStart = { available: true, note: '', delaySec: 20, countdown: { quest: 'den_of_evil', questTitle: 'Den of Evil', chunk: 'clear_den', endsAt: '2026-11-17T12:00:20Z', secondsLeft: 12 } };
+  let m = B.stripModel(v, L0);
+  assert.equal(m.kind, 'countdown');
+  assert.equal(m.head, 'Den of Evil starts by itself in 12 seconds');
+  assert.deepEqual([m.primary.label, m.primary.verb, m.primary.quest, m.primary.chunk], ['Cancel', 'cancel', 'den_of_evil', 'clear_den']);
+  v.autoStart.countdown.secondsLeft = 1;
+  assert.match(B.stripModel(v, L0).head, /in 1 second$/);
+  // the strip tile shows it and Cancel posts to the cancel route
+  const posts = [];
+  const c = ctxFor(posts, { ok: true });
+  const s = S.mount(node('div', 'd-panel'), c);
+  s.update(v);
+  assert.equal(byKey(c.body, 'primary').textContent, 'Cancel');
+  byKey(c.body, 'primary').click(); await tick();
+  assert.deepEqual(posts[0], ['/api/quests/den_of_evil/cancel', { chunk: 'clear_den' }]);
+  // levels to go, in words only
+  assert.equal(B.levelsText(2), 'two levels to go');
+  assert.equal(B.levelsText(1), 'one level to go');
+  assert.equal(B.levelsText(0), '');
+  assert.equal(B.levelsText(40), 'many levels to go');
+  const t = gold('offers-paladin');
+  t.offers.forEach((o) => { o.startable = false; o.readiness = 'risky'; o.levelsToGo = 3; o.reasons = [{ code: 'level', text: 'not yet' }]; });
+  assert.equal(B.stripModel(t, fresh()).sub, 'three levels to go');
+  t.meter = { mode: 'train', target: 'den_of_evil', levelsToGo: 2 };
+  assert.equal(B.stripModel(t, fresh()).sub, 'two levels to go', 'the meter of the training target wins');
+  for (const q of [m.head, B.stripModel(t, fresh()).sub]) assert.doesNotMatch(q, /\d+ level/, 'no level number on the page');
+  // the step list
+  const r = gold('running-paladin');
+  assert.deepEqual(r.running.steps.map((x) => x.state), ['done', 'now', 'todo', 'todo']);
+  assert.equal(B.stepText(r.running), 'step 2 of 4');
+  assert.equal(B.stepText({ stepCount: 1, stepNo: 1 }), '');
+  const ra = clone(r); ra.running.auto = true;
+  assert.match(B.stripModel(ra, fresh()).sub, /started by itself/);
+}
+{
+  fresh();
+  const posts = [];
+  const c = ctxFor(posts, { ok: true });
+  const b = B.mount(node('div', 'd-panel'), c);
+  const v = gold('offers-paladin');
+  v.whileAway = { events: [{ at: '2026-11-17T14:02:00Z', quest: 'den_of_evil', questTitle: 'Den of Evil', chunk: 'clear_den', kind: 'started', text: 'Started Den of Evil by itself' }, { at: '2026-11-17T14:20:00Z', quest: 'den_of_evil', questTitle: 'Den of Evil', chunk: 'clear_den', kind: 'handedIn', text: 'Handed in Den of Evil' }] };
+  b.update(v);
+  assert.match(texts(c.body), /While you were away/);
+  assert.match(texts(c.body), /Started Den of Evil by itself/);
+  assert.match(texts(c.body), /Handed in Den of Evil/);
+  byKey(c.body, 'away-dismiss').click(); await tick();
+  assert.deepEqual(posts.at(-1), ['/api/quests/away/dismiss', {}]);
+  b.update(gold('offers-paladin'));
+  assert.doesNotMatch(texts(c.body), /While you were away/, 'the card goes when the API stops sending it');
+  // a countdown is a Now row with its Cancel
+  const cd = gold('offers-paladin'); cd.autoStart = { available: true, countdown: { quest: 'den_of_evil', questTitle: 'Den of Evil', chunk: 'clear_den', secondsLeft: 9 } };
+  b.update(cd);
+  assert.match(texts(c.body), /Den of Evil starts by itself in 9 seconds/);
+  assert.equal(texts(byKey(c.body, 'now-cancel')), 'Cancel');
 }
 
 // the phone's Quests tab is the same list
