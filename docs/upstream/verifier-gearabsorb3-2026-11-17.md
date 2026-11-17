@@ -10,10 +10,10 @@ The rule is game.exe's and r3 implements it: 0 differ on 60,000 oracle cases (th
 
 1. **Stale base (high).** Upstream main moved to `895f8a67` (Mana Burn r3 merged: `tick.cpp`, `ai.hpp`). r3 rebases without conflict, but the posted commits must be the rebased ones, built and tested there.
 2. **The README recipe fails (medium).** `test_gear_absorb --life` logs `the player died` to stdout (7,310 lines on seed 7, V run), so the README row's `test_gear_absorb --life c.tsv > d.tsv && ... compare` stops with `malformed or out-of-step line`. The body's re-check block has the `grep`; the README row and the script's docstring do not.
-3. **Untested branches of the claim (medium).** Energy Shield's recompute carries the absorb with no test (r3 says so); a life above max (FUN_0057a980 brings it DOWN to max, V read and V run) and a blow the flat absorb takes whole (heal, nothing subtracted) are in no pin and in no oracle case (`gen` clamps life to max). Mutants m13, m14 and m17 below pass r3's tests.
+3. **Untested branches of the claim (medium).** Energy Shield's recompute carries the absorb with no test (r3 says so); a life above max (FUN_0057a980 brings it DOWN to max, V read and V run) and a blow the flat absorb takes whole (heal, nothing subtracted) are in no pin and in no oracle case (`gen` clamps life to max). Mutants m13, m14, m16 and m17 below pass r3's rules test.
 4. **The merc reason is wrong (medium, claims).** r3 says d2d's merc "keeps its life in whole points with a fractional carry and no heal-back path". The merc has 256ths (`Monster::life_fine` / `set_life_fine`, `life_frac`) and is healed elsewhere (`missiles.cpp:1087`, `setup.cpp:288`, V read). Leaving the merc out is a scope choice, not a d2d limitation.
 
-**Post `fid/gear-absorb-r4`**: oracle `ac5c3dd1`, claim `411bb48e`, on upstream main `895f8a67`; author and committer `shatteredeagle <26069301+shatteredeagle@users.noreply.github.com>`, oracle first, `Agent: Claude Code` the only trailer after a blank line (V run, `git interpret-trailers --parse`). Against r3: rebased; the README row and the docstring pipe through `grep -E '^[0-9]+ -?[0-9]+$'`; pins 10 to 12 (game.exe's lives, V run); an Energy Shield case in `test_gear_absorb_rules`; the merc comment and `combat.md` say "not modelled yet", not "cannot". The body then needs C1 to C8 below.
+**Post `fid/gear-absorb-r4`**: oracle `ac5c3dd1`, claim `c05fa8e3`, on upstream main `895f8a67`; author and committer `shatteredeagle <26069301+shatteredeagle@users.noreply.github.com>`, oracle first, `Agent: Claude Code` the only trailer after a blank line (V run, `git interpret-trailers --parse`). Against r3: rebased; the README row and the docstring pipe through `grep -E '^[0-9]+ -?[0-9]+$'`; pins 10 to 13 (game.exe's lives, V run); an Energy Shield case in `test_gear_absorb_rules`; the merc comment and `combat.md` say "not modelled yet", not "cannot". The body then needs C1 to C8 below.
 
 ## Game side, re-derived (V read by this verifier)
 
@@ -39,17 +39,41 @@ Game side `gear_absorb.py game` on the builder; seeds 7 and 5001 reproduce the a
 |---|---|---|---|---|
 | r4 oracle `ac5c3dd1` (parent d2d) | 9,639, exit 1 | 9,519, exit 1 | 9,484, exit 1 | 5 of 6 differ |
 | r3 claim `270b9799` | 0, exit 0 | 0, exit 0 | 0, exit 0 | equal |
-| r4 claim `411bb48e` | R4_7 | R4_5001 | R4_4242 | R4_HAND |
+| r4 claim `c05fa8e3` | 0, exit 0 | 0, exit 0 | 0, exit 0 | equal; pin 13 (below) game.exe 0, d2d 0 |
 
 Hand cases (game.exe, V run): 120 of 100 life, 20 % cold absorb, 50 cold: 60; 120, flat 5, 10 cold: 95; 110, no absorb, 10 cold: 100; 100, 20 %, 100 cold: 20; 1 point, flat 20, 10 cold: 11; 1.17 points, flat 20, blows 30 and 10 cold: 21.17. `compare` exits 1 on an empty file, unequal lengths, a malformed line and an unknown verb (V run).
 
 ## Mutants (V run, local, never pushed)
 
-MUTANTS
+Each one text change in the r4 claim. `.cpp` mutants are real rebuilds of `tick.cpp` / `merc.cpp` and `test_gear_absorb` (no-argument run: the pins through `Fight::hurt_side`, and the merc check); header mutants rebuild `test_combat` and compile `test_gear_absorb_rules` alone (one TU, no library, so no unmutated inline copy wins). m1 to m12 are the author's list (S, re-run here); m13 to m17 are new.
+
+| Mutant | r4 tests | r3 rules test |
+|---|---|---|
+| m1 no heal; m2 merc keeps its absorb; m3 heal after the total (`.cpp`) | abort `test_gear_absorb` | (author: abort) |
+| m4 flat before percent; m5 percent and flat swapped | abort both | |
+| m6 magic and cold stats swapped in `make_fighter` | abort `test_combat` | |
+| m7 heal uncapped; m8 negative share heals; m9 total off before the heal; m10 Cyclone recompute drops the absorb; m11 `Foe::take` drops it | abort `test_gear_absorb_rules` | |
+| m12 percent cap 41 | abort `test_combat` | |
+| m13 a life above max kept (heal never lowers it) | abort (pin 10) | **passes** |
+| m14 Energy Shield's recompute drops the absorb and its share | abort (ES case) | **passes** |
+| m15 one heal per frame, capped once (no subtract between blows) | abort (pin 4) | |
+| m16 a blow after a killing one still heals | abort (pin 13) | **passes** |
+| m17 Energy Shield keeps the absorbed share of the uncut field | abort (ES case) | **passes** |
+
+17 of 17 abort r4's tests; m13, m14, m16 and m17 pass r3's rules test (V run, r3's `test_gear_absorb_rules` compiled with each). No mutant was run through the oracle (that needs the game library rebuilt per mutant).
 
 ## Build, ctest, tidy (V run)
 
-BUILD
+Builder container, Release, GCC, tests and tools on, `-j2` under the builder's lane lock, ccache; every job registered with `tools/agentrun.sh`; `D2_MPQ_DIR` and `D2_PATCH_INSTALLER` set.
+
+| Tree | Build | Tests |
+|---|---|---|
+| r3 claim `270b9799` | full, rc 0 (1,449 targets) | oracle above; ctest not run on r3 (superseded by r4) |
+| r4 oracle `ac5c3dd1` | `test_gear_absorb`, rc 0 | parent counts above; no-argument run exits 77 (skip) |
+| r4 claim `411bb48e` (pins 10 to 12 and the ES case) | full, rc 0 | `ctest -j2` 358 of 360 in one run: `smoke_d2d` and `coop_d2d` (window tests, builder under load) failed; both pass rerun alone (`ctest -j1 -R`, 2 of 2): **360 of 360**; 13 skip for data, as upstream |
+| r4 claim `c05fa8e3` (pin 13 added; differs from the row above in `tests/gear_absorb_case.hpp` only) | `test_gear_absorb`, `test_gear_absorb_rules`, `test_combat`, rc 0 | all three rc 0 |
+
+clang-tidy-19 by file on the r4 claim (`fight/tick.cpp`, `fight/merc.cpp`, `test_gear_absorb.cpp`, `test_gear_absorb_rules.cpp`, `test_combat.cpp`): **0 findings**; positive control `readability-magic-numbers` on `test_gear_absorb_rules.cpp`: 2,608 reports, so the units are parsed. This closes r3's "tidy not re-run after the include fix". The head box rebooted during the first r4 ctest; that run was lost and repeated in full.
 
 ## Hygiene (V run)
 
@@ -59,14 +83,14 @@ BUILD
 
 ## Required changes to the body (`gear-absorb-body.md`)
 
-- **C1 (high).** Commits: "upstream `895f8a67` plus `ac5c3dd1` (oracle) and `411bb48e` (claim)"; the Claims table rows and the counts (seed 7 9,639; 5001 9,519; add fresh seed 4242 9,484; claim 0).
+- **C1 (high).** Commits: "upstream `895f8a67` plus `ac5c3dd1` (oracle) and `c05fa8e3` (claim)"; the Claims table rows and the counts (seed 7 9,639; 5001 9,519; add fresh seed 4242 9,484; claim 0).
 - **C2 (high, template).** Add `## Checklist`, ticked: tests (`tests/test_combat.cpp`, `tests/game/test_gear_absorb.cpp`, `tests/game/test_gear_absorb_rules.cpp`), finding (`docs/research/re/combat.md`), `pr_guard` 0 FAIL 0 WARN. Keep the `Agent: Claude Code` footer.
 - **C3 (high, claims).** "Players only" and the `siblings` answer: replace the merc reason by "game.exe reads the absorb and heals through the struck unit's stats whatever its type, the same list that carries a hireling's gear resistances, so a merc's absorb gear acts there too. This PR leaves the merc out on purpose: its absorb without the heal-back would be half the rule; the merc's heal (its life in 256ths through `life_fine`) is a follow-up. No change for the merc against the parent."
 - **C4 (medium).** Limits: replace the Energy Shield line by "Energy Shield: the absorb works on what the shield left (`energy_shield_blows`); one case pinned in `test_gear_absorb_rules` from the two rules (the shield's from `test_energy_shield`), not from an emulator run." Add "A second record reaching a player at life 0 in the same frame before its death mode (game.exe's dead test is the mode, `FUN_005541b0`) was not read; d2d and the oracle stop at the death."
-- **C5 (medium).** Evidence row `FUN_0057a980`: "`life + total`, at least max life gives max: a life above max is set DOWN to max (pinned: case 10)". Pins: "thirteen pinned lives" and add cases 10 to 12 to the list.
+- **C5 (medium).** Evidence row `FUN_0057a980`: "`life + total`, at least max life gives max: a life above max is set DOWN to max (pinned: case 10)". Pins: "fourteen pinned lives" and add cases 10 to 13 to the list (13: a blow after a killing one heals nothing, as the oracle stops at the death).
 - **C6 (low).** WARN answers: `build` / `gcc` with this file's ctest numbers on r4.
 - **C7 (low).** Re-check block: base `895f8a67`, and add seed 4242.
-- **C8 (low).** Mutants: add m13 to m17 of this file.
+- **C8 (low).** Mutants: "17 of 17 abort" with m13 to m17 of this file; drop "none of them is the Energy Shield recompute".
 
 ## For the coordinator (not body changes)
 
