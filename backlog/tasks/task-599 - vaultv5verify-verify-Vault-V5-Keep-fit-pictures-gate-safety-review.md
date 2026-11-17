@@ -17,6 +17,7 @@ owns:
   - "tools/uishots/fixtures_vault.go"
 exclusive: []
 contracts: []
+result: "Vault V5 verified offline on the worker host (not live). Fit vault* all ok. Viewed 14 Keep pictures at the five sizes, dark and light. Fixed in the fixtures: the Keep and ether presses answered origin not allowed, the page query rewrite dropped the fixture state (Kept chip showed nothing), the Keep states were off the first screen. Fixed in vaultkeep: the kill switch and safe moment are re-judged before every create. Gate PASS after merging main (an earlier run hit a data race in the quest board desk test, not Vault code). Not a gap: identical items cannot both be in a store."
 ---
 
 ## Description
@@ -29,7 +30,7 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 vault fit pages and Keep pictures viewed and defects fixed
-- [ ] #2 gate on vaultkeep, vault, loot, d2dctl, watch, d2bot passes
-- [ ] #3 vaultkeep safety review done, gaps tested
+- [x] #1 vault fit pages and Keep pictures viewed and defects fixed
+- [x] #2 gate on vaultkeep, vault, loot, d2dctl, watch, d2bot passes
+- [x] #3 vaultkeep safety review done, gaps tested
 <!-- AC:END -->
