@@ -26,10 +26,17 @@ func TestDevUpdateStampsTheShippedCommit(t *testing.T) {
 	}
 	fn := s[i : i+j+3]
 	dir := t.TempDir()
+	env := cleanGitEnv()
+	write := func(name, body string) {
+		t.Helper()
+		if err := os.WriteFile(dir+"/"+name, []byte(body), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
 	run := func(args ...string) string {
 		t.Helper()
-		cmd := exec.Command("git", append([]string{"-c", "user.name=t", "-c", "user.email=t@t"}, args...)...)
-		cmd.Dir = dir
+		cmd := exec.Command("git", append([]string{"-c", "user.name=t", "-c", "user.email=t@t", "-c", "safe.directory=*"}, args...)...)
+		cmd.Dir, cmd.Env = dir, env
 		out, err := cmd.CombinedOutput()
 		if err != nil {
 			t.Fatalf("git %v: %v\n%s", args, err, out)
@@ -37,15 +44,17 @@ func TestDevUpdateStampsTheShippedCommit(t *testing.T) {
 		return strings.TrimSpace(string(out))
 	}
 	run("init", "-q")
-	os.WriteFile(dir+"/a.txt", []byte("one\n"), 0o644)
+	write("a.txt", "one\n")
 	run("add", "a.txt")
 	run("commit", "-qm", "one")
 	first := run("rev-parse", "--short=7", "HEAD")
-	os.WriteFile(dir+"/a.txt", []byte("two\n"), 0o644)
+	write("a.txt", "two\n")
 	run("commit", "-qam", "two")
 	second := run("rev-parse", "--short=7", "HEAD")
 	stamp := func(args ...string) string {
-		out, err := exec.Command("bash", append([]string{"-c", fn + "\nstamp_of \"$@\"", "x"}, args...)...).CombinedOutput()
+		cmd := exec.Command("bash", append([]string{"-c", fn + "\nstamp_of \"$@\"", "x"}, args...)...)
+		cmd.Env = env
+		out, err := cmd.CombinedOutput()
 		if err != nil {
 			t.Fatalf("stamp_of %v: %v\n%s", args, err, out)
 		}
@@ -57,11 +66,11 @@ func TestDevUpdateStampsTheShippedCommit(t *testing.T) {
 	if got := stamp(dir, first); got != first {
 		t.Fatalf("a named commit: %q, want %q (no -dirty for a ref)", got, first)
 	}
-	os.WriteFile(dir+"/a.txt", []byte("three\n"), 0o644)
+	write("a.txt", "three\n")
 	if got := stamp(dir); got != second+"-dirty" {
 		t.Fatalf("modified tracked file: %q, want %q", got, second+"-dirty")
 	}
-	os.WriteFile(dir+"/new.txt", []byte("untracked\n"), 0o644)
+	write("new.txt", "untracked\n")
 	run("checkout", "a.txt")
 	if got := stamp(dir); got != second {
 		t.Fatalf("an untracked file must not make it dirty: %q", got)
@@ -78,4 +87,16 @@ func TestDevUpdateStampsTheShippedCommit(t *testing.T) {
 	if !strings.Contains(string(ctx), "-X d2lod-bot/internal/buildinfo.Version=$BUILD_STAMP") {
 		t.Fatal("context.sh cannot stamp the build id")
 	}
+}
+
+// cleanGitEnv is the environment without GIT_DIR, GIT_WORK_TREE, GIT_INDEX_FILE and friends: a gate or hook that exports them would
+// make the test's git commands act on the surrounding repository instead of the temporary one.
+func cleanGitEnv() []string {
+	var out []string
+	for _, kv := range os.Environ() {
+		if !strings.HasPrefix(kv, "GIT_") {
+			out = append(out, kv)
+		}
+	}
+	return out
 }
