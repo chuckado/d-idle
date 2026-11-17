@@ -317,6 +317,11 @@ quest-offer-light watch?first=0&theme=light&needs=0&quests=offer
 quest-awaiting-light watch?first=0&theme=light&needs=0&quests=awaiting
 quest-offer-sorceress watch?first=0&theme=dark&needs=0&quests=offer&class=sorceress
 quest-needs3 watch?first=0&theme=dark&needs=2&quests=awaiting
+quest-countdown watch?first=0&theme=dark&needs=0&quests=countdown
+quest-countdown-sorceress watch?first=0&theme=dark&needs=0&quests=countdown&class=sorceress
+quest-away watch?first=0&theme=dark&needs=0&quests=away
+quest-away-light watch?first=0&theme=light&needs=0&quests=away
+quest-phone-tab-away watch?first=0&theme=dark&needs=0&quests=away&tab=Quests
 quest-phone-tab watch?first=0&theme=dark&needs=0&quests=offer&tab=Quests
 quest-phone-tab-awaiting watch?first=0&theme=dark&needs=0&quests=awaiting&tab=Quests
 quest-phone-tab-off watch?first=0&theme=dark&needs=0&quests=off&tab=Quests
@@ -329,6 +334,9 @@ quest-sheet-mid watch?first=0&theme=dark&needs=0&quests=mid #btn-more|[data-draw
 quest-sheet-off watch?first=0&theme=dark&needs=0&quests=off #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 quest-sheet-training watch?first=0&theme=dark&needs=0&quests=training #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 quest-sheet-light watch?first=0&theme=light&needs=0&quests=offer #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+quest-sheet-countdown watch?first=0&theme=dark&needs=0&quests=countdown #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+quest-sheet-away watch?first=0&theme=dark&needs=0&quests=away #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+quest-sheet-away-sorceress watch?first=0&theme=dark&needs=0&quests=away&class=sorceress #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 quest-sheet-sorceress watch?first=0&theme=dark&needs=0&quests=offer&class=sorceress #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 questdefect-clip watch?first=0&theme=dark&needs=0&quests=offer&defect=q-clip #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 questdefect-small watch?first=0&theme=dark&needs=0&quests=offer&defect=q-small #btn-more|[data-drawer-open=quest-board] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
