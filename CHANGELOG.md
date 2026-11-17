@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into vaultv2 <!--sg:agent/vaultv2-->
 - Merge branch 'main' into vaultv1 <!--sg:agent/vaultv1-->
 - Merge branch 'main' into pausemenufit <!--sg:agent/pausemenufit-->
 - Merge branch 'main' into botcpu <!--sg:agent/botcpu-->

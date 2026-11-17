@@ -251,6 +251,7 @@ data/onboarding/en.json  credit-runner  friendfb
 data/questboard  credit-runner  quests1
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
+data/vault  credit-runner  vaultv2
 deploy/d2d-container/entrypoint.sh  credit-runner  charsup
 deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 deploy/d2d-container/tester_image_test.go  credit-runner  charsup
@@ -270,6 +271,7 @@ docs/contracts/merc-policy.md  credit-runner  mercrevive2
 docs/d2d-vault-verbs.md  credit-runner  vaultv1
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vault
+docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv2
 docs/design/quest-board-2026-11-16.md  credit-runner  quests1
 docs/emu-image.md  credit-runner  emurebuild
 docs/exploredpct.md  credit-runner  exploredpct
@@ -480,6 +482,7 @@ docs/upstream/verifier-p04-2026-11-15.md  live-agent  verifyp04
 docs/upstream/verifier-p17-2026-11-15.md  credit-runner  verifyp17
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
 docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
+docs/vault.md  credit-runner  vaultv2
 docs/video-feed.md  credit-runner  videofeed
 docs/video-feed.md  credit-runner  videofeed2
 docs/video-feed.md  credit-runner  videofeed4
@@ -821,6 +824,7 @@ internal/town/tidy_test.go  credit-runner  towntests
 internal/town/town.go  credit-runner  itemverbs2
 internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
+internal/vault  credit-runner  vaultv2
 internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/cardtext.go  credit-runner  friendfb
 internal/watch/charactersapi.go  credit-runner  charselect
