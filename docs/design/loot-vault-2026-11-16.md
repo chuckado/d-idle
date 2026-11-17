@@ -254,7 +254,7 @@ the action bar sticks to the bottom.
 |---|---|---|---|
 | V0 spike | fork `ground full` + `item create` stub; the lab drill of 1.7 on a throwaway hero on the builder; result in `docs/probes/` | M | live on the builder: bytes equal, save reload equal, optional Game.exe oracle |
 | V1 | fork verbs `ground full`, `ground take`, `item create`, `item vault`, flag `--vault-verbs`, headless tests (like `item_verbs_d2d.py`), `caps`; Go client in `internal/d2dctl`, fakes | L | fork ctest, `go test ./internal/d2dctl` with a stub |
-| V2 | `internal/vault`: record, log, replay, index, capacity and trim and shrink rules, state machine, 2-build tests (Sorceress and Paladin) | M | offline tests incl. crash-between-steps and over-capacity |
+| V2 | `internal/vault`: record, log, replay, index, capacity and trim and shrink rules, state machine, 2-build tests (Sorceress and Paladin) | M | offline tests incl. crash-between-steps and over-capacity. **DONE offline (agent vaultv2, docs/vault.md)**: unused until V3/V5 |
 | V3 | rules engine action `vault`, Vault preset, looter adapter (walk, peek, record, take), knob `loot.vault`, forced off in measured runs | M | offline; shadow compare against Starter |
 | V4 | `/api/vault` read side and the page (grid, filters, capacity meter, Drops feed chip) | M | watch UI golden tests; phone width by screenshot of the game-free page |
 | V5 | Keep queue: stash chore step, errand button, states, failures | M | offline with fakes; then a lab drill: 20 drops, Keep 5, reload, items equal |
