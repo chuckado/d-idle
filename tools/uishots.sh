@@ -229,6 +229,11 @@ quest-awaiting-light first=0&theme=light&needs=0&quests=awaiting
 quest-blocked-light first=0&theme=light&needs=0&quests=blocked
 quest-offer-sorceress first=0&theme=dark&needs=0&quests=offer&class=sorceress
 quest-needs3 first=0&theme=dark&needs=2&quests=awaiting
+quest-countdown first=0&theme=dark&needs=0&quests=countdown
+quest-countdown-sorceress first=0&theme=dark&needs=0&quests=countdown&class=sorceress
+quest-away first=0&theme=dark&needs=0&quests=away
+quest-away-light first=0&theme=light&needs=0&quests=away
+quest-phone-tab-away first=0&theme=dark&needs=0&quests=away&tab=Quests
 quest-phone-tab first=0&theme=dark&needs=0&quests=offer&tab=Quests
 quest-phone-tab-awaiting first=0&theme=dark&needs=0&quests=awaiting&tab=Quests
 quest-phone-tab-off first=0&theme=dark&needs=0&quests=off&tab=Quests
@@ -243,6 +248,9 @@ quest-sheet-off first=0&theme=dark&needs=0&quests=off #btn-more|[data-drawer-ope
 quest-sheet-training first=0&theme=dark&needs=0&quests=training #btn-more|[data-drawer-open=quest-board]
 quest-sheet-light first=0&theme=light&needs=0&quests=offer #btn-more|[data-drawer-open=quest-board]
 quest-sheet-auto-light first=0&theme=light&needs=0&quests=auto #btn-more|[data-drawer-open=quest-board]
+quest-sheet-countdown first=0&theme=dark&needs=0&quests=countdown #btn-more|[data-drawer-open=quest-board]
+quest-sheet-away first=0&theme=dark&needs=0&quests=away #btn-more|[data-drawer-open=quest-board]
+quest-sheet-away-sorceress first=0&theme=dark&needs=0&quests=away&class=sorceress #btn-more|[data-drawer-open=quest-board]
 quest-sheet-sorceress first=0&theme=dark&needs=0&quests=offer&class=sorceress #btn-more|[data-drawer-open=quest-board]
 overlay-menu-zone first=0&theme=dark&zone=cp&tab=Map #btn-more
 overlay-menu-zone-light first=0&theme=light&zone=cp&tab=Map #btn-more
@@ -574,11 +582,10 @@ vaultdefect-ethenabled watch/vault?theme=dark&vault=eth-short&defect=vault-ethen
 		vault-*) szs="$sizes 412x780 360x640" ;;
 		questdefect-words) szs="1366x768" ;;
 		questdefect-clip | questdefect-two) szs="1366x768 412x780" ;;
-		quest-sheet-awaiting | quest-sheet-blocked) szs="$sizes 412x780" ;; # a Needs you row on a 360x640 phone pushes Orders 9 px over (not this card)
 		questdefect-small) szs="412x780 360x640" ;;
 		quest-phone-tab*) szs="412x780 390x844 360x640" ;;
 		quest-sheet-*) szs="$sizes 412x780 360x640" ;;
-		quest-*) szs="$sizes 412x780" ;;
+		quest-*) szs="$sizes 412x780 360x640" ;; # the 360x640 phone too (the Needs you row of a waiting hand-in no longer pushes Orders over, slice S8)
 		overlaydefect-two) szs="1366x768" ;; # the other tiles are not on screen on a phone: nothing to show
 		overlaydefect-*) szs="1366x768 412x780" ;;
 		overlay-*) szs="$sizes 412x780" ;;
