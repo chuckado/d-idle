@@ -411,7 +411,7 @@ func (r *Runner) stuckCheck(now time.Time) string {
 	idleGoal := goal != nil && goal.Type == goals.Idle
 	paused := r.paused
 	r.mu.Unlock()
-	if goal == nil || paused || skippedState(st, idleGoal) {
+	if goal == nil || paused || skippedState(st, idleGoal) || r.parkedBoard.Load() {
 		return ""
 	}
 	r.obMu.Lock()

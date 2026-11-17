@@ -16,7 +16,7 @@ import (
 // The quest board executor hand-off (slice S3, docs/questboard.md "Executor"). With knob quests.board = 1 the planner no
 // longer starts quests: an accepted plan record runs the existing chunk handler (internal/task act*.go) up to, but not
 // including, its hand-in step; the hero stops in town next to the giver (Awaiting) and the player's HandIn tap runs the
-// hand-in step. Between chunks the hero trains (the StepLevel slice; the modes are slice S6). Knob 0: none of this runs.
+// hand-in step. Between chunks the hero acts on the player's mode (boardmode.go, slice S6). Knob 0: none of this runs.
 
 // questBoardOn is the knob quests.board.
 func (r *Runner) questBoardOn() bool { return r.e.Tune.Quests.Board != 0 }
@@ -54,6 +54,8 @@ type boardRT struct {
 	near     map[string]bool      // walked to the giver once this process
 	lastFail map[string]time.Time // chunk key: last failure that was counted
 	noted    map[string]string    // visible-reason log lines already written
+	applied  string               // the between-chunks mode the hero acts on (boardmode.go); "" before the first tick
+	farming  bool                 // inside a farm-mode slice: the area choice farms
 }
 
 // NewQuestBoard builds the board executor of this runner and its hero's plan store and keeps it for boardStep. The S4
@@ -459,13 +461,14 @@ func (r *Runner) boardStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 		return r.boardTrain(ctx, snap, c)
 	}
 	rt.exec.SetEnabled(true)
+	r.parkedBoard.Store(false)
 	if r.boardServeHandIn(ctx, snap, c) {
 		return true
 	}
 	d, err := rt.exec.Next()
 	if err != nil {
 		r.boardNote("next", "quest board: "+err.Error())
-		return r.boardTrain(ctx, snap, c)
+		return r.boardBetween(ctx, snap, c)
 	}
 	switch d.Kind {
 	case questboard.DecRun:
@@ -477,7 +480,7 @@ func (r *Runner) boardStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 	case questboard.DecBlocked:
 		r.boardNote("blocked "+d.Quest, fmt.Sprintf("quest board: %s/%s parked: %s", d.Quest, d.Chunk, d.Why))
 	}
-	return r.boardTrain(ctx, snap, c)
+	return r.boardBetween(ctx, snap, c) // DecIdle, or a parked chunk: the mode decides
 }
 
 // boardNote logs a visible reason once per distinct text.
@@ -496,6 +499,7 @@ func (r *Runner) boardNote(key, line string) {
 }
 
 func (r *Runner) boardTrain(ctx context.Context, snap *d2.Snapshot, c control) bool {
+	r.noteTrain(snap)
 	_, ok := r.boardSlice(ctx, snap, c, boardPlan{train: true}, "Quest board: training")
 	return ok
 }
@@ -506,7 +510,7 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 	q, err := rt.board.Quest(d.Quest)
 	if err != nil {
 		r.boardNote("quest", err.Error())
-		return r.boardTrain(ctx, snap, c)
+		return r.boardBetween(ctx, snap, c)
 	}
 	res, ok := r.boardSlice(ctx, snap, c, boardPlan{q: q}, "Quest: "+q.Title)
 	out := questboard.StepResult{Outcome: questboard.StepRan}
