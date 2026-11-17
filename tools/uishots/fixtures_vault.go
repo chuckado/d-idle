@@ -190,7 +190,7 @@ func mountVault(m *http.ServeMux) {
 				http.Error(w, "no such fixture", http.StatusNotFound)
 				return
 			}
-			api.PostHandler(watch.AnswerOptions{}, route).ServeHTTP(w, r)
+			api.PostHandler(watch.AnswerOptions{Origins: []string{"http://" + r.Host}}, route).ServeHTTP(w, r)
 		})
 	}
 }
