@@ -113,60 +113,77 @@ func TestKhalimRestartBetweenPieces(t *testing.T) {
 	}
 }
 
-// The Staff: the Cube and the Staff of Kings in any order; the assembly has no handler yet and says so (V).
-func TestStaffPiecesAndUnsupportedAssembly(t *testing.T) {
-	for _, order := range perms([]string{"cube", "shaft"}) {
-		r := newRig(t, "Sorceress", 40)
-		r.f.DoneQuest["act1_done"] = TierSave
-		r.f.DoneQuest["radament"] = TierSave
-		for _, p := range order {
-			if err := r.x.Accept(hill, p); err != nil {
-				t.Fatalf("%v %s: %v", order, p, err)
+// The Staff: the Cube and the Staff of Kings in any order, then the assembly with its Cain hand-in (S7b, two builds, V).
+// The assembly needs the Tainted Sun quest too (the amulet).
+func TestStaffPiecesAndAssemblyWithCain(t *testing.T) {
+	for _, bd := range []string{"Sorceress", "Paladin"} {
+		for _, order := range perms([]string{"cube", "shaft"}) {
+			r := newRig(t, bd, 40)
+			r.f.DoneQuest["act1_done"] = TierSave
+			r.f.DoneQuest["radament"] = TierSave
+			for _, p := range order {
+				if err := r.x.Accept(hill, p); err != nil {
+					t.Fatalf("%s %v %s: %v", bd, order, p, err)
+				}
+				r.tick(3)
+				if got := r.chunk(hill, p).State; got != Done {
+					t.Fatalf("%s %v %s: %s", bd, order, p, got)
+				}
 			}
-			r.tick(3)
-			if got := r.chunk(hill, p).State; got != Done {
-				t.Fatalf("%v %s: %s", order, p, got)
+			if cv := r.chunk(hill, "assemble"); cv.State != Locked {
+				t.Fatalf("%s: assemble before the amulet quest = %s %q", bd, cv.State, cv.Why)
 			}
-		}
-		r.f.DoneQuest["tainted_sun"] = TierSave
-		cv := r.chunk(hill, "assemble")
-		if cv.State != Available || !strings.Contains(cv.Why, "not supported yet") {
-			t.Fatalf("assemble = %s %q", cv.State, cv.Why)
-		}
-		err := r.x.Accept(hill, "assemble")
-		if err == nil || !strings.Contains(err.Error(), "not supported yet") {
-			t.Fatalf("Start on an unsupported chunk: %v", err)
-		}
-		off, _ := r.x.Offers()
-		for _, o := range off {
-			if o.Quest == hill && o.Chunk == "assemble" && o.Startable {
-				t.Fatal("an unsupported chunk is startable")
+			r.f.DoneQuest["tainted_sun"] = TierSave
+			cv := r.chunk(hill, "assemble")
+			if cv.State != Ready || strings.Contains(cv.Why, "not supported yet") {
+				t.Fatalf("%s: assemble = %s %q", bd, cv.State, cv.Why)
+			}
+			if err := r.x.Accept(hill, "assemble"); err != nil {
+				t.Fatalf("%s: Start on the assembly: %v", bd, err)
 			}
 		}
 	}
 }
 
-// The Cain chain is strictly ordered; the last part is unsupported and the chain still stops cleanly (V).
+// The Cain chain is strictly ordered and its last part, the report to Akara, is a hand-in that is offered once the cage
+// part reads done (S7b, two builds, V); nothing is offered before.
 func TestCainChainInOrder(t *testing.T) {
 	b := mustBoard(t)
-	ready := readinessFor(t, b, "Paladin", 40)
-	in := Input{Facts: facts{0: {}}, Ready: ready, Chunks: map[string]ChunkFact{}}
-	get := func() QuestView { return view(t, b, in)[strt] }
-	if v := get(); !reflect.DeepEqual(v.Offered, []string{"scroll"}) {
-		t.Fatalf("start: %v", v.Offered)
+	for _, bd := range []string{"Paladin", "Sorceress"} {
+		ready := readinessFor(t, b, bd, 40)
+		in := Input{Facts: facts{0: {}}, Ready: ready, Chunks: map[string]ChunkFact{}}
+		get := func() QuestView { return view(t, b, in)[strt] }
+		if v := get(); !reflect.DeepEqual(v.Offered, []string{"scroll"}) {
+			t.Fatalf("%s start: %v", bd, v.Offered)
+		}
+		in.Chunks[ChunkKey(strt, "scroll")] = ChunkFact{Done: true, Tier: TierProxy}
+		if v := get(); !reflect.DeepEqual(v.Offered, []string{"read"}) {
+			t.Fatalf("%s after the scroll: %v", bd, v.Offered)
+		}
+		in.Chunks[ChunkKey(strt, "read")] = ChunkFact{Done: true, Tier: TierProxy}
+		if v := get(); !reflect.DeepEqual(v.Offered, []string{"free_cain"}) {
+			t.Fatalf("%s after the reading: %v", bd, v.Offered)
+		}
+		in.Chunks[ChunkKey(strt, "free_cain")] = ChunkFact{Done: true, Tier: TierProxy}
+		v := get()
+		if !reflect.DeepEqual(v.Offered, []string{"report"}) {
+			t.Fatalf("%s after the cage: %v", bd, v.Offered)
+		}
+		if c := chunk(v, "report"); strings.Contains(c.Why, "not supported yet") {
+			t.Fatalf("%s report = %s %q", bd, c.State, c.Why)
+		}
 	}
-	in.Chunks[ChunkKey(strt, "scroll")] = ChunkFact{Done: true, Tier: TierProxy}
-	if v := get(); !reflect.DeepEqual(v.Offered, []string{"read"}) {
-		t.Fatalf("after the scroll: %v", v.Offered)
-	}
-	in.Chunks[ChunkKey(strt, "read")] = ChunkFact{Done: true, Tier: TierProxy}
-	in.Chunks[ChunkKey(strt, "free_cain")] = ChunkFact{Done: true, Tier: TierProxy}
-	v := get()
-	if len(v.Offered) != 0 {
-		t.Fatalf("nothing is offered at the unsupported end: %v", v.Offered)
-	}
-	if c := chunk(v, "report"); c.State != Available || !strings.Contains(c.Why, "not supported yet") {
-		t.Fatalf("report = %s %q", c.State, c.Why)
+}
+
+// The Golden Bird is one hand-in chunk, supported; the board does not claim to fetch the figurine (S7b, V).
+func TestGoldenBirdIsSupported(t *testing.T) {
+	b := mustBoard(t)
+	for _, bd := range []string{"Paladin", "Sorceress"} {
+		in := Input{Facts: facts{0: {"act2_done": done(TierSave)}}, Ready: readinessFor(t, b, bd, 40)}
+		v := view(t, b, in)["golden_bird"]
+		if c := chunk(v, "bird"); strings.Contains(c.Why, "not supported yet") {
+			t.Fatalf("%s bird = %s %q", bd, c.State, c.Why)
+		}
 	}
 }
 

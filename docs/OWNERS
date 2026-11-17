@@ -279,6 +279,7 @@ data/onboarding  credit-runner  firstminutes
 data/onboarding/en.json  credit-runner  friendfb
 data/questboard  credit-runner  quests1
 data/questboard  credit-runner  quests7
+data/questboard  credit-runner  quests7b
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
 data/vault  credit-runner  vaultv2
@@ -420,6 +421,7 @@ docs/questboard.md  credit-runner  quests1
 docs/questboard.md  credit-runner  quests3
 docs/questboard.md  credit-runner  quests4
 docs/questboard.md  credit-runner  quests7
+docs/questboard.md  credit-runner  quests7b
 docs/releases/0.1.0.md  credit-runner  cut010b
 docs/releases/0.1.0.md  credit-runner  cut010d
 docs/releases/0.1.1.md  credit-runner  cut011
@@ -634,6 +636,8 @@ internal/bot/playerreset_test.go  credit-runner  resetinstant
 internal/bot/questboard.go  credit-runner  quests3
 internal/bot/questboard.go  credit-runner  quests4
 internal/bot/questboard.go  credit-runner  quests7
+internal/bot/questboard.go  credit-runner  quests7b
+internal/bot/questboard_s7b_test.go  credit-runner  quests7b
 internal/bot/questboard_test.go  credit-runner  quests4
 internal/bot/questboard_test.go  credit-runner  quests7
 internal/bot/repairtrip.go  credit-runner  repairtrip
@@ -875,6 +879,8 @@ internal/questboard  credit-runner  quests1
 internal/questboard  credit-runner  quests3
 internal/questboard  credit-runner  quests4
 internal/questboard  credit-runner  quests7
+internal/questboard/chunks_test.go  credit-runner  quests7b
+internal/questboard/state_test.go  credit-runner  quests7b
 internal/repair  credit-runner  repairtrip
 internal/resource/recovery.go  live-agent  recoverypace
 internal/resource/recovery_test.go  live-agent  recoverypace
@@ -900,6 +906,10 @@ internal/survival/  credit-runner  survC
 internal/survival/controller.go  credit-runner  survreask
 internal/survival/ledger.go  credit-runner  intake
 internal/survival/survival_test.go  credit-runner  survfix
+internal/talk/tables.go  credit-runner  quests7b
+internal/task/act1.go  credit-runner  quests7b
+internal/task/act2.go  credit-runner  quests7b
+internal/task/act3.go  credit-runner  quests7b
 internal/task/campaign.go  credit-runner  campaign1
 internal/task/executor.go  credit-runner  botstuck
 internal/task/executor.go  credit-runner  staletarget
@@ -907,6 +917,9 @@ internal/task/executor_unpark_test.go  credit-runner  staletarget
 internal/task/guided.go  credit-runner  campaign1
 internal/task/guided_test.go  credit-runner  campaign1
 internal/task/guided_test.go  pro-runner  levelplan3
+internal/task/s7b_test.go  credit-runner  quests7b
+internal/task/testdata  credit-runner  quests7b
+internal/task/world.go  credit-runner  quests7b
 internal/tidy  credit-runner  tidy
 internal/town/belt  credit-runner  beltfix
 internal/town/beltfill.go  credit-runner  beltfix

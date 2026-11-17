@@ -197,7 +197,7 @@
       "meshif"
      ],
      "handInStep": "alkor",
-     "unsupported": "the Jade Figurine drops from an unknown monster (U in internal/task/act3.go goldenNodes): the handler only turns one in, so nothing can fetch it"
+     "handler": "golden_bird_board"
     }
    ],
    "minutes": [
@@ -211,7 +211,8 @@
     "steps": "V internal/task/act3.go goldenNodes; dropper U",
     "rewards": "S docs/goals/execution.md s3 (+20 life)",
     "minutes": "I",
-    "meta": "U placeholder"
+    "meta": "U placeholder",
+    "chunks": "S7b: group golden_bird_board (U: the figurine dropper; the chunk needs the figurine or the bird in the pack and says so otherwise)"
    },
    "requires": [
     "act2_done"

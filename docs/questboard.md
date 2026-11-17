@@ -235,15 +235,15 @@ Rules (V by the named tests):
 | 1 | search_for_cain | scroll | item | any | search_for_cain: wp-dark-wood to-wood tree |
 | 1 | search_for_cain | read | handin | after scroll | search_for_cain (hand-in read) |
 | 1 | search_for_cain | free_cain | auto | after read | search_for_cain: to-stony stones to-tristram clear cage home |
-| 1 | search_for_cain | report | handin | after free_cain | UNSUPPORTED |
+| 1 | search_for_cain | report | handin | after free_cain | search_for_cain_board (hand-in report: Akara) |
 | 1 | act1_done | sail_east | handin | any | act1_complete (hand-in warriv) |
 | 2 | tainted_sun | amulet | item | any | viper_amulet |
 | 2 | horadric_staff | cube | item | any | horadric_cube |
 | 2 | horadric_staff | shaft | item | any | staff_of_kings |
-| 2 | horadric_staff | assemble | handin | after cube, shaft; needs quest tainted_sun | UNSUPPORTED |
+| 2 | horadric_staff | assemble | handin | after cube, shaft; needs quest tainted_sun | horadric_staff_board: assemble (hand-in cain) |
 | 2 | seven_tombs | duriel | auto | any | duriel |
 | 2 | act2_done | sail_east | handin | any | act2_hop (hand-in meshif) |
-| 3 | golden_bird | bird | handin | any | UNSUPPORTED |
+| 3 | golden_bird | bird | handin | any | golden_bird_board: meshif (hand-in alkor) |
 | 3 | khalims_will | eye | item | any | khalims_eye |
 | 3 | khalims_will | brain | item | any | khalims_brain |
 | 3 | khalims_will | heart | item | any | khalims_heart |
@@ -265,16 +265,23 @@ Rules (V by the named tests):
 
 | gap | why | what closes it |
 |---|---|---|
-| Cain: report to Akara | `cainNodes` ends at the camp; no step talks to Akara after the cage | a hand-in step in `internal/task/act1.go` |
-| Staff: assemble and give to Cain | `staffNodes` assembles and places the Staff in the Canyon; it never talks to Cain, so the quest word `horadric_staff` is not set by the board and `seven_tombs` (needs it, T1/T2) stays locked until the player talks to Cain by hand | a Cain talk step after `assemble` |
-| Golden Bird | the Jade Figurine dropper is unknown (U) | the dropper |
-| Terror's End: seals | `boss.RunDiablo` opens the seals and kills the seal bosses inside the Diablo kill: no per-seal entry point; leaving the game mid-seals may reset them (U) | a per-seal handler; until then the `diablo` chunk runs the whole thing and the seals chunk stays listed as unsupported |
+| Cain: report to Akara | SUPPORTED in S7b: group `search_for_cain_board`, one turn-in step `report` (Akara, pick `cain report`, the plain Talk, U). It is needed only on the reader's word Cleared (Cain free, reward open); T3 never starts it. `cainNodes` now treats Cleared as free (before: Done), so the cage is not clicked again while the reward is open (U: whether the game sets Cleared at the cage or Done at once; Done at once skips the step with the same chunk result) | the drill |
+| Staff: assemble and give to Cain | SUPPORTED in S7b: group `horadric_staff_board` = the Cube step plus a `cain` turn-in (Deckard Cain, pick `horadric staff`, U), needed with the Staff in the pack and the quest word not Done. The campaign group `horadric_staff` is unchanged. NOT built: a chunk that places the Staff in the Canyon (`place`, to-canyon steps stay in the campaign group only); whether Cain's talk sets the quest word that unlocks `seven_tombs` is U | the drill; a `place` chunk if the word needs the placement |
+| Golden Bird | SUPPORTED in S7b as a hand-in only: group `golden_bird_board`, steps `meshif` (Jade Figurine -> Golden Bird) then `alkor`. The figurine is a random drop (U) and is never fetched: with neither item in the pack the chunk is listed with the reason "no Jade Figurine in the pack"; both steps are done only on the quest word (T1/T2) or, for Meshif, the bird in the pack | the drill; the dropper if it is ever known |
+| Terror's End: seals | stays UNSUPPORTED (sharper reason in `act4.json`): seal progress has no durable evidence (no quest word, no save field; the seals and seal bosses are per game, U), so a seals-only chunk cannot be re-derived after a restart; `boss.OpenSeals` resumes only inside one game and ends by waking Diablo. The `diablo` chunk runs the seals itself | spike plan below |
 | Boss ids | `council`, `mephisto`, `izual`, `hephasto`, `diablo`, `shenk`, `nihlathak`, `ancients`, `baal` go to the survival table's `FindBoss`; an id it does not know gives the legacy word only (U) | table rows |
+
+### Terror's End seals: spike plan (NOT built, needs a lab hero in Act 4)
+
+1. Open the five seals on a lab hero (CHEATED/IMPOSSIBLE tag), leave the game with the seals open, re-enter and read the seal objects' state with `mem` (a read only): do they stay open (U)? Do the seal bosses stay dead (U)? Does Diablo spawn only on the last seal?
+2. If they reset, a seals-only chunk is impossible by design (no evidence): keep the single `diablo` chunk. If they persist, the seal states are T3 evidence read from the objects in the Chaos Sanctuary: add `boss.OpenSeals` with a `StopBeforeDiablo` option (it now waits for Diablo as its last step), a task step `seals` in `diablo` terms and a `nodes` list in the chunk.
+3. Record the answer in `docs/act4.md`; build only after 1 shows persistence.
 
 ### Live drill list per chain (checklist, NOT run; every hero below is lab-created, tag CHEATED/IMPOSSIBLE in `docs/probes/test-characters.md` and the cheat ledger, so none of it is evidence about game behaviour, only about the board)
 
-1. Act 1 Cain: hero at Normal clvl 12 in town, `quests.board` 1. Start `scroll` (Dark Wood tree), see it stop, Start `read` (Akara, hand in tap), Start `free_cain` (stones, Tristram, cage; hazard: never auto), see `report` listed as not supported, and check the quest word after the cage by hand. Kill the process after `scroll` and after `read`: the same offer returns, nothing is redone.
-2. Act 2 Staff pieces: lab hero in Act 2 with Radament done. Start `cube` then `shaft`, then the other order on a second hero; check the offers while one runs (not startable) and after (the other offered); `assemble` shows the reason.
+1. Act 1 Cain: hero at Normal clvl 12 in town, `quests.board` 1. Start `scroll` (Dark Wood tree), see it stop, Start `read` (Akara, hand in tap), Start `free_cain` (stones, Tristram, cage; hazard: never auto), then Start `report` (the Akara hand-in: what does the quest word read after the cage, Cleared or Done? the word decides whether `report` is skipped). Kill the process after `scroll` and after `read`: the same offer returns, nothing is redone.
+2. Act 2 Staff pieces: lab hero in Act 2 with Radament done. Start `cube` then `shaft`, then the other order on a second hero; check the offers while one runs (not startable) and after (the other offered); `assemble` (Cube step, then the Cain hand-in tap): does the quest word of `horadric_staff` change after Cain's talk, and does `seven_tombs` unlock (U)?
+2b. Act 3 Golden Bird: a hero with a Jade Figurine in the pack (a lab-granted item, CHEATED): `bird` lists the missing item without it; Start with it makes the Golden Bird at Meshif, the tap hands it to Alkor; kill the process after Meshif and check the offer comes back.
 3. Act 2 Tainted Sun, Arcane, Summoner, Duriel: one chunk each, boss margin words checked against the survival log; Duriel never auto.
 4. Act 3 Will: hero with the Council done (Flail in the pack). Start Eye, Brain, Heart in two different orders on two heroes; Start `assemble` (cube in town), then `orb`; check each quest item is kept by the loot rules between pieces.
 5. Act 3 Blackened Temple, Blade, Lam Esen, Mephisto and the portal: one chunk each; the portal chunk fights Mephisto again if the game was restarted (U).

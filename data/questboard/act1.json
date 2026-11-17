@@ -239,7 +239,8 @@
       "return_town",
       "talk_akara"
      ],
-     "unsupported": "the task layer ends at the camp after the cage (cainNodes has no Akara hand-in after freeing Cain); a handler step is needed"
+     "handInStep": "report",
+     "handler": "search_for_cain_board"
     }
    ],
    "minutes": [
@@ -250,7 +251,7 @@
    "autoStart": "never",
    "tags": {
     "giver": "SRC docs/quest-hints.md (how: auto_on_area)",
-    "chunks": "V internal/task/act1.go cainNodes (step names); report chunk U: no handler step",
+    "chunks": "V internal/task/act1.go cainNodes (step names); report chunk: group search_for_cain_board added in S7b (U: the Akara row, and whether the quest word is set at the cage or at the talk)",
     "steps": "V docs/goals/execution.md s3 (stone order random per game, U)",
     "levels": "EXP docs/quest-hints.md",
     "handin.pick": "U",
