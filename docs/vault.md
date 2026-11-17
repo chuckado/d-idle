@@ -53,7 +53,7 @@ Order: `Keep` (keepq) -> `BeginKeep` -> game create -> `CompleteKeep`. After a r
 
 `{"version":1,"hero":"...","items":[Item...]}`: live records, oldest first. Import: at most 64 MiB and 5000 items, version must match, every item validated before any is added; items go through Add (dedupe, capacity; import never trims, it counts `Blocked`). Not the wallet: a hand-edited wallet is a cheat (design 2.6).
 
-## Measured (V, `go test -bench`, the small herdr box, 4 cores, NoSync, indicative only)
+## Measured (V, `go test -bench`, a small 4-core box, NoSync, indicative only)
 
 Insert about 8 us (10k and 50k); insert with trim at 10k about 0.6 ms; Open by full replay 59 ms at 10k and 296 ms at 50k; Open with snapshot about 270 ms at 50k (JSON decode dominates, so the snapshot does not beat replay yet: U whether a binary snapshot is worth it); query with code+quality+ilvl+sockets about 0.6 ms at 10k and a name substring scan about 10 ms at 50k. fsync cost per event is not in these numbers.
 
