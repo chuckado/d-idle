@@ -33,6 +33,7 @@ owns:
   - "docs/ui-quests.md"
 exclusive: []
 contracts: []
+result: "S5 built offline behind quests.board: quest-strip tile (offer, running, waiting, handing in, confirming, failed, stuck, training, idle), quest-board drawer and phone Quests tab (acts, readiness words, parts, auto stub, history, mode switch, empty state naming the knob), Hand in read back from GET with payoff toast and the API real refusal reasons, video card quest caption, Needs-you event rows, glance questBoard flag retiring the Journey tile only while the board is on. Node tests with a fake API on both builds; fit run quest* at 8 sizes plus phones clean, four must-fail defects. Gaps: no step list in the API (words only), mode and auto are stubs; a Needs row on a 360x640 phone pushes Orders 9 px over (older, not this card). NOT verified live; a look by the user is open."
 ---
 
 ## Description
@@ -45,10 +46,10 @@ Slice S5 of docs/design/quest-board-2026-11-16.md. Done when the pictures at the
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 quest-strip tile in the strip slot (offer, running, awaiting, handing in, blocked, failed) behind glance questBoard
-- [ ] #2 quest-board sheet (drawer) and the phone Quests tab: acts, readiness words, parts, auto stub, history, mode switch, empty states
-- [ ] #3 Hand in moment read back from GET, payoff toast, real refusal reasons
-- [ ] #4 video card quest caption and Needs-you event rows
-- [ ] #5 node tests for the state to words mapping and buttons with a fake API
-- [ ] #6 fit pages at all sizes and phone, must-fail fixtures, pictures viewed
+- [x] #1 quest-strip tile in the strip slot (offer, running, awaiting, handing in, blocked, failed) behind glance questBoard
+- [x] #2 quest-board sheet (drawer) and the phone Quests tab: acts, readiness words, parts, auto stub, history, mode switch, empty states
+- [x] #3 Hand in moment read back from GET, payoff toast, real refusal reasons
+- [x] #4 video card quest caption and Needs-you event rows
+- [x] #5 node tests for the state to words mapping and buttons with a fake API
+- [x] #6 fit pages at all sizes and phone, must-fail fixtures, pictures viewed
 <!-- AC:END -->
