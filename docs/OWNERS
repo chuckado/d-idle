@@ -463,6 +463,7 @@ docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
 docs/research/emu-runs-2026-11-14b.md  credit-runner  decomp22
 docs/research/fid-poisonres-trace.md  credit-runner  fid-poison-res-diag
 docs/research/fidelity-vendor-probe.md  live-agent  fidprobe-vendor
+docs/research/gear-absorb-r3.md  credit-runner  gearabsorb3
 docs/research/merc-gear.md  credit-runner  uib9
 docs/research/mocks/return.html  credit-runner  returnmock
 docs/research/pal-skill-matrix.md  credit-runner  palskill-matrix
@@ -526,6 +527,7 @@ docs/upstream/bodies/  credit-runner  decomp36
 docs/upstream/bodies/decomp35-  credit-runner  decomp35
 docs/upstream/bodies/decomp37-open-wounds-body.md  credit-runner  owbody
 docs/upstream/bodies/gamble-price-body.md  credit-runner  decomp36bodies
+docs/upstream/bodies/gear-absorb-body.md  credit-runner  gearabsorb3
 docs/upstream/bodies/hitrec-modes-body.md  credit-runner  prfix2
 docs/upstream/bodies/hitrec-norestart-body.md  credit-runner  prfix3
 docs/upstream/bodies/load-gold-clamp-body.md  credit-runner  prfix2
