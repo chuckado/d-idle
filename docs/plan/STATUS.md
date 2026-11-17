@@ -254,6 +254,7 @@
 | survreask | proposed | - | `internal/bot/zonemodel.go`<br>`internal/bot/zonereask_test.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/zoneshadow.go`<br>`internal/survival/controller.go`<br>`cmd/d2bot/survivalwire.go`<br>`docs/probes/survival-ab-reask-2026-11-17.md` | - |
 | vaultv7b | proposed | - | `internal/ether`<br>`internal/watch/etherapi.go`<br>`cmd/d2bot/etherwire.go`<br>`docs/ether.md`<br>`data/vault/ether.json`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`tools/uishots/fixtures_vault.go`<br>`tools/uishots/fit.js`<br>`tools/uishots/fit.go`<br>`tools/uishots/fit_char_test.go`<br>`tools/uishots/serve.go`<br>`tools/uishots.sh`<br>`cmd/d2bot/vaultpage.go`<br>`cmd/d2bot/etherwire_test.go`<br>`internal/watch/etherapi_test.go`<br>`internal/watch/vaultether_test.go`<br>`internal/watch/testdata/vault_ether.mjs`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultui_test.go`<br>`internal/watch/hero.go`<br>`internal/watch/web/panels/hero-vitals/panel.js`<br>`docs/vault.md`<br>`docs/design/loot-vault-2026-11-16.md"exclusive: []` | - |
 | quests7 | proposed | - | `data/questboard`<br>`internal/questboard`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_test.go`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md`<br>`internal/watch/testdata/quests` | - |
+| vaultv5verify | proposed | - | `internal/vaultkeep`<br>`tools/uishots/fixtures_vault.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | vaultv6 | in-progress | - | `internal/vaultkeep`<br>`internal/vault`<br>`internal/d2dctl/vault_fake.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultapi_test.go`<br>`internal/watch/vaultui_test.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/testdata/vault_logic.mjs`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`cmd/d2bot/vaultact_test.go`<br>`internal/loot/vault.go`<br>`internal/loot/pickup.go`<br>`internal/loot/vault_test.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`docs/design/loot-vault-2026-11-16.md`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_vault.go`<br>`tools/uishots/fit.js` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -296,14 +297,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ae5256b97 11-17 03:35 `Merge agent/vaultv5verify: Merge branch 'main' into vaultv5verify` (vaultv5verify)
+- b784cf67e 11-17 03:34 `Merge branch 'main' into vaultv5verify` (-)
 - 09094d83f 11-17 03:28 `Merge agent/vaultv6: Merge origin/main into agent/vaultv6` (vaultv6)
 - 657fd78b5 11-17 03:25 `Merge origin/main into agent/vaultv6` (vaultv6)
+- 8949232a1 11-17 03:12 `Merge origin/main into agent/vaultv5verify` (-)
 - 30634d75a 11-17 03:07 `Merge agent/quests7: Merge branch 'main' into quests7` (quests7)
 - 314405c9b 11-17 03:06 `Merge branch 'main' into quests7` (-)
 - ac2efcb0a 11-17 03:00 `Merge agent/quests5: Merge branch 'main' into quests5` (quests5)
 - 7f956136f 11-17 02:59 `Merge branch 'main' into quests5` (-)
 - 49bb8f3c7 11-17 02:50 `Merge agent/vaultv7b: Merge origin/main into vaultv7b (Keep UI and fixtures kept beside the wallet)` (vaultv7b)
-- 74abd9cc3 11-17 02:48 `Merge origin/main into vaultv7b (Keep UI and fixtures kept beside the wallet)` (vaultv7b)
-- 5bfc5ea2f 11-17 02:47 `Merge origin/main into quests5` (-)
-- f06eea089 11-17 02:32 `Merge agent/vaultv5: Merge origin/main into agent/vaultv5` (vaultv5)
 <!-- statusgen:end -->
