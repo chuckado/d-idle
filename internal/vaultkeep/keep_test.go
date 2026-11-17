@@ -546,3 +546,33 @@ func TestPackTargetAndBadTarget(t *testing.T) {
 		t.Fatal("trip flag should clear")
 	}
 }
+
+// The kill switch or the safe moment changing in the middle of a batch stops the next create.
+func TestSwitchOffOrLeaveTownMidBatch(t *testing.T) {
+	for _, class := range classes {
+		for _, mode := range []string{"off", "ready"} {
+			r := newRig(t, class)
+			for i := 1; i <= 4; i++ {
+				r.enq(r.add(i, "wsp", 6))
+			}
+			n := 0
+			r.k.Backup = func(context.Context) error { return nil }
+			inner := r.k.Ready
+			r.k.Ready = func() string {
+				n++
+				if n > 2 { // the check at the start and before the first create pass, then the world changes
+					if mode == "ready" {
+						return "not in town"
+					}
+					r.on = false
+				}
+				return inner()
+			}
+			r.run()
+			st, _ := r.api.VaultStats(context.Background())
+			if st.Creates >= 4 || r.k.Pending() == 0 {
+				t.Fatalf("%s/%s: creates %d pending %d, the batch did not stop", class, mode, st.Creates, r.k.Pending())
+			}
+		}
+	}
+}
