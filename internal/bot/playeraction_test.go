@@ -311,11 +311,11 @@ func TestSecondPlayerCommandDoesNotWaitOutTheGap(t *testing.T) {
 
 // fakeVaultKeep queues n items; Run creates up to per of them like the executor's per-visit cap.
 type fakeVaultKeep struct {
-	w     *world
-	n     atomic.Int32
-	per   int32
-	trip  atomic.Bool
-	runs  atomic.Int32
+	w    *world
+	n    atomic.Int32
+	per  int32
+	trip atomic.Bool
+	runs atomic.Int32
 }
 
 func (f *fakeVaultKeep) Pending() int     { return int(f.n.Load()) }
