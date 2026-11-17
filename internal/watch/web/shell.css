@@ -340,12 +340,9 @@
   .d-reset-btn[data-busy="1"] { color: var(--d-accent-text); border-color: var(--d-accent); }
 }
 
-/* the quest board (slice S5): what depends on the window, kept here because panels hold no media queries */
+/* the quest board (slice S5): what depends on the window, kept here because panels hold no media queries. The panels size their buttons
+   by --q-touch (a property, so the layer order does not matter): 44 px on a touch screen and in a phone's full-width drawer */
 @layer shell {
-  /* a short window (the strip is 92 px): the quest tile drops its kind label */
-  @media (max-height: 759px) { [data-cockpit-slot="strip"] [data-panel="quest-strip"] .qs-h { display: none; } }
-  /* a touch screen: 44 px targets in the tile, the sheet and the tab */
-  @media (pointer: coarse) { :is([data-panel="quest-strip"], [data-panel="quest-board"], [data-panel="quest-list"]) :is(.qs-btn, .qs-seg, .qb-btn, .qb-sw, .qb-seg) { min-block-size: 44px; } }
-  /* the full-width drawer of a phone sits beside the shell */
-  .d-shell[data-cmode="phone"] ~ .d-drawer [data-panel="quest-board"] :is(.qb-btn, .qb-sw, .qb-seg) { min-block-size: 44px; }
+  @media (pointer: coarse) { :root { --q-touch: 44px; } }
+  .d-shell[data-cmode="phone"] ~ .d-drawer { --q-touch: 44px; }
 }

@@ -56,6 +56,7 @@ export function mount(root, ctx) {
     last = v;
     const m = stripModel(v);
     box.dataset.kind = m.kind;
+    box.dataset.short = ctx.short && ctx.short() ? '1' : '0'; // a short window (92 px strip): the kind label goes
     label.textContent = m.label;
     line.textContent = m.head;
     line.title = m.head;
@@ -67,12 +68,14 @@ export function mount(root, ctx) {
     if (m.primary) acts.append(button(m.primary, true, 'primary'));
     if (m.secondary) acts.append(button(m.secondary, false, 'secondary'));
     if (v && v.enabled) {
+      if (!m.secondary) {
       const all = ctx.el('button', 'qs-btn qs-all', 'All quests');
       all.type = 'button';
       all.dataset.key = 'all';
       all.setAttribute('aria-label', 'Open the quest board');
       all.addEventListener('click', () => ctx.openDrawer('quest-board'));
       acts.append(all);
+      }
       for (const [id, text] of MODES) {
         const b = ctx.el('button', 'qs-seg', text);
         b.type = 'button';

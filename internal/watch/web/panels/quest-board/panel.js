@@ -312,7 +312,8 @@ export function mountBoard(root, ctx, tab) {
       return;
     }
     const head = ctx.el('div', 'qb-head');
-    head.append(ctx.el('span', 'qb-act', m.actLabel), modeBar(m));
+    head.append(ctx.el('span', 'qb-act', m.actLabel));
+    if (!tab) head.append(modeBar(m)); // the phone's tile above the list has the switch
     box.append(head);
     if (m.now) {
       const n = ctx.el('div', 'qb-now');
