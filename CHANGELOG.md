@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- decomp39: player melee through walls (FUN_00622c40 reach and line) and the DoT sub-point rule; docs only <!--sg:agent/decomp39-->
+- Merge branch 'main' into sandbox3 <!--sg:agent/sandbox3-->
+- Merge branch 'main' into morefit <!--sg:agent/morefit-->
 - Merge branch 'main' into TASK-618 <!--sg:agent/owbody-->
 - Merge branch 'main' into TASK-613 <!--sg:agent/verifydecomp37-->
 - Merge branch 'main' into TASK-614 <!--sg:agent/manaburnbody-->
