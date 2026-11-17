@@ -18,7 +18,10 @@ owns:
   - "internal/bot/questboard.go"
   - "internal/bot/questboard_test.go"
   - "docs/questboard.md"
+  - "docs/design/quest-board-2026-11-16.md"
+  - "internal/watch/testdata/quests"
 exclusive: []
+result: "Chunk data for Acts 1 to 5 (handler, nodes, handInStep, unsupported), any-order pieces, bot runs chunks of multi-chunk quests from handler steps; Cain report, Staff assemble, Golden Bird, Terror's End seals are unsupported with reasons. Offline only, NOT verified live (drill list in docs/questboard.md)."
 contracts: []
 ---
 
@@ -32,9 +35,9 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Chunk data (handler, nodes, hand-in step, unsupported) for Acts 1 to 5, any-order pieces
-- [ ] #2 Bot adapter runs a chunk of a multi-chunk quest from its handler nodes
-- [ ] #3 Tests: every order permutation, unsupported chunk, evidence conflicts, difficulty change, restart
-- [ ] #4 Validation test over all act data (acyclic, handler or unsupported, NPCs exist)
-- [ ] #5 docs/questboard.md chunk tables and a live drill list per chain (not run)
+- [x] #1 Chunk data (handler, nodes, hand-in step, unsupported) for Acts 1 to 5, any-order pieces
+- [x] #2 Bot adapter runs a chunk of a multi-chunk quest from its handler nodes
+- [x] #3 Tests: every order permutation, unsupported chunk, evidence conflicts, difficulty change, restart
+- [x] #4 Validation test over all act data (acyclic, handler or unsupported, NPCs exist)
+- [x] #5 docs/questboard.md chunk tables and a live drill list per chain (not run)
 <!-- AC:END -->
