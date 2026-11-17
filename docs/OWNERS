@@ -234,6 +234,7 @@ cmd/d2bot/powerwire.go  credit-runner  survC
 cmd/d2bot/powerwire_test.go  credit-runner  survB
 cmd/d2bot/powerwire_test.go  credit-runner  survC
 cmd/d2bot/powerwire_test.go  credit-runner  survfix
+cmd/d2bot/questwire.go  credit-runner  questrun
 cmd/d2bot/questwire.go  credit-runner  quests10
 cmd/d2bot/questwire.go  credit-runner  quests4
 cmd/d2bot/questwire.go  credit-runner  quests8
@@ -428,6 +429,7 @@ docs/process/queuespeed.md  credit-runner  queuespeed
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
 docs/quest-hints.md  live-agent  questdrill
+docs/questboard.md  credit-runner  questrun
 docs/questboard.md  credit-runner  quests1
 docs/questboard.md  credit-runner  quests10
 docs/questboard.md  credit-runner  quests3
@@ -596,6 +598,7 @@ internal/bot/goal.go  credit-runner  goldprio
 internal/bot/goal.go  credit-runner  hourfix
 internal/bot/goal.go  credit-runner  hourfix2
 internal/bot/goal.go  credit-runner  maphistoryA
+internal/bot/goal.go  credit-runner  questrun
 internal/bot/goal.go  credit-runner  quests3
 internal/bot/goal.go  credit-runner  repairtrip
 internal/bot/goal.go  credit-runner  staletarget
@@ -614,6 +617,7 @@ internal/bot/heroattrs_test.go  credit-runner  uic3
 internal/bot/hpfields.go  credit-runner  intake
 internal/bot/killtime.go  credit-runner  swingmodel
 internal/bot/killtime_test.go  credit-runner  swingmodel
+internal/bot/ladder_t0_test.go  credit-runner  questrun
 internal/bot/leveling.go  credit-runner  hourfix
 internal/bot/levelplan3_test.go  pro-runner  levelplan3
 internal/bot/lifelog.go  credit-runner  arrivalsettle
@@ -658,18 +662,21 @@ internal/bot/playerreset_test.go  credit-runner  botreset
 internal/bot/playerreset_test.go  credit-runner  resetinstant
 internal/bot/questauto.go  credit-runner  quests8
 internal/bot/questauto_test.go  credit-runner  quests8
+internal/bot/questboard.go  credit-runner  questrun
 internal/bot/questboard.go  credit-runner  quests10
 internal/bot/questboard.go  credit-runner  quests3
 internal/bot/questboard.go  credit-runner  quests4
 internal/bot/questboard.go  credit-runner  quests7
 internal/bot/questboard.go  credit-runner  quests7b
 internal/bot/questboard.go  credit-runner  quests8
+internal/bot/questboard_goal_test.go  credit-runner  questrun
 internal/bot/questboard_s7b_test.go  credit-runner  quests7b
 internal/bot/questboard_test.go  credit-runner  quests4
 internal/bot/questboard_test.go  credit-runner  quests7
 internal/bot/repairtrip.go  credit-runner  repairtrip
 internal/bot/repairtrip_test.go  credit-runner  repairtrip
 internal/bot/resource.go  pro-runner  levelplan3
+internal/bot/routeguard.go  credit-runner  questrun
 internal/bot/runner.go  credit-runner  botinstant
 internal/bot/runner.go  credit-runner  campaign1
 internal/bot/runner.go  credit-runner  goldprio
@@ -922,6 +929,9 @@ internal/questboard  credit-runner  quests4
 internal/questboard  credit-runner  quests7
 internal/questboard  credit-runner  quests8
 internal/questboard/chunks_test.go  credit-runner  quests7b
+internal/questboard/desk.go  credit-runner  questrun
+internal/questboard/desk_test.go  credit-runner  questrun
+internal/questboard/exec.go  credit-runner  questrun
 internal/questboard/state_test.go  credit-runner  quests7b
 internal/readiness/model.go  credit-runner  resistorder
 internal/repair  credit-runner  repairtrip
@@ -1300,6 +1310,8 @@ internal/watch/web/panels/map/  credit-runner  uis6
 internal/watch/web/panels/needs-you  credit-runner  quests8
 internal/watch/web/panels/needs-you/  credit-runner  uifix1
 internal/watch/web/panels/needs-you/  credit-runner  uis3
+internal/watch/web/panels/needs-you/panel.css  credit-runner  questrun
+internal/watch/web/panels/needs-you/panel.js  credit-runner  questrun
 internal/watch/web/panels/needs-you/panel.js  credit-runner  uis7
 internal/watch/web/panels/needs-you/panel.json  credit-runner  uis7
 internal/watch/web/panels/onboarding  credit-runner  firstminutes

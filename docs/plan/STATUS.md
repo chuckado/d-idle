@@ -267,6 +267,7 @@
 | labels | proposed | - | `internal/d2dctl/labels.go`<br>`internal/d2dctl/labels_test.go`<br>`internal/watch/labelsapi.go`<br>`internal/watch/labelsapi_test.go`<br>`cmd/d2bot/labelswire.go`<br>`cmd/d2bot/labelswire_test.go`<br>`internal/watch/web/panels/video`<br>`internal/watch/testdata/video_labels_panel.js`<br>`tools/uishots/fixtures_commands.go`<br>`docs/video-feed.md`<br>`internal/watch/funwire.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/watchlayout_test.go`<br>`tools/uishots/serve.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`tools/uishots.sh` | - |
 | morefit | proposed | - | `internal/watch/web/panels/orders/panel.css`<br>`tools/uishots/fixtures_menu.go` | - |
 | owbody | proposed | - | `docs/upstream/bodies/decomp37-open-wounds-body.md` | - |
+| questrun | proposed | - | `internal/bot/questboard.go`<br>`internal/bot/questboard_goal_test.go`<br>`internal/bot/goal.go`<br>`internal/questboard/desk.go`<br>`internal/questboard/desk_test.go`<br>`internal/questboard/exec.go`<br>`cmd/d2bot/questwire.go`<br>`docs/questboard.md`<br>`internal/bot/routeguard.go`<br>`internal/bot/ladder_t0_test.go`<br>`internal/watch/web/panels/needs-you/panel.js`<br>`internal/watch/web/panels/needs-you/panel.css` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -307,6 +308,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b4e8a38ee 11-17 13:06 `Merge agent/questrun: Merge branch 'main' into TASK-619` (questrun)
+- 7b41d2c16 11-17 13:05 `Merge branch 'main' into TASK-619` (-)
 - 0e336ab05 11-17 12:59 `Merge agent/labels: Merge branch 'main' into TASK-615` (labels)
 - bd9bd1d06 11-17 12:58 `Merge branch 'main' into TASK-615` (-)
 - a926509f9 11-17 12:40 `Merge agent/gowhole: Merge branch 'main' into gowhole` (gowhole)
@@ -315,6 +318,4 @@
 - 5c7c7dce0 11-17 11:57 `Merge branch 'main' into TASK-624` (-)
 - 9924f480c 11-17 11:51 `Merge agent/sandbox3: Merge branch 'main' into sandbox3` (sandbox3)
 - 83379c803 11-17 11:50 `Merge branch 'main' into sandbox3` (-)
-- bc63d4199 11-17 11:13 `Merge agent/morefit: Merge branch 'main' into morefit` (morefit)
-- 19962e32b 11-17 11:12 `Merge branch 'main' into morefit` (-)
 <!-- statusgen:end -->
