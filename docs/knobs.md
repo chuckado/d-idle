@@ -486,6 +486,12 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
 | watch.paletteFeed | 0 | 0..1 | bool | 0 | env.PaletteFeedOn | 1: the viewer (d2dview, and the watch screen through the tap relay) also serves the lossless RGBA tile-delta feed of the game picture (/stream.pfeed; measured 0.4 to 0.7 MB/s against 1.8 MB/s of JPEG q72, docs/probes/video-feed-2026-11-15.md) and the page draws it on a canvas when the glance reply lists it; any decode trouble falls back to MJPEG. Needs the d2d framefeed ring. d2dview and the friends pack read the environment switch D2_PALETTE_FEED=1 (same meaning; the d2dview process has no tuning file). 0 (default): MJPEG only, nothing changes. Off until the live A/B has run (docs/video-feed.md section 9). |
+
+### quests.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| quests.board | 0 | 0..1 | bool | 0 | 1 | 1: a quest runs only after the player accepts its current chunk (Start); the bot does that chunk, walks to the NPC and stops, and the player taps Hand in. The planner then no longer starts quests by itself: between chunks it levels (Train; the modes are a later slice). 0 (default): today's planner behaviour, nothing changes. Off until the live drill of docs/questboard.md has run. |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)
