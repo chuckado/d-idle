@@ -54,6 +54,7 @@ type Skipped struct {
 // PickReport is the outcome of a PickUp call.
 type PickReport struct {
 	Picked     []Picked
+	Vaulted    []Picked // recorded in the Ethereal Vault and left on the ground (loot.vault 1)
 	Skipped    []Skipped
 	Failed     []Skipped
 	GoldGained int
@@ -67,8 +68,9 @@ type cand struct {
 	v     Verdict
 	dist  float64
 	name  string
-	gold0 int // player gold when the candidate list was built
-	held0 int // items of the same class in the pack and belt when the list was built
+	gold0 int  // player gold when the candidate list was built
+	held0 int  // items of the same class in the pack and belt when the list was built
+	vault bool // record in the vault instead of picking up (vault.go)
 }
 
 var errGone = errors.New("loot: item left the ground without arriving in the pack")
@@ -127,6 +129,7 @@ func (l *Looter) pickUp(ctx context.Context, o PickOpts) (PickReport, error) {
 	if max <= 0 {
 		max = t.MaxPerCall
 	}
+	l.vaultCheck(ctx)
 	failed := map[uint32]int{}
 	noRoomLogged := map[uint32]bool{}
 	for len(rep.Picked) < max {
@@ -173,6 +176,33 @@ func (l *Looter) pickUp(ctx context.Context, o PickOpts) (PickReport, error) {
 			return rep, nil
 		}
 		c := cands[0]
+		if c.vault {
+			rec, verr := l.vaultOne(ctx, c, o)
+			switch {
+			case verr == nil:
+				if rec {
+					rep.Vaulted = append(rep.Vaulted, Picked{ID: c.u.ID, Class: c.u.Class, Name: c.name, Verdict: c.v})
+				}
+				l.forget(c.u.ID)
+			case errors.Is(verr, errVaultRetry):
+			case errors.Is(verr, context.Canceled), errors.Is(verr, context.DeadlineExceeded):
+				return rep, verr
+			case errors.Is(verr, errAborted):
+				rep.Aborted = true
+				return rep, nil
+			default:
+				failed[c.u.ID]++
+				l.e.Log.Debug("vault peek failed", "item", c.name, "id", c.u.ID, "err", verr)
+				if failed[c.u.ID] >= 2 {
+					rep.Failed = append(rep.Failed, Skipped{ID: c.u.ID, Name: c.name, Why: verr.Error()})
+					l.forget(c.u.ID)
+				}
+			}
+			if len(rep.Vaulted) >= max {
+				return rep, nil
+			}
+			continue
+		}
 		goldBefore := s.Player.Gold
 		err = l.pickOne(ctx, c, o)
 		switch {
@@ -385,6 +415,7 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 		packPct = u.UsedPct()
 	}
 	sp := l.ShadowPass(s, packPct, 0) // shadow stage: log-only, nil when off (lootshadow.go)
+	vlt := sp != nil && sp.vault
 	sp.SetGround(strict, lowGold)
 	for _, u := range s.Ground {
 		if u.Item == nil || u.Mode != d2.ItemModeGround {
@@ -392,6 +423,11 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 		}
 		if l.ignored(u) {
 			continue // the player trashed it from the watch page: not a skip worth a report line either
+		}
+		if vlt {
+			if done, _ := l.vaultSeen(u); done {
+				continue // recorded already: nothing to walk to
+			}
 		}
 		name := l.itemName(u)
 		skip := func(why string) { skipped = append(skipped, Skipped{ID: u.ID, Name: name, Why: why}) }
@@ -420,8 +456,28 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 		if ev, ok := sp.GroundVerdict(u, c.Stats); ok {
 			v = ev // loot.rulesEngine >= 1: the engine decides; the filters below stay today's
 		}
+		toVault := false
+		if vlt {
+			if _, fell := l.vaultSeen(u); !fell { // a failed peek keeps today's decision above
+				if vv, vd, ok := sp.VaultDecision(u, c.Stats); ok {
+					v, toVault = vd, vv
+				}
+			}
+		}
 		if namedItem(o.Names, name, b) {
 			v = Verdict{Action: Keep, Tier: "S", Prio: 100, Rule: "named", Reason: "asked for by name"}
+			toVault = false
+		}
+		if toVault {
+			if v.Prio < o.MinPrio {
+				skip("below min prio")
+			} else if l.vaultBlockedNow() {
+				skip("vault full")
+			} else {
+				sp.Observe(ShadowGround, u, "vault", "", false, c.Stats)
+				out = append(out, cand{u: u, v: v, dist: d, name: name, gold0: s.Player.Gold, vault: true})
+			}
+			continue
 		}
 		shadow := func(today string) { sp.Observe(ShadowGround, u, today, "", false, c.Stats) }
 		if !passes(v, strict, lowGold) {
@@ -460,13 +516,13 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 				continue
 			}
 			shadow("pickup")
-			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
+			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class), false})
 			continue
 		}
 		shadow("pickup") // every filter above said yes; pack room below is not a loot decision
 		// Potions the belt will take (a same-kind column with room or an empty column, B2) do not need pack space.
 		if k := belt.PotionKind(b); k != belt.None && belt.WillBelt(l.e.Data, s.Inventory, k) {
-			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
+			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class), false})
 			continue
 		}
 		w, h := 1, 1
@@ -492,7 +548,7 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 				continue
 			}
 		}
-		out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
+		out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class), false})
 	}
 	sort.SliceStable(out, func(i, j int) bool {
 		if out[i].v.Prio != out[j].v.Prio {
