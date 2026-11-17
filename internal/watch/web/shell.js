@@ -131,6 +131,7 @@ function tileSheet(id, root, where) {
   // FLOAT_MIN tall and never past the window; it keeps the tile's width. A tall enough tile keeps the sheet inside it.
   const FLOAT_MIN = 232;
   const fit = () => {
+    if (where === 'beside') return; // the zone menu has its own placement (it must not cover the zone buttons)
     if (sheet.hidden) { sheet.removeAttribute('data-float'); sheet.style.removeProperty('--ts-top'); return; }
     const r = sheet.parentElement ? sheet.parentElement.getBoundingClientRect() : null;
     if (!r || r.height >= FLOAT_MIN) { sheet.removeAttribute('data-float'); return; }
