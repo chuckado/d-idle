@@ -264,6 +264,7 @@
 | survrecover | proposed | - | `internal/bot/zonemodel.go`<br>`internal/bot/zonerecover_test.go`<br>`internal/bot/broke.go`<br>`docs/probes/survival-ab-recovery-2026-11-17.md`<br>`internal/bot/goal.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/zoneshadow.go` | - |
 | menufit2 | proposed | - | `internal/watch/web/shell.css`<br>`tools/uishots/fixtures_menu.go`<br>`docs/ui-overlays.md` | - |
 | resistorder | proposed | - | `docs/research/resistorder.md`<br>`internal/d2/resist.go`<br>`internal/combat/rules.go`<br>`internal/readiness/model.go`<br>`internal/power/margin.go` | - |
+| vaultphone | proposed | - | `internal/watch/web/vault.js`<br>`tools/uishots.sh` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -304,6 +305,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b18e3627a 11-17 08:06 `Merge agent/vaultphone: Merge branch 'main' into vaultphone` (vaultphone)
+- 6d2cea9a8 11-17 08:05 `Merge branch 'main' into vaultphone` (-)
 - 1ca425356 11-17 08:04 `Merge agent/verifydecomp38: Merge branch 'main' into TASK-608` (verifydecomp38)
 - cedb3f753 11-17 07:59 `Merge branch 'main' into TASK-608` (-)
 - 104d37580 11-17 07:48 `Merge agent/menufit2: Merge branch 'main' into menufit2` (menufit2)
@@ -312,6 +315,4 @@
 - 2c6e8014f 11-17 07:39 `Merge branch 'main' into survrecover` (-)
 - cc0f96f57 11-17 07:31 `Merge agent/resistorder: Merge branch 'main' into TASK-611` (resistorder)
 - 09b62142f 11-17 07:30 `Merge branch 'main' into TASK-611` (-)
-- 099e85f75 11-17 07:19 `Merge agent/quests10: Merge branch 'main' into quests10` (quests10)
-- 5429873f9 11-17 07:18 `Merge branch 'main' into quests10` (-)
 <!-- statusgen:end -->

@@ -1350,6 +1350,7 @@ internal/watch/web/vault.css  credit-runner  vaultv5
 internal/watch/web/vault.css  credit-runner  vaultv6
 internal/watch/web/vault.css  credit-runner  vaultv7b
 internal/watch/web/vault.html  credit-runner  vaultv4
+internal/watch/web/vault.js  credit-runner  vaultphone
 internal/watch/web/vault.js  credit-runner  vaultv4
 internal/watch/web/vault.js  credit-runner  vaultv5
 internal/watch/web/vault.js  credit-runner  vaultv6
@@ -1445,6 +1446,7 @@ tools/uishots.sh  credit-runner  uiphone
 tools/uishots.sh  credit-runner  uis3
 tools/uishots.sh  credit-runner  uis6
 tools/uishots.sh  credit-runner  uis7
+tools/uishots.sh  credit-runner  vaultphone
 tools/uishots.sh  credit-runner  vaultv4
 tools/uishots.sh  credit-runner  vaultv5
 tools/uishots.sh  credit-runner  vaultv6
