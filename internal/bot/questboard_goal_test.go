@@ -6,7 +6,6 @@ import (
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/goals"
-	"d2lod-bot/internal/questboard"
 )
 
 // The live bug of 2026-11-17: the hero farmed Dark Wood under a farm_area goal, the player tapped Start, the accept was
@@ -27,7 +26,12 @@ func TestQuestBoardStartRunsUnderAFarmGoal(t *testing.T) {
 				if err := x.Accept("den_of_evil", "clear_den"); err != nil {
 					t.Fatal(err)
 				}
-				g.waitFor("awaiting hand-in", func() bool { d, _ := x.Next(); return d.Kind == questboard.DecAwait })
+				// the log, not x.Next: the test goroutine must not read the board's world while the loop writes it (-race)
+				g.waitFor("awaiting hand-in", func() bool {
+					l := g.w.log()
+					i := strings.Index(l, "exit 8")
+					return i >= 0 && strings.Contains(l[i:], "talk Akara")
+				})
 				if !strings.Contains(g.w.log(), "exit 8") {
 					t.Fatalf("the chunk never went to the Den: %s", g.w.log())
 				}
