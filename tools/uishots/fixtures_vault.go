@@ -139,6 +139,29 @@ func newVaultFor(mode string, dir string) *watch.VaultAPI {
 	return api
 }
 
+var (
+	vaultModeMu   sync.Mutex
+	vaultModeLast = "pop"
+)
+
+// vaultModeOf is the state the page asked for. The page rewrites its own query when a filter changes (history.replaceState)
+// and then drops vault=, so a request without it keeps the last state seen (one page at a time per harness run).
+func vaultModeOf(r *http.Request) string {
+	mode := r.URL.Query().Get("vault")
+	if mode == "" {
+		if ref, err := url.Parse(r.Referer()); err == nil {
+			mode = ref.Query().Get("vault")
+		}
+	}
+	vaultModeMu.Lock()
+	defer vaultModeMu.Unlock()
+	if mode == "" {
+		return vaultModeLast
+	}
+	vaultModeLast = mode
+	return mode
+}
+
 // vaultFixture serves the Vault page's routes for the state the page asks for.
 func vaultFixture() http.Handler {
 	vaultOnce.Do(func() {
@@ -151,13 +174,7 @@ func vaultFixture() http.Handler {
 		}
 	})
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		mode := "pop"
-		if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("vault") != "" {
-			mode = ref.Query().Get("vault")
-		}
-		if v := r.URL.Query().Get("vault"); v != "" {
-			mode = v
-		}
+		mode := vaultModeOf(r)
 		if mode == "error" && strings.HasPrefix(r.URL.Path, "/api/vault") {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusInternalServerError)
@@ -181,10 +198,7 @@ func mountVault(m *http.ServeMux) {
 	for _, p := range watch.VaultPostRoutes {
 		route := p
 		m.HandleFunc(route, func(w http.ResponseWriter, r *http.Request) {
-			mode := "pop"
-			if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("vault") != "" {
-				mode = ref.Query().Get("vault")
-			}
+			mode := vaultModeOf(r)
 			api := vaultAPIs[mode]
 			if api == nil {
 				http.Error(w, "no such fixture", http.StatusNotFound)
