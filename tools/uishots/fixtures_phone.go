@@ -70,7 +70,7 @@ func init() {
 			item(55, "jew", "Jewel", "rare", 1, 2, 1, 1, map[string]any{"identified": false}),
 			item(56, "jew", "Rainbow Facet", "unique", 4, 2, 1, 1, nil),
 			item(57, "jew", "Jewel", "normal", 5, 2, 1, 1, nil),
-			item(58, "gsw", "Flawless Skull", "normal", 5, 1, 1, 1, nil),
+			item(58, "gsw", "Flawless Skull", "normal", 4, 6, 1, 1, nil),
 			item(59, "amu", "Amulet", "magic", 4, 5, 1, 1, map[string]any{"identified": false}),
 			item(60, "zzz", "Unmapped Thing", "magic", 5, 5, 1, 1, nil), // no icon in the set: the type fallback
 		}
