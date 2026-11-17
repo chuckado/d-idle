@@ -56,7 +56,6 @@ def signed(value):
 
 
 def game(path):
-    import emu
     import monster_damage
     from unicorn.x86_const import UC_X86_REG_ECX
 
@@ -120,7 +119,7 @@ def compare(cases, gfile, dfile):
         bad += differ
     for name, (total, differ) in sorted(by_kind.items()):
         print(f"# {name}: {total} cases, {differ} differ")
-    print(f"# all: {sum(total for total, _ in by_kind.values())} cases, {bad} differ")
+    print(f"# total: {sum(total for total, _ in by_kind.values())} cases, {bad} differ")
     sys.exit(1 if bad else 0)
 
 

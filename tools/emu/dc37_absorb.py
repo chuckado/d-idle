@@ -98,7 +98,7 @@ def compare(cases, gfile, dfile):
         bad += differ
     for kind, (total, differ) in sorted(by_kind.items()):
         print(f"# {kind}: {total} cases, {differ} differ")
-    print(f"# all: {len(case_lines)} cases, {bad} differ")
+    print(f"# total: {len(case_lines)} cases, {bad} differ")
     sys.exit(1 if bad else 0)
 
 

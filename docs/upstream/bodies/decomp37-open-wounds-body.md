@@ -50,7 +50,7 @@ Life taken from a plain monster over the 8 seconds, game.exe against the parent:
 
 ## Answers to the presubmit WARNs
 
-- Unit kinds: only the player's hit on a monster changes. The merc's blows carry no Open Wounds in d2d.
+- Unit kinds: only the player's hit on a monster changes. The merc, the pets and a co-op partner's hero take no part: the merc's and the pets' blows carry no Open Wounds in d2d (`player_blow` is the only reader of the stat), and a partner's hero is a player (the same path).
 - Build: `--quick` skips it; the numbers are above.
 
 ## How to re-check

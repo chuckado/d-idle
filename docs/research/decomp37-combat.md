@@ -7,8 +7,8 @@ Tags: **V run** = game.exe's own code under the emulator (`docs/emu-image.md`), 
 ## Answer in eight lines
 
 1. **Picked (scope: elemental pipeline, to-hit, skill damage; impact x tractability):** the survey below found most of the scope already traced with 0 differences (resistance, pierce, immunity, to-hit, block, avoid, auras, skill element damage). The three open, tractable items are: **(T1) a player's gear absorb** (stats 142..149), **(T2) Open Wounds** (stat 135, the open item of decomp35 D8), **(T3) the player's magic resistance** against a magic blow.
-2. **T1 is a missing mechanic.** FUN_0057bf80 ends with FUN_0057bf10 on every fire, lightning, cold and magic field: after the flat magic reduction and the resistance it takes the absorb percent (capped at 40) and then the flat absorb. d2d reads none of the eight stats, so absorb gear does nothing. V run: 60,000 cases (seed 1) 39,678 differ on the parent, 0 on the claim; 20,000 cases (seed 7) 13,189 differ, 0 after; five mutants of the claim are caught by the oracle and abort `test_combat`. Branch `fid/gear-absorb-r1`.
-3. **T2 found the Open Wounds handler** (decomp35 could not): the item event table at `0x7325b0` entry 15, `FUN_005bfe60`, the neighbour of Crushing Blow's `FUN_005bffc0`. d2d's table of levels is right (the 1.10 bracket 9 / 18 / 27 / 36 / 45 plus 40 equals game.exe at all 99 levels), but d2d (a) never halves it on a champion, a unique or a superunique (game.exe halves it, mask 12 of the monster's data word `+0x16`) and (b) cuts it to whole points a second (up to a quarter of the wound at level 1). V run: 21,782 cases (seed 1) 16,463 differ on the parent, 0 on the claim; 2,000 cases (seed 7) 1,748 differ, 0 after. Branch `fid/open-wounds-r1`.
+2. **T1 is a missing mechanic.** FUN_0057bf80 ends with FUN_0057bf10 on every fire, lightning, cold and magic field: after the flat magic reduction and the resistance it takes the absorb percent (capped at 40) and then the flat absorb. d2d reads none of the eight stats, so absorb gear does nothing. V run: 60,000 cases (seed 1) 39,678 differ on the parent, 0 on the claim; 20,000 cases (seed 7) 13,189 differ, 0 after; five mutants of the claim are caught by the oracle and abort `test_combat`. Branch `fid/gear-absorb-r2`.
+3. **T2 found the Open Wounds handler** (decomp35 could not): the item event table at `0x7325b0` entry 15, `FUN_005bfe60`, the neighbour of Crushing Blow's `FUN_005bffc0`. d2d's table of levels is right (the 1.10 bracket 9 / 18 / 27 / 36 / 45 plus 40 equals game.exe at all 99 levels), but d2d (a) never halves it on a champion, a unique or a superunique (game.exe halves it, mask 12 of the monster's data word `+0x16`) and (b) cuts it to whole points a second (up to a quarter of the wound at level 1). V run: 21,782 cases (seed 1) 16,463 differ on the parent, 0 on the claim; 2,000 cases (seed 7) 1,748 differ, 0 after. Branch `fid/open-wounds-r2`.
 4. **T3, the player's magic resistance (stat 37, with the difficulty penalty and the cap) is applied by game.exe to a magic field of a monster blow; d2d has no input for it** (`Fighter::res` has four entries, `monster_blow` skips type 4). V run: 1,550 of 3,000 random magic cases differ. Reach: Act 5 succubi El rows, so no early effect; recorded, not built.
 5. **Bot finding:** the resistance model caps at 75 before it adds the difficulty penalty (`internal/combat/rules.go:311`, `internal/readiness/model.go:357`); game.exe adds the penalty first and caps after (V read `0x57be3d..0x57bf02`). A raw 90 in Nightmare is 50 in game.exe and 35 in the bot.
 6. **Not traced again (already clean, so skipped):** resistance and pierce (sk-resist-trace), immunity and the one-fifth rule (curse-on-immune), hit chance and the 5/95 clamp (monsterhit-trace Q2), block, avoid, dodge (monsterhit-trace Q4), Holy Fire / Shock / Freeze pulse and filter (palaura-trace), skill element damage (decomp29-skilldamage: 24,750 cases, 0 differ). Evidence list in section 1.
@@ -96,10 +96,12 @@ game.exe: row 4 of the table (magic: record `+0x20`, resist stat `0x25`, max sta
 
 ## 5. Branches (private fork remote only; nothing posted)
 
+The `-r1` branches of the same names were pushed first (same code; the ruff and doc-claims findings of `presubmit.py --quick` on the oracle commit were fixed afterwards, so the fixed history is the new branch: no force-push). Use `-r2`.
+
 | branch | commits | tree | proof | verifier |
 |---|---|---|---|---|
-| `fid/gear-absorb-r1` | oracle `3f8f4738`, claim `8e3f4393` | upstream `ed007569` | section 2: 20,000 and 60,000 cases, parent 13,189 and 39,678 differ, claim 0; 5 mutants caught by the compare and by `test_combat`; `test_combat` ok, `test_game` rc 0 (Release, GCC 14, builder, `-j2`) | not run; body [decomp37-gear-absorb-body.md](../upstream/bodies/decomp37-gear-absorb-body.md) |
-| `fid/open-wounds-r1` | oracle `641d01d0`, claim `51de3580` | upstream `ed007569` | section 3: 2,000 and 21,782 cases, parent 1,748 and 16,463 differ, claim 0; mutants; `test_combat` | not run; body [decomp37-open-wounds-body.md](../upstream/bodies/decomp37-open-wounds-body.md) |
+| `fid/gear-absorb-r2` | oracle `00e7b018`, claim `82eced5f` | upstream `ed007569` | section 2: 20,000 and 60,000 cases, parent 13,189 and 39,678 differ, claim 0; 5 mutants caught by the compare and by `test_combat`; `test_combat` ok, `test_game` rc 0 (Release, GCC 14, builder, `-j2`) | not run; body [decomp37-gear-absorb-body.md](../upstream/bodies/decomp37-gear-absorb-body.md) |
+| `fid/open-wounds-r2` | oracle `857ece45`, claim `6d4b506d` | upstream `ed007569` | section 3: 2,000 and 21,782 cases, parent 1,748 and 16,463 differ, claim 0; mutants; `test_combat` | not run; body [decomp37-open-wounds-body.md](../upstream/bodies/decomp37-open-wounds-body.md) |
 
 `test_combat` pins (game.exe's values from the oracle): absorb `(fire 100, res 25) 19,200`, with 20 percent `15,360`, `(cold 50, 60 percent, flat 10) 5,120`, `(lightning 10, res 50, flat 100) 0`, `(fire 100, res 50, flat 20) 7,680` (the order), `(magic 2, mdr 3, 36 percent) -164`, flat on it `0`, and the stat to element mapping of `make_fighter`; Open Wounds `open_wounds_fine(1 / 15 / 16 / 30 / 61 / 99) = 40 / 166 / 184 / 436 / 1,426 / 3,136`, half `20 / 218 / 713 / 1,568` at 1 / 30 / 61 / 99. The pins use their own `Rng` or none, so the RNG-luck check of the decomp35 verifier does not apply.
 
@@ -109,8 +111,8 @@ Hygiene (V run, local): commits authored and committed with the project's public
 
 | D | Rule on both sides | Tag | Differential |
 |---|---|---|---|
-| D1 | Gear absorb (stats 142..149) on a player's fire, lightning, cold, magic field, after the resistance: percent (cap 40) then flat. d2d: none | V run + V read | yes, built: `gear_absorb.py`, `fid/gear-absorb-r1` |
-| D2 | Open Wounds halved on a champion, unique, superunique. d2d: not halved | V run (game), V read (d2d), I (kind to data word) | yes, built: `open_wounds.py`, `fid/open-wounds-r1` |
+| D1 | Gear absorb (stats 142..149) on a player's fire, lightning, cold, magic field, after the resistance: percent (cap 40) then flat. d2d: none | V run + V read | yes, built: `gear_absorb.py`, `fid/gear-absorb-r2` |
+| D2 | Open Wounds halved on a champion, unique, superunique. d2d: not halved | V run (game), V read (d2d), I (kind to data word) | yes, built: `open_wounds.py`, `fid/open-wounds-r2` |
 | D3 | Open Wounds in 256ths a frame for 200 frames; d2d whole points a second for 8 s (up to a quarter lost at level 1) | V run (value), V read (consumer) | same oracle |
 | D4 | A player struck by a monster with Open Wounds: `/ 4`, missile `/ 2` more. d2d has no such monster | V run (game side only) | no d2d side (no monster carries the property in d2d); buildable if MonProp openwounds is ever read |
 | D5 | A player's magic resistance (stat 37, penalty, cap) on a magic field. d2d: none | V run + V read | yes, oracle ready (`dc37_absorb.py`, the 3,000 magic cases); fix not built |
@@ -147,10 +149,10 @@ Throwaway character, hidden slot, lab binary of [../d2d-fork.md](../d2d-fork.md)
 
 ## 10. Matrix-cell updates (proposed text; the owners apply them)
 
-- **[fidelity-matrix.md](fidelity-matrix.md) ST03 (resists):** append "gear absorb (stats 142..149): DEV V run, `fid/gear-absorb-r1` (60,000 cases, 39,678 differ on the parent); the player's magic resist on a magic blow: DEV V run, not built (decomp37-combat.md section 4)."
-- **IT / SK melee riders** (decomp35 text): replace "open wounds U" by "Open Wounds: handler `FUN_005bfe60` (event func 15), bracket table equal, not halved on a champion / unique and cut to whole points a second in d2d: DEV V run, `fid/open-wounds-r1`".
+- **[fidelity-matrix.md](fidelity-matrix.md) ST03 (resists):** append "gear absorb (stats 142..149): DEV V run, `fid/gear-absorb-r2` (60,000 cases, 39,678 differ on the parent); the player's magic resist on a magic blow: DEV V run, not built (decomp37-combat.md section 4)."
+- **IT / SK melee riders** (decomp35 text): replace "open wounds U" by "Open Wounds: handler `FUN_005bfe60` (event func 15), bracket table equal, not halved on a champion / unique and cut to whole points a second in d2d: DEV V run, `fid/open-wounds-r2`".
 - **[pal-skill-matrix.md](pal-skill-matrix.md) / [sorc-skill-matrix.md](sorc-skill-matrix.md) "Not covered":** "absorb and Open Wounds traced in decomp37-combat.md".
-- **Pipeline** (docs/upstream/pipeline-2026-11-14.md, section 1b): rows P23 (gear absorb, fork `fid/gear-absorb-r1`, stage S2, verifier next) and P24 (Open Wounds, `fid/open-wounds-r1`, stage S2); a row for T3 at stage S0 (oracle ready, fix not built).
+- **Pipeline** (docs/upstream/pipeline-2026-11-14.md, section 1b): rows P23 (gear absorb, fork `fid/gear-absorb-r2`, stage S2, verifier next) and P24 (Open Wounds, `fid/open-wounds-r2`, stage S2); a row for T3 at stage S0 (oracle ready, fix not built).
 - **monsterhit-trace.md D2** (the magic element of a monster swing, U): "V run in decomp37: 1,550 of 3,000 magic cases differ (the player's stat 37, penalty and cap)".
 
 ## 11. Reproduce (builder container, emulator image at `/data/prfix6-emu`)
