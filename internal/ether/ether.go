@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -469,6 +470,13 @@ func (w *Wallet) content() int {
 }
 
 // ---- views ----
+
+// Chip is the one line the Hero tile and the Vault header show: "Ether 35".
+func (w *Wallet) Chip() string {
+	w.mu.Lock()
+	defer w.mu.Unlock()
+	return w.opt.Sources.Currency + " " + strconv.Itoa(w.balance)
+}
 
 // Summary is what GET /api/ether and the wallet chips show.
 type Summary struct {

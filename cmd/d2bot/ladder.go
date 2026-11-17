@@ -319,6 +319,7 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 			if eh != nil {
 				rig.Fun.Ether = &watch.EtherAPI{Src: eh.Wallet}
 				rig.Ether = eh
+				hub.SetEtherSource(eh.chip)
 			}
 		}
 		bindJourney(rig.Fun, l.journey)

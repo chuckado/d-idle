@@ -70,9 +70,7 @@ func (a *EtherAPI) View() EtherView {
 	return EtherView{Schema: etherSchema, Enabled: true, Summary: s, Chip: chipOf(s)}
 }
 
-func chipOf(s ether.Summary) string {
-	return s.Currency + " " + strconv.Itoa(s.Balance)
-}
+func chipOf(s ether.Summary) string { return s.Currency + " " + strconv.Itoa(s.Balance) }
 
 // Get is the read route (mount GET only).
 func (a *EtherAPI) Get() http.Handler {

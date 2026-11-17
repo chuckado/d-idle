@@ -130,3 +130,20 @@ func TestEtherAPIGateAndOff(t *testing.T) {
 		t.Fatalf("on get: %d %v", code, v)
 	}
 }
+
+// The Hero view carries the wallet chip only when a source says so (loot.vault on).
+func TestHeroViewEtherChip(t *testing.T) {
+	h := newRig(t, "sorceress").sim.Hub
+	if h.Hero().Ether != "" {
+		t.Fatal("chip without a source")
+	}
+	chip := ""
+	h.SetEtherSource(func() string { return chip })
+	if h.Hero().Ether != "" {
+		t.Fatal("empty source must stay absent")
+	}
+	chip = "Ether 35"
+	if got := h.Hero().Ether; got != "Ether 35" {
+		t.Fatalf("chip %q", got)
+	}
+}

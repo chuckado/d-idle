@@ -118,6 +118,14 @@ func (h *etherHome) capacity() int {
 	return 0
 }
 
+// chip is the Hero tile's wallet line; empty while loot.vault is 0.
+func (h *etherHome) chip() string {
+	if w := h.Wallet(); w != nil {
+		return w.Chip()
+	}
+	return ""
+}
+
 // owned is VaultDesk.Owned.
 func (h *etherHome) owned() []string {
 	if w := h.open(false); w != nil {
