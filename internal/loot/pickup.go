@@ -459,8 +459,14 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 		toVault := false
 		if vlt {
 			if _, fell := l.vaultSeen(u); !fell { // a failed peek keeps today's decision above
+				today := v
 				if vv, vd, ok := sp.VaultDecision(u, c.Stats); ok {
 					v, toVault = vd, vv
+				}
+				if toVault {
+					if pv, ok := l.vaultPoorPick(today, b, u, c); ok {
+						v, toVault = pv, false
+					}
 				}
 			}
 		}

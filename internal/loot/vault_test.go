@@ -259,3 +259,37 @@ func TestVaultShadowFold(t *testing.T) {
 		t.Fatalf("vault off: pass %+v", p)
 	}
 }
+
+// Poor mode (docs/vault.md, gold flow): below loot.poorGoldBelow gold an item worth loot.poorMinSell is picked up to be sold
+// instead of only recorded; a hero with enough gold, or the knob at 0, still records it.
+func TestVaultPoorModePicksSellableItems(t *testing.T) {
+	for _, cls := range vaultClasses {
+		for _, tc := range []struct {
+			name         string
+			gold, knob   int
+			wantVaulted  bool
+			wantSellPick bool
+		}{
+			{"broke", 0, 1, false, true},
+			{"rich", 5000, 1, true, false},
+			{"broke but knob off", 0, 0, true, false},
+		} {
+			t.Run(cls.String()+"/"+tc.name, func(t *testing.T) {
+				v := newVaultRig(t, cls, 10)
+				v.snap.Player.Gold = tc.gold
+				v.l.e.Tune.Loot.VaultPoorPickup, v.l.e.Tune.Loot.VaultAll = tc.knob, 1
+				u := v.drop(t, "rin", d2.QualityRare, 110, 100, "r")
+				rep := v.pick(t)
+				vaulted := len(rep.Vaulted) == 1 && rep.Vaulted[0].ID == u.ID
+				// the rig has no pickup physics: a pickup attempt is a click and a "still on the ground" failure
+				picked := v.clicks() > 0 && len(rep.Failed) == 1 && rep.Failed[0].ID == u.ID
+				if vaulted != tc.wantVaulted || picked != tc.wantSellPick {
+					t.Fatalf("vaulted %v picked %v; report %+v skipped %+v", vaulted, picked, rep, rep.Skipped)
+				}
+				if tc.wantSellPick && v.st.Status().Count != 0 {
+					t.Error("a picked item must not also be recorded")
+				}
+			})
+		}
+	}
+}

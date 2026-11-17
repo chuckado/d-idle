@@ -12,6 +12,7 @@ import (
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
+	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/input"
 	"d2lod-bot/internal/lootrules"
 	"d2lod-bot/internal/merc"
@@ -244,6 +245,24 @@ func (p *ShadowPass) VaultDecision(u d2.Unit, stats d2.Stats) (vaulted bool, v V
 		eng.fallback(p.l.e.Log, err)
 	}
 	return false, v, false
+}
+
+// vaultPoorPick is the poor-mode rule of the vault (docs/vault.md, gold flow; loot.vaultPoorPickup): a hero below
+// loot.poorGoldBelow gold takes an item worth loot.poorMinSell or more instead of only recording it, so it can earn the
+// money for repairs and potions. An item today's pickit wants anyway keeps that verdict. Both thresholds are the knobs of
+// today's poor mode, not new numbers.
+func (l *Looter) vaultPoorPick(today Verdict, b *data.ItemBase, u d2.Unit, c Ctx) (Verdict, bool) {
+	t := &l.e.Tune.Loot
+	if t.VaultPoorPickup == 0 || b == nil || u.Item == nil || b.Quest || c.Gold >= l.poorBelow() {
+		return Verdict{}, false
+	}
+	if today.Action == Keep {
+		return today, true
+	}
+	if SellValue(l.e.Data, b, u.Item, 0) < t.PoorMinSell {
+		return Verdict{}, false
+	}
+	return Verdict{Action: Sell, Tier: "B", Prio: 3, Rule: poorRule, Reason: "poor: the vault would only record it, it sells for gold"}, true
 }
 
 var (
