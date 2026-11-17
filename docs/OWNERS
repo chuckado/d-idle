@@ -671,12 +671,14 @@ internal/bot/staletarget.go  credit-runner  botstuck
 internal/bot/staletarget.go  credit-runner  staletarget
 internal/bot/staletarget_test.go  credit-runner  staletarget
 internal/bot/state.go  credit-runner  resetinstant
+internal/bot/task.go  credit-runner  boardmoderace
 internal/bot/task.go  credit-runner  botstuck
 internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  quests3
 internal/bot/task.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  staletarget
 internal/bot/vaultkeep.go  credit-runner  vaultv5
+internal/bot/waypoints.go  credit-runner  boardmoderace
 internal/bot/whyline.go  credit-runner  repairtrip
 internal/bot/whyline.go  credit-runner  staletarget
 internal/bot/whyline_test.go  credit-runner  uifix1
