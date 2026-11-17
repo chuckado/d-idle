@@ -266,6 +266,7 @@
 | vaultphone | proposed | - | `internal/watch/web/vault.js`<br>`tools/uishots.sh` | - |
 | morefit | proposed | - | `internal/watch/web/panels/orders/panel.css`<br>`tools/uishots/fixtures_menu.go` | - |
 | owbody | proposed | - | `docs/upstream/bodies/decomp37-open-wounds-body.md` | - |
+| decomp39 | in-progress | - | `docs/research/decomp39-melee-walls.md`<br>`tools/emu/dc39_reach.py`<br>`tools/emu/dc39_dot.py`<br>`docs/upstream/bodies/decomp39-melee-reach-body.md` | `fork-branch:fid/melee-reach-r1` |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -306,6 +307,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 8f92bbf9b 11-17 11:58 `Merge agent/decomp39: decomp39: player melee through walls (FUN_00622c40 reach and line) and the DoT sub-point rule; docs only` (decomp39)
+- 5c7c7dce0 11-17 11:57 `Merge branch 'main' into TASK-624` (-)
 - 9924f480c 11-17 11:51 `Merge agent/sandbox3: Merge branch 'main' into sandbox3` (sandbox3)
 - 83379c803 11-17 11:50 `Merge branch 'main' into sandbox3` (-)
 - bc63d4199 11-17 11:13 `Merge agent/morefit: Merge branch 'main' into morefit` (morefit)
@@ -314,6 +317,4 @@
 - 1d62e4d88 11-17 10:55 `Merge branch 'main' into TASK-618` (-)
 - 7f46b2185 11-17 10:27 `Merge origin/main into agent/morefit` (-)
 - cd5b642fe 11-17 09:53 `Merge origin/main into agent/morefit` (-)
-- 10dbc7735 11-17 09:51 `Merge agent/verifydecomp37: Merge branch 'main' into TASK-613` (verifydecomp37)
-- 6150eaf4e 11-17 09:50 `Merge branch 'main' into TASK-613` (-)
 <!-- statusgen:end -->
