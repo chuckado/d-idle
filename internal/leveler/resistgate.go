@@ -13,7 +13,6 @@ const (
 	nightmareResistFloor = 20
 	hellResistFloor      = 25
 	poisonResistFloor    = 0
-	maxResist            = 75 // S: the standard cap applies to the final value, after the penalty
 )
 
 // ResistGateDecision is the result of ResistGate.
@@ -29,8 +28,8 @@ type ResistGateDecision struct {
 // already contains the penalty is U (docs/difficulty.md live check 2), in which case the caller passes the read value
 // minus the current difficulty's penalty. Pure; the wiring point is the entry decision (combat.EntryGate callers).
 func ResistGate(target d2.Difficulty, r d2.Resists) ResistGateDecision {
-	pen := target.ResistPenalty()
-	post := func(v int) int { return min(v+pen, maxResist) }
+	// penalty first, then the cap (d2.ResistTable, decomp37 B1); the max-resist bonus is not read here (0)
+	post := func(v int) int { return d2.ResistTable.Effective(v, 0, target) }
 	d := ResistGateDecision{Post: [4]int{post(r.Fire), post(r.Cold), post(r.Lightning), post(r.Poison)}}
 	floor := 0
 	switch target {
