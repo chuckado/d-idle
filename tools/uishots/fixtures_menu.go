@@ -9,5 +9,7 @@ func init() {
 	defectCSS["mn-tall"] = tall
 	defectCSS["mn-noscroll"] = tall + ` .d-menu-body { overflow-y: hidden !important; }`
 	defectCSS["mn-primary"] = tall + ` .d-menu-primary { position: relative !important; inset-block-start: 4000px !important; }`
+	// the Orders More list squeezed to nothing again (card morefit): the shape of the 2026-11-17 screenshot
+	defectCSS["mf-clip"] = `[data-panel="orders"] .o-items { flex: 1 1 0 !important; min-block-size: 0 !important; max-block-size: 30px !important; overflow-y: hidden !important; }`
 	defectCSS["mn-hint"] = tall + ` .d-menu-body::after { content: none !important; }`
 }

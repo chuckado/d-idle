@@ -1296,6 +1296,7 @@ internal/watch/web/panels/onboarding  credit-runner  reconnectux
 internal/watch/web/panels/orders  credit-runner  quests8
 internal/watch/web/panels/orders/  credit-runner  uifix1
 internal/watch/web/panels/orders/  credit-runner  uis4
+internal/watch/web/panels/orders/panel.css  credit-runner  morefit
 internal/watch/web/panels/orders/panel.js  credit-runner  pausefix
 internal/watch/web/panels/orders/panel.js  credit-runner  vaultv4
 internal/watch/web/panels/progress/  credit-runner  uis3
@@ -1473,6 +1474,7 @@ tools/uishots/fixtures_chars.go  credit-runner  charui
 tools/uishots/fixtures_commands.go  credit-runner  uis4
 tools/uishots/fixtures_glance.go  credit-runner  uis7
 tools/uishots/fixtures_menu.go  credit-runner  menufit2
+tools/uishots/fixtures_menu.go  credit-runner  morefit
 tools/uishots/fixtures_overlay.go  credit-runner  vaultv4
 tools/uishots/fixtures_phone.go  credit-runner  resetinstant
 tools/uishots/fixtures_quests.go  credit-runner  quests10
