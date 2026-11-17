@@ -168,3 +168,16 @@ func TestEmptyExpeditionPaysNothing(t *testing.T) {
 		}
 	}
 }
+
+func TestTallyViewCacheDroppedByEvents(t *testing.T) {
+	_, s, _ := tallyRig(t, "Sorceress", 10)
+	v1 := s.View()
+	if s.View() != v1 {
+		t.Fatal("a second poll inside the TTL must reuse the view")
+	}
+	feed(s, trip()...)
+	v2 := s.View()
+	if v2 == v1 || v2.Strip == v1.Strip {
+		t.Fatalf("the trip did not show: %q", v2.Strip)
+	}
+}
