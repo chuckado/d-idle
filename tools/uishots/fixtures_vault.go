@@ -50,7 +50,7 @@ func vaultItem(i int, now time.Time) vault.Item {
 	}
 	b := bases[i%len(bases)]
 	q := []int{2, 4, 4, 6, 3, 1, 4, 6, 7, 5, 2, 4}[i%12]
-	it := vault.Item{Hero: "Sorc", Raw: fmt.Sprintf("%08x%08x", i+1, (i+1)*2654435761), Code: b.code, Name: b.name, Quality: q, Ilvl: 3 + (i*7)%80, Identified: i%6 != 1, Chain: b.chain,
+	it := vault.Item{Hero: "Sorc", Raw: fmt.Sprintf("%08x%08x", i+1, uint32((i+1)*2654435761)), Code: b.code, Name: b.name, Quality: q, Ilvl: 3 + (i*7)%80, Identified: i%6 != 1, Chain: b.chain,
 		Sockets: []int{0, 0, 0, 1, 2, 0, 3, 0}[i%8], Eth: i%11 == 3,
 		Found: vault.Found{Time: now.Add(-time.Duration(i*17+5) * time.Minute), Area: []string{"Blood Moor", "Cold Plains", "Burial Grounds", "Den of Evil", "Black Marsh"}[i%5]}}
 	switch {
