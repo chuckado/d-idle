@@ -41,13 +41,16 @@ type Env interface {
 	Ready(q Quest, c Chunk) Readiness // the readiness word (S2; LegacyReadiness until then)
 }
 
-// Actions is the seam to the task layer (the bot adapter). Step is one bounded slice of the chunk handler that
-// never performs the hand-in; HandIn is the hand-in dialogue only; Stop cancels a running slice cleanly.
+// Actions is the seam to the task layer (the bot adapter): HandIn is the hand-in dialogue only (it never
+// walks the chunk), Stop cancels a running slice cleanly.
 type Actions interface {
-	Step(ctx context.Context, q Quest, c Chunk) StepResult
 	HandIn(ctx context.Context, q Quest, c Chunk) error
 	Stop(q Quest, c Chunk)
 }
+
+// Stepper is one bounded slice of the chunk handler that never performs the hand-in. The bot runs its slices
+// inside the runner's guard and reports them with Report; Tick takes a Stepper for drivers without a guard.
+type Stepper func(ctx context.Context, q Quest, c Chunk) StepResult
 
 // Options are the executor limits. Zero values take the defaults.
 type Options struct {
@@ -490,7 +493,7 @@ func nonEmpty(s, d string) string {
 
 // Tick is Next plus one handler slice: what a driver without its own guard calls. The bot calls Next and
 // Report itself because its slice runs inside the runner's guard.
-func (e *Exec) Tick(ctx context.Context) (Decision, error) {
+func (e *Exec) Tick(ctx context.Context, step Stepper) (Decision, error) {
 	d, err := e.Next()
 	if err != nil || d.Kind != DecRun {
 		return d, err
@@ -503,7 +506,7 @@ func (e *Exec) Tick(ctx context.Context) (Decision, error) {
 	if err != nil {
 		return d, err
 	}
-	res := e.act.Step(ctx, q, c)
+	res := step(ctx, q, c)
 	if ctx.Err() != nil {
 		e.act.Stop(q, c)
 		return d, nil

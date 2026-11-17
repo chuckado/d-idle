@@ -39,7 +39,7 @@ func (r *rig) tick(n int) Decision {
 	var d Decision
 	for i := 0; i < n; i++ {
 		var err error
-		if d, err = r.x.Tick(context.Background()); err != nil {
+		if d, err = r.x.Tick(context.Background(), r.f.Step); err != nil {
 			r.t.Fatal(err)
 		}
 	}
@@ -413,7 +413,7 @@ func TestKnobOffRefusesEverything(t *testing.T) {
 	if _, err := r.x.Next(); err != ErrOff {
 		t.Fatalf("next: %v", err)
 	}
-	if _, err := r.x.Tick(context.Background()); err != ErrOff || len(r.f.Calls) != 0 {
+	if _, err := r.x.Tick(context.Background(), r.f.Step); err != ErrOff || len(r.f.Calls) != 0 {
 		t.Fatalf("tick: %v %v", err, r.f.Calls)
 	}
 	if _, err := os.Stat(filepath.Join(r.dir, r.hero+".quests.json")); err == nil {
