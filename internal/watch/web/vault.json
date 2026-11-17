@@ -34,8 +34,24 @@
   "stateKept": "Kept",
   "stateGone": "Discarded or trimmed",
   "sortLabel": "Sort",
-  "sorts": {"new": "Newest", "old": "Oldest", "quality": "Quality", "ilvl": "Item level", "value": "Value", "name": "Name"},
-  "qualities": {"1": "Low", "2": "Normal", "3": "Superior", "4": "Magic", "5": "Set", "6": "Rare", "7": "Unique", "8": "Crafted"},
+  "sorts": {
+    "new": "Newest",
+    "old": "Oldest",
+    "quality": "Quality",
+    "ilvl": "Item level",
+    "value": "Value",
+    "name": "Name"
+  },
+  "qualities": {
+    "1": "Low",
+    "2": "Normal",
+    "3": "Superior",
+    "4": "Magic",
+    "5": "Set",
+    "6": "Rare",
+    "7": "Unique",
+    "8": "Crafted"
+  },
   "filters": "Filters",
   "filtersN": "Filters ({n})",
   "viewGrid": "Grid",
@@ -83,21 +99,104 @@
   "okUnpin": "Unpinned {n}.",
   "okDiscard": "Discarded {n}. The archive keeps a copy.",
   "partial": "{done} done, {failed} refused: {why}",
-  "refusals": {"off": "The vault is read only right now.", "state": "That item is no longer in the vault list.", "missing": "That item is gone.", "pincap": "The pin limit is reached; unpin something first.", "confirm": "Confirm the discard first.", "ids": "Send between 1 and 150 items at a time.", "internal": "The vault could not save the change."},
+  "refusals": {
+    "off": "The vault is read only right now.",
+    "state": "That item is no longer in the vault list.",
+    "missing": "That item is gone.",
+    "pincap": "The pin limit is reached; unpin something first.",
+    "confirm": "Confirm the discard first.",
+    "ids": "Send between 1 and 150 items at a time.",
+    "internal": "The vault could not save the change."
+  },
   "noAnswer": "The vault did not answer.",
   "kinds": [
-    {"id": "unique", "label": "Unique", "quality": [7]},
-    {"id": "set", "label": "Set", "quality": [5]},
-    {"id": "rune", "label": "Runes", "codePrefix": ["r0", "r1", "r2", "r3"]},
-    {"id": "jewel", "label": "Jewels", "codePrefix": ["jew"]},
-    {"id": "charm", "label": "Charms", "codePrefix": ["cm1", "cm2", "cm3"]}
+    {
+      "id": "unique",
+      "label": "Unique",
+      "quality": [
+        7
+      ]
+    },
+    {
+      "id": "set",
+      "label": "Set",
+      "quality": [
+        5
+      ]
+    },
+    {
+      "id": "rune",
+      "label": "Runes",
+      "codePrefix": [
+        "r0",
+        "r1",
+        "r2",
+        "r3"
+      ]
+    },
+    {
+      "id": "jewel",
+      "label": "Jewels",
+      "codePrefix": [
+        "jew"
+      ]
+    },
+    {
+      "id": "charm",
+      "label": "Charms",
+      "codePrefix": [
+        "cm1",
+        "cm2",
+        "cm3"
+      ]
+    }
   ],
   "types": {
-    "weap": "Weapons", "armo": "Armor", "misc": "Miscellaneous", "swor": "Swords", "axe": "Axes", "mace": "Maces", "club": "Clubs", "hamm": "Hammers",
-    "scep": "Scepters", "wand": "Wands", "staf": "Staves", "bow": "Bows", "xbow": "Crossbows", "spea": "Spears", "pole": "Polearms", "knif": "Daggers",
-    "jave": "Javelins", "thro": "Throwing", "orb": "Orbs", "h2h": "Claws", "helm": "Helms", "tors": "Body armor", "shld": "Shields", "glov": "Gloves",
-    "boot": "Boots", "belt": "Belts", "amul": "Amulets", "ring": "Rings", "gem": "Gems", "rune": "Runes", "jewl": "Jewels", "char": "Charms",
-    "pott": "Potions", "scro": "Scrolls", "circ": "Circlets", "pelt": "Druid pelts", "phlm": "Primal helms", "head": "Necromancer heads", "ashd": "Paladin shields",
-    "tpot": "Potions", "blun": "Blunt weapons", "mele": "Melee weapons", "miss": "Missile weapons", "comb": "Combat items"
-  }
+    "weap": "Weapons",
+    "armo": "Armor",
+    "misc": "Miscellaneous",
+    "swor": "Swords",
+    "axe": "Axes",
+    "mace": "Maces",
+    "club": "Clubs",
+    "hamm": "Hammers",
+    "scep": "Scepters",
+    "wand": "Wands",
+    "staf": "Staves",
+    "bow": "Bows",
+    "xbow": "Crossbows",
+    "spea": "Spears",
+    "pole": "Polearms",
+    "knif": "Daggers",
+    "jave": "Javelins",
+    "thro": "Throwing",
+    "orb": "Orbs",
+    "h2h": "Claws",
+    "helm": "Helms",
+    "tors": "Body armor",
+    "shld": "Shields",
+    "glov": "Gloves",
+    "boot": "Boots",
+    "belt": "Belts",
+    "amul": "Amulets",
+    "ring": "Rings",
+    "gem": "Gems",
+    "rune": "Runes",
+    "jewl": "Jewels",
+    "char": "Charms",
+    "pott": "Potions",
+    "scro": "Scrolls",
+    "circ": "Circlets",
+    "pelt": "Druid pelts",
+    "phlm": "Primal helms",
+    "head": "Necromancer heads",
+    "ashd": "Paladin shields",
+    "tpot": "Potions",
+    "blun": "Blunt weapons",
+    "mele": "Melee weapons",
+    "miss": "Missile weapons",
+    "comb": "Combat items"
+  },
+  "ilvlMinHold": "Min level",
+  "ilvlMaxHold": "Max level"
 }

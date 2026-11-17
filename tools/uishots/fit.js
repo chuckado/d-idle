@@ -455,11 +455,11 @@ function vaultPage(win, d, vis, cs) {
     const r = n.getBoundingClientRect(), inSheet = !!n.closest('.vt-sheet'), inMain = main.contains(n);
     if (open !== inSheet) continue; // an open sheet: only its own controls; behind the scrim is by design
     const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-    if (cx < 0 || cy < 0 || cx > vw || cy > vh || (inMain && (cy < mr.top || cy > mr.bottom))) continue; // scrolled out of the list: a thumb scrolls to it
+    if (cx <= 2 || cy <= 2 || cx >= vw - 2 || cy >= vh - 2 || (inMain && (cy <= mr.top + 2 || cy >= mr.bottom - 2))) continue; // scrolled out of the list (a centre within 2 px of an edge is out, the browser returns no element there): a thumb scrolls to it
     const fp = n.closest('.vt-fpanel');
     if (fp) { const pr = fp.getBoundingClientRect(); if (cy < pr.top || cy > pr.bottom) continue; } // inside the folded panel's own scroll
     const at = d.elementFromPoint(cx, cy);
-    if (!at || !(at === n || n.contains(at) || at.contains(n) || (n.labels && [...n.labels].some((l) => l.contains(at))))) o.covered.push(nm(n));
+    if (!at || !(at === n || n.contains(at) || at.contains(n) || (n.labels && [...n.labels].some((l) => l.contains(at))))) o.covered.push(nm(n) + (at ? ' under ' + nm(at) : ' at ' + Math.round(cx) + ',' + Math.round(cy) + ' of ' + vw + 'x' + vh));
   }
   for (const n of root.querySelectorAll('.vt-head, .vt-filters, .vt-bar, .vt-body, .vt-main, .vt-grid, .vt-detail, .vt-sheet-card, .vt-banner')) {
     if (!live(n)) continue;

@@ -72,8 +72,8 @@ export function mountVault(d) {
   });
   const sel = (key, label) => { const s = el('select', 'vt-input'); s.setAttribute('aria-label', label); s.dataset.key = key; return s; };
   const kindSel = sel('kind', T.kindLabel), typeSel = sel('type', T.typeLabel), sockSel = sel('sockets', T.socketsLabel);
-  const num = (key, label) => { const i = el('input', 'vt-input vt-num'); i.type = 'number'; i.min = '0'; i.max = '200'; i.inputMode = 'numeric'; i.placeholder = label; i.setAttribute('aria-label', label); i.dataset.key = key; return i; };
-  const lo = num('ilvl-min', T.ilvlMin), hi = num('ilvl-max', T.ilvlMax);
+  const num = (key, label, hold) => { const i = el('input', 'vt-input vt-num'); i.type = 'number'; i.min = '0'; i.max = '200'; i.inputMode = 'numeric'; i.placeholder = hold || label; i.setAttribute('aria-label', label); i.dataset.key = key; return i; };
+  const lo = num('ilvl-min', T.ilvlMin, T.ilvlMinHold), hi = num('ilvl-max', T.ilvlMax, T.ilvlMaxHold);
   const check = (key, label) => { const b = btn(label, { key, variant: 'ghost' }); b.classList.add('vt-check'); b.setAttribute('aria-pressed', 'false'); return { l: b, c: b }; };
   const ethC = check('eth', T.ethLabel), unidC = check('unid', T.unidLabel), pinC = check('pinned', T.pinnedLabel);
   const stateSel = sel('state', T.stateLabel);
