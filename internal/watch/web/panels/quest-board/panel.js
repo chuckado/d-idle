@@ -367,8 +367,7 @@ export function mountBoard(root, ctx, tab) {
     }
     const head = ctx.el('div', 'qb-head');
     head.append(ctx.el('span', 'qb-act', m.actLabel), modeBar(m));
-    box.append(head);
-    if (m.away) box.append(awayCard(m.away)); // the phone's tab keeps the mode switch here (the tile above the list has no room for it) ...
+    box.append(head); // the phone's tab keeps the mode switch here (the tile above the list has no room for it) ...
     if (m.now && !tab) { // ... and no Now row: the tile above the list is that row
       const n = ctx.el('div', 'qb-now');
       n.dataset.kind = m.now.kind;
@@ -386,6 +385,7 @@ export function mountBoard(root, ctx, tab) {
     }
     const list = ctx.el('div', 'qb-list');
     list.setAttribute('data-scroll', '');
+    if (m.away) list.append(awayCard(m.away)); // inside the list: a short phone scrolls it instead of losing the rows
     for (const a of m.acts) {
       const sec = ctx.el('section', 'qb-act-sec');
       sec.append(ctx.el('h3', '', a.name));
