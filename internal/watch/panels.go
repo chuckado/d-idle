@@ -151,9 +151,19 @@ func servePanels(w http.ResponseWriter, r *http.Request, asset func(name, ctype 
 	case "panel.css":
 		asset(path.Join("panels", id, file), "text/css; charset=utf-8")(w, r)
 	default:
-		http.NotFound(w, r)
+		// a panel's own helper modules (video/brightness.js): imported by panel.js, so they must be served too
+		if reModule(file) {
+			asset(path.Join("panels", id, file), "text/javascript; charset=utf-8")(w, r)
+		} else {
+			http.NotFound(w, r)
+		}
 	}
 	return true
+}
+
+func reModule(f string) bool {
+	n, ok := strings.CutSuffix(f, ".js")
+	return ok && rePanelDir(n)
 }
 
 func rePanelDir(id string) bool {
