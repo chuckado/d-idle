@@ -1,6 +1,6 @@
 # ETHER: the account meta wallet of the Ethereal Vault
 
-> status: built offline 2026-11-17 (agent vaultv7, slice V7 of [design/loot-vault-2026-11-16.md](design/loot-vault-2026-11-16.md) section 2.6). NOT wired into the bot and NOT run live. Tags: **V** verified by a test in this repo, **U** unverified or a placeholder number.
+> status: built offline 2026-11-17 (agents vaultv7 and vaultv7b, slices V7 and V7b of [design/loot-vault-2026-11-16.md](design/loot-vault-2026-11-16.md) section 2.6). Wired into the bot behind `loot.vault` (default 0) in V7b; NOT run live. Tags: **V** verified by a test in this repo, **U** unverified or a placeholder number.
 
 User decisions 2026-11-16: the currency is called ETHER; it is account-level (survives heroes and runs, not hero gold); it is earned from quest hand-ins, "a first" rows, boss kills, milestones and a small capped kill trickle, NOT from pressing Keep; it is spent on vault capacity first (auto-pickup range and filter slots later, as more rows of the same kind).
 
@@ -22,12 +22,12 @@ The `tally` ledger (`internal/currency`, [tally-strip.md](tally-strip.md)) is ha
 | source | key | pays | note |
 |---|---|---|---|
 | `quest` | `quest/<quest>/<difficulty>` | the caller's amount, 0..100 (`maxHook`) | HOOK for the Quest board (S10): the `meta` column value for that difficulty. Account-wide: once per quest and difficulty |
-| `first` | `first/<kind>/<name>` | 5 U | the "a first" rows of `tally_firsts` |
-| `boss` | `boss/<name>/<difficulty>` | 10 / 15 / 25 U | normal / nm / hell |
-| `milestone` | `milestone/<id>` | per row U | `clvl10, clvl20, clvl30, clvl50, diff_nm, diff_hell`; an id not in the table is refused |
-| `kills` | `kills/<batch id>` | 1 U | capped at 10 per UTC day (`dailyCap`); the cap clips, a capped call books nothing |
+| `first` | `first/<hero>/<kind>/<name>` | 5 U | "a first for this hero": the first kill of a monster kind (`monster`) and the first visit to a field area (`area`); a second hero earns its own |
+| `boss` | `boss/<name>/<difficulty>` | 10 / 15 / 25 U | normal / nm / hell; once per account (a second hero does not earn it again) |
+| `milestone` | `milestone/<id>` | per row U | `clvl10, clvl20, clvl30, clvl50, diff_nm, diff_hell`; an id not in the table is refused. `clvlN` pays when a hero reaches level N or more (the thresholds are the table's keys); `diff_nm` and `diff_hell` pay when a hero is playing that difficulty (reached, not cleared). Once per account |
+| `kills` | `kills/<local day>/<k>` | 1 U per `per` (25 U) kills | capped at 10 per LOCAL day (`dailyCap`); `Wallet.Trickle` books the next free `<k>` of today, so a restart never rewrites a key and the cap holds; the unpaid kill count of a run is not saved (a restart starts the count again) |
 
-`Wallet.Earn(source, sub, difficulty, hookAmount)` returns `{credited, key, already, capped}`. A repeated key pays nothing (`already`), so a journal replay books nothing (V `TestEarnIdempotentAndReplay`). Unknown source, missing or unknown difficulty, over-limit hook amount: an error naming it (V `TestEarnErrors`). No call site exists yet: the Quest board hand-in (S10), the tally event hook and the bot's milestone events call `Earn`; this slice only documents them. Pressing Keep never earns.
+`Wallet.Earn(source, sub, difficulty, hookAmount)` returns `{credited, key, already, capped}`. A repeated key pays nothing (`already`), so a journal replay books nothing (V `TestEarnIdempotentAndReplay`). Unknown source, missing or unknown difficulty, over-limit hook amount: an error naming it (V `TestEarnErrors`). Pressing Keep never earns. The Quest board hand-in (S10) is the one call site still missing: it will call `Earn("quest", <quest>, <difficulty>, <meta column>)`.
 
 ## Capacity tiers and spending
 
@@ -42,6 +42,24 @@ Tiers are `data/vault/capacity.json` (base 400, steps v1..v6 add 200, 300, 300, 
 - `GET /api/ether` (`EtherAPI.Get()`, GET only, schema `watch.ether/1`): `currency, balance, chip ("Ether 35"), owned[], capacity, next {id, add, price, canAfford, short, capacity}, downgrade {available, step, refund, reason}, sources [{id, label, dailyCap, earnedToday}], earned {source: total}, recent[] (20 newest ledger entries)`.
 - `POST /api/vault/upgrade` `{"step":"v1"}` (step optional) and `POST /api/vault/downgrade` (`Upgrade()` / `Downgrade()`, mount on the answer listener like `POST /api/orders`). Reply `{ok, changed, already, step, price, balance, capacity}`; refusals carry `code` and `error`: 402 `insufficient` (+ `need`), 409 `in-use` (+ `count`, `fitsTier`), 409 `out-of-order`, `maxed`, `nothing-to-refund`, 400 `bad-body`.
 - Contract for the V4 page (additive): its `VaultUpgrade` placeholder maps as `available = next.canAfford`, `next = {id, add, price}`, `Owned = Wallet.OwnedSteps`; the Upgrade button POSTs `/api/vault/upgrade`; the header and Hero sheet chip is `chip`; the capacity meter takes `capacity`. Field names of `GET /api/vault` are untouched.
-- Wiring still to do (V8 or the V4 merge): open the wallet in `cmd/d2bot` next to the tally ledger (`<currency dir>/ether.jsonl`), pass `Content` from the active vault store, `VaultStore` capacity `Options.Capacity = wallet.Capacity(override)`, mount the three routes. Not done here to keep the slice additive.
+
+## Wiring (V7b, `cmd/d2bot/etherwire.go`)
+
+- One wallet per ACCOUNT: `<currency dir>/ether.jsonl` of the profile (`etherFor`, one `etherHome` per directory, shared by the recorder, the page, the routes and the earn hook). A Character Select switch restarts the child and the next one opens the same ledger; two accounts have two wallets (V `TestEtherFeedEventsRestartAndAccounts`, `TestEtherCapacityAndHeroSwitch`).
+- Behind `loot.vault`: with the knob at 0 the wallet is not opened for earning, spending or the routes (`Wallet()` is nil, GET says `enabled: false`, the POSTs answer 409 `off`, nothing is earned). The capacity of a ledger that exists on disk is still read, so a read only page does not show a false over capacity.
+- Capacity: `vaultHome` gives every store `Options.Capacity` = the wallet's `Capacity(0)` (late bound, open stores see an upgrade at once); `VaultDesk.Owned` is the wallet's owned steps; the refund rule's `Content` is the ACTIVE hero's record count. `Wallet.Capacity` takes no lock on purpose: the store calls it under its own lock and the wallet reads the store's count under its own, and a locked read was a lock order inversion (V `TestEtherNoDeadlockStoreAndWallet`).
+- Routes: `Fun.Ether` mounts `GET /api/ether` on the viewer and `POST /api/vault/upgrade`, `/downgrade` on the answer listener behind the same gate as the other answer routes (token, origin list, JSON only, small body with known fields; V `TestEtherAPIGateAndOff`). The V7 routes were ungated; V7b adds `AnswerOptions`. The body is `{}` or `{"step":"v1"}`.
+- Earn: `startEther` subscribes to the goal manager and `etherFeed` maps events to `ether.Earner` calls (kill, boss kill with the hero's difficulty, field area change, level up). Keys carry what makes them once: see the table. Replaying a journal or restarting books nothing twice (V `TestEarnerNoDoubleCreditAcrossRestartAndHeroes`, `TestEtherFeedEventsRestartAndAccounts`); the rules table is V `TestEarnerRulesTable`; the trickle cap and the local day roll are V `TestEarnerKillTrickleCapAndDay`.
+- Hero tile: `GET /api/hero` carries `ether` ("Ether 35") only while the wallet is on (`Hub.SetEtherSource`); the Hero panel draws it as a link chip to the Vault.
+
+## The page
+
+`/watch/vault` reads `GET /api/ether` next to `GET /api/vault` (on load, after every press and on the poll). With a wallet: the header shows the balance chip and a real Upgrade button ("Upgrade +200 for 20 Ether"); a press opens the confirm sheet (price, balance before and after, new capacity), Pay posts `{"step": <next>}` and the page then reloads both GETs and says what they say ("Capacity is now 600. 15 Ether left."). A short balance keeps the button `aria-disabled` and shows "Need N more Ether" (a press says it on a phone). A Refund button appears once a step is owned; while the vault does not fit the lower tier it is `aria-disabled` with the server's reason, otherwise its sheet shows the refund and the capacity. Refusals use the texts of `vault.json` with the numbers of the answer (402 `insufficient`, 409 `in-use`, `out-of-order`, `maxed`, `nothing-to-refund`, the gate codes); an unknown code falls back to the server sentence, never to a generic line. Without a wallet the old disabled placeholder stands with the reason "needs the vault switched on". The sheet is registered with the overlay manager. V node test `TestVaultEtherUIJS`; fit pages `vault-eth*`, `default-ether`, must-fail `vaultdefect-ethenabled`.
+
+## Not done
+
+- The Quest board hand-in call (S10) and the `meta` column; the live drill with a real bot (the earn rules need real kill and area events: whether the bot's journal carries `Monster` for every kill and `Area` for every change is U until a run).
+- Auto-pickup range and filter slots as more rows of the same kind (later).
+- A hero that is not the active one cannot be refunded against its own content (the rule reads the active hero only; capacity itself is account wide).
 
 Open: U every amount and price; whether the quest `meta` column should also feed `first`; the user may want ETHER shown under another name (the name is the `currency` string of the table).

@@ -148,6 +148,15 @@ sheet vault=pop&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=discard]
 sheettyped vault=pop&theme=dark [data-key=select-toggle]|[data-key=select-all]|[data-key=discard]
 sheetl vault=pop&theme=light [data-key=select-toggle]|.vt-cell|[data-key=discard]
 tip vault=pop&theme=dark hover=.vt-cell:nth-child(3)
+eth vault=eth&theme=dark
+ethl vault=eth&theme=light
+ethshort vault=eth-short&theme=dark
+ethowned vault=eth-owned&theme=dark
+ethnofit vault=eth-nofit&theme=dark
+ethmax vault=eth-max&theme=dark
+ethsheet vault=eth&theme=dark [data-key=upgrade]
+ethsheetl vault=eth&theme=light [data-key=upgrade]
+ethrefund vault=eth-owned&theme=dark [data-key=downgrade]
 keeping vault=keeping&theme=dark
 keepingl vault=keeping&theme=light
 keepfull vault=keepfull&theme=dark
@@ -266,6 +275,7 @@ if [ "$fit" = 1 ]; then
 default-light watch?first=0&theme=light
 default-menu watch?first=0&theme=dark #btn-more
 default-needs0 watch?first=0&theme=dark&needs=0
+default-ether watch?first=0&theme=dark&needs=0&ether=1
 default-needs5-orders8 watch?first=0&theme=dark&needs=5&cmd=eight
 default-needs5-orders8-light watch?first=0&theme=light&needs=5&cmd=eight&glance=full,mercdead,supplieslow
 default-empty watch?first=0&theme=dark&needs=0&cmd=empty
@@ -519,6 +529,15 @@ vault-sheet watch/vault?theme=dark&vault=pop [data-key=select-toggle]|.vt-cell|[
 vault-sheet-typed watch/vault?theme=dark&vault=pop [data-key=select-toggle]|[data-key=select-all]|[data-key=discard] .vt-sheet-card,[data-key=sheet-typed],[data-key=sheet-cancel]
 vault-sheet-light watch/vault?theme=light&vault=pop [data-key=select-toggle]|.vt-cell|[data-key=discard] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-tip watch/vault?theme=dark&vault=pop hover=.vt-cell:nth-child(3)
+vault-eth watch/vault?theme=dark&vault=eth
+vault-eth-light watch/vault?theme=light&vault=eth
+vault-eth-short watch/vault?theme=dark&vault=eth-short
+vault-eth-owned watch/vault?theme=dark&vault=eth-owned
+vault-eth-nofit watch/vault?theme=dark&vault=eth-nofit
+vault-eth-max watch/vault?theme=dark&vault=eth-max
+vault-eth-upgrade watch/vault?theme=dark&vault=eth [data-key=upgrade] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
+vault-eth-upgrade-light watch/vault?theme=light&vault=eth [data-key=upgrade] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
+vault-eth-refund watch/vault?theme=dark&vault=eth-owned [data-key=downgrade] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-keeping watch/vault?theme=dark&vault=keeping
 vault-keeping-light watch/vault?theme=light&vault=keeping
 vault-keeping-list watch/vault?theme=dark&vault=keeping [data-key=view-toggle] .vt-cell,[data-key=view-toggle]
@@ -535,7 +554,8 @@ vaultdefect-small watch/vault?theme=dark&vault=pop&defect=vault-small
 vaultdefect-covered watch/vault?theme=dark&vault=pop&defect=vault-covered
 vaultdefect-sheet watch/vault?theme=dark&vault=pop&defect=vault-sheet [data-key=select-toggle]|.vt-cell|[data-key=discard] .vt-sheet-card,[data-key=sheet-cancel]
 vaultdefect-noname watch/vault?theme=dark&vault=pop&defect=vault-noname
-vaultdefect-enabled watch/vault?theme=dark&vault=pop&defect=vault-enabled"
+vaultdefect-enabled watch/vault?theme=dark&vault=pop&defect=vault-enabled
+vaultdefect-ethenabled watch/vault?theme=dark&vault=eth-short&defect=vault-ethenabled"
 	# in a click or hit selector "_" stands for a space and a leading "?" makes a step optional (no switch on a wide rail);
 	# a third column hover=SEL or ctx=SEL hovers or right-clicks that cell before the measurement (the tooltip, the menu)
 	echo "$pages" | while read -r pname pq pclick phit; do
