@@ -110,8 +110,10 @@ div [data-cols=10]
   div.cell [gridArea:4 / 8]
   div.cell [gridArea:4 / 9]
   div.cell [gridArea:4 / 10]
-  button.item.q-normal [data-h=1 data-key=item-10 gridArea:1 / 1 / span 1 / span 1] "Healing Potion" title="Healing Potion"
-  button.item.q-magic [data-h=3 data-key=item-11 data-mark=sell gridArea:1 / 3 / span 3 / span 2] "Long Sword" title="Long Sword"
+  button.item.q-normal [data-fb=item data-h=1 data-key=item-10 gridArea:1 / 1 / span 1 / span 1] "Healing Potion" title="Healing Potion"
+    span.fbg [] "?"
+  button.item.q-magic [data-fb=item data-h=3 data-key=item-11 data-mark=sell gridArea:1 / 3 / span 3 / span 2] "Long Sword" title="Long Sword"
+    span.fbg [] "?"
     span.mk [] "S"
   button.item.q-rare [data-h=1 data-key=item-12 data-mark=keep data-shown= gridArea:2 / 6 / span 1 / span 1] "Jewel" title="Jewel"
     img.ico [alt= src=/watch/art/item-invjwl.png]
