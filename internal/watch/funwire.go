@@ -169,6 +169,8 @@ type Fun struct {
 	Characters *CharactersAPI
 	// Merc mounts the mercenary state and Revive mercenary routes (mercapi.go); set it before Serve, nil: no routes.
 	Merc *MercAPI
+	// Vault mounts the Ethereal Vault page and /api/vault (vaultapi.go, docs/vault.md); nil: no routes.
+	Vault *VaultAPI
 	// LootShadow mounts GET /api/lootrules/shadow (lootshadowapi.go); nil: no route.
 	LootShadow *LootShadowAPI
 	// LootRules mounts GET (viewer) and PUT (answer listener) /api/lootrules (lootrulesapi.go); nil: no routes.
@@ -748,6 +750,11 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 		m.Handle(SupportDownloadRoute, f.Support.Handler())
 		m.Handle(SupportFileRoute, f.Support.Handler())
 	}
+	if f.Vault != nil {
+		for _, p := range VaultRoutes {
+			m.Handle(p, f.Vault.Handler())
+		}
+	}
 	if f.Characters != nil {
 		m.Handle(CharactersRoute, f.Characters.Handler())
 		m.Handle(CharactersRulesRoute, f.Characters.RulesHandler())
@@ -857,6 +864,11 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	if f.Support != nil {
 		m.Handle(SupportBundleRoute, f.Support.BundleHandler(o))
 		m.Handle(SupportSendRoute, f.Support.SendHandler(o))
+	}
+	if f.Vault != nil {
+		for _, p := range VaultPostRoutes {
+			m.Handle(p, f.Vault.PostHandler(o, p))
+		}
 	}
 	if f.Characters != nil {
 		for _, p := range CharactersPostRoutes {

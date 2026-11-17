@@ -53,7 +53,7 @@ func fitHarness(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `<!doctype html><html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
 <iframe id="f" src="%s" width="%d" height="%d" style="border:0;display:block"></iframe><pre id="fit-result"></pre>
 <script type="module">
-import { measure, hits, expects, overlayState, charsNow } from '/__fit/fit.js';
+import { measure, hits, expects, overlayState, charsNow, vaultNow } from '/__fit/fit.js';
 const pop = (d, sel, c) => {
   const n = d.querySelector(sel), r = n && !n.hidden ? n.getBoundingClientRect() : null;
   if (!r || !r.width) return { open: false, sel };
@@ -90,6 +90,7 @@ f.addEventListener('load', async () => {
     m.ov = overlayState(f.contentWindow);
     if (steps.length) m.hits = hits(f.contentWindow, o.hit);
     if (steps.length && f.contentDocument.body.hasAttribute('data-chars')) m.chars = charsNow(f.contentWindow); // the page with its sheet open
+    if (steps.length && f.contentDocument.body.hasAttribute('data-vault')) m.vault = vaultNow(f.contentWindow);
     const ex = (o.expect || []).filter(Boolean);
     if (ex.length) m.expect = expects(f.contentWindow, ex);
     out.textContent = JSON.stringify(m);
@@ -107,12 +108,12 @@ func framedPage(h http.Handler, w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Del("X-Frame-Options")
 	body := rec.Body.Bytes()
-	if d := r.URL.Query().Get("defect"); defectCSS[d] != "" || overlayJS[d] != "" { // a page that must fail: the same page with one defect put back, from this viewer's own file
+	if d := r.URL.Query().Get("defect"); defectCSS[d] != "" || overlayJS[d] != "" || vaultJS[d] != "" { // a page that must fail: the same page with one defect put back, from this viewer's own file
 		add := ""
 		if defectCSS[d] != "" {
 			add += `<link rel="stylesheet" href="/__fit/defect-` + d + `.css">`
 		}
-		if overlayJS[d] != "" {
+		if overlayJS[d] != "" || vaultJS[d] != "" {
 			add += `<script src="/__fit/defect-` + d + `.js"></script>`
 		}
 		body = bytes.Replace(body, []byte("</head>"), []byte(add+"</head>"), 1)
@@ -161,6 +162,7 @@ type fitResult struct {
 	} `json:"pop"`
 	Expect map[string]bool `json:"expect"`
 	Chars  *fitChars       `json:"chars"`
+	Vault  *fitVault       `json:"vault"`
 	Ov     *struct {
 		Open    []string `json:"open"`
 		Menu    []string `json:"menu"`
@@ -254,13 +256,16 @@ func (r fitResult) judge() []string {
 	for _, u := range r.Unready {
 		bad = append(bad, "panel "+u+" is not ready")
 	}
-	if len(r.Slots) == 0 && r.Chars == nil {
+	if len(r.Slots) == 0 && r.Chars == nil && r.Vault == nil {
 		bad = append(bad, "no [data-cockpit-slot] on the page")
 	}
 	if c := r.Chars; c != nil {
 		bad = append(bad, c.judge(r.VW)...)
 	}
-	if r.Hole > fitGap && r.Chars == nil {
+	if v := r.Vault; v != nil {
+		bad = append(bad, v.judge()...)
+	}
+	if r.Hole > fitGap && r.Chars == nil && r.Vault == nil {
 		bad = append(bad, fmt.Sprintf("dead space: a %d px square is covered by no slot at %d,%d", r.Hole, r.HoleAt[0], r.HoleAt[1]))
 	}
 	if r.CV != nil {
@@ -422,6 +427,59 @@ func (c *fitChars) judge(vw int) []string {
 	return bad
 }
 
+// fitVault is what fit.js returns for the Ethereal Vault page (vaultPage).
+type fitVault struct {
+	Clipped []string `json:"clipped"`
+	Small   []string `json:"small"`
+	Covered []string `json:"covered"`
+	Outside []string `json:"outside"`
+	Under   string   `json:"under"`
+	Sheet   string   `json:"sheet"`
+	Unnamed []string `json:"unnamed"`
+	Holes   []string `json:"holes"`
+	Cells   int      `json:"cells"`
+	State   string   `json:"state"`
+	Open    bool     `json:"open"`
+	Meter   bool     `json:"meter"`
+	Mode    string   `json:"mode"`
+}
+
+// judge is what is wrong with a measured Vault page (docs/vault.md).
+func (v *fitVault) judge() []string {
+	var bad []string
+	if v.State == "loading" {
+		bad = append(bad, "the Vault page is still loading")
+	}
+	if !v.Meter {
+		bad = append(bad, "no capacity meter with a value")
+	}
+	for _, x := range v.Clipped {
+		bad = append(bad, "clipped text: "+x)
+	}
+	for _, x := range v.Small {
+		bad = append(bad, "target under 44 px: "+x)
+	}
+	for _, x := range v.Covered {
+		bad = append(bad, "covered control: "+x)
+	}
+	for _, x := range v.Outside {
+		bad = append(bad, "ends outside the window: "+x)
+	}
+	if v.Under != "" {
+		bad = append(bad, "under the header: "+v.Under)
+	}
+	if v.Sheet != "" {
+		bad = append(bad, "sheet cut: "+v.Sheet)
+	}
+	for _, x := range v.Unnamed {
+		bad = append(bad, "control with no name: "+x)
+	}
+	for _, x := range v.Holes {
+		bad = append(bad, "placeholder: "+x)
+	}
+	return bad
+}
+
 // mustFail names, by file prefix, the pages that must FAIL and the verdict each must fail with. Another verdict, or a
 // broken measurement, does not count: only the reason the fixture was built for.
 var mustFail = map[string]string{
@@ -452,6 +510,15 @@ var mustFail = map[string]string{
 	"fit-charsdefect-hole-":    "dead space in the list",
 	"fit-charsdefect-sheet-":   "sheet cut",
 	"fit-charsdefect-covered-": "covered control",
+	// the Ethereal Vault page (docs/vault.md): one defect each, put back by defectCSS and vaultJS in fixtures_vault.go
+	"fit-vaultdefect-clip-":    "clipped text",
+	"fit-vaultdefect-wide-":    "ends outside the window",
+	"fit-vaultdefect-under-":   "under the header",
+	"fit-vaultdefect-small-":   "target under 44 px",
+	"fit-vaultdefect-covered-": "covered control",
+	"fit-vaultdefect-sheet-":   "sheet cut",
+	"fit-vaultdefect-noname-":  "control with no name",
+	"fit-vaultdefect-enabled-": "placeholder: ",
 }
 
 var reSize = regexp.MustCompile(`-(\d+)x(\d+)$`)
@@ -535,6 +602,10 @@ func fitDir(dir string) ([]string, bool, error) {
 			}
 			if c := r.Chars; c != nil {
 				lines = append(lines, fmt.Sprintf("ok   %s: %dx%d, no scroll, %d cards, largest empty square %d px", name, r.VW, r.VH, c.Cards, c.Hole))
+				continue
+			}
+			if v := r.Vault; v != nil {
+				lines = append(lines, fmt.Sprintf("ok   %s: %dx%d, no scroll, %d cells, %s view, state %q", name, r.VW, r.VH, v.Cells, v.Mode, v.State))
 				continue
 			}
 			lines = append(lines, fmt.Sprintf("ok   %s: %dx%d, no scroll, %d slots, largest gap %d px%s", name, r.VW, r.VH, len(r.Slots), r.Hole, extra))

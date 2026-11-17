@@ -17,6 +17,7 @@ const MAX_FAILS = 5;      // 404 or 401 this often in a row: the route is not mo
 const html = document.documentElement;
 const qs = new URLSearchParams(location.search);
 const CHARS_URL = '/watch/characters' + (/^(dark|light|auto)$/.test(qs.get('theme') || '') ? '?theme=' + qs.get('theme') : '');
+const VAULT_URL = '/watch/vault' + (/^(dark|light|auto)$/.test(qs.get('theme') || '') ? '?theme=' + qs.get('theme') : ''); // the Ethereal Vault page (docs/vault.md)
 if (qs.get('view') === 'characters') location.replace(CHARS_URL); // /watch?view=characters is the Characters page (docs/charselect-ui.md)
 
 function el(tag, cls, text) {
@@ -818,7 +819,13 @@ function setupMenu(sel) {
   cb.dataset.size = 'sm'; cb.dataset.variant = 'ghost'; cb.dataset.key = 'characters-open';
   cb.href = CHARS_URL;
   cb.setAttribute('aria-label', 'Characters: switch, create or delete a hero');
-  pop.appendChild(cb);
+  const vb = el('a', 'd-btn', 'Ethereal Vault'); // a link too: every drop the bot recorded (docs/vault.md); it shares a row with Characters so the menu stays short
+  vb.dataset.size = 'sm'; vb.dataset.variant = 'ghost'; vb.dataset.key = 'vault-open';
+  vb.href = VAULT_URL;
+  vb.setAttribute('aria-label', 'Ethereal Vault: every drop the bot recorded');
+  const cpair = el('div', 'd-menu-pair');
+  cpair.append(cb, vb);
+  pop.appendChild(cpair);
   // the band drops its Return screen link on a narrow window (components.css): the menu always has it
   if (retLink) { menuReturn = el('a', 'd-btn', 'Return screen'); menuReturn.href = '/watch/return'; menuReturn.dataset.size = 'sm'; menuReturn.dataset.variant = 'ghost'; menuReturn.dataset.key = 'menu-return'; menuReturn.hidden = retLink.hidden; pop.appendChild(menuReturn); }
   const rb = ui.btn('Reset', { size: 'sm', variant: 'ghost' });

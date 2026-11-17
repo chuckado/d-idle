@@ -15,3 +15,4 @@
           <span class="when"> "<time>"
           <span class="txt"> "A quiet moor."
       <p class="note">
+      <a class="d-btn" data-key="vault-link" data-size="sm" data-variant="ghost" hidden> "Ethereal Vault: every recorded drop"

@@ -50,8 +50,9 @@ cp "$repo/deploy/d2d-container/entrypoint.sh" "$ctx/entrypoint.sh"
 printf '*.mpq\n*.MPQ\n*.d2s\n*.exe\n.git\nvendor-archives\n' > "$ctx/.dockerignore"
 
 # our Go side (CGO off: static, runs on any libc)
+# BUILD_STAMP=<sha7> (with APP_VERSION) also sets the build id the page shows (internal/buildinfo.Version); unset, the go tool's VCS info of $repo is used.
 # APP_VERSION=x.y.z stamps main.version, the base release the updater compares with (unstamped it reads "dev", which also turns the dev traces on)
-(cd "$repo" && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath ${APP_VERSION:+-ldflags "-X main.version=$APP_VERSION"} -o "$ctx/bin/" \
+(cd "$repo" && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath ${APP_VERSION:+-ldflags "-X main.version=$APP_VERSION${BUILD_STAMP:+ -X d2lod-bot/internal/buildinfo.Version=$BUILD_STAMP}"} -o "$ctx/bin/" \
 	./cmd/d2bot ./cmd/d2dsoak ./cmd/d2dview ./cmd/d2dsetup ./cmd/didleboot ./deploy/d2d-container/d2dping)
 # trusted release public keys (*.pub, up to two: current and next; the private key is never in the repo)
 mkdir -p "$ctx/pubkeys"

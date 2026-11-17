@@ -40,6 +40,7 @@ export function measure(win, opts) {
   // The character screen (card uic4, review c2c3 R14): checks the first fit check let through. Only on a page that has the canvas frame.
   const cvx = d.body.hasAttribute('data-canvas') ? charChecks(win, d, vis, cs) : null;
   const chx = d.body.hasAttribute('data-chars') ? charsPage(win, d, vis, cs) : null; // the Characters page (docs/charselect-ui.md)
+  const vtx = d.body.hasAttribute('data-vault') ? vaultPage(win, d, vis, cs) : null; // the Ethereal Vault page (docs/vault.md)
   // boxes that end outside the window: a frame taller or wider than the viewport that something clips
   const out = [];
   for (const n of d.querySelectorAll('[data-cockpit-slot], [data-cockpit-panel]')) {
@@ -98,7 +99,7 @@ export function measure(win, opts) {
     return t && vis(t) && t.scrollWidth > t.clientWidth + 1 && re && re.clientWidth > 0;
   }).length;
   return {
-    orderCut, zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, chars: chx, empty, unready, slots,
+    orderCut, zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, chars: chx, vault: vtx, empty, unready, slots,
     covered: Math.round((covered * 100) / (cols * rows)), hole: best * cs2, holeAt: [(bx - best + 1) * cs2, (by - best + 1) * cs2],
   };
 }
@@ -406,4 +407,85 @@ function charsPage(win, d, vis, cs) {
 export function charsNow(win) {
   const vis = (n) => { const r = n.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null; };
   return charsPage(win, win.document, vis, (n) => win.getComputedStyle(n));
+}
+
+// The Ethereal Vault page (docs/vault.md, UI section): a header, filters, a bar, one list that scrolls inside the window and, wide, a card.
+// Lists, each naming what a person would see:
+//  clipped:  text cut by its own box (not an ellipsis or a line clamp: those are by design, the tooltip has the full name), or sticking out of its card
+//  small:    a control under 44 px high
+//  covered:  a control with something else at its centre
+//  outside:  a part of the page that ends outside the window
+//  under:    the list starting under the header, filters or bar
+//  sheet:    an open sheet that scrolls or is cut
+//  unnamed:  a control a screen reader would announce with no name
+//  holes:    the Upgrade and Keep placeholders that are not disabled (they do nothing until V7 and V5)
+function vaultPage(win, d, vis, cs) {
+  const vw = win.innerWidth, vh = win.innerHeight;
+  const o = { clipped: [], small: [], covered: [], outside: [], under: '', sheet: '', unnamed: [], holes: [], cells: 0, state: '', open: false, meter: false, mode: '' };
+  const nm = (n) => n.tagName.toLowerCase() + (typeof n.className === 'string' && n.className ? '.' + n.className.trim().split(/\s+/)[0] : '') + ' "' + (n.textContent || '').trim().slice(0, 16) + '"';
+  const root = d.getElementById('vt-root'), main = d.getElementById('vt-main'), head = root && root.querySelector('.vt-head');
+  if (!root || !main || !head) { o.clipped.push('the page has no header or list'); return o; }
+  const live = (n) => vis(n) && !n.closest('[hidden]');
+  const sheet = root.querySelector('.vt-sheet'), open = !!sheet && !sheet.hidden && !!vis(sheet);
+  o.open = open;
+  o.cells = d.querySelectorAll('.vt-cell').length;
+  const sc = d.querySelector('.vt-card[data-kind]');
+  o.state = sc ? sc.dataset.kind : '';
+  o.mode = (d.querySelector('.vt-grid') || { dataset: {} }).dataset.mode || '';
+  o.meter = !!d.querySelector('.vt-meter[role="meter"][aria-valuenow]');
+  const box = 'vt-card,.vt-sheet-card,.vt-banner,.vt-head,.vt-dcard,.vt-cell,.vt-bar';
+  for (const n of root.querySelectorAll('*')) {
+    if (!live(n) || n.closest('.d-sr-only') || !([...n.childNodes].some((c) => c.nodeType === 3 && c.nodeValue.trim()))) continue; // screen-reader-only text is clipped to a pixel on purpose
+    const c0 = cs(n);
+    const by = c0.textOverflow === 'ellipsis' || (c0.webkitLineClamp && c0.webkitLineClamp !== 'none'); // cut with an ellipsis or a clamp: by design
+    if (n.clientWidth && !by && (n.scrollWidth > n.clientWidth + 1 || (/^(hidden|clip|auto|scroll)$/.test(c0.overflowY) && n.scrollHeight > n.clientHeight + 1))) { o.clipped.push(nm(n) + ' [' + n.scrollWidth + '/' + n.clientWidth + ' ' + n.scrollHeight + '/' + n.clientHeight + ']'); continue; }
+    const c = n.closest('.' + box);
+    if (!c || by) continue;
+    const rg = d.createRange();
+    rg.selectNodeContents(n);
+    const r = rg.getBoundingClientRect(), cr = c.getBoundingClientRect();
+    if (r.width && (r.right > cr.right + 1 || r.left < cr.left - 1)) o.clipped.push(nm(n) + ' sticks out of ' + (typeof c.className === 'string' ? c.className.split(/\s+/)[0] : 'its box'));
+  }
+  const ctl = [...root.querySelectorAll('button, a.d-btn, input, select')].filter(live);
+  for (const n of ctl) { const r = n.getBoundingClientRect(); if (r.height < 43.5) o.small.push(nm(n) + ' is ' + Math.round(r.height) + ' px high'); }
+  const above = [head, root.querySelector('.vt-banner'), root.querySelector('.vt-filters'), root.querySelector('.vt-bar'), root.querySelector('.vt-msg')].filter((n) => n && live(n));
+  const mr = main.getBoundingClientRect(), edge = Math.max(...above.map((n) => n.getBoundingClientRect().bottom));
+  if (mr.top < edge - 1) o.under = 'the list starts at ' + Math.round(mr.top) + ' px, under the parts above it that end at ' + Math.round(edge);
+  for (const n of ctl) {
+    const r = n.getBoundingClientRect(), inSheet = !!n.closest('.vt-sheet'), inMain = main.contains(n);
+    if (open !== inSheet) continue; // an open sheet: only its own controls; behind the scrim is by design
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    if (cx <= 2 || cy <= 2 || cx >= vw - 2 || cy >= vh - 2 || (inMain && (cy <= mr.top + 2 || cy >= mr.bottom - 2))) continue; // scrolled out of the list (a centre within 2 px of an edge is out, the browser returns no element there): a thumb scrolls to it
+    const fp = n.closest('.vt-fpanel');
+    if (fp) { const pr = fp.getBoundingClientRect(); if (cy < pr.top || cy > pr.bottom) continue; } // inside the folded panel's own scroll
+    const at = d.elementFromPoint(cx, cy);
+    if (!at || !(at === n || n.contains(at) || at.contains(n) || (n.labels && [...n.labels].some((l) => l.contains(at))))) o.covered.push(nm(n) + (at ? ' under ' + nm(at) : ' at ' + Math.round(cx) + ',' + Math.round(cy) + ' of ' + vw + 'x' + vh));
+  }
+  for (const n of root.querySelectorAll('.vt-head, .vt-filters, .vt-bar, .vt-body, .vt-main, .vt-grid, .vt-detail, .vt-sheet-card, .vt-banner')) {
+    if (!live(n)) continue;
+    const r = n.getBoundingClientRect(), tall = n.matches('.vt-head, .vt-body, .vt-main, .vt-sheet-card');
+    if (r.right > vw + 1 || r.left < -1 || (tall && (r.bottom > vh + 1 || r.top < -1))) o.outside.push(nm(n) + ' right ' + Math.round(r.right) + ' bottom ' + Math.round(r.bottom));
+  }
+  const card = d.querySelector('.vt-sheet-card');
+  if (open && card && card.scrollHeight > card.clientHeight + 1) o.sheet = 'the sheet scrolls or is cut [' + card.scrollHeight + '/' + card.clientHeight + ']';
+  const text = (n) => (n.textContent || '').trim();
+  for (const n of root.querySelectorAll('button, a.d-btn, input, select, [role="meter"]')) {
+    if (!live(n) && !n.matches('[role="meter"]')) continue;
+    const lb = n.getAttribute('aria-labelledby'), byId = lb ? lb.split(/\s+/).map((i) => d.getElementById(i)).filter(Boolean).map(text).join('') : '';
+    const lab = n.labels && n.labels.length ? text(n.labels[0]) : '';
+    const name = (n.getAttribute('aria-label') || byId || (/^(button|a)$/i.test(n.tagName) ? text(n) : '') || lab || n.getAttribute('title') || '').trim();
+    if (!name) o.unnamed.push(nm(n));
+  }
+  for (const k of ['upgrade', 'keep']) {
+    const b = root.querySelector('[data-key="' + k + '"]');
+    if (!b) o.holes.push(k + ' button is missing');
+    else if (b.getAttribute('aria-disabled') !== 'true') o.holes.push(k + ' is enabled');
+  }
+  return o;
+}
+
+// The Vault page measured again after the harness pressed something (an open sheet is judged as it stands).
+export function vaultNow(win) {
+  const vis = (n) => { const r = n.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null; };
+  return vaultPage(win, win.document, vis, (n) => win.getComputedStyle(n));
 }

@@ -172,14 +172,14 @@
   // catches up at once). When the game clock does not track the wall clock (a fast-forwarded lockstep game) the due time is
   // capped at arrival + D, which is "present on the next animation frame". Counters: delivered, decoded, presented draws,
   // dropped (decoded but merged into a later draw) and the standard deviation of the intervals between draws.
-  var MIN_DELAY = 66, MAX_DELAY = 200, MAX_AGE = 260;
+  var MIN_DELAY = 66, MAX_DELAY = 200, MAX_AGE = 260, FALLBACK_MS = 100, WATCHDOG_MS = 500;
   function Player(o) {
     this.o = o; this.dec = new Decoder(); this.ctx = o.canvas.getContext('2d', { alpha: false, desynchronized: true });
     this.stopped = false; this.pending = null; this.raf = o.raf || (root.requestAnimationFrame && root.requestAnimationFrame.bind(root));
     this.now = o.now || (root.performance && root.performance.now.bind(root.performance)) || Date.now;
     this.frames = 0; this.drawn = 0; this.bytes = 0; this.failures = 0; this.lowRate = false; this.ctl = null; this.gen = 0; this.imgs = [];
     this.q = []; this.base = null; this.late = 0; this.step = 33; this.lastGame = -1; this.lastDraw = -1; this.ivs = [];
-    this.work = 0; this.delivered = 0; this.decoded = 0; this.dropped = 0; this.lat = 0; this.rafOn = false;
+    this.work = 0; this.fbOn = false; this.rafAt = 0; this.stallAt = -1e9; this.skewAt = -1e9; this.delivered = 0; this.decoded = 0; this.dropped = 0; this.lat = 0; this.rafOn = false;
   }
   Player.prototype.setLowRate = function (on) { this.lowRate = !!on; this._abort(); };
   Player.prototype._abort = function () { if (this.ctl) this.ctl.abort(); };
@@ -201,7 +201,7 @@
     if (this.o.noClock) return at;   // measurement only: present at the first animation frame after arrival (the old behaviour)
     if (this.lastGame >= 0 && g === this.lastGame) return at;   // a heartbeat repeats the last frame's time: nothing to schedule
     if (this.lastGame >= 0) {
-      if (g < this.lastGame - 1000) { this.base = null; this.late = 0; }   // a restarted d2d: a new clock
+      if (g < this.lastGame - 1000) { this.base = null; this.late = 0; if (this.o.mon) this.o.mon.event('delay-reset', 'game time went back'); }   // a restarted d2d: a new clock
       else if (g > this.lastGame) { var d = g - this.lastGame; if (d < 200) this.step += (Math.min(d, 70) - this.step) * 0.1; }
     }
     if (g > this.lastGame) this.lastGame = g;
@@ -213,7 +213,7 @@
   };
   Player.prototype._run = function () {
     var self = this, o = this.o, inflate = o.inflate || browserInflate, sp = new Splitter(), gen = ++this.gen;
-    this.dec = new Decoder(); this.pending = null; this.q = []; this.base = null; this.late = 0; this.lastGame = -1; // a new connection starts from a key frame
+    this.dec = new Decoder(); this.pending = null; this.q = []; this.base = null; this.late = 0; this.lastGame = -1; this.lastDraw = -1; // a new connection starts from a key frame
     this.ctl = typeof AbortController === 'function' ? new AbortController() : { abort: function () {} };
     var url = o.url + (this.lowRate ? (o.url.indexOf('?') < 0 ? '?' : '&') + 'fps=10' : '');
     var f = o.fetch || root.fetch.bind(root);
@@ -251,22 +251,44 @@
     var self = this;
     Promise.resolve(result).then(function (raw) { e.raw = raw; self._kick(); }, function (err) { e.err = err; self._kick(); });
   };
+  // _kick makes sure a tick will run. Two drivers: requestAnimationFrame (one request at a time, never queued up while the
+  // browser withholds animation frames) and a fallback timer. A browser may pause or throttle animation frames (an occluded or
+  // low-power window, privacy timer clamping) while fetch keeps delivering: the timer ticks every FALLBACK_MS then, so the picture
+  // keeps moving (a stream monitor event 'raf-stall' says so) instead of waiting for frames that never come.
   Player.prototype._kick = function () {
-    if (this.rafOn || !this.raf || this.stopped) return;
-    var self = this; this.rafOn = true;
-    this.raf(function (ts) { self.rafOn = false; self._tick(ts); });
-  };
-  // _tick runs on an animation frame: decode what is due, in order, draw once. A decode error ends the stream like a fetch error.
-  Player.prototype._tick = function (ts) {
     if (this.stopped) return;
-    var q = this.q, applied = 0, shown = 0, newest = null;
-    if (ts === undefined) ts = this.now();
-    var w0 = this.now();
+    var self = this;
+    if (this.raf && !this.rafOn) {
+      this.rafOn = true;
+      this.raf(function (ts) { self.rafOn = false; self._tick(ts, true); });
+    }
+    if (!this.fbOn) {
+      this.fbOn = true;
+      var set = this.o.timer || setTimeout;
+      set(function () { self.fbOn = false; if (self.stopped) return; self._tick(undefined, false); }, FALLBACK_MS);
+    }
+  };
+  // _tick decodes what is due, in order, and draws once. All times are this.now() (performance.now): the animation frame's own
+  // timestamp is NOT used for comparisons, because a browser whose frame timestamps lag or jump against performance.now (timer
+  // clamping, a throttled window) would hold every frame back until the two clocks meet and then release them together (a
+  // stall of seconds with a spike of "dropped"). A decode error ends the stream like a fetch error.
+  Player.prototype._tick = function (rafTs, fromRaf) {
+    if (this.stopped) return;
+    var now = this.now(), q = this.q, applied = 0, shown = 0, newest = null, mon = this.o.mon;
+    var w0 = now;
+    if (fromRaf && typeof rafTs === 'number' && Math.abs(rafTs - now) > 250 && now - this.skewAt > 10000) {
+      this.skewAt = now; if (mon) mon.event('clock-skew', Math.round(rafTs - now) + ' ms');
+    }
+    if (!fromRaf && q.length && now - this.rafAt > 400 && now - this.stallAt > 5000) { this.stallAt = now; if (mon) mon.event('raf-stall', 'timer drives'); }
+    if (fromRaf) this.rafAt = now;
+    // watchdog: a head message still being inflated WATCHDOG_MS after it arrived is stuck in the decompressor (a big key frame):
+    // reconnect for a fresh key frame. (A message merely not yet due cannot wait: anything older than MAX_AGE is taken at once.)
+    if (q.length && !q[0].raw && !q[0].err && now - q[0].at > WATCHDOG_MS) { this._fail(new Error('inflate stall ' + Math.round(now - q[0].at) + ' ms')); return; }
     // the head may only be applied when its payload is inflated; later ones wait behind it (strict order)
     while (q.length && (q[0].raw || q[0].err)) {
       var e = q[0];
-      var late = ts - e.at > MAX_AGE;   // too old to wait for: take everything that is ready
-      if (!late && e.due > ts) break;
+      var late = now - e.at > MAX_AGE;   // too old to wait for: take everything that is ready
+      if (!late && e.due > now) break;
       q.shift();
       if (e.err) { this._fail(e.err); return; }
       try {
@@ -280,7 +302,7 @@
       this.frames += applied;
       this.failures = 0;
       if (this.o.onFrame) this.o.onFrame();
-      if (this.pending) this._draw(ts, shown, newest);   // an empty delta (a heartbeat) changes nothing: it is not a dropped picture
+      if (this.pending) this._draw(now, shown, newest);   // an empty delta (a heartbeat) changes nothing: it is not a dropped picture
     }
     this.work += (this.now() - w0 - this.work) * 0.05;
     if (q.length) this._kick();   // more to present later; an idle player sleeps until the next message
