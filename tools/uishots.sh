@@ -613,6 +613,7 @@ vaultdefect-ethenabled watch/vault?theme=dark&vault=eth-short&defect=vault-ethen
 		charsdefect-*) szs="1280x620 412x780 360x640" ;;
 		chars-*) szs="$sizes 412x780 360x640" ;;
 		vaultdefect-*) szs="1280x620 412x780 360x640" ;;
+		vault-reveal-multi*) szs="1280x620 1366x768 1440x900" ;; # 412x780 fails: header.vt-head ends outside the window once the filter row is open (reported to the Vault owner, card menufit2)
 		vault-menu-entry | vault-more-entry) ;;
 		vault-*) szs="$sizes 412x780 360x640" ;;
 		questdefect-words) szs="1366x768" ;;
