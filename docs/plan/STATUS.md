@@ -311,6 +311,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 14ba33edb 11-17 16:25 `Merge agent/videoload: watch: serve a panel's helper modules (video/brightness.js 404 made the video panel fail to load); test every panel import is served` (videoload)
 - 52f4657fd 11-17 15:29 `Merge agent/verifygearabsorb3: verifier of gear absorb r3: r3 FAIL, r4 PASS WITH CHANGES (fid/gear-absorb-r4 ac5c3dd1+c05fa8e3)` (verifygearabsorb3)
 - 725d0c74b 11-17 15:28 `Merge branch 'main' into verifygearabsorb3` (-)
 - 115106402 11-17 15:22 `Merge agent/jewelicons: watch: inventory DOM stub gets querySelector and the nopin goldens show the type-fallback glyph (the go-whole failure)` (jewelicons)
@@ -320,5 +321,4 @@
 - 1c3b12cf7 11-17 13:35 `Merge origin/main into agent/brightness; Brightness joins the video toolbar` (brightness)
 - 38292e12d 11-17 13:35 `Merge agent/verifydecomp39: Merge branch 'main' into TASK-625` (verifydecomp39)
 - 018de2bca 11-17 13:34 `Merge branch 'main' into TASK-625` (-)
-- f7c45a10b 11-17 13:28 `Merge agent/videoctl: videoctl: video controls out of the picture, caption never covered, fit rule` (videoctl)
 <!-- statusgen:end -->
