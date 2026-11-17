@@ -167,6 +167,11 @@
      "steps": [
       "travel_dark_wood",
       "take_scroll"
+     ],
+     "nodes": [
+      "wp-dark-wood",
+      "to-wood",
+      "tree"
      ]
     },
     {
@@ -186,7 +191,8 @@
      "steps": [
       "return_town",
       "talk_akara"
-     ]
+     ],
+     "handInStep": "read"
     },
     {
      "id": "free_cain",
@@ -205,7 +211,15 @@
       "enter_tristram",
       "free_cain"
      ],
-     "risk": "hazard"
+     "risk": "hazard",
+     "nodes": [
+      "to-stony",
+      "stones",
+      "to-tristram",
+      "clear",
+      "cage",
+      "home"
+     ]
     },
     {
      "id": "report",
@@ -224,7 +238,8 @@
      "steps": [
       "return_town",
       "talk_akara"
-     ]
+     ],
+     "unsupported": "the task layer ends at the camp after the cage (cainNodes has no Akara hand-in after freeing Cain); a handler step is needed"
     }
    ],
    "minutes": [
@@ -235,7 +250,7 @@
    "autoStart": "never",
    "tags": {
     "giver": "SRC docs/quest-hints.md (how: auto_on_area)",
-    "chunks": "I design 1.2 (A then B then C then D hard chain)",
+    "chunks": "V internal/task/act1.go cainNodes (step names); report chunk U: no handler step",
     "steps": "V docs/goals/execution.md s3 (stone order random per game, U)",
     "levels": "EXP docs/quest-hints.md",
     "handin.pick": "U",
@@ -476,7 +491,7 @@
   },
   {
    "id": "act1_done",
-   "taskId": "",
+   "taskId": "act1_complete",
    "title": "Sail east to Act 2",
    "blurb": "Warriv takes you east once Andariel is dead.",
    "act": 1,
@@ -502,7 +517,9 @@
      "steps": [
       "travel_town",
       "talk_warriv"
-     ]
+     ],
+     "handler": "act1_complete",
+     "handInStep": "warriv"
     }
    ],
    "minutes": [
