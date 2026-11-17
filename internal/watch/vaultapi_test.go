@@ -2,11 +2,13 @@ package watch
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -240,7 +242,7 @@ func TestVaultItemDetailAndUnidentified(t *testing.T) {
 	if d.Item.Identified || !strings.Contains(strings.Join(d.Lines, "|"), "Unidentified") || d.Where["area"] != "Burial Grounds" {
 		t.Errorf("detail %+v", d)
 	}
-	if !d.Actions["pin"].OK || !d.Actions["discard"].OK || d.Actions["keep"].OK || !strings.Contains(d.Actions["keep"].Reason, "V5") || d.Actions["reveal"].OK {
+	if !d.Actions["pin"].OK || !d.Actions["discard"].OK || d.Actions["keep"].OK || !strings.Contains(d.Actions["keep"].Reason, "no Keep queue") || d.Actions["reveal"].OK {
 		t.Errorf("actions %+v", d.Actions)
 	}
 	// the row is what the tooltip script reads: quality as a word, level, no property text for an unidentified record
@@ -368,4 +370,136 @@ func TestVaultViewerIsGetOnly(t *testing.T) {
 			t.Errorf("POST %s on the viewer: %d", p, w.Code)
 		}
 	}
+}
+
+// stubKeeper queues through the store like internal/vaultkeep does, with a switchable gate.
+type stubKeeper struct {
+	st                *vault.Store
+	gateCode, gateWhy string
+	nowSeen           bool
+}
+
+func (k *stubKeeper) Gate(context.Context) (bool, string, string) {
+	return k.gateCode == "", k.gateCode, k.gateWhy
+}
+
+func (k *stubKeeper) Enqueue(_ context.Context, ids []string, target string, now bool) []VaultKeepResult {
+	k.nowSeen = k.nowSeen || now
+	var out []VaultKeepResult
+	for _, id := range ids {
+		rec, ok := k.st.Get(id)
+		switch {
+		case !ok:
+			out = append(out, VaultKeepResult{ID: id, Code: "missing", Why: "no such item"})
+		case rec.State == vault.KeepQ:
+			out = append(out, VaultKeepResult{ID: id, OK: true, Already: true})
+		default:
+			if err := k.st.KeepTo(id, target); err != nil {
+				out = append(out, VaultKeepResult{ID: id, Code: "state", Why: err.Error()})
+			} else {
+				out = append(out, VaultKeepResult{ID: id, OK: true})
+			}
+		}
+	}
+	return out
+}
+
+func (k *stubKeeper) Progress() VaultKeepView {
+	n := len(k.st.KeepQueued())
+	v := VaultKeepView{Enabled: k.gateCode == "", Why: k.gateWhy, Queued: n}
+	if n > 0 {
+		v.Line = "Keeping " + strconv.Itoa(n) + " items: arrives at your next town visit"
+	}
+	return v
+}
+
+func keepAPI(s *vault.Store, k *stubKeeper) *VaultAPI {
+	tiers, _ := vault.DefaultTiers()
+	a := NewVaultAPI()
+	a.Bind(VaultDesk{On: func() bool { return true }, Store: func() *vault.Store { return s }, Tiers: tiers, Keep: k})
+	return a
+}
+
+func TestVaultKeepRoute(t *testing.T) {
+	s := testVault(t, 10, 100)
+	k := &stubKeeper{st: s}
+	a := keepAPI(s, k)
+	_, v := getVault(t, a, "/api/vault?limit=5")
+	ids := []string{v.Items[0].ID, v.Items[1].ID}
+
+	code, rep, _ := postVault(t, a, VaultKeepRoute, vaultBody{IDs: ids, Now: true})
+	if code != 200 || !rep.OK || len(rep.Done) != 2 || len(rep.Already) != 0 || !k.nowSeen {
+		t.Fatalf("keep: %d %+v", code, rep)
+	}
+	// a double press changes nothing and says so
+	if code, rep, _ = postVault(t, a, VaultKeepRoute, vaultBody{IDs: ids}); code != 200 || len(rep.Already) != 2 {
+		t.Fatalf("double press: %d %+v", code, rep)
+	}
+	// the page reads the state back from GET
+	_, q := getVault(t, a, "/api/vault?state=keepq")
+	if q.Total != 2 || q.Items[0].Keep != "queued" || q.Keep == nil || q.Keep.Queued != 2 || !strings.Contains(q.Keep.Line, "Keeping 2 items") {
+		t.Fatalf("state read back: %+v keep %+v", q.Items, q.Keep)
+	}
+	// partial: one id does not exist, the reply names it and the real reason
+	_, rep, _ = postVault(t, a, VaultKeepRoute, vaultBody{IDs: []string{v.Items[2].ID, "v-nope"}})
+	if rep.OK || len(rep.Done) != 1 || len(rep.Failed) != 1 || rep.Failed[0].Code != "missing" || rep.Failed[0].Error != "no such item" {
+		t.Fatalf("partial: %+v", rep)
+	}
+	// a bad target is refused before anything is queued
+	if code, _, pr := postVault(t, a, VaultKeepRoute, vaultBody{IDs: ids, Target: "moon"}); code != 400 || pr.Code != "target" {
+		t.Fatalf("target: %d %+v", code, pr)
+	}
+	// the gate: dead hero, verbs missing and so on answer 409 with the code and the sentence
+	k.gateCode, k.gateWhy = "dead", "the hero is dead"
+	if code, _, pr := postVault(t, a, VaultKeepRoute, vaultBody{IDs: []string{v.Items[3].ID}}); code != 409 || pr.Code != "dead" || pr.Error != "the hero is dead" {
+		t.Fatalf("gate: %d %+v", code, pr)
+	}
+	// the card's Keep action carries the same reason
+	w := httptest.NewRecorder()
+	a.Handler().ServeHTTP(w, httptest.NewRequest("GET", "/api/vault/item/"+url.PathEscape(v.Items[3].ID), nil))
+	var d VaultDetail
+	json.Unmarshal(w.Body.Bytes(), &d)
+	if d.Actions["keep"].OK || d.Actions["keep"].Reason != "the hero is dead" {
+		t.Fatalf("detail keep %+v", d.Actions["keep"])
+	}
+	k.gateCode, k.gateWhy = "", ""
+	w = httptest.NewRecorder()
+	a.Handler().ServeHTTP(w, httptest.NewRequest("GET", "/api/vault/item/"+url.PathEscape(v.Items[3].ID), nil))
+	json.Unmarshal(w.Body.Bytes(), &d)
+	if !d.Actions["keep"].OK {
+		t.Fatalf("detail keep %+v", d.Actions["keep"])
+	}
+}
+
+func TestVaultRowKeepStates(t *testing.T) {
+	s := testVault(t, 4, 100)
+	_, v := getVault(t, keepAPI(s, &stubKeeper{st: s}), "/api/vault?limit=4")
+	id := v.Items[0].ID
+	_ = s.KeepTo(id, "")
+	_ = s.BeginKeep(id)
+	if r := rowOf(t, s, id); r.Keep != "creating" {
+		t.Fatalf("%+v", r)
+	}
+	_ = s.RetryKeep(id, "keep: the stash is full: free space or upgrade")
+	if r := rowOf(t, s, id); r.Keep != "queued" || r.Reason != "the stash is full: free space or upgrade" {
+		t.Fatalf("%+v", r)
+	}
+	_ = s.FailKeep(id, "keep: the game does not accept this item's data")
+	if r := rowOf(t, s, id); r.Keep != "failed" || r.Reason != "the game does not accept this item's data" || r.State != "recorded" {
+		t.Fatalf("%+v", r)
+	}
+	_ = s.KeepTo(id, "inv")
+	_ = s.CompleteKeepAt(id, "backpack 2,1")
+	if r := rowOf(t, s, id); r.Keep != "kept" || r.Reason != "backpack 2,1" || r.Where != "inv" {
+		t.Fatalf("%+v", r)
+	}
+}
+
+func rowOf(t *testing.T, s *vault.Store, id string) VaultItem {
+	t.Helper()
+	rec, ok := s.Get(id)
+	if !ok {
+		t.Fatal("missing")
+	}
+	return vaultRow(&rec)
 }
