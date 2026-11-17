@@ -8,6 +8,12 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into pausemenufit <!--sg:agent/pausemenufit-->
+- Merge branch 'main' into botcpu <!--sg:agent/botcpu-->
+- Merge branch 'main' into task-582 <!--sg:agent/botcpulive-->
+- Merge branch 'main' into vaultv0 <!--sg:agent/vaultv0-->
+- palfeedflaky: deterministic palfeed guard tests (main CI red) <!--sg:agent/palfeedflaky-->
+- Merge branch 'main' into quests1 <!--sg:agent/quests1-->
 - survtune2: pay-for-risk floor 0.4, freshNeedsMerc false (fresh game with a dead merc) <!--sg:agent/survtune2-->
 - Merge branch 'main' into vault <!--sg:agent/vaultdesign-->
 - Merge branch 'main' into questdesign <!--sg:agent/questdesign-->
