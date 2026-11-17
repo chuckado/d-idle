@@ -398,6 +398,7 @@ func TestResetPauseCancel(t *testing.T) {
 func TestKnobOffRefusesEverything(t *testing.T) {
 	r := newRig(t, "Paladin", 6)
 	r.x.SetEnabled(false)
+	os.Remove(filepath.Join(r.dir, r.hero+".quests.json")) // the rig's own first derive wrote the baseline
 	if _, err := r.x.Offers(); err != ErrOff {
 		t.Fatalf("offers: %v", err)
 	}

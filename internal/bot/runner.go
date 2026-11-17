@@ -123,14 +123,15 @@ type Runner struct {
 	bus *event.Bus
 	sub *event.Sub // bridge subscription (bus -> ch), nil without a bus
 
-	gf       *goldfarm.Controller // the player's Farm gold order (SetGoldFarm); nil: no order
-	journey  *journey.Controller  // the guided journey (SetJourney, guided.go); nil: the floor planner alone
-	qb       *boardRT             // the quest board executor (NewQuestBoard, questboard.go); nil: not wired
-	qbMu     sync.Mutex           // guards qb and qbMake (the API goroutine builds the board of a hero too)
-	qbMake   QuestBoardMaker      // builds the board of the loaded hero (cmd/d2bot opens the plan store); nil: only NewQuestBoard
-	gfRepair func() int           // gold Repair All would cost now
-	gfArea   int                  // last farm zone logged
-	rep      *repair.Controller   // the player's Repair now request (SetRepairTrip); nil: no repair trips
+	gf       *goldfarm.Controller     // the player's Farm gold order (SetGoldFarm); nil: no order
+	journey  *journey.Controller      // the guided journey (SetJourney, guided.go); nil: the floor planner alone
+	qb       *boardRT                 // the quest board executor (NewQuestBoard, questboard.go); nil: not wired
+	qbMu     sync.Mutex               // guards qb and qbMake (the API goroutine builds the board of a hero too)
+	qbLedger func() questboard.Ledger // the account wallet of the quest board (nil: no Ether hook); guarded by qbMu
+	qbMake   QuestBoardMaker          // builds the board of the loaded hero (cmd/d2bot opens the plan store); nil: only NewQuestBoard
+	gfRepair func() int               // gold Repair All would cost now
+	gfArea   int                      // last farm zone logged
+	rep      *repair.Controller       // the player's Repair now request (SetRepairTrip); nil: no repair trips
 
 	wpHook func(areaID int, name string) // SetWaypointHook
 	firsts *decide.Firsts                // SetLadderFirsts
