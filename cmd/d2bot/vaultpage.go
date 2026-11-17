@@ -77,7 +77,7 @@ func vaultAPI(root string, on func() bool, hero func() string) (*watch.VaultAPI,
 	}
 	home := vaultHomeFor(root)
 	api := watch.NewVaultAPI()
-	api.Bind(watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}})
+	api.Bind(watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}, Act: actFace{home}})
 	return api, nil
 }
 

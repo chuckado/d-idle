@@ -597,14 +597,24 @@ func (s *Store) dry(ev *event) error {
 		if !r.Pin && s.pins+1 > s.pinLimit() {
 			return ErrPinCap
 		}
-	case "unpin", "keepq", "discard":
+	case "unpin":
 		return ok(Recorded)
+	case "keepq", "discard":
+		if err := ok(Recorded); err != nil {
+			return err
+		}
+		if r.Stage != "" { // a reveal has a copy in the hero: let it finish first
+			return fmt.Errorf("%w: %s has a reveal in flight", ErrState, r.ID)
+		}
 	case "sellq":
 		if err := ok(Recorded); err != nil {
 			return err
 		}
 		if r.Pin {
 			return ErrPinned
+		}
+		if r.Stage != "" {
+			return fmt.Errorf("%w: %s has a reveal in flight", ErrState, r.ID)
 		}
 	case "revq", "revcancel", "rfail":
 		return ok(Recorded, KeepQ)
