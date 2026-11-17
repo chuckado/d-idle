@@ -90,6 +90,16 @@ type Chunk struct {
 	Unsupported string   `json:"unsupported,omitempty"`
 }
 
+// ChunkByID returns the chunk of q with that id; an unknown id is an error naming it.
+func (q Quest) ChunkByID(id string) (Chunk, error) {
+	for _, c := range q.Chunks {
+		if c.ID == id {
+			return c, nil
+		}
+	}
+	return Chunk{}, fmt.Errorf("questboard: quest %q has no chunk %q", q.ID, id)
+}
+
 // HandlerRef says which task-layer steps a chunk runs. All: every step of Group except the hand-in step; else
 // only Field. HandIn is the suffix of the hand-in step.
 type HandlerRef struct {
