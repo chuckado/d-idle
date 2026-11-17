@@ -153,6 +153,7 @@ cmd/d2bot/d2dbackend.go  credit-runner  uib1
 cmd/d2bot/d2dbackend.go  credit-runner  uib5
 cmd/d2bot/d2dwire.go  credit-runner  gearsets
 cmd/d2bot/d2dwire.go  credit-runner  itemverbs2
+cmd/d2bot/d2dwire.go  credit-runner  vaultv3
 cmd/d2bot/dangerwire.go  credit-runner  survA
 cmd/d2bot/dangerwire.go  credit-runner  survB
 cmd/d2bot/funwire.go  credit-runner  maphistoryA
@@ -242,6 +243,7 @@ cmd/d2bot/survivalwire.go  credit-runner  survC
 cmd/d2bot/survivalwire.go  credit-runner  survfix
 cmd/d2bot/survivalwire.go  credit-runner  survfix2
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
+cmd/d2bot/vaultwire.go  credit-runner  vaultv3
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2dview  credit-runner  videofeed2
 cmd/d2dview  credit-runner  videofeed4
@@ -272,6 +274,7 @@ docs/contracts/merc-policy.md  credit-runner  mercrevive2
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vault
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv2
+docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv3
 docs/design/quest-board-2026-11-16.md  credit-runner  quests1
 docs/emu-image.md  credit-runner  emurebuild
 docs/exploredpct.md  credit-runner  exploredpct
@@ -315,6 +318,7 @@ docs/knobs.md  credit-runner  staletarget
 docs/knobs.md  credit-runner  survfix2
 docs/knobs.md  credit-runner  survsd
 docs/knobs.md  credit-runner  tidy
+docs/knobs.md  credit-runner  vaultv3
 docs/knobs.md  credit-runner  videofeed2
 docs/knobs.md  credit-runner  viewerfps
 docs/knobs.md  credit-runner  wiring2
@@ -328,6 +332,7 @@ docs/loop-order.md  credit-runner  uib7
 docs/lootrules.md  credit-runner  lootrules
 docs/lootrules.md  credit-runner  lootwire3
 docs/lootrules.md  credit-runner  lootwireL4
+docs/lootrules.md  credit-runner  vaultv3
 docs/merc-revive.md  credit-runner  botmerc
 docs/mercrevive.md  credit-runner  mercrevive2
 docs/onboarding-tour.md  credit-runner  onboardtour
@@ -485,6 +490,7 @@ docs/upstream/verifier-p17-2026-11-15.md  credit-runner  verifyp17
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
 docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
 docs/vault.md  credit-runner  vaultv2
+docs/vault.md  credit-runner  vaultv3
 docs/video-feed.md  credit-runner  videofeed
 docs/video-feed.md  credit-runner  videofeed2
 docs/video-feed.md  credit-runner  videofeed4
@@ -675,6 +681,7 @@ internal/env/tuning_invdesk.go  credit-runner  gearsets
 internal/env/tuning_loot.go  credit-runner  goldprio
 internal/env/tuning_loot.go  credit-runner  hourfix
 internal/env/tuning_loot.go  credit-runner  lootwire3
+internal/env/tuning_loot.go  credit-runner  vaultv3
 internal/env/tuning_nav.go  credit-runner  pursuers
 internal/env/tuning_resource.go  credit-runner  freshstart
 internal/env/tuning_resource.go  live-agent  recoverypace
@@ -721,12 +728,15 @@ internal/loot  credit-runner  goldprio
 internal/loot/fixpickup_test.go  credit-runner  beltfix
 internal/loot/ignore_test.go  credit-runner  tidy
 internal/loot/loot.go  credit-runner  lootwireL4
+internal/loot/loot.go  credit-runner  vaultv3
 internal/loot/lootshadow.go  credit-runner  lootwire3
 internal/loot/lootshadow.go  credit-runner  lootwireL4
+internal/loot/lootshadow.go  credit-runner  vaultv3
 internal/loot/lootshadow_test.go  credit-runner  lootwire3
 internal/loot/lootshadow_test.go  credit-runner  lootwireL4
 internal/loot/lootskip_test.go  credit-runner  beltfix
 internal/loot/pickup.go  credit-runner  lootwireL4
+internal/loot/pickup.go  credit-runner  vaultv3
 internal/loot/rulesadapt.go  credit-runner  lootwire3
 internal/loot/rulesadapt.go  credit-runner  lootwireL3
 internal/loot/rulesadapt_test.go  credit-runner  lootwireL3
@@ -735,8 +745,17 @@ internal/loot/rulesengine_test.go  credit-runner  lootwire3
 internal/loot/rulesfix_test.go  credit-runner  lootwireL3
 internal/loot/rulespreview.go  credit-runner  lootwire3
 internal/loot/rulespreview_test.go  credit-runner  lootwire3
+internal/loot/vault.go  credit-runner  vaultv3
+internal/loot/vault_test.go  credit-runner  vaultv3
 internal/lootrules  credit-runner  lootwire3
 internal/lootrules/**  credit-runner  lootrules
+internal/lootrules/eval.go  credit-runner  vaultv3
+internal/lootrules/parse.go  credit-runner  vaultv3
+internal/lootrules/plain.go  credit-runner  vaultv3
+internal/lootrules/schema.go  credit-runner  vaultv3
+internal/lootrules/types.go  credit-runner  vaultv3
+internal/lootrules/vaultpreset.go  credit-runner  vaultv3
+internal/lootrules/vaultpreset_test.go  credit-runner  vaultv3
 internal/merc  credit-runner  mercrevive2
 internal/merc/playerrevive.go  credit-runner  botmerc
 internal/merc/playerrevive_test.go  credit-runner  botmerc
