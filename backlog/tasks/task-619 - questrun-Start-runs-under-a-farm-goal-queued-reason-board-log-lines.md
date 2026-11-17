@@ -21,9 +21,13 @@ owns:
   - "internal/questboard/exec.go"
   - "cmd/d2bot/questwire.go"
   - "docs/questboard.md"
+  - "internal/bot/routeguard.go"
+  - "internal/bot/ladder_t0_test.go"
+  - "internal/watch/web/panels/needs-you/panel.js"
+  - "internal/watch/web/panels/needs-you/panel.css"
 exclusive: []
 contracts: []
-result: "Cause: boardStep only reachable under a campaign goal. Fixed: boardPreempts, queued reason, quest board log lines; offline tests on two classes; NOT verified live."
+result: "Cause: boardStep only reachable under a campaign goal. Fixed: boardPreempts, queued reason, quest board log lines; offline tests on two classes; Also: the tower ask (t0.area.toohard) is no longer raised when the hero is at or above the floor; Needs-you question text expands on tap. NOT verified live."
 ---
 
 ## Description
