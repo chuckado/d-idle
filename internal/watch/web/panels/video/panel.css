@@ -4,6 +4,8 @@
   [data-panel="video"] .frame { aspect-ratio: 4 / 3; min-block-size: 0; display: grid; place-items: center; background: var(--d-video-bg); color: var(--d-video-text); border-radius: var(--d-r-2); overflow: hidden; }
   [data-panel="video"] .shot { inline-size: 100%; block-size: 100%; min-block-size: 0; object-fit: contain; object-position: center; }
   /* the lossless feed's canvas: hard pixel edges, never smoothed; the page sets whole device pixels per frame pixel (palFit) */
+  /* viewer-side brightness (brightness.js): unset at 100%, so the default path has no filter */
+  [data-panel="video"] .frame[data-bright]:not([data-bright="100"]) .shot { filter: brightness(var(--vid-bright, 1)); }
   [data-panel="video"] canvas.shot { image-rendering: pixelated; image-rendering: crisp-edges; inline-size: var(--pal-w, 100%); block-size: var(--pal-h, 100%); }
   [data-panel="video"] canvas.shot[hidden] { display: none; }
   [data-panel="video"] canvas.shot[data-smooth="1"] { image-rendering: auto; }
