@@ -35,8 +35,8 @@
  },
  "dials": {
   "cautious": {"either": 1, "deaths": 1},
-  "balanced": {"either": 2, "deaths": 1, "typicalEnter": 8, "badFloor": 0.7, "riskValueMul": 0.85},
-  "bold": {"either": 0, "deaths": 1, "typicalEnter": 5, "badFloor": 0.5, "riskValueMul": 0.9}
+  "balanced": {"either": 2, "deaths": 1, "typicalEnter": 8, "badFloor": 0.4, "riskValueMul": 0.85},
+  "bold": {"either": 0, "deaths": 1, "typicalEnter": 5, "badFloor": 0.3, "riskValueMul": 0.9}
  },
  "tags": {
   "halfLifeMinutes": "design 5.4, U",
