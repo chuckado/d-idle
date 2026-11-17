@@ -243,7 +243,6 @@
 | palfeedflaky | proposed | - | `internal/watch/palfeed` | - |
 | botcpulive | proposed | - | `docs/probes/bot-cpu-live-2026-11-16.md` | - |
 | vaultv2 | in-progress | - | `internal/vault`<br>`data/vault`<br>`docs/vault.md`<br>`docs/design/loot-vault-2026-11-16.md` | - |
-| quests2 | in-progress | - | `internal/questboard`<br>`data/questboard`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
 | botcpu2 | proposed | - | `internal/currency`<br>`internal/data/db.go`<br>`internal/bot/catalog.go`<br>`internal/watch/tallystrip.go`<br>`internal/watch/pprofapi.go`<br>`docs/probes/bot-cpu-fix-2026-11-16.md`<br>`internal/watch/serve.go`<br>`internal/watch/tallystrip_test.go`<br>`cmd/d2bot/ladder.go`<br>`docs/knobs.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
