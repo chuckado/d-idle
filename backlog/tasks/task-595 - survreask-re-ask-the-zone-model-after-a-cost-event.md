@@ -5,6 +5,7 @@ status: Proposed
 assignee:
   - credit-runner
 created_date: '2026-11-17T06:29:00Z'
+updated_date: '2026-11-17T06:37:00Z'
 labels:
   - bot
   - feature
@@ -35,7 +36,7 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Cost event (chicken, death, merc death, potion crisis) makes the next pick re-ask the zone model, rate limited, logged as zone reask
-- [ ] #2 Tests on two classes: leave after chicken, no flapping, knob off identical, seed-149 pattern leaves after at most 2
+- [x] #1 Cost event (chicken, death, merc death, potion crisis) makes the next pick re-ask the zone model, rate limited, logged as zone reask
+- [x] #2 Tests on two classes: leave after chicken, no flapping, knob off identical, seed-149 pattern leaves after at most 2
 - [ ] #3 Holdout seeds and Paladin 8-seed A/B rerun with abreport, doc written
 <!-- AC:END -->
