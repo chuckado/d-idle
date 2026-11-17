@@ -900,6 +900,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `probes/`
 
+- [bot-cpu-live-2026-11-16.md](probes/bot-cpu-live-2026-11-16.md): Bot CPU on the sandbox, live profile (card botcpulive, 2026-11-16) (status: partial. Calm-window profile captured (V); NO profile inside a burst (the built-in profiler is one-shot,...)
 - [classpacing.md](probes/classpacing.md): classpacing probe (status: see `docs/soaks/classpacing.md` (the result doc of TASK-147); scripts and per-minute data are in...)
 - [currency1.md](probes/currency1.md): Probe: currency slice 1, the Raven's Mark rows (TASK-63) (status: UNVERIFIED live, 2026-11-06. Offline checks passed; the live run was not started because Gate 2 seeds were...)
 - [deploy-cockpit-2026-11-15.md](probes/deploy-cockpit-2026-11-15.md): Deploy record: cockpit UI to the sandbox, 2026-11-15 (status: record. Task TASK-490. Tags: V = verified in this run (command named), U = not verified.)

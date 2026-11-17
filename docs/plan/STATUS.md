@@ -240,6 +240,7 @@
 | quests1 | in-progress | - | `internal/questboard`<br>`data/questboard`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
 | vaultv0 | proposed | - | `docs/probes/vault-spike-2026-11-16.md` | `fork-branch:didle/vault-spike` |
 | palfeedflaky | proposed | - | `internal/watch/palfeed` | - |
+| botcpulive | proposed | - | `docs/probes/bot-cpu-live-2026-11-16.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -282,7 +283,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- c0acda8d2 11-16 22:50 `Merge agent/botcpulive: Merge branch 'main' into task-582` (botcpulive)
 - 92e27b85d 11-16 22:50 `Merge agent/vaultv0: Merge branch 'main' into vaultv0` (vaultv0)
+- 3c827471f 11-16 22:48 `Merge branch 'main' into task-582` (-)
 - 9fd2f6066 11-16 22:48 `Merge branch 'main' into vaultv0` (-)
 - ba3a37a72 11-16 22:47 `Merge agent/palfeedflaky: palfeedflaky: deterministic palfeed guard tests (main CI red)` (palfeedflaky)
 - 31d647688 11-16 22:46 `Merge branch 'main' into palfeedflaky` (-)
@@ -290,6 +293,4 @@
 - 1cb530a5e 11-16 22:02 `Merge branch 'main' into quests1` (-)
 - f6a131582 11-16 21:52 `Merge agent/survtune2: survtune2: pay-for-risk floor 0.4, freshNeedsMerc false (fresh game with a dead merc)` (survtune2)
 - f2c1f6e8f 11-16 21:51 `Merge branch 'main' into survtune` (-)
-- 14c53adfe 11-16 21:45 `Merge agent/vaultdesign: Merge branch 'main' into vault` (vaultdesign)
-- bfe89b7e3 11-16 21:45 `Merge agent/questdesign: Merge branch 'main' into questdesign` (questdesign)
 <!-- statusgen:end -->
