@@ -15,6 +15,7 @@ type rig struct {
 	dir  string
 	hero string
 	x    *Exec
+	led  Ledger // the account wallet of the rig (nil: none); see ledger_test.go
 }
 
 func newRig(t *testing.T, class string, clvl int) *rig {
@@ -31,7 +32,7 @@ func (r *rig) restart() {
 	if err != nil {
 		r.t.Fatal(err)
 	}
-	r.x = NewExec(r.b, st, r.f, r.f, Options{Enabled: true})
+	r.x = NewExec(r.b, st, r.f, r.f, Options{Enabled: true, Ledger: func() Ledger { return r.led }})
 }
 
 func (r *rig) tick(n int) Decision {
@@ -398,6 +399,7 @@ func TestResetPauseCancel(t *testing.T) {
 func TestKnobOffRefusesEverything(t *testing.T) {
 	r := newRig(t, "Paladin", 6)
 	r.x.SetEnabled(false)
+	os.Remove(filepath.Join(r.dir, r.hero+".quests.json")) // the rig's own first derive wrote the baseline
 	if _, err := r.x.Offers(); err != ErrOff {
 		t.Fatalf("offers: %v", err)
 	}

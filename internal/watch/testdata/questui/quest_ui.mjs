@@ -160,8 +160,11 @@ for (const cls of ['paladin', 'sorceress']) {
   // a payout shows only when the API says it paid
   const L3 = fresh();
   const aw = gold('awaiting-paladin'); B.settle(aw, L3);
-  const d2 = clone(done); d2.handIn = { quest: 'den_of_evil', chunk: 'clear_den', state: 'done', pays: { meta: 5 } };
-  assert.equal(B.settle(d2, L3).text, 'Done: Den of Evil   +5 meta');
+  const d2 = clone(done); d2.handIn = { quest: 'den_of_evil', chunk: 'clear_den', state: 'done', awarded: [{ kind: 'ether', amount: 5, key: 'quest/den_of_evil/-/normal' }] };
+  assert.equal(B.settle(d2, L3).text, 'Done: Den of Evil   +5 Ether');
+  assert.equal(B.paysText([{ kind: 'ether', amount: 2 }]), 'pays 2 Ether');
+  assert.equal(B.paysText(undefined), '', 'no wallet, no chip');
+  assert.equal(B.awardText([]), '');
   // the page never says a number for a margin or a chapter
   for (const v of [gold('offers-paladin'), gold('running-paladin'), gold('awaiting-paladin')]) {
     const m = B.stripModel(v, fresh());
@@ -307,6 +310,16 @@ for (const cls of ['paladin', 'sorceress']) {
   b.update(h);
   assert.match(texts(c.body), /Recent/);
   assert.match(texts(c.body), /handed in/);
+  assert.doesNotMatch(texts(c.body), /Ether/, 'no wallet, no Ether words');
+  // with a wallet: the offer chip, the payoff under the quest row and in Recent
+  const w = gold('offers-paladin'); w.offers[0].pays = [{ kind: 'ether', amount: 2, key: 'k' }];
+  b.update(w);
+  assert.match(texts(c.body), /pays 2 Ether/);
+  const pd = gold('running-paladin'); pd.quests[0].state = 'done'; pd.quests[0].chunks[0].state = 'done'; pd.quests[0].paid = [{ kind: 'ether', amount: 2 }];
+  pd.history = [{ quest: 'x', chunk: 'y', title: 'Den of Evil', confirmed: true, paid: [{ kind: 'ether', amount: 2 }] }];
+  b.update(pd);
+  assert.match(texts(c.body), /\+2 Ether/);
+  assert.match(texts(c.body), /handed in, \+2 Ether/);
   // off: the empty state names the knob
   b.update({ schema: 'watch.quests/1', enabled: false, reason: 'the quest board is off (knob quests.board is 0)' });
   assert.match(texts(c.body), /Turn on the Quest board in settings/);

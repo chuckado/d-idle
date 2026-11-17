@@ -18,6 +18,7 @@ import (
 //
 //	quests=offer      the board on, Den of Evil and Blood Raven offered (a level 6 Paladin)
 //	quests=running    Den of Evil accepted and on its first step
+//	quests=ether      offers carry `pays` (a wallet with nothing booked); quests=paid a finished hand-in with +2 Ether on the toast, quest row and Recent
 //	quests=awaiting   the hero waits at Akara: Hand in
 //	quests=handing    awaiting, and the hand-in dialogue runs ("Handing in...")
 //	quests=confirming the hand-in is read back
@@ -80,7 +81,12 @@ func questView(variant, class string) questboard.View {
 	}
 	f := questboard.NewFake(b, class, 6)
 	now := time.Date(2026, 11, 17, 12, 0, 0, 0, time.UTC)
-	x := questboard.NewExec(b, st, f, f, questboard.Options{Enabled: true, Now: func() time.Time { return now }, Auto: questboard.DefaultAutoOptions()})
+	var led questboard.Ledger // the wallet exists only in the Ether variants
+	if variant == "ether" || variant == "paid" {
+		led = fixtureLedger{}
+	}
+	x := questboard.NewExec(b, st, f, f, questboard.Options{Enabled: true, Now: func() time.Time { return now }, Auto: questboard.DefaultAutoOptions(),
+		Ledger: func() questboard.Ledger { return led }})
 	d := questboard.NewDesk(b, questboard.DeskConfig{
 		Exec:  func() (*questboard.Exec, *questboard.Store) { return x, st },
 		Class: func() string { return class },
@@ -128,6 +134,16 @@ func questView(variant, class string) questboard.View {
 		}
 	}
 	switch variant {
+	case "paid": // a finished hand-in: the toast, the quest row and Recent carry the Ether
+		pay := []questboard.Pay{{Kind: questboard.KindEther, Amount: 2, Key: "quest/den_of_evil/-/normal"}}
+		v.HandIn = &questboard.HandInView{Quest: "den_of_evil", Chunk: "clear_den", State: "done", Awarded: pay}
+		for i := range v.Quests {
+			if v.Quests[i].ID == "den_of_evil" {
+				v.Quests[i].State, v.Quests[i].Paid = questboard.Done, pay
+				v.Quests[i].Chunks[0].State = questboard.Done
+			}
+		}
+		v.History = []questboard.HistoryRow{{Quest: "den_of_evil", Chunk: "clear_den", Title: "Clear the Den and report to Akara", Confirmed: true, Paid: pay}}
 	case "handing":
 		hand("running", "")
 	case "confirming":
@@ -192,3 +208,11 @@ func init() {
   if (n && !/chapter/.test(n.textContent)) n.textContent += '  chapter 3 of 9, margin 2.4';
 }, 300);`
 }
+
+// fixtureLedger is a wallet with nothing booked: every offer shows its pay.
+type fixtureLedger struct{}
+
+func (fixtureLedger) Earn(quest, chunk, diff string, n int) (questboard.LedgerResult, error) {
+	return questboard.LedgerResult{Credited: n}, nil
+}
+func (fixtureLedger) Paid(string, string, string) (int, bool) { return 0, false }
