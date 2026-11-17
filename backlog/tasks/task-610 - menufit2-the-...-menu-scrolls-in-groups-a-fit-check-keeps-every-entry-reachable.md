@@ -18,7 +18,7 @@ owns:
   - "docs/ui-overlays.md"
 exclusive: []
 contracts: []
-result: "Menu = primary row + one scrolling body of collapsible groups (Hero, Tools, Layout); fit.js measures reachability by scrolling, the primary row, scroll possible and hinted; three must-fail defects (noscroll, primary, hint) and healthy tall-menu pages; Orders More list must scroll; vault-reveal-multi pages for the cost line. Tower fit run status in the merge report."
+result: "Menu = primary row + one scrolling body of collapsible groups (Hero, Tools, Layout); fit.js measures reachability by scrolling, the primary row, scroll possible and hinted; three must-fail defects (noscroll, primary, hint) and healthy tall-menu pages; Orders More list must scroll; vault-reveal-multi pages for the cost line. fit run status in the merge report."
 ---
 
 ## Description
