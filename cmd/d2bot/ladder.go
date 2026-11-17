@@ -95,6 +95,7 @@ type ladderOptions struct {
 	supportKnobs                           func() any                            // the tuner's values for the support bundle (supportwire.go); nil: none
 	supportLayout                          paths.Layout                          // data directory layout of the support bundle's logs and saves
 	knobValue                              func(string) (float64, string, error) // the tuner's Value: the zone clear settings read through it
+	vaultRoot                              string                                // <data>/vaults, where the recorder keeps the hero vaults; empty: no Vault page routes (docs/vault.md)
 	explored                               watch.ExploredSource                  // the explored share of /api/hero (Runner.Explored); nil: none
 	heroStats                              watch.HeroStatsSource                 // the stats block of /api/hero (readywire.go); nil: none
 	awayMin, repeatCooldownMin, quietAfter int
@@ -305,6 +306,11 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		rig.Fun.LootShadow = lootShadowAPI(l.knobValue)
 		if stateDir != "" {
 			rig.Fun.LootRules = lootRulesAPI(stateDir, l.storeProfile(), l.knobValue)
+		}
+		if l.vaultRoot != "" {
+			if rig.Fun.Vault, err = vaultAPI(l.vaultRoot, vaultKnobOn(l.knobValue), func() string { return hub.Hero().Name }); err != nil {
+				return nil, nil, err
+			}
 		}
 		bindJourney(rig.Fun, l.journey)
 		if src == nil {

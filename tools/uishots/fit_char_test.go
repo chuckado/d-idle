@@ -165,6 +165,15 @@ func TestFitPhoneRules(t *testing.T) {
 			}
 			continue
 		}
+		if rest, ok := strings.CutPrefix(name, "vault-"); ok { // the Vault page: vaultdefect-NAME (fixtures_vault.go)
+			if !strings.Contains(string(sh), "\nvaultdefect-"+rest+" ") {
+				t.Errorf("no fit page vaultdefect-%s", rest)
+			}
+			if _, ok := mustFail["fit-vaultdefect-"+rest+"-"]; !ok {
+				t.Errorf("mustFail has no entry for vaultdefect-%s", rest)
+			}
+			continue
+		}
 		if !strings.Contains(string(sh), "\nphonedefect-"+name+" ") {
 			t.Errorf("no fit page phonedefect-%s", name)
 		}
@@ -246,6 +255,23 @@ func TestOverlayDefectsHavePages(t *testing.T) {
 		}
 		if _, ok := mustFail["fit-overlaydefect-"+short+"-"]; !ok {
 			t.Errorf("mustFail has no entry for overlaydefect-%s", short)
+		}
+	}
+}
+
+// The script defects of the Vault page have a fit page and a verdict too.
+func TestVaultJSDefectsHavePages(t *testing.T) {
+	sh, _ := os.ReadFile("../uishots.sh")
+	if len(vaultJS) != 2 {
+		t.Errorf("want 2 script defects, have %d", len(vaultJS))
+	}
+	for n := range vaultJS {
+		rest := strings.TrimPrefix(n, "vault-")
+		if !strings.Contains(string(sh), "\nvaultdefect-"+rest+" ") {
+			t.Errorf("no fit page vaultdefect-%s", rest)
+		}
+		if _, ok := mustFail["fit-vaultdefect-"+rest+"-"]; !ok {
+			t.Errorf("mustFail has no entry for vaultdefect-%s", rest)
 		}
 	}
 }
