@@ -69,3 +69,24 @@ func TestPalFeedRelayForwardsOnlyFPSAndOwnToken(t *testing.T) {
 		t.Fatalf("tap saw auth %q query %q cookie %q path %q", gotAuth, gotQuery, gotCookie, gotPath)
 	}
 }
+
+// The page's own scripts are served: the stream monitor and the lossless player; /api/config names the build for the monitor's header.
+func TestMonitorAssetsServedAndBuildInConfig(t *testing.T) {
+	h := glanceRig(t, "sorceress", "").sim.Hub
+	srv := httptest.NewServer(h.ViewHandler())
+	defer srv.Close()
+	for _, p := range []string{"/watch/streamstats.js", "/watch/palfeed.js", "/watch/mjpeg.js"} {
+		resp, err := http.Get(srv.URL + p)
+		if err != nil {
+			t.Fatal(err)
+		}
+		b, _ := io.ReadAll(resp.Body)
+		resp.Body.Close()
+		if resp.StatusCode != 200 || len(b) < 500 {
+			t.Fatalf("%s: %d, %d bytes", p, resp.StatusCode, len(b))
+		}
+	}
+	if h.Config().Build == "" {
+		t.Fatal("config has no build id")
+	}
+}

@@ -1,4 +1,5 @@
 import { videoController, openStream, streamingSupported, registerVideo } from '../../mjpeg.js';
+import { StreamMonitor, SlowGate, draw as drawStats, HEIGHT_FULL, HEIGHT_COMPACT } from '../../streamstats.js';
 
 // Game video (stage band), shown only when the server offers a stream (/api/config frameUrl). The stream is read by
 // web/mjpeg.js (fetch, split into JPEG parts), so the page knows when each frame arrives: no frame for 3 s while the tab
@@ -63,11 +64,12 @@ export function mount(root, ctx) {
   const hint = ctx.el('p', 'd-empty', '');
   hint.hidden = true; hint.setAttribute('role', 'status');
   ctx.body.append(hint);
-  let slowSince = 0, bytes = [];
+  let bytes = [];
+  const mon = new StreamMonitor(); // the 30 s record the Stats overlay draws; both players feed it
   function setLow(on) {
     low.set(on ? '1' : '0');
     lowBtn.setAttribute('aria-pressed', String(on));
-    hint.hidden = true; slowSince = 0;
+    hint.hidden = true; slow = false; gate.slow = false; gate.n = 0;
     ctl.reconnect();
   }
   lowBtn.addEventListener('click', () => setLow(low.get() !== '1'));
@@ -83,20 +85,31 @@ export function mount(root, ctx) {
     }
     return out;
   }
+  // The slow state has hysteresis: on after 3 s below SLOW_ON fps, off after 3 s above SLOW_OFF, so one stall (or a 1 s
+  // bucket that lands on 14 and then 16) cannot flip the hint and the rate line on and off. The fps is the mean of the
+  // monitor's shown frames over the last 3 whole seconds (not the controller's 2 s window of arrivals).
+  const SLOW_ON = 12, SLOW_OFF = 18, SLOW_SECS = 3;
+  const gate = new SlowGate(SLOW_ON, SLOW_OFF, SLOW_SECS);
+  let slow = false, slowAt = 0;
+  const stamp = () => new Date().toISOString();
   function watchRate() {
     const st = stats();
-    if (ctl.state === 'live' && st.fps < HINT_FPS && !st.low) {
-      if (!slowSince) slowSince = Date.now();
-      if (Date.now() - slowSince >= HINT_AFTER && hint.hidden) {
-        hint.textContent = 'The picture runs at ' + Math.round(st.fps) + ' fps here. Low-rate mode may look smoother. ';
+    const avg = mon.fpsAvg(3), f = avg === null ? st.fps : avg;
+    if (ctl.state === 'live') {
+      const flip = gate.update(f);
+      if (flip) { slow = flip === 'on'; if (slow) slowAt = Date.now(); mon.event('slow-' + flip, Math.round(f) + ' fps'); log(stamp() + ' slow ' + flip + ': ' + f.toFixed(1) + ' fps'); }
+    }
+    if (slow && !st.low) {
+      if (Date.now() - slowAt >= 3000 && hint.hidden) {
+        hint.textContent = 'The picture runs at ' + Math.round(f) + ' fps here. Low-rate mode may look smoother. ';
         const b = ctx.el('button', 'd-btn', 'Use low-rate mode'); b.type = 'button'; b.dataset.size = 'sm';
         b.addEventListener('click', () => setLow(true));
         hint.append(b); hint.hidden = false;
       }
-    } else { slowSince = 0; if (!hint.hidden && st.fps >= HINT_FPS) hint.hidden = true; }
+    } else if (!hint.hidden && !slow) hint.hidden = true;
     // the rate line shows while slow or with ?debug; a steady line elsewhere would only repaint the head
     const dbg = typeof location !== 'undefined' && /[?&]debug\b/.test(location.search || '');
-    const text = (dbg || (ctl.state === 'live' && st.fps < HINT_FPS)) ? 'stream: ' + st.fps + ' fps, ' + st.kBps + ' KB/s' + (st.lossless ? ', shown ' + st.shown + ', dropped ' + st.dropped + ', jitter ' + st.jitterMs + ' ms, delay ' + st.latencyMs + ' ms' : '') + (st.low ? ', low rate' : '') : '';
+    const text = (dbg || slow) ? 'stream: ' + st.fps + ' fps, ' + st.kBps + ' KB/s' + (st.lossless ? ', shown ' + st.shown + ', dropped ' + st.dropped + ', jitter ' + st.jitterMs + ' ms, delay ' + st.latencyMs + ' ms' : '') + (st.low ? ', low rate' : '') : '';
     if (ctx.meta.textContent !== text) ctx.meta.textContent = text;
     ctx.later(watchRate, 1000);
   }
@@ -116,9 +129,70 @@ export function mount(root, ctx) {
   const palUrl = ctx.config && ctx.config.palFeedUrl;
   const PF = () => (typeof window !== 'undefined' && window.PalFeed) || null;
   const log = (m) => { if (typeof console !== 'undefined' && console.info) console.info('video: ' + m); };
+  // Stream monitor overlay (docs/video-feed.md section 12): off by default, the Stats button (remembered per browser) or ?pfdebug
+  // turns it on. It draws a 30 s record of both players on one canvas at 5 Hz, in a corner that leaves the game HUD alone.
+  const statsMem = ctx.store('stats');
+  const statsBtn = ctx.el('button', 'd-btn', 'Stats');
+  statsBtn.type = 'button'; statsBtn.dataset.size = 'sm'; statsBtn.dataset.key = 'stats';
+  statsBtn.title = 'Show a 30 second chart of the picture: frames per second, kB/s, gaps and hitches';
+  const copyBtn = ctx.el('button', 'd-btn', 'Copy 30 s');
+  copyBtn.type = 'button'; copyBtn.dataset.size = 'sm'; copyBtn.dataset.key = 'statscopy'; copyBtn.hidden = true;
+  copyBtn.title = 'Copy the last 30 seconds as JSON (times, fps, kB/s, gaps, events, server numbers)';
+  ctx.actions.append(statsBtn, copyBtn);
+  const ov = ctx.el('canvas', 'statsov'); ov.hidden = true; ov.setAttribute('role', 'img');
+  ov.setAttribute('aria-label', 'stream statistics of the last 30 seconds');
+  frame.append(ov);
+  const scratch = { deliv: new Array(30).fill(0), shown: new Array(30).fill(0), drop: new Array(30).fill(0), kB: new Array(30).fill(0), keys: new Array(30).fill(0),
+    delay: new Array(30).fill(NaN), thr: new Array(30).fill(NaN), cpu: new Array(30).fill(NaN), ring: new Array(30).fill(NaN), endSec: 0 };
+  const pfdebug = typeof location !== 'undefined' && /[?&]pfdebug\b/.test(location.search || '');
+  let ovOn = false, stopPoll = null, polledMode = '', lastHolds = -1, ovTick = 0;
+  const viewInfo = () => (mode === 'pal' ? fitInfo : frame.clientWidth + 'x' + frame.clientHeight + ' @dpr' + (((typeof window !== 'undefined' && window.devicePixelRatio) || 1)));
+  function ovPoll() {   // the host's numbers once a second, while the overlay is on and the lossless feed is the player
+    const want = ovOn && mode === 'pal' ? 'pal' : '';
+    if (want === polledMode) return;
+    if (stopPoll) { stopPoll(); stopPoll = null; }
+    polledMode = want;
+    const P = PF();
+    if (!want || !P || !P.poll) return;
+    const tq = ctx.token ? '?t=' + encodeURIComponent(ctx.token) : '';
+    stopPoll = P.poll(fetch, '/api/palfeed' + tq, (j) => {
+      const st = j && j.stats; if (!st) return;
+      mon.server(st.server);
+      if (lastHolds >= 0 && st.holds > lastHolds) mon.event('hold', '+' + (st.holds - lastHolds));
+      lastHolds = st.holds;
+    }, 1000);
+  }
+  function ovDraw() {
+    if (!ovOn) return;
+    const w = Math.max(160, Math.min(380, frame.clientWidth - 12)), compact = frame.clientWidth < 520, h = compact ? HEIGHT_COMPACT : HEIGHT_FULL;
+    const dpr = (typeof window !== 'undefined' && window.devicePixelRatio) || 1;
+    if (ov.width !== Math.round(w * dpr) || ov.height !== Math.round(h * dpr)) {
+      ov.width = Math.round(w * dpr); ov.height = Math.round(h * dpr);
+      ov.style.setProperty('--ov-w', w + 'px'); ov.style.setProperty('--ov-h', h + 'px');
+    }
+    const g = ov.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    drawStats(g, w, h, mon, { player: mon.player, build: ctx.config && ctx.config.build, view: viewInfo() }, scratch, compact);
+    ovPoll();
+    ctx.later(ovDraw, 200);
+  }
+  function setStats(on, remember) {
+    ovOn = on; ov.hidden = !on; copyBtn.hidden = !on;
+    statsBtn.setAttribute('aria-pressed', String(on));
+    if (remember) statsMem.set(on ? '1' : '0');
+    if (on) { ovDraw(); } else { ovPoll(); }
+  }
+  statsBtn.addEventListener('click', () => setStats(!ovOn, true));
+  copyBtn.addEventListener('click', () => {
+    const txt = mon.json({ build: ctx.config && ctx.config.build, view: viewInfo(), page: typeof location !== 'undefined' ? location.pathname : '', userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '' });
+    const done = () => { copyBtn.textContent = 'Copied'; ctx.later(() => { copyBtn.textContent = 'Copy 30 s'; }, 1500); };
+    if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, () => ctx.toast && ctx.toast('Could not copy'));
+    else ctx.toast && ctx.toast('Clipboard not available here');
+  });
+
   // The canvas fills the frame box (contain, 4:3 kept) at ANY scale, rounded to whole device pixels. Sharp pixels off (the
   // default): nearest-neighbour only at a whole-number scale of 1x or more, smooth otherwise (a fractional scale with
   // nearest-neighbour shimmers while the picture scrolls); on: always nearest-neighbour.
+  let fitInfo = '';
   const sharp = ctx.store('sharp');
   const sharpBtn = ctx.el('button', 'd-btn', 'Sharp pixels');
   sharpBtn.type = 'button'; sharpBtn.dataset.size = 'sm'; sharpBtn.dataset.key = 'sharp';
@@ -134,20 +208,21 @@ export function mount(root, ctx) {
     const P = PF();
     if (!P || !P.fitFill || mode !== 'pal' || !frame.clientWidth) return;
     const r = P.fitFill(cv.width, cv.height, frame.clientWidth, frame.clientHeight, (typeof window !== 'undefined' && window.devicePixelRatio) || 1);
-    cv.style.setProperty('--pal-w', r.cssW + 'px'); cv.style.setProperty('--pal-h', r.cssH + 'px');
+    cv.style.setProperty('--pal-w', r.cssW + 'px'); cv.style.setProperty('--pal-h', r.cssH + 'px'); fitInfo = cv.width + 'x' + cv.height + ' @' + (Math.round(r.scale * 100) / 100) + 'x dpr' + (((typeof window !== 'undefined' && window.devicePixelRatio) || 1));
     cv.dataset.smooth = (sharp.get() !== '1' && !(r.integer && r.scale >= 1)) ? '1' : '0';
   }
   function toMjpeg(why) {
     if (mode === 'mjpeg') return;
-    log('falling back to MJPEG: ' + why);
+    log('falling back to MJPEG: ' + why); mon.event('fallback', why);
     mode = 'mjpeg'; palFails = 0;
     cv.hidden = true; sharpBtn.hidden = true;
     ctl.reconnect();
   }
   function openPal(onFrame, onEnd) {
     const P = PF();
+    mon.player = 'palette'; mon.target = 30;
     player = new P.Player({
-      canvas: cv, url: src(palUrl),
+      canvas: cv, url: src(palUrl), mon,
       onFrame: () => { palFails = 0; if (cv.hidden) { cv.hidden = false; shot.hidden = true; wait.hidden = true; sharpBtn.hidden = false; palFit(); } onFrame(); },
       onBytes: (n) => bytes.push([Date.now(), n]),
       log,
@@ -191,7 +266,8 @@ export function mount(root, ctx) {
     if (pending) { const p = pending; pending = null; show(p[0], p[1]); }
   }
   function openFetch(onFrame, onEnd) {
-    return openStream(src(), (b, type) => { bytes.push([Date.now(), b.length]); show(b, type); onFrame(); }, onEnd);
+    mon.player = 'jpeg'; mon.target = 0;
+    return openStream(src(), (b, type) => { bytes.push([Date.now(), b.length]); mon.arrive(b.length, false); show(b, type); onFrame(); }, onEnd);
   }
   // <img> fallback: the browser plays the MJPEG itself; 'error' (refused, ended) is the only end signal
   let imgEnd = null, imgFrame = null;
@@ -201,7 +277,7 @@ export function mount(root, ctx) {
     return () => { imgEnd = imgFrame = null; };
   }
   shot.addEventListener('load', () => {
-    if (streaming) { blobErrs = 0; decoded(); } else if (imgFrame) imgFrame();
+    if (streaming) { blobErrs = 0; decoded(); mon.shownFrame(); } else if (imgFrame) imgFrame();
     shot.hidden = false; wait.hidden = true;
   });
   shot.addEventListener('error', () => {
@@ -225,6 +301,7 @@ export function mount(root, ctx) {
     now: () => Date.now(),
     state(st) {
       ctx.state(st === 'live' ? 'ready' : st);
+      if (st === 'reconnecting' || st === 'down' || st === 'paused') mon.event(st);
       badge.hidden = st === 'live' || st === 'connecting';
       badge.textContent = st === 'down' ? 'stream down' : st === 'paused' ? 'paused (tab hidden)' : st === 'reconnecting' ? 'reconnecting...' : '';
       retry.hidden = st !== 'down';
@@ -244,5 +321,6 @@ export function mount(root, ctx) {
   registerVideo(ctl);
   ctl.start();
   tryPal();
+  if (pfdebug || statsMem.get() === '1') setStats(true, false);
   return {};
 }

@@ -427,3 +427,25 @@ func TestJPEGRunsAtItsOwnCadenceNextToTheFeed(t *testing.T) {
 		t.Fatal("no JPEG due after 120 ms at -fps 10")
 	}
 }
+
+// A throttled container (the sandbox's one-core quota, saturated by a bot burst) gets half the feed rate until it recovers.
+func TestDivisorHalvesTheFeedWhileTheContainerIsThrottled(t *testing.T) {
+	mux, _, _, view := rig(t)
+	fr, err := NewFrames(view, mux, t.TempDir(), 25)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fr.srcPeriod = time.Second / 60
+	fr.Pal = palfeed.NewHub()
+	fr.TouchPal()
+	fr.thr = 20
+	fr.every = 0
+	if k := fr.divisor(); k != 2 {
+		t.Fatalf("not throttled: every %d, want 2", k)
+	}
+	fr.thr = 80
+	fr.every = 0
+	if k := fr.divisor(); k != 4 {
+		t.Fatalf("throttled: every %d, want 4 (15 fps)", k)
+	}
+}
