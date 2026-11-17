@@ -57,7 +57,33 @@ d2d side: each tree's harness compiled against that tree's rules headers, compar
 
 The gear cases without an absorb are equal on the parent (3,393 and 3,268): the reduction and resistance order is unchanged.
 
-@@MUTANTS@@
+## Mutants (V run)
+
+Local mutants only (never pushed). `test_combat` compiled alone against each tree (its `test-links` are the header-only rules) and run; the oracle compare as in Differentials (seed 7 / seed 5001, cases that differ). `test_open_wounds` built from each tree under the builder's lane lock (strike.cpp and ai.hpp mutants).
+
+| Mutant | r2 `test_combat` | oracle compare | r3 tests |
+|---|---|---|---|
+| a1 percent cap 41 | aborts (`5120`) | 2,271 / 2,279 | n/a (gear r3 not built) |
+| a2 absorb before the resistance | aborts (`7680`) | 1,826 / 1,744 | |
+| a3 flat in 256ths, not `<< 8` | aborts (`7680`) | 5,007 / 4,996 | |
+| a4 negative field skipped | aborts (`-164`) | 4,883 / 4,882 | |
+| a5 magic and cold stats swapped in `make_fighter` | aborts (the mapping) | not reached (the harness sets the fields) | |
+| a6 recompute (`absorb_blows`, `energy_shield_blows`) without absorb | **passes** | **0** (not reached) | |
+| a7 `Foe::take` drops the absorb | **passes** | **0** (not reached) | |
+| a8 percent rounded (`+ 50`) | aborts (`-164`) | 3,310 / 3,195 | |
+| a9 flat before the percent | aborts (`5120`) | 1,556 / 1,487 | |
+| a10 `MulDiv(field, 100 - p, 100)` | aborts (`-164`) | 5,482 / 5,475 | |
+| o1 / q1 no halving | aborts | 880 / 1,668 | `test_combat` aborts |
+| o5 / q5 halving rounded up | **passes** | 432 / 836 | `test_combat` aborts (`player_blow` pin, 24) |
+| o6 breakpoint 16 | aborts | 17 / 35 | |
+| o8 / q8 `player_blow` ignores `special` | **passes** | **0** (harness computes `special` itself) | `test_combat` aborts |
+| q2 a minion is special | **passes** (V read: no test builds a `Monster`) | **0** | @@Q2@@ |
+| q3 rate per 25 ms (per second confusion) | **passes** | **0** | @@Q3@@ |
+| q4 wound 200 x 25 ms | **passes** | **0** | @@Q4@@ |
+| q9 whole points a second (the parent's truncation in `Fight::land`) | **passes** | **0** | @@Q9@@ |
+
+So r2's tests and oracles miss six of the gear and Open Wounds path mutants; r3's two tests abort every Open Wounds mutant tried.
+
 
 @@BUILD@@
 
