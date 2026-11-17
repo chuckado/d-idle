@@ -52,6 +52,8 @@ type HeroView struct {
 	Stats *HeroStats `json:"stats"`
 	// Explored is the roam coverage of the current zone (additive, absent in town or without a roaming backend).
 	Explored *HeroExplored `json:"explored,omitempty"`
+	// Ether is the wallet chip ("Ether 35"), present only while loot.vault is on and the account has a wallet (SetEtherSource).
+	Ether string `json:"ether,omitempty"`
 }
 
 // HeroExplored is how much of the zone the roam visited: Pct is whole percent, Threshold the share (bot.exploredPct)
@@ -123,6 +125,9 @@ type HeroStatsSource func() (HeroStats, bool)
 // SetHeroStatsSource sets where /api/hero reads the stats block from (nil: the block stays null).
 func (h *Hub) SetHeroStatsSource(f HeroStatsSource) { h.mu.Lock(); h.stats = f; h.mu.Unlock() }
 
+// SetEtherSource gives the Hero tile its wallet chip; f returns "" while there is no wallet.
+func (h *Hub) SetEtherSource(f func() string) { h.mu.Lock(); h.etherChip = f; h.mu.Unlock() }
+
 // HeroGoal is the order under way.
 type HeroGoal struct {
 	Text    string   `json:"text"`
@@ -167,12 +172,15 @@ func (h *Hub) Hero() HeroView {
 	up := h.Uptime()
 	ov := h.OrdersView()
 	h.mu.Lock()
-	hi, gold, stats, expl, fr := h.hero, h.gold, h.stats, h.explored, h.farmReset
+	hi, gold, stats, expl, fr, chip := h.hero, h.gold, h.stats, h.explored, h.farmReset, h.etherChip
 	from, fromT, seen, now := h.xpFrom, h.xpFromT, h.xpSeen, h.cfg.Clock.Now()
 	h.mu.Unlock()
 	v := HeroView{Schema: heroSchema, Known: hi.Known || hi.Class != "", Name: safeText(hi.Name, 40), Class: hi.Class, Level: hi.Level,
 		Difficulty: hi.Difficulty, Area: hi.Area, Life: hi.Life, MaxLife: hi.MaxLife, Mana: hi.Mana, MaxMana: hi.MaxMana,
 		XP: hi.XP, XPNext: hi.XPNext, State: up.State, StateLabel: up.Label, Activity: hi.Activity, Queue: []string{}}
+	if chip != nil {
+		v.Ether = chip()
+	}
 	if lo, ok := telemetry.DefaultExpForLevel(hi.Level); ok {
 		v.XPLevel = int64(lo)
 		if v.XPNext == 0 {

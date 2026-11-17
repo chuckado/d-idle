@@ -17,8 +17,9 @@
   .vt-meter[data-level="warn"] .vt-fill, .vt-meter[data-level="full"] .vt-fill { background: var(--d-warn); }
   .vt-meter[data-level="over"] .vt-fill { background: var(--d-bad); }
   .vt-count { font-weight: 650; font-variant-numeric: tabular-nums; }
-  .vt-pins, .vt-upgrade-why, .vt-keep-why, .vt-shown, .vt-hint { color: var(--d-text-2); font-size: var(--d-fs-0); overflow-wrap: anywhere; }
-  .vt-upgrade-why { display: none; }
+  .vt-pins, .vt-upgrade-why, .vt-down-why, .vt-keep-why, .vt-shown, .vt-hint { color: var(--d-text-2); font-size: var(--d-fs-0); overflow-wrap: anywhere; }
+  .vt-wallet { padding: 0 var(--d-sp-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-round); font-weight: 650; font-variant-numeric: tabular-nums; color: var(--d-accent-text); white-space: nowrap; }
+  .vt-upgrade-why, .vt-down-why { display: none; }
   .vt-capacity .d-btn[aria-disabled="true"], .vt-bar .d-btn[aria-disabled="true"], .vt-dcard .d-btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
 
   .vt-banner { flex: none; margin: 0; padding: var(--d-sp-1) var(--d-sp-4); background: var(--d-state-bg-warn); border-block-end: var(--d-bw) solid var(--d-warn); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
@@ -68,7 +69,8 @@
   @media (min-width: 900px) {
     .vt-body { grid-template-columns: minmax(0, 1fr) 20rem; }
     .vt-detail { display: block; min-block-size: 0; overflow-y: auto; padding: var(--d-sp-3) var(--d-sp-4); border-inline-start: var(--d-bw) solid var(--d-line); background: var(--d-surface-0); }
-    .vt-upgrade-why { display: block; flex: 1 1 100%; }
+    .vt-upgrade-why, .vt-down-why { display: block; flex: 1 1 100%; }
+    .vt-upgrade-why:empty, .vt-down-why:empty { display: none; }
   }
 
   /* the cells: the look of `.d-cells .item` (components.css section 14) in a grid that fills the width */

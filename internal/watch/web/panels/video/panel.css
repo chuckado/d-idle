@@ -17,4 +17,8 @@
   [data-panel="video"] .badge[hidden], [data-panel="video"] .frame > .d-btn[hidden] { display: none; }
   [data-panel="video"]:fullscreen { overflow: auto; }
   [data-panel="video"]:fullscreen .frame { block-size: calc(100% - 3rem); aspect-ratio: auto; }
+  /* the quest caption: top-left of the picture, one line, no clicks; the game's HUD is at the bottom and the minimap at the top right */
+  [data-panel="video"] .qcap { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-start: var(--d-sp-1); max-inline-size: 58%; padding: 1px var(--d-sp-2); border-radius: var(--d-r-1); background: var(--d-video-bg); color: var(--d-video-text);
+    font-size: var(--d-fs-0); opacity: .88; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
+  [data-panel="video"] .qcap[hidden] { display: none; }
 }

@@ -806,7 +806,7 @@ function setupMenu(sel) {
   for (const id of ['btn-help', 'btn-layout', 'btn-theme']) { const b = document.getElementById(id); if (b) pop.appendChild(b); }
   let chip = null, menuReturn = null;
   const retLink = document.getElementById('returnlink');
-  for (const [id, text] of [['log', 'Log'], ['onboarding', 'Getting started']]) { // the drawers a cockpit has
+  for (const [id, text] of [['log', 'Log'], ['quest-board', 'Quests'], ['onboarding', 'Getting started']]) { // the drawers a cockpit has
     if (!dr.boxes.has(id)) continue;
     const b = ui.btn(text, { size: 'sm', variant: 'ghost' });
     b.dataset.drawerOpen = id;

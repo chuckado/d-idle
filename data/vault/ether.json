@@ -3,9 +3,9 @@
   "currency": "Ether",
   "sources": [
     {"id": "quest", "label": "Quest hand-in", "hook": true, "maxHook": 100, "byDifficulty": true},
-    {"id": "first", "label": "A first for this account", "amount": 5},
+    {"id": "first", "label": "A first for this hero", "amount": 5},
     {"id": "boss", "label": "Boss kill", "byDifficulty": true, "difficulty": {"normal": 10, "nm": 15, "hell": 25}},
     {"id": "milestone", "label": "Milestone", "rows": {"clvl10": 5, "clvl20": 10, "clvl30": 15, "clvl50": 25, "diff_nm": 20, "diff_hell": 40}},
-    {"id": "kills", "label": "Kill trickle", "amount": 1, "dailyCap": 10}
+    {"id": "kills", "label": "Kill trickle", "amount": 1, "dailyCap": 10, "per": 25}
   ]
 }

@@ -79,6 +79,7 @@ type Hub struct {
 	placer    atomic.Pointer[placerBox]         // nil: orders go straight to Give (no charter sink)
 	why       *Whyline                          // the reason line (whyline.go)
 	onClass   func()                            // run when the hero's class becomes known (OnClass); guarded by mu
+	etherChip func() string                     // the wallet chip of /api/hero (SetEtherSource); guarded by mu
 	stats     HeroStatsSource                   // defences for /api/hero (SetHeroStatsSource); guarded by mu
 	survival  survivalHolder                    // the survival shadow choice for /api/survival (SetSurvivalSource); lock-free
 	layout    layoutStore                       // the layout manifest in force (layout.go); its own mutex

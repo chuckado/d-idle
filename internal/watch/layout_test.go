@@ -720,7 +720,7 @@ func TestShippedCockpitLayout(t *testing.T) {
 		t.Error(err)
 	}
 	sl, _, err := l.Cockpit()
-	if err != nil || l.Template != "cockpit/1" || sl == nil || len(sl.Stage) != 1 || sl.RailWide == nil || len(sl.PhoneTabs) != 3 || len(sl.RailWide.Top) != 2 {
+	if err != nil || l.Template != "cockpit/1" || sl == nil || len(sl.Stage) != 1 || sl.RailWide == nil || len(sl.PhoneTabs) != 4 || len(sl.RailWide.Top) != 2 {
 		t.Errorf("cockpit.json: %+v %v", sl, err)
 	}
 	if len(l.Breakpoints["wide"].Panels) == 0 || len(l.Breakpoints["phone"].Panels) == 0 {

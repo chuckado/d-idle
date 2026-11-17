@@ -43,6 +43,8 @@ type GlanceView struct {
 	// Quest is the quest board's current chunk, step and NPC for the video card strip (slice S4); absent while the board
 	// is off or nothing is accepted.
 	Quest *GlanceQuest `json:"quest,omitempty"`
+	// QuestBoard: the quest board is on (knob quests.board); the cockpit then shows the quest strip in place of the Journey tile.
+	QuestBoard bool `json:"questBoard,omitempty"`
 	// Survival is the block of GET /api/survival (docs/survival/ledger.md, slice S-C) as the bot gave it, words only; absent
 	// while no source is bound (an old bot, S-C not merged).
 	Survival json.RawMessage `json:"survival,omitempty"`
@@ -157,6 +159,7 @@ type GlanceSources struct {
 	Needs    func() []GlanceNeed
 	Journey  func() (GlanceJourney, bool)
 	Quest    func() (GlanceQuest, bool)
+	QuestOn  func() bool
 	Gear     func() (GlanceLight, bool)
 	Merc     func() (GlanceLight, bool)
 	Supplies func() (GlanceLight, bool)
@@ -284,6 +287,9 @@ func (h *Hub) Glance() GlanceView {
 			j = cleanJourney(j)
 			v.Journey = &j
 		}
+	}
+	if src.QuestOn != nil {
+		v.QuestBoard = src.QuestOn()
 	}
 	if src.Quest != nil {
 		if q, ok := src.Quest(); ok {

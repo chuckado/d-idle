@@ -159,6 +159,7 @@
   [data-cockpit-slot="strip"] > .d-panel { flex: 1 1 0; min-block-size: 0; }
   [data-cockpit-slot="strip"] > .d-panel:nth-child(2) { flex-grow: 1.25; }
   [data-cockpit-slot="strip"] > .d-panel:nth-child(3) { flex-grow: 1.1; }
+  [data-cockpit-slot="strip"] > [data-panel="quest-strip"] { flex-grow: 2.2; } /* the quest tile needs the width of two cells (offer text, three buttons) */
   .d-slotcol > .d-panel, .d-slottabs > .d-panel, [data-cockpit-slot="strip"] > .d-panel { background: var(--d-surface-1); border-radius: var(--d-r-2); padding: var(--d-sp-2); overflow: hidden; box-sizing: border-box; position: relative; }
   .d-slottabs { display: flex; flex-direction: column; gap: var(--c-gap); min-block-size: 0; }
   .d-tabbar { display: flex; gap: var(--d-sp-1); }
@@ -337,4 +338,13 @@
   .d-reset-btn { position: relative; flex: none; min-inline-size: 0; justify-content: center; white-space: nowrap; border-color: var(--d-line-strong); }
   .d-reset-btn::after { content: ""; position: absolute; inset: -6px -2px; }
   .d-reset-btn[data-busy="1"] { color: var(--d-accent-text); border-color: var(--d-accent); }
+}
+
+/* the quest board (slice S5): what depends on the window, kept here because panels hold no media queries. The panels size their buttons
+   by --q-touch (a property, so the layer order does not matter): 44 px on a touch screen and in a phone's full-width drawer */
+@layer shell {
+  @media (pointer: coarse) { :root { --q-touch: 44px; } }
+  .d-shell[data-cmode="phone"] ~ .d-drawer { --q-touch: 44px; }
+  /* the phone's Quests tab: the tile takes what it needs (its list below scrolls inside), not at most half of a short tab */
+  .d-slottabs > .d-panel[data-panel="quest-strip"]:not([data-grow]) { max-block-size: none; flex: 0 0 auto; }
 }
