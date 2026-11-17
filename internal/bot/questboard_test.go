@@ -155,8 +155,9 @@ func TestBoardPlanHidesTheHandIn(t *testing.T) {
 	if n, has := handInNode(q, read); !has || stepSuffix("search_for_cain", n.Step) != "read" {
 		t.Fatal("read chunk has no hand-in step")
 	}
-	report, _ := b.Chunk("search_for_cain", "report")
-	if _, ok := handlerNodes(q, report); ok {
+	te, _ := b.Quest("terrors_end")
+	seals, _ := b.Chunk("terrors_end", "seals")
+	if _, ok := handlerNodes(te, seals); ok {
 		t.Fatal("an unsupported chunk must have no handler")
 	}
 	_ = task.QDen
