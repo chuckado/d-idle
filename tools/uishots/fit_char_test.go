@@ -189,6 +189,15 @@ func TestFitPhoneRules(t *testing.T) {
 			}
 			continue
 		}
+		if rest, ok := strings.CutPrefix(name, "vid-"); ok { // the video card: viddefect-NAME (fixtures_phone.go)
+			if !strings.Contains(string(sh), "\nviddefect-"+rest+" ") {
+				t.Errorf("no fit page viddefect-%s", rest)
+			}
+			if _, ok := mustFail["fit-viddefect-"+rest+"-"]; !ok {
+				t.Errorf("mustFail has no entry for viddefect-%s", rest)
+			}
+			continue
+		}
 		if rest, ok := strings.CutPrefix(name, "vault-"); ok { // the Vault page: vaultdefect-NAME (fixtures_vault.go)
 			if !strings.Contains(string(sh), "\nvaultdefect-"+rest+" ") {
 				t.Errorf("no fit page vaultdefect-%s", rest)
@@ -296,6 +305,28 @@ func TestVaultJSDefectsHavePages(t *testing.T) {
 		}
 		if _, ok := mustFail["fit-vaultdefect-"+rest+"-"]; !ok {
 			t.Errorf("mustFail has no entry for vaultdefect-%s", rest)
+		}
+	}
+}
+
+// The video card's controls must not touch its caption or another text (card videoctl): fit.js measures video.overlap.
+func TestFitVideoControlsRule(t *testing.T) {
+	base := `{"vw":412,"vh":780,"scrollH":780,"scrollW":412,"overflow":[],"slots":[{"slot":"band"}],"covered":96,"hole":8,"holeAt":[0,44],%s}`
+	for _, c := range []struct{ name, video, want string }{
+		{"controls below the picture", `"video":{"controls":5,"overlap":[]}`, ""},
+		{"a button over the caption", `"video":{"controls":5,"overlap":["video button \"Low rate\" covers video div.qcap \"Running: Dark\""]}`, "video control covers text"},
+	} {
+		dir := t.TempDir()
+		n, body := fitDump("fit-default-live-pal-412x780", strings.Replace(base, "%s", c.video, 1))
+		if err := os.WriteFile(filepath.Join(dir, n+".html"), []byte(body), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		lines, good, err := fitDir(dir)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if c.want == "" && !good || c.want != "" && (good || !strings.Contains(strings.Join(lines, "\n"), c.want)) {
+			t.Errorf("%s: ok=%v %v, want %q", c.name, good, lines, c.want)
 		}
 	}
 }
