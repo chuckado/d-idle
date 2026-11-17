@@ -345,4 +345,6 @@
 @layer shell {
   @media (pointer: coarse) { :root { --q-touch: 44px; } }
   .d-shell[data-cmode="phone"] ~ .d-drawer { --q-touch: 44px; }
+  /* the phone's Quests tab: the tile takes what it needs (its list below scrolls inside), not at most half of a short tab */
+  .d-slottabs > .d-panel[data-panel="quest-strip"]:not([data-grow]) { max-block-size: none; flex: 0 0 auto; }
 }

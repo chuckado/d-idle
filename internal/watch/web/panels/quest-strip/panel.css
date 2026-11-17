@@ -27,6 +27,6 @@
   [data-panel="quest-strip"]:is([data-cmode="phone"] *) .qs-btn { block-size: 44px; min-block-size: 44px; padding-inline: var(--d-sp-3); }
   [data-panel="quest-strip"]:is([data-cmode="phone"] *) .qs-seg { block-size: 44px; min-block-size: 44px; padding-inline: var(--d-sp-3); }
   /* the phone's tab: the mode switch and the list are in the board below; the tile is a label, a line, a sentence and one button */
-  [data-panel="quest-strip"]:is([data-cmode="phone"] *) :is(.qs-mode, .qs-side, .qs-all) { display: none; }
+  [data-panel="quest-strip"]:is([data-cmode="phone"] *) :is(.qs-h, .qs-mode, .qs-side, .qs-all) { display: none; }
   [data-panel="quest-strip"] .qs-box[data-short="1"] .qs-h { display: none; }
 }
