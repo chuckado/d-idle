@@ -3,7 +3,7 @@
 // the "..." in the header open the full list in a popover, where the notification switch lives (off by default; a
 // desktop notification for a NEW red row only). With no rows the panel is hidden and takes no height. From GET
 // /api/glance (needs). A button posts exactly the `post` and `body` of its action. textContent only.
-const RANK = { danger: 3, warn: 2, info: 1 };
+const RANK = { danger: 3, warn: 2, event: 1.5, info: 1 }; // event: a quest waits for the player (accent, not an alarm)
 const SHOWN = 3;
 const SHOWN_SHORT = 2; // a short window (the cockpit's COCKPIT_SHORT, not a phone): Orders keeps its room
 
@@ -47,7 +47,7 @@ export function mount(root, ctx) {
     if (a.post === '/api/reset') { ctx.askReset(btn); return; } // the confirm sheet decides
     btn.disabled = true;
     ctx.post(a.post, a.body).then((j) => {
-      if (j && j.ok === false) ctx.toast('warn', j.error || 'could not do that');
+      if (j && j.ok === false) ctx.toast('warn', j.reason || j.error || 'refused with code ' + (j.code || 'unknown') + ' and no reason');
       btn.disabled = false;
     });
   }
@@ -69,6 +69,7 @@ export function mount(root, ctx) {
     const e = ctx.el('div', 'n-row');
     e.dataset.sev = sevOf(n);
     e.dataset.id = n.id;
+    if (/^quest_/.test(n.kind)) e.dataset.kind = n.kind;
     if (n.kind === 'question') e.dataset.q = ctx.short && ctx.short() ? 's' : '1'; // two lines of text (one on a short window), the answers on a line of their own
     e.title = n.text + (n.sub ? ' - ' + n.sub : '');
     const t = ctx.el('span', 'n-t');

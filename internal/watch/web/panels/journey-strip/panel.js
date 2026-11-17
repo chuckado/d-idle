@@ -61,7 +61,7 @@ export function mount(root, ctx) {
   let sig = ''; // the last drawn journey: an identical poll leaves the dots (and a focused one) alone
   return {
     update(g) {
-      if (!g) { sig = ''; ctx.hide(true); return; }
+      if (!g || g.questBoard) { sig = ''; ctx.hide(true); return; } // with the quest board on, the quest tile stands in this cell
       ctx.hide(false);
       const j = g.journey;
       const now = JSON.stringify(j || null);

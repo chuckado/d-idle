@@ -9,6 +9,15 @@ import { StreamMonitor, SlowGate, draw as drawStats, HEIGHT_FULL, HEIGHT_COMPACT
 // lets the desktop app reload it after a sleep. Browsers without streaming fetch keep the plain MJPEG <img>.
 // The token, if any, rides along from the page address. Collapse is remembered, full screen asks the panel.
 // The picture always fits its box: it keeps 4:3, scales to the width and the height the cell gives and sits centred.
+// captionText is the video card's quest line: the quest, what the hero is doing in words and who is next. Empty: no caption.
+export function captionText(q) {
+  if (!q || !q.title) return '';
+  if (q.state === 'awaiting_handin') return q.title + ': waiting for you at ' + (q.npc || 'the quest giver');
+  if (q.state === 'blocked') return q.title + ': stuck';
+  const step = String(q.step || '').replace(/[_-]+/g, ' ').trim();
+  return q.title + (step ? ': ' + step : '') + (q.npc ? ', next ' + q.npc : '');
+}
+
 export function mount(root, ctx) {
   const url = ctx.config && ctx.config.frameUrl;
   if (!url) { ctx.hide(true); return {}; }
@@ -27,7 +36,10 @@ export function mount(root, ctx) {
   badge.setAttribute('role', 'status');
   const retry = ctx.el('button', 'd-btn', 'Retry');
   retry.type = 'button'; retry.dataset.size = 'sm'; retry.hidden = true;
-  frame.append(shot, cv, wait, badge, retry);
+  const cap = ctx.el('div', 'qcap'); // the quest board's current step as a small caption on the picture's top-left edge (never over the HUD at the bottom)
+  cap.hidden = true;
+  cap.setAttribute('role', 'status');
+  frame.append(shot, cv, wait, badge, retry, cap);
   ctx.body.append(frame);
 
   const full = ctx.el('button', 'd-btn', 'Full screen');
@@ -322,5 +334,19 @@ export function mount(root, ctx) {
   ctl.start();
   tryPal();
   if (pfdebug || statsMem.get() === '1') setStats(true, false);
+  // the quest caption reads /api/glance (`quest` is present while the quest board has a chunk accepted, running or waiting) every
+  // 3 s on its own: the manifest keeps its v1 shape (no endpoint, docs: testdata/compat/panels-v1)
+  function captionPoll() {
+    fetch('/api/glance' + (ctx.token ? '?t=' + encodeURIComponent(ctx.token) : ''), { cache: 'no-store', credentials: 'same-origin' })
+      .then((r) => (r.ok ? r.json() : null)).catch(() => null)
+      .then((g) => {
+        const t = captionText(g && g.quest);
+        if (cap.textContent !== t) cap.textContent = t;
+        cap.hidden = !t;
+        ctx.later(captionPoll, 3000);
+      });
+  }
+  if (typeof fetch === 'function') captionPoll();
   return {};
+
 }
