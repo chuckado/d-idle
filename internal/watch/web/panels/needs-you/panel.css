@@ -29,15 +29,6 @@
   [data-panel="needs-you"] .n-btn { block-size: 26px; min-block-size: 26px; padding: 0 var(--d-sp-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); background: var(--d-surface-2); color: var(--d-text);
     font: inherit; font-size: var(--d-fs-0); white-space: nowrap; cursor: pointer; }
   [data-panel="needs-you"]:is([data-cmode="phone"] *) .n-btn { block-size: 44px; min-block-size: 44px; }
-  /* a short phone (360x640): the Needs row and Orders below it share a few dozen pixels, so the row's buttons take the cockpit phone's 38 px
-     (components.css), the row loses its padding and a lone row drops its heading (the row says what it is). Slice S8, the 9 px Orders overflow. */
-  @media (max-height: 700px) {
-    [data-panel="needs-you"]:is([data-cmode="phone"] *) .n-btn { block-size: 38px; min-block-size: 38px; }
-    [data-panel="needs-you"]:is([data-cmode="phone"] *) .n-row { padding-block: 0; }
-    /* two or more rows: the first shows whole; the list scrolls to the others, the heading dots list them all (it is the panel's data-scroll list) */
-    [data-panel="needs-you"]:is([data-cmode="phone"] *) .n-list:has(> .n-row:nth-child(2)) { max-block-size: 40px; }
-    [data-panel="needs-you"]:is([data-cmode="phone"] *):has(.n-list > .n-row:only-child):not(:has(.n-dots[data-more="1"])) .n-head { display: none; }
-  }
   [data-panel="needs-you"] .n-btn:hover { background: var(--d-surface-3); }
   [data-panel="needs-you"] .n-btn.n-p { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 600; }
   [data-panel="needs-you"] .n-btn:disabled { opacity: .5; cursor: default; }
