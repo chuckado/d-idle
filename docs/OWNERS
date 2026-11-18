@@ -444,6 +444,7 @@ docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
 docs/process/queuespeed.md  credit-runner  queuespeed
+docs/process/sandbox-devp11.md  credit-runner  devp11doc
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
 docs/quest-hints.md  live-agent  questdrill
