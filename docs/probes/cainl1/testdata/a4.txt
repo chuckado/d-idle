@@ -1,0 +1,99 @@
+labrun: synced code/d2lod-wt/cainl1 → orion:~/labrun/herdr/code/d2lod-wt/cainl1 in 1s; job 20261118-094149-1dfd running: docs/probes/cainl1/run.sh a4 'debug goto 4;step 25;debug warp 22 61;step 25;click 400 300;step 5;debug kill;debug give bkd pack;items;debug quest list;dump quests;cmd interact 5;step 100;cmd interact 10;step 100;debug objects;items'
+d2dslot: got slot 3
+time=2026-11-18T09:41:50.270-05:00 level=WARN msg="d2d channel not answering: d2d process pid 1926322 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/3/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/3/d2d.sock: dial unix /home/jesse/d2d-lab/slots/3/d2d.sock: connect: no such file or directory"
+> debug goto 4
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> debug warp 22 61
+ err=<nil>
+> step 25 err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> debug kill
+ err=<nil>
+> debug give bkd pack
+pack 8 0 quality=2 identified=1 err=<nil>
+> items
+[sst loc=1 slot=4 q=2 panel=0 id=1 size=1x3 at=0,0]
+  Short Staff
+  Two-Hand Damage: 1 to 5
+  Durability: 20 of 20
+  Staff Class - Fast Attack Speed
+[hp1 loc=2 slot=0 q=2 panel=0 id=2 size=1x1 at=0,0]
+  Minor Healing Potion
+  Points: 30
+[hp1 loc=2 slot=0 q=2 panel=0 id=3 size=1x1 at=1,0]
+  Minor Healing Potion
+  Points: 30
+[hp1 loc=2 slot=0 q=2 panel=0 id=4 size=1x1 at=2,0]
+  Minor Healing Potion
+  Points: 30
+[hp1 loc=2 slot=0 q=2 panel=0 id=5 size=1x1 at=3,0]
+  Minor Healing Potion
+  Points: 30
+[tsc loc=0 slot=0 q=2 panel=1 id=6 size=1x1 at=0,0]
+  Scroll of Town Portal
+[isc loc=0 slot=0 q=2 panel=1 id=7 size=1x1 at=1,0]
+  Scroll of Identify
+ err=<nil>
+> debug quest list
+ err=<nil>
+> dump quests
+{"v":1,"quests":{"diff":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],"waypoints":[1,0,0]}}
+ err=<nil>
+> cmd interact 5
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	19.1	59.1	op9	17	-	NU
+6	20.7	62.1	op9	20	-	NU
+7	19.1	60.7	op9	21	-	NU
+9	21.9	60.9	op9	19	-	NU
+10	20.7	59.1	op9	18	-	NU
+12	29.3	49.1	op13	37	-	ON
+13	25.9	51.1	op13	37	-	ON
+14	26.7	55.5	op13	37	-	ON
+15	30.9	51.9	op13	37	-	ON
+16	27.7	54.5	op14	269	-	NU
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> items
+[sst loc=1 slot=4 q=2 panel=0 id=1 size=1x3 at=0,0]
+  Short Staff
+  Two-Hand Damage: 1 to 5
+  Durability: 20 of 20
+  Staff Class - Fast Attack Speed
+[hp1 loc=2 slot=0 q=2 panel=0 id=2 size=1x1 at=0,0]
+  Minor Healing Potion
+  Points: 30
+[hp1 loc=2 slot=0 q=2 panel=0 id=3 size=1x1 at=1,0]
+  Minor Healing Potion
+  Points: 30
+[hp1 loc=2 slot=0 q=2 panel=0 id=4 size=1x1 at=2,0]
+  Minor Healing Potion
+  Points: 30
+[hp1 loc=2 slot=0 q=2 panel=0 id=5 size=1x1 at=3,0]
+  Minor Healing Potion
+  Points: 30
+[tsc loc=0 slot=0 q=2 panel=1 id=6 size=1x1 at=0,0]
+  Scroll of Town Portal
+[isc loc=0 slot=0 q=2 panel=1 id=7 size=1x1 at=1,0]
+  Scroll of Identify
+[bkd loc=0 slot=0 q=2 panel=1 id=8 size=2x2 at=8,0]
+  Key to the Cairn Stones
+ err=<nil>
+time=2026-11-18T09:41:52.291-05:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: orion exited 0 after 5s

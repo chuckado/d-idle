@@ -1,0 +1,30 @@
+labrun: synced code/d2lod-wt/cainl1 → orion:~/labrun/herdr/code/d2lod-wt/cainl1 in 1s; job 20261118-094211-0f31 running: docs/probes/cainl1/run.sh a5 'debug goto 4;step 25;debug warp 24 61;step 25;click 400 300;step 5;debug kill;debug give bkd pack;debug players;cmd interact 9;step 150;debug players;state'
+d2dslot: got slot 3
+time=2026-11-18T09:42:11.801-05:00 level=WARN msg="d2d channel not answering: d2d process pid 1927313 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/3/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/3/d2d.sock: dial unix /home/jesse/d2d-lab/slots/3/d2d.sock: connect: no such file or directory"
+> debug goto 4
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> debug warp 24 61
+ err=<nil>
+> step 25 err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> debug kill
+ err=<nil>
+> debug give bkd pack
+pack 8 0 quality=2 identified=1 err=<nil>
+> debug players
+1	Drilly	24.23	60.61	-1	-1	0 err=<nil>
+> cmd interact 9
+
+ err=<nil>
+> step 150 err=<nil>
+> debug players
+1	Drilly	26.85	56.24	-1	-1	0 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=26.85,56.24 walking=0 dir=7 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=15 str=10 life=43/43 mana=41/41 stamina=19712/19712 level=4 exp=4200 pmode=- missiles=0 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=3 tree=0 waypoint=0 items=8 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4679 music_old=4673 quake=0,0,0,0,0 sfx=221:0:0.42/0.33,237:0:0.37/0.69,2723:0:0.97/0.96,2721:0:0.97/0.96,2722:0:0.97/0.96,2721:0:0.97/0.96,2553:0:0.26/0.54,243:0:0.38/0.66,7:0:0.97/0.96,7:0:0.97/0.96,216:0:0.38/0.66,7:0:0.97/0.96,2722:0:0.97/0.96,2723:0:0.97/0.96,2720:0:0.97/0.96,2720:0:0.97/0.96,2578:-8:0.28/0.31,2722:0:0.97/0.96,2721:0:0.97/0.96,2720:0:0.97/0.96,194:0:0.00/0.05,2722:0:0.97/0.96,683:0:0.13/0.00,683:0:0.05/0.00,2720:0:0.97/0.96,2216:0:0.00/0.00,3287:0:0.76/0.00,2720:0:0.97/0.96,2722:0:0.97/0.96,246:0:0.16/0.00,231:0:0.14/0.00,245:0:0.18/0.00
+ err=<nil>
+time=2026-11-18T09:42:13.863-05:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: orion exited 0 after 5s

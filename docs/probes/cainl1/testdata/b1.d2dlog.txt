@@ -1,0 +1,4 @@
+labrun: synced code/d2lod-wt/cainl1 → orion:~/labrun/herdr/code/d2lod-wt/cainl1 in 1s; job 20261118-094246-6831 running: sh -c 'cd ~/d2d-lab/slots/3/drillhome; grep -i "cain\|stone" d2d.out'
+2026-11-18T14:42:43.371Z Search for Cain: the stones' order 20 18 21 17 19
+2026-11-18T14:42:43.577Z Search for Cain: the way to Tristram at (25.1, 57.7)
+labrun: orion exited 0 after 2s
