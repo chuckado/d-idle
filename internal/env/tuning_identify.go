@@ -31,12 +31,12 @@ func identifyKnobs() []Knob {
 	}
 	return []Knob{
 		k("policy", "Bulk identify policy", "code", "0 manual (only the player's commands), 1 cain-free (default: Deckard Cain identifies on a town visit that happens anyway, free; nothing is bought; manual while Cain is not rescued), 2 scrolls-above-value (Cain when open, else scrolls or the tome for items worth identify.minValue), 3 never. Forced to manual in measured runs.", d.Policy, 0, 3),
-		k("minValue", "Scroll bar", "gold", "Policy 2: items whose estimated sell value is below this are not identified with a scroll. 0 = no bar.", d.MinValue, 0, 100000),
+		k("minValue", "Scroll bar", "gold", "Policy 2: items whose estimated sell value is below this are not identified with a scroll. 0 = no bar.", d.MinValue, 0, 99999),
 		k("maxScrolls", "Scrolls per visit", "count", "Identify scrolls or tome charges one town visit may spend.", d.MaxScrolls, 0, 100),
-		k("goldFloor", "Gold kept after buying", "gold", "Gold that must stay in the purse after an identify purchase; a purchase that would break it is skipped.", d.GoldFloor, 0, 100000),
+		k("goldFloor", "Gold kept after buying", "gold", "Gold that must stay in the purse after an identify purchase; a purchase that would break it is skipped.", d.GoldFloor, 0, 99999),
 		k("tripCap", "Items per Cain visit", "count", "Most items one Cain visit identifies; the rest follows at the next visit.", d.TripCap, 1, 200),
 		k("chunk", "Stash batch size", "count", "Items taken out of the stash per batch before Cain; each batch is verified before the next.", d.Chunk, 1, 40),
 		k("autoSellRest", "Sell the rest", "bool", "1: the sell chore may sell identified items the loot rules rate sell. 0 (default): identified items are kept for the player to see first.", d.AutoSellRest, 0, 1),
-		k("etherPerReveal", "Ether per reveal", "ether", "Ether one vault reveal costs when neither Cain nor a scroll pays; 0 = Ether is not used for reveals (U: price not decided).", d.EtherPerReveal, 0, 100000),
+		k("etherPerReveal", "Ether per reveal", "ether", "Ether one vault reveal costs when neither Cain nor a scroll pays; 0 = Ether is not used for reveals (U: price not decided).", d.EtherPerReveal, 0, 99999),
 	}
 }

@@ -242,7 +242,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.portalWalkMs | 3000 | 0..5000 | ms | 5000 | 1 | Walk from the cast spot into the portal used by the guard (generous upper bound, U, drill R3 measures it). Longer blocks more casts. |
 | bot.portalHitMs | 700 | 300..3000 | ms | 300 | 1 | Assumed time between two hits of one adjacent monster in the guard (its strongest attack lands every time: an upper bound, U). Shorter blocks more casts. |
 | bot.portalLifePct | 50 | 10..100 | % | 10 | 1 | The guard blocks a portal cast when the expected damage over the exposure reaches this share of current life. Lower blocks more casts. |
-| bot.tickMs | 100 | 100..1000 | ms | 1000 | 3 | How often the bot re-plans between actions. Slower means more idle gaps. |
+| bot.tickMs | 100 | 100..1000 | ms | 1000 | 4 | How often the bot re-plans between actions. Slower means more idle gaps. |
 | bot.watchMs | 50 | 50..300 | ms | 300 | 5 | How often events, hazards and death are checked while an action runs. Above 300 the bot dies on Hell packs. |
 | bot.reactionMs | 0 | 0..300 | ms | 300 | 1 | Extra delay before reacting to low life or a chicken condition. |
 | bot.resupplyPotions | 2 | 2..4 | potions | 4 | 2 | Healing potions left in the belt that trigger a town trip. Higher means more trips. |
@@ -251,7 +251,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.leaveSlack | 0 | 0..6 | levels | 6 | 9 | Levels past a step's leave level before moving to the next area. Higher wastes time in easy areas. |
 | bot.corpseRetries | 1 | 0..1 | count | 0 | 1 | Max attempts to recover the corpse after a softcore death. 0 abandons the gear. |
 | bot.portalSettleMs | 600 | 600..4500 | ms | 4500 | 1 | Pause in town after chores before going back out. |
-| bot.clearRadius | 30 | 12..45 | subtiles | 12 | 27 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
+| bot.clearRadius | 30 | 12..45 | subtiles | 12 | 28 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
 | bot.exploredPct | 100 | 30..100 | % | 100 | 2 | Share of a zone's roam coverage points the hero must have visited before a clear run calls the zone explored and moves on (the planner then takes the next area or a fresh game). 100 visits every point (the old behaviour). Quest and boss runs always explore everything. Needs a roaming (fully known map) backend; others ignore it. docs/exploredpct.md. |
 | bot.farmReset | 0 | 0..1 | bool | 0 | 3 | 1: in a leveling zone, once its coverage reaches bot.farmResetPct and a fresh game pays (the zone's current XP per minute is below what a reset yields after the 15 s restart and the walk back, measured in this run), the hero goes home, takes a fresh game (monsters respawn) and returns to the same zone. Never during a fight, a quest step, a boss run, a named run, a recovery or within 180 s of one. docs/farmloop.md. |
 | bot.farmResetPct | 85 | 50..100 | % | 85 | 2 | Share of a zone's roam coverage points that must be visited before the farm loop may reset it (bot.farmReset). Keep it at or above bot.exploredPct, which would end the clear first. A zone below this share is never reset. |
@@ -503,6 +503,18 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | quests.autoGapMin | 30 | 0..600 | min | 30 | 1 | At least this long between two auto-started chunks (a bug can then not chain starts). |
 | quests.autoDayCap | 6 | 0..100 | count | 6 | 1 | At most this many auto-started chunks in 24 hours; 0 turns auto-start off. |
 
+### identify.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| identify.policy | 1 | 0..3 | code | 1 | 0 | 0 manual (only the player's commands), 1 cain-free (default: Deckard Cain identifies on a town visit that happens anyway, free; nothing is bought; manual while Cain is not rescued), 2 scrolls-above-value (Cain when open, else scrolls or the tome for items worth identify.minValue), 3 never. Forced to manual in measured runs. |
+| identify.minValue | 0 | 0..1e+05 | gold | 0 | 0 | Policy 2: items whose estimated sell value is below this are not identified with a scroll. 0 = no bar. |
+| identify.maxScrolls | 10 | 0..100 | count | 10 | 0 | Identify scrolls or tome charges one town visit may spend. |
+| identify.goldFloor | 600 | 0..1e+05 | gold | 600 | 0 | Gold that must stay in the purse after an identify purchase; a purchase that would break it is skipped. |
+| identify.tripCap | 40 | 1..200 | count | 40 | 0 | Most items one Cain visit identifies; the rest follows at the next visit. |
+| identify.chunk | 10 | 1..40 | count | 10 | 0 | Items taken out of the stash per batch before Cain; each batch is verified before the next. |
+| identify.autoSellRest | 0 | 0..1 | bool | 0 | 0 | 1: the sell chore may sell identified items the loot rules rate sell. 0 (default): identified items are kept for the player to see first. |
+| identify.etherPerReveal | 0 | 0..1e+05 | ether | 0 | 0 | Ether one vault reveal costs when neither Cain nor a scroll pays; 0 = Ether is not used for reveals (U: price not decided). |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)
