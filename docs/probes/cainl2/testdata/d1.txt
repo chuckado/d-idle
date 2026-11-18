@@ -1,0 +1,235 @@
+labrun: synced code/d2lod-wt/cainl2 → orion:~/labrun/herdr/code/d2lod-wt/cainl2 in 1s; job 20261118-101133-bda9 running: docs/probes/cainl2/run.sh d1 'debug goto 4;step 25;debug warp 24 61;step 25;click 400 300;step 5;debug kill;debug give bkd pack;cmd interact 10;step 100;cmd interact 11;step 100;cmd interact 12;step 100;cmd interact 14;step 100;cmd interact 15;step 100;cmd interact 10;step 100;cmd interact 11;step 100;cmd interact 12;step 100;cmd interact 14;step 100;cmd interact 15;step 100;cmd interact 10;step 100;cmd interact 11;step 100;cmd interact 12;step 100;cmd interact 14;step 100;cmd interact 15;step 100;debug objects;debug portals;cmd interact -2002;step 200;debug level;debug quest list;npcs;click 400 300;step 5;debug kill;step 5;cmd interact 31;step 100;debug level;step 100;debug level;step 100;debug level;step 100;debug level;step 100;debug level;step 100;debug level;debug objects;npcs;debug quest list;debug grid 12'
+d2dslot: got slot 3
+time=2026-11-18T10:11:34.726-05:00 level=WARN msg="d2d channel not answering: d2d process pid 2033348 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/3/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/3/d2d.sock: dial unix /home/jesse/d2d-lab/slots/3/d2d.sock: connect: no such file or directory"
+> debug goto 4
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> debug warp 24 61
+ err=<nil>
+> step 25 err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> debug kill
+ err=<nil>
+> debug give bkd pack
+pack 8 0 quality=2 identified=1 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 100 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	ON
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	ON
+14	21.9	60.9	op9	19	-	ON
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+2	4	25.1	57.7 err=<nil>
+> cmd interact -2002
+
+ err=<nil>
+> step 200 err=<nil>
+> debug level
+38 21.50 24.60 43 48 5000 1000 err=<nil>
+> debug quest list
+4	0x0010	act1	bits=4 err=<nil>
+> npcs
+a Trap	-152	296	0	14	18.1	28.1
+Cain's Gibbet	616	648	0	31	27.3	27.7
+Wirt's body	-1448	272	0	42	9.7	35.9
+ err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> debug kill
+ err=<nil>
+> step 5 err=<nil>
+> cmd interact 31
+
+ err=<nil>
+> step 100 err=<nil>
+> debug level
+38 22.70 24.70 43 48 5000 1000 err=<nil>
+> step 100 err=<nil>
+> debug level
+38 22.70 24.70 43 48 5000 1000 err=<nil>
+> step 100 err=<nil>
+> debug level
+38 22.70 24.70 43 48 5000 1000 err=<nil>
+> step 100 err=<nil>
+> debug level
+38 22.70 24.70 43 48 5000 1000 err=<nil>
+> step 100 err=<nil>
+> debug level
+38 22.70 24.70 43 48 5000 1000 err=<nil>
+> step 100 err=<nil>
+> debug level
+38 22.70 24.70 43 48 5000 1000 err=<nil>
+> debug objects
+1	20.9	31.3	op14	269	-	NU
+2	22.7	27.5	op14	269	-	NU
+3	20.3	24.3	op11	162	-	ON
+4	18.5	25.9	op11	161	-	ON
+5	21.1	31.7	op11	160	-	ON
+6	19.7	25.9	op11	161	-	ON
+7	20.5	25.9	op11	162	-	ON
+8	22.7	30.5	op11	160	-	ON
+9	22.7	31.3	op11	161	-	ON
+10	21.1	30.9	op11	162	-	ON
+11	21.3	31.3	op11	160	-	ON
+12	19.9	31.1	op11	162	-	ON
+13	20.1	30.9	op11	160	-	ON
+14	18.1	28.1	op30	250	-	NU
+15	29.5	32.5	op11	160	-	ON
+16	30.7	32.5	op11	161	-	ON
+17	28.7	32.7	op11	162	-	ON
+18	29.3	33.3	op11	161	-	ON
+19	28.9	33.5	op11	160	-	ON
+20	29.5	33.1	op11	160	-	ON
+22	21.3	32.1	op11	161	-	ON
+23	20.5	32.1	op11	160	-	ON
+24	20.1	32.1	op11	162	-	ON
+25	19.1	33.7	op11	162	-	ON
+26	21.7	33.7	op11	162	-	ON
+27	21.1	33.7	op11	160	-	ON
+28	19.7	32.3	op11	161	-	ON
+29	19.7	33.7	op11	160	-	ON
+30	27.1	29.1	op14	269	-	NU
+31	27.3	27.7	op10	26	-	NU
+32	31.1	27.1	op11	160	-	ON
+33	30.7	27.1	op11	160	-	ON
+34	31.1	27.5	op11	160	-	ON
+35	30.7	26.7	op11	161	-	ON
+36	30.9	28.7	op11	160	-	ON
+37	30.7	28.7	op11	162	-	ON
+38	25.1	25.1	op11	162	-	ON
+39	25.1	25.5	op11	160	-	ON
+40	25.5	25.5	op11	161	-	ON
+41	25.7	25.1	op11	160	-	ON
+42	9.7	35.9	op33	268	-	NU
+43	13.5	32.9	op11	160	-	ON
+44	13.3	32.9	op11	160	-	ON
+45	13.7	32.5	op11	160	-	ON
+46	13.3	32.3	op11	161	-	ON
+47	29.5	23.5	op11	161	-	ON
+48	29.1	23.5	op11	160	-	ON
+49	28.3	22.9	op11	162	-	ON
+50	27.7	23.1	op11	161	-	ON
+51	24.7	22.9	op11	162	-	ON
+52	30.5	23.3	op11	160	-	ON
+53	26.9	23.1	op11	162	-	ON
+54	26.5	23.1	op11	160	-	ON
+55	25.9	23.9	op11	160	-	ON
+56	26.1	23.7	op11	161	-	ON
+57	30.7	22.5	op11	161	-	ON
+58	26.5	23.5	op11	162	-	ON
+59	19.9	23.9	op11	161	-	ON
+60	21.5	23.5	op11	160	-	ON
+61	20.3	23.1	op11	161	-	ON
+62	18.9	22.9	op11	161	-	ON
+63	21.3	23.5	op11	162	-	ON
+64	22.7	22.9	op11	162	-	ON
+65	22.7	23.9	op11	161	-	ON
+66	19.7	23.1	op11	161	-	ON
+67	19.9	23.5	op11	160	-	ON
+68	20.7	23.3	op11	161	-	ON
+69	20.3	23.7	op11	160	-	ON
+70	13.7	27.7	op11	160	-	ON
+71	13.3	28.3	op11	162	-	ON
+72	12.7	27.9	op11	160	-	ON
+73	14.7	27.7	op11	160	-	ON
+74	12.5	28.5	op11	161	-	ON
+75	13.5	28.1	op11	160	-	ON
+76	24.5	10.5	op30	250	-	NU
+77	19.9	13.9	op11	160	-	ON
+78	20.1	14.1	op14	57	-	NU
+79	20.3	14.1	op11	161	-	ON
+80	15.1	14.1	op11	162	-	ON
+81	15.1	14.5	op11	161	-	ON
+82	15.5	14.1	op11	161	-	ON
+83	15.5	14.7	op11	160	-	ON err=<nil>
+> npcs
+a Trap	-240	244	0	14	18.1	28.1
+Cain's Gibbet	528	596	0	31	27.3	27.7
+Wirt's body	-1536	220	0	42	9.7	35.9
+a Trap	1680	-204	0	76	24.5	10.5
+Dead Rogue	1040	-236	0	78	20.1	14.1
+ err=<nil>
+> debug quest list
+4	0x0010	act1	bits=4 err=<nil>
+> debug grid 12
+####################################################################################################################################################################################################################### err=<nil>
+time=2026-11-18T10:11:37.393-05:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: orion exited 0 after 5s

@@ -1,0 +1,188 @@
+labrun: synced code/d2lod-wt/cainl2 → orion:~/labrun/herdr/code/d2lod-wt/cainl2 in 1s; job 20261118-101356-c444 running: docs/probes/cainl2/run.sh m1 'debug goto 4;step 25;debug warp 24 61;step 25;click 400 300;step 5;debug kill;debug give bkd pack;cmd interact 10;step 100;cmd interact 11;step 100;cmd interact 12;step 100;cmd interact 14;step 100;cmd interact 15;step 100;cmd interact 10;step 100;cmd interact 11;step 100;cmd interact 12;step 100;cmd interact 14;step 100;cmd interact 15;step 100;cmd interact 10;step 100;cmd interact 11;step 100;cmd interact 12;step 100;cmd interact 14;step 100;cmd interact 15;step 100;debug objects;debug portals;cmd interact -2002;step 200;debug level;debug quest list;npcs;click 400 300;step 5;debug kill;step 5;cmd move 25 27;step 100;cmd interact 31;step 200;key i;step 25;move 430 329;step 5;move 433 329;step 15;rclick 433 329;step 10;key i;step 50;debug portals;cmd interact -2000;step 200;debug level;debug quest list;npcs;debug portals;cmd interact 39;step 250;menu;debug quest list;state'
+d2dslot: got slot 3
+time=2026-11-18T10:13:57.198-05:00 level=WARN msg="d2d channel not answering: d2d process pid 2039732 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/3/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/3/d2d.sock: dial unix /home/jesse/d2d-lab/slots/3/d2d.sock: connect: no such file or directory"
+> debug goto 4
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> debug warp 24 61
+ err=<nil>
+> step 25 err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> debug kill
+ err=<nil>
+> debug give bkd pack
+pack 8 0 quality=2 identified=1 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 100 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	ON
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	ON
+14	21.9	60.9	op9	19	-	ON
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+2	4	25.1	57.7 err=<nil>
+> cmd interact -2002
+
+ err=<nil>
+> step 200 err=<nil>
+> debug level
+38 21.50 24.60 43 48 5000 1000 err=<nil>
+> debug quest list
+4	0x0010	act1	bits=4 err=<nil>
+> npcs
+a Trap	-152	296	0	14	18.1	28.1
+Cain's Gibbet	616	648	0	31	27.3	27.7
+Wirt's body	-1448	272	0	42	9.7	35.9
+ err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> debug kill
+ err=<nil>
+> step 5 err=<nil>
+> cmd move 25 27
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 31
+
+ err=<nil>
+> step 200 err=<nil>
+> key i
+
+ err=<nil>
+> step 25 err=<nil>
+> move 430 329
+
+ err=<nil>
+> step 5 err=<nil>
+> move 433 329
+
+ err=<nil>
+> step 15 err=<nil>
+> rclick 433 329
+
+ err=<nil>
+> step 10 err=<nil>
+> key i
+
+ err=<nil>
+> step 50 err=<nil>
+> debug portals
+0	38	25.1	27.1
+1	1	16.7	25.7
+2	4	25.1	57.7
+3	38	21.5	24.0 err=<nil>
+> cmd interact -2000
+
+ err=<nil>
+> step 200 err=<nil>
+> debug level
+1 16.70 26.30 57 41 960 1112 err=<nil>
+> debug quest list
+4	0x2012	act1	bits=1,4,13 err=<nil>
+> npcs
+Warriv	592	-140	1	0	12.5	19.7
+Kashya	1040	68	1	5	17.9	19.5
+Akara	2025	153	1	9	25.1	14.4
+Charsi	256	-516	1	11	5.7	17.1
+Gheed	-768	-52	1	12	5.1	29.3
+Your Private Stash	560	-220	0	14	11.3	18.9
+Waypoint	1408	-196	0	35	16.9	13.9
+Deckard Cain	688	-124	1	39	13.3	19.3
+ err=<nil>
+> debug portals
+0	38	25.1	27.1
+1	1	16.7	25.7
+2	4	25.1	57.7
+3	38	21.5	24.0 err=<nil>
+> cmd interact 39
+
+ err=<nil>
+> step 250 err=<nil>
+> menu
+
+ err=<nil>
+> debug quest list
+4	0x2012	act1	bits=1,4,13 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=15.38,23.86 walking=0 dir=12 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=15 str=10 life=40/43 mana=41/41 stamina=19712/19712 level=4 exp=7647 pmode=- missiles=0 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=3 tree=0 waypoint=0 items=6 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4673 music_old=0 quake=0,0,0,0,0 sfx=2720:0:0.87/0.87,2723:0:0.87/0.87,3288:0:0.00/0.47,2578:-18:0.01/0.02,2721:0:0.87/0.87,194:0:0.00/0.02,2721:0:0.87/0.87,2721:0:0.87/0.87,2721:0:0.87/0.87,2723:0:0.87/0.87,2722:0:0.87/0.87,2722:0:0.87/0.87,2720:0:0.87/0.87,221:0:0.31/0.09,249:0:0.24/0.07,223:0:0.24/0.05,237:0:0.30/0.08,2721:0:0.87/0.87,2720:0:0.87/0.87,2720:0:0.87/0.87,2723:0:0.86/0.87,2720:0:0.87/0.87,2722:0:0.87/0.87,2722:0:0.87/0.87,2720:0:0.87/0.87,2721:0:0.87/0.87,3671:0:0.00/0.34,2723:0:0.87/0.87,196:0:0.05/0.00,2723:0:0.87/0.87,2722:0:0.87/0.87,2720:0:0.87/0.87
+ err=<nil>
+time=2026-11-18T10:13:59.891-05:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: orion exited 0 after 5s
