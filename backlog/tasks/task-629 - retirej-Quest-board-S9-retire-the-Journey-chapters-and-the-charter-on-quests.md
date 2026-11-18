@@ -1,17 +1,18 @@
 ---
 id: TASK-629
 title: 'retirej: Quest board S9 retire the Journey chapters and the charter on quests'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T03:16:00Z'
+updated_date: '2026-11-18T04:01:00Z'
 labels:
   - bot
   - feature
 dependencies: []
 priority: medium
-result: "Offline only, NOT verified live. quests.board default 1; Journey panels/controller/guide/API removed; plan import of old campaign.json (skips, orders mode) with a read-only backup; zone-order charter kept."
 ordinal: 316000
+result: "Offline only, NOT verified live. quests.board default 1; Journey panels/controller/guide/API removed; plan import of old campaign.json (skips, orders mode) with a read-only backup; zone-order charter kept."
 card: "retirej"
 owns:
   - "internal/campaign"
