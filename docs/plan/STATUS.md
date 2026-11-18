@@ -276,7 +276,6 @@
 | cainl0 | proposed | - | `docs/probes/cainl0`<br>`docs/probes/search-for-cain-l0-2026-11-18.md`<br>`docs/probes/test-characters.md` | `d2d-control-socket` |
 | jewelcolor | proposed | - | `internal/watch/web/components.css`<br>`internal/watch/artembed_test.go`<br>`internal/data/invfile_test.go`<br>`docs/inventory-ui.md` | - |
 | groundquality | proposed | - | `internal/d2dloot`<br>`cmd/d2bot/d2dloot.go`<br>`cmd/d2bot/d2dwire.go`<br>`docs/d2d-loot.md` | - |
-| itemcolour | proposed | - | `docs/design/item-colour-2026-11-18.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
