@@ -256,7 +256,7 @@ func newTaskDeps(ctx context.Context, o options, tw *town.Town, nv *nav.Navigato
 	rd.mem = memQuestSource(e) // questmem needs the memory reader; d2d has its own source (d2dbackend.go)
 	return &bot.TaskDeps{
 		Dialog:   talk.Adapter{T: tw, E: e, Status: rd.status},
-		Objects:  objectAdapter{e: e, nv: nv, clicked: &onceSet{}},
+		Objects:  objectAdapter{e: e, nv: nv, clicked: &onceSet{}, explored: &exploreTally{}},
 		Cube:     func(ctx context.Context, in []string) error { _, err := tw.Transmute(ctx, in); return err },
 		HireMerc: mercHirer(tw, e),
 		Waypoint: nv.ActivateWaypoint,

@@ -662,6 +662,9 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		if w := whyOf(res); w != "" {
 			r.boardNote("wait "+questboard.ChunkKey(d.Quest, d.Chunk), "quest board: waiting: "+w)
 		}
+	case res.Outcome == task.OutRetry && res.Kind == task.KindExploring:
+		// still walking toward an object that is not built yet: progress, so the failure counter stays at zero
+		r.boardNote("explore "+questboard.ChunkKey(d.Quest, d.Chunk), "quest board: "+whyOf(res))
 	case res.Outcome == task.OutRetry || res.Outcome == task.OutBlocked:
 		out = questboard.StepResult{Outcome: questboard.StepFailed, Why: nonEmptyStr(whyOf(res), "the step was refused")}
 	case res.Outcome == task.OutRan && res.StepID == "":

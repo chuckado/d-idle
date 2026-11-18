@@ -780,12 +780,39 @@ func (a taskActs) Interact(ctx context.Context, object string) error {
 	}
 	if object == TreeObject {
 		// the click only drops the scroll (U); the task node has no pick-up of its own
-		if err := a.PickUp(ctx, task.ItemBark); err != nil {
+		if err := a.pickUpAfterTree(ctx); err != nil {
 			return err
 		}
 	}
 	a.setPseudo(interactPseudo[object])
 	return nil
+}
+
+// The scroll drops after the tree animation, not on the click (U, no live trace yet): look again for a few seconds
+// before reporting that the click gave nothing.
+const (
+	treeDropPolls = 6
+	treeDropWait  = time.Second
+)
+
+func (a taskActs) pickUpAfterTree(ctx context.Context) error {
+	if a.r.d.Loot == nil {
+		return task.Errorf(task.KindNotFound, "no looter: cannot pick up %s", task.ItemBark)
+	}
+	for i := 0; i < treeDropPolls; i++ {
+		rep, err := a.r.d.Loot.PickUp(ctx, PickOpts{Radius: 30, Names: []string{task.ItemBark}})
+		if err == nil && rep.Picked > 0 {
+			return nil
+		}
+		if err != nil && task.Classify(a.tag(err)) != task.KindNotFound {
+			return a.tag(err)
+		}
+		if ctx.Err() != nil {
+			return a.tag(ctx.Err())
+		}
+		a.r.e.Clock.Sleep(treeDropWait)
+	}
+	return task.Errorf(task.KindNotFound, "tree clicked, but no %s dropped within %d polls", task.ItemBark, treeDropPolls)
 }
 
 // TreeObject is the Tree of Inifuss in the Dark Wood.
