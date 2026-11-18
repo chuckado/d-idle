@@ -276,7 +276,6 @@
 | cainl0 | proposed | - | `docs/probes/cainl0`<br>`docs/probes/search-for-cain-l0-2026-11-18.md`<br>`docs/probes/test-characters.md` | `d2d-control-socket` |
 | jewelcolor | proposed | - | `internal/watch/web/components.css`<br>`internal/watch/artembed_test.go`<br>`internal/data/invfile_test.go`<br>`docs/inventory-ui.md` | - |
 | groundquality | proposed | - | `internal/d2dloot`<br>`cmd/d2bot/d2dloot.go`<br>`cmd/d2bot/d2dwire.go`<br>`docs/d2d-loot.md` | - |
-| cain7 | in-progress | - | `cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_room_test.go`<br>`internal/d2dctl/parse.go`<br>`internal/d2dctl/rooms_test.go`<br>`internal/d2dworld`<br>`internal/d2map/tracker.go`<br>`internal/nav/nav.go`<br>`internal/quest/dialog.go` | - |
 | itemcolour2 | proposed | - | `internal/art/`<br>`internal/d2dsrc/`<br>`internal/watch/web/inventory.js`<br>`internal/watch/artembed_test.go`<br>`internal/status/inventory.go`<br>`internal/d2/items.go`<br>`cmd/d2bot/display.go`<br>`cmd/d2bot/itemart_test.go` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
