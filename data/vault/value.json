@@ -1,0 +1,9 @@
+{
+  "_note": "Trim value function (data, never Go literals). value = quality*1000 + ilvl*ilvl + sockets*socket + eth. Quality ids are the d2 item quality numbers (1 low, 2 normal, 3 superior, 4 magic, 5 set, 6 rare, 7 unique, 8 crafted). Protected items are trimmed only when nothing else is left and the caller allows it. All numbers are proposals (U).",
+  "quality": {"1": 1, "2": 2, "3": 3, "4": 10, "5": 60, "6": 40, "7": 80, "8": 50},
+  "ilvl": 5,
+  "socket": 150,
+  "eth": 100,
+  "protectQuality": [5, 6, 7, 8],
+  "protectCodePrefix": ["r0", "r1", "r2", "r3", "jew", "cm1", "cm2", "cm3"]
+}

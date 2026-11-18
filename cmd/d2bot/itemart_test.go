@@ -65,3 +65,35 @@ func TestStatusItemArtOmitEmpty(t *testing.T) {
 		t.Errorf("art missing: %s", b)
 	}
 }
+
+// A jewel carries its kind word (the page tints the untinted jewel art and names the type when the icon is missing); the
+// base code is the key, not the name or the quality, so a magic or unidentified jewel is a jewel too.
+func TestInvItemKind(t *testing.T) {
+	cat := bot.NewDataCatalog(&data.DB{
+		Items: []*data.ItemBase{{Code: "jew", Type: "jewl", InvFile: "invjwl"}, {Code: "rin", Type: "ring", InvFile: "invrin"}, {Code: "zzz", Type: "weird"}},
+	})
+	for class, want := range map[int]string{0: "jewel", 1: "ring", 2: ""} {
+		m, _ := cat.Item(class)
+		if m.GoalType != want {
+			t.Errorf("class %d: kind %q, want %q", class, m.GoalType, want)
+		}
+	}
+	for _, q := range []int{d2.QualityUnique, 4, 6} { // unique, magic, rare: same icon, no name needed
+		if got := itemArt(cat, d2.Unit{Class: 0, Item: &d2.Item{Quality: q, FileIndex: 3}}); got != "invjwl" {
+			t.Errorf("jewel quality %d: art %q", q, got)
+		}
+	}
+}
+
+// itemcolour: the tint rides along with the art (a jewel and a coloured armor), never without an icon, and is absent for
+// older d2d builds; omitted from the JSON when empty.
+func TestStatusItemTint(t *testing.T) {
+	b, _ := json.Marshal(status.Item{Code: "1", Art: "invsst"})
+	if strings.Contains(string(b), "tint") {
+		t.Errorf("empty tint serialised: %s", b)
+	}
+	b, _ = json.Marshal(status.Item{Code: "1", Art: "invjwl", Tint: "t1c3"})
+	if !strings.Contains(string(b), `"tint":"t1c3"`) {
+		t.Errorf("tint missing: %s", b)
+	}
+}

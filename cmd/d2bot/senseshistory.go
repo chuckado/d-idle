@@ -116,7 +116,11 @@ func useSensesHistory(ctx context.Context, rig *ladderRig, e *env.Env, f *combat
 				pub.AddEvent(n.Kind, n.Text, false, nil)
 			}
 		}
+		prevSummary := f.OnSummary // the survival ledger's hook (chainSurvFight), installed before this
 		f.OnSummary = func(s combat.FightSummary) {
+			if prevSummary != nil {
+				prevSummary(s)
+			}
 			fi := fightInfo(s)
 			pub.AddEvent(senses.EvFight, fmt.Sprintf("Fight: %d kills in %.1f s, end=%s, life min %d%%", s.Kills, s.Sec, s.End, s.MinLifePct), false, fi)
 			switch s.Left {

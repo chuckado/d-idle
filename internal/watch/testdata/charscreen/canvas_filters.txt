@@ -1,0 +1,5 @@
+usable: 3=dim 4=dim 5=show 6=show
+merc: 3=dim 4=show 5=show 6=show
+unid: 3=dim 4=dim 5=dim 6=dim
+sell: 3=dim 4=dim 5=dim 6=dim
+q: 3=show 4=dim 5=dim 6=dim

@@ -20,7 +20,7 @@ export function mount(root, ctx) {
       now.textContent = line.charAt(0).toUpperCase() + line.slice(1);
       const ex = h.explored;
       ctx.meta.textContent = (h.area || '') + (ex && ex.total > 0
-        ? (h.area ? ' - ' : '') + 'Explored ' + ex.pct + '%' + (ex.threshold < 100 ? ' (moves on at ' + ex.threshold + '%)' : '')
+        ? (h.area ? ' - ' : '') + 'Explored ' + ex.pct + '%' + (ex.threshold < 100 ? ' (moves on at ' + ex.threshold + '%)' : '') + (ex.reset ? ' (fresh game at ' + ex.reset + '%)' : '')
         : '');
       const g = h.goal;
       if (g) {

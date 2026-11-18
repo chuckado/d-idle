@@ -4,7 +4,9 @@
 // autoloot is off on our runs, so nothing is ever picked up by walking over it.
 //
 // What the "ground" verb does not give, and what this package does about it:
-//   - Quality and item level: only the label text. Quality is guessed from the label against the base name (below, U).
+//   - Quality, item level, identified flag: only the label text. With the fork's vault verbs (`ground full`, peek.go) the
+//     real record is read for gear, jewelry and charms; without them quality is guessed from the label (below, U) and
+//     stays unknown for bases that can never be normal (rings, amulets, jewels, charms).
 //   - Gold amount: the label "<n> Gold" (V: "8800 Gold"); it becomes the pile's StatGold so the looter's small-pile
 //     policy works.
 //   - Position: the trailing cell fields; when they are absent the unit is put at the player (the verb walks anyway).
@@ -32,6 +34,8 @@ type Source struct {
 
 	mu   sync.Mutex
 	gold map[uint32]int32 // pile unit id -> amount, from the last snapshot
+
+	pk peeker
 }
 
 // Attach switches l to read through a Source built on src and returns it.
@@ -83,6 +87,7 @@ func (s *Source) Enrich(res *d2dsrc.Result) {
 			u.Item.Quality = s.quality(u.Class, ex.Label)
 		}
 	}
+	s.peekGround(snap)
 	s.mu.Lock()
 	s.gold = gold
 	s.mu.Unlock()

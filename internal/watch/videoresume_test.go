@@ -12,16 +12,21 @@ import (
 )
 
 // pumpCapture sends a frame every gap until ctx ends.
-func pumpCapture(frame []byte, gap time.Duration) CaptureFunc {
+func pumpCapture(frame []byte, gap time.Duration, same ...bool) CaptureFunc {
 	return func(ctx context.Context) (<-chan []byte, error) {
 		ch := make(chan []byte, 1)
 		go func() {
 			defer close(ch)
-			for {
+			for n := byte(0); ; n++ {
+				f := frame
+				if len(same) == 0 && len(frame) > 2 { // distinct frames: identical ones are skipped by the pump
+					f = append([]byte(nil), frame...)
+					f[1] = n
+				}
 				select {
 				case <-ctx.Done():
 					return
-				case ch <- frame:
+				case ch <- f:
 				}
 				if gap > 0 {
 					time.Sleep(gap)
@@ -44,13 +49,13 @@ func TestVideoStreamOutlivesTheWriteDeadline(t *testing.T) {
 	}
 	defer resp.Body.Close()
 	rd := bufio.NewReader(resp.Body)
-	end, parts := time.Now().Add(time.Second), 0
-	for time.Now().Before(end) {
+	// count-based, not "N parts in 1 s": a loaded box slows the reader without breaking the stream
+	start := time.Now()
+	for parts := 0; parts < 20; parts++ {
 		readPart(t, rd)
-		parts++
 	}
-	if parts < 20 {
-		t.Fatalf("only %d parts in 1 s (10 deadlines)", parts)
+	if d := time.Since(start); d < 300*time.Millisecond {
+		t.Fatalf("20 parts in %v: the pump (20 ms gap) cannot be that fast, the test no longer outlives the 100 ms deadline", d)
 	}
 }
 

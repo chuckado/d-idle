@@ -36,7 +36,7 @@ func wireReadiness(runner *bot.Runner, db *data.DB) http.Handler {
 	return readiness.Handler(ev, runner.ReadinessHero)
 }
 
-// heroStats is the stats block of /api/hero (the hero stats tile of the watch screen): the resistances of the
+// heroStats is the stats block of /api/hero (the hero stats tile of the watch screen): the resistances, attributes, defence and damage of the
 // runner's newest snapshot and the readiness light for the area the hero stands in. Read-only.
 func heroStats(runner *bot.Runner) watch.HeroStatsSource {
 	if runner == nil {
@@ -48,6 +48,17 @@ func heroStats(runner *bot.Runner) watch.HeroStatsSource {
 			return watch.HeroStats{}, false
 		}
 		s := watch.HeroStats{Resists: watch.HeroResists{Fire: h.Resist.Fire, Cold: h.Resist.Cold, Light: h.Resist.Lightning, Poison: h.Resist.Poison}}
+		if sh, ok := runner.Sheet(); ok {
+			if sh.HasAttrs {
+				s.Attrs = &watch.HeroAttrs{Str: sh.Str, Dex: sh.Dex, Vit: sh.Vit, Energy: sh.Energy}
+			}
+			if sh.HasDefense {
+				s.Defense = &sh.Defense
+			}
+			if sh.HasDamage {
+				s.Damage = &watch.HeroDamage{Min: sh.DmgMin, Max: sh.DmgMax}
+			}
+		}
 		if rep, ok := runner.ReadinessHere(); ok {
 			s.Readiness = &watch.HeroReadiness{Light: rep.Light, Area: here}
 			if len(rep.Reasons) > 0 {

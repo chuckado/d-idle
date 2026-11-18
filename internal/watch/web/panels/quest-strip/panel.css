@@ -1,0 +1,32 @@
+@layer panels {
+  /* the quest tile: four short lines in the 112 px strip cell (92 on a short window: the kind label goes) */
+  [data-panel="quest-strip"] .d-slotbody { display: flex; container: qs / inline-size; }
+  [data-panel="quest-strip"] .qs-box { flex: 1 1 auto; min-inline-size: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 2px; }
+  [data-panel="quest-strip"] .qs-h { display: flex; justify-content: space-between; align-items: baseline; gap: var(--d-sp-2); font-size: var(--d-fs-0); font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-2); white-space: nowrap; min-inline-size: 0; }
+  [data-panel="quest-strip"] .qs-side { font-weight: 400; letter-spacing: 0; text-transform: none; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
+  [data-panel="quest-strip"] .qs-line { font-size: var(--d-fs-1); font-weight: 650; color: var(--d-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
+  [data-panel="quest-strip"] .qs-sub { font-size: var(--d-fs-0); color: var(--d-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
+  [data-panel="quest-strip"] [data-kind="awaiting"] .qs-label, [data-panel="quest-strip"] [data-kind="offer"] .qs-label, [data-panel="quest-strip"] [data-kind="countdown"] .qs-label { color: var(--d-accent-text); }
+  [data-panel="quest-strip"] [data-kind="blocked"] .qs-label, [data-panel="quest-strip"] [data-kind="failed"] .qs-label { color: var(--d-warn); }
+  [data-panel="quest-strip"] [data-kind="blocked"] .qs-sub, [data-panel="quest-strip"] [data-kind="failed"] .qs-sub { color: var(--d-warn); }
+  [data-panel="quest-strip"] .qs-row { display: flex; align-items: center; justify-content: space-between; gap: var(--d-sp-2); min-inline-size: 0; }
+  [data-panel="quest-strip"] .qs-acts { display: flex; gap: var(--d-sp-1); min-inline-size: 0; }
+  [data-panel="quest-strip"] .qs-btn { block-size: var(--q-touch, 26px); min-block-size: var(--q-touch, 26px); padding: 0 var(--d-sp-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); background: var(--d-surface-2); color: var(--d-text);
+    font: inherit; font-size: var(--d-fs-0); white-space: nowrap; cursor: pointer; }
+  [data-panel="quest-strip"] .qs-btn:hover { background: var(--d-surface-3); }
+  [data-panel="quest-strip"] .qs-btn.qs-p { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 600; }
+  [data-panel="quest-strip"] .qs-btn[data-armed] { background: var(--d-warn); border-color: var(--d-warn); color: var(--d-on-warn); }
+  [data-panel="quest-strip"] .qs-btn:disabled { opacity: .55; cursor: default; }
+  [data-panel="quest-strip"] .qs-mode { display: flex; flex: none; border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); overflow: hidden; }
+  [data-panel="quest-strip"] .qs-seg { block-size: var(--q-touch, 24px); min-block-size: var(--q-touch, 24px); padding: 0 var(--d-sp-2); border: 0; background: transparent; color: var(--d-text-2); font: inherit; font-size: var(--d-fs-0); cursor: pointer; }
+  [data-panel="quest-strip"] .qs-seg[data-on="1"] { background: var(--d-surface-3); color: var(--d-text); font-weight: 650; }
+  [data-panel="quest-strip"] :is(.qs-btn, .qs-seg):focus-visible { outline: 2px solid var(--d-focus); outline-offset: 1px; }
+  @container qs (max-width: 380px) { [data-panel="quest-strip"] .qs-mode, [data-panel="quest-strip"] .qs-side { display: none; } }
+  @container qs (max-width: 230px) { [data-panel="quest-strip"] .qs-all { display: none; } }
+  /* the phone's Quests tab: the tile is two lines and 44 px targets */
+  [data-panel="quest-strip"]:is([data-cmode="phone"] *) .qs-btn { block-size: 44px; min-block-size: 44px; padding-inline: var(--d-sp-3); }
+  [data-panel="quest-strip"]:is([data-cmode="phone"] *) .qs-seg { block-size: 44px; min-block-size: 44px; padding-inline: var(--d-sp-3); }
+  /* the phone's tab: the mode switch and the list are in the board below; the tile is a label, a line, a sentence and one button */
+  [data-panel="quest-strip"]:is([data-cmode="phone"] *) :is(.qs-h, .qs-mode, .qs-side, .qs-all) { display: none; }
+  [data-panel="quest-strip"] .qs-box[data-short="1"] .qs-h { display: none; }
+}

@@ -22,6 +22,7 @@ type Tuner struct {
 	custom    *Profile
 	profile   string
 	overrides map[string]float64
+	dash      map[string]bool // overrides set by an edit (the dashboard) or loaded from the saved file; the rest came from the config
 	post      []func(*env.Tuning)
 }
 
@@ -36,7 +37,7 @@ type tunerState struct {
 // post, if given, runs on every tuning the Tuner builds (a saved file at start, every later edit) and on tune now: it
 // carries command-line switches that a rebuilt tuning must not drop (--ladder).
 func NewTuner(tune *env.Tuning, cfg Config, path string, post ...func(*env.Tuning)) (*Tuner, error) {
-	t := &Tuner{tune: tune, custom: cfg.Custom, profile: cfg.Profile, overrides: map[string]float64{}, post: post}
+	t := &Tuner{tune: tune, custom: cfg.Custom, profile: cfg.Profile, overrides: map[string]float64{}, dash: map[string]bool{}, post: post}
 	t.apply(tune)
 	if cfg.Custom != nil {
 		t.profile = t.customName()
@@ -60,6 +61,9 @@ func NewTuner(tune *env.Tuning, cfg Config, path string, post ...func(*env.Tunin
 			t.overrides = st.Overrides
 			if t.overrides == nil {
 				t.overrides = map[string]float64{}
+			}
+			for k := range t.overrides {
+				t.dash[k] = true
 			}
 			if err := t.rebuild(); err != nil { // a saved edit that no longer resolves must not stop the bot
 				return nil, fmt.Errorf("saved tuning %s: %w", path, err)
@@ -151,6 +155,10 @@ func (t *Tuner) Edit(e api.TuneEdit) error {
 	for k, v := range t.overrides {
 		over[k] = v
 	}
+	dash := make(map[string]bool, len(t.dash)+len(e.Overrides))
+	for k, v := range t.dash {
+		dash[k] = v
+	}
 	keys := make([]string, 0, len(e.Overrides))
 	for k := range e.Overrides {
 		keys = append(keys, k)
@@ -159,20 +167,46 @@ func (t *Tuner) Edit(e api.TuneEdit) error {
 	for _, k := range keys {
 		if v := e.Overrides[k]; v == nil {
 			delete(over, k)
+			delete(dash, k)
 		} else {
 			over[k] = *v
+			dash[k] = true
 		}
 	}
 	nt, err := t.build(profile, over)
 	if err != nil {
 		return fmt.Errorf("%w: %v", api.ErrInvalidTune, err)
 	}
-	t.profile, t.overrides = profile, over
+	t.profile, t.overrides, t.dash = profile, over, dash
 	*t.tune = nt
 	if t.file != nil {
 		return t.file.Save(tunerState{Profile: profile, Overrides: over})
 	}
 	return nil
+}
+
+// Value is the live value of one knob and where it comes from: "dashboard" (an edit, kept in tuning.json), "config"
+// (the config file's tuning map) or "default" (the profile's or the built-in value).
+func (t *Tuner) Value(key string) (v float64, source string, err error) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+	for _, k := range env.Knobs() {
+		if k.Key != key {
+			continue
+		}
+		if v, err = GetKnob(t.tune, k); err != nil {
+			return 0, "", err
+		}
+		source = "default"
+		if _, set := t.overrides[key]; set {
+			source = "config"
+			if t.dash[key] {
+				source = "dashboard"
+			}
+		}
+		return v, source, nil
+	}
+	return 0, "", fmt.Errorf("unknown knob %q", key)
 }
 
 // Unlock implements api.Tuning. There is no upgrade data yet (docs/plan has the design, nothing backs it), so the

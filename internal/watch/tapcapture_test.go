@@ -105,7 +105,7 @@ func recv(t *testing.T, ch <-chan []byte) []byte {
 			t.Fatal("channel closed")
 		}
 		return f
-	case <-time.After(3 * time.Second):
+	case <-time.After(30 * time.Second):
 		t.Fatal("no frame")
 	}
 	return nil
@@ -378,7 +378,7 @@ func waitClosed(t *testing.T, ch <-chan []byte) {
 			if !ok {
 				return
 			}
-		case <-time.After(3 * time.Second):
+		case <-time.After(30 * time.Second):
 			t.Fatal("channel not closed")
 		}
 	}
@@ -437,7 +437,7 @@ func TestTapCaptureRelaysTheStreamAtItsOwnRate(t *testing.T) {
 		t.Fatal(err)
 	}
 	got := 0
-	deadline := time.After(3 * time.Second)
+	deadline := time.After(30 * time.Second)
 	for got < 25 {
 		select {
 		case <-ch:

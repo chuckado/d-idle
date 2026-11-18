@@ -139,7 +139,7 @@ func TestTreePicksUpTheScrollAndStonesSetThePortal(t *testing.T) {
 	g := newRig(t)
 	objs := &fakeObjects{}
 	g.r.d.Task = &TaskDeps{Objects: objs}
-	g.r.d.Loot = fakeLoot{w: g.w}
+	g.r.d.Loot = &dropLoot{fakeLoot: fakeLoot{w: g.w}, w: g.w}
 	acts := taskActs{r: g.r}
 	ctx := context.Background()
 	if _, err := (taskEnv{g.r}).World(ctx); err != nil {

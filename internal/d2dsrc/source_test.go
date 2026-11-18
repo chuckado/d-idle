@@ -13,7 +13,7 @@ import (
 
 func quiet(string, ...any) {}
 
-func lateReplies(t *testing.T) map[string]string {
+func lateReplies(t testing.TB) map[string]string {
 	r := sampleReplies()
 	r[headSections] = readFile(t, "dump_head_late.json") + "\nok\n"
 	r["dump items"] = readFile(t, "dump_items_late.json") + "\nok\n"
@@ -46,7 +46,7 @@ func TestSnapshotLate(t *testing.T) {
 		{"str=base+bonus", p.Strength, 23}, {"ene", p.Energy, 70}, {"vit", p.Vitality, 35},
 		{"statpts", p.StatPoints, 5}, {"lskill", p.LeftSkill, 36}, {"rskill", p.RightSkill, 54},
 		{"difficulty", p.Difficulty, d2.Nightmare}, {"fire", p.Resist.Fire, 20}, {"cold", p.Resist.Cold, -10},
-		{"stat fire res", p.Stats.Get(d2.StatFireRes), int32(20)}, {"life fixed", p.Stats.Fixed(d2.StatLife), 180},
+		{"stat fire res", p.Stats.Get(d2.StatFireRes), int32(20)}, {"defence stat 31 from stats.defense", p.Stats.Get(d2.StatArmorClass), int32(120)}, {"life fixed", p.Stats.Fixed(d2.StatLife), 180},
 	} {
 		if c.got != c.want {
 			t.Errorf("%s = %v, want %v", c.name, c.got, c.want)
@@ -91,6 +91,14 @@ func TestSnapshotLate(t *testing.T) {
 	}
 	if ex := res.Extras.Items[12]; ex.Sockets != 2 || ex.Dur != 12 {
 		t.Errorf("extras %+v", ex)
+	}
+	if st := inv.Container(d2.ContStash); len(st) != 1 || st[0].Item.Tint != "t6c12" {
+		t.Errorf("tinted armor: %+v", st)
+	}
+	for _, u := range inv.Items {
+		if u.ID != 12 && u.Item.Tint != "" {
+			t.Errorf("item %d of an older-shape row has tint %q", u.ID, u.Item.Tint)
+		}
 	}
 	if !res.Extras.Clock.Valid || res.Extras.Clock.Tick != 90000 || !res.Extras.Clock.Lockstep {
 		t.Errorf("clock %+v", res.Extras.Clock)
@@ -580,6 +588,30 @@ func TestPlayerStatsKeepFraction(t *testing.T) {
 		}
 		if pl.MaxMana != c.mxMan {
 			t.Errorf("%s: whole-point MaxMana changed to %d", c.name, pl.MaxMana)
+		}
+	}
+}
+
+// itemcolour: a jewel with a colour, a jewel with colour -1 and a row with set 0 (no tint).
+func TestSnapshotItemTint(t *testing.T) {
+	r := lateReplies(t)
+	r["dump items"] = readFile(t, "dump_items_tint.json") + "\nok\n"
+	_, c := startScript(t, r)
+	res, err := New(c, Options{Tables: fakeTables{}, Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := map[uint32]string{}
+	for _, u := range res.Snap.Inventory.Items {
+		got[u.ID] = u.Item.Tint
+	}
+	want := map[uint32]string{15: "", 16: "", 17: "t2c7"}
+	if len(got) != 3 {
+		t.Fatalf("items %v", got)
+	}
+	for id, w := range want {
+		if got[id] != w {
+			t.Errorf("item %d tint %q, want %q", id, got[id], w)
 		}
 	}
 }

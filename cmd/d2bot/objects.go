@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"d2lod-bot/internal/boss"
@@ -12,6 +13,7 @@ import (
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/env"
+	"d2lod-bot/internal/gclock"
 	"d2lod-bot/internal/input"
 	"d2lod-bot/internal/nav"
 	"d2lod-bot/internal/quest"
@@ -30,6 +32,8 @@ type objectAdapter struct {
 	// clicked is the objects of objOnce specs already clicked in this area (the pointer keeps the value-type adapter
 	// shareable); nil in tests that do not click.
 	clicked *onceSet
+	// explored is the search time already spent per (area, class); nil means no memory between slices.
+	explored *exploreTally
 }
 
 type objKind int
@@ -121,6 +125,9 @@ func (o objectAdapter) Interact(ctx context.Context, name string) error {
 			u, err = o.find(ctx, spec.class)
 		}
 		if err != nil {
+			if task.Classify(err) == task.KindExploring {
+				return err
+			}
 			return task.Wrap(task.KindNotFound, err)
 		}
 		if err := o.click(ctx, u); err != nil {
@@ -152,8 +159,109 @@ func (o objectAdapter) Interact(ctx context.Context, name string) error {
 	return task.Errorf(task.KindTimeout, "%s: the object never changed after %d clicks", name, tries)
 }
 
+// objectExploreBudget bounds one search walk of find (one slice: the Step budget of an Interact node is 3 minutes).
+// objectExploreTotal bounds the walks together per (area, class): the Dark Wood needed about 6 minutes for 100 percent
+// (V log 2026-11-17: 42 to 79 percent over three 100 s walks). Only a whole-level walk without the object (ErrExplored)
+// or this total ends the search for good; a walk that merely ran out of time is progress (KindExploring).
+const (
+	objectExploreBudget = 100 * time.Second
+	objectExploreTotal  = 12 * time.Minute
+)
+
+type exploreKey struct{ area, class int }
+
+// exploreTally is the time spent searching, kept across slices (the adapter is a value type: share the pointer).
+type exploreTally struct {
+	mu    sync.Mutex
+	spent map[exploreKey]time.Duration
+}
+
+func (t *exploreTally) add(k exploreKey, d time.Duration) time.Duration {
+	if t == nil {
+		return objectExploreTotal
+	}
+	t.mu.Lock()
+	defer t.mu.Unlock()
+	if t.spent == nil {
+		t.spent = map[exploreKey]time.Duration{}
+	}
+	t.spent[k] += d
+	return t.spent[k]
+}
+
+func (t *exploreTally) reset(k exploreKey) {
+	if t == nil {
+		return
+	}
+	t.mu.Lock()
+	delete(t.spent, k)
+	t.mu.Unlock()
+}
+
+// exploreForObject runs one bounded search walk and judges it. look finds the object; explore walks until the context
+// ends or the level is walked out (nav.ErrExplored). A nil tally keeps the old behaviour: one walk, then not found.
+func exploreForObject(ctx context.Context, clk interface{ Now() time.Time }, tally *exploreTally, k exploreKey,
+	explore func(context.Context) error, look func() (*d2.Unit, error)) (*d2.Unit, error) {
+	ectx, cancel := gclock.WithTimeout(ctx, objectExploreBudget)
+	defer cancel()
+	t0 := clk.Now()
+	xerr := explore(ectx)
+	if xerr != nil && !errors.Is(xerr, nav.ErrExplored) && ctx.Err() != nil {
+		return nil, xerr
+	}
+	u, err := look()
+	if err == nil {
+		tally.reset(k)
+		return u, nil
+	}
+	if errors.Is(xerr, nav.ErrExplored) {
+		tally.reset(k)
+		return nil, fmt.Errorf("%w (the whole level was walked)", err)
+	}
+	if spent := tally.add(k, clk.Now().Sub(t0)); spent < objectExploreTotal {
+		return nil, task.Errorf(task.KindExploring, "still exploring for object class %d (%d s of %d s)", k.class,
+			int(spent/time.Second), int(objectExploreTotal/time.Second))
+	}
+	tally.reset(k)
+	return nil, fmt.Errorf("%w (explored for %d min without finding it)", err, int(objectExploreTotal/time.Minute))
+}
+
+// find is the object of the class nearest to the character. When neither the object nor its preset is known yet it
+// explores the level until one shows up: d2d lists presets of built rooms only, so a far quest object (the Tree of
+// Inifuss in the Dark Wood) is missing on arrival (V docs/d2d-backend.md; V 2026-11-15 log: 12 "object class 30 not
+// found" within 1 s of arrival, never a walk).
 func (o objectAdapter) find(ctx context.Context, class int) (*d2.Unit, error) {
-	return o.findNear(ctx, class, nil)
+	u, err := o.findNear(ctx, class, nil)
+	if err == nil || o.nv == nil || ctx.Err() != nil || !strings.Contains(err.Error(), "not found") {
+		return u, err
+	}
+	known := func() bool {
+		if s, err := o.e.Snapshot(); err == nil {
+			for i := range s.Objects {
+				if s.Objects[i].Class == class {
+					return true
+				}
+			}
+		}
+		if o.e.World != nil {
+			_, _ = o.e.World.Update()
+			if lm := o.e.World.Current(); lm != nil {
+				for _, p := range lm.Presets {
+					if p.Kind == d2map.PresetObject && p.ID == class {
+						return true
+					}
+				}
+			}
+		}
+		return false
+	}
+	area := 0
+	if s, err := o.e.Snapshot(); err == nil && s.Player != nil {
+		area = s.Player.Area
+	}
+	return exploreForObject(ctx, o.e.Clock, o.explored, exploreKey{area, class},
+		func(c context.Context) error { return o.nv.Explore(c, known) },
+		func() (*d2.Unit, error) { return o.findNear(ctx, class, nil) })
 }
 
 // findNear is the object of the class nearest to at (the character when at is nil), looking again after walking to the

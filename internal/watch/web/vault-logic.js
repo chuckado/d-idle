@@ -1,0 +1,205 @@
+// The Ethereal Vault page's logic without a DOM (docs/vault.md, UI section): the filter state and its query string, the same
+// filter and sort the server applies (used to prune and re-order the loaded page after a press, never to decide what the
+// vault holds), the multi-select set with shift ranges, and the capacity meter words. Pure functions: node tests run them
+// (internal/watch/testdata/vault_logic.mjs). The page is vault.js.
+
+export const QUALITY = { 1: 'low', 2: 'normal', 3: 'superior', 4: 'magic', 5: 'set', 6: 'rare', 7: 'unique', 8: 'crafted' };
+export const QUALITY_IDS = Object.keys(QUALITY).map(Number);
+export const SORTS = ['new', 'old', 'quality', 'ilvl', 'value', 'name'];
+export const PAGE = 60;
+
+export function defaultFilters() {
+  return { q: '', quality: [], kind: '', type: '', ilvlMin: '', ilvlMax: '', sockets: '', eth: false, unid: false, pinned: false, state: '', sort: 'new' };
+}
+
+const num = (v) => { const n = parseInt(v, 10); return isFinite(n) && n >= 0 ? n : null; };
+
+// toQuery is the query string of GET /api/vault for these filters (a value that is empty or false is left out).
+export function toQuery(f, page) {
+  const p = new URLSearchParams();
+  if (f.q && f.q.trim()) p.set('q', f.q.trim());
+  if (f.quality && f.quality.length) p.set('quality', f.quality.slice().sort((a, b) => a - b).join(','));
+  if (f.kind) p.set('kind', f.kind);
+  if (f.type) p.set('type', f.type);
+  if (num(f.ilvlMin) !== null && num(f.ilvlMin) > 0) p.set('ilvlMin', String(num(f.ilvlMin)));
+  if (num(f.ilvlMax) !== null && num(f.ilvlMax) > 0) p.set('ilvlMax', String(num(f.ilvlMax)));
+  if (f.sockets !== '' && num(f.sockets) !== null) p.set('sockets', String(num(f.sockets)));
+  if (f.eth) p.set('eth', '1');
+  if (f.unid) p.set('identified', '0');
+  if (f.pinned) p.set('pinned', '1');
+  if (f.state) p.set('state', f.state);
+  if (f.sort && f.sort !== 'new') p.set('sort', f.sort);
+  if (page) {
+    if (page.offset) p.set('offset', String(page.offset));
+    if (page.limit) p.set('limit', String(page.limit));
+    if (page.facets) p.set('facets', '1');
+  }
+  const s = p.toString();
+  return s ? '?' + s : '';
+}
+
+// fromQuery reads the page's own address back into filters (a deep link, a reload); unknown keys are ignored.
+export function fromQuery(search) {
+  const p = new URLSearchParams(search || ''), f = defaultFilters();
+  f.q = (p.get('q') || '').slice(0, 64);
+  f.quality = (p.get('quality') || '').split(',').map(Number).filter((n) => QUALITY[n]);
+  f.kind = p.get('kind') || '';
+  f.type = p.get('type') || '';
+  f.ilvlMin = num(p.get('ilvlMin')) ? String(num(p.get('ilvlMin'))) : '';
+  f.ilvlMax = num(p.get('ilvlMax')) ? String(num(p.get('ilvlMax'))) : '';
+  f.sockets = p.get('sockets') !== null && num(p.get('sockets')) !== null ? String(num(p.get('sockets'))) : '';
+  f.eth = p.get('eth') === '1';
+  f.unid = p.get('identified') === '0';
+  f.pinned = p.get('pinned') === '1';
+  f.state = p.get('state') || '';
+  f.sort = SORTS.includes(p.get('sort')) ? p.get('sort') : 'new';
+  return f;
+}
+
+// activeCount is how many filters narrow the list (the sort does not): the number on the phone's Filters button.
+export function activeCount(f) {
+  let n = 0;
+  if (f.q && f.q.trim()) n++;
+  if (f.quality && f.quality.length) n++;
+  if (f.kind) n++;
+  if (f.type) n++;
+  if (num(f.ilvlMin) > 0 || num(f.ilvlMax) > 0) n++;
+  if (f.sockets !== '' && num(f.sockets) !== null) n++;
+  if (f.eth) n++;
+  if (f.unid) n++;
+  if (f.pinned) n++;
+  if (f.state) n++;
+  return n;
+}
+
+// matches mirrors the server's filter for one row. kinds: [{id, quality?, codePrefix?}] from /watch/vault.json. The type filter
+// is the server's (a base type chain the row does not carry): rows are not filtered by it here.
+export function matches(it, f, kinds) {
+  if (f.q && f.q.trim() && !String(it.name || '').toLowerCase().includes(f.q.trim().toLowerCase())) return false;
+  if (f.quality && f.quality.length && !f.quality.includes(it.q)) return false;
+  if (f.kind) {
+    const k = (kinds || []).find((x) => x.id === f.kind);
+    if (!k) return false;
+    if (k.quality && k.quality.length && !k.quality.includes(it.q)) return false;
+    if (k.codePrefix && k.codePrefix.length && !k.codePrefix.some((p) => String(it.code || '').startsWith(p))) return false;
+  }
+  const lo = num(f.ilvlMin), hi = num(f.ilvlMax);
+  if (lo && it.ilvl < lo) return false;
+  if (hi && it.ilvl > hi) return false;
+  if (f.sockets !== '' && num(f.sockets) !== null && (it.sockets || 0) !== num(f.sockets)) return false;
+  if (f.eth && !it.ethereal) return false;
+  if (f.unid && it.identified) return false;
+  if (f.pinned && !it.pin) return false;
+  const live = !f.state ? ['recorded', 'keepq', 'sellq'] : f.state.split(',');
+  return live.includes(it.state);
+}
+
+// sortItems orders rows like the server: new (newest found first), old, quality and ilvl and value (highest first), name (A to Z);
+// ties keep the newer first. Rows carry no insertion number, so the found time stands in for it.
+export function sortItems(items, sort) {
+  const t = (x) => Date.parse(x.found || '') || 0;
+  const newer = (a, b) => t(b) - t(a);
+  const by = {
+    new: newer, old: (a, b) => t(a) - t(b),
+    quality: (a, b) => b.q - a.q || newer(a, b), ilvl: (a, b) => b.ilvl - a.ilvl || newer(a, b), value: (a, b) => b.value - a.value || newer(a, b),
+    name: (a, b) => String(a.name).toLowerCase().localeCompare(String(b.name).toLowerCase()) || newer(a, b),
+  };
+  return items.slice().sort(by[sort] || by.new);
+}
+
+// createSelection is the multi-select: a set of ids with an anchor for shift ranges. mode is "select mode" (a plain press
+// toggles instead of opening the item), set by the Select button, a long press or the first shift press.
+export function createSelection() {
+  const set = new Set();
+  let anchor = null, mode = false;
+  const api = {
+    has: (id) => set.has(id),
+    get size() { return set.size; },
+    get mode() { return mode; },
+    set mode(v) { mode = !!v; },
+    get anchor() { return anchor; },
+    ids: () => [...set],
+    toggle(id) { if (set.has(id)) set.delete(id); else set.add(id); anchor = id; if (set.size) mode = true; return set.has(id); },
+    // range selects every id between the anchor and id in the order shown (inclusive); without an anchor it is a toggle
+    range(order, id) {
+      const a = order.indexOf(anchor), b = order.indexOf(id);
+      if (a < 0 || b < 0) return api.toggle(id);
+      for (let i = Math.min(a, b); i <= Math.max(a, b); i++) set.add(order[i]);
+      anchor = id; mode = true;
+      return true;
+    },
+    all(order) { order.forEach((id) => set.add(id)); mode = true; },
+    clear() { set.clear(); anchor = null; mode = false; },
+    // prune drops ids that are no longer in the list (discarded, filtered away); the mode ends with the last one
+    prune(order) {
+      const keep = new Set(order);
+      for (const id of [...set]) if (!keep.has(id)) set.delete(id);
+      if (anchor !== null && !keep.has(anchor)) anchor = null;
+      if (!set.size) mode = false;
+    },
+  };
+  return api;
+}
+
+// capacityView words the meter: the text, the level the colour follows, the bar width and the banner (over capacity).
+export function capacityView(c, T) {
+  const cap = (c && c.capacity) || 0, n = (c && c.count) || 0;
+  const pct = cap > 0 ? Math.min(100, Math.round((n * 100) / cap)) : 0;
+  const level = (c && c.level) || 'ok';
+  const fmt = (s, o) => String(s || '').replace(/\{(\w+)\}/g, (m, k) => (o && o[k] !== undefined ? o[k] : ''));
+  return {
+    text: n + ' / ' + cap, pct, level, now: n, max: cap,
+    banner: level === 'over' ? fmt(T.overBanner, { over: c.over, n }) : level === 'full' ? T.fullBanner : '',
+  };
+}
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+export function when(iso, nowMs) {
+  const t = Date.parse(iso || '');
+  if (!isFinite(t)) return '';
+  const s = Math.max(0, Math.round(((nowMs === undefined ? Date.now() : nowMs) - t) / 1000));
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s / 60) + ' min ago';
+  if (s < 86400) return Math.floor(s / 3600) + ' h ago';
+  if (s < 172800) return 'yesterday';
+  if (s < 30 * 86400) return Math.floor(s / 86400) + ' days ago';
+  const d = new Date(t);
+  return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+}
+
+// toTipView gives the item tooltip (inventory-tip.js) the rows as an inventory view: each row gets a page-local number as its
+// id (the tooltip looks items up by a number), and the map says which vault id that is.
+export function toTipView(items) {
+  const byN = new Map();
+  const backpack = items.map((it, i) => { byN.set(i + 1, it.id); return Object.assign({}, it, { id: i + 1, vid: it.id }); });
+  return { view: { backpack, stash: [], belt: [], cube: [], equipment: {} }, byN };
+}
+
+// discardAsk is what the confirm sheet needs for n items: the typed number is asked above `typedAbove` items.
+export function discardAsk(n, typedAbove) { return { n, typed: n > typedAbove }; }
+
+// revealPlan is what a Reveal press on these ids would queue and what it costs, the numbers shown BEFORE the click. n counts the
+// unidentified, not yet queued records that are still in the vault; free means Cain stands in the town (no charge is used);
+// short means the pack holds fewer charges than n (have -1: unknown, the server decides).
+export function revealPlan(items, ids, act) {
+  const by = new Map((items || []).map((i) => [i.id, i]));
+  const ok = (ids || []).filter((id) => { const it = by.get(id); return it && !it.identified && !it.reveal && (it.state === 'recorded' || it.state === 'keepq'); });
+  const n = ok.length;
+  const r = (act && act.reveal) || {}, per = r.perItem || 1, have = typeof r.charges === 'number' ? r.charges : -1, free = !!r.free;
+  return { n, ids: ok, charges: n * per, have, free, short: !free && n > 0 && have >= 0 && have < n * per };
+}
+
+// sellPlan is what a Sell press would queue: live recorded items that are not pinned or queued; skipped counts the rest.
+// gold is the vault's lower-bound price of the queued ones.
+export function sellPlan(items, ids) {
+  const by = new Map((items || []).map((i) => [i.id, i]));
+  let n = 0, gold = 0, pinned = 0;
+  const ok = [];
+  for (const id of ids || []) {
+    const it = by.get(id);
+    if (!it || it.state !== 'recorded' || it.sell) continue;
+    if (it.pin) { pinned++; continue; }
+    n++; gold += it.value || 0; ok.push(id);
+  }
+  return { n, ids: ok, gold, pinned, skipped: (ids || []).length - n };
+}

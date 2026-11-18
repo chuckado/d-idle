@@ -129,13 +129,14 @@ func nodes(s ...Step) []Node {
 
 // handlers maps a quest id to its nodes.
 var handlers = map[string]func() []Node{
-	QDen:      denNodes,
-	QBurial:   burialNodes,
-	QCain:     cainNodes,
-	QTools:    toolsNodes,
-	QTower:    towerNodes,
-	QAndariel: andarielNodes,
-	QAct1Done: hopNodes,
+	QDen:       denNodes,
+	QBurial:    burialNodes,
+	QCain:      cainNodes,
+	QCainBoard: cainReportNodes,
+	QTools:     toolsNodes,
+	QTower:     towerNodes,
+	QAndariel:  andarielNodes,
+	QAct1Done:  hopNodes,
 }
 
 // Handler returns the nodes of quest q (nil when unknown).
@@ -192,7 +193,10 @@ func cainNodes() []Node {
 	q := QCain
 	inTristram := func(w World) bool { return w.Area == Tristram }
 	opened := func(w World) bool { return w.Items[ItemPortal] > 0 || inTristram(w) } // portal seen (EvProxy)
-	free := stageAtLeast(q, StageDone)
+	// free: Cain is out of the cage. The reader's "reward pending" word (Cleared) is enough: the report to Akara belongs to
+	// the board's own group (cainReportNodes), so no field step may stay needed until that talk is done (S7b; U: whether
+	// the game sets Cleared at the cage or Done at once).
+	free := stageAtLeast(q, StageCleared)
 	return []Node{
 		{Step: StepWaypoint(id(q, "wp-dark-wood"), DarkWood, free)},
 		{Step: StepTravel(id(q, "to-wood"), "Go to the Dark Wood", DarkWood, func(w World) bool { return w.Items[ItemBark] > 0 || w.Items[ItemCainSc] > 0 || free(w) })},
@@ -208,6 +212,17 @@ func cainNodes() []Node {
 		{Step: StepInteract(id(q, "cage"), "Free Cain", "Cain's Cage", free, inTristram)},
 		{Step: StepTravel(id(q, "home"), "Return to camp", RogueEncampment, func(w World) bool { return !free(w) && w.Area != Tristram || w.InTown })},
 	}
+}
+
+// cainReportNodes is the board's report chunk of Search for Cain (slice S7b): the last Akara talk after the cage. It is
+// a group of its own so the campaign never runs it (a step whose only evidence is the quest word would repeat after every
+// restart without a reader). Needed only while the reader says Cain is free and the reward is open (Cleared, T1/T2); a T3
+// observation never starts it. U: the dialogue row (plain Talk), and whether the game sets the word at the cage (then
+// Done is read at once and the step is skipped, with the same chunk result) or at this talk.
+func cainReportNodes() []Node {
+	q := QCainBoard
+	return []Node{{Step: StepTalk(id(q, "report"), "Report to Akara", NPCAkara, "cain report",
+		stageAtLeast(QCain, StageDone), stageAtLeast(QCain, StageCleared))}}
 }
 
 // Tools of the Trade: needs clvl 8 (V). Smith in the Barracks drops the Horadric Malus; Charsi imbues one item

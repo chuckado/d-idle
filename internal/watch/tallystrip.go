@@ -71,6 +71,19 @@ type TallyStrip struct {
 	kills, drops, xp int64 // activity of the trip under way
 	last             *currency.Window
 	firstErr         error
+
+	viewMu sync.Mutex // the view is recomputed from the whole ledger; polling viewers get a copy up to viewTTL old
+	view   *TallyView
+	viewAt time.Time
+}
+
+// viewTTL bounds how stale a polled view is; every strip event, credit and order drops the cached view at once.
+const viewTTL = time.Second
+
+func (s *TallyStrip) dropView() {
+	s.viewMu.Lock()
+	s.view = nil
+	s.viewMu.Unlock()
 }
 
 // TallyOffText is the strip when no ledger is attached: the human setting (the ladder and the watch screen) is off.
@@ -97,6 +110,7 @@ func (s *TallyStrip) fail(err error) {
 }
 
 func (s *TallyStrip) credit(ev currency.TallyEvent) {
+	defer s.dropView()
 	_, err := s.Tally.Credit(ev)
 	s.fail(err)
 }
@@ -104,6 +118,7 @@ func (s *TallyStrip) credit(ev currency.TallyEvent) {
 // OnEvent is the credit hook: call it for every goals event (GoalsOrders.OnEvent is the place). Events that earn
 // nothing are ignored. The event id is the run plus the event's sequence number, so a replayed journal books nothing twice.
 func (s *TallyStrip) OnEvent(ev goals.Event) {
+	defer s.dropView()
 	id := fmt.Sprintf("%s:%d", s.Tally.Run, ev.Seq)
 	if ev.Seq == 0 && (ev.Type == goals.EvKill || ev.Type == goals.EvAreaChange || ev.Type == goals.EvQuest) {
 		s.fail(fmt.Errorf("tally: a %s event without a sequence number cannot be credited safely", ev.Type))
@@ -179,6 +194,17 @@ func delta(t *currency.Tally, w currency.Window, open bool) (*ExpeditionDelta, e
 
 // View builds the strip. It only reads; a ledger that fails its check shows an error and no balance.
 func (s *TallyStrip) View() *TallyView {
+	s.viewMu.Lock()
+	defer s.viewMu.Unlock()
+	if s.view != nil && time.Since(s.viewAt) < viewTTL {
+		return s.view
+	}
+	s.view = s.build()
+	s.viewAt = time.Now()
+	return s.view
+}
+
+func (s *TallyStrip) build() *TallyView {
 	w := s.Wallet
 	v := &TallyView{Schema: tallySchema, Mode: w.Mode, Recent: []TallyLine{}, Next: []NextBuy{}}
 	if w.Mode == "" || w.Mode == currency.VanillaMode || w.Ledger == nil {
@@ -268,6 +294,7 @@ func (s *TallyStrip) Quote(area string) (currency.Quote, error) {
 // approve the order is placed first and the charter is paid after, keyed by the order, so a refused order costs nothing
 // and tally never goes negative (a short balance is refused before the order is placed). Other order kinds are free.
 func (s *TallyStrip) PlaceOrder(r OrderRequest, approve bool) (Order, currency.Quote, error) {
+	defer s.dropView()
 	if r.Kind != OrderGo {
 		o, err := s.Hub.Give(r)
 		return o, currency.Quote{}, err
