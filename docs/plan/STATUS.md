@@ -272,6 +272,7 @@
 | videoctl | proposed | - | `internal/watch/web/panels/video`<br>`tools/uishots`<br>`tools/uishots.sh`<br>`tools/videofeed`<br>`docs/video-feed.md`<br>`internal/watch/testdata/video_panel.js`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/panel_harness.js` | - |
 | brightness | proposed | - | `docs/probes/viewer-brightness-2026-11-17.md`<br>`internal/watch/web/panels/video/brightness.js`<br>`internal/watch/web/panels/video/panel.css`<br>`internal/watch/web/panels/video/panel.js`<br>`internal/watch/testdata/video_panel.js`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/video_labels_panel.js`<br>`internal/watch/palfeed/luma_test.go`<br>`tools/videofeed/gamma_frames.py`<br>`tools/videofeed/lumastat/` | - |
 | cainfix | proposed | - | `docs/probes/search-for-cain-2026-11-17.md`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_test.go`<br>`internal/questboard`<br>`internal/task/world.go`<br>`internal/quest/act1.go`<br>`internal/bot/task.go`<br>`internal/watch`<br>`internal/task`<br>`internal/bot`<br>`cmd/d2bot`<br>`data/questboard/act1.json` | - |
+| verifycrush3 | proposed | - | `docs/upstream/verifier-crush3-2026-11-17.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -312,6 +313,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 5c809b842 11-17 20:42 `Merge agent/verifycrush3: Merge branch 'main' into TASK-628` (verifycrush3)
+- 98aab18ff 11-17 20:41 `Merge branch 'main' into TASK-628` (-)
 - 20296cd60 11-17 19:52 `Merge agent/cainfix2: cainfix: Search for Cain offline fixes (CAIN-1,2,3,6)` (cainfix2)
 - 8dbe9197e 11-17 19:03 `Merge agent/cainfix: cainfix: Search for Cain diagnosis doc` (cainfix)
 - 14ba33edb 11-17 16:25 `Merge agent/videoload: watch: serve a panel's helper modules (video/brightness.js 404 made the video panel fail to load); test every panel import is served` (videoload)
@@ -320,6 +323,4 @@
 - 115106402 11-17 15:22 `Merge agent/jewelicons: watch: inventory DOM stub gets querySelector and the nopin goldens show the type-fallback glyph (the go-whole failure)` (jewelicons)
 - 1d11c9f28 11-17 14:58 `Merge origin/main into agent/jewelicons` (-)
 - 8680a6d2f 11-17 13:37 `Merge agent/brightness: Merge branch 'main' into TASK-622` (brightness)
-- 6dc47f0c5 11-17 13:36 `Merge branch 'main' into TASK-622` (-)
-- 1c3b12cf7 11-17 13:35 `Merge origin/main into agent/brightness; Brightness joins the video toolbar` (brightness)
 <!-- statusgen:end -->

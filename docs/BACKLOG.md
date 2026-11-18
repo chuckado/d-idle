@@ -1040,6 +1040,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/videoload: watch: serve a panel's helper modules (video/brightness.js 404 made the video panel fail to load); test every panel import is served (merged 2026-11-17) <!--sg:agent/videoload-->
 - cainfix: Search for Cain offline fixes (explore-to-find, item codes, pickup wait, board wording) (TASK-627, merged 2026-11-17, acceptance 0 of 5) <!--sg:agent/cainfix-->
 - agent/cainfix2: cainfix: Search for Cain offline fixes (CAIN-1,2,3,6) (merged 2026-11-17) <!--sg:agent/cainfix2-->
+- verifycrush3: verifier of the Crushing Blow r3 PR (fid/crush-r3) (TASK-628, merged 2026-11-17, acceptance 3 of 3): r3 FAIL (8 of 18 mutants pass test_combat, m11 plain-multiply resist caught by nothing; RE finding missing, monsters.md says after the hit ... <!--sg:agent/verifycrush3-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
