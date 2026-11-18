@@ -281,6 +281,7 @@
 | cain45 | proposed | - | `cmd/d2bot/cain.go`<br>`cmd/d2bot/cain_test.go`<br>`internal/d2dsrc/items.go`<br>`internal/task/act1.go`<br>`internal/task/cainstones_test.go`<br>`data/questboard/act1.json`<br>`docs/probes/search-for-cain-45-2026-11-18.md`<br>`docs/actbot.md`<br>`internal/watch/testdata/quests`<br>`docs/questboard.md`<br>`internal/questboard/chunks_test.go`<br>`internal/questboard/state_test.go`<br>`internal/d2dsrc/source_test.go` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | cainl2 | proposed | - | `docs/probes/cainl2`<br>`docs/probes/search-for-cain-l2-2026-11-18.md`<br>`docs/probes/test-characters.md` | `d2d-control-socket` |
+| itempics | proposed | - | `internal/data/invfile.go`<br>`internal/data/invfiles.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`cmd/d2bot/display.go`<br>`internal/d2dsrc/items.go`<br>`internal/bot/catalog.go`<br>`internal/d2/items.go`<br>`internal/data/invfile_test.go`<br>`internal/data/invfile_real_test.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2dsrc/testdata/dump_items_pic.json`<br>`cmd/d2bot/itemart_test.go` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -319,6 +320,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 91747b183 11-18 10:48 `Merge agent/itempics: itempics: jewel/ring/amulet/charm art by item picture index (inv_pic, ItemTypes InvGfx)` (itempics)
+- 9c1907a92 11-18 10:46 `Merge origin/main into agent/itempics` (-)
 - 05ba40cc0 11-18 10:33 `Merge agent/cain45: CAIN-4/5a: cairn stone solver by class cycling, bkd prereq, quest portal class 60, stones chunk supported` (cain45)
 - 70d357297 11-18 10:32 `Merge branch 'main' into cain45` (-)
 - 8b2625e60 11-18 10:27 `Merge agent/cainl2: cainl2: Search for Cain L2 drill (cage, free Cain, return, Akara report)` (cainl2)
@@ -327,6 +330,4 @@
 - 96848224c 11-18 10:18 `Merge agent/devp11doc: devp11 item colour payload doc` (devp11doc)
 - 0ba7c0782 11-18 10:16 `Merge branch 'main' into devp11doc` (-)
 - 0bc637671 11-18 10:11 `Merge agent/cainl1: Merge branch 'main' into cainl1` (cainl1)
-- 45ac72acf 11-18 10:10 `Merge branch 'main' into cainl1` (-)
-- 058b72f74 11-18 10:01 `Merge agent/cain7: CAIN-7: walk to the Inifuss tree room from the presets room rows` (cain7)
 <!-- statusgen:end -->

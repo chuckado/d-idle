@@ -97,3 +97,41 @@ func TestStatusItemTint(t *testing.T) {
 		t.Errorf("tint missing: %s", b)
 	}
 }
+
+// Item pictures: the six jewel looks are six different art keys, a ring is a second kind, items without variants and
+// items with an unknown or absent picture keep the base icon.
+func TestItemArtPictures(t *testing.T) {
+	jw := [6]string{"invjw1", "invjw2", "invjw3", "invjw4", "invjw5", "invjw6"}
+	cat := bot.NewDataCatalog(&data.DB{
+		ItemTypes: []*data.ItemType{{Code: "jewl", InvGfx: jw}, {Code: "ring", InvGfx: [6]string{"invrin1", "invrin2", "invrin3", "invrin4", "invrin5"}}, {Code: "swor"}},
+		Items:     []*data.ItemBase{{Code: "jew", Type: "jewl", InvFile: "invgswe"}, {Code: "rin", Type: "ring", InvFile: "invrin"}, {Code: "ssd", Type: "swor", InvFile: "invssd"}},
+	})
+	unit := func(class, q, pic int) d2.Unit { return d2.Unit{Class: class, Item: &d2.Item{Quality: q, Pic: pic}} }
+	keys := map[string]bool{}
+	for pic := 0; pic < 6; pic++ {
+		for _, q := range []int{d2.QualityMagic, 6} { // magic and rare; identified or not does not change the picture
+			got := itemArt(cat, unit(0, q, pic+1))
+			if got != jw[pic] {
+				t.Errorf("jewel pic %d quality %d: %q, want %q", pic, q, got, jw[pic])
+			}
+			keys[got] = true
+		}
+	}
+	if len(keys) != 6 {
+		t.Errorf("six jewel pictures gave %d art keys: %v", len(keys), keys)
+	}
+	for _, tc := range []struct {
+		name string
+		u    d2.Unit
+		want string
+	}{
+		{"ring pic 3", unit(1, 4, 4), "invrin4"},
+		{"jewel without a picture (older d2d)", unit(0, 4, 0), "invgswe"},
+		{"ring pic past the list", unit(1, 4, 6), "invrin"},
+		{"sword ignores a picture", unit(2, 4, 3), "invssd"},
+	} {
+		if got := itemArt(cat, tc.u); got != tc.want {
+			t.Errorf("%s: %q, want %q", tc.name, got, tc.want)
+		}
+	}
+}

@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- itempics: jewel/ring/amulet/charm art by item picture index (inv_pic, ItemTypes InvGfx) <!--sg:agent/itempics-->
 - CAIN-4/5a: cairn stone solver by class cycling, bkd prereq, quest portal class 60, stones chunk supported <!--sg:agent/cain45-->
 - cainl2: Search for Cain L2 drill (cage, free Cain, return, Akara report) <!--sg:agent/cainl2-->
 - devp11 item colour payload doc <!--sg:agent/devp11doc-->

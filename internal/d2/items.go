@@ -76,6 +76,7 @@ type Item struct {
 	ILvl      int
 	FileIndex int    // unique/set index, UNVERIFIED (+0x28)
 	Tint      string // inventory colour key "t<set>c<colour>" from the d2d dump (inv_tint, inv_colour); "" = none or an older d2d build
+	Pic       int    // 1 + the item's picture index (ItemTypes InvGfx) from the d2d dump (inv_pic); 0 = none or an older d2d build
 	Body      int    // BodyLocation (+0x44)
 	Page      int    // ItemLocation (+0x45)
 	NodePage  int    // (+0x69): 1 storage, 2 belt, 3 equipment VERIFIED LIVE
