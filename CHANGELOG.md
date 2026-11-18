@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- devp11 item colour payload doc <!--sg:agent/devp11doc-->
+- Merge branch 'main' into cainl1 <!--sg:agent/cainl1-->
+- CAIN-7: walk to the Inifuss tree room from the presets room rows <!--sg:agent/cain7-->
 - item tint: parse inv_tint/inv_colour, art colormap remap, UI key (includes the itemcolour design) <!--sg:agent/itemcolour2-->
 - itemcolour: item colour design doc <!--sg:agent/itemcolour-->
 - Merge branch 'main' into groundquality <!--sg:agent/groundquality-->

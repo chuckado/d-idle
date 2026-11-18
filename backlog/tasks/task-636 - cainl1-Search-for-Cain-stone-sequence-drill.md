@@ -1,10 +1,11 @@
 ---
 id: TASK-636
 title: 'cainl1: Search for Cain stone sequence drill'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T14:40:00Z'
+updated_date: '2026-11-18T15:20:00Z'
 labels:
   - d2d
   - drill

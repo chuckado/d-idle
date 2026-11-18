@@ -450,6 +450,40 @@ func ParsePreset(line string) (Preset, error) {
 	return p, firstErr(e[:]...)
 }
 
+// Room is a "room <type> <x> <y>" row that "debug presets" prints after the placed objects (V lab build, docs/probes/search-for-cain-l0-2026-11-18.md; U in the sandbox build). X, Y is the room origin in cells.
+type Room struct {
+	Type int
+	X, Y float64
+}
+
+// ParseRoom parses room <type> <x> <y>.
+func ParseRoom(line string) (Room, error) {
+	f := fields(line)
+	if len(f) < 4 || f[0] != "room" {
+		return Room{}, fmt.Errorf("room: want room <type> <x> <y>")
+	}
+	var r Room
+	var e [3]error
+	r.Type, e[0] = atoi(f[1])
+	r.X, e[1] = atof(f[2])
+	r.Y, e[2] = atof(f[3])
+	return r, firstErr(e[:]...)
+}
+
+// Rooms picks the room rows out of a presets reply (a nil reply has none).
+func Rooms(r *Reply) []Room {
+	if r == nil {
+		return nil
+	}
+	var out []Room
+	for _, l := range r.Lines {
+		if rm, err := ParseRoom(l); err == nil {
+			out = append(out, rm)
+		}
+	}
+	return out
+}
+
 // Object is one line of "debug objects": a shrine or chest.
 type Object struct {
 	Raw    string

@@ -850,6 +850,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [queuespeed.md](process/queuespeed.md): Queue speed changes (TASK-312) (status: current. Source: docs/research/merge-queue-profile-2026-11-11.md. Code lives in the ops repo...)
 - [retired-terms-20261104.md](process/retired-terms-20261104.md): Retired-terms banner pass (2026-11-04)
 - [sandbox-devp10.md](process/sandbox-devp10.md): Sandbox d2d build devp10 (2026-11-17) (status: current. Task: TASK-623 (sandbox3). Tags: V = verified in this run (how said), S = read from a tool or...)
+- [sandbox-devp11.md](process/sandbox-devp11.md): Sandbox image devp11: item colour payload (slice 1 fixtures) (status: current (task-638, 2026-11-18). Built and checked on the builder, NOT loaded into the sandbox. Design:...)
 - [sandbox-devp9.md](process/sandbox-devp9.md): Sandbox d2d build devp9 (2026-11-15) (status: current. Task: TASK-535 (sandbox2). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [spdx.md](process/spdx.md): SPDX header policy (ADR 0010)
 - [spec-apply-a-20261104.md](process/spec-apply-a-20261104.md): Spec apply A, 2026-11-04
@@ -1010,6 +1011,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [sandbox-fresh-20261115.md](probes/sandbox-fresh-20261115.md): Sandbox reset to a fresh hero, 2026-11-15 (status: record. Task sandboxfresh. Tags: V = verified in this run, U = not verified.)
 - [search-for-cain-2026-11-17.md](probes/search-for-cain-2026-11-17.md): The Search for Cain on the sandbox: diagnosis and fix plan (2026-11-17) (status: diagnosis, read-only and offline. No game was started and nothing was sent to the sandbox; the only live...)
 - [search-for-cain-l0-2026-11-18.md](probes/search-for-cain-l0-2026-11-18.md): Search for Cain, drill L0: object listings of the tree and the stones (2026-11-18) (status: result of the read-only drill CAIN-L0 named in `docs/probes/search-for-cain-2026-11-17.md` section 6 (that...)
+- [search-for-cain-l1-2026-11-18.md](probes/search-for-cain-l1-2026-11-18.md): Search for Cain, drill L1: the five Cairn Stones and the way to Tristram (2026-11-18) (status: result of drill CAIN-L1, follow-up to `docs/probes/search-for-cain-l0-2026-11-18.md`. Same setup as L0...)
 - [shortdrills.md](probes/shortdrills.md): Short live drills for the g2e/g2f fixes (card shortdrills) (status: current (2026-11-06). Tags: V = run live on the worker host, S = secondary, U = unverified.)
 - [survival-ab-8seed-2026-11-16.md](probes/survival-ab-8seed-2026-11-16.md): Survival A/B 8-seed confirmation, Paladin, bot.zoneModel 0 vs 1, 2026-11-16 (status: current (TASK-568). Follows the 3-seed rescreen. Harness: ab-harness. Tags: V verified (run logs,...)
 - [survival-ab-8seed-rerun-2026-11-16.md](probes/survival-ab-8seed-rerun-2026-11-16.md): Survival A/B 8-seed rerun, Paladin (and a Sorceress screen), fixed harness and retuned controller, 2026-11-16 (status: current (TASK-572). Follows the 8-seed run (FAIL on XP). Harness: ab-harness sections 6 to 9. Tags: V...)

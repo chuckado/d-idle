@@ -317,6 +317,10 @@ func (w *World) fetch(ctx context.Context, l *lvl, rect d2map.Rect, pos d2map.Po
 			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: p.ObjectID, Pos: sub(p.X, p.Y)})
 			l.names = append(l.names, p.Name)
 		}
+		l.m.RoomRows = nil
+		for _, r := range d2dctl.Rooms(ps.Reply) {
+			l.m.RoomRows = append(l.m.RoomRows, d2map.RoomRow{Type: r.Type, Pos: sub(r.X+0.5, r.Y+0.5)})
+		}
 	}
 	return max(0, l.m.Grid.KnownCount()-before)
 }
