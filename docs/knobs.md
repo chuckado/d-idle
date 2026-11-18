@@ -194,9 +194,9 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | loot.vault | 0 | 0..1 | 0/1 | 1 | 6 | 1: items the Vault preset (docs/vault.md) selects are peeked and recorded in the vault instead of being picked up; the bot walks to them as for a pickup, sends no pickup click and uses no pack space. Gold, potions, scrolls, keys, gems and stacks keep their own rules. Needs d2d started with --vault-verbs; without it the knob does nothing and a Needs-you info line says why. Forced off in measured runs (gates, soaks, baselines: D2BOT_RUN). 0 (default): today's pickit, byte-identical. |
 | loot.vaultKeep | 1 | 0..1 | 0/1 | 1 | 1 | 1 (default, with loot.vault 1): the Keep button of the Ethereal Vault queues the item and the bot creates it in the hero's stash at the next safe moment in town, exactly as dropped (docs/vault.md, Keep). 0: the queue stops creating at once (kill switch); queued items stay queued. Needs d2d with --vault-verbs; forced off in measured runs (D2BOT_RUN). |
 | loot.vaultKeepPerVisit | 20 | 1..100 | items | 100 | 1 | Most items the Keep queue creates in one town visit, so a long queue does not stall the trip; the rest follows at the next safe moment. |
-| loot.vaultSellPerVisit | 10 | 1..50 | items | 50 | 0 | Most vault items the Sell errand creates in the pack and sells at the vendor in one town visit (docs/vault.md, Sell); the rest follows at the next safe moment. |
-| loot.vaultSellPrompt | 0 | 0..1 | 0/1 | 1 | 0 | 1 (with loot.vault 1): when the town budget (repair, potion floor, mercenary reserve) is short of gold, a Needs-you row offers to sell the lowest-value unpinned vault items (never rare or better); Yes queues them for the Sell errand. 0 (default): no prompt. Nothing is ever sold without the answer. |
-| loot.vaultPoorPickup | 1 | 0..1 | 0/1 | 1 | 0 | 1 (default, with loot.vault 1): below loot.poorGoldBelow gold the looter picks up the items worth loot.poorMinSell gold or more instead of only recording them, so a broke hero earns gold (docs/vault.md). 0: it records them. |
+| loot.vaultSellPerVisit | 10 | 1..50 | items | 50 | 1 | Most vault items the Sell errand creates in the pack and sells at the vendor in one town visit (docs/vault.md, Sell); the rest follows at the next safe moment. |
+| loot.vaultSellPrompt | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1): when the town budget (repair, potion floor, mercenary reserve) is short of gold, a Needs-you row offers to sell the lowest-value unpinned vault items (never rare or better); Yes queues them for the Sell errand. 0 (default): no prompt. Nothing is ever sold without the answer. |
+| loot.vaultPoorPickup | 1 | 0..1 | 0/1 | 1 | 1 | 1 (default, with loot.vault 1): below loot.poorGoldBelow gold the looter picks up the items worth loot.poorMinSell gold or more instead of only recording them, so a broke hero earns gold (docs/vault.md). 0: it records them. |
 | loot.vaultAll | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1): every ground item that is not gold, a gem or a stack and that no other rule takes is recorded too, plain and low items included. 0 (default): the Vault preset only. |
 | loot.pickRadius | 30 | 5..60 | subtiles | 5 | 2 | Ground items within this distance are considered. |
 | loot.pickStrictness | 1 | 0..3 | level | 3 | 4 | 0 loose (also items worth selling), 1 normal, 2 keepers only, 3 gold/runes/gems/uniques only. |
@@ -216,7 +216,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | loot.valuableMinPrio | 70 | 1..100 | prio | 100 | 8 | Items whose pickit rule prio is at least this are valuables. |
 | loot.carryValuables | 0 | 0..20 | count | 0 | 1 | Valuables allowed in the pack outside town (insurance: the rest stay in the stash). |
 | loot.poorGoldBelow | 300 | 0..1e+04 | gold | 1e+04 | 1 | Below this gold every gold pile and junk weapon or armor worth selling is picked. |
-| loot.poorMinSell | 20 | 0..500 | gold | 500 | 2 | Estimated sell value a junk item needs to be picked in poor mode. |
+| loot.poorMinSell | 20 | 0..500 | gold | 500 | 3 | Estimated sell value a junk item needs to be picked in poor mode. |
 | loot.maxPerCall | 30 | 1..100 | count | 1 | 1 | Upper bound on pickups in one PickUp call. |
 | loot.memEnabled | 1 | 0..1 | 0/1 | 0 | 2 | 1: remember wanted drops beyond the pickup radius and walk back for them at quiet moments. |
 | loot.memMinGold | 20 | 0..5000 | gold | 5000 | 1 | Smallest remembered gold pile worth a walk-back at clvl 1; the bar grows by 10 percent per character level. |
@@ -247,8 +247,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.reactionMs | 0 | 0..300 | ms | 300 | 1 | Extra delay before reacting to low life or a chicken condition. |
 | bot.resupplyPotions | 2 | 2..4 | potions | 4 | 2 | Healing potions left in the belt that trigger a town trip. Higher means more trips. |
 | bot.invFullPct | 85 | 40..85 | % | 40 | 2 | Share of occupied inventory cells that triggers a town trip. Lower means more trips. |
-| bot.levelMargin | 0 | 0..8 | levels | 8 | 10 | Levels above a step's enter level the planner requires. Higher is safer but slower. |
-| bot.leaveSlack | 0 | 0..6 | levels | 6 | 8 | Levels past a step's leave level before moving to the next area. Higher wastes time in easy areas. |
+| bot.levelMargin | 0 | 0..8 | levels | 8 | 11 | Levels above a step's enter level the planner requires. Higher is safer but slower. |
+| bot.leaveSlack | 0 | 0..6 | levels | 6 | 9 | Levels past a step's leave level before moving to the next area. Higher wastes time in easy areas. |
 | bot.corpseRetries | 1 | 0..1 | count | 0 | 1 | Max attempts to recover the corpse after a softcore death. 0 abandons the gear. |
 | bot.portalSettleMs | 600 | 600..4500 | ms | 4500 | 1 | Pause in town after chores before going back out. |
 | bot.clearRadius | 30 | 12..45 | subtiles | 12 | 27 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
@@ -368,9 +368,9 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | campaign.imbueNeedsMerc | 1 | 0..1 | bool | 1 | 2 | 1: the Imbue quest is also skipped while no mercenary is alive (an unknown merc counts as none). 0: the level floor alone decides. |
 | campaign.denMinLevelCaster | 5 | 1..12 | levels | 5 | 1 | Sorceress, Necromancer, Druid and a bow-less Amazon enter the Den of Evil (always the first quest) only from this clvl; below it they level in Blood Moor (log: den: waiting for clvl N in Blood Moor). SME: a ~40 life caster dies to Fallen packs on floor 1; 5 is the safe end of clvl 4-5. |
 | campaign.denMinLevelMelee | 3 | 1..12 | levels | 3 | 1 | Same for Barbarian, Paladin, Assassin and a bowed Amazon. |
-| campaign.journeyAskWaitMin | 10 | 0..240 | minutes | 10 | 0 | Guided journey (docs/campaign.md): a 'go to the next chapter at the floor?' question with no answer counts as yes after this many minutes; 0 = never by default (the hero keeps farming until answered). U: judgment. |
-| campaign.journeyFarmBudgetMin | 30 | 0..600 | minutes | 30 | 0 | After this many minutes in a level step for a chapter that is ready at its floor (but under its recommended level) the hero asks whether to go at the floor; 0 = never asks. U: judgment, one level step budget. |
-| campaign.journeyGoAtFloor | 0 | 0..1 | bool | 0 | 0 | 0: Auto chapters go at the recommended level (comfortable); 1: at the floor (ready). The default for a hero that never set the policy row on the Journey panel; the hero's own choice wins. |
+| campaign.journeyAskWaitMin | 10 | 0..240 | minutes | 10 | 0 | RETIRED, no effect (the Journey was removed with the quest board, docs/questboard.md S9; the key stays so saved overrides still load). Guided journey (docs/campaign.md): a 'go to the next chapter at the floor?' question with no answer counts as yes after this many minutes; 0 = never by default (the hero keeps farming until answered). U: judgment. |
+| campaign.journeyFarmBudgetMin | 30 | 0..600 | minutes | 30 | 0 | RETIRED, no effect (the Journey was removed with the quest board, docs/questboard.md S9; the key stays so saved overrides still load). After this many minutes in a level step for a chapter that is ready at its floor (but under its recommended level) the hero asks whether to go at the floor; 0 = never asks. U: judgment, one level step budget. |
+| campaign.journeyGoAtFloor | 0 | 0..1 | bool | 0 | 0 | RETIRED, no effect (the Journey was removed with the quest board, docs/questboard.md S9; the key stays so saved overrides still load). 0: Auto chapters go at the recommended level (comfortable); 1: at the floor (ready). The default for a hero that never set the policy row on the Journey panel; the hero's own choice wins. |
 
 ### route.*
 
@@ -496,12 +496,13 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
-| quests.board | 0 | 0..1 | bool | 0 | 1 | 1: a quest runs only after the player accepts its current chunk (Start); the bot does that chunk, walks to the NPC and stops, and the player taps Hand in. The planner then no longer starts quests by itself: between chunks the hero acts on the player's mode (Train levels toward the next quest, Idle parks in town, Farm farms loot and gold; docs/questboard.md Modes). 0 (default): today's planner behaviour, nothing changes. Off until the live drill of docs/questboard.md has run. |
+| quests.board | 1 | 0..1 | bool | 1 | 1 | 1 (default since the Journey was retired, docs/questboard.md S9): a quest runs only after the player accepts its current chunk (Start); the bot does that chunk, walks to the NPC and stops, and the player taps Hand in. Nothing else starts quests: between chunks the hero acts on the player's mode (Train levels toward the next quest, Idle parks in town, Farm farms loot and gold). Quests the bot cannot do yet show 'not supported yet' and the hero trains instead. 0: the old floor planner plays the quests as before (used by measured runs and gates, no Journey); a hero on 0 has no Start button. |
 | quests.autoDelaySec | 20 | 0..300 | s | 20 | 1 | Seconds an opted-in quest counts down (shown on the page, with Cancel) before it starts by itself; 0 starts at once. Only a SAFE offer ever auto-starts. |
 | quests.awayMin | 10 | 1..240 | min | 10 | 1 | Minutes without any watch client asking for the board before the player counts as away: then a chunk the board started by itself is also handed in by the board. A present player taps Hand in. |
 | quests.autoHoldMin | 15 | 0..240 | min | 15 | 1 | No quest starts by itself this many minutes after the player paused or reset the bot. |
 | quests.autoGapMin | 30 | 0..600 | min | 30 | 1 | At least this long between two auto-started chunks (a bug can then not chain starts). |
 | quests.autoDayCap | 6 | 0..100 | count | 6 | 1 | At most this many auto-started chunks in 24 hours; 0 turns auto-start off. |
+
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)

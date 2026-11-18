@@ -33,27 +33,6 @@ func shipped(t *testing.T) *campaign.Spine {
 
 var t0 = time.Date(2026, 11, 11, 12, 0, 0, 0, time.UTC)
 
-func prog(class string, lvl int, merc bool, done ...string) campaign.Progress {
-	p := campaign.Progress{Hero: campaign.Hero{Class: class, Level: lvl, Merc: merc}, Quests: map[string]bool{}, Waypoints: map[int]bool{3: lvl >= 3}}
-	for _, q := range done {
-		p.Quests[q] = true
-		p.MercOwned = p.MercOwned || q == task.QBurial // the Rogue was claimed (alive or dead) unless a test says otherwise
-	}
-	return p
-}
-
-func next(t *testing.T, s *campaign.Spine, p campaign.Progress, st *campaign.HeroState, o campaign.Opts) campaign.Decision {
-	t.Helper()
-	if o.Now.IsZero() {
-		o.Now = t0
-	}
-	d, err := s.Next(p, st, o)
-	if err != nil {
-		t.Fatal(err)
-	}
-	return d
-}
-
 func TestShippedChapters(t *testing.T) {
 	s := shipped(t)
 	want := []string{"start", "cold_plains_wp", "den_of_evil", "blood_raven", "rogue", "find_cain", "countess", "tools_of_the_trade", "andariel"}
@@ -132,55 +111,6 @@ func TestBands(t *testing.T) {
 }
 
 // The ladder of chapters a hero walks when it levels and finishes each chapter it is sent to (both test classes).
-func TestLadderPaladinAndSorceress(t *testing.T) {
-	s := shipped(t)
-	for _, tc := range []struct {
-		class string
-		want  []string // chapter ids in the order the decision sends the hero
-	}{
-		{"paladin", []string{"start", "cold_plains_wp", "den_of_evil", "blood_raven", "rogue", "find_cain", "countess", "tools_of_the_trade", "andariel"}},
-		{"sorceress", []string{"start", "cold_plains_wp", "den_of_evil", "blood_raven", "rogue", "find_cain", "countess", "andariel"}},
-	} {
-		st := campaign.NewHeroState()
-		p := prog(tc.class, 1, false)
-		var got []string
-		for steps := 0; steps < 100; steps++ {
-			p.Waypoints[3] = p.Waypoints[3] || contains(got, "cold_plains_wp")
-			d := next(t, s, p, st, campaign.Opts{})
-			if d.Action == campaign.ActDone {
-				break
-			}
-			switch d.Action {
-			case campaign.ActGo:
-				got = append(got, d.Chapter)
-				c := s.Chapter(d.Chapter)
-				switch {
-				case c.Done.Quest != "":
-					p.Quests[c.Done.Quest] = true
-				case c.Done.Waypoint > 0:
-					p.Waypoints[c.Done.Waypoint] = true
-				case c.Done.Merc:
-				default:
-					p.Level = max(p.Level, c.Done.Level)
-				}
-				if d.Chapter == "rogue" {
-					p.Merc, p.MercOwned = true, true
-				}
-			case campaign.ActFarm:
-				if d.Level <= p.Level || d.Farm == nil {
-					t.Fatalf("%s: farm step %+v at clvl %d", tc.class, d, p.Level)
-				}
-				p.Level = d.Level
-			default:
-				t.Fatalf("%s: unexpected %+v", tc.class, d)
-			}
-		}
-		if strings.Join(got, ",") != strings.Join(tc.want, ",") {
-			t.Errorf("%s ladder\n got %v\nwant %v", tc.class, got, tc.want)
-		}
-	}
-}
-
 func contains(xs []string, x string) bool {
 	for _, v := range xs {
 		if v == x {
@@ -192,131 +122,6 @@ func contains(xs []string, x string) bool {
 
 // The live hero of 2026-11-11 (Paladin clvl ~12, Den and Blood Raven done, no living merc) is sent to Cain, not to a
 // "level up to 16" grind for Andariel.
-func TestPaladinClvl12GoesToCain(t *testing.T) {
-	s := shipped(t)
-	d := next(t, s, prog("paladin", 12, false, task.QDen, task.QBurial), campaign.NewHeroState(), campaign.Opts{})
-	if d.Action != campaign.ActGo || d.Chapter != "find_cain" || d.Quest != task.QCain {
-		t.Fatalf("%+v", d)
-	}
-	st := campaign.NewHeroState()
-	_ = st.SetIntent(s, "find_cain", campaign.Skip, t0)
-	d = next(t, s, prog("paladin", 12, false, task.QDen, task.QBurial), st, campaign.Opts{})
-	// Charsi's hammer waits for 16 now (the Smith, boss1-trace B2): the Countess (14) is the nearer chapter.
-	if d.Action != campaign.ActFarm || d.Chapter != "countess" || d.Level != 14 || d.Farm.Area != "Tower Cellar Level 1" {
-		t.Fatalf("after skip: %+v", d)
-	}
-	if !strings.Contains(d.Why, "Farming Tower Cellar Level 1 for level 14 to unlock The Countess") {
-		t.Errorf("why %q", d.Why)
-	}
-}
-
-func TestFarmWhyNamesTheChapter(t *testing.T) {
-	s := shipped(t)
-	d := next(t, s, prog("sorceress", 7, false, task.QDen), campaign.NewHeroState(), campaign.Opts{})
-	if d.Action != campaign.ActFarm || d.Chapter != "blood_raven" || d.Level != 10 {
-		t.Fatalf("%+v", d)
-	}
-	if d.Why != "Farming Cold Plains for level 10 to unlock Blood Raven" {
-		t.Errorf("why %q", d.Why)
-	}
-	st := campaign.NewHeroState()
-	_ = st.SetGoAt(campaign.GoFloor)
-	if d := next(t, s, prog("sorceress", 7, false, task.QDen), st, campaign.Opts{}); d.Level != 9 {
-		t.Errorf("floor policy: %+v", d)
-	}
-}
-
-func TestHoldBlocksDependents(t *testing.T) {
-	s := shipped(t)
-	st := campaign.NewHeroState()
-	_ = st.SetIntent(s, "blood_raven", campaign.Hold, t0)
-	d := next(t, s, prog("paladin", 20, true, task.QDen), st, campaign.Opts{})
-	if d.Action != campaign.ActDone {
-		t.Fatalf("held Blood Raven should leave nothing: %+v", d)
-	}
-	_ = st.SetIntent(s, "blood_raven", campaign.Skip, t0)
-	if d := next(t, s, prog("paladin", 20, true, task.QDen), st, campaign.Opts{}); d.Chapter != "find_cain" || d.Action != campaign.ActGo {
-		t.Fatalf("skip satisfies the prerequisite: %+v", d)
-	}
-}
-
-func TestAskAtTheFloor(t *testing.T) {
-	s := shipped(t)
-	st := campaign.NewHeroState()
-	_ = st.SetGoAt(campaign.GoFloor)
-	p := prog("paladin", 8, false, task.QDen) // Blood Raven floor 8, recommended 9, intent ask
-	d := next(t, s, p, st, campaign.Opts{AskWait: 10 * time.Minute})
-	if d.Action != campaign.ActAsk || d.Chapter != "blood_raven" || d.Farm == nil {
-		t.Fatalf("%+v", d)
-	}
-	s.Observe(p, st, d, t0)
-	if d := next(t, s, p, st, campaign.Opts{Now: t0.Add(5 * time.Minute), AskWait: 10 * time.Minute}); d.Action != campaign.ActAsk {
-		t.Fatalf("inside the veto window: %+v", d)
-	}
-	if d := next(t, s, p, st, campaign.Opts{Now: t0.Add(10 * time.Minute), AskWait: 10 * time.Minute}); d.Action != campaign.ActGo || d.Warn == "" {
-		t.Fatalf("default yes: %+v", d)
-	}
-	st.SetAnswer("blood_raven", false, 8)
-	if d := next(t, s, p, st, campaign.Opts{Now: t0.Add(20 * time.Minute), AskWait: 10 * time.Minute}); d.Action != campaign.ActFarm || d.Level != 9 {
-		t.Fatalf("a no farms: %+v", d)
-	}
-	p.Level = 9
-	if d := next(t, s, p, st, campaign.Opts{}); d.Action != campaign.ActGo {
-		t.Fatalf("comfortable goes without asking: %+v", d)
-	}
-}
-
-func TestOfferAfterFarmBudget(t *testing.T) {
-	s := shipped(t)
-	st := campaign.NewHeroState()
-	p := prog("paladin", 17, false, task.QDen, task.QBurial, task.QCain, task.QTower, task.QTools) // Andariel: Ready (floor 17, rec 20)
-	o := campaign.Opts{FarmBudget: 30 * time.Minute}
-	d := next(t, s, p, st, o)
-	if d.Action != campaign.ActFarm || d.Chapter != "andariel" {
-		t.Fatalf("%+v", d)
-	}
-	s.Observe(p, st, d, t0)
-	o.Now = t0.Add(31 * time.Minute)
-	if d := next(t, s, p, st, o); d.Action != campaign.ActAsk || d.Chapter != "andariel" {
-		t.Fatalf("offer after the budget: %+v", d)
-	}
-	st.SetAnswer("andariel", true, 17)
-	if d := next(t, s, p, st, o); d.Action != campaign.ActGo || d.Warn == "" {
-		t.Fatalf("yes goes at the floor: %+v", d)
-	}
-}
-
-func TestGoNowAndModes(t *testing.T) {
-	s := shipped(t)
-	st := campaign.NewHeroState()
-	if err := st.SetGoNow(s, "andariel"); err != nil {
-		t.Fatal(err)
-	}
-	p := prog("sorceress", 6, false, task.QDen)
-	d := next(t, s, p, st, campaign.Opts{})
-	if d.Action != campaign.ActGo || d.Chapter != "andariel" || !strings.Contains(d.Warn, "too_early") {
-		t.Fatalf("go now is never refused: %+v", d)
-	}
-	p.Quests[task.QAndariel] = true
-	if done := s.Observe(p, st, d, t0); st.GoNow != "" || !contains(done, "andariel") || !contains(done, "den_of_evil") {
-		t.Fatalf("note: %v %q", done, st.GoNow)
-	}
-	if done := s.Observe(p, st, d, t0); len(done) != 0 {
-		t.Errorf("done twice: %v", done)
-	}
-	_ = st.SetMode(campaign.Free)
-	if d := next(t, s, p, st, campaign.Opts{}); d.Action != campaign.ActFree {
-		t.Errorf("free: %+v", d)
-	}
-	_ = st.SetMode(campaign.Orders)
-	if d := next(t, s, p, st, campaign.Opts{}); d.Action != campaign.ActOrders {
-		t.Errorf("orders: %+v", d)
-	}
-	if st.SetMode("auto") == nil || st.SetIntent(s, "nope", campaign.Skip, t0) == nil || st.SetIntent(s, "countess", "maybe", t0) == nil {
-		t.Error("bad input accepted")
-	}
-}
-
 func TestStorePersists(t *testing.T) {
 	s := shipped(t)
 	path := filepath.Join(t.TempDir(), "state", "campaign.json")
@@ -344,15 +149,3 @@ func TestStorePersists(t *testing.T) {
 }
 
 // Blood Raven done and no merc ever claimed: the Rogue chapter comes first; a claimed Rogue that died does not repeat it.
-func TestRogueChapterAfterBloodRaven(t *testing.T) {
-	s := shipped(t)
-	p := prog("paladin", 12, false, task.QDen, task.QBurial)
-	p.MercOwned = false
-	if d := next(t, s, p, campaign.NewHeroState(), campaign.Opts{}); d.Action != campaign.ActGo || d.Chapter != "rogue" || d.Quest != task.QBurialMerc {
-		t.Fatalf("%+v", d)
-	}
-	p.MercOwned = true // claimed, dead now
-	if d := next(t, s, p, campaign.NewHeroState(), campaign.Opts{}); d.Chapter != "find_cain" {
-		t.Fatalf("dead Rogue: %+v", d)
-	}
-}

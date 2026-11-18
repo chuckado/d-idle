@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"testing"
 
 	"d2lod-bot/internal/goals"
@@ -16,21 +15,17 @@ func TestJourneyBlockedRowAndCommands(t *testing.T) {
 
 		var src watch.GlanceSources
 		for _, f := range glanceExtra {
-			f(&src, glanceDeps{Status: status, Chapter: func() string { return "blood-raven" }})
+			f(&src, glanceDeps{Status: status})
 		}
 		if src.Needs == nil {
 			t.Fatal("no Needs source registered")
 		}
 		rows := src.Needs()
-		if len(rows) != 1 || rows[0].Kind != "journey_blocked" || rows[0].Text != "Journey blocked: "+reason || rows[0].Sev != "warn" {
+		if len(rows) != 1 || rows[0].Kind != "journey_blocked" || rows[0].Text != "Quest step blocked: "+reason || rows[0].Sev != "warn" {
 			t.Fatalf("%s: rows %+v", class, rows)
 		}
-		if len(rows[0].Actions) != 2 || rows[0].Actions[0].Label != "Go now" || rows[0].Actions[1].Label != "Hold chapter" {
-			t.Fatalf("%s: actions %+v", class, rows[0].Actions)
-		}
-		var body map[string]any
-		if err := json.Unmarshal(rows[0].Actions[1].Body, &body); err != nil || body["chapter"] != "blood-raven" || body["intent"] != "hold" {
-			t.Errorf("hold body %s", rows[0].Actions[1].Body)
+		if len(rows[0].Actions) != 0 {
+			t.Fatalf("%s: actions %+v (the Journey verbs are retired)", class, rows[0].Actions)
 		}
 
 		cv := watch.BuildCommands(watch.CommandSources{Hooks: watch.CommandHooks{Blocked: journeyBlockedHook(status)}})
@@ -48,12 +43,8 @@ func TestJourneyBlockedRowAndCommands(t *testing.T) {
 	}
 }
 
-func TestBlockedNeedWithoutChapterHasNoActions(t *testing.T) {
-	n, ok := blockedNeed("x", func() string { return "" })
-	if !ok || len(n.Actions) != 0 {
-		t.Errorf("%+v %v", n, ok)
-	}
-	if _, ok := blockedNeed("", nil); ok {
+func TestBlockedNeedEmptyReasonGivesNoRow(t *testing.T) {
+	if _, ok := blockedNeed(""); ok {
 		t.Error("empty reason must give no row")
 	}
 	if journeyBlockedHook(nil) != nil {

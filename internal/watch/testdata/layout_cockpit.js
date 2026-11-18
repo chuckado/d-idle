@@ -20,7 +20,7 @@ assert.strictEqual(L.cockpitPlan({ schema: 'watch.layout/1', breakpoints: {} }, 
 let p = L.cockpitPlan(file, 1440, '', all);
 eq(p.band, ['statusline', 'hero-meters', 'needs-count']);
 assert.strictEqual(p.stage, 'video');
-eq(p.strip, ['progress', 'journey-strip', 'quest-strip', 'health']);
+eq(p.strip, ['progress', 'quest-strip', 'health']);
 eq(p.rail, [['needs-you', 'orders', 'zone-map', 'area-map']]);
 assert.strictEqual(p.has, 'str');
 eq(p.sizes, { strip: 112, railMin: 400 });
@@ -67,11 +67,11 @@ eq(file.sizes, { strip: 112, railMin: 400 }, 'the layout it started from is not 
 
 // swap: two panels trade places in every arrangement; one that is not in the layout replaces
 let sw = L.cockpitSwap(file, 'progress', 'orders');
-eq(sw.slots.strip, ['orders', 'journey-strip', 'quest-strip', 'health']);
+eq(sw.slots.strip, ['orders', 'quest-strip', 'health']);
 eq(sw.slots.rail, ['needs-you', 'progress', 'zone-map', 'area-map']);
 eq(sw.slots.railWide.top, ['needs-you', 'progress']);
 eq(sw.slots.phoneTabs.Orders, ['needs-you', 'progress']);
-eq(sw.slots.phoneTabs.Progress, ['orders', 'journey-strip', 'health']);
+eq(sw.slots.phoneTabs.Progress, ['orders', 'health']);
 eq(L.cockpitSwap(sw, 'progress', 'orders'), file, 'swapping back restores the file');
 sw = L.cockpitSwap(file, 'video', 'fx-new');
 assert.strictEqual(sw.slots.stage, 'video' === file.slots.stage ? 'fx-new' : '');
@@ -85,7 +85,7 @@ const edited = L.cockpitSize(L.cockpitSwap(file, 'health', 'zone-map'), { strip:
 const reloaded = JSON.parse(JSON.stringify(edited));
 for (const w of [390, 1440, 1920]) eq(L.cockpitPlan(reloaded, w, '', all), L.cockpitPlan(edited, w, '', all), 'same arrangement at ' + w);
 p = L.cockpitPlan(reloaded, 1440, '', all);
-eq(p.strip, ['progress', 'journey-strip', 'quest-strip', 'zone-map']); eq(p.rail, [['needs-you', 'orders', 'health', 'area-map']]);
+eq(p.strip, ['progress', 'quest-strip', 'zone-map']); eq(p.rail, [['needs-you', 'orders', 'health', 'area-map']]);
 eq(p.sizes, { strip: 140, railMin: 480 });
 
 // which panels mount: a cockpit mounts only slot panels it names, whatever else the page has; other layouts as before

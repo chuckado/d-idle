@@ -22,31 +22,6 @@
       "word": "unknown"
     }
   },
-  "journey": {
-    "actions": [],
-    "chapters": [
-      {
-        "id": "a",
-        "state": "done"
-      },
-      {
-        "id": "b",
-        "state": "done"
-      },
-      {
-        "id": "c",
-        "state": "open"
-      }
-    ],
-    "n": 3,
-    "next": {
-      "band": "too_early",
-      "id": "c",
-      "text": "floor 9",
-      "title": "Blood Raven"
-    },
-    "of": 9
-  },
   "needs": [
     {
       "actions": [],

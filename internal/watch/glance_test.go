@@ -62,10 +62,6 @@ func glanceRig(t *testing.T, build, scenario string) *rig {
 		src.Needs = func() []GlanceNeed {
 			return []GlanceNeed{{ID: "journey", Kind: "journey_blocked", Sev: "warn", Text: "The quest path is blocked", Sub: "no mercenary yet"}}
 		}
-		src.Journey = func() (GlanceJourney, bool) {
-			return GlanceJourney{N: 3, Of: 9, Chapters: []GlanceChapter{{ID: "a", State: "done"}, {ID: "b", State: "done"}, {ID: "c", State: "open"}},
-				Next: &GlanceNextStep{ID: "c", Title: "Blood Raven", Band: "too_early", Text: "floor 9"}}, true
-		}
 	case "paused":
 		h.Activity(KindIdle, "paused")
 		src.Paused = func() (bool, string) { return true, "walking home first, then stopping" }

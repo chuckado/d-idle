@@ -111,16 +111,6 @@
           "order": 8
         },
         {
-          "id": "journey",
-          "band": "side",
-          "col": 1,
-          "row": 60,
-          "colSpan": 12,
-          "rowSpan": 5,
-          "collapsed": false,
-          "order": 9
-        },
-        {
           "id": "hero-vitals",
           "band": "side",
           "col": 1,
@@ -425,16 +415,6 @@
           "rowSpan": 3,
           "collapsed": false,
           "order": 8
-        },
-        {
-          "id": "journey",
-          "band": "side",
-          "col": 1,
-          "row": 60,
-          "colSpan": 12,
-          "rowSpan": 5,
-          "collapsed": false,
-          "order": 9
         },
         {
           "id": "hero-vitals",
@@ -743,16 +723,6 @@
           "order": 8
         },
         {
-          "id": "journey",
-          "band": "side",
-          "col": 1,
-          "row": 27,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "collapsed": false,
-          "order": 9
-        },
-        {
           "id": "hero-vitals",
           "band": "side",
           "col": 7,
@@ -1057,16 +1027,6 @@
           "rowSpan": 3,
           "collapsed": false,
           "order": 8
-        },
-        {
-          "id": "journey",
-          "band": "side",
-          "col": 1,
-          "row": 27,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "collapsed": false,
-          "order": 9
         },
         {
           "id": "hero-vitals",

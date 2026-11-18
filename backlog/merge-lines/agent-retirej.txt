@@ -1,0 +1,2 @@
+BACKLOG: TASK-629 retirej: Quest board S9, the Journey (chapters, strip, chip, sheet, controller, API) is retired and quests.board defaults to 1; old heroes' skips and orders mode are imported once (state/campaign.json is only read and backed up); offline only, live check list in docs/questboard.md
+CHANGELOG: The quest board is now the only way quests start: the Quests tile offers the next quest and nothing begins until you tap Start; the old Journey strip and its chapter questions are gone. Existing heroes keep their progress (read from the game) and their skipped quests.

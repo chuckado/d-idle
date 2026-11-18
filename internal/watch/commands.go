@@ -145,7 +145,7 @@ type CommandSources struct {
 	Repair   func() []byte // internal/repair.View
 	Items    func() []byte // internal/invdesk.View (the cached one: never builds on this goroutine)
 	GoldFarm func() []byte // internal/goldfarm.View
-	Plan     func() []byte // internal/campaign.View
+	Plan     func() []byte // a {decision:{why}, meter:{etaSeconds}} document (nothing binds it since the Journey was retired)
 	Safety   func() CommandSafety
 	Hooks    CommandHooks
 	Now      func() time.Time // wall clock for sources that stamp unix seconds
@@ -525,7 +525,7 @@ func hasBlocked(rows []CommandBlocked, id string) bool {
 }
 
 func blockedRow(text string) CommandBlocked {
-	return CommandBlocked{ID: "journey:blocked", Code: "journey_blocked", Text: safeText(text, 160), Actions: []string{"go_now", "hold"}}
+	return CommandBlocked{ID: "journey:blocked", Code: "journey_blocked", Text: safeText(text, 160), Actions: []string{}}
 }
 
 // itemReq is the part of an inventory desk request this view reads.
@@ -664,14 +664,6 @@ func (f *Fun) CommandSources() CommandSources {
 	if f.GoldFarm != nil {
 		s.GoldFarm = func() []byte {
 			if d := f.GoldFarm.desk(); d != nil {
-				return marshal(d.View())
-			}
-			return nil
-		}
-	}
-	if f.Campaign != nil {
-		s.Plan = func() []byte {
-			if d := f.Campaign.desk(); d != nil {
 				return marshal(d.View())
 			}
 			return nil

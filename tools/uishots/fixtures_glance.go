@@ -12,12 +12,12 @@ import (
 )
 
 // glanceFixture serves /api/glance for the strip panels and Needs you: the hub's own reply (the sentence, the readiness)
-// with the blocks the frozen fixture hub cannot build (rates need minutes of play, the journey, gear, mercenary and supplies
+// with the blocks the frozen fixture hub cannot build (rates need minutes of play, gear, mercenary and supplies
 // have no source here). The page's own query picks the variant (the poll carries it as the Referer):
 //
 //	needs=N     how many rows Needs you shows (0 to 9, default 2)
 //	glance=     full (default), measuring (rates still building), unknown (mercenary and supplies not reported),
-//	            gearbroken, ch1, ch9, blocked (the journey is held), nojourney; further words after commas add a state:
+//	            gearbroken; further words after commas add a state:
 //	            paused (the player pause on the band), mercdead (the mercenary is dead), supplieslow (belt low),
 //	            nopotions (no mercenary and no potions), e.g. glance=full,paused,mercdead
 func glanceFixture(h *watch.Hub) http.HandlerFunc {
@@ -69,35 +69,6 @@ func glanceFixture(h *watch.Hub) http.HandlerFunc {
 			v.Progress.Level.Pct = pctOf(4)
 			v.Progress.XPPerHour, v.Progress.GoldPerHour = nil, nil
 			v.Progress.XPSeries, v.Progress.GoldSeries = []float64{}, []float64{}
-		}
-		chapters := func(cur int, st string) []watch.GlanceChapter {
-			out := make([]watch.GlanceChapter, 9)
-			for i := range out {
-				s := "todo"
-				if i+1 < cur {
-					s = "done"
-				} else if i+1 == cur {
-					s = st
-				}
-				out[i] = watch.GlanceChapter{ID: fmt.Sprintf("ch%d", i+1), State: s}
-			}
-			return out
-		}
-		verbs := []watch.GlanceVerb{{Label: "Go now", Post: "/api/journey/go"}, {Label: "Hold", Post: "/api/journey/hold"}}
-		cur, st := 3, "open"
-		next := &watch.GlanceNextStep{ID: "ch3", Title: "Blood Raven", Band: "too early (floor 9)", Text: "Level 7 is under the floor of 9."}
-		switch variant {
-		case "ch1":
-			cur, next = 1, &watch.GlanceNextStep{ID: "ch1", Title: "Den of Evil", Band: "ready", Text: "The hero is in range."}
-		case "ch9":
-			cur, next = 9, &watch.GlanceNextStep{ID: "ch9", Title: "Baal", Band: "far too early (floor 30)", Text: "A long way off."}
-		case "blocked":
-			st, next = "held", &watch.GlanceNextStep{ID: "ch3", Title: "Blood Raven", Band: "blocked", Text: "The path to the Burial Grounds is blocked."}
-		}
-		if variant != "nojourney" {
-			v.Journey = &watch.GlanceJourney{N: cur, Of: 9, Chapters: chapters(cur, st), Next: next, Actions: verbs}
-		} else {
-			v.Journey = nil
 		}
 		light := func(l, w, d string) watch.GlanceLight { return watch.GlanceLight{Light: l, Word: w, Detail: d} }
 		v.Health.Gear = light("ok", "sound", "")
