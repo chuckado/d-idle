@@ -284,7 +284,6 @@
 | cain5b | proposed | - | `cmd/d2bot/cain5b_test.go`<br>`cmd/d2bot/objects.go`<br>`internal/bot/task.go`<br>`internal/bot/task_acts_test.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/quest/dialog.go`<br>`internal/task/act1.go`<br>`internal/task/testdata/plans/act1.txt`<br>`data/questboard/act1.json`<br>`internal/watch/testdata/quests`<br>`internal/questboard/chunks_test.go`<br>`docs/probes/search-for-cain-5b-2026-11-18.md`<br>`docs/questboard.md` | - |
 | vaulttip | proposed | - | `internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`cmd/d2bot/vaulttip.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/watch/vaulttip_test.go`<br>`internal/watch/testdata/vault_tip.mjs`<br>`tools/uishots/fixtures_vault.go`<br>`docs/vault.md`<br>`tools/uishots.sh`<br>`internal/vault/types.go`<br>`internal/loot/vault.go`<br>`internal/vaultkeep/reveal.go`<br>`internal/d2dctl/vault_verbs.go`<br>`internal/d2dctl/vault_verbs_test.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go` | - |
 | devp12 | proposed | - | `docs/process/sandbox-devp12.md` | - |
-| unidpopup | proposed | - | `internal/watch/web/unlockui.js`<br>`internal/watch/unlockui_quiet_test.go`<br>`docs/unlock-idreveal.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |

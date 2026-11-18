@@ -1,10 +1,11 @@
 ---
 id: TASK-647
 title: 'unidpopup: unidentified card sheet must not auto-open'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T16:59:00Z'
+updated_date: '2026-11-18T17:20:00Z'
 labels:
   - watch
   - bug
