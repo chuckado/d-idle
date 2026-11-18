@@ -281,7 +281,6 @@
 | cain45 | proposed | - | `cmd/d2bot/cain.go`<br>`cmd/d2bot/cain_test.go`<br>`internal/d2dsrc/items.go`<br>`internal/task/act1.go`<br>`internal/task/cainstones_test.go`<br>`data/questboard/act1.json`<br>`docs/probes/search-for-cain-45-2026-11-18.md`<br>`docs/actbot.md`<br>`internal/watch/testdata/quests`<br>`docs/questboard.md`<br>`internal/questboard/chunks_test.go`<br>`internal/questboard/state_test.go`<br>`internal/d2dsrc/source_test.go` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | cainl2 | proposed | - | `docs/probes/cainl2`<br>`docs/probes/search-for-cain-l2-2026-11-18.md`<br>`docs/probes/test-characters.md` | `d2d-control-socket` |
-| itempics | proposed | - | `internal/data/invfile.go`<br>`internal/data/invfiles.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`cmd/d2bot/display.go`<br>`internal/d2dsrc/items.go`<br>`internal/bot/catalog.go`<br>`internal/d2/items.go`<br>`internal/data/invfile_test.go`<br>`internal/data/invfile_real_test.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2dsrc/testdata/dump_items_pic.json`<br>`cmd/d2bot/itemart_test.go` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
