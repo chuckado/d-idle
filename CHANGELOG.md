@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- CAIN-5b: free Cain (guards fought, cage, quest word check) and report to Akara; board chunks supported <!--sg:agent/cain5b-->
 - questboard goal test: hold explore until the accept lands (deterministic, no load race) <!--sg:agent/vaulttip-->
 - Merge branch 'main' into devp12doc <!--sg:agent/devp12doc-->
 - questaudit: quest API audit log/ring, stopped note <!--sg:agent/questaudit-->
