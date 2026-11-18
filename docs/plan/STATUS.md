@@ -276,6 +276,7 @@
 | cainl0 | proposed | - | `docs/probes/cainl0`<br>`docs/probes/search-for-cain-l0-2026-11-18.md`<br>`docs/probes/test-characters.md` | `d2d-control-socket` |
 | jewelcolor | proposed | - | `internal/watch/web/components.css`<br>`internal/watch/artembed_test.go`<br>`internal/data/invfile_test.go`<br>`docs/inventory-ui.md` | - |
 | groundquality | proposed | - | `internal/d2dloot`<br>`cmd/d2bot/d2dloot.go`<br>`cmd/d2bot/d2dwire.go`<br>`docs/d2d-loot.md` | - |
+| itemcolour | proposed | - | `docs/design/item-colour-2026-11-18.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
@@ -315,6 +316,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ed97362bf 11-18 09:43 `Merge agent/itemcolour: itemcolour: item colour design doc` (itemcolour)
+- c968974f6 11-18 09:42 `Merge branch 'main' into itemcolour` (-)
 - 14a14ad44 11-18 09:36 `Merge agent/groundquality: Merge branch 'main' into groundquality` (groundquality)
 - 4733c4c06 11-18 09:35 `Merge branch 'main' into groundquality` (-)
 - fdcf5996e 11-18 09:30 `Merge agent/cainl0: Merge branch 'main' into cainl0` (cainl0)
@@ -323,6 +326,4 @@
 - e1f43e156 11-18 09:14 `cainl0: merge origin/main` (cainl0)
 - 0cede32af 11-18 02:22 `Merge agent/flakyfix: flakyfix: board world race, deterministic waits` (flakyfix)
 - fd0cf0bfa 11-18 00:46 `Merge agent/survhold: survhold: seed 149 cause, riskMinGold fix, holdout record (no default change)` (survhold)
-- 7dab0d83d 11-18 00:25 `Merge branch 'main' into survhold` (-)
-- ef748c380 11-17 22:25 `Merge agent/retirej: retirej: docs, onboarding wording, task card, merge lines` (retirej)
 <!-- statusgen:end -->
