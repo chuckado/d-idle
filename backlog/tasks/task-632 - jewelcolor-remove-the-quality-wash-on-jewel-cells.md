@@ -19,6 +19,7 @@ owns:
   - "docs/inventory-ui.md"
 exclusive: []
 contracts: []
+result: "removed the invented quality wash and multiply on jewel cells; offline only, not verified live; per-item jewel colour (affix transformcolor + PL2) not done"
 ---
 
 ## Description
