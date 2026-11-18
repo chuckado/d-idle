@@ -11,6 +11,7 @@
 Present only when d2d runs with `--item-verbs` (dump) or `--vault-verbs` (dump, `item full`, `ground full`); otherwise nothing changes.
 - `inv_tint` (int): the base's `InvTrans` when it has a colormap set (1, 2, 5..8), else 0.
 - `inv_colour` (int): Colors.txt index 0..20 from the `Colours::of(..., inv=true)` chain (magic/rare: first suffix transformcolor, else first prefix, else automod; unique/set: invtransform; else socketed gem or automod), -1 when none. It is reported even when `inv_tint` is 0.
+- `inv_pic` (int, next build, devp12; fork caea2368, not built or run yet): the item's own picture index (the 1+3 bit field of the item record), the index into ItemTypes `InvGfx1..6` (jewel 0..5, ring 0..4, amulet and charm 0..2); -1 = none. Written next to the pair in `dump items`, `item full`, `ground full`. The bot reads it as `d2.Item.Pic` (index+1) and shows `invjw1..6`, `invrin1..5`, `invamu1..3`, `invch1..9`; without it (devp11) the base art stays.
 
 ## Shapes
 `dump items` (JSON, one line; same fields on `dump merc` `items` rows): the two keys are appended after `name`.
