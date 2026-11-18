@@ -829,6 +829,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [dispatcher-brief.md](process/dispatcher-brief.md): Dispatcher brief (status: moved to the private ops repo (d2lod-ops, `docs/process/dispatcher-brief.md`). Not part of the public tree.)
 - [doc-audit.md](process/doc-audit.md): Doc audit (2026-10-30)
 - [feed-after-events.md](process/feed-after-events.md): Feed after events (status: current rule (card feeds, 2026-11-01). The helper is `tools/discord/feed.py`; details in...)
+- [flaky-tests.md](process/flaky-tests.md): Flaky tests: the waiting pattern (status: current. Load-sensitive tests cost 45-minute gate re-runs; this is the rule that keeps new ones out.)
 - [friends-gamedata-2026-11-15.md](process/friends-gamedata-2026-11-15.md): Friends game-data bundle (2026-11-15)
 - [gamecode-guard.md](process/gamecode-guard.md): Game-code guard, labpath class, path scrubber
 - [grill-agent.md](process/grill-agent.md): The grill agent: one command to be interviewed

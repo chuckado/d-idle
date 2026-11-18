@@ -273,6 +273,7 @@
 | brightness | proposed | - | `docs/probes/viewer-brightness-2026-11-17.md`<br>`internal/watch/web/panels/video/brightness.js`<br>`internal/watch/web/panels/video/panel.css`<br>`internal/watch/web/panels/video/panel.js`<br>`internal/watch/testdata/video_panel.js`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/video_labels_panel.js`<br>`internal/watch/palfeed/luma_test.go`<br>`tools/videofeed/gamma_frames.py`<br>`tools/videofeed/lumastat/` | - |
 | cainfix | proposed | - | `docs/probes/search-for-cain-2026-11-17.md`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_test.go`<br>`internal/questboard`<br>`internal/task/world.go`<br>`internal/quest/act1.go`<br>`internal/bot/task.go`<br>`internal/watch`<br>`internal/task`<br>`internal/bot`<br>`cmd/d2bot`<br>`data/questboard/act1.json` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
+| flakyfix | proposed | - | `internal/bot/`<br>`internal/server/`<br>`internal/watch/`<br>`docs/process/flaky-tests.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
@@ -312,6 +313,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0cede32af 11-18 02:22 `Merge agent/flakyfix: flakyfix: board world race, deterministic waits` (flakyfix)
 - fd0cf0bfa 11-18 00:46 `Merge agent/survhold: survhold: seed 149 cause, riskMinGold fix, holdout record (no default change)` (survhold)
 - 7dab0d83d 11-18 00:25 `Merge branch 'main' into survhold` (-)
 - ef748c380 11-17 22:25 `Merge agent/retirej: retirej: docs, onboarding wording, task card, merge lines` (retirej)
@@ -321,5 +323,4 @@
 - 8dbe9197e 11-17 19:03 `Merge agent/cainfix: cainfix: Search for Cain diagnosis doc` (cainfix)
 - 14ba33edb 11-17 16:25 `Merge agent/videoload: watch: serve a panel's helper modules (video/brightness.js 404 made the video panel fail to load); test every panel import is served` (videoload)
 - 52f4657fd 11-17 15:29 `Merge agent/verifygearabsorb3: verifier of gear absorb r3: r3 FAIL, r4 PASS WITH CHANGES (fid/gear-absorb-r4 ac5c3dd1+c05fa8e3)` (verifygearabsorb3)
-- 725d0c74b 11-17 15:28 `Merge branch 'main' into verifygearabsorb3` (-)
 <!-- statusgen:end -->

@@ -434,6 +434,7 @@ docs/probes/viewer-brightness-2026-11-17.md  credit-runner  brightness
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
+docs/process/flaky-tests.md  credit-runner  flakyfix
 docs/process/queuespeed.md  credit-runner  queuespeed
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
@@ -589,6 +590,7 @@ internal/boss/types.go  pro-runner  levelplan3
 internal/bot  credit-runner  cainfix
 internal/bot  credit-runner  survsd
 internal/bot  credit-runner  wiring2
+internal/bot/  credit-runner  flakyfix
 internal/bot/areametrics.go  credit-runner  intake
 internal/bot/areaskip_test.go  credit-runner  passagebounce
 internal/bot/areaskip_test.go  credit-runner  staletarget
@@ -965,6 +967,7 @@ internal/senses  credit-runner  maphistoryC
 internal/senses  credit-runner  maptrail
 internal/senses/coverage.go  credit-runner  maptrail2
 internal/senses/trail_test.go  credit-runner  maptrail2
+internal/server/  credit-runner  flakyfix
 internal/skilltree  credit-runner  skilltrees
 internal/skilltree  credit-runner  skilltrees2
 internal/status/inventory.go  credit-runner  jewelicons
@@ -1024,6 +1027,7 @@ internal/vault/index.go  credit-runner  vaultv4
 internal/vaultkeep  credit-runner  vaultv5
 internal/vaultkeep  credit-runner  vaultv6
 internal/watch  credit-runner  cainfix
+internal/watch/  credit-runner  flakyfix
 internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/cardtext.go  credit-runner  friendfb
 internal/watch/charactersapi.go  credit-runner  charselect
