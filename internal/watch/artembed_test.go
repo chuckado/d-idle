@@ -64,3 +64,17 @@ func TestInventoryPageDoesNotWaitOnArt(t *testing.T) {
 		t.Error("load() must start before and independent of artProbe()")
 	}
 }
+
+// The game draws no quality wash behind an inventory item and every jewel shares one icon: the jewel cell must not be flooded with its quality
+// colour (the 2026-11-18 stash showed about 20 identical bright blue cells).
+func TestNoQualityWashOnArtCells(t *testing.T) {
+	b, err := webFS.ReadFile("web/components.css")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, bad := range []string{`data-kind="jewel"][data-shown] {`, "mix-blend-mode"} {
+		if strings.Contains(string(b), bad) {
+			t.Errorf("components.css has a quality wash rule: %s", bad)
+		}
+	}
+}

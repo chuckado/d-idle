@@ -1,0 +1,183 @@
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=12.70,18.70 walking=0 dir=4 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=0 str=10 life=40/40 mana=35/35 stamina=18944/18944 level=1 exp=0 pmode=- missiles=0 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=0 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4673 music_old=0 quake=0,0,0,0,0 sfx=2578:-14:0.02/0.07
+ err=<nil>
+> debug help
+act <1-5>: waypoint tabs for acts 1..n (quest flags the panel reads)
+alt: see docs/control_channel.md
+attack: see docs/control_channel.md
+automap: reveal the whole level
+belt clear: empty the belt boxes
+blocked <x> <y>: 1 if a unit can't stand there
+boss: see docs/control_channel.md
+cast <skill> <x> <y>|unit <monster id>|near: the player casts the skill through the normal path (needs a level; offline --no-save only)
+charges: see docs/control_channel.md
+chat: see docs/control_channel.md
+clearinv: see docs/control_channel.md
+collision: see docs/control_channel.md
+corpses: see docs/control_channel.md
+critters: see docs/control_channel.md
+day: see docs/control_channel.md
+die: see docs/control_channel.md
+difficulty: see docs/control_channel.md
+durability <slot|all> <value>: worn items' durability, capped at the maximum
+enter: see docs/control_channel.md
+equip <code> <slot>: a normal item worn in a body slot
+give <code> [quality] [unid]: on the ground (0 by level, 4 magic, 6 rare); give <code> pack|belt [box] [q<quality>] [l<ilvl>] [unid]: into the pack or a belt box
+goto: see docs/control_channel.md
+grid: see docs/control_channel.md
+help: this list
+hit <damage>: one monster blow on the player (life, wear, death, get-hit)
+itemat: see docs/control_channel.md
+kill [<keep>] [spare <MonStats id>] [within <cells>]: kill the level's monsters
+laid: see docs/control_channel.md
+layout: see docs/control_channel.md
+level: see docs/control_channel.md
+light: see docs/control_channel.md
+mana full: mana := max mana (offline --no-save only)
+merc hire <type>|kill|revive|hurt <damage>: the merc (no gold)
+missiles: one row per live missile: unit, id, x, y, dx, dy (unit vector), speed (cells/s), owner type, owner unit, ttl ticks, friendly, name
+mon set <monster id> [life <n>] [frac <0..255>] [maxlife <n>] [dmg <lo> <hi>] [res <phys|magic|fire|light|cold|poison> <-100..100>]: one live monster (offline --no-save only)
+nearby: see docs/control_channel.md
+net: see docs/control_channel.md
+netsend: see docs/control_channel.md
+objects: see docs/control_channel.md
+operate: see docs/control_channel.md
+party: see docs/control_channel.md
+passives: see docs/control_channel.md
+pets: see docs/control_channel.md
+pin on [radius 3..8 subtiles]|off|status: wall the player into a pocket (collision ring), or take it down
+players: see docs/control_channel.md
+points: see docs/control_channel.md
+portals: see docs/control_channel.md
+presets: see docs/control_channel.md
+quest <q> [show|reset]: done (bit 0) | quest list: nonzero records | quest set <q> <flags 0..0xffff> | quest bit <q> <0..15> on|off | quest join: re-run the act's join
+rain: see docs/control_channel.md
+release: see docs/control_channel.md
+relevel: see docs/control_channel.md
+roster: see docs/control_channel.md
+skill: see docs/control_channel.md
+skillpts: see docs/control_channel.md
+spawn <MonStats id|row> [n 1..20] [near] [champion|unique [mod ids]]: monsters round the player (field level)
+stat <0..15> <value>: a character stat (14 purse, 15 stash)
+states: the player buffs and cursed monsters | states set <skill> [level] | states clear <skill>|all: the player self states (offline --no-save only)
+statpts: see docs/control_channel.md
+tiles: see docs/control_channel.md
+tomb: see docs/control_channel.md
+tradestate: see docs/control_channel.md
+typing: see docs/control_channel.md
+unbuilt: see docs/control_channel.md
+unequip <slot|belt>: take what is worn there off
+unid: unidentify every pack item (magic or better ones too)
+walls: see docs/control_channel.md
+warp <x> <y>: put the player at a cell
+warps: see docs/control_channel.md
+wear: see docs/control_channel.md
+wp <index|all|level <id>>: activate waypoints err=<nil>
+> debug goto 5
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=38.62,38.62 walking=1 dir=6 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=0 str=10 life=40/40 mana=35/35 stamina=18944/18944 level=1 exp=0 pmode=- missiles=0 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=0 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4673 music_old=0 quake=0,0,0,0,0 sfx=2792:0:0.00/0.06,2723:0:1.00/1.00,2818:0:0.31/0.39,2817:0:0.13/0.18,2816:0:0.25/0.27,2795:0:0.00/0.11,2720:0:1.00/1.00,2817:0:0.35/0.42,2819:0:0.09/0.14,2819:0:0.23/0.25,2720:0:1.00/1.00,2793:0:0.00/0.14,2819:0:0.06/0.10,2817:0:0.32/0.40,2818:0:0.20/0.22,2721:0:1.00/1.00,2792:0:0.00/0.17,2819:0:0.05/0.09,2819:0:0.35/0.43,2818:0:0.18/0.20,2721:0:1.00/1.00,2792:0:0.00/0.21
+ err=<nil>
+> debug presets
+0	30	44.5	44.5	0	Tree of Inifuss
+1	54	48.9	43.3	0	Dead Rogue
+2	139	49.3	41.9	0	Chest
+3	175	34.3	49.5	0	Loose Boulder
+4	140	33.7	54.7	0	Chest
+5	141	38.7	53.3	0	Chest
+6	37	54.7	35.3	0	
+7	174	47.1	36.1	0	Loose Rock
+8	140	45.9	34.1	0	Chest
+9	2	36.5	45.5	0	Shrine
+10	155	36.3	40.3	0	Hidden Stash
+11	2	28.5	42.5	0	Shrine
+12	144	27.1	42.1	0	Chest
+13	37	41.7	30.3	0	
+14	144	37.9	31.3	0	Chest
+15	139	34.5	26.5	0	Chest
+16	139	30.9	32.3	0	Chest
+17	256	27.7	27.7	0	
+18	55	27.9	28.7	0	Dead Rogue
+19	174	28.5	24.9	0	Loose Rock
+room	20	20	4
+room	6	28	4
+room	6	36	4
+room	6	44	4
+room	6	52	4
+room	10	60	4
+room	19	12	12
+room	23	20	12
+room	14	60	12
+room	6	68	12
+room	10	76	12
+room	25	12	20
+room	49	44	20
+room	7	76	20
+room	19	4	28
+room	23	12	28
+room	43	20	28
+room	48	28	28
+room	41	44	28
+room	41	52	28
+room	41	44	36
+room	41	52	36
+room	15	60	28
+room	4	68	28
+room	11	76	28
+room	16	4	36
+room	14	60	36
+room	6	68	36
+room	10	76	36
+room	16	4	44
+room	161	44	44
+room	7	76	44
+room	16	4	52
+room	40	20	52
+room	40	28	52
+room	40	20	60
+room	40	28	60
+room	15	44	52
+room	4	52	52
+room	12	60	52
+room	7	76	52
+room	16	4	60
+room	14	44	60
+room	6	52	60
+room	13	60	60
+room	7	76	60
+room	18	4	68
+room	4	12	68
+room	12	20	68
+room	29	28	68
+room	30	44	68
+room	7	76	68
+room	8	20	76
+room	4	28	76
+room	4	36	76
+room	4	44	76
+room	4	52	76
+room	4	60	76
+room	4	68	76
+room	11	76	76 err=<nil>
+> debug objects
+0	44.5	44.5	op12	30	-	NU
+1	48.9	43.3	op14	54	-	NU
+2	49.3	41.9	chest	0	-	NU
+3	34.3	49.5	op14	175	-	NU
+4	33.7	54.7	chest	0	-	NU
+5	38.7	53.3	chest	0	-	NU
+6	54.7	35.3	op13	37	-	ON
+7	47.1	36.1	op14	174	-	NU
+8	45.9	34.1	chest	0	-	NU
+9	36.5	45.5	shrine	13	-	NU
+10	36.3	40.3	op14	155	-	NU
+11	28.5	42.5	shrine	6	-	NU
+12	27.1	42.1	chest	5	-	NU
+13	41.7	30.3	op13	37	-	ON
+14	37.9	31.3	chest	0	locked	NU
+15	34.5	26.5	chest	0	-	NU
+16	30.9	32.3	chest	0	-	NU
+17	27.7	27.7	op14	256	-	NU
+18	27.9	28.7	op14	55	-	NU
+19	28.5	24.9	op14	174	-	NU err=<nil>
