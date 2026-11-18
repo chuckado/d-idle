@@ -502,7 +502,7 @@ func rowOf(t *testing.T, s *vault.Store, id string) VaultItem {
 	if !ok {
 		t.Fatal("missing")
 	}
-	return vaultRow(&rec)
+	return vaultRow(&rec, nil)
 }
 
 // stubActor queues Reveal and Sell through the store like internal/vaultkeep does, with switchable gates.

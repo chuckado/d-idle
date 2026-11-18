@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	item "d2lod-bot/internal/status"
 	"d2lod-bot/internal/vault"
 )
 
@@ -52,7 +53,23 @@ type VaultDesk struct {
 	Owned func() []string     // purchased capacity steps (V7); nil: none
 	Keep  VaultKeeper         // the Keep queue (V5); nil: Keep is not part of this bot
 	Act   VaultActor          // Reveal, Sell and the sell prompt (V6); nil: not part of this bot
+	Tip   VaultTipFunc        // the tooltip facts of a row (base type, art, stat lines); nil: rows carry none
 }
+
+// VaultTip is what the inventory tooltip needs beyond the stored fields: the same fields status.Item carries (base facts, art
+// key, kind, sell price, stat lines), so inventory-tip.js draws a vault row unchanged.
+type VaultTip struct {
+	Base  *item.ItemBase
+	Art   string
+	Tint  string
+	Kind  string
+	Sell  int
+	Props []string
+}
+
+// VaultTipFunc builds a row's tooltip facts. props is "" for an unidentified record: the caller of this func never hands
+// out what identify costs a charge for, and vaultRow drops Props of an unidentified row again after the call.
+type VaultTipFunc func(code string, quality int, identified, ethereal bool, props string) VaultTip
 
 // VaultActor is Reveal and Sell as the routes see them (cmd/d2bot/vaultkeep.go adapts internal/vaultkeep).
 type VaultActor interface {
@@ -193,29 +210,35 @@ func vaultData() vaultTexts {
 // unidentified record shows only what the game shows: the stored name is the as-displayed one and nothing else of the item
 // is sent (no property text exists in the store for it).
 type VaultItem struct {
-	ID         string `json:"id"`
-	Code       string `json:"code"`
-	Name       string `json:"name"`
-	Quality    string `json:"quality"`
-	Q          int    `json:"q"`
-	Ilvl       int    `json:"ilvl"`
-	Level      int    `json:"level"`
-	Identified bool   `json:"identified"`
-	Ethereal   bool   `json:"ethereal,omitempty"`
-	Sockets    int    `json:"sockets,omitempty"`
-	Pin        bool   `json:"pin,omitempty"`
-	State      string `json:"state"`
-	Status     string `json:"status"`
-	Value      int    `json:"value"`
-	Found      string `json:"found,omitempty"` // RFC 3339
-	Area       string `json:"area,omitempty"`
-	Reason     string `json:"reason,omitempty"`
-	Keep       string `json:"keep,omitempty"` // queued, creating, kept or failed: the Keep queue's word for the row
-	Where      string `json:"where,omitempty"`
-	Reveal     string `json:"reveal,omitempty"`       // queued, working or failed: the Reveal errand's word for the row
-	RevealWhy  string `json:"revealReason,omitempty"` // why a reveal failed
-	Sell       string `json:"sell,omitempty"`         // queued, selling, sold or failed
-	SellWhy    string `json:"sellReason,omitempty"`
+	ID         string         `json:"id"`
+	Code       string         `json:"code"`
+	Name       string         `json:"name"`
+	Quality    string         `json:"quality"`
+	Q          int            `json:"q"`
+	Ilvl       int            `json:"ilvl"`
+	Level      int            `json:"level"`
+	Identified bool           `json:"identified"`
+	Base       *item.ItemBase `json:"base,omitempty"` // tooltip facts, as in status.Item
+	Art        string         `json:"art,omitempty"`
+	Tint       string         `json:"tint,omitempty"`
+	Kind       string         `json:"kind,omitempty"`
+	SellPrice  int            `json:"sellPrice,omitempty"` // the vendor price the tooltip shows (the row's own "sell" is the Sell errand's state)
+	Props      []string       `json:"props,omitempty"`     // stat lines of an IDENTIFIED row only (docs/vault.md, identify stays a step)
+	Ethereal   bool           `json:"ethereal,omitempty"`
+	Sockets    int            `json:"sockets,omitempty"`
+	Pin        bool           `json:"pin,omitempty"`
+	State      string         `json:"state"`
+	Status     string         `json:"status"`
+	Value      int            `json:"value"`
+	Found      string         `json:"found,omitempty"` // RFC 3339
+	Area       string         `json:"area,omitempty"`
+	Reason     string         `json:"reason,omitempty"`
+	Keep       string         `json:"keep,omitempty"` // queued, creating, kept or failed: the Keep queue's word for the row
+	Where      string         `json:"where,omitempty"`
+	Reveal     string         `json:"reveal,omitempty"`       // queued, working or failed: the Reveal errand's word for the row
+	RevealWhy  string         `json:"revealReason,omitempty"` // why a reveal failed
+	Sell       string         `json:"sell,omitempty"`         // queued, selling, sold or failed
+	SellWhy    string         `json:"sellReason,omitempty"`
 }
 
 const (
@@ -224,7 +247,7 @@ const (
 	sellReasonPrefix   = "sell: "
 )
 
-func vaultRow(r *vault.Rec) VaultItem {
+func vaultRow(r *vault.Rec, tip VaultTipFunc) VaultItem {
 	name := r.Name
 	if name == "" {
 		name = r.Code
@@ -234,6 +257,17 @@ func vaultRow(r *vault.Rec) VaultItem {
 		Value: r.Value, Area: r.Found.Area, Reason: r.Reason}
 	if !r.Found.Time.IsZero() {
 		v.Found = r.Found.Time.UTC().Format(time.RFC3339)
+	}
+	if tip != nil {
+		props := ""
+		if r.Identified {
+			props = r.Props
+		}
+		t := tip(r.Code, r.Quality, r.Identified, r.Eth, props)
+		v.Base, v.Art, v.Tint, v.Kind, v.SellPrice = t.Base, t.Art, t.Tint, t.Kind, t.Sell
+		if r.Identified {
+			v.Props = t.Props
+		}
 	}
 	switch {
 	case r.State == vault.KeepQ && r.InFlight:
@@ -613,7 +647,7 @@ func (d *VaultDesk) view(ctx context.Context, q vaultQuery, kinds vaultTexts) Va
 	recs, total := st.Query(q.f)
 	v.Total = total
 	for i := range recs {
-		v.Items = append(v.Items, vaultRow(&recs[i]))
+		v.Items = append(v.Items, vaultRow(&recs[i], d.Tip))
 	}
 	s := st.Status()
 	v.Capacity, v.Anomalies = capacityOf(s), s.Anomalies
@@ -653,8 +687,8 @@ type VaultAction struct {
 	Reason string `json:"reason,omitempty"`
 }
 
-func detailOf(r *vault.Rec, readOnly bool, keep, reveal, sell VaultAction) VaultDetail {
-	it := vaultRow(r)
+func detailOf(r *vault.Rec, tip VaultTipFunc, readOnly bool, keep, reveal, sell VaultAction) VaultDetail {
+	it := vaultRow(r, tip)
 	var lines []string
 	if !it.Identified {
 		lines = append(lines, "Unidentified: the properties are hidden until it is revealed")
@@ -734,7 +768,7 @@ func (a *VaultAPI) Handler() http.Handler {
 			writeJSON(w, http.StatusNotFound, policyReply{Code: "missing", Error: "no such item"})
 			return
 		}
-		writeJSON(w, 200, detailOf(&rec, !d.on(), d.keepAction(r.Context(), &rec), d.revealAction(r.Context(), &rec), d.sellAction(r.Context(), &rec)))
+		writeJSON(w, 200, detailOf(&rec, d.Tip, !d.on(), d.keepAction(r.Context(), &rec), d.revealAction(r.Context(), &rec), d.sellAction(r.Context(), &rec)))
 	})
 	static := func(path, file, ctype string) {
 		m.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {

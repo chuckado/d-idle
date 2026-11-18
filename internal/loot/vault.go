@@ -334,6 +334,9 @@ func (l *Looter) vaultOne(ctx context.Context, c cand, o PickOpts) (recorded boo
 	}
 	it := vault.Item{Raw: rec.Norm, Code: rec.Code, Name: c.name, Quality: rec.Quality, Ilvl: rec.ILvl, Identified: rec.Identified,
 		Sockets: rec.Sockets, Eth: rec.Ethereal, Found: vault.Found{Time: v.clock().UTC(), Zone: "area " + strconv.Itoa(s.Player.Area)}}
+	if rec.Identified {
+		it.Props = rec.Props
+	}
 	if b := l.base(u.Class); b != nil && l.e.Data != nil {
 		it.Chain = merc.TypeChain(l.e.Data, b.Type)
 	}

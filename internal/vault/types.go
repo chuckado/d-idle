@@ -65,6 +65,7 @@ type Item struct {
 	Chain      []string `json:"chain,omitempty"` // base type chain, most specific first, e.g. swor, weap
 	Sockets    int      `json:"sockets,omitempty"`
 	Eth        bool     `json:"eth,omitempty"`
+	Props      string   `json:"props,omitempty"` // "stat:param:value;..." as d2d sent them, kept ONLY for an identified item (the page words them as the stat lines; an unidentified record never carries them)
 	Found      Found    `json:"found"`
 	Value      int      `json:"value"`
 }
