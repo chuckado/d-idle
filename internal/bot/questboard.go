@@ -192,17 +192,17 @@ func taskID(q questboard.Quest) string {
 
 // world returns the task world of the latest snapshot, built once per snapshot (the executor asks for every chunk).
 //
-// While the loop runs only it builds (worldLoop, from boardStep and boardPreempts): taskEnv.World reads and mutates
-// loop-owned maps (cleared areas, touched waypoints), so building it from an API goroutine (Accept, readiness) raced with
-// the loop (-race, TestQuestBoardStartRunsUnderAFarmGoal). Every other caller then gets the loop's last world, at most one
-// tick old; with no loop running (tests, before Run) the caller builds.
+// taskEnv.World reads and mutates loop-owned maps (cleared areas, touched waypoints), so an API goroutine (Accept, readiness)
+// may build it only between loop steps (stepMu free); during a step it gets the loop's last world, at most one tick old (the
+// loop refreshes it through worldLoop). Building it mid-step raced with the loop (-race, TestQuestBoardStartRunsUnderAFarmGoal).
 func (rt *boardRT) world() (task.World, string, map[string]questboard.Word) {
-	if rt.r.looping.Load() {
-		rt.mu.Lock()
-		defer rt.mu.Unlock()
-		return rt.w, rt.class, rt.ready
+	if rt.r.stepMu.TryLock() {
+		defer rt.r.stepMu.Unlock()
+		return rt.worldLoop()
 	}
-	return rt.worldLoop()
+	rt.mu.Lock()
+	defer rt.mu.Unlock()
+	return rt.w, rt.class, rt.ready
 }
 
 // worldLoop is world() for the loop goroutine: it rebuilds the cache when the snapshot changed.

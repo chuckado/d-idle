@@ -32,6 +32,13 @@ func (r *Runner) safeStep(ctx context.Context) (acted bool) {
 			acted = false
 		}
 	}()
+	r.stepMu.Lock()
+	defer r.stepMu.Unlock()
+	if r.questBoardOn() {
+		if rt := r.qbRT(); rt != nil {
+			rt.worldLoop() // the one place the board's world is built during a step (questboard.go world)
+		}
+	}
 	return r.step(ctx)
 }
 
