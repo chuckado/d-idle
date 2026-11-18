@@ -78,3 +78,14 @@ func TestFlailNeedsNoProgress(t *testing.T) {
 		t.Fatal("slow moves are not flailing")
 	}
 }
+
+func TestFlailIgnoresLinearTravel(t *testing.T) {
+	var g flailGuard
+	now := time.Unix(1000, 0)
+	for i := 0; i < 8; i++ {
+		g.noteMove(now.Add(time.Duration(i)*time.Second), i+1, 0) // eight different areas
+	}
+	if _, started, _ := g.check(now.Add(10*time.Second), 0, 6, 10*time.Minute, 5*time.Minute, func(int) string { return "a" }); started {
+		t.Fatal("a walk through new areas is not a loop")
+	}
+}

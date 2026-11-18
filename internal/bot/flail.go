@@ -14,8 +14,8 @@ import (
 
 // flailGuard catches any area ping-pong whatever the cause (Dark Wood 2026-11-18: Dark Wood, camp, Dark Wood, Cold
 // Plains every 7 s for 12 minutes while the quest board, the area-done trip and the waypoint fallback undid each
-// other). It looks only at the symptom: FlailMoves area changes within FlailWindowMin minutes with no real progress
-// (kill, XP, level) in between. Then the bot holds where it is for FlailHoldMin minutes, doubled per repeat.
+// other). It looks only at the symptom: FlailMoves area changes within FlailWindowMin minutes, mostly into areas
+// already visited in the window, with no real progress (kill, XP, level) in between. Then the bot holds where it is for FlailHoldMin minutes, doubled per repeat.
 type flailGuard struct {
 	mu        sync.Mutex
 	moves     []flailMove
@@ -59,6 +59,14 @@ func (g *flailGuard) check(now time.Time, real uint64, moves int, window, hold t
 	}
 	g.moves = g.moves[cut:]
 	if len(g.moves) < moves || g.moves[0].real != real {
+		return "", false, false
+	}
+	// A walk through new areas is travel, not a loop: a loop revisits, so at most half the moves are distinct areas.
+	distinct := map[int]bool{}
+	for _, m := range g.moves {
+		distinct[m.area] = true
+	}
+	if len(distinct)*2 > len(g.moves) {
 		return "", false, false
 	}
 	if now.Sub(g.holdEnded) > 12*hold {
