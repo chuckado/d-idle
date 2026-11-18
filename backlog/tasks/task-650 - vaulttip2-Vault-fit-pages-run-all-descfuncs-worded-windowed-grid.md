@@ -32,6 +32,7 @@ owns:
   - "tools/uishots.sh"
 exclusive: []
 contracts: []
+result: "Fit pages vault-tip* run on the worker host (Chrome) and viewed (390x844, 1024x768, 1440x900); StatLines (internal/data) words descfunc 1-10, 12-16, 19-21, 24, 27, 28 and the grouped lines, tests per descfunc; grid windowed (2400-item fixture, fit judge and must-fail pages); Cards count is not on the Vault. NOT verified live; string keys of grouped lines and descfunc 13, 14 are U"
 ---
 
 ## Description
@@ -44,8 +45,8 @@ Why: follow-up to vaulttip: the tooltip fit pages never ran, only descfunc 1-5 a
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Fit pages vault-tip* run and were viewed at phone, tablet, laptop
-- [ ] #2 StatLines words the common descfuncs, one shared function, tests per descfunc
-- [ ] #3 Vault grid is windowed; 2400 items stay light
-- [ ] #4 Cards count and Vault tile checked
+- [x] #1 Fit pages vault-tip* run and were viewed at phone, tablet, laptop
+- [x] #2 StatLines words the common descfuncs, one shared function, tests per descfunc
+- [x] #3 Vault grid is windowed; 2400 items stay light
+- [x] #4 Cards count and Vault tile checked
 <!-- AC:END -->
