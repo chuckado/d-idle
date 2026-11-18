@@ -233,7 +233,9 @@ cmd/d2bot/mercwire.go  credit-runner  botmerc
 cmd/d2bot/mercwire.go  credit-runner  mercrevive2
 cmd/d2bot/mercwire_test.go  credit-runner  mercrevive2
 cmd/d2bot/objects.go  credit-runner  botstuck
+cmd/d2bot/objects.go  credit-runner  cain7
 cmd/d2bot/objects.go  credit-runner  cainfix
+cmd/d2bot/objects_room_test.go  credit-runner  cain7
 cmd/d2bot/objects_test.go  credit-runner  cainfix
 cmd/d2bot/pausewire.go  credit-runner  uib1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
@@ -786,6 +788,8 @@ internal/d2dctl/item_verbs_merc_test.go  credit-runner  uib9
 internal/d2dctl/item_verbs_test.go  credit-runner  itemverbs2
 internal/d2dctl/labels.go  credit-runner  labels
 internal/d2dctl/labels_test.go  credit-runner  labels
+internal/d2dctl/parse.go  credit-runner  cain7
+internal/d2dctl/rooms_test.go  credit-runner  cain7
 internal/d2dctl/vault_fake.go  credit-runner  vaultv6
 internal/d2dctl/verbs.go  credit-runner  arrivalsettle
 internal/d2dinput  pro-runner  bounce3
@@ -802,6 +806,8 @@ internal/d2dsrc/player.go  credit-runner  survB
 internal/d2dsrc/source_test.go  credit-runner  botcpu
 internal/d2dsrc/source_test.go  credit-runner  survB
 internal/d2dsrc/srv_test.go  credit-runner  botcpu
+internal/d2dworld  credit-runner  cain7
+internal/d2map/tracker.go  credit-runner  cain7
 internal/danger  credit-runner  dangerfit2
 internal/danger/  credit-runner  survA
 internal/danger/areaunits.json  pro-runner  decomp28
@@ -929,6 +935,7 @@ internal/nav/exit.go  credit-runner  pursuers
 internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/mouthgate.go  credit-runner  botstuck
+internal/nav/nav.go  credit-runner  cain7
 internal/nav/nav.go  credit-runner  maphistoryC
 internal/nav/nav.go  credit-runner  pursuers
 internal/nav/pursuit.go  credit-runner  pursuers
@@ -950,6 +957,7 @@ internal/power/  credit-runner  powerwire
 internal/power/  credit-runner  survB
 internal/power/margin.go  credit-runner  resistorder
 internal/quest/act1.go  credit-runner  cainfix
+internal/quest/dialog.go  credit-runner  cain7
 internal/questboard  credit-runner  cainfix
 internal/questboard  credit-runner  quests1
 internal/questboard  credit-runner  quests10
