@@ -277,7 +277,10 @@
 | jewelcolor | proposed | - | `internal/watch/web/components.css`<br>`internal/watch/artembed_test.go`<br>`internal/data/invfile_test.go`<br>`docs/inventory-ui.md` | - |
 | groundquality | proposed | - | `internal/d2dloot`<br>`cmd/d2bot/d2dloot.go`<br>`cmd/d2bot/d2dwire.go`<br>`docs/d2d-loot.md` | - |
 | itemcolour2 | proposed | - | `internal/art/`<br>`internal/d2dsrc/`<br>`internal/watch/web/inventory.js`<br>`internal/watch/artembed_test.go`<br>`internal/status/inventory.go`<br>`internal/d2/items.go`<br>`cmd/d2bot/display.go`<br>`cmd/d2bot/itemart_test.go` | - |
+| devp11doc | proposed | - | `docs/process/sandbox-devp11.md` | - |
+| cain45 | proposed | - | `cmd/d2bot/cain.go`<br>`cmd/d2bot/cain_test.go`<br>`internal/d2dsrc/items.go`<br>`internal/task/act1.go`<br>`internal/task/cainstones_test.go`<br>`data/questboard/act1.json`<br>`docs/probes/search-for-cain-45-2026-11-18.md`<br>`docs/actbot.md`<br>`internal/watch/testdata/quests`<br>`docs/questboard.md`<br>`internal/questboard/chunks_test.go`<br>`internal/questboard/state_test.go`<br>`internal/d2dsrc/source_test.go` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
+| cainl2 | proposed | - | `docs/probes/cainl2`<br>`docs/probes/search-for-cain-l2-2026-11-18.md`<br>`docs/probes/test-characters.md` | `d2d-control-socket` |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -316,14 +319,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 05ba40cc0 11-18 10:33 `Merge agent/cain45: CAIN-4/5a: cairn stone solver by class cycling, bkd prereq, quest portal class 60, stones chunk supported` (cain45)
+- 70d357297 11-18 10:32 `Merge branch 'main' into cain45` (-)
+- 8b2625e60 11-18 10:27 `Merge agent/cainl2: cainl2: Search for Cain L2 drill (cage, free Cain, return, Akara report)` (cainl2)
+- 3b80ae194 11-18 10:26 `Merge branch 'main' into cainl2` (-)
+- 704dded1c 11-18 10:25 `Merge origin/main into agent/cain45` (-)
+- 96848224c 11-18 10:18 `Merge agent/devp11doc: devp11 item colour payload doc` (devp11doc)
+- 0ba7c0782 11-18 10:16 `Merge branch 'main' into devp11doc` (-)
+- 0bc637671 11-18 10:11 `Merge agent/cainl1: Merge branch 'main' into cainl1` (cainl1)
+- 45ac72acf 11-18 10:10 `Merge branch 'main' into cainl1` (-)
 - 058b72f74 11-18 10:01 `Merge agent/cain7: CAIN-7: walk to the Inifuss tree room from the presets room rows` (cain7)
-- c0c38af8f 11-18 10:00 `Merge branch 'main' into cain7` (-)
-- 93899088c 11-18 09:54 `Merge agent/itemcolour2: item tint: parse inv_tint/inv_colour, art colormap remap, UI key (includes the itemcolour design)` (itemcolour2)
-- 7255719d5 11-18 09:53 `Merge branch 'main' into itemcolour2` (-)
-- 5cd59f5ca 11-18 09:50 `Merge main into cain7` (-)
-- ef8709ccf 11-18 09:46 `Merge remote-tracking branch 'origin/main' into agent/itemcolour2` (-)
-- ed97362bf 11-18 09:43 `Merge agent/itemcolour: itemcolour: item colour design doc` (itemcolour)
-- c968974f6 11-18 09:42 `Merge branch 'main' into itemcolour` (-)
-- 3e51d9cbd 11-18 09:41 `Merge branch 'agent/itemcolour' into agent/itemcolour2` (itemcolour)
-- 14a14ad44 11-18 09:36 `Merge agent/groundquality: Merge branch 'main' into groundquality` (groundquality)
 <!-- statusgen:end -->
