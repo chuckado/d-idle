@@ -1,10 +1,13 @@
 ---
 id: TASK-642
-title: 'itempics: jewel, ring, amulet and charm pictures from the item''s own picture index'
-status: Proposed
+title: >-
+  itempics: jewel, ring, amulet and charm pictures from the item's own picture
+  index
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T15:31:00Z'
+updated_date: '2026-11-18T16:03:00Z'
 labels:
   - d2d
   - feature

@@ -209,11 +209,12 @@ export function settle(v, local = shared, now = Date.now()) {
 
 // act is the one place a button reaches the API: it posts, shows a refusal with the API's own reason and asks for a fresh GET.
 // It returns the reply (or null when the route is unreachable; ctx.post has said so already).
-export async function act(ctx, verb, quest, chunk, local = shared, redraw = null) {
+export async function act(ctx, verb, quest, chunk, local = shared, redraw = null, confirmed = false) {
   const mode = verb === 'mode';
   const path = mode ? '/api/quests/mode' : verb === 'dismiss' ? '/api/quests/away/dismiss' : '/api/quests/' + encodeURIComponent(quest) + '/' + verb;
   // the auto switch (slice S8, POST /api/quests/<id>/auto) sends {on: bool} in the place of a chunk
   const body = mode ? { mode: chunk } : verb === 'auto' ? { on: !!chunk } : chunk ? { chunk } : {};
+  if (confirmed && verb === 'cancel') body.confirm = true; // the second tap of a Stop; the server only records it
   if (verb === 'handin') { local.handing = { quest, chunk, at: Date.now() }; local.error = null; if (redraw) redraw(); }
   const j = await ctx.post(path, body);
   if (j && j.ok === false) {
@@ -255,8 +256,10 @@ export function boardModel(v, local = shared, now = Date.now()) {
   const nowRow = ['running', 'awaiting', 'blocked', 'handingin', 'confirming', 'failed', 'countdown'].includes(cur.kind) ? cur : null;
   const away = v.whileAway && (v.whileAway.events || []).length ? { events: v.whileAway.events.map((e) => ({ at: e.at, text: e.text + (awardText(e.awarded) ? ', ' + awardText(e.awarded) : '') })) } : null;
   const hist = (v.history || []).slice(0, 5).map((h) => ({ title: h.title, text: (h.confirmed ? 'handed in' : 'started') + (awardText(h.paid) ? ', ' + awardText(h.paid) : '') }));
+  // a stop the player made in the last day stays on the board, so a surprise stop is visible (the server drops it after 24 h)
+  const stopped = (v.stopped || []).map((x) => ({ title: x.questTitle || x.quest, text: 'Stopped by you at ' + timeText(x.at).trim() })).filter((x) => x.text.length > 'Stopped by you at '.length);
   const open = list.find((a) => a.rows.some((r) => r.group !== 'done' && r.group !== 'skipped'));
-  return { acts: list, now: nowRow, history: hist, mode: v.mode || 'train', modeActs: !!v.modeActs, actLabel: (open ? open.name : list.length ? list[list.length - 1].name : 'Quests') + ', ' + humanize(v.difficulty || 'normal'),
+  return { acts: list, now: nowRow, history: hist, stopped, mode: v.mode || 'train', modeActs: !!v.modeActs, actLabel: (open ? open.name : list.length ? list[list.length - 1].name : 'Quests') + ', ' + humanize(v.difficulty || 'normal'),
     auto: v.autoStart || { available: false, note: '' }, away, paused: !!v.paused, empty: list.length ? '' : 'No quests to show yet' };
 }
 
@@ -289,7 +292,7 @@ export function mountBoard(root, ctx, tab) {
     }
     stopArm = '';
     b.disabled = true;
-    act(ctx, verb, quest, chunk, local, redraw).then(() => { b.disabled = false; });
+    act(ctx, verb, quest, chunk, local, redraw, !!confirm).then(() => { b.disabled = false; });
   }
 
   function modeBar(m) {
@@ -398,6 +401,13 @@ export function mountBoard(root, ctx, tab) {
     }
     const list = ctx.el('div', 'qb-list');
     list.setAttribute('data-scroll', '');
+    for (const x of m.stopped) { // a quest stopped from the API in the last day
+      const c = ctx.el('div', 'qb-away qb-stopped');
+      const t = ctx.el('span', 'qb-t');
+      t.append(ctx.el('b', '', x.title), ctx.el('span', 'qb-r', x.text));
+      c.append(t);
+      list.append(c);
+    }
     if (m.away) list.append(awayCard(m.away)); // inside the list: a short phone scrolls it instead of losing the rows
     for (const a of m.acts) {
       const sec = ctx.el('section', 'qb-act-sec');
