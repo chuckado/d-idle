@@ -1,6 +1,6 @@
 # Search for Cain, drill L1: the five Cairn Stones and the way to Tristram (2026-11-18)
 
-> status: result of drill CAIN-L1, follow-up to `docs/probes/search-for-cain-l0-2026-11-18.md`. Same setup as L0 (d2d lab slot, lab binary `d2d.lab3-labverbs`, throwaway Sorceress "Drilly", `d2drill -probe`, every `debug` verb ledgered; NOT Game.exe, no Wine instance). Tags: V verified live (fixture), S secondary (fork source or decomp notes), U unverified. The character is CHEATED (warped, item given): mechanics only. Fixtures: `docs/probes/cainl1/testdata/`; command: `docs/probes/cainl1/run.sh LABEL 'verb;verb;...'` (worker host; the d2d's own log is in `~/d2d-lab/slots/3/drillhome/d2d.out`, copied to the `*.d2dlog.txt` fixtures).
+> status: result of drill CAIN-L1, follow-up to `docs/probes/search-for-cain-l0-2026-11-18.md`. Same setup as L0 (d2d lab slot, lab binary `d2d.lab3-labverbs`, throwaway Sorceress "Drilly", `d2drill -probe`, every `debug` verb ledgered; NOT Game.exe, no Wine instance). Tags: V verified live (fixture), S secondary (fork source or decomp notes), U unverified. The character is CHEATED (warped, item given): mechanics only. Fixtures: `docs/probes/cainl1/testdata/`; command: `docs/probes/cainl1/run.sh LABEL 'verb;verb;...'` (worker host; the d2d's own log is in `d2d.out` in the slot's run directory on the worker host, copied to the `*.d2dlog.txt` fixtures).
 
 ## Why L0 saw nothing (V)
 
