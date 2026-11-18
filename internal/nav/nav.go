@@ -200,6 +200,15 @@ func (n *Navigator) UseWorld(w interface {
 	n.w = w
 }
 
+// CurrentMap is the level map the navigator walks on (nil before the first observation). On the d2d backend this is
+// the only map: Env.World is nil there.
+func (n *Navigator) CurrentMap() *d2map.LevelMap {
+	if n.w == nil {
+		return nil
+	}
+	return n.w.Current()
+}
+
 func (n *Navigator) defaults() {
 	if n.clk == nil {
 		n.clk = env.RealClock{}

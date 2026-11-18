@@ -243,13 +243,10 @@ func (o objectAdapter) find(ctx context.Context, class int) (*d2.Unit, error) {
 				}
 			}
 		}
-		if o.e.World != nil {
-			_, _ = o.e.World.Update()
-			if lm := o.e.World.Current(); lm != nil {
-				for _, p := range lm.Presets {
-					if p.Kind == d2map.PresetObject && p.ID == class {
-						return true
-					}
+		if lm := o.levelMap(); lm != nil {
+			for _, p := range lm.Presets {
+				if p.Kind == d2map.PresetObject && p.ID == class {
+					return true
 				}
 			}
 		}
@@ -260,9 +257,69 @@ func (o objectAdapter) find(ctx context.Context, class int) (*d2.Unit, error) {
 		area = s.Player.Area
 	}
 	return exploreForObject(ctx, o.e.Clock, o.explored, exploreKey{area, class},
-		func(c context.Context) error { return o.nv.Explore(c, known) },
+		roomWalk(func() (input.Point, bool) { return o.roomTarget(class) }, o.nv.GoTo,
+			func(c context.Context) error { return o.nv.Explore(c, known) }, known),
 		func() (*d2.Unit, error) { return o.findNear(ctx, class, nil) })
 }
+
+// roomWalk is the explore step of find: when the level's room rows name the room of the object (target), walk to its
+// centre, stopping early once the object is known (it streams in about 13 to 18 cells away, V lab); a walk that fails
+// without the object showing up, or no room row at all, falls back to the coverage sweep.
+func roomWalk(target func() (input.Point, bool), goTo func(context.Context, input.Point) error,
+	sweep func(context.Context) error, known func() bool) func(context.Context) error {
+	return func(c context.Context) error {
+		if dst, ok := target(); ok {
+			if err := goTo(c, dst); err == nil || known() {
+				return err
+			}
+		}
+		return sweep(c)
+	}
+}
+
+// levelMap is the current level map: the tracker of Game.exe, or the navigator's d2d world (Env.World is nil there, so
+// the preset lookups of find never ran on d2d before this).
+func (o objectAdapter) levelMap() *d2map.LevelMap {
+	if o.e.World != nil {
+		_, _ = o.e.World.Update()
+		return o.e.World.Current()
+	}
+	if o.nv != nil {
+		return o.nv.CurrentMap()
+	}
+	return nil
+}
+
+// roomTarget is where the room that holds a quest object of the class stands, when this level's room rows name one and
+// the character is not already there (then the object is not in this room and the sweep takes over).
+func (o objectAdapter) roomTarget(class int) (input.Point, bool) {
+	rt, ok := quest.ObjRoomType[class]
+	if !ok {
+		return input.Point{}, false
+	}
+	lm := o.levelMap()
+	s, err := o.e.Snapshot()
+	if lm == nil || err != nil || s.Player == nil {
+		return input.Point{}, false
+	}
+	return roomTargetIn(lm, rt, input.Point{X: s.Player.X, Y: s.Player.Y})
+}
+
+func roomTargetIn(lm *d2map.LevelMap, roomType int, from input.Point) (input.Point, bool) {
+	for _, r := range lm.RoomRows {
+		if r.Type == roomType {
+			dx, dy := from.X-r.Pos.X, from.Y-r.Pos.Y
+			if dx*dx+dy*dy <= roomReach*roomReach {
+				return input.Point{}, false
+			}
+			return input.Point{X: r.Pos.X, Y: r.Pos.Y}, true
+		}
+	}
+	return input.Point{}, false
+}
+
+// roomReach is how close, in subtiles (2 cells), the character must be to the room centre to call it reached.
+const roomReach = 10
 
 // findNear is the object of the class nearest to at (the character when at is nil), looking again after walking to the
 // level preset when nothing streamed in yet.
@@ -292,14 +349,11 @@ func (o objectAdapter) findNearSkip(ctx context.Context, class int, at *input.Po
 			return best, nil
 		}
 		// quest chests stream in late (V act2 F1): walk to the preset, then look again
-		if o.e.World != nil {
-			_, _ = o.e.World.Update()
-			if lm := o.e.World.Current(); lm != nil {
-				for _, p := range lm.Presets {
-					if p.Kind == d2map.PresetObject && p.ID == class {
-						_ = o.nv.GoTo(ctx, input.Point{X: p.Pos.X, Y: p.Pos.Y})
-						break
-					}
+		if lm := o.levelMap(); lm != nil {
+			for _, p := range lm.Presets {
+				if p.Kind == d2map.PresetObject && p.ID == class {
+					_ = o.nv.GoTo(ctx, input.Point{X: p.Pos.X, Y: p.Pos.Y})
+					break
 				}
 			}
 		}
