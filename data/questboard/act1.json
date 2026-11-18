@@ -218,7 +218,7 @@
     },
     {
      "id": "free_cain",
-     "title": "Clear Tristram and free Cain",
+     "title": "Free Cain from the cage in Tristram",
      "ends": "auto",
      "minutes": [
       6,
@@ -228,14 +228,12 @@
       "stones"
      ],
      "steps": [
-      "clear_tristram",
+      "clear_cage_guards",
       "free_cain",
       "return_camp"
      ],
      "risk": "hazard",
-     "unsupported": "the bot cannot clear Tristram or free Cain from the cage yet (the cage click and Cain never ran live)",
      "nodes": [
-      "clear",
       "cage",
       "home"
      ]
@@ -259,7 +257,6 @@
       "talk_akara"
      ],
      "handInStep": "report",
-     "unsupported": "waits on the Tristram part, which the bot cannot do yet",
      "handler": "search_for_cain_board"
     }
    ],
