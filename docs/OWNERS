@@ -1554,6 +1554,7 @@ tools/play-session.sh  credit-runner  playsession
 tools/survival  credit-runner  survtune
 tools/survival/abreport  credit-runner  survfix
 tools/survival/abrun.sh  credit-runner  survfix2
+tools/survival/wavelane.sh  credit-runner  longlane
 tools/tester-pack.sh  credit-runner  testerpack
 tools/uilint/  credit-runner  uis1
 tools/uilint/lint.go  credit-runner  uis6
