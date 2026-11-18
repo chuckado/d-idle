@@ -23,6 +23,7 @@ owns:
   - "docs/probes/survival-holdout2-2026-11-18.md"
 exclusive: []
 contracts: []
+result: "Kit gate holds a broke potion-less hero on the first fields; trip return walks past a burned portal landing; Paladin 6-seed A/B PASS (xp ratio 1.14, deaths 0/0, chickens 6/6), Sorceress INCONCLUSIVE (seed 103 mana-starved); verified on the builder (lockstep), writes after start 0; no default changed"
 ---
 
 ## Description
@@ -35,9 +36,9 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Gold gap per zone analysed and recorded
-- [ ] #2 Recovery holds a broke potion-less hero on the first fields (must-fail test)
-- [ ] #3 Return-portal mismatch fixed (test)
-- [ ] #4 Holdout 2 A/B per class on the builder, writes after start 0
-- [ ] #5 Probe doc with verdict per class and recommendation
+- [x] #1 Gold gap per zone analysed and recorded
+- [x] #2 Recovery holds a broke potion-less hero on the first fields (must-fail test)
+- [x] #3 Return-portal mismatch fixed (test)
+- [x] #4 Holdout 2 A/B per class on the builder, writes after start 0
+- [x] #5 Probe doc with verdict per class and recommendation
 <!-- AC:END -->
