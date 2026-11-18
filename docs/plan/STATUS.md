@@ -284,6 +284,7 @@
 | cain5b | proposed | - | `cmd/d2bot/cain5b_test.go`<br>`cmd/d2bot/objects.go`<br>`internal/bot/task.go`<br>`internal/bot/task_acts_test.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/quest/dialog.go`<br>`internal/task/act1.go`<br>`internal/task/testdata/plans/act1.txt`<br>`data/questboard/act1.json`<br>`internal/watch/testdata/quests`<br>`internal/questboard/chunks_test.go`<br>`docs/probes/search-for-cain-5b-2026-11-18.md`<br>`docs/questboard.md` | - |
 | vaulttip | proposed | - | `internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`cmd/d2bot/vaulttip.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/watch/vaulttip_test.go`<br>`internal/watch/testdata/vault_tip.mjs`<br>`tools/uishots/fixtures_vault.go`<br>`docs/vault.md`<br>`tools/uishots.sh`<br>`internal/vault/types.go`<br>`internal/loot/vault.go`<br>`internal/vaultkeep/reveal.go`<br>`internal/d2dctl/vault_verbs.go`<br>`internal/d2dctl/vault_verbs_test.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go` | - |
 | devp12 | proposed | - | `docs/process/sandbox-devp12.md` | - |
+| bulkid-design | proposed | - | `docs/design/bulk-identify-2026-11-18.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -322,6 +323,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 48c7ee187 11-18 17:24 `Merge agent/bulkid-design: bulk identify design doc` (bulkid-design)
 - 0275f34bc 11-18 15:54 `Merge agent/longlane: longlane: wavelane.sh launches survival waves in the builder long lane` (longlane)
 - 9ae82ad42 11-18 15:53 `Merge branch 'main' into longlane` (-)
 - 1614693ad 11-18 13:21 `Merge agent/cairnportal: cairnportal: PR candidate D1 Cairn portal offset (fid/cairn-portal-r1), docs and card` (cairnportal)
@@ -331,5 +333,4 @@
 - a9aedc8ff 11-18 11:56 `Merge agent/decomp40: decomp40: Cairn portal offset in tiles (D1), scroll pattern never shown (D2/D7), trace` (decomp40)
 - 765975735 11-18 11:56 `Merge branch 'main' into decomp40` (-)
 - 46d353f23 11-18 11:48 `Merge agent/cain5b: CAIN-5b: free Cain (guards fought, cage, quest word check) and report to Akara; board chunks supported` (cain5b)
-- a6668408f 11-18 11:47 `Merge branch 'main' into cain5b` (-)
 <!-- statusgen:end -->
