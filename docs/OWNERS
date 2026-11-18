@@ -357,6 +357,7 @@ docs/inventory-actions.md  credit-runner  gearsets
 docs/inventory-actions.md  credit-runner  idfast
 docs/inventory-actions.md (a new section)  credit-runner  botsell
 docs/inventory-ui.md  credit-runner  charreq
+docs/inventory-ui.md  credit-runner  jewelcolor
 docs/inventory-ui.md  credit-runner  jewelicons
 docs/inventory-ui.md  credit-runner  nopins
 docs/inventory-ui.md  credit-runner  uic2
@@ -795,6 +796,7 @@ internal/danger/areaunits.json  pro-runner  decomp28
 internal/danger/gapexport.go  credit-runner  survC
 internal/data/db.go  credit-runner  botcpu2
 internal/data/invfile_real_test.go  credit-runner  jewelicons
+internal/data/invfile_test.go  credit-runner  jewelcolor
 internal/decide/firsts_act1.json  credit-runner  friendfb
 internal/decide/queue.go  credit-runner  qqueue
 internal/decide/queue_test.go  credit-runner  qqueue
@@ -1025,6 +1027,7 @@ internal/vaultkeep  credit-runner  vaultv5
 internal/vaultkeep  credit-runner  vaultv6
 internal/watch  credit-runner  cainfix
 internal/watch/areamap_test.go  credit-runner  uis6
+internal/watch/artembed_test.go  credit-runner  jewelcolor
 internal/watch/cardtext.go  credit-runner  friendfb
 internal/watch/charactersapi.go  credit-runner  charselect
 internal/watch/charactersapi_test.go  credit-runner  charselect
@@ -1263,6 +1266,7 @@ internal/watch/web/characters.css  credit-runner  charui
 internal/watch/web/characters.html  credit-runner  charui
 internal/watch/web/characters.js  credit-runner  charui
 internal/watch/web/characters.json  credit-runner  charui
+internal/watch/web/components.css  credit-runner  jewelcolor
 internal/watch/web/components.css  credit-runner  jewelicons
 internal/watch/web/components.css  credit-runner  uis6
 internal/watch/web/components.css  credit-runner  uis7
