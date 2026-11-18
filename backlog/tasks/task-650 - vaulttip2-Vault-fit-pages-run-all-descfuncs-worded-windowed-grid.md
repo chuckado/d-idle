@@ -27,6 +27,9 @@ owns:
   - "internal/watch/vaultui_test.go"
   - "internal/watch/vaulttip_test.go"
   - "internal/watch/testdata/vault_tip.mjs"
+  - "internal/watch/testdata/vault_logic.mjs"
+  - "tools/uishots/fit_char_test.go"
+  - "tools/uishots.sh"
 exclusive: []
 contracts: []
 ---
@@ -36,7 +39,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Why: TODO. Done when: TODO.
+Why: follow-up to vaulttip: the tooltip fit pages never ran, only descfunc 1-5 and 12 were worded, the grid kept every row in the DOM. Done when: fit pages run and viewed, StatLines covers the common descfuncs, the grid is windowed.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
