@@ -617,6 +617,30 @@ func TestSnapshotItemTint(t *testing.T) {
 	}
 }
 
+// item pictures: inv_pic N becomes Pic N+1 (0 stays distinguishable), -1 and an absent field (an older d2d) leave Pic 0.
+func TestSnapshotItemPic(t *testing.T) {
+	r := lateReplies(t)
+	r["dump items"] = readFile(t, "dump_items_pic.json") + "\nok\n"
+	_, c := startScript(t, r)
+	res, err := New(c, Options{Tables: fakeTables{}, Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := map[uint32]int{}
+	for _, u := range res.Snap.Inventory.Items {
+		got[u.ID] = u.Item.Pic
+	}
+	want := map[uint32]int{21: 1, 22: 6, 23: 0, 24: 0}
+	if len(got) != 4 {
+		t.Fatalf("items %v", got)
+	}
+	for id, w := range want {
+		if got[id] != w {
+			t.Errorf("item %d pic %d, want %d", id, got[id], w)
+		}
+	}
+}
+
 // Cairn stones (lab drill L1, V): the lit state is the state column of "debug objects" (NU 0, ON 1) joined to the
 // preset by index, and a "debug portals" row with which >= 2 is the quest portal (class 60), not a town portal (59).
 func TestStoneStateAndQuestPortal(t *testing.T) {
