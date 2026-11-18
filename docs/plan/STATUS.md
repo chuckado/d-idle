@@ -275,6 +275,7 @@
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | cainl0 | proposed | - | `docs/probes/cainl0`<br>`docs/probes/search-for-cain-l0-2026-11-18.md`<br>`docs/probes/test-characters.md` | `d2d-control-socket` |
 | jewelcolor | proposed | - | `internal/watch/web/components.css`<br>`internal/watch/artembed_test.go`<br>`internal/data/invfile_test.go`<br>`docs/inventory-ui.md` | - |
+| groundquality | proposed | - | `internal/d2dloot`<br>`cmd/d2bot/d2dloot.go`<br>`cmd/d2bot/d2dwire.go`<br>`docs/d2d-loot.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
@@ -314,6 +315,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 14a14ad44 11-18 09:36 `Merge agent/groundquality: Merge branch 'main' into groundquality` (groundquality)
+- 4733c4c06 11-18 09:35 `Merge branch 'main' into groundquality` (-)
 - fdcf5996e 11-18 09:30 `Merge agent/cainl0: Merge branch 'main' into cainl0` (cainl0)
 - 7515ada37 11-18 09:29 `Merge branch 'main' into cainl0` (-)
 - fa3954841 11-18 09:23 `Merge agent/jewelcolor: jewelcolor: card result` (jewelcolor)
@@ -322,6 +325,4 @@
 - fd0cf0bfa 11-18 00:46 `Merge agent/survhold: survhold: seed 149 cause, riskMinGold fix, holdout record (no default change)` (survhold)
 - 7dab0d83d 11-18 00:25 `Merge branch 'main' into survhold` (-)
 - ef748c380 11-17 22:25 `Merge agent/retirej: retirej: docs, onboarding wording, task card, merge lines` (retirej)
-- 5c809b842 11-17 20:42 `Merge agent/verifycrush3: Merge branch 'main' into TASK-628` (verifycrush3)
-- 98aab18ff 11-17 20:41 `Merge branch 'main' into TASK-628` (-)
 <!-- statusgen:end -->
