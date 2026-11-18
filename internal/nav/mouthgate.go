@@ -73,11 +73,34 @@ func (n *Navigator) gatedExits() (*d2map.LevelMap, []input.Point) {
 	}
 	var out []input.Point
 	for _, e := range lm.Exits {
-		if e.Dest != n.wantExit {
+		if e.Dest != n.wantExit && !n.exitBesideWanted(lm, e) {
 			out = append(out, exitPoint(e.Pos))
 		}
 	}
 	return lm, out
+}
+
+// exitBesideWanted: the unwanted exit e lies within mouthTriggerR of an exit to the wanted level, so every click toward
+// the goal is inside its disc and the gate would refuse the walk for good. V (botstuck, 2026-11-15 log): in the Forgotten
+// Tower (20) the stairs to Tower Cellar Level 1 are about 6 subtiles from the arrival mouth; 6 refusals in a row
+// (clicks (6..8, 9..11)) and 12 minutes standing at (14,12). U: the real trigger shape. The walk's own exit penalty
+// already leaves exits near the goal alone (penalizeExits); this makes the gate agree.
+func (n *Navigator) exitBesideWanted(lm *d2map.LevelMap, e d2map.Exit) bool {
+	if n.wantExit == 0 {
+		return false
+	}
+	for _, w := range lm.Exits {
+		if w.Dest != n.wantExit {
+			continue
+		}
+		if dist(exitPoint(e.Pos), exitPoint(w.Pos)) < mouthTriggerR {
+			return true
+		}
+		if w.HasClick && dist(exitPoint(e.Pos), exitPoint(w.Click)) < mouthTriggerR {
+			return true
+		}
+	}
+	return false
 }
 
 // MouthClickOK reports whether a click at to, sent while the character stands at from, keeps the cave-mouth invariant.

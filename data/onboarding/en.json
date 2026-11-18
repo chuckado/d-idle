@@ -6,20 +6,32 @@
       "d.idle plays your Diablo II hero for you: it fights, loots, heals and walks town. You watch, and you decide what matters.",
       "It does not touch your gear or your gold. You equip what you find and you decide what to buy; selling junk is yours to mark.",
       "Worn gear is repaired with one button, and you can order any area on the map when you want the hero somewhere else.",
-      "The Journey strip shows the path ahead. You never have to follow it.",
+      "The Quests tile offers the next quest. Nothing starts until you tap Start.",
       "Policies are the rules the hero lives by: open the policy sheet and pick how careful it should be."
     ],
     "buttons": [
       {"id": "inventory", "label": "Open Inventory", "href": "/watch/inventory"},
       {"id": "policy", "label": "Open Policy", "href": "/watch/policy"},
-      {"id": "journey", "label": "Show the Journey", "href": "#p-journey-title"}
+      {"id": "journey", "label": "Show the Quests", "href": "#p-quest-strip-title"}
     ],
     "dismiss": "Got it, hide this"
   },
   "help": {
     "label": "Help",
     "showWelcome": "Show the welcome card again",
-    "showChecklist": "Show the first 30 minutes list again"
+    "showChecklist": "Show the first 30 minutes list again",
+    "whatLabel": "What does the bot do for me?",
+    "what": {
+      "title": "What does the bot do for me?",
+      "lines": [
+        "It fights, picks up loot and walks town by itself. You do not need to play.",
+        "Potions: it drinks them from the belt on its own and buys more in town. Keep some gold for refills.",
+        "Safety: it leaves a fight or goes back to town when life gets low. A hero can still die in a hard spot.",
+        "Gear: the bot never equips or swaps gear for you. Equip upgrades yourself on the Inventory page (it only suggests). If you equip or take off something, the bot leaves it alone.",
+        "Items: it picks up by its loot rules and sells or stashes only what you marked or the rules say. The Items tab of the log shows what it picked up.",
+        "What drives it: hand-written rules in Go that read the game state. There is no trained model and no AI service, and it runs offline on your machine."
+      ]
+    }
   },
   "checklist": {
     "title": "Your first 30 minutes",
@@ -33,7 +45,7 @@
     {"id": "equip", "label": "Equip your starter gear", "hint": "The hero never equips for you. The inventory page tells you what is worth wearing.", "href": "/watch/inventory"},
     {"id": "policy", "label": "Check the policy sheet", "hint": "Each row is a rule the hero follows. The defaults are safe.", "href": "/watch/policy"},
     {"id": "fight", "label": "Watch your first fight", "hint": "It ticks by itself after the first kill. Watch the video or the Thoughts feed.", "href": "#p-video-title"},
-    {"id": "journey", "label": "Open the Journey strip", "hint": "The path through the game, one chapter at a time.", "href": "#p-journey-title", "tickOnOpen": true},
+    {"id": "journey", "label": "Open the Quests tile", "hint": "The next quest, in words. Start it when you want it done.", "href": "#p-quest-strip-title", "tickOnOpen": true},
     {"id": "junk", "label": "Mark junk for sale", "hint": "Mark an item in the inventory and the hero sells it on the next town visit.", "href": "/watch/inventory"}
   ],
   "reconnect": {

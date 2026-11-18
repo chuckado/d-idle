@@ -10,7 +10,9 @@ package main
 import (
 	"context"
 	"crypto/subtle"
+	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/watch"
+	"d2lod-bot/internal/watch/palfeed"
 	"embed"
 	"encoding/json"
 	"flag"
@@ -46,6 +48,7 @@ func main() {
 	backoff := flag.Float64("frame-backoff", 4, "the next frame waits at least this many times the last frame's cost (screenshot: the verb's wall time inside d2d; -feed: our read and encode); 0 off")
 	hideCursor := flag.Bool("hide-cursor", true, "ask the d2d fork (verb `cursor off`) to leave the game's pointer sprite out of the frames; a d2d without the verb is left as it is")
 	feedPath := flag.String("feed", "", "frame ring file for the d2d fork's framefeed verb (docs/viewer-fps.md), e.g. /dev/shm/d2dview/frames.ring (keep it on tmpfs); empty: screenshots only; a d2d without the verb falls back to screenshots")
+	palFeed := flag.Bool("palette-feed", env.PaletteFeedOn(0), "also serve the lossless tile-delta picture feed (/stream.pfeed, docs/video-feed.md) from the -feed ring; env D2_PALETTE_FEED=1 or the knob watch.paletteFeed; the page falls back to MJPEG on any trouble")
 	badgeFlag := flag.String("badge", envOr("D2DVIEW_BADGE", Backend), "header badge text of the stream page and the /api/pub backend field (env D2DVIEW_BADGE)")
 	var wo watchOpts
 	flag.BoolVar(&wo.on, "watch", false, "serve the player screen on /watch (read-only GET routes here; answers on -watch-answer-addr); without -upstream it runs on the simulated runner alone")
@@ -136,6 +139,20 @@ func main() {
 		go frames.Run(ctx)
 	}
 	s := &server{feed: feed, frames: frames, mux: mux, token: token, watchSpeed: *watchSpeed}
+	if *palFeed {
+		if frames == nil || *feedPath == "" {
+			log.Printf("d2dview: -palette-feed needs -feed and frames (-fps > 0): the lossless feed stays off")
+		} else {
+			s.pal = palfeed.NewHub()
+			frames.Pal = s.pal
+			hs := newHostStats(func() int64 { _, _, _, _ = 0, 0, 0, 0; return s.pal.Snapshot().Pubs })
+			frames.Host = hs.Sample
+			s.palOpts = palfeed.Options{Auth: func(*http.Request) bool { return true }, // the token middleware s.auth runs first
+				Touch: frames.TouchPal, Server: hs.Sample}
+			wo.pal = &watch.PalFeed{Stream: s.pal.Stream(s.palOpts)}
+			log.Printf("d2dview: lossless picture feed on /stream.pfeed (docs/video-feed.md)")
+		}
+	}
 	if wo.on {
 		if s.watch, err = startWatch(ctx, wo, *addr, token, *open, frames != nil); err != nil {
 			log.Fatal(err)
@@ -165,6 +182,8 @@ type server struct {
 	token      string
 	watchSpeed float64
 	watch      http.Handler // the read-only player screen (internal/watch), nil unless -watch
+	pal        *palfeed.Hub // the lossless feed, nil unless -palette-feed (and a ring)
+	palOpts    palfeed.Options
 }
 
 func (s *server) routes() http.Handler {
@@ -179,6 +198,10 @@ func (s *server) routes() http.Handler {
 	m.HandleFunc("/map.png", s.mapPNG)
 	m.HandleFunc("/frame", s.frame)
 	m.HandleFunc("/stream.mjpg", s.stream)
+	if s.pal != nil {
+		m.Handle(watch.PalFeedStreamRoute, s.pal.Stream(s.palOpts))
+		m.Handle(watch.PalFeedCapRoute, s.pal.Capability(s.palOpts))
+	}
 	m.HandleFunc("/api/frames", s.frameStats)
 	m.HandleFunc("/api/mode", s.setMode)
 	s.mountWatch(m)

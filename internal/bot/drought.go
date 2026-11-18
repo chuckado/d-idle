@@ -33,7 +33,7 @@ func (r *Runner) droughtStage(s *d2.Snapshot, now time.Time) int {
 		return 0
 	}
 	r.mu.Lock()
-	active := r.goal != nil && !r.paused
+	active := r.goal != nil && !r.paused && !r.parkedBoard.Load()
 	r.mu.Unlock()
 	r.obMu.Lock()
 	defer r.obMu.Unlock()

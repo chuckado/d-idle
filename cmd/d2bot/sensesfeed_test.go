@@ -157,3 +157,21 @@ func TestCoverageFor(t *testing.T) {
 		t.Fatal("no roam, no cells")
 	}
 }
+
+func TestCoverageThrottle(t *testing.T) {
+	clock := time.Unix(1000, 0)
+	var pushes, prevs int
+	h := coverageThrottle(func(*d2map.LevelMap, d2map.Point) { prevs++ }, func() { pushes++ }, func() time.Time { return clock })
+	a, b := &d2map.LevelMap{No: 2}, &d2map.LevelMap{No: 3}
+	for i := 0; i < 10; i++ { // 10 polls in one second on one level: one push at the start, one after 500 ms
+		h(a, d2map.Point{})
+		clock = clock.Add(100 * time.Millisecond)
+	}
+	if prevs != 10 || pushes != 2 {
+		t.Fatalf("prev %d push %d, want 10 and 2", prevs, pushes)
+	}
+	h(b, d2map.Point{}) // an area change goes at once
+	if pushes != 3 {
+		t.Fatalf("area change did not push: %d", pushes)
+	}
+}

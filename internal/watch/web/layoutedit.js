@@ -11,7 +11,7 @@
 // own on the panel's cells, never inside the panel: a card that redraws itself (Hero now, Up next) wiped them before.
 // Hide (the handle's button, or H) switches a panel off; the bar lists the hidden ones to bring back. A panel with
 // data-aspect (the game picture, 4/3) is aspect-locked: its height follows its width.
-import { moveItem, sameCells, setOff, toPanels } from '/watch/layout.js';
+import { moveItem, sameCells, setOff, toPanels, cockpitSwap, cockpitSize, cockpitSizes } from '/watch/layout.js';
 
 export function start(api) {
   const main = api.main, el = api.el;
@@ -274,4 +274,180 @@ export function start(api) {
   const demo = /^([a-z0-9-]+):(\d+):(\d+)$/.exec(api.demo || '');
   if (demo && get(base, demo[1])) { pending = { id: demo[1], rect: { col: +demo[2], row: +demo[3] } }; preview(demo[1], pending.rect); }
   return { stop };
+}
+
+// ---- Edit layout on a cockpit (layout template cockpit/1) ----
+// Tiles do not have cells; they stand in slots. Drag a tile's tag onto another tile to swap the two, or pick another slot
+// panel from the list in the tag (it takes the place, and the one it displaced goes to where it came from when it
+// was on the page). Two dividers move: the strip's height (between the picture and the strip) and the rail's least
+// width (between the picture and the rail); the keyboard moves them by 8 px with the arrows. Every change shows at once
+// (api.preview) and is kept in the layout object; Save posts it, Reset to default drops the stored copy, Done leaves.
+// A panel that is picked and not on the page yet appears after Save and a reload (panels mount once per page load).
+export function startCockpit(api) {
+  const main = api.main, el = api.el, STEP = 8;
+  let layout = JSON.parse(JSON.stringify(api.layout)), kept = api.layout, dirty = false, drag = null;
+  const cleanup = [];
+  const mk = (text, variant) => { const b = el('button', 'd-btn', text); b.type = 'button'; b.dataset.size = 'sm'; if (variant) b.dataset.variant = variant; return b; };
+  const change = (next) => { layout = next; dirty = true; api.preview(layout); };
+
+  // a tag on every tile: the name, the list of slot panels, and the grip to drag
+  const tags = new Map();
+  function tag(id, root) {
+    const t = el('div', 'd-cktag'), grip = el('span', '', id);
+    grip.title = 'Drag onto another tile to swap';
+    const sel = el('select');
+    sel.setAttribute('aria-label', 'Panel in this place: ' + id);
+    for (const m of api.slotPanels) {
+      const o = el('option', '', m.title || m.id);
+      o.value = m.id;
+      if (m.id === id) o.selected = true;
+      sel.appendChild(o);
+    }
+    sel.addEventListener('change', () => {
+      if (sel.value === id) return;
+      if (!api.roots.has(sel.value)) api.toast('info', sel.value + ' is not on this page yet: Save and reload to see it.');
+      change(cockpitSwap(layout, id, sel.value));
+    });
+    grip.addEventListener('pointerdown', (ev) => {
+      if (ev.button !== 0 || drag) return;
+      ev.preventDefault();
+      grip.setPointerCapture(ev.pointerId);
+      drag = { id, over: '' };
+      root.dataset.ckdrag = '1';
+      const at = (e) => { const n = document.elementsFromPoint(e.clientX, e.clientY).find((x) => x.dataset && x.dataset.cockpitPanel && x.dataset.panel !== id); return n ? n.dataset.panel : ''; };
+      const mv = (e) => {
+        const o = at(e);
+        if (o === drag.over) return;
+        if (drag.over && api.roots.get(drag.over)) delete api.roots.get(drag.over).dataset.ckdrop;
+        drag.over = o;
+        if (o) api.roots.get(o).dataset.ckdrop = '1';
+      };
+      const end = (e, ok) => {
+        grip.releasePointerCapture(ev.pointerId);
+        grip.removeEventListener('pointermove', mv); grip.removeEventListener('pointerup', up); grip.removeEventListener('pointercancel', cancel);
+        const over = drag.over;
+        delete root.dataset.ckdrag;
+        if (over && api.roots.get(over)) delete api.roots.get(over).dataset.ckdrop;
+        drag = null;
+        if (ok && over) change(cockpitSwap(layout, id, over));
+      };
+      const up = (e) => end(e, true), cancel = (e) => end(e, false);
+      grip.addEventListener('pointermove', mv); grip.addEventListener('pointerup', up); grip.addEventListener('pointercancel', cancel);
+    });
+    t.append(grip, sel);
+    root.appendChild(t);
+    tags.set(id, t);
+  }
+
+  // the two dividers, placed from the rectangles of the slots they sit between
+  const stripDiv = el('div', 'd-ckdiv'), railDiv = el('div', 'd-ckdiv');
+  stripDiv.dataset.axis = 'y'; railDiv.dataset.axis = 'x';
+  for (const [d, label] of [[stripDiv, 'Strip height'], [railDiv, 'Rail width']]) {
+    d.tabIndex = 0;
+    d.setAttribute('role', 'separator');
+    d.setAttribute('aria-label', label + ': arrow keys move it');
+    main.appendChild(d);
+  }
+  const place = (d, l, t, w, h) => { // a divider's box through custom properties (the sheet reads them)
+    d.style.setProperty('--ck-l', l + 'px'); d.style.setProperty('--ck-t', t + 'px');
+    if (w) d.style.setProperty('--ck-w', w + 'px');
+    if (h) d.style.setProperty('--ck-h', h + 'px');
+  };
+  const slotEl = (n) => main.querySelector(':scope > [data-cockpit-slot="' + n + '"]');
+  const rel = (r) => { const m = main.getBoundingClientRect(); return { l: r.left - m.left, t: r.top - m.top, w: r.width, h: r.height, r: r.right - m.left, b: r.bottom - m.top }; };
+  function paint() {
+    // tags follow the tiles: a tile that stands on the page gets one, a tile that left loses it
+    for (const [id, root] of api.roots) {
+      const on = root.isConnected;
+      if (on && !tags.has(id)) tag(id, root);
+      if (!on && tags.has(id)) { tags.get(id).remove(); tags.delete(id); }
+    }
+    const gap = parseFloat(getComputedStyle(main).columnGap) || 8;
+    const strip = slotEl('strip'), stage = slotEl('stage'), rail = slotEl('rail');
+    stripDiv.hidden = !strip || !stage;
+    railDiv.hidden = !rail || !stage;
+    if (strip && stage) {
+      const a = rel(stage.getBoundingClientRect()), b = rel(strip.getBoundingClientRect());
+      place(stripDiv, a.l, b.t - gap / 2 - 3, a.w, 0);
+    }
+    if (rail && stage) {
+      const a = rel(rail.getBoundingClientRect());
+      place(railDiv, a.l - gap / 2 - 3, a.t, 0, a.h);
+    }
+  }
+  paint();
+  function grab(d, ev) {
+    if (ev.button !== 0 || drag) return;
+    ev.preventDefault();
+    d.setPointerCapture(ev.pointerId);
+    d.dataset.drag = '1';
+    drag = { div: true };
+    const m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0, gap = parseFloat(getComputedStyle(main).columnGap) || 8;
+    let next = layout;
+    const mv = (e) => {
+      next = d === stripDiv ? cockpitSize(layout, { strip: m.bottom - pad - e.clientY - gap / 2 }) : cockpitSize(layout, { railMin: m.right - pad - e.clientX - gap / 2 });
+      api.preview(next);
+      paint();
+    };
+    const end = (ok) => {
+      d.releasePointerCapture(ev.pointerId);
+      d.removeEventListener('pointermove', mv); d.removeEventListener('pointerup', up); d.removeEventListener('pointercancel', cancel);
+      delete d.dataset.drag;
+      drag = null;
+      if (ok && JSON.stringify(next.sizes) !== JSON.stringify(layout.sizes)) { layout = next; dirty = true; } else api.preview(layout);
+      paint();
+    };
+    const up = () => end(true), cancel = () => end(false);
+    d.addEventListener('pointermove', mv); d.addEventListener('pointerup', up); d.addEventListener('pointercancel', cancel);
+  }
+  stripDiv.addEventListener('pointerdown', (ev) => grab(stripDiv, ev));
+  railDiv.addEventListener('pointerdown', (ev) => grab(railDiv, ev));
+  const key = (d, k) => (ev) => {
+    const dir = { ArrowUp: 1, ArrowDown: -1, ArrowLeft: 1, ArrowRight: -1 }[ev.key];
+    if (!dir || (d === stripDiv) !== (ev.key === 'ArrowUp' || ev.key === 'ArrowDown')) return;
+    ev.preventDefault();
+    change(cockpitSize(layout, { [k]: cockpitSizes(layout)[k] + dir * STEP }));
+    paint();
+  };
+  stripDiv.addEventListener('keydown', key(stripDiv, 'strip'));
+  railDiv.addEventListener('keydown', key(railDiv, 'railMin'));
+  const onResize = () => paint();
+  window.addEventListener('resize', onResize);
+  cleanup.push(() => window.removeEventListener('resize', onResize));
+
+  const bar = el('div', 'd-editbar');
+  bar.setAttribute('role', 'toolbar');
+  bar.setAttribute('aria-label', 'Layout editor');
+  const save = mk('Save', 'primary'), reset = mk('Reset to default'), done = mk('Done', 'ghost');
+  const keys = el('span', 'keys', 'Drag a tile\'s name onto another to swap, or pick a panel from its list; drag the gold dividers.');
+  keys.title = 'The dividers set the strip height and the rail width; arrow keys move a focused divider.';
+  bar.append(el('span', 'what', 'Editing the cockpit'), keys, save, reset, done);
+  api.shell.appendChild(bar);
+  main.dataset.editingCockpit = '1';
+
+  function stop() {
+    for (const t of tags.values()) t.remove();
+    tags.clear();
+    stripDiv.remove(); railDiv.remove(); bar.remove();
+    cleanup.forEach((f) => f());
+    delete main.dataset.editingCockpit;
+    api.done(kept);
+  }
+  save.addEventListener('click', async () => {
+    const r = await api.save(layout);
+    if (r && r.ok) { kept = r.layout || layout; dirty = false; api.toast('good', 'Layout saved.'); }
+    else if (r) api.toast('alarm', 'Not saved: ' + (r.error || 'the answer route refused it'));
+  });
+  reset.addEventListener('click', async () => {
+    const r = await api.reset();
+    if (!r || !r.ok || !r.layout) { if (r) api.toast('alarm', 'Not reset: ' + (r.error || 'the answer route refused it')); return; }
+    kept = r.layout;
+    api.toast('good', 'Layout reset to the default.');
+    stop();
+  });
+  done.addEventListener('click', () => {
+    if (dirty) api.toast('info', 'Unsaved layout changes were dropped.');
+    stop();
+  });
+  return { stop, paint };
 }

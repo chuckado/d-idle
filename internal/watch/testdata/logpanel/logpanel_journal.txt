@@ -1,0 +1,18 @@
+<div class="d-panel">
+  <div class="d-slotbody">
+    <div class="lg">
+      <div class="tabs" role="tablist">
+        <button class="d-btn" data-key="tab-items" data-size="sm" aria-selected="false" role="tab" tabindex=-1> "Items"
+        <button class="d-btn" data-key="tab-now" data-size="sm" aria-selected="false" role="tab" tabindex=-1> "Now"
+        <button class="d-btn" data-key="tab-journal" data-size="sm" aria-selected="true" role="tab" tabindex=0> "Journal"
+        <button class="d-btn" data-key="tab-story" data-size="sm" aria-selected="false" role="tab" tabindex=-1> "Story"
+        <button class="d-btn" data-key="tab-alerts" data-size="sm" aria-selected="false" role="tab" tabindex=-1> "Alerts"
+      <div class="rows" data-scroll="1" role="tabpanel">
+        <div class="row" data-kind="learned">
+          <span class="when"> "<time>"
+          <span class="txt"> "It will remember that."
+        <div class="row" data-kind="answer">
+          <span class="when"> "<time>"
+          <span class="txt"> "You said yes to the Den of Evil."
+      <p class="note">
+      <a class="d-btn" data-key="vault-link" data-size="sm" data-variant="ghost" hidden> "Ethereal Vault: every recorded drop"

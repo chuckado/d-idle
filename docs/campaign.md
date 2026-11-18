@@ -1,5 +1,7 @@
 # Campaign: the guided journey
 
+> status: SUPERSEDED 2026-11-17 (quest board slice S9, docs/questboard.md "Journey retired"): the Journey chapters, strip, chip, sheet, controller, guide and /api/campaign are removed; the board is the only quest driver. Kept: the spine data and `internal/campaign` (spine, bands, state reader) for the level plan and the one-time import of old heroes. Read the rest as history.
+
 > status: current (TASK-335 stage 0: spine, loader, bands, decision, state; stage 1 planner: TASK-337; stage 2 API and Journey strip: TASK-338; stage 3 questions, chip, chapter events, knobs, Rogue: TASK-341). Nothing here is verified live.
 
 User direction 2026-11-11 ("Guided journey"): "How do we guide the player through the campaign? Currently I am just letting the bot level and farm aimlessly. ... New Character -> Den of Evil -> Blood Raven -> etc. We shouldn't FORCE the players to do anything, but progression should generally follow the game." Default path: all Act 1 quests, each optional-flagged so the player can skip.
