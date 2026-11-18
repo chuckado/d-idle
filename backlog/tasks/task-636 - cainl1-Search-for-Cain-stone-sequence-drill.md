@@ -19,6 +19,7 @@ owns:
 exclusive:
   - "d2d-control-socket"
 contracts: []
+result: "Verified live on a d2d lab slot (not Game.exe). Stones need the bkd item only; order random per game, wrong click ignored, lit = NU to ON in debug objects, fifth opens a portal in debug portals at StoneLambda+(6,-3), arrival level 38. Doc docs/probes/search-for-cain-l1-2026-11-18.md."
 ---
 
 ## Description
@@ -31,7 +32,7 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Correct stone sequence rule and lit signal recorded with fixtures
-- [ ] #2 Wrong order, portal object and Tristram arrival recorded
-- [ ] #3 CAIN-4/5 inputs written
+- [x] #1 Correct stone sequence rule and lit signal recorded with fixtures
+- [x] #2 Wrong order, portal object and Tristram arrival recorded
+- [x] #3 CAIN-4/5 inputs written
 <!-- AC:END -->
