@@ -165,6 +165,7 @@ cmd/d2bot/d2dwire.go  credit-runner  vaultv3
 cmd/d2bot/d2dwire.go  credit-runner  vaultv5
 cmd/d2bot/dangerwire.go  credit-runner  survA
 cmd/d2bot/dangerwire.go  credit-runner  survB
+cmd/d2bot/display.go  credit-runner  itemcolour2
 cmd/d2bot/display.go  credit-runner  jewelicons
 cmd/d2bot/etherwire.go  credit-runner  vaultv7b
 cmd/d2bot/etherwire_test.go  credit-runner  vaultv7b
@@ -191,6 +192,7 @@ cmd/d2bot/invverbs_test.go  credit-runner  uib9
 cmd/d2bot/invwire.go  credit-runner  gearsets
 cmd/d2bot/invwire.go  credit-runner  tidy
 cmd/d2bot/invwire.go (your lines only)  credit-runner  botsell
+cmd/d2bot/itemart_test.go  credit-runner  itemcolour2
 cmd/d2bot/itemart_test.go  credit-runner  jewelicons
 cmd/d2bot/journeywire.go  credit-runner  campaign1
 cmd/d2bot/labelswire.go  credit-runner  labels
@@ -586,6 +588,7 @@ docs/video-feed.md  credit-runner  videofeed
 docs/video-feed.md  credit-runner  videofeed2
 docs/video-feed.md  credit-runner  videofeed4
 docs/wiring.md  credit-runner  wiring2
+internal/art/  credit-runner  itemcolour2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees
 internal/boss  credit-runner  wiring2
@@ -772,6 +775,7 @@ internal/combat/rules.go  credit-runner  resistorder
 internal/combat/safety.go  credit-runner  beltfix
 internal/combat/types.go  credit-runner  goldprio
 internal/currency  credit-runner  botcpu2
+internal/d2/items.go  credit-runner  itemcolour2
 internal/d2/merc.go  credit-runner  decomp30
 internal/d2/merc_test.go  credit-runner  decomp30
 internal/d2/resist.go  credit-runner  resistorder
@@ -790,6 +794,7 @@ internal/d2dinput/controller_test.go  credit-runner  arrivalsettle
 internal/d2dinput/run_test.go  credit-runner  arrivalsettle
 internal/d2dloot  credit-runner  groundquality
 internal/d2dsoakstat/minute.go  credit-runner  intake
+internal/d2dsrc/  credit-runner  itemcolour2
 internal/d2dsrc/cpuprobe_test.go  credit-runner  botcpu
 internal/d2dsrc/gearstats.go  credit-runner  survB
 internal/d2dsrc/gearstats_test.go  credit-runner  survB
@@ -976,6 +981,7 @@ internal/senses/coverage.go  credit-runner  maptrail2
 internal/senses/trail_test.go  credit-runner  maptrail2
 internal/skilltree  credit-runner  skilltrees
 internal/skilltree  credit-runner  skilltrees2
+internal/status/inventory.go  credit-runner  itemcolour2
 internal/status/inventory.go  credit-runner  jewelicons
 internal/survival  credit-runner  survfix2
 internal/survival  credit-runner  survsd
@@ -1034,6 +1040,7 @@ internal/vaultkeep  credit-runner  vaultv5
 internal/vaultkeep  credit-runner  vaultv6
 internal/watch  credit-runner  cainfix
 internal/watch/areamap_test.go  credit-runner  uis6
+internal/watch/artembed_test.go  credit-runner  itemcolour2
 internal/watch/artembed_test.go  credit-runner  jewelcolor
 internal/watch/cardtext.go  credit-runner  friendfb
 internal/watch/charactersapi.go  credit-runner  charselect
@@ -1307,6 +1314,7 @@ internal/watch/web/inventory-tip.js  credit-runner  nopins
 internal/watch/web/inventory-tip.js  credit-runner  uic3
 internal/watch/web/inventory.css  credit-runner  uic2
 internal/watch/web/inventory.js  credit-runner  gearsets
+internal/watch/web/inventory.js  credit-runner  itemcolour2
 internal/watch/web/inventory.js  credit-runner  jewelicons
 internal/watch/web/inventory.js  credit-runner  nopins
 internal/watch/web/inventory.js  credit-runner  repairtrip
