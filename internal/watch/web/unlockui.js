@@ -167,11 +167,13 @@
   $('rv-flip').addEventListener('click', function () { if (modalCard) flip(modalCard); });
   $('rv-close').addEventListener('click', function () { $('revealsheet').hidden = true; modalCard = ''; });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('revealsheet').hidden) $('rv-close').click(); });
-  var offered = {};
   function reveal(open) {
     if (!open.idreveal) { $('tab-cards').hidden = true; $('cardspane').hidden = true; return Promise.resolve(); }
     return get('/api/reveal').then(function (v) {
       $('tab-cards').hidden = false; $('cardspane').hidden = false;
+      // Never a popup: unflipped cards are one quiet count on the tab; the sheet opens only on a click.
+      var waiting = (v.cards || []).filter(function (c) { return !c.revealed; }).length;
+      $('tab-cards').textContent = waiting ? 'Cards (' + waiting + ')' : 'Cards';
       shown.face = v.face; shown.faceText = v.faceText;
       var ul = $('cardlist'); clear(ul);
       (v.cards || []).slice().reverse().forEach(function (c) {
@@ -181,7 +183,6 @@
         if (c.revealed) li.appendChild(el('span', c.colour, c.label + ': ' + c.name));
         else li.appendChild(el('span', 'cface', (v.face || 'Unidentified item') + ' #' + c.n));
         ul.appendChild(li);
-        if (!c.revealed && !offered[c.id] && $('revealsheet').hidden) { offered[c.id] = true; showCard(c); }
       });
     });
   }
