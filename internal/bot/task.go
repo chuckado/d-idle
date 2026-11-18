@@ -467,6 +467,10 @@ var questItemNames = []string{task.ItemMalus, task.ItemBark, task.ItemCainSc,
 	// Acts 4 and 5 (names U until a live run read them, codes mss, hfh, ice, tr2 are V)
 	task.ItemSoulstone, task.ItemHammer, task.ItemMalahPotion, task.ItemResScroll}
 
+// questItemCodes maps the base codes of the Cain chain items to the name the steps ask for. The code wins over the
+// display name: names differ by locale and by table build (V code internal/quest/act1.go ItemInifussScroll, ItemCairnKey).
+var questItemCodes = map[string]string{"bks": task.ItemBark, "bkd": task.ItemCainSc}
+
 func (r *Runner) scanQuestItems(s *d2.Snapshot, out map[string]int) {
 	if r.d.Catalog == nil || s.Inventory == nil {
 		return
@@ -479,6 +483,10 @@ func (r *Runner) scanQuestItems(s *d2.Snapshot, out map[string]int) {
 		}
 		m, ok := r.d.Catalog.Item(u.Class)
 		if !ok {
+			continue
+		}
+		if n, ok := questItemCodes[m.Code]; ok && m.Code != "" {
+			out[n]++
 			continue
 		}
 		for _, n := range questItemNames {
@@ -772,12 +780,39 @@ func (a taskActs) Interact(ctx context.Context, object string) error {
 	}
 	if object == TreeObject {
 		// the click only drops the scroll (U); the task node has no pick-up of its own
-		if err := a.PickUp(ctx, task.ItemBark); err != nil {
+		if err := a.pickUpAfterTree(ctx); err != nil {
 			return err
 		}
 	}
 	a.setPseudo(interactPseudo[object])
 	return nil
+}
+
+// The scroll drops after the tree animation, not on the click (U, no live trace yet): look again for a few seconds
+// before reporting that the click gave nothing.
+const (
+	treeDropPolls = 6
+	treeDropWait  = time.Second
+)
+
+func (a taskActs) pickUpAfterTree(ctx context.Context) error {
+	if a.r.d.Loot == nil {
+		return task.Errorf(task.KindNotFound, "no looter: cannot pick up %s", task.ItemBark)
+	}
+	for i := 0; i < treeDropPolls; i++ {
+		rep, err := a.r.d.Loot.PickUp(ctx, PickOpts{Radius: 30, Names: []string{task.ItemBark}})
+		if err == nil && rep.Picked > 0 {
+			return nil
+		}
+		if err != nil && task.Classify(a.tag(err)) != task.KindNotFound {
+			return a.tag(err)
+		}
+		if ctx.Err() != nil {
+			return a.tag(ctx.Err())
+		}
+		a.r.e.Clock.Sleep(treeDropWait)
+	}
+	return task.Errorf(task.KindNotFound, "tree clicked, but no %s dropped within %d polls", task.ItemBark, treeDropPolls)
 }
 
 // TreeObject is the Tree of Inifuss in the Dark Wood.

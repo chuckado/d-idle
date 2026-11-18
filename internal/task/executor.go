@@ -503,6 +503,10 @@ func (e *Executor) handleRunFault(plan Plan, s Step, f *Fault, r Result) Result 
 	case KindFatal:
 		r.Outcome = OutInterrupted
 		return r
+	case KindExploring:
+		r.Outcome = OutRetry // run the step again; nothing is counted
+		r.Err = errors.New(f.Why)
+		return r
 	case KindTimeout:
 		e.timeouts[s.ID]++
 		if e.timeouts[s.ID] <= pol.MaxTimeouts {

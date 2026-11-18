@@ -37,9 +37,12 @@ export function secondsText(n) {
   return k + (k === 1 ? ' second' : ' seconds');
 }
 
-// stepText is "step 2 of 4" from a run; empty for a chunk of one step or without a step list.
+// stepText is "step 2 of 4" from a run; empty for a chunk of one step or without a step list. A quest of several chunks
+// leads with its position in the chain ("part 1 of 4, step 2 of 2"), so a step count never reads as the whole quest.
 export function stepText(r) {
-  return r && r.stepCount > 1 && r.stepNo > 0 ? 'step ' + r.stepNo + ' of ' + r.stepCount : '';
+  const step = r && r.stepCount > 1 && r.stepNo > 0 ? 'step ' + r.stepNo + ' of ' + r.stepCount : '';
+  const part = r && r.partCount > 1 && r.partNo > 0 ? 'part ' + r.partNo + ' of ' + r.partCount : '';
+  return [part, step].filter(Boolean).join(', ');
 }
 
 // timeText is "14:20  " for an ISO time; empty when it does not parse.

@@ -20,6 +20,7 @@ const (
 // ItemMeta is what the bot needs to know about an item base. Class is d2.Unit.Class.
 type ItemMeta struct {
 	Name     string
+	Code     string // base item code (bks, bkd, ...); empty when the catalog has none
 	GoalType string // the goals.ItemFilter type word: rune, gem, charm, ring, amulet, ...
 	W, H     int
 	Potion   PotionKind
@@ -88,7 +89,7 @@ func (c dataCatalog) Item(class int) (ItemMeta, bool) {
 
 func (c dataCatalog) item(class int) ItemMeta {
 	b := c.db.Items[class]
-	m := ItemMeta{Name: b.Display, W: b.Width, H: b.Height, Cost: b.Cost, Antidote: b.Code == "yps"}
+	m := ItemMeta{Name: b.Display, Code: b.Code, W: b.Width, H: b.Height, Cost: b.Cost, Antidote: b.Code == "yps"}
 	if m.Name == "" {
 		m.Name = b.Name
 	}
