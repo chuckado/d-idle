@@ -338,8 +338,8 @@ export function mountVault(d) {
     const ak = artKey(it);
     if (ak) { // the game's icon when it loads; a failed load removes it and the name stays
       const im = el('img', 'ico'); im.setAttribute('alt', ''); im.setAttribute('src', '/watch/art/' + ak + '.png');
-      im.addEventListener('error', () => im.remove());
-      b.appendChild(im);
+      im.addEventListener('error', () => { im.remove(); b.classList.remove('has-art'); });
+      b.appendChild(im); b.classList.add('has-art');
     }
     b.appendChild(el('span', 'vt-name', it.name));
     const tags = el('span', 'vt-tags');

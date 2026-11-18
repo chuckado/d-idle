@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/ether"
+	"d2lod-bot/internal/status"
 	"d2lod-bot/internal/vault"
 	"d2lod-bot/internal/watch"
 )
@@ -115,7 +116,7 @@ func newVaultFor(mode string, dir string) *watch.VaultAPI {
 		log.Fatalf("uishots: vault tiers: %v", err)
 	}
 	api := watch.NewVaultAPI()
-	desk := watch.VaultDesk{On: func() bool { return set.on }, Tiers: tiers}
+	desk := watch.VaultDesk{On: func() bool { return set.on }, Tiers: tiers, Tip: vaultFixtureTip}
 	if set.none {
 		desk.Store = func() *vault.Store { return nil }
 		api.Bind(desk)
@@ -505,4 +506,23 @@ func (a *fixtureActor) Act(ctx context.Context) watch.VaultActView {
 		v.Prompt = &watch.VaultPrompt{Short: 140, IDs: a.prompt, Gold: gold, Names: names}
 	}
 	return v
+}
+
+// vaultFixtureTip stands in for the game tables: base facts per code and stat lines for identified items only, the way
+// cmd/d2bot/vaulttip.go sends them (the fixture sends the lines to every identified row, never to an unidentified one).
+func vaultFixtureTip(in watch.VaultTipIn) watch.VaultTip {
+	t := watch.VaultTip{Sell: 60 + in.Quality*40}
+	switch in.Code {
+	case "wsp", "bow", "hax":
+		t.Base = &status.ItemBase{Name: "War Sword", MinDam: 8, MaxDam: 20, ReqStr: 71, ReqDex: 45, Speed: 10, Dur: 50}
+	case "jew", "rin", "amu":
+		t.Base = &status.ItemBase{Name: "Jewel"}
+		t.Kind = "jewel"
+	default:
+		t.Base = &status.ItemBase{Name: "Cap", MinAC: 3, MaxAC: 5, ReqStr: 10, Dur: 12}
+	}
+	if in.Identified && in.Quality >= 4 {
+		t.Props = []string{"+20 to Strength", "10% Increased Attack Speed", "Adds 3-9 fire damage"}
+	}
+	return t
 }
