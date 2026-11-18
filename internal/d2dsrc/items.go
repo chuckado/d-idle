@@ -267,9 +267,13 @@ func (b *builder) world(ctx context.Context) error {
 					continue
 				}
 				x, y := b.pos(p.X, p.Y)
-				b.snap.Objects = append(b.snap.Objects, d2.Unit{Type: d2.TypeObject, Class: townPortalObj, ID: uint32(PortalIDBase + p.Which), Mode: 1, X: x, Y: y})
+				class := townPortalObj
+				if p.Which >= questPortalWhich {
+					class = questPortalObj
+				}
+				b.snap.Objects = append(b.snap.Objects, d2.Unit{Type: d2.TypeObject, Class: class, ID: uint32(PortalIDBase + p.Which), Mode: 1, X: x, Y: y})
 			}
-			rp.derived("objects.portals", "debug portals rows on this level, class 59 (objects.txt Town Portal, S)")
+			rp.derived("objects.portals", "debug portals rows on this level, class 59 (objects.txt Town Portal, S); which >= 2 is a quest portal, class 60")
 		case isCmdErr(err):
 			rp.unknown("objects.portals", "debug portals failed: "+err.Error())
 		default:
@@ -319,7 +323,47 @@ func (b *builder) fieldObjects(ctx context.Context, listed []d2dctl.NPC) {
 		b.snap.Objects = append(b.snap.Objects, d2.Unit{Type: d2.TypeObject, Class: p.ObjectID, ID: id, Mode: -1, X: x, Y: y})
 	}
 	rp.derived("objects.field", "debug presets within the radius, class = objects.txt id of the row, id = NPCIDBase + preset index (V: the index space of cmd interact)")
-	rp.unknown("object.mode", "open/closed state not in presets (debug objects has it for chests and shrines under another index)")
+	b.stoneModes(ctx)
+}
+
+// stoneModes fills Mode of the state-bearing objects (stateObjClass) from "debug objects", whose index equals the
+// preset index for the rows both list (V lab build, docs/probes/search-for-cain-l1-2026-11-18.md: the stone row goes
+// NU to ON when its click is accepted). The list is read only when such an object is in view, and every time (the
+// index shifts as rooms load, so nothing is cached). When the verb is missing or fails the Mode stays -1 and the
+// consumer must say so; U that the sandbox build answers "debug objects" (docs/probes/search-for-cain-45-2026-11-18.md).
+func (b *builder) stoneModes(ctx context.Context) {
+	rp := b.rp
+	var idx []int
+	for i := range b.snap.Objects {
+		if u := &b.snap.Objects[i]; stateObjClass(u.Class) && u.ID >= NPCIDBase && u.ID < PortalIDBase {
+			idx = append(idx, i)
+		}
+	}
+	if len(idx) == 0 {
+		rp.unknown("object.mode", "open/closed state not in presets; read from debug objects only for cairn stones in view")
+		return
+	}
+	l, err := b.s.c.Objects(ctx)
+	if err != nil {
+		rp.unknown("object.mode", "debug objects failed: "+err.Error())
+		return
+	}
+	state := map[int]int{}
+	for _, o := range l.Items {
+		switch o.Mode {
+		case "NU":
+			state[o.Index] = 0
+		case "ON":
+			state[o.Index] = 1
+		}
+	}
+	for _, i := range idx {
+		u := &b.snap.Objects[i]
+		if m, ok := state[int(u.ID-NPCIDBase)]; ok {
+			u.Mode = m
+		}
+	}
+	rp.derived("object.mode", "debug objects state column for cairn stones: NU 0, ON 1 (other objects stay -1)")
 }
 
 // presets returns the cached "debug presets" rows of area, reading them again when the area changed or the player
@@ -342,6 +386,19 @@ func (s *Source) presets(ctx context.Context, area, x, y int) ([]d2dctl.Preset, 
 
 // townPortalObj is the objects.txt id of the town portal (S: D2BS Constants.h, 59; U on 1.14d tables).
 const townPortalObj = 59
+
+// questPortalWhich is the first "debug portals" which of a portal the world made for a quest, not for a town portal
+// scroll (0 is the cast spot, 1 its twin in camp): the way to Tristram after the fifth cairn stone is which 2 (V lab
+// build, docs/probes/search-for-cain-l1-2026-11-18.md, `debug portals` row `2 4 25.1 57.7`; `cmd interact -2002` took it).
+// Which other quests use which >= 2 is U. questPortalObj is the generic red portal, objects.txt 60 (S Kolbot RedPortal).
+const (
+	questPortalWhich = 2
+	questPortalObj   = 60
+)
+
+// stateObjClasses are the objects whose lit state matters to a bot step (the five cairn stones, objects.txt 17..21, S
+// Kolbot); for these "debug objects" is read and its state column becomes Unit.Mode (NU 0, ON 1).
+func stateObjClass(class int) bool { return class >= 17 && class <= 21 }
 
 func (b *builder) monster(m d2dctl.Monster) {
 	rp := b.rp
