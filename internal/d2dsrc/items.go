@@ -110,6 +110,13 @@ func (b *builder) dumpItem(it obj) (d2.Unit, bool) {
 			flags |= d2.FlagRuneword
 		}
 	}
+	// inv_tint / inv_colour: only d2d builds with the item-colour fields write them (itemcolour design, U until
+	// devp11 is loaded); absent, 0 or colour < 0 means no tint.
+	if t, ok := it.int("inv_tint"); ok && t > 0 {
+		if c, ok := it.int("inv_colour"); ok && c >= 0 {
+			m.Tint = fmt.Sprintf("t%dc%d", t, c)
+		}
+	}
 	m.Flags = flags
 	u.Flags = flags
 	uniq, _ := it.int("unique")

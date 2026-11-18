@@ -2,6 +2,9 @@ package watch
 
 import (
 	"io/fs"
+	"os"
+	"os/exec"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -76,5 +79,46 @@ func TestNoQualityWashOnArtCells(t *testing.T) {
 		if strings.Contains(string(b), bad) {
 			t.Errorf("components.css has a quality wash rule: %s", bad)
 		}
+	}
+}
+
+// itemcolour: the cell asks for item-<art>~<tint>, one distinct key per tint, nothing without a (valid) tint and no CSS colour from the
+// item; the server remaps the picture (internal/art tint.go). The key function is cut out of inventory.js and run in node (skipped without it).
+func TestArtKeyAppendsTint(t *testing.T) {
+	b, err := webFS.ReadFile("web/inventory.js")
+	if err != nil {
+		t.Fatal(err)
+	}
+	js := string(b)
+	if strings.Count(js, "'item-' + it.art") != 1 { // only artKey itself builds the key
+		t.Error("inventory.js builds an art key outside artKey()")
+	}
+	if strings.Contains(js, "style.color") || strings.Contains(js, "style.filter") {
+		t.Error("inventory.js colours cells itself")
+	}
+	node, err := exec.LookPath("node")
+	if err != nil {
+		t.Skip("no node")
+	}
+	i := strings.Index(js, "var TINT =")
+	j := strings.Index(js, "function artKey")
+	if i < 0 || j < 0 {
+		t.Fatal("TINT/artKey not found in inventory.js")
+	}
+	end := j + strings.Index(js[j:], "\n")
+	script := js[i:end] + `
+var out = [
+ artKey({art:'invjwl'}), artKey({art:'invjwl',tint:'t1c3'}), artKey({art:'invjwl',tint:'t1c4'}),
+ artKey({art:'invjwl',tint:'t9c4'}), artKey({art:'invjwl',tint:'x"><b'}), artKey({art:'invpla',tint:'t6c12'})];
+console.log(JSON.stringify(out));`
+	f := filepath.Join(t.TempDir(), "k.js")
+	os.WriteFile(f, []byte(script), 0o600)
+	o, err := exec.Command(node, f).CombinedOutput()
+	if err != nil {
+		t.Fatalf("%v: %s", err, o)
+	}
+	want := `["item-invjwl","item-invjwl~t1c3","item-invjwl~t1c4","item-invjwl","item-invjwl","item-invpla~t6c12"]`
+	if strings.TrimSpace(string(o)) != want {
+		t.Errorf("keys %s, want %s", o, want)
 	}
 }

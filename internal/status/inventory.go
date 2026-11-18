@@ -21,6 +21,7 @@ type Item struct {
 	Dur        int       `json:"dur,omitempty"`    // current durability (worn items; 0 with MaxDur > 0 means broken)
 	MaxDur     int       `json:"maxDur,omitempty"` // maximum durability, 0 = the item has none or it was not read
 	Props      []string  `json:"props,omitempty"`  // tooltip lines
+	Tint       string    `json:"tint,omitempty"`   // colormap key "t<set>c<colour>" appended to the art key as item-<art>~<tint>; empty = the plain icon
 	Art        string    `json:"art,omitempty"`    // inventory icon name (lower case, no extension) for /watch/art/item-<art>.png; empty = unknown, draw the cell
 	Kind       string    `json:"kind,omitempty"`   // item kind word from the tables (jewel, charm, ring, amulet, gem, rune, potion, ...): the page's type fallback when the icon is missing, and it tints untinted jewel art
 	Tip        []string  `json:"tip,omitempty"`    // the game's own tooltip lines as d2d prints them, name first (S: d2d "items" verb; U: colour codes, line order)
