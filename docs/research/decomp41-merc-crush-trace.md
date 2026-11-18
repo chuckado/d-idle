@@ -32,18 +32,35 @@ Upstream at this run: `psi29a/d2decomped` main `9b64c11a` (V read, `git fetch up
 
 | | seed 7 | seed 5001 | seed 9091 |
 |---|---|---|---|
-| parent (oracle commit `4909c7e2`), 6,000 cases | 3,075 differ | 3,056 | 3,057 |
-| claim `cc0e92c3` | 0 | 0 | 0 |
+| parent (oracle commit `15490e40`; counted on its C++-identical predecessor, only a lint fix in the .py differs), 6,000 cases | 3,075 differ | 3,056 | 3,057 |
+| claim `0595e2d1` | 0 | 0 | 0 |
 
 Edge exits (V run): an empty game file, an empty d2d file, an empty case file, a short d2d file, a malformed d2d line, a missing file, no argument, `game` on an empty case file: every one exits 1; a d2d file equal to the game file exits 0.
 
 ### 1.2 Mutants of the claim (V run; each one text change, built on the builder, `test_merc_absorb` and the compare on seed 7)
 
-MERC_MUTANTS
+| Mutant | `test_merc_absorb` pins | compare (of 6,000, seed 7) |
+|---|---|---|
+| m1 no heal | abort | 2,357 differ |
+| m2 heal not capped | abort | 1,461 |
+| m3 cap in points, not 256ths | abort | 2,987 |
+| m4 life in whole points | abort | 782 |
+| m5 only the first blow heals | abort | 1,124 |
+| m6 absorb percent dropped | abort | 2,067 |
+| m7 absorb flat dropped | abort | 2,485 |
+| m8 fire and cold percent swapped | abort | 1,279 |
+| m9 a negative heal (life above max) dropped | abort | 0 (the pins catch it only) |
+| m10 heal needs two blows | abort | 1,118 |
+| m11 the parent (absorb zeroed) | abort | 3,075 |
+
+11 of 11 abort the pins (V run, built by `mutb.py`, local, never pushed). m4 passed the first eleven pins and was added as pin 11 (a life with a fraction); m9 is caught by pin 7 only.
 
 ### 1.3 Build and tests
 
-MERC_BUILD
+- Each commit builds alone: the oracle rev built (rc 0, `test_merc_absorb` and `test_gear_absorb`, Release, GCC 14, builder, `-j2` under the lane lock) and the claim rev built (rc 0). `test_merc_absorb` and `test_gear_absorb` print ok on the claim (V run).
+- clang-tidy-19 on the claim's `test_merc_absorb.cpp` first reported four narrowing errors (long to int in the item properties); fixed in the oracle commit (casts); the re-run on the final hash did not report (its output was lost when the job was cancelled): U. The D5 test is clean (V run).
+- `pr_guard.py upstream/main HEAD` 0 FAIL 0 WARN; `presubmit.py --quick` 0 FAIL, 5 WARN (siblings: merc not player, answered in the body; doc-claims on two "every" sentences; build and gcc skipped by `--quick`) (V run).
+- **ctest NOT run.** The builder was overloaded (the coordinator's instruction of 18:15 EST): no new builder jobs. A full-tree build and ctest of the parent, this claim and the D5 claim, and the 41-test subset (`subset2.txt` in the lab dir) are waiting; `fid/merc-absorb-r1` and `fid/crush-d5-r1` have the same limit. The old ctest note (4 known failures on the parent, `test_stand_attack` too, S: `pr-queue.md` 3b, `verifier-crush3`) is not a result of this run.
 
 ### 1.4 Deviations (merc, d2d against game.exe)
 
@@ -164,7 +181,7 @@ B1, B2, B3 (section 1.5), B4 (section 2.4). None changed.
 
 ## 9. Not done
 
-No live game, no lab drill, no Windows or macOS build, the equip path of a merc item (Q2) not run, the dispatch of Crushing Blow's event for a missile not run; D6 and T3 scoped only; the verifier has not read any of this.
+The full ctest of both branches and the parent (waiting for the builder, section 1.3); clang-tidy re-run on the merc test at its final hash; No live game, no lab drill, no Windows or macOS build, the equip path of a merc item (Q2) not run, the dispatch of Crushing Blow's event for a missile not run; D6 and T3 scoped only; the verifier has not read any of this.
 
 ## 10. Shared-file lines for the merger
 

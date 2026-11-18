@@ -20,7 +20,12 @@ Two commits: the oracle (`tools/emu/merc_absorb.py`, `tests/game/test_merc_absor
 
 `merc_absorb.py game` boots game.exe with every table loaded (`drlg.boot`: the hireling classes 271, 338, 359, 560 and 561 have their real MonStats rows) and runs `FUN_0057c6c0` on a unit of type 1 of one of those classes, once per blow, printing the unit's life; the MonStats readers (`FUN_00457490`, `FUN_0063e9f0`, `FUN_0063ee90`, `FUN_0063e990`, `FUN_0063e940`) run for real. The same cases on a type-0 unit through `gear_absorb.py game`: the lives are equal in 300 of 300. `test_merc_absorb --life` prints the merc's life from d2d's real `merc_foe`, `monster_blow`, `Foe::take` and `Fight::hurt_side`, the absorb on a worn torso piece.
 
-RESULTS_PLACEHOLDER
+| | seed 7 | seed 5001 | seed 9091 |
+|---|---|---|---|
+| parent, 6,000 cases | 3,075 differ | 3,056 | 3,057 |
+| claim | 0 | 0 | 0 |
+
+The pins (12 cases) and the compare catch 11 of 11 mutants (no heal, uncapped heal, cap in points, whole-point life, first blow only, percent or flat dropped, fire and cold swapped, negative heal dropped, two-blow heal, the parent). Build and the full ctest: not run yet (waiting for the builder); `presubmit --quick` 0 FAIL, `pr_guard` 0 / 0.
 
 ## In play
 

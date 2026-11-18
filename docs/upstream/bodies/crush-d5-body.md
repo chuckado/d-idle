@@ -21,7 +21,12 @@ Two commits: the oracle (`tools/emu/crush_div.py`, `tests/game/test_crush_diviso
 
 `crush_div.py game` boots game.exe with every table loaded and runs `FUN_005bffc0` natively (the attacker's Crushing Blow 100 percent, a melee strike) on a type-1 unit of every MonStats row (734), made plain, champion, unique, superunique or as a minion (the data word the creators leave, V read above), at 1 to 8 players, on a life of 262,144 points; `FUN_0063ee90`, `FUN_0063e9f0`, `FUN_005a0180` and `FUN_005738f0` all run for real. It prints the life the crush takes. `test_crush_divisor --crush` prints the same from d2d's `Monster::crush_divisor` of the same row, kind and player count.
 
-RESULTS_PLACEHOLDER
+| | plain | champion | unique | superunique | minion | total |
+|---|---|---|---|---|---|---|
+| parent | 0 | 0 | 5,632 | 0 | 0 | 5,632 of 29,360 |
+| claim | 0 | 0 | 0 | 0 | 0 | 0 of 29,360 |
+
+11 of 11 mutants abort `test_crush_divisor` (base 5 or 9 for the boss, player share dropped or off by one, hireling dropped or 9, minion / champion / unique counted, superunique dropped, boss column dropped). Both test binaries print ok; the full ctest has not run (waiting for the builder).
 
 ## In play
 
