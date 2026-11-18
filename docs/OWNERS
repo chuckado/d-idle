@@ -168,6 +168,7 @@ cmd/d2bot/d2dwire.go  credit-runner  vaultv5
 cmd/d2bot/dangerwire.go  credit-runner  survA
 cmd/d2bot/dangerwire.go  credit-runner  survB
 cmd/d2bot/display.go  credit-runner  itemcolour2
+cmd/d2bot/display.go  credit-runner  itempics
 cmd/d2bot/display.go  credit-runner  jewelicons
 cmd/d2bot/etherwire.go  credit-runner  vaultv7b
 cmd/d2bot/etherwire_test.go  credit-runner  vaultv7b
@@ -195,6 +196,7 @@ cmd/d2bot/invwire.go  credit-runner  gearsets
 cmd/d2bot/invwire.go  credit-runner  tidy
 cmd/d2bot/invwire.go (your lines only)  credit-runner  botsell
 cmd/d2bot/itemart_test.go  credit-runner  itemcolour2
+cmd/d2bot/itemart_test.go  credit-runner  itempics
 cmd/d2bot/itemart_test.go  credit-runner  jewelicons
 cmd/d2bot/journeywire.go  credit-runner  campaign1
 cmd/d2bot/labelswire.go  credit-runner  labels
@@ -615,6 +617,7 @@ internal/bot/areaskip_test.go  credit-runner  staletarget
 internal/bot/areaskip_test.go  pro-runner  bounce3
 internal/bot/broke.go  credit-runner  survrecover
 internal/bot/catalog.go  credit-runner  botcpu2
+internal/bot/catalog.go  credit-runner  itempics
 internal/bot/contracts.go  credit-runner  goldprio
 internal/bot/contracts.go  credit-runner  vaultv5
 internal/bot/drought.go  credit-runner  freshstart
@@ -786,6 +789,7 @@ internal/combat/safety.go  credit-runner  beltfix
 internal/combat/types.go  credit-runner  goldprio
 internal/currency  credit-runner  botcpu2
 internal/d2/items.go  credit-runner  itemcolour2
+internal/d2/items.go  credit-runner  itempics
 internal/d2/merc.go  credit-runner  decomp30
 internal/d2/merc_test.go  credit-runner  decomp30
 internal/d2/resist.go  credit-runner  resistorder
@@ -809,18 +813,27 @@ internal/d2dsrc/cpuprobe_test.go  credit-runner  botcpu
 internal/d2dsrc/gearstats.go  credit-runner  survB
 internal/d2dsrc/gearstats_test.go  credit-runner  survB
 internal/d2dsrc/items.go  credit-runner  cain45
+internal/d2dsrc/items.go  credit-runner  itempics
 internal/d2dsrc/player.go  credit-runner  survB
 internal/d2dsrc/source_test.go  credit-runner  botcpu
 internal/d2dsrc/source_test.go  credit-runner  cain45
+internal/d2dsrc/source_test.go  credit-runner  itempics
 internal/d2dsrc/source_test.go  credit-runner  survB
 internal/d2dsrc/srv_test.go  credit-runner  botcpu
+internal/d2dsrc/testdata/dump_items_pic.json  credit-runner  itempics
 internal/danger  credit-runner  dangerfit2
 internal/danger/  credit-runner  survA
 internal/danger/areaunits.json  pro-runner  decomp28
 internal/danger/gapexport.go  credit-runner  survC
 internal/data/db.go  credit-runner  botcpu2
+internal/data/invfile.go  credit-runner  itempics
+internal/data/invfile_real_test.go  credit-runner  itempics
 internal/data/invfile_real_test.go  credit-runner  jewelicons
+internal/data/invfile_test.go  credit-runner  itempics
 internal/data/invfile_test.go  credit-runner  jewelcolor
+internal/data/invfiles.go  credit-runner  itempics
+internal/data/items.go  credit-runner  itempics
+internal/data/schema.go  credit-runner  itempics
 internal/decide/firsts_act1.json  credit-runner  friendfb
 internal/decide/queue.go  credit-runner  qqueue
 internal/decide/queue_test.go  credit-runner  qqueue

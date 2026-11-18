@@ -115,3 +115,70 @@ func TestInvFileDistinctPerBase(t *testing.T) {
 		seen[b.InvFile] = b.Code
 	}
 }
+
+// Made-up types with the real column shape: jewels 6 pictures, rings 5, charms 3 (shared by two sizes), a type with none.
+func picDB() *DB {
+	return &DB{
+		ItemTypes: []*ItemType{
+			{Code: "jewl", InvGfx: [6]string{"invjw1", "invjw2", "invjw3", "invjw4", "invjw5", "invjw6"}},
+			{Code: "ring", InvGfx: [6]string{"invrin1", "invrin2", "invrin3", "invrin4", "invrin5"}},
+			{Code: "scha", InvGfx: [6]string{"invch1", "invch4", "invch7"}},
+			{Code: "swor"},
+		},
+		Items: []*ItemBase{
+			{Code: "jew", Type: "jewl", InvFile: "invgswe"},
+			{Code: "rin", Type: "ring", InvFile: "invrin"},
+			{Code: "cm1", Type: "scha", InvFile: "invchm"},
+			{Code: "ssd", Type: "swor", InvFile: "invSsd"},
+		},
+		Uniques: []*UniqueItem{{Row: 0, Code: "rin", InvFile: "invsoj"}},
+	}
+}
+
+func TestInvFilePic(t *testing.T) {
+	db := picDB()
+	seen := map[string]int{}
+	for pic := 0; pic < 6; pic++ {
+		n, ok := db.InvFilePic(0, InvPlain, 0, pic)
+		if !ok || n != "invjw"+string(rune('1'+pic)) {
+			t.Errorf("jewel pic %d: %q %v", pic, n, ok)
+		}
+		seen[n]++
+	}
+	if len(seen) != 6 {
+		t.Errorf("jewel pictures not distinct: %v", seen)
+	}
+	for _, tc := range []struct {
+		name  string
+		class int
+		q     InvQuality
+		idx   int
+		pic   int
+		want  string
+	}{
+		{"ring pic 2", 1, InvPlain, 0, 2, "invrin3"},
+		{"charm pic 1", 2, InvPlain, 0, 1, "invch4"},
+		{"no pic: base icon", 0, InvPlain, 0, -1, "invgswe"},
+		{"past the type's list", 1, InvPlain, 0, 5, "invrin"},
+		{"past 6", 0, InvPlain, 0, 9, "invgswe"},
+		{"type without pictures", 3, InvPlain, 0, 2, "invssd"},
+		{"unique with its own icon keeps it", 1, InvUnique, 0, 3, "invsoj"},
+		{"unique without an icon row uses the picture", 0, InvUnique, 7, 1, "invjw2"},
+	} {
+		if got, _ := db.InvFilePic(tc.class, tc.q, tc.idx, tc.pic); got != tc.want {
+			t.Errorf("%s: %q, want %q", tc.name, got, tc.want)
+		}
+	}
+	if got, _ := db.InvFile(0, InvPlain, 0); got != "invgswe" {
+		t.Errorf("InvFile changed: %q", got)
+	}
+	files := map[string]bool{}
+	for _, f := range db.InvFiles() {
+		files[f] = true
+	}
+	for _, f := range []string{"invjw6", "invrin5", "invch7"} {
+		if !files[f] {
+			t.Errorf("InvFiles lacks %s (never pre-extracted)", f)
+		}
+	}
+}
