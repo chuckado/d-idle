@@ -26,6 +26,8 @@ import (
 func (r *Runner) Run(ctx context.Context) error {
 	r.e.Log.Info("bot runner started", "profile", r.cfg.Profile)
 	r.lastStep.Store(time.Now().UnixNano())
+	r.looping.Store(true)
+	defer r.looping.Store(false)
 	for {
 		r.mu.Lock()
 		fatal := r.fatal
