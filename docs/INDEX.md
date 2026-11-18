@@ -662,6 +662,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `upstream/bodies/`
 
+- [cairn-portal-body.md](upstream/bodies/cairn-portal-body.md): cairn-portal-body
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
 - [death-corpse-exp-body.md](upstream/bodies/death-corpse-exp-body.md): death-corpse-exp-body
 - [gamble-price-body.md](upstream/bodies/gamble-price-body.md): the d2d side needs D2_MPQ_DIR (as test_game); gamble_price.py game needs the emulator's game image and a...
@@ -700,6 +701,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verify-warp-walk-r2.md](upstream/briefs/verify-warp-walk-r2.md): Verifier brief: fid/warp-walk-r2 (P02), for the independent reviewer (Opus, singly)
 - [verify2-hitrec-interrupt.md](upstream/briefs/verify2-hitrec-interrupt.md): Verifier brief, second pass: fid/hitrec-interrupt-r3 (P04), for the independent reviewer (Opus, singly)
 - [warp-walk.md](upstream/briefs/warp-walk.md): Brief: P02 warp walk-stall (fid/warp-walk-r1)
+
+`upstream/`
+
+- [cairn-portal-2026-11-18.md](upstream/cairn-portal-2026-11-18.md): PR candidate D1: the Cairn Stones' Tristram portal offset (fid/cairn-portal-r1), 2026-11-18 (status: current, 2026-11-18 (card cairnportal, TASK-648, Sonnet). Branch `fid/cairn-portal-r1` on upstream main...)
 
 `upstream/drafts/`
 

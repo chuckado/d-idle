@@ -284,6 +284,7 @@
 | cain5b | proposed | - | `cmd/d2bot/cain5b_test.go`<br>`cmd/d2bot/objects.go`<br>`internal/bot/task.go`<br>`internal/bot/task_acts_test.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/quest/dialog.go`<br>`internal/task/act1.go`<br>`internal/task/testdata/plans/act1.txt`<br>`data/questboard/act1.json`<br>`internal/watch/testdata/quests`<br>`internal/questboard/chunks_test.go`<br>`docs/probes/search-for-cain-5b-2026-11-18.md`<br>`docs/questboard.md` | - |
 | vaulttip | proposed | - | `internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`cmd/d2bot/vaulttip.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/watch/vaulttip_test.go`<br>`internal/watch/testdata/vault_tip.mjs`<br>`tools/uishots/fixtures_vault.go`<br>`docs/vault.md`<br>`tools/uishots.sh`<br>`internal/vault/types.go`<br>`internal/loot/vault.go`<br>`internal/vaultkeep/reveal.go`<br>`internal/d2dctl/vault_verbs.go`<br>`internal/d2dctl/vault_verbs_test.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go` | - |
 | devp12 | proposed | - | `docs/process/sandbox-devp12.md` | - |
+| cairnportal | proposed | - | `docs/upstream/cairn-portal-2026-11-18.md`<br>`docs/upstream/bodies/cairn-portal-body.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -322,6 +323,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 1614693ad 11-18 13:21 `Merge agent/cairnportal: cairnportal: PR candidate D1 Cairn portal offset (fid/cairn-portal-r1), docs and card` (cairnportal)
+- 4bf1b8316 11-18 13:20 `Merge branch 'main' into cairnportal` (-)
 - ebc78bb30 11-18 12:05 `Merge agent/unidpopup: Merge origin/main into agent/unidpopup` (unidpopup)
 - 75068e96b 11-18 12:03 `Merge origin/main into agent/unidpopup` (-)
 - a9aedc8ff 11-18 11:56 `Merge agent/decomp40: decomp40: Cairn portal offset in tiles (D1), scroll pattern never shown (D2/D7), trace` (decomp40)
@@ -330,6 +333,4 @@
 - a6668408f 11-18 11:47 `Merge branch 'main' into cain5b` (-)
 - b79a32063 11-18 11:36 `Merge agent/vaulttip: questboard goal test: hold explore until the accept lands (deterministic, no load race)` (vaulttip)
 - 05f0ed292 11-18 11:19 `Merge origin/main into cain5b` (-)
-- 42e4f6a7c 11-18 11:19 `Merge origin/main into vaulttip` (-)
-- 619c7bb7a 11-18 11:17 `Merge agent/devp12doc: Merge branch 'main' into devp12doc` (devp12doc)
 <!-- statusgen:end -->
