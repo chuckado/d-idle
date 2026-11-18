@@ -1,2 +1,0 @@
-BACKLOG: - survhold: holdout seed 149 of the zone model A/B: cause (potion burn in risk-route zones with an empty purse), fix `riskMinGold` per dial row (Paladin 3 seeds, Sorceress 3 seeds rerun, no default flip), doc docs/probes/survival-holdout-2026-11-17.md <!--sg:agent/survhold-->
-CHANGELOG: - zone model: the pay-for-risk route is closed to a hero with less pack gold than `riskMinGold` (data, `internal/survival/params.json`); `bot.zoneModel` default stays 0.

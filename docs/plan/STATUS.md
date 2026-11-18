@@ -312,6 +312,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- fd0cf0bfa 11-18 00:46 `Merge agent/survhold: survhold: seed 149 cause, riskMinGold fix, holdout record (no default change)` (survhold)
+- 7dab0d83d 11-18 00:25 `Merge branch 'main' into survhold` (-)
 - ef748c380 11-17 22:25 `Merge agent/retirej: retirej: docs, onboarding wording, task card, merge lines` (retirej)
 - 5c809b842 11-17 20:42 `Merge agent/verifycrush3: Merge branch 'main' into TASK-628` (verifycrush3)
 - 98aab18ff 11-17 20:41 `Merge branch 'main' into TASK-628` (-)
@@ -320,6 +322,4 @@
 - 14ba33edb 11-17 16:25 `Merge agent/videoload: watch: serve a panel's helper modules (video/brightness.js 404 made the video panel fail to load); test every panel import is served` (videoload)
 - 52f4657fd 11-17 15:29 `Merge agent/verifygearabsorb3: verifier of gear absorb r3: r3 FAIL, r4 PASS WITH CHANGES (fid/gear-absorb-r4 ac5c3dd1+c05fa8e3)` (verifygearabsorb3)
 - 725d0c74b 11-17 15:28 `Merge branch 'main' into verifygearabsorb3` (-)
-- 115106402 11-17 15:22 `Merge agent/jewelicons: watch: inventory DOM stub gets querySelector and the nopin goldens show the type-fallback glyph (the go-whole failure)` (jewelicons)
-- 1d11c9f28 11-17 14:58 `Merge origin/main into agent/jewelicons` (-)
 <!-- statusgen:end -->
