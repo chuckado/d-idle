@@ -195,12 +195,12 @@
      "handInStep": "read"
     },
     {
-     "id": "free_cain",
-     "title": "Touch the stones and free Cain in Tristram",
+     "id": "stones",
+     "title": "Light the cairn stones and enter Tristram",
      "ends": "auto",
      "minutes": [
-      10,
-      25
+      4,
+      10
      ],
      "after": [
       "read"
@@ -208,15 +208,33 @@
      "steps": [
       "travel_stony_field",
       "touch_stones",
-      "enter_tristram",
-      "free_cain"
+      "enter_tristram"
      ],
-     "risk": "hazard",
-     "unsupported": "the bot cannot do the stones, Tristram, the cage or Cain yet (stone lit state is unreadable on the d2d backend, the Tristram portal and the cage never ran live)",
      "nodes": [
       "to-stony",
       "stones",
-      "to-tristram",
+      "to-tristram"
+     ]
+    },
+    {
+     "id": "free_cain",
+     "title": "Clear Tristram and free Cain",
+     "ends": "auto",
+     "minutes": [
+      6,
+      15
+     ],
+     "after": [
+      "stones"
+     ],
+     "steps": [
+      "clear_tristram",
+      "free_cain",
+      "return_camp"
+     ],
+     "risk": "hazard",
+     "unsupported": "the bot cannot clear Tristram or free Cain from the cage yet (the cage click and Cain never ran live)",
+     "nodes": [
       "clear",
       "cage",
       "home"
