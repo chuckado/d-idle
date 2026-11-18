@@ -2,6 +2,7 @@ package d2dsrc
 
 import (
 	"context"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -637,5 +638,64 @@ func TestSnapshotItemPic(t *testing.T) {
 		if got[id] != w {
 			t.Errorf("item %d pic %d, want %d", id, got[id], w)
 		}
+	}
+}
+
+// Cairn stones (lab drill L1, V): the lit state is the state column of "debug objects" (NU 0, ON 1) joined to the
+// preset by index, and a "debug portals" row with which >= 2 is the quest portal (class 60), not a town portal (59).
+func TestStoneStateAndQuestPortal(t *testing.T) {
+	r := lateReplies(t)
+	r["npcs"] = "ok\n"
+	r["debug presets"] = "10\t17\t33.0\t12.0\t0\tStoneAlpha\n" +
+		"11\t20\t34.0\t12.0\t0\tStoneDelta\n" +
+		"12\t580\t35.0\t12.0\t0\tChest\nok\n"
+	r["debug objects"] = "10\t33.0\t12.0\top9\t17\t-\tON\n11\t34.0\t12.0\top9\t20\t-\tNU\n12\t35.0\t12.0\tchest\t8\t-\tON\nok\n"
+	_, c := startScript(t, r)
+	src := New(c, Options{Logf: quiet})
+	res, err := src.Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	mode := map[uint32]int{}
+	for _, u := range res.Snap.Objects {
+		mode[u.ID] = u.Mode
+	}
+	if mode[NPCIDBase+10] != 1 || mode[NPCIDBase+11] != 0 {
+		t.Fatalf("stone modes %v", mode)
+	}
+	if mode[NPCIDBase+12] != -1 {
+		t.Errorf("a chest got a state it was not asked for: %d", mode[NPCIDBase+12])
+	}
+
+	// debug objects missing (stock build?): the stones stay -1, the read does not fail
+	delete(r, "debug objects")
+	_, c = startScript(t, r)
+	res, err = New(c, Options{Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, u := range res.Snap.Objects {
+		if u.ID == NPCIDBase+10 && u.Mode != -1 {
+			t.Errorf("stone mode %d with no debug objects", u.Mode)
+		}
+	}
+	if gap, ok := res.Report.Unknown["object.mode"]; !ok || !strings.Contains(gap, "debug objects") {
+		t.Errorf("gap %q %v", gap, ok)
+	}
+
+	// quest portal vs town portal
+	area := res.Snap.Player.Area
+	r["debug portals"] = fmt.Sprintf("0\t%d\t30.0\t10.0\n2\t%d\t25.1\t57.7\nok\n", area, area)
+	_, c = startScript(t, r)
+	res, err = New(c, Options{Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	class := map[uint32]int{}
+	for _, u := range res.Snap.Objects {
+		class[u.ID] = u.Class
+	}
+	if class[PortalIDBase] != 59 || class[PortalIDBase+2] != 60 {
+		t.Fatalf("portal classes %v", class)
 	}
 }

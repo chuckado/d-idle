@@ -139,6 +139,8 @@ cmd/d2bot/behaviors.go  credit-runner  quests4
 cmd/d2bot/behaviors.go  credit-runner  vaultv5
 cmd/d2bot/beltfill_adapter.go  credit-runner  beltfix
 cmd/d2bot/boss.go  pro-runner  levelplan3
+cmd/d2bot/cain.go  credit-runner  cain45
+cmd/d2bot/cain_test.go  credit-runner  cain45
 cmd/d2bot/charwire.go  credit-runner  charselect
 cmd/d2bot/charwire.go  credit-runner  charsup
 cmd/d2bot/charwire_test.go  credit-runner  charselect
@@ -296,6 +298,7 @@ data/onboarding/en.json  credit-runner  friendfb
 data/questboard  credit-runner  quests1
 data/questboard  credit-runner  quests7
 data/questboard  credit-runner  quests7b
+data/questboard/act1.json  credit-runner  cain45
 data/questboard/act1.json  credit-runner  cainfix
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
@@ -307,6 +310,7 @@ deploy/d2d-container/entrypoint.sh  credit-runner  charsup
 deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 deploy/d2d-container/tester_image_test.go  credit-runner  charsup
 deploy/nas/imgbuild.sh  credit-runner  buildhosts3
+docs/actbot.md  credit-runner  cain45
 docs/aggression.md  credit-runner  wiring2
 docs/archive  credit-runner  dietarchive
 docs/away-drill.md  live-agent  awaydrill
@@ -419,6 +423,7 @@ docs/probes/bot-cpu-2026-11-16.md  credit-runner  botcpu
 docs/probes/bot-cpu-fix-2026-11-16.md  credit-runner  botcpu2
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
 docs/probes/cainl0  credit-runner  cainl0
+docs/probes/cainl2  credit-runner  cainl2
 docs/probes/deploy-cockpit-2026-11-15.md  credit-runner  deploycockpit
 docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
 docs/probes/firsthour.md  live-agent  firsthour
@@ -427,12 +432,15 @@ docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/search-for-cain-2026-11-17.md  credit-runner  cainfix
+docs/probes/search-for-cain-45-2026-11-18.md  credit-runner  cain45
 docs/probes/search-for-cain-l0-2026-11-18.md  credit-runner  cainl0
+docs/probes/search-for-cain-l2-2026-11-18.md  credit-runner  cainl2
 docs/probes/survival-ab-8seed-2026-11-16.md  credit-runner  survab8
 docs/probes/survival-ab-8seed-rerun-2026-11-16.md  credit-runner  survtune
 docs/probes/survival-ab-reask-2026-11-17.md  credit-runner  survreask
 docs/probes/survival-ab-recovery-2026-11-17.md  credit-runner  survrecover
 docs/probes/test-characters.md  credit-runner  cainl0
+docs/probes/test-characters.md  credit-runner  cainl2
 docs/probes/test-characters.md  credit-runner  survab8
 docs/probes/test-characters.md  credit-runner  survtune
 docs/probes/test-characters.md  live-agent  fid-fixtures
@@ -448,6 +456,7 @@ docs/process/sandbox-devp11.md  credit-runner  devp11doc
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
 docs/quest-hints.md  live-agent  questdrill
+docs/questboard.md  credit-runner  cain45
 docs/questboard.md  credit-runner  questrun
 docs/questboard.md  credit-runner  quests1
 docs/questboard.md  credit-runner  quests10
@@ -799,8 +808,10 @@ internal/d2dsrc/  credit-runner  itemcolour2
 internal/d2dsrc/cpuprobe_test.go  credit-runner  botcpu
 internal/d2dsrc/gearstats.go  credit-runner  survB
 internal/d2dsrc/gearstats_test.go  credit-runner  survB
+internal/d2dsrc/items.go  credit-runner  cain45
 internal/d2dsrc/player.go  credit-runner  survB
 internal/d2dsrc/source_test.go  credit-runner  botcpu
+internal/d2dsrc/source_test.go  credit-runner  cain45
 internal/d2dsrc/source_test.go  credit-runner  survB
 internal/d2dsrc/srv_test.go  credit-runner  botcpu
 internal/danger  credit-runner  dangerfit2
@@ -958,10 +969,12 @@ internal/questboard  credit-runner  quests3
 internal/questboard  credit-runner  quests4
 internal/questboard  credit-runner  quests7
 internal/questboard  credit-runner  quests8
+internal/questboard/chunks_test.go  credit-runner  cain45
 internal/questboard/chunks_test.go  credit-runner  quests7b
 internal/questboard/desk.go  credit-runner  questrun
 internal/questboard/desk_test.go  credit-runner  questrun
 internal/questboard/exec.go  credit-runner  questrun
+internal/questboard/state_test.go  credit-runner  cain45
 internal/questboard/state_test.go  credit-runner  quests7b
 internal/readiness/model.go  credit-runner  resistorder
 internal/repair  credit-runner  repairtrip
@@ -993,9 +1006,11 @@ internal/survival/ledger.go  credit-runner  intake
 internal/survival/survival_test.go  credit-runner  survfix
 internal/talk/tables.go  credit-runner  quests7b
 internal/task  credit-runner  cainfix
+internal/task/act1.go  credit-runner  cain45
 internal/task/act1.go  credit-runner  quests7b
 internal/task/act2.go  credit-runner  quests7b
 internal/task/act3.go  credit-runner  quests7b
+internal/task/cainstones_test.go  credit-runner  cain45
 internal/task/campaign.go  credit-runner  campaign1
 internal/task/executor.go  credit-runner  botstuck
 internal/task/executor.go  credit-runner  staletarget
@@ -1219,6 +1234,7 @@ internal/watch/testdata/panel_harness.js  credit-runner  videoctl
 internal/watch/testdata/panel_harness.js  credit-runner  videofeed2
 internal/watch/testdata/panel_harness.js  credit-runner  videofeed4
 internal/watch/testdata/pause/  credit-runner  uib1
+internal/watch/testdata/quests  credit-runner  cain45
 internal/watch/testdata/quests  credit-runner  quests10
 internal/watch/testdata/quests  credit-runner  quests4
 internal/watch/testdata/quests  credit-runner  quests7

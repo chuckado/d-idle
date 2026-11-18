@@ -213,11 +213,11 @@ func TestAwardKeyIsAccountWideAndPerDifficulty(t *testing.T) {
 	}
 }
 
-// Cain's chain: A then B then C then D, a hard chain; out-of-order Start taps are refused.
+// Cain's chain: scroll, read, stones, free_cain, report, a hard chain; out-of-order Start taps are refused.
 func TestChunkOrderChain(t *testing.T) {
 	b := mustBoard(t)
 	safe := map[string]Word{}
-	for _, c := range []string{"scroll", "read", "free_cain", "report"} {
+	for _, c := range []string{"scroll", "read", "stones", "free_cain", "report"} {
 		safe[ChunkKey("search_for_cain", c)] = ReadySafe
 	}
 	in := Input{Facts: facts{}, Ready: safe}
