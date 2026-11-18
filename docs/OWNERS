@@ -228,6 +228,8 @@ cmd/d2bot/mercwire.go  credit-runner  botmerc
 cmd/d2bot/mercwire.go  credit-runner  mercrevive2
 cmd/d2bot/mercwire_test.go  credit-runner  mercrevive2
 cmd/d2bot/objects.go  credit-runner  botstuck
+cmd/d2bot/objects.go  credit-runner  cainfix
+cmd/d2bot/objects_test.go  credit-runner  cainfix
 cmd/d2bot/pausewire.go  credit-runner  uib1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
 cmd/d2bot/powerwire.go  credit-runner  powerwire
@@ -415,6 +417,7 @@ docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
+docs/probes/search-for-cain-2026-11-17.md  credit-runner  cainfix
 docs/probes/survival-ab-8seed-2026-11-16.md  credit-runner  survab8
 docs/probes/survival-ab-8seed-rerun-2026-11-16.md  credit-runner  survtune
 docs/probes/survival-ab-reask-2026-11-17.md  credit-runner  survreask
@@ -704,6 +707,7 @@ internal/bot/staletarget_test.go  credit-runner  staletarget
 internal/bot/state.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  boardmoderace
 internal/bot/task.go  credit-runner  botstuck
+internal/bot/task.go  credit-runner  cainfix
 internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  quests3
 internal/bot/task.go  credit-runner  resetinstant
@@ -928,6 +932,8 @@ internal/power  credit-runner  survsd
 internal/power/  credit-runner  powerwire
 internal/power/  credit-runner  survB
 internal/power/margin.go  credit-runner  resistorder
+internal/quest/act1.go  credit-runner  cainfix
+internal/questboard  credit-runner  cainfix
 internal/questboard  credit-runner  quests1
 internal/questboard  credit-runner  quests10
 internal/questboard  credit-runner  quests3
@@ -979,6 +985,7 @@ internal/task/guided_test.go  credit-runner  campaign1
 internal/task/guided_test.go  pro-runner  levelplan3
 internal/task/s7b_test.go  credit-runner  quests7b
 internal/task/testdata  credit-runner  quests7b
+internal/task/world.go  credit-runner  cainfix
 internal/task/world.go  credit-runner  quests7b
 internal/tidy  credit-runner  tidy
 internal/town/belt  credit-runner  beltfix
@@ -1012,6 +1019,7 @@ internal/vault  credit-runner  vaultv6
 internal/vault/index.go  credit-runner  vaultv4
 internal/vaultkeep  credit-runner  vaultv5
 internal/vaultkeep  credit-runner  vaultv6
+internal/watch  credit-runner  cainfix
 internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/cardtext.go  credit-runner  friendfb
 internal/watch/charactersapi.go  credit-runner  charselect

@@ -1038,6 +1038,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - jewelicons: jewels show a white diamond in the stash (TASK-616, merged 2026-11-17, acceptance 3 of 4): Cause (S, no install on the build hosts): the icon was already picked by base class; the game jewel art is untinted grey-white, so all jewels looked alike. ... <!--sg:agent/jewelicons-->
 - verifygearabsorb3: verifier of the gear absorb r3 PR (fid/gear-absorb-r3) (TASK-626, merged 2026-11-17, acceptance 3 of 3): r3 FAIL (stale base f1533770, README oracle recipe breaks on log lines, ES/life-over-max/after-death untested: 4 mutants survive, merc reason wrong), r4 PASS WITH CHANGES: fid/gear-absorb-r4 ac5c3dd1+c05fa8e3 on upstream 895f8a67, pushed to the private fork ... <!--sg:agent/verifygearabsorb3-->
 - agent/videoload: watch: serve a panel's helper modules (video/brightness.js 404 made the video panel fail to load); test every panel import is served (merged 2026-11-17) <!--sg:agent/videoload-->
+- cainfix: Search for Cain offline fixes (explore-to-find, item codes, pickup wait, board wording) (TASK-627, merged 2026-11-17, acceptance 0 of 5) <!--sg:agent/cainfix-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
