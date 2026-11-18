@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-
 	"d2lod-bot/internal/goals"
 	"d2lod-bot/internal/watch"
 )
@@ -23,7 +21,7 @@ func init() {
 			if prev != nil {
 				out = prev()
 			}
-			if n, ok := blockedNeed(d.Status().JourneyBlocked, d.Chapter); ok {
+			if n, ok := blockedNeed(d.Status().JourneyBlocked); ok {
 				out = append(out, n)
 			}
 			return out
@@ -31,24 +29,13 @@ func init() {
 	})
 }
 
-// blockedNeed is the Needs you row for a reason; ok is false for "". The actions go to the journey's own intent route
-// (Go now sends the hero, Hold parks the chapter) and exist only while the chapter is known.
-func blockedNeed(reason string, chapter func() string) (watch.GlanceNeed, bool) {
+// blockedNeed is the Needs you row for a reason; ok is false for "". It has no actions: the Journey and its Go now and
+// Hold verbs are retired (quest board, S9), the reason only says why the floor planner's quest step is refused.
+func blockedNeed(reason string) (watch.GlanceNeed, bool) {
 	if reason == "" {
 		return watch.GlanceNeed{}, false
 	}
-	n := watch.GlanceNeed{ID: "journey:blocked", Kind: "journey_blocked", Sev: "warn", Text: "Journey blocked: " + reason, Actions: []watch.GlanceVerb{}}
-	if chapter != nil {
-		if ch := chapter(); ch != "" {
-			go_, _ := json.Marshal(map[string]any{"chapter": ch, "goNow": true})
-			hold, _ := json.Marshal(map[string]any{"chapter": ch, "intent": "hold"})
-			n.Actions = []watch.GlanceVerb{
-				{Label: "Go now", Post: watch.CampaignIntentRoute, Body: go_},
-				{Label: "Hold chapter", Post: watch.CampaignIntentRoute, Body: hold},
-			}
-		}
-	}
-	return n, true
+	return watch.GlanceNeed{ID: "journey:blocked", Kind: "journey_blocked", Sev: "warn", Text: "Quest step blocked: " + reason, Actions: []watch.GlanceVerb{}}, true
 }
 
 // journeyBlockedHook is CommandHooks.Blocked: the same reason for /api/commands.
@@ -57,15 +44,4 @@ func journeyBlockedHook(status func() goals.Status) func() string {
 		return nil
 	}
 	return func() string { return status().JourneyBlocked }
-}
-
-// journeyChapter is the chapter of the journey's last decision, "" without a journey or a decision.
-func journeyChapter(ref *runnerRef) string {
-	if ref == nil || ref.jc == nil {
-		return ""
-	}
-	if d := ref.jc.View().Decision; d != nil {
-		return d.Chapter
-	}
-	return ""
 }

@@ -14,7 +14,6 @@
     "stage": "video",
     "strip": [
       "progress",
-      "journey-strip",
       "quest-strip",
       "health"
     ],
@@ -51,7 +50,6 @@
       ],
       "Progress": [
         "progress",
-        "journey-strip",
         "health"
       ]
     }

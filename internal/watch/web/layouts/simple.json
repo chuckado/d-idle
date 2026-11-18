@@ -85,20 +85,10 @@
           "fallback": "tally"
         },
         {
-          "id": "journey",
-          "band": "side",
-          "col": 1,
-          "row": 32,
-          "colSpan": 12,
-          "rowSpan": 5,
-          "collapsed": false,
-          "order": 6
-        },
-        {
           "id": "zone-map",
           "band": "grid",
           "col": 1,
-          "row": 37,
+          "row": 32,
           "colSpan": 12,
           "rowSpan": 12,
           "collapsed": false,
@@ -418,20 +408,10 @@
           "fallback": "tally"
         },
         {
-          "id": "journey",
-          "band": "side",
-          "col": 1,
-          "row": 30,
-          "colSpan": 12,
-          "rowSpan": 5,
-          "collapsed": false,
-          "order": 6
-        },
-        {
           "id": "zone-map",
           "band": "grid",
           "col": 1,
-          "row": 35,
+          "row": 30,
           "colSpan": 12,
           "rowSpan": 12,
           "collapsed": false,
@@ -751,20 +731,10 @@
           "fallback": "tally"
         },
         {
-          "id": "journey",
-          "band": "side",
-          "col": 1,
-          "row": 18,
-          "colSpan": 12,
-          "rowSpan": 5,
-          "collapsed": false,
-          "order": 6
-        },
-        {
           "id": "zone-map",
           "band": "grid",
           "col": 1,
-          "row": 23,
+          "row": 18,
           "colSpan": 12,
           "rowSpan": 12,
           "collapsed": false,
@@ -1084,20 +1054,10 @@
           "fallback": "tally"
         },
         {
-          "id": "journey",
-          "band": "side",
-          "col": 1,
-          "row": 18,
-          "colSpan": 12,
-          "rowSpan": 5,
-          "collapsed": false,
-          "order": 6
-        },
-        {
           "id": "zone-map",
           "band": "grid",
           "col": 1,
-          "row": 23,
+          "row": 18,
           "colSpan": 12,
           "rowSpan": 12,
           "collapsed": false,

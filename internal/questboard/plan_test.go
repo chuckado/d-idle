@@ -191,3 +191,43 @@ func TestStoreEmptyLoad(t *testing.T) {
 		t.Errorf("empty: %+v %+v %v", p, info, err)
 	}
 }
+
+// The retired Journey's decisions come in once, are idempotent across a restart, ignore quests the board has no data
+// for and never mark anything accepted or done.
+func TestImportLegacyOnce(t *testing.T) {
+	dir := t.TempDir()
+	s := openStore(t, dir, "Pali")
+	l := Legacy{SkippedQuests: []string{"forgotten_tower", "sisters_burial", "sisters_burial_merc", "forgotten_tower"}, OrdersMode: true}
+	n, err := s.ImportLegacy(l, 0)
+	if err != nil || n != 2 {
+		t.Fatalf("first import: %d %v", n, err)
+	}
+	s2 := openStore(t, dir, "Pali") // a restart
+	if n, err := s2.ImportLegacy(Legacy{SkippedQuests: []string{"den_of_evil"}}, 0); err != nil || n != 0 {
+		t.Fatalf("second import must change nothing: %d %v", n, err)
+	}
+	p, _, err := s2.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(p.Skipped) != 2 || p.Skipped[0].Quest != "forgotten_tower" || p.Skipped[1].Quest != "sisters_burial_grounds" || p.Skipped[0].Chunk != "" || p.Skipped[0].Diff != "normal" {
+		t.Errorf("skips: %+v", p.Skipped)
+	}
+	if p.Mode != "farm" || len(p.Accepted) != 0 || p.Legacy != LegacySchema {
+		t.Errorf("plan: %+v", p)
+	}
+	// A hero that already picked a mode keeps it.
+	s3 := openStore(t, t.TempDir(), "Sorci")
+	if err := s3.SetMode("idle"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := s3.ImportLegacy(Legacy{OrdersMode: true}, 0); err != nil {
+		t.Fatal(err)
+	}
+	if p, _, _ := s3.Load(); p.Mode != "idle" {
+		t.Errorf("mode overwritten: %q", p.Mode)
+	}
+	if _, err := s3.ImportLegacy(Legacy{}, 5); err == nil {
+		t.Error("bad difficulty accepted")
+	}
+}

@@ -1,6 +1,6 @@
 # Quest board model (slice S1), executor (S3), API (S4) and chunked quests (S7)
 
-> status: S7 chunked quests (Acts 1 to 5 data, per-chunk handlers) built and tested offline, NOT verified live (see 'Chunked quests'); S1 model built and tested offline (card quests1, TASK-577); S3 executor built and tested offline behind the knob `quests.board` (default 0; card quests3, TASK-585), NOT verified live (the drill below has not run). Design: [docs/design/quest-board-2026-11-16.md](design/quest-board-2026-11-16.md). Tags: V verified by the named test or file, S secondary, U unverified live, I design choice.
+> status: S9 DONE offline 2026-11-17 (card retirej, TASK-629): the Journey is retired and `quests.board` defaults to 1, see 'Journey retired'. S7 chunked quests (Acts 1 to 5 data, per-chunk handlers) built and tested offline, NOT verified live (see 'Chunked quests'); S1 model built and tested offline (card quests1, TASK-577); S3 executor built and tested offline behind the knob `quests.board` (default 0; card quests3, TASK-585), NOT verified live (the drill below has not run). Design: [docs/design/quest-board-2026-11-16.md](design/quest-board-2026-11-16.md). Tags: V verified by the named test or file, S secondary, U unverified live, I design choice.
 
 ## What is here
 
@@ -341,3 +341,32 @@ User decisions 2026-11-16: Ether is earned ONCE per account per quest per diffic
 - UI: the payoff toast "Done: <quest>   +N Ether", a "pays N Ether" chip on the offer line, "+N Ether" under a done quest row and in Recent, the away card text. The wallet chip is unchanged. Fit pages `quest-ether-*`, `quest-sheet-ether*`.
 - Tests: `internal/questboard/ledger_test.go` (two builds, fake ledger: once, repeat, crash, no backfill, hand-played, skip, difficulty, no wallet, two heroes one account, desk), `internal/watch/questsapi_test.go` `TestQuestsRouteEtherGoldens`, `quest_ui.mjs`, `cmd/d2bot` `TestQuestLedgerOverWallet` (real wallet).
 - NOT verified live (U): the live drill (one real hand-in awards once; a restart does not repeat it) is for the next live pass.
+
+## Journey retired (slice S9, card retirej, TASK-629)
+
+> Built and tested offline, NOT verified live. User decision 2026-11-17. Tags: tests V, live behaviour U.
+
+| what | now |
+|---|---|
+| knob `quests.board` | default 1. With 1 only an accepted chunk runs a quest; between chunks the hero acts on its mode (train, idle, farm). 0 stays as the rollback and for measured runs: the old floor planner plays the quests, with NO Journey (no chapters, no questions, no Go now). |
+| removed UI | panels `journey`, `journey-strip`, `journey-chip` (files, cockpit slots, phone tab, status band); the free-grid presets Standard, Simple, Stream and Debug lost the Journey cell and the cells below moved up; frozen Classic keeps its `journey` id, which `shell.json` lists as reserved (drawn as nothing). Glance has no `journey` block. The onboarding step id `journey` stays (old ticks stay valid) but reads "Open the Quests tile". |
+| removed code | `internal/campaign` controller, view and the decision function; `internal/task` guide; `internal/bot` guided.go (floor question, ask gap); `internal/watch` campaign.go (`GET /api/campaign`, `POST /api/campaign/intent`, the chapter-done Chronicle line and the `chapter:<id>` unlock event; no unlock data used it); the "journey" command intent; the Go now and Hold actions of the blocked row. |
+| kept | `internal/campaign` spine, bands and state reader (the level plan reads the spine; the import reads the state), `data/campaign/normal.json`, the decision point `t1.journey.floor` in the catalogue (nothing asks it any more), the knobs `campaign.journey*` (RETIRED, no effect; the keys stay so saved overrides load). |
+| charter | the "Pay and go" charter lived only on the Journey sheet and is gone with it. The zone-order charter (an order above the hero's range, `internal/currency/tallyrows.go`, `watch/tallystrip.go`, `proposals.go`) is untouched, as decided 2026-11-16 (design question 5). |
+| quests the bot cannot do | a chunk with `unsupported` shows "not supported yet: <reason>", cannot be started, and the hero trains (unchanged by S9, V `TestEveryChunkHasAHandlerOrIsUnsupported`). |
+
+### Old heroes (state migration)
+
+On the first load of a hero's plan (`cmd/d2bot/questwire.go` `importJourney`, `questboard.Store.ImportLegacy`):
+1. `state/campaign.json` is never written or deleted. A copy `campaign.json.pre-board` is made next to it once (kept if present). A build from before S9 finds its file as it was.
+2. Chapters the player set to Skip (Normal) become whole-quest skips in `state/quests/<hero>.quests.json` (task ids such as `sisters_burial` map to the board's ids by `taskId`; a chapter with no board quest, like the Rogue claim, is ignored).
+3. Mode `orders` becomes the board mode `farm` when the hero has no mode yet. Free and Guided need nothing (train is the default).
+4. Not imported: done chapters (the board derives done from the game's own quest bits and the save, so a hero mid-Journey loses nothing and is offered its next quest), Hold, Go now, asked questions, the farm clock.
+5. The plan carries `legacy: "campaign/1"` so it runs once. An unreadable or foreign-schema file is logged ("journey import skipped") and the hero starts clean. Fixtures: `cmd/d2bot/testdata/journey/` (a Paladin mid-Journey, a Sorceress in orders mode); tests `TestImportJourney*`, `TestImportLegacyOnce`.
+
+### Live check list (NOT run; hidden instance, a hero with an old `state/campaign.json`)
+1. Start the build: the log has "journey import: decisions taken into the quest plan" once; `campaign.json` and `campaign.json.pre-board` are byte-identical.
+2. The page shows the quest tile and no Journey tile or chip at phone, tablet and laptop widths; Standard and Simple have no empty cell.
+3. A hero that skipped the Countess shows her as skipped; Blood Raven's offer matches the hero's real quest state.
+4. `GET /api/campaign` answers 404.
+

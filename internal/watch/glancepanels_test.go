@@ -6,14 +6,14 @@ import (
 	"testing"
 )
 
-// The cockpit's Needs you panel and the strip (progress, journey-strip, health), slice S3: DOM goldens and behaviour in a stub
+// The cockpit's Needs you panel and the strip (progress, health), slice S3: DOM goldens and behaviour in a stub
 // DOM (testdata/glancepanels/dom.js). Needs you: empty, one red, red and amber, five rows with the overflow line; progress:
-// measuring, full, no hero; journey-strip: chapters 1, 3, 9, blocked, not reported; health: all ok, gear broken, two unknown.
+// measuring, full, no hero; health: all ok, gear broken, two unknown.
 func TestStripPanelDOMGoldens(t *testing.T) {
 	runNode(t, "testdata/glancepanels/dom.js", "web/panels")
 }
 
-var stripPanels = []string{"needs-you", "progress", "journey-strip", "health"}
+var stripPanels = []string{"needs-you", "progress", "health"}
 
 // The four panels keep the page rules (no timers, requests or queries of their own, text through textContent, no style
 // writes) and declare themselves as opt-in cockpit slot panels reading the one /api/glance endpoint.

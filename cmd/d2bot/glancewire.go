@@ -24,16 +24,15 @@ import (
 // glanceExtra lets a card extend the sources without editing this file (B6 appends in an init func).
 var glanceExtra []func(*watch.GlanceSources, glanceDeps)
 
-// glanceDeps is what an extension may read: the runner status and the chapter the journey heads for now ("" when unknown).
+// glanceDeps is what an extension may read: the runner status, the pause and reset views and the quest board desk.
 type glanceDeps struct {
-	Status  func() goals.Status
-	Chapter func() string
-	Pause   func() string // the player pause state (bot.PauseRunning, PauseGoingHome, PausePaused)
-	PauseV  func() bot.PlayerPauseView
-	Reset   func() bot.ResetView
-	Stuck   func() time.Duration    // how long the bot made no progress (the stall detector), 0 = not stuck
-	Beat    func() time.Time        // the loop's last finished iteration
-	Quests  func() *questboard.Desk // the quest board desk (questwire.go); nil result: none
+	Status func() goals.Status
+	Pause  func() string // the player pause state (bot.PauseRunning, PauseGoingHome, PausePaused)
+	PauseV func() bot.PlayerPauseView
+	Reset  func() bot.ResetView
+	Stuck  func() time.Duration    // how long the bot made no progress (the stall detector), 0 = not stuck
+	Beat   func() time.Time        // the loop's last finished iteration
+	Quests func() *questboard.Desk // the quest board desk (questwire.go); nil result: none
 }
 
 // useGlance binds the bot's sources to the Hub. No rig, no Hub or no runner: nothing (the lights stay "unknown").
@@ -53,7 +52,7 @@ func useGlance(rig *ladderRig, r *bot.Runner, db *data.DB, levelerBuild string, 
 			return in.LifeLostPerMin, in.WindowMinutes, ok
 		},
 	}
-	deps := glanceDeps{Status: r.Status, Chapter: func() string { return journeyChapter(ref) },
+	deps := glanceDeps{Status: r.Status,
 		Pause: func() string { return r.PlayerPauseView().State }, PauseV: r.PlayerPauseView,
 		Reset: r.ResetView, Stuck: r.StuckFor, Beat: r.LastStep, Quests: func() *questboard.Desk {
 			if ref == nil {

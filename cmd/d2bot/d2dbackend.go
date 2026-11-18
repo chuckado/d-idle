@@ -335,7 +335,6 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	if err == nil {
 		ref.p.Store(runner)
 		wireGoldFarm(ref, runner)
-		wireJourney(ip.State(), ref, runner, log.Info)
 		wireQuestBoard(ip.State(), ref, runner, log.Info)
 		emit.bind(e.Emit)
 		e.Emit = emit.send
@@ -369,7 +368,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 		// The account's ETHER wallet gives these stores their capacity (owned tiers); the ladder wiring adds the hero and the routes.
 		etherFor(o.ladder.currencyDir, o.ladder.vaultRoot, vaultKnobOn(o.ladder.knobValue), nil)
 	}
-	o.ladder.repair, o.ladder.farm, o.ladder.journey = ref.rep, ref.gf, ref.jc
+	o.ladder.repair, o.ladder.farm = ref.rep, ref.gf
 	o.ladder.quests = ref.qd
 	o.ladder.pause = pauseDesk(runner, ip.State())
 	if labels != nil {
