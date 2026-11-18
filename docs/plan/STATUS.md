@@ -272,6 +272,7 @@
 | videoctl | proposed | - | `internal/watch/web/panels/video`<br>`tools/uishots`<br>`tools/uishots.sh`<br>`tools/videofeed`<br>`docs/video-feed.md`<br>`internal/watch/testdata/video_panel.js`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/panel_harness.js` | - |
 | brightness | proposed | - | `docs/probes/viewer-brightness-2026-11-17.md`<br>`internal/watch/web/panels/video/brightness.js`<br>`internal/watch/web/panels/video/panel.css`<br>`internal/watch/web/panels/video/panel.js`<br>`internal/watch/testdata/video_panel.js`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/video_labels_panel.js`<br>`internal/watch/palfeed/luma_test.go`<br>`tools/videofeed/gamma_frames.py`<br>`tools/videofeed/lumastat/` | - |
 | cainfix | proposed | - | `docs/probes/search-for-cain-2026-11-17.md`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_test.go`<br>`internal/questboard`<br>`internal/task/world.go`<br>`internal/quest/act1.go`<br>`internal/bot/task.go`<br>`internal/watch`<br>`internal/task`<br>`internal/bot`<br>`cmd/d2bot`<br>`data/questboard/act1.json` | - |
+| retirej | proposed | - | `internal/campaign`<br>`internal/watch`<br>`cmd/d2bot`<br>`internal/questboard`<br>`internal/bot`<br>`internal/task`<br>`internal/env`<br>`data/onboarding`<br>`tools/uishots`<br>`docs/questboard.md`<br>`docs/campaign.md`<br>`docs/knobs.md`<br>`docs/onboarding.md`<br>`docs/friend-guide.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -312,6 +313,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ef748c380 11-17 22:25 `Merge agent/retirej: retirej: docs, onboarding wording, task card, merge lines` (retirej)
 - 5c809b842 11-17 20:42 `Merge agent/verifycrush3: Merge branch 'main' into TASK-628` (verifycrush3)
 - 98aab18ff 11-17 20:41 `Merge branch 'main' into TASK-628` (-)
 - 20296cd60 11-17 19:52 `Merge agent/cainfix2: cainfix: Search for Cain offline fixes (CAIN-1,2,3,6)` (cainfix2)
@@ -321,5 +323,4 @@
 - 725d0c74b 11-17 15:28 `Merge branch 'main' into verifygearabsorb3` (-)
 - 115106402 11-17 15:22 `Merge agent/jewelicons: watch: inventory DOM stub gets querySelector and the nopin goldens show the type-fallback glyph (the go-whole failure)` (jewelicons)
 - 1d11c9f28 11-17 14:58 `Merge origin/main into agent/jewelicons` (-)
-- 8680a6d2f 11-17 13:37 `Merge agent/brightness: Merge branch 'main' into TASK-622` (brightness)
 <!-- statusgen:end -->

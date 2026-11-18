@@ -129,6 +129,7 @@ docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-extras.jsonl.gz  gaterun  gate
 backlog/merge-lines/decomp34.txt  credit-runner  decomp34
 cmd/bossrun/adapter.go  pro-runner  levelplan3
 cmd/d2bot  credit-runner  cainfix
+cmd/d2bot  credit-runner  retirej
 cmd/d2bot  credit-runner  survsd
 cmd/d2bot  credit-runner  wiring2
 cmd/d2bot/adapters.go  credit-runner  goldprio
@@ -288,6 +289,7 @@ cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
 data/campaign/normal.json  pro-runner  levelplan3
 data/onboarding  credit-runner  firstminutes
+data/onboarding  credit-runner  retirej
 data/onboarding/en.json  credit-runner  friendfb
 data/questboard  credit-runner  quests1
 data/questboard  credit-runner  quests7
@@ -310,6 +312,7 @@ docs/backlog-howto.md  credit-runner  dietrule
 docs/beltfix.md  credit-runner  beltfix
 docs/bounce3.md  pro-runner  bounce3
 docs/campaign.md  credit-runner  campaign1
+docs/campaign.md  credit-runner  retirej
 docs/charselect-ui.md  credit-runner  charui
 docs/charselect.md  credit-runner  charselect
 docs/charselect.md  credit-runner  charsup
@@ -344,6 +347,7 @@ docs/friend-checklist-0.1.0.md  credit-runner  cut010d
 docs/friend-checklist-0.1.1.md  credit-runner  cut011
 docs/friend-checklist-0.1.2.md  credit-runner  cut012
 docs/friend-guide.md  credit-runner  cut012
+docs/friend-guide.md  credit-runner  retirej
 docs/friend-guide.md  credit-runner  videofeed2
 docs/gear-policy.md  credit-runner  gearsets
 docs/gear-policy.md  credit-runner  nopins
@@ -374,6 +378,7 @@ docs/knobs.md  credit-runner  lootwireL4
 docs/knobs.md  credit-runner  pursuers
 docs/knobs.md  credit-runner  quests3
 docs/knobs.md  credit-runner  quests8
+docs/knobs.md  credit-runner  retirej
 docs/knobs.md  credit-runner  staletarget
 docs/knobs.md  credit-runner  survfix2
 docs/knobs.md  credit-runner  survsd
@@ -400,6 +405,7 @@ docs/mercrevive.md  credit-runner  mercrevive2
 docs/onboarding-tour.md  credit-runner  onboardtour
 docs/onboarding.md  credit-runner  firstminutes
 docs/onboarding.md  credit-runner  reconnectux
+docs/onboarding.md  credit-runner  retirej
 docs/palprofile.md  credit-runner  palprofile2
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
@@ -446,6 +452,7 @@ docs/questboard.md  credit-runner  quests4
 docs/questboard.md  credit-runner  quests7
 docs/questboard.md  credit-runner  quests7b
 docs/questboard.md  credit-runner  quests8
+docs/questboard.md  credit-runner  retirej
 docs/releases/0.1.0.md  credit-runner  cut010b
 docs/releases/0.1.0.md  credit-runner  cut010d
 docs/releases/0.1.1.md  credit-runner  cut011
@@ -587,6 +594,7 @@ internal/boss/fake_test.go  pro-runner  levelplan3
 internal/boss/run.go  pro-runner  levelplan3
 internal/boss/types.go  pro-runner  levelplan3
 internal/bot  credit-runner  cainfix
+internal/bot  credit-runner  retirej
 internal/bot  credit-runner  survsd
 internal/bot  credit-runner  wiring2
 internal/bot/areametrics.go  credit-runner  intake
@@ -733,6 +741,7 @@ internal/bot/zoneshadow.go  credit-runner  survfix2
 internal/bot/zoneshadow.go  credit-runner  survreask
 internal/bot/zoneshadow.go  credit-runner  survrecover
 internal/bot/zoneshadow_test.go  credit-runner  survC
+internal/campaign  credit-runner  retirej
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
 internal/charsel  credit-runner  charselect
@@ -800,6 +809,7 @@ internal/decide/queue.go  credit-runner  qqueue
 internal/decide/queue_test.go  credit-runner  qqueue
 internal/decide/variants.go  credit-runner  qdensity
 internal/decide/variants_test.go  credit-runner  qdensity
+internal/env  credit-runner  retirej
 internal/env  credit-runner  survsd
 internal/env  credit-runner  wiring2
 internal/env/tuning.go  credit-runner  quests3
@@ -943,6 +953,7 @@ internal/questboard  credit-runner  quests3
 internal/questboard  credit-runner  quests4
 internal/questboard  credit-runner  quests7
 internal/questboard  credit-runner  quests8
+internal/questboard  credit-runner  retirej
 internal/questboard/chunks_test.go  credit-runner  quests7b
 internal/questboard/desk.go  credit-runner  questrun
 internal/questboard/desk_test.go  credit-runner  questrun
@@ -977,6 +988,7 @@ internal/survival/ledger.go  credit-runner  intake
 internal/survival/survival_test.go  credit-runner  survfix
 internal/talk/tables.go  credit-runner  quests7b
 internal/task  credit-runner  cainfix
+internal/task  credit-runner  retirej
 internal/task/act1.go  credit-runner  quests7b
 internal/task/act2.go  credit-runner  quests7b
 internal/task/act3.go  credit-runner  quests7b
@@ -1024,6 +1036,7 @@ internal/vault/index.go  credit-runner  vaultv4
 internal/vaultkeep  credit-runner  vaultv5
 internal/vaultkeep  credit-runner  vaultv6
 internal/watch  credit-runner  cainfix
+internal/watch  credit-runner  retirej
 internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/cardtext.go  credit-runner  friendfb
 internal/watch/charactersapi.go  credit-runner  charselect
@@ -1493,6 +1506,7 @@ tools/uilint/  credit-runner  uis1
 tools/uilint/lint.go  credit-runner  uis6
 tools/uishots  credit-runner  gearsets
 tools/uishots  credit-runner  lootwire3
+tools/uishots  credit-runner  retirej
 tools/uishots  credit-runner  videoctl
 tools/uishots  credit-runner  videofeed4
 tools/uishots.sh  credit-runner  friendfb

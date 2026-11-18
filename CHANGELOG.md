@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- The quest board is now the only way quests start: the Quests tile offers the next quest and nothing begins until you tap Start; the old Journey strip and its chapter questions are gone. Existing heroes keep their progress (read from the game) and their skipped quests. <!--sg:agent/retirej-->
 - Merge branch 'main' into TASK-628 <!--sg:agent/verifycrush3-->
 - cainfix: Search for Cain offline fixes (CAIN-1,2,3,6) <!--sg:agent/cainfix2-->
 - cainfix: Search for Cain diagnosis doc <!--sg:agent/cainfix-->
