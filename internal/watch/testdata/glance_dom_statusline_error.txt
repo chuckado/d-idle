@@ -1,0 +1,9 @@
+<div>
+  <button class="say" data-key="say" data-tone="warn" aria-expanded="false" aria-haspopup="true" title="the page cannot reach the bot">
+    <span class="line" aria-live="polite">
+      <span class="word"> "No signal"
+      <span class="txt">
+        <span class="reason"> "the page cannot reach the bot"
+  <div class="pop d-bandpop" aria-label="Why the hero does this" role="dialog" hidden>
+    <dl class="rows">
+    <a class="more" href="#log"> "Open the log"

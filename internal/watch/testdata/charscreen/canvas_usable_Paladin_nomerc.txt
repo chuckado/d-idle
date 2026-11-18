@@ -1,0 +1,6 @@
+pack item-3 usable=no who= badge=SLOT/bad/a two-handed weapon and a shield cannot be worn together; take the other one off first title=War Staff - a two-handed weapon and a shield cannot be worn together; take the other one off first
+pack item-4 usable=no who= badge=STR/bad/needs 47 strength (you have 30) title=Cap - needs 47 strength (you have 30)
+pack item-5 usable= who= badge=BRK/warn/Broken: repair it before it is worn title=Ring A
+pack item-6 usable= who= badge= title=Ring B
+
+

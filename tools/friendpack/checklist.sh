@@ -56,8 +56,11 @@ grep -rIl -E -i 'game\.exe|wine' "$root/compose.yml" "$root/install.sh" "$root/d
 [ -s "$w/o1" ] && bad1=1
 grep -n -E -- '--lab-verbs|D2D_LAB|LAB_VERBS' "$root/compose.yml" "$root/install.sh" "$root/didle" 2>/dev/null | grep -v -E '^\S*:\s*[0-9]+:\s*#' >"$w/o1b"
 [ -s "$w/o1b" ] && bad1=1
+# the game folder itself is never mounted (key file and the rest of the folder stay out): per-archive mounts come from install.sh
+grep -n -E 'D2_GAME_DIR|:/game(:|$)' "$root/compose.yml" 2>/dev/null >"$w/o1d"
+[ -s "$w/o1d" ] && { bad1=1; echo '  compose.yml mounts the whole game folder' >>"$w/o1"; }
 if [ -s "$layers" ] && grep -E -i '(^|/)(game\.exe|wine[0-9a-z_-]*)(/|$)|usr/lib/wine' "$layers" | head -3 >"$w/o1c" && [ -s "$w/o1c" ]; then bad1=1; fi
-if [ -n "$bad1" ]; then cat "$w"/o1 "$w"/o1b "$w"/o1c 2>/dev/null >&2; fail "1 d2d only, lab/cheat verbs off by default: wine/game.exe or a lab flag found (listed above)"
+if [ -n "$bad1" ]; then cat "$w"/o1 "$w"/o1b "$w"/o1c "$w"/o1d 2>/dev/null >&2; fail "1 d2d only, lab/cheat verbs off by default: wine/game.exe or a lab flag found (listed above)"
 else pass "1 d2d only, lab/cheat verbs not enabled in compose/install/didle$([ -s "$layers" ] || echo ' (image layers not listed: no image tar)')"; fi
 
 # 2. licence, GPL text, source offer with the exact commits
@@ -79,7 +82,7 @@ if [ -s "$layers" ] && ! grep -q -E 'opt/d2lod.*LICENSE|licen[sc]e' "$layers"; t
 notice="$root/licenses/NOTICE $root/licenses/THIRD_PARTY.md"
 miss=
 for p in CLI11 crashpad FFmpeg StormLib SDL3 OpenAL libcurl zlib bzip2 Ubuntu; do
-	cat $notice 2>/dev/null | grep -q -i -- "$p" || miss="$miss $p"
+	grep -q -i -- "$p" $notice 2>/dev/null || miss="$miss $p" # files, not a pipe: cat | grep -q can die of SIGPIPE under pipefail
 done
 icon=$(find "$w/d2d" -path '*assets/icon/d2d.svg' 2>/dev/null | head -1)
 freepik_in_tree= freepik_in_notice=
@@ -87,7 +90,7 @@ freepik_in_tree= freepik_in_notice=
 # the Steam launcher art left in the tree (LEGAL.md names its author) also needs the attribution
 legal=$(find "$w/d2d" -maxdepth 2 -name LEGAL.md 2>/dev/null | head -1)
 [ -n "$legal" ] && grep -q -i 'dgim-studio' "$legal" && freepik_in_tree=1
-cat $notice | grep -q -i freepik && freepik_in_notice=1
+grep -q -i freepik $notice 2>/dev/null && freepik_in_notice=1
 if [ -n "$freepik_in_tree" ] && [ -z "$freepik_in_notice" ]; then miss="$miss Freepik(icon still in the d2d tree, attribution missing)"; fi
 if [ -z "$freepik_in_tree" ] && [ -n "$freepik_in_notice" ]; then miss="$miss Freepik(notice claims an icon that the d2d tree no longer has)"; fi
 [ -z "$miss" ] && pass "3 notices name every third-party package; Freepik attribution matches the d2d icon" || fail "3 notices missing:$miss"

@@ -83,6 +83,10 @@ type MapStatus struct {
 	Hard    bool   `json:"hard"`             // the hero's own guard closes it now
 	HardWhy string `json:"hardWhy,omitempty"`
 	Cleared bool   `json:"cleared"`
+	// Failed: the newest order that pointed here ended failed within the last twenty minutes (the Orders list keeps a
+	// failed row that long); FailedWhy is the guard's reason in the order's own words.
+	Failed    bool   `json:"failed,omitempty"`
+	FailedWhy string `json:"failedWhy,omitempty"`
 }
 
 // MapNodeView is one node of GET /api/orders/map.
@@ -137,6 +141,30 @@ type MapView struct {
 	Edges     []MapEdgeView `json:"edges"`
 	OpenOrder int           `json:"openOrders"`
 	MaxOpen   int           `json:"maxOpenOrders"`
+	// Ladder is the state of the Loop and queue slots the zone menu offers; absent when neither desk is bound.
+	Ladder *MapLadder `json:"ladder,omitempty"`
+	// Areas lists the orderable areas of an act without map data, so the panel can show them as a list.
+	Areas []string `json:"areas,omitempty"`
+}
+
+// MapLadder is what the zone menu needs to offer Loop and Add to queue, or their teaser when still locked.
+type MapLadder struct {
+	LoopOpen     bool   `json:"loopOpen"`
+	LoopActive   bool   `json:"loopActive,omitempty"`
+	LoopTeaser   string `json:"loopTeaser,omitempty"`
+	QueueOpen    bool   `json:"queueOpen"`
+	QueueTeaser  string `json:"queueTeaser,omitempty"`
+	QueueSlots   int    `json:"queueSlots,omitempty"`   // places the queue has
+	QueueWaiting int    `json:"queueWaiting,omitempty"` // entries waiting now
+}
+
+// SetMapLadder sets where GET /api/orders/map reads the Loop and queue state from (nil: the field is left out).
+func (h *Hub) SetMapLadder(f func() *MapLadder) {
+	if f == nil {
+		h.ladder.Store(nil)
+		return
+	}
+	h.ladder.Store(&f)
 }
 
 const nodeW, nodeH = 104, 44
@@ -159,9 +187,13 @@ func (h *Hub) OrdersMap(act int) MapView {
 			}
 		}
 	}
+	var ladder *MapLadder
+	if f := h.ladder.Load(); f != nil {
+		ladder = (*f)()
+	}
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	v := MapView{Schema: mapSchema, Seq: h.seq, Act: am.Act, Populated: len(am.Nodes) > 0, Town: am.Town, Hero: h.hero,
+	v := MapView{Ladder: ladder, Schema: mapSchema, Seq: h.seq, Act: am.Act, Populated: len(am.Nodes) > 0, Town: am.Town, Hero: h.hero,
 		Nodes: []MapNodeView{}, Edges: []MapEdgeView{}, MaxOpen: MaxOpenOrders}
 	for a := 1; a <= 5; a++ {
 		v.Acts = append(v.Acts, MapActView{Act: a, Populated: len(Maps[a].Nodes) > 0})
@@ -177,6 +209,10 @@ func (h *Hub) OrdersMap(act int) MapView {
 			queued = append(queued, o)
 			v.OpenOrder++
 		}
+	}
+	now := h.rel(h.cfg.Clock.Now())
+	if len(am.Nodes) == 0 {
+		v.Areas = append([]string(nil), h.cfg.Areas...)
 	}
 	minX, minY, maxX, maxY := 1<<30, 1<<30, 0, 0
 	for _, n := range am.Nodes {
@@ -196,6 +232,13 @@ func (h *Hub) OrdersMap(act int) MapView {
 		for i, q := range queued {
 			if orderAt(*q, n, h.hero) {
 				st.Queued = i + 1
+				break
+			}
+		}
+		for i := len(h.orders) - 1; i >= 0; i-- { // the newest failed order that points here, while its row is still listed
+			o := h.orders[i]
+			if o.State == OrderFailed && now-o.GivenAt <= failedShowSec && orderAt(*o, n, h.hero) {
+				st.Failed, st.FailedWhy = true, safeText(o.Note, 120)
 				break
 			}
 		}

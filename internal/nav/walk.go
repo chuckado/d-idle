@@ -812,7 +812,7 @@ func (n *Navigator) NearMouth(p input.Point) bool {
 		return false
 	}
 	for _, e := range lm.Exits {
-		if e.Dest == n.wantExit {
+		if e.Dest == n.wantExit || n.exitBesideWanted(lm, e) {
 			continue
 		}
 		if math.Hypot(float64(p.X-e.Pos.X), float64(p.Y-e.Pos.Y)) <= mouthApproachR {
@@ -832,7 +832,7 @@ func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 	}
 	inside := false
 	for _, e := range o.lm.Exits {
-		if e.Dest == n.wantExit {
+		if e.Dest == n.wantExit || n.exitBesideWanted(o.lm, e) {
 			continue
 		}
 		dx, dy := float64(o.pos.X-e.Pos.X), float64(o.pos.Y-e.Pos.Y)

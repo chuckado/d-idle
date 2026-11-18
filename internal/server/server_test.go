@@ -406,6 +406,16 @@ func TestRingBounded(t *testing.T) {
 	for i := 0; i < ringSize+50; i++ {
 		b.Publish(event.New(event.KindInfo, "t", event.Message{Message: "m"}))
 	}
+	// the ring fills on its own goroutine and settle() only waits 100 ms: wait for the last event with a real deadline
+	want := b.Seq()
+	for end := time.Now().Add(30 * time.Second); time.Now().Before(end); time.Sleep(time.Millisecond) {
+		r.mu.Lock()
+		ok := r.last >= want
+		r.mu.Unlock()
+		if ok {
+			break
+		}
+	}
 	if got := r.since(0, 0); len(got) != ringSize || got[0].Seq != 51 {
 		t.Fatalf("ring: %d first %d", len(got), got[0].Seq)
 	}

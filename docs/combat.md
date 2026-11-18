@@ -208,3 +208,4 @@ Under a lockstep d2d the clock (`d2dinput.Pacer`) only moves on sleeps and steps
 - `canRetreat` is false while pinned: no step-away is offered when it cannot work; the crowd is fought or the abort rules decide.
 - Fight-loop watchdog: `noProgressMax` (40) iterations without the clock moving force one poll sleep and log `combat no progress, holding` once per fight.
 - Audit: the other `for {` loops in nav, town, loot and bot sleep, are bounded by tries/hops, or end on a deadline; only the combat loop could iterate without sleeping. Shared combat code: needs a G1/G2 (Game.exe) check before it counts as verified there.
+- Resist (decomp37 B1): the bot's resist model follows `d2.ResistTable` (penalty, cap 75 + max bonus, floor, percent absorb); see docs/research/resistorder.md.

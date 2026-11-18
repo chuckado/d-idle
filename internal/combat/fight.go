@@ -82,6 +82,7 @@ type fightState struct {
 	lastNova   time.Time
 	lastNoCast string // reason of the latest tick that did not cast
 	wdLogAt    time.Time
+	starved    int // watchdog lines that found an attack too dear for the mana pool
 
 	// life reference for "life is dropping" (kite rule): the life a couple of seconds ago
 	lifeRef   int
@@ -191,6 +192,7 @@ func (f *Fighter) fight(ctx context.Context, sp fightSpec, snap *d2.Snapshot) (r
 			ft.Dodges = st.dodges + st.mdodges
 			ft.Casts, ft.Kites, ft.Approaches = st.casts, st.kitesAll, st.approach
 			ft.Novas, ft.Forced = st.novas, st.forced
+			ft.Starved = st.starved
 			f.fightTick(&ft, st, start, res)
 			f.info(ft.Finish(res))
 			f.addFight(&ft, st, res)

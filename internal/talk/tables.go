@@ -69,6 +69,7 @@ var actTalkPaths = map[[2]string][]string{
 	{task.NPCAtma, "quest"}:           {"Talk"},
 	{task.NPCAtma, "reward"}:          {"Talk"},
 	{task.NPCCain, "horadric scroll"}: {"Talk"},
+	{task.NPCCain, "horadric staff"}:  {"Talk"}, // U: the board's staff hand-in (slice S7b)
 	{task.NPCDrognan, "arcane"}:       {"Talk"},
 	{task.NPCJerhyn, "arcane"}:        {"Talk"},
 	{task.NPCJerhyn, "act2"}:          {"Talk"},
@@ -108,6 +109,8 @@ var Paths = map[[2]string][]string{
 	{task.NPCCharsi, "imbue:best"}: {"Talk"},
 	{task.NPCCharsi, "imbue"}:      {"Talk"},
 	{task.NPCWarriv, "go east"}:    {"Go East"},
+	// The board's report after the cage (slice S7b): the plain Talk. No skill point follows, so it is not "reward" (U live).
+	{task.NPCAkara, "cain report"}: {"Talk"},
 }
 
 func init() {

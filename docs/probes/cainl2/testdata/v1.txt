@@ -1,0 +1,179 @@
+> debug goto 4
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> debug warp 24 61
+ err=<nil>
+> step 25 err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> debug kill
+ err=<nil>
+> debug give bkd pack
+pack 8 0 quality=2 identified=1 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 100 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	ON
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	ON
+14	21.9	60.9	op9	19	-	ON
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+2	4	25.1	57.7 err=<nil>
+> cmd interact -2002
+
+ err=<nil>
+> step 200 err=<nil>
+> debug level
+38 21.50 24.60 43 48 5000 1000 err=<nil>
+> debug quest list
+4	0x0010	act1	bits=4 err=<nil>
+> npcs
+a Trap	-152	296	0	14	18.1	28.1
+Cain's Gibbet	616	648	0	31	27.3	27.7
+Wirt's body	-1448	272	0	42	9.7	35.9
+ err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> monsters
+sk_archer1	20.90	26.70	174	373	39/39	NU	champion	16	lvl7	Champion Skeleton Archer	#78	-
+sk_archer1	21.70	27.50	174	437	42/42	NU	champion	16	lvl7	Champion Skeleton Archer	#79	-
+sk_archer1	21.30	27.50	142	421	39/39	A1	champion	16	lvl7	Champion Skeleton Archer	#80	-
+griswold	31.70	39.50	14	1317	412/412	NU	superunique	7,22	lvl8	Griswold	#81	-
+skeleton2	27.70	39.10	-274	1141	72/72	NU	unique	26	lvl9	Bile Kill the Mad	#82	-
+skeleton2	27.70	39.70	-322	1165	34/34	NU	minion	-	lvl9	Returned	#83	-
+skeleton2	28.30	39.70	-274	1189	50/50	NU	minion	-	lvl9	Returned	#84	-
+skeleton2	27.10	39.30	-338	1125	50/50	NU	minion	-	lvl9	Returned	#85	-
+goatman2	24.30	32.50	-18	741	27/27	NU	-	-	lvl6	Night Clan	#86	-
+sk_archer1	25.50	35.70	-178	917	14/14	NU	-	-	lvl5	Skeleton Archer	#87	-
+fallenshaman2	9.70	38.70	-1682	405	13/13	NU	-	-	lvl6	Carver Shaman	#88	-
+fallen2	9.90	39.30	-1714	437	8/8	NU	-	-	lvl5	Carver	#89	-
+fallen2	10.30	39.30	-1682	453	9/9	NU	-	-	lvl5	Carver	#90	-
+fallen2	9.50	39.30	-1746	421	7/7	NU	-	-	lvl5	Carver	#91	-
+fallen2	9.10	39.10	-1762	397	8/8	NU	-	-	lvl5	Carver	#92	-
+fallen2	9.10	38.50	-1714	373	5/5	NU	-	-	lvl5	Carver	#93	-
+fallen2	9.10	38.10	-1682	357	5/5	NU	-	-	lvl5	Carver	#94	-
+sk_archer1	15.50	22.10	110	-27	22/22	NU	-	-	lvl5	Skeleton Archer	#95	-
+sk_archer1	15.70	21.50	174	-43	15/15	NU	-	-	lvl5	Skeleton Archer	#96	-
+ err=<nil>
+> cmd move 25 27
+
+ err=<nil>
+> step 50 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=21.94,24.80 walking=0 dir=4 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=15 str=10 life=40/43 mana=41/41 stamina=19712/19712 level=4 exp=4200 pmode=- missiles=2 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=3 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4677 music_old=0 quake=0,0,0,0,0 sfx=2723:0:0.93/0.92,2721:0:0.93/0.92,194:0:0.00/0.05,2723:0:0.93/0.92,315:0:0.62/0.26,2723:0:0.59/0.25,2576:-4:0.27/0.21,3286:0:1.00/0.95,2723:0:0.93/0.93,2721:0:0.93/0.93,2723:0:0.93/0.93,312:15:0.90/0.76,193:0:0.02/0.00,194:0:0.00/0.06,192:0:0.03/0.00,195:0:0.00/0.04,195:0:0.00/0.04,2722:0:0.94/0.94,2723:0:0.93/0.92,2721:0:0.94/0.94,2723:0:0.44/0.13,2722:0:0.50/0.17,2723:0:0.93/0.92,2723:0:0.93/0.92,2722:0:0.93/0.92,2722:0:0.93/0.92,2722:0:0.93/0.93,2720:0:0.93/0.93,2720:0:0.93/0.92,2721:0:0.93/0.92
+ err=<nil>
+> step 50 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=21.94,24.80 walking=0 dir=4 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=15 str=10 life=40/43 mana=41/41 stamina=19712/19712 level=4 exp=4200 pmode=- missiles=0 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=3 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4677 music_old=0 quake=0,0,0,0,0 sfx=2723:0:0.93/0.92,2721:0:0.93/0.92,194:0:0.00/0.05,2723:0:0.93/0.92,315:0:0.51/0.21,2723:0:0.59/0.25,2576:-4:0.27/0.21,3286:0:1.00/0.95,2723:0:0.93/0.93,2721:0:0.93/0.93,2723:0:0.93/0.93,196:0:0.06/0.00,193:0:0.02/0.00,194:0:0.00/0.06,192:0:0.03/0.00,195:0:0.00/0.04,195:0:0.00/0.04,2722:0:0.94/0.94,2723:0:0.93/0.92,2721:0:0.94/0.94,2723:0:0.44/0.13,2722:0:0.50/0.17,2723:0:0.93/0.92,2723:0:0.93/0.92,2722:0:0.93/0.92,2722:0:0.93/0.92,2722:0:0.93/0.93,2720:0:0.93/0.93,2720:0:0.93/0.92,2721:0:0.93/0.92
+ err=<nil>
+> cmd interact 31
+
+ err=<nil>
+> step 100 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=22.50,24.90 walking=0 dir=14 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=15 str=10 life=0/43 mana=41/41 stamina=19712/19712 level=4 exp=4200 pmode=DT missiles=2 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=3 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4677 music_old=0 quake=0,0,0,0,0 sfx=2723:0:0.91/0.90,2721:0:0.91/0.90,194:0:0.00/0.05,2723:0:0.91/0.90,316:0:0.56/0.18,2723:0:0.58/0.25,2576:-4:0.23/0.16,3286:0:0.98/0.85,2723:0:0.91/0.91,2721:0:0.91/0.91,2723:0:0.91/0.91,196:0:0.06/0.00,309:29:0.77/0.49,347:0:0.81/0.81,2910:0:0.92/0.92,352:0:0.81/0.81,2912:0:0.92/0.92,349:0:0.81/0.81,2912:0:0.92/0.92,351:0:0.81/0.81,2915:0:0.92/0.92,2721:0:0.92/0.92,2723:0:0.43/0.13,2722:0:0.49/0.17,2723:0:0.91/0.90,2723:0:0.91/0.90,2722:0:0.91/0.90,2722:0:0.91/0.90,2722:0:0.91/0.91,2720:0:0.91/0.91,2720:0:0.91/0.90,2721:0:0.91/0.90
+ err=<nil>
+> debug quest list
+4	0x0010	act1	bits=4 err=<nil>
+> npcs
+a Trap	-208	244	0	14	18.1	28.1
+Cain's Gibbet	560	596	0	31	27.3	27.7
+Wirt's body	-1504	220	0	42	9.7	35.9
+ err=<nil>
+> monsters
+sk_archer1	20.90	26.70	128	300	39/39	NU	champion	16	lvl7	Champion Skeleton Archer	#78	-
+sk_archer1	21.70	27.50	128	364	42/42	NU	champion	16	lvl7	Champion Skeleton Archer	#79	-
+sk_archer1	21.30	27.50	96	348	39/39	NU	champion	16	lvl7	Champion Skeleton Archer	#80	-
+griswold	31.70	39.50	-32	1244	412/412	NU	superunique	7,22	lvl8	Griswold	#81	-
+skeleton2	27.70	39.10	-320	1068	72/72	NU	unique	26	lvl9	Bile Kill the Mad	#82	-
+skeleton2	27.70	39.70	-368	1092	34/34	NU	minion	-	lvl9	Returned	#83	-
+skeleton2	28.30	39.70	-320	1116	50/50	NU	minion	-	lvl9	Returned	#84	-
+skeleton2	27.10	39.30	-384	1052	50/50	NU	minion	-	lvl9	Returned	#85	-
+goatman2	24.30	32.50	-64	668	27/27	NU	-	-	lvl6	Night Clan	#86	-
+sk_archer1	25.50	35.70	-224	844	14/14	NU	-	-	lvl5	Skeleton Archer	#87	-
+fallenshaman2	9.70	38.70	-1728	332	13/13	NU	-	-	lvl6	Carver Shaman	#88	-
+fallen2	9.90	39.30	-1760	364	8/8	NU	-	-	lvl5	Carver	#89	-
+fallen2	10.30	39.30	-1728	380	9/9	NU	-	-	lvl5	Carver	#90	-
+fallen2	9.50	39.30	-1792	348	7/7	NU	-	-	lvl5	Carver	#91	-
+fallen2	9.10	39.10	-1808	324	8/8	NU	-	-	lvl5	Carver	#92	-
+fallen2	9.10	38.50	-1760	300	5/5	NU	-	-	lvl5	Carver	#93	-
+fallen2	9.10	38.10	-1728	284	5/5	NU	-	-	lvl5	Carver	#94	-
+sk_archer1	15.50	22.10	64	-100	22/22	NU	-	-	lvl5	Skeleton Archer	#95	-
+sk_archer1	15.70	21.50	128	-116	15/15	NU	-	-	lvl5	Skeleton Archer	#96	-
+ err=<nil>

@@ -114,6 +114,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [d2d-spike.md](d2d-spike.md): d2d feasibility spike (agent D2DSPIKE, 2026-10-30) (status: spike answered: d2d is the primary backend (ADR 0009, 2026-10-30; docs/plan/STATUS.md). Numbers here are...)
 - [d2d-tick-rate.md](d2d-tick-rate.md): d2d tick rate versus the 25 fps original (agent PROBES-D2D, 2026-10-30)
 - [d2d-town.md](d2d-town.md): Town layer on the d2d backend (agent D2DTOWN, 2026-10-30) (status: "Game.exe stays the acceptance target" is partly superseded: d2d is the product and game.exe the oracle;...)
+- [d2d-vault-verbs.md](d2d-vault-verbs.md): Vault verbs (d2d fork) and the d2dctl client, slice V1 (status: current, 2026-11-16 (task TASK-584). Design: `docs/design/loot-vault-2026-11-16.md`; V0 spike result:...)
 - [d2d-view.md](d2d-view.md): d2dview: watching the sped-up d2d bot (agent D2DVIEW, 2026-10-30) (status: demo ran 2026-10-30 16:18-16:33 EDT and was stopped; rerun `tools/d2dview-demo.sh --minutes 15 [--watch]`...)
 - [d2d-walk.md](d2d-walk.md): d2d end-to-end walk: cmd/d2dwalk (agent D2DWALK, 2026-10-30)
 - [d2d-wire.md](d2d-wire.md): Whole bot on d2d (agent D2DWIRE, 2026-10-30)
@@ -125,6 +126,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `digest/`
 
 - [d2d-fork-lab.md](digest/d2d-fork-lab.md): Digest: d2d fork and lab (status: current (TASK-310 digest; the area doc is the authority).)
+- [fork-rebase-2026-11-13.md](fork-rebase-2026-11-13.md): Fork rebase 2026-11-13: the d.idle d2d fork on current upstream main (TASK-395) (status: current. Branch `didle/rebase-20261113` of the private fork replaces the 52362d52-based lineages...)
 - [forkarmor.md](forkarmor.md): FORKARMOR: the private fork carries the Frozen Armor freeze-rule fix (card forkarmor, 2026-11-01) (status: current. Branch `lab-armorhit` of the private d2d fork, lab binary `bin/d2d.lab-armorhit` on the worker...)
 - [forkcheats.md](forkcheats.md): FORKCHEATS: test cheats added to the lab binary (card forkcheats, 2026-10-31) (status: current. The verbs exist in the lab d2d binary as of 2026-10-31 (the patches live in the private fork, not...)
 - [forkdbg.md](forkdbg.md): FORKDBG: lab-only debug verbs for the live skill drills (card forkdbg, 2026-11-01) (status: current. The verbs exist in the lab d2d binary built from the private fork branch `lab-debug-skills`...)
@@ -188,7 +190,19 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [potion-policy.md](sme/potion-policy.md): Potion and belt policy (d2-sme review, 2026-10-29)
 - [snaplib.md](snaplib.md): Snapshot library (d2restore)
 - [spec-skip-audit.md](spec-skip-audit.md): Audit of earlier behavioural skip_specs cards (status: audit of card spec-skip-audit (2026-10-31). Nothing here is a spec; the needs-spec rows are a backlog for...)
+
+`survival/`
+
+- [replay-2026-11-14.md](survival/replay-2026-11-14.md): Replay of the sandbox hero's log through the survival shadow and controller (2026-11-14) (status: current (card survreplay, TASK-458). First run of the S-B margin and the S-C ledger/controller on a REAL...)
 - [timescale.md](timescale.md): Bot time scale (D2BOT_TIMESCALE) (status: offline only (card `botclock`); not verified live. Background: docs/research/lockstep-p3.md.)
+
+`upstream/bodies/`
+
+- [decomp35-crush-body.md](upstream/bodies/decomp35-crush-body.md): decomp35-crush-body
+- [decomp35-leech-body.md](upstream/bodies/decomp35-leech-body.md): decomp35-leech-body
+- [decomp37-gear-absorb-body.md](upstream/bodies/decomp37-gear-absorb-body.md): decomp37-gear-absorb-body
+- [decomp37-open-wounds-body.md](upstream/bodies/decomp37-open-wounds-body.md): decomp37-open-wounds-body
+- [decomp39-melee-reach-body.md](upstream/bodies/decomp39-melee-reach-body.md): decomp39-melee-reach-body
 - [upstreamsync.md](upstreamsync.md): Upstream sync after #152 and #153 merged (2026-11-01) (status: current (card upstreamsync, 2026-11-01). Read-only measurement plus local rebases on the worker host;...)
 - [viewport.md](viewport.md): Viewport: capture and stream library (agent VIEWPORT)
 
@@ -227,10 +241,12 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [builder.md](builder.md): Linux builder (build host for fork binaries) (status: current. Specifics (container name, template, limits, host) are in the private ops repo,...)
 - [builds-endgame.md](builds-endgame.md): Endgame builds (clvl 2-90, Normal -> Nightmare -> Hell), one per class (agent BUILDS80)
 - [buildv3.md](buildv3.md): BUILDV3: the fresh Sorceress skill table, rewritten to the order the leveler follows (status: table shipped OPT-IN by name (`fallback-lightning-v3`); the default of a fresh Sorceress stays...)
-- [campaign.md](campaign.md): Campaign: the guided journey (status: current (TASK-335 stage 0: spine, loader, bands, decision, state; stage 1 planner: TASK-337; stage 2 API...)
+- [campaign.md](campaign.md): Campaign: the guided journey (status: SUPERSEDED 2026-11-17 (quest board slice S9, docs/questboard.md "Journey retired"): the Journey chapters,...)
 - [capabilities.md](capabilities.md): What the current build can and cannot do (status: refreshed 2026-11-01 (card capdocs, docs only; first written by card readmedocs; nothing here was run...)
 - [champions.md](champions.md): Champions are elite, not bosses (status: the "G1/G2 check" obligation for shared code is retired (ADR 0013, amended by ADR 0015); verify on d2d...)
 - [chargedbolt.md](chargedbolt.md): Charged Bolt per-bolt damage on d2d (card chargedbolt, 2026-11-04) (status: current. Evidence: docs/probes/sksmoke/2026-11-04-SK-cb.txt, .json, -raw.txt. Tag: compared to table on...)
+- [charselect-ui.md](charselect-ui.md): Character Select, Phase B: the Characters page (status: BUILT offline (card charui, 2026-11-15). Backend and routes: docs/charselect.md (card charselect). Tags: V...)
+- [charselect.md](charselect.md): Character Select: list, create, switch, delete (archive first), restore (status: Phase A BUILT offline (card charselect, 2026-11-15): backend and routes with fakes and temp dirs; no UI,...)
 - [cheats.md](cheats.md): Cheats: logged test cheats (agent CHEAT)
 - [classchores.md](classchores.md): Per-class chore defaults (TASK-146, card classchores) (status: built and tested offline; not run against a live bot. Tags: V = proven by a test in this tree, EXP =...)
 
@@ -297,7 +313,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `design/`
 
+- [item-colour-2026-11-18.md](design/item-colour-2026-11-18.md): Item colour in the inventory art: chain and slice plan (2026-11-18) (status: design, task-634 (card itemcolour). Follow-up to jewelcolor (task-632), which removed the invented wash....)
 - [item-verbs.md](design/item-verbs.md): Item verbs: inventory, stash and equipment actions through d2d's own item handlers (TASK-367) (status: DESIGN plus the built verbs (equip, unequip, move, identify, drop, gold, `caps`), 2026-11-12; stage 2 and...)
+- [loot-vault-2026-11-16.md](design/loot-vault-2026-11-16.md): Ethereal Vault: a database of every drop, created in the game only on Keep (design and feasibility) (status: DESIGN, 2026-11-16. Nothing here was built or run; the fork was read, not changed. "Ethereal Vault" is the...)
+- [quest-board-2026-11-16.md](design/quest-board-2026-11-16.md): Quest board: quests as events the player takes part in (status: design proposal (2026-11-16, card questdesign, TASK-575), not built; waits for the user's answers (section...)
 - [desktop-app.md](desktop-app.md): Desktop app: d2idle-watch (status: the Go launcher is the FALLBACK; the main desktop app is now `apps/desktop-electron`...)
 - [desktop-electron.md](desktop-electron.md): Desktop app on Electron: d2idle-watch (status: built, not yet run on real desktops (TASK-289 skeleton, TASK-290 tray, autostart, hide-to-tray, update...)
 - [dev-reset.md](dev-reset.md): Reset the play sandbox to a fresh hero (status: CURRENT. Task: TASK-263 (devreset). Dev tooling for a DEV container such as `d2play-20261108`...)
@@ -314,9 +333,12 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [watch-ui.md](digest/watch-ui.md): Digest: watch, viewer and player UI (status: current (TASK-310 digest; the area doc is the authority).)
 - [drillsfix.md](drillsfix.md): drillsfix: stash (DS) and tome (TM) drill repairs
 - [earlygame.md](earlygame.md): Early game: a fresh character, clvl 1 to 12 (agent EARLYGAME, 2026-10-30)
+- [emu-image.md](emu-image.md): The game.exe emulator image (status: current (2026-11-14, TASK-406). Rebuilt after the worker-host cleanup of 2026-11-13 removed the volatile...)
+- [ether.md](ether.md): ETHER: the account meta wallet of the Ethereal Vault (status: built offline 2026-11-17 (agents vaultv7 and vaultv7b, slices V7 and V7b of...)
 - [exploredpct.md](exploredpct.md): Explored share: when a zone counts as explored (bot.exploredPct) (status: CURRENT. Tags: V = read from the code in this worktree and covered by a unit test, U = not run in a live game.)
 - [farm.md](farm.md): Farm runs (FARMRUNS, 2026-10-29)
 - [farmfallback.md](farmfallback.md): farmfallback: the gold farm as data, with a fallback
+- [farmloop.md](farmloop.md): The farm loop: reset a mostly cleared leveling zone with a fresh game (status: current (2026-11-15, agent farmloop). Shipped OFF (`bot.farmReset` 0): the simulation shows a small gain...)
 - [first-hour.md](first-hour.md): First hour: the daily table tool
 - [first-session.md](first-session.md): First play session guide (TASK-134) (status: written 2026-11-08 from docs on main only. Nothing here was run for this guide. Tags: V verified live (as...)
 - [fixbank.md](fixbank.md): FIXBANK: gold deposit and repair gold (card fix-bank) (status: current. Findings of the D3 drills (docs/probes/drills/2026-10-31-d3.txt); live proof is a drill rerun.)
@@ -369,6 +391,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [friend-assets.md](friend-assets.md): Friend pack: inventory of non-original assets (status: current 2026-11-11 (TASK-348). Rule (user, 2026-11-11): prefer replacing a third-party or unverifiable...)
 - [friend-checklist-0.1.0.md](friend-checklist-0.1.0.md): Friend pack checklist, version 0.1.0 (status: generated by tools/friendpack/checklist.sh (docs/research/legal-note.md section 4). Keep one per release....)
 - [friend-checklist-0.1.1.md](friend-checklist-0.1.1.md): Friend pack checklist, version 0.1.1 (status: generated by tools/friendpack/checklist.sh (docs/research/legal-note.md section 4). Keep one per release....)
+- [friend-checklist-0.1.2.md](friend-checklist-0.1.2.md): Friend pack checklist, version 0.1.2 (status: generated by tools/friendpack/checklist.sh (docs/research/legal-note.md section 4). Keep one per release....)
+- [friend-checklist-0.1.3.md](friend-checklist-0.1.3.md): Friend pack checklist, version 0.1.3 (status: generated by tools/friendpack/checklist.sh (docs/research/legal-note.md section 4). Keep one per release....)
 - [friend-drills.md](friend-drills.md): Friend pack pre-release drills (D1 to D6) (status: RUN 2026-11-11 (D1 to D6 with fake game files; second run the same day with the real game folder: D3 and...)
 - [friend-feed.md](friend-feed.md): Friend feed: D2BOT_UPDATE_FEED (status: BUILT offline (TASK-272, 2026-11-10); never run against a real feed. Design: docs/research/friend-build.md...)
 - [friend-guide.md](friend-guide.md): d.idle friends pack: install guide (Linux) (status: BUILT offline (TASK-274, 2026-11-10); the install script was run once on the worker host in a scratch...)
@@ -395,16 +419,21 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [lab-verbs.md](lab-verbs.md): Lab verbs: the `--lab-verbs` gate of the private d2d fork (status: current (TASK-42, 2026-11-06). Tags: V = read in the fork commit or run on the worker host, U = unverified.)
 - [leakhunt.md](leakhunt.md): fd growth hunt (agent LEAKHUNT, VERIFIED LIVE on the worker host i3, 2026-10-28)
 - [leveler.md](leveler.md): leveler: points, gear and the leveling loop (agent LEVELER)
-- [levelplan.md](levelplan.md): levelplan: SME-backed leveling changes (2026-11-12)
+- [levelplan.md](levelplan.md): levelplan: SME-backed leveling changes (2026-11-12) (status: band table superseded by levelplan3.md (level plan v3, TASK-414) for the Paladin; items 1 to 5 stand.)
+- [levelplan3.md](levelplan3.md): Level plan v3: where the hero farms between quests (TASK-414) (status: current (2026-11-14, agent levelplan3). Data `internal/plandata/levelplan-normal.json` (copy in...)
+- [levelsim.md](levelsim.md): levelsim: a simulator for Act 1 Normal leveling strategies (status: current (2026-11-14, TASK-413, agent levelsim). Offline: no game, no d2d slot, nothing posted. Code:...)
 - [lifecycle.md](lifecycle.md): Game lifecycle in Go (agent LIFECYCLE)
 - [lifelog.md](lifelog.md): Life log fields
 - [live-checks.md](live-checks.md): Live checks still open
 - [locks.md](locks.md): Lock order and rules (status: current (lock audit, 2026-11-12, after the sandbox freeze of 2026-11-12: nav.roam called done() under...)
 - [logfields.md](logfields.md): Log fields for the per-skill soak report (change logfields)
+- [loop-order.md](loop-order.md): The Loop order and its unlock (status: built offline (task uib7), not verified live. Design: `docs/ui/redesign-2026-11-14/C-orders.md` section 8....)
 - [loot-charms.md](loot-charms.md): Charms, runes and gems on a sell visit (status: current (card m1-loot, agent m1loot, 2026-10-31). Rule source: user decision D4 and the d2-sme; shared...)
 - [lootmemory.md](lootmemory.md): Loot memory (status: current (TASK-320). Code: `internal/loot/memory.go`; hooks in `internal/bot/observe.go` and `goal.go`...)
+- [lootrules.md](lootrules.md): Loot rules: one engine for every item decision (TASK-421) (status: design plus the PROTOTYPE (`internal/lootrules/`) WIRED IN SHADOW since wave 1 (cards lootwire-L2 to L4,...)
 - [lootskip.md](lootskip.md): LOOTSKIP: why ground potions were left (card lootskip) (status: current. Source: container log of the sandbox soak (Paladin clvl 10 to 14, build 0.0.261110171517),...)
 - [merc-farm.md](merc-farm.md): Mercenaries and post-campaign farming (research, MERCRESEARCH, 2026-10-29) (status: ARCHIVED 2026-10-31 (doctrim): superseded by docs/merc.md, docs/merc-wire.md, docs/sme/mercenary.md and...)
+- [merc-revive.md](merc-revive.md): Revive mercenary as a player command (card botmerc, API watch.merc/1) (status: built offline, NOT verified live (2026-11-14). Design: `docs/ui/redesign-2026-11-14/C-orders.md`...)
 - [merc-wire.md](merc-wire.md): Merc wiring (agent MERCWIRE)
 - [merc.md](merc.md): Mercenary policy (internal/merc)
 - [merchire.md](merchire.md): merchire: drill D8.h, paid hire at the hirer (status: current. Tags: V verified, S secondary, U unverified. Offline only: nothing here ran on the game (not...)
@@ -436,6 +465,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [palsme.md](palsme.md): PALSME: SME review of the Paladin tables
 - [paperdoll-art-build.md](paperdoll-art-build.md): Paper doll game art: what is built (status: in progress (TASK-244). Plan and licence reasoning: research/paperdoll-art.md. Tags: V verified (command...)
 - [passagebounce.md](passagebounce.md): Arrival bounce: Underground Passage, Crypt and every cave (TASK passagebounce)
+- [pause.md](pause.md): Pause and resume as player commands (status: current (uib1 2026-11-14; frozen Pause added by card pause, 2026-11-15). Not verified live.)
 - [policy-preview.md](policy-preview.md): Policy preview (card policydryrun, TASK-205) (status: built and tested offline on fixtures; NOT run against a live bot or in a browser. Source:...)
 - [policy-sheet.md](policy-sheet.md): The chores policy sheet (TASK-128) (status: built and tested offline on fixtures; NOT run against a live bot or in a browser. Design:...)
 - [potions.md](potions.md): Potions: how the bot drinks (card potiondrink, TASK-328)
@@ -461,6 +491,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [quest-givers.md](quest-givers.md): Quest givers in town (TASK-243) (status: decision logic, table and fixtures built and tested offline; the live part is U (checklist below). Tags:...)
 - [quest-hints.md](quest-hints.md): Quest hints in town (TASK-197) (status: built and tested offline (fixtures, no game). Tags: V verified by the tests named, SRC read in the repo,...)
 - [quest.md](quest.md): Quest layer: internal/quest (agent QUESTS, offline)
+- [questboard.md](questboard.md): Quest board model (slice S1), executor (S3), API (S4) and chunked quests (S7) (status: S9 DONE offline 2026-11-17 (card retirej, TASK-629): the Journey is retired and `quests.board` defaults to...)
 - [questmem.md](questmem.md): In-memory quest and waypoint data (agent MEMQUEST, V-05)
 - [readiness.md](readiness.md): Readiness model: is this hero ready for that area (status: slice A of the friends beta (cards TASK-217 area table, TASK-218 model, TASK-220 meter feed in part)....)
 - [recovery.md](recovery.md): Recovery phase (broke character)
@@ -469,7 +500,12 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [0.1.0.md](releases/0.1.0.md): d.idle friends release 0.1.0 (status: RE-CUT 2026-11-12 (TASK-359, agent/cut010b) from main 0f049a66 with the lock-ordering fix (TASK-358); the...)
 - [0.1.1.md](releases/0.1.1.md): d.idle friends release 0.1.1 (status: BUILT AND VERIFIED on the worker host 2026-11-12 (card cut011, TASK-393), staged, NOT published, NOT sent....)
+- [0.1.2-drills.md](releases/0.1.2-drills.md): friends 0.1.2 pre-release drills (2026-11-14) (status: RUN, all four drills PASS. Tags: V = run and seen, S = read in source, U = not run. Run on the worker host...)
+- [0.1.2.md](releases/0.1.2.md): d.idle friends release 0.1.2 (status: BUILT AND STAGED 2026-11-14, NOT PUBLISHED, and the live drills have NOT run (they need docker with real...)
+- [0.1.3-drills.md](releases/0.1.3-drills.md): friends 0.1.3 pre-release drills (2026-11-15) (status: RUN, all drills PASS. Tags: V = run and seen, U = not run. Run on the worker host in its own docker...)
+- [0.1.3.md](releases/0.1.3.md): d.idle friends release 0.1.3 (status: BUILT, DRILLED AND STAGED 2026-11-15 (card cut013), NOT PUBLISHED. It supersedes 0.1.2, which was built...)
 - [repair.md](repair.md): Manual repair (TASK-226, repairmanual) and the repair trip (TASK-303, repairtrip) (status: since 2026-11-11 "Repair now" is a TRIP, not a wait for the next town visit (user decision, section "The...)
+- [reset.md](reset.md): Reset: leave the game and rejoin (status: current (botreset + resetinstant, 2026-11-15). Offline tested only; not verified live (checklist at the end).)
 - [resource.md](resource.md): Resource policy: internal/resource (agent RESOURCE)
 - [restloop.md](restloop.md): restloop (archived)
 - [retreatdrill.md](retreatdrill.md): retreatdrill: the P29 retreat action executed live (designed, offline-tested, not run)
@@ -477,6 +513,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [retreatlive.md](retreatlive.md): retreatlive: RT.drink and RT.portal run live on d2d (2026-11-04)
 - [retreatlive2.md](retreatlive2.md): retreatlive2: RT.drink and RT.portal rerun after retreatfix (2026-11-04)
 - [return-screen.md](return-screen.md): The return screen (TASK-127) (status: first slice, built and tested on fixtures and now WIRED into the bot (TASK-140,...)
+
+`reviews/`
+
+- [support-bundle-security-2026-11-15.md](reviews/support-bundle-security-2026-11-15.md): Security review: support bundle upload (branch agent/support, tip 88eecae7b) (status: review of task 542 / card `support` before merge (mergeq #811). Reviewer: Opus, single, offline. Nothing...)
 - [roamleg.md](roamleg.md): ROAMLEG: a mouth-gate hold is not a failed roam target (status: offline fix, tests pass, verified live in DRILLS23 (docs/probes/drills/README.md): 0 failed legs (was 50),...)
 - [roamspacing.md](roamspacing.md): Roam coverage spacing (TASK-301) (status: CURRENT. Tags: V = measured (log read-only, or the simulator run in this worktree on the worker host), S =...)
 - [running.md](running.md): How to run d.idle (status: current as of 2026-11-01 (card readmedocs; Teleport and `--build` note added by card capdocs). Every...)
@@ -484,6 +524,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [self-update-client.md](self-update-client.md): Self-update client (Tier 2, part 2) (status: CURRENT for the code; nothing here has run against real GitHub or in a real container. Design:...)
 - [self-update-drill.md](self-update-drill.md): Self-update boot shim and drills (Tier 2, part 3) (status: CURRENT for the code; the container drills below are a CHECKLIST that has NOT been run (no image was...)
 - [self-update-release.md](self-update-release.md): Self-update release format and signing (Tier 2, part 1) (status: CURRENT for the format and tools; the workflow `.github/workflows/app-release.yml` is a DRAFT and inert...)
+- [sellskip.md](sellskip.md): sellskip: the sell chore that never ran, the Blood Moor recovery, the revive gold (status: current (TASK-399). Source: the hero14 analysis (docs/probes/hero14-analysis-2026-11-14.md, branch...)
 - [senses-map.md](senses-map.md): Side-panel minimap v1 (TASK-148, sensesmap)
 - [senses-units.md](senses-units.md): Senses tiers 2 and 3: enemy dots, target bar and name (TASK-151, sensesenemies)
 - [senses-unlock.md](senses-unlock.md): Senses unlock ladder (TASK-149, sensesunlock)
@@ -498,8 +539,28 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [smoke.md](smoke.md): Smoke: a one-line verdict per bot change (TASK-111) (status: built and unit-tested offline (U live: never run on the game yet). It is the regression floor while Gate 2...)
 - [sorceress-early.md](sorceress-early.md): Sorceress early game (clvl 1 to 12) and friends readiness (TASK-267, sorcready, 2026-11-10) (status: sections 1 to 6 are the sorcready findings (superseded where section 7 says so). Section 7 records the...)
 - [sorcnormal30.md](sorcnormal30.md): Sorceress normal30 table (TASK-144, card sorcnormal30) (status: since TASK-267 (sorcready2) the table is no longer v3-identical: Warmth at clvl 2, a cold line from clvl...)
+- [staletarget.md](staletarget.md): Stale target area, border-loop bans and blocked journey steps (TASK-398) (status: fix landed on branch agent/staletarget (not deployed; no live run). Tags: V verified (how is said), S...)
 - [stance.md](stance.md): Fight stance (cards stancefix, stancelever) (status: built and tested offline; NOT run in a live game. Tags: V = proven by a test in this tree or by a log...)
 - [summon.md](summon.md): Necromancer upkeep (internal/combat/necro.go)
+- [support-bundle.md](support-bundle.md): Support bundle: the "Send support bundle" button (status: new (card `support`, task 542). Code: `internal/support` (build, redact, scan, send),...)
+
+`survival/`
+
+- [survival/README.md](survival/README.md): Survival: review and design (2026-11-14) (status: proposal, docs only (TASK-430). Nothing is implemented. Read this page; the detail is in...)
+- [ab-harness.md](survival/ab-harness.md): Survival A/B harness, S-D readiness audit and drill R3 plan (card survab, 2026-11-16) (status: current (TASK-550). Offline: nothing here ran against a live game; the report tool ran on synthetic logs...)
+- [ab-screen-analysis-2026-11-16.md](survival/ab-screen-analysis-2026-11-16.md): A/B screen analysis and fixes (card survfix), 2026-11-16 (status: current. Reads the screen (TASK-554) and its worker-host logs (`survab/ab-pal`, `survab/ab`, seeds 101 and...)
+- [calibration-2026-11-14.md](survival/calibration-2026-11-14.md): Survival calibration from the sandbox replay (card survcal, 2026-11-14) (status: current (TASK-460). Acts on the findings of docs/survival/replay-2026-11-14.md. Tags: V verified (how), S...)
+- [danger.md](survival/danger.md): Danger profile (survival slice S-A) (status: current (card survA). Implements design-2026-11-14.md section 3. Read-only, no behaviour change. Tags: V...)
+- [decisions-2026-11-14.md](survival/decisions-2026-11-14.md): Survival: user answers to the open questions (2026-11-14) (status: current. Records the user's answers to docs/survival/design-2026-11-14.md section 12, given 2026-11-14 in...)
+- [design-2026-11-14.md](survival/design-2026-11-14.md): Survival design: character power against zone danger (2026-11-14) (status: design proposal, docs only (TASK-430, agent survivaldesign). Nothing here is implemented or decided. It...)
+- [herostats-2026-11-15.md](survival/herostats-2026-11-15.md): Hero stats in the d2d dump (card herostats, TASK-493) (status: current. Fork branch `sandbox-herostats` (private fork, tip `02ceea54`, pushed to the private forge, not...)
+- [ledger.md](survival/ledger.md): Per-zone ledger and the shadow controller (survival slice S-C) (status: current (card survC). Implements design-2026-11-14.md sections 5.3 to 5.6, 8 and 10 for slice S-C: log and...)
+- [power.md](survival/power.md): Power estimate and margin, shadow (survival slice S-B) (status: current (card survB, TASK-449; skill damage wired by card powerwire, TASK-508, section "Skill damage...)
+- [review-2026-11-14.md](survival/review-2026-11-14.md): Survival and zone-choice review: every mechanism, and why we keep going in circles (2026-11-14) (status: review, docs only (TASK-430, agent survivaldesign). No code, no game, no sandbox change. The design that...)
+- [units-fit-2026-11-15.md](survival/units-fit-2026-11-15.md): Units per clear: the danger generator against game.exe's room population (Acts 1 and 2, Normal) (status: current (2026-11-15, card decomp28). Tags: V run (game.exe's room population and room list under the...)
+- [wiring-2026-11-15.md](survival/wiring-2026-11-15.md): Survival shadow lines missing in the sandbox (diagnosis 2026-11-15)
+- [zonemodel.md](survival/zonemodel.md): Survival slice S-D: bot.zoneModel (card survsd, 2026-11-16) (status: current (TASK-552). Offline: nothing here ran against a live game. Tags: V verified (how), S secondary (a...)
+- [swingmodel.md](swingmodel.md): Swing model of the resource simulator (TASK-404)
 - [t0-slice.md](t0-slice.md): T0 slice (TASK-21, phase A3: offline) (status: phase A3 is code and tests only (A3 wires the four T0 fight-time points on top of the five T1 points of...)
 - [tally-strip.md](tally-strip.md): Tally strip: credits from events, the strip, the charter sink (status: built offline 2026-11-07 and wired into the bot by TASK-140 (see Wiring), TASK-129 (fun loop, ADR 0018,...)
 - [task.md](task.md): Task layer (internal/task) and how the bot wires it (agent TASKLAYER)
@@ -516,9 +577,78 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [tomestat.md](tomestat.md): Tome stat 70 lost in the field (tomestat) (status: current. Tags: V = counted in the Gate 2 log or read in code, S = inference from code, U = unverified live.)
 - [town.md](town.md): Town and loot: internal/town, internal/loot (agent TOWN)
 - [townshop.md](townshop.md): Town resupply in Gate 2 (townshop) (status: current. Tags: V = counted in the Gate 2 bot log (read-only), S = code, U = unverified.)
+- [towntests.md](towntests.md): Table-dependent tests that rotted (TASK-401)
 - [townwedge.md](townwedge.md): townwedge: the permanent town-exit wedge (status: fix merged with card townwedge. Tags: VERIFIED = log line or test, INFERRED = reading. Evidence:...)
 - [ui-design-system.md](ui-design-system.md): d.idle watch UI design system (TASK-228, uidesign) (status: accepted design (user decisions 2026-11-09 in section 13), being implemented in small PRs (section 15)....)
+- [ui-overlays.md](ui-overlays.md): Watch UI overlays: one at a time, one layer scale
 - [ui-regression-plan.md](ui-regression-plan.md): Watch UI regression tests and migration plan (TASK-228, uidesign) (status: proposal (2026-11-09); built so far: see ui-design-system.md section 15 (row 14 `uilayout` is section...)
+
+`ui/`
+
+- [friend-feedback-2026-11-15.md](ui/friend-feedback-2026-11-15.md): Friend feedback, release 0.1.3 (2026-11-15): what each remark became (status: current. UI and docs only; the bot's behaviour is unchanged. Tags: V verified (named test or picture), S...)
+
+`ui/redesign-2026-11-14/`
+
+- [A-audit.md](ui/redesign-2026-11-14/A-audit.md): A. Audit: what /watch shows and how the player commands the bot today (status: design input (TASK-416, 2026-11-14). Read from the code on `origin/main` at 883770a9 and from pictures of...)
+- [B-principles-ia.md](ui/redesign-2026-11-14/B-principles-ia.md): B. Principles and information architecture (status: the rules stand; the default view of section 2 is now laid out as the cockpit of J-second-attempt.md....)
+- [C-orders.md](ui/redesign-2026-11-14/C-orders.md): C. Orders: one control surface (status: design accepted by the user's answers of 2026-11-14 (H-open-questions.md), not built. Section 8...)
+- [D-layouts.md](ui/redesign-2026-11-14/D-layouts.md): D. Layout presets, migration and rollout (status: sections 2 and 4 are SUPERSEDED by J-second-attempt.md (2026-11-14): the default view is the cockpit, a...)
+- [E-visual-system.md](ui/redesign-2026-11-14/E-visual-system.md): E. Visual system (status: design proposal (TASK-416, 2026-11-14). The identity stays: near-black warm stone, gold accent, serif...)
+- [G-build-plan.md](ui/redesign-2026-11-14/G-build-plan.md): G. Build plan (status: revised 2026-11-14 for the second attempt: wave 2 is on hold until the user accepts it; the table under...)
+- [H-open-questions.md](ui/redesign-2026-11-14/H-open-questions.md): H. Open questions for the user (status: ANSWERED by the user on 2026-11-14 (all twelve). The Answer column is the decision; where it differs from...)
+- [I-character-screen.md](ui/redesign-2026-11-14/I-character-screen.md): I. The character screen: hero, mercenary, pack, belt, stash on one canvas (status: section 3 (the canvas) and the tooltip and action placement of section 4 are SUPERSEDED by...)
+- [J-second-attempt.md](ui/redesign-2026-11-14/J-second-attempt.md): J. Second attempt: the cockpit and the character canvas (status: design proposal, second attempt (2026-11-14, branch `agent/uidesign3`), not built; waits for the user's...)
+- [redesign-2026-11-14/README.md](ui/redesign-2026-11-14/README.md): Watch UI redesign, design phase (2026-11-14) (status: ACCEPTED by the user on 2026-11-14 (twelve answers, H-open-questions.md) and extended the same day with...)
+
+`ui/redesign-2026-11-14/briefs/`
+
+- [B1-pause.md](ui/redesign-2026-11-14/briefs/B1-pause.md): Brief B1: Pause and resume as player commands (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
+- [B2-sell-now.md](ui/redesign-2026-11-14/briefs/B2-sell-now.md): Brief B2: Sell now as a player command (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
+- [B3-revive-merc.md](ui/redesign-2026-11-14/briefs/B3-revive-merc.md): Brief B3: Revive mercenary as a player command (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
+- [B4-until-level.md](ui/redesign-2026-11-14/briefs/B4-until-level.md): Brief B4: Until-level for zone orders (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
+- [B5-merc-supplies-source.md](ui/redesign-2026-11-14/briefs/B5-merc-supplies-source.md): Brief B5: Mercenary and supplies for the Health lights (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
+- [B6-journey-blocked.md](ui/redesign-2026-11-14/briefs/B6-journey-blocked.md): Brief B6: Journey blocked on the watch side (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
+- [B7-loop-controller.md](ui/redesign-2026-11-14/briefs/B7-loop-controller.md): Brief B7: The Loop order and its unlock (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
+- [B8-instant-actions.md](ui/redesign-2026-11-14/briefs/B8-instant-actions.md): Brief B8: Instant item actions: the fast lane (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
+- [B9-merc-item-verbs.md](ui/redesign-2026-11-14/briefs/B9-merc-item-verbs.md): Brief B9: Mercenary item verbs in the fork, and their bot wiring (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
+- [C1-usable-requirements.md](ui/redesign-2026-11-14/briefs/C1-usable-requirements.md): Brief C1: Item requirements and usability in the inventory view (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
+- [C2-character-canvas.md](ui/redesign-2026-11-14/briefs/C2-character-canvas.md): Brief C2: The character canvas (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [C3-gestures-instant-ui.md](ui/redesign-2026-11-14/briefs/C3-gestures-instant-ui.md): Moved (status: superseded 2026-11-14 by the second attempt. The current brief is C3-tooltip-menu-gestures.md.)
+- [C3-tooltip-menu-gestures.md](ui/redesign-2026-11-14/briefs/C3-tooltip-menu-gestures.md): Brief C3: The tooltip, the context menu, gestures and instant feedback (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [L1-loot-rules-ui.md](ui/redesign-2026-11-14/briefs/L1-loot-rules-ui.md): Brief L1: The loot rules tab (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
+- [briefs/README.md](ui/redesign-2026-11-14/briefs/README.md): Worker briefs for the watch UI redesign (status: revised 2026-11-14 for the second attempt (wave 2 on hold until the user accepts it); first written after...)
+- [S1-foundations.md](ui/redesign-2026-11-14/briefs/S1-foundations.md): Brief S1: Shell foundations and the default flip (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
+- [S1b-cockpit-template.md](ui/redesign-2026-11-14/briefs/S1b-cockpit-template.md): Brief S1b: The cockpit template in the shell, and the fit check (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S2-glance-statusline.md](ui/redesign-2026-11-14/briefs/S2-glance-statusline.md): Brief S2: The glance endpoint and the band (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S3-needs-health-progress.md](ui/redesign-2026-11-14/briefs/S3-needs-health-progress.md): Moved (status: superseded 2026-11-14 by the second attempt. The current brief is S3-strip-and-needs.md.)
+- [S3-strip-and-needs.md](ui/redesign-2026-11-14/briefs/S3-strip-and-needs.md): Brief S3: Needs you and the strip: Progress, Journey, Health (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S4-orders-readonly.md](ui/redesign-2026-11-14/briefs/S4-orders-readonly.md): Brief S4: Orders, read-only, as a slot panel (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S5-orders-write-zonemap.md](ui/redesign-2026-11-14/briefs/S5-orders-write-zonemap.md): Brief S5: Orders write path and the act map as a slot panel (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S6-areamap-drawers-phone.md](ui/redesign-2026-11-14/briefs/S6-areamap-drawers-phone.md): Brief S6: The area map, the drawers, and the phone arrangement (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S6-log-map-phone.md](ui/redesign-2026-11-14/briefs/S6-log-map-phone.md): Moved (status: superseded 2026-11-14 by the second attempt. The current brief is S6-areamap-drawers-phone.md.)
+- [S7-default-polish-a11y.md](ui/redesign-2026-11-14/briefs/S7-default-polish-a11y.md): Brief S7: The cockpit becomes the default; polish and access (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S7-polish-a11y.md](ui/redesign-2026-11-14/briefs/S7-polish-a11y.md): Moved (status: superseded 2026-11-14 by the second attempt. The current brief is S7-default-polish-a11y.md.)
+- [S8-retire-old-tiles.md](ui/redesign-2026-11-14/briefs/S8-retire-old-tiles.md): Brief S8: Retire the old tiles (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
+
+`ui/redesign-2026-11-14/`
+
+- [loot-rules-ux.md](ui/redesign-2026-11-14/loot-rules-ux.md): Loot rules: the player-facing UX and what it needs from the engine (status: UX proposal (TASK-419, 2026-11-14), not built. The ENGINE (rule language, evaluation, merging...)
+
+`ui/redesign-2026-11-14/research/`
+
+- [research/README.md](ui/redesign-2026-11-14/research/README.md): Research and iteration log for the second attempt (status: working record (2026-11-14, branch `agent/uidesign3`). The design it led to is ../J-second-attempt.md....)
+- [references.md](ui/redesign-2026-11-14/research/references.md): UI references for the watch screen and the character screen (status: research input dated 2026-11-14, not a design. Gathered from the web in one session: reference screenshots...)
+
+`ui/redesign-2026-11-14/reviews/`
+
+- [c2c3-review.md](ui/redesign-2026-11-14/reviews/c2c3-review.md): Review of the merged character screen: C2 (canvas) and C3 (tooltip, menu, gestures, feedback) (status: review of `origin/main` at `4996d53af` (cards TASK-456 uic2 and TASK-463 uic3, both merged), 2026-11-15....)
+- [cockpit-review.md](ui/redesign-2026-11-14/reviews/cockpit-review.md): Review of the merged watch cockpit (S1b to S6, B1, B4 to B6), before S7 makes it the default (status: review, 2026-11-15, of `origin/main` at `0caf89220` (`?layout=cockpit`). Reviewer: the design reviewer of...)
+- [s1b-review.md](ui/redesign-2026-11-14/reviews/s1b-review.md): Review of slice S1b: the cockpit template in the shell, and the fit check (status: review of branch `agent/uis1b` at `d9389fc56` (card TASK-438) against `origin/main` at `f050a6fab`,...)
+- [s7-review.md](ui/redesign-2026-11-14/reviews/s7-review.md): Review of S7 (the cockpit becomes the default), before it merges (status: review of branch `agent/uis7` at `be9ac3373` (2026-11-15), done before the merge. Nothing here was checked...)
+
+`ui/redesign-2026-11-14/`
+
+- [stash-anywhere.md](ui/redesign-2026-11-14/stash-anywhere.md): Stash from anywhere (backlog idea, not built) (status: backlog idea, user decision 2026-11-14. Default stays: stash and take need the hero at the chest (the...)
 - [unlock-alerts.md](unlock-alerts.md): Alerts and pings (TASK-162, unlockalerts)
 - [unlock-atlas.md](unlock-atlas.md): Waypoint atlas (TASK-160, unlockatlas)
 - [unlock-bestiary.md](unlock-bestiary.md): Cain's notes, the bestiary (TASK-158, unlockbestiary)
@@ -533,23 +663,98 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `upstream/bodies/`
 
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
+- [death-corpse-exp-body.md](upstream/bodies/death-corpse-exp-body.md): death-corpse-exp-body
+- [gamble-price-body.md](upstream/bodies/gamble-price-body.md): the d2d side needs D2_MPQ_DIR (as test_game); gamble_price.py game needs the emulator's game image and a...
+- [gear-absorb-body.md](upstream/bodies/gear-absorb-body.md): gear-absorb-body
+- [hitrec-interrupt-body.md](upstream/bodies/hitrec-interrupt-body.md): hitrec-interrupt-body
+- [hitrec-knock-in-hit-body.md](upstream/bodies/hitrec-knock-in-hit-body.md): hitrec-knock-in-hit-body
+- [hitrec-modes-body.md](upstream/bodies/hitrec-modes-body.md): hitrec-modes-body
+- [hitrec-norestart-body.md](upstream/bodies/hitrec-norestart-body.md): hitrec-norestart-body
+- [knock-in-gethit-body.md](upstream/bodies/knock-in-gethit-body.md): knock-in-gethit-body
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
+- [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
+- [mana-burn-amount-body.md](upstream/bodies/mana-burn-amount-body.md): mana-burn-amount-body
+- [missile-block-body.md](upstream/bodies/missile-block-body.md): missile-block-body
+- [seq-ias-body.md](upstream/bodies/seq-ias-body.md): seq-ias-body
+- [seq-ias-followup-body.md](upstream/bodies/seq-ias-followup-body.md): test: seq-rate fails when D2_PATCH_INSTALLER names a file that is not there
+- [smite-range-body.md](upstream/bodies/smite-range-body.md): smite-range-body
+- [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
+- [tele-refund-body.md](upstream/bodies/tele-refund-body.md): tele-refund-body
+- [umod-multishot-body.md](upstream/bodies/umod-multishot-body.md): the d2d side needs D2_MPQ_DIR (as test_game); umod_can_take.py game needs the emulator's game image and a...
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
+- [warp-walk-plan-body.md](upstream/bodies/warp-walk-plan-body.md): warp-walk-plan-body
+
+`upstream/briefs/`
+
+- [hitrec-interrupt.md](upstream/briefs/hitrec-interrupt.md): Brief: P04 a hit interrupts an interruptible swing (WAVE 2, blocked on drill R1)
+- [hitrec-modes.md](upstream/briefs/hitrec-modes.md): Brief: P03 hit-recovery modes (fid/hitrec-modes-r1, stacked on fid/swing-start-r2)
+- [hitrec-norestart-oracle.md](upstream/briefs/hitrec-norestart-oracle.md): Brief: P03b "a hit never restarts a get-hit" needs a game-side oracle (BLOCKED, for the worker-host operator) (status: written 2026-11-14 (card prfix2). Nothing here was run: it needs the emulator image on the worker host...)
+- [load-gold-clamp.md](upstream/briefs/load-gold-clamp.md): Brief: P05 saved gold over its cap is 0 on entering a game (fid/load-gold-clamp-r2)
+- [missile-block-gate.md](upstream/briefs/missile-block-gate.md): Brief: P06 a monster missile is blocked only when it has physical damage (fid/missile-block-gate-r1)
+- [verify-hitrec-interrupt.md](upstream/briefs/verify-hitrec-interrupt.md): Verifier brief: fid/hitrec-interrupt-r1 (P04), for the independent reviewer (Opus, singly)
+- [verify-knock-gethit.md](upstream/briefs/verify-knock-gethit.md): Verifier brief: fid/knock-in-gethit-r1 (P03c), for the independent reviewer (Opus, singly)
+- [verify-melee-block.md](upstream/briefs/verify-melee-block.md): Verifier brief: fid/melee-block-r1 (P07, a negative result), for the independent reviewer (Opus, singly)
+- [verify-missile-block.md](upstream/briefs/verify-missile-block.md): Verifier brief: fid/missile-block-r3 (P06), for the independent reviewer (Opus, singly)
+- [verify-seq-ias.md](upstream/briefs/verify-seq-ias.md): Verifier brief: fid/seq-ias-r1 (P17), for the independent reviewer (Opus, singly)
+- [verify-smite-range.md](upstream/briefs/verify-smite-range.md): Verifier brief: fid/smite-r1 (P18), for the independent reviewer (Opus, singly)
+- [verify-warp-walk-r2.md](upstream/briefs/verify-warp-walk-r2.md): Verifier brief: fid/warp-walk-r2 (P02), for the independent reviewer (Opus, singly)
+- [verify2-hitrec-interrupt.md](upstream/briefs/verify2-hitrec-interrupt.md): Verifier brief, second pass: fid/hitrec-interrupt-r3 (P04), for the independent reviewer (Opus, singly)
+- [warp-walk.md](upstream/briefs/warp-walk.md): Brief: P02 warp walk-stall (fid/warp-walk-r1)
 
 `upstream/drafts/`
 
 - [cold-enchanted-length.md](upstream/drafts/cold-enchanted-length.md): Draft (local, NOT posted): "Cold Enchanted chills for its level x 5 + 100 frames (FUN_005a1c70)" (status: r4, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/cold-enchanted-length-r4` on...)
+- [hitrec-interrupt.md](upstream/drafts/hitrec-interrupt.md): Draft (local, NOT posted): "A hit interrupts a swing or cast whose skill allows it" (P04) (status: 2026-11-15 (card prfix7, TASK-509). Fork branch `fid/hitrec-interrupt-r3` (private fork remote only), two...)
+- [hitrec-knock-in-hit.md](upstream/drafts/hitrec-knock-in-hit.md): Draft (local, NOT posted): "A knocking hit does not start a knockback in a get-hit" (P03c) (status: 2026-11-15 (card decomp27, supersedes the decomp26 candidate note). Fork branch `fid/knock-in-gethit-r1`...)
+- [hitrec-modes.md](upstream/drafts/hitrec-modes.md): Draft (local, NOT posted): "A player's block holds game.exe's length" (status: r2, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
+- [hitrec-norestart.md](upstream/drafts/hitrec-norestart.md): Draft (local, NOT posted): "A hit never restarts a get-hit" (r3) (status: r3 2026-11-15 (card prfix3). Superseded by the PR body bodies/hitrec-norestart-body.md; this page is the...)
 - [lightning-last-unit.md](upstream/drafts/lightning-last-unit.md): Draft (local, NOT posted): "Lightning hits one unit a frame and skips the last (FUN_005ae1f0)" (status: r3, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/missile-last-unit-r3` on the...)
+- [load-gold-clamp.md](upstream/drafts/load-gold-clamp.md): Draft (local, NOT posted): "game: a saved purse or stash over its cap is 0 on entering a game" (status: r3, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
+- [merc-aura-issue.md](upstream/drafts/merc-aura-issue.md): Issue draft (local, NOT posted): the merc's own life regeneration (stat 0x4a); friendly auras on the merc... (status: draft 2026-11-15 (card decomp26, P10). Nothing posted. Source: `docs/research/merc2-trace.md` D1 to D3,...)
+- [missile-block.md](upstream/drafts/missile-block.md): Draft (local, NOT posted): "A monster missile with no physical damage cannot be blocked" (P06) (status: 2026-11-15 (card prfix6, supersedes the r3 text of decomp26). Fork branch `fid/missile-block-r4` (private...)
+- [revive-mode-issue.md](upstream/drafts/revive-mode-issue.md): Issue draft (local, NOT posted): a raised monster plays its ResurrectMode, d2d puts it in NU (status: draft 2026-11-15 (card decomp26, P09). Nothing posted, no fork branch. Source:...)
+- [swing-start.md](upstream/drafts/swing-start.md): Draft (local, NOT posted): "A player's swing starts at its weapon's start frame and strikes on game.exe's... (status: r3, **verified PASS after wording fixes (second pass, TASK-418:...)
 - [warp-arrival.md](upstream/drafts/warp-arrival.md): Draft (local, NOT posted): "A warp lands on the free subtile nearest its unit, as FUN_005550b0" (status: r2, ready for the second verifier pass (prwarp, TASK-372, 2026-11-12). Branch `fid/warp-arrival-r2` on the...)
+- [warp-walk-plan.md](upstream/drafts/warp-walk-plan.md): Draft (local, NOT posted): "A clicked warp's walk is planned to its tile unit" (status: r3b, **recheck of two items by the verifier** (the second pass, verifier2-p02-2026-11-15.md, asked: an...)
 - [zeal-gap.md](upstream/drafts/zeal-gap.md): Draft (local, NOT posted): Zeal strike gap, FUN_00553b10 (SUPERSEDED upstream, one residual) (status: 2026-11-12 (TASK-392, agent przeal). **The PR this card was to build is not needed: upstream main...)
 
 `upstream/`
 
+- [offline-decomp21-2026-11-14.md](upstream/offline-decomp21-2026-11-14.md): Offline upstream work, 2026-11-14 (card decomp21, TASK-440, Sonnet) (status: current. Two pipeline items taken to "ready for the verifier" while the worker host was off limits (no...)
+- [pipeline-2026-11-14.md](upstream/pipeline-2026-11-14.md): Upstream PR pipeline: from finding to merged PR (2026-11-14) (status: current, 2026-11-14 (card TASK-422, agent prpipeline, Sonnet). User instruction 2026-11-14: run every...)
 - [pr-queue.md](upstream/pr-queue.md): Upstream PR queue (d2d fidelity fixes against game.exe 1.14d) (status: current, 2026-11-11 (card TASK-332, agent prprep). Audit of every local candidate against upstream main...)
+- [prfix7-p04-r3-2026-11-15.md](upstream/prfix7-p04-r3-2026-11-15.md): P04 r3: the first verifier's required changes applied (2026-11-15, card prfix7, TASK-509) (status: current. Private fork branch `fid/hitrec-interrupt-r3` (private remote only, never force-pushed): oracle...)
 - [verification-2026-11-11.md](upstream/verification-2026-11-11.md): Independent verification of upstream PR candidates 1 and 2 (2026-11-11) (status: current, 2026-11-11 (TASK-340, agent prverify). Both candidates NEEDS-WORK; nothing is cleared for posting...)
+- [verification-swing-start-2026-11-14.md](upstream/verification-swing-start-2026-11-14.md): Independent verification of the swing-start PR r1 (2026-11-14) (status: current, 2026-11-14 (TASK-415, agent prverify5). Verdict **NEEDS-WORK** on r1: one code edit (the held...)
+- [verification-swing-start-r2-2026-11-14.md](upstream/verification-swing-start-r2-2026-11-14.md): Independent verification of the swing-start PR r2 (2026-11-14) (status: current, 2026-11-14 (TASK-418, agent prverify6). Verdict **NEEDS-WORK, text only**: the code, the test and...)
 - [verification-warp-arrival-2026-11-12.md](upstream/verification-warp-arrival-2026-11-12.md): Independent verification of the warp-arrival fork candidate (2026-11-12) (status: current, 2026-11-12 (TASK-366, agent prverify3). Verdict **NEEDS-WORK**: the rule and the code change are...)
 - [verification-warp-arrival-r2-2026-11-12.md](upstream/verification-warp-arrival-r2-2026-11-12.md): Second independent verification of warp arrival r2 (2026-11-12) (status: current, 2026-11-12 (TASK-376, agent prverify4). Verdict **PASS** (two LOW wording edits to the draft, not...)
+- [verifier-crush3-2026-11-17.md](upstream/verifier-crush3-2026-11-17.md): Verifier: Crushing Blow r3 (2026-11-17) (status: current, 2026-11-17 (card verifycrush3, TASK-628, Opus, singly; independent verifier before posting)....)
+- [verifier-decomp35-2026-11-16.md](upstream/verifier-decomp35-2026-11-16.md): Verifier: decomp35, a player's leech and Crushing Blow (2026-11-16) (status: current, 2026-11-16 (card verifydecomp35, TASK-564, Opus, singly; independent verifier before posting)....)
+- [verifier-decomp36-2026-11-16.md](upstream/verifier-decomp36-2026-11-16.md): Verifier: decomp36, the gamble price and MonUMod Multiple Shots (2026-11-16) (status: current, 2026-11-16 (card verifydecomp36, TASK-569, Opus, singly; independent verifier before posting)....)
+- [verifier-decomp37-2026-11-17.md](upstream/verifier-decomp37-2026-11-17.md): Verifier: decomp37, gear absorb and Open Wounds (2026-11-17) (status: current, 2026-11-17 (card verifydecomp37, TASK-613, Opus, singly; independent verifier before posting)....)
+- [verifier-decomp38-2026-11-17.md](upstream/verifier-decomp38-2026-11-17.md): Verifier: decomp38, a Mana Burn monster's hit (2026-11-17) (status: current, 2026-11-17 (card verifydecomp38, TASK-608, Opus, singly; independent verifier before posting)....)
+- [verifier-decomp39-2026-11-17.md](upstream/verifier-decomp39-2026-11-17.md): Verifier: decomp39, a player's melee reach and line (2026-11-17) (status: current, 2026-11-17 (card verifydecomp39, TASK-625, Opus, singly; independent verifier before posting)....)
+- [verifier-gearabsorb3-2026-11-17.md](upstream/verifier-gearabsorb3-2026-11-17.md): Verifier: gear absorb r3, the heal-back (2026-11-17) (status: current, 2026-11-17 (card verifygearabsorb3, TASK-626, Opus, singly; independent verifier before posting)....)
+- [verifier-p02-2026-11-14.md](upstream/verifier-p02-2026-11-14.md): Verifier: P02 "a clicked warp's walk is planned to its tile unit" (2026-11-14) (status: current, 2026-11-15 (card verifyp02, TASK-476, Opus, independent of the author decomp23). Nothing posted,...)
+- [verifier-p03-p05-2026-11-14.md](upstream/verifier-p03-p05-2026-11-14.md): Verifier: P03 hit-recovery modes and P05 load gold clamp (2026-11-14) (status: current, 2026-11-14 (card verifyp03p05, TASK-444, Opus, independent of the author decomp21). Nothing...)
+- [verifier-p03b-2026-11-14.md](upstream/verifier-p03b-2026-11-14.md): Verifier: P03b "a hit never restarts a get-hit" (2026-11-14) (status: current, 2026-11-14 (card verifyp03c, TASK-468, Opus, independent of the author decomp22 and of the P03...)
+- [verifier-p03c-2026-11-15.md](upstream/verifier-p03c-2026-11-15.md): Verifier: P03c a knocking hit does not start a knockback in a get-hit (2026-11-15) (status: current, 2026-11-15 (card verifyp03c2, TASK-513, Opus, singly). All runs finished before this report;...)
+- [verifier-p04-2026-11-15.md](upstream/verifier-p04-2026-11-15.md): Verifier: P04 a hit interrupts a swing or cast whose skill allows it (2026-11-15) (status: current, 2026-11-15 (card verifyp04, TASK-500, Opus, singly). All runs finished before this report;...)
+- [verifier-p06-2026-11-15.md](upstream/verifier-p06-2026-11-15.md): Verifier: P06 a monster missile with no physical damage cannot be blocked (2026-11-15) (status: current, 2026-11-15 (card verifyp06, TASK-494, Opus, singly). Nothing posted, nothing pushed to the fork....)
+- [verifier-p13-2026-11-16.md](upstream/verifier-p13-2026-11-16.md): Verifier: P13, a refused Teleport costs no mana (2026-11-16) (status: current, 2026-11-16 (card verifyp13, TASK-551, Opus, singly; independent verifier before posting). Nothing...)
+- [verifier-p17-2026-11-15.md](upstream/verifier-p17-2026-11-15.md): Verifier: P17, a player's attack sequence runs 30 points slower (2026-11-15) (status: current, 2026-11-15 (card verifyp17, TASK-519, Opus, singly; independent verifier before posting). Nothing...)
+- [verifier-p18-2026-11-15.md](upstream/verifier-p18-2026-11-15.md): Verifier: P18, Smite's range takes stat 111 and a point of width (2026-11-15) (status: current, 2026-11-16 (card verifyp18, TASK-528, Opus, singly; independent verifier before posting). Nothing...)
+- [verifier-seq-followup-2026-11-16.md](upstream/verifier-seq-followup-2026-11-16.md): Verifier: #565 follow-up, seq-rate fails on a missing D2_PATCH_INSTALLER (2026-11-16) (status: current, 2026-11-16 (card verifyseqfollow, TASK-559, Opus, singly; independent verifier before posting)....)
+- [verifier2-p02-2026-11-15.md](upstream/verifier2-p02-2026-11-15.md): Verifier 2: P02 r3 "a clicked warp's walk is planned to its tile unit" (2026-11-15) (status: current, 2026-11-15 (card verifyp02b, TASK-482, Opus, second independent pass after...)
+- [verifier2-p03-2026-11-14.md](upstream/verifier2-p03-2026-11-14.md): Verifier 2: P03 block length after the fixes (2026-11-14) (status: current, 2026-11-14 (card verifyp03b, TASK-450, Opus, independent of the author prfix2 and of the first...)
+- [verifier2-p03b-2026-11-15.md](upstream/verifier2-p03b-2026-11-15.md): Verifier 2: P03b "a get-hit is not restarted by a hit", rebased r4 (2026-11-15) (status: current, 2026-11-15 (card verifyp03d, TASK-488, Opus, second independent pass after...)
+- [verifier2-p04-2026-11-15.md](upstream/verifier2-p04-2026-11-15.md): Verifier 2: P04 a hit interrupts a swing or cast whose skill allows it, r3 (2026-11-15) (status: current, 2026-11-15 (card verifyp04b, TASK-512, Opus, singly). All runs finished; nothing left running....)
+- [verifier2-p06-2026-11-15.md](upstream/verifier2-p06-2026-11-15.md): Verifier 2: P06 r4 recheck, a monster missile with no physical damage cannot be blocked (2026-11-15) (status: current, 2026-11-15 (card verifyp06b, TASK-496, Opus, singly; second pass after...)
+- [verifier3-p02-2026-11-15.md](upstream/verifier3-p02-2026-11-15.md): Verifier 3: P02 r3 recheck: the empty-path rule and the nondeterminism (2026-11-15) (status: current, 2026-11-15 (card verifyp02c, TASK-484, Opus; third pass after verifier2-p02-2026-11-15.md and...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
+- [vault.md](vault.md): Ethereal Vault store (internal/vault) and its file formats (status: V2 store BUILT offline, V3 bot wiring BUILT offline (section 'Bot wiring (V3)'), V4 read API and page...)
+- [video-feed.md](video-feed.md): Lossless delta frame feed for the watch video (card videofeed, 2026-11-15) (status: mounted behind the knob `watch.paletteFeed` (default OFF) by card videofeed2 (2026-11-16); not deployed....)
 - [viewer-fps.md](viewer-fps.md): Viewer game video at 12.5 to 25 fps (card viewerfps1, TASK-293, 2026-11-10)
 - [walksmooth.md](walksmooth.md): walksmooth: the stop-and-go walk (TASK-188) (status: offline fix merged-ready, NOT proven live. Tags: V verified (how stated), S read in code, U unverified.)
 - [watch-origin.md](watch-origin.md): Same-origin rule for state-changing requests (watch login, setup wizard)
@@ -605,6 +810,9 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [backlog-board-nas.md](process/backlog-board-nas.md): Backlog.md web board on the NAS (read-only mirror) (status: DEPLOYED 2026-11-05 as a NAS Docker-tab template (variant B: own br0 address behind Nginx Proxy Manager...)
 - [baseline-runs.md](process/baseline-runs.md): Baseline runs: the extra original-game runs (card baselineruns) (status: current, PREPARED ONLY (2026-11-01). Nothing here was run live; no game was started. The launcher is...)
 - [board-cards.md](process/board-cards.md): Board cards (status: moved to the private ops repo (d2lod-ops, `docs/process/board-cards.md`). Not part of the public tree.)
+- [build-hosts-2026-11-14.md](process/build-hosts-2026-11-14.md): Build hosts: moving builds off the worker host (2026-11-14) (status: study, nothing applied. Request (user, 2026-11-14): stop building on the worker host while the user plays;...)
+- [build-hosts-env-2026-11-14.md](process/build-hosts-env-2026-11-14.md): Builder builder environment: lock hygiene, light lane, gate, status, prune (2026-11-14) (status: applied 2026-11-14 (user go: "make whatever improvements to the builder build environment that are...)
+- [build-hosts-stage3-2026-11-14.md](process/build-hosts-stage3-2026-11-14.md): Build hosts, stage 3 results (2026-11-14): image builds on the NAS (status: applied and drilled. Follows `docs/process/build-hosts-2026-11-14.md` (study, decision D3) and...)
 - [card-board.md](process/card-board.md): Card board: reading the user's decisions (status: current. The page is the `/cards` route of the status board (the board host name, port 8897); its code is...)
 - [card-triage-20261104.md](process/card-triage-20261104.md): Card triage and decisions without an ADR, 2026-11-04 (status: proposal for the lead, docs only (job cardtriage). Nothing was moved, edited or archived; no ADR or...)
 - [chunker.md](process/chunker.md): Roadmap chunker (status: current, APPROVED by the maintainer 2026-11-01 (card chunker). One tool, `tools/contrib/chunker.py`, keeps...)
@@ -622,6 +830,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [dispatcher-brief.md](process/dispatcher-brief.md): Dispatcher brief (status: moved to the private ops repo (d2lod-ops, `docs/process/dispatcher-brief.md`). Not part of the public tree.)
 - [doc-audit.md](process/doc-audit.md): Doc audit (2026-10-30)
 - [feed-after-events.md](process/feed-after-events.md): Feed after events (status: current rule (card feeds, 2026-11-01). The helper is `tools/discord/feed.py`; details in...)
+- [flaky-tests.md](process/flaky-tests.md): Flaky tests: the waiting pattern (status: current. Load-sensitive tests cost 45-minute gate re-runs; this is the rule that keeps new ones out.)
+- [friends-gamedata-2026-11-15.md](process/friends-gamedata-2026-11-15.md): Friends game-data bundle (2026-11-15)
 - [gamecode-guard.md](process/gamecode-guard.md): Game-code guard, labpath class, path scrubber
 - [grill-agent.md](process/grill-agent.md): The grill agent: one command to be interviewed
 - [grill-queue-2026-11-11.md](process/grill-queue-2026-11-11.md): Grill queue 2026-11-11: paste-ready decisions, ADR drafts and glossary text (status: input for the user's next grill session (TASK-342). Docs only. Nothing here is written to...)
@@ -639,6 +849,9 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [public-split.md](process/public-split.md): Public split: rules going forward (change `pubsplit`) (status: cut done 2026-10-31: GitHub `main` is primary; the the private forge steps below are the historical plan.)
 - [queuespeed.md](process/queuespeed.md): Queue speed changes (TASK-312) (status: current. Source: docs/research/merge-queue-profile-2026-11-11.md. Code lives in the ops repo...)
 - [retired-terms-20261104.md](process/retired-terms-20261104.md): Retired-terms banner pass (2026-11-04)
+- [sandbox-devp10.md](process/sandbox-devp10.md): Sandbox d2d build devp10 (2026-11-17) (status: current. Task: TASK-623 (sandbox3). Tags: V = verified in this run (how said), S = read from a tool or...)
+- [sandbox-devp11.md](process/sandbox-devp11.md): Sandbox image devp11: item colour payload (slice 1 fixtures) (status: current (task-638, 2026-11-18). Built and checked on the builder, NOT loaded into the sandbox. Design:...)
+- [sandbox-devp9.md](process/sandbox-devp9.md): Sandbox d2d build devp9 (2026-11-15) (status: current. Task: TASK-535 (sandbox2). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [spdx.md](process/spdx.md): SPDX header policy (ADR 0010)
 - [spec-apply-a-20261104.md](process/spec-apply-a-20261104.md): Spec apply A, 2026-11-04
 - [spec-apply-b-20261104.md](process/spec-apply-b-20261104.md): Spec apply B, 2026-11-04
@@ -704,13 +917,25 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `probes/`
 
+- [bot-cpu-2026-11-16.md](probes/bot-cpu-2026-11-16.md): Bot CPU bursts in town walks (card botcpu, 2026-11-16) (status: partial. Offline profile only; the live repair-trip profile is a checklist (section 4). Trigger:...)
+- [bot-cpu-fix-2026-11-16.md](probes/bot-cpu-fix-2026-11-16.md): Bot CPU fixes after the live calm-window profile (2026-11-16) (status: current. Follows docs/probes/bot-cpu-live-2026-11-16.md (Ledger.load 30 percent, DB.IsA 14.5 percent). All...)
+- [bot-cpu-live-2026-11-16.md](probes/bot-cpu-live-2026-11-16.md): Bot CPU on the sandbox, live profile (card botcpulive, 2026-11-16) (status: partial. Calm-window profile captured (V); NO profile inside a burst (the built-in profiler is one-shot,...)
 - [classpacing.md](probes/classpacing.md): classpacing probe (status: see `docs/soaks/classpacing.md` (the result doc of TASK-147); scripts and per-minute data are in...)
 - [currency1.md](probes/currency1.md): Probe: currency slice 1, the Raven's Mark rows (TASK-63) (status: UNVERIFIED live, 2026-11-06. Offline checks passed; the live run was not started because Gate 2 seeds were...)
+- [deploy-cockpit-2026-11-15.md](probes/deploy-cockpit-2026-11-15.md): Deploy record: cockpit UI to the sandbox, 2026-11-15 (status: record. Task TASK-490. Tags: V = verified in this run (command named), U = not verified.)
+- [devp8-2026-11-15.md](probes/devp8-2026-11-15.md): Sandbox image devp8: hero stats and merc item verbs (2026-11-15) (status: result record, deployed. Tags: V = run and seen (command named), S = read, U = unverified. Task: TASK-516....)
+- [drill-zip-2026-11-14.md](probes/drill-zip-2026-11-14.md): Friend pack 0.1.1 drilled on the user's original install zip (2026-11-14) (status: RUN 2026-11-14 on the worker host. Tags: V = run and output seen, S = read in the source or docs, U = not...)
 
 `probes/drills/`
 
 - [drills/README.md](probes/drills/README.md): Live primitive drills (card m1-liveproof, harness cmd/d2drill + internal/drill) (status: DRILLS5 (2026-10-31, last section): live proofs of the merged fixes (fix-bank, fix-obj, fix-price,...)
 - [hover-audit.md](probes/drills/hover-audit.md): Hover blind-spot audit (agent DRILLS3, 2026-10-31, card m1-liveproof) (status: current. Why: under the lab's `--lockstep` d2d resolves "what is under the cursor" only while it draws a...)
+
+`probes/`
+
+- [farmloop-live-20261116.md](probes/farmloop-live-20261116.md): Farm loop live check in the sandbox, 2026-11-16 (status: record. Task farmlive (TASK-553). Tags: V = verified in this run (container logs, read only), U = not...)
+- [farmloop-measure.md](probes/farmloop-measure.md): Recipe: kills per minute against coverage (farm loop decay curve) (status: current. Tool `tools/farmloop/measure.py` (stdlib Python, reads stdin). Tags: V = ran once...)
+- [farmloop-on-20261115.md](probes/farmloop-on-20261115.md): Farm loop switched on in the sandbox, 2026-11-15 (status: record. Task farmloopon. Tags: V = verified in this run, U = not verified.)
 
 `probes/fid/`
 
@@ -750,8 +975,12 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `probes/`
 
 - [fidprobe.md](probes/fidprobe.md): d2fidprobe run recipe (same-save probe, slice 1) (status: first live run done 2026-11-07 (scenarios 1 to 4, see the last section); the recipe below is VERIFIED LIVE...)
+- [firsthour.md](probes/firsthour.md): First hour: fresh hero, 60 realtime minutes at 1x
+- [hero14-analysis-2026-11-14.md](probes/hero14-analysis-2026-11-14.md): Hero Doofer (Paladin clvl 14 to 15): why it is poor and slow (2026-11-14) (status: analysis, docs only (task hero14). Tags: V verified (how is said), S secondary, U unverified. No code, no...)
 - [hour1-analysis-2026-11-12.md](probes/hour1-analysis-2026-11-12.md): Fresh Paladin first hour: where the 60 minutes went (2026-11-12) (status: analysis, no code changed. Source: the sandbox bot log from the reset (build 0.0.261112021709), window...)
+- [hour4-analysis-2026-11-14.md](probes/hour4-analysis-2026-11-14.md): Fresh Paladin first hour 4: where the 60 minutes went (2026-11-14) (status: analysis, no code changed. Source: the sandbox bot log, build 0.0.261113174258 on d2d devp6 (rebased...)
 - [itemverbs-live-2026-11-12.md](probes/itemverbs-live-2026-11-12.md): Item verbs: live click-vs-verb comparison (TASK-383, 2026-11-12) (status: result record. Tags: V = run and seen on the worker host. Driver: `tools/itemverbs/live_compare.py`;...)
+- [killdrop-2026-11-13.md](probes/killdrop-2026-11-13.md): Kill drop on the rebased fork: `debug players` gained a column (TASK-396, 2026-11-13) (status: result record. Tags: V = run and seen on the worker host; S = read in source. Follows...)
 - [navsoak-compare.md](probes/navsoak-compare.md): navsoak vs navsoak2: paired soak comparison (2026-10-31) (status: analysis of two hidden d2d soaks, read-only. Handoffs: branches agent/navsoak, agent/navsoak2...)
 
 `probes/navsoak/`
@@ -779,11 +1008,28 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [postfix-soak2-analysis.md](probes/postfix-soak2-analysis.md): postfix-soak2 analysis: root causes of F1 to F6, the walking share and a ranked fix-card list (card... (status: current. Offline study of the finished Gate 1 soak 2 (postfix-soak2.md, origin/main 0b0bdb2, one seed, 2 h...)
 - [postfix-soak2.md](probes/postfix-soak2.md): postfix-soak2: Gate 1 of the d2d gate ladder on current main (2026-10-31) (status: current. One finished hidden d2d soak (exit 0, 120 wall min, one injected d2d kill), n=1 seed, not a...)
 - [ptrclick.md](probes/ptrclick.md): ptrclick: is d2d's click-targeting a deviation from game.exe, or only our harness? (TASK-179) (status: plan, nothing run live. Tags: V verified (how stated), S read in code, U unverified. Card:...)
+- [sandbox-fresh-20261115.md](probes/sandbox-fresh-20261115.md): Sandbox reset to a fresh hero, 2026-11-15 (status: record. Task sandboxfresh. Tags: V = verified in this run, U = not verified.)
+- [search-for-cain-2026-11-17.md](probes/search-for-cain-2026-11-17.md): The Search for Cain on the sandbox: diagnosis and fix plan (2026-11-17) (status: diagnosis, read-only and offline. No game was started and nothing was sent to the sandbox; the only live...)
+- [search-for-cain-45-2026-11-18.md](probes/search-for-cain-45-2026-11-18.md): Search for Cain, CAIN-4 and CAIN-5a: cairn stones and the way to Tristram (2026-11-18) (status: current, offline work (agent cain45). Tags: V verified (live lab drill L1 or a test), S source or doc...)
+- [search-for-cain-l0-2026-11-18.md](probes/search-for-cain-l0-2026-11-18.md): Search for Cain, drill L0: object listings of the tree and the stones (2026-11-18) (status: result of the read-only drill CAIN-L0 named in `docs/probes/search-for-cain-2026-11-17.md` section 6 (that...)
+- [search-for-cain-l1-2026-11-18.md](probes/search-for-cain-l1-2026-11-18.md): Search for Cain, drill L1: the five Cairn Stones and the way to Tristram (2026-11-18) (status: result of drill CAIN-L1, follow-up to `docs/probes/search-for-cain-l0-2026-11-18.md`. Same setup as L0...)
+- [search-for-cain-l2-2026-11-18.md](probes/search-for-cain-l2-2026-11-18.md): Search for Cain, drill L2: free Cain, return, report to Akara (2026-11-18) (status: result of drill CAIN-L2, follow-up to `search-for-cain-l1-2026-11-18.md` (stones, portal, arrival). Same...)
 - [shortdrills.md](probes/shortdrills.md): Short live drills for the g2e/g2f fixes (card shortdrills) (status: current (2026-11-06). Tags: V = run live on the worker host, S = secondary, U = unverified.)
+- [survival-ab-8seed-2026-11-16.md](probes/survival-ab-8seed-2026-11-16.md): Survival A/B 8-seed confirmation, Paladin, bot.zoneModel 0 vs 1, 2026-11-16 (status: current (TASK-568). Follows the 3-seed rescreen. Harness: ab-harness. Tags: V verified (run logs,...)
+- [survival-ab-8seed-rerun-2026-11-16.md](probes/survival-ab-8seed-rerun-2026-11-16.md): Survival A/B 8-seed rerun, Paladin (and a Sorceress screen), fixed harness and retuned controller, 2026-11-16 (status: current (TASK-572). Follows the 8-seed run (FAIL on XP). Harness: ab-harness sections 6 to 9. Tags: V...)
+- [survival-ab-reask-2026-11-17.md](probes/survival-ab-reask-2026-11-17.md): Survival A/B with the cost-event re-ask, Paladin 8 seeds, holdout, Sorceress screen, 2026-11-17 (status: current (TASK-595, card survreask). Follows the 8-seed rerun. Tags: V verified (run logs, `abreport...)
+- [survival-ab-rescreen-2026-11-16.md](probes/survival-ab-rescreen-2026-11-16.md): Survival A/B rescreen, Paladin, bot.zoneModel 0 vs 1 (3 seeds), 2026-11-16 (status: current (TASK-563). Rerun of the first screen after the clock fix of the merged survfix card (analysis)....)
+- [survival-ab-screen-2026-11-16.md](probes/survival-ab-screen-2026-11-16.md): Survival A/B screen, bot.zoneModel 0 vs 1 (3 seeds, Paladin and Sorceress), 2026-11-16 (status: current (TASK-554). Harness: ab-harness. Tags: V verified (the run logs and `abreport` output of this...)
+- [survival-holdout-2026-11-17.md](probes/survival-holdout-2026-11-17.md): Survival A/B holdout, seed 149: cause, fix, rerun (2026-11-17) (status: current (card survhold, user decision 2026-11-17: `bot.zoneModel` stays 0 until the holdout is fixed)....)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
+- [vault-spike-2026-11-16.md](probes/vault-spike-2026-11-16.md): Ethereal Vault V0 spike: capture and create on the d2d fork (result) (status: RESULT, 2026-11-16 (task TASK-578). Design: `docs/design/loot-vault-2026-11-16.md` section 1.7. Tags: V =...)
+- [video-feed-2026-11-15.md](probes/video-feed-2026-11-15.md): Probe: lossless delta feed on real d2d frames (card videofeed, 2026-11-15)
+- [viewer-brightness-2026-11-17.md](probes/viewer-brightness-2026-11-17.md): Probe: why the watch viewer looks "a bit too bright" (card brightness, 2026-11-17)
+- [viewer-fps-2026-11-15.md](probes/viewer-fps-2026-11-15.md): Viewer game picture, fps report (2026-11-15)
 - [waits-audit.md](probes/waits-audit.md): Waits audit: wall-clock waits for the game (card waits-audit) (status: current. Offline audit of every wait in the bot, the d2d wiring and the d2d backends; fixes in the same...)
 - [warp-sandbox-2026-11-12.md](probes/warp-sandbox-2026-11-12.md): Warp-arrival fix on the play sandbox (devp4), 2026-11-12
+- [warpclick-2026-11-14.md](probes/warpclick-2026-11-14.md): Warps on the rebased d2d need a Select-box click (TASK-412, 2026-11-14) (status: result record. Tags: V = run and seen on the worker host (headless throwaway heroes, seed 7 unless said);...)
 - [sentinel.md](sentinel.md): Sentinel: layer 2 failsafes (agent SENTINEL)
 - [soak-analysis.md](soak-analysis.md): Soaky soak analysis (SOAKANALYSIS, 2026-10-29) (status: SUPERSEDED in part: pre-fix baseline; the approved death rule is plan-v2 section 10.2 and...)
 - [soak-hosts.md](soak-hosts.md): Soak hosts (status: moved to the private ops repo (d2lod-ops, `docs/soak-hosts.md`). Not part of the public tree.)

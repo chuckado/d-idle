@@ -299,16 +299,37 @@ func ImmuneWorkaround(c d2.Class, t *Target) Workaround {
 
 // PlayerResists are the character's resistances after gear (fire, cold, lightning, poison), without the difficulty
 // penalty (U: whether the stat list read from the game already includes it; check live, see docs/difficulty.md).
-type PlayerResists struct{ Fire, Cold, Lightning, Poison int }
+// Max is the max-resist bonus per element (cap 75 + Max) and AbsorbPct the percent absorb per element (poison has none);
+// both default to 0 and then change nothing.
+type PlayerResists struct {
+	Fire, Cold, Lightning, Poison int
+	Max                           d2.Resists
+	AbsorbPct                     d2.Resists
+}
+
+// ResistsOf reads the resists, max-resist bonuses and percent absorbs of a player.
+func ResistsOf(p *d2.Player) PlayerResists {
+	return PlayerResists{
+		Fire: p.Resist.Fire, Cold: p.Resist.Cold, Lightning: p.Resist.Lightning, Poison: p.Resist.Poison,
+		Max: p.MaxResist,
+		AbsorbPct: d2.Resists{Fire: p.Absorb.FirePct, Cold: p.Absorb.ColdPct, Lightning: p.Absorb.LightningPct,
+			Magic: p.Absorb.MagicPct},
+	}
+}
 
 // ResistPenalty is the player's resist penalty for a difficulty: 0 / -40 / -100 (V tables difficultylevels.tsv).
 func ResistPenalty(d d2.Difficulty) int { return d.ResistPenalty() }
 
-// Effective applies the penalty. The game caps the maximum at 75 and lets the value fall as low as -100 (S).
+// Effective is the intake resist against one element in game.exe's order (d2.ResistTable): penalty added, then the
+// cap (75 + max bonus), then the -100 floor, then the percent absorb (V, decomp37 B1 and Q5). The returned Max and
+// AbsorbPct are cleared: the numbers are final.
 func (r PlayerResists) Effective(d d2.Difficulty) PlayerResists {
-	p := ResistPenalty(d)
-	f := func(v int) int { return max(min(v, 75)+p, -100) }
-	return PlayerResists{f(r.Fire), f(r.Cold), f(r.Lightning), f(r.Poison)}
+	t := d2.ResistTable
+	f := func(v, bonus, abs int) int { return t.Intake(t.Effective(v, bonus, d), abs) }
+	return PlayerResists{
+		Fire: f(r.Fire, r.Max.Fire, r.AbsorbPct.Fire), Cold: f(r.Cold, r.Max.Cold, r.AbsorbPct.Cold),
+		Lightning: f(r.Lightning, r.Max.Lightning, r.AbsorbPct.Lightning), Poison: f(r.Poison, r.Max.Poison, 0),
+	}
 }
 
 // elementResist returns the effective resist against an elemental damage type.

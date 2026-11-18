@@ -1,0 +1,20 @@
+<div>
+  <button class="say" data-key="say" data-tone="danger" aria-expanded="false" aria-haspopup="true" title="Cold Plains · died in Cold Plains">
+    <span class="line" aria-live="polite">
+      <span class="word"> "Dead"
+      <span class="txt">
+        <b class="place"> "Cold Plains"
+        <span class="reason"> " · died in Cold Plains"
+  <div class="pop d-bandpop" aria-label="Why the hero does this" role="dialog" hidden>
+    <dl class="rows">
+      <dt> "Now"
+      <dd> "Fighting in Cold Plains, my life is 72%."
+      <dt> "Would change it"
+      <dd> "Life under my retreat line sends me to town."
+      <dt> "Next"
+      <dd> "Farm Blood Moor."
+      <dt> "Risk here"
+      <dd> "too hard"
+      <dt> "Uptime"
+      <dd> "94% of the time making progress"
+    <a class="more" href="#log"> "Open the log"

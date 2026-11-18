@@ -1,0 +1,20 @@
+{
+  "schema": "watch.panel/1",
+  "version": 1,
+  "id": "statusline",
+  "title": "Status",
+  "band": "status",
+  "size": "m",
+  "priority": 4,
+  "tab": "hero",
+  "defaultOpen": true,
+  "endpoint": "/api/glance",
+  "poll": 2,
+  "unlock": "",
+  "skeleton": 0,
+  "optIn": true,
+  "slot": true,
+  "owner": "uis2",
+  "doc": "docs/ui/redesign-2026-11-14/J-second-attempt.md",
+  "cockpitOnly": true
+}

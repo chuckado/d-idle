@@ -4,7 +4,7 @@ const fs = require('fs'), vm = require('vm');
 function mk(tag) {
   const listeners = {}, attrs = {};
   const e = {
-    tag, hidden: false, dataset: {}, children: [], textContent: '', width: 0, height: 0, clientWidth: 320,
+    tag, hidden: false, dataset: {}, style: { setProperty(k, v) { this[k] = v; } }, children: [], textContent: '', width: 0, height: 0, clientWidth: 320,
     setAttribute(k, v) { attrs[k] = String(v); }, getAttribute(k) { return attrs[k]; }, removeAttribute(k) { delete attrs[k]; }, attrs,
     addEventListener(t, f) { (listeners[t] = listeners[t] || []).push(f); },
     fire(t, ev) { (listeners[t] || []).forEach((f) => f(Object.assign({ preventDefault() {}, clientX: 0, clientY: 0, pointerId: 1 }, ev))); },
@@ -16,9 +16,9 @@ function mk(tag) {
 }
 function load(file, extra) {
   const src = fs.readFileSync(file, 'utf8').replace(/^export /gm, '').replace(/^import .*$/gm, ''); // imports come in through extra
-  const names = [...src.matchAll(/^function (\w+)/gm)].map((m) => m[1]);
+  const names = [...src.matchAll(/^(?:function|class) (\w+)/gm)].map((m) => m[1]).concat([...src.matchAll(/^const (\w+) =/gm)].map((m) => m[1]));
   const document = { fullscreenElement: null, exitFullscreen() {} };
-  const ctx = Object.assign({ document, Math, Object, JSON, Date, Uint8Array, encodeURIComponent, console,
+  const ctx = Object.assign({ document, Math, Object, JSON, Date, Uint8Array, Float64Array, Float32Array, Int32Array, Array, Number, String, Map, encodeURIComponent, console,
     getComputedStyle: () => ({ getPropertyValue: () => '' }) }, extra || {});
   ctx.window = ctx;
   vm.runInNewContext(src + '\n;this.__x = {' + names.join(',') + '};', ctx);
@@ -36,4 +36,6 @@ function shellCtx(cfg, store, timers) {
   };
   return { root, c };
 }
-module.exports = { load, shellCtx, mk };
+// the video card's controls: the toolbar below the picture plus the title bar actions
+function controlsOf(c) { const bar = c.body.children.find((e) => e.attrs && e.attrs.role === 'toolbar'); return (bar ? bar.children : []).concat(c.actions.children); }
+module.exports = { load, shellCtx, mk, controlsOf };
