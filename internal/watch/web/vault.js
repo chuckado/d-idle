@@ -416,7 +416,7 @@ export function mountVault(d) {
     const had = doc.activeElement && cellOf(doc.activeElement) ? doc.activeElement.dataset.vid : '';
     const r = rangeFor(mustIdx === undefined ? -1 : mustIdx);
     rendered = { first: r.first, last: r.last };
-    grid.style.paddingBlockStart = 'calc(2px + ' + r.padTop + 'px)'; grid.style.paddingBlockEnd = 'calc(2px + ' + r.padBot + 'px)';
+    grid.style.setProperty('--vt-pad-top', r.padTop + 'px'); grid.style.setProperty('--vt-pad-bot', r.padBot + 'px');
     const cells = [];
     for (let i = r.first; i < r.last; i++) cells.push(cell(S.items[i], i + 1));
     grid.replaceChildren(...cells);

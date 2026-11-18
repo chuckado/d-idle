@@ -79,7 +79,7 @@
   }
 
   /* the cells: the look of `.d-cells .item` (components.css section 14) in a grid that fills the width */
-  .vt-grid { display: grid; gap: 2px; padding: 2px; --vt-cell-min: 4.75rem; grid-template-columns: repeat(auto-fill, minmax(var(--vt-cell-min), 1fr)); grid-auto-rows: 4.25rem; background: var(--d-surface-0); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); }
+  .vt-grid { display: grid; gap: 2px; padding: 2px; --vt-cell-min: 4.75rem; --vt-pad-top: 0px; --vt-pad-bot: 0px; padding-block: calc(2px + var(--vt-pad-top)) calc(2px + var(--vt-pad-bot)); grid-template-columns: repeat(auto-fill, minmax(var(--vt-cell-min), 1fr)); grid-auto-rows: 4.25rem; background: var(--d-surface-0); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); }
   .vt-cell { position: relative; display: flex; flex-direction: column; min-inline-size: 0; overflow: hidden; background: var(--d-surface-3); border: 0; border-block-start: 3px solid var(--q, var(--d-q-normal)); border-radius: 2px;
     padding: 2px 3px; font: inherit; font-size: .62rem; line-height: 1.15; color: var(--q, var(--d-text)); text-align: start; cursor: pointer; }
   .vt-cell:focus-visible { outline: 2px solid var(--d-focus); outline-offset: -2px; }
