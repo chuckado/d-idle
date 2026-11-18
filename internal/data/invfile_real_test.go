@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"os"
 	"testing"
 )
@@ -145,4 +146,53 @@ func TestRealIconAudit(t *testing.T) {
 		}
 	}
 	t.Logf("%d base items; %d with no icon name: %v; %d whose file is missing: %v", len(db.Items), len(noName), noName, len(noFile), noFile)
+}
+
+// TestRealInvFilePic: the real itemtypes.txt lists the six jewel, five ring and three amulet pictures and every
+// listed file exists (D2ART_INSTALL, read-only; skips without).
+func TestRealInvFilePic(t *testing.T) {
+	inst := os.Getenv("D2ART_INSTALL")
+	if inst == "" {
+		inst = realInstall
+	}
+	if _, err := os.Stat(inst); err != nil {
+		t.Skip("no real install")
+	}
+	db, err := Open(inst, t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	as, err := openArchives(inst)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer closeAll(as)
+	for code, n := range map[string]int{"jewl": 6, "ring": 5, "amul": 3, "char": 3, "scha": 3, "mcha": 3, "lcha": 3} {
+		ty := db.ItemType(code)
+		if ty == nil {
+			t.Fatalf("type %s missing", code)
+		}
+		got := 0
+		for _, g := range ty.InvGfx {
+			if g == "" {
+				continue
+			}
+			got++
+			if _, e := readFirst(as, `data\global\items\`+g+`.dc6`); e != nil {
+				t.Errorf("%s: %s.dc6 missing", code, g)
+			}
+		}
+		if got != n {
+			t.Errorf("%s: %d pictures, want %d", code, got, n)
+		}
+	}
+	for class, b := range db.Items {
+		if b.Code == "jew" {
+			for pic := 0; pic < 6; pic++ {
+				if n, _ := db.InvFilePic(class, InvPlain, 0, pic); n != fmt.Sprintf("invjw%d", pic+1) {
+					t.Errorf("jewel pic %d: %q", pic, n)
+				}
+			}
+		}
+	}
 }

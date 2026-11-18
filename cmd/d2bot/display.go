@@ -191,6 +191,11 @@ type iconCatalog interface {
 	InvFile(class int, q data.InvQuality, fileIndex int) (string, bool)
 }
 
+// picCatalog is the picture-variant side (jewels, rings, amulets, charms); a catalog without it shows the base icon.
+type picCatalog interface {
+	InvFilePic(class int, q data.InvQuality, fileIndex, pic int) (string, bool)
+}
+
 // itemArt is the icon name for an item unit, "" when the catalog cannot say. The unique or set id is the item's
 // FileIndex (U: its memory offset, internal/d2/items.go; the d2d source path sets it from the item JSON).
 func itemArt(cat bot.Catalog, u d2.Unit) string {
@@ -204,6 +209,10 @@ func itemArt(cat bot.Catalog, u d2.Unit) string {
 		q = data.InvUnique
 	case d2.QualitySet:
 		q = data.InvSet
+	}
+	if pc, ok := cat.(picCatalog); ok && u.Item.Pic > 0 {
+		name, _ := pc.InvFilePic(u.Class, q, u.Item.FileIndex, u.Item.Pic-1)
+		return name
 	}
 	name, _ := ic.InvFile(u.Class, q, u.Item.FileIndex)
 	return name

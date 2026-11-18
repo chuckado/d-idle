@@ -117,6 +117,10 @@ func (b *builder) dumpItem(it obj) (d2.Unit, bool) {
 			m.Tint = fmt.Sprintf("t%dc%d", t, c)
 		}
 	}
+	// inv_pic: the item's InvGfx index (jewel 0..5, ring 0..4, amulet and charm 0..2), -1 or absent = the base picture.
+	if v, ok := it.int("inv_pic"); ok && v >= 0 {
+		m.Pic = v + 1
+	}
 	m.Flags = flags
 	u.Flags = flags
 	uniq, _ := it.int("unique")
