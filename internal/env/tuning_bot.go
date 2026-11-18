@@ -306,6 +306,12 @@ func botKnobs() []Knob {
 			Desc: "A leveling area where the hero has killed nothing for this long counts as cleared, so the planner moves on to the next area (a human leaves an emptied field). 0 is off."},
 		{Key: "bot.failsafePauseMaxSec", Label: "Failsafe pause cap", Unit: "s", Default: 3600, Min: 300, Max: 14400, NoHandicap: true,
 			Desc: "Longest failsafe self pause. The pause starts at 5 minutes and doubles with every consecutive pause without real progress."},
+		{Key: "bot.flailMoves", Label: "Flail: area changes", Unit: "moves", Default: 6, Min: 0, Max: 100, NoHandicap: true,
+			Desc: "This many area changes inside the flail window without a kill or XP count as a loop (any cause: the quest board, area done and waypoint fallbacks undoing each other). The bot then holds in place. 0 is off."},
+		{Key: "bot.flailWindowMin", Label: "Flail: window", Unit: "min", Default: 10, Min: 1, Max: 120, NoHandicap: true,
+			Desc: "Length of the window in which the area changes of the flail guard are counted."},
+		{Key: "bot.flailHoldMin", Label: "Flail: hold", Unit: "min", Default: 5, Min: 1, Max: 120, NoHandicap: true,
+			Desc: "How long the bot stays in the current area (fights in the field, rests in town) after a flail was found. Doubles for each repeat within an hour, at most eight times."},
 		// Merc and cube chores: switches and policy, not skill, so no handicap profile moves them (NoHandicap).
 		{Key: "bot.mercRetryMin", Label: "Merc chore retry", Unit: "min", Default: 10, Min: 1, Max: 60, NoHandicap: true,
 			Desc: "Minutes between merc chore attempts; a failed hire or revive is not retried sooner."},
