@@ -116,6 +116,11 @@ func (c dataCatalog) InvFile(class int, q data.InvQuality, fileIndex int) (strin
 	return c.db.InvFile(class, q, fileIndex)
 }
 
+// InvFilePic is InvFile for an item with its own picture index (data.DB.InvFilePic).
+func (c dataCatalog) InvFilePic(class int, q data.InvQuality, fileIndex, pic int) (string, bool) {
+	return c.db.InvFilePic(class, q, fileIndex, pic)
+}
+
 func (c dataCatalog) Monster(class int) (MonsterMeta, bool) {
 	if c.db == nil {
 		return MonsterMeta{}, false

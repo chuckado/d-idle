@@ -319,14 +319,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ea65b6af0 11-18 10:57 `Merge agent/questaudit: questaudit: quest API audit log/ring, stopped note` (questaudit)
+- 23f7914fa 11-18 10:56 `Merge branch 'main' into questaudit` (-)
+- 91747b183 11-18 10:48 `Merge agent/itempics: itempics: jewel/ring/amulet/charm art by item picture index (inv_pic, ItemTypes InvGfx)` (itempics)
+- 9c1907a92 11-18 10:46 `Merge origin/main into agent/itempics` (-)
+- da6230857 11-18 10:40 `Merge branch 'main' into questaudit` (-)
 - 05ba40cc0 11-18 10:33 `Merge agent/cain45: CAIN-4/5a: cairn stone solver by class cycling, bkd prereq, quest portal class 60, stones chunk supported` (cain45)
 - 70d357297 11-18 10:32 `Merge branch 'main' into cain45` (-)
 - 8b2625e60 11-18 10:27 `Merge agent/cainl2: cainl2: Search for Cain L2 drill (cage, free Cain, return, Akara report)` (cainl2)
 - 3b80ae194 11-18 10:26 `Merge branch 'main' into cainl2` (-)
 - 704dded1c 11-18 10:25 `Merge origin/main into agent/cain45` (-)
-- 96848224c 11-18 10:18 `Merge agent/devp11doc: devp11 item colour payload doc` (devp11doc)
-- 0ba7c0782 11-18 10:16 `Merge branch 'main' into devp11doc` (-)
-- 0bc637671 11-18 10:11 `Merge agent/cainl1: Merge branch 'main' into cainl1` (cainl1)
-- 45ac72acf 11-18 10:10 `Merge branch 'main' into cainl1` (-)
-- 058b72f74 11-18 10:01 `Merge agent/cain7: CAIN-7: walk to the Inifuss tree room from the presets room rows` (cain7)
 <!-- statusgen:end -->
