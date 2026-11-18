@@ -15,7 +15,8 @@ const secretAffix = "SECRET-AFFIX-TEXT"
 
 // leakyTip is a tooltip source that words its props line from whatever it is handed and also returns it when the row is
 // unidentified: the API must not let that reach the payload.
-func leakyTip(code string, q int, identified, eth bool, props string) VaultTip {
+func leakyTip(in VaultTipIn) VaultTip {
+	code, props := in.Code, in.Props
 	t := VaultTip{Base: &item.ItemBase{Name: code, MinDam: 1, MaxDam: 2}, Art: "inv" + code, Sell: 7}
 	t.Props = []string{secretAffix + " " + props, secretAffix + " always"}
 	return t
@@ -102,7 +103,8 @@ func TestVaultTipPayloadPaged(t *testing.T) {
 	s := testVault(t, 300, 400)
 	a := vaultAPI(s, true)
 	d := a.desk()
-	d.Tip = func(code string, q int, id, eth bool, props string) VaultTip {
+	d.Tip = func(in VaultTipIn) VaultTip {
+		code := in.Code
 		return VaultTip{Base: &item.ItemBase{Name: code, MinAC: 5, MaxAC: 9, ReqStr: 20}, Art: "inv" + code, Sell: 9}
 	}
 	a.Bind(*d)

@@ -66,6 +66,9 @@ type Item struct {
 	Sockets    int      `json:"sockets,omitempty"`
 	Eth        bool     `json:"eth,omitempty"`
 	Props      string   `json:"props,omitempty"` // "stat:param:value;..." as d2d sent them, kept ONLY for an identified item (the page words them as the stat lines; an unidentified record never carries them)
+	Pic        int      `json:"pic,omitempty"`   // picture variant + 1 (jewel, ring, amulet, charm), 0 = base picture
+	Tint       string   `json:"tint,omitempty"`  // icon colour key "t<set>c<colour>"
+	FileIndex  int      `json:"fidx,omitempty"`  // the unique or set id, for the unique and set icon
 	Found      Found    `json:"found"`
 	Value      int      `json:"value"`
 }

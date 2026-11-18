@@ -27,7 +27,8 @@ func vaultTipFor(db *data.DB) watch.VaultTipFunc {
 			class[b.Code] = i
 		}
 	}
-	return func(code string, quality int, identified, ethereal bool, props string) watch.VaultTip {
+	return func(in watch.VaultTipIn) watch.VaultTip {
+		code, quality, identified, ethereal, props := in.Code, in.Quality, in.Identified, in.Ethereal, in.Props
 		i, ok := class[code]
 		if !ok {
 			return watch.VaultTip{}
@@ -42,8 +43,9 @@ func vaultTipFor(db *data.DB) watch.VaultTipFunc {
 		if m, ok := cat.Item(i); ok {
 			t.Kind = m.GoalType
 		}
-		if ic, ok := cat.(iconCatalog); ok {
-			t.Art, _ = ic.InvFile(i, data.InvPlain, 0)
+		t.Art = recordArt(cat, i, quality, in.FileIndex, in.Pic)
+		if t.Art != "" {
+			t.Tint = in.Tint
 		}
 		if !b.Quest {
 			f := db.PriceFactsOf(b)
@@ -53,6 +55,28 @@ func vaultTipFor(db *data.DB) watch.VaultTipFunc {
 		t.Props = statLines(db, props)
 		return t
 	}
+}
+
+// recordArt is itemArt for a stored record: the same rule (unique and set rows by file index, the picture variant of a
+// jewel, ring, amulet or charm), with the quality ids of the vault (5 set, 7 unique).
+func recordArt(cat bot.Catalog, class, quality, fileIndex, pic int) string {
+	ic, ok := cat.(iconCatalog)
+	if !ok {
+		return ""
+	}
+	q := data.InvPlain
+	switch quality {
+	case 7:
+		q = data.InvUnique
+	case 5:
+		q = data.InvSet
+	}
+	if pc, ok := cat.(picCatalog); ok && pic > 0 {
+		name, _ := pc.InvFilePic(class, q, fileIndex, pic-1)
+		return name
+	}
+	name, _ := ic.InvFile(class, q, fileIndex)
+	return name
 }
 
 // statLines words d2d's "stat:param:value;..." list (item properties of an identified item) with the game's own itemstatcost

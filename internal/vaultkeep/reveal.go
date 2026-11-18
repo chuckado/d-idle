@@ -272,6 +272,7 @@ func (k *Keeper) readIdentified(ctx context.Context, r vault.Rec, unit int) (bac
 func (k *Keeper) recordReveal(st *vault.Store, r vault.Rec, back d2dctl.VaultRecord) string {
 	it := r.Item
 	it.Raw, it.Identified, it.Value, it.Props = back.Norm, true, 0, back.Props
+	it.Pic, it.Tint, it.FileIndex = back.Pic, back.Tint, back.FileIndex()
 	if k.Namer != nil {
 		if n := k.Namer(back, r); n != "" {
 			it.Name = n

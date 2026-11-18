@@ -69,7 +69,17 @@ type VaultTip struct {
 
 // VaultTipFunc builds a row's tooltip facts. props is "" for an unidentified record: the caller of this func never hands
 // out what identify costs a charge for, and vaultRow drops Props of an unidentified row again after the call.
-type VaultTipFunc func(code string, quality int, identified, ethereal bool, props string) VaultTip
+type VaultTipFunc func(r VaultTipIn) VaultTip
+
+// VaultTipIn is what the tip source may read of a record. Props is empty for an unidentified record.
+type VaultTipIn struct {
+	Code                 string
+	Quality              int
+	Identified, Ethereal bool
+	Props                string
+	Pic, FileIndex       int
+	Tint                 string
+}
 
 // VaultActor is Reveal and Sell as the routes see them (cmd/d2bot/vaultkeep.go adapts internal/vaultkeep).
 type VaultActor interface {
@@ -263,7 +273,7 @@ func vaultRow(r *vault.Rec, tip VaultTipFunc) VaultItem {
 		if r.Identified {
 			props = r.Props
 		}
-		t := tip(r.Code, r.Quality, r.Identified, r.Eth, props)
+		t := tip(VaultTipIn{Code: r.Code, Quality: r.Quality, Identified: r.Identified, Ethereal: r.Eth, Props: props, Pic: r.Pic, FileIndex: r.FileIndex, Tint: r.Tint})
 		v.Base, v.Art, v.Tint, v.Kind, v.SellPrice = t.Base, t.Art, t.Tint, t.Kind, t.Sell
 		if r.Identified {
 			v.Props = t.Props
