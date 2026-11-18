@@ -38,7 +38,7 @@ Options: `--port N` (watch page on N, answers on N+1, for when 8891 is busy), `-
 
 ## First 30 minutes
 
-Open the watch page (`./didle status` prints the address). A welcome card explains in five lines what the bot does and what stays yours; "Got it, hide this" removes it, and the Help button at the top brings it back. Under it is a short checklist that ticks itself as you go: equip your starter gear (the hero never equips for you), check the policy sheet, watch your first fight, open the Journey strip, mark some junk for sale. If the page loses the bot it says "Reconnecting to your hero..." and keeps trying; after you were away it points you to the Return screen. While the item pictures are prepared from your own game files, the list says so (a few seconds). Details and the wording file: [onboarding.md](onboarding.md).
+Open the watch page (`./didle status` prints the address). A welcome card explains in five lines what the bot does and what stays yours; "Got it, hide this" removes it, and the Help button at the top brings it back. Under it is a short checklist that ticks itself as you go: equip your starter gear (the hero never equips for you), check the policy sheet, watch your first fight, open the Quests tile (the next quest and its Start button), mark some junk for sale. If the page loses the bot it says "Reconnecting to your hero..." and keeps trying; after you were away it points you to the Return screen. While the item pictures are prepared from your own game files, the list says so (a few seconds). Details and the wording file: [onboarding.md](onboarding.md).
 
 ## Every day
 

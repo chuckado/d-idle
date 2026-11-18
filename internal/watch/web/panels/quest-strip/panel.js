@@ -1,7 +1,7 @@
 // The quest tile of the cockpit strip (design 4.2; slice S5): what the board is doing in words and the one button that fits,
 // from GET /api/quests. Offer: "Offer: Den of Evil, safe" [Start]. Running: the step in words [Stop]. Waiting at the NPC:
 // [Hand in]; the tile then says "Handing in..." until the next GET shows the result. A stuck chunk: [Try again] [Stop]. With
-// the board off the tile hides itself and the Journey tile stays (the old strip goes in slice S9). The page decides what
+// the board off (knob quests.board 0) the tile hides itself; the Journey tile it once replaced was removed in slice S9. The page decides what
 // happened from the GET; a refusal shows the reason the API gave. textContent only.
 import { stripModel, settle, act, shared, MODES, modeLine, setCaption, captionOf } from '../quest-board/panel.js';
 
