@@ -1,0 +1,5 @@
+{"v":1,"items":[
+{"id":15,"code":"gld","loc":"inventory","slot":0,"x":0,"y":0,"w":1,"h":1,"quality":4,"ilvl":9,"sockets":0,"qty":1,"dur":[0,0],"unique":0,"set":0,"inv_tint":1,"inv_colour":-1,"flags":{},"name":"Jewel"},
+{"id":16,"code":"tsc","loc":"inventory","slot":0,"x":1,"y":0,"w":1,"h":1,"quality":4,"ilvl":9,"sockets":0,"qty":1,"dur":[0,0],"unique":0,"set":0,"inv_tint":0,"inv_colour":3,"flags":{},"name":"Zero set"},
+{"id":17,"code":"gld","loc":"inventory","slot":0,"x":2,"y":0,"w":1,"h":1,"quality":4,"ilvl":9,"sockets":0,"qty":1,"dur":[0,0],"unique":0,"set":0,"inv_tint":2,"inv_colour":7,"flags":{},"name":"Magic jewel"}
+]}

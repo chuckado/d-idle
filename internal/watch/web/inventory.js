@@ -13,6 +13,9 @@
   var LABEL = { head: 'helm', neck: 'amulet', torso: 'armour', rhand: 'weapon', lhand: 'shield', rring: 'ring', lring: 'ring', belt: 'belt', feet: 'boots', gloves: 'gloves' };
   var SLOTART = { head: 'helm', neck: 'amulet', torso: 'armor', rhand: 'weapon', lhand: 'weapon', rring: 'ring', lring: 'ring', belt: 'belt', feet: 'boots', gloves: 'gloves' };
   var ART_NAME = /^[a-z0-9_]{1,16}$/;
+  var TINT = /^t[1-8]c(?:[0-9]|1[0-9]|20)$/;
+  // artKey: the server remaps the icon through the game's colormap for key item-<art>~t<set>c<colour>; no tint, no suffix (plain icon, no CSS colour).
+  function artKey(it) { return 'item-' + it.art + (it.tint && TINT.test(it.tint) ? '~' + it.tint : ''); }
   var art = { on: false };
   var WARN_PCT = 30; // pips turn amber under this share of the maximum (the legend says so)
 
@@ -79,7 +82,7 @@
       var b = el('button', 'd-slot2'); b.type = 'button'; b.dataset.slot = s; b.dataset.key = 'slot-' + s;
       // the icon goes first so the durability pips and BROKEN stay above it
       if (art.on) {
-        if (it && it.art && ART_NAME.test(it.art)) artImg(b, 'ico', 'item-' + it.art);
+        if (it && it.art && ART_NAME.test(it.art)) artImg(b, 'ico', artKey(it));
         else if (!it) artImg(b, 'ghost', 'slot-' + SLOTART[s]);
       }
       b.appendChild(el('span', 'sil', LABEL[s]));
@@ -121,7 +124,7 @@
       b.style.gridArea = (it.y + 1) + ' / ' + (it.x + 1) + ' / span ' + h + ' / span ' + w;
       b.textContent = name(it); b.title = name(it);
       if (it.kind) b.dataset.kind = it.kind;
-      if (art.on && it.art && ART_NAME.test(it.art)) artImg(b, 'ico', 'item-' + it.art, it);
+      if (art.on && it.art && ART_NAME.test(it.art)) artImg(b, 'ico', artKey(it), it);
       else if (art.on) typeFallback(b, it, 'no icon name');
       if (it.mark) { b.dataset.mark = it.mark; b.appendChild(el('span', 'mk', it.mark === 'sell' ? 'S' : 'K')); }
       if (sel && sel.id === it.id) b.classList.add('sel');
