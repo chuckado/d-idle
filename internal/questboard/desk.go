@@ -121,6 +121,7 @@ type View struct {
 	Blocked    *RunView     `json:"blocked,omitempty"`
 	HandIn     *HandInView  `json:"handIn,omitempty"`
 	History    []HistoryRow `json:"history"`
+	Stopped    []StoppedRow `json:"stopped,omitempty"` // quests the player stopped in the last day (audit ring)
 	Needs      []NeedRow    `json:"needs"`
 	Strip      *Strip       `json:"strip,omitempty"`
 	Extra      []string     `json:"extra,omitempty"`     // further accepted chunks in the plan file (never run)
@@ -429,6 +430,7 @@ func (d *Desk) build() View {
 	}
 	v.HandIn = last
 	v.Needs = d.needs(v)
+	v.Stopped = d.stopped(st, v)
 	return v
 }
 
