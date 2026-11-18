@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- item tint: parse inv_tint/inv_colour, art colormap remap, UI key (includes the itemcolour design) <!--sg:agent/itemcolour2-->
 - itemcolour: item colour design doc <!--sg:agent/itemcolour-->
 - Merge branch 'main' into groundquality <!--sg:agent/groundquality-->
 - Merge branch 'main' into cainl0 <!--sg:agent/cainl0-->

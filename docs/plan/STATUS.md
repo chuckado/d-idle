@@ -276,6 +276,7 @@
 | cainl0 | proposed | - | `docs/probes/cainl0`<br>`docs/probes/search-for-cain-l0-2026-11-18.md`<br>`docs/probes/test-characters.md` | `d2d-control-socket` |
 | jewelcolor | proposed | - | `internal/watch/web/components.css`<br>`internal/watch/artembed_test.go`<br>`internal/data/invfile_test.go`<br>`docs/inventory-ui.md` | - |
 | groundquality | proposed | - | `internal/d2dloot`<br>`cmd/d2bot/d2dloot.go`<br>`cmd/d2bot/d2dwire.go`<br>`docs/d2d-loot.md` | - |
+| itemcolour2 | proposed | - | `internal/art/`<br>`internal/d2dsrc/`<br>`internal/watch/web/inventory.js`<br>`internal/watch/artembed_test.go`<br>`internal/status/inventory.go`<br>`internal/d2/items.go`<br>`cmd/d2bot/display.go`<br>`cmd/d2bot/itemart_test.go` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
@@ -315,14 +316,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 93899088c 11-18 09:54 `Merge agent/itemcolour2: item tint: parse inv_tint/inv_colour, art colormap remap, UI key (includes the itemcolour design)` (itemcolour2)
+- 7255719d5 11-18 09:53 `Merge branch 'main' into itemcolour2` (-)
+- ef8709ccf 11-18 09:46 `Merge remote-tracking branch 'origin/main' into agent/itemcolour2` (-)
 - ed97362bf 11-18 09:43 `Merge agent/itemcolour: itemcolour: item colour design doc` (itemcolour)
 - c968974f6 11-18 09:42 `Merge branch 'main' into itemcolour` (-)
+- 3e51d9cbd 11-18 09:41 `Merge branch 'agent/itemcolour' into agent/itemcolour2` (itemcolour)
 - 14a14ad44 11-18 09:36 `Merge agent/groundquality: Merge branch 'main' into groundquality` (groundquality)
 - 4733c4c06 11-18 09:35 `Merge branch 'main' into groundquality` (-)
 - fdcf5996e 11-18 09:30 `Merge agent/cainl0: Merge branch 'main' into cainl0` (cainl0)
 - 7515ada37 11-18 09:29 `Merge branch 'main' into cainl0` (-)
-- fa3954841 11-18 09:23 `Merge agent/jewelcolor: jewelcolor: card result` (jewelcolor)
-- e1f43e156 11-18 09:14 `cainl0: merge origin/main` (cainl0)
-- 0cede32af 11-18 02:22 `Merge agent/flakyfix: flakyfix: board world race, deterministic waits` (flakyfix)
-- fd0cf0bfa 11-18 00:46 `Merge agent/survhold: survhold: seed 149 cause, riskMinGold fix, holdout record (no default change)` (survhold)
 <!-- statusgen:end -->

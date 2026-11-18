@@ -84,3 +84,16 @@ func TestInvItemKind(t *testing.T) {
 		}
 	}
 }
+
+// itemcolour: the tint rides along with the art (a jewel and a coloured armor), never without an icon, and is absent for
+// older d2d builds; omitted from the JSON when empty.
+func TestStatusItemTint(t *testing.T) {
+	b, _ := json.Marshal(status.Item{Code: "1", Art: "invsst"})
+	if strings.Contains(string(b), "tint") {
+		t.Errorf("empty tint serialised: %s", b)
+	}
+	b, _ = json.Marshal(status.Item{Code: "1", Art: "invjwl", Tint: "t1c3"})
+	if !strings.Contains(string(b), `"tint":"t1c3"`) {
+		t.Errorf("tint missing: %s", b)
+	}
+}
