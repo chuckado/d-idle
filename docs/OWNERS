@@ -561,7 +561,6 @@ docs/upstream/  credit-runner  prpost4
 docs/upstream/  credit-runner  prprep
 docs/upstream/bodies/  credit-runner  decomp34
 docs/upstream/bodies/  credit-runner  decomp36
-docs/upstream/bodies/cairn-portal-body.md  credit-runner  cairnportal
 docs/upstream/bodies/decomp35-  credit-runner  decomp35
 docs/upstream/bodies/decomp37-open-wounds-body.md  credit-runner  owbody
 docs/upstream/bodies/gamble-price-body.md  credit-runner  decomp36bodies
@@ -572,7 +571,6 @@ docs/upstream/bodies/seq-ias-followup-body.md  credit-runner  seqfollow
 docs/upstream/bodies/umod-multishot-body.md  credit-runner  decomp36bodies
 docs/upstream/briefs/**  credit-runner  prpipeline
 docs/upstream/briefs/hitrec-norestart-oracle.md  credit-runner  prfix2
-docs/upstream/cairn-portal-2026-11-18.md  credit-runner  cairnportal
 docs/upstream/drafts/hitrec-modes.md  credit-runner  prfix2
 docs/upstream/drafts/hitrec-norestart.md  credit-runner  prfix2
 docs/upstream/drafts/hitrec-norestart.md  credit-runner  prfix3

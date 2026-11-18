@@ -1,10 +1,13 @@
 ---
 id: TASK-648
-title: 'cairnportal: PR candidate D1, the Cairn Stones'' Tristram portal offset (fid/cairn-portal-r1)'
-status: Proposed
+title: >-
+  cairnportal: PR candidate D1, the Cairn Stones' Tristram portal offset
+  (fid/cairn-portal-r1)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T17:04:00Z'
+updated_date: '2026-11-18T18:25:00Z'
 labels:
   - d2d
   - research
