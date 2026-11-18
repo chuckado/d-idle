@@ -3,6 +3,7 @@ package watch
 import (
 	"context"
 	"crypto/subtle"
+	"d2lod-bot/internal/buildinfo"
 	"errors"
 	"fmt"
 	"net"
@@ -46,12 +47,14 @@ func Origins(flagVal, viewAddr string) []string {
 type ServeOptions struct {
 	ViewAddr, AnswerAddr string
 	Token                string
-	Origins              string  // comma list; empty: the viewer's port on localhost
-	Video                *Video  // game video on the viewer (/stream, /shot.jpg); nil: off
-	Access               *Access // passcode choice (access.json); nil: token only. A passcode record replaces the token gate.
-	Senses               *Senses // side-panel minimap (/api/senses); nil: off
-	Fun                  *Fun    // return screen, tally strip and Codex (funwire.go); nil: the plain live screen only
-	Update               Updater // self-update status, banner and answer routes (update.go); nil: no update UI
+	Origins              string    // comma list; empty: the viewer's port on localhost
+	Video                *Video    // game video on the viewer (/stream, /shot.jpg); nil: off
+	Access               *Access   // passcode choice (access.json); nil: token only. A passcode record replaces the token gate.
+	Senses               *Senses   // side-panel minimap (/api/senses); nil: off
+	Fun                  *Fun      // return screen, tally strip and Codex (funwire.go); nil: the plain live screen only
+	PalFeed              *PalFeed  // lossless picture feed (palfeed.go); nil: MJPEG only
+	Update               Updater   // self-update status, banner and answer routes (update.go); nil: no update UI
+	Profiler             *Profiler // on-demand CPU profile routes on the answer listener (pprofapi.go); nil: off
 }
 
 // Served names the addresses that were bound.
@@ -71,6 +74,8 @@ func (h *Hub) Serve(ctx context.Context, o ServeOptions) (Served, error) {
 		}
 	}
 	h.SetVideo(o.Video)
+	h.SetPalFeed(o.PalFeed)
+	h.SetBuild(buildinfo.Current())
 	vl, err := net.Listen("tcp", o.ViewAddr)
 	if err != nil {
 		return Served{}, err
@@ -114,6 +119,14 @@ func (h *Hub) Serve(ctx context.Context, o ServeOptions) (Served, error) {
 			m.Handle(p, h.ViewHandler())
 		}
 	}
+	if o.PalFeed != nil {
+		for _, p := range PalFeedRoutes {
+			m.Handle(p, h.ViewHandler())
+		}
+	}
+	for _, p := range LogRoutes {
+		m.Handle(p, h.LogHandler(m)) // reads the routes above, so it comes after them
+	}
 	var viewH http.Handler = m
 	if o.Update != nil {
 		uh := UpdateHandler(o.Update)
@@ -143,6 +156,15 @@ func (h *Hub) Serve(ctx context.Context, o ServeOptions) (Served, error) {
 			um.Handle(p, uah)
 		}
 		ansH = um
+	}
+	if o.Profiler != nil {
+		pm := http.NewServeMux()
+		pm.Handle("/", ansH)
+		ph := o.Profiler.Handler(ansOpts)
+		for _, p := range ProfilerRoutes {
+			pm.Handle(p, ph)
+		}
+		ansH = pm
 	}
 	if o.Access != nil {
 		ansH = o.Access.answerGate(o.Token, ansH)

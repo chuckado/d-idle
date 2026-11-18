@@ -1,0 +1,11 @@
+div.inv-act [aria-label=Actions for Short Staff role=menu data-mode=pop]
+  div.act-title.q-normal [] "Short Staff"
+  button.act [role=menuitem data-act=unequip-rhand] "Take off"
+    kbd [] "Enter"
+  button.act [aria-disabled=true role=menuitem data-act=sell data-off=] "Mark for sale"
+    kbd [] "Alt+click"
+  div.act-why [data-for=sell] "only backpack items are sold"
+  button.act [role=menuitem data-act=keep] "Keep"
+  button.act [role=menuitem data-act=trash data-danger=] "Trash"
+    kbd [] "Del"
+  div.act-note [role=status]

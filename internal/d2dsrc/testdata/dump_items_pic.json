@@ -1,0 +1,6 @@
+{"v":1,"items":[
+{"id":21,"code":"gld","loc":"inventory","slot":0,"x":0,"y":0,"w":1,"h":1,"quality":4,"ilvl":9,"sockets":0,"qty":1,"dur":[0,0],"unique":0,"set":0,"inv_tint":0,"inv_colour":-1,"inv_pic":0,"flags":{},"name":"Jewel pic 0"},
+{"id":22,"code":"gld","loc":"inventory","slot":0,"x":1,"y":0,"w":1,"h":1,"quality":4,"ilvl":9,"sockets":0,"qty":1,"dur":[0,0],"unique":0,"set":0,"inv_tint":0,"inv_colour":-1,"inv_pic":5,"flags":{},"name":"Jewel pic 5"},
+{"id":23,"code":"tsc","loc":"inventory","slot":0,"x":2,"y":0,"w":1,"h":1,"quality":4,"ilvl":9,"sockets":0,"qty":1,"dur":[0,0],"unique":0,"set":0,"inv_tint":0,"inv_colour":-1,"inv_pic":-1,"flags":{},"name":"no picture"},
+{"id":24,"code":"tsc","loc":"inventory","slot":0,"x":3,"y":0,"w":1,"h":1,"quality":4,"ilvl":9,"sockets":0,"qty":1,"dur":[0,0],"unique":0,"set":0,"flags":{},"name":"older d2d, no field"}
+]}

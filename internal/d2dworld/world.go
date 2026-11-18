@@ -304,7 +304,11 @@ func (w *World) fetch(ctx context.Context, l *lvl, rect d2map.Rect, pos d2map.Po
 	if ws, err := w.v.Warps(ctx); err == nil {
 		l.m.Exits = nil
 		for _, x := range ws.Items {
-			l.m.Exits = append(l.m.Exits, d2map.Exit{Dest: x.To, Pos: sub(x.X, x.Y)})
+			e := d2map.Exit{Dest: x.To, Pos: sub(x.X, x.Y)}
+			if x.HasClick {
+				e.Click, e.HasClick = sub(x.ClickX, x.ClickY), true
+			}
+			l.m.Exits = append(l.m.Exits, e)
 		}
 	}
 	if ps, err := w.v.Presets(ctx); err == nil {
@@ -312,6 +316,10 @@ func (w *World) fetch(ctx context.Context, l *lvl, rect d2map.Rect, pos d2map.Po
 		for _, p := range ps.Items {
 			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: p.ObjectID, Pos: sub(p.X, p.Y)})
 			l.names = append(l.names, p.Name)
+		}
+		l.m.RoomRows = nil
+		for _, r := range d2dctl.Rooms(ps.Reply) {
+			l.m.RoomRows = append(l.m.RoomRows, d2map.RoomRow{Type: r.Type, Pos: sub(r.X+0.5, r.Y+0.5)})
 		}
 	}
 	return max(0, l.m.Grid.KnownCount()-before)

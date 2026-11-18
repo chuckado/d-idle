@@ -1,0 +1,22 @@
+{
+  "schema": "watch.panel/1",
+  "version": 1,
+  "id": "log",
+  "title": "Log",
+  "band": "side",
+  "size": "m",
+  "priority": 21,
+  "tab": "hero",
+  "defaultOpen": true,
+  "endpoint": "/api/log",
+  "poll": 3,
+  "unlock": "",
+  "skeleton": 0,
+  "slot": true,
+  "scroll": true,
+  "fit": true,
+  "optIn": true,
+  "cockpitOnly": true,
+  "owner": "uis6",
+  "doc": "docs/ui/redesign-2026-11-14/briefs/S6-areamap-drawers-phone.md"
+}

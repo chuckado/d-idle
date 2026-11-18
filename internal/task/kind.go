@@ -19,10 +19,13 @@ const (
 	KindTimeout
 	KindDeath
 	KindFatal
+	// KindExploring is progress, not failure: a search for a far object is still gaining ground. It never counts toward
+	// a step's or a chunk's failure limit; the adapter that returns it owns the total budget and ends with KindNotFound.
+	KindExploring
 )
 
 func (k Kind) String() string {
-	return [...]string{"none", "prereq", "resource", "not_found", "danger", "ui", "timeout", "death", "fatal"}[k]
+	return [...]string{"none", "prereq", "resource", "not_found", "danger", "ui", "timeout", "death", "fatal", "exploring"}[k]
 }
 
 // Fault says why a step cannot or did not run. Insert holds prerequisite steps the executor may splice in front.

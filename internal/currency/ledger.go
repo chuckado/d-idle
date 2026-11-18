@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"sync"
@@ -88,10 +89,18 @@ type Options struct {
 // Ledger is the append-only, hash-chained account ledger of one profile: <dir>/ledger.jsonl, a head file
 // <dir>/ledger.head (seq and hash of the last entry, so a cut tail is detected) and <dir>/ledger.lock.
 type Ledger struct {
-	dir  string
-	opt  Options
-	mu   sync.Mutex   // flock is per open file description; this keeps goroutines of one process apart too
-	torn atomic.Int64 // bytes of an unfinished last line dropped by the most recent load
+	dir   string
+	opt   Options
+	mu    sync.Mutex   // flock is per open file description; this keeps goroutines of one process apart too
+	torn  atomic.Int64 // bytes of an unfinished last line dropped by the most recent load
+	cache *cache       // parsed ledger as of the last load or append; guarded by mu
+}
+
+// cache is the parsed prefix of ledger.jsonl: size bytes, read when the file looked like fi.
+type cache struct {
+	st   *state
+	size int64
+	fi   os.FileInfo
 }
 
 // Open prepares the directory. Nothing is written until the first entry.
@@ -151,29 +160,70 @@ type state struct {
 	lines   [][]byte
 }
 
-// load reads, parses and verifies the file; with repair it drops an unfinished last line (a crash mid-write).
-// The caller holds the lock.
-func (l *Ledger) load(repair bool) (*state, error) {
-	b, err := os.ReadFile(l.path("ledger.jsonl"))
+// load returns the verified ledger; with repair it drops an unfinished last line (a crash mid-write). The parsed
+// state is kept in memory and only the bytes appended since the last call are read and chain-checked; a file that
+// shrank, was replaced (other inode) or has a new mtime at the same size is re-read in full. Verify always re-reads
+// in full. The caller holds the lock and must not keep st after releasing it.
+func (l *Ledger) load(repair bool) (*state, error) { return l.loadMode(repair, false) }
+
+func (l *Ledger) loadMode(repair, full bool) (*state, error) {
+	st, err := l.loadFile(repair, full)
+	if err == nil {
+		err = l.checkHead(st)
+	}
+	if err != nil {
+		l.cache = nil
+		return nil, err
+	}
+	return st, nil
+}
+
+func (l *Ledger) loadFile(repair, full bool) (*state, error) {
+	path := l.path("ledger.jsonl")
+	fi, err := os.Stat(path)
 	if errors.Is(err, os.ErrNotExist) {
-		b = nil
+		l.torn.Store(0)
+		l.cache = nil
+		return &state{}, nil
 	} else if err != nil {
 		return nil, err
 	}
+	c := l.cache
+	if full || c == nil || c.fi == nil || !os.SameFile(c.fi, fi) || fi.Size() < c.size ||
+		(fi.Size() == c.size && !fi.ModTime().Equal(c.fi.ModTime())) {
+		c = &cache{st: &state{}}
+	}
 	l.torn.Store(0)
+	if c.fi != nil && fi.Size() == c.size {
+		return c.st, nil
+	}
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	b := make([]byte, fi.Size()-c.size)
+	if _, err := f.ReadAt(b, c.size); err != nil && !(errors.Is(err, io.EOF) && len(b) == 0) {
+		return nil, err
+	}
+	read := c.size + int64(len(b))
 	if len(b) > 0 && b[len(b)-1] != '\n' {
 		cut := bytes.LastIndexByte(b, '\n') + 1
 		l.torn.Store(int64(len(b) - cut))
 		if !repair {
 			return nil, fmt.Errorf("%w: unfinished last line (%d bytes)", ErrCorrupt, len(b)-cut)
 		}
-		if err := os.Truncate(l.path("ledger.jsonl"), int64(cut)); err != nil {
+		if err := os.Truncate(path, c.size+int64(cut)); err != nil {
 			return nil, err
 		}
 		b = b[:cut]
+		read = c.size + int64(cut)
 	}
-	st := &state{}
+	st := c.st
 	prev := genesis
+	if n := len(st.lines); n > 0 {
+		prev = hashLine(st.lines[n-1])
+	}
 	sc := bufio.NewScanner(bytes.NewReader(b))
 	sc.Buffer(make([]byte, 0, 64*1024), 1<<20)
 	for sc.Scan() {
@@ -198,23 +248,32 @@ func (l *Ledger) load(repair bool) (*state, error) {
 	if err := sc.Err(); err != nil {
 		return nil, err
 	}
+	c.size, c.fi = read, nil
+	if fi2, err := os.Stat(path); err == nil && fi2.Size() == read {
+		c.fi = fi2 // otherwise the next call re-reads in full
+	}
+	l.cache = c
+	return st, nil
+}
+
+func (l *Ledger) checkHead(st *state) error {
 	if hb, err := os.ReadFile(l.path("ledger.head")); err == nil {
 		var h head
 		if json.Unmarshal(hb, &h) != nil {
-			return nil, fmt.Errorf("%w: ledger.head unreadable", ErrCorrupt)
+			return fmt.Errorf("%w: ledger.head unreadable", ErrCorrupt)
 		}
 		if h.Seq > len(st.entries) {
-			return nil, fmt.Errorf("%w: truncated, the head names seq %d and the file ends at %d", ErrCorrupt, h.Seq, len(st.entries))
+			return fmt.Errorf("%w: truncated, the head names seq %d and the file ends at %d", ErrCorrupt, h.Seq, len(st.entries))
 		}
 		if h.Seq > 0 && hashLine(st.lines[h.Seq-1]) != h.Hash {
-			return nil, fmt.Errorf("%w: seq %d was rewritten (head hash differs)", ErrCorrupt, h.Seq)
+			return fmt.Errorf("%w: seq %d was rewritten (head hash differs)", ErrCorrupt, h.Seq)
 		}
 	} else if !errors.Is(err, os.ErrNotExist) {
-		return nil, err
+		return err
 	} else if len(st.entries) > 0 {
-		return nil, fmt.Errorf("%w: ledger.head is missing", ErrCorrupt)
+		return fmt.Errorf("%w: ledger.head is missing", ErrCorrupt)
 	}
-	return st, nil
+	return nil
 }
 
 func (l *Ledger) lock() (func(), error) {
@@ -235,7 +294,7 @@ func (l *Ledger) Verify() error {
 		return err
 	}
 	defer un()
-	_, err = l.load(false)
+	_, err = l.loadMode(false, true)
 	return err
 }
 
@@ -250,7 +309,7 @@ func (l *Ledger) Entries() ([]Entry, error) {
 	if err != nil {
 		return nil, err
 	}
-	return st.entries, nil
+	return st.entries[:len(st.entries):len(st.entries)], nil
 }
 
 // ledgerCurrency checks that id is a ledger-stored currency.
@@ -455,10 +514,18 @@ func (l *Ledger) appendLocked(st *state, e Entry) (Entry, error) {
 		return Entry{}, err
 	}
 	if err := l.write(line); err != nil {
+		l.cache = nil
 		return Entry{}, err
 	}
 	st.entries = append(st.entries, e)
 	st.lines = append(st.lines, line)
+	if c := l.cache; c != nil && c.st == st {
+		if fi, err := os.Stat(l.path("ledger.jsonl")); err == nil && fi.Size() == c.size+int64(len(line))+1 {
+			c.size, c.fi = fi.Size(), fi
+		} else {
+			l.cache = nil
+		}
+	}
 	hb, _ := json.Marshal(head{Seq: e.Seq, Hash: hashLine(line)})
 	if err := atomicWrite(l.path("ledger.head"), hb); err != nil {
 		return Entry{}, err

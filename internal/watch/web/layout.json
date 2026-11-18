@@ -4,1064 +4,125 @@
   "rowHeight": 48,
   "density": "dense",
   "theme": "dark",
+  "template": "cockpit/1",
+  "slots": {
+    "band": [
+      "statusline",
+      "hero-meters",
+      "needs-count"
+    ],
+    "stage": "video",
+    "strip": [
+      "progress",
+      "quest-strip",
+      "health"
+    ],
+    "rail": [
+      "needs-you",
+      "orders",
+      "zone-map",
+      "area-map"
+    ],
+    "railWide": {
+      "top": [
+        "needs-you",
+        "orders"
+      ],
+      "left": [
+        "zone-map"
+      ],
+      "right": [
+        "area-map"
+      ]
+    },
+    "phoneTabs": {
+      "Orders": [
+        "needs-you",
+        "orders"
+      ],
+      "Map": [
+        "zone-map",
+        "area-map"
+      ],
+      "Quests": [
+        "quest-strip",
+        "quest-list"
+      ],
+      "Progress": [
+        "progress",
+        "health"
+      ]
+    }
+  },
+  "sizes": {
+    "strip": 112,
+    "railMin": 400
+  },
+  "status": [
+    "hero-meters"
+  ],
   "breakpoints": {
     "phone": {
       "width": 390,
       "cols": 12,
       "panels": [
         {
-          "id": "onboarding",
+          "id": "video",
+          "band": "stage",
           "col": 1,
           "row": 1,
           "colSpan": 12,
-          "rowSpan": 4,
-          "band": "side",
+          "rowSpan": 10,
           "collapsed": false,
           "order": 0
-        },
-        {
-          "id": "hero-vitals",
-          "col": 1,
-          "row": 5,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 1
-        },
-        {
-          "id": "why",
-          "col": 1,
-          "row": 9,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 2
-        },
-        {
-          "id": "activity",
-          "col": 1,
-          "row": 13,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 3
-        },
-        {
-          "id": "video",
-          "col": 1,
-          "row": 17,
-          "colSpan": 12,
-          "rowSpan": 9,
-          "band": "stage",
-          "collapsed": false,
-          "order": 4
-        },
-        {
-          "id": "map",
-          "col": 1,
-          "row": 26,
-          "colSpan": 12,
-          "rowSpan": 9,
-          "band": "stage",
-          "collapsed": false,
-          "order": 5
-        },
-        {
-          "id": "gear",
-          "col": 1,
-          "row": 40,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 7
-        },
-        {
-          "id": "now",
-          "col": 1,
-          "row": 44,
-          "colSpan": 12,
-          "rowSpan": 6,
-          "band": "grid",
-          "collapsed": false,
-          "order": 8
-        },
-        {
-          "id": "orders-map",
-          "col": 1,
-          "row": 50,
-          "colSpan": 12,
-          "rowSpan": 10,
-          "band": "grid",
-          "collapsed": false,
-          "order": 9
-        },
-        {
-          "id": "tally",
-          "col": 1,
-          "row": 60,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 10
-        },
-        {
-          "id": "queue",
-          "col": 1,
-          "row": 64,
-          "colSpan": 12,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 11
-        },
-        {
-          "id": "thoughts",
-          "col": 1,
-          "row": 67,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 12
-        },
-        {
-          "id": "currency",
-          "col": 1,
-          "row": 71,
-          "colSpan": 12,
-          "rowSpan": 2,
-          "band": "side",
-          "collapsed": false,
-          "order": 13
-        },
-        {
-          "id": "journal",
-          "col": 1,
-          "row": 73,
-          "colSpan": 12,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 14
-        },
-        {
-          "id": "chronicle",
-          "col": 1,
-          "row": 78,
-          "colSpan": 12,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 15
-        },
-        {
-          "id": "cards",
-          "col": 1,
-          "row": 83,
-          "colSpan": 12,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 16
-        },
-        {
-          "id": "bestiary",
-          "col": 1,
-          "row": 86,
-          "colSpan": 12,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 17
-        },
-        {
-          "id": "diary",
-          "col": 1,
-          "row": 91,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 18
-        },
-        {
-          "id": "quests",
-          "col": 1,
-          "row": 95,
-          "colSpan": 12,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 19
-        },
-        {
-          "id": "rules",
-          "col": 1,
-          "row": 100,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 20
-        },
-        {
-          "id": "atlas",
-          "col": 1,
-          "row": 104,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 21
-        },
-        {
-          "id": "locked",
-          "col": 1,
-          "row": 108,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 22
-        },
-        {
-          "id": "spend",
-          "col": 1,
-          "row": 112,
-          "colSpan": 12,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 23
-        },
-        {
-          "id": "alerts",
-          "col": 1,
-          "row": 115,
-          "colSpan": 12,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 24
-        },
-        {
-          "id": "journey",
-          "col": 1,
-          "row": 120,
-          "colSpan": 12,
-          "rowSpan": 5,
-          "band": "side",
-          "collapsed": false,
-          "order": 25
         }
       ]
     },
     "tablet": {
-      "width": 768,
+      "width": 640,
       "cols": 12,
       "panels": [
         {
-          "id": "onboarding",
+          "id": "video",
+          "band": "stage",
           "col": 1,
           "row": 1,
           "colSpan": 12,
-          "rowSpan": 4,
-          "band": "side",
+          "rowSpan": 12,
           "collapsed": false,
           "order": 0
-        },
-        {
-          "id": "hero-vitals",
-          "col": 1,
-          "row": 5,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 1
-        },
-        {
-          "id": "why",
-          "col": 7,
-          "row": 5,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 2
-        },
-        {
-          "id": "activity",
-          "col": 1,
-          "row": 9,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 3
-        },
-        {
-          "id": "video",
-          "col": 1,
-          "row": 13,
-          "colSpan": 12,
-          "rowSpan": 9,
-          "band": "stage",
-          "collapsed": false,
-          "order": 4
-        },
-        {
-          "id": "map",
-          "col": 1,
-          "row": 22,
-          "colSpan": 6,
-          "rowSpan": 9,
-          "band": "stage",
-          "collapsed": false,
-          "order": 5
-        },
-        {
-          "id": "gear",
-          "col": 7,
-          "row": 27,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 7
-        },
-        {
-          "id": "now",
-          "col": 1,
-          "row": 31,
-          "colSpan": 6,
-          "rowSpan": 6,
-          "band": "grid",
-          "collapsed": false,
-          "order": 8
-        },
-        {
-          "id": "orders-map",
-          "col": 1,
-          "row": 37,
-          "colSpan": 12,
-          "rowSpan": 10,
-          "band": "grid",
-          "collapsed": false,
-          "order": 9
-        },
-        {
-          "id": "tally",
-          "col": 7,
-          "row": 31,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 10
-        },
-        {
-          "id": "queue",
-          "col": 1,
-          "row": 47,
-          "colSpan": 6,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 11
-        },
-        {
-          "id": "thoughts",
-          "col": 7,
-          "row": 47,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 12
-        },
-        {
-          "id": "currency",
-          "col": 7,
-          "row": 35,
-          "colSpan": 6,
-          "rowSpan": 2,
-          "band": "side",
-          "collapsed": false,
-          "order": 13
-        },
-        {
-          "id": "journal",
-          "col": 1,
-          "row": 50,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 14
-        },
-        {
-          "id": "chronicle",
-          "col": 7,
-          "row": 51,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 15
-        },
-        {
-          "id": "cards",
-          "col": 1,
-          "row": 55,
-          "colSpan": 6,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 16
-        },
-        {
-          "id": "bestiary",
-          "col": 7,
-          "row": 56,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 17
-        },
-        {
-          "id": "diary",
-          "col": 1,
-          "row": 58,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 18
-        },
-        {
-          "id": "quests",
-          "col": 7,
-          "row": 61,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 19
-        },
-        {
-          "id": "rules",
-          "col": 1,
-          "row": 62,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 20
-        },
-        {
-          "id": "atlas",
-          "col": 1,
-          "row": 66,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 21
-        },
-        {
-          "id": "locked",
-          "col": 7,
-          "row": 66,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 22
-        },
-        {
-          "id": "spend",
-          "col": 1,
-          "row": 70,
-          "colSpan": 6,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 23
-        },
-        {
-          "id": "alerts",
-          "col": 7,
-          "row": 70,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 24
-        },
-        {
-          "id": "journey",
-          "col": 1,
-          "row": 73,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "side",
-          "collapsed": false,
-          "order": 25
         }
       ]
     },
     "laptop": {
-      "width": 1280,
+      "width": 1024,
       "cols": 12,
       "panels": [
         {
-          "id": "onboarding",
+          "id": "video",
+          "band": "stage",
           "col": 1,
           "row": 1,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "side",
+          "colSpan": 7,
+          "rowSpan": 12,
           "collapsed": false,
           "order": 0
-        },
-        {
-          "id": "hero-vitals",
-          "col": 1,
-          "row": 5,
-          "colSpan": 4,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 1
-        },
-        {
-          "id": "why",
-          "col": 5,
-          "row": 5,
-          "colSpan": 4,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 2
-        },
-        {
-          "id": "activity",
-          "col": 9,
-          "row": 5,
-          "colSpan": 4,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 3
-        },
-        {
-          "id": "video",
-          "col": 1,
-          "row": 9,
-          "colSpan": 6,
-          "rowSpan": 9,
-          "band": "stage",
-          "collapsed": false,
-          "order": 4
-        },
-        {
-          "id": "map",
-          "col": 7,
-          "row": 9,
-          "colSpan": 3,
-          "rowSpan": 9,
-          "band": "stage",
-          "collapsed": false,
-          "order": 5
-        },
-        {
-          "id": "gear",
-          "col": 10,
-          "row": 14,
-          "colSpan": 3,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 7
-        },
-        {
-          "id": "now",
-          "col": 1,
-          "row": 18,
-          "colSpan": 6,
-          "rowSpan": 6,
-          "band": "grid",
-          "collapsed": false,
-          "order": 8
-        },
-        {
-          "id": "orders-map",
-          "col": 7,
-          "row": 18,
-          "colSpan": 6,
-          "rowSpan": 10,
-          "band": "grid",
-          "collapsed": false,
-          "order": 9
-        },
-        {
-          "id": "tally",
-          "col": 1,
-          "row": 24,
-          "colSpan": 3,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 10
-        },
-        {
-          "id": "currency",
-          "col": 1,
-          "row": 28,
-          "colSpan": 3,
-          "rowSpan": 2,
-          "band": "side",
-          "collapsed": false,
-          "order": 11
-        },
-        {
-          "id": "queue",
-          "col": 4,
-          "row": 24,
-          "colSpan": 3,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 12
-        },
-        {
-          "id": "thoughts",
-          "col": 4,
-          "row": 27,
-          "colSpan": 3,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 13
-        },
-        {
-          "id": "chronicle",
-          "col": 1,
-          "row": 31,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 14
-        },
-        {
-          "id": "journal",
-          "col": 7,
-          "row": 28,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 15
-        },
-        {
-          "id": "diary",
-          "col": 1,
-          "row": 36,
-          "colSpan": 3,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 16
-        },
-        {
-          "id": "quests",
-          "col": 4,
-          "row": 36,
-          "colSpan": 3,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 17
-        },
-        {
-          "id": "cards",
-          "col": 7,
-          "row": 33,
-          "colSpan": 3,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 18
-        },
-        {
-          "id": "bestiary",
-          "col": 10,
-          "row": 33,
-          "colSpan": 3,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 19
-        },
-        {
-          "id": "atlas",
-          "col": 1,
-          "row": 40,
-          "colSpan": 3,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 20
-        },
-        {
-          "id": "locked",
-          "col": 4,
-          "row": 41,
-          "colSpan": 3,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 21
-        },
-        {
-          "id": "rules",
-          "col": 7,
-          "row": 38,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 22
-        },
-        {
-          "id": "alerts",
-          "col": 1,
-          "row": 45,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 23
-        },
-        {
-          "id": "spend",
-          "col": 7,
-          "row": 42,
-          "colSpan": 6,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 24
-        },
-        {
-          "id": "journey",
-          "col": 7,
-          "row": 45,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "side",
-          "collapsed": false,
-          "order": 25
         }
       ]
     },
     "wide": {
-      "width": 1920,
+      "width": 1440,
       "cols": 12,
       "panels": [
-        {
-          "id": "onboarding",
-          "col": 1,
-          "row": 1,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 0
-        },
-        {
-          "id": "hero-vitals",
-          "col": 1,
-          "row": 5,
-          "colSpan": 4,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 1
-        },
-        {
-          "id": "why",
-          "col": 5,
-          "row": 5,
-          "colSpan": 4,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 2
-        },
-        {
-          "id": "activity",
-          "col": 9,
-          "row": 5,
-          "colSpan": 4,
-          "rowSpan": 4,
-          "band": "side",
-          "collapsed": false,
-          "order": 3
-        },
         {
           "id": "video",
-          "col": 1,
-          "row": 9,
-          "colSpan": 6,
-          "rowSpan": 13,
           "band": "stage",
-          "collapsed": false,
-          "order": 4
-        },
-        {
-          "id": "map",
-          "col": 7,
-          "row": 9,
-          "colSpan": 3,
-          "rowSpan": 13,
-          "band": "stage",
-          "collapsed": false,
-          "order": 5
-        },
-        {
-          "id": "gear",
-          "col": 10,
-          "row": 14,
-          "colSpan": 3,
-          "rowSpan": 8,
-          "band": "grid",
-          "collapsed": false,
-          "order": 7
-        },
-        {
-          "id": "now",
-          "col": 1,
-          "row": 22,
-          "colSpan": 6,
-          "rowSpan": 6,
-          "band": "grid",
-          "collapsed": false,
-          "order": 8
-        },
-        {
-          "id": "orders-map",
-          "col": 7,
-          "row": 22,
-          "colSpan": 6,
-          "rowSpan": 10,
-          "band": "grid",
-          "collapsed": false,
-          "order": 9
-        },
-        {
-          "id": "tally",
-          "col": 1,
-          "row": 28,
-          "colSpan": 3,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 10
-        },
-        {
-          "id": "currency",
-          "col": 1,
-          "row": 32,
-          "colSpan": 3,
-          "rowSpan": 2,
-          "band": "side",
-          "collapsed": false,
-          "order": 11
-        },
-        {
-          "id": "queue",
-          "col": 4,
-          "row": 28,
-          "colSpan": 3,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 12
-        },
-        {
-          "id": "thoughts",
-          "col": 4,
-          "row": 31,
-          "colSpan": 3,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 13
-        },
-        {
-          "id": "chronicle",
-          "col": 1,
-          "row": 35,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 14
-        },
-        {
-          "id": "journal",
-          "col": 7,
-          "row": 32,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 15
-        },
-        {
-          "id": "diary",
-          "col": 1,
-          "row": 40,
-          "colSpan": 3,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 16
-        },
-        {
-          "id": "quests",
-          "col": 4,
-          "row": 40,
-          "colSpan": 3,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 17
-        },
-        {
-          "id": "cards",
-          "col": 7,
-          "row": 37,
-          "colSpan": 3,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 18
-        },
-        {
-          "id": "bestiary",
-          "col": 10,
-          "row": 37,
-          "colSpan": 3,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 19
-        },
-        {
-          "id": "atlas",
-          "col": 1,
-          "row": 44,
-          "colSpan": 3,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 20
-        },
-        {
-          "id": "locked",
-          "col": 4,
-          "row": 45,
-          "colSpan": 3,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 21
-        },
-        {
-          "id": "rules",
-          "col": 7,
-          "row": 42,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "band": "grid",
-          "collapsed": false,
-          "order": 22
-        },
-        {
-          "id": "alerts",
-          "col": 1,
-          "row": 49,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "grid",
-          "collapsed": false,
-          "order": 23
-        },
-        {
-          "id": "spend",
-          "col": 7,
-          "row": 46,
-          "colSpan": 6,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 24
-        },
-        {
-          "id": "journey",
-          "col": 7,
-          "row": 49,
-          "colSpan": 6,
-          "rowSpan": 5,
-          "band": "side",
-          "collapsed": false,
-          "order": 25
-        }
-      ]
-    },
-    "overlay": {
-      "width": 1920,
-      "cols": 12,
-      "panels": [
-        {
-          "id": "hero-status",
           "col": 1,
           "row": 1,
-          "colSpan": 5,
-          "rowSpan": 3,
-          "band": "status",
+          "colSpan": 7,
+          "rowSpan": 12,
           "collapsed": false,
           "order": 0
-        },
-        {
-          "id": "whyline",
-          "col": 6,
-          "row": 1,
-          "colSpan": 5,
-          "rowSpan": 3,
-          "band": "status",
-          "collapsed": false,
-          "order": 1
-        },
-        {
-          "id": "alerts",
-          "col": 11,
-          "row": 1,
-          "colSpan": 2,
-          "rowSpan": 3,
-          "band": "grid",
-          "collapsed": false,
-          "order": 2
         }
       ]
     }

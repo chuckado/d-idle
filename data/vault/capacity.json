@@ -1,0 +1,14 @@
+{
+  "_note": "PLACEHOLDER numbers (design docs/design/loot-vault-2026-11-16.md section 2.4, user answers 2026-11-16). Prices are in the account meta currency (ETHER). Changing this file is the only way to retune the tiers.",
+  "base": 400,
+  "max": 2400,
+  "pinPercent": 25,
+  "steps": [
+    {"id": "v1", "add": 200, "price": 20},
+    {"id": "v2", "add": 300, "price": 40},
+    {"id": "v3", "add": 300, "price": 80},
+    {"id": "v4", "add": 400, "price": 160},
+    {"id": "v5", "add": 400, "price": 320},
+    {"id": "v6", "add": 400, "price": 640}
+  ]
+}

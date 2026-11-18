@@ -1,0 +1,30 @@
+<!doctype html><meta charset="utf-8"><title>palfeed pacing bench</title><pre id="out">running</pre>
+<canvas id="cv" width="800" height="600" style="width:400px;height:300px"></canvas>
+<script src="/palfeed.js"></script>
+<script>
+// The real Player against a paced, jittery feed (stream3.js): phase A presents at the first animation frame after each arrival
+// (noClock, the old behaviour), phase B uses the presentation clock. Reports what the player counted and the spread of the
+// intervals between draws. Chromium headless: the animation frame rate is whatever the build gives (reported).
+(async function () {
+  var out = ['BENCH3 ' + navigator.userAgent], cv = document.getElementById('cv');
+  function raf() { return new Promise(function (r) { requestAnimationFrame(r); }); }
+  async function phase(name, noClock, jitter) {
+    var p = new PalFeed.Player({ canvas: cv, url: '/stream.pfeed' + (jitter ? '' : '?jitter=0'), noClock: noClock, headers: {} });
+    var ts = [], t0 = performance.now(), running = true;
+    (async function () { var last = 0; while (running) { var t = await raf(); if (last) ts.push(t - last); last = t; } })();
+    p.start();
+    while (performance.now() - t0 < 15000) await new Promise(function (r) { setTimeout(r, 200); });
+    var st = p.stats(); p.stop(); running = false;
+    var m = ts.reduce(function (a, b) { return a + b; }, 0) / ts.length;
+    out.push(name + ': delivered ' + st.delivered + ' decoded ' + st.decoded + ' presented ' + st.presented + ' dropped ' + st.dropped +
+      ' | present fps ' + st.presentFps.toFixed(1) + ' | draw interval sd ' + st.jitterMs.toFixed(2) + ' ms | latency ' + st.latencyMs.toFixed(0) +
+      ' ms | delay ' + st.delayMs.toFixed(0) + ' ms | main-thread work per animation frame ' + st.workMs.toFixed(2) + ' ms | rAF every ' + m.toFixed(2) + ' ms');
+  }
+  await phase('A jitter, no clock (old)', true, true);
+  await phase('B jitter, presentation clock', false, true);
+  await phase('C no jitter, presentation clock', false, false);
+  out.push('DONE');
+  var res = out.join('\n'); document.getElementById('out').textContent = res;
+  await fetch('/result', { method: 'POST', body: res });
+})().catch(function (e) { fetch('/result', { method: 'POST', body: 'ERROR ' + e + ' ' + (e && e.stack) }); });
+</script>

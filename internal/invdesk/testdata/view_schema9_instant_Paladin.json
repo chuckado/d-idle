@@ -1,0 +1,188 @@
+{
+ "schema": 9,
+ "inTown": false,
+ "class": "Paladin",
+ "gold": 5000,
+ "stashGold": 20000,
+ "equipment": {
+  "torso": {
+   "id": 5,
+   "code": "13",
+   "name": "",
+   "quality": "",
+   "identified": false,
+   "x": 0,
+   "y": 0,
+   "w": 2,
+   "h": 3,
+   "noSell": "only backpack items are sold",
+   "noTrash": "it is worn: take it off first"
+  }
+ },
+ "backpack": [
+  {
+   "id": 1,
+   "code": "10",
+   "name": "",
+   "quality": "",
+   "identified": false,
+   "x": 0,
+   "y": 0,
+   "w": 1,
+   "h": 3,
+   "canSell": true,
+   "canWear": [
+    "rhand"
+   ],
+   "noWearSlot": {
+    "belt": "does not fit that slot",
+    "feet": "does not fit that slot",
+    "gloves": "does not fit that slot",
+    "head": "does not fit that slot",
+    "lhand": "does not fit that slot",
+    "lring": "does not fit that slot",
+    "neck": "does not fit that slot",
+    "rring": "does not fit that slot",
+    "torso": "does not fit that slot"
+   },
+   "stashOp": "stash"
+  },
+  {
+   "id": 2,
+   "code": "11",
+   "name": "",
+   "quality": "",
+   "identified": false,
+   "x": 0,
+   "y": 0,
+   "w": 1,
+   "h": 2,
+   "canSell": true,
+   "noWear": "restricted to another class",
+   "noWearSlot": {
+    "belt": "restricted to another class",
+    "feet": "restricted to another class",
+    "gloves": "restricted to another class",
+    "head": "restricted to another class",
+    "lhand": "restricted to another class",
+    "lring": "restricted to another class",
+    "neck": "restricted to another class",
+    "rhand": "restricted to another class",
+    "rring": "restricted to another class",
+    "torso": "restricted to another class"
+   },
+   "stashOp": "stash"
+  },
+  {
+   "id": 4,
+   "code": "",
+   "name": "",
+   "quality": "",
+   "identified": false,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "noWear": "restricted to another class",
+   "noWearSlot": {
+    "belt": "restricted to another class",
+    "feet": "restricted to another class",
+    "gloves": "restricted to another class",
+    "head": "restricted to another class",
+    "lhand": "restricted to another class",
+    "lring": "restricted to another class",
+    "neck": "restricted to another class",
+    "rhand": "restricted to another class",
+    "rring": "restricted to another class",
+    "torso": "restricted to another class"
+   },
+   "noSell": "this item is never sold",
+   "stashOp": "stash"
+  }
+ ],
+ "stash": [
+  {
+   "id": 3,
+   "code": "12",
+   "name": "",
+   "quality": "",
+   "identified": false,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "noWear": "move it to the backpack first",
+   "noSell": "only backpack items are sold",
+   "noTrash": "only backpack items are trashed: move it to the backpack first",
+   "stashOp": "take"
+  }
+ ],
+ "belt": null,
+ "pins": [
+  {
+   "slot": "rhand",
+   "id": 1,
+   "name": "thing",
+   "since": 1800000000
+  }
+ ],
+ "queue": [
+  {
+   "id": 3,
+   "kind": "take",
+   "name": "thing",
+   "state": "queued",
+   "reason": "waits until the hero is in town",
+   "at": 1800000000,
+   "print": "12/0/0",
+   "wait": "town"
+  }
+ ],
+ "recent": [
+  {
+   "id": 1,
+   "kind": "equip",
+   "slot": "rhand",
+   "name": "thing",
+   "state": "done",
+   "at": 1800000000,
+   "print": "10/4/5",
+   "how": "fast"
+  }
+ ],
+ "stashOps": {
+  "depositMax": 5000,
+  "withdrawMax": 20000
+ },
+ "identify": {
+  "tool": "tome",
+  "tome": 5,
+  "tomeCap": 20,
+  "scrolls": 0,
+  "unid": 3,
+  "buyDefault": 15,
+  "buyMax": 20,
+  "cain": "locked",
+  "cainWhy": "opens when Cain is rescued"
+ },
+ "sets": {
+  "schema": 1,
+  "open": true,
+  "max": 8,
+  "sets": []
+ },
+ "instant": {
+  "enabled": true,
+  "equip": true,
+  "unequip": true,
+  "move": true,
+  "identify": true,
+  "drop": true,
+  "stash": false,
+  "take": false,
+  "gold": false,
+  "done": {
+   "fast": 1
+  }
+ }
+}

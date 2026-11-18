@@ -118,6 +118,7 @@ type FightTelemetry struct {
 	Approaches int // moves to get in range
 	Novas      int // Frost Nova casts on a crowd
 	Forced     int // casts forced by the watchdog
+	Starved    int // watchdog lines where an attack was too dear for the mana pool
 	Damage     int // sum of life drops between samples (healing is not netted out)
 	MinLifePct int
 	End        string // why the fight ended (see noteEnd), empty until it did

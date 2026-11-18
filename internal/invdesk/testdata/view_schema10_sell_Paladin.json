@@ -1,0 +1,122 @@
+{
+ "schema": 10,
+ "inTown": false,
+ "class": "Paladin",
+ "gold": 0,
+ "sellPending": 1,
+ "stashGold": 0,
+ "equipment": {},
+ "backpack": [
+  {
+   "id": 1,
+   "code": "10",
+   "name": "",
+   "quality": "",
+   "identified": false,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "mark": "sell",
+   "canSell": true,
+   "canWear": [
+    "rhand"
+   ],
+   "noWearSlot": {
+    "belt": "does not fit that slot",
+    "feet": "does not fit that slot",
+    "gloves": "does not fit that slot",
+    "head": "does not fit that slot",
+    "lhand": "does not fit that slot",
+    "lring": "does not fit that slot",
+    "neck": "does not fit that slot",
+    "rring": "does not fit that slot",
+    "torso": "does not fit that slot"
+   },
+   "noTrash": "trashing is not available on this bot"
+  },
+  {
+   "id": 2,
+   "code": "11",
+   "name": "",
+   "quality": "",
+   "identified": false,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "canSell": true,
+   "noWear": "restricted to another class",
+   "noWearSlot": {
+    "belt": "restricted to another class",
+    "feet": "restricted to another class",
+    "gloves": "restricted to another class",
+    "head": "restricted to another class",
+    "lhand": "restricted to another class",
+    "lring": "restricted to another class",
+    "neck": "restricted to another class",
+    "rhand": "restricted to another class",
+    "rring": "restricted to another class",
+    "torso": "restricted to another class"
+   },
+   "noTrash": "trashing is not available on this bot"
+  },
+  {
+   "id": 4,
+   "code": "",
+   "name": "",
+   "quality": "",
+   "identified": false,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "noWear": "restricted to another class",
+   "noWearSlot": {
+    "belt": "restricted to another class",
+    "feet": "restricted to another class",
+    "gloves": "restricted to another class",
+    "head": "restricted to another class",
+    "lhand": "restricted to another class",
+    "lring": "restricted to another class",
+    "neck": "restricted to another class",
+    "rhand": "restricted to another class",
+    "rring": "restricted to another class",
+    "torso": "restricted to another class"
+   },
+   "noSell": "this item is never sold",
+   "noTrash": "trashing is not available on this bot"
+  }
+ ],
+ "stash": null,
+ "belt": null,
+ "pins": [],
+ "queue": [
+  {
+   "id": 0,
+   "kind": "sell",
+   "name": "Sell marked items (1)",
+   "state": "queued",
+   "reason": "waits until the hero is in town",
+   "at": 1800000000,
+   "count": 1
+  }
+ ],
+ "recent": [
+  {
+   "id": 0,
+   "kind": "sell",
+   "name": "Sell marked items (1)",
+   "state": "done",
+   "at": 1800000000,
+   "count": 1,
+   "result": "sold 1 of 1 marked"
+  }
+ ],
+ "sets": {
+  "schema": 1,
+  "open": true,
+  "max": 8,
+  "sets": []
+ }
+}

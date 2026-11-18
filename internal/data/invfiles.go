@@ -23,6 +23,11 @@ func (db *DB) InvFiles() []string {
 		add(b.UniqueInvFile)
 		add(b.SetInvFile)
 	}
+	for _, t := range db.ItemTypes {
+		for _, n := range t.InvGfx {
+			add(n)
+		}
+	}
 	for _, u := range db.Uniques {
 		add(u.InvFile)
 	}
