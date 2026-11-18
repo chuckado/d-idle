@@ -4,7 +4,7 @@ A mercenary's gear absorb (stats 142 to 149) takes part of every elemental or ma
 
 - `Fight::merc_fighter` keeps the absorb stats `make_fighter` reads from the merc's worn gear (its resistances already came the same way).
 - `Fight::hurt_side` gives the merc the heal-back before the blows' totals come off its life: `rules::absorb_heal` over the merc's blows, in 256ths of `life_fine()`, capped at `merc_max_life() << 8`, a blow at a time. Nothing else in the merc's life handling changes (its fraction carry, the dead-under-one-point rule, the crush after the hits, the get-hit).
-- `test_gear_absorb` no longer asserts that the merc takes none; `test_merc_absorb` pins game.exe's lives for eleven cases.
+- `test_gear_absorb` no longer asserts that the merc takes none; `test_merc_absorb` pins game.exe's lives for twelve cases.
 
 Two commits: the oracle (`tools/emu/merc_absorb.py`, `tests/game/test_merc_absorb.cpp --life`, a README row), then the claim.
 

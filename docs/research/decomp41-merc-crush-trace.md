@@ -8,8 +8,8 @@ Tags: **V run** (game.exe's own code, or d2d's real code, run and compared), **V
 
 | Candidate | Status | Branch (private fork remote) | Proof |
 |---|---|---|---|
-| 1. Merc gear absorb and heal-back | built | `fid/merc-absorb-r1`: oracle `4909c7e2`, claim `cc0e92c3` | section 1 |
-| 2a. Crush D5: a plain unique divides by 4, not 8 | built | `fid/crush-d5-r1`: oracle `f3e764f3`, claim `b0e6297a` | section 2 |
+| 1. Merc gear absorb and heal-back | built | `fid/merc-absorb-r1`: oracle `15490e40`, claim `0595e2d1` | section 1 |
+| 2a. Crush D5: a plain unique divides by 4, not 8 | built | `fid/crush-d5-r1`: oracle `9eac185e`, claim `bfef14cf` | section 2 |
 | 2b. Crush D6: the get-hit size test does not count the crush | scoped, not built | none | section 3 |
 | 3a. death-corpse-exp | stays held, re-checked | `fid/death-corpse-exp-r1` (unchanged) | section 4 |
 | 3b. Player magic resistance (decomp37 T3) | scoped, not built | none | section 5 |
@@ -81,11 +81,34 @@ R1 (equip path, answers Q2): `debug merc hire 12` (a Desert Guard), then put an 
 
 ### 2.1 Differential
 
-D5_RESULTS
+`crush_div.py gen 8` writes 29,360 cases (734 MonStats rows x 5 kinds x 1 to 8 players); `game` runs `FUN_005bffc0` on each (every table loaded); `test_crush_divisor --crush` prints d2d's `Monster::crush_divisor` result as a crush of the same life; `compare` exits 1 on any difference, an empty, short or malformed file (V run).
+
+| | plain | champion | unique | superunique | minion | total |
+|---|---|---|---|---|---|---|
+| parent (oracle commit `9eac185e`), 5,872 cases a kind | 0 | 0 | **5,632** | 0 | 0 | **5,632 of 29,360**, exit 1 |
+| claim `bfef14cf` | 0 | 0 | 0 | 0 | 0 | **0 of 29,360**, exit 0 |
+
+The 240 unique cases that agree on the parent are the 25 MonStats boss rows (8 anyway) and the 5 hireling rows (10), at 8 players: the rest of the rows of a unique differed at every player count. Edge exits (V run): an empty game file, an empty d2d file, an empty case file, a short d2d file, a malformed d2d line, a missing file, no argument and `game` on an empty case file: every one exits 1.
 
 ### 2.2 Mutants of the claim
 
-D5_MUTANTS
+Each mutant is one text change in `crush_divisor` (`components/game/ai.hpp`); the test's translation unit is recompiled with the build's own compile command and linked with the objects of the unmutated build (`mutb5.py` in the lab dir, local, never pushed); `test_crush_divisor` (pins) and the compare run on each.
+
+| Mutant | `test_crush_divisor` pins | compare (of 29,360) |
+|---|---|---|
+| m1 a unique counts again (the parent) | abort | 5,632 differ |
+| m2 the superunique no longer gets 8 | abort | 5,632 |
+| m3 a champion gets 8 | abort | 5,632 |
+| m4 the MonStats boss column dropped | abort | 800 |
+| m5 a minion gets 8 | abort | 5,632 |
+| m6 the base 4 becomes 5 | abort | 22,528 |
+| m7 the 8 becomes 9 | abort | 6,632 |
+| m8 the player share dropped | abort | 25,515 |
+| m9 the share read at one player more | abort | 25,515 |
+| m10 the hireling branch dropped | abort | 180 |
+| m11 a hireling gets 9 | abort | 200 |
+
+11 of 11 abort the pins (V run). One pin first passed m10 (a plain unique at 4 players has the divisor 10 as well: 4 + 150 percent); the hireling pin is at one player now.
 
 ### 2.3 Deviations (crush on a monster defender)
 
