@@ -39,7 +39,6 @@ type GlanceView struct {
 	Needs    []GlanceNeed   `json:"needs"`
 	Health   GlanceHealth   `json:"health"`
 	Progress GlanceProgress `json:"progress"`
-	Journey  *GlanceJourney `json:"journey,omitempty"`
 	// Quest is the quest board's current chunk, step and NPC for the video card strip (slice S4); absent while the board
 	// is off or nothing is accepted.
 	Quest *GlanceQuest `json:"quest,omitempty"`
@@ -131,33 +130,9 @@ type GlanceLevel struct {
 	ETASeconds *int     `json:"etaSeconds"`
 }
 
-// GlanceJourney is the chapter strip (from the campaign desk, when a source is bound).
-type GlanceJourney struct {
-	N        int             `json:"n"`
-	Of       int             `json:"of"`
-	Chapters []GlanceChapter `json:"chapters"`
-	Next     *GlanceNextStep `json:"next,omitempty"`
-	Actions  []GlanceVerb    `json:"actions"`
-}
-
-// GlanceChapter is one dot of the strip; State is done, open, held, skipped or todo.
-type GlanceChapter struct {
-	ID    string `json:"id"`
-	State string `json:"state"`
-}
-
-// GlanceNextStep is the chapter the hero heads for and how ready it is.
-type GlanceNextStep struct {
-	ID    string `json:"id"`
-	Title string `json:"title"`
-	Band  string `json:"band,omitempty"`
-	Text  string `json:"text,omitempty"`
-}
-
 // GlanceSources are the optional readers behind the blocks the Hub does not hold itself. Every field may be nil.
 type GlanceSources struct {
 	Needs    func() []GlanceNeed
-	Journey  func() (GlanceJourney, bool)
 	Quest    func() (GlanceQuest, bool)
 	QuestOn  func() bool
 	Gear     func() (GlanceLight, bool)
@@ -282,12 +257,6 @@ func (h *Hub) Glance() GlanceView {
 	}
 	v.Health = glanceHealth(hv, src)
 	v.Progress = h.glanceProgress(hv)
-	if src.Journey != nil {
-		if j, ok := src.Journey(); ok {
-			j = cleanJourney(j)
-			v.Journey = &j
-		}
-	}
 	if src.QuestOn != nil {
 		v.QuestBoard = src.QuestOn()
 	}
@@ -486,25 +455,6 @@ func cleanVerbsMax(in []GlanceVerb, max int) []GlanceVerb {
 		}
 	}
 	return out
-}
-
-func cleanJourney(j GlanceJourney) GlanceJourney {
-	if len(j.Chapters) > 12 {
-		j.Chapters = j.Chapters[:12]
-	}
-	for i, c := range j.Chapters {
-		j.Chapters[i] = GlanceChapter{ID: safeText(c.ID, 40), State: safeText(c.State, 12)}
-	}
-	if j.Chapters == nil {
-		j.Chapters = []GlanceChapter{}
-	}
-	if j.Next != nil {
-		n := *j.Next
-		n.ID, n.Title, n.Band, n.Text = safeText(n.ID, 40), safeText(n.Title, 60), safeText(n.Band, 20), safeText(n.Text, glanceTextMax)
-		j.Next = &n
-	}
-	j.Actions = cleanVerbs(j.Actions)
-	return j
 }
 
 func (h *Hub) glanceHandler() http.HandlerFunc {

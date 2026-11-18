@@ -14,7 +14,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	journey "d2lod-bot/internal/campaign"
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/decide"
 	"d2lod-bot/internal/env"
@@ -124,7 +123,6 @@ type Runner struct {
 	sub *event.Sub // bridge subscription (bus -> ch), nil without a bus
 
 	gf       *goldfarm.Controller     // the player's Farm gold order (SetGoldFarm); nil: no order
-	journey  *journey.Controller      // the guided journey (SetJourney, guided.go); nil: the floor planner alone
 	qb       *boardRT                 // the quest board executor (NewQuestBoard, questboard.go); nil: not wired
 	qbMu     sync.Mutex               // guards qb and qbMake (the API goroutine builds the board of a hero too)
 	qbLedger func() questboard.Ledger // the account wallet of the quest board (nil: no Ether hook); guarded by qbMu
@@ -666,7 +664,7 @@ func (r *Runner) compile(g goals.Goal) (goalSpec, error) {
 		if r.d.Task == nil {
 			return spec, errors.New("task layer not wired (Deps.Task is nil)")
 		}
-		spec.camp = r.withQuestGivers(task.Template(p.Template, p.Cain).WithRogueClaim()).WithGuide(r.journeyGuide())
+		spec.camp = r.withQuestGivers(task.Template(p.Template, p.Cain).WithRogueClaim())
 		if spec.camp == nil {
 			return spec, fmt.Errorf("unknown campaign template %q", p.Template)
 		}

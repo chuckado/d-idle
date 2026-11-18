@@ -75,6 +75,8 @@ type Plan struct {
 	// those award keys. A key in Baseline never pays (user decision 2026-11-16: no backfill for old saves).
 	Based    []string `json:"based,omitempty"`
 	Baseline []string `json:"baseline,omitempty"`
+	// Legacy is LegacySchema once the retired Journey's decisions were imported (ImportLegacy).
+	Legacy string `json:"legacy,omitempty"`
 }
 
 func (p Plan) based(diff int) bool {
@@ -440,4 +442,55 @@ func (s *Store) SetMode(m string) error {
 		return fmt.Errorf("questboard: unknown mode %q (train, idle or farm)", m)
 	}
 	return s.update(func(p *Plan) error { p.Mode = m; return nil })
+}
+
+// LegacySchema marks a plan file that already took in the retired Journey's decisions (slice S9).
+const LegacySchema = "campaign/1"
+
+// Legacy is what the board keeps of a hero's retired Journey state (state/campaign.json): the quests the player skipped
+// (Intent skip on a chapter that names a quest) and whether the hero played "orders" mode. Derived progress (done
+// chapters, asked questions, Go now, holds) is not imported: the board derives progress from the game's own quest
+// bits, so a hero mid-Journey loses nothing and is simply offered the same next quest.
+type Legacy struct {
+	SkippedQuests []string
+	OrdersMode    bool
+}
+
+// ImportLegacy takes the retired Journey's decisions into the plan once (the marker is stored in the plan, so a
+// restart or a second call changes nothing). Quests the board has no data for are ignored. Never touches the
+// Journey's own file. It returns how many skips were added.
+func (s *Store) ImportLegacy(l Legacy, diff int) (added int, err error) {
+	if diff < 0 || diff > 2 {
+		return 0, fmt.Errorf("questboard: difficulty index %d out of range", diff)
+	}
+	err = s.update(func(p *Plan) error {
+		if p.Legacy == LegacySchema {
+			return nil
+		}
+		for _, name := range l.SkippedQuests {
+			q := s.legacyQuest(name)
+			if q == "" || p.skipped(diff, q, "") {
+				continue
+			}
+			p.Skipped = append(p.Skipped, SkipRecord{Quest: q, Diff: Difficulties[diff], At: s.now().UTC()})
+			added++
+		}
+		if l.OrdersMode && p.Mode == "" {
+			p.Mode = "farm" // "orders": between the player's orders the hero farms its current safe zone
+		}
+		p.Legacy = LegacySchema
+		return nil
+	})
+	return added, err
+}
+
+// legacyQuest resolves a quest name of the old Journey (a task-layer id such as sisters_burial) to the board's quest
+// id ("" when the board has no such quest).
+func (s *Store) legacyQuest(name string) string {
+	for _, q := range s.b.Quests() {
+		if q.ID == name || q.TaskID == name {
+			return q.ID
+		}
+	}
+	return ""
 }

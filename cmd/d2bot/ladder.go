@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"crypto/rand"
-	"d2lod-bot/internal/campaign"
 	"d2lod-bot/internal/paths"
 	"d2lod-bot/internal/questboard"
 	"encoding/base64"
@@ -87,7 +86,6 @@ type ladderOptions struct {
 	characters    watch.CharactersDesk // the Character Select backend (charwire.go, docs/charselect.md); nil: no routes (the Game.exe backend is not wired yet)
 	repair        *repair.Controller   // the repair policy (repairwire.go); nil: none
 	farm          *goldfarm.Controller // the Farm gold order (repairwire.go); nil: none
-	journey       *campaign.Controller // the guided journey (journeywire.go); nil: none
 	quests        *questboard.Desk     // the quest board desk (questwire.go); nil: no routes
 	// riskFacts is the hero risk meter's reader (bot.Runner.RiskFacts); nil: no meter. monsters is the monster table
 	// for the bestiary; nil (no game tables): flavour-only cards.
@@ -327,7 +325,6 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 				hub.SetEtherSource(eh.chip)
 			}
 		}
-		bindJourney(rig.Fun, l.journey)
 		bindQuests(rig.Fun, l.quests)
 		if src == nil {
 			src = hub // a person answers: the Hub never answers by itself

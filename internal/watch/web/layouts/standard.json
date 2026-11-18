@@ -117,16 +117,6 @@
           "fallback": "thoughts"
         },
         {
-          "id": "journey",
-          "band": "side",
-          "col": 1,
-          "row": 54,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "collapsed": false,
-          "order": 9
-        },
-        {
           "id": "cards",
           "band": "grid",
           "col": 1,
@@ -456,16 +446,6 @@
           "collapsed": false,
           "order": 8,
           "fallback": "thoughts"
-        },
-        {
-          "id": "journey",
-          "band": "side",
-          "col": 1,
-          "row": 39,
-          "colSpan": 12,
-          "rowSpan": 4,
-          "collapsed": false,
-          "order": 9
         },
         {
           "id": "cards",
@@ -799,16 +779,6 @@
           "fallback": "tally"
         },
         {
-          "id": "journey",
-          "band": "side",
-          "col": 1,
-          "row": 18,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "collapsed": false,
-          "order": 9
-        },
-        {
           "id": "cards",
           "band": "grid",
           "col": 1,
@@ -1138,16 +1108,6 @@
           "collapsed": false,
           "order": 8,
           "fallback": "tally"
-        },
-        {
-          "id": "journey",
-          "band": "side",
-          "col": 1,
-          "row": 18,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "collapsed": false,
-          "order": 9
         },
         {
           "id": "cards",

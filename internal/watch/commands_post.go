@@ -147,8 +147,6 @@ func (b commandBody) translate() (cmdReq, string) {
 		return cmdReq{RouteSellNow, a}, ""
 	case "revive_merc":
 		return cmdReq{"/api/merc/revive", a}, ""
-	case "journey":
-		return cmdReq{CampaignIntentRoute, a}, ""
 	}
 	if p, ok := itemRoutes[b.Intent]; ok {
 		return cmdReq{p, a}, ""

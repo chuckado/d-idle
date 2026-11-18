@@ -29,7 +29,7 @@ var fxPanels = []fxPanel{
   for (let i = 0; i < n; i++) list.append(ctx.el('div', 'row', i === 0 ? 'Farm Cold Plains 30 min  ACTIVE' : 'then: level 10, order number ' + i + ' of the plan that runs long'));
   ctx.body.append(verbs, list);`},
 	{"fx-progress", "Progress", `ctx.body.append(ctx.el('div', 'row', 'Progress  level 7'), ctx.el('div', 'row', 'to 10 in 25 min'), ctx.el('div', 'row', 'xp/h 12.4k  gold/h 2.1k'));`},
-	{"fx-journey", "Journey", `ctx.body.append(ctx.el('div', 'row', 'Journey  chapter 3 of 9'), ctx.el('div', 'row', 'Blood Raven: too early for this hero, a long line that is cut'));`},
+	{"fx-quest", "Quest", `ctx.body.append(ctx.el('div', 'row', 'Quest  Sisters' + "'" + ' Burial Grounds'), ctx.el('div', 'row', 'Blood Raven: not ready for this hero yet, a long line that is cut'));`},
 	{"fx-health", "Health", `ctx.body.append(ctx.el('div', 'row', 'Health'), ctx.el('div', 'row', 'Life ok  Gear ok  Ready ok'));`},
 	// the crafted pages the check must fail (docs/ui/redesign-2026-11-14/reviews/s1b-review.md): content cut one level below
 	// the panel root, a data-scroll that does not scroll, a slot whose only panel is hidden, a frame taller than the window
@@ -85,7 +85,7 @@ func fxLayout(name string) map[string]any {
 	// the area map is the real panel (S6); the rest stand in for the slices that are not built
 	rail := []string{"fx-needs", "fx-orders", "zone-map", "area-map"}
 	wide := map[string]any{"top": []string{"fx-needs", "fx-orders"}, "left": []string{"zone-map"}, "right": []string{"area-map"}}
-	tabs := orderedTabs{{"Orders", []string{"fx-needs", "fx-orders"}}, {"Map", []string{"zone-map", "area-map"}}, {"Progress", []string{"fx-progress", "fx-journey", "fx-health"}}}
+	tabs := orderedTabs{{"Orders", []string{"fx-needs", "fx-orders"}}, {"Map", []string{"zone-map", "area-map"}}, {"Progress", []string{"fx-progress", "fx-quest", "fx-health"}}}
 	if name == "orders" { // the demo with the real Orders panel (fed by commandsFixture) in place of its stand-in
 		rail = []string{"fx-needs", "orders", "zone-map", "area-map"}
 		wide["top"] = []string{"fx-needs", "orders"}
@@ -105,7 +105,7 @@ func fxLayout(name string) map[string]any {
 		"schema": "watch.layout/1", "cols": 12, "rowHeight": 48, "density": "dense", "theme": "dark", "template": "cockpit/1",
 		"slots": map[string]any{
 			"band": []string{"statusline", "hero-meters", "needs-count"}, "stage": "video",
-			"strip": []string{"fx-progress", "fx-journey", "fx-health"}, "rail": rail,
+			"strip": []string{"fx-progress", "fx-quest", "fx-health"}, "rail": rail,
 			"railWide": wide, "phoneTabs": tabs,
 		},
 		"sizes":       map[string]any{"strip": 112, "railMin": 400},

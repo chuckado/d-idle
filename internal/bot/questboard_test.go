@@ -20,6 +20,7 @@ func boardRig(t *testing.T, on bool) (*rig, *questboard.Exec) {
 	q := &fakeQuests{}
 	g := campaignRig(t, q, 3)
 	g.mover.exploreFn = func(ctx context.Context, done func() bool) error { return nil }
+	g.r.e.Tune.Quests.Board = 0
 	if on {
 		g.r.e.Tune.Quests.Board = 1
 	}
@@ -34,18 +35,18 @@ func boardRig(t *testing.T, on bool) (*rig, *questboard.Exec) {
 	return g, g.r.NewQuestBoard(b, st)
 }
 
-func TestQuestBoardKnobDefaultsOff(t *testing.T) {
-	if env.DefaultTuning().Quests.Board != 0 {
-		t.Fatal("quests.board must default to 0")
+func TestQuestBoardKnobDefaultsOn(t *testing.T) {
+	if env.DefaultTuning().Quests.Board != 1 {
+		t.Fatal("quests.board must default to 1 (S9: the board is the only quest driver)")
 	}
 	found := false
 	for _, k := range env.Knobs() {
 		if k.Key == "quests.board" {
-			found = k.Default == 0 && k.Min == 0 && k.Max == 1
+			found = k.Default == 1 && k.Min == 0 && k.Max == 1
 		}
 	}
 	if !found {
-		t.Fatal("knob quests.board missing or not 0..1 default 0")
+		t.Fatal("knob quests.board missing or not 0..1 default 1")
 	}
 	tu := env.DefaultTuning()
 	for _, k := range env.Knobs() {

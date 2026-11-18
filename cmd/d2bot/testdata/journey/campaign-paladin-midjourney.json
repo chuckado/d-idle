@@ -1,0 +1,16 @@
+{
+ "schema": "campaign.state/1",
+ "heroes": {
+  "Palli": {
+   "mode": "guided",
+   "goAt": "recommended",
+   "intents": {"countess": "skip", "blood_raven": "skip", "andariel": "hold"},
+   "goNow": "blood_raven",
+   "asked": {"blood_raven": "2026-11-14T10:00:00Z"},
+   "answers": {"blood_raven": {"yes": false, "level": 8}},
+   "done": {"start": "2026-11-13T09:00:00Z", "den_of_evil": "2026-11-13T10:00:00Z"},
+   "skipped": {"countess": "2026-11-14T11:00:00Z"},
+   "farm": {"chapter": "blood_raven", "since": "2026-11-14T10:30:00Z"}
+  }
+ }
+}

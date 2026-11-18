@@ -13,12 +13,12 @@ type QuestsTuning struct {
 }
 
 func DefaultQuestsTuning() QuestsTuning {
-	return QuestsTuning{AutoDelaySec: 20, AwayMin: 10, AutoHoldMin: 15, AutoGapMin: 30, AutoDayCap: 6}
+	return QuestsTuning{Board: 1, AutoDelaySec: 20, AwayMin: 10, AutoHoldMin: 15, AutoGapMin: 30, AutoDayCap: 6}
 }
 
 func questsKnobs() []Knob {
 	return []Knob{
-		{Key: "quests.board", Label: "Quest board drives quests", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
+		{Key: "quests.board", Label: "Quest board drives quests", Unit: "bool", Default: 1, Min: 0, Max: 1, NoHandicap: true,
 			Desc: "1: a quest runs only after the player accepts its current chunk (Start); the bot does that chunk, walks to the NPC and stops, and the player taps Hand in. The planner then no longer starts quests by itself: between chunks the hero acts on the player's mode (Train levels toward the next quest, Idle parks in town, Farm farms loot and gold; docs/questboard.md Modes). 0 (default): today's planner behaviour, nothing changes. Off until the live drill of docs/questboard.md has run."},
 		{Key: "quests.autoDelaySec", Label: "Auto-start countdown", Unit: "s", Default: 20, Min: 0, Max: 300, NoHandicap: true,
 			Desc: "Seconds an opted-in quest counts down (shown on the page, with Cancel) before it starts by itself; 0 starts at once. Only a SAFE offer ever auto-starts."},

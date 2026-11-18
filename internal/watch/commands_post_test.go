@@ -175,7 +175,6 @@ func TestCommandsTranslateTable(t *testing.T) {
 		{commandBody{Intent: "sell_now"}, RouteSellNow},
 		{commandBody{Intent: "revive_merc"}, "/api/merc/revive"},
 		{commandBody{Intent: "identify"}, "/api/inventory/identify"},
-		{commandBody{Intent: "journey"}, CampaignIntentRoute},
 	} {
 		if got, why := c.in.translate(); got.path != c.path || why != "" {
 			t.Errorf("%s/%s: %q (%s), want %q", c.in.Intent, c.in.Mode, got.path, why, c.path)
