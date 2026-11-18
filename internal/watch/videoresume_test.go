@@ -49,13 +49,13 @@ func TestVideoStreamOutlivesTheWriteDeadline(t *testing.T) {
 	}
 	defer resp.Body.Close()
 	rd := bufio.NewReader(resp.Body)
-	end, parts := time.Now().Add(time.Second), 0
-	for time.Now().Before(end) {
+	// count-based, not "N parts in 1 s": a loaded box slows the reader without breaking the stream
+	start := time.Now()
+	for parts := 0; parts < 20; parts++ {
 		readPart(t, rd)
-		parts++
 	}
-	if parts < 20 {
-		t.Fatalf("only %d parts in 1 s (10 deadlines)", parts)
+	if d := time.Since(start); d < 300*time.Millisecond {
+		t.Fatalf("20 parts in %v: the pump (20 ms gap) cannot be that fast, the test no longer outlives the 100 ms deadline", d)
 	}
 }
 

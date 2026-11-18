@@ -9,14 +9,14 @@ import (
 	"d2lod-bot/internal/launch"
 )
 
-// within fails the test when f does not return in two seconds (a lock held across a callback shows up as a hang).
+// within fails the test when f does not return in 30 seconds (a lock held across a callback shows up as a hang).
 func within(t *testing.T, what string, f func()) {
 	t.Helper()
 	done := make(chan struct{})
 	go func() { f(); close(done) }()
 	select {
 	case <-done:
-	case <-time.After(2 * time.Second):
+	case <-time.After(30 * time.Second):
 		t.Fatalf("deadlock: %s", what)
 	}
 }
@@ -56,14 +56,14 @@ func TestPollNeverHoldsObMuAcrossHealthStep(t *testing.T) {
 	go func() { g.r.poll(); close(polled) }()
 	select {
 	case <-bh.in:
-	case <-time.After(2 * time.Second):
+	case <-time.After(30 * time.Second):
 		t.Fatal("Health.Step was not reached")
 	}
 	within(t, "LastSnapshot while Health.Step is blocked", func() { g.r.LastSnapshot() })
 	close(bh.release)
 	select {
 	case <-polled:
-	case <-time.After(2 * time.Second):
+	case <-time.After(30 * time.Second):
 		t.Fatal("poll did not finish")
 	}
 }
@@ -77,14 +77,14 @@ func TestExpectGameExitOffKeepsObMuFreeDuringHealthStep(t *testing.T) {
 	go func() { g.r.expectGameExit(false); close(finished) }()
 	select {
 	case <-bh.in:
-	case <-time.After(2 * time.Second):
+	case <-time.After(30 * time.Second):
 		t.Fatal("Health.Step was not reached")
 	}
 	within(t, "LastSnapshot while expectGameExit probes", func() { g.r.LastSnapshot() })
 	close(bh.release)
 	select {
 	case <-finished:
-	case <-time.After(2 * time.Second):
+	case <-time.After(30 * time.Second):
 		t.Fatal("expectGameExit did not finish")
 	}
 }

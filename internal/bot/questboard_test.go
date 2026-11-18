@@ -229,7 +229,12 @@ func TestQuestBoardMakerBuildsPerHero(t *testing.T) {
 		return b, st, err
 	})
 	g.run()
-	defer g.finish()
+	stopped := false
+	defer func() {
+		if !stopped {
+			g.finish()
+		}
+	}()
 	var x *questboard.Exec
 	g.waitFor("board for the hero", func() bool {
 		var st *questboard.Store
@@ -242,6 +247,8 @@ func TestQuestBoardMakerBuildsPerHero(t *testing.T) {
 	if x2, _ := g.r.QuestBoard(); x2 != x || len(got()) != 1 {
 		t.Fatal("the board was rebuilt for the same hero")
 	}
+	g.finish() // the knob is plain data the loop reads: change it only with the loop stopped (-race)
+	stopped = true
 	g.r.e.Tune.Quests.Board = 0
 	if x3, _ := g.r.QuestBoard(); x3.Enabled() {
 		t.Fatal("the board did not follow the knob off")

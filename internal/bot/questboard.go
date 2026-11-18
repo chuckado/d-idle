@@ -191,7 +191,22 @@ func taskID(q questboard.Quest) string {
 }
 
 // world returns the task world of the latest snapshot, built once per snapshot (the executor asks for every chunk).
+//
+// taskEnv.World reads and mutates loop-owned maps (cleared areas, touched waypoints), so an API goroutine (Accept, readiness)
+// may build it only between loop steps (stepMu free); during a step it gets the loop's last world, at most one tick old (the
+// loop refreshes it through worldLoop). Building it mid-step raced with the loop (-race, TestQuestBoardStartRunsUnderAFarmGoal).
 func (rt *boardRT) world() (task.World, string, map[string]questboard.Word) {
+	if rt.r.stepMu.TryLock() {
+		defer rt.r.stepMu.Unlock()
+		return rt.worldLoop()
+	}
+	rt.mu.Lock()
+	defer rt.mu.Unlock()
+	return rt.w, rt.class, rt.ready
+}
+
+// worldLoop is world() for the loop goroutine: it rebuilds the cache when the snapshot changed.
+func (rt *boardRT) worldLoop() (task.World, string, map[string]questboard.Word) {
 	rt.mu.Lock()
 	defer rt.mu.Unlock()
 	s := rt.r.latest()
@@ -583,6 +598,7 @@ func (r *Runner) boardStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 		r.boardNote("unwired", "quests.board is on but no board is wired: the hero only trains")
 		return r.boardTrain(ctx, snap, c)
 	}
+	rt.worldLoop()
 	rt.exec.SetEnabled(true)
 	rt.exec.SetAutoOptions(r.questAutoOptions())
 	r.parkedBoard.Store(false)
@@ -852,6 +868,7 @@ func (r *Runner) boardPreempts(snap *d2.Snapshot, c control) bool {
 	if rt == nil {
 		return false
 	}
+	rt.worldLoop()
 	d, err := rt.exec.Next()
 	if err != nil {
 		return false
