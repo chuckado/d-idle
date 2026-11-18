@@ -467,6 +467,10 @@ var questItemNames = []string{task.ItemMalus, task.ItemBark, task.ItemCainSc,
 	// Acts 4 and 5 (names U until a live run read them, codes mss, hfh, ice, tr2 are V)
 	task.ItemSoulstone, task.ItemHammer, task.ItemMalahPotion, task.ItemResScroll}
 
+// questItemCodes maps the base codes of the Cain chain items to the name the steps ask for. The code wins over the
+// display name: names differ by locale and by table build (V code internal/quest/act1.go ItemInifussScroll, ItemCairnKey).
+var questItemCodes = map[string]string{"bks": task.ItemBark, "bkd": task.ItemCainSc}
+
 func (r *Runner) scanQuestItems(s *d2.Snapshot, out map[string]int) {
 	if r.d.Catalog == nil || s.Inventory == nil {
 		return
@@ -479,6 +483,10 @@ func (r *Runner) scanQuestItems(s *d2.Snapshot, out map[string]int) {
 		}
 		m, ok := r.d.Catalog.Item(u.Class)
 		if !ok {
+			continue
+		}
+		if n, ok := questItemCodes[m.Code]; ok && m.Code != "" {
+			out[n]++
 			continue
 		}
 		for _, n := range questItemNames {
