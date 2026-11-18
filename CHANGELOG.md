@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge origin/main into agent/unidpopup <!--sg:agent/unidpopup-->
 - decomp40: Cairn portal offset in tiles (D1), scroll pattern never shown (D2/D7), trace <!--sg:agent/decomp40-->
 - CAIN-5b: free Cain (guards fought, cage, quest word check) and report to Akara; board chunks supported <!--sg:agent/cain5b-->
 - questboard goal test: hold explore until the accept lands (deterministic, no load race) <!--sg:agent/vaulttip-->

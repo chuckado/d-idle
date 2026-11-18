@@ -553,6 +553,7 @@ docs/ui/redesign-2026-11-14/reviews/c2c3-review.md  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/c2c3/  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/s1b-review.md  credit-runner  uis1breview
 docs/ui/redesign-2026-11-14/stash-anywhere.md  credit-runner  stashany
+docs/unlock-idreveal.md  credit-runner  unidpopup
 docs/upstream/  credit-runner  p02posted
 docs/upstream/  credit-runner  prpost
 docs/upstream/  credit-runner  prpost2
@@ -1296,6 +1297,7 @@ internal/watch/testdata/video_panel.js  credit-runner  videofeed4
 internal/watch/testdata/video_panel.js  credit-runner  viewerfps
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
+internal/watch/unlockui_quiet_test.go  credit-runner  unidpopup
 internal/watch/vaultapi.go  credit-runner  vaulttip
 internal/watch/vaultapi.go  credit-runner  vaultv4
 internal/watch/vaultapi.go  credit-runner  vaultv5
@@ -1464,6 +1466,7 @@ internal/watch/web/skills.js  credit-runner  skilltrees2
 internal/watch/web/streamstats.js  credit-runner  videofeed4
 internal/watch/web/tokens.css  credit-runner  uis1
 internal/watch/web/tokens.css  credit-runner  uis7
+internal/watch/web/unlockui.js  credit-runner  unidpopup
 internal/watch/web/update.js  credit-runner  uis7
 internal/watch/web/utilities.css  credit-runner  quests8
 internal/watch/web/vault-logic.js  credit-runner  vaulttip
