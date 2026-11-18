@@ -75,8 +75,11 @@ type BotTuning struct {
 	HeapLimitMB int
 	// FailsafeRung3Max: leave/re-enter cycles (failsafe ladder rung 3) per progress window before the ladder goes to the
 	// pause rung (0 = unbounded). FailsafePauseMaxSec caps the doubling pause of that rung.
-	FailsafeRung3Max    int
-	FailsafePauseMaxSec int
+	FailsafeRung3Max int
+	// Anti-flail guard (internal/bot/flail.go): FlailMoves area changes within FlailWindowMin minutes without a kill or
+	// XP hold the bot in place for FlailHoldMin minutes (doubled per repeat, at most x8). 0 moves = off.
+	FlailMoves, FlailWindowMin, FlailHoldMin int
+	FailsafePauseMaxSec                      int
 
 	// NOKILL fixes (docs/research/g2d-nokill-diagnosis.md). Rung3WindowMax rung-3 cycles within Rung3WindowMin virtual
 	// minutes end in a field reset whatever progress came between them (0 = off). DroughtMin: no kill and no XP for
@@ -144,7 +147,7 @@ func DefaultBotTuning() BotTuning {
 		LevelMargin: 0, LeaveSlack: 0, CorpseRetries: 1, PortalSettleMs: 600, ClearRadius: 30, ExploredPct: 100, FarmReset: 0, FarmResetPct: 85, FarmResetCooldownMin: 5, LootShadow: 1,
 		CorpseValueMin: 1000, SpiralDeaths: 4, SpiralMinutes: 15, DangerBanMin: 20, StarterBanMin: 3, QuestBlockedFarmMin: 10, ParkAfter: 2, ParkMinutes: 15, RepeatSiteBanMin: 30, RepeatSiteEscalate: 1, RepeatSiteWindowMin: 30, RepeatSiteGapSec: 180, CorpseMinValue: 50, NavSkipSec: 150, AreaIdleSec: 60, StallWarnMin: 30, StallExitMin: 30, PauseDeathsPerHour: 8, PauseCapMin: 60, StalePackHostiles: 4, StalePackMinutes: 10, StalePackMinHP: 5, StalePackMinTier: 2, PotionBurstN: 5, PotionBurstSec: 20, PotionBurstHostiles: 3, PovertyTier: 0, GoldFloor: 2000,
 		PointsRetrySec: 30, GearCheckSec: 60, GearMinGold: 150, GearBudgetPct: 70, GearReserve: 100,
-		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600,
+		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600, FlailMoves: 6, FlailWindowMin: 10, FlailHoldMin: 5,
 		Rung3WindowMax: 3, Rung3WindowMin: 20, DroughtMin: 8, EmptyFieldSec: 150, ClearIdleMin: 3, NoPortalWaitSec: 20, DroughtStage2Min: 2, DroughtSlowMin: 10, DroughtSlowKills: 3, DroughtSlowMaxLevel: 10, FreshAfterRecoverySec: 180, RecoveryDryMin: 5, RecoveryDryKills: 5, RecoveryDrySkipMin: 15,
 		ZoneModel: 0, ZoneDial: 1, PortalGuard: 0, PortalCastMs: 3000, PortalWalkMs: 3000, PortalHitMs: 700, PortalLifePct: 50,
 		MercRetryMin: 10, MercHireMinGold: 400, MercReviveLoopN: 3, MercReviveLoopMin: 10, CubeMaxJobs: 6, CubeRuneCap: 10, CubeGemCap: 2,
