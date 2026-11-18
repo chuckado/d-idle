@@ -19,7 +19,19 @@ The real `internal/loot` (pickit, pack room, left-behind, poor-mode gold policy)
 - Pack full: the looter's own room check (`hand.Layout` + occupancy from the dump's inventory items) marks an item "no room"; valuable ones raise `LeftBehind`, which the
   runner turns into the "loot: pack full" town trip (INVSTASH policy unchanged).
 
-## Quality guess (U)
+## Real quality from `ground full` (2026-11-18, card groundquality)
+
+ROOT CAUSE (V, sandbox logs): the label of an unidentified magic or rare item is only its base name, so the guess below called it normal and
+`g-junk` dropped it (Ring "plain or inferior" 41 times; the Vault preset never fired for real gear). Fix, one place (`Source.Enrich`, the
+classification input every rule, the shadow and the vault path read): when the fork's `ground full` verb exists (`VaultCaps.GroundFull`, read once),
+`internal/d2dloot/peek.go` reads the real record for gear, jewelry and charms (`armo`, `weap`, `ring`, `amul`, `jewl`, `char`; never potions, scrolls,
+gems, runes, stackables, gold) and sets Quality, item level and the identified and ethereal flags. One `ground full` per pass for the whole floor, only
+when a new unit of those types is there; cached per unit id, dropped when the unit leaves the floor; a unit the verb did not return is cached as unknown.
+A build without the verb (caps lack it, or `ErrVaultUnsupported`/`ErrVaultOff`) is detected once; a transient error keeps the guess for that pass.
+With the item level now known, those ground units are no longer label-only in the rules. Without the verb a ring, amulet, jewel or charm whose guess is
+normal gets quality 0 (unknown), which the rules treat as unreadable (`onUnknown` default skip: `g-junk` no longer matches). U until a live run.
+
+## Quality guess without the verb (U)
 
 `ground` carries only a label. Rules: label equals the base name = normal; `Superior <base>` = superior; `Low Quality/Crude/Damaged/Cracked <base>` = low (these
 prefixes are V visible, docs/d2d-fidelity.md); label contains the base name plus affixes = magic; label without the base name = rare (could be unique or set: U, the
