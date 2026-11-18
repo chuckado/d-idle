@@ -7,7 +7,8 @@
 set -u
 [ $# -ge 5 ] || { echo "usage: wave.sh DIR HOURS SPEED CLASS ARM:SEED..." >&2; exit 64; }
 D=$1 H=$2 SP=$3 CL=$4; shift 4
-export AB_DIR=$HOME/d2d-lab/$D AB_CLASS=$CL AB_SPEED=$SP AB_MAX=$# D2D_BIN=$AB_DIR/bin/d2d.lab
+AB_DIR=$HOME/d2d-lab/$D
+export AB_DIR AB_CLASS=$CL AB_SPEED=$SP AB_MAX=$# D2D_BIN=$AB_DIR/bin/d2d.lab
 here=$(cd "$(dirname "$0")" && pwd)
 cd "$AB_DIR" || exit 2
 cp -f "$here/abrun.sh" "$here/abq.sh" "$AB_DIR/"
