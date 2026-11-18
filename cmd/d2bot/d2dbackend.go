@@ -363,6 +363,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	o.ladder.inv = invAPI(ref.inv)
 	o.ladder.skills = skillsAPI(db, ref)
 	o.ladder.art = artSource(o.gameDir, o.data, db)
+	o.ladder.db = db
 	if o.data != "" {
 		o.ladder.vaultRoot = filepath.Join(o.data, "vaults") // the recorder's root (wireVault): the Vault page reads the same stores
 		// The account's ETHER wallet gives these stores their capacity (owned tiers); the ladder wiring adds the hero and the routes.
