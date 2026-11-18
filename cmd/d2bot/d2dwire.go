@@ -15,6 +15,7 @@ import (
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dcombat"
 	"d2lod-bot/internal/d2denv"
+	"d2lod-bot/internal/d2dloot"
 	"d2lod-bot/internal/d2dmerc"
 	"d2lod-bot/internal/d2dsrc"
 	"d2lod-bot/internal/d2dtown"
@@ -46,6 +47,7 @@ type d2dStack struct {
 	quester bot.Quester
 	task    *bot.TaskDeps
 	prepare func(ctx context.Context) error
+	peek    d2dloot.Peeker // the fork verbs for real ground quality (nil: label guess)
 }
 
 // buildD2DStack wires the stack. nv is the backend navigator (be.Navigator()); ref is the runner back-reference the
@@ -81,6 +83,9 @@ func buildD2DStack(ctx context.Context, o options, be *d2denv.Backend, nv *nav.N
 	tw.SetJudge(lt)
 
 	s := &d2dStack{rig: rig, cb: fighterAdapter{cb}, tw: tw, lt: lt, town: townAdapter{t: tw, e: e, mv: nv}}
+	if be.Client != nil {
+		s.peek = be.Client
+	}
 	name := o.char
 	if name == "" {
 		name = "D2dbot"
