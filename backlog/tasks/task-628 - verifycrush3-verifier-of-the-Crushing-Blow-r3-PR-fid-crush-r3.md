@@ -1,10 +1,11 @@
 ---
 id: TASK-628
 title: 'verifycrush3: verifier of the Crushing Blow r3 PR (fid/crush-r3)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T00:49:00Z'
+updated_date: '2026-11-18T01:46:00Z'
 labels:
   - d2d
   - readonly
