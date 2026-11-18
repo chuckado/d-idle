@@ -211,3 +211,17 @@ export function sellPlan(items, ids) {
   }
   return { n, ids: ok, gold, pinned, skipped: (ids || []).length - n };
 }
+
+// windowRange says which cells of a long list to draw (the page keeps up to thousands of rows; only the rows near the view are
+// in the DOM). n items in rows of cols, every row rowH tall; top is how far the first row's top is above the view's top, view the
+// view's height, over the rows kept above and below it. first and last are item indexes (last exclusive, row aligned); padTop
+// and padBot stand in for the rows not drawn. Without a layout (rowH or view not positive) everything up to a cap is drawn.
+export function windowRange(o) {
+  const n = Math.max(0, o.n | 0), cols = Math.max(1, o.cols | 0), rowH = +o.rowH, view = +o.view, over = Math.max(0, o.over | 0);
+  if (!(rowH > 0) || !(view > 0)) return { first: 0, last: Math.min(n, o.cap || 120), padTop: 0, padBot: 0 };
+  const rows = Math.ceil(n / cols);
+  const top = Math.max(0, +o.top || 0);
+  const fr = Math.min(Math.max(0, Math.floor(top / rowH) - over), Math.max(0, rows - 1));
+  const lr = Math.min(rows, Math.max(fr + 1, Math.ceil((top + view) / rowH) + over));
+  return { first: fr * cols, last: Math.min(n, lr * cols), padTop: fr * rowH, padBot: (rows - lr) * rowH };
+}

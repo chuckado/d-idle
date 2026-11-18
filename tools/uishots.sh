@@ -176,7 +176,7 @@ sellsheet vault=revealpress&theme=dark [data-key=select-toggle]|.vt-cell|[data-k
 			w=${sz%x*} h=${sz#*x}
 			ck=
 			case $pclick in
-			hover=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')" ;;
+			hover=* | scroll=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')" ;;
 			?*) ck="&click=$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g; s/|/%7C/g')" ;;
 			esac
 			prof=$(mktemp -d)
@@ -587,6 +587,12 @@ vault-sheet-light watch/vault?theme=light&vault=pop [data-key=select-toggle]|.vt
 vault-tip watch/vault?theme=dark&vault=pop hover=.vt-cell:nth-child(3)
 vault-tip-unid watch/vault?theme=dark&vault=pop hover=.vt-cell:has([data-tag=unid])
 vault-tip-light watch/vault?theme=light&vault=pop hover=.vt-cell:nth-child(2)
+vault-tip-last watch/vault?theme=dark&vault=pop hover=.vt-cell:last-child
+vault-big-deep watch/vault?theme=dark&vault=big scroll=0.55
+vault-big-end watch/vault?theme=dark&vault=big scroll=1
+vault-big-deep-light watch/vault?theme=light&vault=big scroll=0.3
+vaultdefect-tip watch/vault?theme=dark&vault=pop&defect=vault-tip hover=.vt-cell:nth-child(3)
+vaultdefect-unwindowed watch/vault?theme=dark&vault=big&defect=vault-unwindowed
 vault-eth watch/vault?theme=dark&vault=eth
 vault-eth-light watch/vault?theme=light&vault=eth
 vault-eth-short watch/vault?theme=dark&vault=eth-short
@@ -661,7 +667,7 @@ vaultdefect-ethenabled watch/vault?theme=dark&vault=eth-short&defect=vault-ethen
 			w=${sz%x*} h=${sz#*x} ck=
 			enc() { printf %s "$1" | sed 's/_/ /g; s/#/%23/g; s/?/%3F/g; s/|/%7C/g; s/&/%26/g'; }
 			case $pclick in
-			hover=* | ctx=* | expect=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g; s/|/%7C/g')" ;;
+			hover=* | ctx=* | expect=* | scroll=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g; s/|/%7C/g')" ;;
 			?*) ck="&click=$(enc "$pclick")" ;;
 			esac
 			[ -n "$phit" ] && ck="$ck&hit=$(enc "$phit" | sed 's/%7C/|/g')"

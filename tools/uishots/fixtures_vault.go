@@ -23,7 +23,7 @@ import (
 //
 //	pop (default) 140 items in 400 slots: every quality, long names, unidentified, pinned, ethereal, socketed, runes
 //	warn 140 in 160 (87 percent), full 140 in 140, over 140 in 100 (a shrink), empty (a vault with nothing in it), none (no vault yet),
-//	off (loot.vault is 0: read only, items shown), error (the API answers 500), big 1200 items
+//	off (loot.vault is 0: read only, items shown), error (the API answers 500), big 2400 items (the page draws only the rows near the view)
 var (
 	vaultOnce sync.Once
 	vaultAPIs = map[string]*watch.VaultAPI{}
@@ -45,7 +45,7 @@ type vaultSet struct {
 var vaultModes = map[string]vaultSet{
 	"pop": {n: 140, capacity: 400, on: true}, "warn": {n: 140, capacity: 160, on: true}, "full": {n: 140, capacity: 140, on: true},
 	"over": {n: 140, capacity: 400, shrinkTo: 100, on: true}, "empty": {n: 0, capacity: 400, on: true}, "none": {none: true, on: true},
-	"off": {n: 140, capacity: 400, on: false}, "big": {n: 1200, capacity: 2400, on: true},
+	"off": {n: 140, capacity: 400, on: false}, "big": {n: 2400, capacity: 3000, on: true},
 	// the Keep queue (slice V5): its own stores, so a press on one page never changes another
 	"keeping":   {n: 140, capacity: 400, on: true, keep: "ok", preset: true},
 	"keeppress": {n: 140, capacity: 400, on: true, keep: "ok"},
@@ -289,6 +289,8 @@ func init() {
 	defectCSS["vault-small"] = `.vt-input { min-block-size: 28px !important; block-size: 28px !important; }`
 	defectCSS["vault-covered"] = `.vt-head { position: fixed !important; inset: 0 0 auto 0 !important; block-size: 300px !important; z-index: 99; background: var(--d-surface-3) !important; }`
 	defectCSS["vault-sheet"] = `.vt-sheet-card { max-block-size: 120px !important; overflow: hidden !important; }`
+	defectCSS["vault-tip"] = `#inv-tip { transform: translateX(120vw) !important; }`
+	vaultJS["vault-unwindowed"] = `var done = false; new MutationObserver(function () { var g = document.querySelector('.vt-grid'), c = g && g.querySelector('.vt-cell'); if (done || !c) return; done = true; for (var i = 0; i < 700; i++) g.appendChild(c.cloneNode(true)); }).observe(document, { subtree: true, childList: true });`
 	vaultJS["vault-noname"] = `new MutationObserver(function () { document.querySelectorAll('.vt [aria-label]').forEach(function (e) { e.removeAttribute('aria-label'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
 	vaultJS["vault-enabled"] = `new MutationObserver(function () { document.querySelectorAll('[data-key="upgrade"]').forEach(function (e) { e.removeAttribute('aria-disabled'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
 	vaultJS["vault-ethenabled"] = `new MutationObserver(function () { document.querySelectorAll('[data-key="upgrade"]').forEach(function (e) { if (e.getAttribute('aria-disabled') !== 'false') e.setAttribute('aria-disabled', 'false'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
