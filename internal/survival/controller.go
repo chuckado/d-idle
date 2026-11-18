@@ -140,12 +140,18 @@ func (l *Ledger) judge(in Input, c Candidate, lam float64) verdict {
 		row, _ := l.P.stepDown(in.Dial.ID) // an unknown dial has no risk route; ForcedOut above already named it
 		typ := c.ZM.Typical.Low / v.k
 		riskOK := row.TypicalEnter > 0 && typ >= row.TypicalEnter && v.best >= row.BadFloor
+		poor := riskOK && !cur && in.Purse.Gold < row.RiskMinGold
+		if poor {
+			riskOK = false
+		}
 		if cur && v.best >= stay {
 			v.eligible = true
 		} else if !cur && v.low >= enter {
 			v.eligible = true
 		} else if riskOK {
 			v.eligible, v.riskPaid = true, true
+		} else if poor {
+			v.why = Why{WhyPoor, "too poor to pay for a risk: the potions would not be rebought"}
 		} else if cur {
 			v.why = Why{WhyStayLine, "no longer safe enough to stay"}
 		} else if v.best >= stay {

@@ -35,8 +35,8 @@
  },
  "dials": {
   "cautious": {"either": 1, "deaths": 1},
-  "balanced": {"either": 2, "deaths": 1, "typicalEnter": 8, "badFloor": 0.55, "riskValueMul": 0.85},
-  "bold": {"either": 0, "deaths": 1, "typicalEnter": 5, "badFloor": 0.4, "riskValueMul": 0.9}
+  "balanced": {"either": 2, "deaths": 1, "typicalEnter": 8, "badFloor": 0.55, "riskValueMul": 0.85, "riskMinGold": 300},
+  "bold": {"either": 0, "deaths": 1, "typicalEnter": 5, "badFloor": 0.4, "riskValueMul": 0.9, "riskMinGold": 150}
  },
  "tags": {
   "halfLifeMinutes": "design 5.4, U",
@@ -70,6 +70,6 @@
   "starveCasts": "I: decayed count of mana-starved watchdog lines in a zone that lowers its value (26 lines in 41 minutes in the screen), U",
   "starveValueMul": "I: value multiplier of a zone whose starvation count reached starveCasts, U",
   "archetypes": "I: per-archetype overrides (power profile id) of yieldShrinkMinutes and starveCasts; 0 = the global value, U",
-  "dials": "card survtune: typicalEnter, badFloor and riskValueMul are the pay-for-risk route (the 8-seed Paladin A/B lost 18 percent XP with 10 chickens against 36 for the legacy arm; the margin arm sat in 60 xp/min zones while the bad pack of the 440 xp/min zone read 0.8 to 2.4): a zone the bad pack calls too tight is entered when the typical pack is at least typicalEnter and the bad pack's corrected best margin at least badFloor; its value is multiplied by riskValueMul. All three are U until the rerun; 0 turns the route off (cautious). Step-down rows: design 5.2 'observed cost that forces a step down': either = chickens plus merc deaths in the window, deaths = deaths in the window; 0 turns the row off. U"
+  "dials": "card survtune: typicalEnter, badFloor and riskValueMul are the pay-for-risk route (the 8-seed Paladin A/B lost 18 percent XP with 10 chickens against 36 for the legacy arm; the margin arm sat in 60 xp/min zones while the bad pack of the 440 xp/min zone read 0.8 to 2.4): a zone the bad pack calls too tight is entered when the typical pack is at least typicalEnter and the bad pack's corrected best margin at least badFloor; its value is multiplied by riskValueMul. riskMinGold (card survhold: seed 149 of the holdout burned 25 potions in 6 minutes in a risk-route zone with 100 to 290 gold and went broke, then chickened its way through recovery) closes the route below that pack gold, 0 = no condition. All four are U until the rerun; 0 turns the route off (cautious). Step-down rows: design 5.2 'observed cost that forces a step down': either = chickens plus merc deaths in the window, deaths = deaths in the window; 0 turns the row off. U"
  }
 }

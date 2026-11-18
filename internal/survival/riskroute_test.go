@@ -82,7 +82,7 @@ func TestRiskRouteCandidates(t *testing.T) {
 				if err != nil {
 					t.Fatal(err)
 				}
-				in := Input{Now: t0, Dial: d, Power: 150, Archetype: arch, Cands: []Candidate{cand(2, "Safe", 9, 6, 90, 60), risky}}
+				in := Input{Now: t0, Dial: d, Power: 150, Archetype: arch, Purse: Purse{Gold: 5000}, Cands: []Candidate{cand(2, "Safe", 9, 6, 90, 60), risky}}
 				dec, err := NewLedger(p).Choose(in)
 				if err != nil {
 					t.Fatal(err)
