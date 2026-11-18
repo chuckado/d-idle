@@ -5,7 +5,7 @@
 // Reveal and Sell (slice V6) also only queue: the price is shown before the click (revealPlan) and the states come from the GET. The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
 // fed the rows as an inventory view); every text comes from /watch/vault.json or the API and goes in through textContent.
 // Every press is read back: the list is fetched again and what it says is what the page shows.
-import { PAGE, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, revealPlan, sellPlan, toQuery, toTipView, when } from '/watch/vault-logic.js';
+import { PAGE, artKey, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, revealPlan, sellPlan, toQuery, toTipView, when } from '/watch/vault-logic.js';
 
 export const ROUTE = '/api/vault';
 const POLL_MS = 6000;
@@ -335,6 +335,12 @@ export function mountVault(d) {
     b.setAttribute('aria-pressed', S.sel.has(it.id) ? 'true' : 'false');
     if (S.sel.has(it.id)) b.classList.add('on');
     if (S.detailId === it.id) b.classList.add('sel');
+    const ak = artKey(it);
+    if (ak) { // the game's icon when it loads; a failed load removes it and the name stays
+      const im = el('img', 'ico'); im.setAttribute('alt', ''); im.setAttribute('src', '/watch/art/' + ak + '.png');
+      im.addEventListener('error', () => im.remove());
+      b.appendChild(im);
+    }
     b.appendChild(el('span', 'vt-name', it.name));
     const tags = el('span', 'vt-tags');
     if (!it.identified) { const t = el('b', 'vt-tag', '?'); t.dataset.tag = 'unid'; tags.appendChild(t); }
