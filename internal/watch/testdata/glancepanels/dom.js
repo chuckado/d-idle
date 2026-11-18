@@ -1,4 +1,4 @@
-// DOM goldens and behaviour tests of the cockpit's Needs you panel and the strip (progress, journey-strip, health), in a
+// DOM goldens and behaviour tests of the cockpit's Needs you panel and the strip (progress, health), in a
 // stub DOM: each state is rendered through the panel's own mount/update and compared with <panel>_<state>.txt in this
 // directory (UPDATE=1 rewrites). Usage: node dom.js path/to/web/panels
 const assert = require('assert'), fs = require('fs'), path = require('path'), { load, mk } = require('../panel_harness.js');
@@ -161,33 +161,6 @@ for (const [st, progress] of Object.entries(PG)) {
   assert.ok(render('progress', glance({ progress: PG.measuring })).c.st === 'ready');
   assert.strictEqual(render('progress', glance({})).c.hidden, false, 'an empty progress object still draws');
   assert.strictEqual(render('progress', null).c.hidden, true);
-}
-
-// ---- journey-strip
-const chapters = (n, st, held) => Array.from({ length: 9 }, (_, i) => ({ id: 'ch' + (i + 1), state: i + 1 < n ? 'done' : i + 1 === n ? (held ? 'held' : st) : 'todo' }));
-const jr = (n, o) => ({ n, of: 9, chapters: chapters(n, 'open', o && o.held), next: { id: 'ch' + n, title: 'Blood Raven', band: 'too early (floor 9)', text: 'Level 7 is under the floor of 9.' },
-  actions: [verb('Go now', '/api/journey/go', { chapter: 'ch' + n }), verb('Hold', '/api/journey/hold', { chapter: 'ch' + n })] });
-const JS = {
-  'chapter-1': jr(1), 'chapter-3': jr(3), 'chapter-9': jr(9),
-  blocked: Object.assign(jr(3, { held: true }), { next: { id: 'ch3', title: 'Blood Raven', band: 'blocked', text: 'The path is blocked.' } }),
-  absent: undefined,
-};
-for (const [st, journey] of Object.entries(JS)) {
-  const r = render('journey-strip', glance({ journey }));
-  golden('journey-strip', st, dump(r.root, ''), r.c, false);
-}
-{
-  const r = render('journey-strip', glance({ journey: JS['chapter-3'] }));
-  const acts = r.root.children[0].children[0].children[2].children[1].children;
-  acts[0].fire('click'); acts[1].fire('click');
-  assert.deepStrictEqual(r.posts, [['/api/journey/go', { chapter: 'ch3' }], ['/api/journey/hold', { chapter: 'ch3' }]]);
-  const dots = r.root.children[0].children[0].children[1].children.filter((x) => x.tag === 'button');
-  assert.strictEqual(dots.length, 9);
-  dots[1].fire('click');
-  assert.ok(r.root.children[0].children[1].popOpen, 'a dot opens the chapter list');
-  const P = panel('journey-strip');
-  assert.strictEqual(P.current(JS['chapter-9'].chapters), 8); assert.strictEqual(P.current([{ state: 'done' }, { state: 'done' }]), 1);
-  assert.deepStrictEqual(JSON.parse(JSON.stringify(P.line({ chapters: [{ state: 'done' }], next: null }))), ['Every chapter is done', '']);
 }
 
 // ---- health
