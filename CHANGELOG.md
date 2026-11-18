@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- jewelcolor: card result <!--sg:agent/jewelcolor-->
 - flakyfix: board world race, deterministic waits <!--sg:agent/flakyfix-->
 - zone model: the pay-for-risk route is closed to a hero with less pack gold than `riskMinGold` (data, `internal/survival/params.json`); `bot.zoneModel` default stays 0. <!--sg:agent/survhold-->
 - The quest board is now the only way quests start: the Quests tile offers the next quest and nothing begins until you tap Start; the old Journey strip and its chapter questions are gone. Existing heroes keep their progress (read from the game) and their skipped quests. <!--sg:agent/retirej-->
