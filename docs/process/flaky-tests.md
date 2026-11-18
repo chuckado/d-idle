@@ -7,4 +7,4 @@
 - Asynchronous consumers (the event ring, the bus bridge, a build goroutine) are waited for by their own progress marker (`last >= bus.Seq()`), not by a helper's short internal settle bound.
 - A NEGATIVE check ("nothing happened in 100 ms") may stay short: load only makes it weaker, never flaky.
 - Never weaken the assertion; only the waiting mechanism changes.
-- Reproduce before fixing: `labrun tower -- go test -race -count=300 -cpu 1,4 -run <Test> ./internal/<pkg>/` with a CPU burner running (one job at a time).
+- Reproduce before fixing: `labrun <worker host> -- go test -race -count=300 -cpu 1,4 -run <Test> ./internal/<pkg>/` with a CPU burner running (one job at a time).
