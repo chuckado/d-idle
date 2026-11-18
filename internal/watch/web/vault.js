@@ -439,6 +439,8 @@ export function mountVault(d) {
     if (win && win.requestAnimationFrame) raf = win.requestAnimationFrame(run); else run();
   }
   main.addEventListener('scroll', onScroll, { passive: true });
+  const RO = d.ResizeObserver || (win && win.ResizeObserver); // the list's height settles after the first draw (filters fold, fonts load): draw again when it changes
+  if (RO) new RO(onScroll).observe(main);
   if (win && win.addEventListener) win.addEventListener('resize', () => { measure(); drawList(); });
   function drawState() {
     state.replaceChildren();
@@ -821,7 +823,7 @@ async function boot() {
   const back = qs.get('theme') ? '/watch?theme=' + qs.get('theme') : '/watch';
   let overlays = null;
   try { overlays = (await import('/watch/overlay.js')).overlays; } catch (e) { /* the sheet closes itself on Escape */ }
-  const vt = mountVault({ doc, root, overlays, win: window, get, post, texts, now: Date.now, filters: f, backHref: back, IntersectionObserver: window.IntersectionObserver,
+  const vt = mountVault({ doc, root, overlays, win: window, get, post, texts, now: Date.now, filters: f, backHref: back, IntersectionObserver: window.IntersectionObserver, ResizeObserver: window.ResizeObserver,
     later: (fn, ms) => setTimeout(fn, ms), clear: (t) => clearTimeout(t) });
   vt.loadTip();
   vt.start();
