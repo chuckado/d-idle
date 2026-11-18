@@ -1,10 +1,11 @@
 ---
 id: TASK-652
 title: 'longlane: survival waves in the builder long lane'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T20:47:00Z'
+updated_date: '2026-11-18T21:01:00Z'
 labels:
   - ops
   - chore
