@@ -36,6 +36,10 @@ const (
 	ObjWaypointAct5 = 429
 )
 
+// ObjRoomType maps a quest object class to the d2d level-generator room type that holds it (the "room" rows of debug
+// presets). The object stands at the room origin + 0.5, 0.5. V lab build, five seeds (docs/probes/search-for-cain-l0-2026-11-18.md).
+var ObjRoomType = map[int]int{ObjTreeInifuss: 161}
+
 // Menu levels of an NPC dialog.
 const (
 	LevelMain = "main" // Talk / Trade / ... / Cancel

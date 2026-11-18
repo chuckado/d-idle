@@ -93,3 +93,25 @@ func TestInvFileColumns(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+// Different gem, rune and charm bases must each keep their own icon: a lookup that collapses many items to one image
+// (the stash showed one egg for everything) fails here. Jewels legitimately share one invfile; they differ by colour, not art.
+func TestInvFileDistinctPerBase(t *testing.T) {
+	db := &DB{Items: []*ItemBase{
+		{Code: "gpv", InvFile: "invgsv"}, {Code: "gpb", InvFile: "invgsb"}, {Code: "r01", InvFile: "invr01"}, {Code: "r02", InvFile: "invr02"},
+		{Code: "cm1", InvFile: "invch1"}, {Code: "cm2", InvFile: "invch2"}, {Code: "jew", InvFile: "invjw"},
+	}}
+	seen := map[string]string{}
+	for i, b := range db.Items {
+		for _, q := range []InvQuality{InvPlain, InvUnique, InvSet} {
+			n, ok := db.InvFile(i, q, 0)
+			if !ok || n != b.InvFile {
+				t.Fatalf("%s q=%d: got %q ok=%v want %q", b.Code, q, n, ok, b.InvFile)
+			}
+		}
+		if o, dup := seen[b.InvFile]; dup {
+			t.Fatalf("%s and %s share icon %s", o, b.Code, b.InvFile)
+		}
+		seen[b.InvFile] = b.Code
+	}
+}

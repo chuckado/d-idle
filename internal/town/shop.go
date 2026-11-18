@@ -506,7 +506,7 @@ func (t *Town) buyScrolls(ctx context.Context, npc d2.Unit, rep *ChoreReport) er
 		target       int
 	}
 	for _, j := range []job{{"tsc", "tbk", t.tune().TPScrollTarget}, {"isc", "ibk", t.tune().IDScrollTarget}} {
-		if j.target <= 0 {
+		if j.target <= 0 || j.scroll == "isc" && t.tune().IdentifyTome == 0 { // identify scrolls are bought on request only
 			continue
 		}
 		cur, err := t.current()
@@ -514,7 +514,7 @@ func (t *Town) buyScrolls(ctx context.Context, npc d2.Unit, rep *ChoreReport) er
 			return err
 		}
 		have, hasTome := t.scrollCount(cur, j.scroll, j.tome)
-		if !hasTome && j.scroll == "tsc" && cur.Player.Gold >= t.tune().TPTomeMinGold {
+		if !hasTome && j.scroll == "tsc" && cur.Player.Gold >= t.tune().TPTomeMinGold && t.aboveReserve(cur.Player.Gold, t.tomeCost(find)) {
 			tu, ok := find(j.tome)
 			if !ok {
 				t.e.Log.Warn("shop: no tome in stock", "gold", cur.Player.Gold, "stock", len(stock))
@@ -566,7 +566,7 @@ func (t *Town) buyScrolls(ctx context.Context, npc d2.Unit, rep *ChoreReport) er
 				return err
 			}
 			b := t.base(su)
-			if cur.Player.Gold-b.Cost < t.tune().MinGoldReserve && have > 0 {
+			if cur.Player.Gold-b.Cost < t.tune().MinGoldReserve && have > 0 || have > 0 && !t.aboveReserve(cur.Player.Gold, b.Cost) {
 				break
 			}
 			price, err := t.buyUnit(ctx, lay, su)
@@ -639,9 +639,10 @@ func (t *Town) sellable(s *d2.Snapshot, lay *panel.Layout) []d2.Unit {
 }
 
 // sellableIf is sellable with the "pack is full" decision made by the caller (MakeRoom forces it).
-func (t *Town) sellableIf(s *d2.Snapshot, full bool) []d2.Unit {
-	var out []d2.Unit
+func (t *Town) sellableIf(s *d2.Snapshot, full bool) (out []d2.Unit) {
+	defer func() { t.shadowSell(s, out, full) }()
 	t.ReconcileMarks(s)
+	sp := t.sellPass(s)
 	kept := map[string]int{}
 	rvOver := t.rejuvOverCap(s)
 	for _, u := range s.Inventory.Container(d2.ContInventory) {
@@ -663,6 +664,23 @@ func (t *Town) sellableIf(s *d2.Snapshot, full bool) []d2.Unit {
 			continue
 		}
 		v := t.judge.EvaluateUnit(u)
+		if sp != nil {
+			// loot.rulesEngine 3: the rules decide sell or keep; a failure of the engine falls through to today's code
+			// for this item. The rejuvenation cap and the spare-supply surplus are supply counts, not rules, and stay.
+			if sell, rule, why, ok := sp.SellDecision(u, "", t.neverSellUnit(u), t.sellCtx(s, u, full)); ok {
+				switch {
+				case rvOver[u.ID]:
+					t.e.Log.Info("rejuvenation sold", "reason", "over cap", "cap", t.e.Tune.Loot.RejuvSpare, "code", t.base(u).Code)
+					out = append(out, u)
+				case sell:
+					t.e.Log.Debug("sell: rules say sell", "item", t.nameOf(u), "rule", rule, "why", why)
+					out = append(out, u)
+				case full && t.spareSurplus(u, v, kept):
+					out = append(out, u)
+				}
+				continue
+			}
+		}
 		if v.NeedID && !u.Item.Identified() {
 			// The identify step ran before this and could not read it (no scroll, no gold): a full pack must not hold
 			// it for ever. Unidentified jewelry sells as is (SME: no ID tome early); charms are stashed instead.
@@ -1021,3 +1039,55 @@ func (t *Town) TPCount(s *d2.Snapshot) int {
 
 // TakeTPBought returns the town portal scrolls bought since the last call (minute line field tpBuy).
 func (t *Town) TakeTPBought() int { return int(t.tpBought.Swap(0)) }
+
+// aboveReserve says whether spending cost of gold leaves the merc revive money (ChorePlan.ReserveGold) in the purse. Only
+// optional buys ask: the kit potions and the first portal scroll are survival and never wait for the merc.
+func (t *Town) aboveReserve(gold, cost int) bool { return gold-cost >= t.reserveGold }
+
+// tomeCost is the vendor price of the town portal tome, 0 when it is not in stock (the caller then logs it).
+func (t *Town) tomeCost(find func(string) (d2.Unit, bool)) int {
+	if u, ok := find("tbk"); ok {
+		if b := t.base(u); b != nil {
+			return b.Cost
+		}
+	}
+	return 0
+}
+
+// shadowSell feeds the loot rules shadow stage (bot.lootShadow, log only) with what the sell chore decided: sold or not.
+func (t *Town) shadowSell(s *d2.Snapshot, sold []d2.Unit, full bool) {
+	if s == nil || s.Player == nil || s.Inventory == nil {
+		return
+	}
+	c := t.tidyCtx(s)
+	sp := t.shadowPass(s, c.PackFullPct, c.StashFullPct)
+	if sp == nil {
+		return
+	}
+	isSold := map[uint32]bool{}
+	for _, u := range sold {
+		isSold[u.ID] = true
+	}
+	for _, u := range s.Inventory.Container(d2.ContInventory) {
+		today := "keep"
+		if isSold[u.ID] {
+			today = "sell"
+		}
+		sp.Observe(loot.ShadowSell, u, today, t.markOf(u), t.neverSellUnit(u), nil, t.sellCtx(s, u, full))
+	}
+}
+
+// sellPass is the engine's sell stage for this snapshot: nil unless loot.rulesEngine is 3 and the judge is the looter.
+func (t *Town) sellPass(s *d2.Snapshot) *loot.ShadowPass {
+	if l, ok := t.judge.(*loot.Looter); !ok || l.EngineStage() < loot.StageSell || s == nil || s.Player == nil || s.Inventory == nil {
+		return nil
+	}
+	c := t.tidyCtx(s)
+	return t.shadowPass(s, c.PackFullPct, c.StashFullPct)
+}
+
+// sellCtx is what the sell stage needs from the town: the full-pack call of the visit, whether an unidentified plain
+// item is not worth a scroll, and the pickit's valuable priority.
+func (t *Town) sellCtx(s *d2.Snapshot, u d2.Unit, full bool) loot.SellCtx {
+	return loot.SellCtx{Full: full, SellUnid: t.sellUnidentified(s, u), ValuableMinPr: t.e.Tune.Loot.ValuableMinPrio}
+}

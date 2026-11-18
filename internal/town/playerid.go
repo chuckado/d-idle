@@ -274,6 +274,13 @@ func (t *Town) CheckBuyIdentify(s *d2.Snapshot, n int) (string, error) {
 // gold above idBuyReserve; running out of gold is a clean "short of gold" result, not an error, unless nothing at all
 // could be bought.
 func (t *Town) BuyIdentify(ctx context.Context, n int) (string, error) {
+	return t.buyIdentify(ctx, n, 0, false)
+}
+
+// buyIdentify is BuyIdentify with extra gold kept back (the merc reserve of a chore run) and an optional tome-only
+// mode: the chore never falls back to loose scrolls, a missing tome that cannot be paid is a reason, not a purchase.
+// The player's errand ignores town.identifyTome (that knob only enables the automatic chore).
+func (t *Town) buyIdentify(ctx context.Context, n, extraReserve int, tomeOnly bool) (string, error) {
 	s, err := t.current()
 	if err != nil {
 		return "", err
@@ -285,7 +292,7 @@ func (t *Town) BuyIdentify(ctx context.Context, n int) (string, error) {
 	if _, err := t.CheckBuyIdentify(s, n); err != nil {
 		return "", err
 	}
-	reserve := t.idBuyReserve(s)
+	reserve := t.idBuyReserve(s) + extraReserve
 	if err := t.h.CloseAll(ctx); err != nil {
 		return "", err
 	}
@@ -326,6 +333,9 @@ func (t *Town) BuyIdentify(ctx context.Context, n int) (string, error) {
 		in.TomePrice = t.base(tomeU).Cost
 	}
 	plan := planIDBuy(in)
+	if tomeOnly && !in.HaveTome && !plan.Tome {
+		return "", fmt.Errorf("no Tome of Identify bought: %s", idTomeWhy(in))
+	}
 	t.e.Log.Info("player buy identify scrolls", "gold", in.Gold, "reserve", reserve, "tome", tome, "want", n, "plan", fmt.Sprintf("%+v", plan))
 
 	var spent, bought int
@@ -445,4 +455,62 @@ func (t *Town) CainIdentify(ctx context.Context) (string, error) {
 		return "", fmt.Errorf("Cain left %d of %d items unidentified (his Identify line was not reached)", left, before)
 	}
 	return fmt.Sprintf("Deckard Cain identified %d items for free", before), nil
+}
+
+// idTomeWhy names why a tome could not be bought.
+func idTomeWhy(in idBuyIn) string {
+	if in.TomePrice == 0 {
+		return "the vendor has none in stock"
+	}
+	return fmt.Sprintf("gold %d above the reserve %d does not cover the tome at %d", in.Gold, in.Reserve, in.TomePrice)
+}
+
+// needIDTome is the optional automatic chore (town.identifyTome, OFF by default: the user buys through the watch UI).
+// It wants a tome when none is carried or it holds fewer than town.identifyTopUpBelow scrolls, and the gold above the
+// repair, kit and merc reserve covers the tome (or one scroll). A gold skip is logged once per visit with its reason.
+func (t *Town) needIDTome(s *d2.Snapshot) bool {
+	tn := t.tune()
+	if tn.IdentifyTome == 0 || s == nil || s.Player == nil || s.Inventory == nil {
+		return false
+	}
+	tome, _, _ := t.IdentifyTools(s)
+	if tome >= 0 && tome >= tn.IdentifyTopUpBelow {
+		return false
+	}
+	code := "isc"
+	if tome < 0 {
+		code = "ibk"
+	}
+	b := t.e.Data.ItemByCode(code)
+	if b == nil {
+		return false
+	}
+	reserve := t.idBuyReserve(s) + t.reserveGold
+	if s.Player.Gold-reserve < b.Cost {
+		if !t.idTomeLogged {
+			t.idTomeLogged = true
+			t.e.Log.Info("town: identify tome skipped", "reason", "gold short", "tome", tome, "gold", s.Player.Gold, "reserve", reserve, "need", b.Cost)
+		}
+		return false
+	}
+	return true
+}
+
+func (t *Town) buyIDTome(ctx context.Context, rep *ChoreReport) error {
+	s, err := t.current()
+	if err != nil {
+		return err
+	}
+	g0 := s.Player.Gold
+	msg, err := t.buyIdentify(ctx, 0, t.reserveGold, true)
+	if err != nil {
+		t.e.Log.Warn("town: identify tome not topped up", "reason", err)
+		return err
+	}
+	if after, aerr := t.current(); aerr == nil && after.Player.Gold < g0 {
+		rep.Spent += g0 - after.Player.Gold
+		rep.Bought["Tome of Identify top-up"]++
+	}
+	t.e.Log.Info("town: identify tome", "result", msg)
+	return nil
 }

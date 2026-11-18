@@ -1,0 +1,39 @@
+label: Mercenary 17
+box hidden: false
+div [data-canvas=]
+  div.cv-mhead []
+    span.cv-st [data-tone=bad] "dead"
+    button.cv-btn [data-act=revive data-primary=] "Revive 600 g"
+  div.cv-mbody []
+    div.d-doll [aria-label=Mercenary paper doll role=group data-cols=6 data-owner=merc data-state=dead]
+      div.d-slot2 [aria-label=helm: empty data-owner=merc data-slot=mhead] title="helm: empty"
+        span.sil [] "helm"
+      div.d-slot2.q-normal [aria-label=armour: Leather Armor data-filled= data-owner=merc data-slot=mtorso] title="Leather Armor, durability 10/12"
+        span.sil [] "armour"
+        span.nm [] "Leather Armor"
+      div.d-slot2 [aria-label=weapon: empty data-owner=merc data-slot=mrhand] title="weapon: empty"
+        span.sil [] "weapon"
+      div.d-slot2 [aria-label=shield: empty data-owner=merc data-slot=mlhand] title="shield: empty"
+        span.sil [] "shield"
+    div.cv-mside []
+      div.cv-sheet [aria-label=Mercenary values data-cv=msheet]
+        div []
+          label [] "Level"
+          b [] "17"
+        div []
+          label [] "Life"
+          b [data-tone=bad] "dead"
+        div []
+          label [] "Strength"
+          b [] "60"
+        div []
+          label [] "Dexterity"
+          b [] "50"
+        div []
+          label [] "Worn"
+          b [] "1 of 4"
+      div.cv-mextra [data-cv=mextra]
+        p.cv-mworn [data-tone=dim] "helm: empty" title="helm: empty"
+        p.cv-mworn [] "armour: Leather Armor" title="armour: Leather Armor"
+        p.cv-mworn [data-tone=dim] "weapon: empty" title="weapon: empty"
+        p.cv-mworn [data-tone=dim] "shield: empty" title="shield: empty"

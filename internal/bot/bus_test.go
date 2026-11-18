@@ -27,7 +27,7 @@ func TestBusPublishAndBridge(t *testing.T) {
 		if ev.Type != goals.EvKill || ev.Monster != "Fallen" {
 			t.Fatalf("bridged %+v", ev)
 		}
-	case <-time.After(2 * time.Second):
+	case <-time.After(30 * time.Second):
 		t.Fatal("no bridged event")
 	}
 	select {

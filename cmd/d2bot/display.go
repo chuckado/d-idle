@@ -259,8 +259,12 @@ func (i invSource) Inventory() status.InventoryData {
 		if i.d.cat != nil {
 			if m, ok := i.d.cat.Item(u.Class); ok {
 				it.W, it.H = max(m.W, 1), max(m.H, 1)
+				it.Kind = m.GoalType
 			}
 			it.Art = itemArt(i.d.cat, u)
+			if it.Art != "" {
+				it.Tint = u.Item.Tint
+			}
 		}
 		if merc {
 			i.d.tips.fillBase(&it, u) // the merc's item ids are their own id space: no tooltip lookup by id

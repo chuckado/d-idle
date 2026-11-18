@@ -1,0 +1,24 @@
+<div class="d-panel">
+  <div class="d-slotbody">
+    <div class="n-head">
+      <span> "Needs you"
+      <button class="n-dots" data-key="menu" data-more="" aria-haspopup="true" aria-label="All needs and notification setting" type="button"> "..."
+    <div class="n-list" data-scroll="">
+      <div class="n-row" data-id="gear" data-sev="danger" title="Weapon broken - repair is about 180 gold">
+        <span class="n-shape">
+        <span class="n-t">
+          <b> "Weapon broken"
+          <span class="n-s"> " repair is about 180 gold"
+        <span class="n-acts">
+          <button class="n-btn n-p" data-key="act-gear-0" type="button"> "Repair now"
+    <div class="n-pop" aria-label="Everything that needs you" popover="auto" role="dialog">
+      <div class="n-all">
+        <div class="n-row" data-id="gear" data-sev="danger" title="Weapon broken - repair is about 180 gold">
+          <span class="n-shape">
+          <span class="n-t">
+            <b> "Weapon broken"
+            <span class="n-s"> " repair is about 180 gold"
+          <span class="n-acts">
+            <button class="n-btn n-p" data-key="act-gear-0" type="button"> "Repair now"
+      <button class="n-sw" data-key="notify" data-on="0" aria-checked="false" role="switch" type="button"> "Desktop notification for a new red alert"
+        <em> "off"

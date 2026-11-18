@@ -1,0 +1,22 @@
+{
+  "schema": "watch.panel/1",
+  "version": 1,
+  "id": "quest-board",
+  "title": "Quests",
+  "band": "side",
+  "size": "m",
+  "priority": 22,
+  "tab": "hero",
+  "defaultOpen": true,
+  "endpoint": "/api/quests",
+  "poll": 2,
+  "unlock": "",
+  "skeleton": 0,
+  "slot": true,
+  "scroll": true,
+  "fit": true,
+  "optIn": true,
+  "cockpitOnly": true,
+  "owner": "quests5",
+  "doc": "docs/questboard.md"
+}

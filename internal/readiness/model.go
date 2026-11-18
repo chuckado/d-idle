@@ -8,6 +8,8 @@ import (
 	"slices"
 	"sort"
 	"strings"
+
+	"d2lod-bot/internal/d2"
 )
 
 // ResistBasis says how the hero's resist numbers were read. Whether d2.Player.Resist already holds the difficulty penalty
@@ -37,7 +39,11 @@ type Hero struct {
 	MaxLife    int
 	Defence    int
 	Resist     Resists
-	Basis      ResistBasis
+	// MaxBonus is the max-resist bonus per element (cap = cap + bonus) and AbsorbPct the percent absorb per element
+	// (Poison has none). Zero = none; absent stats read 0 (d2.Absorb, decomp37 T1).
+	MaxBonus  Resists
+	AbsorbPct Resists
+	Basis     ResistBasis
 	// DamagePerSec is the hero's sustained damage output; 0 = unknown.
 	DamagePerSec float64
 	Potions      int
@@ -333,31 +339,34 @@ func runCheck(kind string, p params, h Hero, d int, cr classRow, ad AreaDiff) (s
 	return Skip, "unknown check kind " + kind // ParseChecks rejects these
 }
 
-// worstResist is the lowest effective resist among the counted elements. It applies the difficulty penalty only when
-// the numbers are raw (ResistRaw); raw numbers cap at cap before the penalty, and the game's floor is -100.
+// worstResist is the lowest effective resist among the counted elements, in game.exe's order (d2.ResistRules: the
+// difficulty penalty is added first, then the cap of "cap" + the max-resist bonus, then the -100 floor, then the
+// percent absorb). The penalty is added only when the numbers are raw (ResistRaw); the numbers as shown already hold
+// penalty and cap.
 func worstResist(p params, h Hero, d int) (int, string) {
-	pen := [3]int{0, -40, -100}[d]
+	rules := d2.ResistTable
+	rules.BaseCap = int(p["cap"])
+	diff := d2.Difficulty(d)
 	if h.Basis == ResistWithPenalty {
-		pen = 0
+		rules.Penalty = [3]int{}
 	}
-	cap := int(p["cap"])
 	els := []struct {
-		name string
-		v    int
-	}{{"fire", h.Resist.Fire}, {"cold", h.Resist.Cold}, {"lightning", h.Resist.Lightning}}
+		name        string
+		v, max, abs int
+	}{
+		{"fire", h.Resist.Fire, h.MaxBonus.Fire, h.AbsorbPct.Fire},
+		{"cold", h.Resist.Cold, h.MaxBonus.Cold, h.AbsorbPct.Cold},
+		{"lightning", h.Resist.Lightning, h.MaxBonus.Lightning, h.AbsorbPct.Lightning},
+	}
 	if p["poison"] > 0 {
 		els = append(els, struct {
-			name string
-			v    int
-		}{"poison", h.Resist.Poison})
+			name        string
+			v, max, abs int
+		}{"poison", h.Resist.Poison, h.MaxBonus.Poison, 0})
 	}
 	worst, wname := math.MaxInt, ""
 	for _, e := range els {
-		v := e.v
-		if h.Basis == ResistRaw {
-			v = min(v, cap)
-		}
-		v = max(v+pen, -100)
+		v := rules.Intake(rules.Effective(e.v, e.max, diff), e.abs)
 		if v < worst {
 			worst, wname = v, e.name
 		}

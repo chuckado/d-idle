@@ -12,9 +12,10 @@
 (function () {
   'use strict';
   var HOLD_MS = 280, MOVE_PX = 6, SWALLOW_MS = 450;
-  var view = null, pend = null, drag = null, swallowUntil = 0, ghost = null, lastKey = '', scrollGuard = null;
+  var view = null, pend = null, drag = null, swallowUntil = 0, ghost = null, lastKey = '', scrollGuard = null, fp = null;
 
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; }
+  function setVar(n, k, v) { if (n.style.setProperty) n.style.setProperty(k, v); else n.style[k] = v; }
   function nameOf(it) { return (it.name || it.code || 'item'); }
 
   // ---- model (pure) ----
@@ -114,6 +115,7 @@
     ghost.appendChild(el('span', 'g-name', nameOf(p.src.it)));
     ghost.appendChild(el('span', 'g-why'));
     document.body.appendChild(ghost);
+    fp = el('div', 'inv-fp'); fp.setAttribute('aria-hidden', 'true'); fp.hidden = true; document.body.appendChild(fp);
     if (p.src.it.quality) ghost.classList.add('q-' + p.src.it.quality);
     markAll(p.src);
     lastKey = '';
@@ -121,10 +123,24 @@
     document.addEventListener('touchmove', scrollGuard, { passive: false });
     move(p.x, p.y);
   }
+  // The footprint of the held item over the pack or the stash: its w by h cells, snapped to the cell under the pointer and kept
+  // inside the grid, coloured by the same verdict as the grid's outline. Where the item lands is the bot's choice (the first
+  // free spot), so this shows its size and the verdict, not a promise of the position.
+  function footprint(tgt, it, kind, x, y) {
+    if (!fp) return;
+    var n = tgt && tgt.node, cols = n && n.dataset ? Number(n.dataset.cols) : 0;
+    if (!n || !cols || !n.getBoundingClientRect || kind === 'none' || !it || !(it.w > 0) || !(it.h > 0)) { fp.hidden = true; return; }
+    var r = n.getBoundingClientRect(), cs = r.width / cols, rows = Math.max(1, Math.round(r.height / cs));
+    var c = Math.max(0, Math.min(cols - it.w, Math.floor((x - r.left) / cs))), q = Math.max(0, Math.min(rows - it.h, Math.floor((y - r.top) / cs)));
+    fp.hidden = false; fp.dataset.state = kind;
+    setVar(fp, '--fw', Math.round(it.w * cs) + 'px'); setVar(fp, '--fh', Math.round(it.h * cs) + 'px');
+    fp.style.transform = 'translate(' + Math.round(r.left + c * cs) + 'px, ' + Math.round(r.top + q * cs) + 'px)';
+  }
   function move(x, y) {
     if (!drag || !ghost) return;
     ghost.style.transform = 'translate(' + Math.round(x + 14) + 'px, ' + Math.round(y + 14) + 'px)';
     var tgt = targetAt(x, y), vd = verdict(view, drag.src, tgt);
+    footprint(tgt.type === 'pack' || tgt.type === 'stash' ? tgt : null, drag.src.it, vd.kind, x, y);
     var key = tgt.type + (tgt.slot || '') + (tgt.owner || '') + vd.kind + (vd.reason || '');
     if (key === lastKey) return;
     lastKey = key;
@@ -150,6 +166,8 @@
     if (scrollGuard) { document.removeEventListener('touchmove', scrollGuard, { passive: false }); scrollGuard = null; }
     if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
     ghost = null;
+    if (fp && fp.parentNode) fp.parentNode.removeChild(fp);
+    fp = null;
     clearMarks();
     document.body.removeAttribute('data-dragging');
     swallowUntil = Date.now() + SWALLOW_MS;

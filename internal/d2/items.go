@@ -74,10 +74,11 @@ type Item struct {
 	Quality   int
 	Flags     uint32
 	ILvl      int
-	FileIndex int // unique/set index, UNVERIFIED (+0x28)
-	Body      int // BodyLocation (+0x44)
-	Page      int // ItemLocation (+0x45)
-	NodePage  int // (+0x69): 1 storage, 2 belt, 3 equipment VERIFIED LIVE
+	FileIndex int    // unique/set index, UNVERIFIED (+0x28)
+	Tint      string // inventory colour key "t<set>c<colour>" from the d2d dump (inv_tint, inv_colour); "" = none or an older d2d build
+	Body      int    // BodyLocation (+0x44)
+	Page      int    // ItemLocation (+0x45)
+	NodePage  int    // (+0x69): 1 storage, 2 belt, 3 equipment VERIFIED LIVE
 	Where     Container
 	// GX, GY: top-left grid cell inside inventory/stash/cube, or belt column (GX) and row (GY).
 	// VERIFIED LIVE: ItemPath+0x0C/+0x10 hold them (belt potions 0..3,0; tomes 9,2 and 9,3).

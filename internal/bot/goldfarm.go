@@ -8,6 +8,7 @@ import (
 	"d2lod-bot/internal/resource"
 )
 
+// The quest board's Farm mode (boardmode.go) borrows the area choice below with no order behind it (r.gf may be nil).
 // The player's Farm gold order (docs/goldfarm.md). While it is on, the leveling area choice is one rung below the plan
 // area for the character's level (a zone it clearly out-levels), until the player stops it. Town trips, selling,
 // banking and the repair gate run as always; poverty (updateStarvation) keeps its own hysteresis and lean mode.
@@ -129,20 +130,30 @@ func (r *Runner) goldFarmTarget(s *d2.Snapshot) (area int, ok, stop bool) {
 	case RungTooLow:
 		why := "level " + itoa(p.Level) + " is below the first safe zone"
 		r.e.Log.Warn("goldfarm: stopped, no safe zone", "level", p.Level)
-		r.gf.Halt(why)
+		if r.gf != nil {
+			r.gf.Halt(why)
+		}
 		return 0, false, false // the normal plan carries on
 	case RungNone:
 		rep.Note = "waiting, every safe zone is cleared or avoided for now"
-		r.gf.Report(rep)
+		if r.gf != nil {
+			r.gf.Report(rep)
+		}
 		return 0, false, true
 	}
 	name := r.areaName(st.Area)
 	rep.Area = name
 	if r.gfArea != st.Area {
 		r.gfArea = st.Area
-		r.e.Log.Info("goldfarm: farming gold on user request", "area", st.Area, "name", name, "gold", have, "want", want)
+		why := "goldfarm: farming gold on user request"
+		if r.gf == nil {
+			why = "goldfarm: farming for the quest board farm mode"
+		}
+		r.e.Log.Info(why, "area", st.Area, "name", name, "gold", have, "want", want)
 	}
-	r.gf.Report(rep)
+	if r.gf != nil {
+		r.gf.Report(rep)
+	}
 	return st.Area, true, false
 }
 

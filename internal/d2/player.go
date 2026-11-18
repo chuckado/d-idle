@@ -44,6 +44,16 @@ const rvaDifficulty = 0x3A060C
 // penalty, so a fresh character reads 0. Stat ids UNVERIFIED (absent=0 at level 1).
 type Resists struct{ Fire, Cold, Lightning, Poison, Magic int }
 
+// Absorb holds the gear absorb stats 142..149 (percent, flat per element). game.exe applies them to an elemental hit
+// after the resistance (V read, docs/research/decomp37-combat.md section 2); d2d reads none. Whether the player's
+// merged stat list exposes them is U (absent reads 0, which means "no absorb"). Poison has no absorb stat.
+type Absorb struct {
+	FirePct, FireFlat           int
+	LightningPct, LightningFlat int
+	MagicPct, MagicFlat         int
+	ColdPct, ColdFlat           int
+}
+
 // Player is the local character.
 type Player struct {
 	Addr  uint32
@@ -66,6 +76,8 @@ type Player struct {
 	StatPoints          int // unspent
 	SkillPoints         int // unspent
 	Resist              Resists
+	MaxResist           Resists // max-resist bonus per element (added to the 75 cap, ResistTable); stats 40/42/44/46/38
+	Absorb              Absorb
 	Stats               Stats
 	States              StateSet // states.txt bit array (poison, buffs); empty when unreadable
 
@@ -182,6 +194,16 @@ func (r *Reader) Player() (*Player, error) {
 	p.Resist = Resists{
 		Fire: int(st.Get(StatFireRes)), Cold: int(st.Get(StatColdRes)), Lightning: int(st.Get(StatLightRes)),
 		Poison: int(st.Get(StatPoisonRes)), Magic: int(st.Get(StatMagicRes)),
+	}
+	p.MaxResist = Resists{
+		Fire: int(st.Get(StatMaxFireRes)), Cold: int(st.Get(StatMaxColdRes)), Lightning: int(st.Get(StatMaxLightRes)),
+		Poison: int(st.Get(StatMaxPoisonRes)), Magic: int(st.Get(StatMaxMagicRes)),
+	}
+	p.Absorb = Absorb{
+		FirePct: int(st.Get(StatFireAbsorbPct)), FireFlat: int(st.Get(StatFireAbsorb)),
+		LightningPct: int(st.Get(StatLightAbsorbPct)), LightningFlat: int(st.Get(StatLightAbsorb)),
+		MagicPct: int(st.Get(StatMagicAbsorbPct)), MagicFlat: int(st.Get(StatMagicAbsorb)),
+		ColdPct: int(st.Get(StatColdAbsorbPct)), ColdFlat: int(st.Get(StatColdAbsorb)),
 	}
 	if p.Skills, p.LeftSkill, p.RightSkill, err = r.skills(pa); err != nil {
 		return nil, err

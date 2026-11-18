@@ -9,6 +9,7 @@ import (
 	"unicode/utf8"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/itemreq"
 	"d2lod-bot/internal/status"
 )
 
@@ -88,12 +89,14 @@ type SetsView struct {
 // SetSlotPreview says where the item a set names for one slot is now.
 type SetSlotPreview struct {
 	Slot   string `json:"slot"`
-	Name   string `json:"name"`           // what the set names
-	Now    string `json:"now,omitempty"`  // what is worn in the slot now
-	Status string `json:"status"`         // worn, pack, stash, elsewhere, missing, blocked
-	Why    string `json:"why,omitempty"`  // the reason of blocked, or a note
-	ID     uint32 `json:"id,omitempty"`   // the item found
-	From   string `json:"from,omitempty"` // the slot it is worn in now (status elsewhere)
+	Name   string `json:"name"`          // what the set names
+	Now    string `json:"now,omitempty"` // what is worn in the slot now
+	Status string `json:"status"`        // worn, pack, stash, elsewhere, missing, blocked
+	Why    string `json:"why,omitempty"` // the reason of blocked, or a note
+	// Reasons (schema 8) is the structured form of Why for a blocked item: code, stat, need, have.
+	Reasons []itemreq.Reason `json:"reasons,omitempty"`
+	ID      uint32           `json:"id,omitempty"`   // the item found
+	From    string           `json:"from,omitempty"` // the slot it is worn in now (status elsewhere)
 }
 
 // SetStep is one request an Apply would queue.
@@ -479,7 +482,13 @@ func (d *Desk) plan(id string) (SetPreview, []planStep, error) {
 			sp.Status, sp.ID = loc.place, loc.it.ID
 			if loc.place == "pack" && gs.Target == TargetHero && eq != nil && s != nil {
 				if _, err := eq.CheckPlayerEquip(s, loc.it.ID, SlotBody[k]); err != nil && !isOffHand(err) {
-					sp.Status, sp.Why = "blocked", err.Error()
+					sp.Status, sp.Why, sp.Reasons = "blocked", err.Error(), slotReasons(err)
+					break
+				}
+			}
+			if loc.place == "stash" && gs.Target == TargetHero {
+				if rs := stashBlock(eq, s, loc.it); len(rs) > 0 { // taking it out only to be refused at the equip would waste the trip
+					sp.Status, sp.Why, sp.Reasons = "blocked", rs[0].Text, rs
 					break
 				}
 			}
@@ -751,11 +760,7 @@ func (d *Desk) RequestEquipFor(id uint32, slot, target string) (Request, error) 
 	case "", TargetHero:
 		return d.RequestEquip(id, slot)
 	case TargetMerc:
-		var data status.InventoryData
-		if d.c.Inventory != nil {
-			data = d.c.Inventory()
-		}
-		return Request{}, refuse("merc", "%s", d.mercWhy(data))
+		return d.mercVerb(true, id, slot) // refuses with code "merc" until the backend offers the merc verbs (mercverbs.go)
 	}
 	return Request{}, refuse("target", "a target is the hero or the merc")
 }
@@ -766,7 +771,7 @@ func (d *Desk) RequestUnequipFor(slot, target string) (Request, error) {
 	case "", TargetHero:
 		return d.RequestUnequip(slot)
 	case TargetMerc:
-		return d.RequestEquipFor(0, slot, target)
+		return d.mercVerb(false, 0, slot)
 	}
 	return Request{}, refuse("target", "a target is the hero or the merc")
 }

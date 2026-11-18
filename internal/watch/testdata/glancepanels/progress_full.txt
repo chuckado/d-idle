@@ -1,0 +1,34 @@
+<div class="d-panel">
+  <div class="d-slotbody">
+    <button class="pg-btn" data-key="open" aria-haspopup="true" type="button">
+      <span class="pg-h">
+        <b> "Progress"
+        <em> "level 7"
+      <span class="pg-m">
+        <span class="pg-to"> "to 8"
+        <progress class="pg-meter" aria-label="Progress to the next level" max="100" value="62">
+        <span class="pg-said" title="62%, about 25 min"> "62%, about 25 min"
+      <span class="pg-v">
+        <span class="pg-xp">
+          <strong title="12400 xp per hour"> "12.4k"
+          <label> "xp/h"
+          <svg aria-hidden="true" class="pg-spark" viewBox="0 0 60 16">
+            <polyline points="2,13 10,10.7 18,9.6 26,8.5 34,6.2 42,8.5 50,3.9 58,3">
+            <circle cx="58" cy="3" r="2">
+        <span class="pg-gold">
+          <strong title="2100 gold per hour"> "2.1k"
+          <label> "gold/h"
+    <div class="pg-pop" aria-label="Progress in detail" popover="auto" role="dialog">
+      <dl class="pg-rows">
+        <dt> "Level"
+        <dd> "level 7 to 8: 62% done"
+        <dt> "Time to next level"
+        <dd> "about 25 min"
+        <dt> "XP now"
+        <dd> "12.4k xp/h"
+        <dt> "XP average"
+        <dd> "10.2k xp/h over the last 8 min"
+        <dt> "Gold now"
+        <dd> "2.1k gold/h"
+        <dt> "Gold average"
+        <dd> "2.0k gold/h over the last 3 min"
