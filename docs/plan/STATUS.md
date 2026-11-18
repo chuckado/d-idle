@@ -278,6 +278,7 @@
 | groundquality | proposed | - | `internal/d2dloot`<br>`cmd/d2bot/d2dloot.go`<br>`cmd/d2bot/d2dwire.go`<br>`docs/d2d-loot.md` | - |
 | cainl1 | proposed | - | `docs/probes/cainl1`<br>`docs/probes/search-for-cain-l1-2026-11-18.md`<br>`docs/probes/test-characters.md` | `d2d-control-socket` |
 | itemcolour2 | proposed | - | `internal/art/`<br>`internal/d2dsrc/`<br>`internal/watch/web/inventory.js`<br>`internal/watch/artembed_test.go`<br>`internal/status/inventory.go`<br>`internal/d2/items.go`<br>`cmd/d2bot/display.go`<br>`cmd/d2bot/itemart_test.go` | - |
+| devp11doc | proposed | - | `docs/process/sandbox-devp11.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
@@ -317,6 +318,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 96848224c 11-18 10:18 `Merge agent/devp11doc: devp11 item colour payload doc` (devp11doc)
+- 0ba7c0782 11-18 10:16 `Merge branch 'main' into devp11doc` (-)
 - 0bc637671 11-18 10:11 `Merge agent/cainl1: Merge branch 'main' into cainl1` (cainl1)
 - 45ac72acf 11-18 10:10 `Merge branch 'main' into cainl1` (-)
 - 058b72f74 11-18 10:01 `Merge agent/cain7: CAIN-7: walk to the Inifuss tree room from the presets room rows` (cain7)
@@ -325,6 +328,4 @@
 - 93899088c 11-18 09:54 `Merge agent/itemcolour2: item tint: parse inv_tint/inv_colour, art colormap remap, UI key (includes the itemcolour design)` (itemcolour2)
 - 7255719d5 11-18 09:53 `Merge branch 'main' into itemcolour2` (-)
 - 5cd59f5ca 11-18 09:50 `Merge main into cain7` (-)
-- ef8709ccf 11-18 09:46 `Merge remote-tracking branch 'origin/main' into agent/itemcolour2` (-)
-- ed97362bf 11-18 09:43 `Merge agent/itemcolour: itemcolour: item colour design doc` (itemcolour)
 <!-- statusgen:end -->
