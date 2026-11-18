@@ -86,7 +86,14 @@ Each one text change in r4's `combat.hpp`; per mutant `test_combat` (r4's, and r
 
 ## Build, ctest, tidy (V run)
 
-BUILD_PENDING
+Builder container, Release, GCC, tests and tools on, `-j2` under the builder's lane lock, ccache; every job registered with `tools/agentrun.sh`; `D2_MPQ_DIR` and `D2_PATCH_INSTALLER` set.
+
+| Tree | Build | Tests |
+|---|---|---|
+| r4 claim `760df1fa` (the docs commit `1da9632a` changes no built file) | full, rc 0 (1,471 targets, 1,759 s) | `ctest -j2`: 369 of 370, 13 skip for data (as upstream); the failure is `test_stand_attack` |
+| upstream main `bebfdbcf` alone | `test_stand_attack`, rc 0 | aborts at `tests/game/test_stand_attack.cpp:88` (`attack_mon == 0 && pmode == kModeA1`), the same assert: upstream's failure, not this PR's (answers the brief's e) |
+
+clang-tidy-19 on `tests/test_combat.cpp` of r4 (the repo's `HeaderFilterRegex` takes `components/`, so `combat.hpp` too): **0 findings**; positive control `readability-magic-numbers`: 1,588 reports, so the unit is parsed. The mutant runs and the r3 / r4 `test_combat` runs are standalone compiles of the same file (above).
 
 ## Hygiene (V run)
 
@@ -106,7 +113,7 @@ BUILD_PENDING
 - **C3 (high, template).** Checklist: tick "The finding in `docs/research/re/`" (`monsters.md`, `combat.md`). Tests: name the new pins.
 - **C4 (medium).** Mutants: this file's 18 rows (r4 column) instead of the 10-row table; "18 of 18 abort `test_combat`; m10 and m11 only through it". Drop "whole points, the mana leech cut, the uncapped resist and a negative resist adding pass `test_combat`".
 - **C5 (medium).** Limits, the missile line: "the handler's own event-6 branch (divisor doubled) was run natively on hand cases; the dispatch of event 6 by `FUN_0057c6c0` is read, not run".
-- **C6 (medium).** Build and tests: r4's numbers from this file; `test_stand_attack` as found below.
+- **C6 (medium).** Build and tests: r4's numbers from this file; `test_stand_attack` "fails on upstream `bebfdbcf` itself (rebuilt there, same assert)".
 - **C7 (low).** "What changes": "`test_combat` now pins game.exe's crush for a life with a fraction, a resist above 100 and below 0, a crush past MulDiv's `0x100000` branch, a life under the divisor, and the mana leech after a crush".
 - **C8 (low).** Re-check block: `crush.py game` on the pins' cases (`id life phys res div`): `0 25728 7680 0 4`, `1 102400 7680 120 4`, `2 102400 7680 -20 4`, `3 10240256 7680 33 4`, `4 3 7680 0 4` gives 6,432 / 0 / 25,600 / 1,715,264 / 0; `crush.py pair` on `0 1 0 20 25728 25600 8` gives 3,216 / 0 / 2,251.
 - **C9 (low).** Limits: "The get-hit roll (FUN_0057cb00) takes the record total without the crush in game.exe; d2d's counts it (as before this PR)."
