@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 	"time"
+
+	"d2lod-bot/internal/env"
 )
 
 // flailFixture is the cycle from the sandbox log of 2026-11-18 18:13:40 to 18:14:20 (seconds since the first line,
@@ -24,6 +26,7 @@ func feedFlailFixture(g *rig) {
 
 func TestFlailHoldsInsteadOfGoingHome(t *testing.T) {
 	g := newRig(t)
+	g.r.e.Tune.Bot.FlailMoves = env.DefaultTuning().Bot.FlailMoves
 	g.w.set(func(w *world) { w.area = 5 })
 	feedFlailFixture(g)
 	g.r.poll()
