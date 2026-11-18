@@ -78,10 +78,13 @@ Act 1 gaps closed offline (ACT1GAPS, see "Act 1 objects" below); live checks pen
 
 `TaskDeps.Objects` was already set in `newTaskDeps`; what was missing were the names. Now in `cmd/d2bot/objects.go` and `cain.go`:
 - `Tree of Inifuss` (class 30, U): click, then `internal/bot` Interact calls PickUp for the scroll (the task node has none).
-- `cairn-stones`: classes 17..21 (S Kolbot), backtracking search (`solveCairn`): a stone that stays lit (mode differs from its
-  start mode, U) is kept, a wrong one resets (U) and the prefix is re-clicked; max 30 clicks, then a Timeout fault. If the
-  Tristram portal (class 60, S) already exists it only enters. It ends by walking through the portal ("Tristram portal",
-  objLeave) and sets the `Tristram portal` pseudo item.
+- `cairn-stones` (CAIN-4/5a, rule V on the d2d lab build, docs/probes/search-for-cain-l1-2026-11-18.md): classes 17..21 (S Kolbot);
+  `solveCairn` cycles through the stones that are not lit, reads the lit state after every click (Unit.Mode > 0) and stops at
+  the portal: a wrong click is ignored and nothing resets, so at most 15 clicks. Without a readable state (Mode -1) it clicks all
+  five per cycle, at most 25. An error names the lit set and the Key to the Cairn Stones when a whole cycle lit nothing. The step
+  needs `bkd` in the pack (a prereq fault otherwise). It ends by walking through the portal ("Tristram portal", objLeave, class 60
+  from a `debug portals` row with which >= 2) and checks the arrival level 38. Details and the sandbox question:
+  docs/probes/search-for-cain-45-2026-11-18.md.
 - `Cain's Cage` (class 26, U) and `cage` (Frigid Highlands, 473 V): objOnce, the nearest object not yet clicked in this
   area (`onceSet`), so the Rescue step's three calls click three different cages.
 - Talk rows: Akara `bark` and Charsi `imbue:best` / `imbue` are the plain `Talk` (the scroll and Malus are taken by the Talk

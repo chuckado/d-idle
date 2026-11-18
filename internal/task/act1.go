@@ -187,8 +187,8 @@ func burialNodes() []Node {
 }
 
 // Search for Cain (optional, off by default): bark from the Dark Wood tree, Akara reads it, cairn stones in Stony
-// Field open the Tristram portal, free Cain from the cage. Stone order is random per game (U): the adapter brute
-// forces it inside Interact("cairn-stones").
+// Field open the Tristram portal, free Cain from the cage. Stone order is random per game (V): the adapter cycles
+// through the stones inside Interact("cairn-stones") (cmd/d2bot/cain.go).
 func cainNodes() []Node {
 	q := QCain
 	inTristram := func(w World) bool { return w.Area == Tristram }
@@ -197,6 +197,17 @@ func cainNodes() []Node {
 	// the board's own group (cainReportNodes), so no field step may stay needed until that talk is done (S7b; U: whether
 	// the game sets Cleared at the cage or Done at once).
 	free := stageAtLeast(q, StageCleared)
+	// The stones do nothing without the Key to the Cairn Stones (bkd) in the pack: every click is ignored (V lab drill
+	// L1). Without it the step is a prerequisite fault with the reason, so the board shows why and does not click.
+	withKey := func(s Step) Step {
+		s.Ready = func(w World) *Fault {
+			if w.Items[ItemCainSc] == 0 && !opened(w) {
+				return &Fault{Kind: KindPrereq, Why: "no Key to the Cairn Stones in the pack: Akara reads the Scroll of Inifuss into it"}
+			}
+			return nil
+		}
+		return s
+	}
 	return []Node{
 		{Step: StepWaypoint(id(q, "wp-dark-wood"), DarkWood, free)},
 		{Step: StepTravel(id(q, "to-wood"), "Go to the Dark Wood", DarkWood, func(w World) bool { return w.Items[ItemBark] > 0 || w.Items[ItemCainSc] > 0 || free(w) })},
@@ -205,8 +216,8 @@ func cainNodes() []Node {
 		{Step: StepTalk(id(q, "read"), "Give the bark to Akara", NPCAkara, "bark",
 			func(w World) bool { return w.Items[ItemBark] == 0 || free(w) }, nil)},
 		{Step: StepTravel(id(q, "to-stony"), "Go to Stony Field", StonyField, func(w World) bool { return opened(w) || free(w) })},
-		req(Node{Step: StepInteract(id(q, "stones"), "Touch the cairn stones", "cairn-stones",
-			func(w World) bool { return opened(w) || free(w) }, func(w World) bool { return w.Area == StonyField })}, id(q, "to-stony")),
+		req(Node{Step: withKey(StepInteract(id(q, "stones"), "Touch the cairn stones", "cairn-stones",
+			func(w World) bool { return opened(w) || free(w) }, func(w World) bool { return w.Area == StonyField }))}, id(q, "to-stony")),
 		{Step: StepTravel(id(q, "to-tristram"), "Enter Tristram", Tristram, func(w World) bool { return inTristram(w) || free(w) })},
 		{Step: StepClear(id(q, "clear"), "Clear Tristram", Tristram, func(w World) bool { return w.Cleared[Tristram] || free(w) }, 12*time.Minute)},
 		{Step: StepInteract(id(q, "cage"), "Free Cain", "Cain's Cage", free, inTristram)},
