@@ -1,10 +1,11 @@
 ---
 id: TASK-634
 title: 'itemcolour: design for per-item inventory art colour (jewels and tinted gear)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T14:31:00Z'
+updated_date: '2026-11-18T14:47:00Z'
 labels:
   - watch
   - research
