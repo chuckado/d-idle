@@ -425,22 +425,16 @@ export function mountVault(d) {
     viewBtn.textContent = S.mode === 'grid' ? T.viewList : T.viewGrid;
     if (r.last >= S.items.length - OVER_ROWS * geo.cols && S.items.length < S.total) loadMore(); // near the end of what is loaded: fetch the next page
   }
-  let raf = 0;
-  function onScroll() { // redraw only when the view leaves the rows already drawn (one row of margin)
-    if (raf) return;
-    const run = () => {
-      raf = 0;
-      const g = measure(), n = S.items.length;
-      if (!(g.rowH > 0) || !n) return;
-      const top = main.getBoundingClientRect().top - grid.getBoundingClientRect().top;
-      const fr = Math.floor(Math.max(0, top) / g.rowH) * g.cols, lr = Math.ceil((Math.max(0, top) + main.clientHeight) / g.rowH) * g.cols;
-      if ((fr < rendered.first && rendered.first > 0) || (lr > rendered.last && rendered.last < n) || rendered.first < 0) drawList();
-    };
-    if (win && win.requestAnimationFrame) raf = win.requestAnimationFrame(run); else run();
+  function onScroll() { // redraw only when the view leaves the rows already drawn (cheap check: no redraw while the drawn rows cover the view)
+    const g = measure(), n = S.items.length;
+    if (!(g.rowH > 0) || !n) return;
+    const top = Math.max(0, main.getBoundingClientRect().top - grid.getBoundingClientRect().top);
+    const fr = Math.floor(top / g.rowH) * g.cols, lr = Math.ceil((top + main.clientHeight) / g.rowH) * g.cols;
+    if (rendered.first < 0 || (fr < rendered.first && rendered.first > 0) || (lr > rendered.last && rendered.last < n)) drawList();
   }
   main.addEventListener('scroll', onScroll, { passive: true });
   const RO = d.ResizeObserver || (win && win.ResizeObserver); // the list's height settles after the first draw (filters fold, fonts load): draw again when it changes
-  if (RO) new RO(onScroll).observe(main);
+  if (RO) { const ro = new RO(onScroll); ro.observe(main); ro.observe(grid); }
   if (win && win.addEventListener) win.addEventListener('resize', () => { measure(); drawList(); });
   function drawState() {
     state.replaceChildren();
