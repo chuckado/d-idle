@@ -1,10 +1,13 @@
 ---
 id: TASK-646
-title: 'decomp40: Cairn Stones order, Tristram portal and the scroll drop, game.exe vs d2d'
-status: Proposed
+title: >-
+  decomp40: Cairn Stones order, Tristram portal and the scroll drop, game.exe vs
+  d2d
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T16:40:00Z'
+updated_date: '2026-11-18T17:01:00Z'
 labels:
   - d2d
   - research
