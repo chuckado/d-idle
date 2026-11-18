@@ -100,7 +100,8 @@ export function mountVault(d) {
   const pinB = btn(T.pin, { key: 'pin' }), unpinB = btn(T.unpin, { key: 'unpin' }), discB = btn(T.discard, { key: 'discard', variant: 'danger' });
   const keepB = btn(T.keep, { key: 'keep' });
   const revealB = btn(T.reveal, { key: 'reveal' }), sellB = btn(T.sell, { key: 'sell' });
-  const acts = el('div', 'vt-acts'); acts.append(keepB, revealB, sellB, pinB, unpinB, discB);
+  const massB = btn(T.revealFiltered, { key: 'reveal-filtered', variant: 'ghost' }); massB.hidden = true;
+  const acts = el('div', 'vt-acts'); acts.append(keepB, revealB, massB, sellB, pinB, unpinB, discB);
   bar.append(selBtn, selText, selAll, acts);
   const keepRow = el('div', 'vt-keeprow'); keepRow.hidden = true;
   const keepLine = el('span', 'vt-keepline'); keepLine.setAttribute('role', 'status');
@@ -308,7 +309,12 @@ export function mountVault(d) {
     }
     costLine.textContent = cost; costLine.hidden = !cost;
     buyB.hidden = !(cost && rp.short); buyB.disabled = ro;
-    const line = a ? [a.reveal.line, a.sell.line].filter(Boolean).join(' · ') : '';
+    // Mass reveal (docs/design/bulk-identify-2026-11-18.md section 5): the server names the filtered ids and the cost sentence.
+    const m = a && a.reveal.mass;
+    massB.hidden = !(m && m.count > 0);
+    if (m) { massB.textContent = fmt(T.revealFiltered, { n: m.count }); massB.title = m.line; }
+    massB.disabled = ro || !a || !a.reveal.enabled;
+    const line = a ? [a.reveal.note, m && m.line, a.reveal.line, a.sell.line].filter(Boolean).join(' · ') : '';
     actLine.textContent = line;
     actRow.hidden = !(cost || line);
     const p = a && a.prompt;
@@ -575,6 +581,7 @@ export function mountVault(d) {
   const act1 = (route, ids) => act(route, ids, false);
   const keepAct = (ids, now) => act('/api/vault/keep', ids, false, { now });
   const revealAct = (ids, now) => act('/api/vault/reveal', ids, false, { now });
+  massB.addEventListener('click', () => { const m = S.view && S.view.act && S.view.act.reveal.mass; if (m && m.count && !massB.disabled) revealAct(m.ids, false); });
   const sellAct = (ids, now) => act('/api/vault/sell', ids, true, { now });
   pinB.addEventListener('click', () => { if (S.sel.size) act1('/api/vault/pin', S.sel.ids()); });
   unpinB.addEventListener('click', () => { if (S.sel.size) act1('/api/vault/unpin', S.sel.ids()); });
