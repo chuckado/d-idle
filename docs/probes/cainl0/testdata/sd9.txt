@@ -1,0 +1,94 @@
+> debug goto 5
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> debug presets
+0	155	43.7	42.3	0	Hidden Stash
+1	2	50.5	53.5	0	Shrine
+2	139	46.5	48.9	0	Chest
+3	141	48.9	42.1	0	Chest
+4	269	53.5	38.5	0	
+5	37	54.9	39.3	0	
+6	37	50.3	39.3	0	
+7	37	51.1	33.3	0	
+8	37	55.9	33.9	0	
+9	269	54.7	36.5	0	
+10	139	48.3	37.3	0	Chest
+11	155	30.5	40.3	0	Hidden Stash
+12	140	29.7	44.1	0	Chest
+13	139	31.1	41.7	0	Chest
+14	30	36.5	28.5	0	Tree of Inifuss
+15	247	27.9	27.7	0	Bed
+16	139	29.1	25.3	0	Chest
+room	9	12	4
+room	6	20	4
+room	10	28	4
+room	9	44	4
+room	6	52	4
+room	10	60	4
+room	9	4	12
+room	13	12	12
+room	14	28	12
+room	6	36	12
+room	13	44	12
+room	30	52	12
+room	14	60	12
+room	6	68	12
+room	10	76	12
+room	5	4	20
+room	29	28	20
+room	7	76	20
+room	5	4	28
+room	48	28	28
+room	161	36	28
+room	51	44	28
+room	15	60	28
+room	4	68	28
+room	11	76	28
+room	5	4	36
+room	43	52	36
+room	7	60	36
+room	8	4	44
+room	4	12	44
+room	12	20	44
+room	15	36	44
+room	12	44	44
+room	14	60	44
+room	6	68	44
+room	10	76	44
+room	9	4	52
+room	6	12	52
+room	13	20	52
+room	14	36	52
+room	13	44	52
+room	41	60	52
+room	41	68	52
+room	41	60	60
+room	41	68	60
+room	7	76	52
+room	5	4	60
+room	7	76	60
+room	8	4	68
+room	4	12	68
+room	12	20	68
+room	15	36	68
+room	12	44	68
+room	15	60	68
+room	4	68	68
+room	11	76	68
+room	8	20	76
+room	4	28	76
+room	11	36	76
+room	8	44	76
+room	4	52	76
+room	11	60	76 err=<nil>
+> debug layout
+4	1000	1000	80	80
+3	1016	920	80	80
+2	1096	904	96	56
+1	1136	864	56	40
+17	976	904	40	48
+39	5000	1148	80	80
+26	3000	1000	64	18
+7	3000	1018	80	80
+6	3080	1034	80	80
+5	3160	1050	80	80 err=<nil>
