@@ -10,7 +10,7 @@ Fourth of the ten unlockables (`docs/research/unlockables.md`); sits on the ladd
 
 ## What it is
 
-A face-down card appears for each pickup of a quality with a card. The viewer flips it (button in the sheet that opens, or in the "Cards" tab) and only then sees the quality word, the colour (the page's `--q-*` variables), a short sound (Web Audio, with a checkbox) and a line of text. Ladder rows:
+A face-down card appears for each pickup of a quality with a card. The viewer flips it (button in the "Cards" tab; since 2026-11-18 the sheet never opens by itself, unflipped cards show as one quiet "Cards (N)" count on the tab, so a busy vault cannot make a repeating popup) and only then sees the quality word, the colour (the page's `--q-*` variables), a short sound (Web Audio, with a checkbox) and a line of text. Ladder rows:
 
 | row | trigger | opens |
 |---|---|---|
