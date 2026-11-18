@@ -273,7 +273,6 @@
 | brightness | proposed | - | `docs/probes/viewer-brightness-2026-11-17.md`<br>`internal/watch/web/panels/video/brightness.js`<br>`internal/watch/web/panels/video/panel.css`<br>`internal/watch/web/panels/video/panel.js`<br>`internal/watch/testdata/video_panel.js`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/video_labels_panel.js`<br>`internal/watch/palfeed/luma_test.go`<br>`tools/videofeed/gamma_frames.py`<br>`tools/videofeed/lumastat/` | - |
 | cainfix | proposed | - | `docs/probes/search-for-cain-2026-11-17.md`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_test.go`<br>`internal/questboard`<br>`internal/task/world.go`<br>`internal/quest/act1.go`<br>`internal/bot/task.go`<br>`internal/watch`<br>`internal/task`<br>`internal/bot`<br>`cmd/d2bot`<br>`data/questboard/act1.json` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
-| flakyfix | proposed | - | `internal/bot/`<br>`internal/server/`<br>`internal/watch/`<br>`docs/process/flaky-tests.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |

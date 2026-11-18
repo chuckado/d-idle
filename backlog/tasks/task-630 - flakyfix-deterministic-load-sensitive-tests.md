@@ -1,10 +1,11 @@
 ---
 id: TASK-630
 title: 'flakyfix: deterministic load-sensitive tests'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T06:15:00Z'
+updated_date: '2026-11-18T07:30:00Z'
 labels:
   - bot
   - bot-fix
