@@ -38,7 +38,7 @@ export function mount(root, ctx) {
     }
     stopArm = '';
     el.disabled = true;
-    act(ctx, b.verb, b.quest, b.chunk, shared, redraw).then(() => { el.disabled = false; });
+    act(ctx, b.verb, b.quest, b.chunk, shared, redraw, !!b.confirm).then(() => { el.disabled = false; });
   }
 
   function button(b, primary, k) {

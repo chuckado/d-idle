@@ -39,6 +39,7 @@ type QuestsDesk interface {
 	SetMode(mode string) questboard.Reply
 	SetAuto(quest string, on bool) questboard.Reply
 	DismissAway() questboard.Reply
+	Record(questboard.AuditEvent)
 }
 
 // QuestsAPI holds the desk once it exists (it is late-bound like the other desks).
@@ -74,15 +75,40 @@ type questBody struct {
 	Chunk string `json:"chunk"`
 	Mode  string `json:"mode"`
 	On    *bool  `json:"on"`
+	// Confirm is the second tap of a Stop; only recorded, a missing flag does not refuse.
+	Confirm bool `json:"confirm"`
 }
 
 // PostHandler serves the actions under /api/quests/.
 func (a *QuestsAPI) PostHandler(o AnswerOptions) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w0 http.ResponseWriter, r *http.Request) {
+		w := &statusWriter{ResponseWriter: w0, code: http.StatusOK}
+		ev := questboard.AuditEvent{Path: safePath(r.URL.Path), Remote: remoteClass(r.RemoteAddr), Agent: agentFamily(r.UserAgent())}
+		var rep questboard.Reply
+		var d QuestsDesk
+		ran := false
+		defer func() {
+			ev.Status, ev.OK, ev.Already, ev.Code, ev.Reason = w.code, rep.OK, rep.Already, rep.Code, rep.Reason
+			if ev.Action == "" {
+				return
+			}
+			logQuestAction(ev)
+			if d != nil && ran {
+				d.Record(ev)
+			}
+		}()
 		rest := strings.TrimPrefix(r.URL.Path, QuestsPrefix)
 		parts := strings.Split(rest, "/")
 		isMode := rest == "mode"
 		isAway := rest == "away/dismiss"
+		switch {
+		case isMode:
+			ev.Action = "mode"
+		case isAway:
+			ev.Action = "dismiss"
+		case len(parts) == 2:
+			ev.Action, ev.Quest = safeID(parts[1]), safeID(parts[0])
+		}
 		if !isMode && !isAway && (len(parts) != 2 || parts[0] == "" || parts[1] == "") {
 			writeJSON(w, http.StatusNotFound, policyReply{Code: "route", Error: "no such quest route"})
 			return
@@ -99,12 +125,16 @@ func (a *QuestsAPI) PostHandler(o AnswerOptions) http.Handler {
 		if !policyGate(o, w, r, &b) {
 			return
 		}
-		d := a.desk()
-		if d == nil {
+		ev.Chunk, ev.Confirm = safeID(b.Chunk), b.Confirm
+		if isMode {
+			ev.Chunk = safeID(b.Mode)
+		}
+		if dd := a.desk(); dd != nil {
+			d = dd
+		} else {
 			writeJSON(w, http.StatusServiceUnavailable, policyReply{Code: "off", Error: "the quest board is not available yet"})
 			return
 		}
-		var rep questboard.Reply
 		switch {
 		case isMode:
 			if b.Mode == "" {
@@ -129,6 +159,7 @@ func (a *QuestsAPI) PostHandler(o AnswerOptions) http.Handler {
 		default:
 			rep = d.Retry(parts[0], b.Chunk)
 		}
+		ran = true
 		code := rep.Status
 		if code == 0 {
 			code = http.StatusOK
