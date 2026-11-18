@@ -766,6 +766,9 @@ func (a taskActs) Interact(ctx context.Context, object string) error {
 		}
 		holdsPotion = held[task.ItemMalahPotion] > 0
 	}
+	if object == CageObject {
+		return a.freeCain(ctx, td)
+	}
 	if err := a.tag(td.Objects.Interact(ctx, object)); err != nil {
 		return err
 	}
@@ -1268,4 +1271,102 @@ func (r *Runner) planningBlock(ctx context.Context, res task.Result) error {
 		r.rearm()
 	}
 	return nil
+}
+
+// CageObject is Cain's Gibbet in Tristram (the task node's object name; the adapter resolves it by object class).
+const CageObject = "Cain's Cage"
+
+// Bounds of the cage step. V drill L2 (docs/probes/search-for-cain-l2-2026-11-18.md): three awake Champion Skeleton
+// Archers stand 2 to 3 cells from the arrival and killed a level 4 hero in under 200 ticks; opening the cage flips the
+// quest word at once (0x0010 to 0x2012), no delay. cageGuardBudget bounds the fight, cageStalls the number of Clear
+// calls that kill nothing while hostiles remain (unreachable or set aside by the fighter), cageClicks the tries to
+// open the cage and cageWordWait how long the word is polled after a click.
+const (
+	cageGuardBudget = 150 * time.Second
+	cageStalls      = 3
+	cageClicks      = 3
+	cageWordWait    = 6 * time.Second
+)
+
+// freeCain is the Interact of the cage: first the hostiles around the hero are fought with the normal Fighter (its
+// survival and chicken logic stays active, so the class profile decides how), then the cage is clicked until the quest
+// word of Search for Cain reads "reward pending" (bit 1, V). The click never starts while a hostile lives within the
+// clear radius: it ends in a Danger fault instead. Without a live quest reader the click is taken as done (the word is
+// then known from the save only).
+func (a taskActs) freeCain(ctx context.Context, td *TaskDeps) error {
+	if err := a.clearGuards(ctx); err != nil {
+		return err
+	}
+	for try := 0; try < cageClicks; try++ {
+		if err := a.tag(td.Objects.Interact(ctx, CageObject)); err != nil {
+			return err
+		}
+		if td.Quests == nil || !td.QuestsLive {
+			return nil
+		}
+		if a.awaitStage(ctx, td, task.QCain, task.StageCleared, cageWordWait) {
+			return nil
+		}
+		a.r.e.Log.Info("cage: quest word unchanged after the click", "try", try+1)
+	}
+	return task.Errorf(task.KindNotFound, "the cage was clicked %d times but the quest word does not show Cain free", cageClicks)
+}
+
+// clearGuards fights until no hostile is within the clear radius, bounded by time and by stalls.
+func (a taskActs) clearGuards(ctx context.Context) error {
+	r := a.r
+	radius := r.e.Tune.Bot.ClearRadius
+	deadline := r.e.Clock.Now().Add(cageGuardBudget)
+	stalls, buffed := 0, false
+	for {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		s, err := r.d.Snapshot()
+		if err != nil {
+			return a.tag(err)
+		}
+		n := r.hostileNear(s, radius)
+		if n == 0 {
+			return nil
+		}
+		if !r.e.Clock.Now().Before(deadline) || stalls >= cageStalls {
+			return task.Errorf(task.KindDanger, "%d hostile units are still near the cage; not opening it", n)
+		}
+		if !buffed {
+			buffed = true
+			if err := r.d.Fighter.Buff(ctx); err != nil {
+				r.e.Log.Warn("cage guards: buff failed", "err", err)
+			}
+		}
+		res, err := r.d.Fighter.Clear(ctx, ClearOpts{Radius: radius, Interlude: r.goldGrab})
+		if err != nil {
+			return a.tag(err)
+		}
+		if res.Killed == 0 {
+			stalls++
+			r.pause(ctx, time.Duration(r.e.Tune.Bot.TickMs)*time.Millisecond)
+		} else {
+			stalls = 0
+		}
+	}
+}
+
+// awaitStage polls the quest reader until the quest reaches the stage or the wait ends.
+func (a taskActs) awaitStage(ctx context.Context, td *TaskDeps, q string, want task.Stage, wait time.Duration) bool {
+	r := a.r
+	deadline := r.e.Clock.Now().Add(wait)
+	for {
+		diff := 0
+		if s, err := r.d.Snapshot(); err == nil && s != nil && s.Player != nil {
+			diff = int(s.Player.Difficulty)
+		}
+		if v, ok := td.Quests.Read(diff); ok && v.Quests[q].Stage >= want {
+			return true
+		}
+		if ctx.Err() != nil || !r.e.Clock.Now().Before(deadline) {
+			return false
+		}
+		r.e.Clock.Sleep(500 * time.Millisecond)
+	}
 }

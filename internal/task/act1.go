@@ -208,6 +208,11 @@ func cainNodes() []Node {
 		}
 		return s
 	}
+	// The cage step fights the hostiles around the hero first (the bot's Interact does it, bounded, with the normal
+	// survival logic; a Danger fault when they cannot be cleared) and only then opens the gibbet; it is not a sweep of
+	// the whole level (Griswold and Bile stand 12 cells away, V drill L2). Done is the quest word (bit 1), never the click.
+	cage := StepInteract(id(q, "cage"), "Clear the guards and free Cain", "Cain's Cage", free, inTristram)
+	cage.Budget, cage.Est = 6*time.Minute, 2*time.Minute
 	return []Node{
 		{Step: StepWaypoint(id(q, "wp-dark-wood"), DarkWood, free)},
 		{Step: StepTravel(id(q, "to-wood"), "Go to the Dark Wood", DarkWood, func(w World) bool { return w.Items[ItemBark] > 0 || w.Items[ItemCainSc] > 0 || free(w) })},
@@ -219,8 +224,7 @@ func cainNodes() []Node {
 		req(Node{Step: withKey(StepInteract(id(q, "stones"), "Touch the cairn stones", "cairn-stones",
 			func(w World) bool { return opened(w) || free(w) }, func(w World) bool { return w.Area == StonyField }))}, id(q, "to-stony")),
 		{Step: StepTravel(id(q, "to-tristram"), "Enter Tristram", Tristram, func(w World) bool { return inTristram(w) || free(w) })},
-		{Step: StepClear(id(q, "clear"), "Clear Tristram", Tristram, func(w World) bool { return w.Cleared[Tristram] || free(w) }, 12*time.Minute)},
-		{Step: StepInteract(id(q, "cage"), "Free Cain", "Cain's Cage", free, inTristram)},
+		{Step: cage},
 		{Step: StepTravel(id(q, "home"), "Return to camp", RogueEncampment, func(w World) bool { return !free(w) && w.Area != Tristram || w.InTown })},
 	}
 }

@@ -243,8 +243,8 @@ Rules (V by the named tests):
 | 1 | search_for_cain | scroll | item | any | search_for_cain: wp-dark-wood to-wood tree |
 | 1 | search_for_cain | read | handin | after scroll | search_for_cain (hand-in read) |
 | 1 | search_for_cain | stones | auto | after read | search_for_cain: to-stony stones to-tristram |
-| 1 | search_for_cain | free_cain | auto | after stones | search_for_cain: clear cage home (not supported yet) |
-| 1 | search_for_cain | report | handin | after free_cain | search_for_cain_board (hand-in report: Akara) |
+| 1 | search_for_cain | free_cain | auto | after stones | search_for_cain: cage home (CAIN-5b, supported; live drill open) |
+| 1 | search_for_cain | report | handin | after free_cain | search_for_cain_board (hand-in report: Akara; supported) |
 | 1 | act1_done | sail_east | handin | any | act1_complete (hand-in warriv) |
 | 2 | tainted_sun | amulet | item | any | viper_amulet |
 | 2 | horadric_staff | cube | item | any | horadric_cube |
@@ -288,7 +288,7 @@ Rules (V by the named tests):
 
 ### Live drill list per chain (checklist, NOT run; every hero below is lab-created, tag CHEATED/IMPOSSIBLE in `docs/probes/test-characters.md` and the cheat ledger, so none of it is evidence about game behaviour, only about the board)
 
-1. Act 1 Cain: hero at Normal clvl 12 in town, `quests.board` 1. Start `scroll` (Dark Wood tree), see it stop, Start `read` (Akara, hand in tap), Start `stones` (stones and the portal), then `free_cain` (Tristram clear, cage; hazard: never auto; not supported yet), then Start `report` (the Akara hand-in: what does the quest word read after the cage, Cleared or Done? the word decides whether `report` is skipped). Kill the process after `scroll` and after `read`: the same offer returns, nothing is redone.
+1. Act 1 Cain: hero at Normal clvl 12 in town, `quests.board` 1. Start `scroll` (Dark Wood tree), see it stop, Start `read` (Akara, hand in tap), Start `stones` (stones and the portal), then `free_cain` (the guards at the arrival are fought, then the cage; hazard: never auto; CAIN-5b, supported, live drill open), then Start `report` (the Akara hand-in: what does the quest word read after the cage, Cleared or Done? the word decides whether `report` is skipped). Kill the process after `scroll` and after `read`: the same offer returns, nothing is redone.
 2. Act 2 Staff pieces: lab hero in Act 2 with Radament done. Start `cube` then `shaft`, then the other order on a second hero; check the offers while one runs (not startable) and after (the other offered); `assemble` (Cube step, then the Cain hand-in tap): does the quest word of `horadric_staff` change after Cain's talk, and does `seven_tombs` unlock (U)?
 2b. Act 3 Golden Bird: a hero with a Jade Figurine in the pack (a lab-granted item, CHEATED): `bird` lists the missing item without it; Start with it makes the Golden Bird at Meshif, the tap hands it to Alkor; kill the process after Meshif and check the offer comes back.
 3. Act 2 Tainted Sun, Arcane, Summoner, Duriel: one chunk each, boss margin words checked against the survival log; Duriel never auto.

@@ -79,9 +79,16 @@ var objSpecs = map[string]objSpec{
 	// Act 1 (docs/quest.md check 7): classes 30, 26 are U (objects.txt names not re-read), 60 is S (Kolbot RedPortal), 473 V.
 	"Tree of Inifuss": {quest.ObjTreeInifuss, objClick, ""},
 	"Tristram portal": {quest.ObjRedPortal, objLeave, ""},
-	"Cain's Cage":     {quest.ObjCainGibbet, objOnce, ""},
-	"cage":            {quest.ObjCage, objOnce, ""}, // Rescue on Mount Arreat: the step calls this three times
+	"Cain's Cage":     {quest.ObjCainGibbet, objClick, ""}, // one cage; the step may click again until the quest word flips
+	"cage":            {quest.ObjCage, objOnce, ""},        // Rescue on Mount Arreat: the step calls this three times
 }
+
+// objApproach is the cell, relative to the object in subtiles, the character walks to before the click, for objects
+// whose own tile is an obstacle and where the game's walk-to-click stalls short of it. V lab drill L2
+// (docs/probes/search-for-cain-l2-2026-11-18.md): from the arrival a bare interact stands at (22.7, 24.7); walking to
+// (25, 27) first, 2.3 cells west and 0.7 north of the gibbet (27.3, 27.7), then interacting opens the cage. Tristram is a
+// fixed map, so the offset holds for every seed (U: only seed 11 was run).
+var objApproach = map[int]input.Point{quest.ObjCainGibbet: {X: -11, Y: -3}}
 
 // Object names the Hellforge step uses (bot.ForgePlaceObject and bot.ForgeSmashObject, shared with internal/bot).
 const (
@@ -129,6 +136,12 @@ func (o objectAdapter) Interact(ctx context.Context, name string) error {
 				return err
 			}
 			return task.Wrap(task.KindNotFound, err)
+		}
+		if off, ok := objApproach[spec.class]; ok && o.nv != nil {
+			// a failed approach is not fatal: the click walks the rest itself
+			if err := o.nv.GoTo(ctx, input.Point{X: u.X + off.X, Y: u.Y + off.Y}); err != nil && ctx.Err() != nil {
+				return ctx.Err()
+			}
 		}
 		if err := o.click(ctx, u); err != nil {
 			return err
