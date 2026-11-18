@@ -27,6 +27,9 @@ type StepDown struct {
 	// RiskMinGold is the purse the risk route needs (card survhold): the route lives on chickens and potions, so a hero
 	// that cannot rebuy a belt does not take it. 0 = no purse condition. The pack gold the caller passes as Purse.Gold.
 	RiskMinGold int `json:"riskMinGold"`
+	// RiskMaxK closes the route when the zone's correction k reached it (card survhold3): a k near the clamp means the model
+	// has been wrong about this zone for a while, and its margin (which divides by k) says little either way. 0 = no condition.
+	RiskMaxK float64 `json:"riskMaxK"`
 }
 
 // ArchTune overrides the yield and starvation constants for one archetype (profile id); 0 keeps the global value. Data,
@@ -34,6 +37,10 @@ type StepDown struct {
 type ArchTune struct {
 	YieldShrinkMinutes float64 `json:"yieldShrinkMinutes"`
 	StarveCasts        float64 `json:"starveCasts"`
+	// YieldMinMinutes and StarveValueMul (card survhold3): a caster's model kill speed is a fiction as soon as the mana runs
+	// dry, so its realized yield counts sooner and a starved zone loses more. 0 = the global value.
+	YieldMinMinutes float64 `json:"yieldMinMinutes"`
+	StarveValueMul  float64 `json:"starveValueMul"`
 }
 
 // Params are the controller constants; every one is tagged in Tags (all U today).
@@ -98,6 +105,9 @@ func LoadParams() (*Params, error) {
 		if !ok {
 			return nil, fmt.Errorf("survival: params: no step-down row for dial %q", d)
 		}
+		if r.RiskMaxK < 0 {
+			return nil, fmt.Errorf("survival: params: dial %q: riskMaxK must not be negative", d)
+		}
 		if r.RiskMinGold < 0 {
 			return nil, fmt.Errorf("survival: params: dial %q: riskMinGold must not be negative", d)
 		}
@@ -130,4 +140,18 @@ func (p *Params) starveLimit(arch string) float64 {
 		return a.StarveCasts
 	}
 	return p.StarveCasts
+}
+
+func (p *Params) yieldMin(arch string) float64 {
+	if a := p.Archetypes[arch]; a.YieldMinMinutes > 0 {
+		return a.YieldMinMinutes
+	}
+	return p.YieldMinMinutes
+}
+
+func (p *Params) starveMul(arch string) float64 {
+	if a := p.Archetypes[arch]; a.StarveValueMul > 0 {
+		return a.StarveValueMul
+	}
+	return p.StarveValueMul
 }
