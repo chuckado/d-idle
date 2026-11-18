@@ -585,6 +585,8 @@ vault-sheet watch/vault?theme=dark&vault=pop [data-key=select-toggle]|.vt-cell|[
 vault-sheet-typed watch/vault?theme=dark&vault=pop [data-key=select-toggle]|[data-key=select-all]|[data-key=discard] .vt-sheet-card,[data-key=sheet-typed],[data-key=sheet-cancel]
 vault-sheet-light watch/vault?theme=light&vault=pop [data-key=select-toggle]|.vt-cell|[data-key=discard] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-tip watch/vault?theme=dark&vault=pop hover=.vt-cell:nth-child(3)
+vault-tip-unid watch/vault?theme=dark&vault=pop hover=.vt-cell:has([data-tag=unid])
+vault-tip-light watch/vault?theme=light&vault=pop hover=.vt-cell:nth-child(2)
 vault-eth watch/vault?theme=dark&vault=eth
 vault-eth-light watch/vault?theme=light&vault=eth
 vault-eth-short watch/vault?theme=dark&vault=eth-short

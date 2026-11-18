@@ -155,6 +155,8 @@ type VaultRecord struct {
 	RunewordID           int
 	NProps, Children     int
 	Props                string // "stat:param:value;..." as sent
+	Pic                  int    // inv_pic + 1: the item's own picture variant (jewel, ring, amulet, charm), 0 = the base picture
+	Tint                 string // "t<set>c<colour>" from inv_tint and inv_colour, "" = none
 }
 
 // Hash is sha256 of the norm bytes, hex: the content identity of the record (the seed is 0 on every d2d item).
@@ -237,6 +239,14 @@ func ParseVaultLine(line string) (VaultRecord, error) {
 	r.RunewordID, _ = kv.Int("rw")
 	r.NProps, _ = kv.Int("nprops")
 	r.Props, _ = kv.Get("props")
+	if v, ok := kv.Int("inv_pic"); ok && v >= 0 {
+		r.Pic = v + 1
+	}
+	if t, ok := kv.Int("inv_tint"); ok && t > 0 {
+		if c, ok := kv.Int("inv_colour"); ok && c >= 0 {
+			r.Tint = fmt.Sprintf("t%dc%d", t, c)
+		}
+	}
 	r.Children, _ = kv.Int("children")
 	return r, nil
 }
@@ -450,4 +460,15 @@ func CreateOnce(ctx context.Context, api VaultAPI, d *Dedupe, rec VaultRecord, g
 		d.Release(key)
 	}
 	return res, err
+}
+
+// FileIndex is the unique or set id that picks the unique or set icon row (0 for other qualities; d2d prints -1 when absent).
+func (r VaultRecord) FileIndex() int {
+	switch r.Quality {
+	case 7:
+		return max(r.UniqueID, 0)
+	case 5:
+		return max(r.SetID, 0)
+	}
+	return 0
 }

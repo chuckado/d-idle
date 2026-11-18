@@ -21,6 +21,7 @@ import (
 	"d2lod-bot/internal/access"
 	"d2lod-bot/internal/bot"
 	"d2lod-bot/internal/currency"
+	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/decide"
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/ether"
@@ -97,6 +98,7 @@ type ladderOptions struct {
 	supportKnobs                           func() any                            // the tuner's values for the support bundle (supportwire.go); nil: none
 	supportLayout                          paths.Layout                          // data directory layout of the support bundle's logs and saves
 	knobValue                              func(string) (float64, string, error) // the tuner's Value: the zone clear settings read through it
+	db                                     *data.DB                              // the game tables, for the Vault page's tooltip facts; nil: none
 	vaultRoot                              string                                // <data>/vaults, where the recorder keeps the hero vaults; empty: no Vault page routes (docs/vault.md)
 	explored                               watch.ExploredSource                  // the explored share of /api/hero (Runner.Explored); nil: none
 	heroStats                              watch.HeroStatsSource                 // the stats block of /api/hero (readywire.go); nil: none
@@ -316,7 +318,7 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		}
 		if l.vaultRoot != "" {
 			eh := etherFor(l.currencyDir, l.vaultRoot, vaultKnobOn(l.knobValue), func() string { return hub.Hero().Name })
-			if rig.Fun.Vault, err = vaultAPIWith(l.vaultRoot, vaultKnobOn(l.knobValue), func() string { return hub.Hero().Name }, eh); err != nil {
+			if rig.Fun.Vault, err = vaultAPIWith(l.vaultRoot, vaultKnobOn(l.knobValue), func() string { return hub.Hero().Name }, eh, l.db); err != nil {
 				return nil, nil, err
 			}
 			if eh != nil {

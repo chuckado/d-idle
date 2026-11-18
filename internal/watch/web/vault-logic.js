@@ -171,8 +171,16 @@ export function when(iso, nowMs) {
 // id (the tooltip looks items up by a number), and the map says which vault id that is.
 export function toTipView(items) {
   const byN = new Map();
-  const backpack = items.map((it, i) => { byN.set(i + 1, it.id); return Object.assign({}, it, { id: i + 1, vid: it.id }); });
+  const backpack = items.map((it, i) => { byN.set(i + 1, it.id); return Object.assign({}, it, { id: i + 1, vid: it.id, sell: it.sellPrice || 0 }); }); // the row's own sell is the Sell errand's state; the tooltip's is the vendor price
   return { view: { backpack, stash: [], belt: [], cube: [], equipment: {} }, byN };
+}
+
+// artKey is the icon key of a row for /watch/art/<key>.png, the inventory page's rule (inventory.js artKey): item-<art>, plus
+// ~<tint> when the server sent one. '' when the row has no icon name (the cell then shows its name only).
+const ART_NAME = /^[a-z0-9_]{1,40}$/, TINT = /^t\d+c\d+$/;
+export function artKey(it) {
+  if (!it || !it.art || !ART_NAME.test(it.art)) return '';
+  return 'item-' + it.art + (it.tint && TINT.test(it.tint) ? '~' + it.tint : '');
 }
 
 // discardAsk is what the confirm sheet needs for n items: the typed number is asked above `typedAbove` items.

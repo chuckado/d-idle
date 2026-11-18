@@ -6,6 +6,7 @@ import (
 	"sync"
 	"sync/atomic"
 
+	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/vault"
 	"d2lod-bot/internal/vaultkeep"
 	"d2lod-bot/internal/watch"
@@ -90,18 +91,18 @@ func (h *vaultHome) Existing(hero string) *vault.Store {
 
 // vaultAPI builds the page's routes over <root>/<hero>/vault (root is <data>/vaults, as in wireVault). on reads the knob loot.vault; hero names the active hero.
 func vaultAPI(root string, on func() bool, hero func() string) (*watch.VaultAPI, error) {
-	return vaultAPIWith(root, on, hero, nil)
+	return vaultAPIWith(root, on, hero, nil, nil)
 }
 
 // vaultAPIWith is vaultAPI with the ETHER wallet of the account: the capacity line and the tiers owned come from it.
-func vaultAPIWith(root string, on func() bool, hero func() string, eh *etherHome) (*watch.VaultAPI, error) {
+func vaultAPIWith(root string, on func() bool, hero func() string, eh *etherHome, db *data.DB) (*watch.VaultAPI, error) {
 	tiers, err := vault.DefaultTiers()
 	if err != nil {
 		return nil, err
 	}
 	home := vaultHomeFor(root)
 	api := watch.NewVaultAPI()
-	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}, Act: actFace{home}}
+	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}, Act: actFace{home}, Tip: vaultTipFor(db)}
 	if eh != nil {
 		desk.Owned = eh.owned
 	}
