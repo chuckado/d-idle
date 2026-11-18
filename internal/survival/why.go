@@ -16,6 +16,7 @@ const (
 	WhyFresh        = "fresh_game"        // the best zone is cleared and a new game beats walking to a poor one
 	WhyHole         = "hole_first_field"  // nothing is safe: the easiest field, and the hero needs help
 	WhyMarginLow    = "margin_low"        // not safe enough to enter
+	WhyPoor         = "too_poor"          // the risk route is closed: the purse cannot rebuy the belt
 	WhyStayLine     = "below_stay_line"   // the current zone fell under its stay line
 	WhyCost         = "hard_events"       // chickens or merc deaths here crossed the dial's limit
 	WhyDied         = "died"              // a death here crossed the dial's limit
@@ -26,5 +27,5 @@ const (
 )
 
 // Codes lists every code, for the UI's phrase table and the tests.
-var Codes = []string{WhyBestPay, WhyRiskPaid, WhyStay, WhyDepleted, WhyFresh, WhyHole, WhyMarginLow, WhyStayLine, WhyCost, WhyDied,
+var Codes = []string{WhyBestPay, WhyRiskPaid, WhyStay, WhyDepleted, WhyFresh, WhyHole, WhyMarginLow, WhyPoor, WhyStayLine, WhyCost, WhyDied,
 	WhyLeftForCost, WhyMercDead, WhyMercRevive, WhyMercNoRevive}
