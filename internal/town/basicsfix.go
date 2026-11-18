@@ -217,7 +217,7 @@ func (t *Town) needShopWithdraw(s *d2.Snapshot, plan ChorePlan) bool {
 		return false
 	}
 	cost := t.shopCost(s, plan)
-	if s.Player.Gold >= max(cost, t.kitGold()) {
+	if cost == 0 || s.Player.Gold >= max(cost, t.kitGold()) {
 		return false
 	}
 	if s.Player.StashGold <= 0 {
@@ -228,6 +228,9 @@ func (t *Town) needShopWithdraw(s *d2.Snapshot, plan ChorePlan) bool {
 }
 
 func (t *Town) withdraw(ctx context.Context, a *Act, plan ChorePlan) error {
+	if _, can := t.e.In.(goldMover); !can {
+		return nil // a forced round runs every chore; this input cannot move gold
+	}
 	s, err := t.current()
 	if err != nil {
 		return err
