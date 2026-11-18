@@ -25,7 +25,7 @@ result: "PR candidate D1 built, NOT posted: fid/cairn-portal-r1 on upstream 52d4
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Why: TODO. Done when: TODO.
+Why: D1 of docs/research/decomp40-cairn-portal.md (the portal offset added in tiles, 5x too far) as an upstream PR candidate with an oracle that runs game.exe. Consumer: the independent verifier (d2-reviewer) and the posting agent (docs/upstream/pr-queue.md). Done when: the branch is on the private fork, the body and trace doc are in this repo, nothing is posted.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
