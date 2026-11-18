@@ -24,6 +24,9 @@ type LevelMap struct {
 	Adjacent []Adjacent
 	Warps    []Point // Level.WarpX/Y, UNVERIFIED semantics
 	Rooms    []Room2 // static Room2 list
+	// RoomRows are the d2d level-generator rooms with a type (the "room" rows of debug presets): Pos is the room
+	// origin plus half a cell. Empty on Game.exe and on d2d builds that do not print them.
+	RoomRows []RoomRow
 
 	room2Sig map[uint32][3]uint32 // Room2 -> (pRoom1, pPreset, pRoomTiles) when last scanned
 }
@@ -352,4 +355,10 @@ func (l *LevelMap) BorderCells(levelNo int) []Point {
 		}
 	}
 	return out
+}
+
+// RoomRow is one room of the d2d level generator: its type (the quest object tables key on it) and its centre cell.
+type RoomRow struct {
+	Type int
+	Pos  Point
 }

@@ -316,14 +316,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 058b72f74 11-18 10:01 `Merge agent/cain7: CAIN-7: walk to the Inifuss tree room from the presets room rows` (cain7)
+- c0c38af8f 11-18 10:00 `Merge branch 'main' into cain7` (-)
 - 93899088c 11-18 09:54 `Merge agent/itemcolour2: item tint: parse inv_tint/inv_colour, art colormap remap, UI key (includes the itemcolour design)` (itemcolour2)
 - 7255719d5 11-18 09:53 `Merge branch 'main' into itemcolour2` (-)
+- 5cd59f5ca 11-18 09:50 `Merge main into cain7` (-)
 - ef8709ccf 11-18 09:46 `Merge remote-tracking branch 'origin/main' into agent/itemcolour2` (-)
 - ed97362bf 11-18 09:43 `Merge agent/itemcolour: itemcolour: item colour design doc` (itemcolour)
 - c968974f6 11-18 09:42 `Merge branch 'main' into itemcolour` (-)
 - 3e51d9cbd 11-18 09:41 `Merge branch 'agent/itemcolour' into agent/itemcolour2` (itemcolour)
 - 14a14ad44 11-18 09:36 `Merge agent/groundquality: Merge branch 'main' into groundquality` (groundquality)
-- 4733c4c06 11-18 09:35 `Merge branch 'main' into groundquality` (-)
-- fdcf5996e 11-18 09:30 `Merge agent/cainl0: Merge branch 'main' into cainl0` (cainl0)
-- 7515ada37 11-18 09:29 `Merge branch 'main' into cainl0` (-)
 <!-- statusgen:end -->
