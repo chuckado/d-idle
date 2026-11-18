@@ -37,7 +37,11 @@ func TestCainReportChunk(t *testing.T) {
 	if rep.Unsupported == "" {
 		t.Fatal("report must stay unsupported until the Tristram part runs live (cainfix)")
 	}
-	rep.Unsupported = "" // the evidence rules below are the ones that ship when it is switched on
+	// the evidence rules below are the ones that ship when the Tristram part is switched on; Load returns a fresh copy
+	for i := range q.Chunks {
+		q.Chunks[i].Unsupported = ""
+	}
+	rep.Unsupported = ""
 	if _, ok := handlerNodes(q, rep); !ok {
 		t.Fatal("report has no handler")
 	}
@@ -58,10 +62,8 @@ func TestCainReportChunk(t *testing.T) {
 	if nodesDone(q, rep, w, 0) {
 		t.Fatal("report done before the talk")
 	}
-	// the cage part is unsupported for now, so it never reads done (even for a hero who freed Cain by hand); this
-	// flips with the switch-on of the Tristram part
-	if priorDone(q, rep, w) {
-		t.Fatal("an unsupported cage part must not read done")
+	if !priorDone(q, rep, w) {
+		t.Fatal("the cage part does not read done on the reader's freed word")
 	}
 	// reported (T2 save word Done): done; a restart (same world) gives the same answer
 	w2 := exact(task.StageDone, task.EvSave)
