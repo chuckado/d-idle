@@ -322,6 +322,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a9aedc8ff 11-18 11:56 `Merge agent/decomp40: decomp40: Cairn portal offset in tiles (D1), scroll pattern never shown (D2/D7), trace` (decomp40)
+- 765975735 11-18 11:56 `Merge branch 'main' into decomp40` (-)
 - 46d353f23 11-18 11:48 `Merge agent/cain5b: CAIN-5b: free Cain (guards fought, cage, quest word check) and report to Akara; board chunks supported` (cain5b)
 - a6668408f 11-18 11:47 `Merge branch 'main' into cain5b` (-)
 - b79a32063 11-18 11:36 `Merge agent/vaulttip: questboard goal test: hold explore until the accept lands (deterministic, no load race)` (vaulttip)
@@ -330,6 +332,4 @@
 - 619c7bb7a 11-18 11:17 `Merge agent/devp12doc: Merge branch 'main' into devp12doc` (devp12doc)
 - eb931abb5 11-18 11:16 `Merge branch 'main' into devp12doc` (-)
 - 4dcb3c6c1 11-18 11:09 `Merge origin/main into agent/vaulttip` (-)
-- 26bb8d4e4 11-18 11:03 `Merge branch 'main' into cain5b` (-)
-- 30593476c 11-18 10:59 `Merge origin/main into agent/vaulttip` (-)
 <!-- statusgen:end -->
