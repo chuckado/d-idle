@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- bulk identify design doc <!--sg:agent/bulkid-design-->
 - longlane: wavelane.sh launches survival waves in the builder long lane <!--sg:agent/longlane-->
 - cairnportal: PR candidate D1 Cairn portal offset (fid/cairn-portal-r1), docs and card <!--sg:agent/cairnportal-->
 - Merge origin/main into agent/unidpopup <!--sg:agent/unidpopup-->
