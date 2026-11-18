@@ -229,7 +229,7 @@ for (const cls of ['paladin', 'sorceress']) {
   stop = byKey(c.body, 'primary');
   assert.equal(texts(stop), 'Stop it?');
   stop.click(); await tick();
-  assert.deepEqual(posts.at(-1), ['/api/quests/den_of_evil/cancel', { chunk: 'clear_den' }]);
+  assert.deepEqual(posts.at(-1), ['/api/quests/den_of_evil/cancel', { chunk: 'clear_den', confirm: true }], 'the second tap says so');
   // waiting at the NPC: Hand in, then Handing in... at once, and the reply never decides
   s.update(gold('awaiting-paladin'));
   const hand = byKey(c.body, 'primary');
@@ -385,6 +385,17 @@ for (const cls of ['paladin', 'sorceress']) {
   assert.deepEqual(posts.at(-1), ['/api/quests/away/dismiss', {}]);
   b.update(gold('offers-paladin'));
   assert.doesNotMatch(texts(c.body), /While you were away/, 'the card goes when the API stops sending it');
+  // a stop in the last day is a plain-words note with the local time; one without a usable time says nothing
+  const sv = gold('offers-paladin');
+  sv.stopped = [{ quest: 'search_for_cain', questTitle: 'Search for Cain', at: '2026-11-18T14:11:00Z' }, { quest: 'x', questTitle: 'Broken', at: 'nope' }];
+  b.update(sv);
+  const hh = new Date('2026-11-18T14:11:00Z');
+  const hhmm = String(hh.getHours()).padStart(2, '0') + ':' + String(hh.getMinutes()).padStart(2, '0');
+  assert.match(texts(c.body), new RegExp('Search for Cain'));
+  assert.match(texts(c.body), new RegExp('Stopped by you at ' + hhmm));
+  assert.doesNotMatch(texts(c.body), /Broken/);
+  b.update(gold('offers-paladin'));
+  assert.doesNotMatch(texts(c.body), /Stopped by you/, 'gone once the server drops it');
   // a countdown is a Now row with its Cancel
   const cd = gold('offers-paladin'); cd.autoStart = { available: true, countdown: { quest: 'den_of_evil', questTitle: 'Den of Evil', chunk: 'clear_den', secondsLeft: 9 } };
   b.update(cd);

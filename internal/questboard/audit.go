@@ -163,3 +163,14 @@ func (d *Desk) stopped(st *Store, v View) []StoppedRow {
 	}
 	return out
 }
+
+// AuditPathOf is the ring file of a store (for tests and the support doc).
+func AuditPathOf(st *Store) string {
+	if a := AuditOf(st); a != nil {
+		return a.path
+	}
+	return ""
+}
+
+// ExecForTest returns what the desk's Exec hook returns (the watch tests read the ring through it).
+func (d *Desk) ExecForTest() (*Exec, *Store) { return d.exec() }

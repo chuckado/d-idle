@@ -167,6 +167,21 @@ Replace `$H` with the watch address, `$T` with the answer token (never paste it 
 5. `POST /api/quests/mode {"mode":"farm"}` then restart the bot: GET shows `mode:farm`. Wrong token: 401; foreign `Origin`: 403.
 6. Restart the bot while a chunk runs and while awaiting: `running`/`awaiting` come back from the plan file and the evidence, the chunk is not redone. Writes after start must be 0.
 
+## Audit and the stopped note (card questaudit)
+
+Every action that reaches the quest POST routes (start, handin, cancel, retry, auto, mode, dismiss) writes one INFO log line
+`quests: action=.. quest=.. chunk=.. path=.. remote=.. agent=.. confirm=.. ok=.. already=.. status=.. code=.. reason=..` and, when
+the desk ran it, one JSON line to `<state dir>/quests/<hero>.audit.jsonl`, a ring of the last 500 lines (V: tests
+`TestAuditRingIsBounded`, `TestCancelLeavesAuditRecordWithSource`). The source is a label only: `remote` is loopback, lan or other
+(never an address; behind a proxy on the same host every client reads loopback), `agent` is the user-agent family (firefox, chrome,
+curl, ...), `confirm` is the `{"confirm": true}` flag the panels send with the second tap of Stop (recorded, never required). Quest
+ids and chunks are reduced to `[a-z0-9_-]`. No header, token or body is logged. A call the gate refuses is logged but not put in
+the ring. The file name is not on the support-bundle allowlist (`internal/support.Allowed`), so no bundle carries it; to show
+"last actions" in a bundle add a redacted `quest-audit.json` there on purpose.
+
+`GET /api/quests` carries `stopped` (quest, questTitle, chunk, at) for a cancel that really stopped a chunk in the last 24 hours,
+unless the quest runs again or is done; the Quests sheet shows "Stopped by you at HH:MM" (the viewer's local time).
+
 ## Watch UI (slice S5)
 
 > Built offline (card quests5), NOT verified live. Tags: node tests and the fit run are V (they ran); the look on a real hero and a real phone is U. Everything below is dormant while `quests.board` = 0: the quest tile hides itself, the Journey tile stays and the sheet says how to turn the board on.
