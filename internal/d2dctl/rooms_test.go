@@ -27,7 +27,7 @@ func presetsReply(t *testing.T, name string) *Reply {
 }
 
 func TestParseRoom(t *testing.T) {
-	r, err := ParseRoom("room\t161\t44\t44")
+	r, err := ParseRoom("room 161 44 44")
 	if err != nil || r != (Room{Type: 161, X: 44, Y: 44}) {
 		t.Fatalf("%+v %v", r, err)
 	}
@@ -42,7 +42,7 @@ func TestParseRoom(t *testing.T) {
 }
 
 // V (L0 fixtures, five seeds): room 161 origin + 0.5 is where the tree row stands, whenever the tree row is listed.
-func TestRoom161IsTheTreeRoomInTheFixtures(t *testing.T) {
+func TestTreeRoomMatchesTheTreeRowInTheFixtures(t *testing.T) {
 	found := 0
 	for _, f := range []string{"s1", "sd3", "sd5", "sd7", "sd9", "tr3", "tr5", "tr7"} {
 		r := presetsReply(t, f)
