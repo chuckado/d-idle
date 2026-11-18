@@ -1,8 +1,10 @@
 package bot
 
 import (
+	"context"
 	"strings"
 	"testing"
+	"time"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/goals"
@@ -16,6 +18,18 @@ func TestQuestBoardStartRunsUnderAFarmGoal(t *testing.T) {
 		for _, goal := range []goals.Goal{farm("Blood Moor"), {ID: "g2", Type: goals.ReachLevel, Params: goals.Params{Level: 30}}} {
 			t.Run(class.String()+"/"+string(goal.Type), func(t *testing.T) {
 				g, x := boardRig(t, true)
+				// The farm must still be running when the accept lands: with an instant explore the farm clears its
+				// area and ends in the "no fresh game" error before a loaded test goroutine reaches Accept (flake of
+				// 2026-11-18). Explore holds until the accept is recorded (bounded, so a bug fails instead of hanging).
+				accepted := make(chan struct{})
+				g.mover.exploreFn = func(ctx context.Context, done func() bool) error {
+					select {
+					case <-accepted:
+					case <-ctx.Done():
+					case <-time.After(30 * time.Second):
+					}
+					return nil
+				}
 				g.w.set(func(w *world) { w.class = class })
 				g.run()
 				defer g.finish()
@@ -26,6 +40,7 @@ func TestQuestBoardStartRunsUnderAFarmGoal(t *testing.T) {
 				if err := x.Accept("den_of_evil", "clear_den"); err != nil {
 					t.Fatal(err)
 				}
+				close(accepted)
 				// the log, not x.Next: the test goroutine must not read the board's world while the loop writes it (-race)
 				g.waitFor("awaiting hand-in", func() bool {
 					l := g.w.log()
