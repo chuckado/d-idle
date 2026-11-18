@@ -148,6 +148,10 @@ sheet vault=pop&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=discard]
 sheettyped vault=pop&theme=dark [data-key=select-toggle]|[data-key=select-all]|[data-key=discard]
 sheetl vault=pop&theme=light [data-key=select-toggle]|.vt-cell|[data-key=discard]
 tip vault=pop&theme=dark hover=.vt-cell:nth-child(3)
+tipu vault=pop&theme=dark hover=.vt-cell:has([data-tag=unid])
+tipl vault=pop&theme=light hover=.vt-cell:nth-child(2)
+bigdeep vault=big&theme=dark scroll=0.55
+bigend vault=big&theme=dark scroll=1
 eth vault=eth&theme=dark
 ethl vault=eth&theme=light
 ethshort vault=eth-short&theme=dark

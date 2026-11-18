@@ -388,10 +388,13 @@ export function mountVault(d) {
   }
   // ---- the windowed grid: only the rows near the view are cells; padding on the grid stands in for the rest ----
   let rendered = { first: -1, last: -1 }, geo = { cols: 1, rowH: 0 };
-  function measure() { // columns and row pitch from the laid-out grid (the browser resolves auto-fill to a track list)
+  function measure() { // columns and row pitch of the laid-out grid; the columns are worked out from the width the way auto-fill does (the browser reports one track for a grid with no cells yet)
     const cs = win && win.getComputedStyle ? win.getComputedStyle(grid) : null;
     if (!cs) return geo;
-    const cols = String(cs.gridTemplateColumns || '').split(/\s+/).filter((x) => /^[\d.]+px$/.test(x)).length;
+    const rem = parseFloat(win.getComputedStyle(doc.documentElement).fontSize) || 16, gap = parseFloat(cs.columnGap) || 0;
+    const minW = (parseFloat(cs.getPropertyValue('--vt-cell-min')) || 4.75) * rem;
+    const inner = grid.clientWidth - (parseFloat(cs.paddingInlineStart) || 0) - (parseFloat(cs.paddingInlineEnd) || 0);
+    const cols = Math.floor((inner + gap) / (minW + gap));
     const row = parseFloat(cs.gridAutoRows) + (parseFloat(cs.rowGap) || 0);
     geo = { cols: S.mode === 'list' ? 1 : Math.max(1, cols), rowH: row > 0 ? row : 0 };
     return geo;
