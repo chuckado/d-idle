@@ -365,6 +365,8 @@ for (const cls of ['paladin', 'sorceress']) {
   assert.deepEqual(r.running.steps.map((x) => x.state), ['done', 'now', 'todo', 'todo']);
   assert.equal(B.stepText(r.running), 'step 2 of 4');
   assert.equal(B.stepText({ stepCount: 1, stepNo: 1 }), '');
+  assert.equal(B.stepText({ stepCount: 2, stepNo: 2, partNo: 1, partCount: 4 }), 'part 1 of 4, step 2 of 2', 'the chain length leads');
+  assert.equal(B.stepText({ stepCount: 1, stepNo: 1, partNo: 3, partCount: 4 }), 'part 3 of 4');
   const ra = clone(r); ra.running.auto = true;
   assert.match(B.stripModel(ra, fresh()).sub, /started by itself/);
 }

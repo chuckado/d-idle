@@ -21,8 +21,13 @@ owns:
   - "internal/quest/act1.go"
   - "internal/bot/task.go"
   - "internal/watch"
+  - "internal/task"
+  - "internal/bot"
+  - "cmd/d2bot"
+  - "data/questboard/act1.json"
 exclusive: []
 contracts: []
+result: "CAIN-1,2,3,6 done offline (tests, race x20); stones, Tristram, cage, Cain and the report are marked not supported yet; NOT verified live (drills CAIN-L0..L2 open)."
 ---
 
 ## Description
@@ -35,9 +40,9 @@ Size: M. Why: sandbox hero stuck on Search for Cain (docs/probes/search-for-cain
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 diagnosis doc merged
-- [ ] #2 CAIN-1 exploring is not a failure
-- [ ] #3 CAIN-2 quest items by code
-- [ ] #4 CAIN-3 pickup waits after tree click
-- [ ] #5 CAIN-6 honest chain wording, CAIN-4/5 shown as can't do yet
+- [x] #1 diagnosis doc merged
+- [x] #2 CAIN-1 exploring is not a failure
+- [x] #3 CAIN-2 quest items by code
+- [x] #4 CAIN-3 pickup waits after tree click
+- [x] #5 CAIN-6 honest chain wording, CAIN-4/5 shown as can't do yet
 <!-- AC:END -->

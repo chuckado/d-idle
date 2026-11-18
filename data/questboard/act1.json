@@ -212,6 +212,7 @@
       "free_cain"
      ],
      "risk": "hazard",
+     "unsupported": "the bot cannot do the stones, Tristram, the cage or Cain yet (stone lit state is unreadable on the d2d backend, the Tristram portal and the cage never ran live)",
      "nodes": [
       "to-stony",
       "stones",
@@ -240,6 +241,7 @@
       "talk_akara"
      ],
      "handInStep": "report",
+     "unsupported": "waits on the Tristram part, which the bot cannot do yet",
      "handler": "search_for_cain_board"
     }
    ],

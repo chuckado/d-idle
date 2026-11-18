@@ -34,6 +34,14 @@ func s7bChunk(t *testing.T, quest, chunk string) (questboard.Quest, questboard.C
 
 func TestCainReportChunk(t *testing.T) {
 	q, rep := s7bChunk(t, "search_for_cain", "report")
+	if rep.Unsupported == "" {
+		t.Fatal("report must stay unsupported until the Tristram part runs live (cainfix)")
+	}
+	// the evidence rules below are the ones that ship when the Tristram part is switched on; Load returns a fresh copy
+	for i := range q.Chunks {
+		q.Chunks[i].Unsupported = ""
+	}
+	rep.Unsupported = ""
 	if _, ok := handlerNodes(q, rep); !ok {
 		t.Fatal("report has no handler")
 	}

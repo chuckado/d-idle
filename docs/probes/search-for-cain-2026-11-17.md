@@ -51,3 +51,10 @@ All on hidden instances, never i0. Suggested: i1 (Navi) for L1 and L2 sequential
 - CAIN-L0 (read-only first, 5 minutes): in Dark Wood, dump `debug presets` and `debug objects` while walking toward the west half; record the tree's `ObjectID`, its preset index, how far from the waypoint it appears and the real `explored` percent at which it shows. Settles RC1's class and distance question for good.
 - CAIN-L1: find tree, click, scroll in pack (`dump items`), talk Akara, `bkd` name and code in the pack.
 - CAIN-L2: stones: record the `Mode` of each stone via `debug objects` before and after clicks, the reset on a wrong order, the portal appearing; then Tristram arrival, cage click, quest word, Cain in the camp.
+
+## 7. Offline fixes landed (branch agent/cainfix2; tags: V = unit tests, nothing live)
+
+- CAIN-1 (V tests): `find` keeps a per-(area, class) search tally; a walk that only ran out of its 100 s budget returns `task.KindExploring`, which the executor does not count and the board maps to progress (failures stay 0). Ends only on ErrExplored or 12 minutes total (`objectExploreTotal`, U whether 12 is enough for every area).
+- CAIN-2 (V tests): pack scan reads `bks` and `bkd` by base code (`ItemMeta.Code`); `ItemCainSc` display name is now "Key to the Cairn Stones".
+- CAIN-3 (V tests): after the tree click the pickup polls up to 6 times, 1 s apart, then fails "tree clicked, but no scroll dropped" (U: real drop delay, needs CAIN-L1).
+- CAIN-6: the desk sends `partNo`/`partCount`; the panel says "part 1 of 4, step 2 of 2". `free_cain` and `report` are `unsupported` in `data/questboard/act1.json` ("not supported yet"), so the bot stops after Akara reads the scroll instead of failing on the stones. A hero that freed Cain by hand does not read as done. Remove both `unsupported` lines when CAIN-4/5 pass live.
