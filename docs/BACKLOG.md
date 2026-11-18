@@ -1057,6 +1057,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - itempics: jewel, ring, amulet and charm pictures from the item''s own picture index (TASK-642, merged 2026-11-18, acceptance 4 of 4): Real jewel/ring/amulet/charm art by the item picture index (ItemTypes InvGfx1..6, V on the real 1.14d install: jewel invjw1..6, ring invrin1..5, amulet invamu1..3, charms invch1..9). Offline tests only ... <!--sg:agent/itempics-->
 - questaudit: trace every quest board API action, audit ring, stopped note (TASK-641, merged 2026-11-18, acceptance 4 of 4): built and tested offline (go test -race -count=20 V); not deployed, not verified live <!--sg:agent/questaudit-->
 - agent/devp12doc: Merge branch 'main' into devp12doc (merged 2026-11-18) <!--sg:agent/devp12doc-->
+- vaulttip: Vault page shows items like the inventory (art, tooltip stats) (TASK-644, merged 2026-11-18, acceptance 3 of 3): offline only (tests, no live game): rows carry base facts, art key, vendor price and stat lines (identified only) <!--sg:agent/vaulttip-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

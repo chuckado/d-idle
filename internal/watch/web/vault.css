@@ -85,6 +85,11 @@
   .vt-cell:focus-visible { outline: 2px solid var(--d-focus); outline-offset: -2px; }
   .vt-cell.sel { outline: 2px solid var(--d-focus); outline-offset: -2px; }
   .vt-cell.on { box-shadow: inset 0 0 0 2px var(--d-accent); background: var(--d-surface-2); }
+  .vt-cell .ico { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; pointer-events: none; }
+  .vt-cell.has-art .vt-name { margin-block-start: auto; font-size: .56rem; color: var(--d-text); text-shadow: 0 0 2px var(--d-surface-0), 0 0 3px var(--d-surface-0), 0 1px 1px var(--d-surface-0); }
+  .vt-cell .vt-name, .vt-cell .vt-tags { position: relative; }
+  .vt-grid[data-mode="list"] .vt-cell .ico { display: none; }
+  .vt-grid[data-mode="list"] .vt-cell.has-art .vt-name { margin-block-start: 0; font-size: inherit; text-shadow: none; }
   .vt-name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; overflow-wrap: anywhere; padding-inline-end: .8rem; }
   .vt-tags { position: absolute; inset-block-start: 1px; inset-inline-end: 2px; display: flex; flex-direction: column; gap: 1px; }
   .vt-tag { font-size: .58rem; line-height: 1; font-weight: 700; padding: 1px 2px; border-radius: 2px; background: var(--d-surface-0); color: var(--d-text); }

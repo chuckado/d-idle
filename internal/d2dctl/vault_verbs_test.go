@@ -149,3 +149,13 @@ func TestVaultCapsStockAndFlagOff(t *testing.T) {
 		t.Fatalf("partial %+v", caps)
 	}
 }
+
+func TestParseVaultLinePicAndTint(t *testing.T) {
+	r, err := ParseVaultLine("#1 raw=aa norm=aa at=1.1,2.2 code=jew q=7 ilvl=30 uid=0 id'd=1 eth=0 sock=0 def=-1 dur=0/0 qty=-1 pre=0 suf=0 rare=0,0 aff=0. set=-1 uniq=4 rw=-1 nprops=0 props= children=0 inv_pic=2 inv_tint=1 inv_colour=5")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if r.Pic != 3 || r.Tint != "t1c5" || r.FileIndex() != 4 {
+		t.Fatalf("%+v", r)
+	}
+}

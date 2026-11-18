@@ -29,6 +29,26 @@ func TestVaultLogicJS(t *testing.T) {
 	}
 }
 
+// The Vault tooltip is the inventory tooltip fed by vault rows: same text as the inventory draws, no property line for an
+// unidentified row, a weapon and a jewel.
+func TestVaultTipJS(t *testing.T) {
+	node, err := exec.LookPath("node")
+	if err != nil {
+		t.Skip("no node")
+	}
+	js, err := webFS.ReadFile("web/vault-logic.js")
+	if err != nil {
+		t.Fatal(err)
+	}
+	p := filepath.Join(t.TempDir(), "vault-logic.mjs")
+	if err := os.WriteFile(p, js, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if out, err := exec.Command(node, "testdata/vault_tip.mjs", p, "web/inventory-tip.js").CombinedOutput(); err != nil {
+		t.Fatalf("%v\n%s", err, out)
+	}
+}
+
 // The page, its scripts, styles and texts are served by the Vault handler, a POST on it is refused, and the texts name every
 // refusal code the API can send (a code without a text would show the server's raw sentence).
 func TestVaultPageServedAndTexts(t *testing.T) {
