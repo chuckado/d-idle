@@ -279,6 +279,7 @@
 | itemcolour2 | proposed | - | `internal/art/`<br>`internal/d2dsrc/`<br>`internal/watch/web/inventory.js`<br>`internal/watch/artembed_test.go`<br>`internal/status/inventory.go`<br>`internal/d2/items.go`<br>`cmd/d2bot/display.go`<br>`cmd/d2bot/itemart_test.go` | - |
 | devp11doc | proposed | - | `docs/process/sandbox-devp11.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
+| cainl2 | proposed | - | `docs/probes/cainl2`<br>`docs/probes/search-for-cain-l2-2026-11-18.md`<br>`docs/probes/test-characters.md` | `d2d-control-socket` |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -317,6 +318,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 8b2625e60 11-18 10:27 `Merge agent/cainl2: cainl2: Search for Cain L2 drill (cage, free Cain, return, Akara report)` (cainl2)
+- 3b80ae194 11-18 10:26 `Merge branch 'main' into cainl2` (-)
 - 96848224c 11-18 10:18 `Merge agent/devp11doc: devp11 item colour payload doc` (devp11doc)
 - 0ba7c0782 11-18 10:16 `Merge branch 'main' into devp11doc` (-)
 - 0bc637671 11-18 10:11 `Merge agent/cainl1: Merge branch 'main' into cainl1` (cainl1)
@@ -325,6 +328,4 @@
 - 00d3bfe14 11-18 10:01 `Merge origin/main into agent/cainl1` (cainl1)
 - c0c38af8f 11-18 10:00 `Merge branch 'main' into cain7` (-)
 - 93899088c 11-18 09:54 `Merge agent/itemcolour2: item tint: parse inv_tint/inv_colour, art colormap remap, UI key (includes the itemcolour design)` (itemcolour2)
-- 7255719d5 11-18 09:53 `Merge branch 'main' into itemcolour2` (-)
-- 5cd59f5ca 11-18 09:50 `Merge main into cain7` (-)
 <!-- statusgen:end -->
