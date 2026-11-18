@@ -217,7 +217,9 @@ type RunView struct {
 	StepNo     int       `json:"stepNo,omitempty"`    // 1-based position of the current step ("step 2 of 4")
 	StepCount  int       `json:"stepCount,omitempty"` // steps of the chunk definition
 	Steps      []StepRow `json:"steps,omitempty"`
-	NPC        string    `json:"npc,omitempty"` // who the hero walks to or waits at
+	PartNo     int       `json:"partNo,omitempty"`    // 1-based chunk position inside the quest ("part 2 of 4"); 0 for a one-chunk quest
+	PartCount  int       `json:"partCount,omitempty"` // chunks of the quest: the honest length of the chain
+	NPC        string    `json:"npc,omitempty"`       // who the hero walks to or waits at
 	Why        string    `json:"why,omitempty"`
 	Failures   int       `json:"failures,omitempty"`
 	Deaths     int       `json:"deaths,omitempty"`
@@ -505,6 +507,13 @@ func (d *Desk) run(a Active) RunView {
 	}
 	if q, err := d.b.Quest(a.Quest); err == nil {
 		rv.QuestTitle = q.Title
+		if len(q.Chunks) > 1 {
+			for i, c := range q.Chunks {
+				if c.ID == a.Chunk {
+					rv.PartNo, rv.PartCount = i+1, len(q.Chunks)
+				}
+			}
+		}
 		if c, err := d.b.Chunk(a.Quest, a.Chunk); err == nil {
 			rv.Title = c.Title
 			switch {

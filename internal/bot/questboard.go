@@ -740,7 +740,7 @@ func (r *Runner) boardSlice(ctx context.Context, snap *d2.Snapshot, c control, p
 			}
 		}
 		r.noteStepRefused(res)
-		if res.Outcome == task.OutRetry || res.Outcome == task.OutBlocked {
+		if res.Outcome == task.OutRetry && res.Kind != task.KindExploring || res.Outcome == task.OutBlocked {
 			return res.Err
 		}
 		return nil

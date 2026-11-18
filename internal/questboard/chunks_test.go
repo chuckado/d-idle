@@ -145,8 +145,8 @@ func TestStaffPiecesAndAssemblyWithCain(t *testing.T) {
 	}
 }
 
-// The Cain chain is strictly ordered and its last part, the report to Akara, is a hand-in that is offered once the cage
-// part reads done (S7b, two builds, V); nothing is offered before.
+// The Cain chain is strictly ordered; its parts after the reading (stones, Tristram, cage, the report) are marked as
+// not supported yet until CAIN-4 and CAIN-5 ran live (cainfix 2026-11-17), so nothing is offered after the reading.
 func TestCainChainInOrder(t *testing.T) {
 	b := mustBoard(t)
 	for _, bd := range []string{"Paladin", "Sorceress"} {
@@ -161,16 +161,16 @@ func TestCainChainInOrder(t *testing.T) {
 			t.Fatalf("%s after the scroll: %v", bd, v.Offered)
 		}
 		in.Chunks[ChunkKey(strt, "read")] = ChunkFact{Done: true, Tier: TierProxy}
-		if v := get(); !reflect.DeepEqual(v.Offered, []string{"free_cain"}) {
+		// CAIN-4/5 are not done: the stones, Tristram and the cage are shown as "not supported yet", never offered.
+		v := get()
+		if len(v.Offered) != 0 {
 			t.Fatalf("%s after the reading: %v", bd, v.Offered)
 		}
-		in.Chunks[ChunkKey(strt, "free_cain")] = ChunkFact{Done: true, Tier: TierProxy}
-		v := get()
-		if !reflect.DeepEqual(v.Offered, []string{"report"}) {
-			t.Fatalf("%s after the cage: %v", bd, v.Offered)
+		if c := chunk(v, "free_cain"); !strings.Contains(c.Why, "not supported yet") {
+			t.Fatalf("%s free_cain = %s %q, want the not-yet reason", bd, c.State, c.Why)
 		}
-		if c := chunk(v, "report"); strings.Contains(c.Why, "not supported yet") {
-			t.Fatalf("%s report = %s %q", bd, c.State, c.Why)
+		if c := chunk(v, "report"); c.State != Locked {
+			t.Fatalf("%s report = %s %q, want locked behind the Tristram part", bd, c.State, c.Why)
 		}
 	}
 }
