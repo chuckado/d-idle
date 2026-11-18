@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"d2lod-bot/internal/boss"
@@ -74,7 +75,8 @@ type TaskDeps struct {
 type taskState struct {
 	ex         *task.Executor
 	gen        uint64
-	err        error // sentinel error an action hit (portal opened, left the game ...) for r.do to react to
+	err        error      // sentinel error an action hit (portal opened, left the game ...) for r.do to react to
+	mu         sync.Mutex // guards wp and the per-game resets of syncTaskGame: the quest board builds the world off the loop goroutine
 	wp         map[int]bool
 	killed     map[string]bool
 	scene      int            // number of new games seen when killed/wp were last reset
@@ -85,6 +87,10 @@ type taskState struct {
 	refused    map[string]bool // refusals already logged (noteStepRefused)
 	andyLine   string          // last Andariel gate line logged (noteAndariel)
 	andyRowErr string          // last class-row error logged by fillAndariel (once per text)
+	pb         map[string]int  // planning blocks per quest step id, see parkStep
+	parked     map[string]parkedGroup
+	stepTitle  string         // title of the step the tick runs (the park reason names it)
+	bj         blockedJourney // blocked quest step: spin guard and farm fallback (staletarget.go)
 }
 
 type taskReport struct {
@@ -152,39 +158,64 @@ func phaseState(phase string) (State, string) {
 	return StateTraveling, "Quest step"
 }
 
+// ensureTaskExecutor creates the executor of goal generation c.gen once per goal; the quest board slices share it.
+func (r *Runner) ensureTaskExecutor(c control) {
+	l := &r.loop
+	if l.task.ex != nil && l.task.gen == c.gen {
+		return
+	}
+	ex := task.NewExecutor(taskEnv{r}, taskActs{r, c})
+	ex.Now = r.e.Clock.Now // strike expiry on the env clock: virtual under d2d lockstep (docs/d2d-determinism.md), wall on Game.exe as before
+	ex.Hooks.OnStart = func(s task.Step) { r.noTP.Store(s.Constraints.NoTownPortal) }
+	ex.Hooks.OnEnd = func(s task.Step, res task.Result) {
+		r.noTP.Store(false)
+		if res.Outcome == task.OutInterrupted {
+			return // the guard's safety and trip interrupts are routine
+		}
+		r.e.Log.Info("task step", "step", s.ID, "outcome", res.Outcome.String(), "kind", res.Kind.String(), "err", res.Err, "attention", res.Attention)
+	}
+	l.task = taskState{ex: ex, gen: c.gen}
+	r.obMu.Lock()
+	r.ob.taskRep = taskReport{}
+	r.obMu.Unlock()
+}
+
 // taskStep runs one executor tick of the campaign goal.
 func (r *Runner) taskStep(ctx context.Context, snap *d2.Snapshot, c control) bool {
 	l := &r.loop
 	camp := c.spec.camp
-	if l.task.ex == nil || l.task.gen != c.gen {
-		ex := task.NewExecutor(taskEnv{r}, taskActs{r, c})
-		ex.Now = r.e.Clock.Now // strike expiry on the env clock: virtual under d2d lockstep (docs/d2d-determinism.md), wall on Game.exe as before
-		ex.Hooks.OnStart = func(s task.Step) { r.noTP.Store(s.Constraints.NoTownPortal) }
-		ex.Hooks.OnEnd = func(s task.Step, res task.Result) {
-			r.noTP.Store(false)
-			if res.Outcome == task.OutInterrupted {
-				return // the guard's safety and trip interrupts are routine
-			}
-			r.e.Log.Info("task step", "step", s.ID, "outcome", res.Outcome.String(), "kind", res.Kind.String(), "err", res.Err, "attention", res.Attention)
-		}
-		l.task = taskState{ex: ex, gen: c.gen}
-		r.obMu.Lock()
-		r.ob.taskRep = taskReport{}
-		r.obMu.Unlock()
-	}
+	r.ensureTaskExecutor(c)
 	ex := l.task.ex
 	env := taskEnv{r}
 	w, err := env.World(ctx)
 	if err != nil {
 		return false
 	}
+	// A target area left over from the leveling slice must not make the guard cancel the quest step (hero14 log: 1,906
+	// re-plans); a step that clears sets its own target.
+	r.setTargetArea(0)
+	r.unparkDue(ex)
 	plan := camp.Plan(w, ex)
 	r.noteAndariel(w)
+	if isBlockedPlan(plan) || !l.task.bj.retryAt.IsZero() {
+		why := plan.Why
+		if why == "" || !isBlockedPlan(plan) {
+			why = l.task.bj.why
+		}
+		if r.journeyBlocked(ctx, snap, c, ex, strings.TrimPrefix(why, "blocked: ")) {
+			return true
+		}
+		if w, err = env.World(ctx); err != nil {
+			return false
+		}
+		plan = camp.Plan(w, ex)
+	}
 	step, _, hasStep := ex.Peek(plan, w)
 	st, act := StateTraveling, "Quest: planning"
 	if hasStep {
 		st, act = phaseState(step.Phase)
 		act += " (" + step.Title + ")"
+		l.task.stepTitle = step.Title
 	}
 	if plan.Done {
 		return r.campaignFinished(ctx, snap, c, w)
@@ -216,11 +247,20 @@ func (r *Runner) taskStep(ctx context.Context, snap *d2.Snapshot, c control) boo
 			return res.Err
 		case task.OutRan, task.OutDone, task.OutSkipped:
 			l.task.blocks = 0
+			delete(l.task.pb, res.StepID)
 		}
 		return nil
 	})
 	if w2, werr := env.World(ctx); werr == nil {
 		r.setTaskReport(c.gen, camp.Report(w2, ex))
+	}
+	switch res.Outcome {
+	case task.OutRan, task.OutDone, task.OutSkipped:
+		r.journeyOK()
+	case task.OutRetry, task.OutBlocked:
+		if res.Err != nil && res.Kind == task.KindDanger {
+			r.noteRefusal(ctx, res)
+		}
 	}
 	switch res.Outcome {
 	case task.OutDone:
@@ -322,6 +362,9 @@ func (e taskEnv) World(ctx context.Context) (task.World, error) {
 		w.Gated, w.GatedWhy, w.SafeArea = true, g.Reason, task.Area(r.safeFarmArea(s))
 	}
 	for a := range r.avoidedNow() {
+		if r.avoidWhyOf(a) == whyBorderLoop {
+			continue // the loop breaker never blocks a quest step (staletarget.go)
+		}
 		if w.Banned == nil {
 			w.Banned = map[task.Area]bool{}
 		}
@@ -350,9 +393,11 @@ func (e taskEnv) World(ctx context.Context) (task.World, error) {
 	}
 	r.syncGames() // the cleared set read below belongs to this game (the task path never passes runGoal)
 	r.syncTaskGame()
+	l.task.mu.Lock()
 	for a, on := range l.task.wp {
 		w.WPs[task.Area(a)] = w.WPs[task.Area(a)] || on
 	}
+	l.task.mu.Unlock()
 	l.wp.init()
 	r.drainTouched(s)
 	for k := range l.wp.touched {
@@ -392,6 +437,8 @@ func (r *Runner) syncTaskGame() {
 	n := r.ob.newGames
 	r.obMu.Unlock()
 	t := &r.loop.task
+	t.mu.Lock()
+	defer t.mu.Unlock()
 	if t.wp == nil || t.killed == nil || t.scene != n {
 		if t.scene != n {
 			if t.ex != nil {
@@ -420,6 +467,10 @@ var questItemNames = []string{task.ItemMalus, task.ItemBark, task.ItemCainSc,
 	// Acts 4 and 5 (names U until a live run read them, codes mss, hfh, ice, tr2 are V)
 	task.ItemSoulstone, task.ItemHammer, task.ItemMalahPotion, task.ItemResScroll}
 
+// questItemCodes maps the base codes of the Cain chain items to the name the steps ask for. The code wins over the
+// display name: names differ by locale and by table build (V code internal/quest/act1.go ItemInifussScroll, ItemCairnKey).
+var questItemCodes = map[string]string{"bks": task.ItemBark, "bkd": task.ItemCainSc}
+
 func (r *Runner) scanQuestItems(s *d2.Snapshot, out map[string]int) {
 	if r.d.Catalog == nil || s.Inventory == nil {
 		return
@@ -432,6 +483,10 @@ func (r *Runner) scanQuestItems(s *d2.Snapshot, out map[string]int) {
 		}
 		m, ok := r.d.Catalog.Item(u.Class)
 		if !ok {
+			continue
+		}
+		if n, ok := questItemCodes[m.Code]; ok && m.Code != "" {
+			out[n]++
 			continue
 		}
 		for _, n := range questItemNames {
@@ -478,6 +533,8 @@ func (a taskActs) tag(err error) error {
 }
 
 func (a taskActs) Travel(ctx context.Context, ar task.Area) error {
+	a.r.questTravel.Store(true)
+	defer a.r.questTravel.Store(false)
 	return a.tag(a.r.travelTo(ctx, int(ar)))
 }
 
@@ -520,7 +577,10 @@ func (a taskActs) Clear(ctx context.Context, ar task.Area) error {
 	r := a.r
 	area := int(ar)
 	if cur := r.curArea(); cur != area {
-		if err := r.travelTo(ctx, area); err != nil {
+		r.questTravel.Store(true)
+		err := r.travelTo(ctx, area)
+		r.questTravel.Store(false)
+		if err != nil {
 			return a.tag(err)
 		}
 	}
@@ -720,12 +780,39 @@ func (a taskActs) Interact(ctx context.Context, object string) error {
 	}
 	if object == TreeObject {
 		// the click only drops the scroll (U); the task node has no pick-up of its own
-		if err := a.PickUp(ctx, task.ItemBark); err != nil {
+		if err := a.pickUpAfterTree(ctx); err != nil {
 			return err
 		}
 	}
 	a.setPseudo(interactPseudo[object])
 	return nil
+}
+
+// The scroll drops after the tree animation, not on the click (U, no live trace yet): look again for a few seconds
+// before reporting that the click gave nothing.
+const (
+	treeDropPolls = 6
+	treeDropWait  = time.Second
+)
+
+func (a taskActs) pickUpAfterTree(ctx context.Context) error {
+	if a.r.d.Loot == nil {
+		return task.Errorf(task.KindNotFound, "no looter: cannot pick up %s", task.ItemBark)
+	}
+	for i := 0; i < treeDropPolls; i++ {
+		rep, err := a.r.d.Loot.PickUp(ctx, PickOpts{Radius: 30, Names: []string{task.ItemBark}})
+		if err == nil && rep.Picked > 0 {
+			return nil
+		}
+		if err != nil && task.Classify(a.tag(err)) != task.KindNotFound {
+			return a.tag(err)
+		}
+		if ctx.Err() != nil {
+			return a.tag(ctx.Err())
+		}
+		a.r.e.Clock.Sleep(treeDropWait)
+	}
+	return task.Errorf(task.KindNotFound, "tree clicked, but no %s dropped within %d polls", task.ItemBark, treeDropPolls)
 }
 
 // TreeObject is the Tree of Inifuss in the Dark Wood.
@@ -853,7 +940,9 @@ func (a taskActs) ActivateWaypoint(ctx context.Context, ar task.Area) error {
 		return a.tag(err)
 	}
 	r.syncTaskGame()
+	r.loop.task.mu.Lock()
 	r.loop.task.wp[int(ar)] = true
+	r.loop.task.mu.Unlock()
 	return nil
 }
 
@@ -876,6 +965,9 @@ func (a taskActs) LevelTo(ctx context.Context, n int) error {
 		return task.Errorf(task.KindUI, "not in a game")
 	}
 	r.syncGames() // a fresh game forgets its predecessor's cleared areas, else freshGameToLevel restarts in a loop
+	if done, err := r.farmResetStep(ctx, s); done {
+		return a.tag(err)
+	}
 	c := a.c
 	c.spec = goalSpec{kind: goals.ReachLevel, level: n, label: fmt.Sprintf("reach level %d", n)}
 	// the planner reads the goal's level through c.goal.Params.Level
@@ -966,15 +1058,7 @@ func (r *Runner) freshGameToLevel(ctx context.Context, s *d2.Snapshot) (done boo
 	}
 	r.e.Log.Info("leveling: everything worth farming is cleared, starting a fresh game", "level", s.Player.Level, "cleared", len(r.loop.cleared),
 		"noGainRestarts", r.loop.freshNoGain, "reason", "no area left to pick")
-	err = r.newGameRun(func(ctx context.Context) error {
-		return r.d.Cycler.NewGame(ctx, difficultyName(s.Player.Difficulty))
-	})(ctx)
-	if err == nil {
-		// d2d restarts the process without a menu poll, so the observer's newGames never moves (live: restarts 0
-		// after 38 fresh games) and syncGames cannot forget: the cleared set belongs to the old game.
-		r.forgetGame()
-	}
-	return true, err
+	return true, r.startFreshGame(ctx, s)
 }
 
 // freshAllowed is the progress check in front of a fresh game. It compares the experience with the one at the previous
@@ -1146,6 +1230,9 @@ func (r *Runner) planningBlock(ctx context.Context, res task.Result) error {
 		}
 		r.setState(StateInTown, w)
 		r.pause(ctx, 5*time.Second)
+		return nil
+	}
+	if r.parkStep(res) {
 		return nil
 	}
 	l.task.blocks++

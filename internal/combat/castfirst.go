@@ -133,11 +133,13 @@ func (f *Fighter) forceCast(snap *d2.Snapshot, cand []Target, st *fightState, id
 	if why == "" {
 		why = "no decision recorded"
 	}
-	logOnce := func(msg string) {
+	logOnce := func(msg string) bool {
 		if now.Sub(st.wdLogAt) >= 5*time.Second {
 			st.wdLogAt = now
 			f.log().Info("combat: watchdog cannot cast ("+msg+")", "idle", idle.Round(time.Second), "why", why, "mana", p.Mana)
+			return true
 		}
+		return false
 	}
 	var tg *Target
 	for i := range cand {
@@ -151,7 +153,11 @@ func (f *Fighter) forceCast(snap *d2.Snapshot, cand []Target, st *fightState, id
 		return false, nil
 	}
 	f.refineResists(tg, p.Difficulty)
+	short := false // an attack that is ready and in reach but costs more mana than the hero has
 	for _, sp := range f.attackSkills(p) {
+		if sp.Kind != KindSelf && sp.Kind != KindBuff && sp.Cost > p.Mana && !tg.Immune(sp.Elem) {
+			short = true
+		}
 		if sp.Kind == KindSelf || sp.Kind == KindBuff || sp.Cost > p.Mana || tg.Immune(sp.Elem) || !f.skillReady(sp) {
 			continue
 		}
@@ -172,7 +178,9 @@ func (f *Fighter) forceCast(snap *d2.Snapshot, cand []Target, st *fightState, id
 			"skill", sp.Name, "target", tg.Name, "dist", int(tg.Dist))
 		return true, f.cast(snap, sp, input.Point{X: tg.Unit.X, Y: tg.Unit.Y})
 	}
-	logOnce("no affordable, ready, unblocked attack skill")
+	if logOnce("no affordable, ready, unblocked attack skill") && short {
+		st.starved++ // one per logged watchdog line: the observed mana starvation of the fight (survival ledger)
+	}
 	return false, nil
 }
 

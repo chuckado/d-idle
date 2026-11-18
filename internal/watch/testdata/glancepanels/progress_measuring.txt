@@ -1,0 +1,30 @@
+<div class="d-panel">
+  <div class="d-slotbody">
+    <button class="pg-btn" data-key="open" aria-haspopup="true" type="button">
+      <span class="pg-h">
+        <b> "Progress"
+        <em> "level 7"
+      <span class="pg-m">
+        <span class="pg-to"> "to 8"
+        <progress class="pg-meter" aria-label="Progress to the next level" max="100" value="4">
+        <span class="pg-said" title="4%, measuring pace"> "4%, measuring pace"
+      <span class="pg-v">
+        <span class="pg-xp">
+          <strong data-wait="1" title="Still measuring: a rate needs a few minutes of play."> "–"
+          <label> "xp/h"
+          <svg aria-hidden="true" class="pg-spark pg-none" viewBox="0 0 60 16">
+            <polyline points="">
+            <circle r="2">
+        <span class="pg-gold">
+          <strong data-wait="1" title="Still measuring: a rate needs a few minutes of play."> "–"
+          <label> "gold/h"
+    <div class="pg-pop" aria-label="Progress in detail" popover="auto" role="dialog">
+      <dl class="pg-rows">
+        <dt> "Level"
+        <dd> "level 7 to 8: 4% done"
+        <dt> "Time to next level"
+        <dd> "still measuring"
+        <dt> "XP now"
+        <dd> "still measuring"
+        <dt> "Gold now"
+        <dd> "still measuring"

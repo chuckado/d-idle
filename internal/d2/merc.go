@@ -69,6 +69,9 @@ func FindMerc(s *Snapshot) Merc {
 	if !m.Alive {
 		m.LifePct = 0
 	}
+	// A reading over 100 is a unit mix-up in the source (current and maximum in different scales), never a fuller
+	// merc (docs/research/decomp30-mercai.md B1: the watch page once showed "life 4200%"); a percent is 0..100.
+	m.LifePct = min(max(m.LifePct, 0), 100)
 	return m
 }
 

@@ -35,8 +35,25 @@ type PanelManifest struct {
 	Fit bool `json:"fit,omitempty"`
 	// MergedInto: the panel now lives inside another one (its id is an alias in web/shell.json); the shell does not mount it.
 	MergedInto string `json:"mergedInto,omitempty"`
-	Owner      string `json:"owner"`
-	Doc        string `json:"doc"`
+	// OptIn: the shell mounts the panel only when the layout in force names it (placed, not hidden), so a stored
+	// layout never gets a new tile appended the day it ships (docs/ui/redesign-2026-11-14/D-layouts.md section 1).
+	OptIn bool `json:"optIn,omitempty"`
+	// SwitchWith: the id of a panel this one shares a rail column or phone tab with, one shown at a time under a two-button switch
+	// (the act map and the area map); SwitchLabel is the button's text (the title when empty). Either panel may carry the key.
+	// MinBlock: the least height in px this panel keeps when it is the last in a rail column (the act map: ten readable rows).
+	MinBlock    int    `json:"minBlock,omitempty"`
+	SwitchWith  string `json:"switchWith,omitempty"`
+	SwitchLabel string `json:"switchLabel,omitempty"`
+	// Slot: the panel renders into a fixed box and may sit in a cockpit slot (layout.go LayoutSlots).
+	Slot bool `json:"slot,omitempty"`
+	// CockpitOnly: the panel belongs to the cockpit template alone (its band is the cockpit's); a free-grid layout that names it
+	// keeps the panel it names as fallback, so those layouts render as they did before the panel existed (web/layout.js).
+	CockpitOnly bool `json:"cockpitOnly,omitempty"`
+	// Scroll: a slot panel that holds a list longer than its box declares it; only then is a data-scroll element in the panel
+	// accepted by the fit check (tools/uishots), and it must really scroll (overflow-y auto or scroll).
+	Scroll bool   `json:"scroll,omitempty"`
+	Owner  string `json:"owner"`
+	Doc    string `json:"doc"`
 }
 
 const panelSchema = "watch.panel/1"
@@ -134,9 +151,19 @@ func servePanels(w http.ResponseWriter, r *http.Request, asset func(name, ctype 
 	case "panel.css":
 		asset(path.Join("panels", id, file), "text/css; charset=utf-8")(w, r)
 	default:
-		http.NotFound(w, r)
+		// a panel's own helper modules (video/brightness.js): imported by panel.js, so they must be served too
+		if reModule(file) {
+			asset(path.Join("panels", id, file), "text/javascript; charset=utf-8")(w, r)
+		} else {
+			http.NotFound(w, r)
+		}
 	}
 	return true
+}
+
+func reModule(f string) bool {
+	n, ok := strings.CutSuffix(f, ".js")
+	return ok && rePanelDir(n)
 }
 
 func rePanelDir(id string) bool {

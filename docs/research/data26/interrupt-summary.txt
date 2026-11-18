@@ -1,0 +1,30 @@
+# P04 interrupt_swing.py compare, 2026-11-15 (NAS builder, parent a oracle-only build 308e96f8, claim a78f66a3 code-identical to the built b4d81433)
+## parent
+DIFF skill 0 mode A1 (own): d2d after 7, game.exe interrupted 1
+LEFT skill 0 mode A2: interrupted but kicks 3 seq 1 smove 1 remain
+LEFT skill 0 mode SC: interrupted but kicks 3 seq 1 smove 1 remain
+LEFT skill 0 mode TH: interrupted but kicks 3 seq 1 smove 1 remain
+DIFF skill 0 mode KK: d2d after 12, game.exe interrupted 1
+DIFF skill 0 mode S1: d2d after 13, game.exe interrupted 1
+DIFF skill 0 mode S3: d2d after 15, game.exe interrupted 1
+DIFF skill 0 mode S4: d2d after 16, game.exe interrupted 1
+DIFF skill 1 mode A2: d2d after 4, game.exe interrupted 0
+DIFF skill 1 mode SC: d2d after 4, game.exe interrupted 0
+DIFF skill 1 mode TH: d2d after 4, game.exe interrupted 0
+DIFF skill 2 mode A1 (own): d2d after 7, game.exe interrupted 1
+...
+2856 cells (357 skills), 1741 differ; own-mode cells 357, 210 differ; interrupted with swing state left over: 1005; game rows d2d lacks: 0 []
+## claim
+2856 cells (357 skills), 0 differ; own-mode cells 357, 0 differ; interrupted with swing state left over: 0; game rows d2d lacks: 0 []
+## game.exe interrupted per mode (Paladin, 357 rows)
+mode 7 rows 357 interrupted 335
+mode 8 rows 357 interrupted 335
+mode 10 rows 357 interrupted 335
+mode 11 rows 357 interrupted 335
+mode 12 rows 357 interrupted 335
+mode 13 rows 357 interrupted 335
+mode 15 rows 357 interrupted 335
+mode 16 rows 357 interrupted 335
+## class-dependent cells (not Paladin): C lines per class and mode
+    335 class 0 mode 13 allowed 0
+    335 class 5 mode 15 allowed 0

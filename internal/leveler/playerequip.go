@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/itemreq"
 )
 
 // Player-requested equips (docs/inventory-ui.md). The watch screen queues "wear this item in that slot"; the bot calls
@@ -46,7 +47,7 @@ func (l *Leveler) CheckPlayerEquip(s *d2.Snapshot, id uint32, body int) (name st
 		c.Why, c.Usable = "", true
 	}
 	if !c.Usable {
-		return name, fmt.Errorf("%s: %s", name, c.Why)
+		return name, &itemreq.Error{Err: fmt.Errorf("%s: %s", name, c.Why), Reasons: c.Reasons}
 	}
 	ok := false
 	for _, sl := range c.Slots {
@@ -55,12 +56,13 @@ func (l *Leveler) CheckPlayerEquip(s *d2.Snapshot, id uint32, body int) (name st
 		}
 	}
 	if !ok {
-		return name, fmt.Errorf("%s: %w", name, ErrNoSlot)
+		return name, &itemreq.Error{Err: fmt.Errorf("%s: %w", name, ErrNoSlot),
+			Reasons: []itemreq.Reason{{Code: itemreq.Slot, Text: ErrNoSlot.Error()}}}
 	}
 	eq, _ := l.gearState(s)
 	other := map[int]int{d2.BodyRHand: d2.BodyLHand, d2.BodyLHand: d2.BodyRHand}[body]
 	if o, has := eq[other]; has && other != 0 && (c.TwoHanded || o.TwoHanded) {
-		return name, ErrOffHand
+		return name, &itemreq.Error{Err: ErrOffHand, Reasons: []itemreq.Reason{{Code: itemreq.TwoHand, Text: ErrOffHand.Error()}}}
 	}
 	return name, nil
 }

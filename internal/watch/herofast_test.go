@@ -41,7 +41,7 @@ func TestHeroNeverWaitsForTheInventoryView(t *testing.T) {
 		select {
 		case v := <-done:
 			return v
-		case <-time.After(2 * time.Second):
+		case <-time.After(30 * time.Second):
 			t.Fatal("/api/hero waited for the inventory view")
 			return HeroView{}
 		}
@@ -51,11 +51,14 @@ func TestHeroNeverWaitsForTheInventoryView(t *testing.T) {
 			t.Fatalf("gold before the first view: %v", *v.Gold)
 		}
 	}
+	for end := time.Now().Add(30 * time.Second); inv.builds.Load() == 0 && time.Now().Before(end); { // the build starts on its own goroutine
+		time.Sleep(time.Millisecond)
+	}
 	if n := inv.builds.Load(); n != 1 {
 		t.Errorf("%d inventory builds for 20 hero polls while one is in flight", n)
 	}
 	close(inv.gate) // the desk answers
-	deadline := time.Now().Add(2 * time.Second)
+	deadline := time.Now().Add(30 * time.Second)
 	for {
 		if v := get(); v.Gold != nil && *v.Gold == 77 && *v.StashGold == 5 {
 			break

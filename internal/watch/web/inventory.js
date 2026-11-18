@@ -43,11 +43,22 @@
     return o;
   }
   // artImg adds a game-art <img> to host; when it fails to load the image goes away and the host reverts to its drawn look.
-  function artImg(host, cls, key) {
+  function artImg(host, cls, key, it) {
     var i = el('img', cls); i.setAttribute('alt', ''); i.setAttribute('src', '/watch/art/' + key + '.png');
     host.dataset.shown = '';
-    i.addEventListener('error', function () { host.removeChild(i); delete host.dataset.shown; });
+    i.addEventListener('error', function () { host.removeChild(i); delete host.dataset.shown; if (it) typeFallback(host, it, 'icon not found: ' + key); });
     host.appendChild(i);
+  }
+  // typeFallback: art is on but this item has no icon: a type glyph on a dashed cell, never a picture of another item. The glyph says the kind
+  // (J jewel, R ring, A amulet, C charm, G gem, N rune, P potion, ? other); debug mode (?debug or localStorage d2debug) logs each code once.
+  var FB = { jewel: 'J', ring: 'R', amulet: 'A', charm: 'C', gem: 'G', rune: 'N', potion: 'P', key: 'K', helm: 'H', armor: 'T', shield: 'S', boots: 'B', gloves: 'L', belt: 'E', weapon: 'W' };
+  var fbSeen = {};
+  function debugOn() { try { return /[?&]debug\b/.test(location.search) || !!localStorage.getItem('d2debug'); } catch (e) { return false; } }
+  function typeFallback(host, it, why) {
+    host.dataset.fb = it.kind || 'item';
+    if (!host.querySelector('.fbg')) host.appendChild(el('span', 'fbg', FB[it.kind] || '?'));
+    var k = String(it.code);
+    if (!fbSeen[k] && debugOn()) { fbSeen[k] = 1; console.debug('d2 inventory: type fallback for item code ' + k + ' (' + (it.kind || 'no kind') + '): ' + why); }
   }
   function qual(e, it) { if (it.quality) e.classList.add('q-' + it.quality); }
   function button(text, fn, disabled, opts) {
@@ -109,12 +120,27 @@
       var b = el('button', 'item'); b.type = 'button'; qual(b, it); b.dataset.key = 'item-' + it.id; b.dataset.h = String(h);
       b.style.gridArea = (it.y + 1) + ' / ' + (it.x + 1) + ' / span ' + h + ' / span ' + w;
       b.textContent = name(it); b.title = name(it);
-      if (art.on && it.art && ART_NAME.test(it.art)) artImg(b, 'ico', 'item-' + it.art);
+      if (it.kind) b.dataset.kind = it.kind;
+      if (art.on && it.art && ART_NAME.test(it.art)) artImg(b, 'ico', 'item-' + it.art, it);
+      else if (art.on) typeFallback(b, it, 'no icon name');
       if (it.mark) { b.dataset.mark = it.mark; b.appendChild(el('span', 'mk', it.mark === 'sell' ? 'S' : 'K')); }
       if (sel && sel.id === it.id) b.classList.add('sel');
       b.addEventListener('click', function () { select({ id: it.id }); });
       box.appendChild(b);
     });
+  }
+
+  // The belt is four columns wide and up to four rows high. A live belt item may carry its slot number as x (0..15, y 0): the cell is the
+  // slot's column and row, so a seventh potion lands in row two instead of a fifth column that is not there (the phone screenshot of
+  // 2026-11-15 showed three cut slivers beside the four cells). An item that already sits inside the 4 by 4 keeps its x and y.
+  function beltCells(items) {
+    var rows = 1, out = items.map(function (it) {
+      var i = it.x >= 4 ? it.x + 4 * (it.y || 0) : (it.x || 0) + 4 * (it.y || 0), c = {};
+      Object.keys(it).forEach(function (k) { c[k] = it[k]; });
+      c.x = i % 4; c.y = Math.floor(i / 4); rows = Math.min(4, Math.max(rows, c.y + (it.h || 1)));
+      return c;
+    });
+    return { items: out, rows: rows };
   }
 
   // select moves the highlight and redraws the detail card only. draw() skips an unchanged view (its signature ignores
@@ -195,11 +221,12 @@
     if (typeof CustomEvent === 'function' && document.dispatchEvent) document.dispatchEvent(new CustomEvent('d2:inventory', { detail: v }));
     doll(v);
     cells('pack', v.backpack || [], 10, 4);
-    cells('belt', v.belt || [], 4, 1);
+    var bl = beltCells(v.belt || []);
+    cells('belt', bl.items, 4, bl.rows);
     cells('stash', v.stash || [], 6, 8);
     gearPrompt(v.prompt);
     $('packmeta').textContent = '10 by 4';
-    $('stashmeta').textContent = (v.stashGold || v.stashGold === 0 ? 'gold ' + v.stashGold : '');
+    $('stashmeta').textContent = (v.stashGold || v.stashGold === 0 ? 'gold ' + String(v.stashGold).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '');
     $('note').textContent = (v.note || '') + (v.class ? v.class + ', gold on the hero ' + v.gold : '') +
       (v.sellPending ? (v.class ? ', ' : '') + v.sellPending + ' marked for sale, sold at the next town visit' : '');
     detail(v);
@@ -271,13 +298,23 @@
     poll();
   }
   function load() {
-    getJSON('/api/repair').then(drawRepair, function (e) { $('repair').textContent = e.message; });
+    getJSON('/api/repair').then(function (v) {
+      drawRepair(v);
+      // the character canvas (inventory-canvas.js) draws its repair chip from the same reply
+      if (typeof CustomEvent === 'function' && document.dispatchEvent) document.dispatchEvent(new CustomEvent('d2:repair', { detail: v }));
+    }, function (e) { $('repair').textContent = e.message; });
     getJSON('/api/inventory').then(draw, function (e) { say(e.message); });
   }
+  if (document.addEventListener) document.addEventListener('d2:dragend', function () { if (held) { var v = held; held = null; draw(v); } });
+  // the page's own request got its answer and the view with it (inventory-actions.js refresh): the grids follow at once, not at the next poll
+  if (document.addEventListener) document.addEventListener('d2:inventory-fresh', function (e) { if (e.detail) draw(e.detail); });
   if (typeof window !== 'undefined' && window.__invTest) {
-    window.__invTest({ select: select, dur: dur, level: level, lines: lines, paint: paint, say: say, setArt: function (on) { art.on = !!on; }, drawRepair: drawRepair });
+    window.__invTest({ select: select, dur: dur, level: level, lines: lines, paint: paint, draw: draw, say: say, setArt: function (on) { art.on = !!on; }, drawRepair: drawRepair });
     return;
   }
-  document.addEventListener('d2:dragend', function () { if (held) { var v = held; held = null; draw(v); } });
-  load(); artProbe(); setInterval(load, 4000);
+  // The first request waits until every script of the page has run (window load): the view is handed to the other scripts by an event,
+  // and one that answered before the tooltip, menu, mercenary and canvas scripts had registered left them with nothing to draw until
+  // the view changed (found by the fit check as a half-drawn page, review c2c3 R14).
+  function start() { load(); artProbe(); setInterval(load, 4000); }
+  if (document.readyState === 'complete') start(); else window.addEventListener('load', start);
 })();

@@ -1,0 +1,9 @@
+excluded DT (dead unit): d2d entered 1, game allowed 0
+DIFF mode GH: d2d entered GH 1 (after GH, restarted 1), game.exe allowed 0
+excluded A1 (swing, P04): d2d entered 0, game allowed 1
+excluded KK (swing, P04): d2d entered 0, game allowed 1
+excluded S1 (swing, P04): d2d entered 0, game allowed 1
+excluded S3 (swing, P04): d2d entered 0, game allowed 1
+excluded S4 (swing, P04): d2d entered 0, game allowed 1
+excluded DD (dead unit): d2d entered 1, game allowed 0
+13 cells, 1 differ, 7 excluded
