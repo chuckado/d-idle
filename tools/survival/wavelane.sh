@@ -25,4 +25,4 @@ if [ $(( est * 100 )) -gt $(( cap * 80 )) ]; then
 fi
 [ -x tools/survival/wave.sh ] || { echo "wavelane: tools/survival/wave.sh missing (run from the repo root)" >&2; exit 2; }
 echo "wavelane: lane $lane (cap $cap min), estimate $est real minutes"
-exec labrun tower --lane "$lane" --detach --notify $dry -- tools/survival/wave.sh "$@"
+exec labrun builder --lane "$lane" --detach --notify $dry -- tools/survival/wave.sh "$@"
