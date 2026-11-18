@@ -419,6 +419,7 @@ docs/probes/bot-cpu-2026-11-16.md  credit-runner  botcpu
 docs/probes/bot-cpu-fix-2026-11-16.md  credit-runner  botcpu2
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
 docs/probes/cainl0  credit-runner  cainl0
+docs/probes/cainl1  credit-runner  cainl1
 docs/probes/deploy-cockpit-2026-11-15.md  credit-runner  deploycockpit
 docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
 docs/probes/firsthour.md  live-agent  firsthour
@@ -428,11 +429,13 @@ docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/search-for-cain-2026-11-17.md  credit-runner  cainfix
 docs/probes/search-for-cain-l0-2026-11-18.md  credit-runner  cainl0
+docs/probes/search-for-cain-l1-2026-11-18.md  credit-runner  cainl1
 docs/probes/survival-ab-8seed-2026-11-16.md  credit-runner  survab8
 docs/probes/survival-ab-8seed-rerun-2026-11-16.md  credit-runner  survtune
 docs/probes/survival-ab-reask-2026-11-17.md  credit-runner  survreask
 docs/probes/survival-ab-recovery-2026-11-17.md  credit-runner  survrecover
 docs/probes/test-characters.md  credit-runner  cainl0
+docs/probes/test-characters.md  credit-runner  cainl1
 docs/probes/test-characters.md  credit-runner  survab8
 docs/probes/test-characters.md  credit-runner  survtune
 docs/probes/test-characters.md  live-agent  fid-fixtures
