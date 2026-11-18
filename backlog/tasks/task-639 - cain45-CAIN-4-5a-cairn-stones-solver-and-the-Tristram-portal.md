@@ -21,6 +21,7 @@ owns:
   - "data/questboard/act1.json"
   - "docs/probes/search-for-cain-45-2026-11-18.md"
   - "docs/actbot.md"
+  - "internal/watch/testdata/quests"
   - "docs/questboard.md"
   - "internal/questboard/chunks_test.go"
   - "internal/questboard/state_test.go"
