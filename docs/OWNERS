@@ -1393,6 +1393,7 @@ internal/watch/testdata/vault_ether.mjs  credit-runner  vaultv7b
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultv4
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultv6
 internal/watch/testdata/vault_tip.mjs  credit-runner  vaulttip
+internal/watch/testdata/video_conns.js  credit-runner  viewerconns
 internal/watch/testdata/video_labels_panel.js  credit-runner  brightness
 internal/watch/testdata/video_labels_panel.js  credit-runner  labels
 internal/watch/testdata/video_pal_panel.js  credit-runner  brightness
@@ -1540,6 +1541,7 @@ internal/watch/web/panels/video  credit-runner  labels
 internal/watch/web/panels/video  credit-runner  videoctl
 internal/watch/web/panels/video  credit-runner  videofeed2
 internal/watch/web/panels/video  credit-runner  videofeed4
+internal/watch/web/panels/video  credit-runner  viewerconns
 internal/watch/web/panels/video  credit-runner  viewerfps
 internal/watch/web/panels/video/brightness.js  credit-runner  brightness
 internal/watch/web/panels/video/panel.css  credit-runner  brightness
@@ -1620,6 +1622,7 @@ internal/watch/zoneclear_test.go  credit-runner  farmloop
 tools/ab/prep  credit-runner  survfix2
 tools/ab/prep  credit-runner  survtune
 tools/bounce3  pro-runner  bounce3
+tools/connprobe  credit-runner  viewerconns
 tools/dev-update-host.sh  credit-runner  buildhosts3
 tools/dev-update.sh  credit-runner  buildhosts3
 tools/emu  credit-runner  emurebuild
