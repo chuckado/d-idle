@@ -681,6 +681,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [cairn-portal-body.md](upstream/bodies/cairn-portal-body.md): cairn-portal-body
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
 - [crush-d5-body.md](upstream/bodies/crush-d5-body.md): crush-d5-body
+- [crush-d6-body.md](upstream/bodies/crush-d6-body.md): crush-d6-body
 - [death-corpse-exp-body.md](upstream/bodies/death-corpse-exp-body.md): death-corpse-exp-body
 - [gamble-price-body.md](upstream/bodies/gamble-price-body.md): the d2d side needs D2_MPQ_DIR (as test_game); gamble_price.py game needs the emulator's game image and a...
 - [gear-absorb-body.md](upstream/bodies/gear-absorb-body.md): gear-absorb-body
