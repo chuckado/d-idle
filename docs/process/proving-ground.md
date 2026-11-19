@@ -121,4 +121,4 @@ Not run live yet: `cain.read`, `cain.report`, `town.stash-gold-withdraw`, `cain.
 
 ## 12. State after the expansion card (2026-11-19)
 
-19 scenarios: 14 runnable, `cain.stones.shipped` BLOCKED by design, 3 PENDING (repair, merc, nightmare). Fast tier first run: GREEN 4, RED 3 (details and findings: `docs/probes/provingground-run-2026-11-19.md`). Coverage: 22 of 91 behaviours covered (was 10), 5 pending-only, 64 uncovered; all five Search for Cain chunks have a scenario. Determinism pair for `town.resupply` Paladin seed 11 submitted, result in the run record.
+19 scenarios: 14 runnable, `cain.stones.shipped` BLOCKED by design, 3 PENDING (repair, merc, nightmare). Fast tier first run: GREEN 4, RED 3 (details and findings: `docs/probes/provingground-run-2026-11-19.md`). Coverage: 25 of 94 behaviours covered after merging main (22 of 91 on this branch alone; was 10), 6 pending-only, 63 uncovered; all five Search for Cain chunks have a scenario. Determinism pair for `town.resupply` Paladin seed 11 submitted, result in the run record.
