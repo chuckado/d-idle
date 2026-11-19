@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
@@ -291,7 +292,13 @@ func (b *builder) world(ctx context.Context) error {
 const FieldObjectRadius = 40
 
 // presetRefetch is how far the player walks (subtiles) before the preset list is read again.
-const presetRefetch = 50
+// presetMaxAge is how old the cached list may get while the player stands still: d2d lists a preset only once its room
+// is built, which can take a few ticks after the player arrived (V sandbox 2026-11-18: a hero standing on the Dark Wood
+// tree room never saw the Tree of Inifuss because the list read on arrival was kept for good).
+const (
+	presetRefetch = 50
+	presetMaxAge  = 2 * time.Second
+)
 
 // fieldObjects lists the level's placed objects near the player (chests, shrines, altars, Cain's cage, the Tristram
 // portal, a field waypoint) from "debug presets", the index space of "cmd interact" that "npcs" rows share (V drill
@@ -376,7 +383,7 @@ func (s *Source) presets(ctx context.Context, area, x, y int) ([]d2dctl.Preset, 
 	s.pmu.Lock()
 	defer s.pmu.Unlock()
 	if s.pset.ok && s.pset.area == area {
-		if dx, dy := x-s.pset.x, y-s.pset.y; dx*dx+dy*dy < presetRefetch*presetRefetch {
+		if dx, dy := x-s.pset.x, y-s.pset.y; dx*dx+dy*dy < presetRefetch*presetRefetch && s.now().Sub(s.pset.at) < presetMaxAge {
 			return s.pset.rows, nil
 		}
 	}
@@ -384,7 +391,7 @@ func (s *Source) presets(ctx context.Context, area, x, y int) ([]d2dctl.Preset, 
 	if err != nil {
 		return nil, err
 	}
-	s.pset.rows, s.pset.area, s.pset.x, s.pset.y, s.pset.ok = l.Items, area, x, y, true
+	s.pset.rows, s.pset.area, s.pset.x, s.pset.y, s.pset.at, s.pset.ok = l.Items, area, x, y, s.now(), true
 	return l.Items, nil
 }
 

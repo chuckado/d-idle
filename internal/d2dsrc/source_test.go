@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
@@ -697,5 +698,42 @@ func TestStoneStateAndQuestPortal(t *testing.T) {
 	}
 	if class[PortalIDBase] != 59 || class[PortalIDBase+2] != 60 {
 		t.Fatalf("portal classes %v", class)
+	}
+}
+
+// A preset appears only once its room is built, a few ticks after the player arrived. A player who stands still must
+// still see it: the cached list expires by age, not only by distance (sandbox 2026-11-18: the Tree of Inifuss never
+// showed to a hero standing on its room).
+func TestFieldObjectsAppearWhileStandingStill(t *testing.T) {
+	r := lateReplies(t)
+	r["debug presets"] = "7\t580\t33.0\t12.0\t0\tChest\nok\n"
+	sc, c := startScript(t, r)
+	now := time.Unix(1000, 0)
+	src := New(c, Options{Logf: quiet})
+	src.now = func() time.Time { return now }
+	has := func(class int) bool {
+		res, err := src.Read(context.Background())
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, u := range res.Snap.Objects {
+			if u.Class == class {
+				return true
+			}
+		}
+		return false
+	}
+	if has(30) {
+		t.Fatal("tree listed before its room was built")
+	}
+	sc.mu.Lock()
+	sc.reply["debug presets"] = "7\t580\t33.0\t12.0\t0\tChest\n8\t30\t34.0\t12.0\t0\tTree of Inifuss\nok\n"
+	sc.mu.Unlock()
+	if has(30) {
+		t.Fatal("cache re-read within its age")
+	}
+	now = now.Add(presetMaxAge + time.Second)
+	if !has(30) {
+		t.Fatal("the Tree of Inifuss never showed to a player standing still")
 	}
 }
