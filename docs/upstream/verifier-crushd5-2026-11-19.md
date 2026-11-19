@@ -95,23 +95,23 @@ Builder container, Release, GCC, tests and tools on, `-j2` under the builder's l
 | Tree | Build | Tests |
 |---|---|---|
 | r2 claim `5824a42f` | full, rc 0 (3,078 s) | `ctest -j2`: 407 of 408 pass, 13 skip for data (as upstream); the failure is `smoke_d2d` |
-| upstream main `d5de50ca` (the app rebuilt in the same tree) | `d2d`, rc 0 | `smoke_d2d`: @@SMOKEP@@ |
+| upstream main `d5de50ca` (the app rebuilt in the same tree) | `d2d`, rc 0 | `smoke_d2d`: fails at the same assert (`smoke_d2d.py:444`; test 390 there, the parent has no `test_crush_divisor`): upstream's failure, not this PR's |
 
 `smoke_d2d` on the claim aborts at `tests/smoke_d2d.py:444` (`assert st["class"] == "3" and st["name"] == "Alpha" and st["hardcore"] == "1"`, after switching to the character Beta): a character-select / save check that no crush code reaches.
 
-clang-tidy-19 on the r2 claim (`test_crush_divisor.cpp`, `test_game_tables.cpp`, `test_combat.cpp`; the repo's `HeaderFilterRegex` takes `components/`, so `ai.hpp` too): @@TIDY@@
+clang-tidy-19 on the r2 claim (`test_crush_divisor.cpp`, `test_game_tables.cpp`, `test_combat.cpp`; the repo's `HeaderFilterRegex` takes `components/`, so `ai.hpp` too): **0 findings** on all three (rc 0 each). Positive control: an unused `#include <map>` injected into `test_crush_divisor.cpp` makes tidy fail (rc 1, `misc-include-cleaner`, an error under the repo's `WarningsAsErrors`), so the unit is parsed and the checks run; the file was restored after.
 
 ## Hygiene (V run)
 
 - `pr_guard.py upstream/main HEAD` on r2: 0 FAIL, 0 WARN. `presubmit.py --quick --base upstream/main`: 0 FAIL, 4 WARN (doc-claims on `drops.md:690` "every MonStats row", true: the oracle runs every row; doc-claims on `tools/emu/README.md:297`, the same; build and gcc skipped by `--quick`), answered by C6.
-- Identity and trailers as above. Diff r2 against upstream: 8 files (`ai.hpp`, `test_crush_divisor.cpp`, `test_game_tables.cpp`, `test_combat.cpp`, `crush_div.py`, `crush.py`, `tools/emu/README.md`, `drops.md`, `monsters.md`); no private code, host names or paths (read).
+- Identity and trailers as above. Diff r2 against upstream: 9 files (`ai.hpp`, `test_crush_divisor.cpp`, `test_game_tables.cpp`, `test_combat.cpp`, `crush_div.py`, `crush.py`, `tools/emu/README.md`, `drops.md`, `monsters.md`); no private code, host names or paths (read).
 - No `todo.md` / `unverified.md` row names this (V read, `git grep crush`), so the template's "row moved" part has nothing to move.
 
 ## Required changes to the body (`crush-d5-body.md`, becomes the r2 body)
 
 - **C1 (high).** Commits: "Two commits on upstream `d5de50ca`: the oracle (`3d51e67e`), then the claim (`5824a42f`)".
 - **C2 (high, claims).** Evidence rows `0x5a4599, 0x5a4a99`: replace with two rows: "`0x5a4a99` (`FUN_005a49b0`): `or word ptr [eax + 0x16], 2` for a monster made from a SuperUniques row, beside the spawned-bit table at `+0x1d30`" and "`0x5a4599` (`FUN_005a4440`): the same `or`, only when its argument is set; its one caller (`0x5426c3`) passes a saved record's flag 0x800, which the saver (`0x542305..0x54230e`) sets from bit 2 alone, so a monster made again keeps the bit it had". Add a row "`FUN_004ac810` (`0x4ac829`): a second setter with a mask; calls `0x45e465` (4), `0x45e473` (8), `0x4664bd` (a word from a record); its callers sit in the client's address range". Keep the `FUN_005a01b0` row (no caller, no pointer to it). What changes: "only the two superunique branches of the creators write it" becomes "on the game side only a monster made from a SuperUniques row, or made again from a saved record that had it, gets it, so a unique ... takes the quarter".
-- **C3 (high, template).** Add the template's Checklist: a test in `tests/` (`test_crush_divisor`, `test_game_tables`); the finding in `docs/research/re/` (`drops.md`, `monsters.md`); `pr_guard` passes; "`ctest` with the game data: 407 passed, 1 failed, 13 skipped; fails on main too: `smoke_d2d`" (if the parent row above says so); labels `oracle`, `test`, `trace`.
+- **C3 (high, template).** Add the template's Checklist: a test in `tests/` (`test_crush_divisor`, `test_game_tables`); the finding in `docs/research/re/` (`drops.md`, `monsters.md`); `pr_guard` passes; "`ctest` with the game data: 407 passed, 1 failed, 13 skipped; fails on main too: `smoke_d2d`"; labels `oracle`, `test`, `trace`.
 - **C4 (medium).** Counted differentials: the d2d side is "the divisor `Monster::target` hands `player_blow`", not "`Monster::crush_divisor`". Mutants: "18 mutants (this file's table); 17 abort `test_crush_divisor`; the one that does not (the share rounded up) gives the same number for every input". Drop "Both test binaries print ok; the full ctest has not run".
 - **C5 (medium).** What changes: "`test_crush_divisor` pins game.exe's crushes for fourteen rows, kinds and player counts, through `Monster::target` (a hireling at four players, a hireling made superunique)"; and "two comments that still said a unique divides by 8 (`test_combat.cpp`, `crush.py`)".
 - **C6 (medium).** Limits: replace the first bullet with "The writers were found by a scan of every write that covers byte `+0x16` of a unit's data word (`.text` is the one executable section), the base traced to the unit's data pointer; writes through a pointer built another way were not traced one by one. `FUN_004ac810` writes the word for the units it is given; its callers are in the client's range and the game side's handler never reads them (not traced further)." Keep the bit-8 and D6 bullets.
@@ -121,4 +121,4 @@ clang-tidy-19 on the r2 claim (`test_crush_divisor.cpp`, `test_game_tables.cpp`,
 ## Not checked
 
 - No Windows, macOS or Clang build; no live game, no lab drill; nothing on the worker host.
-- The writes not traced to a data pointer (U); `FUN_004ac810`'s callers (I: client); the seal path `FUN_0054e600` calling `FUN_005a49b0` (I, d2d's comment); a full ctest of the parent tree (only `smoke_d2d` was re-run there).
+- The writes not traced to a data pointer (U); `FUN_004ac810`'s callers (I: client); the seal path `FUN_0054e600` calling `FUN_005a49b0` (I, d2d's comment); a full ctest of the parent tree (only `smoke_d2d`, the one failure, was re-run there).
