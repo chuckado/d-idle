@@ -737,3 +737,24 @@ func TestFieldObjectsAppearWhileStandingStill(t *testing.T) {
 		t.Fatal("the Tree of Inifuss never showed to a player standing still")
 	}
 }
+
+// A hidden row of a quest object class (the Tree of Inifuss) is still an object the bot can click.
+func TestHiddenTreeRowIsListed(t *testing.T) {
+	r := lateReplies(t)
+	r["debug presets"] = "8\t30\t34.0\t12.0\t1\tTree of Inifuss\n9\t17\t35.0\t12.0\t1\tHidden Chest\nok\n"
+	_, c := startScript(t, r)
+	res, err := New(c, Options{Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := map[uint32]int{}
+	for _, u := range res.Snap.Objects {
+		got[u.ID] = u.Class
+	}
+	if got[NPCIDBase+8] != 30 {
+		t.Fatalf("hidden tree row not listed: %+v", res.Snap.Objects)
+	}
+	if _, ok := got[NPCIDBase+9]; ok {
+		t.Error("hidden chest listed")
+	}
+}
