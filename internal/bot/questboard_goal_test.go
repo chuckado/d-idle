@@ -128,3 +128,36 @@ func TestQuestBoardHandInWaitsForTown(t *testing.T) {
 	default:
 	}
 }
+
+// Proving Ground cain.scroll (2026-11-19): a hero in recovery (empty purse, no kit) defers an accepted chunk for the whole
+// recovery and showed no reason. The deferral stays, the reason must be shown; without recovery the chunk starts.
+func TestQuestBoardQueuedReasonWhileRecovering(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		t.Run(class.String(), func(t *testing.T) {
+			g, x := boardRig(t, true)
+			g.w.set(func(w *world) { w.class = class; w.area = 2 })
+			snap, _ := g.w.snapshot()
+			g.r.obMu.Lock()
+			g.r.ob.lastSnap = snap
+			g.r.obMu.Unlock()
+			if err := x.Accept("den_of_evil", "clear_den"); err != nil {
+				t.Fatal(err)
+			}
+			farmCtl := control{spec: goalSpec{kind: goals.FarmArea}}
+			g.r.loop.broke.on = true
+			if g.r.boardPreempts(snap, farmCtl) {
+				t.Fatal("the chunk started during the recovery")
+			}
+			if q := g.r.QuestQueued(); !strings.Contains(q, "purse") {
+				t.Fatalf("no reason shown while recovering: %q", q)
+			}
+			g.r.loop.broke.on = false
+			if !g.r.boardPreempts(snap, farmCtl) {
+				t.Fatal("the chunk did not start after the recovery")
+			}
+			if q := g.r.QuestQueued(); q != "" {
+				t.Fatalf("stale reason %q", q)
+			}
+		})
+	}
+}

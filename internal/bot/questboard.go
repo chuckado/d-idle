@@ -899,37 +899,54 @@ func (r *Runner) QuestQueued() string {
 // farm_area on Dark Wood, 13 minutes). A fight in the clear radius delays only the start of a chunk, never a hand-in; the
 // reason is shown as "queued". The Farm gold order and a recovery that has to refill the purse still come first.
 func (r *Runner) boardPreempts(snap *d2.Snapshot, c control) bool {
+	ok, why := r.boardPreemptsWhy(snap, c)
+	if why != "" {
+		// once per distinct reason: the Proving Ground trace showed a chunk deferred for 20 virtual minutes with no line saying why
+		r.boardNote("preempt", "quest board: start gate: "+why)
+	}
+	return ok
+}
+
+func (r *Runner) boardPreemptsWhy(snap *d2.Snapshot, c control) (bool, string) {
 	if !r.questBoardOn() || c.spec.camp != nil {
-		return false
+		return false, ""
 	}
 	switch c.spec.kind {
 	case goals.ReachLevel, goals.FarmArea, goals.KillBoss:
 	default:
-		return false
+		return false, ""
 	}
-	if r.goldFarmOn() || (r.recoveryActive() && !r.gearVerdict(snap).Gated) {
-		return false
+	if r.goldFarmOn() {
+		return false, "the Farm gold order comes first"
 	}
 	rt := r.boardRTFor()
 	if rt == nil {
-		return false
+		return false, ""
 	}
 	rt.worldLoop()
 	d, err := rt.exec.Next()
 	if err != nil {
-		return false
+		return false, ""
 	}
 	k := questboard.ChunkKey(d.Quest, d.Chunk)
+	if (d.Kind == questboard.DecRun || d.Kind == questboard.DecAwait || d.Kind == questboard.DecBusy) &&
+		r.recoveryActive() && !r.gearVerdict(snap).Gated {
+		// The recovery (empty purse, no kit) stays ahead of a chunk, but the player must see it: before, the accepted chunk
+		// showed no reason at all while the hero farmed gold for many minutes (Proving Ground cain.scroll, 2026-11-19).
+		rt.setQueued("Starts after the hero has refilled the purse and restocked.")
+		return false, "waiting for the recovery (purse and kit) to finish"
+	}
 	switch d.Kind {
 	case questboard.DecRun:
 		if !r.safeToPause(snap) {
 			rt.setQueued("Starts when the fight is over.")
 			r.boardNote("queued "+k, "quest board: "+k+" queued: waiting for the fight to end")
-			return false
+			return false, "waiting for the fight to end"
 		}
-		return true
+		rt.setQueued("")
+		return true, ""
 	case questboard.DecAwait, questboard.DecBusy:
-		return true
+		return true, ""
 	case questboard.DecBlocked:
 		rt.setQueued("Parked: " + d.Why)
 		r.boardNote("blocked "+d.Quest, fmt.Sprintf("quest board: %s parked: %s", k, d.Why))
@@ -938,5 +955,5 @@ func (r *Runner) boardPreempts(snap *d2.Snapshot, c control) bool {
 	default:
 		rt.setQueued("")
 	}
-	return false
+	return false, ""
 }

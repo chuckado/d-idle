@@ -33,7 +33,7 @@
    ],
    "pre": {
     "level": 17,
-    "gold": 500,
+    "gold": 5000,
     "waypoints": [
      1,
      2,
@@ -65,7 +65,7 @@
      7
     ]
    },
-   "provenance": "Hero created fresh, clvl 17 by stat verbs (points as a played level gives), purse 500, waypoints Cold Plains to Dark Wood, board chunk accepted in the plan store. CHEATED: waypoints are set by debug wp and the level by stat verbs (SETUP) (mechanics evidence only, never balance).",
+   "provenance": "Hero created fresh, clvl 17 by stat verbs (points as a played level gives), purse 5000 (a played clvl 17 carries more than the kit; at 500 the bot buys a Tome, drops under the kit price and its recovery defers the chunk, see docs/probes/cainstart-2026-11-19.md), waypoints Cold Plains to Dark Wood, board chunk accepted in the plan store. CHEATED: waypoints are set by debug wp and the level by stat verbs (SETUP) (mechanics evidence only, never balance).",
    "notes": "R2: the sandbox stall (hero reaches the tree room, never clicks). Red on the lab slot reproduces it; green on the lab slot means the sandbox differs: see cain.scroll.sandbox.",
    "assert": [
     {
@@ -103,7 +103,7 @@
    ],
    "pre": {
     "level": 17,
-    "gold": 500,
+    "gold": 5000,
     "waypoints": [
      1,
      2,
@@ -172,7 +172,7 @@
    ],
    "pre": {
     "level": 17,
-    "gold": 500,
+    "gold": 5000,
     "waypoints": [
      1,
      2,
@@ -244,7 +244,7 @@
    ],
    "pre": {
     "level": 17,
-    "gold": 500,
+    "gold": 5000,
     "items": [
      {
       "code": "bks"
@@ -564,7 +564,7 @@
    ],
    "pre": {
     "level": 17,
-    "gold": 500,
+    "gold": 5000,
     "quests": [
      {
       "record": 4,
