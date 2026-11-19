@@ -18,7 +18,7 @@ owns:
   - "tools/fork-rebase.sh"
 exclusive: []
 contracts: []
-result: "first round done 2026-11-19: didle/rebase-20261119 tip 89ea1d19 (50 commits on upstream da98b7f89, 236 behind, 3 text conflicts + 1 semantic), d2d built on the builder (532 s), 9 of 10 fork verb tests pass, smoke_d2d fails identically on pure upstream main; bot TestRealD2D (d2dctl, d2dsrc) pass against it; image d2dbot:devp13 4039ae497734 loaded on the sandbox host, container still on devp12. Upstream ctest and a full d2drill leg not run. Verified on the builder, not live on the sandbox."
+result: "first round done 2026-11-19: didle/rebase-20261119 tip f32837d8 (rebase 89ea1d19, 50 commits on upstream da98b7f89, 236 behind, 3 text conflicts + 1 semantic), d2d built on the builder (532 s), 10 of 11 fork verb tests pass (incl. new item create identified=0|1 flag for the vault reveal), smoke_d2d fails identically on pure upstream main; bot TestRealD2D (d2dctl, d2dsrc) pass against it; image d2dbot:devp13 97e985ca5eb5 loaded on the sandbox host, container still on devp12. Upstream ctest and a full d2drill leg not run. Verified on the builder, not live on the sandbox."
 ---
 
 ## Description
