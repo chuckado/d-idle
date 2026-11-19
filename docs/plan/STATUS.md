@@ -340,6 +340,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 7eb8c1e02 11-19 15:06 `Merge agent/viewerwait: Merge branch 'main' into viewerwait` (viewerwait)
+- 0cd16b9d6 11-19 15:05 `Merge branch 'main' into viewerwait` (-)
 - aab3479e1 11-19 14:44 `Merge agent/inputlayer: Merge branch 'main' into inputlayer` (inputlayer)
 - e161922fa 11-19 14:43 `Merge branch 'main' into inputlayer` (-)
 - 049959e12 11-19 14:38 `Merge origin/main into agent/inputlayer (keep pgexpand and the skill assertions)` (inputlayer)
@@ -348,6 +350,4 @@
 - 2997e7ee9 11-19 14:31 `Merge agent/pgexpand: pgexpand: coverage numbers after merging main` (pgexpand)
 - 6e96efe65 11-19 14:27 `Merge origin/main into agent/pgexpand` (-)
 - 5878effb6 11-19 14:18 `Merge origin/main into agent/pgexpand` (-)
-- 1b068f0ad 11-19 14:18 `Merge agent/agencyp0: agencyp0: stat and skill points by verb, points sheet and API, autopilot switch (default off), legality fixes, scenarios` (agencyp0)
-- c81c3a21d 11-19 14:17 `Merge branch 'main' into agencyp0` (-)
 <!-- statusgen:end -->

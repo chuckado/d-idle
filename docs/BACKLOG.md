@@ -1092,6 +1092,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - pgexpand: Proving Ground expansion, Cain chain and behaviour scenarios runnable (TASK-674, merged 2026-11-19, acceptance 4 of 4): Proving Ground expanded: board-taps driver, area-change counter, portal and ground observers, 19 scenarios (14 runnable, 1 BLOCKED by design, 3 PENDING). ... <!--sg:agent/pgexpand-->
 - agent/verifyd6: crush D6 verifier: r1 FAIL, fid/crush-d6-r3 PASS WITH CHANGES (merged 2026-11-19) <!--sg:agent/verifyd6-->
 - inputlayer: R17 input layer I1 and I2 (planner, select verb, fork verbs, devp14 candidate) (TASK-675, merged 2026-11-19, acceptance 5 of 5): Offline only, NOT verified live. Bot: internal/input planner (verb, key, verified click), knob input.planner default 0, SetRight/SetLeft migrated, minute line input=verb/key/click, Proving Ground right_skill_is and scenario input.skill-select-verb (pending). ... <!--sg:agent/inputlayer-->
+- agent/viewerwait: Merge branch 'main' into viewerwait (merged 2026-11-19) <!--sg:agent/viewerwait-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
