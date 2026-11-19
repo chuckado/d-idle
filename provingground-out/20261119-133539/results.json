@@ -1,0 +1,218 @@
+{
+ "version": "didle.scenario-result/1",
+ "results": [
+  {
+   "version": "didle.scenario-result/1",
+   "id": "cain.scroll",
+   "class": "Paladin",
+   "seed": 11,
+   "status": "RED",
+   "reason": "item_in_pack: wanted \u003e= 1 x bks, got 0 x bks",
+   "asserts": [
+    {
+     "kind": "item_in_pack",
+     "ok": false,
+     "want": "\u003e= 1 x bks",
+     "got": "0 x bks",
+     "why": "the tree gave the bark scroll (bks); the pack holds bkd instead once Akara has read it (V provingground rerun 2026-11-19: the bot reads on its next town visit)"
+    },
+    {
+     "kind": "no_writes",
+     "ok": true,
+     "want": "writes after start: 0",
+     "got": "writes after start: 0"
+    }
+   ],
+   "virtual_min": 30,
+   "budget_min": 30,
+   "wall_sec": 312,
+   "tags": [
+    "CHEATED",
+    "waypoint"
+   ],
+   "trace": "provingground-out/20261119-133539/cain.scroll_Paladin_11.bot.log",
+   "state": {
+    "version": "didle.scenario-state/1",
+    "source": "d2d-observer-reload",
+    "has": [
+     "items",
+     "objects"
+    ],
+    "area": 1,
+    "level": 17,
+    "gold": 682,
+    "stash": 0,
+    "life_pct": 79,
+    "quests": {
+     "1": 4
+    },
+    "items": [
+     {
+      "code": "ssd",
+      "where": "body"
+     },
+     {
+      "code": "buc",
+      "where": "body"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "isc",
+      "where": "pack"
+     },
+     {
+      "code": "tbk",
+      "where": "pack"
+     },
+     {
+      "code": "hla",
+      "where": "body"
+     },
+     {
+      "code": "lbt",
+      "where": "body"
+     },
+     {
+      "code": "cap",
+      "where": "body"
+     },
+     {
+      "code": "hp2",
+      "where": "belt"
+     },
+     {
+      "code": "hp2",
+      "where": "pack"
+     },
+     {
+      "code": "hp2",
+      "where": "pack"
+     },
+     {
+      "code": "mp2",
+      "where": "pack"
+     },
+     {
+      "code": "isc",
+      "where": "pack"
+     },
+     {
+      "code": "gcw",
+      "where": "pack"
+     },
+     {
+      "code": "hp2",
+      "where": "pack"
+     },
+     {
+      "code": "mp2",
+      "where": "pack"
+     },
+     {
+      "code": "rvs",
+      "where": "belt"
+     },
+     {
+      "code": "rvs",
+      "where": "belt"
+     }
+    ],
+    "objects": [
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 267,
+      "state": "NU"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 119,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 385,
+      "state": "NU"
+     }
+    ],
+    "writes_after_start": 0
+   },
+   "digest": "a02aa5c298596635"
+  }
+ ]
+}
