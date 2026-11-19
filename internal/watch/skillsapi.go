@@ -1,7 +1,9 @@
 package watch
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"sync"
@@ -55,6 +57,29 @@ func (a *SkillsAPI) Bind(s SkillsSource) {
 	a.cmu.Lock()
 	a.cached = nil
 	a.cmu.Unlock()
+}
+
+// EnableAllocate turns the allocate control on and routes POST /api/skills/allocate to the points desk (one point, no
+// confirmation: an unsupported attack skill is refused there and needs POST /api/hero/points/skill with confirm).
+func (a *SkillsAPI) EnableAllocate(d PointsDesk) {
+	a.mu.Lock()
+	a.alloc, a.AllocateEnabled = pointsAllocator{d}, true
+	a.mu.Unlock()
+	a.cmu.Lock()
+	a.cached = nil
+	a.cmu.Unlock()
+}
+
+type pointsAllocator struct{ d PointsDesk }
+
+func (p pointsAllocator) RequestAllocate(skill, _ int) (any, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	rep := p.d.SpendSkill(ctx, skill, false)
+	if !rep.OK {
+		return rep, errors.New(rep.Reason)
+	}
+	return rep, nil
 }
 
 func (a *SkillsAPI) source() SkillsSource { a.mu.Lock(); defer a.mu.Unlock(); return a.src }

@@ -283,6 +283,29 @@ func TestShippedScenarios(t *testing.T) {
 	}
 }
 
+func TestStatBetweenAssertion(t *testing.T) {
+	max0 := 0
+	st := State{WritesAfterStart: 0, Stats: map[string]int{"statpts": 25, "skillpts": 0, "vit": 40}}
+	as := []Assert{
+		{Kind: AStatBetween, Code: "statpts", Min: 25, Max: func() *int { v := 25; return &v }()},
+		{Kind: AStatBetween, Code: "skillpts", Max: &max0},
+		{Kind: AStatBetween, Code: "vit", Min: 41},
+		{Kind: AStatBetween, Code: "ene", Min: 1},
+	}
+	for _, a := range as {
+		if err := a.Validate(); err != nil {
+			t.Fatalf("%+v: %v", a, err)
+		}
+	}
+	got := Evaluate(as, st)
+	if !got[0].OK || !got[1].OK || got[2].OK || got[2].Unobserved || !got[3].Unobserved {
+		t.Errorf("%+v", got)
+	}
+	if (Assert{Kind: AStatBetween, Code: "luck", Min: 1}).Validate() == nil || (Assert{Kind: AStatBetween, Code: "vit"}).Validate() == nil {
+		t.Error("a bad code or no bound must be refused")
+	}
+}
+
 func TestSkillAssertions(t *testing.T) {
 	st := State{RightSkill: ip(98)}
 	if r := Evaluate([]Assert{{Kind: ARightSkillIs, Skill: 98}}, st); !r[0].OK {

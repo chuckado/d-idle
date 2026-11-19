@@ -1,8 +1,11 @@
 package scenario
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"sort"
+	"strconv"
 )
 
 // StateVersion is the format of the observed game state ("didle.scenario-state/1").
@@ -33,8 +36,16 @@ type State struct {
 	Items []StateItem `json:"items,omitempty"`
 	// Objects are the level objects read with debug objects: class and state (NU, ON ...).
 	Objects []StateObject `json:"objects,omitempty"`
-	// AreaChanges counts area changes during the run when the observer could count them (nil: not observable).
-	AreaChanges *int `json:"area_changes,omitempty"`
+	// Stats are the hero's points as the dump reports them: str, dex, vit, ene (base, no items), statpts and skillpts (unspent)
+	// and skillsspent (the sum of the hard skill points). Absent keys were not observed.
+	Stats map[string]int `json:"stats,omitempty"`
+	// Portals are the open portals of `debug portals` (which, level the portal stands in).
+	Portals []StatePortal `json:"portals,omitempty"`
+	// AreaChanges counts area changes during the run when the observer could count them (nil: not observable). It is the
+	// number of `zone entry` lines of the bot's own log after the first (one line per area change, internal/bot/lifelog.go):
+	// S, the bot's report of what the game told it, not a game-side counter. AreaTrail is the area of each entry.
+	AreaChanges *int  `json:"area_changes,omitempty"`
+	AreaTrail   []int `json:"area_trail,omitempty"`
 	// WritesAfterStart is the number of gameplay-affecting writes after the run start (d2cheat ledger), -1 unknown.
 	WritesAfterStart int `json:"writes_after_start"`
 }
@@ -43,6 +54,12 @@ type State struct {
 type StateItem struct {
 	Code  string `json:"code"`
 	Where string `json:"where"`
+}
+
+// StatePortal is one row of `debug portals`.
+type StatePortal struct {
+	Which int `json:"which"`
+	Level int `json:"level"`
 }
 
 // StateObject is one level object.
@@ -64,27 +81,32 @@ const (
 	ALifePctAtLeast = "life_pct_at_least"
 	AObjectState    = "object_state"    // class, state: at least one object of the class has the state
 	AAreaChangesLE  = "area_changes_le" // max
-	ARightSkillIs   = "right_skill_is"  // skill (the id on the right hand: the aura, the select verb's effect)
-	ALeftSkillIs    = "left_skill_is"   // skill
+	APortalOpen     = "portal_open"     // area: a portal stands in that level (debug portals); needs a live observation
+	ARightSkillIs   = "right_skill_is" // skill (the id on the right hand: the aura, the select verb's effect)
+	ALeftSkillIs    = "left_skill_is"  // skill
 	ANoWrites       = "no_writes"       // writes_after_start == 0 (the CRUTCH RULE line)
+	AStatBetween    = "stat_between"    // code (str dex vit ene statpts skillpts skillsspent), min, max
 )
+
+var statKeys = map[string]bool{"str": true, "dex": true, "vit": true, "ene": true, "statpts": true, "skillpts": true, "skillsspent": true}
 
 // Assert is one assertion on game state.
 type Assert struct {
-	Kind   string `json:"kind"`
-	Code   string `json:"code,omitempty"`
-	Where  string `json:"where,omitempty"` // item_in_pack: pack (default: anywhere carried), stash
-	Record int    `json:"record,omitempty"`
-	Set    uint16 `json:"set,omitempty"`
-	Clear  uint16 `json:"clear,omitempty"`
-	Area   int    `json:"area,omitempty"`
-	Skill  int    `json:"skill,omitempty"` // right_skill_is, left_skill_is: skills.txt id
-	Areas  []int  `json:"areas,omitempty"`
-	Class  int    `json:"class,omitempty"`
-	State  string `json:"state,omitempty"`
-	Min    int    `json:"min,omitempty"`
-	Max    *int   `json:"max,omitempty"`
-	Why    string `json:"why,omitempty"`
+	Kind   string   `json:"kind"`
+	Code   string   `json:"code,omitempty"`
+	Or     []string `json:"or,omitempty"`    // item_in_pack: further codes that count as the same item (bks becomes bkd once Akara reads it)
+	Where  string   `json:"where,omitempty"` // item_in_pack: pack (default: anywhere carried), stash
+	Record int      `json:"record,omitempty"`
+	Set    uint16   `json:"set,omitempty"`
+	Clear  uint16   `json:"clear,omitempty"`
+	Area   int      `json:"area,omitempty"`
+	Skill  int      `json:"skill,omitempty"` // right_skill_is, left_skill_is: skills.txt id
+	Areas  []int    `json:"areas,omitempty"`
+	Class  int      `json:"class,omitempty"`
+	State  string   `json:"state,omitempty"`
+	Min    int      `json:"min,omitempty"`
+	Max    *int     `json:"max,omitempty"`
+	Why    string   `json:"why,omitempty"`
 }
 
 // Validate checks that the fields the kind needs are present.
@@ -118,6 +140,10 @@ func (a Assert) Validate() error {
 		if a.Class == 0 || a.State == "" {
 			return fmt.Errorf("object_state needs class and state")
 		}
+	case APortalOpen:
+		if a.Area == 0 {
+			return fmt.Errorf("portal_open needs area")
+		}
 	case AAreaChangesLE:
 		if a.Max == nil {
 			return fmt.Errorf("area_changes_le needs max")
@@ -125,6 +151,13 @@ func (a Assert) Validate() error {
 	case ARightSkillIs, ALeftSkillIs:
 		if a.Skill <= 0 {
 			return fmt.Errorf("%s needs skill", a.Kind)
+		}
+	case AStatBetween:
+		if !statKeys[a.Code] {
+			return fmt.Errorf("stat_between needs code str, dex, vit, ene, statpts, skillpts or skillsspent")
+		}
+		if a.Max == nil && a.Min == 0 {
+			return fmt.Errorf("stat_between needs min or max")
 		}
 	case ANoWrites:
 	default:
@@ -163,11 +196,12 @@ func evalOne(a Assert, st State) AssertResult {
 	case AItemInPack, AItemAbsent:
 		n := 0
 		for _, it := range st.Items {
-			if it.Code == a.Code && (a.Where == "" || it.Where == a.Where) {
+			// no place named: anything carried (the floor is not carried)
+			if (it.Code == a.Code || contains(a.Or, it.Code)) && (a.Where == "" && it.Where != "ground" || it.Where == a.Where) {
 				n++
 			}
 		}
-		if !st.has("items") {
+		if !st.has("items") || a.Where == "ground" && !st.has("ground") {
 			return unobs("items of "+a.Code, "items")
 		}
 		if a.Kind == AItemAbsent {
@@ -222,6 +256,16 @@ func evalOne(a Assert, st State) AssertResult {
 			return unobs(fmt.Sprintf("life >= %d%%", a.Min), "life")
 		}
 		return AssertResult{OK: *st.LifePct >= a.Min, Want: fmt.Sprintf("life >= %d%%", a.Min), Got: fmt.Sprintf("life %d%%", *st.LifePct)}
+	case AStatBetween:
+		want := fmt.Sprintf("%s >= %d", a.Code, a.Min)
+		if a.Max != nil {
+			want += fmt.Sprintf(" and <= %d", *a.Max)
+		}
+		v, ok := st.Stats[a.Code]
+		if !ok {
+			return unobs(want, a.Code)
+		}
+		return AssertResult{OK: v >= a.Min && (a.Max == nil || v <= *a.Max), Want: want, Got: fmt.Sprintf("%s %d", a.Code, v)}
 	case AObjectState:
 		want := fmt.Sprintf("object class %d state %s", a.Class, a.State)
 		if !st.has("objects") {
@@ -248,6 +292,19 @@ func evalOne(a Assert, st State) AssertResult {
 			return unobs(want, hand+" skill")
 		}
 		return AssertResult{OK: *v == a.Skill, Want: want, Got: fmt.Sprintf("%s skill %d", hand, *v)}
+	case APortalOpen:
+		want := fmt.Sprintf("a portal in area %d", a.Area)
+		if !st.has("portals") {
+			return unobs(want, "portals")
+		}
+		var seen []int
+		for _, p := range st.Portals {
+			seen = append(seen, p.Level)
+			if p.Level == a.Area {
+				return AssertResult{OK: true, Want: want, Got: want}
+			}
+		}
+		return AssertResult{Want: want, Got: fmt.Sprintf("portals in areas %v", seen)}
 	case AAreaChangesLE:
 		want := fmt.Sprintf("area changes <= %d", *a.Max)
 		if st.AreaChanges == nil {
@@ -266,6 +323,51 @@ func evalOne(a Assert, st State) AssertResult {
 func (s State) has(g string) bool {
 	for _, x := range s.Has {
 		if x == g {
+			return true
+		}
+	}
+	return false
+}
+
+// CountZoneEntries reads the bot's structured log (one JSON object per line) and returns the area of every `zone entry`
+// line (internal/bot/lifelog.go). The count of area CHANGES is len-1: the first line is the arrival of the run. ok is
+// false when the log holds no such line at all (a log that is not the bot's, or a run that never started): the fact is
+// then not observed.
+func CountZoneEntries(log []byte) (trail []int, ok bool) {
+	for _, l := range bytes.Split(log, []byte("\n")) {
+		if !bytes.Contains(l, []byte(`"zone entry"`)) {
+			continue
+		}
+		var e struct {
+			Msg  string `json:"msg"`
+			Area any    `json:"area"`
+		}
+		if json.Unmarshal(l, &e) != nil || e.Msg != "zone entry" {
+			continue
+		}
+		switch v := e.Area.(type) {
+		case float64:
+			trail = append(trail, int(v))
+		case string:
+			if n, err := strconv.Atoi(v); err == nil {
+				trail = append(trail, n)
+			}
+		}
+	}
+	return trail, len(trail) > 0
+}
+
+// AreaChangeCount is the number of changes in a trail: entries after the first.
+func AreaChangeCount(trail []int) int {
+	if len(trail) == 0 {
+		return 0
+	}
+	return len(trail) - 1
+}
+
+func contains(l []string, c string) bool {
+	for _, x := range l {
+		if x == c {
 			return true
 		}
 	}
