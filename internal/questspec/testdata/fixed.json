@@ -1,0 +1,82 @@
+{
+ "schema": "questcaps/2",
+ "backend": "fixed",
+ "verbs": [
+  "caps",
+  "cmd",
+  "debug portals",
+  "debug presets",
+  "dump items",
+  "dump player",
+  "ground",
+  "info",
+  "npcs",
+  "state",
+  "debug give",
+  "debug objects",
+  "debug warps",
+  "debug wp"
+ ],
+ "knowledge": [
+  "preset_list",
+  "preset_near",
+  "room_rows"
+ ],
+ "knowledge_note": "V: room rows in debug presets, lab build (docs/probes/search-for-cain-l0-2026-11-18.md)",
+ "readers": {
+  "quest_available": {
+   "tier": "memory",
+   "note": "S: quest record word (docs/questmem.md)"
+  },
+  "quest_state": {
+   "tier": "memory",
+   "note": "S: the reader's stage (task.Stage), T1/T2 evidence; docs/questmem.md"
+  },
+  "has_item": {
+   "tier": "proxy",
+   "via": "dump items",
+   "note": "V: dump items lists the pack by base code (d2dsrc)"
+  },
+  "visited": {
+   "tier": "proxy",
+   "volatile": true
+  },
+  "killed": {
+   "tier": "proxy",
+   "volatile": true,
+   "note": "a kill the bot saw this run; the quest word is the durable evidence"
+  },
+  "cleared": {
+   "tier": "proxy",
+   "volatile": true
+  },
+  "object_known": {
+   "tier": "proxy",
+   "via": "debug presets",
+   "note": "V: debug presets rows (sandbox log 2026-11-19); the tree row is hidden=1 in the sandbox build (U, treefix3)"
+  },
+  "portal_open": {
+   "tier": "proxy",
+   "via": "debug portals",
+   "note": "S: d2dsrc lists the red portal from debug portals"
+  },
+  "object_state/lit": {
+   "tier": "proxy",
+   "via": "debug objects",
+   "volatile": true,
+   "note": "V lab: the stone row goes NU to ON (docs/probes/search-for-cain-l1-2026-11-18.md)"
+  },
+  "stones_lit": {
+   "tier": "proxy",
+   "via": "debug objects",
+   "volatile": true,
+   "note": "V lab: as object_state/lit"
+  }
+ },
+ "item_match": "code",
+ "item_match_note": "V: internal/bot questItemCodes, the code wins over the display name (RC3 fixed)",
+ "progress_rules": [
+  "coverage_grows"
+ ],
+ "progress_note": ""
+}
