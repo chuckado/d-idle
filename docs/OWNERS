@@ -292,6 +292,7 @@ cmd/d2bot/vaultpage.go  credit-runner  vaultv7b
 cmd/d2bot/vaultpage_test.go  credit-runner  vaultv4
 cmd/d2bot/vaultpage_test.go  credit-runner  vaultv5
 cmd/d2bot/vaulttip.go  credit-runner  vaulttip
+cmd/d2bot/vaulttip.go  credit-runner  vaulttip2
 cmd/d2bot/vaultwire.go  credit-runner  vaultv3
 cmd/d2bot/vaultwire.go  credit-runner  vaultv4
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
@@ -597,6 +598,7 @@ docs/upstream/verifier-p17-2026-11-15.md  credit-runner  verifyp17
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
 docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
 docs/vault.md  credit-runner  vaulttip
+docs/vault.md  credit-runner  vaulttip2
 docs/vault.md  credit-runner  vaultv2
 docs/vault.md  credit-runner  vaultv3
 docs/vault.md  credit-runner  vaultv4
@@ -838,6 +840,8 @@ internal/danger/gapexport.go  credit-runner  survC
 internal/data/db.go  credit-runner  botcpu2
 internal/data/invfile_real_test.go  credit-runner  jewelicons
 internal/data/invfile_test.go  credit-runner  jewelcolor
+internal/data/statdesc.go  credit-runner  vaulttip2
+internal/data/statdesc_test.go  credit-runner  vaulttip2
 internal/decide/firsts_act1.json  credit-runner  friendfb
 internal/decide/queue.go  credit-runner  qqueue
 internal/decide/queue_test.go  credit-runner  qqueue
@@ -1282,9 +1286,11 @@ internal/watch/testdata/uic3  credit-runner  idfast
 internal/watch/testdata/uic3/  credit-runner  uic3
 internal/watch/testdata/vault  credit-runner  vaultv4
 internal/watch/testdata/vault_ether.mjs  credit-runner  vaultv7b
+internal/watch/testdata/vault_logic.mjs  credit-runner  vaulttip2
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultv4
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultv6
 internal/watch/testdata/vault_tip.mjs  credit-runner  vaulttip
+internal/watch/testdata/vault_tip.mjs  credit-runner  vaulttip2
 internal/watch/testdata/video_labels_panel.js  credit-runner  brightness
 internal/watch/testdata/video_labels_panel.js  credit-runner  labels
 internal/watch/testdata/video_pal_panel.js  credit-runner  brightness
@@ -1298,6 +1304,7 @@ internal/watch/testdata/video_panel.js  credit-runner  viewerfps
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
 internal/watch/vaultapi.go  credit-runner  vaulttip
+internal/watch/vaultapi.go  credit-runner  vaulttip2
 internal/watch/vaultapi.go  credit-runner  vaultv4
 internal/watch/vaultapi.go  credit-runner  vaultv5
 internal/watch/vaultapi.go  credit-runner  vaultv6
@@ -1307,6 +1314,8 @@ internal/watch/vaultapi_test.go  credit-runner  vaultv5
 internal/watch/vaultapi_test.go  credit-runner  vaultv6
 internal/watch/vaultether_test.go  credit-runner  vaultv7b
 internal/watch/vaulttip_test.go  credit-runner  vaulttip
+internal/watch/vaulttip_test.go  credit-runner  vaulttip2
+internal/watch/vaultui_test.go  credit-runner  vaulttip2
 internal/watch/vaultui_test.go  credit-runner  vaultv4
 internal/watch/vaultui_test.go  credit-runner  vaultv5
 internal/watch/vaultui_test.go  credit-runner  vaultv6
@@ -1468,9 +1477,11 @@ internal/watch/web/tokens.css  credit-runner  uis7
 internal/watch/web/update.js  credit-runner  uis7
 internal/watch/web/utilities.css  credit-runner  quests8
 internal/watch/web/vault-logic.js  credit-runner  vaulttip
+internal/watch/web/vault-logic.js  credit-runner  vaulttip2
 internal/watch/web/vault-logic.js  credit-runner  vaultv4
 internal/watch/web/vault-logic.js  credit-runner  vaultv6
 internal/watch/web/vault.css  credit-runner  vaulttip
+internal/watch/web/vault.css  credit-runner  vaulttip2
 internal/watch/web/vault.css  credit-runner  vaultv4
 internal/watch/web/vault.css  credit-runner  vaultv5
 internal/watch/web/vault.css  credit-runner  vaultv6
@@ -1478,6 +1489,7 @@ internal/watch/web/vault.css  credit-runner  vaultv7b
 internal/watch/web/vault.html  credit-runner  vaultv4
 internal/watch/web/vault.js  credit-runner  vaultphone
 internal/watch/web/vault.js  credit-runner  vaulttip
+internal/watch/web/vault.js  credit-runner  vaulttip2
 internal/watch/web/vault.js  credit-runner  vaultv4
 internal/watch/web/vault.js  credit-runner  vaultv5
 internal/watch/web/vault.js  credit-runner  vaultv6
@@ -1577,6 +1589,7 @@ tools/uishots.sh  credit-runner  uis6
 tools/uishots.sh  credit-runner  uis7
 tools/uishots.sh  credit-runner  vaultphone
 tools/uishots.sh  credit-runner  vaulttip
+tools/uishots.sh  credit-runner  vaulttip2
 tools/uishots.sh  credit-runner  vaultv4
 tools/uishots.sh  credit-runner  vaultv5
 tools/uishots.sh  credit-runner  vaultv6
@@ -1589,14 +1602,17 @@ tools/uishots/  credit-runner  uiphone
 tools/uishots/  credit-runner  uis3
 tools/uishots/  credit-runner  uis6
 tools/uishots/fit.go  credit-runner  resetinstant
+tools/uishots/fit.go  credit-runner  vaulttip2
 tools/uishots/fit.go  credit-runner  vaultv4
 tools/uishots/fit.go  credit-runner  vaultv7b
 tools/uishots/fit.js  credit-runner  uis7
+tools/uishots/fit.js  credit-runner  vaulttip2
 tools/uishots/fit.js  credit-runner  vaultv4
 tools/uishots/fit.js  credit-runner  vaultv5
 tools/uishots/fit.js  credit-runner  vaultv6
 tools/uishots/fit.js  credit-runner  vaultv7b
 tools/uishots/fit_char_test.go  credit-runner  jewelicons
+tools/uishots/fit_char_test.go  credit-runner  vaulttip2
 tools/uishots/fit_char_test.go  credit-runner  vaultv4
 tools/uishots/fit_char_test.go  credit-runner  vaultv7b
 tools/uishots/fixtures.go  credit-runner  uic2
@@ -1616,6 +1632,7 @@ tools/uishots/fixtures_quests_test.go  credit-runner  quests8
 tools/uishots/fixtures_skills.go  credit-runner  friendfb
 tools/uishots/fixtures_update.go  credit-runner  uis7
 tools/uishots/fixtures_vault.go  credit-runner  vaulttip
+tools/uishots/fixtures_vault.go  credit-runner  vaulttip2
 tools/uishots/fixtures_vault.go  credit-runner  vaultv4
 tools/uishots/fixtures_vault.go  credit-runner  vaultv5
 tools/uishots/fixtures_vault.go  credit-runner  vaultv6
