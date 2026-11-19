@@ -1,5 +1,0 @@
-BACKLOG: decomp41: next upstream candidates traced: merc gear absorb and heal-back (`fid/merc-absorb-r1`) and Crushing Blow's plain-unique divisor D5 (`fid/crush-d5-r1`) built oracle-first on upstream 9b64c11a and proven against game.exe (V run), pushed to the private fork only, waiting for the independent verifier (ctest not yet run: builder busy); crush D6, magic resistance T3 and the held death-corpse-exp scoped (docs/research/decomp41-merc-crush-trace.md)
-INDEX: docs/research/decomp41-merc-crush-trace.md | decomp41: merc absorb, crush D5 / D6, held candidates re-checked, next-best scan
-INDEX: docs/upstream/bodies/merc-absorb-body.md | PR body draft: a mercenary's gear absorb takes its share and heals it back
-INDEX: docs/upstream/bodies/crush-d5-body.md | PR body draft: a plain unique's Crushing Blow divisor is 4, not 8
-CHANGELOG: none

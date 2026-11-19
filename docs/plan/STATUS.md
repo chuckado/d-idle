@@ -323,6 +323,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ae0abd4c7 11-18 19:51 `Merge agent/decomp41: decomp41: merc absorb + crush D5 traces and bodies (docs only)` (decomp41)
+- e7c1bd1a6 11-18 19:50 `Merge branch 'main' into decomp41` (-)
 - f5cf91c17 11-18 19:42 `Merge agent/tpfix: Merge branch 'main' into tpfix` (tpfix)
 - 593a2405d 11-18 19:41 `Merge branch 'main' into tpfix` (-)
 - e080f368c 11-18 19:35 `Merge agent/vaulttip2: vaulttip2: Vault fit pages run, shared StatLines for the common descfuncs, windowed 2400-item grid` (vaulttip2)
@@ -331,6 +333,4 @@
 - 1d7387bdd 11-18 19:15 `Merge branch 'main' into treefix` (-)
 - 62a7eba6e 11-18 17:26 `Merge branch 'main' into tpfix` (-)
 - 48c7ee187 11-18 17:24 `Merge agent/bulkid-design: bulk identify design doc` (bulkid-design)
-- 0275f34bc 11-18 15:54 `Merge agent/longlane: longlane: wavelane.sh launches survival waves in the builder long lane` (longlane)
-- 9ae82ad42 11-18 15:53 `Merge branch 'main' into longlane` (-)
 <!-- statusgen:end -->

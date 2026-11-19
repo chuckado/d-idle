@@ -665,6 +665,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [cairn-portal-body.md](upstream/bodies/cairn-portal-body.md): cairn-portal-body
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
+- [crush-d5-body.md](upstream/bodies/crush-d5-body.md): crush-d5-body
 - [death-corpse-exp-body.md](upstream/bodies/death-corpse-exp-body.md): death-corpse-exp-body
 - [gamble-price-body.md](upstream/bodies/gamble-price-body.md): the d2d side needs D2_MPQ_DIR (as test_game); gamble_price.py game needs the emulator's game image and a...
 - [gear-absorb-body.md](upstream/bodies/gear-absorb-body.md): gear-absorb-body
@@ -676,6 +677,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
 - [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
 - [mana-burn-amount-body.md](upstream/bodies/mana-burn-amount-body.md): mana-burn-amount-body
+- [merc-absorb-body.md](upstream/bodies/merc-absorb-body.md): merc-absorb-body
 - [missile-block-body.md](upstream/bodies/missile-block-body.md): missile-block-body
 - [seq-ias-body.md](upstream/bodies/seq-ias-body.md): seq-ias-body
 - [seq-ias-followup-body.md](upstream/bodies/seq-ias-followup-body.md): test: seq-rate fails when D2_PATCH_INSTALLER names a file that is not there
