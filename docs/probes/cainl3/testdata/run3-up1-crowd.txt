@@ -1,0 +1,121 @@
+{"time":"2026-11-19T09:46:42.185994899-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":415,"Y":277},"wp":{"X":415,"Y":277},"rung":0}
+{"time":"2026-11-19T09:46:42.186008551-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":415,"Y":277},"near":5}
+{"time":"2026-11-19T09:46:42.191649797-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":425,"Y":283},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":75,"danger":2,"hostiles":10,"hasMelee":true}
+{"time":"2026-11-19T09:46:42.311915918-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":430,"Y":273},"why":"out of mana, not safe to stand","step":2,"meleeClass":false,"life":75,"danger":2,"hostiles":10,"hasMelee":true}
+{"time":"2026-11-19T09:46:42.370184571-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":432,"Y":270},"why":"out of mana, not safe to stand","step":3,"meleeClass":false,"life":75,"danger":2,"hostiles":9,"hasMelee":true}
+{"time":"2026-11-19T09:46:42.451449398-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":431,"Y":264},"why":"out of mana, not safe to stand","step":4,"meleeClass":false,"life":75,"danger":2,"hostiles":9,"hasMelee":true}
+{"time":"2026-11-19T09:46:43.087975858-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":440,"Y":247},"why":"out of mana, not safe to stand","step":5,"meleeClass":false,"life":75,"danger":2,"hostiles":7,"hasMelee":true}
+{"time":"2026-11-19T09:46:43.278501762-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":449,"Y":242},"why":"out of mana, not safe to stand","step":6,"meleeClass":false,"life":75,"danger":2,"hostiles":1,"hasMelee":true}
+{"time":"2026-11-19T09:46:44.364909876-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":422,"Y":284},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":72,"danger":2,"hostiles":11,"hasMelee":true}
+{"time":"2026-11-19T09:46:44.543200812-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":415,"Y":291},"why":"out of mana, not safe to stand","step":2,"meleeClass":false,"life":72,"danger":2,"hostiles":10,"hasMelee":true}
+{"time":"2026-11-19T09:46:44.601274716-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":420,"Y":291},"why":"out of mana, not safe to stand","step":3,"meleeClass":false,"life":72,"danger":2,"hostiles":10,"hasMelee":true}
+{"time":"2026-11-19T09:46:47.286436646-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":400,"Y":338},"wp":{"X":412,"Y":342},"rung":0}
+{"time":"2026-11-19T09:46:47.286453108-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":400,"Y":338},"near":4}
+{"time":"2026-11-19T09:46:47.453318915-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":406,"Y":327},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":69,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:47.839146114-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:47.839214291-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":7}
+{"time":"2026-11-19T09:46:47.848494144-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":405,"Y":325},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":68,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:48.26817146-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:48.268236294-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":10}
+{"time":"2026-11-19T09:46:48.731499831-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:48.731585416-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":11}
+{"time":"2026-11-19T09:46:49.156422581-05:00","level":"INFO","msg":"combat pinned: evasive moves go nowhere, fighting in place","inst":"cl3","at":{"X":402,"Y":337},"for":8000000000}
+{"time":"2026-11-19T09:46:49.162981663-05:00","level":"INFO","msg":"guard: drank healing at life 63% (state=clearing)","inst":"cl3"}
+{"time":"2026-11-19T09:46:49.227127594-05:00","level":"INFO","msg":"quest board: Training toward Sisters to the Slaughter: level is not the gap, the margin still says too hard (gear, potions or resistances).","inst":"cl3"}
+{"time":"2026-11-19T09:46:49.243823805-05:00","level":"INFO","msg":"nav exit","inst":"cl3","to":5,"gate":{"X":495,"Y":145},"push":{"X":495,"Y":146},"border":false}
+{"time":"2026-11-19T09:46:49.35050761-05:00","level":"INFO","msg":"nav: followed, turning to fight","inst":"cl3","pos":{"X":401,"Y":337},"near":11,"life":65}
+{"time":"2026-11-19T09:46:49.502514733-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":405,"Y":326},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":66,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:49.857879949-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":340},"rung":0}
+{"time":"2026-11-19T09:46:49.857889969-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":12}
+{"time":"2026-11-19T09:46:49.86249931-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":409,"Y":327},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":69,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:50.232472823-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:50.232557651-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":12}
+{"time":"2026-11-19T09:46:50.239729722-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":409,"Y":327},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":70,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:50.590364303-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:50.590457889-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":12}
+{"time":"2026-11-19T09:46:50.597797627-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":410,"Y":328},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":72,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:50.956960115-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:50.9570204-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":12}
+{"time":"2026-11-19T09:46:50.960955257-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":409,"Y":327},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":75,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:51.33653489-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:51.336591853-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":11}
+{"time":"2026-11-19T09:46:51.342282152-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":404,"Y":325},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":79,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:51.701352105-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:51.701441384-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":11}
+{"time":"2026-11-19T09:46:51.710604568-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":409,"Y":327},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":81,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:52.127434585-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:52.127516199-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":12}
+{"time":"2026-11-19T09:46:52.134741301-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":410,"Y":328},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":79,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:52.411093456-05:00","level":"INFO","msg":"minute","inst":"cl3","area":10,"explored":-1,"clvl":24,"xp":1312304,"kills":24,"killsGame":24,"deaths":0,"potions":3,"mana":0,"packHP":0,"packMP":0,"beltBoxes":"1:Minor_Healing_Potion 2:Minor_Healing_Potion 3:Minor_Healing_Potion","potionsUsed":1,"tp":7,"gold":700,"stashGold":6500,"restarts":0,"xpRisk":17,"xpLost":0,"rung":0,"goal":"campaign","step":"Quest: fighting (Level up to 25)","state":"farming","rstate":"clearing","life":211,"maxLife":266,"mp":1,"maxMana":35,"table":"sorceress_normal30","invPct":7,"dmgTaken":111,"hpMinPct":63,"lifeLost":61,"hitsTaken":19,"hpPolls":510,"armor":"Frozen Armor","goldPickup":0,"arrivals":7,"bounces":0,"bouncesPer100":0,"navRung":1,"runBelieved":true,"stam":47872,"stamMax":47872,"runKeys":108,"runResets":1,"walkingRaw":"0","runObs":"walk","runFix":105}
+{"time":"2026-11-19T09:46:52.525993863-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:52.526053273-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":12}
+{"time":"2026-11-19T09:46:52.531318514-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":409,"Y":328},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":77,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:52.564012792-05:00","level":"INFO","msg":"quest board: accepted search_for_cain/scroll","inst":"cl3","quest":"search_for_cain","chunk":"scroll"}
+{"time":"2026-11-19T09:46:52.979434097-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:52.979515685-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":12}
+{"time":"2026-11-19T09:46:52.989369172-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":409,"Y":328},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":76,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:53.465262215-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:53.465354119-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":12}
+{"time":"2026-11-19T09:46:53.475382955-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":409,"Y":327},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":75,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:53.908132384-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:53.908202489-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":11}
+{"time":"2026-11-19T09:46:53.916493006-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":410,"Y":328},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":73,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:54.327985604-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:54.328054539-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":12}
+{"time":"2026-11-19T09:46:54.337951751-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":410,"Y":328},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":71,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:54.711603536-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:54.711683266-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":12}
+{"time":"2026-11-19T09:46:54.894653768-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":411,"Y":329},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":71,"danger":2,"hostiles":12,"hasMelee":true}
+{"time":"2026-11-19T09:46:55.272810321-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:55.272922106-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":10}
+{"time":"2026-11-19T09:46:55.284279932-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":410,"Y":328},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":71,"danger":2,"hostiles":11,"hasMelee":true}
+{"time":"2026-11-19T09:46:55.637582925-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:55.63764557-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":10}
+{"time":"2026-11-19T09:46:55.646286932-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":404,"Y":325},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":71,"danger":2,"hostiles":11,"hasMelee":true}
+{"time":"2026-11-19T09:46:55.988935294-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:55.98900847-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":10}
+{"time":"2026-11-19T09:46:56.371695836-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:56.37174641-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":9}
+{"time":"2026-11-19T09:46:56.745592009-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:56.745644589-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":8}
+{"time":"2026-11-19T09:46:57.120639553-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:57.12068727-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":9}
+{"time":"2026-11-19T09:46:57.385164569-05:00","level":"INFO","msg":"combat health killsPerMin=0.9 castsPerMin=1.9 kitesPerMin=0.0 novas=0 forced=0 damagePerKill=6 windowSec=63","inst":"cl3"}
+{"time":"2026-11-19T09:46:57.38601105-05:00","level":"INFO","msg":"combat pinned: evasive moves go nowhere, fighting in place","inst":"cl3","at":{"X":402,"Y":337},"for":8000000000}
+{"time":"2026-11-19T09:46:57.387836714-05:00","level":"INFO","msg":"combat pinned: evasive moves go nowhere, fighting in place","inst":"cl3","at":{"X":402,"Y":337},"for":8000000000}
+{"time":"2026-11-19T09:46:57.393473128-05:00","level":"INFO","msg":"guard: drank healing at life 64% (state=clearing)","inst":"cl3"}
+{"time":"2026-11-19T09:46:57.443537831-05:00","level":"INFO","msg":"quest board: starting chunk search_for_cain/scroll","inst":"cl3"}
+{"time":"2026-11-19T09:46:57.446078723-05:00","level":"INFO","msg":"quest board: step Activate waypoint","inst":"cl3"}
+{"time":"2026-11-19T09:46:57.446106891-05:00","level":"INFO","msg":"state","inst":"cl3","from":"clearing","to":"traveling","activity":"Quest: travelling (Activate waypoint)"}
+{"time":"2026-11-19T09:46:57.455065651-05:00","level":"INFO","msg":"nav exit","inst":"cl3","to":5,"gate":{"X":495,"Y":145},"push":{"X":495,"Y":146},"border":false}
+{"time":"2026-11-19T09:46:57.558461227-05:00","level":"INFO","msg":"nav: followed, turning to fight","inst":"cl3","pos":{"X":401,"Y":337},"near":10,"life":65}
+{"time":"2026-11-19T09:46:57.564680707-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":408,"Y":327},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":65,"danger":2,"hostiles":11,"hasMelee":true}
+{"time":"2026-11-19T09:46:57.862909152-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:46:57.862955627-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":9}
+{"time":"2026-11-19T09:46:57.8759846-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":405,"Y":325},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":63,"danger":2,"hostiles":11,"hasMelee":true}
+{"time":"2026-11-19T09:46:58.171689861-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:58.171761414-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":10}
+{"time":"2026-11-19T09:46:58.176812818-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":406,"Y":326},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":67,"danger":2,"hostiles":11,"hasMelee":true}
+{"time":"2026-11-19T09:46:58.506284131-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:58.506385866-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":9}
+{"time":"2026-11-19T09:46:58.513833093-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":405,"Y":325},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":68,"danger":2,"hostiles":11,"hasMelee":true}
+{"time":"2026-11-19T09:46:58.849688184-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:58.849742299-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":9}
+{"time":"2026-11-19T09:46:58.853870831-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":405,"Y":325},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":71,"danger":2,"hostiles":11,"hasMelee":true}
+{"time":"2026-11-19T09:46:59.238143131-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:59.238216456-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":10}
+{"time":"2026-11-19T09:46:59.438198068-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":407,"Y":326},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":75,"danger":2,"hostiles":11,"hasMelee":true}
+{"time":"2026-11-19T09:46:59.858039562-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:46:59.858127407-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":10}
+{"time":"2026-11-19T09:46:59.868300693-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":408,"Y":326},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":74,"danger":2,"hostiles":11,"hasMelee":true}
+{"time":"2026-11-19T09:47:00.347537984-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:47:00.347617717-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":10}
+{"time":"2026-11-19T09:47:00.358044043-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":408,"Y":327},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":74,"danger":2,"hostiles":11,"hasMelee":true}
+{"time":"2026-11-19T09:47:00.754106137-05:00","level":"INFO","msg":"safety decision","inst":"cl3","action":"crowd-retreat","area":10,"life":186,"maxLife":266,"heal":2,"beltMP":0,"rejuv":0,"tome":1}
+{"time":"2026-11-19T09:47:00.779702438-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:47:00.779761943-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":9}
+{"time":"2026-11-19T09:47:00.823060795-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":402,"Y":338},"rung":0}
+{"time":"2026-11-19T09:47:00.823125587-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":10}
+{"time":"2026-11-19T09:47:00.868460416-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
+{"time":"2026-11-19T09:47:00.868516224-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":402,"Y":337},"near":10}
+{"time":"2026-11-19T09:47:00.913106974-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":402,"Y":337},"wp":{"X":403,"Y":339},"rung":0}
