@@ -117,15 +117,40 @@ type QWord struct {
 // Item is one item given to the pack (or stash, belt, body) by a declared SETUP verb.
 type Item struct {
 	Code  string `json:"code"`
-	Where string `json:"where,omitempty"` // pack (default), stash, body
+	Where string `json:"where,omitempty"` // pack (default), ground (at the hero's feet), stash, body
 	Count int    `json:"count,omitempty"`
+	// Quality is the item quality of the `debug give` verb (4 magic, 6 rare: docs/forkcheats.md, V); 0 leaves the code's default.
+	Quality int `json:"quality,omitempty"`
+	// Unid gives the item unidentified (verb flag `unid`).
+	Unid bool `json:"unid,omitempty"`
 }
 
 // Trigger says how the real bot is driven. Goals is the bot's --goals value; Knobs are tuning overrides.
 type Trigger struct {
 	Goals string         `json:"goals,omitempty"`
 	Knobs map[string]any `json:"knobs,omitempty"`
+	// Driver plays the part of the person: "" (none) or "board-taps", which runs the bot like the friend sandbox does
+	// (--ladder --watch, the quest board is built) and taps Start and Hand in on the board of Quest (V docs/probes/cainl3/poll.py).
+	Driver string `json:"driver,omitempty"`
+	// TapQuest names the quest whose board is tapped; empty means the scenario's own quest (a behaviour scenario names it).
+	TapQuest string `json:"tap_quest,omitempty"`
+	// TapChunks limits the taps to these chunks of the scenario's quest (empty: every chunk, a whole chain).
+	TapChunks []string `json:"tap_chunks,omitempty"`
 }
+
+// TappedQuest is the quest id the board driver taps ("" when the scenario has no driver).
+func (s Scenario) TappedQuest() string {
+	switch {
+	case s.Trigger.Driver != DriverBoardTaps:
+		return ""
+	case s.Trigger.TapQuest != "":
+		return s.Trigger.TapQuest
+	}
+	return s.Quest.Quest
+}
+
+// DriverBoardTaps is the Trigger.Driver value that taps the quest board.
+const DriverBoardTaps = "board-taps"
 
 // Budget bounds the run in VIRTUAL minutes (the lockstep clock); WallMin is a safety net in wall minutes.
 type Budget struct {
@@ -250,6 +275,18 @@ func (s Scenario) Validate() error {
 	}
 	if s.Kind == KindStep && (s.Quest == nil || s.Step == nil) {
 		return fmt.Errorf("%s: a step scenario declares quest and step", at)
+	}
+	switch s.Trigger.Driver {
+	case "":
+	case DriverBoardTaps:
+		if s.Quest == nil && s.Trigger.TapQuest == "" {
+			return fmt.Errorf("%s: driver board-taps needs a quest or trigger.tap_quest", at)
+		}
+		if s.Pre.Board != nil {
+			return fmt.Errorf("%s: driver board-taps accepts the chunk itself: drop pre.board", at)
+		}
+	default:
+		return fmt.Errorf("%s: trigger.driver %q", at, s.Trigger.Driver)
 	}
 	if s.Pre.Start != StartTown && s.Pre.Start != StartField {
 		return fmt.Errorf("%s: pre.start %q", at, s.Pre.Start)

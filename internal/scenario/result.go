@@ -35,7 +35,9 @@ type Result struct {
 	Tags []string `json:"tags,omitempty"`
 	// Trace is the path of the bot's decision trace (what it chose and why): output for the human, never asserted on.
 	Trace string `json:"trace,omitempty"`
-	State *State `json:"state,omitempty"`
+	// Taps are the board taps the driver made ("start scroll", "handin read"), in order (trigger.driver board-taps).
+	Taps  []string `json:"taps,omitempty"`
+	State *State   `json:"state,omitempty"`
 	// Digest is the hash of the observed state: the determinism check compares it, not only the verdict.
 	Digest string `json:"digest,omitempty"`
 }

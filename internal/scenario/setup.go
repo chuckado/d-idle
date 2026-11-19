@@ -25,6 +25,10 @@ type Setup struct {
 	// Tags classify the setup for docs/probes/test-characters.md: CHEATED when the state could not be reached by play
 	// (a warped position, a given quest item, a hand-set quest word), SETUP-only otherwise.
 	Tags []string `json:"tags"`
+	// LifePct is the life percentage the runner brings the hero to AFTER the verbs, with `debug hit <dmg>` (V docs/forkcheats.md:
+	// the real hurt path), the damage computed from the live life: 0 means leave it alone. It is a gameplay write before the
+	// start, a declared SETUP.
+	LifePct int `json:"life_pct,omitempty"`
 	// Field is true when the hero is warped and the live d2d is handed to the bot (pre.start field).
 	Field bool `json:"field"`
 	// Unsupported lists declared preconditions the builder cannot construct yet (no verb known). A run with any is BLOCKED.
@@ -85,10 +89,29 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		if n <= 0 {
 			n = 1
 		}
+		flags := ""
+		if it.Quality > 0 {
+			flags += fmt.Sprintf(" q%d", it.Quality)
+		}
+		if it.Unid {
+			flags += " unid"
+		}
 		switch it.Where {
 		case "", "pack":
 			for i := 0; i < n; i++ {
-				add("item "+it.Code, fmt.Sprintf("debug give %s pack", it.Code))
+				add("item "+it.Code, fmt.Sprintf("debug give %s pack%s", it.Code, flags))
+			}
+		case "ground": // the verb without a place drops the item beside the hero and takes the quality as a bare number (V docs/forkcheats.md)
+			if it.Quality == 0 {
+				su.Unsupported = append(su.Unsupported, fmt.Sprintf("item %s on the ground needs a quality", it.Code))
+				break
+			}
+			for i := 0; i < n; i++ {
+				line := fmt.Sprintf("debug give %s %d", it.Code, it.Quality)
+				if it.Unid {
+					line += " unid"
+				}
+				add("item "+it.Code+" on the ground", line)
 			}
 		default:
 			su.Unsupported = append(su.Unsupported, fmt.Sprintf("item %s into %s (no setup verb known)", it.Code, it.Where))
@@ -106,7 +129,7 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		tags["merc"] = true
 	}
 	if p.LifePct > 0 && p.LifePct < 100 {
-		su.Unsupported = append(su.Unsupported, "life_pct (no life-set verb known; use debug hit)")
+		su.LifePct = p.LifePct
 	}
 	if p.Start == StartField {
 		add("position (the save cannot hold a field position)", fmt.Sprintf("debug goto %d", p.Area))

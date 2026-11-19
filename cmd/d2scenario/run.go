@@ -158,6 +158,9 @@ func blockedBefore(s scenario.Scenario, r scenario.Run) string {
 			return "needs the shipped sandbox d2d build: set D2D_BIN_SANDBOX"
 		}
 	}
+	if s.Build == "sandbox" && s.Pre.Start == scenario.StartField {
+		return "a field start warps the hero with a lab verb and hands the lab d2d to the bot; the shipped build refuses the gated verbs, so its field state cannot be set up (use a town start, or the lab build)"
+	}
 	su, err := scenario.BuildSetup(s, r.Class, r.Seed)
 	if err != nil {
 		return err.Error()
@@ -288,7 +291,8 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	if s.Build == "sandbox" {
 		d2dBot = os.Getenv("D2D_BIN_SANDBOX")
 	}
-	refused, berr := runBot(ctx, s, r, botBin, d2dBot, gamedata, data, home, sock, inst, hero, trace, false)
+	refused, taps, berr := runBot(ctx, s, r, botBin, d2dBot, gamedata, data, home, sock, inst, hero, trace, false)
+	res.Taps = taps
 	if why := botFailure(trace); why != "" {
 		return withVerdict(res, blocked("the bot exited with an error, it did not play: %s", why))
 	}
@@ -308,8 +312,9 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	if err := obs.WaitInGame(ctx, 3*time.Minute); err != nil {
 		return withVerdict(res, blocked("observer not in game: %v", err))
 	}
-	st := observe(ctx, obs.Controller().C, refused)
+	st := observe(ctx, obs.Controller().C, refused, false)
 	st.Source = "d2d-observer-reload"
+	addTrail(&st, trace)
 	res.State = &st
 	return withVerdict(res, scenario.Result{})
 }
@@ -387,7 +392,31 @@ func applySetup(ctx context.Context, c *d2dctl.Client, su scenario.Setup, ledger
 			return fmt.Errorf("%s: %w", v.Line, err)
 		}
 	}
+	if su.LifePct > 0 {
+		return hurtTo(ctx, c, su.LifePct, enc)
+	}
 	return nil
+}
+
+// hurtTo brings the hero to pct percent of maximum life with `debug hit` (the game's own hurt path, V docs/forkcheats.md),
+// a ledgered SETUP verb whose damage is computed from the live life.
+func hurtTo(ctx context.Context, c *d2dctl.Client, pct int, enc *json.Encoder) error {
+	sv, _, err := c.State(ctx)
+	if err != nil || sv.Life.Max <= 0 {
+		return fmt.Errorf("life setup: no life read (%v)", err)
+	}
+	dmg := sv.Life.Cur - sv.Life.Max*pct/100
+	if dmg <= 0 {
+		return nil
+	}
+	line := fmt.Sprintf("debug hit %d", dmg)
+	l := ledgerLine{Time: time.Now().Format(time.RFC3339), Verb: line, Reason: fmt.Sprintf("SETUP: life to %d%% (%d of %d)", pct, sv.Life.Max*pct/100, sv.Life.Max)}
+	rep, err := c.Do(ctx, line)
+	if rep != nil {
+		l.Reply = rep.Rest
+	}
+	_ = enc.Encode(l)
+	return err
 }
 
 // writeBoardAndTuning writes the player's accepted chunk with the real plan store and the knob overrides.
@@ -418,10 +447,10 @@ func writeBoardAndTuning(state, hero string, su scenario.Setup) error {
 
 // runBot starts the real bot like tools/survival/abrun.sh does and returns how many gated writes the d2d refused (the
 // bot tried a write after the start; the CRUTCH RULE line) and the bot's exit error.
-func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBin, gamedata, data, home, sock, inst, hero, trace string, attach bool) (int, error) {
+func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBin, gamedata, data, home, sock, inst, hero, trace string, attach bool) (int, []string, error) {
 	f, err := os.Create(trace)
 	if err != nil {
-		return -1, err
+		return -1, nil, err
 	}
 	defer f.Close()
 	hours := strconv.FormatFloat(s.Budget.VirtualMin/60, 'f', -1, 64)
@@ -434,12 +463,63 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 	} else {
 		args = append(args, "--managed", "--d2d-class", "-1", "--d2d-args", "--lockstep")
 	}
+	var tap *tapper
+	if s.Trigger.Driver == scenario.DriverBoardTaps {
+		tokFile := filepath.Join(data, "wtoken")
+		tok, err := newWatchToken(tokFile)
+		if err != nil {
+			return -1, nil, err
+		}
+		slot, _ := strconv.Atoi(os.Getenv("D2D_SLOT"))
+		vp := 9300 + slot*10 // the L3 harness's port plan; the answer route is the next port
+		view, ans := fmt.Sprintf("127.0.0.1:%d", vp), fmt.Sprintf("127.0.0.1:%d", vp+1)
+		args = append(args, "--ladder", "--watch", "--watch-addr", view, "--watch-answer-addr", ans, "--watch-token-file", tokFile)
+		tlog, _ := os.Create(strings.TrimSuffix(trace, ".bot.log") + ".taps.log")
+		if tlog != nil {
+			defer tlog.Close()
+		} else {
+			tlog = os.Stderr
+		}
+		tap = newTapper("http://"+view, "http://"+ans, tok, s.TappedQuest(), s.Trigger.TapChunks, tlog)
+	}
+	tctx, stopTap := context.WithCancel(ctx)
+	defer stopTap()
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		if tap != nil {
+			select {
+			case <-tctx.Done():
+				return
+			case <-time.After(20 * time.Second): // the watch server comes up with the bot
+			}
+			tap.Run(tctx, 5*time.Second)
+		}
+	}()
 	cmd := exec.CommandContext(ctx, "nice", append([]string{"-n", "10", bot}, args...)...)
 	cmd.Env = append(os.Environ(), "D2BOT_INSTANCE="+inst, "D2DSOAK_HOURS="+hours, "D2D_BIN="+d2dBin, "D2D_DATA="+gamedata)
 	cmd.Stdout, cmd.Stderr = f, f
 	err = cmd.Run()
+	stopTap()
+	<-done
 	b, _ := os.ReadFile(trace)
-	return strings.Count(string(b), "err lab verbs off"), err
+	var taps []string
+	if tap != nil {
+		taps = tap.Taps
+	}
+	return strings.Count(string(b), "err lab verbs off"), taps, err
+}
+
+// addTrail sets the area-change count from the bot's log (S: the bot's own `zone entry` lines).
+func addTrail(st *scenario.State, trace string) {
+	b, err := os.ReadFile(trace)
+	if err != nil {
+		return
+	}
+	if trail, ok := scenario.CountZoneEntries(b); ok {
+		n := scenario.AreaChangeCount(trail)
+		st.AreaChanges, st.AreaTrail = &n, trail
+	}
 }
 
 // runField is the field start: the lab d2d (verbs on) was warped by the setup and is now handed to the bot with
@@ -447,14 +527,16 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scenario.Result, prep *d2dinput.Process, c *d2dctl.Client, bot, data, sock, inst, trace string) scenario.Result {
 	hero := scenario.HeroName(s.ID, r.Class, r.Seed)
 	_ = c.Close() // the d2d takes one control client: the bot gets it, then we take it back
-	_, berr := runBot(ctx, s, r, bot, os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA"), data, "", sock, inst, hero, trace, true)
+	_, taps, berr := runBot(ctx, s, r, bot, os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA"), data, "", sock, inst, hero, trace, true)
+	res.Taps = taps
 	if why := botFailure(trace); why != "" {
 		_ = prep.Stop()
 		return withVerdict(res, blocked("the bot exited with an error, it did not play: %s", why))
 	}
 	cc := d2dctl.New(sock, d2dctl.Options{})
-	st := observe(ctx, cc, -1)
+	st := observe(ctx, cc, -1, true)
 	st.Source = "d2d-live-attach"
+	addTrail(&st, trace)
 	res.State = &st
 	res.VirtualMin = s.Budget.VirtualMin
 	_ = prep.Stop()
@@ -466,7 +548,7 @@ func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scen
 
 // observe reads the facts of a loaded hero. Item places: loc 1 body, loc 2 belt, panel "stash" the stash, the rest the
 // pack (U: the "panel" attribute value for the stash was not seen live).
-func observe(ctx context.Context, c *d2dctl.Client, writes int) scenario.State {
+func observe(ctx context.Context, c *d2dctl.Client, writes int, live bool) scenario.State {
 	st := scenario.State{Version: scenario.StateVersion, WritesAfterStart: writes}
 	if sv, _, err := c.State(ctx); err == nil {
 		l, g := sv.Level, sv.Gold
@@ -496,6 +578,20 @@ func observe(ctx context.Context, c *d2dctl.Client, writes int) scenario.State {
 				where = "stash"
 			}
 			st.Items = append(st.Items, scenario.StateItem{Code: it.Code, Where: where})
+		}
+	}
+	if ps, err := c.Portals(ctx); err == nil {
+		st.Has = append(st.Has, "portals")
+		for _, p := range ps.Items {
+			st.Portals = append(st.Portals, scenario.StatePortal{Which: p.Which, Level: p.Level})
+		}
+	}
+	if gs, err := c.Ground(ctx); err == nil && live { // the floor of the level the hero stands in: only a live observation means it
+		st.Has = append(st.Has, "ground")
+		for _, g := range gs.Items {
+			if !g.IsGold() {
+				st.Items = append(st.Items, scenario.StateItem{Code: g.Code, Where: "ground"})
+			}
 		}
 	}
 	if rep, err := c.Do(ctx, "debug quest list"); err == nil {
