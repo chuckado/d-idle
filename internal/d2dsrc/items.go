@@ -326,6 +326,7 @@ func (b *builder) fieldObjects(ctx context.Context, listed []d2dctl.NPC) {
 	for _, n := range listed {
 		seen[n.Index] = true
 	}
+	b.classFromPresets(ps)
 	lim := 5 * FieldObjectRadius
 	for _, p := range ps {
 		if (p.Hidden && !hiddenQuestObj[p.ObjectID]) || seen[p.Index] {
@@ -341,6 +342,38 @@ func (b *builder) fieldObjects(ctx context.Context, listed []d2dctl.NPC) {
 	}
 	rp.derived("objects.field", "debug presets within the radius, class = objects.txt id of the row, id = NPCIDBase + preset index (V: the index space of cmd interact)")
 	b.stoneModes(ctx)
+}
+
+// classFromPresets gives the "npcs" rows that npc() filed as class -1 objects the objects.txt id of the preset row with
+// the same index at the same spot. d2d lists some placed objects in "npcs" as well (V 2026-11-19 lab drill CAIN-L3,
+// seed 11: the Tree of Inifuss, id NPCIDBase+43 at (222,222), class -1 in the snapshot), fieldObjects skips every
+// index "npcs" lists, so such an object never got its class and a search by class (the tree, class 30) walked to its
+// preset and stood there for good.
+func (b *builder) classFromPresets(ps []d2dctl.Preset) {
+	byIndex := make(map[int]d2dctl.Preset, len(ps))
+	for _, p := range ps {
+		byIndex[p.Index] = p
+	}
+	for i := range b.snap.Objects {
+		u := &b.snap.Objects[i]
+		if u.Class != -1 || u.ID < NPCIDBase || u.ID >= PortalIDBase {
+			continue
+		}
+		p, ok := byIndex[int(u.ID-NPCIDBase)]
+		if !ok || p.ObjectID <= 0 {
+			continue
+		}
+		if x, y := b.pos(p.X, p.Y); abs(x-u.X) <= 2 && abs(y-u.Y) <= 2 {
+			u.Class = p.ObjectID
+		}
+	}
+}
+
+func abs(v int) int {
+	if v < 0 {
+		return -v
+	}
+	return v
 }
 
 // stoneModes fills Mode of the state-bearing objects (stateObjClass) from "debug objects", whose index equals the

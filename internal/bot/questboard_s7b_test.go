@@ -152,3 +152,102 @@ func TestBoardGroupTierFollowsTheQuestWord(t *testing.T) {
 		t.Fatalf("group %q task %q", q.HandlerOf(bird).Group, taskID(q))
 	}
 }
+
+// V lab drill CAIN-L3 (2026-11-19, sandbox-like run on a d2d lab slot): the scroll chunk reads done only while the
+// Key to the Cairn Stones is in the pack, the stones chunk only while the hero stands in Tristram or holds a portal.
+// The first town trip from Tristram (the potion trip comes at once) made both read open again: the board offered
+// the Scroll of Inifuss again and the hero walked back to the Dark Wood. A chunk seen done stays done for the process.
+func TestCainAutoChunksStayDoneAfterTheEvidenceVanishes(t *testing.T) {
+	b, err := questboard.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	{ // class-free rule: no class, skill or build data is read, so one run covers every build
+		rt := &boardRT{handed: map[string]bool{}, reached: map[string]bool{}}
+		q, err := b.Quest("search_for_cain")
+		if err != nil {
+			t.Fatal(err)
+		}
+		tristram := s7bWorld(map[string]int{task.ItemCainSc: 1, task.ItemPortal: 1}, map[string]task.QuestState{task.QCain: {Stage: task.StageStarted, Ev: task.EvMemory}})
+		tristram.Area, tristram.InTown = task.Tristram, false
+		town := s7bWorld(map[string]int{}, map[string]task.QuestState{task.QCain: {Stage: task.StageStarted, Ev: task.EvMemory}})
+		for _, id := range []string{"scroll", "stones"} {
+			c, err := b.Chunk("search_for_cain", id)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if rt.chunkFact(q, c, town).Done {
+				t.Fatalf("%s: done on a hero that never did it", id)
+			}
+			if !rt.chunkFact(q, c, tristram).Done {
+				t.Fatalf("%s: not done in Tristram", id)
+			}
+			if !rt.chunkFact(q, c, town).Done {
+				t.Fatalf("%s: read open again in town after it was done", id)
+			}
+		}
+	}
+}
+
+// V lab drill CAIN-L3, second live run: the stones chunk comes after the scroll chunk, and the Key to the Cairn Stones
+// is used up when the portal opens, so in Tristram the scroll chunk read open again, the stones chunk with it ("all
+// steps done but the quest does not read as finished", the board stood in Tristram for good). The earlier chunk seen
+// done counts for the later one as well.
+func TestCainStonesChunkDoneAfterTheKeyIsUsedUp(t *testing.T) {
+	b, err := questboard.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	q, err := b.Quest("search_for_cain")
+	if err != nil {
+		t.Fatal(err)
+	}
+	rt := &boardRT{handed: map[string]bool{}, reached: map[string]bool{}}
+	started := map[string]task.QuestState{task.QCain: {Stage: task.StageStarted, Ev: task.EvMemory}}
+	withKey := s7bWorld(map[string]int{task.ItemCainSc: 1}, started)
+	withKey.Area, withKey.InTown = task.StonyField, false
+	scroll, _ := b.Chunk("search_for_cain", "scroll")
+	stones, _ := b.Chunk("search_for_cain", "stones")
+	if !rt.chunkFact(q, scroll, withKey).Done {
+		t.Fatal("scroll not done with the key in the pack")
+	}
+	tristram := s7bWorld(map[string]int{}, started) // the key is gone
+	tristram.Area, tristram.InTown = task.Tristram, false
+	if !rt.chunkFact(q, stones, tristram).Done {
+		t.Fatal("stones not done in Tristram after the key was used up")
+	}
+}
+
+// V lab drill CAIN-L3, third live run: the free-Cain chunk (cage, home) read DONE whenever the hero stood outside
+// Tristram, because a field step whose area precondition is false counts as "not needed". After the first chicken from
+// Tristram the board dropped the chunk (and the report to Akara could never be offered). The chunk is done on the quest
+// word (reward pending, record 4 bit 1) and a hero in town, nothing else.
+func TestCainFreeChunkIsDoneOnTheQuestWordOnly(t *testing.T) {
+	b, err := questboard.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	q, _ := b.Quest("search_for_cain")
+	c, _ := b.Chunk("search_for_cain", "free_cain")
+	started := map[string]task.QuestState{task.QCain: {Stage: task.StageStarted, Ev: task.EvMemory}}
+	cleared := map[string]task.QuestState{task.QCain: {Stage: task.StageCleared, Ev: task.EvMemory}}
+	town := func(qs map[string]task.QuestState) task.World { return s7bWorld(map[string]int{}, qs) }
+	field := func(qs map[string]task.QuestState, area task.Area) task.World {
+		w := s7bWorld(map[string]int{}, qs)
+		w.Area, w.InTown = area, false
+		return w
+	}
+	// the chunks before it are done (the board remembered them), so only its own evidence is in question
+	rt := &boardRT{handed: map[string]bool{"search_for_cain/read": true}, reached: map[string]bool{"search_for_cain/scroll/": true, "search_for_cain/stones/": true}}
+	for name, w := range map[string]task.World{"town": town(started), "stony field": field(started, task.StonyField), "tristram": field(started, task.Tristram)} {
+		if rt.chunkFact(q, c, w).Done {
+			t.Errorf("free_cain reads done in %s with Cain still caged", name)
+		}
+	}
+	if rt.chunkFact(q, c, field(cleared, task.Tristram)).Done {
+		t.Error("free_cain reads done before the hero is back in camp")
+	}
+	if !rt.chunkFact(q, c, town(cleared)).Done {
+		t.Error("free_cain not done with Cain free and the hero in camp")
+	}
+}
