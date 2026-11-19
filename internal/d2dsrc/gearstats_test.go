@@ -9,11 +9,17 @@ func TestGearStats(t *testing.T) {
 	}{
 		{"older fork, no gear key", `{"base":{}}`, nil},
 		{"empty gear, staff", `{"gear":[],"weapons":[{"code":"sst","slot":4,"mindam":1,"maxdam":5}]}`,
-			map[int]int{19: 0, 25: 0, 21: 1, 22: 5}},
+			map[int]int{19: 0, 25: 0, 20: 0, 21: 1, 22: 5}},
 		{"sums plus weapon", `{"gear":[{"stat":19,"param":0,"sum":40,"n":2},{"stat":21,"param":0,"sum":2,"n":1},{"stat":22,"param":0,"sum":3,"n":1},{"stat":25,"param":0,"sum":60,"n":1},{"stat":107,"param":36,"sum":2,"n":1}],"weapons":[{"code":"lsd","slot":4,"mindam":3,"maxdam":10}]}`,
-			map[int]int{19: 40, 25: 60, 21: 5, 22: 13}},
+			map[int]int{19: 40, 25: 60, 20: 0, 21: 5, 22: 13}},
 		{"left hand only: no 21/22", `{"gear":[{"stat":25,"param":0,"sum":10,"n":1}],"weapons":[{"code":"x","slot":5,"mindam":1,"maxdam":2}]}`,
-			map[int]int{19: 0, 25: 10}},
+			map[int]int{19: 0, 25: 10, 20: 0}},
+		{"hero object wins: block total, right hand range", `{"gear":[{"stat":20,"param":0,"sum":10,"n":1},{"stat":22,"param":0,"sum":5,"n":1}],"weapons":[{"code":"lsd","slot":4,"mindam":3,"maxdam":10}],"hero":{"block":61,"hands":[{"slot":4,"code":"lsd","min":4,"max":19,"pct":80}]}}`,
+			map[int]int{19: 0, 25: 0, 20: 61, 21: 4, 22: 19}},
+		{"hero null (class unknown)", `{"gear":[{"stat":20,"param":0,"sum":10,"n":1}],"weapons":[],"hero":null}`,
+			map[int]int{19: 0, 25: 0, 20: 10}},
+		{"block from a shield", `{"gear":[{"stat":20,"param":0,"sum":30,"n":1}],"weapons":[]}`,
+			map[int]int{19: 0, 25: 0, 20: 30}},
 	} {
 		o, err := parseObj([]byte(c.js))
 		if err != nil {

@@ -54,6 +54,10 @@ A charter is the price of a "go" order to an area above the hero's recommended r
 - The ledger directory is `<profile state dir>/currency` for every backend (`currencyDirFor`, env `D2BOT_CURRENCY_DIR`), per profile, idempotent through the same keys. A ledger written in events mode and later opened with the overlay keeps its entries (the mode is a stamp on each entry).
 - The strip says off only without a ledger (ladder or watch off), with the reason in the text (`watch.TallyOffText`). V `TestFeedHubFunLoop` (Sorceress and Paladin, with and without overlay), `TestEventsModeCreditsTallyOnly` (two heroes). U live on vanilla d2d.
 
+## See also
+
+- [ether.md](ether.md): the vault's ETHER wallet reuses these key and replay rules in its own small ledger (`ether.jsonl`).
+
 ## Not done
 
 - Order slot 2 (`MaxOpenOrders` from a ledger value) and the first perk are not built; `next` lists registry upgrades that exist (unwired). TASK-129 AC 2 stays open for that part.

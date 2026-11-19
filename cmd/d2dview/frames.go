@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2dctl"
+	"d2lod-bot/internal/watch/palfeed"
 )
 
 // Frame is one sampled picture of the d2d window.
@@ -56,13 +57,23 @@ type Frames struct {
 	// rests mid-screen; docs/viewer-fps.md section 8). A d2d without the verb is left alone, silently.
 	HideCursor bool
 	Stats      *frameStats
+	// Pal, when set, also receives every ring frame (the lossless tile-delta feed, docs/video-feed.md). Its clients keep
+	// the sampler awake through TouchPal; the JPEG is encoded only while an MJPEG viewer is there too.
+	Pal *palfeed.Hub
+	// Host samples the container's CPU throttling (hoststats.go) once per lease renewal; nil: not measured. Above throttleHigh percent
+	// of the CPU periods throttled, the lossless feed asks d2d for half the rate (every 4th draw instead of every 2nd): a starved
+	// container cannot make 30 even frames, and fewer, evenly spaced ones look better than 30 erratic ones and cost d2dview half the CPU.
+	Host func() palfeed.ServerStats
+	thr  float64
 
-	mu   sync.RWMutex
-	cur  Frame
-	seen int64 // wall unix nanos of the last Touch
-	last int64 // mux ticks at the previous frame
-	Dur  time.Duration
-	Got  int64
+	mu      sync.RWMutex
+	palSeen int64     // wall unix nanos of the last TouchPal
+	jpegAt  time.Time // last JPEG encode (sampler goroutine only)
+	cur     Frame
+	seen    int64 // wall unix nanos of the last Touch
+	last    int64 // mux ticks at the previous frame
+	Dur     time.Duration
+	Got     int64
 
 	// sampler goroutine only
 	enc       bytes.Buffer
@@ -103,7 +114,41 @@ func (f *Frames) Touch() { f.mu.Lock(); f.seen = time.Now().UnixNano(); f.mu.Unl
 func (f *Frames) watching() bool {
 	f.mu.RLock()
 	defer f.mu.RUnlock()
-	return time.Since(time.Unix(0, f.seen)) < 5*time.Second
+	return time.Since(time.Unix(0, f.seen)) < 5*time.Second || time.Since(time.Unix(0, f.palSeen)) < 5*time.Second
+}
+
+// TouchPal is the lossless feed's Touch: its clients keep the ring lease and the sampler alive.
+func (f *Frames) TouchPal() { f.mu.Lock(); f.palSeen = time.Now().UnixNano(); f.mu.Unlock() }
+
+// throttleHigh is the share of throttled CPU periods (percent, last second) above which the feed halves its rate.
+const throttleHigh = 60
+
+// palPeriod is the ring period asked for while the lossless feed has a viewer (30 fps).
+const palPeriod = time.Second / 30
+
+func (f *Frames) palActive() bool {
+	f.mu.RLock()
+	defer f.mu.RUnlock()
+	return f.Pal != nil && time.Since(time.Unix(0, f.palSeen)) < 5*time.Second
+}
+
+// jpegWanted is false while only the lossless feed has viewers: the JPEG encode (8 ms a frame) is skipped. With both
+// kinds of viewer the JPEG is encoded at its own cadence (the -fps target, stretched by the back-off), not at every
+// ring frame, so the lossless feed's higher rate does not raise the JPEG's cost.
+func (f *Frames) jpegWanted() bool {
+	f.mu.RLock()
+	defer f.mu.RUnlock()
+	if f.Pal == nil {
+		return true
+	}
+	if time.Since(time.Unix(0, f.seen)) >= 5*time.Second {
+		return false
+	}
+	if f.palSeen == 0 || time.Since(time.Unix(0, f.palSeen)) >= 5*time.Second {
+		return true
+	}
+	gap := max(time.Duration(float64(time.Second)/f.fps), time.Duration(f.Backoff*float64(f.costEMA)))
+	return time.Since(f.jpegAt) >= gap*9/10
 }
 
 func (f *Frames) Current() Frame { f.mu.RLock(); defer f.mu.RUnlock(); return f.cur }
@@ -199,6 +244,9 @@ func (f *Frames) feedLease(ctx context.Context) error {
 	if !f.feedOn.IsZero() && time.Since(f.feedOn) < time.Second {
 		return nil
 	}
+	if f.Host != nil {
+		f.thr = f.Host().ThrottlePct
+	}
 	every := f.divisor()
 	cctx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	defer cancel()
@@ -222,6 +270,16 @@ func (f *Frames) feedLease(ctx context.Context) error {
 // 25 fps would alternate 33 and 50 ms of game time, which reads as judder). A change needs two renewals in a row.
 func (f *Frames) divisor() int {
 	target := max(time.Duration(float64(time.Second)/f.fps), time.Duration(f.Backoff*float64(f.costEMA)))
+	if f.palActive() {
+		// The lossless feed's cost is a ring read and a 0.5 to 3 ms encode in the hub, not the JPEG the back-off was built for,
+		// and its viewers want the render rate: a 33 ms period (60 Hz draws -> every 2nd = 30 fps), whatever -fps says (the
+		// old target of 40 ms rounded UP to every 3rd draw = 20 fps, and -fps 15 gave 15). JPEG viewers keep their own
+		// cadence (jpegDue), so a mixed audience costs the JPEG nothing extra.
+		target = palPeriod
+		if f.thr >= throttleHigh {
+			target = 2 * palPeriod
+		}
+	}
 	k := max(1, int(math.Ceil(0.95*float64(target)/float64(f.srcPeriod))))
 	if f.every == 0 {
 		return k
@@ -278,11 +336,19 @@ func (f *Frames) grabRing() (cost time.Duration, fresh bool, err error) {
 	}
 	f.ringSeq, f.ringMS, f.ringAt = h.Seq, h.GameMS, time.Now()
 	read := time.Since(t0)
+	if f.Pal != nil {
+		f.Pal.Publish(palfeed.Frame{W: h.W, H: h.H, Pix: pix, Seq: uint32(h.Seq), GameMS: uint32(h.GameMS)}, h.Stride)
+	}
+	if !f.jpegWanted() {
+		f.Stats.add("framefeed-pal", read, 0, 0, h.W, h.H)
+		return time.Since(t0), true, nil
+	}
 	img := &image.RGBA{Pix: pix, Stride: h.Stride, Rect: image.Rect(0, 0, h.W, h.H)}
 	data, err := encodeJPEG(&f.enc, img, f.Half, f.Quality)
 	if err != nil {
 		return time.Since(t0), false, err
 	}
+	f.jpegAt = time.Now()
 	f.publish(data, "image/jpeg", read, int64(h.GameMS))
 	if c := time.Since(t0); f.costEMA == 0 {
 		f.costEMA = c

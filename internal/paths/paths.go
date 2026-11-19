@@ -140,10 +140,14 @@ func (i Instance) Dir() string { return filepath.Join(i.l.InstancesDir(), i.ID) 
 func (i Instance) join(p ...string) string {
 	return filepath.Join(append([]string{i.Dir()}, p...)...)
 }
-func (i Instance) Runtime() string  { return i.join("runtime.json") }
-func (i Instance) Goals() string    { return i.join("goals.json") }
-func (i Instance) Deaths() string   { return i.join("deaths.json") }
-func (i Instance) Routes() string   { return i.join("routes.json") }
+func (i Instance) Runtime() string { return i.join("runtime.json") }
+func (i Instance) Goals() string   { return i.join("goals.json") }
+func (i Instance) Deaths() string  { return i.join("deaths.json") }
+func (i Instance) Routes() string  { return i.join("routes.json") }
+
+// Ledger is the survival slice S-C per-zone ledger (additive: a bot without it never reads the file).
+func (i Instance) Ledger() string { return i.join("ledger.json") }
+
 func (i Instance) State() string    { return i.join("state") }
 func (i Instance) Logs() string     { return i.join("logs") }
 func (i Instance) Fixtures() string { return i.join("fixtures") }

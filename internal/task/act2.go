@@ -39,6 +39,7 @@ const (
 	QViper       = "viper_amulet"
 	QShaft       = "staff_of_kings"
 	QStaff       = "horadric_staff"
+	QStaffBoard  = "horadric_staff_board" // the board's assemble chunk (slice S7b); the campaign never lists it
 	QArcane      = "arcane_sanctuary"
 	QSummoner    = "summoner"
 	QDuriel      = "duriel"
@@ -89,6 +90,7 @@ func init() {
 	handlers[QViper] = viperNodes
 	handlers[QShaft] = shaftNodes
 	handlers[QStaff] = staffNodes
+	handlers[QStaffBoard] = staffBoardNodes
 	handlers[QArcane] = arcaneNodes
 	handlers[QSummoner] = summonerNodes
 	handlers[QDuriel] = durielNodes
@@ -261,13 +263,11 @@ func shaftNodes() []Node {
 	return a2fetch(QShaft, FarOasis, MaggotLair3, "", "Staff of Kings chest", ItemShaft, a2At(QShaft, StageDone), 0, 18)
 }
 
-// The Horadric Staff: put shaft and amulet into the Cube in town, then in the Canyon of the Magi find the tomb that holds
-// the orifice (the adapter scans the seven tombs) and place the Staff. Done is the reader or the pseudo item
-// ItemStaffPlaced; entering Duriel's Lair proves it too.
-func staffNodes() []Node {
-	q := QStaff
-	placed := a2At(q, StageDone)
-	assemble := Step{ID: id(q, "assemble"), Title: "Assemble the Horadric Staff", Phase: "chore", Budget: 3 * time.Minute, Est: 30 * time.Second,
+// staffAssembleStep is the Cube step of the Staff; group names the handler whose step ids it carries (the campaign's
+// horadric_staff, or the board's own group).
+func staffAssembleStep(q string) Step {
+	placed := a2At(QStaff, StageDone)
+	return Step{ID: id(q, "assemble"), Title: "Assemble the Horadric Staff", Phase: "chore", Budget: 3 * time.Minute, Est: 30 * time.Second,
 		Need: func(w World) (bool, Evidence) {
 			return !placed(w) && w.Items[ItemStaff] == 0 && w.Items[ItemShaft] > 0 && w.Items[ItemStaffTop] > 0, evOf(w)
 		},
@@ -291,6 +291,15 @@ func staffNodes() []Node {
 			}
 			return Errorf(KindPrereq, "the bot has no Horadric Cube capability")
 		}}
+}
+
+// The Horadric Staff: put shaft and amulet into the Cube in town, then in the Canyon of the Magi find the tomb that holds
+// the orifice (the adapter scans the seven tombs) and place the Staff. Done is the reader or the pseudo item
+// ItemStaffPlaced; entering Duriel's Lair proves it too.
+func staffNodes() []Node {
+	q := QStaff
+	placed := a2At(q, StageDone)
+	assemble := staffAssembleStep(q)
 	place := StepInteract(id(q, "place"), "Place the Staff in the orifice", "tal-orifice", placed, func(w World) bool { return w.Items[ItemStaff] > 0 && w.Area == CanyonOfMagi })
 	place.Budget = 10 * time.Minute // the tomb scan walks up to seven tomb levels
 	return []Node{
@@ -298,6 +307,19 @@ func staffNodes() []Node {
 		{Step: StepWaypoint(id(q, "wp-canyon"), CanyonOfMagi, placed)},
 		{Step: withReady(StepTravelA2(id(q, "to-canyon"), "Go to the Canyon of the Magi", CanyonOfMagi, func(w World) bool { return placed(w) || w.Items[ItemStaff] == 0 }), a2gate(20, "the Canyon needs clvl 20"))},
 		req(Node{Step: place}, id(q, "to-canyon")),
+	}
+}
+
+// staffBoardNodes is the board's assemble chunk (S7b): the Cube step, then the hand-in to Deckard Cain. A group of its own,
+// so the campaign (which places the Staff without this talk) is unchanged and a restart cannot repeat the talk there.
+// The talk is needed only with the Staff in the pack and the quest word not Done (T1/T2, or what staffPlaced proves).
+// U: that this talk is what sets the quest word, and the dialogue row (the plain Talk).
+func staffBoardNodes() []Node {
+	q := QStaffBoard
+	return []Node{
+		{Step: staffAssembleStep(q)},
+		{Step: StepTalk(id(q, "cain"), "Give the Horadric Staff to Cain", NPCCain, "horadric staff", a2At(QStaff, StageDone),
+			func(w World) bool { return w.Items[ItemStaff] > 0 })},
 	}
 }
 

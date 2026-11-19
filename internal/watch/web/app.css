@@ -45,7 +45,7 @@ input[type=number] { width: 5rem; }
 .views button[aria-current="page"] { border-bottom-color: var(--accent); font-weight: 650; color: var(--text); }
 
 main { display: grid; gap: 16px; padding: 16px; max-width: 1280px; margin: 0 auto; grid-template-columns: 1fr; }
-@media (max-width: 899px) { main [data-v] { display: none; } main[data-view="thoughts"] .thoughts, main[data-view="orders"] .o-now, main[data-view="orders"] .o-map, main[data-view="orders"] .o-queue, main[data-view="rules"] .rules, main[data-view="journal"] .journal, main[data-view="journal"] .silhouettes, main[data-view="chronicle"] .chronicle, main[data-view="diary"] .diary, main[data-view="quests"] .quests, main[data-view="cards"] .cards { display: block; } main[data-view="spend"] .spend { display: block; } }
+@media (max-width: 899px) { main [data-v] { display: none; } main[data-view="thoughts"] .thoughts, main[data-view="orders"] .o-now, main[data-view="orders"] .o-map, main[data-view="orders"] .o-queue, main[data-view="rules"] .rules, main[data-view="journal"] .journal, main[data-view="journal"] .silhouettes, main[data-view="chronicle"] .chronicle, main[data-view="diary"] .diary, main[data-view="quests"] .quests { display: block; } main[data-view="spend"] .spend { display: block; } }
 main .spend[hidden] { display: none !important; }
 @media (min-width: 900px) { .views { display: none; } }
 /* The pre-shell cards are cells of the shell's grid band (docs/ui-design-system.md section 15): the compatibility
@@ -63,7 +63,7 @@ main .spend[hidden] { display: none !important; }
 .d-compat > main > .o-now { order: 10; } .d-compat > main > .o-queue { order: 12; } .d-compat > main > .o-map { order: 14; }
 .d-compat > main > .thoughts { order: 20; } .d-compat > main > .spend { order: 40; } .d-compat > main > .chronicle { order: 50; }
 .d-compat > main > .diary { order: 52; } .d-compat > main > .journal { order: 60; } .d-compat > main > .quests { order: 70; }
-.d-compat > main > .cards { order: 71; } .d-compat > main > .bestiary { order: 72; } .d-compat > main > .atlas { order: 73; }
+.d-compat > main > .bestiary { order: 72; } .d-compat > main > .atlas { order: 73; }
 .d-compat > main > .alerts { order: 90; } .d-compat > main > .rules { order: 92; } .d-compat > main > .silhouettes { order: 95; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--d-r-3); padding: var(--d-pad); min-width: 0; }
 .card-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-3); margin-bottom: var(--d-sp-2); }
@@ -136,7 +136,7 @@ svg.map { width: 100%; height: auto; max-height: 30rem; display: block; }
 .scrim { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 20; }
 .sheet { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-radius: 16px 16px 0 0; padding: 14px 16px 18px; max-height: 92vh; overflow: auto; z-index: 21; box-shadow: 0 -6px 24px rgba(0,0,0,.3); }
 @media (min-width: 900px) { .sheet { left: 50%; right: auto; width: 480px; bottom: auto; top: 50%; transform: translate(-50%, -50%); border-radius: var(--radius); } }
-.toast { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 8px; z-index: 30; max-width: 90vw; }
+#toast { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 8px; z-index: 30; max-width: 90vw; }
 .progress { margin: 6px 0; }
 .q-list { list-style: none; margin: 0; padding: 0; }
 .q-list li { display: flex; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); }
@@ -181,13 +181,10 @@ main [data-v][hidden] { display: none !important; }
 .card-list .cface { font-style: italic; color: var(--muted); }
 .card-list .q-magic { color: var(--q-magic); } .card-list .q-rare { color: var(--q-rare); } .card-list .q-set { color: var(--q-set); }
 .card-list .q-unique { color: var(--q-unique); } .card-list .q-crafted { color: var(--q-crafted); }
-.revealsheet.q-magic { border-top: 4px solid var(--q-magic); } .revealsheet.q-rare { border-top: 4px solid var(--q-rare); }
-.revealsheet.q-set { border-top: 4px solid var(--q-set); } .revealsheet.q-unique { border-top: 4px solid var(--q-unique); }
-.revealsheet.q-crafted { border-top: 4px solid var(--q-crafted); }
 
 /* alerts (TASK-162) */
 .toasts { position: fixed; right: 12px; top: 12px; z-index: 30; display: flex; flex-direction: column; gap: 8px; max-width: min(92vw, 380px); }
-.toast { background: var(--surface); border: 1px solid var(--line); border-left-width: 5px; border-radius: 10px; padding: 8px 10px; box-shadow: 0 4px 16px rgba(0,0,0,.3); display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+.toast { background: var(--surface); color: var(--text); border: 1px solid var(--line); border-left-width: 5px; border-radius: 10px; padding: 8px 10px; box-shadow: 0 4px 16px rgba(0,0,0,.3); display: flex; gap: 8px; align-items: center; justify-content: space-between; }
 .toast.good { border-left-color: var(--ok, #3a3); }
 .toast.warn { border-left-color: #d90; }
 .toast.alarm { border-left-color: var(--bad); }

@@ -99,3 +99,32 @@ func TestCallerDeadlineCountsAsTimeout(t *testing.T) {
 		}
 	}
 }
+
+// A search that is still exploring is progress: any number of such slices neither counts nor blocks, and the first
+// real not-found afterwards starts the count from zero (Search for Cain, 2026-11-17).
+func TestExploringIsNotCounted(t *testing.T) {
+	g := sim.New(true)
+	ex := task.NewExecutor(g, g)
+	n := 0
+	p := fixedPlanner{task.Plan{Group: "x", Nodes: []task.Node{{Step: task.Step{
+		ID:   "find",
+		Need: func(w task.World) (bool, task.Evidence) { return true, task.EvMemory },
+		Do: func(ctx context.Context, a task.Actions) error {
+			n++
+			if n <= 10 {
+				return task.Errorf(task.KindExploring, "still exploring")
+			}
+			return task.Errorf(task.KindNotFound, "gone")
+		},
+	}}}}}
+	for i := 1; i <= 10; i++ {
+		r, _ := ex.Tick(context.Background(), p)
+		if r.Outcome != task.OutRetry || r.Kind != task.KindExploring {
+			t.Fatalf("slice %d: %+v", i, r)
+		}
+	}
+	r, _ := ex.Tick(context.Background(), p)
+	if r.Outcome != task.OutRetry || r.Kind != task.KindNotFound {
+		t.Fatalf("first real failure must retry: %+v", r)
+	}
+}

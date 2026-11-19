@@ -1,0 +1,16 @@
+{
+ "schema": "danger.bosses/1",
+ "evidence": "docs/research/boss1-trace.md",
+ "bosses": [
+  {"key": "corpsefire", "name": "Corpsefire", "superunique": "Corpsefire", "area": 8, "mods": ["spectral_hit"], "minions": 5},
+  {"key": "bishibosh", "name": "Bishibosh", "superunique": "Bishibosh", "area": 3, "mods": ["fire_enchanted", "magic_resistant"], "minions": 2},
+  {"key": "blood_raven", "name": "Blood Raven", "monster": "bloodraven", "area": 17, "minions": 0},
+  {"key": "coldcrow", "name": "Coldcrow", "superunique": "Coldcrow", "area": 9, "mods": ["cold_enchanted"], "minions": 4},
+  {"key": "rakanishu", "name": "Rakanishu", "superunique": "Rakanishu", "area": 4, "mods": ["lightning_enchanted", "extra_fast"], "minions": 8},
+  {"key": "treehead", "name": "Treehead WoodFist", "superunique": "Treehead WoodFist", "area": 5, "mods": ["extra_strong", "extra_fast"], "dmgPct": 235, "minions": 2},
+  {"key": "griswold", "name": "Griswold", "superunique": "Griswold", "area": 38, "mods": ["cursed"], "minions": 0},
+  {"key": "countess", "name": "The Countess", "superunique": "The Countess", "area": 25, "mods": ["fire_enchanted"], "minions": 5},
+  {"key": "smith", "name": "The Smith", "superunique": "The Smith", "area": 28, "mods": ["extra_strong"], "dmgPct": 235, "minions": 0},
+  {"key": "andariel", "name": "Andariel", "monster": "andariel", "area": 37, "minions": 0}
+ ]
+}

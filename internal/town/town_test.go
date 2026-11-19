@@ -336,8 +336,14 @@ func TestIdentifyWithScroll(t *testing.T) {
 	}
 	// Without a scroll one is bought first.
 	r2 := newRig(t)
+	r2.Env.Tune.Town.IdentifyTome = 0
 	r2.W.Add("rin", d2.ContInventory, 0, 0)
 	r2.W.Items[0].Item.Quality, r2.W.Items[0].Item.Flags = 6, 0 // BASICSFIX: a plain magic ring is sold as it is; a rare is worth a scroll
+	rep, err = r2.T.Chores(context.Background(), town.ChorePlan{Identify: true})
+	if err != nil || rep.Identified != 0 || rep.Bought["Scroll of Identify"] != 0 {
+		t.Fatalf("knob off must not buy: %v %+v", err, rep)
+	}
+	r2.Env.Tune.Town.IdentifyTome = 1
 	rep, err = r2.T.Chores(context.Background(), town.ChorePlan{Identify: true})
 	if err != nil || rep.Identified != 1 || rep.Bought["Scroll of Identify"] != 1 {
 		t.Fatalf("%v %+v", err, rep)

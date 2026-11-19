@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
@@ -109,6 +110,17 @@ func (b *builder) dumpItem(it obj) (d2.Unit, bool) {
 		if v, _ := f.bool("runeword"); v {
 			flags |= d2.FlagRuneword
 		}
+	}
+	// inv_tint / inv_colour: only d2d builds with the item-colour fields write them (itemcolour design, U until
+	// devp11 is loaded); absent, 0 or colour < 0 means no tint.
+	if t, ok := it.int("inv_tint"); ok && t > 0 {
+		if c, ok := it.int("inv_colour"); ok && c >= 0 {
+			m.Tint = fmt.Sprintf("t%dc%d", t, c)
+		}
+	}
+	// inv_pic: the item's InvGfx index (jewel 0..5, ring 0..4, amulet and charm 0..2), -1 or absent = the base picture.
+	if v, ok := it.int("inv_pic"); ok && v >= 0 {
+		m.Pic = v + 1
 	}
 	m.Flags = flags
 	u.Flags = flags
@@ -260,9 +272,13 @@ func (b *builder) world(ctx context.Context) error {
 					continue
 				}
 				x, y := b.pos(p.X, p.Y)
-				b.snap.Objects = append(b.snap.Objects, d2.Unit{Type: d2.TypeObject, Class: townPortalObj, ID: uint32(PortalIDBase + p.Which), Mode: 1, X: x, Y: y})
+				class := townPortalObj
+				if p.Which >= questPortalWhich {
+					class = questPortalObj
+				}
+				b.snap.Objects = append(b.snap.Objects, d2.Unit{Type: d2.TypeObject, Class: class, ID: uint32(PortalIDBase + p.Which), Mode: 1, X: x, Y: y})
 			}
-			rp.derived("objects.portals", "debug portals rows on this level, class 59 (objects.txt Town Portal, S)")
+			rp.derived("objects.portals", "debug portals rows on this level, class 59 (objects.txt Town Portal, S); which >= 2 is a quest portal, class 60")
 		case isCmdErr(err):
 			rp.unknown("objects.portals", "debug portals failed: "+err.Error())
 		default:
@@ -276,7 +292,19 @@ func (b *builder) world(ctx context.Context) error {
 const FieldObjectRadius = 40
 
 // presetRefetch is how far the player walks (subtiles) before the preset list is read again.
-const presetRefetch = 50
+// presetMaxAge is how old the cached list may get while the player stands still: d2d lists a preset only once its room
+// is built, which can take a few ticks after the player arrived (V sandbox 2026-11-18: a hero standing on the Dark Wood
+// tree room never saw the Tree of Inifuss because the list read on arrival was kept for good).
+const (
+	presetRefetch = 50
+	presetMaxAge  = 2 * time.Second
+)
+
+// hiddenQuestObj are quest objects listed even when their preset row carries the hidden flag. U (2026-11-19 sandbox
+// log, not read from the game): a hero standing at the Tree of Inifuss never saw it and looped on empty plans; the
+// walk to a known class 30 preset ends with no path while the object list lacks it, which fits a hidden=1 row in the
+// sandbox build (the lab build printed hidden 0, V docs/probes/search-for-cain-l0-2026-11-18.md).
+var hiddenQuestObj = map[int]bool{30: true}
 
 // fieldObjects lists the level's placed objects near the player (chests, shrines, altars, Cain's cage, the Tristram
 // portal, a field waypoint) from "debug presets", the index space of "cmd interact" that "npcs" rows share (V drill
@@ -300,7 +328,7 @@ func (b *builder) fieldObjects(ctx context.Context, listed []d2dctl.NPC) {
 	}
 	lim := 5 * FieldObjectRadius
 	for _, p := range ps {
-		if p.Hidden || seen[p.Index] {
+		if (p.Hidden && !hiddenQuestObj[p.ObjectID]) || seen[p.Index] {
 			continue
 		}
 		x, y := b.pos(p.X, p.Y)
@@ -312,7 +340,47 @@ func (b *builder) fieldObjects(ctx context.Context, listed []d2dctl.NPC) {
 		b.snap.Objects = append(b.snap.Objects, d2.Unit{Type: d2.TypeObject, Class: p.ObjectID, ID: id, Mode: -1, X: x, Y: y})
 	}
 	rp.derived("objects.field", "debug presets within the radius, class = objects.txt id of the row, id = NPCIDBase + preset index (V: the index space of cmd interact)")
-	rp.unknown("object.mode", "open/closed state not in presets (debug objects has it for chests and shrines under another index)")
+	b.stoneModes(ctx)
+}
+
+// stoneModes fills Mode of the state-bearing objects (stateObjClass) from "debug objects", whose index equals the
+// preset index for the rows both list (V lab build, docs/probes/search-for-cain-l1-2026-11-18.md: the stone row goes
+// NU to ON when its click is accepted). The list is read only when such an object is in view, and every time (the
+// index shifts as rooms load, so nothing is cached). When the verb is missing or fails the Mode stays -1 and the
+// consumer must say so; U that the sandbox build answers "debug objects" (docs/probes/search-for-cain-45-2026-11-18.md).
+func (b *builder) stoneModes(ctx context.Context) {
+	rp := b.rp
+	var idx []int
+	for i := range b.snap.Objects {
+		if u := &b.snap.Objects[i]; stateObjClass(u.Class) && u.ID >= NPCIDBase && u.ID < PortalIDBase {
+			idx = append(idx, i)
+		}
+	}
+	if len(idx) == 0 {
+		rp.unknown("object.mode", "open/closed state not in presets; read from debug objects only for cairn stones in view")
+		return
+	}
+	l, err := b.s.c.Objects(ctx)
+	if err != nil {
+		rp.unknown("object.mode", "debug objects failed: "+err.Error())
+		return
+	}
+	state := map[int]int{}
+	for _, o := range l.Items {
+		switch o.Mode {
+		case "NU":
+			state[o.Index] = 0
+		case "ON":
+			state[o.Index] = 1
+		}
+	}
+	for _, i := range idx {
+		u := &b.snap.Objects[i]
+		if m, ok := state[int(u.ID-NPCIDBase)]; ok {
+			u.Mode = m
+		}
+	}
+	rp.derived("object.mode", "debug objects state column for cairn stones: NU 0, ON 1 (other objects stay -1)")
 }
 
 // presets returns the cached "debug presets" rows of area, reading them again when the area changed or the player
@@ -321,7 +389,7 @@ func (s *Source) presets(ctx context.Context, area, x, y int) ([]d2dctl.Preset, 
 	s.pmu.Lock()
 	defer s.pmu.Unlock()
 	if s.pset.ok && s.pset.area == area {
-		if dx, dy := x-s.pset.x, y-s.pset.y; dx*dx+dy*dy < presetRefetch*presetRefetch {
+		if dx, dy := x-s.pset.x, y-s.pset.y; dx*dx+dy*dy < presetRefetch*presetRefetch && s.now().Sub(s.pset.at) < presetMaxAge {
 			return s.pset.rows, nil
 		}
 	}
@@ -329,12 +397,25 @@ func (s *Source) presets(ctx context.Context, area, x, y int) ([]d2dctl.Preset, 
 	if err != nil {
 		return nil, err
 	}
-	s.pset.rows, s.pset.area, s.pset.x, s.pset.y, s.pset.ok = l.Items, area, x, y, true
+	s.pset.rows, s.pset.area, s.pset.x, s.pset.y, s.pset.at, s.pset.ok = l.Items, area, x, y, s.now(), true
 	return l.Items, nil
 }
 
 // townPortalObj is the objects.txt id of the town portal (S: D2BS Constants.h, 59; U on 1.14d tables).
 const townPortalObj = 59
+
+// questPortalWhich is the first "debug portals" which of a portal the world made for a quest, not for a town portal
+// scroll (0 is the cast spot, 1 its twin in camp): the way to Tristram after the fifth cairn stone is which 2 (V lab
+// build, docs/probes/search-for-cain-l1-2026-11-18.md, `debug portals` row `2 4 25.1 57.7`; `cmd interact -2002` took it).
+// Which other quests use which >= 2 is U. questPortalObj is the generic red portal, objects.txt 60 (S Kolbot RedPortal).
+const (
+	questPortalWhich = 2
+	questPortalObj   = 60
+)
+
+// stateObjClasses are the objects whose lit state matters to a bot step (the five cairn stones, objects.txt 17..21, S
+// Kolbot); for these "debug objects" is read and its state column becomes Unit.Mode (NU 0, ON 1).
+func stateObjClass(class int) bool { return class >= 17 && class <= 21 }
 
 func (b *builder) monster(m d2dctl.Monster) {
 	rp := b.rp
