@@ -73,7 +73,8 @@ func TestStarvedZoneLosesValue(t *testing.T) {
 	for _, b := range twoBuilds {
 		t.Run(b.name, func(t *testing.T) {
 			e := newEnv(t, b.arch)
-			e.p.StarveValueMul = 0.2 // a hard cut: the synthetic zones differ by a factor of 5 in pay
+			e.p.StarveValueMul = 0.2
+			e.p.Archetypes = map[string]ArchTune{b.arch: {StarveCasts: e.p.starveLimit(b.arch), StarveValueMul: 0.2}} // a hard cut: the synthetic zones differ by a factor of 5 in pay
 			l := NewLedger(e.p)
 			h := b.hero(14)
 			first, _ := l.Choose(activeIn(e, h, b.arch, t0))

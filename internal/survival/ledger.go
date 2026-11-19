@@ -385,7 +385,7 @@ func (l *Ledger) RealizedXPPerMin(k ZoneKey) (perMin, seconds float64) {
 func (l *Ledger) BlendYield(k ZoneKey, prior float64, arch string) (blended, realized float64) {
 	obs, sec := l.RealizedXPPerMin(k)
 	m := sec / 60
-	if m < l.P.YieldMinMinutes || m <= 0 {
+	if m < l.P.yieldMin(arch) || m <= 0 {
 		return prior, 0
 	}
 	w := math.Min(l.P.YieldMaxWeight, m/(m+l.P.yieldShrink(arch)))
