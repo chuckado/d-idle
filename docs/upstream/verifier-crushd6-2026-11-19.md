@@ -10,3 +10,21 @@ Tags: **V run** (run by this verifier today, the builder container), **V read** 
 - **The total.** `FUN_0057c1e0` `0x57c3a5..0x57c3c7`: `+0x4c = +8 + 0x10 + 0x1c + 0x20 + 0x24 + 0x28`, plus `+0x38` only when the attacker is a type-1 unit that is not a hireling (`0x57c214..0x57c228`); the resistances (`0x57c378..0x57c3a3`, rows at `0x732980`) and event 0xb (`0x57c2fc`) before it.
 - **Every path through the damage handler sums before the strike events.** `FUN_0057c6c0` has two callers. `0x56ba73` (`FUN_0056b9c0`, the record path: `FUN_0057dfb0`'s hit result into the record flags, then `FUN_0057c6c0(..., 1, rec)`, then `FUN_0057cee0`): with the second argument 1, `FUN_0057c1e0` runs at `0x57c7a0`, then events 6 and 2 only when the record's flag dword has 0x20 (and 6 only without 0x80). `0x57d5c7` (`FUN_0057d4f0`): copies a record stored on the attacker (the list at unit `+0xac`, matched by both units' type and id), sets its flag dword to 0x20 and calls with 0: no sum in the handler, the stored record carries its total, then events 5 and 1 (`0x57c7d8..0x57c7f3`). Then, in both, the physical cut to the life left (`0x57c7f8..0x57c820`, after the total), the leech (`FUN_0057c420`), and at `0x57c852` the total off stat 6 (under `0x100`: 0). So whatever unit carries the Crushing Blow (player, hireling, pet, monster MonProp) and whatever the blow (melee record, missile record), the crush is out of `+0x4c`, which is what `FUN_0057cb00` sizes. Which code stores the melee record on the attacker was not read (U); it cannot hold a crush that has not run yet.
 - **Life Tap reads the physical only.** Func 5 (`0x5c61e0`, table `0x7325f0`) reads the record's `+8` (`0x5c6227`, `0x5c62d2`) at event 1 or 2, before the cut at `0x57c7f8`: not the crush and not the elements (see Findings beside the PR).
+
+## d2d side: every hit path (the brief's a)
+
+V read on r1 / r2 (`git grep` of `player_blow(`, `hurt(`, `crushed`):
+
+| Path | How the blow reaches the monster | After the claim |
+|---|---|---|
+| player melee, kick, Telekinesis (`fight/strike.cpp:707`, `:951`, `:959`) | `player_blow` -> `Fight::land` -> `blow_hurt` | fixed |
+| player missile (`fight/missiles.cpp:891`) | `player_blow` with `swing.missile` (divisor doubled), then `missile_blow` adds to the same `Blow` (`crush_fine` kept) -> `land` | fixed (r1 not tested; r2 tests it) |
+| hireling melee and missile (`fight/deaths.cpp:484`, `fight/tick.cpp:365`) | `player_blow` -> `land` | fixed |
+| pets (`fight/pets.cpp:304`, `:1019`, `:1104`, `:1125`, `:1184`) | `player_blow` -> `pet_strike` -> `land` | fixed |
+| a monster's MonProp crush on a monster (`fight/tick.cpp:458..459`) | the crush is its OWN `hurt(..., crush)` call after `take_blows`: class 0, unmarked, size = the crush | **still sized by the crush alone**: a separate get-hit test whose whole size is the crush (game.exe: none, the crush is never in a total). Not in this PR |
+| a monster's MonProp crush on a pet (`fight/tick.cpp:516..517`) | `pet_hurt(pet, crush)` -> `hurt` | **same as the row above** |
+| a monster's crush on the hireling (`fight/tick.cpp:690..693`) | added to `side[1].damage`; the size test is `struck_big(side[1].blows)` per blow | not sized (right) |
+| a monster's crush on the player (`fight/tick.cpp:831..838`) | life only; the size test runs on `foe.blows` | not sized (right) |
+| thorns, traps, burning ground (`ai.cpp:2578`, `world/objects.cpp:775`, `fight/deaths.cpp:73`) | `hurt` without a crush | unchanged |
+
+Other users of the size: knockback (`Fight::knock_back`) and `struck_event` do not read it; the stun (`stun_until`) does not; `rules::struck_big` (player, hireling) is per monster blow. Nothing else read the old crush-inclusive size (V read). **Life Tap** (`fight/strike.cpp:549..551`) heals `blow.damage` x calc1 %, and `blow.damage` carries the crush's whole points and the elements; game.exe's func 5 heals from the record's physical `+8` only (V read above): a sibling deviation the claim neither fixes nor worsens.
