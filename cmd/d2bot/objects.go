@@ -365,7 +365,14 @@ func (o objectAdapter) findNearSkip(ctx context.Context, class int, at *input.Po
 		if lm := o.levelMap(); lm != nil {
 			for _, p := range lm.Presets {
 				if p.Kind == d2map.PresetObject && p.ID == class {
-					_ = o.nv.GoTo(ctx, input.Point{X: p.Pos.X, Y: p.Pos.Y})
+					gerr := o.nv.GoTo(ctx, input.Point{X: p.Pos.X, Y: p.Pos.Y})
+					near := 0
+					for i := range s.Objects {
+						if s.Objects[i].Class == class {
+							near++
+						}
+					}
+					o.e.Log.Info("object preset walk", "class", class, "try", try, "player", ref, "preset", p.Pos, "objects", len(s.Objects), "ofClass", near, "err", gerr, "now", o.e.Clock.Now().UnixMilli())
 					break
 				}
 			}
