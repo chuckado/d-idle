@@ -48,7 +48,7 @@ func fitHarness(w http.ResponseWriter, r *http.Request) {
 	}
 	// hover and ctx: a selector to hover (pointerover, as a mouse does) or to right-click before the measurement; the tooltip or the
 	// menu it opens must lie inside the window and, beside a cell, not cover it
-	opts, _ := json.Marshal(map[string]any{"page": u, "click": strings.Split(q.Get("click"), "|"), "hit": strings.Split(hit, ","), "hover": q.Get("hover"), "ctx": q.Get("ctx"), "expect": strings.Split(q.Get("expect"), "|")})
+	opts, _ := json.Marshal(map[string]any{"page": u, "click": strings.Split(q.Get("click"), "|"), "hit": strings.Split(hit, ","), "hover": q.Get("hover"), "scroll": q.Get("scroll"), "ctx": q.Get("ctx"), "expect": strings.Split(q.Get("expect"), "|")})
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Fprintf(w, `<!doctype html><html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
 <iframe id="f" src="%s" width="%d" height="%d" style="border:0;display:block"></iframe><pre id="fit-result"></pre>
@@ -67,6 +67,8 @@ f.addEventListener('load', async () => {
   // the character screen draws from its first view: measure only once its grids hold cells (a slow first answer is a late page, not a fit result)
   for (let i = 0; i < 30 && f.contentDocument.body.hasAttribute('data-canvas') && !(f.contentDocument.querySelector('#equip .d-slot2') && f.contentDocument.querySelector('#pack [data-key]') && f.contentDocument.getElementById('merc-sub').textContent && f.contentDocument.getElementById('cv-sel').firstChild && f.contentDocument.getElementById('hsheet').children.length > 4); i++) await wait(500);
   if (f.contentDocument.body.hasAttribute('data-canvas')) await wait(1500);
+  // scroll: how far down (0 to 1) the Vault list is scrolled before the measurement: the rows far from the top must fit like the first ones
+  if (o.scroll) { const sc = f.contentDocument.querySelector('[data-vscroll]'); if (sc) { sc.scrollTop = Number(o.scroll) * (sc.scrollHeight - sc.clientHeight); await wait(1500); } }
   try {
     const pv = await (await fetch('/watch/panels.json')).json();
     const m = measure(f.contentWindow, { scroll: (pv.panels || []).filter((p) => p.scroll).map((p) => p.id) });
@@ -464,6 +466,10 @@ type fitVault struct {
 	Mode    string   `json:"mode"`
 }
 
+// maxVaultCells is the most cells the Vault page may have in the DOM at once: a full window plus its margin, on the tallest
+// supported window and the narrowest cells (the vault itself holds thousands).
+const maxVaultCells = 500
+
 // judge is what is wrong with a measured Vault page (docs/vault.md).
 func (v *fitVault) judge() []string {
 	var bad []string
@@ -496,6 +502,9 @@ func (v *fitVault) judge() []string {
 	}
 	for _, x := range v.Holes {
 		bad = append(bad, "placeholder: "+x)
+	}
+	if v.Cells > maxVaultCells {
+		bad = append(bad, fmt.Sprintf("cells drawn for the whole list: %d (the grid is windowed)", v.Cells))
 	}
 	return bad
 }
@@ -549,6 +558,8 @@ var mustFail = map[string]string{
 	"fit-vaultdefect-small-":      "target under 44 px",
 	"fit-vaultdefect-covered-":    "covered control",
 	"fit-vaultdefect-sheet-":      "sheet cut",
+	"fit-vaultdefect-tip-":        "is not inside the window",
+	"fit-vaultdefect-unwindowed-": "cells drawn for the whole list",
 	"fit-vaultdefect-noname-":     "control with no name",
 	"fit-vaultdefect-enabled-":    "placeholder: ",
 	"fit-vaultdefect-ethenabled-": "placeholder: ",

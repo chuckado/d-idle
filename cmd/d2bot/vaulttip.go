@@ -1,11 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"sort"
-	"strconv"
-	"strings"
-
 	"d2lod-bot/internal/bot"
 	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/status"
@@ -52,7 +47,7 @@ func vaultTipFor(db *data.DB) watch.VaultTipFunc {
 			f.Identified, f.Ethereal, f.Low = identified, ethereal, quality == 1
 			t.Sell = b.SellPrice(f, 0)
 		}
-		t.Props = statLines(db, props)
+		t.Props = db.StatLines(props)
 		return t
 	}
 }
@@ -77,74 +72,4 @@ func recordArt(cat bot.Catalog, class, quality, fileIndex, pic int) string {
 	}
 	name, _ := ic.InvFile(class, q, fileIndex)
 	return name
-}
-
-// statLines words d2d's "stat:param:value;..." list (item properties of an identified item) with the game's own itemstatcost
-// text. S: descfunc 1 to 5 and 12 follow the standard table's meaning (plus value, percent value, plain value, value*100/128
-// percent); every other function is left out rather than worded wrongly (U: the rest of the table is not covered yet).
-// Lines come in descpriority order, highest first, as the game lists them.
-func statLines(db *data.DB, props string) []string {
-	type line struct {
-		prio int
-		text string
-	}
-	var out []line
-	byID := map[int]*data.StatCost{}
-	for _, s := range db.StatCosts {
-		byID[s.ID] = s
-	}
-	for _, p := range strings.Split(props, ";") {
-		f := strings.Split(p, ":")
-		if len(f) != 3 {
-			continue
-		}
-		id, e1 := strconv.Atoi(f[0])
-		val, e2 := strconv.Atoi(f[2])
-		s := byID[id]
-		if e1 != nil || e2 != nil || s == nil || s.DescFunc == 0 {
-			continue
-		}
-		val = s.FromMemory(val)
-		key := s.DescStrPos
-		if val < 0 && s.DescStrNeg != "" {
-			key = s.DescStrNeg
-		}
-		str, ok := db.Str(key)
-		if !ok || str == "" {
-			continue
-		}
-		var v string
-		switch s.DescFunc {
-		case 1, 12:
-			v = signed(val)
-		case 2:
-			v = strconv.Itoa(val) + "%"
-		case 3:
-			v = strconv.Itoa(val)
-		case 4:
-			v = signed(val) + "%"
-		case 5:
-			v = strconv.Itoa(val*100/128) + "%"
-		default:
-			continue
-		}
-		t := v + " " + str
-		if s.DescVal == 2 {
-			t = str + " " + v
-		}
-		out = append(out, line{s.DescPriority, t})
-	}
-	sort.SliceStable(out, func(i, j int) bool { return out[i].prio > out[j].prio })
-	lines := make([]string, len(out))
-	for i, l := range out {
-		lines[i] = l.text
-	}
-	return lines
-}
-
-func signed(v int) string {
-	if v >= 0 {
-		return fmt.Sprintf("+%d", v)
-	}
-	return strconv.Itoa(v)
 }
