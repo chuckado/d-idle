@@ -19,6 +19,7 @@ owns:
 exclusive:
   - "fork-branch:fid/crush-d6-r1"
 contracts: []
+result: "PENDING"
 ---
 
 ## Description
@@ -26,7 +27,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Why: TODO. Done when: TODO.
+Why: the next upstream candidates after decomp41 (crush D6, P08, magic resistance, the scan). Consumer: the independent verifier of fid/crush-d6-r1 (coordinator schedules). Done when: trace doc, oracle numbers and the local branch exist; nothing posted.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria

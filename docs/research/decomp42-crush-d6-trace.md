@@ -45,7 +45,21 @@ Edge exits (V run, `crush_hit.py`): an empty game file, an empty d2d file, an em
 
 ### 1.3 Mutants of the claim (V run; builder, local, never pushed)
 
-MUTANTS_PLACEHOLDER
+Each mutant is one text change on the claim (`mutd6.py`, builder, long lane, rebuilding `test_crush_get_hit`); `test_crush_get_hit` (pins) and the compare (seed 7, 100,800 cases) run on each.
+
+| Mutant | pins | compare (of 100,800) |
+|---|---|---|
+| m1 the parent: crush not taken off the size | abort | 72,108 differ |
+| m2 `crush_fine` never set | abort | 72,108 |
+| m3 `blow_hurt` passes 0 | abort | 72,108 |
+| m4 the crush taken off twice | abort | 23,035 |
+| m5 the crush cut to whole points | passes the first eight pins; the ninth pin (a crush of 12.5 points under the threshold) was added for it and the mutant was not rebuilt against it (U, a re-run for the verifier) | 9,300 |
+| m6 no floor at 0 on the size | passes | 0: an **equivalent mutant**: the size is `taken - crush` and `taken` includes the crush (soak takes at most the physical), so it is never negative (I) |
+| m7 `crush_fine` halved | abort | 50,307 |
+| m8 a missile blow carries no crush | passes | 0: **escape**: the oracle runs the melee path only (D4) |
+| m9 `marked` dropped in `blow_hurt` | passes | 0: **escape**: the oracle's records carry no element (D3) |
+
+Built locally, never pushed. 7 of 9 are caught by the compare (5 also by the pins); m6 is equivalent; m8 and m9 are the two disclosed limits (a missile record and an element are not in the cases). The first mutant pass built m3 to m6 and m9 on a stale object (an edited header restored with its old mtime), so they equalled the parent; the table is the second pass with the mtime touched (V run: the m4 and m5 binaries differ from the parent's in play).
 
 ### 1.4 Build and tests
 

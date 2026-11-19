@@ -1,0 +1,3 @@
+BACKLOG: TASK-659 decomp42: crush D6 (a Crushing Blow's life is not in the get-hit size) built as local fork branch fid/crush-d6-r1 (72k of 100.8k cases differ on the parent, 0 on the claim, three seeds, control 0), P08 re-run (0 of 100k puts differ on upstream main: no candidate), magic resistance T3 not worth building for Normal Act 1-3, scan of the next deviations; waits for the independent verifier
+INDEX: docs/research/decomp42-crush-d6-trace.md | decomp42: crush D6 get-hit size, P08 re-run, magic resistance decision, next deviations
+CHANGELOG: decomp42 trace (docs/research/decomp42-crush-d6-trace.md): the get-hit size after a Crushing Blow, oracle and local candidate, no upstream post
