@@ -461,7 +461,6 @@ docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
 docs/probes/cainl0  credit-runner  cainl0
 docs/probes/cainl2  credit-runner  cainl2
 docs/probes/cainl3  live-agent  cainl3
-docs/probes/cainstart-2026-11-19.md  credit-runner  cainstart
 docs/probes/deploy-cockpit-2026-11-15.md  credit-runner  deploycockpit
 docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
 docs/probes/firsthour.md  live-agent  firsthour
@@ -761,7 +760,6 @@ internal/bot/pointsgate_test.go  credit-runner  agencyp0
 internal/bot/portalburn_test.go  credit-runner  survhold2
 internal/bot/questauto.go  credit-runner  quests8
 internal/bot/questauto_test.go  credit-runner  quests8
-internal/bot/questboard.go  credit-runner  cainstart
 internal/bot/questboard.go  credit-runner  questrun
 internal/bot/questboard.go  credit-runner  quests10
 internal/bot/questboard.go  credit-runner  quests3
@@ -1661,7 +1659,6 @@ tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
 tools/provingground/  credit-runner  pgexpand
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
-tools/provingground/scenarios/cain.json  credit-runner  cainstart
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/survival  credit-runner  survhold2
 tools/survival  credit-runner  survtune

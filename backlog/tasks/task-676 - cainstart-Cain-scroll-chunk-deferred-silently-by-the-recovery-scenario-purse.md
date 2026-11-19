@@ -1,10 +1,11 @@
 ---
 id: TASK-676
 title: 'cainstart: Cain scroll chunk deferred silently by the recovery, scenario purse'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T20:03:00Z'
+updated_date: '2026-11-19T20:26:00Z'
 labels:
   - bot
   - bot-fix
