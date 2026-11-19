@@ -71,7 +71,8 @@
     {
      "kind": "item_in_pack",
      "code": "bks",
-     "why": "the tree gave the bark scroll (bks); it stays until Akara reads it"
+     "or": ["bkd"],
+     "why": "the tree gave the bark scroll (bks); the pack holds bkd instead once Akara has read it (V provingground rerun 2026-11-19: the bot reads on its next town visit)"
     },
     {
      "kind": "no_writes"
@@ -140,7 +141,8 @@
    "assert": [
     {
      "kind": "item_in_pack",
-     "code": "bks"
+     "code": "bks",
+     "or": ["bkd"]
     },
     {
      "kind": "no_writes"
@@ -213,7 +215,8 @@
    "assert": [
     {
      "kind": "item_in_pack",
-     "code": "bks"
+     "code": "bks",
+     "or": ["bkd"]
     }
    ]
   },
