@@ -3,9 +3,9 @@
 # on one d2d lab slot, a prepared throwaway Sorceress (SETUP via tools/ab/prep, ledgered, CHEATED: mechanics only). poll.py taps Start
 # and Hand in on the board for search_for_cain. usage: run.sh SEED CLVL WALLMIN [SLOT]
 export PATH=$PATH:/opt/go/bin
+SRC=$(cd "$(dirname "$0")" && pwd)
 W=/data/d2d-lab/cainl3; cd "$W" || exit 2
 S=${1:-11} CLVL=${2:-18} WALLMIN=${3:-38} SLOT=${4:-3}
-SRC=$(cd "$(dirname "$0")" && pwd)
 export D2D_AGENT=cainl3
 exec "$W/bin/d2dslot.sh" run -n $SLOT -w 600 -t $((WALLMIN*60+300)) -- bash -c '
 cd '$W'; S='$S'; export D2BOT_INSTANCE=cl3 D2D_RUN=on
