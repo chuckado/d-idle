@@ -82,8 +82,8 @@ const (
 	AObjectState    = "object_state"    // class, state: at least one object of the class has the state
 	AAreaChangesLE  = "area_changes_le" // max
 	APortalOpen     = "portal_open"     // area: a portal stands in that level (debug portals); needs a live observation
-	ARightSkillIs   = "right_skill_is" // skill (the id on the right hand: the aura, the select verb's effect)
-	ALeftSkillIs    = "left_skill_is"  // skill
+	ARightSkillIs   = "right_skill_is"  // skill (the id on the right hand: the aura, the select verb's effect)
+	ALeftSkillIs    = "left_skill_is"   // skill
 	ANoWrites       = "no_writes"       // writes_after_start == 0 (the CRUTCH RULE line)
 	AStatBetween    = "stat_between"    // code (str dex vit ene statpts skillpts skillsspent), min, max
 )
