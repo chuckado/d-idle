@@ -54,6 +54,15 @@ type Trip struct {
 func (t *Trip) Run(ctx context.Context) (Report, error) {
 	var rep Report
 	tu := Effective(t.Tu, t.Measured)
+	// A restart (or a failed return) may have left stash items in the pack: put them back whatever the policy says.
+	if len(t.S.J.IDs) > 0 {
+		rr, rerr := t.S.Return(ctx)
+		rep.Returned, rep.Kept = len(rr.Back), len(rr.Kept)
+		rep.Reason = rr.Reason
+		if rerr != nil {
+			return rep, rerr
+		}
+	}
 	if tu.Policy == env.IdentifyManual || tu.Policy == env.IdentifyNever {
 		rep.Reason = WhyManual
 		if tu.Policy == env.IdentifyNever {
@@ -61,12 +70,17 @@ func (t *Trip) Run(ctx context.Context) (Report, error) {
 		}
 		return rep, nil
 	}
+	present := t.Cain.Present(ctx)
+	if tu.Policy == env.IdentifyCainFree && !present {
+		rep.Reason = WhyNoCain // nothing is listed, opened or moved for an absent Cain
+		return rep, nil
+	}
 	items, err := t.L.Unidentified(ctx)
 	if err != nil {
 		return rep, fmt.Errorf("bulkid: list: %w", err)
 	}
 	h := t.Hero(ctx)
-	h.CainOpen = h.CainOpen && t.Cain.Present(ctx) // nothing moves for an absent Cain
+	h.CainOpen = h.CainOpen && present // nothing moves for an absent Cain
 	plan := Make(t.F, tu, h, items)
 	rep.Reason = plan.Reason
 	for _, p := range plan.Picks {
