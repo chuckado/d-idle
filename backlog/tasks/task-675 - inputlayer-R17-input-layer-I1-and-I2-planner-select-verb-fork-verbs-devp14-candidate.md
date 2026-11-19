@@ -1,10 +1,13 @@
 ---
 id: TASK-675
-title: 'inputlayer: R17 input layer I1 and I2 (planner, select verb, fork verbs, devp14 candidate)'
-status: Proposed
+title: >-
+  inputlayer: R17 input layer I1 and I2 (planner, select verb, fork verbs,
+  devp14 candidate)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T18:56:00Z'
+updated_date: '2026-11-19T20:11:00Z'
 labels:
   - bot
   - feature
