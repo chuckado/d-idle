@@ -139,6 +139,7 @@ cmd/d2bot/behaviors.go  credit-runner  quests4
 cmd/d2bot/behaviors.go  credit-runner  vaultv5
 cmd/d2bot/beltfill_adapter.go  credit-runner  beltfix
 cmd/d2bot/boss.go  pro-runner  levelplan3
+cmd/d2bot/bulkidwire.go  credit-runner  bulkid2
 cmd/d2bot/cain.go  credit-runner  cain45
 cmd/d2bot/cain5b_test.go  credit-runner  cain5b
 cmd/d2bot/cain_test.go  credit-runner  cain45
@@ -146,6 +147,7 @@ cmd/d2bot/charwire.go  credit-runner  charselect
 cmd/d2bot/charwire.go  credit-runner  charsup
 cmd/d2bot/charwire_test.go  credit-runner  charselect
 cmd/d2bot/charwire_test.go  credit-runner  charsup
+cmd/d2bot/d2dbackend.go  credit-runner  bulkid2
 cmd/d2bot/d2dbackend.go  credit-runner  campaign1
 cmd/d2bot/d2dbackend.go  credit-runner  exploredpct
 cmd/d2bot/d2dbackend.go  credit-runner  labels
@@ -162,6 +164,7 @@ cmd/d2bot/d2dbackend.go  credit-runner  uib5
 cmd/d2bot/d2dbackend.go  credit-runner  vaulttip
 cmd/d2bot/d2dbackend.go  credit-runner  vaultv4
 cmd/d2bot/d2dloot.go  credit-runner  groundquality
+cmd/d2bot/d2dwire.go  credit-runner  bulkid2
 cmd/d2bot/d2dwire.go  credit-runner  gearsets
 cmd/d2bot/d2dwire.go  credit-runner  groundquality
 cmd/d2bot/d2dwire.go  credit-runner  itemverbs2
@@ -193,6 +196,7 @@ cmd/d2bot/invverbs.go  credit-runner  itemverbs2
 cmd/d2bot/invverbs.go  credit-runner  uib9
 cmd/d2bot/invverbs_test.go  credit-runner  botinstant
 cmd/d2bot/invverbs_test.go  credit-runner  uib9
+cmd/d2bot/invwire.go  credit-runner  bulkid2
 cmd/d2bot/invwire.go  credit-runner  gearsets
 cmd/d2bot/invwire.go  credit-runner  tidy
 cmd/d2bot/invwire.go (your lines only)  credit-runner  botsell
@@ -283,6 +287,7 @@ cmd/d2bot/survivalwire.go  credit-runner  survreask
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/vaultact_test.go  credit-runner  vaultv6
 cmd/d2bot/vaultkeep.go  credit-runner  bulkid
+cmd/d2bot/vaultkeep.go  credit-runner  bulkid2
 cmd/d2bot/vaultkeep.go  credit-runner  vaultv5
 cmd/d2bot/vaultkeep.go  credit-runner  vaultv6
 cmd/d2bot/vaultpage.go  credit-runner  bulkid
@@ -335,6 +340,7 @@ docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/contracts/merc-policy.md  credit-runner  mercrevive2
 docs/d2d-loot.md  credit-runner  groundquality
 docs/design/bulk-identify-2026-11-18.md  credit-runner  bulkid-design
+docs/design/bulk-identify-2026-11-18.md  credit-runner  bulkid2
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vault
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv2
@@ -780,6 +786,7 @@ internal/bot/zoneshadow.go  credit-runner  survreask
 internal/bot/zoneshadow.go  credit-runner  survrecover
 internal/bot/zoneshadow_test.go  credit-runner  survC
 internal/bulkid  credit-runner  bulkid
+internal/bulkid  credit-runner  bulkid2
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
 internal/charsel  credit-runner  charselect
@@ -1066,6 +1073,9 @@ internal/town/beltfill.go  credit-runner  beltfix
 internal/town/beltfix6_test.go  credit-runner  beltfix
 internal/town/beltfix_test.go  credit-runner  beltfix
 internal/town/beltrepair.go  credit-runner  beltfix
+internal/town/bulkid.go  credit-runner  bulkid2
+internal/town/bulkid_need_test.go  credit-runner  bulkid2
+internal/town/chores.go  credit-runner  bulkid2
 internal/town/chores.go  credit-runner  idfast
 internal/town/chores.go  credit-runner  repairtrip
 internal/town/chores.go  credit-runner  tidy
@@ -1078,11 +1088,13 @@ internal/town/repairtrip_test.go  credit-runner  repairtrip
 internal/town/shop.go  credit-runner  lootwire3
 internal/town/shop.go  credit-runner  lootwireL4
 internal/town/sim  credit-runner  beltfix
+internal/town/stash.go  credit-runner  bulkid2
 internal/town/tidy.go  credit-runner  lootwireL4
 internal/town/tidy.go  credit-runner  tidy
 internal/town/tidy_test.go  credit-runner  lootwireL4
 internal/town/tidy_test.go  credit-runner  tidy
 internal/town/tidy_test.go  credit-runner  towntests
+internal/town/town.go  credit-runner  bulkid2
 internal/town/town.go  credit-runner  itemverbs2
 internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
@@ -1091,6 +1103,7 @@ internal/vault  credit-runner  vaultv5
 internal/vault  credit-runner  vaultv6
 internal/vault/index.go  credit-runner  vaultv4
 internal/vault/types.go  credit-runner  vaulttip
+internal/vaultkeep  credit-runner  bulkid2
 internal/vaultkeep  credit-runner  vaultv5
 internal/vaultkeep  credit-runner  vaultv6
 internal/vaultkeep/keep.go  credit-runner  bulkid
@@ -1317,6 +1330,7 @@ internal/watch/testdata/video_panel.js  credit-runner  viewerfps
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
 internal/watch/vaultapi.go  credit-runner  bulkid
+internal/watch/vaultapi.go  credit-runner  bulkid2
 internal/watch/vaultapi.go  credit-runner  vaulttip
 internal/watch/vaultapi.go  credit-runner  vaultv4
 internal/watch/vaultapi.go  credit-runner  vaultv5

@@ -288,6 +288,7 @@
 | bulkid-design | proposed | - | `docs/design/bulk-identify-2026-11-18.md` | - |
 | bulkid | proposed | - | `internal/bulkid`<br>`data/bulkid`<br>`internal/env/tuning_identify.go`<br>`internal/watch/vaultmass_test.go`<br>`internal/env/tuning.go`<br>`docs/knobs.md`<br>`internal/vaultkeep/reveal.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/note_test.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go` | - |
 | survhold3 | proposed | - | `internal/survival`<br>`docs/probes/survival-holdout3-2026-11-18.md` | - |
+| bulkid2 | proposed | - | `internal/bulkid`<br>`internal/town/bulkid.go`<br>`internal/town/bulkid_need_test.go`<br>`internal/town/chores.go`<br>`internal/town/stash.go`<br>`internal/town/town.go`<br>`internal/vaultkeep`<br>`internal/watch/vaultapi.go`<br>`cmd/d2bot/bulkidwire.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/invwire.go`<br>`cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dbackend.go`<br>`docs/design/bulk-identify-2026-11-18.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -326,6 +327,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f70213a90 11-19 09:24 `Merge agent/bulkid2: bulkid2: town adapters, scroll path, Ether tap payer` (bulkid2)
+- bfb8bb8fb 11-19 09:23 `Merge branch 'main' into bulkid2` (-)
 - ee4e89850 11-19 09:06 `Merge agent/survhold3: Merge origin/main into agent/survhold3` (survhold3)
 - 7ba3b21d7 11-19 09:01 `Merge origin/main into agent/survhold3` (-)
 - 67c1f056f 11-18 20:20 `Merge agent/goldwithdraw: Merge branch 'main' into goldwithdraw` (goldwithdraw)
@@ -334,6 +337,4 @@
 - 26c11333d 11-18 20:10 `Merge branch 'main' into survhold2` (-)
 - 22284866b 11-18 20:02 `Merge agent/antiflail: Merge branch 'main' into antiflail` (antiflail)
 - 315a64e87 11-18 20:01 `Merge branch 'main' into antiflail` (-)
-- 575c90c37 11-18 19:56 `Merge agent/bulkid: bulk identify B1-B5 offline` (bulkid)
-- 14f4ed022 11-18 19:55 `Merge branch 'main' into bulkid` (-)
 <!-- statusgen:end -->
