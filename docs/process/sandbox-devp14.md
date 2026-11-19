@@ -4,7 +4,7 @@
 
 ## What devp14 is
 
-devp13 (`didle/rebase-20261119`, tip `f32837d8`) plus the fork branch `didle/input-verbs-20261119` (private remote only, never upstream without the owner's go). Build ref `devp14`. STATUS_PLACEHOLDER
+devp13 (`didle/rebase-20261119`, tip `f32837d8`) plus the fork branch `didle/input-verbs-20261119` (private remote only, never upstream without the owner's go). Build ref `devp14`. Image `d2dbot:devp14`, id `f5bc525d159c`, loaded on the sandbox host next to `devp13` (`97e985ca5eb5`); the running container `d2play-20261108` is still on `devp13` (V: `docker ps` after the load). Fork tip at build: `cef4abfd` (the two later commits change only `tests/input_verbs_d2d.py`; the binary, sha256 prefix `d3a11812638bf219`, equals the builder's). Built on the builder's main lane in 773 s (long lane was held by another job), d2d only, rc 0.
 
 ## Verbs
 
@@ -24,7 +24,12 @@ Skill and aura selection: verb when advertised, else key, else popup click, each
 
 ## Tests
 
-RESULTS_PLACEHOLDER
+On the builder, game data there, `D2_MPQ_DIR=/data/gamedata`:
+- Pass (rc 0): `input_verbs_d2d` (new), `lab_verbs_d2d`, `item_verbs_d2d`, `vault_verbs_d2d`, `item_colour_d2d`, `item_create_identified_d2d`, `item_pic_d2d`, `labels_d2d`, `merc_verbs_d2d`, `cursor_verb_d2d`, `overlay_d2d`. V.
+- `smoke_d2d` rc 1: the known upstream roster-order failure (docs/process/sandbox-devp13.md), not compared again here. U.
+- `input_verbs_d2d` V: `caps` lists the three input names; `cmd select 7 0` (right, Fire Arrow on the class the headless start gives with `--start-class 3`, the list `debug points` accepts is 6..35) sets `state` rskill and it is still set 1.5 s later; a second right select and a left select change their own hand only; an unlearned skill is refused. This is the R08 fix (before: only the message went and the hand reverted a frame later; S: source of walk.cpp). On devp13 the same select left `rskill` unchanged (V live, docs/palready.md).
+- NOT verified: `menu choose` and `cmd repair` (the headless hero never reached the vendor in 4 runs: the walk stalled about 4 cells short, so the part prints SKIPPED); the select differential against the click path; and the priming-click quirk: `cmd move` right after `debug goto` moved 0.2 cells in 4 s, but a plain `cmd move` also moved only 1.8 of 6 cells in 8 s in the same slow headless run, so the observation is inconclusive (U).
+- A Paladin aura on the real bot path is the Proving Ground scenario `input.skill-select-verb` (pending, needs the switch).
 
 ## Switch (needs the owner's go; not done)
 
