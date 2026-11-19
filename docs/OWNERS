@@ -302,6 +302,7 @@ cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
 data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
+data/idreveal  credit-runner  nocards
 data/onboarding  credit-runner  firstminutes
 data/onboarding/en.json  credit-runner  friendfb
 data/questboard  credit-runner  quests1
@@ -310,6 +311,7 @@ data/questboard  credit-runner  quests7b
 data/questboard/act1.json  credit-runner  cain45
 data/questboard/act1.json  credit-runner  cain5b
 data/questboard/act1.json  credit-runner  cainfix
+data/unlocks  credit-runner  nocards
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
 data/vault  credit-runner  vaultv2
@@ -321,6 +323,9 @@ deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 deploy/d2d-container/tester_image_test.go  credit-runner  charsup
 deploy/nas/imgbuild.sh  credit-runner  buildhosts3
 docs/actbot.md  credit-runner  cain45
+docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md  credit-runner  adrfable
+docs/adr/0020-proving-ground-and-stat-skill-agency.md  credit-runner  adrfable
+docs/adr/README.md  credit-runner  adrfable
 docs/aggression.md  credit-runner  wiring2
 docs/archive  credit-runner  dietarchive
 docs/away-drill.md  live-agent  awaydrill
@@ -334,7 +339,9 @@ docs/charselect.md  credit-runner  charsup
 docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/contracts/merc-policy.md  credit-runner  mercrevive2
 docs/d2d-loot.md  credit-runner  groundquality
+docs/decisions.md  credit-runner  adrfable
 docs/design/bulk-identify-2026-11-18.md  credit-runner  bulkid-design
+docs/design/fable-review-2026-11-19  user  fablereview
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vault
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv2
@@ -453,6 +460,7 @@ docs/probes/survival-ab-8seed-rerun-2026-11-16.md  credit-runner  survtune
 docs/probes/survival-ab-reask-2026-11-17.md  credit-runner  survreask
 docs/probes/survival-ab-recovery-2026-11-17.md  credit-runner  survrecover
 docs/probes/survival-holdout2-2026-11-18.md  credit-runner  survhold2
+docs/probes/survival-holdout3-2026-11-18.md  credit-runner  survhold3
 docs/probes/test-characters.md  credit-runner  cainl0
 docs/probes/test-characters.md  credit-runner  cainl2
 docs/probes/test-characters.md  credit-runner  survab8
@@ -465,9 +473,11 @@ docs/probes/viewer-brightness-2026-11-17.md  credit-runner  brightness
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
+docs/process/fork-rebase.md  credit-runner  forkrebase
 docs/process/queuespeed.md  credit-runner  queuespeed
 docs/process/sandbox-devp11.md  credit-runner  devp11doc
 docs/process/sandbox-devp12.md  credit-runner  devp12
+docs/process/sandbox-devp13.md  credit-runner  forkrebase
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
 docs/quest-hints.md  live-agent  questdrill
@@ -501,6 +511,7 @@ docs/research/decomp30-mercai.md  credit-runner  decomp30
 docs/research/decomp31-drops.md  credit-runner  decomp31
 docs/research/decomp34-fallen-flee.md  credit-runner  decomp34
 docs/research/decomp35-combat.md  credit-runner  decomp35
+docs/research/decomp42-crush-d6-trace.md  credit-runner  decomp42
 docs/research/design-brief-v1.md  credit-runner  designbrief
 docs/research/earlydeath13.md  pro-runner  earlydeath13
 docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
@@ -511,6 +522,7 @@ docs/research/merc-gear.md  credit-runner  uib9
 docs/research/mocks/return.html  credit-runner  returnmock
 docs/research/pal-skill-matrix.md  credit-runner  palskill-matrix
 docs/research/pal-zeal-trace.md  credit-runner  palskill-matrix
+docs/research/public-d2-bots-2026-11-19.md  credit-runner  botsurvey
 docs/research/resistorder.md  credit-runner  resistorder
 docs/research/return-screen.md  credit-runner  returnmock
 docs/research/upstream-next.md  credit-runner  upstream-next
@@ -559,6 +571,8 @@ docs/ui/redesign-2026-11-14/reviews/c2c3-review.md  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/c2c3/  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/s1b-review.md  credit-runner  uis1breview
 docs/ui/redesign-2026-11-14/stash-anywhere.md  credit-runner  stashany
+docs/unlock-idreveal.md  credit-runner  nocards
+docs/unlock-ladder.md  credit-runner  nocards
 docs/upstream/  credit-runner  p02posted
 docs/upstream/  credit-runner  prpost
 docs/upstream/  credit-runner  prpost2
@@ -567,6 +581,7 @@ docs/upstream/  credit-runner  prpost4
 docs/upstream/  credit-runner  prprep
 docs/upstream/bodies/  credit-runner  decomp34
 docs/upstream/bodies/  credit-runner  decomp36
+docs/upstream/bodies/crush-d6-body.md  credit-runner  decomp42
 docs/upstream/bodies/decomp35-  credit-runner  decomp35
 docs/upstream/bodies/decomp37-open-wounds-body.md  credit-runner  owbody
 docs/upstream/bodies/gamble-price-body.md  credit-runner  decomp36bodies
@@ -593,6 +608,7 @@ docs/upstream/pr-queue.md  credit-runner  p06posted
 docs/upstream/pr-queue.md  credit-runner  prfix2
 docs/upstream/pr-queue.md  credit-runner  prfix3
 docs/upstream/pr-queue.md  credit-runner  prpipeline
+docs/upstream/verifier-mercabsorb-2026-11-18.md  credit-runner  verifymerc
 docs/upstream/verifier-p02-2026-11-14.md  credit-runner  verifyp02
 docs/upstream/verifier-p03-p05-2026-11-14.md  credit-runner  verifyp03p05
 docs/upstream/verifier-p03b-2026-11-14.md  live-agent  verifyp03c
@@ -601,6 +617,7 @@ docs/upstream/verifier-p04-2026-11-15.md  live-agent  verifyp04
 docs/upstream/verifier-p17-2026-11-15.md  credit-runner  verifyp17
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
 docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
+docs/vault.md  credit-runner  nocards
 docs/vault.md  credit-runner  vaulttip
 docs/vault.md  credit-runner  vaultv2
 docs/vault.md  credit-runner  vaultv3
@@ -1032,6 +1049,7 @@ internal/status/inventory.go  credit-runner  itemcolour2
 internal/status/inventory.go  credit-runner  jewelicons
 internal/survival  credit-runner  survfix2
 internal/survival  credit-runner  survhold2
+internal/survival  credit-runner  survhold3
 internal/survival  credit-runner  survsd
 internal/survival  credit-runner  survtune
 internal/survival/  credit-runner  survC
@@ -1116,6 +1134,7 @@ internal/watch/etherapi_test.go  credit-runner  vaultv7b
 internal/watch/funwire.go  credit-runner  friendfb
 internal/watch/funwire.go  credit-runner  labels
 internal/watch/funwire.go  credit-runner  lootwireL4
+internal/watch/funwire.go  credit-runner  nocards
 internal/watch/funwire.go  credit-runner  quests4
 internal/watch/funwire.go  credit-runner  survA
 internal/watch/funwire.go  credit-runner  uib1
@@ -1168,6 +1187,7 @@ internal/watch/lootshadowapi_test.go  credit-runner  lootwireL4
 internal/watch/mercapi.go  credit-runner  botmerc
 internal/watch/mercapi_test.go  credit-runner  botmerc
 internal/watch/minimapfix_test.go  credit-runner  minimapfix
+internal/watch/nocards_test.go  credit-runner  nocards
 internal/watch/nopins_test.go  credit-runner  nopins
 internal/watch/onboarding.go  credit-runner  firstminutes
 internal/watch/onboarding.go  credit-runner  reconnectux
@@ -1232,6 +1252,7 @@ internal/watch/survivalapi.go  credit-runner  survC
 internal/watch/survivalapi_test.go  credit-runner  survC
 internal/watch/tallystrip.go  credit-runner  botcpu2
 internal/watch/tallystrip_test.go  credit-runner  botcpu2
+internal/watch/testdata  credit-runner  nocards
 internal/watch/testdata/  credit-runner  uifix1
 internal/watch/testdata/areamap/  credit-runner  uis6
 internal/watch/testdata/campaign  pro-runner  levelplan3
@@ -1314,6 +1335,9 @@ internal/watch/testdata/video_panel.js  credit-runner  videofeed4
 internal/watch/testdata/video_panel.js  credit-runner  viewerfps
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
+internal/watch/unlockidreveal.go  credit-runner  nocards
+internal/watch/unlockidreveal_test.go  credit-runner  nocards
+internal/watch/unlockui_quiet_test.go  credit-runner  nocards
 internal/watch/vaultapi.go  credit-runner  bulkid
 internal/watch/vaultapi.go  credit-runner  vaulttip
 internal/watch/vaultapi.go  credit-runner  vaultv4
@@ -1339,6 +1363,7 @@ internal/watch/views.go  credit-runner  videofeed2
 internal/watch/views.go  credit-runner  videofeed4
 internal/watch/watchlayout_test.go  credit-runner  labels
 internal/watch/watchlayout_test.go  credit-runner  videofeed2
+internal/watch/web  credit-runner  nocards
 internal/watch/web/app.css  credit-runner  toastfix
 internal/watch/web/characters.css  credit-runner  charui
 internal/watch/web/characters.html  credit-runner  charui
@@ -1529,6 +1554,7 @@ tools/emu/am_model.py  credit-runner  areamon
 tools/emu/bs_model.py  credit-runner  boss1
 tools/emu/bs_spawn.sh  credit-runner  boss1
 tools/emu/d35_  credit-runner  decomp35
+tools/emu/d42_crush_hit.py  credit-runner  decomp42
 tools/emu/dc22_dis.py  credit-runner  decomp22
 tools/emu/dc28_  pro-runner  decomp28
 tools/emu/dc34_cmp.py  credit-runner  decomp34
@@ -1550,6 +1576,7 @@ tools/emu/pp_*  credit-runner  prprep
 tools/emu/zd_*  credit-runner  palskill-matrix
 tools/emu/zd_*  credit-runner  zealdiff
 tools/firsthour.sh  live-agent  firsthour
+tools/fork-rebase.sh  credit-runner  forkrebase
 tools/friendpack/README.txt  credit-runner  cut012
 tools/friendpack/build.sh  credit-runner  buildhosts3
 tools/friendpack/checklist.sh  credit-runner  cut010b

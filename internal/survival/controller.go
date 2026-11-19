@@ -96,6 +96,7 @@ type verdict struct {
 	xp       float64 // xp/min the value rests on (model prior, or the blend with the realized one)
 	realized float64 // the realized xp/min behind the blend, 0 = the prior stands
 	starving bool
+	kClosed  bool // the risk route was closed by the dial's riskMaxK
 	riskPaid bool // eligible only through the dial's pay-for-risk route
 }
 
@@ -140,6 +141,9 @@ func (l *Ledger) judge(in Input, c Candidate, lam float64) verdict {
 		row, _ := l.P.stepDown(in.Dial.ID) // an unknown dial has no risk route; ForcedOut above already named it
 		typ := c.ZM.Typical.Low / v.k
 		riskOK := row.TypicalEnter > 0 && typ >= row.TypicalEnter && v.best >= row.BadFloor
+		if riskOK && row.RiskMaxK > 0 && v.k >= row.RiskMaxK {
+			riskOK, v.kClosed = false, true
+		}
 		poor := riskOK && !cur && in.Purse.Gold < row.RiskMinGold
 		if poor {
 			riskOK = false
@@ -150,6 +154,8 @@ func (l *Ledger) judge(in Input, c Candidate, lam float64) verdict {
 			v.eligible = true
 		} else if riskOK {
 			v.eligible, v.riskPaid = true, true
+		} else if v.kClosed {
+			v.why = Why{WhyMarginLow, "too hard: the model has been wrong about this zone (k at its limit), no risk is paid here"}
 		} else if poor {
 			v.why = Why{WhyPoor, "too poor to pay for a risk: the potions would not be rebought"}
 		} else if cur {
@@ -165,6 +171,9 @@ func (l *Ledger) judge(in Input, c Candidate, lam float64) verdict {
 	if in.Active {
 		v.xp, v.realized = l.BlendYield(c.Key, c.Eco.XPPerMin, in.Archetype)
 		v.starving = l.Starving(c.Key, in.Archetype)
+		if v.starving && v.realized > 0 && v.realized < v.xp {
+			v.xp = v.realized // a starved zone is worth what it paid, not what the model's kill speed promised
+		}
 	}
 	v.value = (v.xp + lam*c.Eco.Net()) * stayMin / (stayMin + c.TravelMin)
 	if v.riskPaid {
@@ -172,7 +181,7 @@ func (l *Ledger) judge(in Input, c Candidate, lam float64) verdict {
 		v.value *= row.RiskValueMul
 	}
 	if v.starving {
-		v.value *= l.P.StarveValueMul // the hero cannot cast here for want of mana: the model's kill speed is a fiction
+		v.value *= l.P.starveMul(in.Archetype) // the hero cannot cast here for want of mana: the model's kill speed is a fiction
 	}
 	return v
 }

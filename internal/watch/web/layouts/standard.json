@@ -117,16 +117,6 @@
           "fallback": "thoughts"
         },
         {
-          "id": "cards",
-          "band": "grid",
-          "col": 1,
-          "row": 54,
-          "colSpan": 12,
-          "rowSpan": 3,
-          "collapsed": false,
-          "order": 10
-        },
-        {
           "id": "hero-vitals",
           "band": "side",
           "col": 1,
@@ -446,16 +436,6 @@
           "collapsed": false,
           "order": 8,
           "fallback": "thoughts"
-        },
-        {
-          "id": "cards",
-          "band": "grid",
-          "col": 1,
-          "row": 39,
-          "colSpan": 6,
-          "rowSpan": 4,
-          "collapsed": false,
-          "order": 10
         },
         {
           "id": "hero-vitals",
@@ -779,16 +759,6 @@
           "fallback": "tally"
         },
         {
-          "id": "cards",
-          "band": "grid",
-          "col": 1,
-          "row": 18,
-          "colSpan": 3,
-          "rowSpan": 3,
-          "collapsed": false,
-          "order": 10
-        },
-        {
           "id": "hero-vitals",
           "band": "side",
           "col": 4,
@@ -1108,16 +1078,6 @@
           "collapsed": false,
           "order": 8,
           "fallback": "tally"
-        },
-        {
-          "id": "cards",
-          "band": "grid",
-          "col": 1,
-          "row": 18,
-          "colSpan": 3,
-          "rowSpan": 3,
-          "collapsed": false,
-          "order": 10
         },
         {
           "id": "hero-vitals",

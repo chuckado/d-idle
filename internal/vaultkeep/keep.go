@@ -18,6 +18,7 @@ import (
 	"sync"
 	"time"
 
+	"d2lod-bot/internal/bulkid"
 	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/vault"
 )
@@ -69,6 +70,7 @@ type Keeper struct {
 	Namer          func(d2dctl.VaultRecord, vault.Rec) string // display name of an identified record (default: the old name)
 	ShortBy        func() int                                 // gold the town budget is short by (repair, potions, merc); 0 none
 	Prompt         func() bool                                // loot.vaultSellPrompt
+	Ether          *bulkid.EtherPayer                         // identify.etherPerReveal payer; nil or price 0: Ether is not used
 	IdentifyPolicy func() int                                 // identify.policy after the measured-run override (nil: manual)
 
 	mu         sync.Mutex
