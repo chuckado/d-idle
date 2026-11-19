@@ -1,0 +1,1217 @@
+{
+ "schema": "didle.cap/1",
+ "tags": "tier is the engine's code and verification state today, not a build judgement; it is meant to be GENERATED from Proving Ground results (ADR 0020), until then it is typed from the profiles and live notes. reqLevel/reqSkills: V for Sorceress (docs/research/sorc-skill-matrix.md, read from skills.txt), S for Paladin (SME read, leveler/palprobe_test.go). synergies: null = not known (never 'none'); [] = none; the runtime overlay (Caps.Overlay) replaces req and synergies by skills.txt when the tables are loaded. mana.source names where the cost per level comes from: skilldamage.json (V, game.exe functions run in the emulator) or the skills.txt columns.",
+ "mana": {
+  "note": "U: a simple sustain budget, not the game's regen formula",
+  "perEnergy": {
+   "sorceress": 2.0,
+   "necromancer": 2.0,
+   "paladin": 1.5,
+   "barbarian": 1.0,
+   "amazon": 1.5,
+   "druid": 2.0,
+   "assassin": 1.5
+  },
+  "perLevel": {
+   "sorceress": 2.0,
+   "necromancer": 2.0,
+   "paladin": 1.5,
+   "barbarian": 1.0,
+   "amazon": 1.5,
+   "druid": 2.0,
+   "assassin": 1.5
+  },
+  "base": 35,
+  "regenFracPerSec": 0.011,
+  "fightSeconds": 30
+ },
+ "skills": {
+  "Fire Bolt": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "supported",
+   "reason": "V live: the only skill of the old skillTable (classdata.go header)",
+   "element": "fire",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Fire Ball",
+    "Meteor"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Ice Bolt": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "supported",
+   "reason": "in the cold and fallback bands; bolt aiming shared with Fire Bolt (U for Ice Bolt itself)",
+   "element": "cold",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Charged Bolt": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "supported",
+   "reason": "opening attack of the Lightning and Blizzard lines; G1 soaks ran it",
+   "element": "ltng",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Lightning",
+    "Nova"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Ice Blast": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "experimental",
+   "reason": "in the cold/blizzard bands, not exercised live (classdata.go: every non-Fire-Bolt row is U)",
+   "element": "cold",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Ice Bolt"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Glacial Spike": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "experimental",
+   "reason": "in the blizzard/cold bands, U live",
+   "element": "cold",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Ice Blast"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Fire Ball": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "experimental",
+   "reason": "skills.json kind bolt, in no profile band: aimable, never selected today",
+   "element": "fire",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Fire Bolt"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Lightning": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "unsupported",
+   "reason": "on every Sorceress profile avoid list (broken on the d2d build in use, classdata profiles.json); the engine never casts it",
+   "element": "ltng",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Charged Bolt"
+   ],
+   "synergies": [
+    "Charged Bolt",
+    "Nova"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Chain Lightning": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "unsupported",
+   "reason": "on the lightning and cold profile avoid lists (broken on the d2d build in use); the engine never casts it",
+   "element": "ltng",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Lightning"
+   ],
+   "synergies": [
+    "Charged Bolt",
+    "Lightning"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Blizzard": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "blizzard band from clvl 26, ground aim, U live",
+   "element": "cold",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Frost Nova",
+    "Glacial Spike"
+   ],
+   "synergies": [
+    "Ice Bolt",
+    "Ice Blast",
+    "Glacial Spike"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Meteor": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "skills.json ground kind, no profile band",
+   "element": "fire",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Fire Ball",
+    "Fire Wall"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Nova": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "nova",
+   "tier": "experimental",
+   "reason": "skills.json self kind, no profile band",
+   "element": "ltng",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Static Field"
+   ],
+   "synergies": [
+    "Charged Bolt",
+    "Lightning"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Frost Nova": {
+   "class": "sorceress",
+   "kind": "utility",
+   "delivery": "nova",
+   "tier": "experimental",
+   "reason": "skills.json self kind; a crowd-control cast, not a damage loop",
+   "element": "cold",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Static Field": {
+   "class": "sorceress",
+   "kind": "utility",
+   "delivery": "nova",
+   "tier": "supported",
+   "reason": "percent-of-life nova; live-verified use in the Sorceress melee-range loop per the brief (U for the exact engine file)",
+   "element": "ltng",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Frozen Armor": {
+   "class": "sorceress",
+   "kind": "buff",
+   "delivery": "self",
+   "tier": "supported",
+   "reason": "in every Sorceress buff ladder; state 10 read (necro.go notes it S)",
+   "element": "cold",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Shiver Armor": {
+   "class": "sorceress",
+   "kind": "buff",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "buff ladder fallback, state id U",
+   "element": "cold",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Ice Blast",
+    "Frozen Armor"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Chilling Armor": {
+   "class": "sorceress",
+   "kind": "buff",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "buff ladder fallback, state id U",
+   "element": "cold",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Shiver Armor"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Energy Shield": {
+   "class": "sorceress",
+   "kind": "buff",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "second buff slot of the cold and lightning profiles, U",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Teleport",
+    "Chain Lightning"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Thunder Storm": {
+   "class": "sorceress",
+   "kind": "buff",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json buff kind, in no profile",
+   "element": "ltng",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Nova",
+    "Chain Lightning"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Teleport": {
+   "class": "sorceress",
+   "kind": "movement",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "profile layout key f2; the walker does not plan teleport hops (U)",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Telekinesis"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Warmth": {
+   "class": "sorceress",
+   "kind": "passive",
+   "delivery": "self",
+   "tier": "supported",
+   "reason": "mana recovery, no engine action needed",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "none"
+   }
+  },
+  "Fire Mastery": {
+   "class": "sorceress",
+   "kind": "passive",
+   "delivery": "self",
+   "tier": "supported",
+   "reason": "passive, no action; damage not in skilldamage.json (mastery_none)",
+   "element": "fire",
+   "reqLevel": 30,
+   "reqSkills": [],
+   "mana": {
+    "source": "none"
+   }
+  },
+  "Cold Mastery": {
+   "class": "sorceress",
+   "kind": "passive",
+   "delivery": "self",
+   "tier": "supported",
+   "reason": "passive, no action; damage not in skilldamage.json",
+   "element": "cold",
+   "reqLevel": 30,
+   "reqSkills": [],
+   "mana": {
+    "source": "none"
+   }
+  },
+  "Lightning Mastery": {
+   "class": "sorceress",
+   "kind": "passive",
+   "delivery": "self",
+   "tier": "supported",
+   "reason": "passive, no action; damage not in skilldamage.json",
+   "element": "ltng",
+   "reqLevel": 30,
+   "reqSkills": [],
+   "mana": {
+    "source": "none"
+   }
+  },
+  "Telekinesis": {
+   "class": "sorceress",
+   "kind": "utility",
+   "delivery": "self",
+   "tier": "unsupported",
+   "reason": "no engine support (no skills.json row)",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Inferno": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "channelled skill, no skills.json row, no hold loop for casters",
+   "element": "fire",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Blaze": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "no skills.json row",
+   "element": "fire",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Inferno"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Fire Wall": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "no skills.json row",
+   "element": "fire",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Blaze"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Hydra": {
+   "class": "sorceress",
+   "kind": "summon",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "pet recognised by friendly.go (V live ids) but no cast or upkeep code",
+   "element": "fire",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Enchant"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Enchant": {
+   "class": "sorceress",
+   "kind": "buff",
+   "delivery": "self",
+   "tier": "unsupported",
+   "reason": "targets a minion or merc; no engine row",
+   "element": "fire",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Warmth",
+    "Fire Ball"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Frozen Orb": {
+   "class": "sorceress",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "no skills.json row",
+   "element": "cold",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Blizzard"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Zeal": {
+   "class": "paladin",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "supported",
+   "reason": "V live: Paladin Zeal/Holy Fire melee loop (classdata.go header, docs/classes/smoke-paladin.md)",
+   "element": "phys",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Sacrifice"
+   ],
+   "synergies": [
+    "Sacrifice"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Sacrifice": {
+   "class": "paladin",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "experimental",
+   "reason": "in the profile bands with lifePrice rules, U live",
+   "element": "phys",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Redemption",
+    "Fanaticism"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Smite": {
+   "class": "paladin",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "experimental",
+   "reason": "skills.json melee, plan tables use it to clvl 17; U live",
+   "element": "phys",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Blessed Hammer": {
+   "class": "paladin",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "profile band from clvl 18 with hold, but positioning (stand still in the pack) is not modelled",
+   "element": "mag",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Holy Bolt"
+   ],
+   "synergies": [
+    "Concentration"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Holy Bolt": {
+   "class": "paladin",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "experimental",
+   "reason": "skills.json bolt row, in no profile band",
+   "element": "mag",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Charge": {
+   "class": "paladin",
+   "kind": "movement",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "skills.json melee row but in no band; a charge move is not an attack loop",
+   "element": "phys",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Smite"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Vengeance": {
+   "class": "paladin",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "skills.json row, no band, elemental triple damage not in the estimator",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Zeal"
+   ],
+   "synergies": [
+    "Holy Fire",
+    "Holy Freeze",
+    "Holy Shock"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Conversion": {
+   "class": "paladin",
+   "kind": "utility",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "no band",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Vengeance"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Fist of the Heavens": {
+   "class": "paladin",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "skills.json ground row, no band, needs the target-bound cast",
+   "element": "ltng",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Blessed Hammer",
+    "Conversion"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Might": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "supported",
+   "reason": "V live: aura apply by cmd skill (aura.go, palready)",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Holy Fire": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "supported",
+   "reason": "V live in the Zeal loop (classdata.go header)",
+   "element": "fire",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Might"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Prayer": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "profile aura ladder, resting aura, U",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Concentration": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "hammerdin aura in the band ladder, U live",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Blessed Aim"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Thorns": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "profile aura ladder fallback",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Holy Shield": {
+   "class": "paladin",
+   "kind": "buff",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "profile buff slot, U live",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Charge",
+    "Blessed Hammer"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Blessed Aim": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Might"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Holy Freeze": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "element": "cold",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Holy Fire"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Holy Shock": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "element": "ltng",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Holy Freeze"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Sanctuary": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Thorns",
+    "Holy Freeze"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Fanaticism": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Concentration"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Conviction": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Sanctuary"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Redemption": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Vigor"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Salvation": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 30,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Resist Fire": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "element": "fire",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Resist Cold": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "element": "cold",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Resist Lightning": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "element": "ltng",
+   "reqLevel": 12,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Defiance": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Cleansing": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Prayer"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Vigor": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Cleansing",
+    "Defiance"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Meditation": {
+   "class": "paladin",
+   "kind": "aura",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Cleansing"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Bash": {
+   "class": "barbarian",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "experimental",
+   "reason": "barbarian profile band, melee loop shared with the Paladin (U for Barbarian)",
+   "element": "phys",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Double Swing": {
+   "class": "barbarian",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "experimental",
+   "reason": "barbarian profile band",
+   "element": "phys",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Frenzy": {
+   "class": "barbarian",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "experimental",
+   "reason": "barbarian band from clvl 18; sequence animation rate is U (power FlagSequenceRate)",
+   "element": "phys",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Whirlwind": {
+   "class": "barbarian",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "skills.json row has hold but no profile lists it: movement while attacking is not planned",
+   "element": "phys",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Leap Attack": {
+   "class": "barbarian",
+   "kind": "movement",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "no band",
+   "element": "phys",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "War Cry": {
+   "class": "barbarian",
+   "kind": "damage",
+   "delivery": "nova",
+   "tier": "unsupported",
+   "reason": "skills.json buff kind; stun nova, no loop",
+   "element": "phys",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Battle Orders": {
+   "class": "barbarian",
+   "kind": "buff",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "profile buff ladder, U live",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Shout": {
+   "class": "barbarian",
+   "kind": "buff",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "profile buff ladder, U live",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Iron Skin": {
+   "class": "barbarian",
+   "kind": "buff",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "profile buff ladder, U live",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Howl": {
+   "class": "barbarian",
+   "kind": "utility",
+   "delivery": "nova",
+   "tier": "experimental",
+   "reason": "skills.json buff row; a fear nova, no engine loop beyond the generic cast",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Taunt": {
+   "class": "barbarian",
+   "kind": "utility",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "skills.json buff row, no loop",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Double Throw": {
+   "class": "barbarian",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "skills.json melee row, needs throwing weapons; no band",
+   "element": "phys",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Natural Resistance": {
+   "class": "barbarian",
+   "kind": "passive",
+   "delivery": "self",
+   "tier": "supported",
+   "reason": "passive, no action",
+   "mana": {
+    "source": "none"
+   }
+  },
+  "Increased Stamina": {
+   "class": "barbarian",
+   "kind": "passive",
+   "delivery": "self",
+   "tier": "supported",
+   "reason": "passive, no action",
+   "mana": {
+    "source": "none"
+   }
+  },
+  "Axe Mastery": {
+   "class": "barbarian",
+   "kind": "passive",
+   "delivery": "self",
+   "tier": "supported",
+   "reason": "passive, no action",
+   "mana": {
+    "source": "none"
+   }
+  },
+  "Sword Mastery": {
+   "class": "barbarian",
+   "kind": "passive",
+   "delivery": "self",
+   "tier": "supported",
+   "reason": "passive, no action",
+   "mana": {
+    "source": "none"
+   }
+  },
+  "Raise Skeleton": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "supported",
+   "reason": "V live 2026-10-29: golem + skeletons upkeep (necro.go comments)",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Skeleton Mastery": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "supported",
+   "reason": "passive pet strength; see Raise Skeleton",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Raise Skeletal Mage": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "skills.json summon row, upkeep shared with skeletons, U",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Clay Golem": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "supported",
+   "reason": "V live 2026-10-29 (necro.go: golem cast)",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Golem Mastery": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "passive for golems, U",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Teeth": {
+   "class": "necromancer",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "experimental",
+   "reason": "necromancer fallback band, U live",
+   "element": "mag",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Bone Spear": {
+   "class": "necromancer",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "experimental",
+   "reason": "band from clvl 18, U live",
+   "element": "mag",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Corpse Explosion": {
+   "class": "necromancer",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "skills.json ground row, needs a corpse; not in the band",
+   "element": "phys",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Bone Armor": {
+   "class": "necromancer",
+   "kind": "buff",
+   "delivery": "self",
+   "tier": "supported",
+   "reason": "V live: state 14 readable (necro.go)",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Amplify Damage": {
+   "class": "necromancer",
+   "kind": "curse",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "curse cast loop exists, V live for the cover radius rule only (necro.go curseCover)",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Poison Dagger": {
+   "class": "necromancer",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "no band",
+   "element": "pois",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Poison Explosion": {
+   "class": "necromancer",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "no skills.json row",
+   "element": "pois",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Poison Nova": {
+   "class": "necromancer",
+   "kind": "damage",
+   "delivery": "nova",
+   "tier": "experimental",
+   "reason": "skills.json self row, no band",
+   "element": "pois",
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  }
+ }
+}
