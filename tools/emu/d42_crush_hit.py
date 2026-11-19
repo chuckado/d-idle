@@ -196,7 +196,7 @@ def compare(cpath, gpath, dpath):
                 print(f"{name}: id {r[0]} where case {c['id']} was expected", file=sys.stderr)
                 return 1
     gh_only = seed_only = both = flips = 0
-    for c, gl, dl in zip(cases, g, d):
+    for gl, dl in zip(g, d):
         bad_gh, bad_seed = gl[1] != dl[1], gl[2:4] != dl[2:4]
         gh_only += bad_gh and not bad_seed
         seed_only += bad_seed and not bad_gh

@@ -2,7 +2,7 @@
 
 A Crushing Blow takes a share of the monster's life directly (`FUN_005bffc0` writes the unit's stat 6) and is not part of the damage record's total (`+0x4c`), which `FUN_0057cb00` tests to decide whether a blow is big enough for a get-hit. d2d added the crush to the blow's damage and `hurt` used the sum as the blow's size for `rules::get_hit`, so a Crushing Blow proc staggered a monster that the same blow without the crush would not.
 
-`Blow::crush_fine` carries the crush's 256ths; `hurt` takes it off the size for the get-hit only (the monster's life still loses it); `Fight::land` calls the new `blow_hurt` (the soak and the `hurt` call it made inline) so the test drives the same line. `test_crush_get_hit` pins eight game.exe decisions; `docs/research/re/combat.md` says where the crush stands in the total.
+`Blow::crush_fine` carries the crush's 256ths; `hurt` takes it off the size for the get-hit only (the monster's life still loses it); `Fight::land` calls the new `blow_hurt` (the soak and the `hurt` call it made inline) so the test drives the same line. `test_crush_get_hit` pins nine game.exe decisions; `docs/research/re/combat.md` says where the crush stands in the total.
 
 Two commits: the oracle (`tools/emu/crush_hit.py`, `tests/game/test_crush_get_hit.cpp --crush-hit`, a README row), then the claim.
 
@@ -26,7 +26,7 @@ Two commits: the oracle (`tools/emu/crush_hit.py`, `tests/game/test_crush_get_hi
 | claim | 0 | 0 | 0 |
 | control (no crush, both trees) | 0 | 0 | 0 |
 
-MUTANT_BODY
+Mutants of the claim (one text change each, `test_crush_get_hit` rebuilt): the parent, `crush_fine` unset, `blow_hurt` passing 0, the crush taken off twice, the crush halved abort the pins and differ on the compare (72,108, 72,108, 72,108, 23,035, 50,307 of 100,800); the crush cut to whole points differs on 9,300 (and the ninth pin is its pin); a floor at 0 on the size is an equivalent mutant (the size is never negative); a missile blow carrying no crush and `marked` dropped are not caught: the cases are melee and carry no element. Both test binaries print ok; the 40-test fight subset of ctest passed (5 skipped), the whole-tree ctest has not run.
 
 ## In play
 

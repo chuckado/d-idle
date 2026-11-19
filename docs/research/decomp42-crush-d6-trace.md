@@ -8,7 +8,7 @@ Tags: **V run** (game.exe's own code, or d2d's real code, run and compared), **V
 
 | Item | Status | Branch (private fork) | Proof |
 |---|---|---|---|
-| 1. Crush D6: the get-hit size test counts the crush in d2d, not in game.exe | **built** | `fid/crush-d6-r1` (oracle `abdd63a7`, claim `18961f04`) on upstream main `da98b7f8` | section 1 |
+| 1. Crush D6: the get-hit size test counts the crush in d2d, not in game.exe | **built** | `fid/crush-d6-r1` (oracle `e177207f`, claim `a35db81c`) on upstream main `da98b7f8` | section 1 |
 | 2. P08 timed-state put rule | **no candidate**: the curse slot is merged upstream; `curse_put.py` against upstream main: 0 of 20,000 and 0 of 100,000 puts differ (V run) | none | section 2 |
 | 3. Player magic resistance (decomp37 T3) | **not worth building now**: no Normal Act 1 to 3 monster deals magic damage to the player (S, I); stays scoped | none | section 3 |
 | 4. The next three player-visible deviations | list, ranked by Normal Act 1-2 impact | none | section 4 |
@@ -31,17 +31,17 @@ Upstream at this run: `psi29a/d2decomped` main `da98b7f8` (V read, `git fetch up
 | | seed 7 | seed 5001 | seed 9091 |
 |---|---|---|---|
 | cases | 100,800 | 100,800 | 100,800 |
-| parent (oracle commit `abdd63a7`) | 72,108 differ (get-hit 46,345, seed 54,280), exit 1 | 72,163 (46,555 / 54,504) | 72,111 (46,412 / 54,459) |
-| claim (`18961f04`) | 0, exit 0 | 0 | 0 |
+| parent (oracle commit `e177207f`) | 72,108 differ (get-hit 46,345, seed 54,280), exit 1 | 72,163 (46,555 / 54,504) | 72,111 (46,412 / 54,459) |
+| claim (`a35db81c`) | 0, exit 0 | 0 | 0 |
 | control, no crush, parent and claim | 0 | 0 | 0 |
 
 The grid sits on the thresholds on purpose, so the parent's 72 percent is not a play frequency. A play-shaped grid (`playgrid`, 4,890 surviving crush procs: plain monsters of 12 to 1,024 points of max life at full and half life, a physical of 2 to 20 points, hit class 0, 30 seeds each; V run on the same oracle): game.exe staggers 1,921 (39 percent), the parent 4,513 (92 percent), the claim 1,921 (0 differ). A Crushing Blow weapon staggers a monster on nearly every proc in the parent whatever the weapon's damage, because the crush alone is a quarter of its life (more than max / 16).
 
 Edge exits (V run, `crush_hit.py`): an empty game file, an empty d2d file, an empty case file, a short d2d file, a malformed d2d line, a missing file, no argument, `game` on an empty case file, `gen` without arguments: every one exits 1; the equal 8-case set exits 0.
 
-### 1.2 The claim (`18961f04`), 8 files in 2 commits
+### 1.2 The claim (`a35db81c`), 2 commits
 
-`Blow::crush_fine` (the crush's share of `damage`/`frac`, set where the crush is added), `hurt(..., crush)` takes it off `blow_fine` for the get-hit only (the life still loses it), `blow_hurt(game_data, monster, blow, now_ms)` is the soak and the `hurt` call `Fight::land` made inline (now `land` calls it, so the test drives the same line), and `test_crush_get_hit` pins eight game.exe decisions. `docs/research/re/combat.md` says where the crush stands in the total. Bone Armor still takes the physical only (`soak`), and the total game.exe reads is after that event (`FUN_0057c1e0` raises event 0xb before its sum, S: `combat.md`), so `taken - crush` is the record total.
+`Blow::crush_fine` (the crush's share of `damage`/`frac`, set where the crush is added), `hurt(..., crush)` takes it off `blow_fine` for the get-hit only (the life still loses it), `blow_hurt(game_data, monster, blow, now_ms)` is the soak and the `hurt` call `Fight::land` made inline (now `land` calls it, so the test drives the same line), and `test_crush_get_hit` pins nine game.exe decisions. `docs/research/re/combat.md` says where the crush stands in the total. Bone Armor still takes the physical only (`soak`), and the total game.exe reads is after that event (`FUN_0057c1e0` raises event 0xb before its sum, S: `combat.md`), so `taken - crush` is the record total.
 
 ### 1.3 Mutants of the claim (V run; builder, local, never pushed)
 
@@ -63,7 +63,10 @@ Built locally, never pushed. 7 of 9 are caught by the compare (5 also by the pin
 
 ### 1.4 Build and tests
 
-BUILD_PLACEHOLDER
+- Oracle `e177207f` builds alone (rc 0, `test_crush_get_hit`, Release, GCC 14, the builder; its parent comparison above: 72,163 differ on seed 5001, rebuilt at this hash). Claim `a35db81c` builds (rc 0) and `test_crush_get_hit` prints ok with nine pins; the compare is 0 of 100,800 on seeds 7, 5001, 9091 on THIS hash (V run).
+- ctest subset (40 of the fight tests of decomp41's `subset2.txt` that exist upstream, plus `test_crush_get_hit`), built at the claim rev `d2c43d87` (the claim before the ninth pin and the `staggered` rename of the test, same code): 100 percent passed, 0 failed, 5 skipped (`test_armor_hit`, `test_freeze_resume`, `test_freeze_rules`, `test_next_hit`, `test_static_field`: they skip without their data). The `test_crush_get_hit` row of that ctest ran a mutant binary left in the build dir (m9), so it is not evidence; the final binary's run is the line above. **The full ctest of the whole tree and a parent subset run were NOT done** (builder queue); the 4 known failures of the parent (S: decomp41 section 1.3) were not re-checked.
+- `pr_guard.py upstream/main HEAD`: 0 FAIL 0 WARN; `presubmit.py --quick` on the final tree: 0 FAIL, 3 WARN (siblings: monster not player, merc, pet, answered in the body; build and gcc skipped by `--quick`) (V run). Both commits: author and committer the public noreply identity, `Agent: Claude Code` the only trailer (V run, `git interpret-trailers --parse`).
+- Pushed to the private fork remote (`fid/crush-d6-r1`, `a35db81c`); nothing is on GitHub.
 
 ### 1.5 Deviations (d2d against game.exe)
 
@@ -84,7 +87,7 @@ BUILD_PLACEHOLDER
 
 ### 1.7 PR candidate
 
-**Yes, `fid/crush-d6-r1`, local, not pushed to GitHub, awaiting the independent verifier.** Mismatches before: 72,108, 72,163, 72,111 of 100,800 (three seeds); after: 0; the control is 0 on both trees; MUTANT_SUMMARY. Standard (docs/upstream/verifier-*.md): the oracle commit comes first and builds alone; the oracle runs game.exe's functions natively; `compare` exits 1 on parent, empty, short, malformed; the claim's `test_crush_get_hit` pins game.exe's values; no force-push; the body is `docs/upstream/bodies/crush-d6-body.md`. The call site `Fight::land -> blow_hurt` is read, not run (a mutant that puts the old inline `soak` + `hurt` back in `land` would pass the oracle: listed below as an escape, tagged U): verifier, please grind it.
+**Yes, `fid/crush-d6-r1`, local, not pushed to GitHub, awaiting the independent verifier.** Mismatches before: 72,108, 72,163, 72,111 of 100,800 (three seeds); after: 0; the control is 0 on both trees; 7 of 9 mutants caught by the compare, 5 by the pins too, one equivalent, two disclosed escapes (section 1.3). Standard (docs/upstream/verifier-*.md): the oracle commit comes first and builds alone; the oracle runs game.exe's functions natively; `compare` exits 1 on parent, empty, short, malformed; the claim's `test_crush_get_hit` pins game.exe's values; no force-push; the body is `docs/upstream/bodies/crush-d6-body.md`. The call site `Fight::land -> blow_hurt` is read, not run (a mutant that puts the old inline `soak` + `hurt` back in `land` would pass the oracle: listed below as an escape, tagged U): verifier, please grind it.
 
 ### 1.8 Drill recipe (lab binary, fork verbs; run later, not now)
 
