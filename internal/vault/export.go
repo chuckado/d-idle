@@ -27,6 +27,7 @@ func (s *Store) Export(w io.Writer) error {
 	ef := exportFile{Version: ExportVersion, Hero: s.hero, Items: make([]Item, len(recs))}
 	for i := range recs {
 		ef.Items[i] = recs[i].Item
+		ef.Items[i].Sealed = "" // unpaid affixes are not handed out in a file either
 	}
 	return json.NewEncoder(w).Encode(ef)
 }

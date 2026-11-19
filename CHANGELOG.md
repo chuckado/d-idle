@@ -8,6 +8,14 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- verifycrushd5: crush D5 verifier, r1 FAIL, r2 PASS WITH CHANGES <!--sg:agent/verifyd5-->
+- cainl3: Search for Cain L3 drill, real bot chain on a lab slot <!--sg:agent/cainl3-->
+- decomp42 trace (docs/research/decomp42-crush-d6-trace.md): the get-hit size after a Crushing Blow, oracle and local candidate, no upstream post <!--sg:agent/decomp42-->
+- ADR 0020 Proving Ground and stat/skill agency <!--sg:agent/adrfable-->
+- design review 2026-11-19: docs only (bots comparison, fidelity and gaps, seven classes, stat and skill agency, architecture, roadmap) <!--sg:agent/fablereview-->
+- public D2 bots inventory (docs only) <!--sg:agent/botsurvey-->
+- Merge branch 'main' into etherreveal <!--sg:agent/etherreveal-->
+- Remove the unidentified item card feature (tab, sheet, routes, ladder rows) <!--sg:agent/nocards-->
 - verifymerc: verifier of merc gear absorb r1 (r1 FAIL, r2 PASS WITH CHANGES) <!--sg:agent/verifymerc-->
 - Merge branch 'main' into treefix3 <!--sg:agent/treefix3-->
 - bulkid2: town adapters, scroll path, Ether tap payer <!--sg:agent/bulkid2-->

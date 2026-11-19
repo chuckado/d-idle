@@ -427,7 +427,7 @@ func (f actFace) Act(ctx context.Context) watch.VaultActView {
 	}
 	in, p := k.Info(), k.RevealPrice(ctx)
 	v := watch.VaultActView{
-		Reveal: watch.VaultRevealView{Note: p.Note, Charges: p.Charges, Free: p.Free, PerItem: p.PerItem, EtherPer: p.EtherPer, Queued: in.RevQueued, Working: in.RevWorking, Done: in.Revealed, Line: k.RevealLine()},
+		Reveal: watch.VaultRevealView{Note: p.Note, Charges: p.Charges, Free: p.Free, PerItem: p.PerItem, EtherPer: p.EtherPer, Balance: p.Balance, Queued: in.RevQueued, Working: in.RevWorking, Done: in.Revealed, Line: k.RevealLine()},
 		Sell:   watch.VaultSellView{Queued: in.SellQueued, Working: in.SellWorking, Sold: in.Sold, Gold: in.GoldEarned, Line: k.SellLine()},
 	}
 	v.Reveal.Enabled, v.Reveal.Why = k.GateReveal(ctx)
