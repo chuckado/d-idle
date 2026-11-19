@@ -65,19 +65,20 @@ const (
 
 // Assert is one assertion on game state.
 type Assert struct {
-	Kind   string `json:"kind"`
-	Code   string `json:"code,omitempty"`
-	Where  string `json:"where,omitempty"` // item_in_pack: pack (default: anywhere carried), stash
-	Record int    `json:"record,omitempty"`
-	Set    uint16 `json:"set,omitempty"`
-	Clear  uint16 `json:"clear,omitempty"`
-	Area   int    `json:"area,omitempty"`
-	Areas  []int  `json:"areas,omitempty"`
-	Class  int    `json:"class,omitempty"`
-	State  string `json:"state,omitempty"`
-	Min    int    `json:"min,omitempty"`
-	Max    *int   `json:"max,omitempty"`
-	Why    string `json:"why,omitempty"`
+	Kind   string   `json:"kind"`
+	Code   string   `json:"code,omitempty"`
+	Or     []string `json:"or,omitempty"`    // item_in_pack: further codes that count as the same item (bks becomes bkd once Akara reads it)
+	Where  string   `json:"where,omitempty"` // item_in_pack: pack (default: anywhere carried), stash
+	Record int      `json:"record,omitempty"`
+	Set    uint16   `json:"set,omitempty"`
+	Clear  uint16   `json:"clear,omitempty"`
+	Area   int      `json:"area,omitempty"`
+	Areas  []int    `json:"areas,omitempty"`
+	Class  int      `json:"class,omitempty"`
+	State  string   `json:"state,omitempty"`
+	Min    int      `json:"min,omitempty"`
+	Max    *int     `json:"max,omitempty"`
+	Why    string   `json:"why,omitempty"`
 }
 
 // Validate checks that the fields the kind needs are present.
@@ -152,7 +153,7 @@ func evalOne(a Assert, st State) AssertResult {
 	case AItemInPack, AItemAbsent:
 		n := 0
 		for _, it := range st.Items {
-			if it.Code == a.Code && (a.Where == "" || it.Where == a.Where) {
+			if (it.Code == a.Code || contains(a.Or, it.Code)) && (a.Where == "" || it.Where == a.Where) {
 				n++
 			}
 		}
@@ -245,6 +246,15 @@ func evalOne(a Assert, st State) AssertResult {
 func (s State) has(g string) bool {
 	for _, x := range s.Has {
 		if x == g {
+			return true
+		}
+	}
+	return false
+}
+
+func contains(l []string, c string) bool {
+	for _, x := range l {
+		if x == c {
 			return true
 		}
 	}
