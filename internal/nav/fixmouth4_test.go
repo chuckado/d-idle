@@ -300,3 +300,23 @@ func TestCorneredAtTheMouthNeverCrosses(t *testing.T) {
 		t.Fatal("no click at all")
 	}
 }
+
+// botstuck: the Forgotten Tower case. The wanted exit (stairs) lies 6 subtiles from the arrival mouth; clicks toward it
+// are inside the mouth's disc and must not be refused for good. A wanted exit far from the mouth leaves it gated.
+func TestGateSkipsMouthBesideWantedExit(t *testing.T) {
+	stairs := d2map.Exit{Dest: 21, Pos: d2map.Point{X: denExit.Pos.X + 1, Y: denExit.Pos.Y + 6}}
+	s, n, o := gateNav(t, denAt(5, 3))
+	o.lm.Exits = []d2map.Exit{denExit, stairs}
+	n.wantExit = 21
+	if err := n.in.ClickWorld(denAt(2, 6)); err != nil || s.clicks[0] != denAt(2, 6) {
+		t.Fatalf("a click toward stairs beside the mouth must go as it is: %v %v", err, s.clicks)
+	}
+	if n.NearMouth(denAt(2, 6)) {
+		t.Fatal("the mouth beside the goal is not a guarded approach")
+	}
+	far := d2map.Exit{Dest: 21, Pos: d2map.Point{X: denExit.Pos.X + 40, Y: denExit.Pos.Y + 40}}
+	o.lm.Exits = []d2map.Exit{denExit, far}
+	if n.MouthClickOK(denAt(5, 3), denAt(2, 6)) {
+		t.Fatal("far stairs: the mouth stays gated")
+	}
+}

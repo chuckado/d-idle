@@ -57,6 +57,10 @@ func (t *Town) identifyNeeded(s *d2.Snapshot) bool {
 	if _, have := t.idTool(s); have {
 		return true
 	}
+	if t.tune().IdentifyTome == 0 {
+		t.logNoIDTool()
+		return false
+	}
 	return t.idScrollWanted(s)
 }
 
@@ -168,16 +172,82 @@ func (t *Town) NeedWithdrawForTest() (bool, error) {
 	return t.needWithdraw(s), nil
 }
 
-func (t *Town) withdraw(ctx context.Context, a *Act) error {
+// shopCost is the gold the shop pass of this plan would spend: missing town portal scrolls, a portal tome when none
+// is owned (TPTomeMinGold is its price, S), the identify tome when the chore keeps one, and the belt's potion shortfall at
+// the kit prices. The potion mix comes from the belt plan, so it follows the class.
+func (t *Town) shopCost(s *d2.Snapshot, plan ChorePlan) int {
+	r, tu := &t.e.Tune.Resource, t.tune()
+	cost := 0
+	if plan.Scrolls {
+		n, hasTome := t.scrollCount(s, "tsc", "tbk")
+		cost += max(tu.TPScrollTarget-n, 0) * r.KitTPGold
+		if !hasTome {
+			cost += tu.TPTomeMinGold
+		}
+		if tu.IdentifyTome != 0 && t.idScrollWanted(s) {
+			if _, has := t.scrollCount(s, "isc", "ibk"); !has {
+				cost += tu.TPTomeMinGold
+			}
+		}
+	}
+	if plan.Potions {
+		for _, n := range t.potionsWanted(s) {
+			cost += n * r.KitPotionGold
+		}
+	}
+	return cost
+}
+
+// shopTarget is the pack gold a withdrawal for the shop aims at: the shopping list, never below the minimal kit.
+func (t *Town) shopTarget(s *d2.Snapshot, plan ChorePlan) int {
+	if t.tune().WithdrawShop == 0 {
+		return 0
+	}
+	return max(t.shopCost(s, plan), t.kitGold())
+}
+
+// needShopWithdraw: the stash has gold, the pack cannot pay the shopping list, and the input can move gold. The old
+// rule only looked at an empty belt and ignored scrolls and tomes: a hero with 8 gold and 128k in the stash never
+// withdrew (tpfix diagnosis 2026-11-18). A stash that reads 0 is logged, since it may be unreadable.
+func (t *Town) needShopWithdraw(s *d2.Snapshot, plan ChorePlan) bool {
+	if t.tune().WithdrawShop == 0 || !plan.Gold || !plan.Potions && !plan.Scrolls {
+		return false
+	}
+	if _, can := t.e.In.(goldMover); !can {
+		return false
+	}
+	cost := t.shopCost(s, plan)
+	if cost == 0 || s.Player.Gold >= max(cost, t.kitGold()) {
+		return false
+	}
+	if s.Player.StashGold <= 0 {
+		t.e.Log.Info("town: no withdrawal for the shop, stash gold reads 0 (empty or unknown)", "gold", s.Player.Gold, "need", cost)
+		return false
+	}
+	return true
+}
+
+func (t *Town) withdraw(ctx context.Context, a *Act, plan ChorePlan) error {
+	if _, can := t.e.In.(goldMover); !can {
+		return nil // a forced round runs every chore; this input cannot move gold
+	}
 	s, err := t.current()
 	if err != nil {
 		return err
 	}
-	amount := min(t.bankKeep(s.Player.Level)-s.Player.Gold, s.Player.StashGold)
+	target := max(t.shopTarget(s, plan), t.bankKeep(s.Player.Level)*b2i(t.needWithdraw(s)))
+	amount := min(target-s.Player.Gold, s.Player.StashGold)
 	if amount <= 0 {
 		return nil
 	}
 	return t.withdrawAmount(ctx, a, s, amount, "for the kit")
+}
+
+func b2i(b bool) int {
+	if b {
+		return 1
+	}
+	return 0
 }
 
 // ErrNoGoldMover: the input cannot move gold through the game's own command, so the stash cannot be emptied.
@@ -227,4 +297,12 @@ func (t *Town) withdrawAmount(ctx context.Context, a *Act, s *d2.Snapshot, amoun
 		first = err
 	}
 	return first
+}
+
+// logNoIDTool is the reason when the identify chore has no tool and may not buy one (town.identifyTome 0); once per visit.
+func (t *Town) logNoIDTool() {
+	if !t.idTomeLogged {
+		t.idTomeLogged = true
+		t.e.Log.Info("town: identify skipped", "reason", "no scroll/tome (buy on request)")
+	}
 }

@@ -328,17 +328,24 @@ type Player struct {
 	X, Y        float64
 	Seat, PMode int // seat -1: the first player; pmode -1: none
 	Ghost       bool
+	Level       int // the player's level id; -1 when the reply has no level column (d2d before upstream 4307d9c8)
 }
 
-// ParsePlayer parses <id> <name> <x> <y> <seat> <pmode> <ghost>; the last five fields are fixed.
+// ParsePlayer parses <id> <name> <x> <y> <seat> <pmode> <ghost> [<level> [<quest bits>]]. d2d writes the fields
+// tab-separated, so they are read from the front; upstream 4307d9c8 (2026-11-11) appended the level id, and counting
+// from the end then read y as x and the level as the ghost flag (TASK-396). A space-separated line (old fixtures)
+// keeps the old rule: the last five fields are fixed and the name may hold spaces.
 func ParsePlayer(line string) (Player, error) {
-	p := Player{Raw: line}
+	p := Player{Raw: line, Level: -1}
 	f := fields(line)
 	if len(f) < 7 {
 		return p, fmt.Errorf("player: want 7 fields, got %d", len(f))
 	}
-	k := len(f) - 5
-	var e [6]error
+	k := 2 // first field after the name
+	if !strings.Contains(line, "\t") {
+		k = len(f) - 5
+	}
+	var e [7]error
 	p.ID, e[0] = atoi(f[0])
 	p.Name = strings.Join(f[1:k], " ")
 	p.X, e[1] = atof(f[k])
@@ -348,6 +355,9 @@ func ParsePlayer(line string) (Player, error) {
 	var g int
 	g, e[5] = atoi(f[k+4])
 	p.Ghost = g != 0
+	if len(f) > k+5 {
+		p.Level, e[6] = atoi(f[k+5])
+	}
 	return p, firstErr(e[:]...)
 }
 
@@ -380,20 +390,34 @@ type Warp struct {
 	Index int // for "debug enter"
 	X, Y  float64
 	To    int // Levels.txt id
+	// d.idle fork (didle/rebase-20261114b): the tile unit's cell and a cell whose click takes the warp. Upstream d2d
+	// 66aece1a takes a warp only for a click inside LvlWarp's Select box round the unit (as game.exe); the tile's own
+	// cell is outside it at the Den of Evil's mouth (TASK-412). HasClick is false on an older d2d (4 columns) or when
+	// the fork found no point (-1 -1).
+	UnitX, UnitY   float64
+	ClickX, ClickY float64
+	HasClick       bool
 }
 
-// ParseWarp parses <i> <x> <y> <to>.
+// ParseWarp parses <i> <x> <y> <to> [<unit x> <unit y> <click x> <click y>].
 func ParseWarp(line string) (Warp, error) {
 	w := Warp{Raw: line}
 	f := fields(line)
 	if len(f) < 4 {
 		return w, fmt.Errorf("warp: want 4 fields")
 	}
-	var e [4]error
+	var e [8]error
 	w.Index, e[0] = atoi(f[0])
 	w.X, e[1] = atof(f[1])
 	w.Y, e[2] = atof(f[2])
 	w.To, e[3] = atoi(f[3])
+	if len(f) >= 8 {
+		w.UnitX, e[4] = atof(f[4])
+		w.UnitY, e[5] = atof(f[5])
+		w.ClickX, e[6] = atof(f[6])
+		w.ClickY, e[7] = atof(f[7])
+		w.HasClick = firstErr(e[4:]...) == nil && w.ClickX >= 0 && w.ClickY >= 0
+	}
 	return w, firstErr(e[:]...)
 }
 
@@ -424,6 +448,40 @@ func ParsePreset(line string) (Preset, error) {
 	p.Hidden = h != 0
 	p.Name = strings.Join(f[5:], " ")
 	return p, firstErr(e[:]...)
+}
+
+// Room is a "room <type> <x> <y>" row that "debug presets" prints after the placed objects (V lab build, docs/probes/search-for-cain-l0-2026-11-18.md; U in the sandbox build). X, Y is the room origin in cells.
+type Room struct {
+	Type int
+	X, Y float64
+}
+
+// ParseRoom parses room <type> <x> <y>.
+func ParseRoom(line string) (Room, error) {
+	f := fields(line)
+	if len(f) < 4 || f[0] != "room" {
+		return Room{}, fmt.Errorf("room: want room <type> <x> <y>")
+	}
+	var r Room
+	var e [3]error
+	r.Type, e[0] = atoi(f[1])
+	r.X, e[1] = atof(f[2])
+	r.Y, e[2] = atof(f[3])
+	return r, firstErr(e[:]...)
+}
+
+// Rooms picks the room rows out of a presets reply (a nil reply has none).
+func Rooms(r *Reply) []Room {
+	if r == nil {
+		return nil
+	}
+	var out []Room
+	for _, l := range r.Lines {
+		if rm, err := ParseRoom(l); err == nil {
+			out = append(out, rm)
+		}
+	}
+	return out
 }
 
 // Object is one line of "debug objects": a shrine or chest.

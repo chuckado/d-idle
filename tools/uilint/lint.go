@@ -383,6 +383,13 @@ type Manifest struct {
 	Unlock      string  `json:"unlock"`
 	Skeleton    int     `json:"skeleton"`
 	Fit         bool    `json:"fit"`
+	OptIn       bool    `json:"optIn"`       // mounted only when the layout in force names the panel (S1, D-layouts.md section 1)
+	MinBlock    int     `json:"minBlock"`    // least height in px as the last panel of a rail column (S6)
+	SwitchWith  string  `json:"switchWith"`  // shares a column with that panel under a switch (S6)
+	SwitchLabel string  `json:"switchLabel"` // the switch button text
+	Slot        bool    `json:"slot"`        // renders into a fixed box and may sit in a cockpit slot (S1b)
+	CockpitOnly bool    `json:"cockpitOnly"` // belongs to the cockpit template alone: a free-grid layout keeps its fallback (uis2)
+	Scroll      bool    `json:"scroll"`      // holds a list that scrolls inside the box (data-scroll); needs slot
 	MergedInto  string  `json:"mergedInto"`
 	Owner       string  `json:"owner"`
 	Doc         string  `json:"doc"`
@@ -412,7 +419,7 @@ func (l *Linter) lintManifests(files []string) {
 	ladder := l.ladderIDs()
 	seen := map[string]string{}
 	prio := map[string]map[int]string{}
-	dirs := map[string]bool{}
+	dirs, slots := map[string]bool{}, map[string]bool{}
 	for _, f := range files {
 		id := panelOf(f)
 		dirs[id] = true
@@ -453,6 +460,10 @@ func (l *Linter) lintManifests(files []string) {
 			l.add(f, 1, "manifest-id", "id %q also in %s", m.ID, other)
 		}
 		seen[m.ID] = f
+		slots[m.ID] = m.Slot
+		if m.Scroll && !m.Slot {
+			l.add(f, 1, "manifest-schema", "scroll: true on a panel that is not a slot panel")
+		}
 		lo, sz, hi := sizes[m.MinSize], sizes[m.Size], sizes[m.MaxSize]
 		if m.MinSize == "" {
 			lo = sz
@@ -516,16 +527,27 @@ func (l *Linter) lintManifests(files []string) {
 			l.add("panels/"+e.Name(), 0, "manifest-orphan", "panel directory without panel.json")
 		}
 	}
-	l.lintLayouts(shell.Layout, dirs)
+	l.lintLayouts(shell.Layout, dirs, slots)
 }
 
 // lintLayouts checks layout.json and layouts/*.json (watch.layout/1, docs/ui-design-system.md section 6.4): the file
 // parses, every id is a panel, an alias, a compat card or a reserved id of shell.json, nothing overlaps within a
-// breakpoint, spans stay inside the columns, order is unique.
-func (l *Linter) lintLayouts(c watch.LayoutConf, panels map[string]bool) {
+// breakpoint, spans stay inside the columns, order is unique; a cockpit file (template cockpit/1) names only known slots
+// and only panels that fit one.
+func (l *Linter) lintLayouts(c watch.LayoutConf, panels, slots map[string]bool) {
 	known := func(id string) bool {
 		_, alias := c.Aliases[id]
 		return panels[id] || alias || contains(c.Compat, id) || contains(c.Reserved, id)
+	}
+	// a cockpit slot takes a panel that fits one (manifest slot: true, or listed in shell.json "slot" until its manifest says so),
+	// or an id that is not built yet (reserved); never a card of the old page, an alias, or a panel that is not for slots
+	slotOK := func(id string) bool {
+		return slots[id] || contains(c.Slot, id) && panels[id] || !panels[id] && contains(c.Reserved, id)
+	}
+	for _, id := range c.Slot {
+		if !panels[id] {
+			l.add("shell.json", 1, "layout-slot", "slot panel %s is not a panel", id)
+		}
 	}
 	for a, to := range c.Aliases {
 		if !panels[to] && !contains(c.Compat, to) {
@@ -545,10 +567,68 @@ func (l *Linter) lintLayouts(c watch.LayoutConf, panels map[string]bool) {
 		if err == nil {
 			err = m.Check(known)
 		}
+		if err == nil {
+			err = m.CheckSlots(slotOK)
+		}
+		if err == nil {
+			err = checkFallbacks(m, c, panels)
+		}
 		if err != nil {
 			l.add(rel, 1, "layout-manifest", "%v", err)
 		}
 	}
+}
+
+// checkFallbacks: a fallback names something that is on the page today (a panel or a pre-shell card, or an alias of
+// one), never another not yet built tile (a reserved id), and an entry never falls back to itself.
+func checkFallbacks(m watch.LayoutManifest, c watch.LayoutConf, panels map[string]bool) error {
+	real := func(id string) bool {
+		if to, ok := c.Aliases[id]; ok {
+			id = to
+		}
+		return panels[id] || contains(c.Compat, id)
+	}
+	fb := func(where, id, to string) error {
+		switch {
+		case to == "":
+			return nil
+		case to == id:
+			return fmt.Errorf("layout %s: %q falls back to itself", where, id)
+		case !real(to):
+			return fmt.Errorf("layout %s: fallback %q of %q is not a panel or card on the page", where, to, id)
+		}
+		return nil
+	}
+	for _, e := range m.Status {
+		if err := fb("status", e.ID, e.Fallback); err != nil {
+			return err
+		}
+	}
+	for name, bp := range m.Breakpoints {
+		own := map[string]bool{}
+		for _, p := range bp.Panels {
+			own[p.ID] = p.Hidden
+		}
+		used := map[string]string{}
+		for _, p := range bp.Panels {
+			if err := fb(name, p.ID, p.Fallback); err != nil {
+				return err
+			}
+			if p.Fallback == "" {
+				continue
+			}
+			// one tile stands in for one entry (a second one plans to nothing and is lost when the layout is saved), and the
+			// target's own entry in the same breakpoint must be switched off, else it would leave its own cell
+			if other, dup := used[p.Fallback]; dup {
+				return fmt.Errorf("layout %s: %q and %q both fall back to %q", name, other, p.ID, p.Fallback)
+			}
+			used[p.Fallback] = p.ID
+			if h, named := own[p.Fallback]; named && !h {
+				return fmt.Errorf("layout %s: the target %q of the fallback of %q is also placed in its own cell (it must be hidden there)", name, p.Fallback, p.ID)
+			}
+		}
+	}
+	return nil
 }
 
 func (l *Linter) ladderIDs() map[string]bool {

@@ -108,6 +108,7 @@ func (f *Fighter) resInput(snap *d2.Snapshot, hs []Target, pack int, skills []re
 			}
 		}
 	}
+	in.CastGuard = castGuard(f.e.Tune.Bot, f.tune(), p, hs)
 	in.MeleeClass = f.profileFor(p).MeleeClass()
 	in.PackDanger = f.packDanger(p, hs)
 	in.WeakPack = weakHostiles(p, hs, f.tune().FightRadius)

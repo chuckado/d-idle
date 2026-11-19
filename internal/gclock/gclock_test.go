@@ -87,6 +87,7 @@ func TestWithTimeoutDeadline(t *testing.T) {
 var allowed = map[string]int{
 	"internal/input/client.go": 3, // dial backoff, heal cooldown, helper RPC deadline: host
 	"internal/bot/loop.go":     2, // recycle and restart deadlines: the game process, host
+	"internal/bot/freeze.go":   3, // freeze, thaw and probe RPC deadlines of the d2d control socket: host
 	"internal/bot/farm.go":     1, // farm duration is a wall-clock goal budget (U: could be game time)
 }
 

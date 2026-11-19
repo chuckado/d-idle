@@ -153,6 +153,24 @@ func (e *Executor) Reset() {
 	e.kitBlocks = nil
 }
 
+// Park blocks group g with a reason so the planner moves on to the level plan; the bot Unparks it later.
+func (e *Executor) Park(g, why string) { e.blocked[g] = why }
+
+// Unpark lifts the block, strikes and failure counts of group g so the planner offers it again (the bot's retry after a
+// blocked journey: the hero farmed meanwhile and the world may have changed).
+func (e *Executor) Unpark(g string) {
+	delete(e.blocked, g)
+	delete(e.strikes, g)
+	delete(e.kitBlocks, g)
+	for _, m := range []map[string]int{e.fails, e.timeouts, e.deaths} {
+		for id := range m {
+			if strings.HasPrefix(id, "quest."+g+"/") {
+				delete(m, id)
+			}
+		}
+	}
+}
+
 // ForgetFails drops the failure bookkeeping (fails, timeouts, deaths, skips, blocks, spliced steps) but keeps what was
 // proven or assumed done. The bot calls it on a new game and after a game restart: a poverty spell or a bad area early
 // in a long run must not block a group for the rest of the goal.
@@ -484,6 +502,10 @@ func (e *Executor) handleRunFault(plan Plan, s Step, f *Fault, r Result) Result 
 		return r
 	case KindFatal:
 		r.Outcome = OutInterrupted
+		return r
+	case KindExploring:
+		r.Outcome = OutRetry // run the step again; nothing is counted
+		r.Err = errors.New(f.Why)
 		return r
 	case KindTimeout:
 		e.timeouts[s.ID]++

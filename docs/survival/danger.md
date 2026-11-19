@@ -1,0 +1,16 @@
+# Danger profile (survival slice S-A)
+
+> status: current (card survA). Implements design-2026-11-14.md section 3. Read-only, no behaviour change. Tags: V verified, I inferred, U unverified.
+
+- Code: `internal/danger` (generator `Build`, `bosses.json`, `overrides.json`, handler). Wiring: `cmd/d2bot/dangerwire.go`, route `GET /api/danger[?area=id|name][&difficulty=normal|nightmare|hell]` (no area: list of zones with the bad-pack size).
+- Source: the install tables through `data.DB` (Levels, MonStats, MonLvl, SuperUniques); nothing from the game is committed. Overrides are rows with evidence file, tag, expiry; at most five per class; a test fails a missing evidence file or an expired row.
+- Per zone and difficulty: monsters (share I, life/defence/to-hit/damage V from tables x MonLvl rows U as in readiness, dps I against a reference defence), encounters typical/bad/elite (I, from group size and density), uniques per clear, immunities (V), pay (XP per kill V, level-gap bands U).
+- Bosses (`bosses.json`, evidence boss1-trace.md): superuniques +3 level for damage and to-hit, life x4, experience x5; Extra Strong as `dmgPct` 235 (V run in boss1-trace).
+- Units per clear are estimated from MonDen x level size; `Params.UnitsPerDensityGroup` (units = MonDen x mean pack size x k per Levels DrlgType) is fitted to areamon-table.csv: median error outdoor 20%, preset 18%, maze 55%; `TestAreamonDiff` asserts a 45% median over all 36 areas (measured 41%, worst single area 8x off, a maze level). Levels.txt sizes are not real areas and are not used. Andariel (life 1024, defence 60, level 12), Smith 404, Countess 96, Blood Raven 113 match boss1-trace exactly (V, builder run).
+- Not here (later slices): power estimate, margin, ledger, controller. The `readiness` package stays until S-B folds it in.
+
+## Measured units and unblockable shooters (card dangerfit2, 2026-11-15)
+
+- `internal/danger/areaunits.json` (`areaunits.go`) is read by the generator. For an area it measures (Normal, Acts 1 and 2: 67 areas) `Density.Units` and `Density.PerScreen` are game.exe's room population (V run, 12 seeds; source tag `density` V). For any other area (Nightmare, Hell, Acts 3 to 5: NOT measured) `Units` keeps the Levels.txt formula (94 percent median error where measured) and `PerScreen` comes from the fitted units per tile times 280 screen tiles (`exp(a + b ln MonDen)`, U outside the sample), so it no longer depends on the 200 x 200 Levels.txt size that made mazes 10 to 30 times low. `Params.AreaUnits = nil` restores the old formula (used by `TestAreamonDiff`, which stays the formula's gate at 45 percent).
+- `TestAreaUnitsFile` pins the tiles fit against the rows (median error bound 22 percent; the report says 16 percent in sample, 17 percent leaving one area out).
+- `Monster.Unblockable` (`unblockable.json`, V run: monster-missile-trace.md Q4 'blockable: no' rows) marks ranged species whose missile has a zero physical record (Fallen Shaman fire, Radament, unravelers, vampires, skeleton mages, summoner, bighead, spitting slingers). `internal/power` skips the shield's block for that damage share (`Mon.Unblockable`, the share-weighted mean of the zone's ranged spawns). A ranged species not in the table counts as blockable.

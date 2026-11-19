@@ -26,15 +26,17 @@ const (
 
 // Order is one task order of the orders box.
 type Order struct {
-	ID      int     `json:"id"`
-	Kind    string  `json:"kind"`
-	Area    string  `json:"area,omitempty"`
-	Minutes int     `json:"minutes,omitempty"`
-	Forever bool    `json:"forever,omitempty"` // runs until the player cancels it (all farm limits 0)
-	State   string  `json:"state"`
-	Note    string  `json:"note,omitempty"`
-	Text    string  `json:"text"`
-	GivenAt float64 `json:"givenAt"` // virtual seconds
+	ID      int    `json:"id"`
+	Kind    string `json:"kind"`
+	Area    string `json:"area,omitempty"`
+	Minutes int    `json:"minutes,omitempty"`
+	Forever bool   `json:"forever,omitempty"` // runs until the player cancels it (all farm limits 0)
+	// UntilLevel ends the order done when the hero reaches that level (TickOrders). The bot sees an endless order.
+	UntilLevel int     `json:"untilLevel,omitempty"`
+	State      string  `json:"state"`
+	Note       string  `json:"note,omitempty"`
+	Text       string  `json:"text"`
+	GivenAt    float64 `json:"givenAt"` // virtual seconds
 	// Progress, for the Hero-now panel: set when the order starts, kills and xp counted until it ends.
 	StartedAt float64 `json:"startedAt,omitempty"`
 	Kills     int     `json:"kills,omitempty"`
@@ -74,6 +76,29 @@ func orderText(o Order) string {
 	default:
 		return "Rest in town"
 	}
+}
+
+// withUntilLevel checks an until-level request (go or fight, no minutes, no until-you-cancel, a level above the hero's up
+// to the queue table's maxUntilLevel) and returns the order the bot gets: endless, with the level kept for the hub's
+// check. It is the one rule the queue's Add and POST /api/orders share in meaning.
+func (h *Hub) withUntilLevel(r OrderRequest) (OrderRequest, error) {
+	t, err := ShippedQueueTable()
+	if err != nil {
+		return r, fmt.Errorf("%w: %v", ErrBadOrder, err)
+	}
+	lvl := h.heroNow().Level
+	switch {
+	case r.Kind != OrderGo && r.Kind != OrderHere:
+		return r, fmt.Errorf("%w: until-level is for go and fight orders", ErrBadOrder)
+	case r.Forever || r.Minutes != 0:
+		return r, fmt.Errorf("%w: until-level takes no minutes and no until-you-cancel", ErrBadOrder)
+	case r.UntilLevel < 2 || r.UntilLevel > t.MaxUntilLevel:
+		return r, fmt.Errorf("%w: level must be 2 to %d", ErrBadOrder, t.MaxUntilLevel)
+	case lvl > 0 && r.UntilLevel <= lvl:
+		return r, fmt.Errorf("%w: the hero is already level %d", ErrBadOrder, lvl)
+	}
+	r.Forever = true
+	return r, nil
 }
 
 // validateOrder normalises an order request against the area list (case-insensitive) and the limits.
