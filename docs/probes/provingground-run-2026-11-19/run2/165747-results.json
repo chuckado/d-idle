@@ -1,0 +1,218 @@
+{
+ "version": "didle.scenario-result/1",
+ "results": [
+  {
+   "version": "didle.scenario-result/1",
+   "id": "cain.report",
+   "class": "Paladin",
+   "seed": 11,
+   "status": "GREEN",
+   "asserts": [
+    {
+     "kind": "quest_bits",
+     "ok": true,
+     "want": "record 4 set 0x0001 clear 0x0002",
+     "got": "0x2011",
+     "why": "V L2: Akara talk turns 0x2012 into 0x2011 (bit 0 done, bit 1 reward pending cleared)"
+    },
+    {
+     "kind": "no_writes",
+     "ok": true,
+     "want": "writes after start: 0",
+     "got": "writes after start: 0"
+    }
+   ],
+   "virtual_min": 10,
+   "budget_min": 10,
+   "wall_sec": 31,
+   "tags": [
+    "CHEATED",
+    "quest-word"
+   ],
+   "trace": "provingground-out/20261119-165747/cain.report_Paladin_11.bot.log",
+   "state": {
+    "version": "didle.scenario-state/1",
+    "source": "d2d-observer-reload",
+    "has": [
+     "items",
+     "portals",
+     "objects"
+    ],
+    "area": 1,
+    "level": 17,
+    "gold": 0,
+    "stash": 2628,
+    "life_pct": 83,
+    "right_skill": 0,
+    "left_skill": 0,
+    "quests": {
+     "1": 4,
+     "4": 8209
+    },
+    "items": [
+     {
+      "code": "isc",
+      "where": "pack"
+     },
+     {
+      "code": "tbk",
+      "where": "pack"
+     },
+     {
+      "code": "rin",
+      "where": "pack"
+     },
+     {
+      "code": "mp1",
+      "where": "belt"
+     },
+     {
+      "code": "yps",
+      "where": "pack"
+     },
+     {
+      "code": "yps",
+      "where": "pack"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     }
+    ],
+    "objects": [
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 267,
+      "state": "NU"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 119,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 385,
+      "state": "NU"
+     }
+    ],
+    "stats": {
+     "dex": 20,
+     "ene": 15,
+     "skillpts": 16,
+     "skillsspent": 0,
+     "statpts": 80,
+     "str": 25,
+     "vit": 25
+    },
+    "area_changes": 20,
+    "area_trail": [
+     1,
+     2,
+     3,
+     4,
+     10,
+     1,
+     3,
+     4,
+     10,
+     1,
+     10,
+     1,
+     3,
+     4,
+     10,
+     1,
+     10,
+     1,
+     3,
+     4,
+     1
+    ],
+    "writes_after_start": 0
+   },
+   "digest": "c4b48ade08cb0248"
+  }
+ ]
+}

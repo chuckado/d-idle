@@ -206,7 +206,7 @@
     "goals": "campaign"
    },
    "budget": {
-    "virtual_min": 4
+    "virtual_min": 1
    },
    "matrix": {
     "classes": [
@@ -259,7 +259,10 @@
     "life_pct": 15
    },
    "trigger": {
-    "goals": "reach:30"
+    "goals": "reach:30",
+    "knobs": {
+     "resource.pointsDecisions": 1
+    }
    },
    "budget": {
     "virtual_min": 15
@@ -327,7 +330,10 @@
     ]
    },
    "trigger": {
-    "goals": "reach:30"
+    "goals": "reach:30",
+    "knobs": {
+     "resource.pointsDecisions": 1
+    }
    },
    "budget": {
     "virtual_min": 10
