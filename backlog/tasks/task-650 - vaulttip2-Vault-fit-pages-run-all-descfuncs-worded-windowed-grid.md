@@ -1,10 +1,11 @@
 ---
 id: TASK-650
 title: 'vaulttip2: Vault fit pages run, all descfuncs worded, windowed grid'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T18:36:00Z'
+updated_date: '2026-11-19T00:50:00Z'
 labels:
   - watch
   - feature
