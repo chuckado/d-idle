@@ -237,7 +237,8 @@ func TestCainFreeChunkIsDoneOnTheQuestWordOnly(t *testing.T) {
 		w.Area, w.InTown = area, false
 		return w
 	}
-	rt := &boardRT{handed: map[string]bool{}, reached: map[string]bool{}}
+	// the chunks before it are done (the board remembered them), so only its own evidence is in question
+	rt := &boardRT{handed: map[string]bool{"search_for_cain/read": true}, reached: map[string]bool{"search_for_cain/scroll/": true, "search_for_cain/stones/": true}}
 	for name, w := range map[string]task.World{"town": town(started), "stony field": field(started, task.StonyField), "tristram": field(started, task.Tristram)} {
 		if rt.chunkFact(q, c, w).Done {
 			t.Errorf("free_cain reads done in %s with Cain still caged", name)
