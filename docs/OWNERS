@@ -443,6 +443,7 @@ docs/probes/bot-cpu-fix-2026-11-16.md  credit-runner  botcpu2
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
 docs/probes/cainl0  credit-runner  cainl0
 docs/probes/cainl2  credit-runner  cainl2
+docs/probes/cainl3  live-agent  cainl3
 docs/probes/deploy-cockpit-2026-11-15.md  credit-runner  deploycockpit
 docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
 docs/probes/firsthour.md  live-agent  firsthour
@@ -455,6 +456,7 @@ docs/probes/search-for-cain-45-2026-11-18.md  credit-runner  cain45
 docs/probes/search-for-cain-5b-2026-11-18.md  credit-runner  cain5b
 docs/probes/search-for-cain-l0-2026-11-18.md  credit-runner  cainl0
 docs/probes/search-for-cain-l2-2026-11-18.md  credit-runner  cainl2
+docs/probes/search-for-cain-l3-2026-11-19.md  live-agent  cainl3
 docs/probes/survival-ab-8seed-2026-11-16.md  credit-runner  survab8
 docs/probes/survival-ab-8seed-rerun-2026-11-16.md  credit-runner  survtune
 docs/probes/survival-ab-reask-2026-11-17.md  credit-runner  survreask
@@ -465,6 +467,7 @@ docs/probes/test-characters.md  credit-runner  cainl0
 docs/probes/test-characters.md  credit-runner  cainl2
 docs/probes/test-characters.md  credit-runner  survab8
 docs/probes/test-characters.md  credit-runner  survtune
+docs/probes/test-characters.md  live-agent  cainl3
 docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tpreserve.md  live-agent  tpreserve-live
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed
@@ -473,11 +476,11 @@ docs/probes/viewer-brightness-2026-11-17.md  credit-runner  brightness
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
-docs/process/fork-rebase.md  credit-runner  forkrebase
+docs/process/fork-rebase.md  credit-runner  forkrebase2
 docs/process/queuespeed.md  credit-runner  queuespeed
 docs/process/sandbox-devp11.md  credit-runner  devp11doc
 docs/process/sandbox-devp12.md  credit-runner  devp12
-docs/process/sandbox-devp13.md  credit-runner  forkrebase
+docs/process/sandbox-devp13.md  credit-runner  forkrebase2
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
 docs/quest-hints.md  live-agent  questdrill
@@ -608,6 +611,7 @@ docs/upstream/pr-queue.md  credit-runner  p06posted
 docs/upstream/pr-queue.md  credit-runner  prfix2
 docs/upstream/pr-queue.md  credit-runner  prfix3
 docs/upstream/pr-queue.md  credit-runner  prpipeline
+docs/upstream/verifier-crushd5-2026-11-19.md  credit-runner  verifycrushd5
 docs/upstream/verifier-mercabsorb-2026-11-18.md  credit-runner  verifymerc
 docs/upstream/verifier-p02-2026-11-14.md  credit-runner  verifyp02
 docs/upstream/verifier-p03-p05-2026-11-14.md  credit-runner  verifyp03p05
@@ -1576,7 +1580,7 @@ tools/emu/pp_*  credit-runner  prprep
 tools/emu/zd_*  credit-runner  palskill-matrix
 tools/emu/zd_*  credit-runner  zealdiff
 tools/firsthour.sh  live-agent  firsthour
-tools/fork-rebase.sh  credit-runner  forkrebase
+tools/fork-rebase.sh  credit-runner  forkrebase2
 tools/friendpack/README.txt  credit-runner  cut012
 tools/friendpack/build.sh  credit-runner  buildhosts3
 tools/friendpack/checklist.sh  credit-runner  cut010b
