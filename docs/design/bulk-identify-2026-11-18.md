@@ -1,6 +1,6 @@
 # Bulk identify: Cain-free, lazy reveal, filter (design, 2026-11-18)
 
-> status: DESIGN plus slice plan, 2026-11-18 (user go by popup, SME plan "Cain-free + lazy reveal + filter"). Built offline in the slices of section 8; nothing ran live. Tags: V = verified (code read or a named offline test), S = secondary (game knowledge, SME answer), U = unverified, needs the live drill of section 9. Related: `docs/vault.md` (Reveal), `docs/inventory-actions.md` (identify commands, stash actions), `docs/unlock-idreveal.md` (the Cards), `docs/lootrules.md`, `docs/design/item-verbs.md`, `docs/d2d-vault-verbs.md`.
+> status: BUILT offline (B1-B5 and the town adapters, scroll path and Ether tap payer of slice B6, task bulkid2), 2026-11-19; nothing ran live. Slice plan 2026-11-18 (user go by popup, SME plan "Cain-free + lazy reveal + filter"). Built offline in the slices of section 8; nothing ran live. Tags: V = verified (code read or a named offline test), S = secondary (game knowledge, SME answer), U = unverified, needs the live drill of section 9. Related: `docs/vault.md` (Reveal), `docs/inventory-actions.md` (identify commands, stash actions), `docs/unlock-idreveal.md` (the Cards), `docs/lootrules.md`, `docs/design/item-verbs.md`, `docs/d2d-vault-verbs.md`.
 
 ## 1. What the user wants
 
@@ -129,3 +129,22 @@ Merge order: this doc first (`agent/bulkid-design`), then `agent/bulkid` with B1
 - Ether as a payer of reveals needs a price decision (`identify.etherPerReveal`, default 0 = off).
 - Default ilvl of the rare gear rule (20).
 - Whether Cain trips should also be allowed to start a trip when many items wait (today: ride-along only, as decided).
+
+## 11. Slice B6: town adapters, scroll path, Ether payer (built offline 2026-11-19, nothing ran live)
+
+| Piece | Where | Notes |
+|---|---|---|
+| Town side of a trip | `internal/town/bulkid.go` (`BulkID`, `SetBulkID`, chore step `bulkid` after `identify`) | `bulkSide` implements Mover (`moveOne`: the item verb when the mover has it, else the click path; the stash is opened on demand, the pack keeps `loot.freeCellsKeep` cells free), Lister (pack and stash, unidentified by the `Identified` flag) and CainTalk (`Present` = a Cain-class monster alive in the town snapshot, found by class never by position; `IdentifyAll` = `CainIdentify`). Cheap need check `needBulk`: journal pending, or policy 1 with Cain rescued and standing here, or policy 2; an idle latch stops a second walk to the chest for the same pack |
+| Journal | `bulkid.FileJournal` (`<data>/bulkid-<hero>.json`), recovery runs first in every `Trip.Run`, under any policy | a damaged file leaves the chore off |
+| Rescued | `bulkid.CainRescued(word)` (record 4 bit 1 or 0, V `search-for-cain-l2`), `cainQuest(ref, task.StageCleared)` in cmd/d2bot | Cain absent from the snapshot while policy 1: nothing is listed, opened or moved |
+| Scroll path (policy 2) | `bulkid.RunScrolls`, `town.bulkSide` as `ScrollIO` | held charges only; buys only when `town.identifyTome` is 1, within `identify.goldFloor` and `identify.maxScrolls`; `ScrollPrice` is the base cost of `isc` (S: a lower bound of the vendor price) |
+| Ether | `bulkid.EtherPayer`, `vaultkeep.Keeper.EnqueueRevealEther`, `POST /api/vault/reveal {"ether":true}`, `RevealInfo.etherPer` | only an explicit tap; refused (nothing queued, nothing spent) when `identify.etherPerReveal` is 0 or the wallet is short; charged ONCE per record AFTER the verified reveal, ledger key `reveal:<record id>`. U: nothing makes a reveal possible without a scroll, tome charge or Cain, so today an Ether tap pays in addition to the identify tool; what Ether should replace is the user's price decision (section 10) |
+
+Live drill additions (a d2-live agent, on top of section 9):
+8. Cain's identify scope: put 2 stash items and 2 pack items unidentified, talk to Cain without staging, read which flags changed (stash coverage: S says no).
+9. Item-move verbs away from the chest: `item move <id> inv -1 -1` from the stash panel at 2, 5, 10 cells from the chest (the fork's "far" refusal; does `moveOne` fall back to the click path?).
+10. Cain's Identify line index and the dialog for a full pack: time 40 items (`identify.tripCap`), read the chore log line `bulkid trip`.
+11. Prices: a scroll and a tome at the vendor (`isc` base cost vs the shop price), to replace the `ScrollPrice` lower bound.
+12. Journal recovery: kill the bot between the stage and the return of a 12 item trip; after restart the journal file lists the ids and the first town visit returns them (policy manual too).
+13. Cain's position: no coordinates are assumed; check `Present` finds the class in the Act 1 camp after he left the cage (V l2: he shows in town later).
+14. Ether: set `identify.etherPerReveal` to 1, tap a reveal with Ether on a hero with a scroll, read the ether ledger line `reveal:<id>`; with a zero balance the tap is refused.

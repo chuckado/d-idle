@@ -70,9 +70,10 @@ func (k *Keeper) free() bool { return k.Tools != nil && k.Tools.Free() }
 
 // RevealInfo is what the page shows before the click: the price per item and what the hero holds.
 type RevealInfo struct {
-	Charges int  `json:"charges"` // -1 unknown
-	Free    bool `json:"free"`    // Cain is here: no charge is used
-	PerItem int  `json:"perItem"` // charges one reveal costs (1)
+	Charges  int  `json:"charges"`            // -1 unknown
+	Free     bool `json:"free"`               // Cain is here: no charge is used
+	PerItem  int  `json:"perItem"`            // charges one reveal costs (1)
+	EtherPer int  `json:"etherPer,omitempty"` // Ether one tapped reveal costs; 0: Ether is not a payer
 	// Note is the viewer sentence while identify.policy wants Cain and he is not rescued ("" otherwise).
 	Note string `json:"note,omitempty"`
 }
@@ -96,7 +97,7 @@ func (k *Keeper) RevealNote() string {
 
 // RevealPrice reads the current price view.
 func (k *Keeper) RevealPrice(ctx context.Context) RevealInfo {
-	return RevealInfo{Charges: k.charges(ctx), Free: k.free(), PerItem: 1, Note: k.RevealNote()}
+	return RevealInfo{Charges: k.charges(ctx), Free: k.free(), PerItem: 1, EtherPer: k.Ether.Quote(1), Note: k.RevealNote()}
 }
 
 // GateReveal says whether a Reveal press can be queued now (the same refusals as Keep, plus: the bot must be able to
@@ -305,6 +306,7 @@ func (k *Keeper) recordReveal(st *vault.Store, r vault.Rec, back d2dctl.VaultRec
 		}
 		return err.Error()
 	}
+	k.chargeEther(r.ID)
 	return ""
 }
 
@@ -545,4 +547,47 @@ func (k *Keeper) finishReveal(ctx context.Context, st *vault.Store, r vault.Rec,
 		where = "free at Cain"
 	}
 	return "reveal: " + r.Name + " revealed (" + where + ")", false
+}
+
+// EnqueueRevealEther is the explicit tap "Reveal with Ether": it refuses (nothing queued, nothing spent) when Ether is
+// off or the wallet is short for the whole press, else it queues like EnqueueReveal and remembers which records were
+// paid for. The Ether is charged only once the reveal is verified (recordReveal), so a failed reveal costs none. No
+// automatic path calls this.
+func (k *Keeper) EnqueueRevealEther(ctx context.Context, ids []string, wantNow bool) []Result {
+	if err := k.Ether.Check(len(ids)); err != nil {
+		code := "ether"
+		if errors.Is(err, bulkid.ErrEtherOff) {
+			code = "etheroff"
+		}
+		out := make([]Result, 0, len(ids))
+		for _, id := range ids {
+			out = append(out, Result{ID: id, Code: code, Why: err.Error()})
+		}
+		return out
+	}
+	out := k.EnqueueReveal(ctx, ids, wantNow)
+	k.mu.Lock()
+	defer k.mu.Unlock()
+	if k.etherTap == nil {
+		k.etherTap = map[string]bool{}
+	}
+	for _, r := range out {
+		if r.OK {
+			k.etherTap[r.ID] = true
+		}
+	}
+	return out
+}
+
+func (k *Keeper) chargeEther(id string) {
+	k.mu.Lock()
+	tapped := k.etherTap[id]
+	delete(k.etherTap, id)
+	k.mu.Unlock()
+	if !tapped {
+		return
+	}
+	if err := k.Ether.Charge(id); err != nil {
+		k.note("ether:"+id, "Reveal: the Ether for "+id+" was not charged: "+err.Error())
+	}
 }
