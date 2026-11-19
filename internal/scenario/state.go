@@ -23,6 +23,10 @@ type State struct {
 	Stash *int     `json:"stash,omitempty"`
 	// LifePct is current life in percent of maximum.
 	LifePct *int `json:"life_pct,omitempty"`
+	// RightSkill and LeftSkill are the skill ids on the two hands (the lskill and rskill keys of the state verb; the
+	// active aura of a Paladin is the right hand).
+	RightSkill *int `json:"right_skill,omitempty"`
+	LeftSkill  *int `json:"left_skill,omitempty"`
 	// Quests maps the fork's quest record index to its 16-bit word (docs/forkcheats.md).
 	Quests map[int]uint16 `json:"quests,omitempty"`
 	// Items lists every item the hero carries: Code is the base code (bks, bkd), Where pack, stash, belt, body, cursor.
@@ -60,6 +64,8 @@ const (
 	ALifePctAtLeast = "life_pct_at_least"
 	AObjectState    = "object_state"    // class, state: at least one object of the class has the state
 	AAreaChangesLE  = "area_changes_le" // max
+	ARightSkillIs   = "right_skill_is"  // skill (the id on the right hand: the aura, the select verb's effect)
+	ALeftSkillIs    = "left_skill_is"   // skill
 	ANoWrites       = "no_writes"       // writes_after_start == 0 (the CRUTCH RULE line)
 )
 
@@ -72,6 +78,7 @@ type Assert struct {
 	Set    uint16 `json:"set,omitempty"`
 	Clear  uint16 `json:"clear,omitempty"`
 	Area   int    `json:"area,omitempty"`
+	Skill  int    `json:"skill,omitempty"` // right_skill_is, left_skill_is: skills.txt id
 	Areas  []int  `json:"areas,omitempty"`
 	Class  int    `json:"class,omitempty"`
 	State  string `json:"state,omitempty"`
@@ -114,6 +121,10 @@ func (a Assert) Validate() error {
 	case AAreaChangesLE:
 		if a.Max == nil {
 			return fmt.Errorf("area_changes_le needs max")
+		}
+	case ARightSkillIs, ALeftSkillIs:
+		if a.Skill <= 0 {
+			return fmt.Errorf("%s needs skill", a.Kind)
 		}
 	case ANoWrites:
 	default:
@@ -227,6 +238,16 @@ func evalOne(a Assert, st State) AssertResult {
 		}
 		sort.Strings(seen)
 		return AssertResult{Want: want, Got: fmt.Sprintf("class %d states %v", a.Class, seen)}
+	case ARightSkillIs, ALeftSkillIs:
+		v, hand := st.RightSkill, "right"
+		if a.Kind == ALeftSkillIs {
+			v, hand = st.LeftSkill, "left"
+		}
+		want := fmt.Sprintf("%s skill %d", hand, a.Skill)
+		if v == nil {
+			return unobs(want, hand+" skill")
+		}
+		return AssertResult{OK: *v == a.Skill, Want: want, Got: fmt.Sprintf("%s skill %d", hand, *v)}
 	case AAreaChangesLE:
 		want := fmt.Sprintf("area changes <= %d", *a.Max)
 		if st.AreaChanges == nil {

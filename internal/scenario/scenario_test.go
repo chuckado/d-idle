@@ -282,3 +282,19 @@ func TestShippedScenarios(t *testing.T) {
 		}
 	}
 }
+
+func TestSkillAssertions(t *testing.T) {
+	st := State{RightSkill: ip(98)}
+	if r := Evaluate([]Assert{{Kind: ARightSkillIs, Skill: 98}}, st); !r[0].OK {
+		t.Fatal(r)
+	}
+	if r := Evaluate([]Assert{{Kind: ARightSkillIs, Skill: 102}}, st); r[0].OK || r[0].Unobserved {
+		t.Fatal(r)
+	}
+	if r := Evaluate([]Assert{{Kind: ALeftSkillIs, Skill: 36}}, st); !r[0].Unobserved {
+		t.Fatal("an unread hand is unobserved, not red")
+	}
+	if (Assert{Kind: ARightSkillIs}).Validate() == nil {
+		t.Fatal("right_skill_is needs skill")
+	}
+}
