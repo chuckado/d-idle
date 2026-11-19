@@ -3,11 +3,13 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"testing"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/input"
+	"d2lod-bot/internal/nav"
 	"d2lod-bot/internal/quest"
 )
 
@@ -23,6 +25,7 @@ type treeWorld struct {
 	tree    input.Point
 	goTos   []input.Point
 	sweeps  int
+	hints   []*input.Point
 	clicked bool
 }
 
@@ -44,7 +47,11 @@ func (w *treeWorld) goTo(_ context.Context, p input.Point) error {
 	w.player = p
 	return nil
 }
-func (w *treeWorld) sweep(context.Context) error { w.sweeps++; return context.DeadlineExceeded }
+func (w *treeWorld) sweep(_ context.Context, hint *input.Point) error {
+	w.sweeps++
+	w.hints = append(w.hints, hint)
+	return context.DeadlineExceeded
+}
 func (w *treeWorld) look() (*d2.Unit, error) {
 	if w.near() {
 		return &d2.Unit{Class: quest.ObjTreeInifuss, X: w.tree.X, Y: w.tree.Y}, nil
@@ -100,5 +107,26 @@ func TestObjRoomTypeOnlyForListedClasses(t *testing.T) {
 	lm := &d2map.LevelMap{RoomRows: []d2map.RoomRow{{Type: 161, Pos: d2map.Point{X: 500, Y: 500}}}}
 	if _, ok := roomTargetIn(lm, quest.ObjRoomType[quest.ObjCainGibbet], input.Point{}); ok {
 		t.Fatal("class without a room type routed (type 0 matched a row)")
+	}
+}
+
+// The 2026-11-19 sandbox failure: the room lies beyond the known map, GoTo ends at the nearest known point with
+// ErrNoPath, 16 cells short of the room (tree not listed yet). The sweep must then explore toward the room.
+func TestUnreachableRoomSweepsTowardIt(t *testing.T) {
+	w := newTreeWorld(treeRooms[4])
+	room, _ := w.target()
+	stop := input.Point{X: room.X - 16*5, Y: room.Y}
+	goTo := func(_ context.Context, p input.Point) error {
+		w.goTos = append(w.goTos, p)
+		w.player = stop
+		return fmt.Errorf("nav: no path: %w", nav.ErrNoPath)
+	}
+	if w.near() {
+		t.Fatal("setup: stop must be out of listing range")
+	}
+	_, _ = exploreForObject(context.Background(), &exploreClock{}, &exploreTally{}, exploreKey{5, 30},
+		roomWalk(w.target, goTo, w.sweep, w.near), w.look)
+	if w.sweeps != 1 || w.hints[0] == nil || *w.hints[0] != room {
+		t.Fatalf("sweeps %d hints %v, want one sweep toward %v", w.sweeps, w.hints, room)
 	}
 }
