@@ -1,7 +1,7 @@
 ---
 id: TASK-657
 title: 'forkrebase: regular fork rebase routine, script and first round (devp13)'
-status: Proposed
+status: In Progress
 assignee:
   - credit-runner
 created_date: '2026-11-19T14:06:00Z'
@@ -18,6 +18,7 @@ owns:
   - "tools/fork-rebase.sh"
 exclusive: []
 contracts: []
+result: "first round done 2026-11-19: didle/rebase-20261119 tip 89ea1d19 (50 commits on upstream da98b7f89, 236 behind, 3 text conflicts + 1 semantic), d2d built on the builder (532 s), 9 of 10 fork verb tests pass, smoke_d2d fails identically on pure upstream main; bot TestRealD2D (d2dctl, d2dsrc) pass against it; image d2dbot:devp13 4039ae497734 loaded on the sandbox host, container still on devp12. Upstream ctest and a full d2drill leg not run. Verified on the builder, not live on the sandbox."
 ---
 
 ## Description
@@ -25,13 +26,13 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Why: TODO. Done when: TODO.
+Why: the private d2d fork must follow upstream regularly (user decision 2026-11-19). Done when: routine doc, script and first round (devp13 loaded, not switched) are merged.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 docs/process/fork-rebase.md: routine, conflict policy, tests, regression checklist
-- [ ] #2 tools/fork-rebase.sh measure/rebase/test/build, stops on conflict
-- [ ] #3 first round: rebase onto upstream main (didle/rebase-20261119), tests, image devp13 loaded not switched
-- [ ] #4 docs/process/sandbox-devp13.md: payloads, diff vs devp12, rollback
+- [x] #1 docs/process/fork-rebase.md: routine, conflict policy, tests, regression checklist
+- [x] #2 tools/fork-rebase.sh measure/rebase/test/build, stops on conflict
+- [x] #3 first round: rebase onto upstream main (didle/rebase-20261119), tests, image devp13 loaded not switched
+- [x] #4 docs/process/sandbox-devp13.md: payloads, diff vs devp12, rollback
 <!-- AC:END -->

@@ -32,6 +32,7 @@ The private d2d fork carries patches upstream does not have (item/vault/lab verb
 - Fork verb tests (python, one d2d process each): `lab_verbs_d2d`, `item_verbs_d2d`, `vault_verbs_d2d`, `item_colour_d2d`, `item_pic_d2d`, `labels_d2d`, `merc_verbs_d2d`, `cursor_verb_d2d`, `overlay_d2d`, `smoke_d2d`.
 - Upstream ctest: full test build and `ctest` in the long lane when the round carries a lot of upstream change (more than about 100 commits); the d2d-driven tests above are part of it. Tests without game data report Skipped, that is not a failure.
 - Bot side (regression checklist below): the bot's own parser tests against recorded replies, then the read-only real-d2d tests against a d2d started on the builder.
+- Known upstream failure: `smoke_d2d` fails on upstream main as of 2026-11-19 (roster order after Save and Exit, see `sandbox-devp13.md`); run it last and compare with a baseline build of upstream main before calling it a rebase regression (long lane, d2d only, about 11 minutes).
 - Lab smoke: a headless d2d with a throwaway character on the builder, a scripted devctl session (walk, fight a spawned monster, ground items, `dump items` with the three item gates). The full bot drill (`cmd/d2drill`) runs on a worker slot after a sandbox switch, not in the round.
 
 ## Regression checklist: what the bot's client assumes

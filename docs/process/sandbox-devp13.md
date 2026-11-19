@@ -36,7 +36,10 @@ Fork-side effect of our own PRs that merged upstream: none dropped by patch-id t
 ## Tests (on the builder, game data there; `tests/` of the branch)
 
 Each ran as `D2_MPQ_DIR=<data> python3 tests/<t>.py <builder d2d>` (V, from `tools/fork-rebase-builder.sh test`).
-RESULTS_PLACEHOLDER
+Result: 9 of 10 pass (rc 0): `lab_verbs_d2d`, `item_verbs_d2d`, `vault_verbs_d2d`, `item_colour_d2d`, `item_pic_d2d`, `labels_d2d`, `merc_verbs_d2d`, `cursor_verb_d2d`, `overlay_d2d`. V.
+- `smoke_d2d` FAILS (line 444: after Save and Exit the double-click on the first roster row plays `Beta`, the test expects `Alpha`). It fails the same way on pure upstream main `da98b7f89` built without any fork patch (builder long lane, same game data, rc 1, same assertion), so it is an upstream test or roster-order issue (char select orders saves by file time since 68fbb47c, the test's fake file times are in 2033), not a rebase regression. V. To report upstream if the user wants it (draft only, nothing posted).
+- Harness note: with `smoke_d2d` run first, `vault_verbs_d2d` failed twice with "a worn item is not vaulted" in the same container; without the failing smoke before it, vault passed 6 of 6 solo runs and in sequence. Cause not found (U); the script now runs `smoke_d2d` last.
+- Upstream full `ctest` (all unit tests) was not run in this round: the main lane stayed busy with gates, the long lane carried the baseline build. U. Next round: run it in the long lane (docs/process/fork-rebase.md).
 
 Bot side (V): `go test -p 1 ./internal/d2dctl/... ./internal/d2dsrc/...` ok (recorded replies, offline). `TestRealD2D` of `internal/d2dctl` and `internal/d2dsrc` (static test binaries) against a headless d2d with `--no-save --lab-verbs --item-verbs --vault-verbs`: both PASS, 0 unparsed lines. A d2dprobe session on the same d2d (ping, info, state, debug level / warps / presets / objects / portals, `debug mana full`, `debug give`, `debug equip`, `ground`, `dump items`, `dump stats`, `dump player`, `dump merc`, `dump vendor`, `dump ui`, `debug players`, `cmd move 40 40`) answered every step ok, 0 bad lines. Not run: a full `d2drill` or soak leg (needs a worker slot); `debug spawn` takes arguments I did not pass (usage error, not a regression).
 
