@@ -1,10 +1,11 @@
 ---
 id: TASK-677
 title: 'agencyp1a: Agency P1a capability table, shadow skill planner, build files'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T22:05:00Z'
+updated_date: '2026-11-19T23:04:00Z'
 labels:
   - bot
   - feature
