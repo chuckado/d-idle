@@ -296,7 +296,6 @@
 | nocards | proposed | - | `data/idreveal`<br>`internal/watch/unlockidreveal.go`<br>`internal/watch/unlockidreveal_test.go`<br>`internal/watch/unlockui_quiet_test.go`<br>`internal/watch/testdata`<br>`docs/unlock-ladder.md`<br>`docs/vault.md`<br>`internal/watch/web`<br>`internal/watch/funwire.go`<br>`internal/watch/nocards_test.go`<br>`data/unlocks`<br>`docs/unlock-idreveal.md` | - |
 | botsurvey | proposed | - | `docs/research/public-d2-bots-2026-11-19.md` | - |
 | fablereview | proposed | - | `docs/design/fable-review-2026-11-19` | - |
-| cainfix2 | proposed | - | `internal/d2dsrc/items.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/bot/questboard_goal_test.go`<br>`internal/task/step.go`<br>`internal/task/act1.go` | - |
 | adrfable | proposed | - | `docs/adr/0020-proving-ground-and-stat-skill-agency.md`<br>`docs/decisions.md`<br>`docs/adr/README.md`<br>`docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
