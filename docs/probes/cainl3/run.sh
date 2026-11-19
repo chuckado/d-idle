@@ -11,7 +11,7 @@ exec "$W/bin/d2dslot.sh" run -n $SLOT -w 600 -t $((WALLMIN*60+300)) -- bash -c '
 cd '$W'; S='$S'; export D2BOT_INSTANCE=cl3 D2D_RUN=on
 export D2D_BIN=$HOME/d2d-lab/survhold/bin/d2d.lab D2D_DATA=$HOME/d2d-lab/data
 rm -rf data-run; mkdir -p logs data-run/instances/cl3/state; inst=data-run/instances/cl3; home=$inst/d2d
-./bin/prep.cainl3 --home "$PWD/$home" --name Cainy-$S --seed $S --class 4 --clvl '$CLVL' --gold 3000 --ledger "$PWD/$inst/prep-ledger.jsonl" > logs/prep.log 2>&1 || { echo prep failed; exit 3; }
+./bin/prep.cainl3 --home "$PWD/$home" --name Cainy-$S --seed $S --class 4 --clvl '$CLVL' --gold ${GOLD:-8000} --ledger "$PWD/$inst/prep-ledger.jsonl" > logs/prep.log 2>&1 || { echo prep failed; exit 3; }
 head -c 24 /dev/urandom | od -An -tx1 | tr -d " \n" > data-run/wtoken; chmod 600 data-run/wtoken
 WP=$((9300+D2D_SLOT*10))
 nice -n 10 ./bin/d2bot.cainl3 --backend d2d --managed --d2d-class -1 --char Cainy-$S --seed $S \
