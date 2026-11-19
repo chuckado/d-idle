@@ -1,0 +1,33 @@
+{"time":"2026-11-19T11:25:07.525133782-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"bkd x1, isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:25:07.542547485-05:00","level":"INFO","msg":"route guard: blocked monastery (3 healing potions < 4); route guard: blocked tower (3 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:25:07.553159644-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":122,"player_y":75,"attempt":1}
+{"time":"2026-11-19T11:25:07.790618466-05:00","level":"INFO","msg":"Entered Stony Field","inst":"cl3","type":"area_change","goal":"g1","area":"Stony Field"}
+{"time":"2026-11-19T11:25:07.891996878-05:00","level":"INFO","msg":"state","inst":"cl3","from":"resupplying","to":"clearing","activity":"Quest: fighting (Touch the cairn stones)"}
+{"time":"2026-11-19T11:25:11.308309883-05:00","level":"INFO","msg":"memory quest words","inst":"cl3","normalQuestWords":["den_of_evil=0x0004","search_for_cain=0x0018"]}
+{"time":"2026-11-19T11:25:11.308412473-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/stones","outcome":"ran","kind":"none","err":null,"attention":""}
+{"time":"2026-11-19T11:25:11.319063517-05:00","level":"INFO","msg":"Entered Tristram","inst":"cl3","type":"area_change","goal":"g1","area":"Tristram"}
+{"time":"2026-11-19T11:25:14.457680479-05:00","level":"INFO","msg":"quest board: accepted search_for_cain/free_cain","inst":"cl3","quest":"search_for_cain","chunk":"free_cain"}
+{"time":"2026-11-19T11:25:22.620838976-05:00","level":"INFO","msg":"guard: drank healing at life 54% (state=clearing)","inst":"cl3"}
+{"time":"2026-11-19T11:25:22.641955013-05:00","level":"INFO","msg":"route guard: blocked monastery (2 healing potions < 4); route guard: blocked tower (2 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:25:22.64408394-05:00","level":"INFO","msg":"quest board: starting chunk search_for_cain/free_cain","inst":"cl3"}
+{"time":"2026-11-19T11:25:22.644841231-05:00","level":"INFO","msg":"quest board: step Clear the guards and free Cain","inst":"cl3"}
+{"time":"2026-11-19T11:25:25.048444361-05:00","level":"INFO","msg":"guard: drank healing at life 59% (state=clearing)","inst":"cl3"}
+{"time":"2026-11-19T11:25:25.048465065-05:00","level":"INFO","msg":"quest board: waiting: context canceled","inst":"cl3"}
+{"time":"2026-11-19T11:25:25.062799542-05:00","level":"INFO","msg":"route guard: blocked monastery (1 healing potions < 4); route guard: blocked tower (1 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:25:26.44308658-05:00","level":"INFO","msg":"guard: drank healing at life 62% (state=clearing)","inst":"cl3"}
+{"time":"2026-11-19T11:25:26.508601434-05:00","level":"INFO","msg":"state","inst":"cl3","from":"clearing","to":"resupplying","activity":"Going to town ([0 healing potions low on healing potions])"}
+{"time":"2026-11-19T11:25:26.789501032-05:00","level":"INFO","msg":"safety decision","inst":"cl3","action":"crowd-retreat","area":38,"life":191,"maxLife":304,"heal":0,"beltMP":0,"rejuv":0,"tome":1}
+{"time":"2026-11-19T11:25:27.51571918-05:00","level":"INFO","msg":"portal cast refused: 6 adjacent attackers (count rule, damage terms unknown) life=54% mode=0","inst":"cl3"}
+{"time":"2026-11-19T11:25:27.517047041-05:00","level":"WARN","msg":"d2d: Save and Exit requested (chicken / leave game): the process quits and its socket goes away","inst":"cl3"}
+{"time":"2026-11-19T11:25:30.396369323-05:00","level":"INFO","msg":"route guard: blocked monastery (0 healing potions < 4); route guard: blocked tower (0 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:25:30.404273789-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:25:30.611532025-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:25:30.617399674-05:00","level":"INFO","msg":"route guard: blocked monastery (3 healing potions < 4); route guard: blocked tower (3 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:25:30.619609123-05:00","level":"INFO","msg":"back to field: no portal in the unit table","inst":"cl3"}
+{"time":"2026-11-19T11:25:32.500277694-05:00","level":"INFO","msg":"Entered Blood Moor","inst":"cl3","type":"area_change","goal":"g1","area":"Blood Moor"}
+{"time":"2026-11-19T11:25:32.999110129-05:00","level":"INFO","msg":"state","inst":"cl3","from":"resupplying","to":"clearing","activity":"Quest: fighting (Level up to 33)"}
+{"time":"2026-11-19T11:25:36.238680517-05:00","level":"INFO","msg":"Entered Cold Plains","inst":"cl3","type":"area_change","goal":"g1","area":"Cold Plains"}
+{"time":"2026-11-19T11:25:36.82743634-05:00","level":"INFO","msg":"Entered Dark Wood","inst":"cl3","type":"area_change","goal":"g1","area":"Dark Wood"}
+{"time":"2026-11-19T11:25:36.832944695-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"level.33","outcome":"ran","kind":"none","err":null,"attention":""}
+{"time":"2026-11-19T11:25:37.290979844-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"level.33","outcome":"ran","kind":"none","err":null,"attention":""}
+{"time":"2026-11-19T11:25:39.405701144-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"level.33","outcome":"ran","kind":"none","err":null,"attention":""}
