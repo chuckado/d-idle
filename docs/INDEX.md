@@ -314,6 +314,20 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `design/`
 
 - [bulk-identify-2026-11-18.md](design/bulk-identify-2026-11-18.md): Bulk identify: Cain-free, lazy reveal, filter (design, 2026-11-18) (status: BUILT offline (B1-B5 and the town adapters, scroll path and Ether tap payer of slice B6, task bulkid2),...)
+
+`design/fable-review-2026-11-19/`
+
+- [00-summary.md](design/fable-review-2026-11-19/00-summary.md): Design review 2026-11-19: summary for the owner (status: REVIEW for the owner (Fable, card fablereview, branch `agent/fablereview`). Docs only. Nothing here is...)
+- [01-landscape-and-comparison.md](design/fable-review-2026-11-19/01-landscape-and-comparison.md): 01. The landscape: what public Diablo II bots do, and where d.idle stands against them (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided....)
+- [02-fidelity-and-gaps.md](design/fable-review-2026-11-19/02-fidelity-and-gaps.md): 02. Fidelity and gaps: what the idle hero will meet between Act 1 Normal and Baal in Hell (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided....)
+- [03-classes-plan.md](design/fable-review-2026-11-19/03-classes-plan.md): 03. All seven classes, Normal to Hell: builds, what the engine needs, and the order to bring them online (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided....)
+- [04-stat-skill-agency.md](design/fable-review-2026-11-19/04-stat-skill-agency.md): 04. Stat and skill points: how much the player decides, and how the hero copes with it (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided....)
+- [05-architecture-and-overhaul-options.md](design/fable-review-2026-11-19/05-architecture-and-overhaul-options.md): 05. Architecture: what to keep, what to rebuild, and whether to start over (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided....)
+- [06-roadmap.md](design/fable-review-2026-11-19/06-roadmap.md): 06. Roadmap: phases, order, effort, risks, and the decisions only the owner can make (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided or...)
+- [07-input-layer.md](design/fable-review-2026-11-19/07-input-layer.md): 07. The input layer: clicks, hotkeys and direct verbs (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only; added on the owner's note of...)
+
+`design/`
+
 - [item-colour-2026-11-18.md](design/item-colour-2026-11-18.md): Item colour in the inventory art: chain and slice plan (2026-11-18) (status: design, task-634 (card itemcolour). Follow-up to jewelcolor (task-632), which removed the invented wash....)
 - [item-verbs.md](design/item-verbs.md): Item verbs: inventory, stash and equipment actions through d2d's own item handlers (TASK-367) (status: DESIGN plus the built verbs (equip, unequip, move, identify, drop, gold, `caps`), 2026-11-12; stage 2 and...)
 - [loot-vault-2026-11-16.md](design/loot-vault-2026-11-16.md): Ethereal Vault: a database of every drop, created in the game only on Keep (design and feasibility) (status: DESIGN, 2026-11-16. Nothing here was built or run; the fork was read, not changed. "Ethereal Vault" is the...)

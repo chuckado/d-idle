@@ -292,6 +292,7 @@
 | etherreveal | proposed | - | `internal/vaultkeep`<br>`internal/vault`<br>`internal/bulkid`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`docs/design/bulk-identify-2026-11-18.md`<br>`internal/loot/vault.go`<br>`cmd/d2bot/vaultkeep.go`<br>`internal/env/tuning_identify.go`<br>`docs/knobs.md`<br>`internal/watch/vaultmass_test.go` | - |
 | nocards | proposed | - | `data/idreveal`<br>`internal/watch/unlockidreveal.go`<br>`internal/watch/unlockidreveal_test.go`<br>`internal/watch/unlockui_quiet_test.go`<br>`internal/watch/testdata`<br>`docs/unlock-ladder.md`<br>`docs/vault.md`<br>`internal/watch/web`<br>`internal/watch/funwire.go`<br>`internal/watch/nocards_test.go`<br>`data/unlocks`<br>`docs/unlock-idreveal.md` | - |
 | botsurvey | proposed | - | `docs/research/public-d2-bots-2026-11-19.md` | - |
+| fablereview | proposed | - | `docs/design/fable-review-2026-11-19` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -330,7 +331,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 387afed02 11-19 11:38 `Merge agent/fablereview: design review 2026-11-19: docs only (bots comparison, fidelity and gaps, seven classes, stat and skill agency, architecture, roadmap)` (fablereview)
 - ba78343bc 11-19 11:38 `Merge agent/botsurvey: public D2 bots inventory (docs only)` (botsurvey)
+- fba98be65 11-19 11:35 `Merge branch 'main' into fablereview` (-)
 - 503e4d1cc 11-19 11:35 `Merge branch 'main' into botsurvey` (-)
 - c085552a7 11-19 11:25 `Merge agent/etherreveal: Merge branch 'main' into etherreveal` (etherreveal)
 - 960f739ed 11-19 11:24 `Merge branch 'main' into etherreveal` (-)
@@ -338,6 +341,4 @@
 - 70ec05444 11-19 09:56 `Merge branch 'main' into etherreveal` (-)
 - 78a7ca888 11-19 09:54 `Merge agent/verifymerc: verifymerc: verifier of merc gear absorb r1 (r1 FAIL, r2 PASS WITH CHANGES)` (verifymerc)
 - d37ccd25b 11-19 09:53 `Merge branch 'main' into verifymerc` (-)
-- 7feab5450 11-19 09:41 `Merge agent/treefix3: Merge branch 'main' into treefix3` (treefix3)
-- b3721d322 11-19 09:40 `Merge branch 'main' into treefix3` (-)
 <!-- statusgen:end -->

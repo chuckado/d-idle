@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- design review 2026-11-19: docs only (bots comparison, fidelity and gaps, seven classes, stat and skill agency, architecture, roadmap) <!--sg:agent/fablereview-->
 - public D2 bots inventory (docs only) <!--sg:agent/botsurvey-->
 - Merge branch 'main' into etherreveal <!--sg:agent/etherreveal-->
 - Remove the unidentified item card feature (tab, sheet, routes, ladder rows) <!--sg:agent/nocards-->
