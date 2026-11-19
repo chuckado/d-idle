@@ -35,6 +35,7 @@ owns:
   - "tools/provingground/scenarios/behaviours.json"
 exclusive: []
 contracts: []
+result: "Shadow only, knob agency.planner default 0, no change to what the hero does; NOT verified live (offline tests only). Capability table for 30 Paladin and 30 Sorceress skills (data/capabilities), planner agrees with the combat profile at 25 of 30 Paladin/Sorceress checkpoints (30 of 40 with paper classes), GET /api/hero/plan, Points page line, internal/buildfile with plan table import/export. Scenario agency.plan-matches-profile is pending (needs a log assertion). docs/agency.md."
 ---
 
 ## Description
@@ -47,9 +48,9 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Capability table as data for all Paladin and Sorceress skills (kind, delivery, tier with reason, requirements, mana source, synergies)
-- [ ] #2 Shadow planner: rotation, aura, warnings, viability line; knob agency.planner 0 off 1 shadow; planner shadow log line a minute; GET /api/hero/plan; Points page line
-- [ ] #3 internal/buildfile with validator and plan table import/export; shipped Paladin and Sorceress tables validate against the capability table
-- [ ] #4 Tests: agreement fixture vs combat profiles, unsupported never chosen, paper Barbarian and Necromancer, -race -count=20
-- [ ] #5 docs/agency.md; scenario agency.plan-matches-profile (pending: needs a log assertion kind)
+- [x] #1 Capability table as data for all Paladin and Sorceress skills (kind, delivery, tier with reason, requirements, mana source, synergies)
+- [x] #2 Shadow planner: rotation, aura, warnings, viability line; knob agency.planner 0 off 1 shadow; planner shadow log line a minute; GET /api/hero/plan; Points page line
+- [x] #3 internal/buildfile with validator and plan table import/export; shipped Paladin and Sorceress tables validate against the capability table
+- [x] #4 Tests: agreement fixture vs combat profiles, unsupported never chosen, paper Barbarian and Necromancer, -race -count=20
+- [x] #5 docs/agency.md; scenario agency.plan-matches-profile (pending: needs a log assertion kind)
 <!-- AC:END -->
