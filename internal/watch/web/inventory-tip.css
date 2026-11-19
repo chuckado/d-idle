@@ -16,6 +16,31 @@
   .inv-tip .tip-line[data-k="bad"] { color: var(--d-tip-bad); }
   .inv-tip .tip-badges { display: flex; justify-content: center; gap: var(--d-sp-1); margin-block-start: var(--d-sp-1); }
   .inv-tip .tip-badge { font: 700 .65rem/1.4 var(--d-font-body); padding: 0 var(--d-sp-1); border-radius: 2px; background: var(--d-tip-line); color: var(--d-tip-text); }
-  .inv-tip .tip-badge[data-badge="sell"] { background: var(--d-bad); color: var(--d-on-bad); }
-  .inv-tip .tip-badge[data-badge="keep"] { background: var(--d-good); color: var(--d-on-good); }
+  .inv-tip .tip-badge[data-badge="sell"] { background: var(--d-tip-bad); color: var(--d-tip-bg); }
+  .inv-tip .tip-badge[data-badge="keep"] { background: var(--d-tip-good); color: var(--d-tip-bg); }
+}
+
+/* The character canvas tooltip (card uic3): a fixed 270 px column beside the cell, left aligned, with the where line, one block
+   per wearer (met and unmet rows), the comparison and a hint. On a phone or after a tap it is a bottom (or top) sheet. */
+@layer components {
+  .inv-tip[data-rich] { inline-size: 270px; max-inline-size: calc(100% - 2 * var(--d-sp-2)); max-block-size: calc(100% - 2 * var(--d-sp-2)); overflow: hidden; text-align: start; font-size: var(--d-fs-0); font-family: var(--d-font-body);
+    background: linear-gradient(var(--d-tip-bg), var(--d-tip-bg)), var(--d-surface-0); } /* opaque: the grid under it must not show through the text */
+  .inv-tip[data-rich] .tip-name { font-size: var(--d-fs-1); }
+  .inv-tip[data-rich] .tip-where { margin-block-start: var(--d-sp-1); padding-block-start: var(--d-sp-1); border-block-start: var(--d-bw) solid var(--d-tip-line); color: var(--d-tip-dim); font-weight: 600; text-transform: none; }
+  .inv-tip[data-rich] .tip-where .tip-badge { margin-inline-start: var(--d-sp-2); background: var(--d-info); color: var(--d-on-info, var(--d-tip-text)); }
+  .inv-tip .tip-sec { margin-block-start: var(--d-sp-1); padding-block-start: var(--d-sp-1); border-block-start: var(--d-bw) solid var(--d-tip-line); }
+  .inv-tip .tip-hd { font: 700 .62rem/1.3 var(--d-font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--d-tip-dim); }
+  .inv-tip .tip-req[data-ok="y"] { color: var(--d-tip-good); }
+  .inv-tip .tip-req[data-ok="n"] { color: var(--d-tip-bad); }
+  .inv-tip .tip-req[data-ok="w"] { color: var(--d-tip-warn); }
+  .inv-tip .tip-cmp { display: flex; gap: var(--d-sp-2); align-items: baseline; }
+  .inv-tip .tip-cmp .k { flex: 1 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--d-tip-dim); }
+  .inv-tip .tip-cmp .v { flex: none; font-variant-numeric: tabular-nums; }
+  .inv-tip .tip-cmp .d { flex: none; min-inline-size: 2.4em; text-align: end; font-variant-numeric: tabular-nums; }
+  .inv-tip .tip-cmp[data-tone="up"] .d { color: var(--d-tip-good); }
+  .inv-tip .tip-cmp[data-tone="dn"] .d { color: var(--d-tip-bad); }
+  .inv-tip .tip-cmp[data-tone="eq"] .d { color: var(--d-tip-dim); }
+  .inv-tip .tip-hint { margin-block-start: var(--d-sp-1); color: var(--d-tip-dim); font-size: .66rem; }
+  .inv-tip[data-sheet] { inset: auto 0 0 0; inline-size: auto; max-inline-size: none; border-radius: var(--d-r-2) var(--d-r-2) 0 0; max-block-size: 55%; }
+  .inv-tip[data-sheet="top"] { inset: 0 0 auto 0; border-radius: 0 0 var(--d-r-2) var(--d-r-2); }
 }

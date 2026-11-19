@@ -268,3 +268,88 @@ func TestStashErrandGoesHomeWithTheStashWhy(t *testing.T) {
 		g.finish()
 	}
 }
+
+// SafetyBusy is true exactly while a safety action is being carried out (the inventory desk's fast lane stays closed
+// meanwhile) and false again afterwards, also when the action fails.
+func TestSafetyBusyWhileCarryingOut(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) {})
+		g.w.set(func(w *world) { w.class, w.area = class, 2 })
+		if g.r.SafetyBusy() {
+			t.Fatalf("%v: busy before any action", class)
+		}
+		var during bool
+		g.fight.onAct = func(a SafetyAction) { during = g.r.SafetyBusy() }
+		g.fight.actErr = errors.New("boom")
+		_ = g.r.carryOut(context.Background(), SafetyDrinkLife)
+		if !during || g.r.SafetyBusy() {
+			t.Errorf("%v: during %v after %v", class, during, g.r.SafetyBusy())
+		}
+	}
+}
+
+// A request that ran leaves no pause behind: the next click in the field runs at the next loop tick, not after the 10 s
+// gap that only a postponed attempt needs (user report 2026-11-15: identify felt slow).
+func TestSecondPlayerCommandDoesNotWaitOutTheGap(t *testing.T) {
+	g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) {})
+	pg := &fakePlayerGear{w: g.w}
+	pg.pending.Store(1)
+	g.r.d.PlayerGear = pg
+	g.mover.exploreFn = blockExplore
+	g.run()
+	defer g.finish()
+	g.r.Start(reach(10))
+	g.waitFor("first run", func() bool { return pg.runs.Load() == 1 })
+	g.waitFor("in the field", func() bool { return g.w.count("explore") > 0 })
+	t0 := time.Now()
+	pg.pending.Store(1)
+	g.waitFor("second run", func() bool { return pg.runs.Load() >= 2 })
+	if d := time.Since(t0); d >= playerActionGap/2 {
+		t.Fatalf("second command waited %v: the gap must only follow a postponed attempt", d)
+	}
+}
+
+// fakeVaultKeep queues n items; Run creates up to per of them like the executor's per-visit cap.
+type fakeVaultKeep struct {
+	w    *world
+	n    atomic.Int32
+	per  int32
+	trip atomic.Bool
+	runs atomic.Int32
+}
+
+func (f *fakeVaultKeep) Pending() int     { return int(f.n.Load()) }
+func (f *fakeVaultKeep) TripWanted() bool { return f.trip.Load() }
+func (f *fakeVaultKeep) Run(context.Context) []string {
+	f.w.call("vault-keep")
+	f.runs.Add(1)
+	f.trip.Store(false)
+	k := min(f.n.Load(), f.per)
+	f.n.Add(-k)
+	return []string{"keep: done"}
+}
+
+// Kept items are created in town at a safe moment; "Keep now" walks home for them; the per-visit cap leaves the rest for a
+// later attempt, for a Paladin and a Sorceress.
+func TestVaultKeepRunsInTownAndKeepNowWalksHome(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) {})
+		g.w.set(func(w *world) { w.class, w.area = class, 2 })
+		vk := &fakeVaultKeep{w: g.w, per: 2}
+		vk.n.Store(3)
+		g.r.d.VaultKeep = vk
+		g.mover.exploreFn = blockExplore
+		g.run()
+		g.r.Start(reach(10))
+		g.waitFor("in the field, nothing wanted", func() bool { return g.w.count("explore") > 0 })
+		if vk.runs.Load() != 0 || g.w.count("totown") != 0 {
+			t.Fatalf("%v: ran or walked home without Keep now", class)
+		}
+		vk.trip.Store(true) // Keep now
+		g.waitFor("went home and ran", func() bool { return vk.runs.Load() >= 1 })
+		if g.w.count("totown") == 0 {
+			t.Fatalf("%v: Keep now did not walk home", class)
+		}
+		g.finish()
+	}
+}

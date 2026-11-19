@@ -118,6 +118,10 @@ func (h *HeroState) SetGoAt(g GoAt) error {
 	return nil
 }
 
+// StateFile is the per-hero state file in the bot's state directory. The Journey is retired (quest board S9); the
+// file is only read, once, by the board's import (cmd/d2bot importJourney).
+const StateFile = "campaign.json"
+
 // StateSchema tags state/campaign.json.
 const StateSchema = "campaign.state/1"
 

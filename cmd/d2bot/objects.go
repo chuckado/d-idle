@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"d2lod-bot/internal/boss"
@@ -12,6 +13,7 @@ import (
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/env"
+	"d2lod-bot/internal/gclock"
 	"d2lod-bot/internal/input"
 	"d2lod-bot/internal/nav"
 	"d2lod-bot/internal/quest"
@@ -30,6 +32,8 @@ type objectAdapter struct {
 	// clicked is the objects of objOnce specs already clicked in this area (the pointer keeps the value-type adapter
 	// shareable); nil in tests that do not click.
 	clicked *onceSet
+	// explored is the search time already spent per (area, class); nil means no memory between slices.
+	explored *exploreTally
 }
 
 type objKind int
@@ -75,9 +79,16 @@ var objSpecs = map[string]objSpec{
 	// Act 1 (docs/quest.md check 7): classes 30, 26 are U (objects.txt names not re-read), 60 is S (Kolbot RedPortal), 473 V.
 	"Tree of Inifuss": {quest.ObjTreeInifuss, objClick, ""},
 	"Tristram portal": {quest.ObjRedPortal, objLeave, ""},
-	"Cain's Cage":     {quest.ObjCainGibbet, objOnce, ""},
-	"cage":            {quest.ObjCage, objOnce, ""}, // Rescue on Mount Arreat: the step calls this three times
+	"Cain's Cage":     {quest.ObjCainGibbet, objClick, ""}, // one cage; the step may click again until the quest word flips
+	"cage":            {quest.ObjCage, objOnce, ""},        // Rescue on Mount Arreat: the step calls this three times
 }
+
+// objApproach is the cell, relative to the object in subtiles, the character walks to before the click, for objects
+// whose own tile is an obstacle and where the game's walk-to-click stalls short of it. V lab drill L2
+// (docs/probes/search-for-cain-l2-2026-11-18.md): from the arrival a bare interact stands at (22.7, 24.7); walking to
+// (25, 27) first, 2.3 cells west and 0.7 north of the gibbet (27.3, 27.7), then interacting opens the cage. Tristram is a
+// fixed map, so the offset holds for every seed (U: only seed 11 was run).
+var objApproach = map[int]input.Point{quest.ObjCainGibbet: {X: -11, Y: -3}}
 
 // Object names the Hellforge step uses (bot.ForgePlaceObject and bot.ForgeSmashObject, shared with internal/bot).
 const (
@@ -121,7 +132,16 @@ func (o objectAdapter) Interact(ctx context.Context, name string) error {
 			u, err = o.find(ctx, spec.class)
 		}
 		if err != nil {
+			if task.Classify(err) == task.KindExploring {
+				return err
+			}
 			return task.Wrap(task.KindNotFound, err)
+		}
+		if off, ok := objApproach[spec.class]; ok && o.nv != nil {
+			// a failed approach is not fatal: the click walks the rest itself
+			if err := o.nv.GoTo(ctx, input.Point{X: u.X + off.X, Y: u.Y + off.Y}); err != nil && ctx.Err() != nil {
+				return ctx.Err()
+			}
 		}
 		if err := o.click(ctx, u); err != nil {
 			return err
@@ -152,9 +172,177 @@ func (o objectAdapter) Interact(ctx context.Context, name string) error {
 	return task.Errorf(task.KindTimeout, "%s: the object never changed after %d clicks", name, tries)
 }
 
-func (o objectAdapter) find(ctx context.Context, class int) (*d2.Unit, error) {
-	return o.findNear(ctx, class, nil)
+// objectExploreBudget bounds one search walk of find (one slice: the Step budget of an Interact node is 3 minutes).
+// objectExploreTotal bounds the walks together per (area, class): the Dark Wood needed about 6 minutes for 100 percent
+// (V log 2026-11-17: 42 to 79 percent over three 100 s walks). Only a whole-level walk without the object (ErrExplored)
+// or this total ends the search for good; a walk that merely ran out of time is progress (KindExploring).
+const (
+	objectExploreBudget = 100 * time.Second
+	objectExploreTotal  = 12 * time.Minute
+)
+
+type exploreKey struct{ area, class int }
+
+// exploreTally is the time spent searching, kept across slices (the adapter is a value type: share the pointer).
+type exploreTally struct {
+	mu    sync.Mutex
+	spent map[exploreKey]time.Duration
 }
+
+func (t *exploreTally) add(k exploreKey, d time.Duration) time.Duration {
+	if t == nil {
+		return objectExploreTotal
+	}
+	t.mu.Lock()
+	defer t.mu.Unlock()
+	if t.spent == nil {
+		t.spent = map[exploreKey]time.Duration{}
+	}
+	t.spent[k] += d
+	return t.spent[k]
+}
+
+func (t *exploreTally) reset(k exploreKey) {
+	if t == nil {
+		return
+	}
+	t.mu.Lock()
+	delete(t.spent, k)
+	t.mu.Unlock()
+}
+
+// exploreForObject runs one bounded search walk and judges it. look finds the object; explore walks until the context
+// ends or the level is walked out (nav.ErrExplored). A nil tally keeps the old behaviour: one walk, then not found.
+func exploreForObject(ctx context.Context, clk interface{ Now() time.Time }, tally *exploreTally, k exploreKey,
+	explore func(context.Context) error, look func() (*d2.Unit, error)) (*d2.Unit, error) {
+	ectx, cancel := gclock.WithTimeout(ctx, objectExploreBudget)
+	defer cancel()
+	t0 := clk.Now()
+	xerr := explore(ectx)
+	if xerr != nil && !errors.Is(xerr, nav.ErrExplored) && ctx.Err() != nil {
+		return nil, xerr
+	}
+	u, err := look()
+	if err == nil {
+		tally.reset(k)
+		return u, nil
+	}
+	if errors.Is(xerr, nav.ErrExplored) {
+		tally.reset(k)
+		return nil, fmt.Errorf("%w (the whole level was walked)", err)
+	}
+	if spent := tally.add(k, clk.Now().Sub(t0)); spent < objectExploreTotal {
+		return nil, task.Errorf(task.KindExploring, "still exploring for object class %d (%d s of %d s)", k.class,
+			int(spent/time.Second), int(objectExploreTotal/time.Second))
+	}
+	tally.reset(k)
+	return nil, fmt.Errorf("%w (explored for %d min without finding it)", err, int(objectExploreTotal/time.Minute))
+}
+
+// find is the object of the class nearest to the character. When neither the object nor its preset is known yet it
+// explores the level until one shows up: d2d lists presets of built rooms only, so a far quest object (the Tree of
+// Inifuss in the Dark Wood) is missing on arrival (V docs/d2d-backend.md; V 2026-11-15 log: 12 "object class 30 not
+// found" within 1 s of arrival, never a walk).
+func (o objectAdapter) find(ctx context.Context, class int) (*d2.Unit, error) {
+	u, err := o.findNear(ctx, class, nil)
+	if err == nil || o.nv == nil || ctx.Err() != nil || !strings.Contains(err.Error(), "not found") {
+		return u, err
+	}
+	known := func() bool {
+		if s, err := o.e.Snapshot(); err == nil {
+			for i := range s.Objects {
+				if s.Objects[i].Class == class {
+					return true
+				}
+			}
+		}
+		if lm := o.levelMap(); lm != nil {
+			for _, p := range lm.Presets {
+				if p.Kind == d2map.PresetObject && p.ID == class {
+					return true
+				}
+			}
+		}
+		return false
+	}
+	area := 0
+	if s, err := o.e.Snapshot(); err == nil && s.Player != nil {
+		area = s.Player.Area
+	}
+	return exploreForObject(ctx, o.e.Clock, o.explored, exploreKey{area, class},
+		roomWalk(func() (input.Point, bool) { return o.roomTarget(class) }, o.nv.GoTo,
+			func(c context.Context, hint *input.Point) error {
+				if hint != nil {
+					return o.nv.ExploreToward(c, *hint, known)
+				}
+				return o.nv.Explore(c, known)
+			}, known),
+		func() (*d2.Unit, error) { return o.findNear(ctx, class, nil) })
+}
+
+// roomWalk is the explore step of find: when the level's room rows name the room of the object (target), walk to its
+// centre, stopping early once the object is known (it streams in about 13 to 18 cells away, V lab); a walk that fails
+// without the object showing up, or no room row at all, falls back to the coverage sweep. The room is often beyond the
+// known map (d2d builds rooms around the character): GoTo then ends at the nearest known point with ErrNoPath, still
+// outside the 13 to 18 cell listing range (V 2026-11-19 sandbox log: every cycle ended at the same spot with empty
+// plans, 100 s each, for 17 hours), so the sweep then explores toward the room instead of blindly.
+func roomWalk(target func() (input.Point, bool), goTo func(context.Context, input.Point) error,
+	sweep func(context.Context, *input.Point) error, known func() bool) func(context.Context) error {
+	return func(c context.Context) error {
+		dst, ok := target()
+		if !ok {
+			return sweep(c, nil)
+		}
+		if err := goTo(c, dst); err == nil || known() {
+			return err
+		}
+		return sweep(c, &dst)
+	}
+}
+
+// levelMap is the current level map: the tracker of Game.exe, or the navigator's d2d world (Env.World is nil there, so
+// the preset lookups of find never ran on d2d before this).
+func (o objectAdapter) levelMap() *d2map.LevelMap {
+	if o.e.World != nil {
+		_, _ = o.e.World.Update()
+		return o.e.World.Current()
+	}
+	if o.nv != nil {
+		return o.nv.CurrentMap()
+	}
+	return nil
+}
+
+// roomTarget is where the room that holds a quest object of the class stands, when this level's room rows name one and
+// the character is not already there (then the object is not in this room and the sweep takes over).
+func (o objectAdapter) roomTarget(class int) (input.Point, bool) {
+	rt, ok := quest.ObjRoomType[class]
+	if !ok {
+		return input.Point{}, false
+	}
+	lm := o.levelMap()
+	s, err := o.e.Snapshot()
+	if lm == nil || err != nil || s.Player == nil {
+		return input.Point{}, false
+	}
+	return roomTargetIn(lm, rt, input.Point{X: s.Player.X, Y: s.Player.Y})
+}
+
+func roomTargetIn(lm *d2map.LevelMap, roomType int, from input.Point) (input.Point, bool) {
+	for _, r := range lm.RoomRows {
+		if r.Type == roomType {
+			dx, dy := from.X-r.Pos.X, from.Y-r.Pos.Y
+			if dx*dx+dy*dy <= roomReach*roomReach {
+				return input.Point{}, false
+			}
+			return input.Point{X: r.Pos.X, Y: r.Pos.Y}, true
+		}
+	}
+	return input.Point{}, false
+}
+
+// roomReach is how close, in subtiles (2 cells), the character must be to the room centre to call it reached.
+const roomReach = 10
 
 // findNear is the object of the class nearest to at (the character when at is nil), looking again after walking to the
 // level preset when nothing streamed in yet.
@@ -184,14 +372,11 @@ func (o objectAdapter) findNearSkip(ctx context.Context, class int, at *input.Po
 			return best, nil
 		}
 		// quest chests stream in late (V act2 F1): walk to the preset, then look again
-		if o.e.World != nil {
-			_, _ = o.e.World.Update()
-			if lm := o.e.World.Current(); lm != nil {
-				for _, p := range lm.Presets {
-					if p.Kind == d2map.PresetObject && p.ID == class {
-						_ = o.nv.GoTo(ctx, input.Point{X: p.Pos.X, Y: p.Pos.Y})
-						break
-					}
+		if lm := o.levelMap(); lm != nil {
+			for _, p := range lm.Presets {
+				if p.Kind == d2map.PresetObject && p.ID == class {
+					_ = o.nv.GoTo(ctx, input.Point{X: p.Pos.X, Y: p.Pos.Y})
+					break
 				}
 			}
 		}

@@ -1,0 +1,17 @@
+label: Rogue Scout 9 · helm, armour, bow
+box hidden: false
+div [data-canvas=]
+  div.cv-mhead []
+    span.cv-st [data-tone=warn] "unknown"
+    span.cv-life [aria-label=life 55 percent role=img]
+      i.on []
+      i.on []
+      i.on []
+      i.on []
+      i.on []
+      i.on []
+      i []
+      i []
+      i []
+      i []
+  p.cv-mnote [] "Equipment unreadable on this backend."

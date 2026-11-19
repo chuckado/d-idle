@@ -39,7 +39,7 @@ function setup(opts) {
   const api = { el: (t, c, text) => { const e = mk(t, c); if (text !== undefined) e.textContent = text; return e; }, toast: (s, t) => calls.toast.push(s + ': ' + t), main, targets, layout,
     demo: (opts && opts.demo) || '', plan: () => plan, save: async (l) => { calls.save.push(JSON.parse(JSON.stringify(l))); return { ok: true, layout: l }; },
     reset: async () => { calls.reset++; return { ok: true, layout }; }, done: (l) => calls.done.push(l) };
-  const src = fs.readFileSync(process.argv[3], 'utf8').replace(/^import .*$/m, '').replace('export function start', 'function start');
+  const src = fs.readFileSync(process.argv[3], 'utf8').split('// ---- Edit layout on a cockpit')[0].replace(/^import .*$/m, '').replace('export function start', 'function start');
   const ctx = { moveItem: L.moveItem, sameCells: L.sameCells, toPanels: L.toPanels, setOff: L.setOff, JSON, Math, Object, Map, parseFloat, parseInt, String,
     getComputedStyle: () => ({ columnGap: '0px', paddingLeft: '0px' }), requestAnimationFrame: (f) => { calls.raf++; f(); }, window: { innerWidth: 1920 },
     matchMedia: () => ({ matches: !!(opts && opts.still) }) };

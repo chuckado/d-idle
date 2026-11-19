@@ -1,15 +1,18 @@
 // Runs web/panels/video/panel.js against a stub DOM: shown only with a stream, reconnect backoff, collapse memory,
 // full screen on the panel. Usage: node video_panel.js path/to/panel.js
-const assert = require('assert'), { load, shellCtx } = require('./panel_harness.js');
+const assert = require('assert'), { load, shellCtx, controlsOf } = require('./panel_harness.js');
 const path = require('path');
-const M = load(path.join(path.dirname(process.argv[2]), '../../mjpeg.js'));
+const M0 = load(path.join(path.dirname(process.argv[2]), '../../mjpeg.js'));
+const B = load(path.join(path.dirname(process.argv[2]), 'brightness.js'));
+const S = load(path.join(path.dirname(process.argv[2]), '../../streamstats.js'));
+const M = Object.assign({}, M0, S, B, { drawStats: S.draw });
 const P = load(process.argv[2], M);
 // no stream: the panel hides itself
 { const t = []; const { root, c } = shellCtx({}, {}, t); P.mount(root, c); assert.strictEqual(c.hidden, true); }
 const store = {}, timers = [];
 const { root, c } = shellCtx({ frameUrl: '/stream' }, store, timers);
 P.mount(root, c);
-const shot = c.body.children[0].children[0], [full, col] = c.actions.children;
+const shot = c.body.children[0].children[0], full = controlsOf(c).find((b) => b.dataset && b.dataset.key === 'full'), col = controlsOf(c).find((b) => b.dataset && b.dataset.key === 'collapse');
 assert.notStrictEqual(c.hidden, true, 'shown when the server offers a stream');
 assert.ok(/^\/stream\?t=tok&r=\d+$/.test(shot.src), 'src ' + shot.src);
 const waits = [];
@@ -25,6 +28,22 @@ assert.strictEqual(c.body.hidden, true); assert.strictEqual(store.collapsed, '1'
 col.fire('click');
 assert.strictEqual(c.body.hidden, false); assert.strictEqual(store.collapsed, '0');
 full.fire('click'); assert.ok(root.fullscreen, 'full screen asks the panel');
+
+// viewer-side Brightness: default leaves the picture alone, each press steps Darkest..Brightest, remembered per browser, wraps
+{
+  const st = {}, t = [];
+  const s3 = shellCtx({ frameUrl: '/stream' }, st, t); P.mount(s3.root, s3.c);
+  const fr = s3.c.body.children[0], b = s3.c.body.children.flatMap((e) => e.children || []).find((x) => x.dataset && x.dataset.key === 'brightness');
+  assert.ok(b, 'a Brightness button'); assert.strictEqual(b.textContent, 'Brightness: Default'); assert.strictEqual(fr.dataset.bright, '100');
+  assert.strictEqual(fr.style['--vid-bright'], '1'); assert.strictEqual(st.brightness, undefined, 'default is not stored');
+  b.fire('click'); assert.strictEqual(fr.dataset.bright, '115'); assert.strictEqual(fr.style['--vid-bright'], '1.15'); assert.strictEqual(st.brightness, '115');
+  b.fire('click'); b.fire('click'); assert.strictEqual(fr.dataset.bright, '70'); assert.strictEqual(b.textContent, 'Brightness: Darkest');
+  b.fire('click'); b.fire('click'); assert.strictEqual(fr.dataset.bright, '100', 'wraps to Default');
+  const s4 = shellCtx({ frameUrl: '/stream' }, { brightness: '85' }, []); P.mount(s4.root, s4.c);
+  assert.strictEqual(s4.c.body.children[0].dataset.bright, '85', 'restored'); 
+  const s5 = shellCtx({ frameUrl: '/stream' }, { brightness: 'junk' }, []); P.mount(s5.root, s5.c);
+  assert.strictEqual(s5.c.body.children[0].dataset.bright, '100', 'junk falls back to Default');
+}
 
 // the connection logic on a fake clock: stall -> reconnect with backoff, hidden -> closed, visible -> reopened
 {
@@ -75,5 +94,39 @@ full.fire('click'); assert.ok(root.fullscreen, 'full screen asks the panel');
   for (let i = 0; i < bytes.length; i += 7) p.push(new Uint8Array(bytes.subarray(i, i + 7)));
   assert.deepStrictEqual(parts, [['AAAAA', 'image/jpeg'], ['BBB', 'image/png']]);
   assert.throws(() => M.partParser(() => {}).push(new Uint8Array(Buffer.from('--f\r\nContent-Type: image/jpeg\r\n\r\nxx'))), /Content-Length/);
+}
+// the parser keeps its place across many parts and odd chunk sizes without losing bytes (growing buffer)
+{
+  const parts = [];
+  const p = M.partParser((b) => parts.push(b.length));
+  const body = 'x'.repeat(90000);
+  let msg = '';
+  for (let i = 0; i < 40; i++) msg += '--f\r\nContent-Type: image/jpeg\r\nContent-Length: ' + body.length + '\r\n\r\n' + body + '\r\n';
+  const bytes = Buffer.from(msg);
+  for (let i = 0; i < bytes.length; i += 16384) p.push(new Uint8Array(bytes.subarray(i, i + 16384)));
+  assert.strictEqual(parts.length, 40); assert.ok(parts.every((n) => n === 90000));
+}
+// low-rate mode: the toggle persists per browser and asks the server for fewer parts
+{
+  const t = [], st = {};
+  const s2 = shellCtx({ frameUrl: '/stream' }, st, t); P.mount(s2.root, s2.c);
+  const img = s2.c.body.children[0].children[0];
+  const btn = controlsOf(s2.c).find((b) => b.dataset && b.dataset.key === 'lowrate');
+  assert.ok(btn, 'low rate button');
+  assert.ok(!/fps=/.test(img.src), 'default asks for every frame');
+  btn.fire('click');
+  assert.strictEqual(st.lowrate, '1'); assert.ok(/fps=8/.test(img.src), 'low rate src ' + img.src);
+  const s3 = shellCtx({ frameUrl: '/stream' }, { lowrate: '1' }, []); P.mount(s3.root, s3.c);
+  assert.ok(/fps=8/.test(s3.c.body.children[0].children[0].src), 'remembered');
+}
+// the controls are a toolbar below the picture, never over it: only Collapse stays in the title bar; a control added later lands in the toolbar
+{
+  const t = [], st = {};
+  const s4 = shellCtx({ frameUrl: '/stream' }, st, t); P.mount(s4.root, s4.c);
+  const keys = (list) => list.map((b) => b.dataset && b.dataset.key);
+  assert.deepStrictEqual(keys(s4.c.actions.children), ['collapse'], 'title bar holds Collapse only');
+  const bar = s4.c.body.children.find((e) => e.attrs && e.attrs.role === 'toolbar');
+  assert.ok(bar, 'toolbar exists in the body'); assert.ok(s4.c.body.children.indexOf(bar) > s4.c.body.children.indexOf(s4.c.body.children[0]), 'toolbar comes after the picture frame');
+  for (const k of ['full', 'lowrate', 'stats']) assert.ok(keys(bar.children).includes(k), k + ' in the toolbar');
 }
 console.log('ok');

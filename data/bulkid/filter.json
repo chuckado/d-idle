@@ -1,0 +1,11 @@
+{
+  "schema": "bulkid.filter/1",
+  "rules": [
+    {"id": "set_unique", "types": ["*"],    "quality": ["set", "unique"],   "priority": 90},
+    {"id": "jewelry",    "types": ["ring", "amul"], "quality": ["magic", "rare"], "priority": 80},
+    {"id": "charms",     "types": ["char"],  "quality": ["magic"],          "priority": 70},
+    {"id": "jewels",     "types": ["jewl"],  "quality": ["magic", "rare"],  "priority": 70},
+    {"id": "rare_gear",  "types": ["*"],     "quality": ["rare"], "minIlvl": 20, "priority": 60}
+  ],
+  "default": false
+}

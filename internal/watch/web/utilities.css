@@ -6,3 +6,15 @@
   .d-muted { color: var(--d-text-2); }
   .d-hidden, [hidden] { display: none; }
 }
+@layer utilities {
+  /* a short phone (360x640): the Needs row and Orders below it share a few dozen pixels (quests8, the 9 px Orders overflow). The row's buttons take
+     the cockpit phone's 38 px, the row loses its padding, a lone row drops its heading (the row says what it is), two or more rows show the first
+     and the panel's own data-scroll list scrolls to the rest; Orders' verbs take 38 px too. Its own layer, after panels, so no important flag. */
+  @media (max-height: 700px) {
+    .d-main[data-cmode="phone"] [data-panel="needs-you"] .n-btn { block-size: 38px; min-block-size: 38px; }
+    .d-main[data-cmode="phone"] [data-panel="needs-you"] .n-row { padding-block: 0; }
+    .d-main[data-cmode="phone"] [data-panel="needs-you"] .n-list:has(> .n-row:nth-child(2)) { max-block-size: 40px; }
+    .d-main[data-cmode="phone"] [data-panel="needs-you"]:has(.n-list > .n-row:only-child):not(:has(.n-dots[data-more="1"])) .n-head { display: none; }
+    .d-main[data-cmode="phone"] [data-panel="orders"] .o-verbs .d-btn { min-block-size: 38px; block-size: 38px; line-height: 36px; }
+  }
+}

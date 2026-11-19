@@ -1,0 +1,8 @@
+excluded DT (dead unit): d2d entered 1, game allowed 0
+excluded A1 (swing, P04): d2d entered 0, game allowed 1
+excluded KK (swing, P04): d2d entered 0, game allowed 1
+excluded S1 (swing, P04): d2d entered 0, game allowed 1
+excluded S3 (swing, P04): d2d entered 0, game allowed 1
+excluded S4 (swing, P04): d2d entered 0, game allowed 1
+excluded DD (dead unit): d2d entered 1, game allowed 0
+13 cells, 0 differ, 7 excluded

@@ -2,6 +2,7 @@ package bot
 
 import (
 	"strings"
+	"sync/atomic"
 
 	"d2lod-bot/internal/data"
 )
@@ -19,6 +20,7 @@ const (
 // ItemMeta is what the bot needs to know about an item base. Class is d2.Unit.Class.
 type ItemMeta struct {
 	Name     string
+	Code     string // base item code (bks, bkd, ...); empty when the catalog has none
 	GoalType string // the goals.ItemFilter type word: rune, gem, charm, ring, amulet, ...
 	W, H     int
 	Potion   PotionKind
@@ -48,10 +50,19 @@ type Catalog interface {
 	ExpToReach(level int) int64
 }
 
-type dataCatalog struct{ db *data.DB }
+type dataCatalog struct {
+	db   *data.DB
+	memo []atomic.Pointer[ItemMeta] // ItemMeta per class, filled on first use: the item table is immutable and Item runs per item per poll
+}
 
 // NewDataCatalog adapts the extracted game tables. A nil db yields an empty catalog.
-func NewDataCatalog(db *data.DB) Catalog { return dataCatalog{db} }
+func NewDataCatalog(db *data.DB) Catalog {
+	c := dataCatalog{db: db}
+	if db != nil {
+		c.memo = make([]atomic.Pointer[ItemMeta], len(db.Items))
+	}
+	return c
+}
 
 // goalTypes maps item type codes (and their ancestors) to the words used by goals.ItemFilter.
 // UNVERIFIED against the real itemtypes.txt: codes are from memory of the standard table.
@@ -65,8 +76,20 @@ func (c dataCatalog) Item(class int) (ItemMeta, bool) {
 	if c.db == nil || class < 0 || class >= len(c.db.Items) {
 		return ItemMeta{}, false
 	}
+	if class >= len(c.memo) {
+		return c.item(class), true
+	}
+	if p := c.memo[class].Load(); p != nil {
+		return *p, true
+	}
+	m := c.item(class)
+	c.memo[class].Store(&m)
+	return m, true
+}
+
+func (c dataCatalog) item(class int) ItemMeta {
 	b := c.db.Items[class]
-	m := ItemMeta{Name: b.Display, W: b.Width, H: b.Height, Cost: b.Cost, Antidote: b.Code == "yps"}
+	m := ItemMeta{Name: b.Display, Code: b.Code, W: b.Width, H: b.Height, Cost: b.Cost, Antidote: b.Code == "yps"}
 	if m.Name == "" {
 		m.Name = b.Name
 	}
@@ -85,12 +108,17 @@ func (c dataCatalog) Item(class int) (ItemMeta, bool) {
 	case c.db.IsA(b.Type, "rpot"):
 		m.Potion = PotionRejuv
 	}
-	return m, true
+	return m
 }
 
 // InvFile is the inventory icon name of an item (data.DB.InvFile); ok is false when the tables do not name one.
 func (c dataCatalog) InvFile(class int, q data.InvQuality, fileIndex int) (string, bool) {
 	return c.db.InvFile(class, q, fileIndex)
+}
+
+// InvFilePic is InvFile for an item with its own picture index (data.DB.InvFilePic).
+func (c dataCatalog) InvFilePic(class int, q data.InvQuality, fileIndex, pic int) (string, bool) {
+	return c.db.InvFilePic(class, q, fileIndex, pic)
 }
 
 func (c dataCatalog) Monster(class int) (MonsterMeta, bool) {
