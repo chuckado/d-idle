@@ -97,3 +97,17 @@ func anyIn(have, want []string) bool {
 	}
 	return false
 }
+
+// TypeCodes lists the item type codes the rules name ("*" left out), so a caller can build an Item's type chain by
+// asking the data tables which of them the base is.
+func (f *Filter) TypeCodes() []string {
+	var out []string
+	for _, r := range f.Rules {
+		for _, t := range r.Types {
+			if t != "*" && !slices.Contains(out, t) {
+				out = append(out, t)
+			}
+		}
+	}
+	return out
+}

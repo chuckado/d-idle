@@ -16,6 +16,7 @@ import (
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/env"
+	"d2lod-bot/internal/ether"
 	"d2lod-bot/internal/invdesk"
 	"d2lod-bot/internal/town"
 	"d2lod-bot/internal/vault"
@@ -62,7 +63,7 @@ func keepReady(snap func() *d2.Snapshot) func() string {
 }
 
 // wireVaultKeep builds the keeper for the hero and hangs it on the shared home and the runner ref.
-func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir string, hero func() string, log *slog.Logger) {
+func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir, currencyDir string, hero func() string, log *slog.Logger) {
 	if ref == nil || c == nil || dataDir == "" || e == nil {
 		return
 	}
@@ -94,6 +95,9 @@ func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir string,
 	k.Prompt = func() bool { return e.Tune.Loot.VaultSellPrompt != 0 }
 	k.IdentifyPolicy = func() int { return bulkid.Effective(e.Tune.Identify, os.Getenv("D2BOT_RUN") != "").Policy }
 	k.ShortBy = ha.short
+	if dir := currencyDir; dir != "" { // identify.etherPerReveal (0: off): Ether pays only an explicit tap
+		k.Ether = &bulkid.EtherPayer{W: lazyWallet{func() *ether.Wallet { return etherFor(dir, "", nil, nil).Wallet() }}, Price: func() int { return e.Tune.Identify.EtherPerReveal }}
+	}
 	k.Namer = ha.name
 	home.mu.Lock()
 	home.keep = k
@@ -388,6 +392,13 @@ func (f actFace) EnqueueReveal(ctx context.Context, ids []string, now bool) []wa
 	return nil
 }
 
+func (f actFace) EnqueueRevealEther(ctx context.Context, ids []string, now bool) []watch.VaultKeepResult {
+	if k := f.k(); k != nil {
+		return results(k.EnqueueRevealEther(ctx, ids, now))
+	}
+	return nil
+}
+
 func (f actFace) EnqueueSell(ctx context.Context, ids []string, now bool) []watch.VaultKeepResult {
 	if k := f.k(); k != nil {
 		return results(k.EnqueueSell(ctx, ids, now))
@@ -416,7 +427,7 @@ func (f actFace) Act(ctx context.Context) watch.VaultActView {
 	}
 	in, p := k.Info(), k.RevealPrice(ctx)
 	v := watch.VaultActView{
-		Reveal: watch.VaultRevealView{Note: p.Note, Charges: p.Charges, Free: p.Free, PerItem: p.PerItem, Queued: in.RevQueued, Working: in.RevWorking, Done: in.Revealed, Line: k.RevealLine()},
+		Reveal: watch.VaultRevealView{Note: p.Note, Charges: p.Charges, Free: p.Free, PerItem: p.PerItem, EtherPer: p.EtherPer, Balance: p.Balance, Queued: in.RevQueued, Working: in.RevWorking, Done: in.Revealed, Line: k.RevealLine()},
 		Sell:   watch.VaultSellView{Queued: in.SellQueued, Working: in.SellWorking, Sold: in.Sold, Gold: in.GoldEarned, Line: k.SellLine()},
 	}
 	v.Reveal.Enabled, v.Reveal.Why = k.GateReveal(ctx)

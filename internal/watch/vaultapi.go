@@ -97,6 +97,11 @@ type VaultActor interface {
 	Act(ctx context.Context) VaultActView
 }
 
+// VaultEtherActor is the optional part of a VaultActor that pays reveals with Ether, on an explicit tap only.
+type VaultEtherActor interface {
+	EnqueueRevealEther(ctx context.Context, ids []string, now bool) []VaultKeepResult
+}
+
 // VaultActView is the state of Reveal and Sell in GET /api/vault: the price shown before the click, what is queued, the
 // sentences under the toolbar and the opt-in prompt.
 type VaultActView struct {
@@ -106,16 +111,18 @@ type VaultActView struct {
 }
 
 type VaultRevealView struct {
-	Enabled bool   `json:"enabled"`
-	Why     string `json:"why,omitempty"` // when not enabled: shown on the button (code noscroll offers the Buy action)
-	Code    string `json:"code,omitempty"`
-	Charges int    `json:"charges"` // identify scrolls and tome charges in the pack, -1 unknown
-	Free    bool   `json:"free"`    // Cain stands here: Reveal costs nothing
-	PerItem int    `json:"perItem"`
-	Queued  int    `json:"queued"`
-	Working int    `json:"working"`
-	Done    int    `json:"done"`
-	Line    string `json:"line,omitempty"`
+	Enabled  bool   `json:"enabled"`
+	Why      string `json:"why,omitempty"` // when not enabled: shown on the button (code noscroll offers the Buy action)
+	Code     string `json:"code,omitempty"`
+	Charges  int    `json:"charges"` // identify scrolls and tome charges in the pack, -1 unknown
+	Free     bool   `json:"free"`    // Cain stands here: Reveal costs nothing
+	PerItem  int    `json:"perItem"`
+	EtherPer int    `json:"etherPer,omitempty"` // Ether one tapped reveal costs; 0: Ether is not used
+	Balance  int    `json:"balance"`            // Ether in the wallet, -1 none
+	Queued   int    `json:"queued"`
+	Working  int    `json:"working"`
+	Done     int    `json:"done"`
+	Line     string `json:"line,omitempty"`
 	// Note says why identify is manual (Cain is not rescued while identify.policy counts on him).
 	Note string `json:"note,omitempty"`
 	// Mass previews the "Reveal filtered" button: the ids it would queue (to /api/vault/reveal) and the cost sentence.
@@ -667,7 +674,7 @@ func (d *VaultDesk) view(ctx context.Context, q vaultQuery, kinds vaultTexts) Va
 		no := false
 		recs, _ := st.Query(vault.Filter{Identified: &no})
 		r := v.Act.Reveal
-		m := bulkid.MassReveal(d.MassFilter, recs, d.Quality, bulkid.Price{Free: r.Free, Charges: r.Charges, ScrollGold: d.ScrollGold})
+		m := bulkid.MassReveal(d.MassFilter, recs, d.Quality, bulkid.Price{Free: r.Free, Charges: r.Charges, ScrollGold: d.ScrollGold, EtherPer: r.EtherPer, EtherBal: r.Balance})
 		v.Act.Reveal.Mass = &m
 	}
 	recs, total := st.Query(q.f)
@@ -819,6 +826,7 @@ type vaultBody struct {
 	IDs     []string `json:"ids"`
 	Confirm bool     `json:"confirm"`
 	Target  string   `json:"target,omitempty"`  // keep: stash (default) or inv
+	Ether   bool     `json:"ether,omitempty"`   // reveal: pay with Ether (an explicit tap; identify.etherPerReveal)
 	Now     bool     `json:"now,omitempty"`     // keep, reveal, sell: also ask the bot to walk home for it
 	Dismiss bool     `json:"dismiss,omitempty"` // sellprompt: mute the prompt
 }
@@ -927,11 +935,16 @@ func (a *VaultAPI) act(w http.ResponseWriter, r *http.Request, d *VaultDesk, rou
 	var res []VaultKeepResult
 	switch route {
 	case VaultRevealRoute:
-		if ok, code, why := d.Act.GateReveal(r.Context()); !ok {
-			writeJSON(w, http.StatusConflict, policyReply{Code: code, Error: why})
-			return
+		// An Ether reveal is an unlock of data the vault holds: it needs no game and no gate.
+		if ea, ok := d.Act.(VaultEtherActor); ok && b.Ether {
+			res = ea.EnqueueRevealEther(r.Context(), b.IDs, b.Now)
+		} else {
+			if ok, code, why := d.Act.GateReveal(r.Context()); !ok {
+				writeJSON(w, http.StatusConflict, policyReply{Code: code, Error: why})
+				return
+			}
+			res = d.Act.EnqueueReveal(r.Context(), b.IDs, b.Now)
 		}
-		res = d.Act.EnqueueReveal(r.Context(), b.IDs, b.Now)
 	case VaultSellRoute:
 		if !b.Confirm {
 			writeJSON(w, http.StatusBadRequest, policyReply{Code: "confirm", Error: "sell needs confirm: true"})

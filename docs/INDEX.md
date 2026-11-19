@@ -30,6 +30,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0017-direction-fun-first-2026-11-07.md](adr/0017-direction-fun-first-2026-11-07.md): 0017: Direction for the next two weeks: find the fun first
 - [0018-fun-loop-expedition-ledger-2026-11-07.md](adr/0018-fun-loop-expedition-ledger-2026-11-07.md): 0018: d.idle's loop is the Expedition Ledger; Act 1 content is the Codex; carry-over is a Hall of Fame first
 - [0019-pacts-and-unlocks-2026-11-07.md](adr/0019-pacts-and-unlocks-2026-11-07.md): 0019: Pacts are opt-in challenge rules with meta rewards; information and watch features unlock progressively
+- [0020-proving-ground-and-stat-skill-agency.md](adr/0020-proving-ground-and-stat-skill-agency.md): 0020: Proving Ground first; the player spends every point; intent arbiter; class order
 - [adr/README.md](adr/README.md): Architecture decision records
 - [decisions.md](decisions.md): Decisions (user, with date)
 
@@ -313,7 +314,21 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `design/`
 
-- [bulk-identify-2026-11-18.md](design/bulk-identify-2026-11-18.md): Bulk identify: Cain-free, lazy reveal, filter (design, 2026-11-18) (status: DESIGN plus slice plan, 2026-11-18 (user go by popup, SME plan "Cain-free + lazy reveal + filter"). Built...)
+- [bulk-identify-2026-11-18.md](design/bulk-identify-2026-11-18.md): Bulk identify: Cain-free, lazy reveal, filter (design, 2026-11-18) (status: BUILT offline (B1-B5 and the town adapters, scroll path and Ether tap payer of slice B6, task bulkid2),...)
+
+`design/fable-review-2026-11-19/`
+
+- [00-summary.md](design/fable-review-2026-11-19/00-summary.md): Design review 2026-11-19: summary for the owner (status: REVIEW for the owner (Fable, card fablereview, branch `agent/fablereview`). Docs only. Nothing here is...)
+- [01-landscape-and-comparison.md](design/fable-review-2026-11-19/01-landscape-and-comparison.md): 01. The landscape: what public Diablo II bots do, and where d.idle stands against them (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided....)
+- [02-fidelity-and-gaps.md](design/fable-review-2026-11-19/02-fidelity-and-gaps.md): 02. Fidelity and gaps: what the idle hero will meet between Act 1 Normal and Baal in Hell (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided....)
+- [03-classes-plan.md](design/fable-review-2026-11-19/03-classes-plan.md): 03. All seven classes, Normal to Hell: builds, what the engine needs, and the order to bring them online (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided....)
+- [04-stat-skill-agency.md](design/fable-review-2026-11-19/04-stat-skill-agency.md): 04. Stat and skill points: how much the player decides, and how the hero copes with it (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided....)
+- [05-architecture-and-overhaul-options.md](design/fable-review-2026-11-19/05-architecture-and-overhaul-options.md): 05. Architecture: what to keep, what to rebuild, and whether to start over (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided....)
+- [06-roadmap.md](design/fable-review-2026-11-19/06-roadmap.md): 06. Roadmap: phases, order, effort, risks, and the decisions only the owner can make (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided or...)
+- [07-input-layer.md](design/fable-review-2026-11-19/07-input-layer.md): 07. The input layer: clicks, hotkeys and direct verbs (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only; added on the owner's note of...)
+
+`design/`
+
 - [item-colour-2026-11-18.md](design/item-colour-2026-11-18.md): Item colour in the inventory art: chain and slice plan (2026-11-18) (status: design, task-634 (card itemcolour). Follow-up to jewelcolor (task-632), which removed the invented wash....)
 - [item-verbs.md](design/item-verbs.md): Item verbs: inventory, stash and equipment actions through d2d's own item handlers (TASK-367) (status: DESIGN plus the built verbs (equip, unequip, move, identify, drop, gold, `caps`), 2026-11-12; stage 2 and...)
 - [loot-vault-2026-11-16.md](design/loot-vault-2026-11-16.md): Ethereal Vault: a database of every drop, created in the game only on Keep (design and feasibility) (status: DESIGN, 2026-11-16. Nothing here was built or run; the fork was read, not changed. "Ethereal Vault" is the...)
@@ -654,7 +669,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [unlock-atlas.md](unlock-atlas.md): Waypoint atlas (TASK-160, unlockatlas)
 - [unlock-bestiary.md](unlock-bestiary.md): Cain's notes, the bestiary (TASK-158, unlockbestiary)
 - [unlock-chronicle.md](unlock-chronicle.md): Chronicle (TASK-154, unlockchronicle)
-- [unlock-idreveal.md](unlock-idreveal.md): Identify reveal (TASK-157, unlockidreveal)
+- [unlock-idreveal.md](unlock-idreveal.md): Identify reveal (TASK-157, unlockidreveal) (status: REMOVED 2026-11-19 (task nocards, user report: no "Unidentified item" card anywhere). The face-down card...)
 - [unlock-ladder.md](unlock-ladder.md): Unlock ladder (TASK-153, unlockladder)
 - [unlock-orderqueue.md](unlock-orderqueue.md): Order queue (TASK-161, unlockorderqueue)
 - [unlock-questlog.md](unlock-questlog.md): Quest log (TASK-156, unlockquestlog)
@@ -744,6 +759,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier-decomp38-2026-11-17.md](upstream/verifier-decomp38-2026-11-17.md): Verifier: decomp38, a Mana Burn monster's hit (2026-11-17) (status: current, 2026-11-17 (card verifydecomp38, TASK-608, Opus, singly; independent verifier before posting)....)
 - [verifier-decomp39-2026-11-17.md](upstream/verifier-decomp39-2026-11-17.md): Verifier: decomp39, a player's melee reach and line (2026-11-17) (status: current, 2026-11-17 (card verifydecomp39, TASK-625, Opus, singly; independent verifier before posting)....)
 - [verifier-gearabsorb3-2026-11-17.md](upstream/verifier-gearabsorb3-2026-11-17.md): Verifier: gear absorb r3, the heal-back (2026-11-17) (status: current, 2026-11-17 (card verifygearabsorb3, TASK-626, Opus, singly; independent verifier before posting)....)
+- [verifier-mercabsorb-2026-11-18.md](upstream/verifier-mercabsorb-2026-11-18.md): Verifier: merc gear absorb r1 (2026-11-18) (status: current, 2026-11-19 (card verifymerc, Opus, singly; independent verifier before posting). Nothing posted....)
 - [verifier-p02-2026-11-14.md](upstream/verifier-p02-2026-11-14.md): Verifier: P02 "a clicked warp's walk is planned to its tile unit" (2026-11-14) (status: current, 2026-11-15 (card verifyp02, TASK-476, Opus, independent of the author decomp23). Nothing posted,...)
 - [verifier-p03-p05-2026-11-14.md](upstream/verifier-p03-p05-2026-11-14.md): Verifier: P03 hit-recovery modes and P05 load gold clamp (2026-11-14) (status: current, 2026-11-14 (card verifyp03p05, TASK-444, Opus, independent of the author decomp21). Nothing...)
 - [verifier-p03b-2026-11-14.md](upstream/verifier-p03b-2026-11-14.md): Verifier: P03b "a hit never restarts a get-hit" (2026-11-14) (status: current, 2026-11-14 (card verifyp03c, TASK-468, Opus, independent of the author decomp22 and of the P03...)
@@ -839,6 +855,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [doc-audit.md](process/doc-audit.md): Doc audit (2026-10-30)
 - [feed-after-events.md](process/feed-after-events.md): Feed after events (status: current rule (card feeds, 2026-11-01). The helper is `tools/discord/feed.py`; details in...)
 - [flaky-tests.md](process/flaky-tests.md): Flaky tests: the waiting pattern (status: current. Load-sensitive tests cost 45-minute gate re-runs; this is the rule that keeps new ones out.)
+- [fork-rebase.md](process/fork-rebase.md): Fork rebase routine (status: current (task forkrebase, user decision 2026-11-19: rebase the private d2d fork onto upstream main...)
 - [friends-gamedata-2026-11-15.md](process/friends-gamedata-2026-11-15.md): Friends game-data bundle (2026-11-15)
 - [gamecode-guard.md](process/gamecode-guard.md): Game-code guard, labpath class, path scrubber
 - [grill-agent.md](process/grill-agent.md): The grill agent: one command to be interviewed
@@ -860,6 +877,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [sandbox-devp10.md](process/sandbox-devp10.md): Sandbox d2d build devp10 (2026-11-17) (status: current. Task: TASK-623 (sandbox3). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [sandbox-devp11.md](process/sandbox-devp11.md): Sandbox image devp11: item colour payload (slice 1 fixtures) (status: current (task-638, 2026-11-18). Built and checked on the builder, NOT loaded into the sandbox. Design:...)
 - [sandbox-devp12.md](process/sandbox-devp12.md): Sandbox d2d build devp12 (2026-11-18) (status: current. Task: TASK-645. Tags: V = verified in this run (how said), S = read from a tool or log, U =...)
+- [sandbox-devp13.md](process/sandbox-devp13.md): Sandbox d2d build devp13 (2026-11-19) (status: current. Task: forkrebase (first round of `docs/process/fork-rebase.md`). Tags: V = verified in this run...)
 - [sandbox-devp9.md](process/sandbox-devp9.md): Sandbox d2d build devp9 (2026-11-15) (status: current. Task: TASK-535 (sandbox2). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [spdx.md](process/spdx.md): SPDX header policy (ADR 0010)
 - [spec-apply-a-20261104.md](process/spec-apply-a-20261104.md): Spec apply A, 2026-11-04
@@ -1032,8 +1050,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [survival-ab-screen-2026-11-16.md](probes/survival-ab-screen-2026-11-16.md): Survival A/B screen, bot.zoneModel 0 vs 1 (3 seeds, Paladin and Sorceress), 2026-11-16 (status: current (TASK-554). Harness: ab-harness. Tags: V verified (the run logs and `abreport` output of this...)
 - [survival-holdout-2026-11-17.md](probes/survival-holdout-2026-11-17.md): Survival A/B holdout, seed 149: cause, fix, rerun (2026-11-17) (status: current (card survhold, user decision 2026-11-17: `bot.zoneModel` stays 0 until the holdout is fixed)....)
 - [survival-holdout2-2026-11-18.md](probes/survival-holdout2-2026-11-18.md): Survival A/B holdout 2: gold gap, recovery without potions, return portal (2026-11-18) (status: current (card survhold2, user decision 2026-11-17: `bot.zoneModel` stays 0 until the holdout passes;...)
+- [survival-holdout3-2026-11-18.md](probes/survival-holdout3-2026-11-18.md): Survival A/B holdout 3: starved caster yield, risk route at the k limit (2026-11-18, PARTIAL) (status: partial (card survhold3). Tags: V verified (builder logs, `abreport -death-slack 1 -chicken-slack 1...)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
+- [treefix3-2026-11-19.md](probes/treefix3-2026-11-19.md): treefix3: why the Inifuss tree was not found for 17 hours (2026-11-19)
 - [vault-spike-2026-11-16.md](probes/vault-spike-2026-11-16.md): Ethereal Vault V0 spike: capture and create on the d2d fork (result) (status: RESULT, 2026-11-16 (task TASK-578). Design: `docs/design/loot-vault-2026-11-16.md` section 1.7. Tags: V =...)
 - [video-feed-2026-11-15.md](probes/video-feed-2026-11-15.md): Probe: lossless delta feed on real d2d frames (card videofeed, 2026-11-15)
 - [viewer-brightness-2026-11-17.md](probes/viewer-brightness-2026-11-17.md): Probe: why the watch viewer looks "a bit too bright" (card brightness, 2026-11-17)

@@ -40,6 +40,7 @@ const (
 	ReasonRevDiffers = "the game identified a different item"
 	ReasonRevStill   = "the item is still unidentified"
 	ReasonRevDup     = "an identical identified item is already in the vault"
+	ReasonNoSealed   = "the vault holds no affixes for this item; use a scroll or Cain"
 	revPrefix        = "reveal: "
 	revKey           = "vr-"
 )
@@ -70,9 +71,11 @@ func (k *Keeper) free() bool { return k.Tools != nil && k.Tools.Free() }
 
 // RevealInfo is what the page shows before the click: the price per item and what the hero holds.
 type RevealInfo struct {
-	Charges int  `json:"charges"` // -1 unknown
-	Free    bool `json:"free"`    // Cain is here: no charge is used
-	PerItem int  `json:"perItem"` // charges one reveal costs (1)
+	Charges  int  `json:"charges"`            // -1 unknown
+	Free     bool `json:"free"`               // Cain is here: no charge is used
+	PerItem  int  `json:"perItem"`            // charges one reveal costs (1)
+	EtherPer int  `json:"etherPer,omitempty"` // Ether one tapped reveal costs; 0: Ether is not a payer
+	Balance  int  `json:"balance"`            // Ether in the wallet, -1 when there is none
 	// Note is the viewer sentence while identify.policy wants Cain and he is not rescued ("" otherwise).
 	Note string `json:"note,omitempty"`
 }
@@ -96,7 +99,7 @@ func (k *Keeper) RevealNote() string {
 
 // RevealPrice reads the current price view.
 func (k *Keeper) RevealPrice(ctx context.Context) RevealInfo {
-	return RevealInfo{Charges: k.charges(ctx), Free: k.free(), PerItem: 1, Note: k.RevealNote()}
+	return RevealInfo{Charges: k.charges(ctx), Free: k.free(), PerItem: 1, EtherPer: k.Ether.Quote(1), Balance: k.Ether.Balance(), Note: k.RevealNote()}
 }
 
 // GateReveal says whether a Reveal press can be queued now (the same refusals as Keep, plus: the bot must be able to
@@ -545,4 +548,76 @@ func (k *Keeper) finishReveal(ctx context.Context, st *vault.Store, r vault.Rec,
 		where = "free at Cain"
 	}
 	return "reveal: " + r.Name + " revealed (" + where + ")", false
+}
+
+// EnqueueRevealEther is the explicit tap "Reveal with Ether". The payment order of a reveal (docs/design/bulk-identify-2026-11-18.md
+// section 12): (1) Cain stands here: the normal free reveal, no Ether; (2) Ether, picked by the player: the record is
+// unlocked from the affixes the vault already holds (no scroll, no tome charge, no game step) and the Ether is charged ONCE
+// after the unlock succeeded, ledger key reveal:<id>; a failed unlock or a failed charge leaves the record sealed and the
+// wallet as it was. A short wallet or price 0 refuses the whole press before anything changes. No automatic path calls this.
+func (k *Keeper) EnqueueRevealEther(ctx context.Context, ids []string, wantNow bool) []Result {
+	if k.free() {
+		return k.EnqueueReveal(ctx, ids, wantNow)
+	}
+	out := make([]Result, len(ids))
+	st := k.store()
+	eligible := 0
+	for i, id := range ids {
+		out[i] = Result{ID: id}
+		rec, found := vault.Rec{}, false
+		if st != nil {
+			rec, found = st.Get(id)
+		}
+		switch {
+		case st == nil:
+			out[i].Code, out[i].Why = "missing", "there is no vault for this hero yet"
+		case !found:
+			out[i].Code, out[i].Why = "missing", "no such item"
+		case rec.Unlocked: // a repeated tap after a paid reveal: nothing changes, nothing is charged
+			out[i].OK, out[i].Already = true, true
+		case rec.Identified:
+			out[i].Code, out[i].Why = "state", "it is identified already"
+		case rec.State != vault.Recorded && rec.State != vault.KeepQ:
+			out[i].Code, out[i].Why = "state", "only an item in the vault can be revealed (it is "+string(rec.State)+")"
+		case rec.Sealed == "":
+			out[i].Code, out[i].Why = "nosealed", ReasonNoSealed
+		default:
+			eligible++
+		}
+	}
+	if eligible == 0 {
+		return out
+	}
+	if err := k.Ether.Check(eligible); err != nil {
+		code := "ether"
+		if errors.Is(err, bulkid.ErrEtherOff) {
+			code = "etheroff"
+		}
+		for i := range out {
+			if out[i].Code == "" && !out[i].OK {
+				out[i].Code, out[i].Why = code, err.Error()
+			}
+		}
+		return out
+	}
+	for i := range out {
+		if out[i].Code != "" || out[i].OK {
+			continue
+		}
+		id := out[i].ID
+		if err := st.Unseal(id); err != nil {
+			out[i].Code, out[i].Why = codeOf(err), err.Error()
+			continue
+		}
+		if err := k.Ether.Charge(id); err != nil {
+			_ = st.Reseal(id)
+			out[i].Code, out[i].Why = "ether", err.Error()
+			continue
+		}
+		out[i].OK = true
+		k.mu.Lock()
+		k.info.Revealed++
+		k.mu.Unlock()
+	}
+	return out
 }
