@@ -27,6 +27,7 @@ const pointsPage = `<!DOCTYPE html>
   <div class="d-card-head"><h2 id="t-sum">Points</h2><span class="meta" id="sum"></span></div>
   <p class="d-hint" id="waiting"></p>
   <p class="d-hint" id="skillline"></p>
+  <p class="d-hint" id="buildline"></p>
  </section>
  <section class="d-card" aria-labelledby="t-stats">
   <div class="d-card-head"><h2 id="t-stats">Attributes</h2><span class="meta" id="statmeta"></span></div>

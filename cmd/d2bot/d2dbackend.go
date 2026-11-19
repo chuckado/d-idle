@@ -284,8 +284,9 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	if o.managed {
 		savedExp = d2dSavedExp(filepath.Join(ip.Dir(), "d2d"), func() string { return charName })
 	}
+	ref.aw = wireAgency(db, e, func() string { return charName }, be.Clock.Now, log)
 	deps := bot.Deps{SavedExp: savedExp, Mover: moverAdapter{nv}, Cycler: be.Cycler, Catalog: cat, Health: d2dHealth(be.Proc, be.Beat, func() bool { return be.Clock.Lockstep() || ref.frozen() }, be.Clock.LastStep, log),
-		OnSnapshot: disp.OnSnapshot, Bus: bus, Restart: func(ctx context.Context) error { return be.Cycler.NewGame(ctx, "") }}
+		OnSnapshot: chainSnap(disp.OnSnapshot, ref.aw.OnSnapshot), Bus: bus, Restart: func(ctx context.Context) error { return be.Cycler.NewGame(ctx, "") }}
 	if os.Getenv("D2BOT_RUN") == "" { // a measured run is never paused (docs/pause.md)
 		deps.Freezer = d2denv.NewFreezer(be.Client, be.Clock)
 	}
@@ -376,6 +377,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	o.ladder.repair, o.ladder.farm = ref.rep, ref.gf
 	o.ladder.quests = ref.qd
 	o.ladder.points = ref.pd
+	o.ladder.plan = ref.aw
 	o.ladder.pause = pauseDesk(runner, ip.State())
 	if labels != nil {
 		o.ladder.labels = labels
