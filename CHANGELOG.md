@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- verifymerc: verifier of merc gear absorb r1 (r1 FAIL, r2 PASS WITH CHANGES) <!--sg:agent/verifymerc-->
 - Merge branch 'main' into treefix3 <!--sg:agent/treefix3-->
 - bulkid2: town adapters, scroll path, Ether tap payer <!--sg:agent/bulkid2-->
 - Merge origin/main into agent/survhold3 <!--sg:agent/survhold3-->
