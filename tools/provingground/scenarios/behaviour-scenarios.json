@@ -1,0 +1,300 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "town.stash-gold-withdraw",
+   "title": "Broke with gold in the stash: withdraw and buy the kit",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": [
+    "town.stash-gold",
+    "town.resupply",
+    "hook.town-trip",
+    "resource.belt-policy",
+    "hook.belt-fill"
+   ],
+   "touches": [
+    "internal/town/",
+    "internal/bot/goal.go",
+    "internal/bot/resource.go",
+    "internal/resource/",
+    "internal/d2dtown/"
+   ],
+   "pre": {
+    "level": 8,
+    "gold": 0,
+    "stash": 2500,
+    "belt": []
+   },
+   "trigger": {
+    "goals": "campaign"
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "SETUP: level 8, purse 0, stash 2500 by stat verbs, belt emptied. Reachable by play (2500 gold at clvl 8 is possible), so tagged SETUP-only.",
+   "notes": "Replaces the prototype's 'broke-with-stash-gold becomes a withdraw step'. hp1 is the minor healing potion (S).",
+   "assert": [
+    {
+     "kind": "stash_between",
+     "min": 0,
+     "max": 2499,
+     "why": "the bot took gold out of the stash"
+    },
+    {
+     "kind": "gold_between",
+     "min": 1
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "hp1",
+     "where": "belt"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "flail.area-cycle",
+   "title": "Anti-flail: no more than N area changes in a window without progress",
+   "kind": "behaviour",
+   "tier": "fast",
+   "status": "pending",
+   "pending_reason": "the area-change count is not an observable game-state fact yet: the observer reads a saved hero, and the d2d journal records reply digests, not the level id; needs a fork read of a level-change counter or a runner that samples debug level between steps",
+   "covers": [
+    "hook.flail-hold",
+    "travel.area-transition"
+   ],
+   "touches": [
+    "internal/bot/flail.go",
+    "internal/bot/goal.go",
+    "internal/bot/questboard.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 500,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 40
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "As cain.scroll.",
+   "assert": [
+    {
+     "kind": "area_changes_le",
+     "max": 12,
+     "why": "the sandbox cycled Dark Wood, Cold Plains and the camp for 17 hours"
+    }
+   ]
+  },
+  {
+   "id": "belt.refill-after-fight",
+   "title": "Belt policy: refill the belt column after potions are used",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "skeleton: the precondition and assertion are named in the catalogue, the setup verbs or the observed facts are not built yet",
+   "covers": [
+    "resource.belt-policy",
+    "hook.belt-fill",
+    "town.resupply"
+   ],
+   "pre": {
+    "level": 10
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "to be written with the scenario"
+  },
+  {
+   "id": "recovery.chicken-heal",
+   "title": "Chicken at the life line, heal in town, return",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "skeleton: the precondition and assertion are named in the catalogue, the setup verbs or the observed facts are not built yet",
+   "covers": [
+    "resource.chicken",
+    "hook.heal-in-town",
+    "travel.portal-return"
+   ],
+   "pre": {
+    "level": 10
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "to be written with the scenario"
+  },
+  {
+   "id": "loot.rare-ring",
+   "title": "Loot: a rare ring on the ground is picked up and classified",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "skeleton: the precondition and assertion are named in the catalogue, the setup verbs or the observed facts are not built yet",
+   "covers": [
+    "loot.pickup-classify"
+   ],
+   "pre": {
+    "level": 10
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "to be written with the scenario"
+  },
+  {
+   "id": "town.repair-trip",
+   "title": "Repair trip when durability is low",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "skeleton: the precondition and assertion are named in the catalogue, the setup verbs or the observed facts are not built yet",
+   "covers": [
+    "hook.repair-trip",
+    "town.repair"
+   ],
+   "pre": {
+    "level": 10
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "to be written with the scenario"
+  },
+  {
+   "id": "merc.hire-act1",
+   "title": "Hire the Act 1 mercenary",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "skeleton: the precondition and assertion are named in the catalogue, the setup verbs or the observed facts are not built yet",
+   "covers": [
+    "merc.hire"
+   ],
+   "pre": {
+    "level": 10
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "to be written with the scenario"
+  },
+  {
+   "id": "difficulty.nightmare-start",
+   "title": "Start Nightmare after Andariel",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "skeleton: the precondition and assertion are named in the catalogue, the setup verbs or the observed facts are not built yet",
+   "covers": [
+    "difficulty.change",
+    "hook.ensure-difficulty"
+   ],
+   "pre": {
+    "level": 10
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "to be written with the scenario"
+  }
+ ]
+}
