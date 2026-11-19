@@ -295,11 +295,13 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	// drops never reached the goal manager, summary 0 kills). Give them a forwarder bound to the runner later.
 	var feedFighter *combat.Fighter
 	var labels *labelsDesk
+	var pverbs *pointVerbs
 	emit := &lateEmit{}
 	e.Emit = emit.send
 	if db != nil { // combat and town need the game tables; without them the "not yet" stubs stay
 		st := buildD2DStack(ctx, o, be, nv, db, cfg, ref, log)
 		feedFighter = st.cb.f
+		pverbs = st.pointVerbs
 		if seams.Fighter == nil {
 			seams.Fighter = st.seams().Fighter
 		}
@@ -337,6 +339,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 		ref.p.Store(runner)
 		wireGoldFarm(ref, runner)
 		wireQuestBoard(ip.State(), ref, runner, log.Info)
+		wirePoints(ip.State(), charName, ref, runner, e, be.Client, db, pverbs)
 		emit.bind(e.Emit)
 		e.Emit = emit.send
 	}
@@ -372,6 +375,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	}
 	o.ladder.repair, o.ladder.farm = ref.rep, ref.gf
 	o.ladder.quests = ref.qd
+	o.ladder.points = ref.pd
 	o.ladder.pause = pauseDesk(runner, ip.State())
 	if labels != nil {
 		o.ladder.labels = labels

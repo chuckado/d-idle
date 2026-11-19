@@ -142,3 +142,17 @@ func TestBotFailureReadsTheExitLine(t *testing.T) {
 		t.Fatal("clean log")
 	}
 }
+
+func TestPointStatsFromDump(t *testing.T) {
+	line := `{"v":1,"player":{"stat_pts":25,"skill_pts":5},"stats":{"base":{"str":25,"dex":20,"vit":25,"ene":15}},"skills":{"base_levels":[1,0,2,0]}}`
+	got := pointStats(nil, line)
+	want := map[string]int{"str": 25, "dex": 20, "vit": 25, "ene": 15, "statpts": 25, "skillpts": 5, "skillsspent": 3}
+	for k, v := range want {
+		if got[k] != v {
+			t.Errorf("%s = %d, want %d (%v)", k, got[k], v, got)
+		}
+	}
+	if pointStats(nil, "err unknown verb") != nil || pointStats(nil, "{}") != nil {
+		t.Error("stock d2d or an empty dump observes nothing")
+	}
+}

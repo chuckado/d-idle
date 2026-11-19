@@ -131,9 +131,10 @@ const (
 	WhyMax      = "already at the maximum level"
 )
 
-// CanAdd says whether one more hard point may go into s now, with the reason when not. Rules (game.exe's own check
-// was not read; these are the standard rules of the tables, U live): the hero has an unspent point, the skill is
-// under its maxlvl, the character level reaches reqlevel, and every reqskill has at least one hard point. Stat
+// CanAdd says whether one more hard point may go into s now, with the reason when not. Rules (V: the same three tests as
+// d2d's can_learn, fork components/rules/rules.hpp, which is the decompiled game.exe icon check FUN_004ac200; no cap by
+// character level exists there): the hero has an unspent point, the skill is under its maxlvl, the character level reaches
+// reqlevel, and every reqskill has at least one hard point. Stat
 // requirements (reqstr and so on) are not checked: the 1.14d tables hold none for class skills (U for other tables).
 func CanAdd(s *data.Skill, h Hero, byKey map[string]*data.Skill) (bool, string) {
 	base := h.Points[s.ID].Base
