@@ -4,6 +4,17 @@
 
 Tags: **V run** (run by this verifier today, the builder container), **V read** (disassembly or source read by this verifier), **I** (inferred), **S** (an earlier doc, named), **U** (unverified).
 
+## Verdict: r1 FAIL (stale base, two disclosed escapes and an untested call site), r2 PASS WITH CHANGES
+
+The rule is game.exe's, for every path through the damage handler (re-derived below), and r1's code change implements it for every player-side blow (melee, missile, kick, hireling, pet: all reach `Fight::land`). r1 should not be posted as it is:
+
+1. **Stale base (high).** r1 is on `da98b7f8`; upstream main is `d5de50ca` (15 commits on). It rebases with no conflict; the posted commits must be the rebased ones, built and tested there.
+2. **The oracle and the pins miss three plausible mutants (high).** r1's own m8 (a missile blow carries no crush) and m9 (`marked` dropped) pass its pins and its compare, and so does putting the old inline `soak` + `hurt` back in `Fight::land` (the d2d side called `blow_hurt`, one step short of the player-visible path: the decomp37/38 and D5 lesson again). A fourth, m11 (the crush taken off the life too, to keep the size right), passes too: r1's compare never reads the monster's life. r2 measures through `Fight::land`, adds missile cases (FUN_0057c6c0's second argument 1, the record flag 0x20, event 6 and its doubled divisor, the sum run by game.exe itself at `0x57c7a0`), fire cases (an element marks the blow: FUN_0057ce30 run natively) and the life after the blow, in the oracle commit; the claim pins sixteen game.exe decisions (get-hit, seed and life) through `Fight::land`. All 13 non-equivalent mutants abort r2's pins and differ on its compare.
+3. **The trace's "missile path not run" (D4) and "element not run" (D3) limits are closed by r2**, and the controls (no crush, both trees) are exact on the new missile and fire cases: 0 of 103,520 on three seeds.
+4. **Sibling paths (medium, body).** A monster's MonProp crush on a monster or on a pet is still its own `hurt` call whose whole size is the crush (`fight/tick.cpp:459`, `:517`): game.exe never sizes a crush. Not this PR's to fix; the body must say so (the presubmit `siblings` WARN). Life Tap heals from `blow.damage` (crush and elements in it); game.exe's func 5 reads the record's physical only: a separate finding.
+
+**Post `fid/crush-d6-r2`**: oracle `8fb5d1e4`, claim `629e3126`, on upstream main `d5de50ca` (pushed to the private fork remote today, V run `git ls-remote`); author and committer `shatteredeagle <26069301+shatteredeagle@users.noreply.github.com>`, oracle first, `Agent: Claude Code` the only parsed trailer after a blank line in both (V run, `git interpret-trailers --parse`). The code change (`ai.cpp`, `ai.hpp`, `strike.cpp`, `combat.hpp`, `combat.md`) is r1's byte for byte; only the oracle, the test and the two commit messages changed. It also applies cleanly on top of D5 (`fid/crush-d5-r2`) in either order (V run; combined build below). The body then needs C1 to C8.
+
 ## Game side, re-derived (V read)
 
 - **The crush handler writes no record total.** `FUN_005bffc0` (`0x5bffc0..0x5c0127`, MonProp/item event func 16, table `0x7325f0`): the seed roll against stat 136, the divisor (10 player, 10 hireling, 4, 8 for a MonStats boss row or `FUN_005a0180(unit, 2)`, plus the player share), doubled for event 6 (`0x5c00a2..0x5c00a8`), `stat 6 / divisor` (`idiv`, 256ths), less `MulDiv(crush, min(stat 0x24, 100), 100)` when stat 0x24 > 0, stat 6 written by `FUN_00627260` (`0x5c00f6`), the record's kill bit `or word [rec+4], 2` when the life is gone (`0x5c0106`), `FUN_00621e40(unit, 0x93, 0)` when it took anything. Its only record write is the kill bit: never `+0x4c`.
@@ -28,3 +39,89 @@ V read on r1 / r2 (`git grep` of `player_blow(`, `hurt(`, `crushed`):
 | thorns, traps, burning ground (`ai.cpp:2578`, `world/objects.cpp:775`, `fight/deaths.cpp:73`) | `hurt` without a crush | unchanged |
 
 Other users of the size: knockback (`Fight::knock_back`) and `struck_event` do not read it; the stun (`stun_until`) does not; `rules::struck_big` (player, hireling) is per monster blow. Nothing else read the old crush-inclusive size (V read). **Life Tap** (`fight/strike.cpp:549..551`) heals `blow.damage` x calc1 %, and `blow.damage` carries the crush's whole points and the elements; game.exe's func 5 heals from the record's physical `+8` only (V read above): a sibling deviation the claim neither fixes nor worsens.
+
+## Rounding, 256ths, the max-life reference (the brief's b)
+
+- The size stays in 256ths end to end: `player_blow` adds `crushing_fine` (256ths) to `frac`/`damage` and keeps the same value in `crush_fine`; `blow_hurt` hands `hurt` `taken` (256ths, Bone Armor's pool off the physical only) and `crush_fine`; `hurt` takes it off `(damage << 8) + fraction` before the carry from earlier blows joins. So `taken - crush` is the record's `+8 + 0x10 + ...` after event 0xb, and the crush's part under one point does not leak into the size (pin 8: a crush of 12.5 points with a blow one 256th under max / 16 does not roll; m05, the crush cut to whole points, differs on 8,928 of 103,520) (V run).
+- The floor at 0 is never reached: `taken >= crush`, because soak takes at most the physical (and a pet's Weaken cut keeps the damage at or above the crush, `fight/deaths.cpp:508..509`, V read); m06 builds to the claim's binary byte for byte (equivalent).
+- The max-life reference and the divisor by class are `rules::get_hit`'s, unchanged (`monster.max_life_fine()`, 256ths; S: `combat.md`, `hit_rule.py`); the oracle runs classes 0 to 13 and random ones up to `0x5f`, marked and unmarked (V run).
+
+## Interactions (the brief's c)
+
+- **Leech #587:** unchanged: the leech still cuts the physical to the life the crush left (`after_crush`, `combat.hpp`), game.exe's `0x57c7f8..0x57c826`, after the total (V read). No leech in the cases (U for a leech-and-crush case; the leech has its own oracle).
+- **Gear absorb #606, merc absorb #632 (open):** monster blows on the player and the hireling; this PR touches neither path (`Fight::hurt_side`, `struck_big` per monster blow) and shares no lines with them (V read the diffs).
+- **Crush D5 (`fid/crush-d5-r2`):** both touch `components/game/ai.hpp` (D5 `Monster::crush_divisor`, D6 the `hurt` declaration) and `tools/emu/README.md` (adjacent rows). r1 and r2 cherry-pick on top of D5 r2 with no conflict (V run). The D6 cases are plain (4) or superunique (8), divisors D5 does not change. Combined tree: below.
+
+## Differential (V run, builder, r2 trees)
+
+`crush_hit.py gen 100000 SEED` (103,520 cases with the boundary rows; about 30 percent missile, 30 percent with fire), `game` once per seed (and `--no-crush`), the d2d side from each tree's `test_crush_get_hit --crush-hit`, `compare` on get-hit, seed and life:
+
+| Tree | seed 7 | seed 5001 | seed 9091 | control (no crush), each seed |
+|---|---|---|---|---|
+| parent (r2 oracle commit `8fb5d1e4`) | 65,145 differ (get-hit 38,601, seed 52,109, life 0), exit 1 | 65,544 (38,613 / 52,555 / 0) | 65,316 (38,696 / 52,353 / 0) | 0, exit 0 |
+| r2 claim `629e3126` | 0, exit 0 | 0 | 0 | 0 |
+
+Every parent get-hit difference is d2d staggering where game.exe does not. Play grid (the author's 4,890 surviving procs, melee, no fire): game.exe staggers 1,921, the parent 4,513, the claim 1,921 with 0 differ: the author's numbers reproduced. The sixteen pins are `crush_hit.py game` on their cases. The compare's exits on empty, short, malformed and missing files: the author's runs (S); the new width check exits 1 when the d2d side is empty (V run: the first d2d run here printed nothing and every compare exited 1).
+
+## Mutants (V run, builder, local, never pushed)
+
+One text change each on the r2 claim (`mutb.py`): a `.cpp` mutant is rebuilt as the test target; a header mutant recompiles the test's unit and links it first. Pins = `test_crush_get_hit` with no argument (16 pins); compare = seed 7 (103,520). r1 column: the author's run (S) or by construction (I: r1's d2d side calls `blow_hurt`, prints no life, and has no missile or fire case).
+
+| Mutant | r2 pins | r2 compare: get-hit / seed / life / total | r1 |
+|---|---|---|---|
+| m01 the parent: crush in the size | abort | 38,601 / 52,109 / 0 / 65,145 | caught |
+| m02 `crush_fine` never set | HDR02 | caught |
+| m03 `blow_hurt` passes 0 | abort | 38,601 / 52,109 / 0 / 65,145 | caught |
+| m04 the crush taken off twice | abort | 13,948 / 29,223 / 0 / 30,965 | caught |
+| m05 the crush cut to whole points | abort | 3,582 / 8,438 / 0 / 8,928 | compare only (its pin was added after) |
+| m06 no floor at 0 | passes | 0 (binary equal to the claim's) | equivalent |
+| m07 `crush_fine` halved | HDR07 | caught |
+| m08 a missile blow carries no crush | HDR08 | **escapes** |
+| m09 `marked` dropped | abort | 3,922 / 8,631 / 0 / 9,523 | **escapes** |
+| m10 `Fight::land` back to the inline soak and hurt | abort | 38,601 / 52,109 / 0 / 65,145 | **escapes** (I) |
+| m11 the crush taken off the life too (size kept) | abort | 0 / 0 / 103,520 / 103,520 | **escapes** (I) |
+| m12 only the crush's part under a point in `crush_fine` | HDR12 | caught (I) |
+| m13 a missile's crush halved in `crush_fine` | HDR13 | **escapes** (I) |
+| m14 a crush marks the blow | abort | 5,414 / 12,931 / 0 / 13,794 | **escapes** (I) |
+
+The first mutant pass linked each header mutant with the object the previous `.cpp` mutant left (a restored source rebuilds only at the next build); the header rows are a clean second pass.
+
+## Build, ctest, tidy (V run)
+
+Builder container, Release, GCC, tests and tools on, `-j2`; three jobs, each one long-lane lockrun registered with `tools/agentrun.sh`; `D2_MPQ_DIR` and `D2_PATCH_INSTALLER` set.
+
+| Tree | Build | `ctest -j2` |
+|---|---|---|
+| parent (the oracle commit's code; its test had a wrong assert, fixed before r2) | full, rc 0 | 407 of 408 pass; fails `smoke_d2d` |
+| r2 claim `629e3126` | full, rc 0 | 407 of 408 pass; fails `smoke_d2d` |
+
+`smoke_d2d` fails on both trees, as on upstream `d5de50ca` (`tests/smoke_d2d.py:444`, S: `verifier-crushd5`): not this PR's.
+
+TIDYROW
+
+## Hygiene (V run)
+
+- `pr_guard.py upstream/main HEAD` on r2: 0 FAIL, 0 WARN. `presubmit.py --quick --base upstream/main`: 0 FAIL, 3 WARN: `siblings` (monster, not player, merc, pet, co-op partner: answered by C5), build and gcc skipped by `--quick`.
+- Diff r2 against upstream: 8 files (`ai.cpp`, `ai.hpp`, `fight/strike.cpp`, `rules/combat.hpp`, `combat.md`, `test_crush_get_hit.cpp`, `crush_hit.py`, `tools/emu/README.md`); no private code, host names or paths (read). No `todo.md` / `unverified.md` row names it (V read).
+
+## Required changes to the body (`crush-d6-body.md`, becomes the r2 body)
+
+- **C1 (high).** "Two commits on upstream `d5de50ca`: the oracle (`8fb5d1e4`), then the claim (`629e3126`)".
+- **C2 (high).** What changes: "`test_crush_get_hit` pins sixteen game.exe decisions (get-hit, seed and life) through `Fight::land`: melee, missile, fire". Counted differentials: cases are melee or missile, with or without fire; for a missile game.exe's side runs `FUN_0057c6c0` with its second argument 1 (it sums the total itself at `0x57c7a0`, then events 6 and 2); the d2d side is `player_blow` then `Fight::land`; `compare` checks the life too. Replace the table with this file's (65,145 / 65,544 / 65,316 of 103,520; claim 0; control 0).
+- **C3 (high).** Mutants: "14 mutants (the verifier's table): 13 abort `test_crush_get_hit` and differ on the compare; the one that does not (no floor at 0) builds to the same binary". Drop the two "not caught" mutants and "Both test binaries print ok; ... the whole-tree ctest has not run".
+- **C4 (high, template).** Add the Checklist: a test in `tests/` (`test_crush_get_hit`); the finding in `docs/research/re/combat.md`; `pr_guard` passes; "`ctest` with the game data: 407 passed, 1 failed; fails on main too: `smoke_d2d`"; labels `oracle`, `test`, `trace`.
+- **C5 (medium, Limits).** Replace the bullets with: "A monster's MonProp Crushing Blow on another monster or on a pet is still its own `hurt` call sized by the crush alone (`fight/tick.cpp:459`, `:517`); game.exe sizes no crush in any path; not changed here." "Which code stores the melee record on the attacker before `FUN_0057d4f0` hands it to `FUN_0057c6c0` was not read; the harness sums a melee record with `FUN_0057c1e0` first (a missile's `FUN_0057c6c0` sums itself, as run)." "Life Tap heals from the blow's damage in d2d (crush and elements in it), from the record's physical in game.exe (`0x5c6227`); not changed here."
+- **C6 (medium, evidence).** Add rows: "`FUN_0057d4f0` `0x57d563..0x57d5c7`: the melee caller copies a record stored on the attacker, sets its flag dword to 0x20, calls `FUN_0057c6c0` with 0 (events 5 and 1)"; "`FUN_0056b9c0` `0x56ba5f..0x56ba7f`: the record caller, `FUN_0057c6c0` with 1, then `FUN_0057cee0`"; the `FUN_005bffc0` row: "writes stat 6, the record's kill bit (`+4 |= 2`) and nothing else of the record".
+- **C7 (low).** In play: add "the same for a missile (the crush an eighth, a sixteenth for a boss row) and a blow with fire".
+- **C8 (low).** How to re-check: the d2d grep becomes `grep -E '^[0-9]+ [01] [0-9]+ [0-9]+ -?[0-9]+$'`; add the control (`game ... --no-crush`, the test with a third argument `--no-crush`), "parent: 65,145 differ, exit 1; claim 0, exit 0", and `ctest --test-dir build -R test_crush_get_hit --output-on-failure`.
+
+## Findings beside the PR (not blockers)
+
+- **F1 (medium).** A monster's MonProp crush on a monster or a pet is sized by the crush alone (`fight/tick.cpp:459`, `:517`): a follow-up candidate; the oracle would run the same chain with a type-1 attacker carrying stat 136.
+- **F2 (low).** Life Tap amount: d2d `blow.damage` x calc1 %, game.exe the record's `+8` (the physical before the cut) (`0x5c61e0`, V read; the MulDiv tail not read: U).
+- **F3 (low, trace).** decomp42 section 1.3's m5 row ("not rebuilt against the ninth pin") is settled: m05 aborts r2's pins.
+
+## Not checked
+
+- No Windows, macOS or Clang build; no live game, no lab drill (the trace's 1.8 recipe stands); nothing on the worker host.
+- Which code stores a melee record on the attacker (U); a leech-and-crush case; the full ctest of the D5+D6 tree (only the four crush and combat tests).
