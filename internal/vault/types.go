@@ -66,11 +66,18 @@ type Item struct {
 	Sockets    int      `json:"sockets,omitempty"`
 	Eth        bool     `json:"eth,omitempty"`
 	Props      string   `json:"props,omitempty"` // "stat:param:value;..." as d2d sent them, kept ONLY for an identified item (the page words them as the stat lines; an unidentified record never carries them)
-	Pic        int      `json:"pic,omitempty"`   // picture variant + 1 (jewel, ring, amulet, charm), 0 = base picture
-	Tint       string   `json:"tint,omitempty"`  // icon colour key "t<set>c<colour>"
-	FileIndex  int      `json:"fidx,omitempty"`  // the unique or set id, for the unique and set icon
-	Found      Found    `json:"found"`
-	Value      int      `json:"value"`
+	// Sealed holds the affixes of an UNIDENTIFIED record exactly as Props would carry them. The server keeps them and
+	// serves them to no one until the reveal is paid (Store.Unseal); exports drop them. Empty: nothing held (the fork did
+	// not send affixes for the unidentified item, U), so only the in-game identify can reveal it.
+	Sealed string `json:"sealed,omitempty"`
+	// Unlocked: the record was revealed by Unseal. Raw is still the unidentified bytes the game dropped, so a Keep
+	// creates the unidentified item in the game (the fork's item create takes no identified flag, V code read).
+	Unlocked  bool   `json:"unlocked,omitempty"`
+	Pic       int    `json:"pic,omitempty"`  // picture variant + 1 (jewel, ring, amulet, charm), 0 = base picture
+	Tint      string `json:"tint,omitempty"` // icon colour key "t<set>c<colour>"
+	FileIndex int    `json:"fidx,omitempty"` // the unique or set id, for the unique and set icon
+	Found     Found  `json:"found"`
+	Value     int    `json:"value"`
 }
 
 // Rec is a record as the index holds it.
@@ -103,13 +110,14 @@ func (r *Rec) Status() string {
 }
 
 var (
-	ErrDuplicate    = errors.New("vault: identical item already in the vault")
-	ErrOverCapacity = errors.New("vault: over capacity, new records are blocked")
-	ErrFull         = errors.New("vault: full and nothing may be trimmed")
-	ErrNotFound     = errors.New("vault: no such record")
-	ErrState        = errors.New("vault: transition not allowed from this state")
-	ErrPinCap       = errors.New("vault: pin limit reached")
-	ErrInvalid      = errors.New("vault: invalid item")
-	ErrTooLarge     = errors.New("vault: import too large")
-	ErrPinned       = errors.New("vault: pinned items are never sold")
+	ErrNothingSealed = errors.New("vault: no affixes are held for this item")
+	ErrDuplicate     = errors.New("vault: identical item already in the vault")
+	ErrOverCapacity  = errors.New("vault: over capacity, new records are blocked")
+	ErrFull          = errors.New("vault: full and nothing may be trimmed")
+	ErrNotFound      = errors.New("vault: no such record")
+	ErrState         = errors.New("vault: transition not allowed from this state")
+	ErrPinCap        = errors.New("vault: pin limit reached")
+	ErrInvalid       = errors.New("vault: invalid item")
+	ErrTooLarge      = errors.New("vault: import too large")
+	ErrPinned        = errors.New("vault: pinned items are never sold")
 )

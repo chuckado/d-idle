@@ -289,6 +289,8 @@
 | bulkid | proposed | - | `internal/bulkid`<br>`data/bulkid`<br>`internal/env/tuning_identify.go`<br>`internal/watch/vaultmass_test.go`<br>`internal/env/tuning.go`<br>`docs/knobs.md`<br>`internal/vaultkeep/reveal.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/note_test.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go` | - |
 | survhold3 | proposed | - | `internal/survival`<br>`docs/probes/survival-holdout3-2026-11-18.md` | - |
 | verifymerc | proposed | - | `docs/upstream/verifier-mercabsorb-2026-11-18.md` | - |
+| etherreveal | proposed | - | `internal/vaultkeep`<br>`internal/vault`<br>`internal/bulkid`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`docs/design/bulk-identify-2026-11-18.md`<br>`internal/loot/vault.go`<br>`cmd/d2bot/vaultkeep.go`<br>`internal/env/tuning_identify.go`<br>`docs/knobs.md`<br>`internal/watch/vaultmass_test.go` | - |
+| nocards | proposed | - | `data/idreveal`<br>`internal/watch/unlockidreveal.go`<br>`internal/watch/unlockidreveal_test.go`<br>`internal/watch/unlockui_quiet_test.go`<br>`internal/watch/testdata`<br>`docs/unlock-ladder.md`<br>`docs/vault.md`<br>`internal/watch/web`<br>`internal/watch/funwire.go`<br>`internal/watch/nocards_test.go`<br>`data/unlocks`<br>`docs/unlock-idreveal.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -327,14 +329,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- c085552a7 11-19 11:25 `Merge agent/etherreveal: Merge branch 'main' into etherreveal` (etherreveal)
+- 960f739ed 11-19 11:24 `Merge branch 'main' into etherreveal` (-)
+- 362df2fac 11-19 10:57 `Merge agent/nocards: Remove the unidentified item card feature (tab, sheet, routes, ladder rows)` (nocards)
+- 70ec05444 11-19 09:56 `Merge branch 'main' into etherreveal` (-)
 - 78a7ca888 11-19 09:54 `Merge agent/verifymerc: verifymerc: verifier of merc gear absorb r1 (r1 FAIL, r2 PASS WITH CHANGES)` (verifymerc)
 - d37ccd25b 11-19 09:53 `Merge branch 'main' into verifymerc` (-)
 - 7feab5450 11-19 09:41 `Merge agent/treefix3: Merge branch 'main' into treefix3` (treefix3)
 - b3721d322 11-19 09:40 `Merge branch 'main' into treefix3` (-)
 - f70213a90 11-19 09:24 `Merge agent/bulkid2: bulkid2: town adapters, scroll path, Ether tap payer` (bulkid2)
 - bfb8bb8fb 11-19 09:23 `Merge branch 'main' into bulkid2` (-)
-- ee4e89850 11-19 09:06 `Merge agent/survhold3: Merge origin/main into agent/survhold3` (survhold3)
-- 7ba3b21d7 11-19 09:01 `Merge origin/main into agent/survhold3` (-)
-- 67c1f056f 11-18 20:20 `Merge agent/goldwithdraw: Merge branch 'main' into goldwithdraw` (goldwithdraw)
-- 9c26547e9 11-18 20:19 `Merge branch 'main' into goldwithdraw` (-)
 <!-- statusgen:end -->

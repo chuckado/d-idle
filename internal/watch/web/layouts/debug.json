@@ -241,16 +241,6 @@
           "order": 22
         },
         {
-          "id": "cards",
-          "band": "grid",
-          "col": 1,
-          "row": 125,
-          "colSpan": 12,
-          "rowSpan": 3,
-          "collapsed": false,
-          "order": 23
-        },
-        {
           "id": "bestiary",
           "band": "grid",
           "col": 1,
@@ -545,16 +535,6 @@
           "rowSpan": 5,
           "collapsed": false,
           "order": 22
-        },
-        {
-          "id": "cards",
-          "band": "grid",
-          "col": 1,
-          "row": 125,
-          "colSpan": 12,
-          "rowSpan": 3,
-          "collapsed": false,
-          "order": 23
         },
         {
           "id": "bestiary",
@@ -853,16 +833,6 @@
           "order": 22
         },
         {
-          "id": "cards",
-          "band": "grid",
-          "col": 4,
-          "row": 51,
-          "colSpan": 3,
-          "rowSpan": 3,
-          "collapsed": false,
-          "order": 23
-        },
-        {
           "id": "bestiary",
           "band": "grid",
           "col": 7,
@@ -1157,16 +1127,6 @@
           "rowSpan": 5,
           "collapsed": false,
           "order": 22
-        },
-        {
-          "id": "cards",
-          "band": "grid",
-          "col": 4,
-          "row": 51,
-          "colSpan": 3,
-          "rowSpan": 3,
-          "collapsed": false,
-          "order": 23
         },
         {
           "id": "bestiary",

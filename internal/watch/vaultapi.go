@@ -118,6 +118,7 @@ type VaultRevealView struct {
 	Free     bool   `json:"free"`    // Cain stands here: Reveal costs nothing
 	PerItem  int    `json:"perItem"`
 	EtherPer int    `json:"etherPer,omitempty"` // Ether one tapped reveal costs; 0: Ether is not used
+	Balance  int    `json:"balance"`            // Ether in the wallet, -1 none
 	Queued   int    `json:"queued"`
 	Working  int    `json:"working"`
 	Done     int    `json:"done"`
@@ -673,7 +674,7 @@ func (d *VaultDesk) view(ctx context.Context, q vaultQuery, kinds vaultTexts) Va
 		no := false
 		recs, _ := st.Query(vault.Filter{Identified: &no})
 		r := v.Act.Reveal
-		m := bulkid.MassReveal(d.MassFilter, recs, d.Quality, bulkid.Price{Free: r.Free, Charges: r.Charges, ScrollGold: d.ScrollGold})
+		m := bulkid.MassReveal(d.MassFilter, recs, d.Quality, bulkid.Price{Free: r.Free, Charges: r.Charges, ScrollGold: d.ScrollGold, EtherPer: r.EtherPer, EtherBal: r.Balance})
 		v.Act.Reveal.Mass = &m
 	}
 	recs, total := st.Query(q.f)
@@ -934,13 +935,14 @@ func (a *VaultAPI) act(w http.ResponseWriter, r *http.Request, d *VaultDesk, rou
 	var res []VaultKeepResult
 	switch route {
 	case VaultRevealRoute:
-		if ok, code, why := d.Act.GateReveal(r.Context()); !ok {
-			writeJSON(w, http.StatusConflict, policyReply{Code: code, Error: why})
-			return
-		}
+		// An Ether reveal is an unlock of data the vault holds: it needs no game and no gate.
 		if ea, ok := d.Act.(VaultEtherActor); ok && b.Ether {
 			res = ea.EnqueueRevealEther(r.Context(), b.IDs, b.Now)
 		} else {
+			if ok, code, why := d.Act.GateReveal(r.Context()); !ok {
+				writeJSON(w, http.StatusConflict, policyReply{Code: code, Error: why})
+				return
+			}
 			res = d.Act.EnqueueReveal(r.Context(), b.IDs, b.Now)
 		}
 	case VaultSellRoute:
