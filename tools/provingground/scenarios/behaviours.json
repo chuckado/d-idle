@@ -264,6 +264,24 @@
    "group": "difficulty",
    "title": "start the next difficulty",
    "where": "internal/bot/goal.go ensureDifficulty, launcher"
+  },
+  {
+   "id": "points.bank",
+   "group": "points",
+   "title": "points are banked, not spent, until the player acts (resource.pointsDecisions 0)",
+   "where": "internal/bot/pointsgate.go, internal/bot/leveling.go pointsStep"
+  },
+  {
+   "id": "points.verb",
+   "group": "points",
+   "title": "stat and skill points spent by the d2d verbs with a read-back (autopilot or the API)",
+   "where": "internal/leveler runVerbs, internal/points Desk, internal/d2dctl points_verbs.go"
+  },
+  {
+   "id": "points.api",
+   "group": "points",
+   "title": "the points API: sheet, explicit spend, refusal of an illegal skill, audit",
+   "where": "internal/watch/pointsapi.go, internal/points"
   }
  ]
 }

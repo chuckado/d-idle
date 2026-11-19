@@ -27,8 +27,8 @@ func TestResourceKnobsRegistered(t *testing.T) {
 		}
 	}
 	// 55 before the kit gate; kitGateLevel, kitMinHP, kitMinMP and kitTripCap added 4; recoveryStall* added 3; beltPlan and beltCol1..4 added 5; gearDecisions added 1.
-	if n != 69 {
-		t.Fatalf("%d resource knobs registered, want 69", n)
+	if n != 72 {
+		t.Fatalf("%d resource knobs registered, want 72", n)
 	}
 }
 
