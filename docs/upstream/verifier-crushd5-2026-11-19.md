@@ -1,7 +1,46 @@
 # Verifier: Crushing Blow D5, the divisor of a plain unique (2026-11-19)
 
-> status: WIP, 2026-11-19 (card verifycrushd5, Opus, singly; independent verifier before posting). Nothing posted. Subject: private fork branch `fid/crush-d5-r1` (oracle `9eac185e`, claim `bfef14cf`, on upstream `9b64c11a`), body `docs/upstream/bodies/crush-d5-body.md`, trace `docs/research/decomp41-merc-crush-trace.md` section 2.
+> status: current, 2026-11-19 (card verifycrushd5, Opus, singly; independent verifier before posting). Nothing posted. Subject: private fork branch `fid/crush-d5-r1` (oracle `9eac185e`, claim `bfef14cf`, on upstream `9b64c11a`), body `docs/upstream/bodies/crush-d5-body.md`, trace `docs/research/decomp41-merc-crush-trace.md` section 2. The fixed `fid/crush-d5-r2` is on the private fork remote only.
 
 Tags: **V run** (run by this verifier today, the builder container), **V read** (disassembly or source read by this verifier), **I** (inferred), **S** (an earlier doc, named), **U** (unverified).
 
-(in progress)
+## Verdict: r1 FAIL (stale base, pin gaps, scan wording), r2 PASS WITH CHANGES
+
+@@VERDICT@@
+
+## Game side, re-derived (V read by this verifier)
+
+- **`FUN_005bffc0` `0x5c0031..0x5c00a8`.** A type-0 defender (player): 10, straight to the missile test (`0x5c003c`). Type 1: `FUN_0063ee90` (a hireling) 10, no player share (`0x5c0050`); else `ebx = 4`, then 8 when `FUN_0063e9f0(0, unit)` is not 0 (MonStats boss row) or, only when it is 0, `FUN_005a0180(unit, 2)` (`lea edx, [eax+2]` with eax 0 at `0x5c0063`); then `+ MulDiv(ebx, FUN_005738f0(max(stat 0x64, 1)), 100)`; doubled for event 6 (`0x5c00a8`). Other types 4.
+- **`FUN_005a0180` (`0x5a0180..0x5a01a1`).** Type-1 unit, data `[unit+0x14]`, `(word [data+0x16] & dx) != 0`.
+- **The mask-2 bit is the superunique bit, from three readers.** `FUN_005a03a0` reads the SuperUniques index only under it (S: `verifier-crush3`); the S->C monster packet writer `0x53e4bf..0x53e58d` packs `FUN_005a0180` with 4, 8, 2, 0x10, 0x40 and, under 2 only, a 16-bit `FUN_005a01e0(unit, 0x10)` (the SuperUniques index); the saver `0x542305..0x54231c` sets record flag 0x800 and copies `FUN_005a01e0` into the record's `+0x3c` under 2 only (V read).
+
+### Who writes bit 2 (the brief's (b))
+
+The author's scan matched `or|mov|and|xor|add|sub` of a **word or byte** at `[reg + 0x16]`. This verifier widened it (`scan.py`, capstone over every executable section; only `.text` is executable): every instruction whose first operand is memory and whose byte range covers displacement `0x16` (byte, word or **dword at `+0x13..+0x16`**), any base or index, `mov/or/xor/add/adc/bts/xchg/inc/shl/rol/set*/movs/stos/cmpxchg` and the rest, plus every `lea reg, [reg+0x16]`: 1,286 hits. Writes of an immediate without the bit dropped: 1,146. Then the base register's last definition traced in a linear sweep (`scan2.py`): 24 writes whose base came from `mov reg, [x + 0x14]` (a unit's data pointer). V read of each:
+
+| Site | What it is | Bit 2? |
+|---|---|---|
+| `0x5a4a99` | `FUN_005a49b0`, a monster made from a SuperUniques row (spawned-bit table `+0x1d30` beside it) | yes |
+| `0x5a4599` | `FUN_005a4440`, `or ..., 2` only when its argument `[ebp+0x20]` is set; its one caller `0x5426c3` passes `record[+0x18] & 0x800` (and `& 2` as the champion argument): a monster made again from a saved record | yes, only for a record the saver flagged from bit 2 (`0x542305..0x54230e`) |
+| `0x5a01c9` | `FUN_005a01b0`, setter with a mask | no caller, no pointer to it in any section (V run) |
+| `0x5a0375` | `FUN_005a0320`, `dx = 8` fixed at `0x5a034a` (callers `0x5a0b61`, `0x5a487b`, `0x5a48f4`, `0x5a496e`) | no |
+| `0x5a4967` | `FUN_005a4940` (unique), `or ..., cx` with `cx` = the unit type, 1 by the test at `0x5a494c` | no |
+| `0x5a4905`, `0x5a44a3`, `0x5a083e`, `0x5a0b76` | champion `5`, champion `4`, `4`, `1` | no |
+| `0x4ac829` | **`FUN_004ac810`, a second setter with a mask, missed by the author's list**: calls `0x45e465` (4), `0x45e473` (8), `0x4664bd` (a word read from `[edi+0x10]`) | possible for the unit it is given; its callers sit in the client's address range (I) and the game-side handler never reads a client unit (I) |
+| `0x62818f`, `0x64a1d9`, `0x64acae` | type-4 (item) / type-3 (missile) data, guarded by `cmp [unit], 4` / `3` | not a monster |
+| `0x66ac18` | `or dword [x+0x14], 8`: bit 3 of byte `+0x14` | no |
+| the other 10 | list-link writes (`[x+0x14]` / `[x+0x18]` pairs: `0x4bc762`, `0x50eb87`, `0x575d64`, `0x5ff24b`, `0x5ff4d6`, `0x5ff4e1`) and a pointer that is a stack argument, not a unit (`[ebp+0x14]` / `[esp+0x14]`: `0x62af32`, `0x663941`, `0x66394c`, `0x6b089f`) | not the monster data (V read) |
+
+The rest of the 1,146 have bases not traced to a `+0x14` load (stack frames, `alloc` results, table rows): not checked one by one (U), as the author's. The SuperUniques.txt and Levels tables only feed `FUN_005a49b0` (which row), never the word itself: no table value is copied into `+0x16` (no `movs`/`rep` or dword write at `+0x14..+0x16` traced to a data pointer). Result: on the game side a plain unique never carries bit 2 (V read), with the client setter as the one caveat the body must not deny.
+
+### Which d2d kind is which (the brief's (a))
+
+- d2d sets `Boss::superunique` only for a SuperUniques row: the preset path (`objgroups.cpp:718`, `FUN_005a49b0`'s) and `World::seal_boss` (`act4.cpp:62`: Diablo's seals, the Ancients through `act5.cpp:490`, Baal's waves through `act5.cpp:525`) (V read). game.exe makes all of these through `FUN_005a49b0` (I, the d2d comments name it; the seal path `FUN_0054e600` not re-read).
+- `Boss::unique` comes from the random unique pack (`objgroups.cpp:704`, `833`), the Gidbinn guardian (`act3.cpp:234`, game.exe `FUN_005a43e0`, which writes no flag), and the act-boss rows made without a pack (`ai.cpp:219`, `act4.cpp:335`: `FUN_005b1cf0`, "flag 8"): none of them gets bit 2 in game.exe (the writer list above). With the claim they take 4 unless their row is a MonStats boss row (Andariel, Duriel, Mephisto, Diablo, Baal keep 8 through `boss_column`). So Blood Raven, the Maggot Queen rows, the compelling orb and Nihlathak's non-superunique row change from 8 to 4 too (I from the table; each is a row of the oracle's 734, which agrees).
+- Champion, minion, plain: 4 on both sides before and after; the oracle's other kinds agree in all 23,728 cases (V run below). No other row of d2d's table is wrong: no further fix belongs in the PR.
+
+## Rebase (the brief's (c))
+
+r1 sits on `9b64c11a`; upstream main is `d5de50ca` (83 commits on; V run `git fetch`). Since then nothing in upstream touched `crush_divisor`, `Monster::target`'s crush argument, `player_blow`'s crush (#609, #615) or the leech (#587); the two commits rebase with no conflict (V run). The crush base #609 / #615 is unchanged; this PR changes only the divisor the target carries into it.
+
+@@RUNS@@
