@@ -206,7 +206,7 @@
     "goals": "campaign"
    },
    "budget": {
-    "virtual_min": 4
+    "virtual_min": 1
    },
    "matrix": {
     "classes": [
