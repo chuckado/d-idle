@@ -287,6 +287,7 @@
 | survhold2 | proposed | - | `internal/survival`<br>`internal/bot/kitgate.go`<br>`internal/bot/kitlevel_test.go`<br>`internal/bot/portalburn_test.go`<br>`internal/bot/zonemodel.go`<br>`internal/bot/goal.go`<br>`tools/survival`<br>`docs/probes/survival-holdout2-2026-11-18.md` | - |
 | bulkid-design | proposed | - | `docs/design/bulk-identify-2026-11-18.md` | - |
 | bulkid | proposed | - | `internal/bulkid`<br>`data/bulkid`<br>`internal/env/tuning_identify.go`<br>`internal/watch/vaultmass_test.go`<br>`internal/env/tuning.go`<br>`docs/knobs.md`<br>`internal/vaultkeep/reveal.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/note_test.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go` | - |
+| survhold3 | proposed | - | `internal/survival`<br>`docs/probes/survival-holdout3-2026-11-18.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -325,6 +326,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ee4e89850 11-19 09:06 `Merge agent/survhold3: Merge origin/main into agent/survhold3` (survhold3)
+- 7ba3b21d7 11-19 09:01 `Merge origin/main into agent/survhold3` (-)
 - 67c1f056f 11-18 20:20 `Merge agent/goldwithdraw: Merge branch 'main' into goldwithdraw` (goldwithdraw)
 - 9c26547e9 11-18 20:19 `Merge branch 'main' into goldwithdraw` (-)
 - 687344925 11-18 20:11 `Merge agent/survhold2: survhold2: kit gate hold, return walk past burned portal, holdout 2 record` (survhold2)
@@ -333,6 +336,4 @@
 - 315a64e87 11-18 20:01 `Merge branch 'main' into antiflail` (-)
 - 575c90c37 11-18 19:56 `Merge agent/bulkid: bulk identify B1-B5 offline` (bulkid)
 - 14f4ed022 11-18 19:55 `Merge branch 'main' into bulkid` (-)
-- ae0abd4c7 11-18 19:51 `Merge agent/decomp41: decomp41: merc absorb + crush D5 traces and bodies (docs only)` (decomp41)
-- e7c1bd1a6 11-18 19:50 `Merge branch 'main' into decomp41` (-)
 <!-- statusgen:end -->

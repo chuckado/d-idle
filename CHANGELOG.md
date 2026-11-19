@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge origin/main into agent/survhold3 <!--sg:agent/survhold3-->
 - Merge branch 'main' into goldwithdraw <!--sg:agent/goldwithdraw-->
 - survhold2: kit gate hold, return walk past burned portal, holdout 2 record <!--sg:agent/survhold2-->
 - Merge branch 'main' into antiflail <!--sg:agent/antiflail-->
