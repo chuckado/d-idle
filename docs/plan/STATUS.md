@@ -298,6 +298,7 @@
 | fablereview | proposed | - | `docs/design/fable-review-2026-11-19` | - |
 | adrfable | proposed | - | `docs/adr/0020-proving-ground-and-stat-skill-agency.md`<br>`docs/decisions.md`<br>`docs/adr/README.md`<br>`docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md` | - |
 | questspec | proposed | - | `internal/questspec`<br>`data/questspec`<br>`docs/questspec.md` | - |
+| agencyp0 | proposed | - | `internal/points`<br>`internal/watch/pointsapi.go`<br>`internal/watch/pointsapi_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`internal/watch/web/points.css`<br>`internal/watch/web/skills.js`<br>`internal/watch/web/watch.html`<br>`internal/watch/skillsapi.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/pointswire.go`<br>`cmd/d2bot/pointswire_test.go`<br>`cmd/d2bot/resource_test.go`<br>`cmd/d2bot/gearpolicy.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/live.go`<br>`internal/bot/pointsgate.go`<br>`internal/bot/pointsgate_test.go`<br>`internal/bot/leveling.go`<br>`internal/bot/runner.go`<br>`internal/combat/playable.go`<br>`internal/leveler/leveler.go`<br>`internal/leveler/build.go`<br>`internal/leveler/verbs_test.go`<br>`internal/d2dctl/points_verbs.go`<br>`internal/d2dctl/points_verbs_test.go`<br>`internal/d2dsrc/points_sheet_test.go`<br>`internal/skilltree/skilltree.go`<br>`internal/power/profiles.json`<br>`internal/power/skilldamage_test.go`<br>`internal/plandata`<br>`docs/plan/data`<br>`internal/env/tuning_resource.go`<br>`internal/resource/tuning.go`<br>`docs/knobs.md`<br>`internal/scenario/state.go`<br>`internal/scenario/scenario_test.go`<br>`cmd/d2scenario/run.go`<br>`cmd/d2scenario/main_test.go`<br>`tools/provingground/scenarios/points.json`<br>`tools/provingground/scenarios/behaviours.json`<br>`docs/points.md`<br>`docs/process/points-verbs-devp14.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -336,6 +337,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 1b068f0ad 11-19 14:18 `Merge agent/agencyp0: agencyp0: stat and skill points by verb, points sheet and API, autopilot switch (default off), legality fixes, scenarios` (agencyp0)
+- c81c3a21d 11-19 14:17 `Merge branch 'main' into agencyp0` (-)
 - 89909e20a 11-19 13:47 `Merge agent/pgcain: pgcain: Proving Ground rerun of the Cain scroll scenarios; item_in_pack accepts bks or bkd; probe doc` (pgcain)
 - 5aae05b01 11-19 13:45 `Merge branch 'main' into pgcain` (-)
 - 7682853f7 11-19 12:56 `Merge agent/arbitershadow: arbitershadow: intent arbiter in shadow mode (R4 slice 1)` (arbitershadow)
@@ -344,6 +347,4 @@
 - 11df828eb 11-19 12:37 `Merge branch 'main' into provingground` (-)
 - b10f0edc0 11-19 12:33 `Merge agent/questspec: questspec: quest chains as checkable data, checker + Act 1 chains (R5)` (questspec)
 - 40dd3814a 11-19 12:30 `Merge origin/main into questspec` (-)
-- 01538fb89 11-19 12:27 `Merge origin/main into agent/provingground` (-)
-- c72b2eb05 11-19 12:07 `Merge agent/cainfix2: cainfix2: tree class from presets, chunks stay done, hand-in waits for town, free-Cain evidence` (cainfix2)
 <!-- statusgen:end -->
