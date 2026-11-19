@@ -21,7 +21,7 @@ const (
 )
 
 func DefaultIdentifyTuning() IdentifyTuning {
-	return IdentifyTuning{Policy: IdentifyCainFree, MaxScrolls: 10, GoldFloor: 600, TripCap: 40, Chunk: 10}
+	return IdentifyTuning{Policy: IdentifyCainFree, MaxScrolls: 10, GoldFloor: 600, TripCap: 40, Chunk: 10, EtherPerReveal: 1}
 }
 
 func identifyKnobs() []Knob {
@@ -37,6 +37,6 @@ func identifyKnobs() []Knob {
 		k("tripCap", "Items per Cain visit", "count", "Most items one Cain visit identifies; the rest follows at the next visit.", d.TripCap, 1, 200),
 		k("chunk", "Stash batch size", "count", "Items taken out of the stash per batch before Cain; each batch is verified before the next.", d.Chunk, 1, 40),
 		k("autoSellRest", "Sell the rest", "bool", "1: the sell chore may sell identified items the loot rules rate sell. 0 (default): identified items are kept for the player to see first.", d.AutoSellRest, 0, 1),
-		k("etherPerReveal", "Ether per reveal", "ether", "Ether one vault reveal costs when neither Cain nor a scroll pays; 0 = Ether is not used for reveals (U: price not decided).", d.EtherPerReveal, 0, 99999),
+		k("etherPerReveal", "Ether per reveal", "ether", "Ether one vault reveal costs when the player picks Ether instead of a scroll; 0 = Ether is not used for reveals. Default 1: a deliberate small spend (a quest hand-in pays 2 to 5 Ether, the first vault tier costs 20). Replaces the scroll: no scroll or tome charge is used; free after Cain is rescued and here.", d.EtherPerReveal, 0, 99999),
 	}
 }

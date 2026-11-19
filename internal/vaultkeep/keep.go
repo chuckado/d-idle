@@ -79,7 +79,6 @@ type Keeper struct {
 	tripped    string // a read-back mismatch switches creating off for the process
 	info       Info
 	tripWant   bool
-	etherTap   map[string]bool // records the player asked to reveal with Ether (charged when the reveal is verified)
 	noticed    map[string]bool
 	caps       d2dctl.VaultCaps // cached for capsTTL: the page polls, the socket is shared
 	capsAt     time.Time

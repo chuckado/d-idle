@@ -407,6 +407,28 @@ func (s *Store) apply(ev *event) error {
 		} else {
 			r.Stage = ""
 		}
+	case "unseal": // the reveal was paid: the held affixes become the record's lines (the bytes stay as dropped)
+		r, err := need(Recorded, KeepQ)
+		if err != nil {
+			return err
+		}
+		if r.Identified || r.Sealed == "" {
+			return ErrState
+		}
+		r.Props, r.Sealed, r.Identified, r.Unlocked = r.Sealed, "", true, true
+		r.Value = s.opt.Values.Of(&r.Item)
+		r.RevQ, r.Reason, r.Updated = false, "", ev.T
+	case "reseal": // undo an unseal whose payment failed
+		r, err := need(Recorded, KeepQ)
+		if err != nil {
+			return err
+		}
+		if !r.Unlocked {
+			return ErrState
+		}
+		r.Sealed, r.Props, r.Identified, r.Unlocked = r.Props, "", false, false
+		r.Value = s.opt.Values.Of(&r.Item)
+		r.Updated = ev.T
 	case "sellq":
 		r, err := need(Recorded)
 		if err != nil {
@@ -721,6 +743,27 @@ func (s *Store) Reveal(id string, identified Item) error {
 	}
 	return s.commit(&event{Ev: "reveal", ID: id, Item: &identified})
 }
+
+// Unseal reveals an unidentified record from the affixes the vault already holds: no game step. It refuses an identified
+// record (ErrState) and one that holds nothing (ErrNothingSealed). The caller charges for it afterwards (Reseal undoes it).
+func (s *Store) Unseal(id string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	r := s.byID[id]
+	if r == nil {
+		return ErrNotFound
+	}
+	if r.Identified {
+		return fmt.Errorf("%w: %s is identified already", ErrState, id)
+	}
+	if r.Sealed == "" {
+		return ErrNothingSealed
+	}
+	return s.opLocked(id, event{Ev: "unseal"})
+}
+
+// Reseal takes an Unseal back (the Ether charge failed after it).
+func (s *Store) Reseal(id string) error { return s.op(id, event{Ev: "reseal"}) }
 
 // MarkSell queues a record for the sell errand; a pinned record is refused (ErrPinned).
 func (s *Store) MarkSell(id string) error { return s.op(id, event{Ev: "sellq"}) }
