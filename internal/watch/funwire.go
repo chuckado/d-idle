@@ -180,6 +180,8 @@ type Fun struct {
 	QuestBoard *QuestsAPI // the quest board routes (questsapi.go); nil: none
 	// Points mounts GET /api/hero/points (viewer) and the POSTs under /api/hero/points/ (answer listener); nil: no routes (pointsapi.go, docs/points.md).
 	Points *PointsAPI
+	// Plan mounts GET /api/hero/plan (viewer): the shadow planner's derived rotation and viability line; nil: no route (planapi.go, docs/agency.md).
+	Plan *PlanAPI
 	// Onboarding is the welcome card, first-30-minutes checklist and reconnect data (onboarding.go); always set by NewFun.
 	Onboarding *Onboarding
 	// Cmd are the optional facts of GET /api/commands (commands.go): the pause desk and the journey-blocked reason.
@@ -788,6 +790,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 		for _, p := range PointsRoutes {
 			m.Handle(p, f.Points.Handler())
 		}
+	}
+	if f.Plan != nil {
+		m.Handle(PlanRoute, f.Plan.Handler())
 	}
 	if f.ZoneClear != nil {
 		m.Handle(ZoneClearRoute, f.ZoneClear.Handler())

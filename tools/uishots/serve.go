@@ -86,7 +86,17 @@ func serve(addr, class string) error {
 	})
 	// no live event stream: headless Chrome's virtual time waits for the network to go idle, and an open SSE request
 	// never does; the pages fall back to their polls
-	m.HandleFunc("/api/events", http.NotFound)
+	// UISHOTS_SSE=1 (tools/connprobe) holds the stream open like the real one, to count the page's long-lived requests
+	m.HandleFunc("/api/events", func(w http.ResponseWriter, r *http.Request) {
+		if os.Getenv("UISHOTS_SSE") == "" {
+			http.NotFound(w, r)
+			return
+		}
+		w.Header().Set("Content-Type", "text/event-stream")
+		w.WriteHeader(200)
+		w.(http.Flusher).Flush()
+		<-r.Context().Done()
+	})
 	m.HandleFunc("/stream", func(w http.ResponseWriter, r *http.Request) {
 		if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("stream") == "live" {
 			liveStream(w, r)

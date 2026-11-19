@@ -284,6 +284,12 @@
    "where": "internal/watch/pointsapi.go, internal/points"
   },
   {
+   "id": "agency.plan",
+   "group": "points",
+   "title": "the shadow planner derives the attack and aura from the skills the hero has and logs it next to the combat profile's pick (knob agency.planner 1)",
+   "where": "internal/agency, cmd/d2bot/agencywire.go"
+  },
+  {
    "id": "input.skill-select",
    "group": "input",
    "title": "select the right or left skill (aura) through the input planner: verb, key, verified click",

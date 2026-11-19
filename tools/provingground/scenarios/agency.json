@@ -1,0 +1,24 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "agency.plan-matches-profile",
+   "title": "Shadow planner on: at the checkpoints the `planner shadow:` line names the same attack as the combat profile",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "the scenario format asserts game state (the dump), not a line of the bot log, and the log is the only place the shadow planner writes (it changes nothing the dump can show). Needs an assertion kind that reads a bot log line (log_line with a pattern, run through the Trace) before it can run. Offline equivalent, run on every merge: internal/agency TestPlannerAgreementFixture (the planner against the combat profile at six checkpoints per shipped table, mismatches documented in testdata/agreement.json).",
+   "covers": ["agency.plan"],
+   "touches": ["internal/agency/", "data/capabilities/", "cmd/d2bot/agencywire.go", "internal/combat/"],
+   "pre": {"level": 18},
+   "trigger": {"goals": "campaign", "knobs": {"agency.planner": 1, "resource.pointsDecisions": 1}},
+   "budget": {"virtual_min": 5},
+   "matrix": {"classes": ["Paladin", "Sorceress"], "seeds": [11, 3]},
+   "provenance": "SETUP: level 18 with the points a played level gives; the autopilot spends them from the plan table so the hero has the table's skills. Reachable by play.",
+   "notes": "Run shape once the assertion exists: wait one virtual minute after the points are spent, then expect one line `planner shadow: ... agree=true` for the Sorceress and for the Paladin whose table is not paladin-zealot-lite at clvl 18 (that checkpoint is a documented mismatch: the estimate prefers Sacrifice over Zeal). The knob is shadow only: the hero's play must equal a run with agency.planner 0, so no_writes and the same quest progress.",
+   "assert": [
+    {"kind": "no_writes"}
+   ]
+  }
+ ]
+}
