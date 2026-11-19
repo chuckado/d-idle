@@ -483,6 +483,7 @@
     "action": "interact",
     "target": "Cain's Cage",
     "nodes": [
+     "to-tristram",
      "cage",
      "home"
     ]
