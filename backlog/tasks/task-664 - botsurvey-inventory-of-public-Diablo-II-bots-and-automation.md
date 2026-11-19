@@ -16,6 +16,7 @@ owns:
   - "docs/research/public-d2-bots-2026-11-19.md"
 exclusive: []
 contracts: []
+result: "docs-only survey of about 46 distinct public Diablo II bot projects (53 table rows); not verified live, no code"
 ---
 
 ## Description
