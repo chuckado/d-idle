@@ -3,9 +3,9 @@
   "stage": ["video"],
   "layout": {
     "aliases": {"hero-status": "hero-vitals", "hero-detail": "hero-vitals", "whyline": "why", "hero-now": "now", "voice": "diary"},
-    "compat": ["now", "queue", "orders-map", "thoughts", "rules", "journal", "spend", "chronicle", "diary", "quests", "cards", "locked", "bestiary", "atlas", "alerts"],
-    "reserved": ["risk", "statusline", "needs-count", "needs-you", "orders", "health", "progress", "zone-map", "log", "journey", "journey-strip", "journey-chip", "area-map", "quest-strip", "quest-board", "quest-list"],
-    "fit": ["now", "queue", "orders-map", "thoughts", "rules", "journal", "spend", "chronicle", "diary", "quests", "cards", "locked", "bestiary", "atlas", "alerts"],
+    "compat": ["now", "queue", "orders-map", "thoughts", "rules", "journal", "spend", "chronicle", "diary", "quests", "locked", "bestiary", "atlas", "alerts"],
+    "reserved": ["risk", "statusline", "needs-count", "needs-you", "orders", "health", "progress", "zone-map", "log", "journey", "journey-strip", "journey-chip", "area-map", "quest-strip", "quest-board", "quest-list", "cards"],
+    "fit": ["now", "queue", "orders-map", "thoughts", "rules", "journal", "spend", "chronicle", "diary", "quests", "locked", "bestiary", "atlas", "alerts"],
     "slot": ["video", "hero-meters"],
     "drawer": ["log", "onboarding", "quest-board"]
   }

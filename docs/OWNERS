@@ -302,6 +302,7 @@ cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
 data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
+data/idreveal  credit-runner  nocards
 data/onboarding  credit-runner  firstminutes
 data/onboarding/en.json  credit-runner  friendfb
 data/questboard  credit-runner  quests1
@@ -310,6 +311,7 @@ data/questboard  credit-runner  quests7b
 data/questboard/act1.json  credit-runner  cain45
 data/questboard/act1.json  credit-runner  cain5b
 data/questboard/act1.json  credit-runner  cainfix
+data/unlocks  credit-runner  nocards
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
 data/vault  credit-runner  vaultv2
@@ -560,6 +562,8 @@ docs/ui/redesign-2026-11-14/reviews/c2c3-review.md  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/c2c3/  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/s1b-review.md  credit-runner  uis1breview
 docs/ui/redesign-2026-11-14/stash-anywhere.md  credit-runner  stashany
+docs/unlock-idreveal.md  credit-runner  nocards
+docs/unlock-ladder.md  credit-runner  nocards
 docs/upstream/  credit-runner  p02posted
 docs/upstream/  credit-runner  prpost
 docs/upstream/  credit-runner  prpost2
@@ -603,6 +607,7 @@ docs/upstream/verifier-p04-2026-11-15.md  live-agent  verifyp04
 docs/upstream/verifier-p17-2026-11-15.md  credit-runner  verifyp17
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
 docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
+docs/vault.md  credit-runner  nocards
 docs/vault.md  credit-runner  vaulttip
 docs/vault.md  credit-runner  vaultv2
 docs/vault.md  credit-runner  vaultv3
@@ -1119,6 +1124,7 @@ internal/watch/etherapi_test.go  credit-runner  vaultv7b
 internal/watch/funwire.go  credit-runner  friendfb
 internal/watch/funwire.go  credit-runner  labels
 internal/watch/funwire.go  credit-runner  lootwireL4
+internal/watch/funwire.go  credit-runner  nocards
 internal/watch/funwire.go  credit-runner  quests4
 internal/watch/funwire.go  credit-runner  survA
 internal/watch/funwire.go  credit-runner  uib1
@@ -1171,6 +1177,7 @@ internal/watch/lootshadowapi_test.go  credit-runner  lootwireL4
 internal/watch/mercapi.go  credit-runner  botmerc
 internal/watch/mercapi_test.go  credit-runner  botmerc
 internal/watch/minimapfix_test.go  credit-runner  minimapfix
+internal/watch/nocards_test.go  credit-runner  nocards
 internal/watch/nopins_test.go  credit-runner  nopins
 internal/watch/onboarding.go  credit-runner  firstminutes
 internal/watch/onboarding.go  credit-runner  reconnectux
@@ -1235,6 +1242,7 @@ internal/watch/survivalapi.go  credit-runner  survC
 internal/watch/survivalapi_test.go  credit-runner  survC
 internal/watch/tallystrip.go  credit-runner  botcpu2
 internal/watch/tallystrip_test.go  credit-runner  botcpu2
+internal/watch/testdata  credit-runner  nocards
 internal/watch/testdata/  credit-runner  uifix1
 internal/watch/testdata/areamap/  credit-runner  uis6
 internal/watch/testdata/campaign  pro-runner  levelplan3
@@ -1317,6 +1325,9 @@ internal/watch/testdata/video_panel.js  credit-runner  videofeed4
 internal/watch/testdata/video_panel.js  credit-runner  viewerfps
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
+internal/watch/unlockidreveal.go  credit-runner  nocards
+internal/watch/unlockidreveal_test.go  credit-runner  nocards
+internal/watch/unlockui_quiet_test.go  credit-runner  nocards
 internal/watch/vaultapi.go  credit-runner  bulkid
 internal/watch/vaultapi.go  credit-runner  vaulttip
 internal/watch/vaultapi.go  credit-runner  vaultv4
@@ -1342,6 +1353,7 @@ internal/watch/views.go  credit-runner  videofeed2
 internal/watch/views.go  credit-runner  videofeed4
 internal/watch/watchlayout_test.go  credit-runner  labels
 internal/watch/watchlayout_test.go  credit-runner  videofeed2
+internal/watch/web  credit-runner  nocards
 internal/watch/web/app.css  credit-runner  toastfix
 internal/watch/web/characters.css  credit-runner  charui
 internal/watch/web/characters.html  credit-runner  charui
