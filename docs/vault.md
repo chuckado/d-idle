@@ -207,4 +207,4 @@ Record the `.bak` of the hero before step 2 and restore it if anything differs.
 
 The account wallet is ETHER, implemented in `internal/ether` and described in [ether.md](ether.md): it implements `vault.Account` and `vault.Wallet`, derives the owned capacity steps and the balance by ledger replay, and serves `GET /api/ether`, `POST /api/vault/upgrade` and `POST /api/vault/downgrade` (`internal/watch/etherapi.go`). The store's `Options.Capacity` is `wallet.Capacity(override)`; shrinking (refund of the last step) is allowed only while the active hero's count fits the lower tier. Wired into the bot in V7b behind `loot.vault` (docs/ether.md "Wiring"); not run live.
 
-Cards count: the quiet `Cards (N)` count of unflipped cards (docs/unlock-idreveal.md) lives on the Cards tab of the unlock sheet on the watch page (`#tab-cards`, unlockui.js). The Vault page and the places that link to it (the Drops feed's Vault link, the Ether chip, the Orders entry) do not read or show it, so there is nothing to conflict; the Vault is not a card surface.
+The old Cards tab and its count are gone (docs/unlock-idreveal.md, 2026-11-19); a reveal is a tap on the row.

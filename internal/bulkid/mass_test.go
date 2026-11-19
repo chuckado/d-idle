@@ -78,3 +78,35 @@ func TestMassPreviewLeaksNothing(t *testing.T) {
 		}
 	}
 }
+
+// The Ether option of the button: both previews are there, the choice is the player's; free at Cain hides it; only
+// records whose affixes are held count; the wallet bounds the count.
+func TestMassRevealEtherOption(t *testing.T) {
+	f := mustFilter(t)
+	for _, build := range []string{"Sorceress", "Paladin"} {
+		recs := vaultRecs(build)
+		for i := range recs {
+			if i != 0 { // the first matching record holds no affixes
+				recs[i].Sealed = "7:0:20"
+			}
+		}
+		m := MassReveal(f, recs, qn, Price{Charges: 1, ScrollGold: 80, EtherPer: 2, EtherBal: 3})
+		if m.Mode != ViaScroll || m.Ether == nil || m.Ether.Per != 2 || m.Ether.Count > 1 || m.Ether.Cost != m.Ether.Count*2 || m.Ether.Skipped == 0 {
+			t.Fatalf("%s: %+v / %+v", build, m, m.Ether)
+		}
+		for _, id := range m.Ether.IDs {
+			if id == recs[0].ID {
+				t.Fatalf("%s: a record with nothing held was offered", build)
+			}
+		}
+		if m := MassReveal(f, recs, qn, Price{Free: true, EtherPer: 2, EtherBal: 99}); m.Ether != nil {
+			t.Fatalf("%s: Ether offered while Cain is free", build)
+		}
+		if m := MassReveal(f, recs, qn, Price{Charges: 0, EtherPer: 0}); m.Ether != nil {
+			t.Fatalf("%s: price 0 must be off", build)
+		}
+		if m := MassReveal(f, recs, qn, Price{EtherPer: 2, EtherBal: -1}); m.Ether == nil || m.Ether.Count != 0 {
+			t.Fatalf("%s: no wallet must queue nothing: %+v", build, m.Ether)
+		}
+	}
+}

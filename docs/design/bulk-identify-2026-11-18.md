@@ -138,7 +138,7 @@ Merge order: this doc first (`agent/bulkid-design`), then `agent/bulkid` with B1
 | Journal | `bulkid.FileJournal` (`<data>/bulkid-<hero>.json`), recovery runs first in every `Trip.Run`, under any policy | a damaged file leaves the chore off |
 | Rescued | `bulkid.CainRescued(word)` (record 4 bit 1 or 0, V `search-for-cain-l2`), `cainQuest(ref, task.StageCleared)` in cmd/d2bot | Cain absent from the snapshot while policy 1: nothing is listed, opened or moved |
 | Scroll path (policy 2) | `bulkid.RunScrolls`, `town.bulkSide` as `ScrollIO` | held charges only; buys only when `town.identifyTome` is 1, within `identify.goldFloor` and `identify.maxScrolls`; `ScrollPrice` is the base cost of `isc` (S: a lower bound of the vendor price) |
-| Ether | `bulkid.EtherPayer`, `vaultkeep.Keeper.EnqueueRevealEther`, `POST /api/vault/reveal {"ether":true}`, `RevealInfo.etherPer` | only an explicit tap; refused (nothing queued, nothing spent) when `identify.etherPerReveal` is 0 or the wallet is short; charged ONCE per record AFTER the verified reveal, ledger key `reveal:<record id>`. U: nothing makes a reveal possible without a scroll, tome charge or Cain, so today an Ether tap pays in addition to the identify tool; what Ether should replace is the user's price decision (section 10) |
+| Ether | `bulkid.EtherPayer`, `vaultkeep.Keeper.EnqueueRevealEther`, `POST /api/vault/reveal {"ether":true}`, `RevealInfo.etherPer` | only an explicit tap; refused (nothing queued, nothing spent) when `identify.etherPerReveal` is 0 or the wallet is short; charged ONCE per record AFTER the verified reveal, ledger key `reveal:<record id>`. superseded by section 12: an Ether tap now REPLACES the scroll |
 
 Live drill additions (a d2-live agent, on top of section 9):
 8. Cain's identify scope: put 2 stash items and 2 pack items unidentified, talk to Cain without staging, read which flags changed (stash coverage: S says no).
@@ -148,3 +148,21 @@ Live drill additions (a d2-live agent, on top of section 9):
 12. Journal recovery: kill the bot between the stage and the return of a 12 item trip; after restart the journal file lists the ids and the first town visit returns them (policy manual too).
 13. Cain's position: no coordinates are assumed; check `Present` finds the class in the Act 1 camp after he left the cage (V l2: he shows in town later).
 14. Ether: set `identify.etherPerReveal` to 1, tap a reveal with Ether on a hero with a scroll, read the ether ledger line `reveal:<id>`; with a zero balance the tap is refused.
+
+## 12. Payment rules of a reveal (user decision 2026-11-19, agent etherreveal)
+
+A reveal is paid in this order; the first rule that applies wins.
+
+1. **Cain rescued and here**: free. The normal queued reveal (or the bulk Cain trip) runs; no scroll, no Ether, even if the player tapped "with Ether".
+2. **The player picked Ether** (`POST /api/vault/reveal {"ether":true}`, the "Reveal with Ether" buttons): no scroll or tome charge is used and no game step runs. The vault unlocks the record from the affixes it already holds (`vault.Store.Unseal`), then charges `identify.etherPerReveal` once (ledger key `reveal:<record id>`). A refused unlock charges nothing; a failed charge puts the record back (`Reseal`) so it is never half paid. A repeated tap on a paid record is a no-op ("already"). A short wallet or price 0 refuses the whole press before anything changes.
+3. **The player picked the scroll** (the plain "Reveal" buttons): the existing queue; a held scroll or tome charge is used at the next town visit. With none the press is refused with "no scroll; buy on request".
+
+The page shows both options before the tap: the selection cost line reads "Reveal N items: N charges (you have H). Or with Ether: C (you have B), no scroll used", and "Reveal filtered" has two buttons (scroll/Cain preview `mass`, Ether preview `mass.ether` with count, cost, balance and what cannot be paid). The Ether buttons are hidden while price is 0 or Cain is here.
+
+**Default price: 1 Ether per item** (data: knob `identify.etherPerReveal`, one number, no per-quality table). Why: a quest hand-in pays 2 to 5 Ether and the first vault tier costs 20, so one reveal is a small but real choice (about a twentieth of a tier), and the mass button (50 at most) is a deliberate 50 Ether spend. 0 turns Ether off. U: whether this feels right is a player call; it is one knob.
+
+**Secrecy.** `ground full` for an unidentified item carries its affixes (U: the fork's reply was never read live for an unidentified item; design doc loot-vault section U1). The recorder stores them in `vault.Item.Sealed`. The API rows, the item detail and the export never carry `Sealed`; the stat lines (`Props`) exist only for identified records, so the page learns the text only after `Unseal`. A record with nothing sealed (the fork sent no affixes) cannot be Ether-revealed: refused with "the vault holds no affixes for this item; use a scroll or Cain", nothing charged.
+
+**Keep of an Ether-revealed record.** `item create` takes the hex only (V, `d2dctl.ItemCreate` has no identified flag), so Keep creates the item exactly as dropped: still UNIDENTIFIED in the game, while the vault page shows it revealed. Creating it identified needs a fork flag (`identified=1`) and a bit-flip that the design forbids in the bot; not done. Open point for the user: ask for that flag in the fork, then Keep can create it identified (the read-back compare would then use the flagged bytes).
+
+Tests: `internal/vaultkeep/ether_test.go` (pays once and replaces the scroll, idempotent, short wallet, price 0, failed charge, nothing held, Cain free, scroll path never charges, two classes), `internal/vault` `TestUnsealRevealReseal` (restart, export), `internal/bulkid` `TestMassRevealEtherOption`, `internal/watch` `TestVaultEtherRevealUnlocksOnlyOnPayment`. Live drill addition: tap Ether on a fresh drop, check the ledger line and that no scroll was used; Keep it and read whether the item is identified (expect no).

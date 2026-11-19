@@ -695,3 +695,41 @@ func TestValueTableData(t *testing.T) {
 		t.Fatal()
 	}
 }
+
+// Unseal: the held affixes become the record's lines only on the event; it survives a restart; Reseal undoes it; an
+// export never carries unpaid affixes.
+func TestUnsealRevealReseal(t *testing.T) {
+	dir := t.TempDir()
+	s := open(t, dir, "sorc", 10)
+	it := mk(1, "wsp", 4, 20)
+	it.Sealed = "7:0:20"
+	r, err := s.Add(it)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var buf bytes.Buffer
+	if err := s.Export(&buf); err != nil || strings.Contains(buf.String(), "7:0:20") {
+		t.Fatalf("export leaks sealed affixes: %v %s", err, buf.String())
+	}
+	if got, _ := s.Get(r.ID); got.Identified || got.Props != "" {
+		t.Fatalf("%+v", got)
+	}
+	if err := s.Unseal(r.ID); err != nil {
+		t.Fatal(err)
+	}
+	if err := s.Unseal(r.ID); !errors.Is(err, ErrState) {
+		t.Fatalf("second unseal: %v", err)
+	}
+	s.Close()
+	s = open(t, dir, "sorc", 10)
+	if got, _ := s.Get(r.ID); !got.Identified || got.Props != "7:0:20" || got.Sealed != "" || !got.Unlocked || got.Status() != "revealed" {
+		t.Fatalf("after restart: %+v", got)
+	}
+	if err := s.Reseal(r.ID); err != nil {
+		t.Fatal(err)
+	}
+	if got, _ := s.Get(r.ID); got.Identified || got.Props != "" || got.Sealed != "7:0:20" {
+		t.Fatalf("after reseal: %+v", got)
+	}
+	s.Close()
+}
