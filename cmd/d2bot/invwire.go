@@ -125,12 +125,7 @@ const cainOpenTTL = 5 * time.Second
 // (memory first, then the save; V that the words exist, docs/saves.md), or Cain stands in the town the hero is in (a
 // monster of his classes; U live). Either one opens the "Identify all (Cain)" command.
 func cainOpen(ref *runnerRef) func(*d2.Snapshot) bool {
-	var (
-		mu   sync.Mutex
-		at   time.Time
-		diff = -1
-		done bool
-	)
+	quest := cainQuest(ref, task.StageDone)
 	return func(s *d2.Snapshot) bool {
 		if s == nil || s.Player == nil {
 			return false
@@ -142,6 +137,24 @@ func cainOpen(ref *runnerRef) func(*d2.Snapshot) bool {
 				}
 			}
 		}
+		return quest(s)
+	}
+}
+
+// cainQuest reads the Search for Cain quest for the hero's difficulty and says whether it reached at least stage (cached
+// for cainOpenTTL). Stage Cleared is the reward-pending word (record 4 bit 1, V docs/probes/search-for-cain-l2-2026-11-18.md:
+// the cage is open); the bulk identify policy counts it as rescued, the older Identify-all command waits for Done.
+func cainQuest(ref *runnerRef, stage task.Stage) func(*d2.Snapshot) bool {
+	var (
+		mu   sync.Mutex
+		at   time.Time
+		diff = -1
+		done bool
+	)
+	return func(s *d2.Snapshot) bool {
+		if s == nil || s.Player == nil {
+			return false
+		}
 		r := ref.p.Load()
 		if r == nil {
 			return false
@@ -151,7 +164,7 @@ func cainOpen(ref *runnerRef) func(*d2.Snapshot) bool {
 		if now := time.Now(); diff != int(s.Player.Difficulty) || now.Sub(at) > cainOpenTTL {
 			diff, at, done = int(s.Player.Difficulty), now, false
 			if v, ok := r.QuestView(diff); ok {
-				done = v.Quests[task.QCain].Stage == task.StageDone
+				done = v.Quests[task.QCain].Stage >= stage
 			}
 		}
 		return done

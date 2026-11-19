@@ -35,6 +35,7 @@ type Report struct {
 	Identified  int    // planned items that read identified afterwards
 	Returned    int    // moved back to the stash
 	Kept        int    // stayed in the pack because the stash had no room
+	NeedBuy     int    // scrolls the plan would buy first (the caller buys only if allowed)
 	ScrollPicks []Pick // picks the policy wants done with scrolls (the town's identify chore does them)
 }
 
@@ -83,6 +84,7 @@ func (t *Trip) Run(ctx context.Context) (Report, error) {
 	h.CainOpen = h.CainOpen && present // nothing moves for an absent Cain
 	plan := Make(t.F, tu, h, items)
 	rep.Reason = plan.Reason
+	rep.NeedBuy = plan.NeedBuy
 	for _, p := range plan.Picks {
 		if p.Via == ViaScroll {
 			rep.ScrollPicks = append(rep.ScrollPicks, p)

@@ -61,6 +61,9 @@ type Town struct {
 	marks         ItemMarks      // the player's sell and keep marks (SetItemMarks)
 	pinned        func(int) bool // the player's slot pins (SetPinned)
 
+	bulk     *BulkID // bulk identify (SetBulkID); nil: the chore is off
+	bulkIdle int     // pack item count at the last trip that planned nothing (-1: none), see bulkid.go
+
 	repairGate RepairGate // the player's repair policy (SetRepairGate); nil: the legacy durability rule
 
 	tpBought atomic.Int64 // scrolls bought since the minute line last took the count
