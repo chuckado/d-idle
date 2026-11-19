@@ -35,9 +35,9 @@ Counts over 19: GREEN 4 (plus 1 by pgcain), RED 3 (plus 1 by pgcain), runnable-n
 - Cairn stones: the observable is `debug portals` listing a portal in level 4 (`portal_open`), V L1 on the lab build; it stays listed from Tristram. The per-stone `NU` to `ON` column is readable only while the hero is in Stony Field and is the bot's own check. Shipped build: BLOCKED (reason above); U that it lists portals.
 - Board-driven scenarios use the `board-taps` driver; a scenario that must exercise the hand-in should assert something only the board path produces (open item for `cain.read`).
 
-## Determinism (V where stated)
+## Determinism (V, job 20261119-141800-a155 plus the fast-tier run)
 
-Pair: `town.resupply` Paladin seed 11 twice on the long lane (job 20261119-141800-a155); the first fast-tier run above has digest `40ec13d9` for the same key. Result: see the section below once the job has run.
+`town.resupply` Paladin seed 11, three runs in total: GREEN, GREEN, GREEN, same verdict every time (`d2scenario determinism` exit 0, hard rule met). State digests: `40ec13d9` (fast-tier run), `4e9f6d77` (pair run 1), `40ec13d9` (pair run 2). The digest differs in one run (gold 700 against 712, stash 395 against 250; area changes 14 in all three): the documented wall-clock decisions of the bot loop, a warning not a failure (`docs/d2d-determinism.md`). The second scenario of the pair was not run (one scenario only, U for the rest).
 
 ## Coverage (`d2scenario coverage`)
 
