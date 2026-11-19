@@ -300,6 +300,12 @@ const (
 	presetMaxAge  = 2 * time.Second
 )
 
+// hiddenQuestObj are quest objects listed even when their preset row carries the hidden flag. U (2026-11-19 sandbox
+// log, not read from the game): a hero standing at the Tree of Inifuss never saw it and looped on empty plans; the
+// walk to a known class 30 preset ends with no path while the object list lacks it, which fits a hidden=1 row in the
+// sandbox build (the lab build printed hidden 0, V docs/probes/search-for-cain-l0-2026-11-18.md).
+var hiddenQuestObj = map[int]bool{30: true}
+
 // fieldObjects lists the level's placed objects near the player (chests, shrines, altars, Cain's cage, the Tristram
 // portal, a field waypoint) from "debug presets", the index space of "cmd interact" that "npcs" rows share (V drill
 // H.obj: "cmd interact <index>" opens a field object). The unit id is NPCIDBase + index, so the controller sends the
@@ -322,7 +328,7 @@ func (b *builder) fieldObjects(ctx context.Context, listed []d2dctl.NPC) {
 	}
 	lim := 5 * FieldObjectRadius
 	for _, p := range ps {
-		if p.Hidden || seen[p.Index] {
+		if (p.Hidden && !hiddenQuestObj[p.ObjectID]) || seen[p.Index] {
 			continue
 		}
 		x, y := b.pos(p.X, p.Y)
