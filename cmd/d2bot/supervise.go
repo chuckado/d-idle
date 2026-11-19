@@ -31,9 +31,11 @@ func superviseProcess(ctx context.Context, o options, log *slog.Logger, args []s
 // newSupervisor wires the restart policy to real child processes of self (a test points self at a fake child).
 func newSupervisor(o options, log *slog.Logger, args []string, self string) *supervisor {
 	start := time.Now()
+	sw := &switcher{o: o, log: log, cur: args}
 	return &supervisor{
 		log: log, max: o.superviseMax, window: time.Hour, minRun: 10 * time.Minute,
 		base: 5 * time.Second, ceil: 2 * time.Minute, now: time.Now,
+		onSwitch: sw.apply,
 		run: func(ctx context.Context, attempt int) int {
 			var left time.Duration
 			if o.runFor > 0 {
@@ -41,7 +43,7 @@ func newSupervisor(o options, log *slog.Logger, args []string, self string) *sup
 					return 0
 				}
 			}
-			return runChild(ctx, self, childArgs(args, attempt > 0, left, o.goalSpec != ""), childEnv(os.Environ(), attempt > 0), log)
+			return runChild(ctx, self, sw.args(attempt, left), childEnv(os.Environ(), attempt > 0), log)
 		},
 		sleep: func(ctx context.Context, d time.Duration) {
 			select {
@@ -63,6 +65,9 @@ type supervisor struct {
 	now    func() time.Time
 	run    func(ctx context.Context, attempt int) int // runs one child, returns its exit code
 	sleep  func(ctx context.Context, d time.Duration)
+	// onSwitch handles exitSwitch (a character switch, charwire.go): it reports whether the next child starts at once
+	// with other arguments. nil or false: the exit is handled like any other non-zero code.
+	onSwitch func() bool
 }
 
 func (s *supervisor) loop(ctx context.Context) int {
@@ -78,6 +83,10 @@ func (s *supervisor) loop(ctx context.Context) int {
 		if code == 0 || ctx.Err() != nil {
 			s.log.Info("supervise: child ended, not restarting", "code", code, "attempt", attempt)
 			return code
+		}
+		if code == exitSwitch && s.onSwitch != nil && s.onSwitch() {
+			wait = s.base
+			continue // a deliberate switch: no backoff, not a crash
 		}
 		if s.now().Sub(t0) >= s.minRun {
 			wait = s.base

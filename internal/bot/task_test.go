@@ -55,7 +55,7 @@ func (q *fakeQuests) Read(int) (QuestView, bool) {
 }
 
 func campaignRig(t *testing.T, q *fakeQuests, level int) *rig {
-	g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) {})
+	g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Quests.Board = 0 }) // the planner path (the board is the default)
 	g.w.set(func(w *world) { w.level = level })
 	g.r.d.Task = &TaskDeps{Dialog: fakeDialog{g.w, q}, Quests: q, Waypoint: func(ctx context.Context) error { g.w.call("waypoint"); return nil }}
 	return g

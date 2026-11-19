@@ -1,5 +1,10 @@
 package data
 
+import (
+	"strconv"
+	"strings"
+)
+
 // ItemType is an itemtypes.txt row. Types form a DAG through Equiv1/Equiv2
 // (e.g. "swor" -> "mele" -> "weap"); DB.IsA walks it.
 type ItemType struct {
@@ -18,11 +23,15 @@ type ItemType struct {
 	Class     string // class restriction code, "" for none
 	MaxSock   [3]int // max sockets for ilvl <25, 25-39, >=40
 	StorePage string
+	// InvGfx is InvGfx1..6 (inventory icon names, lower case, "" = unused): the pictures an item of this type can
+	// carry (VarInvGfx of them, the item's own picture index picks one). Jewels 6, rings 5, amulets and charms 3.
+	InvGfx [6]string
 }
 
 var itemTypeCols = []string{
 	"ItemType", "Code", "Equiv1", "Equiv2", "Body", "BodyLoc1", "BodyLoc2", "Shoots", "Quiver", "Throwable",
 	"AutoStack", "Charm", "Gem", "Beltable", "MaxSock1", "MaxSock25", "MaxSock40", "Class", "StorePage",
+	"InvGfx1", "InvGfx2", "InvGfx3", "InvGfx4", "InvGfx5", "InvGfx6",
 }
 
 func loadItemTypes(t *Table) []*ItemType {
@@ -33,14 +42,18 @@ func loadItemTypes(t *Table) []*ItemType {
 		if code == "" {
 			continue
 		}
-		out = append(out, &ItemType{
+		t := &ItemType{
 			Name: r.Str("ItemType"), Code: code, Equiv: [2]string{r.Str("Equiv1"), r.Str("Equiv2")},
 			Body: r.Bool("Body"), BodyLocs: [2]string{r.Str("BodyLoc1"), r.Str("BodyLoc2")},
 			Shoots: r.Str("Shoots"), Quiver: r.Str("Quiver"), Throwable: r.Bool("Throwable"),
 			AutoStack: r.Bool("AutoStack"), Charm: r.Bool("Charm"), Gem: r.Bool("Gem"), Beltable: r.Bool("Beltable"),
 			Class: r.Str("Class"), MaxSock: [3]int{r.Int("MaxSock1"), r.Int("MaxSock25"), r.Int("MaxSock40")},
 			StorePage: r.Str("StorePage"),
-		})
+		}
+		for i := range t.InvGfx {
+			t.InvGfx[i] = strings.ToLower(strings.TrimSpace(r.Str("InvGfx" + strconv.Itoa(i+1))))
+		}
+		out = append(out, t)
 	}
 	return out
 }

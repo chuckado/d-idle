@@ -14,7 +14,7 @@ import (
 // CaptureOptions describe how to grab the instance's private X display.
 type CaptureOptions struct {
 	Display string // ":105", from the instance mapping, never the desktop
-	FPS     int    // default 8
+	FPS     int    // default 15
 	Quality int    // ffmpeg -q:v, 2 (best) to 31; default 5
 	// LookPath and Command are seams for tests; they default to exec.LookPath and exec.CommandContext.
 	LookPath func(string) (string, error)
@@ -22,10 +22,10 @@ type CaptureOptions struct {
 }
 
 // DefaultVideoFPS is the frame rate when -watch-video-fps is not given.
-const DefaultVideoFPS = 8
+const DefaultVideoFPS = 15
 
 // MaxVideoFPS caps the rate: the capture is shared by all viewers and costs CPU on the worker host.
-const MaxVideoFPS = 15
+const MaxVideoFPS = 30
 
 // ExecCapture picks a capture tool at start time: ffmpeg x11grab (piped mjpeg) when present, else ImageMagick import
 // polled at a lower rate. It returns an error naming what to install when neither exists.

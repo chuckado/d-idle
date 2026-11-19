@@ -127,18 +127,23 @@ func (r *Runner) towerGuardWhy(s *d2.Snapshot) string {
 
 // towerWhy is task.TowerWhy with point t0.area.toohard (docs/t0-slice.md): the level guard's verdict is the answer
 // (go when open, else lower with no kit, else skip) until the ladder, when installed, learns a rule for the context.
-// A learned go lifts the level block (the kit part of the guard stays); a learned skip or lower blocks an area the guard
-// would open. Asked only while the guard is on (Normal), so the other difficulties are untouched. p may be nil.
+// A learned go lifts the level block (the kit part of the guard stays); a learned skip or lower still blocks. The point
+// is asked only while the level guard blocks (never when the hero is at or above the floor). Asked only while the guard is on (Normal), so the other difficulties are untouched. p may be nil.
 func (r *Runner) towerWhy(w task.World, p *d2.Player) string {
 	why := task.TowerWhy(w)
 	l := ladder.Active()
 	if l == nil || p == nil || task.TowerFloor(w) == 0 {
 		return why
 	}
+	if task.TowerLevelWhy(w) == "" {
+		// The level passes (clvl at the floor counts): there is nothing "too hard" to ask about. The point used to be asked
+		// anyway, which put "the bot wants hero level 15 there and the hero is level 15" on the phone while only the kit
+		// was thin (live 2026-11-17). A thin kit stays a chores matter (why).
+		return why
+	}
 	kit := ladder.KitFor(w.HasTP, w.Potions)
 	legacy := "go"
 	switch {
-	case task.TowerLevelWhy(w) == "":
 	case kit == ladder.KitNone:
 		legacy = "lower"
 	default:

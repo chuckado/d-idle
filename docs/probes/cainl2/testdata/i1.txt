@@ -1,0 +1,160 @@
+> debug goto 4
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> debug warp 24 61
+ err=<nil>
+> step 25 err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> debug kill
+ err=<nil>
+> debug give bkd pack
+pack 8 0 quality=2 identified=1 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 100 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	ON
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	ON
+14	21.9	60.9	op9	19	-	ON
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+2	4	25.1	57.7 err=<nil>
+> cmd interact -2002
+
+ err=<nil>
+> step 200 err=<nil>
+> debug level
+38 21.50 24.60 43 48 5000 1000 err=<nil>
+> debug quest list
+4	0x0010	act1	bits=4 err=<nil>
+> npcs
+a Trap	-152	296	0	14	18.1	28.1
+Cain's Gibbet	616	648	0	31	27.3	27.7
+Wirt's body	-1448	272	0	42	9.7	35.9
+ err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> debug kill
+ err=<nil>
+> step 5 err=<nil>
+> cmd move 25 27
+
+ err=<nil>
+> step 100 err=<nil>
+> cmd interact 31
+
+ err=<nil>
+> step 200 err=<nil>
+> debug portals
+2	4	25.1	57.7
+3	38	21.5	24.0 err=<nil>
+> debug give tsc pack
+pack 9 3 quality=2 identified=1 err=<nil>
+> key i
+
+ err=<nil>
+> step 10 err=<nil>
+> items
+[sst loc=1 slot=4 q=2 panel=0 id=1 size=1x3 at=0,0]
+  Short Staff
+  Two-Hand Damage: 1 to 5
+  Durability: 20 of 20
+  Staff Class - Fast Attack Speed
+[hp1 loc=2 slot=0 q=2 panel=0 id=2 size=1x1 at=0,0]
+  Minor Healing Potion
+  Points: 30
+[hp1 loc=2 slot=0 q=2 panel=0 id=3 size=1x1 at=1,0]
+  Minor Healing Potion
+  Points: 30
+[hp1 loc=2 slot=0 q=2 panel=0 id=4 size=1x1 at=2,0]
+  Minor Healing Potion
+  Points: 30
+[hp1 loc=2 slot=0 q=2 panel=0 id=5 size=1x1 at=3,0]
+  Minor Healing Potion
+  Points: 30
+[tsc loc=0 slot=0 q=2 panel=1 id=6 size=1x1 at=0,0]
+  Scroll of Town Portal
+[isc loc=0 slot=0 q=2 panel=1 id=7 size=1x1 at=1,0]
+  Scroll of Identify
+[tsc loc=0 slot=0 q=2 panel=1 id=9 size=1x1 at=9,3]
+  Scroll of Town Portal
+ err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=25.40,27.10 walking=0 dir=14 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=15 str=10 life=40/43 mana=41/41 stamina=19712/19712 level=4 exp=7647 pmode=- missiles=0 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=3 tree=0 waypoint=0 items=8 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4677 music_old=0 quake=0,0,0,0,0 sfx=2720:0:0.89/0.89,2723:0:0.89/0.89,3288:0:1.00/1.00,2584:0:0.36/0.49,2633:0:0.25/0.34,194:0:0.00/0.02,2576:-4:0.01/0.01,3286:0:0.77/0.56,2721:0:0.89/0.89,1784:0:0.16/0.03,1784:0:0.25/0.05,1784:0:0.20/0.02,2720:0:0.89/0.89,221:0:0.32/0.10,249:0:0.24/0.07,223:0:0.24/0.05,237:0:0.31/0.08,2721:0:0.89/0.89,2723:0:0.89/0.89,2723:0:0.89/0.89,2720:0:0.88/0.89,2720:0:0.89/0.89,2722:0:0.89/0.89,2723:0:0.89/0.89,2723:0:0.89/0.89,2723:0:0.89/0.89,3671:0:0.57/0.77,2720:0:0.89/0.89,196:0:0.05/0.00,2721:0:0.89/0.89,2720:0:0.89/0.89,2721:0:0.89/0.89
+ err=<nil>

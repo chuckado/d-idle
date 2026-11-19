@@ -14,7 +14,7 @@ import (
 // foreign env) the looter keeps its own source.
 func (s *d2dStack) lootSeam(e *env.Env, _ *nav.Navigator) bot.Looter {
 	if rd, ok := e.Read.(*d2denv.Reader); ok {
-		d2dloot.Attach(s.lt, rd.Source, e.Data)
+		d2dloot.Attach(s.lt, rd.Source, e.Data).UsePeek(s.peek)
 	}
 	return looterAdapter{s.lt}
 }

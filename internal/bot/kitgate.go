@@ -98,7 +98,16 @@ func (r *Runner) kitHolds(s *d2.Snapshot) bool {
 		return r.kitMissing(s)
 	}
 	k, known := r.kitRead(s)
-	return known && !k.TP && k.HP < 1
+	if !known {
+		return false
+	}
+	if !k.TP && k.HP < 1 {
+		return true
+	}
+	// card survhold2 (holdout seed 149: recovery farmed Cave Level 1 with an empty belt and 5 gold and chickened three
+	// times in 20 s): a hero with a portal but no healing potion that cannot pay for one yet stays on the first fields
+	// until the purse reaches the price; kitTrip then makes the trip that buys it.
+	return !k.noHP && k.HP < 1 && s.Player.Gold < r.e.Tune.Resource.KitPotionGold
 }
 
 // kitGateActive is the gate: knob on, recovery running, the hold condition, Normal act 1 (where the tables above apply).

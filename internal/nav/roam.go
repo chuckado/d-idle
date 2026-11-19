@@ -67,6 +67,14 @@ func (n *Navigator) Coverage() (visited, total int) {
 	return n.cov.visited(), len(n.cov.pts)
 }
 
+// ForgetCoverage drops every level's roam coverage: a new game is a new zone (its monsters are back), so the visited
+// points of the old one must not count toward "explored" (the farm loop thrashed on a carried-over 100 percent).
+func (n *Navigator) ForgetCoverage() {
+	n.covMu.Lock()
+	n.covs, n.cov = nil, nil
+	n.covMu.Unlock()
+}
+
 func (n *Navigator) fullyKnown() bool {
 	f, ok := n.w.(fullyKnown)
 	return ok && f.FullyKnown()

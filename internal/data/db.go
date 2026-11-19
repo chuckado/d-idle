@@ -2,6 +2,7 @@ package data
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -51,6 +52,7 @@ type DB struct {
 	skillByKey                   map[string]*Skill
 	itemByCode                   map[string]*ItemBase
 	typeByCode                   map[string]*ItemType
+	typeAnc                      map[string][]string // type code -> every code reachable through Equiv1/Equiv2 (itself excluded)
 	objByID                      map[int]*Object
 	invByClass                   map[string]*Inventory
 	beltByName                   map[string]*Belt
@@ -233,6 +235,7 @@ func (db *DB) index() {
 			db.typeByCode[t.Code] = t
 		}
 	}
+	db.buildTypeAnc()
 	db.objByID = map[int]*Object{}
 	for _, o := range db.Objects {
 		db.objByID[o.ID] = o
@@ -346,8 +349,53 @@ func (db *DB) ItemByCode(code string) *ItemBase { return db.itemByCode[code] }
 func (db *DB) ItemType(code string) *ItemType { return db.typeByCode[code] }
 
 // IsA reports whether item type typ is, or inherits through Equiv1/Equiv2
-// from, ancestor (e.g. IsA("swor","weap") is true).
+// from, ancestor (e.g. IsA("swor","weap") is true). The ancestor sets are built
+// once at load (the table is immutable), so a call allocates nothing.
 func (db *DB) IsA(typ, ancestor string) bool {
+	if typ == "" || ancestor == "" {
+		return false
+	}
+	if typ == ancestor {
+		return true
+	}
+	if db.typeAnc == nil {
+		return slices.Contains(db.reach(typ), ancestor)
+	}
+	return slices.Contains(db.typeAnc[typ], ancestor)
+}
+
+func (db *DB) buildTypeAnc() {
+	db.typeAnc = make(map[string][]string, len(db.typeByCode))
+	for code := range db.typeByCode {
+		db.typeAnc[code] = db.reach(code)
+	}
+}
+
+// reach lists the codes reachable from typ through Equiv1/Equiv2, typ excluded.
+func (db *DB) reach(typ string) []string {
+	var out []string
+	seen := map[string]bool{typ: true}
+	var walk func(string)
+	walk = func(c string) {
+		if c == "" || seen[c] {
+			return
+		}
+		seen[c] = true
+		out = append(out, c)
+		if t := db.typeByCode[c]; t != nil {
+			walk(t.Equiv[0])
+			walk(t.Equiv[1])
+		}
+	}
+	if t := db.typeByCode[typ]; t != nil {
+		walk(t.Equiv[0])
+		walk(t.Equiv[1])
+	}
+	return out
+}
+
+// isAWalk is the original per-call walk, kept as the reference the tests compare IsA with.
+func (db *DB) isAWalk(typ, ancestor string) bool {
 	seen := map[string]bool{}
 	var walk func(string) bool
 	walk = func(c string) bool {

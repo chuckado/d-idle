@@ -102,6 +102,10 @@ type Looter struct {
 
 	build string // leveler build name; with the snapshot's difficulty it picks the belt columns (SetBuild)
 
+	shadow *Shadow    // the loot rules shadow stage (lootshadow.go); nil = off
+	engine *Engine    // the loot rules engine stages (rulesengine.go), switched by loot.rulesEngine
+	vault  vaultState // the Ethereal Vault ground action (vault.go), switched by loot.vault; off by default
+
 	// Seams for tests.
 	snap  func() (*d2.Snapshot, error)
 	stats func(addr uint32) (d2.Stats, error)
@@ -112,7 +116,7 @@ const GemKeep = 6
 
 // New builds a Looter with the built-in starter pickit.
 func New(e *env.Env, mv Mover) *Looter {
-	l := &Looter{e: e, mv: mv, pk: Starter(), hand: hand.New(e), snap: e.Snapshot}
+	l := &Looter{e: e, mv: mv, pk: Starter(), hand: hand.New(e), snap: e.Snapshot, shadow: DefaultShadow, engine: DefaultEngine}
 	if e.Read != nil {
 		l.stats = e.Read.UnitStats
 	}
@@ -433,7 +437,9 @@ func (l *Looter) ctxFrom(s *d2.Snapshot) Ctx {
 		c.NeedWeapon = !hand.FilledEither(inv, d2.BodyRHand)
 		c.NeedBody = !hand.FilledEither(inv, d2.BodyTorso)
 		c.Str, c.Dex = s.Player.Strength, s.Player.Dexterity
-		c.WearBetter = resource.Early(s.Player.Level, l.e.Tune.Resource.EarlyGearMax)
+		// Only when the bot wears what it keeps: with the player deciding gear (the default) nothing would ever equip
+		// the "better" piece, so keeping it only filled the pack and the sell chore skipped it (sellskip, docs/sellskip.md).
+		c.WearBetter = l.e.Tune.Resource.BotDecidesGear() && resource.Early(s.Player.Level, l.e.Tune.Resource.EarlyGearMax)
 		if c.WearBetter {
 			c.Worn = map[int]int{}
 			for _, u := range inv.Container(d2.ContEquipment) {
