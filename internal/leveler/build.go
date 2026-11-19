@@ -56,6 +56,9 @@ type Build struct {
 	// Combat names the combat line the table is made for ("lightning"; "" = the class default). Data, so a new table
 	// selects its combat profile without a Go change (BUILDV3).
 	Combat string
+	// LadderOnly names runewords the table's gear and stat targets assume that cannot be made offline (ladder-only in
+	// 1.14d, docs/points.md). They are tagged, not removed: the table is data the player may follow with other gear.
+	LadderOnly []string
 }
 
 // Hotkey is one entry of a build's hotkey plan: bind Skill to Key on Hand ("left" or "right") from clvl FromClvl
@@ -69,11 +72,12 @@ type Hotkey struct {
 }
 
 type rawBuild struct {
-	Build   string   `json:"build"`
-	Class   string   `json:"class"`
-	Combat  string   `json:"combat"`
-	Hotkeys []Hotkey `json:"hotkeys"`
-	Rows    []struct {
+	Build      string   `json:"build"`
+	Class      string   `json:"class"`
+	Combat     string   `json:"combat"`
+	Hotkeys    []Hotkey `json:"hotkeys"`
+	LadderOnly []string `json:"ladder_only"`
+	Rows       []struct {
 		Clvl      int `json:"clvl"`
 		Strength  int `json:"strength"`
 		Dexterity int `json:"dexterity"`
@@ -99,7 +103,7 @@ func ParseBuild(b []byte) (*Build, error) {
 	if err := json.Unmarshal(b, &rb); err != nil {
 		return nil, err
 	}
-	out := &Build{Name: rb.Build, Class: strings.ToLower(rb.Class), Hotkeys: rb.Hotkeys, Combat: rb.Combat}
+	out := &Build{Name: rb.Build, Class: strings.ToLower(rb.Class), Hotkeys: rb.Hotkeys, Combat: rb.Combat, LadderOnly: rb.LadderOnly}
 	if out.Class == "" {
 		out.Class = "sorceress"
 	}
