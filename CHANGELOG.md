@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- crush D6 verifier: r1 FAIL, fid/crush-d6-r3 PASS WITH CHANGES <!--sg:agent/verifyd6-->
 - pgexpand: coverage numbers after merging main <!--sg:agent/pgexpand-->
 - agencyp0: stat and skill points by verb, points sheet and API, autopilot switch (default off), legality fixes, scenarios <!--sg:agent/agencyp0-->
 - pgcain: Proving Ground rerun of the Cain scroll scenarios; item_in_pack accepts bks or bkd; probe doc <!--sg:agent/pgcain-->

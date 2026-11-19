@@ -633,6 +633,7 @@ docs/upstream/pr-queue.md  credit-runner  prfix2
 docs/upstream/pr-queue.md  credit-runner  prfix3
 docs/upstream/pr-queue.md  credit-runner  prpipeline
 docs/upstream/verifier-crushd5-2026-11-19.md  credit-runner  verifycrushd5
+docs/upstream/verifier-crushd6-2026-11-19.md  credit-runner  verifycrushd6
 docs/upstream/verifier-mercabsorb-2026-11-18.md  credit-runner  verifymerc
 docs/upstream/verifier-p02-2026-11-14.md  credit-runner  verifyp02
 docs/upstream/verifier-p03-p05-2026-11-14.md  credit-runner  verifyp03p05
