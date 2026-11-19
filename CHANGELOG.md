@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into antiflail <!--sg:agent/antiflail-->
 - bulk identify B1-B5 offline <!--sg:agent/bulkid-->
 - none <!--sg:agent/decomp41-->
 - Merge branch 'main' into tpfix <!--sg:agent/tpfix-->

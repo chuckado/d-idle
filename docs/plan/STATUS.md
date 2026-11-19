@@ -324,6 +324,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 22284866b 11-18 20:02 `Merge agent/antiflail: Merge branch 'main' into antiflail` (antiflail)
+- 315a64e87 11-18 20:01 `Merge branch 'main' into antiflail` (-)
 - 575c90c37 11-18 19:56 `Merge agent/bulkid: bulk identify B1-B5 offline` (bulkid)
 - 14f4ed022 11-18 19:55 `Merge branch 'main' into bulkid` (-)
 - ae0abd4c7 11-18 19:51 `Merge agent/decomp41: decomp41: merc absorb + crush D5 traces and bodies (docs only)` (decomp41)
@@ -332,6 +334,4 @@
 - 593a2405d 11-18 19:41 `Merge branch 'main' into tpfix` (-)
 - e080f368c 11-18 19:35 `Merge agent/vaulttip2: vaulttip2: Vault fit pages run, shared StatLines for the common descfuncs, windowed 2400-item grid` (vaulttip2)
 - 35abf9ecb 11-18 19:34 `Merge branch 'main' into vaulttip2` (-)
-- d81f72c08 11-18 19:17 `Merge agent/treefix: d2dsrc: expire cached debug presets by age so a standing hero sees the Tree of Inifuss` (treefix)
-- 1d7387bdd 11-18 19:15 `Merge branch 'main' into treefix` (-)
 <!-- statusgen:end -->
