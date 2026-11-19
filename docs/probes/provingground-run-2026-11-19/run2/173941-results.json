@@ -1,0 +1,186 @@
+{
+ "version": "didle.scenario-result/1",
+ "results": [
+  {
+   "version": "didle.scenario-result/1",
+   "id": "heal.town",
+   "class": "Sorceress",
+   "seed": 3,
+   "status": "GREEN",
+   "asserts": [
+    {
+     "kind": "life_pct_at_least",
+     "ok": true,
+     "want": "life \u003e= 80%",
+     "got": "life 100%",
+     "why": "the hero was healed in town (Akara, free heal) before the walk out"
+    },
+    {
+     "kind": "no_writes",
+     "ok": true,
+     "want": "writes after start: 0",
+     "got": "writes after start: 0"
+    }
+   ],
+   "virtual_min": 1,
+   "budget_min": 1,
+   "wall_sec": 11,
+   "tags": [
+    "SETUP-only"
+   ],
+   "trace": "provingground-out/20261119-173941/heal.town_Sorceress_3.bot.log",
+   "state": {
+    "version": "didle.scenario-state/1",
+    "source": "d2d-observer-reload",
+    "has": [
+     "items",
+     "portals",
+     "objects"
+    ],
+    "area": 1,
+    "level": 10,
+    "gold": 50,
+    "stash": 0,
+    "life_pct": 100,
+    "right_skill": 0,
+    "left_skill": 0,
+    "quests": {
+     "1": 4
+    },
+    "items": [
+     {
+      "code": "sst",
+      "where": "body"
+     },
+     {
+      "code": "isc",
+      "where": "pack"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "tbk",
+      "where": "pack"
+     }
+    ],
+    "objects": [
+     {
+      "class": 385,
+      "state": "NU"
+     },
+     {
+      "class": 267,
+      "state": "NU"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 119,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     }
+    ],
+    "stats": {
+     "dex": 25,
+     "ene": 35,
+     "skillpts": 9,
+     "skillsspent": 1,
+     "statpts": 45,
+     "str": 10,
+     "vit": 10
+    },
+    "area_changes": 2,
+    "area_trail": [
+     1,
+     2,
+     1
+    ],
+    "writes_after_start": 0
+   },
+   "digest": "201970659632b40c"
+  }
+ ]
+}
