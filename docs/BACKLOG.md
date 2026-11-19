@@ -1066,6 +1066,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - bulkid-design: bulk identify design doc (TASK-653, merged 2026-11-18, acceptance 1 of 1): Design doc docs/design/bulk-identify-2026-11-18.md: flow, identify.* knobs, filter table, Cain trip, UI, slices B1-B5, live drill. Docs only, not run live. <!--sg:agent/bulkid-design-->
 - agent/treefix: d2dsrc: expire cached debug presets by age so a standing hero sees the Tree of Inifuss (merged 2026-11-18) <!--sg:agent/treefix-->
 - vaulttip2: Vault fit pages run, all descfuncs worded, windowed grid (TASK-650, merged 2026-11-18, acceptance 4 of 4): Fit pages vault-tip* run on the worker host (Chrome) and viewed (390x844, 1024x768, 1440x900); StatLines (internal/data) words descfunc 1-10, 12-16, 19-21, 24, 27, 28 and the grouped lines, tests per descfunc ... <!--sg:agent/vaulttip2-->
+- agent/tpfix: Merge branch 'main' into tpfix (merged 2026-11-18) <!--sg:agent/tpfix-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
