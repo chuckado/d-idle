@@ -247,3 +247,31 @@ func TestSkillOffenceComposesWithUnblockable(t *testing.T) {
 		t.Errorf("with no block the share is irrelevant: %.3f vs %.3f", nb.Terms.Taken, nf.Terms.Taken)
 	}
 }
+
+// TestSkillKindsCoverAttacks: every skill the damage table knows has a kind in profiles.json, except these 21 which are
+// not a main attack (auras, buffs, an armor, a monster's own skill). Found by the free-allocation review (Fire Bolt, Fire
+// Ball and 56 more were missing, so a resolver run on an off-plan build failed on the commonest Sorceress attacks).
+func TestSkillKindsCoverAttacks(t *testing.T) {
+	p, err := Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	d, err := LoadSkillData()
+	if err != nil {
+		t.Fatal(err)
+	}
+	notAttack := map[string]bool{}
+	for _, n := range strings.Split("Chilling Armor,Conversion,CursedBallTrapLeft,CursedBallTrapRight,DiabCold,DiabRun,Enchant,FireGolem,Holy Fire,Holy Freeze,Holy Shield,Holy Shock,MonFrenzy,Mosquito,Plague Poppy,PoisonBallTrap,Sanctuary,Shiver Armor,Telekinesis,VampireMeteor,Venom", ",") {
+		notAttack[n] = true
+	}
+	for name := range d.Skills {
+		if _, ok := p.SkillKinds[name]; !ok && !notAttack[name] {
+			t.Errorf("skill %q has damage data but no kind in profiles.json", name)
+		}
+	}
+	for _, n := range []string{"Fire Bolt", "Fire Ball", "Ice Bolt", "Whirlwind", "Zeal"} {
+		if _, ok := p.SkillKinds[n]; !ok {
+			t.Errorf("%s has no kind", n)
+		}
+	}
+}

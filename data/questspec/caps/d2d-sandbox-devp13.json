@@ -1,0 +1,75 @@
+{
+ "schema": "questcaps/2",
+ "backend": "d2d-sandbox-devp13",
+ "verbs": [
+  "caps",
+  "cmd",
+  "debug portals",
+  "debug presets",
+  "dump items",
+  "dump player",
+  "ground",
+  "info",
+  "npcs",
+  "state"
+ ],
+ "knowledge": [
+  "preset_list",
+  "preset_near"
+ ],
+ "knowledge_note": "room rows: U whether the devp13 build prints them in debug presets (docs/probes/treefix3-2026-11-19.md)",
+ "readers": {
+  "quest_available": {
+   "tier": "memory",
+   "note": "S: quest record word (docs/questmem.md)"
+  },
+  "quest_state": {
+   "tier": "memory",
+   "note": "S: the reader's stage (task.Stage), T1/T2 evidence; docs/questmem.md"
+  },
+  "has_item": {
+   "tier": "proxy",
+   "via": "dump items",
+   "note": "V: dump items lists the pack by base code (d2dsrc)"
+  },
+  "visited": {
+   "tier": "proxy",
+   "volatile": true
+  },
+  "killed": {
+   "tier": "proxy",
+   "volatile": true,
+   "note": "a kill the bot saw this run; the quest word is the durable evidence"
+  },
+  "cleared": {
+   "tier": "proxy",
+   "volatile": true
+  },
+  "object_known": {
+   "tier": "proxy",
+   "via": "debug presets",
+   "note": "V: debug presets rows (sandbox log 2026-11-19); the tree row is hidden=1 in the sandbox build (U, treefix3)"
+  },
+  "portal_open": {
+   "tier": "proxy",
+   "via": "debug portals",
+   "note": "S: d2dsrc lists the red portal from debug portals"
+  },
+  "object_state/lit": {
+   "tier": "proxy",
+   "via": "debug objects",
+   "volatile": true,
+   "note": "RC2: the state of a preset object is always -1 in d2d; the lit state needs debug objects (lab only, U in the sandbox build)"
+  },
+  "stones_lit": {
+   "tier": "proxy",
+   "via": "debug objects",
+   "volatile": true,
+   "note": "RC2: as object_state/lit"
+  }
+ },
+ "item_match": "code",
+ "item_match_note": "V: internal/bot questItemCodes, the code wins over the display name (RC3 fixed)",
+ "progress_rules": [],
+ "progress_note": "RC1: the find step restarts its walk per try and counts a walk that still gained coverage as a failure; no coverage-progress rule is implemented (U, treefix3 'not fixed')"
+}

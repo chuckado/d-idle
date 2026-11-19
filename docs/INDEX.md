@@ -225,6 +225,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [andarielplan.md](andarielplan.md): Plan for card m3-andariel: the throwaway Andariel fight (status: plan, offline, nothing verified live. Tags: V = read in this tree or counted from a recorded log (file...)
 - [andarielsme.md](andarielsme.md): Andariel fight: the SME version and the user decisions (2026-11-04) (status: decisions recorded offline, nothing verified live. Tags: experience = SME judgement from play, V =...)
 - [api.md](api.md): Goal manager, Runner contract and HTTP API
+- [arbiter.md](arbiter.md): The intent arbiter (shadow mode) (status: current. First slice of roadmap R4 (docs/design/fable-review-2026-11-19/06-roadmap.md,...)
 - [arch.md](arch.md): Architecture diagrams (Archify) (status: current (TASK-373). One command draws the project as clickable HTML; nothing generated is committed.)
 - [areametrics.md](areametrics.md): Per-area gold and XP log (change areametrics)
 - [areathrash.md](areathrash.md): Area thrash, cave-mouth holds and the Dark Wood exit (fun killer 5) (status: analysis V (sandbox log), fix OFFLINE ONLY (unit tests, not run live). Source:...)
@@ -482,6 +483,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [paperdoll-art-build.md](paperdoll-art-build.md): Paper doll game art: what is built (status: in progress (TASK-244). Plan and licence reasoning: research/paperdoll-art.md. Tags: V verified (command...)
 - [passagebounce.md](passagebounce.md): Arrival bounce: Underground Passage, Crypt and every cave (TASK passagebounce)
 - [pause.md](pause.md): Pause and resume as player commands (status: current (uib1 2026-11-14; frozen Pause added by card pause, 2026-11-15). Not verified live.)
+- [points.md](points.md): Points: stat and skill points are the player's (roadmap R3, agency P0) (status: current (card agencyp0, 2026-11-19). Decision: ADR 0020 (path D, user decision): the player spends every...)
 - [policy-preview.md](policy-preview.md): Policy preview (card policydryrun, TASK-205) (status: built and tested offline on fixtures; NOT run against a live bot or in a browser. Source:...)
 - [policy-sheet.md](policy-sheet.md): The chores policy sheet (TASK-128) (status: built and tested offline on fixtures; NOT run against a live bot or in a browser. Design:...)
 - [potions.md](potions.md): Potions: how the bot drinks (card potiondrink, TASK-328)
@@ -509,6 +511,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [quest.md](quest.md): Quest layer: internal/quest (agent QUESTS, offline)
 - [questboard.md](questboard.md): Quest board model (slice S1), executor (S3), API (S4) and chunked quests (S7) (status: S9 DONE offline 2026-11-17 (card retirej, TASK-629): the Journey is retired and `quests.board` defaults to...)
 - [questmem.md](questmem.md): In-memory quest and waypoint data (agent MEMQUEST, V-05)
+- [questspec.md](questspec.md): questspec: quest chains as checkable data (status: current (card questspec, roadmap R5 of docs/design/fable-review-2026-11-19/06-roadmap.md). Checker plus...)
 - [readiness.md](readiness.md): Readiness model: is this hero ready for that area (status: slice A of the friends beta (cards TASK-217 area table, TASK-218 model, TASK-220 meter feed in part)....)
 - [recovery.md](recovery.md): Recovery phase (broke character)
 
@@ -873,6 +876,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [openspec-removal-plan.md](process/openspec-removal-plan.md): OpenSpec removal plan (proposal for the user), revised for Backlog.md (status: PROPOSAL, written 2026-11-04 after the user retired OpenSpec for new work; revised the same day after the...)
 - [outside-prs.md](process/outside-prs.md): Outside pull requests: the proposed review gate (status: policy text APPROVED by the maintainer 2026-11-01 (card communitywork); its proposed repository settings...)
 - [plugin-pin.md](process/plugin-pin.md): Matt Pocock skills plugin: pin
+- [points-verbs-devp14.md](process/points-verbs-devp14.md): Fork additions wanted for stat and skill points (devp14), and what the bot does without them (status: proposal for the fork-rebase routine (card agencyp0, 2026-11-19). Tags: V verified in the source of the...)
+- [proving-ground.md](process/proving-ground.md): The Proving Ground: scenarios that play the real bot and read the game (status: current (card provingground, 2026-11-19). Source: the design review `docs/design/fable-review-2026-11-19/`...)
 - [public-split.md](process/public-split.md): Public split: rules going forward (change `pubsplit`) (status: cut done 2026-10-31: GitHub `main` is primary; the the private forge steps below are the historical plan.)
 - [queuespeed.md](process/queuespeed.md): Queue speed changes (TASK-312) (status: current. Source: docs/research/merge-queue-profile-2026-11-11.md. Code lives in the ops repo...)
 - [retired-terms-20261104.md](process/retired-terms-20261104.md): Retired-terms banner pass (2026-11-04)
@@ -1036,6 +1041,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [postfix-soak1.md](probes/postfix-soak1.md): postfix-soak1: first soak on the fixed bot, Gate 1 shape (2026-10-31) (status: current. Read-only analysis of one finished hidden d2d soak (exit 0, 120 wall min, one injected d2d kill)....)
 - [postfix-soak2-analysis.md](probes/postfix-soak2-analysis.md): postfix-soak2 analysis: root causes of F1 to F6, the walking share and a ranked fix-card list (card... (status: current. Offline study of the finished Gate 1 soak 2 (postfix-soak2.md, origin/main 0b0bdb2, one seed, 2 h...)
 - [postfix-soak2.md](probes/postfix-soak2.md): postfix-soak2: Gate 1 of the d2d gate ladder on current main (2026-10-31) (status: current. One finished hidden d2d soak (exit 0, 120 wall min, one injected d2d kill), n=1 seed, not a...)
+- [provingground-cain-2026-11-19.md](probes/provingground-cain-2026-11-19.md): Proving Ground rerun: Cain scroll scenarios on main with cainfix2 (2026-11-19) (status: current (card pgcain). Tags: V verified (run named), S secondary, U unverified. All runs on the builder...)
+- [provingground-run-2026-11-19.md](probes/provingground-run-2026-11-19.md): Proving Ground: fast tier on the builder, and what the expansion makes runnable (2026-11-19) (status: current (card pgexpand). Tags: V verified (run named), S secondary, U unverified. Builder long lane job...)
 - [ptrclick.md](probes/ptrclick.md): ptrclick: is d2d's click-targeting a deviation from game.exe, or only our harness? (TASK-179) (status: plan, nothing run live. Tags: V verified (how stated), S read in code, U unverified. Card:...)
 - [sandbox-fresh-20261115.md](probes/sandbox-fresh-20261115.md): Sandbox reset to a fresh hero, 2026-11-15 (status: record. Task sandboxfresh. Tags: V = verified in this run, U = not verified.)
 - [search-for-cain-2026-11-17.md](probes/search-for-cain-2026-11-17.md): The Search for Cain on the sandbox: diagnosis and fix plan (2026-11-17) (status: diagnosis, read-only and offline. No game was started and nothing was sent to the sandbox; the only live...)

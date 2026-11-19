@@ -8,6 +8,12 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- pgexpand: coverage numbers after merging main <!--sg:agent/pgexpand-->
+- agencyp0: stat and skill points by verb, points sheet and API, autopilot switch (default off), legality fixes, scenarios <!--sg:agent/agencyp0-->
+- pgcain: Proving Ground rerun of the Cain scroll scenarios; item_in_pack accepts bks or bkd; probe doc <!--sg:agent/pgcain-->
+- arbitershadow: intent arbiter in shadow mode (R4 slice 1) <!--sg:agent/arbitershadow-->
+- Proving Ground (TASK-668) <!--sg:agent/provingground-->
+- questspec: quest chains as checkable data, checker + Act 1 chains (R5) <!--sg:agent/questspec-->
 - verifycrushd5: crush D5 verifier, r1 FAIL, r2 PASS WITH CHANGES <!--sg:agent/verifyd5-->
 - cainl3: Search for Cain L3 drill, real bot chain on a lab slot <!--sg:agent/cainl3-->
 - decomp42 trace (docs/research/decomp42-crush-d6-trace.md): the get-hit size after a Crushing Blow, oracle and local candidate, no upstream post <!--sg:agent/decomp42-->

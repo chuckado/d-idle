@@ -113,7 +113,8 @@ type control struct {
 // Runner is the real goals.Runner: a state machine driven by a tick loop on d2.Snapshot. Create it with New, start
 // its goroutine with Run, and hand it to goals.New. See docs/bot.md.
 type Runner struct {
-	readiness *readiness.Evaluator // nil: no readiness model wired (TASK-218)
+	pointsGate atomic.Pointer[func() bool] // who spends points: nil = the bot (pointsgate.go)
+	readiness  *readiness.Evaluator        // nil: no readiness model wired (TASK-218)
 
 	e   *env.Env
 	d   Deps
@@ -167,6 +168,7 @@ type Runner struct {
 	healthMu       sync.Mutex // serialises Health.Step, which runs outside obMu (see healthProbe)
 	tpBuyMin       int        // scrolls bought this minute, set by tpDiag under obMu for failsafeKV
 	ob             observer
+	arb            arbShadow               // intent arbiter in shadow mode (shadow.go); idle unless bot.arbiterShadow is 1
 	zst            zoneState               // the last zone model verdict (zonemodel.go)
 	zmerc          zoneMerc                // merc alive/dead edge detection for ZoneObserve (zoneshadow.go)
 	deathW         combat.DeathWeights     // lessons of Nightmare/Hell deaths, guarded by obMu (deathweights.go)

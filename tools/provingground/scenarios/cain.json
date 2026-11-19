@@ -1,0 +1,702 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "cain.scroll",
+   "title": "Search for Cain: take the Scroll of Inifuss from the Dark Wood tree",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [
+    "travel.waypoint",
+    "travel.area-transition"
+   ],
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/task/",
+    "internal/d2dsrc/",
+    "internal/nav/",
+    "internal/questboard/",
+    "internal/bot/questboard.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 500,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3,
+     5,
+     7
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs (points as a played level gives), purse 500, waypoints Cold Plains to Dark Wood, board chunk accepted in the plan store. CHEATED: waypoints are set by debug wp and the level by stat verbs (SETUP) (mechanics evidence only, never balance).",
+   "notes": "R2: the sandbox stall (hero reaches the tree room, never clicks). Red on the lab slot reproduces it; green on the lab slot means the sandbox differs: see cain.scroll.sandbox.",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "bks",
+     "or": ["bkd"],
+     "why": "the tree gave the bark scroll (bks); the pack holds bkd instead once Akara has read it (V provingground rerun 2026-11-19: the bot reads on its next town visit)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "cain.scroll.sandbox",
+   "title": "Search for Cain tree step on the SHIPPED sandbox d2d build",
+   "kind": "step",
+   "tier": "full",
+   "build": "sandbox",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "tree"
+    ]
+   },
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/d2dsrc/",
+    "internal/d2dctl/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 500,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "sandbox-d2d-binary"
+   ],
+   "provenance": "As cain.scroll. Setup runs on the lab d2d (the save is portable); the BOT RUN uses the shipped build, whose gated debug verbs are refused and whose debug presets may lack room rows.",
+   "notes": "BLOCKED until D2D_BIN_SANDBOX names the sandbox build (devp12 and later). Reproduces the sandbox condition with the shipped verbs only.",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "bks",
+     "or": ["bkd"]
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "cain.scroll.field",
+   "title": "Search for Cain tree step from the Dark Wood (travel excluded)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "tree"
+    ]
+   },
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/d2dsrc/",
+    "internal/nav/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 500,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "start": "field",
+    "area": 5,
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3,
+     5,
+     7,
+     9
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "provenance": "CHEATED position: the hero is warped into the Dark Wood by debug goto and the live lab d2d (verbs on) is handed to the bot. Mechanics only. no_writes is not asserted: that d2d keeps lab verbs on.",
+   "notes": "Isolates the tree click from the walk to the Dark Wood. Field start is untested live (U).",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "bks",
+     "or": ["bkd"]
+    }
+   ]
+  },
+  {
+   "id": "cain.read",
+   "title": "Search for Cain: Akara reads the Scroll of Inifuss",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "read"
+   },
+   "step": {
+    "action": "talk",
+    "target": "Akara",
+    "nodes": [
+     "read"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "cmd/d2bot/cain.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 500,
+    "items": [
+     {
+      "code": "bks"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "read"
+    ]
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: the Scroll of Inifuss is given to the pack by debug give (not obtained from the tree). Mechanics only.",
+   "notes": "Driver board-taps plays the person: Start on the offered read chunk and the Hand in tap (V docs/probes/cainl3/poll.py). Only the read chunk is tapped, so the stones chunk that follows is not started and bkd stays.",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "bkd",
+     "why": "Akara deciphers bks into the Key to the Cairn Stones (bkd)"
+    },
+    {
+     "kind": "item_absent",
+     "code": "bks"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "cain.stones",
+   "title": "Search for Cain: cycle the five cairn stones by class until the Tristram way opens",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "stones"
+   },
+   "step": {
+    "action": "interact",
+    "target": "cairn-stones",
+    "nodes": [
+     "to-stony",
+     "stones",
+     "to-tristram"
+    ]
+   },
+   "pre": {
+    "level": 20,
+    "gold": 500,
+    "start": "field",
+    "area": 4,
+    "items": [
+     {
+      "code": "bkd"
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 25
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: warped to Stony Field (debug goto) with the Key to the Cairn Stones given (debug give bkd pack), level by stat verbs. Mechanics only. The lab d2d (verbs on) is handed to the bot, so no_writes is not asserted.",
+   "touches": [
+    "cmd/d2bot/cain.go",
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/d2dsrc/",
+    "internal/d2dctl/"
+   ],
+   "covers": [
+    "travel.area-transition"
+   ],
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "stones"
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "notes": "OBSERVABLE (decision): the portal. After the fifth stone `debug portals` lists a row for level 4 (V docs/probes/search-for-cain-l1: `2 4 25.1 57.7`) and it stays listed from Tristram, so portal_open(4) holds wherever the bot stands at the end; the per-stone lit state is the `debug objects` state column NU to ON (V L1), readable only while the hero is still in Stony Field, so it is the bot's own check and not asserted here. record 4 bit 4 (0x0010) is set on arrival in Tristram (V L2 a1). bkd is consumed at the fifth stone (S).",
+   "assert": [
+    {
+     "kind": "portal_open",
+     "area": 4,
+     "why": "V L1: the fifth lit stone opens the way to Tristram, listed by debug portals as level 4"
+    },
+    {
+     "kind": "quest_bits",
+     "record": 4,
+     "set": 16,
+     "why": "V L2 a1: arriving in Tristram sets bit 4 of record 4"
+    },
+    {
+     "kind": "item_absent",
+     "code": "bkd",
+     "why": "S: the key is consumed at the fifth stone"
+    }
+   ]
+  },
+  {
+   "id": "cain.stones.shipped",
+   "title": "Search for Cain stones on the SHIPPED build (BLOCKED: no field setup, stone state unobservable)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "stones"
+   },
+   "step": {
+    "action": "interact",
+    "target": "cairn-stones",
+    "nodes": [
+     "to-stony",
+     "stones",
+     "to-tristram"
+    ]
+   },
+   "pre": {
+    "level": 20,
+    "gold": 500,
+    "start": "field",
+    "area": 4,
+    "items": [
+     {
+      "code": "bkd"
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 25
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "As cain.stones, but the shipped build refuses the gated verbs, so neither the warp nor the key can be set up.",
+   "touches": [
+    "cmd/d2bot/cain.go",
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/d2dsrc/",
+    "internal/d2dctl/"
+   ],
+   "covers": [
+    "travel.area-transition"
+   ],
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "stones"
+    ]
+   },
+   "needs": [
+    "sandbox-d2d-binary"
+   ],
+   "notes": "BLOCKED by design, two reasons. (1) A field start needs the lab d2d (verbs on) handed to the bot; the shipped build refuses debug goto, so the run is refused before it starts (blockedBefore). (2) Even from a town start the shipped (devp13) verbs may not show the stone state: the `debug objects` NU to ON column is a lab-build fact (V L1, lab build only), the shipped build was not probed (U). The observable chosen for it is the same as the lab one, `debug portals` row for level 4 (U that the shipped build lists portals). Unblocking needs a shipped-build verb to place the hero at Stony Field or a town start that walks (Cold Plains to Stony Field costs a full walk).",
+   "assert": [
+    {
+     "kind": "portal_open",
+     "area": 4,
+     "why": "V L1: the fifth lit stone opens the way to Tristram, listed by debug portals as level 4"
+    },
+    {
+     "kind": "quest_bits",
+     "record": 4,
+     "set": 16,
+     "why": "V L2 a1: arriving in Tristram sets bit 4 of record 4"
+    },
+    {
+     "kind": "item_absent",
+     "code": "bkd",
+     "why": "S: the key is consumed at the fifth stone"
+    }
+   ],
+   "build": "sandbox"
+  },
+  {
+   "id": "cain.cage",
+   "title": "Search for Cain: Tristram arrival, the three archers, open the cage",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "free_cain"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Cain's Cage",
+    "nodes": [
+     "cage",
+     "home"
+    ]
+   },
+   "pre": {
+    "level": 24,
+    "gold": 3000,
+    "start": "field",
+    "area": 38,
+    "quests": [
+     {
+      "record": 4,
+      "word": 24
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 25
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: warped into Tristram (debug goto 38), quest record 4 set to 0x0018 (bark taken, Tristram entered; what a played hero shows on arrival, V L3), level 24 and 3000 gold by stat verbs. Knob combat.crowdAbandonN 0 is the declared L3 knob. Mechanics only.",
+   "touches": [
+    "cmd/d2bot/cain.go",
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/combat/"
+   ],
+   "covers": [
+    "combat.fight",
+    "travel.portal-return"
+   ],
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "combat.crowdAbandonN": 0
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "free_cain"
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "notes": "V L2: the three Champion Skeleton Archers stand 2 to 3 cells from the arrival (awake within 5 ticks), Cain's Gibbet is object class 26 at (27.3, 27.7), the cage is opened by walking to about (25, 27) and interacting; success is record 4 bit 1 (0x2012 and later 0x201a). The chunk then walks home through the town portal, so the area at the end is not asserted; the gibbet ON state (V L2) is only readable while in level 38.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 4,
+     "set": 2,
+     "why": "V L2/L3: record 4 bit 1 is set the moment the cage opens (0x2012, 0x201a)"
+    }
+   ]
+  },
+  {
+   "id": "cain.report",
+   "title": "Search for Cain: report to Akara after Cain is free",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "report"
+   },
+   "step": {
+    "action": "talk",
+    "target": "Akara",
+    "nodes": [
+     "report"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/quest/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 500,
+    "quests": [
+     {
+      "record": 4,
+      "word": 8210
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "report"
+    ]
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: quest record 4 set to 0x2012 (Cain freed) by debug quest set, no play. Mechanics only.",
+   "notes": "8210 is 0x2012. V L3: the quest can finish at the first Akara visit before the report chunk is offered; the assertion is the record, not the chunk. Driver board-taps taps only report.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 4,
+     "set": 1,
+     "clear": 2,
+     "why": "V L2: Akara talk turns 0x2012 into 0x2011 (bit 0 done, bit 1 reward pending cleared)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "cain.chain",
+   "title": "Search for Cain end to end: tree, Akara, stones, Tristram, cage, report (the L3 run)",
+   "kind": "e2e",
+   "tier": "nightly",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [
+    "hook.board",
+    "hook.task",
+    "hook.claim",
+    "travel.waypoint",
+    "travel.area-transition",
+    "travel.portal-return",
+    "combat.fight",
+    "quest.search_for_cain.free_cain",
+    "quest.search_for_cain.stones"
+   ],
+   "touches": [
+    "cmd/d2bot/",
+    "internal/task/",
+    "internal/bot/",
+    "internal/questboard/",
+    "internal/combat/",
+    "internal/nav/",
+    "internal/d2dsrc/"
+   ],
+   "pre": {
+    "level": 32,
+    "gold": 8000,
+    "merc": 0
+   },
+   "trigger": {
+    "goals": "campaign:normal_act1",
+    "knobs": {
+     "quests.board": 1,
+     "combat.crowdAbandonN": 0
+    },
+    "driver": "board-taps"
+   },
+   "budget": {
+    "virtual_min": 80
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "provenance": "CHEATED/IMPOSSIBLE as L3 (docs/probes/search-for-cain-l3-2026-11-19.md): hero clvl 32 with its experience, 5 x 31 stat and skill points, 8000 gold and a hired Rogue by SETUP verbs (docs/probes/cainl3/testdata/prep-ledger.txt); declared knob combat.crowdAbandonN 0. Nothing is written after the start (town start, bot on a d2d without lab verbs). Mechanics only: never evidence of how a played hero fares.",
+   "notes": "Reproduces CAIN-L3 run 10 (V: unattended, 9 minutes wall, virtual 47 at the milestone, quest word 0x2019, log Quest done: search_for_cain) as a scenario. The driver taps Start for every offered chunk and Hand in when the board waits, nothing else. The end state is read from the reloaded hero, so only durable facts are asserted: the quest record and the consumed items. The merc seed 0 is the L3 hire.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 4,
+     "set": 1,
+     "clear": 2,
+     "why": "V L3 run 10: the quest word ends 0x2019: bit 0 done, bit 1 (reward pending) cleared"
+    },
+    {
+     "kind": "item_absent",
+     "code": "bks",
+     "why": "the scroll was read"
+    },
+    {
+     "kind": "item_absent",
+     "code": "bkd",
+     "why": "the key was used at the fifth stone"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  }
+ ]
+}

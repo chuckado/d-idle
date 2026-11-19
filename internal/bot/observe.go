@@ -1078,7 +1078,7 @@ func (r *Runner) minuteLine(s *d2.Snapshot, p *d2.Player, now time.Time) {
 		"potions", kit.BeltHP, "mana", kit.BeltMP, "packHP", packHP, "packMP", packMP, "beltBoxes", beltBoxes, "potionsUsed", int(r.drank.Load()), "tp", tp,
 		"gold", p.Gold, "stashGold", p.StashGold, "restarts", restartCount(o.newGames, o.plannedGames, o.recycles, o.lostRestarts), "xpRisk", o.xpAtRiskLocked(r.d.SavedExp), "xpLost", o.xpLost, "rung", rung, "goal", goal, "step", step,
 		"state", group, "rstate", rstate, "life", p.Life, "maxLife", p.MaxLife, "mp", p.Mana, "maxMana", p.MaxMana, "table", r.buildName(p), "invPct", invPct, "dmgTaken", o.hp.dmg, "hpMinPct", o.takeHPMin(), "lifeLost", lifeLost, "hitsTaken", hitsTaken, "hpPolls", hpPolls, "armor", combat.ArmorState(p), "goldPickup", o.goldPickupMin,
-		"arrivals", o.arrivals, "bounces", o.bounces, "bouncesPer100", bouncesPer100(o.bounces, o.arrivals)}, append(r.failsafeKV(o), r.runKV()...)...)...)
+		"arrivals", o.arrivals, "bounces", o.bounces, "bouncesPer100", bouncesPer100(o.bounces, o.arrivals)}, append(r.failsafeKV(o), append(r.runKV(), r.arb.minuteKV()...)...)...)...)
 	o.goldPickupMin = 0
 	r.noteGoldNextMinute(p.Gold, now)
 }

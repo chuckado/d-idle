@@ -52,6 +52,7 @@ type boardRT struct {
 	assessOn string                          // the inputs it was computed for (level, difficulty)
 	th       *questboard.Thresholds
 	handed   map[string]bool      // hand-in dialogue ran this process (T3 proxy until the save or memory agrees)
+	reached  map[string]bool      // an auto or item chunk read done once this process (its evidence can vanish: key used, Tristram left)
 	near     map[string]bool      // walked to the giver once this process
 	lastFail map[string]time.Time // chunk key: last failure that was counted
 	noted    map[string]string    // visible-reason log lines already written
@@ -68,7 +69,7 @@ func (r *Runner) NewQuestBoard(b *questboard.Board, st *questboard.Store) *quest
 }
 
 func (r *Runner) newQuestBoard(b *questboard.Board, st *questboard.Store, hero string) *questboard.Exec {
-	rt := &boardRT{r: r, board: b, st: st, hero: hero, reqs: make(chan boardHandInReq, 1), handed: map[string]bool{}, near: map[string]bool{},
+	rt := &boardRT{r: r, board: b, st: st, hero: hero, reqs: make(chan boardHandInReq, 1), handed: map[string]bool{}, reached: map[string]bool{}, near: map[string]bool{},
 		lastFail: map[string]time.Time{}, noted: map[string]string{}}
 	rt.exec = questboard.NewExec(b, st, boardEnv{rt}, boardActions{rt}, questboard.Options{
 		Enabled: r.questBoardOn(),
@@ -411,7 +412,10 @@ func handInNode(q questboard.Quest, c questboard.Chunk) (task.Node, bool) {
 // nodesDone is the handler's own evidence for a part: every required field step satisfied (T3: items, areas), the
 // hand-in step satisfied when it has one, and every chunk it comes after done in the same way (a hand-in step reads
 // "done" before its item exists, so a part never counts before its predecessors).
-func nodesDone(q questboard.Quest, c questboard.Chunk, w task.World, depth int) bool {
+//
+// kept, when given, names the chunks already seen done in this process (boardRT.keptDone): they count without their
+// evidence, which can have vanished (the key used up by the Tristram portal).
+func nodesDone(q questboard.Quest, c questboard.Chunk, w task.World, depth int, kept ...func(chunk string) bool) bool {
 	if depth > len(q.Chunks) {
 		return false
 	}
@@ -439,7 +443,10 @@ func nodesDone(q questboard.Quest, c questboard.Chunk, w task.World, depth int) 
 	}
 	for _, a := range c.After {
 		pc, err := q.ChunkByID(a)
-		if err != nil || !nodesDone(q, pc, w, depth+1) {
+		if len(kept) > 0 && kept[0](a) {
+			continue
+		}
+		if err != nil || !nodesDone(q, pc, w, depth+1, kept...) {
 			return false
 		}
 	}
@@ -448,11 +455,30 @@ func nodesDone(q questboard.Quest, c questboard.Chunk, w task.World, depth int) 
 
 func (e boardEnv) Chunk(q questboard.Quest, c questboard.Chunk) questboard.ChunkFact {
 	rt := e.rt
+	if _, ok := handlerNodes(q, c); !ok {
+		return questboard.ChunkFact{}
+	}
+	w, _, _ := rt.world()
+	return rt.chunkFact(q, c, w)
+}
+
+// keptDone reports the chunks of q that were seen done in this process (hand-in ran, or an item or auto chunk read done
+// once) for the hero's difficulty in w.
+func (rt *boardRT) keptDone(q questboard.Quest, w task.World) func(chunk string) bool {
+	return func(chunk string) bool {
+		k := questboard.ChunkKey(q.ID, chunk)
+		rt.mu.Lock()
+		defer rt.mu.Unlock()
+		return rt.handed[k] || rt.reached[k+"/"+w.Difficulty]
+	}
+}
+
+// chunkFact is Chunk over a given world (the evidence of one derive).
+func (rt *boardRT) chunkFact(q questboard.Quest, c questboard.Chunk, w task.World) questboard.ChunkFact {
 	nodes, ok := handlerNodes(q, c)
 	if !ok {
 		return questboard.ChunkFact{}
 	}
-	w, _, _ := rt.world()
 	if w.Quests == nil && w.Level == 0 {
 		return questboard.ChunkFact{} // no snapshot yet
 	}
@@ -483,7 +509,9 @@ func (e boardEnv) Chunk(q questboard.Quest, c questboard.Chunk) questboard.Chunk
 		}
 	}
 	rt.mu.Lock()
-	handed := rt.handed[questboard.ChunkKey(q.ID, c.ID)]
+	key := questboard.ChunkKey(q.ID, c.ID)
+	handed := rt.handed[key]
+	reached := rt.reached[key+"/"+w.Difficulty]
 	rt.mu.Unlock()
 	if legacyChunk(q, c) {
 		st := w.Quest(taskID(q))
@@ -497,7 +525,16 @@ func (e boardEnv) Chunk(q questboard.Quest, c questboard.Chunk) questboard.Chunk
 		return cf
 	}
 	// A part: the steps are the evidence. The group's own word (T1/T2) raises the tier when it says done.
-	if nodesDone(q, c, w, 0) || handed {
+	if nodesDone(q, c, w, 0, rt.keptDone(q, w)) || handed || reached {
+		if c.Ends != "handin" && !reached {
+			// V lab drill CAIN-L3 (2026-11-19): the stones chunk reads done only while the hero stands in Tristram
+			// (or holds a portal) and the scroll chunk only while the key is in the pack. After the first town trip
+			// from Tristram both read open again and the board walked back to the Dark Wood for a second scroll.
+			// Once seen done, an item or auto chunk stays done for this hero and difficulty until the process ends.
+			rt.mu.Lock()
+			rt.reached[key+"/"+w.Difficulty] = true
+			rt.mu.Unlock()
+		}
 		cf.Done, cf.Tier = true, questboard.TierProxy
 		// The quest word of the handler group, or of the quest itself when the group is the board's own (S7b).
 		for _, id := range []string{q.HandlerOf(c).Group, taskID(q)} {
@@ -508,17 +545,20 @@ func (e boardEnv) Chunk(q questboard.Quest, c questboard.Chunk) questboard.Chunk
 		}
 		return cf
 	}
-	if _, has := handInNode(q, c); has && c.Ends == "handin" && need == 0 && priorDone(q, c, w) {
+	if _, has := handInNode(q, c); has && c.Ends == "handin" && need == 0 && priorDone(q, c, w, rt.keptDone(q, w)) {
 		cf.Objective = true
 		cf.Missing = ""
 	}
 	return cf
 }
 
-func priorDone(q questboard.Quest, c questboard.Chunk, w task.World) bool {
+func priorDone(q questboard.Quest, c questboard.Chunk, w task.World, kept ...func(chunk string) bool) bool {
 	for _, a := range c.After {
 		pc, err := q.ChunkByID(a)
-		if err != nil || !nodesDone(q, pc, w, 1) {
+		if len(kept) > 0 && kept[0](a) {
+			continue
+		}
+		if err != nil || !nodesDone(q, pc, w, 1, kept...) {
 			return false
 		}
 	}
@@ -791,6 +831,12 @@ func (r *Runner) boardAwait(ctx context.Context, snap *d2.Snapshot, c control, d
 // else. It reports true when it used the tick.
 func (r *Runner) boardServeHandIn(ctx context.Context, snap *d2.Snapshot, c control) bool {
 	rt := r.qbRT()
+	// V lab drill CAIN-L3 (2026-11-19): a tap that landed while the hero was out in the Dark Wood was taken off the
+	// queue in the field, answered "not in town" three times in one second and parked the chunk (docs/questboard.md
+	// promises the hand-in waits for the next town visit). The request stays queued until the hero stands in town.
+	if snap == nil || snap.Player == nil || !snap.Player.InTown() {
+		return false
+	}
 	select {
 	case req := <-rt.reqs:
 		req.done <- r.boardHandIn(ctx, snap, c, req)

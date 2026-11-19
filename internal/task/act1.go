@@ -213,6 +213,7 @@ func cainNodes() []Node {
 	// the whole level (Griswold and Bile stand 12 cells away, V drill L2). Done is the quest word (bit 1), never the click.
 	cage := StepInteract(id(q, "cage"), "Clear the guards and free Cain", "Cain's Cage", free, inTristram)
 	cage.Budget, cage.Est = 6*time.Minute, 2*time.Minute
+	cage.Evidence = free // the board reads the quest word, not "not in Tristram"
 	return []Node{
 		{Step: StepWaypoint(id(q, "wp-dark-wood"), DarkWood, free)},
 		{Step: StepTravel(id(q, "to-wood"), "Go to the Dark Wood", DarkWood, func(w World) bool { return w.Items[ItemBark] > 0 || w.Items[ItemCainSc] > 0 || free(w) })},
@@ -225,9 +226,12 @@ func cainNodes() []Node {
 			func(w World) bool { return opened(w) || free(w) }, func(w World) bool { return w.Area == StonyField }))}, id(q, "to-stony")),
 		{Step: StepTravel(id(q, "to-tristram"), "Enter Tristram", Tristram, func(w World) bool { return inTristram(w) || free(w) })},
 		{Step: cage},
-		{Step: StepTravel(id(q, "home"), "Return to camp", RogueEncampment, func(w World) bool { return !free(w) && w.Area != Tristram || w.InTown })},
+		{Step: withEvidence(StepTravel(id(q, "home"), "Return to camp", RogueEncampment, func(w World) bool { return !free(w) && w.Area != Tristram || w.InTown }),
+			func(w World) bool { return free(w) && w.InTown })},
 	}
 }
+
+func withEvidence(s Step, ev Pred) Step { s.Evidence = ev; return s }
 
 // cainReportNodes is the board's report chunk of Search for Cain (slice S7b): the last Akara talk after the cage. It is
 // a group of its own so the campaign never runs it (a step whose only evidence is the quest word would repeat after every

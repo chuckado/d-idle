@@ -106,3 +106,25 @@ func TestQuestBoardQueuedReasonWhileFighting(t *testing.T) {
 		})
 	}
 }
+
+// V lab drill CAIN-L3 (2026-11-19): a hand-in tap that lands while the hero is out in the field stays queued until the
+// hero stands in town; it used to be taken off the queue in the field and answered "not in town", three times in a
+// second, which parked the chunk.
+func TestQuestBoardHandInWaitsForTown(t *testing.T) {
+	g, _ := boardRig(t, true)
+	rt := g.r.qbRT()
+	req := boardHandInReq{done: make(chan error, 1)}
+	rt.reqs <- req
+	field := &d2.Snapshot{Player: &d2.Player{Area: 2}} // Blood Moor
+	if g.r.boardServeHandIn(context.Background(), field, control{}) {
+		t.Fatal("a hand-in was served in the field")
+	}
+	if len(rt.reqs) != 1 {
+		t.Fatal("the hand-in tap was taken off the queue in the field")
+	}
+	select {
+	case err := <-req.done:
+		t.Fatalf("the tap was answered in the field: %v", err)
+	default:
+	}
+}
