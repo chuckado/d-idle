@@ -29,6 +29,9 @@ type State struct {
 	Items []StateItem `json:"items,omitempty"`
 	// Objects are the level objects read with debug objects: class and state (NU, ON ...).
 	Objects []StateObject `json:"objects,omitempty"`
+	// Stats are the hero's points as the dump reports them: str, dex, vit, ene (base, no items), statpts and skillpts (unspent)
+	// and skillsspent (the sum of the hard skill points). Absent keys were not observed.
+	Stats map[string]int `json:"stats,omitempty"`
 	// AreaChanges counts area changes during the run when the observer could count them (nil: not observable).
 	AreaChanges *int `json:"area_changes,omitempty"`
 	// WritesAfterStart is the number of gameplay-affecting writes after the run start (d2cheat ledger), -1 unknown.
@@ -61,7 +64,10 @@ const (
 	AObjectState    = "object_state"    // class, state: at least one object of the class has the state
 	AAreaChangesLE  = "area_changes_le" // max
 	ANoWrites       = "no_writes"       // writes_after_start == 0 (the CRUTCH RULE line)
+	AStatBetween    = "stat_between"    // code (str dex vit ene statpts skillpts skillsspent), min, max
 )
+
+var statKeys = map[string]bool{"str": true, "dex": true, "vit": true, "ene": true, "statpts": true, "skillpts": true, "skillsspent": true}
 
 // Assert is one assertion on game state.
 type Assert struct {
@@ -114,6 +120,13 @@ func (a Assert) Validate() error {
 	case AAreaChangesLE:
 		if a.Max == nil {
 			return fmt.Errorf("area_changes_le needs max")
+		}
+	case AStatBetween:
+		if !statKeys[a.Code] {
+			return fmt.Errorf("stat_between needs code str, dex, vit, ene, statpts, skillpts or skillsspent")
+		}
+		if a.Max == nil && a.Min == 0 {
+			return fmt.Errorf("stat_between needs min or max")
 		}
 	case ANoWrites:
 	default:
@@ -211,6 +224,16 @@ func evalOne(a Assert, st State) AssertResult {
 			return unobs(fmt.Sprintf("life >= %d%%", a.Min), "life")
 		}
 		return AssertResult{OK: *st.LifePct >= a.Min, Want: fmt.Sprintf("life >= %d%%", a.Min), Got: fmt.Sprintf("life %d%%", *st.LifePct)}
+	case AStatBetween:
+		want := fmt.Sprintf("%s >= %d", a.Code, a.Min)
+		if a.Max != nil {
+			want += fmt.Sprintf(" and <= %d", *a.Max)
+		}
+		v, ok := st.Stats[a.Code]
+		if !ok {
+			return unobs(want, a.Code)
+		}
+		return AssertResult{OK: v >= a.Min && (a.Max == nil || v <= *a.Max), Want: want, Got: fmt.Sprintf("%s %d", a.Code, v)}
 	case AObjectState:
 		want := fmt.Sprintf("object class %d state %s", a.Class, a.State)
 		if !st.has("objects") {

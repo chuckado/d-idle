@@ -498,6 +498,9 @@ func observe(ctx context.Context, c *d2dctl.Client, writes int) scenario.State {
 			st.Items = append(st.Items, scenario.StateItem{Code: it.Code, Where: where})
 		}
 	}
+	if rep, err := c.Do(ctx, "dump player,stats,skills"); err == nil {
+		st.Stats = pointStats(rep.Lines, rep.Rest)
+	}
 	if rep, err := c.Do(ctx, "debug quest list"); err == nil {
 		st.Quests = map[int]uint16{}
 		for _, l := range rep.Lines {
@@ -524,4 +527,54 @@ func observe(ctx context.Context, c *d2dctl.Client, writes int) scenario.State {
 		}
 	}
 	return st
+}
+
+// pointStats reads the hero's points out of `dump player,stats,skills` (V dump_head_late.json: player.stat_pts and
+// skill_pts, stats.base str/dex/vit/ene, skills.base_levels). nil when the dump is not there (stock d2d) or unreadable.
+func pointStats(lines []string, rest string) map[string]int {
+	line := strings.TrimSpace(rest)
+	for _, l := range lines {
+		if strings.TrimSpace(l) != "" {
+			line = l
+			break
+		}
+	}
+	var d struct {
+		Player struct {
+			StatPts  *int `json:"stat_pts"`
+			SkillPts *int `json:"skill_pts"`
+		} `json:"player"`
+		Stats struct {
+			Base map[string]int `json:"base"`
+		} `json:"stats"`
+		Skills struct {
+			Levels []int `json:"base_levels"`
+		} `json:"skills"`
+	}
+	if json.Unmarshal([]byte(line), &d) != nil {
+		return nil
+	}
+	out := map[string]int{}
+	for _, k := range []string{"str", "dex", "vit", "ene"} {
+		if v, ok := d.Stats.Base[k]; ok {
+			out[k] = v
+		}
+	}
+	if d.Player.StatPts != nil {
+		out["statpts"] = *d.Player.StatPts
+	}
+	if d.Player.SkillPts != nil {
+		out["skillpts"] = *d.Player.SkillPts
+	}
+	if d.Skills.Levels != nil {
+		sum := 0
+		for _, n := range d.Skills.Levels {
+			sum += n
+		}
+		out["skillsspent"] = sum
+	}
+	if len(out) == 0 {
+		return nil
+	}
+	return out
 }
