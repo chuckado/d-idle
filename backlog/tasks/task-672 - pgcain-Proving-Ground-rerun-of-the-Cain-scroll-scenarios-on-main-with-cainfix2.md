@@ -1,10 +1,13 @@
 ---
 id: TASK-672
-title: 'pgcain: Proving Ground rerun of the Cain scroll scenarios on main with cainfix2'
-status: Proposed
+title: >-
+  pgcain: Proving Ground rerun of the Cain scroll scenarios on main with
+  cainfix2
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T18:41:00Z'
+updated_date: '2026-11-19T18:57:00Z'
 labels:
   - bot
   - probe
