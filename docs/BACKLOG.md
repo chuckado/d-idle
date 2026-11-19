@@ -1074,6 +1074,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/goldwithdraw: Merge branch 'main' into goldwithdraw (merged 2026-11-18) <!--sg:agent/goldwithdraw-->
 - survhold3: starved caster yield, risk route closed at the k limit, holdout 3 (TASK-655, merged 2026-11-19, acceptance 2 of 3): Risk route closed at the k limit (riskMaxK) and caster yieldMinMinutes/starveValueMul as data, must-fail tests on two builds; Sorceress seeds 101/103 re-run on the builder (103 recovered: margin 22.9k against legacy 16.9k; 101 12.0k against 16.1k ... <!--sg:agent/survhold3-->
 - bulkid2: bulk identify town adapters, scroll path, Ether payer (TASK-658, merged 2026-11-19, acceptance 2 of 3): Town adapters (Mover, Lister, CainTalk), the bulkid chore after identify, file journal with recovery under any policy, Cain quest word gate, scroll path (policy 2, buys only with town.identifyTome) and an Ether tap payer built offline with must-fail tests. ... <!--sg:agent/bulkid2-->
+- agent/treefix3: Merge branch 'main' into treefix3 (merged 2026-11-19) <!--sg:agent/treefix3-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
