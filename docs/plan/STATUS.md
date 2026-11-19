@@ -288,6 +288,7 @@
 | bulkid-design | proposed | - | `docs/design/bulk-identify-2026-11-18.md` | - |
 | bulkid | proposed | - | `internal/bulkid`<br>`data/bulkid`<br>`internal/env/tuning_identify.go`<br>`internal/watch/vaultmass_test.go`<br>`internal/env/tuning.go`<br>`docs/knobs.md`<br>`internal/vaultkeep/reveal.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/note_test.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go` | - |
 | survhold3 | proposed | - | `internal/survival`<br>`docs/probes/survival-holdout3-2026-11-18.md` | - |
+| verifymerc | proposed | - | `docs/upstream/verifier-mercabsorb-2026-11-18.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -326,14 +327,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 78a7ca888 11-19 09:54 `Merge agent/verifymerc: verifymerc: verifier of merc gear absorb r1 (r1 FAIL, r2 PASS WITH CHANGES)` (verifymerc)
+- d37ccd25b 11-19 09:53 `Merge branch 'main' into verifymerc` (-)
+- 7feab5450 11-19 09:41 `Merge agent/treefix3: Merge branch 'main' into treefix3` (treefix3)
+- b3721d322 11-19 09:40 `Merge branch 'main' into treefix3` (-)
+- f70213a90 11-19 09:24 `Merge agent/bulkid2: bulkid2: town adapters, scroll path, Ether tap payer` (bulkid2)
+- bfb8bb8fb 11-19 09:23 `Merge branch 'main' into bulkid2` (-)
 - ee4e89850 11-19 09:06 `Merge agent/survhold3: Merge origin/main into agent/survhold3` (survhold3)
 - 7ba3b21d7 11-19 09:01 `Merge origin/main into agent/survhold3` (-)
 - 67c1f056f 11-18 20:20 `Merge agent/goldwithdraw: Merge branch 'main' into goldwithdraw` (goldwithdraw)
 - 9c26547e9 11-18 20:19 `Merge branch 'main' into goldwithdraw` (-)
-- 687344925 11-18 20:11 `Merge agent/survhold2: survhold2: kit gate hold, return walk past burned portal, holdout 2 record` (survhold2)
-- 26c11333d 11-18 20:10 `Merge branch 'main' into survhold2` (-)
-- 22284866b 11-18 20:02 `Merge agent/antiflail: Merge branch 'main' into antiflail` (antiflail)
-- 315a64e87 11-18 20:01 `Merge branch 'main' into antiflail` (-)
-- 575c90c37 11-18 19:56 `Merge agent/bulkid: bulk identify B1-B5 offline` (bulkid)
-- 14f4ed022 11-18 19:55 `Merge branch 'main' into bulkid` (-)
 <!-- statusgen:end -->
