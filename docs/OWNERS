@@ -331,6 +331,7 @@ docs/charselect.md  credit-runner  charsup
 docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/contracts/merc-policy.md  credit-runner  mercrevive2
 docs/d2d-loot.md  credit-runner  groundquality
+docs/design/bulk-identify-2026-11-18.md  credit-runner  bulkid-design
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vault
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv2
