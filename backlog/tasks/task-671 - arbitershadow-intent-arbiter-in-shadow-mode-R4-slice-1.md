@@ -1,10 +1,11 @@
 ---
 id: TASK-671
 title: 'arbitershadow: intent arbiter in shadow mode (R4 slice 1)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T17:22:00Z'
+updated_date: '2026-11-19T18:11:00Z'
 labels:
   - bot
   - feature

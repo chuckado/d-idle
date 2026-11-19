@@ -298,7 +298,6 @@
 | fablereview | proposed | - | `docs/design/fable-review-2026-11-19` | - |
 | adrfable | proposed | - | `docs/adr/0020-proving-ground-and-stat-skill-agency.md`<br>`docs/decisions.md`<br>`docs/adr/README.md`<br>`docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md` | - |
 | questspec | proposed | - | `internal/questspec`<br>`data/questspec`<br>`docs/questspec.md` | - |
-| arbitershadow | in-progress | - | `internal/arbiter`<br>`cmd/d2arbiter`<br>`internal/bot/shadow.go`<br>`internal/bot/shadow_test.go`<br>`docs/arbiter.md`<br>`internal/env/tuning_bot.go`<br>`docs/knobs.md`<br>`internal/bot/loop.go`<br>`internal/bot/runner.go`<br>`internal/bot/observe.go` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
