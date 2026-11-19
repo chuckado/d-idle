@@ -323,6 +323,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d81f72c08 11-18 19:17 `Merge agent/treefix: d2dsrc: expire cached debug presets by age so a standing hero sees the Tree of Inifuss` (treefix)
+- 1d7387bdd 11-18 19:15 `Merge branch 'main' into treefix` (-)
 - 48c7ee187 11-18 17:24 `Merge agent/bulkid-design: bulk identify design doc` (bulkid-design)
 - 0275f34bc 11-18 15:54 `Merge agent/longlane: longlane: wavelane.sh launches survival waves in the builder long lane` (longlane)
 - 9ae82ad42 11-18 15:53 `Merge branch 'main' into longlane` (-)
@@ -331,6 +333,4 @@
 - ebc78bb30 11-18 12:05 `Merge agent/unidpopup: Merge origin/main into agent/unidpopup` (unidpopup)
 - 75068e96b 11-18 12:03 `Merge origin/main into agent/unidpopup` (-)
 - a9aedc8ff 11-18 11:56 `Merge agent/decomp40: decomp40: Cairn portal offset in tiles (D1), scroll pattern never shown (D2/D7), trace` (decomp40)
-- 765975735 11-18 11:56 `Merge branch 'main' into decomp40` (-)
-- 46d353f23 11-18 11:48 `Merge agent/cain5b: CAIN-5b: free Cain (guards fought, cage, quest word check) and report to Akara; board chunks supported` (cain5b)
 <!-- statusgen:end -->
