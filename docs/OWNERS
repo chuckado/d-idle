@@ -282,8 +282,10 @@ cmd/d2bot/survivalwire.go  credit-runner  survfix2
 cmd/d2bot/survivalwire.go  credit-runner  survreask
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/vaultact_test.go  credit-runner  vaultv6
+cmd/d2bot/vaultkeep.go  credit-runner  bulkid
 cmd/d2bot/vaultkeep.go  credit-runner  vaultv5
 cmd/d2bot/vaultkeep.go  credit-runner  vaultv6
+cmd/d2bot/vaultpage.go  credit-runner  bulkid
 cmd/d2bot/vaultpage.go  credit-runner  vaulttip
 cmd/d2bot/vaultpage.go  credit-runner  vaultv4
 cmd/d2bot/vaultpage.go  credit-runner  vaultv5
@@ -298,6 +300,7 @@ cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2dview  credit-runner  videofeed2
 cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
+data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
 data/onboarding  credit-runner  firstminutes
 data/onboarding/en.json  credit-runner  friendfb
@@ -382,6 +385,7 @@ docs/inventory-ui.md  credit-runner  uic3
 docs/knobs.md  credit-runner  botcpu2
 docs/knobs.md  credit-runner  botinstant
 docs/knobs.md  credit-runner  botstuck
+docs/knobs.md  credit-runner  bulkid
 docs/knobs.md  credit-runner  exploredpct
 docs/knobs.md  credit-runner  freshstart
 docs/knobs.md  credit-runner  gearsets
@@ -768,6 +772,7 @@ internal/bot/zoneshadow.go  credit-runner  survfix2
 internal/bot/zoneshadow.go  credit-runner  survreask
 internal/bot/zoneshadow.go  credit-runner  survrecover
 internal/bot/zoneshadow_test.go  credit-runner  survC
+internal/bulkid  credit-runner  bulkid
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
 internal/charsel  credit-runner  charselect
@@ -845,6 +850,7 @@ internal/decide/variants.go  credit-runner  qdensity
 internal/decide/variants_test.go  credit-runner  qdensity
 internal/env  credit-runner  survsd
 internal/env  credit-runner  wiring2
+internal/env/tuning.go  credit-runner  bulkid
 internal/env/tuning.go  credit-runner  quests3
 internal/env/tuning.go  credit-runner  videofeed2
 internal/env/tuning_bot.go  credit-runner  botstuck
@@ -854,6 +860,7 @@ internal/env/tuning_bot.go  credit-runner  hourfix
 internal/env/tuning_bot.go  credit-runner  lootwireL4
 internal/env/tuning_bot.go  credit-runner  staletarget
 internal/env/tuning_bot.go  credit-runner  survfix2
+internal/env/tuning_identify.go  credit-runner  bulkid
 internal/env/tuning_invdesk.go  credit-runner  botinstant
 internal/env/tuning_invdesk.go  credit-runner  gearsets
 internal/env/tuning_loot.go  credit-runner  goldprio
@@ -1077,6 +1084,9 @@ internal/vault/index.go  credit-runner  vaultv4
 internal/vault/types.go  credit-runner  vaulttip
 internal/vaultkeep  credit-runner  vaultv5
 internal/vaultkeep  credit-runner  vaultv6
+internal/vaultkeep/keep.go  credit-runner  bulkid
+internal/vaultkeep/note_test.go  credit-runner  bulkid
+internal/vaultkeep/reveal.go  credit-runner  bulkid
 internal/vaultkeep/reveal.go  credit-runner  vaulttip
 internal/watch  credit-runner  cainfix
 internal/watch/areamap_test.go  credit-runner  uis6
@@ -1297,6 +1307,7 @@ internal/watch/testdata/video_panel.js  credit-runner  videofeed4
 internal/watch/testdata/video_panel.js  credit-runner  viewerfps
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
+internal/watch/vaultapi.go  credit-runner  bulkid
 internal/watch/vaultapi.go  credit-runner  vaulttip
 internal/watch/vaultapi.go  credit-runner  vaultv4
 internal/watch/vaultapi.go  credit-runner  vaultv5
@@ -1306,6 +1317,7 @@ internal/watch/vaultapi_test.go  credit-runner  vaultv4
 internal/watch/vaultapi_test.go  credit-runner  vaultv5
 internal/watch/vaultapi_test.go  credit-runner  vaultv6
 internal/watch/vaultether_test.go  credit-runner  vaultv7b
+internal/watch/vaultmass_test.go  credit-runner  bulkid
 internal/watch/vaulttip_test.go  credit-runner  vaulttip
 internal/watch/vaultui_test.go  credit-runner  vaultv4
 internal/watch/vaultui_test.go  credit-runner  vaultv5
@@ -1476,12 +1488,14 @@ internal/watch/web/vault.css  credit-runner  vaultv5
 internal/watch/web/vault.css  credit-runner  vaultv6
 internal/watch/web/vault.css  credit-runner  vaultv7b
 internal/watch/web/vault.html  credit-runner  vaultv4
+internal/watch/web/vault.js  credit-runner  bulkid
 internal/watch/web/vault.js  credit-runner  vaultphone
 internal/watch/web/vault.js  credit-runner  vaulttip
 internal/watch/web/vault.js  credit-runner  vaultv4
 internal/watch/web/vault.js  credit-runner  vaultv5
 internal/watch/web/vault.js  credit-runner  vaultv6
 internal/watch/web/vault.js  credit-runner  vaultv7b
+internal/watch/web/vault.json  credit-runner  bulkid
 internal/watch/web/vault.json  credit-runner  vaultv4
 internal/watch/web/vault.json  credit-runner  vaultv5
 internal/watch/web/vault.json  credit-runner  vaultv6

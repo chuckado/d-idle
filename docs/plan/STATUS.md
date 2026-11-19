@@ -285,6 +285,7 @@
 | vaulttip | proposed | - | `internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`cmd/d2bot/vaulttip.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/watch/vaulttip_test.go`<br>`internal/watch/testdata/vault_tip.mjs`<br>`tools/uishots/fixtures_vault.go`<br>`docs/vault.md`<br>`tools/uishots.sh`<br>`internal/vault/types.go`<br>`internal/loot/vault.go`<br>`internal/vaultkeep/reveal.go`<br>`internal/d2dctl/vault_verbs.go`<br>`internal/d2dctl/vault_verbs_test.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go` | - |
 | devp12 | proposed | - | `docs/process/sandbox-devp12.md` | - |
 | bulkid-design | proposed | - | `docs/design/bulk-identify-2026-11-18.md` | - |
+| bulkid | proposed | - | `internal/bulkid`<br>`data/bulkid`<br>`internal/env/tuning_identify.go`<br>`internal/watch/vaultmass_test.go`<br>`internal/env/tuning.go`<br>`docs/knobs.md`<br>`internal/vaultkeep/reveal.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/note_test.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -323,14 +324,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 48c7ee187 11-18 17:24 `Merge agent/bulkid-design: bulk identify design doc` (bulkid-design)
-- 0275f34bc 11-18 15:54 `Merge agent/longlane: longlane: wavelane.sh launches survival waves in the builder long lane` (longlane)
-- 9ae82ad42 11-18 15:53 `Merge branch 'main' into longlane` (-)
-- 1614693ad 11-18 13:21 `Merge agent/cairnportal: cairnportal: PR candidate D1 Cairn portal offset (fid/cairn-portal-r1), docs and card` (cairnportal)
-- 4bf1b8316 11-18 13:20 `Merge branch 'main' into cairnportal` (-)
-- ebc78bb30 11-18 12:05 `Merge agent/unidpopup: Merge origin/main into agent/unidpopup` (unidpopup)
-- 75068e96b 11-18 12:03 `Merge origin/main into agent/unidpopup` (-)
-- a9aedc8ff 11-18 11:56 `Merge agent/decomp40: decomp40: Cairn portal offset in tiles (D1), scroll pattern never shown (D2/D7), trace` (decomp40)
-- 765975735 11-18 11:56 `Merge branch 'main' into decomp40` (-)
-- 46d353f23 11-18 11:48 `Merge agent/cain5b: CAIN-5b: free Cain (guards fought, cage, quest word check) and report to Akara; board chunks supported` (cain5b)
+- 575c90c37 11-18 19:56 `Merge agent/bulkid: bulk identify B1-B5 offline` (bulkid)
+- 14f4ed022 11-18 19:55 `Merge branch 'main' into bulkid` (-)
+- ae0abd4c7 11-18 19:51 `Merge agent/decomp41: decomp41: merc absorb + crush D5 traces and bodies (docs only)` (decomp41)
+- e7c1bd1a6 11-18 19:50 `Merge branch 'main' into decomp41` (-)
+- f5cf91c17 11-18 19:42 `Merge agent/tpfix: Merge branch 'main' into tpfix` (tpfix)
+- 593a2405d 11-18 19:41 `Merge branch 'main' into tpfix` (-)
+- e080f368c 11-18 19:35 `Merge agent/vaulttip2: vaulttip2: Vault fit pages run, shared StatLines for the common descfuncs, windowed 2400-item grid` (vaulttip2)
+- 35abf9ecb 11-18 19:34 `Merge branch 'main' into vaulttip2` (-)
+- d81f72c08 11-18 19:17 `Merge agent/treefix: d2dsrc: expire cached debug presets by age so a standing hero sees the Tree of Inifuss` (treefix)
+- 1d7387bdd 11-18 19:15 `Merge branch 'main' into treefix` (-)
 <!-- statusgen:end -->

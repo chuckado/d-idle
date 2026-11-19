@@ -79,7 +79,7 @@
   }
 
   /* the cells: the look of `.d-cells .item` (components.css section 14) in a grid that fills the width */
-  .vt-grid { display: grid; gap: 2px; padding: 2px; grid-template-columns: repeat(auto-fill, minmax(4.75rem, 1fr)); grid-auto-rows: 4.25rem; background: var(--d-surface-0); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); }
+  .vt-grid { display: grid; gap: 2px; padding: 2px; --vt-cell-min: 4.75rem; --vt-pad-top: 0px; --vt-pad-bot: 0px; padding-block: calc(2px + var(--vt-pad-top)) calc(2px + var(--vt-pad-bot)); grid-template-columns: repeat(auto-fill, minmax(var(--vt-cell-min), 1fr)); grid-auto-rows: 4.25rem; background: var(--d-surface-0); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); }
   .vt-cell { position: relative; display: flex; flex-direction: column; min-inline-size: 0; overflow: hidden; background: var(--d-surface-3); border: 0; border-block-start: 3px solid var(--q, var(--d-q-normal)); border-radius: 2px;
     padding: 2px 3px; font: inherit; font-size: .62rem; line-height: 1.15; color: var(--q, var(--d-text)); text-align: start; cursor: pointer; }
   .vt-cell:focus-visible { outline: 2px solid var(--d-focus); outline-offset: -2px; }
@@ -95,7 +95,7 @@
   .vt-tag { font-size: .58rem; line-height: 1; font-weight: 700; padding: 1px 2px; border-radius: 2px; background: var(--d-surface-0); color: var(--d-text); }
   .vt-tag[data-tag="unid"] { color: var(--d-warn); } .vt-tag[data-tag="pin"] { color: var(--d-accent-text); } .vt-tag[data-tag="eth"] { color: var(--d-info); }
   .vt-check-mark { position: absolute; inset-block-end: 1px; inset-inline-end: 3px; font-weight: 700; color: var(--d-accent-text); }
-  .vt-grid[data-mode="list"] { grid-template-columns: minmax(0, 1fr); grid-auto-rows: minmax(3.5rem, auto); }
+  .vt-grid[data-mode="list"] { grid-template-columns: minmax(0, 1fr); grid-auto-rows: 4rem; }
   .vt-grid[data-mode="list"] .vt-cell { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-content: center; font-size: var(--d-fs-1); padding: var(--d-sp-1) var(--d-sp-3); }
   .vt-grid[data-mode="list"] .vt-name { -webkit-line-clamp: 2; padding-inline-end: 0; }
   .vt-grid[data-mode="list"] .vt-tags { position: static; flex-direction: row; align-self: start; }

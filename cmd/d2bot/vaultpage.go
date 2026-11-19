@@ -6,7 +6,9 @@ import (
 	"sync"
 	"sync/atomic"
 
+	"d2lod-bot/internal/bulkid"
 	"d2lod-bot/internal/data"
+	"d2lod-bot/internal/loot"
 	"d2lod-bot/internal/vault"
 	"d2lod-bot/internal/vaultkeep"
 	"d2lod-bot/internal/watch"
@@ -102,7 +104,10 @@ func vaultAPIWith(root string, on func() bool, hero func() string, eh *etherHome
 	}
 	home := vaultHomeFor(root)
 	api := watch.NewVaultAPI()
-	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}, Act: actFace{home}, Tip: vaultTipFor(db)}
+	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}, Act: actFace{home}, Tip: vaultTipFor(db), Quality: loot.QualityName, ScrollGold: scrollGold(db)}
+	if f, ferr := bulkid.DefaultFilter(); ferr == nil {
+		desk.MassFilter = f
+	}
 	if eh != nil {
 		desk.Owned = eh.owned
 	}
@@ -119,4 +124,16 @@ func vaultKnobOn(knob func(string) (float64, string, error)) func() bool {
 		v, _, err := knob("loot.vault")
 		return err == nil && v != 0
 	}
+}
+
+// scrollGold is the base price of a Scroll of Identify from the item tables (information in the mass reveal line; 0 when
+// the tables lack it).
+func scrollGold(db *data.DB) int {
+	if db == nil {
+		return 0
+	}
+	if b := db.ItemByCode("isc"); b != nil {
+		return b.Cost
+	}
+	return 0
 }

@@ -63,12 +63,13 @@ type Keeper struct {
 	Budget   time.Duration // most wall time of one Run before it yields (default 8 s)
 
 	// Reveal and Sell (slice V6); nil Tools or Vendor leaves that errand off.
-	Tools        Identifier
-	Vendor       Seller
-	SellPerVisit func() int                                 // loot.vaultSellPerVisit
-	Namer        func(d2dctl.VaultRecord, vault.Rec) string // display name of an identified record (default: the old name)
-	ShortBy      func() int                                 // gold the town budget is short by (repair, potions, merc); 0 none
-	Prompt       func() bool                                // loot.vaultSellPrompt
+	Tools          Identifier
+	Vendor         Seller
+	SellPerVisit   func() int                                 // loot.vaultSellPerVisit
+	Namer          func(d2dctl.VaultRecord, vault.Rec) string // display name of an identified record (default: the old name)
+	ShortBy        func() int                                 // gold the town budget is short by (repair, potions, merc); 0 none
+	Prompt         func() bool                                // loot.vaultSellPrompt
+	IdentifyPolicy func() int                                 // identify.policy after the measured-run override (nil: manual)
 
 	mu         sync.Mutex
 	promptMute time.Time
