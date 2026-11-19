@@ -557,6 +557,12 @@ func observe(ctx context.Context, c *d2dctl.Client, writes int, live bool) scena
 			p := 100 * sv.Life.Cur / sv.Life.Max
 			st.LifePct = &p
 		}
+		if v, ok := sv.Int("rskill"); ok {
+			st.RightSkill = &v
+		}
+		if v, ok := sv.Int("lskill"); ok {
+			st.LeftSkill = &v
+		}
 	}
 	if li, err := c.Level(ctx); err == nil {
 		a := li.ID

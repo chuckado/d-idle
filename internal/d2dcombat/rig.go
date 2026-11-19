@@ -19,6 +19,7 @@ import (
 	"d2lod-bot/internal/d2dworld"
 	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/env"
+	"d2lod-bot/internal/input"
 	"d2lod-bot/internal/nav"
 )
 
@@ -72,6 +73,7 @@ func New(cfg Config) (*Rig, error) {
 		Sleep: r.Pace.Sleep, Now: r.Pace.Now}) // stepping the game is the wait; the old extra 50 ms wall sleep only slowed lockstep
 	tune := env.DefaultTuning()
 	r.Env = &env.Env{ID: "d2dcombat", Log: log, Read: viewReader{r.Src}, In: r.In, Data: cfg.Tables, Clock: r.Meter, Tune: &tune}
+	r.Env.Planner = newPlanner(ctx, r.Env, cfg.Ctl)
 	r.Nav = nav.New(r.Env)
 	r.Nav.UseWorld(r.World)
 	r.Fighter = combat.New(r.Env, r.Nav)
@@ -93,6 +95,9 @@ func Attach(ctx context.Context, e *env.Env, nv *nav.Navigator, ctl *d2dinput.Co
 	}
 	ctl.Skills = map[string]int{}
 	in := &Input{Controller: ctl, ctx: ctx}
+	if e.Planner == nil { // shared with the bot's own env, so its minute line sees the counters
+		e.Planner = newPlanner(ctx, e, ctl.C)
+	}
 	ce := *e
 	ce.Read, ce.In = viewReader{e.Read}, in
 	r := &Rig{Ctl: ctl.C, In: in, Env: &ce, Nav: nv}
@@ -146,4 +151,21 @@ func (r *Rig) BindSkills() (int, error) {
 	}
 	r.Fighter.SetHotkeys(keys)
 	return len(keys), nil
+}
+
+// newPlanner builds the input planner for a d2d backend: switched by the knob input.planner (read live, default off) and
+// told what the connected build can do by its "caps" reply (asked once, on the first planned action).
+func newPlanner(ctx context.Context, e *env.Env, c *d2dctl.Client) *input.Planner {
+	return &input.Planner{
+		Enabled: func() bool { return e.Tune != nil && e.Tune.Input.Planner == 1 },
+		CapsFn: func() []string {
+			names, _ := c.Caps(ctx)
+			return names
+		},
+		Logf: func(msg string, kv ...any) {
+			if e.Log != nil {
+				e.Log.Info(msg, kv...)
+			}
+		},
+	}
 }

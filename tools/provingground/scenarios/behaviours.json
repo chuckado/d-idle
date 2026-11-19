@@ -282,6 +282,12 @@
    "group": "points",
    "title": "the points API: sheet, explicit spend, refusal of an illegal skill, audit",
    "where": "internal/watch/pointsapi.go, internal/points"
+  },
+  {
+   "id": "input.skill-select",
+   "group": "input",
+   "title": "select the right or left skill (aura) through the input planner: verb, key, verified click",
+   "where": "internal/combat/bindleft.go setPlanned; internal/input/planner.go"
   }
  ]
 }
