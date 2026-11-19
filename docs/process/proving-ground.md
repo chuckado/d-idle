@@ -24,7 +24,7 @@ One JSON object in `tools/provingground/scenarios/*.json` (unknown fields are re
 - `trigger`: the bot's `--goals` and tuning knobs. `budget.virtual_min`: the timeout, in VIRTUAL minutes (a scenario without one is refused). `matrix`: classes and seeds.
 - `assert`: kinds `item_in_pack`, `item_absent`, `quest_bits` (record, set mask, clear mask), `area_is`, `area_in`, `gold_between`, `stash_between`, `level_at_least`, `life_pct_at_least`, `object_state`, `area_changes_le`, `no_writes`. Each cites the fact it reads. A fact the observer could not read makes the assertion UNOBSERVED.
 - `covers`: behaviour ids of `behaviours.json`; a step scenario also covers its `quest.<quest>.<chunk>`. `touches`: path prefixes; the merge gate runs the fast scenarios whose prefixes match the changed files.
-- `needs`, `d2d` (`lab` or `sandbox`), `provenance` (what is CHEATED), `status: pending` with `pending_reason` for a skeleton.
+- `needs`, `build` (`lab` or `sandbox`), `provenance` (what is CHEATED), `status: pending` with `pending_reason` for a skeleton.
 
 Dev loop: `d2scenario setup cain.scroll -class Sorceress -seed 3` shows exactly what will be written; `d2scenario eval cain.scroll -state s.json` evaluates a state file offline; `d2scenario plan -id cain.scroll` is the dry run.
 

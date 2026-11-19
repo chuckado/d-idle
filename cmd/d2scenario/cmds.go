@@ -129,7 +129,7 @@ func cmdPlan(args []string, w io.Writer) error {
 		scenario.Run
 		Setup scenario.Setup `json:"setup"`
 		Needs []string       `json:"needs,omitempty"`
-		D2D   string         `json:"d2d"`
+		Build string         `json:"build"`
 	}
 	var out []planRun
 	by := map[string]scenario.Scenario{}
@@ -141,7 +141,7 @@ func cmdPlan(args []string, w io.Writer) error {
 		if err != nil {
 			return err
 		}
-		out = append(out, planRun{Run: r, Setup: su, Needs: by[r.ID].Needs, D2D: by[r.ID].D2D})
+		out = append(out, planRun{Run: r, Setup: su, Needs: by[r.ID].Needs, Build: by[r.ID].Build})
 	}
 	est := scenario.Estimate(picked, runs, *parallel)
 	if *asJSON {
@@ -157,7 +157,7 @@ func cmdPlan(args []string, w io.Writer) error {
 	}
 	fmt.Fprintf(w, "DRY RUN tier=%s: %d runs of %d scenarios (%d pending, never run), wall upper bound %d min at %d slots\n", *tier, len(out), len(picked)-pend, pend, est, *parallel)
 	for _, r := range out {
-		fmt.Fprintf(w, "  %-40s d2d=%s tags=%s verbs=%d needs=%v\n", r.Key(), r.D2D, strings.Join(r.Setup.Tags, ","), len(r.Setup.Verbs), r.Needs)
+		fmt.Fprintf(w, "  %-40s build=%s tags=%s verbs=%d needs=%v\n", r.Key(), r.Build, strings.Join(r.Setup.Tags, ","), len(r.Setup.Verbs), r.Needs)
 	}
 	return nil
 }

@@ -285,7 +285,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	// 2. The real bot plays on a d2d WITHOUT lab verbs: gated debug verbs are refused, so no gameplay write after the start.
 	botBin := bot
 	d2dBot := bin
-	if s.D2D == "sandbox" {
+	if s.Build == "sandbox" {
 		d2dBot = os.Getenv("D2D_BIN_SANDBOX")
 	}
 	refused, berr := runBot(ctx, s, r, botBin, d2dBot, gamedata, data, home, sock, inst, hero, trace, false)

@@ -83,7 +83,7 @@
    "title": "Search for Cain tree step on the SHIPPED sandbox d2d build",
    "kind": "step",
    "tier": "full",
-   "d2d": "sandbox",
+   "build": "sandbox",
    "quest": {
     "quest": "search_for_cain",
     "chunk": "scroll"

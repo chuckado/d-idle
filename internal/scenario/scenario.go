@@ -72,7 +72,7 @@ type Scenario struct {
 	// Needs lists capabilities the d2d build must have (verbs, dump keys). A missing one makes the run BLOCKED, not red.
 	Needs []string `json:"needs,omitempty"`
 	// D2D selects the build: "lab" (default) or "sandbox" (the shipped build of the friend sandbox, env D2D_BIN_SANDBOX).
-	D2D string `json:"d2d,omitempty"`
+	Build string `json:"build,omitempty"`
 	// Provenance is the text for docs/probes/test-characters.md: what is CHEATED or IMPOSSIBLE about the setup.
 	Provenance string `json:"provenance,omitempty"`
 	Notes      string `json:"notes,omitempty"`
@@ -212,8 +212,8 @@ func (s *Scenario) applyDefaults() {
 	if s.Pre.Difficulty == "" {
 		s.Pre.Difficulty = "normal"
 	}
-	if s.D2D == "" {
-		s.D2D = "lab"
+	if s.Build == "" {
+		s.Build = "lab"
 	}
 	if s.Trigger.Goals == "" {
 		s.Trigger.Goals = "campaign"
@@ -257,8 +257,8 @@ func (s Scenario) Validate() error {
 	if s.Pre.Start == StartField && s.Pre.Area == 0 {
 		return fmt.Errorf("%s: pre.start field needs pre.area", at)
 	}
-	if s.D2D != "lab" && s.D2D != "sandbox" {
-		return fmt.Errorf("%s: d2d %q", at, s.D2D)
+	if s.Build != "lab" && s.Build != "sandbox" {
+		return fmt.Errorf("%s: d2d %q", at, s.Build)
 	}
 	if s.Budget.VirtualMin <= 0 {
 		return fmt.Errorf("%s: budget.virtual_min must be positive (every scenario has a timeout)", at)
