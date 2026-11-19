@@ -289,6 +289,7 @@
 | bulkid | proposed | - | `internal/bulkid`<br>`data/bulkid`<br>`internal/env/tuning_identify.go`<br>`internal/watch/vaultmass_test.go`<br>`internal/env/tuning.go`<br>`docs/knobs.md`<br>`internal/vaultkeep/reveal.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/note_test.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go` | - |
 | survhold3 | proposed | - | `internal/survival`<br>`docs/probes/survival-holdout3-2026-11-18.md` | - |
 | verifymerc | proposed | - | `docs/upstream/verifier-mercabsorb-2026-11-18.md` | - |
+| forkrebase | in-progress | - | `docs/process/fork-rebase.md`<br>`docs/process/sandbox-devp13.md`<br>`tools/fork-rebase.sh` | - |
 | nocards | proposed | - | `data/idreveal`<br>`internal/watch/unlockidreveal.go`<br>`internal/watch/unlockidreveal_test.go`<br>`internal/watch/unlockui_quiet_test.go`<br>`internal/watch/testdata`<br>`docs/unlock-ladder.md`<br>`docs/vault.md`<br>`internal/watch/web`<br>`internal/watch/funwire.go`<br>`internal/watch/nocards_test.go`<br>`data/unlocks`<br>`docs/unlock-idreveal.md` | - |
 | botsurvey | proposed | - | `docs/research/public-d2-bots-2026-11-19.md` | - |
 | fablereview | proposed | - | `docs/design/fable-review-2026-11-19` | - |
@@ -331,6 +332,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f79446ff1 11-19 11:42 `Merge agent/forkrebase: fork rebase routine, fork-rebase.sh, devp13 first round (incl. item create identified flag)` (forkrebase)
+- 05da5d6ca 11-19 11:41 `Merge branch 'main' into forkrebase` (-)
 - 601bd9fe4 11-19 11:38 `Merge agent/adrfable: ADR 0020 Proving Ground and stat/skill agency` (adrfable)
 - 387afed02 11-19 11:38 `Merge agent/fablereview: design review 2026-11-19: docs only (bots comparison, fidelity and gaps, seven classes, stat and skill agency, architecture, roadmap)` (fablereview)
 - ba78343bc 11-19 11:38 `Merge agent/botsurvey: public D2 bots inventory (docs only)` (botsurvey)
@@ -339,6 +342,4 @@
 - 503e4d1cc 11-19 11:35 `Merge branch 'main' into botsurvey` (-)
 - c085552a7 11-19 11:25 `Merge agent/etherreveal: Merge branch 'main' into etherreveal` (etherreveal)
 - 960f739ed 11-19 11:24 `Merge branch 'main' into etherreveal` (-)
-- 362df2fac 11-19 10:57 `Merge agent/nocards: Remove the unidentified item card feature (tab, sheet, routes, ladder rows)` (nocards)
-- 70ec05444 11-19 09:56 `Merge branch 'main' into etherreveal` (-)
 <!-- statusgen:end -->

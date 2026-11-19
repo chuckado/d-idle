@@ -855,6 +855,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [doc-audit.md](process/doc-audit.md): Doc audit (2026-10-30)
 - [feed-after-events.md](process/feed-after-events.md): Feed after events (status: current rule (card feeds, 2026-11-01). The helper is `tools/discord/feed.py`; details in...)
 - [flaky-tests.md](process/flaky-tests.md): Flaky tests: the waiting pattern (status: current. Load-sensitive tests cost 45-minute gate re-runs; this is the rule that keeps new ones out.)
+- [fork-rebase.md](process/fork-rebase.md): Fork rebase routine (status: current (task forkrebase, user decision 2026-11-19: rebase the private d2d fork onto upstream main...)
 - [friends-gamedata-2026-11-15.md](process/friends-gamedata-2026-11-15.md): Friends game-data bundle (2026-11-15)
 - [gamecode-guard.md](process/gamecode-guard.md): Game-code guard, labpath class, path scrubber
 - [grill-agent.md](process/grill-agent.md): The grill agent: one command to be interviewed
@@ -876,6 +877,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [sandbox-devp10.md](process/sandbox-devp10.md): Sandbox d2d build devp10 (2026-11-17) (status: current. Task: TASK-623 (sandbox3). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [sandbox-devp11.md](process/sandbox-devp11.md): Sandbox image devp11: item colour payload (slice 1 fixtures) (status: current (task-638, 2026-11-18). Built and checked on the builder, NOT loaded into the sandbox. Design:...)
 - [sandbox-devp12.md](process/sandbox-devp12.md): Sandbox d2d build devp12 (2026-11-18) (status: current. Task: TASK-645. Tags: V = verified in this run (how said), S = read from a tool or log, U =...)
+- [sandbox-devp13.md](process/sandbox-devp13.md): Sandbox d2d build devp13 (2026-11-19) (status: current. Task: forkrebase (first round of `docs/process/fork-rebase.md`). Tags: V = verified in this run...)
 - [sandbox-devp9.md](process/sandbox-devp9.md): Sandbox d2d build devp9 (2026-11-15) (status: current. Task: TASK-535 (sandbox2). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [spdx.md](process/spdx.md): SPDX header policy (ADR 0010)
 - [spec-apply-a-20261104.md](process/spec-apply-a-20261104.md): Spec apply A, 2026-11-04
