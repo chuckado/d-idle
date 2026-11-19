@@ -372,7 +372,14 @@ func (o objectAdapter) findNearSkip(ctx context.Context, class int, at *input.Po
 							near++
 						}
 					}
-					o.e.Log.Info("object preset walk", "class", class, "try", try, "player", ref, "preset", p.Pos, "objects", len(s.Objects), "ofClass", near, "err", gerr, "now", o.e.Clock.Now().UnixMilli())
+					var around []string
+					for i := range s.Objects {
+						u := &s.Objects[i]
+						if dx, dy := u.X-ref.X, u.Y-ref.Y; dx*dx+dy*dy <= 60*60 {
+							around = append(around, fmt.Sprintf("c%d/id%d/(%d,%d)/m%d", u.Class, u.ID, u.X, u.Y, u.Mode))
+						}
+					}
+					o.e.Log.Info("object preset walk", "around", around, "class", class, "try", try, "player", ref, "preset", p.Pos, "objects", len(s.Objects), "ofClass", near, "err", gerr, "now", o.e.Clock.Now().UnixMilli())
 					break
 				}
 			}
