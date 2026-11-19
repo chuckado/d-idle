@@ -297,7 +297,10 @@
 | botsurvey | proposed | - | `docs/research/public-d2-bots-2026-11-19.md` | - |
 | fablereview | proposed | - | `docs/design/fable-review-2026-11-19` | - |
 | adrfable | proposed | - | `docs/adr/0020-proving-ground-and-stat-skill-agency.md`<br>`docs/decisions.md`<br>`docs/adr/README.md`<br>`docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md` | - |
+| verifycrushd6 | proposed | - | `docs/upstream/verifier-crushd6-2026-11-19.md` | - |
 | questspec | proposed | - | `internal/questspec`<br>`data/questspec`<br>`docs/questspec.md` | - |
+| agencyp0 | proposed | - | `internal/points`<br>`internal/watch/pointsapi.go`<br>`internal/watch/pointsapi_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`internal/watch/web/points.css`<br>`internal/watch/web/skills.js`<br>`internal/watch/web/watch.html`<br>`internal/watch/skillsapi.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/pointswire.go`<br>`cmd/d2bot/pointswire_test.go`<br>`cmd/d2bot/resource_test.go`<br>`cmd/d2bot/gearpolicy.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/live.go`<br>`internal/bot/pointsgate.go`<br>`internal/bot/pointsgate_test.go`<br>`internal/bot/leveling.go`<br>`internal/bot/runner.go`<br>`internal/combat/playable.go`<br>`internal/leveler/leveler.go`<br>`internal/leveler/build.go`<br>`internal/leveler/verbs_test.go`<br>`internal/d2dctl/points_verbs.go`<br>`internal/d2dctl/points_verbs_test.go`<br>`internal/d2dsrc/points_sheet_test.go`<br>`internal/skilltree/skilltree.go`<br>`internal/power/profiles.json`<br>`internal/power/skilldamage_test.go`<br>`internal/plandata`<br>`docs/plan/data`<br>`internal/env/tuning_resource.go`<br>`internal/resource/tuning.go`<br>`docs/knobs.md`<br>`internal/scenario/state.go`<br>`internal/scenario/scenario_test.go`<br>`cmd/d2scenario/run.go`<br>`cmd/d2scenario/main_test.go`<br>`tools/provingground/scenarios/points.json`<br>`tools/provingground/scenarios/behaviours.json`<br>`docs/points.md`<br>`docs/process/points-verbs-devp14.md` | - |
+| pgexpand | in-progress | - | `internal/scenario/`<br>`cmd/d2scenario/`<br>`tools/provingground/`<br>`docs/process/proving-ground.md`<br>`docs/probes/provingground-run-2026-11-19.md` | `d2d-lab-binary` |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -336,14 +339,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 89909e20a 11-19 13:47 `Merge agent/pgcain: pgcain: Proving Ground rerun of the Cain scroll scenarios; item_in_pack accepts bks or bkd; probe doc` (pgcain)
-- 5aae05b01 11-19 13:45 `Merge branch 'main' into pgcain` (-)
-- 7682853f7 11-19 12:56 `Merge agent/arbitershadow: arbitershadow: intent arbiter in shadow mode (R4 slice 1)` (arbitershadow)
-- b8d89cd06 11-19 12:55 `Merge branch 'main' into arbitershadow` (-)
-- 6a5af8636 11-19 12:38 `Merge agent/provingground: Proving Ground (TASK-668)` (provingground)
-- 11df828eb 11-19 12:37 `Merge branch 'main' into provingground` (-)
-- b10f0edc0 11-19 12:33 `Merge agent/questspec: questspec: quest chains as checkable data, checker + Act 1 chains (R5)` (questspec)
-- 40dd3814a 11-19 12:30 `Merge origin/main into questspec` (-)
-- 01538fb89 11-19 12:27 `Merge origin/main into agent/provingground` (-)
-- c72b2eb05 11-19 12:07 `Merge agent/cainfix2: cainfix2: tree class from presets, chunks stay done, hand-in waits for town, free-Cain evidence` (cainfix2)
+- 7eb8c1e02 11-19 15:06 `Merge agent/viewerwait: Merge branch 'main' into viewerwait` (viewerwait)
+- 0cd16b9d6 11-19 15:05 `Merge branch 'main' into viewerwait` (-)
+- aab3479e1 11-19 14:44 `Merge agent/inputlayer: Merge branch 'main' into inputlayer` (inputlayer)
+- e161922fa 11-19 14:43 `Merge branch 'main' into inputlayer` (-)
+- 049959e12 11-19 14:38 `Merge origin/main into agent/inputlayer (keep pgexpand and the skill assertions)` (inputlayer)
+- 1f3392d73 11-19 14:38 `Merge agent/verifyd6: crush D6 verifier: r1 FAIL, fid/crush-d6-r3 PASS WITH CHANGES` (verifyd6)
+- fe2bcda8f 11-19 14:37 `Merge branch 'main' into verifycrushd6` (-)
+- 2997e7ee9 11-19 14:31 `Merge agent/pgexpand: pgexpand: coverage numbers after merging main` (pgexpand)
+- 6e96efe65 11-19 14:27 `Merge origin/main into agent/pgexpand` (-)
+- 5878effb6 11-19 14:18 `Merge origin/main into agent/pgexpand` (-)
 <!-- statusgen:end -->

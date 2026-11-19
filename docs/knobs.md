@@ -63,7 +63,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
-| combat.drinkLifePct | 55 | 35..80 | % | 35 | 4 | Life percent that triggers a healing potion. |
+| combat.drinkLifePct | 55 | 35..80 | % | 35 | 5 | Life percent that triggers a healing potion. |
 | combat.drinkRejuvPct | 35 | 20..60 | % | 20 | 5 | Life percent that triggers a rejuvenation potion. |
 | combat.drinkRejuvBossPct | 50 | 0..70 | % | 0 | 0 | Life percent that triggers a rejuvenation potion in a fight against champions, uniques or bosses (danger 1+); 0 = off. SME advice, EXP. |
 | combat.championEarlyPct | 10 | 0..25 | pp | 0 | 0 | Percentage points added to the healing potion line and the rejuvenation (boss) line while champions (not bosses) are in range, in Normal below character level 15. Champions have about 3x life and +50% damage. 0 = off. SME rule of thumb, EXP. |
@@ -137,12 +137,12 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | town.tripRepairPct | 20 | 0..60 | % | 0 | 1 | Go to town when an equipped item is below this durability. |
 | town.beltFillPct | 100 | 25..100 | % | 25 | 1 | Refill each potion type to this share of its planned columns. |
 | town.equipKindFails | 2 | 1..10 | count | 10 | 1 | Failed equips of one item kind (base class) into one slot before that kind is skipped until the character gains a level. The memory is by kind, so a fresh game (new item ids) does not repeat the same refused swap (g2g E1: Cap to head failed in every game). |
-| town.tpScrollTarget | 2 | 1..20 | count | 1 | 4 | Scrolls to hold when no tome is owned. |
+| town.tpScrollTarget | 2 | 1..20 | count | 1 | 5 | Scrolls to hold when no tome is owned. |
 | town.tpReserve | 2 | 1..5 | count | 1 | 3 | Town portal scrolls a poor character buys once it carries its minimal healing kit (a dive then does not start with the only scroll spent). 1 = one scroll, the old cap. |
 | town.tpMinGold | 0 | 0..1000 | gold | 1000 | 1 | Below this gold the first town portal scroll is not bought and a missing scroll is no trip reason, so a poor character puts its gold into potions first (XPGAP: 62% of the gold of a fresh d2d character went to scrolls). 0 = always buy at the scroll price. |
-| town.tpTomeMinGold | 450 | 0..5000 | gold | 5000 | 2 | Buy a Tome of Town Portal when gold is at least this. |
+| town.tpTomeMinGold | 450 | 0..5000 | gold | 5000 | 4 | Buy a Tome of Town Portal when gold is at least this. |
 | town.idScrollTarget | 2 | 0..20 | count | 0 | 4 | Scrolls to hold when no tome is owned. |
-| town.identifyTome | 0 | 0..1 | bool | 0 | 5 | 1 lets the town chore buy a Tome of Identify and fill it to 20 (before identify and sell, only from gold above the repair, kit and merc reserves; a logged reason when short). 0 (default) = the bot never buys it by itself; the watch UI Buy scrolls errand always works and ignores this knob. |
+| town.identifyTome | 0 | 0..1 | bool | 0 | 8 | 1 lets the town chore buy a Tome of Identify and fill it to 20 (before identify and sell, only from gold above the repair, kit and merc reserves; a logged reason when short). 0 (default) = the bot never buys it by itself; the watch UI Buy scrolls errand always works and ignores this knob. |
 | town.identifyTopUpBelow | 10 | 1..20 | count | 1 | 1 | With identifyTome on, refill the Tome of Identify to full when it holds fewer scrolls than this. |
 | town.minGoldReserve | 100 | 0..1e+04 | gold | 1e+04 | 5 | Optional purchases never spend below this. |
 | town.keyTarget | 0 | 0..12 | count | 0 | 6 | Keys to hold; 0 never buys keys. |
@@ -207,7 +207,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | loot.gapMs | 150 | 0..1000 | ms | 1000 | 1 | Pause between two pickups. |
 | loot.goldMinStack | 10 | 0..2000 | gold | 2000 | 4 | Ignore gold piles smaller than this (a ceiling: see goldPileShare). |
 | loot.goldPileShare | 50 | 0..100 | percent | 100 | 2 | The min-pile bar never skips more than this share of the area's piles: pile size is ilvl to 6 ilvl - 1 coins (treasure-trace section 4), so Blood Moor piles (1..5) would all fall under 10. 0 keeps the flat bar. |
-| loot.freeCellsKeep | 2 | 0..12 | cells | 0 | 1 | Inventory cells that must stay free after a pickup. |
+| loot.freeCellsKeep | 2 | 0..12 | cells | 0 | 2 | Inventory cells that must stay free after a pickup. |
 | loot.potionBuffer | 4 | 0..10 | count | 0 | 1 | Extra healing potions carried in the pack beyond the belt (SME EXP, docs/levelplan.md: 4). |
 | loot.potionBufferMana | 2 | 0..10 | count | 0 | 1 | Extra mana potions carried in the pack beyond the belt. |
 | loot.rejuvSpare | 3 | 0..6 | count | 0 | 5 | Rejuvenation potions carried in total (belt plus pack); more are left on the ground or sold, Full Rejuvenation preferred over regular. Pack ones are moved to a free belt slot in town so the belt hotkey can drink them. |
@@ -246,13 +246,13 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.tickMs | 100 | 100..1000 | ms | 1000 | 4 | How often the bot re-plans between actions. Slower means more idle gaps. |
 | bot.watchMs | 50 | 50..300 | ms | 300 | 5 | How often events, hazards and death are checked while an action runs. Above 300 the bot dies on Hell packs. |
 | bot.reactionMs | 0 | 0..300 | ms | 300 | 1 | Extra delay before reacting to low life or a chicken condition. |
-| bot.resupplyPotions | 2 | 2..4 | potions | 4 | 2 | Healing potions left in the belt that trigger a town trip. Higher means more trips. |
+| bot.resupplyPotions | 2 | 2..4 | potions | 4 | 3 | Healing potions left in the belt that trigger a town trip. Higher means more trips. |
 | bot.invFullPct | 85 | 40..85 | % | 40 | 2 | Share of occupied inventory cells that triggers a town trip. Lower means more trips. |
 | bot.levelMargin | 0 | 0..8 | levels | 8 | 11 | Levels above a step's enter level the planner requires. Higher is safer but slower. |
 | bot.leaveSlack | 0 | 0..6 | levels | 6 | 9 | Levels past a step's leave level before moving to the next area. Higher wastes time in easy areas. |
 | bot.corpseRetries | 1 | 0..1 | count | 0 | 1 | Max attempts to recover the corpse after a softcore death. 0 abandons the gear. |
 | bot.portalSettleMs | 600 | 600..4500 | ms | 4500 | 1 | Pause in town after chores before going back out. |
-| bot.clearRadius | 30 | 12..45 | subtiles | 12 | 28 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
+| bot.clearRadius | 30 | 12..45 | subtiles | 12 | 29 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
 | bot.exploredPct | 100 | 30..100 | % | 100 | 2 | Share of a zone's roam coverage points the hero must have visited before a clear run calls the zone explored and moves on (the planner then takes the next area or a fresh game). 100 visits every point (the old behaviour). Quest and boss runs always explore everything. Needs a roaming (fully known map) backend; others ignore it. docs/exploredpct.md. |
 | bot.farmReset | 0 | 0..1 | bool | 0 | 3 | 1: in a leveling zone, once its coverage reaches bot.farmResetPct and a fresh game pays (the zone's current XP per minute is below what a reset yields after the 15 s restart and the walk back, measured in this run), the hero goes home, takes a fresh game (monsters respawn) and returns to the same zone. Never during a fight, a quest step, a boss run, a named run, a recovery or within 180 s of one. docs/farmloop.md. |
 | bot.farmResetPct | 85 | 50..100 | % | 85 | 2 | Share of a zone's roam coverage points that must be visited before the farm loop may reset it (bot.farmReset). Keep it at or above bot.exploredPct, which would end the clear first. A zone below this share is never reset. |
@@ -428,7 +428,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | resource.mercDeadPack | 2 | 1..6 | count | 6 | 1 | Hostiles at which a fight is left once the merc is dead. |
 | resource.fleeLifePct | 50 | 30..80 | % | 30 | 1 | Life percent below which a character with no healing potion and no portal breaks away from hostiles instead of trading blows. |
 | resource.kitTPGold | 100 | 50..200 | gold | 50 | 11 | Price of one town portal scroll, for the minimal-kit cost. |
-| resource.kitPotionGold | 30 | 20..100 | gold | 20 | 14 | Price of the cheapest healing potion, for the minimal-kit cost. |
+| resource.kitPotionGold | 30 | 20..100 | gold | 20 | 15 | Price of the cheapest healing potion, for the minimal-kit cost. |
 | resource.povertyMargin | 60 | 0..300 | gold | 0 | 1 | Gold above the minimal kit cost at which poverty mode ends. |
 | resource.retreatBelt | 0 | 0..3 | count | 0 | 2 | In a fight with life under the drink line and at most this many healing potions left, leave (portal, or walk home near town) instead of drinking. 0 = off. |
 | resource.retreatCountPack | 1 | 0..1 | 0/1 | 0 | 1 | 1 = spare healing/rejuvenation potions in the backpack (up to the free belt slots) count towards retreatBelt, so a full pack does not trigger a retreat; 0 = belt only. |
@@ -439,6 +439,9 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | resource.gearRiskHigh | 6 | 2..20 | points | 20 | 0 | Risk points at which gear risk is high and only the first field is open. |
 | resource.gearDeathsHigh | 4 | 2..10 | deaths | 2 | 0 | Deaths in the hour or in one area from which deaths add gear risk. Dying is normal: a few change nothing. |
 | resource.gearDecisions | 0 | 0..1 | 0/1 | 1 | 0 | 0 = the player: the bot never equips, swaps or buys equipment and never fills an empty slot (it only advises); 1 = the bot (legacy: drills, soaks, measured runs set it through D2BOT_RUN, and the Gear Sets unlock). Potions, scrolls, keys, ammo, repair, selling and pickup are not equipment and do not change. docs/gear-policy.md. |
+| resource.pointsApi | 1 | 0..1 | 0/1 | 0 | 0 | 1 = serve the read-only stat and skill points sheet (GET /api/hero/points) and show the Points tile; spending is always an explicit player action, never automatic. docs/points.md. |
+| resource.pointsDecisions | 0 | 0..1 | 0/1 | 1 | 0 | 0 = the player: stat and skill points are banked and the hero asks (Needs you, return screen); 1 = the bot from its plan table (legacy: drills, soaks and measured runs set it through D2BOT_RUN; a hero's autopilot switch does the same for that hero). docs/points.md. |
+| resource.skillCapPerLevel | 0 | 0..1 | 0/1 | 1 | 0 | 1 = a skill takes no more hard points than character level minus its required level plus one (the kolbot rule). d2d's can_learn and game.exe's icon check do not enforce it, so it is off; the table checker reports rows that would break it. docs/points.md. |
 | resource.earlyGearMax | 15 | 0..40 | level | 0 | 3 | Below this level armor is ignored (worn only if it drops and is better, never bought, never a trip or gate reason) and a weapon matters only for Amazon, Paladin, Barbarian, Assassin. 0 = off (old rebuy and gate). docs/sme/early-gear-policy.md. |
 | resource.tripBudget | 3 | 0..10 | trips | 0 | 3 | Finished town trips allowed per window before a thin belt no longer sends the bot home (it drinks and fights on). 0 = no budget. |
 | resource.tripWindowMin | 10 | 1..60 | min | 1 | 3 | Minutes the trip budget looks back. |
@@ -523,6 +526,12 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | identify.chunk | 10 | 1..40 | count | 10 | 0 | Items taken out of the stash per batch before Cain; each batch is verified before the next. |
 | identify.autoSellRest | 0 | 0..1 | bool | 0 | 0 | 1: the sell chore may sell identified items the loot rules rate sell. 0 (default): identified items are kept for the player to see first. |
 | identify.etherPerReveal | 1 | 0..1e+05 | ether | 1 | 1 | Ether one vault reveal costs when the player picks Ether instead of a scroll; 0 = Ether is not used for reveals. Default 1: a deliberate small spend (a quest hand-in pays 2 to 5 Ether, the first vault tier costs 20). Replaces the scroll: no scroll or tome charge is used; free after Cain is rescued and here. |
+
+### input.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| input.planner | 0 | 0..1 | bool | 0 | 0 | 1: skill selection (right hand and aura, left hand) runs through the input planner: the fork's select verb when the connected d2d advertises input.select in caps, else the bound key, else the popup click, and every path is verified by reading the hand back; the path used is counted in the minute line as input=verb/key/click. 0 (default): the legacy popup path, unchanged. Off until the Proving Ground scenario and a live check pass on the devp14 image (docs/process/sandbox-devp14.md; question Q13 of the Fable review is open). |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)

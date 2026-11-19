@@ -1,0 +1,83 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "points.bank-by-default",
+   "title": "Level 6 hero with 25 stat and 5 skill points banked: the bot spends none of them",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": ["points.bank", "hook.points"],
+   "touches": ["internal/bot/pointsgate.go", "internal/bot/leveling.go", "internal/points/", "cmd/d2bot/pointswire.go"],
+   "pre": {"level": 6},
+   "trigger": {"goals": "campaign", "knobs": {"resource.pointsDecisions": 0}},
+   "budget": {"virtual_min": 10},
+   "matrix": {"classes": ["Paladin", "Sorceress"], "seeds": [11, 3]},
+   "provenance": "SETUP: level 6 with the points a played level gives (debug stat 12, statpts, skillpts). Reachable by play.",
+   "notes": "The default of the product: the player decides every point (ADR 0020). The knob is set to its default explicitly so a measured-run environment (D2BOT_RUN) cannot flip it.",
+   "assert": [
+    {"kind": "stat_between", "code": "statpts", "min": 25, "max": 25, "why": "no stat point was spent behind the player's back"},
+    {"kind": "stat_between", "code": "skillpts", "min": 5, "max": 5, "why": "no skill point was spent behind the player's back"},
+    {"kind": "no_writes"}
+   ]
+  },
+  {
+   "id": "points.autopilot-spends-by-verb",
+   "title": "Autopilot on: every banked stat and skill point is spent through the d2d verbs",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": ["points.verb", "hook.points"],
+   "touches": ["internal/leveler/", "internal/points/", "internal/d2dctl/points_verbs.go", "cmd/d2bot/pointswire.go"],
+   "pre": {"level": 6},
+   "trigger": {"goals": "campaign", "knobs": {"resource.pointsDecisions": 1}},
+   "budget": {"virtual_min": 10},
+   "matrix": {"classes": ["Paladin", "Sorceress"], "seeds": [11, 3]},
+   "provenance": "SETUP: level 6 with the points a played level gives. Reachable by play.",
+   "notes": "pointsDecisions 1 is the same switch as a hero's autopilot, so the leveler plans from its table and spends by `cmd stat` and `cmd skillpt` (read back by the leveler; a failed verb falls back to clicks, which a headless d2d cannot do, so a stuck run shows as unspent points). The skill rows of the shipped tables at clvl 6 are legal under d2d's can_learn.",
+   "assert": [
+    {"kind": "stat_between", "code": "statpts", "min": 0, "max": 0, "why": "the stat points were taken"},
+    {"kind": "stat_between", "code": "skillpts", "min": 0, "max": 0, "why": "the skill points were taken"},
+    {"kind": "stat_between", "code": "skillsspent", "min": 1, "why": "the dump shows skill points in the tree"},
+    {"kind": "no_writes"}
+   ]
+  },
+  {
+   "id": "points.api-skill-legal-and-illegal",
+   "title": "POST a legal skill point (taken, read back) and an illegal one (refused with a reason)",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "needs a scenario trigger that POSTs to the bot's answer listener during the run (trigger.api); the format has none yet. Offline coverage: internal/points TestSpendSkillLegalAndIllegal and internal/watch TestPointsAPITwoClasses.",
+   "covers": ["points.api", "points.verb"],
+   "touches": ["internal/watch/pointsapi.go", "internal/points/"],
+   "pre": {"level": 6},
+   "trigger": {"goals": "campaign"},
+   "budget": {"virtual_min": 5},
+   "matrix": {"classes": ["Paladin", "Sorceress"], "seeds": [11]},
+   "provenance": "SETUP: level 6 with the points a played level gives.",
+   "notes": "Steps once the trigger exists: (1) POST /api/hero/points/skill with the class's level-1 starter skill, expect 200 and skillsspent 1; (2) POST a skill whose required level is above 6, expect 409 code rule and skillsspent still 1.",
+   "assert": [
+    {"kind": "stat_between", "code": "skillsspent", "min": 1, "max": 1, "why": "only the legal point was taken"},
+    {"kind": "no_writes"}
+   ]
+  },
+  {
+   "id": "points.sheet-matches-dump",
+   "title": "The points sheet equals the dump: base attributes, unspent points and the class base",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "needs the same API trigger as points.api-skill-legal-and-illegal (GET /api/hero/points compared with dump stats). Offline coverage: internal/points TestSheetMatchesDumpFixture reads the recorded dump through the real d2dsrc parser.",
+   "covers": ["points.api"],
+   "touches": ["internal/points/", "internal/watch/pointsapi.go"],
+   "pre": {"level": 6},
+   "trigger": {"goals": "campaign"},
+   "budget": {"virtual_min": 2},
+   "matrix": {"classes": ["Paladin", "Sorceress"], "seeds": [11]},
+   "provenance": "SETUP: level 6 with the points a played level gives.",
+   "assert": [
+    {"kind": "stat_between", "code": "statpts", "min": 25, "max": 25},
+    {"kind": "no_writes"}
+   ]
+  }
+ ]
+}

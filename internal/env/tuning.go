@@ -24,6 +24,7 @@ type Tuning struct {
 	Watch    WatchTuning
 	Quests   QuestsTuning
 	Identify IdentifyTuning
+	Input    InputTuning
 }
 
 // DefaultTuning returns the optimal profile.
@@ -45,6 +46,7 @@ func DefaultTuning() Tuning {
 		Watch:    DefaultWatchTuning(),
 		Quests:   DefaultQuestsTuning(),
 		Identify: DefaultIdentifyTuning(),
+		Input:    DefaultInputTuning(),
 	}
 }
 
@@ -83,5 +85,6 @@ func Knobs() []Knob {
 	k = append(k, watchKnobs()...)
 	k = append(k, questsKnobs()...)
 	k = append(k, identifyKnobs()...)
+	k = append(k, inputKnobs()...)
 	return k
 }

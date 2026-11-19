@@ -2,6 +2,7 @@ package combat
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sort"
 	"time"
@@ -128,6 +129,21 @@ func (f *Fighter) SetLeft(ctx context.Context, id int) error {
 	if p.LeftSkill == id {
 		return nil
 	}
+	if f.e.Planner.On() {
+		return f.setPlanned(ctx, "select-left", id, true, func() error {
+			if len(f.listRows) == 0 {
+				return fmt.Errorf("%w: popup rows not loaded (SetListRows)", ErrBindFailed)
+			}
+			cells := f.leftCells(p, id)
+			if c, ok := f.leftCell[id]; ok {
+				cells = append([]input.Screen{c}, cells...)
+			}
+			if len(cells) == 0 {
+				return fmt.Errorf("%w: skill %d has no left popup cell", ErrBindFailed, id)
+			}
+			return f.leftPopupPick(ctx, id, cells)
+		}, nil)
+	}
 	if len(f.listRows) == 0 {
 		return fmt.Errorf("%w: popup rows not loaded (SetListRows)", ErrBindFailed)
 	}
@@ -138,6 +154,11 @@ func (f *Fighter) SetLeft(ctx context.Context, id int) error {
 	if len(cells) == 0 {
 		return fmt.Errorf("%w: skill %d has no left popup cell", ErrBindFailed, id)
 	}
+	return f.leftPopupPick(ctx, id, cells)
+}
+
+// leftPopupPick opens the left popup and clicks each candidate cell until the hand reads back as id.
+func (f *Fighter) leftPopupPick(ctx context.Context, id int, cells []input.Screen) error {
 	tried := map[input.Screen]bool{}
 	for _, c := range cells {
 		if tried[c] {
@@ -174,6 +195,13 @@ func (f *Fighter) SetRight(ctx context.Context, id int) error {
 	if p.RightSkill == id {
 		return nil
 	}
+	if f.e.Planner.On() {
+		var key func() error
+		if k := f.keys[id]; k != "" && !f.D2D {
+			key = func() error { return f.e.In.Key(k) }
+		}
+		return f.setPlanned(ctx, "select-right", id, false, func() error { return f.rightPopupPick(ctx, p, id) }, key)
+	}
 	if key := f.keys[id]; key != "" && !f.D2D { // d2d has pseudo keys only: the popup is the way
 		if err := f.e.In.Key(key); err != nil {
 			return err
@@ -182,6 +210,11 @@ func (f *Fighter) SetRight(ctx context.Context, id int) error {
 			return err
 		}
 	}
+	return f.rightPopupPick(ctx, p, id)
+}
+
+// rightPopupPick clicks the candidate cells of the right popup until the hand reads back as id.
+func (f *Fighter) rightPopupPick(ctx context.Context, p *d2.Player, id int) error {
 	for _, c := range f.popupCells(p, id) {
 		if err := f.openPopup(ctx); err != nil {
 			return err
@@ -194,4 +227,29 @@ func (f *Fighter) SetRight(ctx context.Context, id int) error {
 		}
 	}
 	return fmt.Errorf("%w: right skill %d", ErrBindFailed, id)
+}
+
+// setPlanned selects skill id on a hand through the input planner: the select verb when the backend advertises it,
+// else key (nil: none), else click, each verified by reading the hand back (07-input-layer.md 4.2).
+func (f *Fighter) setPlanned(ctx context.Context, name string, id int, left bool, click, key func() error) error {
+	a := input.Action{Name: name, Cap: input.CapSelect, Key: key, Click: click,
+		Verify: func() (bool, error) {
+			l, r, err := f.readHands(ctx)
+			if left {
+				return l == id, err
+			}
+			return r == id, err
+		}}
+	if sel, ok := f.e.In.(input.SkillSelector); ok {
+		a.Verb = func() error { return sel.SelectSkillID(id, left) }
+	}
+	path, err := f.e.Planner.Run(a)
+	if err != nil {
+		if errors.Is(err, input.ErrNoPath) && !errors.Is(err, ErrBindFailed) {
+			return fmt.Errorf("%w: %s %d: %v", ErrBindFailed, name, id, err)
+		}
+		return err
+	}
+	f.info("skill selected", "hand", name, "skill", id, "path", string(path))
+	return nil
 }
