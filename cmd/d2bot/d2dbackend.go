@@ -199,6 +199,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	if err != nil {
 		return err
 	}
+	o.ladder.currencyDir = currencyDirFor(ip.State()) // early: the vault keeper wires its Ether payer from it
 	if cfg.DeathLogPath == "" {
 		cfg.DeathLogPath = ip.Deaths()
 	}

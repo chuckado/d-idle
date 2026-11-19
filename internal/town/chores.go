@@ -421,6 +421,8 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		// optional (town.identifyTome, off by default): a Tome of Identify bought and filled before identify and sell
 		{"idtome", plan.Scrolls && t.tune().IdentifyTome != 0, t.needIDTome, func() error { return t.buyIDTome(ctx, &rep) }},
 		{"identify", plan.Identify, t.identifyNeeded, func() error { return t.identify(ctx, a, &rep) }},
+		// after identify: Cain-free bulk identify of what the scroll chore leaves (docs/design/bulk-identify-2026-11-18.md)
+		{"bulkid", plan.Identify && t.bulk != nil, t.needBulk, func() error { return t.bulkTrip(ctx, a, &rep) }},
 		// before sell: a naked character wears what it found instead of selling it (G1 attempt 6)
 		{"equip", true, t.needEquipFound, func() error { _, err := t.EquipFound(ctx); return err }},
 		// the player's sell marks always run, whatever the trip was for (live 2026-11-11: potion and kit trips skipped it)

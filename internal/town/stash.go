@@ -257,6 +257,7 @@ func (t *Town) DepositForTest(ctx context.Context, amount int) error {
 
 // doStash runs the whole stash visit.
 func (t *Town) doStash(ctx context.Context, a *Act, plan ChorePlan, rep *ChoreReport) error {
+	t.bulkIdle = -1 // the stash is about to change: a trip that found nothing may find something now
 	if err := t.openStash(ctx, a); err != nil {
 		return err
 	}
