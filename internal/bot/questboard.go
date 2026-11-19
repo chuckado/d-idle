@@ -52,6 +52,7 @@ type boardRT struct {
 	assessOn string                          // the inputs it was computed for (level, difficulty)
 	th       *questboard.Thresholds
 	handed   map[string]bool      // hand-in dialogue ran this process (T3 proxy until the save or memory agrees)
+	reached  map[string]bool      // an auto or item chunk read done once this process (its evidence can vanish: key used, Tristram left)
 	near     map[string]bool      // walked to the giver once this process
 	lastFail map[string]time.Time // chunk key: last failure that was counted
 	noted    map[string]string    // visible-reason log lines already written
@@ -68,7 +69,7 @@ func (r *Runner) NewQuestBoard(b *questboard.Board, st *questboard.Store) *quest
 }
 
 func (r *Runner) newQuestBoard(b *questboard.Board, st *questboard.Store, hero string) *questboard.Exec {
-	rt := &boardRT{r: r, board: b, st: st, hero: hero, reqs: make(chan boardHandInReq, 1), handed: map[string]bool{}, near: map[string]bool{},
+	rt := &boardRT{r: r, board: b, st: st, hero: hero, reqs: make(chan boardHandInReq, 1), handed: map[string]bool{}, reached: map[string]bool{}, near: map[string]bool{},
 		lastFail: map[string]time.Time{}, noted: map[string]string{}}
 	rt.exec = questboard.NewExec(b, st, boardEnv{rt}, boardActions{rt}, questboard.Options{
 		Enabled: r.questBoardOn(),
@@ -448,11 +449,19 @@ func nodesDone(q questboard.Quest, c questboard.Chunk, w task.World, depth int) 
 
 func (e boardEnv) Chunk(q questboard.Quest, c questboard.Chunk) questboard.ChunkFact {
 	rt := e.rt
+	if _, ok := handlerNodes(q, c); !ok {
+		return questboard.ChunkFact{}
+	}
+	w, _, _ := rt.world()
+	return rt.chunkFact(q, c, w)
+}
+
+// chunkFact is Chunk over a given world (the evidence of one derive).
+func (rt *boardRT) chunkFact(q questboard.Quest, c questboard.Chunk, w task.World) questboard.ChunkFact {
 	nodes, ok := handlerNodes(q, c)
 	if !ok {
 		return questboard.ChunkFact{}
 	}
-	w, _, _ := rt.world()
 	if w.Quests == nil && w.Level == 0 {
 		return questboard.ChunkFact{} // no snapshot yet
 	}
@@ -483,7 +492,9 @@ func (e boardEnv) Chunk(q questboard.Quest, c questboard.Chunk) questboard.Chunk
 		}
 	}
 	rt.mu.Lock()
-	handed := rt.handed[questboard.ChunkKey(q.ID, c.ID)]
+	key := questboard.ChunkKey(q.ID, c.ID)
+	handed := rt.handed[key]
+	reached := rt.reached[key+"/"+w.Difficulty]
 	rt.mu.Unlock()
 	if legacyChunk(q, c) {
 		st := w.Quest(taskID(q))
@@ -497,7 +508,16 @@ func (e boardEnv) Chunk(q questboard.Quest, c questboard.Chunk) questboard.Chunk
 		return cf
 	}
 	// A part: the steps are the evidence. The group's own word (T1/T2) raises the tier when it says done.
-	if nodesDone(q, c, w, 0) || handed {
+	if nodesDone(q, c, w, 0) || handed || reached {
+		if c.Ends != "handin" && !reached {
+			// V lab drill CAIN-L3 (2026-11-19): the stones chunk reads done only while the hero stands in Tristram
+			// (or holds a portal) and the scroll chunk only while the key is in the pack. After the first town trip
+			// from Tristram both read open again and the board walked back to the Dark Wood for a second scroll.
+			// Once seen done, an item or auto chunk stays done for this hero and difficulty until the process ends.
+			rt.mu.Lock()
+			rt.reached[key+"/"+w.Difficulty] = true
+			rt.mu.Unlock()
+		}
 		cf.Done, cf.Tier = true, questboard.TierProxy
 		// The quest word of the handler group, or of the quest itself when the group is the board's own (S7b).
 		for _, id := range []string{q.HandlerOf(c).Group, taskID(q)} {

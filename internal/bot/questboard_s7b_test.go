@@ -152,3 +152,39 @@ func TestBoardGroupTierFollowsTheQuestWord(t *testing.T) {
 		t.Fatalf("group %q task %q", q.HandlerOf(bird).Group, taskID(q))
 	}
 }
+
+// V lab drill CAIN-L3 (2026-11-19, sandbox-like run on a d2d lab slot): the scroll chunk reads done only while the
+// Key to the Cairn Stones is in the pack, the stones chunk only while the hero stands in Tristram or holds a portal.
+// The first town trip from Tristram (the potion trip comes at once) made both read open again: the board offered
+// the Scroll of Inifuss again and the hero walked back to the Dark Wood. A chunk seen done stays done for the process.
+func TestCainAutoChunksStayDoneAfterTheEvidenceVanishes(t *testing.T) {
+	b, err := questboard.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	{ // class-free rule: no class, skill or build data is read, so one run covers every build
+		rt := &boardRT{handed: map[string]bool{}, reached: map[string]bool{}}
+		q, err := b.Quest("search_for_cain")
+		if err != nil {
+			t.Fatal(err)
+		}
+		tristram := s7bWorld(map[string]int{task.ItemCainSc: 1, task.ItemPortal: 1}, map[string]task.QuestState{task.QCain: {Stage: task.StageStarted, Ev: task.EvMemory}})
+		tristram.Area, tristram.InTown = task.Tristram, false
+		town := s7bWorld(map[string]int{}, map[string]task.QuestState{task.QCain: {Stage: task.StageStarted, Ev: task.EvMemory}})
+		for _, id := range []string{"scroll", "stones"} {
+			c, err := b.Chunk("search_for_cain", id)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if rt.chunkFact(q, c, town).Done {
+				t.Fatalf("%s: done on a hero that never did it", id)
+			}
+			if !rt.chunkFact(q, c, tristram).Done {
+				t.Fatalf("%s: not done in Tristram", id)
+			}
+			if !rt.chunkFact(q, c, town).Done {
+				t.Fatalf("%s: read open again in town after it was done", id)
+			}
+		}
+	}
+}
