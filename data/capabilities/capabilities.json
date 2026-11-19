@@ -29,6 +29,51 @@
   "priorMargin": 2.0,
   "note": "U: the estimate must beat the combat profile's pick by this factor (design review 04 section 3.2: the band order is a prior and a tie-break). Not calibrated."
  },
+ "classStart": {
+  "amazon": [
+   20,
+   25,
+   20,
+   15
+  ],
+  "sorceress": [
+   10,
+   25,
+   10,
+   35
+  ],
+  "necromancer": [
+   15,
+   25,
+   15,
+   25
+  ],
+  "paladin": [
+   25,
+   20,
+   25,
+   15
+  ],
+  "barbarian": [
+   30,
+   20,
+   25,
+   10
+  ],
+  "druid": [
+   15,
+   20,
+   25,
+   20
+  ],
+  "assassin": [
+   20,
+   20,
+   20,
+   25
+  ]
+ },
+ "classStartTag": "strength, dexterity, vitality, energy at clvl 1 (charstats.txt). V for the four classes of the repo's plan fixtures (internal/buildfile tests, the tables' first rows); S for the rest.",
  "skills": {
   "Fire Bolt": {
    "class": "sorceress",

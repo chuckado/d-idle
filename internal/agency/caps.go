@@ -79,6 +79,8 @@ type Caps struct {
 	Mana   ManaCfg        `json:"mana"`
 	// Planner holds the planner's own constants (all U until calibrated on tracks known to be good).
 	Planner PlannerCfg `json:"planner"`
+	// ClassStart is strength, dexterity, vitality and energy of a level 1 character by class name.
+	ClassStart map[string][4]int `json:"classStart"`
 }
 
 // PlannerCfg are the planner's constants.

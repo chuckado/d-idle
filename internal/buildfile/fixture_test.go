@@ -51,7 +51,7 @@ func init() {
 // start stats U (charstats.txt values from memory; not read here).
 var fixtureStart = map[string][4]int{
 	"sorceress": {10, 25, 10, 35}, "paladin": {25, 20, 25, 15},
-	"necromancer": {15, 25, 15, 25}, "barbarian": {30, 20, 25, 10},
+	"necromancer": {15, 25, 15, 25}, "barbarian": {30, 20, 25, 10}, "amazon": {20, 25, 20, 15}, "druid": {15, 20, 25, 20}, "assassin": {20, 20, 20, 25},
 }
 
 func (fixtureRules) Skill(name string) (SkillInfo, bool) {
