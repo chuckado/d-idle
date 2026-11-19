@@ -493,8 +493,18 @@
     "belt": [
      "hp1",
      "hp1",
-     "mp1",
-     "mp1"
+     "hp1",
+     "hp1"
+    ],
+    "items": [
+     {
+      "code": "mp1",
+      "count": 6
+     },
+     {
+      "code": "hp1",
+      "count": 6
+     }
     ],
     "start": "field",
     "area": 38,
@@ -518,7 +528,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: warped into Tristram (debug goto 38), quest record 4 set to 0x0018 (bark taken, Tristram entered; what a played hero shows on arrival, V L3), level 24, 5000 gold and a full belt (no town trip: a warped hero has no portal pair back to Tristram) by stat verbs. The crowd-abandon default is NOT turned off (cainfix3: the started-quest override applies). Mechanics only.",
+   "provenance": "CHEATED: warped into Tristram (debug goto 38), quest record 4 set to 0x0018 (bark taken, Tristram entered; what a played hero shows on arrival, V L3), level 24, 5000 gold, four healing potions in the belt and mana and healing potions in the pack (no town trip: a warped hero has no portal pair back to Tristram) by stat verbs. The crowd-abandon default is NOT turned off (cainfix3: the started-quest override applies). Mechanics only.",
    "touches": [
     "cmd/d2bot/cain.go",
     "internal/task/",
