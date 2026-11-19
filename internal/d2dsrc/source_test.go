@@ -738,6 +738,27 @@ func TestFieldObjectsAppearWhileStandingStill(t *testing.T) {
 	}
 }
 
+// A hidden row of a quest object class (the Tree of Inifuss) is still an object the bot can click.
+func TestHiddenTreeRowIsListed(t *testing.T) {
+	r := lateReplies(t)
+	r["debug presets"] = "8\t30\t34.0\t12.0\t1\tTree of Inifuss\n9\t17\t35.0\t12.0\t1\tHidden Chest\nok\n"
+	_, c := startScript(t, r)
+	res, err := New(c, Options{Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := map[uint32]int{}
+	for _, u := range res.Snap.Objects {
+		got[u.ID] = u.Class
+	}
+	if got[NPCIDBase+8] != 30 {
+		t.Fatalf("hidden tree row not listed: %+v", res.Snap.Objects)
+	}
+	if _, ok := got[NPCIDBase+9]; ok {
+		t.Error("hidden chest listed")
+	}
+}
+
 // V 2026-11-19 (lab drill CAIN-L3): "npcs" also lists the Tree of Inifuss (a named, class-less row), and fieldObjects
 // skipped every index "npcs" lists, so the tree stayed class -1 and the bot's search for class 30 never matched it.
 // The row must come out with the preset's class, once, under the same unit id; other class -1 rows stay as they are.
@@ -748,12 +769,6 @@ func TestNpcsListedObjectGetsItsPresetClass(t *testing.T) {
 		"9\t580\t60.0\t12.0\t0\tOther Place\nok\n" // same index as an npcs row, other spot: not the same object
 	_, c := startScript(t, r)
 	res, err := New(c, Options{Tables: fakeTables{}, Logf: quiet}).Read(context.Background())
-// A hidden row of a quest object class (the Tree of Inifuss) is still an object the bot can click.
-func TestHiddenTreeRowIsListed(t *testing.T) {
-	r := lateReplies(t)
-	r["debug presets"] = "8\t30\t34.0\t12.0\t1\tTree of Inifuss\n9\t17\t35.0\t12.0\t1\tHidden Chest\nok\n"
-	_, c := startScript(t, r)
-	res, err := New(c, Options{Logf: quiet}).Read(context.Background())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -770,13 +785,5 @@ func TestHiddenTreeRowIsListed(t *testing.T) {
 	}
 	if got[NPCIDBase+9] != -1 {
 		t.Errorf("a row at another spot took the preset class: %d", got[NPCIDBase+9])
-	for _, u := range res.Snap.Objects {
-		got[u.ID] = u.Class
-	}
-	if got[NPCIDBase+8] != 30 {
-		t.Fatalf("hidden tree row not listed: %+v", res.Snap.Objects)
-	}
-	if _, ok := got[NPCIDBase+9]; ok {
-		t.Error("hidden chest listed")
 	}
 }
