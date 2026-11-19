@@ -103,7 +103,8 @@ export function mountVault(d) {
   const keepB = btn(T.keep, { key: 'keep' });
   const revealB = btn(T.reveal, { key: 'reveal' }), sellB = btn(T.sell, { key: 'sell' });
   const massB = btn(T.revealFiltered, { key: 'reveal-filtered', variant: 'ghost' }); massB.hidden = true;
-  const acts = el('div', 'vt-acts'); acts.append(keepB, revealB, massB, sellB, pinB, unpinB, discB);
+  const etherB = btn(T.revealEther, { key: 'reveal-ether' }), massEtherB = btn(T.revealFilteredEther, { key: 'reveal-filtered-ether', variant: 'ghost' }); etherB.hidden = massEtherB.hidden = true;
+  const acts = el('div', 'vt-acts'); acts.append(keepB, revealB, etherB, massB, massEtherB, sellB, pinB, unpinB, discB);
   bar.append(selBtn, selText, selAll, acts);
   const keepRow = el('div', 'vt-keeprow'); keepRow.hidden = true;
   const keepLine = el('span', 'vt-keepline'); keepLine.setAttribute('role', 'status');
@@ -318,6 +319,16 @@ export function mountVault(d) {
     if (a && n && rp.n) {
       cost = (rp.n === 1 ? T.revealCostOne : fmt(T.revealCost, { n: rp.n, c: rp.charges })) + (rp.free ? T.revealFree : (rp.have >= 0 ? fmt(T.revealHave, { have: rp.have }) : '')) + (rp.short ? T.revealShort : '');
     }
+    // Ether replaces the scroll: no charge is used. Shown only while Ether is a payer and Cain is not here (Cain is free).
+    const per = a ? a.reveal.etherPer || 0 : 0, bal = a ? a.reveal.balance : -1, eOn = per > 0 && !(a && a.reveal.free);
+    etherB.hidden = !eOn;
+    if (eOn) {
+      const need = rp.n * per;
+      etherB.textContent = fmt(T.revealEtherSel, { n: rp.n || n });
+      etherB.disabled = ro || !rp.n || bal < need;
+      etherB.title = !rp.n ? T.revealNone : (bal < need ? fmt(T.etherShort, { need, have: bal }) : '');
+      if (cost) cost += fmt(T.revealEtherOr, { cost: need, have: bal });
+    }
     costLine.textContent = cost; costLine.hidden = !cost;
     buyB.hidden = !(cost && rp.short); buyB.disabled = ro;
     // Mass reveal (docs/design/bulk-identify-2026-11-18.md section 5): the server names the filtered ids and the cost sentence.
@@ -325,7 +336,11 @@ export function mountVault(d) {
     massB.hidden = !(m && m.count > 0);
     if (m) { massB.textContent = fmt(T.revealFiltered, { n: m.count }); massB.title = m.line; }
     massB.disabled = ro || !a || !a.reveal.enabled;
-    const line = a ? [a.reveal.note, m && m.line, a.reveal.line, a.sell.line].filter(Boolean).join(' · ') : '';
+    const me = m && m.ether;
+    massEtherB.hidden = !(eOn && me && me.count > 0);
+    if (me) { massEtherB.textContent = fmt(T.revealFilteredEther, { n: me.count, cost: me.cost }); massEtherB.title = me.line; }
+    massEtherB.disabled = ro;
+    const line = a ? [a.reveal.note, m && m.line, me && me.line, a.reveal.line, a.sell.line].filter(Boolean).join(' · ') : '';
     actLine.textContent = line;
     actRow.hidden = !(cost || line);
     const p = a && a.prompt;
@@ -506,6 +521,8 @@ export function mountVault(d) {
       mk(T.discard, 'discard', act.discard, () => openDiscard([it.id], row.lastChild), 'danger'));
     row.appendChild(mk(T.keep, 'keep', act.keep, () => keepAct([it.id], false)));
     row.appendChild(mk(T.reveal, 'reveal', act.reveal, () => revealAct([it.id], false)));
+    const ra = S.view && S.view.act && S.view.act.reveal;
+    if (ra && ra.etherPer > 0 && !ra.free && !it.identified) row.appendChild(mk(fmt(T.revealEtherOne, { cost: ra.etherPer }), 'reveal-ether', { ok: ra.balance >= ra.etherPer, reason: fmt(T.etherShort, { need: ra.etherPer, have: ra.balance }) }, () => etherAct([it.id])));
     row.appendChild(mk(T.sell, 'sell', act.sell, () => openSell([it.id], row.lastChild)));
     if (it.reveal === 'queued' || it.sell === 'queued' || it.keep === 'queued') row.appendChild(mk(T.cancelQueued, 'cancel', { ok: true }, () => act1('/api/vault/cancel', [it.id]), 'ghost'));
     card.appendChild(row);
@@ -608,6 +625,7 @@ export function mountVault(d) {
       const body = { ids: ids.slice(i, i + CHUNK) };
       if (confirm) body.confirm = true;
       if (opts && opts.now) body.now = true;
+      if (opts && opts.ether) body.ether = true;
       const r = await d.post(route, body);
       if (!r) { j = null; break; }
       j = r;
@@ -620,7 +638,7 @@ export function mountVault(d) {
     const isKeep = REAL.test(route); // the queue routes name the real cause (the server's sentence)
     const now = opts && opts.now;
     const word = route.endsWith('/pin') ? T.okPin : route.endsWith('/unpin') ? T.okUnpin : route.endsWith('/keep') ? (now ? T.okKeepNow : T.okKeep)
-      : route.endsWith('/reveal') ? (now ? T.okRevealNow : T.okReveal) : route.endsWith('/sell') ? (now ? T.okSellNow : T.okSell) : route.endsWith('/cancel') ? T.okCancel : T.okDiscard;
+      : route.endsWith('/reveal') ? (opts && opts.ether ? T.okRevealEther : now ? T.okRevealNow : T.okReveal) : route.endsWith('/sell') ? (now ? T.okSellNow : T.okSell) : route.endsWith('/cancel') ? T.okCancel : T.okDiscard;
     if (!failed.length && j.ok) {
       const al = already.length;
       setMsg('good', al && al === done.length ? fmt(T.okKeepAlready, { n: al }) : fmt(word, { n: done.length - al }) + (al ? ' ' + fmt(T.okKeepAlready, { n: al }) : ''));
@@ -639,6 +657,14 @@ export function mountVault(d) {
   const keepAct = (ids, now) => act('/api/vault/keep', ids, false, { now });
   const revealAct = (ids, now) => act('/api/vault/reveal', ids, false, { now });
   massB.addEventListener('click', () => { const m = S.view && S.view.act && S.view.act.reveal.mass; if (m && m.count && !massB.disabled) revealAct(m.ids, false); });
+  const etherAct = (ids) => act('/api/vault/reveal', ids, false, { ether: true });
+  massEtherB.addEventListener('click', () => { const m = S.view && S.view.act && S.view.act.reveal.mass; if (m && m.ether && m.ether.count && !massEtherB.disabled) etherAct(m.ether.ids); });
+  etherB.addEventListener('click', () => {
+    if (!S.sel.size || etherB.disabled) return;
+    const p = revealPlan(S.items, S.sel.ids(), S.view && S.view.act);
+    if (!p.n) { setMsg('info', T.revealNone); return; }
+    etherAct(p.ids);
+  });
   const sellAct = (ids, now) => act('/api/vault/sell', ids, true, { now });
   pinB.addEventListener('click', () => { if (S.sel.size) act1('/api/vault/pin', S.sel.ids()); });
   unpinB.addEventListener('click', () => { if (S.sel.size) act1('/api/vault/unpin', S.sel.ids()); });

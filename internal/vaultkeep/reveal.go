@@ -40,6 +40,7 @@ const (
 	ReasonRevDiffers = "the game identified a different item"
 	ReasonRevStill   = "the item is still unidentified"
 	ReasonRevDup     = "an identical identified item is already in the vault"
+	ReasonNoSealed   = "the vault holds no affixes for this item; use a scroll or Cain"
 	revPrefix        = "reveal: "
 	revKey           = "vr-"
 )
@@ -74,6 +75,7 @@ type RevealInfo struct {
 	Free     bool `json:"free"`               // Cain is here: no charge is used
 	PerItem  int  `json:"perItem"`            // charges one reveal costs (1)
 	EtherPer int  `json:"etherPer,omitempty"` // Ether one tapped reveal costs; 0: Ether is not a payer
+	Balance  int  `json:"balance"`            // Ether in the wallet, -1 when there is none
 	// Note is the viewer sentence while identify.policy wants Cain and he is not rescued ("" otherwise).
 	Note string `json:"note,omitempty"`
 }
@@ -97,7 +99,7 @@ func (k *Keeper) RevealNote() string {
 
 // RevealPrice reads the current price view.
 func (k *Keeper) RevealPrice(ctx context.Context) RevealInfo {
-	return RevealInfo{Charges: k.charges(ctx), Free: k.free(), PerItem: 1, EtherPer: k.Ether.Quote(1), Note: k.RevealNote()}
+	return RevealInfo{Charges: k.charges(ctx), Free: k.free(), PerItem: 1, EtherPer: k.Ether.Quote(1), Balance: k.Ether.Balance(), Note: k.RevealNote()}
 }
 
 // GateReveal says whether a Reveal press can be queued now (the same refusals as Keep, plus: the bot must be able to
@@ -306,7 +308,6 @@ func (k *Keeper) recordReveal(st *vault.Store, r vault.Rec, back d2dctl.VaultRec
 		}
 		return err.Error()
 	}
-	k.chargeEther(r.ID)
 	return ""
 }
 
@@ -549,45 +550,74 @@ func (k *Keeper) finishReveal(ctx context.Context, st *vault.Store, r vault.Rec,
 	return "reveal: " + r.Name + " revealed (" + where + ")", false
 }
 
-// EnqueueRevealEther is the explicit tap "Reveal with Ether": it refuses (nothing queued, nothing spent) when Ether is
-// off or the wallet is short for the whole press, else it queues like EnqueueReveal and remembers which records were
-// paid for. The Ether is charged only once the reveal is verified (recordReveal), so a failed reveal costs none. No
-// automatic path calls this.
+// EnqueueRevealEther is the explicit tap "Reveal with Ether". The payment order of a reveal (docs/design/bulk-identify-2026-11-18.md
+// section 12): (1) Cain stands here: the normal free reveal, no Ether; (2) Ether, picked by the player: the record is
+// unlocked from the affixes the vault already holds (no scroll, no tome charge, no game step) and the Ether is charged ONCE
+// after the unlock succeeded, ledger key reveal:<id>; a failed unlock or a failed charge leaves the record sealed and the
+// wallet as it was. A short wallet or price 0 refuses the whole press before anything changes. No automatic path calls this.
 func (k *Keeper) EnqueueRevealEther(ctx context.Context, ids []string, wantNow bool) []Result {
-	if err := k.Ether.Check(len(ids)); err != nil {
+	if k.free() {
+		return k.EnqueueReveal(ctx, ids, wantNow)
+	}
+	out := make([]Result, len(ids))
+	st := k.store()
+	eligible := 0
+	for i, id := range ids {
+		out[i] = Result{ID: id}
+		rec, found := vault.Rec{}, false
+		if st != nil {
+			rec, found = st.Get(id)
+		}
+		switch {
+		case st == nil:
+			out[i].Code, out[i].Why = "missing", "there is no vault for this hero yet"
+		case !found:
+			out[i].Code, out[i].Why = "missing", "no such item"
+		case rec.Unlocked: // a repeated tap after a paid reveal: nothing changes, nothing is charged
+			out[i].OK, out[i].Already = true, true
+		case rec.Identified:
+			out[i].Code, out[i].Why = "state", "it is identified already"
+		case rec.State != vault.Recorded && rec.State != vault.KeepQ:
+			out[i].Code, out[i].Why = "state", "only an item in the vault can be revealed (it is "+string(rec.State)+")"
+		case rec.Sealed == "":
+			out[i].Code, out[i].Why = "nosealed", ReasonNoSealed
+		default:
+			eligible++
+		}
+	}
+	if eligible == 0 {
+		return out
+	}
+	if err := k.Ether.Check(eligible); err != nil {
 		code := "ether"
 		if errors.Is(err, bulkid.ErrEtherOff) {
 			code = "etheroff"
 		}
-		out := make([]Result, 0, len(ids))
-		for _, id := range ids {
-			out = append(out, Result{ID: id, Code: code, Why: err.Error()})
+		for i := range out {
+			if out[i].Code == "" && !out[i].OK {
+				out[i].Code, out[i].Why = code, err.Error()
+			}
 		}
 		return out
 	}
-	out := k.EnqueueReveal(ctx, ids, wantNow)
-	k.mu.Lock()
-	defer k.mu.Unlock()
-	if k.etherTap == nil {
-		k.etherTap = map[string]bool{}
-	}
-	for _, r := range out {
-		if r.OK {
-			k.etherTap[r.ID] = true
+	for i := range out {
+		if out[i].Code != "" || out[i].OK {
+			continue
 		}
+		id := out[i].ID
+		if err := st.Unseal(id); err != nil {
+			out[i].Code, out[i].Why = codeOf(err), err.Error()
+			continue
+		}
+		if err := k.Ether.Charge(id); err != nil {
+			_ = st.Reseal(id)
+			out[i].Code, out[i].Why = "ether", err.Error()
+			continue
+		}
+		out[i].OK = true
+		k.mu.Lock()
+		k.info.Revealed++
+		k.mu.Unlock()
 	}
 	return out
-}
-
-func (k *Keeper) chargeEther(id string) {
-	k.mu.Lock()
-	tapped := k.etherTap[id]
-	delete(k.etherTap, id)
-	k.mu.Unlock()
-	if !tapped {
-		return
-	}
-	if err := k.Ether.Charge(id); err != nil {
-		k.note("ether:"+id, "Reveal: the Ether for "+id+" was not charged: "+err.Error())
-	}
 }

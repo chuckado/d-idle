@@ -271,22 +271,32 @@ func (o objectAdapter) find(ctx context.Context, class int) (*d2.Unit, error) {
 	}
 	return exploreForObject(ctx, o.e.Clock, o.explored, exploreKey{area, class},
 		roomWalk(func() (input.Point, bool) { return o.roomTarget(class) }, o.nv.GoTo,
-			func(c context.Context) error { return o.nv.Explore(c, known) }, known),
+			func(c context.Context, hint *input.Point) error {
+				if hint != nil {
+					return o.nv.ExploreToward(c, *hint, known)
+				}
+				return o.nv.Explore(c, known)
+			}, known),
 		func() (*d2.Unit, error) { return o.findNear(ctx, class, nil) })
 }
 
 // roomWalk is the explore step of find: when the level's room rows name the room of the object (target), walk to its
 // centre, stopping early once the object is known (it streams in about 13 to 18 cells away, V lab); a walk that fails
-// without the object showing up, or no room row at all, falls back to the coverage sweep.
+// without the object showing up, or no room row at all, falls back to the coverage sweep. The room is often beyond the
+// known map (d2d builds rooms around the character): GoTo then ends at the nearest known point with ErrNoPath, still
+// outside the 13 to 18 cell listing range (V 2026-11-19 sandbox log: every cycle ended at the same spot with empty
+// plans, 100 s each, for 17 hours), so the sweep then explores toward the room instead of blindly.
 func roomWalk(target func() (input.Point, bool), goTo func(context.Context, input.Point) error,
-	sweep func(context.Context) error, known func() bool) func(context.Context) error {
+	sweep func(context.Context, *input.Point) error, known func() bool) func(context.Context) error {
 	return func(c context.Context) error {
-		if dst, ok := target(); ok {
-			if err := goTo(c, dst); err == nil || known() {
-				return err
-			}
+		dst, ok := target()
+		if !ok {
+			return sweep(c, nil)
 		}
-		return sweep(c)
+		if err := goTo(c, dst); err == nil || known() {
+			return err
+		}
+		return sweep(c, &dst)
 	}
 }
 

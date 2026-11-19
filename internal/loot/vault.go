@@ -336,6 +336,8 @@ func (l *Looter) vaultOne(ctx context.Context, c cand, o PickOpts) (recorded boo
 		Sockets: rec.Sockets, Eth: rec.Ethereal, Found: vault.Found{Time: v.clock().UTC(), Zone: "area " + strconv.Itoa(s.Player.Area)}}
 	if rec.Identified {
 		it.Props = rec.Props
+	} else {
+		it.Sealed = rec.Props // held, never shown until the reveal is paid
 	}
 	it.Pic, it.Tint, it.FileIndex = rec.Pic, rec.Tint, rec.FileIndex()
 	if b := l.base(u.Class); b != nil && l.e.Data != nil {

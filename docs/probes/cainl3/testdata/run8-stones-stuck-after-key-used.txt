@@ -1,0 +1,7 @@
+{"time":"2026-11-19T11:08:31.704245315-05:00","level":"INFO","msg":"state","inst":"cl3","from":"resupplying","to":"clearing","activity":"Quest: fighting (Touch the cairn stones)"}
+{"time":"2026-11-19T11:08:40.125530497-05:00","level":"INFO","msg":"guard: drank healing at life 64% (state=clearing)","inst":"cl3"}
+{"time":"2026-11-19T11:08:42.429297185-05:00","level":"INFO","msg":"memory quest words","inst":"cl3","normalQuestWords":["den_of_evil=0x0004","search_for_cain=0x0018"]}
+{"time":"2026-11-19T11:08:42.429416209-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/stones","outcome":"ran","kind":"none","err":null,"attention":""}
+{"time":"2026-11-19T11:08:42.437532298-05:00","level":"INFO","msg":"Entered Tristram","inst":"cl3","type":"area_change","goal":"g1","area":"Tristram"}
+{"time":"2026-11-19T11:08:42.438789553-05:00","level":"INFO","msg":"state","inst":"cl3","from":"clearing","to":"traveling","activity":"Quest: The Search for Cain"}
+{"time":"2026-11-19T11:08:42.438874299-05:00","level":"INFO","msg":"quest board: search_for_cain/stones: all steps done but the quest does not read as finished (waiting for the save or memory)","inst":"cl3"}

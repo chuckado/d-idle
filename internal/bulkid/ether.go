@@ -61,3 +61,15 @@ func (p *EtherPayer) Charge(id string) error {
 	}
 	return p.W.Spend("reveal:"+id, p.price())
 }
+
+// Balance is the wallet balance, -1 when Ether is off or unreadable.
+func (p *EtherPayer) Balance() int {
+	if p == nil || p.W == nil {
+		return -1
+	}
+	b, err := p.W.Balance()
+	if err != nil {
+		return -1
+	}
+	return b
+}

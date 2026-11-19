@@ -1,7 +1,9 @@
 package watch
 
 import (
+	"context"
 	"encoding/json"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
@@ -62,5 +64,61 @@ func TestVaultViewMassRevealPreview(t *testing.T) {
 	b, _ := json.Marshal(v.Act.Reveal.Mass)
 	if strings.Contains(string(b), "raw") {
 		t.Fatalf("preview leaks: %s", b)
+	}
+}
+
+// etherStub adds the Ether tap to stubActor: it unlocks sealed records like vaultkeep does and records that the gate was bypassed.
+type etherStub struct {
+	*stubActor
+	taps int
+}
+
+func (e *etherStub) EnqueueRevealEther(_ context.Context, ids []string, _ bool) []VaultKeepResult {
+	var out []VaultKeepResult
+	for _, id := range ids {
+		e.taps++
+		if err := e.st.Unseal(id); err != nil {
+			out = append(out, VaultKeepResult{ID: id, Code: "nosealed", Why: err.Error()})
+			continue
+		}
+		out = append(out, VaultKeepResult{ID: id, OK: true})
+	}
+	return out
+}
+
+// The vault never sends sealed affixes (list, detail), the Ether tap works while the reveal gate is closed (no game
+// needed), and the stat lines exist only after the unlock.
+func TestVaultEtherRevealUnlocksOnlyOnPayment(t *testing.T) {
+	s := testVault(t, 12, 100)
+	_, un := getVault(t, massAPI(t, s, &stubActor{st: s}, false), "/api/vault?identified=0&limit=10")
+	id := un.Items[0].ID
+	rec, _ := s.Get(id)
+	it := rec.Item
+	it.Raw += "00"
+	it.Sealed, it.Name = "SEALEDAFFIX", "sealed one"
+	nr, err := s.Add(it)
+	if err != nil {
+		t.Fatal(err)
+	}
+	a := &etherStub{stubActor: &stubActor{st: s, revGate: "dead"}}
+	tiers, _ := vault.DefaultTiers()
+	api := NewVaultAPI()
+	api.Bind(VaultDesk{On: func() bool { return true }, Store: func() *vault.Store { return s }, Tiers: tiers, Act: a,
+		Tip: func(in VaultTipIn) VaultTip { return VaultTip{Props: []string{in.Props}} }})
+	w := httptest.NewRecorder()
+	api.Handler().ServeHTTP(w, httptest.NewRequest("GET", "/api/vault?identified=0&limit=50", nil))
+	if strings.Contains(w.Body.String(), "SEALEDAFFIX") {
+		t.Fatal("sealed affixes reached the page before payment")
+	}
+	if code, rep, _ := postVault(t, api, VaultRevealRoute, vaultBody{IDs: []string{nr.ID}, Ether: true}); code != 200 || len(rep.Done) != 1 || a.taps != 1 {
+		t.Fatalf("ether tap with the gate closed: %d %+v", code, rep)
+	}
+	if code, _, pr := postVault(t, api, VaultRevealRoute, vaultBody{IDs: []string{nr.ID}}); code != 409 || pr.Code != "dead" {
+		t.Fatalf("a plain tap still obeys the gate: %d %+v", code, pr)
+	}
+	w = httptest.NewRecorder()
+	api.Handler().ServeHTTP(w, httptest.NewRequest("GET", "/api/vault?identified=1&limit=50", nil))
+	if !strings.Contains(w.Body.String(), "SEALEDAFFIX") {
+		t.Fatal("the affix lines are missing after the unlock")
 	}
 }

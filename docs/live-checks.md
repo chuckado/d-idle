@@ -105,3 +105,4 @@ Closing rule: a card closes when merged with offline acceptance proven; every op
 | TASK-110 run4h | #2 | If it cannot finish, the smoke card is what fixes it; result says so | live drill on the sandbox, fresh hero, per the card result (driftfix 2026-11-11) | open |
 | TASK-538 farmloop2 | #3 | Live check: loop on in the sandbox with the new-game-requested log (not run) | live drill on the sandbox, fresh hero, per the card result | open |
 | TASK-542 support | #5 | Live check: real upload on the updates site (owner, after deploy) | live drill on the sandbox, fresh hero, per the card result | open |
+| TASK-658 bulkid2 | #3 | Live Cain drill (design sections 9 and 11) run | live drill on the sandbox, fresh hero, per the card result | open |

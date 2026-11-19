@@ -88,8 +88,6 @@ type FunConfig struct {
 	OrderLoop *OrderLoopConfig
 	// Unlock turns the unlock ladder on (TASK-153): the engine of the profile (unlock.Open). nil: no ladder, no routes.
 	Unlock *unlock.Engine
-	// Affixes reads the properties of an identified item for the reveal card (TASK-157). nil: cards say they are not read.
-	Affixes AffixSource
 	// Hall turns the Hall of Fame and the retire question on (TASK-135). StatePath "" keeps the state next to the ledger.
 	Hall *HallConfig
 	// Monsters gives the bestiary its type, attack pattern and resists (TASK-158). nil: cards carry the flavour only.
@@ -141,8 +139,6 @@ type Fun struct {
 	Queue *OrderQueue
 	// Loop is nil unless FunConfig.OrderLoop is set and the ladder has the row "orderloop"; bind its repair desk with Loop.Bind.
 	Loop *OrderLoop
-	// Reveal is nil unless the ladder has the rows "idreveal" and "idreveal_later" (TASK-157).
-	Reveal *Reveal
 	// Bestiary is nil unless the ladder has the rows "bestiary" and "bestiary_resists" (TASK-158).
 	Bestiary *Bestiary
 	// Atlas is nil unless the ladder has the row "atlas" (TASK-160).
@@ -323,14 +319,6 @@ func NewFun(c FunConfig) (*Fun, error) {
 			}
 			f.Atlas = at
 		}
-		if c.Unlock.Has(IDRevealID) || c.Unlock.Has(IDRevealLaterID) {
-			h := c.Hub
-			rv, err := NewReveal(f.Unlocks, nil, c.Affixes, func() float64 { return h.rel(h.cfg.Clock.Now()) })
-			if err != nil {
-				return nil, err
-			}
-			f.Reveal = rv
-		}
 	}
 	if c.Proposals != nil {
 		pc := *c.Proposals
@@ -490,9 +478,6 @@ func (f *Fun) OnGoalEvent(ev goals.Event) {
 	}
 	if f.Queue != nil {
 		f.Queue.OnGoalEvent(ev)
-	}
-	if f.Reveal != nil {
-		f.Reveal.OnGoalEvent(ev)
 	}
 	if f.Bestiary != nil {
 		f.Bestiary.OnGoalEvent(ev)
@@ -711,9 +696,6 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 		m.Handle(AlertsRoute, f.Alerts.Handler())
 		m.Handle(AlertsUIRoute, alertsUIHandler())
 	}
-	if f.Reveal != nil {
-		m.Handle(RevealRoute, f.Reveal.Handler())
-	}
 	if f.Hall != nil {
 		hh := f.Hall.Handler()
 		for _, p := range HallRoutes {
@@ -836,9 +818,6 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	}
 	if f.Loop != nil {
 		m.Handle(OrderLoopRoute, f.Loop.PostHandler(o))
-	}
-	if f.Reveal != nil {
-		m.Handle(RevealFlipRoute, f.Reveal.FlipHandler(o))
 	}
 	if f.Voice != nil {
 		m.Handle(VoiceMuteRoute, f.Voice.MuteHandler(o))

@@ -288,7 +288,14 @@
 | bulkid-design | proposed | - | `docs/design/bulk-identify-2026-11-18.md` | - |
 | bulkid | proposed | - | `internal/bulkid`<br>`data/bulkid`<br>`internal/env/tuning_identify.go`<br>`internal/watch/vaultmass_test.go`<br>`internal/env/tuning.go`<br>`docs/knobs.md`<br>`internal/vaultkeep/reveal.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/note_test.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go` | - |
 | survhold3 | proposed | - | `internal/survival`<br>`docs/probes/survival-holdout3-2026-11-18.md` | - |
-| bulkid2 | proposed | - | `internal/bulkid`<br>`internal/town/bulkid.go`<br>`internal/town/bulkid_need_test.go`<br>`internal/town/chores.go`<br>`internal/town/stash.go`<br>`internal/town/town.go`<br>`internal/vaultkeep`<br>`internal/watch/vaultapi.go`<br>`cmd/d2bot/bulkidwire.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/invwire.go`<br>`cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dbackend.go`<br>`docs/design/bulk-identify-2026-11-18.md` | - |
+| verifymerc | proposed | - | `docs/upstream/verifier-mercabsorb-2026-11-18.md` | - |
+| forkrebase2 | in-progress | - | `docs/process/fork-rebase.md`<br>`docs/process/sandbox-devp13.md`<br>`tools/fork-rebase.sh` | - |
+| decomp42 | in-progress | - | `docs/research/decomp42-crush-d6-trace.md`<br>`docs/upstream/bodies/crush-d6-body.md`<br>`tools/emu/d42_crush_hit.py` | `fork-branch:fid/crush-d6-r1` |
+| cainl3 | proposed | - | `docs/probes/cainl3`<br>`docs/probes/search-for-cain-l3-2026-11-19.md`<br>`docs/probes/test-characters.md` | `d2d-control-socket` |
+| nocards | proposed | - | `data/idreveal`<br>`internal/watch/unlockidreveal.go`<br>`internal/watch/unlockidreveal_test.go`<br>`internal/watch/unlockui_quiet_test.go`<br>`internal/watch/testdata`<br>`docs/unlock-ladder.md`<br>`docs/vault.md`<br>`internal/watch/web`<br>`internal/watch/funwire.go`<br>`internal/watch/nocards_test.go`<br>`data/unlocks`<br>`docs/unlock-idreveal.md` | - |
+| botsurvey | proposed | - | `docs/research/public-d2-bots-2026-11-19.md` | - |
+| fablereview | proposed | - | `docs/design/fable-review-2026-11-19` | - |
+| adrfable | proposed | - | `docs/adr/0020-proving-ground-and-stat-skill-agency.md`<br>`docs/decisions.md`<br>`docs/adr/README.md`<br>`docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -327,14 +334,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- f70213a90 11-19 09:24 `Merge agent/bulkid2: bulkid2: town adapters, scroll path, Ether tap payer` (bulkid2)
-- bfb8bb8fb 11-19 09:23 `Merge branch 'main' into bulkid2` (-)
-- ee4e89850 11-19 09:06 `Merge agent/survhold3: Merge origin/main into agent/survhold3` (survhold3)
-- 7ba3b21d7 11-19 09:01 `Merge origin/main into agent/survhold3` (-)
-- 67c1f056f 11-18 20:20 `Merge agent/goldwithdraw: Merge branch 'main' into goldwithdraw` (goldwithdraw)
-- 9c26547e9 11-18 20:19 `Merge branch 'main' into goldwithdraw` (-)
-- 687344925 11-18 20:11 `Merge agent/survhold2: survhold2: kit gate hold, return walk past burned portal, holdout 2 record` (survhold2)
-- 26c11333d 11-18 20:10 `Merge branch 'main' into survhold2` (-)
-- 22284866b 11-18 20:02 `Merge agent/antiflail: Merge branch 'main' into antiflail` (antiflail)
-- 315a64e87 11-18 20:01 `Merge branch 'main' into antiflail` (-)
+- 5d602ea36 11-19 11:59 `Merge agent/cainl3: cainl3: Search for Cain L3 drill, real bot chain on a lab slot` (cainl3)
+- c83e9c60d 11-19 11:58 `Merge branch 'main' into cainl3` (-)
+- 1584c7942 11-19 11:52 `Merge branch 'main' into cainl3` (-)
+- 4aa428d08 11-19 11:50 `Merge agent/decomp42: Merge branch 'main' into 659` (decomp42)
+- b73254b13 11-19 11:49 `Merge branch 'main' into 659` (-)
+- f79446ff1 11-19 11:42 `Merge agent/forkrebase: fork rebase routine, fork-rebase.sh, devp13 first round (incl. item create identified flag)` (forkrebase)
+- 05da5d6ca 11-19 11:41 `Merge branch 'main' into forkrebase` (-)
+- 601bd9fe4 11-19 11:38 `Merge agent/adrfable: ADR 0020 Proving Ground and stat/skill agency` (adrfable)
+- 387afed02 11-19 11:38 `Merge agent/fablereview: design review 2026-11-19: docs only (bots comparison, fidelity and gaps, seven classes, stat and skill agency, architecture, roadmap)` (fablereview)
+- ba78343bc 11-19 11:38 `Merge agent/botsurvey: public D2 bots inventory (docs only)` (botsurvey)
 <!-- statusgen:end -->
