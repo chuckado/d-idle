@@ -300,6 +300,7 @@ cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2dview  credit-runner  videofeed2
 cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
+cmd/d2scenario/  credit-runner  provingground
 data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
 data/idreveal  credit-runner  nocards
@@ -478,6 +479,7 @@ docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
 docs/process/fork-rebase.md  credit-runner  forkrebase2
+docs/process/proving-ground.md  credit-runner  provingground
 docs/process/queuespeed.md  credit-runner  queuespeed
 docs/process/sandbox-devp11.md  credit-runner  devp11doc
 docs/process/sandbox-devp12.md  credit-runner  devp12
@@ -1042,6 +1044,7 @@ internal/resource/swing.go  credit-runner  swingmodel
 internal/resource/swing_test.go  credit-runner  swingmodel
 internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
+internal/scenario/  credit-runner  provingground
 internal/senses  credit-runner  botcpu
 internal/senses  credit-runner  maphistory
 internal/senses  credit-runner  maphistoryA
@@ -1607,6 +1610,7 @@ tools/levelsim/shadow.go  credit-runner  intake
 tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
+tools/provingground/  credit-runner  provingground
 tools/survival  credit-runner  survhold2
 tools/survival  credit-runner  survtune
 tools/survival/abreport  credit-runner  survfix

@@ -297,6 +297,7 @@
 | botsurvey | proposed | - | `docs/research/public-d2-bots-2026-11-19.md` | - |
 | fablereview | proposed | - | `docs/design/fable-review-2026-11-19` | - |
 | adrfable | proposed | - | `docs/adr/0020-proving-ground-and-stat-skill-agency.md`<br>`docs/decisions.md`<br>`docs/adr/README.md`<br>`docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md` | - |
+| provingground | proposed | - | `tools/provingground/`<br>`internal/scenario/`<br>`cmd/d2scenario/`<br>`docs/process/proving-ground.md` | `d2d-lab-binary` |
 | questspec | proposed | - | `internal/questspec`<br>`data/questspec`<br>`docs/questspec.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
@@ -336,14 +337,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 6a5af8636 11-19 12:38 `Merge agent/provingground: Proving Ground (TASK-668)` (provingground)
+- 11df828eb 11-19 12:37 `Merge branch 'main' into provingground` (-)
 - b10f0edc0 11-19 12:33 `Merge agent/questspec: questspec: quest chains as checkable data, checker + Act 1 chains (R5)` (questspec)
 - 40dd3814a 11-19 12:30 `Merge origin/main into questspec` (-)
+- 01538fb89 11-19 12:27 `Merge origin/main into agent/provingground` (-)
 - c72b2eb05 11-19 12:07 `Merge agent/cainfix2: cainfix2: tree class from presets, chunks stay done, hand-in waits for town, free-Cain evidence` (cainfix2)
 - 3a00ec9ae 11-19 12:06 `Merge branch 'main' into cainfix2` (-)
 - 35682f260 11-19 12:05 `Merge agent/verifyd5: verifycrushd5: crush D5 verifier, r1 FAIL, r2 PASS WITH CHANGES` (verifyd5)
 - a72cc16bc 11-19 12:04 `Merge branch 'main' into verifyd5` (-)
 - 5d602ea36 11-19 11:59 `Merge agent/cainl3: cainl3: Search for Cain L3 drill, real bot chain on a lab slot` (cainl3)
-- c83e9c60d 11-19 11:58 `Merge branch 'main' into cainl3` (-)
-- be0ad0e76 11-19 11:53 `Merge remote-tracking branch 'origin/main' into agent/cainfix2` (-)
-- 621fe1e0f 11-19 11:52 `Merge remote-tracking branch 'origin/main' into agent/cainfix2` (-)
 <!-- statusgen:end -->

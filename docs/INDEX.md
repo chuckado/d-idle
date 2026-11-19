@@ -874,6 +874,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [openspec-removal-plan.md](process/openspec-removal-plan.md): OpenSpec removal plan (proposal for the user), revised for Backlog.md (status: PROPOSAL, written 2026-11-04 after the user retired OpenSpec for new work; revised the same day after the...)
 - [outside-prs.md](process/outside-prs.md): Outside pull requests: the proposed review gate (status: policy text APPROVED by the maintainer 2026-11-01 (card communitywork); its proposed repository settings...)
 - [plugin-pin.md](process/plugin-pin.md): Matt Pocock skills plugin: pin
+- [proving-ground.md](process/proving-ground.md): The Proving Ground: scenarios that play the real bot and read the game (status: current (card provingground, 2026-11-19). Source: the design review `docs/design/fable-review-2026-11-19/`...)
 - [public-split.md](process/public-split.md): Public split: rules going forward (change `pubsplit`) (status: cut done 2026-10-31: GitHub `main` is primary; the the private forge steps below are the historical plan.)
 - [queuespeed.md](process/queuespeed.md): Queue speed changes (TASK-312) (status: current. Source: docs/research/merge-queue-profile-2026-11-11.md. Code lives in the ops repo...)
 - [retired-terms-20261104.md](process/retired-terms-20261104.md): Retired-terms banner pass (2026-11-04)
