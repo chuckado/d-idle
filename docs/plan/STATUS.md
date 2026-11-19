@@ -291,6 +291,7 @@
 | verifymerc | proposed | - | `docs/upstream/verifier-mercabsorb-2026-11-18.md` | - |
 | etherreveal | proposed | - | `internal/vaultkeep`<br>`internal/vault`<br>`internal/bulkid`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`docs/design/bulk-identify-2026-11-18.md`<br>`internal/loot/vault.go`<br>`cmd/d2bot/vaultkeep.go`<br>`internal/env/tuning_identify.go`<br>`docs/knobs.md`<br>`internal/watch/vaultmass_test.go` | - |
 | nocards | proposed | - | `data/idreveal`<br>`internal/watch/unlockidreveal.go`<br>`internal/watch/unlockidreveal_test.go`<br>`internal/watch/unlockui_quiet_test.go`<br>`internal/watch/testdata`<br>`docs/unlock-ladder.md`<br>`docs/vault.md`<br>`internal/watch/web`<br>`internal/watch/funwire.go`<br>`internal/watch/nocards_test.go`<br>`data/unlocks`<br>`docs/unlock-idreveal.md` | - |
+| botsurvey | proposed | - | `docs/research/public-d2-bots-2026-11-19.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -329,6 +330,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ba78343bc 11-19 11:38 `Merge agent/botsurvey: public D2 bots inventory (docs only)` (botsurvey)
+- 503e4d1cc 11-19 11:35 `Merge branch 'main' into botsurvey` (-)
 - c085552a7 11-19 11:25 `Merge agent/etherreveal: Merge branch 'main' into etherreveal` (etherreveal)
 - 960f739ed 11-19 11:24 `Merge branch 'main' into etherreveal` (-)
 - 362df2fac 11-19 10:57 `Merge agent/nocards: Remove the unidentified item card feature (tab, sheet, routes, ladder rows)` (nocards)
@@ -337,6 +340,4 @@
 - d37ccd25b 11-19 09:53 `Merge branch 'main' into verifymerc` (-)
 - 7feab5450 11-19 09:41 `Merge agent/treefix3: Merge branch 'main' into treefix3` (treefix3)
 - b3721d322 11-19 09:40 `Merge branch 'main' into treefix3` (-)
-- f70213a90 11-19 09:24 `Merge agent/bulkid2: bulkid2: town adapters, scroll path, Ether tap payer` (bulkid2)
-- bfb8bb8fb 11-19 09:23 `Merge branch 'main' into bulkid2` (-)
 <!-- statusgen:end -->

@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- public D2 bots inventory (docs only) <!--sg:agent/botsurvey-->
 - Merge branch 'main' into etherreveal <!--sg:agent/etherreveal-->
 - Remove the unidentified item card feature (tab, sheet, routes, ladder rows) <!--sg:agent/nocards-->
 - verifymerc: verifier of merc gear absorb r1 (r1 FAIL, r2 PASS WITH CHANGES) <!--sg:agent/verifymerc-->
