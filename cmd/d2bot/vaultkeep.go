@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/bot"
+	"d2lod-bot/internal/bulkid"
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/env"
@@ -87,10 +88,11 @@ func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir string,
 		Notice:   func(text string) { log.Info("vault keep: " + text) },
 		PerVisit: func() int { return e.Tune.Loot.VaultKeepPerVisit },
 	}
-	ha := heroActs{ref: ref, e: e, snap: snap}
+	ha := heroActs{ref: ref, e: e, snap: snap, rescued: cainOpen(ref)}
 	k.Tools, k.Vendor = ha, ha
 	k.SellPerVisit = func() int { return e.Tune.Loot.VaultSellPerVisit }
 	k.Prompt = func() bool { return e.Tune.Loot.VaultSellPrompt != 0 }
+	k.IdentifyPolicy = func() int { return bulkid.Effective(e.Tune.Identify, os.Getenv("D2BOT_RUN") != "").Policy }
 	k.ShortBy = ha.short
 	k.Namer = ha.name
 	home.mu.Lock()
@@ -196,7 +198,12 @@ type heroActs struct {
 	ref  *runnerRef
 	e    *env.Env
 	snap func() *d2.Snapshot
+	// rescued is cainOpen's check: the Search for Cain is done (or he stands here).
+	rescued func(*d2.Snapshot) bool
 }
+
+// Rescued says whether Cain is rescued for the hero (the vault's Reveal note while identify.policy counts on him).
+func (h heroActs) Rescued() bool { return h.rescued != nil && h.rescued(h.snap()) }
 
 func (h heroActs) town() *town.Town { return h.ref.tw.Load() }
 
@@ -409,7 +416,7 @@ func (f actFace) Act(ctx context.Context) watch.VaultActView {
 	}
 	in, p := k.Info(), k.RevealPrice(ctx)
 	v := watch.VaultActView{
-		Reveal: watch.VaultRevealView{Charges: p.Charges, Free: p.Free, PerItem: p.PerItem, Queued: in.RevQueued, Working: in.RevWorking, Done: in.Revealed, Line: k.RevealLine()},
+		Reveal: watch.VaultRevealView{Note: p.Note, Charges: p.Charges, Free: p.Free, PerItem: p.PerItem, Queued: in.RevQueued, Working: in.RevWorking, Done: in.Revealed, Line: k.RevealLine()},
 		Sell:   watch.VaultSellView{Queued: in.SellQueued, Working: in.SellWorking, Sold: in.Sold, Gold: in.GoldEarned, Line: k.SellLine()},
 	}
 	v.Reveal.Enabled, v.Reveal.Why = k.GateReveal(ctx)

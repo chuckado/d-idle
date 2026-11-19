@@ -53,6 +53,7 @@ type TownTuning struct {
 	IdentifyTome       int // 1: the chore buys a Tome of Identify and keeps it topped up (default 0: buying is the player's errand)
 	IdentifyTopUpBelow int // refill the tome to full when it holds fewer scrolls than this
 	IDScrollNeed       int // 1: buy identify scrolls only while an unidentified set, rare, unique or crafted item is in the pack; 0 = always up to IDScrollTarget
+	WithdrawShop       int // 1: the withdraw chore also fires when the pack cannot pay the shopping list (scrolls, tome, potions) and takes out that list, never below the minimal kit; 0 = only the empty-belt rule
 	BankFirst          int // 1: deposit the gold above the keep line (never below the minimal kit) before the shop; 0 = after it
 	RepairLatch        int // 1: a repair that changed nothing is not retried until durability changed or gold grew by FutileGoldStep; 0 = retry every visit
 	TripEmptyHPBelt    int // NeedsTrip: 1 = go to town when no healing potion (not Rejuvenation) is in belt or pack and the purse buys one (KitPotionGold); 0 = off
@@ -75,7 +76,7 @@ func DefaultTownTuning() TownTuning {
 		RepairBelowPct: 30, StashGoldBase: 300, StashGoldPerLvl: 50, SellJunk: 1, BeltBuyLevel: 10,
 		NPCStopDist: 4, NPCOpenTries: 3, UITimeoutMs: 2500, ClickSettleMs: 150, MoveTries: 3, DropTries: 6, CursorStuckMax: 3,
 		RebuyGearTier: 1, RebuyPotionPct: 40, RebuyItemMaxPct: 60, PortalSettle: 4500, ChoreBudgetS: 150, SellMaxS: 60, FutileGoldStep: 100, TripMinSpend: 0, TripEmptyHPBelt: 1, MPCapEarly: 0, MPCapLevel: 0, FutileMinutes: 10, SpareKeep: 4, GreetingWaitS: 90, GreetingSkip: 0, PortalReuseDist: 40, PortalClickFails: 2,
-		PotionsFirst: 1, TPFirstLevel: 0, TPScrollPotions: 2, SellLowGems: 1, IDScrollNeed: 1, IdentifyTome: 0, IdentifyTopUpBelow: 10, BankFirst: 1, RepairLatch: 1, EquipKindFails: 2,
+		PotionsFirst: 1, TPFirstLevel: 0, TPScrollPotions: 2, SellLowGems: 1, IDScrollNeed: 1, IdentifyTome: 0, IdentifyTopUpBelow: 10, BankFirst: 1, WithdrawShop: 1, RepairLatch: 1, EquipKindFails: 2,
 		TidyEnabled: 1, TidyMaxActions: 12, TidyMinPackPct: 60, MercReserve: 1,
 	}
 }
@@ -139,6 +140,7 @@ func townKnobs() []Knob {
 		townK("tpFirstLevel", "First scroll from clvl", "clvl", "potionsFirst: extra floor, no first town portal scroll below this level. 0 = none (default, the SME gold rule decides); 4 with tpScrollPotions 0 restores the old BASICSFIX rule.", d.TPFirstLevel, 0, 30, false),
 		townK("tpScrollPotions", "Potions kept for the first scroll", "potions", "potionsFirst: the first town portal scroll is bought only when the gold left after the kit potions covers the scroll plus this many healing potions (d2-sme order, decision D3). 0 = no gold margin.", d.TPScrollPotions, 0, 10, false),
 		townK("idScrollNeed", "Identify scroll only if valuable", "bool", "1 buys identify scrolls only while an unidentified set, rare, unique or crafted item is in the pack; 0 = always idScrollTarget (old).", d.IDScrollNeed, 0, 1, true),
+		townK("withdrawShop", "Withdraw for the shop", "bool", "1 takes gold out of the stash up to the shopping list (portal scrolls, tome, potions) when the pack cannot pay it; 0 = only when no healing potion is carried.", d.WithdrawShop, 0, 1, true),
 		townK("bankFirst", "Bank before shop", "bool", "1 deposits gold above the keep line (never below the minimal kit) before the shop; 0 = the shop spends first (old).", d.BankFirst, 0, 1, true),
 		townK("repairLatch", "Failed repair latch", "bool", "1 retries a repair that changed nothing only after durability changed or gold grew by futileGoldStep; 0 = every visit (old).", d.RepairLatch, 0, 1, true),
 		townK("tripEmptyHPBelt", "Trip: empty healing belt", "on/off", "Go to town when the belt and pack hold no healing potion (Rejuvenation does not count, as in the BELT gate) and the gold buys one. 0 = off.", d.TripEmptyHPBelt, 0, 1, true),

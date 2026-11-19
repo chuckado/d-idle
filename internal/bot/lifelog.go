@@ -79,6 +79,7 @@ func (r *Runner) noteArrival(o *observer, p *d2.Player, now time.Time) {
 		}
 	}
 	o.arrivals++
+	r.loop.flail.noteMove(now, p.Area, o.real)
 	o.arrived = arrival{from: o.area, at: now, pos: input.Point{X: p.X, Y: p.Y}}
 	r.e.Log.Info("arrival", "area", p.Area, "from", o.area, "x", p.X, "y", p.Y,
 		"arrivals", o.arrivals, "bounces", o.bounces) // cumulative since start: bounces/arrivals is the rate to compare per build

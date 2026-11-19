@@ -313,6 +313,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `design/`
 
+- [bulk-identify-2026-11-18.md](design/bulk-identify-2026-11-18.md): Bulk identify: Cain-free, lazy reveal, filter (design, 2026-11-18) (status: DESIGN plus slice plan, 2026-11-18 (user go by popup, SME plan "Cain-free + lazy reveal + filter"). Built...)
 - [item-colour-2026-11-18.md](design/item-colour-2026-11-18.md): Item colour in the inventory art: chain and slice plan (2026-11-18) (status: design, task-634 (card itemcolour). Follow-up to jewelcolor (task-632), which removed the invented wash....)
 - [item-verbs.md](design/item-verbs.md): Item verbs: inventory, stash and equipment actions through d2d's own item handlers (TASK-367) (status: DESIGN plus the built verbs (equip, unequip, move, identify, drop, gold, `caps`), 2026-11-12; stage 2 and...)
 - [loot-vault-2026-11-16.md](design/loot-vault-2026-11-16.md): Ethereal Vault: a database of every drop, created in the game only on Keep (design and feasibility) (status: DESIGN, 2026-11-16. Nothing here was built or run; the fork was read, not changed. "Ethereal Vault" is the...)
@@ -664,6 +665,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [cairn-portal-body.md](upstream/bodies/cairn-portal-body.md): cairn-portal-body
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
+- [crush-d5-body.md](upstream/bodies/crush-d5-body.md): crush-d5-body
 - [death-corpse-exp-body.md](upstream/bodies/death-corpse-exp-body.md): death-corpse-exp-body
 - [gamble-price-body.md](upstream/bodies/gamble-price-body.md): the d2d side needs D2_MPQ_DIR (as test_game); gamble_price.py game needs the emulator's game image and a...
 - [gear-absorb-body.md](upstream/bodies/gear-absorb-body.md): gear-absorb-body
@@ -675,6 +677,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
 - [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
 - [mana-burn-amount-body.md](upstream/bodies/mana-burn-amount-body.md): mana-burn-amount-body
+- [merc-absorb-body.md](upstream/bodies/merc-absorb-body.md): merc-absorb-body
 - [missile-block-body.md](upstream/bodies/missile-block-body.md): missile-block-body
 - [seq-ias-body.md](upstream/bodies/seq-ias-body.md): seq-ias-body
 - [seq-ias-followup-body.md](upstream/bodies/seq-ias-followup-body.md): test: seq-rate fails when D2_PATCH_INSTALLER names a file that is not there
@@ -1028,6 +1031,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [survival-ab-rescreen-2026-11-16.md](probes/survival-ab-rescreen-2026-11-16.md): Survival A/B rescreen, Paladin, bot.zoneModel 0 vs 1 (3 seeds), 2026-11-16 (status: current (TASK-563). Rerun of the first screen after the clock fix of the merged survfix card (analysis)....)
 - [survival-ab-screen-2026-11-16.md](probes/survival-ab-screen-2026-11-16.md): Survival A/B screen, bot.zoneModel 0 vs 1 (3 seeds, Paladin and Sorceress), 2026-11-16 (status: current (TASK-554). Harness: ab-harness. Tags: V verified (the run logs and `abreport` output of this...)
 - [survival-holdout-2026-11-17.md](probes/survival-holdout-2026-11-17.md): Survival A/B holdout, seed 149: cause, fix, rerun (2026-11-17) (status: current (card survhold, user decision 2026-11-17: `bot.zoneModel` stays 0 until the holdout is fixed)....)
+- [survival-holdout2-2026-11-18.md](probes/survival-holdout2-2026-11-18.md): Survival A/B holdout 2: gold gap, recovery without potions, return portal (2026-11-18) (status: current (card survhold2, user decision 2026-11-17: `bot.zoneModel` stays 0 until the holdout passes;...)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
 - [vault-spike-2026-11-16.md](probes/vault-spike-2026-11-16.md): Ethereal Vault V0 spike: capture and create on the d2d fork (result) (status: RESULT, 2026-11-16 (task TASK-578). Design: `docs/design/loot-vault-2026-11-16.md` section 1.7. Tags: V =...)

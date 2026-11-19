@@ -8,6 +8,15 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into goldwithdraw <!--sg:agent/goldwithdraw-->
+- survhold2: kit gate hold, return walk past burned portal, holdout 2 record <!--sg:agent/survhold2-->
+- Merge branch 'main' into antiflail <!--sg:agent/antiflail-->
+- bulk identify B1-B5 offline <!--sg:agent/bulkid-->
+- none <!--sg:agent/decomp41-->
+- Merge branch 'main' into tpfix <!--sg:agent/tpfix-->
+- vaulttip2: Vault fit pages run, shared StatLines for the common descfuncs, windowed 2400-item grid <!--sg:agent/vaulttip2-->
+- d2dsrc: expire cached debug presets by age so a standing hero sees the Tree of Inifuss <!--sg:agent/treefix-->
+- bulk identify design doc <!--sg:agent/bulkid-design-->
 - longlane: wavelane.sh launches survival waves in the builder long lane <!--sg:agent/longlane-->
 - cairnportal: PR candidate D1 Cairn portal offset (fid/cairn-portal-r1), docs and card <!--sg:agent/cairnportal-->
 - Merge origin/main into agent/unidpopup <!--sg:agent/unidpopup-->
