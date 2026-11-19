@@ -297,7 +297,6 @@
 | botsurvey | proposed | - | `docs/research/public-d2-bots-2026-11-19.md` | - |
 | fablereview | proposed | - | `docs/design/fable-review-2026-11-19` | - |
 | adrfable | proposed | - | `docs/adr/0020-proving-ground-and-stat-skill-agency.md`<br>`docs/decisions.md`<br>`docs/adr/README.md`<br>`docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md` | - |
-| provingground | proposed | - | `tools/provingground/`<br>`internal/scenario/`<br>`cmd/d2scenario/`<br>`docs/process/proving-ground.md` | `d2d-lab-binary` |
 | questspec | proposed | - | `internal/questspec`<br>`data/questspec`<br>`docs/questspec.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |

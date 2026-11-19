@@ -1,10 +1,11 @@
 ---
 id: TASK-668
 title: 'provingground: scenario runner, Cain step scenarios, catalogue'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T16:26:00Z'
+updated_date: '2026-11-19T17:50:00Z'
 labels:
   - ops
   - feature
