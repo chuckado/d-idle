@@ -1,7 +1,8 @@
-# buildfile: prototype of a shareable build file (`didle.build/1`)
+# buildfile: the shareable build file (`didle.build/1`)
 
-OFFLINE PROTOTYPE for the design review. Never merged, not wired into the leveler or the bot. Stdlib plus `internal/leveler`,
-`internal/plandata` (tests) and `internal/data` (one adapter). Tags: V = I read the file or ran the test (path given), U = unverified.
+> status: current (card agencyp1a, 2026-11-19). Promoted from the prototype branch `agent/fable-proto-buildfile`; the design is in `docs/agency.md` section 5 and `docs/design/fable-review-2026-11-19/04-stat-skill-agency.md` section 3.6. Not wired into the leveler yet (P3 adds `POST /api/hero/track`). Tags: V = ran in a test of this package, U = unverified.
+
+`plans.go` is what P1 adds: `PlanNames`, `ExportPlan` (a shipped plan table of `internal/plandata` to a build file), `ImportPlan` (validate, expand, write the plan table JSON the leveler reads), `LoadFile` and `SaveFile`. The capability table is a rules source (`agency.Caps.BuildRules`) for Paladin and Sorceress, so those files validate without the game tables.
 
 ## What it is
 JSON, strict decode (unknown fields, a wrong `schema`, trailing data are errors). Skill and class names only, never ids.
@@ -48,7 +49,7 @@ V sources: `blizzhackers_kolbot/.../libs/config/Paladin.js` (AutoSkill/AutoStat 
 Kolbot's `skillCheck` only spends when `hardPoints <= charlvl - reqlevel` (V, AutoSkill.js): one more clvl per extra point. Our tables bank
 and dump 5 points at once at the unlock level (V, hammerdin row 18), so one of the two is wrong or kolbot is conservative (U: needs the game).
 
-## What it proves (V = `go test -p 1 ./internal/proto/buildfile/`)
+## What it proves (V = `go test -p 1 ./internal/buildfile/`)
 - Compression with exact round trip: `Expand(FromRows(table))` equals the table's cumulative skill and stat allocation at EVERY row, not
   only clvl 10/20/30/last, for 8 tables: sorceress blizzard_endgame90 + normal30, paladin hammerdin_endgame90 + normal30, necromancer
   summoner_endgame90 + leveling_normal30, barbarian warcry_endgame90 + melee_normal30 (`TestRoundTripTables -v`). 89 rows become 17..25 skill goals and 6..13 stat goals (2 to 3 KB JSON).

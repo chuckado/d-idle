@@ -29,7 +29,8 @@ type agencyWire struct {
 	log   *slog.Logger
 	lim   *agency.Limiter
 	now   func() time.Time
-	combo sync.Map // table name -> combat line
+	combo sync.Map                        // table name -> combat line
+	owned func(*d2.Player) map[string]int // hard points by skill name; the leveler's reading of the skill list
 
 	mu    sync.Mutex
 	snap  *d2.Snapshot
@@ -61,13 +62,15 @@ func wireAgency(db *data.DB, e *env.Env, hero func() string, now func() time.Tim
 	if now == nil {
 		now = time.Now
 	}
-	return &agencyWire{pl: p, db: db, hero: hero, log: log, lim: agency.NewLimiter(time.Minute), now: now,
+	w := &agencyWire{pl: p, db: db, hero: hero, log: log, lim: agency.NewLimiter(time.Minute), now: now,
 		tune: func() env.AgencyTuning {
 			if e.Tune == nil {
 				return env.DefaultAgencyTuning()
 			}
 			return e.Tune.Agency
 		}}
+	w.owned = func(pl *d2.Player) map[string]int { return leveler.OwnedSkills(db, pl) }
+	return w
 }
 
 // chainSnap runs the hooks in order on every snapshot.
@@ -138,7 +141,7 @@ func (w *agencyWire) View() any {
 func (w *agencyWire) eval(s *d2.Snapshot) (agency.View, agency.Plan, error) {
 	p := s.Player
 	class := strings.ToLower(p.Class.String())
-	owned := leveler.OwnedSkills(w.db, p)
+	owned := w.owned(p)
 	a := agency.Allocation{Class: class, Clvl: p.Level, Skills: owned}
 	if int(p.Class) < len(w.db.Classes) {
 		a.Ene = max(0, p.Energy-w.db.Classes[p.Class].Int)
@@ -181,4 +184,3 @@ func bindPlan(f *watch.Fun, w *agencyWire) {
 	api.Bind(w.View)
 	f.Plan = api
 }
-
