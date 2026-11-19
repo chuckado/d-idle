@@ -97,6 +97,10 @@ func TestQuestBoardQueuedReasonWhileFighting(t *testing.T) {
 			if g.r.hostileNear(snap, g.r.e.Tune.Bot.ClearRadius) == 0 {
 				t.Skip("the fake monster is not hostile here")
 			}
+			if !g.r.boardPreempts(snap, farmCtl) {
+				t.Fatal("a chunk under way was gated by a fight (cainfix3: only a fresh start waits)")
+			}
+			g.r.qbRT().startedKey = "" // a fresh start
 			if g.r.boardPreempts(snap, farmCtl) {
 				t.Fatal("started in the middle of a fight")
 			}

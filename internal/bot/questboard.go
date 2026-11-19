@@ -62,6 +62,9 @@ type boardRT struct {
 	// queuedSince is when the chunk first met a fight in the clear radius (zero when it is not waiting): past
 	// boardQueueGrace the chunk starts anyway, see boardPreemptsWhy.
 	queuedSince time.Time
+	// startedKey is the chunk the board has already started this run of decisions: a fight gates only a fresh start, never
+	// the next step of a chunk under way (cainfix3: after "Go to Stony Field" the level plan took the hero away again).
+	startedKey string
 }
 
 // NewQuestBoard builds the board executor of this runner and its hero's plan store and keeps it for boardStep. The S4
@@ -978,7 +981,10 @@ func (r *Runner) boardPreemptsWhy(snap *d2.Snapshot, c control) (bool, string) {
 	}
 	switch d.Kind {
 	case questboard.DecRun:
-		if !r.safeToPause(snap) {
+		rt.mu.Lock()
+		under := rt.startedKey == k
+		rt.mu.Unlock()
+		if !under && !r.safeToPause(snap) {
 			now := r.e.Clock.Now()
 			rt.mu.Lock()
 			if rt.queuedSince.IsZero() {
@@ -998,18 +1004,28 @@ func (r *Runner) boardPreemptsWhy(snap *d2.Snapshot, c control) (bool, string) {
 		}
 		rt.mu.Lock()
 		rt.queuedSince = time.Time{}
+		rt.startedKey = k
 		rt.mu.Unlock()
 		rt.setQueued("")
 		return true, ""
 	case questboard.DecAwait, questboard.DecBusy:
 		return true, ""
 	case questboard.DecBlocked:
+		rt.mu.Lock()
+		rt.startedKey = ""
+		rt.mu.Unlock()
 		rt.setQueued("Parked: " + d.Why)
 		r.boardNote("blocked "+d.Quest, fmt.Sprintf("quest board: %s parked: %s", k, d.Why))
 	case questboard.DecPaused:
 		rt.setQueued("Paused: the hero starts it when you resume.")
+		rt.mu.Lock()
+		rt.startedKey = ""
+		rt.mu.Unlock()
 	default:
 		rt.setQueued("")
+		rt.mu.Lock()
+		rt.startedKey = ""
+		rt.mu.Unlock()
 	}
 	return false, ""
 }
