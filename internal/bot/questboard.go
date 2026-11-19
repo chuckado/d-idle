@@ -811,6 +811,12 @@ func (r *Runner) boardAwait(ctx context.Context, snap *d2.Snapshot, c control, d
 // else. It reports true when it used the tick.
 func (r *Runner) boardServeHandIn(ctx context.Context, snap *d2.Snapshot, c control) bool {
 	rt := r.qbRT()
+	// V lab drill CAIN-L3 (2026-11-19): a tap that landed while the hero was out in the Dark Wood was taken off the
+	// queue in the field, answered "not in town" three times in one second and parked the chunk (docs/questboard.md
+	// promises the hand-in waits for the next town visit). The request stays queued until the hero stands in town.
+	if snap == nil || snap.Player == nil || !snap.Player.InTown() {
+		return false
+	}
 	select {
 	case req := <-rt.reqs:
 		req.done <- r.boardHandIn(ctx, snap, c, req)
