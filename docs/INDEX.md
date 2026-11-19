@@ -886,6 +886,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [sandbox-devp11.md](process/sandbox-devp11.md): Sandbox image devp11: item colour payload (slice 1 fixtures) (status: current (task-638, 2026-11-18). Built and checked on the builder, NOT loaded into the sandbox. Design:...)
 - [sandbox-devp12.md](process/sandbox-devp12.md): Sandbox d2d build devp12 (2026-11-18) (status: current. Task: TASK-645. Tags: V = verified in this run (how said), S = read from a tool or log, U =...)
 - [sandbox-devp13.md](process/sandbox-devp13.md): Sandbox d2d build devp13 (2026-11-19) (status: current. Task: forkrebase (first round of `docs/process/fork-rebase.md`). Tags: V = verified in this run...)
+- [sandbox-devp14.md](process/sandbox-devp14.md): Sandbox d2d build devp14 (input verbs candidate, 2026-11-19) (status: candidate, LOADED only on the sandbox host, NOT switched (the switch needs the owner's go). Task:...)
 - [sandbox-devp9.md](process/sandbox-devp9.md): Sandbox d2d build devp9 (2026-11-15) (status: current. Task: TASK-535 (sandbox2). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [spdx.md](process/spdx.md): SPDX header policy (ADR 0010)
 - [spec-apply-a-20261104.md](process/spec-apply-a-20261104.md): Spec apply A, 2026-11-04
