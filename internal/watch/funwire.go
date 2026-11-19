@@ -178,6 +178,8 @@ type Fun struct {
 	// GoldFarm mounts the Farm gold order routes (goldfarmapi.go); set it before Serve, nil: no routes.
 	GoldFarm   *GoldFarmAPI
 	QuestBoard *QuestsAPI // the quest board routes (questsapi.go); nil: none
+	// Points mounts GET /api/hero/points (viewer) and the POSTs under /api/hero/points/ (answer listener); nil: no routes (pointsapi.go, docs/points.md).
+	Points *PointsAPI
 	// Onboarding is the welcome card, first-30-minutes checklist and reconnect data (onboarding.go); always set by NewFun.
 	Onboarding *Onboarding
 	// Cmd are the optional facts of GET /api/commands (commands.go): the pause desk and the journey-blocked reason.
@@ -776,6 +778,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.QuestBoard != nil {
 		m.Handle(QuestsRoute, f.QuestBoard.Handler())
 	}
+	if f.Points != nil {
+		m.Handle(PointsRoute, f.Points.Handler())
+	}
 	if f.ZoneClear != nil {
 		m.Handle(ZoneClearRoute, f.ZoneClear.Handler())
 	}
@@ -890,6 +895,9 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	}
 	if f.QuestBoard != nil {
 		m.Handle(QuestsPrefix, f.QuestBoard.PostHandler(o))
+	}
+	if f.Points != nil {
+		m.Handle(PointsPrefix, f.Points.PostHandler(o))
 	}
 	if f.ZoneClear != nil {
 		m.Handle(ZoneClearRoute, f.ZoneClear.PostHandler(o))
