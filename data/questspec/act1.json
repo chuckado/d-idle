@@ -643,7 +643,7 @@
     "black_marsh": {
      "size": "large"
     },
-    "tower_cellar_5": {
+    "cellar_5": {
      "size": "medium"
     }
    },
@@ -676,7 +676,7 @@
      "act": "travel",
      "target": {
       "kind": "area",
-      "name": "tower_cellar_5"
+      "name": "cellar_5"
      },
      "chunk": "countess",
      "board": [
@@ -684,7 +684,7 @@
      ],
      "pre": [],
      "post": [
-      "in_area(tower_cellar_5)"
+      "in_area(cellar_5)"
      ],
      "discover": "preset_always",
      "budget_s": 300,
@@ -704,7 +704,7 @@
       "kill_countess"
      ],
      "pre": [
-      "in_area(tower_cellar_5)"
+      "in_area(cellar_5)"
      ],
      "post": [
       "killed(the_countess)|quest_state(forgotten_tower,done)"
