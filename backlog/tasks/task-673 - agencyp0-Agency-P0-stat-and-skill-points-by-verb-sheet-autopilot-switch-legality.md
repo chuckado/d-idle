@@ -26,6 +26,7 @@ owns:
   - "internal/watch/funwire.go"
   - "cmd/d2bot/pointswire.go"
   - "cmd/d2bot/pointswire_test.go"
+  - "cmd/d2bot/resource_test.go"
   - "cmd/d2bot/gearpolicy.go"
   - "cmd/d2bot/behaviors.go"
   - "cmd/d2bot/glancewire.go"
