@@ -21,10 +21,10 @@ func replayFile(t *testing.T, name string, follow bool) ReplayResult {
 }
 
 // The Dark Wood ping-pong (docs/probes/treefix3-2026-11-19.md): the chain changed area every 7 s with no progress.
-// The fixture is RECONSTRUCTED from that description (U for exact timing), not a raw sandbox log.
+// The fixture is built from the real area-change gaps of internal/bot/flail_test.go flailFixture (V: copied from the sandbox log 2026-11-18); the facts (potions, gold, objective) are assumed (U), not logged.
 func TestReplayPingPong(t *testing.T) {
 	res := replayFile(t, "darkwood_pingpong.jsonl", true)
-	if res.AreaChanges < 100 {
+	if res.AreaChanges < 300 {
 		t.Fatalf("fixture should show the chain flailing, got %d area changes", res.AreaChanges)
 	}
 	if res.FollowMoves > 4 {

@@ -326,8 +326,7 @@ func (d Decision) String() string {
 	return b.String()
 }
 
-// Compact is the one-line form for the divergence log: the choice and the
-// first travel refusal, without steps.
+// Compact is the short form of the choice for the divergence log (reasons follow it there).
 func (d Decision) Compact() string {
 	if d.Chosen == nil {
 		return "nothing"
@@ -335,12 +334,6 @@ func (d Decision) Compact() string {
 	s := fmt.Sprintf("%s (%s)", d.Chosen.Key(), d.Chosen.Reason)
 	if d.Held {
 		s += " [lease]"
-	}
-	for _, r := range d.Rejected {
-		if strings.HasPrefix(r.Why, "travel budget") {
-			s += "; " + r.Intent.Key() + " refused: " + r.Why
-			break
-		}
 	}
 	return s
 }
