@@ -1,6 +1,6 @@
 ---
 id: TASK-657
-title: 'forkrebase: regular fork rebase routine, script and first round (devp13)'
+title: 'forkrebase2: regular fork rebase routine, script and first round (devp13)'
 status: In Progress
 assignee:
   - credit-runner
@@ -11,7 +11,7 @@ labels:
 dependencies: []
 priority: medium
 ordinal: 246000
-card: "forkrebase"
+card: "forkrebase2"
 owns:
   - "docs/process/fork-rebase.md"
   - "docs/process/sandbox-devp13.md"
