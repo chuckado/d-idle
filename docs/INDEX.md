@@ -220,6 +220,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [act4.md](act4.md): Normal Act 4 plan (agent ACT3PLAN, docs only) (status: OFFLINE PLAN: never run live; 400+ code commits since this was last touched (doc audit 2026-10-30). Treat...)
 - [act5.md](act5.md): Normal Act 5 plan (agent ACT3PLAN, docs only) (status: OFFLINE PLAN: never run live; 460+ code commits since this was last touched (doc audit 2026-10-30). Treat...)
 - [actbot.md](actbot.md): ACTBOT and ACT45BOT: Acts 2-5 wiring in cmd/d2bot (offline, nothing run live)
+- [agency.md](agency.md): Agency P1a: the capability table, the shadow skill planner, build files (status: current (card agencyp1a, 2026-11-19; roadmap R7, first slice). Decision: ADR 0020, path D (the player...)
 - [aggression.md](aggression.md): Paladin aggression in big packs (2026-11-11)
 - [andarielgate.md](andarielgate.md): Gate 2 seed 11: why Andariel was never attempted (status: analysis, no code change. Tags: V = counted from the run log on the worker host (read-only), S = from code...)
 - [andarielplan.md](andarielplan.md): Plan for card m3-andariel: the throwaway Andariel fight (status: plan, offline, nothing verified live. Tags: V = read in this tree or counted from a recorded log (file...)
