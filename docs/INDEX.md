@@ -509,6 +509,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [quest.md](quest.md): Quest layer: internal/quest (agent QUESTS, offline)
 - [questboard.md](questboard.md): Quest board model (slice S1), executor (S3), API (S4) and chunked quests (S7) (status: S9 DONE offline 2026-11-17 (card retirej, TASK-629): the Journey is retired and `quests.board` defaults to...)
 - [questmem.md](questmem.md): In-memory quest and waypoint data (agent MEMQUEST, V-05)
+- [questspec.md](questspec.md): questspec: quest chains as checkable data (status: current (card questspec, roadmap R5 of docs/design/fable-review-2026-11-19/06-roadmap.md). Checker plus...)
 - [readiness.md](readiness.md): Readiness model: is this hero ready for that area (status: slice A of the friends beta (cards TASK-217 area table, TASK-218 model, TASK-220 meter feed in part)....)
 - [recovery.md](recovery.md): Recovery phase (broke character)
 
@@ -873,6 +874,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [openspec-removal-plan.md](process/openspec-removal-plan.md): OpenSpec removal plan (proposal for the user), revised for Backlog.md (status: PROPOSAL, written 2026-11-04 after the user retired OpenSpec for new work; revised the same day after the...)
 - [outside-prs.md](process/outside-prs.md): Outside pull requests: the proposed review gate (status: policy text APPROVED by the maintainer 2026-11-01 (card communitywork); its proposed repository settings...)
 - [plugin-pin.md](process/plugin-pin.md): Matt Pocock skills plugin: pin
+- [proving-ground.md](process/proving-ground.md): The Proving Ground: scenarios that play the real bot and read the game (status: current (card provingground, 2026-11-19). Source: the design review `docs/design/fable-review-2026-11-19/`...)
 - [public-split.md](process/public-split.md): Public split: rules going forward (change `pubsplit`) (status: cut done 2026-10-31: GitHub `main` is primary; the the private forge steps below are the historical plan.)
 - [queuespeed.md](process/queuespeed.md): Queue speed changes (TASK-312) (status: current. Source: docs/research/merge-queue-profile-2026-11-11.md. Code lives in the ops repo...)
 - [retired-terms-20261104.md](process/retired-terms-20261104.md): Retired-terms banner pass (2026-11-04)

@@ -1,10 +1,11 @@
 ---
 id: TASK-666
 title: 'cainfix2: tree class from the preset, chunks stay done, hand-in waits for town'
-status: Proposed
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-19T15:58:00Z'
+updated_date: '2026-11-19T17:22:00Z'
 labels:
   - bot
   - bot-fix

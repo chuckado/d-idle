@@ -1,0 +1,453 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "cain.scroll",
+   "title": "Search for Cain: take the Scroll of Inifuss from the Dark Wood tree",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [
+    "travel.waypoint",
+    "travel.area-transition"
+   ],
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/task/",
+    "internal/d2dsrc/",
+    "internal/nav/",
+    "internal/questboard/",
+    "internal/bot/questboard.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 500,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3,
+     5,
+     7
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs (points as a played level gives), purse 500, waypoints Cold Plains to Dark Wood, board chunk accepted in the plan store. CHEATED: waypoints are set by debug wp and the level by stat verbs (SETUP) (mechanics evidence only, never balance).",
+   "notes": "R2: the sandbox stall (hero reaches the tree room, never clicks). Red on the lab slot reproduces it; green on the lab slot means the sandbox differs: see cain.scroll.sandbox.",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "bks",
+     "why": "the tree gave the bark scroll (bks); it stays until Akara reads it"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "cain.scroll.sandbox",
+   "title": "Search for Cain tree step on the SHIPPED sandbox d2d build",
+   "kind": "step",
+   "tier": "full",
+   "build": "sandbox",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "tree"
+    ]
+   },
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/d2dsrc/",
+    "internal/d2dctl/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 500,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "sandbox-d2d-binary"
+   ],
+   "provenance": "As cain.scroll. Setup runs on the lab d2d (the save is portable); the BOT RUN uses the shipped build, whose gated debug verbs are refused and whose debug presets may lack room rows.",
+   "notes": "BLOCKED until D2D_BIN_SANDBOX names the sandbox build (devp12 and later). Reproduces the sandbox condition with the shipped verbs only.",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "bks"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "cain.scroll.field",
+   "title": "Search for Cain tree step from the Dark Wood (travel excluded)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "tree"
+    ]
+   },
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/d2dsrc/",
+    "internal/nav/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 500,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "start": "field",
+    "area": 5,
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3,
+     5,
+     7,
+     9
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "provenance": "CHEATED position: the hero is warped into the Dark Wood by debug goto and the live lab d2d (verbs on) is handed to the bot. Mechanics only. no_writes is not asserted: that d2d keeps lab verbs on.",
+   "notes": "Isolates the tree click from the walk to the Dark Wood. Field start is untested live (U).",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "bks"
+    }
+   ]
+  },
+  {
+   "id": "cain.read",
+   "title": "Search for Cain: Akara reads the Scroll of Inifuss",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "read"
+   },
+   "step": {
+    "action": "talk",
+    "target": "Akara",
+    "nodes": [
+     "read"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "cmd/d2bot/cain.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 500,
+    "items": [
+     {
+      "code": "bks"
+     }
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "read"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: the Scroll of Inifuss is given to the pack by debug give (not obtained from the tree). Mechanics only.",
+   "notes": "The chunk ends on a hand-in: the board walks to Akara and waits for the player's tap (docs/questboard.md), so the bot may stop short of the talk; if red for that reason the trigger needs the hand-in tap (U).",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "bkd",
+     "why": "Akara deciphers bks into the Key to the Cairn Stones (bkd)"
+    },
+    {
+     "kind": "item_absent",
+     "code": "bks"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "cain.stones",
+   "title": "Search for Cain: light the cairn stones, enter Tristram",
+   "kind": "step",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "the lab d2d shows no state change on the stones and no portal in the L0/L1 drills (docs/probes/search-for-cain-l1-2026-11-18.md); the stone handler and the Tristram portal object are not verified, so there is no state to assert yet",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "stones"
+   },
+   "step": {
+    "action": "interact",
+    "target": "cairn-stones",
+    "nodes": [
+     "to-stony",
+     "stones",
+     "to-tristram"
+    ]
+   },
+   "pre": {
+    "level": 17,
+    "start": "field",
+    "area": 4,
+    "items": [
+     {
+      "code": "bkd"
+     }
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "stones"
+    }
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: warped to Stony Field with the Key to the Cairn Stones given."
+  },
+  {
+   "id": "cain.free_cain",
+   "title": "Search for Cain: clear the guards, free Cain in Tristram",
+   "kind": "step",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "needs the Tristram portal open; the stone chunk is pending, and a warp into Tristram leaves the portal-open fact unset (U); assert quest record 4 bit 1 (0x2012) once a start state exists",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "free_cain"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Cain's Cage",
+    "nodes": [
+     "cage",
+     "home"
+    ]
+   },
+   "pre": {
+    "level": 17,
+    "start": "field",
+    "area": 38,
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "free_cain"
+    }
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: warped into Tristram."
+  },
+  {
+   "id": "cain.report",
+   "title": "Search for Cain: report to Akara after Cain is free",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "report"
+   },
+   "step": {
+    "action": "talk",
+    "target": "Akara",
+    "nodes": [
+     "report"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/quest/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 500,
+    "quests": [
+     {
+      "record": 4,
+      "word": 8210
+     }
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "report"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: quest record 4 set to 0x2012 (Cain freed) by debug quest set, no play. Mechanics only.",
+   "notes": "8210 is 0x2012. Same hand-in caveat as cain.read.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 4,
+     "set": 1,
+     "clear": 2,
+     "why": "V L2: Akara talk turns 0x2012 into 0x2011 (bit 0 done, bit 1 reward pending cleared)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  }
+ ]
+}
