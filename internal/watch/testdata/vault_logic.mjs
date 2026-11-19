@@ -126,4 +126,22 @@ ok('sell plan: pinned and queued items are skipped, the gold is the lower bound'
   assert.deepEqual(L.sellPlan(items, []), { n: 0, ids: [], gold: 0, pinned: 0, skipped: 0 }); assert.deepEqual(p.ids, ['a', 'b']);
 });
 
+
+ok('windowRange draws the rows near the view and pads the rest', () => {
+  const w = (o) => L.windowRange(Object.assign({ n: 2400, cols: 6, rowH: 70, view: 700, top: 0, over: 4 }, o));
+  let r = w({});
+  assert.equal(r.first, 0); assert.equal(r.padTop, 0); assert.equal(r.last, 6 * (10 + 4)); // 10 rows in view plus 4 below
+  assert.equal(r.padBot, (400 - 14) * 70);
+  r = w({ top: 70 * 100 + 5 }); // deep in the list
+  assert.equal(r.first, 6 * 96); assert.equal(r.last, 6 * (100 + 11 + 4)); assert.equal(r.padTop, 96 * 70);
+  assert.equal(r.padTop + (r.last - r.first) / 6 * 70 + r.padBot, 400 * 70, 'the padding keeps the full height');
+  r = w({ top: 70 * 5000 }); // past the end (a shrunk list): the last rows, never an empty window
+  assert.ok(r.last > r.first && r.last === 2400 && r.padBot === 0);
+  r = w({ n: 7, cols: 6 }); assert.deepEqual([r.first, r.last, r.padTop, r.padBot], [0, 7, 0, 0]);
+  r = w({ n: 0 }); assert.deepEqual([r.first, r.last], [0, 0]);
+  r = w({ cols: 1, rowH: 64, view: 640 }); assert.equal(r.last, 14); // the list mode is one column
+  r = w({ rowH: 0 }); assert.equal(r.last, 120, 'no layout: a capped first screen'); assert.equal(w({ view: 0, n: 30 }).last, 30);
+  for (let top = 0; top < 400 * 70; top += 333) { const q = w({ top }); assert.ok(q.last - q.first <= 6 * (10 + 8 + 2), 'window stays small at ' + top); }
+});
+
 console.log('vault logic: ' + n + ' groups ok');
