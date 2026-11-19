@@ -113,7 +113,8 @@ type control struct {
 // Runner is the real goals.Runner: a state machine driven by a tick loop on d2.Snapshot. Create it with New, start
 // its goroutine with Run, and hand it to goals.New. See docs/bot.md.
 type Runner struct {
-	readiness *readiness.Evaluator // nil: no readiness model wired (TASK-218)
+	pointsGate atomic.Pointer[func() bool] // who spends points: nil = the bot (pointsgate.go)
+	readiness  *readiness.Evaluator        // nil: no readiness model wired (TASK-218)
 
 	e   *env.Env
 	d   Deps
