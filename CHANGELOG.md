@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- verifycrushd5: crush D5 verifier, r1 FAIL, r2 PASS WITH CHANGES <!--sg:agent/verifyd5-->
 - cainl3: Search for Cain L3 drill, real bot chain on a lab slot <!--sg:agent/cainl3-->
 - decomp42 trace (docs/research/decomp42-crush-d6-trace.md): the get-hit size after a Crushing Blow, oracle and local candidate, no upstream post <!--sg:agent/decomp42-->
 - ADR 0020 Proving Ground and stat/skill agency <!--sg:agent/adrfable-->
