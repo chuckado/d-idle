@@ -452,6 +452,7 @@ docs/probes/survival-ab-8seed-2026-11-16.md  credit-runner  survab8
 docs/probes/survival-ab-8seed-rerun-2026-11-16.md  credit-runner  survtune
 docs/probes/survival-ab-reask-2026-11-17.md  credit-runner  survreask
 docs/probes/survival-ab-recovery-2026-11-17.md  credit-runner  survrecover
+docs/probes/survival-holdout2-2026-11-18.md  credit-runner  survhold2
 docs/probes/test-characters.md  credit-runner  cainl0
 docs/probes/test-characters.md  credit-runner  cainl2
 docs/probes/test-characters.md  credit-runner  survab8
@@ -650,6 +651,7 @@ internal/bot/goal.go  credit-runner  quests3
 internal/bot/goal.go  credit-runner  repairtrip
 internal/bot/goal.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  survB
+internal/bot/goal.go  credit-runner  survhold2
 internal/bot/goal.go  credit-runner  survrecover
 internal/bot/goal.go  credit-runner  uib1
 internal/bot/goal.go  credit-runner  vaultv5
@@ -664,6 +666,8 @@ internal/bot/heroattrs_test.go  credit-runner  uic3
 internal/bot/hpfields.go  credit-runner  intake
 internal/bot/killtime.go  credit-runner  swingmodel
 internal/bot/killtime_test.go  credit-runner  swingmodel
+internal/bot/kitgate.go  credit-runner  survhold2
+internal/bot/kitlevel_test.go  credit-runner  survhold2
 internal/bot/ladder_t0_test.go  credit-runner  questrun
 internal/bot/leveling.go  credit-runner  hourfix
 internal/bot/levelplan3_test.go  pro-runner  levelplan3
@@ -707,6 +711,7 @@ internal/bot/playerreset.go  credit-runner  quests8
 internal/bot/playerreset.go  credit-runner  resetinstant
 internal/bot/playerreset_test.go  credit-runner  botreset
 internal/bot/playerreset_test.go  credit-runner  resetinstant
+internal/bot/portalburn_test.go  credit-runner  survhold2
 internal/bot/questauto.go  credit-runner  quests8
 internal/bot/questauto_test.go  credit-runner  quests8
 internal/bot/questboard.go  credit-runner  questrun
@@ -760,6 +765,7 @@ internal/bot/whyline.go  credit-runner  repairtrip
 internal/bot/whyline.go  credit-runner  staletarget
 internal/bot/whyline_test.go  credit-runner  uifix1
 internal/bot/zonemodel.go  credit-runner  survfix2
+internal/bot/zonemodel.go  credit-runner  survhold2
 internal/bot/zonemodel.go  credit-runner  survreask
 internal/bot/zonemodel.go  credit-runner  survrecover
 internal/bot/zonemodel_test.go  credit-runner  survfix2
@@ -1025,6 +1031,7 @@ internal/skilltree  credit-runner  skilltrees2
 internal/status/inventory.go  credit-runner  itemcolour2
 internal/status/inventory.go  credit-runner  jewelicons
 internal/survival  credit-runner  survfix2
+internal/survival  credit-runner  survhold2
 internal/survival  credit-runner  survsd
 internal/survival  credit-runner  survtune
 internal/survival/  credit-runner  survC
@@ -1566,6 +1573,7 @@ tools/levelsim/shadow.go  credit-runner  intake
 tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
+tools/survival  credit-runner  survhold2
 tools/survival  credit-runner  survtune
 tools/survival/abreport  credit-runner  survfix
 tools/survival/abrun.sh  credit-runner  survfix2

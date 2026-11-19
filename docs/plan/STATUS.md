@@ -284,6 +284,7 @@
 | cain5b | proposed | - | `cmd/d2bot/cain5b_test.go`<br>`cmd/d2bot/objects.go`<br>`internal/bot/task.go`<br>`internal/bot/task_acts_test.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/quest/dialog.go`<br>`internal/task/act1.go`<br>`internal/task/testdata/plans/act1.txt`<br>`data/questboard/act1.json`<br>`internal/watch/testdata/quests`<br>`internal/questboard/chunks_test.go`<br>`docs/probes/search-for-cain-5b-2026-11-18.md`<br>`docs/questboard.md` | - |
 | vaulttip | proposed | - | `internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`cmd/d2bot/vaulttip.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/watch/vaulttip_test.go`<br>`internal/watch/testdata/vault_tip.mjs`<br>`tools/uishots/fixtures_vault.go`<br>`docs/vault.md`<br>`tools/uishots.sh`<br>`internal/vault/types.go`<br>`internal/loot/vault.go`<br>`internal/vaultkeep/reveal.go`<br>`internal/d2dctl/vault_verbs.go`<br>`internal/d2dctl/vault_verbs_test.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go` | - |
 | devp12 | proposed | - | `docs/process/sandbox-devp12.md` | - |
+| survhold2 | proposed | - | `internal/survival`<br>`internal/bot/kitgate.go`<br>`internal/bot/kitlevel_test.go`<br>`internal/bot/portalburn_test.go`<br>`internal/bot/zonemodel.go`<br>`internal/bot/goal.go`<br>`tools/survival`<br>`docs/probes/survival-holdout2-2026-11-18.md` | - |
 | bulkid-design | proposed | - | `docs/design/bulk-identify-2026-11-18.md` | - |
 | bulkid | proposed | - | `internal/bulkid`<br>`data/bulkid`<br>`internal/env/tuning_identify.go`<br>`internal/watch/vaultmass_test.go`<br>`internal/env/tuning.go`<br>`docs/knobs.md`<br>`internal/vaultkeep/reveal.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/note_test.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -324,6 +325,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 687344925 11-18 20:11 `Merge agent/survhold2: survhold2: kit gate hold, return walk past burned portal, holdout 2 record` (survhold2)
+- 26c11333d 11-18 20:10 `Merge branch 'main' into survhold2` (-)
 - 22284866b 11-18 20:02 `Merge agent/antiflail: Merge branch 'main' into antiflail` (antiflail)
 - 315a64e87 11-18 20:01 `Merge branch 'main' into antiflail` (-)
 - 575c90c37 11-18 19:56 `Merge agent/bulkid: bulk identify B1-B5 offline` (bulkid)
@@ -332,6 +335,4 @@
 - e7c1bd1a6 11-18 19:50 `Merge branch 'main' into decomp41` (-)
 - f5cf91c17 11-18 19:42 `Merge agent/tpfix: Merge branch 'main' into tpfix` (tpfix)
 - 593a2405d 11-18 19:41 `Merge branch 'main' into tpfix` (-)
-- e080f368c 11-18 19:35 `Merge agent/vaulttip2: vaulttip2: Vault fit pages run, shared StatLines for the common descfuncs, windowed 2400-item grid` (vaulttip2)
-- 35abf9ecb 11-18 19:34 `Merge branch 'main' into vaulttip2` (-)
 <!-- statusgen:end -->
