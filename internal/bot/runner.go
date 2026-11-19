@@ -167,6 +167,7 @@ type Runner struct {
 	healthMu       sync.Mutex // serialises Health.Step, which runs outside obMu (see healthProbe)
 	tpBuyMin       int        // scrolls bought this minute, set by tpDiag under obMu for failsafeKV
 	ob             observer
+	arb            arbShadow               // intent arbiter in shadow mode (shadow.go); idle unless bot.arbiterShadow is 1
 	zst            zoneState               // the last zone model verdict (zonemodel.go)
 	zmerc          zoneMerc                // merc alive/dead edge detection for ZoneObserve (zoneshadow.go)
 	deathW         combat.DeathWeights     // lessons of Nightmare/Hell deaths, guarded by obMu (deathweights.go)

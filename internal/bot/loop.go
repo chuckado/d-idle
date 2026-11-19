@@ -132,7 +132,7 @@ func (r *Runner) step(ctx context.Context) bool {
 		}
 		return false
 	}
-	return r.runGoal(ctx, snap, c)
+	return r.runGoalShadowed(ctx, snap, c)
 }
 
 // betweenGoals asks the recycler (Deps.Recycle) whether the game should be restarted now. Only in town with nothing hostile

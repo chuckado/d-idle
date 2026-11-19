@@ -314,6 +314,10 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.flailMoves | 6 | 0..100 | moves | 6 | 1 | This many area changes inside the flail window without a kill or XP count as a loop (any cause: the quest board, area done and waypoint fallbacks undoing each other). The bot then holds in place. 0 is off. |
 | bot.flailWindowMin | 10 | 1..120 | min | 10 | 1 | Length of the window in which the area changes of the flail guard are counted. |
 | bot.flailHoldMin | 5 | 1..120 | min | 5 | 2 | How long the bot stays in the current area (fights in the field, rests in town) after a flail was found. Doubles for each repeat within an hour, at most eight times. |
+| bot.arbiterShadow | 0 | 0..1 | bool | 0 | 1 | 1 runs the intent arbiter beside the goal chain and logs one line per divergence (chain chose A, arbiter would choose B because ...) plus per-family counters in the minute line. It never acts: nothing changes for the hero. 0 is off (docs/arbiter.md). |
+| bot.arbiterDwellSec | 120 | 10..1800 | s | 120 | 1 | Arbiter shadow: how long a chosen intent holds its lease; only a higher priority class preempts it inside this time. |
+| bot.arbiterTravelSec | 600 | 30..7200 | s | 600 | 1 | Arbiter shadow: an area change that would undo the previous one inside this window is refused unless a kill, XP, gold or belt change happened in between. |
+| bot.arbiterLogGapSec | 60 | 1..3600 | s | 60 | 1 | Arbiter shadow: minimum seconds between two divergence lines of the same (chain, arbiter) pair. |
 | bot.mercRetryMin | 10 | 1..60 | min | 10 | 1 | Minutes between merc chore attempts; a failed hire or revive is not retried sooner. |
 | bot.mercHireMinGold | 400 | 0..2000 | gold | 400 | 1 | Gold in Act 2 town below which no hire is attempted. |
 | bot.mercReviveUnverified | 0 | 0..1 | bool | 0 | 3 | 1 lets the town visit click the revive dialog, which is UNVERIFIED live (docs/merc-farm.md). Off until a live probe. |
