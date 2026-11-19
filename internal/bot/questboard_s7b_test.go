@@ -217,3 +217,36 @@ func TestCainStonesChunkDoneAfterTheKeyIsUsedUp(t *testing.T) {
 		t.Fatal("stones not done in Tristram after the key was used up")
 	}
 }
+
+// V lab drill CAIN-L3, third live run: the free-Cain chunk (cage, home) read DONE whenever the hero stood outside
+// Tristram, because a field step whose area precondition is false counts as "not needed". After the first chicken from
+// Tristram the board dropped the chunk (and the report to Akara could never be offered). The chunk is done on the quest
+// word (reward pending, record 4 bit 1) and a hero in town, nothing else.
+func TestCainFreeChunkIsDoneOnTheQuestWordOnly(t *testing.T) {
+	b, err := questboard.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	q, _ := b.Quest("search_for_cain")
+	c, _ := b.Chunk("search_for_cain", "free_cain")
+	started := map[string]task.QuestState{task.QCain: {Stage: task.StageStarted, Ev: task.EvMemory}}
+	cleared := map[string]task.QuestState{task.QCain: {Stage: task.StageCleared, Ev: task.EvMemory}}
+	town := func(qs map[string]task.QuestState) task.World { return s7bWorld(map[string]int{}, qs) }
+	field := func(qs map[string]task.QuestState, area task.Area) task.World {
+		w := s7bWorld(map[string]int{}, qs)
+		w.Area, w.InTown = area, false
+		return w
+	}
+	rt := &boardRT{handed: map[string]bool{}, reached: map[string]bool{}}
+	for name, w := range map[string]task.World{"town": town(started), "stony field": field(started, task.StonyField), "tristram": field(started, task.Tristram)} {
+		if rt.chunkFact(q, c, w).Done {
+			t.Errorf("free_cain reads done in %s with Cain still caged", name)
+		}
+	}
+	if rt.chunkFact(q, c, field(cleared, task.Tristram)).Done {
+		t.Error("free_cain reads done before the hero is back in camp")
+	}
+	if !rt.chunkFact(q, c, town(cleared)).Done {
+		t.Error("free_cain not done with Cain free and the hero in camp")
+	}
+}
