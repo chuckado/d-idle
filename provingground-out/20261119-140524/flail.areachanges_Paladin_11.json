@@ -1,0 +1,237 @@
+{
+ "version": "didle.scenario-result/1",
+ "id": "flail.areachanges",
+ "class": "Paladin",
+ "seed": 11,
+ "status": "RED",
+ "reason": "area_changes_le: wanted area changes \u003c= 12, got 26 area changes",
+ "asserts": [
+  {
+   "kind": "area_changes_le",
+   "ok": false,
+   "want": "area changes \u003c= 12",
+   "got": "26 area changes",
+   "why": "the sandbox cycled Dark Wood, Cold Plains and the camp for 17 hours"
+  }
+ ],
+ "virtual_min": 40,
+ "budget_min": 40,
+ "wall_sec": 387,
+ "tags": [
+  "CHEATED",
+  "waypoint"
+ ],
+ "trace": "provingground-out/20261119-140524/flail.areachanges_Paladin_11.bot.log",
+ "taps": [
+  "start scroll"
+ ],
+ "state": {
+  "version": "didle.scenario-state/1",
+  "source": "d2d-observer-reload",
+  "has": [
+   "items",
+   "portals",
+   "objects"
+  ],
+  "area": 1,
+  "level": 17,
+  "gold": 828,
+  "stash": 1087,
+  "life_pct": 73,
+  "quests": {
+   "1": 4
+  },
+  "items": [
+   {
+    "code": "ssd",
+    "where": "body"
+   },
+   {
+    "code": "buc",
+    "where": "body"
+   },
+   {
+    "code": "isc",
+    "where": "pack"
+   },
+   {
+    "code": "tbk",
+    "where": "pack"
+   },
+   {
+    "code": "isc",
+    "where": "pack"
+   },
+   {
+    "code": "cap",
+    "where": "body"
+   },
+   {
+    "code": "lbt",
+    "where": "body"
+   },
+   {
+    "code": "mp2",
+    "where": "belt"
+   },
+   {
+    "code": "hp2",
+    "where": "belt"
+   },
+   {
+    "code": "qui",
+    "where": "body"
+   },
+   {
+    "code": "mp2",
+    "where": "pack"
+   },
+   {
+    "code": "mp2",
+    "where": "pack"
+   },
+   {
+    "code": "hp2",
+    "where": "belt"
+   },
+   {
+    "code": "hp2",
+    "where": "belt"
+   },
+   {
+    "code": "hp2",
+    "where": "pack"
+   },
+   {
+    "code": "hp2",
+    "where": "pack"
+   },
+   {
+    "code": "gcw",
+    "where": "pack"
+   }
+  ],
+  "objects": [
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 267,
+    "state": "NU"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 119,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 385,
+    "state": "NU"
+   }
+  ],
+  "area_changes": 26,
+  "area_trail": [
+   1,
+   2,
+   3,
+   4,
+   10,
+   1,
+   10,
+   5,
+   6,
+   5,
+   1,
+   5,
+   10,
+   4,
+   1,
+   4,
+   1,
+   4,
+   3,
+   9,
+   1,
+   9,
+   13,
+   9,
+   1,
+   2,
+   1
+  ],
+  "writes_after_start": 0
+ },
+ "digest": "266bcf31ba417d75"
+}
