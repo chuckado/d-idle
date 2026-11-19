@@ -737,3 +737,32 @@ func TestFieldObjectsAppearWhileStandingStill(t *testing.T) {
 		t.Fatal("the Tree of Inifuss never showed to a player standing still")
 	}
 }
+
+// V 2026-11-19 (lab drill CAIN-L3): "npcs" also lists the Tree of Inifuss (a named, class-less row), and fieldObjects
+// skipped every index "npcs" lists, so the tree stayed class -1 and the bot's search for class 30 never matched it.
+// The row must come out with the preset's class, once, under the same unit id; other class -1 rows stay as they are.
+func TestNpcsListedObjectGetsItsPresetClass(t *testing.T) {
+	r := lateReplies(t)
+	r["npcs"] = "Tree of Inifuss\t300\t200\t0\t8\t34.0\t12.0\nSomething Odd\t300\t200\t0\t9\t35.0\t12.0\nok\n"
+	r["debug presets"] = "8\t30\t34.0\t12.0\t0\tTree of Inifuss\n" +
+		"9\t580\t60.0\t12.0\t0\tOther Place\nok\n" // same index as an npcs row, other spot: not the same object
+	_, c := startScript(t, r)
+	res, err := New(c, Options{Tables: fakeTables{}, Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := map[uint32]int{}
+	n := 0
+	for _, u := range res.Snap.Objects {
+		got[u.ID] = u.Class
+		if u.ID == NPCIDBase+8 {
+			n++
+		}
+	}
+	if got[NPCIDBase+8] != 30 || n != 1 {
+		t.Fatalf("tree class %d, rows %d (want 30, 1): %+v", got[NPCIDBase+8], n, res.Snap.Objects)
+	}
+	if got[NPCIDBase+9] != -1 {
+		t.Errorf("a row at another spot took the preset class: %d", got[NPCIDBase+9])
+	}
+}
