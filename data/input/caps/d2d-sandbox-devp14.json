@@ -1,0 +1,6 @@
+{
+ "schema": "inputcaps/1",
+ "backend": "d2d-sandbox-devp14",
+ "verbs": ["input.select"],
+ "note": "U until the candidate image is switched in and the Proving Ground scenario passes live: devp14 carries cmd select fixed to set the hand (docs/process/sandbox-devp14.md)."
+}

@@ -1,0 +1,6 @@
+{
+ "schema": "inputcaps/1",
+ "backend": "d2d-sandbox-devp13",
+ "verbs": [],
+ "note": "V: cmd select is accepted but leaves the right skill unchanged (docs/palready.md, deviation R08), so no input verb is usable; the popup click path is the only one."
+}

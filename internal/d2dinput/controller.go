@@ -64,6 +64,7 @@ func New(c *d2dctl.Client) *Controller {
 var (
 	_ input.Controller    = (*Controller)(nil)
 	_ input.SemanticInput = (*Controller)(nil)
+	_ input.SkillSelector = (*Controller)(nil)
 )
 
 type wall struct{}
@@ -421,6 +422,10 @@ func (c *Controller) SelectSkill(hotkey string) error {
 	}
 	return c.Key(hotkey)
 }
+
+// SelectSkillID is the select verb ("cmd select <id> <hand>") by skill id. U/V: on fork builds before devp14 it is
+// accepted and leaves the hand unchanged (R08), so callers verify the hand from state; devp14 sets it.
+func (c *Controller) SelectSkillID(id int, left bool) error { return c.C.CmdSelect(c.ctx(), id, left) }
 
 // CastAt casts the hotkey's skill at w: "cmd skill" when the id is known, else key + right click on the pixel
 // computed from the player position (U: transform not calibrated on d2d).

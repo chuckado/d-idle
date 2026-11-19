@@ -1,0 +1,6 @@
+{
+ "schema": "inputcaps/1",
+ "backend": "game-exe",
+ "verbs": [],
+ "note": "V (07-input-layer.md): the frozen Game.exe backend has no verbs; skills use the F-keys the bot binds itself, everything else is a click."
+}
