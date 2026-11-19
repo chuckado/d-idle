@@ -654,7 +654,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [unlock-atlas.md](unlock-atlas.md): Waypoint atlas (TASK-160, unlockatlas)
 - [unlock-bestiary.md](unlock-bestiary.md): Cain's notes, the bestiary (TASK-158, unlockbestiary)
 - [unlock-chronicle.md](unlock-chronicle.md): Chronicle (TASK-154, unlockchronicle)
-- [unlock-idreveal.md](unlock-idreveal.md): Identify reveal (TASK-157, unlockidreveal)
+- [unlock-idreveal.md](unlock-idreveal.md): Identify reveal (TASK-157, unlockidreveal) (status: REMOVED 2026-11-19 (task nocards, user report: no "Unidentified item" card anywhere). The face-down card...)
 - [unlock-ladder.md](unlock-ladder.md): Unlock ladder (TASK-153, unlockladder)
 - [unlock-orderqueue.md](unlock-orderqueue.md): Order queue (TASK-161, unlockorderqueue)
 - [unlock-questlog.md](unlock-questlog.md): Quest log (TASK-156, unlockquestlog)
