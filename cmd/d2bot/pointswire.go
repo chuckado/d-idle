@@ -197,6 +197,9 @@ func bindPoints(f *watch.Fun, d *points.Desk) {
 	api := watch.NewPointsAPI()
 	api.Bind(d)
 	f.Points = api
+	if f.Skills != nil && d.CanSpendSkills() {
+		f.Skills.EnableAllocate(d) // the skill page then shows its + control
+	}
 }
 
 // pointsNeeds is the Needs-you row of banked points: one row while any stat or skill point waits.

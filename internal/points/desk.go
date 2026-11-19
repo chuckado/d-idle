@@ -78,6 +78,9 @@ func (d *Desk) verbs() Verbs {
 	return d.c.Verbs()
 }
 
+// CanSpendSkills says whether a skill point can be spent by verb on this backend now.
+func (d *Desk) CanSpendSkills() bool { v := d.verbs(); return v.Skill && d.c.SpendSkill != nil }
+
 // Autopilot is the per-hero switch (default off).
 func (d *Desk) Autopilot() bool { return d.store.Get().Autopilot }
 

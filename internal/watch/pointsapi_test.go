@@ -128,3 +128,42 @@ func TestPointsAPIGate(t *testing.T) {
 		t.Errorf("unbound GET: %d", un.Code)
 	}
 }
+
+func TestPointsPageAndAssets(t *testing.T) {
+	r := newPointsRig(t, d2.Sorceress)
+	for path, want := range map[string]string{"/watch/points": "<title>d.idle - points</title>", "/watch/points.js": "/api/hero/points/stat", "/watch/points.css": ".pt-stat"} {
+		w := httptest.NewRecorder()
+		r.view.ServeHTTP(w, httptest.NewRequest("GET", path, nil))
+		if w.Code != 200 || !strings.Contains(w.Body.String(), want) {
+			t.Errorf("%s: %d", path, w.Code)
+		}
+	}
+	w := httptest.NewRecorder()
+	r.view.ServeHTTP(w, httptest.NewRequest("GET", "/watch/points.txt", nil))
+	if w.Code != http.StatusNotFound {
+		t.Errorf("unknown asset: %d", w.Code)
+	}
+}
+
+func TestSkillsAllocateRoutesToThePointsDesk(t *testing.T) {
+	r := newPointsRig(t, d2.Paladin)
+	sk := NewSkillsAPI()
+	sk.EnableAllocate(r.desk)
+	w := httptest.NewRecorder()
+	sk.PostHandler(AnswerOptions{Token: "tok"}).ServeHTTP(w, newJSONReq("/api/skills/allocate", `{"skill":96,"points":1}`))
+	if w.Code != 200 {
+		t.Fatalf("allocate: %d %s", w.Code, w.Body)
+	}
+	w = httptest.NewRecorder()
+	sk.PostHandler(AnswerOptions{Token: "tok"}).ServeHTTP(w, newJSONReq("/api/skills/allocate", `{"skill":36,"points":1}`))
+	if w.Code != http.StatusConflict {
+		t.Errorf("other class skill: %d %s", w.Code, w.Body)
+	}
+}
+
+func newJSONReq(path, body string) *http.Request {
+	req := httptest.NewRequest("POST", path, strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer tok")
+	return req
+}

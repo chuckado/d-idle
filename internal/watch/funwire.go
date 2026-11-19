@@ -779,7 +779,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 		m.Handle(QuestsRoute, f.QuestBoard.Handler())
 	}
 	if f.Points != nil {
-		m.Handle(PointsRoute, f.Points.Handler())
+		for _, p := range PointsRoutes {
+			m.Handle(p, f.Points.Handler())
+		}
 	}
 	if f.ZoneClear != nil {
 		m.Handle(ZoneClearRoute, f.ZoneClear.Handler())

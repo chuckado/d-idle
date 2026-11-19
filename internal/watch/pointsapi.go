@@ -2,6 +2,7 @@ package watch
 
 import (
 	"context"
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
@@ -25,6 +26,9 @@ const (
 	PointsRoute  = "/api/hero/points"
 	PointsPrefix = "/api/hero/points/"
 )
+
+// PointsRoutes are the viewer routes the handler serves: the sheet, the page and its two assets.
+var PointsRoutes = []string{PointsRoute, "/watch/points", "/watch/points.js", "/watch/points.css"}
 
 // PointsDesk is what the routes need from the points service (points.Desk).
 type PointsDesk interface {
@@ -56,7 +60,26 @@ type pointsView struct {
 // Handler serves the viewer GET.
 func (a *PointsAPI) Handler() http.Handler {
 	return readOnly(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != PointsRoute {
+		switch r.URL.Path {
+		case PointsRoute:
+		case "/watch/points":
+			pactHdr(w, "text/html; charset=utf-8")
+			io.WriteString(w, pointsPage)
+			return
+		case "/watch/points.js", "/watch/points.css":
+			b, err := webFS.ReadFile("web/" + strings.TrimPrefix(r.URL.Path, "/watch/"))
+			if err != nil {
+				http.NotFound(w, r)
+				return
+			}
+			ct := "text/javascript; charset=utf-8"
+			if strings.HasSuffix(r.URL.Path, ".css") {
+				ct = "text/css; charset=utf-8"
+			}
+			pactHdr(w, ct)
+			w.Write(b)
+			return
+		default:
 			http.NotFound(w, r)
 			return
 		}
