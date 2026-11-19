@@ -324,6 +324,9 @@ deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 deploy/d2d-container/tester_image_test.go  credit-runner  charsup
 deploy/nas/imgbuild.sh  credit-runner  buildhosts3
 docs/actbot.md  credit-runner  cain45
+docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md  credit-runner  adrfable
+docs/adr/0020-proving-ground-and-stat-skill-agency.md  credit-runner  adrfable
+docs/adr/README.md  credit-runner  adrfable
 docs/aggression.md  credit-runner  wiring2
 docs/archive  credit-runner  dietarchive
 docs/away-drill.md  live-agent  awaydrill
@@ -337,6 +340,7 @@ docs/charselect.md  credit-runner  charsup
 docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/contracts/merc-policy.md  credit-runner  mercrevive2
 docs/d2d-loot.md  credit-runner  groundquality
+docs/decisions.md  credit-runner  adrfable
 docs/design/bulk-identify-2026-11-18.md  credit-runner  bulkid-design
 docs/design/bulk-identify-2026-11-18.md  credit-runner  etherreveal
 docs/design/fable-review-2026-11-19  user  fablereview

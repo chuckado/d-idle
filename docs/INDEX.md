@@ -30,6 +30,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0017-direction-fun-first-2026-11-07.md](adr/0017-direction-fun-first-2026-11-07.md): 0017: Direction for the next two weeks: find the fun first
 - [0018-fun-loop-expedition-ledger-2026-11-07.md](adr/0018-fun-loop-expedition-ledger-2026-11-07.md): 0018: d.idle's loop is the Expedition Ledger; Act 1 content is the Codex; carry-over is a Hall of Fame first
 - [0019-pacts-and-unlocks-2026-11-07.md](adr/0019-pacts-and-unlocks-2026-11-07.md): 0019: Pacts are opt-in challenge rules with meta rewards; information and watch features unlock progressively
+- [0020-proving-ground-and-stat-skill-agency.md](adr/0020-proving-ground-and-stat-skill-agency.md): 0020: Proving Ground first; the player spends every point; intent arbiter; class order
 - [adr/README.md](adr/README.md): Architecture decision records
 - [decisions.md](decisions.md): Decisions (user, with date)
 
