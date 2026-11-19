@@ -6,7 +6,14 @@ Tags: **V run** (run by this verifier today, the builder container), **V read** 
 
 ## Verdict: r1 FAIL (stale base, pin gaps, scan wording), r2 PASS WITH CHANGES
 
-@@VERDICT@@
+The rule is game.exe's and r1's one-line fix implements it: 0 of 29,360 differ on the claim, 5,632 on the parent, every one a plain unique (V run, the grid is exhaustive: 734 MonStats rows x 5 kinds x 1 to 8 players, so there is no seed to vary). The class mapping holds on both sides and no other row of d2d's divisor table is wrong (below). r1 should not be posted as it is:
+
+1. **Stale base (high).** r1 is on `9b64c11a`; upstream main is `d5de50ca`, 83 commits on. It rebases with no conflict, but the posted commits must be the rebased ones, built and tested there.
+2. **The pins and the oracle miss mutants (high).** Four plausible mutants pass r1's `test_crush_divisor` (V run, section Mutants): a hireling given the player share (v10), a superunique hireling given 8 (v11), and two in `Monster::target`, which hands the divisor to `player_blow` (v15: a constant 4; v16: the parent's 8 back for a unique). v15 and v16 also pass r1's ORACLE (0 differ): its d2d side calls `Monster::crush_divisor` directly, not the divisor the player's blow takes, so the measured quantity is one step short of the player-visible one (the decomp37 / decomp38 lesson). No test in the tree reads `Monster::target(...).crush_divisor` (V read, `git grep`). r2 measures through `Monster::target` in the oracle commit (same measuring code in both commits) and adds two game.exe pins (a hireling at 4 players, a hireling made superunique): 17 of 17 non-equivalent mutants abort.
+3. **The writer scan overclaims (medium, claims).** "the only two writes of bit 2 in the executable" and "only the two superunique branches write bit 2": a widened scan finds a third writer of the word, `FUN_004ac810` (a setter with a mask, three calls, one with a mask read from memory), and shows that `0x5a4599` is not a creator's superunique branch but `FUN_005a4440` re-making a monster from a saved record, gated on a record flag the saver sets from bit 2 alone (section "Who writes bit 2"). The conclusion stands (a plain unique never gets bit 2 on the game side); the wording must change. r2's `drops.md`, the oracle docstring and the claim message say it.
+4. **Stale "boss or unique" comments (low).** `tests/test_combat.cpp:423` and `tools/emu/crush.py:18` (both from #609) still say a unique divides by 8; r2's claim corrects both.
+
+**Post `fid/crush-d5-r2`**: oracle `3d51e67e`, claim `5824a42f`, on upstream main `d5de50ca` (pushed to the private fork remote today, V run `git ls-remote`); author and committer `shatteredeagle <26069301+shatteredeagle@users.noreply.github.com>`, oracle first, `Agent: Claude Code` the only parsed trailer after a blank line in both (V run, `git interpret-trailers --parse`). Against r1 rebased: `ai.hpp` byte for byte; the oracle's d2d side through `Monster::target`; pins 13 and 14; `drops.md` writer paragraph; two comments. The body then needs C1 to C8 below.
 
 ## Game side, re-derived (V read by this verifier)
 
