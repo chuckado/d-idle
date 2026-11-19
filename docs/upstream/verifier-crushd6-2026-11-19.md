@@ -1,10 +1,10 @@
 # Verifier: Crushing Blow D6, the crush is not in the get-hit's size (2026-11-19)
 
-> status: draft, 2026-11-19 (card verifycrushd6, Opus, singly; independent verifier before posting). Nothing posted. Subject: private fork branch `fid/crush-d6-r1` (oracle `e177207f`, claim `a35db81c`, on upstream `da98b7f8`), body `docs/upstream/bodies/crush-d6-body.md`, trace `docs/research/decomp42-crush-d6-trace.md` section 1.
+> status: current, 2026-11-19 (card verifycrushd6, Opus, singly; independent verifier before posting). Nothing posted. Subject: private fork branch `fid/crush-d6-r1` (oracle `e177207f`, claim `a35db81c`, on upstream `da98b7f8`), body `docs/upstream/bodies/crush-d6-body.md`, trace `docs/research/decomp42-crush-d6-trace.md` section 1.
 
 Tags: **V run** (run by this verifier today, the builder container), **V read** (disassembly or source read by this verifier), **I** (inferred), **S** (an earlier doc, named), **U** (unverified).
 
-## Verdict: r1 FAIL (stale base, two disclosed escapes and an untested call site), r2 PASS WITH CHANGES
+## Verdict: r1 FAIL (stale base, escapes, an untested call site), r3 PASS WITH CHANGES
 
 The rule is game.exe's, for every path through the damage handler (re-derived below), and r1's code change implements it for every player-side blow (melee, missile, kick, hireling, pet: all reach `Fight::land`). r1 should not be posted as it is:
 
@@ -13,7 +13,7 @@ The rule is game.exe's, for every path through the damage handler (re-derived be
 3. **The trace's "missile path not run" (D4) and "element not run" (D3) limits are closed by r2**, and the controls (no crush, both trees) are exact on the new missile and fire cases: 0 of 103,520 on three seeds.
 4. **Sibling paths (medium, body).** A monster's MonProp crush on a monster or on a pet is still its own `hurt` call whose whole size is the crush (`fight/tick.cpp:459`, `:517`): game.exe never sizes a crush. Not this PR's to fix; the body must say so (the presubmit `siblings` WARN). Life Tap heals from `blow.damage` (crush and elements in it); game.exe's func 5 reads the record's physical only: a separate finding.
 
-**Post `fid/crush-d6-r2`**: oracle `8fb5d1e4`, claim `629e3126`, on upstream main `d5de50ca` (pushed to the private fork remote today, V run `git ls-remote`); author and committer `shatteredeagle <26069301+shatteredeagle@users.noreply.github.com>`, oracle first, `Agent: Claude Code` the only parsed trailer after a blank line in both (V run, `git interpret-trailers --parse`). The code change (`ai.cpp`, `ai.hpp`, `strike.cpp`, `combat.hpp`, `combat.md`) is r1's byte for byte; only the oracle, the test and the two commit messages changed. It also applies cleanly on top of D5 (`fid/crush-d5-r2`) in either order (V run; combined build below). The body then needs C1 to C8.
+**Post `fid/crush-d6-r3`**: oracle `f2a7007c`, claim `8867eb7f`, on upstream main `d5de50ca` (pushed to the private fork remote today, V run `git ls-remote`); author and committer `shatteredeagle <26069301+shatteredeagle@users.noreply.github.com>`, oracle first, `Agent: Claude Code` the only parsed trailer after a blank line in both (V run, `git interpret-trailers --parse`). The code change (`ai.cpp`, `ai.hpp`, `strike.cpp`, `combat.hpp`, `combat.md`) is r1's byte for byte; only the oracle, the test and the two commit messages changed. `fid/crush-d6-r2` (`629e3126`, pushed earlier today) is the same tree before four clang-tidy fixes in the test (a short name, three includes); it is superseded, not to be posted (no force-push, so r3 is a new branch). The tables below were measured on r2's trees (same code; the test differs only in names and includes); on r3 the parent and the claim were re-run on seed 7 with the same counts (65,145 and 0, controls 0), the pins pass and ctest's `test_crush_get_hit` passes (V run). r3 also applies cleanly on top of D5 (`fid/crush-d5-r2`) (V run; combined build below). The body then needs C1 to C8.
 
 ## Game side, re-derived (V read)
 
@@ -70,18 +70,18 @@ One text change each on the r2 claim (`mutb.py`): a `.cpp` mutant is rebuilt as 
 | Mutant | r2 pins | r2 compare: get-hit / seed / life / total | r1 |
 |---|---|---|---|
 | m01 the parent: crush in the size | abort | 38,601 / 52,109 / 0 / 65,145 | caught |
-| m02 `crush_fine` never set | HDR02 | caught |
+| m02 `crush_fine` never set | abort | 38,601 / 52,109 / 0 / 65,145 | caught |
 | m03 `blow_hurt` passes 0 | abort | 38,601 / 52,109 / 0 / 65,145 | caught |
 | m04 the crush taken off twice | abort | 13,948 / 29,223 / 0 / 30,965 | caught |
 | m05 the crush cut to whole points | abort | 3,582 / 8,438 / 0 / 8,928 | compare only (its pin was added after) |
 | m06 no floor at 0 | passes | 0 (binary equal to the claim's) | equivalent |
-| m07 `crush_fine` halved | HDR07 | caught |
-| m08 a missile blow carries no crush | HDR08 | **escapes** |
+| m07 `crush_fine` halved | abort | 22,067 / 39,211 / 0 / 43,975 | caught |
+| m08 a missile blow carries no crush | abort | 7,931 / 13,690 / 0 / 15,479 | **escapes** |
 | m09 `marked` dropped | abort | 3,922 / 8,631 / 0 / 9,523 | **escapes** |
 | m10 `Fight::land` back to the inline soak and hurt | abort | 38,601 / 52,109 / 0 / 65,145 | **escapes** (I) |
 | m11 the crush taken off the life too (size kept) | abort | 0 / 0 / 103,520 / 103,520 | **escapes** (I) |
-| m12 only the crush's part under a point in `crush_fine` | HDR12 | caught (I) |
-| m13 a missile's crush halved in `crush_fine` | HDR13 | **escapes** (I) |
+| m12 only the crush's part under a point in `crush_fine` | abort | 35,078 / 48,568 / 0 / 59,542 | caught (I) |
+| m13 a missile's crush halved in `crush_fine` | abort | 4,138 / 8,679 / 0 / 9,380 | **escapes** (I) |
 | m14 a crush marks the blow | abort | 5,414 / 12,931 / 0 / 13,794 | **escapes** (I) |
 
 The first mutant pass linked each header mutant with the object the previous `.cpp` mutant left (a restored source rebuilds only at the next build); the header rows are a clean second pass.
@@ -97,16 +97,18 @@ Builder container, Release, GCC, tests and tools on, `-j2`; three jobs, each one
 
 `smoke_d2d` fails on both trees, as on upstream `d5de50ca` (`tests/smoke_d2d.py:444`, S: `verifier-crushd5`): not this PR's.
 
-TIDYROW
+clang-tidy-19 (the repo's config, warnings as errors): `fight/strike.cpp` 0, `ai.cpp` 0; `test_crush_get_hit.cpp` on r2 had 4 errors (`hc` too short, no direct include for `Boss`, `kMaxLife`, `kLife`; the first two were in r1's test too), fixed in r3's oracle commit: 0. Positive control: an unused `#include <map>` injected makes tidy fail (rc 1, `misc-include-cleaner`), restored after.
+
+**D5 + D6 together** (r2 cherry-picked on `fid/crush-d5-r2`, `e2e6886f`, local only): the four crush and combat tests build and pass (`ctest -R` 4 of 4); the D6 compare on seed 7: 0 of 103,520 (control 0); the D5 oracle (`crush_div.py`, the D5 verifier's 29,360 cases): 0 differ (V run).
 
 ## Hygiene (V run)
 
-- `pr_guard.py upstream/main HEAD` on r2: 0 FAIL, 0 WARN. `presubmit.py --quick --base upstream/main`: 0 FAIL, 3 WARN: `siblings` (monster, not player, merc, pet, co-op partner: answered by C5), build and gcc skipped by `--quick`.
-- Diff r2 against upstream: 8 files (`ai.cpp`, `ai.hpp`, `fight/strike.cpp`, `rules/combat.hpp`, `combat.md`, `test_crush_get_hit.cpp`, `crush_hit.py`, `tools/emu/README.md`); no private code, host names or paths (read). No `todo.md` / `unverified.md` row names it (V read).
+- `pr_guard.py upstream/main HEAD` on r3: 0 FAIL, 0 WARN. `presubmit.py --quick --base upstream/main`: 0 FAIL, 3 WARN: `siblings` (monster, not player, merc, pet, co-op partner: answered by C5), build and gcc skipped by `--quick`.
+- Diff r3 against upstream: 8 files (`ai.cpp`, `ai.hpp`, `fight/strike.cpp`, `rules/combat.hpp`, `combat.md`, `test_crush_get_hit.cpp`, `crush_hit.py`, `tools/emu/README.md`); no private code, host names or paths (read). No `todo.md` / `unverified.md` row names it (V read).
 
-## Required changes to the body (`crush-d6-body.md`, becomes the r2 body)
+## Required changes to the body (`crush-d6-body.md`, becomes the r3 body)
 
-- **C1 (high).** "Two commits on upstream `d5de50ca`: the oracle (`8fb5d1e4`), then the claim (`629e3126`)".
+- **C1 (high).** Branch `fid/crush-d6-r3`; "Two commits on upstream `d5de50ca`: the oracle (`f2a7007c`), then the claim (`8867eb7f`)".
 - **C2 (high).** What changes: "`test_crush_get_hit` pins sixteen game.exe decisions (get-hit, seed and life) through `Fight::land`: melee, missile, fire". Counted differentials: cases are melee or missile, with or without fire; for a missile game.exe's side runs `FUN_0057c6c0` with its second argument 1 (it sums the total itself at `0x57c7a0`, then events 6 and 2); the d2d side is `player_blow` then `Fight::land`; `compare` checks the life too. Replace the table with this file's (65,145 / 65,544 / 65,316 of 103,520; claim 0; control 0).
 - **C3 (high).** Mutants: "14 mutants (the verifier's table): 13 abort `test_crush_get_hit` and differ on the compare; the one that does not (no floor at 0) builds to the same binary". Drop the two "not caught" mutants and "Both test binaries print ok; ... the whole-tree ctest has not run".
 - **C4 (high, template).** Add the Checklist: a test in `tests/` (`test_crush_get_hit`); the finding in `docs/research/re/combat.md`; `pr_guard` passes; "`ctest` with the game data: 407 passed, 1 failed; fails on main too: `smoke_d2d`"; labels `oracle`, `test`, `trace`.
