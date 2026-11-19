@@ -325,6 +325,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 67c1f056f 11-18 20:20 `Merge agent/goldwithdraw: Merge branch 'main' into goldwithdraw` (goldwithdraw)
+- 9c26547e9 11-18 20:19 `Merge branch 'main' into goldwithdraw` (-)
 - 687344925 11-18 20:11 `Merge agent/survhold2: survhold2: kit gate hold, return walk past burned portal, holdout 2 record` (survhold2)
 - 26c11333d 11-18 20:10 `Merge branch 'main' into survhold2` (-)
 - 22284866b 11-18 20:02 `Merge agent/antiflail: Merge branch 'main' into antiflail` (antiflail)
@@ -333,6 +335,4 @@
 - 14f4ed022 11-18 19:55 `Merge branch 'main' into bulkid` (-)
 - ae0abd4c7 11-18 19:51 `Merge agent/decomp41: decomp41: merc absorb + crush D5 traces and bodies (docs only)` (decomp41)
 - e7c1bd1a6 11-18 19:50 `Merge branch 'main' into decomp41` (-)
-- f5cf91c17 11-18 19:42 `Merge agent/tpfix: Merge branch 'main' into tpfix` (tpfix)
-- 593a2405d 11-18 19:41 `Merge branch 'main' into tpfix` (-)
 <!-- statusgen:end -->

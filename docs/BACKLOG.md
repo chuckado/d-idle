@@ -1071,6 +1071,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - bulkid: bulk identify, Cain trip planner, mass reveal (TASK-654, merged 2026-11-18, acceptance 4 of 5): B1-B5 built offline: identify.* knobs and filter table, planner, chunked stash-pack moves with journal, Cain trip orchestrator on fakes, mass reveal preview and Cain-not-rescued note in the vault view and page. ... <!--sg:agent/bulkid-->
 - agent/antiflail: Merge branch 'main' into antiflail (merged 2026-11-18) <!--sg:agent/antiflail-->
 - survhold2: survival model gold gap, recovery without potions, portal mismatch, holdout 2 (TASK-651, merged 2026-11-18, acceptance 5 of 5): Kit gate holds a broke potion-less hero on the first fields; trip return walks past a burned portal landing; Paladin 6-seed A/B PASS (xp ratio 1.14, deaths 0/0, chickens 6/6), Sorceress INCONCLUSIVE (seed 103 mana-starved) ... <!--sg:agent/survhold2-->
+- agent/goldwithdraw: Merge branch 'main' into goldwithdraw (merged 2026-11-18) <!--sg:agent/goldwithdraw-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
