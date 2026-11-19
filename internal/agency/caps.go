@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	capdata "d2lod-bot/data/capabilities"
+	"d2lod-bot/internal/combat"
 	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/power"
 )
@@ -76,6 +77,14 @@ type Caps struct {
 	Schema string         `json:"schema"`
 	Skills map[string]Cap `json:"skills"`
 	Mana   ManaCfg        `json:"mana"`
+	// Planner holds the planner's own constants (all U until calibrated on tracks known to be good).
+	Planner PlannerCfg `json:"planner"`
+}
+
+// PlannerCfg are the planner's constants.
+type PlannerCfg struct {
+	// PriorMargin: the estimate must beat the combat profile's pick by this factor to overrule it; 0 = the estimate alone.
+	PriorMargin float64 `json:"priorMargin"`
 }
 
 // LoadCaps parses the embedded table and checks every row.
@@ -211,3 +220,6 @@ func (c *Caps) Overlay(skills func(name string) *data.Skill) (missing []string) 
 	}
 	return missing
 }
+
+// combatBuild is the combat package's name for the combat line of a plan table.
+func combatBuild(s string) combat.Build { return combat.Build(s) }

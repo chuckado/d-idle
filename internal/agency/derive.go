@@ -116,6 +116,14 @@ type Plan struct {
 	Summons    []Choice
 	Movement   []Choice
 	Archetype  string // "" when it could not be resolved
+	// Best is the attack with the highest estimate; Prior is the combat profile's own pick (the hand-written band order);
+	// Attack is the one the plan names: the Prior unless the estimate beats it by Caps.Planner.PriorMargin (docs/agency.md).
+	Best, Prior string
+	PriorAura   string // the combat profile's aura pick ("" none)
+	// Spec and Arch are what the survival model needs to judge the hero with this plan (Arch is nil when the archetype
+	// could not be resolved).
+	Spec       power.BuildSpec
+	Arch       *power.Archetype
 	ManaPerSec float64
 	ManaBudget float64
 	Unplayed   Unplayed
@@ -169,7 +177,10 @@ func Derive(a Allocation, env Env) (Plan, error) {
 		return pl, err
 	}
 	d := &deriver{a: a, class: class, env: env, prof: prof, kinds: mergedKinds(a, env)}
-	return d.run(), nil
+	d.prior = ProfilePick(prof, a.Clvl, a.Skills)
+	pl = d.run()
+	pl.PriorAura = ProfileAura(prof, a.Clvl, a.Skills)
+	return pl, nil
 }
 
 func d2Class(name string) (d2.Class, error) {
@@ -215,6 +226,29 @@ type deriver struct {
 	env   Env
 	prof  *combat.Profile
 	kinds map[string]string
+	prior string // the profile's pick, "" none
+}
+
+// ProfileAura is the combat profile's fighting aura for a character with these hard points: the first aura of the
+// ladder it has a point in that is not a resting aura; "" when none.
+func ProfileAura(prof *combat.Profile, clvl int, skills map[string]int) string {
+	for _, a := range prof.AuraLadder(clvl, func(s string) bool { return skills[s] > 0 }) {
+		if a.RestLifePct == 0 && skills[a.Name] > 0 {
+			return a.Name
+		}
+	}
+	return ""
+}
+
+// ProfilePick is the combat profile's current attack choice for a character with these hard points: the first skill of
+// the active band that the character has a point in (the plain swing needs none); "" when the band names none.
+func ProfilePick(prof *combat.Profile, clvl int, skills map[string]int) string {
+	for _, n := range prof.AttackNames(clvl, func(s string) bool { return skills[s] > 0 }) {
+		if skills[n] > 0 || n == power.PlainAttack {
+			return n
+		}
+	}
+	return ""
 }
 
 func (d *deriver) cap(n string) (Cap, bool) { return d.env.Caps.Lookup(n, d.kinds) }
@@ -287,6 +321,15 @@ func (d *deriver) run() Plan {
 	if len(pl.Candidates) > 0 {
 		best := pl.Candidates[0]
 		best.Why = d.whyAttack(best, pl.Candidates, skipped)
+		pl.Best, pl.Prior = best.Skill, d.prior
+		// The band order holds knowledge the estimate lacks (multi-strike, life cost): keep the profile's pick unless the
+		// estimate beats it by a clear margin (design review 04 section 3.2).
+		if i := d.priorIndex(pl.Candidates); i > 0 && best.DPS < pl.Candidates[i].DPS*d.env.Caps.Planner.PriorMargin {
+			pr := pl.Candidates[i]
+			pr.Why = fmt.Sprintf("the combat profile's pick; %s estimates %.1f dps against %.1f, under the %.1fx margin that overrules it", best.Skill, best.DPS, pr.DPS, d.env.Caps.Planner.PriorMargin)
+			pl.Candidates = append([]Choice{pr}, append(pl.Candidates[:i:i], pl.Candidates[i+1:]...)...)
+			best = pr
+		}
 		pl.Attack = &best
 		pl.Candidates[0] = best
 	}
@@ -326,8 +369,9 @@ func (d *deriver) run() Plan {
 	}
 	prof := *d.env.Profiles
 	prof.SkillKinds = d.kinds
+	pl.Spec = spec
 	if arch, err := prof.Resolve(spec); err == nil {
-		pl.Archetype = arch.ID
+		pl.Archetype, pl.Arch = arch.ID, arch
 	}
 	summoner := pl.Archetype == "summoner"
 	if summoner && len(pl.Summons) > 0 {
@@ -348,6 +392,20 @@ func (d *deriver) run() Plan {
 	// 6. warnings.
 	d.warn(&pl, summoner, spent, synUnknown)
 	return pl
+}
+
+// priorIndex is the place of the profile's pick among the candidates, -1 when it is not one (no points, unsupported, no
+// estimate) or the margin is off.
+func (d *deriver) priorIndex(c []Choice) int {
+	if d.prior == "" || d.env.Caps.Planner.PriorMargin <= 0 {
+		return -1
+	}
+	for i := range c {
+		if c[i].Skill == d.prior && c[i].DPS > 0 {
+			return i
+		}
+	}
+	return -1
 }
 
 func (d *deriver) profileHas(skill string) bool {

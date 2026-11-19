@@ -25,6 +25,10 @@
   "regenFracPerSec": 0.011,
   "fightSeconds": 30
  },
+ "planner": {
+  "priorMargin": 2.0,
+  "note": "U: the estimate must beat the combat profile's pick by this factor (design review 04 section 3.2: the band order is a prior and a tie-break). Not calibrated."
+ },
  "skills": {
   "Fire Bolt": {
    "class": "sorceress",
