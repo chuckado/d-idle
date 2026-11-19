@@ -188,3 +188,32 @@ func TestCainAutoChunksStayDoneAfterTheEvidenceVanishes(t *testing.T) {
 		}
 	}
 }
+
+// V lab drill CAIN-L3, second live run: the stones chunk comes after the scroll chunk, and the Key to the Cairn Stones
+// is used up when the portal opens, so in Tristram the scroll chunk read open again, the stones chunk with it ("all
+// steps done but the quest does not read as finished", the board stood in Tristram for good). The earlier chunk seen
+// done counts for the later one as well.
+func TestCainStonesChunkDoneAfterTheKeyIsUsedUp(t *testing.T) {
+	b, err := questboard.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	q, err := b.Quest("search_for_cain")
+	if err != nil {
+		t.Fatal(err)
+	}
+	rt := &boardRT{handed: map[string]bool{}, reached: map[string]bool{}}
+	started := map[string]task.QuestState{task.QCain: {Stage: task.StageStarted, Ev: task.EvMemory}}
+	withKey := s7bWorld(map[string]int{task.ItemCainSc: 1}, started)
+	withKey.Area, withKey.InTown = task.StonyField, false
+	scroll, _ := b.Chunk("search_for_cain", "scroll")
+	stones, _ := b.Chunk("search_for_cain", "stones")
+	if !rt.chunkFact(q, scroll, withKey).Done {
+		t.Fatal("scroll not done with the key in the pack")
+	}
+	tristram := s7bWorld(map[string]int{}, started) // the key is gone
+	tristram.Area, tristram.InTown = task.Tristram, false
+	if !rt.chunkFact(q, stones, tristram).Done {
+		t.Fatal("stones not done in Tristram after the key was used up")
+	}
+}
