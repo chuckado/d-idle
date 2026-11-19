@@ -518,7 +518,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | identify.tripCap | 40 | 1..200 | count | 40 | 0 | Most items one Cain visit identifies; the rest follows at the next visit. |
 | identify.chunk | 10 | 1..40 | count | 10 | 0 | Items taken out of the stash per batch before Cain; each batch is verified before the next. |
 | identify.autoSellRest | 0 | 0..1 | bool | 0 | 0 | 1: the sell chore may sell identified items the loot rules rate sell. 0 (default): identified items are kept for the player to see first. |
-| identify.etherPerReveal | 0 | 0..1e+05 | ether | 0 | 0 | Ether one vault reveal costs when neither Cain nor a scroll pays; 0 = Ether is not used for reveals (U: price not decided). |
+| identify.etherPerReveal | 1 | 0..1e+05 | ether | 1 | 1 | Ether one vault reveal costs when the player picks Ether instead of a scroll; 0 = Ether is not used for reveals. Default 1: a deliberate small spend (a quest hand-in pays 2 to 5 Ether, the first vault tier costs 20). Replaces the scroll: no scroll or tome charge is used; free after Cain is rescued and here. |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)
