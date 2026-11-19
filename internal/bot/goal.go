@@ -124,7 +124,7 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 		if r.goldFarmOn() {
 			return r.goldFarmStep(ctx, snap, c) // the player's order: farm gold until told to stop (docs/goldfarm.md)
 		}
-		if r.recoveryActive() && !r.gearVerdict(snap).Gated {
+		if r.recoveryActive() && !r.gearVerdict(snap).Gated && !r.boardChunkNeedsNoGold() {
 			return r.recoveryStep(ctx, snap, c) // the quest step waits until the purse is filled again
 		}
 		if r.questBoardOn() {

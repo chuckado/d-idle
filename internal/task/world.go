@@ -113,6 +113,8 @@ type World struct {
 	SafeArea Area
 	// Banned: areas the death-spiral breaker keeps the character out of for now (travel, clear and kill steps wait).
 	Banned map[Area]bool
+	// BanNote is the player-facing detail of a ban ("N deaths, until HH:MM"), empty when the bot has none.
+	BanNote map[Area]string
 
 	// Blood Raven kit gate inputs (gate.go brFloor/brShort). BRHigh: the class takes the higher caster floor (Sorceress,
 	// Druid, Amazon; the Necromancer and melee classes do not). BR holds the knobs, zero fields mean the defaults;

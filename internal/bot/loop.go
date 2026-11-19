@@ -1253,6 +1253,14 @@ func (r *Runner) setWalking(on bool) {
 	}
 }
 
+// setQuestCrowd tells a fighter that supports it whether a player-started quest chunk runs (the quest crowd-abandon
+// threshold, combat.crowdAbandonQuestN, applies while it does).
+func (r *Runner) setQuestCrowd(on bool) {
+	if w, ok := r.d.Fighter.(interface{ SetQuestCrowd(bool) }); ok {
+		w.SetQuestCrowd(on)
+	}
+}
+
 // preferWaypointRun: from town, the town portal leads to the area where the last scroll was read (V live, G1 attempt
 // 12: "no way back to level 26 from 3"), so when that is not the corpse area and an activated waypoint shortens the
 // way, waypoint plus walk beats portal plus a long walk. The route guard still vets every area (travelTo).

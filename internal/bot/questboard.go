@@ -59,6 +59,9 @@ type boardRT struct {
 	applied  string               // the between-chunks mode the hero acts on (boardmode.go); "" before the first tick
 	farming  bool                 // inside a farm-mode slice: the area choice farms
 	queued   string               // why an accepted chunk is not running yet ("" when it runs or none is accepted)
+	// queuedSince is when the chunk first met a fight in the clear radius (zero when it is not waiting): past
+	// boardQueueGrace the chunk starts anyway, see boardPreemptsWhy.
+	queuedSince time.Time
 }
 
 // NewQuestBoard builds the board executor of this runner and its hero's plan store and keeps it for boardStep. The S4
@@ -708,6 +711,17 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		r.boardNote("chunk", err.Error())
 		return r.boardBetween(ctx, snap, c)
 	}
+	// F1/F2 (cainfix3): the player started this chunk; unless the readiness model calls it too hard, the farm areas' death
+	// bans and the crowd-abandon rule of walks do not stop it (a refused start shows the ban's deaths and end time instead).
+	rt.mu.Lock()
+	word := rt.ready[questboard.ChunkKey(d.Quest, d.Chunk)]
+	rt.mu.Unlock()
+	if word != questboard.ReadyTooHard {
+		r.banWaive.Store(true)
+		defer r.banWaive.Store(false)
+		r.setQuestCrowd(true)
+		defer r.setQuestCrowd(false)
+	}
 	res, ok := r.boardSlice(ctx, snap, c, boardPlan{q: q, c: ch}, "Quest: "+q.Title)
 	out := questboard.StepResult{Outcome: questboard.StepRan}
 	switch {
@@ -876,6 +890,32 @@ func nonNilErr(err error, msg string) error {
 	return errors.New(msg)
 }
 
+// chunkNeedsNoGold says the decided chunk buys nothing (questboard Chunk.NoGold): the purse recovery does not hold it
+// (cainfix3 F3, Proving Ground cain.stones: the stones chunk waited behind a recovery it did not need).
+func (r *Runner) chunkNeedsNoGold(rt *boardRT, d questboard.Decision) bool {
+	if d.Kind != questboard.DecRun {
+		return false
+	}
+	ch, err := rt.board.Chunk(d.Quest, d.Chunk)
+	return err == nil && ch.NoGold
+}
+
+// boardChunkNeedsNoGold is chunkNeedsNoGold for the chunk the board would run next (campaign goals).
+func (r *Runner) boardChunkNeedsNoGold() bool {
+	if !r.questBoardOn() {
+		return false
+	}
+	rt := r.boardRTFor()
+	if rt == nil {
+		return false
+	}
+	d, err := rt.exec.Next()
+	return err == nil && r.chunkNeedsNoGold(rt, d)
+}
+
+// boardQueueGrace is how long an accepted chunk waits for a calm moment before it starts amid hostiles (virtual clock).
+const boardQueueGrace = 45 * time.Second
+
 func (rt *boardRT) setQueued(why string) {
 	rt.mu.Lock()
 	rt.queued = why
@@ -930,7 +970,7 @@ func (r *Runner) boardPreemptsWhy(snap *d2.Snapshot, c control) (bool, string) {
 	}
 	k := questboard.ChunkKey(d.Quest, d.Chunk)
 	if (d.Kind == questboard.DecRun || d.Kind == questboard.DecAwait || d.Kind == questboard.DecBusy) &&
-		r.recoveryActive() && !r.gearVerdict(snap).Gated {
+		r.recoveryActive() && !r.gearVerdict(snap).Gated && !r.chunkNeedsNoGold(rt, d) {
 		// The recovery (empty purse, no kit) stays ahead of a chunk, but the player must see it: before, the accepted chunk
 		// showed no reason at all while the hero farmed gold for many minutes (Proving Ground cain.scroll, 2026-11-19).
 		rt.setQueued("Starts after the hero has refilled the purse and restocked.")
@@ -939,10 +979,26 @@ func (r *Runner) boardPreemptsWhy(snap *d2.Snapshot, c control) (bool, string) {
 	switch d.Kind {
 	case questboard.DecRun:
 		if !r.safeToPause(snap) {
-			rt.setQueued("Starts when the fight is over.")
-			r.boardNote("queued "+k, "quest board: "+k+" queued: waiting for the fight to end")
-			return false, "waiting for the fight to end"
+			now := r.e.Clock.Now()
+			rt.mu.Lock()
+			if rt.queuedSince.IsZero() {
+				rt.queuedSince = now
+			}
+			late := now.Sub(rt.queuedSince) >= boardQueueGrace
+			rt.mu.Unlock()
+			if !late {
+				rt.setQueued("Starts when the fight is over.")
+				r.boardNote("queued "+k, "quest board: "+k+" queued: waiting for the fight to end")
+				return false, "waiting for the fight to end"
+			}
+			// Proving Ground 2026-11-19 (cain.scroll Sorceress, cain.stones): the level sweep keeps a hostile in the clear
+			// radius at nearly every decision, so a chunk that waits for calm never starts. The step fights what stands in
+			// its way, so after the grace the player's Start wins over the level goal's area choice.
+			r.boardNote("queued-late "+k, "quest board: "+k+" starts although hostiles are near (queued over "+boardQueueGrace.String()+")")
 		}
+		rt.mu.Lock()
+		rt.queuedSince = time.Time{}
+		rt.mu.Unlock()
 		rt.setQueued("")
 		return true, ""
 	case questboard.DecAwait, questboard.DecBusy:

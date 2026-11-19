@@ -365,10 +365,15 @@ func (e taskEnv) World(ctx context.Context) (task.World, error) {
 		if r.avoidWhyOf(a) == whyBorderLoop {
 			continue // the loop breaker never blocks a quest step (staletarget.go)
 		}
+		if r.banWaive.Load() && dangerBan(r.avoidWhyOf(a)) {
+			continue // the player started this chunk and its readiness is not "too hard": the farm area's ban does not apply
+		}
 		if w.Banned == nil {
 			w.Banned = map[task.Area]bool{}
+			w.BanNote = map[task.Area]string{}
 		}
 		w.Banned[task.Area(a)] = true
+		w.BanNote[task.Area(a)] = r.banNote(a)
 	}
 	w.HasMerc = d2.FindMerc(s).Alive
 	r.fillRoute(&w, p.Class, p)

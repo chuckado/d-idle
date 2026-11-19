@@ -88,6 +88,9 @@ type Chunk struct {
 	Nodes       []string `json:"nodes,omitempty"`
 	HandInStep  string   `json:"handInStep,omitempty"`
 	Unsupported string   `json:"unsupported,omitempty"`
+	// NoGold says the chunk buys nothing on its way (no shop, no gamble): the purse recovery that refills gold and kit
+	// does not hold its start (cainfix3 F3). Default false: the recovery waits, as before.
+	NoGold bool `json:"noGold,omitempty"`
 }
 
 // ChunkByID returns the chunk of q with that id; an unknown id is an error naming it.

@@ -160,6 +160,7 @@
      "id": "scroll",
      "title": "Get the Scroll of Inifuss from the tree",
      "ends": "item",
+     "noGold": true,
      "minutes": [
       6,
       12
@@ -198,6 +199,7 @@
      "id": "stones",
      "title": "Light the cairn stones and enter Tristram",
      "ends": "auto",
+     "noGold": true,
      "minutes": [
       4,
       10
@@ -220,6 +222,7 @@
      "id": "free_cain",
      "title": "Free Cain from the cage in Tristram",
      "ends": "auto",
+     "noGold": true,
      "minutes": [
       6,
       15

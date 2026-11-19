@@ -79,6 +79,7 @@ type Fighter struct {
 	portalCast    PortalCast
 	casts         []castRec
 	walking       atomic.Bool // the bot is on a travel or quest walk (SetWalking)
+	questCrowd    atomic.Bool // a player-started quest chunk runs (SetQuestCrowd)
 	pinned        int         // consecutive evasive moves that went nowhere (evade)
 	noEvadeUntil  time.Time   // pinned: no kite or dodge before this
 	mouthEvades   int         // evasive moves started inside a cave mouth (evade, FIXMOUTH2)
@@ -257,6 +258,7 @@ func (f *Fighter) Safety(snap *d2.Snapshot) SafetyAction {
 		}
 	}
 	in.Walking = f.walking.Load()
+	in.Quest = f.questCrowd.Load()
 	in.Crowd, in.Adjacent = Crowd(p, hs, float64(t.CrowdAdjacent))
 	in.CastGuard = castGuard(f.e.Tune.Bot, t, p, hs)
 	if t.CrowdN > 0 {
