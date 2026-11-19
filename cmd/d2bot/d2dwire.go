@@ -37,17 +37,18 @@ import (
 // over a d2d backend: the same packages, with d2d's reader/input seams instead of memory and pixels
 // (docs/d2d-wire.md). Without game tables nothing can be built and the caller keeps the "not yet" stubs.
 type d2dStack struct {
-	rig     *d2dcombat.Rig
-	cb      fighterAdapter
-	tw      *town.Town
-	lt      *loot.Looter
-	town    townAdapter
-	leveler *leveler.Leveler
-	gear    bot.Gear
-	quester bot.Quester
-	task    *bot.TaskDeps
-	prepare func(ctx context.Context) error
-	peek    d2dloot.Peeker // the fork verbs for real ground quality (nil: label guess)
+	rig        *d2dcombat.Rig
+	cb         fighterAdapter
+	tw         *town.Town
+	lt         *loot.Looter
+	town       townAdapter
+	leveler    *leveler.Leveler
+	pointVerbs *pointVerbs // the point verbs (pointswire.go); nil without a d2d client
+	gear       bot.Gear
+	quester    bot.Quester
+	task       *bot.TaskDeps
+	prepare    func(ctx context.Context) error
+	peek       d2dloot.Peeker // the fork verbs for real ground quality (nil: label guess)
 }
 
 // buildD2DStack wires the stack. nv is the backend navigator (be.Navigator()); ref is the runner back-reference the
@@ -104,10 +105,20 @@ func buildD2DStack(ctx context.Context, o options, be *d2denv.Backend, nv *nav.N
 	s.task.Boss = bossKill(br, log.Info)
 	s.task.Farm = farmLoop(bg, br, log.Info)
 	if !cfg.NoLeveler {
-		s.leveler = leveler.New(e, leveler.Options{Build: cfg.LevelerBuild, PlanDir: cfg.PlanDir, Pause: ref.pause, Pinned: ref.pinned, Rebind: func(context.Context) error {
+		s.pointVerbs = newPointVerbs(be.Client, db, func() string {
+			if sn, err := e.Snapshot(); err == nil && sn.Player != nil {
+				return sn.Player.Class.String()
+			}
+			return ""
+		})
+		lopts := leveler.Options{Build: cfg.LevelerBuild, PlanDir: cfg.PlanDir, Pause: ref.pause, Pinned: ref.pinned, Rebind: func(context.Context) error {
 			_, err := rig.BindSkills()
 			return err
-		}})
+		}}
+		if s.pointVerbs != nil { // a nil *pointVerbs in the interface would not be nil
+			lopts.Verbs = s.pointVerbs
+		}
+		s.leveler = leveler.New(e, lopts)
 		s.gear = gearAdapter{l: s.leveler, v: townvendor.Vendor{T: tw}, e: e}
 		s.quester = questAdapter{t: tw, e: e}
 	}
