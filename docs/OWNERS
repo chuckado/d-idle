@@ -467,7 +467,6 @@ docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/provingground-run-2026-11-19.md  credit-runner  pgexpand
-docs/probes/provingground-run-2026-11-19.md  credit-runner  pgrun2
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/search-for-cain-2026-11-17.md  credit-runner  cainfix
@@ -498,7 +497,6 @@ docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
 docs/process/fork-rebase.md  credit-runner  forkrebase2
 docs/process/points-verbs-devp14.md  credit-runner  agencyp0
 docs/process/proving-ground.md  credit-runner  pgexpand
-docs/process/proving-ground.md  credit-runner  pgrun2
 docs/process/queuespeed.md  credit-runner  queuespeed
 docs/process/sandbox-devp11.md  credit-runner  devp11doc
 docs/process/sandbox-devp12.md  credit-runner  devp12
@@ -1663,9 +1661,7 @@ tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
 tools/provingground/  credit-runner  pgexpand
-tools/provingground/scenarios/behaviour-scenarios.json  credit-runner  pgrun2
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
-tools/provingground/scenarios/cain.json  credit-runner  pgrun2
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/survival  credit-runner  survhold2
 tools/survival  credit-runner  survtune
