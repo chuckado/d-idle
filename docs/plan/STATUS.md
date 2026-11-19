@@ -289,7 +289,6 @@
 | bulkid | proposed | - | `internal/bulkid`<br>`data/bulkid`<br>`internal/env/tuning_identify.go`<br>`internal/watch/vaultmass_test.go`<br>`internal/env/tuning.go`<br>`docs/knobs.md`<br>`internal/vaultkeep/reveal.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/note_test.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go` | - |
 | survhold3 | proposed | - | `internal/survival`<br>`docs/probes/survival-holdout3-2026-11-18.md` | - |
 | verifymerc | proposed | - | `docs/upstream/verifier-mercabsorb-2026-11-18.md` | - |
-| etherreveal | proposed | - | `internal/vaultkeep`<br>`internal/vault`<br>`internal/bulkid`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`docs/design/bulk-identify-2026-11-18.md`<br>`internal/loot/vault.go`<br>`cmd/d2bot/vaultkeep.go`<br>`internal/env/tuning_identify.go`<br>`docs/knobs.md`<br>`internal/watch/vaultmass_test.go` | - |
 | nocards | proposed | - | `data/idreveal`<br>`internal/watch/unlockidreveal.go`<br>`internal/watch/unlockidreveal_test.go`<br>`internal/watch/unlockui_quiet_test.go`<br>`internal/watch/testdata`<br>`docs/unlock-ladder.md`<br>`docs/vault.md`<br>`internal/watch/web`<br>`internal/watch/funwire.go`<br>`internal/watch/nocards_test.go`<br>`data/unlocks`<br>`docs/unlock-idreveal.md` | - |
 | botsurvey | proposed | - | `docs/research/public-d2-bots-2026-11-19.md` | - |
 | fablereview | proposed | - | `docs/design/fable-review-2026-11-19` | - |

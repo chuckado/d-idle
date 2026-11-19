@@ -1,10 +1,11 @@
 ---
 id: TASK-662
 title: 'etherreveal: Ether replaces the scroll for vault reveals'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T14:49:00Z'
+updated_date: '2026-11-19T16:41:00Z'
 labels:
   - bot
   - feature
