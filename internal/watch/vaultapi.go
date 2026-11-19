@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"d2lod-bot/internal/bulkid"
 	item "d2lod-bot/internal/status"
 	"d2lod-bot/internal/vault"
 )
@@ -54,6 +55,10 @@ type VaultDesk struct {
 	Keep  VaultKeeper         // the Keep queue (V5); nil: Keep is not part of this bot
 	Act   VaultActor          // Reveal, Sell and the sell prompt (V6); nil: not part of this bot
 	Tip   VaultTipFunc        // the tooltip facts of a row (base type, art, stat lines); nil: rows carry none
+	// MassFilter is the identify filter table (data/bulkid); nil: no mass reveal preview. Quality names a quality number; ScrollGold is a scroll's price (information).
+	MassFilter *bulkid.Filter
+	Quality    func(int) string
+	ScrollGold int
 }
 
 // VaultTip is what the inventory tooltip needs beyond the stored fields: the same fields status.Item carries (base facts, art
@@ -111,6 +116,10 @@ type VaultRevealView struct {
 	Working int    `json:"working"`
 	Done    int    `json:"done"`
 	Line    string `json:"line,omitempty"`
+	// Note says why identify is manual (Cain is not rescued while identify.policy counts on him).
+	Note string `json:"note,omitempty"`
+	// Mass previews the "Reveal filtered" button: the ids it would queue (to /api/vault/reveal) and the cost sentence.
+	Mass *bulkid.Mass `json:"mass,omitempty"`
 }
 
 type VaultSellView struct {
@@ -654,6 +663,13 @@ func (d *VaultDesk) view(ctx context.Context, q vaultQuery, kinds vaultTexts) Va
 		return v
 	}
 	v.Exists, v.Hero = true, st.Hero()
+	if v.Act != nil && d.MassFilter != nil && d.Quality != nil && d.on() {
+		no := false
+		recs, _ := st.Query(vault.Filter{Identified: &no})
+		r := v.Act.Reveal
+		m := bulkid.MassReveal(d.MassFilter, recs, d.Quality, bulkid.Price{Free: r.Free, Charges: r.Charges, ScrollGold: d.ScrollGold})
+		v.Act.Reveal.Mass = &m
+	}
 	recs, total := st.Query(q.f)
 	v.Total = total
 	for i := range recs {

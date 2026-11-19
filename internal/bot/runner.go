@@ -301,6 +301,8 @@ type loopState struct {
 	recoveredAt     time.Time   // end of the last lost-game recovery (freshHold)
 	lowLifeUntil    time.Time   // end of the current low-life wait (lowLifeWait); zero when not waiting
 	reentries       []time.Time // recent re-entries after a chicken (notInGame), pruned to reentryWindow
+	flail           flailGuard  // anti-flail guard (flail.go)
+	areaDoneAt      time.Time   // last "area done" trip home from the field (noTarget rate limit)
 	futile          bool
 	futilePos       input.Point
 	futileUntil     time.Time

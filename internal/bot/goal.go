@@ -57,6 +57,9 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 	if r.beltFillStep(ctx, snap) {
 		return true
 	}
+	if r.flailHold(ctx, snap, c) {
+		return true
+	}
 	if plan, emergency, ok := r.needChores(snap); ok {
 		now := r.e.Clock.Now()
 		gap := sec(r.cfg.ResupplyCooldownSec)
@@ -625,7 +628,7 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 			r.setWhy(WhyBackToField)
 		}
 		ok := r.do(ctx, c, StateResupplying, "Returning to the field", sec(r.cfg.TravelTimeoutSec), "back to field", func(ctx context.Context) error {
-			err := r.d.Town.BackToField(ctx, t.returnTo)
+			err := r.returnToField(ctx, t.returnTo)
 			if err == nil {
 				r.waitForMerc(ctx, "portal")
 			}
@@ -1122,10 +1125,20 @@ func rank(d string) int {
 	return 0
 }
 
+// areaDoneGap is the least time between two "area done, back to town" trips from the field.
+const areaDoneGap = 3 * time.Minute
+
 // noTarget handles "everything useful in this game is done": go home and ask for a fresh game, or wait visibly.
 func (r *Runner) noTarget(ctx context.Context, s *d2.Snapshot, c control) bool {
 	l := &r.loop
 	if !s.Player.InTown() {
+		now := r.e.Clock.Now()
+		if now.Sub(l.areaDoneAt) < areaDoneGap {
+			// A second "area done" so soon is a loop, not a finished area (Dark Wood 2026-11-18: 305 trips in an hour,
+			// each arrival met hostiles the quest board waited on and no target existed): fight where we stand.
+			return r.sweep(ctx, s, c, s.Player.Area)
+		}
+		l.areaDoneAt = now
 		r.setWhy(WhyAreaDone)
 		return r.do(ctx, c, StateResupplying, "Area done, returning to town", sec(r.cfg.TownTimeoutSec), "to town", r.d.Town.ToTown)
 	}
