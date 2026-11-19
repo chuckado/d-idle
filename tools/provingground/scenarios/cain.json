@@ -466,8 +466,6 @@
    "title": "Search for Cain: Tristram arrival, the three archers, open the cage",
    "kind": "step",
    "tier": "full",
-   "status": "pending",
-   "pending_reason": "needs the Tristram portal open; the stone chunk is pending, and a warp into Tristram leaves the portal-open fact unset (U); assert quest record 4 bit 1 (0x2012) once a start state exists",
    "quest": {
     "quest": "search_for_cain",
     "chunk": "free_cain"
