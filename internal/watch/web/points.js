@@ -77,8 +77,19 @@
     if (!(view.recent || []).length) tr.appendChild(el('li', '', 'Nothing yet.'));
   }
 
+  // The shadow planner's line (GET /api/hero/plan, docs/agency.md): off or unreachable hides it.
+  function loadPlan() {
+    fetch('/api/hero/plan', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
+      var b = $('buildline');
+      b.textContent = j && j.enabled && j.line ? j.line : '';
+      b.hidden = !b.textContent;
+      if (j && j.warnings && j.warnings.length) b.title = j.warnings.map(function (w) { return w.text; }).join('\n');
+    }).catch(function () { $('buildline').hidden = true; });
+  }
+
   var view = { stats: [] };
   function load() {
+    loadPlan();
     fetch('/api/hero/points', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
       if (j.code) { say(j.error || 'the points desk is not available'); return; }
       view = j; render(j);

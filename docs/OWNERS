@@ -133,7 +133,10 @@ cmd/d2bot  credit-runner  survsd
 cmd/d2bot  credit-runner  wiring2
 cmd/d2bot/adapters.go  credit-runner  goldprio
 cmd/d2bot/adapters.go  credit-runner  idfast
+cmd/d2bot/agencywire.go  credit-runner  agencyp1a
+cmd/d2bot/agencywire_test.go  credit-runner  agencyp1a
 cmd/d2bot/behaviors.go  credit-runner  agencyp0
+cmd/d2bot/behaviors.go  credit-runner  agencyp1a
 cmd/d2bot/behaviors.go  credit-runner  campaign1
 cmd/d2bot/behaviors.go  credit-runner  gearsets
 cmd/d2bot/behaviors.go  credit-runner  quests4
@@ -148,6 +151,7 @@ cmd/d2bot/charwire.go  credit-runner  charsup
 cmd/d2bot/charwire_test.go  credit-runner  charselect
 cmd/d2bot/charwire_test.go  credit-runner  charsup
 cmd/d2bot/d2dbackend.go  credit-runner  agencyp0
+cmd/d2bot/d2dbackend.go  credit-runner  agencyp1a
 cmd/d2bot/d2dbackend.go  credit-runner  campaign1
 cmd/d2bot/d2dbackend.go  credit-runner  exploredpct
 cmd/d2bot/d2dbackend.go  credit-runner  labels
@@ -207,6 +211,7 @@ cmd/d2bot/journeywire.go  credit-runner  campaign1
 cmd/d2bot/labelswire.go  credit-runner  labels
 cmd/d2bot/labelswire_test.go  credit-runner  labels
 cmd/d2bot/ladder.go  credit-runner  agencyp0
+cmd/d2bot/ladder.go  credit-runner  agencyp1a
 cmd/d2bot/ladder.go  credit-runner  botcpu2
 cmd/d2bot/ladder.go  credit-runner  exploredpct
 cmd/d2bot/ladder.go  credit-runner  gearsets
@@ -220,6 +225,7 @@ cmd/d2bot/ladder.go  credit-runner  vaultv4
 cmd/d2bot/ladder.go  credit-runner  videofeed2
 cmd/d2bot/ladder.go  live-agent  recoverypace
 cmd/d2bot/live.go  credit-runner  agencyp0
+cmd/d2bot/live.go  credit-runner  agencyp1a
 cmd/d2bot/live.go  credit-runner  campaign1
 cmd/d2bot/live.go  credit-runner  exploredpct
 cmd/d2bot/live.go  credit-runner  maphistory
@@ -315,6 +321,7 @@ cmd/d2scenario/main_test.go  credit-runner  agencyp0
 cmd/d2scenario/run.go  credit-runner  agencyp0
 data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
+data/capabilities  credit-runner  agencyp1a
 data/idreveal  credit-runner  nocards
 data/onboarding  credit-runner  firstminutes
 data/onboarding/en.json  credit-runner  friendfb
@@ -340,6 +347,7 @@ docs/actbot.md  credit-runner  cain45
 docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md  credit-runner  adrfable
 docs/adr/0020-proving-ground-and-stat-skill-agency.md  credit-runner  adrfable
 docs/adr/README.md  credit-runner  adrfable
+docs/agency.md  credit-runner  agencyp1a
 docs/aggression.md  credit-runner  wiring2
 docs/archive  credit-runner  dietarchive
 docs/away-drill.md  live-agent  awaydrill
@@ -404,6 +412,7 @@ docs/inventory-ui.md  credit-runner  nopins
 docs/inventory-ui.md  credit-runner  uic2
 docs/inventory-ui.md  credit-runner  uic3
 docs/knobs.md  credit-runner  agencyp0
+docs/knobs.md  credit-runner  agencyp1a
 docs/knobs.md  credit-runner  botcpu2
 docs/knobs.md  credit-runner  botinstant
 docs/knobs.md  credit-runner  botstuck
@@ -658,6 +667,7 @@ docs/video-feed.md  credit-runner  videofeed
 docs/video-feed.md  credit-runner  videofeed2
 docs/video-feed.md  credit-runner  videofeed4
 docs/wiring.md  credit-runner  wiring2
+internal/agency  credit-runner  agencyp1a
 internal/art/  credit-runner  itemcolour2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees
@@ -825,6 +835,7 @@ internal/bot/zoneshadow.go  credit-runner  survfix2
 internal/bot/zoneshadow.go  credit-runner  survreask
 internal/bot/zoneshadow.go  credit-runner  survrecover
 internal/bot/zoneshadow_test.go  credit-runner  survC
+internal/buildfile  credit-runner  agencyp1a
 internal/bulkid  credit-runner  bulkid
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
@@ -907,9 +918,11 @@ internal/decide/variants.go  credit-runner  qdensity
 internal/decide/variants_test.go  credit-runner  qdensity
 internal/env  credit-runner  survsd
 internal/env  credit-runner  wiring2
+internal/env/tuning.go  credit-runner  agencyp1a
 internal/env/tuning.go  credit-runner  bulkid
 internal/env/tuning.go  credit-runner  quests3
 internal/env/tuning.go  credit-runner  videofeed2
+internal/env/tuning_agency.go  credit-runner  agencyp1a
 internal/env/tuning_bot.go  credit-runner  botstuck
 internal/env/tuning_bot.go  credit-runner  exploredpct
 internal/env/tuning_bot.go  credit-runner  freshstart
@@ -1180,6 +1193,7 @@ internal/watch/etherapi.go  credit-runner  vaultv7b
 internal/watch/etherapi_test.go  credit-runner  vaultv7
 internal/watch/etherapi_test.go  credit-runner  vaultv7b
 internal/watch/funwire.go  credit-runner  agencyp0
+internal/watch/funwire.go  credit-runner  agencyp1a
 internal/watch/funwire.go  credit-runner  friendfb
 internal/watch/funwire.go  credit-runner  labels
 internal/watch/funwire.go  credit-runner  lootwireL4
@@ -1260,9 +1274,12 @@ internal/watch/pauseapi.go  credit-runner  pausefix
 internal/watch/pauseapi.go  credit-runner  uib1
 internal/watch/pauseapi_test.go  credit-runner  uib1
 internal/watch/pausefix_test.go  credit-runner  pausefix
+internal/watch/planapi.go  credit-runner  agencyp1a
+internal/watch/planapi_test.go  credit-runner  agencyp1a
 internal/watch/pointsapi.go  credit-runner  agencyp0
 internal/watch/pointsapi_test.go  credit-runner  agencyp0
 internal/watch/pointsui.go  credit-runner  agencyp0
+internal/watch/pointsui.go  credit-runner  agencyp1a
 internal/watch/pprofapi.go  credit-runner  botcpu2
 internal/watch/questsapi.go  credit-runner  quests4
 internal/watch/questsapi.go  credit-runner  quests8
@@ -1534,6 +1551,7 @@ internal/watch/web/pauseui.js  credit-runner  pausefix
 internal/watch/web/pauseui.js  credit-runner  pausemenufit
 internal/watch/web/points.css  credit-runner  agencyp0
 internal/watch/web/points.js  credit-runner  agencyp0
+internal/watch/web/points.js  credit-runner  agencyp1a
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
@@ -1658,7 +1676,9 @@ tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
 tools/provingground/  credit-runner  pgexpand
+tools/provingground/scenarios/agency.json  credit-runner  agencyp1a
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
+tools/provingground/scenarios/behaviours.json  credit-runner  agencyp1a
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/survival  credit-runner  survhold2
 tools/survival  credit-runner  survtune

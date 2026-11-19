@@ -25,6 +25,7 @@ type Tuning struct {
 	Quests   QuestsTuning
 	Identify IdentifyTuning
 	Input    InputTuning
+	Agency   AgencyTuning
 }
 
 // DefaultTuning returns the optimal profile.
@@ -47,6 +48,7 @@ func DefaultTuning() Tuning {
 		Quests:   DefaultQuestsTuning(),
 		Identify: DefaultIdentifyTuning(),
 		Input:    DefaultInputTuning(),
+		Agency:   DefaultAgencyTuning(),
 	}
 }
 
@@ -86,5 +88,6 @@ func Knobs() []Knob {
 	k = append(k, questsKnobs()...)
 	k = append(k, identifyKnobs()...)
 	k = append(k, inputKnobs()...)
+	k = append(k, agencyKnobs()...)
 	return k
 }

@@ -90,6 +90,7 @@ type ladderOptions struct {
 	farm          *goldfarm.Controller // the Farm gold order (repairwire.go); nil: none
 	quests        *questboard.Desk     // the quest board desk (questwire.go); nil: no routes
 	points        *points.Desk         // the points desk (pointswire.go); nil: no routes
+	plan          *agencyWire          // the shadow planner (agencywire.go); nil: no route
 	// riskFacts is the hero risk meter's reader (bot.Runner.RiskFacts); nil: no meter. monsters is the monster table
 	// for the bestiary; nil (no game tables): flavour-only cards.
 	riskFacts                              func(zone string) watch.RiskFacts
@@ -331,6 +332,7 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		}
 		bindQuests(rig.Fun, l.quests)
 		bindPoints(rig.Fun, l.points)
+		bindPlan(rig.Fun, l.plan)
 		if src == nil {
 			src = hub // a person answers: the Hub never answers by itself
 		}

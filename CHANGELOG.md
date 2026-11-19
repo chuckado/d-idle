@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- agencyp1a: task card result and checks <!--sg:agent/agencyp1a-->
 - Merge branch 'main' into cainstart <!--sg:agent/cainstart-->
 - Merge branch 'main' into viewerwait <!--sg:agent/viewerwait-->
 - Merge branch 'main' into inputlayer <!--sg:agent/inputlayer-->

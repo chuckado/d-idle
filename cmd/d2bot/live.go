@@ -142,8 +142,9 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 		}
 	}
 	zoneChoice, zoneObserve, zoneDecide, bossMargin := wireSurvivalModel(db, ip.Ledger(), e.Clock.Now) // shadow choice and ledger (S-C); the decision hooks act only with bot.zoneModel 1 (S-D)
+	ref.aw = wireAgency(db, e, charName, e.Clock.Now, log)
 	runner, err := bot.New(e, bot.Deps{ZoneChoice: zoneChoice, ZoneObserve: zoneObserve, ZoneDecide: zoneDecide, BossMargin: bossMargin, Recycle: recycleDep(rc), RecycleDue: recycleDue(rc), Restart: restart, Mover: bh.Mover, Fighter: bh.Fighter, Town: bh.Town, Loot: bh.Loot, Cycler: bh.Cycler, Leveler: bh.Leveler, Gear: bh.Gear, PlayerGear: playerGear(ref), VaultKeep: vaultKeepDep(ref), Quester: bh.Quester, Task: bh.Task, SavedExp: savedExpDep(saveDirOf(ctx, o), charName), Prepare: bh.prepare, Catalog: cat,
-		Health: g.health, OnSnapshot: disp.OnSnapshot, Bus: bus, ZoneShadow: wirePower(db)}, cfg)
+		Health: g.health, OnSnapshot: chainSnap(disp.OnSnapshot, ref.aw.OnSnapshot), Bus: bus, ZoneShadow: wirePower(db)}, cfg)
 	if err != nil {
 		return err
 	}
@@ -175,6 +176,7 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 	o.ladder.repair, o.ladder.farm = ref.rep, ref.gf
 	o.ladder.quests = ref.qd
 	o.ladder.points = ref.pd
+	o.ladder.plan = ref.aw
 	o.ladder.pause = pauseDesk(runner, ip.State())
 	o.ladder.reset = resetDesk(runner, ip.State())
 	o.ladder.sensesTier = tune.Senses.Tier
