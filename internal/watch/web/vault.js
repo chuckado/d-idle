@@ -5,13 +5,15 @@
 // Reveal and Sell (slice V6) also only queue: the price is shown before the click (revealPlan) and the states come from the GET. The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
 // fed the rows as an inventory view); every text comes from /watch/vault.json or the API and goes in through textContent.
 // Every press is read back: the list is fetched again and what it says is what the page shows.
-import { PAGE, artKey, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, revealPlan, sellPlan, toQuery, toTipView, when } from '/watch/vault-logic.js';
+import { PAGE, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, revealPlan, sellPlan, toQuery, toTipView, when } from '/watch/vault-logic.js';
 
 export const ROUTE = '/api/vault';
 const POLL_MS = 6000;
 const LONG_PRESS_MS = 500;
 const TYPED_ABOVE = 10; // a discard of more items than this asks for the number typed
-const MAX_LOADED = 600; // the page loads this many rows at most before "Show more" stops (the list is for choosing, search narrows it)
+const MAX_LOADED = 6000; // rows kept in memory at most (a vault holds a few thousand); only the rows near the view are drawn
+const LOAD = 200; // the server's page size cap: scrolling near the end of what is loaded fetches the next page
+const OVER_ROWS = 4; // rows drawn above and below the view
 
 const fmt = (s, o) => String(s || '').replace(/\{(\w+)\}/g, (m, k) => (o && o[k] !== undefined ? o[k] : ''));
 
@@ -148,6 +150,7 @@ export function mountVault(d) {
   }
   async function reload(keep) {
     S.loading = !S.view; S.err = false;
+    if (!keep) main.scrollTop = 0; // a new query starts at the top
     const limit = keep ? Math.min(Math.max(S.items.length, PAGE), MAX_LOADED) : PAGE;
     const [j] = await Promise.all([fetchPage(0, Math.min(limit, 200), !S.view || !S.facets.types.length), refreshEther()]);
     if (!j) { S.err = true; S.loading = false; draw(); return; }
@@ -172,11 +175,19 @@ export function mountVault(d) {
   }
   async function loadMore() {
     if (S.items.length >= S.total || S.items.length >= MAX_LOADED) return;
-    const j = await fetchPage(S.items.length, PAGE, false);
-    if (!j) { setMsg('bad', T.loadError); return; }
-    S.view = j; S.total = j.total;
-    const have = new Set(order());
-    absorb(j, j.items.filter((i) => !have.has(i.id)), false);
+    if (S.busy) return;
+    S.busy = true;
+    let added = 0;
+    try {
+      const j = await fetchPage(S.items.length, LOAD, false);
+      if (!j) { setMsg('bad', T.loadError); return; }
+      S.view = j; S.total = j.total;
+      const have = new Set(order());
+      const fresh = j.items.filter((i) => !have.has(i.id));
+      added = fresh.length;
+      absorb(j, fresh, false);
+    } finally { S.busy = false; }
+    if (added && S.items.length < S.total && rendered.last >= S.items.length - OVER_ROWS * geo.cols) loadMore(); // still near the end (a tall window): the next page
   }
   const sig = (j) => j.total + '|' + (j.capacity && j.capacity.count) + '|' + (j.items[0] && j.items[0].id) + '|' + j.mode + '|' + (j.capacity && j.capacity.pins) + '|' + (j.keep ? j.keep.queued + ',' + j.keep.creating + ',' + j.keep.done + ',' + j.keep.line : '') + '|' + (j.act ? [j.act.reveal.queued, j.act.reveal.working, j.act.reveal.done, j.act.reveal.charges, j.act.reveal.free, j.act.sell.queued, j.act.sell.working, j.act.sell.sold, j.act.reveal.line, j.act.sell.line, j.act.prompt ? j.act.prompt.ids.length : 0].join(',') : '');
   async function poll() {
@@ -381,15 +392,56 @@ export function mountVault(d) {
     return it.sell === 'queued' ? T.sellQueuedHint : it.sell === 'selling' ? T.sellWorkingHint
       : it.sell === 'sold' ? (it.value ? fmt(T.sellSoldHint, { gold: it.value }) : T.sellSoldUnknown) : fmt(T.sellFailedHint, { why: it.sellReason || '' });
   }
-  function drawList() {
+  // ---- the windowed grid: only the rows near the view are cells; padding on the grid stands in for the rest ----
+  let rendered = { first: -1, last: -1 }, geo = { cols: 1, rowH: 0 };
+  function measure() { // columns and row pitch of the laid-out grid; the columns are worked out from the width the way auto-fill does (the browser reports one track for a grid with no cells yet)
+    const cs = win && win.getComputedStyle ? win.getComputedStyle(grid) : null;
+    if (!cs) return geo;
+    const rem = parseFloat(win.getComputedStyle(doc.documentElement).fontSize) || 16, gap = parseFloat(cs.columnGap) || 0;
+    const minW = (parseFloat(cs.getPropertyValue('--vt-cell-min')) || 4.75) * rem;
+    const inner = grid.clientWidth - (parseFloat(cs.paddingInlineStart) || 0) - (parseFloat(cs.paddingInlineEnd) || 0);
+    const cols = Math.floor((inner + gap) / (minW + gap));
+    const row = parseFloat(cs.gridAutoRows) + (parseFloat(cs.rowGap) || 0);
+    geo = { cols: S.mode === 'list' ? 1 : Math.max(1, cols), rowH: row > 0 ? row : 0 };
+    return geo;
+  }
+  function rangeFor(mustIdx) {
+    const g = measure(), n = S.items.length;
+    let top = 0;
+    if (main.getBoundingClientRect) top = main.getBoundingClientRect().top - grid.getBoundingClientRect().top;
+    let r = windowRange({ n, cols: g.cols, rowH: g.rowH, top, view: main.clientHeight, over: OVER_ROWS });
+    if (mustIdx >= 0 && g.rowH > 0 && (mustIdx < r.first || mustIdx >= r.last)) { // keyboard to a cell outside the window
+      r = windowRange({ n, cols: g.cols, rowH: g.rowH, top: Math.floor(mustIdx / g.cols) * g.rowH, view: main.clientHeight, over: OVER_ROWS });
+    }
+    return r;
+  }
+  function drawList(mustIdx) {
     const tv = toTipView(S.items);
     S.tip = tv;
     grid.dataset.mode = S.mode;
-    grid.replaceChildren();
-    S.items.forEach((it, i) => grid.appendChild(cell(it, i + 1)));
+    const had = doc.activeElement && cellOf(doc.activeElement) ? doc.activeElement.dataset.vid : '';
+    const r = rangeFor(mustIdx === undefined ? -1 : mustIdx);
+    rendered = { first: r.first, last: r.last };
+    grid.style.setProperty('--vt-pad-top', r.padTop + 'px'); grid.style.setProperty('--vt-pad-bot', r.padBot + 'px');
+    const cells = [];
+    for (let i = r.first; i < r.last; i++) cells.push(cell(S.items[i], i + 1));
+    grid.replaceChildren(...cells);
+    if (had) { const again = grid.querySelector('[data-vid="' + (win && win.CSS && win.CSS.escape ? win.CSS.escape(had) : had) + '"]'); if (again && again.focus) again.focus({ preventScroll: true }); }
     if (typeof doc.dispatchEvent === 'function' && typeof CustomEvent !== 'undefined') doc.dispatchEvent(new CustomEvent('d2:inventory', { detail: tv.view })); // the tooltip reads rows from here
     viewBtn.textContent = S.mode === 'grid' ? T.viewList : T.viewGrid;
+    if (r.last >= S.items.length - OVER_ROWS * geo.cols && S.items.length < S.total) loadMore(); // near the end of what is loaded: fetch the next page
   }
+  function onScroll() { // redraw only when the view leaves the rows already drawn (cheap check: no redraw while the drawn rows cover the view)
+    const g = measure(), n = S.items.length;
+    if (!(g.rowH > 0) || !n) return;
+    const top = Math.max(0, main.getBoundingClientRect().top - grid.getBoundingClientRect().top);
+    const fr = Math.floor(top / g.rowH) * g.cols, lr = Math.ceil((top + main.clientHeight) / g.rowH) * g.cols;
+    if (rendered.first < 0 || (fr < rendered.first && rendered.first > 0) || (lr > rendered.last && rendered.last < n)) drawList();
+  }
+  main.addEventListener('scroll', onScroll, { passive: true });
+  const RO = d.ResizeObserver || (win && win.ResizeObserver); // the list's height settles after the first draw (filters fold, fonts load): draw again when it changes
+  if (RO) { const ro = new RO(onScroll); ro.observe(main); ro.observe(grid); }
+  if (win && win.addEventListener) win.addEventListener('resize', () => { measure(); drawList(); });
   function drawState() {
     state.replaceChildren();
     const v = S.view, n = activeCount(S.f);
@@ -525,15 +577,20 @@ export function mountVault(d) {
     if (!S.sel.size) S.sel.mode = false;
     drawBar(); drawList();
   });
-  grid.addEventListener('keydown', (e) => { // arrows move between cells; Escape ends a selection
+  grid.addEventListener('keydown', (e) => { // arrows, Home, End and Page keys move between cells (also past the drawn window); Escape ends a selection
     const c = cellOf(e.target);
     if (e.key === 'Escape' && S.sel.size) { S.sel.clear(); drawBar(); drawList(); e.preventDefault(); return; }
-    if (!c || !/^Arrow(Left|Right|Up|Down)$/.test(e.key)) return;
-    const cells = [...grid.querySelectorAll('.vt-cell')], i = cells.indexOf(c), top = cells[0].offsetTop;
-    const cols = Math.max(1, cells.findIndex((x) => x.offsetTop !== top) < 0 ? cells.length : cells.findIndex((x) => x.offsetTop !== top));
-    const step = e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' ? -cols : cols;
-    const nx = cells[i + step];
-    if (nx) { nx.focus(); e.preventDefault(); }
+    if (!c || !/^(Arrow(Left|Right|Up|Down)|Home|End|Page(Up|Down))$/.test(e.key)) return;
+    const i = S.items.findIndex((x) => x.id === c.dataset.vid), cols = Math.max(1, measure().cols), page = Math.max(1, Math.floor(main.clientHeight / (geo.rowH || 1)) - 1) * cols;
+    const step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -cols, ArrowDown: cols, PageUp: -page, PageDown: page }[e.key];
+    let to = e.key === 'Home' ? 0 : e.key === 'End' ? S.items.length - 1 : i + step;
+    if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && (to < 0 || to >= S.items.length)) return; // a column does not wrap
+    to = Math.min(S.items.length - 1, Math.max(0, to));
+    if (i < 0 || to === i) return;
+    e.preventDefault();
+    if (to < rendered.first || to >= rendered.last) drawList(to);
+    const nx = grid.querySelector('[data-vid="' + (win && win.CSS && win.CSS.escape ? win.CSS.escape(S.items[to].id) : S.items[to].id) + '"]');
+    if (nx) { nx.focus(); if (nx.scrollIntoView) nx.scrollIntoView({ block: 'nearest' }); }
   });
   selBtn.addEventListener('click', () => {
     if (S.sel.mode) S.sel.clear(); else { S.sel.mode = true; S.fopen = false; syncFilters(); } // the folded filter panel closes when selecting starts: on a phone it left no room for the list and the cost line
@@ -767,7 +824,7 @@ async function boot() {
   const back = qs.get('theme') ? '/watch?theme=' + qs.get('theme') : '/watch';
   let overlays = null;
   try { overlays = (await import('/watch/overlay.js')).overlays; } catch (e) { /* the sheet closes itself on Escape */ }
-  const vt = mountVault({ doc, root, overlays, win: window, get, post, texts, now: Date.now, filters: f, backHref: back, IntersectionObserver: window.IntersectionObserver,
+  const vt = mountVault({ doc, root, overlays, win: window, get, post, texts, now: Date.now, filters: f, backHref: back, IntersectionObserver: window.IntersectionObserver, ResizeObserver: window.ResizeObserver,
     later: (fn, ms) => setTimeout(fn, ms), clear: (t) => clearTimeout(t) });
   vt.loadTip();
   vt.start();
