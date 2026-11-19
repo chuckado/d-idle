@@ -1077,6 +1077,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/treefix3: Merge branch 'main' into treefix3 (merged 2026-11-19) <!--sg:agent/treefix3-->
 - verifymerc: verifier of the merc gear absorb PR (fid/merc-absorb-r1) (TASK-656, merged 2026-11-19, acceptance 3 of 3): r1 FAIL (stale base 9b64c11a; heal cap at the merc's whole max life unpinned: mutant v3 passes r1's pins and every oracle case; combat.md says FUN_0057c6c0 tests no unit type ... <!--sg:agent/verifymerc-->
 - nocards: remove the unidentified item card feature completely (TASK-663, merged 2026-11-19, acceptance 2 of 2) <!--sg:agent/nocards-->
+- etherreveal: Ether replaces the scroll for vault reveals (TASK-662, merged 2026-11-19, acceptance 3 of 3): Ether tap replaces the scroll: unlock from held affixes, 1 Ether default, charged once; Cain free; previews for both. Offline only, not verified live; Keep of a revealed item stays unidentified in game (fork has no flag). <!--sg:agent/etherreveal-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
