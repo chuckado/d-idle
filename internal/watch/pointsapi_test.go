@@ -167,3 +167,21 @@ func newJSONReq(path, body string) *http.Request {
 	req.Header.Set("Authorization", "Bearer tok")
 	return req
 }
+
+func TestPointsReturnSection(t *testing.T) {
+	r := newPointsRig(t, d2.Paladin)
+	api := NewPointsAPI()
+	sec := PointsSection(func() PointsDesk { return api.desk() })
+	if sec.Build(&ReturnData{}) != nil {
+		t.Error("unbound desk: no card")
+	}
+	api.Bind(r.desk)
+	sv := sec.Build(&ReturnData{})
+	if sv == nil || sv.ID != "points" || !strings.Contains(sv.Lines[0], "3 stat points and 1 skill point waiting for you") {
+		t.Fatalf("%+v", sv)
+	}
+	r.p.StatPoints, r.p.SkillPoints = 0, 0
+	if sec.Build(&ReturnData{}) != nil {
+		t.Error("nothing banked: no card")
+	}
+}

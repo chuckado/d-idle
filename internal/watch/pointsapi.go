@@ -38,6 +38,7 @@ type PointsDesk interface {
 	SpendSkill(ctx context.Context, id int, confirm bool) points.Reply
 	SetAutopilot(on bool) points.Reply
 	Record(points.Event)
+	Waiting() (text string, stat, skill int, ok bool)
 }
 
 // PointsAPI holds the desk once it exists (late-bound like the quest board).
@@ -169,3 +170,22 @@ func (a *PointsAPI) PostHandler(o AnswerOptions) http.Handler {
 		writeJSON(w, code, rep)
 	})
 }
+
+// PointsSection is the return screen's "points waiting" card: shown while stat or skill points are banked (the hero never
+// spends them behind the player's back unless the autopilot switch is on). get is read on every build (the desk binds late).
+func PointsSection(get func() PointsDesk) ReturnSection {
+	return SectionFunc(func(d *ReturnData) *SectionView {
+		pd := get()
+		if pd == nil {
+			return nil
+		}
+		text, _, _, ok := pd.Waiting()
+		if !ok {
+			return nil
+		}
+		return &SectionView{ID: "points", Title: "Points waiting", Lines: []string{text, "The hero is not spending them. Open the Points page to place them: " + PointsPage + "."}}
+	})
+}
+
+// PointsPage is the path of the page.
+const PointsPage = "/watch/points"

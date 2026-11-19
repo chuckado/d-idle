@@ -226,6 +226,12 @@ func NewFun(c FunConfig) (*Fun, error) {
 		sec.Register(CodexSectionID, CodexReturnSection(f.CodexSource()))
 	}
 	sec.Register("quiet", QuietSection(c.Hub))
+	sec.Register("points", PointsSection(func() PointsDesk {
+		if f.Points == nil {
+			return nil
+		}
+		return f.Points.desk()
+	}))
 	if c.Unlock != nil {
 		f.Unlocks = &Unlocks{Engine: c.Unlock, Hub: c.Hub, Spend: c.Strip.UnlockSpender()}
 		sec.Register(UnlocksSectionID, f.Unlocks.Section())
