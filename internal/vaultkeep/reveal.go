@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"strings"
 
+	"d2lod-bot/internal/bulkid"
 	"d2lod-bot/internal/d2dctl"
+	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/vault"
 )
 
@@ -71,11 +73,30 @@ type RevealInfo struct {
 	Charges int  `json:"charges"` // -1 unknown
 	Free    bool `json:"free"`    // Cain is here: no charge is used
 	PerItem int  `json:"perItem"` // charges one reveal costs (1)
+	// Note is the viewer sentence while identify.policy wants Cain and he is not rescued ("" otherwise).
+	Note string `json:"note,omitempty"`
+}
+
+// CainRescuer is an optional part of an Identifier: whether the Search for Cain is done for the hero.
+type CainRescuer interface{ Rescued() bool }
+
+// RevealNote says that identify is manual because Cain is not rescued, while identify.policy (1 or 2) counts on him.
+func (k *Keeper) RevealNote() string {
+	if k.IdentifyPolicy == nil {
+		return ""
+	}
+	if p := k.IdentifyPolicy(); p != env.IdentifyCainFree && p != env.IdentifyScrolls {
+		return ""
+	}
+	if r, ok := k.Tools.(CainRescuer); ok && !r.Rescued() {
+		return bulkid.WhyNoCain
+	}
+	return ""
 }
 
 // RevealPrice reads the current price view.
 func (k *Keeper) RevealPrice(ctx context.Context) RevealInfo {
-	return RevealInfo{Charges: k.charges(ctx), Free: k.free(), PerItem: 1}
+	return RevealInfo{Charges: k.charges(ctx), Free: k.free(), PerItem: 1, Note: k.RevealNote()}
 }
 
 // GateReveal says whether a Reveal press can be queued now (the same refusals as Keep, plus: the bot must be able to

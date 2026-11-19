@@ -238,6 +238,7 @@
   "ilvlMaxHold": "Max level",
   "reveal": "Reveal",
   "revealSel": "Reveal ({n})",
+  "revealFiltered": "Reveal filtered ({n})",
   "revealNote": "Reveal needs the identify step, which this bot does not have",
   "revealCostOne": "Reveal 1 item: 1 charge",
   "revealCost": "Reveal {n} items: {c} charges",
