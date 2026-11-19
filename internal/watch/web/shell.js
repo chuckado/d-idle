@@ -1035,6 +1035,10 @@ async function start() {
   // a new hero meets the first-steps card once, without opening a menu
   if (cockpit && sel.origin === 'newhero' && !pref(FIRST) && dr.boxes.has('onboarding') && !qs.has('drawer') && qs.get('first') !== '0') { pref(FIRST, '1'); openDrawer('onboarding'); }
   if (cockpit && qs.get('drawer')) openDrawer(qs.get('drawer')); // a link (and the screenshot suite) can open a drawer
+  // The poll loop runs before the first module loads: the imports below are plain GETs queued behind the picture and event
+  // streams (a browser keeps about six connections per host, tabs together), and a slow one used to hold the loop back, so
+  // every panel stayed in its first state ("waiting for the bot"). A slot polls as soon as its own panel is added.
+  sched.start();
   for (const [m, parts] of made) {
     const css = el('link');
     css.rel = 'stylesheet'; css.href = '/watch/panels/' + m.id + '/panel.css';
@@ -1042,7 +1046,7 @@ async function start() {
     const timers = new Set();
     let api = {};
     try {
-      const mod = await import('/watch/panels/' + m.id + '/panel.js');
+      const mod = await Promise.race([import('/watch/panels/' + m.id + '/panel.js'), new Promise((_, no) => setTimeout(() => no(new Error('panel module timed out')), FETCH_TIMEOUT * 2))]);
       api = mod.mount(parts.root, makeCtx(m, parts, cfg, answerBase, timers)) || {};
     } catch (e) {
       parts.root.dataset.state = 'error';
@@ -1059,7 +1063,6 @@ async function start() {
     syncBand(parts.root.parentElement);
   }
   Object.values(bands).forEach(syncBand);
-  sched.start();
   mountReset({ ui, toast, doc: document, button: document.getElementById('btn-reset'), later: (fn, ms) => setTimeout(fn, ms),
     post: (path, body) => postJSON(answerBase, path, body),
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
