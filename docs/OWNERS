@@ -742,12 +742,9 @@ internal/bot/questboard.go  credit-runner  quests4
 internal/bot/questboard.go  credit-runner  quests7
 internal/bot/questboard.go  credit-runner  quests7b
 internal/bot/questboard.go  credit-runner  quests8
-internal/bot/questboard.go  live-agent  cainfix2
 internal/bot/questboard_goal_test.go  credit-runner  questrun
-internal/bot/questboard_goal_test.go  live-agent  cainfix2
 internal/bot/questboard_s7b_test.go  credit-runner  cain5b
 internal/bot/questboard_s7b_test.go  credit-runner  quests7b
-internal/bot/questboard_s7b_test.go  live-agent  cainfix2
 internal/bot/questboard_test.go  credit-runner  quests4
 internal/bot/questboard_test.go  credit-runner  quests7
 internal/bot/repairtrip.go  credit-runner  repairtrip
@@ -861,12 +858,10 @@ internal/d2dsrc/cpuprobe_test.go  credit-runner  botcpu
 internal/d2dsrc/gearstats.go  credit-runner  survB
 internal/d2dsrc/gearstats_test.go  credit-runner  survB
 internal/d2dsrc/items.go  credit-runner  cain45
-internal/d2dsrc/items.go  live-agent  cainfix2
 internal/d2dsrc/player.go  credit-runner  survB
 internal/d2dsrc/source_test.go  credit-runner  botcpu
 internal/d2dsrc/source_test.go  credit-runner  cain45
 internal/d2dsrc/source_test.go  credit-runner  survB
-internal/d2dsrc/source_test.go  live-agent  cainfix2
 internal/d2dsrc/srv_test.go  credit-runner  botcpu
 internal/danger  credit-runner  dangerfit2
 internal/danger/  credit-runner  survA
@@ -1070,7 +1065,6 @@ internal/task  credit-runner  cainfix
 internal/task/act1.go  credit-runner  cain45
 internal/task/act1.go  credit-runner  cain5b
 internal/task/act1.go  credit-runner  quests7b
-internal/task/act1.go  live-agent  cainfix2
 internal/task/act2.go  credit-runner  quests7b
 internal/task/act3.go  credit-runner  quests7b
 internal/task/cainstones_test.go  credit-runner  cain45
@@ -1082,7 +1076,6 @@ internal/task/guided.go  credit-runner  campaign1
 internal/task/guided_test.go  credit-runner  campaign1
 internal/task/guided_test.go  pro-runner  levelplan3
 internal/task/s7b_test.go  credit-runner  quests7b
-internal/task/step.go  live-agent  cainfix2
 internal/task/testdata  credit-runner  quests7b
 internal/task/testdata/plans/act1.txt  credit-runner  cain5b
 internal/task/world.go  credit-runner  cainfix
