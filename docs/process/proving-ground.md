@@ -118,3 +118,7 @@ Not run live yet: `cain.read`, `cain.report`, `town.stash-gold-withdraw`, `cain.
 | item on the ground | `ground`, only on a live (field) observation; a reloaded hero's floor is the town and is not read | V verb |
 | stone lit state | `debug objects` NU to ON (V L1), readable only while the hero stands in Stony Field: the bot's own check, not asserted; the scenario asserts the portal instead | V lab |
 | shipped verbs | a field start needs the lab d2d (verbs on); the shipped build refuses the warp, so `cain.stones.shipped` is BLOCKED by `blockedBefore` with that reason; whether the shipped build lists portals is U | decision |
+
+## 12. State after the expansion card (2026-11-19)
+
+19 scenarios: 14 runnable, `cain.stones.shipped` BLOCKED by design, 3 PENDING (repair, merc, nightmare). Fast tier first run: GREEN 4, RED 3 (details and findings: `docs/probes/provingground-run-2026-11-19.md`). Coverage: 22 of 91 behaviours covered (was 10), 5 pending-only, 64 uncovered; all five Search for Cain chunks have a scenario. Determinism pair for `town.resupply` Paladin seed 11 submitted, result in the run record.

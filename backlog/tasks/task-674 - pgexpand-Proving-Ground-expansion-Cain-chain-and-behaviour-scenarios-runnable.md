@@ -21,6 +21,7 @@ owns:
 exclusive:
   - "d2d-lab-binary"
 contracts: []
+result: "Proving Ground expanded: board-taps driver, area-change counter, portal and ground observers, 19 scenarios (14 runnable, 1 BLOCKED by design, 3 PENDING). Fast tier run live on the builder (lab slots, CHEATED/SETUP, mechanics only): GREEN 4 (belt.refill-after-fight, cain.read, town.resupply, town.stash-gold-withdraw), RED 3 (cain.scroll, flail.areachanges 26 area changes, heal.town scenario artifact). Determinism pair submitted (job 20261119-141800-a155), result not in this commit. Coverage 22 of 91 behaviours (was 10). Record: docs/probes/provingground-run-2026-11-19.md."
 ---
 
 ## Description
@@ -33,8 +34,8 @@ Expand the Proving Ground (card provingground). Done when the listed scenarios r
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Cain stones, cage, read, report and the whole chain are runnable scenarios with a recorded observable
-- [ ] #2 Behaviour scenarios (flail, stash withdraw, resupply, rare ring, chicken, heal, belt) are runnable; the area-change counter is in the observer
+- [x] #1 Cain stones, cage, read, report and the whole chain are runnable scenarios with a recorded observable
+- [x] #2 Behaviour scenarios (flail, stash withdraw, resupply, rare ring, chicken, heal, belt) are runnable; the area-change counter is in the observer
 - [ ] #3 Fast tier run on the builder with a G/R/P/B table and a determinism pair committed
-- [ ] #4 Coverage report updated
+- [x] #4 Coverage report updated
 <!-- AC:END -->
