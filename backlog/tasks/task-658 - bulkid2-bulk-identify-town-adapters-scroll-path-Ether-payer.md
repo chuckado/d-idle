@@ -1,10 +1,11 @@
 ---
 id: TASK-658
 title: 'bulkid2: bulk identify town adapters, scroll path, Ether payer'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T14:12:00Z'
+updated_date: '2026-11-19T14:53:00Z'
 labels:
   - bot
   - feature

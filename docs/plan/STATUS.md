@@ -288,7 +288,6 @@
 | bulkid-design | proposed | - | `docs/design/bulk-identify-2026-11-18.md` | - |
 | bulkid | proposed | - | `internal/bulkid`<br>`data/bulkid`<br>`internal/env/tuning_identify.go`<br>`internal/watch/vaultmass_test.go`<br>`internal/env/tuning.go`<br>`docs/knobs.md`<br>`internal/vaultkeep/reveal.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/note_test.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go` | - |
 | survhold3 | proposed | - | `internal/survival`<br>`docs/probes/survival-holdout3-2026-11-18.md` | - |
-| bulkid2 | proposed | - | `internal/bulkid`<br>`internal/town/bulkid.go`<br>`internal/town/bulkid_need_test.go`<br>`internal/town/chores.go`<br>`internal/town/stash.go`<br>`internal/town/town.go`<br>`internal/vaultkeep`<br>`internal/watch/vaultapi.go`<br>`cmd/d2bot/bulkidwire.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/invwire.go`<br>`cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dbackend.go`<br>`docs/design/bulk-identify-2026-11-18.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
