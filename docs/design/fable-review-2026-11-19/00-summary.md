@@ -1,6 +1,6 @@
 # Design review 2026-11-19: summary for the owner
 
-> status: REVIEW for the owner (Fable, card fablereview, branch `agent/fablereview`). Docs only. Nothing here is decided; nothing in the bot's behaviour changed; no game was run, nothing was posted, nothing touched the live hero. The questions for the owner are Q1 to Q12 in [06-roadmap.md](06-roadmap.md) section 7.
+> status: REVIEW for the owner (Fable, card fablereview, branch `agent/fablereview`). Docs only. Nothing here is decided; nothing in the bot's behaviour changed; no game was run, nothing was posted, nothing touched the live hero. The questions for the owner are Q1 to Q13 in [06-roadmap.md](06-roadmap.md) section 7.
 >
 > The owner's ask (2026-11-19): compare all public Diablo II bots with ours; fidelity improvements; gaps; think about all seven classes; let the player decide every stat and skill point if that can be done, or discuss alternatives; weigh fidelity and bot capability, capability first; no cap on findings up to a complete overhaul.
 >
@@ -15,7 +15,8 @@
 | [03-classes-plan.md](03-classes-plan.md) | seven classes: builds, guide tracks, breakpoints, dangers, engine needs, order and effort |
 | [04-stat-skill-agency.md](04-stat-skill-agency.md) | THE KEY DESIGN: free stat and skill points; four options; one recommendation with phases, tests and failure modes |
 | [05-architecture-and-overhaul-options.md](05-architecture-and-overhaul-options.md) | keep, rebuild, or start over; the Search for Cain and ping-pong case studies; the Proving Ground |
-| [06-roadmap.md](06-roadmap.md) | ranked packages with effort, first week and month, prototypes, risks, the twelve questions |
+| [06-roadmap.md](06-roadmap.md) | ranked packages with effort, first week and month, prototypes, risks, the thirteen questions |
+| [07-input-layer.md](07-input-layer.md) | added on the owner's note: where the bot clicks, uses keys or direct verbs; how public bots do it; what to move to verbs and hotkeys |
 
 ## The ten findings that matter most
 
@@ -29,6 +30,8 @@
 8. **Seven classes are sixteen "delivery kinds", not seven projects.** Data for all classes already exists (tables, profiles, upkeep code) and none beyond two has played. Order: Sorceress second build, Necromancer Summoner (the best idle hero, and it forces the summon, corpse and curse drivers three other classes reuse), Hammerdin, Barbarian, ground-target builds with the Druid, Assassin, Amazon. Shapeshifting and martial-arts charges: not for the bot. [03](03-classes-plan.md).
 9. **Ladder-only runewords do not exist offline, and our tables assume them.** Spirit, Insight, Fortitude, Grief, Infinity and 18 more cannot be made in vanilla single-player 1.14d [V this install's runes.txt via docs/sme/builds-gear.md; helper B: two archives agree]. No Insight means no free mana. Five endgame plan tables set their stat targets by Spirit, Insight or Fortitude gear. Whether d.idle mode enables them is a product decision (Q4). Also found: the rule that a skill's points cannot exceed character level minus required level plus one is not in our leveler and at least one table violates it [U high confidence; V kolbot enforces it]. [03](03-classes-plan.md) section 1, [04](04-stat-skill-agency.md) 3.4.
 10. **The survival model is the right unifier and is half switched on.** One margin (power against danger) should judge zone choice, quest readiness, the difficulty transition and build viability. Its holdout failure came from the recovery state bypassing it, which is finding 3 again. [05](05-architecture-and-overhaul-options.md) 3.3.
+
+**Addendum (input, on the owner's note of 2026-11-19).** The bot does click where it should not, mostly on d2d outside combat: aura and skill selection through the popup, points, town portal through the inventory, vendors, gold, waypoint rows, and a priming click after level changes that caused two bounce incidents. kolbot and d2bsng press no hotkeys; they send the game's own client messages. Recommendation: the fork's action verbs are those messages (one verb per message, same handler, each proven by a differential), the bot prefers verb, then key, then verified click, and the hero's hotkey map is generated from the skills the player chose. About 10 to 14 cards and 6 to 8 small fork verbs; target zero pixel clicks per hour on d2d. [07-input-layer.md](07-input-layer.md).
 
 ## The recommendation on stat and skill points
 

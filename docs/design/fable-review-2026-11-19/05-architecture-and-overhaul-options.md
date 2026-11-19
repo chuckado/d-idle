@@ -126,6 +126,16 @@ Reading: the model is not the problem. The holdout failure is the if-chain again
 
 Policy line to record (proposed, question Q5): "The fork may expose anything the engine already knows to the bot as a READ. Reads never make a run CHEATED. What the hero is allowed to ACT on is a product decision (K0, K1, K2)." The Game.exe memory backend can already read all of it; d2d was held to a stricter standard by accident.
 
+### 4a. The input layer (added on the owner's note of 2026-11-19; full audit in [07-input-layer.md](07-input-layer.md))
+
+The owner observed that the bot clicks where it could use hotkeys. The audit [V helper I, helper H] says:
+
+- On d2d, combat already uses direct verbs (cast, belt, pickup, move, interact). The clicks are in: aura and left-skill selection through the skill popup (because `cmd select` does not set the right skill, deviation R08), stat and skill points (the verbs exist, unused), town portal through the inventory (one incident: a dropped cast that spent the charge), vendor tabs and cells, selling, repair, gold, identify, cube, waypoint rows, and a priming click after every level change (two bounce incidents). On Game.exe skills are F-keys the bot binds itself with read-back and potions are keys 1 to 4; the rest is pixel clicks.
+- kolbot and d2bsng press no skill hotkey at all. They send the game's own client messages (select skill, cast, belt, pick up, interact, buy, sell, add point, take waypoint) and fall back to clicks. Hotkeys are what bots without engine access use.
+- A hover-first click on d2d costs about 600 ms; an aura switch through the popup is two of them; on the watch video the popup and inventory flash open.
+
+Architecture decision proposed (question Q13): **the fork's action verbs are the game's client-to-server messages, one verb per message, routed to the same handler; the bot prefers verb, then key, then verified click; behaviour packages talk only to the intent-level `SemanticInput` interface (it exists and has one production caller); every intent ends with a postcondition read from state.** A verb equal to a message a real client can send is input, not a cheat, which also gives the crutch rule a precise definition of "the real input channel" on d2d. Each verb is promoted from "lab" to "input" by a differential (UI path against verb, identical state for N ticks). No binding bootstrap is needed on d2d; a hotkey map GENERATED from the planner's slots ([04](04-stat-skill-agency.md)) replaces the hand-written `layout` in the profiles, because with player-chosen skills a hand-written layout cannot exist. Cost: about 10 to 14 bot cards and 6 to 8 small fork verbs. Success measure in the Proving Ground: pixel clicks per virtual hour on d2d, target zero.
+
 ## 5. The Proving Ground (the one thing I would build first)
 
 What exists [V]: `--lockstep` fork, 46 to 62 times real time with the bot attached (8 virtual hours in about 8 wall minutes) (docs/d2d-loop.md); `tools/smoke.sh` and `cmd/d2smoke` with a rules file, "never run on the game yet" (docs/smoke.md); `internal/d2dreplay`; the survival A/B harness and `abreport`; the journal and `d2ddet compare` (docs/d2d-determinism.md); the builder with a long lane (docs/process/build-hosts-2026-11-14.md).

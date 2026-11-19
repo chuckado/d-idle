@@ -16,7 +16,7 @@ owns:
   - "docs/design/fable-review-2026-11-19"
 exclusive: []
 contracts: []
-result: "Design review docs/design/fable-review-2026-11-19 (00 summary to 06 roadmap): no full overhaul, rebuild the decision core behind a lockstep Proving Ground; stat and skill agency path D (free points, capability tiers, guide tracks); class order; 12 questions for the owner. Three offline prototype branches (agent/fable-proto-freebuild, -buildfile, -arbiter), not merged. Docs only, nothing run live."
+result: "Design review docs/design/fable-review-2026-11-19 (00 summary to 07 input layer): no full overhaul, rebuild the decision core behind a lockstep Proving Ground; stat and skill agency path D (free points, capability tiers, guide tracks); class order; 13 questions for the owner; input layer audit (verbs before keys before clicks). Three offline prototype branches (agent/fable-proto-freebuild, -buildfile, -arbiter), not merged. Docs only, nothing run live."
 ---
 
 ## Description
@@ -29,7 +29,7 @@ Owner-requested design review: public bots comparison, fidelity and gaps, seven 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [x] #1 00-summary to 06-roadmap written under docs/design/fable-review-2026-11-19
+- [x] #1 00-summary to 07-input-layer written under docs/design/fable-review-2026-11-19
 - [x] #2 prototype branches reported with what they prove
 - [x] #3 questions for the user listed
 <!-- AC:END -->

@@ -10,6 +10,7 @@
 week 1        week 2          week 3          week 4          weeks 5 to 8
 PROVE ------> DECIDE CORE --> SWITCH CORE --> WIDEN --------> CLASSES AND ACTS
 R1 Proving    R4 arbiter      R4 arbiter      R8 Act 2        R10 Necromancer
+R17 input I1-I2  (R17 I3 to I7 run beside R4 and R7)
    Ground L0-L2  in shadow       live by family   through      R11 Hammerdin
 R2 Cain e2e   R5 questspec    R6 survival     the board      R12 Barbarian
 R3 P0 agency     checker         model on     R9 difficulty  R13 Act 3 to 5
@@ -39,6 +40,7 @@ Nothing in a later column starts before the Proving Ground of column one exists.
 | R14 | Runeword and cube ADVISOR; shrines; status reflexes (curses, monster auras) | data and advice, the player acts | 8 to 10 | 0 | R7 | self-found heroes stay weak |
 | R15 | Agency P3 (share, import), NIP importer | | 8 to 12 | 0 | R7 | |
 | R16 | Blizzard and Druid (ground target), Assassin traps, Amazon bow | per [03](03-classes-plan.md) section 4 | 26 to 40 total | | fidelity A5, A7, A8, A9 | |
+| R17 | **Input layer** ([07](07-input-layer.md)) | fork: `cmd select` sets the right skill, `cmd move` without the priming click, message-equivalent verbs for buy, sell, repair, waypoint, menu choice, use item; bot: aura and skill selection, town portal, points, town chores on verbs; `SemanticInput` as the only interface of behaviour packages; generated hotkey map from the planner slots; one differential per promoted verb | 10 to 14 + a fork branch of 6 to 8 verbs | emulator and lab time for the differentials | Q13; I1 and I2 can start in week 1 (they remove the popup clicks and the kick), the rest with R4 town batching | click failures keep feeding the loop guards; every new class adds popup geometry |
 | F | **Fidelity lane, re-pointed** ([02](02-fidelity-and-gaps.md) section 3) | refresh the risk map by class and act; class gates in roadmap order: melee chain (A1), aura reach (A3), curse rule (A2), difficulty start (A4), then per class | continuous, 1 to 2 cards a day as today | emulator runs | the class order | numbers measured on d2d mean less with every class |
 
 Totals: R1 to R7 (the core) about 64 to 90 cards; at the current pace of several agents a day that is three to four weeks of focused work, with the WIP limit of 3 implementation agents kept. R8 to R13 about 55 to 85 more over the following month.
@@ -88,7 +90,7 @@ Each has a README with its V and U lines. All three test suites passed on 2026-1
 
 ## 7. Decisions for the owner
 
-Each is a concrete question with my recommendation. None is recorded anywhere but here; the guard files (`docs/decisions.md`, ADRs) are not touched by this review.
+Each is a concrete question with my recommendation (Q13 was added with the input audit and sits before Q12 in the table). None is recorded anywhere but here; the guard files (`docs/decisions.md`, ADRs) are not touched by this review.
 
 | # | question | recommendation | what a "no" changes |
 |---|---|---|---|
@@ -103,6 +105,7 @@ Each is a concrete question with my recommendation. None is recorded anywhere bu
 | Q9 | **Unit of work**: vertical cards ("the hero does X on d2d, scenario green") instead of layer slices, even when a card is larger than today's 400-line guide? | yes | |
 | Q10 | **Respec as a player event**: the hero proposes the Akara reset when viability is red, the player decides; staged guide tracks may plan one? | yes | no-respec tracks only: slower Normal for most classes |
 | Q11 | Unsupported skills: **allowed with a clear "your hero cannot use this yet" label** (my recommendation), or refused until supported? | allowed, one confirmation for attack skills | refused: simpler, less the player's hero |
+| Q13 | **Input rule**: "the fork's action verbs are the game's own client messages; the bot prefers verb, then key, then verified click", and the item, gold and identify verbs move from lab to input after a differential each? | yes | hotkeys only: then d2d needs real key bindings and a bind bootstrap, and town stays click-driven |
 | Q12 | May the review's prototypes be turned into real cards (arbiter, questspec, freebuild planner, build file) by the coordinator, on the order of section 2? | yes | |
 
 ## 8. What I would do first, in one sentence
