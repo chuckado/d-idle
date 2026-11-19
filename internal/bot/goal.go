@@ -57,6 +57,9 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 	if r.beltFillStep(ctx, snap) {
 		return true
 	}
+	if r.flailHold(ctx, snap, c) {
+		return true
+	}
 	if plan, emergency, ok := r.needChores(snap); ok {
 		now := r.e.Clock.Now()
 		gap := sec(r.cfg.ResupplyCooldownSec)
