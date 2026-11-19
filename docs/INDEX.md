@@ -509,6 +509,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [quest.md](quest.md): Quest layer: internal/quest (agent QUESTS, offline)
 - [questboard.md](questboard.md): Quest board model (slice S1), executor (S3), API (S4) and chunked quests (S7) (status: S9 DONE offline 2026-11-17 (card retirej, TASK-629): the Journey is retired and `quests.board` defaults to...)
 - [questmem.md](questmem.md): In-memory quest and waypoint data (agent MEMQUEST, V-05)
+- [questspec.md](questspec.md): questspec: quest chains as checkable data (status: current (card questspec, roadmap R5 of docs/design/fable-review-2026-11-19/06-roadmap.md). Checker plus...)
 - [readiness.md](readiness.md): Readiness model: is this hero ready for that area (status: slice A of the friends beta (cards TASK-217 area table, TASK-218 model, TASK-220 meter feed in part)....)
 - [recovery.md](recovery.md): Recovery phase (broke character)
 
