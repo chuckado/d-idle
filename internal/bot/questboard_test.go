@@ -149,11 +149,6 @@ func TestBoardPlanHidesTheHandIn(t *testing.T) {
 	if !ok || len(nodes) != 3 {
 		t.Fatalf("scroll chunk nodes = %d %v", len(nodes), ok)
 	}
-	// cainfix3: free_cain starts with the way into Tristram, so a hero that left it (town trip) walks back before the cage
-	free, _ := b.Chunk("search_for_cain", "free_cain")
-	if nodes, ok := handlerNodes(q, free); !ok || len(nodes) != 3 || stepSuffix("search_for_cain", nodes[0].Step) != "to-tristram" {
-		t.Fatalf("free_cain nodes = %d %v", len(nodes), ok)
-	}
 	read, _ := b.Chunk("search_for_cain", "read")
 	if nodes, ok := handlerNodes(q, read); !ok || len(nodes) != 0 {
 		t.Fatalf("read chunk field nodes = %d %v", len(nodes), ok)

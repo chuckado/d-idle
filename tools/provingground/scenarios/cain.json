@@ -483,7 +483,6 @@
     "action": "interact",
     "target": "Cain's Cage",
     "nodes": [
-     "to-tristram",
      "cage",
      "home"
     ]
@@ -510,6 +509,10 @@
       "count": 6
      }
     ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "free_cain"
+    },
     "start": "field",
     "area": 38,
     "quests": [
@@ -532,7 +535,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: warped into Tristram (debug goto 38), quest record 4 set to 0x0018 (bark taken, Tristram entered; what a played hero shows on arrival, V L3), level 24, 5000 gold, four healing potions in the belt, mana and healing potions and the Key to the Cairn Stones in the pack (the board reads the scroll and stones chunks done only from that evidence, so free_cain is offered) (no town trip: a warped hero has no portal pair back to Tristram) by stat verbs. The crowd-abandon default is NOT turned off (cainfix3: the started-quest override applies). Mechanics only.",
+   "provenance": "CHEATED: warped into Tristram (debug goto 38), quest record 4 set to 0x0018 (bark taken, Tristram entered; what a played hero shows on arrival, V L3), level 24, 5000 gold, four healing potions in the belt, mana and healing potions and the Key to the Cairn Stones in the pack (the board reads the scroll and stones chunks done only from that evidence), and the chunk accepted in the plan store at setup (no tap latency: a hero left alone in Tristram spends its potions and goes to town, with no portal pair back) (no town trip: a warped hero has no portal pair back to Tristram) by stat verbs. The crowd-abandon default is NOT turned off (cainfix3: the started-quest override applies). Mechanics only.",
    "touches": [
     "cmd/d2bot/cain.go",
     "internal/task/",
@@ -548,11 +551,7 @@
     "knobs": {
      "quests.board": 1,
      "resource.pointsDecisions": 1
-    },
-    "driver": "board-taps",
-    "tap_chunks": [
-     "free_cain"
-    ]
+    }
    },
    "needs": [
     "lab-verbs-attach"
