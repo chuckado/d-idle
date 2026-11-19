@@ -272,18 +272,34 @@ export function mount(root, ctx) {
     const p = player;
     return () => { p.stop(); if (player === p) player = null; };
   }
-  async function tryPal() {
-    if (!palUrl || typeof fetch !== 'function') return;
-    try {
+  // ONE video transport at a time (a browser keeps about six connections per host and the page already holds the event
+  // stream): the capability probe runs BEFORE any stream opens, so the picture is the palette feed or the MJPEG stream, never
+  // both, and a probe that stalls (a busy host) cannot sit next to an already running MJPEG stream and starve the panels' own
+  // fetches. A probe still unanswered after NEGOTIATE_MS is aborted and the MJPEG stream starts.
+  const NEGOTIATE_MS = 6000;
+  async function negotiatePal() {
+    if (!palUrl || typeof fetch !== 'function') return false;
+    const ac = typeof AbortController === 'function' ? new AbortController() : null;
+    const get = fetch, guarded = (u, o) => get(u, ac ? Object.assign({}, o, { signal: ac.signal }) : o);
+    let timer = 0;
+    const timeout = new Promise((res) => { timer = ctx.later(() => { if (ac) ac.abort(); res(null); }, NEGOTIATE_MS); });
+    const probe = (async () => {
       if (!PF()) await import('../../palfeed.js');
       const P = PF();
-      if (!P || typeof DecompressionStream !== 'function' || typeof ImageData !== 'function') { log('lossless feed: this browser cannot decode it'); return; }
-      const d = await P.negotiate(fetch, ctx.token ? '?t=' + encodeURIComponent(ctx.token) : '');
-      if (!d) return; // not offered (glance without palfeed) or not ready: MJPEG stays
-      mode = 'pal';
-      if (typeof ResizeObserver === 'function') { ro = new ResizeObserver(palFit); ro.observe(frame); }
-      ctl.reconnect();
-    } catch (e) { log('lossless feed not used: ' + (e && e.message || e)); }
+      if (!P || typeof DecompressionStream !== 'function' || typeof ImageData !== 'function') { log('lossless feed: this browser cannot decode it'); return null; }
+      return P.negotiate(guarded, ctx.token ? '?t=' + encodeURIComponent(ctx.token) : '');
+    })();
+    let d = null;
+    try { d = await Promise.race([probe, timeout]); } catch (e) { log('lossless feed not used: ' + (e && e.message || e)); }
+    if (!d) { if (ac) ac.abort(); return false; } // not offered, not ready or too slow: MJPEG
+    mode = 'pal';
+    if (typeof ResizeObserver === 'function') { ro = new ResizeObserver(palFit); ro.observe(frame); }
+    return true;
+  }
+  async function startVideo() {
+    if (!palUrl || typeof fetch !== 'function') { ctl.start(); return; } // no palette feed to ask about: the stream opens at once
+    try { await negotiatePal(); } catch (e) { log('lossless feed not used: ' + (e && e.message || e)); }
+    ctl.start();
   }
 
   // fetch path: each part becomes an object URL on the <img>; while one decodes only the newest waits (latest wins)
@@ -352,6 +368,8 @@ export function mount(root, ctx) {
   if (typeof window.addEventListener === 'function') {
     window.addEventListener('focus', () => ctl.wake());
     window.addEventListener('online', () => ctl.wake());
+    // leaving the page closes the stream at once (a navigation or reload must not leave the old page's stream holding a connection)
+    window.addEventListener('pagehide', () => ctl.stop());
     window.addEventListener('pageshow', (e) => { if (e && e.persisted) ctl.reconnect(); else ctl.wake(); });
   }
   // Item labels (docs/video-feed.md, "Item labels"): the game's ground item names, as with Alt held in D2. The button is hidden
@@ -380,8 +398,7 @@ export function mount(root, ctx) {
   if (typeof ctx.get === 'function') (function labelsLoop() { labelsRead().then(() => ctx.later(labelsLoop, 20000)); })();
   registerVideo(ctl);
   if (typeof window !== 'undefined' && window.d2video) window.d2video.controls = { add: addControl };
-  ctl.start();
-  tryPal();
+  startVideo();
   if (pfdebug || statsMem.get() === '1') setStats(true, false);
   // the quest caption: quest-strip (the quest board's tile) publishes the text, this panel only shows it; without the tile (or in a
   // page where the import is not there) the caption stays empty
