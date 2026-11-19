@@ -561,8 +561,8 @@
     {
      "kind": "quest_bits",
      "record": 4,
-     "set": 2,
-     "why": "V L2/L3: record 4 bit 1 is set the moment the cage opens (0x2012, 0x201a)"
+     "set": 8192,
+     "why": "V L2/L3: bit 13 (0x2000) appears when the cage opens (0x2012, 0x201a) and stays through the report (0x2011, 0x2019); bit 1 alone is cleared by the report, which the bot also does within the run (cainfix3 cage run: 0x2019)"
     }
    ]
   },
