@@ -464,6 +464,10 @@ docs/passagebounce.md  credit-runner  passagebounce
 docs/pause.md  credit-runner  uib1
 docs/plan/STATUS.md  credit-runner  statusrefresh
 docs/plan/data  credit-runner  agencyp0
+docs/plan/data/build-fallback-lightning-v2.json  credit-runner  sorc2
+docs/plan/data/build-fallback-lightning.json  credit-runner  sorc2
+docs/plan/data/build-primary-blizzard.json  credit-runner  sorc2
+docs/plan/data/build-sorceress_fire_normal30.json  credit-runner  sorc2
 docs/plan/data/dropmodel-normal.json  credit-runner  decomp31
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
@@ -678,6 +682,7 @@ docs/video-feed.md  credit-runner  videofeed
 docs/video-feed.md  credit-runner  videofeed2
 docs/video-feed.md  credit-runner  videofeed4
 docs/wiring.md  credit-runner  wiring2
+internal/agency/buildrules_test.go  credit-runner  sorc2
 internal/art/  credit-runner  itemcolour2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees
@@ -851,6 +856,9 @@ internal/bot/zoneshadow.go  credit-runner  survfix2
 internal/bot/zoneshadow.go  credit-runner  survreask
 internal/bot/zoneshadow.go  credit-runner  survrecover
 internal/bot/zoneshadow_test.go  credit-runner  survC
+internal/buildfile/plans_test.go  credit-runner  sorc2
+internal/buildfile/tablecheck.go  credit-runner  sorc2
+internal/buildfile/tablecheck_test.go  credit-runner  sorc2
 internal/bulkid  credit-runner  bulkid
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
@@ -864,6 +872,7 @@ internal/combat/  credit-runner  cainfix3
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/castfirst.go  credit-runner  survfix2
 internal/combat/classdata  credit-runner  palprofile2
+internal/combat/classdata/profiles.json  credit-runner  sorc2
 internal/combat/dodge.go  credit-runner  survfix2
 internal/combat/fight.go  credit-runner  goldprio
 internal/combat/fight.go  credit-runner  maphistory
@@ -881,6 +890,7 @@ internal/combat/lifeprice.go  credit-runner  palprofile2
 internal/combat/packdrink.go  credit-runner  beltfix
 internal/combat/packdrink_test.go  credit-runner  beltfix
 internal/combat/playable.go  credit-runner  agencyp0
+internal/combat/profileid_test.go  credit-runner  sorc2
 internal/combat/reach.go  credit-runner  maphistoryC
 internal/combat/rules.go  credit-runner  resistorder
 internal/combat/safety.go  credit-runner  beltfix
@@ -1014,6 +1024,7 @@ internal/leveler/playerequip.go  credit-runner  charreq
 internal/leveler/playerequip_test.go  credit-runner  gearsets
 internal/leveler/playerunequip.go  credit-runner  gearsets
 internal/leveler/score.go  credit-runner  charreq
+internal/leveler/sorcfire_test.go  credit-runner  sorc2
 internal/leveler/verbs_test.go  credit-runner  agencyp0
 internal/levelplan  pro-runner  levelplan3
 internal/loot  credit-runner  goldprio
@@ -1079,6 +1090,10 @@ internal/nav/walk.go  credit-runner  pursuers
 internal/plandata  credit-runner  agencyp0
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
+internal/plandata/build-fallback-lightning-v2.json  credit-runner  sorc2
+internal/plandata/build-fallback-lightning.json  credit-runner  sorc2
+internal/plandata/build-primary-blizzard.json  credit-runner  sorc2
+internal/plandata/build-sorceress_fire_normal30.json  credit-runner  sorc2
 internal/plandata/dropmodel-normal.json  credit-runner  decomp31
 internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
@@ -1721,6 +1736,7 @@ tools/provingground/  credit-runner  pgexpand
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
+tools/provingground/scenarios/points.json  credit-runner  sorc2
 tools/survival  credit-runner  survhold2
 tools/survival  credit-runner  survtune
 tools/survival/abreport  credit-runner  survfix

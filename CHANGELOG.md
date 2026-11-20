@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into sorc2 <!--sg:agent/sorc2-->
 - Merge branch 'main' into q13input <!--sg:agent/q13input-->
 - verify43: game-side rerun and room control results <!--sg:agent/verify43-->
 - Merge branch 'main' into survhold7 <!--sg:agent/survhold7-->
