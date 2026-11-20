@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into decomp44 <!--sg:agent/decomp44-->
 - Merge branch 'main' into w2worker <!--sg:agent/secondworker-->
 - Merge branch 'main' into necro1 <!--sg:agent/necro1-->
 - Merge branch 'main' into pgformat <!--sg:agent/pgformat-->

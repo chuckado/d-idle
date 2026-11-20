@@ -568,6 +568,8 @@ docs/research/decomp34-fallen-flee.md  credit-runner  decomp34
 docs/research/decomp35-combat.md  credit-runner  decomp35
 docs/research/decomp42-crush-d6-trace.md  credit-runner  decomp42
 docs/research/decomp43-monster-block-trace.md  credit-runner  decomp43
+docs/research/decomp43-monster-block-trace.md  credit-runner  decomp44
+docs/research/decomp44-pet-block-trace.md  credit-runner  decomp44
 docs/research/design-brief-v1.md  credit-runner  designbrief
 docs/research/earlydeath13.md  pro-runner  earlydeath13
 docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
@@ -645,6 +647,7 @@ docs/upstream/bodies/hitrec-modes-body.md  credit-runner  prfix2
 docs/upstream/bodies/hitrec-norestart-body.md  credit-runner  prfix3
 docs/upstream/bodies/load-gold-clamp-body.md  credit-runner  prfix2
 docs/upstream/bodies/monster-block-body.md  credit-runner  decomp43
+docs/upstream/bodies/monster-block-body.md  credit-runner  decomp44
 docs/upstream/bodies/seq-ias-followup-body.md  credit-runner  seqfollow
 docs/upstream/bodies/umod-multishot-body.md  credit-runner  decomp36bodies
 docs/upstream/briefs/**  credit-runner  prpipeline

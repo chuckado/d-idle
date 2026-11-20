@@ -310,6 +310,7 @@
 | q13input | proposed | - | `internal/invdesk/mover.go`<br>`internal/invdesk/verbs.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/d2dwire.go`<br>`data/input/caps_test.go`<br>`docs/knobs.md`<br>`internal/hotkeymap/`<br>`internal/invdesk/inputcaps.go`<br>`internal/invdesk/inputcaps_test.go`<br>`cmd/d2bot/hotkeymapwire.go`<br>`cmd/d2bot/hotkeymapwire_test.go`<br>`data/input/caps/d2d-fork-input-items.json`<br>`internal/env/tuning_input.go`<br>`docs/process/sandbox-input-items.md` | - |
 | sorc2 | in-progress | - | `internal/buildfile/tablecheck.go`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/plandata/build-sorceress_fire_normal30.json`<br>`internal/leveler/sorcfire_test.go`<br>`internal/plandata/build-primary-blizzard.json`<br>`internal/plandata/build-fallback-lightning.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-primary-blizzard.json`<br>`docs/plan/data/build-fallback-lightning.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-sorceress_fire_normal30.json`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/buildfile/plans_test.go`<br>`tools/provingground/scenarios/points.json` | - |
 | q4runes | in-progress | - | `internal/env/tuning_items.go`<br>`internal/plandata/ladder_runewords.go`<br>`internal/plandata/ladder_runewords_test.go`<br>`docs/knobs.md`<br>`internal/env/tuning.go`<br>`internal/data/db.go`<br>`internal/data/extra.go`<br>`internal/data/data_test.go`<br>`internal/town/imbue_test.go`<br>`internal/watch/returnscreen.go`<br>`internal/watch/returnscreen_test.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/funwire.go`<br>`cmd/d2bot/ladder.go` | - |
+| decomp44 | proposed | - | `docs/research/decomp44-pet-block-trace.md`<br>`docs/research/decomp43-monster-block-trace.md`<br>`docs/upstream/bodies/monster-block-body.md` | - |
 | necro1 | proposed | - | `data/capabilities/capabilities.json`<br>`internal/buildfile/necrosummoner_test.go`<br>`internal/buildfile/testdata/necromancer-summoner-guide.json`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/plandata/build-necromancer_summoner_guide.json`<br>`docs/plan/data/build-necromancer_summoner_guide.json`<br>`internal/leveler/necrosummoner_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/necrosummoner_test.go`<br>`internal/agency/planner_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/agency/testdata/agreement.json`<br>`tools/provingground/scenarios/points.json`<br>`docs/process/necromancer-support.md`<br>`docs/agency.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
@@ -349,7 +350,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- afe07bebe 11-20 15:50 `Merge agent/decomp44: Merge branch 'main' into decomp44` (decomp44)
 - 0c5fec3e3 11-20 15:50 `Merge agent/secondworker: Merge branch 'main' into w2worker` (secondworker)
+- 763d6d70f 11-20 15:48 `Merge branch 'main' into decomp44` (-)
 - ff55fd030 11-20 15:48 `Merge branch 'main' into w2worker` (-)
 - 0d450095b 11-20 15:43 `Merge agent/necro1: Merge branch 'main' into necro1` (necro1)
 - 566694fa2 11-20 15:42 `Merge branch 'main' into necro1` (-)
@@ -357,6 +360,4 @@
 - f99a23a1e 11-20 15:31 `Merge branch 'main' into pgformat` (-)
 - aed1329f5 11-20 15:12 `Merge agent/q4runes: Merge branch 'main' into q4runes` (q4runes)
 - 511a8e300 11-20 15:11 `Merge branch 'main' into q4runes` (-)
-- 5f22eee60 11-20 14:33 `Merge agent/sorc2: Merge branch 'main' into sorc2` (sorc2)
-- 45faedecc 11-20 14:32 `Merge branch 'main' into sorc2` (-)
 <!-- statusgen:end -->

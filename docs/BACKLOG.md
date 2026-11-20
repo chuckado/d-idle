@@ -1112,6 +1112,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - pgformat: Proving Ground format additions (trigger.build, skill_points, log_line, only_class) and the two pending scenarios run (TASK-694, merged 2026-11-20, acceptance 3 of 3): Format additions (all optional, old scenarios unchanged): trigger.build, skill_points, log_line, only_class; must-fail tests with Paladin and Sorceress. ... <!--sg:agent/pgformat-->
 - necro1: Necromancer summoner (capability rows, build, combat profile, planner shadow) (TASK-697, merged 2026-11-20, acceptance 6 of 6) <!--sg:agent/necro1-->
 - agent/secondworker: Merge branch 'main' into w2worker (merged 2026-11-20) <!--sg:agent/secondworker-->
+- decomp44: monster block r2 rebase, skip fix, body fixes and the pet block decomp (TASK-696, merged 2026-11-20, acceptance 3 of 3): fid/monster-block-r2 (local + private fork remote, on upstream c1b38311; r1 untouched): rebased with the gear_res conflict resolved, test returns D2D_TEST_SKIPPED in every mode (rc 77 checked), compare reads plain integers ... <!--sg:agent/decomp44-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
