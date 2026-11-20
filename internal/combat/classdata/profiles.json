@@ -366,6 +366,33 @@
    }
   },
   {
+   "class": "necromancer",
+   "build": "summoner",
+   "bands": [
+    {
+     "attack": [
+      "Teeth",
+      "Attack"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Bone Armor"
+    ]
+   ],
+   "layout": {
+    "Teeth": "f1",
+    "Raise Skeleton": "f2",
+    "Raise Skeletal Mage": "f3",
+    "Clay Golem": "f4",
+    "Bone Armor": "f5",
+    "Amplify Damage": "f6",
+    "Corpse Explosion": "f7",
+    "Revive": "f8"
+   }
+  },
+  {
    "class": "barbarian",
    "bands": [
     {
