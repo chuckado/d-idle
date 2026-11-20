@@ -97,7 +97,8 @@ func Build(ctx context.Context, cfg Config) (*Backend, error) {
 		cfg.LinkWait = DefaultLinkWait
 	}
 	w := d2dworld.New(d2dworld.Client{Client: c}, d2dworld.Options{LinkWait: cfg.LinkWait, Sleep: clk.Poll, Now: clk.Now,
-		Logf: func(f string, a ...any) { cfg.Log.Info(sprintf(f, a...)) }})
+		LayoutRead: func() bool { return cfg.Tune != nil && cfg.Tune.Quests.LayoutRead != 0 },
+		Logf:       func(f string, a ...any) { cfg.Log.Info(sprintf(f, a...)) }})
 	p := &Proc{C: c, Bin: cfg.Bin, Data: cfg.DataDir, Sock: cfg.Sock, Home: cfg.Home, Nice: cfg.Nice, NoSave: cfg.Spec.NoSave, ExtraArgs: cfg.ExtraArgs}
 	if cfg.LogFile != "" && cfg.Bin != "" {
 		p.LogPath = cfg.LogFile // opened (and the previous one rotated) at every start
