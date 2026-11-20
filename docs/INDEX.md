@@ -31,6 +31,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0018-fun-loop-expedition-ledger-2026-11-07.md](adr/0018-fun-loop-expedition-ledger-2026-11-07.md): 0018: d.idle's loop is the Expedition Ledger; Act 1 content is the Codex; carry-over is a Hall of Fame first
 - [0019-pacts-and-unlocks-2026-11-07.md](adr/0019-pacts-and-unlocks-2026-11-07.md): 0019: Pacts are opt-in challenge rules with meta rewards; information and watch features unlock progressively
 - [0020-proving-ground-and-stat-skill-agency.md](adr/0020-proving-ground-and-stat-skill-agency.md): 0020: Proving Ground first; the player spends every point; intent arbiter; class order
+- [0021-input-rule-verb-key-click.md](adr/0021-input-rule-verb-key-click.md): 0021: Input rule: verb, then key, then verified click
+- [0022-hero-knowledge-reads-never-cheat.md](adr/0022-hero-knowledge-reads-never-cheat.md): 0022: Hero knowledge: engine facts exposed as reads never make a run CHEATED
+- [0023-fidelity-by-rule-differentials.md](adr/0023-fidelity-by-rule-differentials.md): 0023: Fidelity acceptance: per-rule differentials replace the A:B verdict; no play on Game.exe
+- [0024-ladder-runewords-in-didle-mode.md](adr/0024-ladder-runewords-in-didle-mode.md): 0024: Ladder-only runewords enabled in d.idle mode
 - [adr/README.md](adr/README.md): Architecture decision records
 - [decisions.md](decisions.md): Decisions (user, with date)
 
