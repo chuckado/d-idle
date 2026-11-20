@@ -51,7 +51,9 @@ func TestPortalCancelRetry(t *testing.T) {
 					cancel(safetyInterrupt{SafetyCrowdRetreat})
 					return fmt.Errorf("to town: %w", town.ErrPortalCancelled)
 				}
-				run := func() bool { return g.r.do(context.Background(), g.r.control(), StateResupplying, "to town", 0, "to town", cast) }
+				run := func() bool {
+					return g.r.do(context.Background(), g.r.control(), StateResupplying, "to town", 0, "to town", cast)
+				}
 				if run() {
 					t.Fatal("a cancelled cast reported success")
 				}
