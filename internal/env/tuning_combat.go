@@ -20,6 +20,9 @@ type CombatTuning struct {
 	CrowdDrinkPct  int // in a crowd: drink a healing potion below this life % (when the portal cannot be cast)
 	CrowdAdjacent  int // subtiles: a hostile this close is in melee reach and counts as adjacent (crowd rule, melee cast guard)
 	CrowdAbandonN  int // hostiles within 8 subtiles on a walk: abandon the walk, retreat 20+ subtiles, then portal
+	// CrowdAbandonQuestN replaces CrowdAbandonN while a player-started quest chunk runs and its readiness is not "too hard"
+	// (0 = no override). Proving Ground L3: 21 to 30 hostiles stand at the arrival of the Dark Wood and Underground Passage.
+	CrowdAbandonQuestN int
 
 	// Potion timing.
 	PotionGapMs        int // minimum gap between healing/mana potions (a potion heals over 5 to 10 s, see PotionEmergencyPct)
@@ -87,10 +90,18 @@ type CombatTuning struct {
 	HolyFireMinMonsters int // an aura marked needsCrowd (Holy Fire) is wanted only with this many hostiles within 8 subtiles
 }
 
+// AbandonN is the crowd-abandon size in force: the quest override while a started quest chunk runs, else the default.
+func (t CombatTuning) AbandonN(quest bool) int {
+	if quest && t.CrowdAbandonQuestN > t.CrowdAbandonN {
+		return t.CrowdAbandonQuestN
+	}
+	return t.CrowdAbandonN
+}
+
 func DefaultCombatTuning() CombatTuning {
 	return CombatTuning{
 		DrinkLifePct: 55, DrinkRejuvPct: 35, DrinkRejuvBossPct: 50, ChampionEarlyPct: 10, ChickenPct: 25, ChickenHellPct: 30, DrinkManaPct: 25, TownPotionMin: 2,
-		CrowdN: 8, CrowdAdjacent: 8, CrowdPortalPct: 70, CrowdDrinkPct: 65, CrowdAbandonN: 15,
+		CrowdN: 8, CrowdAdjacent: 8, CrowdPortalPct: 70, CrowdDrinkPct: 65, CrowdAbandonN: 15, CrowdAbandonQuestN: 40,
 		PotionGapMs: 1000, PotionEmergencyPct: 30, RejuvGapMs: 300, ReactionMs: 120, PollMs: 60,
 		TargetQuality: 100, RangeMargin: 3, ClearRadius: 40, FightRadius: 22, MaxTargetSec: 45, NoProgressSec: 12, ClearMaxSec: 180,
 		CastGapMs: 650, CastPerSkill: 1, CastMarginMs: 90, CastFCR: 0, LowManaWaitMs: 700, StaticCasts: 4, StaticCastsBR: 0, StaticFloorNorm: 25, StaticFloorNM: 33, StaticFloorHell: 50, NovaManaFloor: 25,
@@ -119,6 +130,7 @@ func combatKnobs() []Knob {
 		k("crowdDrinkPct", "Crowd drink below life", "%", "In a crowd, drink a healing potion below this life percent (the portal cannot be cast when surrounded); the normal rule drinks at 55.", float64(d.CrowdDrinkPct), 40, 85, true),
 		k("crowdAdjacent", "Melee reach for adjacent", "subtiles", "A hostile within this distance (centre to centre) is in melee reach and counts as adjacent: three or more make a town portal cast a non-escape (potion, else leave the game) and a crowd 'surrounded'. Default 8 from the live zombie reads (drills11), UNVERIFIED for other monsters.", float64(d.CrowdAdjacent), 3, 12, false),
 		k("crowdAbandonN", "Crowd abandon size", "count", "Hostiles within 8 subtiles on a travel or quest walk that make the bot abandon the walk at once, retreat 20+ subtiles and open a portal. 0 turns it off.", float64(d.CrowdAbandonN), 0, 30, false),
+		k("crowdAbandonQuestN", "Crowd abandon size (started quest)", "count", "Like crowdAbandonN, but while a quest chunk the player started runs and the hero's readiness for it is not too hard: the hero fights the crowd instead of leaving. 0 = use crowdAbandonN. The drink, portal and chicken lines still apply.", float64(d.CrowdAbandonQuestN), 0, 60, false),
 		k("potionGapMs", "Potion gap", "ms", "Minimum time between healing or mana potions.", float64(d.PotionGapMs), 900, 3000, false),
 		k("potionEmergencyPct", "Potion emergency line", "%", "Below this life percent a healing potion is drunk even while an earlier one is still working. Above it the bot drinks again only for a higher tier: the game adds a same-tier drink to the running effect (longer, not faster; fid-potions.md Q5).", float64(d.PotionEmergencyPct), 10, 50, true),
 		k("rejuvGapMs", "Rejuvenation gap", "ms", "Minimum time between rejuvenation potions.", float64(d.RejuvGapMs), 250, 1500, false),

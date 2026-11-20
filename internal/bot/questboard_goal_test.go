@@ -97,6 +97,10 @@ func TestQuestBoardQueuedReasonWhileFighting(t *testing.T) {
 			if g.r.hostileNear(snap, g.r.e.Tune.Bot.ClearRadius) == 0 {
 				t.Skip("the fake monster is not hostile here")
 			}
+			if !g.r.boardPreempts(snap, farmCtl) {
+				t.Fatal("a chunk under way was gated by a fight (cainfix3: only a fresh start waits)")
+			}
+			g.r.qbRT().startedKey = "" // a fresh start
 			if g.r.boardPreempts(snap, farmCtl) {
 				t.Fatal("started in the middle of a fight")
 			}
@@ -157,6 +161,143 @@ func TestQuestBoardQueuedReasonWhileRecovering(t *testing.T) {
 			}
 			if q := g.r.QuestQueued(); q != "" {
 				t.Fatalf("stale reason %q", q)
+			}
+		})
+	}
+}
+
+// cainfix3 F3: a chunk that buys nothing (Chunk.NoGold) starts during the purse recovery; one that may shop (den_of_evil)
+// still waits. Two classes.
+func TestQuestBoardNoGoldChunkSkipsRecovery(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		t.Run(class.String(), func(t *testing.T) {
+			g, x := boardRig(t, true)
+			g.w.set(func(w *world) { w.class = class; w.area = 2; w.level = 30 })
+			snap, _ := g.w.snapshot()
+			g.r.obMu.Lock()
+			g.r.ob.lastSnap = snap
+			g.r.obMu.Unlock()
+			if err := x.Accept("search_for_cain", "scroll"); err != nil {
+				t.Fatal(err)
+			}
+			g.r.loop.broke.on = true
+			farmCtl := control{spec: goalSpec{kind: goals.ReachLevel}}
+			if !g.r.boardPreempts(snap, farmCtl) {
+				t.Fatalf("the scroll chunk waited for the recovery: %q", g.r.QuestQueued())
+			}
+			if !g.r.boardChunkNeedsNoGold() {
+				t.Fatal("campaign path: the recovery still holds a chunk that buys nothing")
+			}
+		})
+	}
+}
+
+// cainfix3 F1: the ban note names the deaths and the end time; a player-started chunk (banWaive) is not stopped by a
+// death ban, a ban of another producer and the default behaviour stay.
+func TestBannedAreaNoteAndWaiver(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		t.Run(class.String(), func(t *testing.T) {
+			g, _ := boardRig(t, true)
+			g.w.set(func(w *world) { w.class = class; w.area = 2 })
+			g.r.obMu.Lock()
+			g.r.skipAreaLocked(4, 30*time.Minute, whyDeath)
+			g.r.skipAreaLocked(5, 30*time.Minute, whyUnreachable)
+			g.r.obMu.Unlock()
+			w, err := taskEnv{g.r}.World(context.Background())
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !w.Banned[4] || !strings.Contains(w.BanNote[4], "until") || !strings.Contains(w.BanNote[4], "deaths") {
+				t.Fatalf("death ban %v note %q", w.Banned[4], w.BanNote[4])
+			}
+			g.r.banWaive.Store(true)
+			w, _ = taskEnv{g.r}.World(context.Background())
+			if w.Banned[4] {
+				t.Fatal("a started chunk is still stopped by the death ban")
+			}
+			if !w.Banned[5] {
+				t.Fatal("a waiver must not lift a nav-fault skip")
+			}
+			if !g.r.questWins(4, whyDeath) || g.r.questWins(5, whyUnreachable) {
+				t.Fatal("route bans: the waiver must lift death bans only")
+			}
+			g.r.banWaive.Store(false)
+			if g.r.questWins(4, whyDeath) {
+				t.Fatal("no waiver outside a started chunk")
+			}
+		})
+	}
+}
+
+// Proving Ground 2026-11-19: a level sweep keeps hostiles in the clear radius, so a chunk queued behind a fight never
+// started again. Past boardQueueGrace it starts anyway (two classes).
+func TestQuestBoardQueuedChunkStartsAfterGrace(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		t.Run(class.String(), func(t *testing.T) {
+			g, x := boardRig(t, true)
+			g.w.set(func(w *world) { w.class = class; w.area = 2 })
+			snap, _ := g.w.snapshot()
+			g.r.obMu.Lock()
+			g.r.ob.lastSnap = snap
+			g.r.obMu.Unlock()
+			if err := x.Accept("den_of_evil", "clear_den"); err != nil {
+				t.Fatal(err)
+			}
+			fc := newFClock()
+			g.r.e.Clock = fc
+			g.w.addMonster(500, 1, 3, 3)
+			snap, _ = g.w.snapshot()
+			g.r.obMu.Lock()
+			g.r.ob.lastSnap = snap
+			g.r.obMu.Unlock()
+			if g.r.hostileNear(snap, g.r.e.Tune.Bot.ClearRadius) == 0 {
+				t.Skip("the fake monster is not hostile here")
+			}
+			farmCtl := control{spec: goalSpec{kind: goals.ReachLevel}}
+			if g.r.boardPreempts(snap, farmCtl) {
+				t.Fatal("started at once in the middle of a fight")
+			}
+			fc.Sleep(boardQueueGrace + time.Second)
+			if !g.r.boardPreempts(snap, farmCtl) {
+				t.Fatal("still queued after the grace")
+			}
+		})
+	}
+}
+
+// crowdFighter records SetQuestCrowd on top of the rig's fighter.
+type crowdFighter struct {
+	Fighter
+	on bool
+}
+
+func (c *crowdFighter) SetQuestCrowd(on bool) { c.on = on }
+
+// cainfix3 F2: the quest crowd line is raised by a chunk that runs and lowered again when the board runs nothing.
+func TestQuestBoardCrowdLineFollowsTheChunk(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		t.Run(class.String(), func(t *testing.T) {
+			g, x := boardRig(t, true)
+			cf := &crowdFighter{Fighter: g.r.d.Fighter}
+			g.r.d.Fighter = cf
+			g.w.set(func(w *world) { w.class = class; w.area = 2 })
+			snap, _ := g.w.snapshot()
+			g.r.obMu.Lock()
+			g.r.ob.lastSnap = snap
+			g.r.obMu.Unlock()
+			cf.on = true // left over from an earlier chunk
+			if g.r.boardPreempts(snap, control{spec: goalSpec{kind: goals.FarmArea}}) {
+				t.Fatal("started with nothing accepted")
+			}
+			if cf.on {
+				t.Fatal("the quest crowd line stayed up with no chunk to run")
+			}
+			if err := x.Accept("den_of_evil", "clear_den"); err != nil {
+				t.Fatal(err)
+			}
+			g.r.setQuestCrowd(true)
+			if !g.r.boardPreempts(snap, control{spec: goalSpec{kind: goals.FarmArea}}) || !cf.on {
+				t.Fatalf("a running chunk must keep the line up (on=%v)", cf.on)
 			}
 		})
 	}

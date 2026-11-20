@@ -199,6 +199,7 @@ Trigger: Soaky died at one spot three times (G1 attempts 11, 12, 15; 22 hostiles
 - crowd >= `crowdN`, life <= `crowdPortalPct` (70), a portal scroll or tome exists and fewer than 3 hostiles are within 3 subtiles: `TownPortal`.
 - 3 or more adjacent (a portal cast takes about 2 s and fails when surrounded, U): drink at `crowdDrinkPct` (65); between 65 and 70 the new action `CrowdRetreat` steps away from the crowd (only offered when `awayPoint` finds a step, so the fight loop cannot spin).
 - crowd >= `crowdAbandonN` (15) on a travel or quest walk (`Fighter.SetWalking`, set by the bot around StateTraveling), or at life <= 70 anywhere: `CrowdAbandon` = retreat up to 8 steps until 20+ subtiles from the start, then open the portal; no scroll degrades to `CrowdRetreat`. The bot then plans no walk back into that area for 4 x `bot.navSkipSec` and runs a chores trip.
+- While a quest chunk the player started runs (readiness not too hard), `crowdAbandonQuestN` (40) replaces `crowdAbandonN` when larger (cainfix3: 21 to 30 hostiles stand at the arrival of Underground Passage and the Dark Wood, V Proving Ground L3). Only the abandon size changes.
 - Chicken (25) still wins; at <= 25 with a rejuvenation potion it drinks first. Tests: `crowd_test.go` (pure table, snapshot, abandon walk). The retreat goes straight away from the crowd (U: no bias toward the entry yet, the Fighter does not know it).
 - Autopsy facts and the potion counter fix: docs/deathautopsy.md "Route guard fields".
 

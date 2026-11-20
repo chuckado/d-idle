@@ -50,7 +50,7 @@ func crowdDecide(in SafetyInput, lp int, heal, rejuv bool) (SafetyAction, bool) 
 		}
 		return SafetyNone, false
 	}
-	if t.CrowdAbandonN > 0 && in.Crowd >= t.CrowdAbandonN && (in.Walking || lp <= t.CrowdPortalPct) {
+	if t.CrowdAbandonN > 0 && in.Crowd >= t.AbandonN(in.Quest) && (in.Walking || lp <= t.CrowdPortalPct) {
 		if surrounded && lp < t.CrowdDrinkPct {
 			if a, ok := drink(); ok {
 				return a, true // cannot walk away from three attackers at this life: drink first
@@ -76,6 +76,10 @@ func crowdDecide(in SafetyInput, lp int, heal, rejuv bool) (SafetyAction, bool) 
 	}
 	return SafetyNone, false
 }
+
+// SetQuestCrowd tells the fighter a player-started quest chunk runs (the quest crowd-abandon size applies). Safe from
+// any goroutine.
+func (f *Fighter) SetQuestCrowd(on bool) { f.questCrowd.Store(on) }
 
 // SetWalking tells the fighter whether the bot is on a travel or quest walk (the crowd-abandon rule is for walks; in a
 // fight the same crowd is fought). Safe from any goroutine.

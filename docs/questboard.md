@@ -88,6 +88,15 @@ Now `boardPreempts` (internal/bot/questboard.go) sends a non-campaign `farm_area
 
 Never silent: `Strip.queued` and `Running.queued` in GET /api/quests carry the reason while a chunk is accepted and not running ("Starts when the fight is over.", "Parked: ...", "Paused: ...", else "Queued: starts at the hero's next free moment."; `DeskConfig.Queued` = `Runner.QuestQueued`). Log lines (INFO, all start with `quest board:`): `accepted <q>/<c>`, `starting chunk <q>/<c>`, `<q>/<c> queued: waiting for the fight to end`, `step <name>`, `waiting: <why>`, `parked <q>/<c>`, `awaiting hand-in of <q>/<c>`, `handed in <q>/<c>`, `hand-in failed <q>/<c>`, `<q>/<c>: <failure>`. Tests: `internal/bot/questboard_goal_test.go` (two classes, farm and level goals, fight delay with reason, knob 0), `TestDeskQueuedReason`. NOT verified live.
 
+### A started chunk and the hero's own rules (card cainfix3, 2026-11-19; V by the Proving Ground runs named in the card result)
+
+Findings of the Proving Ground chain runs and what the bot does now:
+
+- Fight gate: a fight in the clear radius delays only the START of a chunk. After `boardQueueGrace` (20 s on the virtual clock) the start wins over the level goal's area choice ("starts although hostiles are near" in the log), and a chunk already under way is never gated again (`boardRT.startedKey`). Before this the level sweep kept a hostile in the radius at nearly every decision and `cain.scroll` (Sorceress) and `cain.stones` never started.
+- Purse recovery: a chunk with `noGold` in `data/questboard/*.json` (scroll, stones and free_cain of Search for Cain buy nothing) is not held by the purse and kit recovery, on the preempt path and on the campaign path. Default false: every other chunk still waits.
+- Area bans: a death ban (`bot.dangerBanMin`) on a field area no longer stops a chunk the player started, unless the readiness word of that chunk is `too_hard` (`Runner.banWaive`, set in `boardRun`; `questWins` and `taskEnv.World` honour it; nav-fault and border-loop skips are not touched). A ban that does apply is named in the refusal: "area banned after N deaths (until HH:MM)" (`task.World.BanNote`), which the board shows as the parked reason.
+- Crowd: while such a chunk runs, `combat.crowdAbandonQuestN` (40) replaces `combat.crowdAbandonN` (15) when it is larger (`Fighter.SetQuestCrowd`, `SafetyInput.Quest`). The drink, portal and chicken lines are unchanged. 0 = no override.
+
 ## Live drill, Act 1 (checklist, NOT run)
 
 Throwaway character (test-characters rule: create it normally, no setup writes if possible; log it in docs/probes/test-characters.md), one hidden instance, `tools/live.sh`, `quests.board` = 1, a board wired through S4 or a drill command that calls `Offers`, `Accept`, `HandIn` on the runner. Writes after start must be 0 (`d2cheat ledger --since-run <run>`).

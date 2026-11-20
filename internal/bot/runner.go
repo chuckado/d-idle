@@ -199,6 +199,7 @@ type Runner struct {
 	why            goals.Why            // reason of the current activity (whyline.go); guarded by mu
 	pendingWhy     goals.Why            // announced by setWhy, taken by the next setLocked; guarded by mu
 	journeyWhy     string               // why the quest journey is blocked now, guarded by mu (staletarget.go)
+	banWaive       atomic.Bool          // a player-started board chunk runs with a readiness below "too hard": a death-spiral ban does not stop it (boardRun)
 	questTravel    atomic.Bool          // a quest step is walking: a border-loop ban does not stop it (staletarget.go)
 	inTown         atomic.Bool          // the hero stands in a town area (observe.go): the roam coverage is not read there
 	farmOff        string               // why the farm loop is off for this session (mu)

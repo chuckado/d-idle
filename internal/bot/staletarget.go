@@ -51,6 +51,17 @@ func (r *Runner) banReason(area int) string {
 	return "skipped (" + why + ", not a death)"
 }
 
+// banNote is "N deaths (until HH:MM)" for a death ban of area, "" for any other ban: the board shows it to the player.
+func (r *Runner) banNote(area int) string {
+	now := r.e.Clock.Now()
+	r.obMu.Lock()
+	defer r.obMu.Unlock()
+	if why := r.avoidWhy[area]; why != "" && why != whyDeath {
+		return ""
+	}
+	return fmt.Sprintf("%d deaths (until %s)", r.dlog.since(now.Add(-time.Hour), area), r.avoid[area].Format("15:04"))
+}
+
 // dangerBan says a ban reason is a danger signal (deaths) and not a fault of the bot's own walking.
 func dangerBan(why string) bool { return why == "" || why == whyDeath || why == whyRepeat }
 
@@ -71,6 +82,10 @@ func (r *Runner) jumpedHops(cur int, hops []int) int {
 
 // questWins is true while a quest step walks: the loop breaker's ban on the step's own area must not stop the step.
 func (r *Runner) questWins(h int, why string) bool {
+	if r.banWaive.Load() && dangerBan(why) {
+		r.e.Log.Info("started quest chunk wins over the area ban", "area", h, "name", r.areaName(h), "ban", why)
+		return true
+	}
 	if why != whyBorderLoop || !r.questTravel.Load() {
 		return false
 	}

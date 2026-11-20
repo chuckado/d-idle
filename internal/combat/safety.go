@@ -122,6 +122,7 @@ type SafetyInput struct {
 	ManaReady  bool
 	RejuvReady bool
 	CastGuard  resource.CastGuard // portal exposure test (resource/castguard.go); the zero value is the old count rule
+	Quest      bool               // a player-started quest chunk runs: CrowdAbandonQuestN applies (SetQuestCrowd)
 	Tune       env.CombatTuning
 }
 
