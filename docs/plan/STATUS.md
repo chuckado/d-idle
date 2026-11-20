@@ -305,6 +305,7 @@
 | cainfix3 | proposed | - | `cmd/d2bot/adapters.go`<br>`data/questboard/act1.json`<br>`docs/combat.md`<br>`docs/knobs.md`<br>`docs/questboard.md`<br>`internal/bot/`<br>`internal/combat/`<br>`internal/env/tuning_combat.go`<br>`internal/questboard/def.go`<br>`internal/task/banote_test.go`<br>`internal/task/gate.go`<br>`internal/task/world.go`<br>`tools/provingground/scenarios/cain.json` | - |
 | cainchain | proposed | - | `internal/task/act1.go`<br>`internal/task/cainreenter_test.go`<br>`internal/town/trip.go`<br>`internal/town/portalonly_test.go`<br>`internal/nav/route.go`<br>`docs/probes/provingground-cainchain-2026-11-20.md`<br>`internal/town/town.go`<br>`internal/data/db.go`<br>`internal/bot/questboard.go`<br>`internal/bot/task.go`<br>`internal/bot/runner.go`<br>`internal/bot/staletarget.go`<br>`internal/bot/questboard_goal_test.go` | - |
 | decomp43 | proposed | - | `docs/research/decomp43-monster-block-trace.md`<br>`docs/upstream/bodies/monster-block-body.md`<br>`tools/emu/mb_explore.py`<br>`tools/emu/mb_gate.py`<br>`tools/emu/mb_act2.py`<br>`tools/emu/mb_col.py`<br>`tools/emu/mb_block.py`<br>`tools/emu/mb_mut.py`<br>`tools/emu/mb_mut2.py`<br>`tools/emu/mb_edge.sh` | `fork-branch:fid/monster-block-r1` |
+| survhold4 | proposed | - | `tools/survival`<br>`docs/probes/survival-holdout4-2026-11-19.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -343,6 +344,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 97803b69b 11-20 01:32 `Merge agent/survhold4: Merge branch 'main' into survhold4` (survhold4)
+- 2d53466da 11-20 01:31 `Merge branch 'main' into survhold4` (-)
 - e9c645479 11-20 01:23 `Merge agent/cainchain: cainchain: leakcheck wording` (cainchain)
 - 6762edd24 11-20 01:15 `Merge origin/main into agent/cainchain` (-)
 - de7e7997c 11-19 23:01 `Merge agent/decomp43: Merge branch 'main' into decomp43` (decomp43)
@@ -351,6 +354,4 @@
 - 210163518 11-19 20:35 `Merge agent/cainfix3: cainfix3: record the flaky chain verdict` (cainfix3)
 - d4478bf29 11-19 20:09 `Merge branch 'main' into cainfix3` (-)
 - 6be76a937 11-19 18:05 `Merge agent/pgrun2: Merge branch 'main' into pgrun2` (pgrun2)
-- cf86f4e88 11-19 18:04 `Merge branch 'main' into pgrun2` (-)
-- 36ca6cf23 11-19 17:53 `Merge agent/viewerconns: Merge branch 'main' into viewerconns` (viewerconns)
 <!-- statusgen:end -->
