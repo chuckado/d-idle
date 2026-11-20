@@ -38,9 +38,9 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 trace doc: P07 monster block rule with addresses and tags, d2d and bot compared
-- [ ] #2 oracle differential of the block chance against game.exe (V run), parent mismatches, claim 0
+- [x] #1 trace doc: P07 monster block rule with addresses and tags, d2d and bot compared
+- [x] #2 oracle differential of the block chance against game.exe (V run), parent mismatches, claim 0
 - [ ] #3 mutants and pins of the claim
-- [ ] #4 crush follow-up (merc, pet, missile) decided
-- [ ] #5 scan of the next player-visible deviations
+- [x] #4 crush follow-up (merc, pet, missile) decided
+- [x] #5 scan of the next player-visible deviations
 <!-- AC:END -->
