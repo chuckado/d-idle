@@ -24,7 +24,7 @@ export D2BOT_INSTANCE=sa-$ARM$S D2DSOAK_HOURS=$H D2D_RUN=on
 export D2D_BIN=${D2D_BIN:?set D2D_BIN to a lab d2d with the dump weapons key} D2D_DATA=$HOME/d2d-lab/data
 mkdir -p logs ab/$ARM; rm -rf data-$ARM$S; mkdir -p data-$ARM$S
 inst=data-$ARM$S/instances/sa-$ARM$S; home=$inst/d2d; mkdir -p $inst/state
-echo "{\"version\":1,\"data\":{\"overrides\":{\"bot.zoneModel\":$ZM,\"bot.portalGuard\":0}}}" > $inst/state/tuning.json
+echo "{\"version\":1,\"data\":{\"overrides\":{\"bot.zoneModel\":$ZM,\"bot.portalGuard\":0,\"resource.pointsDecisions\":1}}}" > $inst/state/tuning.json
 if ! ./bin/prep.abmerc --home "$PWD/$home" --name SaHero-$S --seed $S --class $AB_CLASS --clvl $AB_CLVL --gold $AB_GOLD ${AB_WEAPON:+--weapon $AB_WEAPON} --ledger "$PWD/$inst/prep-ledger.jsonl" > logs/prep-$ARM$S.log 2>&1; then
   echo "exit prep-failed" > ab/$ARM/$S.log; exit 3
 fi
