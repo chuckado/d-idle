@@ -18,9 +18,14 @@ owns:
   - "internal/town/trip.go"
   - "internal/town/portalonly_test.go"
   - "internal/nav/route.go"
-  - "docs/probes/provingground-cainchain-2026-11-19.md"
+  - "docs/probes/provingground-cainchain-2026-11-20.md"
   - "internal/town/town.go"
   - "internal/data/db.go"
+  - "internal/bot/questboard.go"
+  - "internal/bot/task.go"
+  - "internal/bot/runner.go"
+  - "internal/bot/staletarget.go"
+  - "internal/bot/questboard_goal_test.go"
 exclusive: []
 contracts: []
 ---
@@ -30,7 +35,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Why: TODO. Done when: TODO.
+Why: cain.chain was flaky (stale town portal, re-entry, level planner inside Tristram, frozen clock). Done when: cain.chain green on Paladin 11, 5 and Sorceress 3 and the same-host repeat gives the same verdict.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
