@@ -27,6 +27,7 @@ owns:
   - "tools/provingground/scenarios/behaviour-scenarios.json"
 exclusive: []
 contracts: []
+result: "chicken.recovery GREEN Paladin 11 and Sorceress 3 (scenario fix); loot.rare-ring-classified GREEN both (setup order, wealth assertion, pickit rule for unknown-quality jewelry); cancelled portal cast retried once (unit-tested, no scenario possible); cain.chain GREEN 4 more runs. Builder only, CHEATED setups."
 ---
 
 ## Description
@@ -39,8 +40,8 @@ Why: pgrun2/cainfix3/cainchain left chicken.recovery and loot.rare-ring-classifi
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 chicken.recovery green Paladin 11 and Sorceress 3 on the builder
-- [ ] #2 loot.rare-ring-classified green Paladin 11 and Sorceress 3
-- [ ] #3 cancelled town portal cast retried once (must-fail test, two classes)
-- [ ] #4 cain.chain two more runs each Paladin 11 and Sorceress 3, verdicts and digests recorded
+- [x] #1 chicken.recovery green Paladin 11 and Sorceress 3 on the builder
+- [x] #2 loot.rare-ring-classified green Paladin 11 and Sorceress 3
+- [x] #3 cancelled town portal cast retried once (must-fail test, two classes)
+- [x] #4 cain.chain two more runs each Paladin 11 and Sorceress 3, verdicts and digests recorded
 <!-- AC:END -->

@@ -37,7 +37,19 @@ Tests: `TestPortalRetryDue` (table), `TestPortalCancelRetry` (Paladin and Sorcer
 Scenario `town.portal-cancel`: NOT possible with the current format. A scenario has `pre` (setup verbs), `trigger` (goals, knobs, board taps) and asserts on the end state; there is no verb or driver that cancels a cast at a chosen moment, and the cancel comes from the guard's own safety decision under a crowd, which no verb produces on demand. The chicken scenarios exercise the path indirectly (the log shows the cancel). A scenario would need a fork verb that injects a hostile pack at the cast (U, candidate for the fork card).
 
 ## 4. Widening: cain.chain
-CHAIN_PLACEHOLDER
+Builder main lane, same host, `-id cain.chain -parallel 1`, 80 virtual min each, `writes after start: 0`, record 4 = 0x2019, no bks/bkd left (V where a results.json came back):
+
+| class, seed | run | job | verdict | wall | digest |
+|---|---|---|---|---|---|
+| Paladin 11 | A | 20261120-141046-7941 | GREEN | 987 s | 2ffabd0c3a935a59 |
+| Paladin 11 | B | 20261120-144848-1dc8 | GREEN (exit 0) | about 22 min | not recovered |
+| Sorceress 3 | A | 20261120-142938-d413 | GREEN (exit 0) | about 19 min | not recovered |
+| Sorceress 3 | B | 20261120-150941-1d57 | GREEN | 871 s | e7d21fd9c2a123b6 |
+
+Verdicts are deterministic on this host: Paladin 11 GREEN twice, Sorceress 3 GREEN twice (with the three of cainchain: Paladin 11 three times, Sorceress 3 twice before). Digests: only two of the four `results.json` files survived the labrun pull (the builder's output directory lost the others, the exit code and the bot log stayed), so no digest pair is compared; the area trails differ between runs (wall-clock decisions, `docs/d2d-determinism.md`), so identical digests were not expected. Code state: run A of Paladin 11 ran before the cancelled-cast flag was forwarded through the d2d and merc town wrappers (the retry was silently off in it); the other three include it. The retry never fired in a chain run that is on record here (U: no log line was searched in the three runs without results).
 
 ## Not done / stays red
-NOTDONE_PLACEHOLDER
+- The cancelled-cast retry has no live evidence of its own: the wiring and unit tests pass, the chain runs stayed GREEN with it, but no run is known to have hit the path after the flag fix (U). No Proving Ground scenario exists for it (format, section 3).
+- chicken.recovery with a small purse (the recovery start gate) is not covered; the scenario now measures the heal and restock, not the poor-hero path.
+- The labrun pull dropped some `results.json` files; evidence for those runs is the exit code and the job id.
+- Tests: `go test -p 1` of internal/bot, internal/town (skips without the game tables on the head box; the loot test ran on the builder), internal/loot, internal/scenario, cmd/d2bot wiring; `-race -count=20` on internal/loot, internal/scenario and the portal-retry tests; leakcheck 0 hits, contracts and backlog checks clean. A whole-repo `go vet` and test through the builder gate was not run (the builder mirror was held by the chain jobs); the merge step runs it.
