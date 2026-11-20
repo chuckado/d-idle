@@ -1,10 +1,11 @@
 ---
 id: TASK-684
 title: 'survhold4: holdout 4, Sorceress screen and Paladin seeds on valid heroes'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T04:52:00Z'
+updated_date: '2026-11-20T06:41:00Z'
 labels:
   - bot
   - bug
