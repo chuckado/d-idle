@@ -486,7 +486,6 @@ docs/probes/survival-ab-reask-2026-11-17.md  credit-runner  survreask
 docs/probes/survival-ab-recovery-2026-11-17.md  credit-runner  survrecover
 docs/probes/survival-holdout2-2026-11-18.md  credit-runner  survhold2
 docs/probes/survival-holdout3-2026-11-18.md  credit-runner  survhold3
-docs/probes/survival-holdout4-2026-11-19.md  credit-runner  survhold6
 docs/probes/test-characters.md  credit-runner  cainl0
 docs/probes/test-characters.md  credit-runner  cainl2
 docs/probes/test-characters.md  credit-runner  survab8
@@ -1704,7 +1703,6 @@ tools/survival  credit-runner  survhold2
 tools/survival  credit-runner  survtune
 tools/survival/abreport  credit-runner  survfix
 tools/survival/abrun.sh  credit-runner  survfix2
-tools/survival/abrun.sh  credit-runner  survhold6
 tools/tester-pack.sh  credit-runner  testerpack
 tools/uilint/  credit-runner  uis1
 tools/uilint/lint.go  credit-runner  uis6
