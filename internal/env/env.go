@@ -49,6 +49,8 @@ type Env struct {
 	// current level map and the hero position in that map's coordinates. It must only read (the senses minimap,
 	// docs/senses-map.md) and must not keep lm: the Tracker is single-goroutine.
 	OnObserve func(lm *d2map.LevelMap, pos d2map.Point)
+	// Planner chooses verb, key or verified click for the actions migrated to it (internal/input/planner.go); nil: legacy paths only.
+	Planner *input.Planner
 }
 
 // Snapshot is one consistent read of the whole game state for this tick.

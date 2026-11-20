@@ -236,5 +236,5 @@ const flush = () => new Promise((r) => setImmediate(r));
     const o = pl(r, w, h, vw, vh); assert.ok(o.x >= 8 && o.y >= 8 && o.x + w <= vw - 8 && o.y + h <= vh - 8, JSON.stringify([r, o]));
   });
   if (bad) process.exit(1);
-  console.log('ok');
+  console.log('ok'); process.exit(0); // the fast poll of a pending request would keep the process alive
 })();

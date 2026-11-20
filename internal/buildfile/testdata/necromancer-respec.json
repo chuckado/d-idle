@@ -1,0 +1,17 @@
+{
+ "schema": "didle.build/1",
+ "name": "Teeth leveling, respec to Bone Spear",
+ "class": "necromancer",
+ "phases": [
+  {"name": "teeth", "from_clvl": 2, "skills": [{"skill": "Teeth", "to": 20}, {"skill": "Amplify Damage", "to": 1}]}
+ ],
+ "respec_at": {"clvl": 24},
+ "skills": [
+  {"skill": "Bone Spear", "to": 20},
+  {"skill": "Raise Skeleton", "to": 5}
+ ],
+ "stats": [
+  {"stat": "vit", "to": 80, "per": 3},
+  {"stat": "ene", "to": "rest"}
+ ]
+}

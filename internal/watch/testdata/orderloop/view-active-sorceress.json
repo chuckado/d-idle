@@ -1,0 +1,14 @@
+{
+  "schema": "watch.orderloop/1",
+  "open": true,
+  "title": "Loop order",
+  "state": "active",
+  "phase": "farming",
+  "round": 1,
+  "rounds": 3,
+  "area": "Blood Moor",
+  "minutes": 20,
+  "repair": "damaged",
+  "text": "Loop: Blood Moor 20 min, repair, repeat (round 1 of 3)",
+  "finished": 0
+}

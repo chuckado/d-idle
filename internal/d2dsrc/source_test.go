@@ -2,9 +2,11 @@ package d2dsrc
 
 import (
 	"context"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
@@ -13,7 +15,7 @@ import (
 
 func quiet(string, ...any) {}
 
-func lateReplies(t *testing.T) map[string]string {
+func lateReplies(t testing.TB) map[string]string {
 	r := sampleReplies()
 	r[headSections] = readFile(t, "dump_head_late.json") + "\nok\n"
 	r["dump items"] = readFile(t, "dump_items_late.json") + "\nok\n"
@@ -46,7 +48,7 @@ func TestSnapshotLate(t *testing.T) {
 		{"str=base+bonus", p.Strength, 23}, {"ene", p.Energy, 70}, {"vit", p.Vitality, 35},
 		{"statpts", p.StatPoints, 5}, {"lskill", p.LeftSkill, 36}, {"rskill", p.RightSkill, 54},
 		{"difficulty", p.Difficulty, d2.Nightmare}, {"fire", p.Resist.Fire, 20}, {"cold", p.Resist.Cold, -10},
-		{"stat fire res", p.Stats.Get(d2.StatFireRes), int32(20)}, {"life fixed", p.Stats.Fixed(d2.StatLife), 180},
+		{"stat fire res", p.Stats.Get(d2.StatFireRes), int32(20)}, {"defence stat 31 from stats.defense", p.Stats.Get(d2.StatArmorClass), int32(120)}, {"life fixed", p.Stats.Fixed(d2.StatLife), 180},
 	} {
 		if c.got != c.want {
 			t.Errorf("%s = %v, want %v", c.name, c.got, c.want)
@@ -91,6 +93,14 @@ func TestSnapshotLate(t *testing.T) {
 	}
 	if ex := res.Extras.Items[12]; ex.Sockets != 2 || ex.Dur != 12 {
 		t.Errorf("extras %+v", ex)
+	}
+	if st := inv.Container(d2.ContStash); len(st) != 1 || st[0].Item.Tint != "t6c12" {
+		t.Errorf("tinted armor: %+v", st)
+	}
+	for _, u := range inv.Items {
+		if u.ID != 12 && u.Item.Tint != "" {
+			t.Errorf("item %d of an older-shape row has tint %q", u.ID, u.Item.Tint)
+		}
 	}
 	if !res.Extras.Clock.Valid || res.Extras.Clock.Tick != 90000 || !res.Extras.Clock.Lockstep {
 		t.Errorf("clock %+v", res.Extras.Clock)
@@ -581,5 +591,199 @@ func TestPlayerStatsKeepFraction(t *testing.T) {
 		if pl.MaxMana != c.mxMan {
 			t.Errorf("%s: whole-point MaxMana changed to %d", c.name, pl.MaxMana)
 		}
+	}
+}
+
+// itemcolour: a jewel with a colour, a jewel with colour -1 and a row with set 0 (no tint).
+func TestSnapshotItemTint(t *testing.T) {
+	r := lateReplies(t)
+	r["dump items"] = readFile(t, "dump_items_tint.json") + "\nok\n"
+	_, c := startScript(t, r)
+	res, err := New(c, Options{Tables: fakeTables{}, Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := map[uint32]string{}
+	for _, u := range res.Snap.Inventory.Items {
+		got[u.ID] = u.Item.Tint
+	}
+	want := map[uint32]string{15: "", 16: "", 17: "t2c7"}
+	if len(got) != 3 {
+		t.Fatalf("items %v", got)
+	}
+	for id, w := range want {
+		if got[id] != w {
+			t.Errorf("item %d tint %q, want %q", id, got[id], w)
+		}
+	}
+}
+
+// item pictures: inv_pic N becomes Pic N+1 (0 stays distinguishable), -1 and an absent field (an older d2d) leave Pic 0.
+func TestSnapshotItemPic(t *testing.T) {
+	r := lateReplies(t)
+	r["dump items"] = readFile(t, "dump_items_pic.json") + "\nok\n"
+	_, c := startScript(t, r)
+	res, err := New(c, Options{Tables: fakeTables{}, Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := map[uint32]int{}
+	for _, u := range res.Snap.Inventory.Items {
+		got[u.ID] = u.Item.Pic
+	}
+	want := map[uint32]int{21: 1, 22: 6, 23: 0, 24: 0}
+	if len(got) != 4 {
+		t.Fatalf("items %v", got)
+	}
+	for id, w := range want {
+		if got[id] != w {
+			t.Errorf("item %d pic %d, want %d", id, got[id], w)
+		}
+	}
+}
+
+// Cairn stones (lab drill L1, V): the lit state is the state column of "debug objects" (NU 0, ON 1) joined to the
+// preset by index, and a "debug portals" row with which >= 2 is the quest portal (class 60), not a town portal (59).
+func TestStoneStateAndQuestPortal(t *testing.T) {
+	r := lateReplies(t)
+	r["npcs"] = "ok\n"
+	r["debug presets"] = "10\t17\t33.0\t12.0\t0\tStoneAlpha\n" +
+		"11\t20\t34.0\t12.0\t0\tStoneDelta\n" +
+		"12\t580\t35.0\t12.0\t0\tChest\nok\n"
+	r["debug objects"] = "10\t33.0\t12.0\top9\t17\t-\tON\n11\t34.0\t12.0\top9\t20\t-\tNU\n12\t35.0\t12.0\tchest\t8\t-\tON\nok\n"
+	_, c := startScript(t, r)
+	src := New(c, Options{Logf: quiet})
+	res, err := src.Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	mode := map[uint32]int{}
+	for _, u := range res.Snap.Objects {
+		mode[u.ID] = u.Mode
+	}
+	if mode[NPCIDBase+10] != 1 || mode[NPCIDBase+11] != 0 {
+		t.Fatalf("stone modes %v", mode)
+	}
+	if mode[NPCIDBase+12] != -1 {
+		t.Errorf("a chest got a state it was not asked for: %d", mode[NPCIDBase+12])
+	}
+
+	// debug objects missing (stock build?): the stones stay -1, the read does not fail
+	delete(r, "debug objects")
+	_, c = startScript(t, r)
+	res, err = New(c, Options{Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, u := range res.Snap.Objects {
+		if u.ID == NPCIDBase+10 && u.Mode != -1 {
+			t.Errorf("stone mode %d with no debug objects", u.Mode)
+		}
+	}
+	if gap, ok := res.Report.Unknown["object.mode"]; !ok || !strings.Contains(gap, "debug objects") {
+		t.Errorf("gap %q %v", gap, ok)
+	}
+
+	// quest portal vs town portal
+	area := res.Snap.Player.Area
+	r["debug portals"] = fmt.Sprintf("0\t%d\t30.0\t10.0\n2\t%d\t25.1\t57.7\nok\n", area, area)
+	_, c = startScript(t, r)
+	res, err = New(c, Options{Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	class := map[uint32]int{}
+	for _, u := range res.Snap.Objects {
+		class[u.ID] = u.Class
+	}
+	if class[PortalIDBase] != 59 || class[PortalIDBase+2] != 60 {
+		t.Fatalf("portal classes %v", class)
+	}
+}
+
+// A preset appears only once its room is built, a few ticks after the player arrived. A player who stands still must
+// still see it: the cached list expires by age, not only by distance (sandbox 2026-11-18: the Tree of Inifuss never
+// showed to a hero standing on its room).
+func TestFieldObjectsAppearWhileStandingStill(t *testing.T) {
+	r := lateReplies(t)
+	r["debug presets"] = "7\t580\t33.0\t12.0\t0\tChest\nok\n"
+	sc, c := startScript(t, r)
+	now := time.Unix(1000, 0)
+	src := New(c, Options{Logf: quiet})
+	src.now = func() time.Time { return now }
+	has := func(class int) bool {
+		res, err := src.Read(context.Background())
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, u := range res.Snap.Objects {
+			if u.Class == class {
+				return true
+			}
+		}
+		return false
+	}
+	if has(30) {
+		t.Fatal("tree listed before its room was built")
+	}
+	sc.mu.Lock()
+	sc.reply["debug presets"] = "7\t580\t33.0\t12.0\t0\tChest\n8\t30\t34.0\t12.0\t0\tTree of Inifuss\nok\n"
+	sc.mu.Unlock()
+	if has(30) {
+		t.Fatal("cache re-read within its age")
+	}
+	now = now.Add(presetMaxAge + time.Second)
+	if !has(30) {
+		t.Fatal("the Tree of Inifuss never showed to a player standing still")
+	}
+}
+
+// A hidden row of a quest object class (the Tree of Inifuss) is still an object the bot can click.
+func TestHiddenTreeRowIsListed(t *testing.T) {
+	r := lateReplies(t)
+	r["debug presets"] = "8\t30\t34.0\t12.0\t1\tTree of Inifuss\n9\t17\t35.0\t12.0\t1\tHidden Chest\nok\n"
+	_, c := startScript(t, r)
+	res, err := New(c, Options{Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := map[uint32]int{}
+	for _, u := range res.Snap.Objects {
+		got[u.ID] = u.Class
+	}
+	if got[NPCIDBase+8] != 30 {
+		t.Fatalf("hidden tree row not listed: %+v", res.Snap.Objects)
+	}
+	if _, ok := got[NPCIDBase+9]; ok {
+		t.Error("hidden chest listed")
+	}
+}
+
+// V 2026-11-19 (lab drill CAIN-L3): "npcs" also lists the Tree of Inifuss (a named, class-less row), and fieldObjects
+// skipped every index "npcs" lists, so the tree stayed class -1 and the bot's search for class 30 never matched it.
+// The row must come out with the preset's class, once, under the same unit id; other class -1 rows stay as they are.
+func TestNpcsListedObjectGetsItsPresetClass(t *testing.T) {
+	r := lateReplies(t)
+	r["npcs"] = "Tree of Inifuss\t300\t200\t0\t8\t34.0\t12.0\nSomething Odd\t300\t200\t0\t9\t35.0\t12.0\nok\n"
+	r["debug presets"] = "8\t30\t34.0\t12.0\t0\tTree of Inifuss\n" +
+		"9\t580\t60.0\t12.0\t0\tOther Place\nok\n" // same index as an npcs row, other spot: not the same object
+	_, c := startScript(t, r)
+	res, err := New(c, Options{Tables: fakeTables{}, Logf: quiet}).Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := map[uint32]int{}
+	n := 0
+	for _, u := range res.Snap.Objects {
+		got[u.ID] = u.Class
+		if u.ID == NPCIDBase+8 {
+			n++
+		}
+	}
+	if got[NPCIDBase+8] != 30 || n != 1 {
+		t.Fatalf("tree class %d, rows %d (want 30, 1): %+v", got[NPCIDBase+8], n, res.Snap.Objects)
+	}
+	if got[NPCIDBase+9] != -1 {
+		t.Errorf("a row at another spot took the preset class: %d", got[NPCIDBase+9])
 	}
 }

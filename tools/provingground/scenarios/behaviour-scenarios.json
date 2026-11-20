@@ -1,0 +1,509 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "town.stash-gold-withdraw",
+   "title": "Broke with 128k in the stash: withdraw, then buy portal scrolls and potions",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": [
+    "town.stash-gold",
+    "town.resupply",
+    "hook.town-trip",
+    "resource.belt-policy",
+    "hook.belt-fill"
+   ],
+   "touches": [
+    "internal/town/",
+    "internal/bot/goal.go",
+    "internal/bot/resource.go",
+    "internal/resource/",
+    "internal/d2dtown/"
+   ],
+   "pre": {
+    "level": 8,
+    "gold": 8,
+    "stash": 128000,
+    "belt": []
+   },
+   "trigger": {
+    "goals": "campaign"
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "SETUP: level 8, purse 8, stash 128000 gold, belt emptied, by stat and belt verbs. Reachable by play (a stash that size is a late-game state at clvl 8 but not impossible), tagged SETUP-only.",
+   "notes": "Brief of the expansion card: hero 8 gold, stash 128k, needs portal scrolls and potions. hp1 is the minor healing potion and tbk the Tome of Town Portal (S: item codes). Gold is not asserted: what is left depends on the shopping.",
+   "assert": [
+    {
+     "kind": "stash_between",
+     "min": 0,
+     "max": 127999,
+     "why": "the bot took gold out of the stash"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "hp1",
+     "where": "belt",
+     "why": "potions were bought into the belt"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "tbk",
+     "why": "a Tome of Town Portal was bought (S: tbk); the kit needs portals"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "town.resupply",
+   "title": "Resupply: empty belt and no scrolls, gold in hand: fill the belt, buy portals",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": [
+    "town.resupply",
+    "hook.town-trip",
+    "resource.belt-policy",
+    "hook.belt-fill"
+   ],
+   "touches": [
+    "internal/town/",
+    "internal/resource/",
+    "internal/bot/goal.go",
+    "internal/bot/resource.go"
+   ],
+   "pre": {
+    "level": 8,
+    "gold": 1500,
+    "belt": []
+   },
+   "trigger": {
+    "goals": "campaign"
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "SETUP: level 8, purse 1500, belt emptied. Reachable by play, SETUP-only.",
+   "notes": "The same kit shopping as town.stash-gold-withdraw with the money in the purse, so a red here is the shopping and a red only there is the withdraw.",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "hp1",
+     "where": "belt",
+     "why": "belt filled with healing potions"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "tbk",
+     "why": "S: Tome of Town Portal"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "belt.refill-after-fight",
+   "title": "Belt policy: a belt with one healing potion left is topped up",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": [
+    "resource.belt-policy",
+    "hook.belt-fill",
+    "town.resupply"
+   ],
+   "pre": {
+    "level": 10,
+    "gold": 1500,
+    "belt": [
+     "hp1"
+    ]
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "SETUP: level 10, purse 1500, belt emptied and one hp1 given. Reachable by play.",
+   "touches": [
+    "internal/town/",
+    "internal/resource/",
+    "internal/bot/resource.go"
+   ],
+   "trigger": {
+    "goals": "campaign"
+   },
+   "notes": "The state a fight leaves behind, set directly (a scenario does not need the fight). min 3 is the policy's floor (U: the class column target of the default build is not read from the policy table here; adjust when a green run shows the number).",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "hp1",
+     "where": "belt",
+     "min": 3,
+     "why": "U: the bot tops the column up from one"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "heal.town",
+   "title": "Hurt hero in town takes the free heal before leaving",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": [
+    "hook.heal-in-town",
+    "hook.low-life-gate"
+   ],
+   "touches": [
+    "internal/bot/goal.go",
+    "internal/town/",
+    "internal/d2dtown/"
+   ],
+   "pre": {
+    "level": 10,
+    "gold": 500,
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ],
+    "life_pct": 40
+   },
+   "trigger": {
+    "goals": "campaign"
+   },
+   "budget": {
+    "virtual_min": 1
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "SETUP: level 10, purse 500, four hp1 in the belt, life brought to 40 percent with debug hit. Reachable by play.",
+   "notes": "A short budget so the hero is not hurt again by the field after the heal. The saved life is the observed fact (the saved hero stores current life, U: the lab d2d restores it on load).",
+   "assert": [
+    {
+     "kind": "life_pct_at_least",
+     "min": 80,
+     "why": "the hero was healed in town (Akara, free heal) before the walk out"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "chicken.recovery",
+   "title": "Below the chicken line with an empty belt: leave, rest and restock, come back healed",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "resource.chicken",
+    "hook.heal-in-town",
+    "hook.low-life-gate",
+    "travel.portal-return",
+    "town.resupply"
+   ],
+   "touches": [
+    "internal/resource/",
+    "internal/safety/",
+    "internal/bot/goal.go",
+    "internal/bot/resource.go",
+    "internal/town/"
+   ],
+   "pre": {
+    "level": 10,
+    "gold": 800,
+    "belt": [],
+    "start": "field",
+    "area": 2,
+    "life_pct": 15
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "provenance": "SETUP: level 10, purse 800, belt emptied, life brought to 15 percent with debug hit (the game's own hurt path), field start in the Blood Moor by debug goto 2 (CHEATED position).",
+   "notes": "15 percent is under chickenPct's default (knob range 15 to 45). The run is judged by the end state of the live d2d: life restored, kit bought (no potion-less re-entry), and at most 8 area changes (leave, town, return, not a loop).",
+   "assert": [
+    {
+     "kind": "life_pct_at_least",
+     "min": 60,
+     "why": "rested or healed before going on"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "hp1",
+     "where": "belt",
+     "why": "restocked before re-entering the field"
+    },
+    {
+     "kind": "area_changes_le",
+     "max": 8,
+     "why": "leave, heal, return: not a loop"
+    }
+   ]
+  },
+  {
+   "id": "loot.rare-ring-classified",
+   "title": "Loot: an unidentified rare ring on the ground is taken up and decided",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "loot.pickup-classify"
+   ],
+   "touches": [
+    "internal/vault/",
+    "internal/loot/",
+    "internal/bot/goal.go",
+    "internal/d2dsrc/"
+   ],
+   "pre": {
+    "level": 10,
+    "gold": 300,
+    "start": "field",
+    "area": 2,
+    "items": [
+     {
+      "code": "rin",
+      "where": "ground",
+      "quality": 6,
+      "unid": true
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "provenance": "CHEATED item: an unidentified rare ring dropped beside the hero by debug give rin 6 unid (a rare ring is a normal drop, but not at this moment). Field start in the Blood Moor by debug goto 2. Mechanics only.",
+   "notes": "The observer reads the floor with `ground full`-class listing (`ground`) while the lab d2d is still live: the ring must be gone from the floor. What the bot decided (keep, sell or vault) is not a fact the observer reads yet: the carried ring is shown in the state but only the floor is asserted (U: a sold ring leaves no trace). Red = the ring was left lying.",
+   "assert": [
+    {
+     "kind": "item_absent",
+     "code": "rin",
+     "where": "ground",
+     "why": "the ring was picked up (the loot step saw it)"
+    }
+   ]
+  },
+  {
+   "id": "flail.areachanges",
+   "title": "Anti-flail: no more than 12 area changes in 40 virtual minutes on the tree step",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": [
+    "hook.flail-hold",
+    "travel.area-transition"
+   ],
+   "touches": [
+    "internal/bot/flail.go",
+    "internal/bot/goal.go",
+    "internal/bot/questboard.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 500,
+    "waypoints": [
+     1,
+     2,
+     3
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "scroll"
+    ],
+    "tap_quest": "search_for_cain"
+   },
+   "budget": {
+    "virtual_min": 40
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "As cain.scroll: waypoints set by debug wp and the level by stat verbs (CHEATED waypoints). Mechanics only.",
+   "assert": [
+    {
+     "kind": "area_changes_le",
+     "max": 12,
+     "why": "the sandbox cycled Dark Wood, Cold Plains and the camp for 17 hours"
+    }
+   ],
+   "notes": "The counter is the number of `zone entry` lines of the bot's own log after the first (one line per area change, internal/bot/lifelog.go; S: the bot's report of what the game told it, written by the observer into state.area_changes and area_trail). The first live run of the tree step cycled Dark Wood, Cold Plains and the camp (docs/process/proving-ground.md section 9): this scenario is the number that stops it. Red means the flail hold did not stop the cycling; fixing it is not part of the Proving Ground card."
+  },
+  {
+   "id": "town.repair-trip",
+   "title": "Repair trip when durability is low",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "needs an observer for item durability (`items` does not carry it in the state reader) and a setup verb with a verified argument form (`debug durability`, S docs/forkcheats.md)",
+   "covers": [
+    "hook.repair-trip",
+    "town.repair"
+   ],
+   "pre": {
+    "level": 10
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "to be written with the scenario"
+  },
+  {
+   "id": "merc.hire-act1",
+   "title": "Hire the Act 1 mercenary",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "needs a merc fact in the state (`dump merc` is not read by the observer) and the Rogue's gold price rule at the scenario's level",
+   "covers": [
+    "merc.hire"
+   ],
+   "pre": {
+    "level": 10
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "to be written with the scenario"
+  },
+  {
+   "id": "difficulty.nightmare-start",
+   "title": "Start Nightmare after Andariel",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "needs the `debug difficulty` argument form (U) and a difficulty fact in the state (not read yet); the run also restarts the game (5 to 6 s, V)",
+   "covers": [
+    "difficulty.change",
+    "hook.ensure-difficulty"
+   ],
+   "pre": {
+    "level": 10
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "to be written with the scenario"
+  }
+ ]
+}

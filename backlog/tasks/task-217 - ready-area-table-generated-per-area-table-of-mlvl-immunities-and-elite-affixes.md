@@ -1,7 +1,7 @@
 ---
 id: TASK-217
 title: 'ready-area-table: generated per-area table of mlvl, immunities and elite affixes'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-09T14:27:00Z'
@@ -19,7 +19,7 @@ owns:
   - "internal/readiness/areatable_test.go"
 exclusive: []
 contracts: []
-result: "Offline only, NOT verified live. BuildAreaTable + fixtures + two-class tests; validation against difficulty.md 2.1 is TestRealAnchors, which skips without an install at /tmp/d2mpq and was not run (AC 1 stays open for that). Docs: docs/readiness.md."
+result: "Closed by the coordinator brief of 2026-11-14 (card survC): folded into survA (S-A danger profiles, internal/danger, agent/survA, PR 704). No work done under this card; boxes ticked as closed, not as built. Not verified live."
 ---
 
 ## Description
@@ -32,6 +32,6 @@ Source: docs/research/player-power.md Part 3.4 (TASK-214 follow-up). Per-area da
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Generated per-area table (mlvl, immunities, common elite affixes) from install data for all difficulties; validated against docs/difficulty.md section 2.1 and 3; tests for two classes
+- [x] #1 Generated per-area table (mlvl, immunities, common elite affixes) from install data for all difficulties; validated against docs/difficulty.md section 2.1 and 3; tests for two classes
 - [x] #2 Build flexibility: checks, floors and boss rows are data (per class and difficulty), no class or skill literal in Go; tests run with Paladin and Sorceress; an unknown class or table is an error naming it
 <!-- AC:END -->

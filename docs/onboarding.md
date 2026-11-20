@@ -5,7 +5,7 @@
 
 ## What a friend sees
 
-1. First visit: a welcome card at the top of /watch, five short lines in the d.idle voice: the bot plays for you, you equip and buy, repair is one button, any area can be ordered, the Journey strip shows the path, policies are the rules. Three buttons open Inventory, Policy and the Journey; "Got it, hide this" dismisses it for this hero.
+1. First visit: a welcome card at the top of /watch, five short lines in the d.idle voice: the bot plays for you, you equip and buy, repair is one button, any area can be ordered, the Quests tile offers the next quest, policies are the rules. Three buttons open Inventory, Policy and the Journey; "Got it, hide this" dismisses it for this hero.
 2. Under it, "Your first 30 minutes": a checklist of five steps. It collapses (the choice is kept) and hides itself when every step is done.
 3. Header "Help" button: "Show the welcome card again" and "Show the first 30 minutes list again" (works when the panel is otherwise hidden).
 4. When the page loses the bot, restarts or the player was away, a banner (below).
@@ -15,7 +15,7 @@
 | Equip your starter gear | an equip request is accepted (`POST /api/inventory/equip` answered 200) | Mark done |
 | Check the policy sheet | `/watch/policy` is opened (GET answered 200) | Mark done |
 | Watch your first fight | the first `kill` event reaches the away log | Mark done |
-| Open the Journey strip | the player follows the link (`tickOnOpen`; the strip itself is TASK-338) | Mark done |
+| Open the Quests tile (step id `journey`, kept so old ticks stay valid) | the player follows the link (`tickOnOpen`) | Mark done |
 | Mark junk for sale | `POST /api/inventory/mark` with mark `sell` answered 200 | Mark done |
 
 V: `TestOnboardingAutoTicksAndHides`. A tick is kept forever (it is a latch, not a live reading).

@@ -129,13 +129,14 @@ func nodes(s ...Step) []Node {
 
 // handlers maps a quest id to its nodes.
 var handlers = map[string]func() []Node{
-	QDen:      denNodes,
-	QBurial:   burialNodes,
-	QCain:     cainNodes,
-	QTools:    toolsNodes,
-	QTower:    towerNodes,
-	QAndariel: andarielNodes,
-	QAct1Done: hopNodes,
+	QDen:       denNodes,
+	QBurial:    burialNodes,
+	QCain:      cainNodes,
+	QCainBoard: cainReportNodes,
+	QTools:     toolsNodes,
+	QTower:     towerNodes,
+	QAndariel:  andarielNodes,
+	QAct1Done:  hopNodes,
 }
 
 // Handler returns the nodes of quest q (nil when unknown).
@@ -186,13 +187,33 @@ func burialNodes() []Node {
 }
 
 // Search for Cain (optional, off by default): bark from the Dark Wood tree, Akara reads it, cairn stones in Stony
-// Field open the Tristram portal, free Cain from the cage. Stone order is random per game (U): the adapter brute
-// forces it inside Interact("cairn-stones").
+// Field open the Tristram portal, free Cain from the cage. Stone order is random per game (V): the adapter cycles
+// through the stones inside Interact("cairn-stones") (cmd/d2bot/cain.go).
 func cainNodes() []Node {
 	q := QCain
 	inTristram := func(w World) bool { return w.Area == Tristram }
 	opened := func(w World) bool { return w.Items[ItemPortal] > 0 || inTristram(w) } // portal seen (EvProxy)
-	free := stageAtLeast(q, StageDone)
+	// free: Cain is out of the cage. The reader's "reward pending" word (Cleared) is enough: the report to Akara belongs to
+	// the board's own group (cainReportNodes), so no field step may stay needed until that talk is done (S7b; U: whether
+	// the game sets Cleared at the cage or Done at once).
+	free := stageAtLeast(q, StageCleared)
+	// The stones do nothing without the Key to the Cairn Stones (bkd) in the pack: every click is ignored (V lab drill
+	// L1). Without it the step is a prerequisite fault with the reason, so the board shows why and does not click.
+	withKey := func(s Step) Step {
+		s.Ready = func(w World) *Fault {
+			if w.Items[ItemCainSc] == 0 && !opened(w) {
+				return &Fault{Kind: KindPrereq, Why: "no Key to the Cairn Stones in the pack: Akara reads the Scroll of Inifuss into it"}
+			}
+			return nil
+		}
+		return s
+	}
+	// The cage step fights the hostiles around the hero first (the bot's Interact does it, bounded, with the normal
+	// survival logic; a Danger fault when they cannot be cleared) and only then opens the gibbet; it is not a sweep of
+	// the whole level (Griswold and Bile stand 12 cells away, V drill L2). Done is the quest word (bit 1), never the click.
+	cage := StepInteract(id(q, "cage"), "Clear the guards and free Cain", "Cain's Cage", free, inTristram)
+	cage.Budget, cage.Est = 6*time.Minute, 2*time.Minute
+	cage.Evidence = free // the board reads the quest word, not "not in Tristram"
 	return []Node{
 		{Step: StepWaypoint(id(q, "wp-dark-wood"), DarkWood, free)},
 		{Step: StepTravel(id(q, "to-wood"), "Go to the Dark Wood", DarkWood, func(w World) bool { return w.Items[ItemBark] > 0 || w.Items[ItemCainSc] > 0 || free(w) })},
@@ -201,13 +222,26 @@ func cainNodes() []Node {
 		{Step: StepTalk(id(q, "read"), "Give the bark to Akara", NPCAkara, "bark",
 			func(w World) bool { return w.Items[ItemBark] == 0 || free(w) }, nil)},
 		{Step: StepTravel(id(q, "to-stony"), "Go to Stony Field", StonyField, func(w World) bool { return opened(w) || free(w) })},
-		req(Node{Step: StepInteract(id(q, "stones"), "Touch the cairn stones", "cairn-stones",
-			func(w World) bool { return opened(w) || free(w) }, func(w World) bool { return w.Area == StonyField })}, id(q, "to-stony")),
+		req(Node{Step: withKey(StepInteract(id(q, "stones"), "Touch the cairn stones", "cairn-stones",
+			func(w World) bool { return opened(w) || free(w) }, func(w World) bool { return w.Area == StonyField }))}, id(q, "to-stony")),
 		{Step: StepTravel(id(q, "to-tristram"), "Enter Tristram", Tristram, func(w World) bool { return inTristram(w) || free(w) })},
-		{Step: StepClear(id(q, "clear"), "Clear Tristram", Tristram, func(w World) bool { return w.Cleared[Tristram] || free(w) }, 12*time.Minute)},
-		{Step: StepInteract(id(q, "cage"), "Free Cain", "Cain's Cage", free, inTristram)},
-		{Step: StepTravel(id(q, "home"), "Return to camp", RogueEncampment, func(w World) bool { return !free(w) && w.Area != Tristram || w.InTown })},
+		{Step: cage},
+		{Step: withEvidence(StepTravel(id(q, "home"), "Return to camp", RogueEncampment, func(w World) bool { return !free(w) && w.Area != Tristram || w.InTown }),
+			func(w World) bool { return free(w) && w.InTown })},
 	}
+}
+
+func withEvidence(s Step, ev Pred) Step { s.Evidence = ev; return s }
+
+// cainReportNodes is the board's report chunk of Search for Cain (slice S7b): the last Akara talk after the cage. It is
+// a group of its own so the campaign never runs it (a step whose only evidence is the quest word would repeat after every
+// restart without a reader). Needed only while the reader says Cain is free and the reward is open (Cleared, T1/T2); a T3
+// observation never starts it. U: the dialogue row (plain Talk), and whether the game sets the word at the cage (then
+// Done is read at once and the step is skipped, with the same chunk result) or at this talk.
+func cainReportNodes() []Node {
+	q := QCainBoard
+	return []Node{{Step: StepTalk(id(q, "report"), "Report to Akara", NPCAkara, "cain report",
+		stageAtLeast(QCain, StageDone), stageAtLeast(QCain, StageCleared))}}
 }
 
 // Tools of the Trade: needs clvl 8 (V). Smith in the Barracks drops the Horadric Malus; Charsi imbues one item

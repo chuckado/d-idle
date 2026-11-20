@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"crypto/rand"
-	"d2lod-bot/internal/campaign"
+	"d2lod-bot/internal/paths"
+	"d2lod-bot/internal/points"
+	"d2lod-bot/internal/questboard"
 	"encoding/base64"
 	"errors"
 	"flag"
@@ -20,8 +22,10 @@ import (
 	"d2lod-bot/internal/access"
 	"d2lod-bot/internal/bot"
 	"d2lod-bot/internal/currency"
+	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/decide"
 	"d2lod-bot/internal/env"
+	"d2lod-bot/internal/ether"
 	"d2lod-bot/internal/goals"
 	"d2lod-bot/internal/goldfarm"
 	"d2lod-bot/internal/ladder"
@@ -78,16 +82,29 @@ type ladderOptions struct {
 	inv           *watch.InvAPI        // the inventory page routes (invwire.go); nil: none
 	skills        *watch.SkillsAPI     // the skill tree page routes (skillswire.go); nil: none
 	art           watch.ArtSource      // the game art of the install (artwire.go); nil: /api/art says available:false
+	pause         watch.PauseDesk      // the player's Pause command (pausewire.go); nil: none
+	labels        watch.LabelsDesk     // the item labels toggle (labelswire.go); nil: none
+	reset         watch.ResetDesk      // the player's Reset command (resetwire.go); nil: none
+	characters    watch.CharactersDesk // the Character Select backend (charwire.go, docs/charselect.md); nil: no routes (the Game.exe backend is not wired yet)
 	repair        *repair.Controller   // the repair policy (repairwire.go); nil: none
 	farm          *goldfarm.Controller // the Farm gold order (repairwire.go); nil: none
-	journey       *campaign.Controller // the guided journey (journeywire.go); nil: none
+	quests        *questboard.Desk     // the quest board desk (questwire.go); nil: no routes
+	points        *points.Desk         // the points desk (pointswire.go); nil: no routes
+	plan          *agencyWire          // the shadow planner (agencywire.go); nil: no route
 	// riskFacts is the hero risk meter's reader (bot.Runner.RiskFacts); nil: no meter. monsters is the monster table
 	// for the bestiary; nil (no game tables): flavour-only cards.
 	riskFacts                              func(zone string) watch.RiskFacts
 	monsters                               watch.MonsterTables
-	readiness                              http.Handler          // GET /api/readiness (readywire.go); nil: none
-	explored                               watch.ExploredSource  // the explored share of /api/hero (Runner.Explored); nil: none
-	heroStats                              watch.HeroStatsSource // the stats block of /api/hero (readywire.go); nil: none
+	readiness                              http.Handler // GET /api/readiness (readywire.go); nil: none
+	danger                                 http.Handler // GET /api/danger (dangerwire.go); nil: none
+	farmReset                              func() int
+	supportKnobs                           func() any                            // the tuner's values for the support bundle (supportwire.go); nil: none
+	supportLayout                          paths.Layout                          // data directory layout of the support bundle's logs and saves
+	knobValue                              func(string) (float64, string, error) // the tuner's Value: the zone clear settings read through it
+	db                                     *data.DB                              // the game tables, for the Vault page's tooltip facts; nil: none
+	vaultRoot                              string                                // <data>/vaults, where the recorder keeps the hero vaults; empty: no Vault page routes (docs/vault.md)
+	explored                               watch.ExploredSource                  // the explored share of /api/hero (Runner.Explored); nil: none
+	heroStats                              watch.HeroStatsSource                 // the stats block of /api/hero (readywire.go); nil: none
 	awayMin, repeatCooldownMin, quietAfter int
 }
 
@@ -105,7 +122,7 @@ func ladderFlags(fs *flag.FlagSet, l *ladderOptions) {
 	fs.BoolVar(&l.video, "watch-video", envBool("D2BOT_WATCH_VIDEO"), "with --watch: live video of this instance's private game display on the viewer (/stream, /shot.jpg), captured only while someone watches (env D2BOT_WATCH_VIDEO; default off)")
 	fs.StringVar(&l.videoSource, "watch-video-source", envOr("D2BOT_WATCH_VIDEO_SOURCE", videoX11), "with --watch-video: where frames come from, x11 (the instance's private display, ffmpeg or import) or tap (the d2d view tap's /frame, for --backend d2d; token from env D2DVIEW_TOKEN) (env D2BOT_WATCH_VIDEO_SOURCE; default x11)")
 	fs.StringVar(&l.tapURL, "watch-tap-url", envOr("D2BOT_WATCH_TAP_URL", "http://127.0.0.1:8893"), "with --watch-video-source tap: base URL of the d2dview tap (env D2BOT_WATCH_TAP_URL)")
-	fs.IntVar(&l.videoFPS, "watch-video-fps", envInt("D2BOT_WATCH_VIDEO_FPS", 0), "with --watch-video: frames per second of the shared capture (x11: 1 to 15, default 8; tap: a cap of 1 to 30, default none: the tap's own rate)")
+	fs.IntVar(&l.videoFPS, "watch-video-fps", envInt("D2BOT_WATCH_VIDEO_FPS", 0), "with --watch-video: frames per second of the shared capture (x11: 1 to 30, default 15; tap: a cap of 1 to 30, default none: the tap's own rate)")
 	fs.IntVar(&l.videoQuality, "watch-video-quality", envInt("D2BOT_WATCH_VIDEO_QUALITY", 5), "with --watch-video: JPEG quality as ffmpeg -q:v, 2 (best, big) to 31 (small)")
 }
 
@@ -199,6 +216,7 @@ type ladderRig struct {
 	Video  *watch.Video
 	Pacts  *pactHolder       // the Pacts return section (pactwire.go); nil when Pacts are off
 	Senses *senses.Publisher // side-panel minimap source (sensesfeed.go); nil when senses.tier is 0
+	Ether  *etherHome        // the account's ETHER wallet (etherwire.go); nil without a vault root or an account ledger
 }
 
 // StopRec ends the session record (summary written); safe on a nil rig and to call twice.
@@ -270,10 +288,51 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		rig.Fun.Skills = l.skills
 		rig.Fun.Art = artAPI(l.art)
 		rig.Fun.Readiness = l.readiness
+		rig.Fun.Danger = l.danger
 		hub.SetHeroStatsSource(l.heroStats)
+		hub.SetSurvivalSource(survivalGlance)
 		hub.SetExploredSource(l.explored)
+		hub.SetFarmResetSource(l.farmReset)
+		if l.knobs != nil && l.knobValue != nil {
+			rig.Fun.ZoneClear = &watch.ZoneClear{Value: l.knobValue, Set: l.knobs}
+		}
 		bindRepair(rig.Fun, l.repair, l.farm)
-		bindJourney(rig.Fun, l.journey)
+		if l.pause != nil {
+			rig.Fun.Pause = watch.NewPauseAPI()
+			rig.Fun.Pause.Bind(l.pause)
+		}
+		if l.labels != nil {
+			rig.Fun.Labels = watch.NewLabelsAPI()
+			rig.Fun.Labels.Bind(l.labels)
+		}
+		if l.reset != nil {
+			rig.Fun.Reset = watch.NewResetAPI()
+			rig.Fun.Reset.Bind(l.reset)
+		}
+		rig.Fun.Support = newSupportAPI(l, stateDir, watchTok, apiToken)
+		if l.characters != nil {
+			rig.Fun.Characters = watch.NewCharactersAPI()
+			rig.Fun.Characters.Bind(l.characters)
+		}
+		rig.Fun.Merc = mercAPI()
+		rig.Fun.LootShadow = lootShadowAPI(l.knobValue)
+		if stateDir != "" {
+			rig.Fun.LootRules = lootRulesAPI(stateDir, l.storeProfile(), l.knobValue)
+		}
+		if l.vaultRoot != "" {
+			eh := etherFor(l.currencyDir, l.vaultRoot, vaultKnobOn(l.knobValue), func() string { return hub.Hero().Name })
+			if rig.Fun.Vault, err = vaultAPIWith(l.vaultRoot, vaultKnobOn(l.knobValue), func() string { return hub.Hero().Name }, eh, l.db); err != nil {
+				return nil, nil, err
+			}
+			if eh != nil {
+				rig.Fun.Ether = &watch.EtherAPI{Src: eh.Wallet}
+				rig.Ether = eh
+				hub.SetEtherSource(eh.chip)
+			}
+		}
+		bindQuests(rig.Fun, l.quests)
+		bindPoints(rig.Fun, l.points)
+		bindPlan(rig.Fun, l.plan)
 		if src == nil {
 			src = hub // a person answers: the Hub never answers by itself
 		}
@@ -297,6 +356,19 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 	}
 	rig.Video = vid
 	so := watch.ServeOptions{ViewAddr: l.viewAddr, AnswerAddr: l.answerAddr, Token: watchTok, Origins: l.origins, Video: vid, Fun: rig.Fun}
+	if os.Getenv("D2BOT_PPROF_HTTP") == "1" {
+		dir := stateDir
+		if dir == "" {
+			dir = os.TempDir()
+		}
+		so.Profiler = &watch.Profiler{Dir: filepath.Join(dir, "pprof")}
+	}
+	if pal, err := l.palFeed(vid != nil); err != nil {
+		ladder.Install(nil)
+		return nil, err
+	} else {
+		so.PalFeed = pal
+	}
 	if l.sensesTier >= 1 {
 		rig.Senses = &senses.Publisher{}
 		adj, err := senses.ShippedAdjacency()
@@ -328,6 +400,10 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 	ch, unsub := m.Subscribe() // subscribed before startLadder returns: the first events of the run are not lost
 	go feedHub(ctx, rig.Hub, orders, rig.Fun, rig.Rec, ch, unsub, status)
 	startPacts(ctx, l, rig, m, status, stateDir, os.Getenv)
+	startEther(ctx, rig.Ether, m, func() ether.Hero {
+		h := rig.Hub.Hero()
+		return ether.Hero{Name: h.Name, Difficulty: etherDifficulty(h.Difficulty)}
+	}, func(s string) { slog.Warn(s) })
 	return rig, nil
 }
 
@@ -602,6 +678,22 @@ func (l ladderOptions) newVideo() (*watch.Video, error) {
 		return nil, err
 	}
 	return watch.NewVideo(watch.VideoOptions{Capture: capture})
+}
+
+// palFeed relays the tap's lossless picture feed (docs/video-feed.md) when the knob watch.paletteFeed or D2_PALETTE_FEED=1
+// is on and the video comes from the tap; nil otherwise (MJPEG only).
+func (l ladderOptions) palFeed(hasVideo bool) (*watch.PalFeed, error) {
+	if !hasVideo || l.videoSource != videoTap {
+		return nil, nil
+	}
+	var knob float64
+	if l.knobValue != nil {
+		knob, _, _ = l.knobValue("watch.paletteFeed")
+	}
+	if !env.PaletteFeedOn(knob) {
+		return nil, nil
+	}
+	return watch.PalFeedRelay(l.tapURL, os.Getenv("D2DVIEW_TOKEN"))
 }
 
 const (

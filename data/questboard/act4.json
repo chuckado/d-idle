@@ -1,0 +1,340 @@
+{
+ "schema": "quests.def/1",
+ "act": 4,
+ "source": "docs/goals/execution.md s3 and internal/task/act4.go; every row U until a live drill",
+ "quests": [
+  {
+   "id": "izual",
+   "taskId": "",
+   "title": "The Fallen Angel",
+   "blurb": "Tyrael: find Izual on the Plains of Despair.",
+   "act": 4,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "izual",
+     "title": "Kill Izual and report to Tyrael",
+     "ends": "handin",
+     "minutes": [
+      15,
+      30
+     ],
+     "handin": {
+      "npc": "Tyrael"
+     },
+     "steps": [
+      "travel_city_of_the_damned",
+      "travel_plains_of_despair",
+      "kill_izual",
+      "talk_tyrael"
+     ],
+     "boss": "izual",
+     "risk": "boss",
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     }
+    }
+   ],
+   "minutes": [
+    15,
+    30
+   ],
+   "risk": "boss",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3",
+    "boss": "V docs/goals/execution.md s3 (Izual freezes; 75 cold resist)",
+    "rewards": "V docs/goals/execution.md s3 (2 skill points)",
+    "steps": "V internal/task/act4.go izualNodes",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "act3_done"
+   ],
+   "boss": "izual",
+   "rewards": [
+    {
+     "kind": "skill_point",
+     "amount": 2,
+     "repeats": [
+      "normal",
+      "nm",
+      "hell"
+     ]
+    }
+   ],
+   "meta": {
+    "normal": 3,
+    "nm": 5,
+    "hell": 8
+   },
+   "legacyFloor": {
+    "melee": 30,
+    "caster": 32,
+    "summoner": 33
+   }
+  },
+  {
+   "id": "hellforge",
+   "taskId": "",
+   "title": "Hell's Forge",
+   "blurb": "Cain: smash Mephisto's Soulstone on the Hellforge with Hephasto's Hammer.",
+   "act": 4,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "hammer",
+     "title": "Kill Hephasto the Armorer and take the Hellforge Hammer",
+     "ends": "item",
+     "minutes": [
+      15,
+      30
+     ],
+     "steps": [
+      "travel_river_of_flame",
+      "kill_hephasto",
+      "take_hammer"
+     ],
+     "boss": "hephasto",
+     "risk": "boss",
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "nodes": [
+      "wp",
+      "to",
+      "kill",
+      "hammer"
+     ]
+    },
+    {
+     "id": "smash",
+     "title": "Smash the Soulstone on the forge and return to town",
+     "ends": "auto",
+     "minutes": [
+      3,
+      8
+     ],
+     "after": [
+      "hammer"
+     ],
+     "steps": [
+      "place_soulstone",
+      "return_town"
+     ],
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "nodes": [
+      "place",
+      "home"
+     ]
+    }
+   ],
+   "minutes": [
+    18,
+    38
+   ],
+   "risk": "boss",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "S docs/goals/execution.md s3 (the Soulstone drops from Mephisto)",
+    "chunks": "I design 1.2 (Hammer then smash); the handler is one group whose steps are cut here",
+    "steps": "V internal/task/act4.go hellforgeNodes",
+    "items": "V docs/goals/execution.md s3 (a ground quest item: the loot rules must take it)",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "guardian"
+   ],
+   "items": [
+    {
+     "name": "Mephisto's Soulstone",
+     "from": "Mephisto"
+    },
+    {
+     "name": "Hellforge Hammer",
+     "from": "Hephasto the Armorer"
+    }
+   ],
+   "boss": "hephasto",
+   "meta": {
+    "normal": 3,
+    "nm": 5,
+    "hell": 8
+   },
+   "legacyFloor": {
+    "melee": 30,
+    "caster": 32,
+    "summoner": 33
+   }
+  },
+  {
+   "id": "terrors_end",
+   "taskId": "",
+   "title": "Terror's End",
+   "blurb": "Tyrael: open the seals, kill the three seal bosses, then Diablo.",
+   "act": 4,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "seals",
+     "title": "Open the five seals and kill the Vizier, de Seis and the Infector",
+     "ends": "auto",
+     "minutes": [
+      15,
+      30
+     ],
+     "steps": [
+      "open_seals",
+      "kill_vizier",
+      "kill_de_seis",
+      "kill_infector"
+     ],
+     "risk": "hazard",
+     "unsupported": "seal progress has no durable evidence (no quest word, no save field: the seals and the seal bosses are per game, U), so a seals-only chunk could not be re-derived after a restart; boss.OpenSeals resumes only inside one game and ends by waking Diablo. The diablo chunk runs the seals itself (spike plan in docs/questboard.md)"
+    },
+    {
+     "id": "diablo",
+     "title": "Go to the Chaos Sanctuary, kill Diablo and report to Tyrael",
+     "ends": "handin",
+     "minutes": [
+      10,
+      25
+     ],
+     "handin": {
+      "npc": "Tyrael"
+     },
+     "steps": [
+      "travel_river_of_flame",
+      "travel_chaos_sanctuary",
+      "kill_diablo",
+      "talk_tyrael"
+     ],
+     "boss": "diablo",
+     "risk": "hazard",
+     "meta": {
+      "normal": 2,
+      "nm": 3,
+      "hell": 5
+     },
+     "nodes": [
+      "wp",
+      "to",
+      "kill",
+      "home"
+     ],
+     "handInStep": "reward"
+    }
+   ],
+   "minutes": [
+    25,
+    55
+   ],
+   "risk": "hazard",
+   "autoStart": "never",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3 (Req)",
+    "chunks": "I design 1.2 (seals then Diablo); seals U, see the unsupported reason",
+    "boss": "V docs/goals/execution.md s3 (walls of fire and lightning; seal order U)",
+    "steps": "V internal/task/act4.go diabloNodes",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "izual"
+   ],
+   "boss": "diablo",
+   "rewards": [
+    {
+     "kind": "act_access",
+     "item": "5"
+    }
+   ],
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   },
+   "legacyFloor": {
+    "melee": 30,
+    "caster": 32,
+    "summoner": 33
+   }
+  },
+  {
+   "id": "act4_done",
+   "taskId": "act4_hop",
+   "title": "Take Tyrael's portal to Act 5",
+   "blurb": "Tyrael opens the portal to Harrogath (needs the Expansion).",
+   "act": 4,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "unlock",
+   "chunks": [
+    {
+     "id": "portal",
+     "title": "Talk to Tyrael and take the portal to Harrogath",
+     "ends": "handin",
+     "minutes": [
+      1,
+      3
+     ],
+     "handin": {
+      "npc": "Tyrael",
+      "pick": "Travel to Harrogath"
+     },
+     "steps": [
+      "talk_tyrael",
+      "take_portal"
+     ],
+     "handler": "act4_hop",
+     "handInStep": "tyrael"
+    }
+   ],
+   "minutes": [
+    1,
+    3
+   ],
+   "risk": "routine",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "V docs/progression/verification.md V-02 (the Expansion flag)",
+    "steps": "V internal/task/act4.go act4HopNodes; the row text is U",
+    "minutes": "I"
+   },
+   "requires": [
+    "terrors_end"
+   ]
+  }
+ ]
+}

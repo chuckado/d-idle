@@ -65,7 +65,7 @@ report)
 	out="didle-report-$(date +%Y%m%d-%H%M%S).tar.gz"
 	d=$(mktemp -d)
 	trap 'rm -rf "$d"' EXIT
-	scrub() { sed -E -e 's#[?&]t=[A-Za-z0-9_-]+#?t=<token>#g' -e 's#(Bearer|token[=: ]+)[A-Za-z0-9_-]{16,}#\1<token>#gI' -e "s#$HOME#~#g" -e "s#${D2_GAME_DIR}#<game>#g" -e 's/[A-Za-z0-9_-]{32,}/<redacted>/g'; }
+	scrub() { sed -E -e 's#[?&]t=[A-Za-z0-9_-]+#?t=<token>#g' -e 's#(Bearer|token[=: ]+)[A-Za-z0-9_-]{16,}#\1<token>#gI' -e "s#$HOME#~#g" -e "s#$(printf %s "$D2_GAME_DIR" | sed 's/[][\\.*^$#&\/]/\\&/g')#<game>#g" -e 's/[A-Za-z0-9_-]{32,}/<redacted>/g'; }
 	{ echo "pack $(cat VERSION) image ${D2_IMAGE}"; docker version --format 'docker {{.Server.Version}}' 2>&1; uname -srm; } | scrub >"$d/versions.txt"
 	docker compose ps 2>&1 | scrub >"$d/ps.txt"
 	docker compose logs --no-color --tail 1000 2>&1 | scrub >"$d/log.txt"

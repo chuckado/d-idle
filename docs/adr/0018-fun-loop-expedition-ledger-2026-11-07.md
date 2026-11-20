@@ -1,5 +1,5 @@
 ---
-status: accepted
+status: accepted, amended by ADR 0020 (2026-11-19: item 6, the player spends every skill point)
 date: 2026-11-07
 decision-makers: user (popup answers on docs/research/fun-ideas.md, 2026-11-07)
 ---

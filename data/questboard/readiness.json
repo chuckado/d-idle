@@ -1,0 +1,18 @@
+{
+ "schema": "quests.readiness/1",
+ "dials": {
+  "cautious": {"enter": 2.0, "stay": 1.6},
+  "balanced": {"enter": 1.5, "stay": 1.2},
+  "bold": {"enter": 1.2, "stay": 1.0}
+ },
+ "defaultDial": "balanced",
+ "kit": {
+  "minPotions": 4,
+  "minResist": {"normal": 0, "nm": 10, "hell": 30}
+ },
+ "tags": {
+  "dials": "V mirrors internal/power/profiles.json dials (a test compares them); words follow survival word(): safe = low >= enter, risky = best >= stay, else too hard",
+  "kit.minPotions": "I, U",
+  "kit.minResist": "I, U (lowest of the four resists; not calibrated)"
+ }
+}

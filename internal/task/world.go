@@ -24,9 +24,11 @@ const (
 
 // Quest ids follow docs/archive/goals-catalog.md ("quest.<id>").
 const (
-	QDen       = "den_of_evil"
-	QBurial    = "sisters_burial"
-	QCain      = "search_for_cain"
+	QDen    = "den_of_evil"
+	QBurial = "sisters_burial"
+	QCain   = "search_for_cain"
+	// QCainBoard is the board's own group for the report to Akara (slice S7b); the campaign never lists it.
+	QCainBoard = "search_for_cain_board"
 	QTower     = "forgotten_tower"
 	QTools     = "tools_of_the_trade"
 	QAndariel  = "sisters_to_slaughter"
@@ -42,8 +44,8 @@ const (
 	BossAndy   = "Andariel"
 	ItemMalus  = "Horadric Malus"
 	ItemBark   = "Scroll of Inifuss"
-	ItemCainSc = "Deckard Cain's Scroll"
-	ItemPortal = "Tristram portal" // pseudo item: the red portal is open
+	ItemCainSc = "Key to the Cairn Stones" // code bkd, what Akara hands back after reading the scroll (not Cain's own scroll)
+	ItemPortal = "Tristram portal"         // pseudo item: the red portal is open
 )
 
 // Stage is how far a quest got. Cleared means the objective is met but the reward is not claimed (Den cleared,
@@ -111,6 +113,8 @@ type World struct {
 	SafeArea Area
 	// Banned: areas the death-spiral breaker keeps the character out of for now (travel, clear and kill steps wait).
 	Banned map[Area]bool
+	// BanNote is the player-facing detail of a ban ("N deaths, until HH:MM"), empty when the bot has none.
+	BanNote map[Area]string
 
 	// Blood Raven kit gate inputs (gate.go brFloor/brShort). BRHigh: the class takes the higher caster floor (Sorceress,
 	// Druid, Amazon; the Necromancer and melee classes do not). BR holds the knobs, zero fields mean the defaults;

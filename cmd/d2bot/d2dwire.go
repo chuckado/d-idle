@@ -15,6 +15,7 @@ import (
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dcombat"
 	"d2lod-bot/internal/d2denv"
+	"d2lod-bot/internal/d2dloot"
 	"d2lod-bot/internal/d2dmerc"
 	"d2lod-bot/internal/d2dsrc"
 	"d2lod-bot/internal/d2dtown"
@@ -36,16 +37,18 @@ import (
 // over a d2d backend: the same packages, with d2d's reader/input seams instead of memory and pixels
 // (docs/d2d-wire.md). Without game tables nothing can be built and the caller keeps the "not yet" stubs.
 type d2dStack struct {
-	rig     *d2dcombat.Rig
-	cb      fighterAdapter
-	tw      *town.Town
-	lt      *loot.Looter
-	town    townAdapter
-	leveler *leveler.Leveler
-	gear    bot.Gear
-	quester bot.Quester
-	task    *bot.TaskDeps
-	prepare func(ctx context.Context) error
+	rig        *d2dcombat.Rig
+	cb         fighterAdapter
+	tw         *town.Town
+	lt         *loot.Looter
+	town       townAdapter
+	leveler    *leveler.Leveler
+	pointVerbs *pointVerbs // the point verbs (pointswire.go); nil without a d2d client
+	gear       bot.Gear
+	quester    bot.Quester
+	task       *bot.TaskDeps
+	prepare    func(ctx context.Context) error
+	peek       d2dloot.Peeker // the fork verbs for real ground quality (nil: label guess)
 }
 
 // buildD2DStack wires the stack. nv is the backend navigator (be.Navigator()); ref is the runner back-reference the
@@ -81,6 +84,9 @@ func buildD2DStack(ctx context.Context, o options, be *d2denv.Backend, nv *nav.N
 	tw.SetJudge(lt)
 
 	s := &d2dStack{rig: rig, cb: fighterAdapter{cb}, tw: tw, lt: lt, town: townAdapter{t: tw, e: e, mv: nv}}
+	if be.Client != nil {
+		s.peek = be.Client
+	}
 	name := o.char
 	if name == "" {
 		name = "D2dbot"
@@ -99,16 +105,29 @@ func buildD2DStack(ctx context.Context, o options, be *d2denv.Backend, nv *nav.N
 	s.task.Boss = bossKill(br, log.Info)
 	s.task.Farm = farmLoop(bg, br, log.Info)
 	if !cfg.NoLeveler {
-		s.leveler = leveler.New(e, leveler.Options{Build: cfg.LevelerBuild, PlanDir: cfg.PlanDir, Pause: ref.pause, Pinned: ref.pinned, Rebind: func(context.Context) error {
+		s.pointVerbs = newPointVerbs(be.Client, db, func() string {
+			if sn, err := e.Snapshot(); err == nil && sn.Player != nil {
+				return sn.Player.Class.String()
+			}
+			return ""
+		})
+		lopts := leveler.Options{Build: cfg.LevelerBuild, PlanDir: cfg.PlanDir, Pause: ref.pause, Pinned: ref.pinned, Rebind: func(context.Context) error {
 			_, err := rig.BindSkills()
 			return err
-		}})
+		}}
+		if s.pointVerbs != nil { // a nil *pointVerbs in the interface would not be nil
+			lopts.Verbs = s.pointVerbs
+		}
+		s.leveler = leveler.New(e, lopts)
 		s.gear = gearAdapter{l: s.leveler, v: townvendor.Vendor{T: tw}, e: e}
 		s.quester = questAdapter{t: tw, e: e}
 	}
 	wireInv(ref, tw, lt, s.leveler, db)
 	wireSets(ref, e)
 	wireItemVerbs(ref, tw, s.leveler, be.Client, e)
+	wireVault(lt, be.Client, o.data, charName, log)
+	wireVaultKeep(ref, e, be.Client, o.data, o.ladder.currencyDir, charName, log)
+	wireBulkID(ref, tw, e, o.data, charName, log)
 	s.prepare = func(ctx context.Context) error {
 		applyClass(ctx, e.Snapshot, cb, tw, lt, cfg.LevelerBuild, db, log)
 		_, err := rig.BindSkills()
