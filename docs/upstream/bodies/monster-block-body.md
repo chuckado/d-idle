@@ -27,7 +27,7 @@ Two commits: the oracle (`tools/emu/monster_block.py`, `tests/game/test_monster_
 
 `monster_block.py codes` runs the shield test over all 659 item codes of the tables: 24 shields in game.exe, 0 where the `type` column disagrees. `monster_block.py cap` sets Mephisto's stat 20 to 0, 1, 74, 75, 76, 90, 200: game.exe gives 0, 1, 74, 75, 75, 75, 75.
 
-MUTANT_SUMMARY
+Mutants of the claim (one text change each, `test_monster_block` rebuilt): the parent rule, gate A dropped, gate B dropped and no gate at all abort the pins and differ on the compare (228, 45, 255 and 1,560 of 2,469). MUTANTS_PENDING
 
 ## In play
 
