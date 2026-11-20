@@ -1,0 +1,242 @@
+{
+ "version": "didle.scenario-result/1",
+ "id": "cain.cage",
+ "class": "Sorceress",
+ "seed": 3,
+ "status": "RED",
+ "reason": "quest_bits: wanted record 4 set 0x2000 clear 0x0000, got 0x0018",
+ "asserts": [
+  {
+   "kind": "quest_bits",
+   "ok": false,
+   "want": "record 4 set 0x2000 clear 0x0000",
+   "got": "0x0018",
+   "why": "V L2/L3: bit 13 (0x2000) appears when the cage opens (0x2012, 0x201a) and stays through the report (0x2011, 0x2019); bit 1 alone is cleared by the report, which the bot also does within the run (cainfix3 cage run: 0x2019)"
+  }
+ ],
+ "virtual_min": 25,
+ "budget_min": 25,
+ "wall_sec": 135,
+ "tags": [
+  "CHEATED",
+  "given-item",
+  "position",
+  "quest-word"
+ ],
+ "trace": "provingground-out/20261119-185801/cain.cage_Sorceress_3.bot.log",
+ "state": {
+  "version": "didle.scenario-state/1",
+  "source": "d2d-live-attach",
+  "has": [
+   "items",
+   "portals",
+   "ground",
+   "objects"
+  ],
+  "area": 1,
+  "level": 24,
+  "gold": 44,
+  "stash": 3230,
+  "life_pct": 90,
+  "right_skill": 0,
+  "left_skill": 0,
+  "quests": {
+   "1": 4,
+   "4": 24
+  },
+  "items": [
+   {
+    "code": "isc",
+    "where": "pack"
+   },
+   {
+    "code": "bkd",
+    "where": "pack"
+   },
+   {
+    "code": "tbk",
+    "where": "pack"
+   },
+   {
+    "code": "yps",
+    "where": "pack"
+   },
+   {
+    "code": "yps",
+    "where": "pack"
+   },
+   {
+    "code": "hp1",
+    "where": "belt"
+   },
+   {
+    "code": "hp1",
+    "where": "belt"
+   },
+   {
+    "code": "hax",
+    "where": "body"
+   },
+   {
+    "code": "rvs",
+    "where": "belt"
+   },
+   {
+    "code": "isc",
+    "where": "pack"
+   },
+   {
+    "code": "ssd",
+    "where": "pack"
+   },
+   {
+    "code": "buc",
+    "where": "body"
+   },
+   {
+    "code": "gpl",
+    "where": "pack"
+   },
+   {
+    "code": "lbl",
+    "where": "body"
+   },
+   {
+    "code": "lgl",
+    "where": "body"
+   }
+  ],
+  "objects": [
+   {
+    "class": 385,
+    "state": "NU"
+   },
+   {
+    "class": 267,
+    "state": "NU"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 119,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   },
+   {
+    "class": 37,
+    "state": "ON"
+   }
+  ],
+  "stats": {
+   "dex": 25,
+   "ene": 35,
+   "skillpts": 0,
+   "skillsspent": 24,
+   "statpts": 0,
+   "str": 12,
+   "vit": 123
+  },
+  "portals": [
+   {
+    "which": 0,
+    "level": 4
+   },
+   {
+    "which": 1,
+    "level": 1
+   },
+   {
+    "which": 2,
+    "level": 4
+   }
+  ],
+  "area_changes": 17,
+  "area_trail": [
+   38,
+   1,
+   38,
+   1,
+   38,
+   1,
+   2,
+   3,
+   4,
+   10,
+   1,
+   10,
+   4,
+   1,
+   4,
+   1,
+   4,
+   1
+  ],
+  "writes_after_start": -1
+ },
+ "digest": "a8480655e702b092"
+}
