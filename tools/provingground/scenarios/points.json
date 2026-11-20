@@ -100,6 +100,26 @@
     {"kind": "log_line", "pattern": "class-aware start.*levelerBuild=sorceress_fire_normal30", "min": 1, "why": "the bot played the selected table, not the default"},
     {"kind": "no_writes"}
    ]
+  },
+  {
+   "id": "points.necro-summoner-lands-at-30",
+   "title": "Necromancer summoner build (necromancer_summoner_guide): at clvl 30 the planned skill points are in the tree",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "the format on main cannot yet (1) select a build per run (trigger.build) or (2) assert one skill's level (skill_points); both are on branch agent/pgformat (the same two kinds flip points.sorc-fire-lands-at-30 there). Offline coverage today: internal/leveler TestNecromancerSummonerBuildSelectableAndDefaultsUnchanged (the table's points at clvl 30), internal/buildfile TestNecromancerSummonerGoalFileMatchesTable (every row legal under skills.txt rules) and internal/agency TestNecromancerSummonerShadowPlan (the shadow plan at clvl 1 to 30). Once pgformat is merged: add trigger.build necromancer_summoner_guide and the skill_points asserts listed in notes.",
+   "covers": ["points.verb"],
+   "touches": ["internal/plandata/build-necromancer_summoner_guide.json", "internal/leveler/", "internal/points/"],
+   "pre": {"level": 30},
+   "trigger": {"goals": "campaign", "knobs": {"resource.pointsDecisions": 1}},
+   "budget": {"virtual_min": 10},
+   "matrix": {"classes": ["Necromancer"], "seeds": [11]},
+   "provenance": "SETUP: level 30 with the points a played level gives (29 level points; the table's clvl 30 sum is 33 because it counts the Den of Evil, Radament and Izual quest points at clvl 8, 15 and 26, so the hero spends 29 of 33 unless the setup grants quest points). Reachable by play. CHEATED setup: mechanics evidence only.",
+   "notes": "Steps once the format allows: run with the build necromancer_summoner_guide, autopilot on. The table at clvl 30: Raise Skeleton 10 (skills.txt id 70), Skeleton Mastery 10 (69), Raise Skeletal Mage 6 (80), Corpse Explosion 3 (74), Clay Golem 1 (75), Amplify Damage 1 (66), Bone Armor 1 (68), Teeth 1 (67). Skill-by-skill asserts to add: skill_points skill 70 min 8 at_level 30, skill 69 min 8, skill 80 min 4, plus a log_line 'class-aware start.*levelerBuild=necromancer_summoner_guide'. The lower bounds leave room for the 4 quest points the setup does not grant; the order in which the planner spends them is the leveler's, so assert only the two big skills tightly. The census of minions is not asserted: it needs a live Raise Skeleton check on this build (docs/process/necromancer-support.md).",
+   "assert": [
+    {"kind": "stat_between", "code": "skillsspent", "min": 29, "max": 33, "why": "the table's points were spent"},
+    {"kind": "no_writes"}
+   ]
   }
  ]
 }
