@@ -84,18 +84,20 @@
    "title": "Sorceress fire build (sorceress_fire_normal30): at clvl 30 the planned skill points are in the tree",
    "kind": "behaviour",
    "tier": "full",
-   "status": "pending",
-   "pending_reason": "the format cannot yet (1) select a build per run (levelerBuild is bot config, not a trigger knob) or (2) assert one skill's level (stat_between reads only the sum skillsspent). Offline coverage today: internal/leveler TestSorceressFireBuildSelectableAndDefaultsUnchanged (the table's points at clvl 30) and internal/buildfile TestShippedTablesAreLegal (every row legal under skills.txt rules). Needs: trigger.build, and stat_between codes skill:<name> (the dump's base_levels indexed by skill id).",
    "covers": ["points.verb"],
    "touches": ["internal/plandata/build-sorceress_fire_normal30.json", "internal/leveler/", "internal/points/"],
    "pre": {"level": 30},
-   "trigger": {"goals": "campaign", "knobs": {"resource.pointsDecisions": 1}},
+   "trigger": {"goals": "campaign", "build": "sorceress_fire_normal30", "knobs": {"resource.pointsDecisions": 1}},
    "budget": {"virtual_min": 10},
    "matrix": {"classes": ["Sorceress"], "seeds": [11]},
    "provenance": "SETUP: level 30 with the points a played level gives (a fresh hero at clvl 30 has 29 skill points plus quest points; the setup grants the 29 level points only). Reachable by play. CHEATED setup: mechanics evidence only.",
-   "notes": "Steps once the format allows: run with the build sorceress_fire_normal30, autopilot on; expect Fire Bolt 9, Fire Ball 16, Fire Mastery 1, Teleport 1, Telekinesis 1, Frozen Armor 1, Warmth 1 (the table's clvl 30 sum is 30 points, one more than 29 level points: the Den of Evil point is a quest point, so the hero needs it granted or the last row, Fire Mastery, stays unspent).",
+   "notes": "Run with the build sorceress_fire_normal30, autopilot on; expect Fire Bolt 9, Fire Ball 16, Fire Mastery 1, Teleport 1, Telekinesis 1, Frozen Armor 1, Warmth 1 (the table's clvl 30 sum is 30 points, one more than 29 level points: the Den of Evil point is a quest point, so the hero needs it granted or the last row, Fire Mastery, stays unspent).",
    "assert": [
     {"kind": "stat_between", "code": "skillsspent", "min": 29, "max": 30, "why": "the table's points were spent"},
+    {"kind": "skill_points", "skill": 36, "min": 9, "at_level": 30, "why": "Fire Bolt 9 (skills.txt id 36)"},
+    {"kind": "skill_points", "skill": 47, "min": 16, "at_level": 30, "why": "Fire Ball 16 (id 47)"},
+    {"kind": "skill_points", "skill": 54, "min": 1, "at_level": 30, "why": "Teleport 1 (id 54)"},
+    {"kind": "log_line", "pattern": "class-aware start.*levelerBuild=sorceress_fire_normal30", "min": 1, "why": "the bot played the selected table, not the default"},
     {"kind": "no_writes"}
    ]
   }
