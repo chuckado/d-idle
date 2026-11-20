@@ -156,6 +156,7 @@ cmd/d2bot/d2dbackend.go  credit-runner  maphistory
 cmd/d2bot/d2dbackend.go  credit-runner  maphistoryA
 cmd/d2bot/d2dbackend.go  credit-runner  maphistoryC
 cmd/d2bot/d2dbackend.go  credit-runner  maptrail
+cmd/d2bot/d2dbackend.go  credit-runner  q4runes
 cmd/d2bot/d2dbackend.go  credit-runner  quests4
 cmd/d2bot/d2dbackend.go  credit-runner  survA
 cmd/d2bot/d2dbackend.go  credit-runner  survB
@@ -179,6 +180,7 @@ cmd/d2bot/display.go  credit-runner  jewelicons
 cmd/d2bot/etherwire.go  credit-runner  vaultv7b
 cmd/d2bot/etherwire_test.go  credit-runner  vaultv7b
 cmd/d2bot/funwire.go  credit-runner  maphistoryA
+cmd/d2bot/funwire.go  credit-runner  q4runes
 cmd/d2bot/funwire.go  credit-runner  uib6
 cmd/d2bot/gearpolicy.go  credit-runner  agencyp0
 cmd/d2bot/gearsets_test.go  credit-runner  gearsets
@@ -217,6 +219,7 @@ cmd/d2bot/ladder.go  credit-runner  exploredpct
 cmd/d2bot/ladder.go  credit-runner  gearsets
 cmd/d2bot/ladder.go  credit-runner  labels
 cmd/d2bot/ladder.go  credit-runner  lootwireL4
+cmd/d2bot/ladder.go  credit-runner  q4runes
 cmd/d2bot/ladder.go  credit-runner  quests4
 cmd/d2bot/ladder.go  credit-runner  survA
 cmd/d2bot/ladder.go  credit-runner  uib1
@@ -429,6 +432,7 @@ docs/knobs.md  credit-runner  lootwire3
 docs/knobs.md  credit-runner  lootwireL4
 docs/knobs.md  credit-runner  pursuers
 docs/knobs.md  credit-runner  q13input
+docs/knobs.md  credit-runner  q4runes
 docs/knobs.md  credit-runner  quests3
 docs/knobs.md  credit-runner  quests8
 docs/knobs.md  credit-runner  staletarget
@@ -937,8 +941,11 @@ internal/danger  credit-runner  dangerfit2
 internal/danger/  credit-runner  survA
 internal/danger/areaunits.json  pro-runner  decomp28
 internal/danger/gapexport.go  credit-runner  survC
+internal/data/data_test.go  credit-runner  q4runes
 internal/data/db.go  credit-runner  botcpu2
 internal/data/db.go  credit-runner  cainchain
+internal/data/db.go  credit-runner  q4runes
+internal/data/extra.go  credit-runner  q4runes
 internal/data/invfile_real_test.go  credit-runner  jewelicons
 internal/data/invfile_test.go  credit-runner  jewelcolor
 internal/decide/firsts_act1.json  credit-runner  friendfb
@@ -949,6 +956,7 @@ internal/decide/variants_test.go  credit-runner  qdensity
 internal/env  credit-runner  survsd
 internal/env  credit-runner  wiring2
 internal/env/tuning.go  credit-runner  bulkid
+internal/env/tuning.go  credit-runner  q4runes
 internal/env/tuning.go  credit-runner  quests3
 internal/env/tuning.go  credit-runner  videofeed2
 internal/env/tuning_bot.go  credit-runner  botstuck
@@ -963,6 +971,7 @@ internal/env/tuning_identify.go  credit-runner  bulkid
 internal/env/tuning_input.go  credit-runner  q13input
 internal/env/tuning_invdesk.go  credit-runner  botinstant
 internal/env/tuning_invdesk.go  credit-runner  gearsets
+internal/env/tuning_items.go  credit-runner  q4runes
 internal/env/tuning_loot.go  credit-runner  goldprio
 internal/env/tuning_loot.go  credit-runner  hourfix
 internal/env/tuning_loot.go  credit-runner  lootwire3
@@ -1095,6 +1104,8 @@ internal/plandata/build-fallback-lightning.json  credit-runner  sorc2
 internal/plandata/build-primary-blizzard.json  credit-runner  sorc2
 internal/plandata/build-sorceress_fire_normal30.json  credit-runner  sorc2
 internal/plandata/dropmodel-normal.json  credit-runner  decomp31
+internal/plandata/ladder_runewords.go  credit-runner  q4runes
+internal/plandata/ladder_runewords_test.go  credit-runner  q4runes
 internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
@@ -1195,6 +1206,7 @@ internal/town/chores.go  credit-runner  idfast
 internal/town/chores.go  credit-runner  repairtrip
 internal/town/chores.go  credit-runner  tidy
 internal/town/idtome_test.go  credit-runner  idtome
+internal/town/imbue_test.go  credit-runner  q4runes
 internal/town/invstash_test.go  credit-runner  towntests
 internal/town/playerid.go  credit-runner  itemverbs2
 internal/town/playerstash.go  credit-runner  itemverbs2
@@ -1248,6 +1260,7 @@ internal/watch/funwire.go  credit-runner  friendfb
 internal/watch/funwire.go  credit-runner  labels
 internal/watch/funwire.go  credit-runner  lootwireL4
 internal/watch/funwire.go  credit-runner  nocards
+internal/watch/funwire.go  credit-runner  q4runes
 internal/watch/funwire.go  credit-runner  quests4
 internal/watch/funwire.go  credit-runner  survA
 internal/watch/funwire.go  credit-runner  uib1
@@ -1342,6 +1355,8 @@ internal/watch/resetapi_test.go  credit-runner  botreset
 internal/watch/resetapi_test.go  credit-runner  resetinstant
 internal/watch/resetui_test.go  credit-runner  botreset
 internal/watch/resetui_test.go  credit-runner  resetinstant
+internal/watch/returnscreen.go  credit-runner  q4runes
+internal/watch/returnscreen_test.go  credit-runner  q4runes
 internal/watch/senses.go  credit-runner  maphistory
 internal/watch/senses.go  credit-runner  maphistoryA
 internal/watch/senses.go  credit-runner  maphistoryB
