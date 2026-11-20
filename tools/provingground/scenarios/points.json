@@ -120,6 +120,27 @@
     {"kind": "stat_between", "code": "skillsspent", "min": 29, "max": 33, "why": "the table's points were spent"},
     {"kind": "no_writes"}
    ]
+  },
+  {
+   "id": "points.paladin-hammerdin-lands-at-30",
+   "title": "Paladin Hammerdin build (paladin_hammerdin_guide): at clvl 30 the planned skill points are in the tree",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": ["points.verb"],
+   "touches": ["internal/plandata/build-paladin_hammerdin_guide.json", "internal/combat/classdata/profiles.json", "internal/leveler/", "internal/points/"],
+   "pre": {"level": 30},
+   "trigger": {"goals": "campaign", "build": "paladin_hammerdin_guide", "knobs": {"resource.pointsDecisions": 1}},
+   "budget": {"virtual_min": 10},
+   "matrix": {"classes": ["Paladin"], "seeds": [11]},
+   "provenance": "SETUP: level 30 with the points a played level gives (29 level points; the table's clvl 30 sum is 33 because it counts the Den of Evil, Radament and Izual quest points at clvl 8, 15 and 26, so the hero spends 29 of 33 unless the setup grants quest points). Reachable by play. CHEATED setup: mechanics evidence only.",
+   "notes": "Run with the build paladin_hammerdin_guide, autopilot on. The table at clvl 30: Might 1, Smite 6, Holy Bolt 1, Blessed Hammer 14, Blessed Aim 1, Concentration 8, Charge 1, Holy Shield 1. Paladin skill ids are 96 + the index in skills.txt class order (S: the same rule as the Sorceress run; UNOBSERVED live for the Paladin): Smite 97, Blessed Hammer 112, Concentration 113, Holy Shield 117. Lower bounds leave room for the 4 quest points the setup does not grant. Not asserted: that the hero fights with Blessed Hammer (needs a live fight; docs/process/hammerdin-support.md).",
+   "assert": [
+    {"kind": "stat_between", "code": "skillsspent", "min": 29, "max": 33, "why": "the table's points were spent"},
+    {"kind": "skill_points", "skill": 112, "min": 10, "at_level": 30, "why": "Blessed Hammer, the main attack (id 112)"},
+    {"kind": "skill_points", "skill": 113, "min": 5, "at_level": 30, "why": "Concentration, the hammer's synergy (id 113)"},
+    {"kind": "log_line", "pattern": "class-aware start.*levelerBuild=paladin_hammerdin_guide", "min": 1, "why": "the bot played the selected table, not the default"},
+    {"kind": "no_writes"}
+   ]
   }
  ]
 }
