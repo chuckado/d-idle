@@ -17,6 +17,7 @@ owns:
   - "docs/adr/"
 exclusive: []
 contracts: []
+result: "ADR 0021 to 0024 written, ADR 0015 amended by 0023, Current truth updated; docs only, not verified live"
 ---
 
 ## Description
