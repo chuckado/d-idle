@@ -829,8 +829,8 @@ func TestUnknownQualityJewelryIsTaken(t *testing.T) {
 			for _, code := range []string{"rin", "amu"} {
 				u := r.W.NewItem(code, 0)
 				u.Item.Flags = 0
-				if v := l.EvaluateWith(u, loot.Ctx{CLvl: 10, Gold: 300}); v.Action != loot.Keep || v.Rule != "jewelry to id" || !v.NeedID {
-					t.Errorf("%s quality unknown: %v rule %q needId %v, want keep by jewelry to id", code, v.Action, v.Rule, v.NeedID)
+				if v := l.EvaluateWith(u, loot.Ctx{CLvl: 10, Gold: 300}); v.Action != loot.Keep || v.Rule != "jewelry unknown quality" || !v.NeedID {
+					t.Errorf("%s quality unknown: %v rule %q needId %v, want keep by jewelry unknown quality", code, v.Action, v.Rule, v.NeedID)
 				}
 			}
 		})
