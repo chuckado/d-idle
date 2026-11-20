@@ -303,7 +303,6 @@
 | pgexpand | in-progress | - | `internal/scenario/`<br>`cmd/d2scenario/`<br>`tools/provingground/`<br>`docs/process/proving-ground.md`<br>`docs/probes/provingground-run-2026-11-19.md` | `d2d-lab-binary` |
 | viewerconns | in-progress | - | `internal/watch/web/panels/video`<br>`internal/watch/testdata/video_conns.js`<br>`tools/connprobe` | - |
 | cainfix3 | proposed | - | `cmd/d2bot/adapters.go`<br>`data/questboard/act1.json`<br>`docs/combat.md`<br>`docs/knobs.md`<br>`docs/questboard.md`<br>`internal/bot/`<br>`internal/combat/`<br>`internal/env/tuning_combat.go`<br>`internal/questboard/def.go`<br>`internal/task/banote_test.go`<br>`internal/task/gate.go`<br>`internal/task/world.go`<br>`tools/provingground/scenarios/cain.json` | - |
-| fabledecisions | proposed | - | `docs/decisions.md`<br>`docs/adr/` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |

@@ -1,10 +1,11 @@
 ---
 id: TASK-682
 title: 'fabledecisions: record Fable review decisions as ADR 0021 to 0024'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T02:58:00Z'
+updated_date: '2026-11-20T03:07:00Z'
 labels:
   - docs
   - chore
