@@ -466,9 +466,12 @@ func (db *DB) WarpByID(id int) *LevelWarp { return db.warpByID[id] }
 // 23 flagged rows are exactly the 1.10 ladder-only list, V by reading the
 // file). That the game really refuses them offline is S (community
 // knowledge), UNVERIFIED in game.
+//
+// With db.LadderRunewords set (knob items.ladderRunewords, ADR 0024: d.idle mode
+// with the fork flag --ladder-runewords) the ladder rows count as available.
 func (db *DB) RunewordAvailableOffline(name string) bool {
 	w := db.RunewordByName(name)
-	return w != nil && w.Complete && !w.Ladder
+	return w != nil && w.Complete && (!w.Ladder || db.LadderRunewords)
 }
 
 func (db *DB) indexExtra() {

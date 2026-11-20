@@ -1,6 +1,6 @@
 {
  "schema": "didle.cap/1",
- "tags": "tier is the engine's code and verification state today, not a build judgement; it is meant to be GENERATED from Proving Ground results (ADR 0020), until then it is typed from the profiles and live notes. reqLevel/reqSkills: V for Sorceress (docs/research/sorc-skill-matrix.md, read from skills.txt), S for Paladin (SME read, leveler/palprobe_test.go). synergies: null = not known (never 'none'); [] = none; the runtime overlay (Caps.Overlay) replaces req and synergies by skills.txt when the tables are loaded. mana.source names where the cost per level comes from: skilldamage.json (V, game.exe functions run in the emulator) or the skills.txt columns.",
+ "tags": "tier is the engine's code and verification state today, not a build judgement; it is meant to be GENERATED from Proving Ground results (ADR 0020), until then it is typed from the profiles and live notes. reqLevel/reqSkills: V for Sorceress (docs/research/sorc-skill-matrix.md, read from skills.txt), S for Paladin (SME read, leveler/palprobe_test.go). synergies: null = not known (never 'none'); [] = none; the runtime overlay (Caps.Overlay) replaces req and synergies by skills.txt when the tables are loaded. mana.source names where the cost per level comes from: skilldamage.json (V, game.exe functions run in the emulator) or the skills.txt columns. Necromancer (necro1, 2026-11-20): reqLevel and reqSkills of all 30 rows are V, read from the patched skills.txt of the worker host (charclass nec); synergies of damage rows are its DmgSymPerCalc/EDmgSymPerCalc, of summon rows the skill() references in its calc columns; skill names are the skills.txt names (BloodGolem, IronGolem, FireGolem). Tiers are read from internal/combat necro.go, necro_corpse.go and profiles.json (docs/process/necromancer-support.md).",
  "mana": {
   "note": "U: a simple sustain budget, not the game's regen formula",
   "perEnergy": {
@@ -1126,12 +1126,47 @@
     "source": "none"
    }
   },
-  "Raise Skeleton": {
+  "Amplify Damage": {
    "class": "necromancer",
-   "kind": "summon",
-   "delivery": "pet",
+   "kind": "curse",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "Fighter.Curse casts it at a pack, an elite or a boss (necro.go curseFor); V live 2026-10-29 for the cast and the cover radius, the state 9 was never read back after a cast (U). Amplify breaks physical immunity in the game but that is not checked by the planner.",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Teeth": {
+   "class": "necromancer",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "experimental",
+   "reason": "necromancer fallback band (profiles.json), U live as a measured loop",
+   "element": "mag",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Bone Wall",
+    "Bone Prison",
+    "Bone Spear",
+    "Bone Spirit"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Bone Armor": {
+   "class": "necromancer",
+   "kind": "buff",
+   "delivery": "self",
    "tier": "supported",
-   "reason": "V live 2026-10-29: golem + skeletons upkeep (necro.go comments)",
+   "reason": "V live: state 14 readable, recast by state (necro.go buffDue)",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
    "mana": {
     "source": "skills.txt:mana,lvlmana,manashift,minmana"
    }
@@ -1142,89 +1177,54 @@
    "delivery": "pet",
    "tier": "supported",
    "reason": "passive pet strength; see Raise Skeleton",
+   "reqLevel": 1,
+   "reqSkills": [
+    "Raise Skeleton"
+   ],
+   "synergies": [],
    "mana": {
-    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+    "source": "none"
    }
   },
-  "Raise Skeletal Mage": {
-   "class": "necromancer",
-   "kind": "summon",
-   "delivery": "pet",
-   "tier": "experimental",
-   "reason": "skills.json summon row, upkeep shared with skeletons, U",
-   "mana": {
-    "source": "skills.txt:mana,lvlmana,manashift,minmana"
-   }
-  },
-  "Clay Golem": {
+  "Raise Skeleton": {
    "class": "necromancer",
    "kind": "summon",
    "delivery": "pet",
    "tier": "supported",
-   "reason": "V live 2026-10-29 (necro.go: golem cast)",
+   "reason": "V live 2026-10-29: skeletons raised from a corpse within 4 subtiles, census by IsFriendly, cap found by evidence (necro.go KeepSummons, docs/summon.md)",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Skeleton Mastery"
+   ],
    "mana": {
     "source": "skills.txt:mana,lvlmana,manashift,minmana"
    }
   },
-  "Golem Mastery": {
+  "Dim Vision": {
    "class": "necromancer",
-   "kind": "summon",
-   "delivery": "pet",
-   "tier": "experimental",
-   "reason": "passive for golems, U",
-   "mana": {
-    "source": "skills.txt:mana,lvlmana,manashift,minmana"
-   }
-  },
-  "Teeth": {
-   "class": "necromancer",
-   "kind": "damage",
-   "delivery": "projectile",
-   "tier": "experimental",
-   "reason": "necromancer fallback band, U live",
-   "element": "mag",
-   "mana": {
-    "source": "skilldamage.json:mana"
-   }
-  },
-  "Bone Spear": {
-   "class": "necromancer",
-   "kind": "damage",
-   "delivery": "projectile",
-   "tier": "experimental",
-   "reason": "band from clvl 18, U live",
-   "element": "mag",
-   "mana": {
-    "source": "skilldamage.json:mana"
-   }
-  },
-  "Corpse Explosion": {
-   "class": "necromancer",
-   "kind": "damage",
+   "kind": "curse",
    "delivery": "ground",
-   "tier": "experimental",
-   "reason": "skills.json ground row, needs a corpse; not in the band",
-   "element": "phys",
-   "mana": {
-    "source": "skilldamage.json:mana"
-   }
-  },
-  "Bone Armor": {
-   "class": "necromancer",
-   "kind": "buff",
-   "delivery": "self",
-   "tier": "supported",
-   "reason": "V live: state 14 readable (necro.go)",
+   "tier": "unsupported",
+   "reason": "curseNames recognises it but curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [],
    "mana": {
     "source": "skills.txt:mana,lvlmana,manashift,minmana"
    }
   },
-  "Amplify Damage": {
+  "Weaken": {
    "class": "necromancer",
    "kind": "curse",
    "delivery": "ground",
    "tier": "experimental",
-   "reason": "curse cast loop exists, V live for the cover radius rule only (necro.go curseCover)",
+   "reason": "curseFor picks it on an elite or boss when Amplify Damage is not learned; state 19 is S (necro.go), never seen live",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Amplify Damage"
+   ],
+   "synergies": [],
    "mana": {
     "source": "skills.txt:mana,lvlmana,manashift,minmana"
    }
@@ -1234,10 +1234,154 @@
    "kind": "damage",
    "delivery": "melee",
    "tier": "unsupported",
-   "reason": "no band",
+   "reason": "poison line: no band, a weapon-skill modifier with no loop",
    "element": "pois",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [
+    "Poison Explosion",
+    "Poison Nova"
+   ],
    "mana": {
     "source": "skilldamage.json:mana"
+   }
+  },
+  "Corpse Explosion": {
+   "class": "necromancer",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "Fighter.corpseExplode casts it at the best corpse when no summon is wanted (necro_corpse.go); needs a corpse, U live",
+   "element": "phys",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Teeth"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Clay Golem": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "supported",
+   "reason": "V live 2026-10-29: first summon in a fresh area, no corpse needed (necro.go golemLadder)",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [
+    "Golem Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Iron Maiden": {
+   "class": "necromancer",
+   "kind": "curse",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "curseNames recognises it but curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Amplify Damage"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Terror": {
+   "class": "necromancer",
+   "kind": "curse",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "curseNames recognises it but curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Weaken"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Bone Wall": {
+   "class": "necromancer",
+   "kind": "utility",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "ground placement, no cast rule or minion-blocking logic",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Bone Armor"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Golem Mastery": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "passive for golems; the Clay Golem and Fire Golem loop is shared, U",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Clay Golem"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   }
+  },
+  "Raise Skeletal Mage": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "supported",
+   "reason": "V live 2026-10-29: mages raised and counted (class 364), cap equals the skill level (docs/summon.md)",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Raise Skeleton"
+   ],
+   "synergies": [
+    "Skeleton Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Confuse": {
+   "class": "necromancer",
+   "kind": "curse",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "curseNames recognises it but curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Dim Vision"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Life Tap": {
+   "class": "necromancer",
+   "kind": "curse",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "curseNames recognises it but curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Iron Maiden"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
    }
   },
   "Poison Explosion": {
@@ -1245,21 +1389,226 @@
    "kind": "damage",
    "delivery": "ground",
    "tier": "unsupported",
-   "reason": "no skills.json row",
+   "reason": "poison line: needs a corpse like Corpse Explosion, no band and no rule",
    "element": "pois",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Poison Dagger",
+    "Corpse Explosion"
+   ],
+   "synergies": [
+    "Poison Dagger",
+    "Poison Nova"
+   ],
    "mana": {
     "source": "skilldamage.json:mana"
+   }
+  },
+  "Bone Spear": {
+   "class": "necromancer",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "experimental",
+   "reason": "band from clvl 18 (profiles.json necromancer), U live as a measured loop",
+   "element": "mag",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Corpse Explosion"
+   ],
+   "synergies": [
+    "Bone Wall",
+    "Bone Prison",
+    "Teeth",
+    "Bone Spirit"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "BloodGolem": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "unsupported",
+   "reason": "costs life to cast; not in golemLadder (necro.go): never cast by the engine",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Clay Golem"
+   ],
+   "synergies": [
+    "Golem Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Attract": {
+   "class": "necromancer",
+   "kind": "curse",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "curseNames recognises it but curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Confuse"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Decrepify": {
+   "class": "necromancer",
+   "kind": "curse",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "in skills.json as a buff, curseNames recognises it, curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Terror"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Bone Prison": {
+   "class": "necromancer",
+   "kind": "utility",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "ground placement, no cast rule",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Bone Wall",
+    "Bone Spear"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Summon Resist": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "passive for minions, nothing to cast; the benefit is not modelled, U",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Golem Mastery"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   }
+  },
+  "IronGolem": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "unsupported",
+   "reason": "needs an item in the world (Iron Golem is built from an item); not in golemLadder (necro.go)",
+   "reqLevel": 24,
+   "reqSkills": [
+    "BloodGolem"
+   ],
+   "synergies": [
+    "Golem Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Lower Resist": {
+   "class": "necromancer",
+   "kind": "curse",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "curseFor picks it when physical resist is under 50 and magic resist is 50 or more (necro.go); state number unknown, 30 s cast memory, never seen live",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Life Tap",
+    "Decrepify"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
    }
   },
   "Poison Nova": {
    "class": "necromancer",
    "kind": "damage",
    "delivery": "nova",
-   "tier": "experimental",
-   "reason": "skills.json self row, no band",
+   "tier": "unsupported",
+   "reason": "poison line: no band and no nova rule for the Necromancer (Static Field and Frost Nova are special rules of the Sorceress profile)",
    "element": "pois",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Poison Explosion"
+   ],
+   "synergies": [
+    "Poison Dagger",
+    "Poison Explosion"
+   ],
    "mana": {
     "source": "skilldamage.json:mana"
+   }
+  },
+  "Bone Spirit": {
+   "class": "necromancer",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "unsupported",
+   "reason": "in skills.json as a bolt but in no band (profiles.json); the Bone line stops at Bone Spear",
+   "element": "mag",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Bone Spear"
+   ],
+   "synergies": [
+    "Bone Wall",
+    "Bone Prison",
+    "Teeth",
+    "Bone Spear"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "FireGolem": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "second on golemLadder (necro.go planSummon), needs clvl 30 and a prerequisite chain; never raised live, U",
+   "reqLevel": 30,
+   "reqSkills": [
+    "IronGolem"
+   ],
+   "synergies": [
+    "Golem Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Revive": {
+   "class": "necromancer",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "planSummon raises it from the best corpse after skeletons and mages (necro_corpse.go bestRevivable); the Other census needs child state 105, U live (docs/summon.md)",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Raise Skeletal Mage",
+    "IronGolem"
+   ],
+   "synergies": [
+    "Skeleton Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
    }
   }
  }

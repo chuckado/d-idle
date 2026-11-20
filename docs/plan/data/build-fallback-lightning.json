@@ -323,7 +323,7 @@
    "energy": 0,
    "skills": [
     {
-     "skill": "Lightning Mastery",
+     "skill": "Lightning",
      "points": 1
     }
    ]
@@ -349,7 +349,7 @@
    "energy": 0,
    "skills": [
     {
-     "skill": "Lightning Mastery",
+     "skill": "Lightning",
      "points": 1
     }
    ]
@@ -362,7 +362,7 @@
    "energy": 0,
    "skills": [
     {
-     "skill": "Lightning Mastery",
+     "skill": "Lightning",
      "points": 1
     }
    ]
@@ -1064,7 +1064,7 @@
    "energy": 0,
    "skills": [
     {
-     "skill": "Lightning",
+     "skill": "Lightning Mastery",
      "points": 1
     }
    ]
@@ -1077,7 +1077,7 @@
    "energy": 0,
    "skills": [
     {
-     "skill": "Lightning",
+     "skill": "Lightning Mastery",
      "points": 1
     }
    ]
@@ -1090,7 +1090,7 @@
    "energy": 0,
    "skills": [
     {
-     "skill": "Lightning",
+     "skill": "Lightning Mastery",
      "points": 1
     }
    ]
@@ -1278,5 +1278,5 @@
    ]
   }
  ],
- "note": "No respec needed. Points through clvl 25 identical to primary pre-respec. Validate prereqs against skills.txt."
+ "note": "No respec needed. Points through clvl 25 identical to primary pre-respec. Validate prereqs against skills.txt. SORC2 fix (V tablecheck against skills.txt rules): Lightning Mastery needs clvl 30 and Chain Lightning needs Lightning, so clvl 26/28/29 take Lightning and the last three Lightning rows (83-85) became Lightning Mastery; totals unchanged (20 each)."
 }

@@ -49,6 +49,9 @@ type ladderOptions struct {
 	// vanilla) and the profile directory of the currency ledger (set by every backend; the tally runs without the overlay).
 	overlayDir, currencyDir string
 
+	// ladderRunewords: knob items.ladderRunewords (ADR 0024); the Return screen shows the rule.
+	ladderRunewords bool
+
 	// play: the play-session command (play.go) is running; a person plays through the watch screen and the session
 	// record (internal/watch/sessionrec.go) is written. Set by `d2bot play`, never a flag of its own.
 	play bool
