@@ -925,7 +925,7 @@ func (r *Runner) boardChunkNeedsNoGold() bool {
 }
 
 // boardQueueGrace is how long an accepted chunk waits for a calm moment before it starts amid hostiles (virtual clock).
-const boardQueueGrace = 45 * time.Second
+const boardQueueGrace = 20 * time.Second
 
 func (rt *boardRT) setQueued(why string) {
 	rt.mu.Lock()
