@@ -306,6 +306,7 @@
 | cainchain | proposed | - | `internal/task/act1.go`<br>`internal/task/cainreenter_test.go`<br>`internal/town/trip.go`<br>`internal/town/portalonly_test.go`<br>`internal/nav/route.go`<br>`docs/probes/provingground-cainchain-2026-11-20.md`<br>`internal/town/town.go`<br>`internal/data/db.go`<br>`internal/bot/questboard.go`<br>`internal/bot/task.go`<br>`internal/bot/runner.go`<br>`internal/bot/staletarget.go`<br>`internal/bot/questboard_goal_test.go` | - |
 | decomp43 | proposed | - | `docs/research/decomp43-monster-block-trace.md`<br>`docs/upstream/bodies/monster-block-body.md`<br>`tools/emu/mb_explore.py`<br>`tools/emu/mb_gate.py`<br>`tools/emu/mb_act2.py`<br>`tools/emu/mb_col.py`<br>`tools/emu/mb_block.py`<br>`tools/emu/mb_mut.py`<br>`tools/emu/mb_mut2.py`<br>`tools/emu/mb_edge.sh` | `fork-branch:fid/monster-block-r1` |
 | k1layout | proposed | - | `docs/process/layout-read.md`<br>`internal/d2dctl`<br>`internal/d2dworld`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_layout_test.go`<br>`internal/env/tuning_quests.go`<br>`internal/d2denv`<br>`docs/knobs.md` | - |
+| q13input | proposed | - | `internal/invdesk/mover.go`<br>`internal/invdesk/verbs.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/d2dwire.go`<br>`data/input/caps_test.go`<br>`docs/knobs.md`<br>`internal/hotkeymap/`<br>`internal/invdesk/inputcaps.go`<br>`internal/invdesk/inputcaps_test.go`<br>`cmd/d2bot/hotkeymapwire.go`<br>`cmd/d2bot/hotkeymapwire_test.go`<br>`data/input/caps/d2d-fork-input-items.json`<br>`internal/env/tuning_input.go`<br>`docs/process/sandbox-input-items.md` | - |
 | verify43 | proposed | - | `docs/research/decomp43-monster-block-verify.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
@@ -345,6 +346,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b0c091dff 11-20 14:10 `Merge agent/q13input: Merge branch 'main' into q13input` (q13input)
+- 0a210d0ab 11-20 14:09 `Merge branch 'main' into q13input` (-)
 - bfafe8c2d 11-20 14:07 `Merge agent/verify43: verify43: game-side rerun and room control results` (verify43)
 - f53decc2c 11-20 10:42 `Merge agent/survhold7: Merge branch 'main' into survhold7` (survhold7)
 - b96873717 11-20 10:41 `Merge branch 'main' into survhold7` (-)
@@ -353,6 +356,4 @@
 - 97803b69b 11-20 01:32 `Merge agent/survhold4: Merge branch 'main' into survhold4` (survhold4)
 - 2d53466da 11-20 01:31 `Merge branch 'main' into survhold4` (-)
 - e9c645479 11-20 01:23 `Merge agent/cainchain: cainchain: leakcheck wording` (cainchain)
-- 6762edd24 11-20 01:15 `Merge origin/main into agent/cainchain` (-)
-- de7e7997c 11-19 23:01 `Merge agent/decomp43: Merge branch 'main' into decomp43` (decomp43)
 <!-- statusgen:end -->
