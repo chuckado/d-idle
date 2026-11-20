@@ -1,10 +1,13 @@
 ---
 id: TASK-694
-title: 'pgformat: Proving Ground format additions (trigger.build, skill_points, log_line, only_class) and the two pending scenarios run'
-status: Proposed
+title: >-
+  pgformat: Proving Ground format additions (trigger.build, skill_points,
+  log_line, only_class) and the two pending scenarios run
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T18:37:00Z'
+updated_date: '2026-11-20T20:42:00Z'
 labels:
   - bot
   - feature
