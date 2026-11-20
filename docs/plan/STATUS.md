@@ -305,6 +305,7 @@
 | cainfix3 | proposed | - | `cmd/d2bot/adapters.go`<br>`data/questboard/act1.json`<br>`docs/combat.md`<br>`docs/knobs.md`<br>`docs/questboard.md`<br>`internal/bot/`<br>`internal/combat/`<br>`internal/env/tuning_combat.go`<br>`internal/questboard/def.go`<br>`internal/task/banote_test.go`<br>`internal/task/gate.go`<br>`internal/task/world.go`<br>`tools/provingground/scenarios/cain.json` | - |
 | cainchain | proposed | - | `internal/task/act1.go`<br>`internal/task/cainreenter_test.go`<br>`internal/town/trip.go`<br>`internal/town/portalonly_test.go`<br>`internal/nav/route.go`<br>`docs/probes/provingground-cainchain-2026-11-20.md`<br>`internal/town/town.go`<br>`internal/data/db.go`<br>`internal/bot/questboard.go`<br>`internal/bot/task.go`<br>`internal/bot/runner.go`<br>`internal/bot/staletarget.go`<br>`internal/bot/questboard_goal_test.go` | - |
 | decomp43 | proposed | - | `docs/research/decomp43-monster-block-trace.md`<br>`docs/upstream/bodies/monster-block-body.md`<br>`tools/emu/mb_explore.py`<br>`tools/emu/mb_gate.py`<br>`tools/emu/mb_act2.py`<br>`tools/emu/mb_col.py`<br>`tools/emu/mb_block.py`<br>`tools/emu/mb_mut.py`<br>`tools/emu/mb_mut2.py`<br>`tools/emu/mb_edge.sh` | `fork-branch:fid/monster-block-r1` |
+| survhold7 | proposed | - | `internal/survival/`<br>`docs/probes/survival-holdout4-2026-11-19.md` | - |
 | k1layout | proposed | - | `docs/process/layout-read.md`<br>`internal/d2dctl`<br>`internal/d2dworld`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_layout_test.go`<br>`internal/env/tuning_quests.go`<br>`internal/d2denv`<br>`docs/knobs.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
@@ -344,6 +345,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f53decc2c 11-20 10:42 `Merge agent/survhold7: Merge branch 'main' into survhold7` (survhold7)
+- b96873717 11-20 10:41 `Merge branch 'main' into survhold7` (-)
 - 38637cd33 11-20 09:56 `Merge agent/k1layout: k1layout: task result` (k1layout)
 - 16dfce909 11-20 09:25 `Merge agent/survhold6: survhold6: doc wording (leakcheck)` (survhold6)
 - 97803b69b 11-20 01:32 `Merge agent/survhold4: Merge branch 'main' into survhold4` (survhold4)
@@ -352,6 +355,4 @@
 - 6762edd24 11-20 01:15 `Merge origin/main into agent/cainchain` (-)
 - de7e7997c 11-19 23:01 `Merge agent/decomp43: Merge branch 'main' into decomp43` (decomp43)
 - 38474374a 11-19 23:00 `Merge branch 'main' into decomp43` (-)
-- 632e7116b 11-19 22:03 `Merge agent/fabledecisions: fabledecisions: task result` (fabledecisions)
-- 210163518 11-19 20:35 `Merge agent/cainfix3: cainfix3: record the flaky chain verdict` (cainfix3)
 <!-- statusgen:end -->

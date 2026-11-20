@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into survhold7 <!--sg:agent/survhold7-->
 - k1layout: task result <!--sg:agent/k1layout-->
 - survhold6: doc wording (leakcheck) <!--sg:agent/survhold6-->
 - Merge branch 'main' into survhold4 <!--sg:agent/survhold4-->
