@@ -18,11 +18,7 @@ func TestShippedTablesValidateAgainstCapabilityRules(t *testing.T) {
 		t.Fatal(err)
 	}
 	rules := c.BuildRules()
-	// Findings (V, this test against docs/research/sorc-skill-matrix.md, which read the rules from skills.txt): the two legacy
-	// lightning tables take Lightning Mastery at clvl 26 (required level 30) and Chain Lightning at 27 without a point in
-	// Lightning, its prerequisite. The game's rule (d2d can_learn) refuses both, so the expanded file differs from clvl 26
-	// on (the mastery waits for 30, the prerequisite costs a point); the rows before are compared, the tables are untouched.
-	legacyUntil := map[string]int{"fallback-lightning": 25, "fallback-lightning-v2": 25}
+	// Every table must validate and round-trip; the legacy defects of primary-blizzard and the two lightning tables are fixed as data.
 	covered, other := 0, 0
 	for _, name := range buildfile.PlanNames() {
 		b, _, err := buildfile.ExportPlan(name, rules)
@@ -32,19 +28,12 @@ func TestShippedTablesValidateAgainstCapabilityRules(t *testing.T) {
 		ps := buildfile.Validate(b, rules)
 		switch b.Class {
 		case "sorceress", "paladin":
-			if name == "primary-blizzard" { // V: the legacy table puts 43 points into Static Field (cap 20)
-				for _, p := range ps {
-					if p.Code != "target_range" {
-						t.Errorf("%s: unexpected %s", name, p)
-					}
-				}
-				if len(ps) == 0 {
-					t.Errorf("%s: the known over-cap defect is gone, drop the exception", name)
-				}
-				continue
-			}
 			if len(ps) > 0 {
 				t.Errorf("%s: %v", name, ps)
+				continue
+			}
+			if name == "primary-blizzard" { // an enabled respec: its rows are the post-respec path, Cumulative does not model the refund (buildfile.CheckTable does)
+				covered++
 				continue
 			}
 			raw, _ := plandata.FS.ReadFile("build-" + name + ".json")
@@ -57,9 +46,6 @@ func TestShippedTablesValidateAgainstCapabilityRules(t *testing.T) {
 			for _, r := range lb.Rows {
 				ws, wa := buildfile.Cumulative(lb.Rows, r.Clvl)
 				gs, ga := buildfile.Cumulative(e.Pre, r.Clvl)
-				if u, ok := legacyUntil[name]; ok && r.Clvl > u {
-					break
-				}
 				if !reflect.DeepEqual(ws, gs) || wa != ga {
 					t.Errorf("%s clvl %d: table %v %v, file %v %v", name, r.Clvl, ws, wa, gs, ga)
 					break
