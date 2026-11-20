@@ -77,6 +77,7 @@ const (
 	AAreaIn         = "area_in"        // areas
 	AGoldBetween    = "gold_between"   // min, max (purse)
 	AStashBetween   = "stash_between"  // min, max
+	AWealthBetween  = "wealth_between" // min, max (purse plus stash: a sale and the bank chore move gold between them)
 	ALevelAtLeast   = "level_at_least" // min
 	ALifePctAtLeast = "life_pct_at_least"
 	AObjectState    = "object_state"    // class, state: at least one object of the class has the state
@@ -128,7 +129,7 @@ func (a Assert) Validate() error {
 		if len(a.Areas) == 0 {
 			return fmt.Errorf("area_in needs areas")
 		}
-	case AGoldBetween, AStashBetween:
+	case AGoldBetween, AStashBetween, AWealthBetween:
 		if a.Max == nil && a.Min == 0 {
 			return fmt.Errorf("%s needs min or max", a.Kind)
 		}
@@ -233,10 +234,16 @@ func evalOne(a Assert, st State) AssertResult {
 			ok = ok || x == *st.Area
 		}
 		return AssertResult{OK: ok, Want: fmt.Sprintf("area in %v", a.Areas), Got: fmt.Sprintf("area %d", *st.Area)}
-	case AGoldBetween, AStashBetween:
+	case AGoldBetween, AStashBetween, AWealthBetween:
 		v, name := st.Gold, "gold"
-		if a.Kind == AStashBetween {
+		switch {
+		case a.Kind == AStashBetween:
 			v, name = st.Stash, "stash"
+		case a.Kind == AWealthBetween && st.Gold != nil && st.Stash != nil:
+			w := *st.Gold + *st.Stash
+			v, name = &w, "purse and stash"
+		case a.Kind == AWealthBetween:
+			v, name = nil, "purse and stash"
 		}
 		want := fmt.Sprintf("%s >= %d", name, a.Min)
 		if a.Max != nil {
