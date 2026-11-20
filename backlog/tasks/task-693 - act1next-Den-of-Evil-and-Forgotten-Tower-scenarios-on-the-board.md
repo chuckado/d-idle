@@ -1,10 +1,11 @@
 ---
 id: TASK-693
 title: 'act1next: Den of Evil and Forgotten Tower scenarios on the board'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T18:33:00Z'
+updated_date: '2026-11-20T21:02:00Z'
 labels:
   - bot
   - bot-fix
