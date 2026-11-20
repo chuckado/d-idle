@@ -774,6 +774,11 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		// Proving Ground cain.cage (2026-11-19): a free_cain start outside Tristram has no step to run. The tick did nothing,
 		// so under a lockstep clock no time passed, the failure gap above never elapsed and the chunk spun for 17 minutes
 		// wall in a field. Going to town spends time, and three counted failures then park the chunk with its reason.
+		if snap.Player.InTown() {
+			// rest does nothing in town unless chores are due: spend the time here so the failure gap can elapse
+			// (Proving Ground cain.chain 2026-11-19: virtual clock frozen with the hero in camp, 30 minutes wall).
+			r.e.Clock.Sleep(boardFailGap / 3)
+		}
 		return r.rest(ctx, snap, c)
 	}
 	return ok
