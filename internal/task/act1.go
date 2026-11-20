@@ -211,8 +211,22 @@ func cainNodes() []Node {
 	// The cage step fights the hostiles around the hero first (the bot's Interact does it, bounded, with the normal
 	// survival logic; a Danger fault when they cannot be cleared) and only then opens the gibbet; it is not a sweep of
 	// the whole level (Griswold and Bile stand 12 cells away, V drill L2). Done is the quest word (bit 1), never the click.
-	cage := StepInteract(id(q, "cage"), "Clear the guards and free Cain", "Cain's Cage", free, inTristram)
+	cage := StepInteract(id(q, "cage"), "Clear the guards and free Cain", "Cain's Cage", free, nil)
 	cage.Budget, cage.Est = 6*time.Minute, 2*time.Minute
+	// Re-entry (Proving Ground cain.chain, 2026-11-19): a hero that left Tristram (a potion trip, a chicken, a stale town
+	// portal that led to the Dark Wood) goes back through the red portal of the cairn stones in Stony Field (it stays open,
+	// U), never by a walk (Tristram has no exit, V) and never by the town portal of an earlier trip. Both steps are spliced
+	// in front of the cage, so the chunk is bounded by its own budget and failure count.
+	atStony := func(w World) bool { return w.Area == StonyField }
+	cage.Ready = func(w World) *Fault {
+		if inTristram(w) {
+			return nil
+		}
+		return &Fault{Kind: KindPrereq, Why: "not in Tristram: back through the Stony Field portal", Insert: []Step{
+			StepTravel(id(q, "reenter/stony"), "Go back to Stony Field", StonyField, func(w World) bool { return inTristram(w) || free(w) }),
+			StepInteract(id(q, "reenter/portal"), "Take the Tristram portal", "Tristram portal", func(w World) bool { return inTristram(w) || free(w) }, atStony),
+		}}
+	}
 	cage.Evidence = free // the board reads the quest word, not "not in Tristram"
 	return []Node{
 		{Step: StepWaypoint(id(q, "wp-dark-wood"), DarkWood, free)},

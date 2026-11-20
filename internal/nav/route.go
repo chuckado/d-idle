@@ -34,7 +34,8 @@ var act1Hints = [][2]int{
 	{3, 4},   // Cold Plains - Stony Field
 	{4, 10},  // Stony Field - Underground Passage 1
 	{10, 5},  // Underground Passage 1 - Dark Wood (the only way on foot: levels.txt Cave 3 Vis = 4, 5)
-	{4, 38},  // Stony Field - Tristram
+	// Stony Field - Tristram is NOT an exit: Tristram is entered only through the red portal of the cairn stones (V lab drill L1;
+	// a walk there roamed 5 minutes, Proving Ground cain.chain). The step "enter-tristram" takes the portal.
 	{10, 14}, // Underground Passage 1 - Underground Passage 2 (levels.txt Cave 3 Treasure)
 	{5, 6},   // Dark Wood - Black Marsh
 	{6, 11},  // Black Marsh - Hole 1

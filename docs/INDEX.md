@@ -31,6 +31,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0018-fun-loop-expedition-ledger-2026-11-07.md](adr/0018-fun-loop-expedition-ledger-2026-11-07.md): 0018: d.idle's loop is the Expedition Ledger; Act 1 content is the Codex; carry-over is a Hall of Fame first
 - [0019-pacts-and-unlocks-2026-11-07.md](adr/0019-pacts-and-unlocks-2026-11-07.md): 0019: Pacts are opt-in challenge rules with meta rewards; information and watch features unlock progressively
 - [0020-proving-ground-and-stat-skill-agency.md](adr/0020-proving-ground-and-stat-skill-agency.md): 0020: Proving Ground first; the player spends every point; intent arbiter; class order
+- [0021-input-rule-verb-key-click.md](adr/0021-input-rule-verb-key-click.md): 0021: Input rule: verb, then key, then verified click
+- [0022-hero-knowledge-reads-never-cheat.md](adr/0022-hero-knowledge-reads-never-cheat.md): 0022: Hero knowledge: engine facts exposed as reads never make a run CHEATED
+- [0023-fidelity-by-rule-differentials.md](adr/0023-fidelity-by-rule-differentials.md): 0023: Fidelity acceptance: per-rule differentials replace the A:B verdict; no play on Game.exe
+- [0024-ladder-runewords-in-didle-mode.md](adr/0024-ladder-runewords-in-didle-mode.md): 0024: Ladder-only runewords enabled in d.idle mode
 - [adr/README.md](adr/README.md): Architecture decision records
 - [decisions.md](decisions.md): Decisions (user, with date)
 
@@ -699,6 +703,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [mana-burn-amount-body.md](upstream/bodies/mana-burn-amount-body.md): mana-burn-amount-body
 - [merc-absorb-body.md](upstream/bodies/merc-absorb-body.md): merc-absorb-body
 - [missile-block-body.md](upstream/bodies/missile-block-body.md): missile-block-body
+- [monster-block-body.md](upstream/bodies/monster-block-body.md): monster-block-body
 - [seq-ias-body.md](upstream/bodies/seq-ias-body.md): seq-ias-body
 - [seq-ias-followup-body.md](upstream/bodies/seq-ias-followup-body.md): test: seq-rate fails when D2_PATCH_INSTALLER names a file that is not there
 - [smite-range-body.md](upstream/bodies/smite-range-body.md): smite-range-body
@@ -1046,6 +1051,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [postfix-soak2-analysis.md](probes/postfix-soak2-analysis.md): postfix-soak2 analysis: root causes of F1 to F6, the walking share and a ranked fix-card list (card... (status: current. Offline study of the finished Gate 1 soak 2 (postfix-soak2.md, origin/main 0b0bdb2, one seed, 2 h...)
 - [postfix-soak2.md](probes/postfix-soak2.md): postfix-soak2: Gate 1 of the d2d gate ladder on current main (2026-10-31) (status: current. One finished hidden d2d soak (exit 0, 120 wall min, one injected d2d kill), n=1 seed, not a...)
 - [provingground-cain-2026-11-19.md](probes/provingground-cain-2026-11-19.md): Proving Ground rerun: Cain scroll scenarios on main with cainfix2 (2026-11-19) (status: current (card pgcain). Tags: V verified (run named), S secondary, U unverified. All runs on the builder...)
+- [provingground-cainchain-2026-11-20.md](probes/provingground-cainchain-2026-11-20.md): Proving Ground: Search for Cain chain (card cainchain, 2026-11-19/20) (status: current. Tags: V verified (run named), S secondary, U unverified. Host: the builder main lane, lab d2d...)
 - [provingground-cainfix3-2026-11-19.md](probes/provingground-cainfix3-2026-11-19.md): Proving Ground: Search for Cain fixes (card cainfix3, 2026-11-19) (status: current. Tags: V verified (run named), S secondary, U unverified. Builder, lab d2d slots, bot of branch...)
 - [provingground-run-2026-11-19.md](probes/provingground-run-2026-11-19.md): Proving Ground: fast tier on the builder, and what the expansion makes runnable (2026-11-19) (status: current (card pgexpand). Tags: V verified (run named), S secondary, U unverified. Builder long lane job...)
 - [ptrclick.md](probes/ptrclick.md): ptrclick: is d2d's click-targeting a deviation from game.exe, or only our harness? (TASK-179) (status: plan, nothing run live. Tags: V verified (how stated), S read in code, U unverified. Card:...)

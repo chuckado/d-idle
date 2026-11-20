@@ -746,6 +746,10 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		r.boardNote("explore "+questboard.ChunkKey(d.Quest, d.Chunk), "quest board: "+whyOf(res))
 	case res.Outcome == task.OutRetry || res.Outcome == task.OutBlocked:
 		out = questboard.StepResult{Outcome: questboard.StepFailed, Why: nonEmptyStr(whyOf(res), "the step was refused")}
+		// A refusal by the area ban or a guard ran nothing: under a lockstep clock no time passes, so the failure gap never
+		// elapses and the chunk spins (Proving Ground cain.chain, 2026-11-19: virtual time frozen 20 minutes wall after the
+		// re-entry step met a banned Stony Field). Going to town spends time; three counted failures then park the chunk.
+		idle = res.Kind == task.KindDanger
 	case res.Outcome == task.OutRan && res.StepID == "":
 		// Nothing left to run, yet the quest does not read as finished: never spin on it silently.
 		out = questboard.StepResult{Outcome: questboard.StepFailed, Why: "all steps done but the quest does not read as finished (waiting for the save or memory)"}
@@ -770,6 +774,11 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		// Proving Ground cain.cage (2026-11-19): a free_cain start outside Tristram has no step to run. The tick did nothing,
 		// so under a lockstep clock no time passed, the failure gap above never elapsed and the chunk spun for 17 minutes
 		// wall in a field. Going to town spends time, and three counted failures then park the chunk with its reason.
+		if snap.Player.InTown() {
+			// rest does nothing in town unless chores are due: spend the time here so the failure gap can elapse
+			// (Proving Ground cain.chain 2026-11-19: virtual clock frozen with the hero in camp, 30 minutes wall).
+			r.e.Clock.Sleep(boardFailGap / 3)
+		}
 		return r.rest(ctx, snap, c)
 	}
 	return ok

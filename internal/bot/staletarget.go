@@ -82,7 +82,7 @@ func (r *Runner) jumpedHops(cur int, hops []int) int {
 
 // questWins is true while a quest step walks: the loop breaker's ban on the step's own area must not stop the step.
 func (r *Runner) questWins(h int, why string) bool {
-	if r.banWaive.Load() && dangerBan(why) {
+	if r.banWaive.Load() && (dangerBan(why) || why == whyUnreachable || why == whyNavStuck) {
 		r.e.Log.Info("started quest chunk wins over the area ban", "area", h, "name", r.areaName(h), "ban", why)
 		return true
 	}
