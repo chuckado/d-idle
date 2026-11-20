@@ -28,17 +28,19 @@ type DB struct {
 	Uniques      []*UniqueItem
 	SetItems     []*SetItem
 	Runewords    []*Runeword
-	Cube         []*CubeRecipe
-	MonLevels    []*MonLevel      // by monster level (index = level)
-	Difficulties []DifficultyInfo // Normal, Nightmare, Hell
-	Hirelings    []*Hireling
-	StatCosts    []*StatCost // itemstatcost.txt
-	Properties   []*Property
-	Prefixes     []*Affix
-	Suffixes     []*Affix
-	States       []*State
-	Missiles     []*Missile
-	Warps        []*LevelWarp // lvlwarp.txt
+	// LadderRunewords: the ladder-only runewords are available (items.ladderRunewords, d.idle mode); false = vanilla.
+	LadderRunewords bool
+	Cube            []*CubeRecipe
+	MonLevels       []*MonLevel      // by monster level (index = level)
+	Difficulties    []DifficultyInfo // Normal, Nightmare, Hell
+	Hirelings       []*Hireling
+	StatCosts       []*StatCost // itemstatcost.txt
+	Properties      []*Property
+	Prefixes        []*Affix
+	Suffixes        []*Affix
+	States          []*State
+	Missiles        []*Missile
+	Warps           []*LevelWarp // lvlwarp.txt
 
 	strs map[string]string
 

@@ -27,7 +27,10 @@ func wireItemVerbs(ref *runnerRef, tw *town.Town, lv *leveler.Leveler, c *d2dctl
 	}
 	on := func() bool { return e.Tune != nil && e.Tune.Invdesk.Verbs != 0 }
 	verbs := invdesk.Serial{Ch: invdesk.NewChannel(), V: coder{d2dctl.ItemVerbs{C: c}}}
+	// The input.* capability names (the verbs became ordinary input, Q13) count only with the input planner on.
+	inputCaps := func() bool { return e.Tune != nil && e.Tune.Input.Planner == 1 }
 	mover := invdesk.NewVerbMover(verbs, on)
+	mover.InputCaps = inputCaps
 	mover.Fresh = e.Snapshot
 	if tw != nil {
 		tw.SetMover(mover)
@@ -36,6 +39,7 @@ func wireItemVerbs(ref *runnerRef, tw *town.Town, lv *leveler.Leveler, c *d2dctl
 	if lv != nil {
 		ve := invdesk.NewVerbEquipper(lv, verbs, on)
 		ve.Verify = mover.Equipped
+		ve.InputCaps = inputCaps
 		ref.inv.SetEquipper(ve)
 		ref.inv.SetTrasher(invdesk.VerbTrasher{Click: lv, Mover: mover})
 	}
