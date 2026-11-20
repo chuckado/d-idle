@@ -1,10 +1,13 @@
 ---
 id: TASK-687
-title: 'survhold7: realized-yield starve and unvisited-prior discount for the zone model'
-status: Proposed
+title: >-
+  survhold7: realized-yield starve and unvisited-prior discount for the zone
+  model
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T14:37:00Z'
+updated_date: '2026-11-20T15:52:00Z'
 labels:
   - bot
   - bot-fix

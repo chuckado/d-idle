@@ -489,7 +489,6 @@ docs/probes/survival-ab-reask-2026-11-17.md  credit-runner  survreask
 docs/probes/survival-ab-recovery-2026-11-17.md  credit-runner  survrecover
 docs/probes/survival-holdout2-2026-11-18.md  credit-runner  survhold2
 docs/probes/survival-holdout3-2026-11-18.md  credit-runner  survhold3
-docs/probes/survival-holdout4-2026-11-19.md  credit-runner  survhold7
 docs/probes/test-characters.md  credit-runner  cainl0
 docs/probes/test-characters.md  credit-runner  cainl2
 docs/probes/test-characters.md  credit-runner  survab8
@@ -1129,7 +1128,6 @@ internal/survival  credit-runner  survhold3
 internal/survival  credit-runner  survsd
 internal/survival  credit-runner  survtune
 internal/survival/  credit-runner  survC
-internal/survival/  credit-runner  survhold7
 internal/survival/controller.go  credit-runner  survreask
 internal/survival/ledger.go  credit-runner  intake
 internal/survival/survival_test.go  credit-runner  survfix
