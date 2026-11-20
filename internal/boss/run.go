@@ -389,6 +389,17 @@ func (r *runner) locate(ctx context.Context) (Mon, error) {
 	if r.overdue() {
 		return Mon{}, ErrTimeout
 	}
+	for _, sp := range an.Spawns {
+		if err := r.a.GoTo(ctx, sp); err != nil {
+			r.note("goto spawn %v: %v", sp, err)
+		}
+		if m, ok, err := try(r.o.LocatePolls / 2); err != nil || ok {
+			return m, err
+		}
+		if r.overdue() {
+			return Mon{}, ErrTimeout
+		}
+	}
 	var found Mon
 	seen := false
 	stop := func() bool {

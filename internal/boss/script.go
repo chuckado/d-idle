@@ -29,9 +29,12 @@ func (x Match) Is(m Mon) bool {
 // Anchor says where the fight happens. Preferred source is a preset (works for random layouts); Hint is a fixed
 // world coordinate from Kolbot used only as a cross-check and as a last-resort walk target (S, U for 1.14d).
 type Anchor struct {
-	Preset   *PresetRef
-	Also     []*PresetRef // tried in order when Preset is absent from the level
-	Hint     *Pt
+	Preset *PresetRef
+	Also   []*PresetRef // tried in order when Preset is absent from the level
+	Hint   *Pt
+	// Spawns are known positions of the boss tried in order after the Hint (and after a missing preset): d2d lists no
+	// monster presets and every level map is whole, so exploring finds nothing; walking to where she lies does.
+	Spawns   []Pt
 	Boss     bool // the boss unit itself is the anchor: no preset, wait/explore until it is in the monster list
 	HintSlop int  // subtiles the resolved stand may differ from Hint before a note is recorded (default 60)
 	// Teleport: the arena is islands over a void (Arcane Sanctuary), so walking cannot reach the anchor; when the

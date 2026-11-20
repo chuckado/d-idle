@@ -41,15 +41,11 @@ type bossGame struct {
 	pinned     pinState // consecutive Attack slices that ended near one spot
 	cloudIDs   map[int]bool
 	logPresets map[int]int
-	mapFn      func() *d2map.LevelMap // the level map when Env.World is nil (d2d)
-	seenLog    map[uint32]time.Time   // unique units already logged (rate limit), docs/boss.md live checks 2, 3, 5, 6
+	seenLog    map[uint32]time.Time // unique units already logged (rate limit), docs/boss.md live checks 2, 3, 5, 6
 }
 
 func newBossGame(e *env.Env, db *data.DB, f *combat.Fighter, nv *nav.Navigator, lt *loot.Looter, toTown func(context.Context) error) *bossGame {
 	g := &bossGame{e: e, db: db, cat: combat.NewCatalog(db), f: f, nv: nv, lt: lt, toTown: toTown, cloudIDs: map[int]bool{}, seenLog: map[uint32]time.Time{}, logPresets: map[int]int{}}
-	if nv != nil {
-		g.mapFn = nv.CurrentMap
-	}
 	if db != nil {
 		for _, n := range poisonCloudMissiles {
 			if m := db.MissileByName(n); m != nil {
@@ -164,41 +160,29 @@ func (g *bossGame) viewOf(s *d2.Snapshot) boss.View {
 	return v
 }
 
-// levelMap is the tracker's current map on Game.exe; on d2d Env.World is nil and the navigator's world holds the level
-// (V: the d2d scenario run listed no "boss presets" line before this, so the anchor preset was never looked up).
-func (g *bossGame) levelMap() *d2map.LevelMap {
-	if g.e.World != nil {
-		if _, err := g.e.World.Update(); err != nil && !errors.Is(err, d2map.ErrNotInGame) {
-			return nil
-		}
-		return g.e.World.Current()
-	}
-	if g.mapFn != nil {
-		return g.mapFn()
-	}
-	return nil
-}
-
 // Presets lists the static units of the current level from the map tracker.
 func (g *bossGame) Presets(ctx context.Context) ([]boss.Preset, error) {
-	lm := g.levelMap()
+	if g.e.World == nil {
+		return nil, nil
+	}
+	if _, err := g.e.World.Update(); err != nil && !errors.Is(err, d2map.ErrNotInGame) {
+		return nil, err
+	}
+	lm := g.e.World.Current()
 	if lm == nil {
 		return nil, nil
 	}
 	out := make([]boss.Preset, 0, len(lm.Presets))
-	var npcs, objs []string
+	var npcs []string
 	for _, p := range lm.Presets {
 		out = append(out, boss.Preset{Kind: p.Kind, ID: p.ID, Pos: boss.Pt{X: p.Pos.X, Y: p.Pos.Y}})
 		if p.Kind == d2map.PresetNPC && g.logPresets[lm.No] != len(lm.Presets) {
 			npcs = append(npcs, fmt.Sprintf("%d@%d,%d", p.ID, p.Pos.X, p.Pos.Y))
 		}
-		if p.Kind == d2map.PresetObject && len(objs) < 60 && g.logPresets[lm.No] != len(lm.Presets) {
-			objs = append(objs, fmt.Sprintf("%d@%d,%d", p.ID, p.Pos.X, p.Pos.Y)) // layout read: is the Countess chest listed?
-		}
 	}
 	if g.logPresets[lm.No] != len(lm.Presets) { // monster presets of the level, once per change (docs/boss.md live checks 2 to 6)
 		g.logPresets[lm.No] = len(lm.Presets)
-		g.e.Log.Info("boss presets", "level", lm.No, "presets", len(lm.Presets), "monsterPresets", npcs, "objectPresets", objs)
+		g.e.Log.Info("boss presets", "level", lm.No, "presets", len(lm.Presets), "monsterPresets", npcs)
 	}
 	return out, nil
 }

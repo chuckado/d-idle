@@ -153,7 +153,6 @@
     "goals": "reach:30",
     "knobs": {
      "quests.board": 1,
-     "quests.layoutRead": 1,
      "resource.pointsDecisions": 1
     },
     "driver": "board-taps",
