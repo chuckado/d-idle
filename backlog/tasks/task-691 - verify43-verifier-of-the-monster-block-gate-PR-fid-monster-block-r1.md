@@ -19,7 +19,7 @@ owns:
   - "docs/research/decomp43-monster-block-verify.md"
 exclusive: []
 contracts: []
-result: "GO WITH FIXES for fid/monster-block-r1: FUN_00622720/FUN_006225f0 re-disassembled (jump table decoded: classes 243/310/333 forced open, 359 closed, no outcome change); fresh claim run 0 of 2,469 differ, parent 228, compare exits 1 on 14 bad-input cases; all 17 non-equivalent mutants abort the pins (m10-m13 rerun as ai.hpp edits after they failed to compile in job 20261119-225204-80bf; m14, m18 equivalent); fixes: rebase (ai.hpp conflict with upstream gear_res), test default mode must return D2D_TEST_SKIPPED, body commit count and mutant paragraph; new deviation D6 player pets never block (I); #634 and #637 merged, no human comment; game-side rerun and MB_SPOT control queued as builder job 20261120-132422-41a1; offline, not verified live"
+result: "GO WITH FIXES for fid/monster-block-r1: FUN_00622720/FUN_006225f0 re-disassembled (jump table decoded: classes 243/310/333 forced open, 359 closed, no outcome change); fresh claim run 0 of 2,469 differ, parent 228, compare exits 1 on 14 bad-input cases; all 17 non-equivalent mutants abort the pins (m10-m13 rerun as ai.hpp edits after they failed to compile in job 20261119-225204-80bf; m14, m18 equivalent); fixes: rebase (ai.hpp conflict with upstream gear_res), test default mode must return D2D_TEST_SKIPPED, body commit count and mutant paragraph; new deviation D6 player pets never block (I); #634 and #637 merged, no human comment; game-side rerun byte-identical, MB_SPOT=5 room control 0 differ, codes and cap reproduce (job 20261120-132422-41a1); offline, not verified live"
 ---
 
 ## Description

@@ -37,9 +37,17 @@ On an 8-case slice: a good triple 0; empty game, empty d2d, empty cases, short d
 
 ## 3. Game side rerun and room control
 
-**Queued, not yet run at hand-back:** builder long-lane job **20261120-132422-41a1** (`v43_game.sh`: `gen` reproduces `cases.tsv`, `codes`, `cap`, a full rerun of `monster_block.py game` compared byte for byte with the stored `game.tsv` and against the claim's fresh d2d output, then the `MB_SPOT=5` room control decomp43 wrote but never ran). My first job could not run these (the stored environment points at a build directory whose `mpq-cat` is gone; this one picks the newest built `mpq-cat`). Read it with `labrun watch 20261120-132422-41a1`. Pass: `gen = cases.tsv`, `codes ... 0 where the type column disagrees`, cap `0 1 74 75 75 75 75`, `rerun = stored game.tsv`, claim vs rerun 0 rc 0, parent vs rerun 228 rc 1, claim vs control 0 rc 0. A non-zero control would mean the result depends on the spawn room (a NO-GO until explained); the other lines only re-confirm decomp43's V run numbers.
+V run, builder long-lane job 20261120-132422-41a1 (`v43_game.sh`; my first job could not run these: the stored environment pointed at a build directory whose `mpq-cat` is gone, this one takes the newest built `mpq-cat`):
 
-Until then the game side rests on decomp43's single run (S), which my fresh d2d run reproduces exactly against the stored `game.tsv`.
+| Check | Result |
+|---|---|
+| `gen` | byte-identical to the stored `cases.tsv` |
+| `codes` | 659 item codes, 24 shields in game.exe, 0 where the `type` column disagrees, rc 0 |
+| `cap` (Mephisto's stat 20 set by `FUN_00627260`) | 0, 1, 74, 75, 75, 75, 75 for 0, 1, 74, 75, 76, 90, 200 |
+| `game` rerun | byte-identical to the stored `game.tsv` (deterministic); claim 0 differ rc 0, parent 228 rc 1 |
+| `MB_SPOT=5` room control (decomp43 wrote it, never ran it) | claim 0 of 2,469 differ, rc 0 (93 skipped as before) |
+
+The result does not depend on the spawn room.
 
 ## 4. Mutants (V run)
 
