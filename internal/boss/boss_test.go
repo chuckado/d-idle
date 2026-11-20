@@ -453,3 +453,36 @@ func TestBloodRavenRetreatKnob(t *testing.T) {
 		t.Fatalf("err %v drinks %d town %d", err, f.did("drink"), f.townCalls)
 	}
 }
+
+// The Countess' room is not built when the hero arrives, so only the layout read lists her chest (class 580): the walk
+// must start at the stand of the chest's layout, not at the arrival-side hint and an explore. Two arrival spots stand
+// for the Paladin and the Sorceress (the script has no class data; the walk is the same from either).
+func TestCountessChestPresetWalksThereWhen836Absent(t *testing.T) {
+	for _, c := range []struct {
+		name  string
+		start Pt
+		chest Pt
+		stand string
+	}{
+		{"paladin", Pt{12400, 11000}, Pt{12565, 11060}, "goto 12578,11043"},
+		{"sorceress", Pt{12700, 11200}, Pt{12526, 11090}, "goto 12548,11083"},
+		{"unknown layout", Pt{12400, 11000}, Pt{12600, 11100}, "goto 12600,11100"},
+	} {
+		t.Run(c.name, func(t *testing.T) {
+			f := newFake()
+			f.level = 20
+			f.area = AreaTowerCellar5
+			f.pos = c.start
+			f.presets = []Preset{{Kind: PresetObject, ID: presetCountessChest, Pos: c.chest}}
+			b := f.addBoss(Mon{Class: 45, UniqueNo: 6, Name: "The Countess", Pos: Pt{12542, 11036}}, AreaTowerCellar5, 40)
+			b.vis = 80
+			res, err := run(t, NameCountess, f, Opts{})
+			if err != nil || !res.Killed {
+				t.Fatalf("%v %v", err, f.log)
+			}
+			if f.did(c.stand) != 1 || f.did("explore") != 0 {
+				t.Fatalf("want one %q and no explore: %v", c.stand, f.log)
+			}
+		})
+	}
+}

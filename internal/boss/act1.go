@@ -113,7 +113,12 @@ func countess() *Script {
 		Match: Match{UniqueNo: -1, Name: NameCountess},
 		Anchor: Anchor{
 			Preset: &PresetRef{Kind: PresetNPC, ID: presetCountessSpawn},
-			Hint:   &hint,
+			// d2d lists only built rooms: with the layout read (quests.layoutRead) her chest, a fixed object of her
+			// room at the far end, is in the presets before the room exists, so the walk starts there. Stands are
+			// Kolbot's two layouts (S); an unknown chest X stands at the chest itself.
+			Also: []*PresetRef{{Kind: PresetObject, ID: presetCountessChest, Variants: []Variant{
+				{AtX: 12565, Stand: Pt{12578, 11043}}, {AtX: 12526, Stand: Pt{12548, 11083}}}}},
+			Hint: &hint,
 		},
 		Hazards:  []Hazard{NoPotionLowLife(30), RaisedAdds(5, 12, 10*time.Second)},
 		MinLevel: [3]int{14, 42, 67}, RouteMinLifePct: 40, MinPotions: 2,
