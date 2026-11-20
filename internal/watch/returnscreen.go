@@ -345,6 +345,8 @@ type ReturnData struct {
 	Sections []SectionView `json:"sections"`
 	// Gaps names what the page could not show because no event carries it (honest list, U items of docs/return-screen.md).
 	Gaps []string `json:"gaps"`
+	// Rules are the mode rules in force ("ladder runewords: on"), shown under the headline.
+	Rules []string `json:"rules,omitempty"`
 }
 
 // ReturnInput is everything BuildReturn reads.
@@ -773,6 +775,8 @@ type ReturnConfig struct {
 	Sections *SectionRegistry
 	// Notes receives the three sentences of the session record (TASK-106). nil: the box says no record is connected.
 	Notes NotesSink
+	// Rules are the visible mode rules (ADR 0024) put on the page and in its data; nil: none.
+	Rules []string
 	// OnRead is called with the data of every served HTML return page (a card the viewer is shown); nil: none.
 	OnRead func(ReturnData)
 }
@@ -806,7 +810,9 @@ func (c ReturnConfig) Return(sinceOverride float64) ReturnData {
 			in.OpenAsk[t.Point]++
 		}
 	}
-	return BuildReturn(in)
+	d := BuildReturn(in)
+	d.Rules = c.Rules
+	return d
 }
 
 func (v *Visit) awayOK() (time.Duration, bool) {
@@ -1038,7 +1044,7 @@ var returnTmpl = template.Must(template.New("return").Funcs(template.FuncMap{"du
 <header class="top"><div class="brand"><span class="brand-mark" aria-hidden="true"></span><h1>d.idle</h1></div>
 <a class="btn primary" href="/watch?live=1">Go to the live screen</a></header>
 <main class="ret" id="return">
-<section class="card" aria-labelledby="r-head"><h2 id="r-head">While you were away</h2><p class="headline">{{.Headline}}</p></section>
+<section class="card" aria-labelledby="r-head"><h2 id="r-head">While you were away</h2><p class="headline">{{.Headline}}</p>{{if .Rules}}<p class="hint">{{range $i, $r := .Rules}}{{if $i}}; {{end}}{{$r}}{{end}}</p>{{end}}</section>
 {{if .Moments}}<section class="card" aria-labelledby="r-moments"><h2 id="r-moments">The moments</h2><ul class="moments">
 {{range .Moments}}<li class="moment {{.Kind}}"><b>{{.Title}}</b> <span>{{.Text}}</span></li>{{end}}</ul></section>{{end}}
 {{if .Deaths}}<section class="card" aria-labelledby="r-deaths"><h2 id="r-deaths">Deaths</h2><ul>{{range .Deaths}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
