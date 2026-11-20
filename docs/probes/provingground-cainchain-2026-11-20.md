@@ -9,7 +9,7 @@
 | cain.chain Paladin 11 | GREEN, 80 virtual min, 18 min wall | 20261119-232655-7217 |
 | cain.chain Paladin 5 | GREEN, 80 virtual min, 24 min wall | 20261120-000256-0f09 |
 | cain.chain Sorceress 3 | GREEN, 80 virtual min, 34 min wall | 20261120-002704-6dae |
-| cain.chain Paladin 11 (repeat, same host) | see "Determinism" | 20261120-010053-a896 |
+| cain.chain Paladin 11 (repeat, same host) | GREEN, 80 virtual min, 14 min wall | 20261120-010053-a896 |
 
 ## Root causes found (V from bot logs of the red runs)
 
@@ -20,7 +20,7 @@
 
 ## Determinism
 
-See the table row above; both runs on the builder (the Orion lab d2d may differ). Runs are not bit-identical; the requirement is the same verdict.
+Paladin 11 twice on the builder (jobs 20261119-232655-7217 and 20261120-010053-a896): GREEN and GREEN, same verdict. Wall time differed (18 and 14 min), so runs are not bit-identical; the Orion lab d2d may differ and was not used. V for two runs only; the earlier FLAKY verdict came from the race fixed in finding 3, so a longer repeat series is still advisable (U).
 
 ## Not done
 

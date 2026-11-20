@@ -28,6 +28,7 @@ owns:
   - "internal/bot/questboard_goal_test.go"
 exclusive: []
 contracts: []
+result: "cain.chain GREEN on the builder (V, CHEATED setup, mechanics only): Paladin 11 twice (jobs 20261119-232655-7217, 20261120-010053-a896), Paladin 5 (20261120-000256-0f09), Sorceress 3 (20261120-002704-6dae). Fixes: stale town portal refused for portal-only levels, cage re-entry through Stony Field, no leveling plan inside Tristram, nav-fault skips do not stop a started chunk, idle ticks spend time. Not verified live on shipped d2d."
 ---
 
 ## Description
@@ -40,7 +41,7 @@ Why: cain.chain was flaky (stale town portal, re-entry, level planner inside Tri
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 cage step re-enters Tristram through the Stony Field portal
-- [ ] #2 BackToField refuses a stale portal for a portal-only level
-- [ ] #3 cain.chain green 3 runs Paladin 11, 5, Sorceress 3 and a determinism pair
+- [x] #1 cage step re-enters Tristram through the Stony Field portal
+- [x] #2 BackToField refuses a stale portal for a portal-only level
+- [x] #3 cain.chain green 3 runs Paladin 11, 5, Sorceress 3 and a determinism pair
 <!-- AC:END -->
