@@ -703,6 +703,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [mana-burn-amount-body.md](upstream/bodies/mana-burn-amount-body.md): mana-burn-amount-body
 - [merc-absorb-body.md](upstream/bodies/merc-absorb-body.md): merc-absorb-body
 - [missile-block-body.md](upstream/bodies/missile-block-body.md): missile-block-body
+- [monster-block-body.md](upstream/bodies/monster-block-body.md): monster-block-body
 - [seq-ias-body.md](upstream/bodies/seq-ias-body.md): seq-ias-body
 - [seq-ias-followup-body.md](upstream/bodies/seq-ias-followup-body.md): test: seq-rate fails when D2_PATCH_INSTALLER names a file that is not there
 - [smite-range-body.md](upstream/bodies/smite-range-body.md): smite-range-body
