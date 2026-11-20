@@ -365,7 +365,9 @@ func (e taskEnv) World(ctx context.Context) (task.World, error) {
 		if r.avoidWhyOf(a) == whyBorderLoop {
 			continue // the loop breaker never blocks a quest step (staletarget.go)
 		}
-		if r.banWaive.Load() && dangerBan(r.avoidWhyOf(a)) {
+		// A nav-fault skip (150 s "unreachable" or "nav-stuck") is no danger either: after the stones step the whole Act 1 chain
+		// read "banned" and the re-entry through Stony Field was refused (Proving Ground cain.chain, 2026-11-19).
+		if why := r.avoidWhyOf(a); r.banWaive.Load() && (dangerBan(why) || why == whyUnreachable || why == whyNavStuck) {
 			continue // the player started this chunk and its readiness is not "too hard": the farm area's ban does not apply
 		}
 		if w.Banned == nil {
