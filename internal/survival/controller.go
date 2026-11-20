@@ -96,8 +96,11 @@ type verdict struct {
 	xp       float64 // xp/min the value rests on (model prior, or the blend with the realized one)
 	realized float64 // the realized xp/min behind the blend, 0 = the prior stands
 	starving bool
-	kClosed  bool // the risk route was closed by the dial's riskMaxK
-	riskPaid bool // eligible only through the dial's pay-for-risk route
+	// yieldStarved: realized yield stayed below the dial's share of the prior (card survhold7); yieldMul is its value factor
+	yieldStarved bool
+	yieldMul     float64
+	kClosed      bool // the risk route was closed by the dial's riskMaxK
+	riskPaid     bool // eligible only through the dial's pay-for-risk route
 }
 
 func word(best, low, enter, stay float64) string {
@@ -118,7 +121,7 @@ func lambda(p *Params, pu Purse) float64 {
 	return math.Min(1, math.Max(0, short)) * p.LambdaMax
 }
 
-func (l *Ledger) judge(in Input, c Candidate, lam float64) verdict {
+func (l *Ledger) judge(in Input, c Candidate, lam float64, disc float64) verdict {
 	l.Refresh(c.Key, in.Power)
 	v := verdict{c: c}
 	v.k = l.KZoneFor(c.Key, in.Now, in.OffenceUnread) * l.KHeroFor(in.OffenceUnread)
@@ -174,11 +177,23 @@ func (l *Ledger) judge(in Input, c Candidate, lam float64) verdict {
 		if v.starving && v.realized > 0 && v.realized < v.xp {
 			v.xp = v.realized // a starved zone is worth what it paid, not what the model's kill speed promised
 		}
+		if v.realized == 0 && disc < 1 {
+			v.xp *= disc // no data here: the prior is discounted by how the hero fared in the zones that have data
+		}
+		if ratio, minutes, mul := l.P.yieldStarve(in.Archetype); ratio > 0 {
+			if obs, sec := l.RealizedXPPerMin(c.Key); sec/60 >= minutes && obs < ratio*c.Eco.XPPerMin {
+				v.xp, v.realized, v.yieldStarved = math.Min(obs, v.xp), obs, true
+				v.yieldMul = mul
+			}
+		}
 	}
 	v.value = (v.xp + lam*c.Eco.Net()) * stayMin / (stayMin + c.TravelMin)
 	if v.riskPaid {
 		row, _ := l.P.stepDown(in.Dial.ID)
 		v.value *= row.RiskValueMul
+	}
+	if v.yieldStarved {
+		v.value *= v.yieldMul
 	}
 	if v.starving {
 		v.value *= l.P.starveMul(in.Archetype) // the hero cannot cast here for want of mana: the model's kill speed is a fiction
@@ -193,8 +208,9 @@ func (l *Ledger) Choose(in Input) (Decision, error) {
 	}
 	lam := lambda(l.P, in.Purse)
 	vs := make([]verdict, 0, len(in.Cands))
+	disc := l.unvisitedDiscount(in)
 	for _, c := range in.Cands {
-		vs = append(vs, l.judge(in, c, lam))
+		vs = append(vs, l.judge(in, c, lam, disc))
 	}
 	var elig []*verdict
 	var cur *verdict
@@ -313,4 +329,31 @@ func decisionLine(d Decision, p *verdict, in Input) string {
 		fmt.Fprintf(&b, "  | not %s: %s, %s", a.Name, a.Why.Code, a.detail)
 	}
 	return b.String()
+}
+
+// unvisitedDiscount is the factor on the prior xp/min of zones without realized data (card survhold7): the realized
+// over prior ratio of the zones that have data, weighted by their stay minutes, bounded to [floor, 1]. 1 when off.
+func (l *Ledger) unvisitedDiscount(in Input) float64 {
+	floor, below := l.P.unvisitedFloor(in.Archetype)
+	if !in.Active || floor <= 0 {
+		return 1
+	}
+	var num, den float64
+	for _, c := range in.Cands {
+		obs, sec := l.RealizedXPPerMin(c.Key)
+		m := sec / 60
+		if m < l.P.yieldMin(in.Archetype) || m <= 0 {
+			continue
+		}
+		num += obs * m
+		den += c.Eco.XPPerMin * m
+	}
+	if den <= 0 {
+		return 1
+	}
+	r := num / den
+	if r >= below {
+		return 1
+	}
+	return math.Max(floor, r)
 }

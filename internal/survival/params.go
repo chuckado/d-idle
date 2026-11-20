@@ -41,6 +41,16 @@ type ArchTune struct {
 	// dry, so its realized yield counts sooner and a starved zone loses more. 0 = the global value.
 	YieldMinMinutes float64 `json:"yieldMinMinutes"`
 	StarveValueMul  float64 `json:"starveValueMul"`
+	// YieldStarveRatio, YieldStarveMinutes and YieldStarveMul (card survhold7): a zone whose realized xp/min stayed below
+	// this share of the model's prior over at least this many stay minutes is worth what it paid (no blend floor) times
+	// the multiplier. 0 = off. UnvisitedFloor bounds the discount of zones with no realized data by the minutes-weighted
+	// realized/prior ratio of the zones that have it (never below the floor, never above 1). 0 = off.
+	YieldStarveRatio   float64 `json:"yieldStarveRatio"`
+	YieldStarveMinutes float64 `json:"yieldStarveMinutes"`
+	YieldStarveMul     float64 `json:"yieldStarveMul"`
+	UnvisitedFloor     float64 `json:"unvisitedFloor"`
+	// UnvisitedBelow: the discount applies only when the pooled ratio is under this (a hero near its prior is left alone).
+	UnvisitedBelow float64 `json:"unvisitedBelow"`
 }
 
 // Params are the controller constants; every one is tagged in Tags (all U today).
@@ -75,6 +85,11 @@ type Params struct {
 	YieldMaxWeight      float64             `json:"yieldMaxWeight"`
 	StarveCasts         float64             `json:"starveCasts"`
 	StarveValueMul      float64             `json:"starveValueMul"`
+	YieldStarveRatio    float64             `json:"yieldStarveRatio"`
+	YieldStarveMinutes  float64             `json:"yieldStarveMinutes"`
+	YieldStarveMul      float64             `json:"yieldStarveMul"`
+	UnvisitedFloor      float64             `json:"unvisitedFloor"`
+	UnvisitedBelow      float64             `json:"unvisitedBelow"`
 	FreshNeedsMerc      bool                `json:"freshNeedsMerc"`
 	Archetypes          map[string]ArchTune `json:"archetypes"`
 	Dials               map[string]StepDown `json:"dials"`
@@ -154,4 +169,23 @@ func (p *Params) starveMul(arch string) float64 {
 		return a.StarveValueMul
 	}
 	return p.StarveValueMul
+}
+
+// yieldStarve returns the realized-yield starvation constants of an archetype (ratio 0 = off).
+func (p *Params) yieldStarve(arch string) (ratio, minutes, mul float64) {
+	ratio, minutes, mul = p.YieldStarveRatio, p.YieldStarveMinutes, p.YieldStarveMul
+	if a := p.Archetypes[arch]; a.YieldStarveRatio > 0 {
+		ratio, minutes, mul = a.YieldStarveRatio, a.YieldStarveMinutes, a.YieldStarveMul
+	}
+	if mul <= 0 {
+		mul = 1
+	}
+	return
+}
+
+func (p *Params) unvisitedFloor(arch string) (floor, below float64) {
+	if a := p.Archetypes[arch]; a.UnvisitedFloor > 0 {
+		return a.UnvisitedFloor, a.UnvisitedBelow
+	}
+	return p.UnvisitedFloor, p.UnvisitedBelow
 }

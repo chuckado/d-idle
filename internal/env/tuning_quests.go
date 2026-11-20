@@ -10,10 +10,13 @@ type QuestsTuning struct {
 	AutoHoldMin  int // minutes after the player paused or reset when nothing starts by itself
 	AutoGapMin   int // minutes between two auto-started chunks
 	AutoDayCap   int // auto-started chunks per 24 hours
+
+	// LayoutRead 1: the d2d backend reads the fork's read-only `debug levelmap` and walks straight to known quest objects (ADR 0022); 0 (default): explore as before.
+	LayoutRead int
 }
 
 func DefaultQuestsTuning() QuestsTuning {
-	return QuestsTuning{Board: 1, AutoDelaySec: 20, AwayMin: 10, AutoHoldMin: 15, AutoGapMin: 30, AutoDayCap: 6}
+	return QuestsTuning{Board: 1, AutoDelaySec: 20, AwayMin: 10, AutoHoldMin: 15, AutoGapMin: 30, AutoDayCap: 6, LayoutRead: 0}
 }
 
 func questsKnobs() []Knob {
@@ -30,5 +33,7 @@ func questsKnobs() []Knob {
 			Desc: "At least this long between two auto-started chunks (a bug can then not chain starts)."},
 		{Key: "quests.autoDayCap", Label: "Auto-starts per day", Unit: "count", Default: 6, Min: 0, Max: 100, NoHandicap: true,
 			Desc: "At most this many auto-started chunks in 24 hours; 0 turns auto-start off."},
+		{Key: "quests.layoutRead", Label: "Read the level layout", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
+			Desc: "1: ask the private d2d fork for the current level's room layout and quest-object positions (read-only verb `debug levelmap`, ADR 0022: a read never makes a run CHEATED) and walk straight to the Tree of Inifuss, the cairn stones or Cain's cage instead of exploring for them; stock d2d or an error falls back to exploring. 0 (default): explore as before."},
 	}
 }

@@ -30,7 +30,7 @@
  "starveCasts": 5,
  "starveValueMul": 0.5,
  "archetypes": {
-  "caster": {"yieldShrinkMinutes": 6, "starveCasts": 3, "yieldMinMinutes": 1.5, "starveValueMul": 0.25},
+  "caster": {"yieldShrinkMinutes": 6, "starveCasts": 3, "yieldMinMinutes": 1.5, "starveValueMul": 0.25, "yieldStarveRatio": 0.25, "yieldStarveMinutes": 3, "yieldStarveMul": 0.5, "unvisitedFloor": 0.3, "unvisitedBelow": 0.8},
   "bruiser": {"starveCasts": 8}
  },
  "dials": {
@@ -71,7 +71,9 @@
   "starveValueMul": "I: value multiplier of a zone whose starvation count reached starveCasts, U",
   "archetypes": "I: per-archetype overrides (power profile id) of yieldShrinkMinutes, starveCasts, yieldMinMinutes and starveValueMul; 0 = the global value, U",
   "riskMaxK": "card survhold3: the risk route is closed when k (zone x hero) is at or above this (seed 103 of holdout 2: Dark Wood picked for risk at k 3.00 = the clamp, then a chicken); 0 = no condition, U",
-  "casterYield": "card survhold3: caster yieldMinMinutes 1.5 (realized yield counts after 1.5 minutes, not 3) and starveValueMul 0.25; a starved zone's xp is also capped at what it realized (seed 103: realized 6 xp/min against a model 152), U",
+  "yieldStarveRatio": "I: card survhold7: a zone whose realized xp/min stayed below this share of the model prior over yieldStarveMinutes stay minutes is worth what it paid (no blend floor) times yieldStarveMul; 0 = off (global default off; the caster row is on), seed 211 margin: BG model 152, realized 5-8 for 25 minutes, U",
+ "unvisitedFloor": "I: card survhold7: zones with no realized data have their prior xp/min multiplied by the minutes-weighted realized/prior ratio of the zones that have it, never below this floor and never above 1, and only when that ratio is under unvisitedBelow; 0 = off (caster row on), seed 211: Mausoleum/Crypt priors 160/165 after BG realized 7, U",
+ "casterYield": "card survhold3: caster yieldMinMinutes 1.5 (realized yield counts after 1.5 minutes, not 3) and starveValueMul 0.25; a starved zone's xp is also capped at what it realized (seed 103: realized 6 xp/min against a model 152), U",
   "dials": "card survtune: typicalEnter, badFloor and riskValueMul are the pay-for-risk route (the 8-seed Paladin A/B lost 18 percent XP with 10 chickens against 36 for the legacy arm; the margin arm sat in 60 xp/min zones while the bad pack of the 440 xp/min zone read 0.8 to 2.4): a zone the bad pack calls too tight is entered when the typical pack is at least typicalEnter and the bad pack's corrected best margin at least badFloor; its value is multiplied by riskValueMul. riskMinGold (card survhold: seed 149 of the holdout burned 25 potions in 6 minutes in a risk-route zone with 100 to 290 gold and went broke, then chickened its way through recovery) closes the route below that pack gold, 0 = no condition. All four are U until the rerun; 0 turns the route off (cautious). Step-down rows: design 5.2 'observed cost that forces a step down': either = chickens plus merc deaths in the window, deaths = deaths in the window; 0 turns the row off. U"
  }
 }
