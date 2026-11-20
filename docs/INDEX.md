@@ -875,6 +875,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [grill-workflow.md](process/grill-workflow.md): Grill workflow: deciding with the user in a dedicated session (status: the "create change cards with changecheck new" step is retired for new work (OpenSpec retired, user...)
 - [guarded-proposals.md](process/guarded-proposals.md): Guarded-file proposals from the roadmap decisions (2026-10-31) (status: APPLIED 2026-10-31 by card grillapply: the decisions index has the lines, the milestones/WIP ADR is ADR...)
 - [hooks.md](process/hooks.md): Hooks (change card `hooks`) (status: current since OpenSpec removal stage 5 (2026-11-04): changecheck and `openspec/` are gone; the pre-push...)
+- [layout-read.md](process/layout-read.md): Level layout read (K1, ADR 0022) (status: current (2026-11-20). Tags: V = verified (say how), U = unverified.)
 - [matt-pocock-skills-fit.md](process/matt-pocock-skills-fit.md): Matt Pocock skills plugin: fit for d2lod-bot (PLUGINFIT, 2026-10-30) (status: 2026-10-30 plugin fit; its "tracker = OpenSpec change cards" answer is superseded: OpenSpec is retired for...)
 - [mini-grill.md](process/mini-grill.md): Mini-grill: small and medium decisions asked inline
 - [mpq-data-reading.md](process/mpq-data-reading.md): Reading 1.14d tables with mpq-cat (trap and recipe)
