@@ -34,7 +34,7 @@ Pooled 2 pairs: ratio 1.085, no deaths or chickens. **Verdict: no regression; wi
 3. Harness note for other A/B work: any run that uses `abrun.sh` needs `resource.pointsDecisions` 1 now; fixed here.
 
 ## 5. Addendum 2026-11-20 (card survhold6): Sorceress rerun with a wand
-> status: the weaponless-hero explanation in section 2 was incomplete. The harness now gives the Sorceress hero a wand (`wnd`, SETUP, both arms; `tools/survival/abrun.sh`); the Paladin heroes always had `hax` (V: test-characters log, holdout 2), so they were never weaponless. The hero line now reads `dmg 2-4` instead of `1-5` (V: zone-entry lines of the new runs). Every run here: writes after start 0 (V, last log line). Both arms of a pair on the same host; the Orion pair was run on the second worker (no other pair crossed hosts), cleaned up afterwards.
+> status: the weaponless-hero explanation in section 2 was incomplete. The harness now gives the Sorceress hero a wand (`wnd`, SETUP, both arms; `tools/survival/abrun.sh`); the Paladin heroes always had `hax` (V: test-characters log, holdout 2), so they were never weaponless. The hero line now reads `dmg 2-4` instead of `1-5` (V: zone-entry lines of the new runs). Every run here: writes after start 0 (V, last log line). Both arms of a pair on the same host; the pair 241 and 243 was run on the second worker (no other pair crossed hosts), cleaned up afterwards.
 
 | seed | host | legacy xp@~89 / chick | margin xp@~88 / chick | deaths L/M |
 |---|---|---|---|---|
