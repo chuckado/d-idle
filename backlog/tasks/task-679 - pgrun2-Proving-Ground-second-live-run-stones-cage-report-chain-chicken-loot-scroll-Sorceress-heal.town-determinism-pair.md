@@ -1,10 +1,13 @@
 ---
 id: TASK-679
-title: 'pgrun2: Proving Ground second live run (stones, cage, report, chain, chicken, loot, scroll Sorceress, heal.town, determinism pair)'
-status: Proposed
+title: >-
+  pgrun2: Proving Ground second live run (stones, cage, report, chain, chicken,
+  loot, scroll Sorceress, heal.town, determinism pair)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T22:49:00Z'
+updated_date: '2026-11-19T23:13:00Z'
 labels:
   - docs
   - drill
