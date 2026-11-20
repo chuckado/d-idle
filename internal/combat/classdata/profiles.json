@@ -141,6 +141,41 @@
    }
   },
   {
+   "class": "sorceress",
+   "build": "fire",
+   "bands": [
+    {
+     "requires": "Fire Ball",
+     "attack": [
+      "Fire Ball",
+      "Fire Bolt",
+      "Charged Bolt"
+     ]
+    },
+    {
+     "attack": [
+      "Fire Bolt",
+      "Charged Bolt"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Frozen Armor",
+     "Shiver Armor",
+     "Chilling Armor"
+    ]
+   ],
+   "layout": {
+    "Static Field": "f1",
+    "Teleport": "f2",
+    "Frozen Armor": "f3",
+    "Fire Bolt": "f4",
+    "Fire Ball": "f5",
+    "Charged Bolt": "f6"
+   }
+  },
+  {
    "class": "paladin",
    "bands": [
     {
