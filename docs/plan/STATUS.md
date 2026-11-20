@@ -306,6 +306,7 @@
 | cainchain | proposed | - | `internal/task/act1.go`<br>`internal/task/cainreenter_test.go`<br>`internal/town/trip.go`<br>`internal/town/portalonly_test.go`<br>`internal/nav/route.go`<br>`docs/probes/provingground-cainchain-2026-11-20.md`<br>`internal/town/town.go`<br>`internal/data/db.go`<br>`internal/bot/questboard.go`<br>`internal/bot/task.go`<br>`internal/bot/runner.go`<br>`internal/bot/staletarget.go`<br>`internal/bot/questboard_goal_test.go` | - |
 | decomp43 | proposed | - | `docs/research/decomp43-monster-block-trace.md`<br>`docs/upstream/bodies/monster-block-body.md`<br>`tools/emu/mb_explore.py`<br>`tools/emu/mb_gate.py`<br>`tools/emu/mb_act2.py`<br>`tools/emu/mb_col.py`<br>`tools/emu/mb_block.py`<br>`tools/emu/mb_mut.py`<br>`tools/emu/mb_mut2.py`<br>`tools/emu/mb_edge.sh` | `fork-branch:fid/monster-block-r1` |
 | k1layout | proposed | - | `docs/process/layout-read.md`<br>`internal/d2dctl`<br>`internal/d2dworld`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_layout_test.go`<br>`internal/env/tuning_quests.go`<br>`internal/d2denv`<br>`docs/knobs.md` | - |
+| verify43 | proposed | - | `docs/research/decomp43-monster-block-verify.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -344,6 +345,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- bfafe8c2d 11-20 14:07 `Merge agent/verify43: verify43: game-side rerun and room control results` (verify43)
 - f53decc2c 11-20 10:42 `Merge agent/survhold7: Merge branch 'main' into survhold7` (survhold7)
 - b96873717 11-20 10:41 `Merge branch 'main' into survhold7` (-)
 - 38637cd33 11-20 09:56 `Merge agent/k1layout: k1layout: task result` (k1layout)
@@ -353,5 +355,4 @@
 - e9c645479 11-20 01:23 `Merge agent/cainchain: cainchain: leakcheck wording` (cainchain)
 - 6762edd24 11-20 01:15 `Merge origin/main into agent/cainchain` (-)
 - de7e7997c 11-19 23:01 `Merge agent/decomp43: Merge branch 'main' into decomp43` (decomp43)
-- 38474374a 11-19 23:00 `Merge branch 'main' into decomp43` (-)
 <!-- statusgen:end -->
