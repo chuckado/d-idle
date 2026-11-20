@@ -307,7 +307,6 @@
 | decomp43 | proposed | - | `docs/research/decomp43-monster-block-trace.md`<br>`docs/upstream/bodies/monster-block-body.md`<br>`tools/emu/mb_explore.py`<br>`tools/emu/mb_gate.py`<br>`tools/emu/mb_act2.py`<br>`tools/emu/mb_col.py`<br>`tools/emu/mb_block.py`<br>`tools/emu/mb_mut.py`<br>`tools/emu/mb_mut2.py`<br>`tools/emu/mb_edge.sh` | `fork-branch:fid/monster-block-r1` |
 | k1layout | proposed | - | `docs/process/layout-read.md`<br>`internal/d2dctl`<br>`internal/d2dworld`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_layout_test.go`<br>`internal/env/tuning_quests.go`<br>`internal/d2denv`<br>`docs/knobs.md` | - |
 | q13input | proposed | - | `internal/invdesk/mover.go`<br>`internal/invdesk/verbs.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/d2dwire.go`<br>`data/input/caps_test.go`<br>`docs/knobs.md`<br>`internal/hotkeymap/`<br>`internal/invdesk/inputcaps.go`<br>`internal/invdesk/inputcaps_test.go`<br>`cmd/d2bot/hotkeymapwire.go`<br>`cmd/d2bot/hotkeymapwire_test.go`<br>`data/input/caps/d2d-fork-input-items.json`<br>`internal/env/tuning_input.go`<br>`docs/process/sandbox-input-items.md` | - |
-| verify43 | proposed | - | `docs/research/decomp43-monster-block-verify.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |

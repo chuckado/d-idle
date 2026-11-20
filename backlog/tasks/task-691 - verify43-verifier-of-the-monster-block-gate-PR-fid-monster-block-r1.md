@@ -1,11 +1,11 @@
 ---
 id: TASK-691
 title: 'verify43: verifier of the monster block gate PR (fid/monster-block-r1)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T18:24:00Z'
-updated_date: '2026-11-20T18:30:00Z'
+updated_date: '2026-11-20T19:32:00Z'
 labels:
   - d2d
   - readonly
