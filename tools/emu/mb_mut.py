@@ -60,7 +60,7 @@ def main():
             continue
         open(f, "w").write(s.replace(old, new))
         sh(f"touch {f}")
-        r = sh(f"nice cmake --build {B} -j6 --target test_monster_block")
+        r = sh(f"nice cmake --build {B} -j2 --target test_monster_block")
         if r.returncode:
             print(name, "BUILD FAILED", r.stdout[-300:], flush=True)
             continue

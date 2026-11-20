@@ -23,6 +23,7 @@ must be 2 (ItemTypes row `shie`). A gate open: stat 20 (MonStats ToBlock of the 
 """
 import csv
 import io
+import os
 import sys
 
 COLS = "id name difficulty variant".split()
@@ -87,7 +88,7 @@ def game(path, exe=None):
         key = (d, c['name'])
         if key not in units:
             try:
-                u, _, _ = g.unit(index[c['name']], index[c['name']])
+                u, _, _ = g.unit(index[c['name']], index[c['name']] + int(os.environ.get('MB_SPOT', '0')))   # MB_SPOT: another room, the control
             except Exception:
                 u = 0
             units[key] = u

@@ -109,4 +109,4 @@ Nothing in this section is a PR candidate: each needs a new differential first.
 
 ## 5. Shared-file lines for the merger
 
-See `backlog/merge-lines/agent-decomp43.txt`.
+None written: BACKLOG, CHANGELOG and INDEX lines are generated at merge from the task card (TASK-683: title, `result:`, ticked boxes, `owns:`).
