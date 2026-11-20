@@ -1110,6 +1110,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - sorc2: Sorceress second build (fire line) and the plan table validator (TASK-690, merged 2026-11-20, acceptance 4 of 4) <!--sg:agent/sorc2-->
 - q4runes: ladder-only runewords as the knob items.ladderRunewords (ADR 0024) (TASK-692, merged 2026-11-20, acceptance 4 of 4): knob items.ladderRunewords (default 0, no change off) + plandata ladder table (paladin, sorceress) + Return-screen rule line + fork flag --ladder-runewords (fork branch didle/ladder-runewords-20261120, differential test run on the builder, V). ... <!--sg:agent/q4runes-->
 - pgformat: Proving Ground format additions (trigger.build, skill_points, log_line, only_class) and the two pending scenarios run (TASK-694, merged 2026-11-20, acceptance 3 of 3): Format additions (all optional, old scenarios unchanged): trigger.build, skill_points, log_line, only_class; must-fail tests with Paladin and Sorceress. ... <!--sg:agent/pgformat-->
+- necro1: Necromancer summoner (capability rows, build, combat profile, planner shadow) (TASK-697, merged 2026-11-20, acceptance 6 of 6) <!--sg:agent/necro1-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
