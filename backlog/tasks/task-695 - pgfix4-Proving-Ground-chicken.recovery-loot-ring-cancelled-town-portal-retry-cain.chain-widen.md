@@ -23,6 +23,8 @@ owns:
   - "cmd/d2bot/d2dwire.go"
   - "internal/env/tuning_bot.go"
   - "internal/loot/"
+  - "docs/knobs.md"
+  - "cmd/d2drill/portal_copy.go"
   - "internal/scenario/"
   - "tools/provingground/scenarios/behaviour-scenarios.json"
 exclusive: []
