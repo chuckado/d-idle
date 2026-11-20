@@ -1,10 +1,11 @@
 ---
 id: TASK-686
 title: 'survhold6: Sorceress hero gets a wand, rerun 211 213 241 243'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T14:17:00Z'
+updated_date: '2026-11-20T14:34:00Z'
 labels:
   - bot
   - bug
