@@ -30,6 +30,7 @@ type Fixtures struct {
 	Portals  []string
 	Grid     []string
 	Level    string // rest of "debug level"
+	LevelMap string // the JSON line of "debug levelmap" (empty: the verb is missing, answers err)
 	Quest    string // rest of "debug quest <q> show"
 	Attack   string
 	Passives string
@@ -345,6 +346,11 @@ func (s *Server) debug(f []string) (string, bool, bool) {
 		return payload(s.Fix.Presets) + "ok\n", false, false
 	case "objects":
 		return payload(s.Fix.Objects) + "ok\n", false, false
+	case "levelmap":
+		if s.Fix.LevelMap == "" {
+			return "err unknown debug verb\n", false, false
+		}
+		return s.Fix.LevelMap + "\nok\n", false, false
 	case "portals":
 		return payload(s.Fix.Portals) + "ok\n", false, false
 	case "grid":

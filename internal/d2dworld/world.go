@@ -66,9 +66,12 @@ type Options struct {
 	// nothing; a few hundred ticks did), so Sleep must advance the game (d2dwalk passes the Pacer's). 0: no wait; the
 	// pending retries of Update look again later, and nav may give up on an exit before the neighbour exists.
 	LinkWait time.Duration
-	Now      func() time.Time                 // test seam (virtual or fake clock for MinRefetch)
-	Logf     func(format string, args ...any) // arrival diagnostics (nil: silent)
-	Sleep    func(time.Duration)              // LinkWait pause between polls (step the game here), nil: time.Sleep
+	// LayoutRead reports whether the fork's read-only "debug levelmap" feeds the level's presets and room rows (knob
+	// quests.layoutRead, ADR 0022); nil or false: today's behaviour, the verb is never sent.
+	LayoutRead func() bool
+	Now        func() time.Time                 // test seam (virtual or fake clock for MinRefetch)
+	Logf       func(format string, args ...any) // arrival diagnostics (nil: silent)
+	Sleep      func(time.Duration)              // LinkWait pause between polls (step the game here), nil: time.Sleep
 }
 
 const maxLinkTries = 20
@@ -322,6 +325,7 @@ func (w *World) fetch(ctx context.Context, l *lvl, rect d2map.Rect, pos d2map.Po
 			l.m.RoomRows = append(l.m.RoomRows, d2map.RoomRow{Type: r.Type, Pos: sub(r.X+0.5, r.Y+0.5)})
 		}
 	}
+	w.mergeLayout(ctx, l, sub)
 	return max(0, l.m.Grid.KnownCount()-before)
 }
 
@@ -567,3 +571,61 @@ func ASCII(lm *d2map.LevelMap, maxW, maxH int) string {
 // FullyKnown tells nav the level maps arrive whole (`debug level`/layout), so there is nothing to reveal by
 // exploring and clearing has to roam instead (nav.roam).
 func (w *World) FullyKnown() bool { return true }
+
+// LevelMapper is the optional part of a Verbs that has the fork's "debug levelmap" (read-only room layout and objects
+// of the current level). Stock d2d, or an "err" reply, leaves the world as it was.
+type LevelMapper interface {
+	LevelMap(ctx context.Context) (*d2dctl.LevelMap, error)
+}
+
+// layoutNear is how close (cells) a layout object must be to a listed preset of the same class to count as the same.
+const layoutNear = 4 // in subtiles (0.8 cell)
+
+// mergeLayout adds what "debug levelmap" knows and "debug presets" does not yet (objects of rooms not built, preset
+// rooms) to the level's presets and room rows. Only with Options.LayoutRead on; any error leaves the level as fetched.
+func (w *World) mergeLayout(ctx context.Context, l *lvl, sub func(x, y float64) d2map.Point) {
+	if w.o.LayoutRead == nil || !w.o.LayoutRead() {
+		return
+	}
+	lm, ok := w.v.(LevelMapper)
+	if !ok {
+		return
+	}
+	doc, err := lm.LevelMap(ctx)
+	if err != nil || doc == nil || doc.Level != l.own.Level {
+		return
+	}
+	for _, o := range doc.Objects {
+		if o.Class == 0 {
+			continue
+		}
+		at := sub(o.X, o.Y)
+		known := false
+		for _, p := range l.m.Presets {
+			if p.ID == o.Class && at.X-p.Pos.X <= layoutNear && p.Pos.X-at.X <= layoutNear && at.Y-p.Pos.Y <= layoutNear && p.Pos.Y-at.Y <= layoutNear {
+				known = true
+				break
+			}
+		}
+		if !known {
+			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: o.Class, Pos: at})
+			l.names = append(l.names, o.Name)
+		}
+	}
+	for _, r := range doc.Rooms {
+		if !r.Preset || r.Def < 0 {
+			continue
+		}
+		pos := sub(float64(r.X+r.W/2)+0.5, float64(r.Y+r.H/2)+0.5)
+		known := false
+		for _, row := range l.m.RoomRows {
+			if row.Type == r.Def && row.Pos == pos {
+				known = true
+				break
+			}
+		}
+		if !known {
+			l.m.RoomRows = append(l.m.RoomRows, d2map.RoomRow{Type: r.Def, Pos: pos})
+		}
+	}
+}

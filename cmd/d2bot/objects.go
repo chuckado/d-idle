@@ -34,6 +34,17 @@ type objectAdapter struct {
 	clicked *onceSet
 	// explored is the search time already spent per (area, class); nil means no memory between slices.
 	explored *exploreTally
+	// Test seams: the level map and the walk (nil: the navigator's).
+	lmFn func() *d2map.LevelMap
+	goTo func(context.Context, input.Point) error
+}
+
+// walk goes to p (the navigator's GoTo unless a test replaced it).
+func (o objectAdapter) walk(ctx context.Context, p input.Point) error {
+	if o.goTo != nil {
+		return o.goTo(ctx, p)
+	}
+	return o.nv.GoTo(ctx, p)
 }
 
 type objKind int
@@ -303,6 +314,9 @@ func roomWalk(target func() (input.Point, bool), goTo func(context.Context, inpu
 // levelMap is the current level map: the tracker of Game.exe, or the navigator's d2d world (Env.World is nil there, so
 // the preset lookups of find never ran on d2d before this).
 func (o objectAdapter) levelMap() *d2map.LevelMap {
+	if o.lmFn != nil {
+		return o.lmFn()
+	}
 	if o.e.World != nil {
 		_, _ = o.e.World.Update()
 		return o.e.World.Current()
@@ -375,7 +389,7 @@ func (o objectAdapter) findNearSkip(ctx context.Context, class int, at *input.Po
 		if lm := o.levelMap(); lm != nil {
 			for _, p := range lm.Presets {
 				if p.Kind == d2map.PresetObject && p.ID == class {
-					_ = o.nv.GoTo(ctx, input.Point{X: p.Pos.X, Y: p.Pos.Y})
+					_ = o.walk(ctx, input.Point{X: p.Pos.X, Y: p.Pos.Y})
 					break
 				}
 			}
