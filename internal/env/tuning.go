@@ -26,6 +26,7 @@ type Tuning struct {
 	Identify IdentifyTuning
 	Input    InputTuning
 	Agency   AgencyTuning
+	Items    ItemsTuning
 }
 
 // DefaultTuning returns the optimal profile.
@@ -49,6 +50,7 @@ func DefaultTuning() Tuning {
 		Identify: DefaultIdentifyTuning(),
 		Input:    DefaultInputTuning(),
 		Agency:   DefaultAgencyTuning(),
+		Items:    DefaultItemsTuning(),
 	}
 }
 
@@ -89,5 +91,6 @@ func Knobs() []Knob {
 	k = append(k, identifyKnobs()...)
 	k = append(k, inputKnobs()...)
 	k = append(k, agencyKnobs()...)
+	k = append(k, itemsKnobs()...)
 	return k
 }

@@ -47,10 +47,13 @@ type VerbEquipper struct {
 	On     func() bool                                          // the knob invdesk.verbs; nil: off
 	Verify func(ctx context.Context, id uint32, body int) error // proves from a fresh snapshot that id is worn on body; nil: trust the reply
 	Now    func() time.Time
+	// InputCaps, when it returns true (the knob input.planner), lets input.item-equip stand for item.equip.
+	InputCaps func() bool
 
 	mu       sync.Mutex
 	capsAt   time.Time
-	capsOK   bool
+	capsOK   bool // item.equip listed
+	capsIn   bool // input.item-equip listed
 	lastHow  string
 	capsLife time.Duration
 }
@@ -78,7 +81,7 @@ func (v *VerbEquipper) setHow(h string) { v.mu.Lock(); v.lastHow = h; v.mu.Unloc
 func (v *VerbEquipper) hasCap(ctx context.Context) bool {
 	v.mu.Lock()
 	if !v.capsAt.IsZero() && v.Now().Sub(v.capsAt) < v.capsLife {
-		ok := v.capsOK
+		ok := v.capsOK || (v.InputCaps != nil && v.InputCaps() && v.capsIn)
 		v.mu.Unlock()
 		return ok
 	}
@@ -87,19 +90,26 @@ func (v *VerbEquipper) hasCap(ctx context.Context) bool {
 	if err != nil {
 		return false // do not cache a transport error
 	}
-	ok := false
+	ok, in := false, false
 	for _, c := range caps {
 		if c == CapItemEquip {
 			ok = true
 		}
+		if c == InputCapItemEquip {
+			in = true
+		}
 	}
 	v.mu.Lock()
-	v.capsAt, v.capsOK = v.Now(), ok
+	v.capsAt, v.capsOK, v.capsIn = v.Now(), ok, in
 	v.mu.Unlock()
-	return ok
+	return ok || (v.InputCaps != nil && v.InputCaps() && in)
 }
 
-func (v *VerbEquipper) dropCaps() { v.mu.Lock(); v.capsAt, v.capsOK = v.Now(), false; v.mu.Unlock() }
+func (v *VerbEquipper) dropCaps() {
+	v.mu.Lock()
+	v.capsAt, v.capsOK, v.capsIn = v.Now(), false, false
+	v.mu.Unlock()
+}
 
 // PlayerEquip wears pack item id on body slot body: the verb when the knob is on and the backend advertises it, else
 // the click path. A rule refusal from the verb is returned as is.
