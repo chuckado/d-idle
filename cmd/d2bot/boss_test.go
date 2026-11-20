@@ -3,13 +3,17 @@ package main
 import (
 	"context"
 	"errors"
+	"io"
+	"log/slog"
 	"testing"
 
 	"d2lod-bot/internal/boss"
 	"d2lod-bot/internal/bot"
 	"d2lod-bot/internal/combat"
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/data"
+	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/task"
 )
 
@@ -108,5 +112,22 @@ func TestAct45RunnerKnowsEveryCampaignBoss(t *testing.T) {
 	}
 	if r.Ops == nil {
 		t.Error("the runner has no ObjectOps: Diablo, the Ancients and Baal would abort")
+	}
+}
+
+// On d2d Env.World is nil: the boss anchor must still see the level's presets (the Countess chest from the layout read)
+// for both a Paladin and a Sorceress start, and nothing when no map is known.
+func TestBossPresetsComeFromTheNavigatorMapWhenNoTracker(t *testing.T) {
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		lm := &d2map.LevelMap{No: 25, Presets: []d2map.Preset{{Kind: d2map.PresetObject, ID: 580, Pos: d2map.Point{X: 12565, Y: 11060}}}}
+		g := &bossGame{e: &env.Env{Log: slog.New(slog.NewTextHandler(io.Discard, nil))}, logPresets: map[int]int{}, mapFn: func() *d2map.LevelMap { return lm }}
+		ps, err := g.Presets(context.Background())
+		if err != nil || len(ps) != 1 || ps[0].ID != 580 || ps[0].Kind != boss.PresetObject || ps[0].Pos.X != 12565 {
+			t.Fatalf("%s: %+v %v", class, ps, err)
+		}
+		g.mapFn = nil
+		if ps, _ := g.Presets(context.Background()); len(ps) != 0 {
+			t.Fatalf("%s: presets without a map: %+v", class, ps)
+		}
 	}
 }
