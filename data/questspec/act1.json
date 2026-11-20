@@ -645,6 +645,9 @@
     },
     "cellar_5": {
      "size": "medium"
+    },
+    "rogue_encampment": {
+     "size": "small"
     }
    },
    "steps": [
@@ -712,6 +715,27 @@
      "discover": "preset_always",
      "budget_s": 600,
      "on_fail": "park"
+    },
+    {
+     "id": "return_town",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "rogue_encampment"
+     },
+     "chunk": "countess",
+     "board": [],
+     "pre": [
+      "killed(the_countess)|quest_state(forgotten_tower,done)"
+     ],
+     "post": [
+      "in_area(rogue_encampment)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
     }
    ]
   },
