@@ -141,6 +141,41 @@
    }
   },
   {
+   "class": "sorceress",
+   "build": "fire",
+   "bands": [
+    {
+     "requires": "Fire Ball",
+     "attack": [
+      "Fire Ball",
+      "Fire Bolt",
+      "Charged Bolt"
+     ]
+    },
+    {
+     "attack": [
+      "Fire Bolt",
+      "Charged Bolt"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Frozen Armor",
+     "Shiver Armor",
+     "Chilling Armor"
+    ]
+   ],
+   "layout": {
+    "Static Field": "f1",
+    "Teleport": "f2",
+    "Frozen Armor": "f3",
+    "Fire Bolt": "f4",
+    "Fire Ball": "f5",
+    "Charged Bolt": "f6"
+   }
+  },
+  {
    "class": "paladin",
    "bands": [
     {
@@ -328,6 +363,33 @@
     "Raise Skeletal Mage": "f6",
     "Lower Resist": "f7",
     "Clay Golem": "f8"
+   }
+  },
+  {
+   "class": "necromancer",
+   "build": "summoner",
+   "bands": [
+    {
+     "attack": [
+      "Teeth",
+      "Attack"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Bone Armor"
+    ]
+   ],
+   "layout": {
+    "Teeth": "f1",
+    "Raise Skeleton": "f2",
+    "Raise Skeletal Mage": "f3",
+    "Clay Golem": "f4",
+    "Bone Armor": "f5",
+    "Amplify Damage": "f6",
+    "Corpse Explosion": "f7",
+    "Revive": "f8"
    }
   },
   {

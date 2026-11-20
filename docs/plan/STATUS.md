@@ -306,6 +306,10 @@
 | cainchain | proposed | - | `internal/task/act1.go`<br>`internal/task/cainreenter_test.go`<br>`internal/town/trip.go`<br>`internal/town/portalonly_test.go`<br>`internal/nav/route.go`<br>`docs/probes/provingground-cainchain-2026-11-20.md`<br>`internal/town/town.go`<br>`internal/data/db.go`<br>`internal/bot/questboard.go`<br>`internal/bot/task.go`<br>`internal/bot/runner.go`<br>`internal/bot/staletarget.go`<br>`internal/bot/questboard_goal_test.go` | - |
 | decomp43 | proposed | - | `docs/research/decomp43-monster-block-trace.md`<br>`docs/upstream/bodies/monster-block-body.md`<br>`tools/emu/mb_explore.py`<br>`tools/emu/mb_gate.py`<br>`tools/emu/mb_act2.py`<br>`tools/emu/mb_col.py`<br>`tools/emu/mb_block.py`<br>`tools/emu/mb_mut.py`<br>`tools/emu/mb_mut2.py`<br>`tools/emu/mb_edge.sh` | `fork-branch:fid/monster-block-r1` |
 | k1layout | proposed | - | `docs/process/layout-read.md`<br>`internal/d2dctl`<br>`internal/d2dworld`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_layout_test.go`<br>`internal/env/tuning_quests.go`<br>`internal/d2denv`<br>`docs/knobs.md` | - |
+| q13input | proposed | - | `internal/invdesk/mover.go`<br>`internal/invdesk/verbs.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/d2dwire.go`<br>`data/input/caps_test.go`<br>`docs/knobs.md`<br>`internal/hotkeymap/`<br>`internal/invdesk/inputcaps.go`<br>`internal/invdesk/inputcaps_test.go`<br>`cmd/d2bot/hotkeymapwire.go`<br>`cmd/d2bot/hotkeymapwire_test.go`<br>`data/input/caps/d2d-fork-input-items.json`<br>`internal/env/tuning_input.go`<br>`docs/process/sandbox-input-items.md` | - |
+| sorc2 | in-progress | - | `internal/buildfile/tablecheck.go`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/plandata/build-sorceress_fire_normal30.json`<br>`internal/leveler/sorcfire_test.go`<br>`internal/plandata/build-primary-blizzard.json`<br>`internal/plandata/build-fallback-lightning.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-primary-blizzard.json`<br>`docs/plan/data/build-fallback-lightning.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-sorceress_fire_normal30.json`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/buildfile/plans_test.go`<br>`tools/provingground/scenarios/points.json` | - |
+| q4runes | in-progress | - | `internal/env/tuning_items.go`<br>`internal/plandata/ladder_runewords.go`<br>`internal/plandata/ladder_runewords_test.go`<br>`docs/knobs.md`<br>`internal/env/tuning.go`<br>`internal/data/db.go`<br>`internal/data/extra.go`<br>`internal/data/data_test.go`<br>`internal/town/imbue_test.go`<br>`internal/watch/returnscreen.go`<br>`internal/watch/returnscreen_test.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/funwire.go`<br>`cmd/d2bot/ladder.go` | - |
+| necro1 | proposed | - | `data/capabilities/capabilities.json`<br>`internal/buildfile/necrosummoner_test.go`<br>`internal/buildfile/testdata/necromancer-summoner-guide.json`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/plandata/build-necromancer_summoner_guide.json`<br>`docs/plan/data/build-necromancer_summoner_guide.json`<br>`internal/leveler/necrosummoner_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/necrosummoner_test.go`<br>`internal/agency/planner_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/agency/testdata/agreement.json`<br>`tools/provingground/scenarios/points.json`<br>`docs/process/necromancer-support.md`<br>`docs/agency.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -344,14 +348,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- f53decc2c 11-20 10:42 `Merge agent/survhold7: Merge branch 'main' into survhold7` (survhold7)
-- b96873717 11-20 10:41 `Merge branch 'main' into survhold7` (-)
-- 38637cd33 11-20 09:56 `Merge agent/k1layout: k1layout: task result` (k1layout)
-- 16dfce909 11-20 09:25 `Merge agent/survhold6: survhold6: doc wording (leakcheck)` (survhold6)
-- 97803b69b 11-20 01:32 `Merge agent/survhold4: Merge branch 'main' into survhold4` (survhold4)
-- 2d53466da 11-20 01:31 `Merge branch 'main' into survhold4` (-)
-- e9c645479 11-20 01:23 `Merge agent/cainchain: cainchain: leakcheck wording` (cainchain)
-- 6762edd24 11-20 01:15 `Merge origin/main into agent/cainchain` (-)
-- de7e7997c 11-19 23:01 `Merge agent/decomp43: Merge branch 'main' into decomp43` (decomp43)
-- 38474374a 11-19 23:00 `Merge branch 'main' into decomp43` (-)
+- 0d450095b 11-20 15:43 `Merge agent/necro1: Merge branch 'main' into necro1` (necro1)
+- 566694fa2 11-20 15:42 `Merge branch 'main' into necro1` (-)
+- ce25d4e63 11-20 15:32 `Merge agent/pgformat: Merge branch 'main' into pgformat` (pgformat)
+- f99a23a1e 11-20 15:31 `Merge branch 'main' into pgformat` (-)
+- aed1329f5 11-20 15:12 `Merge agent/q4runes: Merge branch 'main' into q4runes` (q4runes)
+- 511a8e300 11-20 15:11 `Merge branch 'main' into q4runes` (-)
+- 5f22eee60 11-20 14:33 `Merge agent/sorc2: Merge branch 'main' into sorc2` (sorc2)
+- 45faedecc 11-20 14:32 `Merge branch 'main' into sorc2` (-)
+- b0c091dff 11-20 14:10 `Merge agent/q13input: Merge branch 'main' into q13input` (q13input)
+- 0a210d0ab 11-20 14:09 `Merge branch 'main' into q13input` (-)
 <!-- statusgen:end -->

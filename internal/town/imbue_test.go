@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/plandata"
 	"d2lod-bot/internal/town"
 )
 
@@ -170,6 +171,36 @@ func TestExpectedSocketsCapsByIlvl(t *testing.T) {
 			t.Logf("%s ilvl %d -> %d (gemsockets %d)", c.code, c.ilvl, n, b.Sockets)
 			if n < c.min || n > c.max || n > b.Sockets {
 				t.Errorf("%s ilvl %d: %d", c.code, c.ilvl, n)
+			}
+		}
+	}
+}
+
+// ADR 0024: with the ladder switch off Larzuk never targets Spirit or Insight (the vanilla rule); on, each class's
+// ladder list makes a sword the Spirit base. Both classes' lists are checked so a class row cannot hide a regression.
+func TestSocketLadderRunewordsFollowTheSwitch(t *testing.T) {
+	geartest.Need(t)
+	for _, class := range []string{"paladin", "sorceress"} {
+		want, err := plandata.LadderRunewords(class)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, on := range []bool{false, true} {
+			r := larzukRig(t)
+			sword := packItem(r, "bsw", d2.QualityNormal, 0, 0)
+			db := r.Env.Data
+			if db == nil {
+				t.Fatal("the rig has no game tables")
+			}
+			db.LadderRunewords = on
+			rep, err := r.T.Socket(context.Background(), town.SocketWant{Runewords: want})
+			db.LadderRunewords = false
+			if err != nil {
+				t.Fatalf("%s on=%v: %v", class, on, err)
+			}
+			// Off: the plain-base fallback may still socket the sword, but for no ladder runeword.
+			if got := strings.Contains(rep.Why, "Spirit"); got != on || !packBy(r, sword.ID).Item.Socketed() {
+				t.Errorf("%s on=%v: why %q", class, on, rep.Why)
 			}
 		}
 	}

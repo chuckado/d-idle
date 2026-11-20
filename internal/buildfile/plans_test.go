@@ -29,11 +29,6 @@ func TestPlansRoundTripThroughFiles(t *testing.T) {
 			t.Fatal(err)
 		}
 		if ps := Validate(b, rules); len(ps) > 0 {
-			// Finding (V, this test): the legacy table primary-blizzard puts 43 points into Static Field; the game caps a skill at 20.
-			if name == "primary-blizzard" && onlyCode(ps, "target_range") {
-				t.Logf("%s: known table defect, %d goals over the 20 point cap", name, len(ps))
-				continue
-			}
 			t.Errorf("%s: exported file does not validate: %v (notes %v)", name, ps, notes)
 			continue
 		}

@@ -67,6 +67,7 @@ type FunConfig struct {
 	Visit   *Visit  // nil: in memory
 	Speed   float64 // virtual seconds per wall second (Config.Speed)
 	Notes   NotesSink
+	Rules   []string    // visible rules shown on the return screen ("ladder runewords: on"); nil: none
 	Strip   *TallyStrip // nil: /api/tally says tally is off
 	Codex   *decide.Codex
 	Table   *decide.Firsts
@@ -400,7 +401,7 @@ func NewFun(c FunConfig) (*Fun, error) {
 		f.Hall = hd
 		sec.Register(HallSectionID, hd.Section())
 	}
-	f.Return = ReturnConfig{Hub: c.Hub, Events: f.Away, Visit: c.Visit, Speed: c.Speed, Sections: sec, Notes: c.Notes}
+	f.Return = ReturnConfig{Hub: c.Hub, Events: f.Away, Visit: c.Visit, Speed: c.Speed, Sections: sec, Notes: c.Notes, Rules: c.Rules}
 	if f.Unlocks != nil {
 		f.Return.OnRead = func(d ReturnData) { // the first expedition card the viewer is shown
 			if len(d.Trips) > 0 {
