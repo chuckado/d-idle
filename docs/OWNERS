@@ -170,6 +170,7 @@ cmd/d2bot/d2dwire.go  credit-runner  agencyp0
 cmd/d2bot/d2dwire.go  credit-runner  gearsets
 cmd/d2bot/d2dwire.go  credit-runner  groundquality
 cmd/d2bot/d2dwire.go  credit-runner  itemverbs2
+cmd/d2bot/d2dwire.go  credit-runner  pgfix4
 cmd/d2bot/d2dwire.go  credit-runner  q13input
 cmd/d2bot/d2dwire.go  credit-runner  vaultv3
 cmd/d2bot/d2dwire.go  credit-runner  vaultv5
@@ -317,6 +318,7 @@ cmd/d2bot/vaulttip.go  credit-runner  vaulttip
 cmd/d2bot/vaultwire.go  credit-runner  vaultv3
 cmd/d2bot/vaultwire.go  credit-runner  vaultv4
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
+cmd/d2drill/portal_copy.go  credit-runner  pgfix4
 cmd/d2dview  credit-runner  videofeed2
 cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
@@ -432,6 +434,7 @@ docs/knobs.md  credit-runner  goldprio
 docs/knobs.md  credit-runner  hourfix
 docs/knobs.md  credit-runner  lootwire3
 docs/knobs.md  credit-runner  lootwireL4
+docs/knobs.md  credit-runner  pgfix4
 docs/knobs.md  credit-runner  pursuers
 docs/knobs.md  credit-runner  q13input
 docs/knobs.md  credit-runner  q4runes
@@ -492,6 +495,7 @@ docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/provingground-cainchain-2026-11-20.md  credit-runner  cainchain
+docs/probes/provingground-pgfix4-2026-11-20.md  credit-runner  pgfix4
 docs/probes/provingground-run-2026-11-19.md  credit-runner  pgexpand
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
@@ -765,6 +769,7 @@ internal/bot/lockorder_test.go  credit-runner  lockscan
 internal/bot/loop.go  credit-runner  botinstant
 internal/bot/loop.go  credit-runner  hourfix
 internal/bot/loop.go  credit-runner  passagebounce
+internal/bot/loop.go  credit-runner  pgfix4
 internal/bot/loop.go  credit-runner  resetinstant
 internal/bot/loop.go  credit-runner  staletarget
 internal/bot/loop.go  credit-runner  survreask
@@ -800,6 +805,8 @@ internal/bot/playerreset_test.go  credit-runner  resetinstant
 internal/bot/pointsgate.go  credit-runner  agencyp0
 internal/bot/pointsgate_test.go  credit-runner  agencyp0
 internal/bot/portalburn_test.go  credit-runner  survhold2
+internal/bot/portalretry.go  credit-runner  pgfix4
+internal/bot/portalretry_test.go  credit-runner  pgfix4
 internal/bot/questauto.go  credit-runner  quests8
 internal/bot/questauto_test.go  credit-runner  quests8
 internal/bot/questboard.go  credit-runner  cainchain
@@ -829,6 +836,7 @@ internal/bot/runner.go  credit-runner  hourfix
 internal/bot/runner.go  credit-runner  lockscan
 internal/bot/runner.go  credit-runner  maphistoryA
 internal/bot/runner.go  credit-runner  passagebounce
+internal/bot/runner.go  credit-runner  pgfix4
 internal/bot/runner.go  credit-runner  quests10
 internal/bot/runner.go  credit-runner  quests3
 internal/bot/runner.go  credit-runner  quests4
@@ -981,6 +989,7 @@ internal/env/tuning_bot.go  credit-runner  exploredpct
 internal/env/tuning_bot.go  credit-runner  freshstart
 internal/env/tuning_bot.go  credit-runner  hourfix
 internal/env/tuning_bot.go  credit-runner  lootwireL4
+internal/env/tuning_bot.go  credit-runner  pgfix4
 internal/env/tuning_bot.go  credit-runner  staletarget
 internal/env/tuning_bot.go  credit-runner  survfix2
 internal/env/tuning_combat.go  credit-runner  cainfix3
@@ -1055,6 +1064,7 @@ internal/leveler/sorcfire_test.go  credit-runner  sorc2
 internal/leveler/verbs_test.go  credit-runner  agencyp0
 internal/levelplan  pro-runner  levelplan3
 internal/loot  credit-runner  goldprio
+internal/loot/  credit-runner  pgfix4
 internal/loot/fixpickup_test.go  credit-runner  beltfix
 internal/loot/ignore_test.go  credit-runner  tidy
 internal/loot/loot.go  credit-runner  lootwireL4
@@ -1166,6 +1176,7 @@ internal/resource/tuning.go  credit-runner  agencyp0
 internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
 internal/scenario/  credit-runner  pgexpand
+internal/scenario/  credit-runner  pgfix4
 internal/scenario/scenario_test.go  credit-runner  agencyp0
 internal/scenario/state.go  credit-runner  agencyp0
 internal/senses  credit-runner  botcpu
@@ -1242,9 +1253,11 @@ internal/town/tidy_test.go  credit-runner  tidy
 internal/town/tidy_test.go  credit-runner  towntests
 internal/town/town.go  credit-runner  cainchain
 internal/town/town.go  credit-runner  itemverbs2
+internal/town/town.go  credit-runner  pgfix4
 internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
 internal/town/trip.go  credit-runner  cainchain
+internal/town/trip.go  credit-runner  pgfix4
 internal/vault  credit-runner  vaultv2
 internal/vault  credit-runner  vaultv5
 internal/vault  credit-runner  vaultv6
@@ -1767,6 +1780,7 @@ tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
 tools/provingground/  credit-runner  pgexpand
+tools/provingground/scenarios/behaviour-scenarios.json  credit-runner  pgfix4
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
 tools/provingground/scenarios/points.json  credit-runner  agencyp0

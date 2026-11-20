@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- pgfix4: knob entry, knobs.md, refresh the d2drill portal copy (whole-repo gate findings) <!--sg:agent/pgfix4-->
 - Merge branch 'main' into act1next <!--sg:agent/act1next-->
 - Merge branch 'main' into decomp44 <!--sg:agent/decomp44-->
 - Merge branch 'main' into w2worker <!--sg:agent/secondworker-->
