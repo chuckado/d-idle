@@ -252,14 +252,14 @@
    ],
    "pre": {
     "level": 10,
-    "gold": 800,
+    "gold": 5000,
     "belt": [],
     "start": "field",
     "area": 2,
     "life_pct": 15
    },
    "trigger": {
-    "goals": "reach:30",
+    "goals": "farm:Blood Moor",
     "knobs": {
      "resource.pointsDecisions": 1
     }
@@ -280,7 +280,7 @@
    "needs": [
     "lab-verbs-attach"
    ],
-   "provenance": "SETUP: level 10, purse 800, belt emptied, life brought to 15 percent with debug hit (the game's own hurt path), field start in the Blood Moor by debug goto 2 (CHEATED position).",
+   "provenance": "SETUP: level 10, purse 5000 (the bot buys the portal tome and scrolls first, 650 of 800 in pgfix4 run 20261120-131852; the purse must cover the kit AND what it buys), belt emptied, life brought to 15 percent with debug hit (the game's own hurt path), field start in the Blood Moor by debug goto 2 (CHEATED position).",
    "notes": "15 percent is under chickenPct's default (knob range 15 to 45). The run is judged by the end state of the live d2d: life restored, kit bought (no potion-less re-entry), and at most 8 area changes (leave, town, return, not a loop).",
    "assert": [
     {
@@ -319,6 +319,7 @@
     "level": 10,
     "gold": 300,
     "start": "field",
+    "belt": ["hp1", "hp1", "mp1", "mp1"],
     "area": 2,
     "items": [
      {
@@ -330,7 +331,7 @@
     ]
    },
    "trigger": {
-    "goals": "reach:30",
+    "goals": "farm:Blood Moor",
     "knobs": {
      "resource.pointsDecisions": 1
     }
@@ -351,16 +352,15 @@
    "needs": [
     "lab-verbs-attach"
    ],
-   "provenance": "CHEATED item: an unidentified rare ring dropped beside the hero by debug give rin 6 unid (a rare ring is a normal drop, but not at this moment). Field start in the Blood Moor by debug goto 2. Mechanics only.",
-   "notes": "The observer reads the floor with `ground full`-class listing (`ground`) while the lab d2d is still live: the ring must be gone from the floor. What the bot decided (keep, sell or vault) is not a fact the observer reads yet: the carried ring is shown in the state but only the floor is asserted (U: a sold ring leaves no trace). Red = the ring was left lying.",
+   "provenance": "CHEATED item: an unidentified rare ring dropped beside the hero by debug give rin 6 unid (a rare ring is a normal drop, but not at this moment). A stocked belt (2 hp1, 2 mp1; the starter belt has four slots) so the Sorceress does not leave for a kit trip before the loot step sees the ring (pgfix4 run 20261120-132609: she left at once for mana potions and never came back to it). Farm goal in the Blood Moor: the loot sweep runs after fights in the area, a level goal walks on to Cold Plains and Stony Field before any sweep (pgfix4 run 20261120-132834). Field start in the Blood Moor by debug goto 2. Mechanics only.",
+   "notes": "The observer reads the floor only of the level the hero ends in (the town, where the vendor shelves count as floor: a ring there proves nothing), so the ring is judged by what it earned: picked up, identified and sold, the purse and stash hold more than 700 (pgfix4 run 20261120-133236: 2115 after the sale; without the pick-up the hero stays under 400). Red = the ring was left lying.",
    "assert": [
-    {
-     "kind": "item_absent",
-     "code": "rin",
-     "where": "ground",
-     "why": "the ring was picked up (the loot step saw it)"
-    }
-   ]
+  {
+   "kind": "wealth_between",
+   "min": 700,
+   "why": "the ring was picked up, identified and sold (a rare ring sells for well over the purse 300 plus a kit; the bank chore moves gold to the stash, so purse and stash are summed)"
+  }
+ ]
   },
   {
    "id": "flail.areachanges",

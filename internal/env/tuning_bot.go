@@ -101,8 +101,11 @@ type BotTuning struct {
 	// trip that failed for lack of a town portal before the hero leaves the game (240 or more = never, the old wait).
 	// DroughtStage2Min: virtual minutes after a stage 1 drought action before stage 2 (fresh game); 0 = DroughtMin.
 	// FreshAfterRecoverySec: no unplanned fresh game this long after a lost-game recovery (0 = off).
-	NoPortalWaitSec  int
-	DroughtStage2Min int
+	NoPortalWaitSec int
+	// PortalRetryWaitSec: a town portal cast cancelled before the click by a drink or a retreat (nothing spent) is retried
+	// ONCE after this many virtual seconds, as a town trip; 0 = off (the next planning tick decides, the old behaviour).
+	PortalRetryWaitSec int
+	DroughtStage2Min   int
 	// Slow field (TASK-138): fewer than DroughtSlowKills kills in DroughtSlowMin minutes, after that long in the same
 	// field area, below clvl DroughtSlowMaxLevel, starts a fresh game (a depleted early field refills only in a new
 	// game; stragglers kept the kill drought quiet). 0 for DroughtSlowMin or DroughtSlowMaxLevel = off.
@@ -153,7 +156,7 @@ func DefaultBotTuning() BotTuning {
 		PointsRetrySec: 30, GearCheckSec: 60, GearMinGold: 150, GearBudgetPct: 70, GearReserve: 100,
 		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600, FlailMoves: 6, FlailWindowMin: 10, FlailHoldMin: 5,
 		ArbiterShadow: 0, ArbiterDwellSec: 120, ArbiterTravelSec: 600, ArbiterLogGapSec: 60,
-		Rung3WindowMax: 3, Rung3WindowMin: 20, DroughtMin: 8, EmptyFieldSec: 150, ClearIdleMin: 3, NoPortalWaitSec: 20, DroughtStage2Min: 2, DroughtSlowMin: 10, DroughtSlowKills: 3, DroughtSlowMaxLevel: 10, FreshAfterRecoverySec: 180, RecoveryDryMin: 5, RecoveryDryKills: 5, RecoveryDrySkipMin: 15,
+		Rung3WindowMax: 3, Rung3WindowMin: 20, DroughtMin: 8, EmptyFieldSec: 150, ClearIdleMin: 3, NoPortalWaitSec: 20, PortalRetryWaitSec: 3, DroughtStage2Min: 2, DroughtSlowMin: 10, DroughtSlowKills: 3, DroughtSlowMaxLevel: 10, FreshAfterRecoverySec: 180, RecoveryDryMin: 5, RecoveryDryKills: 5, RecoveryDrySkipMin: 15,
 		ZoneModel: 0, ZoneDial: 1, PortalGuard: 0, PortalCastMs: 3000, PortalWalkMs: 3000, PortalHitMs: 700, PortalLifePct: 50,
 		MercRetryMin: 10, MercHireMinGold: 400, MercReviveLoopN: 3, MercReviveLoopMin: 10, CubeMaxJobs: 6, CubeRuneCap: 10, CubeGemCap: 2,
 	}
@@ -303,6 +306,8 @@ func botKnobs() []Knob {
 			Desc: "Minutes the recovery stays out of an area it left as dry (a new game or a respawn refills it)."},
 		{Key: "bot.noPortalWaitSec", Label: "No portal: leave after", Unit: "s", Default: 20, Min: 0, Max: 240, NoHandicap: true,
 			Desc: "Low life, no potion and the way to town fails because there is no town portal (and no walk back for this area): seconds after the first such failure before the hero leaves the game, which restarts it in town. 240 keeps the old two minute waits."},
+		{Key: "bot.portalRetryWaitSec", Label: "Cancelled portal: retry after", Unit: "s", Default: 3, Min: 0, Max: 30, NoHandicap: true,
+			Desc: "A town portal cast cancelled before the click (a drink or a retreat cut it, nothing spent) is retried once as a town trip after this many seconds. 0 is off: the next planning tick decides."},
 		{Key: "bot.freshAfterRecoverySec", Label: "Quiet after recovery", Unit: "s", Default: 180, Min: 0, Max: 900, NoHandicap: true,
 			Desc: "No unplanned fresh game (no target left, drought) this long after a lost-game recovery, unless life is below the resume line. A second restart right after the recovery fails the Gate 2 fault criterion. 0 is off."},
 		{Key: "bot.emptyFieldSec", Label: "Empty quest field", Unit: "s", Default: 150, Min: 0, Max: 900, NoHandicap: true,

@@ -339,6 +339,9 @@ func (l *Looter) matches(m *Match, b *data.ItemBase, it *d2.Item, c Ctx) bool {
 			return false
 		}
 	}
+	if m.QualityUnknown && it.Quality != 0 {
+		return false
+	}
 	if m.Identified != nil && it.Identified() != *m.Identified {
 		return false
 	}

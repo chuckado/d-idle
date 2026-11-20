@@ -65,6 +65,7 @@ func (t *Town) ToTown(ctx context.Context) error {
 	}
 	var last error = ErrNoPortal
 	cast := false
+	t.castCancelled.Store(false)
 	// A portal that is already open nearby (the one we came out of, or the last try's) is free: enter it instead of
 	// reading a scroll. A new cast only replaces it with the same kind of portal (one pair per player), so a failed
 	// entry is retried on it and never paid for with another scroll (drill D2.t: all 3 scrolls were spent so).
@@ -78,6 +79,10 @@ func (t *Town) ToTown(ctx context.Context) error {
 					return t.walkToTown(ctx, s, err)
 				}
 				last = err
+				if errors.Is(err, ErrPortalCancelled) {
+					t.castCancelled.Store(true) // the context is dead: the caller retries (bot.portalretry.go), not this loop
+					return err
+				}
 				continue
 			}
 			cast = true
@@ -108,6 +113,14 @@ func (t *Town) ToTown(ctx context.Context) error {
 	}
 	return last
 }
+
+// TakePortalCancelled reports (and clears) that the last ToTown ended because its portal cast was cancelled before the
+// click. A step that returns only the guard's cause loses the error; the bot reads this instead.
+func (t *Town) TakePortalCancelled() bool { return t.castCancelled.Swap(false) }
+
+// NoteCastCancelled lets a wrapper that cast the portal itself (the d2d adapter) say its cast was cancelled before the
+// click and the walk home did not follow either.
+func (t *Town) NoteCastCancelled() { t.castCancelled.Store(true) }
 
 // openNear returns a town portal object within PortalReuseDist of the player.
 func (t *Town) openNear(ctx context.Context) (d2.Unit, bool) {
@@ -296,6 +309,10 @@ func (t *Town) findPortal(s *d2.Snapshot) (d2.Unit, bool) {
 // portal was opened, not where the character died: LIVE G1 attempt 12, portal to Cold Plains, corpse in Monastery
 // Gate). The character stands in that level; the caller walks on with its route logic (waypoints, multi-hop).
 var ErrWrongLevel = errors.New("town: portal led to another level")
+
+// ErrPortalCancelled: the cast of a town portal was cancelled before the click (the guard cut the action for a drink or a
+// retreat); nothing was spent. The bot retries it once after a bounded wait (bot.portalRetryWaitSec).
+var ErrPortalCancelled = errors.New("town: portal cast cancelled before the click")
 
 // ErrPortalStale: BackToField refused a standing town portal known to lead to another level than the wanted portal-only one.
 var ErrPortalStale = errors.New("town: standing portal leads elsewhere")

@@ -86,6 +86,7 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		add(fmt.Sprintf("quest record %d", q.Record), fmt.Sprintf("debug quest set %d 0x%04x", q.Record, q.Word))
 		tags["quest-word"] = true
 	}
+	var floor [][2]string // ground items, dropped after the position verb: a drop before it lands where the hero stood (the town)
 	for _, it := range p.Items {
 		n := it.Count
 		if n <= 0 {
@@ -113,7 +114,7 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 				if it.Unid {
 					line += " unid"
 				}
-				add("item "+it.Code+" on the ground", line)
+				floor = append(floor, [2]string{"item " + it.Code + " on the ground", line})
 			}
 		default:
 			su.Unsupported = append(su.Unsupported, fmt.Sprintf("item %s into %s (no setup verb known)", it.Code, it.Where))
@@ -137,6 +138,9 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		add("position (the save cannot hold a field position)", fmt.Sprintf("debug goto %d", p.Area))
 		su.Field = true
 		tags["position"] = true
+	}
+	for _, f := range floor {
+		add(f[0], f[1])
 	}
 	su.Board = p.Board
 	su.Build = s.Trigger.Build

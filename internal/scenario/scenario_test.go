@@ -81,6 +81,12 @@ func TestEvaluateAndVerdict(t *testing.T) {
 	if r := Evaluate([]Assert{{Kind: AAreaChangesLE, Max: ip(3)}}, State{AreaChanges: ip(5)}); r[0].OK {
 		t.Fatal("5 > 3")
 	}
+	if w := Evaluate([]Assert{{Kind: AWealthBetween, Min: 700}}, State{Gold: ip(300), Stash: ip(450)}); !w[0].OK {
+		t.Errorf("wealth 750 >= 700: %+v", w[0])
+	}
+	if w := Evaluate([]Assert{{Kind: AWealthBetween, Min: 700}}, State{Gold: ip(300), Stash: ip(100)}); w[0].OK {
+		t.Errorf("wealth 400 >= 700 passed")
+	}
 	gold := Evaluate([]Assert{{Kind: AGoldBetween, Min: 1, Max: ip(10)}}, State{Gold: ip(11)})
 	if gold[0].OK {
 		t.Fatal("gold 11 > 10")
