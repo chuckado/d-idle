@@ -29,6 +29,7 @@ owns:
   - "cmd/d2bot/funwire.go"
   - "cmd/d2bot/ladder.go"
 exclusive: []
+result: "knob items.ladderRunewords (default 0, no change off) + plandata ladder table (paladin, sorceress) + Return-screen rule line + fork flag --ladder-runewords (fork branch didle/ladder-runewords-20261120, differential test run on the builder, V). Not verified in a live game; gates stay vanilla."
 contracts: []
 ---
 
@@ -42,8 +43,8 @@ ADR 0024. Gates and fidelity runs stay vanilla. Done when the above holds.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Knob items.ladderRunewords (default 0) in the knob tables; off = no behaviour change
-- [ ] #2 Ladder rows count as available in the planner only with the knob; class table for Paladin and Sorceress; tests on two classes
-- [ ] #3 Return screen shows the rule 'ladder runewords: on/off'
-- [ ] #4 Fork switch --ladder-runewords pushed to the private fork (differential recorded)
+- [x] #1 Knob items.ladderRunewords (default 0) in the knob tables; off = no behaviour change
+- [x] #2 Ladder rows count as available in the planner only with the knob; class table for Paladin and Sorceress; tests on two classes
+- [x] #3 Return screen shows the rule 'ladder runewords: on/off'
+- [x] #4 Fork switch --ladder-runewords pushed to the private fork (differential recorded)
 <!-- AC:END -->

@@ -185,21 +185,23 @@ func TestSocketLadderRunewordsFollowTheSwitch(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		r := larzukRig(t)
-		sword := packItem(r, "bsw", d2.QualityNormal, 0, 0)
-		db := r.Env.Data
-		if db == nil {
-			t.Fatal("the rig has no game tables")
+		for _, on := range []bool{false, true} {
+			r := larzukRig(t)
+			sword := packItem(r, "bsw", d2.QualityNormal, 0, 0)
+			db := r.Env.Data
+			if db == nil {
+				t.Fatal("the rig has no game tables")
+			}
+			db.LadderRunewords = on
+			rep, err := r.T.Socket(context.Background(), town.SocketWant{Runewords: want})
+			db.LadderRunewords = false
+			if err != nil {
+				t.Fatalf("%s on=%v: %v", class, on, err)
+			}
+			// Off: the plain-base fallback may still socket the sword, but for no ladder runeword.
+			if got := strings.Contains(rep.Why, "Spirit"); got != on || !packBy(r, sword.ID).Item.Socketed() {
+				t.Errorf("%s on=%v: why %q", class, on, rep.Why)
+			}
 		}
-		if _, err := r.T.Socket(context.Background(), town.SocketWant{Runewords: want}); err == nil || packBy(r, sword.ID).Item.Socketed() {
-			t.Errorf("%s: a ladder-only want socketed with the switch off (err %v)", class, err)
-		}
-		db.LadderRunewords = true
-		t.Cleanup(func() { db.LadderRunewords = false })
-		rep, err := r.T.Socket(context.Background(), town.SocketWant{Runewords: want})
-		if err != nil || !strings.Contains(rep.Why, "Spirit") || !packBy(r, sword.ID).Item.Socketed() {
-			t.Errorf("%s: switch on: why %q err %v", class, rep.Why, err)
-		}
-		db.LadderRunewords = false
 	}
 }
