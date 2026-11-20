@@ -319,6 +319,7 @@
     "level": 10,
     "gold": 300,
     "start": "field",
+    "belt": ["hp1", "hp1", "hp1", "hp1", "mp1", "mp1", "mp1"],
     "area": 2,
     "items": [
      {
@@ -351,7 +352,7 @@
    "needs": [
     "lab-verbs-attach"
    ],
-   "provenance": "CHEATED item: an unidentified rare ring dropped beside the hero by debug give rin 6 unid (a rare ring is a normal drop, but not at this moment). Field start in the Blood Moor by debug goto 2. Mechanics only.",
+   "provenance": "CHEATED item: an unidentified rare ring dropped beside the hero by debug give rin 6 unid (a rare ring is a normal drop, but not at this moment). A full belt (4 hp1, 3 mp1) so the Sorceress does not leave for a kit trip before the loot step sees the ring (pgfix4 run 20261120-132609: she left at once for mana potions and never came back to it). Field start in the Blood Moor by debug goto 2. Mechanics only.",
    "notes": "The observer reads the floor with `ground full`-class listing (`ground`) while the lab d2d is still live: the ring must be gone from the floor. What the bot decided (keep, sell or vault) is not a fact the observer reads yet: the carried ring is shown in the state but only the floor is asserted (U: a sold ring leaves no trace). Red = the ring was left lying.",
    "assert": [
     {
