@@ -1,5 +1,5 @@
 export PG_D2D_BIN=/data/build/devp15-f212b77a-d2d/apps/d2d/d2d
-for c in "Paladin 11" "Sorceress 3" "Paladin 11"; do set -- $c
+for c in "$@"; do set -- $c
  echo "=== RUN $1 $2"
  tools/provingground/run.sh -id act1.forgotten.countess -class $1 -seed $2 -parallel 1 2>&1 | tail -4
  d=$(ls -dt provingground-out/*/ | head -1)
