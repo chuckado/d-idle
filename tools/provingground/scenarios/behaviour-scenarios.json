@@ -252,14 +252,14 @@
    ],
    "pre": {
     "level": 10,
-    "gold": 800,
+    "gold": 5000,
     "belt": [],
     "start": "field",
     "area": 2,
     "life_pct": 15
    },
    "trigger": {
-    "goals": "reach:30",
+    "goals": "farm:Blood Moor",
     "knobs": {
      "resource.pointsDecisions": 1
     }
@@ -280,7 +280,7 @@
    "needs": [
     "lab-verbs-attach"
    ],
-   "provenance": "SETUP: level 10, purse 800, belt emptied, life brought to 15 percent with debug hit (the game's own hurt path), field start in the Blood Moor by debug goto 2 (CHEATED position).",
+   "provenance": "SETUP: level 10, purse 5000 (the bot buys the portal tome and scrolls first, 650 of 800 in pgfix4 run 20261120-131852; the purse must cover the kit AND what it buys), belt emptied, life brought to 15 percent with debug hit (the game's own hurt path), field start in the Blood Moor by debug goto 2 (CHEATED position).",
    "notes": "15 percent is under chickenPct's default (knob range 15 to 45). The run is judged by the end state of the live d2d: life restored, kit bought (no potion-less re-entry), and at most 8 area changes (leave, town, return, not a loop).",
    "assert": [
     {
