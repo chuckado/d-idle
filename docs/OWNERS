@@ -470,6 +470,7 @@ docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
 docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
+docs/probes/provingground-cainchain-2026-11-20.md  credit-runner  cainchain
 docs/probes/provingground-run-2026-11-19.md  credit-runner  pgexpand
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
@@ -768,6 +769,7 @@ internal/bot/pointsgate_test.go  credit-runner  agencyp0
 internal/bot/portalburn_test.go  credit-runner  survhold2
 internal/bot/questauto.go  credit-runner  quests8
 internal/bot/questauto_test.go  credit-runner  quests8
+internal/bot/questboard.go  credit-runner  cainchain
 internal/bot/questboard.go  credit-runner  questrun
 internal/bot/questboard.go  credit-runner  quests10
 internal/bot/questboard.go  credit-runner  quests3
@@ -775,6 +777,7 @@ internal/bot/questboard.go  credit-runner  quests4
 internal/bot/questboard.go  credit-runner  quests7
 internal/bot/questboard.go  credit-runner  quests7b
 internal/bot/questboard.go  credit-runner  quests8
+internal/bot/questboard_goal_test.go  credit-runner  cainchain
 internal/bot/questboard_goal_test.go  credit-runner  questrun
 internal/bot/questboard_s7b_test.go  credit-runner  cain5b
 internal/bot/questboard_s7b_test.go  credit-runner  quests7b
@@ -786,6 +789,7 @@ internal/bot/resource.go  pro-runner  levelplan3
 internal/bot/routeguard.go  credit-runner  questrun
 internal/bot/runner.go  credit-runner  agencyp0
 internal/bot/runner.go  credit-runner  botinstant
+internal/bot/runner.go  credit-runner  cainchain
 internal/bot/runner.go  credit-runner  campaign1
 internal/bot/runner.go  credit-runner  goldprio
 internal/bot/runner.go  credit-runner  hourfix
@@ -802,12 +806,14 @@ internal/bot/runner.go  credit-runner  survB
 internal/bot/runner.go  credit-runner  uib1
 internal/bot/runner.go  credit-runner  vaultv5
 internal/bot/staletarget.go  credit-runner  botstuck
+internal/bot/staletarget.go  credit-runner  cainchain
 internal/bot/staletarget.go  credit-runner  staletarget
 internal/bot/staletarget_test.go  credit-runner  staletarget
 internal/bot/state.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  boardmoderace
 internal/bot/task.go  credit-runner  botstuck
 internal/bot/task.go  credit-runner  cain5b
+internal/bot/task.go  credit-runner  cainchain
 internal/bot/task.go  credit-runner  cainfix
 internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  quests3
@@ -907,6 +913,7 @@ internal/danger/  credit-runner  survA
 internal/danger/areaunits.json  pro-runner  decomp28
 internal/danger/gapexport.go  credit-runner  survC
 internal/data/db.go  credit-runner  botcpu2
+internal/data/db.go  credit-runner  cainchain
 internal/data/invfile_real_test.go  credit-runner  jewelicons
 internal/data/invfile_test.go  credit-runner  jewelcolor
 internal/decide/firsts_act1.json  credit-runner  friendfb
@@ -1044,6 +1051,7 @@ internal/nav/pursuit_test.go  credit-runner  pursuers
 internal/nav/roam.go  credit-runner  maphistoryC
 internal/nav/roam.go  credit-runner  maptrail
 internal/nav/roam.go  credit-runner  pursuers
+internal/nav/route.go  credit-runner  cainchain
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/plandata  credit-runner  agencyp0
@@ -1119,10 +1127,12 @@ internal/talk/tables.go  credit-runner  quests7b
 internal/task  credit-runner  cainfix
 internal/task/act1.go  credit-runner  cain45
 internal/task/act1.go  credit-runner  cain5b
+internal/task/act1.go  credit-runner  cainchain
 internal/task/act1.go  credit-runner  quests7b
 internal/task/act2.go  credit-runner  quests7b
 internal/task/act3.go  credit-runner  quests7b
 internal/task/banote_test.go  credit-runner  cainfix3
+internal/task/cainreenter_test.go  credit-runner  cainchain
 internal/task/cainstones_test.go  credit-runner  cain45
 internal/task/campaign.go  credit-runner  campaign1
 internal/task/executor.go  credit-runner  botstuck
@@ -1152,6 +1162,7 @@ internal/town/invstash_test.go  credit-runner  towntests
 internal/town/playerid.go  credit-runner  itemverbs2
 internal/town/playerstash.go  credit-runner  itemverbs2
 internal/town/playerstash_test.go  credit-runner  towntests
+internal/town/portalonly_test.go  credit-runner  cainchain
 internal/town/repairtrip_test.go  credit-runner  repairtrip
 internal/town/shop.go  credit-runner  lootwire3
 internal/town/shop.go  credit-runner  lootwireL4
@@ -1161,9 +1172,11 @@ internal/town/tidy.go  credit-runner  tidy
 internal/town/tidy_test.go  credit-runner  lootwireL4
 internal/town/tidy_test.go  credit-runner  tidy
 internal/town/tidy_test.go  credit-runner  towntests
+internal/town/town.go  credit-runner  cainchain
 internal/town/town.go  credit-runner  itemverbs2
 internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
+internal/town/trip.go  credit-runner  cainchain
 internal/vault  credit-runner  vaultv2
 internal/vault  credit-runner  vaultv5
 internal/vault  credit-runner  vaultv6
