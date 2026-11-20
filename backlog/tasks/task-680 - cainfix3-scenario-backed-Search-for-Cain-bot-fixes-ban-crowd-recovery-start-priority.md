@@ -28,7 +28,7 @@ owns:
   - "tools/provingground/scenarios/cain.json"
 exclusive: []
 contracts: []
-result: "GREEN on the builder lab slots (CHEATED setups, mechanics only): cain.stones Paladin 11 and Sorceress 3, cain.cage both, cain.scroll Sorceress 3, cain.chain Paladin 11 (80 virtual min). F1 ban waiver and F2 crowd override are unit-tested; the ban path was not hit live. Build-specific data: Chunk.noGold in data/questboard/act1.json, combat.crowdAbandonQuestN knob."
+result: "GREEN on the builder lab slots (CHEATED setups, mechanics only): cain.stones Paladin 11 and Sorceress 3, cain.cage both, cain.scroll Sorceress 3. cain.chain Paladin 11 is FLAKY, not green: GREEN once without the d2bot adapter wiring of the crowd override, RED once with it (potion trip out of Tristram returns by a stale town portal, see docs/probes/provingground-cainfix3-2026-11-19.md). F1 ban waiver and F2 override are unit-tested; no run hit a death ban. Build-specific data: Chunk.noGold in data/questboard/act1.json, knob combat.crowdAbandonQuestN."
 ---
 
 ## Description
@@ -43,6 +43,6 @@ Why: the Proving Ground chain runs of 2026-11-19 found the bot stalling a starte
 <!-- AC:BEGIN -->
 - [x] #1 cain.stones green Paladin and Sorceress
 - [x] #2 cain.cage green
-- [x] #3 cain.chain Paladin seed 11
+- [ ] #3 cain.chain Paladin seed 11 (flaky, see result)
 - [x] #4 unit tests two classes, race x20
 <!-- AC:END -->

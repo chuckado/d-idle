@@ -11,7 +11,7 @@
 | cain.cage Paladin 11 | RED | GREEN (V) | scenario setup (potions, key, chunk accepted at setup, bit 13 assert), grace 20 s, idle tick spends time |
 | cain.cage Sorceress 3 | RED | GREEN (V) | same |
 | cain.scroll Sorceress 3 | RED | GREEN (V) | fight grace (F4) |
-| cain.chain Paladin 11 | RED | GREEN (V, 80 virtual min, 815 s wall) | all of the above plus the quest crowd line held between slices (F2) |
+| cain.chain Paladin 11 | RED | FLAKY: GREEN once (80 virtual min, 815 s wall, stamp 194905, the crowd override was NOT yet wired into the d2bot fighter adapter: the wiring test caught it afterwards), RED once with the override live (stamp 201758) | the first four chunks (scroll, read, stones, free_cain start) now run on the board every time; see "Still red" |
 
 ## Findings and fixes
 
@@ -26,3 +26,7 @@
 - A tick of a chunk with no step to run (free_cain started outside Tristram) did nothing, so under the lockstep clock no time passed and the failure counter never advanced: 17 minutes wall in a field, ending in a death. The tick now goes to town (`rest`) and three counted failures park the chunk with its reason (V cain.cage run 192200: parked after 2 minutes).
 - free_cain started outside Tristram cannot do anything: a `to-tristram` node does not help (V: `exit to Tristram: nav: timeout: roaming for 5m0s`; the portal is only taken by the stones step). Left as is; the chunk parks with the reason above. Candidate for a card: let free_cain take the Tristram portal.
 - Stones from Underground Passage: the first stones run showed the level goal's `travel` taking the hero out of Stony Field again between two board steps (the fight gate re-queued the chunk each tick); fixed by `startedKey`, not a nav defect.
+
+## Still red: the chain's free_cain after a potion trip from Tristram (V stamp 201758, U root cause)
+
+With the override live the hero fought Tristram (crowd 14 to 24, `crowd-retreat` steps), needed potions 8 s after the start of free_cain, the town-portal cast was cancelled by the guard's `crowd-retreat` ("cancelled, nothing clicked"), the walk fallback reached camp, and the way back used the portal id 805306369 that was already in town from the earlier Dark Wood trip: the hero came back to the Dark Wood, not to Tristram. free_cain then has no step (cage needs Tristram), parks after three counted failures, the scenario ends RED (record 4 stays 0x0018). A `to-tristram` node in free_cain does not repair it (nav cannot path into Tristram, `roaming for 5m0s`). Candidates for the next card: (1) the town-portal bookkeeping (which town portal leads where after a cancelled cast); (2) free_cain re-entering through the Stony Field portal when it starts outside Tristram.
