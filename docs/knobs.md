@@ -533,7 +533,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
-| input.planner | 0 | 0..1 | bool | 0 | 4 | 1: skill selection (right hand and aura, left hand) runs through the input planner: the fork's select verb when the connected d2d advertises input.select in caps, else the bound key, else the popup click, and every path is verified by reading the hand back; the path used is counted in the minute line as input=verb/key/click. 0 (default): the legacy popup path, unchanged. Off until the Proving Ground scenario and a live check pass on the devp14 image (docs/process/sandbox-devp14.md; question Q13 of the Fable review is open). |
+| input.planner | 0 | 0..1 | bool | 0 | 5 | 1: skill selection (right hand and aura, left hand) runs through the input planner: the fork's select verb when the connected d2d advertises input.select in caps, else the bound key, else the popup click, and every path is verified by reading the hand back; the path used is counted in the minute line as input=verb/key/click. 0 (default): the legacy popup path, unchanged. Off until the Proving Ground scenario and a live check pass on the devp14 image (docs/process/sandbox-devp14.md; question Q13 of the Fable review is open). |
+| input.hotkeyMap | 0 | 0..1 | bool | 0 | 1 | 1: when a game starts the bot derives the hero's skill hotkey map from the planner's slots (main attack, second element, movement, buffs in upkeep order, aura, summons, town portal), writes it into the game's own hotkey table through the skill popup (F1 to F8) and reads the table back from the game state, logging any slot that does not match (docs/design/fable-review-2026-11-19/07-input-layer.md 4.3, I7). Never writes a save file. 0 (default): the hotkeys are left alone. U: not verified live. |
 
 ### agency.*
 
