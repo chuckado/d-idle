@@ -1,0 +1,41 @@
+div.inv-tip [role=tooltip data-rich=]
+  div.q-rare.tip-name [] "Gold Ring"
+  div.tip-line [data-k=prop] "Fire Resist +11%"
+  div.tip-line [data-k=prop] "+12 Life"
+  div.tip-line [data-k=prop] "+3 Dexterity"
+  div.tip-where [data-k=where] "In the pack"
+  div.tip-sec [data-ok=y data-who=hero]
+    div.tip-hd [] "You"
+    div.tip-req [data-ok=y] "✓ no requirements"
+  div.tip-sec [data-ok=y data-who=merc]
+    div.tip-hd [] "Desert Guard 14"
+    div.tip-req [data-ok=y] "✓ no requirements"
+  div.tip-sec [data-cmp=lring]
+    div.tip-hd [] "Against Raven Grip (left ring)"
+    div.tip-cmp [data-tone=up]
+      span.k [] "Fire Resist"
+      span.v [] "+8 → +11"
+      b.d [] "+3"
+    div.tip-cmp [data-tone=up]
+      span.k [] "Life"
+      span.v [] "+6 → +12"
+      b.d [] "+6"
+    div.tip-cmp [data-tone=up]
+      span.k [] "Dexterity"
+      span.v [] "- → +3"
+      b.d [] "+3"
+  div.tip-sec [data-cmp=rring]
+    div.tip-hd [] "Against Coral Band (right ring)"
+    div.tip-cmp [data-tone=up]
+      span.k [] "Fire Resist"
+      span.v [] "- → +11"
+      b.d [] "+11"
+    div.tip-cmp [data-tone=up]
+      span.k [] "Life"
+      span.v [] "+10 → +12"
+      b.d [] "+2"
+    div.tip-cmp [data-tone=up]
+      span.k [] "Dexterity"
+      span.v [] "- → +3"
+      b.d [] "+3"
+  div.tip-hint [] "Right-click: all actions."

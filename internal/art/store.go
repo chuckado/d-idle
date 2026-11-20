@@ -13,6 +13,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -36,7 +37,8 @@ const (
 	palPath  = `data\global\palette\ACT1\pal.dat`
 )
 
-var itemKey = regexp.MustCompile(`^item-([a-z0-9_]{1,16})$`)
+// itemKey: item-<invfile> with an optional ~t<T>c<C> tint (colormap set 1..8, colour 0..20; itemcolour design).
+var itemKey = regexp.MustCompile(`^item-([a-z0-9_]{1,16})(?:~t([1-8])c([0-9]|1[0-9]|20))?$`)
 
 // slotFiles maps slot-<name> keys to a panel silhouette file and frame. VERIFIED by rendering the real
 // frames and looking at them: inv_helm_glove frame 0 is the glove, 1 the helm; inv_ring_amulet frame 0 is
@@ -242,7 +244,16 @@ func (s *Store) render(key string) (image.Image, error) {
 	if err != nil {
 		return nil, err
 	}
-	return fr[0].Image(s.pal), nil
+	f := fr[0]
+	if m[2] != "" {
+		set, _ := strconv.Atoi(m[2])
+		col, _ := strconv.Atoi(m[3])
+		// Any problem with the colormap serves the plain icon: a tint is decoration, never an error.
+		if cm, err := s.colormap(set, col); err == nil {
+			f = f.Remap(cm)
+		}
+	}
+	return f.Image(s.pal), nil
 }
 
 func writeAtomic(path string, b []byte) {

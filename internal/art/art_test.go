@@ -74,6 +74,17 @@ func synthPal() []byte {
 	return p
 }
 
+// synthColormap is 21 made-up colours x 256: colour c sends index i to 1+(i+c*step) mod 250, never to 0.
+func synthColormap(step int) []byte {
+	b := make([]byte, 21*256)
+	for c := 0; c < 21; c++ {
+		for i := 0; i < 256; i++ {
+			b[c*256+i] = byte(1 + (i+c*step)%250)
+		}
+	}
+	return b
+}
+
 var icon = [][]byte{{0, 5, 5, 0}, {7, 7, 0, 9}}
 
 func synthInstall(t *testing.T) string {
@@ -101,6 +112,8 @@ func synthInstall(t *testing.T) string {
 		`data\global\items\invtst.dc6`:            synthDC6(icon),
 		`data\global\ui\PANEL\invchar.dc6`:        sheet,
 		`data\global\ui\PANEL\inv_helm_glove.dc6`: panelFrames(2),
+		`data\global\items\palette\grey.dat`:      synthColormap(10),
+		`data\global\items\palette\invgrey.dat`:   synthColormap(20),
 	})
 	exp := mpq.Build(map[string][]byte{`data\global\items\invexp.dc6`: synthDC6(icon)})
 	must := func(name string, b []byte) {

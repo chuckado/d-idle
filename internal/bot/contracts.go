@@ -121,6 +121,8 @@ type ChorePlan struct {
 	GoldFloor int // gold the visit must not spend
 	// PotionFloor > 0 (recovery): buy healing potions only up to this many in the belt, no mana or rejuvenation.
 	PotionFloor int
+	// ReserveGold > 0: the merc revive price the shop keeps back from optional buys (town.mercReserve).
+	ReserveGold int
 	// Antidotes > 0: top antidote potions up to this many (belt and pack); the Andariel kit (task.BossGate).
 	Antidotes int
 }
@@ -197,6 +199,14 @@ type Leveler interface {
 type PlayerGear interface {
 	Pending() int
 	RunPending(ctx context.Context) []string
+}
+
+// VaultKeep creates the items the player marked Keep in the Ethereal Vault (internal/vaultkeep); optional (Deps.VaultKeep).
+// Run checks its own readiness (alive, in town, no panel, cursor free) and is bounded in time and items per call.
+type VaultKeep interface {
+	Pending() int                     // records waiting for a create
+	Run(ctx context.Context) []string // one log line per notable event
+	TripWanted() bool                 // the player pressed Keep now: walk home for it
 }
 
 // Gear equips and buys weapons and armor for the build. Optional. (leveler.Leveler through an adapter)

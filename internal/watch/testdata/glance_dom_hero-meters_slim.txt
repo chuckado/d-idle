@@ -1,0 +1,9 @@
+<div data-cockpitPanel="band" data-slim="1">
+  <div class="d-meter thin" data-key="life" data-kind="life" data-level="bad" aria-label="life" aria-valuenow="20" role="meter" title="life 30 of 150">
+    <span class="lbl"> "life"
+    <span class="track">
+    <span class="num"> "30"
+  <div class="d-meter thin" data-key="mana" data-kind="mana" aria-label="mana" aria-valuenow="68" role="meter" title="mana 41 of 60">
+    <span class="lbl"> "mana"
+    <span class="track">
+    <span class="num"> "41"

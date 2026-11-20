@@ -1,0 +1,25 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "agency.plan-matches-profile",
+   "title": "Shadow planner on: at the checkpoints the `planner shadow:` line names the same attack as the combat profile",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": ["agency.plan"],
+   "touches": ["internal/agency/", "data/capabilities/", "cmd/d2bot/agencywire.go", "internal/combat/"],
+   "pre": {"level": 18},
+   "trigger": {"goals": "campaign", "knobs": {"agency.planner": 1, "resource.pointsDecisions": 1}},
+   "budget": {"virtual_min": 5},
+   "matrix": {"classes": ["Paladin", "Sorceress"], "seeds": [11, 3]},
+   "provenance": "SETUP: level 18 with the points a played level gives; the autopilot spends them from the plan table so the hero has the table's skills. Reachable by play.",
+   "notes": "Uses the log_line assertion (the shadow planner writes only a bot log line, the dump cannot show it). The line is written once a minute, so a 5 virtual minute run holds several. Offline equivalent on every merge: internal/agency TestPlannerAgreementFixture. Agreement is asserted for the Sorceress only: a Paladin on paladin-zealot-lite at clvl 18 is a documented mismatch (the estimate prefers Sacrifice over Zeal), so the Paladin is asserted to produce the line and no 'no plan' warning. The knob is shadow only: the hero's play must equal a run with agency.planner 0, so no_writes. The window is a linear map of the log's wall clock to virtual minutes (U).",
+   "assert": [
+    {"kind": "log_line", "pattern": "^planner shadow: clvl=\\d+ class=\\w+ plan=", "min": 1, "why": "the shadow planner ran and wrote its line"},
+    {"kind": "log_line", "pattern": "^planner shadow: no plan", "max": 0, "why": "the planner found a plan for the bought skills"},
+    {"kind": "log_line", "pattern": "^planner shadow: clvl=\\d+ class=sorceress .* agree=true", "min": 1, "only_class": "Sorceress", "why": "the plan names the attack the combat profile plays"},
+    {"kind": "no_writes"}
+   ]
+  }
+ ]
+}

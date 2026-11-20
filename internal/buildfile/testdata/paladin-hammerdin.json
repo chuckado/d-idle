@@ -1,0 +1,22 @@
+{
+ "schema": "didle.build/1",
+ "name": "Hammerdin, no respec",
+ "class": "paladin",
+ "author": "example",
+ "notes": "Smite carries to 18, then everything banked goes into Blessed Hammer. Fanaticism pulls Sacrifice and Zeal in as prerequisites.",
+ "source": "hand-written example (U numbers)",
+ "skills": [
+  {"skill": "Might", "to": 1},
+  {"skill": "Blessed Hammer", "to": 20, "when": {"clvl": 18}},
+  {"skill": "Holy Shield", "to": 1},
+  {"skill": "Fanaticism", "to": 1, "when": {"clvl": 30}},
+  {"skill": "Concentration", "to": 20},
+  {"skill": "Vigor", "to": 20}
+ ],
+ "stats": [
+  {"stat": "str", "to": 60, "req_for": "shield and armor requirements (comment only)"},
+  {"stat": "dex", "to": 70, "per": 2},
+  {"stat": "vit", "to": "rest"}
+ ],
+ "quest_points": [{"clvl": 8, "skill": 1}, {"clvl": 15, "skill": 1}, {"clvl": 26, "skill": 2}]
+}

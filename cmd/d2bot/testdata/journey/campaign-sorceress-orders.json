@@ -1,0 +1,6 @@
+{
+ "schema": "campaign.state/1",
+ "heroes": {
+  "Sorci": {"mode": "orders", "goAt": "floor", "done": {"start": "2026-11-12T09:00:00Z"}}
+ }
+}

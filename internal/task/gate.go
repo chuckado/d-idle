@@ -267,7 +267,11 @@ func fieldReady(a Area) func(World) *Fault {
 		}
 		switch {
 		case w.Banned[a]:
-			return &Fault{Kind: KindDanger, Why: "not ready: area banned after repeated deaths"}
+			why := "area banned after repeated deaths"
+			if n := w.BanNote[a]; n != "" {
+				why = "area banned after " + n
+			}
+			return &Fault{Kind: KindDanger, Why: "not ready: " + why}
 		case w.RouteBlocked != "" && RouteGuarded(a):
 			return &Fault{Kind: KindDanger, Why: "not ready: route guard (" + w.RouteBlocked + ")"}
 		case w.TowerBlocked != "" && TowerGuarded(a):

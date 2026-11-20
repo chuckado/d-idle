@@ -119,8 +119,13 @@ func (h *Hub) Thoughts() ThoughtsView {
 			it.Learn = fmt.Sprintf("From now on I will always \"%s\" here (%s). OK?", h.pointAnswerLabel(info.Point, info.Answer), it.Context)
 			it.Choices = []ChoiceView{{"yes", "Yes, always", ""}, {"no", "No", ""}}
 		} else {
+			fl := firstLabels(info)
 			for _, c := range info.Choices {
-				it.Choices = append(it.Choices, ChoiceView{c.ID, c.Label, card.Does[c.ID]})
+				lbl := c.Label
+				if fl[c.ID] != "" {
+					lbl = fl[c.ID]
+				}
+				it.Choices = append(it.Choices, ChoiceView{c.ID, lbl, card.Does[c.ID]})
 			}
 			it.Choices = append(it.Choices, ChoiceView{decide.NotSure, "Not sure, you decide", "let the hero decide this time; nothing is learned"})
 		}
@@ -450,11 +455,13 @@ type ConfigView struct {
 	AnswerBase string `json:"answerBase,omitempty"`
 	AnswerPort int    `json:"answerPort,omitempty"`
 	FadeSec    int    `json:"fadeSec"`
-	FrameURL   string `json:"frameUrl,omitempty"` // the viewer's frame stream, empty when there is no game
-	Currency   bool   `json:"currency,omitempty"` // the page shows the balance strip (d.idle mode)
+	FrameURL   string `json:"frameUrl,omitempty"`   // the viewer's frame stream, empty when there is no game
+	Build      string `json:"build,omitempty"`      // this viewer's build id, for the stream monitor's header
+	PalFeedURL string `json:"palFeedUrl,omitempty"` // the lossless feed (palfeed.go), empty while the knob is off
+	Currency   bool   `json:"currency,omitempty"`   // the page shows the balance strip (d.idle mode)
 }
 
 func (h *Hub) Config() ConfigView {
 	return ConfigView{Schema: configSchema, AnswerBase: strings.TrimRight(h.cfg.AnswerBase, "/"), AnswerPort: h.cfg.AnswerPort,
-		FadeSec: h.cfg.Cat.Config.FadeSec, FrameURL: h.cfg.FrameURL, Currency: h.cur.Load() != nil}
+		FadeSec: h.cfg.Cat.Config.FadeSec, FrameURL: h.cfg.FrameURL, PalFeedURL: h.palFeedURL(), Build: h.build, Currency: h.cur.Load() != nil}
 }

@@ -28,6 +28,7 @@ type stub struct {
 	rows                []string
 	warps, presets, npc []string
 	calls               map[string]int
+	lm                  *d2dctl.LevelMap // the fork's debug levelmap (nil: the verb errors)
 }
 
 func (s *stub) n(k string) { s.calls[k]++ }
@@ -58,7 +59,15 @@ func (s *stub) Warps(context.Context) (d2dctl.List[d2dctl.Warp], error) {
 	return list(s.warps, d2dctl.ParseWarp)
 }
 func (s *stub) Presets(context.Context) (d2dctl.List[d2dctl.Preset], error) {
-	return list(s.presets, d2dctl.ParsePreset)
+	var rows []string
+	for _, x := range s.presets {
+		if !strings.HasPrefix(x, "room") {
+			rows = append(rows, x)
+		}
+	}
+	l, err := list(rows, d2dctl.ParsePreset)
+	l.Reply = &d2dctl.Reply{Lines: s.presets}
+	return l, err
 }
 func (s *stub) NPCs(context.Context) (d2dctl.List[d2dctl.NPC], error) {
 	return list(s.npc, d2dctl.ParseNPC)
@@ -106,6 +115,22 @@ func TestGridMatchesSyntheticMap(t *testing.T) {
 	}
 	if lm.Grid.Known(15, 0) || lm.Grid.Walkable(-1, 3) {
 		t.Fatal("outside the map must be unknown and not walkable")
+	}
+}
+
+func TestRoomRowsComeFromThePresetsReply(t *testing.T) {
+	s := newStub()
+	s.presets = append(s.presets, "room\t161\t2\t1")
+	w := New(s, Options{})
+	if _, err := w.Update(); err != nil {
+		t.Fatal(err)
+	}
+	lm := w.Current()
+	if len(lm.RoomRows) != 1 || lm.RoomRows[0].Type != 161 || lm.RoomRows[0].Pos != (d2map.Point{X: 12, Y: 7}) {
+		t.Fatalf("room rows %+v", lm.RoomRows)
+	}
+	if len(lm.Presets) != 2 {
+		t.Fatalf("presets %+v", lm.Presets)
 	}
 }
 

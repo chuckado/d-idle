@@ -1,0 +1,31 @@
+# questspec: quest chains as checkable data
+
+> status: current (card questspec, roadmap R5 of docs/design/fable-review-2026-11-19/06-roadmap.md). Checker plus data annotation: NO bot behaviour change, the executor still reads `data/questboard` only. Tags: V = a test in `internal/questspec` ran and passed, S = a secondary or doc source, U = unverified.
+
+## What it is
+
+- `data/questspec/act1.json` (`questspec/2`): one chain per Act 1 quest of `data/questboard/act1.json` (8 chains, Search for Cain in 11 steps over its 5 chunks). A chain has `quest` (the board quest id), `initial` facts, `areas` (with a size) and ordered `steps`.
+- A step: `id`, `act` (travel, clear, find_object, interact, pickup, talk, kill, use_item, wait), `target`, `pre`, `post`, `consumes`, `discover`, `budget_s`, `on_fail`, `tries`, optional `explore`, `verbs`, `idempotent`, and the link to the board: `chunk`, `board` (the chunk's step strings it realises), `nodes` (task-layer node suffixes).
+- Target identity is never a display name: objects and npcs carry `class` (objects.txt id, monstats id), items a base `code`, monsters and areas a snake_case token. The classes are asserted equal to the constants of `internal/quest` (V, `TestClassesMatchBotConstants`).
+- Facts are `name(arg,...)`; `a|b` is a disjunction (as a post the first alternative is what the step produces, the rest is later evidence, so a durable fact can back a per-run one: `killed(x)|quest_state(q,cleared)`). `in_area` is transient and only for movement; a step whose posts are all `in_area` is `idempotent` and resumption skips it.
+- `data/questspec/caps/*.json` (`questcaps/2`, file name = backend): per backend the control `verbs` it answers, how a target can become `knowledge` (preset_list, preset_near = a row only within about 15 cells, room_rows), the fact `readers` (`tier`, `via` = the verb it needs, `volatile` = lost on restart, `note` starting `RCn:` ties it to a root cause), `item_match` and the executor's `progress_rules`.
+- `data/questspec/allow.json` (`questallow/1`): known gaps, each with owner and reason.
+
+## The checker (`internal/questspec`, `go test`, so the merge gate runs it)
+
+`Check(chain, caps)` rules: 1 every pre/post fact has a reader, and the verb it needs is shipped; 2 every pre is initial or an earlier post; 3 some post of each step is readable; 4 a find in a large area with presets only near needs an explore budget and a progress rule the executor supports; 5 items by code, matched by code; 6 resumable: the next step derives from durable facts after every prefix, every step has a persistent post that is not only a per-run observation; 7 targets by class or code, labels not display names; 8 verbs of the step exist on the backend; 9 the discovery mode has a knowledge source; 10 a retry has `tries` (a lease), every step a budget. `CheckBoard(chain, board)` (rule 11): the chain names exactly the chunks, board steps and nodes of its quest, in order, so the two views cannot drift.
+
+`TestShippedChains` checks EVERY chain against EVERY caps file and the board; a finding not in `allow.json` fails, and an allow entry whose finding is gone fails too (V). `Run`/`World` is a scripted fake world: after k steps the runner is thrown away and the next step must derive from facts alone; every chain resumes identically from all restart points (V, `TestSimResumesAtEveryStep`).
+
+## What it caught (V)
+
+- Fixtures (`internal/questspec/testdata`): the old Cain data (tree by display name, five stones read by lit state, scroll by name, unleased retries) on the 2026-11-17 backend reproduces RC1 (hidden tree row, no progress rule), RC2 (lit state unreadable; on the shipped build the verb is `debug objects`, lab only) and RC3 (display-name item matching), plus rules 7, 8, 10 (`TestOldCainReproducesRootCauses`, `TestKnownBugsAreNamedPrecisely`, `TestLitStateNeedsLabVerb`). The converted chain has no finding on `testdata/fixed.json` (lab verbs, room rows, a progress rule): `TestShippedCainCleanOnFixedBackend`.
+- Today's main data, three findings, all allow-listed with owner "cain follow-up (RC1)": rule 4 `find_tree` on both backends (no coverage-progress rule in the executor, treefix3 "not fixed", U); rule 9 `find_tree` on the shipped build (room rows U, one `debug presets` reply closes it). Every other Act 1 step is clean on both backends. Not a finding, but a modelled choice: the five stones are ONE step with post `portal_open(tristram)` because the executor cycles them inside one Interact and the per-stone lit state is unreadable on the shipped build; a per-stone chain fails (fixture).
+
+## Limits (U)
+
+Single actor, no branching, no negative facts, no per-difficulty variants. The capability sets are what the docs say, not a dump of the code (`debug objects`/`debug portals` shipping status is S/U: docs/process/sandbox-devp13.md lists them among carried patches, the sandbox runs `--item-verbs --vault-verbs` and not `--lab-verbs`). `quest_state` reader tier is S (docs/questmem.md). Budgets are only checked to exist. Acts 2 to 5 have no chains yet: copy a chain, run the test, fix or allow-list.
+
+## Coordination with the Proving Ground (S: read-only look at agent/provingground `internal/scenario`)
+
+`scenario.Step{Action,Target,Nodes}` and `scenario.QuestRef{Quest,Chunk}` map onto a step's `act`, `target` and `nodes` and the chain's `quest` plus the step's `chunk`; a step's `pre`/`post` facts are what a scenario's `Pre`/`Assert` should be generated from (fact -> record word, item code, area). Name differences to settle when both merge: `action` vs `act`, `Target` is one string there and an object here (use `target.name`, the class travels with the chain). The `Needs` list of a scenario is the step's `verbs`; `D2D: sandbox|lab` selects the caps file. The later arbiter reads `Derive` for "what next after a restart".

@@ -86,6 +86,9 @@ func (a fighterAdapter) SetDeathWeights(w combat.DeathWeights) { a.f.SetDeathWei
 // SetWalking tells the fighter the bot is on a travel or quest walk (the crowd-abandon rule applies to walks).
 func (a fighterAdapter) SetWalking(on bool) { a.f.SetWalking(on) }
 
+// SetQuestCrowd tells the fighter a player-started quest chunk runs (combat.crowdAbandonQuestN applies).
+func (a fighterAdapter) SetQuestCrowd(on bool) { a.f.SetQuestCrowd(on) }
+
 func (a fighterAdapter) Safety(s *d2.Snapshot) bot.SafetyAction { return toBot[a.f.Safety(s)] }
 func (a fighterAdapter) Act(ctx context.Context, act bot.SafetyAction) error {
 	return mapCombatErr(a.f.Act(ctx, toCombat[act]))
@@ -165,7 +168,7 @@ func (a townAdapter) Chores(ctx context.Context, p bot.ChorePlan) (bot.ChoreRepo
 	// Every visit may restock: the shop chore checks its own need, so a trip that came for a quest, a heal or a full
 	// pack still buys the town portal and the potion kit when gold allows (G1 attempt 6).
 	tp := town.ChorePlan{Heal: p.Heal, Identify: p.Identify, Sell: p.Sell, Potions: true, Scrolls: true, Repair: p.Repair,
-		Stash: p.Stash, Gold: true, Insure: p.Insure, Ammo: true, Force: p.Poverty, PotionFloor: p.PotionFloor, Antidotes: p.Antidotes, Cube: a.e.Tune.Bot.CubeJobs && p.Stash}
+		Stash: p.Stash, Gold: true, Insure: p.Insure, Ammo: true, Force: p.Poverty, PotionFloor: p.PotionFloor, ReserveGold: p.ReserveGold, Antidotes: p.Antidotes, Cube: a.e.Tune.Bot.CubeJobs && p.Stash}
 	rep, err := a.t.Chores(ctx, tp)
 	out := bot.ChoreReport{}
 	for _, s := range rep.Steps {
@@ -176,7 +179,11 @@ func (a townAdapter) Chores(ctx context.Context, p bot.ChorePlan) (bot.ChoreRepo
 		case s.Ran:
 			out.Done = append(out.Done, s.Name)
 		default:
-			out.Skipped = append(out.Skipped, s.Name)
+			if s.Detail != "" {
+				out.Skipped = append(out.Skipped, s.Name+" ("+s.Detail+")")
+			} else {
+				out.Skipped = append(out.Skipped, s.Name)
+			}
 		}
 	}
 	if err == nil && p.Poverty {

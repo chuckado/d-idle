@@ -44,22 +44,23 @@ func TestLadderTooHardTower(t *testing.T) {
 		t.Fatalf("learned go must lift the level block: %q (stats %+v)", got, l.Stats())
 	}
 
-	g2 := campaignRig(t, &fakeQuests{}, 20)
-	g2.r.e.Tune.Route.TowerMinLife = 0 // the life rule would close it for another reason
-	g2.r.poll()
-	s2 := g2.r.latest()
-	ladder.Install(nil)
-	if g2.r.towerGuardWhy(s2) != "" && strings.Contains(g2.r.towerGuardWhy(s2), "clvl") {
-		t.Skipf("clvl 20 is not open in this rig")
-	}
-	l, clk = teachLadder(t, ladder.PointTooHard, "skip")
-	for i := 0; i < 10 && l.Stats().ByRule == 0; i++ {
+	// At or above the floor nothing is asked: no "wants level 15, hero is level 15" card (live 2026-11-17).
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		g2 := campaignRig(t, &fakeQuests{}, 15)
+		g2.w.set(func(w *world) { w.class = class })
+		g2.r.e.Tune.Route.TowerMinLife = 0
+		g2.r.poll()
+		s2 := g2.r.latest()
+		ladder.Install(nil)
+		if strings.Contains(g2.r.towerGuardWhy(s2), "clvl") {
+			t.Fatalf("%v: clvl 15 must meet the floor 15: %q", class, g2.r.towerGuardWhy(s2))
+		}
+		l, _ = teachLadder(t, ladder.PointTooHard, "skip")
+		before := l.Stats().Asked
 		g2.r.towerGuardWhy(s2)
-		clk.Advance(5 * time.Second)
-		l.Pump()
-	}
-	if got := g2.r.towerGuardWhy(s2); !strings.HasPrefix(got, "ladder: skip") {
-		t.Fatalf("learned skip must block: %q (stats %+v)", got, l.Stats())
+		if l.Stats().Asked != before {
+			t.Fatalf("%v: asked at the floor", class)
+		}
 	}
 }
 

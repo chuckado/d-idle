@@ -28,6 +28,8 @@ func (r *Runner) ReadinessHero() (readiness.Hero, string, bool) {
 		Life:       p.Life,
 		MaxLife:    p.MaxLife,
 		Resist:     readiness.Resists{Fire: p.Resist.Fire, Cold: p.Resist.Cold, Lightning: p.Resist.Lightning, Poison: p.Resist.Poison},
+		MaxBonus:   readiness.Resists{Fire: p.MaxResist.Fire, Cold: p.MaxResist.Cold, Lightning: p.MaxResist.Lightning, Poison: p.MaxResist.Poison},
+		AbsorbPct:  readiness.Resists{Fire: p.Absorb.FirePct, Cold: p.Absorb.ColdPct, Lightning: p.Absorb.LightningPct},
 		Basis:      readiness.DefaultResistBasis,
 		Potions:    w.Potions,
 		RepairPct:  -1,

@@ -1,0 +1,16 @@
+10:21:30 board [null, null, null, null, []] meter= Training toward Sisters to the Slaughter: level is not the gap, the margin still says too hard (gear, potions or resistances).
+10:21:30 no startable offer yet []
+10:21:40 tap start scroll {"ok":true,"reason":"The Search for Cain started.","quest":"search_for_cain","chunk":"scroll","state":"accepted"}
+
+10:21:45 board [["scroll", "in_progress", "take_scroll", null], null, null, null, []] meter= On a quest: The Search for Cain. After it the hero returns to train mode.
+10:23:06 board [null, null, null, null, ["scroll"]] meter= Training toward Sisters to the Slaughter: level is not the gap, the margin still says too hard (gear, potions or resistances).
+10:23:06 tap start read {"ok":true,"reason":"The Search for Cain started.","quest":"search_for_cain","chunk":"read","state":"accepted"}
+
+10:23:11 board [null, ["read", "awaiting_handin"], null, null, ["scroll"]] meter= On a quest: The Search for Cain. After it the hero returns to train mode.
+10:23:11 tap handin read {"ok":true,"pending":true,"reason":"Handing in The Search for Cain.","quest":"search_for_cain","chunk":"read","state":"awaiting_handin"}
+
+10:23:16 board [null, null, null, {"quest": "search_for_cain", "chunk": "read", "state": "confirming", "reason": "The reward was seen; waiting for the game to confirm it.", "attempts": 1, "at": "2026-11-19T15:23:13Z"}, ["read", "scroll"]] meter= Training toward Sisters to the Slaughter: level is not the gap, the margin still says too hard (gear, potions or resistances).
+10:23:16 tap start stones {"ok":true,"reason":"The Search for Cain started.","quest":"search_for_cain","chunk":"stones","state":"accepted"}
+
+10:23:21 board [["stones", "in_progress", "touch_stones", null], null, null, {"quest": "search_for_cain", "chunk": "read", "state": "confirming", "reason": "The reward was seen; waiting for the game to confirm it.", "attempts": 1, "at": "2026-11-19T15:23:13Z"}, ["read", "scroll"]] meter= On a quest: The Search for Cain. After it the hero returns to train mode.
+10:31:17 board [["scroll", "in_progress", "take_scroll", null], null, null, {"quest": "search_for_cain", "chunk": "read", "state": "confirming", "reason": "The reward was seen; waiting for the game to confirm it.", "attempts": 1, "at": "2026-11-19T15:23:13Z"}, ["read"]] meter= On a quest: The Search for Cain. After it the hero returns to train mode.

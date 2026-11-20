@@ -75,7 +75,7 @@ func runID() string {
 // the catalogue carries the firsts point (useFirsts), and the return screen over both.
 func newFun(l ladderOptions, stateDir string, hub *watch.Hub, wallet *currency.Wallet, st *decide.Store, cat *decide.Catalogue, clk decide.Clock, notes watch.NotesSink, status func() goals.Status, halt func() string) (*watch.Fun, error) {
 	run := runID()
-	cfg := watch.FunConfig{Hub: hub, Speed: 1, Notes: notes}
+	cfg := watch.FunConfig{Hub: hub, Speed: 1, Notes: notes, Rules: []string{"ladder runewords: " + map[bool]string{false: "off", true: "on"}[l.ladderRunewords]}}
 	if stateDir != "" {
 		hub.SetLayoutPath(filepath.Join(stateDir, "layout-"+l.storeProfile()+".json"))
 		cfg.Visit = watch.NewVisit(filepath.Join(stateDir, "visit.json"), nil)
@@ -127,6 +127,7 @@ func newFun(l ladderOptions, stateDir string, hub *watch.Hub, wallet *currency.W
 	if cfg.Strip != nil {
 		cfg.OrderQueue.Quote = cfg.Strip.Quote
 	}
+	cfg.OrderLoop = loopConfig(stateDir, halt, status, cfg.Strip)
 	if m := l.monsterTables(); m != nil {
 		cfg.Monsters = m
 		if stateDir != "" {
@@ -140,6 +141,7 @@ func newFun(l ladderOptions, stateDir string, hub *watch.Hub, wallet *currency.W
 		return nil, err
 	}
 	fun = f
+	f.Cmd.Blocked = journeyBlockedHook(status)
 	for _, e := range f.Errors() {
 		slog.Warn("fun: " + e)
 	}

@@ -1,0 +1,28 @@
+# P06 missile_block.py, 2026-11-15 (game side: the worker host, d2d: the NAS builder). oracle 13783a6d, claim cd314f2c (code identical to the built c439ac7e)
+## mm_diff cases (30,000, seed 20261115)
+parent: 29421 cases, 4550 differ (4550 unblockable in game.exe); 579 excluded (Blood Raven: her record carries her weapon's random damage); 0 with no d2d row
+claim:  29421 cases, 0 differ (4550 unblockable in game.exe); 579 excluded (Blood Raven: her record carries her weapon's random damage); 0 with no d2d row
+## skill rows (mm_launch.py, 60 lines)
+parent: 45 cases, 42 differ (42 unblockable in game.exe); 3 excluded (Blood Raven: her record carries her weapon's random damage); 12 with no d2d row
+claim:  45 cases, 0 differ (42 unblockable in game.exe); 3 excluded (Blood Raven: her record carries her weapon's random damage); 12 with no d2d row (a gap of its own: listed above, not judged)
+## rows with no d2d Missiles row (cases, row)
+      3 shafire2
+      3 shafire4
+      3 unholybolt2
+      3 unholybolt3
+## game.exe can-block of the skill rows (case count by row, can_block)
+3 andarielspray can_block=1
+3 countessfirewallmaker can_block=0
+3 frostnova can_block=0
+9 leapknockback can_block=0
+3 shafire1 can_block=0
+3 shafire2 can_block=0
+3 shafire3 can_block=0
+3 shafire4 can_block=0
+6 unholybolt1 can_block=0
+3 unholybolt2 can_block=0
+3 unholybolt3 can_block=0
+9 vampirefirewallmaker can_block=0
+6 vampiremeteorcenter can_block=0
+## mm_diff rows whose physical is 0 in every case
+mummy1 mummy2 mummy3 mummy4 pantherpotgreen (the other 25 rows have 0 only for owner damage pairs of 0)

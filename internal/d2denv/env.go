@@ -12,6 +12,7 @@ import (
 	"runtime/pprof"
 	"strconv"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -96,7 +97,8 @@ func Build(ctx context.Context, cfg Config) (*Backend, error) {
 		cfg.LinkWait = DefaultLinkWait
 	}
 	w := d2dworld.New(d2dworld.Client{Client: c}, d2dworld.Options{LinkWait: cfg.LinkWait, Sleep: clk.Poll, Now: clk.Now,
-		Logf: func(f string, a ...any) { cfg.Log.Info(sprintf(f, a...)) }})
+		LayoutRead: func() bool { return cfg.Tune != nil && cfg.Tune.Quests.LayoutRead != 0 },
+		Logf:       func(f string, a ...any) { cfg.Log.Info(sprintf(f, a...)) }})
 	p := &Proc{C: c, Bin: cfg.Bin, Data: cfg.DataDir, Sock: cfg.Sock, Home: cfg.Home, Nice: cfg.Nice, NoSave: cfg.Spec.NoSave, ExtraArgs: cfg.ExtraArgs}
 	if cfg.LogFile != "" && cfg.Bin != "" {
 		p.LogPath = cfg.LogFile // opened (and the previous one rotated) at every start
@@ -174,6 +176,10 @@ type LateClock struct {
 	c   *d2dctl.Client
 	ctx context.Context
 	p   atomic.Pointer[d2dinput.Pacer]
+
+	fmu      sync.Mutex // the frozen Pause (freeze.go): the wall clock stands still between SetFrozen(true) and (false)
+	frozenAt time.Time
+	offset   time.Duration
 }
 
 // Detect looks at "clock": lockstep gives the Pacer. Returns whether lockstep is on.
@@ -212,7 +218,7 @@ func (l *LateClock) Now() time.Time {
 	if p := l.p.Load(); p != nil {
 		return p.Now()
 	}
-	return time.Now()
+	return l.wall()
 }
 
 // Watch is the Pacer's Watch under lockstep (the runner's guard runs on the acting goroutine, docs/d2d-determinism.md);

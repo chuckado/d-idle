@@ -1,0 +1,22 @@
+div.inv-tip [role=tooltip data-rich=]
+  div.q-magic.tip-name [] "War Staff"
+  div.tip-line [data-k=prop] "Two-Hand Damage: 2 to 8"
+  div.tip-line [data-k=prop] "+2 to Charged Bolt"
+  div.tip-where [data-k=where] "In the pack"
+  div.tip-sec [data-ok=y data-who=hero]
+    div.tip-hd [] "You"
+    div.tip-req [data-ok=y] "✓ Level 6"
+  div.tip-sec [data-ok=y data-who=merc]
+    div.tip-hd [] "Desert Guard 14"
+    div.tip-req [data-ok=y] "✓ Level 6"
+  div.tip-sec [data-cmp=rhand]
+    div.tip-hd [] "Against Short Staff (right hand)"
+    div.tip-cmp [data-tone=up]
+      span.k [] "Damage"
+      span.v [] "1-5 → 2-8"
+      b.d [] "+2"
+    div.tip-cmp [data-tone=up]
+      span.k [] "Charged Bolt"
+      span.v [] "- → +2"
+      b.d [] "+2"
+  div.tip-hint [] "Right-click: all actions."

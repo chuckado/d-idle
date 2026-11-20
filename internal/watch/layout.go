@@ -28,12 +28,228 @@ const (
 
 // LayoutManifest is a watch.layout/1 file: the grid positions the layout editor exports.
 type LayoutManifest struct {
-	Schema      string                      `json:"schema"`
-	Cols        int                         `json:"cols"`
-	RowHeight   int                         `json:"rowHeight"`
-	Density     string                      `json:"density,omitempty"`
-	Theme       string                      `json:"theme,omitempty"`
+	Schema    string `json:"schema"`
+	Cols      int    `json:"cols"`
+	RowHeight int    `json:"rowHeight"`
+	Density   string `json:"density,omitempty"`
+	Theme     string `json:"theme,omitempty"`
+	// Status chooses the panels of the status band instead of the page's own list (optional; see LayoutStatus).
+	Status      []LayoutStatus              `json:"status,omitempty"`
 	Breakpoints map[string]LayoutBreakpoint `json:"breakpoints"`
+	// Template and Slots turn the file into a viewport-filling cockpit (docs/ui/redesign-2026-11-14/J-second-attempt.md
+	// section 3). Additive: a reader that does not know them lays out Breakpoints, and a file without a template is
+	// laid out exactly as before.
+	// Slots and Sizes stay raw: a file of a later version (other template, other shapes) must load and be stored as it
+	// is, so they are decoded only for template cockpit/1, by Cockpit (and so by the strict check, never by ParseLayout).
+	Template string          `json:"template,omitempty"`
+	Slots    json.RawMessage `json:"slots,omitempty"`
+	Sizes    json.RawMessage `json:"sizes,omitempty"`
+}
+
+// Cockpit decodes the slots and sizes of a cockpit/1 file; a file with another template has none (nil, no error).
+func (l LayoutManifest) Cockpit() (*LayoutSlots, LayoutSizes, error) {
+	var z LayoutSizes
+	if l.Template != cockpitTemplate {
+		return nil, z, nil
+	}
+	if len(l.Slots) == 0 {
+		return nil, z, nil
+	}
+	var s LayoutSlots
+	if err := json.Unmarshal(l.Slots, &s); err != nil {
+		return nil, z, fmt.Errorf("layout slots: %w", err)
+	}
+	if len(l.Sizes) > 0 {
+		if err := json.Unmarshal(l.Sizes, &z); err != nil {
+			return nil, z, fmt.Errorf("layout sizes: %w", err)
+		}
+	}
+	return &s, z, nil
+}
+
+const cockpitTemplate = "cockpit/1"
+
+// idList is a slot's panels: one id ("stage": "video") or a list.
+type idList []string
+
+func (l *idList) UnmarshalJSON(b []byte) error {
+	var one string
+	if err := json.Unmarshal(b, &one); err == nil {
+		*l = idList{one}
+		return nil
+	}
+	var many []string
+	if err := json.Unmarshal(b, &many); err != nil {
+		return fmt.Errorf("want a panel id or a list of ids: %w", err)
+	}
+	*l = many
+	return nil
+}
+
+// LayoutSlots are the named regions of cockpit/1. RailWide replaces Rail from 1700 px (two columns); PhoneTabs are the
+// tabs under 700 px. Unknown holds slot names this version does not have (Check refuses them, the loader ignores them).
+type LayoutSlots struct {
+	Band      idList            `json:"band"`
+	Stage     idList            `json:"stage"`
+	Strip     idList            `json:"strip"`
+	Rail      idList            `json:"rail"`
+	RailWide  *LayoutRailWide   `json:"railWide,omitempty"`
+	PhoneTabs map[string]idList `json:"phoneTabs,omitempty"`
+	Unknown   []string          `json:"-"`
+}
+
+// LayoutRailWide is the rail from 1700 px (the accepted renders): Top across the whole rail, under it Left (1.7 parts) and
+// Right (1 part) side by side. Top is optional.
+type LayoutRailWide struct {
+	Top   idList `json:"top,omitempty"`
+	Left  idList `json:"left"`
+	Right idList `json:"right"`
+}
+
+// LayoutSizes: the strip height and the rail's least width, in px.
+type LayoutSizes struct {
+	Strip   int `json:"strip,omitempty"`
+	RailMin int `json:"railMin,omitempty"`
+}
+
+var layoutSlotNames = []string{"band", "stage", "strip", "rail", "railWide", "phoneTabs"}
+
+func (s *LayoutSlots) UnmarshalJSON(b []byte) error {
+	type plain LayoutSlots
+	if err := json.Unmarshal(b, (*plain)(s)); err != nil {
+		return err
+	}
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(b, &raw); err != nil {
+		return err
+	}
+	s.Unknown = nil
+	for k := range raw {
+		if !containsStr(layoutSlotNames, k) {
+			s.Unknown = append(s.Unknown, k)
+		}
+	}
+	sort.Strings(s.Unknown)
+	return nil
+}
+
+// ids lists every panel id a cockpit names, in slot order.
+func (s *LayoutSlots) ids() []string {
+	var out []string
+	out = append(out, s.Band...)
+	out = append(out, s.Stage...)
+	out = append(out, s.Strip...)
+	out = append(out, s.Rail...)
+	if s.RailWide != nil {
+		out = append(out, s.RailWide.Top...)
+		out = append(out, s.RailWide.Left...)
+		out = append(out, s.RailWide.Right...)
+	}
+	tabs := make([]string, 0, len(s.PhoneTabs))
+	for n := range s.PhoneTabs {
+		tabs = append(tabs, n)
+	}
+	sort.Strings(tabs)
+	for _, n := range tabs {
+		out = append(out, s.PhoneTabs[n]...)
+	}
+	return out
+}
+
+// CheckSlots is the strict check of a cockpit file: the template is known, no unknown slot name, every id a panel
+// that fits a slot (slotOK) or an id that is not built yet (known says so, slotOK too), sizes in range. A file without
+// a template has nothing to check.
+func (l LayoutManifest) CheckSlots(slotOK func(id string) bool) error {
+	if l.Template == "" {
+		if len(l.Slots) > 0 {
+			return errors.New("layout: slots without a template")
+		}
+		return nil
+	}
+	if l.Template != cockpitTemplate {
+		return fmt.Errorf("layout: unknown template %q (this version reads %s)", l.Template, cockpitTemplate)
+	}
+	sl, z, err := l.Cockpit()
+	if err != nil {
+		return err
+	}
+	if sl == nil || len(sl.Stage) != 1 {
+		return errors.New("layout: a cockpit has exactly one stage panel")
+	}
+	if len(sl.Unknown) > 0 {
+		return fmt.Errorf("layout: unknown slot %q (slots are %s)", sl.Unknown[0], strings.Join(layoutSlotNames, ", "))
+	}
+	// three arrangements of the same panels: the page (band, stage, strip, rail), the wide page (railWide instead of
+	// rail) and the phone tabs; a panel stands once in each
+	pools := map[string][]string{"band": sl.Band, "stage": sl.Stage, "strip": sl.Strip, "rail": sl.Rail}
+	arr := map[string][]string{"page": {"band", "stage", "strip", "rail"}}
+	if rw := sl.RailWide; rw != nil {
+		pools["railWide.top"], pools["railWide.left"], pools["railWide.right"] = rw.Top, rw.Left, rw.Right
+		arr["wide"] = []string{"band", "stage", "strip", "railWide.top", "railWide.left", "railWide.right"}
+	}
+	for n, ids := range sl.PhoneTabs {
+		pools["phoneTabs."+n] = ids
+		arr["tabs"] = append(arr["tabs"], "phoneTabs."+n)
+	}
+	for _, w := range sortedKeys(pools) {
+		for _, id := range pools[w] {
+			if id == "" || strings.ContainsAny(id, " /") {
+				return fmt.Errorf("layout slot %s: bad panel id %q", w, id)
+			}
+			if !slotOK(id) {
+				return fmt.Errorf("layout slot %s: %q is not a panel that fits a slot (manifest slot: true)", w, id)
+			}
+		}
+	}
+	for _, name := range sortedKeys(arr) {
+		seen := map[string]string{}
+		sort.Strings(arr[name])
+		for _, w := range arr[name] {
+			for _, id := range pools[w] {
+				if other, dup := seen[id]; dup {
+					return fmt.Errorf("layout slot %s: %q is also in %s", w, id, other)
+				}
+				seen[id] = w
+			}
+		}
+	}
+	if z.Strip != 0 && (z.Strip < 48 || z.Strip > 240) || z.RailMin != 0 && (z.RailMin < 240 || z.RailMin > 800) {
+		return fmt.Errorf("layout sizes: strip %d (48 to 240) or railMin %d (240 to 800) out of range", z.Strip, z.RailMin)
+	}
+	return nil
+}
+
+// LayoutStatus is one entry of the layout's "status" list: a bare panel id, or {id, fallback}. An entry whose id is not
+// a mounted panel uses its fallback, else the shell skips it.
+type LayoutStatus struct {
+	ID       string
+	Fallback string
+}
+
+func (s *LayoutStatus) UnmarshalJSON(b []byte) error {
+	if err := json.Unmarshal(b, &s.ID); err == nil {
+		s.Fallback = ""
+		return nil
+	}
+	var o struct {
+		ID       string `json:"id"`
+		Fallback string `json:"fallback"`
+	}
+	if err := json.Unmarshal(b, &o); err != nil {
+		return fmt.Errorf("status entry: want an id or {id, fallback}: %w", err)
+	}
+	s.ID, s.Fallback = o.ID, o.Fallback
+	return nil
+}
+
+func (s LayoutStatus) MarshalJSON() ([]byte, error) {
+	if s.Fallback == "" {
+		return json.Marshal(s.ID)
+	}
+	return json.Marshal(struct {
+		ID       string `json:"id"`
+		Fallback string `json:"fallback"`
+	}{s.ID, s.Fallback})
 }
 
 // LayoutBreakpoint is one breakpoint of a layout manifest.
@@ -56,6 +272,9 @@ type LayoutPanel struct {
 	// Hidden is a panel the user switched off in Edit layout: it keeps its cells in the file and takes none on the
 	// page. Added after the first v1 files; absent means shown, and a loader that does not know it shows the panel.
 	Hidden bool `json:"hidden,omitempty"`
+	// Fallback: the panel or card that fills this cell while ID is not a mounted panel. The shell shows it even when
+	// the same layout lists it as hidden, and ignores the key once ID is mounted (D-layouts.md section 4).
+	Fallback string `json:"fallback,omitempty"`
 }
 
 // layoutBreakpoints are the names the shell knows.
@@ -70,6 +289,11 @@ func ParseLayout(b []byte) (LayoutManifest, error) {
 	}
 	if l.Schema != layoutSchema {
 		return l, fmt.Errorf("layout schema %q (this version reads %s)", l.Schema, layoutSchema)
+	}
+	for _, e := range l.Status {
+		if e.ID == "" || strings.ContainsAny(e.ID+e.Fallback, " /") {
+			return l, fmt.Errorf("layout status: bad entry %q", e.ID)
+		}
 	}
 	for name, bp := range l.Breakpoints {
 		cols := bp.Cols
@@ -93,14 +317,19 @@ func (l LayoutManifest) Check(known func(id string) bool) error {
 		names = append(names, n)
 	}
 	sort.Strings(names)
+	for _, e := range l.Status {
+		if err := checkIDFallback("status", e.ID, e.Fallback, known); err != nil {
+			return err
+		}
+	}
 	for _, name := range names {
 		if !containsStr(layoutBreakpoints, name) {
 			return fmt.Errorf("layout: unknown breakpoint %q", name)
 		}
 		seen, orders, cells := map[string]bool{}, map[int]string{}, map[[2]int]string{}
 		for _, p := range l.Breakpoints[name].Panels {
-			if known != nil && !known(p.ID) {
-				return fmt.Errorf("layout %s: unknown panel id %q", name, p.ID)
+			if err := checkIDFallback(name, p.ID, p.Fallback, known); err != nil {
+				return err
 			}
 			if seen[p.ID] {
 				return fmt.Errorf("layout %s: panel %q placed twice", name, p.ID)
@@ -130,6 +359,33 @@ func (l LayoutManifest) Check(known func(id string) bool) error {
 	return nil
 }
 
+func sortedKeys[V any](m map[string]V) []string {
+	out := make([]string, 0, len(m))
+	for k := range m {
+		out = append(out, k)
+	}
+	sort.Strings(out)
+	return out
+}
+
+// checkIDFallback: an id must be known unless the entry names a fallback (a new tile that is not built yet); a
+// fallback must be known itself.
+func checkIDFallback(where, id, fallback string, known func(string) bool) error {
+	if id == "" {
+		return fmt.Errorf("layout %s: entry without an id", where)
+	}
+	if known == nil {
+		return nil
+	}
+	if fallback != "" && !known(fallback) {
+		return fmt.Errorf("layout %s: unknown fallback id %q of %q", where, fallback, id)
+	}
+	if fallback == "" && !known(id) {
+		return fmt.Errorf("layout %s: unknown panel id %q", where, id)
+	}
+	return nil
+}
+
 // LayoutConf is the "layout" block of web/shell.json: how the ids of a layout file map onto the real page. Aliases
 // are editor ids that became another panel (the editor's "hero-status" card is the real "hero-vitals"); Compat are
 // the pre-shell cards of watch.html (their data-lid); Reserved are ids a layout may name before the panel exists
@@ -140,6 +396,12 @@ type LayoutConf struct {
 	Reserved []string          `json:"reserved"`
 	// Fit are the pre-shell cards whose rows follow their content (the panels say so in panel.json).
 	Fit []string `json:"fit,omitempty"`
+	// Slot are panels that fit a cockpit slot though their own panel.json does not say slot: true yet (the panel
+	// directories belong to other slices); a manifest key and this list mean the same.
+	Slot []string `json:"slot,omitempty"`
+	// Drawer are panels a cockpit opens as a side sheet (the "..." menu, ctx.openDrawer) instead of placing in a slot; the shell
+	// mounts them in every cockpit and polls them only while open.
+	Drawer []string `json:"drawer,omitempty"`
 }
 
 var shellLayoutConf = sync.OnceValues(func() (LayoutConf, error) {
@@ -187,6 +449,9 @@ type layoutStore struct {
 	mu   sync.Mutex
 	path string
 	cur  []byte // the JSON GET serves; nil until first read
+	// stored: cur is a per-profile copy, not web/layout.json. The shell reads it from the X-Layout-Source header to
+	// tell "no layout of my own" (the default may change, a new hero starts on Simple) from a layout it must keep.
+	stored bool
 }
 
 // SetLayoutPath names the per-profile file POST /api/layout writes (cmd/d2bot: <state dir>/layout-<profile>.json).
@@ -212,7 +477,7 @@ func (s *layoutStore) load() ([]byte, error) {
 	if s.path != "" {
 		if b, err := os.ReadFile(s.path); err == nil {
 			if _, err := ParseLayout(b); err == nil {
-				s.cur = b
+				s.cur, s.stored = b, true
 				return b, nil
 			}
 		}
@@ -221,19 +486,26 @@ func (s *layoutStore) load() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	s.cur = b
+	s.cur, s.stored = b, false
 	return b, nil
 }
 
 func (h *Hub) layoutHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		b, err := h.Layout()
+		h.layout.mu.Lock()
+		b, err := h.layout.load()
+		src := "default"
+		if h.layout.stored {
+			src = "stored"
+		}
+		h.layout.mu.Unlock()
 		if err != nil {
 			writeJSON(w, http.StatusServiceUnavailable, policyReply{Code: "off", Error: "no layout"})
 			return
 		}
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.Header().Set("Cache-Control", "no-store")
+		w.Header().Set("X-Layout-Source", src)
 		w.Write(b)
 	}
 }
@@ -262,7 +534,7 @@ func (h *Hub) postLayout(o AnswerOptions, w http.ResponseWriter, r *http.Request
 				return
 			}
 		}
-		s.cur = nil
+		s.cur, s.stored = nil, false
 	case len(b.Layout) > 0:
 		// the loader's rule only: the editor's own exports can overlap, and the shell pushes an overlap down
 		if _, err := ParseLayout(b.Layout); err != nil {
@@ -279,7 +551,7 @@ func (h *Hub) postLayout(o AnswerOptions, w http.ResponseWriter, r *http.Request
 				return
 			}
 		}
-		s.cur = b.Layout
+		s.cur, s.stored = b.Layout, true
 	default:
 		fail(http.StatusBadRequest, "body", `send {"layout": {...}} or {"reset": true}`)
 		return

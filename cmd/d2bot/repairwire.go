@@ -167,6 +167,7 @@ func bindRepair(f *watch.Fun, c *repair.Controller, gf *goldfarm.Controller) {
 	api := watch.NewRepairAPI()
 	api.Bind(repairAdapter{c, gf})
 	f.Repair = api
+	bindLoop(f, c, gf)
 	if gf != nil {
 		fa := watch.NewGoldFarmAPI()
 		fa.Bind(farmAdapter{gf, c})

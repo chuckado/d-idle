@@ -33,9 +33,9 @@ Source: docs/research/player-power.md Part 3.4 (TASK-214 follow-up). Per-boss ro
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Boss table for all act bosses with per-boss rows (resists, immunities, kit); Normal/NM/Hell values from install data; bossGates map retired
-- [ ] #2 Build flexibility: checks, floors and boss rows are data (per class and difficulty), no class or skill literal in Go; tests run with Paladin and Sorceress; an unknown class or table is an error naming it
-- [ ] #3 Open question settled first: whether Player.Resist already includes the difficulty penalty (TODO in internal/combat/hard.go) is taken from the ready-audit result and the resist logic here uses that answer; a test covers both possible cases of the ambiguity until it is settled
+- [x] #1 Boss table for all act bosses with per-boss rows (resists, immunities, kit); Normal/NM/Hell values from install data; bossGates map retired
+- [x] #2 Build flexibility: checks, floors and boss rows are data (per class and difficulty), no class or skill literal in Go; tests run with Paladin and Sorceress; an unknown class or table is an error naming it
+- [x] #3 Open question settled first: whether Player.Resist already includes the difficulty penalty (TODO in internal/combat/hard.go) is taken from the ready-audit result and the resist logic here uses that answer; a test covers both possible cases of the ambiguity until it is settled
 <!-- AC:END -->
 
 ## Implementation Notes

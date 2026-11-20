@@ -380,6 +380,15 @@ func extraTables(t *testing.T, db *DB) {
 	if !db.RunewordAvailableOffline("Ancient's Pledge") || db.RunewordAvailableOffline("Spirit") || db.RunewordAvailableOffline("Unfinished") || db.RunewordAvailableOffline("Nope") {
 		t.Error("RunewordAvailableOffline")
 	}
+	// ADR 0024: the ladder switch opens the ladder rows only; incomplete and unknown rows stay closed.
+	db.LadderRunewords = true
+	if !db.RunewordAvailableOffline("Spirit") || db.RunewordAvailableOffline("Unfinished") || db.RunewordAvailableOffline("Nope") {
+		t.Error("RunewordAvailableOffline with the ladder switch on")
+	}
+	db.LadderRunewords = false
+	if db.RunewordAvailableOffline("Spirit") {
+		t.Error("Spirit available again with the switch off")
+	}
 }
 
 func TestStampPatchHash(t *testing.T) {

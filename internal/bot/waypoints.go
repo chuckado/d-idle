@@ -75,11 +75,13 @@ func (r *Runner) activeWaypoints(s *d2.Snapshot) (map[int]bool, bool) {
 		}
 	}
 	r.syncTaskGame()
+	r.loop.task.mu.Lock()
 	for a, on := range r.loop.task.wp {
 		if on {
 			out[a] = true
 		}
 	}
+	r.loop.task.mu.Unlock()
 	r.loop.wp.init()
 	for k := range r.loop.wp.touched {
 		if k.diff == diffOf(s) {

@@ -58,6 +58,10 @@ func (r *Runner) pause(ctx context.Context, d time.Duration) {
 
 // step runs one decision and at most one action. It reports whether an action ran (false: the caller sleeps a tick).
 func (r *Runner) step(ctx context.Context) bool {
+	r.ackReset()
+	if r.frozenStep() {
+		return false // the game is frozen: nothing is read, nothing acts, no clock runs (freeze.go)
+	}
 	r.applySettings()
 	snap := r.poll()
 	r.pumpLadder()
@@ -90,7 +94,7 @@ func (r *Runner) step(ctx context.Context) bool {
 	if isDead(p) {
 		return r.deathWait(c)
 	}
-	if r.campaignStall(ctx, snap, c.goal != nil && !c.paused) {
+	if r.campaignStall(ctx, snap, c.goal != nil && !c.paused && !r.parkedBoard.Load()) {
 		return true
 	}
 	if r.droughtCheck(ctx, snap, c) {
@@ -98,6 +102,9 @@ func (r *Runner) step(ctx context.Context) bool {
 	}
 	if r.loop.rec != nil {
 		return r.finishRecovery(ctx, snap, c)
+	}
+	if r.resetStep(ctx, snap, c) {
+		return true
 	}
 	if c.goal == nil {
 		return r.noGoal(ctx, snap, c)
@@ -125,7 +132,7 @@ func (r *Runner) step(ctx context.Context) bool {
 		}
 		return false
 	}
-	return r.runGoal(ctx, snap, c)
+	return r.runGoalShadowed(ctx, snap, c)
 }
 
 // betweenGoals asks the recycler (Deps.Recycle) whether the game should be restarted now. Only in town with nothing hostile
@@ -303,8 +310,23 @@ func (r *Runner) hazard(ctx context.Context, snap *d2.Snapshot) {
 	}
 }
 
+// SafetyBusy says a safety action (drink, chicken, flee, safety portal) is being carried out. The inventory desk's fast
+// lane (docs/inventory-actions.md, instant actions) stays closed while it is true: a player command never bypasses safety.
+func (r *Runner) SafetyBusy() bool { return r.safetyBusy.Load() > 0 }
+
 func (r *Runner) carryOut(ctx context.Context, a SafetyAction) error {
+	r.safetyBusy.Add(1)
+	defer r.safetyBusy.Add(-1)
 	a = r.earlyExit(r.latest(), a)
+	if a == SafetyChicken {
+		if s := r.latest(); s != nil && s.Player != nil {
+			r.zoneObserve(ZoneEvent{Kind: ZoneEvChicken, Area: s.Player.Area, Diff: difficultyName(s.Player.Difficulty), At: r.e.Clock.Now()})
+			r.zoneCostAt("chicken", s.Player.Area)
+		}
+	}
+	if a == SafetyDrinkRejuv {
+		r.zonePotion()
+	}
 	if a != SafetyDrinkLife && a != SafetyDrinkMana && a != SafetyDrinkRejuv {
 		if s := r.latest(); s != nil && s.Player != nil {
 			r.e.Log.Info("safety decision", append([]any{"action", a.String(), "area", s.Player.Area}, r.vitalsKV(s, s.Player)...)...)
@@ -378,7 +400,7 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 	err, cause := r.runAction(ctx, c.gen, st, activity, timeout, f)
 	l := &r.loop
 	if err == nil {
-		l.failures = 0
+		l.failures, l.portalRetried = 0, false
 		return true
 	}
 	if ctx.Err() != nil {
@@ -391,6 +413,7 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 		r.gameLost(ctx, c, gone.Event)
 	case errors.As(cause, &si):
 		r.handleSafety(ctx, si.Action)
+		r.retryCancelledPortal(ctx, err, si.Action)
 	case errors.Is(err, ErrPortalOpened):
 		area := 0
 		if s := r.latest(); s != nil {
@@ -400,7 +423,7 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 		r.setLastTrip(r.e.Clock.Now())
 	case errors.Is(err, ErrLeftGame):
 		// the menus are handled by the next step
-	case errors.Is(cause, errNewGoal), errors.Is(cause, errStop), errors.Is(cause, errPause), errors.Is(cause, errTripDue), errors.Is(cause, errPoints), errors.Is(cause, errPlayer), errors.Is(cause, errReplan), errors.Is(cause, errDied), errors.Is(cause, errLeftGame):
+	case errors.Is(cause, errNewGoal), errors.Is(cause, errStop), errors.Is(cause, errPause), errors.Is(cause, errTripDue), errors.Is(cause, errPoints), errors.Is(cause, errPlayer), errors.Is(cause, errReset), errors.Is(cause, errReplan), errors.Is(cause, errDied), errors.Is(cause, errLeftGame):
 		// the next step re-reads control and the snapshot
 	case errors.Is(cause, errStuck):
 		if !l.inLadder {
@@ -922,7 +945,7 @@ func (r *Runner) antidotesWanted() int {
 		return 0
 	}
 	if p := s.Player; p.Difficulty == d2.Hell { // docs/difficulty.md item 25: keep antidotes while poison resist is low
-		pr := combat.PlayerResists{Fire: p.Resist.Fire, Cold: p.Resist.Cold, Lightning: p.Resist.Lightning, Poison: p.Resist.Poison}
+		pr := combat.ResistsOf(p)
 		return resource.AntidotesToCarry(p.Difficulty, pr.Effective(p.Difficulty).Poison)
 	}
 	if s.Player.Difficulty != d2.Normal || s.Player.Level < r.andarielLow(s.Player.Class)-2 || r.killedBoss(task.BossAndy) {
@@ -1058,8 +1081,7 @@ func (r *Runner) replanCause(snap *d2.Snapshot, st State) string {
 		ta := r.ob.targetArea
 		r.obMu.Unlock()
 		if ta != 0 && snap.Player.Area != ta && !snap.Player.InTown() {
-			r.noteCrossing(ta)
-			return fmt.Sprintf("exploring crossed an area border (target area %d)", ta) // walk back
+			return r.staleOrCrossing(snap.Player.Area, ta)
 		}
 	}
 	if c := r.control(); c.spec.kind == goals.ReachLevel && st == StateClearing {
@@ -1232,6 +1254,14 @@ func (r *Runner) setWalking(on bool) {
 	}
 }
 
+// setQuestCrowd tells a fighter that supports it whether a player-started quest chunk runs (the quest crowd-abandon
+// threshold, combat.crowdAbandonQuestN, applies while it does).
+func (r *Runner) setQuestCrowd(on bool) {
+	if w, ok := r.d.Fighter.(interface{ SetQuestCrowd(bool) }); ok {
+		w.SetQuestCrowd(on)
+	}
+}
+
 // preferWaypointRun: from town, the town portal leads to the area where the last scroll was read (V live, G1 attempt
 // 12: "no way back to level 26 from 3"), so when that is not the corpse area and an activated waypoint shortens the
 // way, waypoint plus walk beats portal plus a long walk. The route guard still vets every area (travelTo).
@@ -1272,6 +1302,7 @@ const (
 	borderLoopSkip      = 3 * time.Minute
 	borderLoopDoublings = 4
 	borderLoopMemory    = 2 * time.Hour
+	borderLoopGap       = 10 * time.Second // two stamps for one target closer than this are one crossing (staletarget)
 )
 
 // crossStamp is one unwanted border crossing toward target.
@@ -1289,6 +1320,15 @@ type loopStamp struct {
 func (r *Runner) noteCrossing(target int) {
 	now := r.e.Clock.Now()
 	r.obMu.Lock()
+	for i := len(r.crossLog) - 1; i >= 0; i-- {
+		if c := r.crossLog[i]; c.target == target {
+			if now.Sub(c.at) < borderLoopGap {
+				r.obMu.Unlock()
+				return
+			}
+			break
+		}
+	}
 	keep := r.crossLog[:0]
 	same := 1
 	for _, c := range r.crossLog {
@@ -1318,7 +1358,7 @@ func (r *Runner) tripLoopLocked(area int, now time.Time) {
 	}
 	d := borderLoopSkip << min(l.n, borderLoopDoublings)
 	r.loopTrips[area] = loopStamp{n: l.n + 1, at: now}
-	r.skipAreaLocked(area, d, "border-loop")
+	r.skipAreaLocked(area, d, whyBorderLoop)
 }
 
 // Arrival bounce (docs/passagebounce.md): d2d fires the return exit of a cave or passage about 0.2 s after the first move

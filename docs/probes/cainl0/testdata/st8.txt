@@ -1,0 +1,168 @@
+> debug goto 4
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> debug warp 24 56
+ err=<nil>
+> step 25 err=<nil>
+> debug kill
+ err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> debug operate 10
+life=40 mana=41 boost=0 err=<nil>
+> step 30 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	NU
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	NU err=<nil>
+> debug presets
+0	83	53.5	34.5	0	Shrine
+1	139	33.7	41.3	0	Chest
+2	144	25.7	46.3	0	Chest
+3	141	46.3	28.9	0	Chest
+4	83	29.5	34.5	0	Shrine
+5	37	29.3	49.1	0	
+6	37	25.9	51.1	0	
+7	37	26.7	55.5	0	
+8	37	30.9	51.9	0	
+9	269	27.7	54.5	0	
+10	17	19.1	59.1	0	Cairn Stone
+11	20	20.7	62.1	0	Cairn Stone
+12	21	19.1	60.7	0	Cairn Stone
+13	22	18.1	63.1	0	
+14	19	21.9	60.9	0	Cairn Stone
+15	18	20.7	59.1	0	Cairn Stone
+16	61	20.5	60.5	0	
+room	9	12	4
+room	6	20	4
+room	6	28	4
+room	6	36	4
+room	6	44	4
+room	6	52	4
+room	6	60	4
+room	10	68	4
+room	9	4	12
+room	13	12	12
+room	31	60	12
+room	7	68	12
+room	5	4	20
+room	162	28	20
+room	15	36	20
+room	12	44	20
+room	14	68	20
+room	10	76	20
+room	5	4	28
+room	49	20	28
+room	7	36	28
+room	5	44	28
+room	7	76	28
+room	5	4	36
+room	47	20	36
+room	14	36	36
+room	13	44	36
+room	15	68	36
+room	11	76	36
+room	5	4	44
+room	51	20	44
+room	14	68	44
+room	10	76	44
+room	5	4	52
+room	42	28	52
+room	15	36	52
+room	4	44	52
+room	12	52	52
+room	7	76	52
+room	5	4	60
+room	45	12	60
+room	160	20	60
+room	14	36	60
+room	10	44	60
+room	5	52	60
+room	15	68	60
+room	11	76	60
+room	8	4	68
+room	4	12	68
+room	12	20	68
+room	15	36	68
+room	11	44	68
+room	5	52	68
+room	7	68	68
+room	8	20	76
+room	4	28	76
+room	11	36	76
+room	8	52	76
+room	4	60	76
+room	11	68	76 err=<nil>
+> debug portals
+ err=<nil>
+> debug operate 15
+life=40 mana=41 boost=0 err=<nil>
+> step 30 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	NU
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	NU err=<nil>
+> ground
+gld	2 Gold	2940	679	#1	46.1	43.1
+rvs	Rejuvenation Potion	2764	1455	#2	54.7	53.9
+gld	9 Gold	2684	1447	#3	54.1	54.3
+tkf	Throwing Knife	2828	1439	#4	54.9	53.3
+gld	18 Gold	3036	951	#5	50.1	45.9
+lgl	Superior Leather Gloves	3820	383	#6	47.9	33.9
+gld	13 Gold	3756	367	#7	47.3	34.1
+cap	Cap	3772	407	#8	47.9	34.5
+gld	10 Gold	3852	399	#9	48.3	33.9
+ktr	Katar	1788	-201	#10	27.9	39.3
+hp1	Minor Healing Potion	1772	-209	#11	27.7	39.3
+hp2	Light Healing Potion	1804	-193	#12	28.1	39.3
+hp2	Light Healing Potion	1804	-209	#13	27.9	39.1
+hp1	Minor Healing Potion	1772	-193	#14	27.9	39.5
+hp1	Minor Healing Potion	-756	879	#15	25.5	68.7
+hp1	Minor Healing Potion	-820	895	#16	25.3	69.3
+tsc	Scroll of Town Portal	748	143	#17	25.7	50.1
+hp1	Minor Healing Potion	636	135	#18	24.9	50.7
+hp1	Minor Healing Potion	652	543	#19	30.1	55.7
+buc	Crude Buckler	604	439	#20	28.5	54.7
+mp2	Light Mana Potion	652	319	#21	27.3	52.9
+aqv	Arrows	844	367	#22	29.1	52.3
+gld	1 Gold	684	335	#23	27.7	52.9
+isc	Scroll of Identify	1068	399	#24	30.9	51.3
+hp1	Minor Healing Potion	1132	383	#25	31.1	50.7
+hp1	Minor Healing Potion	1164	399	#26	31.5	50.7
+hp1	Minor Healing Potion	1004	527	#27	32.1	53.3
+dr1	Wolf Head	940	463	#28	30.9	52.9
+ktr	Katar	-564	351	#29	20.1	60.9
+pa1	Targe	-580	343	#30	19.9	60.9
+hp1	Minor Healing Potion	-548	359	#31	20.3	60.9
+hp1	Minor Healing Potion	-548	343	#32	20.1	60.7
+hp2	Light Healing Potion	-580	359	#33	20.1	61.1
+mp1	Minor Mana Potion	-564	335	#34	19.9	60.7
+scm	Scimitar	-500	415	#35	21.3	61.3
+gld	22 Gold	-52	303	#36	22.7	57.1
+ err=<nil>

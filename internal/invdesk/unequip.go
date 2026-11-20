@@ -84,9 +84,9 @@ func unequipWhy(data status.InventoryData, it status.Item) string {
 	return ""
 }
 
-// RequestUnequip queues taking the item worn in slot off. Refused when the slot is empty or unknown, when the pack has
+// requestUnequip queues taking the item worn in slot off. Refused when the slot is empty or unknown, when the pack has
 // no room, or when the same slot already has an unequip waiting. The hero need not be in town.
-func (d *Desk) RequestUnequip(slot string) (Request, error) {
+func (d *Desk) requestUnequip(slot string) (Request, error) {
 	d.mu.Lock()
 	un := d.un
 	d.mu.Unlock()
