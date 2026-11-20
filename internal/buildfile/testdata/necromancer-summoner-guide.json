@@ -1,0 +1,199 @@
+{
+ "schema": "didle.build/1",
+ "name": "necromancer_summoner_guide",
+ "class": "necromancer",
+ "author": "necro1",
+ "source": "docs/design/fable-review-2026-11-19/03-classes-plan.md section 3.3 N1 Summoner; docs/classes/necromancer.md section 3 (Maxroll summoner and leveling guides, V)",
+ "notes": "Normal to about clvl 33: skeletons and their mastery, Clay Golem at 6, Amplify Damage, Bone Armor at 14, mages from 12 (the army does the killing, Teeth is the one point wand attack and Corpse Explosion's prerequisite). Nightmare to about clvl 65: both masteries to 20, Corpse Explosion, Weaken then Terror then Decrepify (a prerequisite chain, only Weaken is cast by the engine today), golem mastery. Hell: Fire Golem through the Blood and Iron Golem prerequisite points, Revive, Lower Resist through Iron Maiden and Life Tap, Summon Resist. Stats: energy first for the mana the army costs, strength 25 for gear, the rest vitality.",
+ "skills": [
+  {
+   "skill": "Teeth",
+   "to": 1
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 3
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 3
+  },
+  {
+   "skill": "Clay Golem",
+   "to": 1
+  },
+  {
+   "skill": "Amplify Damage",
+   "to": 1
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 6
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 6
+  },
+  {
+   "skill": "Bone Armor",
+   "to": 1,
+   "when": {
+    "clvl": 14
+   }
+  },
+  {
+   "skill": "Raise Skeletal Mage",
+   "to": 3
+  },
+  {
+   "skill": "Corpse Explosion",
+   "to": 3
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 10
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 10
+  },
+  {
+   "skill": "Raise Skeletal Mage",
+   "to": 6
+  },
+  {
+   "skill": "Amplify Damage",
+   "to": 5
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 15
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 15
+  },
+  {
+   "skill": "Raise Skeletal Mage",
+   "to": 8
+  },
+  {
+   "skill": "Corpse Explosion",
+   "to": 8
+  },
+  {
+   "skill": "Weaken",
+   "to": 1
+  },
+  {
+   "skill": "Terror",
+   "to": 1
+  },
+  {
+   "skill": "Decrepify",
+   "to": 1
+  },
+  {
+   "skill": "Clay Golem",
+   "to": 5
+  },
+  {
+   "skill": "Golem Mastery",
+   "to": 5
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 20
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 20
+  },
+  {
+   "skill": "Raise Skeletal Mage",
+   "to": 12
+  },
+  {
+   "skill": "FireGolem",
+   "to": 1
+  },
+  {
+   "skill": "Revive",
+   "to": 5
+  },
+  {
+   "skill": "Lower Resist",
+   "to": 1
+  },
+  {
+   "skill": "Summon Resist",
+   "to": 1
+  },
+  {
+   "skill": "Revive",
+   "to": 10
+  },
+  {
+   "skill": "Amplify Damage",
+   "to": 10
+  },
+  {
+   "skill": "Corpse Explosion",
+   "to": 16
+  }
+ ],
+ "stats": [
+  {
+   "stat": "ene",
+   "to": 45,
+   "per": 5
+  },
+  {
+   "stat": "str",
+   "to": 25,
+   "per": 5
+  },
+  {
+   "stat": "vit",
+   "to": "rest"
+  }
+ ],
+ "quest_points": [
+  {
+   "clvl": 8,
+   "skill": 1
+  },
+  {
+   "clvl": 15,
+   "skill": 1
+  },
+  {
+   "clvl": 26,
+   "skill": 2
+  },
+  {
+   "clvl": 38,
+   "skill": 1
+  },
+  {
+   "clvl": 44,
+   "skill": 1
+  },
+  {
+   "clvl": 56,
+   "skill": 2
+  },
+  {
+   "clvl": 68,
+   "skill": 1
+  },
+  {
+   "clvl": 72,
+   "skill": 1
+  },
+  {
+   "clvl": 82,
+   "skill": 2
+  }
+ ]
+}

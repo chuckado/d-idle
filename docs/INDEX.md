@@ -879,6 +879,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [matt-pocock-skills-fit.md](process/matt-pocock-skills-fit.md): Matt Pocock skills plugin: fit for d2lod-bot (PLUGINFIT, 2026-10-30) (status: 2026-10-30 plugin fit; its "tracker = OpenSpec change cards" answer is superseded: OpenSpec is retired for...)
 - [mini-grill.md](process/mini-grill.md): Mini-grill: small and medium decisions asked inline
 - [mpq-data-reading.md](process/mpq-data-reading.md): Reading 1.14d tables with mpq-cat (trap and recipe)
+- [necromancer-support.md](process/necromancer-support.md): Necromancer summoner: what the engine plays, and what a later card must build (status: current (card necro1, 2026-11-20; Fable roadmap Q8, class 2 after the Sorceress fire build). Design note,...)
 - [openspec-fit-notes.md](process/openspec-fit-notes.md): OpenSpec fit notes for d2lod-bot (status: 2026-10-30 fit assessment; superseded by the OpenSpec retirement for new work (user, 2026-11-04). Current...)
 - [openspec-reference.md](process/openspec-reference.md): OpenSpec reference (SME notes for setting it up and writing its documents) (status: background notes from 2026-10-30; OpenSpec is retired for new work (user, 2026-11-04). Current truth:...)
 - [openspec-removal-plan.md](process/openspec-removal-plan.md): OpenSpec removal plan (proposal for the user), revised for Backlog.md (status: PROPOSAL, written 2026-11-04 after the user retired OpenSpec for new work; revised the same day after the...)
@@ -895,6 +896,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [sandbox-devp13.md](process/sandbox-devp13.md): Sandbox d2d build devp13 (2026-11-19) (status: current. Task: forkrebase (first round of `docs/process/fork-rebase.md`). Tags: V = verified in this run...)
 - [sandbox-devp14.md](process/sandbox-devp14.md): Sandbox d2d build devp14 (input verbs candidate, 2026-11-19) (status: candidate, LOADED only on the sandbox host, NOT switched (the switch needs the owner's go). Task:...)
 - [sandbox-devp9.md](process/sandbox-devp9.md): Sandbox d2d build devp9 (2026-11-15) (status: current. Task: TASK-535 (sandbox2). Tags: V = verified in this run (how said), S = read from a tool or...)
+- [sandbox-input-items.md](process/sandbox-input-items.md): Item, gold and identify verbs promoted to input (Q13, ADR 0021; 2026-11-20) (status: candidate. Fork branch `didle/input-items-20261120` (private remote only, never upstream without the...)
+- [second-worker.md](process/second-worker.md): The second worker host for survival waves and Proving Ground (status: current (2026-11-20). The user allows the second worker for heavy d.idle work until 9 am EST on 2026-11-20...)
 - [spdx.md](process/spdx.md): SPDX header policy (ADR 0010)
 - [spec-apply-a-20261104.md](process/spec-apply-a-20261104.md): Spec apply A, 2026-11-04
 - [spec-apply-b-20261104.md](process/spec-apply-b-20261104.md): Spec apply B, 2026-11-04

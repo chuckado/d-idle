@@ -33,7 +33,7 @@ func TestLookupProfileUnknownIsAnError(t *testing.T) {
 		id    Build
 	}{
 		{d2.Class(42), ""},          // unknown class: never the Sorceress
-		{d2.Sorceress, "fire"},      // unknown profile of a known class
+		{d2.Sorceress, "poison"},    // unknown profile of a known class
 		{d2.Paladin, "zealot-lite"}, // single-profile classes only know their own id
 	} {
 		if p, err := LookupProfile(c.class, c.id); err == nil || p != nil {
@@ -47,11 +47,51 @@ func TestSelectProfileCheckedErrorsAndFallbackLogs(t *testing.T) {
 	if _, err := SelectProfileChecked(&d2.Player{Class: d2.Class(42)}, cat, ""); err == nil {
 		t.Fatal("unknown class must be an error")
 	}
-	if _, err := SelectProfileChecked(&d2.Player{Class: d2.Sorceress}, cat, "fire"); err == nil {
+	if _, err := SelectProfileChecked(&d2.Player{Class: d2.Sorceress}, cat, "poison"); err == nil {
 		t.Fatal("unknown profile must be an error")
 	}
 	// the lenient form still returns something the fight loop can use
-	if pr := SelectProfile(&d2.Player{Class: d2.Sorceress}, cat, "fire"); pr == nil || pr.Class != "sorceress" {
+	if pr := SelectProfile(&d2.Player{Class: d2.Sorceress}, cat, "poison"); pr == nil || pr.Class != "sorceress" {
 		t.Fatalf("%v", pr)
+	}
+}
+
+// The sorceress/fire line (sorc2): the second Sorceress build selects it by name, Fire Ball leads once owned.
+func TestSorceressFireProfile(t *testing.T) {
+	pr, err := LookupProfile(d2.Sorceress, "fire")
+	if err != nil || pr == nil || pr.Bands[0].Requires != "Fire Ball" || pr.Bands[0].Attack[0] != "Fire Ball" {
+		t.Fatalf("fire profile: %v %+v", err, pr)
+	}
+}
+
+// necro1: the Necromancer summoner line is a second profile selected by name; the class default stays the Teeth line,
+// and an unknown Necromancer profile is an error that names it, never another class or the default.
+func TestNecromancerSummonerProfile(t *testing.T) {
+	def, err := LookupProfile(d2.Necromancer, "")
+	if err != nil || def.Build != "" || def.Bands[0].Attack[0] != "Bone Spear" {
+		t.Fatalf("necromancer default changed: %v %+v", err, def)
+	}
+	sm, err := LookupProfile(d2.Necromancer, "summoner")
+	if err != nil || sm.ProfileID() != "necromancer/summoner" {
+		t.Fatalf("summoner profile: %v %+v", err, sm)
+	}
+	if _, ok := sm.Layout["Raise Skeleton"]; !ok {
+		t.Errorf("summoner layout has no Raise Skeleton key: %v", sm.Layout)
+	}
+	// the summoner never ranks the Bone line as an attack
+	for _, b := range sm.Bands {
+		for _, a := range b.Attack {
+			if a == "Bone Spear" {
+				t.Errorf("summoner band attacks with %s", a)
+			}
+		}
+	}
+	for _, c := range []struct {
+		class d2.Class
+		id    Build
+	}{{d2.Necromancer, "bone"}, {d2.Paladin, "summoner"}, {d2.Sorceress, "summoner"}, {d2.Class(42), "summoner"}} {
+		if p, err := LookupProfile(c.class, c.id); err == nil || p != nil {
+			t.Errorf("%v %q: got %v, want an error", c.class, c.id, p)
+		}
 	}
 }

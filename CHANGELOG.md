@@ -8,6 +8,14 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into decomp44 <!--sg:agent/decomp44-->
+- Merge branch 'main' into w2worker <!--sg:agent/secondworker-->
+- Merge branch 'main' into necro1 <!--sg:agent/necro1-->
+- Merge branch 'main' into pgformat <!--sg:agent/pgformat-->
+- Merge branch 'main' into q4runes <!--sg:agent/q4runes-->
+- Merge branch 'main' into sorc2 <!--sg:agent/sorc2-->
+- Merge branch 'main' into q13input <!--sg:agent/q13input-->
+- verify43: game-side rerun and room control results <!--sg:agent/verify43-->
 - Merge branch 'main' into survhold7 <!--sg:agent/survhold7-->
 - k1layout: task result <!--sg:agent/k1layout-->
 - survhold6: doc wording (leakcheck) <!--sg:agent/survhold6-->

@@ -26,6 +26,7 @@ func DigestState(st State) string {
 		}
 		return c.Objects[i].State < c.Objects[j].State
 	})
+	c.LogLines = nil        // the bot log is not game state and its place in the run follows the wall clock
 	b, _ := json.Marshal(c) // map keys of Quests are sorted by encoding/json
 	h := sha256.Sum256(b)
 	return hex.EncodeToString(h[:8])
