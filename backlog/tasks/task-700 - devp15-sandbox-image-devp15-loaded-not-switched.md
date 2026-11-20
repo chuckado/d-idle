@@ -1,10 +1,11 @@
 ---
 id: TASK-700
 title: 'devp15: sandbox image devp15 loaded (not switched)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T19:57:00Z'
+updated_date: '2026-11-20T22:22:00Z'
 labels:
   - docs
   - chore
