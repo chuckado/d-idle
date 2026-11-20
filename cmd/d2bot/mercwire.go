@@ -902,6 +902,12 @@ type mercTown struct {
 	w *mercWire
 }
 
+// TakePortalCancelled forwards the wrapped town's flag (bot/portalretry.go).
+func (t *mercTown) TakePortalCancelled() bool {
+	c, ok := t.Townsman.(interface{ TakePortalCancelled() bool })
+	return ok && c.TakePortalCancelled()
+}
+
 func (t *mercTown) Chores(ctx context.Context, plan bot.ChorePlan) (bot.ChoreReport, error) {
 	var first string
 	if s, serr := t.w.e.Snapshot(); serr == nil {

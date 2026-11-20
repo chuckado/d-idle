@@ -118,6 +118,10 @@ func (t *Town) ToTown(ctx context.Context) error {
 // click. A step that returns only the guard's cause loses the error; the bot reads this instead.
 func (t *Town) TakePortalCancelled() bool { return t.castCancelled.Swap(false) }
 
+// NoteCastCancelled lets a wrapper that cast the portal itself (the d2d adapter) say its cast was cancelled before the
+// click and the walk home did not follow either.
+func (t *Town) NoteCastCancelled() { t.castCancelled.Store(true) }
+
 // openNear returns a town portal object within PortalReuseDist of the player.
 func (t *Town) openNear(ctx context.Context) (d2.Unit, bool) {
 	if err := ctx.Err(); err != nil {
