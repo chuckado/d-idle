@@ -28,7 +28,7 @@ type ReviveDecision struct {
 func (l *Ledger) bestEligible(in Input, cs []Candidate, lam float64) (float64, string, bool) {
 	best, name, ok := 0.0, "", false
 	for _, c := range cs {
-		v := l.judge(in, c, lam)
+		v := l.judge(in, c, lam, 1)
 		if v.eligible && (!ok || v.value > best) {
 			best, name, ok = v.value, c.Name, true
 		}
