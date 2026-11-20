@@ -20,10 +20,10 @@
 
 ## Determinism
 
-Paladin 11 twice on the builder (jobs 20261119-232655-7217 and 20261120-010053-a896): GREEN and GREEN, same verdict. Wall time differed (18 and 14 min), so runs are not bit-identical; the Orion lab d2d may differ and was not used. V for two runs only; the earlier FLAKY verdict came from the race fixed in finding 3, so a longer repeat series is still advisable (U).
+Paladin 11 twice on the builder (jobs 20261119-232655-7217 and 20261120-010053-a896): GREEN and GREEN, same verdict. Wall time differed (18 and 14 min), so runs are not bit-identical; another worker host's lab d2d may differ and was not used. V for two runs only; the earlier FLAKY verdict came from the race fixed in finding 3, so a longer repeat series is still advisable (U).
 
 ## Not done
 
 - The cancelled town-portal cast of a potion trip is not retried (its context is dead); the walk home plus re-entry covers it.
 - The 4 fixes in the bot (3, 4) have no unit test beyond the waiver test: the bot package has no `boardRun` harness; the scenario is the test.
-- `-race -count=20` ran on internal/task only; internal/nav ran `-count=3` (the 20 repeats exceeded 10 minutes under nice 19); the town tests need the game tables (skipped on Orion; passed with them on the builder, without -race).
+- `-race -count=20` ran on internal/task only; internal/nav ran `-count=3` (the 20 repeats exceeded 10 minutes under nice 19); the town tests need the game tables (skipped on the second worker; passed with them on the builder, without -race).
