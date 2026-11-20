@@ -1,10 +1,13 @@
 ---
 id: TASK-695
-title: 'pgfix4: Proving Ground chicken.recovery, loot ring, cancelled town-portal retry, cain.chain widen'
-status: Proposed
+title: >-
+  pgfix4: Proving Ground chicken.recovery, loot ring, cancelled town-portal
+  retry, cain.chain widen
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T18:45:00Z'
+updated_date: '2026-11-20T21:48:00Z'
 labels:
   - bot
   - bot-fix
