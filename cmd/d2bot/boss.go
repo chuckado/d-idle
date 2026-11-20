@@ -173,16 +173,19 @@ func (g *bossGame) Presets(ctx context.Context) ([]boss.Preset, error) {
 		return nil, nil
 	}
 	out := make([]boss.Preset, 0, len(lm.Presets))
-	var npcs []string
+	var npcs, objs []string
 	for _, p := range lm.Presets {
 		out = append(out, boss.Preset{Kind: p.Kind, ID: p.ID, Pos: boss.Pt{X: p.Pos.X, Y: p.Pos.Y}})
 		if p.Kind == d2map.PresetNPC && g.logPresets[lm.No] != len(lm.Presets) {
 			npcs = append(npcs, fmt.Sprintf("%d@%d,%d", p.ID, p.Pos.X, p.Pos.Y))
 		}
+		if p.Kind == d2map.PresetObject && len(objs) < 60 && g.logPresets[lm.No] != len(lm.Presets) {
+			objs = append(objs, fmt.Sprintf("%d@%d,%d", p.ID, p.Pos.X, p.Pos.Y)) // layout read: is the Countess chest listed?
+		}
 	}
 	if g.logPresets[lm.No] != len(lm.Presets) { // monster presets of the level, once per change (docs/boss.md live checks 2 to 6)
 		g.logPresets[lm.No] = len(lm.Presets)
-		g.e.Log.Info("boss presets", "level", lm.No, "presets", len(lm.Presets), "monsterPresets", npcs)
+		g.e.Log.Info("boss presets", "level", lm.No, "presets", len(lm.Presets), "monsterPresets", npcs, "objectPresets", objs)
 	}
 	return out, nil
 }

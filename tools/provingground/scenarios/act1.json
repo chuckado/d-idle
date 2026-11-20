@@ -135,11 +135,11 @@
     "items": [
      {
       "code": "hp1",
-      "count": 8
+      "count": 16
      },
      {
       "code": "mp1",
-      "count": 6
+      "count": 10
      }
     ],
     "belt": [
