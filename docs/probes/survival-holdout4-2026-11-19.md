@@ -32,3 +32,21 @@ Pooled 2 pairs: ratio 1.085, no deaths or chickens. **Verdict: no regression; wi
 1. **Paladin: PASS at 8 seeds, ready for the flip decision** (6 seeds pre-gate harness plus 2 post-gate).
 2. **Sorceress: do not flip.** INCONCLUSIVE by the stats rule, with a repeatable low-yield mode (211, 213) and ratio 0.669. Next step: a task that reads the zone-pick lines of seed 211 margin and finds why a zero-yield safe zone is kept (suspected yield judge for a hero with no damage skill), then a new 3-seed screen. A per-class flip (Paladin only) needs the user's call.
 3. Harness note for other A/B work: any run that uses `abrun.sh` needs `resource.pointsDecisions` 1 now; fixed here.
+
+## 5. Addendum 2026-11-20 (card survhold6): Sorceress rerun with a wand
+> status: the weaponless-hero explanation in section 2 was incomplete. The harness now gives the Sorceress hero a wand (`wnd`, SETUP, both arms; `tools/survival/abrun.sh`); the Paladin heroes always had `hax` (V: test-characters log, holdout 2), so they were never weaponless. The hero line now reads `dmg 2-4` instead of `1-5` (V: zone-entry lines of the new runs). Every run here: writes after start 0 (V, last log line). Both arms of a pair on the same host; the pair 241 and 243 was run on the second worker (no other pair crossed hosts), cleaned up afterwards.
+
+| seed | host | legacy xp@~89 / chick | margin xp@~88 / chick | deaths L/M |
+|---|---|---|---|---|
+| 211 | builder | 19629 / 0 | 3066 / 0 | 0 / 0 |
+| 213 | builder | 11463 / 0 | 16872 / 0 | 0 / 0 |
+| 241 | second worker | 17443 / 1 | 4419 / 0 | 0 / 0 |
+| 243 | second worker | 24739 / 0 | 4766 / 0 | 0 / 0 |
+
+abreport per host: builder ratio 0.643 (interval spans the floor), second worker ratio 0.218; each INCONCLUSIVE at 2 pairs. Pooled by hand over the 4 pairs: margin 29123 against legacy 73274 (ratio 0.397), per-seed difference mean -11038, sd 11060, 95% interval about [-28600, +6600] (t, 3 df). Chickens 1 / 0, deaths 0 / 0.
+
+**Verdict: FAIL on yield (practical); the statistics alone read INCONCLUSIVE.** Three of four seeds sit at 16 to 27 percent of legacy; seed 213 recovered (margin above legacy). The safety numbers are not better enough to pay for it (chickens 1 against 0, deaths 0 against 0).
+
+**Cause, from the model's own log lines (V, seed 241 margin, 39 `zone choice` lines; seed 211 margin: Burial Grounds 16, Cold Plains 8, Mausoleum 5):** the weapon was not the main cause. The model keeps choosing Burial Grounds (and Cold Plains) as `best_pay_eligible` with a model yield of about 150 xp/min, while the hero realizes 4 to 27 (log: "realized 4 (model 152)", "realized 6 (model 152)", "realized 27 (model 165)"), and k sits at the clamp 3.00 from the second decision on. `weakest=offence_weapon_class_default dps=11.5 src=skill`: the offence input is still the class default, not a measured value. The realized-yield cap (survhold3) lowers the value to about 54 to 67, but the other zones are then excluded by `margin_low` or lower value, so the same zone is picked again for 60 to 99 minutes. Legacy leaves for Stony Field, Dark Wood and the Cave (areas 4, 5, 6, 9, 10) and earns 3 to 5 times as much. This is a model defect (yield estimate for a starved caster, and no escape from a zone that realizes under 10 percent of the model), not a data-only defect I can set in `internal/survival` with a must-fail test in this card: finding filed (U on the right fix: cap the model yield of a zone by the realized yield with no floor, or count a zone as depleted after N minutes under X percent of the model).
+
+**Recommendation (user decides; nothing flipped).** Sorceress: do not flip; the zone model needs a fix to its caster yield estimate before another screen (a new card; wave 4 and the 8-seed run are not worth running on this build). Paladin: unchanged, PASS at 8 seeds (section 3).

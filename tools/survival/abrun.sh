@@ -5,7 +5,7 @@
 # with a d2d WITHOUT --lab-verbs (gated debug verbs are refused, so no gameplay write after the start) and plays HOURS virtual
 # hours under the arm's knobs. The only difference between the arms is bot.zoneModel (0 legacy, 1 margin); bot.portalGuard is 0 in both.
 # Logs land in $W/ab/<arm>/<seed>.log, the layout tools/survival/abreport reads.
-# Env: AB_CLASS (d2d class index, 2 Paladin, 4 Sorceress; default 2), AB_CLVL (12), AB_GOLD (500), AB_WEAPON (item code worn in the right hand as SETUP; default hax for the Paladin, none otherwise: without a weapon a melee hero has no damage stat and the model reads src=default), AB_SPEED (8), D2D_BIN (lab binary with --lab-verbs AND the dump "weapons"/"hero" keys: build the fork branch didle/rebase-20261115 or later; the Nov 6 lab3-labverbs build has neither and prep now refuses it), AB_DIR (work dir, default ~/d2d-lab/survab).
+# Env: AB_CLASS (d2d class index, 2 Paladin, 4 Sorceress; default 2), AB_CLVL (12), AB_GOLD (500), AB_WEAPON (item code worn in the right hand as SETUP; default hax for the Paladin, wnd for the Sorceress, none otherwise: without a weapon a melee hero has no damage stat and the model reads src=default), AB_SPEED (8), D2D_BIN (lab binary with --lab-verbs AND the dump "weapons"/"hero" keys: build the fork branch didle/rebase-20261115 or later; the Nov 6 lab3-labverbs build has neither and prep now refuses it), AB_DIR (work dir, default ~/d2d-lab/survab).
 # Ship to ~/d2d-lab/survab/bin first: d2bot.survab (built from the branch that has bot.zoneModel), prep.abmerc, d2dslot.sh, agentrun.sh.
 set -u
 W=${AB_DIR:-$HOME/d2d-lab/survab}; cd "$W" || exit 2
@@ -16,7 +16,9 @@ case $ARM in legacy) ZM=0 ;; margin) ZM=1 ;; *) echo "abrun: arm must be legacy 
 ./bin/d2bot.survab --help 2>&1 | grep -q 'bot.zoneModel' || strings ./bin/d2bot.survab | grep -q 'bot.zoneModel' \
   || { echo "abrun: this d2bot has no bot.zoneModel (slice S-D not built in)" >&2; exit 65; }
 export D2D_AGENT=survab AB_CLASS=${AB_CLASS:-2} AB_CLVL=${AB_CLVL:-12} AB_GOLD=${AB_GOLD:-500}
-if [ -z "${AB_WEAPON+x}" ]; then [ "$AB_CLASS" = 2 ] && AB_WEAPON=hax || AB_WEAPON=; fi; export AB_WEAPON
+# SETUP weapon, both arms: a starter weapon per class (hax Paladin, wnd Sorceress). A weaponless caster reads dmg 1-5, so the
+# model sits at its k limit and every zone past the first reads margin_low (survhold4 seeds 211, 213).
+if [ -z "${AB_WEAPON+x}" ]; then case $AB_CLASS in 2) AB_WEAPON=hax ;; 4) AB_WEAPON=wnd ;; *) AB_WEAPON= ;; esac; fi; export AB_WEAPON
 WALLMIN=$(awk -v h="$H" -v v="${AB_SPEED:-8}" 'BEGIN{print int(h*60/v*1.6+10)}'); export WALLMIN
 exec "$W/bin/d2dslot.sh" run ${SLOT:+-n $SLOT} -w 3000 -- bash -c '
 cd '$W'; ARM='$ARM' S='$SEED' H='$H' ZM='$ZM'
