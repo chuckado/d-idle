@@ -381,3 +381,17 @@ func TestReturnLayoutResetsMainGrid(t *testing.T) {
 		t.Fatal("policy page does not use main.ret with return.css")
 	}
 }
+
+// ADR 0024: the mode rules are shown on the page; without rules the page and data are unchanged (omitempty).
+func TestReturnShowsModeRules(t *testing.T) {
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		d := BuildReturn(input(t, class, ""))
+		if strings.Contains(string(RenderReturn(d, false)), "ladder runewords") {
+			t.Errorf("%s: a rule shown without being set", class)
+		}
+		d.Rules = []string{"ladder runewords: on"}
+		if !strings.Contains(string(RenderReturn(d, false)), "ladder runewords: on") {
+			t.Errorf("%s: rule missing from the page", class)
+		}
+	}
+}

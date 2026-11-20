@@ -542,6 +542,11 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 |---|---|---|---|---|---|---|
 | agency.planner | 0 | 0..1 | mode | 0 | 0 | 0 (default): off. 1: shadow. Once a minute the hero logs a `planner shadow:` line with the attack and aura the planner would pick from the skills the player actually bought, next to what the combat profile picks, and GET /api/hero/plan and the Points page show the derived rotation, the warnings and the viability line. Shadow only: it never changes what the hero does (docs/agency.md). |
 
+### items.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| items.ladderRunewords | 0 | 0..1 | bool | 0 | 3 | 1: the planner may socket the ladder-only runewords (Spirit, Insight and the rest of the Runes.txt server rows) and the Return screen shows 'ladder runewords: on'. Set it only together with the fork flag --ladder-runewords (ADR 0024, d.idle mode); read at start. 0 (default, vanilla): they stay unavailable, as in every gate and fidelity run. |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)
