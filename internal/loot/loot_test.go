@@ -816,3 +816,23 @@ func TestClearOrDropFallsBackToGround(t *testing.T) {
 		t.Fatalf("cursor %v ground %d", w.Cursor != nil, len(w.Ground))
 	}
 }
+
+// pgfix4 (Proving Ground loot.rare-ring-classified, Sorceress seed 3): a ground ring whose quality the d2d label cannot
+// tell (the verb answered nothing: quality 0) fell to the pickit default ("drop: no rule matches") and was left lying.
+// Rings, amulets and circlets never drop normal, so every unidentified one is worth taking to the identify step.
+func TestUnknownQualityJewelryIsTaken(t *testing.T) {
+	for _, cl := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		t.Run(cl.String(), func(t *testing.T) {
+			l, r := newLooter(t)
+			r.W.Player.Level = 10
+			r.W.Player.Class = cl
+			for _, code := range []string{"rin", "amu"} {
+				u := r.W.NewItem(code, 0)
+				u.Item.Flags = 0
+				if v := l.EvaluateWith(u, loot.Ctx{CLvl: 10, Gold: 300}); v.Action != loot.Keep || v.Rule != "jewelry to id" || !v.NeedID {
+					t.Errorf("%s quality unknown: %v rule %q needId %v, want keep by jewelry to id", code, v.Action, v.Rule, v.NeedID)
+				}
+			}
+		})
+	}
+}
