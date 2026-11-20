@@ -15,7 +15,7 @@ func TestBackToFieldPortalOnlyRefusesStalePortal(t *testing.T) {
 	for _, class := range []d2.Class{d2.Sorceress, d2.Barbarian} {
 		r := newRig(t)
 		r.W.Player.Class = class
-		r.W.Player.Area = 5 // Dark Wood
+		r.W.Player.Area, r.W.PortalLevel = 5, 1 // Dark Wood, the portal leads to camp
 		r.W.Add("tsc", d2.ContInventory, 0, 0)
 		if err := r.T.ToTown(context.Background()); err != nil {
 			t.Fatalf("class %v: ToTown: %v", class, err)
@@ -34,7 +34,7 @@ func TestBackToFieldPortalOnlyRefusesStalePortal(t *testing.T) {
 // A portal cast in Tristram leads back to Tristram, so the same call is allowed then.
 func TestBackToFieldPortalOnlyAllowedWhenCastThere(t *testing.T) {
 	r := newRig(t)
-	r.W.Player.Area = 38
+	r.W.Player.Area, r.W.PortalLevel = 38, 1
 	r.W.Add("tsc", d2.ContInventory, 0, 0)
 	if err := r.T.ToTown(context.Background()); err != nil {
 		t.Fatal(err)
