@@ -1,5 +1,5 @@
 ---
-status: accepted (Q4, Q5, Q7, Q13 still OPEN, see the end)
+status: accepted (Q4, Q5, Q7, Q13 since decided in 0021 to 0024)
 date: 2026-11-19
 decision-makers: user (popup answers on the Fable design review, 2026-11-19)
 ---

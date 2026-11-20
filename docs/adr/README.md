@@ -8,3 +8,7 @@ MADR-style, one file per decision the user made or the project depends on; `docs
 - [0018](0018-fun-loop-expedition-ledger-2026-11-07.md): accepted 2026-11-07 (user popups on docs/research/fun-ideas.md: the loop is the Expedition Ledger, Act 1 Codex, optional retire into a Hall of Fame; amends 0016 items 10, 15, 16, 17), amended by 0020 (item 6)
 - [0019](0019-pacts-and-unlocks-2026-11-07.md): accepted 2026-11-07 (user popups: Pacts as opt-in challenge rules with meta rewards, information unlocks in a side-panel minimap, a data-driven unlock ladder; builds on 0018, no text change)
 - [0020](0020-proving-ground-and-stat-skill-agency.md): accepted 2026-11-19 (user popups on the Fable review: Proving Ground first as merge gate, player spends every stat and skill point, intent arbiter, class order; amends 0018 item 6; Q4, Q5, Q7, Q13 open, 0015 acceptance stands)
+- [0021](0021-input-rule-verb-key-click.md): accepted 2026-11-19 (user popup: input rule verb, then hotkey, then verified click; generated hotkey map in the hero save; builds on 0020)
+- [0022](0022-hero-knowledge-reads-never-cheat.md): accepted 2026-11-19 (user popup: K1 level layout read verb; reads never make a run CHEATED; builds on 0020)
+- [0023](0023-fidelity-by-rule-differentials.md): accepted 2026-11-19 (user popup: per-rule differentials or listed shims replace the A:B verdict; amends 0015)
+- [0024](0024-ladder-runewords-in-didle-mode.md): accepted 2026-11-19 (user popup: ladder-only runewords in d.idle mode, vanilla for gates and fidelity; builds on 0020)
