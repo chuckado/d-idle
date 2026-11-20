@@ -727,6 +727,7 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 	}
 	res, ok := r.boardSlice(ctx, snap, c, boardPlan{q: q, c: ch}, "Quest: "+q.Title)
 	out := questboard.StepResult{Outcome: questboard.StepRan}
+	idle := false // nothing ran this tick: the loop must still spend time (below)
 	switch {
 	case r.deadNow() || res.Outcome == task.OutDeath:
 		out = questboard.StepResult{Outcome: questboard.StepDied, Why: nonEmptyStr(whyOf(res), "died on the way")}
@@ -743,6 +744,7 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 	case res.Outcome == task.OutRan && res.StepID == "":
 		// Nothing left to run, yet the quest does not read as finished: never spin on it silently.
 		out = questboard.StepResult{Outcome: questboard.StepFailed, Why: "all steps done but the quest does not read as finished (waiting for the save or memory)"}
+		idle = true
 	case !ok:
 		out.Outcome = questboard.StepWaiting
 	}
@@ -759,6 +761,12 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		r.boardNote("fail "+k, fmt.Sprintf("quest board: %s: %s", k, out.Why))
 	}
 	rt.exec.Report(d, out)
+	if idle {
+		// Proving Ground cain.cage (2026-11-19): a free_cain start outside Tristram has no step to run. The tick did nothing,
+		// so under a lockstep clock no time passed, the failure gap above never elapsed and the chunk spun for 17 minutes
+		// wall in a field. Going to town spends time, and three counted failures then park the chunk with its reason.
+		return r.rest(ctx, snap, c)
+	}
 	return ok
 }
 
