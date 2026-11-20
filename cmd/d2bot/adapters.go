@@ -86,6 +86,9 @@ func (a fighterAdapter) SetDeathWeights(w combat.DeathWeights) { a.f.SetDeathWei
 // SetWalking tells the fighter the bot is on a travel or quest walk (the crowd-abandon rule applies to walks).
 func (a fighterAdapter) SetWalking(on bool) { a.f.SetWalking(on) }
 
+// SetQuestCrowd tells the fighter a player-started quest chunk runs (combat.crowdAbandonQuestN applies).
+func (a fighterAdapter) SetQuestCrowd(on bool) { a.f.SetQuestCrowd(on) }
+
 func (a fighterAdapter) Safety(s *d2.Snapshot) bot.SafetyAction { return toBot[a.f.Safety(s)] }
 func (a fighterAdapter) Act(ctx context.Context, act bot.SafetyAction) error {
 	return mapCombatErr(a.f.Act(ctx, toCombat[act]))

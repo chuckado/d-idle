@@ -13,6 +13,7 @@ priority: medium
 ordinal: 332000
 card: "cainfix3"
 owns:
+  - "cmd/d2bot/adapters.go"
   - "data/questboard/act1.json"
   - "docs/combat.md"
   - "docs/knobs.md"
