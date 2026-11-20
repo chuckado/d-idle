@@ -169,6 +169,7 @@ cmd/d2bot/d2dwire.go  credit-runner  agencyp0
 cmd/d2bot/d2dwire.go  credit-runner  gearsets
 cmd/d2bot/d2dwire.go  credit-runner  groundquality
 cmd/d2bot/d2dwire.go  credit-runner  itemverbs2
+cmd/d2bot/d2dwire.go  credit-runner  q13input
 cmd/d2bot/d2dwire.go  credit-runner  vaultv3
 cmd/d2bot/d2dwire.go  credit-runner  vaultv5
 cmd/d2bot/dangerwire.go  credit-runner  survA
@@ -194,8 +195,11 @@ cmd/d2bot/glancewire_pause_test.go  credit-runner  uifix1
 cmd/d2bot/glancewire_reset.go  credit-runner  botreset
 cmd/d2bot/glancewire_test.go  credit-runner  uib5
 cmd/d2bot/goldfarmwire_test.go  credit-runner  repairtrip
+cmd/d2bot/hotkeymapwire.go  credit-runner  q13input
+cmd/d2bot/hotkeymapwire_test.go  credit-runner  q13input
 cmd/d2bot/invverbs.go  credit-runner  botinstant
 cmd/d2bot/invverbs.go  credit-runner  itemverbs2
+cmd/d2bot/invverbs.go  credit-runner  q13input
 cmd/d2bot/invverbs.go  credit-runner  uib9
 cmd/d2bot/invverbs_test.go  credit-runner  botinstant
 cmd/d2bot/invverbs_test.go  credit-runner  uib9
@@ -319,6 +323,8 @@ cmd/d2scenario/run.go  credit-runner  agencyp0
 data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
 data/idreveal  credit-runner  nocards
+data/input/caps/d2d-fork-input-items.json  credit-runner  q13input
+data/input/caps_test.go  credit-runner  q13input
 data/onboarding  credit-runner  firstminutes
 data/onboarding/en.json  credit-runner  friendfb
 data/questboard  credit-runner  quests1
@@ -422,6 +428,7 @@ docs/knobs.md  credit-runner  hourfix
 docs/knobs.md  credit-runner  lootwire3
 docs/knobs.md  credit-runner  lootwireL4
 docs/knobs.md  credit-runner  pursuers
+docs/knobs.md  credit-runner  q13input
 docs/knobs.md  credit-runner  quests3
 docs/knobs.md  credit-runner  quests8
 docs/knobs.md  credit-runner  staletarget
@@ -510,6 +517,7 @@ docs/process/queuespeed.md  credit-runner  queuespeed
 docs/process/sandbox-devp11.md  credit-runner  devp11doc
 docs/process/sandbox-devp12.md  credit-runner  devp12
 docs/process/sandbox-devp13.md  credit-runner  forkrebase2
+docs/process/sandbox-input-items.md  credit-runner  q13input
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
 docs/quest-hints.md  live-agent  questdrill
@@ -942,6 +950,7 @@ internal/env/tuning_bot.go  credit-runner  staletarget
 internal/env/tuning_bot.go  credit-runner  survfix2
 internal/env/tuning_combat.go  credit-runner  cainfix3
 internal/env/tuning_identify.go  credit-runner  bulkid
+internal/env/tuning_input.go  credit-runner  q13input
 internal/env/tuning_invdesk.go  credit-runner  botinstant
 internal/env/tuning_invdesk.go  credit-runner  gearsets
 internal/env/tuning_loot.go  credit-runner  goldprio
@@ -965,6 +974,7 @@ internal/ether/earner.go  credit-runner  quests10
 internal/fidvendor  live-agent  fidprobe-vendor
 internal/goals/runner.go  credit-runner  staletarget
 internal/goldfarm  credit-runner  repairtrip
+internal/hotkeymap/  credit-runner  q13input
 internal/invdesk  credit-runner  gearsets
 internal/invdesk  credit-runner  idfast
 internal/invdesk/desk.go  credit-runner  botinstant
@@ -973,11 +983,14 @@ internal/invdesk/desk.go  credit-runner  itemverbs2
 internal/invdesk/desk.go  credit-runner  tidy
 internal/invdesk/identify.go  credit-runner  botinstant
 internal/invdesk/identify.go  credit-runner  itemverbs2
+internal/invdesk/inputcaps.go  credit-runner  q13input
+internal/invdesk/inputcaps_test.go  credit-runner  q13input
 internal/invdesk/instant.go  credit-runner  botinstant
 internal/invdesk/instant_test.go  credit-runner  botinstant
 internal/invdesk/mercverbs.go  credit-runner  uib9
 internal/invdesk/mercverbs_test.go  credit-runner  uib9
 internal/invdesk/mover.go  credit-runner  itemverbs2
+internal/invdesk/mover.go  credit-runner  q13input
 internal/invdesk/mover_test.go  credit-runner  itemverbs2
 internal/invdesk/sellnow.go  credit-runner  botsell
 internal/invdesk/sellnow_test.go  credit-runner  botsell
@@ -990,6 +1003,7 @@ internal/invdesk/unequip.go  credit-runner  botinstant
 internal/invdesk/usable.go  credit-runner  charreq
 internal/invdesk/usable_test.go  credit-runner  botinstant
 internal/invdesk/usable_test.go  credit-runner  charreq
+internal/invdesk/verbs.go  credit-runner  q13input
 internal/itemreq/  credit-runner  charreq
 internal/leveler/build.go  credit-runner  agencyp0
 internal/leveler/itemreasons.go  credit-runner  charreq

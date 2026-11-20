@@ -1,0 +1,6 @@
+{
+ "schema": "inputcaps/1",
+ "backend": "d2d-fork-input-items",
+ "verbs": ["input.select", "input.repair", "input.menu-choose", "input.item-equip", "input.item-unequip", "input.item-move", "input.item-identify", "input.item-drop", "input.gold-stash"],
+ "note": "U until a sandbox image of fork branch didle/input-items-20261120 is loaded and switched in: the item, identify and gold verbs run without --item-verbs after a 0-difference differential (fork tests/input_items_diff_d2d.py, 19 steps; docs/process/sandbox-input-items.md). The bot adopts the names only with input.planner=1 (internal/invdesk/inputcaps.go)."
+}
