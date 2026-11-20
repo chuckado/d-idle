@@ -457,7 +457,7 @@ func TestBloodRavenRetreatKnob(t *testing.T) {
 // The Countess' room is not built when the hero arrives, so only the layout read lists her chest (class 580): the walk
 // must start at the stand of the chest's layout, not at the arrival-side hint and an explore. Two arrival spots stand
 // for the Paladin and the Sorceress (the script has no class data; the walk is the same from either).
-func TestCountessChestPresetWalksThereWhen836Absent(t *testing.T) {
+func TestCountessChestPresetWalksWhenSpawnPresetAbsent(t *testing.T) {
 	for _, c := range []struct {
 		name  string
 		start Pt
