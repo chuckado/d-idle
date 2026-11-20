@@ -165,6 +165,9 @@ func d2dConfig(o options, log *slog.Logger, tune *env.Tuning, db *data.DB, home 
 		if o.d2d.overlay != "" {
 			cfg.ExtraArgs = append(cfg.ExtraArgs, "--overlay-dir", o.d2d.overlay)
 		}
+		if tune != nil && tune.Items.LadderRunewords != 0 {
+			cfg.ExtraArgs = append(cfg.ExtraArgs, "--ladder-runewords") // ADR 0024: the engine side of items.ladderRunewords
+		}
 		cfg.ExtraArgs = append(cfg.ExtraArgs, strings.Fields(o.d2d.extraArgs)...)
 	}
 	return cfg
@@ -224,6 +227,9 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 			log.Warn("game tables unavailable; running without a catalog", "gamedir", o.gameDir, "err", err)
 			db = nil
 		}
+	}
+	if db != nil {
+		db.LadderRunewords = tune.Items.LadderRunewords != 0
 	}
 	if o.managed {
 		if err := os.MkdirAll(filepath.Dir(d2dSock(o)), 0o700); err != nil {
@@ -358,6 +364,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 		return err
 	}
 	o.ladder.overlayDir = o.d2d.overlay
+	o.ladder.ladderRunewords = tune.Items.LadderRunewords != 0
 	o.ladder.currencyDir = currencyDirFor(ip.State())
 	if err := useFirsts(o.ladder, runner); err != nil {
 		return err
