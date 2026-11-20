@@ -320,6 +320,7 @@ cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2dview  credit-runner  videofeed2
 cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
+cmd/d2scenario  credit-runner  pgformat
 cmd/d2scenario/  credit-runner  pgexpand
 cmd/d2scenario/main_test.go  credit-runner  agencyp0
 cmd/d2scenario/run.go  credit-runner  agencyp0
@@ -521,6 +522,7 @@ docs/process/fork-rebase.md  credit-runner  forkrebase2
 docs/process/layout-read.md  live-agent  k1layout
 docs/process/points-verbs-devp14.md  credit-runner  agencyp0
 docs/process/proving-ground.md  credit-runner  pgexpand
+docs/process/proving-ground.md  credit-runner  pgformat
 docs/process/queuespeed.md  credit-runner  queuespeed
 docs/process/sandbox-devp11.md  credit-runner  devp11doc
 docs/process/sandbox-devp12.md  credit-runner  devp12
@@ -1146,6 +1148,7 @@ internal/resource/swing_test.go  credit-runner  swingmodel
 internal/resource/tuning.go  credit-runner  agencyp0
 internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
+internal/scenario  credit-runner  pgformat
 internal/scenario/  credit-runner  pgexpand
 internal/scenario/scenario_test.go  credit-runner  agencyp0
 internal/scenario/state.go  credit-runner  agencyp0
@@ -1747,6 +1750,7 @@ tools/levelsim/shadow.go  credit-runner  intake
 tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
+tools/provingground  credit-runner  pgformat
 tools/provingground/  credit-runner  pgexpand
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3

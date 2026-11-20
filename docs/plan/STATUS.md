@@ -309,6 +309,7 @@
 | q13input | proposed | - | `internal/invdesk/mover.go`<br>`internal/invdesk/verbs.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/d2dwire.go`<br>`data/input/caps_test.go`<br>`docs/knobs.md`<br>`internal/hotkeymap/`<br>`internal/invdesk/inputcaps.go`<br>`internal/invdesk/inputcaps_test.go`<br>`cmd/d2bot/hotkeymapwire.go`<br>`cmd/d2bot/hotkeymapwire_test.go`<br>`data/input/caps/d2d-fork-input-items.json`<br>`internal/env/tuning_input.go`<br>`docs/process/sandbox-input-items.md` | - |
 | sorc2 | in-progress | - | `internal/buildfile/tablecheck.go`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/plandata/build-sorceress_fire_normal30.json`<br>`internal/leveler/sorcfire_test.go`<br>`internal/plandata/build-primary-blizzard.json`<br>`internal/plandata/build-fallback-lightning.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-primary-blizzard.json`<br>`docs/plan/data/build-fallback-lightning.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-sorceress_fire_normal30.json`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/buildfile/plans_test.go`<br>`tools/provingground/scenarios/points.json` | - |
 | q4runes | in-progress | - | `internal/env/tuning_items.go`<br>`internal/plandata/ladder_runewords.go`<br>`internal/plandata/ladder_runewords_test.go`<br>`docs/knobs.md`<br>`internal/env/tuning.go`<br>`internal/data/db.go`<br>`internal/data/extra.go`<br>`internal/data/data_test.go`<br>`internal/town/imbue_test.go`<br>`internal/watch/returnscreen.go`<br>`internal/watch/returnscreen_test.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/funwire.go`<br>`cmd/d2bot/ladder.go` | - |
+| pgformat | proposed | - | `internal/scenario`<br>`cmd/d2scenario`<br>`tools/provingground`<br>`docs/process/proving-ground.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -347,6 +348,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ce25d4e63 11-20 15:32 `Merge agent/pgformat: Merge branch 'main' into pgformat` (pgformat)
+- f99a23a1e 11-20 15:31 `Merge branch 'main' into pgformat` (-)
 - aed1329f5 11-20 15:12 `Merge agent/q4runes: Merge branch 'main' into q4runes` (q4runes)
 - 511a8e300 11-20 15:11 `Merge branch 'main' into q4runes` (-)
 - 5f22eee60 11-20 14:33 `Merge agent/sorc2: Merge branch 'main' into sorc2` (sorc2)
@@ -354,7 +357,5 @@
 - b0c091dff 11-20 14:10 `Merge agent/q13input: Merge branch 'main' into q13input` (q13input)
 - 0a210d0ab 11-20 14:09 `Merge branch 'main' into q13input` (-)
 - bfafe8c2d 11-20 14:07 `Merge agent/verify43: verify43: game-side rerun and room control results` (verify43)
-- f53decc2c 11-20 10:42 `Merge agent/survhold7: Merge branch 'main' into survhold7` (survhold7)
-- b96873717 11-20 10:41 `Merge branch 'main' into survhold7` (-)
-- 38637cd33 11-20 09:56 `Merge agent/k1layout: k1layout: task result` (k1layout)
+- 56695b95a 11-20 13:39 `Merge branch 'agent/sorc2' into agent/pgformat` (sorc2)
 <!-- statusgen:end -->
