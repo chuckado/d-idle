@@ -92,6 +92,7 @@ func (t *Town) ToTown(ctx context.Context) error {
 			continue
 		}
 		t.arrived = t.e.Clock.Now()
+		t.portalFrom = s.Player.Area // the standing town portal now leads back to where this one was entered
 		t.portalEmpty, t.emptyStreak = false, 0
 		if open {
 			t.e.Log.Info("arrived in town through an open portal", "area", cur.Player.Area)
@@ -296,6 +297,9 @@ func (t *Town) findPortal(s *d2.Snapshot) (d2.Unit, bool) {
 // Gate). The character stands in that level; the caller walks on with its route logic (waypoints, multi-hop).
 var ErrWrongLevel = errors.New("town: portal led to another level")
 
+// ErrPortalStale: BackToField refused a standing town portal known to lead to another level than the wanted portal-only one.
+var ErrPortalStale = errors.New("town: standing portal leads elsewhere")
+
 func (t *Town) wrongLevel(levelNo int) error {
 	if s, err := t.current(); err == nil && s.Player.Area != levelNo && !data.IsTown(s.Player.Area) {
 		return fmt.Errorf("%w: wanted %d, in %d", ErrWrongLevel, levelNo, s.Player.Area)
@@ -315,6 +319,12 @@ func (t *Town) BackToField(ctx context.Context, levelNo int) error {
 	}
 	if !data.IsTown(s.Player.Area) {
 		return fmt.Errorf("town: BackToField called outside town (area %d)", s.Player.Area)
+	}
+	// A level only a portal object leads to (Tristram) is not reached by the town portal that stands in town unless it was
+	// cast there: after a walk home (a cancelled cast, no scroll) the standing portal is the stale one of an earlier trip and
+	// took the hero to the Dark Wood (Proving Ground cain.chain stamp 201758). Fail fast and leave the way in to the caller.
+	if data.PortalOnly(levelNo) && t.portalFrom != 0 && t.portalFrom != levelNo {
+		return fmt.Errorf("%w: level %d is entered only by its own portal, the standing town portal leads to %d", ErrPortalStale, levelNo, t.portalFrom)
 	}
 	if wait := time.Duration(t.tune().PortalSettle)*time.Millisecond - t.e.Clock.Now().Sub(t.arrived); !t.arrived.IsZero() && wait > 0 {
 		t.e.Clock.Sleep(wait)

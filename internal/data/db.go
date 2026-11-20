@@ -449,6 +449,12 @@ func IsTown(area int) bool {
 	return false
 }
 
+// PortalOnly reports whether an area has no walkable way in: only a portal object leads there (Tristram, entered through
+// the red portal the cairn stones open; V lab drills L1/L2, docs/probes/search-for-cain-l1-2026-11-18.md: Stony Field
+// has no exit to level 38 and a walk there timed out after 5 minutes roaming). A town portal reaches it only when it was
+// cast there.
+func PortalOnly(area int) bool { return area == 38 }
+
 // MonLevelRow returns the monlvl.txt scaling row for a monster level, or nil.
 func (db *DB) MonLevelRow(level int) *MonLevel {
 	if level < 0 || level >= len(db.MonLevels) {

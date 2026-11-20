@@ -11,6 +11,7 @@ import (
 
 	"d2lod-bot/internal/boss"
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/goals"
 	"d2lod-bot/internal/input"
 	"d2lod-bot/internal/task"
@@ -365,7 +366,9 @@ func (e taskEnv) World(ctx context.Context) (task.World, error) {
 		if r.avoidWhyOf(a) == whyBorderLoop {
 			continue // the loop breaker never blocks a quest step (staletarget.go)
 		}
-		if r.banWaive.Load() && dangerBan(r.avoidWhyOf(a)) {
+		// A nav-fault skip (150 s "unreachable" or "nav-stuck") is no danger either: after the stones step the whole Act 1 chain
+		// read "banned" and the re-entry through Stony Field was refused (Proving Ground cain.chain, 2026-11-19).
+		if why := r.avoidWhyOf(a); r.banWaive.Load() && (dangerBan(why) || why == whyUnreachable || why == whyNavStuck) {
 			continue // the player started this chunk and its readiness is not "too hard": the farm area's ban does not apply
 		}
 		if w.Banned == nil {
@@ -962,6 +965,9 @@ func (a taskActs) Chores(ctx context.Context) error {
 	return nil
 }
 
+// portalOnlyIdleMax bounds the LevelTo slices spent waiting in a portal-only level (2 s each).
+const portalOnlyIdleMax = 30
+
 // noAreaMsg is the text of LevelTo's no-target error; recovery treats it as a planning block.
 const noAreaMsg = "no eligible reachable leveling area"
 
@@ -975,6 +981,16 @@ func (a taskActs) LevelTo(ctx context.Context, n int) error {
 	r.syncGames() // a fresh game forgets its predecessor's cleared areas, else freshGameToLevel restarts in a loop
 	if done, err := r.farmResetStep(ctx, s); done {
 		return a.tag(err)
+	}
+	// A portal-only level (Tristram) has no walkable way out, so every farm target reads "no route", gets skipped as
+	// unreachable for 150 s and the hero is sent to town: the free_cain chunk, accepted a second later, then found the Act 1
+	// map banned (Proving Ground cain.chain, 2026-11-19; also the source of its run-to-run differences). Wait there for the
+	// board instead, a bounded number of slices; then the normal way out (town portal) applies.
+	if cur := s.Player.Area; data.PortalOnly(cur) && r.portalOnlyIdle.Add(1) <= portalOnlyIdleMax {
+		r.e.Clock.Sleep(2 * time.Second)
+		return nil
+	} else if !data.PortalOnly(cur) {
+		r.portalOnlyIdle.Store(0)
 	}
 	c := a.c
 	c.spec = goalSpec{kind: goals.ReachLevel, level: n, label: fmt.Sprintf("reach level %d", n)}

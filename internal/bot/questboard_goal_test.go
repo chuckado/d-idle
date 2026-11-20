@@ -215,11 +215,11 @@ func TestBannedAreaNoteAndWaiver(t *testing.T) {
 			if w.Banned[4] {
 				t.Fatal("a started chunk is still stopped by the death ban")
 			}
-			if !w.Banned[5] {
-				t.Fatal("a waiver must not lift a nav-fault skip")
+			if w.Banned[5] {
+				t.Fatal("a started chunk is stopped by a nav-fault skip (cainchain: the skips of a Tristram stay read as bans)")
 			}
-			if !g.r.questWins(4, whyDeath) || g.r.questWins(5, whyUnreachable) {
-				t.Fatal("route bans: the waiver must lift death bans only")
+			if !g.r.questWins(4, whyDeath) || !g.r.questWins(5, whyUnreachable) {
+				t.Fatal("route bans: the waiver must lift death and nav-fault skips of a started chunk")
 			}
 			g.r.banWaive.Store(false)
 			if g.r.questWins(4, whyDeath) {
