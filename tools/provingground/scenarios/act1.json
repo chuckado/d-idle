@@ -34,12 +34,12 @@
     "travel.area-transition"
    ],
    "pre": {
-    "level": 8,
-    "gold": 2000,
+    "level": 10,
+    "gold": 8000,
     "items": [
      {
       "code": "hp1",
-      "count": 6
+      "count": 8
      },
      {
       "code": "mp1",
@@ -77,7 +77,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: level 8, 2000 gold and potions by SETUP verbs (a played hero reaches the Den at about level 3 to 8). Town start, nothing written after the start. Mechanics only.",
+   "provenance": "CHEATED: level 10, 8000 gold (2000 left the purse empty after the bank chore: the purse recovery then held the chunk, run 20261120-133340-b8dd) and potions by SETUP verbs (a played hero reaches the Den at about level 3 to 8). Town start, nothing written after the start. Mechanics only.",
    "notes": "The tapper taps Start on the offered clear_den chunk and Hand in when the board waits. Done is record 1 bit 0 (V docs/cheats.md step 3: 0x0001 reads as completed).",
    "assert": [
     {
