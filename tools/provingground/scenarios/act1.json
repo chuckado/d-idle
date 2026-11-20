@@ -1,0 +1,191 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "act1.den.clear",
+   "title": "Den of Evil: Akara, clear the Den, hand in (board-driven)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "den_of_evil",
+    "chunk": "clear_den"
+   },
+   "step": {
+    "action": "clear",
+    "target": "Den of Evil",
+    "nodes": [
+     "talk-akara",
+     "to-den",
+     "clear",
+     "home",
+     "reward"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "data/questspec/"
+   ],
+   "covers": [
+    "quest.den_of_evil.clear_den",
+    "combat.fight",
+    "travel.area-transition"
+   ],
+   "pre": {
+    "level": 8,
+    "gold": 2000,
+    "items": [
+     {
+      "code": "hp1",
+      "count": 6
+     },
+     {
+      "code": "mp1",
+      "count": 4
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "mp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "clear_den"
+    ]
+   },
+   "budget": {
+    "virtual_min": 45
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level 8, 2000 gold and potions by SETUP verbs (a played hero reaches the Den at about level 3 to 8). Town start, nothing written after the start. Mechanics only.",
+   "notes": "The tapper taps Start on the offered clear_den chunk and Hand in when the board waits. Done is record 1 bit 0 (V docs/cheats.md step 3: 0x0001 reads as completed).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 1,
+     "set": 1,
+     "why": "V docs/cheats.md: bit 0 = completed; the real reward word is 0x8001/0x9001"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "act1.tower.countess",
+   "title": "Forgotten Tower: Black Marsh, five cellar levels, kill the Countess (board-driven)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "forgotten_tower",
+    "chunk": "countess"
+   },
+   "step": {
+    "action": "kill",
+    "target": "The Countess",
+    "nodes": [
+     "wp-black-marsh",
+     "to-cellar",
+     "kill",
+     "home"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "data/questspec/",
+    "internal/boss/",
+    "internal/nav/"
+   ],
+   "covers": [
+    "quest.forgotten_tower.countess",
+    "combat.fight",
+    "travel.waypoint",
+    "travel.area-transition"
+   ],
+   "pre": {
+    "level": 24,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     4
+    ],
+    "items": [
+     {
+      "code": "hp1",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "mp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "countess"
+    ]
+   },
+   "budget": {
+    "virtual_min": 60
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level 24, 5000 gold, Cold Plains and Black Marsh waypoints and potions by SETUP verbs. Town start, nothing written after the start. Mechanics only.",
+   "notes": "U: the Countess kill sets record 5 bit 0 (docs/task.md: no turn-in, the kill completes the quest). If this is RED on the assertion with the Countess dead, probe the word and fix the assertion, not the bot. The Countess drop (runes) is not asserted: loot is random.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 5,
+     "set": 1,
+     "why": "U docs/task.md: the kill completes the quest (record 5, Forgotten Tower in saves questTable)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  }
+ ]
+}
