@@ -97,7 +97,8 @@ def game(path, exe=None):
             continue
         e = g.e
         e.mu.mem_write(e.r32(u + 0x14) + 0xb, bytes([c['variant']]))
-        v = e.s32(e.call(0x622720, u, 0))
+        v = e.call(0x622720, u, 0)
+        v -= (1 << 32) if v >> 31 else 0
         print(c['id'], v)
     print("#", len(cases), "cases", file=sys.stderr)
 
@@ -187,17 +188,34 @@ def codes():
     return 0 if bad == 0 and seen else 1
 
 
-USAGE = "usage: monster_block.py gen | game CASES | compare CASES GAME D2D | codes"
+def cap():
+    """The cap of 75 (0x62280e): FUN_00622720 on a gate-A monster (Mephisto) with its stat 20 set to each value with game.exe's own
+    stat setter (FUN_00627260); no MonStats row has a ToBlock above 75, so the cases never reach it."""
+    import mm_launch
+    g = mm_launch.G(0)
+    e = g.e
+    index = {r['Id']: int(r['hcIdx']) for r in table('monstats')}
+    u, _, _ = g.unit(index['mephisto'], 1)
+    for value in (0, 1, 74, 75, 76, 90, 200):
+        e.call(0x627260, u, 20, value, 0)
+        v = e.call(0x622720, u, 0)
+        print('cap', value, v - (1 << 32) if v >> 31 else v)
+    return 0
+
+
+USAGE = "usage: monster_block.py gen | game CASES | compare CASES GAME D2D | codes | cap"
 
 if __name__ == "__main__":
     argv = sys.argv[1:]
-    arity = {"gen": 1, "game": 2, "compare": 4, "codes": 1}
+    arity = {"gen": 1, "game": 2, "compare": 4, "codes": 1, "cap": 1}
     if not argv or arity.get(argv[0]) != len(argv):
         raise SystemExit(USAGE)
     if argv[0] == "gen":
         gen()
     elif argv[0] == "game":
         game(argv[1])
+    elif argv[0] == "cap":
+        sys.exit(cap())
     elif argv[0] == "codes":
         sys.exit(codes())
     else:
