@@ -400,7 +400,7 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 	err, cause := r.runAction(ctx, c.gen, st, activity, timeout, f)
 	l := &r.loop
 	if err == nil {
-		l.failures = 0
+		l.failures, l.portalRetried = 0, false
 		return true
 	}
 	if ctx.Err() != nil {
@@ -413,6 +413,7 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 		r.gameLost(ctx, c, gone.Event)
 	case errors.As(cause, &si):
 		r.handleSafety(ctx, si.Action)
+		r.retryCancelledPortal(ctx, err, si.Action)
 	case errors.Is(err, ErrPortalOpened):
 		area := 0
 		if s := r.latest(); s != nil {

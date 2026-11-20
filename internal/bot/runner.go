@@ -301,6 +301,7 @@ type loopState struct {
 	diffBan         map[string]time.Time
 	forceTrip       bool
 	healFails       int         // failed heal attempts while below the resume line; reset when life is back above it
+	portalRetried   bool        // the cancelled-cast retry was used since the last arrival in town (portalretry.go)
 	noPortalSince   time.Time   // first heal-trip failure for lack of a town portal in this stretch (noPortalLeave)
 	recoveredAt     time.Time   // end of the last lost-game recovery (freshHold)
 	lowLifeUntil    time.Time   // end of the current low-life wait (lowLifeWait); zero when not waiting

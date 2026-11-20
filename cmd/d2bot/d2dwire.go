@@ -267,7 +267,7 @@ func busyPMode(m int) bool {
 }
 
 func portalDead(ctx context.Context) error {
-	return fmt.Errorf("d2d portal: cancelled, nothing clicked (%v)", context.Cause(ctx))
+	return fmt.Errorf("d2d portal: cancelled, nothing clicked (%v): %w", context.Cause(ctx), town.ErrPortalCancelled)
 }
 
 // portalCut is the error of a cast whose context died after the click: d2d may have spent the charge (Gate 1 20261102
