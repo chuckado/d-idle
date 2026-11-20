@@ -662,6 +662,9 @@ func (r *Runner) boardStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 		r.boardNote("next", "quest board: "+err.Error())
 		return r.boardBetween(ctx, snap, c)
 	}
+	if d.Kind != questboard.DecRun {
+		r.setQuestCrowd(false)
+	}
 	switch d.Kind {
 	case questboard.DecRun:
 		rt.setQueued("")
@@ -722,9 +725,11 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 	if word != questboard.ReadyTooHard {
 		r.banWaive.Store(true)
 		defer r.banWaive.Store(false)
-		r.setQuestCrowd(true)
-		defer r.setQuestCrowd(false)
 	}
+	// The crowd line stays raised between slices too (a potion trip or a fight of the guard runs outside boardSlice, and
+	// the Proving Ground chain run abandoned its walk in Tristram that way); boardStep and boardPreemptsWhy lower it when
+	// the board is not running a chunk.
+	r.setQuestCrowd(word != questboard.ReadyTooHard)
 	res, ok := r.boardSlice(ctx, snap, c, boardPlan{q: q, c: ch}, "Quest: "+q.Title)
 	out := questboard.StepResult{Outcome: questboard.StepRan}
 	idle := false // nothing ran this tick: the loop must still spend time (below)
@@ -980,6 +985,9 @@ func (r *Runner) boardPreemptsWhy(snap *d2.Snapshot, c control) (bool, string) {
 		return false, ""
 	}
 	k := questboard.ChunkKey(d.Quest, d.Chunk)
+	if d.Kind != questboard.DecRun {
+		r.setQuestCrowd(false)
+	}
 	if (d.Kind == questboard.DecRun || d.Kind == questboard.DecAwait || d.Kind == questboard.DecBusy) &&
 		r.recoveryActive() && !r.gearVerdict(snap).Gated && !r.chunkNeedsNoGold(rt, d) {
 		// The recovery (empty purse, no kit) stays ahead of a chunk, but the player must see it: before, the accepted chunk

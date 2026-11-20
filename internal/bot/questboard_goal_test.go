@@ -264,3 +264,41 @@ func TestQuestBoardQueuedChunkStartsAfterGrace(t *testing.T) {
 		})
 	}
 }
+
+// crowdFighter records SetQuestCrowd on top of the rig's fighter.
+type crowdFighter struct {
+	Fighter
+	on bool
+}
+
+func (c *crowdFighter) SetQuestCrowd(on bool) { c.on = on }
+
+// cainfix3 F2: the quest crowd line is raised by a chunk that runs and lowered again when the board runs nothing.
+func TestQuestBoardCrowdLineFollowsTheChunk(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		t.Run(class.String(), func(t *testing.T) {
+			g, x := boardRig(t, true)
+			cf := &crowdFighter{Fighter: g.r.d.Fighter}
+			g.r.d.Fighter = cf
+			g.w.set(func(w *world) { w.class = class; w.area = 2 })
+			snap, _ := g.w.snapshot()
+			g.r.obMu.Lock()
+			g.r.ob.lastSnap = snap
+			g.r.obMu.Unlock()
+			cf.on = true // left over from an earlier chunk
+			if g.r.boardPreempts(snap, control{spec: goalSpec{kind: goals.FarmArea}}) {
+				t.Fatal("started with nothing accepted")
+			}
+			if cf.on {
+				t.Fatal("the quest crowd line stayed up with no chunk to run")
+			}
+			if err := x.Accept("den_of_evil", "clear_den"); err != nil {
+				t.Fatal(err)
+			}
+			g.r.setQuestCrowd(true)
+			if !g.r.boardPreempts(snap, control{spec: goalSpec{kind: goals.FarmArea}}) || !cf.on {
+				t.Fatalf("a running chunk must keep the line up (on=%v)", cf.on)
+			}
+		})
+	}
+}

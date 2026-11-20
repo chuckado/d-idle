@@ -13,13 +13,17 @@ priority: medium
 ordinal: 332000
 card: "cainfix3"
 owns:
-  - "internal/bot/questboard.go"
-  - "internal/bot/goal.go"
-  - "internal/bot/staletarget.go"
-  - "internal/bot/task.go"
-  - "internal/combat/crowd.go"
-  - "internal/env/tuning_combat.go"
   - "data/questboard/act1.json"
+  - "docs/combat.md"
+  - "docs/knobs.md"
+  - "docs/questboard.md"
+  - "internal/bot/"
+  - "internal/combat/"
+  - "internal/env/tuning_combat.go"
+  - "internal/questboard/def.go"
+  - "internal/task/banote_test.go"
+  - "internal/task/gate.go"
+  - "internal/task/world.go"
   - "tools/provingground/scenarios/cain.json"
 exclusive: []
 contracts: []
