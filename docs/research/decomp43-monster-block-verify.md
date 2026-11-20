@@ -6,7 +6,7 @@ Tags: **V run** (run here, builder long lane or locally), **V read** (disassembl
 
 ## Verdict: GO WITH FIXES
 
-The rule is right on every input the oracle covers, the compare refuses bad input, and 15 of 16 non-equivalent mutants abort the pins and differ on the compare (one survives because it is equivalent on the shipped data). Before posting: rebase (one trivial conflict), fix the test's skip code, correct the body (commit count, mutant paragraph). Details in section 6.
+The rule is right on every input the oracle covers, the compare refuses bad input, and all 17 non-equivalent mutants abort the pins (15 of them also differ on the compare; the two cap mutants are caught by the cap pins only); two mutants are equivalent on the shipped data. Before posting: rebase (one trivial conflict), fix the test's skip code, correct the body (commit count, mutant paragraph). Details in section 6.
 
 ## 1. The claim against game.exe (re-derived, V read)
 
@@ -37,7 +37,9 @@ On an 8-case slice: a good triple 0; empty game, empty d2d, empty cases, short d
 
 ## 3. Game side rerun and room control
 
-PENDING_GAME
+**Queued, not yet run at hand-back:** builder long-lane job **20261120-132422-41a1** (`v43_game.sh`: `gen` reproduces `cases.tsv`, `codes`, `cap`, a full rerun of `monster_block.py game` compared byte for byte with the stored `game.tsv` and against the claim's fresh d2d output, then the `MB_SPOT=5` room control decomp43 wrote but never ran). My first job could not run these (the stored environment points at a build directory whose `mpq-cat` is gone; this one picks the newest built `mpq-cat`). Read it with `labrun watch 20261120-132422-41a1`. Pass: `gen = cases.tsv`, `codes ... 0 where the type column disagrees`, cap `0 1 74 75 75 75 75`, `rerun = stored game.tsv`, claim vs rerun 0 rc 0, parent vs rerun 228 rc 1, claim vs control 0 rc 0. A non-zero control would mean the result depends on the spawn room (a NO-GO until explained); the other lines only re-confirm decomp43's V run numbers.
+
+Until then the game side rests on decomp43's single run (S), which my fresh d2d run reproduces exactly against the stored `game.tsv`.
 
 ## 4. Mutants (V run)
 
@@ -66,7 +68,7 @@ decomp43 ran m1 to m4 (S). Job 20261119-225204-80bf (decomp43's queue, it did fi
 | m18 gate B also by `type2 == shie` | **survives**: pins ok, compare 0 | | verify43 |
 | m19 the torch counts as a shield | abort | 24 | verify43 |
 
-m18 is equivalent on the shipped tables (no layer-7 code has `type2` `shie` without `type` `shie`, I from the 0 differ over all 2,469 cases and `codes`' 0 disagreements); a `type2` reading is not what game.exe does (word `+0x11e` is the primary type), so nothing to add. **15 of 15 non-equivalent mutants of the decomp43 list and 4 of 4 extra non-equivalent ones abort the pins.** m5 and m6 rely on the cap pins alone (the compare cannot see them): keep the cap block in the test.
+m18 is equivalent on the shipped tables (no layer-7 code has `type2` `shie` without `type` `shie`, I from the 0 differ over all 2,469 cases and `codes`' 0 disagreements); a `type2` reading is not what game.exe does (word `+0x11e` is the primary type), so nothing to add. **14 of 14 non-equivalent mutants of the decomp43 list (m14 is equivalent) and 3 of 3 non-equivalent extra ones (m16, m17, m19; m18 is equivalent) abort the pins.** m5 and m6 rely on the cap pins alone (the compare cannot see them): keep the cap block in the test.
 
 ## 5. Scope and commit hygiene (V run unless tagged)
 
@@ -83,7 +85,7 @@ m18 is equivalent on the shipped tables (no layer-7 code has `type2` `shie` with
 | F1 | high | The branch does not apply to current upstream: conflict in `ai.hpp` (`gear_res`, upstream `13c0b939`) | V run `git merge-tree` | Rebase on current upstream main, keep `res[i] += boss_res[i] + gear_res[i]` and call `block_chance`; rebuild fresh, rerun pins and the compare (expect 0) and the parent compare (expect 228) |
 | F2 | high (CodeRabbit will flag it) | `test_monster_block` without arguments returns **0** when the MPQs or the 1.14d tables are missing (`return oracle ? D2D_TEST_SKIPPED : 0`); upstream's rule (and CodeRabbit's learned note from #634, where we fixed the same thing in `9daf732b`) is `D2D_TEST_SKIPPED` in every mode | V read of the test and the #634 thread | Return `D2D_TEST_SKIPPED` on both guards in both modes |
 | F3 | medium | Body says "Two commits: the oracle (..., a README row), then the claim"; the branch has three and the README row plus `MB_SPOT` are in the third | V run `git log` | Either fold `91e3d4c5` into the oracle commit (private branch, before any push upstream) or say three commits |
-| F4 | medium | Body "Not yet run" mutant paragraph is stale | this doc, section 4 | Replace with: 15 of 15 non-equivalent mutants (cap, difficulty, layer, `mBL`, component column, any code, `boss` column, `shld`) abort the pins; m5/m6 only through the cap pins; m14 equivalent |
+| F4 | medium | Body "Not yet run" mutant paragraph is stale | this doc, section 4 | Replace with: 14 of 14 non-equivalent mutants (cap, difficulty, layer, `mBL`, component column, any code, `boss` column, `shld`) abort the pins; m5/m6 only through the cap pins; m14 equivalent |
 | F5 | medium | The trace calls the jump table in `FUN_006225f0` a "hireling range ... not read: U" | V read, section 1 | Correct the trace and body Evidence row: four classes (243, 310, 333 forced open; 359 forced closed), no outcome changes |
 | F6 | low | The test is not in `d2d_oracle_tests` / `oracle_test.py` RECIPES, so ctest never runs the differential | V read `tests/CMakeLists.txt` | Optional (the recent oracles of #632 to #637 are not registered either); mention in the body only if asked |
 | F7 | low | `compare` accepts Python int spellings like `1_0` or `+5` | V read `load()` (`int(v)`) | Optional: match `-?[0-9]+` as in #634's `crush_div.py` fix, so CodeRabbit does not raise it |
