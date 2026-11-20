@@ -897,6 +897,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [sandbox-devp14.md](process/sandbox-devp14.md): Sandbox d2d build devp14 (input verbs candidate, 2026-11-19) (status: candidate, LOADED only on the sandbox host, NOT switched (the switch needs the owner's go). Task:...)
 - [sandbox-devp9.md](process/sandbox-devp9.md): Sandbox d2d build devp9 (2026-11-15) (status: current. Task: TASK-535 (sandbox2). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [sandbox-input-items.md](process/sandbox-input-items.md): Item, gold and identify verbs promoted to input (Q13, ADR 0021; 2026-11-20) (status: candidate. Fork branch `didle/input-items-20261120` (private remote only, never upstream without the...)
+- [second-worker.md](process/second-worker.md): The second worker host for survival waves and Proving Ground (status: current (2026-11-20). The user allows the second worker for heavy d.idle work until 9 am EST on 2026-11-20...)
 - [spdx.md](process/spdx.md): SPDX header policy (ADR 0010)
 - [spec-apply-a-20261104.md](process/spec-apply-a-20261104.md): Spec apply A, 2026-11-04
 - [spec-apply-b-20261104.md](process/spec-apply-b-20261104.md): Spec apply B, 2026-11-04
