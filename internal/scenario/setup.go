@@ -22,6 +22,8 @@ type Setup struct {
 	Board *QuestRef `json:"board,omitempty"`
 	// Tuning are knob overrides for the bot run (state/tuning.json), after the scenario's own Trigger.Knobs.
 	Tuning map[string]any `json:"tuning,omitempty"`
+	// Build is trigger.build: the runner writes it as levelerBuild into the bot's config.json.
+	Build string `json:"build,omitempty"`
 	// Tags classify the setup for docs/probes/test-characters.md: CHEATED when the state could not be reached by play
 	// (a warped position, a given quest item, a hand-set quest word), SETUP-only otherwise.
 	Tags []string `json:"tags"`
@@ -137,6 +139,7 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		tags["position"] = true
 	}
 	su.Board = p.Board
+	su.Build = s.Trigger.Build
 	if p.Board != nil {
 		su.Tuning = map[string]any{"quests.board": 1}
 	}

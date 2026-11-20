@@ -156,3 +156,30 @@ func TestPointStatsFromDump(t *testing.T) {
 		t.Error("stock d2d or an empty dump observes nothing")
 	}
 }
+
+func TestBotConfigAndSkillLevels(t *testing.T) {
+	dir := t.TempDir()
+	if err := writeBotConfig(dir, scenario.Setup{}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(filepath.Join(dir, "config.json")); err == nil {
+		t.Fatal("a config file without a build")
+	}
+	if err := writeBotConfig(dir, scenario.Setup{Build: "sorceress_normal30"}); err != nil {
+		t.Fatal(err)
+	}
+	b, _ := os.ReadFile(filepath.Join(dir, "config.json"))
+	if string(b) != `{"levelerBuild":"sorceress_normal30"}` {
+		t.Fatalf("config %s", b)
+	}
+	line := `{"player":{"skill_pts":2},"skills":{"base_levels":[0,3,0,1]}}`
+	if got := skillLevels(nil, line); len(got) != 4 || got[1] != 3 {
+		t.Fatalf("levels %v", got)
+	}
+	if got := skillLevels(nil, "garbage"); got != nil {
+		t.Fatalf("garbage %v", got)
+	}
+	if ps := pointStats(nil, line); ps["skillsspent"] != 4 || ps["skillpts"] != 2 {
+		t.Fatalf("stats %v", ps)
+	}
+}
