@@ -13,7 +13,7 @@ import (
 // necro1: the shadow planner gives a sane plan for the Summoner table at every level from 1 to 30, with the new
 // Necromancer rows, and the same invariants hold for a second class (the Sorceress fire table), so the check is not
 // Necromancer-only. Every unsupported skill stays out of every slot (TestUnsupportedNeverChosenAndAlwaysFlagged runs
-// the 14 unsupported Necromancer rows too).
+// the unsupported Necromancer rows too).
 func TestNecromancerSummonerShadowPlan(t *testing.T) {
 	env := testEnv(t)
 	pl := &Planner{Env: env}
