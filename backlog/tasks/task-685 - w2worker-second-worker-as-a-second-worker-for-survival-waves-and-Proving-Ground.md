@@ -1,6 +1,6 @@
 ---
 id: TASK-685
-title: 'orionworker: second worker host for survival waves and Proving Ground'
+title: 'w2worker: second worker host for survival waves and Proving Ground'
 status: Proposed
 assignee:
   - credit-runner
@@ -11,7 +11,7 @@ labels:
 dependencies: []
 priority: medium
 ordinal: 334000
-card: "orionworker"
+card: "w2worker"
 owns:
   - "docs/process/second-worker.md"
 exclusive: []
