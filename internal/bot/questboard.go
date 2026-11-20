@@ -746,6 +746,10 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		r.boardNote("explore "+questboard.ChunkKey(d.Quest, d.Chunk), "quest board: "+whyOf(res))
 	case res.Outcome == task.OutRetry || res.Outcome == task.OutBlocked:
 		out = questboard.StepResult{Outcome: questboard.StepFailed, Why: nonEmptyStr(whyOf(res), "the step was refused")}
+		// A refusal by the area ban or a guard ran nothing: under a lockstep clock no time passes, so the failure gap never
+		// elapses and the chunk spins (Proving Ground cain.chain, 2026-11-19: virtual time frozen 20 minutes wall after the
+		// re-entry step met a banned Stony Field). Going to town spends time; three counted failures then park the chunk.
+		idle = res.Kind == task.KindDanger
 	case res.Outcome == task.OutRan && res.StepID == "":
 		// Nothing left to run, yet the quest does not read as finished: never spin on it silently.
 		out = questboard.StepResult{Outcome: questboard.StepFailed, Why: "all steps done but the quest does not read as finished (waiting for the save or memory)"}
