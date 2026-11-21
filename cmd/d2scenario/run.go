@@ -275,6 +275,10 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 		_ = prep.Stop()
 		return blocked("board record: %v", err)
 	}
+	if err := writeBotConfig(data, su); err != nil {
+		_ = prep.Stop()
+		return blocked("bot config: %v", err)
+	}
 	res := scenario.Result{Tags: su.Tags, Trace: trace}
 
 	if su.Field {
@@ -315,6 +319,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	st := observe(ctx, obs.Controller().C, refused, false)
 	st.Source = "d2d-observer-reload"
 	addTrail(&st, trace)
+	addRunFacts(&st, s, r, trace)
 	res.State = &st
 	return withVerdict(res, scenario.Result{})
 }
@@ -510,6 +515,30 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 	return strings.Count(string(b), "err lab verbs off"), taps, err
 }
 
+// writeBotConfig writes the bot's config file (<data>/config.json, the default of d2bot --config, S cmd/d2bot/main.go) with
+// the leveler build the scenario selects (trigger.build). No build: no file, the bot keeps its defaults.
+func writeBotConfig(data string, su scenario.Setup) error {
+	if su.Build == "" {
+		return nil
+	}
+	b, _ := json.Marshal(map[string]any{"levelerBuild": su.Build})
+	return os.WriteFile(filepath.Join(data, "config.json"), b, 0o644)
+}
+
+// addRunFacts adds what the assertions on skill points and bot log lines need: the hero's class and the log lines that
+// match a log_line assertion (S: the bot's own log, with a place in the run by a linear map of its wall clock).
+func addRunFacts(st *scenario.State, s scenario.Scenario, r scenario.Run, trace string) {
+	st.Class = r.Class
+	b, err := os.ReadFile(trace)
+	if err != nil {
+		return
+	}
+	if lines, ok := scenario.CollectLog(s.Assert, b, s.Budget.VirtualMin); ok {
+		st.Has = append(st.Has, "log")
+		st.LogLines = lines
+	}
+}
+
 // addTrail sets the area-change count from the bot's log (S: the bot's own `zone entry` lines).
 func addTrail(st *scenario.State, trace string) {
 	b, err := os.ReadFile(trace)
@@ -537,6 +566,7 @@ func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scen
 	st := observe(ctx, cc, -1, true)
 	st.Source = "d2d-live-attach"
 	addTrail(&st, trace)
+	addRunFacts(&st, s, r, trace)
 	res.State = &st
 	res.VirtualMin = s.Budget.VirtualMin
 	_ = prep.Stop()
@@ -602,6 +632,7 @@ func observe(ctx context.Context, c *d2dctl.Client, writes int, live bool) scena
 	}
 	if rep, err := c.Do(ctx, "dump player,stats,skills"); err == nil {
 		st.Stats = pointStats(rep.Lines, rep.Rest)
+		st.SkillLevels = skillLevels(rep.Lines, rep.Rest)
 	}
 	if rep, err := c.Do(ctx, "debug quest list"); err == nil {
 		st.Quests = map[int]uint16{}
@@ -634,26 +665,8 @@ func observe(ctx context.Context, c *d2dctl.Client, writes int, live bool) scena
 // pointStats reads the hero's points out of `dump player,stats,skills` (V dump_head_late.json: player.stat_pts and
 // skill_pts, stats.base str/dex/vit/ene, skills.base_levels). nil when the dump is not there (stock d2d) or unreadable.
 func pointStats(lines []string, rest string) map[string]int {
-	line := strings.TrimSpace(rest)
-	for _, l := range lines {
-		if strings.TrimSpace(l) != "" {
-			line = l
-			break
-		}
-	}
-	var d struct {
-		Player struct {
-			StatPts  *int `json:"stat_pts"`
-			SkillPts *int `json:"skill_pts"`
-		} `json:"player"`
-		Stats struct {
-			Base map[string]int `json:"base"`
-		} `json:"stats"`
-		Skills struct {
-			Levels []int `json:"base_levels"`
-		} `json:"skills"`
-	}
-	if json.Unmarshal([]byte(line), &d) != nil {
+	d, ok := readPointDump(lines, rest)
+	if !ok {
 		return nil
 	}
 	out := map[string]int{}
@@ -679,4 +692,38 @@ func pointStats(lines []string, rest string) map[string]int {
 		return nil
 	}
 	return out
+}
+
+// skillLevels is the dump's skills.base_levels (class order), nil when the dump has none.
+func skillLevels(lines []string, rest string) []int {
+	if d, ok := readPointDump(lines, rest); ok {
+		return d.Skills.Levels
+	}
+	return nil
+}
+
+type pointDump struct {
+	Player struct {
+		StatPts  *int `json:"stat_pts"`
+		SkillPts *int `json:"skill_pts"`
+	} `json:"player"`
+	Stats struct {
+		Base map[string]int `json:"base"`
+	} `json:"stats"`
+	Skills struct {
+		Levels []int `json:"base_levels"`
+	} `json:"skills"`
+}
+
+// readPointDump decodes the first non-empty line of a `dump player,stats,skills` reply.
+func readPointDump(lines []string, rest string) (pointDump, bool) {
+	line := strings.TrimSpace(rest)
+	for _, l := range lines {
+		if strings.TrimSpace(l) != "" {
+			line = l
+			break
+		}
+	}
+	var d pointDump
+	return d, json.Unmarshal([]byte(line), &d) == nil
 }

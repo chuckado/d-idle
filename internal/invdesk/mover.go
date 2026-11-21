@@ -55,6 +55,8 @@ type MoverVerbs interface {
 type VerbMover struct {
 	Verbs MoverVerbs
 	On    func() bool // the knob invdesk.verbs
+	// InputCaps, when it returns true (the knob input.planner), lets the input.* capability names stand for the lab names.
+	InputCaps func() bool
 	// Fresh reads a snapshot taken now; Settle polls it for the end state after a verb (the verb answers "queued").
 	Fresh func() (*d2.Snapshot, error)
 	Pause func(ctx context.Context, d time.Duration) error
@@ -97,7 +99,7 @@ func (m *VerbMover) has(ctx context.Context, name string) bool {
 	}
 	m.mu.Lock()
 	if m.caps != nil && m.Now().Sub(m.capsAt) < m.TTL {
-		ok := m.caps[name]
+		ok := capHas(m.caps, name, m.InputCaps != nil && m.InputCaps())
 		m.mu.Unlock()
 		return ok
 	}
@@ -113,7 +115,7 @@ func (m *VerbMover) has(ctx context.Context, name string) bool {
 	m.mu.Lock()
 	m.caps, m.capsAt = set, m.Now()
 	m.mu.Unlock()
-	return set[name]
+	return capHas(set, name, m.InputCaps != nil && m.InputCaps())
 }
 
 func (m *VerbMover) dropCaps() {

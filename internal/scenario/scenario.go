@@ -12,6 +12,8 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+
+	"d2lod-bot/internal/leveler"
 )
 
 // Version is the scenario file format ("didle.scenario/1"); a file with another version is refused.
@@ -129,6 +131,10 @@ type Item struct {
 type Trigger struct {
 	Goals string         `json:"goals,omitempty"`
 	Knobs map[string]any `json:"knobs,omitempty"`
+	// Build is the leveler build (stat and skill table) the hero plays by name, for example "sorceress_fire_normal30": the
+	// runner writes it as levelerBuild into the bot's config file. Empty keeps the class default. It must be a table of
+	// the class of every matrix class (Validate).
+	Build string `json:"build,omitempty"`
 	// Driver plays the part of the person: "" (none) or "board-taps", which runs the bot like the friend sandbox does
 	// (--ladder --watch, the quest board is built) and taps Start and Hand in on the board of Quest (V docs/probes/cainl3/poll.py).
 	Driver string `json:"driver,omitempty"`
@@ -287,6 +293,17 @@ func (s Scenario) Validate() error {
 		}
 	default:
 		return fmt.Errorf("%s: trigger.driver %q", at, s.Trigger.Driver)
+	}
+	if s.Trigger.Build != "" {
+		lb, err := leveler.LoadBuild(s.Trigger.Build, "")
+		if err != nil {
+			return fmt.Errorf("%s: trigger.build: %w", at, err)
+		}
+		for _, c := range s.Matrix.Classes {
+			if !strings.EqualFold(c, lb.Class) {
+				return fmt.Errorf("%s: trigger.build %q is a %s table, matrix class %s", at, s.Trigger.Build, lb.Class, c)
+			}
+		}
 	}
 	if s.Pre.Start != StartTown && s.Pre.Start != StartField {
 		return fmt.Errorf("%s: pre.start %q", at, s.Pre.Start)

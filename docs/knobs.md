@@ -308,6 +308,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.recoveryDryKills | 5 | 1..60 | kills | 5 | 1 | Kills the dry-recovery window must hold to stay in the same area. |
 | bot.recoveryDrySkipMin | 15 | 1..60 | min | 15 | 1 | Minutes the recovery stays out of an area it left as dry (a new game or a respawn refills it). |
 | bot.noPortalWaitSec | 20 | 0..240 | s | 20 | 1 | Low life, no potion and the way to town fails because there is no town portal (and no walk back for this area): seconds after the first such failure before the hero leaves the game, which restarts it in town. 240 keeps the old two minute waits. |
+| bot.portalRetryWaitSec | 3 | 0..30 | s | 3 | 3 | A town portal cast cancelled before the click (a drink or a retreat cut it, nothing spent) is retried once as a town trip after this many seconds. 0 is off: the next planning tick decides. |
 | bot.freshAfterRecoverySec | 180 | 0..900 | s | 180 | 1 | No unplanned fresh game (no target left, drought) this long after a lost-game recovery, unless life is below the resume line. A second restart right after the recovery fails the Gate 2 fault criterion. 0 is off. |
 | bot.emptyFieldSec | 150 | 0..900 | s | 150 | 1 | A quest-run area with no hostile in sight and no kill for this long counts as cleared, so the route moves on. Other areas follow the sweep setting. 0 is off. |
 | bot.clearIdleMin | 3 | 0..30 | min | 3 | 1 | A leveling area where the hero has killed nothing for this long counts as cleared, so the planner moves on to the next area (a human leaves an emptied field). 0 is off. |
@@ -533,7 +534,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
-| input.planner | 0 | 0..1 | bool | 0 | 4 | 1: skill selection (right hand and aura, left hand) runs through the input planner: the fork's select verb when the connected d2d advertises input.select in caps, else the bound key, else the popup click, and every path is verified by reading the hand back; the path used is counted in the minute line as input=verb/key/click. 0 (default): the legacy popup path, unchanged. Off until the Proving Ground scenario and a live check pass on the devp14 image (docs/process/sandbox-devp14.md; question Q13 of the Fable review is open). |
+| input.planner | 0 | 0..1 | bool | 0 | 5 | 1: skill selection (right hand and aura, left hand) runs through the input planner: the fork's select verb when the connected d2d advertises input.select in caps, else the bound key, else the popup click, and every path is verified by reading the hand back; the path used is counted in the minute line as input=verb/key/click. 0 (default): the legacy popup path, unchanged. Off until the Proving Ground scenario and a live check pass on the devp14 image (docs/process/sandbox-devp14.md; question Q13 of the Fable review is open). |
+| input.hotkeyMap | 0 | 0..1 | bool | 0 | 1 | 1: when a game starts the bot derives the hero's skill hotkey map from the planner's slots (main attack, second element, movement, buffs in upkeep order, aura, summons, town portal), writes it into the game's own hotkey table through the skill popup (F1 to F8) and reads the table back from the game state, logging any slot that does not match (docs/design/fable-review-2026-11-19/07-input-layer.md 4.3, I7). Never writes a save file. 0 (default): the hotkeys are left alone. U: not verified live. |
 
 ### agency.*
 
@@ -541,6 +543,11 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 |---|---|---|---|---|---|---|
 | agency.planner | 0 | 0..1 | mode | 0 | 0 | 0 (default): off. 1: shadow. Once a minute the hero logs a `planner shadow:` line with the attack and aura the planner would pick from the skills the player actually bought, next to what the combat profile picks, and GET /api/hero/plan and the Points page show the derived rotation, the warnings and the viability line. Shadow only: it never changes what the hero does (docs/agency.md). |
 
+### items.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| items.ladderRunewords | 0 | 0..1 | bool | 0 | 3 | 1: the planner may socket the ladder-only runewords (Spirit, Insight and the rest of the Runes.txt server rows) and the Return screen shows 'ladder runewords: on'. Set it only together with the fork flag --ladder-runewords (ADR 0024, d.idle mode); read at start. 0 (default, vanilla): they stay unavailable, as in every gate and fidelity run. |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"sort"
 	"strconv"
+	"strings"
 )
 
 // StateVersion is the format of the observed game state ("didle.scenario-state/1").
@@ -46,6 +47,14 @@ type State struct {
 	// S, the bot's report of what the game told it, not a game-side counter. AreaTrail is the area of each entry.
 	AreaChanges *int  `json:"area_changes,omitempty"`
 	AreaTrail   []int `json:"area_trail,omitempty"`
+	// Class is the hero's class name of the run (set by the runner), the key of the base skill id of SkillLevels.
+	Class string `json:"class,omitempty"`
+	// SkillLevels is the dump's skills.base_levels (hard points, class order; the entry i is skill id ClassSkillBase+i, S
+	// internal/d2dsrc/tables.go). Absent when the dump has none.
+	SkillLevels []int `json:"skill_levels,omitempty"`
+	// LogLines are the lines of the bot's log that match a log_line assertion of the scenario (never the whole log), each
+	// with its place in the run as virtual minutes (LogLine.T). They come from the bot's log, not from the game: S.
+	LogLines []LogLine `json:"log_lines,omitempty"`
 	// WritesAfterStart is the number of gameplay-affecting writes after the run start (d2cheat ledger), -1 unknown.
 	WritesAfterStart int `json:"writes_after_start"`
 }
@@ -77,6 +86,7 @@ const (
 	AAreaIn         = "area_in"        // areas
 	AGoldBetween    = "gold_between"   // min, max (purse)
 	AStashBetween   = "stash_between"  // min, max
+	AWealthBetween  = "wealth_between" // min, max (purse plus stash: a sale and the bank chore move gold between them)
 	ALevelAtLeast   = "level_at_least" // min
 	ALifePctAtLeast = "life_pct_at_least"
 	AObjectState    = "object_state"    // class, state: at least one object of the class has the state
@@ -86,6 +96,8 @@ const (
 	ALeftSkillIs    = "left_skill_is"   // skill
 	ANoWrites       = "no_writes"       // writes_after_start == 0 (the CRUTCH RULE line)
 	AStatBetween    = "stat_between"    // code (str dex vit ene statpts skillpts skillsspent), min, max
+	ASkillPoints    = "skill_points"    // skill (skills.txt id), min, max, at_level: hard points in one skill (skills.go)
+	ALogLine        = "log_line"        // pattern, min (default 1), max, from_min, to_min: lines of the bot log (logline.go)
 )
 
 var statKeys = map[string]bool{"str": true, "dex": true, "vit": true, "ene": true, "statpts": true, "skillpts": true, "skillsspent": true}
@@ -107,6 +119,16 @@ type Assert struct {
 	Min    int      `json:"min,omitempty"`
 	Max    *int     `json:"max,omitempty"`
 	Why    string   `json:"why,omitempty"`
+	// OnlyClass limits the assertion to one class of the matrix (other classes skip it); any kind.
+	OnlyClass string `json:"only_class,omitempty"`
+	// AtLevel (skill_points): the hero must be exactly at this character level when observed, else the fact is UNOBSERVED
+	// (the points of a table are only defined at a level). 0: any level.
+	AtLevel int `json:"at_level,omitempty"`
+	// Pattern (log_line) is a Go regexp matched against `<msg> k=v k=v ...` of each bot log line; FromMin and ToMin
+	// bound the window in virtual minutes of the run (ToMin 0: to the end).
+	Pattern string  `json:"pattern,omitempty"`
+	FromMin float64 `json:"from_min,omitempty"`
+	ToMin   float64 `json:"to_min,omitempty"`
 }
 
 // Validate checks that the fields the kind needs are present.
@@ -128,7 +150,7 @@ func (a Assert) Validate() error {
 		if len(a.Areas) == 0 {
 			return fmt.Errorf("area_in needs areas")
 		}
-	case AGoldBetween, AStashBetween:
+	case AGoldBetween, AStashBetween, AWealthBetween:
 		if a.Max == nil && a.Min == 0 {
 			return fmt.Errorf("%s needs min or max", a.Kind)
 		}
@@ -159,6 +181,17 @@ func (a Assert) Validate() error {
 		if a.Max == nil && a.Min == 0 {
 			return fmt.Errorf("stat_between needs min or max")
 		}
+	case ASkillPoints:
+		if a.Skill <= 0 {
+			return fmt.Errorf("skill_points needs skill (skills.txt id)")
+		}
+		if a.Max == nil && a.Min == 0 {
+			return fmt.Errorf("skill_points needs min or max")
+		}
+	case ALogLine:
+		if err := a.validateLogLine(); err != nil {
+			return err
+		}
 	case ANoWrites:
 	default:
 		return fmt.Errorf("unknown assertion kind %q", a.Kind)
@@ -180,6 +213,9 @@ type AssertResult struct {
 func Evaluate(as []Assert, st State) []AssertResult {
 	out := make([]AssertResult, 0, len(as))
 	for _, a := range as {
+		if a.OnlyClass != "" && !strings.EqualFold(a.OnlyClass, st.Class) {
+			continue
+		}
 		r := evalOne(a, st)
 		r.Kind, r.Why = a.Kind, a.Why
 		out = append(out, r)
@@ -233,10 +269,16 @@ func evalOne(a Assert, st State) AssertResult {
 			ok = ok || x == *st.Area
 		}
 		return AssertResult{OK: ok, Want: fmt.Sprintf("area in %v", a.Areas), Got: fmt.Sprintf("area %d", *st.Area)}
-	case AGoldBetween, AStashBetween:
+	case AGoldBetween, AStashBetween, AWealthBetween:
 		v, name := st.Gold, "gold"
-		if a.Kind == AStashBetween {
+		switch {
+		case a.Kind == AStashBetween:
 			v, name = st.Stash, "stash"
+		case a.Kind == AWealthBetween && st.Gold != nil && st.Stash != nil:
+			w := *st.Gold + *st.Stash
+			v, name = &w, "purse and stash"
+		case a.Kind == AWealthBetween:
+			v, name = nil, "purse and stash"
 		}
 		want := fmt.Sprintf("%s >= %d", name, a.Min)
 		if a.Max != nil {
@@ -311,6 +353,10 @@ func evalOne(a Assert, st State) AssertResult {
 			return unobs(want, "area change count")
 		}
 		return AssertResult{OK: *st.AreaChanges <= *a.Max, Want: want, Got: fmt.Sprintf("%d area changes", *st.AreaChanges)}
+	case ASkillPoints:
+		return evalSkillPoints(a, st)
+	case ALogLine:
+		return evalLogLine(a, st)
 	case ANoWrites:
 		if st.WritesAfterStart < 0 {
 			return unobs("writes after start: 0", "write ledger")
