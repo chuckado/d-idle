@@ -1,10 +1,13 @@
 ---
 id: TASK-776
-title: 'cainscroll: Cain scroll step follows the quest record bits, quest items never sold'
-status: Proposed
+title: >-
+  cainscroll: Cain scroll step follows the quest record bits, quest items never
+  sold
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T14:38:00Z'
+updated_date: '2026-11-21T20:31:00Z'
 labels:
   - bot
   - bot-fix
