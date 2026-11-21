@@ -55,6 +55,9 @@ type State struct {
 	// LogLines are the lines of the bot's log that match a log_line assertion of the scenario (never the whole log), each
 	// with its place in the run as virtual minutes (LogLine.T). They come from the bot's log, not from the game: S.
 	LogLines []LogLine `json:"log_lines,omitempty"`
+	// Board are samples of GET /api/quests during the run and APIReplies the recorded answers of trigger.api (board.go).
+	Board      []BoardSample `json:"board,omitempty"`
+	APIReplies []APIReply    `json:"api_replies,omitempty"`
 	// WritesAfterStart is the number of gameplay-affecting writes after the run start (d2cheat ledger), -1 unknown.
 	WritesAfterStart int `json:"writes_after_start"`
 }
@@ -129,6 +132,17 @@ type Assert struct {
 	Pattern string  `json:"pattern,omitempty"`
 	FromMin float64 `json:"from_min,omitempty"`
 	ToMin   float64 `json:"to_min,omitempty"`
+	// board, board_heads_le and api_reply (board.go): the chunk, the reason alternatives and the reply fields.
+	Quest      string   `json:"quest,omitempty"`
+	Chunk      string   `json:"chunk,omitempty"`
+	Reason     string   `json:"reason,omitempty"`
+	ReasonOr   []string `json:"reason_or,omitempty"`
+	When       string   `json:"when,omitempty"`
+	Index      *int     `json:"index,omitempty"`
+	Status     int      `json:"status,omitempty"`
+	OKIs       *bool    `json:"ok,omitempty"`
+	AlreadyIs  *bool    `json:"already,omitempty"`
+	ChangedHas []string `json:"changed_has,omitempty"`
 }
 
 // Validate checks that the fields the kind needs are present.
@@ -192,6 +206,8 @@ func (a Assert) Validate() error {
 		if err := a.validateLogLine(); err != nil {
 			return err
 		}
+	case ABoard, ABoardHeadsLE, AAPIReply:
+		return a.validateBoard()
 	case ANoWrites:
 	default:
 		return fmt.Errorf("unknown assertion kind %q", a.Kind)
@@ -360,6 +376,12 @@ func evalOne(a Assert, st State) AssertResult {
 		return evalSkillPoints(a, st)
 	case ALogLine:
 		return evalLogLine(a, st)
+	case ABoard:
+		return evalBoard(a, st)
+	case ABoardHeadsLE:
+		return evalBoardHeads(a, st)
+	case AAPIReply:
+		return evalAPIReply(a, st)
 	case ANoWrites:
 		if st.WritesAfterStart < 0 {
 			return unobs("writes after start: 0", "write ledger")
