@@ -98,6 +98,7 @@ func Attach(ctx context.Context, e *env.Env, nv *nav.Navigator, ctl *d2dinput.Co
 	if e.Planner == nil { // shared with the bot's own env, so its minute line sees the counters
 		e.Planner = newPlanner(ctx, e, ctl.C)
 	}
+	ctl.Planner = e.Planner // Pickup and UsePortal use the fork's verbs behind the same knob (d2dinput/worldverbs.go)
 	ce := *e
 	ce.Read, ce.In = viewReader{e.Read}, in
 	r := &Rig{Ctl: ctl.C, In: in, Env: &ce, Nav: nv}

@@ -55,6 +55,9 @@ func (e *VerbRefusal) Error() string { return e.Verb + " refused (" + e.Code + "
 // RuleRefusal marks the error as a game-rule refusal.
 func (e *VerbRefusal) RuleRefusal() bool { return true }
 
+// RefusalCode is the cause the fork named.
+func (e *VerbRefusal) RefusalCode() string { return e.Code }
+
 // IsVerbRefusal reports whether err is a *VerbRefusal and returns it.
 func IsVerbRefusal(err error) (*VerbRefusal, bool) {
 	var r *VerbRefusal
