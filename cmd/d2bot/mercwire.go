@@ -22,6 +22,7 @@ import (
 	"d2lod-bot/internal/merc"
 	"d2lod-bot/internal/nav"
 	"d2lod-bot/internal/resource"
+	"d2lod-bot/internal/supply"
 	"d2lod-bot/internal/task"
 )
 
@@ -906,6 +907,17 @@ type mercTown struct {
 func (t *mercTown) TakePortalCancelled() bool {
 	c, ok := t.Townsman.(interface{ TakePortalCancelled() bool })
 	return ok && c.TakePortalCancelled()
+}
+
+// SupplyPlan forwards the town planner (knob town.plan >= 2, bot/routeguard.go): without it the guards would silently keep the constants.
+func (t *mercTown) SupplyPlan(s *d2.Snapshot, profile string, reserve int) (supply.Plan, error) {
+	p, ok := t.Townsman.(interface {
+		SupplyPlan(*d2.Snapshot, string, int) (supply.Plan, error)
+	})
+	if !ok {
+		return supply.Plan{}, errors.New("town planner not wired")
+	}
+	return p.SupplyPlan(s, profile, reserve)
 }
 
 func (t *mercTown) Chores(ctx context.Context, plan bot.ChorePlan) (bot.ChoreReport, error) {

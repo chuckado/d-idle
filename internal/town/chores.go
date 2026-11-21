@@ -4,6 +4,7 @@ import (
 	"context"
 	"d2lod-bot/internal/gclock"
 	"fmt"
+	"slices"
 	"time"
 
 	"d2lod-bot/internal/d2"
@@ -183,7 +184,35 @@ func (t *Town) potionsWanted(s *d2.Snapshot) map[belt.Kind]int {
 		}
 	}
 	t.ensureHealing(s, band, bs, want)
+	t.ensureKitHealing(s, band, want)
+	t.ensureKitMana(s, band, want)
 	return want
+}
+
+// ensureKitHealing tops the healing want up to the visit's kit minimum (ChorePlan.KitHealing, the task chores pass
+// resource.kitMinHP):
+// the belt plan may reserve fewer healing columns than the guard counts (a 4 slot belt with a mana column holds 3), and
+// the pack counts for the guard, so the rest is bought into the pack. Without it the guard refused the quest road at
+// 3 healing potions while the shop saw nothing to buy (Proving Ground act1more, act1.tools.malus).
+func (t *Town) ensureKitHealing(s *d2.Snapshot, band belt.Band, want map[belt.Kind]int) {
+	if t.kitHealing <= 0 || band.Capacity(belt.HP, belt.Columns) == 0 {
+		return
+	}
+	if short := t.kitHealing - t.healingCarried(s) - want[belt.HP]; short > 0 {
+		want[belt.HP] += short
+	}
+}
+
+// ensureKitMana is ensureKitHealing for mana (town.plan >= 2): the guard counts belt and pack, the belt plan may hold
+// one mana column, so the rest of the minimum is bought into the pack.
+func (t *Town) ensureKitMana(s *d2.Snapshot, band belt.Band, want map[belt.Kind]int) {
+	if t.kitMana <= 0 || band.Capacity(belt.MP, belt.Columns) == 0 {
+		return
+	}
+	have := belt.Read(t.e.Data, s.Inventory).Count[belt.MP] + belt.PackCount(t.e.Data, s.Inventory, belt.MP)
+	if short := t.kitMana - have - want[belt.MP]; short > 0 {
+		want[belt.MP] += short
+	}
 }
 
 func (t *Town) needScrolls(s *d2.Snapshot) bool {
@@ -336,7 +365,7 @@ var vendorStep = map[string]bool{"sell": true, "ammo": true, "shop": true, "idto
 func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ error) {
 	rep = ChoreReport{Bought: map[string]int{}}
 	t.withdrew = false
-	t.reserveGold = 0
+	t.reserveGold, t.kitHealing, t.kitMana = 0, plan.KitHealing, plan.KitMana
 	if t.tune().MercReserve != 0 {
 		t.reserveGold = plan.ReserveGold
 	}
@@ -349,6 +378,7 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		return rep, ErrNotInTown
 	}
 	rep.GoldBefore = s.Player.Gold
+	t.logPlanShadow(s, plan)
 	wasEmpty := t.portalEmpty
 	lowAtStart := plan.Heal && t.needHeal(s)
 	deadline := t.e.Clock.Now().Add(time.Duration(t.tune().ChoreBudgetS) * time.Second)
@@ -452,6 +482,22 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		{"stash", plan.Stash || plan.Gold, func(s *d2.Snapshot) bool { return t.needStash(s, plan) }, func() error { return t.doStash(ctx, a, plan, &rep) }},
 		// last: what the pickit chores left in the pack, by the tidy policy table (docs/tidy.md); never equipment or marked items
 		{"tidy", plan.Stash || plan.Sell, t.needTidy, func() error { return t.tidyPass(ctx, a, &rep) }},
+	}
+	// town.plan >= 2 (invariant T2): the belt takes the pack's potions BEFORE the sell chore, so the sale never sees a
+	// potion the belt still wants.
+	if t.PlanStage() >= 2 {
+		for i, st := range steps {
+			if st.name == "sell" {
+				bf := struct {
+					name    string
+					enabled bool
+					need    func(*d2.Snapshot) bool
+					run     func() error
+				}{"beltfirst", plan.Potions, t.NeedsBeltFill, func() error { _, err := t.FillBelt(ctx); return err }}
+				steps = slices.Insert(steps, i, bf)
+				break
+			}
+		}
 	}
 	// A requested repair is paid before the supplies: it moves up behind the sale, so the potions and portal scroll
 	// cannot spend its gold first (repairmanual fix, user report 2026-11-09).

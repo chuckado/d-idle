@@ -1,6 +1,6 @@
 {
  "schema": "didle.cap/1",
- "tags": "tier is the engine's code and verification state today, not a build judgement; it is meant to be GENERATED from Proving Ground results (ADR 0020), until then it is typed from the profiles and live notes. reqLevel/reqSkills: V for Sorceress (docs/research/sorc-skill-matrix.md, read from skills.txt), S for Paladin (SME read, leveler/palprobe_test.go). synergies: null = not known (never 'none'); [] = none; the runtime overlay (Caps.Overlay) replaces req and synergies by skills.txt when the tables are loaded. mana.source names where the cost per level comes from: skilldamage.json (V, game.exe functions run in the emulator) or the skills.txt columns. Necromancer (necro1, 2026-11-20): reqLevel and reqSkills of all 30 rows are V, read from the patched skills.txt of the worker host (charclass nec); synergies of damage rows are its DmgSymPerCalc/EDmgSymPerCalc, of summon rows the skill() references in its calc columns; skill names are the skills.txt names (BloodGolem, IronGolem, FireGolem). Tiers are read from internal/combat necro.go, necro_corpse.go and profiles.json (docs/process/necromancer-support.md). Barbarian (barb1, 2026-11-20): reqLevel and reqSkills of all 30 rows are V, read from the patched skills.txt of the worker host (charclass bar); synergies of damage rows are its DmgSymPerCalc (only War Cry has one), of buff rows the skill() references in their aura-length calc; Iron Skin is a passive in skills.txt (row corrected from buff). Tiers are read from internal/combat and profiles.json (docs/process/barbarian-support.md).",
+ "tags": "tier is the engine's code and verification state today, not a build judgement; it is meant to be GENERATED from Proving Ground results (ADR 0020), until then it is typed from the profiles and live notes. reqLevel/reqSkills: V for Sorceress (docs/research/sorc-skill-matrix.md, read from skills.txt), S for Paladin (SME read, leveler/palprobe_test.go). synergies: null = not known (never 'none'); [] = none; the runtime overlay (Caps.Overlay) replaces req and synergies by skills.txt when the tables are loaded. mana.source names where the cost per level comes from: skilldamage.json (V, game.exe functions run in the emulator) or the skills.txt columns. Necromancer (necro1, 2026-11-20): reqLevel and reqSkills of all 30 rows are V, read from the patched skills.txt of the worker host (charclass nec); synergies of damage rows are its DmgSymPerCalc/EDmgSymPerCalc, of summon rows the skill() references in its calc columns; skill names are the skills.txt names (BloodGolem, IronGolem, FireGolem). Tiers are read from internal/combat necro.go, necro_corpse.go and profiles.json (docs/process/necromancer-support.md). Barbarian (barb1, 2026-11-20): reqLevel and reqSkills of all 30 rows are V, read from the patched skills.txt of the worker host (charclass bar); synergies of damage rows are its DmgSymPerCalc (only War Cry has one), of buff rows the skill() references in their aura-length calc; Iron Skin is a passive in skills.txt (row corrected from buff). Tiers are read from internal/combat and profiles.json (docs/process/barbarian-support.md). Druid (druid1, 2026-11-20): reqLevel and reqSkills of all 30 rows are V, read from the patched skills.txt of the worker host (charclass dru); synergies of damage rows are its EDmgSymPerCalc and DmgSymPerCalc, of summon rows the skill() references in their calc columns; Wearwolf, Wearbear and Shape Shifting are Werewolf, Werebear and Lycanthropy in game; Fissure is Eruption. Tiers are read from internal/combat (druid.go, classdata/skills.json and profiles.json) and docs/process/druid-support.md; no row is supported because no Druid skill ever ran live.",
  "mana": {
   "note": "U: a simple sustain budget, not the game's regen formula",
   "perEnergy": {
@@ -1891,6 +1891,520 @@
     "Shout",
     "Battle Orders"
    ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Firestorm": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "profiles.json druid bands (the opener and the fallback) and skills.json ground row; U live: no Druid skill was ever seen cast in a game, d2d verdict on the effect open (review 02 A8)",
+   "element": "fire",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Molten Boulder",
+    "Eruption"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Molten Boulder": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "skills.json ground row (range 20) and the second band entry from clvl 12; a rolling boulder with a physical half (V docs/classes/druid.md); U live: no Druid skill was ever seen cast in a game",
+   "element": "fire",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Firestorm"
+   ],
+   "synergies": [
+    "Firestorm",
+    "Volcano"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Eruption": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "skills.txt name of Fissure: profiles.json druid band from clvl 12 (requires Eruption), skills.json ground row, cast at the monster's ground point; U live: no Druid skill was ever seen cast in a game, no cooldown or line-of-sight rule (docs/process/druid-support.md section 4)",
+   "element": "fire",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Molten Boulder"
+   ],
+   "synergies": [
+    "Firestorm",
+    "Volcano"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Volcano": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "experimental",
+   "reason": "skills.json ground row (range 25), key reserved on the fire profile but in no band: the engine can cast it, nothing chooses it; U live: no Druid skill was ever seen cast in a game",
+   "element": "fire",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Eruption"
+   ],
+   "synergies": [
+    "Molten Boulder",
+    "Eruption",
+    "Armageddon"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Armageddon": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "self",
+   "tier": "unsupported",
+   "reason": "no skills.json row and in no band or buff ladder: a persistent fire rain around the caster (srvdofunc 124, V skills.txt) that needs a recast clock and a state number nobody read; its prerequisite Hurricane is unsupported too",
+   "element": "fire",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Volcano",
+    "Hurricane"
+   ],
+   "synergies": [
+    "Firestorm",
+    "Molten Boulder",
+    "Volcano"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Arctic Blast": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "experimental",
+   "reason": "skills.json bolt row with hold; in no band: only the prerequisite point of Cyclone Armor in the build; U live: no Druid skill was ever seen cast in a game",
+   "element": "cold",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [
+    "Cyclone Armor",
+    "Hurricane"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   }
+  },
+  "Cyclone Armor": {
+   "class": "druid",
+   "kind": "buff",
+   "delivery": "self",
+   "tier": "experimental",
+   "reason": "default druid buff ladder (profiles.json), recast by the generic buff path; the state number is not read, so the recast clock is a guess (necro.go buffDue method), and the absorb is spent in a few hits (docs/classes/druid.md); U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Arctic Blast"
+   ],
+   "synergies": [
+    "Twister",
+    "Tornado",
+    "Hurricane"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Twister": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "experimental",
+   "reason": "skills.json bolt row, in no band: only the prerequisite point of Tornado; flight of the missile is without a d2d verdict (review 02 A8)",
+   "element": "phys",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Cyclone Armor"
+   ],
+   "synergies": [
+    "Tornado",
+    "Hurricane"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Tornado": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "projectile",
+   "tier": "unsupported",
+   "reason": "an erratic travelling missile: kolbot aims it with a random offset and it must be cast close (review 03 D2); no band, no aim rule, d2d flight unmeasured (review 02 A8)",
+   "element": "phys",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Twister"
+   ],
+   "synergies": [
+    "Cyclone Armor",
+    "Twister",
+    "Hurricane"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Hurricane": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "self",
+   "tier": "unsupported",
+   "reason": "a cold storm around the caster (srvdofunc 124, V skills.txt) that ends on a timer and cannot be cast in town: no buff ladder entry, no recast clock, no state read",
+   "element": "cold",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Tornado"
+   ],
+   "synergies": [
+    "Twister",
+    "Tornado"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Raven": {
+   "class": "druid",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "druid.go planPet (census class 419, up to 5): upkeep by count with the cap found by evidence; no Druid summon was ever cast live, which skill makes which monster class is U",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Summon Spirit Wolf": {
+   "class": "druid",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "druid.go planPet (census class 420, up to 5): upkeep by count; U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Raven"
+   ],
+   "synergies": [
+    "Summon Fenris",
+    "Summon Grizzly"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Summon Fenris": {
+   "class": "druid",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "druid.go planPet (the Dire Wolf, census class 421, up to 3): upkeep by count; U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Oak Sage",
+    "Summon Spirit Wolf"
+   ],
+   "synergies": [
+    "Summon Spirit Wolf",
+    "Summon Grizzly"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Summon Grizzly": {
+   "class": "druid",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "druid.go planPet (census class 428, one): upkeep by count; U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Summon Fenris"
+   ],
+   "synergies": [
+    "Summon Fenris",
+    "Summon Spirit Wolf"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Oak Sage": {
+   "class": "druid",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "druid.go planPet (a totem spirit, census classes 422 to 424; which spirit is which is U): the first spirit skill; U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [
+    "Heart of Wolverine",
+    "Spirit of Barbs"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Heart of Wolverine": {
+   "class": "druid",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "druid.go planPet (second spirit); U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Oak Sage"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Spirit of Barbs": {
+   "class": "druid",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "experimental",
+   "reason": "druid.go planPet (third spirit); U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Heart of Wolverine"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Vines": {
+   "class": "druid",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "unsupported",
+   "reason": "the census counts vines (classes 425 to 427) but no plan casts them: no upkeep rule, and a vine is rooted where it is raised",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Cycle of Life"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Cycle of Life": {
+   "class": "druid",
+   "kind": "summon",
+   "delivery": "pet",
+   "tier": "unsupported",
+   "reason": "a prerequisite of Vines (and Plague Poppy's line); no upkeep rule, nothing to cast for the bot",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Plague Poppy"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Plague Poppy": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "ground",
+   "tier": "unsupported",
+   "reason": "a plant raised at a ground point (poison cloud): no skills.json row, no band, no placement rule",
+   "element": "pois",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Cycle of Life",
+    "Rabies"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Wearwolf": {
+   "class": "druid",
+   "kind": "utility",
+   "delivery": "self",
+   "tier": "unsupported",
+   "reason": "Werewolf form change. shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md)",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Wearbear": {
+   "class": "druid",
+   "kind": "utility",
+   "delivery": "self",
+   "tier": "unsupported",
+   "reason": "Werebear form change. shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md)",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Shape Shifting": {
+   "class": "druid",
+   "kind": "passive",
+   "delivery": "self",
+   "tier": "unsupported",
+   "reason": "Lycanthropy, the passive that lengthens the forms (no srvdofunc, V skills.txt): worthless without a form. shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md)",
+   "reqLevel": 1,
+   "reqSkills": [
+    "Wearwolf"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   }
+  },
+  "Feral Rage": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "a Werewolf melee skill (life steal): shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "phys",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Wearwolf"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Maul": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "a Werebear melee skill: shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "phys",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Wearbear"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Rabies": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "a Werewolf melee skill (poison that spreads): shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "pois",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Feral Rage"
+   ],
+   "synergies": [
+    "Plague Poppy"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Fire Claws": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "a melee skill of either form (fire damage): shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "fire",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Feral Rage",
+    "Maul"
+   ],
+   "synergies": [
+    "Firestorm",
+    "Molten Boulder",
+    "Volcano",
+    "Eruption"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Hunger": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "a Werewolf melee skill (leech): shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "phys",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Fire Claws"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Shock Wave": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "nova",
+   "tier": "unsupported",
+   "reason": "a Werebear skill (stunning wave): shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "phys",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Maul"
+   ],
+   "synergies": [
+    "Maul"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   }
+  },
+  "Fury": {
+   "class": "druid",
+   "kind": "damage",
+   "delivery": "melee",
+   "tier": "unsupported",
+   "reason": "a Werewolf melee skill (multi-hit): shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "phys",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Rabies"
+   ],
+   "synergies": [],
    "mana": {
     "source": "skills.txt:mana,lvlmana,manashift,minmana"
    }

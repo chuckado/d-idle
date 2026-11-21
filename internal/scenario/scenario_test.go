@@ -2,6 +2,7 @@ package scenario
 
 import (
 	"bytes"
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -338,5 +339,34 @@ func TestClassIndexMatchesSmokeRules(t *testing.T) {
 	}
 	if _, err := ClassIndex("Warlock"); err == nil {
 		t.Error("an unknown class must be an error")
+	}
+}
+
+// druid1: the Druid index is 5 and every class matches data/smoke/rules.json (the file the smoke driver reads), so a swap like
+// the Barbarian and Amazon one of barb1 fails here for any class.
+func TestClassIndexMatchesSmokeRulesFile(t *testing.T) {
+	raw, err := os.ReadFile("../../data/smoke/rules.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var rules struct {
+		Classes map[string]struct {
+			Index int `json:"d2d_index"`
+		} `json:"classes"`
+	}
+	if err := json.Unmarshal(raw, &rules); err != nil {
+		t.Fatal(err)
+	}
+	if len(rules.Classes) != 7 {
+		t.Fatalf("rules.json lists %d classes", len(rules.Classes))
+	}
+	for name, c := range rules.Classes {
+		title := strings.ToUpper(name[:1]) + name[1:]
+		if got, err := ClassIndex(title); err != nil || got != c.Index {
+			t.Errorf("%s: scenario index %d %v, smoke rules %d", title, got, err, c.Index)
+		}
+	}
+	if got, _ := ClassIndex("Druid"); got != 5 {
+		t.Errorf("Druid index %d, want 5", got)
 	}
 }
