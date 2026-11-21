@@ -361,6 +361,7 @@
 | town1 | in-progress | - | `tools/provingground/scenarios/townplan.json`<br>`internal/scenario/state.go`<br>`internal/scenario/newkinds_test.go`<br>`docs/probes/town-plan-scenarios.md` | - |
 | mgcache | proposed | - | `docs/process/pg-ops-mgcache.md` | - |
 | mglanes | proposed | - | `docs/process/pg-ops-mglanes.md` | - |
+| bsm2 | proposed | - | `internal/questboard/sm.go`<br>`internal/questboard/sm_reason.go`<br>`internal/questboard/sm_test.go` | - |
 | fabledecisions2 | proposed | - | `docs/adr/`<br>`docs/decisions.md`<br>`GLOSSARY.md` | - |
 | mgwatchdog | proposed | - | `docs/process/pg-ops-mgwatchdog.md` | - |
 | town3 | in-progress | - | `internal/supply`<br>`internal/town/planshadow.go`<br>`internal/town/chores.go`<br>`internal/town/town.go`<br>`internal/env/tuning_town.go`<br>`internal/bot/observe.go`<br>`docs/knobs.md` | - |
@@ -410,6 +411,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d91bf5058 11-21 01:36 `Merge agent/bsm2: agent/bsm2 quest board state machine card` (bsm2)
+- 2e5f6968d 11-21 01:35 `Merge branch 'main' into TASK-750` (-)
 - 04538c3c9 11-21 01:30 `Merge agent/townprobe: town planner stage 1 and 2 record (docs only)` (townprobe)
 - b4c549016 11-21 01:29 `Merge branch 'main' into townprobe` (-)
 - 8089cfba8 11-21 01:24 `Merge agent/bsm1: bsm1: quest board SM scenarios and assert kinds` (bsm1)
@@ -418,6 +421,4 @@
 - 6288cd22f 11-21 01:14 `Merge branch 'main' into town4` (-)
 - d28021ec7 11-21 01:06 `Merge agent/town3: town3: supply NeedFor/Solve, profiles, knob town.plan default 0, stage 1 shadow trace (no behaviour change)` (town3)
 - 05417d792 11-21 01:05 `Merge branch 'main' into town3` (-)
-- e10888fad 11-21 00:53 `Merge agent/town2: town2: internal/supply one potion counter, bot and town counters call it (no behaviour change at stage 0)` (town2)
-- 401f842fa 11-21 00:52 `Merge branch 'main' into town2` (-)
 <!-- statusgen:end -->
