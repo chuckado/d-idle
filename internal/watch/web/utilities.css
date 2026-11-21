@@ -18,3 +18,26 @@
     .d-main[data-cmode="phone"] [data-panel="orders"] .o-verbs .d-btn { min-block-size: 38px; block-size: 38px; line-height: 36px; }
   }
 }
+
+/* The phone is a page, not a frame (card mobilequests, bug report 2026-11-21: "I can scroll the quests box but not the page"). The cockpit's
+   fixed 100dvh frame and the panels' own scroll boxes suit a desk window; on a phone a box that scrolls inside the page swallows the
+   finger, so the tab grows to its content and the page scrolls, the band stays on top. Its own layer, after panels (they set the scrollers). */
+@layer utilities {
+  .d-shell[data-template="cockpit"][data-cmode="phone"] { block-size: auto; min-block-size: calc(100dvh - var(--d-banner-h, 0px)); overflow: visible; grid-template-rows: var(--c-band) auto; }
+  .d-shell[data-template="cockpit"][data-cmode="phone"] > .d-band-status { position: sticky; inset-block-start: 0; z-index: var(--d-z-band); }
+  .d-main[data-template="cockpit"][data-cmode="phone"] { grid-template-rows: auto; min-block-size: 0; }
+  .d-main[data-template="cockpit"][data-cmode="phone"][data-has="sp"] { grid-template-rows: auto auto; }
+  .d-main[data-template="cockpit"][data-cmode="phone"] > [data-cockpit-slot] { overflow: visible; }
+  .d-main[data-template="cockpit"][data-cmode="phone"] > [data-cockpit-slot="stage"] { overflow: hidden; }
+  .d-main[data-template="cockpit"][data-cmode="phone"] > [data-cockpit-slot="phoneTabs"] { grid-template-rows: auto auto; }
+  .d-main[data-cmode="phone"] .d-slottabs { overflow: visible; }
+  .d-main[data-cmode="phone"] .d-slottabs > .d-panel { overflow: visible; max-block-size: none; flex: 0 0 auto; }
+  .d-main[data-cmode="phone"] .d-slottabs > .d-panel > .d-slotbody { block-size: auto; overflow: visible; }
+  .d-main[data-cmode="phone"] .d-slottabs :is(.qb-box, .qb-list, .o-list, .o-items, .rows, .zm-list, .zc-scroll, .n-list, .d-slotbody[data-scroll], [data-scroll]) {
+    flex: 0 0 auto; max-block-size: none; overflow: visible; overscroll-behavior: auto; scrollbar-gutter: auto; }
+  .d-main[data-cmode="phone"] .d-slottabs .o-items { min-block-size: 0; }
+  /* the quest rows say their whole title (a wrapped line, never an ellipsis) and the badge sits under it when the row is narrow */
+  .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-t, .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-t b { white-space: normal; overflow: visible; text-overflow: clip; min-inline-size: 0; overflow-wrap: anywhere; }
+  .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-row > .qb-w, .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-row > .qb-auto { justify-self: start; }
+}
