@@ -1160,7 +1160,7 @@
    "assert": [
     {
      "kind": "log_line",
-     "pattern": "^task step step=\\S*wp-dark-wood outcome=(ran|done) ",
+     "pattern": "^task step .*outcome=(ran|done) .*step=\\S*wp-dark-wood( |$)",
      "min": 1,
      "why": "the waypoint step finished by touching the waypoint (Need reads the waypoint bit after the Do)"
     },
@@ -1240,7 +1240,7 @@
    "assert": [
     {
      "kind": "log_line",
-     "pattern": "^task step step=\\S*wp-dark-wood outcome=(ran|done) ",
+     "pattern": "^task step .*outcome=(ran|done) .*step=\\S*wp-dark-wood( |$)",
      "min": 1,
      "why": "the waypoint step finished by touching the waypoint (Need reads the waypoint bit after the Do)"
     },

@@ -78,12 +78,12 @@ const maxLinkTries = 20
 
 // World is a nav.worldSource over one d2d socket. Not safe for concurrent use, like d2map.Tracker.
 type World struct {
-	layoutLogged string // signature of the last levelmap diagnostic line
+	layoutLogged     string // signature of the last levelmap diagnostic line
 	objPresetsLogged string // signature of the last levelmonsters objpresets diagnostic line
-	v            Verbs
-	o            Options
-	levs         map[int]*lvl
-	cur          *lvl
+	v                Verbs
+	o                Options
+	levs             map[int]*lvl
+	cur              *lvl
 
 	resetNext atomic.Bool // ResetNext: forget the levels at the start of the next update, on the reader's goroutine
 
