@@ -1048,6 +1048,8 @@ internal/d2dctl/item_verbs_merc_test.go  credit-runner  uib9
 internal/d2dctl/item_verbs_test.go  credit-runner  itemverbs2
 internal/d2dctl/labels.go  credit-runner  labels
 internal/d2dctl/labels_test.go  credit-runner  labels
+internal/d2dctl/levelmonsters.go  credit-runner  levelobjects
+internal/d2dctl/objpresets_test.go  credit-runner  levelobjects
 internal/d2dctl/points_verbs.go  credit-runner  agencyp0
 internal/d2dctl/points_verbs_test.go  credit-runner  agencyp0
 internal/d2dctl/vault_fake.go  credit-runner  vaultv6
@@ -1075,6 +1077,7 @@ internal/d2dsrc/source_test.go  credit-runner  survB
 internal/d2dsrc/srv_test.go  credit-runner  botcpu
 internal/d2dworld  credit-runner  countess3
 internal/d2dworld  live-agent  k1layout
+internal/d2dworld/  credit-runner  levelobjects
 internal/d2dworld/  credit-runner  wpstep
 internal/d2dworld/world.go  credit-runner  andariel1
 internal/d2dworld/world_test.go  credit-runner  andariel1
@@ -1987,6 +1990,7 @@ tools/provingground/scenarios/board.json  credit-runner  bsm1
 tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
+tools/provingground/scenarios/cain.json  credit-runner  levelobjects
 tools/provingground/scenarios/cain.json  credit-runner  wpstep
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/provingground/scenarios/points.json  credit-runner  barb1

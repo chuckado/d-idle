@@ -381,6 +381,7 @@
 | countess3b | proposed | - | `cmd/d2bot/boss.go`<br>`cmd/d2bot/boss_levelmonsters_test.go`<br>`internal/nav/nav.go`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
 | bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
 | mouthgate | proposed | - | `internal/nav` | - |
+| levelobjects | proposed | - | `internal/d2dctl/levelmonsters.go`<br>`internal/d2dctl/objpresets_test.go`<br>`internal/d2dworld/`<br>`tools/provingground/scenarios/cain.json` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -416,6 +417,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 40116d00d 11-21 02:58 `Merge agent/levelobjects: Merge branch 'main' into levelobjects` (levelobjects)
+- 3b87f2610 11-21 02:57 `Merge branch 'main' into levelobjects` (-)
 - d8984d3c7 11-21 02:52 `Merge agent/mouthgate: Merge branch 'main' into mouthgate` (mouthgate)
 - 9c0703d7c 11-21 02:51 `Merge branch 'main' into mouthgate` (-)
 - c2118b36b 11-21 02:45 `Merge agent/andariel1: Merge branch 'main' into andariel1` (andariel1)
@@ -424,6 +427,4 @@
 - 8eb46e0e3 11-21 02:33 `Merge branch 'main' into TASK-716` (-)
 - b62c45349 11-21 02:25 `Merge agent/bsm5: Merge branch 'main' into TASK-768` (bsm5)
 - ffe284f81 11-21 02:24 `Merge branch 'main' into TASK-768` (-)
-- 07712c446 11-21 02:23 `Merge agent/druid1: Merge branch 'main' into druid1` (druid1)
-- 0db4e11df 11-21 02:22 `Merge branch 'main' into druid1` (-)
 <!-- statusgen:end -->
