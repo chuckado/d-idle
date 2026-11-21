@@ -335,6 +335,11 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `design/fable-review-2026-11-21/`
 
+- [combat-engine-a-today.md](design/fable-review-2026-11-21/combat-engine-a-today.md): Appendix A. The combat engine today, per skill kind (status: REVIEW (card fablecombat, docs only). Part of combat-engine.md. All file and line references are to this...)
+- [combat-engine-b-grammar.md](design/fable-review-2026-11-21/combat-engine-b-grammar.md): Appendix B. The skill delivery grammar (status: REVIEW (card fablecombat, docs only). Part of combat-engine.md. A proposal: no schema, loader or data row...)
+- [combat-engine-c-tests.md](design/fable-review-2026-11-21/combat-engine-c-tests.md): Appendix C. Test strategy: simulator, Proving Ground, read verbs, differentials (status: REVIEW (card fablecombat, docs only). Part of combat-engine.md. Proposal; no assertion kind, verb or...)
+- [combat-engine-d-cards.md](design/fable-review-2026-11-21/combat-engine-d-cards.md): Appendix D. Rollout: sixteen cards and one parked (status: REVIEW (card fablecombat, docs only). Part of combat-engine.md. These are PROPOSED cards; none exists in...)
+- [combat-engine.md](design/fable-review-2026-11-21/combat-engine.md): Combat engine and skill delivery layer: what exists, and a data-driven design (status: REVIEW for the owner (design review 2026-11-21, card fablecombat, docs only). Nothing here is decided and...)
 - [proving-ground-gate-catalog.md](design/fable-review-2026-11-21/proving-ground-gate-catalog.md): Proving Ground: scenario catalogue and coverage map (2026-11-21) (status: snapshot for the design review proving-ground-gate.md (card fablepg, TASK-712). It is a hand-made table...)
 - [proving-ground-gate.md](design/fable-review-2026-11-21/proving-ground-gate.md): Proving Ground, merge gate and builder scheduling: design review (2026-11-21) (status: proposal for the owner (card fablepg, TASK-712). Docs only: nothing here changes Go, the merge scripts,...)
 - [quest-board-appendix-a-evidence.md](design/fable-review-2026-11-21/quest-board-appendix-a-evidence.md): Appendix A: evidence per bug (quest board review 2026-11-21) (status: appendix of quest-board.md. Code at `origin/main` `5b12ce5e7` unless a line says `e77b53911`...)

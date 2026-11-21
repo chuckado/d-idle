@@ -321,6 +321,7 @@
 | boardprereq | proposed | - | `internal/questboard`<br>`tools/provingground/scenarios/cain.json` | - |
 | countess3 | proposed | - | `internal/d2dctl`<br>`internal/d2dworld`<br>`internal/boss`<br>`internal/d2map`<br>`cmd/d2bot/boss.go`<br>`docs/process/layout-read.md`<br>`docs/probes/provingground-countess-2026-11-20.md`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | `fork-branch:didle/level-monsters-20261121` |
 | fablepg | proposed | - | `docs/design/fable-review-2026-11-21/proving-ground-gate.md`<br>`docs/design/fable-review-2026-11-21/proving-ground-gate-catalog.md` | - |
+| fablecombat | in-progress | - | `docs/design/fable-review-2026-11-21/combat-engine*` | - |
 | fableboard | proposed | - | `docs/design/fable-review-2026-11-21/quest-board*` | - |
 | fabletown | in-progress | - | `docs/design/fable-review-2026-11-21/town-planner*` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -361,14 +362,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 92389015f 11-20 23:05 `Merge agent/fablecombat: Merge branch 'main' into fablecombat` (fablecombat)
 - 5978c2729 11-20 23:05 `Merge agent/fableboard: Merge branch 'main' into fableboard` (fableboard)
 - ae8e2b1be 11-20 23:05 `Merge agent/fabletown: town and chores planner design review: supply need, town plan, 16 rule conflicts, scenarios, migration cards (docs only)` (fabletown)
 - 623f72aa4 11-20 23:05 `Merge agent/fablepg: fablepg: Proving Ground determinism, tiers, merge gate and builder scheduling design review (docs only)` (fablepg)
+- 8176155a0 11-20 23:01 `Merge branch 'main' into fablecombat` (-)
 - 3fb0432b7 11-20 23:01 `Merge branch 'main' into fableboard` (-)
 - 6dad67b70 11-20 23:01 `Merge branch 'main' into fabletown` (-)
 - 5d153db66 11-20 23:01 `Merge branch 'main' into fablepg` (-)
 - e590a2a88 11-20 22:21 `Merge agent/countess3: Merge branch 'main' into countess3` (countess3)
 - 27233215e 11-20 22:20 `Merge branch 'main' into countess3` (-)
-- f663347eb 11-20 22:08 `Merge agent/boardprereq: boardprereq: task result` (boardprereq)
-- f9a89e05f 11-20 21:43 `Merge agent/countess2: Merge branch 'main' into countess2` (countess2)
 <!-- statusgen:end -->
