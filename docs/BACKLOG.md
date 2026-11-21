@@ -1154,6 +1154,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/cmb1: dlv-data: cap/2 delivery object, generated skills/skillKinds/tiers, golden parity (merged 2026-11-21) <!--sg:agent/cmb1-->
 - agent/cmb2: dlv-rotation: Rotation type, Profile.Rotation adapter, Fighter reads slots, golden parity (merged 2026-11-21) <!--sg:agent/cmb2-->
 - agent/cmb3: dlv-expect: cast expectation ledger, knob combat.deliveryExpect, tests (merged 2026-11-21) <!--sg:agent/cmb3-->
+- agent/pggroup1: pggroup1 (rebased): Proving Ground gate group 1 (merged 2026-11-21) <!--sg:agent/pggroup1-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
