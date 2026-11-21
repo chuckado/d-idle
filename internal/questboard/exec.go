@@ -63,6 +63,7 @@ type Options struct {
 	MaxFailures int    // consecutive failed slices before the chunk parks (default 3)
 	MaxDeaths   int    // deaths on one chunk before it parks (default 2)
 	MaxHandIn   int    // dialogue attempts per HandIn call before it parks (default 3)
+	Release     string // the bot release id; a gave_up park from another release is retried once (exec_sm.go)
 	Mode        string // recorded on the plan record (train, idle, farm); default train
 	Log         func(msg string, kv ...any)
 	Now         func() time.Time // the clock of the auto-start controller (default time.Now); tests pass a fake
@@ -114,6 +115,7 @@ type Exec struct {
 	act Actions
 
 	mu      sync.Mutex
+	relDone bool // smReleaseRetry has run
 	o       Options
 	rs      map[string]*runState
 	paused  bool

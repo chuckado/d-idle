@@ -30,6 +30,7 @@ func (o *smOverlay) dirty() bool { return len(o.latch)+len(o.regress) > 0 }
 
 // smLoad loads the machine of this difficulty with the import, the repair and the head selection done.
 func (e *Exec) smLoad(diff int) (*smOverlay, error) {
+	e.smReleaseRetry()
 	m, err := e.st.LoadSM(e.smDone())
 	if err != nil {
 		return nil, err
@@ -220,12 +221,68 @@ func (e *Exec) smPark(quest, chunk, code string, rs *runState) {
 		}
 		if r := m.find(quest, chunk, d); r != nil {
 			r.Failures, r.Deaths = rs.failures, rs.deaths
+			r.Release = e.o.Release
 		}
 		return nil
 	})
 	if err != nil {
 		e.o.Log("quest board: park not saved", "chunk", ChunkKey(quest, chunk), "err", err)
 	}
+}
+
+// smReleaseRetry runs once per Exec: a gave_up park (the step kept failing) stored by another bot release is retried
+// once, because the failure may be the old release's bug. The park keeps its history (RetriesAfterRelease) and, if the
+// step fails again, comes back stored with this release, so it cannot loop. Parks of other codes stay as the player
+// decided (Q5).
+func (e *Exec) smReleaseRetry() {
+	if e.relDone || !e.o.SM || e.o.Release == "" {
+		return
+	}
+	e.relDone = true
+	var cleared []Ref
+	var olds []string
+	err := e.st.UpdateSM(e.smDone(), func(m *SM) error {
+		for _, d := range Difficulties {
+			for _, r := range m.Live(e.b, d) {
+				if r.Status != RunParked || r.Code != "gave_up" || r.Release == e.o.Release {
+					continue
+				}
+				old, n := r.Release, r.RetriesAfterRelease+1
+				if _, _, err := m.Retry(e.b, d, r.Quest, r.Chunk, false, e.o.Now()); err != nil {
+					continue
+				}
+				if live := m.find(r.Quest, r.Chunk, d); live != nil {
+					live.Release, live.RetriesAfterRelease = e.o.Release, n
+					cleared = append(cleared, Ref{r.Quest, r.Chunk})
+					olds = append(olds, old)
+				}
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		e.o.Log("quest board: release retry not saved", "err", err)
+		return
+	}
+	u, _ := e.act.(unparker)
+	for i, ref := range cleared {
+		e.o.Log(fmt.Sprintf("quest board: %s park cleared after release %s -> %s: retrying once", ChunkKey(ref.Quest, ref.Chunk), orNone(olds[i]), e.o.Release), "chunk", ChunkKey(ref.Quest, ref.Chunk))
+		if u == nil {
+			continue
+		}
+		if q, err := e.b.Quest(ref.Quest); err == nil {
+			if c, err := q.ChunkByID(ref.Chunk); err == nil {
+				u.Unpark(q, c)
+			}
+		}
+	}
+}
+
+func orNone(s string) string {
+	if s == "" {
+		return "(unrecorded)"
+	}
+	return s
 }
 
 // unparker is implemented by the bot's actions: it lifts the task executor's block of the chunk's group, which Retry
