@@ -87,6 +87,8 @@ type CombatTuning struct {
 	Sacrifice           int // 1 = a profile may attack with Sacrifice (its band lists it); 0 = never, plain Attack instead
 	SacrificeMinLifePct int // Sacrifice only at or above this life %; below it plain Attack until life is back 10 points above
 	SacrificeMinPotions int // Sacrifice only with at least this many healing/rejuvenation potions in the belt
+	// DeliveryExpect: the cast expectation ledger (internal/combat/expect.go): 0 off, 1 log only, 2 skip skills that failed three casts in a row.
+	DeliveryExpect      int
 	HolyFireMinMonsters int // an aura marked needsCrowd (Holy Fire) is wanted only with this many hostiles within 8 subtiles
 }
 
@@ -107,7 +109,7 @@ func DefaultCombatTuning() CombatTuning {
 		CastGapMs: 650, CastPerSkill: 1, CastMarginMs: 90, CastFCR: 0, LowManaWaitMs: 700, StaticCasts: 4, StaticCastsBR: 0, StaticFloorNorm: 25, StaticFloorNM: 33, StaticFloorHell: 50, NovaManaFloor: 25,
 		KiteEnabled: 1, KiteDistance: 10, KiteLifePct: 60, KiteMaxSteps: 6, KiteRetreat: 12, DodgeRadius: 4, MissileDodge: 0, ThreatDodge: 0, DodgeReactMs: 400, ShooterKillMin: 0, RunnerGuard: 1, StandOK: 0, CurseRetreatPct: 60, MaxApproaches: 12, ReachSec: 15, IgnoreMemorySec: 90,
 		BuffRecastSec: 150, BuffMarginSec: 6, AuraCheckMs: 1500, LeftFailSec: 60,
-		Sacrifice: 1, SacrificeMinLifePct: 70, SacrificeMinPotions: 1, HolyFireMinMonsters: 3,
+		Sacrifice: 1, SacrificeMinLifePct: 70, SacrificeMinPotions: 1, HolyFireMinMonsters: 3, DeliveryExpect: 0,
 	}
 }
 
@@ -175,6 +177,7 @@ func combatKnobs() []Knob {
 		k("sacrifice", "Paladin Sacrifice attack", "bool", "1 lets a profile attack with Sacrifice (about x1.9 damage over Attack, costs 8 percent of the damage dealt in life, docs/palprofile.md); 0 keeps plain Attack.", float64(d.Sacrifice), 0, 1, true),
 		k("sacrificeMinLifePct", "Sacrifice life floor", "%", "Sacrifice only at or above this life percent; below it plain Attack until life is 10 points above the floor again.", float64(d.SacrificeMinLifePct), 40, 100, true),
 		k("sacrificeMinPotions", "Sacrifice potion floor", "count", "Sacrifice only with at least this many healing or rejuvenation potions in the belt (and no dead merc).", float64(d.SacrificeMinPotions), 0, 8, true),
+		k("deliveryExpect", "Cast expectation ledger", "mode", "0 = off; 1 = record what each paid cast should change, settle it from later snapshots and log failures (decisions unchanged); 2 = also skip a skill after three failed casts in a row for a growing back-off (combat plan section 3.4).", float64(d.DeliveryExpect), 0, 2, false),
 		k("holyFireMinMonsters", "Holy Fire crowd size", "count", "A needsCrowd aura (Holy Fire) is wanted only with at least this many hostiles within 8 subtiles; fewer and Might is used (Might wins below about 3 monsters, docs/palprofile.md).", float64(d.HolyFireMinMonsters), 1, 10, false),
 		k("buffRecastSec", "Buff recast", "s", "Upper bound and fallback: recast armors and shields this long after the last cast. An armor whose real duration is known (Frozen Armor 120 s at level 1) is recast earlier, see buffMarginSec.", float64(d.BuffRecastSec), 60, 300, false),
 		k("buffMarginSec", "Buff recast margin", "s", "Recast an armor or shield this many seconds before its real duration (Skills.txt auralencalc at the skill's level) runs out.", float64(d.BuffMarginSec), 0, 30, false),
