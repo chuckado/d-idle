@@ -754,6 +754,7 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 	res, ok := r.boardSlice(ctx, snap, c, boardPlan{q: q, c: ch}, "Quest: "+q.Title)
 	out := questboard.StepResult{Outcome: questboard.StepRan}
 	idle := false // nothing ran this tick: the loop must still spend time (below)
+	held := false // a hold: the hero trains instead (below)
 	switch {
 	case r.deadNow() || res.Outcome == task.OutDeath:
 		out = questboard.StepResult{Outcome: questboard.StepDied, Why: nonEmptyStr(whyOf(res), "died on the way")}
@@ -762,6 +763,12 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		if w := whyOf(res); w != "" {
 			r.boardNote("wait "+questboard.ChunkKey(d.Quest, d.Chunk), "quest board: waiting: "+w)
 		}
+	case res.Outcome == task.OutRetry && res.Hold && res.Code != "":
+		// quests.boardSM: a guard refused for a reason that is no failure (potions, ban, too weak, closed road): a hold.
+		// Nothing is counted and the hero trains meanwhile; the board parks it with hold_timeout when it outlives its budget.
+		out = questboard.StepResult{Outcome: questboard.StepHeld, Code: res.Code, Why: nonEmptyStr(whyOf(res), "the step was refused")}
+		held = true
+		r.boardNote("hold "+questboard.ChunkKey(d.Quest, d.Chunk)+" "+res.Code, "quest board: hold "+res.Code+": "+out.Why)
 	case res.Outcome == task.OutRetry && res.Kind == task.KindExploring:
 		// still walking toward an object that is not built yet: progress, so the failure counter stays at zero
 		r.boardNote("explore "+questboard.ChunkKey(d.Quest, d.Chunk), "quest board: "+whyOf(res))
@@ -791,6 +798,9 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		r.boardNote("fail "+k, fmt.Sprintf("quest board: %s: %s", k, out.Why))
 	}
 	rt.exec.Report(d, out)
+	if held {
+		return r.boardTrain(ctx, snap, c)
+	}
 	if idle {
 		// Proving Ground cain.cage (2026-11-19): a free_cain start outside Tristram has no step to run. The tick did nothing,
 		// so under a lockstep clock no time passed, the failure gap above never elapsed and the chunk spun for 17 minutes

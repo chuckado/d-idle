@@ -241,10 +241,10 @@ func gateReady(q string) func(World) *Fault {
 		case why == "":
 			return nil
 		case w.Level < g.floor(w):
-			return &Fault{Kind: KindDanger, Why: "not ready: " + why}
+			return refusal(w, "too_weak", "not ready: "+why)
 		case g.BR && normalDiff(w) && brShort(w) == "":
 			// only gold is short: a chores trip buys nothing, the planner levels and farms first (recovery)
-			return &Fault{Kind: KindDanger, Why: "not ready: " + why}
+			return refusal(w, "needs_gold_farm", "not ready: "+why)
 		}
 		return &Fault{Kind: KindResource, Why: "not ready: " + why, Insert: []Step{StepChores(id(q, "chores"))}}
 	}
@@ -271,16 +271,40 @@ func fieldReady(a Area) func(World) *Fault {
 			if n := w.BanNote[a]; n != "" {
 				why = "area banned after " + n
 			}
-			return &Fault{Kind: KindDanger, Why: "not ready: " + why}
+			return refusal(w, "area_banned", "not ready: "+why)
 		case w.RouteBlocked != "" && RouteGuarded(a):
-			return &Fault{Kind: KindDanger, Why: "not ready: route guard (" + w.RouteBlocked + ")"}
+			return refusal(w, "route_closed", "not ready: route guard ("+w.RouteBlocked+")")
 		case w.TowerBlocked != "" && TowerGuarded(a):
-			return &Fault{Kind: KindDanger, Why: "not ready: tower guard (" + w.TowerBlocked + ")"}
+			return refusal(w, "route_closed", "not ready: tower guard ("+w.TowerBlocked+")")
 		case w.Gated && a != w.SafeArea:
-			return &Fault{Kind: KindDanger, Why: "not ready: " + w.GatedWhy}
+			if w.BoardSM && w.GatedFix == "potions" {
+				// bug 4: a missing potion kit is fixed by a town visit, so the hero goes now and nothing is counted
+				return &Fault{Kind: KindResource, Code: "needs_potions", Why: "not ready: " + w.GatedWhy,
+					Insert: []Step{StepChores(fmt.Sprintf("field.%d/chores", a))}}
+			}
+			return refusal(w, gatedCode(w), "not ready: "+w.GatedWhy)
 		}
 		return nil
 	}
+}
+
+// refusal is the danger fault of a guard. With the quest board's state machine (World.BoardSM) it also carries the
+// reason code and is a hold; without it the fault is exactly the old one.
+func refusal(w World, code, why string) *Fault {
+	f := &Fault{Kind: KindDanger, Why: why}
+	if w.BoardSM {
+		f.Code, f.Hold = code, true
+	}
+	return f
+}
+
+// gatedCode is the code of a gear gate that no town visit fixes: gold first when the purse and the potions are both
+// empty, else the hero is too weak for the area.
+func gatedCode(w World) string {
+	if w.Potions == 0 && w.Gold == 0 {
+		return "needs_gold_farm"
+	}
+	return "too_weak"
 }
 
 // gatedReady is the Ready of the quest steps that start a boss quest (greeting, waypoint, walk): a gear-gated character
@@ -288,7 +312,10 @@ func fieldReady(a Area) func(World) *Fault {
 // talk-charsi retry/skipped, then 'Go to the Barracks' not ready, twice). The planner levels it in its safe area instead.
 func gatedReady(w World) *Fault {
 	if w.Gated {
-		return &Fault{Kind: KindDanger, Why: "not ready: " + w.GatedWhy}
+		if w.BoardSM && w.GatedFix == "potions" {
+			return &Fault{Kind: KindResource, Code: "needs_potions", Why: "not ready: " + w.GatedWhy, Insert: []Step{StepChores("gate.chores")}}
+		}
+		return refusal(w, gatedCode(w), "not ready: "+w.GatedWhy)
 	}
 	return nil
 }

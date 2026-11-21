@@ -26,6 +26,7 @@ const (
 	StepRan     StepOutcome = iota // progress: call again
 	StepWaiting                    // nothing to do this tick (recovering, loading); not a failure
 	StepFailed                     // a retryable failure; Why says what
+	StepHeld                       // a guard refused for a reason that is no failure (StepResult.Code, a hold of appendix B.1); nothing is counted
 	StepDied                       // the hero died; the bot recovers, then the chunk resumes from the evidence
 )
 
@@ -33,6 +34,7 @@ const (
 type StepResult struct {
 	Outcome StepOutcome
 	Why     string
+	Code    string // StepHeld: the hold's reason code
 }
 
 // Env is the read-only evidence of one tick. Everything is re-read each time; none of it is stored here.
@@ -98,6 +100,9 @@ type runState struct {
 	deaths   int
 	lastWhy  string
 	blocked  string
+	hold     string    // the code of the hold the head run is under (quests.boardSM), "" when none
+	holdWhy  string    // the guard's words
+	holdFrom time.Time // when the hold began; the budget of its code runs from here
 }
 
 // Exec is the board's executor and the API-free interface the S4 API calls: Offers, Accept, HandIn, State
@@ -607,6 +612,8 @@ type Active struct {
 	StepIdx      int    // index of the first open step in the chunk's list, -1 when none is open (waiting at the NPC)
 	Failures     int
 	Deaths       int
+	Hold         string // the reason code of the hold the chunk is under (quests.boardSM), "" when none
+	HoldWhy      string
 }
 
 // State derives the board now.
@@ -630,6 +637,7 @@ func (e *Exec) State() (Status, error) {
 	a := &Active{Quest: r.Quest, Chunk: r.Chunk, State: c.State, Step: c.StepName, Why: c.Why, StepIdx: c.Step}
 	if rs := e.rs[ChunkKey(r.Quest, r.Chunk)]; rs != nil {
 		a.Failures, a.Deaths = rs.failures, rs.deaths
+		a.Hold, a.HoldWhy = rs.hold, rs.holdWhy
 	}
 	st.Active, st.Extra = a, o[1:]
 	return st, nil
@@ -704,7 +712,12 @@ func (e *Exec) Report(d Decision, res StepResult) {
 	defer e.mu.Unlock()
 	k := ChunkKey(d.Quest, d.Chunk)
 	rs := e.state(k)
+	if res.Outcome != StepHeld {
+		rs.hold, rs.holdWhy, rs.holdFrom = "", "", time.Time{} // anything but a hold lifts it
+	}
 	switch res.Outcome {
+	case StepHeld:
+		e.holdLocked(d, rs, res)
 	case StepRan:
 		rs.started, rs.failures = true, 0
 	case StepFailed:

@@ -110,6 +110,11 @@ type World struct {
 	// potions and no gold. Only towns and SafeArea (the first field, where it farms gold) are open to it; GatedWhy says why.
 	Gated    bool
 	GatedWhy string
+	// GatedFix is "potions" when the only thing that gates the character is a missing potion kit that a town visit with its
+	// gold fixes (knob quests.boardSM): the guard then sends it to town instead of refusing the step.
+	GatedFix string
+	// BoardSM mirrors the knob quests.boardSM: guards then return coded faults (Fault.Code) and holds (Fault.Hold).
+	BoardSM  bool
 	SafeArea Area
 	// Banned: areas the death-spiral breaker keeps the character out of for now (travel, clear and kill steps wait).
 	Banned map[Area]bool
