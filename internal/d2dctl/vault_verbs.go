@@ -39,7 +39,10 @@ const (
 
 // VaultCaps is what a fork build can do with the vault verbs. The zero value (a stock build, an older fork, or a fork
 // started without --vault-verbs: `caps` then lists none of them) means "nothing": callers keep the pickup path.
-type VaultCaps struct{ GroundFull, GroundTake, ItemFull, ItemCreate, ItemVault bool }
+type VaultCaps struct {
+	GroundFull, GroundTake, ItemFull, ItemCreate, ItemVault bool
+	PayGold                                                 bool // `debug paygold` (fork flag --vault-pay, ADR 0029); not part of Complete
+}
 
 // Complete reports whether every verb of the keep flow is there (peek, take, create, and vault for the deposit side).
 func (v VaultCaps) Complete() bool {
@@ -50,7 +53,7 @@ func (v VaultCaps) Complete() bool {
 func VaultCapsOf(caps []string) VaultCaps {
 	return VaultCaps{
 		GroundFull: HasCap(caps, CapGroundFull), GroundTake: HasCap(caps, CapGroundTake), ItemFull: HasCap(caps, CapItemFull),
-		ItemCreate: HasCap(caps, CapItemCreate), ItemVault: HasCap(caps, CapItemVault),
+		ItemCreate: HasCap(caps, CapItemCreate), ItemVault: HasCap(caps, CapItemVault), PayGold: HasCap(caps, CapVaultPaygold),
 	}
 }
 

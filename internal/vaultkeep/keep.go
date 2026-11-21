@@ -74,12 +74,14 @@ type Keeper struct {
 	Ether          *bulkid.EtherPayer                         // identify.etherPerReveal payer; nil or price 0: Ether is not used
 	IdentifyPolicy func() int                                 // identify.policy after the measured-run override (nil: manual)
 
-	// Reveal paid in gold (gold.go): the vendor side, the knobs and where the order is kept. nil Shop: no gold orders.
-	Shop        ScrollShop
+	// Reveal paid in gold (gold.go): the payer, the knobs and where the order is kept. nil Payer: no gold orders.
+	Payer       GoldPayer
 	GoldOn      func() bool // loot.vaultRevealGold
 	GoldConfirm func() int  // loot.vaultRevealGoldConfirm
 	OrderFile   func() string
+	Measured    func() bool // a measured run (D2BOT_RUN): a gold reveal is refused and never reaches the fork
 
+	pmu    sync.Mutex // serialises one gold order's unlock, payment and settle (taken before omu)
 	omu    sync.Mutex // guards mem and loaded (never taken while mu is held)
 	mem    *GoldOrder
 	loaded string
@@ -359,10 +361,9 @@ type created struct {
 // It returns one log line per notable event. Call it only at a safe moment in town; it checks Ready itself.
 func (k *Keeper) Run(ctx context.Context) []string {
 	lines := k.runKeep(ctx)
-	lines = append(lines, k.runGold(ctx, false)...)
+	lines = append(lines, k.resumeGold(ctx)...) // an order a restart or a lost reply left unsettled
 	lines = append(lines, k.runEquip(ctx)...)
 	lines = append(lines, k.runReveal(ctx)...)
-	lines = append(lines, k.runGold(ctx, true)...) // settles the order when the last reveal of this visit finished
 	return append(lines, k.runSell(ctx)...)
 }
 

@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync/atomic"
+	"time"
 
 	"d2lod-bot/internal/bot"
 	"d2lod-bot/internal/combat"
@@ -183,9 +184,12 @@ func wirePoints(stateDir, hero string, ref *runnerRef, r *bot.Runner, e *env.Env
 	if pv != nil {
 		cfg.SpendStat, cfg.SpendSkill = pv.spendStat, pv.spendSkillIndex
 	}
+	fillAutoAlloc(&cfg, db, e, e.Log)
 	d := points.NewDesk(cfg)
-	r.SetPointsGate(func() bool { return res().BotSpendsPoints() || d.Autopilot() })
+	// A locked build with the allocator on owns the points: the leveler's own spending stays closed so they never double-spend.
+	r.SetPointsGate(func() bool { return (res().BotSpendsPoints() || d.Autopilot()) && !d.Locked() })
 	ref.pd = d
+	go runAutoAlloc(context.Background(), d, 3*time.Second)
 	return d
 }
 
