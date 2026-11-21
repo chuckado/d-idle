@@ -22,7 +22,19 @@ Not new verbs, on purpose: opening a vendor window is `menu choose Trade` (input
 
 Two headless d2d (same seed, same setup, `--lab-verbs` only for the setup verbs): the verb on one, the engine's own path on the other, a state digest compared after each step (gold, items, held, the player and stats dumps without life, mana, stamina and wear, the ground by id, the vendor's stock; position only where the pointer path nudges it). A step that changed nothing on the verb side fails, a refusal must move nothing and name its cause.
 
-RESULT_PLACEHOLDER
+V (builder long lane, headless, game data there, fork tip below): 22 steps, 0 differences, `rc=0`.
+
+| verb | scenarios (verb against ...) |
+|---|---|
+| buy | a Minor Healing Potion and a Scroll of Identify stack from Akara (against a right-click on the stock cell after a click on the tab); a Minor Mana Potion; refusals `stock` (index 999) and `gold` (purse 0) move nothing |
+| sell | an axe from the pack (against a ctrl-click); a cap (against the `Sell` message); refusals `item` and `closed` move nothing |
+| waypoint | Rogue Encampment to Cold Plains, Cold Plains to Stony Field, Stony Field back to the camp (against `cmd waypoint <object> <level>`, the 0x49 message the row click sends); refusals `closed`, `here`, `level`; `inactive` on a third session with no waypoint touched |
+| portal | field to town and town to field (against `cmd interact -2000-k`, the portal made by a Scroll of Town Portal used from the pack); refusal `none` |
+| pickup | an axe (against a click on the item after a `move` onto it) and a 100-gold pile (the same); refusals `far` (with a maximum) and `item` |
+
+Regression set on the same binary: `test_runeword`, `levelmap`, `levelmonsters`, `levelobjects`, `combat_reads`, `input_items_diff`, `input_verbs`, `lab_verbs`, `vault_verbs`, `item_verbs` all rc 0; `smoke_d2d` rc 1 at the known line 512 (identical on every image, not caused by this branch).
+
+Listed, not hidden: the pointer path eats the first click after a menu choice (the test clicks again until the tab or the gold moves) and nudges the hero a little (vendor and pickup steps compare without position); life, mana, stamina and armour wear are left out of the digest (a field monster's blow differs by timing); the `space` (full pack) and `elsewhere` (portal in another level) refusals and the stack `fill` flag have no differential step: they are the handler's own rule functions run on a copy and are U until a scenario fills the pack.
 
 ## Bot side (behind the knob `input.planner`, default 0)
 

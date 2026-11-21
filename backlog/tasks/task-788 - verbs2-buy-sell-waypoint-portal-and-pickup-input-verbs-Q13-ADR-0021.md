@@ -36,6 +36,7 @@ owns:
   - "docs/process/input-verbs2.md"
 exclusive: []
 contracts: []
+result: "Fork branch didle/input-verbs2-20261121 (tip d85a74d56, pushed to the private fork): buy, sell, waypoint, portal and pickup are ordinary input (caps input.buy, input.sell, input.waypoint, input.portal, input.pickup), the client message each, refusals named before sending; tests/input_verbs2_diff_d2d.py 22 steps, 0 differences (verb vs pointer path or message, builder, V), fork regression set rc 0 (smoke_d2d line 512 as before). Bot: d2dctl client methods and fake replies, input.WorldVerbs on the d2dinput controller, adoption behind input.planner in town buy/sell, nav.TakeWaypoint, Controller.Pickup and UsePortal with the click path as the fallback and no click after a named refusal; tests on Paladin and Sorceress where the code has a class; whole-repo go vet and test green on the worker host. Build-specific: nothing (the verbs are class-free). Not verified live: no sandbox image was built or loaded; full-pack (space) and elsewhere refusals have no differential step."
 ---
 
 ## Description
@@ -48,7 +49,7 @@ Remaining Q13 input verbs of ADR 0021. Done when the fork differential and the b
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Fork branch didle/input-verbs2-20261121: buy, sell, waypoint, portal, pickup verbs, caps list them, differential 0 differences, refusals named (pushed to the private remote)
-- [ ] #2 Bot: d2dctl client methods and fakes, input.planner adoption in town buy/sell, nav waypoint, controller pickup/portal, tests on two classes
-- [ ] #3 docs/process/input-verbs2.md; whole-repo gate green
+- [x] #1 Fork branch didle/input-verbs2-20261121: buy, sell, waypoint, portal, pickup verbs, caps list them, differential 0 differences, refusals named (pushed to the private remote)
+- [x] #2 Bot: d2dctl client methods and fakes, input.planner adoption in town buy/sell, nav waypoint, controller pickup/portal, tests on two classes
+- [x] #3 docs/process/input-verbs2.md; whole-repo gate green
 <!-- AC:END -->
