@@ -676,6 +676,7 @@ docs/senses-map.md  credit-runner  maphistoryD
 docs/senses-map.md  credit-runner  maptrail
 docs/senses-map.md  credit-runner  maptrail2
 docs/session-record.md  live-agent  sessions
+docs/skilltrees.md  credit-runner  skillsbadge
 docs/skilltrees.md  credit-runner  skilltrees
 docs/skilltrees.md  credit-runner  skilltrees2
 docs/soaks/recoverypace.md  live-agent  recoverypace
@@ -1396,6 +1397,7 @@ internal/senses  credit-runner  maphistoryC
 internal/senses  credit-runner  maptrail
 internal/senses/coverage.go  credit-runner  maptrail2
 internal/senses/trail_test.go  credit-runner  maptrail2
+internal/skilltree  credit-runner  skillsbadge
 internal/skilltree  credit-runner  skilltrees
 internal/skilltree  credit-runner  skilltrees2
 internal/skilltree/skilltree.go  credit-runner  agencyp0
@@ -1650,12 +1652,15 @@ internal/watch/skillsapi.go  credit-runner  agencyp0
 internal/watch/skillsapi.go  credit-runner  skilltrees
 internal/watch/skillsapi_test.go  credit-runner  skilltrees
 internal/watch/skillsapi_test.go  credit-runner  skilltrees2
+internal/watch/skillsjs_test.go  credit-runner  skillsbadge
+internal/watch/skillsui.go  credit-runner  skillsbadge
 internal/watch/skillsui.go  credit-runner  skilltrees
 internal/watch/survivalapi.go  credit-runner  survC
 internal/watch/survivalapi_test.go  credit-runner  survC
 internal/watch/tallystrip.go  credit-runner  botcpu2
 internal/watch/tallystrip_test.go  credit-runner  botcpu2
 internal/watch/testdata  credit-runner  nocards
+internal/watch/testdata  credit-runner  skillsbadge
 internal/watch/testdata/  credit-runner  uifix1
 internal/watch/testdata/areamap/  credit-runner  uis6
 internal/watch/testdata/campaign  pro-runner  levelplan3
@@ -1919,9 +1924,11 @@ internal/watch/web/shell.js  credit-runner  vaultv4
 internal/watch/web/shell.json  credit-runner  uis1
 internal/watch/web/shell.json  credit-runner  uis6
 internal/watch/web/skills.css  credit-runner  friendfb
+internal/watch/web/skills.css  credit-runner  skillsbadge
 internal/watch/web/skills.css  credit-runner  skilltrees
 internal/watch/web/skills.css  credit-runner  skilltrees2
 internal/watch/web/skills.js  credit-runner  agencyp0
+internal/watch/web/skills.js  credit-runner  skillsbadge
 internal/watch/web/skills.js  credit-runner  skilltrees
 internal/watch/web/skills.js  credit-runner  skilltrees2
 internal/watch/web/streamstats.js  credit-runner  videofeed4
@@ -2138,6 +2145,7 @@ tools/uishots/fixtures_quests.go  credit-runner  quests10
 tools/uishots/fixtures_quests.go  credit-runner  quests8
 tools/uishots/fixtures_quests_test.go  credit-runner  quests8
 tools/uishots/fixtures_skills.go  credit-runner  friendfb
+tools/uishots/fixtures_skills.go  credit-runner  skillsbadge
 tools/uishots/fixtures_update.go  credit-runner  uis7
 tools/uishots/fixtures_vault.go  credit-runner  vaulttip
 tools/uishots/fixtures_vault.go  credit-runner  vaultv4
