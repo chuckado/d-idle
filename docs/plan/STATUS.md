@@ -390,6 +390,7 @@
 | vaultpay | proposed | - | `internal/vaultkeep`<br>`internal/bulkid`<br>`internal/d2dctl/paygold.go`<br>`internal/d2dctl/paygold_test.go`<br>`internal/d2dctl/vault_verbs.go`<br>`internal/d2dctl/vault_fake.go`<br>`internal/watch/vaultapi_gold.go`<br>`internal/watch/vaultapi_gold_test.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`internal/watch/testdata/vault_logic.mjs`<br>`cmd/d2bot/vaultkeep.go`<br>`internal/town/playerid.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`docs/cheats.md`<br>`docs/adr/0014-memory-writes-allowed-no-crutch.md`<br>`docs/adr/0029-vault-gold-payment.md`<br>`docs/adr/README.md`<br>`docs/decisions.md`<br>`tools/provingground/scenarios/vaultreveal.json` | `fork-branch:didle/devp17-20261121` |
 | verbs2 | proposed | - | `internal/d2dctl/world_verbs.go`<br>`internal/d2dctl/world_verbs_test.go`<br>`internal/d2dctl/fake/fake.go`<br>`internal/input/worldverbs.go`<br>`internal/input/worldfake.go`<br>`internal/d2dinput/worldverbs.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`internal/d2dcombat/rig.go`<br>`internal/d2dtown/adapter.go`<br>`internal/town/shop.go`<br>`internal/town/worldverbs_test.go`<br>`internal/town/worldverbs_unit_test.go`<br>`internal/town/export_world_test.go`<br>`internal/nav/waypoint.go`<br>`internal/nav/wpverb_test.go`<br>`internal/env/tuning_input.go`<br>`docs/knobs.md`<br>`data/input/caps/d2d-fork-input-verbs2.json`<br>`data/input/caps_test.go`<br>`docs/process/input-verbs2.md` | - |
 | pgvault | proposed | - | `tools/provingground/`<br>`internal/scenario/`<br>`cmd/d2scenario/`<br>`docs/process/proving-ground.md` | - |
+| vaultwire | proposed | - | `cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/invwire.go`<br>`cmd/d2bot/vaultequip.go`<br>`cmd/d2bot/vaultequip_test.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/invverbs_test.go` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -425,6 +426,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 11d0d6c11 11-21 16:24 `Merge agent/vaultwire: vaultwire: task card TASK-791 with result` (vaultwire)
 - 4bdf35e8e 11-21 15:41 `Merge agent/pgvault: Merge origin/main into pgvault` (pgvault)
 - a35f56347 11-21 15:37 `Merge origin/main into pgvault` (-)
 - 8af7d79c6 11-21 15:32 `Merge agent/bsm9: Merge branch 'main' into bsm9` (bsm9)
@@ -434,5 +436,4 @@
 - 87f94536e 11-21 15:18 `Merge branch 'main' into cainscroll` (-)
 - 72fb9cc59 11-21 15:11 `Merge agent/vaultfull: Full Vault never trims or sells; missed drops; knob loot.vaultAutoTrim` (vaultfull)
 - 943595cdb 11-21 15:10 `Merge branch 'main' into vaultfull` (-)
-- 682a8b0ea 11-21 15:07 `Merge remote-tracking branch 'origin/main' into agent/bsm9` (-)
 <!-- statusgen:end -->

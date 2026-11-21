@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- vaultwire: task card TASK-791 with result <!--sg:agent/vaultwire-->
 - Merge origin/main into pgvault <!--sg:agent/pgvault-->
 - Merge branch 'main' into bsm9 <!--sg:agent/bsm9-->
 - Merge branch 'main' into cainscroll <!--sg:agent/cainscroll-->
