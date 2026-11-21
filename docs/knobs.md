@@ -138,7 +138,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | town.tripPackUsedPct | 80 | 40..100 | % | 100 | 5 | Go to town when the backpack is this full. |
 | town.tripRepairPct | 20 | 0..60 | % | 0 | 1 | Go to town when an equipped item is below this durability. |
 | town.beltFillPct | 100 | 25..100 | % | 25 | 1 | Refill each potion type to this share of its planned columns. |
-| town.plan | 0 | 0..5 | stage | 5 | 15 | 0 = old town code (default). 1 = shadow: every chores visit logs 'town plan (shadow)' with what the supply plan needs, has and would buy; no behaviour change. 2 = guards, chunk preconditions and the shop read the plan (belt plus pack counted; a guard blocks only on a line the plan cannot close). 3 to 5 are later stages (purse, sell and pickup, route). Measured run records carry the stage. |
+| town.plan | 0 | 0..5 | stage | 5 | 14 | 0 = old town code (default). 1 = shadow: every chores visit logs 'town plan (shadow)' with what the supply plan needs, has and would buy; no behaviour change. 2 = guards, chunk preconditions and the shop read the plan (belt plus pack counted; a guard blocks only on a line the plan cannot close). 3 to 5 are later stages (purse, sell and pickup, route). Measured run records carry the stage. |
 | town.equipKindFails | 2 | 1..10 | count | 10 | 1 | Failed equips of one item kind (base class) into one slot before that kind is skipped until the character gains a level. The memory is by kind, so a fresh game (new item ids) does not repeat the same refused swap (g2g E1: Cap to head failed in every game). |
 | town.tpScrollTarget | 2 | 1..20 | count | 1 | 5 | Scrolls to hold when no tome is owned. |
 | town.looseScrollKeep | 2 | 0..10 | count | 0 | 3 | Town portal and identify scrolls kept loose in the pack while a tome of the same kind is owned. The pickup rule takes no more, and the sell chore sells the surplus (sandbox hero: 22 loose scrolls beside a tome of 10 filled the pack to 82%). |
@@ -202,6 +202,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | loot.vaultKeepPerVisit | 20 | 1..100 | items | 100 | 1 | Most items the Keep queue creates in one town visit, so a long queue does not stall the trip; the rest follows at the next safe moment. |
 | loot.vaultSellPerVisit | 10 | 1..50 | items | 50 | 1 | Most vault items the Sell errand creates in the pack and sells at the vendor in one town visit (docs/vault.md, Sell); the rest follows at the next safe moment. |
 | loot.vaultSellPrompt | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1): when the town budget (repair, potion floor, mercenary reserve) is short of gold, a Needs-you row offers to sell the lowest-value unpinned vault items (never rare or better); Yes queues them for the Sell errand. 0 (default): no prompt. Nothing is ever sold without the answer. |
+| loot.vaultAutoTrim | 0 | 0..1 | 0/1 | 1 | 1 | 0 (default, user decision 2026-11-21): a full vault never removes, sells or replaces an item; new drops are not recorded (they are counted as missed drops on the Vault page) and only the player takes items out. 1: an unlock for later, the old behaviour: a worthwhile drop trims the least valuable unpinned item, and items marked for sale are sold at the next visit without a confirm (docs/vault.md, Decision 2026-11-21). |
 | loot.vaultPoorPickup | 1 | 0..1 | 0/1 | 1 | 1 | 1 (default, with loot.vault 1): below loot.poorGoldBelow gold the looter picks up the items worth loot.poorMinSell gold or more instead of only recording them, so a broke hero earns gold (docs/vault.md). 0: it records them. |
 | loot.vaultRevealGold | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1 and loot.vaultKeep 1): the Reveal bar of the Vault page offers Gold as a payment. A gold reveal is an order the player gives: the price (the vendor price of one Scroll of Identify per item) is subtracted from the STASH gold at once through the d2d fork's `debug paygold` (needs d2d --vault-pay; ledgered with the reason 'vault gold reveal order <id>'; ADR 0029) and the items whose affixes the vault holds are revealed in the same moment: no town visit, no scroll, no tome charge. Never in a measured run (D2BOT_RUN), never above the stash gold, never the purse. 0 (default): off. |
 | loot.vaultRevealGoldConfirm | 2000 | 0..1e+05 | gold | 1e+05 | 1 | A gold reveal that costs this much or more (paid from the stash gold) asks for a second confirming press on the page. |
@@ -495,7 +496,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
-| senses.tier | 1 | 0..1 | tier | 1 | 2 | Highest senses tier the watch screen shows beside the video (needs --watch). 1: the fogged map of the area and the hero (docs/senses-map.md). 0: no panel and no /api/senses. The panel only reads what the bot already knows; bot inputs are identical either way. TASK-148. |
+| senses.tier | 1 | 0..1 | tier | 1 | 4 | Highest senses tier the watch screen shows beside the video (needs --watch). 1: the fogged map of the area and the hero (docs/senses-map.md). 0: no panel and no /api/senses. The panel only reads what the bot already knows; bot inputs are identical either way. TASK-148. |
 
 ### invdesk.*
 
@@ -522,7 +523,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
 | quests.board | 1 | 0..1 | bool | 1 | 1 | 1 (default since the Journey was retired, docs/questboard.md S9): a quest runs only after the player accepts its current chunk (Start); the bot does that chunk, walks to the NPC and stops, and the player taps Hand in. Nothing else starts quests: between chunks the hero acts on the player's mode (Train levels toward the next quest, Idle parks in town, Farm farms loot and gold). Quests the bot cannot do yet show 'not supported yet' and the hero trains instead. 0: the old floor planner plays the quests as before (used by measured runs and gates, no Journey); a hero on 0 has no Start button. |
-| quests.boardSM | 0 | 0..1 | bool | 0 | 3 | 1: the quest board stores each accepted chunk as a run with a status and latches completion in the hero's plan file (a park survives a restart, accept implies the earlier parts, Stop implies the parts that wait for it, a chunk seen done stays done), design docs/design/fable-review-2026-11-21/quest-board.md. 0 (default): the board derives its state from the evidence every tick, as before. The plan file keeps its old accepted records either way. |
+| quests.boardSM | 0 | 0..1 | bool | 0 | 4 | 1: the quest board stores each accepted chunk as a run with a status and latches completion in the hero's plan file (a park survives a restart, accept implies the earlier parts, Stop implies the parts that wait for it, a chunk seen done stays done), design docs/design/fable-review-2026-11-21/quest-board.md. 0 (default): the board derives its state from the evidence every tick, as before. The plan file keeps its old accepted records either way. |
 | quests.autoDelaySec | 20 | 0..300 | s | 20 | 1 | Seconds an opted-in quest counts down (shown on the page, with Cancel) before it starts by itself; 0 starts at once. Only a SAFE offer ever auto-starts. |
 | quests.awayMin | 10 | 1..240 | min | 10 | 1 | Minutes without any watch client asking for the board before the player counts as away: then a chunk the board started by itself is also handed in by the board. A present player taps Hand in. |
 | quests.autoHoldMin | 15 | 0..240 | min | 15 | 1 | No quest starts by itself this many minutes after the player paused or reset the bot. |
@@ -554,7 +555,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
-| agency.autoAlloc | 0 | 0..1 | 0/1 | 0 | 0 | 0 (default): off, points are banked for the player. 1: a hero whose build is locked (chosen on the Points page) puts every new stat and skill point where that build's table says, at a calm moment, by verb. A skill the hero cannot use yet is skipped with a visible reason and the point stays banked (docs/autoalloc.md). |
+| agency.autoAlloc | 0 | 0..1 | 0/1 | 0 | 1 | 0 (default): off, points are banked for the player. 1: a hero whose build is locked (chosen on the Points page) puts every new stat and skill point where that build's table says, at a calm moment, by verb. A skill the hero cannot use yet is skipped with a visible reason and the point stays banked (docs/autoalloc.md). |
 | agency.planner | 0 | 0..1 | mode | 0 | 0 | 0 (default): off. 1: shadow. Once a minute the hero logs a `planner shadow:` line with the attack and aura the planner would pick from the skills the player actually bought, next to what the combat profile picks, and GET /api/hero/plan and the Points page show the derived rotation, the warnings and the viability line. Shadow only: it never changes what the hero does (docs/agency.md). |
 
 ### items.*
@@ -573,6 +574,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | respec.firstFree | 0 | 0..10 | count | 0 | 0 | How many of a hero's first respecs cost nothing (they do not count for the escalation). 0 = every respec is paid. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
 | respec.minGold | 1000 | 0..1e+06 | gold | 1000 | 0 | The price before the escalation is at least this. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
 | respec.maxGold | 1e+05 | 0..1e+07 | gold | 1e+05 | 0 | The price before the escalation is at most this (0 = no cap). PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)

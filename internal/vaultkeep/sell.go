@@ -83,14 +83,20 @@ func (k *Keeper) EnqueueSell(ctx context.Context, ids []string, wantNow bool) []
 			switch {
 			case !found:
 				r.Code, r.Why = "missing", "no such item"
-			case rec.State == vault.SellQ:
+			case rec.State == vault.SellQ && rec.Ordered:
 				r.OK, r.Already = true, true
+			case rec.State == vault.SellQ: // a mark: the player's press is the confirm
+				if err := st.OrderSell(id); err != nil {
+					r.Code, r.Why = codeOf(err), err.Error()
+				} else {
+					r.OK = true
+				}
 			case rec.Pin:
 				r.Code, r.Why = "pinned", "pinned items are never sold: unpin it first"
 			case rec.State != vault.Recorded:
 				r.Code, r.Why = "state", "only an item that is in the vault can be sold (it is "+string(rec.State)+")"
 			default:
-				if err := st.MarkSell(id); err != nil {
+				if err := st.OrderSell(id); err != nil {
 					r.Code, r.Why = codeOf(err), err.Error()
 					if errors.Is(err, vault.ErrPinned) {
 						r.Code = "pinned"
@@ -114,7 +120,12 @@ func (k *Keeper) runSell(ctx context.Context) []string {
 	if st == nil || k.Vendor == nil {
 		return nil
 	}
-	list := st.SellQueued()
+	var list []vault.Rec
+	for _, r := range st.SellQueued() {
+		if r.Stage != "" || r.Ordered || k.autoSell() { // a mere mark never sells without loot.vaultAutoTrim or the player's confirm
+			list = append(list, r)
+		}
+	}
 	if len(list) == 0 {
 		return nil
 	}
