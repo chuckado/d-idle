@@ -1,10 +1,11 @@
 ---
 id: TASK-774
 title: 'mobilequests: phone page scroll, Vault button and quick filters'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T14:15:00Z'
+updated_date: '2026-11-21T15:40:00Z'
 labels:
   - watch
   - bug

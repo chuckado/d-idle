@@ -699,7 +699,6 @@ docs/ui-design-system.md  credit-runner  nopins
 docs/ui-design-system.md  credit-runner  uic3
 docs/ui-overlays.md  credit-runner  menufit2
 docs/ui/friend-feedback-2026-11-15.md  credit-runner  friendfb
-docs/ui/mobile  credit-runner  mobilequests
 docs/ui/redesign-2026-11-14/reviews/c2c3-review.md  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/c2c3/  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/s1b-review.md  credit-runner  uis1breview
@@ -1734,7 +1733,6 @@ internal/watch/vaultapi_test.go  credit-runner  vaultv5
 internal/watch/vaultapi_test.go  credit-runner  vaultv6
 internal/watch/vaultequip_test.go  credit-runner  vaultequip
 internal/watch/vaultether_test.go  credit-runner  vaultv7b
-internal/watch/vaultlink_test.go  credit-runner  mobilequests
 internal/watch/vaultmass_test.go  credit-runner  bulkid
 internal/watch/vaulttip_test.go  credit-runner  vaulttip
 internal/watch/vaultui_test.go  credit-runner  vaultv4
@@ -1750,7 +1748,6 @@ internal/watch/views.go  credit-runner  videofeed2
 internal/watch/views.go  credit-runner  videofeed4
 internal/watch/watchlayout_test.go  credit-runner  labels
 internal/watch/watchlayout_test.go  credit-runner  videofeed2
-internal/watch/web  credit-runner  mobilequests
 internal/watch/web  credit-runner  nocards
 internal/watch/web/app.css  credit-runner  toastfix
 internal/watch/web/characters.css  credit-runner  charui
@@ -2009,7 +2006,6 @@ tools/levelsim/farmreset.go  credit-runner  farmloop
 tools/levelsim/shadow.go  credit-runner  intake
 tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
-tools/mobilescroll  credit-runner  mobilequests
 tools/play-session.sh  credit-runner  playsession
 tools/provingground/  credit-runner  dlv-reads
 tools/provingground/  credit-runner  pgexpand
