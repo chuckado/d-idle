@@ -14,6 +14,7 @@ ordinal: 344000
 card: "dlv-reads"
 owns:
   - "internal/d2dctl/"
+  - "docs/process/combat-reads.md"
   - "internal/scenario/"
   - "tools/provingground/"
 exclusive:
