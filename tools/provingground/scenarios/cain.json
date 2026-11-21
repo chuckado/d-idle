@@ -823,6 +823,102 @@
      "kind": "no_writes"
     }
    ]
+  },
+  {
+   "id": "board.stop-parked-chunk",
+   "title": "Quest board: Stop on the queued second chunk withdraws it (POST /api/quests/<id>/cancel)",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/task/",
+    "internal/d2dsrc/",
+    "internal/nav/",
+    "internal/questboard/",
+    "internal/bot/questboard.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    },
+    "board_also": [
+     {
+      "quest": "search_for_cain",
+      "chunk": "stones"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    },
+    "api": [
+     {
+      "after_s": 90,
+      "path": "/api/quests/search_for_cain/cancel",
+      "body": {
+       "chunk": "stones",
+       "confirm": true
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs (points as a played level gives), purse 5000 (a played clvl 17 carries more than the kit; at 500 the bot buys a Tome, drops under the kit price and its recovery defers the chunk, see docs/probes/cainstart-2026-11-19.md), waypoints Cold Plains to Dark Wood, board chunks scroll and stones both accepted in the plan store (the state of the sandbox report 2026-11-20). CHEATED: waypoints are set by debug wp and the level by stat verbs (SETUP) (mechanics evidence only, never balance).",
+   "notes": "Sandbox 2026-11-20: Stop then Confirm on an accepted Cain chunk did nothing. Cause: the queued chunk (its predecessor not done) derives locked and the desk answered ok/already \"not running\" without withdrawing the record. Expected: the cancel reply is ok and not already, the audit line says so, scroll keeps running.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "quests: action=cancel quest=search_for_cain chunk=stones .*ok=true already=false",
+     "min": 1,
+     "why": "the stop withdrew the queued chunk"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: starting chunk search_for_cain/scroll",
+     "min": 1,
+     "why": "the other chunk runs"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
   }
  ]
 }
