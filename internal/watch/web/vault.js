@@ -362,7 +362,7 @@ export function mountVault(d) {
     rbOrder.hidden = !o;
     if (o) {
       rbSteps.replaceChildren(...o.steps.map((x) => { const li = el('li', x.current ? 'cur' : x.past ? 'past' : '', x.label); if (x.current) li.setAttribute('aria-current', 'step'); return li; }));
-      rbProg.textContent = o.progress + (o.spent ? ' · ' + o.spent + ' gold' : ''); rbNote.textContent = o.note;
+      rbProg.textContent = [o.progress, o.paidText, o.stashText].filter(Boolean).join(' · '); rbNote.textContent = o.note;
       rbCancel.hidden = !o.active; rbCancel.disabled = ro;
     }
   }
@@ -719,13 +719,15 @@ export function mountVault(d) {
     etherAct(p.ids);
   });
   const sellAct = (ids, now) => act('/api/vault/sell', ids, true, { now });
-  // The bar's press: free and Ether use the ordinary reveal routes; gold is an order the bot fills at the next town visit.
+  // The bar's press: free and Ether use the ordinary reveal routes; gold is an order that pays from the stash and reveals at once.
   async function goldOrder(ids, cost, confirm) {
     const r = await d.post('/api/vault/revealgold', { ids, maxGold: cost, confirm: !!confirm });
     RB.confirming = false;
+    const line = r && r.order && r.order.line;
     if (!r) setMsg('bad', T.noAnswer);
-    else if (r.ok) setMsg('good', RT.sent);
-    else setMsg('bad', ((r.failed && r.failed[0] && r.failed[0].error) || r.error || T.noAnswer));
+    else if (r.ok) setMsg('good', line || RT.sent);
+    else if (r.done && r.done.length) setMsg('info', line || RT.sent);
+    else setMsg('bad', ((r.failed && r.failed[0] && r.failed[0].error) || (line && r.order && r.order.note) || r.error || T.noAnswer));
     await reload(true);
   }
   rbGo.addEventListener('click', () => {

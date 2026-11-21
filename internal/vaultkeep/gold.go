@@ -484,6 +484,7 @@ func (k *Keeper) resumeGold(ctx context.Context) []string {
 type GoldFacts struct {
 	On                    bool
 	Price, Stash, Confirm int
+	Why                   string // why the bar offers no gold although it is on ("" when it can)
 }
 
 // GoldFacts reads them; an unreadable stash counts as empty.
@@ -493,6 +494,11 @@ func (k *Keeper) GoldFacts(ctx context.Context) GoldFacts {
 		return f
 	}
 	f.Price = k.Payer.Price()
+	if k.API != nil {
+		if caps, known, err := k.vaultCaps(ctx, false); err == nil && known && !caps.PayGold {
+			f.Why = ReasonGoldNoFlag
+		}
+	}
 	if s, err := k.Payer.Stash(ctx); err == nil {
 		f.Stash = s
 	}
