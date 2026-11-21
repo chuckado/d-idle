@@ -211,7 +211,7 @@ func (a Assert) Validate() error {
 		if err := a.validateLogLine(); err != nil {
 			return err
 		}
-	case ABoard, ABoardHeadsLE, AAPIReply:
+	case ABoard, ABoardHeadsLE, ABoardReasons, AAPIReply:
 		return a.validateBoard()
 	case ANoWrites:
 	default:
@@ -396,6 +396,8 @@ func evalOne(a Assert, st State) AssertResult {
 		return evalBoard(a, st)
 	case ABoardHeadsLE:
 		return evalBoardHeads(a, st)
+	case ABoardReasons:
+		return evalBoardReasons(st)
 	case AAPIReply:
 		return evalAPIReply(a, st)
 	case ANoWrites:

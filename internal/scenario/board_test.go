@@ -94,3 +94,17 @@ func TestNeedsBoardSamples(t *testing.T) {
 		t.Fatal("board_heads_le needs the samples")
 	}
 }
+
+func TestBoardReasons(t *testing.T) {
+	st := boardState(BoardSample{Chunks: []BoardChunk{ch("q", "a", "in_progress", ""), ch("q", "b", "accepted", "waits_for"), ch("q", "c", "ready", "")}})
+	if r := evalOne(Assert{Kind: ABoardReasons}, st); !r.OK {
+		t.Fatalf("reasons present: %+v", r)
+	}
+	st.Board[0].Chunks[1].Reason = ""
+	if r := evalOne(Assert{Kind: ABoardReasons}, st); r.OK {
+		t.Fatalf("a queued chunk without reason passed: %+v", r)
+	}
+	if r := evalOne(Assert{Kind: ABoardReasons}, State{}); !r.Unobserved {
+		t.Fatalf("no board must be unobserved: %+v", r)
+	}
+}
