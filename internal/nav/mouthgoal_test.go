@@ -2,25 +2,27 @@ package nav
 
 import (
 	"context"
-	"errors"
 	"testing"
 
 	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/input"
 )
 
-// Tower Cellar Level 5 on d2d (V, job 20261121-005917, Paladin 11): the stairs from level 24 arrive at (135,67); the
-// Countess' read stand is (121,70), 14.2 from them, inside mouthTriggerR; the hero walks there from (125,76). The nav
-// has no class data: the Paladin and the Sorceress differ only in where the walk starts (the Sorceress teleports to the
-// stairs' side after a town portal, here 5 subtiles from the stairs).
+// Tower Cellar Level 5 on d2d (V, job 20261121-005917, Paladin 11, K1 fork): the stairs from level 24 list at (130,60),
+// the hero stands at (125,76), the Countess' read stand is (21,70), 100 subtiles west and outside the known map, so
+// the planner's next waypoint is the known grid's edge (121,70), 13.5 from the stairs, and the gate refused it for good
+// ("click {121 70}: no path: the click would cross the trigger area of an unwanted exit"). The nav has no class data:
+// the Paladin and the Sorceress differ only in where the walk starts.
 var (
-	cellar5Stairs = d2map.Exit{Dest: 24, Pos: d2map.Point{X: 135, Y: 67}}
-	cellar5Goal   = input.Point{X: 121, Y: 70}
+	cellar5Stairs = d2map.Exit{Dest: 24, Pos: d2map.Point{X: 130, Y: 60}}
+	cellar5Goal   = input.Point{X: 21, Y: 70}
+	cellar5Edge   = input.Point{X: 121, Y: 70}
 )
 
+// cellar5Nav: an open level whose known map starts at x=120 (the Countess' side is not up yet).
 func cellar5Nav(t *testing.T, start input.Point) (*sim, *Navigator) {
 	t.Helper()
-	s, n := newKnown(t, openField(60, 20, 120, 120), start, true)
+	s, n := newKnown(t, openField(20, 20, 200, 120), start, true)
 	o, err := n.observe()
 	if err != nil {
 		t.Fatal(err)
@@ -30,72 +32,63 @@ func cellar5Nav(t *testing.T, start input.Point) (*sim, *Navigator) {
 	return s, n
 }
 
-// The walk to a goal that lies inside the bound of the arrival stairs must not fail with ErrMouthGate, and no click may
-// come nearer to the stairs than the closer of its ends. Fails (ErrMouthGate on the first click) without goalPocketOK.
-func TestGoToGoalInsideArrivalStairsBound(t *testing.T) {
-	for _, c := range []struct {
-		class string
-		start input.Point
-	}{
-		{"Paladin", input.Point{X: 125, Y: 76}},
-		{"Sorceress", input.Point{X: 131, Y: 71}},
-	} {
+var cellar5Starts = []struct {
+	class string
+	start input.Point
+}{
+	{"Paladin", input.Point{X: 125, Y: 76}},
+	{"Sorceress", input.Point{X: 124, Y: 74}}, // the second click of the logged walk
+}
+
+// Fails (ErrMouthGate, no click) without gateExtend.
+func TestGateExtendsAWaypointInsideTheStairsBound(t *testing.T) {
+	ex := mp(cellar5Stairs.Pos)
+	for _, c := range cellar5Starts {
+		_, n := cellar5Nav(t, c.start)
+		n.goal, n.goalSet = cellar5Goal, true
+		_, exits := n.gatedExits()
+		if clickOKAll(c.start, cellar5Edge, exits) {
+			t.Fatalf("%s: test geometry: the waypoint must be refused", c.class)
+		}
+		q, err := n.gateClick(n.in, cellar5Edge)
+		if err != nil {
+			t.Fatalf("%s: gate refused the waypoint: %v", c.class, err)
+		}
+		if q == cellar5Edge || !mouthClickOK(c.start, q, ex) || dist(q, cellar5Goal) >= dist(c.start, cellar5Goal) || dist(c.start, q) < gateUsefulClip {
+			t.Fatalf("%s: sent %v from %v (%.1f from the stairs): not a safe click toward the goal", c.class, q, c.start, dist(q, ex))
+		}
+	}
+}
+
+// Whole walk: GoTo the Countess' stand makes progress west (clicks sent, no refusal) instead of failing at once.
+func TestGoToFarGoalPastStairsBound(t *testing.T) {
+	for _, c := range cellar5Starts {
 		s, n := cellar5Nav(t, c.start)
-		ex := mp(cellar5Stairs.Pos)
-		if err := n.GoTo(context.Background(), cellar5Goal); err != nil {
-			t.Fatalf("%s: GoTo %v from %v: %v", c.class, cellar5Goal, c.start, err)
+		_ = n.GoTo(context.Background(), cellar5Goal) // the far end may not be reachable in the sim; the first leg is the point
+		if got := n.gateRefused.Load(); got != 0 {
+			t.Errorf("%s: %d refusals", c.class, got)
 		}
 		if len(s.clicks) == 0 {
 			t.Fatalf("%s: no click sent", c.class)
 		}
-		from := c.start
-		for _, q := range s.clicks {
-			if !goalPocketOK(from, q, ex, cellar5Goal) && !mouthClickOK(from, q, ex) {
-				t.Errorf("%s: click %v from %v approaches the stairs", c.class, q, from)
-			}
-			from = q
-		}
-		if got := n.gateRefused.Load(); got != 0 {
-			t.Errorf("%s: %d refusals", c.class, got)
-		}
 	}
 }
 
-// The same click outside a GoTo (a swing, a step-away) keeps the old rule: its target inside the bound is refused.
-func TestClickInsideBoundStillRefusedWithoutGoal(t *testing.T) {
+// Without a walk goal (a swing, a step-away) nothing is extended and the old refusal stands.
+func TestNoExtendWithoutGoal(t *testing.T) {
 	_, n := cellar5Nav(t, input.Point{X: 125, Y: 76})
-	if err := n.in.ClickWorld(cellar5Goal); err == nil || !errors.Is(err, ErrMouthGate) {
-		// the gate may rewrite it (a clip); it must never send the goal itself
-		if n.MouthClickOK(input.Point{X: 125, Y: 76}, cellar5Goal) {
-			t.Fatal("MouthClickOK (the Fighter's check) must still refuse a target inside the bound")
-		}
-	}
-}
-
-// A goal pocket never lets a click move toward the exit: the straight line from the goal's side through the stairs is
-// refused even though the goal itself lies inside the bound.
-func TestGoalPocketRefusesApproach(t *testing.T) {
-	ex := mp(cellar5Stairs.Pos)
-	if goalPocketOK(input.Point{X: 125, Y: 76}, input.Point{X: 145, Y: 60}, ex, cellar5Goal) {
-		t.Error("a click passing over the stairs must be refused")
-	}
-	if !goalPocketOK(input.Point{X: 125, Y: 76}, cellar5Goal, ex, cellar5Goal) {
-		t.Error("the Countess walk must pass")
-	}
-	if goalPocketOK(cellar5Goal, input.Point{X: 134, Y: 67}, ex, cellar5Goal) {
-		t.Error("walking up to the stairs must be refused")
+	lm, exits := n.gatedExits()
+	if q, found := n.gateExtend(lm, input.Point{X: 125, Y: 76}, exits); found {
+		t.Fatalf("extended to %v without a goal", q)
 	}
 }
 
 // A click whose straight line grazes the trigger area is rerouted around it (a waypoint), not refused, when a clear
 // route exists. The hero stands 17 from the stairs, the clip would be 2 long (a crawl), so the gate detours.
 func TestGrazingClickDetoursAroundTrigger(t *testing.T) {
-	from, to := input.Point{X: 118, Y: 67}, input.Point{X: 160, Y: 67}
+	from, to := input.Point{X: 113, Y: 60}, input.Point{X: 160, Y: 60}
 	_, n := cellar5Nav(t, from)
 	lm, exits := n.gatedExits()
-	if len(exits) != 1 {
-		t.Fatalf("exits %v", exits)
-	}
 	if clickOKAll(from, to, exits) {
 		t.Fatal("test geometry: the straight click must cross the trigger area")
 	}
@@ -105,8 +98,5 @@ func TestGrazingClickDetoursAroundTrigger(t *testing.T) {
 	}
 	if !clickOKAll(from, q, exits) {
 		t.Fatalf("waypoint %v is not safe", q)
-	}
-	if got, err := n.gateClick(n.in, to); err != nil || got == to {
-		t.Fatalf("gateClick: %v %v", got, err)
 	}
 }

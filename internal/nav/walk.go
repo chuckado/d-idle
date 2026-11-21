@@ -26,7 +26,7 @@ type walkOpts struct {
 	escape     bool             // a stalled walk tries the Escape hook (town portal) before it gives up (GoTo, GoToUnit)
 	oneClick   bool             // click the goal itself while it is in line of sight (the step away from a cave mouth, FIXMOUTH3)
 	pursuit    bool             // a wander: monsters that keep following within nav.pursuitRadius hand the walk over to the fight (pursuit.go)
-	goal       *input.Point     // fixed goal of a GoTo: exits whose disc holds it are walked around, not refused (mouthgate.go goalPocketOK)
+	goal       *input.Point     // fixed goal of a GoTo: the mouth gate extends a refused waypoint toward it (mouthgate.go gateExtend)
 	flee       *fleeState       // the step away from a cave mouth: re-checked on every replan (FIXMOUTH4)
 }
 
@@ -468,7 +468,7 @@ func (n *Navigator) lookahead(o *obs, w *walkState, sees func(a, b input.Point) 
 		for k := w.cur; k < j && straight; k++ {
 			straight = segDist(wps[k], o.pos, wps[j]) <= lookaheadStraightR
 		}
-		if !straight || !sees(o.pos, wps[j]) || !n.okAll(o.pos, wps[j], exits) {
+		if !straight || !sees(o.pos, wps[j]) || !clickOKAll(o.pos, wps[j], exits) {
 			break
 		}
 		best = wps[j]
