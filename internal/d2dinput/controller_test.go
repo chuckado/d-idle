@@ -378,3 +378,79 @@ func TestDropClickPressesTheMouse(t *testing.T) {
 		t.Error("different offsets must give different spots")
 	}
 }
+
+// Pickup and UsePortal use the fork's verbs behind the planner (docs/process/input-verbs2.md), the cmd path otherwise.
+func worldRig(t *testing.T, on bool, caps string, world map[string]string) (*Controller, *fake.Server) {
+	fix := fake.Sample()
+	fix.World = world
+	c, srv := rig(t, fix)
+	c.Planner = &input.Planner{Enabled: func() bool { return on }, Caps: &input.BackendCaps{Verbs: strings.Fields(caps)}}
+	return c, srv
+}
+
+func lastLine(srv *fake.Server) string {
+	ls := srv.Lines()
+	return ls[len(ls)-1]
+}
+
+func TestPickupVerbBehindPlanner(t *testing.T) {
+	world := map[string]string{"pickup": `{"verb":"pickup","id":5,"code":"gld","dist":3.0}`}
+	c, srv := worldRig(t, true, input.CapPickup, world)
+	if err := c.Pickup(5); err != nil || lastLine(srv) != "pickup 5" {
+		t.Fatalf("verb: %v %q", err, lastLine(srv))
+	}
+	for name, c := range map[string]*Controller{
+		"knob off": func() *Controller { c, _ := worldRig(t, false, input.CapPickup, world); return c }(),
+		"no cap":   func() *Controller { c, _ := worldRig(t, true, "", world); return c }(),
+	} {
+		if err := c.Pickup(5); err != nil {
+			t.Fatalf("%s: %v", name, err)
+		}
+	}
+	c, srv = worldRig(t, false, input.CapPickup, world)
+	_ = c.Pickup(5)
+	if lastLine(srv) != "cmd pickup 5" {
+		t.Fatalf("knob off must send the cmd path, got %q", lastLine(srv))
+	}
+	// a rule refusal is the answer, no cmd pickup follows; an older build falls back to cmd pickup
+	c, srv = worldRig(t, true, input.CapPickup, map[string]string{"pickup": "err item no such item on the floor"})
+	if err := c.Pickup(9); err == nil || !input.IsRuleRefusal(err) || lastLine(srv) != "pickup 9" {
+		t.Fatalf("refusal: %v %q", err, lastLine(srv))
+	}
+	c, srv = worldRig(t, true, input.CapPickup, nil)
+	if err := c.Pickup(9); err != nil || lastLine(srv) != "cmd pickup 9" {
+		t.Fatalf("older build: %v %q", err, lastLine(srv))
+	}
+}
+
+func TestUsePortalVerbBehindPlanner(t *testing.T) {
+	world := map[string]string{"portal": `{"verb":"portal","which":1,"x":10.0,"y":4.0,"dist":2.0}`}
+	c, srv := worldRig(t, true, input.CapPortal, world)
+	if err := c.UsePortal(1); err != nil || lastLine(srv) != "portal 1" {
+		t.Fatalf("verb: %v %q", err, lastLine(srv))
+	}
+	c, srv = worldRig(t, false, input.CapPortal, world)
+	if err := c.UsePortal(1); err != nil || lastLine(srv) != "cmd interact -2001" {
+		t.Fatalf("knob off: %v %q", err, lastLine(srv))
+	}
+	c, srv = worldRig(t, true, input.CapPortal, map[string]string{"portal": "err elsewhere that portal stands in another level"})
+	if err := c.UsePortal(1); err == nil || !input.IsRuleRefusal(err) {
+		t.Fatalf("refusal: %v", err)
+	}
+}
+
+func TestWorldVerbMethods(t *testing.T) {
+	c, srv := worldRig(t, true, "", map[string]string{
+		"sell":     `{"verb":"sell","id":4,"code":"hax","price":20}`,
+		"waypoint": `{"verb":"waypoint","object":2,"level":3,"from":1}`,
+	})
+	if err := c.SellItem(4); err != nil || lastLine(srv) != "sell 4" {
+		t.Fatalf("sell: %v %q", err, lastLine(srv))
+	}
+	if err := c.TakeWaypoint(3); err != nil || lastLine(srv) != "waypoint 3" {
+		t.Fatalf("waypoint: %v %q", err, lastLine(srv))
+	}
+	if _, ok := input.AsWorldVerbs(c); !ok {
+		t.Fatal("the controller offers the world verbs")
+	}
+}

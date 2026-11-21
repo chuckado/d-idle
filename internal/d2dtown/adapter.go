@@ -279,6 +279,12 @@ func (h hoverBelt) BeltPut(id uint32, box int) error {
 	return h.c.BeltPut(ctx, int(id), box)
 }
 
+// WorldVerbs lets the fork's verbs through the hover wrapper (input.AsWorldVerbs).
+func (h hoverFirst) WorldVerbs() (input.WorldVerbs, bool) {
+	v, ok := h.Controller.(input.WorldVerbs)
+	return v, ok
+}
+
 // wait uses the controller's clock when it has one (lockstep: stepped ticks, not wall time).
 func (h hoverFirst) wait(d time.Duration) {
 	if w, ok := h.Controller.(interface{ Wait(time.Duration) }); ok {
@@ -321,6 +327,13 @@ func (t townInput) DropClick(w input.Point) error {
 		return wd.DropClick(w)
 	}
 	return t.Controller.ClickWorld(w)
+}
+
+// WorldVerbs passes the d2d controller's buy, sell, waypoint, portal and pickup verbs through the hover wrapper
+// (input.AsWorldVerbs); the town asks them only with the knob input.planner on.
+func (t townInput) WorldVerbs() (input.WorldVerbs, bool) {
+	v, ok := t.raw.(input.WorldVerbs)
+	return v, ok
 }
 
 // BeltPut is the d2d way to put a pack potion into the belt (town.beltPutter).

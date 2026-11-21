@@ -1,10 +1,11 @@
 ---
 id: TASK-787
 title: 'autoalloc: Automatic Allocate Skills slice, respec knobs, currency design'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T19:18:00Z'
+updated_date: '2026-11-21T20:10:00Z'
 labels:
   - bot
   - feature
