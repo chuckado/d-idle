@@ -2,7 +2,7 @@
 
 > status: proposal, decision-ready. Docs only: no Go and no behaviour changes on main. Card `fableboard` (TASK-714). The questions in section 7 are for the user; nothing here is an ADR.
 
-Code read at `origin/main` `5b12ce5e7` and at `agent/boardprereq` `e77b53911` (the fix in flight). Tags: **V** = read in the code at that commit (file:line given) or run by me; **S** = read in a probe doc or card, not re-run; **U** = unverified. I ran no game and no test; every "V" below is a code read unless it says otherwise.
+Code read at `origin/main` `5b12ce5e7` and at `agent/boardprereq` `e77b53911`. That branch was in flight when the review started and merged to main while it was written (merge queue entry #1019, head `3cedddeeb`, CI still pending when I looked; S `mergeq list`). "Today" and "main" below mean `5b12ce5e7`; lines marked `e77b53911` are the merged fix. Tags: **V** = read in the code at that commit (file:line given) or run by me; **S** = read in a probe doc or card, not re-run; **U** = unverified. I ran no game and no test; every "V" below is a code read unless it says otherwise.
 
 Appendices: [A, evidence per bug](quest-board-appendix-a-evidence.md); [B, tables: reason codes and wording, API, invariants and scenarios, panel spec](quest-board-appendix-b-tables.md).
 
@@ -16,7 +16,7 @@ Appendices: [A, evidence per bug](quest-board-appendix-a-evidence.md); [B, table
 6. API verbs act on the stored run, so they are idempotent by construction: Start means "a live run exists", Stop means "no live run of this chunk or of anything that waits for it".
 7. With the arbiter, the board is one intent source. Its holds are exported as world facts that the upkeep sources read; the board never orders a town trip itself.
 8. Migration: 10 small cards, scenarios first, behind one knob, with the plan file dual-written for one release so a rollback loses nothing.
-9. `agent/boardprereq` is the right behaviour for the interim (accept implies the chain, Stop implies dependants) and should merge; three points in it are noted in section 6.2.
+9. `agent/boardprereq` (merged meanwhile) is the right behaviour for the interim: accept implies the chain, Stop implies dependants. Three points in it for the follow-up are in section 6.2.
 10. Eleven questions for the user in section 7; the two that shape the work are Q1 (store the lifecycle) and Q4 (what happens when exact evidence goes back).
 
 ## 2. Root cause
@@ -285,7 +285,7 @@ Ten cards. Scenarios first; one knob `quests.boardSM` (0 = today's code); the pl
 | 9 | `boardsm-arbiter` | the board intent source and the exported facts in shadow; read the divergence lines of one sandbox night | `internal/arbiter/sources.go`, `internal/bot/shadow.go` | arbiter replay tests | low: shadow | knob `bot.arbiterShadow` |
 | 10 | `boardsm-default` | knob default 1 after the scenario set is green on a determinism pair; one release later remove the old paths and the dual-write | knob table, `internal/questboard`, `docs/questboard.md` | full set | medium | knob |
 
-Order: 1, 2, 3, then 4 and 5 (different files, can run in parallel), 6, 7; 8 and 9 any time after 2. `agent/boardprereq` merges before card 1 and is the behaviour the scenarios pin.
+Order: 1, 2, 3, then 4 and 5 (different files, can run in parallel), 6, 7; 8 and 9 any time after 2. `agent/boardprereq` is on main and is the behaviour the scenarios of card 1 pin.
 
 ## 6. Notes on the code as it is
 
@@ -299,7 +299,7 @@ Order: 1, 2, 3, then 4 and 5 (different files, can run in parallel), 6, 7; 8 and
 
 ### 6.2 `agent/boardprereq` (V at `e77b53911`)
 
-Merge it; it implements D1 and D2. Three points for the follow-up, none blocks the merge:
+It implements D1 and D2 and is the right interim. Three points for the follow-up, none a reason to revert:
 1. `afterOnly` recognises the case by the reason text (`strings.HasPrefix(c.Why, "after ")`). A wording change breaks the logic; the reason needs a code (card 2).
 2. The chain accept returns before `CanStart`, so the chunk the player tapped is accepted without its readiness word being looked at (it derives `locked`, so there is none). After the chain runs, that chunk starts even if it would have been "too hard". With the model, readiness of the tapped chunk is checked when it becomes the head (hold `too_weak`).
 3. The repair writes from inside `Next` (4.4).
@@ -320,7 +320,7 @@ Each has my recommendation first. Nothing is decided here.
 | Q8 | Priority of a started chunk against the hero's own needs: | Keep today's order: survival, your orders and Pause, town chores, gold recovery and the Farm gold order, then the chunk, then level and farm goals. A chunk that buys nothing passes the recovery. | Make a Start tap a player order above recovery; the hero may then start a quest broke. |
 | Q9 | A guard refuses a step for something a town visit fixes (potions, repair, gold in the stash): the hero goes to town at once and continues, with no failure counted? | Yes. | Count it as a failure (today: parks after three). |
 | Q10 | A hold the bot cannot resolve in time (default proposal: 20 virtual minutes for chores, 60 for training holds): | Park with the reason and a Needs-you row. | Hold without limit and show the reason only. |
-| Q11 | May the coordinator turn section 5 into the ten cards, with `agent/boardprereq` merged first? | Yes. | |
+| Q11 | May the coordinator turn section 5 into the ten cards? | Yes. | |
 
 Proposed text for the decisions index, if Q1 to Q5 are answered as recommended (for the coordinator or the user's session to place; I did not edit `docs/decisions.md`):
 

@@ -50,7 +50,7 @@ Consequences read off the table (all V):
 - Data: `stones` is `after: [read]`, `read` is `after: [scroll]` (V `data/questboard/act1.json`, quest `search_for_cain`).
 - Record for `stones` only (the player stopped `scroll`). `stones` derives `locked` with the reason "after Have Akara read the scroll" (rule 6, V `qb/state.go:284-288`). `open()` returns it (V `qb/exec.go:216-222`), `Next` answers `DecBlocked` (V `qb/exec.go:495-499`), `boardStep` logs "parked" once and runs the mode (V `bot/qb.go:680-683`). Nothing can change the evidence, because nothing runs.
 - On the page (V): `Status.Active` is the locked chunk; the view shows it as the running card (`qb/desk.go:417-424`); no Needs-you row (`qb/desk.go:545`); Try again says "is not stuck" (`qb/desk.go:798-801`).
-- Fix in flight (V `e77b53911`): accept of a chunk locked only by `after` accepts the chain (`qb/exec.go:310-319`); `Next` repairs a lone later record (`qb/exec.go:624`); Stop withdraws dependants (`qb/exec.go:492-501`, `qb/desk.go:779-793`).
+- Fix (V `e77b53911`, merged as queue entry #1019 while this review was written): accept of a chunk locked only by `after` accepts the chain (`qb/exec.go:310-319`); `Next` repairs a lone later record (`qb/exec.go:624`); Stop withdraws dependants (`qb/exec.go:492-501`, `qb/desk.go:779-793`).
 
 ### Bug 4: the route guard blocks a step (potions under 4), `needs_attention`, no restock
 
