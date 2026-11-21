@@ -200,7 +200,7 @@
         "internal/vaultkeep/equip.go"
       ],
       "pre": {
-        "level": 14,
+        "level": 30,
         "gold": 500,
         "vault_records": {
           "items": [

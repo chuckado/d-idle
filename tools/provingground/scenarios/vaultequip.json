@@ -17,7 +17,7 @@
         "internal/watch/vaultapi.go"
       ],
       "pre": {
-        "level": 14,
+        "level": 30,
         "gold": 500,
         "vault_records": {
           "items": [
@@ -67,7 +67,7 @@
         "item.vault",
         "item.equip"
       ],
-      "provenance": "SETUP (CHEATED, mechanics only): level 14, the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
       "notes": "Paladin and Sorceress both wear a helm (cap, S). The vault record leaves the live state (kept): U, needs the vault observer.",
       "assert": [
         {
@@ -127,7 +127,7 @@
         "internal/watch/vaultapi.go"
       ],
       "pre": {
-        "level": 14,
+        "level": 30,
         "gold": 500,
         "worn": [
           {
@@ -183,7 +183,7 @@
         "item.vault",
         "item.equip"
       ],
-      "provenance": "SETUP (CHEATED, mechanics only): level 14, the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
       "notes": "The old helm exists once: in the vault, not in the hero (the offline test TestEquipSwapKeepsTheOldItem pins it).",
       "assert": [
         {
@@ -243,7 +243,7 @@
         "internal/watch/vaultapi.go"
       ],
       "pre": {
-        "level": 14,
+        "level": 30,
         "gold": 500,
         "worn": [
           {
@@ -305,7 +305,7 @@
         "item.vault",
         "item.equip"
       ],
-      "provenance": "SETUP (CHEATED, mechanics only): level 14, the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
       "notes": "left is the game's left ring slot (lring) and right is rring, the Inventory page's words (S: which one is drawn on which side of the doll is U live).",
       "assert": [
         {
@@ -360,7 +360,7 @@
         "internal/watch/vaultapi.go"
       ],
       "pre": {
-        "level": 14,
+        "level": 30,
         "gold": 500,
         "worn": [
           {
@@ -422,7 +422,7 @@
         "item.vault",
         "item.equip"
       ],
-      "provenance": "SETUP (CHEATED, mechanics only): level 14, the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
       "notes": "left is the game's left ring slot (lring) and right is rring, the Inventory page's words (S: which one is drawn on which side of the doll is U live).",
       "assert": [
         {
