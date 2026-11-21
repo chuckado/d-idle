@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -284,12 +285,17 @@ func (r Resolver) invID(expr string, list func(map[string]json.RawMessage) ([]js
 		return nil, fmt.Errorf("template {{%s}}: %w", expr, err)
 	}
 	seen := 0
+	var codes []string
 	for _, raw := range items {
 		var it struct {
 			ID   float64 `json:"id"`
 			Code string  `json:"code"`
 		}
-		if json.Unmarshal(raw, &it) != nil || code != "" && it.Code != code {
+		if json.Unmarshal(raw, &it) != nil {
+			continue
+		}
+		codes = append(codes, it.Code)
+		if code != "" && it.Code != code {
 			continue
 		}
 		if seen == nth {
@@ -297,7 +303,7 @@ func (r Resolver) invID(expr string, list func(map[string]json.RawMessage) ([]js
 		}
 		seen++
 	}
-	return nil, fmt.Errorf("template {{%s}}: no such item in the inventory", expr)
+	return nil, fmt.Errorf("template {{%s}}: no such item in the inventory (it lists %v; keys %s)", expr, codes, invKeys(inv))
 }
 
 // ---- reading JSON replies ----
@@ -340,4 +346,13 @@ func norm(v any) any {
 	var out any
 	_ = json.Unmarshal(b, &out)
 	return out
+}
+
+func invKeys(inv map[string]json.RawMessage) string {
+	var k []string
+	for name := range inv {
+		k = append(k, name)
+	}
+	sort.Strings(k)
+	return strings.Join(k, ",")
 }
