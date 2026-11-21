@@ -380,6 +380,7 @@
 | town12 | proposed | - | `docs/design/fable-review-2026-11-21/town-profiles-sme.md` | - |
 | countess3b | proposed | - | `cmd/d2bot/boss.go`<br>`cmd/d2bot/boss_levelmonsters_test.go`<br>`internal/nav/nav.go`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
 | bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
+| mouthgate | proposed | - | `internal/nav` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -415,6 +416,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d8984d3c7 11-21 02:52 `Merge agent/mouthgate: Merge branch 'main' into mouthgate` (mouthgate)
+- 9c0703d7c 11-21 02:51 `Merge branch 'main' into mouthgate` (-)
 - c2118b36b 11-21 02:45 `Merge agent/andariel1: Merge branch 'main' into andariel1` (andariel1)
 - e94174c16 11-21 02:44 `Merge branch 'main' into andariel1` (-)
 - 4cef37c7c 11-21 02:34 `Merge agent/wpstep: Merge branch 'main' into TASK-716` (wpstep)
@@ -423,6 +426,4 @@
 - ffe284f81 11-21 02:24 `Merge branch 'main' into TASK-768` (-)
 - 07712c446 11-21 02:23 `Merge agent/druid1: Merge branch 'main' into druid1` (druid1)
 - 0db4e11df 11-21 02:22 `Merge branch 'main' into druid1` (-)
-- b66c4d189 11-21 02:16 `Merge agent/countess3b: Merge branch 'main' into countess3b` (countess3b)
-- b78539912 11-21 02:15 `Merge branch 'main' into countess3b` (-)
 <!-- statusgen:end -->

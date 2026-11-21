@@ -1237,6 +1237,7 @@ internal/merc/playerrevive_test.go  credit-runner  botmerc
 internal/merc/wear.go  credit-runner  lootwireL2
 internal/merc/wear.json  credit-runner  lootwireL2
 internal/merc/wear_test.go  credit-runner  lootwireL2
+internal/nav  credit-runner  mouthgate
 internal/nav/  credit-runner  dlv-move-tele
 internal/nav/covview.go  credit-runner  maptrail
 internal/nav/covview_test.go  credit-runner  maphistoryC

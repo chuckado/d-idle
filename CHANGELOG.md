@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into mouthgate <!--sg:agent/mouthgate-->
 - Merge branch 'main' into andariel1 <!--sg:agent/andariel1-->
 - Merge branch 'main' into TASK-716 <!--sg:agent/wpstep-->
 - Merge branch 'main' into TASK-768 <!--sg:agent/bsm5-->
