@@ -319,6 +319,7 @@
 | countess2 | proposed | - | `tools/provingground/scenarios/act1.json`<br>`tools/provingground/countess-check.sh`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
 | barb1 | proposed | - | `data/capabilities/capabilities.json`<br>`internal/buildfile/frenzy_test.go`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/buildfile/testdata/barbarian-frenzy-guide.json`<br>`internal/plandata/build-barbarian_frenzy_guide.json`<br>`docs/plan/data/build-barbarian_frenzy_guide.json`<br>`internal/leveler/frenzy_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/frenzy_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/agency/planner_test.go`<br>`internal/agency/testdata/agreement.json`<br>`tools/provingground/scenarios/points.json`<br>`docs/process/barbarian-support.md`<br>`docs/agency.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/scenario_test.go` | - |
 | druid1 | proposed | - | `data/capabilities/capabilities.json`<br>`internal/buildfile/druidfire_test.go`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/buildfile/testdata/druid-fire-guide.json`<br>`internal/plandata/build-druid_fire_guide.json`<br>`docs/plan/data/build-druid_fire_guide.json`<br>`internal/leveler/druidfire_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/druidfire_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/agency/planner_test.go`<br>`internal/agency/testdata/agreement.json`<br>`tools/provingground/scenarios/points.json`<br>`docs/process/druid-support.md`<br>`docs/agency.md`<br>`internal/scenario/scenario_test.go` | - |
+| andariel1 | proposed | - | `internal/questboard/desk.go`<br>`cmd/d2scenario/tap.go`<br>`internal/nav/exit.go`<br>`tools/provingground/scenarios/act1more.json`<br>`internal/d2map/tracker.go`<br>`internal/d2dworld/world.go`<br>`internal/d2dworld/world_test.go`<br>`internal/nav/exit_test.go`<br>`internal/questboard/desk_test.go`<br>`cmd/d2scenario/tap_test.go` | - |
 | boardprereq | proposed | - | `internal/questboard`<br>`tools/provingground/scenarios/cain.json` | - |
 | countess3 | proposed | - | `internal/d2dctl`<br>`internal/d2dworld`<br>`internal/boss`<br>`internal/d2map`<br>`cmd/d2bot/boss.go`<br>`docs/process/layout-read.md`<br>`docs/probes/provingground-countess-2026-11-20.md`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | `fork-branch:didle/level-monsters-20261121` |
 | chores2 | proposed | - | `internal/town/chores.go`<br>`internal/town/kithealing_test.go`<br>`internal/town/town.go`<br>`internal/task/gate.go`<br>`internal/task/route_test.go`<br>`internal/bot/task.go`<br>`internal/bot/contracts.go`<br>`cmd/d2bot/adapters.go`<br>`docs/probes/chores2-2026-11-21.md` | - |
@@ -414,6 +415,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- c2118b36b 11-21 02:45 `Merge agent/andariel1: Merge branch 'main' into andariel1` (andariel1)
+- e94174c16 11-21 02:44 `Merge branch 'main' into andariel1` (-)
 - 4cef37c7c 11-21 02:34 `Merge agent/wpstep: Merge branch 'main' into TASK-716` (wpstep)
 - 8eb46e0e3 11-21 02:33 `Merge branch 'main' into TASK-716` (-)
 - b62c45349 11-21 02:25 `Merge agent/bsm5: Merge branch 'main' into TASK-768` (bsm5)
@@ -422,6 +425,4 @@
 - 0db4e11df 11-21 02:22 `Merge branch 'main' into druid1` (-)
 - b66c4d189 11-21 02:16 `Merge agent/countess3b: Merge branch 'main' into countess3b` (countess3b)
 - b78539912 11-21 02:15 `Merge branch 'main' into countess3b` (-)
-- 15543d7d7 11-21 02:03 `Merge agent/bsm4: agent/bsm4 quest board state machine card` (bsm4)
-- d167f6aa5 11-21 01:57 `Merge agent/bsm3: agent/bsm3 quest board state machine card` (bsm3)
 <!-- statusgen:end -->
