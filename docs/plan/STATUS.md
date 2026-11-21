@@ -391,6 +391,7 @@
 | verbs2 | proposed | - | `internal/d2dctl/world_verbs.go`<br>`internal/d2dctl/world_verbs_test.go`<br>`internal/d2dctl/fake/fake.go`<br>`internal/input/worldverbs.go`<br>`internal/input/worldfake.go`<br>`internal/d2dinput/worldverbs.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`internal/d2dcombat/rig.go`<br>`internal/d2dtown/adapter.go`<br>`internal/town/shop.go`<br>`internal/town/worldverbs_test.go`<br>`internal/town/worldverbs_unit_test.go`<br>`internal/town/export_world_test.go`<br>`internal/nav/waypoint.go`<br>`internal/nav/wpverb_test.go`<br>`internal/env/tuning_input.go`<br>`docs/knobs.md`<br>`data/input/caps/d2d-fork-input-verbs2.json`<br>`data/input/caps_test.go`<br>`docs/process/input-verbs2.md` | - |
 | pgvault | proposed | - | `tools/provingground/`<br>`internal/scenario/`<br>`cmd/d2scenario/`<br>`docs/process/proving-ground.md` | - |
 | vaultwire | proposed | - | `cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/invwire.go`<br>`cmd/d2bot/vaultequip.go`<br>`cmd/d2bot/vaultequip_test.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/invverbs_test.go` | - |
+| parkrelease | proposed | - | `internal/questboard`<br>`internal/scenario`<br>`cmd/d2scenario`<br>`internal/bot/questboard.go`<br>`tools/provingground/scenarios/board.json`<br>`docs/probes/park-retry-after-release-2026-11-21.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -426,6 +427,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 537c7a083 11-21 16:49 `Merge agent/parkrelease: parkrelease: leakcheck wording` (parkrelease)
 - 11d0d6c11 11-21 16:24 `Merge agent/vaultwire: vaultwire: task card TASK-791 with result` (vaultwire)
 - 4bdf35e8e 11-21 15:41 `Merge agent/pgvault: Merge origin/main into pgvault` (pgvault)
 - a35f56347 11-21 15:37 `Merge origin/main into pgvault` (-)
@@ -435,5 +437,4 @@
 - caadfa33f 11-21 15:19 `Merge agent/cainscroll: Merge branch 'main' into cainscroll` (cainscroll)
 - 87f94536e 11-21 15:18 `Merge branch 'main' into cainscroll` (-)
 - 72fb9cc59 11-21 15:11 `Merge agent/vaultfull: Full Vault never trims or sells; missed drops; knob loot.vaultAutoTrim` (vaultfull)
-- 943595cdb 11-21 15:10 `Merge branch 'main' into vaultfull` (-)
 <!-- statusgen:end -->

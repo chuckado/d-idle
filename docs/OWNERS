@@ -346,6 +346,7 @@ cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
 cmd/d2scenario  credit-runner  boardorder
 cmd/d2scenario  credit-runner  bsm1
+cmd/d2scenario  credit-runner  parkrelease
 cmd/d2scenario/  credit-runner  pgexpand
 cmd/d2scenario/  credit-runner  pgvault
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
@@ -573,6 +574,7 @@ docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
 docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
+docs/probes/park-retry-after-release-2026-11-21.md  credit-runner  parkrelease
 docs/probes/pg-gate-group1-2026-11-21.md  credit-runner  pgjournal
 docs/probes/pg-journal-pair-2026-11-21.md  credit-runner  pgjournal
 docs/probes/provingground-act1more-2026-11-20.md  credit-runner  act1more
@@ -940,6 +942,7 @@ internal/bot/questauto_test.go  credit-runner  quests8
 internal/bot/questboard.go  credit-runner  bsm4
 internal/bot/questboard.go  credit-runner  bsm7
 internal/bot/questboard.go  credit-runner  cainchain
+internal/bot/questboard.go  credit-runner  parkrelease
 internal/bot/questboard.go  credit-runner  questrun
 internal/bot/questboard.go  credit-runner  quests10
 internal/bot/questboard.go  credit-runner  quests3
@@ -1375,6 +1378,7 @@ internal/quest/dialog.go  credit-runner  cain5b
 internal/questboard  credit-runner  boardorder
 internal/questboard  credit-runner  boardprereq
 internal/questboard  credit-runner  cainfix
+internal/questboard  credit-runner  parkrelease
 internal/questboard  credit-runner  quests1
 internal/questboard  credit-runner  quests10
 internal/questboard  credit-runner  quests3
@@ -1416,6 +1420,7 @@ internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
 internal/scenario  credit-runner  boardorder
 internal/scenario  credit-runner  bsm1
+internal/scenario  credit-runner  parkrelease
 internal/scenario/  credit-runner  dlv-reads
 internal/scenario/  credit-runner  pgexpand
 internal/scenario/  credit-runner  pgvault
@@ -2133,6 +2138,7 @@ tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/behaviours.json  credit-runner  vaultequip
 tools/provingground/scenarios/board.json  credit-runner  bsm1
 tools/provingground/scenarios/board.json  credit-runner  bsm7
+tools/provingground/scenarios/board.json  credit-runner  parkrelease
 tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3

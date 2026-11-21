@@ -1093,6 +1093,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [pactnative.md](probes/pactnative.md): pactnative: do the native difficulty levers work offline on 1.14d? (TASK-170) (status: probe result of 2026-11-08 (overnight, one hidden instance). Facts for the Pact design note...)
 - [paladin-smoke.md](probes/paladin-smoke.md): Paladin smoke (pointer) (status: current. The results of TASK-142 are in `docs/paladinsmoke.md` (the card's owned file); the run scripts,...)
 - [panels-live.md](probes/panels-live.md): Live check of the watch panels against real lockstep runs (panelslive) (status: measured 2026-11-08 (EST). Tags: V verified live (how stated), S code reading, U unverified. Evidence is a...)
+- [park-retry-after-release-2026-11-21.md](probes/park-retry-after-release-2026-11-21.md): Park retry after a new release (2026-11-21)
 - [pg-gate-group1-2026-11-21.md](probes/pg-gate-group1-2026-11-21.md): Proving Ground gate, first group (2026-11-21) (status: record of the first rollout group of docs/design/fable-review-2026-11-21/proving-ground-gate.md (owner...)
 - [pg-gate-group2-2026-11-21.md](probes/pg-gate-group2-2026-11-21.md): Proving Ground gate, cost-cut group (2026-11-21) (status: record of the second rollout group of docs/design/fable-review-2026-11-21/proving-ground-gate.md (owner...)
 - [postfix-soak1.md](probes/postfix-soak1.md): postfix-soak1: first soak on the fixed bot, Gate 1 shape (2026-10-31) (status: current. Read-only analysis of one finished hidden d2d soak (exit 0, 120 wall min, one injected d2d kill)....)
