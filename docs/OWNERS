@@ -356,7 +356,6 @@ data/questboard/act1.json  credit-runner  cain5b
 data/questboard/act1.json  credit-runner  cainfix
 data/questboard/act1.json  credit-runner  cainfix3
 data/questspec  credit-runner  questspec
-data/supply  credit-runner  town3
 data/unlocks  credit-runner  nocards
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
@@ -855,6 +854,7 @@ internal/bot/observe.go  credit-runner  passagebounce
 internal/bot/observe.go  credit-runner  staletarget
 internal/bot/observe.go  credit-runner  survreask
 internal/bot/observe.go  credit-runner  survrecover
+internal/bot/observe.go  credit-runner  town3
 internal/bot/observe.go  pro-runner  bounce3
 internal/bot/ordersguard.go  credit-runner  staletarget
 internal/bot/parkstep_test.go  credit-runner  botstuck
@@ -1387,10 +1387,12 @@ internal/town/chores.go  credit-runner  chores2
 internal/town/chores.go  credit-runner  idfast
 internal/town/chores.go  credit-runner  repairtrip
 internal/town/chores.go  credit-runner  tidy
+internal/town/chores.go  credit-runner  town3
 internal/town/idtome_test.go  credit-runner  idtome
 internal/town/imbue_test.go  credit-runner  q4runes
 internal/town/invstash_test.go  credit-runner  towntests
 internal/town/kithealing_test.go  credit-runner  chores2
+internal/town/planshadow.go  credit-runner  town3
 internal/town/playerid.go  credit-runner  itemverbs2
 internal/town/playerstash.go  credit-runner  itemverbs2
 internal/town/playerstash_test.go  credit-runner  towntests
@@ -1409,6 +1411,7 @@ internal/town/town.go  credit-runner  chores2
 internal/town/town.go  credit-runner  itemverbs2
 internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
+internal/town/town.go  credit-runner  town3
 internal/town/trip.go  credit-runner  cainchain
 internal/vault  credit-runner  vaultv2
 internal/vault  credit-runner  vaultv5

@@ -362,7 +362,7 @@
 | mglanes | proposed | - | `docs/process/pg-ops-mglanes.md` | - |
 | fabledecisions2 | proposed | - | `docs/adr/`<br>`docs/decisions.md`<br>`GLOSSARY.md` | - |
 | mgwatchdog | proposed | - | `docs/process/pg-ops-mgwatchdog.md` | - |
-| town3 | proposed | - | `internal/supply`<br>`data/supply`<br>`internal/env/tuning_town.go`<br>`docs/knobs.md` | - |
+| town3 | in-progress | - | `internal/supply`<br>`internal/town/planshadow.go`<br>`internal/town/chores.go`<br>`internal/town/town.go`<br>`internal/env/tuning_town.go`<br>`internal/bot/observe.go`<br>`docs/knobs.md` | - |
 | pgnightly | proposed | - | `docs/process/pg-ops-pgnightly.md`<br>`tools/provingground/nightly.sh` | - |
 | town4 | proposed | - | `internal/task`<br>`internal/town`<br>`internal/bot`<br>`internal/supply` | - |
 | pgearned | proposed | - | `internal/scenario/earned.go`<br>`tools/provingground/earned` | - |
@@ -409,6 +409,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d28021ec7 11-21 01:06 `Merge agent/town3: town3: supply NeedFor/Solve, profiles, knob town.plan default 0, stage 1 shadow trace (no behaviour change)` (town3)
+- 05417d792 11-21 01:05 `Merge branch 'main' into town3` (-)
 - e10888fad 11-21 00:53 `Merge agent/town2: town2: internal/supply one potion counter, bot and town counters call it (no behaviour change at stage 0)` (town2)
 - 401f842fa 11-21 00:52 `Merge branch 'main' into town2` (-)
 - 9e2b6cf06 11-21 00:47 `Merge agent/town1: town1: planner scenarios (12 B4 sketches) and belt_at_least assertion, not run` (town1)
@@ -417,6 +419,4 @@
 - 7295f4ba1 11-21 00:44 `Merge agent/fabledecisions2: Merge branch 'main' into fabledecisions2` (fabledecisions2)
 - 6a35831bb 11-21 00:44 `Merge agent/combatcards: combatcards: 17 dlv-* combat-engine cards (docs/backlog only)` (combatcards)
 - 346082f06 11-21 00:44 `Merge agent/towncards: town planner: 12 migration cards TASK-746..765 (docs/backlog only)` (towncards)
-- 5a5b7c337 11-21 00:37 `Merge branch 'main' into pgcards` (-)
-- 1ebb38cb5 11-21 00:37 `Merge branch 'main' into fabledecisions2` (-)
 <!-- statusgen:end -->
