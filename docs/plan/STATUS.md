@@ -362,7 +362,6 @@
 | mgonejob | proposed | - | `docs/process/pg-ops-mgonejob.md` | - |
 | town1 | in-progress | - | `tools/provingground/scenarios/townplan.json`<br>`internal/scenario/state.go`<br>`internal/scenario/newkinds_test.go`<br>`docs/probes/town-plan-scenarios.md` | - |
 | mgcache | proposed | - | `docs/process/pg-ops-mgcache.md` | - |
-| mglanes | proposed | - | `docs/process/pg-ops-mglanes.md` | - |
 | bsm2 | proposed | - | `internal/questboard/sm.go`<br>`internal/questboard/sm_reason.go`<br>`internal/questboard/sm_test.go` | - |
 | fabledecisions2 | proposed | - | `docs/adr/`<br>`docs/decisions.md`<br>`GLOSSARY.md` | - |
 | mgwatchdog | proposed | - | `docs/process/pg-ops-mgwatchdog.md` | - |
@@ -416,6 +415,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 55aaba5df 11-21 10:17 `Merge agent/pgc1: mglanes: lane policy doc and card (TASK-749); ops lockrun quotas, merge priority, two long slots, warn-only` (pgc1)
 - c731907e6 11-21 09:07 `Merge agent/cmbdoc: combat foundation record doc` (cmbdoc)
 - 21255ccc8 11-21 09:07 `Merge agent/devp16: Merge branch 'main' into devp16` (devp16)
 - dfa784c08 11-21 09:05 `Merge branch 'main' into cmbdoc` (-)
@@ -425,5 +425,4 @@
 - b442e454f 11-21 08:48 `Merge agent/cmb3: dlv-expect: cast expectation ledger, knob combat.deliveryExpect, tests` (cmb3)
 - e1b4f2ad4 11-21 08:47 `Merge branch 'main' into cmb3` (-)
 - 87636c8c1 11-21 08:42 `Merge agent/cmb2: dlv-rotation: Rotation type, Profile.Rotation adapter, Fighter reads slots, golden parity` (cmb2)
-- a2a46da3d 11-21 08:41 `Merge branch 'main' into cmb2` (-)
 <!-- statusgen:end -->

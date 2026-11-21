@@ -588,7 +588,6 @@ docs/process/layout-read.md  live-agent  k1layout
 docs/process/necromancer-support.md  credit-runner  necro1
 docs/process/pg-ledger-ops.md  credit-runner  pgledger
 docs/process/pg-ops-mgcache.md  credit-runner  mgcache
-docs/process/pg-ops-mglanes.md  credit-runner  mglanes
 docs/process/pg-ops-mgonejob.md  credit-runner  mgonejob
 docs/process/pg-ops-mgwatchdog.md  credit-runner  mgwatchdog
 docs/process/pg-ops-pgnightly.md  credit-runner  pgnightly
