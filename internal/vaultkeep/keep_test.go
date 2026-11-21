@@ -78,10 +78,11 @@ type rig struct {
 	goldOn  bool
 	confirm int
 	ch      *chaos
+	cap     int
 }
 
 func newRig(t *testing.T, class string) *rig {
-	r := &rig{t: t, dir: t.TempDir(), hero: class, now: t0, on: true, per: 20}
+	r := &rig{t: t, dir: t.TempDir(), hero: class, now: t0, on: true, per: 20, cap: 100}
 	r.api = &flaky{VaultFake: d2dctl.NewVaultFake(class), clock: &r.now, step: 0}
 	r.open()
 	return r
@@ -93,7 +94,7 @@ func (r *rig) open() {
 	if r.st != nil {
 		_ = r.st.Close()
 	}
-	st, err := vault.OpenHero(r.dir, r.hero, vault.Options{Capacity: func() int { return 100 }, NoSync: true, Now: func() time.Time { return t0 }})
+	st, err := vault.OpenHero(r.dir, r.hero, vault.Options{Capacity: func() int { return r.cap }, NoSync: true, Now: func() time.Time { return t0 }})
 	if err != nil {
 		r.t.Fatal(err)
 	}

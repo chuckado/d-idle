@@ -1,10 +1,13 @@
 ---
 id: TASK-749
-title: 'mglanes: merge class, agent quotas, whole-repo refusal, wait budget, load guard'
-status: In Progress
+title: >-
+  mglanes: merge class, agent quotas, whole-repo refusal, wait budget, load
+  guard
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T04:50:00Z'
+updated_date: '2026-11-21T15:22:00Z'
 labels:
   - ops
   - feature

@@ -265,4 +265,39 @@ export function revealBarModel(rev, pay, T) {
   if (m.skippedN && !m.skipped.length) m.skipped = [{ n: m.skippedN, why: T.skipOther }];
   m.skipTitle = f2(T.skipped, { n: m.skippedN });
   return m;
+// equipPlan turns the GET /api/vault/equip/<id> answer into what the Equip sheet draws: the state, the buttons and the line.
+// The three states of the sheet: off (the knob or the gate says no, why), blocked (the item cannot be worn: a charm, an
+// unidentified item, a requirement), ready (buttons) and active/done/failed (an order exists). Rings get a left and a right
+// button besides the default "replace weaker"; every other item one button. Nothing here decides: the server refuses again.
+export function equipPlan(sh) {
+  if (!sh) return { state: 'none', buttons: [] };
+  const order = sh.order || null;
+  const slots = sh.slots || [];
+  const ring = slots.some((x) => x.side);
+  const buttons = [];
+  if (sh.wearable) {
+    const can = slots.filter((x) => x.can);
+    buttons.push({ slot: 'auto', ring, can: can.length > 0, why: can.length ? '' : (slots[0] && slots[0].why) || '' });
+    if (ring) {
+      for (const side of ['left', 'right']) {
+        const x = slots.find((y) => y.side === side);
+        if (x) buttons.push({ slot: side, ring, can: !!x.can, why: x.why || '', view: x });
+      }
+    }
+  }
+  let state = 'ready';
+  if (order && ['queued', 'withdrawing', 'equipping'].includes(order.state)) state = 'active';
+  else if (order && order.state === 'done') state = 'done';
+  else if (order && order.state === 'failed') state = 'failed';
+  else if (!sh.enabled) state = 'off';
+  else if (!sh.wearable) state = sh.reveal ? 'reveal' : 'blocked';
+  return { state, buttons, ring, order, why: sh.why || '', offWhy: sh.offWhy || '' };
+}
+
+// equipUpgradeWord is the sheet's one word on whether the candidate beats what is worn ('' when the page cannot tell).
+export function equipUpgradeWord(sv) {
+  if (!sv || !sv.worn) return 'empty';
+  if (sv.upgrade === true) return 'better';
+  if (sv.upgrade === false) return 'worse';
+  return '';
 }

@@ -83,6 +83,13 @@ type Keeper struct {
 	mem    *GoldOrder
 	loaded string
 
+	// One-tap Equip (equip.go); a nil Hand leaves it off.
+	Hand      Hand
+	EquipPath string                     // the orders file (empty: memory only)
+	EquipOn   func() bool                // loot.vaultEquip; nil counts as on
+	Chain     func(code string) []string // base type chain of an item code, for the record of a displaced item
+
+	eq         equipBook
 	mu         sync.Mutex
 	promptMute time.Time
 	backedUp   bool
@@ -286,7 +293,7 @@ func (k *Keeper) Pending() int {
 	if st == nil {
 		return 0
 	}
-	n := len(st.KeepQueued()) + len(st.SellQueued())
+	n := len(st.KeepQueued()) + len(st.SellQueued()) + k.equipPending()
 	if k.GoldPending() {
 		n++
 	}
@@ -349,6 +356,7 @@ type created struct {
 func (k *Keeper) Run(ctx context.Context) []string {
 	lines := k.runKeep(ctx)
 	lines = append(lines, k.runGold(ctx, false)...)
+	lines = append(lines, k.runEquip(ctx)...)
 	lines = append(lines, k.runReveal(ctx)...)
 	lines = append(lines, k.runGold(ctx, true)...) // settles the order when the last reveal of this visit finished
 	return append(lines, k.runSell(ctx)...)

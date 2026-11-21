@@ -186,6 +186,21 @@ ok('bar: Ether and free words', () => {
   const r = rev(); r.bar.options = [opt('free', { count: 1, ids: ['a'] }), opt('ether', { cost: 29, count: 29 })]; r.bar.default = 'free';
   assert.equal(L.revealBarModel(r, '', RT).go, 'Reveal 1 item');
   assert.equal(L.revealBarModel(r, 'ether', RT).go, 'Reveal 29 with 29 Ether');
+ok('equipPlan: ring gets left, right and auto; other items one button; states', () => {
+  const ring = { enabled: true, wearable: true, slots: [{ slot: 'lring', side: 'left', can: true, worn: { name: 'A' }, upgrade: true }, { slot: 'rring', side: 'right', can: false, why: 'needs level 30' }] };
+  let p = L.equipPlan(ring);
+  assert.deepEqual(p.buttons.map((b) => b.slot + (b.can ? '+' : '-')), ['auto+', 'left+', 'right-']);
+  assert.equal(p.state, 'ready'); assert.equal(p.ring, true);
+  p = L.equipPlan({ enabled: true, wearable: true, slots: [{ slot: 'head', can: true }] });
+  assert.deepEqual(p.buttons.map((b) => b.slot), ['auto']);
+  p = L.equipPlan({ enabled: true, wearable: false, why: 'charms are not equipped', slots: [] });
+  assert.equal(p.state, 'blocked'); assert.equal(p.buttons.length, 0);
+  assert.equal(L.equipPlan({ enabled: true, wearable: false, reveal: true, slots: [] }).state, 'reveal');
+  assert.equal(L.equipPlan({ enabled: false, offWhy: 'off', wearable: true, slots: [{ slot: 'head', can: true }] }).state, 'off');
+  assert.equal(L.equipPlan(Object.assign({ order: { state: 'withdrawing' } }, ring)).state, 'active');
+  assert.equal(L.equipPlan(Object.assign({ order: { state: 'done' } }, ring)).state, 'done');
+  assert.equal(L.equipPlan(Object.assign({ order: { state: 'failed' } }, ring)).state, 'failed');
+  assert.equal(L.equipUpgradeWord({ worn: null }), 'empty'); assert.equal(L.equipUpgradeWord({ worn: {}, upgrade: false }), 'worse'); assert.equal(L.equipUpgradeWord({ worn: {} }), '');
 });
 
 console.log('vault logic: ' + n + ' groups ok');
