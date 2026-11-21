@@ -1424,7 +1424,8 @@
      "kind": "no_writes"
     }
    ],
-   "status": "active"
+   "status": "pending",
+   "pending_reason": "RED live 2026-11-21 (bsm6 run, Paladin 11): the quest word 0x0002 is read from memory but the board derives the chunk Ready (pending bit not seen as exact: task World stage of the memory reader, U), so no awaiting chunk exists at the start; the offline test TestDeskHandInReady covers handin_ready and Start"
   },
   {
    "id": "board.handin.without-run",
@@ -1513,7 +1514,8 @@
      "kind": "no_writes"
     }
    ],
-   "status": "active"
+   "status": "pending",
+   "pending_reason": "RED live 2026-11-21 (bsm6 run, Paladin 11): the quest word 0x0002 is read from memory but the board derives the chunk Ready (pending bit not seen as exact: task World stage of the memory reader, U), so no awaiting chunk exists at the start; the offline test TestDeskHandInReady covers handin_ready and Start"
   },
   {
    "id": "board.auto.chain-safe-only",
