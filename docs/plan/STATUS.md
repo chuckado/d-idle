@@ -380,6 +380,7 @@
 | countess3b | proposed | - | `cmd/d2bot/boss.go`<br>`cmd/d2bot/boss_levelmonsters_test.go`<br>`internal/nav/nav.go`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
 | bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
 | mouthgate | proposed | - | `internal/nav` | - |
+| survhold8 | proposed | - | `docs/probes/survival-holdout5-2026-11-21.md` | - |
 | vaultequip | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/equipnow.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/watch/vaultequip_test.go`<br>`tools/provingground/scenarios/vaultequip.json`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/vaultapi.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/keep_test.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`internal/watch/testdata/vault_logic.mjs`<br>`tools/provingground/scenarios/behaviours.json` | - |
 | pgledgeron | in-progress | - | `docs/process/pg-ledger-ops.md`<br>`tools/provingground/run.sh`<br>`tools/provingground/pgenv.sh`<br>`tools/provingground/pgenv_test.sh` | - |
 | heavyguard | proposed | - | `tools/lib/heavy-guard.sh`<br>`tools/lib/heavy-guard-test.sh`<br>`tools/uishots.sh`<br>`docs/process/worker-capacity.md` | - |
@@ -418,6 +419,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- e475e2ade 11-21 11:01 `Merge agent/survhold8: Merge branch 'main' into survhold8` (survhold8)
+- 585d6f347 11-21 10:58 `Merge branch 'main' into survhold8` (-)
 - 3314b62e3 11-21 10:57 `Merge agent/heavyguard: Merge branch 'main' into heavyguard` (heavyguard)
 - d78daa12f 11-21 10:56 `Merge branch 'main' into heavyguard` (-)
 - edcfd5121 11-21 10:48 `Merge agent/pgc5: pgclock: goals manager, farm timers and the guard snapshot reuse window on the env clock (TASK-739)` (pgc5)
@@ -426,6 +429,4 @@
 - 6928ca8b4 11-21 10:43 `Merge branch 'main' into pgledgeron` (-)
 - d3341adfa 11-21 10:41 `Merge agent/pgc3: mgcache: gate stats, replay measurement, nightly uncached race doc and card (TASK-747)` (pgc3)
 - cf0e806ab 11-21 10:40 `Merge branch 'main' into mgcache` (-)
-- f0c3330a4 11-21 10:33 `Merge agent/vaultequip: Merge branch 'main' into vaultequip` (vaultequip)
-- 352164657 11-21 10:32 `Merge branch 'main' into vaultequip` (-)
 <!-- statusgen:end -->
