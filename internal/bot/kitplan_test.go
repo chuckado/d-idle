@@ -27,10 +27,13 @@ func (f fixedPlanner) SupplyPlan(*d2.Snapshot, string, int) (supply.Plan, error)
 // Stage 2 counts mana in belt plus pack and hands the guards the plan; stage 0 and 1 keep the belt-only count and no plan.
 func TestFillKitStages(t *testing.T) {
 	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
-		for _, stage := range []int{0, 1, 2} {
+		for _, stage := range []int{0, 1, 2, 10} { // 10: stage 0 with quests.boardSM (the guard reads the plan then)
 			g := newRig(t)
 			g.r.d.Catalog = manaCatalog{}
 			g.r.e.Tune.Town.Plan = stage
+			if stage == 10 {
+				g.r.e.Tune.Town.Plan, g.r.e.Tune.Quests.BoardSM = 0, 1
+			}
 			g.w.set(func(w *world) {
 				w.class = class
 				w.items = []d2.Unit{
@@ -44,7 +47,7 @@ func TestFillKitStages(t *testing.T) {
 			g.r.poll()
 			w := g.r.guardWorld(g.r.latest())
 			wantMana, wantPlan := 1, false
-			if stage >= 2 {
+			if stage >= 2 { // stage 10 counts like stage 2
 				wantMana, wantPlan = 3, true
 			}
 			if w.ManaPotions != wantMana || (w.KitPlan != nil) != wantPlan {
