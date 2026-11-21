@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"os"
+	"time"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
@@ -29,9 +30,7 @@ func wireItemVerbs(ref *runnerRef, tw *town.Town, lv *leveler.Leveler, c *d2dctl
 	verbs := invdesk.Serial{Ch: invdesk.NewChannel(), V: coder{d2dctl.ItemVerbs{C: c}}}
 	// The input.* capability names (the verbs became ordinary input, Q13) count only with the input planner on.
 	_, inputCaps, instant := verbKnobs(e)
-	mover := invdesk.NewVerbMover(verbs, on)
-	mover.InputCaps = inputCaps
-	mover.Fresh = e.Snapshot
+	mover := newItemMover(e, verbs, on, inputCaps)
 	if tw != nil {
 		tw.SetMover(mover)
 	}
@@ -55,6 +54,24 @@ func wireItemVerbs(ref *runnerRef, tw *town.Town, lv *leveler.Leveler, c *d2dctl
 		Hold:  inputHeld(func() bool { r := ref.p.Load(); return r != nil && r.SafetyBusy() }),
 		Fresh: e.Snapshot,
 	})
+}
+
+// newItemMover is the executors' mover with its read-back wired. The settle pause runs on the bot's clock: under d2d's
+// lockstep the game moves only when that clock steps, and the queue path runs ON the stepping goroutine, so a wall-clock
+// pause never let the verb's change appear and every identify "answered ok but the game did not show the change" (F3,
+// pgvault live; the item WAS identified a moment later, when the bot stepped on).
+func newItemMover(e *env.Env, verbs invdesk.MoverVerbs, on, inputCaps func() bool) *invdesk.VerbMover {
+	mover := invdesk.NewVerbMover(verbs, on)
+	mover.InputCaps = inputCaps
+	mover.Fresh = e.Snapshot
+	mover.Pause = func(ctx context.Context, d time.Duration) error {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		e.Clock.Sleep(d)
+		return ctx.Err()
+	}
+	return mover
 }
 
 // verbKnobs reads the three switches of the item verbs at call time. ui.managementFast stands for invdesk.verbs,

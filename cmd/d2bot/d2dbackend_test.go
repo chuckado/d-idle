@@ -14,6 +14,7 @@ import (
 	"testing"
 	"time"
 
+	"d2lod-bot/internal/bot"
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/d2dctl/fake"
@@ -325,5 +326,56 @@ func TestBackendOverlayDir(t *testing.T) {
 	cfg := d2dConfig(o, slog.Default(), &env.Tuning{}, nil, "/home")
 	if strings.Join(cfg.ExtraArgs, " ") != "--overlay-dir "+dir || os.Getenv("D2_OVERLAY_DIR") != dir {
 		t.Fatalf("%v env=%q", cfg.ExtraArgs, os.Getenv("D2_OVERLAY_DIR"))
+	}
+}
+
+// A must-fail wiring test (F1): with game tables the d2d stack must hand the runner a VaultKeep. Without it every Keep,
+// Equip and Reveal order stays queued forever (pgvault live finding). The test stops the run as soon as the deps are
+// assembled, so it needs no extracted gear tables.
+func TestRunD2DWiresVaultKeep(t *testing.T) {
+	dir := t.TempDir()
+	srv, err := fake.New(filepath.Join(dir, "d.sock"), fake.Sample(), fake.Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer srv.Close()
+	dataDir, _ := os.MkdirTemp("", "d2dbotdata")
+	defer os.RemoveAll(dataDir)
+	cache := synthTables(t)
+	old := openTables
+	openTables = func(string, string) (*data.DB, error) { return data.Load(cache) }
+	defer func() { openTables = old }()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	seen := make(chan bot.Deps, 1)
+	seeDeps = func(d bot.Deps) {
+		select {
+		case seen <- d:
+		default:
+		}
+	}
+	defer func() { seeDeps = nil }()
+	o := options{attach: true, data: dataDir, addr: "127.0.0.1:0", instance: "t", goalSpec: "farm:Blood Moor", gameDir: "synthetic",
+		d2d: d2dOptions{backend: "d2d", sock: filepath.Join(dir, "d.sock"), class: -1, attach: true}}
+	done := make(chan error, 1)
+	go func() { done <- runD2D(ctx, o, slog.New(slog.NewTextHandler(io.Discard, nil))) }()
+	select {
+	case got := <-seen:
+		if got.VaultKeep == nil {
+			t.Error("d2d runner deps have no VaultKeep: Keep/Equip/Reveal orders would stay queued")
+		}
+		if got.PlayerGear == nil {
+			t.Error("d2d runner deps have no PlayerGear")
+		}
+	case err := <-done:
+		t.Fatalf("runD2D returned before the deps were assembled: %v", err)
+	case <-time.After(20 * time.Second):
+		t.Fatal("deps were never assembled")
+	}
+	cancel()
+	select {
+	case <-done:
+	case <-time.After(30 * time.Second):
+		t.Fatal("no graceful shutdown")
 	}
 }
