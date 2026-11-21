@@ -336,6 +336,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	fighter, town, loot := be.Behaviors(seams, nv)
 	deps.Fighter, deps.Town = fighter, town
 	deps.PlayerGear = playerGear(ref)
+	deps.VaultKeep = vaultKeepDep(ref) // F1: without it every Keep/Equip/Reveal order stays queued on d2d
 	if loot != nil {
 		deps.Loot = loot
 	}
