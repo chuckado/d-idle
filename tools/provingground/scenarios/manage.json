@@ -95,7 +95,8 @@
           "kind": "log_line",
           "pattern": "totown|to town",
           "max": 0,
-          "why": "no town visit"
+          "why": "no town visit (first two virtual minutes: a coarse bound, the bot's own sell trips come later)",
+          "to_min": 2
         },
         {
           "kind": "no_writes"
@@ -171,15 +172,22 @@
         },
         {
           "kind": "log_line",
-          "pattern": "identif",
+          "pattern": "player identify Cap",
           "min": 1,
           "why": "the lane identified it"
         },
         {
           "kind": "log_line",
+          "pattern": "identify .* failed",
+          "max": 0,
+          "why": "the identify verb's change shows in the game"
+        },
+        {
+          "kind": "log_line",
           "pattern": "totown|to town",
           "max": 0,
-          "why": "no town visit"
+          "why": "no town visit (first two virtual minutes: a coarse bound, the bot's own sell trips come later)",
+          "to_min": 2
         },
         {
           "kind": "no_writes"
