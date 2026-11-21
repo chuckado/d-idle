@@ -640,8 +640,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "BLOCKED live 2026-11-21: the setup cannot leave the cairn stones done (no verb, U), so the step runs; also no write ledger on a field start"
+   "status": "active"
   },
   {
    "id": "board.park.persist-restart",
