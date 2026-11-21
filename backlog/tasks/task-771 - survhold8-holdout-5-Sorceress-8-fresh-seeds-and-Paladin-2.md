@@ -1,6 +1,6 @@
 ---
 id: TASK-771
-title: 'survhold8: holdout 5, Sorceress 8 fresh seeds and Paladin 2 on Orion'
+title: 'survhold8: holdout 5, Sorceress 8 fresh seeds and Paladin 2'
 status: Proposed
 assignee:
   - credit-runner
@@ -16,7 +16,7 @@ owns:
   - "docs/probes/survival-holdout5-2026-11-21.md"
 exclusive: []
 contracts: []
-result: "Sorceress 8 fresh pairs on the second worker: ratio 0.497, interval [-16691, -5391] under the floor, FAIL (cause: merc revive left dead and k 3.00 clamp, inferred); Paladin 2 pairs ratio 1.364, chickens 0/2, below minimum, INCONCLUSIVE. zoneModel default untouched. Verified live (Orion), writes after start 0 in all 20 runs."
+result: "Sorceress 8 fresh pairs on the second worker: ratio 0.497, interval [-16691, -5391] under the floor, FAIL (cause: merc revive left dead and k 3.00 clamp, inferred); Paladin 2 pairs ratio 1.364, chickens 0/2, below minimum, INCONCLUSIVE. zoneModel default untouched. Verified live (the worker host), writes after start 0 in all 20 runs."
 ---
 
 ## Description
