@@ -13,7 +13,7 @@ Tags: V = verified in this review (the command or file:line is named), S = secon
 5. A scenario has a stability state (candidate, stable, quarantined). Only stable scenarios gate. A verdict flip on unchanged binaries quarantines the scenario automatically; there is no retry-until-green.
 6. The merge gate costs a median of 435 s and a p90 of 1990 s per code merge (V, 78 merges since 2026-11-17). The median is compute, the tail is queueing behind agent jobs. Cut the median with the Go test cache and prebuilt check tools; cut the tail with one locked job, merge priority and agent quotas.
 7. Whole-repo and race safety stay: whole-repo vet and test still run for every code merge (cached), CI still runs it after the push, and a nightly uncached whole-repo `-race` run is added.
-8. The merge worker needs a supervisor, a heartbeat and a stuck-item alarm: it timed out at 3600 s five times and sat idle for 471 minutes with items queued (V worker log and queue log).
+8. The merge worker needs a supervisor, a heartbeat and a stuck-item alarm: a merge hit the 3600 s timeout five times, and one queued item waited 13.6 hours with no recorded reason (V worker log and queue log).
 9. One results ledger (JSONL, one record per run, written by the runner) and one board page replace verdict tables in probe docs. A doc cites a run id.
 10. Scenario setup moves into a hero library with a self-check, so a hero with banked points, no weapon or three potions is BLOCKED(setup) in seconds instead of RED after 30 minutes.
 
@@ -44,7 +44,7 @@ Tags: V = verified in this review (the command or file:line is named), S = secon
 
 | # | source | evidence | scenarios hit |
 |---|---|---|---|
-| H1 | The board tapper runs on the wall clock: it waits 20 wall seconds, then polls every 5 wall seconds. The game runs 5 to 60 times faster than real time (S `internal/scenario/scenario.go:268` comment), so one poll interval is 25 virtual seconds to 5 virtual minutes, and the ratio moves with builder load. The Start tap therefore lands at a different game tick in every run. | `cmd/d2scenario/run.go:517`, `:519`, `tap.go:128` | all 13 `board-taps` scenarios: the Blood Raven pair, `cain.chain`, Den, Countess, Andariel |
+| H1 | The board tapper runs on the wall clock: it waits 20 wall seconds, then polls every 5 wall seconds. The game runs 5 to 60 times faster than real time (S `internal/scenario/scenario.go:268` comment), so one poll interval is 25 virtual seconds to 5 virtual minutes, and the ratio moves with builder load. The Start tap therefore lands at a different game tick in every run. | `cmd/d2scenario/run.go:517`, `:519`, `tap.go:128` | all 12 `board-taps` scenarios: the Blood Raven pair, `cain.chain`, Den, Countess, Andariel |
 | H2 | `trigger.api` calls fire at wall seconds after the start. | `tap.go:157` | `board.stop-parked-chunk` and the pending `points.api-*` |
 | H3 | The digest hashes the WHOLE observed state: purse, stash, life percent, every carried item, the area trail from the bot log, stats. A scenario asserting one quest bit gets a new digest when the hero ends with 712 gold instead of 700. | `internal/scenario/determinism.go:13-33`; `town.resupply`: gold 700 against 712, same verdict (S run record 2026-11-19) | all |
 | H4 | The area trail and area-change count come from the bot's log and are inside the digest. | `run.go` `addTrail`, `state.go` `AreaTrail` | all |
@@ -52,7 +52,7 @@ Tags: V = verified in this review (the command or file:line is named), S = secon
 | H6 | The result does not record the bot commit, the d2d binary hash, the host, the load or the pace ratio. One "pair" in the records ran two different bot builds (S pgfix4 section 4: run A before a wiring fix). | `internal/scenario/result.go` | every pair so far |
 | H7 | Results are lost on the way back: two of four `results.json` of the `cain.chain` widening did not survive the pull (S pgfix4). The digest pair could not be compared at all. | probe doc | evidence, not behaviour |
 | H8 | The observer d2d is started without a seed and vendor shelves were once counted as floor (S pgfix4 2.2). | `run.go:312`, `internal/d2dinput/lifecycle.go:89` | `item_absent ... ground` |
-| H9 | `log_line` windows map wall time linearly onto the virtual budget. | `docs/process/proving-ground.md` section 2 (marked U there) | 9 scenarios with `log_line` |
+| H9 | `log_line` windows map wall time linearly onto the virtual budget. | `docs/process/proving-ground.md` section 2 (marked U there) | 11 scenarios with `log_line` |
 | H10 | The second worker's lab d2d is a different build file from the builder's; same commit or not is U. | `docs/process/second-worker.md:359` | every cross-host comparison |
 
 ### 2.3 Bot sources (wall clock inside the decision loop)
@@ -122,7 +122,7 @@ D1 is deliberately close to the verdict. Its extra value is the discrete facts: 
 |---|---|---|---|---|
 | T0 static | `d2scenario validate`, `coverage`, `plan -dry-run`; questspec checker; build-file and plan-table validation; the static half of the setup self-check (6.2) | no | under 30 s in total | head box, CI |
 | T1 offline | `d2scenario eval` over recorded state fixtures (the state file of the last green run of each stable scenario: assertion and observer-parser regressions); decision-trace goldens for the incident cases (ping-pong, broke with stash gold, ignored Start tap); `mem.Fake` package tests | no | seconds each, inside `go test` | anywhere |
-| T2 smoke | stable, town-start, no taps, at most 3 wall minutes each, one class and seed: today `heal.town`, `town.resupply`, `belt.refill-after-fight`, `town.stash-gold-withdraw`, `points.bank-by-default`, `points.autopilot-spends-by-verb`, `cain.report`, `town.tp-scroll-hoard` | lab slot | 10 minutes at 2 slots (measured singles: 8 s, 94 s, 149 s, 140 s, 31 s; S run records) | builder long lane or the second worker |
+| T2 smoke | stable, town-start, no taps, at most 3 wall minutes each, one class and seed: today `heal.town`, `town.resupply`, `belt.refill-after-fight`, `town.stash-gold-withdraw`, `points.bank-by-default`, `points.autopilot-spends-by-verb`, `town.tp-scroll-hoard`; `cain.report` and `cain.read` join when their taps are on the virtual clock (card 4) | lab slot | 10 minutes at 2 slots (measured singles: 8 s, 94 s, 149 s, 140 s; the three others not on record; S run records) | builder long lane or the second worker |
 | T3 full | every runnable step and behaviour scenario times its class matrix; one seed per class at night, the second seed weekly | lab slot | 5 to 35 minutes each; the full set about 5 to 6 hours of slot time (U, from the per-scenario wall times in the records) | long lane, at night |
 | T4 e2e and soak | `cain.chain`, act runs from a fresh hero (EARNED), survival A/B waves | lab slot | 15 to 150 minutes each | long lane at night, second worker when allowed |
 
@@ -137,7 +137,7 @@ T1 is honest about what it is: it guards the harness and the arbitration, not th
 | nightly | nothing (it reports) | T2, T3, the determinism pairs, one T4 item; a RED stable scenario opens a hold-or-fix line on the board for the coordinator |
 | release cut | T0 to T3 green on the release commit; the smoke set clean five times; at least one EARNED act run green; no quarantined scenario among those the release notes cite | T4 soaks |
 
-The current `tier` values map as fast to T2 or T3 (see the catalogue: five of today's twelve `fast` scenarios are board-taps or RED and do not belong in a gate), full to T3, nightly to T4.
+The current `tier` values map as fast to T2 or T3 (see the catalogue: five of today's twelve `fast` scenarios use wall-clock taps or API calls, or include field travel and fights, and do not belong in a merge gate yet), full to T3, nightly to T4.
 
 ### 3.3 Setup honesty tags
 
@@ -150,7 +150,7 @@ Four tags, one per run, stored in the ledger:
 | CHEATED | a state play does not reach this way (warp, given quest item, quest word, waypoints, level jump) | mechanics only |
 | IMPOSSIBLE | stats or items no played hero can have | mechanics only; never on the release page |
 
-Today 0 scenarios are EARNED, 12 are SETUP and 26 are CHEATED or IMPOSSIBLE (V `d2scenario provenance`; the catalogue lists each). The original design asked for prepared saves made by the normal path (`05-architecture` section 5, row L1); the build went to verbs because a save cannot hold a field position. Section 6.3 proposes the way back.
+Of the 32 active scenarios today 0 are EARNED, 11 are SETUP and 21 are CHEATED (`cain.chain` is CHEATED and IMPOSSIBLE by its own text); 6 more are pending skeletons (V `d2scenario provenance` and `list`; the catalogue lists each). The original design asked for prepared saves made by the normal path (`05-architecture` section 5, row L1); the build went to verbs because a save cannot hold a field position. Section 6.3 proposes the way back.
 
 ## 4. Merge gate and builder scheduling
 
@@ -165,7 +165,8 @@ Today 0 scenarios are EARNED, 12 are SETUP and 26 are CHEATED or IMPOSSIBLE (V `
 | wait in the queue before the merge starts | median 525 s, p90 6461 s, max 48993 s |
 | `gate go-whole failed` | 8 since item 700 on 7 branches; 6 of those branches merged on a later queue entry, two of them on the very next entry (988 to 989, 1007 to 1008) |
 | `merge.sh timed out after 3600s` | 5 (items 895, 906, 948, 953, 962) |
-| worker restarts in the log | 4 `worker started` lines; idle stretches over 60 minutes with items queued: 9, the longest 471 minutes (2026-11-20, 01:33 EST) |
+| worker restarts in the log | 4 `worker started` lines; none says why the previous worker ended |
+| longest wait of one item | item 992: queued 2026-11-20 00:28 EST, touched 14:05 EST right after a `worker started` line, then dropped by hand. No merge started between 01:33 and about 10:40 EST that night. Why it waited is not recorded (U): the log has no per-item waiting reason over time |
 
 Two facts explain most of it. First, `merge.sh` calls the builder twice per code merge (whole-repo at line 480, race at line 499) and each call queues again on the main lane, so an agent job can slip between them. `labrun BUILDER --gate` already does both in one locked job (V `labrun --help`) and the merge does not use it. Second, at the time of reading the main lane held the merge gate and one agent's own `go vet && go test` behind it, and the long lane had one job running and three waiting (V builder-status). Agents use the same lane as the gate for work the gate will repeat.
 
