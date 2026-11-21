@@ -339,6 +339,7 @@ cmd/d2firsthour/  live-agent  firsthour
 cmd/d2scenario  credit-runner  boardorder
 cmd/d2scenario  credit-runner  bsm1
 cmd/d2scenario/  credit-runner  pgexpand
+cmd/d2scenario/  credit-runner  pgvault
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/detrun.go  credit-runner  pgjournal
 cmd/d2scenario/detrun_test.go  credit-runner  pgjournal
@@ -625,6 +626,7 @@ docs/process/pg-ops-pgnightly.md  credit-runner  pgnightly
 docs/process/points-verbs-devp14.md  credit-runner  agencyp0
 docs/process/proving-ground-status.md  credit-runner  pgpage
 docs/process/proving-ground.md  credit-runner  pgexpand
+docs/process/proving-ground.md  credit-runner  pgvault
 docs/process/queuespeed.md  credit-runner  queuespeed
 docs/process/sandbox-devp11.md  credit-runner  devp11doc
 docs/process/sandbox-devp12.md  credit-runner  devp12
@@ -1414,6 +1416,7 @@ internal/scenario  credit-runner  boardorder
 internal/scenario  credit-runner  bsm1
 internal/scenario/  credit-runner  dlv-reads
 internal/scenario/  credit-runner  pgexpand
+internal/scenario/  credit-runner  pgvault
 internal/scenario/assertdigest.go  credit-runner  pgdigest
 internal/scenario/assertdigest_test.go  credit-runner  pgdigest
 internal/scenario/determinism.go  credit-runner  pgdigest
@@ -2113,6 +2116,7 @@ tools/lib/heavy-guard.sh  credit-runner  heavyguard
 tools/play-session.sh  credit-runner  playsession
 tools/provingground/  credit-runner  dlv-reads
 tools/provingground/  credit-runner  pgexpand
+tools/provingground/  credit-runner  pgvault
 tools/provingground/countess-check.sh  credit-runner  countess2
 tools/provingground/earned  credit-runner  pgearned
 tools/provingground/nightly.sh  credit-runner  pgnightly
