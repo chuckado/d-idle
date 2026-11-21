@@ -78,6 +78,13 @@ type QuestState struct {
 
 // World is the read-only value one tick decides on (finding F7: the same value goes to Need and Ready of every
 // candidate). The bot's Env assembles it from d2.Snapshot, the quest/waypoint readers and the pack.
+// KitPlan is the supply plan's answer for the guard kit (internal/supply, town-planner section 5.4): the minima the
+// guards compare against, already clamped to what the hero can carry, and the line the plan cannot close.
+type KitPlan struct {
+	Healing, Mana, Portals int
+	Short                  string // "" = the plan closes every min with the gold owned; else "short of gold: needs N more for healing"
+}
+
 type World struct {
 	Act         int
 	Difficulty  string
@@ -88,6 +95,7 @@ type World struct {
 	Gold        int
 	Potions     int // usable healing potions in belt and pack
 	HasTP       bool
+	KitPlan     *KitPlan              // the town planner's view of the guard kit (knob town.plan >= 2); nil = the constants below
 	ManaPotions int                   // mana potions in belt and pack
 	Caster      bool                  // the class lives on mana (Sorceress, Necromancer, Druid); the boss gate checks mana for it
 	WPs         map[Area]bool         // waypoints activated

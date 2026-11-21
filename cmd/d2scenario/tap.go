@@ -145,15 +145,17 @@ func newWatchToken(path string) (string, error) {
 	return tok, os.WriteFile(path, []byte(tok), 0o600)
 }
 
-// runAPICalls sends the scenario's trigger.api calls to the bot's answer listener, once each in order, and writes the
-// reply to the taps log. The token is the scenario-local one of newWatchToken.
-func runAPICalls(ctx context.Context, base, token string, calls []scenario.APICall, log io.Writer) {
+// runAPICalls sends the scenario's trigger.api calls to the bot's answer listener, once each in order, writes the
+// reply to the taps log and returns the parsed replies for the api_reply assertion. The token is the scenario-local one
+// of newWatchToken.
+func runAPICalls(ctx context.Context, base, token string, calls []scenario.APICall, log io.Writer) []scenario.APIReply {
 	client := &http.Client{Timeout: 10 * time.Second}
 	start := time.Now()
-	for _, c := range calls {
+	var out []scenario.APIReply
+	for i, c := range calls {
 		select {
 		case <-ctx.Done():
-			return
+			return out
 		case <-time.After(time.Until(start.Add(time.Duration(c.After) * time.Second))):
 		}
 		method := c.Method
@@ -169,8 +171,14 @@ func runAPICalls(ctx context.Context, base, token string, calls []scenario.APICa
 			fmt.Fprintf(log, "%s api %s %s: error %v\n", time.Now().Format("15:04:05"), method, c.Path, err)
 			continue
 		}
-		body, _ := io.ReadAll(io.LimitReader(resp.Body, 300))
+		body, _ := io.ReadAll(io.LimitReader(resp.Body, 64<<10))
 		resp.Body.Close()
-		fmt.Fprintf(log, "%s api %s %s: HTTP %d %s\n", time.Now().Format("15:04:05"), method, c.Path, resp.StatusCode, strings.TrimSpace(string(body)))
+		short := strings.TrimSpace(string(body))
+		if len(short) > 300 {
+			short = short[:300]
+		}
+		fmt.Fprintf(log, "%s api %s %s: HTTP %d %s\n", time.Now().Format("15:04:05"), method, c.Path, resp.StatusCode, short)
+		out = append(out, parseReply(i, c.Path, resp.StatusCode, body))
 	}
+	return out
 }

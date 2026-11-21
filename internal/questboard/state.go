@@ -73,6 +73,7 @@ type ChunkFact struct {
 	Steps     []bool // per-step checks, in Chunk.Steps order
 	Running   bool   // the executor is on this chunk now
 	Missing   string // a readiness fact that is not a failure ("needs 3 antidotes"), keeps the chunk available
+	Denied    bool   // exact evidence (T1 or T2) says "not done" although a latch says done (card bsm4, R3); the bot does not set it yet (U)
 	Blocked   string // the executor gave up (3 failures, lost item, retry cap); words for the Needs-you row
 }
 
