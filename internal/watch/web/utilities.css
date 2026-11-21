@@ -44,6 +44,6 @@
 
 @layer utilities {
   /* the band's Vault link: a 44 px hit area on a 32 px button, like the header Reset */
-  .d-band-status .d-links > #vaultlink { position: relative; }
-  .d-band-status .d-links > #vaultlink::after { content: ""; position: absolute; inset: -6px -2px; }
+  .d-band-status .d-links > a[href^="/watch/vault"] { position: relative; }
+  .d-band-status .d-links > a[href^="/watch/vault"]::after { content: ""; position: absolute; inset: -6px -2px; }
 }
