@@ -118,7 +118,9 @@ type Exec struct {
 	rs      map[string]*runState
 	paused  bool
 	handing bool // a HandIn dialogue is in flight: Next answers Busy
-	ax      autoState
+	// lastChanged is the runs the last machine verb touched, read by the same caller under e.mu (AcceptRuns and kin).
+	lastChanged []Ref
+	ax          autoState
 }
 
 // NewExec builds the executor of one hero. env and act are the bot adapter (or the Fake in tests).
@@ -333,16 +335,30 @@ func (e *Exec) Offers() ([]Offer, error) {
 // Accept records the player's Start tap for the CURRENT chunk (a tap never covers the next part). It refuses
 // anything that is not Ready and a second concurrent chunk, naming the one that runs.
 func (e *Exec) Accept(quest, chunk string) error {
+	_, err := e.AcceptRuns(quest, chunk)
+	return err
+}
+
+// AcceptRuns is Accept that also names the chunks that got a run (the reply's `changed`); nil with the machine off
+// except for the chunk itself.
+func (e *Exec) AcceptRuns(quest, chunk string) ([]Ref, error) {
 	e.mu.Lock()
 	defer e.mu.Unlock()
 	if !e.o.Enabled {
-		return ErrOff
+		return nil, ErrOff
 	}
 	vs, plan, diff, err := e.derive()
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return e.acceptLocked(vs, plan, diff, quest, chunk, nil)
+	e.lastChanged = nil
+	if err := e.acceptLocked(vs, plan, diff, quest, chunk, nil); err != nil {
+		return nil, err
+	}
+	if !e.o.SM {
+		return []Ref{{quest, chunk}}, nil
+	}
+	return e.lastChanged, nil
 }
 
 // acceptLocked records an accept; ev (the auto-start controller) makes it an auto record with its log line. Callers
@@ -523,35 +539,45 @@ func (e *Exec) HasRecord(quest, chunk string) bool {
 // Cancel withdraws an accepted chunk (the player's Stop): the record goes, the running slice is stopped, the
 // chunk is Ready again. Cancelling something that is not accepted is a no-op.
 func (e *Exec) Cancel(quest, chunk string) error {
+	_, err := e.CancelRuns(quest, chunk)
+	return err
+}
+
+// CancelRuns is Cancel that also names the runs it closed: the chunk and every run that waited for it (D2).
+func (e *Exec) CancelRuns(quest, chunk string) ([]Ref, error) {
 	q, err := e.b.Quest(quest)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	c, err := e.b.Chunk(quest, chunk)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	e.mu.Lock()
 	defer e.mu.Unlock()
 	if !e.o.Enabled {
-		return ErrOff
+		return nil, ErrOff
 	}
 	if e.o.SM {
-		return e.smCancel(q, c)
+		e.lastChanged = nil
+		err := e.smCancel(q, c)
+		return e.lastChanged, err
 	}
 	deps := e.dependantsLocked(quest, chunk)
 	if err := e.st.Cancel(quest, chunk, e.env.Diff()); err != nil {
-		return err
+		return nil, err
 	}
+	out := []Ref{{quest, chunk}}
 	for _, d := range deps { // a step that waited for it would only park, or start it again
 		if err := e.st.Cancel(quest, d, e.env.Diff()); err != nil {
-			return err
+			return nil, err
 		}
 		delete(e.rs, ChunkKey(quest, d))
+		out = append(out, Ref{quest, d})
 	}
 	delete(e.rs, ChunkKey(quest, chunk))
 	e.act.Stop(q, c)
-	return nil
+	return out, nil
 }
 
 // Reset cancels the running slice cleanly and forgets every counter and park. The plan records stay accepted:
@@ -583,13 +609,19 @@ func (e *Exec) Reset() {
 func (e *Exec) Pause(on bool) { e.mu.Lock(); e.paused = on; e.mu.Unlock() }
 
 // Unblock clears the park of a chunk (the player's "Try again").
-func (e *Exec) Unblock(quest, chunk string) {
+func (e *Exec) Unblock(quest, chunk string) { e.UnblockRuns(quest, chunk) }
+
+// UnblockRuns is Unblock that also names the runs it changed.
+func (e *Exec) UnblockRuns(quest, chunk string) []Ref {
 	e.mu.Lock()
+	defer e.mu.Unlock()
 	delete(e.rs, ChunkKey(quest, chunk))
+	e.lastChanged = nil
 	if e.o.SM {
 		e.smRetry(quest, chunk)
+		return e.lastChanged
 	}
-	e.mu.Unlock()
+	return []Ref{{quest, chunk}}
 }
 
 // Status is what the board shows now.
