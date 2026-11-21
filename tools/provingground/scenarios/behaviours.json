@@ -312,6 +312,24 @@
    "group": "town-chore",
    "title": "one-tap Equip of a Vault item (withdraw, wear, swap back, pin) in one town visit",
    "where": "internal/vaultkeep/equip.go, internal/invdesk/equipnow.go, cmd/d2bot/vaultequip.go"
+  },
+  {
+   "id": "manage.equip-instant",
+   "group": "town-chore",
+   "title": "a pack item equipped from the sheet at once through the item verbs, in the field, swap-back kept in the pack",
+   "where": "internal/invdesk/instant.go, cmd/d2bot/invverbs.go"
+  },
+  {
+   "id": "manage.identify-instant",
+   "group": "town-chore",
+   "title": "a pack item identified from the sheet at once through the item verbs",
+   "where": "internal/invdesk/instant.go, cmd/d2bot/invverbs.go"
+  },
+  {
+   "id": "manage.recall-now",
+   "group": "town-chore",
+   "title": "Recall now: the hero walks home at the next safe moment because the player asked, queued town work runs on arrival",
+   "where": "internal/bot/recall.go, internal/watch/recallapi.go"
   }
  ]
 }

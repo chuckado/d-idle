@@ -178,6 +178,7 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 	o.ladder.points = ref.pd
 	o.ladder.plan = ref.aw
 	o.ladder.pause = pauseDesk(runner, ip.State())
+	o.ladder.recall = recallDesk(runner)
 	o.ladder.reset = resetDesk(runner, ip.State())
 	o.ladder.sensesTier = tune.Senses.Tier
 	o.ladder.proposalFacts = runner.ProposalFacts

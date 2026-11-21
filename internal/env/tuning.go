@@ -21,6 +21,7 @@ type Tuning struct {
 	Ladder   LadderTuning
 	Senses   SensesTuning
 	Invdesk  InvdeskTuning
+	UI       UITuning
 	Watch    WatchTuning
 	Quests   QuestsTuning
 	Identify IdentifyTuning
@@ -46,6 +47,7 @@ func DefaultTuning() Tuning {
 		Ladder:   DefaultLadderTuning(),
 		Senses:   DefaultSensesTuning(),
 		Invdesk:  DefaultInvdeskTuning(),
+		UI:       DefaultUITuning(),
 		Watch:    DefaultWatchTuning(),
 		Quests:   DefaultQuestsTuning(),
 		Identify: DefaultIdentifyTuning(),
@@ -88,6 +90,7 @@ func Knobs() []Knob {
 	k = append(k, ladderKnobs()...)
 	k = append(k, sensesKnobs()...)
 	k = append(k, invdeskKnobs()...)
+	k = append(k, uiKnobs()...)
 	k = append(k, watchKnobs()...)
 	k = append(k, questsKnobs()...)
 	k = append(k, identifyKnobs()...)

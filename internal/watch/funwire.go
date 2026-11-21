@@ -158,6 +158,8 @@ type Fun struct {
 	Repair *RepairAPI
 	// Pause mounts GET and POST /api/pause (pauseapi.go); nil: no routes.
 	Pause *PauseAPI
+	// Recall mounts GET and POST /api/recall (recallapi.go); nil: no routes.
+	Recall *RecallAPI
 	// Labels mounts GET and POST /api/labels (labelsapi.go); nil: no routes.
 	Labels *LabelsAPI
 	// Reset mounts GET and POST /api/reset (resetapi.go); nil: no routes.
@@ -737,6 +739,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.Pause != nil {
 		m.Handle(PauseRoute, f.Pause.Handler())
 	}
+	if f.Recall != nil {
+		m.Handle(RecallRoute, f.Recall.Handler())
+	}
 	if f.Labels != nil {
 		m.Handle(LabelsRoute, f.Labels.Handler())
 	}
@@ -861,6 +866,9 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	}
 	if f.Pause != nil {
 		m.Handle(PauseRoute, f.Pause.PostHandler(o))
+	}
+	if f.Recall != nil {
+		m.Handle(RecallRoute, f.Recall.PostHandler(o))
 	}
 	if f.Labels != nil {
 		m.Handle(LabelsRoute, f.Labels.PostHandler(o))
