@@ -353,7 +353,8 @@ func TestCapabilityTable(t *testing.T) {
 	}
 	// a skill missing from the table is derived from power's kinds and marked experimental; one in neither is not found.
 	env := testEnv(t)
-	if d, ok := c.Lookup("Cold Arrow", env.Profiles.SkillKinds); !ok || d.Tier != Experimental || !d.Derived || d.Role != RoleAttack {
+	// every skill power knows has a row since dlv-data, so the derived path is exercised with a made-up kind.
+	if d, ok := c.Lookup("Made Up Arrow", map[string]string{"Made Up Arrow": "missile"}); !ok || d.Tier != Experimental || !d.Derived || d.Role != RoleAttack {
 		t.Errorf("derived row: %+v %v", d, ok)
 	}
 	if _, ok := c.Lookup("Banana Strike", env.Profiles.SkillKinds); ok {
