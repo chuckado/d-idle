@@ -29,6 +29,6 @@ Design 4.6, 7 card 15. Design: docs/design/fable-review-2026-11-21/proving-groun
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Nightly job runs T2, T3, pairs and one T4 in the standing Orion window 23:00-07:00 EST only, at most 3 runs, niced (Q4)
+- [ ] #1 Nightly job runs T2, T3, pairs and one T4 in the standing worker-host window 23:00-07:00 EST only, at most 3 runs, niced (Q4)
 - [ ] #2 smoke set report-only for 7 clean days, then the user decides on blocking (Q2)
 <!-- AC:END -->
