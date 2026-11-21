@@ -318,6 +318,7 @@
 | boardorder | proposed | - | `internal/questboard`<br>`cmd/d2scenario`<br>`internal/scenario`<br>`tools/provingground/scenarios/cain.json`<br>`internal/watch/web/panels/quest-board` | - |
 | countess2 | proposed | - | `tools/provingground/scenarios/act1.json`<br>`tools/provingground/countess-check.sh`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
 | barb1 | proposed | - | `data/capabilities/capabilities.json`<br>`internal/buildfile/frenzy_test.go`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/buildfile/testdata/barbarian-frenzy-guide.json`<br>`internal/plandata/build-barbarian_frenzy_guide.json`<br>`docs/plan/data/build-barbarian_frenzy_guide.json`<br>`internal/leveler/frenzy_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/frenzy_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/agency/planner_test.go`<br>`internal/agency/testdata/agreement.json`<br>`tools/provingground/scenarios/points.json`<br>`docs/process/barbarian-support.md`<br>`docs/agency.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/scenario_test.go` | - |
+| boardprereq | proposed | - | `internal/questboard`<br>`tools/provingground/scenarios/cain.json` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -356,6 +357,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f663347eb 11-20 22:08 `Merge agent/boardprereq: boardprereq: task result` (boardprereq)
 - f9a89e05f 11-20 21:43 `Merge agent/countess2: Merge branch 'main' into countess2` (countess2)
 - 700023a41 11-20 21:42 `Merge branch 'main' into countess2` (-)
 - 389505fb9 11-20 21:38 `Merge agent/act1more: Merge branch 'main' into act1more` (act1more)
@@ -365,5 +367,4 @@
 - 09641c32a 11-20 21:25 `Merge agent/barb1: Merge branch 'main' into TASK-706` (barb1)
 - 71efb3052 11-20 21:24 `Merge branch 'main' into TASK-706` (-)
 - 39403b563 11-20 20:45 `Merge agent/tphoard: Merge branch 'main' into tphoard` (tphoard)
-- 1ff13e214 11-20 20:44 `Merge branch 'main' into tphoard` (-)
 <!-- statusgen:end -->
