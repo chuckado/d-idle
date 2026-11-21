@@ -60,6 +60,7 @@ type Preset struct {
 	Kind int
 	ID   int
 	Pos  Pt
+	Name string // a monster preset's name when the source gives one (the fork's layout read), else empty
 }
 
 // Preset kinds, copied from d2map so this package stays free of it.

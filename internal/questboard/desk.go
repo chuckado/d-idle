@@ -776,11 +776,21 @@ func (d *Desk) Cancel(quest, chunk string) Reply {
 			return base
 		}
 	}
+	deps := x.Dependants(quest, chunk)
 	if err := x.Cancel(quest, chunk); err != nil {
 		return withBase(base, refuse(http.StatusInternalServerError, CodeInternal, "Could not stop it: %v", err))
 	}
 	d.invalidate()
 	base.OK, base.State, base.Status, base.Reason = true, string(Ready), http.StatusOK, d.title(quest)+" stopped."
+	if len(deps) > 0 {
+		var ts []string
+		for _, id := range deps {
+			if c, err := d.b.Chunk(quest, id); err == nil {
+				ts = append(ts, c.Title)
+			}
+		}
+		base.Reason += " The step that waited for it was stopped too: " + strings.Join(ts, ", ") + "."
+	}
 	return base
 }
 
