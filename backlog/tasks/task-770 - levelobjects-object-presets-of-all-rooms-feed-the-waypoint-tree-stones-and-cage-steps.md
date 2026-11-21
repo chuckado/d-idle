@@ -1,10 +1,13 @@
 ---
 id: TASK-770
-title: 'levelobjects: object presets of all rooms feed the waypoint, tree, stones and cage steps'
-status: Proposed
+title: >-
+  levelobjects: object presets of all rooms feed the waypoint, tree, stones and
+  cage steps
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T06:32:00Z'
+updated_date: '2026-11-21T13:31:00Z'
 labels:
   - bot
   - bot-fix
