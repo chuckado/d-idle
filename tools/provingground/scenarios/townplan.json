@@ -1,0 +1,875 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "town.plan.guard-blocked-restock",
+   "title": "A 4-slot belt with 3 healing and 1 mana potion and 1220 gold: the road guard asks for 4 healing, the plan restocks and the chunk starts",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "town.resupply"
+   ],
+   "touches": [
+    "internal/supply/",
+    "internal/town/",
+    "internal/task/",
+    "internal/bot/"
+   ],
+   "pre": {
+    "level": 22,
+    "gold": 1220,
+    "waypoints": [
+     1,
+     4,
+     5
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "mp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.plan": 2
+    },
+    "driver": "board-taps",
+    "tap_quest": "tools_of_the_trade",
+    "tap_chunks": [
+     "malus"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
+   "notes": "Invariant T1 of docs/design/fable-review-2026-11-21/town-planner.md. RED on today's main (rule conflict I1; run 20261120-200952-46d2). Knob town.plan 2 is the stage that must turn it green.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "to_min": 10,
+     "why": "the chunk starts within 10 virtual minutes"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "ran but is still needed",
+     "max": 0,
+     "why": "no chores step that cannot close its line"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "needs_attention",
+     "max": 0,
+     "why": "no needs_attention with gold in hand"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "hp1",
+     "min": 4,
+     "why": "belt plus pack hold the guard minimum 4"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "town.plan.broke-after-bank",
+   "title": "8000 gold in the purse and an empty belt: the purse is not banked away from the kit, recovery never starts",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "town.resupply",
+    "town.stash-gold"
+   ],
+   "touches": [
+    "internal/supply/",
+    "internal/town/",
+    "internal/task/",
+    "internal/bot/"
+   ],
+   "pre": {
+    "level": 3,
+    "gold": 8000
+   },
+   "trigger": {
+    "goals": "reach:8",
+    "knobs": {
+     "town.plan": 2
+    }
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
+   "notes": "Invariant T4 of docs/design/fable-review-2026-11-21/town-planner.md. RED expected on today's main (I9; Den finding 1 had the same shape, U whether this exact setup reproduces it). Fully green needs stage 3 (purse settle).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^recovery: start",
+     "max": 0,
+     "why": "a hero with 8000 gold is not broke"
+    },
+    {
+     "kind": "wealth_between",
+     "min": 7000,
+     "why": "gold is spent on supplies only"
+    },
+    {
+     "kind": "belt_at_least",
+     "code": "hp",
+     "min": 2,
+     "why": "the kit was bought"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "town.plan.malus-errand-gold",
+   "title": "8000 gold, default bankFirst, a full kit, the Malus chunk tapped: the chunk starts and the gold is not stranded in the stash",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "town.resupply"
+   ],
+   "touches": [
+    "internal/supply/",
+    "internal/town/",
+    "internal/task/",
+    "internal/bot/"
+   ],
+   "pre": {
+    "level": 22,
+    "gold": 8000,
+    "waypoints": [
+     1,
+     4,
+     5
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ],
+    "items": [
+     {
+      "code": "hp1",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "town.plan": 3
+    },
+    "driver": "board-taps",
+    "tap_quest": "tools_of_the_trade",
+    "tap_chunks": [
+     "malus"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
+   "notes": "Invariant T4 of docs/design/fable-review-2026-11-21/town-planner.md. RED on today's main (I10; run 20261120-184924-bb3e: the bank chore moved 6900 into the stash). Needs stage 3.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^town plan: .*verdict=ready",
+     "min": 1,
+     "why": "the plan sees a ready hero"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "to_min": 10,
+     "why": "chunk starts by minute 10"
+    },
+    {
+     "kind": "quest_bits",
+     "record": 3,
+     "set": 1,
+     "why": "U: record 3 is Tools of the Trade"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "town.plan.belt-refill-from-pack",
+   "title": "Belt with one healing potion, 8 healing and 4 mana potions in the pack, pack 85 percent full: the belt fills before the sale and the potions survive it",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "town.resupply"
+   ],
+   "touches": [
+    "internal/supply/",
+    "internal/town/",
+    "internal/task/",
+    "internal/bot/"
+   ],
+   "pre": {
+    "level": 16,
+    "gold": 0,
+    "belt": [
+     "hp1"
+    ],
+    "items": [
+     {
+      "code": "hp1",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 4
+     },
+     {
+      "code": "cap",
+      "count": 10
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:20",
+    "knobs": {
+     "town.plan": 2
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
+   "notes": "Invariant T2,T3 of docs/design/fable-review-2026-11-21/town-planner.md. U whether RED: expected on the keep count (I3, I4). The pack fullness setup (10 caps) is U.",
+   "assert": [
+    {
+     "kind": "belt_at_least",
+     "code": "hp",
+     "min": 3,
+     "why": "belt fill from the pack"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "hp1",
+     "min": 6,
+     "why": "the sale keeps what the plan needs"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^town plan",
+     "min": 1,
+     "why": "the plan line is logged"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "town.plan.sell-keeps-need",
+   "title": "The Countess setup before its workaround: a pack full of 16 healing potions, default spareKeep: the visit does not sell the potions the next guard needs",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "town.resupply"
+   ],
+   "touches": [
+    "internal/supply/",
+    "internal/town/",
+    "internal/task/",
+    "internal/bot/"
+   ],
+   "pre": {
+    "level": 24,
+    "gold": 300,
+    "items": [
+     {
+      "code": "hp1",
+      "count": 16
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "town.plan": 4
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
+   "notes": "Invariant T3 of docs/design/fable-review-2026-11-21/town-planner.md. RED on today's main (I3; Countess finding 1). Needs stage 4 (sell keep).",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "hp1",
+     "min": 8,
+     "why": "at least the target stays"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "tower guard \\(.*healing",
+     "max": 0,
+     "why": "the guard never waits on healing potions"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "town.plan.scroll-hoard",
+   "title": "The tp-scroll-hoard setup plus four scrolls on the ground by a full tome: no more than the cap in the pack, no failed cast",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "town.scroll-hoard"
+   ],
+   "touches": [
+    "internal/supply/",
+    "internal/town/",
+    "internal/task/",
+    "internal/bot/"
+   ],
+   "pre": {
+    "level": 18,
+    "gold": 600,
+    "items": [
+     {
+      "code": "tbk"
+     },
+     {
+      "code": "tsc",
+      "count": 12
+     },
+     {
+      "code": "tsc",
+      "where": "ground",
+      "count": 4,
+      "quality": 2
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "campaign",
+    "knobs": {
+     "town.plan": 4
+    }
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
+   "notes": "Invariant T5 of docs/design/fable-review-2026-11-21/town-planner.md. Green in town since #1013; the ground half is U.",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "tsc",
+     "max": 3,
+     "why": "loose scrolls at most the cap"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "tbk",
+     "why": "the tome stays"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "town portal did not appear",
+     "max": 0,
+     "why": "no failed portal cast"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "town.plan.no-cast-in-town",
+   "title": "Arrival in town whose portal entry is not confirmed at the first try: no cast is attempted in town",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "town.resupply"
+   ],
+   "touches": [
+    "internal/supply/",
+    "internal/town/",
+    "internal/task/",
+    "internal/bot/"
+   ],
+   "pre": {
+    "level": 18,
+    "gold": 600,
+    "items": [
+     {
+      "code": "tbk"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "campaign",
+    "knobs": {
+     "town.plan": 5
+    }
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
+   "notes": "Invariant T5 of docs/design/fable-review-2026-11-21/town-planner.md. U: no way to force the unconfirmed entry yet; the unit test of the one cast function is the offline twin.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "town portal did not appear",
+     "max": 0,
+     "why": "no failed portal cast"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "portal cast refused: in town",
+     "max": 0,
+     "why": "no cast in town"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "town.plan.mana-kit-satisfiable",
+   "title": "clvl 10, mana-need-2 build, 2000 gold, no belt item: the kit gate never skips and mana potions are bought",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "town.resupply"
+   ],
+   "touches": [
+    "internal/supply/",
+    "internal/town/",
+    "internal/task/",
+    "internal/bot/"
+   ],
+   "pre": {
+    "level": 10,
+    "gold": 2000
+   },
+   "trigger": {
+    "goals": "reach:14",
+    "knobs": {
+     "town.plan": 2
+    }
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
+   "notes": "Invariant T1 of docs/design/fable-review-2026-11-21/town-planner.md. RED for the Sorceress (I7).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "kitgate-skip",
+     "max": 0,
+     "why": "no kit gate skip"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "mp1",
+     "min": 3,
+     "only_class": "Sorceress",
+     "why": "mana kit satisfied (belt plus pack)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "town.plan.gold-short-priorities",
+   "title": "130 gold, empty belt, no scroll, nothing to sell: three healing potions first, no scroll, the plan names the dropped portal line",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "town.resupply"
+   ],
+   "touches": [
+    "internal/supply/",
+    "internal/town/",
+    "internal/task/",
+    "internal/bot/"
+   ],
+   "pre": {
+    "level": 6,
+    "gold": 130
+   },
+   "trigger": {
+    "goals": "reach:8",
+    "knobs": {
+     "town.plan": 2
+    }
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
+   "notes": "Invariant T6 of docs/design/fable-review-2026-11-21/town-planner.md. Partly green today (potions first is built); the trace line needs stage 1 and the priority table stage 7 (card town7).",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "hp1",
+     "min": 3,
+     "why": "potions before the first scroll (decision D3)"
+    },
+    {
+     "kind": "item_absent",
+     "code": "tsc"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^town plan: .*verdict=short-gold.*portal",
+     "min": 1,
+     "why": "the dropped line is named"
+    },
+    {
+     "kind": "gold_between",
+     "max": 40,
+     "why": "the gold went to potions"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "town.plan.short-gold-handover",
+   "title": "20 gold in purse and stash, empty belt, 6 junk items, a chunk tapped: no needs_attention, the junk is sold and the hero farms gold",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "town.resupply"
+   ],
+   "touches": [
+    "internal/supply/",
+    "internal/town/",
+    "internal/task/",
+    "internal/bot/"
+   ],
+   "pre": {
+    "level": 12,
+    "gold": 20,
+    "waypoints": [
+     1,
+     4,
+     5
+    ],
+    "items": [
+     {
+      "code": "cap",
+      "count": 6
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.plan": 2
+    },
+    "driver": "board-taps",
+    "tap_quest": "tools_of_the_trade",
+    "tap_chunks": [
+     "malus"
+    ]
+   },
+   "budget": {
+    "virtual_min": 40
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
+   "notes": "Invariant T1 of docs/design/fable-review-2026-11-21/town-planner.md. RED on today's main (Countess finding 4). Needs card town7; the `sell=` field of the trace is added by card town3 and extended by town6.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "needs_attention",
+     "max": 0,
+     "why": "short gold is not an attention state"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^town plan: .*sell=",
+     "min": 1,
+     "why": "sale is planned"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^recovery: start|farm gold",
+     "min": 1,
+     "why": "the gold source follows, with the amount"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "town.plan.one-visit",
+   "title": "clvl 20, damaged gear, junk, a low belt, gold above the keep line: one visit, one stash stop",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "town.resupply"
+   ],
+   "touches": [
+    "internal/supply/",
+    "internal/town/",
+    "internal/task/",
+    "internal/bot/"
+   ],
+   "pre": {
+    "level": 20,
+    "gold": 2000,
+    "belt": [
+     "hp1"
+    ],
+    "items": [
+     {
+      "code": "cap",
+      "count": 6
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:24",
+    "knobs": {
+     "town.plan": 5
+    }
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
+   "notes": "Invariant T7 of docs/design/fable-review-2026-11-21/town-planner.md. U: today up to three stash stops. Needs stage 5 (card town8).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^town plan: .*stops=",
+     "min": 1,
+     "why": "the route is logged"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^town plan: .*stops=[a-z,]*stash,[a-z,]*stash",
+     "max": 0,
+     "why": "the stash is one stop"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "chore budget exhausted",
+     "max": 0,
+     "why": "the visit fits its budget"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "town.plan.determinism",
+   "title": "The guard-blocked-restock setup run twice with one seed: the plan lines of both runs are equal",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "town.resupply"
+   ],
+   "touches": [
+    "internal/supply/",
+    "internal/town/",
+    "internal/task/",
+    "internal/bot/"
+   ],
+   "pre": {
+    "level": 22,
+    "gold": 1220,
+    "waypoints": [
+     1,
+     4,
+     5
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "mp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.plan": 2
+    },
+    "driver": "board-taps",
+    "tap_quest": "tools_of_the_trade",
+    "tap_chunks": [
+     "malus"
+    ]
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
+   "notes": "Invariant T8 of docs/design/fable-review-2026-11-21/town-planner.md. The pair comparison is the existing determinism pair (internal/scenario/determinism.go); this row only guarantees the lines exist.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^town plan",
+     "min": 1,
+     "why": "at least one plan line to compare"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  }
+ ]
+}

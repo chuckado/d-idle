@@ -14,6 +14,7 @@ import (
 	"d2lod-bot/internal/ladder"
 	"d2lod-bot/internal/repair"
 	"d2lod-bot/internal/resource"
+	"d2lod-bot/internal/supply"
 	"d2lod-bot/internal/town"
 )
 
@@ -218,29 +219,21 @@ func (r *Runner) antidotes(s *d2.Snapshot) int {
 }
 
 func (r *Runner) beltAndInv(s *d2.Snapshot) (healing int, fullPct int, known bool) {
-	if r.d.Catalog == nil || s.Inventory == nil {
+	c, known := r.supplyCount(s)
+	if !known {
 		return 0, 0, false
 	}
 	cells := 0
 	for i := range s.Inventory.Items {
 		u := &s.Inventory.Items[i]
-		if u.Item == nil {
+		if u.Item == nil || u.Item.Where != d2.ContInventory {
 			continue
 		}
-		m, ok := r.d.Catalog.Item(u.Class)
-		if !ok {
-			continue
-		}
-		switch u.Item.Where {
-		case d2.ContBelt:
-			if m.Potion == PotionHealing || m.Potion == PotionRejuv {
-				healing++
-			}
-		case d2.ContInventory:
+		if m, ok := r.d.Catalog.Item(u.Class); ok {
 			cells += max(m.W, 1) * max(m.H, 1)
 		}
 	}
-	return healing, cells * 100 / invCells, true
+	return c.Belt[supply.HP] + c.Belt[supply.RV], cells * 100 / invCells, true
 }
 
 // denPotionEntry is the belt healing count the Den needs to be entered; denPotionStay is the count below which a hero

@@ -26,6 +26,7 @@ const (
 	StepRan     StepOutcome = iota // progress: call again
 	StepWaiting                    // nothing to do this tick (recovering, loading); not a failure
 	StepFailed                     // a retryable failure; Why says what
+	StepHeld                       // a guard refused for a reason that is no failure (StepResult.Code, a hold of appendix B.1); nothing is counted
 	StepDied                       // the hero died; the bot recovers, then the chunk resumes from the evidence
 )
 
@@ -33,6 +34,7 @@ const (
 type StepResult struct {
 	Outcome StepOutcome
 	Why     string
+	Code    string // StepHeld: the hold's reason code
 }
 
 // Env is the read-only evidence of one tick. Everything is re-read each time; none of it is stored here.
@@ -57,6 +59,7 @@ type Stepper func(ctx context.Context, q Quest, c Chunk) StepResult
 // Options are the executor limits. Zero values take the defaults.
 type Options struct {
 	Enabled     bool   // the knob quests.board
+	SM          bool   // the knob quests.boardSM: runs and latches in the plan file drive the board (sm.go, exec_sm.go)
 	MaxFailures int    // consecutive failed slices before the chunk parks (default 3)
 	MaxDeaths   int    // deaths on one chunk before it parks (default 2)
 	MaxHandIn   int    // dialogue attempts per HandIn call before it parks (default 3)
@@ -97,6 +100,9 @@ type runState struct {
 	deaths   int
 	lastWhy  string
 	blocked  string
+	hold     string    // the code of the hold the head run is under (quests.boardSM), "" when none
+	holdWhy  string    // the guard's words
+	holdFrom time.Time // when the hold began; the budget of its code runs from here
 }
 
 // Exec is the board's executor and the API-free interface the S4 API calls: Offers, Accept, HandIn, State
@@ -156,6 +162,15 @@ func (e *Exec) derive() ([]QuestView, Plan, int, error) {
 		return nil, Plan{}, 0, err
 	}
 	diff := e.env.Diff()
+	var sm *smOverlay
+	if e.o.SM {
+		if sm, err = e.smLoad(diff); err != nil {
+			return nil, Plan{}, 0, err
+		}
+		if plan, _, err = e.st.Load(); err != nil { // the load may have imported or repaired
+			return nil, Plan{}, 0, err
+		}
+	}
 	in := Input{Diff: diff, Facts: e.env.Facts(), Plan: plan,
 		Chunks: map[string]ChunkFact{}, Ready: map[string]Word{}}
 	for _, q := range e.b.Quests() {
@@ -175,9 +190,18 @@ func (e *Exec) derive() ([]QuestView, Plan, int, error) {
 					cf.Blocked = rs.blocked
 				}
 			}
+			if sm != nil {
+				cf = sm.apply(q, c, cf, e.rs[k])
+			}
 			in.Chunks[k] = cf
 			in.Ready[k] = e.env.Ready(q, c)
 		}
+	}
+	if sm != nil && sm.dirty() {
+		if err := e.smFlush(sm, diff); err != nil {
+			return nil, Plan{}, 0, err
+		}
+		return e.derive() // the latches or the regression just written are now part of the stored state
 	}
 	vs, err := Derive(e.b, in)
 	if err == nil && !plan.based(diff) {
@@ -232,6 +256,26 @@ func open(vs []QuestView, plan Plan, diff int) []Ref {
 	return out
 }
 
+// open is the package-level open for the Exec: with the run machine only a record with a live run counts, so a
+// finished run (kept in Accepted as the proof that the board ran it) never reopens when its evidence goes back.
+func (e *Exec) open(vs []QuestView, plan Plan, diff int) []Ref {
+	out := open(vs, plan, diff)
+	if !e.o.SM {
+		return out
+	}
+	d := Difficulties[diff]
+	live := out[:0]
+	for _, r := range out {
+		for _, run := range plan.Runs {
+			if run.Quest == r.Quest && run.Chunk == r.Chunk && run.Diff == d && run.Status.Live() {
+				live = append(live, r)
+				break
+			}
+		}
+	}
+	return live
+}
+
 // WaitsFor is the visible reason of a queued chunk: it waits for the one that runs.
 func WaitsFor(running Ref) string { return "waits for " + running.String() }
 
@@ -260,7 +304,7 @@ func (e *Exec) Offers() ([]Offer, error) {
 	if err != nil {
 		return nil, err
 	}
-	busy := len(open(vs, plan, diff)) > 0
+	busy := len(e.open(vs, plan, diff)) > 0
 	var out []Offer
 	for _, v := range vs {
 		q, err := e.b.Quest(v.ID)
@@ -304,6 +348,9 @@ func (e *Exec) Accept(quest, chunk string) error {
 // acceptLocked records an accept; ev (the auto-start controller) makes it an auto record with its log line. Callers
 // hold e.mu and pass the views they just derived.
 func (e *Exec) acceptLocked(vs []QuestView, plan Plan, diff int, quest, chunk string, ev *AutoEvent) error {
+	if e.o.SM {
+		return e.smAccept(vs, diff, quest, chunk, ev)
+	}
 	if _, cur, ok := chunkView(vs, quest, chunk); ok && (cur.State == Accepted || cur.State == InProgress || cur.State == Awaiting) {
 		return nil // the same tap again is a no-op
 	}
@@ -317,7 +364,7 @@ func (e *Exec) acceptLocked(vs []QuestView, plan Plan, diff int, quest, chunk st
 			return e.acceptChainLocked(vs, diff, quest, append(chain, chunk), "")
 		}
 	}
-	if o := open(vs, plan, diff); len(o) > 0 {
+	if o := e.open(vs, plan, diff); len(o) > 0 {
 		return fmt.Errorf("questboard: %s is already accepted; finish or stop it first (one chunk at a time)", o[0])
 	}
 	if err := CanStart(vs, quest, chunk); err != nil {
@@ -489,6 +536,9 @@ func (e *Exec) Cancel(quest, chunk string) error {
 	if !e.o.Enabled {
 		return ErrOff
 	}
+	if e.o.SM {
+		return e.smCancel(q, c)
+	}
 	deps := e.dependantsLocked(quest, chunk)
 	if err := e.st.Cancel(quest, chunk, e.env.Diff()); err != nil {
 		return err
@@ -512,9 +562,12 @@ func (e *Exec) Reset() {
 	vs, plan, diff, err := e.derive()
 	var act []Ref
 	if err == nil {
-		act = open(vs, plan, diff)
+		act = e.open(vs, plan, diff)
 	}
 	e.rs = map[string]*runState{}
+	if e.o.SM && err == nil {
+		e.smRetryAll() // the player's Reset is the one explicit way a stored park is cleared
+	}
 	e.mu.Unlock()
 	for _, r := range act {
 		if q, qerr := e.b.Quest(r.Quest); qerr == nil {
@@ -533,6 +586,9 @@ func (e *Exec) Pause(on bool) { e.mu.Lock(); e.paused = on; e.mu.Unlock() }
 func (e *Exec) Unblock(quest, chunk string) {
 	e.mu.Lock()
 	delete(e.rs, ChunkKey(quest, chunk))
+	if e.o.SM {
+		e.smRetry(quest, chunk)
+	}
 	e.mu.Unlock()
 }
 
@@ -556,6 +612,8 @@ type Active struct {
 	StepIdx      int    // index of the first open step in the chunk's list, -1 when none is open (waiting at the NPC)
 	Failures     int
 	Deaths       int
+	Hold         string // the reason code of the hold the chunk is under (quests.boardSM), "" when none
+	HoldWhy      string
 }
 
 // State derives the board now.
@@ -570,7 +628,7 @@ func (e *Exec) State() (Status, error) {
 		return Status{}, err
 	}
 	st := Status{Enabled: true, Paused: e.paused, Diff: diff, Views: vs}
-	o := open(vs, plan, diff)
+	o := e.open(vs, plan, diff)
 	if len(o) == 0 {
 		return st, nil
 	}
@@ -579,6 +637,7 @@ func (e *Exec) State() (Status, error) {
 	a := &Active{Quest: r.Quest, Chunk: r.Chunk, State: c.State, Step: c.StepName, Why: c.Why, StepIdx: c.Step}
 	if rs := e.rs[ChunkKey(r.Quest, r.Chunk)]; rs != nil {
 		a.Failures, a.Deaths = rs.failures, rs.deaths
+		a.Hold, a.HoldWhy = rs.hold, rs.holdWhy
 	}
 	st.Active, st.Extra = a, o[1:]
 	return st, nil
@@ -617,15 +676,15 @@ func (e *Exec) Next() (Decision, error) {
 	if err != nil {
 		return Decision{}, err
 	}
-	o := open(vs, plan, diff)
+	o := e.open(vs, plan, diff)
 	if len(o) == 0 {
 		return Decision{Kind: DecIdle}, nil
 	}
-	if e.repairLocked(vs, plan, diff, o[0]) {
+	if !e.o.SM && e.repairLocked(vs, plan, diff, o[0]) { // with the machine the repair is the load step (store_sm.go)
 		if vs, plan, diff, err = e.derive(); err != nil {
 			return Decision{}, err
 		}
-		o = open(vs, plan, diff)
+		o = e.open(vs, plan, diff)
 	}
 	r := o[0]
 	_, c, _ := chunkView(vs, r.Quest, r.Chunk)
@@ -653,7 +712,12 @@ func (e *Exec) Report(d Decision, res StepResult) {
 	defer e.mu.Unlock()
 	k := ChunkKey(d.Quest, d.Chunk)
 	rs := e.state(k)
+	if res.Outcome != StepHeld {
+		rs.hold, rs.holdWhy, rs.holdFrom = "", "", time.Time{} // anything but a hold lifts it
+	}
 	switch res.Outcome {
+	case StepHeld:
+		e.holdLocked(d, rs, res)
 	case StepRan:
 		rs.started, rs.failures = true, 0
 	case StepFailed:
@@ -663,6 +727,7 @@ func (e *Exec) Report(d Decision, res StepResult) {
 		if rs.failures >= e.o.MaxFailures {
 			rs.blocked = fmt.Sprintf("gave up after %d tries: %s", rs.failures, nonEmpty(res.Why, "the step kept failing"))
 			e.o.Log("quest board: parked "+k, "chunk", k, "why", rs.blocked)
+			e.smPark(d.Quest, d.Chunk, "gave_up", rs)
 		}
 	case StepDied:
 		rs.started = true
@@ -671,6 +736,7 @@ func (e *Exec) Report(d Decision, res StepResult) {
 		if rs.deaths >= e.o.MaxDeaths {
 			rs.blocked = fmt.Sprintf("died %d times on this part: %s", rs.deaths, rs.lastWhy)
 			e.o.Log("quest board: parked "+k, "chunk", k, "why", rs.blocked)
+			e.smPark(d.Quest, d.Chunk, "died_too_often", rs)
 		}
 	}
 }
@@ -801,7 +867,9 @@ func (e *Exec) HandIn(ctx context.Context, quest, chunk string) (HandInResult, e
 	res.Outcome = HandInBlocked
 	res.Why = fmt.Sprintf("hand-in failed %d times: %s", res.Attempts, last)
 	e.mu.Lock()
-	e.state(ChunkKey(quest, chunk)).blocked = res.Why
+	rs := e.state(ChunkKey(quest, chunk))
+	rs.blocked = res.Why
+	e.smPark(quest, chunk, "handin_failed", rs)
 	e.mu.Unlock()
 	e.o.Log("quest board: parked "+ChunkKey(quest, chunk), "chunk", ChunkKey(quest, chunk), "why", res.Why)
 	return res, nil

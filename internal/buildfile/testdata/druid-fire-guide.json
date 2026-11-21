@@ -1,0 +1,30 @@
+{
+  "schema": "didle.build/1",
+  "name": "druid_fire_guide",
+  "class": "druid",
+  "author": "druid1",
+  "source": "docs/design/fable-review-2026-11-19/03-classes-plan.md section 3.5 D1 Fire, Normal (the recommended first Druid build); docs/classes/druid.md section 1 and 3 (Maxroll Druid leveling, V: Firestorm 1-5, Molten Boulder 6-7, Firestorm 8-11, Fissure from 12); the shipped druid_fire_normal30 table",
+  "notes": "No respec (the Maxroll respec to Tornado and Hurricane at clvl 38 is not used: both are unsupported rows). Fissure is Eruption in skills.txt. Firestorm to 5, Molten Boulder 2 (the prerequisite of Eruption), Firestorm to 9, Eruption from clvl 12; Oak Sage at 16 for a tanking spirit, Arctic Blast and Cyclone Armor 1 each as the cheap absorb (the engine casts Cyclone Armor from its buff ladder), Eruption to 10, Volcano 1 at 24 (V skills.txt: reqlevel 24, needs Eruption; cast by no band yet), then Molten Boulder, Firestorm and Eruption to 20. Shapeshift skills, Tornado, Hurricane and Armageddon are NOT in this file (unsupported rows). Stats: Vitality to 75 (clvl 2 to 11), Strength to 25 (12, 13), Vitality to 115 (14 to 21), Strength to 50 (22 to 26), the rest Vitality (V Maxroll, U that 26 and later fit a bot).",
+  "skills": [
+    {"skill": "Firestorm", "to": 5},
+    {"skill": "Molten Boulder", "to": 2},
+    {"skill": "Firestorm", "to": 9},
+    {"skill": "Eruption", "to": 4, "when": {"clvl": 12}},
+    {"skill": "Oak Sage", "to": 1, "when": {"clvl": 16}},
+    {"skill": "Arctic Blast", "to": 1, "when": {"clvl": 17}},
+    {"skill": "Cyclone Armor", "to": 1, "when": {"clvl": 18}},
+    {"skill": "Eruption", "to": 10},
+    {"skill": "Volcano", "to": 1, "when": {"clvl": 24}},
+    {"skill": "Molten Boulder", "to": 6},
+    {"skill": "Firestorm", "to": 17},
+    {"skill": "Eruption", "to": 20}
+  ],
+  "stats": [
+    {"stat": "vit", "to": 75},
+    {"stat": "str", "to": 25},
+    {"stat": "vit", "to": 115, "when": {"clvl": 14}},
+    {"stat": "str", "to": 50, "when": {"clvl": 22}},
+    {"stat": "vit", "to": "rest"}
+  ],
+  "quest_points": [{"clvl":8,"skill":1},{"clvl":15,"skill":1},{"clvl":26,"skill":2},{"clvl":38,"skill":1},{"clvl":44,"skill":1},{"clvl":56,"skill":2},{"clvl":68,"skill":1},{"clvl":72,"skill":1},{"clvl":82,"skill":2}]
+}
