@@ -68,6 +68,12 @@ func (p Policy) norm() Policy {
 type Hooks struct {
 	OnStart func(s Step)
 	OnEnd   func(s Step, r Result)
+	// Progress reports how far the current area is explored (percent); ok is false where that is not measured (town, a
+	// backend that does not roam). A step that times out while it explored nothing new is not extended.
+	Progress func() (pct int, ok bool)
+	// OnTimeout is told of every step timeout: n counts them for the step, pct is the exploration at that moment (-1
+	// unknown), extend says the step runs once more, otherwise it is given up (skipped or parked with the reason).
+	OnTimeout func(s Step, n, pct int, extend bool)
 }
 
 // Executor runs one decision per Tick. It holds only failure counters, never a cursor.
@@ -81,6 +87,7 @@ type Executor struct {
 
 	fails    map[string]int
 	timeouts map[string]int
+	startPct int // exploration percent when the running step started, -1 unknown
 	deaths   map[string]int
 	assumed  map[string]bool // steps whose Do succeeded but Need stays true on EvProxy/EvNone only
 	skipped  map[string]bool
@@ -351,6 +358,12 @@ func (e *Executor) run(ctx context.Context, w World, plan Plan, s Step, r Result
 	if e.Hooks.OnStart != nil {
 		e.Hooks.OnStart(s)
 	}
+	e.startPct = -1
+	if e.Hooks.Progress != nil {
+		if pct, ok := e.Hooks.Progress(); ok {
+			e.startPct = pct
+		}
+	}
 	err := s.Do(runCtx, e.Act)
 	// A deadline on the caller's ctx (the Runner's step budget) is an overrun and counts as a timeout; a plain cancel
 	// (the Runner's guard) is not the step's fault.
@@ -509,11 +522,35 @@ func (e *Executor) handleRunFault(plan Plan, s Step, f *Fault, r Result) Result 
 		return r
 	case KindTimeout:
 		e.timeouts[s.ID]++
-		if e.timeouts[s.ID] <= pol.MaxTimeouts {
+		n, pct := e.timeouts[s.ID], -1
+		if e.Hooks.Progress != nil {
+			if p, ok := e.Hooks.Progress(); ok {
+				pct = p
+			}
+		}
+		// One extension, and only while the step still made exploration progress: a step that spins in a level it cannot
+		// finish must not run forever (live: Dark Wood waypoint step, an hour of exploring).
+		stalled := pct >= 0 && e.startPct >= 0 && pct <= e.startPct
+		extend := n <= pol.MaxTimeouts && !stalled
+		if e.Hooks.OnTimeout != nil {
+			e.Hooks.OnTimeout(s, n, pct, extend)
+		}
+		if extend {
 			r.Outcome = OutRetry
 			return r
 		}
-		return e.escape(plan, s, r, "timeout: "+f.Why)
+		why := fmt.Sprintf("step timeout %d", n)
+		if pct >= 0 {
+			why += fmt.Sprintf(" (explored %d%%)", pct)
+		}
+		if stalled {
+			why += ", no exploration progress"
+		}
+		r = e.escape(plan, s, r, why)
+		if r.Outcome == OutSkipped {
+			r.Attention = fmt.Sprintf("skipped: %s (%s): %s", s.Title, s.ID, why) // optional step: visible in the task log
+		}
+		return r
 	case KindPrereq, KindResource, KindDanger:
 		if f.Kind == KindDanger && e.strike(plan.Group, "too weak for "+s.Title) {
 			return e.block(plan, s, r, e.strikes[plan.Group].why)

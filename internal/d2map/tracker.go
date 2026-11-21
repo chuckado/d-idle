@@ -35,7 +35,7 @@ type LevelMap struct {
 func (l *LevelMap) Waypoints() []Preset {
 	var out []Preset
 	for _, p := range l.Presets {
-		if p.Kind == PresetObject && IsWaypointObject(p.ID) {
+		if p.Kind == PresetObject && (p.Waypoint || IsWaypointObject(p.ID)) {
 			out = append(out, p)
 		}
 	}

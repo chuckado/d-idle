@@ -168,6 +168,13 @@ func (r *Runner) ensureTaskExecutor(c control) {
 	ex := task.NewExecutor(taskEnv{r}, taskActs{r, c})
 	ex.Now = r.e.Clock.Now // strike expiry on the env clock: virtual under d2d lockstep (docs/d2d-determinism.md), wall on Game.exe as before
 	ex.Hooks.OnStart = func(s task.Step) { r.noTP.Store(s.Constraints.NoTownPortal) }
+	ex.Hooks.Progress = func() (int, bool) {
+		_, _, pct, _, ok := r.Explored()
+		return pct, ok
+	}
+	ex.Hooks.OnTimeout = func(s task.Step, n, pct int, extend bool) {
+		r.e.Log.Info("step timeout", "step", s.ID, "n", n, "explored", pct, "extend", extend)
+	}
 	ex.Hooks.OnEnd = func(s task.Step, res task.Result) {
 		r.noTP.Store(false)
 		if res.Outcome == task.OutInterrupted {
