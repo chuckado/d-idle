@@ -15,7 +15,7 @@ One function runs one fixed list. `Town.Chores` (V `internal/town/chores.go:336-
 | 4 | equip | always | `needEquipFound` | empty slots |
 | 5 | sell | `Sell` and `town.sellJunk`, or any player sell mark | `needSell` `chores.go:505-508` -> `sellableIf` `internal/town/shop.go:642-709` | pickit verdicts, marks, pack fullness |
 | 6 | ammo | `Ammo` | `ammoTodo` | launcher, stacks |
-| 7 | beltbuy | `Potions` | `needBelt` (buys a belt ITEM from `town.beltBuyLevel` 10; it is not a potion step) | worn belt, gold |
+| 7 | beltbuy | `Potions` | `needBelt` `internal/town/beltbuy.go:20-31` (buys a belt ITEM from `town.beltBuyLevel` 10, and only when the bot decides gear, which is not the default; it is not a potion step) | worn belt, gold |
 | 8 | repair | `Repair` | `needRepair` `chores.go:204-224` | durability, estimate, repair gate, purse and stash |
 | 9 | belt | `Potions` | `NeedsBeltFill` `internal/town/beltfill.go:93-99` | pack potions the belt plan has room for |
 | 10 | bank | `Gold` | `needBank` `basicsfix.go:98-100` | purse above `goldKeep` (`internal/town/stash.go:124-131`) |
@@ -75,7 +75,7 @@ Gold lines:
 | recovery start / target | 500 / 900 | PURSE only | `recovery.go:62`, `:81`; `broke.go:77` |
 | trip needs gold | `resource.tripMinGold` 60 | purse | `chores.go:40` |
 | restock free above | `resource.tripGoldFloor` 300 | purse | `shop.go:534-543` |
-| optional buys reserve | `town.minGoldReserve` 100, merc revive reserve | purse | `shop.go:1073` |
+| optional buys reserve | `town.minGoldReserve` 100; merc revive reserve | purse | `shop.go:569`, `:617`, `:932`; `shop.go:1073` |
 | Blood Raven gold | 250 | purse (`World.Gold`) | `gate.go:28`, `:65-70` |
 | antidotes count as kit from | 150 | purse | `gate.go:85` |
 | chunk gold | a boolean `noGold` | | `internal/questboard/def.go:91-93` |
@@ -87,7 +87,7 @@ Each row is a pair (or triple) of rules that cannot both be satisfied, with the 
 
 | id | rule A | rule B | conflict | evidence |
 |---|---|---|---|---|
-| I1 | chores step `Need`: healing (belt + pack) `< 4` (`steps.go:104`) | shop buys the BELT PLAN shortfall only (`chores.go:174-187`) | Structural. The class plans are `[hp hp hp mp]` (mana need 1) and `[hp hp mp mp]` (mana need 2) below clvl 31 (`internal/resource/potion.go:150-165`). On a 4-slot belt the healing capacity is 3 or 2. With no spare healing potion in the pack the step runs, buys to 3, is "still needed" and ends as `needs_attention` (`internal/task/executor.go:395`, `:485`). | V structure. V run 20261120-200952-46d2 and -192148-b1a8: "3 healing potions < 4", "healing potions 3/4 with a 3+1 belt" (`docs/probes/provingground-act1more-2026-11-20.md` finding 2). |
+| I1 | chores step `Need`: healing (belt + pack) `< 4` (`steps.go:104`) | shop buys the BELT PLAN shortfall only (`chores.go:174-187`) | Structural. The class plans are `[hp hp hp mp]` (mana need 1) and `[hp hp mp mp]` (mana need 2) below clvl 31 (`internal/resource/potion.go:150-165`). On a 4-slot belt the healing capacity is 3 or 2 (and the bot buys a bigger belt only when it decides gear, A1 row 7). With no spare healing potion in the pack the step runs, buys to 3, is "still needed" and ends as `needs_attention` (`internal/task/executor.go:395`, `:485`). | V structure. V run 20261120-200952-46d2 and -192148-b1a8: "3 healing potions < 4", "healing potions 3/4 with a 3+1 belt" (`docs/probes/provingground-act1more-2026-11-20.md` finding 2). |
 | I2 | guard and gates want 4 healing (`route.go:169`, `gate.go:182-184`) | the same shop target | Same mechanism at the guard: `gateReady` inserts a chores step (`gate.go:249`), which is I1. The hero then idles in town with gold. | V countess finding 4 (700 gold, 3 healing, 25 virtual minutes idle, `docs/probes/provingground-countess-2026-11-20.md`). |
 | I3 | sell: a full pack keeps `spareKeep` 4 per code; below-floor potions are plain junk | guard counts every healing potion in the pack | The visit that should prepare the hero lowers the count the guard reads. | V countess finding 1 ("28 sold", pack healing 16 to 4) and 2 (Minor potions sold first). |
 | I4 | step 5 `sell` runs before step 9 `belt` | belt fill would have belted some of those potions | Order: potions leave the pack before the fill looks at them. | V order `chores.go:429`, `:437`. U how often it costs a potion in play. |
