@@ -8,6 +8,25 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into levelobjects <!--sg:agent/levelobjects-->
+- Merge branch 'main' into mouthgate <!--sg:agent/mouthgate-->
+- Merge branch 'main' into andariel1 <!--sg:agent/andariel1-->
+- Merge branch 'main' into TASK-716 <!--sg:agent/wpstep-->
+- Merge branch 'main' into TASK-768 <!--sg:agent/bsm5-->
+- Merge branch 'main' into countess3b <!--sg:agent/countess3b-->
+- agent/bsm4 quest board state machine card <!--sg:agent/bsm4-->
+- agent/bsm3 quest board state machine card <!--sg:agent/bsm3-->
+- agent/bsm2 quest board state machine card <!--sg:agent/bsm2-->
+- town planner stage 1 and 2 record (docs only) <!--sg:agent/townprobe-->
+- bsm1: quest board SM scenarios and assert kinds <!--sg:agent/bsm1-->
+- town4: stage 2 guards, chunk preconditions and shop read the supply plan behind town.plan>=2 (default 0) <!--sg:agent/town4-->
+- town3: supply NeedFor/Solve, profiles, knob town.plan default 0, stage 1 shadow trace (no behaviour change) <!--sg:agent/town3-->
+- town2: internal/supply one potion counter, bot and town counters call it (no behaviour change at stage 0) <!--sg:agent/town2-->
+- town1: planner scenarios (12 B4 sketches) and belt_at_least assertion, not run <!--sg:agent/town1-->
+- pgcards: 16 Proving Ground and merge gate cards <!--sg:agent/pgcards-->
+- Merge branch 'main' into fabledecisions2 <!--sg:agent/fabledecisions2-->
+- combatcards: 17 dlv-* combat-engine cards (docs/backlog only) <!--sg:agent/combatcards-->
+- town planner: 12 migration cards TASK-746..765 (docs/backlog only) <!--sg:agent/towncards-->
 - Merge branch 'main' into chores2 <!--sg:agent/chores2-->
 - Merge branch 'main' into druid1 <!--sg:agent/druid1-->
 - board scenario assertions fixed, probe note <!--sg:agent/boardorder4-->

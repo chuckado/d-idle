@@ -57,6 +57,7 @@ type Town struct {
 	h     *hand.Hand
 
 	kitHealing    int            // ChorePlan.KitHealing of the visit under way
+	kitMana       int            // ChorePlan.KitMana of the visit under way
 	reserveGold   int            // ChorePlan.ReserveGold of the visit under way: optional shop buys stay above it
 	sellMarksOnly bool           // set while a visit sells the player's marks but not the pickit's junk
 	marks         ItemMarks      // the player's sell and keep marks (SetItemMarks)
@@ -260,9 +261,11 @@ type ChorePlan struct {
 	Force                                                       bool
 	ReserveGold                                                 int            // > 0: the shop leaves this much for the merc revive (tome, spare scrolls and mana potions only buy above it)
 	KitHealing                                                  int            // > 0: the shop also buys healing (into the pack when the belt plan is full) until belt and pack hold this many (the route guard kit, task chores)
+	KitMana                                                     int            // > 0: the same for mana potions (belt and pack), set at town.plan >= 2
 	PotionFloor                                                 int            // > 0: buy healing potions only up to this many in the belt, no mana or rejuvenation (recovery keeps the gold for the kit)
 	Cube                                                        bool           // gem and rune cube upgrades (cubejobs.go); the Tuning.Bot.CubeJobs knob decides in the adapter
 	CubeKeep                                                    map[string]int // item codes the cube chore must not consume
+	Profile                                                     string         // supply profile of the next excursion for the town plan (internal/supply; empty = field); only read while town.plan > 0
 }
 
 // FullPlan is every chore.

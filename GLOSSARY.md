@@ -474,3 +474,27 @@ The town action that removes a stack of marks (a cube recipe at first) and credi
 
 **Registry**:
 The data table of currencies (id, scope, name, source, sink, storage, conversion). One worth unit, several scopes and forms; a new currency is a row, not code (ADR 0016, Amendment 2026-11-06).
+
+**Excursion**:
+The next thing the hero leaves town for: a quest chunk, a farm zone, a boss, a recovery farm or a player errand. ADR 0028.
+
+**Supply need**:
+Per item line, a `min` (below it the hero does not leave) and a `target` (what a visit fills to when gold allows), each with the rule that produced it. ADR 0028.
+
+**Supply count**:
+What the hero carries and owns (belt, pack, stash, purse), by the one counter. ADR 0028.
+
+**Town plan**:
+The lines (have, min, target, buy, cost, status), the budget, the ordered stops and the verdict, solved from a supply need and a supply count. Staged by the knob `town.plan`. ADR 0028.
+
+**Verdict (town plan)**:
+`ready`, `ready-lean` (min met, target not), `short-gold` (a min line is unaffordable) or `blocked` (a min line cannot be bought here at any price). ADR 0028.
+
+**Run (quest board)**:
+The stored intent to work a chunk, with a status (`queued`, `running`, `held`, `awaiting`, `handing_in`, `parked`, `finished`, `stopped`); facts stay derived, completion is latched. ADR 0025.
+
+**Stable / quarantined (scenario)**:
+A Proving Ground scenario gates only when `stable`; a verdict flip on unchanged binaries moves it to `quarantined` automatically and a person releases it. ADR 0027.
+
+**Results ledger**:
+The append-only JSONL, one record per Proving Ground run, on the board host; a doc cites a run id. ADR 0027.

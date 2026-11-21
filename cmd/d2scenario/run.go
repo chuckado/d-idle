@@ -341,6 +341,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	st.Source = "d2d-observer-reload"
 	addTrail(&st, trace)
 	addRunFacts(&st, s, r, trace)
+	addBoardFacts(&st, s, trace)
 	res.State = &st
 	return withVerdict(res, scenario.Result{})
 }
@@ -506,7 +507,7 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 		args = append(args, "--managed", "--d2d-class", "-1", "--d2d-args", "--lockstep")
 	}
 	var tap *tapper
-	var apiRun func(context.Context)
+	var apiRun, sampler func(context.Context)
 	if s.Trigger.Driver == scenario.DriverBoardTaps || len(s.Trigger.API) > 0 {
 		tokFile := filepath.Join(data, "wtoken")
 		tok, err := newWatchToken(tokFile)
@@ -527,12 +528,29 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 			tap = newTapper("http://"+view, "http://"+ans, tok, s.TappedQuest(), s.Trigger.TapChunks, tlog)
 		}
 		if len(s.Trigger.API) > 0 {
-			apiRun = func(c context.Context) { runAPICalls(c, "http://"+ans, tok, s.Trigger.API, tlog) }
+			sp, rp := boardFiles(trace)
+			apiRun = func(c context.Context) {
+				replies := runAPICalls(c, "http://"+ans, tok, s.Trigger.API, tlog)
+				if b, err := json.Marshal(replies); err == nil {
+					_ = os.WriteFile(rp, b, 0o644)
+				}
+			}
+			if f, err := os.Create(sp); err == nil {
+				defer f.Close()
+				sampler = func(c context.Context) { sampleBoard(c, "http://"+view, tok, 15*time.Second, f) }
+			}
 		}
 	}
 	tctx, stopTap := context.WithCancel(ctx)
 	defer stopTap()
 	done := make(chan struct{})
+	sdone := make(chan struct{})
+	go func() {
+		defer close(sdone)
+		if sampler != nil {
+			sampler(tctx)
+		}
+	}()
 	go func() {
 		defer close(done)
 		if apiRun != nil {
@@ -549,6 +567,7 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 	err = cmd.Run()
 	stopTap()
 	<-done
+	<-sdone
 	b, _ := os.ReadFile(trace)
 	var taps []string
 	var tapsAt []float64
@@ -614,6 +633,7 @@ func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scen
 	st.Source = "d2d-live-attach"
 	addTrail(&st, trace)
 	addRunFacts(&st, s, r, trace)
+	addBoardFacts(&st, s, trace)
 	res.State = &st
 	res.VirtualMin = s.Budget.VirtualMin
 	_ = prep.Stop()

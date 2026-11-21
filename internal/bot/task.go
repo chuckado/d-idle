@@ -168,6 +168,13 @@ func (r *Runner) ensureTaskExecutor(c control) {
 	ex := task.NewExecutor(taskEnv{r}, taskActs{r, c})
 	ex.Now = r.e.Clock.Now // strike expiry on the env clock: virtual under d2d lockstep (docs/d2d-determinism.md), wall on Game.exe as before
 	ex.Hooks.OnStart = func(s task.Step) { r.noTP.Store(s.Constraints.NoTownPortal) }
+	ex.Hooks.Progress = func() (int, bool) {
+		_, _, pct, _, ok := r.Explored()
+		return pct, ok
+	}
+	ex.Hooks.OnTimeout = func(s task.Step, n, pct int, extend bool) {
+		r.e.Log.Info("step timeout", "step", s.ID, "n", n, "explored", pct, "extend", extend)
+	}
 	ex.Hooks.OnEnd = func(s task.Step, res task.Result) {
 		r.noTP.Store(false)
 		if res.Outcome == task.OutInterrupted {
@@ -348,6 +355,7 @@ func (e taskEnv) World(ctx context.Context) (task.World, error) {
 	in := r.resInput(s)
 	w.Potions += in.Belt.PackHP + in.Belt.PackRV // World.Potions says belt and pack
 	w.HasTP, w.ManaPotions = in.HasTP, in.Belt.MP
+	r.fillKit(&w, s)
 	r.fillAndariel(&w, p.Class)
 	w.AndarielHold = r.e.Tune.Boss.AndarielHold != 0
 	w.Antidotes = r.antidotes(s)
@@ -359,8 +367,12 @@ func (e taskEnv) World(ctx context.Context) (task.World, error) {
 	w.BRHigh = p.Class == d2.Sorceress || p.Class == d2.Druid || p.Class == d2.Amazon
 	w.BR = task.BRKnobs{CasterLevel: bt.BRCasterLevel, MeleeLevel: bt.BRMeleeLevel, Potions: bt.BRPotions, ManaPotions: bt.BRManaPotions, TPCharges: bt.BRTPCharges, Gold: bt.BRGold}
 	w.BRWaitLevel = l.br.waitLvl
+	w.BoardSM = r.e.Tune.Quests.BoardSM != 0
 	if g := r.gearVerdict(s); g.Gated {
 		w.Gated, w.GatedWhy, w.SafeArea = true, g.Reason, task.Area(r.safeFarmArea(s))
+		if !g.Naked && w.Potions == 0 && w.Gold > 0 {
+			w.GatedFix = "potions" // the kit is the only reason and the purse pays for it: a town visit fixes it
+		}
 	}
 	for a := range r.avoidedNow() {
 		if r.avoidWhyOf(a) == whyBorderLoop {
@@ -961,6 +973,9 @@ func (a taskActs) Chores(ctx context.Context) error {
 	plan := a.r.fullChores("task")
 	// the route guard counts belt and pack: buy up to its minimum plus a buffer (the road drinks potions), not only to the belt plan
 	plan.KitHealing = a.r.e.Tune.Resource.KitMinHP + kitHealingBuffer
+	if k := a.r.kitPlanOf(a.r.latest()); k != nil { // town.plan >= 2: the shop buys to the plan's minima, belt plus pack
+		plan.KitHealing, plan.KitMana = k.Healing+kitHealingBuffer, k.Mana
+	}
 	_, err := a.r.d.Town.Chores(ctx, plan)
 	a.r.poll() // the executor confirms the step on the latest snapshot: it must see what was just bought
 	if err != nil {

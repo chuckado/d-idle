@@ -225,3 +225,22 @@ func TestRunVirtualFallsBackToTheWallClock(t *testing.T) {
 		t.Fatalf("log %q", log.String())
 	}
 }
+
+// A quest that is on the board but never startable says why in the taps log, once per change (card andariel1).
+func TestTapperLogsWhyAChunkIsNotStartable(t *testing.T) {
+	b := &board{}
+	srv := httptest.NewServer(b.handler(t))
+	defer srv.Close()
+	var log strings.Builder
+	tp := newTapper(srv.URL, srv.URL, "tok", "sisters_to_the_slaughter", []string{"andariel"}, &log)
+	b.set(`{"quests":[{"id":"sisters_to_the_slaughter","state":"available","chunks":[{"id":"andariel","state":"available","readiness":"too_hard","why":"You have no merc: too hard"}]}]}`)
+	for i := 0; i < 3; i++ {
+		if tap, _, err := tp.Step(context.Background()); err != nil || tap != "" {
+			t.Fatalf("tap %q %v", tap, err)
+		}
+	}
+	got := log.String()
+	if strings.Count(got, "not startable") != 1 || !strings.Contains(got, `readiness "too_hard"`) || !strings.Contains(got, "no merc") {
+		t.Fatalf("log %q", got)
+	}
+}

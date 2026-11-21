@@ -56,6 +56,7 @@ type boardRT struct {
 	near     map[string]bool      // walked to the giver once this process
 	lastFail map[string]time.Time // chunk key: last failure that was counted
 	noted    map[string]string    // visible-reason log lines already written
+	unpark   map[string]bool      // task groups the executor must lift the block of (Retry, knob quests.boardSM): the loop goroutine applies it
 	applied  string               // the between-chunks mode the hero acts on (boardmode.go); "" before the first tick
 	farming  bool                 // inside a farm-mode slice: the area choice farms
 	queued   string               // why an accepted chunk is not running yet ("" when it runs or none is accepted)
@@ -76,9 +77,10 @@ func (r *Runner) NewQuestBoard(b *questboard.Board, st *questboard.Store) *quest
 
 func (r *Runner) newQuestBoard(b *questboard.Board, st *questboard.Store, hero string) *questboard.Exec {
 	rt := &boardRT{r: r, board: b, st: st, hero: hero, reqs: make(chan boardHandInReq, 1), handed: map[string]bool{}, reached: map[string]bool{}, near: map[string]bool{},
-		lastFail: map[string]time.Time{}, noted: map[string]string{}}
+		lastFail: map[string]time.Time{}, noted: map[string]string{}, unpark: map[string]bool{}}
 	rt.exec = questboard.NewExec(b, st, boardEnv{rt}, boardActions{rt}, questboard.Options{
 		Enabled: r.questBoardOn(),
+		SM:      r.e.Tune.Quests.BoardSM != 0,
 		Log:     func(msg string, kv ...any) { r.e.Log.Info(msg, kv...) },
 		Now:     r.e.Clock.Now,
 		Auto:    r.questAutoOptions(),
@@ -613,6 +615,25 @@ func (a boardActions) Stop(q questboard.Quest, c questboard.Chunk) {
 	a.rt.mu.Unlock()
 }
 
+// Unpark is the Retry of a parked chunk: the task executor's own block of the chunk's group has to go too, or the chunk
+// is parked again at the next slice. The executor belongs to the loop goroutine, so the request is queued for it.
+func (a boardActions) Unpark(q questboard.Quest, c questboard.Chunk) {
+	a.rt.mu.Lock()
+	a.rt.unpark[q.HandlerOf(c).Group] = true
+	a.rt.mu.Unlock()
+}
+
+// applyUnparks lifts the requested blocks; it runs on the loop goroutine, the owner of ex.
+func (rt *boardRT) applyUnparks(ex *task.Executor) {
+	rt.mu.Lock()
+	groups := rt.unpark
+	rt.unpark = map[string]bool{}
+	rt.mu.Unlock()
+	for g := range groups {
+		ex.Unpark(g)
+	}
+}
+
 // ---- the loop step ------------------------------------------------------------------------------------
 
 // boardPlan is the task.Planner of the board: the accepted chunk's handler without its hand-in, or the train slice.
@@ -733,6 +754,7 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 	res, ok := r.boardSlice(ctx, snap, c, boardPlan{q: q, c: ch}, "Quest: "+q.Title)
 	out := questboard.StepResult{Outcome: questboard.StepRan}
 	idle := false // nothing ran this tick: the loop must still spend time (below)
+	held := false // a hold: the hero trains instead (below)
 	switch {
 	case r.deadNow() || res.Outcome == task.OutDeath:
 		out = questboard.StepResult{Outcome: questboard.StepDied, Why: nonEmptyStr(whyOf(res), "died on the way")}
@@ -741,6 +763,12 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		if w := whyOf(res); w != "" {
 			r.boardNote("wait "+questboard.ChunkKey(d.Quest, d.Chunk), "quest board: waiting: "+w)
 		}
+	case res.Outcome == task.OutRetry && res.Hold && res.Code != "":
+		// quests.boardSM: a guard refused for a reason that is no failure (potions, ban, too weak, closed road): a hold.
+		// Nothing is counted and the hero trains meanwhile; the board parks it with hold_timeout when it outlives its budget.
+		out = questboard.StepResult{Outcome: questboard.StepHeld, Code: res.Code, Why: nonEmptyStr(whyOf(res), "the step was refused")}
+		held = true
+		r.boardNote("hold "+questboard.ChunkKey(d.Quest, d.Chunk)+" "+res.Code, "quest board: hold "+res.Code+": "+out.Why)
 	case res.Outcome == task.OutRetry && res.Kind == task.KindExploring:
 		// still walking toward an object that is not built yet: progress, so the failure counter stays at zero
 		r.boardNote("explore "+questboard.ChunkKey(d.Quest, d.Chunk), "quest board: "+whyOf(res))
@@ -770,6 +798,9 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		r.boardNote("fail "+k, fmt.Sprintf("quest board: %s: %s", k, out.Why))
 	}
 	rt.exec.Report(d, out)
+	if held {
+		return r.boardTrain(ctx, snap, c)
+	}
 	if idle {
 		// Proving Ground cain.cage (2026-11-19): a free_cain start outside Tristram has no step to run. The tick did nothing,
 		// so under a lockstep clock no time passed, the failure gap above never elapsed and the chunk spun for 17 minutes
@@ -803,6 +834,9 @@ func (r *Runner) boardSlice(ctx context.Context, snap *d2.Snapshot, c control, p
 	l := &r.loop
 	r.ensureTaskExecutor(c)
 	ex := l.task.ex
+	if rt := r.qbRT(); rt != nil {
+		rt.applyUnparks(ex)
+	}
 	env := taskEnv{r}
 	w, err := env.World(ctx)
 	if err != nil {
