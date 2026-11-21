@@ -5,7 +5,7 @@
 // Reveal and Sell (slice V6) also only queue: the price is shown before the click (revealPlan) and the states come from the GET. The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
 // fed the rows as an inventory view); every text comes from /watch/vault.json or the API and goes in through textContent.
 // Every press is read back: the list is fetched again and what it says is what the page shows.
-import { PAGE, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, revealPlan, sellPlan, toQuery, toTipView, when } from '/watch/vault-logic.js';
+import { PAGE, equipPlan, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, revealPlan, sellPlan, toQuery, toTipView, when } from '/watch/vault-logic.js';
 
 export const ROUTE = '/api/vault';
 const POLL_MS = 6000;
@@ -535,6 +535,8 @@ export function mountVault(d) {
     row.append(it.pin ? mk(T.unpin, 'unpin', act.unpin, () => act1('/api/vault/unpin', [it.id])) : mk(T.pin, 'pin', act.pin, () => act1('/api/vault/pin', [it.id])),
       mk(T.discard, 'discard', act.discard, () => openDiscard([it.id], row.lastChild), 'danger'));
     row.appendChild(mk(T.keep, 'keep', act.keep, () => keepAct([it.id], false)));
+    const eqv = S.view && S.view.equip; // one-tap Equip: only when the bot offers it (loot.vaultEquip)
+    if (eqv && eqv.enabled && it.state === 'recorded') { const eb = btn(T.equip, { key: 'd-equip' }); eb.addEventListener('click', () => openEquip(it, eb)); row.appendChild(eb); }
     row.appendChild(mk(T.reveal, 'reveal', act.reveal, () => revealAct([it.id], false)));
     const ra = S.view && S.view.act && S.view.act.reveal;
     if (ra && ra.etherPer > 0 && !ra.free && !it.identified) row.appendChild(mk(fmt(T.revealEtherOne, { cost: ra.etherPer }), 'reveal-ether', { ok: ra.balance >= ra.etherPer, reason: fmt(T.etherShort, { need: ra.etherPer, have: ra.balance }) }, () => etherAct([it.id])));
@@ -751,7 +753,93 @@ export function mountVault(d) {
     go.addEventListener('click', async () => { go.disabled = true; closeSheet(true); await sellAct(ids, false); });
     cancel.focus();
   }
+  // ---- the Equip sheet: what is worn against this item, can-equip with the reason, then one button per way to wear it ----
+  let eqTimer = null;
+  function openEquip(it, opener) {
+    sheetCard.replaceChildren();
+    sheetCard.setAttribute('aria-label', fmt(T.equipTitle, { name: it.name }));
+    S.sheet = { opener, first: null, equip: it.id };
+    sheetWrap.hidden = false;
+    equipDraw(it, null);
+    equipLoad(it);
+  }
+  async function equipLoad(it) {
+    const sh = await d.get('/api/vault/equip/' + encodeURIComponent(it.id));
+    if (!S.sheet || S.sheet.equip !== it.id) return; // closed or another sheet meanwhile
+    equipDraw(it, sh || false);
+    const p = sh ? equipPlan(sh) : null;
+    if (eqTimer && d.clear) d.clear(eqTimer);
+    eqTimer = null;
+    if (p && p.state === 'active' && d.later) eqTimer = d.later(() => equipLoad(it), 3000);
+  }
+  async function equipPress(it, slot, now) {
+    const r = await d.post('/api/vault/equip', { ids: [it.id], slot, now: !!now });
+    if (r && r.ok) setMsg('good', T.equipSent);
+    else setMsg('bad', (r && r.failed && r.failed[0] && r.failed[0].error) || (r && r.error) || T.noAnswer);
+    await reload(true);
+    equipLoad(it);
+  }
+  function equipDraw(it, sh) {
+    sheetCard.replaceChildren();
+    sheetCard.appendChild(el('h2', '', fmt(T.equipTitle, { name: it.name })));
+    const close = btn(T.equipClose, { key: 'sheet-cancel', variant: 'ghost' });
+    close.addEventListener('click', () => closeSheet());
+    if (sh === null) { sheetCard.appendChild(el('p', '', T.equipLoading)); sheetCard.appendChild(close); if (S.sheet) S.sheet.first = close; return; }
+    if (sh === false) { sheetCard.appendChild(el('p', '', T.equipNone)); sheetCard.appendChild(close); if (S.sheet) S.sheet.first = close; return; }
+    const pl = equipPlan(sh);
+    const st = el('p', 'vt-eq-state'); st.setAttribute('role', 'status'); st.dataset.state = pl.state;
+    if (pl.state === 'off') st.textContent = fmt(T.equipOff, { why: pl.offWhy });
+    else if (pl.state === 'blocked') st.textContent = fmt(T.equipBlocked, { why: pl.why });
+    else if (pl.state === 'reveal') st.textContent = T.equipReveal;
+    else if (pl.order) {
+      const o = pl.order;
+      if (pl.state === 'done') st.textContent = (o.displaced && o.displaced.length ? fmt(T.equipDoneSwap, { slot: o.worn, old: o.displaced.join(', '), where: o.where || 'vault' }) : fmt(T.equipDone, { slot: o.worn }));
+      else if (pl.state === 'failed') st.textContent = fmt(T.equipFailed, { why: o.reason || '' });
+      else st.textContent = T.equipStates[o.state] || o.state;
+    }
+    if (st.textContent) sheetCard.appendChild(st);
+    if (sh.req && sh.req.length) sheetCard.appendChild(el('p', 'vt-eq-req', fmt(T.equipReq, { req: sh.req.join(', ') })));
+    (sh.slots || []).forEach((x) => {
+      const box = el('div', 'vt-eq-slot'); box.dataset.slot = x.slot;
+      box.appendChild(el('h3', '', x.label));
+      const w = el('p', 'vt-eq-worn', x.worn ? T.equipWorn + ': ' + x.worn.name : T.equipWorn + ': ' + T.equipEmpty); box.appendChild(w);
+      if (x.worn && x.worn.lines && x.worn.lines.length) { const ul = el('ul', 'vt-eq-lines'); x.worn.lines.forEach((l) => ul.appendChild(el('li', '', l))); box.appendChild(ul); }
+      box.appendChild(el('p', 'vt-eq-can', x.can ? T.equipCan : fmt(T.equipCant, { why: x.why || '' })));
+      const up = equipUpgradeWord(x);
+      if (x.can && x.worn) box.appendChild(el('p', 'vt-eq-up', up === 'better' ? T.equipBetter : up === 'worse' ? T.equipWorse : T.equipUnknown));
+      if (x.note) box.appendChild(el('p', 'vt-eq-note', x.note));
+      sheetCard.appendChild(box);
+    });
+    const recall = el('label', 'vt-label'); const cb = el('input'); cb.type = 'checkbox'; cb.dataset.key = 'equip-recall'; recall.append(cb, doc.createTextNode(' ' + T.equipRecall));
+    const row = el('div', 'vt-row'); row.dataset.key = 'equip-row';
+    if (pl.state === 'ready') {
+      pl.buttons.forEach((b) => {
+        const label = b.slot === 'auto' ? (pl.ring ? T.equipGoAuto : T.equipGo) : b.slot === 'left' ? T.equipGoLeft : T.equipGoRight;
+        const bb = btn(label, { key: 'equip-' + b.slot, variant: b.slot === 'auto' ? undefined : 'ghost' });
+        if (!b.can) { bb.setAttribute('aria-disabled', 'true'); bb.title = b.why; }
+        bb.addEventListener('click', () => { if (b.can) equipPress(it, b.slot, cb.checked); });
+        row.appendChild(bb);
+      });
+      sheetCard.appendChild(recall);
+    } else if (pl.state === 'reveal') {
+      const rb = btn(T.equipRevealGo, { key: 'equip-reveal' });
+      rb.addEventListener('click', () => { closeSheet(true); revealAct([it.id], false); });
+      row.appendChild(rb);
+    } else if (pl.state === 'active') {
+      const cx = btn(T.equipCancel, { key: 'equip-cancel', variant: 'ghost' });
+      cx.addEventListener('click', async () => { const r = await d.post('/api/vault/equipcancel', { ids: [it.id] }); if (!(r && r.ok)) setMsg('bad', (r && r.failed && r.failed[0] && r.failed[0].error) || T.noAnswer); await reload(true); equipLoad(it); });
+      row.appendChild(cx);
+    }
+    const take = btn(T.equipTakeOut, { key: 'equip-takeout', variant: 'ghost' });
+    take.addEventListener('click', () => { closeSheet(true); keepAct([it.id], false); });
+    if (pl.state !== 'active' && pl.state !== 'done') row.appendChild(take);
+    row.appendChild(close);
+    sheetCard.appendChild(row);
+    sheetCard.appendChild(el('p', 'vt-eq-help', T.equipNote));
+    if (S.sheet) S.sheet.first = close;
+  }
   function closeSheet(noFocus) {
+    if (eqTimer && d.clear) { d.clear(eqTimer); eqTimer = null; }
     if (!S.sheet) return;
     const o = S.sheet.opener; S.sheet = null; sheetWrap.hidden = true; sheetCard.replaceChildren();
     if (noFocus !== true && o && o.focus) o.focus();

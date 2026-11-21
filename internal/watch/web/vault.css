@@ -126,6 +126,14 @@
   .vt-row { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--d-sp-2); }
   .vt-row .d-btn { align-items: center; }
   .vt-nojs { padding: var(--d-sp-4); }
+  .vt-eq-state { font-weight: 600; }
+  .vt-eq-slot { display: grid; gap: var(--d-sp-1); padding: var(--d-sp-2); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-2); }
+  .vt-eq-slot h3 { margin: 0; font-size: var(--d-fs-2); }
+  .vt-eq-slot p, .vt-eq-lines { margin: 0; overflow-wrap: anywhere; }
+  .vt-eq-lines { padding-inline-start: 1.1rem; }
+  .vt-eq-help, .vt-eq-note, .vt-eq-req { color: var(--d-text-2); font-size: var(--d-fs-1); }
+  .vt-sheet-card .vt-row { flex-wrap: wrap; }
+  .vt-sheet-card .vt-row .d-btn { flex: 1 1 9rem; min-block-size: 2.75rem; }
 }
 
 /* A phone is a page (card mobilequests, 2026-11-21: "can't scroll down"): the frame of 100dvh whose header ate the screen and left the grid a
