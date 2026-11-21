@@ -126,4 +126,31 @@
   .vt-row { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--d-sp-2); }
   .vt-row .d-btn { align-items: center; }
   .vt-nojs { padding: var(--d-sp-4); }
+  .vt-eq-state { font-weight: 600; }
+  .vt-eq-slot { display: grid; gap: var(--d-sp-1); padding: var(--d-sp-2); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-2); }
+  .vt-eq-slot h3 { margin: 0; font-size: var(--d-fs-2); }
+  .vt-eq-slot p, .vt-eq-lines { margin: 0; overflow-wrap: anywhere; }
+  .vt-eq-lines { padding-inline-start: 1.1rem; }
+  .vt-eq-help, .vt-eq-note, .vt-eq-req { color: var(--d-text-2); font-size: var(--d-fs-1); }
+  .vt-sheet-card .vt-row { flex-wrap: wrap; }
+  .vt-sheet-card .vt-row .d-btn { flex: 1 1 9rem; min-block-size: 2.75rem; }
+}
+
+/* A phone is a page (card mobilequests, 2026-11-21: "can't scroll down"): the frame of 100dvh whose header ate the screen and left the grid a
+   sliver becomes one document that scrolls with the finger, no inner scroll box; the notice rows show two lines and open on a tap. */
+@layer utilities {
+  @media (max-width: 699px) {
+    .vt, .vt-page { block-size: auto; min-block-size: 100dvh; }
+    .vt-body, .vt-main { overflow: visible; min-block-size: auto; }
+    .vt-filters[data-open="1"] .vt-fpanel { max-block-size: none; overflow: visible; }
+    .vt-keeprow .vt-keepline, .vt-keeprow > span, .vt-msg { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; cursor: pointer; }
+    .vt-keeprow[data-open="1"] .vt-keepline, .vt-keeprow[data-open="1"] > span, .vt-msg[data-open="1"] { display: block; -webkit-line-clamp: none; overflow: visible; }
+  }
+}
+
+@layer panels {
+  /* the quick filter row: one line that scrolls sideways on its own (pan-y stays with the page), so it never traps the page's scroll */
+  .vt-slots { flex: none; display: flex; gap: var(--d-sp-2); padding: var(--d-sp-2) var(--d-sp-4); overflow-x: auto; touch-action: pan-x pan-y; scrollbar-width: none; border-block-end: var(--d-bw) solid var(--d-line); background: var(--d-surface-0); }
+  .vt-slot { flex: none; min-block-size: 44px; align-items: center; white-space: nowrap; border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-round); padding-inline: var(--d-sp-3); }
+  .vt-slot[aria-pressed="true"] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
 }

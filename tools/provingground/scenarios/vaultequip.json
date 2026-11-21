@@ -1,0 +1,403 @@
+{
+  "version": "didle.scenario/1",
+  "scenarios": [
+    {
+      "id": "vault.equip-one-tap",
+      "title": "One tap on a Vault helm with the head slot empty: worn within minutes, gone from the Vault, nothing dropped",
+      "kind": "behaviour",
+      "tier": "fast",
+      "status": "pending",
+      "pending_reason": "the runner has no setup for a vault record (Items where=vault: give the item, read its bytes with `item full`, `item vault` it, write the record into the hero's vault store) nor for a worn start item (where=body), and does not substitute the record id into trigger.api bodies ({{vault.1}}); the bot side, the order API and the offline tests are done (docs/vault.md, Equip)",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 14,
+        "gold": 500,
+        "items": [
+          {
+            "code": "cap",
+            "where": "vault",
+            "quality": 4
+          }
+        ]
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.1}}"
+              ],
+              "slot": "auto"
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 8
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 14 and the given items by the debug give verb; the vault record is made from a given item. Not evidence about balance or parity.",
+      "notes": "Paladin and Sorceress both wear a helm (cap, S). The vault record leaves the live state (kept): U, needs the vault observer.",
+      "assert": [
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "body",
+          "why": "the helm is worn"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "pack",
+          "max": 0,
+          "min": 0,
+          "why": "it is not left in the backpack"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in head",
+          "why": "the bot logged the verified equip"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "(drop|trash|sold|sell).*cap",
+          "max": 0,
+          "why": "nothing was dropped or sold"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    },
+    {
+      "id": "vault.equip-swap",
+      "title": "One tap on a Vault helm while another is worn: the old one lands in the Vault, nothing dropped or sold",
+      "kind": "behaviour",
+      "tier": "fast",
+      "status": "pending",
+      "pending_reason": "the runner has no setup for a vault record (Items where=vault: give the item, read its bytes with `item full`, `item vault` it, write the record into the hero's vault store) nor for a worn start item (where=body), and does not substitute the record id into trigger.api bodies ({{vault.1}}); the bot side, the order API and the offline tests are done (docs/vault.md, Equip)",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 14,
+        "gold": 500,
+        "items": [
+          {
+            "code": "cap",
+            "where": "body"
+          },
+          {
+            "code": "cap",
+            "where": "vault",
+            "quality": 4
+          }
+        ]
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.1}}"
+              ],
+              "slot": "auto"
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 8
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 14 and the given items by the debug give verb; the vault record is made from a given item. Not evidence about balance or parity.",
+      "notes": "The old helm exists once: in the vault, not in the hero (the offline test TestEquipSwapKeepsTheOldItem pins it).",
+      "assert": [
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "body",
+          "why": "a helm is worn"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in head, .* went to the vault",
+          "why": "the replaced helm went to the vault"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "(drop|trash|sold|sell).*cap",
+          "max": 0,
+          "why": "the replaced helm was not dropped or sold"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    },
+    {
+      "id": "vault.equip-ring-left",
+      "title": "Both ring slots worn, one tap on the left ring button of a Vault ring: that slot swaps, the other is untouched",
+      "kind": "behaviour",
+      "tier": "fast",
+      "status": "pending",
+      "pending_reason": "the runner has no setup for a vault record (Items where=vault: give the item, read its bytes with `item full`, `item vault` it, write the record into the hero's vault store) nor for a worn start item (where=body), and does not substitute the record id into trigger.api bodies ({{vault.1}}); the bot side, the order API and the offline tests are done (docs/vault.md, Equip)",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 14,
+        "gold": 500,
+        "items": [
+          {
+            "code": "rin",
+            "where": "body"
+          },
+          {
+            "code": "rin",
+            "where": "body"
+          },
+          {
+            "code": "rin",
+            "where": "vault",
+            "quality": 4
+          }
+        ]
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.1}}"
+              ],
+              "slot": "left"
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 8
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 14 and the given items by the debug give verb; the vault record is made from a given item. Not evidence about balance or parity.",
+      "notes": "left is the game's left ring slot (lring) and right is rring, the Inventory page's words (S: which one is drawn on which side of the doll is U live).",
+      "assert": [
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in lring",
+          "why": "the chosen ring slot was used"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in rring",
+          "max": 0,
+          "why": "the other ring slot was not touched"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "rin",
+          "where": "body",
+          "min": 2,
+          "why": "both fingers still wear a ring"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    },
+    {
+      "id": "vault.equip-ring-right",
+      "title": "Both ring slots worn, one tap on the right ring button of a Vault ring: that slot swaps, the other is untouched",
+      "kind": "behaviour",
+      "tier": "fast",
+      "status": "pending",
+      "pending_reason": "the runner has no setup for a vault record (Items where=vault: give the item, read its bytes with `item full`, `item vault` it, write the record into the hero's vault store) nor for a worn start item (where=body), and does not substitute the record id into trigger.api bodies ({{vault.1}}); the bot side, the order API and the offline tests are done (docs/vault.md, Equip)",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 14,
+        "gold": 500,
+        "items": [
+          {
+            "code": "rin",
+            "where": "body"
+          },
+          {
+            "code": "rin",
+            "where": "body"
+          },
+          {
+            "code": "rin",
+            "where": "vault",
+            "quality": 4
+          }
+        ]
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.1}}"
+              ],
+              "slot": "right"
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 8
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 14 and the given items by the debug give verb; the vault record is made from a given item. Not evidence about balance or parity.",
+      "notes": "left is the game's left ring slot (lring) and right is rring, the Inventory page's words (S: which one is drawn on which side of the doll is U live).",
+      "assert": [
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in rring",
+          "why": "the chosen ring slot was used"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in lring",
+          "max": 0,
+          "why": "the other ring slot was not touched"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "rin",
+          "where": "body",
+          "min": 2,
+          "why": "both fingers still wear a ring"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    }
+  ]
+}

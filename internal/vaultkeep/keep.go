@@ -73,6 +73,13 @@ type Keeper struct {
 	Ether          *bulkid.EtherPayer                         // identify.etherPerReveal payer; nil or price 0: Ether is not used
 	IdentifyPolicy func() int                                 // identify.policy after the measured-run override (nil: manual)
 
+	// One-tap Equip (equip.go); a nil Hand leaves it off.
+	Hand      Hand
+	EquipPath string                     // the orders file (empty: memory only)
+	EquipOn   func() bool                // loot.vaultEquip; nil counts as on
+	Chain     func(code string) []string // base type chain of an item code, for the record of a displaced item
+
+	eq         equipBook
 	mu         sync.Mutex
 	promptMute time.Time
 	backedUp   bool
@@ -276,7 +283,7 @@ func (k *Keeper) Pending() int {
 	if st == nil {
 		return 0
 	}
-	n := len(st.KeepQueued()) + len(st.SellQueued())
+	n := len(st.KeepQueued()) + len(st.SellQueued()) + k.equipPending()
 	for _, r := range st.RevealQueued() {
 		if r.State == vault.Recorded { // a keep-combined reveal is counted with its keep
 			n++
@@ -334,6 +341,7 @@ type created struct {
 // It returns one log line per notable event. Call it only at a safe moment in town; it checks Ready itself.
 func (k *Keeper) Run(ctx context.Context) []string {
 	lines := k.runKeep(ctx)
+	lines = append(lines, k.runEquip(ctx)...)
 	lines = append(lines, k.runReveal(ctx)...)
 	return append(lines, k.runSell(ctx)...)
 }
