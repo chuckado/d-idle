@@ -309,6 +309,7 @@ cmd/d2bot/survivalwire.go  credit-runner  survC
 cmd/d2bot/survivalwire.go  credit-runner  survfix
 cmd/d2bot/survivalwire.go  credit-runner  survfix2
 cmd/d2bot/survivalwire.go  credit-runner  survreask
+cmd/d2bot/task.go  credit-runner  cainscroll
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/vaultact_test.go  credit-runner  vaultv6
 cmd/d2bot/vaultequip.go  credit-runner  vaultequip
@@ -379,6 +380,7 @@ data/questboard/act1.json  credit-runner  cain45
 data/questboard/act1.json  credit-runner  cain5b
 data/questboard/act1.json  credit-runner  cainfix
 data/questboard/act1.json  credit-runner  cainfix3
+data/questitems  credit-runner  cainscroll
 data/questspec  credit-runner  questspec
 data/unlocks  credit-runner  nocards
 data/unlocks/ladder.json  credit-runner  gearsets
@@ -555,6 +557,7 @@ docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm7
 docs/probes/bot-cpu-2026-11-16.md  credit-runner  botcpu
 docs/probes/bot-cpu-fix-2026-11-16.md  credit-runner  botcpu2
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
+docs/probes/cain-tree-scroll-2026-11-21.md  credit-runner  cainscroll
 docs/probes/cainl0  credit-runner  cainl0
 docs/probes/cainl2  credit-runner  cainl2
 docs/probes/cainl3  live-agent  cainl3
@@ -1279,6 +1282,9 @@ internal/loot/pickup.go  credit-runner  lootwireL4
 internal/loot/pickup.go  credit-runner  vaultfull
 internal/loot/pickup.go  credit-runner  vaultv3
 internal/loot/pickup.go  credit-runner  vaultv6
+internal/loot/questcodes.go  credit-runner  cainscroll
+internal/loot/questcodes_test.go  credit-runner  cainscroll
+internal/loot/rulesadapt.go  credit-runner  cainscroll
 internal/loot/rulesadapt.go  credit-runner  lootwire3
 internal/loot/rulesadapt.go  credit-runner  lootwireL3
 internal/loot/rulesadapt_test.go  credit-runner  lootwireL3
@@ -1463,12 +1469,14 @@ internal/task  credit-runner  town4
 internal/task/act1.go  credit-runner  cain45
 internal/task/act1.go  credit-runner  cain5b
 internal/task/act1.go  credit-runner  cainchain
+internal/task/act1.go  credit-runner  cainscroll
 internal/task/act1.go  credit-runner  quests7b
 internal/task/act2.go  credit-runner  quests7b
 internal/task/act3.go  credit-runner  quests7b
 internal/task/banote_test.go  credit-runner  cainfix3
 internal/task/cainreenter_test.go  credit-runner  cainchain
 internal/task/cainstones_test.go  credit-runner  cain45
+internal/task/cainword_test.go  credit-runner  cainscroll
 internal/task/campaign.go  credit-runner  campaign1
 internal/task/executor.go  credit-runner  botstuck
 internal/task/executor.go  credit-runner  bsm7
@@ -1488,6 +1496,7 @@ internal/task/testdata/plans/act1.txt  credit-runner  cain5b
 internal/task/timeoutpolicy_test.go  credit-runner  wpstep
 internal/task/world.go  credit-runner  cainfix
 internal/task/world.go  credit-runner  cainfix3
+internal/task/world.go  credit-runner  cainscroll
 internal/task/world.go  credit-runner  quests7b
 internal/tidy  credit-runner  tidy
 internal/town  credit-runner  town11
@@ -1518,11 +1527,14 @@ internal/town/playerid.go  credit-runner  vaultreveal
 internal/town/playerstash.go  credit-runner  itemverbs2
 internal/town/playerstash_test.go  credit-runner  towntests
 internal/town/portalonly_test.go  credit-runner  cainchain
+internal/town/questnever_test.go  credit-runner  cainscroll
 internal/town/repairtrip_test.go  credit-runner  repairtrip
 internal/town/shop.go  credit-runner  lootwire3
 internal/town/shop.go  credit-runner  lootwireL4
 internal/town/shop.go  credit-runner  verbs2
 internal/town/sim  credit-runner  beltfix
+internal/town/stashfull.go  credit-runner  cainscroll
+internal/town/tidy.go  credit-runner  cainscroll
 internal/town/tidy.go  credit-runner  lootwireL4
 internal/town/tidy.go  credit-runner  tidy
 internal/town/tidy_test.go  credit-runner  lootwireL4
@@ -2124,6 +2136,7 @@ tools/provingground/scenarios/board.json  credit-runner  bsm7
 tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
+tools/provingground/scenarios/cain.json  credit-runner  cainscroll
 tools/provingground/scenarios/cain.json  credit-runner  wpstep
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/provingground/scenarios/points.json  credit-runner  barb1

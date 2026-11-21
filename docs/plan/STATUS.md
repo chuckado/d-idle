@@ -381,6 +381,7 @@
 | bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
 | mouthgate | proposed | - | `internal/nav` | - |
 | vaultequip | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/equipnow.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/watch/vaultequip_test.go`<br>`tools/provingground/scenarios/vaultequip.json`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/vaultapi.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/keep_test.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`internal/watch/testdata/vault_logic.mjs`<br>`tools/provingground/scenarios/behaviours.json` | - |
+| cainscroll | proposed | - | `docs/probes/cain-tree-scroll-2026-11-21.md`<br>`tools/provingground/scenarios/cain.json`<br>`internal/task/act1.go`<br>`internal/task/world.go`<br>`internal/task/cainword_test.go`<br>`cmd/d2bot/task.go`<br>`internal/loot/questcodes.go`<br>`internal/loot/questcodes_test.go`<br>`internal/loot/rulesadapt.go`<br>`internal/town/stashfull.go`<br>`internal/town/tidy.go`<br>`internal/town/questnever_test.go`<br>`data/questitems` | - |
 | pgledgeron | in-progress | - | `docs/process/pg-ledger-ops.md`<br>`tools/provingground/run.sh`<br>`tools/provingground/pgenv.sh`<br>`tools/provingground/pgenv_test.sh` | - |
 | vaultreveal | proposed | - | `internal/vaultkeep`<br>`internal/bulkid`<br>`internal/watch/vaultapi_gold.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.json`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultapi_gold_test.go`<br>`internal/watch/vaultreveal_ui_test.go`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`internal/watch/testdata/vault_logic.mjs`<br>`internal/env/tuning_loot.go`<br>`internal/town/playerid.go`<br>`docs/knobs.md`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`tools/provingground/scenarios/vaultreveal.json` | - |
 | heavyguard | proposed | - | `tools/lib/heavy-guard.sh`<br>`tools/lib/heavy-guard-test.sh`<br>`tools/uishots.sh`<br>`docs/process/worker-capacity.md` | - |
@@ -424,14 +425,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- caadfa33f 11-21 15:19 `Merge agent/cainscroll: Merge branch 'main' into cainscroll` (cainscroll)
+- 87f94536e 11-21 15:18 `Merge branch 'main' into cainscroll` (-)
 - 72fb9cc59 11-21 15:11 `Merge agent/vaultfull: Full Vault never trims or sells; missed drops; knob loot.vaultAutoTrim` (vaultfull)
 - 943595cdb 11-21 15:10 `Merge branch 'main' into vaultfull` (-)
 - 229170d9d 11-21 15:03 `Merge agent/verbs2: Merge branch 'main' into verbs2` (verbs2)
 - 16104ab89 11-21 15:02 `Merge origin/main into vaultfull` (vaultfull)
 - 4975e5169 11-21 15:01 `Merge branch 'main' into verbs2` (-)
 - d4815b337 11-21 14:54 `Merge agent/autoalloc: Merge branch 'main' into TASK-787` (autoalloc)
+- 58119931c 11-21 14:53 `Merge origin/main into agent/cainscroll` (-)
 - d5bdb2385 11-21 14:53 `Merge branch 'main' into TASK-787` (-)
-- 43dc908bd 11-21 14:47 `Merge agent/vaultpay: Merge branch 'main' into vaultpay` (vaultpay)
-- 934aac430 11-21 14:45 `Merge branch 'main' into vaultpay` (-)
-- 1080b4433 11-21 14:37 `Merge agent/mgmtfast: immediate management: ui.managementFast knob, Recall now, audit doc` (mgmtfast)
 <!-- statusgen:end -->
