@@ -284,7 +284,11 @@ func TestDeskStopOfOneOfTwoAcceptedChunks(t *testing.T) {
 				t.Fatalf("stop stones: %+v", a)
 			}
 			st, _ := r.x.State()
-			if st.Active == nil || st.Active.Chunk != "scroll" || len(st.Extra) != 0 {
+			wantExtra := 0
+			if testSM { // D4: the load added the missing middle part read
+				wantExtra = 1
+			}
+			if st.Active == nil || st.Active.Chunk != "scroll" || len(st.Extra) != wantExtra {
 				t.Fatalf("%+v", st)
 			}
 			if a := d.Cancel(cain, "scroll"); !a.OK || a.Already {
