@@ -165,6 +165,13 @@ Decisions and gaps (I unless tagged):
 - Auto-start flags and modes are built (S6, S8); the Ether award is built in S10 (section Ether below).
 - Not done: the strip's step names are the board's descriptive names, not the handler's (S3 note); restart persistence of `accepted` is V offline (`TestDeskModeAndRestartPersistence`), not live.
 
+### Reason codes and `changed` (card bsm6, `quests.boardSM`; design appendix B.1 and B.2)
+
+- Every chunk row of `quests[].chunks[]` carries `reason: {code, text, remedy}` while the part is live and does not move (`internal/questboard/desk_reason.go`): a queued part `waits_for`, the head under a guard hold its hold code, an awaiting part `handin_wanted` (`handin_in_town` while the dialogue is in flight, an approximation: it also covers the talk itself, S), a parked part its stored park code, a done part still unconfirmed `confirming`. The head that moves has no reason. `running`, `awaiting` and `blocked` carry the same object. The sentence comes from the one table (`sm_reason.go`); a placeholder the producer cannot fill is replaced by the producer's own words.
+- A queued part shows the wire state `accepted` (not `locked`) while it has a run; the page and the scenarios read `accepted` + `waits_for`.
+- `handin_ready` (row reason, no run): the game already counts the field work done (pending bit exact, no record). Start creates the run (it no longer answers "already started"); with the knob off nothing changes.
+- Replies of start, cancel and retry carry `changed: [{quest, chunk, state, reason}]`: every run the verb touched (the chain a Start accepted, the dependants a Stop closed), the state and reason read back after the verb. A repeated verb has `already: true` and no `changed`. V offline by `TestDeskChangedAndReasons`, `TestDeskHandInReady` (Paladin and Sorceress).
+
 ### Live check list for the API (NOT run; needs `quests.board` = 1 and a hidden instance, `tools/live.sh`)
 
 Replace `$H` with the watch address, `$T` with the answer token (never paste it into a log); POST bodies are JSON.

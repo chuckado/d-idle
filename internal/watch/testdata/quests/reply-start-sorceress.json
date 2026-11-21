@@ -1,1 +1,1 @@
-{"ok":true,"reason":"Den of Evil started.","quest":"den_of_evil","chunk":"clear_den","state":"accepted"}
+{"ok":true,"reason":"Den of Evil started.","quest":"den_of_evil","chunk":"clear_den","state":"accepted","changed":[{"quest":"den_of_evil","chunk":"clear_den","state":"accepted"}]}

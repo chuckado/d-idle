@@ -39,6 +39,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0026-combat-engine-capability-table-and-grammar.md](adr/0026-combat-engine-capability-table-and-grammar.md): 0026: Combat engine: one capability table, generated tiers, delivery grammar, reads a player can see
 - [0027-proving-ground-gate-and-night-window.md](adr/0027-proving-ground-gate-and-night-window.md): 0027: Proving Ground gate: assertion digest, tiers, quotas, ledger, quarantine; standing night window
 - [0028-one-supply-need-town-planner.md](adr/0028-one-supply-need-town-planner.md): 0028: One supply need (town planner)
+- [0029-vault-gold-payment.md](adr/0029-vault-gold-payment.md): 0029: The vault gold reveal is paid at once from the stash gold (amends ADR 0014 for one purpose)
 - [adr/README.md](adr/README.md): Architecture decision records
 - [decisions.md](decisions.md): Decisions (user, with date)
 
@@ -879,6 +880,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [ci-runners-worker.md](process/ci-runners-worker.md): CI runners on the worker (status: moved to the private ops repo (d2lod-ops, `docs/process/ci-runners-worker.md`). Not part of the public tree.)
 - [cleanup-plan-20261105.md](process/cleanup-plan-20261105.md): Whole-project cleanup plan (read-only inventory, 2026-11-05) (status: proposal. Nothing in this pass deleted, renamed or pushed anything. Full lists:...)
 - [coderabbit-prescan.md](process/coderabbit-prescan.md): CodeRabbit pre-scan runbook (d-idle repo and the d2decomped fork) (status: current, card crsetup, 2026-11-02. Owner go given 2026-11-02. Nothing here runs until the owner installs...)
+- [combat-reads.md](process/combat-reads.md): Combat read verbs (dlv-reads, TASK-721) (status: current 2026-11-21. Fork side (private forge, branch didle/combat-reads-20261121, tip 81b191a94) built and...)
 - [contracts-after-openspec.md](process/contracts-after-openspec.md): Contracts after OpenSpec: design (status: PROPOSAL, 2026-11-04 (job contractsdesign, docs only). Nothing here is applied. It refines stages 3 to 5...)
 - [coordinator-efficiency.md](process/coordinator-efficiency.md): Coordinator efficiency checklist (status: current (TASK-310; source: docs/research/project-review-2026-11-10.md section 6 and...)
 - [credit.md](process/credit.md): Credit for work carried upstream (status: current (card creditkit, approved by the maintainer 2026-11-02).)
@@ -900,6 +902,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [hammerdin-support.md](process/hammerdin-support.md): Paladin Hammerdin: what the engine plays, and what a later card must build (status: current (card hammer1, 2026-11-20; Fable roadmap Q8, class 3 after the Sorceress fire build and the...)
 - [hooks.md](process/hooks.md): Hooks (change card `hooks`) (status: current since OpenSpec removal stage 5 (2026-11-04): changecheck and `openspec/` are gone; the pre-push...)
 - [layout-read.md](process/layout-read.md): Level layout read (K1, ADR 0022) (status: current (2026-11-20). Tags: V = verified (say how), U = unverified.)
+- [management-fast-path.md](process/management-fast-path.md): Management fast path (audit, lane design, first slice) (status: current (2026-11-21, branch agent/mgmtfast). Built offline and tested; the live RED and green runs are NOT...)
 - [matt-pocock-skills-fit.md](process/matt-pocock-skills-fit.md): Matt Pocock skills plugin: fit for d2lod-bot (PLUGINFIT, 2026-10-30) (status: 2026-10-30 plugin fit; its "tracker = OpenSpec change cards" answer is superseded: OpenSpec is retired for...)
 - [mini-grill.md](process/mini-grill.md): Mini-grill: small and medium decisions asked inline
 - [mpq-data-reading.md](process/mpq-data-reading.md): Reading 1.14d tables with mpq-cat (trap and recipe)
@@ -908,6 +911,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [openspec-reference.md](process/openspec-reference.md): OpenSpec reference (SME notes for setting it up and writing its documents) (status: background notes from 2026-10-30; OpenSpec is retired for new work (user, 2026-11-04). Current truth:...)
 - [openspec-removal-plan.md](process/openspec-removal-plan.md): OpenSpec removal plan (proposal for the user), revised for Backlog.md (status: PROPOSAL, written 2026-11-04 after the user retired OpenSpec for new work; revised the same day after the...)
 - [outside-prs.md](process/outside-prs.md): Outside pull requests: the proposed review gate (status: policy text APPROVED by the maintainer 2026-11-01 (card communitywork); its proposed repository settings...)
+- [pg-ledger-ops.md](process/pg-ledger-ops.md): Proving Ground results ledger: how it is turned on (card pgledgeron) (status: current, 2026-11-21. Code of the ledger line and the status page: `internal/scenario/ledger.go`,...)
+- [pg-ops-mgcache.md](process/pg-ops-mgcache.md): Cached whole-repo gate: measurement, and the nightly uncached race run (card mgcache, TASK-747) (status: current, 2026-11-21. Design: `docs/design/fable-review-2026-11-21/proving-ground-gate.md` sections 4.2 and...)
+- [pg-ops-mglanes.md](process/pg-ops-mglanes.md): Lane policy on the builder: quotas, merge priority, two long slots (card mglanes, TASK-749) (status: current, rolled out 2026-11-21 (warn-only for one day, then enforced). Design:...)
+- [pg-ops-mgwatchdog.md](process/pg-ops-mgwatchdog.md): Merge queue watchdog (card mgwatchdog, TASK-752) (status: current, rolled out 2026-11-21. Design: `docs/design/fable-review-2026-11-21/proving-ground-gate.md`...)
 - [plugin-pin.md](process/plugin-pin.md): Matt Pocock skills plugin: pin
 - [points-verbs-devp14.md](process/points-verbs-devp14.md): Fork additions wanted for stat and skill points (devp14), and what the bot does without them (status: proposal for the fork-rebase routine (card agencyp0, 2026-11-19). Tags: V verified in the source of the...)
 - [proving-ground.md](process/proving-ground.md): The Proving Ground: scenarios that play the real bot and read the game (status: current (card provingground, 2026-11-19). Source: the design review `docs/design/fable-review-2026-11-19/`...)
@@ -990,6 +997,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `probes/`
 
 - [boardorder-2026-11-20.md](probes/boardorder-2026-11-20.md): boardorder scenarios, builder long lane, 2026-11-20 (CHEATED setups: mechanics only)
+- [boardsm-progress-2026-11-21.md](probes/boardsm-progress-2026-11-21.md): Quest board state machine: migration progress (2026-11-21) (status: current. One line per merged card (design `docs/design/fable-review-2026-11-21/quest-board.md` section 5)....)
+- [boardsm-scenarios-2026-11-21.md](probes/boardsm-scenarios-2026-11-21.md): Quest board state machine scenarios, first live run (2026-11-21) (status: current. Tags: V verified (run id named), S secondary, U unverified. Host: the second worker host (16...)
 - [bot-cpu-2026-11-16.md](probes/bot-cpu-2026-11-16.md): Bot CPU bursts in town walks (card botcpu, 2026-11-16) (status: partial. Offline profile only; the live repair-trip profile is a checklist (section 4). Trigger:...)
 - [bot-cpu-fix-2026-11-16.md](probes/bot-cpu-fix-2026-11-16.md): Bot CPU fixes after the live calm-window profile (2026-11-16) (status: current. Follows docs/probes/bot-cpu-live-2026-11-16.md (Ledger.load 30 percent, DB.IsA 14.5 percent). All...)
 - [bot-cpu-live-2026-11-16.md](probes/bot-cpu-live-2026-11-16.md): Bot CPU on the sandbox, live profile (card botcpulive, 2026-11-16) (status: partial. Calm-window profile captured (V); NO profile inside a burst (the built-in profiler is one-shot,...)
@@ -1081,6 +1090,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [paladin-smoke.md](probes/paladin-smoke.md): Paladin smoke (pointer) (status: current. The results of TASK-142 are in `docs/paladinsmoke.md` (the card's owned file); the run scripts,...)
 - [panels-live.md](probes/panels-live.md): Live check of the watch panels against real lockstep runs (panelslive) (status: measured 2026-11-08 (EST). Tags: V verified live (how stated), S code reading, U unverified. Evidence is a...)
 - [pg-gate-group1-2026-11-21.md](probes/pg-gate-group1-2026-11-21.md): Proving Ground gate, first group (2026-11-21) (status: record of the first rollout group of docs/design/fable-review-2026-11-21/proving-ground-gate.md (owner...)
+- [pg-gate-group2-2026-11-21.md](probes/pg-gate-group2-2026-11-21.md): Proving Ground gate, cost-cut group (2026-11-21) (status: record of the second rollout group of docs/design/fable-review-2026-11-21/proving-ground-gate.md (owner...)
 - [postfix-soak1.md](probes/postfix-soak1.md): postfix-soak1: first soak on the fixed bot, Gate 1 shape (2026-10-31) (status: current. Read-only analysis of one finished hidden d2d soak (exit 0, 120 wall min, one injected d2d kill)....)
 - [postfix-soak2-analysis.md](probes/postfix-soak2-analysis.md): postfix-soak2 analysis: root causes of F1 to F6, the walking share and a ranked fix-card list (card... (status: current. Offline study of the finished Gate 1 soak 2 (postfix-soak2.md, origin/main 0b0bdb2, one seed, 2 h...)
 - [postfix-soak2.md](probes/postfix-soak2.md): postfix-soak2: Gate 1 of the d2d gate ladder on current main (2026-10-31) (status: current. One finished hidden d2d soak (exit 0, 120 wall min, one injected d2d kill), n=1 seed, not a...)
@@ -1111,6 +1121,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [survival-holdout2-2026-11-18.md](probes/survival-holdout2-2026-11-18.md): Survival A/B holdout 2: gold gap, recovery without potions, return portal (2026-11-18) (status: current (card survhold2, user decision 2026-11-17: `bot.zoneModel` stays 0 until the holdout passes;...)
 - [survival-holdout3-2026-11-18.md](probes/survival-holdout3-2026-11-18.md): Survival A/B holdout 3: starved caster yield, risk route at the k limit (2026-11-18, PARTIAL) (status: partial (card survhold3). Tags: V verified (builder logs, `abreport -death-slack 1 -chicken-slack 1...)
 - [survival-holdout4-2026-11-19.md](probes/survival-holdout4-2026-11-19.md): Survival A/B holdout 4: Sorceress screen, Paladin seeds 8 (2026-11-19/20) (status: current (card survhold4). Tags: V verified (builder logs, `abreport -death-slack 1 -chicken-slack 1...)
+- [survival-holdout5-2026-11-21.md](probes/survival-holdout5-2026-11-21.md): Survival A/B holdout 5: Sorceress 8 fresh seeds, Paladin 2 (2026-11-21) (status: current (card survhold8). Tags: V verified (abreport and bot logs of this run), I inferred....)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
 - [town-plan-scenarios.md](probes/town-plan-scenarios.md): Town planner scenarios (card town1) (status: current (2026-11-21). Source: docs/design/fable-review-2026-11-21/town-planner-b-model.md section B4.)

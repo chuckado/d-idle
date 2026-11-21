@@ -8,16 +8,19 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync/atomic"
 	"time"
 
 	"d2lod-bot/internal/bot"
 	"d2lod-bot/internal/bulkid"
+	"d2lod-bot/internal/cheat"
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/ether"
 	"d2lod-bot/internal/invdesk"
+	"d2lod-bot/internal/merc"
 	"d2lod-bot/internal/town"
 	"d2lod-bot/internal/vault"
 	"d2lod-bot/internal/vaultkeep"
@@ -99,6 +102,29 @@ func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir, curren
 		k.Ether = &bulkid.EtherPayer{W: lazyWallet{func() *ether.Wallet { return etherFor(dir, "", nil, nil).Wallet() }}, Price: func() int { return e.Tune.Identify.EtherPerReveal }}
 	}
 	k.Namer = ha.name
+	k.Payer = goldPayer{heroActs: ha, pay: &d2dctl.Pay{C: c, Ledger: cheat.NewLedger(cheat.DefaultLedgerPath()), Actor: "bot:vault", Instance: os.Getenv("D2BOT_INSTANCE"),
+		Character: hero(), Measured: measuredRun}}
+	k.Measured = measuredRun
+	k.GoldOn = func() bool { return keepOn(e)() && e.Tune.Loot.VaultRevealGold != 0 }
+	k.GoldConfirm = func() int { return e.Tune.Loot.VaultRevealGoldConfirm }
+	k.OrderFile = func() string {
+		h := hero()
+		if h == "" || vault.ValidHero(h) != nil {
+			return ""
+		}
+		return filepath.Join(vault.HeroDir(home.root, h), "revealgold.json")
+	}
+	k.Hand = equipHand{ref: ref, e: e, snap: snap}
+	k.EquipOn = equipOn(e)
+	k.EquipPath = filepath.Join(dataDir, "vaults", hero(), "vault", "equip.json")
+	if e.Data != nil {
+		k.Chain = func(code string) []string {
+			if b := e.Data.ItemByCode(code); b != nil {
+				return merc.TypeChain(e.Data, b.Type)
+			}
+			return nil
+		}
+	}
 	home.mu.Lock()
 	home.keep = k
 	home.mu.Unlock()
@@ -452,4 +478,84 @@ func plural(n int) string {
 		return ""
 	}
 	return "s"
+}
+
+// Price is the vendor price of one Scroll of Identify from the item tables (the same figure the town's buy errand plans
+// with); 0 when the tables lack it.
+func (h heroActs) Price() int {
+	if h.e == nil || h.e.Data == nil {
+		return 0
+	}
+	if b := h.e.Data.ItemByCode("isc"); b != nil {
+		return b.Cost
+	}
+	return 0
+}
+
+// Stash reads the stash gold fresh (the last snapshot can be a tick old): the gold a gold reveal pays from. The purse is
+// never read for it and never touched.
+func (h heroActs) Stash(context.Context) (int, error) {
+	s := h.snap()
+	if fresh, ferr := h.e.Snapshot(); ferr == nil && fresh != nil && fresh.Player != nil {
+		s = fresh
+	}
+	if s == nil || s.Player == nil {
+		return 0, errors.New("the stash gold is unreadable")
+	}
+	return s.Player.StashGold, nil
+}
+
+// goldPayer is the vault keeper's payer: the price and the stash gold of heroActs, the payment itself through the fork's
+// `debug paygold` (d2dctl.Pay: ledgered with the reason "vault gold reveal order <id>", refused in a measured run).
+type goldPayer struct {
+	heroActs
+	pay *d2dctl.Pay
+}
+
+func (p goldPayer) PayGold(ctx context.Context, amount int, order string) (d2dctl.PayResult, error) {
+	return p.pay.PayGold(ctx, amount, order)
+}
+
+// measuredRun is true in a measured run (gate, soak, baseline, fidelity: D2BOT_RUN names it): a gold reveal never pays then.
+func measuredRun() bool { return strings.TrimSpace(os.Getenv(cheat.RunEnv)) != "" }
+
+func viewOf(v vaultkeep.GoldView) watch.VaultGoldOrder {
+	return watch.VaultGoldOrder{ID: v.ID, State: v.State, Total: v.Total, Want: v.Want, Done: v.Done, Paid: v.Paid, StashAfter: v.StashAfter, Note: v.Note, Line: v.Line}
+}
+
+func (f actFace) GoldInfo(ctx context.Context) watch.VaultGoldInfo {
+	k := f.k()
+	if k == nil {
+		return watch.VaultGoldInfo{}
+	}
+	g := k.GoldFacts(ctx)
+	out := watch.VaultGoldInfo{On: g.On, ScrollGold: g.Price, Stash: g.Stash, ConfirmAt: g.Confirm, Why: g.Why}
+	if v := k.GoldView(); v != nil {
+		o := viewOf(*v)
+		out.Order = &o
+	}
+	return out
+}
+
+func (f actFace) EnqueueRevealGold(ctx context.Context, ids []string, maxGold int, confirm bool) ([]watch.VaultKeepResult, *watch.VaultGoldOrder) {
+	k := f.k()
+	if k == nil {
+		return nil, nil
+	}
+	res, v := k.EnqueueRevealGold(ctx, ids, maxGold, confirm)
+	var o *watch.VaultGoldOrder
+	if v != nil {
+		x := viewOf(*v)
+		o = &x
+	}
+	return results(res), o
+}
+
+func (f actFace) CancelGold() (watch.VaultGoldOrder, bool) {
+	k := f.k()
+	if k == nil {
+		return watch.VaultGoldOrder{}, false
+	}
+	v, ok := k.CancelGold()
+	return viewOf(v), ok
 }

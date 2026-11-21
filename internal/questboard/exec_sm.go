@@ -120,8 +120,8 @@ func (e *Exec) smAccept(vs []QuestView, diff int, quest, chunk string, ev *AutoE
 			switch {
 			case !ok:
 				return fmt.Errorf("unknown chunk")
-			case r.Chunk == chunk && ev == nil && afterOnly(cv):
-				return nil
+			case r.Chunk == chunk && ev == nil && (afterOnly(cv) || cv.State == Awaiting):
+				return nil // Awaiting without a run: the game counts the field work done (C5), the run starts at the hand-in
 			case r.Chunk != chunk && (cv.State == Ready || cv.State == Locked && strings.HasPrefix(cv.Why, "after ")):
 				return nil
 			}
@@ -169,6 +169,7 @@ func (e *Exec) smAccept(vs []QuestView, diff int, quest, chunk string, ev *AutoE
 			e.o.Log("quest board: auto event not saved", "err", aerr)
 		}
 	}
+	e.lastChanged = changed
 	last := changed[len(changed)-1]
 	if len(changed) > 1 {
 		var pre []string
@@ -202,6 +203,7 @@ func (e *Exec) smCancel(q Quest, c Chunk) error {
 	for _, r := range changed {
 		delete(e.rs, ChunkKey(r.Quest, r.Chunk))
 	}
+	e.lastChanged = changed
 	e.act.Stop(q, c)
 	return nil
 }
@@ -233,12 +235,15 @@ type unparker interface{ Unpark(q Quest, c Chunk) }
 // smRetry is Retry on the machine plus the task executor's group.
 func (e *Exec) smRetry(quest, chunk string) {
 	d := Difficulties[e.env.Diff()]
+	var changed []Ref
 	if err := e.st.UpdateSM(e.smDone(), func(m *SM) error {
-		_, _, err := m.Retry(e.b, d, quest, chunk, false, e.o.Now())
+		var err error
+		changed, _, err = m.Retry(e.b, d, quest, chunk, false, e.o.Now())
 		return err
 	}); err != nil && !strings.Contains(err.Error(), "has no run") {
 		e.o.Log("quest board: retry not saved", "chunk", ChunkKey(quest, chunk), "err", err)
 	}
+	e.lastChanged = changed
 	if u, ok := e.act.(unparker); ok {
 		if q, err := e.b.Quest(quest); err == nil {
 			if c, err := q.ChunkByID(chunk); err == nil {

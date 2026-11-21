@@ -333,7 +333,7 @@
 | dlv-rotation | proposed | - | `internal/delivery/`<br>`internal/combat/`<br>`internal/agency/` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | dlv-expect | proposed | - | `internal/combat/`<br>`internal/env/tuning_combat.go`<br>`docs/knobs.md` | - |
-| dlv-reads | proposed | - | `internal/d2dctl/`<br>`internal/scenario/`<br>`tools/provingground/` | `fork-branch:didle/combat-reads`<br>`d2d-lab-binary` |
+| dlv-reads | proposed | - | `internal/d2dctl/`<br>`docs/process/combat-reads.md`<br>`internal/scenario/`<br>`tools/provingground/` | `fork-branch:didle/combat-reads`<br>`d2d-lab-binary` |
 | dlv-upkeep-state | proposed | - | `internal/combat/`<br>`internal/data/` | - |
 | dlv-upkeep-minions | proposed | - | `internal/combat/` | - |
 | dlv-mark | proposed | - | `internal/combat/` | - |
@@ -352,7 +352,7 @@
 | dlv-cleanup | proposed | - | `internal/combat/`<br>`internal/power/`<br>`tools/ci/` | - |
 | pgjournal | in-progress | - | `cmd/d2scenario/journal.go`<br>`docs/probes/pg-journal-pair-2026-11-21.md`<br>`docs/probes/pg-gate-group1-2026-11-21.md`<br>`cmd/d2scenario/detrun.go`<br>`cmd/d2scenario/detrun_test.go`<br>`tools/provingground/run.sh` | - |
 | pgtaps | in-progress | - | `cmd/d2bot/ladder.go`<br>`cmd/d2scenario/tap.go`<br>`internal/scenario/taps.go`<br>`cmd/d2scenario/run.go`<br>`cmd/d2scenario/tap_test.go`<br>`internal/scenario/result.go` | - |
-| pgclock | proposed | - | `cmd/d2bot/d2dbackend.go`<br>`internal/bot/farm.go`<br>`internal/goals/clock_test.go` | - |
+| pgclock | in-progress | - | `cmd/d2bot/d2dbackend.go`<br>`internal/bot/farm.go`<br>`internal/goals/clock_test.go`<br>`internal/bot/farmclock_test.go`<br>`internal/d2denv/reader.go`<br>`internal/d2denv/recent_test.go`<br>`internal/d2denv/env.go`<br>`cmd/d2bot/goalsclock_test.go`<br>`docs/d2d-determinism.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
 | pgstability | proposed | - | `internal/scenario/stability.go`<br>`tools/provingground/scenarios/tiers.json` | - |
 | pghero | proposed | - | `internal/scenario/hero`<br>`tools/ab/prep`<br>`tools/survival` | - |
@@ -361,11 +361,10 @@
 | pgpage | proposed | - | `docs/process/proving-ground-status.md`<br>`tools/provingground/status_doc.sh` | - |
 | mgonejob | proposed | - | `docs/process/pg-ops-mgonejob.md` | - |
 | town1 | in-progress | - | `tools/provingground/scenarios/townplan.json`<br>`internal/scenario/state.go`<br>`internal/scenario/newkinds_test.go`<br>`docs/probes/town-plan-scenarios.md` | - |
-| mgcache | proposed | - | `docs/process/pg-ops-mgcache.md` | - |
-| mglanes | proposed | - | `docs/process/pg-ops-mglanes.md` | - |
+| mgcache | in-progress | - | `docs/process/pg-ops-mgcache.md` | - |
 | bsm2 | proposed | - | `internal/questboard/sm.go`<br>`internal/questboard/sm_reason.go`<br>`internal/questboard/sm_test.go` | - |
 | fabledecisions2 | proposed | - | `docs/adr/`<br>`docs/decisions.md`<br>`GLOSSARY.md` | - |
-| mgwatchdog | proposed | - | `docs/process/pg-ops-mgwatchdog.md` | - |
+| mgwatchdog | in-progress | - | `docs/process/pg-ops-mgwatchdog.md` | - |
 | town3 | in-progress | - | `internal/supply`<br>`internal/town/planshadow.go`<br>`internal/town/chores.go`<br>`internal/town/town.go`<br>`internal/env/tuning_town.go`<br>`internal/bot/observe.go`<br>`docs/knobs.md` | - |
 | pgnightly | proposed | - | `docs/process/pg-ops-pgnightly.md`<br>`tools/provingground/nightly.sh` | - |
 | town4 | in-progress | - | `internal/task`<br>`internal/town`<br>`internal/bot`<br>`internal/supply`<br>`cmd/d2bot`<br>`docs/knobs.md` | - |
@@ -381,6 +380,13 @@
 | countess3b | proposed | - | `cmd/d2bot/boss.go`<br>`cmd/d2bot/boss_levelmonsters_test.go`<br>`internal/nav/nav.go`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
 | bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
 | mouthgate | proposed | - | `internal/nav` | - |
+| vaultequip | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/equipnow.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/watch/vaultequip_test.go`<br>`tools/provingground/scenarios/vaultequip.json`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/vaultapi.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/keep_test.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`internal/watch/testdata/vault_logic.mjs`<br>`tools/provingground/scenarios/behaviours.json` | - |
+| pgledgeron | in-progress | - | `docs/process/pg-ledger-ops.md`<br>`tools/provingground/run.sh`<br>`tools/provingground/pgenv.sh`<br>`tools/provingground/pgenv_test.sh` | - |
+| vaultreveal | proposed | - | `internal/vaultkeep`<br>`internal/bulkid`<br>`internal/watch/vaultapi_gold.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.json`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultapi_gold_test.go`<br>`internal/watch/vaultreveal_ui_test.go`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`internal/watch/testdata/vault_logic.mjs`<br>`internal/env/tuning_loot.go`<br>`internal/town/playerid.go`<br>`docs/knobs.md`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`tools/provingground/scenarios/vaultreveal.json` | - |
+| heavyguard | proposed | - | `tools/lib/heavy-guard.sh`<br>`tools/lib/heavy-guard-test.sh`<br>`tools/uishots.sh`<br>`docs/process/worker-capacity.md` | - |
+| bsm7 | proposed | - | `internal/task/executor.go`<br>`internal/task/gate_hold_test.go`<br>`internal/bot/routeguard.go`<br>`internal/bot/questboard.go`<br>`internal/bot/kitplan_test.go`<br>`tools/provingground/scenarios/board.json`<br>`docs/probes/boardsm-progress-2026-11-21.md` | - |
+| bsm8 | proposed | - | `internal/watch/web/panels/quest-board/panel.js`<br>`internal/watch/testdata/questui/quest_ui.mjs`<br>`internal/questboard/desk.go`<br>`internal/questboard/desk_reason_test.go` | - |
+| vaultpay | proposed | - | `internal/vaultkeep`<br>`internal/bulkid`<br>`internal/d2dctl/paygold.go`<br>`internal/d2dctl/paygold_test.go`<br>`internal/d2dctl/vault_verbs.go`<br>`internal/d2dctl/vault_fake.go`<br>`internal/watch/vaultapi_gold.go`<br>`internal/watch/vaultapi_gold_test.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`internal/watch/testdata/vault_logic.mjs`<br>`cmd/d2bot/vaultkeep.go`<br>`internal/town/playerid.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`docs/cheats.md`<br>`docs/adr/0014-memory-writes-allowed-no-crutch.md`<br>`docs/adr/0029-vault-gold-payment.md`<br>`docs/adr/README.md`<br>`docs/decisions.md`<br>`tools/provingground/scenarios/vaultreveal.json` | `fork-branch:didle/devp17-20261121` |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -416,14 +422,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- c731907e6 11-21 09:07 `Merge agent/cmbdoc: combat foundation record doc` (cmbdoc)
-- 21255ccc8 11-21 09:07 `Merge agent/devp16: Merge branch 'main' into devp16` (devp16)
-- dfa784c08 11-21 09:05 `Merge branch 'main' into cmbdoc` (-)
-- 656278cbe 11-21 09:05 `Merge branch 'main' into devp16` (-)
-- a45c10a1c 11-21 08:55 `Merge agent/pggroup1: pggroup1 (rebased): Proving Ground gate group 1` (pggroup1)
-- 782f2fe65 11-21 08:54 `Merge branch 'main' into pgprov` (-)
-- b442e454f 11-21 08:48 `Merge agent/cmb3: dlv-expect: cast expectation ledger, knob combat.deliveryExpect, tests` (cmb3)
-- e1b4f2ad4 11-21 08:47 `Merge branch 'main' into cmb3` (-)
-- 87636c8c1 11-21 08:42 `Merge agent/cmb2: dlv-rotation: Rotation type, Profile.Rotation adapter, Fighter reads slots, golden parity` (cmb2)
-- a2a46da3d 11-21 08:41 `Merge branch 'main' into cmb2` (-)
+- 43dc908bd 11-21 14:47 `Merge agent/vaultpay: Merge branch 'main' into vaultpay` (vaultpay)
+- 934aac430 11-21 14:45 `Merge branch 'main' into vaultpay` (-)
+- 1080b4433 11-21 14:37 `Merge agent/mgmtfast: immediate management: ui.managementFast knob, Recall now, audit doc` (mgmtfast)
+- 98776d5e9 11-21 14:36 `Merge branch 'main' into mgmtfast` (-)
+- fbe544ea2 11-21 14:26 `Merge agent/bsm8: Merge branch 'main' into bsm8` (bsm8)
+- f41c0dfa6 11-21 14:25 `Merge branch 'main' into bsm8` (-)
+- 3db6a3947 11-21 14:18 `Merge agent/skillsbadge: Merge branch 'main' into TASK-784` (skillsbadge)
+- b1c861cb1 11-21 14:16 `Merge branch 'main' into TASK-784` (-)
+- 415221f5a 11-21 14:11 `Merge remote-tracking branch 'origin/main' into agent/bsm8` (-)
+- 80392c305 11-21 14:01 `Merge agent/bsm7: bsm7: progress lines` (bsm7)
 <!-- statusgen:end -->

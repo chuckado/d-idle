@@ -225,3 +225,84 @@ export function windowRange(o) {
   const lr = Math.min(rows, Math.max(fr + 1, Math.ceil((top + view) / rowH) + over));
   return { first: fr * cols, last: Math.min(n, lr * cols), padTop: fr * rowH, padBot: (rows - lr) * rowH };
 }
+
+// The Reveal bar (docs/vault.md, "Reveal paid in gold"): one bar over the list instead of a notice paragraph. The model is pure:
+// the server's quote (act.reveal.bar, act.reveal.gold) and the player's pick in, what to draw out.
+const ORDER_STEPS = ['queued', 'paid', 'revealed'];
+const f2 = (s, o) => String(s || '').replace(/\{(\w+)\}/g, (m, k) => (o && o[k] !== undefined ? o[k] : ''));
+const grp = (n) => String(Math.max(0, n | 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+// orderModel words a gold order: the chain queued -> paid -> revealed (it runs for seconds), where it stands, and whether it can
+// be cancelled (only before the payment is confirmed). A partial, failed or cancelled order ends the chain with its own label.
+export function orderModel(o, T) {
+  if (!o) return null;
+  const ended = o.state === 'revealed' || o.state === 'partial' || o.state === 'failed' || o.state === 'cancelled';
+  const at = ended ? ORDER_STEPS.length - 1 : Math.max(0, ORDER_STEPS.indexOf(o.state));
+  const steps = ORDER_STEPS.map((s, i) => ({ id: s, label: T.steps[s], current: i === at, past: i < at }));
+  if (o.state === 'partial' || o.state === 'failed' || o.state === 'cancelled') steps[steps.length - 1].label = T.steps[o.state];
+  const paidText = o.paid ? f2(T.paidGold, { gold: grp(o.paid) }) : '';
+  const stashText = o.paid ? f2(T.stashGold, { n: grp(o.stashAfter) }) : '';
+  return { id: o.id, state: o.state, steps, active: o.state === 'queued', progress: f2(T.progress, { done: o.done, total: o.want || o.total }), paidText, stashText, line: o.line, note: o.note || '' };
+}
+
+// revealBarModel is what the bar draws. rev is act.reveal of GET /api/vault, pay the option the player picked ('' = the server's
+// default). show is false when there is nothing to reveal and no order to follow.
+export function revealBarModel(rev, pay, T) {
+  const bar = rev && rev.bar, order = orderModel(rev && rev.gold && rev.gold.order, T);
+  if (!bar || (!bar.total && !order)) return { show: false };
+  const opts = bar.options || [];
+  const pick = opts.find((o) => o.id === pay && o.ok) || opts.find((o) => o.id === bar.default) || null;
+  const m = { show: true, total: bar.total, title: f2(bar.total === 1 ? T.titleOne : T.title, { n: bar.total }), line: bar.line, order, sel: pick ? pick.id : '', confirm: false, go: '', goOff: true, why: '', skipped: [], skippedN: 0, note: rev.note || '' };
+  m.options = opts.map((o) => ({ id: o.id, label: T.pay[o.id] || o.label, line: o.line, ok: o.ok, why: o.why || '', checked: !!pick && o.id === pick.id }));
+  if (!bar.total) return m;
+  if (!pick) { m.why = (opts.find((o) => o.id === 'free') || {}).why || T.nothingPayable; return m; }
+  const n = pick.count;
+  m.go = pick.id === 'gold' ? f2(n === 1 ? T.goGoldOne : T.goGold, { n, cost: grp(pick.cost) }) : pick.id === 'ether' ? f2(T.goEther, { n, cost: grp(pick.cost) }) : f2(n === 1 ? T.goFreeOne : T.goFree, { n });
+  m.goOff = !pick.ok || !rev.enabled && pick.id !== 'ether';
+  if (m.goOff && !pick.ok) m.why = pick.why;
+  else if (m.goOff) m.why = rev.why || '';
+  m.confirm = !!pick.confirm;
+  m.confirmAsk = pick.id === 'gold' ? f2(T.confirmGold, { cost: grp(pick.cost), n }) : '';
+  m.skipped = (pick.skipped || []).map((s) => ({ n: s.n, why: s.why }));
+  m.skippedN = Math.max(0, bar.total - n);
+  if (m.skippedN && !m.skipped.length) m.skipped = [{ n: m.skippedN, why: T.skipOther }];
+  m.skipTitle = f2(T.skipped, { n: m.skippedN });
+  return m;
+}
+
+// equipPlan turns the GET /api/vault/equip/<id> answer into what the Equip sheet draws: the state, the buttons and the line.
+// The three states of the sheet: off (the knob or the gate says no, why), blocked (the item cannot be worn: a charm, an
+// unidentified item, a requirement), ready (buttons) and active/done/failed (an order exists). Rings get a left and a right
+// button besides the default "replace weaker"; every other item one button. Nothing here decides: the server refuses again.
+export function equipPlan(sh) {
+  if (!sh) return { state: 'none', buttons: [] };
+  const order = sh.order || null;
+  const slots = sh.slots || [];
+  const ring = slots.some((x) => x.side);
+  const buttons = [];
+  if (sh.wearable) {
+    const can = slots.filter((x) => x.can);
+    buttons.push({ slot: 'auto', ring, can: can.length > 0, why: can.length ? '' : (slots[0] && slots[0].why) || '' });
+    if (ring) {
+      for (const side of ['left', 'right']) {
+        const x = slots.find((y) => y.side === side);
+        if (x) buttons.push({ slot: side, ring, can: !!x.can, why: x.why || '', view: x });
+      }
+    }
+  }
+  let state = 'ready';
+  if (order && ['queued', 'withdrawing', 'equipping'].includes(order.state)) state = 'active';
+  else if (order && order.state === 'done') state = 'done';
+  else if (order && order.state === 'failed') state = 'failed';
+  else if (!sh.enabled) state = 'off';
+  else if (!sh.wearable) state = sh.reveal ? 'reveal' : 'blocked';
+  return { state, buttons, ring, order, why: sh.why || '', offWhy: sh.offWhy || '' };
+}
+
+// equipUpgradeWord is the sheet's one word on whether the candidate beats what is worn ('' when the page cannot tell).
+export function equipUpgradeWord(sv) {
+  if (!sv || !sv.worn) return 'empty';
+  if (sv.upgrade === true) return 'better';
+  if (sv.upgrade === false) return 'worse';
+  return '';
+}

@@ -5,7 +5,16 @@
 (function () {
   'use strict';
   var $ = function (id) { return document.getElementById(id); };
-  var view = null, sig = '', tip = null, openId = null;
+  var view = null, sig = '', tip = null, openId = null, kindSel = 'all';
+  // Skill kinds (n.kind from skills.txt flags, internal/skilltree KindOf): label, glyph, one-line explanation. A node with
+  // no known kind gets no badge and is counted only under All.
+  var KINDS = [
+    { k: 'active', label: 'Active', glyph: '\u25B6', note: 'cast or used by the hero' },
+    { k: 'aura', label: 'Aura', glyph: '\u25CE', note: 'switched on once, stays on' },
+    { k: 'passive', label: 'Passive', glyph: '\u25C6', note: 'always on, nothing to cast' }
+  ];
+  function kindInfo(k) { for (var i = 0; i < KINDS.length; i++) if (KINDS[i].k === k) return KINDS[i]; return null; }
+  try { var saved = localStorage.getItem('sk.kind'); if (saved === 'all' || kindInfo(saved)) kindSel = saved; } catch (e) { /* storage blocked */ }
 
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; }
   function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
@@ -19,7 +28,7 @@
     var L = [], add = function (k, t) { if (t) L.push({ k: k, t: t }); };
     add('desc', n.short);
     add('desc', n.long && n.long !== n.short ? n.long : '');
-    add('type', n.passive ? 'Passive' : (n.aura ? 'Aura' : ''));
+    var ki = kindInfo(n.kind); add('type', ki ? ki.label + ': ' + ki.note : '');
     add('req', 'Required level: ' + n.reqLevel);
     (n.prereqs || []).forEach(function (p) { add(p.have ? 'req' : 'bad', 'Requires: ' + p.name + (p.have ? '' : ' (not learned)')); });
     var cur = 'Skill level: ' + n.base + (n.bonus ? ' (+' + n.bonus + ' from items, level ' + n.level + ')' : '') + ' of ' + n.maxLevel;
@@ -61,7 +70,7 @@
     var d = el('div', 'sk-tile');
     d.style.setProperty('--l', pct(n.x, tr.w)); d.style.setProperty('--t', pct(n.y, tr.h)); d.style.setProperty('--w', pct(n.w, tr.w));
     d.tabIndex = 0; d.setAttribute('role', 'group'); d.setAttribute('data-state', n.state); d.setAttribute('data-id', n.id);
-    d.setAttribute('aria-label', n.name + ', level ' + n.base + (n.bonus ? ' plus ' + n.bonus : '') + ' of ' + n.maxLevel + (n.state === 'locked' ? ', locked' : ''));
+    d.setAttribute('aria-label', n.name + ', level ' + n.base + (n.bonus ? ' plus ' + n.bonus : '') + ' of ' + n.maxLevel + (kindInfo(n.kind) ? ', ' + kindInfo(n.kind).label.toLowerCase() : '') + (n.state === 'locked' ? ', locked' : ''));
     if (allocOn && n.canAdd) d.setAttribute('data-act', '1');
     var ab = el('span', 'sk-ab', n.icon ? '' : abbr(n.name));
     if (n.icon) {
@@ -70,6 +79,14 @@
       d.appendChild(img);
     }
     d.appendChild(ab);
+    var ki = kindInfo(n.kind);
+    if (ki) {
+      d.setAttribute('data-kind', ki.k);
+      var b = el('span', 'sk-kind'); b.setAttribute('data-kind', ki.k);
+      var g = el('span', 'sk-kg', ki.glyph); g.setAttribute('aria-hidden', 'true');
+      b.appendChild(g); b.appendChild(el('span', 'sk-kt', ki.label));
+      d.appendChild(b);
+    }
     if (n.level > 0) d.appendChild(el('span', 'sk-lv', n.bonus ? n.base + '+' + n.bonus : String(n.base)));
     d.addEventListener('mouseenter', function () { showTip(d, n); });
     d.addEventListener('mouseleave', hideTip);
@@ -120,8 +137,29 @@
     return svg;
   }
 
+  // kindBar draws the filter chips with their counts (All first); the counts cover every tree of the hero.
+  function kindBar(v) {
+    var bar = $('kindbar'); if (!bar) return;
+    clear(bar);
+    var counts = { all: 0 };
+    KINDS.forEach(function (x) { counts[x.k] = 0; });
+    (v.trees || []).forEach(function (tr) { tr.nodes.forEach(function (n) { counts.all++; if (kindInfo(n.kind)) counts[n.kind]++; }); });
+    [{ k: 'all', label: 'All' }].concat(KINDS).forEach(function (x) {
+      var c = el('button', 'd-chip sk-chip'); c.type = 'button'; c.setAttribute('data-kind', x.k);
+      c.setAttribute('aria-pressed', kindSel === x.k ? 'true' : 'false');
+      c.appendChild(el('span', '', x.label)); c.appendChild(el('b', '', String(counts[x.k])));
+      c.addEventListener('click', function () {
+        kindSel = x.k;
+        try { localStorage.setItem('sk.kind', kindSel); } catch (e) { /* storage blocked */ }
+        render(view);
+      });
+      bar.appendChild(c);
+    });
+  }
+
   function render(v) {
     var host = $('trees'); clear(host); hideTip();
+    kindBar(v);
     var meta = $('summeta');
     if (!v.available) {
       meta.textContent = '';
@@ -134,9 +172,13 @@
       h.id = 'tree-' + tr.tab; card.setAttribute('aria-labelledby', h.id);
       head.appendChild(h); head.appendChild(el('span', 'meta', tr.spent + ' point' + (tr.spent === 1 ? '' : 's') + ' spent'));
       card.appendChild(head);
-      var board = el('div', 'sk-board'); board.setAttribute('role', 'group'); board.setAttribute('aria-label', 'Skills of tree ' + (i + 1));
+      var board = el('div', 'sk-board'); if (kindSel !== 'all') board.setAttribute('data-filtered', '1'); board.setAttribute('role', 'group'); board.setAttribute('aria-label', 'Skills of tree ' + (i + 1));
       board.appendChild(arrows(tr));
-      tr.nodes.forEach(function (n) { board.appendChild(tile(n, v.allocate, tr)); });
+      tr.nodes.forEach(function (n) {
+        var t = tile(n, v.allocate, tr);
+        if (kindSel !== 'all' && n.kind !== kindSel) t.hidden = true;
+        board.appendChild(t);
+      });
       card.appendChild(board); host.appendChild(card);
     });
   }

@@ -354,8 +354,8 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 		return err
 	}
 	disp.run = runner
-	m, err := goals.New(goals.Options{Runner: runner, Path: ip.Goals(), Chain: taskChain(runner.LastSnapshot),
-		Logf: func(f string, a ...any) { log.Info("goals", "msg", sprintf(f, a...)) }})
+	m, err := goals.New(d2dGoalsOptions(runner, ip.Goals(), taskChain(runner.LastSnapshot), be.Clock,
+		func(f string, a ...any) { log.Info("goals", "msg", sprintf(f, a...)) }))
 	if err != nil {
 		return err
 	}
@@ -386,6 +386,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	o.ladder.points = ref.pd
 	o.ladder.plan = ref.aw
 	o.ladder.pause = pauseDesk(runner, ip.State())
+	o.ladder.recall = recallDesk(runner)
 	if labels != nil {
 		o.ladder.labels = labels
 	}
@@ -554,6 +555,13 @@ func soakHours() time.Duration {
 		return 0
 	}
 	return time.Duration(f * float64(time.Hour))
+}
+
+// d2dGoalsOptions is the goal manager's options on the d2d path. The manager runs on the env clock (virtual under lockstep,
+// the wall clock on a free-running d2d), like every other timer of the bot: a wall-clocked manager credited time and ended
+// time-boxed goals by machine load, so two same-seed runs diverged (card pgclock, docs/d2d-determinism.md section 2 row 3).
+func d2dGoalsOptions(r goals.Runner, path string, chain *goals.Chain, clk env.Clock, logf func(string, ...any)) goals.Options {
+	return goals.Options{Runner: r, Path: path, Clock: clk.Now, Chain: chain, Logf: logf}
 }
 
 // stopAtVirtual cancels the run once the env clock (virtual under lockstep) has advanced by d. --run-for stays wall

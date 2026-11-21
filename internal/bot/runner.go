@@ -212,6 +212,7 @@ type Runner struct {
 	levelerPaused  bool                 // selfStop came from the leveler (LevelerPause), guarded by mu
 	autoResumeAt   time.Time            // a failsafe self pause ends by itself at this time (zero: waits for Resume), guarded by mu
 	plp            playerPause          // the player's Pause command (playerpause.go), guarded by mu
+	rcl            recallState          // the player's Recall now command (recall.go), guarded by mu
 	frz            freezeState          // the frozen Pause (freeze.go), guarded by mu
 	wall           func() time.Time     // wall clock of the pause cap and its display; nil: time.Now (tests set it)
 	freshBusy      atomic.Bool          // startFreshGame is running (task.go)

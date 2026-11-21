@@ -6,6 +6,7 @@ import (
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
+	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/invdesk"
 )
 
@@ -56,5 +57,27 @@ func TestCoderMercVerbRefusalCodes(t *testing.T) {
 	}
 	if d2dctl.CapItemMercEquip != invdesk.CapItemMercEquip || d2dctl.CapItemMercUnequip != invdesk.CapItemMercUnequip {
 		t.Error("capability names of the client and the desk differ")
+	}
+}
+
+// ui.managementFast opens the verbs, the input names and the instant lane together; with it off the three old knobs decide.
+func TestManagementFastStandsForTheThreeKnobs(t *testing.T) {
+	tu := env.DefaultTuning()
+	e := &env.Env{Tune: &tu}
+	v, in, ins := verbKnobs(e)
+	if v() || in() || ins() {
+		t.Fatal("default must be all off")
+	}
+	tu.UI.ManagementFast = 1
+	if !v() || !in() || !ins() {
+		t.Fatal("ui.managementFast must open all three")
+	}
+	tu.UI.ManagementFast = 0
+	tu.Invdesk.Instant = 1
+	if v() || in() || !ins() {
+		t.Fatal("invdesk.instant alone must open only the lane's own switch")
+	}
+	if v2, in2, ins2 := verbKnobs(&env.Env{}); v2() || in2() || ins2() {
+		t.Fatal("no tuning: off")
 	}
 }
