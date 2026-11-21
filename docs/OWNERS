@@ -320,6 +320,7 @@ cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2dview  credit-runner  videofeed2
 cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
+cmd/d2scenario  credit-runner  boardorder
 cmd/d2scenario/  credit-runner  pgexpand
 cmd/d2scenario/main_test.go  credit-runner  agencyp0
 cmd/d2scenario/run.go  credit-runner  agencyp0
@@ -1150,6 +1151,7 @@ internal/power/profiles.json  credit-runner  agencyp0
 internal/power/skilldamage_test.go  credit-runner  agencyp0
 internal/quest/act1.go  credit-runner  cainfix
 internal/quest/dialog.go  credit-runner  cain5b
+internal/questboard  credit-runner  boardorder
 internal/questboard  credit-runner  cainfix
 internal/questboard  credit-runner  quests1
 internal/questboard  credit-runner  quests10
@@ -1177,6 +1179,7 @@ internal/resource/swing_test.go  credit-runner  swingmodel
 internal/resource/tuning.go  credit-runner  agencyp0
 internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
+internal/scenario  credit-runner  boardorder
 internal/scenario/  credit-runner  pgexpand
 internal/scenario/scenario_test.go  credit-runner  agencyp0
 internal/scenario/state.go  credit-runner  agencyp0
@@ -1625,6 +1628,7 @@ internal/watch/web/panels/orders/panel.css  credit-runner  morefit
 internal/watch/web/panels/orders/panel.js  credit-runner  pausefix
 internal/watch/web/panels/orders/panel.js  credit-runner  vaultv4
 internal/watch/web/panels/progress/  credit-runner  uis3
+internal/watch/web/panels/quest-board  credit-runner  boardorder
 internal/watch/web/panels/quest-board  credit-runner  quests10
 internal/watch/web/panels/quest-board  credit-runner  quests8
 internal/watch/web/panels/quest-list  credit-runner  quests8
@@ -1780,6 +1784,7 @@ tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
 tools/provingground/  credit-runner  pgexpand
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
+tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/provingground/scenarios/points.json  credit-runner  hammer1
