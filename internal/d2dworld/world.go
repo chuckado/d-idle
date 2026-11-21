@@ -78,11 +78,12 @@ const maxLinkTries = 20
 
 // World is a nav.worldSource over one d2d socket. Not safe for concurrent use, like d2map.Tracker.
 type World struct {
-	layoutLogged string // signature of the last levelmap diagnostic line
-	v            Verbs
-	o            Options
-	levs         map[int]*lvl
-	cur          *lvl
+	layoutLogged     string // signature of the last levelmap diagnostic line
+	objPresetsLogged string // signature of the last levelmonsters objpresets diagnostic line
+	v                Verbs
+	o                Options
+	levs             map[int]*lvl
+	cur              *lvl
 
 	resetNext atomic.Bool // ResetNext: forget the levels at the start of the next update, on the reader's goroutine
 
@@ -673,6 +674,17 @@ func (w *World) mergeMonsterPresets(ctx context.Context, l *lvl, sub func(x, y f
 	if err != nil || doc == nil || doc.Level != l.own.Level {
 		return
 	}
+	if sig := fmt.Sprint(doc.Level, len(doc.ObjPresets)); sig != w.objPresetsLogged {
+		w.objPresetsLogged = sig // diagnostics only on change: the verb is read at every fetch
+		var wps []string
+		for _, o := range doc.ObjPresets {
+			if o.Kind == "waypoint" || o.Kind == "tree" || o.Kind == "cage" {
+				wps = append(wps, fmt.Sprintf("%s:%d@%.1f,%.1f built=%v", o.Kind, o.Class, o.X, o.Y, o.Built))
+			}
+		}
+		w.logf("d2dworld: levelmonsters level %d: %d object presets, key objects %v", doc.Level, len(doc.ObjPresets), wps)
+	}
+	w.mergeObjectPresets(l, doc.ObjPresets, sub)
 	for _, p := range doc.Presets {
 		if p.Kind != "superunique" {
 			continue
@@ -688,6 +700,33 @@ func (w *World) mergeMonsterPresets(ctx context.Context, l *lvl, sub func(x, y f
 		if !known {
 			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetNPC, ID: p.ID, Pos: at, Name: p.Name})
 			l.names = append(l.names, p.Name)
+		}
+	}
+}
+
+// maxObjectClass is the last objects.txt Id the fork's objpresets names; above it a preset is a random shrine or chest.
+const maxObjectClass = 573
+
+// mergeObjectPresets adds the level's object presets of rooms not built yet ("debug levelmonsters" objpresets, the DS1
+// data of ALL rooms: a waypoint, the Tree, the Stones, the cage) as object presets, so the nav walks straight there
+// instead of exploring until the room is built. An object the level already lists (same class within layoutNear) is
+// not doubled; a random shrine or chest (class above objects.txt) is skipped.
+func (w *World) mergeObjectPresets(l *lvl, objs []d2dctl.ObjectPreset, sub func(x, y float64) d2map.Point) {
+	for _, o := range objs {
+		if o.Class <= 0 || o.Class > maxObjectClass {
+			continue
+		}
+		at := sub(o.X, o.Y)
+		known := false
+		for _, p := range l.m.Presets {
+			if p.Kind == d2map.PresetObject && p.ID == o.Class && at.X-p.Pos.X <= layoutNear && p.Pos.X-at.X <= layoutNear && at.Y-p.Pos.Y <= layoutNear && p.Pos.Y-at.Y <= layoutNear {
+				known = true
+				break
+			}
+		}
+		if !known {
+			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: o.Class, Pos: at, Waypoint: o.Kind == "waypoint"})
+			l.names = append(l.names, o.Name)
 		}
 	}
 }

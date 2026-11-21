@@ -38,6 +38,23 @@ type LevelMonster struct {
 	Alive   bool    `json:"alive"`
 }
 
+// ObjectPreset is one object-type preset unit of the level's DS1 rooms in "debug levelmonsters" objpresets (private fork,
+// K1 / ADR 0022): known from the level's build for ALL rooms, built or not. Class is the DS1 object id (objects.txt Id
+// up to 573; above that a random shrine or chest picked by the room's seed, Name empty), Kind as the levelmap's
+// (waypoint, tree, stone, cage, shrine, chest, portal, door, object), X and Y level cells, Room the room index, Built
+// whether a made object sits there (Npc its levelmap index, else -1).
+type ObjectPreset struct {
+	Index int     `json:"index"`
+	Class int     `json:"class"`
+	Name  string  `json:"name"`
+	Kind  string  `json:"kind"`
+	X     float64 `json:"x"`
+	Y     float64 `json:"y"`
+	Room  int     `json:"room"`
+	Built bool    `json:"built"`
+	Npc   int     `json:"npc"`
+}
+
 // LevelMonsters is the reply of "debug levelmonsters": a READ of what the engine already generated for the CURRENT
 // level; it never makes a run CHEATED (ADR 0022). Rooms populate as the player nears them, so Monsters lacks those of
 // rooms not Up; Presets does not.
@@ -47,6 +64,9 @@ type LevelMonsters struct {
 	RoomsUp  []int           `json:"rooms_up"`
 	Presets  []MonsterPreset `json:"presets"`
 	Monsters []LevelMonster  `json:"monsters"`
+	// ObjPresets are the level's object presets of every room, including rooms not built yet (empty from a fork
+	// without them): a waypoint, a quest object, a chest ahead of the player.
+	ObjPresets []ObjectPreset `json:"objpresets"`
 }
 
 // ErrNoLevelMonsters is returned when the reply is not the verb's JSON line.

@@ -183,3 +183,56 @@ func TestLayoutReadWaypointKindCountsWithoutTableClass(t *testing.T) {
 		t.Fatalf("layout waypoint not in Waypoints(): %+v", lm.Presets)
 	}
 }
+
+// darkWoodRead is a read at arrival: the level lists no waypoint (its room is not built), the fork's objpresets do.
+func darkWoodRead() *d2dctl.LevelMonsters {
+	return &d2dctl.LevelMonsters{Level: 1, Unit: "cell", RoomsUp: []int{0}, ObjPresets: []d2dctl.ObjectPreset{
+		{Index: 3, Class: 12, Name: "Wooden Door", Kind: "door", X: 1.0, Y: 0.2, Room: 0, Built: true, Npc: 1},
+		{Index: 9, Class: 119, Name: "Waypoint", Kind: "waypoint", X: 90.5, Y: 70.5, Room: 4},
+		{Index: 10, Class: 580, Kind: "chest", X: 50.5, Y: 40.5, Room: 5},
+		{Index: 11, Class: 26, Name: "Cage", Kind: "cage", X: 60.5, Y: 10.5, Room: 6}}}
+}
+
+// Two arrivals (a Paladin's and a Sorceress's: the hero starts in different cells of the level): the waypoint of a room
+// not built is a waypoint of the level at arrival, the built door is not doubled, a random chest (class above
+// objects.txt) is skipped. Without mergeObjectPresets the waypoint list is empty and the nav explores for it.
+func TestObjectPresetsGiveTheWaypointAtArrival(t *testing.T) {
+	for name, hero := range map[string]string{"Paladin": "1 1.0 0.6 3 2 10 20", "Sorceress": "1 2.5 1.4 3 2 10 20"} {
+		s := newStub()
+		s.level = hero
+		s.presets = []string{"0\t12\t1.0\t0.2\t0\tWooden Door"} // no waypoint built
+		s.mons = darkWoodRead()
+		w := New(s, Options{LayoutRead: func() bool { return true }})
+		if _, err := w.Update(); err != nil {
+			t.Fatal(err)
+		}
+		wps := w.Current().Waypoints()
+		if len(wps) != 1 || wps[0].Pos != (d2map.Point{X: 452, Y: 352}) { // OriginNone: subtile = floor(5 * cell)
+			t.Fatalf("%s: waypoints %+v", name, wps)
+		}
+		if pos := w.Waypoints(1); len(pos) != 1 || pos[0] != wps[0].Pos {
+			t.Fatalf("%s: World.Waypoints %+v", name, pos)
+		}
+		if n := len(w.Current().Presets); n != 3 { // door, waypoint, cage
+			t.Fatalf("%s: presets %d: %+v", name, n, w.Current().Presets)
+		}
+		if pos, ok := presetOf(w.Current(), 26); !ok || pos != (d2map.Point{X: 302, Y: 52}) {
+			t.Fatalf("%s: cage %v %v", name, pos, ok)
+		}
+	}
+}
+
+func TestObjectPresetsOffOrAbsentChangeNothing(t *testing.T) {
+	for name, opts := range map[string]Options{"knob off": {LayoutRead: func() bool { return false }}, "knob unset": {}} {
+		s := newStub()
+		s.presets = []string{"0\t12\t1.0\t0.2\t0\tWooden Door"}
+		s.mons = darkWoodRead()
+		w := New(s, opts)
+		if _, err := w.Update(); err != nil {
+			t.Fatal(err)
+		}
+		if len(w.Current().Waypoints()) != 0 || len(w.Current().Presets) != 1 {
+			t.Fatalf("%s: %+v", name, w.Current().Presets)
+		}
+	}
+}
