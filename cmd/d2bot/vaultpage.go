@@ -19,12 +19,13 @@ import (
 // go through vaultHome. The recorder Opens (creating the vault on its first record); the page only reads an Existing one and
 // never creates a directory.
 type vaultHome struct {
-	root string
-	mu   sync.Mutex
-	hero string
-	st   *vault.Store
-	capf atomic.Value      // func() int: the capacity the stores read at every insert (the ETHER wallet's owned tiers, etherwire.go)
-	keep *vaultkeep.Keeper // the Keep queue (vaultkeep.go); nil until wireVaultKeep
+	root     string
+	mu       sync.Mutex
+	hero     string
+	st       *vault.Store
+	autoTrim atomic.Value      // func() bool: loot.vaultAutoTrim
+	capf     atomic.Value      // func() int: the capacity the stores read at every insert (the ETHER wallet's owned tiers, etherwire.go)
+	keep     *vaultkeep.Keeper // the Keep queue (vaultkeep.go); nil until wireVaultKeep
 }
 
 var vaultHomes sync.Map // root -> *vaultHome
@@ -32,6 +33,14 @@ var vaultHomes sync.Map // root -> *vaultHome
 func vaultHomeFor(root string) *vaultHome {
 	h, _ := vaultHomes.LoadOrStore(root, &vaultHome{root: root})
 	return h.(*vaultHome)
+}
+
+// setAutoTrim late-binds loot.vaultAutoTrim for every store of this root (nil or unset: off, a full vault removes nothing).
+func (h *vaultHome) setAutoTrim(f func() bool) { h.autoTrim.Store(f) }
+
+func (h *vaultHome) autoTrimOn() bool {
+	f, _ := h.autoTrim.Load().(func() bool)
+	return f != nil && f()
 }
 
 // setCapacity late-binds the capacity of every store of this root, those already open included.
@@ -44,7 +53,7 @@ func (h *vaultHome) Open(hero string) (*vault.Store, error) {
 	if h.st != nil && h.hero == hero {
 		return h.st, nil
 	}
-	st, err := vault.OpenHero(h.root, hero, vault.Options{Capacity: h.storeCapacity})
+	st, err := vault.OpenHero(h.root, hero, vault.Options{Capacity: h.storeCapacity, AutoTrim: h.autoTrimOn})
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +113,7 @@ func vaultAPIWith(root string, on func() bool, hero func() string, eh *etherHome
 	}
 	home := vaultHomeFor(root)
 	api := watch.NewVaultAPI()
-	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}, Act: actFace{home}, Equip: equipFace{home}, Tip: vaultTipFor(db), Quality: loot.QualityName, ScrollGold: scrollGold(db)}
+	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}, Act: actFace{home}, Equip: equipFace{home}, Tip: vaultTipFor(db), Quality: loot.QualityName, ScrollGold: scrollGold(db), AutoTrim: home.autoTrimOn}
 	if f, ferr := bulkid.DefaultFilter(); ferr == nil {
 		desk.MassFilter = f
 	}

@@ -93,6 +93,9 @@ func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir, curren
 	ha := heroActs{ref: ref, e: e, snap: snap, rescued: cainOpen(ref)}
 	k.Tools, k.Vendor = ha, ha
 	k.SellPerVisit = func() int { return e.Tune.Loot.VaultSellPerVisit }
+	autoTrim := func() bool { return e.Tune.Loot.VaultAutoTrim != 0 }
+	home.setAutoTrim(autoTrim)
+	k.AutoSell = autoTrim
 	k.Prompt = func() bool { return e.Tune.Loot.VaultSellPrompt != 0 }
 	k.IdentifyPolicy = func() int { return bulkid.Effective(e.Tune.Identify, os.Getenv("D2BOT_RUN") != "").Policy }
 	k.ShortBy = ha.short

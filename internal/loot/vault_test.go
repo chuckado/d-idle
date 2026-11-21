@@ -2,6 +2,7 @@ package loot
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"testing"
 	"time"
@@ -46,7 +47,7 @@ func newVaultRig(t *testing.T, class d2.Class, capN int) *vaultRig {
 		Player: &d2.Player{Class: class, Level: 12, Gold: 5000, Strength: 25, Dexterity: 25, Area: 2, X: 100, Y: 100}}
 	l.UseSource(func() (*d2.Snapshot, error) { return v.snap, nil }, nil)
 	var err error
-	if v.st, err = vault.Open(t.TempDir(), "hero", vault.Options{Capacity: func() int { return capN }, NoSync: true}); err != nil {
+	if v.st, err = vault.Open(t.TempDir(), "hero", vault.Options{Capacity: func() int { return capN }, NoSync: true, AutoTrim: func() bool { return vaultTestAutoTrim }}); err != nil {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() { v.st.Close() })
@@ -57,6 +58,53 @@ func newVaultRig(t *testing.T, class d2.Class, capN int) *vaultRig {
 }
 
 var nextUnit uint32 = 500
+
+// vaultTestAutoTrim is loot.vaultAutoTrim as the rig's store sees it (default off, like the knob).
+var vaultTestAutoTrim bool
+
+// A full vault removes nothing and records nothing new (decision 2026-11-21); loot.vaultAutoTrim brings the trim back.
+func TestVaultFullDoesNotTrimUnlessAutoTrim(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, auto := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%v/auto%v", class, auto), func(t *testing.T) {
+				vaultTestAutoTrim = auto
+				t.Cleanup(func() { vaultTestAutoTrim = false })
+				v := newVaultRig(t, class, 2)
+				v.drop(t, "rin", d2.QualityMagic, 110, 100, "a")
+				v.drop(t, "rin", d2.QualityMagic, 111, 101, "b")
+				v.pick(t)
+				if v.st.Status().Count != 2 {
+					t.Fatalf("seed: %d", v.st.Status().Count)
+				}
+				before := v.st.Dump()
+				v.drop(t, "rin", d2.QualityRare, 112, 102, "worth")
+				v.pick(t)
+				arch, _ := v.st.Archived()
+				if auto {
+					if len(arch) != 1 {
+						t.Fatalf("knob on: the old trim must run, archive %d", len(arch))
+					}
+					return
+				}
+				if len(arch) != 0 || v.st.Status().Count != 2 || v.clicks() != 0 {
+					t.Fatalf("knob off: removed %d, count %d, clicks %d", len(arch), v.st.Status().Count, v.clicks())
+				}
+				for i, r := range v.st.Dump() {
+					if r.ID != before[i].ID || r.State != vault.Recorded {
+						t.Fatalf("record %d changed: %+v", i, r)
+					}
+				}
+				if m := v.st.MissedDrops(); m.Count != 1 {
+					t.Fatalf("missed %+v", m)
+				}
+				v.pick(t) // the same unit is not counted twice
+				if m := v.st.MissedDrops(); m.Count != 1 {
+					t.Fatalf("recounted %+v", m)
+				}
+			})
+		}
+	}
+}
 
 // drop puts an item on the floor of the snapshot and its twin on the fork's floor, so the peek finds it.
 func (v *vaultRig) drop(t *testing.T, code string, q int, x, y int, extra string) d2.Unit {
