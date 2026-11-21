@@ -499,6 +499,8 @@ docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/provingground-act1more-2026-11-20.md  credit-runner  act1more
 docs/probes/provingground-cainchain-2026-11-20.md  credit-runner  cainchain
+docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess
+docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess2
 docs/probes/provingground-run-2026-11-19.md  credit-runner  pgexpand
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
@@ -719,9 +721,13 @@ internal/art/  credit-runner  itemcolour2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees
 internal/boss  credit-runner  wiring2
+internal/boss/act1.go  credit-runner  countess
+internal/boss/boss_test.go  credit-runner  countess
 internal/boss/boss_test.go  pro-runner  levelplan3
 internal/boss/fake_test.go  pro-runner  levelplan3
+internal/boss/run.go  credit-runner  countess
 internal/boss/run.go  pro-runner  levelplan3
+internal/boss/script.go  credit-runner  countess
 internal/boss/types.go  pro-runner  levelplan3
 internal/bot  credit-runner  cainfix
 internal/bot  credit-runner  survsd
@@ -1802,6 +1808,9 @@ tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
 tools/provingground/  credit-runner  pgexpand
+tools/provingground/countess-check.sh  credit-runner  countess2
+tools/provingground/scenarios/act1.json  credit-runner  countess
+tools/provingground/scenarios/act1.json  credit-runner  countess2
 tools/provingground/scenarios/act1more.json  credit-runner  act1more
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/cain.json  credit-runner  boardorder

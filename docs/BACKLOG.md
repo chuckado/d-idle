@@ -1122,6 +1122,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - barb1: Barbarian Frenzy (capability rows, build, combat profile, planner shadow, Proving Ground scenario) (TASK-706, merged 2026-11-20, acceptance 6 of 6) <!--sg:agent/barb1-->
 - agent/boardorder2: proving-ground.md: trigger.api exists (merged 2026-11-20) <!--sg:agent/boardorder2-->
 - act1more: Blood Raven, Tools of the Trade and Andariel scenarios and questspec checks (TASK-701, merged 2026-11-20, acceptance 4 of 4): Blood Raven GREEN on the Proving Ground (Paladin/11, job 20261120-195436-d0c5, determinism pair with 20261120-210945-74a3: same verdict, digest differs; CHEATED setup, mechanics only, Kashya hand-in U). ... <!--sg:agent/act1more-->
+- countess2: sound Countess scenario setup (full belt, Sorceress build) and the determinism pair (TASK-705, merged 2026-11-20, acceptance 1 of 3): setup fixed (Light potions, town.spareKeep 30, own Sorceress scenario with the fire build; V builder job 20261120-203007-6700). Paladin RED (reaches Tower Cellar 5; the Spawns walk resolves to one blocked click ... <!--sg:agent/countess2-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
