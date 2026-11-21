@@ -634,6 +634,44 @@
     "surroundLifePct": 65,
     "manaReserve": 4
    }
+  },
+  {
+   "class": "druid",
+   "build": "fire",
+   "bands": [
+    {
+     "minLevel": 12,
+     "requires": "Eruption",
+     "attack": [
+      "Eruption",
+      "Firestorm",
+      "Molten Boulder",
+      "Attack"
+     ]
+    },
+    {
+     "attack": [
+      "Firestorm",
+      "Molten Boulder",
+      "Attack"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Cyclone Armor"
+    ]
+   ],
+   "layout": {
+    "Firestorm": "f1",
+    "Molten Boulder": "f2",
+    "Eruption": "f3",
+    "Cyclone Armor": "f4",
+    "Oak Sage": "f5",
+    "Volcano": "f6",
+    "Raven": "f7",
+    "Summon Spirit Wolf": "f8"
+   }
   }
  ]
 }
