@@ -1,0 +1,5 @@
+{
+ "tags": "V codes: internal/quest/act1.go (bks, bkd, hdm) and act2.go (box, msf, vip, hst, tr1, ass); leg (Wirt's Leg) S: the cow portal item. The items.txt quest column is the primary source (data.ItemBase.Quest); this list covers a data build whose column is 0 for them.",
+ "act1": ["bks", "bkd", "hdm", "leg"],
+ "act2": ["box", "msf", "vip", "hst", "tr1", "ass"]
+}
