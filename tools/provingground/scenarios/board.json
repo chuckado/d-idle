@@ -978,7 +978,7 @@
   },
   {
    "id": "board.hold.broke",
-   "title": "Purse 0, stash 0, 3 potions: hold needs_gold_farm, never a live run without a reason (I5, I10)",
+   "title": "Broke at the start: the board waits for the recovery (purse and kit), counts no failure and then starts the chunk",
    "kind": "step",
    "tier": "full",
    "quest": {
@@ -1040,11 +1040,11 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
+   "notes": "Live 2026-11-21 (Paladin 11): the recovery sells and restocks (gold 36 to 650), so the hold needs_gold_farm never shows; the permanent-hold case (timeout) needs a hero the recovery cannot fix (U).",
    "assert": [
     {
      "kind": "log_line",
-     "pattern": "hold needs_gold_farm",
+     "pattern": "start gate: waiting for the recovery",
      "min": 1
     },
     {
@@ -1053,11 +1053,9 @@
      "max": 0
     },
     {
-     "kind": "board",
-     "quest": "forgotten_tower",
-     "chunk": "countess",
-     "state": "in_progress",
-     "reason": "needs_gold_farm"
+     "kind": "log_line",
+     "pattern": "starting chunk forgotten_tower/countess",
+     "min": 1
     },
     {
      "kind": "no_writes"
@@ -1223,7 +1221,8 @@
      "kind": "no_writes"
     }
    ],
-   "status": "active"
+   "status": "pending",
+   "pending_reason": "needs a hero that stays broke after the recovery (U): the live broke run recovered by selling, so no hold outlives its budget; hold_timeout is covered offline (internal/questboard, bsm5)"
   },
   {
    "id": "board.view.reason-always",
