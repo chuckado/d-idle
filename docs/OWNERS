@@ -342,13 +342,18 @@ cmd/d2scenario/  credit-runner  pgexpand
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/detrun.go  credit-runner  pgjournal
 cmd/d2scenario/detrun_test.go  credit-runner  pgjournal
+cmd/d2scenario/fieldledger.go  credit-runner  bsm9
+cmd/d2scenario/fieldledger_test.go  credit-runner  bsm9
 cmd/d2scenario/journal.go  credit-runner  pgjournal
 cmd/d2scenario/ledger.go  credit-runner  pgledger
 cmd/d2scenario/ledger_test.go  credit-runner  pgledger
 cmd/d2scenario/main.go  credit-runner  pgledger
 cmd/d2scenario/main_test.go  credit-runner  agencyp0
 cmd/d2scenario/prov.go  credit-runner  pgprov
+cmd/d2scenario/restart.go  credit-runner  bsm9
+cmd/d2scenario/restart_test.go  credit-runner  bsm9
 cmd/d2scenario/run.go  credit-runner  agencyp0
+cmd/d2scenario/run.go  credit-runner  bsm9
 cmd/d2scenario/run.go  credit-runner  pgledger
 cmd/d2scenario/run.go  credit-runner  pgprov
 cmd/d2scenario/run.go  credit-runner  pgtaps
@@ -552,6 +557,7 @@ docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/points.md  credit-runner  agencyp0
 docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm7
+docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm9
 docs/probes/bot-cpu-2026-11-16.md  credit-runner  botcpu
 docs/probes/bot-cpu-fix-2026-11-16.md  credit-runner  botcpu2
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
@@ -1422,6 +1428,7 @@ internal/scenario/result.go  credit-runner  pgdigest
 internal/scenario/result.go  credit-runner  pgprov
 internal/scenario/result.go  credit-runner  pgtaps
 internal/scenario/scenario.go  credit-runner  barb1
+internal/scenario/scenario.go  credit-runner  bsm9
 internal/scenario/scenario_test.go  credit-runner  agencyp0
 internal/scenario/scenario_test.go  credit-runner  barb1
 internal/scenario/scenario_test.go  credit-runner  druid1
@@ -2121,6 +2128,7 @@ tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/behaviours.json  credit-runner  vaultequip
 tools/provingground/scenarios/board.json  credit-runner  bsm1
 tools/provingground/scenarios/board.json  credit-runner  bsm7
+tools/provingground/scenarios/board.json  credit-runner  bsm9
 tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3

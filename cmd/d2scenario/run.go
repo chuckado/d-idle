@@ -14,6 +14,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"d2lod-bot/internal/d2dctl"
@@ -589,10 +590,30 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 			tap.RunVirtual(tctx, tapEveryVirtual, 250*time.Millisecond, 90*time.Second)
 		}
 	}()
-	cmd := exec.CommandContext(ctx, "nice", append([]string{"-n", "10", bot}, args...)...)
-	cmd.Env = append(os.Environ(), "D2BOT_INSTANCE="+inst, "D2DSOAK_HOURS="+hours, "D2D_BIN="+d2dBin, "D2D_DATA="+gamedata)
-	cmd.Stdout, cmd.Stderr = f, f
-	err = cmd.Run()
+	runLeg := func(c context.Context, hrs string) error {
+		cmd := exec.CommandContext(c, "nice", append([]string{"-n", "10", bot}, args...)...)
+		cmd.Env = append(os.Environ(), "D2BOT_INSTANCE="+inst, "D2DSOAK_HOURS="+hrs, "D2D_BIN="+d2dBin, "D2D_DATA="+gamedata)
+		cmd.Stdout, cmd.Stderr = f, f
+		// a stop is the bot's own save and quit (SIGTERM), as a restart of the service would do; only a hang is killed
+		cmd.Cancel = func() error { return cmd.Process.Signal(syscall.SIGTERM) }
+		cmd.WaitDelay = 90 * time.Second
+		return cmd.Run()
+	}
+	if at := s.Trigger.RestartAtS; at > 0 && !attach {
+		// trigger.restart_at_s: the bot process is stopped once and started again on the same hero and state directory
+		// (the plan file lives there), with the rest of the virtual budget. The game restarts with it (managed mode).
+		leg, stopLeg := context.WithTimeout(ctx, time.Duration(at)*time.Second)
+		err = runLeg(leg, hours)
+		stopLeg()
+		if ctx.Err() == nil {
+			b, _ := os.ReadFile(trace)
+			rest := restHours(s.Budget.VirtualMin, lastVirtualMin(b))
+			_, _ = fmt.Fprintf(f, "\nd2scenario: bot restarted after %d s (virtual %.1f min done)\n", at, lastVirtualMin(b))
+			err = runLeg(ctx, rest)
+		}
+	} else {
+		err = runLeg(ctx, hours)
+	}
 	stopTap()
 	<-done
 	<-sdone
@@ -646,6 +667,12 @@ func addTrail(st *scenario.State, trace string) {
 func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scenario.Result, prep *d2dinput.Process, c *d2dctl.Client, bot, data, sock, inst, trace string, seeded seedOut, vaultVerbs bool) scenario.Result {
 	hero := scenario.HeroName(s.ID, r.Class, r.Seed)
 	_ = c.Close() // the d2d takes one control client: the bot gets it, then we take it back
+	// The lab d2d has its verbs on, so nothing refuses a bot write: the bot's command journal says what it sent (card bsm10).
+	jnl := os.Getenv(journalEnv)
+	if jnl == "" {
+		jnl = strings.TrimSuffix(trace, ".bot.log") + ".jnl"
+		os.Setenv(journalEnv, jnl) // exec-one runs one scenario per process; runBot inherits it
+	}
 	_, taps, tapsAt, berr := runBot(ctx, s, r, bot, os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA"), data, "", sock, inst, hero, trace, true, seeded, vaultVerbs)
 	res.Taps, res.TapsAt = taps, tapsAt
 	if why := botFailure(trace); why != "" {
@@ -657,7 +684,11 @@ func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scen
 		return withVerdict(res, blocked("%s", why))
 	}
 	cc := d2dctl.New(sock, d2dctl.Options{})
-	st := observe(ctx, cc, -1, true)
+	writes := -1
+	if n, ok := journalWrites(jnl); ok {
+		writes = n
+	}
+	st := observe(ctx, cc, writes, true)
 	st.Source = "d2d-live-attach"
 	addTrail(&st, trace)
 	addRunFacts(&st, s, r, trace)

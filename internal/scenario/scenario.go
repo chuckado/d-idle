@@ -156,6 +156,9 @@ type Trigger struct {
 	// API are calls the runner makes on the bot's answer listener, with a scenario-local token, as the viewer would
 	// (the bot runs with --ladder --watch). Each is sent once, in order, After wall seconds after the bot started.
 	API []APICall `json:"api,omitempty"`
+	// RestartAtS stops the bot once, this many wall seconds after it started, and starts it again on the same hero and
+	// state directory with the rest of the budget (a restart of the service; managed runs only). 0: no restart.
+	RestartAtS int `json:"restart_at_s,omitempty"`
 }
 
 // APICall is one request of Trigger.API. Path starts with /api/; the body is sent as JSON.
@@ -322,6 +325,9 @@ func (s Scenario) Validate() error {
 		if !strings.HasPrefix(c.Path, "/api/") || c.After < 0 || (c.Method != "" && c.Method != "GET" && c.Method != "POST") {
 			return fmt.Errorf("%s: trigger.api[%d]: want path /api/..., after_s >= 0, method GET or POST", at, i)
 		}
+	}
+	if s.Trigger.RestartAtS < 0 {
+		return fmt.Errorf("%s: trigger.restart_at_s must be >= 0", at)
 	}
 	if s.Trigger.Build != "" {
 		lb, err := leveler.LoadBuild(s.Trigger.Build, "")

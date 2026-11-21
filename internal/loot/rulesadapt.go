@@ -90,7 +90,7 @@ func (a *RulesAdapter) Item(u d2.Unit, o ItemOpts) (lootrules.Item, error) {
 		Place: o.Place, Code: b.Code, Name: b.Display, Types: chain, Quality: ruleQuality[u.Item.Quality],
 		ILvl: u.Item.ILvl, ReqLvl: b.LevelReq, ReqStr: b.ReqStr, ReqDex: b.ReqDex, ClassOnly: a.classOnly(chain),
 		RuneNo: runeNo(b.Code), Grade: gemGrade(b), BaseTier: baseTier(b), MaxSockets: b.Sockets,
-		Identified: u.Item.Identified(), Ethereal: u.Item.Ethereal(), Stackable: b.Stackable, Quest: b.Quest || o.NeverSell,
+		Identified: u.Item.Identified(), Ethereal: u.Item.Ethereal(), Stackable: b.Stackable, Quest: b.Quest || o.NeverSell || QuestCode(b.Code),
 		StartItem: u.Item.Flags&d2.FlagStartItem != 0, Mark: o.Mark, ID: u.ID,
 		Value: SellValue(db, b, u.Item, o.MaxBuy),
 	}
