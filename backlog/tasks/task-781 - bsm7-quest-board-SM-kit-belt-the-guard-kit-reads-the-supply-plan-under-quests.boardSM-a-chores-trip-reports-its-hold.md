@@ -34,5 +34,5 @@ Why: TODO. Done when: TODO.
 <!-- AC:BEGIN -->
 - [ ] #1 with quests.boardSM the guards and the shop read the supply plan (belt plus pack, minima clamped to the belt) so a chores trip can close the kit
 - [ ] #2 a coded fault that inserts the chores trip reports its hold (Result.Via) and the board logs 'quest board: hold needs_potions' with nothing counted
-- [ ] #3 board.hold.* scenarios green live (Orion)
+- [ ] #3 board.hold.* scenarios green live (the second worker)
 <!-- AC:END -->
