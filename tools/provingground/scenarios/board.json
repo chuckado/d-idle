@@ -978,7 +978,7 @@
   },
   {
    "id": "board.hold.broke",
-   "title": "Broke at the start: the board waits for the recovery (purse and kit), counts no failure and then starts the chunk",
+   "title": "Broke at the start: the board waits for the recovery (purse and kit) and counts no failure",
    "kind": "step",
    "tier": "full",
    "quest": {
@@ -1040,7 +1040,7 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Live 2026-11-21 (Paladin 11): the recovery sells and restocks (gold 36 to 650), so the hold needs_gold_farm never shows; the permanent-hold case (timeout) needs a hero the recovery cannot fix (U).",
+   "notes": "Live 2026-11-21 (Paladin 11, two runs): the start gate waits for the recovery; one run recovered (gold 36 to 650) and started the chunk, the other was still recovering at 40 virtual minutes. Either way nothing is parked or counted. The permanent-hold case (timeout) needs a hero the recovery cannot fix (U).",
    "assert": [
     {
      "kind": "log_line",
@@ -1051,11 +1051,6 @@
      "kind": "log_line",
      "pattern": "parked",
      "max": 0
-    },
-    {
-     "kind": "log_line",
-     "pattern": "starting chunk forgotten_tower/countess",
-     "min": 1
     },
     {
      "kind": "no_writes"
@@ -1142,7 +1137,8 @@
      "kind": "no_writes"
     }
    ],
-   "status": "active"
+   "status": "pending",
+   "pending_reason": "live 2026-11-21 (Paladin 11, clvl 10): no guard refused, the hero started the chunk and levelled to 11 inside the budget; the setup needs a level under the guard floor of the Countess road (U), so no too_weak hold fires"
   },
   {
    "id": "board.hold.timeout",
