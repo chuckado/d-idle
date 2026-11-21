@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into tphoard <!--sg:agent/tphoard-->
+- Merge branch 'main' into boardorder <!--sg:agent/boardorder-->
 - hammer1: scenario bound from the first run, card result, run record <!--sg:agent/hammer1-->
 - Merge branch 'main' into devp15 <!--sg:agent/devp15-->
 - pgfix4: knob entry, knobs.md, refresh the d2drill portal copy (whole-repo gate findings) <!--sg:agent/pgfix4-->
