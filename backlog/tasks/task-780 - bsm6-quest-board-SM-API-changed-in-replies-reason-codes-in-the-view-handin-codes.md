@@ -1,10 +1,13 @@
 ---
 id: TASK-780
-title: 'bsm6: quest board SM API (changed in replies, reason codes in the view, handin codes)'
-status: Proposed
+title: >-
+  bsm6: quest board SM API (changed in replies, reason codes in the view, handin
+  codes)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T17:21:00Z'
+updated_date: '2026-11-21T18:40:00Z'
 labels:
   - bot
   - feature
