@@ -368,7 +368,9 @@ data/capabilities/capabilities.json  credit-runner  necro1
 data/idreveal  credit-runner  nocards
 data/input/caps/  credit-runner  dlv-cast-verbs
 data/input/caps/d2d-fork-input-items.json  credit-runner  q13input
+data/input/caps/d2d-fork-input-verbs2.json  credit-runner  verbs2
 data/input/caps_test.go  credit-runner  q13input
+data/input/caps_test.go  credit-runner  verbs2
 data/onboarding  credit-runner  firstminutes
 data/onboarding/en.json  credit-runner  friendfb
 data/questboard  credit-runner  quests1
@@ -512,6 +514,7 @@ docs/knobs.md  credit-runner  vaultreveal
 docs/knobs.md  credit-runner  vaultv3
 docs/knobs.md  credit-runner  vaultv5
 docs/knobs.md  credit-runner  vaultv6
+docs/knobs.md  credit-runner  verbs2
 docs/knobs.md  credit-runner  videofeed2
 docs/knobs.md  credit-runner  viewerfps
 docs/knobs.md  credit-runner  wiring2
@@ -606,6 +609,7 @@ docs/process/combat-reads.md  credit-runner  dlv-reads
 docs/process/druid-support.md  credit-runner  druid1
 docs/process/fork-rebase.md  credit-runner  forkrebase2
 docs/process/hammerdin-support.md  credit-runner  hammer1
+docs/process/input-verbs2.md  credit-runner  verbs2
 docs/process/layout-read.md  credit-runner  countess3
 docs/process/layout-read.md  live-agent  k1layout
 docs/process/necromancer-support.md  credit-runner  necro1
@@ -1082,9 +1086,11 @@ internal/d2/resist.go  credit-runner  resistorder
 internal/d2/stats.go  credit-runner  survB
 internal/d2dcombat/  credit-runner  dlv-cast-verbs
 internal/d2dcombat/  credit-runner  dlv-press
+internal/d2dcombat/rig.go  credit-runner  verbs2
 internal/d2dctl  credit-runner  countess3
 internal/d2dctl  live-agent  k1layout
 internal/d2dctl/  credit-runner  dlv-reads
+internal/d2dctl/fake/fake.go  credit-runner  verbs2
 internal/d2dctl/item_verbs.go  credit-runner  itemverbs2
 internal/d2dctl/item_verbs_merc.go  credit-runner  uib9
 internal/d2dctl/item_verbs_merc_test.go  credit-runner  uib9
@@ -1101,6 +1107,8 @@ internal/d2dctl/vault_verbs.go  credit-runner  vaultpay
 internal/d2dctl/vault_verbs.go  credit-runner  vaulttip
 internal/d2dctl/vault_verbs_test.go  credit-runner  vaulttip
 internal/d2dctl/verbs.go  credit-runner  arrivalsettle
+internal/d2dctl/world_verbs.go  credit-runner  verbs2
+internal/d2dctl/world_verbs_test.go  credit-runner  verbs2
 internal/d2denv  live-agent  k1layout
 internal/d2denv/env.go  credit-runner  pgclock
 internal/d2denv/reader.go  credit-runner  pgclock
@@ -1108,8 +1116,11 @@ internal/d2denv/recent_test.go  credit-runner  pgclock
 internal/d2dinput  pro-runner  bounce3
 internal/d2dinput/  credit-runner  dlv-cast-verbs
 internal/d2dinput/controller.go  credit-runner  arrivalsettle
+internal/d2dinput/controller.go  credit-runner  verbs2
 internal/d2dinput/controller_test.go  credit-runner  arrivalsettle
+internal/d2dinput/controller_test.go  credit-runner  verbs2
 internal/d2dinput/run_test.go  credit-runner  arrivalsettle
+internal/d2dinput/worldverbs.go  credit-runner  verbs2
 internal/d2dloot  credit-runner  groundquality
 internal/d2dsoakstat/minute.go  credit-runner  intake
 internal/d2dsrc/  credit-runner  itemcolour2
@@ -1123,6 +1134,7 @@ internal/d2dsrc/source_test.go  credit-runner  botcpu
 internal/d2dsrc/source_test.go  credit-runner  cain45
 internal/d2dsrc/source_test.go  credit-runner  survB
 internal/d2dsrc/srv_test.go  credit-runner  botcpu
+internal/d2dtown/adapter.go  credit-runner  verbs2
 internal/d2dworld  credit-runner  countess3
 internal/d2dworld  live-agent  k1layout
 internal/d2dworld/  credit-runner  wpstep
@@ -1171,6 +1183,7 @@ internal/env/tuning_combat.go  credit-runner  cainfix3
 internal/env/tuning_combat.go  credit-runner  dlv-expect
 internal/env/tuning_identify.go  credit-runner  bulkid
 internal/env/tuning_input.go  credit-runner  q13input
+internal/env/tuning_input.go  credit-runner  verbs2
 internal/env/tuning_invdesk.go  credit-runner  botinstant
 internal/env/tuning_invdesk.go  credit-runner  gearsets
 internal/env/tuning_items.go  credit-runner  q4runes
@@ -1205,6 +1218,8 @@ internal/goals/runner.go  credit-runner  staletarget
 internal/goldfarm  credit-runner  repairtrip
 internal/hotkeymap/  credit-runner  q13input
 internal/input/  credit-runner  dlv-cast-verbs
+internal/input/worldfake.go  credit-runner  verbs2
+internal/input/worldverbs.go  credit-runner  verbs2
 internal/invdesk  credit-runner  gearsets
 internal/invdesk  credit-runner  idfast
 internal/invdesk/desk.go  credit-runner  botinstant
@@ -1321,6 +1336,8 @@ internal/nav/roam.go  credit-runner  pursuers
 internal/nav/route.go  credit-runner  cainchain
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
+internal/nav/waypoint.go  credit-runner  verbs2
+internal/nav/wpverb_test.go  credit-runner  verbs2
 internal/plandata  credit-runner  agencyp0
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
@@ -1494,6 +1511,7 @@ internal/town/chores.go  credit-runner  idfast
 internal/town/chores.go  credit-runner  repairtrip
 internal/town/chores.go  credit-runner  tidy
 internal/town/chores.go  credit-runner  town3
+internal/town/export_world_test.go  credit-runner  verbs2
 internal/town/idtome_test.go  credit-runner  idtome
 internal/town/imbue_test.go  credit-runner  q4runes
 internal/town/invstash_test.go  credit-runner  towntests
@@ -1508,6 +1526,7 @@ internal/town/portalonly_test.go  credit-runner  cainchain
 internal/town/repairtrip_test.go  credit-runner  repairtrip
 internal/town/shop.go  credit-runner  lootwire3
 internal/town/shop.go  credit-runner  lootwireL4
+internal/town/shop.go  credit-runner  verbs2
 internal/town/sim  credit-runner  beltfix
 internal/town/tidy.go  credit-runner  lootwireL4
 internal/town/tidy.go  credit-runner  tidy
@@ -1521,6 +1540,8 @@ internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
 internal/town/town.go  credit-runner  town3
 internal/town/trip.go  credit-runner  cainchain
+internal/town/worldverbs_test.go  credit-runner  verbs2
+internal/town/worldverbs_unit_test.go  credit-runner  verbs2
 internal/vault  credit-runner  vaultv2
 internal/vault  credit-runner  vaultv5
 internal/vault  credit-runner  vaultv6
