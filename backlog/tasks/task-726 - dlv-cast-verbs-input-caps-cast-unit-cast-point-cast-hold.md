@@ -1,0 +1,41 @@
+---
+id: TASK-726
+title: 'dlv-cast-verbs: input caps cast-unit, cast-point, cast-hold'
+status: Proposed
+assignee:
+  - credit-runner
+created_date: '2026-11-21T04:43:00Z'
+labels:
+  - bot
+  - feature
+dependencies: []
+priority: medium
+ordinal: 349000
+card: "dlv-cast-verbs"
+owns:
+  - "internal/input/"
+  - "internal/d2dcombat/"
+  - "internal/d2dinput/"
+  - "data/input/caps/"
+exclusive:
+  - "fork-branch:didle/cast-verbs"
+contracts: []
+---
+
+## Description
+
+<!-- SECTION:DESCRIPTION:BEGIN -->
+Size: L
+
+Design: docs/design/fable-review-2026-11-21/combat-engine-d-cards.md (user-approved 2026-11-21, all Q1-Q11 as recommended). Delivery builds an input.Action per cast (verb, key, click, verify=expectation); corpse casts carry the corpse unit; Fighter stops calling Click and CastAt directly. Fused cast verb allowed as input only if a differential equals select-then-cast (Q3). No new pixel work (Q10). Depends on dlv-expect.
+<!-- SECTION:DESCRIPTION:END -->
+
+## Acceptance Criteria
+<!-- AC:BEGIN -->
+- [ ] #1 Scenario input.cast-point-lands: a point spell lands at the aimed cell
+- [ ] #2 Differential fused verb vs select-then-cast
+- [ ] #3 Knob input.planner (exists, default 0)
+- [ ] #4 Two builds tested (Paladin + Sorceress), no class or skill literal added, literal count reported in result (may only fall)
+- [ ] #5 Knob combat.delivery.<driver> 0/1/2 where a driver ships; rollback is the knob
+- [ ] #6 go test -race -count=20 on touched packages; tools/ci/check.sh, contracts/backlog checks and leakcheck clean
+<!-- AC:END -->
