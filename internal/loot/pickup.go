@@ -479,6 +479,7 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 				skip("below min prio")
 			} else if l.vaultBlockedNow() {
 				skip("vault full")
+				l.vaultMissSkip(u, name)
 			} else {
 				sp.Observe(ShadowGround, u, "vault", "", false, c.Stats)
 				out = append(out, cand{u: u, v: v, dist: d, name: name, gold0: s.Player.Gold, vault: true})

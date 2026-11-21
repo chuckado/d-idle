@@ -33,6 +33,9 @@ func newPointsRig(t *testing.T, class d2.Class) *pointsRig {
 	}
 	r.desk = points.NewDesk(points.Config{
 		Hero: "Testy", T: tb, Dir: t.TempDir(),
+		Builds: func() []points.BuildInfo {
+			return []points.BuildInfo{{Name: "sor_a", Class: "sorceress", Tier: points.BuildSupported}, {Name: "pal_a", Class: "paladin", Tier: points.BuildSupported}}
+		},
 		Player: func() *d2.Player { q := r.p; return &q },
 		Fresh:  func(context.Context) (*d2.Player, error) { q := r.p; return &q, nil },
 		Verbs:  func() points.Verbs { return points.Verbs{Stat: true, Skill: true, Via: "d2d verbs"} },
@@ -183,5 +186,41 @@ func TestPointsReturnSection(t *testing.T) {
 	r.p.StatPoints, r.p.SkillPoints = 0, 0
 	if sec.Build(&ReturnData{}) != nil {
 		t.Error("nothing banked: no card")
+	}
+}
+
+func TestBuildAPITwoClasses(t *testing.T) {
+	for _, c := range []struct {
+		class       d2.Class
+		mine, other string
+	}{{d2.Sorceress, "sor_a", "pal_a"}, {d2.Paladin, "pal_a", "sor_a"}} {
+		r := newPointsRig(t, c.class)
+		api := NewPointsAPI()
+		api.Bind(r.desk)
+		post, view := api.BuildPostHandler(AnswerOptions{Token: "tok", Origins: []string{"http://ok.test"}}), api.Handler()
+		do := func(body string) *httptest.ResponseRecorder { return invPost(post, BuildRoute, body, questAuth) }
+		w := httptest.NewRecorder()
+		view.ServeHTTP(w, httptest.NewRequest("GET", BuildRoute, nil))
+		if w.Code != 200 || !strings.Contains(w.Body.String(), `"locked":false`) {
+			t.Fatalf("%s GET %d %s", c.class, w.Code, w.Body)
+		}
+		if w := do(`{"build":"nope"}`); w.Code != 400 || !strings.Contains(w.Body.String(), "nope") {
+			t.Errorf("unknown: %d %s", w.Code, w.Body)
+		}
+		if w := do(`{}`); w.Code != 400 {
+			t.Errorf("empty: %d", w.Code)
+		}
+		if w := do(`{"build":"` + c.mine + `"}`); w.Code != 200 || !strings.Contains(w.Body.String(), `"ok":true`) {
+			t.Fatalf("lock: %d %s", w.Code, w.Body)
+		}
+		if w := do(`{"build":"` + c.mine + `"}`); w.Code != 200 || !strings.Contains(w.Body.String(), `"already":true`) {
+			t.Errorf("idempotent: %d %s", w.Code, w.Body)
+		}
+		if w := do(`{"build":"` + c.other + `"}`); w.Code != 409 {
+			t.Errorf("switch: %d %s", w.Code, w.Body)
+		}
+		if w := invPost(post, BuildRoute, `{"build":"`+c.mine+`"}`, nil); w.Code != http.StatusUnauthorized {
+			t.Errorf("no token: %d", w.Code)
+		}
 	}
 }

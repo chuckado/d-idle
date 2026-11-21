@@ -120,6 +120,9 @@ func (n *Navigator) TakeWaypoint(ctx context.Context, levelNo int) error {
 		_ = n.in.CloseAll()
 		return err
 	}
+	if done, err := n.verbWaypoint(ctx, levelNo, from, waited); done {
+		return err
+	}
 	// the panel opens on the current act's tab; click the target act's tab, then the row
 	if err := n.in.Click(input.Left, wpPanel.TabX[act], wpPanel.TabY); err != nil {
 		return err
@@ -413,4 +416,34 @@ func (n *Navigator) clearCursor(ctx context.Context, s *d2.Snapshot) error {
 		return ErrCursorItem
 	}
 	return nil
+}
+
+// verbWaypoint takes the waypoint with the fork's waypoint verb when the knob input.planner is on and the backend lists
+// input.waypoint (docs/process/input-verbs2.md): one message instead of the act tab and row clicks. done reports that the
+// attempt is over (success, or a named rule refusal such as an inactive waypoint, which a click could not fix either);
+// anything else (no verb, an older build, a joined game, a closed panel) leaves done false and the caller clicks as before.
+func (n *Navigator) verbWaypoint(ctx context.Context, levelNo, from int, waited time.Duration) (done bool, err error) {
+	if !n.e.Planner.On() || !n.e.Planner.HasCap(input.CapWaypoint) {
+		return false, nil
+	}
+	wv, ok := input.AsWorldVerbs(n.in)
+	if !ok {
+		return false, nil
+	}
+	if verr := wv.TakeWaypoint(levelNo); verr != nil {
+		if input.IsRuleRefusal(verr) && input.RefusalCode(verr) != "closed" {
+			_ = n.in.CloseAll()
+			return true, fmt.Errorf("%w: level %d: %v", ErrNoWaypoint, levelNo, verr)
+		}
+		n.log.Info("wp: verb unavailable, clicking", "area", levelNo, "err", verr)
+		return false, nil
+	}
+	n.wpClicks++
+	if err := n.waitArea(ctx, n.tune().LoadWait(), levelNo); err != nil {
+		return true, err
+	}
+	n.log.Info(fmt.Sprintf("wp: used %d -> %d (verb, waited %d ms)", from, levelNo, waited.Milliseconds()))
+	n.e.Planner.Count(input.PathVerb)
+	n.noteActivated(levelNo)
+	return true, nil
 }

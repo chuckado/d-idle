@@ -30,7 +30,7 @@ func mk(i int, code string, q, ilvl int) Item {
 
 func open(t testing.TB, dir, hero string, capN int) *Store {
 	t.Helper()
-	s, err := Open(dir, hero, Options{Capacity: func() int { return capN }, Now: fixed, NoSync: true})
+	s, err := Open(dir, hero, Options{AutoTrim: func() bool { return true }, Capacity: func() int { return capN }, Now: fixed, NoSync: true})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -143,7 +143,7 @@ func TestRevealStatusAndPins(t *testing.T) {
 func TestCapacityTrimOrderProtectedAndPins(t *testing.T) {
 	capN := 4
 	c := &clock{}
-	s, _ := Open(t.TempDir(), "sorc", Options{Capacity: func() int { return capN }, Now: c.now, NoSync: true})
+	s, _ := Open(t.TempDir(), "sorc", Options{AutoTrim: func() bool { return true }, Capacity: func() int { return capN }, Now: c.now, NoSync: true})
 	rare, _ := s.Add(mk(1, "wsp", 6, 40)) // protected (rare)
 	low, _ := s.Add(mk(2, "cap", 2, 5))   // normal, lowest value
 	mag1, _ := s.Add(mk(3, "cap", 4, 30))
@@ -195,7 +195,7 @@ func TestShrinkNeverDeletes(t *testing.T) {
 	capN := 6
 	dir := t.TempDir()
 	c := &clock{}
-	s, _ := Open(dir, "sorc", Options{Capacity: func() int { return capN }, Now: c.now, NoSync: true})
+	s, _ := Open(dir, "sorc", Options{AutoTrim: func() bool { return true }, Capacity: func() int { return capN }, Now: c.now, NoSync: true})
 	var ids []string
 	for i := 0; i < 6; i++ {
 		r, _ := s.Add(mk(i, "cap", 4, i))

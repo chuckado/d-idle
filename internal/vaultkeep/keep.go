@@ -70,6 +70,7 @@ type Keeper struct {
 	Namer          func(d2dctl.VaultRecord, vault.Rec) string // display name of an identified record (default: the old name)
 	ShortBy        func() int                                 // gold the town budget is short by (repair, potions, merc); 0 none
 	Prompt         func() bool                                // loot.vaultSellPrompt
+	AutoSell       func() bool                                // loot.vaultAutoTrim: marked (unordered) sales run without the player's confirm; nil or false: only ordered sales run
 	Ether          *bulkid.EtherPayer                         // identify.etherPerReveal payer; nil or price 0: Ether is not used
 	IdentifyPolicy func() int                                 // identify.policy after the measured-run override (nil: manual)
 
@@ -136,7 +137,8 @@ type Info struct {
 	RevQueued   int `json:"revQueued"`  // Reveal waiting
 	RevWorking  int `json:"revWorking"` // Reveal with a step done in the game
 	Revealed    int `json:"revealed"`   // revealed in this process
-	SellQueued  int `json:"sellQueued"` // Sell waiting
+	SellQueued  int `json:"sellQueued"` // Sell waiting (ordered by the player, or marked with loot.vaultAutoTrim on)
+	SellMarked  int `json:"sellMarked"` // marked for sale and waiting for the player's confirm (never sold by itself)
 	SellWorking int `json:"sellWorking"`
 	Sold        int `json:"sold"` // sold in this process
 	GoldEarned  int `json:"goldEarned"`
@@ -295,7 +297,7 @@ func (k *Keeper) Pending() int {
 	if st == nil {
 		return 0
 	}
-	n := len(st.KeepQueued()) + len(st.SellQueued()) + k.equipPending()
+	n := len(st.KeepQueued()) + k.sellRunnable(st.SellQueued()) + k.equipPending()
 	if k.GoldPending() {
 		n++
 	}
@@ -340,6 +342,8 @@ func (k *Keeper) Info() Info {
 		for _, r := range st.SellQueued() {
 			if r.Stage != "" {
 				in.SellWorking++
+			} else if !r.Ordered && !k.autoSell() {
+				in.SellMarked++
 			} else {
 				in.SellQueued++
 			}
@@ -760,4 +764,26 @@ func (k *Keeper) SellLine() string {
 		return k.waitLine("Selling", n)
 	}
 	return ""
+}
+
+func (k *Keeper) autoSell() bool { return k.AutoSell != nil && k.AutoSell() }
+
+// sellRunnable counts the queued sales the errand may run now: in flight, ordered by the player, or any with AutoSell.
+func (k *Keeper) sellRunnable(list []vault.Rec) int {
+	n := 0
+	for _, r := range list {
+		if r.Stage != "" || r.Ordered || k.autoSell() {
+			n++
+		}
+	}
+	return n
+}
+
+// ConfirmMarked is the player's "Sell these N now": every marked record becomes an order.
+func (k *Keeper) ConfirmMarked() (int, error) {
+	st := k.store()
+	if st == nil {
+		return 0, nil
+	}
+	return st.ConfirmSell()
 }
