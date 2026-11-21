@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"testing"
 	"time"
 
@@ -458,5 +459,29 @@ func TestExitToIgnoresAStaleNoExitMark(t *testing.T) {
 	l1.lm.Adjacent = adj // the border was only late: the grid did not grow, the borders did
 	if err := n.ExitTo(ctxT(t), 2); err != nil {
 		t.Fatalf("stale mark held the gate back: %v", err)
+	}
+}
+
+// andariel1, log 20261120-230516-0e0d: the neighbour is linked but d2d cannot read across the edge from the arrival
+// point (nothing open across, pending 1, the map fully known). Waiting finds nothing; walking to the strip does.
+func TestExitToWalksToAnUnprovenStrip(t *testing.T) {
+	s, _ := gateWorld() // far from the gate, whole level in view
+	s.reveal = 300
+	l1 := s.levels[0]
+	adj := l1.lm.Adjacent
+	l1.lm.Adjacent, l1.lm.Pending = nil, 1
+	l1.lm.Unproven = []d2map.Adjacent{{LevelNo: 2, Rect: adj[0].Rect, Contact: adj[0].Contact}}
+	s.onStep = func(s *sim) {
+		if l1.lm.Pending > 0 && math.Hypot(s.px-3000, s.py-3057) < 40 {
+			l1.lm.Adjacent, l1.lm.Pending, l1.lm.Unproven = adj, 0, nil // the strip is near: d2d reads across now
+		}
+	}
+	n := s.navigator()
+	n.exploreFn = func(context.Context, func() bool, *input.Point) error { return ErrExplored }
+	if err := n.ExitTo(ctxT(t), 2); err != nil {
+		t.Fatalf("unproven strip: %v", err)
+	}
+	if s.cur().no != 2 {
+		t.Fatalf("still in level %d at %v", s.cur().no, s.pos())
 	}
 }

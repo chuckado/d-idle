@@ -34,7 +34,7 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 	if n.recentNoExit(start, levelNo) && !n.gateShown(levelNo) {
 		return fmt.Errorf("%w: level %d from %d (nothing new since the last search)", ErrNoExit, levelNo, start)
 	}
-	fruitless := 0
+	fruitless, approached := 0, 0
 	for attempt := 0; attempt < 8; attempt++ {
 		if n.clk.Now().After(deadline) {
 			return fmt.Errorf("%w: leaving for level %d", ErrTimeout, levelNo)
@@ -68,6 +68,27 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 					continue
 				}
 				return fmt.Errorf("%w: gate to level %d is on the map but not reachable from %v (cut off, no way out found)", ErrNoPath, levelNo, o.pos)
+			}
+		}
+		if !ok && approached < 3 {
+			// The map lists the neighbour as linked but cannot read across the edge from here (its collision is built near
+			// the player): walk to its strip, the border shows up on the way. The map is fully known, so exploring finds nothing.
+			if cell, found := n.unprovenTarget(o, levelNo); found {
+				approached++
+				n.log.Info("nav: border not readable from here, walking to its strip", "to", levelNo, "from", o.pos, "cell", cell)
+				err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return cell, 3, nil }, walkOpts{pursuit: true})
+				if err != nil && !errors.Is(err, ErrAlreadyThere) {
+					if errors.Is(err, ErrLevelChanged) {
+						if no := n.levelNow(); no != 0 {
+							n.learn(o.level, no)
+							if no == levelNo {
+								return nil
+							}
+						}
+					}
+					return err
+				}
+				continue
 			}
 		}
 		if !ok {
@@ -211,7 +232,25 @@ func (n *Navigator) gateShown(levelNo int) bool {
 }
 
 // pendingWait bounds the wait for a late border (nav clock: virtual in a lockstep run, which steps the game).
-const pendingWait = 30 * time.Second
+const pendingWait = 10 * time.Second
+
+// unprovenTarget picks the nearest strip cell toward levelNo (see LevelMap.Unproven) the planner can reach.
+func (n *Navigator) unprovenTarget(o *obs, levelNo int) (input.Point, bool) {
+	cells := o.lm.UnprovenCells(levelNo)
+	sort.Slice(cells, func(i, j int) bool {
+		return math.Hypot(float64(cells[i].X-o.pos.X), float64(cells[i].Y-o.pos.Y)) < math.Hypot(float64(cells[j].X-o.pos.X), float64(cells[j].Y-o.pos.Y))
+	})
+	for i, c := range cells {
+		if i%5 != 0 { // neighbours on a strip plan alike
+			continue
+		}
+		p := input.Point{X: c.X, Y: c.Y}
+		if res, err := n.plan(o.lm, o.pos, p, 3, o.snap.Monsters, 0); err == nil && !res.partial && !res.optimistic {
+			return p, true
+		}
+	}
+	return input.Point{}, false
+}
 
 // pendingGate waits while the level still has borders it cannot read, for a gate to levelNo to show up. It reports
 // whether one did.

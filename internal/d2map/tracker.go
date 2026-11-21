@@ -25,8 +25,11 @@ type LevelMap struct {
 	// Pending counts abutting levels whose border is not readable yet (not linked, or linked with no open cell across):
 	// a missing gate may only be late (d2dworld keeps probing). Zero on backends without a layout.
 	Pending int
-	Warps   []Point // Level.WarpX/Y, UNVERIFIED semantics
-	Rooms   []Room2 // static Room2 list
+	// Unproven are the strips toward linked neighbours whose collision is not readable across yet: the inside cells are
+	// walkable, nothing proves the way through. Route and BorderCells ignore them; ExitTo walks there to make the border readable.
+	Unproven []Adjacent
+	Warps    []Point // Level.WarpX/Y, UNVERIFIED semantics
+	Rooms    []Room2 // static Room2 list
 	// RoomRows are the d2d level-generator rooms with a type (the "room" rows of debug presets): Pos is the room
 	// origin plus half a cell. Empty on Game.exe and on d2d builds that do not print them.
 	RoomRows []RoomRow
@@ -346,6 +349,24 @@ func contact(a, b Rect) Rect {
 func (l *LevelMap) BorderCells(levelNo int) []Point {
 	var out []Point
 	for _, a := range l.Adjacent {
+		if a.LevelNo != levelNo {
+			continue
+		}
+		for y := a.Contact.Y; y < a.Contact.Bottom(); y++ {
+			for x := a.Contact.X; x < a.Contact.Right(); x++ {
+				if l.Rect.Contains(x, y) && l.Grid.Walkable(x, y) {
+					out = append(out, Point{x, y})
+				}
+			}
+		}
+	}
+	return out
+}
+
+// UnprovenCells are the walkable cells of the strips in Unproven that lead to levelNo.
+func (l *LevelMap) UnprovenCells(levelNo int) []Point {
+	var out []Point
+	for _, a := range l.Unproven {
 		if a.LevelNo != levelNo {
 			continue
 		}
