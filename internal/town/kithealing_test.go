@@ -2,6 +2,7 @@ package town_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"d2lod-bot/internal/d2"
@@ -28,7 +29,7 @@ func TestKitHealingBoughtWhenPlanIsFull(t *testing.T) {
 		if err != nil {
 			t.Fatalf("%s: %v", tc.name, err)
 		}
-		if rep.Bought["Minor Healing Potion"] < 1 {
+		if healingBought(rep) < 1 {
 			t.Errorf("%s: bought %v, want a healing potion toward the kit minimum of %d", tc.name, rep.Bought, r.Env.Tune.Resource.KitMinHP)
 		}
 	}
@@ -66,7 +67,17 @@ func TestKitHealingOffByDefault(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if n := rep.Bought["Minor Healing Potion"]; n != 0 {
+	if n := healingBought(rep); n != 0 {
 		t.Errorf("bought %d healing potions without a kit minimum", n)
 	}
+}
+
+func healingBought(rep town.ChoreReport) int {
+	n := 0
+	for name, c := range rep.Bought {
+		if strings.HasSuffix(name, "Healing Potion") {
+			n += c
+		}
+	}
+	return n
 }
