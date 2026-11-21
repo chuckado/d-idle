@@ -186,6 +186,8 @@ ok('bar: Ether and free words', () => {
   const r = rev(); r.bar.options = [opt('free', { count: 1, ids: ['a'] }), opt('ether', { cost: 29, count: 29 })]; r.bar.default = 'free';
   assert.equal(L.revealBarModel(r, '', RT).go, 'Reveal 1 item');
   assert.equal(L.revealBarModel(r, 'ether', RT).go, 'Reveal 29 with 29 Ether');
+});
+
 ok('equipPlan: ring gets left, right and auto; other items one button; states', () => {
   const ring = { enabled: true, wearable: true, slots: [{ slot: 'lring', side: 'left', can: true, worn: { name: 'A' }, upgrade: true }, { slot: 'rring', side: 'right', can: false, why: 'needs level 30' }] };
   let p = L.equipPlan(ring);

@@ -265,6 +265,8 @@ export function revealBarModel(rev, pay, T) {
   if (m.skippedN && !m.skipped.length) m.skipped = [{ n: m.skippedN, why: T.skipOther }];
   m.skipTitle = f2(T.skipped, { n: m.skippedN });
   return m;
+}
+
 // equipPlan turns the GET /api/vault/equip/<id> answer into what the Equip sheet draws: the state, the buttons and the line.
 // The three states of the sheet: off (the knob or the gate says no, why), blocked (the item cannot be worn: a charm, an
 // unidentified item, a requirement), ready (buttons) and active/done/failed (an order exists). Rings get a left and a right
