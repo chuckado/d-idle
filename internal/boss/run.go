@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -389,17 +390,6 @@ func (r *runner) locate(ctx context.Context) (Mon, error) {
 	if r.overdue() {
 		return Mon{}, ErrTimeout
 	}
-	for _, sp := range an.Spawns {
-		if err := r.a.GoTo(ctx, sp); err != nil {
-			r.note("goto spawn %v: %v", sp, err)
-		}
-		if m, ok, err := try(r.o.LocatePolls / 2); err != nil || ok {
-			return m, err
-		}
-		if r.overdue() {
-			return Mon{}, ErrTimeout
-		}
-	}
 	var found Mon
 	seen := false
 	stop := func() bool {
@@ -441,7 +431,7 @@ func (r *runner) checkHint(p Pt) {
 
 func resolvePreset(ref *PresetRef, ps []Preset) (Pt, bool) {
 	for _, p := range ps {
-		if p.Kind != ref.Kind || p.ID != ref.ID {
+		if p.Kind != ref.Kind || (p.ID != ref.ID && !(ref.Name != "" && sameName(p.Name, ref.Name))) {
 			continue
 		}
 		for _, v := range ref.Variants {
@@ -452,6 +442,15 @@ func resolvePreset(ref *PresetRef, ps []Preset) (Pt, bool) {
 		return Pt{p.Pos.X + ref.Off.X, p.Pos.Y + ref.Off.Y}, true
 	}
 	return Pt{}, false
+}
+
+// sameName compares monster names ignoring case, spaces and a leading "the".
+func sameName(a, b string) bool {
+	norm := func(x string) string {
+		x = strings.ToLower(strings.Join(strings.Fields(x), ""))
+		return strings.TrimPrefix(x, "the")
+	}
+	return a != "" && b != "" && norm(a) == norm(b)
 }
 
 func abs(a int) int {

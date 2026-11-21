@@ -326,6 +326,7 @@ func (w *World) fetch(ctx context.Context, l *lvl, rect d2map.Rect, pos d2map.Po
 		}
 	}
 	w.mergeLayout(ctx, l, sub)
+	w.mergeMonsterPresets(ctx, l, sub)
 	return max(0, l.m.Grid.KnownCount()-before)
 }
 
@@ -626,6 +627,46 @@ func (w *World) mergeLayout(ctx context.Context, l *lvl, sub func(x, y float64) 
 		}
 		if !known {
 			l.m.RoomRows = append(l.m.RoomRows, d2map.RoomRow{Type: r.Def, Pos: pos})
+		}
+	}
+}
+
+// LevelMonsterer is the optional part of a Verbs that has the fork's "debug levelmonsters" (read-only: the level's
+// monster presets, a superunique's spawn point among them, and the monsters made so far).
+type LevelMonsterer interface {
+	LevelMonsters(ctx context.Context) (*d2dctl.LevelMonsters, error)
+}
+
+// mergeMonsterPresets adds the level's superunique spawn points ("debug levelmonsters" presets, known from the level's
+// build although her room is not up and she is not made yet) as NPC presets with their name, the way `debug presets`
+// does not list them. Only with Options.LayoutRead on; any error or a missing verb leaves the level as fetched.
+func (w *World) mergeMonsterPresets(ctx context.Context, l *lvl, sub func(x, y float64) d2map.Point) {
+	if w.o.LayoutRead == nil || !w.o.LayoutRead() {
+		return
+	}
+	lm, ok := w.v.(LevelMonsterer)
+	if !ok {
+		return
+	}
+	doc, err := lm.LevelMonsters(ctx)
+	if err != nil || doc == nil || doc.Level != l.own.Level {
+		return
+	}
+	for _, p := range doc.Presets {
+		if p.Kind != "superunique" {
+			continue
+		}
+		at := sub(p.X, p.Y)
+		known := false
+		for _, q := range l.m.Presets {
+			if q.Kind == d2map.PresetNPC && q.ID == p.ID && at.X-q.Pos.X <= layoutNear && q.Pos.X-at.X <= layoutNear && at.Y-q.Pos.Y <= layoutNear && q.Pos.Y-at.Y <= layoutNear {
+				known = true
+				break
+			}
+		}
+		if !known {
+			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetNPC, ID: p.ID, Pos: at, Name: p.Name})
+			l.names = append(l.names, p.Name)
 		}
 	}
 }

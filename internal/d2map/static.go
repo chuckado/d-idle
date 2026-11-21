@@ -16,6 +16,7 @@ type Preset struct {
 	ID    int // monster class (NPC), object id (object) or tile number (tile)
 	Pos   Point
 	Room2 uint32
+	Name  string // a monster preset's name when the source gives one (the fork's levelmonsters), else empty
 }
 
 // RoomTile links a tile number to the Room2 on the other side of a level transition.

@@ -516,7 +516,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | quests.autoHoldMin | 15 | 0..240 | min | 15 | 1 | No quest starts by itself this many minutes after the player paused or reset the bot. |
 | quests.autoGapMin | 30 | 0..600 | min | 30 | 1 | At least this long between two auto-started chunks (a bug can then not chain starts). |
 | quests.autoDayCap | 6 | 0..100 | count | 6 | 1 | At most this many auto-started chunks in 24 hours; 0 turns auto-start off. |
-| quests.layoutRead | 0 | 0..1 | bool | 0 | 1 | 1: ask the private d2d fork for the current level's room layout and quest-object positions (read-only verb `debug levelmap`, ADR 0022: a read never makes a run CHEATED) and walk straight to the Tree of Inifuss, the cairn stones or Cain's cage instead of exploring for them; stock d2d or an error falls back to exploring. 0 (default): explore as before. |
+| quests.layoutRead | 0 | 0..1 | bool | 0 | 1 | 1: ask the private d2d fork for the current level's room layout and quest-object positions (read-only verb `debug levelmap`, ADR 0022: a read never makes a run CHEATED) and walk straight to the Tree of Inifuss, the cairn stones or Cain's cage instead of exploring for them; a second read (`debug levelmonsters`) gives a superunique's spawn point (the Countess in Tower Cellar 5) from the level's build; stock d2d or an error falls back to exploring. 0 (default): explore as before. |
 
 ### identify.*
 
