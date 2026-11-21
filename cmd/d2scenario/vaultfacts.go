@@ -56,7 +56,7 @@ func addVaultFacts(st *scenario.State, s scenario.Scenario, dataDir, hero, trace
 			seeded[id] = true
 		}
 		for _, r := range store.Dump() {
-			vf.Records = append(vf.Records, scenario.VaultRecFact{ID: r.ID, Code: r.Code, State: string(r.State), Pin: r.Pin, Identified: r.Identified, Seeded: seeded[r.ID]})
+			vf.Records = append(vf.Records, scenario.VaultRecFact{ID: r.ID, Code: r.Code, State: string(r.State), Pin: r.Pin, Identified: r.Identified, Unlocked: r.Unlocked, Seeded: seeded[r.ID]})
 		}
 		_ = store.Close()
 		log, _ := os.ReadFile(filepath.Join(dir, vault.LogFile))

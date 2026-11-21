@@ -277,3 +277,14 @@ func TestRunAPICallsResolvesPlaceholders(t *testing.T) {
 		t.Fatalf("reply body not kept: %q", reps[0].Body)
 	}
 }
+
+func TestMissingCaps(t *testing.T) {
+	needs := []string{"item.create", "item.equip", "sandbox-d2d-binary", "input.select", "vault.paygold"}
+	got := missingCaps(needs, []string{"item.create", "item.equip"})
+	if len(got) != 1 || got[0] != "vault.paygold" {
+		t.Fatalf("missing %v, want only vault.paygold (other needs are not d2d capabilities)", got)
+	}
+	if got := missingCaps(needs, nil); len(got) != 3 {
+		t.Fatalf("a d2d without caps lacks %v", got)
+	}
+}

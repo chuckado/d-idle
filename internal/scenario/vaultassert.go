@@ -13,6 +13,7 @@ const (
 	AVaultLog      = "vault_log"             // pattern, min (default 1), max: lines of the vault journal (see VaultJournal)
 	AVaultCount    = "vault_count"           // min, max: live records (recorded, keep queued, sell queued)
 	AVaultPresent  = "vault_records_present" // which "seeded" (default): every seeded record is still live
+	AVaultRevealed = "vault_revealed"        // min, max: live records that are revealed (identified, or unsealed by a paid reveal)
 	AVaultMissed   = "vault_missed"          // min, max: missed.count of GET /api/vault
 	AVaultAPI      = "vault_api"             // path, equals or min or max: a field of the last GET /api/vault sample
 	vaultWhichSeed = "seeded"
@@ -25,6 +26,7 @@ type VaultRecFact struct {
 	State      string `json:"state"`
 	Pin        bool   `json:"pin,omitempty"`
 	Identified bool   `json:"identified,omitempty"`
+	Unlocked   bool   `json:"unlocked,omitempty"`
 	Seeded     bool   `json:"seeded,omitempty"`
 }
 
@@ -68,7 +70,7 @@ func (a Assert) validateVault() error {
 		if _, err := regexp.Compile(a.Pattern); err != nil {
 			return fmt.Errorf("vault_log pattern: %w", err)
 		}
-	case AVaultCount, AVaultMissed:
+	case AVaultCount, AVaultMissed, AVaultRevealed:
 		if a.Max == nil && a.Min == 0 {
 			return fmt.Errorf("%s needs min or max", a.Kind)
 		}
@@ -98,6 +100,14 @@ func evalVault(a Assert, st State) AssertResult {
 			}
 		}
 		return rangeResult(n, a.Min, a.Max, "live vault records")
+	case AVaultRevealed:
+		n := 0
+		for _, r := range v.Records {
+			if (r.State == "recorded" || r.State == "keepq" || r.State == "sellq") && (r.Identified || r.Unlocked) {
+				n++
+			}
+		}
+		return rangeResult(n, a.Min, a.Max, "revealed vault records")
 	case AVaultPresent:
 		var gone []string
 		for _, r := range v.Records {
@@ -240,7 +250,7 @@ func NeedsVaultSample(s Scenario) bool {
 func NeedsVault(s Scenario) bool {
 	for _, a := range s.Assert {
 		switch a.Kind {
-		case AVaultLog, AVaultCount, AVaultPresent, AVaultMissed, AVaultAPI:
+		case AVaultLog, AVaultCount, AVaultPresent, AVaultMissed, AVaultAPI, AVaultRevealed:
 			return true
 		}
 	}

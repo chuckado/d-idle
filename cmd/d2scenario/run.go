@@ -281,6 +281,13 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 		return blocked("prep d2d not in game: %v", err)
 	}
 	c := prep.Controller().C
+	if caps, err := c.Caps(ctx); err != nil {
+		_ = prep.Stop()
+		return blocked("caps: %v", err)
+	} else if miss := missingCaps(s.Needs, caps); len(miss) > 0 {
+		_ = prep.Stop()
+		return blocked("the lab d2d lacks %s (the scenario needs them)", strings.Join(miss, ", "))
+	}
 	if err := applySetup(ctx, c, su, ledger); err != nil {
 		_ = prep.Stop()
 		return blocked("setup: %v", err)
@@ -823,4 +830,16 @@ func withVault(args []string, on bool) []string {
 		return append(args, "--vault-verbs")
 	}
 	return args
+}
+
+// missingCaps lists the d2d capabilities in needs (the fork's names: item.*, ground.*, vault.*) that caps does not list.
+// Other needs (a build, an input module) are not d2d capabilities and are checked elsewhere.
+func missingCaps(needs, caps []string) []string {
+	var out []string
+	for _, n := range needs {
+		if (strings.HasPrefix(n, "item.") || strings.HasPrefix(n, "ground.") || strings.HasPrefix(n, "vault.")) && !d2dctl.HasCap(caps, n) {
+			out = append(out, n)
+		}
+	}
+	return out
 }

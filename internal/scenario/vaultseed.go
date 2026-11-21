@@ -46,8 +46,11 @@ type VaultIt struct {
 	Quality int    `json:"quality,omitempty"` // docs/forkcheats.md: 4 magic, 6 rare; 0 leaves the code's default
 	// Unid makes the record unidentified (the item is given with the `unid` flag; its affixes are held sealed).
 	Unid bool `json:"unid,omitempty"`
-	Pin  bool `json:"pin,omitempty"`
-	N    int  `json:"n,omitempty"` // copies (default 1); copies of a magic or better item are distinct items
+	// Sealed is the held affix text ("stat:param:value;...") written when the fork sent none for the unidentified item
+	// (U: it may not), so a gold reveal has something to unseal.
+	Sealed string `json:"sealed,omitempty"`
+	Pin    bool   `json:"pin,omitempty"`
+	N      int    `json:"n,omitempty"` // copies (default 1); copies of a magic or better item are distinct items
 }
 
 var qualityWords = map[string]int{"low": 1, "normal": 2, "superior": 3, "magic": 4, "rare": 6, "": 2}

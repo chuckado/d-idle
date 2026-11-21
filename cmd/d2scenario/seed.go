@@ -234,8 +234,8 @@ func seedRecord(ctx context.Context, c seedGame, st *vault.Store, do func(line, 
 			Chain: ch, Sockets: rec.Sockets, Eth: rec.Ethereal, Found: vault.Found{Time: time.Now().UTC(), Zone: "scenario seed"}}
 		if rec.Identified {
 			it.Props = rec.Props
-		} else {
-			it.Sealed = rec.Props
+		} else if it.Sealed = rec.Props; it.Sealed == "" {
+			it.Sealed = sd.Sealed // the fork sent no affixes for the unidentified item: the scenario holds its own
 		}
 		it.Pic, it.Tint, it.FileIndex = rec.Pic, rec.Tint, rec.FileIndex()
 		r, err := st.Add(it)
