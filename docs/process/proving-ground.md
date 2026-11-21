@@ -139,3 +139,19 @@ Not run live yet: `cain.read`, `cain.report`, `town.stash-gold-withdraw`, `cain.
 ## 13. State after the second live run (card pgrun2, 2026-11-19)
 
 Record and stall lines: `docs/probes/provingground-run-2026-11-19.md` (second run section). 24 scenarios (18 runnable, 6 PENDING). Coverage (`d2scenario coverage`): 95 behaviours, COVERED 25, PENDING-ONLY 7, UNCOVERED 63. Run live so far: GREEN belt.refill-after-fight, cain.read, cain.report, heal.town (assert point moved: `virtual_min` 1, both classes), loot.rare-ring-classified (with the points knob), town.resupply, town.stash-gold-withdraw, cain.scroll.field; RED (findings, bot or scenario owners named in the record): cain.scroll, flail.areachanges, cain.stones, cain.cage, cain.chain, chicken.recovery, cain.scroll.sandbox. Determinism: `cain.stones` Paladin 11 twice, same verdict and the same digest; `d2scenario determinism` takes the two `results.json` files. Lesson for scenario authors: a hero raised by stat verbs keeps its points banked (55 life at clvl 32, no attack skill); the Cain, chicken and loot scenarios set `resource.pointsDecisions` 1 so the bot spends them, and a purse is spent within minutes, so a scenario that needs the board must not depend on the purse being intact.
+
+## 10. Vault, equip and manage scenarios: first live runs (card pgvault, 2026-11-21)
+
+V live on the builder long lane, lab d2d build devp16 (`--vault-verbs`), bot of the card branch, setups CHEATED (mechanics only). Seeding works end to end: a record (give, `item full`, `item vault`, vault store) in about a second, 400 filler records in about 2 minutes of the run; `{{vault.N.id}}` and `{{pack.item[name=cap].id}}` resolve; `GET /api/vault` is sampled.
+
+| scenario | Paladin 11 | Sorceress 3 | reading |
+|---|---|---|---|
+| vault.full-no-trim | GREEN as asserted at the end (count 400 and every seeded record present after the run; earlier RED only for the removed `vault_missed`) | GREEN | a full vault trims nothing (V live) |
+| vault.full-notice | GREEN in the API fields `capacity.level` full and `autoTrim` false; `missed.count` is absent until a drop is missed, not asserted | GREEN | `missed.count` needs a drop the bot walks to: a field start with the drop, not done |
+| vault.equip-one-tap, -swap, -ring-left, -ring-right | RED | RED | FINDING F1: the d2d backend never passes `deps.VaultKeep` to `bot.New` (`cmd/d2bot/d2dbackend.go` sets `deps.PlayerGear` only), so Keep, Equip and Reveal orders are accepted and stay queued (`keepq`) forever on the d2d path. V live: with `deps.VaultKeep = vaultKeepDep(ref)` added locally (not committed) the record reached `kept` through "Going to town to keep your vault items". FINDING F2 (same local patch): the equip step right after the Keep logs "Cap not worn: that item is not in the inventory any more" and the saved hero holds no cap at all: the created item is not found by the equip, and the hero reloads without it (U which of the two). |
+| manage.equip-immediate | GREEN | RED (the swapped-out cap is not in the pack at the end: sold or not equipped, U) | the route queues the order with `wait: safe` and the equip lane runs |
+| manage.identify-immediate | RED | RED | FINDING F3: `player identify Cap failed: the item verb answered ok but the game did not show the change` (identify of a `debug give ... unid` magic cap) |
+| manage.recall-now | RED (needs the vault Keep, F1) | RED | the Recall route answers 200 `state waiting`; the equip it carries never runs (F1) |
+| vault.reveal-gold, vault.reveal-gold-short | PENDING | PENDING | not run: `debug paygold` is not in devp16 (devp17), and the bot refuses the payment in a measured run |
+
+Reproduce: `labrun BUILDER --lane long --detach --pull provingground-out -- env PG_D2D_BIN=<devp16 d2d> tools/provingground/run.sh -id <ids, comma list> -class Paladin -seed 11 -parallel 2`.
