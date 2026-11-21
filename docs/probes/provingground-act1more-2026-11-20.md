@@ -18,7 +18,7 @@
 | act1.tools.malus | BLOCKED | 20261120-200952-46d2: record 3 not observed (never written); the Barracks step refused: "route guard (3 healing potions < 4)" with 1220 gold and 8 potions in the pack (finding 2) |
 | act1.andariel.slaughter at level 30 | RED (scenario defect) | 20261120-204236-684a: `reach:30` is already met at level 30, the bot idles in town; level set to 26 |
 | act1.andariel.slaughter at level 26 | RED | 20261120-204437-d3bd: no Start was ever offered in 90 virtual minutes (no taps), no `quest board` line; the hero trained through Outer Cloister and Jail (finding 3); record 6 not observed |
-| determinism pair act1.burial.blood_raven Paladin/11 | see the card result | 20261120-210945-74a3 against 20261120-195436-d0c5 |
+| determinism pair act1.burial.blood_raven Paladin/11 | same verdict GREEN, digest differs (warning, wall-clock decisions) | 20261120-210945-74a3 against 20261120-195436-d0c5 |
 
 Scenario defects fixed on the way (mine, not bot): the `log_line` format cannot express `min 0` with a positive `max` (0 means the default 1; the death bound is `max: 0`, the chicken bound counts the single "starting chunk" line in its `max`); a level equal to the `reach:` goal ends the run at once.
 
