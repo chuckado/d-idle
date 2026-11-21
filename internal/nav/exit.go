@@ -92,6 +92,10 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 			}
 		}
 		if !ok {
+			// The facts behind "no gate": what the map shows toward levelNo and why none is usable (card andariel1).
+			n.log.Info("nav no usable gate", "from", o.level, "to", levelNo, "exits", len(o.lm.Exits), "adjacent", len(o.lm.Adjacent),
+				"borderCells", len(o.lm.BorderCells(levelNo)), "unproven", len(o.lm.UnprovenCells(levelNo)), "pending", o.lm.Pending,
+				"cands", len(n.gateCands(o, levelNo)), "known", o.lm.Grid.KnownCount(), "fullyKnown", n.fullyKnown(), "badTTL", n.badTTL() > 0)
 			n.log.Info("nav no exit known yet, exploring", "from", o.level, "to", levelNo)
 			known := o.lm.Grid.KnownCount()
 			explore := n.explore
