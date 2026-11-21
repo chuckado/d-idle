@@ -165,6 +165,28 @@
     {"kind": "log_line", "pattern": "class-aware start.*levelerBuild=barbarian_frenzy_guide", "min": 1, "why": "the bot played the selected table, not the default"},
     {"kind": "no_writes"}
    ]
+  },
+  {
+   "id": "points.druid-fire-lands-at-30",
+   "title": "Druid fire build (druid_fire_guide): at clvl 30 the planned skill points are in the tree",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": ["points.verb"],
+   "touches": ["internal/plandata/build-druid_fire_guide.json", "internal/combat/classdata/profiles.json", "internal/leveler/", "internal/points/"],
+   "pre": {"level": 30},
+   "trigger": {"goals": "campaign", "build": "druid_fire_guide", "knobs": {"resource.pointsDecisions": 1}},
+   "budget": {"virtual_min": 10},
+   "matrix": {"classes": ["Druid"], "seeds": [11]},
+   "provenance": "SETUP: level 30 with the points a played level gives (29 level points; the table's clvl 30 sum is 33 because it counts the Den of Evil, Radament and Izual quest points at clvl 8, 15 and 26, so the hero spends 29 of 33 unless the setup grants quest points). Reachable by play. CHEATED setup: mechanics evidence only.",
+   "notes": "Run with the build druid_fire_guide, autopilot on. The table at clvl 30: Firestorm 13, Molten Boulder 6, Eruption 10 (Fissure), Oak Sage 1, Arctic Blast 1, Cyclone Armor 1, Volcano 1. Druid skill ids are the skills.txt Id column (V, patched skills.txt of the worker host): Firestorm 225, Molten Boulder 229, Eruption 234. With 29 level points the first 24 spend Firestorm 9, Molten Boulder 2, Eruption 10 and the three singles; the last five go to Volcano and Molten Boulder, so Firestorm stays at 9 and the lower bounds leave room. The Druid class index 5 is S (data/smoke/rules.json, docs/d2d-fidelity.md) until this run. Not asserted: that a Fissure or Firestorm cast lands (ground-aimed, no live verdict; docs/process/druid-support.md).",
+   "assert": [
+    {"kind": "stat_between", "code": "skillsspent", "min": 29, "max": 33, "why": "the table's points were spent"},
+    {"kind": "skill_points", "skill": 234, "min": 8, "at_level": 30, "why": "Eruption (Fissure), the build's attack from clvl 12 (id 234)"},
+    {"kind": "skill_points", "skill": 225, "min": 8, "at_level": 30, "why": "Firestorm, the opener (id 225)"},
+    {"kind": "skill_points", "skill": 229, "min": 2, "at_level": 30, "why": "Molten Boulder, Eruption's prerequisite (id 229)"},
+    {"kind": "log_line", "pattern": "class-aware start.*levelerBuild=druid_fire_guide", "min": 1, "why": "the bot played the selected table, not the default"},
+    {"kind": "no_writes"}
+   ]
   }
  ]
 }

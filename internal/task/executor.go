@@ -37,6 +37,9 @@ type Result struct {
 	Attention string // set with OutBlocked: text for goal.Note / needs_attention
 	Stuck     bool   // with OutBlocked: nothing else is runnable, the goal should pause
 	Err       error
+	// Code and Hold carry the Fault of a refused step to the quest board (Fault.Code, Fault.Hold).
+	Code string
+	Hold bool
 }
 
 // Policy is the retry/escape policy (tasklayer.md sections 3 and 6). Counters live in memory only; a restart forgets
@@ -575,7 +578,7 @@ func (e *Executor) givenUp(ins []Step) bool {
 
 // handleFault deals with a Ready fault (or a run fault of a precondition kind).
 func (e *Executor) handleFault(plan Plan, s Step, f *Fault, r Result) Result {
-	r.Kind = f.Kind
+	r.Kind, r.Code, r.Hold = f.Kind, f.Code, f.Hold
 	pol := e.Policy.norm()
 	if len(f.Insert) > 0 && e.insDepth < pol.MaxInsert && !e.givenUp(f.Insert) {
 		e.insDepth++
@@ -585,6 +588,11 @@ func (e *Executor) handleFault(plan Plan, s Step, f *Fault, r Result) Result {
 		}
 		e.inserted = append(front, e.inserted...) // prerequisites of a prerequisite run first
 		r.Outcome = OutInserted
+		return r
+	}
+	if f.Hold { // a hold is no failure: nothing is counted and the group is never escaped or blocked by it
+		r.Outcome = OutRetry
+		r.Err = errors.New(f.Why)
 		return r
 	}
 	if f.Kind == KindDanger || f.Kind == KindPrereq || f.Kind == KindResource {

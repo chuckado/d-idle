@@ -116,12 +116,14 @@ type Runner struct {
 	pointsGate atomic.Pointer[func() bool] // who spends points: nil = the bot (pointsgate.go)
 	readiness  *readiness.Evaluator        // nil: no readiness model wired (TASK-218)
 
-	e   *env.Env
-	d   Deps
-	cfg Config
-	ch  chan goals.Event
-	bus *event.Bus
-	sub *event.Sub // bridge subscription (bus -> ch), nil without a bus
+	e *env.Env
+	d Deps
+
+	planWarn sync.Once // a failing town planner is logged once (routeguard.go kitPlanOf)
+	cfg      Config
+	ch       chan goals.Event
+	bus      *event.Bus
+	sub      *event.Sub // bridge subscription (bus -> ch), nil without a bus
 
 	gf       *goldfarm.Controller     // the player's Farm gold order (SetGoldFarm); nil: no order
 	qb       *boardRT                 // the quest board executor (NewQuestBoard, questboard.go); nil: not wired

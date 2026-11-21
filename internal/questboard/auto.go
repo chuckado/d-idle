@@ -261,7 +261,7 @@ func (e *Exec) AutoTick(in AutoInput) (AutoAct, error) {
 	away := e.awayAt(now, e.o.Auto)
 	e.ax.am.Unlock()
 
-	o := open(vs, plan, diff)
+	o := e.open(vs, plan, diff)
 	if len(o) > 0 {
 		e.ax.am.Lock()
 		e.ax.pending, e.ax.why = nil, ""
