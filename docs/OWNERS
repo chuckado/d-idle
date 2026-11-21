@@ -1308,6 +1308,7 @@ internal/scenario/earned.go  credit-runner  pgearned
 internal/scenario/hero  credit-runner  pghero
 internal/scenario/hero/selfcheck.go  credit-runner  pgselfcheck
 internal/scenario/ledger.go  credit-runner  pgledger
+internal/scenario/newkinds_test.go  credit-runner  town1
 internal/scenario/result.go  credit-runner  pgprov
 internal/scenario/scenario.go  credit-runner  barb1
 internal/scenario/scenario_test.go  credit-runner  agencyp0
@@ -1959,7 +1960,7 @@ tools/provingground/scenarios/points.json  credit-runner  hammer1
 tools/provingground/scenarios/points.json  credit-runner  necro1
 tools/provingground/scenarios/points.json  credit-runner  sorc2
 tools/provingground/scenarios/tiers.json  credit-runner  pgstability
-tools/provingground/scenarios/town.plan.*  credit-runner  town1
+tools/provingground/scenarios/townplan.json  credit-runner  town1
 tools/provingground/status_doc.sh  credit-runner  pgpage
 tools/survival  credit-runner  pghero
 tools/survival  credit-runner  survhold2

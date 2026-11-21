@@ -1110,6 +1110,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [survival-holdout4-2026-11-19.md](probes/survival-holdout4-2026-11-19.md): Survival A/B holdout 4: Sorceress screen, Paladin seeds 8 (2026-11-19/20) (status: current (card survhold4). Tags: V verified (builder logs, `abreport -death-slack 1 -chicken-slack 1...)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
+- [town-plan-scenarios.md](probes/town-plan-scenarios.md): Town planner scenarios (card town1) (status: current (2026-11-21). Source: docs/design/fable-review-2026-11-21/town-planner-b-model.md section B4.)
 - [treefix3-2026-11-19.md](probes/treefix3-2026-11-19.md): treefix3: why the Inifuss tree was not found for 17 hours (2026-11-19)
 - [vault-spike-2026-11-16.md](probes/vault-spike-2026-11-16.md): Ethereal Vault V0 spike: capture and create on the d2d fork (result) (status: RESULT, 2026-11-16 (task TASK-578). Design: `docs/design/loot-vault-2026-11-16.md` section 1.7. Tags: V =...)
 - [video-feed-2026-11-15.md](probes/video-feed-2026-11-15.md): Probe: lossless delta feed on real d2d frames (card videofeed, 2026-11-15)

@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- town1: planner scenarios (12 B4 sketches) and belt_at_least assertion, not run <!--sg:agent/town1-->
 - pgcards: 16 Proving Ground and merge gate cards <!--sg:agent/pgcards-->
 - Merge branch 'main' into fabledecisions2 <!--sg:agent/fabledecisions2-->
 - combatcards: 17 dlv-* combat-engine cards (docs/backlog only) <!--sg:agent/combatcards-->

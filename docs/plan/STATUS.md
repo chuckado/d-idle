@@ -357,7 +357,7 @@
 | pgledger | proposed | - | `cmd/d2scenario/ledger.go`<br>`internal/scenario/ledger.go`<br>`docs/process/pg-ledger-ops.md` | - |
 | pgpage | proposed | - | `docs/process/proving-ground-status.md`<br>`tools/provingground/status_doc.sh` | - |
 | mgonejob | proposed | - | `docs/process/pg-ops-mgonejob.md` | - |
-| town1 | proposed | - | `tools/provingground/scenarios/town.plan.*`<br>`internal/scenario/state.go`<br>`docs/probes/town-plan-scenarios.md` | - |
+| town1 | in-progress | - | `tools/provingground/scenarios/townplan.json`<br>`internal/scenario/state.go`<br>`internal/scenario/newkinds_test.go`<br>`docs/probes/town-plan-scenarios.md` | - |
 | mgcache | proposed | - | `docs/process/pg-ops-mgcache.md` | - |
 | town2 | proposed | - | `internal/supply`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/bot/kitgate.go`<br>`internal/town/basicsfix.go` | - |
 | mglanes | proposed | - | `docs/process/pg-ops-mglanes.md` | - |
@@ -410,6 +410,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 9e2b6cf06 11-21 00:47 `Merge agent/town1: town1: planner scenarios (12 B4 sketches) and belt_at_least assertion, not run` (town1)
+- fda7178c2 11-21 00:46 `Merge branch 'main' into town1` (-)
 - df91428e3 11-21 00:44 `Merge agent/pgcards: pgcards: 16 Proving Ground and merge gate cards` (pgcards)
 - 7295f4ba1 11-21 00:44 `Merge agent/fabledecisions2: Merge branch 'main' into fabledecisions2` (fabledecisions2)
 - 6a35831bb 11-21 00:44 `Merge agent/combatcards: combatcards: 17 dlv-* combat-engine cards (docs/backlog only)` (combatcards)
@@ -418,6 +420,4 @@
 - 1ebb38cb5 11-21 00:37 `Merge branch 'main' into fabledecisions2` (-)
 - 12b543079 11-21 00:37 `Merge branch 'main' into combatcards` (-)
 - 98fd96105 11-21 00:37 `Merge branch 'main' into towncards` (-)
-- a3e821b57 11-21 00:11 `Merge agent/chores2: Merge branch 'main' into chores2` (chores2)
-- acd82d6e2 11-21 00:10 `Merge branch 'main' into chores2` (-)
 <!-- statusgen:end -->

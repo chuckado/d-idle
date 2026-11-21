@@ -1136,6 +1136,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/combatcards: combatcards: 17 dlv-* combat-engine cards (docs/backlog only) (merged 2026-11-21) <!--sg:agent/combatcards-->
 - fabledecisions2: ADRs 0025 to 0028 for the four 2026-11-21 Fable reviews (TASK-751, merged 2026-11-21, acceptance 1 of 1): ADRs 0025 to 0028 written; docs only, not verified live <!--sg:agent/fabledecisions2-->
 - agent/pgcards: pgcards: 16 Proving Ground and merge gate cards (merged 2026-11-21) <!--sg:agent/pgcards-->
+- town1: planner scenarios (B4 set, belt_at_least assertion) and RED/green record (TASK-746, merged 2026-11-21, acceptance 3 of 3): The 12 B4 scenarios are in tools/provingground/scenarios/townplan.json (Paladin and Sorceress matrix, seeds 11 and 3, no_writes) and the belt_at_least assertion exists with a unit test (go test ./internal/scenario ./cmd/d2scenario ok). ... <!--sg:agent/town1-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
