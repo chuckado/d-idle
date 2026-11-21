@@ -31,10 +31,10 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 	deadline := n.clk.Now().Add(2 * t.WalkTimeout())
 	settled := false
 	start := n.levelNow()
-	if n.recentNoExit(start, levelNo) {
+	if n.recentNoExit(start, levelNo) && !n.gateShown(levelNo) {
 		return fmt.Errorf("%w: level %d from %d (nothing new since the last search)", ErrNoExit, levelNo, start)
 	}
-	fruitless := 0
+	fruitless, approached := 0, 0
 	for attempt := 0; attempt < 8; attempt++ {
 		if n.clk.Now().After(deadline) {
 			return fmt.Errorf("%w: leaving for level %d", ErrTimeout, levelNo)
@@ -70,7 +70,32 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 				return fmt.Errorf("%w: gate to level %d is on the map but not reachable from %v (cut off, no way out found)", ErrNoPath, levelNo, o.pos)
 			}
 		}
+		if !ok && approached < 3 {
+			// The map lists the neighbour as linked but cannot read across the edge from here (its collision is built near
+			// the player): walk to its strip, the border shows up on the way. The map is fully known, so exploring finds nothing.
+			if cell, found := n.unprovenTarget(o, levelNo); found {
+				approached++
+				n.log.Info("nav: border not readable from here, walking to its strip", "to", levelNo, "from", o.pos, "cell", cell)
+				err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return cell, 3, nil }, walkOpts{pursuit: true})
+				if err != nil && !errors.Is(err, ErrAlreadyThere) {
+					if errors.Is(err, ErrLevelChanged) {
+						if no := n.levelNow(); no != 0 {
+							n.learn(o.level, no)
+							if no == levelNo {
+								return nil
+							}
+						}
+					}
+					return err
+				}
+				continue
+			}
+		}
 		if !ok {
+			// The facts behind "no gate": what the map shows toward levelNo and why none is usable (card andariel1).
+			n.log.Info("nav no usable gate", "from", o.level, "to", levelNo, "exits", len(o.lm.Exits), "adjacent", len(o.lm.Adjacent),
+				"borderCells", len(o.lm.BorderCells(levelNo)), "unproven", len(o.lm.UnprovenCells(levelNo)), "pending", o.lm.Pending,
+				"cands", len(n.gateCands(o, levelNo)), "known", o.lm.Grid.KnownCount(), "fullyKnown", n.fullyKnown(), "badTTL", n.badTTL() > 0)
 			n.log.Info("nav no exit known yet, exploring", "from", o.level, "to", levelNo)
 			known := o.lm.Grid.KnownCount()
 			explore := n.explore
@@ -96,6 +121,11 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 				// Right after an arrival the client may still be loading rooms: give the map one chance to grow.
 				if !settled && n.mapGrows(ctx, 3*time.Second) {
 					settled = true
+					continue
+				}
+				// A border that d2dworld still probes (a linked neighbour whose collision is not built yet) is late, not
+				// missing: andariel1, Monastery Gate to Outer Cloister, "no exit" 0.2 s after arrival with pending 1.
+				if n.pendingGate(ctx, o.lm, levelNo) {
 					continue
 				}
 				n.markNoExit(o.level, levelNo, known)
@@ -198,6 +228,56 @@ func (n *Navigator) recentNoExit(from, to int) bool {
 	return false
 }
 
+// gateShown reports that the current level map shows a way to levelNo now (an earlier "nothing found" mark is stale then:
+// the map did not grow, but its borders did).
+func (n *Navigator) gateShown(levelNo int) bool {
+	lm := n.w.Current()
+	return lm != nil && lm.Grid != nil && hasGate(lm, levelNo)
+}
+
+// pendingWait bounds the wait for a late border (nav clock: virtual in a lockstep run, which steps the game).
+const pendingWait = 10 * time.Second
+
+// unprovenTarget picks the nearest strip cell toward levelNo (see LevelMap.Unproven) the planner can reach.
+func (n *Navigator) unprovenTarget(o *obs, levelNo int) (input.Point, bool) {
+	cells := o.lm.UnprovenCells(levelNo)
+	sort.Slice(cells, func(i, j int) bool {
+		return math.Hypot(float64(cells[i].X-o.pos.X), float64(cells[i].Y-o.pos.Y)) < math.Hypot(float64(cells[j].X-o.pos.X), float64(cells[j].Y-o.pos.Y))
+	})
+	for i, c := range cells {
+		if i%5 != 0 { // neighbours on a strip plan alike
+			continue
+		}
+		p := input.Point{X: c.X, Y: c.Y}
+		if res, err := n.plan(o.lm, o.pos, p, 3, o.snap.Monsters, 0); err == nil && !res.partial && !res.optimistic {
+			return p, true
+		}
+	}
+	return input.Point{}, false
+}
+
+// pendingGate waits while the level still has borders it cannot read, for a gate to levelNo to show up. It reports
+// whether one did.
+func (n *Navigator) pendingGate(ctx context.Context, lm *d2map.LevelMap, levelNo int) bool {
+	if lm == nil || lm.Pending == 0 {
+		return false
+	}
+	end := n.clk.Now().Add(pendingWait)
+	for n.clk.Now().Before(end) && ctx.Err() == nil {
+		n.clk.Sleep(n.tune().Poll())
+		if _, err := n.observeWait(ctx); err != nil {
+			return false
+		}
+		if n.gateShown(levelNo) {
+			return true
+		}
+		if cur := n.w.Current(); cur == nil || cur.Pending == 0 {
+			return false
+		}
+	}
+	return false
+}
+
 func hasGate(lm *d2map.LevelMap, levelNo int) bool {
 	for _, e := range lm.Exits {
 		if e.Dest == levelNo {
@@ -223,7 +303,11 @@ func (n *Navigator) gateCands(o *obs, levelNo int) []gate {
 	var cands []gate
 	for _, e := range o.lm.Exits {
 		if e.Dest == levelNo {
-			cands = append(cands, gate{at: input.Point{X: e.Pos.X, Y: e.Pos.Y}, push: input.Point{X: e.Pos.X, Y: e.Pos.Y}})
+			g := gate{at: input.Point{X: e.Pos.X, Y: e.Pos.Y}, push: input.Point{X: e.Pos.X, Y: e.Pos.Y}}
+			if e.HasClick { // the push click must land in the warp's Select box (d2dctl.Warp)
+				g.push = input.Point{X: e.Click.X, Y: e.Click.Y}
+			}
+			cands = append(cands, g)
 		}
 	}
 	cands = append(cands, n.borderGates(o.lm, levelNo)...)

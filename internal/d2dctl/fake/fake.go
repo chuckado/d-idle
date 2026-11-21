@@ -16,25 +16,30 @@ import (
 
 // Fixtures are raw payload lines (tab separated like the real channel) per verb.
 type Fixtures struct {
-	State    string // the one "state" line
-	NPCs     []string
-	Monsters []string
-	Ground   []string
-	Menu     []string
-	Items    []string
-	Corpses  []string
-	Players  []string
-	Warps    []string
-	Presets  []string
-	Objects  []string
-	Portals  []string
-	Grid     []string
-	Level    string // rest of "debug level"
-	Quest    string // rest of "debug quest <q> show"
-	Attack   string
-	Passives string
+	State         string // the one "state" line
+	NPCs          []string
+	Monsters      []string
+	Ground        []string
+	Menu          []string
+	Items         []string
+	Corpses       []string
+	Players       []string
+	Warps         []string
+	Presets       []string
+	Objects       []string
+	Portals       []string
+	Grid          []string
+	Level         string // rest of "debug level"
+	LevelMap      string // the JSON line of "debug levelmap" (empty: the verb is missing, answers err)
+	LevelMonsters string // the JSON line of "debug levelmonsters" (empty: the verb is missing, answers err)
+	Quest         string // rest of "debug quest <q> show"
+	Attack        string
+	Passives      string
 	// Caps is the fork's "caps" list (comma separated); empty: the verb is unknown, like stock d2d.
 	Caps string
+	// Realtime starts the fork free-running (clock says lockstep=0); "lockstep on|off" then switches it, "lockstep" is
+	// an unknown verb when NoLockstepVerb is set (a build without the runtime switch).
+	Realtime, NoLockstepVerb bool
 	// ItemReply is the first payload line of "item ..." (e.g. "equip id=5 slot=4 displaced=-1 at=-1,-1" or "noop slot=4 at=-1,-1"); ItemErr is an "err" text instead.
 	ItemReply, ItemErr string
 }
@@ -67,6 +72,7 @@ type Server struct {
 	cur     net.Conn
 	frame   int
 	tick    int  // lockstep virtual ticks (step verb)
+	lsOn    bool // the lockstep switch (Fixtures.Realtime starts it off)
 	needs   bool // quirk state: a click is required
 	quit    bool
 	cmds    int
@@ -81,7 +87,7 @@ func New(path string, fix Fixtures, opts Options) (*Server, error) {
 	if err != nil {
 		return nil, err
 	}
-	s := &Server{Fix: fix, Opts: opts, path: path, ln: ln, frame: 100}
+	s := &Server{Fix: fix, Opts: opts, path: path, ln: ln, frame: 100, lsOn: !fix.Realtime}
 	s.wg.Add(1)
 	go s.accept()
 	return s, nil
@@ -237,8 +243,21 @@ func (s *Server) handle(line string) (reply string, ignored, quit bool) {
 		}
 		s.tick += n
 		return fmt.Sprintf("frame=%d game_ms=%d tick=%d\nok\n", s.frame+s.tick, s.tick*40, s.tick), false, false
+	case "lockstep":
+		if s.Fix.NoLockstepVerb {
+			return "err unknown verb 'lockstep'\n", false, false
+		}
+		if len(f) != 2 || (f[1] != "on" && f[1] != "off") {
+			return "err usage: lockstep on|off\n", false, false
+		}
+		s.lsOn = f[1] == "on"
+		return "ok\n", false, false
 	case "clock":
-		return fmt.Sprintf("lockstep=1 scale=1 frame=%d stepped=%d game_ms=%d tick=%d pending=0 render_steps=0\nok\n", s.frame+s.tick, s.tick, s.tick*40, s.tick), false, false
+		ls := 0
+		if s.lsOn {
+			ls = 1
+		}
+		return fmt.Sprintf("lockstep=%d scale=1 frame=%d stepped=%d game_ms=%d tick=%d pending=0 render_steps=0\nok\n", ls, s.frame+s.tick, s.tick, s.tick*40, s.tick), false, false
 	case "caps":
 		if s.Fix.Caps == "" {
 			return "err unknown verb caps\n", false, false
@@ -328,6 +347,16 @@ func (s *Server) debug(f []string) (string, bool, bool) {
 		return payload(s.Fix.Presets) + "ok\n", false, false
 	case "objects":
 		return payload(s.Fix.Objects) + "ok\n", false, false
+	case "levelmap":
+		if s.Fix.LevelMap == "" {
+			return "err unknown debug verb\n", false, false
+		}
+		return s.Fix.LevelMap + "\nok\n", false, false
+	case "levelmonsters":
+		if s.Fix.LevelMonsters == "" {
+			return "err unknown debug verb\n", false, false
+		}
+		return s.Fix.LevelMonsters + "\nok\n", false, false
 	case "portals":
 		return payload(s.Fix.Portals) + "ok\n", false, false
 	case "grid":

@@ -82,13 +82,19 @@
     return d;
   }
 
-  // The allocation control is disabled today: /api/skills says allocate:false and the route answers 501.
-  function allocate(id) {
+  // The allocation control spends one point through POST /api/hero/points/skill (docs/points.md). A skill the hero cannot
+  // use yet that is an attack asks once: the reply says needsConfirm and the page asks the player before it sends confirm.
+  function allocate(id, confirm) {
     fetch('/api/config', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (c) {
       var u = c.answerBase ? c.answerBase : location.protocol + '//' + location.hostname + ':' + c.answerPort;
-      return fetch(u + '/api/skills/allocate', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ skill: id, points: 1 }) });
-    }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || ('error ' + r.status)); say(''); load(true); }); })
-      .catch(function (e) { say(e.message); });
+      return fetch(u + '/api/hero/points/skill', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ skill: id, confirm: !!confirm }) });
+    }).then(function (r) {
+      return r.json().then(function (j) {
+        if (j.needsConfirm && !confirm) { if (window.confirm(j.reason)) allocate(id, true); return; }
+        if (!r.ok) throw new Error(j.reason || j.error || ('error ' + r.status));
+        say(''); load(true);
+      });
+    }).catch(function (e) { say(e.message); });
   }
 
   var SVGNS = 'http://www.w3.org/2000/svg';

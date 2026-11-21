@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/delivery"
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/gear"
 	"d2lod-bot/internal/goals"
@@ -69,8 +70,9 @@ type Fighter struct {
 	heal          healEffect // the healing potion still working (potioneffect.go)
 	manaChickenAt time.Time  // last chicken caused by the mana-burn watch (hard.go)
 	lastCast      time.Time
-	clog          castLog // log-only cast outcome tracking (castlog.go)
-	lastCastName  string  // skill of lastCast: the gap before the next cast covers ITS cast length
+	clog          castLog      // log-only cast outcome tracking (castlog.go)
+	expect        expectLedger // cast expectations and demotion (expect.go)
+	lastCastName  string       // skill of lastCast: the gap before the next cast covers ITS cast length
 	lastCastSkill map[int]time.Time
 	buffAt        map[int]time.Time
 	buffTries     map[int]int // consecutive casts cut by a hit, per skill (card armorcut)
@@ -79,6 +81,7 @@ type Fighter struct {
 	portalCast    PortalCast
 	casts         []castRec
 	walking       atomic.Bool // the bot is on a travel or quest walk (SetWalking)
+	questCrowd    atomic.Bool // a player-started quest chunk runs (SetQuestCrowd)
 	pinned        int         // consecutive evasive moves that went nowhere (evade)
 	noEvadeUntil  time.Time   // pinned: no kite or dodge before this
 	mouthEvades   int         // evasive moves started inside a cave mouth (evade, FIXMOUTH2)
@@ -257,7 +260,9 @@ func (f *Fighter) Safety(snap *d2.Snapshot) SafetyAction {
 		}
 	}
 	in.Walking = f.walking.Load()
+	in.Quest = f.questCrowd.Load()
 	in.Crowd, in.Adjacent = Crowd(p, hs, float64(t.CrowdAdjacent))
+	in.CastGuard = castGuard(f.e.Tune.Bot, t, p, hs)
 	if t.CrowdN > 0 {
 		if in.Crowd >= t.CrowdN {
 			in.CanRetreat = f.canRetreat(snap, hs)
@@ -267,6 +272,9 @@ func (f *Fighter) Safety(snap *d2.Snapshot) SafetyAction {
 		in.HasPortal = f.portalItem(snap) != nil
 	}
 	a := Decide(in)
+	if b, why := in.castBlocked(); b && a != TownPortal && in.InFight && decideBase(in) == TownPortal {
+		f.noteCastRefused(why, in)
+	}
 	if a == SafetyNone && f.packDrinkWanted(snap, in) {
 		a = DrinkLife // the belt is empty: drink() falls back to the pack (packdrink.go)
 	}
@@ -683,10 +691,11 @@ func (f *Fighter) buffPass(ctx context.Context, snap *d2.Snapshot) (cast bool, e
 	}
 	known := KnownSkills(p, f.cat, f.keys)
 	mana := p.Mana
-	for _, group := range f.profileFor(p).Buffs {
+	has := func(n string) bool { _, ok := known[n]; return ok }
+	for _, group := range f.profileFor(p).Rotation(p.Level, has).Groups() {
 		for _, name := range group {
 			sp, ok := known[name]
-			if !ok || curseNames[name] || (sp.Key == "" && p.RightSkill != sp.ID) {
+			if !ok || curseNames[name] || f.expectDemoted(name) || (sp.Key == "" && p.RightSkill != sp.ID) {
 				continue
 			}
 			if !f.buffDue(p, sp) {
@@ -744,7 +753,7 @@ func (f *Fighter) watchCast(ctx context.Context, d time.Duration) (cut bool, err
 // fightBuff is the buff check of the fight loop (SKARMOR B1, card fixbuff): Buff otherwise runs only on need-buff
 // edges, so inside one long clear an armor with a real duration (Frozen Armor 120 s) lapsed. It is a clock comparison
 // per tick on the snapshot the loop already has. Casting is skipped where the portal cast is already refused: with
-// crowdAdjacentMax or more attackers in reach a hit cuts the cast (meleeCastGuard's rule, U).
+// crowdAdjacentMax or more attackers in reach the buff cast is cut (a hit interrupts a buff, V run decomp28 Q6; the TP cast is not, so this count is a buff rule only).
 func (f *Fighter) fightBuff(ctx context.Context, snap *d2.Snapshot, hs []Target) (bool, error) {
 	if len(f.profileFor(snap.Player).Buffs) == 0 {
 		return false, nil
@@ -795,6 +804,7 @@ func (f *Fighter) cast(snap *d2.Snapshot, sp SkillSpec, at input.Point) error {
 	f.lastCastSkill[sp.ID] = f.lastCast
 	f.noteCast(sp.ID, f.lastCast)
 	f.castLogStart(snap, sp)
+	f.expectRecord(snap, sp)
 	return err
 }
 
@@ -809,6 +819,11 @@ func (f *Fighter) holdFor(p *d2.Player) time.Duration {
 // profileFor is the combat profile of the character (classdata.go).
 func (f *Fighter) profileFor(p *d2.Player) *Profile { return SelectProfile(p, f.cat, f.Build) }
 
+// MeleeClass reports whether p fights with a melee profile (the profile's melee block, data, not a class check).
+func (f *Fighter) MeleeClass(p *d2.Player) bool {
+	return f != nil && p != nil && f.profileFor(p).MeleeClass()
+}
+
 // attackSkills lists the usable attack skills in preference order. A right-hand skill must be bound to a key or
 // already selected; a left-hand skill needs the left popup (SetListRows) or to be selected already, and a left skill
 // that is not selected costs the profile's mana reserve on top, so the choice does not flip at the cost line.
@@ -820,14 +835,14 @@ func (f *Fighter) attackSkills(p *d2.Player) []SkillSpec {
 		reserve = pr.Melee.ManaReserve
 	}
 	var out []SkillSpec
-	for _, name := range pr.AttackNames(p.Level, func(n string) bool { _, ok := known[n]; return ok }) {
+	for _, name := range pr.Rotation(p.Level, func(n string) bool { _, ok := known[n]; return ok }).Names(delivery.RoleAttack) {
 		sp, ok := known[name]
 		if !ok && name == meleeSpec().Name {
 			// The skill dump may omit the basic attack (live 2026-11-09: known had no Attack), yet it is always usable
 			// and is the only attack left when gear rules out the build's skill (Smite needs a shield).
 			sp, ok = meleeSpec(), true
 		}
-		if !ok || (pr.costsLife(name) && !f.lifePriceOK()) {
+		if !ok || f.expectDemoted(name) || (pr.costsLife(name) && !f.lifePriceOK()) {
 			continue
 		}
 		if sp.Hand == HandLeft {
@@ -934,4 +949,19 @@ func (f *Fighter) noteDrinkSkip(why string, in SafetyInput) {
 	f.skipWhy, f.skipAt = why, now
 	f.diagMu.Unlock()
 	f.log().Info(fmt.Sprintf("potion: not drinking because %s life=%d%% belt=%s", why, pct(in.Life, in.Max), in.Belt))
+}
+
+// noteCastRefused logs, at most every 2 s per reason, that the portal guard refused a town portal cast (the survival
+// action then is a potion or leaving the game).
+func (f *Fighter) noteCastRefused(why string, in SafetyInput) {
+	why = "portal cast refused: " + why
+	now := f.now()
+	f.diagMu.Lock()
+	if why == f.skipWhy && now.Sub(f.skipAt) < 2*time.Second {
+		f.diagMu.Unlock()
+		return
+	}
+	f.skipWhy, f.skipAt = why, now
+	f.diagMu.Unlock()
+	f.log().Info(fmt.Sprintf("%s life=%d%% mode=%d", why, pct(in.Life, in.Max), in.CastGuard.Mode))
 }

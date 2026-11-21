@@ -22,6 +22,7 @@ import (
 	"d2lod-bot/internal/merc"
 	"d2lod-bot/internal/nav"
 	"d2lod-bot/internal/resource"
+	"d2lod-bot/internal/supply"
 	"d2lod-bot/internal/task"
 )
 
@@ -196,17 +197,22 @@ type mercWire struct {
 	lastLine time.Time
 	lastDec  string
 
-	gearRefused map[lutKey]bool          // a replacing hire was refused for worn merc gear; quiet until he is bare (mu)
-	lutDone     map[lutKey]bool          // the swap decision of the first Lut Gholein visit is final (hired, or declined for good)
-	statePath   string                   // where lutDone is kept across restarts ("" = memory only); mercStatePath at construction
-	loaded      map[string]bool          // characters whose entry was read from statePath
-	winLogged   map[merc.Difficulty]bool // `merc: hire window` is written once per difficulty
-	farmOn      bool
-	budget      merc.FarmBudget // time budget and cooldown of the gold farm
-	skipLogAt   time.Time       // last revive refusal written (logSkip)
-	quoteLogAt  time.Time       // last unreadable-quote line written (once per town visit)
-	shortFirst  bool            // the pre-shop revive was refused for gold (the chores then sell junk first)
-	waitNeed    int             // need of the last logged `merc: gold wait`; 0 = none pending
+	gearRefused  map[lutKey]bool          // a replacing hire was refused for worn merc gear; quiet until he is bare (mu)
+	lutDone      map[lutKey]bool          // the swap decision of the first Lut Gholein visit is final (hired, or declined for good)
+	statePath    string                   // where lutDone is kept across restarts ("" = memory only); mercStatePath at construction
+	loaded       map[string]bool          // characters whose entry was read from statePath
+	winLogged    map[merc.Difficulty]bool // `merc: hire window` is written once per difficulty
+	farmOn       bool
+	budget       merc.FarmBudget // time budget and cooldown of the gold farm
+	skipLogAt    time.Time       // last revive refusal written (logSkip)
+	reviveFailAt time.Time       // last failed revive attempt: no new attempt for mercSkipGap (no loop on an unreachable NPC)
+	quoteLogAt   time.Time       // last unreadable-quote line written (once per town visit)
+	shortFirst   bool            // the pre-shop revive was refused for gold (the chores then sell junk first)
+	waitNeed     int             // need of the last logged `merc: gold wait`; 0 = none pending
+
+	pr       *merc.PlayerRevive  // the player's Revive mercenary request (mercplayer.go)
+	lastSnap *d2.Snapshot        // newest snapshot the runner's trip poll showed us (mu)
+	snapSrc  func() *d2.Snapshot // the runner's own newest snapshot, set by mercGear (mu)
 }
 
 func newMercWire(e *env.Env, rd merc.Reader, rev Reviver, cat bot.Catalog) *mercWire {
@@ -732,8 +738,19 @@ func (w *mercWire) reviveStep(ctx context.Context, s *d2.Snapshot, first bool) s
 		return ""
 	}
 	c := mercCtx(w, s)
+	w.mu.Lock()
+	backoff := !w.reviveFailAt.IsZero() && w.now().Sub(w.reviveFailAt) < mercSkipGap
+	w.mu.Unlock()
+	if backoff {
+		return "merc revive skipped: backoff after a failed attempt"
+	}
 	if first {
-		c.Gold, c.HaveTP, c.HavePotions = s.Player.Gold, true, true
+		// Survival first: with no healing potion carried the shop runs before the revive (the revive then runs
+		// after it with the optional buys held back, town.mercReserve); the game itself needs gold only.
+		if !c.HavePotions {
+			return ""
+		}
+		c.Gold = s.Player.Gold
 		if w.bank != nil {
 			c.Gold += s.Player.StashGold // fetched below before the payment
 		}
@@ -784,6 +801,9 @@ func (w *mercWire) reviveStep(ctx context.Context, s *d2.Snapshot, first bool) s
 	w.fundRevive(ctx, s, price)
 	paid, err := w.rev.Revive(ctx)
 	if err != nil {
+		w.mu.Lock()
+		w.reviveFailAt = w.now()
+		w.mu.Unlock()
 		w.logSkip("failed: "+err.Error(), price, c.Gold, need)
 		return "merc revive failed"
 	}
@@ -883,6 +903,23 @@ type mercTown struct {
 	w *mercWire
 }
 
+// TakePortalCancelled forwards the wrapped town's flag (bot/portalretry.go).
+func (t *mercTown) TakePortalCancelled() bool {
+	c, ok := t.Townsman.(interface{ TakePortalCancelled() bool })
+	return ok && c.TakePortalCancelled()
+}
+
+// SupplyPlan forwards the town planner (knob town.plan >= 2, bot/routeguard.go): without it the guards would silently keep the constants.
+func (t *mercTown) SupplyPlan(s *d2.Snapshot, profile string, reserve int) (supply.Plan, error) {
+	p, ok := t.Townsman.(interface {
+		SupplyPlan(*d2.Snapshot, string, int) (supply.Plan, error)
+	})
+	if !ok {
+		return supply.Plan{}, errors.New("town planner not wired")
+	}
+	return p.SupplyPlan(s, profile, reserve)
+}
+
 func (t *mercTown) Chores(ctx context.Context, plan bot.ChorePlan) (bot.ChoreReport, error) {
 	var first string
 	if s, serr := t.w.e.Snapshot(); serr == nil {
@@ -931,6 +968,7 @@ func (t *mercTown) TakeTPBought() int {
 // NeedsTrip is polled by the runner; it doubles as the cheap tick for the once-a-minute merc line.
 func (t *mercTown) NeedsTrip(s *d2.Snapshot) (bool, string) {
 	t.w.Tick()
+	t.w.noteSnap(s)
 	return t.Townsman.NeedsTrip(s)
 }
 

@@ -1,0 +1,18 @@
+{
+ "schema": "didle.build/1",
+ "name": "Fire Bolt then Fire Ball, no respec",
+ "class": "sorceress",
+ "notes": "Fire Bolt carries to clvl 17, points earned after Fire Bolt 12 bank and land in Fire Ball at 18 (its reqlevel); Fire Bolt resumes after Fire Ball 20.",
+ "phases": [
+  {"name": "bolt", "from_clvl": 2, "until_clvl": 17, "skills": [{"skill": "Fire Bolt", "to": 12}]}
+ ],
+ "skills": [
+  {"skill": "Fire Ball", "to": 20},
+  {"skill": "Fire Bolt", "to": 20, "when": {"after": {"skill": "Fire Ball", "level": 20}}}
+ ],
+ "stats": [
+  {"stat": "vit", "to": 60, "per": 3},
+  {"stat": "ene", "to": 60, "per": 2},
+  {"stat": "vit", "to": "rest"}
+ ]
+}

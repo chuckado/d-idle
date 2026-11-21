@@ -165,6 +165,9 @@ func d2dConfig(o options, log *slog.Logger, tune *env.Tuning, db *data.DB, home 
 		if o.d2d.overlay != "" {
 			cfg.ExtraArgs = append(cfg.ExtraArgs, "--overlay-dir", o.d2d.overlay)
 		}
+		if tune != nil && tune.Items.LadderRunewords != 0 {
+			cfg.ExtraArgs = append(cfg.ExtraArgs, "--ladder-runewords") // ADR 0024: the engine side of items.ladderRunewords
+		}
 		cfg.ExtraArgs = append(cfg.ExtraArgs, strings.Fields(o.d2d.extraArgs)...)
 	}
 	return cfg
@@ -199,6 +202,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	if err != nil {
 		return err
 	}
+	o.ladder.currencyDir = currencyDirFor(ip.State()) // early: the vault keeper wires its Ether payer from it
 	if cfg.DeathLogPath == "" {
 		cfg.DeathLogPath = ip.Deaths()
 	}
@@ -223,6 +227,9 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 			log.Warn("game tables unavailable; running without a catalog", "gamedir", o.gameDir, "err", err)
 			db = nil
 		}
+	}
+	if db != nil {
+		db.LadderRunewords = tune.Items.LadderRunewords != 0
 	}
 	if o.managed {
 		if err := os.MkdirAll(filepath.Dir(d2dSock(o)), 0o700); err != nil {
@@ -283,16 +290,25 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	if o.managed {
 		savedExp = d2dSavedExp(filepath.Join(ip.Dir(), "d2d"), func() string { return charName })
 	}
-	deps := bot.Deps{SavedExp: savedExp, Mover: moverAdapter{nv}, Cycler: be.Cycler, Catalog: cat, Health: d2dHealth(be.Proc, be.Beat, be.Clock.Lockstep, be.Clock.LastStep, log),
-		OnSnapshot: disp.OnSnapshot, Bus: bus, Restart: func(ctx context.Context) error { return be.Cycler.NewGame(ctx, "") }}
+	ref.aw = wireAgency(db, e, func() string { return charName }, be.Clock.Now, log)
+	deps := bot.Deps{SavedExp: savedExp, Mover: moverAdapter{nv}, Cycler: be.Cycler, Catalog: cat, Health: d2dHealth(be.Proc, be.Beat, func() bool { return be.Clock.Lockstep() || ref.frozen() }, be.Clock.LastStep, log),
+		OnSnapshot: chainSnap(disp.OnSnapshot, ref.aw.OnSnapshot), Bus: bus, Restart: func(ctx context.Context) error { return be.Cycler.NewGame(ctx, "") }}
+	if os.Getenv("D2BOT_RUN") == "" { // a measured run is never paused (docs/pause.md)
+		deps.Freezer = d2denv.NewFreezer(be.Client, be.Clock)
+	}
+	deps.ZoneShadow = wirePower(db)                                                                                        // shadow margin line next to the planner line, log only (survival slice S-B)
+	deps.ZoneChoice, deps.ZoneObserve, deps.ZoneDecide, deps.BossMargin = wireSurvivalModel(db, ip.Ledger(), be.Clock.Now) // shadow choice and ledger (S-C); the decision hooks act only with bot.zoneModel 1 (S-D)
 	// Rig and town copy the Env by value, before bot.New installs Env.Emit: they would emit into nothing (kills, potions,
 	// drops never reached the goal manager, summary 0 kills). Give them a forwarder bound to the runner later.
 	var feedFighter *combat.Fighter
+	var labels *labelsDesk
+	var pverbs *pointVerbs
 	emit := &lateEmit{}
 	e.Emit = emit.send
 	if db != nil { // combat and town need the game tables; without them the "not yet" stubs stay
 		st := buildD2DStack(ctx, o, be, nv, db, cfg, ref, log)
 		feedFighter = st.cb.f
+		pverbs = st.pointVerbs
 		if seams.Fighter == nil {
 			seams.Fighter = st.seams().Fighter
 		}
@@ -303,6 +319,15 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 			seams.Loot = st.seams().Loot
 		}
 		deps.Leveler, deps.Gear, deps.Quester, deps.Task, deps.Prepare = st.leveler, st.gear, st.quester, st.task, st.prepare
+		labels = newLabelsDesk(be.Client, ip.State(), func() string { return charName })
+		prepare := deps.Prepare
+		deps.Prepare = func(ctx context.Context) error {
+			_ = labels.Apply(ctx)
+			if prepare == nil {
+				return nil
+			}
+			return prepare(ctx)
+		}
 	} else {
 		log.Warn("no game tables (--gamedir): combat, town and campaign goals stay off on d2d")
 	}
@@ -320,7 +345,8 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	if err == nil {
 		ref.p.Store(runner)
 		wireGoldFarm(ref, runner)
-		wireJourney(ip.State(), ref, runner, log.Info)
+		wireQuestBoard(ip.State(), ref, runner, log.Info)
+		wirePoints(ip.State(), charName, ref, runner, e, be.Client, db, pverbs)
 		emit.bind(e.Emit)
 		e.Emit = emit.send
 	}
@@ -328,8 +354,8 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 		return err
 	}
 	disp.run = runner
-	m, err := goals.New(goals.Options{Runner: runner, Path: ip.Goals(), Chain: taskChain(runner.LastSnapshot),
-		Logf: func(f string, a ...any) { log.Info("goals", "msg", sprintf(f, a...)) }})
+	m, err := goals.New(d2dGoalsOptions(runner, ip.Goals(), taskChain(runner.LastSnapshot), be.Clock,
+		func(f string, a ...any) { log.Info("goals", "msg", sprintf(f, a...)) }))
 	if err != nil {
 		return err
 	}
@@ -338,21 +364,49 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 		return err
 	}
 	o.ladder.overlayDir = o.d2d.overlay
+	o.ladder.ladderRunewords = tune.Items.LadderRunewords != 0
 	o.ladder.currencyDir = currencyDirFor(ip.State())
 	if err := useFirsts(o.ladder, runner); err != nil {
 		return err
 	}
 	o.ladder.knobs = knobSetter(tuner)
+	o.ladder.knobValue = tuner.Value
+	o.ladder.supportKnobs, o.ladder.supportLayout = func() any { return tuner.Snapshot().Values }, o.layout
 	o.ladder.inv = invAPI(ref.inv)
 	o.ladder.skills = skillsAPI(db, ref)
 	o.ladder.art = artSource(o.gameDir, o.data, db)
-	o.ladder.repair, o.ladder.farm, o.ladder.journey = ref.rep, ref.gf, ref.jc
+	o.ladder.db = db
+	if o.data != "" {
+		o.ladder.vaultRoot = filepath.Join(o.data, "vaults") // the recorder's root (wireVault): the Vault page reads the same stores
+		// The account's ETHER wallet gives these stores their capacity (owned tiers); the ladder wiring adds the hero and the routes.
+		etherFor(o.ladder.currencyDir, o.ladder.vaultRoot, vaultKnobOn(o.ladder.knobValue), nil)
+	}
+	o.ladder.repair, o.ladder.farm = ref.rep, ref.gf
+	o.ladder.quests = ref.qd
+	o.ladder.points = ref.pd
+	o.ladder.plan = ref.aw
+	o.ladder.pause = pauseDesk(runner, ip.State())
+	if labels != nil {
+		o.ladder.labels = labels
+	}
+	o.ladder.reset = resetDesk(runner, ip.State())
+	var leave func(context.Context) error
+	if o.managed { // the bot owns this d2d: Save and Exit it (not Cycler.LeaveGame, which would re-enter the old character)
+		leave = be.Proc.SaveExit
+	}
+	saveRoots := []string{filepath.Join(ip.Dir(), "d2d")}
+	if x := os.Getenv("XDG_DATA_HOME"); x != "" {
+		saveRoots = append(saveRoots, x)
+	}
+	o.ladder.characters = charactersDesk(ip, func() string { return charName }, saveRoots, runner, leave)
 	o.ladder.sensesTier = tune.Senses.Tier
 	o.ladder.proposalFacts = runner.ProposalFacts
 	o.ladder.riskFacts = runner.RiskFacts
 	o.ladder.readiness = wireReadiness(runner, db)
+	o.ladder.danger = wireDanger(db)
 	o.ladder.heroStats = heroStats(runner)
 	o.ladder.explored = runner.Explored
+	o.ladder.farmReset = runner.FarmResetShare
 	if db != nil {
 		o.ladder.monsters = db
 	}
@@ -364,9 +418,11 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	}
 	defer lrig.StopRec()
 	useFun(lrig, runner, runID())
+	useGlance(lrig, runner, db, cfg.LevelerBuild, ref)
 	useFightFeed(lrig, feedFighter, ldir, log)
 	useSenses(lrig, be.Env, feedFighter, log)
 	useSensesCoverage(lrig, be.Env, nv)
+	chainSurvFight(feedFighter)
 	useSensesHistory(ctx, lrig, be.Env, feedFighter, m, runner.Status, runner.LootWalking, nv)
 	logLadder(log, o.ladder, lrig, ldir)
 	if err := enqueueGoals(m, o.goalSpec); err != nil {
@@ -498,6 +554,13 @@ func soakHours() time.Duration {
 		return 0
 	}
 	return time.Duration(f * float64(time.Hour))
+}
+
+// d2dGoalsOptions is the goal manager's options on the d2d path. The manager runs on the env clock (virtual under lockstep,
+// the wall clock on a free-running d2d), like every other timer of the bot: a wall-clocked manager credited time and ended
+// time-boxed goals by machine load, so two same-seed runs diverged (card pgclock, docs/d2d-determinism.md section 2 row 3).
+func d2dGoalsOptions(r goals.Runner, path string, chain *goals.Chain, clk env.Clock, logf func(string, ...any)) goals.Options {
+	return goals.Options{Runner: r, Path: path, Clock: clk.Now, Chain: chain, Logf: logf}
 }
 
 // stopAtVirtual cancels the run once the env clock (virtual under lockstep) has advanced by d. --run-for stays wall

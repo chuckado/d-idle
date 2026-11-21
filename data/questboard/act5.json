@@ -1,0 +1,509 @@
+{
+ "schema": "quests.def/1",
+ "act": 5,
+ "source": "docs/goals/execution.md s3 and internal/task/act5.go; data stubs, every row U (the handlers exist, nothing ran live)",
+ "quests": [
+  {
+   "id": "siege_harrogath",
+   "taskId": "",
+   "title": "Siege on Harrogath",
+   "blurb": "Shenk the Overseer holds the Bloody Foothills.",
+   "act": 5,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "shenk",
+     "title": "Kill Shenk and report to Larzuk",
+     "ends": "handin",
+     "minutes": [
+      10,
+      25
+     ],
+     "handin": {
+      "npc": "Larzuk"
+     },
+     "steps": [
+      "travel_bloody_foothills",
+      "kill_shenk",
+      "talk_larzuk"
+     ],
+     "boss": "shenk",
+     "risk": "boss",
+     "meta": {
+      "normal": 2,
+      "nm": 3,
+      "hell": 5
+     }
+    }
+   ],
+   "minutes": [
+    10,
+    25
+   ],
+   "risk": "boss",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3",
+    "steps": "V internal/task/act5.go siegeNodes",
+    "rewards": "S docs/goals/execution.md s3 (Larzuk sockets)",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "act4_done"
+   ],
+   "boss": "shenk",
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   },
+   "legacyFloor": {
+    "melee": 25,
+    "caster": 27,
+    "summoner": 28
+   }
+  },
+  {
+   "id": "rescue_arreat",
+   "taskId": "",
+   "title": "Rescue on Mount Arreat",
+   "blurb": "Break the three barbarian doors in the Frigid Highlands; the quest can fail.",
+   "act": 5,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "doors",
+     "title": "Free the barbarians and report to Qual-Kehk",
+     "ends": "handin",
+     "minutes": [
+      10,
+      25
+     ],
+     "handin": {
+      "npc": "Qual-Kehk"
+     },
+     "steps": [
+      "travel_frigid_highlands",
+      "break_doors",
+      "talk_qual_kehk"
+     ],
+     "risk": "hazard",
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     }
+    }
+   ],
+   "minutes": [
+    10,
+    25
+   ],
+   "risk": "hazard",
+   "autoStart": "never",
+   "tags": {
+    "requires": "S docs/goals/execution.md s3",
+    "steps": "V internal/task/act5.go rescueNodes; the reward hand-in is optional there",
+    "failure": "V docs/goals/execution.md s3 (the game can fail it: create a new game)",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "siege_harrogath"
+   ],
+   "meta": {
+    "normal": 3,
+    "nm": 5,
+    "hell": 8
+   },
+   "legacyFloor": {
+    "melee": 25,
+    "caster": 27,
+    "summoner": 28
+   }
+  },
+  {
+   "id": "prison_of_ice",
+   "taskId": "",
+   "title": "Prison of Ice",
+   "blurb": "Anya is frozen in the Frozen River: Malah's potion thaws her, her scroll gives resists.",
+   "act": 5,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "find",
+     "title": "Find Anya in the Frozen River and return",
+     "ends": "auto",
+     "minutes": [
+      10,
+      25
+     ],
+     "steps": [
+      "travel_frigid_highlands",
+      "travel_frozen_river",
+      "touch_anya",
+      "return_town"
+     ],
+     "risk": "hazard",
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "nodes": [
+      "wp",
+      "to",
+      "touch",
+      "home1"
+     ]
+    },
+    {
+     "id": "potion",
+     "title": "Take Malah's potion",
+     "ends": "handin",
+     "minutes": [
+      2,
+      4
+     ],
+     "after": [
+      "find"
+     ],
+     "handin": {
+      "npc": "Malah"
+     },
+     "steps": [
+      "talk_malah"
+     ],
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "handInStep": "potion"
+    },
+    {
+     "id": "thaw",
+     "title": "Thaw Anya with the potion and return",
+     "ends": "auto",
+     "minutes": [
+      5,
+      12
+     ],
+     "after": [
+      "potion"
+     ],
+     "steps": [
+      "travel_frozen_river",
+      "thaw_anya",
+      "return_town"
+     ],
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "nodes": [
+      "to2",
+      "thaw",
+      "home2"
+     ]
+    },
+    {
+     "id": "scroll",
+     "title": "Take Anya's scroll",
+     "ends": "handin",
+     "minutes": [
+      2,
+      4
+     ],
+     "after": [
+      "thaw"
+     ],
+     "handin": {
+      "npc": "Anya"
+     },
+     "steps": [
+      "talk_anya"
+     ],
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "handInStep": "scroll"
+    },
+    {
+     "id": "read",
+     "title": "Read the scroll",
+     "ends": "auto",
+     "minutes": [
+      1,
+      2
+     ],
+     "after": [
+      "scroll"
+     ],
+     "steps": [
+      "read_scroll"
+     ],
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "nodes": [
+      "read"
+     ]
+    }
+   ],
+   "minutes": [
+    20,
+    47
+   ],
+   "risk": "hazard",
+   "autoStart": "never",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3 (Req: the portal to Nihlathak)",
+    "chunks": "I design 1.2 (each part is a town trip); steps V internal/task/act5.go prisonNodes",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "siege_harrogath"
+   ],
+   "rewards": [
+    {
+     "kind": "resist",
+     "amount": 10
+    }
+   ],
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   },
+   "legacyFloor": {
+    "melee": 25,
+    "caster": 27,
+    "summoner": 28
+   }
+  },
+  {
+   "id": "betrayal_harrogath",
+   "taskId": "",
+   "title": "Betrayal of Harrogath",
+   "blurb": "Nihlathak waits in the Halls of Vaught.",
+   "act": 5,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "nihlathak",
+     "title": "Kill Nihlathak and report to Anya",
+     "ends": "handin",
+     "minutes": [
+      15,
+      30
+     ],
+     "handin": {
+      "npc": "Anya"
+     },
+     "steps": [
+      "travel_halls_of_pain",
+      "kill_nihlathak",
+      "talk_anya"
+     ],
+     "boss": "nihlathak",
+     "risk": "boss",
+     "meta": {
+      "normal": 2,
+      "nm": 3,
+      "hell": 5
+     }
+    }
+   ],
+   "minutes": [
+    15,
+    30
+   ],
+   "risk": "boss",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3 (Req)",
+    "boss": "V docs/goals/execution.md s3 (corpse explosion; Mana Burn in Hell)",
+    "steps": "V internal/task/act5.go betrayalNodes",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "prison_of_ice"
+   ],
+   "boss": "nihlathak",
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   },
+   "legacyFloor": {
+    "melee": 30,
+    "caster": 32,
+    "summoner": 33
+   }
+  },
+  {
+   "id": "rite_of_passage",
+   "taskId": "",
+   "title": "Rite of Passage",
+   "blurb": "The Ancients: never leave the summit mid-fight.",
+   "act": 5,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "ancients",
+     "title": "Kill Madawc, Talic and Korlic on the Arreat Summit without leaving",
+     "ends": "handin",
+     "minutes": [
+      15,
+      30
+     ],
+     "handin": {
+      "npc": "Qual-Kehk"
+     },
+     "steps": [
+      "travel_arreat_summit",
+      "kill_ancients",
+      "talk_qual_kehk"
+     ],
+     "boss": "ancients",
+     "risk": "hazard",
+     "meta": {
+      "normal": 2,
+      "nm": 3,
+      "hell": 5
+     }
+    }
+   ],
+   "minutes": [
+    15,
+    30
+   ],
+   "risk": "hazard",
+   "autoStart": "never",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3 (Req)",
+    "chunks": "V docs/goals/execution.md s3 (never split: leaving or a town portal resets the fight)",
+    "steps": "V internal/task/act5.go ancientsNodes",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "betrayal_harrogath"
+   ],
+   "boss": "ancients",
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   },
+   "legacyFloor": {
+    "melee": 36,
+    "caster": 38,
+    "summoner": 39
+   }
+  },
+  {
+   "id": "eve_of_destruction",
+   "taskId": "",
+   "title": "Eve of Destruction",
+   "blurb": "Baal in the Worldstone Chamber.",
+   "act": 5,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "baal",
+     "title": "Clear the Throne of Destruction and kill Baal",
+     "ends": "auto",
+     "minutes": [
+      25,
+      50
+     ],
+     "steps": [
+      "travel_worldstone_keep",
+      "clear_throne",
+      "kill_baal"
+     ],
+     "boss": "baal",
+     "risk": "hazard",
+     "meta": {
+      "normal": 2,
+      "nm": 3,
+      "hell": 5
+     }
+    }
+   ],
+   "minutes": [
+    25,
+    50
+   ],
+   "risk": "hazard",
+   "autoStart": "never",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3 (Req)",
+    "boss": "V docs/goals/execution.md s3 (waves, Baal's fakes; a town portal is allowed)",
+    "steps": "V internal/task/act5.go baalNodes",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "rite_of_passage"
+   ],
+   "boss": "baal",
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   },
+   "legacyFloor": {
+    "melee": 38,
+    "caster": 40,
+    "summoner": 41
+   }
+  }
+ ]
+}

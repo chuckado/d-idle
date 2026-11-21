@@ -1,0 +1,121 @@
+{"time":"2026-11-19T09:39:36.733432699-05:00","level":"INFO","msg":"arrival","inst":"cl3","area":10,"from":4,"x":39,"y":144,"arrivals":11,"bounces":0}
+{"time":"2026-11-19T09:39:36.733517923-05:00","level":"INFO","msg":"Entered Underground Passage Level 1","inst":"cl3","type":"area_change","goal":"g1","area":"Underground Passage Level 1"}
+{"time":"2026-11-19T09:39:36.800091788-05:00","level":"INFO","msg":"nav exit","inst":"cl3","to":5,"gate":{"X":495,"Y":145},"push":{"X":495,"Y":146},"border":false}
+{"time":"2026-11-19T09:39:36.801159817-05:00","level":"INFO","msg":"nav: stepping away from a cave mouth","inst":"cl3","from":{"X":40,"Y":145},"to":{"X":49,"Y":163}}
+{"time":"2026-11-19T09:39:36.852875434-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":48,"Y":161},"wp":{"X":47,"Y":154},"rung":0}
+{"time":"2026-11-19T09:39:36.875653022-05:00","level":"INFO","msg":"nav: stuck recovered","inst":"cl3","at":{"X":48,"Y":161},"method":"reclick","rung":1,"repeat":false}
+{"time":"2026-11-19T09:39:36.887825809-05:00","level":"INFO","msg":"nav: followed, turning to fight","inst":"cl3","pos":{"X":48,"Y":153},"near":1,"life":89}
+{"time":"2026-11-19T09:39:37.212756496-05:00","level":"INFO","msg":"nav: followed, turning to fight","inst":"cl3","pos":{"X":100,"Y":182},"near":1,"life":89}
+{"time":"2026-11-19T09:39:37.370372456-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":108,"Y":183},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":89,"danger":1,"hostiles":4,"hasMelee":true}
+{"time":"2026-11-19T09:39:37.41009191-05:00","level":"INFO","msg":"minute","inst":"cl3","area":10,"explored":-1,"clvl":18,"xp":344036,"kills":26,"killsGame":26,"deaths":0,"potions":4,"mana":0,"packHP":0,"packMP":0,"beltBoxes":"0:Minor_Healing_Potion 1:Minor_Healing_Potion 2:Minor_Healing_Potion 3:Minor_Healing_Potion","potionsUsed":0,"tp":7,"gold":400,"stashGold":1800,"restarts":0,"xpRisk":28,"xpLost":0,"rung":0,"goal":"campaign","step":"Quest: fighting (Level up to 19)","state":"farming","rstate":"clearing","life":185,"maxLife":206,"mp":0,"maxMana":35,"table":"sorceress_normal30","invPct":7,"dmgTaken":21,"hpMinPct":89,"lifeLost":0,"hitsTaken":0,"hpPolls":502,"armor":"Frozen Armor","goldPickup":0,"arrivals":11,"bounces":0,"bouncesPer100":0,"navRung":2,"runBelieved":true,"stam":40192,"stamMax":40192,"runKeys":48,"runResets":1,"walkingRaw":"0","runObs":"","runFix":43}
+{"time":"2026-11-19T09:39:37.435793984-05:00","level":"INFO","msg":"combat health killsPerMin=1.6 castsPerMin=5.5 kitesPerMin=0.0 novas=0 forced=0 damagePerKill=0 windowSec=77","inst":"cl3"}
+{"time":"2026-11-19T09:39:37.924952457-05:00","level":"INFO","msg":"nav: followed, turning to fight","inst":"cl3","pos":{"X":150,"Y":206},"near":1,"life":89}
+{"time":"2026-11-19T09:39:37.989165403-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":151,"Y":194},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":89,"danger":1,"hostiles":7,"hasMelee":true}
+{"time":"2026-11-19T09:39:38.474138867-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":162,"Y":190},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":89,"danger":1,"hostiles":6,"hasMelee":true}
+{"time":"2026-11-19T09:39:38.574513611-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":167,"Y":193},"why":"out of mana, not safe to stand","step":2,"meleeClass":false,"life":89,"danger":1,"hostiles":6,"hasMelee":true}
+{"time":"2026-11-19T09:39:38.614856801-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":164,"Y":196},"why":"out of mana, not safe to stand","step":3,"meleeClass":false,"life":89,"danger":1,"hostiles":6,"hasMelee":true}
+{"time":"2026-11-19T09:39:39.596134581-05:00","level":"INFO","msg":"combat dodging","inst":"cl3","to":{"X":156,"Y":196}}
+{"time":"2026-11-19T09:39:39.745213799-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":165,"Y":195},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":85,"danger":1,"hostiles":10,"hasMelee":true}
+{"time":"2026-11-19T09:39:39.874183984-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":172,"Y":200},"why":"out of mana, not safe to stand","step":2,"meleeClass":false,"life":84,"danger":1,"hostiles":9,"hasMelee":true}
+{"time":"2026-11-19T09:39:40.781236392-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":183,"Y":215},"wp":{"X":183,"Y":200},"rung":0}
+{"time":"2026-11-19T09:39:40.78125211-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":183,"Y":215},"near":5}
+{"time":"2026-11-19T09:39:40.785357068-05:00","level":"INFO","msg":"combat dodging","inst":"cl3","to":{"X":179,"Y":222}}
+{"time":"2026-11-19T09:39:40.953076999-05:00","level":"INFO","msg":"combat out of mana: backing off","inst":"cl3","to":{"X":179,"Y":234},"why":"out of mana, not safe to stand","step":1,"meleeClass":false,"life":83,"danger":1,"hostiles":23,"hasMelee":true}
+{"time":"2026-11-19T09:39:43.380563343-05:00","level":"INFO","msg":"stale pack noted","inst":"cl3","area":10,"hostiles":30}
+{"time":"2026-11-19T09:39:43.380661833-05:00","level":"INFO","msg":"safety decision","inst":"cl3","action":"crowd-abandon","area":10,"life":146,"maxLife":206,"heal":4,"beltMP":0,"rejuv":0,"tome":1}
+{"time":"2026-11-19T09:39:43.66459817-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":178,"Y":219},"wp":{"X":180,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:43.664666853-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":178,"Y":219},"near":23}
+{"time":"2026-11-19T09:39:43.759678818-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":178,"Y":219},"wp":{"X":180,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:43.7598072-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":178,"Y":219},"near":21}
+{"time":"2026-11-19T09:39:43.840274597-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":178,"Y":219},"wp":{"X":180,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:43.840368133-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":178,"Y":219},"near":24}
+{"time":"2026-11-19T09:39:43.934276876-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":178,"Y":219},"wp":{"X":180,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:43.934371846-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":178,"Y":219},"near":23}
+{"time":"2026-11-19T09:39:44.034727647-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":171,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:44.034830248-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":20}
+{"time":"2026-11-19T09:39:44.100405449-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":168,"Y":219},"rung":0}
+{"time":"2026-11-19T09:39:44.10056354-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":22}
+{"time":"2026-11-19T09:39:44.183521144-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":167,"Y":220},"rung":0}
+{"time":"2026-11-19T09:39:44.18362007-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":22}
+{"time":"2026-11-19T09:39:44.199893334-05:00","level":"INFO","msg":"potion: not drinking because chose crowd-abandon first life=53% belt=hp=3 mp=0 rv=0","inst":"cl3"}
+{"time":"2026-11-19T09:39:44.279186673-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":171,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:44.279275517-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":24}
+{"time":"2026-11-19T09:39:44.36456681-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":171,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:44.364661217-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":24}
+{"time":"2026-11-19T09:39:44.369463206-05:00","level":"INFO","msg":"potion: not drinking because chose crowd-abandon first life=48% belt=hp=2 mp=0 rv=0","inst":"cl3"}
+{"time":"2026-11-19T09:39:44.449985882-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":164,"Y":223},"rung":0}
+{"time":"2026-11-19T09:39:44.450083115-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":26}
+{"time":"2026-11-19T09:39:44.552750652-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":171,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:44.552828983-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":24}
+{"time":"2026-11-19T09:39:44.558358758-05:00","level":"INFO","msg":"potion: not drinking because chose crowd-abandon first life=44% belt=hp=2 mp=0 rv=0","inst":"cl3"}
+{"time":"2026-11-19T09:39:44.646021194-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":171,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:44.646094823-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":25}
+{"time":"2026-11-19T09:39:44.754892364-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":171,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:44.754985343-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":23}
+{"time":"2026-11-19T09:39:44.774371212-05:00","level":"INFO","msg":"potion: not drinking because chose crowd-abandon first life=38% belt=hp=2 mp=0 rv=0","inst":"cl3"}
+{"time":"2026-11-19T09:39:44.860592078-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":171,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:44.860706141-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":24}
+{"time":"2026-11-19T09:39:44.945286193-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":180,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:44.945369808-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":26}
+{"time":"2026-11-19T09:39:44.949730724-05:00","level":"INFO","msg":"potion: not drinking because chose crowd-abandon first life=35% belt=hp=1 mp=0 rv=0","inst":"cl3"}
+{"time":"2026-11-19T09:39:45.017901138-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":169,"Y":219},"rung":0}
+{"time":"2026-11-19T09:39:45.01798037-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":25}
+{"time":"2026-11-19T09:39:45.098274083-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":171,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:45.098346317-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":25}
+{"time":"2026-11-19T09:39:45.102401422-05:00","level":"INFO","msg":"potion: not drinking because chose crowd-abandon first life=30% belt=hp=1 mp=0 rv=0","inst":"cl3"}
+{"time":"2026-11-19T09:39:45.181138795-05:00","level":"INFO","msg":"nav stuck","inst":"cl3","pos":{"X":177,"Y":218},"wp":{"X":180,"Y":218},"rung":0}
+{"time":"2026-11-19T09:39:45.181248837-05:00","level":"INFO","msg":"nav stalled by monsters, yielding","inst":"cl3","pos":{"X":177,"Y":218},"near":27}
+{"time":"2026-11-19T09:39:45.185855133-05:00","level":"INFO","msg":"potion: not drinking because chose chicken first life=25% belt=hp=1 mp=0 rv=0","inst":"cl3"}
+{"time":"2026-11-19T09:39:45.18629861-05:00","level":"WARN","msg":"d2d: Save and Exit requested (chicken / leave game): the process quits and its socket goes away","inst":"cl3"}
+{"time":"2026-11-19T09:39:45.325237668-05:00","level":"WARN","msg":"d2d channel not answering: d2d process pid 1410859 still running; socket file is gone (stat /data/d2d-lab/slots/3/d2d.sock: no such file or directory); ping: d2dctl: dial /data/d2d-lab/slots/3/d2d.sock: dial unix /data/d2d-lab/slots/3/d2d.sock: connect: no such file or directory","inst":"cl3"}
+{"time":"2026-11-19T09:39:46.78435093-05:00","level":"WARN","msg":"d2d: leave: re-entered the game (err <nil>)","inst":"cl3"}
+{"time":"2026-11-19T09:39:46.784599378-05:00","level":"INFO","msg":"combat health killsPerMin=0.0 castsPerMin=2.9 kitesPerMin=0.0 novas=0 forced=0 damagePerKill=0 windowSec=63","inst":"cl3"}
+{"time":"2026-11-19T09:39:46.784646571-05:00","level":"INFO","msg":"combat move failed","inst":"cl3","to":{"X":174,"Y":206},"err":"combat: left the game to survive"}
+{"time":"2026-11-19T09:39:47.503590103-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:47.503682665-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":1,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:47.522291981-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:47.522378336-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":2,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:47.538434323-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:47.538505505-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":3,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:47.539170969-05:00","level":"INFO","msg":"combat town portal failed, leaving the game","inst":"cl3","err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:47.539523279-05:00","level":"WARN","msg":"d2d: Save and Exit requested (chicken / leave game): the process quits and its socket goes away","inst":"cl3"}
+{"time":"2026-11-19T09:39:47.828717827-05:00","level":"WARN","msg":"d2d channel not answering: d2d process pid 1410926 still running; socket file is gone (stat /data/d2d-lab/slots/3/d2d.sock: no such file or directory); ping: d2dctl: dial /data/d2d-lab/slots/3/d2d.sock: dial unix /data/d2d-lab/slots/3/d2d.sock: connect: no such file or directory","inst":"cl3"}
+{"time":"2026-11-19T09:39:49.354580813-05:00","level":"WARN","msg":"d2d: leave: re-entered the game (err <nil>)","inst":"cl3"}
+{"time":"2026-11-19T09:39:49.354944525-05:00","level":"INFO","msg":"combat move failed","inst":"cl3","to":{"X":171,"Y":208},"err":"combat: left the game to survive"}
+{"time":"2026-11-19T09:39:50.000203966-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:50.000306035-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":1,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:50.01890614-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:50.018998413-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":2,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:50.034659856-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:50.034767154-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":3,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:50.035682976-05:00","level":"INFO","msg":"combat town portal failed, leaving the game","inst":"cl3","err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:50.036204872-05:00","level":"WARN","msg":"d2d: Save and Exit requested (chicken / leave game): the process quits and its socket goes away","inst":"cl3"}
+{"time":"2026-11-19T09:39:50.328059919-05:00","level":"WARN","msg":"d2d channel not answering: d2d process pid 1410984 still running; socket file is gone (stat /data/d2d-lab/slots/3/d2d.sock: no such file or directory); ping: d2dctl: dial /data/d2d-lab/slots/3/d2d.sock: dial unix /data/d2d-lab/slots/3/d2d.sock: connect: no such file or directory","inst":"cl3"}
+{"time":"2026-11-19T09:39:51.875821816-05:00","level":"WARN","msg":"d2d: leave: re-entered the game (err <nil>)","inst":"cl3"}
+{"time":"2026-11-19T09:39:51.876091696-05:00","level":"INFO","msg":"combat move failed","inst":"cl3","to":{"X":170,"Y":208},"err":"combat: left the game to survive"}
+{"time":"2026-11-19T09:39:52.505760609-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:52.505875323-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":1,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:52.526334378-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:52.526472877-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":2,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:52.540642202-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:52.540751548-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":3,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:52.541821221-05:00","level":"INFO","msg":"combat town portal failed, leaving the game","inst":"cl3","err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:52.54229606-05:00","level":"WARN","msg":"d2d: Save and Exit requested (chicken / leave game): the process quits and its socket goes away","inst":"cl3"}
+{"time":"2026-11-19T09:39:52.709842139-05:00","level":"WARN","msg":"d2d channel not answering: d2d process pid 1411035 still running; socket file is gone (stat /data/d2d-lab/slots/3/d2d.sock: no such file or directory); ping: d2dctl: dial /data/d2d-lab/slots/3/d2d.sock: dial unix /data/d2d-lab/slots/3/d2d.sock: connect: no such file or directory","inst":"cl3"}
+{"time":"2026-11-19T09:39:54.079733311-05:00","level":"WARN","msg":"d2d: leave: re-entered the game (err <nil>)","inst":"cl3"}
+{"time":"2026-11-19T09:39:54.080013915-05:00","level":"INFO","msg":"combat move failed","inst":"cl3","to":{"X":173,"Y":207},"err":"combat: left the game to survive"}
+{"time":"2026-11-19T09:39:54.756282321-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:54.756400995-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":1,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:54.773162884-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:54.773243788-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":2,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:54.781460521-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:54.781554965-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":3,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:54.782088611-05:00","level":"INFO","msg":"combat town portal failed, leaving the game","inst":"cl3","err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:54.782377771-05:00","level":"WARN","msg":"d2d: Save and Exit requested (chicken / leave game): the process quits and its socket goes away","inst":"cl3"}
+{"time":"2026-11-19T09:39:54.886294438-05:00","level":"WARN","msg":"d2d channel not answering: d2d process pid 1411093 still running; socket file is gone (stat /data/d2d-lab/slots/3/d2d.sock: no such file or directory); ping: d2dctl: dial /data/d2d-lab/slots/3/d2d.sock: dial unix /data/d2d-lab/slots/3/d2d.sock: connect: no such file or directory","inst":"cl3"}
+{"time":"2026-11-19T09:39:56.531681797-05:00","level":"WARN","msg":"d2d: leave: re-entered the game (err <nil>)","inst":"cl3"}
+{"time":"2026-11-19T09:39:56.531966576-05:00","level":"INFO","msg":"combat move failed","inst":"cl3","to":{"X":171,"Y":208},"err":"combat: left the game to survive"}
+{"time":"2026-11-19T09:39:57.180773412-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:57.180895819-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":1,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}
+{"time":"2026-11-19T09:39:57.197852657-05:00","level":"INFO","msg":"d2d portal: click without a portal","inst":"cl3","item":4,"class":518,"portalObjNear":0,"portalObjAny":0,"sourceSpent":false}
+{"time":"2026-11-19T09:39:57.197984203-05:00","level":"INFO","msg":"d2d town portal attempt failed","inst":"cl3","try":2,"err":"d2d portal: no object after the click, the click was dropped (source unchanged)"}

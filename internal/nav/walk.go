@@ -26,6 +26,7 @@ type walkOpts struct {
 	escape     bool             // a stalled walk tries the Escape hook (town portal) before it gives up (GoTo, GoToUnit)
 	oneClick   bool             // click the goal itself while it is in line of sight (the step away from a cave mouth, FIXMOUTH3)
 	pursuit    bool             // a wander: monsters that keep following within nav.pursuitRadius hand the walk over to the fight (pursuit.go)
+	goal       *input.Point     // fixed goal of a GoTo: the mouth gate lets a waypoint inside an exit bound through when the goal lies beyond (mouthgate.go gateClick)
 	flee       *fleeState       // the step away from a cave mouth: re-checked on every replan (FIXMOUTH4)
 }
 
@@ -119,6 +120,11 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 	deadline := n.clk.Now().Add(timeout)
 	n.walkSeq++
 	n.gateRewrites = 0
+	if wo.goal != nil {
+		pg, pset := n.goal, n.goalSet
+		n.goal, n.goalSet = *wo.goal, true
+		defer func() { n.goal, n.goalSet = pg, pset }()
+	}
 	if n.log.Enabled(ctx, slog.LevelDebug) {
 		var pcs [6]uintptr
 		k := runtime.Callers(2, pcs[:])
@@ -812,7 +818,7 @@ func (n *Navigator) NearMouth(p input.Point) bool {
 		return false
 	}
 	for _, e := range lm.Exits {
-		if e.Dest == n.wantExit {
+		if e.Dest == n.wantExit || n.exitBesideWanted(lm, e) {
 			continue
 		}
 		if math.Hypot(float64(p.X-e.Pos.X), float64(p.Y-e.Pos.Y)) <= mouthApproachR {
@@ -832,7 +838,7 @@ func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 	}
 	inside := false
 	for _, e := range o.lm.Exits {
-		if e.Dest == n.wantExit {
+		if e.Dest == n.wantExit || n.exitBesideWanted(o.lm, e) {
 			continue
 		}
 		dx, dy := float64(o.pos.X-e.Pos.X), float64(o.pos.Y-e.Pos.Y)

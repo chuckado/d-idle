@@ -35,10 +35,20 @@ type Step struct {
 	Constraints Constraints
 	Repeat      bool // Do is a bounded slice; Need staying true afterwards is progress, not a failure
 	Optional    bool // may be skipped after repeated NotFound/Timeout without blocking its group
+	// Evidence, when set, is what the quest board reads as "this step is done" instead of !Need. Need also says "not
+	// needed" when a precondition (ready: the hero is in the right area) is false, which is no evidence of anything:
+	// outside Tristram the cage step read done and so did the whole free-Cain chunk (V lab drill CAIN-L3, 2026-11-19).
+	Evidence func(w World) bool
 }
 
-// Done reports !Need.
-func (s Step) Done(w World) bool { n, _ := s.Need(w); return !n }
+// Done reports !Need, or Evidence when the step names its own.
+func (s Step) Done(w World) bool {
+	if s.Evidence != nil {
+		return s.Evidence(w)
+	}
+	n, _ := s.Need(w)
+	return !n
+}
 
 // Node places a Step in a group's graph. Requires lists step IDs (within the plan) that must not be needed any
 // more (done or skipped) before this node can run. With no Requires a node follows list order.

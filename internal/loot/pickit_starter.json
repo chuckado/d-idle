@@ -31,6 +31,8 @@
   {"name": "good jewelry",     "match": {"types": ["ring","amul"], "qualities": ["magic","rare"], "identified": true,
                                           "anyStats": [{"stat": 7, "min": 20, "shift": 8}, {"stat": 105, "min": 10}, {"stat": 127, "min": 1}, {"stat": 39, "min": 15}, {"stat": 41, "min": 15}, {"stat": 43, "min": 15}, {"stat": 45, "min": 15}]},
                                                                                                 "action": "stash", "tier": "A", "prio": 55, "reason": "jewelry with life, FCR, skills or resist"},
+  {"name": "jewelry unknown quality", "match": {"types": ["ring","amul","circ"], "qualityUnknown": true, "identified": false},
+                                                                                                "action": "keep",  "tier": "A", "prio": 55, "needId": true, "reason": "unidentified jewelry, quality not readable (never normal)"},
   {"name": "jewelry to id",    "match": {"types": ["ring","amul","circ"], "qualities": ["magic","rare"], "identified": false},
                                                                                                 "action": "keep",  "tier": "A", "prio": 55, "needId": true, "reason": "unidentified jewelry"},
   {"name": "runeword base 2", "match": {"qualities": ["normal","superior"], "types": ["tors","helm","shld","staf"], "needed": "runeword", "stats": [{"stat": 194, "min": 2, "max": 2}]},

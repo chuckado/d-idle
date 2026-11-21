@@ -1,5 +1,7 @@
 # Identify reveal (TASK-157, unlockidreveal)
 
+> status: REMOVED 2026-11-19 (task nocards, user report: no "Unidentified item" card anywhere). The face-down card flow, the Cards tab and sheet, `GET /api/reveal`, `POST /api/reveal/flip`, the ladder rows `idreveal` and `idreveal_later` and `data/idreveal/` are deleted; `cards` is a reserved panel id in `internal/watch/web/shell.json` (the frozen layouts keep working) and no preset has it. Unidentified items are revealed in the Vault grid by a tap (`docs/vault.md`, `docs/design/bulk-identify-2026-11-18.md`). The text below is history. Test: `internal/watch/nocards_test.go`.
+
 Fourth of the ten unlockables (`docs/research/unlockables.md`); sits on the ladder (`docs/unlock-ladder.md`). Tags: V verified (code read or offline test named), S secondary, U unverified (needs a live run).
 
 ## What the bot does with unidentified items (checked first)
@@ -10,7 +12,7 @@ Fourth of the ten unlockables (`docs/research/unlockables.md`); sits on the ladd
 
 ## What it is
 
-A face-down card appears for each pickup of a quality with a card. The viewer flips it (button in the sheet that opens, or in the "Cards" tab) and only then sees the quality word, the colour (the page's `--q-*` variables), a short sound (Web Audio, with a checkbox) and a line of text. Ladder rows:
+A face-down card appears for each pickup of a quality with a card. The viewer flips it (button in the "Cards" tab; since 2026-11-18 the sheet never opens by itself, unflipped cards show as one quiet "Cards (N)" count on the tab, so a busy vault cannot make a repeating popup) and only then sees the quality word, the colour (the page's `--q-*` variables), a short sound (Web Audio, with a checkbox) and a line of text. Ladder rows:
 
 | row | trigger | opens |
 |---|---|---|

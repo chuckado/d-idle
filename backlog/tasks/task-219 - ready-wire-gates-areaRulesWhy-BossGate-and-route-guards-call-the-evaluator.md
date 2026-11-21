@@ -34,9 +34,9 @@ Source: docs/research/player-power.md Part 3.4 (TASK-214 follow-up). The bot's g
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 areaRulesWhy, BossGate, route guards call the evaluator; existing gate tests unchanged; new test: no verdict looser than today for the same inputs
-- [ ] #2 Build flexibility: checks, floors and boss rows are data (per class and difficulty), no class or skill literal in Go; tests run with Paladin and Sorceress; an unknown class or table is an error naming it
-- [ ] #3 Open question settled first: whether Player.Resist already includes the difficulty penalty (TODO in internal/combat/hard.go) is taken from the ready-audit result and the resist logic here uses that answer; a test covers both possible cases of the ambiguity until it is settled
+- [x] #1 areaRulesWhy, BossGate, route guards call the evaluator; existing gate tests unchanged; new test: no verdict looser than today for the same inputs
+- [x] #2 Build flexibility: checks, floors and boss rows are data (per class and difficulty), no class or skill literal in Go; tests run with Paladin and Sorceress; an unknown class or table is an error naming it
+- [x] #3 Open question settled first: whether Player.Resist already includes the difficulty penalty (TODO in internal/combat/hard.go) is taken from the ready-audit result and the resist logic here uses that answer; a test covers both possible cases of the ambiguity until it is settled
 <!-- AC:END -->
 
 ## Implementation Notes

@@ -1,0 +1,16 @@
+{"time":"2026-11-19T10:42:47.660735976-05:00","level":"INFO","msg":"Found Scroll of Inifuss","inst":"cl3","type":"drop","goal":"g1"}
+{"time":"2026-11-19T10:42:47.807197155-05:00","level":"INFO","msg":"memory quest words","inst":"cl3","normalQuestWords":["den_of_evil=0x0004","search_for_cain=0x0008"]}
+{"time":"2026-11-19T10:42:47.80736336-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/tree","outcome":"retry","kind":"none","err":"quest.search_for_cain/tree ran but is still needed (evidence 2)","attention":""}
+{"time":"2026-11-19T10:42:47.839755114-05:00","level":"INFO","msg":"quest board: search_for_cain/scroll: quest.search_for_cain/tree ran but is still needed (evidence 2)","inst":"cl3"}
+{"time":"2026-11-19T10:42:52.636631094-05:00","level":"INFO","msg":"quest board: accepted search_for_cain/read","inst":"cl3","quest":"search_for_cain","chunk":"read"}
+{"time":"2026-11-19T10:42:58.703839813-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T10:42:58.837550697-05:00","level":"INFO","msg":"Quest progress: search_for_cain","inst":"cl3","type":"quest","goal":"g1"}
+{"time":"2026-11-19T10:43:02.707955743-05:00","level":"INFO","msg":"quest board: accepted search_for_cain/stones","inst":"cl3","quest":"search_for_cain","chunk":"stones"}
+{"time":"2026-11-19T10:43:04.719451903-05:00","level":"INFO","msg":"Entered Dark Wood","inst":"cl3","type":"area_change","goal":"g1","area":"Dark Wood"}
+{"time":"2026-11-19T10:43:04.955692383-05:00","level":"INFO","msg":"quest board: hand-in failed search_for_cain/read","inst":"cl3","quest":"search_for_cain","chunk":"read","attempt":1,"err":"not in town"}
+{"time":"2026-11-19T10:43:05.108063251-05:00","level":"INFO","msg":"quest board: hand-in failed search_for_cain/read","inst":"cl3","quest":"search_for_cain","chunk":"read","attempt":2,"err":"not in town"}
+{"time":"2026-11-19T10:43:05.2682424-05:00","level":"INFO","msg":"quest board: hand-in failed search_for_cain/read","inst":"cl3","quest":"search_for_cain","chunk":"read","attempt":3,"err":"not in town"}
+{"time":"2026-11-19T10:43:05.26846556-05:00","level":"INFO","msg":"quest board: parked search_for_cain/read","inst":"cl3","chunk":"search_for_cain/read","why":"hand-in failed 3 times: not in town"}
+{"time":"2026-11-19T10:43:05.464556183-05:00","level":"INFO","msg":"quest board: starting chunk search_for_cain/stones","inst":"cl3"}
+{"time":"2026-11-19T10:43:05.484082808-05:00","level":"INFO","msg":"quest board: step Go to Stony Field","inst":"cl3"}
+{"time":"2026-11-19T10:43:17.212250317-05:00","level":"INFO","msg":"quest board: waiting: context canceled","inst":"cl3"}

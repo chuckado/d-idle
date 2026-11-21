@@ -1,0 +1,22 @@
+package inputdata
+
+import (
+	"testing"
+
+	"d2lod-bot/internal/input"
+)
+
+// TestShippedCaps loads every shipped set and pins the one fact the planner depends on: devp13 has no usable select
+// verb (R08), devp14 advertises it.
+func TestShippedCaps(t *testing.T) {
+	for _, n := range []string{"d2d-sandbox-devp13", "d2d-sandbox-devp14", "d2d-fork-input-items", "d2d-lab", "game-exe"} {
+		if _, err := input.BackendCapsByName(FS, n); err != nil {
+			t.Fatal(n, err)
+		}
+	}
+	c13, _ := input.BackendCapsByName(FS, "d2d-sandbox-devp13")
+	c14, _ := input.BackendCapsByName(FS, "d2d-sandbox-devp14")
+	if c13.Has(input.CapSelect) || !c14.Has(input.CapSelect) {
+		t.Fatalf("devp13 %v devp14 %v", c13.Verbs, c14.Verbs)
+	}
+}

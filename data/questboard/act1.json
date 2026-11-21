@@ -1,0 +1,562 @@
+{
+ "schema": "quests.def/1",
+ "act": 1,
+ "source": "merged from data/quests/act1-hints.json, act1-givers.json, docs/goals/execution.md s3, docs/progression/quests.md; tags per row",
+ "quests": [
+  {
+   "id": "den_of_evil",
+   "taskId": "",
+   "title": "Den of Evil",
+   "blurb": "Akara asks you to clear the cave north of the Blood Moor.",
+   "act": 1,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "clear_den",
+     "title": "Clear the Den and report to Akara",
+     "ends": "handin",
+     "minutes": [
+      8,
+      15
+     ],
+     "handin": {
+      "npc": "Akara"
+     },
+     "steps": [
+      "talk_akara",
+      "walk_blood_moor",
+      "clear_den",
+      "return_akara"
+     ]
+    }
+   ],
+   "minutes": [
+    8,
+    15
+   ],
+   "risk": "routine",
+   "autoStart": "allowed",
+   "tags": {
+    "giver": "SRC docs/quest-hints.md",
+    "levels": "EXP docs/quest-hints.md",
+    "steps": "V docs/goals/execution.md s3",
+    "handin.pick": "U (Akara reward row not read live)",
+    "rewards": "S docs/goals/execution.md s3; repeats in NM/Hell U (docs/progression/quests.md s4)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "accept": {
+    "npc": "Akara"
+   },
+   "rewards": [
+    {
+     "kind": "skill_point",
+     "amount": 1
+    }
+   ],
+   "meta": {
+    "normal": 2,
+    "nm": 3,
+    "hell": 5
+   },
+   "legacyFloor": {
+    "melee": 1,
+    "caster": 2,
+    "summoner": 3
+   }
+  },
+  {
+   "id": "sisters_burial_grounds",
+   "taskId": "sisters_burial",
+   "title": "Sisters' Burial Grounds",
+   "blurb": "Kashya's rogues are lost; kill their captain, Blood Raven.",
+   "act": 1,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "blood_raven",
+     "title": "Kill Blood Raven and report to Kashya",
+     "ends": "handin",
+     "minutes": [
+      10,
+      20
+     ],
+     "handin": {
+      "npc": "Kashya",
+      "pick": "reward"
+     },
+     "steps": [
+      "accept_kashya",
+      "travel_cold_plains",
+      "enter_burial_grounds",
+      "kill_blood_raven",
+      "return_kashya"
+     ],
+     "boss": "blood_raven",
+     "risk": "boss"
+    }
+   ],
+   "minutes": [
+    10,
+    20
+   ],
+   "risk": "boss",
+   "autoStart": "allowed",
+   "tags": {
+    "giver": "SRC docs/quest-givers.md (accept pick U)",
+    "handin.pick": "SRC docs/quest-givers.md",
+    "levels": "EXP docs/quest-hints.md",
+    "boss": "V docs/goals/execution.md s3",
+    "rewards": "S docs/goals/execution.md s3",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "accept": {
+    "npc": "Kashya",
+    "pick": "quest"
+   },
+   "boss": "blood_raven",
+   "rewards": [
+    {
+     "kind": "mercenary",
+     "item": "rogue"
+    }
+   ],
+   "meta": {
+    "normal": 2,
+    "nm": 3,
+    "hell": 5
+   },
+   "legacyFloor": {
+    "melee": 7,
+    "caster": 8,
+    "summoner": 9
+   }
+  },
+  {
+   "id": "search_for_cain",
+   "taskId": "",
+   "title": "The Search for Cain",
+   "blurb": "Akara knows about the old tree in the Dark Wood: free Cain in Tristram.",
+   "act": 1,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "scroll",
+     "title": "Get the Scroll of Inifuss from the tree",
+     "ends": "item",
+     "noGold": true,
+     "minutes": [
+      6,
+      12
+     ],
+     "steps": [
+      "travel_dark_wood",
+      "take_scroll"
+     ],
+     "nodes": [
+      "wp-dark-wood",
+      "to-wood",
+      "tree"
+     ]
+    },
+    {
+     "id": "read",
+     "title": "Have Akara read the scroll",
+     "ends": "handin",
+     "minutes": [
+      2,
+      4
+     ],
+     "after": [
+      "scroll"
+     ],
+     "handin": {
+      "npc": "Akara"
+     },
+     "steps": [
+      "return_town",
+      "talk_akara"
+     ],
+     "handInStep": "read"
+    },
+    {
+     "id": "stones",
+     "title": "Light the cairn stones and enter Tristram",
+     "ends": "auto",
+     "noGold": true,
+     "minutes": [
+      4,
+      10
+     ],
+     "after": [
+      "read"
+     ],
+     "steps": [
+      "travel_stony_field",
+      "touch_stones",
+      "enter_tristram"
+     ],
+     "nodes": [
+      "to-stony",
+      "stones",
+      "to-tristram"
+     ]
+    },
+    {
+     "id": "free_cain",
+     "title": "Free Cain from the cage in Tristram",
+     "ends": "auto",
+     "noGold": true,
+     "minutes": [
+      6,
+      15
+     ],
+     "after": [
+      "stones"
+     ],
+     "steps": [
+      "clear_cage_guards",
+      "free_cain",
+      "return_camp"
+     ],
+     "risk": "hazard",
+     "nodes": [
+      "cage",
+      "home"
+     ]
+    },
+    {
+     "id": "report",
+     "title": "Report to Akara",
+     "ends": "handin",
+     "minutes": [
+      2,
+      4
+     ],
+     "after": [
+      "free_cain"
+     ],
+     "handin": {
+      "npc": "Akara"
+     },
+     "steps": [
+      "return_town",
+      "talk_akara"
+     ],
+     "handInStep": "report",
+     "handler": "search_for_cain_board"
+    }
+   ],
+   "minutes": [
+    20,
+    45
+   ],
+   "risk": "hazard",
+   "autoStart": "never",
+   "tags": {
+    "giver": "SRC docs/quest-hints.md (how: auto_on_area)",
+    "chunks": "V internal/task/act1.go cainNodes (step names); report chunk: group search_for_cain_board added in S7b (U: the Akara row, and whether the quest word is set at the cage or at the talk)",
+    "steps": "V docs/goals/execution.md s3 (stone order random per game, U)",
+    "levels": "EXP docs/quest-hints.md",
+    "handin.pick": "U",
+    "rewards": "S docs/goals/execution.md s3",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "accept": {
+    "npc": "Akara"
+   },
+   "items": [
+    {
+     "name": "Scroll of Inifuss",
+     "from": "Tree of Inifuss, Dark Wood"
+    }
+   ],
+   "rewards": [
+    {
+     "kind": "identify",
+     "item": "cain"
+    }
+   ],
+   "meta": {
+    "normal": 2,
+    "nm": 3,
+    "hell": 5
+   },
+   "legacyFloor": {
+    "melee": 9,
+    "caster": 11,
+    "summoner": 12
+   }
+  },
+  {
+   "id": "forgotten_tower",
+   "taskId": "",
+   "title": "The Forgotten Tower",
+   "blurb": "The Countess waits at the bottom of the tower in the Black Marsh.",
+   "act": 1,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "countess",
+     "title": "Kill the Countess",
+     "ends": "auto",
+     "minutes": [
+      10,
+      20
+     ],
+     "steps": [
+      "travel_black_marsh",
+      "descend_to_cellar",
+      "kill_countess"
+     ],
+     "boss": "countess",
+     "risk": "boss"
+    }
+   ],
+   "minutes": [
+    10,
+    20
+   ],
+   "risk": "boss",
+   "autoStart": "allowed",
+   "tags": {
+    "giver": "SRC docs/quest-hints.md (no NPC, auto_on_kill)",
+    "levels": "EXP docs/quest-hints.md",
+    "boss": "V docs/goals/execution.md s3",
+    "rewards": "S docs/goals/execution.md s3 (chest and rune drops)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "boss": "countess",
+   "rewards": [
+    {
+     "kind": "drops",
+     "item": "runes"
+    }
+   ],
+   "meta": {
+    "normal": 2,
+    "nm": 3,
+    "hell": 5
+   },
+   "legacyFloor": {
+    "melee": 13,
+    "caster": 15,
+    "summoner": 16
+   }
+  },
+  {
+   "id": "tools_of_the_trade",
+   "taskId": "",
+   "title": "Tools of the Trade",
+   "blurb": "Charsi needs the Horadric Malus from the Smith in the Barracks.",
+   "act": 1,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "malus",
+     "title": "Kill the Smith, bring the Malus to Charsi and pick the imbue",
+     "ends": "handin",
+     "minutes": [
+      10,
+      20
+     ],
+     "handin": {
+      "npc": "Charsi",
+      "pick": "imbue"
+     },
+     "steps": [
+      "accept_charsi",
+      "travel_barracks",
+      "kill_smith",
+      "return_charsi",
+      "pick_imbue"
+     ],
+     "boss": "the_smith",
+     "risk": "boss"
+    }
+   ],
+   "minutes": [
+    10,
+    20
+   ],
+   "risk": "boss",
+   "autoStart": "allowed",
+   "tags": {
+    "giver": "SRC docs/quest-givers.md (accept pick U)",
+    "handin.pick": "U",
+    "levels": "EXP docs/quest-hints.md",
+    "boss": "V docs/goals/execution.md s3",
+    "rewards": "V docs/goals/execution.md s3 (imbue one item)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "accept": {
+    "npc": "Charsi",
+    "pick": "quest"
+   },
+   "items": [
+    {
+     "name": "Horadric Malus",
+     "from": "The Smith, Barracks"
+    }
+   ],
+   "boss": "the_smith",
+   "rewards": [
+    {
+     "kind": "imbue"
+    }
+   ],
+   "meta": {
+    "normal": 2,
+    "nm": 3,
+    "hell": 5
+   },
+   "legacyFloor": {
+    "melee": 12,
+    "caster": 14,
+    "summoner": 15
+   }
+  },
+  {
+   "id": "sisters_to_the_slaughter",
+   "taskId": "sisters_to_slaughter",
+   "title": "Sisters to the Slaughter",
+   "blurb": "Andariel holds the Catacombs; kill her to open the way east.",
+   "act": 1,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "andariel",
+     "title": "Kill Andariel",
+     "ends": "auto",
+     "minutes": [
+      10,
+      20
+     ],
+     "steps": [
+      "travel_catacombs",
+      "kill_andariel"
+     ],
+     "boss": "andariel",
+     "risk": "hazard"
+    }
+   ],
+   "minutes": [
+    10,
+    20
+   ],
+   "risk": "hazard",
+   "autoStart": "never",
+   "tags": {
+    "giver": "SRC docs/quest-hints.md (Warriv, auto_on_kill)",
+    "requires": "U docs/quest-hints.md says Kashya's quest done; kept soft",
+    "levels": "EXP docs/quest-hints.md",
+    "boss": "V docs/goals/execution.md s3 (poison)",
+    "rewards": "V docs/goals/execution.md s3",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "softAfter": [
+    "sisters_burial_grounds"
+   ],
+   "boss": "andariel",
+   "rewards": [
+    {
+     "kind": "act_access",
+     "item": "2"
+    }
+   ],
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   },
+   "legacyFloor": {
+    "melee": 16,
+    "caster": 18,
+    "summoner": 18
+   }
+  },
+  {
+   "id": "act1_done",
+   "taskId": "act1_complete",
+   "title": "Sail east to Act 2",
+   "blurb": "Warriv takes you east once Andariel is dead.",
+   "act": 1,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "unlock",
+   "chunks": [
+    {
+     "id": "sail_east",
+     "title": "Talk to Warriv and go east",
+     "ends": "handin",
+     "minutes": [
+      1,
+      3
+     ],
+     "handin": {
+      "npc": "Warriv",
+      "pick": "Go East"
+     },
+     "steps": [
+      "travel_town",
+      "talk_warriv"
+     ],
+     "handler": "act1_complete",
+     "handInStep": "warriv"
+    }
+   ],
+   "minutes": [
+    1,
+    3
+   ],
+   "risk": "routine",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3 (Req)",
+    "handin.pick": "U (Go East row NEW in execution.md)",
+    "minutes": "I"
+   },
+   "requires": [
+    "sisters_to_the_slaughter"
+   ]
+  }
+ ]
+}

@@ -20,6 +20,7 @@ import (
 const funToken = "fun-test-token-0123456789"
 
 type funRig struct {
+	pause  *PauseAPI // set by a mod hook: mounted on the Fun before it serves
 	t      *testing.T
 	fun    *Fun
 	hub    *Hub
@@ -88,6 +89,9 @@ func newFunRigWith(t *testing.T, class string, level int, mod func(*funRig, *Fun
 	r.fun, err = NewFun(fc)
 	if err != nil {
 		t.Fatal(err)
+	}
+	if r.pause != nil {
+		r.fun.Pause = r.pause
 	}
 	r.hub.SetHero(HeroInfo{Class: class, Level: level, Area: "Rogue Encampment"})
 	ctx, cancel := context.WithCancel(context.Background())

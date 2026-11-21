@@ -14,6 +14,7 @@ type TownTuning struct {
 	// Restocking.
 	BeltFillPct     int // refill each potion type up to this percent of its planned columns
 	TPScrollTarget  int // town portal scrolls to hold when there is no tome
+	LooseScrollKeep int // loose town portal / identify scrolls kept beside a tome of the same kind; the pickup rule stops at this many and the sell chore sells the surplus
 	TPReserve       int // scrolls a poor character that carries its minimal healing kit still buys (g2e F2b; 1 = the old single scroll)
 	TPMinGold       int // below this gold the first town portal scroll is not bought and its absence is no trip reason (0 = off): potions first
 	TPTomeMinGold   int // buy a Tome of Town Portal when gold is at least this and none is owned
@@ -30,50 +31,55 @@ type TownTuning struct {
 	RebuyPotionPct  int // share of the rebuy budget potions may use
 	RebuyItemMaxPct int // one item may cost at most this percent of the rebuy budget
 	// Interaction timing and retries.
-	NPCStopDist      int // subtiles from the NPC at which the walk stops before clicking it
-	NPCOpenTries     int // attempts to open an NPC dialog
-	UITimeoutMs      int // wait for a panel flag after a click
-	ClickSettleMs    int // pause after a UI click before the memory is re-read
-	MoveTries        int // attempts to move one item between grids (verified each time)
-	DropTries        int // ground clicks DropCursor tries, each on a different cell next to the character, before it falls back to the pack
-	CursorStuckMax   int // distinct pack spots ClearCursor tries, and failed pack clears in a row after which PickUp goes straight to the ground drop
-	PortalClickFails int // BackToField drops a town portal id after this many failed entries and uses a fresh portal, the waypoint or the walk (fixstaleportal)
-	PortalSettle     int // ms to wait after arriving before using a portal again
-	ChoreBudgetS     int // seconds one Chores call may take before it gives up
-	SellMaxS         int // seconds the sell chore alone may take (it is capped, then the other chores go on)
-	PortalReuseDist  int // ToTown uses an already open portal within this many subtiles instead of a scroll
-	GreetingWaitS    int // after clicking an NPC, wait this long for its menu (first contact plays a speech of about 60 s)
-	GreetingSkip     int // how a first-contact NPC greeting is skipped: 0 wait, 1 click the NPC again, 2 Esc then click, 3 click the NPC tile without hover (internal/town/skip.go)
-	SpareKeep        int // spare potions (pickit tier C) and identify scrolls kept per item code when a full pack is sold down; the surplus is sold
-	FutileMinutes    int // a trip reason a visit left unfixed stays quiet this long, whatever the gold
-	PotionsFirst     int // 1: kit potions before the first town portal scroll, which needs gold for the scroll plus TPScrollPotions potions (d2-sme order, D3); 0 = scroll first
-	TPFirstLevel     int // PotionsFirst: extra floor, no first town portal scroll below this clvl (0 = none; the old rule was 4)
-	TPScrollPotions  int // PotionsFirst: the first scroll needs gold for the scroll plus this many healing potions (SME: 2; 0 with TPFirstLevel 4 = the old rule)
-	SellLowGems      int // 1: chipped and flawed gems are sold while no Horadric Cube is held (decision D4); 0 = keep them for the cube as before
-	IDScrollNeed     int // 1: buy identify scrolls only while an unidentified set, rare, unique or crafted item is in the pack; 0 = always up to IDScrollTarget
-	BankFirst        int // 1: deposit the gold above the keep line (never below the minimal kit) before the shop; 0 = after it
-	RepairLatch      int // 1: a repair that changed nothing is not retried until durability changed or gold grew by FutileGoldStep; 0 = retry every visit
-	TripEmptyHPBelt  int // NeedsTrip: 1 = go to town when no healing potion (not Rejuvenation) is in belt or pack and the purse buys one (KitPotionGold); 0 = off
-	TripMinSpend     int // goldfloor: a pure restock trip with a healing potion in the belt needs a planned purchase of at least this gold; a poor character (gold under the kit line, under 2 healing potions) buys no portal scroll (0 = off, old behaviour)
-	MPCapEarly       int // goldfloor: mana potions bought per visit below MPCapLevel
-	MPCapLevel       int // goldfloor: clvl below which MPCapEarly applies and a low mana belt raises no trip (0 = off, old behaviour)
-	EquipKindFails   int // g2g E1: failed equips of one item kind (base class) into one slot, across games, before that kind is skipped until the character gains a level
-	TidyEnabled      int // tidy: 1 = the Tidy chore stashes by the tidy policy and drops pure junk from a full pack (docs/tidy.md); 0 = off
-	TidyMaxActions   int // tidy: most stash and drop actions of one pass (the safety valve)
-	TidyMinPackPct   int // tidy: a pass runs only when the backpack is at least this full, or something is waiting for the stash
-	FutileGoldStep   int // after a visit that could not fix a trip reason (cannot afford, not sold), NeedsTrip stays quiet about it until gold grew by this
+	NPCStopDist        int // subtiles from the NPC at which the walk stops before clicking it
+	NPCOpenTries       int // attempts to open an NPC dialog
+	UITimeoutMs        int // wait for a panel flag after a click
+	ClickSettleMs      int // pause after a UI click before the memory is re-read
+	MoveTries          int // attempts to move one item between grids (verified each time)
+	DropTries          int // ground clicks DropCursor tries, each on a different cell next to the character, before it falls back to the pack
+	CursorStuckMax     int // distinct pack spots ClearCursor tries, and failed pack clears in a row after which PickUp goes straight to the ground drop
+	PortalClickFails   int // BackToField drops a town portal id after this many failed entries and uses a fresh portal, the waypoint or the walk (fixstaleportal)
+	PortalSettle       int // ms to wait after arriving before using a portal again
+	ChoreBudgetS       int // seconds one Chores call may take before it gives up
+	SellMaxS           int // seconds the sell chore alone may take (it is capped, then the other chores go on)
+	PortalReuseDist    int // ToTown uses an already open portal within this many subtiles instead of a scroll
+	GreetingWaitS      int // after clicking an NPC, wait this long for its menu (first contact plays a speech of about 60 s)
+	GreetingSkip       int // how a first-contact NPC greeting is skipped: 0 wait, 1 click the NPC again, 2 Esc then click, 3 click the NPC tile without hover (internal/town/skip.go)
+	SpareKeep          int // spare potions (pickit tier C) and identify scrolls kept per item code when a full pack is sold down; the surplus is sold
+	FutileMinutes      int // a trip reason a visit left unfixed stays quiet this long, whatever the gold
+	PotionsFirst       int // 1: kit potions before the first town portal scroll, which needs gold for the scroll plus TPScrollPotions potions (d2-sme order, D3); 0 = scroll first
+	TPFirstLevel       int // PotionsFirst: extra floor, no first town portal scroll below this clvl (0 = none; the old rule was 4)
+	TPScrollPotions    int // PotionsFirst: the first scroll needs gold for the scroll plus this many healing potions (SME: 2; 0 with TPFirstLevel 4 = the old rule)
+	SellLowGems        int // 1: chipped and flawed gems are sold while no Horadric Cube is held (decision D4); 0 = keep them for the cube as before
+	IdentifyTome       int // 1: the chore buys a Tome of Identify and keeps it topped up (default 0: buying is the player's errand)
+	IdentifyTopUpBelow int // refill the tome to full when it holds fewer scrolls than this
+	IDScrollNeed       int // 1: buy identify scrolls only while an unidentified set, rare, unique or crafted item is in the pack; 0 = always up to IDScrollTarget
+	WithdrawShop       int // 1: the withdraw chore also fires when the pack cannot pay the shopping list (scrolls, tome, potions) and takes out that list, never below the minimal kit; 0 = only the empty-belt rule
+	BankFirst          int // 1: deposit the gold above the keep line (never below the minimal kit) before the shop; 0 = after it
+	RepairLatch        int // 1: a repair that changed nothing is not retried until durability changed or gold grew by FutileGoldStep; 0 = retry every visit
+	TripEmptyHPBelt    int // NeedsTrip: 1 = go to town when no healing potion (not Rejuvenation) is in belt or pack and the purse buys one (KitPotionGold); 0 = off
+	TripMinSpend       int // goldfloor: a pure restock trip with a healing potion in the belt needs a planned purchase of at least this gold; a poor character (gold under the kit line, under 2 healing potions) buys no portal scroll (0 = off, old behaviour)
+	MPCapEarly         int // goldfloor: mana potions bought per visit below MPCapLevel
+	MPCapLevel         int // goldfloor: clvl below which MPCapEarly applies and a low mana belt raises no trip (0 = off, old behaviour)
+	Plan               int // town planner stage (docs/design/fable-review-2026-11-21): 0 off (default, old code), 1 shadow (log what the plan would buy, change nothing), 2 guards and shop read the plan, 3 purse, 4 sell and pickup, 5 route
+	EquipKindFails     int // g2g E1: failed equips of one item kind (base class) into one slot, across games, before that kind is skipped until the character gains a level
+	TidyEnabled        int // tidy: 1 = the Tidy chore stashes by the tidy policy and drops pure junk from a full pack (docs/tidy.md); 0 = off
+	TidyMaxActions     int // tidy: most stash and drop actions of one pass (the safety valve)
+	TidyMinPackPct     int // tidy: a pass runs only when the backpack is at least this full, or something is waiting for the stash
+	MercReserve        int // 1: a dead merc's revive price is kept back from the optional shop buys (tome, spare scrolls, mana); healing potions and the first portal scroll still come first; 0 = off
+	FutileGoldStep     int // after a visit that could not fix a trip reason (cannot afford, not sold), NeedsTrip stays quiet about it until gold grew by this
 }
 
 func DefaultTownTuning() TownTuning {
 	return TownTuning{
 		HealBelowLifePct: 70, HealBelowManaPct: 30,
 		TripMinHPPotions: 2, TripMinMPPotions: 1, TripBeltColumnPct: 50, TripPackUsedPct: 80, TripRepairPct: 20,
-		BeltFillPct: 100, TPScrollTarget: 2, TPReserve: 2, TPTomeMinGold: 450, IDScrollTarget: 2, MinGoldReserve: 100, KeyTarget: 0,
+		BeltFillPct: 100, TPScrollTarget: 2, LooseScrollKeep: 2, TPReserve: 2, TPTomeMinGold: 450, IDScrollTarget: 2, MinGoldReserve: 100, KeyTarget: 0,
 		RepairBelowPct: 30, StashGoldBase: 300, StashGoldPerLvl: 50, SellJunk: 1, BeltBuyLevel: 10,
 		NPCStopDist: 4, NPCOpenTries: 3, UITimeoutMs: 2500, ClickSettleMs: 150, MoveTries: 3, DropTries: 6, CursorStuckMax: 3,
 		RebuyGearTier: 1, RebuyPotionPct: 40, RebuyItemMaxPct: 60, PortalSettle: 4500, ChoreBudgetS: 150, SellMaxS: 60, FutileGoldStep: 100, TripMinSpend: 0, TripEmptyHPBelt: 1, MPCapEarly: 0, MPCapLevel: 0, FutileMinutes: 10, SpareKeep: 4, GreetingWaitS: 90, GreetingSkip: 0, PortalReuseDist: 40, PortalClickFails: 2,
-		PotionsFirst: 1, TPFirstLevel: 0, TPScrollPotions: 2, SellLowGems: 1, IDScrollNeed: 1, BankFirst: 1, RepairLatch: 1, EquipKindFails: 2,
-		TidyEnabled: 1, TidyMaxActions: 12, TidyMinPackPct: 60,
+		PotionsFirst: 1, TPFirstLevel: 0, TPScrollPotions: 2, SellLowGems: 1, IDScrollNeed: 1, IdentifyTome: 0, IdentifyTopUpBelow: 10, BankFirst: 1, WithdrawShop: 1, RepairLatch: 1, EquipKindFails: 2,
+		TidyEnabled: 1, TidyMaxActions: 12, TidyMinPackPct: 60, MercReserve: 1,
 	}
 }
 
@@ -93,12 +99,16 @@ func townKnobs() []Knob {
 		townK("tripPackUsedPct", "Trip: pack full", "%", "Go to town when the backpack is this full.", d.TripPackUsedPct, 40, 100, false),
 		townK("tripRepairPct", "Trip: durability", "%", "Go to town when an equipped item is below this durability.", d.TripRepairPct, 0, 60, true),
 		townK("beltFillPct", "Belt fill target", "%", "Refill each potion type to this share of its planned columns.", d.BeltFillPct, 25, 100, true),
+		townK("plan", "Town planner stage", "stage", "0 = old town code (default). 1 = shadow: every chores visit logs 'town plan (shadow)' with what the supply plan needs, has and would buy; no behaviour change. 2 = guards, chunk preconditions and the shop read the plan (belt plus pack counted; a guard blocks only on a line the plan cannot close). 3 to 5 are later stages (purse, sell and pickup, route). Measured run records carry the stage.", d.Plan, 0, 5, false),
 		townK("equipKindFails", "Equip: failures per kind", "count", "Failed equips of one item kind (base class) into one slot before that kind is skipped until the character gains a level. The memory is by kind, so a fresh game (new item ids) does not repeat the same refused swap (g2g E1: Cap to head failed in every game).", d.EquipKindFails, 1, 10, false),
 		townK("tpScrollTarget", "Town portal scrolls", "count", "Scrolls to hold when no tome is owned.", d.TPScrollTarget, 1, 20, true),
+		townK("looseScrollKeep", "Loose scrolls beside a tome", "count", "Town portal and identify scrolls kept loose in the pack while a tome of the same kind is owned. The pickup rule takes no more, and the sell chore sells the surplus (sandbox hero: 22 loose scrolls beside a tome of 10 filled the pack to 82%).", d.LooseScrollKeep, 0, 10, true),
 		townK("tpReserve", "Scroll reserve (poor)", "count", "Town portal scrolls a poor character buys once it carries its minimal healing kit (a dive then does not start with the only scroll spent). 1 = one scroll, the old cap.", d.TPReserve, 1, 5, true),
 		townK("tpMinGold", "TP scroll min gold", "gold", "Below this gold the first town portal scroll is not bought and a missing scroll is no trip reason, so a poor character puts its gold into potions first (XPGAP: 62% of the gold of a fresh d2d character went to scrolls). 0 = always buy at the scroll price.", d.TPMinGold, 0, 1000, false),
 		townK("tpTomeMinGold", "TP tome min gold", "gold", "Buy a Tome of Town Portal when gold is at least this.", d.TPTomeMinGold, 0, 5000, false),
 		townK("idScrollTarget", "Identify scrolls", "count", "Scrolls to hold when no tome is owned.", d.IDScrollTarget, 0, 20, true),
+		townK("identifyTome", "Identify tome chore", "bool", "1 lets the town chore buy a Tome of Identify and fill it to 20 (before identify and sell, only from gold above the repair, kit and merc reserves; a logged reason when short). 0 (default) = the bot never buys it by itself; the watch UI Buy scrolls errand always works and ignores this knob.", d.IdentifyTome, 0, 1, true),
+		townK("identifyTopUpBelow", "Identify tome top-up", "count", "With identifyTome on, refill the Tome of Identify to full when it holds fewer scrolls than this.", d.IdentifyTopUpBelow, 1, 20, true),
 		townK("minGoldReserve", "Gold reserve", "gold", "Optional purchases never spend below this.", d.MinGoldReserve, 0, 10000, false),
 		townK("keyTarget", "Keys", "count", "Keys to hold; 0 never buys keys.", d.KeyTarget, 0, 12, true),
 		townK("repairBelowPct", "Repair below", "%", "Repair when any equipped item is below this durability.", d.RepairBelowPct, 0, 90, true),
@@ -126,6 +136,7 @@ func townKnobs() []Knob {
 		townK("tidyEnabled", "Tidy: on", "0/1", "1: the Tidy chore stashes by the tidy policy table and drops pure junk from a full pack; it never touches equipment or marked items (docs/tidy.md).", d.TidyEnabled, 0, 1, false),
 		townK("tidyMaxActions", "Tidy: actions per pass", "count", "Most stash and drop actions of one tidy pass (safety valve).", d.TidyMaxActions, 1, 40, false),
 		townK("tidyMinPackPct", "Tidy: pack full", "%", "A tidy pass drops junk only when the backpack is at least this full.", d.TidyMinPackPct, 20, 100, false),
+		townK("mercReserve", "Keep the merc revive gold", "0/1", "1: while the merc is dead the shop keeps its revive price back from the tome, spare town portal scrolls and mana potions (hero14: 950 gold went to a tome and scrolls, then 600 for the revive was missing). Healing potions and the first portal scroll still come first. 0 = off.", d.MercReserve, 0, 1, true),
 		townK("spareKeep", "Spare supplies kept", "count", "A full pack sells spare potions and identify scrolls beyond this many per kind (they fill the pack but are never belted).", d.SpareKeep, 0, 30, true),
 		townK("sellMaxS", "Sell chore cap", "s", "Time the sell chore alone may take before it is cut off.", d.SellMaxS, 15, 300, true),
 		townK("potionsFirst", "Potions before first scroll", "bool", "1 buys the kit potions before the first town portal scroll, which then needs gold for the scroll plus tpScrollPotions potions (d2-sme order, decision D3). 0 = scroll first (old).", d.PotionsFirst, 0, 1, true),
@@ -133,6 +144,7 @@ func townKnobs() []Knob {
 		townK("tpFirstLevel", "First scroll from clvl", "clvl", "potionsFirst: extra floor, no first town portal scroll below this level. 0 = none (default, the SME gold rule decides); 4 with tpScrollPotions 0 restores the old BASICSFIX rule.", d.TPFirstLevel, 0, 30, false),
 		townK("tpScrollPotions", "Potions kept for the first scroll", "potions", "potionsFirst: the first town portal scroll is bought only when the gold left after the kit potions covers the scroll plus this many healing potions (d2-sme order, decision D3). 0 = no gold margin.", d.TPScrollPotions, 0, 10, false),
 		townK("idScrollNeed", "Identify scroll only if valuable", "bool", "1 buys identify scrolls only while an unidentified set, rare, unique or crafted item is in the pack; 0 = always idScrollTarget (old).", d.IDScrollNeed, 0, 1, true),
+		townK("withdrawShop", "Withdraw for the shop", "bool", "1 takes gold out of the stash up to the shopping list (portal scrolls, tome, potions) when the pack cannot pay it; 0 = only when no healing potion is carried.", d.WithdrawShop, 0, 1, true),
 		townK("bankFirst", "Bank before shop", "bool", "1 deposits gold above the keep line (never below the minimal kit) before the shop; 0 = the shop spends first (old).", d.BankFirst, 0, 1, true),
 		townK("repairLatch", "Failed repair latch", "bool", "1 retries a repair that changed nothing only after durability changed or gold grew by futileGoldStep; 0 = every visit (old).", d.RepairLatch, 0, 1, true),
 		townK("tripEmptyHPBelt", "Trip: empty healing belt", "on/off", "Go to town when the belt and pack hold no healing potion (Rejuvenation does not count, as in the BELT gate) and the gold buys one. 0 = off.", d.TripEmptyHPBelt, 0, 1, true),

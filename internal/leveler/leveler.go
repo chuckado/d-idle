@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"d2lod-bot/internal/d2"
@@ -37,6 +38,9 @@ type Options struct {
 	// locked (fidelity and measured runs; a table with AllMetProgress is the equivalent).
 	Unlocks  *Unlocks
 	Progress *Progress
+	// Verbs spends points by a protocol verb (docs/points.md): no panel, no clicks. Nil: clicks. A verb error turns the verbs
+	// off for the rest of the run and the click path carries on, so a build without the verb costs nothing.
+	Verbs PointVerbs
 	// Snapshot replaces env.Snapshot for the hand (tests with the simulated town).
 	Snapshot func() (*d2.Snapshot, error)
 	// Pinned says whether the player pinned the body slot (watch screen, docs/inventory-ui.md); a pinned slot is never
@@ -62,6 +66,7 @@ type Leveler struct {
 	// player reads the player fresh (tests replace it with a fake skill panel).
 	player func() (*d2.Player, error)
 
+	verbsOff atomic.Bool // a point verb failed or was not taken: the clicks carry on
 	mu       sync.Mutex
 	rejected map[string]int      // skill -> character level at which the game refused a point
 	bad      map[badKey]badMark  // (item id, slot) -> its failed equips; slot -1 is a failed purchase
@@ -167,6 +172,13 @@ var (
 func (l *Leveler) logf(msg string, kv ...any) { l.e.Log.Info("leveler: "+msg, kv...) }
 
 func (l *Leveler) sleep(ms int) { l.e.Clock.Sleep(time.Duration(ms) * time.Millisecond) }
+
+// PointVerbs spends one point without a click. attr is Str, Dex, Vit or Ene; skillID is the skills.txt id. Any error means
+// "this backend has no such verb or it did not take": the leveler does not retry it.
+type PointVerbs interface {
+	StatPoint(ctx context.Context, attr int) error
+	SkillPoint(ctx context.Context, skillID int) error
+}
 
 // Spend is the bot.Leveler contract: errors only for real failures.
 func (l *Leveler) Spend(ctx context.Context, snap *d2.Snapshot) error {
@@ -455,6 +467,10 @@ func (l *Leveler) run(ctx context.Context, acts []Action, rep *Report) (refused 
 			skills = append(skills, a)
 		}
 	}
+	stats, skills, verr := l.runVerbs(ctx, stats, skills, rep)
+	if verr != nil {
+		return nil, verr
+	}
 	if len(stats) > 0 {
 		if err := l.openPanel(ctx, "c", d2.UICharacter); err != nil {
 			return nil, err
@@ -720,4 +736,94 @@ func (l *Leveler) logAllocated(done []Action) {
 	if len(sk) > 0 {
 		l.e.Log.Info("skills: allocated " + strings.Join(sk, " "))
 	}
+}
+
+// runVerbs spends what it can by verb and returns the actions still to do by clicks. A verb counts only when the points
+// read back lower (the same proof the click path uses); the first failure switches the verbs off for this leveler.
+func (l *Leveler) runVerbs(ctx context.Context, stats, skills []Action, rep *Report) (restStats, restSkills []Action, err error) {
+	if l.o.Verbs == nil || l.verbsOff.Load() {
+		return stats, skills, nil
+	}
+	for i, a := range stats {
+		if !l.verbStat(ctx, a) {
+			return stats[i:], skills, nil
+		}
+		rep.Done = append(rep.Done, a)
+		l.mu.Lock()
+		l.stats.StatPoints++
+		l.mu.Unlock()
+	}
+	for i, a := range skills {
+		ok, err := l.verbSkill(ctx, a)
+		if errors.Is(err, ErrSkillMismatch) {
+			return nil, nil, err
+		}
+		if err != nil {
+			l.logf("point verb failed, clicking instead", "action", a.String(), "err", err)
+			l.verbsOff.Store(true)
+			return nil, skills[i:], nil
+		}
+		if !ok {
+			return nil, skills[i:], nil
+		}
+		rep.Done = append(rep.Done, a)
+		l.mu.Lock()
+		l.stats.SkillPoints++
+		l.mu.Unlock()
+	}
+	return nil, nil, nil
+}
+
+func (l *Leveler) verbStat(ctx context.Context, a Action) bool {
+	before, err := l.player()
+	if err != nil || before.StatPoints == 0 {
+		return false
+	}
+	if err := l.o.Verbs.StatPoint(ctx, a.Attr); err != nil {
+		l.logf("point verb failed, clicking instead", "action", a.String(), "err", err)
+		l.verbsOff.Store(true)
+		return false
+	}
+	if _, done, err := l.pollPlayer(ctx, 1500*time.Millisecond, func(p *d2.Player) bool { return p.StatPoints < before.StatPoints }); err != nil || !done {
+		l.logf("point verb not taken, clicking instead", "action", a.String())
+		l.verbsOff.Store(true)
+		return false
+	}
+	return true
+}
+
+// verbSkill returns ok false (no error) when the skill is not learnable by verb (the click path then decides and
+// reports a refusal), and an error when the verb itself failed.
+func (l *Leveler) verbSkill(ctx context.Context, a Action) (bool, error) {
+	db := l.e.Data
+	if db == nil {
+		return false, nil
+	}
+	s := db.SkillByName(a.Skill)
+	if s == nil {
+		return false, nil
+	}
+	before, err := l.player()
+	if err != nil || before.SkillPoints == 0 {
+		return false, nil
+	}
+	if err := l.o.Verbs.SkillPoint(ctx, s.ID); err != nil {
+		return false, err
+	}
+	after, done, err := l.pollPlayer(ctx, 1500*time.Millisecond, func(p *d2.Player) bool { return p.SkillPoints < before.SkillPoints })
+	if err != nil || !done {
+		return false, fmt.Errorf("skill point not taken")
+	}
+	got := gained(before.Skills, after.Skills)
+	if len(got) == 0 { // the skill list can lag the point count by a frame or two
+		if after, _, err = l.pollPlayer(ctx, 800*time.Millisecond, func(p *d2.Player) bool { return len(gained(before.Skills, p.Skills)) > 0 }); err != nil {
+			return false, err
+		}
+		got = gained(before.Skills, after.Skills)
+	}
+	if err := checkLearned(db, s.ID, got); err != nil {
+		l.pause(err.Error())
+		return false, err
+	}
+	return true, nil
 }

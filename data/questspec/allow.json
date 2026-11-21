@@ -1,0 +1,11 @@
+{
+ "schema": "questallow/1",
+ "allowed": [
+  {"chain": "search_for_cain", "caps": "d2d-sandbox-devp13", "step": "find_tree", "rule": 4, "owner": "cain follow-up (RC1)",
+   "why": "RC1 residual: the find step still restarts its walk per try; no coverage-progress rule exists in the executor (docs/probes/treefix3-2026-11-19.md, not fixed)"},
+  {"chain": "search_for_cain", "caps": "d2d-lab", "step": "find_tree", "rule": 4, "owner": "cain follow-up (RC1)",
+   "why": "the same executor gap, independent of the backend"},
+  {"chain": "search_for_cain", "caps": "d2d-sandbox-devp13", "step": "find_tree", "rule": 9, "owner": "cain follow-up (RC1)",
+   "why": "treefix3 sweeps toward the tree room from the room rows of debug presets; U whether devp13 prints them (read one reply to close it)"}
+ ]
+}

@@ -152,3 +152,29 @@ func TestFieldReadyHonoursTheClosedRoad(t *testing.T) {
 		t.Error("open road")
 	}
 }
+
+// Proving Ground act1more (act1.tools.malus): the level passes, the kit is one healing potion short. The road step must
+// ask for a chores trip (resource fault), not report danger and leave the planner leveling with the kit never restocked.
+func TestFieldReadyKitShortInsertsChores(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		caster bool
+	}{{"paladin", false}, {"sorceress", true}} {
+		w := routeWorld(22, func(w *task.World) { w.Caster, w.Potions = tc.caster, 3 })
+		w.RouteBlocked, w.TowerBlocked = task.RouteWhy(w), task.TowerWhy(w)
+		for _, a := range []task.Area{7} { // the Barracks road
+			if w.RouteBlocked == "" {
+				t.Fatalf("%s: guard open with 3 healing potions", tc.name)
+			}
+			f := task.StepTravel("t", "travel", a, func(task.World) bool { return false }).Ready(w)
+			if f == nil || f.Kind != task.KindResource || len(f.Insert) != 1 || !strings.Contains(f.Why, "healing potions") {
+				t.Errorf("%s area %d: fault %+v, want a resource fault inserting chores", tc.name, a, f)
+			}
+		}
+		w.Level = 5 // level grounds stay danger
+		w.RouteBlocked = task.RouteWhy(w)
+		if f := task.StepTravel("t", "travel", 7, func(task.World) bool { return false }).Ready(w); f == nil || f.Kind != task.KindDanger {
+			t.Errorf("%s clvl 5: fault %+v, want danger", tc.name, f)
+		}
+	}
+}

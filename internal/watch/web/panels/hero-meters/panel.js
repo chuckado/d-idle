@@ -13,14 +13,20 @@ export function mount(root, ctx) {
   mana.root.classList.add('thin');
   life.root.dataset.key = 'life';
   mana.root.dataset.key = 'mana';
-  root.append(where, life.root, mana.root);
+  // in the cockpit band (the shell marks the root) the panel is slim: two thin bars and one number each, no line of words
+  const slim = root.dataset.cockpitPanel === 'band';
+  if (slim) root.dataset.slim = '1'; else root.append(where);
+  root.append(life.root, mana.root);
   return {
     update(h) {
       if (!h || !h.known) { ctx.hide(true); return; }
       ctx.hide(false);
       where.textContent = [h.name, h.class ? h.class + (h.level ? ' lvl ' + h.level : '') : '', h.area].filter(Boolean).join(', ');
-      life.set(h.maxLife ? (100 * h.life) / h.maxLife : 0, h.maxLife ? h.life + '/' + h.maxLife : '-', level(h.life, h.maxLife));
-      mana.set(h.maxMana ? (100 * h.mana) / h.maxMana : 0, h.maxMana ? h.mana + '/' + h.maxMana : '-');
+      const lt = slim ? (h.life) : h.life + '/' + h.maxLife, mt = slim ? h.mana : h.mana + '/' + h.maxMana;
+      life.set(h.maxLife ? (100 * h.life) / h.maxLife : 0, h.maxLife ? String(lt) : '-', level(h.life, h.maxLife));
+      mana.set(h.maxMana ? (100 * h.mana) / h.maxMana : 0, h.maxMana ? String(mt) : '-');
+      if (slim && h.maxLife) life.root.title = 'life ' + h.life + ' of ' + h.maxLife;
+      if (slim && h.maxMana) mana.root.title = 'mana ' + h.mana + ' of ' + h.maxMana;
     },
   };
 }

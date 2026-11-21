@@ -47,6 +47,9 @@ type Teleporter interface {
 // PresetRef selects a preset and the stand point derived from it.
 type PresetRef struct {
 	Kind, ID int
+	// Name matches a monster preset by its name when the ID differs between sources (the fork's layout read names the
+	// superunique preset; the Kolbot ID is S): "The Countess" equals "Countess" and "countess".
+	Name     string
 	Off      Pt        // stand = preset.Pos + Off when no variant matches
 	Variants []Variant // layouts told apart by the preset's X (Countess chest: 12565 / 12526)
 }

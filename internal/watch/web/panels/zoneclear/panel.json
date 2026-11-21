@@ -1,0 +1,23 @@
+{
+  "schema": "watch.panel/1",
+  "version": 2,
+  "id": "zoneclear",
+  "title": "Zone clear",
+  "band": "side",
+  "size": "m",
+  "minSize": "m",
+  "priority": 45,
+  "tab": "hero",
+  "defaultOpen": true,
+  "endpoint": "/api/zoneclear",
+  "poll": 10,
+  "unlock": "",
+  "skeleton": 3,
+  "optIn": true,
+  "fit": true,
+  "slot": true,
+  "scroll": true,
+  "cockpitOnly": true,
+  "owner": "farmloop",
+  "doc": "docs/farmloop.md"
+}

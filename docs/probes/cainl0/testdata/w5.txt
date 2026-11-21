@@ -1,0 +1,632 @@
+> debug goto 10
+60.0 36.0 err=<nil>
+> step 25 err=<nil>
+> debug enter 0
+ err=<nil>
+> step 50 err=<nil>
+> debug warp 20 24
+ err=<nil>
+> step 25 err=<nil>
+> debug presets
+0	37	13.5	20.3	0	
+1	37	18.1	28.1	0	
+2	37	22.3	26.3	0	
+3	37	22.3	30.1	0	
+4	269	20.9	27.3	0	
+5	139	26.7	33.5	0	Chest
+6	55	21.5	32.5	0	Dead Rogue
+7	155	17.7	38.7	0	Hidden Stash
+8	256	27.7	27.7	0	
+9	55	27.9	28.7	0	Dead Rogue
+10	155	25.7	24.5	0	Hidden Stash
+11	139	30.7	29.3	0	Chest
+12	175	13.1	33.7	0	Loose Boulder
+room	20	20	4
+room	6	28	4
+room	6	36	4
+room	6	44	4
+room	6	52	4
+room	10	60	4
+room	19	12	12
+room	23	20	12
+room	14	60	12
+room	6	68	12
+room	10	76	12
+room	25	12	20
+room	49	44	20
+room	7	76	20
+room	19	4	28
+room	23	12	28
+room	43	20	28
+room	48	28	28
+room	41	44	28
+room	41	52	28
+room	41	44	36
+room	41	52	36
+room	15	60	28
+room	4	68	28
+room	11	76	28
+room	16	4	36
+room	14	60	36
+room	6	68	36
+room	10	76	36
+room	16	4	44
+room	161	44	44
+room	7	76	44
+room	16	4	52
+room	40	20	52
+room	40	28	52
+room	40	20	60
+room	40	28	60
+room	15	44	52
+room	4	52	52
+room	12	60	52
+room	7	76	52
+room	16	4	60
+room	14	44	60
+room	6	52	60
+room	13	60	60
+room	7	76	60
+room	18	4	68
+room	4	12	68
+room	12	20	68
+room	29	28	68
+room	30	44	68
+room	7	76	68
+room	8	20	76
+room	4	28	76
+room	4	36	76
+room	4	44	76
+room	4	52	76
+room	4	60	76
+room	4	68	76
+room	11	76	76 err=<nil>
+> debug warp 26 29
+ err=<nil>
+> step 25 err=<nil>
+> debug presets
+0	37	13.5	20.3	0	
+1	37	18.1	28.1	0	
+2	37	22.3	26.3	0	
+3	37	22.3	30.1	0	
+4	269	20.9	27.3	0	
+5	139	26.7	33.5	0	Chest
+6	55	21.5	32.5	0	Dead Rogue
+7	155	17.7	38.7	0	Hidden Stash
+8	256	27.7	27.7	0	
+9	55	27.9	28.7	0	Dead Rogue
+10	155	25.7	24.5	0	Hidden Stash
+11	139	30.7	29.3	0	Chest
+12	175	13.1	33.7	0	Loose Boulder
+13	144	36.3	24.3	0	Chest
+14	139	33.1	29.1	0	Chest
+15	139	33.5	23.3	0	Chest
+room	20	20	4
+room	6	28	4
+room	6	36	4
+room	6	44	4
+room	6	52	4
+room	10	60	4
+room	19	12	12
+room	23	20	12
+room	14	60	12
+room	6	68	12
+room	10	76	12
+room	25	12	20
+room	49	44	20
+room	7	76	20
+room	19	4	28
+room	23	12	28
+room	43	20	28
+room	48	28	28
+room	41	44	28
+room	41	52	28
+room	41	44	36
+room	41	52	36
+room	15	60	28
+room	4	68	28
+room	11	76	28
+room	16	4	36
+room	14	60	36
+room	6	68	36
+room	10	76	36
+room	16	4	44
+room	161	44	44
+room	7	76	44
+room	16	4	52
+room	40	20	52
+room	40	28	52
+room	40	20	60
+room	40	28	60
+room	15	44	52
+room	4	52	52
+room	12	60	52
+room	7	76	52
+room	16	4	60
+room	14	44	60
+room	6	52	60
+room	13	60	60
+room	7	76	60
+room	18	4	68
+room	4	12	68
+room	12	20	68
+room	29	28	68
+room	30	44	68
+room	7	76	68
+room	8	20	76
+room	4	28	76
+room	4	36	76
+room	4	44	76
+room	4	52	76
+room	4	60	76
+room	4	68	76
+room	11	76	76 err=<nil>
+> debug warp 30 33
+ err=<nil>
+> step 25 err=<nil>
+> debug presets
+0	37	13.5	20.3	0	
+1	37	18.1	28.1	0	
+2	37	22.3	26.3	0	
+3	37	22.3	30.1	0	
+4	269	20.9	27.3	0	
+5	139	26.7	33.5	0	Chest
+6	55	21.5	32.5	0	Dead Rogue
+7	155	17.7	38.7	0	Hidden Stash
+8	256	27.7	27.7	0	
+9	55	27.9	28.7	0	Dead Rogue
+10	155	25.7	24.5	0	Hidden Stash
+11	139	30.7	29.3	0	Chest
+12	175	13.1	33.7	0	Loose Boulder
+13	144	36.3	24.3	0	Chest
+14	139	33.1	29.1	0	Chest
+15	139	33.5	23.3	0	Chest
+16	2	36.5	45.5	0	Shrine
+17	155	33.1	46.3	0	Hidden Stash
+18	2	28.5	42.5	0	Shrine
+19	144	28.9	47.1	0	Chest
+20	155	17.3	40.5	0	Hidden Stash
+21	139	17.1	41.9	0	Chest
+room	20	20	4
+room	6	28	4
+room	6	36	4
+room	6	44	4
+room	6	52	4
+room	10	60	4
+room	19	12	12
+room	23	20	12
+room	14	60	12
+room	6	68	12
+room	10	76	12
+room	25	12	20
+room	49	44	20
+room	7	76	20
+room	19	4	28
+room	23	12	28
+room	43	20	28
+room	48	28	28
+room	41	44	28
+room	41	52	28
+room	41	44	36
+room	41	52	36
+room	15	60	28
+room	4	68	28
+room	11	76	28
+room	16	4	36
+room	14	60	36
+room	6	68	36
+room	10	76	36
+room	16	4	44
+room	161	44	44
+room	7	76	44
+room	16	4	52
+room	40	20	52
+room	40	28	52
+room	40	20	60
+room	40	28	60
+room	15	44	52
+room	4	52	52
+room	12	60	52
+room	7	76	52
+room	16	4	60
+room	14	44	60
+room	6	52	60
+room	13	60	60
+room	7	76	60
+room	18	4	68
+room	4	12	68
+room	12	20	68
+room	29	28	68
+room	30	44	68
+room	7	76	68
+room	8	20	76
+room	4	28	76
+room	4	36	76
+room	4	44	76
+room	4	52	76
+room	4	60	76
+room	4	68	76
+room	11	76	76 err=<nil>
+> debug warp 34 36
+ err=<nil>
+> step 25 err=<nil>
+> debug presets
+0	37	13.5	20.3	0	
+1	37	18.1	28.1	0	
+2	37	22.3	26.3	0	
+3	37	22.3	30.1	0	
+4	269	20.9	27.3	0	
+5	139	26.7	33.5	0	Chest
+6	55	21.5	32.5	0	Dead Rogue
+7	155	17.7	38.7	0	Hidden Stash
+8	256	27.7	27.7	0	
+9	55	27.9	28.7	0	Dead Rogue
+10	155	25.7	24.5	0	Hidden Stash
+11	139	30.7	29.3	0	Chest
+12	175	13.1	33.7	0	Loose Boulder
+13	144	36.3	24.3	0	Chest
+14	139	33.1	29.1	0	Chest
+15	139	33.5	23.3	0	Chest
+16	2	36.5	45.5	0	Shrine
+17	155	33.1	46.3	0	Hidden Stash
+18	2	28.5	42.5	0	Shrine
+19	144	28.9	47.1	0	Chest
+20	155	17.3	40.5	0	Hidden Stash
+21	139	17.1	41.9	0	Chest
+22	30	44.5	44.5	0	Tree of Inifuss
+23	155	44.5	33.9	0	Hidden Stash
+24	139	45.5	33.3	0	Chest
+25	37	41.7	30.3	0	
+26	155	47.3	27.9	0	Hidden Stash
+27	141	40.9	28.3	0	Chest
+room	20	20	4
+room	6	28	4
+room	6	36	4
+room	6	44	4
+room	6	52	4
+room	10	60	4
+room	19	12	12
+room	23	20	12
+room	14	60	12
+room	6	68	12
+room	10	76	12
+room	25	12	20
+room	49	44	20
+room	7	76	20
+room	19	4	28
+room	23	12	28
+room	43	20	28
+room	48	28	28
+room	41	44	28
+room	41	52	28
+room	41	44	36
+room	41	52	36
+room	15	60	28
+room	4	68	28
+room	11	76	28
+room	16	4	36
+room	14	60	36
+room	6	68	36
+room	10	76	36
+room	16	4	44
+room	161	44	44
+room	7	76	44
+room	16	4	52
+room	40	20	52
+room	40	28	52
+room	40	20	60
+room	40	28	60
+room	15	44	52
+room	4	52	52
+room	12	60	52
+room	7	76	52
+room	16	4	60
+room	14	44	60
+room	6	52	60
+room	13	60	60
+room	7	76	60
+room	18	4	68
+room	4	12	68
+room	12	20	68
+room	29	28	68
+room	30	44	68
+room	7	76	68
+room	8	20	76
+room	4	28	76
+room	4	36	76
+room	4	44	76
+room	4	52	76
+room	4	60	76
+room	4	68	76
+room	11	76	76 err=<nil>
+> debug warp 36 39
+ err=<nil>
+> step 25 err=<nil>
+> debug presets
+0	37	13.5	20.3	0	
+1	37	18.1	28.1	0	
+2	37	22.3	26.3	0	
+3	37	22.3	30.1	0	
+4	269	20.9	27.3	0	
+5	139	26.7	33.5	0	Chest
+6	55	21.5	32.5	0	Dead Rogue
+7	155	17.7	38.7	0	Hidden Stash
+8	256	27.7	27.7	0	
+9	55	27.9	28.7	0	Dead Rogue
+10	155	25.7	24.5	0	Hidden Stash
+11	139	30.7	29.3	0	Chest
+12	175	13.1	33.7	0	Loose Boulder
+13	144	36.3	24.3	0	Chest
+14	139	33.1	29.1	0	Chest
+15	139	33.5	23.3	0	Chest
+16	2	36.5	45.5	0	Shrine
+17	155	33.1	46.3	0	Hidden Stash
+18	2	28.5	42.5	0	Shrine
+19	144	28.9	47.1	0	Chest
+20	155	17.3	40.5	0	Hidden Stash
+21	139	17.1	41.9	0	Chest
+22	30	44.5	44.5	0	Tree of Inifuss
+23	155	44.5	33.9	0	Hidden Stash
+24	139	45.5	33.3	0	Chest
+25	37	41.7	30.3	0	
+26	155	47.3	27.9	0	Hidden Stash
+27	141	40.9	28.3	0	Chest
+room	20	20	4
+room	6	28	4
+room	6	36	4
+room	6	44	4
+room	6	52	4
+room	10	60	4
+room	19	12	12
+room	23	20	12
+room	14	60	12
+room	6	68	12
+room	10	76	12
+room	25	12	20
+room	49	44	20
+room	7	76	20
+room	19	4	28
+room	23	12	28
+room	43	20	28
+room	48	28	28
+room	41	44	28
+room	41	52	28
+room	41	44	36
+room	41	52	36
+room	15	60	28
+room	4	68	28
+room	11	76	28
+room	16	4	36
+room	14	60	36
+room	6	68	36
+room	10	76	36
+room	16	4	44
+room	161	44	44
+room	7	76	44
+room	16	4	52
+room	40	20	52
+room	40	28	52
+room	40	20	60
+room	40	28	60
+room	15	44	52
+room	4	52	52
+room	12	60	52
+room	7	76	52
+room	16	4	60
+room	14	44	60
+room	6	52	60
+room	13	60	60
+room	7	76	60
+room	18	4	68
+room	4	12	68
+room	12	20	68
+room	29	28	68
+room	30	44	68
+room	7	76	68
+room	8	20	76
+room	4	28	76
+room	4	36	76
+room	4	44	76
+room	4	52	76
+room	4	60	76
+room	4	68	76
+room	11	76	76 err=<nil>
+> debug warp 38 41
+ err=<nil>
+> step 25 err=<nil>
+> debug presets
+0	37	13.5	20.3	0	
+1	37	18.1	28.1	0	
+2	37	22.3	26.3	0	
+3	37	22.3	30.1	0	
+4	269	20.9	27.3	0	
+5	139	26.7	33.5	0	Chest
+6	55	21.5	32.5	0	Dead Rogue
+7	155	17.7	38.7	0	Hidden Stash
+8	256	27.7	27.7	0	
+9	55	27.9	28.7	0	Dead Rogue
+10	155	25.7	24.5	0	Hidden Stash
+11	139	30.7	29.3	0	Chest
+12	175	13.1	33.7	0	Loose Boulder
+13	144	36.3	24.3	0	Chest
+14	139	33.1	29.1	0	Chest
+15	139	33.5	23.3	0	Chest
+16	2	36.5	45.5	0	Shrine
+17	155	33.1	46.3	0	Hidden Stash
+18	2	28.5	42.5	0	Shrine
+19	144	28.9	47.1	0	Chest
+20	155	17.3	40.5	0	Hidden Stash
+21	139	17.1	41.9	0	Chest
+22	30	44.5	44.5	0	Tree of Inifuss
+23	155	44.5	33.9	0	Hidden Stash
+24	139	45.5	33.3	0	Chest
+25	37	41.7	30.3	0	
+26	155	47.3	27.9	0	Hidden Stash
+27	141	40.9	28.3	0	Chest
+28	175	35.9	55.3	0	Loose Boulder
+29	140	32.5	50.7	0	Chest
+30	141	36.3	49.3	0	Chest
+31	175	29.5	50.7	0	Loose Boulder
+32	139	30.7	48.7	0	Chest
+room	20	20	4
+room	6	28	4
+room	6	36	4
+room	6	44	4
+room	6	52	4
+room	10	60	4
+room	19	12	12
+room	23	20	12
+room	14	60	12
+room	6	68	12
+room	10	76	12
+room	25	12	20
+room	49	44	20
+room	7	76	20
+room	19	4	28
+room	23	12	28
+room	43	20	28
+room	48	28	28
+room	41	44	28
+room	41	52	28
+room	41	44	36
+room	41	52	36
+room	15	60	28
+room	4	68	28
+room	11	76	28
+room	16	4	36
+room	14	60	36
+room	6	68	36
+room	10	76	36
+room	16	4	44
+room	161	44	44
+room	7	76	44
+room	16	4	52
+room	40	20	52
+room	40	28	52
+room	40	20	60
+room	40	28	60
+room	15	44	52
+room	4	52	52
+room	12	60	52
+room	7	76	52
+room	16	4	60
+room	14	44	60
+room	6	52	60
+room	13	60	60
+room	7	76	60
+room	18	4	68
+room	4	12	68
+room	12	20	68
+room	29	28	68
+room	30	44	68
+room	7	76	68
+room	8	20	76
+room	4	28	76
+room	4	36	76
+room	4	44	76
+room	4	52	76
+room	4	60	76
+room	4	68	76
+room	11	76	76 err=<nil>
+> debug warp 40 42
+ err=<nil>
+> step 25 err=<nil>
+> debug presets
+0	37	13.5	20.3	0	
+1	37	18.1	28.1	0	
+2	37	22.3	26.3	0	
+3	37	22.3	30.1	0	
+4	269	20.9	27.3	0	
+5	139	26.7	33.5	0	Chest
+6	55	21.5	32.5	0	Dead Rogue
+7	155	17.7	38.7	0	Hidden Stash
+8	256	27.7	27.7	0	
+9	55	27.9	28.7	0	Dead Rogue
+10	155	25.7	24.5	0	Hidden Stash
+11	139	30.7	29.3	0	Chest
+12	175	13.1	33.7	0	Loose Boulder
+13	144	36.3	24.3	0	Chest
+14	139	33.1	29.1	0	Chest
+15	139	33.5	23.3	0	Chest
+16	2	36.5	45.5	0	Shrine
+17	155	33.1	46.3	0	Hidden Stash
+18	2	28.5	42.5	0	Shrine
+19	144	28.9	47.1	0	Chest
+20	155	17.3	40.5	0	Hidden Stash
+21	139	17.1	41.9	0	Chest
+22	30	44.5	44.5	0	Tree of Inifuss
+23	155	44.5	33.9	0	Hidden Stash
+24	139	45.5	33.3	0	Chest
+25	37	41.7	30.3	0	
+26	155	47.3	27.9	0	Hidden Stash
+27	141	40.9	28.3	0	Chest
+28	175	35.9	55.3	0	Loose Boulder
+29	140	32.5	50.7	0	Chest
+30	141	36.3	49.3	0	Chest
+31	175	29.5	50.7	0	Loose Boulder
+32	139	30.7	48.7	0	Chest
+33	54	49.1	42.1	0	Dead Rogue
+34	139	52.5	41.5	0	Chest
+35	37	54.7	35.3	0	
+36	175	53.7	34.3	0	Loose Boulder
+37	140	52.1	39.3	0	Chest
+room	20	20	4
+room	6	28	4
+room	6	36	4
+room	6	44	4
+room	6	52	4
+room	10	60	4
+room	19	12	12
+room	23	20	12
+room	14	60	12
+room	6	68	12
+room	10	76	12
+room	25	12	20
+room	49	44	20
+room	7	76	20
+room	19	4	28
+room	23	12	28
+room	43	20	28
+room	48	28	28
+room	41	44	28
+room	41	52	28
+room	41	44	36
+room	41	52	36
+room	15	60	28
+room	4	68	28
+room	11	76	28
+room	16	4	36
+room	14	60	36
+room	6	68	36
+room	10	76	36
+room	16	4	44
+room	161	44	44
+room	7	76	44
+room	16	4	52
+room	40	20	52
+room	40	28	52
+room	40	20	60
+room	40	28	60
+room	15	44	52
+room	4	52	52
+room	12	60	52
+room	7	76	52
+room	16	4	60
+room	14	44	60
+room	6	52	60
+room	13	60	60
+room	7	76	60
+room	18	4	68
+room	4	12	68
+room	12	20	68
+room	29	28	68
+room	30	44	68
+room	7	76	68
+room	8	20	76
+room	4	28	76
+room	4	36	76
+room	4	44	76
+room	4	52	76
+room	4	60	76
+room	4	68	76
+room	11	76	76 err=<nil>
