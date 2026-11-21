@@ -11,8 +11,9 @@ type FakeWorld struct {
 
 type fakeRefusal struct{ Code string }
 
-func (e fakeRefusal) Error() string   { return "refused: " + e.Code }
-func (fakeRefusal) RuleRefusal() bool { return true }
+func (e fakeRefusal) RefusalCode() string { return e.Code }
+func (e fakeRefusal) Error() string       { return "refused: " + e.Code }
+func (fakeRefusal) RuleRefusal() bool     { return true }
 
 // Refusal builds a rule refusal for FakeWorld.Fail.
 func Refusal(code string) error { return fakeRefusal{Code: code} }
