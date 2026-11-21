@@ -892,8 +892,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "RED live 2026-11-21: no hold fired; the town trip leaves 3 healing potions of 4 (belt column taken by mana) and the step fails 3 times (finding boardsm-kit-belt)"
+   "status": "active"
   },
   {
    "id": "board.hold.restock-stash-gold",
@@ -980,8 +979,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "RED live 2026-11-21: no withdraw hold fired and the stash was not drawn (finding boardsm-kit-belt)"
+   "status": "active"
   },
   {
    "id": "board.hold.broke",
@@ -1062,8 +1060,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "RED live 2026-11-21: no hold fired and the chunk view carries no reason code (card 6 boardsm-api)"
+   "status": "active"
   },
   {
    "id": "board.hold.too-weak",
@@ -1150,8 +1147,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "RED live 2026-11-21: no hold fired within the budget and the chunk view carries no reason code (card 6 boardsm-api)"
+   "status": "active"
   },
   {
    "id": "board.hold.timeout",
@@ -1230,8 +1226,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "RED live 2026-11-21: parked by the old failure counter (3 tries), no hold_timeout hold (finding boardsm-kit-belt)"
+   "status": "active"
   },
   {
    "id": "board.view.reason-always",
