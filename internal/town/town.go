@@ -263,6 +263,7 @@ type ChorePlan struct {
 	PotionFloor                                                 int            // > 0: buy healing potions only up to this many in the belt, no mana or rejuvenation (recovery keeps the gold for the kit)
 	Cube                                                        bool           // gem and rune cube upgrades (cubejobs.go); the Tuning.Bot.CubeJobs knob decides in the adapter
 	CubeKeep                                                    map[string]int // item codes the cube chore must not consume
+	Profile                                                     string         // supply profile of the next excursion for the town plan (internal/supply; empty = field); only read while town.plan > 0
 }
 
 // FullPlan is every chore.
