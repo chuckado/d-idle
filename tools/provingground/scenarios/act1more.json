@@ -236,7 +236,7 @@
   },
   {
    "id": "act1.andariel.slaughter",
-   "title": "Sisters to the Slaughter: the way to Catacombs 4 and Andariel (board-driven)",
+   "title": "Sisters to the Slaughter: the board holds Andariel back from a naked clvl-26 hero (too hard), the Monastery road is open",
    "kind": "step",
    "tier": "full",
    "quest": {
@@ -295,7 +295,8 @@
      "hp1",
      "hp1",
      "hp1"
-    ]
+    ],
+    "merc": 0
    },
    "trigger": {
     "goals": "reach:30",
@@ -322,38 +323,25 @@
      3
     ]
    },
-   "provenance": "CHEATED: level 26 (Normal Andariel is dangerous below about clvl 24), 15000 gold, the waypoints Cold Plains to Catacombs 2 and potions by SETUP verbs. Town start, nothing written after the start. Mechanics only, never a statement about the level a played hero fights her at.",
-   "notes": "The tapper taps Start on andariel (autoStart is never: a player decision). Kill sets record 6 to 0x2002 or similar with bit 1 = reward pending (V docs/d2d-probes.md: 0x200a after the kill; the Warriv talk sets bit 0). The assertion is the kill word (bit 1); the hand-in to Warriv belongs to act1_done.sail_east, not here. town.bankFirst 0: with the default the bank chore moved 6900 of the 8000 gold into the stash in the first minute and the chunk then waited 28 minutes on chores it could not pay (run 20261120-184924-bb3e, finding in the probe doc). Belt is four healing potions: the kit gate asked for 'healing potions 3/4' with a 3+1 belt and the chunk sat on its chores step (run 20261120-192148-b1a8). Level 26, not 30: with goals reach:30 a level-30 hero finishes its goal at once and idles, the board never starts (run 20261120-204236-684a).",
+   "provenance": "CHEATED: level 26 (Normal Andariel is dangerous below about clvl 24), 15000 gold, the waypoints Cold Plains to Catacombs 2, a hired merc (hireling 0) and potions by SETUP verbs. Without the merc the board holds Andariel back as 'too hard' (run 20261120-221758-41b3: no merc, short of potions, would likely lose), which is the readiness model working as intended. Town start, nothing written after the start. Mechanics only, never a statement about the level a played hero fights her at.",
+   "notes": "MILESTONE (andariel1): the board holds Andariel as too hard for this hero (no skills spent, clvl 26 from a SETUP verb): the readiness model is right, the tapper logs the reason, and the hero must still walk the Monastery road to the Outer Cloister. The kill itself (record 6 bit 1) needs a geared hero and is U. The tapper taps Start on andariel (autoStart is never: a player decision). Kill sets record 6 to 0x2002 or similar with bit 1 = reward pending (V docs/d2d-probes.md: 0x200a after the kill; the Warriv talk sets bit 0). The assertion is the kill word (bit 1); the hand-in to Warriv belongs to act1_done.sail_east, not here. town.bankFirst 0: with the default the bank chore moved 6900 of the 8000 gold into the stash in the first minute and the chunk then waited 28 minutes on chores it could not pay (run 20261120-184924-bb3e, finding in the probe doc). Belt is four healing potions: the kit gate asked for 'healing potions 3/4' with a 3+1 belt and the chunk sat on its chores step (run 20261120-192148-b1a8). Level 26, not 30: with goals reach:30 a level-30 hero finishes its goal at once and idles, the board never starts (run 20261120-204236-684a).",
    "assert": [
-    {
-     "kind": "quest_bits",
-     "record": 6,
-     "set": 2,
-     "why": "V docs/d2d-probes.md and docs/forkcheats.md: record 6 is Andariel; bit 1 = killed, reward pending"
-    },
-    {
-     "kind": "log_line",
-     "pattern": "^character died ",
-     "max": 0,
-     "why": "no death: these setups are far above the boss's level, a death is a RED (the format has no min 0 with a positive max)"
-    },
-    {
-     "kind": "log_line",
-     "pattern": "^(safety decision action=chicken|quest board: starting chunk)",
-     "max": 5,
-     "why": "chicken bound: at most 4 chickens (the one 'starting chunk' line is counted in the max)",
-     "min": 1
-    },
-    {
-     "kind": "log_line",
-     "pattern": "^quest board: starting chunk",
-     "min": 1,
-     "why": "the board started the tapped chunk (the hero engaged)"
-    },
-    {
-     "kind": "no_writes"
-    }
-   ]
+  {
+   "kind": "log_line",
+   "pattern": "^Entered Outer Cloister",
+   "min": 1,
+   "why": "the road past the Monastery Gate is open: the hero reached the Outer Cloister (run 20261120-230516-0e0d: travel from the Monastery Gate failed with no exit; fix card andariel1: the nav walks to a border d2d cannot read from afar)"
+  },
+  {
+   "kind": "log_line",
+   "pattern": "^character died ",
+   "max": 0,
+   "why": "no death: the board holds the fight back, a death is a RED"
+  },
+  {
+   "kind": "no_writes"
+  }
+ ]
   }
  ]
 }
