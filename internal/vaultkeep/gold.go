@@ -12,85 +12,87 @@ import (
 	"time"
 
 	"d2lod-bot/internal/bulkid"
+	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/vault"
 )
 
-// Reveal paid in gold (docs/vault.md, "Reveal paid in gold"). A gold reveal is an ORDER: the bot buys Scrolls of Identify
-// at the vendor of the town it visits (real gold, above the repair and potion-kit reserve) and reads them on the vault
-// items through the ordinary Reveal flow in the same visit. No virtual gold exists, so the price is the vendor price of
-// the scrolls that are bought and used up.
+// Reveal paid in gold (docs/vault.md, "Reveal paid in gold"; ADR 0029 amending ADR 0014). A gold reveal is an ORDER the
+// player gives through the vault API: the price of each item (the vendor price of one Scroll of Identify) is subtracted from
+// the STASH gold at once by the fork's `debug paygold` verb (internal/d2dctl Pay: ledgered, once per order id, never the
+// purse, refused in a measured run), and the items are unlocked from the affixes the vault already holds, exactly as an
+// Ether reveal does. No town visit, no scroll, no tome charge, no game step. The bot never starts one by itself.
 //
-//	queued -> (town visit) buying -> revealing -> done | partial | cancelled
+//	queued -> paid -> revealed | partial | failed | cancelled     (seconds)
+//
+// The order is saved before the payment so a restart or a lost reply is settled again with the same order id (the fork
+// answers a repeated id with paid 0 and changes nothing, so a gold reveal is never charged twice).
 
 // Order states.
 const (
-	OrderQueued    = "queued"    // waits for a town visit
-	OrderBuying    = "buying"    // the visit is buying scrolls
-	OrderRevealing = "revealing" // scrolls are in the pack, the items are being revealed
-	OrderDone      = "done"
-	OrderPartial   = "partial" // ended with items left: gold ran short, the cap was reached or an item failed
+	OrderQueued    = "queued" // items unlocked, payment not yet confirmed
+	OrderPaid      = "paid"   // the fork took the gold
+	OrderRevealed  = "revealed"
+	OrderPartial   = "partial" // some of the player's items were revealed, the stash paid for no more
+	OrderFailed    = "failed"  // nothing was paid and nothing stays unlocked; Note says why
 	OrderCancelled = "cancelled"
 )
 
-// ScrollShop is the vendor side of the order: the town's buy-identify errand and the purse.
-type ScrollShop interface {
-	// Price is the vendor price of one Scroll of Identify, 0 when unknown.
+// GoldPayer is the payment side of the order: the reveal price, the stash gold and the fork's paygold verb.
+type GoldPayer interface {
+	// Price is the gold one reveal costs: the vendor price of one Scroll of Identify, 0 when unknown.
 	Price() int
-	// Purse reads the pack gold, the stash gold and the gold the town guards keep back (repair, potion kit, merc).
-	Purse(ctx context.Context) (purse, stash, reserve int, err error)
-	// Buy buys up to n scrolls with gold above the reserve (taking gold out of the stash when the pack is short). It
-	// returns without error when it could buy fewer; the caller reads the pack to see how many.
-	Buy(ctx context.Context, n int) error
+	// Stash reads the stash gold (a fresh read; the order never pays from the purse).
+	Stash(ctx context.Context) (int, error)
+	// PayGold takes amount out of the stash gold once per order id (d2dctl.Pay in the bot, d2dctl.PayFake in tests).
+	PayGold(ctx context.Context, amount int, order string) (d2dctl.PayResult, error)
 }
 
 // GoldOrder is the one gold reveal order of a hero. It is stored next to the vault log so a restart keeps it.
 type GoldOrder struct {
-	ID     string   `json:"id"`
-	IDs    []string `json:"ids"`             // the records the player named, reveal order
-	Max    int      `json:"max"`             // gold the order may spend
-	Price  int      `json:"price"`           // gold of one scroll when ordered
-	State  string   `json:"state"`           // Order*
-	Asked  []string `json:"asked,omitempty"` // handed to the Reveal queue
-	Done   int      `json:"done"`            // revealed
-	Failed int      `json:"failed"`          // asked and not revealed (reason on the record)
-	Bought int      `json:"bought"`          // scrolls bought for this order
-	Spent  int      `json:"spent"`           // gold spent on them
-	Note   string   `json:"note,omitempty"`  // why the order ended early, in plain words
-	Ended  int64    `json:"ended,omitempty"` // unix time the order ended; the page forgets it after goldShown
-	Stop   bool     `json:"stop,omitempty"`  // the rest cannot be paid: finish what is queued, then end as partial
+	ID         string   `json:"id"`
+	IDs        []string `json:"ids"`                  // the records the stash pays for, the player's list order
+	Want       int      `json:"want"`                 // the records the player asked for that could be revealed
+	Price      int      `json:"price"`                // gold of one reveal when ordered
+	State      string   `json:"state"`                // Order*
+	Done       int      `json:"done"`                 // revealed
+	Paid       int      `json:"paid"`                 // gold taken from the stash
+	StashAfter int      `json:"stashAfter,omitempty"` // the stash gold the fork answered after the payment
+	Note       string   `json:"note,omitempty"`       // why the order ended early, in plain words
+	Ended      int64    `json:"ended,omitempty"`      // unix time the order ended; the page forgets it after goldShown
 }
 
 // goldShown is how long the page keeps showing a finished order.
 const goldShown = 30 * time.Minute
 
-// Active reports whether the order still moves.
+// Active reports whether the order still moves (a payment is not settled yet).
 func (o *GoldOrder) Active() bool {
-	return o != nil && (o.State == OrderQueued || o.State == OrderBuying || o.State == OrderRevealing)
+	return o != nil && (o.State == OrderQueued || o.State == OrderPaid)
 }
 
 // GoldView is the order as the page shows it.
 type GoldView struct {
-	ID     string `json:"id"`
-	State  string `json:"state"`
-	Total  int    `json:"total"`
-	Done   int    `json:"done"`
-	Failed int    `json:"failed"`
-	Bought int    `json:"bought"`
-	Spent  int    `json:"spent"`
-	Max    int    `json:"max"`
-	Note   string `json:"note,omitempty"`
-	Line   string `json:"line"`
+	ID         string `json:"id"`
+	State      string `json:"state"`
+	Total      int    `json:"total"` // items the stash pays for
+	Want       int    `json:"want"`  // items the player asked for
+	Done       int    `json:"done"`
+	Paid       int    `json:"paid"`
+	StashAfter int    `json:"stashAfter"` // stash gold after the payment (0 until paid)
+	Note       string `json:"note,omitempty"`
+	Line       string `json:"line"`
 }
 
 // Reasons of the gold order.
 const (
-	ReasonGoldOff    = "reveal paid in gold is off (loot.vaultRevealGold is 0)"
-	ReasonGoldNoShop = "this bot cannot buy scrolls"
-	ReasonGoldShort  = "short of gold: the repair and potion kit come first"
-	ReasonGoldCap    = "the gold cap of the order is spent"
+	ReasonGoldOff      = "reveal paid in gold is off (loot.vaultRevealGold is 0)"
+	ReasonGoldNoPayer  = "this bot cannot pay a reveal in gold"
+	ReasonGoldMeasured = "a reveal paid in gold is never done in a measured run"
+	ReasonGoldNoFlag   = "this d2d build cannot take the gold (start it with --vault-pay)"
 )
 
-func (k *Keeper) goldOn() bool { return k.Shop != nil && k.GoldOn != nil && k.GoldOn() }
+func (k *Keeper) goldOn() bool { return k.Payer != nil && k.GoldOn != nil && k.GoldOn() }
+
+func (k *Keeper) measured() bool { return k.Measured != nil && k.Measured() }
 
 // orderPath is the file of the hero's order ("" when no place is wired: the order lives in memory).
 func (k *Keeper) orderPath() string {
@@ -124,15 +126,17 @@ func (k *Keeper) orderLocked() *GoldOrder {
 	return k.mem
 }
 
-// saveOrder writes the order through a temp file so a crash never leaves half a file. A failed write is returned: the
-// order then lives on in memory only and the caller says so.
-func (k *Keeper) saveOrder(o *GoldOrder) error {
-	k.mem = o
+// putOrder stores a copy of o and writes it through a temp file so a crash never leaves half a file. A failed write is
+// returned: the order then lives on in memory only and the caller says so.
+func (k *Keeper) putOrder(o GoldOrder) error {
+	k.omu.Lock()
+	defer k.omu.Unlock()
+	k.orderLocked() // load the file of this hero first
+	k.mem = &o
 	path := k.orderPath()
 	if path == "" {
 		return nil
 	}
-	k.loaded = path
 	b, err := json.Marshal(o)
 	if err != nil {
 		return err
@@ -147,6 +151,12 @@ func (k *Keeper) saveOrder(o *GoldOrder) error {
 	return os.Rename(tmp, path)
 }
 
+func (k *Keeper) saveOrNote(o GoldOrder) {
+	if err := k.putOrder(o); err != nil {
+		k.note("goldorder", "The gold reveal order could not be saved ("+err.Error()+"): it is kept until the bot restarts.")
+	}
+}
+
 func sameSet(a, b []string) bool {
 	x, y := slices.Clone(a), slices.Clone(b)
 	sort.Strings(x)
@@ -154,18 +164,14 @@ func sameSet(a, b []string) bool {
 	return slices.Equal(x, y)
 }
 
-// GoldQuote is what the order would cost right now: the gold of the scrolls the hero lacks for n items.
-func (k *Keeper) GoldQuote(ctx context.Context, n int) (cost, price int) {
-	if k.Shop == nil {
-		return 0, 0
-	}
-	price = k.Shop.Price()
-	return max(n-max(k.charges(ctx), 0), 0) * price, price
+func goldShort(price, stash int) string {
+	return fmt.Sprintf("short of gold: one reveal costs %s gold, the stash holds %s", bulkid.Thousands(price), bulkid.Thousands(stash))
 }
 
-// EnqueueRevealGold creates the gold order for ids. Idempotent: the same ids while the order runs answer Already; a
-// different set while one runs is refused with code "active". maxGold caps what the bot may spend (0: the quote). A cost at
-// or over the confirm threshold needs confirm. Refusals have a code: off, noshop, state, missing, active, cap, confirm.
+// EnqueueRevealGold gives the gold order for ids and settles it before it returns: the stash pays for as many of the items
+// as it can, in the order the player named them, and the paid items are revealed in the same call. maxGold caps what the
+// order may cost (0: no cap). A cost at or over the confirm threshold needs confirm. Refusals have a code: off, noshop,
+// measured, state, missing, nosealed, active, gold (the stash is short or the cap too low), confirm, payoff, pay.
 func (k *Keeper) EnqueueRevealGold(ctx context.Context, ids []string, maxGold int, confirm bool) (res []Result, view *GoldView) {
 	fail := func(code, why string) ([]Result, *GoldView) {
 		out := make([]Result, len(ids))
@@ -176,74 +182,219 @@ func (k *Keeper) EnqueueRevealGold(ctx context.Context, ids []string, maxGold in
 	}
 	st := k.store()
 	switch {
-	case !k.goldOn() && k.Shop == nil:
-		return fail("noshop", ReasonGoldNoShop)
+	case k.Payer == nil:
+		return fail("noshop", ReasonGoldNoPayer)
 	case !k.goldOn():
 		return fail("off", ReasonGoldOff)
+	case k.measured():
+		return fail("measured", ReasonGoldMeasured)
 	case st == nil:
 		return fail("missing", "there is no vault for this hero yet")
 	case len(ids) == 0 || len(ids) > bulkid.GoldMax:
 		return fail("ids", fmt.Sprintf("name 1 to %d items", bulkid.GoldMax))
 	}
+	k.pmu.Lock()
+	defer k.pmu.Unlock()
 	if o := k.order(); o.Active() {
-		if sameSet(o.IDs, ids) {
-			out := make([]Result, len(ids))
-			for i, id := range ids {
-				out[i] = Result{ID: id, OK: true, Already: true}
-			}
-			v := k.goldView(o)
-			return out, &v
+		if !sameSet(o.IDs, ids) {
+			return fail("active", "a gold reveal is still being paid: wait a moment")
 		}
-		return fail("active", "a gold reveal is already running: cancel it first")
+		lines := k.settleGold(ctx, *o) // a repeated press settles it again; the same order id is never charged twice
+		_ = lines
+		out := make([]Result, len(ids))
+		for i, id := range ids {
+			out[i] = Result{ID: id, OK: true, Already: true}
+		}
+		v := k.goldView(k.order())
+		return out, &v
 	}
 	res = make([]Result, len(ids))
 	var ok []string
+	at := map[string]int{}
 	for i, id := range ids {
 		res[i] = Result{ID: id}
 		rec, found := st.Get(id)
 		switch {
 		case !found:
 			res[i].Code, res[i].Why = "missing", "no such item"
+		case rec.Unlocked: // a repeated press after a paid reveal: nothing changes, nothing is charged
+			res[i].OK, res[i].Already = true, true
 		case rec.Identified:
 			res[i].Code, res[i].Why = "state", "it is identified already"
 		case rec.State != vault.Recorded && rec.State != vault.KeepQ:
 			res[i].Code, res[i].Why = "state", "only an item in the vault can be revealed (it is "+string(rec.State)+")"
-		case rec.RevQ:
-			res[i].Code, res[i].Why = "queued", "a reveal is queued for it already"
+		case rec.Sealed == "":
+			res[i].Code, res[i].Why = "nosealed", ReasonNoSealed
 		default:
 			ok = append(ok, id)
+			at[id] = i
 		}
 	}
 	if len(ok) == 0 {
 		return res, nil
 	}
-	cost, price := k.GoldQuote(ctx, len(ok))
+	price := k.Payer.Price()
 	if price <= 0 {
-		return fail("noshop", "the scroll price is unknown")
+		for _, id := range ok {
+			res[at[id]].Code, res[at[id]].Why = "noshop", "the reveal price is unknown"
+		}
+		return res, nil
 	}
-	if t := k.goldConfirm(); t > 0 && cost >= t && !confirm {
-		return fail("confirm", fmt.Sprintf("this spends up to %d gold on scrolls: confirm it", cost))
-	}
-	if maxGold <= 0 {
-		maxGold = cost
-	}
-	if maxGold < price && cost > 0 {
-		return fail("cap", fmt.Sprintf("the cap %d is below one scroll (%d)", maxGold, price))
-	}
-	o := &GoldOrder{ID: fmt.Sprintf("g-%d", k.now().UnixNano()), IDs: ok, Max: maxGold, Price: price, State: OrderQueued}
-	k.omu.Lock()
-	err := k.saveOrder(o)
-	k.omu.Unlock()
+	stash, err := k.Payer.Stash(ctx)
 	if err != nil {
-		k.note("goldorder", "The gold reveal order could not be saved ("+err.Error()+"): it is kept until the bot restarts.")
+		for _, id := range ok {
+			res[at[id]].Code, res[at[id]].Why = "state", "the stash gold could not be read: "+err.Error()
+		}
+		return res, nil
 	}
-	for i := range res {
-		if res[i].Code == "" {
-			res[i].OK = true
+	n := min(len(ok), stash/price)
+	why := goldShort(price, stash)
+	if maxGold > 0 && maxGold/price < n {
+		was := n
+		n = maxGold / price
+		why = fmt.Sprintf("the gold cap %s pays for %d of %d items", bulkid.Thousands(maxGold), n, was)
+		if n == 0 {
+			why = fmt.Sprintf("the gold cap %s is below one reveal (%s)", bulkid.Thousands(maxGold), bulkid.Thousands(price))
 		}
 	}
-	v := k.goldView(o)
-	return res, &v
+	if n == 0 {
+		for _, id := range ok {
+			res[at[id]].Code, res[at[id]].Why = "gold", why
+		}
+		return res, nil
+	}
+	if t := k.goldConfirm(); t > 0 && n*price >= t && !confirm {
+		for _, id := range ok {
+			res[at[id]].Code, res[at[id]].Why = "confirm", fmt.Sprintf("this pays %s gold from your stash: confirm it", bulkid.Thousands(n*price))
+		}
+		return res, nil
+	}
+	o := GoldOrder{ID: fmt.Sprintf("g-%d", k.now().UnixNano()), IDs: slices.Clone(ok[:n]), Want: len(ok), Price: price, State: OrderQueued}
+	k.saveOrNote(o)
+	k.settleGold(ctx, o)
+	final := k.order()
+	for _, id := range ok[:n] {
+		r := &res[at[id]]
+		if final != nil && slices.Contains(final.IDs, id) && (final.State == OrderRevealed || final.State == OrderPartial) {
+			r.OK = true
+			continue
+		}
+		r.Code, r.Why = "pay", "the payment did not go through"
+		if final != nil && final.Note != "" {
+			r.Why = final.Note
+		}
+		if final != nil && final.State == OrderQueued {
+			r.Why = "the payment is not confirmed yet; it is settled again at the next step"
+		}
+	}
+	for _, id := range ok[n:] {
+		res[at[id]].Code, res[at[id]].Why = "gold", why
+	}
+	if final != nil && final.State == OrderFailed {
+		for _, id := range ok[:n] {
+			res[at[id]].Code = payCode(final.Note)
+		}
+	}
+	if final != nil {
+		v := k.goldView(final)
+		return res, &v
+	}
+	return res, nil
+}
+
+func payCode(note string) string {
+	switch note {
+	case ReasonGoldMeasured:
+		return "measured"
+	case ReasonGoldNoFlag:
+		return "payoff"
+	}
+	return "pay"
+}
+
+// settleGold runs an order from where it stands: unlock the items from the held affixes, take the gold, mark them revealed.
+// The caller holds pmu. A refusal (stash short, measured run, flag off) takes the unlock back and ends the order failed; an
+// unanswered request leaves it queued so the next settle repeats it with the same order id.
+func (k *Keeper) settleGold(ctx context.Context, o GoldOrder) []string {
+	st := k.store()
+	if st == nil || !o.Active() {
+		return nil
+	}
+	var lines []string
+	end := func(state, note string) []string {
+		o.State, o.Note, o.Ended = state, note, k.now().Unix()
+		k.saveOrNote(o)
+		return append(lines, "gold reveal "+state+": "+k.goldView(&o).Line)
+	}
+	if o.State == OrderQueued {
+		var kept []string
+		for _, id := range o.IDs {
+			rec, found := st.Get(id)
+			switch {
+			case !found:
+			case rec.Unlocked: // unlocked by an earlier try of this order
+				kept = append(kept, id)
+			default:
+				if err := st.Unseal(id); err == nil {
+					kept = append(kept, id)
+				}
+			}
+		}
+		o.IDs = kept
+		if len(kept) == 0 {
+			return end(OrderFailed, "none of the items could be unlocked any more")
+		}
+		cost := len(kept) * o.Price
+		if k.measured() {
+			k.reseal(st, kept)
+			o.IDs = nil
+			return end(OrderFailed, ReasonGoldMeasured)
+		}
+		pr, err := k.Payer.PayGold(ctx, cost, o.ID)
+		switch {
+		case err == nil:
+			o.Paid, o.StashAfter = cost, pr.StashAfter
+			o.State = OrderPaid
+			k.saveOrNote(o)
+		case errors.Is(err, d2dctl.ErrPayShort), errors.Is(err, d2dctl.ErrPayMeasured), errors.Is(err, d2dctl.ErrPayOff), errors.Is(err, d2dctl.ErrPayAmount):
+			k.reseal(st, kept)
+			o.IDs = nil
+			note := "the gold was refused: " + err.Error()
+			switch {
+			case errors.Is(err, d2dctl.ErrPayMeasured):
+				note = ReasonGoldMeasured
+			case errors.Is(err, d2dctl.ErrPayOff):
+				note = ReasonGoldNoFlag
+			case errors.Is(err, d2dctl.ErrPayShort):
+				note = "short of gold: the stash holds less than the order costs"
+			}
+			return end(OrderFailed, note)
+		default: // unanswered: the gold may or may not have left the stash; the same order id settles it
+			k.note("goldpay", "A gold reveal is waiting for the payment to be confirmed ("+err.Error()+"); it is tried again at the next step.")
+			return append(lines, "gold reveal: payment unanswered, will repeat with the same order id: "+err.Error())
+		}
+	}
+	k.clearNote("goldpay")
+	revealed := 0
+	for _, id := range o.IDs {
+		if rec, ok := st.Get(id); ok && rec.Identified {
+			revealed++
+		}
+	}
+	o.Done = revealed
+	k.mu.Lock()
+	k.info.Revealed += revealed
+	k.mu.Unlock()
+	if o.Done < o.Want {
+		return end(OrderPartial, fmt.Sprintf("%d of the %d items you asked for were revealed: the stash paid for those", o.Done, o.Want))
+	}
+	return end(OrderRevealed, "")
+}
+
+func (k *Keeper) reseal(st *vault.Store, ids []string) {
+	for _, id := range ids {
+		_ = st.Reseal(id)
+	}
 }
 
 func (k *Keeper) goldConfirm() int {
@@ -253,32 +404,25 @@ func (k *Keeper) goldConfirm() int {
 	return k.GoldConfirm()
 }
 
-// CancelGold ends a running order: reveals not yet started are taken back, scrolls already bought stay in the pack.
+// CancelGold ends an order whose payment is not confirmed yet (it takes the unlock back); a paid order cannot be undone.
 func (k *Keeper) CancelGold() (GoldView, bool) {
-	k.omu.Lock()
-	defer k.omu.Unlock()
-	o := k.orderLocked()
-	if !o.Active() {
-		if o == nil {
-			return GoldView{}, false
-		}
+	k.pmu.Lock()
+	defer k.pmu.Unlock()
+	o := k.order()
+	if o == nil {
+		return GoldView{}, false
+	}
+	if o.State != OrderQueued {
 		return k.goldView(o), false
 	}
+	c := *o
 	if st := k.store(); st != nil {
-		for _, id := range o.Asked {
-			if r, ok := st.Get(id); ok && r.RevQ && r.Stage == "" {
-				_ = st.RevealCancel(id)
-			}
-		}
+		k.reseal(st, c.IDs)
 	}
-	k.tally(o)
-	o.State, o.Ended = OrderCancelled, k.now().Unix()
-	o.Note = fmt.Sprintf("cancelled; %d revealed", o.Done)
-	if o.Bought > 0 {
-		o.Note += fmt.Sprintf(", %d bought scroll%s stay in the pack", o.Bought, plural(o.Bought))
-	}
-	_ = k.saveOrder(o)
-	return k.goldView(o), true
+	c.IDs = nil
+	c.State, c.Ended, c.Note = OrderCancelled, k.now().Unix(), "cancelled before it was paid"
+	k.saveOrNote(c)
+	return k.goldView(&c), true
 }
 
 // GoldView reads the order for the page (nil when none).
@@ -289,212 +433,68 @@ func (k *Keeper) GoldView() *GoldView {
 	if o == nil {
 		return nil
 	}
-	if o.Active() {
-		k.tally(o)
-	} else if o.Ended > 0 && k.now().Sub(time.Unix(o.Ended, 0)) > goldShown {
+	if !o.Active() && o.Ended > 0 && k.now().Sub(time.Unix(o.Ended, 0)) > goldShown {
 		return nil
 	}
 	v := k.goldView(o)
 	return &v
 }
 
-// goldView words the state; the caller holds omu or owns o.
+// goldView words the state; the caller owns o.
 func (k *Keeper) goldView(o *GoldOrder) GoldView {
-	v := GoldView{ID: o.ID, State: o.State, Total: len(o.IDs), Done: o.Done, Failed: o.Failed, Bought: o.Bought, Spent: o.Spent, Max: o.Max, Note: o.Note}
+	v := GoldView{ID: o.ID, State: o.State, Total: len(o.IDs), Want: o.Want, Done: o.Done, Paid: o.Paid, StashAfter: o.StashAfter, Note: o.Note}
+	n := max(len(o.IDs), o.Done)
 	switch o.State {
 	case OrderQueued:
-		v.Line = fmt.Sprintf("Gold reveal of %d item%s: queued, the bot buys the scrolls at your next town visit", v.Total, plural(v.Total))
-	case OrderBuying:
-		v.Line = fmt.Sprintf("Gold reveal: buying scrolls (%d of %d revealed)", o.Done, v.Total)
-	case OrderRevealing:
-		v.Line = fmt.Sprintf("Gold reveal: revealing, %d of %d done, %d gold spent", o.Done, v.Total, o.Spent)
-	case OrderDone:
-		v.Line = fmt.Sprintf("Gold reveal done: %d item%s revealed for %d gold", o.Done, plural(o.Done), o.Spent)
+		v.Line = fmt.Sprintf("Gold reveal of %d item%s: paying %s gold from the stash", n, plural(n), bulkid.Thousands(len(o.IDs)*o.Price))
+	case OrderPaid:
+		v.Line = fmt.Sprintf("Gold reveal: paid %s gold, revealing %d item%s", bulkid.Thousands(o.Paid), n, plural(n))
+	case OrderRevealed:
+		v.Line = fmt.Sprintf("Gold reveal done: %d item%s revealed for %s gold. Stash gold: %s", o.Done, plural(o.Done), bulkid.Thousands(o.Paid), bulkid.Thousands(o.StashAfter))
+	case OrderPartial:
+		v.Line = fmt.Sprintf("Gold reveal in part: %d of %d revealed for %s gold. Stash gold: %s. %s", o.Done, o.Want, bulkid.Thousands(o.Paid), bulkid.Thousands(o.StashAfter), o.Note)
 	default:
-		v.Line = fmt.Sprintf("Gold reveal %s: %d of %d revealed, %d gold spent", o.State, o.Done, v.Total, o.Spent)
+		v.Line = "Gold reveal " + o.State
 		if o.Note != "" {
-			v.Line += ". " + o.Note
+			v.Line += ": " + o.Note
 		}
 	}
 	return v
 }
 
-// tally recounts done and failed from the records the order asked for.
-func (k *Keeper) tally(o *GoldOrder) {
-	st := k.store()
-	if st == nil {
-		return
-	}
-	o.Done, o.Failed = 0, 0
-	for _, id := range o.Asked {
-		r, ok := st.Get(id)
-		switch {
-		case !ok:
-			o.Failed++
-		case r.Identified:
-			o.Done++
-		case !r.RevQ && r.Stage == "":
-			o.Failed++
-		}
-	}
-}
-
-// pendingIDs are the order's records that are not yet handed to the Reveal queue and can still be revealed.
-func (k *Keeper) goldPending(o *GoldOrder, st *vault.Store) []string {
-	asked := map[string]bool{}
-	for _, id := range o.Asked {
-		asked[id] = true
-	}
-	var out []string
-	for _, id := range o.IDs {
-		if asked[id] {
-			continue
-		}
-		if r, ok := st.Get(id); ok && !r.Identified && !r.RevQ && (r.State == vault.Recorded || r.State == vault.KeepQ) {
-			out = append(out, id)
-		}
-	}
-	return out
-}
-
-// GoldPending is true while an order needs the bot in town (the bot step then runs the keeper).
+// GoldPending is true while an order has a payment to settle (the bot step then runs the keeper).
 func (k *Keeper) GoldPending() bool {
 	o := k.order()
 	return o.Active() && k.goldOn()
 }
 
-// runGold (settle false) is the order's step of a town visit: buy what is missing, hand the items to the Reveal queue (runReveal does
-// the rest in the same Run). It never spends below the town's reserve and never above the order's cap.
-func (k *Keeper) runGold(ctx context.Context, settle bool) []string {
-	k.omu.Lock()
-	defer k.omu.Unlock()
-	o := k.orderLocked()
-	st := k.store()
-	if !o.Active() || st == nil || !k.goldOn() {
+// resumeGold settles an order a restart or a lost reply left half done.
+func (k *Keeper) resumeGold(ctx context.Context) []string {
+	k.pmu.Lock()
+	defer k.pmu.Unlock()
+	o := k.order()
+	if !o.Active() || !k.goldOn() {
 		return nil
 	}
-	k.tally(o)
-	pending := k.goldPending(o, st)
-	if o.Stop {
-		pending = nil
-	}
-	queued := 0 // asked and still waiting or working
-	for _, id := range o.Asked {
-		if r, ok := st.Get(id); ok && !r.Identified && (r.RevQ || r.Stage != "") {
-			queued++
-		}
-	}
-	finish := func(state, note string) []string {
-		k.tally(o)
-		o.State, o.Note, o.Ended = state, note, k.now().Unix()
-		if err := k.saveOrder(o); err != nil {
-			return []string{"gold reveal: order not saved: " + err.Error()}
-		}
-		return []string{"gold reveal " + state + ": " + k.goldView(o).Line}
-	}
-	if len(pending) == 0 && queued == 0 {
-		switch {
-		case o.Note != "":
-			return finish(OrderPartial, o.Note)
-		case o.Failed > 0:
-			return finish(OrderPartial, fmt.Sprintf("%d item%s could not be revealed (the reason is on the item)", o.Failed, plural(o.Failed)))
-		case o.Done < len(o.IDs):
-			return finish(OrderPartial, fmt.Sprintf("%d item%s left the vault or were revealed another way", len(o.IDs)-o.Done, plural(len(o.IDs)-o.Done)))
-		}
-		return finish(OrderDone, "")
-	}
-	if settle { // after the visit's reveals: only close an order that is finished, buy and ask for nothing more
-		return nil
-	}
-	if len(pending) == 0 {
-		o.State = OrderRevealing
-		_ = k.saveOrder(o)
-		return nil
-	}
-	if !k.runGate(ctx) {
-		return nil
-	}
-	free := k.free()
-	batch := min(len(pending), k.perVisit())
-	var lines []string
-	n := batch
-	if !free {
-		held := max(k.charges(ctx), 0)
-		if need := batch - held; need > 0 {
-			o.State = OrderBuying
-			_ = k.saveOrder(o)
-			price := max(k.Shop.Price(), o.Price)
-			afford := 0
-			if price > 0 {
-				afford = max(o.Max-o.Spent, 0) / price
-			}
-			buy := min(need, afford)
-			if buy > 0 {
-				p0, s0, _, perr := k.Shop.Purse(ctx)
-				c0 := max(k.charges(ctx), 0)
-				err := k.Shop.Buy(ctx, buy)
-				p1, s1, _, perr2 := k.Shop.Purse(ctx)
-				got := max(k.charges(ctx), 0) - c0
-				if perr == nil && perr2 == nil {
-					o.Spent += max(p0+s0-p1-s1, 0)
-				} else {
-					o.Spent += max(got, 0) * price
-				}
-				o.Bought += max(got, 0)
-				switch {
-				case errors.Is(err, ErrPostpone) || ctx.Err() != nil:
-					_ = k.saveOrder(o)
-					return append(lines, "gold reveal: scroll shopping postponed: "+fmt.Sprint(err))
-				case err != nil && got == 0:
-					lines = append(lines, "gold reveal: no scrolls bought: "+err.Error())
-				}
-				lines = append(lines, fmt.Sprintf("gold reveal: bought %d of %d scrolls for %d gold", got, buy, max(p0+s0-p1-s1, 0)))
-			}
-			held = max(k.charges(ctx), 0)
-			n = min(batch, held)
-			if n < batch {
-				note := ReasonGoldShort
-				if buy < need && afford < need {
-					note = ReasonGoldCap
-				}
-				if n == 0 && queued == 0 {
-					return append(lines, finish(OrderPartial, note)...)
-				}
-				// the rest of the order cannot be paid: reveal what the scrolls cover, then end as partial
-				o.Note, o.Stop = note, true
-			}
-		}
-	}
-	for _, id := range pending[:n] {
-		if err := st.RevealWant(id); err != nil {
-			lines = append(lines, "gold reveal: "+id+": "+err.Error())
-			continue
-		}
-		o.Asked = append(o.Asked, id)
-	}
-	o.State = OrderRevealing
-	if err := k.saveOrder(o); err != nil {
-		lines = append(lines, "gold reveal: order not saved: "+err.Error())
-	}
-	return lines
+	return k.settleGold(ctx, *o)
 }
 
-// GoldFacts is what the page's bar reads of the shop: whether gold orders are on, the scroll price, the purse and the
-// reserve, and the confirm threshold.
+// GoldFacts is what the page's bar reads of the payer: whether gold orders are on, the price of one reveal, the stash gold
+// and the confirm threshold.
 type GoldFacts struct {
-	On                                    bool
-	Price, Purse, Stash, Reserve, Confirm int
+	On                    bool
+	Price, Stash, Confirm int
 }
 
-// GoldFacts reads them; an unreadable purse counts as empty.
+// GoldFacts reads them; an unreadable stash counts as empty.
 func (k *Keeper) GoldFacts(ctx context.Context) GoldFacts {
-	f := GoldFacts{On: k.goldOn(), Confirm: k.goldConfirm()}
-	if k.Shop == nil {
+	f := GoldFacts{On: k.goldOn() && !k.measured(), Confirm: k.goldConfirm()}
+	if k.Payer == nil {
 		return f
 	}
-	f.Price = k.Shop.Price()
-	if p, s, r, err := k.Shop.Purse(ctx); err == nil {
-		f.Purse, f.Stash, f.Reserve = p, s, r
+	f.Price = k.Payer.Price()
+	if s, err := k.Payer.Stash(ctx); err == nil {
+		f.Stash = s
 	}
 	return f
 }
