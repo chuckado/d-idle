@@ -901,6 +901,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [hammerdin-support.md](process/hammerdin-support.md): Paladin Hammerdin: what the engine plays, and what a later card must build (status: current (card hammer1, 2026-11-20; Fable roadmap Q8, class 3 after the Sorceress fire build and the...)
 - [hooks.md](process/hooks.md): Hooks (change card `hooks`) (status: current since OpenSpec removal stage 5 (2026-11-04): changecheck and `openspec/` are gone; the pre-push...)
 - [layout-read.md](process/layout-read.md): Level layout read (K1, ADR 0022) (status: current (2026-11-20). Tags: V = verified (say how), U = unverified.)
+- [management-fast-path.md](process/management-fast-path.md): Management fast path (audit, lane design, first slice) (status: current (2026-11-21, branch agent/mgmtfast). Built offline and tested; the live RED and green runs are NOT...)
 - [matt-pocock-skills-fit.md](process/matt-pocock-skills-fit.md): Matt Pocock skills plugin: fit for d2lod-bot (PLUGINFIT, 2026-10-30) (status: 2026-10-30 plugin fit; its "tracker = OpenSpec change cards" answer is superseded: OpenSpec is retired for...)
 - [mini-grill.md](process/mini-grill.md): Mini-grill: small and medium decisions asked inline
 - [mpq-data-reading.md](process/mpq-data-reading.md): Reading 1.14d tables with mpq-cat (trap and recipe)
