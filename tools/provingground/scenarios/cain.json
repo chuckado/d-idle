@@ -1172,7 +1172,9 @@
     {
      "kind": "no_writes"
     }
-   ]
+   ],
+   "status": "pending",
+   "pending_reason": "RED on the builder (K1 d2d devp15, Paladin 11, layoutRead 0 and 1, 2026-11-21): the hero explores the Dark Wood to 40 percent in 15 virtual minutes and never touches the waypoint. debug levelmap lists only the objects of rooms already built (12 objects at arrival, 59 at 40 percent, no waypoint among them), so the layout cannot name the waypoint position ahead; the fix needs the waypoint room's LvlPrest def (candidates among the Dark Wood preset rooms 20 25 29 30 43 48 49), U."
   },
   {
    "id": "act1.wp.dark-wood.layout",
@@ -1252,7 +1254,9 @@
     {
      "kind": "no_writes"
     }
-   ]
+   ],
+   "status": "pending",
+   "pending_reason": "RED on the builder (K1 d2d devp15, Paladin 11, layoutRead 0 and 1, 2026-11-21): the hero explores the Dark Wood to 40 percent in 15 virtual minutes and never touches the waypoint. debug levelmap lists only the objects of rooms already built (12 objects at arrival, 59 at 40 percent, no waypoint among them), so the layout cannot name the waypoint position ahead; the fix needs the waypoint room's LvlPrest def (candidates among the Dark Wood preset rooms 20 25 29 30 43 48 49), U."
   }
  ]
 }
