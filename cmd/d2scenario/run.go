@@ -525,7 +525,7 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 	}
 	var tap *tapper
 	var apiRun, sampler func(context.Context)
-	if s.Trigger.Driver == scenario.DriverBoardTaps || len(s.Trigger.API) > 0 || scenario.NeedsBoardSamples(s) || scenario.NeedsVaultSample(s) {
+	if s.Trigger.Driver == scenario.DriverBoardTaps || len(s.Trigger.API) > 0 || scenario.NeedsBoardSamples(s) || scenario.NeedsVault(s) {
 		tokFile := filepath.Join(data, "wtoken")
 		tok, err := newWatchToken(tokFile)
 		if err != nil {
@@ -557,7 +557,7 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 			defer f.Close()
 			sampler = func(c context.Context) { sampleBoard(c, "http://"+view, tok, 15*time.Second, f) }
 		}
-		if scenario.NeedsVaultSample(s) {
+		if scenario.NeedsVault(s) {
 			inner := sampler
 			sampler = func(c context.Context) {
 				go sampleVault(c, "http://"+view, tok, 10*time.Second, vaultSampleFile(trace))
