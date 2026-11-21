@@ -360,10 +360,16 @@ type supplyPlanner interface {
 // kitProfile is the supply profile the route and tower guards ask for (internal/supply/profiles.json).
 const kitProfile = "monastery_road"
 
+// kitPlanOn: the guards and the shop read the supply plan at stage 2 of town.plan, and always with the quest board's
+// state machine (quests.boardSM). The guard's constants ask for more healing than a belt with a mana column holds, so a
+// chores trip ended one potion short and the chunk was parked (Proving Ground boardsmrun, hold.restock); the plan is
+// clamped to what the hero can carry and names the line it cannot close.
+func (r *Runner) kitPlanOn() bool { return r.e.Tune.Town.Plan >= 2 || r.e.Tune.Quests.BoardSM != 0 }
+
 // kitPlanOf is the town planner's view of the guard kit at stage 2 of the knob town.plan: nil at stage 0 or 1 (the
 // guards keep their constants) or when the planner cannot answer, which is logged once.
 func (r *Runner) kitPlanOf(s *d2.Snapshot) *task.KitPlan {
-	if r.e.Tune.Town.Plan < 2 || s == nil || s.Player == nil {
+	if !r.kitPlanOn() || s == nil || s.Player == nil {
 		return nil
 	}
 	sp, ok := r.d.Town.(supplyPlanner)
@@ -381,7 +387,7 @@ func (r *Runner) kitPlanOf(s *d2.Snapshot) *task.KitPlan {
 // fillKit counts the kit by the one counter and, at stage 2, attaches the plan. Stage 0 and 1 keep the old counts byte for
 // byte (mana in the belt only).
 func (r *Runner) fillKit(w *task.World, s *d2.Snapshot) {
-	if r.e.Tune.Town.Plan < 2 {
+	if !r.kitPlanOn() {
 		return
 	}
 	if c, ok := r.supplyCount(s); ok {
