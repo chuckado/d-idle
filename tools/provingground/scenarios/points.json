@@ -143,6 +143,28 @@
     {"kind": "log_line", "pattern": "class-aware start.*levelerBuild=paladin_hammerdin_guide", "min": 1, "why": "the bot played the selected table, not the default"},
     {"kind": "no_writes"}
    ]
+  },
+  {
+   "id": "points.barbarian-frenzy-lands-at-30",
+   "title": "Barbarian Frenzy build (barbarian_frenzy_guide): at clvl 30 the planned skill points are in the tree",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": ["points.verb"],
+   "touches": ["internal/plandata/build-barbarian_frenzy_guide.json", "internal/combat/classdata/profiles.json", "internal/leveler/", "internal/points/"],
+   "pre": {"level": 30},
+   "trigger": {"goals": "campaign", "build": "barbarian_frenzy_guide", "knobs": {"resource.pointsDecisions": 1}},
+   "budget": {"virtual_min": 10},
+   "matrix": {"classes": ["Barbarian"], "seeds": [11]},
+   "provenance": "SETUP: level 30 with the points a played level gives (29 level points; the table's clvl 30 sum is 33 because it counts the Den of Evil, Radament and Izual quest points at clvl 8, 15 and 26, so the hero spends 29 of 33 unless the setup grants quest points). Reachable by play. CHEATED setup: mechanics evidence only.",
+   "notes": "Run with the build barbarian_frenzy_guide, autopilot on. The table at clvl 30: Bash 1, Axe Mastery 3, Double Swing 13, Howl 1, Shout 1, Double Throw 1, Increased Stamina 2, Iron Skin 3, Frenzy 7, Battle Orders 1. Barbarian skill ids are the skills.txt Id column (V, patched skills.txt of the worker host): Axe Mastery 128, Double Swing 133, Frenzy 147. Lower bounds leave room for the 4 quest points the setup does not grant (the last rows, Frenzy and Battle Orders, come short). Not asserted: that the hero fights with Frenzy (needs a live fight and two one-hand weapons; docs/process/barbarian-support.md).",
+   "assert": [
+    {"kind": "stat_between", "code": "skillsspent", "min": 29, "max": 33, "why": "the table's points were spent"},
+    {"kind": "skill_points", "skill": 133, "min": 10, "at_level": 30, "why": "Double Swing, the main attack until Frenzy (id 133)"},
+    {"kind": "skill_points", "skill": 147, "min": 2, "at_level": 30, "why": "Frenzy, the build's finisher (id 147): the 4 points after the table's 25th go to it"},
+    {"kind": "skill_points", "skill": 128, "min": 2, "at_level": 30, "why": "Axe Mastery, the one weapon mastery (id 128)"},
+    {"kind": "log_line", "pattern": "class-aware start.*levelerBuild=barbarian_frenzy_guide", "min": 1, "why": "the bot played the selected table, not the default"},
+    {"kind": "no_writes"}
+   ]
   }
  ]
 }
