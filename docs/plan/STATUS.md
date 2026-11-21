@@ -353,6 +353,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 4a623ace2 11-20 21:31 `Merge agent/boardorder2: proving-ground.md: trigger.api exists` (boardorder2)
+- 464141bab 11-20 21:30 `Merge branch 'main' into boardorder2` (-)
 - 09641c32a 11-20 21:25 `Merge agent/barb1: Merge branch 'main' into TASK-706` (barb1)
 - 71efb3052 11-20 21:24 `Merge branch 'main' into TASK-706` (-)
 - 39403b563 11-20 20:45 `Merge agent/tphoard: Merge branch 'main' into tphoard` (tphoard)
@@ -361,6 +363,4 @@
 - 9cd0444b9 11-20 19:56 `Merge branch 'main' into boardorder` (-)
 - f8578f562 11-20 19:23 `Merge agent/hammer1: hammer1: scenario bound from the first run, card result, run record` (hammer1)
 - fd3cc0c96 11-20 17:18 `Merge agent/devp15: Merge branch 'main' into devp15` (devp15)
-- bb98709b8 11-20 17:16 `Merge branch 'main' into devp15` (-)
-- cf9958700 11-20 16:33 `Merge agent/pgfix4: pgfix4: knob entry, knobs.md, refresh the d2drill portal copy (whole-repo gate findings)` (pgfix4)
 <!-- statusgen:end -->

@@ -1120,6 +1120,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - boardorder: board runs accepted chunks in chain order, Stop withdraws a queued chunk (TASK-703, merged 2026-11-20, acceptance 2 of 2): Offline fix: board orders accepted chunks by chain order, queued ones wait; Stop withdraws a queued (Locked) record; trigger.api added; unit tests on Paladin+Sorceress green, -race x20 green. ... <!--sg:agent/boardorder-->
 - tphoard: loose town portal scrolls hoard the pack beside a tome (TASK-704, merged 2026-11-20, acceptance 4 of 4): Loose TP/ID scrolls beside a tome capped by town.looseScrollKeep (2) in the pickup rule and sold down by the sell chore; the in-town fresh-portal cast (cause of the failed casts) removed. ... <!--sg:agent/tphoard-->
 - barb1: Barbarian Frenzy (capability rows, build, combat profile, planner shadow, Proving Ground scenario) (TASK-706, merged 2026-11-20, acceptance 6 of 6) <!--sg:agent/barb1-->
+- agent/boardorder2: proving-ground.md: trigger.api exists (merged 2026-11-20) <!--sg:agent/boardorder2-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
