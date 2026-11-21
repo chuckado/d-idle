@@ -42,7 +42,7 @@ const (
 // VaultRoutes are the viewer paths (the page and its files, the two GET routes); VaultPostRoutes the answer ones.
 var (
 	VaultRoutes     = []string{VaultRoute, VaultItemRoute, "/watch/vault", "/watch/vault.js", "/watch/vault-logic.js", "/watch/vault.css", "/watch/vault.json"}
-	VaultPostRoutes = []string{VaultPinRoute, VaultUnpinRoute, VaultDiscardRoute, VaultKeepRoute, VaultRevealRoute, VaultSellRoute, VaultCancelRoute, VaultPromptRoute}
+	VaultPostRoutes = []string{VaultPinRoute, VaultUnpinRoute, VaultDiscardRoute, VaultKeepRoute, VaultRevealRoute, VaultSellRoute, VaultCancelRoute, VaultPromptRoute, VaultRevealGoldRoute, VaultRevealGoldCancelRoute}
 )
 
 // VaultDesk is what the routes need from the bot side (cmd/d2bot/vaultwire.go). Every field is a func read per request, so a
@@ -127,6 +127,9 @@ type VaultRevealView struct {
 	Note string `json:"note,omitempty"`
 	// Mass previews the "Reveal filtered" button: the ids it would queue (to /api/vault/reveal) and the cost sentence.
 	Mass *bulkid.Mass `json:"mass,omitempty"`
+	// Bar is the one Reveal bar: the payments (free, Ether, gold) with a cost line each, the default and the skipped items.
+	Bar  *bulkid.Bar    `json:"bar,omitempty"`
+	Gold *VaultGoldInfo `json:"gold,omitempty"`
 }
 
 type VaultSellView struct {
@@ -676,6 +679,11 @@ func (d *VaultDesk) view(ctx context.Context, q vaultQuery, kinds vaultTexts) Va
 		r := v.Act.Reveal
 		m := bulkid.MassReveal(d.MassFilter, recs, d.Quality, bulkid.Price{Free: r.Free, Charges: r.Charges, ScrollGold: d.ScrollGold, EtherPer: r.EtherPer, EtherBal: r.Balance})
 		v.Act.Reveal.Mass = &m
+		v.Act.Reveal.Bar = d.bar(ctx, recs, r)
+		if ga, ok := d.Act.(VaultGoldActor); ok {
+			gi := ga.GoldInfo(ctx)
+			v.Act.Reveal.Gold = &gi
+		}
 	}
 	recs, total := st.Query(q.f)
 	v.Total = total
@@ -826,6 +834,7 @@ type vaultBody struct {
 	IDs     []string `json:"ids"`
 	Confirm bool     `json:"confirm"`
 	Target  string   `json:"target,omitempty"`  // keep: stash (default) or inv
+	MaxGold int      `json:"maxGold,omitempty"` // revealgold: the most gold the order may spend (0: the quote)
 	Ether   bool     `json:"ether,omitempty"`   // reveal: pay with Ether (an explicit tap; identify.etherPerReveal)
 	Now     bool     `json:"now,omitempty"`     // keep, reveal, sell: also ask the bot to walk home for it
 	Dismiss bool     `json:"dismiss,omitempty"` // sellprompt: mute the prompt
@@ -874,6 +883,10 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 			writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "the vault is read only (loot.vault is 0 or there is no vault yet)"})
 			return
 		}
+		if route == VaultRevealGoldCancelRoute {
+			a.goldRoute(w, r, d, route, &b)
+			return
+		}
 		if route == VaultPromptRoute {
 			if d.Act == nil || !b.Dismiss {
 				writeJSON(w, http.StatusBadRequest, policyReply{Code: "dismiss", Error: "send dismiss: true"})
@@ -885,6 +898,10 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 		}
 		if len(b.IDs) == 0 || len(b.IDs) > vaultMaxIDs {
 			writeJSON(w, http.StatusBadRequest, policyReply{Code: "ids", Error: "send 1 to " + strconv.Itoa(vaultMaxIDs) + " ids"})
+			return
+		}
+		if route == VaultRevealGoldRoute {
+			a.goldRoute(w, r, d, route, &b)
 			return
 		}
 		if route == VaultDiscardRoute && !b.Confirm {

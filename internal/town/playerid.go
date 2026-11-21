@@ -249,6 +249,9 @@ func planIDBuy(in idBuyIn) idBuyPlan {
 // first potions, beltBuyReserve) plus the repair the worn gear needs (repairEstimate).
 func (t *Town) idBuyReserve(s *d2.Snapshot) int { return t.beltBuyReserve() + t.repairEstimate(s) }
 
+// IdentifyBuyReserve is the gold a scroll purchase never spends (the potion kit and the repair), for callers that quote one.
+func (t *Town) IdentifyBuyReserve(s *d2.Snapshot) int { return t.idBuyReserve(s) }
+
 // CheckBuyIdentify validates the count (0 = fill the tome) and names the errand.
 func (t *Town) CheckBuyIdentify(s *d2.Snapshot, n int) (string, error) {
 	if s == nil || s.Player == nil || s.Inventory == nil {

@@ -471,3 +471,23 @@ func (k *Keeper) runGold(ctx context.Context, settle bool) []string {
 	}
 	return lines
 }
+
+// GoldFacts is what the page's bar reads of the shop: whether gold orders are on, the scroll price, the purse and the
+// reserve, and the confirm threshold.
+type GoldFacts struct {
+	On                                    bool
+	Price, Purse, Stash, Reserve, Confirm int
+}
+
+// GoldFacts reads them; an unreadable purse counts as empty.
+func (k *Keeper) GoldFacts(ctx context.Context) GoldFacts {
+	f := GoldFacts{On: k.goldOn(), Confirm: k.goldConfirm()}
+	if k.Shop == nil {
+		return f
+	}
+	f.Price = k.Shop.Price()
+	if p, s, r, err := k.Shop.Purse(ctx); err == nil {
+		f.Purse, f.Stash, f.Reserve = p, s, r
+	}
+	return f
+}
