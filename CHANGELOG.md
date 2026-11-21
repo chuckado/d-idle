@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into vaultreveal <!--sg:agent/vaultreveal-->
 - Merge branch 'main' into TASK-721 <!--sg:agent/combatreads-->
 - pg gate group 2 record (cost-cut cards, measurements, what is enforced) <!--sg:agent/pgc6-->
 - Merge branch 'main' into survhold8 <!--sg:agent/survhold8-->

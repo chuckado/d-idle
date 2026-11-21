@@ -382,6 +382,7 @@
 | mouthgate | proposed | - | `internal/nav` | - |
 | vaultequip | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/equipnow.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/watch/vaultequip_test.go`<br>`tools/provingground/scenarios/vaultequip.json`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/vaultapi.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/keep_test.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`internal/watch/testdata/vault_logic.mjs`<br>`tools/provingground/scenarios/behaviours.json` | - |
 | pgledgeron | in-progress | - | `docs/process/pg-ledger-ops.md`<br>`tools/provingground/run.sh`<br>`tools/provingground/pgenv.sh`<br>`tools/provingground/pgenv_test.sh` | - |
+| vaultreveal | proposed | - | `internal/vaultkeep`<br>`internal/bulkid`<br>`internal/watch/vaultapi_gold.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.json`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultapi_gold_test.go`<br>`internal/watch/vaultreveal_ui_test.go`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`internal/watch/testdata/vault_logic.mjs`<br>`internal/env/tuning_loot.go`<br>`internal/town/playerid.go`<br>`docs/knobs.md`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`tools/provingground/scenarios/vaultreveal.json` | - |
 | heavyguard | proposed | - | `tools/lib/heavy-guard.sh`<br>`tools/lib/heavy-guard-test.sh`<br>`tools/uishots.sh`<br>`docs/process/worker-capacity.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
@@ -418,6 +419,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b6d4ffb6f 11-21 11:12 `Merge agent/vaultreveal: Merge branch 'main' into vaultreveal` (vaultreveal)
+- db3ee9c3a 11-21 11:11 `Merge branch 'main' into vaultreveal` (-)
 - dba450f87 11-21 11:06 `Merge agent/combatreads: Merge branch 'main' into TASK-721` (combatreads)
 - f202af3c1 11-21 11:05 `Merge branch 'main' into TASK-721` (-)
 - 3e70158f6 11-21 11:01 `Merge agent/pgc6: pg gate group 2 record (cost-cut cards, measurements, what is enforced)` (pgc6)
@@ -426,6 +429,4 @@
 - 585d6f347 11-21 10:58 `Merge branch 'main' into survhold8` (-)
 - 3314b62e3 11-21 10:57 `Merge agent/heavyguard: Merge branch 'main' into heavyguard` (heavyguard)
 - d78daa12f 11-21 10:56 `Merge branch 'main' into heavyguard` (-)
-- edcfd5121 11-21 10:48 `Merge agent/pgc5: pgclock: goals manager, farm timers and the guard snapshot reuse window on the env clock (TASK-739)` (pgc5)
-- 8691cf517 11-21 10:46 `Merge branch 'main' into pgclock` (-)
 <!-- statusgen:end -->
