@@ -209,6 +209,16 @@ func (n *Navigator) CurrentMap() *d2map.LevelMap {
 	return n.w.Current()
 }
 
+// RefreshMap observes the level once more (on the d2d backend this is the fetch that lists presets and, with the layout
+// read, the monster presets) and returns the map. Nil before the first observation or without a world.
+func (n *Navigator) RefreshMap() *d2map.LevelMap {
+	if n.w == nil {
+		return nil
+	}
+	_, _ = n.w.Update()
+	return n.w.Current()
+}
+
 func (n *Navigator) defaults() {
 	if n.clk == nil {
 		n.clk = env.RealClock{}
