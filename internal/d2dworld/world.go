@@ -78,10 +78,11 @@ const maxLinkTries = 20
 
 // World is a nav.worldSource over one d2d socket. Not safe for concurrent use, like d2map.Tracker.
 type World struct {
-	v    Verbs
-	o    Options
-	levs map[int]*lvl
-	cur  *lvl
+	layoutLogged string // signature of the last levelmap diagnostic line
+	v            Verbs
+	o            Options
+	levs         map[int]*lvl
+	cur          *lvl
 
 	resetNext atomic.Bool // ResetNext: forget the levels at the start of the next update, on the reader's goroutine
 
@@ -605,7 +606,16 @@ func (w *World) mergeLayout(ctx context.Context, l *lvl, sub func(x, y float64) 
 			listed = append(listed, fmt.Sprintf("%d:%s", o.Class, o.Kind))
 		}
 	}
-	w.logf("d2dworld: levelmap level %d: %d objects, %d rooms, waypoints %v, first %v", doc.Level, len(doc.Objects), len(doc.Rooms), wps, listed)
+	var presetRooms []string
+	for _, r := range doc.Rooms {
+		if r.Preset {
+			presetRooms = append(presetRooms, fmt.Sprintf("%d@%d,%d", r.Def, r.X, r.Y))
+		}
+	}
+	if sig := fmt.Sprint(doc.Level, len(doc.Objects), len(wps)); sig != w.layoutLogged {
+		w.layoutLogged = sig // diagnostics only on change: the verb is read at every fetch
+		w.logf("d2dworld: levelmap level %d: %d objects, %d rooms, waypoints %v, preset rooms %v, first %v", doc.Level, len(doc.Objects), len(doc.Rooms), wps, presetRooms, listed)
+	}
 	for _, o := range doc.Objects {
 		if o.Class == 0 {
 			continue
