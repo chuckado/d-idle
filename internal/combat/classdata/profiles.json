@@ -90,7 +90,10 @@
   {
    "class": "sorceress",
    "build": "lightning",
-   "avoid": ["Chain Lightning", "Lightning"],
+   "avoid": [
+    "Chain Lightning",
+    "Lightning"
+   ],
    "bands": [
     {
      "minLevel": 0,
@@ -575,6 +578,61 @@
     "Shadow Warrior": "f5",
     "Lightning Sentry": "f6",
     "Charged Bolt Sentry": "f7"
+   }
+  },
+  {
+   "class": "barbarian",
+   "build": "frenzy",
+   "bands": [
+    {
+     "minLevel": 24,
+     "requires": "Frenzy",
+     "attack": [
+      "Frenzy",
+      "Double Swing",
+      "Attack"
+     ]
+    },
+    {
+     "minLevel": 6,
+     "requires": "Double Swing",
+     "attack": [
+      "Double Swing",
+      "Attack"
+     ]
+    },
+    {
+     "attack": [
+      "Bash",
+      "Attack"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Battle Orders"
+    ],
+    [
+     "Shout"
+    ]
+   ],
+   "layout": {
+    "Bash": "f1",
+    "Double Swing": "f2",
+    "Frenzy": "f3",
+    "Battle Orders": "f4",
+    "Shout": "f5",
+    "Howl": "f6",
+    "Berserk": "f7",
+    "Concentrate": "f8"
+   },
+   "melee": {
+    "reach": 4,
+    "holdMs": 500,
+    "retreatLifePct": 40,
+    "surround": 4,
+    "surroundLifePct": 65,
+    "manaReserve": 4
    }
   }
  ]

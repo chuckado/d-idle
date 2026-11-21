@@ -1,0 +1,873 @@
+{
+ "build": "barbarian_frenzy_guide",
+ "class": "barbarian",
+ "combat": "frenzy",
+ "note": "BARB1 (Fable roadmap Q8, user decision 2026-11-19): the Barbarian Frenzy build, class 4 after the Sorceress fire build, the Necromancer summoner and the Hammerdin; review row B1 of docs/design/fable-review-2026-11-19/03-classes-plan.md section 3.4 (B2 Whirlwind is 'do not start here', so the file is Frenzy, not Whirlwind). Guide-track provenance [S: SoloPlay Start is Double Swing and mastery, Frenzy at 24, via the review, V helper A there; the no-respec row order is this repo's own arrangement, U]. Tier experimental: Frenzy and Double Swing are melee skills the engine casts from bands but never measured live beyond clvl 5, Frenzy needs two one-hand weapons (the bot's dual-wield rule), Battle Orders and Shout upkeep and the mana pool of 10 to 20 are not verified (docs/process/barbarian-support.md). Opt-in by name (levelerBuild barbarian_frenzy_guide); the default Barbarian table (barbarian_melee_normal30) and the endgame table are unchanged.",
+ "respec": null,
+ "rows": [
+  {
+   "clvl": 2,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Bash",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 3,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Axe Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 4,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Axe Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 5,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Axe Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 6,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Double Swing",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 7,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Double Swing",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 8,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Double Swing",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 9,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Double Swing",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 10,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Double Swing",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 11,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Howl",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 12,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Shout",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 13,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Double Throw",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 14,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Increased Stamina",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 15,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Increased Stamina",
+     "points": 1
+    },
+    {
+     "skill": "Double Swing",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 16,
+   "strength": 2,
+   "dexterity": 1,
+   "vitality": 2,
+   "skills": [
+    {
+     "skill": "Double Swing",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 17,
+   "dexterity": 1,
+   "vitality": 4,
+   "skills": [
+    {
+     "skill": "Double Swing",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 18,
+   "dexterity": 1,
+   "vitality": 4,
+   "skills": [
+    {
+     "skill": "Double Swing",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 19,
+   "dexterity": 1,
+   "vitality": 4,
+   "skills": [
+    {
+     "skill": "Double Swing",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 20,
+   "dexterity": 1,
+   "vitality": 4,
+   "skills": [
+    {
+     "skill": "Double Swing",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 21,
+   "dexterity": 1,
+   "vitality": 4,
+   "skills": [
+    {
+     "skill": "Double Swing",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 22,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 23,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 24,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 25,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 26,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 3
+    }
+   ]
+  },
+  {
+   "clvl": 27,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 28,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 29,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Battle Orders",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 30,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 31,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 32,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 33,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 34,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 35,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 36,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Stun",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 37,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Concentrate",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 38,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Berserk",
+     "points": 1
+    },
+    {
+     "skill": "Natural Resistance",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 39,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Natural Resistance",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 40,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Natural Resistance",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 41,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Natural Resistance",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 42,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Natural Resistance",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 43,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Battle Orders",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 44,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Battle Orders",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 45,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Battle Orders",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 46,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Battle Orders",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 47,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Battle Orders",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 48,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Battle Orders",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 49,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Battle Orders",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 50,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Battle Orders",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 51,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 52,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 53,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 54,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 55,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 56,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Frenzy",
+     "points": 3
+    }
+   ]
+  },
+  {
+   "clvl": 57,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 58,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 59,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 60,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 61,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 62,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 63,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 64,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 65,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 66,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 67,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 68,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 69,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 70,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 71,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 72,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Skin",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 73,
+   "vitality": 5
+  },
+  {
+   "clvl": 74,
+   "vitality": 5
+  },
+  {
+   "clvl": 75,
+   "vitality": 5
+  },
+  {
+   "clvl": 76,
+   "vitality": 5
+  },
+  {
+   "clvl": 77,
+   "vitality": 5
+  },
+  {
+   "clvl": 78,
+   "vitality": 5
+  },
+  {
+   "clvl": 79,
+   "vitality": 5
+  },
+  {
+   "clvl": 80,
+   "vitality": 5
+  },
+  {
+   "clvl": 81,
+   "vitality": 5
+  },
+  {
+   "clvl": 82,
+   "vitality": 5
+  },
+  {
+   "clvl": 83,
+   "vitality": 5
+  },
+  {
+   "clvl": 84,
+   "vitality": 5
+  },
+  {
+   "clvl": 85,
+   "vitality": 5
+  },
+  {
+   "clvl": 86,
+   "vitality": 5
+  },
+  {
+   "clvl": 87,
+   "vitality": 5
+  },
+  {
+   "clvl": 88,
+   "vitality": 5
+  },
+  {
+   "clvl": 89,
+   "vitality": 5
+  },
+  {
+   "clvl": 90,
+   "vitality": 5
+  },
+  {
+   "clvl": 91,
+   "vitality": 5
+  },
+  {
+   "clvl": 92,
+   "vitality": 5
+  },
+  {
+   "clvl": 93,
+   "vitality": 5
+  },
+  {
+   "clvl": 94,
+   "vitality": 5
+  },
+  {
+   "clvl": 95,
+   "vitality": 5
+  },
+  {
+   "clvl": 96,
+   "vitality": 5
+  },
+  {
+   "clvl": 97,
+   "vitality": 5
+  },
+  {
+   "clvl": 98,
+   "vitality": 5
+  },
+  {
+   "clvl": 99,
+   "vitality": 5
+  }
+ ],
+ "schema": "per-clvl allocation, same shape as build-barbarian_melee_normal30.json (leveler.ParseBuild); rows are generated from internal/buildfile/testdata/barbarian-frenzy-guide.json (didle.build/1) by TestBarbarianFrenzyGoalFileMatchesTable (UPDATE=1), never edited by hand.",
+ "selector": "barbarian_frenzy_guide",
+ "tier": "experimental"
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "didle.build/1",
+  "name": "barbarian_frenzy_guide",
+  "class": "barbarian",
+  "author": "barb1",
+  "source": "docs/design/fable-review-2026-11-19/03-classes-plan.md section 3.4 B1 Frenzy and roadmap row 4 (Barbarian Frenzy first; B2 Whirlwind is 'do not start here'); docs/classes/barbarian.md section 3 (Maxroll leveling, V); the shipped barbarian_melee_normal30 table",
+  "notes": "No respec. Bash 1 is the Double Swing prerequisite, Axe Mastery 3 is the one weapon mastery (the start weapon is a hand axe, V live BARBLIVE), Double Swing carries clvl 6 to 23, Howl and Shout are the prerequisite points of Battle Orders, Double Throw 1 and Increased Stamina 2 from 12, Iron Skin from 18, then from clvl 24 every point goes to Frenzy (Double Throw is its prerequisite, V skills.txt) with Battle Orders 1 early. After clvl 30: Battle Orders, Berserk 1 for physical immunes (Stun and Concentrate are its prerequisite points), Natural Resistance, Frenzy and Iron Skin to 20. Whirlwind and War Cry are NOT in this file (unsupported rows). Frenzy needs two one-hand weapons (dual wield, bot rule in gearcheck.go). Stats: Str 60 for gear and Frenzy's dual wield, Dex 40, rest Vitality (U numbers, the class start is 30 20 25 10).",
+  "skills": [
+    {"skill": "Bash", "to": 1},
+    {"skill": "Axe Mastery", "to": 3},
+    {"skill": "Double Swing", "to": 6},
+    {"skill": "Howl", "to": 1},
+    {"skill": "Shout", "to": 1},
+    {"skill": "Double Throw", "to": 1, "when": {"clvl": 12}},
+    {"skill": "Increased Stamina", "to": 2, "when": {"clvl": 12}},
+    {"skill": "Double Swing", "to": 13},
+    {"skill": "Iron Skin", "to": 3, "when": {"clvl": 18}},
+    {"skill": "Frenzy", "to": 6},
+    {"skill": "Battle Orders", "to": 1},
+    {"skill": "Frenzy", "to": 12},
+    {"skill": "Berserk", "to": 1},
+    {"skill": "Natural Resistance", "to": 5},
+    {"skill": "Battle Orders", "to": 10},
+    {"skill": "Frenzy", "to": 20},
+    {"skill": "Iron Skin", "to": 20}
+  ],
+  "stats": [
+    {"stat": "str", "to": 60, "per": 2},
+    {"stat": "dex", "to": 40, "per": 1},
+    {"stat": "vit", "to": "rest"}
+  ],
+  "quest_points": [{"clvl":8,"skill":1},{"clvl":15,"skill":1},{"clvl":26,"skill":2},{"clvl":38,"skill":1},{"clvl":44,"skill":1},{"clvl":56,"skill":2},{"clvl":68,"skill":1},{"clvl":72,"skill":1},{"clvl":82,"skill":2}]
+}
