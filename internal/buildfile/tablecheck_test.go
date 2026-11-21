@@ -10,8 +10,8 @@ import (
 	"d2lod-bot/internal/plandata"
 )
 
-// Must-fail: every shipped Sorceress, Paladin, Necromancer and Barbarian plan table is legal under the capability table's rules (V from
-// skills.txt for the Sorceress and Necromancer, S for the Paladin). Four classes, so the rule is not Sorceress-only.
+// Must-fail: every shipped Sorceress, Paladin, Necromancer, Barbarian and Druid plan table is legal under the capability table's rules (V from
+// skills.txt for the Sorceress and Necromancer, S for the Paladin). Five classes, so the rule is not Sorceress-only.
 func TestShippedTablesAreLegal(t *testing.T) {
 	c, err := agency.LoadCaps()
 	if err != nil {
@@ -25,7 +25,7 @@ func TestShippedTablesAreLegal(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if lb.Class != "sorceress" && lb.Class != "paladin" && lb.Class != "necromancer" && lb.Class != "barbarian" {
+		if lb.Class != "sorceress" && lb.Class != "paladin" && lb.Class != "necromancer" && lb.Class != "barbarian" && lb.Class != "druid" {
 			continue
 		}
 		seen[lb.Class]++
@@ -43,7 +43,7 @@ func TestShippedTablesAreLegal(t *testing.T) {
 			t.Errorf("%s: %s", name, p)
 		}
 	}
-	if seen["sorceress"] < 5 || seen["paladin"] < 3 || seen["necromancer"] < 3 || seen["barbarian"] < 2 {
+	if seen["sorceress"] < 5 || seen["paladin"] < 3 || seen["necromancer"] < 3 || seen["barbarian"] < 2 || seen["druid"] < 3 {
 		t.Errorf("tables checked per class: %v", seen)
 	}
 }

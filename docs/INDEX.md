@@ -35,6 +35,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0022-hero-knowledge-reads-never-cheat.md](adr/0022-hero-knowledge-reads-never-cheat.md): 0022: Hero knowledge: engine facts exposed as reads never make a run CHEATED
 - [0023-fidelity-by-rule-differentials.md](adr/0023-fidelity-by-rule-differentials.md): 0023: Fidelity acceptance: per-rule differentials replace the A:B verdict; no play on Game.exe
 - [0024-ladder-runewords-in-didle-mode.md](adr/0024-ladder-runewords-in-didle-mode.md): 0024: Ladder-only runewords enabled in d.idle mode
+- [0025-quest-board-lifecycle-stored-runs.md](adr/0025-quest-board-lifecycle-stored-runs.md): 0025: Quest board lifecycle: stored runs, accept chain, stop cascade, restart-persistent parks
+- [0026-combat-engine-capability-table-and-grammar.md](adr/0026-combat-engine-capability-table-and-grammar.md): 0026: Combat engine: one capability table, generated tiers, delivery grammar, reads a player can see
+- [0027-proving-ground-gate-and-night-window.md](adr/0027-proving-ground-gate-and-night-window.md): 0027: Proving Ground gate: assertion digest, tiers, quotas, ledger, quarantine; standing night window
+- [0028-one-supply-need-town-planner.md](adr/0028-one-supply-need-town-planner.md): 0028: One supply need (town planner)
 - [adr/README.md](adr/README.md): Architecture decision records
 - [decisions.md](decisions.md): Decisions (user, with date)
 
@@ -883,6 +887,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [dispatcher-brief-proposed.md](process/dispatcher-brief-proposed.md): Dispatcher brief, proposed replacement (agent ROADMAP, 2026-10-31) (status: PROPOSAL (its WIP limit 3 and milestone rule were ADOPTED by the user on 2026-10-31, docs/roadmap.md...)
 - [dispatcher-brief.md](process/dispatcher-brief.md): Dispatcher brief (status: moved to the private ops repo (d2lod-ops, `docs/process/dispatcher-brief.md`). Not part of the public tree.)
 - [doc-audit.md](process/doc-audit.md): Doc audit (2026-10-30)
+- [druid-support.md](process/druid-support.md): Druid fire: what the engine plays, and what a later card must build (status: current (card druid1, 2026-11-20; Fable roadmap Q8, class 5 after the Sorceress fire build, the...)
 - [feed-after-events.md](process/feed-after-events.md): Feed after events (status: current rule (card feeds, 2026-11-01). The helper is `tools/discord/feed.py`; details in...)
 - [flaky-tests.md](process/flaky-tests.md): Flaky tests: the waiting pattern (status: current. Load-sensitive tests cost 45-minute gate re-runs; this is the rule that keeps new ones out.)
 - [fork-rebase.md](process/fork-rebase.md): Fork rebase routine (status: current (task forkrebase, user decision 2026-11-19: rebase the private d2d fork onto upstream main...)
@@ -988,6 +993,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [bot-cpu-fix-2026-11-16.md](probes/bot-cpu-fix-2026-11-16.md): Bot CPU fixes after the live calm-window profile (2026-11-16) (status: current. Follows docs/probes/bot-cpu-live-2026-11-16.md (Ledger.load 30 percent, DB.IsA 14.5 percent). All...)
 - [bot-cpu-live-2026-11-16.md](probes/bot-cpu-live-2026-11-16.md): Bot CPU on the sandbox, live profile (card botcpulive, 2026-11-16) (status: partial. Calm-window profile captured (V); NO profile inside a burst (the built-in profiler is one-shot,...)
 - [cainstart-2026-11-19.md](probes/cainstart-2026-11-19.md): cainstart: why `cain.scroll` stayed RED from the camp (2026-11-19) (status: current (card cainstart). Tags: V verified (run named), U unverified. CHEATED setup (clvl 17, waypoints,...)
+- [chores2-2026-11-21.md](probes/chores2-2026-11-21.md): chores2: restock to the route guard kit, stash pays (2026-11-21) (status: current. Tags: V verified (named run or test), S secondary, U unverified. Setups of the scenario runs are...)
 - [classpacing.md](probes/classpacing.md): classpacing probe (status: see `docs/soaks/classpacing.md` (the result doc of TASK-147); scripts and per-minute data are in...)
 - [currency1.md](probes/currency1.md): Probe: currency slice 1, the Raven's Mark rows (TASK-63) (status: UNVERIFIED live, 2026-11-06. Offline checks passed; the live run was not started because Gate 2 seeds were...)
 - [deploy-cockpit-2026-11-15.md](probes/deploy-cockpit-2026-11-15.md): Deploy record: cockpit UI to the sandbox, 2026-11-15 (status: record. Task TASK-490. Tags: V = verified in this run (command named), U = not verified.)
@@ -1104,6 +1110,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [survival-holdout4-2026-11-19.md](probes/survival-holdout4-2026-11-19.md): Survival A/B holdout 4: Sorceress screen, Paladin seeds 8 (2026-11-19/20) (status: current (card survhold4). Tags: V verified (builder logs, `abreport -death-slack 1 -chicken-slack 1...)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
+- [town-plan-scenarios.md](probes/town-plan-scenarios.md): Town planner scenarios (card town1) (status: current (2026-11-21). Source: docs/design/fable-review-2026-11-21/town-planner-b-model.md section B4.)
 - [treefix3-2026-11-19.md](probes/treefix3-2026-11-19.md): treefix3: why the Inifuss tree was not found for 17 hours (2026-11-19)
 - [vault-spike-2026-11-16.md](probes/vault-spike-2026-11-16.md): Ethereal Vault V0 spike: capture and create on the d2d fork (result) (status: RESULT, 2026-11-16 (task TASK-578). Design: `docs/design/loot-vault-2026-11-16.md` section 1.7. Tags: V =...)
 - [video-feed-2026-11-15.md](probes/video-feed-2026-11-15.md): Probe: lossless delta feed on real d2d frames (card videofeed, 2026-11-15)

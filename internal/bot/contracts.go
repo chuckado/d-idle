@@ -125,6 +125,8 @@ type ChorePlan struct {
 	ReserveGold int
 	// Antidotes > 0: top antidote potions up to this many (belt and pack); the Andariel kit (task.BossGate).
 	Antidotes int
+	// KitHealing > 0: buy healing (into the pack when the belt plan is full) until belt and pack hold this many.
+	KitHealing int
 }
 
 // ChoreReport is what the visit achieved. Done lists chore names that completed.
