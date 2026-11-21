@@ -1,10 +1,11 @@
 ---
 id: TASK-792
 title: 'parkrelease: gave_up park retried once after a new bot release'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T21:32:00Z'
+updated_date: '2026-11-21T22:04:00Z'
 labels:
   - bot
   - bot-fix
