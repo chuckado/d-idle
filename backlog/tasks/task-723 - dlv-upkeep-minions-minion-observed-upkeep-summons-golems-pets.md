@@ -1,0 +1,37 @@
+---
+id: TASK-723
+title: 'dlv-upkeep-minions: minion-observed upkeep: summons, golems, pets'
+status: Proposed
+assignee:
+  - credit-runner
+created_date: '2026-11-21T04:42:00Z'
+labels:
+  - bot
+  - feature
+dependencies: []
+priority: medium
+ordinal: 346000
+card: "dlv-upkeep-minions"
+owns:
+  - "internal/combat/"
+exclusive: []
+contracts: []
+---
+
+## Description
+
+<!-- SECTION:DESCRIPTION:BEGIN -->
+Size: L
+
+Design: docs/design/fable-review-2026-11-21/combat-engine-d-cards.md (user-approved 2026-11-21, all Q1-Q11 as recommended). Groups from the summon column, want from pet cap, corpse-target summons via corpse aim rules; deletes necro.go summon planning, druid.go plans, assassin.go shadow code, class switch. Must first reproduce the Necromancer loop in shadow (knob 1). Experimental skills enter the rotation behind the expectation breaker, unsupported never (Q6). Depends on dlv-upkeep-state, dlv-reads.
+<!-- SECTION:DESCRIPTION:END -->
+
+## Acceptance Criteria
+<!-- AC:BEGIN -->
+- [ ] #1 Scenarios combat.army-holds (Necromancer) and combat.pets-hold (Druid) first
+- [ ] #2 Shadow run matches the old loop
+- [ ] #3 Differential A11 for specials
+- [ ] #4 Two builds tested (Paladin + Sorceress), no class or skill literal added, literal count reported in result (may only fall)
+- [ ] #5 Knob combat.delivery.<driver> 0/1/2 where a driver ships; rollback is the knob
+- [ ] #6 go test -race -count=20 on touched packages; tools/ci/check.sh, contracts/backlog checks and leakcheck clean
+<!-- AC:END -->

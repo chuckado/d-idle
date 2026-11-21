@@ -1,10 +1,11 @@
 ---
 id: TASK-748
 title: 'town2: supply.CountOf, the one counter, five old counters call it'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T04:50:00Z'
+updated_date: '2026-11-21T06:01:00Z'
 labels:
   - bot
   - feature

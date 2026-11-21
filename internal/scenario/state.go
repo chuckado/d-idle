@@ -97,6 +97,7 @@ const (
 	ANoWrites       = "no_writes"       // writes_after_start == 0 (the CRUTCH RULE line)
 	AStatBetween    = "stat_between"    // code (str dex vit ene statpts skillpts skillsspent), min, max
 	ASkillPoints    = "skill_points"    // skill (skills.txt id), min, max, at_level: hard points in one skill (skills.go)
+	ABeltAtLeast    = "belt_at_least"   // code (potion family prefix: hp, mp, rv), min: potions of that family in the BELT alone (item_in_pack cannot tell belt from pack when where is unset)
 	ALogLine        = "log_line"        // pattern, min (default 1), max, from_min, to_min: lines of the bot log (logline.go)
 )
 
@@ -137,6 +138,10 @@ func (a Assert) Validate() error {
 	case AItemInPack, AItemAbsent:
 		if a.Code == "" {
 			return fmt.Errorf("%s needs code", a.Kind)
+		}
+	case ABeltAtLeast:
+		if a.Code == "" || a.Min <= 0 {
+			return fmt.Errorf("belt_at_least needs code (hp, mp or rv) and min")
 		}
 	case AQuestBits:
 		if a.Set == 0 && a.Clear == 0 {
@@ -251,6 +256,17 @@ func evalOne(a Assert, st State) AssertResult {
 			return AssertResult{OK: n >= min && n <= *a.Max, Want: fmt.Sprintf("%d..%d x %s", min, *a.Max, a.Code), Got: fmt.Sprintf("%d x %s", n, a.Code)}
 		}
 		return AssertResult{OK: n >= min, Want: fmt.Sprintf(">= %d x %s", min, a.Code), Got: fmt.Sprintf("%d x %s", n, a.Code)}
+	case ABeltAtLeast:
+		if !st.has("items") {
+			return unobs("belt "+a.Code, "items")
+		}
+		n := 0
+		for _, it := range st.Items {
+			if it.Where == "belt" && len(it.Code) == 3 && strings.HasPrefix(it.Code, a.Code) {
+				n++
+			}
+		}
+		return AssertResult{OK: n >= a.Min, Want: fmt.Sprintf(">= %d %s potions in the belt", a.Min, a.Code), Got: fmt.Sprintf("%d in the belt", n)}
 	case AQuestBits:
 		w, ok := st.Quests[a.Record]
 		want := fmt.Sprintf("record %d set 0x%04x clear 0x%04x", a.Record, a.Set, a.Clear)
