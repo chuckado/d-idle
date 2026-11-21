@@ -9,14 +9,13 @@
       "status": "pending",
       "pending_reason": "not runnable as a measured scenario yet: the runner now seeds the unidentified vault records (pre.vault_records, with held affixes) and posts the order with the record ids ({{vault.N.id}}), but the instant stash payment (ADR 0029, agent/vaultpay) is a player-paid write, `debug paygold`, which the lab d2d build devp16 lacks (it ships in devp17) and which the bot and the fork refuse in a measured run (`no_writes` would be red). Flip to active when a d2d with `debug paygold` is the lab build and the run is declared unmeasured with the paygold writes named in the record.",
       "covers": [
-        "town.vault",
-        "town.identify-cain"
+        "town.vault"
       ],
       "touches": [
         "internal/vaultkeep/",
         "internal/bulkid/",
-        "cmd/d2bot/vaultkeep.go",
-        "internal/town/playerid.go"
+        "internal/d2dctl/paygold.go",
+        "cmd/d2bot/vaultkeep.go"
       ],
       "pre": {
         "level": 20,
@@ -151,14 +150,13 @@
       "status": "pending",
       "pending_reason": "not runnable as a measured scenario yet: the runner now seeds the unidentified vault records (pre.vault_records, with held affixes) and posts the order with the record ids ({{vault.N.id}}), but the instant stash payment (ADR 0029, agent/vaultpay) is a player-paid write, `debug paygold`, which the lab d2d build devp16 lacks (it ships in devp17) and which the bot and the fork refuse in a measured run (`no_writes` would be red). Flip to active when a d2d with `debug paygold` is the lab build and the run is declared unmeasured with the paygold writes named in the record.",
       "covers": [
-        "town.vault",
-        "town.identify-cain"
+        "town.vault"
       ],
       "touches": [
         "internal/vaultkeep/",
         "internal/bulkid/",
-        "cmd/d2bot/vaultkeep.go",
-        "internal/town/playerid.go"
+        "internal/d2dctl/paygold.go",
+        "cmd/d2bot/vaultkeep.go"
       ],
       "pre": {
         "level": 20,
