@@ -812,12 +812,10 @@
      "why": "the first chunk in chain order starts"
     },
     {
-     "kind": "item_in_pack",
-     "code": "bks",
-     "or": [
-      "bkd"
-     ],
-     "why": "the scroll step ran to the tree"
+     "kind": "log_line",
+     "pattern": "quest board: search_for_cain/scroll parked",
+     "max": 0,
+     "why": "the first chunk is not parked"
     },
     {
      "kind": "no_writes"
@@ -905,9 +903,9 @@
    "assert": [
     {
      "kind": "log_line",
-     "pattern": "quests: action=cancel quest=search_for_cain chunk=stones .*ok=true already=false",
-     "min": 1,
-     "why": "the stop withdrew the queued chunk"
+     "pattern": "quest board: starting chunk search_for_cain/stones",
+     "max": 0,
+     "why": "the stopped chunk never starts (V: without the stop it starts, board.two-accepted-chunks Sorceress 3 2026-11-20); the cancel reply itself is in <run>.taps.log (the std-log audit line is not a bot-log JSON line)"
     },
     {
      "kind": "log_line",
