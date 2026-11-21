@@ -22,7 +22,7 @@ Sandbox hero Doofer (Paladin clvl 18, release 0.0.261121135709, deploy 23): the 
 
 ## Scenario verdicts (builder lab slot on the second worker, Paladin 11)
 
-V, second worker (Orion) lab slots, lab d2d devp16, bot of this branch vs origin/main plus the new scenarios, `tools/provingground/run.sh -parallel 1`:
+V, second worker host lab slots, lab d2d devp16, bot of this branch vs origin/main plus the new scenarios, `tools/provingground/run.sh -parallel 1`:
 
 | scenario | unfixed | fixed |
 |---|---|---|
