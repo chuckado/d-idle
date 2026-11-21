@@ -83,3 +83,14 @@ func TestBoardAssertValidate(t *testing.T) {
 		}
 	}
 }
+
+func TestNeedsBoardSamples(t *testing.T) {
+	s := Scenario{Assert: []Assert{{Kind: ALogLine}}}
+	if NeedsBoardSamples(s) {
+		t.Fatal("a log_line scenario needs no board samples")
+	}
+	s.Assert = append(s.Assert, Assert{Kind: ABoardHeadsLE})
+	if !NeedsBoardSamples(s) {
+		t.Fatal("board_heads_le needs the samples")
+	}
+}
