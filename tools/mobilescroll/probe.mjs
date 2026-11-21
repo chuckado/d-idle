@@ -22,6 +22,11 @@ await send('Page.enable');
 await send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 1, mobile: true });
 await send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
 const fails = [];
+if (process.env.OLD) { // the CSS before the fix, put back: a fixed frame and a small scroll box around the quest list
+  await send('Page.setBypassCSP', { enabled: true });
+  const css = '.d-shell[data-template=cockpit]{block-size:100dvh!important;overflow:hidden!important}.qb-list{max-block-size:266px!important;overflow-y:auto!important}';
+  await send('Page.addScriptToEvaluateOnNewDocument', { source: `document.addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.textContent = ${JSON.stringify(css)}; document.head.appendChild(s); });` });
+}
 const tabs = (process.env.TABS || 'Orders,Map,Quests,Progress').split(',');
 const sep = base.includes('?') ? '&' : '?';
 for (const tab of tabs) {
@@ -33,19 +38,24 @@ for (const tab of tabs) {
     const info = await ev(`(() => { const b = document.querySelector('.d-slottabs'); if (!b) return { err: 'no tab body' };
       const bad = []; for (const n of b.querySelectorAll('*')) { const cs = getComputedStyle(n); if (/^(auto|scroll)$/.test(cs.overflowY) && n.scrollHeight > n.clientHeight + 1 && n.clientHeight > 0) bad.push((n.className||n.tagName)+' '+n.clientHeight+'/'+n.scrollHeight); }
       const r = b.getBoundingClientRect(); const se = document.scrollingElement;
-      return { bad, x: Math.round(innerWidth/2), y: Math.round(Math.min(innerHeight-60, Math.max(r.top+40, innerHeight*0.7))), sh: se.scrollHeight, vh: innerHeight, sw: se.scrollWidth, vw: innerWidth, bodyBottom: Math.round(r.bottom), tab: document.querySelector('.d-tabbar [aria-selected=true],.d-tabbar [data-on]') ? 1 : 0 }; })()`);
+      return { bad, x: Math.round(innerWidth/2), y: Math.round(Math.min(innerHeight-60, Math.max(r.top+40, innerHeight*0.7))), sh: se.scrollHeight, vh: innerHeight, sw: se.scrollWidth, cw: document.documentElement.clientWidth, scale: visualViewport.scale, vw: innerWidth, bodyBottom: Math.round(r.bottom), tab: document.querySelector('.d-tabbar [aria-selected=true],.d-tabbar [data-on]') ? 1 : 0 }; })()`);
     if (info.err) { fails.push(`${name}: ${info.err}`); continue; }
+    if (info.sw > info.cw) { const w = await ev(`[...document.querySelectorAll('body *')].filter((n) => n.getBoundingClientRect().right > document.documentElement.clientWidth + 1 && n.getBoundingClientRect().width > 0).slice(0, 6).map((n) => (n.dataset.panel || n.className || n.tagName) + ' ' + Math.round(n.getBoundingClientRect().right)).join('; ')`); fails.push(`${name}: wider than the screen: ${w}`); if (process.env.DEBUG) console.log(await ev(`['.d-shell','.d-main','[data-cockpit-slot=stage]','[data-cockpit-slot=phoneTabs]','.d-slottabs','.d-slottabs > *','.d-band-status'].map((q) => { const n = document.querySelector(q); return n ? q + ' ' + Math.round(n.getBoundingClientRect().width) + ' ' + getComputedStyle(n).gridTemplateColumns : q + ' none'; }).join('\\n')`)); }
     if (info.sw > info.vw) fails.push(`${name}: page scrolls sideways (${info.sw} > ${info.vw})`);
     if (info.bad.length) fails.push(`${name}: nested scroller(s) with content cut: ${info.bad.join('; ')}`);
     const before = await ev('scrollY');
     if (info.sh > info.vh + 2) {
       // swipe up with one finger starting over the tab content
-      await send('Input.synthesizeScrollGesture', { x: info.x, y: info.y, yDistance: -Math.min(400, info.sh - info.vh), gestureSourceType: 'touch', speed: 800 });
+      const dist = Math.min(400, info.sh - info.vh), y0 = info.y;
+      await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: info.x, y: y0 }] });
+      for (let i = 1; i <= 12; i++) { await send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: info.x, y: y0 - Math.round((dist * i) / 12) }] }); await sleep(16); }
+      await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
       await sleep(600);
       const after = await ev('scrollY');
+      if (!(after > before) && process.env.DEBUG) console.log(await ev(`(() => { const o = []; for (let n = document.elementFromPoint(${info.x}, ${info.y}); n; n = n.parentElement) o.push((n.dataset && n.dataset.panel || n.className || n.tagName) + ':' + getComputedStyle(n).touchAction + ':' + getComputedStyle(n).overflowY); return o.join(' < '); })()`));
       if (!(after > before)) fails.push(`${name}: a one-finger drag over the content did not scroll the page (scrollY ${before} -> ${after}, scrollHeight ${info.sh}, viewport ${info.vh})`);
     } else if (tab === 'Quests') fails.push(`${name}: the Quests tab fits the screen (scrollHeight ${info.sh}); the fixture must be taller than the screen`);
-    console.log(`${name}: scrollH ${info.sh} vh ${info.vh} nested ${info.bad.length}`);
+    console.log(`${name}: scrollH ${info.sh} vh ${info.vh} vw ${info.vw} sw ${info.sw} cw ${info.cw} scale ${info.scale} y ${info.y} nested ${info.bad.length}`);
   }
 }
 ch.kill();
