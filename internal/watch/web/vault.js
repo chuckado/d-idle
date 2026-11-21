@@ -137,8 +137,21 @@ export function mountVault(d) {
   const sheetCard = el('div', 'vt-sheet-card'); sheetCard.setAttribute('role', 'dialog'); sheetCard.setAttribute('aria-modal', 'true');
   sheetWrap.appendChild(sheetCard);
 
+  // quick filter chips: one tap for a slot (card mobilequests). A chip is the Type filter with a name and a count; the slot list is data (vault.json "slots").
+  const slotRow = el('div', 'vt-slots'); slotRow.setAttribute('role', 'group'); slotRow.setAttribute('aria-label', T.slotsLabel || ''); slotRow.hidden = !(T.slots && T.slots.length);
+  const SLOT_KEY = 'vt-slot';
+  const slotStore = (v) => { try { if (v === undefined) return localStorage.getItem(SLOT_KEY) || ''; localStorage.setItem(SLOT_KEY, v); } catch (e) { /* storage blocked */ } return ''; };
+  function pickSlot(id) { S.f.type = id; slotStore(id); changed(); }
+  function drawSlots() {
+    const n = {}; (S.facets.types || []).forEach((t) => { n[t.id] = t.n; });
+    slotRow.replaceChildren();
+    const mk = (id, label, count) => { const b = el('button', 'd-btn vt-slot', label + (count === undefined ? '' : ' ' + count)); b.type = 'button'; b.dataset.variant = 'ghost'; b.dataset.slot = id; b.setAttribute('aria-pressed', String(S.f.type === id)); b.addEventListener('click', () => pickSlot(id)); return b; };
+    slotRow.appendChild(mk('', T.slotAll || 'All'));
+    (T.slots || []).forEach((s) => { if (n[s.id] || S.f.type === s.id) slotRow.appendChild(mk(s.id, s.label, n[s.id] || 0)); });
+  }
+  { const was = slotStore(); if (was && !S.f.type) S.f.type = was; }
   const page = el('div', 'vt-page');
-  page.append(head, banner, filters, bar, keepRow, actRow, promptRow, msg, body);
+  page.append(head, banner, slotRow, filters, bar, keepRow, actRow, promptRow, msg, body);
   root.replaceChildren ? root.replaceChildren(page, sheetWrap) : (root.appendChild(page), root.appendChild(sheetWrap));
 
   // ---- loading ----
@@ -170,6 +183,7 @@ export function mountVault(d) {
     S.items = replace ? items : S.items.concat(items);
     if (j.kinds && j.kinds.length) S.facets.kinds = j.kinds;
     if (j.types) { S.facets.types = j.types; fillTypes(); }
+    drawSlots();
     S.sig = sig(j);
     S.sel.prune(order());
     draw();
@@ -217,6 +231,7 @@ export function mountVault(d) {
     sortSel.value = S.f.sort;
     Object.keys(qbtn).forEach((id) => qbtn[id].setAttribute('aria-pressed', String(S.f.quality.includes(Number(id)))));
     kindSel.value = S.f.kind; typeSel.value = S.f.type;
+    slotRow.querySelectorAll('[data-slot]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.slot === S.f.type)));
     sockSel.value = S.f.sockets;
     if (doc.activeElement !== lo) lo.value = S.f.ilvlMin;
     if (doc.activeElement !== hi) hi.value = S.f.ilvlMax;

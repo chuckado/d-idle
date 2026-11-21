@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into mobilequests <!--sg:agent/mobilequests-->
+- mgwatchdog: merge queue watchdog doc and card (TASK-752); ops watchdog, phase budgets, status exit code <!--sg:agent/pgc2-->
+- mglanes: lane policy doc and card (TASK-749); ops lockrun quotas, merge priority, two long slots, warn-only <!--sg:agent/pgc1-->
 - combat foundation record doc <!--sg:agent/cmbdoc-->
 - Merge branch 'main' into devp16 <!--sg:agent/devp16-->
 - pggroup1 (rebased): Proving Ground gate group 1 <!--sg:agent/pggroup1-->
