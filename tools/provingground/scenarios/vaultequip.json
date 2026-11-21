@@ -6,8 +6,6 @@
       "title": "One tap on a Vault helm with the head slot empty: worn within minutes, gone from the Vault, nothing dropped",
       "kind": "behaviour",
       "tier": "fast",
-      "status": "pending",
-      "pending_reason": "the runner has no setup for a vault record (Items where=vault: give the item, read its bytes with `item full`, `item vault` it, write the record into the hero's vault store) nor for a worn start item (where=body), and does not substitute the record id into trigger.api bodies ({{vault.1}}); the bot side, the order API and the offline tests are done (docs/vault.md, Equip)",
       "covers": [
         "hook.vault-keep",
         "town.vault-equip"
@@ -21,13 +19,14 @@
       "pre": {
         "level": 14,
         "gold": 500,
-        "items": [
-          {
-            "code": "cap",
-            "where": "vault",
-            "quality": 4
-          }
-        ]
+        "vault_records": {
+          "items": [
+            {
+              "code": "cap",
+              "quality": 4
+            }
+          ]
+        }
       },
       "trigger": {
         "goals": "campaign",
@@ -42,7 +41,7 @@
             "path": "/api/vault/equip",
             "body": {
               "ids": [
-                "{{vault.1}}"
+                "{{vault.0.id}}"
               ],
               "slot": "auto"
             }
@@ -68,9 +67,16 @@
         "item.vault",
         "item.equip"
       ],
-      "provenance": "SETUP (CHEATED, mechanics only): level 14 and the given items by the debug give verb; the vault record is made from a given item. Not evidence about balance or parity.",
+      "provenance": "SETUP (CHEATED, mechanics only): level 14, the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
       "notes": "Paladin and Sorceress both wear a helm (cap, S). The vault record leaves the live state (kept): U, needs the vault observer.",
       "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the order was accepted"
+        },
         {
           "kind": "item_in_pack",
           "code": "cap",
@@ -82,8 +88,12 @@
           "code": "cap",
           "where": "pack",
           "max": 0,
-          "min": 0,
           "why": "it is not left in the backpack"
+        },
+        {
+          "kind": "vault_log",
+          "pattern": "^kept cap",
+          "why": "the record left the vault by a Keep"
         },
         {
           "kind": "log_line",
@@ -92,7 +102,7 @@
         },
         {
           "kind": "log_line",
-          "pattern": "(drop|trash|sold|sell).*cap",
+          "pattern": "(drop|trash|sold|sell).*(cap|rin)",
           "max": 0,
           "why": "nothing was dropped or sold"
         },
@@ -106,8 +116,6 @@
       "title": "One tap on a Vault helm while another is worn: the old one lands in the Vault, nothing dropped or sold",
       "kind": "behaviour",
       "tier": "fast",
-      "status": "pending",
-      "pending_reason": "the runner has no setup for a vault record (Items where=vault: give the item, read its bytes with `item full`, `item vault` it, write the record into the hero's vault store) nor for a worn start item (where=body), and does not substitute the record id into trigger.api bodies ({{vault.1}}); the bot side, the order API and the offline tests are done (docs/vault.md, Equip)",
       "covers": [
         "hook.vault-keep",
         "town.vault-equip"
@@ -121,17 +129,20 @@
       "pre": {
         "level": 14,
         "gold": 500,
-        "items": [
+        "worn": [
           {
             "code": "cap",
-            "where": "body"
-          },
-          {
-            "code": "cap",
-            "where": "vault",
-            "quality": 4
+            "slot": "head"
           }
-        ]
+        ],
+        "vault_records": {
+          "items": [
+            {
+              "code": "cap",
+              "quality": 4
+            }
+          ]
+        }
       },
       "trigger": {
         "goals": "campaign",
@@ -146,7 +157,7 @@
             "path": "/api/vault/equip",
             "body": {
               "ids": [
-                "{{vault.1}}"
+                "{{vault.0.id}}"
               ],
               "slot": "auto"
             }
@@ -172,9 +183,16 @@
         "item.vault",
         "item.equip"
       ],
-      "provenance": "SETUP (CHEATED, mechanics only): level 14 and the given items by the debug give verb; the vault record is made from a given item. Not evidence about balance or parity.",
+      "provenance": "SETUP (CHEATED, mechanics only): level 14, the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
       "notes": "The old helm exists once: in the vault, not in the hero (the offline test TestEquipSwapKeepsTheOldItem pins it).",
       "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the order was accepted"
+        },
         {
           "kind": "item_in_pack",
           "code": "cap",
@@ -187,10 +205,22 @@
           "why": "the replaced helm went to the vault"
         },
         {
-          "kind": "log_line",
-          "pattern": "(drop|trash|sold|sell).*cap",
+          "kind": "vault_log",
+          "pattern": "^recorded cap",
+          "why": "the old helm is a vault record"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "pack",
           "max": 0,
-          "why": "the replaced helm was not dropped or sold"
+          "why": "the old helm is not left in the backpack"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "(drop|trash|sold|sell).*(cap|rin)",
+          "max": 0,
+          "why": "nothing was dropped or sold"
         },
         {
           "kind": "no_writes"
@@ -202,8 +232,6 @@
       "title": "Both ring slots worn, one tap on the left ring button of a Vault ring: that slot swaps, the other is untouched",
       "kind": "behaviour",
       "tier": "fast",
-      "status": "pending",
-      "pending_reason": "the runner has no setup for a vault record (Items where=vault: give the item, read its bytes with `item full`, `item vault` it, write the record into the hero's vault store) nor for a worn start item (where=body), and does not substitute the record id into trigger.api bodies ({{vault.1}}); the bot side, the order API and the offline tests are done (docs/vault.md, Equip)",
       "covers": [
         "hook.vault-keep",
         "town.vault-equip"
@@ -217,21 +245,26 @@
       "pre": {
         "level": 14,
         "gold": 500,
-        "items": [
+        "worn": [
           {
             "code": "rin",
-            "where": "body"
+            "slot": "rring",
+            "quality": 4
           },
           {
             "code": "rin",
-            "where": "body"
-          },
-          {
-            "code": "rin",
-            "where": "vault",
+            "slot": "lring",
             "quality": 4
           }
-        ]
+        ],
+        "vault_records": {
+          "items": [
+            {
+              "code": "rin",
+              "quality": 4
+            }
+          ]
+        }
       },
       "trigger": {
         "goals": "campaign",
@@ -246,7 +279,7 @@
             "path": "/api/vault/equip",
             "body": {
               "ids": [
-                "{{vault.1}}"
+                "{{vault.0.id}}"
               ],
               "slot": "left"
             }
@@ -272,9 +305,16 @@
         "item.vault",
         "item.equip"
       ],
-      "provenance": "SETUP (CHEATED, mechanics only): level 14 and the given items by the debug give verb; the vault record is made from a given item. Not evidence about balance or parity.",
+      "provenance": "SETUP (CHEATED, mechanics only): level 14, the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
       "notes": "left is the game's left ring slot (lring) and right is rring, the Inventory page's words (S: which one is drawn on which side of the doll is U live).",
       "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the order was accepted"
+        },
         {
           "kind": "log_line",
           "pattern": "equip: .* worn in lring",
@@ -294,6 +334,12 @@
           "why": "both fingers still wear a ring"
         },
         {
+          "kind": "log_line",
+          "pattern": "(drop|trash|sold|sell).*(cap|rin)",
+          "max": 0,
+          "why": "nothing was dropped or sold"
+        },
+        {
           "kind": "no_writes"
         }
       ]
@@ -303,8 +349,6 @@
       "title": "Both ring slots worn, one tap on the right ring button of a Vault ring: that slot swaps, the other is untouched",
       "kind": "behaviour",
       "tier": "fast",
-      "status": "pending",
-      "pending_reason": "the runner has no setup for a vault record (Items where=vault: give the item, read its bytes with `item full`, `item vault` it, write the record into the hero's vault store) nor for a worn start item (where=body), and does not substitute the record id into trigger.api bodies ({{vault.1}}); the bot side, the order API and the offline tests are done (docs/vault.md, Equip)",
       "covers": [
         "hook.vault-keep",
         "town.vault-equip"
@@ -318,21 +362,26 @@
       "pre": {
         "level": 14,
         "gold": 500,
-        "items": [
+        "worn": [
           {
             "code": "rin",
-            "where": "body"
+            "slot": "rring",
+            "quality": 4
           },
           {
             "code": "rin",
-            "where": "body"
-          },
-          {
-            "code": "rin",
-            "where": "vault",
+            "slot": "lring",
             "quality": 4
           }
-        ]
+        ],
+        "vault_records": {
+          "items": [
+            {
+              "code": "rin",
+              "quality": 4
+            }
+          ]
+        }
       },
       "trigger": {
         "goals": "campaign",
@@ -347,7 +396,7 @@
             "path": "/api/vault/equip",
             "body": {
               "ids": [
-                "{{vault.1}}"
+                "{{vault.0.id}}"
               ],
               "slot": "right"
             }
@@ -373,9 +422,16 @@
         "item.vault",
         "item.equip"
       ],
-      "provenance": "SETUP (CHEATED, mechanics only): level 14 and the given items by the debug give verb; the vault record is made from a given item. Not evidence about balance or parity.",
+      "provenance": "SETUP (CHEATED, mechanics only): level 14, the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
       "notes": "left is the game's left ring slot (lring) and right is rring, the Inventory page's words (S: which one is drawn on which side of the doll is U live).",
       "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the order was accepted"
+        },
         {
           "kind": "log_line",
           "pattern": "equip: .* worn in rring",
@@ -393,6 +449,12 @@
           "where": "body",
           "min": 2,
           "why": "both fingers still wear a ring"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "(drop|trash|sold|sell).*(cap|rin)",
+          "max": 0,
+          "why": "nothing was dropped or sold"
         },
         {
           "kind": "no_writes"
