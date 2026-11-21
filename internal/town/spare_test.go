@@ -142,3 +142,33 @@ func TestFullPackOfRejuvsIsSoldDown(t *testing.T) {
 		t.Errorf("%d Full kept, want all 3 (regular ones go first)", n)
 	}
 }
+
+// tphoard: loose town portal scrolls beside a tome are sold down to town.looseScrollKeep at the sell visit even with
+// room in the pack; the tome and the kept scrolls stay. With no tome nothing is sold (the shopping target rules).
+func TestLooseScrollsBesideTomeAreSold(t *testing.T) {
+	geartest.Need(t)
+	for _, withTome := range []bool{true, false} {
+		r := newRig(t)
+		dressed(r.W)
+		if withTome {
+			r.W.Add("tbk", d2.ContInventory, 0, 0)
+		}
+		for i := 0; i < 9; i++ {
+			r.W.Add("tsc", d2.ContInventory, 1+i, 0)
+		}
+		keep := r.Env.Tune.Town.LooseScrollKeep
+		if _, err := r.T.Chores(context.Background(), town.ChorePlan{Sell: true}); err != nil {
+			t.Fatal(err)
+		}
+		want := 9
+		if withTome {
+			want = keep
+			if countCode(r, "tbk") != 1 {
+				t.Errorf("the tome was sold")
+			}
+		}
+		if n := countCode(r, "tsc"); n != want {
+			t.Errorf("tome %v: %d loose scrolls left, want %d", withTome, n, want)
+		}
+	}
+}
