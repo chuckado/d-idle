@@ -125,3 +125,34 @@ func TestDeskHandInReady(t *testing.T) {
 		})
 	}
 }
+
+// B.4: the park's code decides the Needs-you buttons (hold_timeout: Keep waiting and Stop; a missing prerequisite or a
+// locked quest: Stop only; a failed quest: none).
+func TestNeedsRowButtonsByCode(t *testing.T) {
+	cases := []struct {
+		code string
+		want []string
+	}{
+		{"died_too_often", []string{"Try again", "Stop"}},
+		{"hold_timeout", []string{"Keep waiting", "Stop"}},
+		{"prereq_missing", []string{"Stop"}},
+		{"quest_locked", []string{"Stop"}},
+		{"game_failed", nil},
+	}
+	for _, class := range smClasses {
+		r := newRigSM(t, class, 17, true)
+		d := r.desk(nil)
+		for _, c := range cases {
+			v := View{Blocked: &RunView{Quest: "search_for_cain", QuestTitle: "The Search for Cain", Chunk: "scroll", Why: "x", Reason: &ReasonView{Code: c.code}}}
+			var got []string
+			for _, row := range d.needs(v) {
+				for _, a := range row.Actions {
+					got = append(got, a.Label)
+				}
+			}
+			if strings.Join(got, ",") != strings.Join(c.want, ",") {
+				t.Fatalf("%s %s: buttons %v, want %v", class, c.code, got, c.want)
+			}
+		}
+	}
+}

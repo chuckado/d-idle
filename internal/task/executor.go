@@ -40,6 +40,9 @@ type Result struct {
 	// Code and Hold carry the Fault of a refused step to the quest board (Fault.Code, Fault.Hold).
 	Code string
 	Hold bool
+	// Via and ViaWhy are the Code and words of the coded fault that spliced this step in (a potion shortage sends the
+	// hero to the chores step): the board shows that hold while the trip runs (quests.boardSM).
+	Via, ViaWhy string
 }
 
 // Policy is the retry/escape policy (tasklayer.md sections 3 and 6). Counters live in memory only; a restart forgets
@@ -81,12 +84,14 @@ type Hooks struct {
 
 // Executor runs one decision per Tick. It holds only failure counters, never a cursor.
 type Executor struct {
-	Env     Env
-	Act     Actions
-	Policy  Policy
-	Hooks   Hooks
-	Now     func() time.Time
-	Journal []Result // optional ring for tests/dashboard; appended when non-nil via Record
+	sticky, stickyWhy string // the coded fault whose inserted steps are still pending
+	via               string // the code of the coded fault that inserted the step being run ("" none)
+	Env               Env
+	Act               Actions
+	Policy            Policy
+	Hooks             Hooks
+	Now               func() time.Time
+	Journal           []Result // optional ring for tests/dashboard; appended when non-nil via Record
 
 	fails    map[string]int
 	timeouts map[string]int
@@ -319,6 +324,7 @@ func (e *Executor) Tick(ctx context.Context, p Planner) (Result, error) {
 	)
 	// A Ready fault with prerequisites splices them in front and the first one runs in this same tick, so a restart
 	// between ticks cannot lose the splice.
+	var via, viaWhy string
 	for try := 0; ; try++ {
 		nodes := append(append([]Node(nil), e.inserted...), plan.Nodes...)
 		n, ev, ok, pending = e.pick(nodes, w)
@@ -330,12 +336,30 @@ func (e *Executor) Tick(ctx context.Context, p Planner) (Result, error) {
 			if f := n.Step.Ready(w); f != nil {
 				r = e.handleFault(plan, n.Step, f, r)
 				if r.Outcome == OutInserted && try < e.Policy.norm().MaxInsert {
+					if f.Code != "" {
+						via, viaWhy = f.Code, f.Why
+						e.sticky, e.stickyWhy = f.Code, f.Why
+					}
 					continue
 				}
 				return r, nil
 			}
 		}
-		return e.run(ctx, w, plan, n.Step, r), nil
+		if via == "" && e.sticky != "" { // a later tick runs the step an earlier coded fault inserted
+			for _, in := range e.inserted {
+				if in.Step.ID == n.Step.ID {
+					via, viaWhy = e.sticky, e.stickyWhy
+				}
+			}
+		}
+		e.via = via
+		res := e.run(ctx, w, plan, n.Step, r)
+		e.via = ""
+		if res.Outcome == OutRan || res.Outcome == OutSkipped {
+			e.sticky = ""
+		}
+		res.Via, res.ViaWhy = via, viaWhy
+		return res, nil
 	}
 	if !ok {
 		if pending {
@@ -414,6 +438,13 @@ func (e *Executor) run(ctx context.Context, w World, plan Plan, s Step, r Result
 		// 14: the Charsi greeting ran twice, 25 s, before it was skipped).
 		r.Err = errors.New(why)
 		return e.end(s, e.escape(plan, s, r, why))
+	}
+	if e.via != "" {
+		// A step a coded fault inserted (the potion chores trip) ran clean and the shortage stays: the belt cannot hold
+		// what the guard asks for or the purse is short. That is a hold (the board trains meanwhile and parks it with
+		// hold_timeout after its budget), not a failure to count.
+		r.Outcome, r.Err, r.Code, r.Hold = OutRetry, errors.New(why), e.via, true
+		return e.end(s, r)
 	}
 	return e.end(s, e.failure(plan, s, r, why))
 }

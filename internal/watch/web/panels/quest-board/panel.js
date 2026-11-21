@@ -143,8 +143,12 @@ export function stripModel(v, local = shared, now = Date.now()) {
     return Object.assign(m, { kind: 'awaiting', label: 'Waiting for you', head: who(aw) + ' is waiting: hand in ' + aw.questTitle, sub: 'The hero stands there and waits for your tap', primary: btn('Hand in', 'handin', aw) });
   }
   if (bl) {
-    return { kind: 'blocked', label: 'Stuck', quest: bl.quest, chunk: bl.chunk, head: bl.questTitle + ' is stuck', sub: bl.why || 'the step failed',
+    return { kind: 'blocked', label: 'Stuck', quest: bl.quest, chunk: bl.chunk, head: bl.questTitle + ' is stuck', sub: (bl.reason && bl.reason.text) || bl.why || 'the step failed',
       primary: btn('Try again', 'retry', bl), secondary: btn('Stop', 'cancel', bl, { confirm: true }) };
+  }
+  if (run && run.reason && run.reason.text && run.reason.remedy !== 'none') { // a hold: the hero is not on the quest's own step (B.4)
+    return { kind: 'held', label: 'On hold', quest: run.quest, chunk: run.chunk, head: run.questTitle + ': on hold', sub: run.reason.text,
+      primary: btn('Stop', 'cancel', run, { confirm: true }), secondary: null };
   }
   if (run) {
     const step = run.step ? humanize(run.step) : 'Starting';
@@ -243,7 +247,7 @@ export function boardModel(v, local = shared, now = Date.now()) {
     const chunks = (q.chunks || []).map((c) => {
       const o = offerOf(q.id, c.id);
       const w = wordOf(c.readiness || (o && o.readiness));
-      const reason = (o && (o.sentence || ((o.reasons || [])[0] || {}).text)) || c.why || '';
+      const reason = (c.reason && c.reason.text) || (o && (o.sentence || ((o.reasons || [])[0] || {}).text)) || c.why || '';
       const lv = o && o.readiness !== 'safe' ? levelsText(o.levelsToGo) : '';
       return { id: c.id, title: c.title, state: c.state, word: w, reason: lv || reason, minutes: o ? minutesText(o.minutes) : '', startable: !!(o && o.startable), why: o && !o.startable ? o.why : '', pays: o ? paysText(o.pays) : '' };
     });
@@ -254,7 +258,7 @@ export function boardModel(v, local = shared, now = Date.now()) {
   const order = (g) => (g === 'now' ? -1 : GROUPS.findIndex((x) => x[0] === g));
   const list = [...acts.keys()].sort((a, b) => a - b).map((n) => ({ act: n, name: actName(n), rows: acts.get(n).sort((a, b) => order(a.group) - order(b.group)) }));
   const cur = stripModel(v, local, now);
-  const nowRow = ['running', 'awaiting', 'blocked', 'handingin', 'confirming', 'failed', 'countdown'].includes(cur.kind) ? cur : null;
+  const nowRow = ['running', 'held', 'awaiting', 'blocked', 'handingin', 'confirming', 'failed', 'countdown'].includes(cur.kind) ? cur : null;
   const away = v.whileAway && (v.whileAway.events || []).length ? { events: v.whileAway.events.map((e) => ({ at: e.at, text: e.text + (awardText(e.awarded) ? ', ' + awardText(e.awarded) : '') })) } : null;
   const hist = (v.history || []).slice(0, 5).map((h) => ({ title: h.title, text: (h.confirmed ? 'handed in' : 'started') + (awardText(h.paid) ? ', ' + awardText(h.paid) : '') }));
   // a stop the player made in the last day stays on the board, so a surprise stop is visible (the server drops it after 24 h)

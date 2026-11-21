@@ -23,6 +23,7 @@ func (fakeSkills) View() skilltree.View {
 					continue
 				}
 				s := &data.Skill{ID: id, Key: fmt.Sprintf("Skill %d", id), Name: fmt.Sprintf("Skill %d", id), Class: "sor", Page: page, Row: row, Column: col, ReqLevel: row * 6, MaxLevel: 20}
+				s.Passive, s.Aura = id%4 == 0, id%7 == 0 // a mix of the three kinds so the badges show
 				sk = append(sk, s)
 				id++
 			}

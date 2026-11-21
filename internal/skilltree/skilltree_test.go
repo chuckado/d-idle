@@ -153,3 +153,36 @@ func TestLayoutAndLinks(t *testing.T) {
 		t.Errorf("links: %+v", l)
 	}
 }
+
+// Kind comes from the skills.txt flags alone. Flags below are the rows of the real 1.14d skills.txt (V: read from an
+// extracted table: Might, Holy Fire, Vigor, Resist Fire aura=1; Warmth, Cold Mastery, Skeleton Mastery passive=1;
+// Sacrifice, Zeal, Fire Bolt, Frozen Armor, Raise Skeleton neither).
+func TestKindOfRealFlags(t *testing.T) {
+	rows := []struct {
+		s    data.Skill
+		want string
+	}{
+		{data.Skill{Key: "Might", Class: "pal", Aura: true}, KindAura},
+		{data.Skill{Key: "Holy Fire", Class: "pal", Aura: true}, KindAura},
+		{data.Skill{Key: "Vigor", Class: "pal", Aura: true}, KindAura},
+		{data.Skill{Key: "Resist Fire", Class: "pal", Aura: true}, KindAura},
+		{data.Skill{Key: "Sacrifice", Class: "pal"}, KindActive},
+		{data.Skill{Key: "Zeal", Class: "pal"}, KindActive},
+		{data.Skill{Key: "Fire Bolt", Class: "sor"}, KindActive},
+		{data.Skill{Key: "Frozen Armor", Class: "sor"}, KindActive},
+		{data.Skill{Key: "Warmth", Class: "sor", Passive: true}, KindPassive},
+		{data.Skill{Key: "Cold Mastery", Class: "sor", Passive: true}, KindPassive},
+		{data.Skill{Key: "Skeleton Mastery", Class: "nec", Passive: true}, KindPassive},
+		{data.Skill{Key: "Raise Skeleton", Class: "nec"}, KindActive},
+	}
+	for _, r := range rows {
+		if got := KindOf(&r.s); got != r.want {
+			t.Errorf("%s: kind %q, want %q", r.s.Key, got, r.want)
+		}
+	}
+	// Build carries it onto the node, for the fixture's Sorceress.
+	v := Build(fixture(), Hero{ClassCode: "sor", ClassName: "Sorceress", Level: 5}, nil)
+	if node(v, "Warmth").Kind != KindPassive || node(v, "Fire Bolt").Kind != KindActive {
+		t.Errorf("node kinds: %+v %+v", node(v, "Warmth"), node(v, "Fire Bolt"))
+	}
+}
