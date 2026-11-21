@@ -1152,6 +1152,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - mouthgate: nav mouth gate lets a GoTo reach a goal inside an unwanted exit''s bound (TASK-769, merged 2026-11-21, acceptance 2 of 2): act1.forgotten.countess Paladin 11 GREEN twice on the K1 fork (live, builder long lane, jobs 20261121-012324-37e7 and 012853-5d61, determinism pair same verdict, setup CHEATED = mechanics only). ... <!--sg:agent/mouthgate-->
 - levelobjects: object presets of all rooms feed the waypoint, tree, stones and cage steps (TASK-770, merged 2026-11-21, acceptance 3 of 3): Done on the builder, NOT verified in the live sandbox. Fork debug levelmonsters gained objpresets (every object preset unit of ALL rooms of the level, built or not; fork branch didle/level-objects-20261121). ... <!--sg:agent/levelobjects-->
 - agent/cmb1: dlv-data: cap/2 delivery object, generated skills/skillKinds/tiers, golden parity (merged 2026-11-21) <!--sg:agent/cmb1-->
+- agent/cmb2: dlv-rotation: Rotation type, Profile.Rotation adapter, Fighter reads slots, golden parity (merged 2026-11-21) <!--sg:agent/cmb2-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
