@@ -596,6 +596,16 @@ func (w *World) mergeLayout(ctx context.Context, l *lvl, sub func(x, y float64) 
 	if err != nil || doc == nil || doc.Level != l.own.Level {
 		return
 	}
+	var wps, listed []string
+	for _, o := range doc.Objects {
+		if o.Kind == "waypoint" {
+			wps = append(wps, fmt.Sprintf("%d@%.0f,%.0f", o.Class, o.X, o.Y))
+		}
+		if len(listed) < 24 {
+			listed = append(listed, fmt.Sprintf("%d:%s", o.Class, o.Kind))
+		}
+	}
+	w.logf("d2dworld: levelmap level %d: %d objects, %d rooms, waypoints %v, first %v", doc.Level, len(doc.Objects), len(doc.Rooms), wps, listed)
 	for _, o := range doc.Objects {
 		if o.Class == 0 {
 			continue
