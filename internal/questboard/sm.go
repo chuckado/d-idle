@@ -61,6 +61,7 @@ type Run struct {
 	Status   RunStatus `json:"status"`
 	Code     string    `json:"code,omitempty"` // the reason code of a live run that is not running
 	By       string    `json:"by,omitempty"`   // player, chain or auto
+	Mode     string    `json:"mode,omitempty"` // the mode that was active when it was accepted
 	At       time.Time `json:"at"`
 	Failures int       `json:"failures,omitempty"` // kept with a park
 	Deaths   int       `json:"deaths,omitempty"`
