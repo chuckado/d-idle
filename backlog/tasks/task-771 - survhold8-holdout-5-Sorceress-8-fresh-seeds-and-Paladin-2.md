@@ -1,10 +1,11 @@
 ---
 id: TASK-771
 title: 'survhold8: holdout 5, Sorceress 8 fresh seeds and Paladin 2'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T13:36:00Z'
+updated_date: '2026-11-21T16:05:00Z'
 labels:
   - bot
   - research
