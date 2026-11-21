@@ -5,7 +5,7 @@
 // Reveal and Sell (slice V6) also only queue: the price is shown before the click (revealPlan) and the states come from the GET. The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
 // fed the rows as an inventory view); every text comes from /watch/vault.json or the API and goes in through textContent.
 // Every press is read back: the list is fetched again and what it says is what the page shows.
-import { PAGE, equipPlan, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, revealPlan, sellPlan, toQuery, toTipView, when } from '/watch/vault-logic.js';
+import { PAGE, equipPlan, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, revealBarModel, revealPlan, sellPlan, toQuery, toTipView, when } from '/watch/vault-logic.js';
 
 export const ROUTE = '/api/vault';
 const POLL_MS = 6000;
@@ -102,10 +102,24 @@ export function mountVault(d) {
   const pinB = btn(T.pin, { key: 'pin' }), unpinB = btn(T.unpin, { key: 'unpin' }), discB = btn(T.discard, { key: 'discard', variant: 'danger' });
   const keepB = btn(T.keep, { key: 'keep' });
   const revealB = btn(T.reveal, { key: 'reveal' }), sellB = btn(T.sell, { key: 'sell' });
-  const massB = btn(T.revealFiltered, { key: 'reveal-filtered', variant: 'ghost' }); massB.hidden = true;
-  const etherB = btn(T.revealEther, { key: 'reveal-ether' }), massEtherB = btn(T.revealFilteredEther, { key: 'reveal-filtered-ether', variant: 'ghost' }); etherB.hidden = massEtherB.hidden = true;
-  const acts = el('div', 'vt-acts'); acts.append(keepB, revealB, etherB, massB, massEtherB, sellB, pinB, unpinB, discB);
+  const etherB = btn(T.revealEther, { key: 'reveal-ether' }); etherB.hidden = true;
+  const acts = el('div', 'vt-acts'); acts.append(keepB, revealB, etherB, sellB, pinB, unpinB, discB);
   bar.append(selBtn, selText, selAll, acts);
+  // ---- the Reveal bar: one bar for the items of the identify filter, a payment picker with one cost line each ----
+  const RT = T.revealBar || {};
+  const RB = { pay: '', confirming: false };
+  const rb = el('section', 'vt-revealbar'); rb.hidden = true; rb.setAttribute('aria-label', RT.label || '');
+  const rbTitle = el('p', 'vt-rb-title'); rbTitle.setAttribute('role', 'status');
+  const rbOpts = el('div', 'vt-rb-opts'); rbOpts.setAttribute('role', 'radiogroup'); rbOpts.setAttribute('aria-label', RT.payLabel || '');
+  const rbGo = btn('', { key: 'reveal-bar-go' }), rbYes = btn(RT.confirmYes, { key: 'reveal-bar-yes' }), rbNo = btn(RT.confirmNo, { key: 'reveal-bar-back', variant: 'ghost' });
+  const rbAsk = el('span', 'vt-rb-ask'); rbAsk.setAttribute('role', 'alert');
+  const rbWhy = el('span', 'vt-rb-why');
+  const rbRow = el('div', 'vt-rb-row'); rbRow.append(rbGo, rbAsk, rbYes, rbNo, rbWhy);
+  const rbSkip = el('details', 'vt-rb-skip'), rbSkipSum = el('summary'), rbSkipList = el('ul'); rbSkip.append(rbSkipSum, rbSkipList);
+  const rbOrder = el('div', 'vt-rb-order'), rbSteps = el('ol', 'vt-rb-steps'), rbProg = el('span', 'vt-rb-prog'), rbNote = el('span', 'vt-rb-note');
+  const rbCancel = btn(RT.cancel, { key: 'reveal-bar-cancel', variant: 'ghost' });
+  rbOrder.append(rbSteps, rbProg, rbNote, rbCancel);
+  rb.append(rbTitle, rbOpts, rbRow, rbSkip, rbOrder);
   const keepRow = el('div', 'vt-keeprow'); keepRow.hidden = true;
   const keepLine = el('span', 'vt-keepline'); keepLine.setAttribute('role', 'status');
   const keepNowB = btn(T.keepNow, { key: 'keep-now', variant: 'ghost' }); keepNowB.title = T.keepNowWhy;
@@ -151,7 +165,7 @@ export function mountVault(d) {
   }
   { const was = slotStore(); if (was && !S.f.type) S.f.type = was; }
   const page = el('div', 'vt-page');
-  page.append(head, banner, slotRow, filters, bar, keepRow, actRow, promptRow, msg, body);
+  page.append(head, banner, slotRow, filters, rb, bar, keepRow, actRow, promptRow, msg, body);
   root.replaceChildren ? root.replaceChildren(page, sheetWrap) : (root.appendChild(page), root.appendChild(sheetWrap));
 
   // ---- loading ----
@@ -320,6 +334,38 @@ export function mountVault(d) {
     keepNowB.disabled = ro || !k || !k.enabled;
     drawAct(n, ro);
   }
+  function drawRevealBar(ro) {
+    const a = S.view && S.view.act, m = revealBarModel(a && a.reveal, RB.pay, RT);
+    rb.hidden = !m.show;
+    if (!m.show) return;
+    rbTitle.textContent = m.total ? m.title : '';
+    rbTitle.title = m.line || '';
+    rbOpts.replaceChildren(...m.options.map((o) => {
+      const b = el('button', 'vt-rb-opt'); b.type = 'button'; b.dataset.key = 'pay-' + o.id;
+      b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', o.checked ? 'true' : 'false');
+      if (!o.ok) { b.setAttribute('aria-disabled', 'true'); b.title = o.why; }
+      b.appendChild(el('strong', '', o.label)); b.appendChild(el('span', 'vt-rb-line', o.line));
+      b.addEventListener('click', () => { if (o.ok) { RB.pay = o.id; RB.confirming = false; draw(); } });
+      return b;
+    }));
+    rbOpts.hidden = !m.total;
+    const ask = RB.confirming && m.confirm && m.sel === 'gold';
+    rbGo.hidden = !m.total || ask; rbGo.textContent = m.go; rbGo.disabled = ro || m.goOff;
+    rbGo.title = m.goOff ? m.why : '';
+    rbAsk.hidden = rbYes.hidden = rbNo.hidden = !ask; rbAsk.textContent = ask ? m.confirmAsk : '';
+    rbWhy.textContent = m.total && m.goOff ? m.why : ''; rbWhy.hidden = !rbWhy.textContent;
+    const tail = [m.note].filter(Boolean);
+    rbSkip.hidden = !(m.skippedN > 0 || tail.length);
+    rbSkipSum.textContent = m.skippedN > 0 ? m.skipTitle : (RT.skipNote || '');
+    rbSkipList.replaceChildren(...m.skipped.map((x) => el('li', '', x.n + ' · ' + x.why)), ...tail.map((t) => el('li', '', t)));
+    const o = m.order;
+    rbOrder.hidden = !o;
+    if (o) {
+      rbSteps.replaceChildren(...o.steps.map((x) => { const li = el('li', x.current ? 'cur' : x.past ? 'past' : '', x.label); if (x.current) li.setAttribute('aria-current', 'step'); return li; }));
+      rbProg.textContent = o.progress + (o.spent ? ' · ' + o.spent + ' gold' : ''); rbNote.textContent = o.note;
+      rbCancel.hidden = !o.active; rbCancel.disabled = ro;
+    }
+  }
   // Reveal and Sell: the buttons, the cost line for the selection, the queue sentences and the opt-in prompt
   function drawAct(n, ro) {
     const a = S.view && S.view.act, ids = S.sel.ids();
@@ -346,16 +392,8 @@ export function mountVault(d) {
     }
     costLine.textContent = cost; costLine.hidden = !cost;
     buyB.hidden = !(cost && rp.short); buyB.disabled = ro;
-    // Mass reveal (docs/design/bulk-identify-2026-11-18.md section 5): the server names the filtered ids and the cost sentence.
-    const m = a && a.reveal.mass;
-    massB.hidden = !(m && m.count > 0);
-    if (m) { massB.textContent = fmt(T.revealFiltered, { n: m.count }); massB.title = m.line; }
-    massB.disabled = ro || !a || !a.reveal.enabled;
-    const me = m && m.ether;
-    massEtherB.hidden = !(eOn && me && me.count > 0);
-    if (me) { massEtherB.textContent = fmt(T.revealFilteredEther, { n: me.count, cost: me.cost }); massEtherB.title = me.line; }
-    massEtherB.disabled = ro;
-    const line = a ? [a.reveal.note, m && m.line, me && me.line, a.reveal.line, a.sell.line].filter(Boolean).join(' · ') : '';
+    drawRevealBar(ro);
+    const line = a ? [a.reveal.line, a.sell.line].filter(Boolean).join(' · ') : '';
     actLine.textContent = line;
     actRow.hidden = !(cost || line);
     const p = a && a.prompt;
@@ -673,9 +711,7 @@ export function mountVault(d) {
   const act1 = (route, ids) => act(route, ids, false);
   const keepAct = (ids, now) => act('/api/vault/keep', ids, false, { now });
   const revealAct = (ids, now) => act('/api/vault/reveal', ids, false, { now });
-  massB.addEventListener('click', () => { const m = S.view && S.view.act && S.view.act.reveal.mass; if (m && m.count && !massB.disabled) revealAct(m.ids, false); });
   const etherAct = (ids) => act('/api/vault/reveal', ids, false, { ether: true });
-  massEtherB.addEventListener('click', () => { const m = S.view && S.view.act && S.view.act.reveal.mass; if (m && m.ether && m.ether.count && !massEtherB.disabled) etherAct(m.ether.ids); });
   etherB.addEventListener('click', () => {
     if (!S.sel.size || etherB.disabled) return;
     const p = revealPlan(S.items, S.sel.ids(), S.view && S.view.act);
@@ -683,6 +719,28 @@ export function mountVault(d) {
     etherAct(p.ids);
   });
   const sellAct = (ids, now) => act('/api/vault/sell', ids, true, { now });
+  // The bar's press: free and Ether use the ordinary reveal routes; gold is an order the bot fills at the next town visit.
+  async function goldOrder(ids, cost, confirm) {
+    const r = await d.post('/api/vault/revealgold', { ids, maxGold: cost, confirm: !!confirm });
+    RB.confirming = false;
+    if (!r) setMsg('bad', T.noAnswer);
+    else if (r.ok) setMsg('good', RT.sent);
+    else setMsg('bad', ((r.failed && r.failed[0] && r.failed[0].error) || r.error || T.noAnswer));
+    await reload(true);
+  }
+  rbGo.addEventListener('click', () => {
+    const rev = S.view && S.view.act && S.view.act.reveal, m = revealBarModel(rev, RB.pay, RT);
+    const o = m.sel && rev.bar.options.find((x) => x.id === m.sel);
+    if (!o || m.goOff) return;
+    if (o.id === 'gold') { if (o.confirm) { RB.confirming = true; draw(); return; } goldOrder(o.ids, o.cost, false); } else if (o.id === 'ether') etherAct(o.ids); else revealAct(o.ids, false);
+  });
+  rbYes.addEventListener('click', () => {
+    const rev = S.view && S.view.act && S.view.act.reveal, m = revealBarModel(rev, RB.pay, RT);
+    const o = m.sel === 'gold' && rev.bar.options.find((x) => x.id === 'gold');
+    if (o) goldOrder(o.ids, o.cost, true);
+  });
+  rbNo.addEventListener('click', () => { RB.confirming = false; draw(); });
+  rbCancel.addEventListener('click', async () => { const r = await d.post('/api/vault/revealgold/cancel', {}); setMsg(r && r.ok ? 'good' : 'bad', r && r.ok ? RT.cancelled : ((r && r.error) || T.noAnswer)); await reload(true); });
   pinB.addEventListener('click', () => { if (S.sel.size) act1('/api/vault/pin', S.sel.ids()); });
   unpinB.addEventListener('click', () => { if (S.sel.size) act1('/api/vault/unpin', S.sel.ids()); });
   discB.addEventListener('click', () => { if (S.sel.size) openDiscard(S.sel.ids(), discB); });

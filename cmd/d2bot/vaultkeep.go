@@ -100,6 +100,16 @@ func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir, curren
 		k.Ether = &bulkid.EtherPayer{W: lazyWallet{func() *ether.Wallet { return etherFor(dir, "", nil, nil).Wallet() }}, Price: func() int { return e.Tune.Identify.EtherPerReveal }}
 	}
 	k.Namer = ha.name
+	k.Shop = ha
+	k.GoldOn = func() bool { return keepOn(e)() && e.Tune.Loot.VaultRevealGold != 0 }
+	k.GoldConfirm = func() int { return e.Tune.Loot.VaultRevealGoldConfirm }
+	k.OrderFile = func() string {
+		h := hero()
+		if h == "" || vault.ValidHero(h) != nil {
+			return ""
+		}
+		return filepath.Join(vault.HeroDir(home.root, h), "revealgold.json")
+	}
 	k.Hand = equipHand{ref: ref, e: e, snap: snap}
 	k.EquipOn = equipOn(e)
 	k.EquipPath = filepath.Join(dataDir, "vaults", hero(), "vault", "equip.json")
@@ -464,4 +474,105 @@ func plural(n int) string {
 		return ""
 	}
 	return "s"
+}
+
+// Price is the vendor price of one Scroll of Identify from the item tables (the same figure the town's buy errand plans
+// with); 0 when the tables lack it.
+func (h heroActs) Price() int {
+	if h.e == nil || h.e.Data == nil {
+		return 0
+	}
+	if b := h.e.Data.ItemByCode("isc"); b != nil {
+		return b.Cost
+	}
+	return 0
+}
+
+// Purse reads the pack and stash gold and the reserve the town keeps back for the repair and the potion kit.
+func (h heroActs) Purse(context.Context) (purse, stash, reserve int, err error) {
+	tw, s := h.town(), h.snap()
+	if tw == nil || s == nil || s.Player == nil {
+		return 0, 0, 0, errors.New("the purse is unreadable")
+	}
+	if fresh, ferr := h.e.Snapshot(); ferr == nil && fresh != nil && fresh.Player != nil {
+		s = fresh
+	}
+	return s.Player.Gold, s.Player.StashGold, tw.IdentifyBuyReserve(s), nil
+}
+
+// maxBuy is the most scrolls one buy errand takes (the tome holds 20; the town refuses more).
+const maxBuy = 20
+
+// Buy runs the town's own buy-identify errand (the same code as the page's Buy scrolls button): only gold above the repair
+// and potion-kit reserve is spent. The stash gold is taken out first when the pack cannot pay. It stops when an errand buys
+// nothing.
+func (h heroActs) Buy(ctx context.Context, n int) error {
+	tw := h.town()
+	if tw == nil {
+		return errors.New("no town helper yet")
+	}
+	price := h.Price()
+	for n > 0 {
+		before, _ := h.Charges(ctx)
+		purse, stash, reserve, err := h.Purse(ctx)
+		if err != nil {
+			return err
+		}
+		k := min(n, maxBuy)
+		if short := k*price + reserve - purse; short > 0 && stash > 0 {
+			if werr := tw.WithdrawGold(ctx, min(short, stash)); werr != nil && !errors.Is(werr, town.ErrNoGoldMover) {
+				return werr
+			}
+		}
+		if _, err := tw.BuyIdentify(ctx, k); err != nil {
+			return err
+		}
+		after, _ := h.Charges(ctx)
+		if after <= before {
+			return nil
+		}
+		n -= after - before
+	}
+	return nil
+}
+
+func viewOf(v vaultkeep.GoldView) watch.VaultGoldOrder {
+	return watch.VaultGoldOrder{ID: v.ID, State: v.State, Total: v.Total, Done: v.Done, Failed: v.Failed, Bought: v.Bought, Spent: v.Spent, Max: v.Max, Note: v.Note, Line: v.Line}
+}
+
+func (f actFace) GoldInfo(ctx context.Context) watch.VaultGoldInfo {
+	k := f.k()
+	if k == nil {
+		return watch.VaultGoldInfo{}
+	}
+	g := k.GoldFacts(ctx)
+	out := watch.VaultGoldInfo{On: g.On, ScrollGold: g.Price, Purse: g.Purse, Stash: g.Stash, Reserve: g.Reserve, ConfirmAt: g.Confirm}
+	if v := k.GoldView(); v != nil {
+		o := viewOf(*v)
+		out.Order = &o
+	}
+	return out
+}
+
+func (f actFace) EnqueueRevealGold(ctx context.Context, ids []string, maxGold int, confirm bool) ([]watch.VaultKeepResult, *watch.VaultGoldOrder) {
+	k := f.k()
+	if k == nil {
+		return nil, nil
+	}
+	res, v := k.EnqueueRevealGold(ctx, ids, maxGold, confirm)
+	var o *watch.VaultGoldOrder
+	if v != nil {
+		x := viewOf(*v)
+		o = &x
+	}
+	return results(res), o
+}
+
+func (f actFace) CancelGold() (watch.VaultGoldOrder, bool) {
+	k := f.k()
+	if k == nil {
+		return watch.VaultGoldOrder{}, false
+	}
+	v, ok := k.CancelGold()
+	return viewOf(v), ok
 }

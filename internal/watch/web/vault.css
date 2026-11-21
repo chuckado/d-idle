@@ -51,6 +51,25 @@
   .vt-bar .d-btn { align-items: center; }
   .vt-seltext { font-weight: 650; }
   .vt-acts { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
+  /* the Reveal bar: one title, the payment picker (one cost line each), the press, the skipped line, the order chain */
+  .vt-revealbar { flex: none; display: grid; gap: var(--d-sp-2); padding: var(--d-sp-2) var(--d-sp-4); background: var(--d-state-bg-info); border-block-end: var(--d-bw) solid var(--d-line); }
+  .vt-revealbar[hidden], .vt-revealbar [hidden] { display: none; }
+  .vt-rb-title { margin: 0; font-weight: 650; }
+  .vt-rb-opts { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
+  .vt-rb-opt { display: grid; gap: 2px; min-block-size: 44px; padding: var(--d-sp-1) var(--d-sp-3); text-align: start; color: inherit; background: transparent; border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-2); cursor: pointer; font: inherit; }
+  .vt-rb-opt[aria-checked="true"] { border-color: var(--d-accent, currentColor); box-shadow: inset 0 0 0 1px var(--d-accent, currentColor); }
+  .vt-rb-opt[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+  .vt-rb-line { font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .vt-rb-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-2); }
+  .vt-rb-row .d-btn { align-items: center; }
+  .vt-rb-why, .vt-rb-note, .vt-rb-prog, .vt-rb-skip { font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .vt-rb-skip summary { cursor: pointer; min-block-size: 24px; }
+  .vt-rb-skip ul { margin: var(--d-sp-1) 0 0; padding-inline-start: var(--d-sp-4); }
+  .vt-rb-order { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-3); }
+  .vt-rb-steps { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); margin: 0; padding: 0; list-style: none; font-size: var(--d-fs-1); }
+  .vt-rb-steps li + li::before { content: "\2192\00a0"; }
+  .vt-rb-steps li.past { opacity: .6; }
+  .vt-rb-steps li.cur { font-weight: 700; }
   .vt-keeprow { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-2); padding: var(--d-sp-1) var(--d-sp-4); background: var(--d-state-bg-info); border-block-end: var(--d-bw) solid var(--d-line); }
   .vt-keeprow[hidden] { display: none; }
   .vt-keeprow .d-btn { align-items: center; }

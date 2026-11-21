@@ -73,6 +73,16 @@ type Keeper struct {
 	Ether          *bulkid.EtherPayer                         // identify.etherPerReveal payer; nil or price 0: Ether is not used
 	IdentifyPolicy func() int                                 // identify.policy after the measured-run override (nil: manual)
 
+	// Reveal paid in gold (gold.go): the vendor side, the knobs and where the order is kept. nil Shop: no gold orders.
+	Shop        ScrollShop
+	GoldOn      func() bool // loot.vaultRevealGold
+	GoldConfirm func() int  // loot.vaultRevealGoldConfirm
+	OrderFile   func() string
+
+	omu    sync.Mutex // guards mem and loaded (never taken while mu is held)
+	mem    *GoldOrder
+	loaded string
+
 	// One-tap Equip (equip.go); a nil Hand leaves it off.
 	Hand      Hand
 	EquipPath string                     // the orders file (empty: memory only)
@@ -284,6 +294,9 @@ func (k *Keeper) Pending() int {
 		return 0
 	}
 	n := len(st.KeepQueued()) + len(st.SellQueued()) + k.equipPending()
+	if k.GoldPending() {
+		n++
+	}
 	for _, r := range st.RevealQueued() {
 		if r.State == vault.Recorded { // a keep-combined reveal is counted with its keep
 			n++
@@ -294,9 +307,10 @@ func (k *Keeper) Pending() int {
 
 // TripWanted reports whether the player pressed Keep now and the hero is not yet home; Run clears it.
 func (k *Keeper) TripWanted() bool {
+	pend := k.Pending() // before mu: the gold order has its own lock
 	k.mu.Lock()
 	defer k.mu.Unlock()
-	return k.tripWant && k.Pending() > 0
+	return k.tripWant && pend > 0
 }
 
 // Info reads the visible state.
@@ -341,8 +355,10 @@ type created struct {
 // It returns one log line per notable event. Call it only at a safe moment in town; it checks Ready itself.
 func (k *Keeper) Run(ctx context.Context) []string {
 	lines := k.runKeep(ctx)
+	lines = append(lines, k.runGold(ctx, false)...)
 	lines = append(lines, k.runEquip(ctx)...)
 	lines = append(lines, k.runReveal(ctx)...)
+	lines = append(lines, k.runGold(ctx, true)...) // settles the order when the last reveal of this visit finished
 	return append(lines, k.runSell(ctx)...)
 }
 

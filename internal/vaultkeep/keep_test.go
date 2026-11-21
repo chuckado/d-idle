@@ -59,23 +59,26 @@ func (f *flaky) ItemVault(ctx context.Context, id int) (d2dctl.VaultRecord, erro
 }
 
 type rig struct {
-	t     *testing.T
-	dir   string
-	hero  string
-	st    *vault.Store
-	api   *flaky
-	k     *Keeper
-	now   time.Time
-	saves int
-	saveE error
-	notes []string
-	ready string
-	on    bool
-	per   int
-	tools *fakeTools
-	vend  *fakeVendor
-	ch    *chaos
-	cap   int
+	t       *testing.T
+	dir     string
+	hero    string
+	st      *vault.Store
+	api     *flaky
+	k       *Keeper
+	now     time.Time
+	saves   int
+	saveE   error
+	notes   []string
+	ready   string
+	on      bool
+	per     int
+	tools   *fakeTools
+	vend    *fakeVendor
+	shop    *fakeShop
+	goldOn  bool
+	confirm int
+	ch      *chaos
+	cap     int
 }
 
 func newRig(t *testing.T, class string) *rig {
@@ -115,6 +118,7 @@ func (r *rig) open() {
 	if r.vend != nil {
 		r.k.Vendor = chaosVendor{r.vend, r.ch}
 	}
+	r.wireShop()
 }
 
 func (r *rig) add(i int, code string, q int) string {
