@@ -1354,7 +1354,7 @@
     "quests": [
      {
       "record": 2,
-      "word": 2
+      "word": 14
      }
     ]
    },
@@ -1396,7 +1396,7 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "The hand-in tap while the hero is still in the field (reason handin_in_town) needs an awaiting chunk away from town: no setup verb for that (U); this scenario covers the tap path from town.",
+   "notes": "The hand-in tap while the hero is still in the field (reason handin_in_town) needs an awaiting chunk away from town: no setup verb for that (U); this scenario covers the tap path from town. Word 0x000e: pending bit plus started bits; the bare pending word 0x0002 reads as 'needed' (internal/quest/state.go Interpret needs a started bit), so no awaiting chunk existed (bsm9 diagnosis).",
    "assert": [
     {
      "kind": "api_reply",
@@ -1421,8 +1421,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "RED live 2026-11-21 (bsm6 run, Paladin 11): the quest word 0x0002 is read from memory but the board derives the chunk Ready (pending bit not seen as exact: task World stage of the memory reader, U), so no awaiting chunk exists at the start; the offline test TestDeskHandInReady covers handin_ready and Start"
+   "status": "active"
   },
   {
    "id": "board.handin.without-run",
@@ -1459,7 +1458,7 @@
     "quests": [
      {
       "record": 2,
-      "word": 2
+      "word": 14
      }
     ]
    },
@@ -1494,7 +1493,7 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Sisters' Burial Grounds record 2 word 0x0002 is reward pending (V docs/forkcheats.md).",
+   "notes": "Sisters' Burial Grounds record 2 word 0x0002 is reward pending (V docs/forkcheats.md). Word 0x000e: pending bit plus started bits; the bare pending word 0x0002 reads as 'needed' (internal/quest/state.go Interpret needs a started bit), so no awaiting chunk existed (bsm9 diagnosis).",
    "assert": [
     {
      "kind": "api_reply",
@@ -1511,8 +1510,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "RED live 2026-11-21 (bsm6 run, Paladin 11): the quest word 0x0002 is read from memory but the board derives the chunk Ready (pending bit not seen as exact: task World stage of the memory reader, U), so no awaiting chunk exists at the start; the offline test TestDeskHandInReady covers handin_ready and Start"
+   "status": "active"
   },
   {
    "id": "board.auto.chain-safe-only",
