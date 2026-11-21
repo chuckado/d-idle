@@ -2,7 +2,9 @@ package delivery
 
 import (
 	"bytes"
+	"encoding/json"
 	"os"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -116,5 +118,46 @@ func TestProvenSkillsNeedAScenario(t *testing.T) {
 	m, err := ProvenSkills([]byte(`{"rows":[{"skill":"A","scenario":"s","backend":"d2d"},{"skill":"B","scenario":"s","backend":"other"}]}`), "d2d")
 	if err != nil || !m["A"] || m["B"] {
 		t.Errorf("backend filter: %v %v", m, err)
+	}
+}
+
+// Golden parity (Q11): the views generated from the table equal, entry by entry, the two hand-typed tables they
+// replace as they were at the card's base. The list of listed corrections is empty: the card changes no decision.
+func TestGoldenParityWithTheOldTables(t *testing.T) {
+	tb := load(t)
+	b, err := os.ReadFile("testdata/skills.golden.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var old struct{ Skills []CombatSkill }
+	if err := json.Unmarshal(b, &old); err != nil {
+		t.Fatal(err)
+	}
+	v, err := tb.CombatView()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(v) != len(old.Skills) {
+		t.Errorf("combat view has %d skills, old table %d", len(v), len(old.Skills))
+	}
+	got := map[string]CombatSkill{}
+	for _, s := range v {
+		got[s.Name] = s
+	}
+	for _, o := range old.Skills {
+		if got[o.Name] != o {
+			t.Errorf("%s: generated %+v, old %+v", o.Name, got[o.Name], o)
+		}
+	}
+	b, err = os.ReadFile("testdata/skillkinds.golden.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var kinds map[string]string
+	if err := json.Unmarshal(b, &kinds); err != nil {
+		t.Fatal(err)
+	}
+	if gk := tb.PowerKinds(); !reflect.DeepEqual(gk, kinds) {
+		t.Errorf("power skillKinds differ from the golden: generated %d entries, golden %d", len(gk), len(kinds))
 	}
 }
