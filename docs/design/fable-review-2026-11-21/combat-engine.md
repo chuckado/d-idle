@@ -19,7 +19,7 @@
 9. **One cast order:** the planner emits a `Rotation` (ordered slots with conditions). The Fighter consumes only a Rotation. Until the planner drives, an adapter compiles today's profile bands into the same type, so the switch is a data change per hero, not a code path (section 2.4).
 10. **Every cast gets an expectation** (mana left the pool, a missile of mine appeared, a state is present, the census grew, the target lost life) that later ticks settle. Failures demote the skill for a while and are counted. This generalises four separate ad-hoc memories that exist today (section 3.4).
 11. **Tests:** a logic-only simulator for the engine's choices, Proving Ground behaviour scenarios with new combat assertions, three new READ verbs in the fork (minions, skill state, combat events; ADR 0022 makes reads free), and a per-rule differential wherever the number matters (appendix C).
-12. **Order:** foundation with no behaviour change, then upkeep (the largest group of rows and the safest failure mode), marks, point-aimed spells, stand-in-pack, hold and channel, movement, forms. 16 cards, about 30 to 41 agent-days, each scenario-first with a knob to roll back (section 5, appendix D).
+12. **Order:** foundation with no behaviour change, then upkeep (the largest group of rows and the safest failure mode), marks, point-aimed spells, stand-in-pack, hold and channel, movement, forms. Sixteen cards plus one parked, about 39 to 45 agent-days in sequence, each scenario-first with a knob to roll back (section 5, appendix D).
 
 ## 1. What the engine supports today
 
@@ -195,14 +195,15 @@ Ordering rule: after a foundation that changes no behaviour, take the driver tha
 
 | step | driver | unlocks (skills.json rows by kind at `5b12ce5e7`, V by count) | classes | agent-days |
 |---|---|---|---|---|
-| 0 | foundation: grammar, Rotation, expectations, read verbs, assertions | none (parity) | all | 8 to 10 |
-| 1 | **upkeep** (buff 32, aura 20, summon 19 rows) | Necromancer Summoner army, Druid spirits and pets, Barbarian war cries, Holy Shield, Valkyrie, Shadow, every armor | 6 of 7 | 5 to 7 |
+| 0 | foundation: grammar, Rotation, expectations, read verbs, assertions | none (parity) | all | 10 to 11 |
+| 1 | **upkeep** (buff 32, aura 20, summon 19 rows) | Necromancer Summoner army, Druid spirits and pets, Barbarian war cries, Holy Shield, Valkyrie, Shadow, every armor | 6 of 7 | 8 to 9 |
 | 2 | **mark** | curses (Necromancer), Cloak of Shadows, Taunt, Howl, Battle Cry | 3 | 2 to 3 |
-| 3 | **point and corpse aim** (ground 16 rows, corpse skills, traps onto the shared path) | Fissure, Firestorm, Volcano, Blizzard, Meteor, Fire Wall, Corpse Explosion, sentries | 4 | 5 to 7 |
-| 4 | **insidePack stance** | Blessed Hammer, Nova, Poison Nova, War Cry, Shock Wave | 4 | 3 to 4 |
+| 3 | **point and corpse aim** (ground 16 rows, corpse skills, traps onto the shared path) | Fissure, Firestorm, Volcano, Blizzard, Meteor, Fire Wall, Corpse Explosion, sentries | 4 | 7 to 9 (3 of them the cast verbs) |
+| 4 | **insidePack stance** | Blessed Hammer, Nova, Poison Nova, War Cry, Shock Wave | 4 | 3 |
 | 5 | **hold and channel** on verbs | Zeal chain on d2d, Strafe, Fend, Inferno, Arctic Blast | 4 | 2 to 3 |
-| 6 | **move** | Teleport in fights and hops planned by the walker, Charge, Leap, Leap Attack; Whirlwind last (fidelity A6) | 3 | 5 to 7 |
-| 7 | forms and charge-up (data on top of 1 and 5) | Werewolf, Werebear lines, martial arts | 2 | parked until fidelity A7, A8 |
+| 6 | **move** | Teleport in fights and hops planned by the walker, Charge, Leap, Leap Attack; Whirlwind last and parked (fidelity A6) | 3 | 5 (+2 to 3 parked) |
+| 7 | forms and charge-up (data on top of 1 and 5) | Werewolf, Werebear lines, martial arts | 2 | not carded: parked until fidelity A7, A8 |
+| end | cleanup: delete the old tables and the class switch | the build-flexibility rule holds for combat | all | 2 |
 
 This order agrees with the class order of ADR 0020 item 4 (Sorceress second build needs nothing here; Summoner = steps 1 to 3; Hammerdin = step 4 plus 1; Frenzy = step 1; ground builds = step 3) and moves the Hammerdin out of the "ground" group.
 
