@@ -26,6 +26,7 @@ owns:
   - "internal/town/tidy.go"
   - "internal/town/questnever_test.go"
   - "data/questitems"
+result: "Sandbox hero (record 0x0018) stalled at the tree because the board steps read only the pack, not the quest word; bit 4 (stones done) means the scroll was used and the tree never drops again. Fixed: World carries the record word, Cain field steps follow bit 4; Acts 1 and 2 quest items (data/questitems) are never sold or dropped. Second worker Proving Ground: cain.scroll-already-taken RED unfixed, GREEN fixed (Paladin 11, Sorceress 3, key variant); cain.scroll Paladin 11 and cain.chain Paladin 11 GREEN; cain.scroll Sorceress 3 RED on both trees (pre-existing). Not verified on the sandbox. Doc docs/probes/cain-tree-scroll-2026-11-21.md."
 exclusive: []
 contracts: []
 ---
