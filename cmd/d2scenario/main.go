@@ -44,6 +44,8 @@ func main() {
 		err = cmdDeterminism(args, os.Stdout)
 	case "determinism-run":
 		err = cmdDeterminismRun(args, os.Stdout)
+	case "ledger":
+		err = cmdLedger(args, os.Stdout)
 	case "gate-check":
 		err = cmdGateCheck(args, os.Stdout)
 	case "run":
@@ -87,6 +89,7 @@ func usage(w io.Writer) {
   provenance  [-dir D]                          rows for docs/probes/test-characters.md (every scenario's CHEATED/SETUP tags)
   report      results.json                      one-screen report
   determinism-run -n N -out DIR [run flags]      run the selection N times (journals on) and compare every run with the first
+  ledger status-doc|check -in L.jsonl           the results ledger: generated status page, line check (lines are written by exec-one)
   determinism a.json b.json                     same seed twice: same verdict (and state digest)
   gate-check  results.json                      exit 3 unless GREEN (no RED, no BLOCKED)
   run         [plan flags] [-out DIR] [-parallel N] [-dry-run]   run on the builder (long lane), see docs/process/proving-ground.md

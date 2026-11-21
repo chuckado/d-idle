@@ -223,7 +223,11 @@ func cmdExecOne(args []string) error {
 	}
 	res.AssertDigest = scenario.AssertDigest(res)
 	b, _ := json.MarshalIndent(res, "", " ")
-	return os.WriteFile(filepath.Join(*out, resultName(r)), b, 0o644)
+	if err := os.WriteFile(filepath.Join(*out, resultName(r)), b, 0o644); err != nil {
+		return err
+	}
+	shipLedger(res, s.Tier, *out, start)
+	return nil
 }
 
 func blocked(why string, a ...any) scenario.Result {
