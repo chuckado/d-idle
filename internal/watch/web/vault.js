@@ -165,7 +165,16 @@ export function mountVault(d) {
   }
   { const was = slotStore(); if (was && !S.f.type) S.f.type = was; }
   const page = el('div', 'vt-page');
-  page.append(head, banner, slotRow, filters, rb, bar, keepRow, actRow, promptRow, msg, body);
+  // Marked for sale (flags the player has not confirmed) and Missed drops (the vault was full): both are the player's to act on.
+  const markRow = el('div', 'vt-keeprow vt-promptrow'); markRow.hidden = true;
+  const markLine = el('span', 'vt-keepline'); markLine.setAttribute('role', 'status');
+  const markGo = btn('', { key: 'marked-sell' });
+  markRow.append(markLine, markGo);
+  const missRow = el('div', 'vt-keeprow'); missRow.hidden = true;
+  const missLine = el('span', 'vt-keepline'); missLine.setAttribute('role', 'status');
+  const missClear = btn(T.missedClear, { key: 'missed-clear', variant: 'ghost' });
+  missRow.append(missLine, missClear);
+  page.append(head, banner, slotRow, filters, rb, bar, keepRow, actRow, promptRow, markRow, missRow, msg, body);
   root.replaceChildren ? root.replaceChildren(page, sheetWrap) : (root.appendChild(page), root.appendChild(sheetWrap));
 
   // ---- loading ----
@@ -218,7 +227,7 @@ export function mountVault(d) {
     } finally { S.busy = false; }
     if (added && S.items.length < S.total && rendered.last >= S.items.length - OVER_ROWS * geo.cols) loadMore(); // still near the end (a tall window): the next page
   }
-  const sig = (j) => j.total + '|' + (j.capacity && j.capacity.count) + '|' + (j.items[0] && j.items[0].id) + '|' + j.mode + '|' + (j.capacity && j.capacity.pins) + '|' + (j.keep ? j.keep.queued + ',' + j.keep.creating + ',' + j.keep.done + ',' + j.keep.line : '') + '|' + (j.act ? [j.act.reveal.queued, j.act.reveal.working, j.act.reveal.done, j.act.reveal.charges, j.act.reveal.free, j.act.sell.queued, j.act.sell.working, j.act.sell.sold, j.act.reveal.line, j.act.sell.line, j.act.prompt ? j.act.prompt.ids.length : 0].join(',') : '');
+  const sig = (j) => (j.missed ? j.missed.count : 0) + '/' + (j.marked ? j.marked.n : 0) + '/' + (j.autoTrim ? 1 : 0) + '|' + j.total + '|' + (j.capacity && j.capacity.count) + '|' + (j.items[0] && j.items[0].id) + '|' + j.mode + '|' + (j.capacity && j.capacity.pins) + '|' + (j.keep ? j.keep.queued + ',' + j.keep.creating + ',' + j.keep.done + ',' + j.keep.line : '') + '|' + (j.act ? [j.act.reveal.queued, j.act.reveal.working, j.act.reveal.done, j.act.reveal.charges, j.act.reveal.free, j.act.sell.queued, j.act.sell.working, j.act.sell.sold, j.act.reveal.line, j.act.sell.line, j.act.prompt ? j.act.prompt.ids.length : 0].join(',') : '');
   async function poll() {
     if (!S.sheet) {
       const j = await d.get(ROUTE + toQuery(S.f, { limit: 1 }));
@@ -267,7 +276,7 @@ export function mountVault(d) {
   function drawHead() {
     const v = S.view, c = v && v.capacity;
     heroName.textContent = v && v.hero ? v.hero : '';
-    const cv = capacityView(c, T);
+    const cv = capacityView(c, T, v);
     meter.dataset.level = cv.level;
     meter.setAttribute('aria-valuemax', String(cv.max)); meter.setAttribute('aria-valuenow', String(cv.now)); meter.setAttribute('aria-valuetext', cv.text);
     fill.style.setProperty('--vt-pct', cv.pct + '%');
@@ -399,6 +408,12 @@ export function mountVault(d) {
     const p = a && a.prompt;
     promptRow.hidden = !p || ro;
     promptLine.textContent = p ? fmt(T.promptText, { short: p.short, n: p.ids.length, gold: p.gold }) : '';
+    const mk = S.view && S.view.marked;
+    markRow.hidden = !mk || ro;
+    if (mk) { markLine.textContent = fmt(T.markedText, { n: mk.n, names: (mk.names || []).join(', ') + (mk.n > (mk.names || []).length ? ', ...' : '') }); markGo.textContent = fmt(T.markedGo, { n: mk.n }); }
+    const ms = S.view && S.view.missed;
+    missRow.hidden = !ms;
+    if (ms) missLine.textContent = fmt(T.missedTitle, { n: ms.count }) + ': ' + (ms.best || []).map((x) => fmt(T.missedItem, { name: x.name, quality: x.quality, ilvl: x.ilvl })).join('; ');
   }
 
   function cellLabel(it) {
@@ -762,6 +777,8 @@ export function mountVault(d) {
     setMsg(r && !r.error ? 'good' : 'bad', r && !r.error ? T.okBuy : (r && r.error) || T.noAnswer);
   });
   promptYes.addEventListener('click', () => { const p = S.view && S.view.act && S.view.act.prompt; if (p) act('/api/vault/sell', p.ids, true, {}); });
+  markGo.addEventListener('click', () => { const mk = S.view && S.view.marked; if (mk) act('/api/vault/sell', mk.ids, true, {}); });
+  missClear.addEventListener('click', async () => { await d.post('/api/vault/missed', { dismiss: true }); await reload(true); });
   promptNo.addEventListener('click', async () => { await d.post('/api/vault/sellprompt', { dismiss: true }); await reload(true); });
   keepNowB.addEventListener('click', async () => { // any queued id will do: the server only needs one that is queued to ask for the trip
     const q = S.items.find((i) => i.keep === 'queued' || i.keep === 'creating');

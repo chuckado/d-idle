@@ -676,3 +676,36 @@ func TestVaultActReadOnlyAndAbsent(t *testing.T) {
 		t.Fatalf("read only act view: %+v", v.Act)
 	}
 }
+
+// Decision 2026-11-21: a full vault reports missed drops and marked sales, never removes anything.
+func TestVaultFullPageShowsMissedAndMarked(t *testing.T) {
+	s, err := vault.OpenHero(t.TempDir(), "Pala", vault.Options{Capacity: func() int { return 3 }, NoSync: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer s.Close()
+	var ids []string
+	for i := 0; i < 3; i++ {
+		r, err := s.Add(vault.Item{Raw: fmt.Sprintf("%04x", i), Code: "cap", Name: "Cap", Quality: 4, Ilvl: 5, Identified: true})
+		if err != nil {
+			t.Fatal(err)
+		}
+		ids = append(ids, r.ID)
+	}
+	if _, err := s.Add(vault.Item{Raw: "ffff", Code: "cap", Name: "Cap", Quality: 7, Ilvl: 80}); !errors.Is(err, vault.ErrFull) {
+		t.Fatalf("full vault must refuse, got %v", err)
+	}
+	s.Miss(vault.Item{Name: "Skin of the Vipermagi", Code: "ltp", Quality: 7, Ilvl: 80})
+	s.MarkSell(ids[0])
+	for _, auto := range []bool{false, true} {
+		a := NewVaultAPI()
+		a.Bind(VaultDesk{Store: func() *vault.Store { return s }, AutoTrim: func() bool { return auto }})
+		_, v := getVault(t, a, "/api/vault")
+		if v.Total != 3 || v.Capacity.Level != "full" || v.AutoTrim != auto || v.Missed == nil || v.Missed.Count != 1 || v.Missed.Best[0].Name != "Skin of the Vipermagi" {
+			t.Fatalf("auto %v: %+v missed %+v", auto, v.Capacity, v.Missed)
+		}
+		if (v.Marked != nil) == auto || (!auto && (v.Marked.N != 1 || v.Marked.IDs[0] != ids[0])) {
+			t.Fatalf("auto %v: marked %+v", auto, v.Marked)
+		}
+	}
+}

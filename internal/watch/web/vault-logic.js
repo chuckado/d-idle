@@ -141,15 +141,23 @@ export function createSelection() {
   return api;
 }
 
+// The full banner follows loot.vaultAutoTrim: off (default) nothing is removed and new drops are not recorded.
+function fullBanner(c, T, v) {
+  if (v && v.autoTrim) return T.fullBannerTrim;
+  const miss = v && v.missed && v.missed.count;
+  const fmt = (s, o) => String(s || '').replace(/\{(\w+)\}/g, (m, k) => (o && o[k] !== undefined ? o[k] : ''));
+  return fmt(miss ? T.fullBannerMissed : T.fullBanner, { n: c.count, cap: c.capacity, missed: miss });
+}
+
 // capacityView words the meter: the text, the level the colour follows, the bar width and the banner (over capacity).
-export function capacityView(c, T) {
+export function capacityView(c, T, v) {
   const cap = (c && c.capacity) || 0, n = (c && c.count) || 0;
   const pct = cap > 0 ? Math.min(100, Math.round((n * 100) / cap)) : 0;
   const level = (c && c.level) || 'ok';
   const fmt = (s, o) => String(s || '').replace(/\{(\w+)\}/g, (m, k) => (o && o[k] !== undefined ? o[k] : ''));
   return {
     text: n + ' / ' + cap, pct, level, now: n, max: cap,
-    banner: level === 'over' ? fmt(T.overBanner, { over: c.over, n }) : level === 'full' ? T.fullBanner : '',
+    banner: level === 'over' ? fmt(T.overBanner, { over: c.over, n }) : level === 'full' ? fullBanner(c, T, v) : '',
   };
 }
 
