@@ -554,6 +554,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
+| agency.autoAlloc | 0 | 0..1 | 0/1 | 0 | 0 | 0 (default): off, points are banked for the player. 1: a hero whose build is locked (chosen on the Points page) puts every new stat and skill point where that build's table says, at a calm moment, by verb. A skill the hero cannot use yet is skipped with a visible reason and the point stays banked (docs/autoalloc.md). |
 | agency.planner | 0 | 0..1 | mode | 0 | 0 | 0 (default): off. 1: shadow. Once a minute the hero logs a `planner shadow:` line with the attack and aura the planner would pick from the skills the player actually bought, next to what the combat profile picks, and GET /api/hero/plan and the Points page show the derived rotation, the warnings and the viability line. Shadow only: it never changes what the hero does (docs/agency.md). |
 
 ### items.*
@@ -561,6 +562,17 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
 | items.ladderRunewords | 0 | 0..1 | bool | 0 | 3 | 1: the planner may socket the ladder-only runewords (Spirit, Insight and the rest of the Runes.txt server rows) and the Return screen shows 'ladder runewords: on'. Set it only together with the fork flag --ladder-runewords (ADR 0024, d.idle mode); read at start. 0 (default, vanilla): they stay unavailable, as in every gate and fidelity run. |
+
+### respec.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| respec.baseGold | 500 | 0..1e+06 | gold | 500 | 0 | Fixed part of the price of a respec (all skill and stat points refunded). price = clamp(minGold, maxGold, baseGold + perLevel x level) x (1 + perRespecPct/100 x paid respecs). PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.perLevel | 250 | 0..1e+05 | gold | 250 | 0 | Gold added per character level before the escalation. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.perRespecPct | 50 | 0..1000 | % | 50 | 0 | Percent added to the price for every respec this hero already paid for. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.firstFree | 0 | 0..10 | count | 0 | 0 | How many of a hero's first respecs cost nothing (they do not count for the escalation). 0 = every respec is paid. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.minGold | 1000 | 0..1e+06 | gold | 1000 | 0 | The price before the escalation is at least this. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.maxGold | 1e+05 | 0..1e+07 | gold | 1e+05 | 0 | The price before the escalation is at most this (0 = no cap). PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)

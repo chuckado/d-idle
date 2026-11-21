@@ -1,0 +1,264 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "points.autoalloc-follows-build",
+   "title": "Paladin, default build paladin-normal30-v2 locked at level 11: every skill point lands as the build's rows say, none is spent by the leveler",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": [
+    "points.autoalloc",
+    "hook.points"
+   ],
+   "touches": [
+    "internal/points/autoalloc.go",
+    "internal/leveler/autoalloc.go",
+    "cmd/d2bot/autoallocwire.go",
+    "internal/watch/pointsapi.go"
+   ],
+   "pre": {
+    "level": 11
+   },
+   "trigger": {
+    "goals": "campaign",
+    "knobs": {
+     "agency.autoAlloc": 1,
+     "resource.pointsDecisions": 0
+    },
+    "api": [
+     {
+      "after_s": 20,
+      "path": "/api/hero/build",
+      "body": {
+       "build": "paladin-normal30-v2"
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "provenance": "SETUP: level N with the points a played level gives (debug stat, statpts, skillpts). CHEATED setup: mechanics evidence only, never evidence about balance or parity.",
+   "notes": "Expected totals of the first 11 rows: Might 8, Sacrifice 1, Prayer 1, Smite 1 (V: the data file). resource.pointsDecisions is 0 on purpose: only the allocator may spend, the leveler gate stays closed while the build is locked. The Sorceress fire build twin is points.autoalloc-follows-build-sorc-fire.",
+   "assert": [
+    {
+     "kind": "api_reply",
+     "index": 0,
+     "ok": true,
+     "already": false
+    },
+    {
+     "kind": "stat_between",
+     "code": "skillpts",
+     "min": 0,
+     "max": 0,
+     "why": "every banked skill point was placed by the allocator"
+    },
+    {
+     "kind": "skill_points",
+     "skill": 98,
+     "min": 8,
+     "at_level": 11,
+     "why": "Might 8 (rows 2 to 11; id 98 is S: vanilla skills.txt)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "auto-alloc: clvl \\d+ -> skill Might \\(build paladin-normal30-v2\\)",
+     "min": 1,
+     "why": "the trace line names level, skill and build"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "points.autoalloc-follows-build-sorc-fire",
+   "title": "Sorceress, fire build sorceress_fire_normal30 locked at level 11: Fire Bolt and the singles land per the rows",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": [
+    "points.autoalloc",
+    "hook.points"
+   ],
+   "touches": [
+    "internal/points/autoalloc.go",
+    "internal/leveler/autoalloc.go",
+    "cmd/d2bot/autoallocwire.go",
+    "internal/watch/pointsapi.go"
+   ],
+   "pre": {
+    "level": 11
+   },
+   "trigger": {
+    "goals": "campaign",
+    "knobs": {
+     "agency.autoAlloc": 1,
+     "resource.pointsDecisions": 0
+    },
+    "api": [
+     {
+      "after_s": 20,
+      "path": "/api/hero/build",
+      "body": {
+       "build": "sorceress_fire_normal30"
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Sorceress"
+    ],
+    "seeds": [
+     3
+    ]
+   },
+   "provenance": "SETUP: level N with the points a played level gives (debug stat, statpts, skillpts). CHEATED setup: mechanics evidence only, never evidence about balance or parity.",
+   "notes": "Expected totals of the first 11 rows: Fire Bolt 9, Frozen Armor 1, Warmth 1 (V: the data file).",
+   "assert": [
+    {
+     "kind": "api_reply",
+     "index": 0,
+     "ok": true,
+     "already": false
+    },
+    {
+     "kind": "stat_between",
+     "code": "skillpts",
+     "min": 0,
+     "max": 0,
+     "why": "every banked skill point was placed by the allocator"
+    },
+    {
+     "kind": "skill_points",
+     "skill": 36,
+     "min": 9,
+     "at_level": 11,
+     "why": "Fire Bolt 9 (id 36, V in points.sorc-fire-lands-at-30)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "auto-alloc: clvl \\d+ -> skill Fire Bolt \\(build sorceress_fire_normal30\\)",
+     "min": 1,
+     "why": "the trace line names level, skill and build"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "points.autoalloc-refuses-locked-switch",
+   "title": "Paladin: a second POST with another build while locked is refused in words and changes nothing; the same build again is ok and already",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": [
+    "points.autoalloc",
+    "hook.points"
+   ],
+   "touches": [
+    "internal/points/autoalloc.go",
+    "internal/leveler/autoalloc.go",
+    "cmd/d2bot/autoallocwire.go",
+    "internal/watch/pointsapi.go"
+   ],
+   "pre": {
+    "level": 6
+   },
+   "trigger": {
+    "goals": "campaign",
+    "knobs": {
+     "agency.autoAlloc": 1,
+     "resource.pointsDecisions": 0
+    },
+    "api": [
+     {
+      "after_s": 20,
+      "path": "/api/hero/build",
+      "body": {
+       "build": "paladin-normal30-v2"
+      }
+     },
+     {
+      "after_s": 30,
+      "path": "/api/hero/build",
+      "body": {
+       "build": "paladin_hammerdin_guide",
+       "confirm": true
+      }
+     },
+     {
+      "after_s": 40,
+      "path": "/api/hero/build",
+      "body": {
+       "build": "paladin-normal30-v2"
+      }
+     },
+     {
+      "after_s": 50,
+      "path": "/api/hero/build",
+      "body": {
+       "build": "no-such-build"
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "provenance": "SETUP: level N with the points a played level gives (debug stat, statpts, skillpts). CHEATED setup: mechanics evidence only, never evidence about balance or parity.",
+   "notes": "The refusal is the lock rule of docs/autoalloc.md section 1; the unlock is a paid respec, which has no scenario until the respec fork card exists.",
+   "assert": [
+    {
+     "kind": "api_reply",
+     "index": 0,
+     "ok": true,
+     "already": false
+    },
+    {
+     "kind": "api_reply",
+     "index": 1,
+     "status": 409,
+     "ok": false,
+     "code": "locked"
+    },
+    {
+     "kind": "api_reply",
+     "index": 2,
+     "ok": true,
+     "already": true
+    },
+    {
+     "kind": "api_reply",
+     "index": 3,
+     "status": 400,
+     "ok": false,
+     "code": "unknown_build"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  }
+ ]
+}
