@@ -29,6 +29,9 @@ const RecallSchema = "watch.recall/1"
 // recallBackoff is the wait after a failed walk home before the next try.
 const recallBackoff = 20 * time.Second
 
+// recallShown is how long the view keeps saying "arrived" after the walk.
+const recallShown = 30 * time.Second
+
 // RecallView is what GET /api/recall shows.
 type RecallView struct {
 	Schema  string     `json:"schema"`
@@ -45,6 +48,7 @@ type recallState struct {
 	since  time.Time
 	reason string
 	nextAt time.Time
+	until  time.Time // an "arrived" answer is shown until then
 }
 
 func (r *Runner) recallOn() bool { return r.e.Tune != nil && r.e.Tune.UI.ManagementFast != 0 }
@@ -95,7 +99,7 @@ func (r *Runner) RecallView() RecallView {
 			v.InTown = sn.Player.InTown()
 		}
 	}
-	if v.State == RecallArrived && !v.InTown { // the hero went back out: the command is history
+	if v.State == RecallArrived && !r.e.Clock.Now().Before(rc.until) { // the answer was shown long enough
 		v.State, v.Reason = RecallIdle, ""
 	}
 	if v.State != RecallIdle {
@@ -137,6 +141,9 @@ func (r *Runner) recallStep(ctx context.Context, snap *d2.Snapshot, c control) b
 			return false
 		}
 		r.setRecall(RecallArrived, "in town")
+		r.mu.Lock()
+		r.rcl.until = r.e.Clock.Now().Add(recallShown)
+		r.mu.Unlock()
 		return false // the queued town work runs in this same tick (playerActionStep, vaultKeepStep)
 	}
 	if r.d.Town == nil {
