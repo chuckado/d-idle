@@ -16,6 +16,7 @@ owns:
   - "internal/nav"
 exclusive: []
 contracts: []
+result: "act1.forgotten.countess Paladin 11 GREEN twice on the K1 fork (live, builder long lane, jobs 20261121-012324-37e7 and 012853-5d61, determinism pair same verdict, setup CHEATED = mechanics only). Fix: a GoTo waypoint inside the 15 subtile bound of an unwanted exit goes through when the walk goal lies beyond and it stays outside the 10 subtile core (nav mouth gate). Build-specific: none (nav has no class data). U: whether a click 10 to 15 from stairs fires in the Tower Cellars."
 ---
 
 ## Description
@@ -28,6 +29,6 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 must-fail tests Paladin and Sorceress start, real Tower Cellar 5 geometry
-- [ ] #2 scenario act1.forgotten.countess Paladin 11 past the gate (live)
+- [x] #1 must-fail tests Paladin and Sorceress start, real Tower Cellar 5 geometry
+- [x] #2 scenario act1.forgotten.countess Paladin 11 past the gate (live)
 <!-- AC:END -->
