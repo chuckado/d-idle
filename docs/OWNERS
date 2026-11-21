@@ -497,6 +497,7 @@ docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
 docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
+docs/probes/provingground-act1more-2026-11-20.md  credit-runner  act1more
 docs/probes/provingground-cainchain-2026-11-20.md  credit-runner  cainchain
 docs/probes/provingground-run-2026-11-19.md  credit-runner  pgexpand
 docs/probes/ready-audit.md  live-agent  ready-audit
@@ -1184,6 +1185,7 @@ internal/questboard/exec.go  credit-runner  questrun
 internal/questboard/state_test.go  credit-runner  cain45
 internal/questboard/state_test.go  credit-runner  quests7b
 internal/questspec  credit-runner  questspec
+internal/questspec/act1boss_test.go  credit-runner  act1more
 internal/readiness/model.go  credit-runner  resistorder
 internal/repair  credit-runner  repairtrip
 internal/resource/recovery.go  live-agent  recoverypace
@@ -1800,6 +1802,7 @@ tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
 tools/provingground/  credit-runner  pgexpand
+tools/provingground/scenarios/act1more.json  credit-runner  act1more
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
