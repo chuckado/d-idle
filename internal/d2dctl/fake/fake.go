@@ -45,6 +45,10 @@ type Fixtures struct {
 	Realtime, NoLockstepVerb bool
 	// ItemReply is the first payload line of "item ..." (e.g. "equip id=5 slot=4 displaced=-1 at=-1,-1" or "noop slot=4 at=-1,-1"); ItemErr is an "err" text instead.
 	ItemReply, ItemErr string
+	// World answers the fork's second set of input verbs (buy, sell, waypoint, portal, pickup) by their first word: a text
+	// starting "err " is an error reply, anything else the JSON line before "ok". A verb without an entry is unknown, like
+	// an older build.
+	World map[string]string
 }
 
 // Options model misbehaviour.
@@ -271,6 +275,15 @@ func (s *Server) handle(line string) (reply string, ignored, quit bool) {
 			return "err " + s.Fix.ItemErr + "\n", false, false
 		}
 		return s.Fix.ItemReply + "\nok\n", false, false
+	case "buy", "sell", "waypoint", "portal", "pickup":
+		reply, ok := s.Fix.World[f[0]]
+		if !ok {
+			return fmt.Sprintf("err unknown verb '%s'\n", f[0]), false, false
+		}
+		if strings.HasPrefix(reply, "err ") {
+			return reply + "\n", false, false
+		}
+		return reply + "\nok\n", false, false
 	case "info":
 		s.frame += 7
 		return fmt.Sprintf("w=800 h=600 frame=%d\nok\n", s.frame), false, false
