@@ -386,6 +386,7 @@
 | heavyguard | proposed | - | `tools/lib/heavy-guard.sh`<br>`tools/lib/heavy-guard-test.sh`<br>`tools/uishots.sh`<br>`docs/process/worker-capacity.md` | - |
 | bsm7 | proposed | - | `internal/task/executor.go`<br>`internal/task/gate_hold_test.go`<br>`internal/bot/routeguard.go`<br>`internal/bot/questboard.go`<br>`internal/bot/kitplan_test.go`<br>`tools/provingground/scenarios/board.json`<br>`docs/probes/boardsm-progress-2026-11-21.md` | - |
 | bsm8 | proposed | - | `internal/watch/web/panels/quest-board/panel.js`<br>`internal/watch/testdata/questui/quest_ui.mjs`<br>`internal/questboard/desk.go`<br>`internal/questboard/desk_reason_test.go` | - |
+| mgmtfast | proposed | - | `internal/bot/recall.go`<br>`internal/bot/recall_test.go`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/bot/playeraction.go`<br>`internal/watch/recallapi.go`<br>`internal/watch/recallapi_test.go`<br>`internal/watch/funwire.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`cmd/d2bot/recallwire.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/invverbs_test.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`internal/env/tuning.go`<br>`internal/env/tuning_ui.go`<br>`docs/knobs.md`<br>`docs/process/management-fast-path.md`<br>`tools/provingground/scenarios/manage.json`<br>`tools/provingground/scenarios/behaviours.json` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -421,6 +422,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 1080b4433 11-21 14:37 `Merge agent/mgmtfast: immediate management: ui.managementFast knob, Recall now, audit doc` (mgmtfast)
+- 98776d5e9 11-21 14:36 `Merge branch 'main' into mgmtfast` (-)
 - fbe544ea2 11-21 14:26 `Merge agent/bsm8: Merge branch 'main' into bsm8` (bsm8)
 - f41c0dfa6 11-21 14:25 `Merge branch 'main' into bsm8` (-)
 - 3db6a3947 11-21 14:18 `Merge agent/skillsbadge: Merge branch 'main' into TASK-784` (skillsbadge)
@@ -429,6 +432,4 @@
 - 80392c305 11-21 14:01 `Merge agent/bsm7: bsm7: progress lines` (bsm7)
 - db140b57e 11-21 13:58 `Merge origin/main into bsm7` (-)
 - 1e0ad25aa 11-21 13:28 `Merge agent/bsm6: Merge branch 'main' into bsm6` (bsm6)
-- f450d3ee4 11-21 13:27 `Merge branch 'main' into bsm6` (-)
-- b78530494 11-21 12:12 `Merge agent/boardsmrun: Merge branch 'main' into boardsmrun` (boardsmrun)
 <!-- statusgen:end -->

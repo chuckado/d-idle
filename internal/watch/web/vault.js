@@ -821,7 +821,16 @@ export function mountVault(d) {
     equipDraw(it, null);
     equipLoad(it);
   }
+  // Recall now (management fast path): the state of the command, read with the sheet; null when the route is absent.
+  let recallView = null;
+  async function recallPress(it) {
+    const r = await d.post('/api/recall', {});
+    if (r && r.ok) setMsg('good', T.recallSent);
+    else setMsg('bad', (r && (r.error || r.reason)) || T.noAnswer);
+    equipLoad(it);
+  }
   async function equipLoad(it) {
+    recallView = await d.get('/api/recall');
     const sh = await d.get('/api/vault/equip/' + encodeURIComponent(it.id));
     if (!S.sheet || S.sheet.equip !== it.id) return; // closed or another sheet meanwhile
     equipDraw(it, sh || false);
@@ -887,6 +896,19 @@ export function mountVault(d) {
       const cx = btn(T.equipCancel, { key: 'equip-cancel', variant: 'ghost' });
       cx.addEventListener('click', async () => { const r = await d.post('/api/vault/equipcancel', { ids: [it.id] }); if (!(r && r.ok)) setMsg('bad', (r && r.failed && r.failed[0] && r.failed[0].error) || T.noAnswer); await reload(true); equipLoad(it); });
       row.appendChild(cx);
+    }
+    // Do it now: only when the command exists (knob on), the hero is in the field and an order is waiting for town.
+    const rv = recallView;
+    if (rv && rv.enabled && pl.state === 'active') {
+      if (rv.state && rv.state !== 'idle') {
+        const rs = el('p', 'vt-eq-state', fmt((T.recallStates || {})[rv.state] || rv.state, { why: rv.reason || '' })); rs.setAttribute('role', 'status'); rs.dataset.key = 'recall-state';
+        sheetCard.appendChild(rs);
+      }
+      if (!rv.in_town && rv.state !== 'going') {
+        const rb = btn(T.recallBtn, { key: 'equip-recall-now' });
+        rb.addEventListener('click', () => recallPress(it));
+        row.appendChild(rb);
+      }
     }
     const take = btn(T.equipTakeOut, { key: 'equip-takeout', variant: 'ghost' });
     take.addEventListener('click', () => { closeSheet(true); keepAct([it.id], false); });
