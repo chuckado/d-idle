@@ -101,7 +101,9 @@ func StepGoHome(id string) Step {
 // StepChores runs the town loop once.
 func StepChores(id string) Step {
 	return Step{ID: id, Title: "Buy potions and supplies", Phase: "chore", Budget: 6 * time.Minute, Est: 2 * time.Minute,
-		Need: func(w World) (bool, Evidence) { return w.Potions < minPotions, EvMemory },
+		Need: func(w World) (bool, Evidence) {
+			return w.Potions < healingMin(w) && (w.KitPlan == nil || w.KitPlan.Short == ""), EvMemory
+		},
 		Ready: func(w World) *Fault {
 			if !w.InTown {
 				return &Fault{Kind: KindPrereq, Why: "chores run in town", Insert: []Step{StepGoHome(id + "/home")}}
@@ -116,6 +118,14 @@ func StepLevel(n int) Step {
 	return Step{ID: "level." + strconv.Itoa(n), Title: "Level up to " + strconv.Itoa(n), Phase: "level", Repeat: true, Budget: 30 * time.Minute, Est: levelEst,
 		Need: func(w World) (bool, Evidence) { return w.Level < n, EvMemory },
 		Do:   func(ctx context.Context, x Actions) error { return x.LevelTo(ctx, n) }}
+}
+
+// healingMin is the healing potions a chores trip aims at: the plan's clamped minimum under knob town.plan >= 2, else 4.
+func healingMin(w World) int {
+	if w.KitPlan != nil {
+		return w.KitPlan.Healing
+	}
+	return minPotions
 }
 
 const (

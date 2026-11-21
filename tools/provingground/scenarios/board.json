@@ -1,0 +1,1590 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "board.sm.stop-cascades",
+   "title": "Stop on scroll also stops read and stones (D2)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    },
+    "board_also": [
+     {
+      "quest": "search_for_cain",
+      "chunk": "read"
+     },
+     {
+      "quest": "search_for_cain",
+      "chunk": "stones"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    },
+    "api": [
+     {
+      "after_s": 60,
+      "path": "/api/quests/search_for_cain/cancel",
+      "body": {
+       "chunk": "scroll",
+       "confirm": true
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "D2: Stop implies dependants; the reply lists them in `changed` (field added by card 6).",
+   "assert": [
+    {
+     "kind": "api_reply",
+     "index": 0,
+     "ok": true,
+     "already": false,
+     "changed_has": [
+      "search_for_cain/read",
+      "search_for_cain/stones"
+     ]
+    },
+    {
+     "kind": "board",
+     "quest": "search_for_cain",
+     "chunk": "stones",
+     "state": "ready",
+     "or": [
+      "locked"
+     ]
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: starting chunk search_for_cain",
+     "max": 1,
+     "from_min": 3,
+     "why": "nothing of the chain starts after the stop"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 6 boardsm-api (the `changed` reply field)"
+  },
+  {
+   "id": "board.sm.stop-idempotent",
+   "title": "Stop twice: the second answers already and the plan is unchanged (I7)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    },
+    "api": [
+     {
+      "after_s": 60,
+      "path": "/api/quests/search_for_cain/cancel",
+      "body": {
+       "chunk": "scroll",
+       "confirm": true
+      }
+     },
+     {
+      "after_s": 75,
+      "path": "/api/quests/search_for_cain/cancel",
+      "body": {
+       "chunk": "scroll",
+       "confirm": true
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "I7. Plan file equality is covered offline by the card 2 and 3 unit tests (a scenario cannot read the file).",
+   "assert": [
+    {
+     "kind": "api_reply",
+     "index": 0,
+     "ok": true,
+     "already": false
+    },
+    {
+     "kind": "api_reply",
+     "index": 1,
+     "ok": true,
+     "already": true
+    },
+    {
+     "kind": "board",
+     "quest": "search_for_cain",
+     "chunk": "scroll",
+     "state": "ready"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 6 boardsm-api (idempotent verbs)"
+  },
+  {
+   "id": "board.sm.start-idempotent",
+   "title": "Start twice: the second answers already, one run in the view (I7)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    },
+    "api": [
+     {
+      "after_s": 20,
+      "path": "/api/quests/search_for_cain/start",
+      "body": {
+       "chunk": "scroll"
+      }
+     },
+     {
+      "after_s": 35,
+      "path": "/api/quests/search_for_cain/start",
+      "body": {
+       "chunk": "scroll"
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "I7.",
+   "assert": [
+    {
+     "kind": "api_reply",
+     "index": 0,
+     "ok": true,
+     "already": false
+    },
+    {
+     "kind": "api_reply",
+     "index": 1,
+     "ok": true,
+     "already": true
+    },
+    {
+     "kind": "board_heads_le",
+     "max": 1
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 6 boardsm-api (idempotent verbs)"
+  },
+  {
+   "id": "board.sm.one-head",
+   "title": "Three Cain runs for 30 virtual minutes: never two head chunks (I1)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    },
+    "board_also": [
+     {
+      "quest": "search_for_cain",
+      "chunk": "read"
+     },
+     {
+      "quest": "search_for_cain",
+      "chunk": "stones"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "I1, sampled every 15 wall seconds.",
+   "assert": [
+    {
+     "kind": "board_heads_le",
+     "max": 1,
+     "why": "one head run per hero"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 4 boardsm-exec (the run model)"
+  },
+  {
+   "id": "board.sm.busy-second-quest",
+   "title": "Start of a second quest while one runs is refused as busy (D5)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    },
+    "api": [
+     {
+      "after_s": 30,
+      "path": "/api/quests/den_of_evil/start",
+      "body": {
+       "chunk": "clear_den"
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "D5, Q7: one quest at a time; the refusal text names Search for Cain (checked by the card 6 unit test).",
+   "assert": [
+    {
+     "kind": "api_reply",
+     "index": 0,
+     "ok": false,
+     "status": 409,
+     "code": "busy"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 6 boardsm-api (the busy code)"
+  },
+  {
+   "id": "board.sm.restart-mid-chain",
+   "title": "Restart after the scroll is taken and read: no second scroll (I4, I6)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    },
+    "api": [
+     {
+      "after_s": 20,
+      "path": "/api/quests/search_for_cain/start",
+      "body": {
+       "chunk": "read"
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "Needs the trigger `restart_at_s` (stop and start the bot once on the same hero): not in the runner; split into two runs sharing a state directory or add the trigger in card 4.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "step Take the Scroll",
+     "max": 1
+    },
+    {
+     "kind": "board",
+     "quest": "search_for_cain",
+     "chunk": "scroll",
+     "state": "done"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 4 boardsm-exec (runner trigger restart_at_s)"
+  },
+  {
+   "id": "board.sm.regress-proxy",
+   "title": "Stones done while standing in Tristram stay done after a town trip (I6)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "stones"
+    },
+    "area": 38,
+    "start": "field"
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "R1: silence of a proxy never clears a latch. Needs a field start in Tristram with the stones done (U: setup verb).",
+   "assert": [
+    {
+     "kind": "board",
+     "quest": "search_for_cain",
+     "chunk": "stones",
+     "state": "done"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "step Touch the cairn stones",
+     "max": 0
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 4 boardsm-exec (the latch)"
+  },
+  {
+   "id": "board.park.persist-restart",
+   "title": "A parked chunk stays parked after a restart (Q5, I9)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 6,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "Needs `restart_at_s` and a hero that dies on the chunk (U).",
+   "assert": [
+    {
+     "kind": "board",
+     "quest": "search_for_cain",
+     "chunk": "scroll",
+     "state": "blocked",
+     "reason": "died_too_often"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: starting chunk",
+     "max": 0,
+     "from_min": 20
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 4 boardsm-exec (persisted parks and the restart trigger)"
+  },
+  {
+   "id": "board.retry.runs-a-step",
+   "title": "Retry on a parked chunk runs a step (the task executor group is cleared)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    },
+    "api": [
+     {
+      "after_s": 120,
+      "path": "/api/quests/search_for_cain/retry",
+      "body": {
+       "chunk": "scroll"
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "Appendix A.4 row 1: today Retry clears Exec.rs only and the executor's block keeps the chunk stuck.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: step",
+     "min": 1,
+     "from_min": 3
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 4 boardsm-exec (retry clearing the executor group)"
+  },
+  {
+   "id": "board.hold.restock",
+   "title": "Countess chunk with 3 potions: a hold, a town trip, no park (bug 4, Q9)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 24,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "forgotten_tower",
+     "chunk": "countess"
+    },
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 40
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "hold needs_potions",
+     "min": 1
+    },
+    {
+     "kind": "log_line",
+     "pattern": "parked",
+     "max": 0
+    },
+    {
+     "kind": "area_in",
+     "areas": [
+      6
+     ]
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+  },
+  {
+   "id": "board.hold.restock-stash-gold",
+   "title": "Purse empty, stash 5000: the hold withdraws gold, restocks, no park",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 24,
+    "gold": 0,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "forgotten_tower",
+     "chunk": "countess"
+    },
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1"
+    ],
+    "stash": 5000
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 40
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "needs_gold_withdraw",
+     "min": 1
+    },
+    {
+     "kind": "stash_between",
+     "max": 4999
+    },
+    {
+     "kind": "log_line",
+     "pattern": "parked",
+     "max": 0
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+  },
+  {
+   "id": "board.hold.broke",
+   "title": "Purse 0, stash 0, 3 potions: hold needs_gold_farm, never a live run without a reason (I5, I10)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 24,
+    "gold": 0,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "forgotten_tower",
+     "chunk": "countess"
+    },
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 40
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
+   "assert": [
+    {
+     "kind": "board",
+     "quest": "forgotten_tower",
+     "chunk": "countess",
+     "state": "in_progress",
+     "reason": "needs_gold_farm",
+     "when": "always",
+     "why": "sampled: a reason on every sample"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+  },
+  {
+   "id": "board.hold.too-weak",
+   "title": "Hero under the guard floor: hold too_weak or route_closed, the level rises, no park inside the budget",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 10,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "forgotten_tower",
+     "chunk": "countess"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 40
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
+   "assert": [
+    {
+     "kind": "board",
+     "quest": "forgotten_tower",
+     "chunk": "countess",
+     "state": "in_progress",
+     "reason": "too_weak",
+     "reason_or": [
+      "route_closed"
+     ],
+     "when": "always"
+    },
+    {
+     "kind": "level_at_least",
+     "min": 11
+    },
+    {
+     "kind": "log_line",
+     "pattern": "parked",
+     "max": 0
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+  },
+  {
+   "id": "board.hold.timeout",
+   "title": "As broke with a 70 virtual minute run: the hold times out into a park hold_timeout (I10)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 24,
+    "gold": 0,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "forgotten_tower",
+     "chunk": "countess"
+    },
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 80
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
+   "assert": [
+    {
+     "kind": "board",
+     "quest": "forgotten_tower",
+     "chunk": "countess",
+     "state": "blocked",
+     "reason": "hold_timeout"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+  },
+  {
+   "id": "board.view.reason-always",
+   "title": "Cain chain run: every live chunk that does not move has a reason code (I5, I11)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    },
+    "board_also": [
+     {
+      "quest": "search_for_cain",
+      "chunk": "read"
+     },
+     {
+      "quest": "search_for_cain",
+      "chunk": "stones"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "Sampled every 15 wall seconds; the full I5 sweep over all chunks is the card 6 unit test.",
+   "assert": [
+    {
+     "kind": "board",
+     "quest": "search_for_cain",
+     "chunk": "stones",
+     "state": "accepted",
+     "reason": "waits_for",
+     "when": "always",
+     "why": "the queued chunk always says why"
+    },
+    {
+     "kind": "board_heads_le",
+     "max": 1
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 6 boardsm-api (the `reason` view field)"
+  },
+  {
+   "id": "board.handin.field-tap",
+   "title": "Hand-in tapped in the field waits for town: reason handin_in_town",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    },
+    "api": [
+     {
+      "after_s": 60,
+      "path": "/api/quests/search_for_cain/handin",
+      "body": {
+       "chunk": "scroll"
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "Needs an awaiting chunk at the start (U: a setup that leaves the chunk awaiting).",
+   "assert": [
+    {
+     "kind": "api_reply",
+     "index": 0,
+     "status": 202
+    },
+    {
+     "kind": "board",
+     "quest": "search_for_cain",
+     "chunk": "scroll",
+     "reason": "handin_in_town",
+     "state": "awaiting_handin",
+     "or": [
+      "in_progress"
+     ],
+     "when": "always"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 6 boardsm-api (handin codes)"
+  },
+  {
+   "id": "board.handin.without-run",
+   "title": "Pending bit exact and no record: Start goes straight to the hand-in (C5)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "sisters_burial_grounds",
+    "chunk": "blood_raven"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "quests": [
+     {
+      "record": 2,
+      "word": 2
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    },
+    "api": [
+     {
+      "after_s": 20,
+      "path": "/api/quests/sisters_burial_grounds/start",
+      "body": {
+       "chunk": "blood_raven"
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "Sisters' Burial Grounds record 2 word 0x0002 is reward pending (V docs/forkcheats.md).",
+   "assert": [
+    {
+     "kind": "api_reply",
+     "index": 0,
+     "ok": true
+    },
+    {
+     "kind": "board",
+     "quest": "sisters_burial_grounds",
+     "chunk": "blood_raven",
+     "state": "awaiting_handin"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 6 boardsm-api (the handin_ready offer)"
+  },
+  {
+   "id": "board.auto.chain-safe-only",
+   "title": "Auto on, part 1 safe and part 2 risky: part 1 starts by itself, part 2 does not",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "No allowed-auto multi-part quest exists in act 1 (search_for_cain is autoStart never): this stays pending until one does (U).",
+   "assert": [
+    {
+     "kind": "board",
+     "quest": "search_for_cain",
+     "chunk": "stones",
+     "state": "ready",
+     "or": [
+      "locked"
+     ],
+     "when": "always"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "red by design until card 6 boardsm-api (an auto-start multi-part quest)"
+  }
+ ]
+}

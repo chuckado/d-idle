@@ -273,9 +273,9 @@ func fieldReady(a Area) func(World) *Fault {
 			}
 			return refusal(w, "area_banned", "not ready: "+why)
 		case w.RouteBlocked != "" && RouteGuarded(a):
-			return refusal(w, "route_closed", "not ready: route guard ("+w.RouteBlocked+")")
+			return guardFault(w, "route guard", "route", w.RouteBlocked, RouteLevelWhy(w) == "")
 		case w.TowerBlocked != "" && TowerGuarded(a):
-			return refusal(w, "route_closed", "not ready: tower guard ("+w.TowerBlocked+")")
+			return guardFault(w, "tower guard", "ftower", w.TowerBlocked, TowerLevelWhy(w) == "")
 		case w.Gated && a != w.SafeArea:
 			if w.BoardSM && w.GatedFix == "potions" {
 				// bug 4: a missing potion kit is fixed by a town visit, so the hero goes now and nothing is counted
@@ -305,6 +305,27 @@ func gatedCode(w World) string {
 		return "needs_gold_farm"
 	}
 	return "too_weak"
+}
+
+// guardFault is the fault of a closed guarded road. A level shortage is danger (the planner levels first); a kit-only
+// shortage (potions, portal, mana) is a resource fault that inserts a chores trip, as gateReady does for the boss
+// quests. Before, a hero at 3 healing potions of 4 was refused with danger, the planner went on leveling and the kit
+// was never restocked (Proving Ground act1more, act1.tools.malus Paladin 11).
+func guardFault(w World, name, stepID, why string, kitOnly bool) *Fault {
+	msg := "not ready: " + name + " (" + why + ")"
+	if !kitOnly {
+		return refusal(w, "route_closed", msg)
+	}
+	if k := w.KitPlan; k != nil && k.Short != "" {
+		// the plan cannot close the line with the gold owned: a chores trip would end "ran but still needed", so say what is
+		// missing. With the board SM this is the hold: the plan's open line is the reason (gold first).
+		return refusal(w, "needs_gold_farm", msg+"; "+k.Short)
+	}
+	f := &Fault{Kind: KindResource, Why: msg, Insert: []Step{StepChores("guard/" + stepID + "/chores")}}
+	if w.BoardSM {
+		f.Code = "needs_potions" // a fixable kit shortage is a restock trip, never counted
+	}
+	return f
 }
 
 // gatedReady is the Ready of the quest steps that start a boss quest (greeting, waypoint, walk): a gear-gated character

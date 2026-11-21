@@ -12,6 +12,7 @@ import (
 	"d2lod-bot/internal/leveler"
 	"d2lod-bot/internal/merc"
 	"d2lod-bot/internal/resource"
+	"d2lod-bot/internal/supply"
 )
 
 // resInput fills the policy input from a snapshot outside a fight (docs/resource.md: TownTripTrigger every idle tick).
@@ -35,38 +36,13 @@ func (r *Runner) resInput(s *d2.Snapshot) resource.Input {
 	in.HasTP = r.hasPortalSource(s)
 	mc := d2.FindMerc(s)
 	in.SetMerc(mc, r.merc.observe(mc, p.InTown(), r.e.Clock.Now()))
-	if r.d.Catalog == nil || s.Inventory == nil {
+	c, known := r.supplyCount(s)
+	if !known {
 		return in
 	}
-	for i := range s.Inventory.Items {
-		u := &s.Inventory.Items[i]
-		if u.Item == nil {
-			continue
-		}
-		m, ok := r.d.Catalog.Item(u.Class)
-		if !ok {
-			continue
-		}
-		switch u.Item.Where {
-		case d2.ContBelt:
-			switch m.Potion {
-			case PotionHealing:
-				in.Belt.HP++
-				in.Belt.HPTier = max(in.Belt.HPTier, m.Tier)
-			case PotionMana:
-				in.Belt.MP++
-			case PotionRejuv:
-				in.Belt.RV++
-			}
-		case d2.ContInventory:
-			switch m.Potion {
-			case PotionHealing:
-				in.Belt.PackHP++
-			case PotionRejuv:
-				in.Belt.PackRV++
-			}
-		}
-	}
+	in.Belt.HP, in.Belt.MP, in.Belt.RV = c.Belt[supply.HP], c.Belt[supply.MP], c.Belt[supply.RV]
+	in.Belt.HPTier = c.BeltTier[supply.HP]
+	in.Belt.PackHP, in.Belt.PackRV = c.Pack[supply.HP], c.Pack[supply.RV]
 	// BELTFIX5: with no healing potion anywhere the town visit withdraws the stash gold for the kit (Town.withdraw), so
 	// every purse test of the policy (poor, futile, trip floor, recovery) sees purse plus bank. Gate 1 20261103-0338:
 	// 6 gold in the pack, 1418 in the stash, 7 virtual minutes without a potion.
