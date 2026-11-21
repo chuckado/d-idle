@@ -126,7 +126,8 @@ func (w WornItem) Validate() error {
 //
 //	{{vault.N.id}}                       the id of the N-th seeded record (a string)
 //	{{pack.item[code=cap].id}}           the id of the first backpack item with that code (a number)
-//	{{pack.item[code=cap,nth=1].id}}     the second one (nth counts from 0)
+//	{{pack.item[name=cap,nth=1].id}}     the second one (nth counts from 0); name is a case-insensitive part of the item's
+//	                                     name or base name (the inventory view's `code` is the numeric base class, not the 3-letter code)
 //	{{worn.head.id}}                     the id of the item worn in that slot (a number)
 type Resolver struct {
 	VaultIDs  []string
@@ -244,35 +245,37 @@ func (r Resolver) lookup(expr string) (any, error) {
 				return nil, fmt.Errorf("nothing worn in %s", parts[1])
 			}
 			return []json.RawMessage{eq[parts[1]]}, nil
-		}, "", 0)
+		}, "", "", 0)
 	}
 	if m := packRe.FindStringSubmatch(expr); m != nil {
-		code, nth := "", 0
+		code, name, nth := "", "", 0
 		for _, kv := range strings.Split(m[1], ",") {
 			k, v, _ := strings.Cut(strings.TrimSpace(kv), "=")
 			switch k {
 			case "code":
 				code = v
+			case "name":
+				name = strings.ToLower(v)
 			case "nth":
 				nth, _ = strconv.Atoi(v)
 			default:
-				return nil, fmt.Errorf("template {{%s}}: filter %q (want code, nth)", expr, k)
+				return nil, fmt.Errorf("template {{%s}}: filter %q (want code, name, nth)", expr, k)
 			}
 		}
-		if code == "" {
-			return nil, fmt.Errorf("template {{%s}}: no code filter", expr)
+		if code == "" && name == "" {
+			return nil, fmt.Errorf("template {{%s}}: no code or name filter", expr)
 		}
 		return r.invID(expr, func(inv map[string]json.RawMessage) ([]json.RawMessage, error) {
 			var bp []json.RawMessage
 			_ = json.Unmarshal(inv["backpack"], &bp)
 			return bp, nil
-		}, code, nth)
+		}, code, name, nth)
 	}
 	return nil, fmt.Errorf("template {{%s}}: unknown (vault.N.id, pack.item[code=..].id, worn.<slot>.id)", expr)
 }
 
 // invID finds the id of the nth item with code (any code when empty) among the items list returns.
-func (r Resolver) invID(expr string, list func(map[string]json.RawMessage) ([]json.RawMessage, error), code string, nth int) (any, error) {
+func (r Resolver) invID(expr string, list func(map[string]json.RawMessage) ([]json.RawMessage, error), code, name string, nth int) (any, error) {
 	if len(r.Inventory) == 0 {
 		return nil, fmt.Errorf("template {{%s}}: the inventory could not be read", expr)
 	}
@@ -291,6 +294,10 @@ func (r Resolver) invID(expr string, list func(map[string]json.RawMessage) ([]js
 		var it struct {
 			ID   float64 `json:"id"`
 			Code string  `json:"code"`
+			Name string  `json:"name"`
+			Base struct {
+				Name string `json:"name"`
+			} `json:"base"`
 		}
 		if json.Unmarshal(raw, &it) != nil {
 			continue
@@ -302,7 +309,7 @@ func (r Resolver) invID(expr string, list func(map[string]json.RawMessage) ([]js
 				first = first[:300]
 			}
 		}
-		if code != "" && it.Code != code {
+		if code != "" && it.Code != code || name != "" && !strings.Contains(strings.ToLower(it.Name), name) && !strings.Contains(strings.ToLower(it.Base.Name), name) {
 			continue
 		}
 		if seen == nth {

@@ -94,20 +94,21 @@ func TestSeedValidationMustFail(t *testing.T) {
 }
 
 func TestResolver(t *testing.T) {
-	inv := []byte(`{"backpack":[{"id":7,"code":"isc"},{"id":42,"code":"cap"},{"id":43,"code":"cap"}],"equipment":{"head":{"id":9,"code":"cap"},"neck":null}}`)
+	inv := []byte(`{"backpack":[{"id":7,"code":"isc","name":"Scroll of Identify"},{"id":42,"code":"cap","name":"Cap of Fire"},{"id":43,"code":"cap","name":"Cap of Fire"}],"equipment":{"head":{"id":9,"code":"cap","name":"Cap of Fire"},"neck":null}}`)
 	r := Resolver{VaultIDs: []string{"v-aa", "v-bb"}, Inventory: inv}
 	body, err := r.ResolveBody(map[string]any{
-		"ids":  []any{"{{vault.1.id}}"},
-		"id":   "{{pack.item[code=cap].id}}",
-		"two":  "{{pack.item[code=cap,nth=1].id}}",
-		"worn": "{{worn.head.id}}",
-		"mix":  "item-{{vault.0.id}}!",
+		"ids":    []any{"{{vault.1.id}}"},
+		"id":     "{{pack.item[name=cap].id}}",
+		"two":    "{{pack.item[code=cap,nth=1].id}}",
+		"worn":   "{{worn.head.id}}",
+		"mix":    "item-{{vault.0.id}}!",
+		"bycode": "{{pack.item[code=isc].id}}",
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
 	b, _ := json.Marshal(body)
-	want := `{"id":42,"ids":["v-bb"],"mix":"item-v-aa!","two":43,"worn":9}`
+	want := `{"bycode":7,"id":42,"ids":["v-bb"],"mix":"item-v-aa!","two":43,"worn":9}`
 	if string(b) != want {
 		t.Fatalf("got %s\nwant %s", b, want)
 	}
@@ -121,7 +122,7 @@ func TestResolver(t *testing.T) {
 			t.Errorf("%s must not resolve", expr)
 		}
 	}
-	if _, err := (Resolver{}).ResolveBody(map[string]any{"x": "{{pack.item[code=cap].id}}"}); err == nil {
+	if _, err := (Resolver{}).ResolveBody(map[string]any{"x": "{{pack.item[name=cap].id}}"}); err == nil {
 		t.Error("an unread inventory must be an error, not a zero id")
 	}
 	if !NeedsInventory(map[string]any{"a": []any{"{{worn.head.id}}"}}) || NeedsInventory(map[string]any{"a": "{{vault.0.id}}"}) || !HasTemplate("x{{vault.0.id}}") || HasTemplate("plain") {
@@ -213,7 +214,7 @@ func TestAPIReplyFieldAssertion(t *testing.T) {
 }
 
 func TestBuildJournal(t *testing.T) {
-	storeLog := `{"seq":1,"ev":"add","id":"v-1","item":{"code":"cap"}}
+	storeLog := `{"seq":1,"ev":"add","id":"v-1","item":{"code":"cap","name":"Cap of Fire"}}
 {"seq":2,"ev":"add","id":"v-2","item":{"code":"rin"}}
 {"seq":3,"ev":"pin","id":"v-2"}
 {"seq":4,"ev":"add","id":"v-3","item":{"code":"hax"}}

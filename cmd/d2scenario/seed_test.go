@@ -239,7 +239,7 @@ func TestRunAPICallsResolvesPlaceholders(t *testing.T) {
 	var mu sync.Mutex
 	var got []string
 	view := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		io.WriteString(w, `{"backpack":[{"id":7,"code":"isc"},{"id":42,"code":"cap"},{"id":43,"code":"cap"}],"equipment":{"head":{"id":9,"code":"cap"}}}`)
+		io.WriteString(w, `{"backpack":[{"id":7,"code":"isc","name":"Scroll of Identify"},{"id":42,"code":"cap","name":"Cap of Fire"},{"id":43,"code":"cap","name":"Cap of Fire"}],"equipment":{"head":{"id":9,"code":"cap","name":"Cap of Fire"}}}`)
 	}))
 	defer view.Close()
 	ans := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

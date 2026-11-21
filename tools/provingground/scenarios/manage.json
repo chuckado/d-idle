@@ -40,7 +40,7 @@
             "after_s": 20,
             "path": "/api/inventory/equip",
             "body": {
-              "id": "{{pack.item[code=cap].id}}",
+              "id": "{{pack.item[name=cap].id}}",
               "slot": "head"
             }
           }
@@ -138,7 +138,7 @@
             "after_s": 20,
             "path": "/api/inventory/identify",
             "body": {
-              "id": "{{pack.item[code=cap].id}}"
+              "id": "{{pack.item[name=cap].id}}"
             }
           }
         ]
