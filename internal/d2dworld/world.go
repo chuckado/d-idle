@@ -609,7 +609,7 @@ func (w *World) mergeLayout(ctx context.Context, l *lvl, sub func(x, y float64) 
 			}
 		}
 		if !known {
-			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: o.Class, Pos: at})
+			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: o.Class, Pos: at, Waypoint: o.Kind == "waypoint"})
 			l.names = append(l.names, o.Name)
 		}
 	}
