@@ -93,7 +93,7 @@ func TestVaultEquipRoutes(t *testing.T) {
 	}
 }
 
-func TestVaultEquipOffAnswers409AndHidesTheFlag(t *testing.T) {
+func TestVaultEquipOffRefuses(t *testing.T) {
 	a, fe := equipDesk(t, false)
 	_, v := getVault(t, a, "/api/vault?limit=2")
 	if v.Equip == nil || v.Equip.Enabled {
