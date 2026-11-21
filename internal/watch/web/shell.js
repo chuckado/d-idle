@@ -18,6 +18,7 @@ const html = document.documentElement;
 const qs = new URLSearchParams(location.search);
 const CHARS_URL = '/watch/characters' + (/^(dark|light|auto)$/.test(qs.get('theme') || '') ? '?theme=' + qs.get('theme') : '');
 const VAULT_URL = '/watch/vault' + (/^(dark|light|auto)$/.test(qs.get('theme') || '') ? '?theme=' + qs.get('theme') : ''); // the Ethereal Vault page (docs/vault.md)
+{ const vl = document.getElementById('vaultlink'); if (vl) vl.href = VAULT_URL; } // the band's one-tap Vault link keeps the theme choice
 if (qs.get('view') === 'characters') location.replace(CHARS_URL); // /watch?view=characters is the Characters page (docs/charselect-ui.md)
 
 function el(tag, cls, text) {
