@@ -83,6 +83,208 @@
    ]
   },
   {
+   "id": "cain.scroll-already-taken",
+   "title": "Search for Cain: the scroll chunk when the record already says the stones are done (no scroll in the pack)",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [
+    "travel.waypoint"
+   ],
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/task/",
+    "internal/d2dsrc/",
+    "internal/nav/",
+    "internal/questboard/",
+    "internal/bot/questboard.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    },
+    "quests": [
+     {
+      "record": 4,
+      "word": 24
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3,
+     5,
+     7
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17, record 4 (Search for Cain) written as 0x0018 (bit 3 left town, bit 4 stones done) as the sandbox hero read on 2026-11-21, NO scroll or key in the pack, board scroll chunk accepted. CHEATED: the quest word, waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "R4 (docs/probes/cain-tree-scroll-2026-11-21.md): before the fix the board walked to the tree, clicked it, got no scroll (the game marks the tree used for a hero that joined with bit 4) and parked the chunk after 3 tries. Fixed: the scroll, read and stones steps read done from the record word, so no tree click is made and the chunk is never parked. RED = a 'Take the Inifuss bark' step or a park line.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 4,
+     "set": 24,
+     "why": "the word the hero started with is still there (nothing cleared it)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: step Take the Inifuss bark",
+     "max": 0,
+     "why": "no tree click: the record says the scroll was taken long ago"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: parked search_for_cain/scroll",
+     "max": 0,
+     "why": "the chunk is done, not parked"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "cain.scroll-already-taken.key",
+   "title": "Search for Cain: the scroll chunk with record 0x0018 and the Key to the Cairn Stones in the pack",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [
+    "travel.waypoint"
+   ],
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/task/",
+    "internal/d2dsrc/",
+    "internal/nav/",
+    "internal/questboard/",
+    "internal/bot/questboard.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    },
+    "quests": [
+     {
+      "record": 4,
+      "word": 24
+     }
+    ],
+    "items": [
+     {
+      "code": "bkd"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3,
+     5,
+     7
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17, record 4 (Search for Cain) written as 0x0018 (bit 3 left town, bit 4 stones done) as the sandbox hero read on 2026-11-21, the Key to the Cairn Stones (bkd) given by debug give, board scroll chunk accepted. CHEATED: the quest word, waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "Same as cain.scroll-already-taken with the key in the pack: the key must stay (never sold or dropped by the town chores) and the tree is not clicked.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 4,
+     "set": 24,
+     "why": "the word the hero started with is still there (nothing cleared it)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: step Take the Inifuss bark",
+     "max": 0,
+     "why": "no tree click: the record says the scroll was taken long ago"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: parked search_for_cain/scroll",
+     "max": 0,
+     "why": "the chunk is done, not parked"
+    },
+    {
+     "kind": "no_writes"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "bkd",
+     "why": "quest items are never sold, dropped or vaulted"
+    }
+   ]
+  },
+  {
    "id": "cain.scroll.sandbox",
    "title": "Search for Cain tree step on the SHIPPED sandbox d2d build",
    "kind": "step",
@@ -1139,7 +1341,7 @@
     "knobs": {
      "quests.board": 1,
      "resource.pointsDecisions": 1,
-    "quests.layoutRead": 1
+     "quests.layoutRead": 1
     }
    },
    "budget": {
