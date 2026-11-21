@@ -1055,7 +1055,8 @@
      "kind": "no_writes"
     }
    ],
-   "status": "active"
+   "status": "pending",
+   "pending_reason": "not yet run against the bsm7 kit-plan build (card bsm7); the assertions are untested sketches (U)"
   },
   {
    "id": "board.hold.too-weak",
@@ -1142,7 +1143,8 @@
      "kind": "no_writes"
     }
    ],
-   "status": "active"
+   "status": "pending",
+   "pending_reason": "not yet run against the bsm7 kit-plan build (card bsm7); the assertions are untested sketches (U)"
   },
   {
    "id": "board.hold.timeout",
@@ -1221,7 +1223,8 @@
      "kind": "no_writes"
     }
    ],
-   "status": "active"
+   "status": "pending",
+   "pending_reason": "not yet run against the bsm7 kit-plan build (card bsm7); the assertions are untested sketches (U)"
   },
   {
    "id": "board.view.reason-always",

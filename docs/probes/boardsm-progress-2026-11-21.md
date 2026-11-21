@@ -1,0 +1,1 @@
+- bsm6 (TASK-780, merged 2026-11-21): replies carry `changed`, chunk rows carry `reason {code,text,remedy}`, `handin_ready`; live stop-cascades GREEN (Paladin 11, Sorceress 3), reason-always GREEN Sorceress 3 (Paladin 11 BLOCKED twice: lab pace, run cut); handin.* stay pending (the lab quest word 0x0002 does not derive awaiting, U). CHEATED setups, mechanics only.

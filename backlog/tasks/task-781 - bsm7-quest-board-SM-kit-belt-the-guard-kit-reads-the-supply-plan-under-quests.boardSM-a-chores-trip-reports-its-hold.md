@@ -18,8 +18,11 @@ owns:
   - "internal/bot/routeguard.go"
   - "internal/bot/questboard.go"
   - "internal/bot/kitplan_test.go"
+  - "tools/provingground/scenarios/board.json"
+  - "docs/probes/boardsm-progress-2026-11-21.md"
 exclusive: []
 contracts: []
+result: "With quests.boardSM the guards and the shop read the supply plan; a coded fault that inserts the chores trip reports its hold (Result.Via, log line quest board: hold needs_potions), and a clean trip that leaves the shortage is a hold, not a counted failure. Unit tested (Paladin and Sorceress worlds), bot suite green. Live (second worker, CHEATED setups): hold.restock Paladin 11 shows the hold line, no park and the road onward; restock-stash-gold Paladin 11 withdrew from the stash with no park; Sorceress runs were cut by the lab pace (BLOCKED, not judged); broke, too-weak and timeout not run yet."
 ---
 
 ## Description
@@ -32,7 +35,7 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 with quests.boardSM the guards and the shop read the supply plan (belt plus pack, minima clamped to the belt) so a chores trip can close the kit
-- [ ] #2 a coded fault that inserts the chores trip reports its hold (Result.Via) and the board logs 'quest board: hold needs_potions' with nothing counted
+- [x] #1 with quests.boardSM the guards and the shop read the supply plan (belt plus pack, minima clamped to the belt) so a chores trip can close the kit
+- [x] #2 a coded fault that inserts the chores trip reports its hold (Result.Via) and the board logs 'quest board: hold needs_potions' with nothing counted
 - [ ] #3 board.hold.* scenarios green live (the second worker)
 <!-- AC:END -->
