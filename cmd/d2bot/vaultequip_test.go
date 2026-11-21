@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"testing"
+	"time"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/env"
@@ -61,6 +62,42 @@ func TestEquipHandSeesTheUnitTheKeepJustMade(t *testing.T) {
 			if ref.hold.Load() != nil {
 				t.Fatal("the held snapshot leaked")
 			}
+		}
+	}
+}
+
+// appearsLater lists unit 77 only after the bot clock stepped three times, like a created item under d2d's lockstep.
+type appearsLater struct {
+	freshReader
+	class d2.Class
+	steps int
+}
+
+func (a *appearsLater) Sleep(time.Duration) { a.steps++ }
+func (a *appearsLater) Now() time.Time      { return time.Unix(1, 0) }
+func (a *appearsLater) Snapshot() (*d2.Snapshot, error) {
+	if a.steps >= 3 {
+		return packSnap(a.class, 1, 77), nil
+	}
+	return packSnap(a.class, 1), nil
+}
+
+// F2, second cause: the Keep's create answers with the id before the game lists the item. The hand waits on the bot clock
+// for the unit instead of refusing "not in the inventory any more". Two classes.
+func TestEquipHandWaitsForTheCreatedUnit(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		w := &appearsLater{class: class}
+		ref := &runnerRef{}
+		desk, err := invdesk.New(invdesk.Config{Snap: ref.deskSnap})
+		if err != nil {
+			t.Fatal(err)
+		}
+		desk.SetEquipper(&okEquip{})
+		ref.inv = desk
+		h := equipHand{ref: ref, e: &env.Env{Clock: w, Read: w}, snap: func() *d2.Snapshot { return packSnap(class, 1) }}
+		slot, err := h.Pick(77, "")
+		if err != nil || slot == "" {
+			t.Fatalf("%v: Pick %q %v (clock steps %d)", class, slot, err, w.steps)
 		}
 	}
 }

@@ -66,6 +66,28 @@ func (h equipHand) fresh() *d2.Snapshot {
 	return h.snap()
 }
 
+// freshWith is fresh, waiting on the bot clock until the pack lists unit. The Keep's create answers before the game shows
+// the item (under d2d's lockstep it appears a few steps later), and the verb replied with the id at once: F2 second cause
+// (pgvault live: the id was 20, the dump listed 1..19). Gives up after about a second of game time and returns what it has.
+func (h equipHand) freshWith(unit uint32) *d2.Snapshot {
+	var s *d2.Snapshot
+	for try := 0; try < 12; try++ {
+		s = h.fresh()
+		if s != nil && s.Inventory != nil {
+			for _, u := range s.Inventory.Items {
+				if u.ID == unit {
+					return s
+				}
+			}
+		}
+		if h.e == nil || h.e.Clock == nil {
+			break
+		}
+		h.e.Clock.Sleep(100 * time.Millisecond)
+	}
+	return s
+}
+
 // wornUnits maps slot key to the item unit worn there.
 func wornUnits(s *d2.Snapshot) map[string]d2.Unit {
 	out := map[string]d2.Unit{}
@@ -220,7 +242,8 @@ func (h equipHand) Pick(unit uint32, slot string) (string, error) {
 	if d == nil {
 		return "", errors.New("equipping is not available on this bot")
 	}
-	defer h.ref.holdSnap(h.fresh())()
+	fs := h.freshWith(unit)
+	defer h.ref.holdSnap(fs)()
 	fits, err := d.FitSlots(unit)
 	if err != nil {
 		return "", err
@@ -258,7 +281,7 @@ func (h equipHand) Wear(ctx context.Context, unit uint32, slot string) ([]vaultk
 	if d == nil {
 		return nil, errors.New("equipping is not available on this bot")
 	}
-	fresh := h.fresh()
+	fresh := h.freshWith(unit)
 	defer h.ref.holdSnap(fresh)()
 	before := wornUnits(fresh)
 	names := map[uint32]string{}
@@ -298,7 +321,7 @@ func (h equipHand) Protect(unit uint32) {
 	if h.ref.inv == nil {
 		return
 	}
-	defer h.ref.holdSnap(h.fresh())()
+	defer h.ref.holdSnap(h.freshWith(unit))()
 	for try := 0; try < 6; try++ {
 		err := h.ref.inv.SetMark(unit, invdesk.MarkKeep)
 		var rf *invdesk.Refusal
