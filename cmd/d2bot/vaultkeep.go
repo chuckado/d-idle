@@ -8,11 +8,13 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync/atomic"
 	"time"
 
 	"d2lod-bot/internal/bot"
 	"d2lod-bot/internal/bulkid"
+	"d2lod-bot/internal/cheat"
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/env"
@@ -93,6 +95,9 @@ func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir, curren
 	ha := heroActs{ref: ref, e: e, snap: snap, rescued: cainOpen(ref)}
 	k.Tools, k.Vendor = ha, ha
 	k.SellPerVisit = func() int { return e.Tune.Loot.VaultSellPerVisit }
+	autoTrim := func() bool { return e.Tune.Loot.VaultAutoTrim != 0 }
+	home.setAutoTrim(autoTrim)
+	k.AutoSell = autoTrim
 	k.Prompt = func() bool { return e.Tune.Loot.VaultSellPrompt != 0 }
 	k.IdentifyPolicy = func() int { return bulkid.Effective(e.Tune.Identify, os.Getenv("D2BOT_RUN") != "").Policy }
 	k.ShortBy = ha.short
@@ -100,7 +105,9 @@ func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir, curren
 		k.Ether = &bulkid.EtherPayer{W: lazyWallet{func() *ether.Wallet { return etherFor(dir, "", nil, nil).Wallet() }}, Price: func() int { return e.Tune.Identify.EtherPerReveal }}
 	}
 	k.Namer = ha.name
-	k.Shop = ha
+	k.Payer = goldPayer{heroActs: ha, pay: &d2dctl.Pay{C: c, Ledger: cheat.NewLedger(cheat.DefaultLedgerPath()), Actor: "bot:vault", Instance: os.Getenv("D2BOT_INSTANCE"),
+		Character: hero(), Measured: measuredRun}}
+	k.Measured = measuredRun
 	k.GoldOn = func() bool { return keepOn(e)() && e.Tune.Loot.VaultRevealGold != 0 }
 	k.GoldConfirm = func() int { return e.Tune.Loot.VaultRevealGoldConfirm }
 	k.OrderFile = func() string {
@@ -488,56 +495,35 @@ func (h heroActs) Price() int {
 	return 0
 }
 
-// Purse reads the pack and stash gold and the reserve the town keeps back for the repair and the potion kit.
-func (h heroActs) Purse(context.Context) (purse, stash, reserve int, err error) {
-	tw, s := h.town(), h.snap()
-	if tw == nil || s == nil || s.Player == nil {
-		return 0, 0, 0, errors.New("the purse is unreadable")
-	}
+// Stash reads the stash gold fresh (the last snapshot can be a tick old): the gold a gold reveal pays from. The purse is
+// never read for it and never touched.
+func (h heroActs) Stash(context.Context) (int, error) {
+	s := h.snap()
 	if fresh, ferr := h.e.Snapshot(); ferr == nil && fresh != nil && fresh.Player != nil {
 		s = fresh
 	}
-	return s.Player.Gold, s.Player.StashGold, tw.IdentifyBuyReserve(s), nil
+	if s == nil || s.Player == nil {
+		return 0, errors.New("the stash gold is unreadable")
+	}
+	return s.Player.StashGold, nil
 }
 
-// maxBuy is the most scrolls one buy errand takes (the tome holds 20; the town refuses more).
-const maxBuy = 20
-
-// Buy runs the town's own buy-identify errand (the same code as the page's Buy scrolls button): only gold above the repair
-// and potion-kit reserve is spent. The stash gold is taken out first when the pack cannot pay. It stops when an errand buys
-// nothing.
-func (h heroActs) Buy(ctx context.Context, n int) error {
-	tw := h.town()
-	if tw == nil {
-		return errors.New("no town helper yet")
-	}
-	price := h.Price()
-	for n > 0 {
-		before, _ := h.Charges(ctx)
-		purse, stash, reserve, err := h.Purse(ctx)
-		if err != nil {
-			return err
-		}
-		k := min(n, maxBuy)
-		if short := k*price + reserve - purse; short > 0 && stash > 0 {
-			if werr := tw.WithdrawGold(ctx, min(short, stash)); werr != nil && !errors.Is(werr, town.ErrNoGoldMover) {
-				return werr
-			}
-		}
-		if _, err := tw.BuyIdentify(ctx, k); err != nil {
-			return err
-		}
-		after, _ := h.Charges(ctx)
-		if after <= before {
-			return nil
-		}
-		n -= after - before
-	}
-	return nil
+// goldPayer is the vault keeper's payer: the price and the stash gold of heroActs, the payment itself through the fork's
+// `debug paygold` (d2dctl.Pay: ledgered with the reason "vault gold reveal order <id>", refused in a measured run).
+type goldPayer struct {
+	heroActs
+	pay *d2dctl.Pay
 }
+
+func (p goldPayer) PayGold(ctx context.Context, amount int, order string) (d2dctl.PayResult, error) {
+	return p.pay.PayGold(ctx, amount, order)
+}
+
+// measuredRun is true in a measured run (gate, soak, baseline, fidelity: D2BOT_RUN names it): a gold reveal never pays then.
+func measuredRun() bool { return strings.TrimSpace(os.Getenv(cheat.RunEnv)) != "" }
 
 func viewOf(v vaultkeep.GoldView) watch.VaultGoldOrder {
-	return watch.VaultGoldOrder{ID: v.ID, State: v.State, Total: v.Total, Done: v.Done, Failed: v.Failed, Bought: v.Bought, Spent: v.Spent, Max: v.Max, Note: v.Note, Line: v.Line}
+	return watch.VaultGoldOrder{ID: v.ID, State: v.State, Total: v.Total, Want: v.Want, Done: v.Done, Paid: v.Paid, StashAfter: v.StashAfter, Note: v.Note, Line: v.Line}
 }
 
 func (f actFace) GoldInfo(ctx context.Context) watch.VaultGoldInfo {
@@ -546,7 +532,7 @@ func (f actFace) GoldInfo(ctx context.Context) watch.VaultGoldInfo {
 		return watch.VaultGoldInfo{}
 	}
 	g := k.GoldFacts(ctx)
-	out := watch.VaultGoldInfo{On: g.On, ScrollGold: g.Price, Purse: g.Purse, Stash: g.Stash, Reserve: g.Reserve, ConfirmAt: g.Confirm}
+	out := watch.VaultGoldInfo{On: g.On, ScrollGold: g.Price, Stash: g.Stash, ConfirmAt: g.Confirm, Why: g.Why}
 	if v := k.GoldView(); v != nil {
 		o := viewOf(*v)
 		out.Order = &o

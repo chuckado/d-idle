@@ -13,7 +13,7 @@ import (
 const (
 	PayFree  = "free"  // Cain stands here, or scrolls and tome charges the hero already holds
 	PayEther = "ether" // unlock from the affixes the vault holds, Ether charged per item
-	PayGold  = "gold"  // the bot buys the missing scrolls at the next town visit
+	PayGold  = "gold"  // unlock from the held affixes, the price taken from the stash gold at once
 )
 
 // GoldMax is the most items one gold order names (the POST body cap, internal/watch vaultMaxIDs).
@@ -25,12 +25,11 @@ type BarIn struct {
 	Charges  int  // scrolls plus tome charges held, -1 unknown counts as none
 	EtherPer int  // 0: Ether is not a payer
 	EtherBal int
-	// Gold: ScrollGold is the vendor price of one scroll (0 unknown). Purse and Stash are the hero's gold, Reserve the gold
-	// the town guards keep back for the repair and the potion kit. GoldOn is knob loot.vaultRevealGold with a shop wired.
+	// Gold: ScrollGold is the price of one reveal, the vendor price of one scroll (0 unknown). Stash is the stash gold the
+	// order pays from (never the purse). GoldOn is knob loot.vaultRevealGold with a payer wired.
 	GoldOn            bool
 	ScrollGold        int
-	Purse, Stash      int
-	Reserve           int
+	Stash             int
 	ConfirmAt         int // gold from which the order needs a confirming press (0: never)
 	GoldWhy           string
 	ActiveGoldOrderID string // an order is running: a second one is refused until it ends
@@ -135,9 +134,17 @@ func MakeBar(cs []Cand, in BarIn) Bar {
 	}
 
 	if in.GoldOn && !in.Free {
+		// Gold unlocks from the affixes the vault holds, exactly as Ether does (EnqueueRevealGold): the price of an item is the
+		// vendor price of one Scroll of Identify, taken from the STASH gold at once (nothing is bought, no town visit).
 		g := BarOption{ID: PayGold, Label: "Gold", IDs: []string{}}
-		room := min(n, GoldMax)
-		avail := max(in.Purse+in.Stash-in.Reserve, 0)
+		var sids []string
+		for _, c := range cs {
+			if c.Sealed {
+				sids = append(sids, c.ID)
+			}
+		}
+		sealed := len(sids)
+		room := min(sealed, GoldMax)
 		switch {
 		case in.ActiveGoldOrderID != "":
 			g.Why = "a gold reveal is already running"
@@ -145,18 +152,20 @@ func MakeBar(cs []Cand, in BarIn) Bar {
 			g.Why = "the scroll price is unknown"
 		case in.GoldWhy != "":
 			g.Why = in.GoldWhy
+		case sealed == 0:
+			g.Why = "the vault holds no affixes for these items"
 		default:
-			g.Count = min(room, held+avail/in.ScrollGold)
-			g.Cost = max(g.Count-held, 0) * in.ScrollGold
+			g.Count = min(room, max(in.Stash, 0)/in.ScrollGold)
+			g.Cost = g.Count * in.ScrollGold
 			g.OK = g.Count > 0
 		}
-		g.IDs = candIDs(cs, g.Count)
+		g.IDs = sids[:g.Count]
 		g.Line = fmt.Sprintf("Gold: %s (stash %s)", Thousands(g.Cost), Thousands(in.Stash))
 		g.Confirm = in.ConfirmAt > 0 && g.Cost >= in.ConfirmAt
 		if g.OK {
-			g.Skipped = skip(skip(nil, room-g.Count, fmt.Sprintf("not enough gold above the repair and potion reserve (%s kept)", Thousands(in.Reserve))), n-room, "over the "+strconv.Itoa(GoldMax)+" one order takes")
+			g.Skipped = skip(skip(skip(nil, n-sealed, "the vault holds no affixes for them"), room-g.Count, fmt.Sprintf("not enough gold in the stash (%s each)", Thousands(in.ScrollGold))), sealed-room, "over the "+strconv.Itoa(GoldMax)+" one order takes")
 		} else if g.Why == "" {
-			g.Why = fmt.Sprintf("not enough gold above the repair and potion reserve (%s kept)", Thousands(in.Reserve))
+			g.Why = fmt.Sprintf("not enough gold in the stash (%s each, you have %s)", Thousands(in.ScrollGold), Thousands(in.Stash))
 		}
 		b.Options = append(b.Options, g)
 	}

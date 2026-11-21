@@ -141,15 +141,23 @@ export function createSelection() {
   return api;
 }
 
+// The full banner follows loot.vaultAutoTrim: off (default) nothing is removed and new drops are not recorded.
+function fullBanner(c, T, v) {
+  if (v && v.autoTrim) return T.fullBannerTrim;
+  const miss = v && v.missed && v.missed.count;
+  const fmt = (s, o) => String(s || '').replace(/\{(\w+)\}/g, (m, k) => (o && o[k] !== undefined ? o[k] : ''));
+  return fmt(miss ? T.fullBannerMissed : T.fullBanner, { n: c.count, cap: c.capacity, missed: miss });
+}
+
 // capacityView words the meter: the text, the level the colour follows, the bar width and the banner (over capacity).
-export function capacityView(c, T) {
+export function capacityView(c, T, v) {
   const cap = (c && c.capacity) || 0, n = (c && c.count) || 0;
   const pct = cap > 0 ? Math.min(100, Math.round((n * 100) / cap)) : 0;
   const level = (c && c.level) || 'ok';
   const fmt = (s, o) => String(s || '').replace(/\{(\w+)\}/g, (m, k) => (o && o[k] !== undefined ? o[k] : ''));
   return {
     text: n + ' / ' + cap, pct, level, now: n, max: cap,
-    banner: level === 'over' ? fmt(T.overBanner, { over: c.over, n }) : level === 'full' ? T.fullBanner : '',
+    banner: level === 'over' ? fmt(T.overBanner, { over: c.over, n }) : level === 'full' ? fullBanner(c, T, v) : '',
   };
 }
 
@@ -228,18 +236,21 @@ export function windowRange(o) {
 
 // The Reveal bar (docs/vault.md, "Reveal paid in gold"): one bar over the list instead of a notice paragraph. The model is pure:
 // the server's quote (act.reveal.bar, act.reveal.gold) and the player's pick in, what to draw out.
-const ORDER_STEPS = ['queued', 'buying', 'revealing', 'done'];
+const ORDER_STEPS = ['queued', 'paid', 'revealed'];
 const f2 = (s, o) => String(s || '').replace(/\{(\w+)\}/g, (m, k) => (o && o[k] !== undefined ? o[k] : ''));
 const grp = (n) => String(Math.max(0, n | 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-// orderModel words a gold order: the chain queued -> buying -> revealing -> done, where it stands, and whether it can be cancelled.
+// orderModel words a gold order: the chain queued -> paid -> revealed (it runs for seconds), where it stands, and whether it can
+// be cancelled (only before the payment is confirmed). A partial, failed or cancelled order ends the chain with its own label.
 export function orderModel(o, T) {
   if (!o) return null;
-  const ended = o.state === 'done' || o.state === 'partial' || o.state === 'cancelled';
+  const ended = o.state === 'revealed' || o.state === 'partial' || o.state === 'failed' || o.state === 'cancelled';
   const at = ended ? ORDER_STEPS.length - 1 : Math.max(0, ORDER_STEPS.indexOf(o.state));
   const steps = ORDER_STEPS.map((s, i) => ({ id: s, label: T.steps[s], current: i === at, past: i < at }));
-  if (o.state === 'partial' || o.state === 'cancelled') steps[steps.length - 1].label = T.steps[o.state];
-  return { id: o.id, state: o.state, steps, active: !ended, progress: f2(T.progress, { done: o.done, total: o.total }), spent: o.spent, line: o.line, note: o.note || '' };
+  if (o.state === 'partial' || o.state === 'failed' || o.state === 'cancelled') steps[steps.length - 1].label = T.steps[o.state];
+  const paidText = o.paid ? f2(T.paidGold, { gold: grp(o.paid) }) : '';
+  const stashText = o.paid ? f2(T.stashGold, { n: grp(o.stashAfter) }) : '';
+  return { id: o.id, state: o.state, steps, active: o.state === 'queued', progress: f2(T.progress, { done: o.done, total: o.want || o.total }), paidText, stashText, line: o.line, note: o.note || '' };
 }
 
 // revealBarModel is what the bar draws. rev is act.reveal of GET /api/vault, pay the option the player picked ('' = the server's

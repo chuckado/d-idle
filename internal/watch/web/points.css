@@ -10,4 +10,13 @@
   .pt-plus { grid-column: 2; grid-row: 1 / span 2; min-inline-size: 2.75rem; min-block-size: 2.75rem; }
   .pt-trail li, .pt-gear li { font-size: .9em; }
   .pt-trail [data-ok="0"] { color: var(--d-bad); }
+  .pt-row { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
+  .pt-builds { list-style: none; margin: var(--d-sp-2) 0 0; padding: 0; display: grid; gap: var(--d-sp-2); }
+  .pt-build { border-top: 1px solid var(--d-line); padding-block: var(--d-sp-2); display: grid; gap: var(--d-sp-1); }
+  .pt-build h3 { margin: 0; font-size: 1em; overflow-wrap: anywhere; }
+  .pt-build p { margin: 0; font-size: .9em; }
+  .pt-build[data-tier="experimental"] .pt-tier { color: var(--d-bad); }
+  .pt-warn { color: var(--d-bad); }
+  .pt-prev-list { margin: 0; padding-inline-start: 1.1rem; font-size: .85em; overflow-wrap: anywhere; }
+  .pt-build[data-chosen="1"] { background: var(--d-surface-2, transparent); }
 }

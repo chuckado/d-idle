@@ -1,10 +1,11 @@
 ---
 id: TASK-783
 title: 'mgmtfast: immediate management actions (knob, Recall now, audit)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T19:05:00Z'
+updated_date: '2026-11-21T19:53:00Z'
 labels:
   - watch
   - feature

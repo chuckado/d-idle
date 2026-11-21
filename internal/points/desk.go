@@ -52,6 +52,16 @@ type Config struct {
 
 	Playable func(skillName string) bool
 	Attack   func(skillName string) bool
+
+	// Automatic allocator (autoalloc.go). AutoOn is the knob agency.autoAlloc; Builds lists every build file with its
+	// class and tier; Next is the build's remaining steps for this hero, in order; OffBuild names skills the hero owns
+	// that the build does not call for; Respec is the price model; Logf writes the trace lines.
+	AutoOn   func() bool
+	Builds   func() []BuildInfo
+	Next     func(build string, p *d2.Player) ([]Step, error)
+	OffBuild func(build string, p *d2.Player) []string
+	Respec   func() RespecParams
+	Logf     func(msg string, kv ...any)
 }
 
 // Desk is the points service of one hero.
@@ -59,6 +69,7 @@ type Desk struct {
 	c     Config
 	store *Store
 	audit *Audit
+	auto  autoState
 }
 
 // NewDesk builds the desk. It reads no game state until asked.

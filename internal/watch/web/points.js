@@ -87,9 +87,75 @@
     }).catch(function () { $('buildline').hidden = true; });
   }
 
+  // Automatic Allocate Skills (docs/autoalloc.md): GET /api/hero/build, POST the pick (it locks), refusals read back in words.
+  var bview = null, pickerOpen = false;
+  function renderBuild(b) {
+    bview = b;
+    var st = b.state || {};
+    $('bmeta').textContent = st.locked ? 'locked' : (b.autoAlloc ? 'on' : 'off');
+    var line = st.locked
+      ? 'Locked to ' + (st.label || st.build) + ' since level ' + st.lockedAtLevel + '. Respec to change.'
+      : 'No build chosen: points are banked for you. Choose a build and the hero puts every new point where it says.';
+    if (!b.autoAlloc) line += ' The allocator is switched off (knob agency.autoAlloc), so nothing is spent automatically yet.';
+    $('bstate').textContent = line;
+    var h = $('bheld'); h.hidden = !(b.held && b.held.length);
+    h.textContent = h.hidden ? '' : b.held.map(function (x) { return x.skill + ' (level ' + x.clvl + '): ' + x.reason; }).join(' ');
+    var o = $('boff'); o.hidden = !(b.offBuild && b.offBuild.length);
+    o.textContent = o.hidden ? '' : 'Off-build points you spent yourself (the allocator plans around them): ' + b.offBuild.join(', ') + '.';
+    $('brespecline').textContent = b.respec ? 'A respec now would cost ' + b.respec.price + ' gold and refund every skill and stat point. ' + b.respec.note : '';
+    var bo = $('bopen');
+    bo.disabled = !!st.locked;
+    bo.title = st.locked ? 'Locked. Respec to change the build.' : '';
+    bo.onclick = function () { pickerOpen = !pickerOpen; renderPicker(); };
+    renderPicker();
+  }
+  function renderPicker() {
+    var ul = $('bpicker'), b = bview; clear(ul);
+    $('bopen').setAttribute('aria-expanded', pickerOpen ? 'true' : 'false');
+    ul.hidden = !pickerOpen || !b;
+    if (ul.hidden) return;
+    if (!b.builds.length) { ul.appendChild(el('li', 'pt-build', 'No build files for this class.')); return; }
+    b.builds.forEach(function (x) {
+      var li = el('li', 'pt-build'); li.setAttribute('data-tier', x.tier); li.setAttribute('data-chosen', b.state.build === x.name ? '1' : '0');
+      var h = el('h3', '', x.label + ' '); h.appendChild(el('span', 'pt-tier', '(' + x.tier + ')')); li.appendChild(h);
+      var bad = (x.needs || []).filter(function (n) { return n.tier === 'unsupported'; });
+      var meh = (x.needs || []).length - bad.length;
+      if (bad.length) li.appendChild(el('p', 'pt-warn', 'The hero cannot use these yet and will hold the point for you: ' + bad.map(function (n) { return n.skill; }).join(', ') + '.'));
+      if (meh) li.appendChild(el('p', '', meh + ' more skill' + (meh === 1 ? ' is' : 's are') + ' not proven in the fighter yet.'));
+      var d = el('details'); d.appendChild(el('summary', '', 'First ' + x.preview.length + ' levels'));
+      var pl = el('ul', 'pt-prev-list');
+      x.preview.forEach(function (r) {
+        var parts = (r.skills || []).map(function (s) { return s.skill + (s.points > 1 ? ' x' + s.points : '') + (s.tier && s.tier !== 'supported' ? ' [' + s.tier + ']' : ''); });
+        var stats = Object.keys(r.stats || {}).map(function (k) { return '+' + r.stats[k] + ' ' + k; });
+        pl.appendChild(el('li', '', 'Level ' + r.clvl + ': ' + parts.concat(stats).join(', ')));
+      });
+      d.appendChild(pl); li.appendChild(d);
+      var btn = el('button', 'd-btn', b.state.build === x.name ? 'Chosen' : 'Choose and lock'); btn.type = 'button'; btn.setAttribute('data-size', 'sm');
+      btn.disabled = !!b.state.locked;
+      btn.addEventListener('click', function () { pickBuild(x, false); });
+      li.appendChild(btn);
+      ul.appendChild(li);
+    });
+  }
+  function pickBuild(x, confirmed) {
+    var price = bview && bview.respec ? bview.respec.price : '?';
+    if (!confirmed && !window.confirm('Lock to ' + x.label + '? Every new point follows it. Changing it later means a respec (about ' + price + ' gold now) that refunds all skill and stat points.')) return;
+    post('/api/hero/build', { build: x.name, confirm: confirmed }).then(function (j) {
+      if (j.needsConfirm && !confirmed) { if (window.confirm(j.reason)) pickBuild(x, true); return; }
+      if (!j.ok) say(j.reason || j.error || ('error ' + j.status)); else { say(''); pickerOpen = false; }
+      loadBuild();
+    }).catch(function () { say('the answer route is not reachable'); });
+  }
+  function loadBuild() {
+    fetch('/api/hero/build', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
+      if (j.code) { $('bstate').textContent = j.error || 'the build picker is not available'; return; }
+      renderBuild(j);
+    }).catch(function () { $('bstate').textContent = 'could not read the build state'; });
+  }
+
   var view = { stats: [] };
   function load() {
-    loadPlan();
+    loadPlan(); loadBuild();
     fetch('/api/hero/points', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
       if (j.code) { say(j.error || 'the points desk is not available'); return; }
       view = j; render(j);

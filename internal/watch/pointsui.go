@@ -38,6 +38,18 @@ const pointsPage = `<!DOCTYPE html>
   <div class="d-card-head"><h2 id="t-gear">What your gear asks for</h2></div>
   <ul class="pt-gear" id="gear"></ul>
  </section>
+ <section class="d-card" aria-labelledby="t-build">
+  <div class="d-card-head"><h2 id="t-build">Automatic Allocate Skills</h2><span class="meta" id="bmeta"></span></div>
+  <p class="d-hint" id="bstate"></p>
+  <p class="d-hint" id="bheld" hidden></p>
+  <p class="d-hint" id="boff" hidden></p>
+  <div class="pt-row">
+   <button class="d-btn" data-size="sm" id="bopen" type="button" aria-expanded="false" aria-controls="bpicker">Automatic Allocate Skills</button>
+   <button class="d-btn" data-size="sm" data-variant="ghost" id="brespec" type="button" disabled>Respec: coming soon</button>
+  </div>
+  <p class="d-hint" id="brespecline"></p>
+  <ul class="pt-builds" id="bpicker" hidden></ul>
+ </section>
  <section class="d-card" aria-labelledby="t-auto">
   <div class="d-card-head"><h2 id="t-auto">Autopilot</h2></div>
   <p class="d-hint" id="autodesc"></p>

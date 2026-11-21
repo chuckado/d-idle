@@ -6,6 +6,7 @@ package vault
 
 import (
 	"errors"
+	"sort"
 	"time"
 )
 
@@ -93,6 +94,7 @@ type Rec struct {
 	Gold     int       `json:"gold,omitempty"`    // sale price once sold
 	RevQ     bool      `json:"revq,omitempty"`    // Reveal asked: the item is identified at the next town visit (V6)
 	Stage    string    `json:"stage,omitempty"`   // in-flight step of a reveal or sale (Stage* constants), "" when idle
+	Ordered  bool      `json:"ordered,omitempty"` // sellq: the player ordered the sale; false is a mark that waits for a confirm (loot.vaultAutoTrim off)
 	GoldPre  int       `json:"goldpre,omitempty"` // purse before the sale create, for the read-back after a restart
 	Updated  time.Time `json:"updated"`
 	seq      int       // position in insertion order
@@ -113,7 +115,7 @@ var (
 	ErrNothingSealed = errors.New("vault: no affixes are held for this item")
 	ErrDuplicate     = errors.New("vault: identical item already in the vault")
 	ErrOverCapacity  = errors.New("vault: over capacity, new records are blocked")
-	ErrFull          = errors.New("vault: full and nothing may be trimmed")
+	ErrFull          = errors.New("vault: full: new drops are not recorded until room is made")
 	ErrNotFound      = errors.New("vault: no such record")
 	ErrState         = errors.New("vault: transition not allowed from this state")
 	ErrPinCap        = errors.New("vault: pin limit reached")
@@ -121,3 +123,26 @@ var (
 	ErrTooLarge      = errors.New("vault: import too large")
 	ErrPinned        = errors.New("vault: pinned items are never sold")
 )
+
+// MissedKeep is how many of the best missed drops the vault remembers.
+const MissedKeep = 10
+
+// Missed counts the drops that were not recorded because the vault was full, and keeps the best few (highest value)
+// so the player sees what they missed. It persists with the vault until the player clears it.
+type Missed struct {
+	Count int    `json:"count"`
+	Since string `json:"since,omitempty"` // RFC3339 time of the first miss since the last clear
+	Best  []Item `json:"best,omitempty"`
+}
+
+func (m *Missed) add(it Item, t time.Time) {
+	if m.Count == 0 {
+		m.Since = t.UTC().Format(time.RFC3339)
+	}
+	m.Count++
+	m.Best = append(m.Best, it)
+	sort.SliceStable(m.Best, func(i, j int) bool { return m.Best[i].Value > m.Best[j].Value })
+	if len(m.Best) > MissedKeep {
+		m.Best = m.Best[:MissedKeep]
+	}
+}

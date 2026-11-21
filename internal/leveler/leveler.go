@@ -278,26 +278,7 @@ func (l *Leveler) ruleFor(code string) Rule {
 }
 
 func (l *Leveler) rule(code, name string, level int, lv map[string]int) bool {
-	db := l.e.Data
-	if db == nil {
-		return true
-	}
-	s := db.SkillByName(name)
-	if s == nil || s.Page == 0 {
-		return false
-	}
-	if s.Class != "" && code != "" && s.Class != code {
-		return false
-	}
-	if s.ReqLevel > level || (s.MaxLevel > 0 && lv[name] >= s.MaxLevel) {
-		return false
-	}
-	for _, rq := range s.ReqSkills {
-		if rq != "" && lv[rq] == 0 {
-			return false
-		}
-	}
-	return true
+	return DBRule(l.e.Data, code)(name, level, lv)
 }
 
 func (l *Leveler) skipSet(level int) map[string]bool {

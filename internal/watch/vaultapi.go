@@ -34,6 +34,7 @@ const (
 	VaultEquipRoute   = "/api/vault/equip"       // POST {ids:[one id], slot: auto|left|right, now}: one-tap Equip (docs/vault.md, Equip)
 	VaultEquipCancel  = "/api/vault/equipcancel" // POST {ids}: cancel an Equip order that has not started
 	VaultEquipGet     = "/api/vault/equip/"      // GET /api/vault/equip/<id>: the sheet's data and the order's status (polled)
+	VaultMissedRoute  = "/api/vault/missed"      // POST {"dismiss":true}: clear the missed-drops counter and list
 	VaultPromptRoute  = "/api/vault/sellprompt"  // POST {"dismiss":true}: mute the "short on gold" prompt
 	vaultSchema       = "watch.vault/1"
 
@@ -45,7 +46,7 @@ const (
 // VaultRoutes are the viewer paths (the page and its files, the two GET routes); VaultPostRoutes the answer ones.
 var (
 	VaultRoutes     = []string{VaultRoute, VaultItemRoute, VaultEquipGet, "/watch/vault", "/watch/vault.js", "/watch/vault-logic.js", "/watch/vault.css", "/watch/vault.json"}
-	VaultPostRoutes = []string{VaultPinRoute, VaultUnpinRoute, VaultDiscardRoute, VaultKeepRoute, VaultRevealRoute, VaultSellRoute, VaultCancelRoute, VaultPromptRoute, VaultEquipRoute, VaultEquipCancel, VaultRevealGoldRoute, VaultRevealGoldCancelRoute}
+	VaultPostRoutes = []string{VaultPinRoute, VaultUnpinRoute, VaultDiscardRoute, VaultKeepRoute, VaultRevealRoute, VaultSellRoute, VaultCancelRoute, VaultPromptRoute, VaultMissedRoute, VaultEquipRoute, VaultEquipCancel, VaultRevealGoldRoute, VaultRevealGoldCancelRoute}
 )
 
 // VaultDesk is what the routes need from the bot side (cmd/d2bot/vaultwire.go). Every field is a func read per request, so a
@@ -63,6 +64,8 @@ type VaultDesk struct {
 	MassFilter *bulkid.Filter
 	Quality    func(int) string
 	ScrollGold int
+	// AutoTrim is the knob loot.vaultAutoTrim (default off): off means a full vault removes and sells nothing by itself.
+	AutoTrim func() bool
 }
 
 // VaultTip is what the inventory tooltip needs beyond the stored fields: the same fields status.Item carries (base facts, art
@@ -422,6 +425,33 @@ type VaultView struct {
 	Equip     *VaultEquipFlag `json:"equip,omitempty"` // one-tap Equip: offered (knob on) or why not; absent when the bot has none
 	Keep      *VaultKeepView  `json:"keep,omitempty"`  // schema additive: absent when the bot has no Keep queue
 	Act       *VaultActView   `json:"act,omitempty"`   // Reveal and Sell (V6); absent when the bot has neither
+	// AutoTrim is loot.vaultAutoTrim: false (default) the vault never removes an item by itself, so a full vault does not record new drops.
+	AutoTrim bool `json:"autoTrim"`
+	// Missed counts the drops not recorded while the vault was full, with the best few; absent when none.
+	Missed *VaultMissed `json:"missed,omitempty"`
+	// Marked lists the records flagged for sale that wait for the player's "Sell these N now" (a POST to the sell route with these ids); absent when none.
+	Marked *VaultMarked `json:"marked,omitempty"`
+}
+
+// VaultMissed is the missed-drops counter of the page.
+type VaultMissed struct {
+	Count int         `json:"count"`
+	Since string      `json:"since,omitempty"`
+	Best  []VaultMiss `json:"best,omitempty"`
+}
+
+type VaultMiss struct {
+	Name    string `json:"name"`
+	Quality string `json:"quality"`
+	Q       int    `json:"q"`
+	Ilvl    int    `json:"ilvl"`
+}
+
+// VaultMarked is the "Marked for sale" list.
+type VaultMarked struct {
+	N     int      `json:"n"`
+	IDs   []string `json:"ids"`
+	Names []string `json:"names,omitempty"` // the first few, for the sentence
 }
 
 type vaultQuery struct {
@@ -719,6 +749,26 @@ func (d *VaultDesk) view(ctx context.Context, q vaultQuery, kinds vaultTexts) Va
 	}
 	s := st.Status()
 	v.Capacity, v.Anomalies = capacityOf(s), s.Anomalies
+	v.AutoTrim = d.AutoTrim != nil && d.AutoTrim()
+	if m := st.MissedDrops(); m.Count > 0 {
+		vm := &VaultMissed{Count: m.Count, Since: m.Since}
+		for _, it := range m.Best {
+			vm.Best = append(vm.Best, VaultMiss{Name: it.Name, Quality: qualityWord(it.Quality), Q: it.Quality, Ilvl: it.Ilvl})
+		}
+		v.Missed = vm
+	}
+	if !v.AutoTrim {
+		if marked := st.SellMarked(); len(marked) > 0 {
+			vk := &VaultMarked{N: len(marked), IDs: make([]string, 0, len(marked))}
+			for i, r := range marked {
+				vk.IDs = append(vk.IDs, r.ID)
+				if i < 5 {
+					vk.Names = append(vk.Names, r.Name)
+				}
+			}
+			v.Marked = vk
+		}
+	}
 	if q.facets {
 		for id, n := range st.Facets().Types {
 			label := kinds.Types[id]
@@ -926,6 +976,18 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 		}
 		if route == VaultRevealGoldCancelRoute {
 			a.goldRoute(w, r, d, route, &b)
+			return
+		}
+		if route == VaultMissedRoute {
+			if !b.Dismiss {
+				writeJSON(w, http.StatusBadRequest, policyReply{Code: "dismiss", Error: "send dismiss: true"})
+				return
+			}
+			if err := st.ClearMissed(); err != nil {
+				writeJSON(w, http.StatusInternalServerError, policyReply{Code: "internal", Error: err.Error()})
+				return
+			}
+			writeJSON(w, 200, vaultReply{OK: true, Done: []string{}})
 			return
 		}
 		if route == VaultPromptRoute {
