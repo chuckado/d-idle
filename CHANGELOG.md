@@ -8,6 +8,20 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into heavyguard <!--sg:agent/heavyguard-->
+- pgclock: goals manager, farm timers and the guard snapshot reuse window on the env clock (TASK-739) <!--sg:agent/pgc5-->
+- pgledgeron: ledger environment for builder runs, pull path, doc and card (TASK-777) <!--sg:agent/pgc4-->
+- mgcache: gate stats, replay measurement, nightly uncached race doc and card (TASK-747) <!--sg:agent/pgc3-->
+- Merge branch 'main' into vaultequip <!--sg:agent/vaultequip-->
+- Merge branch 'main' into mobilequests <!--sg:agent/mobilequests-->
+- mgwatchdog: merge queue watchdog doc and card (TASK-752); ops watchdog, phase budgets, status exit code <!--sg:agent/pgc2-->
+- mglanes: lane policy doc and card (TASK-749); ops lockrun quotas, merge priority, two long slots, warn-only <!--sg:agent/pgc1-->
+- combat foundation record doc <!--sg:agent/cmbdoc-->
+- Merge branch 'main' into devp16 <!--sg:agent/devp16-->
+- pggroup1 (rebased): Proving Ground gate group 1 <!--sg:agent/pggroup1-->
+- dlv-expect: cast expectation ledger, knob combat.deliveryExpect, tests <!--sg:agent/cmb3-->
+- dlv-rotation: Rotation type, Profile.Rotation adapter, Fighter reads slots, golden parity <!--sg:agent/cmb2-->
+- dlv-data: cap/2 delivery object, generated skills/skillKinds/tiers, golden parity <!--sg:agent/cmb1-->
 - Merge branch 'main' into levelobjects <!--sg:agent/levelobjects-->
 - Merge branch 'main' into mouthgate <!--sg:agent/mouthgate-->
 - Merge branch 'main' into andariel1 <!--sg:agent/andariel1-->
