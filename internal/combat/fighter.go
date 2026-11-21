@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/delivery"
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/gear"
 	"d2lod-bot/internal/goals"
@@ -689,7 +690,8 @@ func (f *Fighter) buffPass(ctx context.Context, snap *d2.Snapshot) (cast bool, e
 	}
 	known := KnownSkills(p, f.cat, f.keys)
 	mana := p.Mana
-	for _, group := range f.profileFor(p).Buffs {
+	has := func(n string) bool { _, ok := known[n]; return ok }
+	for _, group := range f.profileFor(p).Rotation(p.Level, has).Groups() {
 		for _, name := range group {
 			sp, ok := known[name]
 			if !ok || curseNames[name] || (sp.Key == "" && p.RightSkill != sp.ID) {
@@ -831,7 +833,7 @@ func (f *Fighter) attackSkills(p *d2.Player) []SkillSpec {
 		reserve = pr.Melee.ManaReserve
 	}
 	var out []SkillSpec
-	for _, name := range pr.AttackNames(p.Level, func(n string) bool { _, ok := known[n]; return ok }) {
+	for _, name := range pr.Rotation(p.Level, func(n string) bool { _, ok := known[n]; return ok }).Names(delivery.RoleAttack) {
 		sp, ok := known[name]
 		if !ok && name == meleeSpec().Name {
 			// The skill dump may omit the basic attack (live 2026-11-09: known had no Attack), yet it is always usable
