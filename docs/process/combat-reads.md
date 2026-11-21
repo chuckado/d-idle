@@ -1,10 +1,10 @@
 # Combat read verbs (dlv-reads, TASK-721)
 
-> status: current 2026-11-21. Fork side built and tested headless on the builder (see the card result for the commit); bot side is the typed client and fake only, no bot consumer yet (the consumers are later cards: dlv-upkeep-minions, dlv-expect follow-ups, the scenario assertion kinds). Tags: V = verified (how is said), S = read in code or docs, U = unverified. Decision: ADR 0026 Q4 (the three reads are flag-gated and are reads under ADR 0022: never CHEATED) and Q5 (the hero acts only on `visible` reads).
+> status: current 2026-11-21. Fork side (private forge, branch didle/combat-reads-20261121, tip 81b191a94) built and tested headless on the builder, ticks per second measured (no difference with the journal on); bot side is the typed client and fake only, no bot consumer yet (the consumers are later cards: dlv-upkeep-minions, dlv-expect follow-ups, the scenario assertion kinds). Tags: V = verified (how is said), S = read in code or docs, U = unverified. Decision: ADR 0026 Q4 (the three reads are flag-gated and are reads under ADR 0022: never CHEATED) and Q5 (the hero acts only on `visible` reads).
 
 ## What the fork exposes
 
-Three READ verbs of the private d2d fork, gated by the d2d flag `--read-combat` (`--lab-verbs` implies it). Without the flag they answer `err read combat off: debug <verb> needs d2d --read-combat`; with it they are listed in `caps` as `read.minions`, `read.skillstate`, `read.combat-events`. Each answers ONE JSON line, then `ok`. They write no game state (V: the fork test compares the unit list before and after repeated reads). The journal behind `combatlog` records only while the flag is on (V: the fork source; one relaxed atomic load per site when off); frame cost with the flag on and off is NOT measured here (card criterion 2 stays open: needs a lab slot).
+Three READ verbs of the private d2d fork, gated by the d2d flag `--read-combat` (`--lab-verbs` implies it). Without the flag they answer `err read combat off: debug <verb> needs d2d --read-combat`; with it they are listed in `caps` as `read.minions`, `read.skillstate`, `read.combat-events`. Each answers ONE JSON line, then `ok`. They write no game state (V: the fork test compares the unit list before and after repeated reads). The journal behind `combatlog` records only while the flag is on (V: the fork source; one relaxed atomic load per site when off); frame cost: 6000 lockstep steps with 12 fallens, 6 zombies and a Clay Golem took 0.80 to 1.03 s on the fork without the journal and 0.73 to 1.11 s with it (builder under load, 4 runs each, V: measured), no measurable difference.
 
 Go client: `internal/d2dctl/combat_reads.go` (`Client.Minions`, `SkillState`, `CombatLog(n)`; types carry `Visible` and `Hidden` marks; every failure wraps `ErrCombatRead` and names `debug <verb>`), the fake in `internal/d2dctl/fake` (`Fixtures.Minions|SkillState|CombatLog`), tests in `combat_reads_test.go` (a Necromancer's army, Paladin and Sorceress skill states, a Sorceress kill).
 
@@ -32,4 +32,4 @@ Event kinds: `cast` (amount mana paid, detail level), `refuse` (amount engine st
 
 - Corpses and states in `monsters` (appendix C section 4 of the combat engine review): not part of this card.
 - Scenario runner assertion kinds and `tools/provingground` consumers: later cards.
-- Frame-time measurement with the flag on and off; a live differential of the journal against game.exe.
+- A live differential of the journal against game.exe.

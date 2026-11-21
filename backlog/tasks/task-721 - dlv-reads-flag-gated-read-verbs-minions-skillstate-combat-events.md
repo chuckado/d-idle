@@ -21,6 +21,7 @@ exclusive:
   - "fork-branch:didle/combat-reads"
   - "d2d-lab-binary"
 contracts: []
+result: "Fork (private forge, branch didle/combat-reads-20261121, tip 81b191a94, code 5664e0c4 built and tested headless on the builder, NOT on a live game): read verbs debug minions, skillstate, combatlog [n] behind --read-combat (implied by --lab-verbs), caps read.minions/read.skillstate/read.combat-events, a 1024-event combat journal, every field marked visible or hidden; tests/combat_reads_d2d.py green (Necromancer golem equals the engine pets walk; Paladin and Sorceress skill state; Sorceress Fire Bolt kill with cast, hit, kill events; reads change nothing). Ticks per second: 6000 lockstep steps with 18 monsters and a golem, 0.80-1.03 s without the journal (devp15 binary) and 0.73-1.11 s with it, no measurable difference (builder under load). Bot: internal/d2dctl client + fake + tests (Necromancer, Paladin, Sorceress), docs/process/combat-reads.md; no bot consumer, no scenario assertion kinds yet (AC1 and AC6 open: no driver ships, no knob). go test -race -count=20 d2dctl, whole-repo go vet and test, check.sh, leakcheck clean. Class and skill data: no literal in Go code."
 ---
 
 ## Description
@@ -34,10 +35,10 @@ Design: docs/design/fable-review-2026-11-21/combat-engine-d-cards.md (user-appro
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
 - [ ] #1 Fork tests in the style of input_verbs_d2d; one scenario per assertion kind that fails when inverted
-- [ ] #2 Ticks/s measured with the flag on and off
-- [ ] #3 Visible/hidden mark on every read row
-- [ ] #4 Foundation gate: golden parity unchanged
-- [ ] #5 Two builds tested (Paladin + Sorceress), no class or skill literal added, literal count reported in result (may only fall)
+- [x] #2 Ticks/s measured with the flag on and off
+- [x] #3 Visible/hidden mark on every read row
+- [x] #4 Foundation gate: golden parity unchanged
+- [x] #5 Two builds tested (Paladin + Sorceress), no class or skill literal added, literal count reported in result (may only fall)
 - [ ] #6 Knob combat.delivery.<driver> 0/1/2 where a driver ships; rollback is the knob
-- [ ] #7 go test -race -count=20 on touched packages; tools/ci/check.sh, contracts/backlog checks and leakcheck clean
+- [x] #7 go test -race -count=20 on touched packages; tools/ci/check.sh, contracts/backlog checks and leakcheck clean
 <!-- AC:END -->
