@@ -333,6 +333,11 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [06-roadmap.md](design/fable-review-2026-11-19/06-roadmap.md): 06. Roadmap: phases, order, effort, risks, and the decisions only the owner can make (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided or...)
 - [07-input-layer.md](design/fable-review-2026-11-19/07-input-layer.md): 07. The input layer: clicks, hotkeys and direct verbs (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only; added on the owner's note of...)
 
+`design/fable-review-2026-11-21/`
+
+- [proving-ground-gate-catalog.md](design/fable-review-2026-11-21/proving-ground-gate-catalog.md): Proving Ground: scenario catalogue and coverage map (2026-11-21) (status: snapshot for the design review proving-ground-gate.md (card fablepg, TASK-712). It is a hand-made table...)
+- [proving-ground-gate.md](design/fable-review-2026-11-21/proving-ground-gate.md): Proving Ground, merge gate and builder scheduling: design review (2026-11-21) (status: proposal for the owner (card fablepg, TASK-712). Docs only: nothing here changes Go, the merge scripts,...)
+
 `design/`
 
 - [item-colour-2026-11-18.md](design/item-colour-2026-11-18.md): Item colour in the inventory art: chain and slice plan (2026-11-18) (status: design, task-634 (card itemcolour). Follow-up to jewelcolor (task-632), which removed the invented wash....)
