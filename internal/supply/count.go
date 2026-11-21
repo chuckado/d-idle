@@ -83,3 +83,18 @@ func (c Count) Wealth() int {
 	}
 	return c.Purse + c.Stash
 }
+
+// Have is the carried count of a planned line.
+func (c Count) Have(l Line) int {
+	switch l {
+	case Healing:
+		return c.Healing()
+	case Mana:
+		return c.Mana()
+	case Rejuvenation:
+		return c.Belt[RV] + c.Pack[RV]
+	case Portal:
+		return c.PortalCharges
+	}
+	return 0
+}

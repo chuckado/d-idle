@@ -349,6 +349,7 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		return rep, ErrNotInTown
 	}
 	rep.GoldBefore = s.Player.Gold
+	t.logPlanShadow(s, plan)
 	wasEmpty := t.portalEmpty
 	lowAtStart := plan.Heal && t.needHeal(s)
 	deadline := t.e.Clock.Now().Add(time.Duration(t.tune().ChoreBudgetS) * time.Second)
