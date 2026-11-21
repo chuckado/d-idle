@@ -307,6 +307,16 @@ func (e *Exec) acceptLocked(vs []QuestView, plan Plan, diff int, quest, chunk st
 	if _, cur, ok := chunkView(vs, quest, chunk); ok && (cur.State == Accepted || cur.State == InProgress || cur.State == Awaiting) {
 		return nil // the same tap again is a no-op
 	}
+	if ev == nil {
+		if _, cur, ok := chunkView(vs, quest, chunk); ok && afterOnly(cur) {
+			// A chunk that only waits for earlier steps of its quest: accepting it accepts those steps too.
+			chain, err := e.prereqChain(vs, quest, chunk)
+			if err != nil {
+				return err
+			}
+			return e.acceptChainLocked(vs, diff, quest, append(chain, chunk), "")
+		}
+	}
 	if o := open(vs, plan, diff); len(o) > 0 {
 		return fmt.Errorf("questboard: %s is already accepted; finish or stop it first (one chunk at a time)", o[0])
 	}
@@ -329,6 +339,129 @@ func (e *Exec) acceptLocked(vs []QuestView, plan Plan, diff int, quest, chunk st
 	delete(e.rs, ChunkKey(quest, chunk)) // a fresh start: no old counters or park
 	e.o.Log("quest board: accepted "+ChunkKey(quest, chunk), "quest", quest, "chunk", chunk)
 	return nil
+}
+
+// acceptChainLocked records the chunks (prerequisites first, the asked chunk last) in one save. repair is the
+// log line of a board-load repair ("" for a tap).
+func (e *Exec) acceptChainLocked(vs []QuestView, diff int, quest string, chunks []string, repair string) error {
+	finished := func(r Record) bool {
+		_, c, ok := chunkView(vs, r.Quest, r.Chunk)
+		return ok && (c.State == Done || c.State == Skipped)
+	}
+	if err := e.st.AcceptChain(quest, chunks, diff, e.o.Mode, finished); err != nil {
+		return err
+	}
+	for _, c := range chunks {
+		delete(e.rs, ChunkKey(quest, c))
+	}
+	last, pre := chunks[len(chunks)-1], chunks[:len(chunks)-1]
+	if repair != "" {
+		e.o.Log(repair, "quest", quest, "chunk", last)
+	} else {
+		e.o.Log("quest board: accepted "+ChunkKey(quest, last)+" (after: "+strings.Join(pre, ", ")+")", "quest", quest, "chunk", last)
+	}
+	return nil
+}
+
+// afterOnly says the chunk is locked only because earlier chunks of its own quest are not done.
+func afterOnly(c ChunkView) bool { return c.State == Locked && strings.HasPrefix(c.Why, "after ") }
+
+// prereqChain lists the unfinished earlier chunks the chunk waits for (its After chunks, transitively), in
+// questspec order. Each must be startable or already accepted; otherwise the error says which one to start first.
+func (e *Exec) prereqChain(vs []QuestView, quest, chunk string) ([]string, error) {
+	q, err := e.b.Quest(quest)
+	if err != nil {
+		return nil, err
+	}
+	need := map[string]bool{}
+	var walk func(id string)
+	walk = func(id string) {
+		c, err := e.b.Chunk(quest, id)
+		if err != nil {
+			return
+		}
+		for _, a := range c.After {
+			if !need[a] {
+				need[a] = true
+				walk(a)
+			}
+		}
+	}
+	walk(chunk)
+	var out []string
+	for _, c := range q.Chunks {
+		if !need[c.ID] || c.ID == chunk {
+			continue
+		}
+		_, cv, ok := chunkView(vs, quest, c.ID)
+		if !ok || cv.State == Done {
+			continue
+		}
+		switch {
+		case cv.State == Ready || cv.State == Accepted || cv.State == InProgress || cv.State == Awaiting || afterOnly(cv):
+			out = append(out, c.ID)
+		default:
+			return nil, fmt.Errorf("questboard: start %q first: it is %s%s", c.Title, cv.State, because(cv.Why))
+		}
+	}
+	return out, nil
+}
+
+// repairLocked accepts the missing prerequisite steps of the first accepted chunk (a plan file that holds a
+// chunk whose predecessor was never accepted, or was stopped). It reports whether it wrote records.
+func (e *Exec) repairLocked(vs []QuestView, plan Plan, diff int, first Ref) bool {
+	_, c, ok := chunkView(vs, first.Quest, first.Chunk)
+	if !ok || !afterOnly(c) {
+		return false
+	}
+	chain, err := e.prereqChain(vs, first.Quest, first.Chunk)
+	if err != nil || len(chain) == 0 {
+		return false
+	}
+	line := "quest board: " + first.Chunk + " waits for " + strings.Join(chain, ", ") + " (auto-started)"
+	return e.acceptChainLocked(vs, diff, first.Quest, append(chain, first.Chunk), line) == nil
+}
+
+// Dependants lists the accepted chunks of the quest that wait, directly or not, for the chunk (what a Stop of it
+// withdraws too).
+func (e *Exec) Dependants(quest, chunk string) []string {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	return e.dependantsLocked(quest, chunk)
+}
+
+func (e *Exec) dependantsLocked(quest, chunk string) []string {
+	p, _, err := e.st.Load()
+	q, qerr := e.b.Quest(quest)
+	if err != nil || qerr != nil {
+		return nil
+	}
+	diff := e.env.Diff()
+	waits := func(id string) bool { // id waits for chunk, transitively
+		seen := map[string]bool{}
+		var walk func(string) bool
+		walk = func(x string) bool {
+			c, err := e.b.Chunk(quest, x)
+			if err != nil {
+				return false
+			}
+			for _, a := range c.After {
+				if a == chunk || (!seen[a] && walk(a)) {
+					return true
+				}
+				seen[a] = true
+			}
+			return false
+		}
+		return walk(id)
+	}
+	var out []string
+	for _, c := range q.Chunks {
+		if c.ID != chunk && p.accepted(diff, quest, c.ID) && waits(c.ID) {
+			out = append(out, c.ID)
+		}
+	}
+	return out
 }
 
 // HasRecord reports whether the plan file holds an accepted record of the chunk in this difficulty, whatever state
@@ -356,8 +489,15 @@ func (e *Exec) Cancel(quest, chunk string) error {
 	if !e.o.Enabled {
 		return ErrOff
 	}
+	deps := e.dependantsLocked(quest, chunk)
 	if err := e.st.Cancel(quest, chunk, e.env.Diff()); err != nil {
 		return err
+	}
+	for _, d := range deps { // a step that waited for it would only park, or start it again
+		if err := e.st.Cancel(quest, d, e.env.Diff()); err != nil {
+			return err
+		}
+		delete(e.rs, ChunkKey(quest, d))
 	}
 	delete(e.rs, ChunkKey(quest, chunk))
 	e.act.Stop(q, c)
@@ -480,6 +620,12 @@ func (e *Exec) Next() (Decision, error) {
 	o := open(vs, plan, diff)
 	if len(o) == 0 {
 		return Decision{Kind: DecIdle}, nil
+	}
+	if e.repairLocked(vs, plan, diff, o[0]) {
+		if vs, plan, diff, err = e.derive(); err != nil {
+			return Decision{}, err
+		}
+		o = open(vs, plan, diff)
 	}
 	r := o[0]
 	_, c, _ := chunkView(vs, r.Quest, r.Chunk)

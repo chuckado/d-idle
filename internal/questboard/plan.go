@@ -253,6 +253,48 @@ func (s *Store) AcceptIf(quest, chunk string, diff int, mode string, finished fu
 	return s.accept(quest, chunk, diff, mode, finished, false)
 }
 
+// AcceptChain records several chunks of one quest in one save, in the order given (a chunk and the prerequisite
+// steps it waits for). Chunks that already have a record are kept; any other unfinished record refuses.
+func (s *Store) AcceptChain(quest string, chunks []string, diff int, mode string, finished func(Record) bool, events ...AutoEvent) error {
+	if diff < 0 || diff > 2 {
+		return fmt.Errorf("questboard: difficulty index %d out of range", diff)
+	}
+	for _, c := range chunks {
+		if _, err := s.b.Chunk(quest, c); err != nil {
+			return err
+		}
+	}
+	return s.update(func(p *Plan) error {
+		in := map[string]bool{}
+		for _, c := range chunks {
+			in[c] = true
+		}
+		have := map[string]bool{}
+		for _, r := range p.Accepted {
+			if r.Diff != Difficulties[diff] {
+				continue
+			}
+			if r.Quest == quest && in[r.Chunk] {
+				have[r.Chunk] = true
+				continue
+			}
+			if finished != nil && finished(r) {
+				continue
+			}
+			return fmt.Errorf("questboard: %s/%s is already accepted in %s", r.Quest, r.Chunk, r.Diff)
+		}
+		for _, c := range chunks {
+			if !have[c] {
+				p.Accepted = append(p.Accepted, Record{Quest: quest, Chunk: c, Diff: Difficulties[diff], At: s.now().UTC(), Mode: mode})
+			}
+		}
+		for _, e := range events {
+			p.addEvent(e)
+		}
+		return nil
+	})
+}
+
 // AcceptAuto is AcceptIf for the auto-start controller: the record carries Auto, and the start event is written in
 // the same save so a crash cannot leave a started chunk without its log line.
 func (s *Store) AcceptAuto(quest, chunk string, diff int, mode string, finished func(Record) bool, ev AutoEvent) error {
