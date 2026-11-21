@@ -15,6 +15,12 @@ card: "chores2"
 owns:
   - "internal/town/chores.go"
   - "internal/town/kithealing_test.go"
+  - "internal/town/town.go"
+  - "internal/task/gate.go"
+  - "internal/task/route_test.go"
+  - "internal/bot/task.go"
+  - "internal/bot/contracts.go"
+  - "cmd/d2bot/adapters.go"
 exclusive: []
 contracts: []
 ---
@@ -24,7 +30,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Why: TODO. Done when: TODO.
+Why: the route guard counts 4 healing potions (belt + pack), the belt plan of a 4-slot belt with a mana column holds 3, so the shop saw nothing to buy; and a kit-only guard block was a danger fault (planner levels) instead of a chores trip. Fix: kit-only block inserts chores (task/gate.go guardFault); task chores pass ChorePlan.KitHealing = kitMinHP so the shop buys to it (into the pack) and the stash pays (shopCost). Done when: unit tests on Paladin and Sorceress pass and act1.tools.malus is GREEN. Source: docs/probes/provingground-act1more-2026-11-20.md findings 1 and 2.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
