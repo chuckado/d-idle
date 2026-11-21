@@ -137,6 +137,8 @@ cmd/d2bot/adapters.go  credit-runner  cainfix3
 cmd/d2bot/adapters.go  credit-runner  chores2
 cmd/d2bot/adapters.go  credit-runner  goldprio
 cmd/d2bot/adapters.go  credit-runner  idfast
+cmd/d2bot/autoallocwire.go  credit-runner  autoalloc
+cmd/d2bot/autoallocwire_test.go  credit-runner  autoalloc
 cmd/d2bot/behaviors.go  credit-runner  agencyp0
 cmd/d2bot/behaviors.go  credit-runner  campaign1
 cmd/d2bot/behaviors.go  credit-runner  gearsets
@@ -270,6 +272,7 @@ cmd/d2bot/objects_test.go  credit-runner  cainfix
 cmd/d2bot/pausewire.go  credit-runner  uib1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
 cmd/d2bot/pointswire.go  credit-runner  agencyp0
+cmd/d2bot/pointswire.go  credit-runner  autoalloc
 cmd/d2bot/pointswire_test.go  credit-runner  agencyp0
 cmd/d2bot/powerwire.go  credit-runner  powerwire
 cmd/d2bot/powerwire.go  credit-runner  survB
@@ -401,6 +404,7 @@ docs/agency.md  credit-runner  hammer1
 docs/agency.md  credit-runner  necro1
 docs/aggression.md  credit-runner  wiring2
 docs/archive  credit-runner  dietarchive
+docs/autoalloc.md  credit-runner  autoalloc
 docs/away-drill.md  live-agent  awaydrill
 docs/backlog-howto.md  credit-runner  dietrule
 docs/beltfix.md  credit-runner  beltfix
@@ -418,6 +422,7 @@ docs/d2d-loot.md  credit-runner  groundquality
 docs/decisions.md  credit-runner  adrfable
 docs/decisions.md  credit-runner  fabledecisions2
 docs/decisions.md  credit-runner  vaultpay
+docs/design/autoalloc-and-currencies-2026-11-21.md  credit-runner  autoalloc
 docs/design/bulk-identify-2026-11-18.md  credit-runner  bulkid-design
 docs/design/fable-review-2026-11-19  user  fablereview
 docs/design/fable-review-2026-11-21/combat-engine*  pro-runner  fablecombat
@@ -474,6 +479,7 @@ docs/inventory-ui.md  credit-runner  nopins
 docs/inventory-ui.md  credit-runner  uic2
 docs/inventory-ui.md  credit-runner  uic3
 docs/knobs.md  credit-runner  agencyp0
+docs/knobs.md  credit-runner  autoalloc
 docs/knobs.md  credit-runner  botcpu2
 docs/knobs.md  credit-runner  botinstant
 docs/knobs.md  credit-runner  botstuck
@@ -1148,10 +1154,12 @@ internal/delivery/  credit-runner  dlv-data
 internal/delivery/  credit-runner  dlv-rotation
 internal/env  credit-runner  survsd
 internal/env  credit-runner  wiring2
+internal/env/tuning.go  credit-runner  autoalloc
 internal/env/tuning.go  credit-runner  bulkid
 internal/env/tuning.go  credit-runner  q4runes
 internal/env/tuning.go  credit-runner  quests3
 internal/env/tuning.go  credit-runner  videofeed2
+internal/env/tuning_agency.go  credit-runner  autoalloc
 internal/env/tuning_bot.go  credit-runner  botstuck
 internal/env/tuning_bot.go  credit-runner  exploredpct
 internal/env/tuning_bot.go  credit-runner  freshstart
@@ -1184,6 +1192,7 @@ internal/env/tuning_quests.go  live-agent  k1layout
 internal/env/tuning_resource.go  credit-runner  agencyp0
 internal/env/tuning_resource.go  credit-runner  freshstart
 internal/env/tuning_resource.go  live-agent  recoverypace
+internal/env/tuning_respec.go  credit-runner  autoalloc
 internal/env/tuning_town.go  credit-runner  tidy
 internal/env/tuning_town.go  credit-runner  town3
 internal/env/tuning_watch.go  credit-runner  videofeed2
@@ -1227,6 +1236,8 @@ internal/invdesk/usable_test.go  credit-runner  botinstant
 internal/invdesk/usable_test.go  credit-runner  charreq
 internal/invdesk/verbs.go  credit-runner  q13input
 internal/itemreq/  credit-runner  charreq
+internal/leveler/autoalloc.go  credit-runner  autoalloc
+internal/leveler/autoalloc_test.go  credit-runner  autoalloc
 internal/leveler/build.go  credit-runner  agencyp0
 internal/leveler/druidfire_test.go  credit-runner  druid1
 internal/leveler/frenzy_test.go  credit-runner  barb1
@@ -1235,6 +1246,7 @@ internal/leveler/itemreasons.go  credit-runner  charreq
 internal/leveler/judge.go  credit-runner  charreq
 internal/leveler/judge_test.go  credit-runner  charreq
 internal/leveler/leveler.go  credit-runner  agencyp0
+internal/leveler/leveler.go  credit-runner  autoalloc
 internal/leveler/necrosummoner_test.go  credit-runner  necro1
 internal/leveler/playerequip.go  credit-runner  charreq
 internal/leveler/playerequip_test.go  credit-runner  gearsets
@@ -1327,6 +1339,7 @@ internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
 internal/points  credit-runner  agencyp0
+internal/points/  credit-runner  autoalloc
 internal/power  credit-runner  dangerfit2
 internal/power  credit-runner  survsd
 internal/power/  credit-runner  dlv-cleanup
@@ -1545,6 +1558,7 @@ internal/watch/etherapi.go  credit-runner  vaultv7b
 internal/watch/etherapi_test.go  credit-runner  vaultv7
 internal/watch/etherapi_test.go  credit-runner  vaultv7b
 internal/watch/funwire.go  credit-runner  agencyp0
+internal/watch/funwire.go  credit-runner  autoalloc
 internal/watch/funwire.go  credit-runner  friendfb
 internal/watch/funwire.go  credit-runner  labels
 internal/watch/funwire.go  credit-runner  lootwireL4
@@ -1627,8 +1641,11 @@ internal/watch/pauseapi.go  credit-runner  uib1
 internal/watch/pauseapi_test.go  credit-runner  uib1
 internal/watch/pausefix_test.go  credit-runner  pausefix
 internal/watch/pointsapi.go  credit-runner  agencyp0
+internal/watch/pointsapi.go  credit-runner  autoalloc
 internal/watch/pointsapi_test.go  credit-runner  agencyp0
+internal/watch/pointsapi_test.go  credit-runner  autoalloc
 internal/watch/pointsui.go  credit-runner  agencyp0
+internal/watch/pointsui.go  credit-runner  autoalloc
 internal/watch/pprofapi.go  credit-runner  botcpu2
 internal/watch/questsapi.go  credit-runner  quests4
 internal/watch/questsapi.go  credit-runner  quests8
@@ -1919,7 +1936,9 @@ internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area
 internal/watch/web/pauseui.js  credit-runner  pausefix
 internal/watch/web/pauseui.js  credit-runner  pausemenufit
 internal/watch/web/points.css  credit-runner  agencyp0
+internal/watch/web/points.css  credit-runner  autoalloc
 internal/watch/web/points.js  credit-runner  agencyp0
+internal/watch/web/points.js  credit-runner  autoalloc
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
@@ -2081,7 +2100,9 @@ tools/provingground/scenarios/act1.json  credit-runner  countess
 tools/provingground/scenarios/act1.json  credit-runner  countess2
 tools/provingground/scenarios/act1more.json  credit-runner  act1more
 tools/provingground/scenarios/act1more.json  credit-runner  andariel1
+tools/provingground/scenarios/autoalloc.json  credit-runner  autoalloc
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
+tools/provingground/scenarios/behaviours.json  credit-runner  autoalloc
 tools/provingground/scenarios/behaviours.json  credit-runner  vaultequip
 tools/provingground/scenarios/board.json  credit-runner  bsm1
 tools/provingground/scenarios/board.json  credit-runner  bsm7

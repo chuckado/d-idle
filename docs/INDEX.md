@@ -240,6 +240,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [areametrics.md](areametrics.md): Per-area gold and XP log (change areametrics)
 - [areathrash.md](areathrash.md): Area thrash, cave-mouth holds and the Dark Wood exit (fun killer 5) (status: analysis V (sandbox log), fix OFFLINE ONLY (unit tests, not run live). Source:...)
 - [armorcut.md](armorcut.md): armorcut: a Frozen Armor recast cut in a fight (card armorcut) (status: current, offline fix, awaits the live proof. Tags: V = verified (read in a log or test), S = read in code...)
+- [autoalloc.md](autoalloc.md): Automatic Allocate Skills (mechanics) (status: built 2026-11-21 (agent autoalloc), knob `agency.autoAlloc` default 0 (off); not run live. The design, the...)
 - [basics-audit.md](basics-audit.md): Basics audit: town and inventory scenarios against the code (agent BASICSAUDIT, 2026-10-31) (status: current. Offline audit for the milestone in BACKLOG.md section 0. Read-only on production code; no game,...)
 - [belt-plan.md](belt-plan.md): Belt plan knob (TASK-164) (status: built and tested offline; the live drill is below. Tags: V = proven by a test in this tree, S = from a...)
 - [beltfill.md](beltfill.md): Belt fill (BELTFILL)
@@ -325,6 +326,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `design/`
 
+- [autoalloc-and-currencies-2026-11-21.md](design/autoalloc-and-currencies-2026-11-21.md): Automatic Allocate Skills, the gold respec and the currency consolidation (design, 2026-11-21) (status: DESIGN plus a built first slice (agent autoalloc). Tags: **V** verified (how said), **S** secondary, **U**...)
 - [bulk-identify-2026-11-18.md](design/bulk-identify-2026-11-18.md): Bulk identify: Cain-free, lazy reveal, filter (design, 2026-11-18) (status: BUILT offline (B1-B5 and the town adapters, scroll path and Ether tap payer of slice B6, task bulkid2),...)
 
 `design/fable-review-2026-11-19/`
