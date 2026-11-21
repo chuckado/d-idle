@@ -6,7 +6,7 @@
 
 | card | task | branch tip | merge head | what |
 |---|---|---|---|---|
-| towncards | TASK-746..765 | 2adf5ed3c's fix `c9d49843d` | `35960ca36` | the 12 cards (11 of B5 plus the SME review card town12) |
+| towncards | TASK-746..765 | `c9d49843d` | `35960ca36` | the 12 cards (11 of B5 plus the SME review card town12) |
 | town1 | TASK-746 | `a57287bcd` | `f333ddef6` | 12 B4 scenarios in `tools/provingground/scenarios/townplan.json`, assertion `belt_at_least` |
 | town2 | TASK-748 | `ae5d79b8e` | `a05fa2d8c` | `internal/supply` counter; bot and town counters call it |
 | town3 | TASK-753 | `d3babf679` | `d3190e47a` | `NeedFor`, pure `Solve`, `profiles.json`, knob `town.plan`, stage 1 shadow trace and minute-line field |
