@@ -55,6 +55,9 @@ type State struct {
 	// LogLines are the lines of the bot's log that match a log_line assertion of the scenario (never the whole log), each
 	// with its place in the run as virtual minutes (LogLine.T). They come from the bot's log, not from the game: S.
 	LogLines []LogLine `json:"log_lines,omitempty"`
+	// Board are samples of GET /api/quests during the run and APIReplies the recorded answers of trigger.api (board.go).
+	Board      []BoardSample `json:"board,omitempty"`
+	APIReplies []APIReply    `json:"api_replies,omitempty"`
 	// WritesAfterStart is the number of gameplay-affecting writes after the run start (d2cheat ledger), -1 unknown.
 	WritesAfterStart int `json:"writes_after_start"`
 }
@@ -97,6 +100,7 @@ const (
 	ANoWrites       = "no_writes"       // writes_after_start == 0 (the CRUTCH RULE line)
 	AStatBetween    = "stat_between"    // code (str dex vit ene statpts skillpts skillsspent), min, max
 	ASkillPoints    = "skill_points"    // skill (skills.txt id), min, max, at_level: hard points in one skill (skills.go)
+	ABeltAtLeast    = "belt_at_least"   // code (potion family prefix: hp, mp, rv), min: potions of that family in the BELT alone (item_in_pack cannot tell belt from pack when where is unset)
 	ALogLine        = "log_line"        // pattern, min (default 1), max, from_min, to_min: lines of the bot log (logline.go)
 )
 
@@ -129,6 +133,17 @@ type Assert struct {
 	Pattern string  `json:"pattern,omitempty"`
 	FromMin float64 `json:"from_min,omitempty"`
 	ToMin   float64 `json:"to_min,omitempty"`
+	// board, board_heads_le and api_reply (board.go): the chunk, the reason alternatives and the reply fields.
+	Quest      string   `json:"quest,omitempty"`
+	Chunk      string   `json:"chunk,omitempty"`
+	Reason     string   `json:"reason,omitempty"`
+	ReasonOr   []string `json:"reason_or,omitempty"`
+	When       string   `json:"when,omitempty"`
+	Index      *int     `json:"index,omitempty"`
+	Status     int      `json:"status,omitempty"`
+	OKIs       *bool    `json:"ok,omitempty"`
+	AlreadyIs  *bool    `json:"already,omitempty"`
+	ChangedHas []string `json:"changed_has,omitempty"`
 }
 
 // Validate checks that the fields the kind needs are present.
@@ -137,6 +152,10 @@ func (a Assert) Validate() error {
 	case AItemInPack, AItemAbsent:
 		if a.Code == "" {
 			return fmt.Errorf("%s needs code", a.Kind)
+		}
+	case ABeltAtLeast:
+		if a.Code == "" || a.Min <= 0 {
+			return fmt.Errorf("belt_at_least needs code (hp, mp or rv) and min")
 		}
 	case AQuestBits:
 		if a.Set == 0 && a.Clear == 0 {
@@ -192,6 +211,8 @@ func (a Assert) Validate() error {
 		if err := a.validateLogLine(); err != nil {
 			return err
 		}
+	case ABoard, ABoardHeadsLE, AAPIReply:
+		return a.validateBoard()
 	case ANoWrites:
 	default:
 		return fmt.Errorf("unknown assertion kind %q", a.Kind)
@@ -251,6 +272,17 @@ func evalOne(a Assert, st State) AssertResult {
 			return AssertResult{OK: n >= min && n <= *a.Max, Want: fmt.Sprintf("%d..%d x %s", min, *a.Max, a.Code), Got: fmt.Sprintf("%d x %s", n, a.Code)}
 		}
 		return AssertResult{OK: n >= min, Want: fmt.Sprintf(">= %d x %s", min, a.Code), Got: fmt.Sprintf("%d x %s", n, a.Code)}
+	case ABeltAtLeast:
+		if !st.has("items") {
+			return unobs("belt "+a.Code, "items")
+		}
+		n := 0
+		for _, it := range st.Items {
+			if it.Where == "belt" && len(it.Code) == 3 && strings.HasPrefix(it.Code, a.Code) {
+				n++
+			}
+		}
+		return AssertResult{OK: n >= a.Min, Want: fmt.Sprintf(">= %d %s potions in the belt", a.Min, a.Code), Got: fmt.Sprintf("%d in the belt", n)}
 	case AQuestBits:
 		w, ok := st.Quests[a.Record]
 		want := fmt.Sprintf("record %d set 0x%04x clear 0x%04x", a.Record, a.Set, a.Clear)
@@ -360,6 +392,12 @@ func evalOne(a Assert, st State) AssertResult {
 		return evalSkillPoints(a, st)
 	case ALogLine:
 		return evalLogLine(a, st)
+	case ABoard:
+		return evalBoard(a, st)
+	case ABoardHeadsLE:
+		return evalBoardHeads(a, st)
+	case AAPIReply:
+		return evalAPIReply(a, st)
 	case ANoWrites:
 		if st.WritesAfterStart < 0 {
 			return unobs("writes after start: 0", "write ledger")

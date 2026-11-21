@@ -183,3 +183,15 @@ func TestBotConfigAndSkillLevels(t *testing.T) {
 		t.Fatalf("stats %v", ps)
 	}
 }
+
+func TestParseBoardAndReply(t *testing.T) {
+	body := []byte(`{"quests":[{"id":"q","chunks":[{"id":"a","state":"accepted","reason":{"code":"waits_for"}},{"id":"b","state":"ready"},{"id":"c","state":"blocked","reason":"gave_up"}]}]}`)
+	got := parseBoard(body)
+	if len(got) != 3 || got[0].Reason != "waits_for" || got[1].Reason != "" || got[2].Reason != "gave_up" || got[0].Quest != "q" {
+		t.Fatalf("board %+v", got)
+	}
+	r := parseReply(1, "/api/quests/q/cancel", 200, []byte(`{"ok":true,"already":true,"changed":[{"quest":"q","chunk":"a"}]}`))
+	if !r.OK || !r.Already || len(r.Changed) != 1 || r.Changed[0] != "q/a" || r.Index != 1 {
+		t.Fatalf("reply %+v", r)
+	}
+}

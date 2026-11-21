@@ -1,0 +1,708 @@
+{
+ "build": "druid_fire_guide",
+ "class": "druid",
+ "combat": "fire",
+ "hotkeys": [
+  {
+   "key": "F1",
+   "skill": "Firestorm",
+   "hand": "right",
+   "from_clvl": 2
+  },
+  {
+   "key": "F2",
+   "skill": "Molten Boulder",
+   "hand": "right",
+   "from_clvl": 6
+  },
+  {
+   "key": "F3",
+   "skill": "Eruption",
+   "hand": "right",
+   "from_clvl": 12
+  },
+  {
+   "key": "F4",
+   "skill": "Cyclone Armor",
+   "hand": "right",
+   "from_clvl": 18
+  },
+  {
+   "key": "F5",
+   "skill": "Oak Sage",
+   "hand": "right",
+   "from_clvl": 16
+  }
+ ],
+ "main_attack": [
+  {
+   "from_clvl": 1,
+   "until_clvl": 11,
+   "skill": "Firestorm",
+   "weapon": "any",
+   "note": "Molten Boulder from 6 for fire immune targets"
+  },
+  {
+   "from_clvl": 12,
+   "until_clvl": 30,
+   "skill": "Eruption",
+   "weapon": "any",
+   "note": "Fissure (skills.txt Eruption); Firestorm and Molten Boulder as fallbacks; ground-aimed, 2 s cooldown tuning is D2R only (U in 1.14d)"
+  }
+ ],
+ "note": "DRUID1 (Fable roadmap Q8, user decision 2026-11-19): the Druid fire build, class 5 after the Sorceress fire build, the Necromancer summoner, the Hammerdin and the Barbarian Frenzy; review row D1 Fire, Normal of docs/design/fable-review-2026-11-19/03-classes-plan.md section 3.5 (Firestorm, Molten Boulder, Fissure = Eruption in skills.txt). Guide-track provenance [V Maxroll Druid leveling via docs/classes/druid.md: Firestorm 1-5, Molten Boulder 6-7, Firestorm 8-11, Fissure from 12; the points after clvl 16 and the no-respec row order are this repo's own arrangement, U]. Tier experimental: no Druid skill was ever cast in a live game, the ground aim (cast at the monster's ground point, no cooldown or line-of-sight rule) and the d2d effect of Fissure and Volcano have no verdict (review 02 A8), Cyclone Armor's recast clock is a guess (docs/process/druid-support.md). Opt-in by name (levelerBuild druid_fire_guide); the default Druid table (druid_fire_normal30) and the endgame table are unchanged.",
+ "respec": null,
+ "rows": [
+  {
+   "clvl": 2,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 3,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 4,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 5,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 6,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 7,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Molten Boulder",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 8,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Molten Boulder",
+     "points": 1
+    },
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 9,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 10,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 11,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 12,
+   "strength": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 13,
+   "strength": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 14,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 15,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 16,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Oak Sage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 17,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Arctic Blast",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 18,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Cyclone Armor",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 19,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 20,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 21,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 22,
+   "strength": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 23,
+   "strength": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 24,
+   "strength": 5,
+   "skills": [
+    {
+     "skill": "Volcano",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 25,
+   "strength": 5,
+   "skills": [
+    {
+     "skill": "Molten Boulder",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 26,
+   "strength": 5,
+   "skills": [
+    {
+     "skill": "Molten Boulder",
+     "points": 3
+    }
+   ]
+  },
+  {
+   "clvl": 27,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 28,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 29,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 30,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 31,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 32,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 33,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 34,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Firestorm",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 35,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 36,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 37,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 38,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 39,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 40,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 41,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 42,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 43,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Eruption",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 44,
+   "vitality": 5
+  },
+  {
+   "clvl": 45,
+   "vitality": 5
+  },
+  {
+   "clvl": 46,
+   "vitality": 5
+  },
+  {
+   "clvl": 47,
+   "vitality": 5
+  },
+  {
+   "clvl": 48,
+   "vitality": 5
+  },
+  {
+   "clvl": 49,
+   "vitality": 5
+  },
+  {
+   "clvl": 50,
+   "vitality": 5
+  },
+  {
+   "clvl": 51,
+   "vitality": 5
+  },
+  {
+   "clvl": 52,
+   "vitality": 5
+  },
+  {
+   "clvl": 53,
+   "vitality": 5
+  },
+  {
+   "clvl": 54,
+   "vitality": 5
+  },
+  {
+   "clvl": 55,
+   "vitality": 5
+  },
+  {
+   "clvl": 56,
+   "vitality": 5
+  },
+  {
+   "clvl": 57,
+   "vitality": 5
+  },
+  {
+   "clvl": 58,
+   "vitality": 5
+  },
+  {
+   "clvl": 59,
+   "vitality": 5
+  },
+  {
+   "clvl": 60,
+   "vitality": 5
+  },
+  {
+   "clvl": 61,
+   "vitality": 5
+  },
+  {
+   "clvl": 62,
+   "vitality": 5
+  },
+  {
+   "clvl": 63,
+   "vitality": 5
+  },
+  {
+   "clvl": 64,
+   "vitality": 5
+  },
+  {
+   "clvl": 65,
+   "vitality": 5
+  },
+  {
+   "clvl": 66,
+   "vitality": 5
+  },
+  {
+   "clvl": 67,
+   "vitality": 5
+  },
+  {
+   "clvl": 68,
+   "vitality": 5
+  },
+  {
+   "clvl": 69,
+   "vitality": 5
+  },
+  {
+   "clvl": 70,
+   "vitality": 5
+  },
+  {
+   "clvl": 71,
+   "vitality": 5
+  },
+  {
+   "clvl": 72,
+   "vitality": 5
+  },
+  {
+   "clvl": 73,
+   "vitality": 5
+  },
+  {
+   "clvl": 74,
+   "vitality": 5
+  },
+  {
+   "clvl": 75,
+   "vitality": 5
+  },
+  {
+   "clvl": 76,
+   "vitality": 5
+  },
+  {
+   "clvl": 77,
+   "vitality": 5
+  },
+  {
+   "clvl": 78,
+   "vitality": 5
+  },
+  {
+   "clvl": 79,
+   "vitality": 5
+  },
+  {
+   "clvl": 80,
+   "vitality": 5
+  },
+  {
+   "clvl": 81,
+   "vitality": 5
+  },
+  {
+   "clvl": 82,
+   "vitality": 5
+  },
+  {
+   "clvl": 83,
+   "vitality": 5
+  },
+  {
+   "clvl": 84,
+   "vitality": 5
+  },
+  {
+   "clvl": 85,
+   "vitality": 5
+  },
+  {
+   "clvl": 86,
+   "vitality": 5
+  },
+  {
+   "clvl": 87,
+   "vitality": 5
+  },
+  {
+   "clvl": 88,
+   "vitality": 5
+  },
+  {
+   "clvl": 89,
+   "vitality": 5
+  },
+  {
+   "clvl": 90,
+   "vitality": 5
+  },
+  {
+   "clvl": 91,
+   "vitality": 5
+  },
+  {
+   "clvl": 92,
+   "vitality": 5
+  },
+  {
+   "clvl": 93,
+   "vitality": 5
+  },
+  {
+   "clvl": 94,
+   "vitality": 5
+  },
+  {
+   "clvl": 95,
+   "vitality": 5
+  },
+  {
+   "clvl": 96,
+   "vitality": 5
+  },
+  {
+   "clvl": 97,
+   "vitality": 5
+  },
+  {
+   "clvl": 98,
+   "vitality": 5
+  },
+  {
+   "clvl": 99,
+   "vitality": 5
+  }
+ ],
+ "schema": "per-clvl allocation, same shape as build-druid_fire_normal30.json (leveler.ParseBuild); rows are generated from internal/buildfile/testdata/druid-fire-guide.json (didle.build/1) by TestDruidFireGoalFileMatchesTable (UPDATE=1), never edited by hand.",
+ "selector": "druid_fire_guide",
+ "tier": "experimental"
+}
