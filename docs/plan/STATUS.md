@@ -333,7 +333,7 @@
 | dlv-rotation | proposed | - | `internal/delivery/`<br>`internal/combat/`<br>`internal/agency/` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | dlv-expect | proposed | - | `internal/combat/`<br>`internal/env/tuning_combat.go`<br>`docs/knobs.md` | - |
-| dlv-reads | proposed | - | `internal/d2dctl/`<br>`internal/scenario/`<br>`tools/provingground/` | `fork-branch:didle/combat-reads`<br>`d2d-lab-binary` |
+| dlv-reads | proposed | - | `internal/d2dctl/`<br>`docs/process/combat-reads.md`<br>`internal/scenario/`<br>`tools/provingground/` | `fork-branch:didle/combat-reads`<br>`d2d-lab-binary` |
 | dlv-upkeep-state | proposed | - | `internal/combat/`<br>`internal/data/` | - |
 | dlv-upkeep-minions | proposed | - | `internal/combat/` | - |
 | dlv-mark | proposed | - | `internal/combat/` | - |
@@ -418,6 +418,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- dba450f87 11-21 11:06 `Merge agent/combatreads: Merge branch 'main' into TASK-721` (combatreads)
+- f202af3c1 11-21 11:05 `Merge branch 'main' into TASK-721` (-)
 - 3e70158f6 11-21 11:01 `Merge agent/pgc6: pg gate group 2 record (cost-cut cards, measurements, what is enforced)` (pgc6)
 - e475e2ade 11-21 11:01 `Merge agent/survhold8: Merge branch 'main' into survhold8` (survhold8)
 - 54c9494d2 11-21 10:58 `Merge branch 'main' into pgc6` (-)
@@ -426,6 +428,4 @@
 - d78daa12f 11-21 10:56 `Merge branch 'main' into heavyguard` (-)
 - edcfd5121 11-21 10:48 `Merge agent/pgc5: pgclock: goals manager, farm timers and the guard snapshot reuse window on the env clock (TASK-739)` (pgc5)
 - 8691cf517 11-21 10:46 `Merge branch 'main' into pgclock` (-)
-- 759c72151 11-21 10:45 `Merge agent/pgc4: pgledgeron: ledger environment for builder runs, pull path, doc and card (TASK-777)` (pgc4)
-- 6928ca8b4 11-21 10:43 `Merge branch 'main' into pgledgeron` (-)
 <!-- statusgen:end -->

@@ -879,6 +879,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [ci-runners-worker.md](process/ci-runners-worker.md): CI runners on the worker (status: moved to the private ops repo (d2lod-ops, `docs/process/ci-runners-worker.md`). Not part of the public tree.)
 - [cleanup-plan-20261105.md](process/cleanup-plan-20261105.md): Whole-project cleanup plan (read-only inventory, 2026-11-05) (status: proposal. Nothing in this pass deleted, renamed or pushed anything. Full lists:...)
 - [coderabbit-prescan.md](process/coderabbit-prescan.md): CodeRabbit pre-scan runbook (d-idle repo and the d2decomped fork) (status: current, card crsetup, 2026-11-02. Owner go given 2026-11-02. Nothing here runs until the owner installs...)
+- [combat-reads.md](process/combat-reads.md): Combat read verbs (dlv-reads, TASK-721) (status: current 2026-11-21. Fork side (private forge, branch didle/combat-reads-20261121, tip 81b191a94) built and...)
 - [contracts-after-openspec.md](process/contracts-after-openspec.md): Contracts after OpenSpec: design (status: PROPOSAL, 2026-11-04 (job contractsdesign, docs only). Nothing here is applied. It refines stages 3 to 5...)
 - [coordinator-efficiency.md](process/coordinator-efficiency.md): Coordinator efficiency checklist (status: current (TASK-310; source: docs/research/project-review-2026-11-10.md section 6 and...)
 - [credit.md](process/credit.md): Credit for work carried upstream (status: current (card creditkit, approved by the maintainer 2026-11-02).)
