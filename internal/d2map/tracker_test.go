@@ -324,10 +324,10 @@ func TestPresetsExitsWaypointsAdjacency(t *testing.T) {
 	lm := tr.Current()
 	_ = lvl
 	want := []Preset{
-		{PresetNPC, 148, Point{503, 504}, r2a},
-		{PresetObject, 119, Point{515, 506}, r2b},
-		{PresetObject, 267, Point{511, 501}, r2b},
-		{PresetTile, 60, Point{518, 502}, r2b},
+		{PresetNPC, 148, Point{503, 504}, r2a, "", false},
+		{PresetObject, 119, Point{515, 506}, r2b, "", false},
+		{PresetObject, 267, Point{511, 501}, r2b, "", false},
+		{PresetTile, 60, Point{518, 502}, r2b, "", false},
 	}
 	if len(lm.Presets) != len(want) {
 		t.Fatalf("presets %+v", lm.Presets)
@@ -417,8 +417,8 @@ func TestStaticDataSurvivesRoomDataBeingFreed(t *testing.T) {
 }
 
 func TestMergePresetsDropsDuplicates(t *testing.T) {
-	a := []Preset{{PresetObject, 119, Point{1, 2}, 10}}
-	a = mergePresets(a, []Preset{{PresetObject, 119, Point{1, 2}, 20}, {PresetNPC, 148, Point{3, 4}, 20}})
+	a := []Preset{{PresetObject, 119, Point{1, 2}, 10, "", false}}
+	a = mergePresets(a, []Preset{{PresetObject, 119, Point{1, 2}, 20, "", false}, {PresetNPC, 148, Point{3, 4}, 20, "", false}})
 	if len(a) != 2 || a[0].Room2 != 20 {
 		t.Fatalf("%+v", a)
 	}

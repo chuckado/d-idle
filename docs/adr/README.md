@@ -12,3 +12,7 @@ MADR-style, one file per decision the user made or the project depends on; `docs
 - [0022](0022-hero-knowledge-reads-never-cheat.md): accepted 2026-11-19 (user popup: K1 level layout read verb; reads never make a run CHEATED; builds on 0020)
 - [0023](0023-fidelity-by-rule-differentials.md): accepted 2026-11-19 (user popup: per-rule differentials or listed shims replace the A:B verdict; amends 0015)
 - [0024](0024-ladder-runewords-in-didle-mode.md): accepted 2026-11-19 (user popup: ladder-only runewords in d.idle mode, vanilla for gates and fidelity; builds on 0020)
+- [0025](0025-quest-board-lifecycle-stored-runs.md): accepted 2026-11-21 (user popups: quest board stores runs, accept chain, stop cascade, parks survive restart, one quest at a time; amends board design 1.5)
+- [0026](0026-combat-engine-capability-table-and-grammar.md): accepted 2026-11-21 (user popups: one capability table, generated tiers, delivery grammar, reads a player can see; builds on 0020 to 0022)
+- [0027](0027-proving-ground-gate-and-night-window.md): accepted 2026-11-21 (user popups: assertion-digest gate, tiers, quotas, ledger, quarantine, standing night window on the second worker host 23:00-07:00 EST; builds on 0020)
+- [0028](0028-one-supply-need-town-planner.md): accepted 2026-11-21 (user popups: One supply need, town plan, staged knob town.plan; builds on 0020)

@@ -812,12 +812,10 @@
      "why": "the first chunk in chain order starts"
     },
     {
-     "kind": "item_in_pack",
-     "code": "bks",
-     "or": [
-      "bkd"
-     ],
-     "why": "the scroll step ran to the tree"
+     "kind": "log_line",
+     "pattern": "quest board: search_for_cain/scroll parked",
+     "max": 0,
+     "why": "the first chunk is not parked"
     },
     {
      "kind": "no_writes"
@@ -905,9 +903,9 @@
    "assert": [
     {
      "kind": "log_line",
-     "pattern": "quests: action=cancel quest=search_for_cain chunk=stones .*ok=true already=false",
-     "min": 1,
-     "why": "the stop withdrew the queued chunk"
+     "pattern": "quest board: starting chunk search_for_cain/stones",
+     "max": 0,
+     "why": "the stopped chunk never starts (V: without the stop it starts, board.two-accepted-chunks Sorceress 3 2026-11-20); the cancel reply itself is in <run>.taps.log (the std-log audit line is not a bot-log JSON line)"
     },
     {
      "kind": "log_line",
@@ -919,6 +917,346 @@
      "kind": "no_writes"
     }
    ]
+  },
+  {
+   "id": "board.prereq-not-accepted",
+   "title": "Quest board: a stones record whose scroll step is not accepted starts the scroll step itself, never parks for ever",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/task/",
+    "internal/d2dsrc/",
+    "internal/nav/",
+    "internal/questboard/",
+    "internal/bot/questboard.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "stones"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs (points as a played level gives), purse 5000 (a played clvl 17 carries more than the kit; at 500 the bot buys a Tome, drops under the kit price and its recovery defers the chunk, see docs/probes/cainstart-2026-11-19.md), waypoints Cold Plains to Dark Wood, board record: stones only, its prerequisite scroll step not accepted (the sandbox state after the player stopped the scroll step, 2026-11-20). CHEATED: waypoints are set by debug wp and the level by stat verbs (SETUP) (mechanics evidence only, never balance).",
+   "notes": "Sandbox 2026-11-20 (deploy 21): stones accepted, the scroll step stopped by the player: the board logged 'stones parked: after Have Akara read the scroll' and nothing ran. Expected: the board accepts the prerequisite chain in questspec order at board load and logs 'stones waits for scroll (auto-started)'; scroll runs, stones is never parked.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "quest board: stones waits for scroll",
+     "min": 1,
+     "why": "the board starts the missing prerequisite step itself"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: starting chunk search_for_cain/scroll",
+     "min": 1,
+     "why": "the prerequisite step runs"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "search_for_cain/stones parked",
+     "max": 0,
+     "why": "never parked behind a step nobody runs"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "board.prereq-start-tap",
+   "title": "Quest board: a Start tap on stones accepts its prerequisite chain in order and the scroll step runs",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/task/",
+    "internal/d2dsrc/",
+    "internal/nav/",
+    "internal/questboard/",
+    "internal/bot/questboard.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    },
+    "api": [
+     {
+      "after_s": 20,
+      "path": "/api/quests/search_for_cain/start",
+      "body": {
+       "chunk": "stones"
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs (points as a played level gives), purse 5000 (a played clvl 17 carries more than the kit; at 500 the bot buys a Tome, drops under the kit price and its recovery defers the chunk, see docs/probes/cainstart-2026-11-19.md), waypoints Cold Plains to Dark Wood, board record: none (the Start tap on stones is the trigger). CHEATED: waypoints are set by debug wp and the level by stat verbs (SETUP) (mechanics evidence only, never balance).",
+   "notes": "The player taps Start on the stones chunk while the scroll step is not accepted (POST /api/quests/search_for_cain/start). Expected: one accepted record per chunk of the chain (scroll, read, stones), shown as stones (after: scroll, read), scroll runs first; no silent park, no refusal.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "quest board: accepted search_for_cain/stones \\(after: scroll, read\\)",
+     "min": 1,
+     "why": "the tap accepted the chain"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: starting chunk search_for_cain/scroll",
+     "min": 1,
+     "why": "the prerequisite step runs first"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "search_for_cain/stones parked",
+     "max": 0,
+     "why": "never parked"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "act1.wp.dark-wood",
+   "title": "Dark Wood waypoint: walk from Stony Field and activate it (any waypoint step, layout read or explore)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "travel",
+    "target": "Dark Wood waypoint",
+    "nodes": [
+     "wp-dark-wood"
+    ]
+   },
+   "covers": [
+    "travel.waypoint"
+   ],
+   "touches": [
+    "internal/task/",
+    "internal/nav/",
+    "internal/d2dworld/",
+    "internal/d2map/",
+    "internal/bot/task.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     0,
+     1,
+     2
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level 17 by stat verbs, 5000 gold, waypoints Rogue Encampment to Stony Field by debug wp (SETUP); the Dark Wood waypoint is NOT set. Mechanics only, never balance.",
+   "notes": "Sandbox hero explored the Dark Wood for an hour on this step (step timeout, no waypoint touched). Run with quests.layoutRead 0 and 1 (-knob); the step must finish (ran or skipped with a 'step timeout N (explored X%)' reason) inside the budget, never spin.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^task step step=\\S*wp-dark-wood outcome=(ran|done) ",
+     "min": 1,
+     "why": "the waypoint step finished by touching the waypoint (Need reads the waypoint bit after the Do)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^step timeout ",
+     "max": 0,
+     "why": "no timeout: the waypoint is found within the 4 minute step budget"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "RED on the builder (K1 d2d devp15, Paladin 11, layoutRead 0 and 1, 2026-11-21): the hero explores the Dark Wood to 40 percent in 15 virtual minutes and never touches the waypoint. debug levelmap lists only the objects of rooms already built (12 objects at arrival, 59 at 40 percent, no waypoint among them), so the layout cannot name the waypoint position ahead; the fix needs the waypoint room's LvlPrest def (candidates among the Dark Wood preset rooms 20 25 29 30 43 48 49), U."
+  },
+  {
+   "id": "act1.wp.dark-wood.layout",
+   "title": "Dark Wood waypoint with the layout read on (quests.layoutRead 1): the waypoint object is walked to, not explored for",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "travel",
+    "target": "Dark Wood waypoint",
+    "nodes": [
+     "wp-dark-wood"
+    ]
+   },
+   "covers": [
+    "travel.waypoint"
+   ],
+   "touches": [
+    "internal/task/",
+    "internal/nav/",
+    "internal/d2dworld/",
+    "internal/d2map/",
+    "internal/bot/task.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     0,
+     1,
+     2
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "quests.layoutRead": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level 17 by stat verbs, 5000 gold, waypoints Rogue Encampment to Stony Field by debug wp (SETUP); the Dark Wood waypoint is NOT set. Mechanics only, never balance.",
+   "notes": "As act1.wp.dark-wood with the fork levelmap read on: needs a d2d with debug levelmap (devp15 and later).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^task step step=\\S*wp-dark-wood outcome=(ran|done) ",
+     "min": 1,
+     "why": "the waypoint step finished by touching the waypoint (Need reads the waypoint bit after the Do)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^step timeout ",
+     "max": 0,
+     "why": "no timeout: the waypoint is found within the 4 minute step budget"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "RED on the builder (K1 d2d devp15, Paladin 11, layoutRead 0 and 1, 2026-11-21): the hero explores the Dark Wood to 40 percent in 15 virtual minutes and never touches the waypoint. debug levelmap lists only the objects of rooms already built (12 objects at arrival, 59 at 40 percent, no waypoint among them), so the layout cannot name the waypoint position ahead; the fix needs the waypoint room's LvlPrest def (candidates among the Dark Wood preset rooms 20 25 29 30 43 48 49), U."
   }
  ]
 }

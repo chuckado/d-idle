@@ -75,6 +75,11 @@ type Plan struct {
 	// those award keys. A key in Baseline never pays (user decision 2026-11-16: no backfill for old saves).
 	Based    []string `json:"based,omitempty"`
 	Baseline []string `json:"baseline,omitempty"`
+	// Runs and Latches are the lifecycle of the quest board state machine (sm.go, knob quests.boardSM). They are additive
+	// inside file version 1: an older build ignores them and keeps working from Accepted, which stays written from the
+	// live and finished runs for one release (store_sm.go).
+	Runs    []Run   `json:"runs,omitempty"`
+	Latches []Latch `json:"latches,omitempty"`
 	// Legacy is LegacySchema once the retired Journey's decisions were imported (ImportLegacy).
 	Legacy string `json:"legacy,omitempty"`
 }
@@ -251,6 +256,48 @@ func (s *Store) Accept(quest, chunk string, diff int, mode string) error {
 // proof that the board ran it) no longer counts as running. A nil finished counts every record.
 func (s *Store) AcceptIf(quest, chunk string, diff int, mode string, finished func(Record) bool) error {
 	return s.accept(quest, chunk, diff, mode, finished, false)
+}
+
+// AcceptChain records several chunks of one quest in one save, in the order given (a chunk and the prerequisite
+// steps it waits for). Chunks that already have a record are kept; any other unfinished record refuses.
+func (s *Store) AcceptChain(quest string, chunks []string, diff int, mode string, finished func(Record) bool, events ...AutoEvent) error {
+	if diff < 0 || diff > 2 {
+		return fmt.Errorf("questboard: difficulty index %d out of range", diff)
+	}
+	for _, c := range chunks {
+		if _, err := s.b.Chunk(quest, c); err != nil {
+			return err
+		}
+	}
+	return s.update(func(p *Plan) error {
+		in := map[string]bool{}
+		for _, c := range chunks {
+			in[c] = true
+		}
+		have := map[string]bool{}
+		for _, r := range p.Accepted {
+			if r.Diff != Difficulties[diff] {
+				continue
+			}
+			if r.Quest == quest && in[r.Chunk] {
+				have[r.Chunk] = true
+				continue
+			}
+			if finished != nil && finished(r) {
+				continue
+			}
+			return fmt.Errorf("questboard: %s/%s is already accepted in %s", r.Quest, r.Chunk, r.Diff)
+		}
+		for _, c := range chunks {
+			if !have[c] {
+				p.Accepted = append(p.Accepted, Record{Quest: quest, Chunk: c, Diff: Difficulties[diff], At: s.now().UTC(), Mode: mode})
+			}
+		}
+		for _, e := range events {
+			p.addEvent(e)
+		}
+		return nil
+	})
 }
 
 // AcceptAuto is AcceptIf for the auto-start controller: the record carries Auto, and the start event is written in

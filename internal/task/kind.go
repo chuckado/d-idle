@@ -33,6 +33,11 @@ type Fault struct {
 	Kind   Kind
 	Why    string
 	Insert []Step
+	// Code is the reason code of docs/design/fable-review-2026-11-21 appendix B.1 (the quest board's closed list), set
+	// only while World.BoardSM is on; Hold says the refusal is no failure: the executor neither counts it nor escapes
+	// from it, the board shows it as a hold and trains meanwhile.
+	Code string
+	Hold bool
 }
 
 func (f *Fault) Error() string { return f.Kind.String() + ": " + f.Why }

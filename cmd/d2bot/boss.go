@@ -162,20 +162,23 @@ func (g *bossGame) viewOf(s *d2.Snapshot) boss.View {
 
 // Presets lists the static units of the current level from the map tracker.
 func (g *bossGame) Presets(ctx context.Context) ([]boss.Preset, error) {
-	if g.e.World == nil {
-		return nil, nil
+	var lm *d2map.LevelMap
+	switch {
+	case g.e.World != nil:
+		if _, err := g.e.World.Update(); err != nil && !errors.Is(err, d2map.ErrNotInGame) {
+			return nil, err
+		}
+		lm = g.e.World.Current()
+	case g.nv != nil:
+		lm = g.nv.RefreshMap() // d2d: Env.World is nil, the navigator's world is the only map (V: scenario act1.forgotten.countess, 2026-11-21)
 	}
-	if _, err := g.e.World.Update(); err != nil && !errors.Is(err, d2map.ErrNotInGame) {
-		return nil, err
-	}
-	lm := g.e.World.Current()
 	if lm == nil {
 		return nil, nil
 	}
 	out := make([]boss.Preset, 0, len(lm.Presets))
 	var npcs []string
 	for _, p := range lm.Presets {
-		out = append(out, boss.Preset{Kind: p.Kind, ID: p.ID, Pos: boss.Pt{X: p.Pos.X, Y: p.Pos.Y}})
+		out = append(out, boss.Preset{Kind: p.Kind, ID: p.ID, Pos: boss.Pt{X: p.Pos.X, Y: p.Pos.Y}, Name: p.Name})
 		if p.Kind == d2map.PresetNPC && g.logPresets[lm.No] != len(lm.Presets) {
 			npcs = append(npcs, fmt.Sprintf("%d@%d,%d", p.ID, p.Pos.X, p.Pos.Y))
 		}

@@ -8,6 +8,17 @@ import (
 	"testing"
 )
 
+// testSM runs the whole executor suite on the run machine: QUESTBOARD_SM=1 go test ./internal/questboard. A test that
+// states an old behaviour the machine changes on purpose (design section 3.7) skips itself with skipSM.
+var testSM = os.Getenv("QUESTBOARD_SM") == "1"
+
+func skipSM(t *testing.T, why string) {
+	t.Helper()
+	if testSM {
+		t.Skip("changed on purpose by the run machine: " + why)
+	}
+}
+
 type rig struct {
 	t    *testing.T
 	b    *Board
@@ -15,13 +26,16 @@ type rig struct {
 	dir  string
 	hero string
 	x    *Exec
+	sm   bool   // run this rig's Exec on the run machine whatever QUESTBOARD_SM says
 	led  Ledger // the account wallet of the rig (nil: none); see ledger_test.go
 }
 
-func newRig(t *testing.T, class string, clvl int) *rig {
+func newRig(t *testing.T, class string, clvl int) *rig { return newRigSM(t, class, clvl, false) }
+
+func newRigSM(t *testing.T, class string, clvl int, sm bool) *rig {
 	t.Helper()
 	b := mustBoard(t)
-	r := &rig{t: t, b: b, f: NewFake(b, class, clvl), dir: t.TempDir(), hero: "Testy"}
+	r := &rig{t: t, b: b, f: NewFake(b, class, clvl), dir: t.TempDir(), hero: "Testy", sm: sm}
 	r.restart()
 	return r
 }
@@ -32,7 +46,7 @@ func (r *rig) restart() {
 	if err != nil {
 		r.t.Fatal(err)
 	}
-	r.x = NewExec(r.b, st, r.f, r.f, Options{Enabled: true, Ledger: func() Ledger { return r.led }})
+	r.x = NewExec(r.b, st, r.f, r.f, Options{Enabled: true, SM: testSM || r.sm, Ledger: func() Ledger { return r.led }})
 }
 
 func (r *rig) tick(n int) Decision {
@@ -276,6 +290,12 @@ func TestHandInReadBack(t *testing.T) {
 		}
 		r.restart() // a restart forgets the park and the chunk is tried again from the evidence
 		r.f.HandInSilent = 0
+		if testSM { // Q5: with the run machine a park survives the restart until the player retries
+			if d := r.next(); d.Kind != DecBlocked {
+				t.Fatalf("after restart: %v", d)
+			}
+			r.x.Unblock(den, clr)
+		}
 		if d := r.next(); d.Kind != DecAwait {
 			t.Fatalf("after restart: %v", d)
 		}
@@ -290,7 +310,7 @@ func TestHandInReadBack(t *testing.T) {
 }
 
 func TestFailureDeathParkResume(t *testing.T) {
-	fail := StepResult{StepFailed, "no path to the Den"}
+	fail := StepResult{StepFailed, "no path to the Den", ""}
 	t.Run("failures park with a visible reason, no silent loop", func(t *testing.T) {
 		r := newRig(t, "Sorceress", 6)
 		r.x.Accept(den, clr)
@@ -327,15 +347,15 @@ func TestFailureDeathParkResume(t *testing.T) {
 	t.Run("death resumes after recovery, a second death parks", func(t *testing.T) {
 		r := newRig(t, "Paladin", 6)
 		r.x.Accept(den, clr)
-		r.f.Script = []StepResult{{Outcome: StepRan}, {StepDied, "Fallen pack"}}
+		r.f.Script = []StepResult{{Outcome: StepRan}, {StepDied, "Fallen pack", ""}}
 		r.tick(2)
 		if d := r.next(); d.Kind != DecRun {
 			t.Fatalf("after one death: %v", d)
 		}
 		r.restart() // the bot restarts while recovering: progress comes from the evidence
-		r.f.Script = []StepResult{{StepDied, "Fallen pack"}}
+		r.f.Script = []StepResult{{StepDied, "Fallen pack", ""}}
 		r.tick(1)
-		r.x.Report(Decision{Quest: den, Chunk: clr}, StepResult{StepDied, "again"})
+		r.x.Report(Decision{Quest: den, Chunk: clr}, StepResult{StepDied, "again", ""})
 		d := r.next()
 		if d.Kind != DecBlocked || !strings.Contains(d.Why, "died 2 times") {
 			t.Fatalf("%v", d)
@@ -355,7 +375,7 @@ func TestFailureDeathParkResume(t *testing.T) {
 func TestResetPauseCancel(t *testing.T) {
 	r := newRig(t, "Paladin", 6)
 	r.x.Accept(den, clr)
-	r.f.Script = []StepResult{{Outcome: StepRan}, {StepFailed, "x"}, {StepFailed, "x"}}
+	r.f.Script = []StepResult{{Outcome: StepRan}, {StepFailed, "x", ""}, {StepFailed, "x", ""}}
 	r.tick(3)
 	r.x.Reset()
 	if r.f.Count("stop") != 1 {
@@ -455,7 +475,12 @@ func TestTwoAcceptedRecordsRunInChainOrder(t *testing.T) {
 				t.Fatalf("%+v %v", d, err)
 			}
 			st, err := r.x.State()
-			if err != nil || st.Active == nil || st.Active.Chunk != "scroll" || len(st.Extra) != 1 || st.Extra[0].Chunk != "stones" {
+			// with the machine the missing middle part (read) is added at load (D4), so two chunks wait
+			wantExtra := 1
+			if testSM {
+				wantExtra = 2
+			}
+			if err != nil || st.Active == nil || st.Active.Chunk != "scroll" || len(st.Extra) != wantExtra || st.Extra[wantExtra-1].Chunk != "stones" {
 				t.Fatalf("%+v %v", st, err)
 			}
 			if w := WaitsFor(Ref{st.Active.Quest, st.Active.Chunk}); w != "waits for "+cain+"/scroll" {
@@ -468,8 +493,13 @@ func TestTwoAcceptedRecordsRunInChainOrder(t *testing.T) {
 func TestStartCoversOnlyTheCurrentChunk(t *testing.T) {
 	r := newRig(t, "Paladin", 14)
 	const cain = "search_for_cain"
-	if err := r.x.Accept(cain, "read"); err == nil {
-		t.Fatal("a later chunk was startable before its predecessor")
+	// boardprereq: a tap on a later part accepts the earlier steps it waits for, in order (never a lone later record)
+	early := newRig(t, "Paladin", 14)
+	if err := early.x.Accept(cain, "read"); err != nil {
+		t.Fatalf("a later chunk accepts its prerequisite: %v", err)
+	}
+	if d := early.next(); d.Kind != DecRun || d.Chunk != "scroll" {
+		t.Fatalf("the prerequisite runs first: %+v", d)
 	}
 	if err := r.x.Accept(cain, "scroll"); err != nil {
 		t.Fatal(err)
@@ -505,5 +535,84 @@ func TestUnknownIDsNameThemselves(t *testing.T) {
 	f := NewFake(r.b, "Bard", 6)
 	if _, err := r.b.LegacyReadiness(f.Class, 6); err == nil || !strings.Contains(err.Error(), "Bard") {
 		t.Fatalf("%v", err)
+	}
+}
+
+// Sandbox 2026-11-20 (boardprereq): stones accepted, its prerequisite scroll step not (the player stopped it). The
+// board must not park for ever: it starts the scroll step itself, and a tap on the later chunk accepts the chain.
+func TestPrerequisiteChainIsAccepted(t *testing.T) {
+	const cain = "search_for_cain"
+	accepted := func(r *rig) []string {
+		p, _, _ := r.x.st.Load()
+		var out []string
+		for _, a := range p.Accepted {
+			out = append(out, a.Chunk)
+		}
+		return out
+	}
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		t.Run(class+"/tap", func(t *testing.T) {
+			r := newRig(t, class, 17)
+			if err := r.x.Accept(cain, "stones"); err != nil {
+				t.Fatal(err)
+			}
+			if got := accepted(r); strings.Join(got, ",") != "scroll,read,stones" {
+				t.Fatalf("records %v", got)
+			}
+			if d := r.next(); d.Kind != DecRun || d.Chunk != "scroll" {
+				t.Fatalf("%+v", d)
+			}
+		})
+		t.Run(class+"/repair", func(t *testing.T) {
+			r := newRig(t, class, 17)
+			p, _, _ := r.x.st.Load()
+			p.Accepted = append(p.Accepted, Record{Quest: cain, Chunk: "stones", Diff: "normal"})
+			if err := r.x.st.file.Save(p); err != nil {
+				t.Fatal(err)
+			}
+			d := r.next()
+			if d.Kind != DecRun || d.Chunk != "scroll" {
+				t.Fatalf("not repaired: %+v", d)
+			}
+			if got := accepted(r); strings.Join(got, ",") != "stones,scroll,read" {
+				t.Fatalf("records %v", got)
+			}
+			if d := r.next(); d.Kind != DecRun || d.Chunk != "scroll" || len(accepted(r)) != 3 {
+				t.Fatalf("second call changed it: %+v %v", d, accepted(r))
+			}
+		})
+		t.Run(class+"/stop", func(t *testing.T) {
+			r := newRig(t, class, 17)
+			if err := r.x.Accept(cain, "stones"); err != nil {
+				t.Fatal(err)
+			}
+			if deps := r.x.Dependants(cain, "scroll"); len(deps) != 2 || deps[0] != "read" || deps[1] != "stones" {
+				t.Fatalf("dependants %v", deps)
+			}
+			if err := r.x.Cancel(cain, "stones"); err != nil || len(accepted(r)) != 2 {
+				t.Fatalf("stones stop: %v %v", err, accepted(r))
+			}
+			if err := r.x.Accept(cain, "stones"); err != nil {
+				t.Fatal(err)
+			}
+			if len(accepted(r)) != 3 {
+				t.Fatalf("%v", accepted(r))
+			}
+			if err := r.x.Cancel(cain, "scroll"); err != nil || len(accepted(r)) != 0 {
+				t.Fatalf("scroll stop must withdraw stones: %v %v", err, accepted(r))
+			}
+			if d := r.next(); d.Kind != DecIdle {
+				t.Fatalf("%+v", d)
+			}
+		})
+		t.Run(class+"/single", func(t *testing.T) {
+			r := newRig(t, class, 17)
+			if err := r.x.Accept(cain, "scroll"); err != nil || len(accepted(r)) != 1 {
+				t.Fatalf("%v %v", err, accepted(r))
+			}
+			if d := r.next(); d.Kind != DecRun || d.Chunk != "scroll" {
+				t.Fatalf("%+v", d)
+			}
+		})
 	}
 }
