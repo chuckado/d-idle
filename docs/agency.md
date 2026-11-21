@@ -24,7 +24,7 @@ Per skill: `kind` (damage, aura, buff, curse, summon, utility, movement, passive
 | class | supported | experimental | unsupported |
 |---|---|---|---|
 | Sorceress (30) | 9: Fire Bolt, Ice Bolt, Charged Bolt, Static Field, Frozen Armor, Warmth, the three masteries | 12 | 9: Lightning, Chain Lightning, Telekinesis, Inferno, Blaze, Fire Wall, Hydra, Enchant, Frozen Orb |
-| Paladin (30) | 3: Zeal, Might, Holy Fire | 23 | 4: Charge, Vengeance, Conversion, Fist of the Heavens |
+| Paladin (30) | 3: Zeal, Might, Holy Fire | 23 | 4: Charge, Vengeance, Conversion, Fist of the Heavens (card hammer1: rows audited, none changed; Blessed Hammer, Concentration, Vigor and Holy Shield stay experimental, Charge stays unsupported and enters the Hammerdin table only as the Holy Shield prerequisite point: `docs/process/hammerdin-support.md`) |
 | Necromancer (30) | 5: Raise Skeleton, Skeleton Mastery, Raise Skeletal Mage, Clay Golem, Bone Armor | 10 | 15: seven curses, Blood and Iron Golem, the Bone Wall, Prison and Spirit, the Poison line (card necro1, V `reqLevel`/`reqSkills` from skills.txt; list and what a later card builds in `docs/process/necromancer-support.md`) |
 
 - Tier evidence: unchanged from the freebuild prototype. Supported = a live-verified loop named in `internal/combat` comments or a smoke doc; unsupported = on a profile avoid list or no cast loop (Lightning and Chain Lightning are on every Sorceress `avoid` list, broken on the d2d build in use). **U**: tiers are typed, not generated. ADR 0020 wants them GENERATED from Proving Ground matrix rows; that wiring is P2.
