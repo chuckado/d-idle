@@ -16,6 +16,7 @@ owns:
   - "docs/design/fable-review-2026-11-21/quest-board*"
 exclusive: []
 contracts: []
+result: "Docs only, nothing verified live and no test run: quest-board.md plus appendices A (file:line evidence, read at 5b12ce5e7 and e77b53911) and B (reason codes, API, invariants and scenarios, panel spec). Root cause: the board stores no lifecycle and derives state from non-monotonic evidence. Proposal: stored runs, completion latch, reason codes; 10 migration cards; 11 questions for the user. No build-specific part."
 ---
 
 ## Description
@@ -28,7 +29,7 @@ Why: six related quest board bugs in one day (two accepted chunks parked, Stop o
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Root-cause analysis with file:line evidence for the six board bugs of 2026-11-20
-- [ ] #2 Clean model: chunk and quest state machine, dependency semantics, invariants, reason codes, API semantics, regression, persistence
-- [ ] #3 Arbiter relation, migration cards, panel spec, numbered open questions with a recommendation
+- [x] #1 Root-cause analysis with file:line evidence for the six board bugs of 2026-11-20
+- [x] #2 Clean model: chunk and quest state machine, dependency semantics, invariants, reason codes, API semantics, regression, persistence
+- [x] #3 Arbiter relation, migration cards, panel spec, numbered open questions with a recommendation
 <!-- AC:END -->

@@ -95,7 +95,7 @@ Offer status (derived, no storage; today's rules, V `state.go:195-261`):
 | `failed` | the game failed the quest (shown as `blocked`, code `game_failed`) |
 | `locked` | a `requires` quest is not done on T1/T2, or an `after` chunk is neither latched nor live |
 | `available` | no handler, or readiness too hard or unknown, or a readiness fact is missing |
-| `ready` | readiness safe or risky |
+| `ready` | readiness safe or risky; also a chunk whose pending bit is exact although nobody started it (Start then goes straight to the hand-in, case C5 of appendix A) |
 
 Run status (stored):
 
@@ -149,7 +149,7 @@ A quest's state stays the aggregate of its chunks (V `state.go:318-345`), with o
 - **D1 limit.** Quest-level `requires` (another quest, T1/T2) are never accepted by implication: another quest has its own risk and its own consent (Andariel is `hazard`, `autoStart never`, V `data/questboard/act1.json`).
 - **D1 does not run the later parts.** "A tap never covers the next part" (V `exec.go:289`) stays true: the chain ends at C.
 - **D2. Stop implies dependants.** Stopping C stops every live run of the same quest that waits for C, directly or not. The reply lists them (`changed`), the toast names them. Also in `agent/boardprereq`.
-- **D3. One head.** At most one run is `running`, `held`, `awaiting` or `handing_in` per hero and difficulty. The head is the first live, not parked run in data order; when the head is parked, everything behind it is `queued` with code `waits_for` (it depends on it, by D4 and D5).
+- **D3. One head.** At most one run is `running`, `held`, `awaiting` or `handing_in` per hero and difficulty. The head is the first live run in data order. When the head is parked nothing runs: everything behind it stays `queued` with code `waits_for`, because by D4 and D5 it depends on the head.
 - **D4. Closure (the invariant bug 3 broke).** For every live run, each `after` ancestor is latched or has a live run. Checked on every write; at load a violation is repaired by adding the missing ancestors when they are startable, else the run is parked with `prereq_missing`. The repair is a load step with a log line, never a write inside `Next`.
 - **D5. One quest at a time** (today's rule "one chunk at a time", V `exec.go:310-312`, generalised): all live runs belong to one quest. A Start for another quest is refused with `busy` and the name of the running quest. Queueing across quests is Q7.
 
@@ -160,9 +160,9 @@ A reason is `{code, args, remedy, since}`; the sentence is built from the code b
 | remedy | meaning | examples (codes) | what the bot does |
 |---|---|---|---|
 | `chore` | a town visit fixes it | `needs_potions`, `needs_gold_withdraw`, `needs_repair`, `needs_kit` | goes to town now and does it (bug 4) |
-| `wait` | time or another run fixes it | `waits_for`, `fight_first`, `recovery_first`, `gold_order_first`, `handin_in_town`, `confirming` | waits; the mode does not take over for short waits |
-| `train` | levels or gold fix it | `too_weak`, `needs_gold_farm`, `area_banned` | the between-chunks mode runs with this chunk as its target |
-| `player` | a tap fixes it | `handin_wanted`, `paused`, `gave_up`, `died_too_often`, `handin_failed`, `prereq_regressed`, `prereq_missing`, `hold_timeout` | waits, Needs-you row |
+| `wait` | time or another run fixes it | `waits_for`, `fight_first`, `recovery_first`, `gold_order_first`, `order_first`, `area_banned`, `handin_in_town`, `confirming` | waits; the mode does not take over for short waits |
+| `train` | levels or gold fix it | `too_weak`, `route_closed`, `needs_gold_farm` | the between-chunks mode runs with this chunk as its target |
+| `player` | a tap fixes it | `handin_wanted`, `paused`, `gave_up`, `died_too_often`, `handin_failed`, `prereq_regressed`, `prereq_missing`, `quest_locked`, `hold_timeout` | waits, Needs-you row |
 | `none` | nothing fixes it here | `game_failed`, `unsupported` | shows it |
 
 To make bug 4 impossible the task layer has to say which kind a refusal is. Today `Fault{Kind, Why, Insert}` (V `gate.go:244-250`) carries a kind but the guards use `KindDanger` for both a level floor and a potion count. The change: the guard reasons are produced as a code plus numbers (`potions 3 < 4`, `clvl 12 < 20`, `no merc`), and the potion and gold codes carry the chores step, as `gatePotions` already does for the boss gates (V `internal/task/act1.go:99-110`). No class or build literal is needed: the floors are already data (V `internal/bot/routeguard.go:17-18`, `data/questboard/readiness.json`).
@@ -208,7 +208,7 @@ Short list (assertion sketches and the scenario that carries each are in appendi
 |---|---|---|
 | I1 | at most one head run per hero and difficulty | unit, on every store write; scenario `board.sm.one-head` |
 | I2 | closure: prerequisites of a live run are latched or live (D4) | unit on write and load; `board.prereq-not-accepted` |
-| I3 | the head is the first live, unparked run in data order; data order is a topological order of `after` | questspec rule 12; `board.two-accepted-chunks` |
+| I3 | the head is the first live run in data order; nothing runs past a parked head; data order is a topological order of `after` | questspec rule 12; `board.two-accepted-chunks` |
 | I4 | no live run for a latched chunk; a run finishes and its latch is written in one save | unit; `board.sm.restart-mid-chain` |
 | I5 | a live run that is not `running` has a reason code from the closed list | unit over the table; `board.view.reason-always` |
 | I6 | a latch never falls except by a logged `regressed` event | unit; `board.sm.regress-proxy` |
