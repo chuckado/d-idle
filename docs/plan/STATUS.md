@@ -371,7 +371,6 @@
 | town5 | proposed | - | `internal/town`<br>`internal/resource`<br>`town-basics` | - |
 | town6 | proposed | - | `internal/town`<br>`internal/loot` | - |
 | town7 | proposed | - | `internal/supply`<br>`internal/town`<br>`internal/resource` | - |
-| bsm3 | proposed | - | `internal/questboard/store_sm.go`<br>`internal/questboard/store_sm_test.go`<br>`internal/questboard/plan.go` | - |
 | town8 | proposed | - | `internal/supply`<br>`internal/town` | - |
 | town9 | proposed | - | `internal/watch`<br>`internal/supply` | - |
 | town10 | proposed | - | `internal/arbiter`<br>`internal/supply` | - |

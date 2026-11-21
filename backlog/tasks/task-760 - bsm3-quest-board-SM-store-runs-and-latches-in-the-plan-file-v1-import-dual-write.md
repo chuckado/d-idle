@@ -1,10 +1,13 @@
 ---
 id: TASK-760
-title: 'bsm3: quest board SM store (runs and latches in the plan file, v1 import, dual write)'
-status: Proposed
+title: >-
+  bsm3: quest board SM store (runs and latches in the plan file, v1 import, dual
+  write)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T04:52:00Z'
+updated_date: '2026-11-21T07:11:00Z'
 labels:
   - bot
   - feature

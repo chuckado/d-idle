@@ -1290,14 +1290,11 @@ internal/questboard/exec.go  credit-runner  bsm4
 internal/questboard/exec.go  credit-runner  questrun
 internal/questboard/exec_sm.go  credit-runner  bsm4
 internal/questboard/exec_sm_test.go  credit-runner  bsm4
-internal/questboard/plan.go  credit-runner  bsm3
 internal/questboard/sm.go  credit-runner  bsm2
 internal/questboard/sm_reason.go  credit-runner  bsm2
 internal/questboard/sm_test.go  credit-runner  bsm2
 internal/questboard/state_test.go  credit-runner  cain45
 internal/questboard/state_test.go  credit-runner  quests7b
-internal/questboard/store_sm.go  credit-runner  bsm3
-internal/questboard/store_sm_test.go  credit-runner  bsm3
 internal/questspec  credit-runner  questspec
 internal/questspec/act1boss_test.go  credit-runner  act1more
 internal/readiness/model.go  credit-runner  resistorder
