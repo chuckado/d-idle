@@ -329,6 +329,18 @@
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
+| town1 | proposed | - | `tools/provingground/scenarios/town.plan.*`<br>`internal/scenario/state.go`<br>`docs/probes/town-plan-scenarios.md` | - |
+| town2 | proposed | - | `internal/supply`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/bot/kitgate.go`<br>`internal/town/basicsfix.go` | - |
+| town3 | proposed | - | `internal/supply`<br>`data/supply`<br>`internal/env/tuning_town.go`<br>`docs/knobs.md` | - |
+| town4 | proposed | - | `internal/task`<br>`internal/town`<br>`internal/bot`<br>`internal/supply` | - |
+| town5 | proposed | - | `internal/town`<br>`internal/resource`<br>`town-basics` | - |
+| town6 | proposed | - | `internal/town`<br>`internal/loot` | - |
+| town7 | proposed | - | `internal/supply`<br>`internal/town`<br>`internal/resource` | - |
+| town8 | proposed | - | `internal/supply`<br>`internal/town` | - |
+| town9 | proposed | - | `internal/watch`<br>`internal/supply` | - |
+| town10 | proposed | - | `internal/arbiter`<br>`internal/supply` | - |
+| town11 | proposed | - | `internal/town`<br>`docs/town.md`<br>`town-basics` | - |
+| town12 | proposed | - | `docs/design/fable-review-2026-11-21/town-profiles-sme.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -364,6 +376,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 346082f06 11-21 00:44 `Merge agent/towncards: town planner: 12 migration cards TASK-746..765 (docs/backlog only)` (towncards)
+- 98fd96105 11-21 00:37 `Merge branch 'main' into towncards` (-)
 - a3e821b57 11-21 00:11 `Merge agent/chores2: Merge branch 'main' into chores2` (chores2)
 - acd82d6e2 11-21 00:10 `Merge branch 'main' into chores2` (-)
 - 134d42aab 11-20 23:16 `Merge agent/druid1: Merge branch 'main' into druid1` (druid1)
@@ -372,6 +386,4 @@
 - 016ab686e 11-20 23:07 `Merge branch 'main' into boardorder4` (-)
 - 92389015f 11-20 23:05 `Merge agent/fablecombat: Merge branch 'main' into fablecombat` (fablecombat)
 - 5978c2729 11-20 23:05 `Merge agent/fableboard: Merge branch 'main' into fableboard` (fableboard)
-- ae8e2b1be 11-20 23:05 `Merge agent/fabletown: town and chores planner design review: supply need, town plan, 16 rule conflicts, scenarios, migration cards (docs only)` (fabletown)
-- 623f72aa4 11-20 23:05 `Merge agent/fablepg: fablepg: Proving Ground determinism, tiers, merge gate and builder scheduling design review (docs only)` (fablepg)
 <!-- statusgen:end -->

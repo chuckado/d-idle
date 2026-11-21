@@ -344,6 +344,7 @@ data/questboard/act1.json  credit-runner  cain5b
 data/questboard/act1.json  credit-runner  cainfix
 data/questboard/act1.json  credit-runner  cainfix3
 data/questspec  credit-runner  questspec
+data/supply  credit-runner  town3
 data/unlocks  credit-runner  nocards
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
@@ -385,6 +386,7 @@ docs/design/fable-review-2026-11-21/proving-ground-gate-catalog.md  user  fablep
 docs/design/fable-review-2026-11-21/proving-ground-gate.md  user  fablepg
 docs/design/fable-review-2026-11-21/quest-board*  credit-runner  fableboard
 docs/design/fable-review-2026-11-21/town-planner*  credit-runner  fabletown
+docs/design/fable-review-2026-11-21/town-profiles-sme.md  credit-runner  town12
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vault
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv2
@@ -455,6 +457,7 @@ docs/knobs.md  credit-runner  staletarget
 docs/knobs.md  credit-runner  survfix2
 docs/knobs.md  credit-runner  survsd
 docs/knobs.md  credit-runner  tidy
+docs/knobs.md  credit-runner  town3
 docs/knobs.md  credit-runner  vaultv3
 docs/knobs.md  credit-runner  vaultv5
 docs/knobs.md  credit-runner  vaultv6
@@ -535,6 +538,7 @@ docs/probes/test-characters.md  credit-runner  survab8
 docs/probes/test-characters.md  credit-runner  survtune
 docs/probes/test-characters.md  live-agent  cainl3
 docs/probes/test-characters.md  live-agent  fid-fixtures
+docs/probes/town-plan-scenarios.md  credit-runner  town1
 docs/probes/tpreserve.md  live-agent  tpreserve-live
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed2
@@ -646,6 +650,7 @@ docs/tally-strip.md  credit-runner  vaultv7
 docs/tester-guide.md  credit-runner  testerpack
 docs/tester-licence.md  credit-runner  testerlicence
 docs/tidy.md  credit-runner  tidy
+docs/town.md  credit-runner  town11
 docs/towntests.md  credit-runner  towntests
 docs/ui-design-system.md  credit-runner  nopins
 docs/ui-design-system.md  credit-runner  uic3
@@ -736,6 +741,7 @@ internal/agency/testdata/agreement.json  credit-runner  barb1
 internal/agency/testdata/agreement.json  credit-runner  druid1
 internal/agency/testdata/agreement.json  credit-runner  hammer1
 internal/agency/testdata/agreement.json  credit-runner  necro1
+internal/arbiter  credit-runner  town10
 internal/art/  credit-runner  itemcolour2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees
@@ -751,6 +757,7 @@ internal/boss/script.go  credit-runner  countess
 internal/boss/types.go  pro-runner  levelplan3
 internal/bot  credit-runner  cainfix
 internal/bot  credit-runner  survsd
+internal/bot  credit-runner  town4
 internal/bot  credit-runner  wiring2
 internal/bot/  credit-runner  cainfix3
 internal/bot/areametrics.go  credit-runner  intake
@@ -781,6 +788,7 @@ internal/bot/goal.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  survB
 internal/bot/goal.go  credit-runner  survhold2
 internal/bot/goal.go  credit-runner  survrecover
+internal/bot/goal.go  credit-runner  town2
 internal/bot/goal.go  credit-runner  uib1
 internal/bot/goal.go  credit-runner  vaultv5
 internal/bot/goal.go  pro-runner  levelplan3
@@ -795,6 +803,7 @@ internal/bot/hpfields.go  credit-runner  intake
 internal/bot/killtime.go  credit-runner  swingmodel
 internal/bot/killtime_test.go  credit-runner  swingmodel
 internal/bot/kitgate.go  credit-runner  survhold2
+internal/bot/kitgate.go  credit-runner  town2
 internal/bot/kitlevel_test.go  credit-runner  survhold2
 internal/bot/ladder_t0_test.go  credit-runner  questrun
 internal/bot/leveling.go  credit-runner  agencyp0
@@ -861,6 +870,7 @@ internal/bot/questboard_test.go  credit-runner  quests4
 internal/bot/questboard_test.go  credit-runner  quests7
 internal/bot/repairtrip.go  credit-runner  repairtrip
 internal/bot/repairtrip_test.go  credit-runner  repairtrip
+internal/bot/resource.go  credit-runner  town2
 internal/bot/resource.go  pro-runner  levelplan3
 internal/bot/routeguard.go  credit-runner  questrun
 internal/bot/runner.go  credit-runner  agencyp0
@@ -1065,6 +1075,7 @@ internal/env/tuning_resource.go  credit-runner  agencyp0
 internal/env/tuning_resource.go  credit-runner  freshstart
 internal/env/tuning_resource.go  live-agent  recoverypace
 internal/env/tuning_town.go  credit-runner  tidy
+internal/env/tuning_town.go  credit-runner  town3
 internal/env/tuning_watch.go  credit-runner  videofeed2
 internal/ether  credit-runner  vaultv7
 internal/ether  credit-runner  vaultv7b
@@ -1120,6 +1131,7 @@ internal/leveler/sorcfire_test.go  credit-runner  sorc2
 internal/leveler/verbs_test.go  credit-runner  agencyp0
 internal/levelplan  pro-runner  levelplan3
 internal/loot  credit-runner  goldprio
+internal/loot  credit-runner  town6
 internal/loot/fixpickup_test.go  credit-runner  beltfix
 internal/loot/ignore_test.go  credit-runner  tidy
 internal/loot/loot.go  credit-runner  lootwireL4
@@ -1228,6 +1240,8 @@ internal/questspec  credit-runner  questspec
 internal/questspec/act1boss_test.go  credit-runner  act1more
 internal/readiness/model.go  credit-runner  resistorder
 internal/repair  credit-runner  repairtrip
+internal/resource  credit-runner  town5
+internal/resource  credit-runner  town7
 internal/resource/recovery.go  live-agent  recoverypace
 internal/resource/recovery_test.go  live-agent  recoverypace
 internal/resource/sim.go  credit-runner  swingmodel
@@ -1243,6 +1257,7 @@ internal/scenario/scenario_test.go  credit-runner  agencyp0
 internal/scenario/scenario_test.go  credit-runner  barb1
 internal/scenario/scenario_test.go  credit-runner  druid1
 internal/scenario/state.go  credit-runner  agencyp0
+internal/scenario/state.go  credit-runner  town1
 internal/senses  credit-runner  botcpu
 internal/senses  credit-runner  maphistory
 internal/senses  credit-runner  maphistoryA
@@ -1256,6 +1271,13 @@ internal/skilltree  credit-runner  skilltrees2
 internal/skilltree/skilltree.go  credit-runner  agencyp0
 internal/status/inventory.go  credit-runner  itemcolour2
 internal/status/inventory.go  credit-runner  jewelicons
+internal/supply  credit-runner  town10
+internal/supply  credit-runner  town2
+internal/supply  credit-runner  town3
+internal/supply  credit-runner  town4
+internal/supply  credit-runner  town7
+internal/supply  credit-runner  town8
+internal/supply  credit-runner  town9
 internal/survival  credit-runner  survfix2
 internal/survival  credit-runner  survhold2
 internal/survival  credit-runner  survhold3
@@ -1267,6 +1289,7 @@ internal/survival/ledger.go  credit-runner  intake
 internal/survival/survival_test.go  credit-runner  survfix
 internal/talk/tables.go  credit-runner  quests7b
 internal/task  credit-runner  cainfix
+internal/task  credit-runner  town4
 internal/task/act1.go  credit-runner  cain45
 internal/task/act1.go  credit-runner  cain5b
 internal/task/act1.go  credit-runner  cainchain
@@ -1293,6 +1316,13 @@ internal/task/world.go  credit-runner  cainfix
 internal/task/world.go  credit-runner  cainfix3
 internal/task/world.go  credit-runner  quests7b
 internal/tidy  credit-runner  tidy
+internal/town  credit-runner  town11
+internal/town  credit-runner  town4
+internal/town  credit-runner  town5
+internal/town  credit-runner  town6
+internal/town  credit-runner  town7
+internal/town  credit-runner  town8
+internal/town/basicsfix.go  credit-runner  town2
 internal/town/belt  credit-runner  beltfix
 internal/town/beltfill.go  credit-runner  beltfix
 internal/town/beltfix6_test.go  credit-runner  beltfix
@@ -1337,6 +1367,7 @@ internal/vaultkeep/note_test.go  credit-runner  bulkid
 internal/vaultkeep/reveal.go  credit-runner  bulkid
 internal/vaultkeep/reveal.go  credit-runner  vaulttip
 internal/watch  credit-runner  cainfix
+internal/watch  credit-runner  town9
 internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/artembed_test.go  credit-runner  itemcolour2
 internal/watch/artembed_test.go  credit-runner  jewelcolor
@@ -1862,6 +1893,7 @@ tools/provingground/scenarios/points.json  credit-runner  druid1
 tools/provingground/scenarios/points.json  credit-runner  hammer1
 tools/provingground/scenarios/points.json  credit-runner  necro1
 tools/provingground/scenarios/points.json  credit-runner  sorc2
+tools/provingground/scenarios/town.plan.*  credit-runner  town1
 tools/survival  credit-runner  survhold2
 tools/survival  credit-runner  survtune
 tools/survival/abreport  credit-runner  survfix
@@ -1951,4 +1983,6 @@ tools/videofeed  credit-runner  videofeed2
 tools/videofeed  credit-runner  videofeed4
 tools/videofeed/gamma_frames.py  credit-runner  brightness
 tools/videofeed/lumastat/  credit-runner  brightness
+town-basics  credit-runner  town11
+town-basics  credit-runner  town5
 # END GENERATED OWNERS
