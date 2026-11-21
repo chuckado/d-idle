@@ -46,19 +46,21 @@ func newAllocWire(db *data.DB, log *slog.Logger) *allocWire {
 }
 
 // tier is the capability tier of a skill by name ("" when unknown or without a table).
-func (w *allocWire) tier(name string) (tier, why string) {
+func (w *allocWire) tier(name string) (tier, why string, attack bool) {
 	if w.caps == nil {
-		return "", ""
+		return "", "", false
 	}
 	c, ok := w.caps.Lookup(name, w.kinds)
 	if !ok {
-		return agency.Unsupported, "no capability row: the fighter has no rule for it"
+		return agency.Unsupported, "no capability row: the fighter has no rule for it", false
 	}
-	return c.Tier, c.Note
+	return c.Tier, c.Note, c.Role == agency.RoleAttack || c.Role == agency.RoleSummon
 }
 
 // builds lists every build file with its class, preview and what it needs. A build is experimental when any skill of its
-// first levels is not supported; passives and unknown-class skills never count (a passive is supported by rule).
+// first levels has an ATTACK or summon skill with no engine support (unsupported). Every other skill that is not supported (utility,
+// movement, merely unproven) is listed in Needs as a warning but does not make the build experimental: nearly every build
+// would be (the tier is computed from capabilities.json, docs/agency.md).
 func (w *allocWire) builds() []points.BuildInfo {
 	var out []points.BuildInfo
 	for _, name := range leveler.TableNames() {
@@ -82,12 +84,14 @@ func (w *allocWire) builds() []points.BuildInfo {
 				}
 			}
 			for _, s := range r.Skills {
-				t, why := w.tier(s.Skill)
+				t, why, atk := w.tier(s.Skill)
 				pr.Skills = append(pr.Skills, points.PreviewSkill{Skill: s.Skill, Points: s.Points, Tier: t})
 				if t != "" && t != agency.Supported && !seen[s.Skill] {
 					seen[s.Skill] = true
 					bi.Needs = append(bi.Needs, points.Need{Skill: s.Skill, Tier: t, Reason: why})
-					bi.Tier = points.BuildExperimental
+					if t == agency.Unsupported && atk {
+						bi.Tier = points.BuildExperimental
+					}
 				}
 			}
 			bi.Preview = append(bi.Preview, pr)

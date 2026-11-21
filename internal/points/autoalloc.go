@@ -279,7 +279,7 @@ func (d *Desk) AutoAllocOnce(ctx context.Context) (did string) {
 			}
 			reason := r.Reason
 			if r.NeedsConfirm {
-				reason = st.Name + " is an attack your hero cannot use yet: spend the point yourself on the Skills page to confirm. " + r.Reason
+				reason = "Held for you, spend it on the Skills page to confirm: " + r.Reason
 			}
 			held = append(held, Held{Clvl: p.Level, Skill: st.Name, Reason: reason})
 		}
