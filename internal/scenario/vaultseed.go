@@ -127,7 +127,7 @@ func (w WornItem) Validate() error {
 //	{{vault.N.id}}                       the id of the N-th seeded record (a string)
 //	{{pack.item[code=cap].id}}           the id of the first backpack item with that code (a number)
 //	{{pack.item[name=cap,nth=1].id}}     the second one (nth counts from 0); name is a case-insensitive part of the item's
-//	                                     name or base name (the inventory view's `code` is the numeric base class, not the 3-letter code)
+//	                                     name, base name or icon name (art) (the inventory view's `code` is the numeric base class, not the 3-letter code)
 //	{{worn.head.id}}                     the id of the item worn in that slot (a number)
 type Resolver struct {
 	VaultIDs  []string
@@ -295,6 +295,7 @@ func (r Resolver) invID(expr string, list func(map[string]json.RawMessage) ([]js
 			ID   float64 `json:"id"`
 			Code string  `json:"code"`
 			Name string  `json:"name"`
+			Art  string  `json:"art"`
 			Base struct {
 				Name string `json:"name"`
 			} `json:"base"`
@@ -309,7 +310,7 @@ func (r Resolver) invID(expr string, list func(map[string]json.RawMessage) ([]js
 				first = first[:300]
 			}
 		}
-		if code != "" && it.Code != code || name != "" && !strings.Contains(strings.ToLower(it.Name), name) && !strings.Contains(strings.ToLower(it.Base.Name), name) {
+		if code != "" && it.Code != code || name != "" && !strings.Contains(strings.ToLower(it.Name), name) && !strings.Contains(strings.ToLower(it.Base.Name), name) && !strings.Contains(strings.ToLower(it.Art), name) {
 			continue
 		}
 		if seen == nth {

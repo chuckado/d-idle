@@ -14,7 +14,7 @@
         "cmd/d2bot/invverbs.go"
       ],
       "pre": {
-        "level": 14,
+        "level": 30,
         "gold": 0,
         "pack": [
           {
@@ -115,7 +115,7 @@
         "cmd/d2bot/invverbs.go"
       ],
       "pre": {
-        "level": 14,
+        "level": 30,
         "gold": 0,
         "pack": [
           {
