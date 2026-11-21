@@ -364,7 +364,7 @@
 | mgwatchdog | proposed | - | `docs/process/pg-ops-mgwatchdog.md` | - |
 | town3 | in-progress | - | `internal/supply`<br>`internal/town/planshadow.go`<br>`internal/town/chores.go`<br>`internal/town/town.go`<br>`internal/env/tuning_town.go`<br>`internal/bot/observe.go`<br>`docs/knobs.md` | - |
 | pgnightly | proposed | - | `docs/process/pg-ops-pgnightly.md`<br>`tools/provingground/nightly.sh` | - |
-| town4 | proposed | - | `internal/task`<br>`internal/town`<br>`internal/bot`<br>`internal/supply` | - |
+| town4 | in-progress | - | `internal/task`<br>`internal/town`<br>`internal/bot`<br>`internal/supply`<br>`cmd/d2bot`<br>`docs/knobs.md` | - |
 | pgearned | proposed | - | `internal/scenario/earned.go`<br>`tools/provingground/earned` | - |
 | town5 | proposed | - | `internal/town`<br>`internal/resource`<br>`town-basics` | - |
 | town6 | proposed | - | `internal/town`<br>`internal/loot` | - |
@@ -409,6 +409,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 019caff49 11-21 01:15 `Merge agent/town4: town4: stage 2 guards, chunk preconditions and shop read the supply plan behind town.plan>=2 (default 0)` (town4)
+- 6288cd22f 11-21 01:14 `Merge branch 'main' into town4` (-)
 - d28021ec7 11-21 01:06 `Merge agent/town3: town3: supply NeedFor/Solve, profiles, knob town.plan default 0, stage 1 shadow trace (no behaviour change)` (town3)
 - 05417d792 11-21 01:05 `Merge branch 'main' into town3` (-)
 - e10888fad 11-21 00:53 `Merge agent/town2: town2: internal/supply one potion counter, bot and town counters call it (no behaviour change at stage 0)` (town2)
@@ -417,6 +419,4 @@
 - fda7178c2 11-21 00:46 `Merge branch 'main' into town1` (-)
 - df91428e3 11-21 00:44 `Merge agent/pgcards: pgcards: 16 Proving Ground and merge gate cards` (pgcards)
 - 7295f4ba1 11-21 00:44 `Merge agent/fabledecisions2: Merge branch 'main' into fabledecisions2` (fabledecisions2)
-- 6a35831bb 11-21 00:44 `Merge agent/combatcards: combatcards: 17 dlv-* combat-engine cards (docs/backlog only)` (combatcards)
-- 346082f06 11-21 00:44 `Merge agent/towncards: town planner: 12 migration cards TASK-746..765 (docs/backlog only)` (towncards)
 <!-- statusgen:end -->

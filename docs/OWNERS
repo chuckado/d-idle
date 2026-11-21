@@ -131,6 +131,7 @@ backlog/merge-lines/decomp34.txt  credit-runner  decomp34
 cmd/bossrun/adapter.go  pro-runner  levelplan3
 cmd/d2bot  credit-runner  cainfix
 cmd/d2bot  credit-runner  survsd
+cmd/d2bot  credit-runner  town4
 cmd/d2bot  credit-runner  wiring2
 cmd/d2bot/adapters.go  credit-runner  cainfix3
 cmd/d2bot/adapters.go  credit-runner  chores2
@@ -471,6 +472,7 @@ docs/knobs.md  credit-runner  survfix2
 docs/knobs.md  credit-runner  survsd
 docs/knobs.md  credit-runner  tidy
 docs/knobs.md  credit-runner  town3
+docs/knobs.md  credit-runner  town4
 docs/knobs.md  credit-runner  vaultv3
 docs/knobs.md  credit-runner  vaultv5
 docs/knobs.md  credit-runner  vaultv6
