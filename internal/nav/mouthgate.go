@@ -135,6 +135,32 @@ func clickOKAll(from, to input.Point, exits []input.Point) bool {
 	return true
 }
 
+// goalPocketOK is the invariant for an exit whose disc holds the walk's own goal (a GoTo to a point 14 subtiles from the
+// arrival stairs: the Countess stands there). The bound is a heuristic (V: the real trigger reaches about 10 subtiles,
+// exitAvoidR); a goal inside it cannot be reached by a click that ends outside it, so refusing every such click fails
+// the walk for good. The click may end inside, but the straight segment must never come nearer to the exit than the
+// closer of its start and the goal: the walk moves around the exit, never toward it.
+func goalPocketOK(from, to, ex, goal input.Point) bool {
+	d := math.Min(dist(from, ex), dist(goal, ex))
+	return segDist(ex, from, to) >= d-0.5
+}
+
+// okAll is clickOKAll for the click of a walk: exits whose disc holds the walk's goal use goalPocketOK.
+func (n *Navigator) okAll(from, to input.Point, exits []input.Point) bool {
+	for _, e := range exits {
+		ok := false
+		if n.goalSet && dist(n.goal, e) < mouthTriggerR {
+			ok = goalPocketOK(from, to, e, n.goal)
+		} else {
+			ok = mouthClickOK(from, to, e)
+		}
+		if !ok {
+			return false
+		}
+	}
+	return true
+}
+
 // gateClick returns the click to send instead of p: p itself, a clipped or away-rewritten click, or ErrMouthGate.
 func (n *Navigator) gateClick(ctl input.Controller, p input.Point) (input.Point, error) {
 	lm, exits := n.gatedExits()
@@ -145,7 +171,7 @@ func (n *Navigator) gateClick(ctl input.Controller, p input.Point) (input.Point,
 	if err != nil {
 		from = n.lastPos
 	}
-	if clickOKAll(from, p, exits) {
+	if n.okAll(from, p, exits) {
 		return p, nil
 	}
 	if n.gateRewrites >= gateMaxRewrites {
@@ -167,14 +193,14 @@ func (n *Navigator) gateClick(ctl input.Controller, p input.Point) (input.Point,
 func (n *Navigator) gateRewrite(lm *d2map.LevelMap, from, to input.Point, exits []input.Point) (q input.Point, how string) {
 	ex, best := exits[0], math.MaxFloat64
 	for _, e := range exits {
-		if d := dist(from, e); !mouthClickOK(from, to, e) && d < best {
+		if d := dist(from, e); !n.okAll(from, to, []input.Point{e}) && d < best {
 			ex, best = e, d
 		}
 	}
 	d0 := dist(from, ex)
 	if d0 >= mouthTriggerR {
 		c, ok := clipOutside(from, to, ex)
-		ok = ok && dist(from, c) >= gateMinClip && clickOKAll(from, c, exits)
+		ok = ok && dist(from, c) >= gateMinClip && n.okAll(from, c, exits)
 		if ok && dist(from, c) >= gateUsefulClip {
 			return c, "clip"
 		}
@@ -210,7 +236,7 @@ func (n *Navigator) gateRewrite(lm *d2map.LevelMap, from, to input.Point, exits 
 					}
 					c = input.Point{X: x, Y: y}
 				}
-				if clickOKAll(from, c, exits) {
+				if n.okAll(from, c, exits) {
 					return c, "away"
 				}
 			}
@@ -278,10 +304,10 @@ func (n *Navigator) gateDetour(lm *d2map.LevelMap, from, to, ex input.Point, exi
 			}
 			c = input.Point{X: x, Y: y}
 		}
-		if dist(from, c) < gateMinClip || !clickOKAll(from, c, exits) {
+		if dist(from, c) < gateMinClip || !n.okAll(from, c, exits) {
 			continue
 		}
-		through := clickOKAll(c, to, exits)
+		through := n.okAll(c, to, exits)
 		cost := dist(from, c) + dist(c, to)
 		if through && !bestThrough || through == bestThrough && cost < bestCost {
 			best, bestCost, bestThrough, found = c, cost, through, true
@@ -331,7 +357,7 @@ func (n *Navigator) hold(lm *d2map.LevelMap, from, p input.Point, exits []input.
 		n.log.Info("nav mouth gate: pocket escape", "from", from, "to", p, "as", q, "how", how, "why", why, "holds", h.count)
 		return q, nil
 	}
-	n.log.Info("nav mouth gate: click held", "from", from, "to", p, "why", why, "holds", h.count)
+	n.log.Info("nav mouth gate: click held", "from", from, "to", p, "why", why, "holds", h.count, "exits", exits, "goal", n.goal, "goalSet", n.goalSet)
 	return input.Point{}, n.refuse()
 }
 
