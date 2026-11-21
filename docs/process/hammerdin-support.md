@@ -30,7 +30,7 @@ All 30 Paladin rows exist (supported Zeal, Might, Holy Fire; experimental 23; un
 | H6 | Holy Shield recast on expiry (the buff slot casts it by state; the state number is U), and a block-aware stat rule for Dex | profile buffs | small |
 | H7 | Charge: Holy Shield needs it as a prerequisite point only; the capability row stays unsupported (a charge move is not an attack loop) | capabilities.json | none |
 | H8 | Teleport-less pathing: the Hammerdin walks. The walker, not the profile, owns this; Enigma is not on the list for the idle hero | review 03 | not ours |
-| H9 | Respec: the community track respecs at 19; the no-respec track here wastes up to 11 banked points at clvl 17 (Holy Bolt waits for 6, the hammer for 18) and plays Smite to 17. A respec goal for the buildfile (`respec_at`) is supported by the format, not wired into this table | buildfile README | small |
+| H9 | Respec: the community track respecs at 19; the no-respec track here banks about 10 points at clvl 17 (Holy Bolt waits for 6, the hammer for 18) and plays Smite to 17. A respec goal for the buildfile (`respec_at`) is supported by the format, not wired into this table | buildfile README | small |
 
 ## 5. Not verified and the live checklist
 
