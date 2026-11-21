@@ -937,6 +937,7 @@ internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  quests3
 internal/bot/task.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  staletarget
+internal/bot/task.go  credit-runner  wpstep
 internal/bot/task_acts_test.go  credit-runner  cain5b
 internal/bot/vaultkeep.go  credit-runner  vaultv5
 internal/bot/waypoints.go  credit-runner  boardmoderace
@@ -1073,7 +1074,11 @@ internal/d2dsrc/source_test.go  credit-runner  survB
 internal/d2dsrc/srv_test.go  credit-runner  botcpu
 internal/d2dworld  credit-runner  countess3
 internal/d2dworld  live-agent  k1layout
+internal/d2dworld/  credit-runner  wpstep
 internal/d2map  credit-runner  countess3
+internal/d2map/static.go  credit-runner  wpstep
+internal/d2map/tracker.go  credit-runner  wpstep
+internal/d2map/tracker_test.go  credit-runner  wpstep
 internal/danger  credit-runner  dangerfit2
 internal/danger/  credit-runner  survA
 internal/danger/areaunits.json  pro-runner  decomp28
@@ -1377,6 +1382,7 @@ internal/task/campaign.go  credit-runner  campaign1
 internal/task/executor.go  credit-runner  botstuck
 internal/task/executor.go  credit-runner  bsm5
 internal/task/executor.go  credit-runner  staletarget
+internal/task/executor.go  credit-runner  wpstep
 internal/task/executor_unpark_test.go  credit-runner  staletarget
 internal/task/gate.go  credit-runner  bsm5
 internal/task/gate.go  credit-runner  cainfix3
@@ -1390,6 +1396,7 @@ internal/task/route_test.go  credit-runner  chores2
 internal/task/s7b_test.go  credit-runner  quests7b
 internal/task/testdata  credit-runner  quests7b
 internal/task/testdata/plans/act1.txt  credit-runner  cain5b
+internal/task/timeoutpolicy_test.go  credit-runner  wpstep
 internal/task/world.go  credit-runner  bsm5
 internal/task/world.go  credit-runner  cainfix
 internal/task/world.go  credit-runner  cainfix3
@@ -1975,6 +1982,7 @@ tools/provingground/scenarios/board.json  credit-runner  bsm1
 tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
+tools/provingground/scenarios/cain.json  credit-runner  wpstep
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/provingground/scenarios/points.json  credit-runner  barb1
 tools/provingground/scenarios/points.json  credit-runner  druid1

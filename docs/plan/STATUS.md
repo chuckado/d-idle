@@ -326,6 +326,7 @@
 | fablecombat | in-progress | - | `docs/design/fable-review-2026-11-21/combat-engine*` | - |
 | fableboard | proposed | - | `docs/design/fable-review-2026-11-21/quest-board*` | - |
 | fabletown | in-progress | - | `docs/design/fable-review-2026-11-21/town-planner*` | - |
+| wpstep | proposed | - | `internal/task/executor.go`<br>`internal/task/timeoutpolicy_test.go`<br>`internal/d2map/static.go`<br>`internal/d2map/tracker.go`<br>`internal/d2map/tracker_test.go`<br>`internal/d2dworld/`<br>`internal/bot/task.go`<br>`tools/provingground/scenarios/cain.json` | - |
 | bsm1 | proposed | - | `tools/provingground/scenarios/board.json`<br>`internal/scenario`<br>`cmd/d2scenario` | - |
 | dlv-data | proposed | - | `data/capabilities/`<br>`internal/delivery/`<br>`tools/capgen/` | - |
 | dlv-rotation | proposed | - | `internal/delivery/`<br>`internal/combat/`<br>`internal/agency/` | - |
@@ -414,6 +415,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 4cef37c7c 11-21 02:34 `Merge agent/wpstep: Merge branch 'main' into TASK-716` (wpstep)
+- 8eb46e0e3 11-21 02:33 `Merge branch 'main' into TASK-716` (-)
 - b62c45349 11-21 02:25 `Merge agent/bsm5: Merge branch 'main' into TASK-768` (bsm5)
 - ffe284f81 11-21 02:24 `Merge branch 'main' into TASK-768` (-)
 - 07712c446 11-21 02:23 `Merge agent/druid1: Merge branch 'main' into druid1` (druid1)
@@ -422,6 +425,4 @@
 - b78539912 11-21 02:15 `Merge branch 'main' into countess3b` (-)
 - 15543d7d7 11-21 02:03 `Merge agent/bsm4: agent/bsm4 quest board state machine card` (bsm4)
 - d167f6aa5 11-21 01:57 `Merge agent/bsm3: agent/bsm3 quest board state machine card` (bsm3)
-- d91bf5058 11-21 01:36 `Merge agent/bsm2: agent/bsm2 quest board state machine card` (bsm2)
-- 2e5f6968d 11-21 01:35 `Merge branch 'main' into TASK-750` (-)
 <!-- statusgen:end -->
