@@ -1,10 +1,13 @@
 ---
 id: TASK-790
-title: 'bsm9: Proving Ground runner restart_at_s trigger and the field-start write count (journal), board scenarios flipped'
-status: Proposed
+title: >-
+  bsm9: Proving Ground runner restart_at_s trigger and the field-start write
+  count (journal), board scenarios flipped
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T19:46:00Z'
+updated_date: '2026-11-21T20:45:00Z'
 labels:
   - bot
   - chore
