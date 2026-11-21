@@ -1133,6 +1133,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - druid1: Druid fire (capability rows, build, combat profile, planner shadow, Proving Ground scenario, ground-target note) (TASK-707, merged 2026-11-20, acceptance 5 of 6) <!--sg:agent/druid1-->
 - chores2: shop buys healing to the route guard kit minimum (TASK-711, merged 2026-11-21, acceptance 1 of 2): Restock and stash withdraw now satisfy the route guard kit (belt+pack, KitHealing), kit-only guard block inserts chores; unit tests Paladin+Sorceress green on the builder ... <!--sg:agent/chores2-->
 - town1: planner scenarios (B4 set, belt_at_least assertion) and RED/green record (TASK-746, merged 2026-11-21, acceptance 0 of 3) <!--sg:agent/towncards-->
+- agent/combatcards: combatcards: 17 dlv-* combat-engine cards (docs/backlog only) (merged 2026-11-21) <!--sg:agent/combatcards-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

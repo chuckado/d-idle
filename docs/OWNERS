@@ -328,10 +328,13 @@ cmd/d2scenario/main_test.go  credit-runner  agencyp0
 cmd/d2scenario/run.go  credit-runner  agencyp0
 data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
+data/capabilities/  credit-runner  dlv-data
+data/capabilities/  credit-runner  dlv-stance-pack
 data/capabilities/capabilities.json  credit-runner  barb1
 data/capabilities/capabilities.json  credit-runner  druid1
 data/capabilities/capabilities.json  credit-runner  necro1
 data/idreveal  credit-runner  nocards
+data/input/caps/  credit-runner  dlv-cast-verbs
 data/input/caps/d2d-fork-input-items.json  credit-runner  q13input
 data/input/caps_test.go  credit-runner  q13input
 data/onboarding  credit-runner  firstminutes
@@ -725,6 +728,7 @@ docs/video-feed.md  credit-runner  videofeed
 docs/video-feed.md  credit-runner  videofeed2
 docs/video-feed.md  credit-runner  videofeed4
 docs/wiring.md  credit-runner  wiring2
+internal/agency/  credit-runner  dlv-rotation
 internal/agency/buildrules_test.go  credit-runner  barb1
 internal/agency/buildrules_test.go  credit-runner  druid1
 internal/agency/buildrules_test.go  credit-runner  necro1
@@ -742,6 +746,7 @@ internal/agency/testdata/agreement.json  credit-runner  druid1
 internal/agency/testdata/agreement.json  credit-runner  hammer1
 internal/agency/testdata/agreement.json  credit-runner  necro1
 internal/arbiter  credit-runner  town10
+internal/arbiter/  credit-runner  dlv-stance-army
 internal/art/  credit-runner  itemcolour2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees
@@ -950,6 +955,20 @@ internal/charsel/perchar.json  credit-runner  lootwire3
 internal/charsel/rules.go  credit-runner  charui
 internal/combat  credit-runner  wiring2
 internal/combat/  credit-runner  cainfix3
+internal/combat/  credit-runner  dlv-aim-corpse
+internal/combat/  credit-runner  dlv-aim-point
+internal/combat/  credit-runner  dlv-cleanup
+internal/combat/  credit-runner  dlv-expect
+internal/combat/  credit-runner  dlv-mark
+internal/combat/  credit-runner  dlv-move-melee
+internal/combat/  credit-runner  dlv-move-tele
+internal/combat/  credit-runner  dlv-press
+internal/combat/  credit-runner  dlv-rotation
+internal/combat/  credit-runner  dlv-stance-army
+internal/combat/  credit-runner  dlv-stance-pack
+internal/combat/  credit-runner  dlv-upkeep-minions
+internal/combat/  credit-runner  dlv-upkeep-state
+internal/combat/  credit-runner  dlv-whirl
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/castfirst.go  credit-runner  survfix2
 internal/combat/classdata  credit-runner  palprofile2
@@ -990,8 +1009,11 @@ internal/d2/merc.go  credit-runner  decomp30
 internal/d2/merc_test.go  credit-runner  decomp30
 internal/d2/resist.go  credit-runner  resistorder
 internal/d2/stats.go  credit-runner  survB
+internal/d2dcombat/  credit-runner  dlv-cast-verbs
+internal/d2dcombat/  credit-runner  dlv-press
 internal/d2dctl  credit-runner  countess3
 internal/d2dctl  live-agent  k1layout
+internal/d2dctl/  credit-runner  dlv-reads
 internal/d2dctl/item_verbs.go  credit-runner  itemverbs2
 internal/d2dctl/item_verbs_merc.go  credit-runner  uib9
 internal/d2dctl/item_verbs_merc_test.go  credit-runner  uib9
@@ -1006,6 +1028,7 @@ internal/d2dctl/vault_verbs_test.go  credit-runner  vaulttip
 internal/d2dctl/verbs.go  credit-runner  arrivalsettle
 internal/d2denv  live-agent  k1layout
 internal/d2dinput  pro-runner  bounce3
+internal/d2dinput/  credit-runner  dlv-cast-verbs
 internal/d2dinput/controller.go  credit-runner  arrivalsettle
 internal/d2dinput/controller_test.go  credit-runner  arrivalsettle
 internal/d2dinput/run_test.go  credit-runner  arrivalsettle
@@ -1029,6 +1052,7 @@ internal/danger  credit-runner  dangerfit2
 internal/danger/  credit-runner  survA
 internal/danger/areaunits.json  pro-runner  decomp28
 internal/danger/gapexport.go  credit-runner  survC
+internal/data/  credit-runner  dlv-upkeep-state
 internal/data/data_test.go  credit-runner  q4runes
 internal/data/db.go  credit-runner  botcpu2
 internal/data/db.go  credit-runner  cainchain
@@ -1041,6 +1065,8 @@ internal/decide/queue.go  credit-runner  qqueue
 internal/decide/queue_test.go  credit-runner  qqueue
 internal/decide/variants.go  credit-runner  qdensity
 internal/decide/variants_test.go  credit-runner  qdensity
+internal/delivery/  credit-runner  dlv-data
+internal/delivery/  credit-runner  dlv-rotation
 internal/env  credit-runner  survsd
 internal/env  credit-runner  wiring2
 internal/env/tuning.go  credit-runner  bulkid
@@ -1084,6 +1110,7 @@ internal/fidvendor  live-agent  fidprobe-vendor
 internal/goals/runner.go  credit-runner  staletarget
 internal/goldfarm  credit-runner  repairtrip
 internal/hotkeymap/  credit-runner  q13input
+internal/input/  credit-runner  dlv-cast-verbs
 internal/invdesk  credit-runner  gearsets
 internal/invdesk  credit-runner  idfast
 internal/invdesk/desk.go  credit-runner  botinstant
@@ -1173,6 +1200,7 @@ internal/merc/playerrevive_test.go  credit-runner  botmerc
 internal/merc/wear.go  credit-runner  lootwireL2
 internal/merc/wear.json  credit-runner  lootwireL2
 internal/merc/wear_test.go  credit-runner  lootwireL2
+internal/nav/  credit-runner  dlv-move-tele
 internal/nav/covview.go  credit-runner  maptrail
 internal/nav/covview_test.go  credit-runner  maphistoryC
 internal/nav/covview_test.go  credit-runner  maptrail
@@ -1211,6 +1239,7 @@ internal/plandata/progression-normal.json  credit-runner  hourfix
 internal/points  credit-runner  agencyp0
 internal/power  credit-runner  dangerfit2
 internal/power  credit-runner  survsd
+internal/power/  credit-runner  dlv-cleanup
 internal/power/  credit-runner  powerwire
 internal/power/  credit-runner  survB
 internal/power/margin.go  credit-runner  resistorder
@@ -1251,6 +1280,7 @@ internal/resource/tuning.go  credit-runner  agencyp0
 internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
 internal/scenario  credit-runner  boardorder
+internal/scenario/  credit-runner  dlv-reads
 internal/scenario/  credit-runner  pgexpand
 internal/scenario/scenario.go  credit-runner  barb1
 internal/scenario/scenario_test.go  credit-runner  agencyp0
@@ -1814,6 +1844,8 @@ internal/watch/zoneclear_test.go  credit-runner  farmloop
 tools/ab/prep  credit-runner  survfix2
 tools/ab/prep  credit-runner  survtune
 tools/bounce3  pro-runner  bounce3
+tools/capgen/  credit-runner  dlv-data
+tools/ci/  credit-runner  dlv-cleanup
 tools/connprobe  credit-runner  viewerconns
 tools/dev-update-host.sh  credit-runner  buildhosts3
 tools/dev-update.sh  credit-runner  buildhosts3
@@ -1878,6 +1910,7 @@ tools/levelsim/shadow.go  credit-runner  intake
 tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
+tools/provingground/  credit-runner  dlv-reads
 tools/provingground/  credit-runner  pgexpand
 tools/provingground/countess-check.sh  credit-runner  countess2
 tools/provingground/scenarios/act1.json  credit-runner  countess

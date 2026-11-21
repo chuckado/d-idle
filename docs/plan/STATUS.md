@@ -326,8 +326,25 @@
 | fablecombat | in-progress | - | `docs/design/fable-review-2026-11-21/combat-engine*` | - |
 | fableboard | proposed | - | `docs/design/fable-review-2026-11-21/quest-board*` | - |
 | fabletown | in-progress | - | `docs/design/fable-review-2026-11-21/town-planner*` | - |
+| dlv-data | proposed | - | `data/capabilities/`<br>`internal/delivery/`<br>`tools/capgen/` | - |
+| dlv-rotation | proposed | - | `internal/delivery/`<br>`internal/combat/`<br>`internal/agency/` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
+| dlv-expect | proposed | - | `internal/combat/` | - |
+| dlv-reads | proposed | - | `internal/d2dctl/`<br>`internal/scenario/`<br>`tools/provingground/` | `fork-branch:didle/combat-reads`<br>`d2d-lab-binary` |
+| dlv-upkeep-state | proposed | - | `internal/combat/`<br>`internal/data/` | - |
+| dlv-upkeep-minions | proposed | - | `internal/combat/` | - |
+| dlv-mark | proposed | - | `internal/combat/` | - |
+| dlv-stance-army | proposed | - | `internal/combat/`<br>`internal/arbiter/` | - |
+| dlv-cast-verbs | proposed | - | `internal/input/`<br>`internal/d2dcombat/`<br>`internal/d2dinput/`<br>`data/input/caps/` | `fork-branch:didle/cast-verbs` |
+| dlv-aim-point | proposed | - | `internal/combat/` | - |
+| dlv-aim-corpse | proposed | - | `internal/combat/` | - |
+| dlv-stance-pack | proposed | - | `internal/combat/`<br>`data/capabilities/` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
+| dlv-press | proposed | - | `internal/combat/`<br>`internal/d2dcombat/` | - |
+| dlv-move-tele | proposed | - | `internal/combat/`<br>`internal/nav/` | - |
+| dlv-move-melee | proposed | - | `internal/combat/` | - |
+| dlv-whirl | proposed | - | `internal/combat/` | - |
+| dlv-cleanup | proposed | - | `internal/combat/`<br>`internal/power/`<br>`tools/ci/` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
 | town1 | proposed | - | `tools/provingground/scenarios/town.plan.*`<br>`internal/scenario/state.go`<br>`docs/probes/town-plan-scenarios.md` | - |
 | town2 | proposed | - | `internal/supply`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/bot/kitgate.go`<br>`internal/town/basicsfix.go` | - |
@@ -376,7 +393,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 6a35831bb 11-21 00:44 `Merge agent/combatcards: combatcards: 17 dlv-* combat-engine cards (docs/backlog only)` (combatcards)
 - 346082f06 11-21 00:44 `Merge agent/towncards: town planner: 12 migration cards TASK-746..765 (docs/backlog only)` (towncards)
+- 12b543079 11-21 00:37 `Merge branch 'main' into combatcards` (-)
 - 98fd96105 11-21 00:37 `Merge branch 'main' into towncards` (-)
 - a3e821b57 11-21 00:11 `Merge agent/chores2: Merge branch 'main' into chores2` (chores2)
 - acd82d6e2 11-21 00:10 `Merge branch 'main' into chores2` (-)
@@ -384,6 +403,4 @@
 - 18cf1885d 11-20 23:15 `Merge branch 'main' into druid1` (-)
 - 1dd2b99c0 11-20 23:08 `Merge agent/boardorder4: board scenario assertions fixed, probe note` (boardorder4)
 - 016ab686e 11-20 23:07 `Merge branch 'main' into boardorder4` (-)
-- 92389015f 11-20 23:05 `Merge agent/fablecombat: Merge branch 'main' into fablecombat` (fablecombat)
-- 5978c2729 11-20 23:05 `Merge agent/fableboard: Merge branch 'main' into fableboard` (fableboard)
 <!-- statusgen:end -->
