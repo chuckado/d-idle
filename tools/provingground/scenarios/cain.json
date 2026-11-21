@@ -1138,7 +1138,8 @@
     "goals": "reach:30",
     "knobs": {
      "quests.board": 1,
-     "resource.pointsDecisions": 1
+     "resource.pointsDecisions": 1,
+    "quests.layoutRead": 1
     }
    },
    "budget": {
@@ -1155,7 +1156,7 @@
     ]
    },
    "provenance": "CHEATED: level 17 by stat verbs, 5000 gold, waypoints Rogue Encampment to Stony Field by debug wp (SETUP); the Dark Wood waypoint is NOT set. Mechanics only, never balance.",
-   "notes": "Sandbox hero explored the Dark Wood for an hour on this step (step timeout, no waypoint touched). Run with quests.layoutRead 0 and 1 (-knob); the step must finish (ran or skipped with a 'step timeout N (explored X%)' reason) inside the budget, never spin.",
+   "notes": "Sandbox hero explored the Dark Wood for an hour on this step (step timeout, no waypoint touched). Runs with quests.layoutRead 1 (the fork objpresets feed the waypoint position at arrival); the step must finish (ran or skipped with a 'step timeout N (explored X%)' reason) inside the budget, never spin.",
    "assert": [
     {
      "kind": "log_line",
@@ -1172,9 +1173,7 @@
     {
      "kind": "no_writes"
     }
-   ],
-   "status": "pending",
-   "pending_reason": "RED on the builder (K1 d2d devp15, Paladin 11, layoutRead 0 and 1, 2026-11-21): the hero explores the Dark Wood to 40 percent in 15 virtual minutes and never touches the waypoint. debug levelmap lists only the objects of rooms already built (12 objects at arrival, 59 at 40 percent, no waypoint among them), so the layout cannot name the waypoint position ahead; the fix needs the waypoint room's LvlPrest def (candidates among the Dark Wood preset rooms 20 25 29 30 43 48 49), U."
+   ]
   },
   {
    "id": "act1.wp.dark-wood.layout",
@@ -1254,9 +1253,7 @@
     {
      "kind": "no_writes"
     }
-   ],
-   "status": "pending",
-   "pending_reason": "RED on the builder (K1 d2d devp15, Paladin 11, layoutRead 0 and 1, 2026-11-21): the hero explores the Dark Wood to 40 percent in 15 virtual minutes and never touches the waypoint. debug levelmap lists only the objects of rooms already built (12 objects at arrival, 59 at 40 percent, no waypoint among them), so the layout cannot name the waypoint position ahead; the fix needs the waypoint room's LvlPrest def (candidates among the Dark Wood preset rooms 20 25 29 30 43 48 49), U."
+   ]
   }
  ]
 }
