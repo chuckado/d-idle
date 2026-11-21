@@ -43,35 +43,43 @@ type MassEther struct {
 	Line    string   `json:"line"`
 }
 
-// MassReveal picks the filtered, unidentified vault records the hero can pay for now: all of them at Cain, else as many
-// as it holds charges, best first (priority, value, id). Nothing is bought and nothing is queued here.
-func MassReveal(f *Filter, recs []vault.Rec, qname func(int) string, p Price) Mass {
-	type cand struct {
-		id     string
-		prio   int
-		value  int
-		sealed bool
-	}
-	var cs []cand
+// Cand is one unidentified vault record the identify filter selects, in reveal order (priority, value, id).
+type Cand struct {
+	ID     string
+	Prio   int
+	Value  int
+	Sealed bool // the vault holds its affixes: Ether can unlock it without a scroll
+}
+
+// Candidates lists the filtered, unidentified, not yet queued vault records best first.
+func Candidates(f *Filter, recs []vault.Rec, qname func(int) string) []Cand {
+	var cs []Cand
 	for _, r := range recs {
 		if r.Identified || r.RevQ || (r.State != vault.Recorded && r.State != vault.KeepQ) {
 			continue
 		}
 		it := Item{Code: r.Code, Types: r.Chain, Quality: qname(r.Quality), Ilvl: r.Ilvl, Value: r.Value}
 		if _, prio, ok := f.Match(it); ok {
-			cs = append(cs, cand{r.ID, prio, r.Value, r.Sealed != ""})
+			cs = append(cs, Cand{r.ID, prio, r.Value, r.Sealed != ""})
 		}
 	}
 	sort.SliceStable(cs, func(i, j int) bool {
 		a, b := cs[i], cs[j]
-		if a.prio != b.prio {
-			return a.prio > b.prio
+		if a.Prio != b.Prio {
+			return a.Prio > b.Prio
 		}
-		if a.value != b.value {
-			return a.value > b.value
+		if a.Value != b.Value {
+			return a.Value > b.Value
 		}
-		return a.id < b.id
+		return a.ID < b.ID
 	})
+	return cs
+}
+
+// MassReveal picks the filtered, unidentified vault records the hero can pay for now: all of them at Cain, else as many
+// as it holds charges, best first (priority, value, id). Nothing is bought and nothing is queued here.
+func MassReveal(f *Filter, recs []vault.Rec, qname func(int) string, p Price) Mass {
+	cs := Candidates(f, recs, qname)
 	m := Mass{IDs: []string{}}
 	room := MassMax
 	switch {
@@ -89,7 +97,7 @@ func MassReveal(f *Filter, recs []vault.Rec, qname func(int) string, p Price) Ma
 			m.Skipped = len(cs) - i
 			break
 		}
-		m.IDs = append(m.IDs, c.id)
+		m.IDs = append(m.IDs, c.ID)
 	}
 	m.Count = len(m.IDs)
 	switch {
@@ -108,7 +116,7 @@ func MassReveal(f *Filter, recs []vault.Rec, qname func(int) string, p Price) Ma
 		m.Line = fmt.Sprintf("%d filtered item%s: no scroll or tome charge and Cain is not here; buy scrolls or visit Cain", len(cs), plural(len(cs)))
 	}
 	if p.EtherPer > 0 && !p.Free {
-		m.Ether = massEther(cs2ids(cs, func(c cand) (string, bool) { return c.id, c.sealed }), len(cs), p)
+		m.Ether = massEther(cs2ids(cs, func(c Cand) (string, bool) { return c.ID, c.Sealed }), len(cs), p)
 	}
 	return m
 }
