@@ -275,10 +275,10 @@ func cmdDeterminism(args []string, w io.Writer) error {
 	}
 	ok, vd, dd, missing := scenario.CheckDeterminism(a, b)
 	for _, d := range vd {
-		fmt.Fprintf(w, "VERDICT DIFFERS %s: %s vs %s (%s)\n", d.Key, d.A, d.B, d.Detail)
+		fmt.Fprintf(w, "DIFFERS (hard) %s: %s vs %s (%s)\n", d.Key, d.A, d.B, d.Detail)
 	}
 	for _, d := range dd {
-		fmt.Fprintf(w, "digest differs  %s: %s vs %s\n", d.Key, d.A, d.B)
+		fmt.Fprintf(w, "drift (state digest, not a failure) %s: %s vs %s\n", d.Key, d.A, d.B)
 	}
 	for _, m := range missing {
 		fmt.Fprintf(w, "missing in one execution: %s\n", m)
@@ -286,7 +286,7 @@ func cmdDeterminism(args []string, w io.Writer) error {
 	if !ok {
 		return exitErr{3, "NOT DETERMINISTIC (a flaky scenario is a failed scenario)"}
 	}
-	fmt.Fprintf(w, "deterministic: %d runs, same verdicts (%d digest warnings)\n", len(a), len(dd))
+	fmt.Fprintf(w, "deterministic: %d runs, same verdicts and assertion digests (%d state-digest drifts)\n", len(a), len(dd))
 	return nil
 }
 
