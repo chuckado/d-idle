@@ -28,7 +28,7 @@ The full map with file and line is appendix A. The short form, per skill kind of
 | skill kind | state today | why (short) |
 |---|---|---|
 | melee | **works, V live for Paladin** [S docs/classes/smoke-paladin.md]; code-only for other classes | left-hand loop, melee guard, `swinger` verb on d2d (`fight.go:662-666`, `:721`, `fighter.go:783-784`) |
-| single-target missile | **works, V live for Fire Bolt** [S classdata.go:19-22]; code-only otherwise | the main loop |
+| single-target missile | **works, V live for Fire Bolt** [S classdata.go:20-21]; code-only otherwise | the main loop |
 | self-centred nova as main attack | generic path exists, never listed in a band; two skills are special rules by name | `castfirst.go:98-126`, `fight.go:808-824` |
 | aura upkeep | **works, data-driven, V live for Might and Holy Fire** | ladder in the profile (`aura.go:85-126`); one knob is named after a skill |
 | timed buff upkeep | works by clock for any buff in a profile group; by state for five armors only | `fighter.go:685-731`, `necro.go:42-43`, `:473-487` |
@@ -39,12 +39,12 @@ The full map with file and line is appendix A. The short form, per skill kind of
 | movement skills | Teleport: navigation only; Charge, Leap, Leap Attack, Whirlwind: none | `nav/teleport.go`, `telekey.go:18` |
 | shapeshift | none (form skills have melee rows; nothing reads or sets the form) | no `Werewolf` or `Werebear` row in skills.json |
 | channelled, hold | left-hand pixel hold only | `fighter.go:785-791` |
-| charge-up and finisher | none | `skills.go:35`, `classdata.go:160` |
+| charge-up and finisher | none | `skills.go:35`, `classdata.go:164` |
 
 Three structural findings matter more than any single row:
 
 - **F1. The kinds are labels, not drivers.** `grep 'Kind(Bolt|Ground|Charged)'` over the non-test Go of `internal/combat` finds only the parser. A new delivery kind added to the JSON changes nothing until someone writes a branch for it in `engage`, which is how the class side loops came to exist.
-- **F2. Build flexibility is broken in about 40 places in `internal/combat` alone** (class checks, skill names, monster class ids, state ids; inventory in appendix A, section 3). The rule in AGENTS.md says none of these may be in Go. The aura ladder (`AuraPref`, `classdata.go:47-58`) shows the repo already knows how to do it right: conditions as data fields, one generic chooser.
+- **F2. Build flexibility is broken in about 40 places in `internal/combat` alone** (class checks, skill names, monster class ids, state ids; inventory in appendix A, section 3). The rule in AGENTS.md says none of these may be in Go. The aura ladder (`AuraPref`, `classdata.go:47-56`) shows the repo already knows how to do it right: conditions as data fields, one generic chooser.
 - **F3. The engine cannot tell that a skill does nothing.** Two incidents in the code comments are exactly this: a second Raise Skeleton cast on a used corpse "spent no mana" (`necro.go:135`), and a curse per unit "burned a cast every 1.2 s" (`necro.go:25`). Each got its own memory. Every unsupported skill the player may now buy (ADR 0020) can fail the same way.
 
 Corrections to merged notes, so later cards do not inherit them [V read]:
