@@ -166,6 +166,9 @@ func (t *Town) buyUnit(ctx context.Context, lay *panel.Layout, it d2.Unit) (int,
 	if b := t.base(it); b != nil && g0 < b.Cost/2 { // sure to fail: cheap items cost exactly Cost, gear 0.9-1.5x (VERIFIED LIVE)
 		return 0, fmt.Errorf("%w: %s costs about %d, have %d", ErrNoMoney, t.nameOf(it), b.Cost, g0)
 	}
+	if paid, handled, err := t.buyByVerb(ctx, it, g0); handled {
+		return paid, err
+	}
 	if err := t.selectTab(it); err != nil {
 		return 0, err
 	}
@@ -816,7 +819,16 @@ func (t *Town) sellTo(ctx context.Context, list []d2.Unit, rep *ChoreReport) (re
 		}
 		var after *d2.Snapshot
 		ok = false
-		if !t.sellByCursor {
+		if a, handled, vok, verr := t.sellByVerb(ctx, fresh, sold); handled {
+			if verr != nil {
+				return refused, verr
+			}
+			if !vok {
+				refused = append(refused, u)
+				continue
+			}
+			after, ok = a, true
+		} else if !t.sellByCursor {
 			if err := t.h.RightClick(fresh, lay.Inventory); err != nil {
 				return refused, err
 			}
@@ -1118,4 +1130,62 @@ func (t *Town) sellPass(s *d2.Snapshot) *loot.ShadowPass {
 // item is not worth a scroll, and the pickit's valuable priority.
 func (t *Town) sellCtx(s *d2.Snapshot, u d2.Unit, full bool) loot.SellCtx {
 	return loot.SellCtx{Full: full, SellUnid: t.sellUnidentified(s, u), ValuableMinPr: t.e.Tune.Loot.ValuableMinPrio}
+}
+
+// buyByVerb buys a vendor item with the fork's buy verb when the knob input.planner is on and the backend lists
+// input.buy (docs/process/input-verbs2.md): no tab click, no cell geometry, and a refusal names its cause. handled false
+// leaves the click path to the caller (knob off, no verb, an older build, an item the stock dump does not list). A sent
+// verb is never repeated by a click: the purchase either shows in the gold or the call fails.
+func (t *Town) buyByVerb(ctx context.Context, it d2.Unit, g0 int) (paid int, handled bool, err error) {
+	if !t.e.Planner.On() || !t.e.Planner.HasCap(input.CapBuy) || it.Item == nil {
+		return 0, false, nil
+	}
+	wv, ok := input.AsWorldVerbs(t.e.In)
+	if !ok {
+		return 0, false, nil
+	}
+	if verr := wv.BuyAt(it.Item.Page, it.X, it.Y); verr != nil {
+		if !input.IsRuleRefusal(verr) {
+			t.e.Log.Info("shop: buy verb unavailable, clicking", "item", t.nameOf(it), "err", verr)
+			return 0, false, nil
+		}
+		if input.RefusalCode(verr) == "gold" {
+			return 0, true, fmt.Errorf("%w: %s: %v", ErrNoMoney, t.nameOf(it), verr)
+		}
+		return 0, true, fmt.Errorf("town: buying %s: %w", t.nameOf(it), verr)
+	}
+	t.e.Planner.Count(input.PathVerb)
+	s, ok, werr := t.h.Wait(ctx, t.uiTimeout(), func(s *d2.Snapshot) bool { return s.Player.Gold < g0 })
+	if werr != nil {
+		return 0, true, werr
+	}
+	if !ok {
+		return 0, true, fmt.Errorf("town: buying %s: the buy verb was sent but the gold did not change", t.nameOf(it))
+	}
+	paid = g0 - s.Player.Gold
+	t.e.Log.Info("shop: bought", "item", t.nameOf(it), "price", paid, "gold left", s.Player.Gold, "path", "verb")
+	return paid, true, nil
+}
+
+// sellByVerb sells pack item u with the fork's sell verb (same conditions as buyByVerb). handled true: the item is
+// sold (sold true) or refused by the vendor for a named reason; false: the caller clicks.
+func (t *Town) sellByVerb(ctx context.Context, u d2.Unit, sold func(*d2.Snapshot) bool) (after *d2.Snapshot, handled, ok bool, err error) {
+	if !t.e.Planner.On() || !t.e.Planner.HasCap(input.CapSell) {
+		return nil, false, false, nil
+	}
+	wv, has := input.AsWorldVerbs(t.e.In)
+	if !has {
+		return nil, false, false, nil
+	}
+	if verr := wv.SellItem(u.ID); verr != nil {
+		if !input.IsRuleRefusal(verr) {
+			t.e.Log.Info("sell: verb unavailable, clicking", "item", t.nameOf(u), "err", verr)
+			return nil, false, false, nil
+		}
+		t.e.Log.Warn("sell: the vendor refused", "item", t.nameOf(u), "err", verr)
+		return nil, true, false, nil
+	}
+	t.e.Planner.Count(input.PathVerb)
+	after, ok, err = t.h.Wait(ctx, t.uiTimeout(), sold)
+	return after, true, ok, err
 }

@@ -213,14 +213,18 @@ func (r *saveQuestReader) Read(diff int) (bot.QuestView, bool) {
 		if info.Evidence == quest.EvMemory {
 			ev = task.EvMemory
 		}
+		st := task.QuestState{Ev: ev, Raw: info.Raw}
 		switch {
 		case info.Status == quest.Done:
-			v.Quests[tid] = task.QuestState{Stage: task.StageDone, Ev: ev}
+			st.Stage = task.StageDone
 		case info.Status == quest.Started && info.Pending:
-			v.Quests[tid] = task.QuestState{Stage: task.StageCleared, Ev: ev}
+			st.Stage = task.StageCleared
 		case info.Status == quest.Started:
-			v.Quests[tid] = task.QuestState{Stage: task.StageStarted, Ev: ev}
+			st.Stage = task.StageStarted
+		default:
+			continue // untouched: left to the in-game proxies, as before
 		}
+		v.Quests[tid] = st
 	}
 	for _, wp := range prog.Difficulty[diff].Waypoints {
 		on := wp.Active

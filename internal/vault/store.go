@@ -43,7 +43,11 @@ type Options struct {
 	Values        *ValueTable
 	Now           func() time.Time
 	NoSync        bool // skip fsync (benchmarks, tests); production leaves it off
-	TrimProtected bool // allow trimming protected items when nothing else is left (needs a Needs-you confirm upstream)
+	TrimProtected bool // with AutoTrim: allow trimming protected items when nothing else is left (needs a Needs-you confirm upstream)
+	// AutoTrim reads loot.vaultAutoTrim, live at every insert. nil or false (the default, user decision 2026-11-21):
+	// a full vault never removes anything and a new drop is NOT recorded (ErrFull; see Miss). true: the old behaviour,
+	// an insert at capacity archives the least valuable unpinned record first.
+	AutoTrim func() bool
 }
 
 // Store is one hero's vault. Safe for concurrent use.
@@ -64,6 +68,7 @@ type Store struct {
 	live     int
 	pins     int
 	ix       index
+	missed   Missed
 	anomaly  int  // log lines skipped on replay
 	repaired bool // a torn tail was cut on open
 
@@ -129,6 +134,7 @@ func ValidHero(h string) error {
 func (s *Store) reset() {
 	s.recs, s.byID, s.liveHash, s.gens = nil, map[string]*Rec{}, map[string]*Rec{}, map[string]int{}
 	s.live, s.pins, s.seq, s.anomaly = 0, 0, 0, 0
+	s.missed = Missed{}
 	s.ix = newIndex()
 }
 
@@ -295,6 +301,13 @@ func (s *Store) apply(ev *event) error {
 		s.gens[h]++
 		s.live++
 		s.ix.add(r)
+	case "miss":
+		if ev.Item == nil {
+			return ErrInvalid
+		}
+		s.missed.add(*ev.Item, ev.T)
+	case "missclear":
+		s.missed = Missed{}
 	case "pin":
 		r, err := need(Recorded)
 		if err != nil {
@@ -438,12 +451,19 @@ func (s *Store) apply(ev *event) error {
 			return ErrPinned
 		}
 		r.State, r.Reason, r.Updated = SellQ, "", ev.T
+		r.Ordered = ev.N == 1
+	case "sellord":
+		r, err := need(SellQ)
+		if err != nil {
+			return err
+		}
+		r.Ordered, r.Updated = true, ev.T
 	case "sellfail", "sellcancel":
 		r, err := need(SellQ)
 		if err != nil {
 			return err
 		}
-		r.State, r.Stage, r.GoldPre, r.Reason, r.Updated = Recorded, "", 0, ev.Reason, ev.T
+		r.State, r.Stage, r.GoldPre, r.Reason, r.Ordered, r.Updated = Recorded, "", 0, ev.Reason, false, ev.T
 	case "sold":
 		r, err := need(SellQ)
 		if err != nil {
@@ -491,8 +511,8 @@ func hashOf(raw string) string {
 // ---- public operations ----
 
 // Add records a new drop. The ID is derived from the content (generation g > 0 when the same bytes were
-// recorded and finished before). At exact capacity it trims one record first (design 2.4); over capacity it
-// refuses; a live identical item is a duplicate.
+// recorded and finished before). At exact capacity it returns ErrFull and removes nothing, unless Options.AutoTrim
+// is on: then it trims one record first (design 2.4). Over capacity it always refuses; a live identical item is a duplicate.
 func (s *Store) Add(it Item) (*Rec, error) {
 	if err := s.check(&it); err != nil {
 		return nil, err
@@ -520,6 +540,9 @@ func (s *Store) Add(it Item) (*Rec, error) {
 	case s.live > capN:
 		return nil, ErrOverCapacity
 	case s.live == capN:
+		if s.opt.AutoTrim == nil || !s.opt.AutoTrim() {
+			return nil, ErrFull
+		}
 		v := s.trimCandidate()
 		if v == nil {
 			return nil, ErrFull
@@ -535,6 +558,34 @@ func (s *Store) Add(it Item) (*Rec, error) {
 	}
 	r := *s.byID[it.ID]
 	return &r, nil
+}
+
+// Miss records a drop that could not be recorded because the vault is full (never an item removal). Only the facts
+// the page lists are kept (name, code, quality, ilvl, value), not the bytes.
+func (s *Store) Miss(it Item) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	m := Item{Name: it.Name, Code: it.Code, Quality: it.Quality, Ilvl: it.Ilvl, Value: it.Value, Found: it.Found}
+	if m.Value == 0 {
+		m.Value = s.opt.Values.Of(&it)
+	}
+	return s.commit(&event{Ev: "miss", Item: &m})
+}
+
+// ClearMissed resets the missed-drops counter and list (the player's dismiss button).
+func (s *Store) ClearMissed() error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.commit(&event{Ev: "missclear"})
+}
+
+// MissedDrops is a copy of the missed-drops counter.
+func (s *Store) MissedDrops() Missed {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	m := s.missed
+	m.Best = append([]Item(nil), m.Best...)
+	return m
 }
 
 func (s *Store) check(it *Item) error {
@@ -767,6 +818,45 @@ func (s *Store) Reseal(id string) error { return s.op(id, event{Ev: "reseal"}) }
 
 // MarkSell queues a record for the sell errand; a pinned record is refused (ErrPinned).
 func (s *Store) MarkSell(id string) error { return s.op(id, event{Ev: "sellq"}) }
+
+// OrderSell queues a sale the player asked for (N=1 in the log). With loot.vaultAutoTrim off only ordered sales run;
+// a record marked without an order is a flag the player confirms (ConfirmSell). Ordering an already marked record
+// confirms it.
+func (s *Store) OrderSell(id string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if r := s.byID[id]; r != nil && r.State == SellQ {
+		if r.Ordered {
+			return nil
+		}
+		return s.opLocked(id, event{Ev: "sellord"})
+	}
+	return s.opLocked(id, event{Ev: "sellq", N: 1})
+}
+
+// ConfirmSell turns marked-for-sale records into player orders; it returns how many it confirmed.
+func (s *Store) ConfirmSell() (int, error) {
+	n := 0
+	for _, r := range s.SellMarked() {
+		if err := s.OrderSell(r.ID); err != nil {
+			return n, err
+		}
+		n++
+	}
+	return n, nil
+}
+
+// SellMarked lists sell-queued records the player has not ordered (flags from before the full-vault rule, or set
+// without an order), oldest first.
+func (s *Store) SellMarked() []Rec {
+	var out []Rec
+	for _, r := range s.SellQueued() {
+		if !r.Ordered && r.Stage == "" {
+			out = append(out, r)
+		}
+	}
+	return out
+}
 
 // FailSell ends a sale with a reason; the record goes back to Recorded.
 func (s *Store) FailSell(id, reason string) error {
@@ -1065,6 +1155,7 @@ type snapshot struct {
 	Anomaly  int            `json:"anomaly"`
 	Gens     map[string]int `json:"gens"`
 	Recs     []*Rec         `json:"recs"`
+	Missed   *Missed        `json:"missed,omitempty"`
 }
 
 // Checkpoint writes the index snapshot (also done by Close). The snapshot is only a cache: delete it and the
@@ -1077,7 +1168,7 @@ func (s *Store) Checkpoint() error {
 
 func (s *Store) checkpointLocked() error {
 	sn := snapshot{Version: 1, Hero: s.hero, Offset: s.size, LastLine: hex.EncodeToString(s.lastLine[:]),
-		Seq: s.seq, Anomaly: s.anomaly, Gens: s.gens, Recs: s.recs}
+		Seq: s.seq, Anomaly: s.anomaly, Gens: s.gens, Recs: s.recs, Missed: &s.missed}
 	b, err := json.Marshal(sn)
 	if err != nil {
 		return err
@@ -1139,5 +1230,8 @@ func (s *Store) loadSnapshot(logPath string, logSize int64) (int64, bool) {
 		s.ix.add(r)
 	}
 	s.seq, s.anomaly = sn.Seq, sn.Anomaly
+	if sn.Missed != nil {
+		s.missed = *sn.Missed
+	}
 	return sn.Offset, true
 }

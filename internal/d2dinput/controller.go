@@ -41,6 +41,11 @@ type Controller struct {
 	// Run, when set, manages the run toggle by stamina before every move (run.go). nil: always walk, as before.
 	Run *RunPolicy
 
+	// Planner, when set and on (the knob input.planner), makes Pickup and UsePortal send the fork's pickup and portal
+	// verbs when the connected d2d lists input.pickup / input.portal; a rule refusal then comes back named, any other
+	// failure falls back to the cmd path below (worldverbs.go).
+	Planner *input.Planner
+
 	lastLevel  int
 	primed     bool
 	runMu      sync.Mutex // guards the run belief and its observables (RunInfo is read from the bot's minute loop)
@@ -65,6 +70,7 @@ var (
 	_ input.Controller    = (*Controller)(nil)
 	_ input.SemanticInput = (*Controller)(nil)
 	_ input.SkillSelector = (*Controller)(nil)
+	_ input.WorldVerbs    = (*Controller)(nil)
 )
 
 type wall struct{}
@@ -492,7 +498,14 @@ func (c *Controller) InteractNPC(index int) error {
 	return c.C.CmdInteract(c.ctx(), index)
 }
 
-func (c *Controller) Pickup(unit uint32) error { return c.C.CmdPickup(c.ctx(), int(unit)) }
+func (c *Controller) Pickup(unit uint32) error {
+	if c.verbOn(input.CapPickup) {
+		if err := c.PickupItem(unit); err == nil || input.IsRuleRefusal(err) {
+			return err
+		}
+	}
+	return c.C.CmdPickup(c.ctx(), int(unit))
+}
 
 func (c *Controller) Belt(slot int, merc bool) error { return c.C.CmdBelt(c.ctx(), slot, merc) }
 
@@ -524,6 +537,11 @@ func (c *Controller) UsePortal(which int) error {
 		if p.Which == which {
 			if err := c.prime(); err != nil {
 				return err
+			}
+			if c.verbOn(input.CapPortal) {
+				if err := c.EnterPortal(which); err == nil || input.IsRuleRefusal(err) {
+					return err
+				}
 			}
 			return c.C.TakePortal(c.ctx(), which)
 		}

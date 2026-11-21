@@ -386,8 +386,9 @@
 | heavyguard | proposed | - | `tools/lib/heavy-guard.sh`<br>`tools/lib/heavy-guard-test.sh`<br>`tools/uishots.sh`<br>`docs/process/worker-capacity.md` | - |
 | bsm7 | proposed | - | `internal/task/executor.go`<br>`internal/task/gate_hold_test.go`<br>`internal/bot/routeguard.go`<br>`internal/bot/questboard.go`<br>`internal/bot/kitplan_test.go`<br>`tools/provingground/scenarios/board.json`<br>`docs/probes/boardsm-progress-2026-11-21.md` | - |
 | bsm8 | proposed | - | `internal/watch/web/panels/quest-board/panel.js`<br>`internal/watch/testdata/questui/quest_ui.mjs`<br>`internal/questboard/desk.go`<br>`internal/questboard/desk_reason_test.go` | - |
+| vaultfull | proposed | - | `internal/vault/`<br>`internal/vaultkeep/`<br>`internal/loot/vault.go`<br>`internal/loot/vault_test.go`<br>`internal/loot/pickup.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultapi_test.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault-logic.js`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/env/tuning_loot.go`<br>`docs/vault.md`<br>`docs/knobs.md`<br>`tools/provingground/scenarios/vaultfull.json` | - |
 | vaultpay | proposed | - | `internal/vaultkeep`<br>`internal/bulkid`<br>`internal/d2dctl/paygold.go`<br>`internal/d2dctl/paygold_test.go`<br>`internal/d2dctl/vault_verbs.go`<br>`internal/d2dctl/vault_fake.go`<br>`internal/watch/vaultapi_gold.go`<br>`internal/watch/vaultapi_gold_test.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`internal/watch/testdata/vault_logic.mjs`<br>`cmd/d2bot/vaultkeep.go`<br>`internal/town/playerid.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`docs/cheats.md`<br>`docs/adr/0014-memory-writes-allowed-no-crutch.md`<br>`docs/adr/0029-vault-gold-payment.md`<br>`docs/adr/README.md`<br>`docs/decisions.md`<br>`tools/provingground/scenarios/vaultreveal.json` | `fork-branch:didle/devp17-20261121` |
-| autoalloc | proposed | - | `docs/design/autoalloc-and-currencies-2026-11-21.md`<br>`docs/autoalloc.md`<br>`internal/points/`<br>`internal/leveler/autoalloc.go`<br>`internal/leveler/autoalloc_test.go`<br>`cmd/d2bot/autoallocwire.go`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/env/tuning_respec.go`<br>`internal/env/tuning_agency.go`<br>`internal/env/tuning.go`<br>`docs/knobs.md`<br>`internal/watch/pointsapi.go`<br>`internal/watch/pointsapi_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`internal/watch/web/points.css`<br>`tools/provingground/scenarios/autoalloc.json`<br>`tools/provingground/scenarios/behaviours.json`<br>`internal/leveler/leveler.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/pointswire.go` | - |
+| verbs2 | proposed | - | `internal/d2dctl/world_verbs.go`<br>`internal/d2dctl/world_verbs_test.go`<br>`internal/d2dctl/fake/fake.go`<br>`internal/input/worldverbs.go`<br>`internal/input/worldfake.go`<br>`internal/d2dinput/worldverbs.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`internal/d2dcombat/rig.go`<br>`internal/d2dtown/adapter.go`<br>`internal/town/shop.go`<br>`internal/town/worldverbs_test.go`<br>`internal/town/worldverbs_unit_test.go`<br>`internal/town/export_world_test.go`<br>`internal/nav/waypoint.go`<br>`internal/nav/wpverb_test.go`<br>`internal/env/tuning_input.go`<br>`docs/knobs.md`<br>`data/input/caps/d2d-fork-input-verbs2.json`<br>`data/input/caps_test.go`<br>`docs/process/input-verbs2.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -423,14 +424,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- caadfa33f 11-21 15:19 `Merge agent/cainscroll: Merge branch 'main' into cainscroll` (cainscroll)
+- 87f94536e 11-21 15:18 `Merge branch 'main' into cainscroll` (-)
+- 72fb9cc59 11-21 15:11 `Merge agent/vaultfull: Full Vault never trims or sells; missed drops; knob loot.vaultAutoTrim` (vaultfull)
+- 943595cdb 11-21 15:10 `Merge branch 'main' into vaultfull` (-)
+- 229170d9d 11-21 15:03 `Merge agent/verbs2: Merge branch 'main' into verbs2` (verbs2)
+- 16104ab89 11-21 15:02 `Merge origin/main into vaultfull` (vaultfull)
+- 4975e5169 11-21 15:01 `Merge branch 'main' into verbs2` (-)
 - d4815b337 11-21 14:54 `Merge agent/autoalloc: Merge branch 'main' into TASK-787` (autoalloc)
+- 58119931c 11-21 14:53 `Merge origin/main into agent/cainscroll` (-)
 - d5bdb2385 11-21 14:53 `Merge branch 'main' into TASK-787` (-)
-- 43dc908bd 11-21 14:47 `Merge agent/vaultpay: Merge branch 'main' into vaultpay` (vaultpay)
-- 934aac430 11-21 14:45 `Merge branch 'main' into vaultpay` (-)
-- 1080b4433 11-21 14:37 `Merge agent/mgmtfast: immediate management: ui.managementFast knob, Recall now, audit doc` (mgmtfast)
-- 98776d5e9 11-21 14:36 `Merge branch 'main' into mgmtfast` (-)
-- fbe544ea2 11-21 14:26 `Merge agent/bsm8: Merge branch 'main' into bsm8` (bsm8)
-- f41c0dfa6 11-21 14:25 `Merge branch 'main' into bsm8` (-)
-- 3db6a3947 11-21 14:18 `Merge agent/skillsbadge: Merge branch 'main' into TASK-784` (skillsbadge)
-- b1c861cb1 11-21 14:16 `Merge branch 'main' into TASK-784` (-)
 <!-- statusgen:end -->

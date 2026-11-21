@@ -41,7 +41,7 @@ d2d items have `uid` 0 (V0 finding), so identity is `sha256(raw bytes)[:8]`. ID 
 ## Capacity, trim, shrink (data/vault/capacity.json, value.json; numbers are placeholders)
 
 - Capacity = `base` plus owned steps, capped at `max`; `Tiers.Capacity(owned, override)`; unknown step ids are ignored.
-- Insert at exact full (count == capacity) trims ONE record first: lowest `value`, then lowest ilvl, then oldest, among unpinned `recorded` records. Protected items (qualities set, rare, unique, crafted; runes, jewels, charms by code prefix, from value.json) go only when nothing else is left AND `Options.TrimProtected` is set, otherwise `ErrFull`. The victim is archived first.
+- (Default since 2026-11-21: NO trim, see "Decision 2026-11-21" below. The next line is the behaviour with `loot.vaultAutoTrim` 1.) Insert at exact full (count == capacity) trims ONE record first: lowest `value`, then lowest ilvl, then oldest, among unpinned `recorded` records. Protected items (qualities set, rare, unique, crafted; runes, jewels, charms by code prefix, from value.json) go only when nothing else is left AND `Options.TrimProtected` is set, otherwise `ErrFull`. The victim is archived first.
 - Over capacity (count > capacity, after a shrink): Add returns `ErrOverCapacity`, nothing is trimmed, nothing is deleted; recording resumes once discards or keeps bring the count back to capacity.
 - Value (`ValueTable.Of`) is computed at Add and stored, so replay never changes a trim order. It does not reuse the loot rules (those decide pickup; none of their helpers rank records).
 
@@ -256,3 +256,25 @@ Live checklist (not run; lab d2d build with the item verbs and `--vault-verbs`, 
 3. Read the equipment: the vault helm is worn, the old helm is a live vault record and not in the hero, `writes after start: 0`.
 4. Rings: both fingers worn, press left, then right in a second run: only the chosen slot changes.
 5. Repeat with the vault full of pinned records: the old item stays in the backpack, marked keep, and is not sold at the next chore.
+
+## Decision 2026-11-21: a full Vault never removes anything
+
+User decision (the Ethereal Vault, sandbox hero): "we shouldn't sell items when it's full, just don't record drops when it is. That's to punish the player for not keeping up with it: if we sell the least important items it becomes a strat to just let the bot run and it will filter out the trash itself instead of having to manage it." Later the same day: keep the automatic code as an unlock for later, behind a knob, default off.
+
+Rule. The Vault never removes, sells, trims or replaces an item on its own. At capacity a new drop is NOT recorded; only the player decides what leaves (take out, sell by their own order, equip, unpin/discard, the Ether upgrade). Pins are unaffected.
+
+Knob `loot.vaultAutoTrim` (default 0; docs/knobs.md). 0: the rule above. 1: the old behaviour, exactly as before: an insert at capacity archives the least valuable unpinned record (`Store.Add` with `Options.AutoTrim`), and records marked for sale are sold at the next visit without a confirm (`Keeper.AutoSell`). This is an unlock for later and is not offered as a button: an unlock (a purchase or a milestone) would hook in by returning true from `vaultHome.autoTrimOn` (cmd/d2bot/vaultpage.go), which today reads the knob through `home.setAutoTrim` in `wireVaultKeep` (cmd/d2bot/vaultkeep.go); the page already shows the old banner when the API says `autoTrim: true`.
+
+Every automatic removal path found (V: grep of internal/vault, internal/vaultkeep, internal/loot, cmd/d2bot, internal/watch, the page):
+1. `Store.Add` at capacity, `trimCandidate` (internal/vault/store.go): trimmed the lowest value, unpinned record into the archive. Now behind `AutoTrim`; off returns `ErrFull`. The Ether conversion of trimmed items does not exist (V: no salvage code; the trimmed record only goes to `archive.jsonl`).
+2. The sell errand (`Keeper.runSell`, internal/vaultkeep/sell.go) sold every sell-queued record. It now runs only records the player ORDERED (`Rec.Ordered`, set by `Store.OrderSell`, which the sell route and the opt-in prompt answer use); a bare mark (`Store.MarkSell`, or any flag from before this change) is "Marked for sale" and waits. `loot.vaultAutoTrim` 1 runs marks as before.
+3. The page banner promised the trim; it now says what happens.
+Not Vault paths, unchanged: the bot's own pack junk handling and the poor-mode pickup (`loot.vaultPoorPickup`), equip (`runEquip`: a replaced item that the full vault cannot take stays in the backpack under the keep mark), `Discard` after a failed equip, the player's own discard.
+
+What the bot does with a drop it cannot record (V: `Looter.vaultOne`, the candidate filter in pickup.go): the item stays on the ground, is not walked to once the full state is known (2 minute re-check, `vaultBlockedFor`), is not picked up (the pack does not clog) and no pickup click is sent. It is counted as a missed drop.
+
+Missed drops. `Store.Miss` appends a `miss` event (name, code, quality, item level, value; not the item bytes) and the snapshot keeps `missed`. The counter and the ten best (by value) persist with the vault until the player presses Clear (`POST /api/vault/missed {dismiss:true}`, event `missclear`). One count per floor unit. The page (internal/watch/web/vault*.js) shows the banner `Vault full: N/400. New drops are not recorded until you make room.` (plus `Missed drops: M` once there are some), a "Missed drops" row with the best names and a Clear button.
+
+Marked for sale. With the knob off, `GET /api/vault` returns `marked {n, ids, names}` for sell-queued records without an order, and the page shows "Marked for sale: N ... Nothing is sold until you confirm." with a button "Sell these N now": it posts the ids to `/api/vault/sell` (a player order, `EnqueueSell` turns a mark into an order). Migration of existing vaults needs no data change: the `ordered` flag is absent on all old `sellq` lines, so every existing flag (for example the 196 of the sandbox vault) reads as a mark and nothing sells until the player presses the button; the "Selling N items: at your next town visit" line counts ordered sales only (and, with the knob on, marks too).
+
+Tests: internal/vault (`TestFullVaultNeverTrimsByDefault`, `TestAutoTrimOnReproducesOldTrim`, `TestSellMarksWaitForConfirm`), internal/loot (`TestVaultFullDoesNotTrimUnlessAutoTrim`, Paladin and Sorceress, both knob states), internal/vaultkeep (`TestMarkedSalesWaitForConfirm`), internal/watch (`TestVaultFullPageShowsMissedAndMarked`). Scenarios `vault.full-no-trim` and `vault.full-notice` (tools/provingground/scenarios/vaultfull.json) are pending: the runner cannot seed vault records yet (needs `pre.vault_records` and the assertions `vault_count`, `vault_records_present`, `vault_missed`, `vault_api`). U: nothing here ran against a live game.

@@ -25,6 +25,10 @@ var neverSell = func() map[string]bool {
 	return m
 }()
 
+// questBase reports a quest item: the items.txt column, or a code of the data list (loot.QuestCode). The column wins when
+// the build sets it; the list covers a data build that does not.
+func questBase(b *data.ItemBase) bool { return b != nil && (b.Quest || loot.QuestCode(b.Code)) }
+
 // NeverSellReason says why an item can never be sold, whatever the player marks ("" = it may be): quest items, the
 // Cube, keys, tomes and the character's start kit. b may be nil (unknown base: refused).
 func NeverSellReason(b *data.ItemBase, u d2.Unit) string {
@@ -33,7 +37,7 @@ func NeverSellReason(b *data.ItemBase, u d2.Unit) string {
 		return "unknown item"
 	case u.Item != nil && u.Item.Flags&d2.FlagStartItem != 0:
 		return "start item"
-	case neverSell[b.Code] || b.Type == "key":
+	case neverSell[b.Code] || b.Type == "key" || questBase(b):
 		return "quest item, key or tome"
 	}
 	return ""
@@ -53,7 +57,7 @@ func (t *Town) sellProtected(u d2.Unit, v loot.Verdict) bool {
 	if b == nil {
 		return true // unknown: keep
 	}
-	return neverSell[b.Code] || b.Type == "rune" || b.Type == "key" || isCubeItem(b.Code) || b.Code == "" ||
+	return neverSell[b.Code] || questBase(b) || b.Type == "rune" || b.Type == "key" || isCubeItem(b.Code) || b.Code == "" ||
 		u.Item.Flags&d2.FlagStartItem != 0
 }
 

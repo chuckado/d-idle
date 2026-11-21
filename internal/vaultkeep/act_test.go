@@ -578,3 +578,45 @@ func TestSellOffer(t *testing.T) {
 		t.Fatal("the mute ends")
 	}
 }
+
+// A mark (a flag from before the full-vault rule, no player order) is never sold with loot.vaultAutoTrim off; the
+// player's confirm turns it into an order; with the knob on the old behaviour (mark sells) applies.
+func TestMarkedSalesWaitForConfirm(t *testing.T) {
+	for _, class := range classes {
+		for _, auto := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/auto%v", class, auto), func(t *testing.T) {
+				r := newRig(t, class)
+				r.withVendor(100, 37)
+				r.k.AutoSell = func() bool { return auto }
+				a, b := r.add(1, "wsp", 4), r.add(2, "rin", 4)
+				st := r.k.store()
+				if err := st.MarkSell(a); err != nil {
+					t.Fatal(err)
+				}
+				if err := st.MarkSell(b); err != nil {
+					t.Fatal(err)
+				}
+				if !auto {
+					if in := r.k.Info(); in.SellMarked != 2 || in.SellQueued != 0 || r.k.SellLine() != "" || r.k.Pending() != 0 {
+						t.Fatalf("info %+v", in)
+					}
+					r.run()
+					for _, id := range []string{a, b} {
+						if rec := r.state(id); rec.State != vault.SellQ || r.vend.gold != 100 {
+							t.Fatalf("%s sold without a confirm: %+v gold %d", id, rec, r.vend.gold)
+						}
+					}
+					if n, err := r.k.ConfirmMarked(); err != nil || n != 2 {
+						t.Fatalf("confirm %d %v", n, err)
+					}
+				}
+				r.run()
+				for _, id := range []string{a, b} {
+					if rec := r.state(id); rec.State != vault.Sold {
+						t.Fatalf("%s: %+v", id, rec)
+					}
+				}
+			})
+		}
+	}
+}

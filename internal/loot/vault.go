@@ -28,6 +28,7 @@ import (
 // VaultRecorder is the part of *vault.Store the looter uses.
 type VaultRecorder interface {
 	Add(vault.Item) (*vault.Rec, error)
+	Miss(vault.Item) error // a drop that could not be recorded because the vault is full (the page counts them)
 }
 
 // VaultWiring connects a Looter to the fork verbs and the hero's vault store.
@@ -57,6 +58,7 @@ type vaultState struct {
 	noticed  bool              // the full notice of this episode went out (cleared by the next record)
 	done     map[vaultKey]bool // recorded or duplicate: never walk to it again
 	fell     map[vaultKey]bool // peek or record failed: today's pickup decision applies
+	missed   map[vaultKey]bool // counted as a missed drop (vault full): once per floor unit
 	logged   map[string]bool
 	recorded int
 	dups     int
@@ -70,6 +72,9 @@ type vaultState struct {
 func (v *vaultState) init() {
 	if v.done == nil {
 		v.done, v.fell, v.logged = map[vaultKey]bool{}, map[vaultKey]bool{}, map[string]bool{}
+	}
+	if v.missed == nil {
+		v.missed = map[vaultKey]bool{}
 	}
 }
 
@@ -358,11 +363,17 @@ func (l *Looter) vaultOne(ctx context.Context, c cand, o PickOpts) (recorded boo
 		v.dups++
 		return false, nil
 	case errors.Is(err, vault.ErrOverCapacity), errors.Is(err, vault.ErrFull):
+		// Decision 2026-11-21: nothing leaves the vault to make room. The drop stays on the ground (not picked up, so
+		// the pack does not clog) and is counted as a missed drop.
 		v.blocked = v.clock().Add(vaultBlockedFor)
+		if !v.missed[keyOf(u)] {
+			v.missed[keyOf(u)] = true
+			_ = st.Miss(it)
+		}
 		if !v.noticed {
 			v.noticed = true
-			l.e.Log.Info("vault full: new records are stopped until room is made", "err", err)
-			l.vaultNotice("The vault is full: new items are not recorded. Keep, sell or discard some to make room.")
+			l.e.Log.Info("vault full: new drops are not recorded until room is made", "err", err)
+			l.vaultNotice("The vault is full: new drops are not recorded until you make room.")
 		}
 		return false, errVaultRetry
 	}
@@ -370,4 +381,26 @@ func (l *Looter) vaultOne(ctx context.Context, c cand, o PickOpts) (recorded boo
 	v.fallback++
 	l.vaultOnce("add", "vault: record failed; this item falls back to the pickup decision", "err", err)
 	return false, errVaultRetry
+}
+
+// vaultMissSkip counts a drop the looter skips as "vault full" without walking to it (the block of vaultBlockedFor
+// is still on): once per floor unit, with what the unit itself tells (name, code, quality, item level).
+func (l *Looter) vaultMissSkip(u d2.Unit, name string) {
+	v := &l.vault
+	v.mu.Lock()
+	defer v.mu.Unlock()
+	v.init()
+	if v.missed[keyOf(u)] || v.w == nil || u.Item == nil {
+		return
+	}
+	v.missed[keyOf(u)] = true
+	st, err := v.w.Store()
+	if err != nil {
+		return
+	}
+	it := vault.Item{Name: name, Quality: u.Item.Quality, Ilvl: u.Item.ILvl, Found: vault.Found{Time: v.clock().UTC()}}
+	if b := l.base(u.Class); b != nil {
+		it.Code = b.Code
+	}
+	_ = st.Miss(it)
 }

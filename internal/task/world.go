@@ -74,6 +74,9 @@ const (
 type QuestState struct {
 	Stage Stage
 	Ev    Evidence
+	// Raw is the quest record's word as read (0 = unknown or untouched). The Stage folds it; a handler that needs one
+	// bit of it (Search for Cain: bit 4 = the cairn stones were done, so the tree has given its scroll) reads it here.
+	Raw uint16
 }
 
 // World is the read-only value one tick decides on (finding F7: the same value goes to Need and Ready of every
