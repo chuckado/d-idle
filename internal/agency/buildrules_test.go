@@ -27,7 +27,7 @@ func TestShippedTablesValidateAgainstCapabilityRules(t *testing.T) {
 		}
 		ps := buildfile.Validate(b, rules)
 		switch b.Class {
-		case "sorceress", "paladin", "necromancer":
+		case "sorceress", "paladin", "necromancer", "barbarian":
 			if len(ps) > 0 {
 				t.Errorf("%s: %v", name, ps)
 				continue
@@ -61,8 +61,8 @@ func TestShippedTablesValidateAgainstCapabilityRules(t *testing.T) {
 			other++
 		}
 	}
-	t.Logf("%d Paladin, Sorceress and Necromancer tables validate and round-trip against the capability table; %d other-class tables are skill_unknown by design", covered, other)
-	if covered < 13 {
+	t.Logf("%d Paladin, Sorceress, Necromancer and Barbarian tables validate and round-trip against the capability table; %d other-class tables are skill_unknown by design", covered, other)
+	if covered < 15 {
 		t.Errorf("only %d tables covered", covered)
 	}
 }
