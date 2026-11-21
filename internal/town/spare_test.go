@@ -147,8 +147,13 @@ func TestFullPackOfRejuvsIsSoldDown(t *testing.T) {
 // room in the pack; the tome and the kept scrolls stay. With no tome nothing is sold (the shopping target rules).
 func TestLooseScrollsBesideTomeAreSold(t *testing.T) {
 	geartest.Need(t)
-	for _, withTome := range []bool{true, false} {
+	for _, c := range []struct {
+		withTome bool
+		class    d2.Class
+	}{{true, d2.Paladin}, {false, d2.Paladin}, {true, d2.Sorceress}, {false, d2.Sorceress}} {
+		withTome := c.withTome
 		r := newRig(t)
+		r.W.Player.Class = c.class
 		dressed(r.W)
 		if withTome {
 			r.W.Add("tbk", d2.ContInventory, 0, 0)
