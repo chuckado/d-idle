@@ -310,7 +310,7 @@ func TestHandInReadBack(t *testing.T) {
 }
 
 func TestFailureDeathParkResume(t *testing.T) {
-	fail := StepResult{StepFailed, "no path to the Den"}
+	fail := StepResult{StepFailed, "no path to the Den", ""}
 	t.Run("failures park with a visible reason, no silent loop", func(t *testing.T) {
 		r := newRig(t, "Sorceress", 6)
 		r.x.Accept(den, clr)
@@ -347,15 +347,15 @@ func TestFailureDeathParkResume(t *testing.T) {
 	t.Run("death resumes after recovery, a second death parks", func(t *testing.T) {
 		r := newRig(t, "Paladin", 6)
 		r.x.Accept(den, clr)
-		r.f.Script = []StepResult{{Outcome: StepRan}, {StepDied, "Fallen pack"}}
+		r.f.Script = []StepResult{{Outcome: StepRan}, {StepDied, "Fallen pack", ""}}
 		r.tick(2)
 		if d := r.next(); d.Kind != DecRun {
 			t.Fatalf("after one death: %v", d)
 		}
 		r.restart() // the bot restarts while recovering: progress comes from the evidence
-		r.f.Script = []StepResult{{StepDied, "Fallen pack"}}
+		r.f.Script = []StepResult{{StepDied, "Fallen pack", ""}}
 		r.tick(1)
-		r.x.Report(Decision{Quest: den, Chunk: clr}, StepResult{StepDied, "again"})
+		r.x.Report(Decision{Quest: den, Chunk: clr}, StepResult{StepDied, "again", ""})
 		d := r.next()
 		if d.Kind != DecBlocked || !strings.Contains(d.Why, "died 2 times") {
 			t.Fatalf("%v", d)
@@ -375,7 +375,7 @@ func TestFailureDeathParkResume(t *testing.T) {
 func TestResetPauseCancel(t *testing.T) {
 	r := newRig(t, "Paladin", 6)
 	r.x.Accept(den, clr)
-	r.f.Script = []StepResult{{Outcome: StepRan}, {StepFailed, "x"}, {StepFailed, "x"}}
+	r.f.Script = []StepResult{{Outcome: StepRan}, {StepFailed, "x", ""}, {StepFailed, "x", ""}}
 	r.tick(3)
 	r.x.Reset()
 	if r.f.Count("stop") != 1 {

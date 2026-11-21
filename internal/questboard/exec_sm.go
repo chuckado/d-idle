@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 )
 
 // The executor on the run machine (knob quests.boardSM, card bsm4). exec.go calls these only when Options.SM is set;
@@ -258,4 +259,27 @@ func (e *Exec) smRetryAll() {
 		}
 		return nil
 	})
+}
+
+// holdLocked records a hold (a guard refused for a reason that is no failure). The first refusal starts the clock; a
+// hold older than the budget of its code parks the run with hold_timeout (I10, Q10). Callers hold e.mu.
+func (e *Exec) holdLocked(d Decision, rs *runState, res StepResult) {
+	info, ok := ReasonOf(res.Code)
+	if !ok || info.Kind != KindHold {
+		// a code outside the closed list is a bug of the producer: count it as the failure it used to be
+		rs.failures++
+		rs.lastWhy = res.Why
+		return
+	}
+	now := e.o.Now()
+	if rs.hold != res.Code {
+		rs.hold, rs.holdFrom = res.Code, now
+	}
+	rs.holdWhy = res.Why
+	rs.started = true
+	if info.BudgetMin > 0 && now.Sub(rs.holdFrom) >= time.Duration(info.BudgetMin)*time.Minute {
+		rs.blocked = Sentence("hold_timeout", map[string]string{"n": fmt.Sprint(info.BudgetMin), "hold": Sentence(res.Code, nil)})
+		e.o.Log("quest board: parked "+ChunkKey(d.Quest, d.Chunk), "chunk", ChunkKey(d.Quest, d.Chunk), "why", rs.blocked, "hold", res.Code)
+		e.smPark(d.Quest, d.Chunk, "hold_timeout", rs)
+	}
 }

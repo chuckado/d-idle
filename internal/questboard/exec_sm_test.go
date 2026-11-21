@@ -3,6 +3,7 @@ package questboard
 import (
 	"strings"
 	"testing"
+	"time"
 )
 
 var smClasses = []string{"Paladin", "Sorceress"}
@@ -13,7 +14,7 @@ func parkRig(t *testing.T, class string, sm bool) *rig {
 	if err := r.x.Accept(den, clr); err != nil {
 		t.Fatal(err)
 	}
-	fail := StepResult{StepFailed, "no path to the Den"}
+	fail := StepResult{StepFailed, "no path to the Den", ""}
 	r.f.Script = []StepResult{fail, fail, fail}
 	r.tick(3)
 	if d := r.next(); d.Kind != DecBlocked {
@@ -154,5 +155,53 @@ func TestSMAcceptChainBusyAndStop(t *testing.T) {
 				t.Fatalf("second stop: %v", err)
 			}
 		})
+	}
+}
+
+// Q9, Q10: a refusal a town visit fixes is a hold, not a failure; it parks with hold_timeout when it outlives its
+// budget, and the park survives a restart.
+func TestSMHoldIsNoFailureAndTimesOut(t *testing.T) {
+	for _, class := range smClasses {
+		t.Run(class, func(t *testing.T) {
+			r := newRigSM(t, class, 6, true)
+			now := smT0
+			r.x.o.Now = func() time.Time { return now }
+			if err := r.x.Accept(den, clr); err != nil {
+				t.Fatal(err)
+			}
+			d := r.next()
+			held := StepResult{StepHeld, "potions 3 < 4", "needs_potions"}
+			for i := 0; i < 6; i++ { // three failures would park an old-style refusal
+				r.x.Report(d, held)
+			}
+			st, _ := r.x.State()
+			if st.Active == nil || st.Active.Failures != 0 || st.Active.Hold != "needs_potions" || r.next().Kind != DecRun {
+				t.Fatalf("a hold must count nothing and keep the chunk running: %+v", st.Active)
+			}
+			r.x.Report(d, StepResult{Outcome: StepRan})
+			if st, _ = r.x.State(); st.Active.Hold != "" {
+				t.Fatalf("a slice that ran must lift the hold: %+v", st.Active)
+			}
+			r.x.Report(d, held)
+			now = now.Add(21 * time.Minute) // the chore budget is 20 minutes
+			r.x.Report(d, held)
+			if dd := r.next(); dd.Kind != DecBlocked || !strings.Contains(dd.Why, "Still waiting after 20 minutes") {
+				t.Fatalf("budget exceeded must park with hold_timeout: %+v", dd)
+			}
+			r.restart()
+			if dd := r.next(); dd.Kind != DecBlocked {
+				t.Fatalf("hold_timeout park lost over a restart: %+v", dd)
+			}
+		})
+	}
+	// a code outside the closed list is a producer bug and stays the failure it used to be
+	r := newRigSM(t, "Paladin", 6, true)
+	r.x.Accept(den, clr)
+	d := r.next()
+	for i := 0; i < 3; i++ {
+		r.x.Report(d, StepResult{StepHeld, "x", "made_up_code"})
+	}
+	if r.next().Kind != DecRun {
+		t.Fatal("unknown hold code: see the failure counters")
 	}
 }
