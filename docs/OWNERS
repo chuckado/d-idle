@@ -144,7 +144,9 @@ cmd/d2bot/behaviors.go  credit-runner  quests4
 cmd/d2bot/behaviors.go  credit-runner  vaultv5
 cmd/d2bot/beltfill_adapter.go  credit-runner  beltfix
 cmd/d2bot/boss.go  credit-runner  countess3
+cmd/d2bot/boss.go  credit-runner  countess3b
 cmd/d2bot/boss.go  pro-runner  levelplan3
+cmd/d2bot/boss_levelmonsters_test.go  credit-runner  countess3b
 cmd/d2bot/cain.go  credit-runner  cain45
 cmd/d2bot/cain5b_test.go  credit-runner  cain5b
 cmd/d2bot/cain_test.go  credit-runner  cain45
@@ -453,6 +455,7 @@ docs/knobs.md  credit-runner  agencyp0
 docs/knobs.md  credit-runner  botcpu2
 docs/knobs.md  credit-runner  botinstant
 docs/knobs.md  credit-runner  botstuck
+docs/knobs.md  credit-runner  bsm4
 docs/knobs.md  credit-runner  bulkid
 docs/knobs.md  credit-runner  cainfix3
 docs/knobs.md  credit-runner  countess3
@@ -534,6 +537,7 @@ docs/probes/provingground-cainchain-2026-11-20.md  credit-runner  cainchain
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess2
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess3
+docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess3b
 docs/probes/provingground-run-2026-11-19.md  credit-runner  pgexpand
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
@@ -880,6 +884,7 @@ internal/bot/pointsgate_test.go  credit-runner  agencyp0
 internal/bot/portalburn_test.go  credit-runner  survhold2
 internal/bot/questauto.go  credit-runner  quests8
 internal/bot/questauto_test.go  credit-runner  quests8
+internal/bot/questboard.go  credit-runner  bsm4
 internal/bot/questboard.go  credit-runner  cainchain
 internal/bot/questboard.go  credit-runner  questrun
 internal/bot/questboard.go  credit-runner  quests10
@@ -1113,6 +1118,7 @@ internal/env/tuning_loot.go  credit-runner  vaultv3
 internal/env/tuning_loot.go  credit-runner  vaultv5
 internal/env/tuning_loot.go  credit-runner  vaultv6
 internal/env/tuning_nav.go  credit-runner  pursuers
+internal/env/tuning_quests.go  credit-runner  bsm4
 internal/env/tuning_quests.go  credit-runner  countess3
 internal/env/tuning_quests.go  credit-runner  quests3
 internal/env/tuning_quests.go  credit-runner  quests8
@@ -1230,6 +1236,7 @@ internal/nav/exit.go  credit-runner  pursuers
 internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/mouthgate.go  credit-runner  botstuck
+internal/nav/nav.go  credit-runner  countess3b
 internal/nav/nav.go  credit-runner  maphistoryC
 internal/nav/nav.go  credit-runner  pursuers
 internal/nav/pursuit.go  credit-runner  pursuers
@@ -1283,7 +1290,13 @@ internal/questboard/chunks_test.go  credit-runner  quests7b
 internal/questboard/def.go  credit-runner  cainfix3
 internal/questboard/desk.go  credit-runner  questrun
 internal/questboard/desk_test.go  credit-runner  questrun
+internal/questboard/exec.go  credit-runner  bsm4
 internal/questboard/exec.go  credit-runner  questrun
+internal/questboard/exec_sm.go  credit-runner  bsm4
+internal/questboard/exec_sm_test.go  credit-runner  bsm4
+internal/questboard/sm.go  credit-runner  bsm2
+internal/questboard/sm_reason.go  credit-runner  bsm2
+internal/questboard/sm_test.go  credit-runner  bsm2
 internal/questboard/state_test.go  credit-runner  cain45
 internal/questboard/state_test.go  credit-runner  quests7b
 internal/questspec  credit-runner  questspec

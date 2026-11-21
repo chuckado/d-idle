@@ -8,6 +8,10 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into countess3b <!--sg:agent/countess3b-->
+- agent/bsm4 quest board state machine card <!--sg:agent/bsm4-->
+- agent/bsm3 quest board state machine card <!--sg:agent/bsm3-->
+- agent/bsm2 quest board state machine card <!--sg:agent/bsm2-->
 - town planner stage 1 and 2 record (docs only) <!--sg:agent/townprobe-->
 - bsm1: quest board SM scenarios and assert kinds <!--sg:agent/bsm1-->
 - town4: stage 2 guards, chunk preconditions and shop read the supply plan behind town.plan>=2 (default 0) <!--sg:agent/town4-->

@@ -361,6 +361,7 @@
 | town1 | in-progress | - | `tools/provingground/scenarios/townplan.json`<br>`internal/scenario/state.go`<br>`internal/scenario/newkinds_test.go`<br>`docs/probes/town-plan-scenarios.md` | - |
 | mgcache | proposed | - | `docs/process/pg-ops-mgcache.md` | - |
 | mglanes | proposed | - | `docs/process/pg-ops-mglanes.md` | - |
+| bsm2 | proposed | - | `internal/questboard/sm.go`<br>`internal/questboard/sm_reason.go`<br>`internal/questboard/sm_test.go` | - |
 | fabledecisions2 | proposed | - | `docs/adr/`<br>`docs/decisions.md`<br>`GLOSSARY.md` | - |
 | mgwatchdog | proposed | - | `docs/process/pg-ops-mgwatchdog.md` | - |
 | town3 | in-progress | - | `internal/supply`<br>`internal/town/planshadow.go`<br>`internal/town/chores.go`<br>`internal/town/town.go`<br>`internal/env/tuning_town.go`<br>`internal/bot/observe.go`<br>`docs/knobs.md` | - |
@@ -375,6 +376,8 @@
 | town10 | proposed | - | `internal/arbiter`<br>`internal/supply` | - |
 | town11 | proposed | - | `internal/town`<br>`docs/town.md`<br>`town-basics` | - |
 | town12 | proposed | - | `docs/design/fable-review-2026-11-21/town-profiles-sme.md` | - |
+| countess3b | proposed | - | `cmd/d2bot/boss.go`<br>`cmd/d2bot/boss_levelmonsters_test.go`<br>`internal/nav/nav.go`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
+| bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -410,14 +413,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 07712c446 11-21 02:23 `Merge agent/druid1: Merge branch 'main' into druid1` (druid1)
+- 0db4e11df 11-21 02:22 `Merge branch 'main' into druid1` (-)
+- b66c4d189 11-21 02:16 `Merge agent/countess3b: Merge branch 'main' into countess3b` (countess3b)
+- b78539912 11-21 02:15 `Merge branch 'main' into countess3b` (-)
+- 15543d7d7 11-21 02:03 `Merge agent/bsm4: agent/bsm4 quest board state machine card` (bsm4)
+- d167f6aa5 11-21 01:57 `Merge agent/bsm3: agent/bsm3 quest board state machine card` (bsm3)
+- d91bf5058 11-21 01:36 `Merge agent/bsm2: agent/bsm2 quest board state machine card` (bsm2)
+- 2e5f6968d 11-21 01:35 `Merge branch 'main' into TASK-750` (-)
 - 04538c3c9 11-21 01:30 `Merge agent/townprobe: town planner stage 1 and 2 record (docs only)` (townprobe)
 - b4c549016 11-21 01:29 `Merge branch 'main' into townprobe` (-)
-- 8089cfba8 11-21 01:24 `Merge agent/bsm1: bsm1: quest board SM scenarios and assert kinds` (bsm1)
-- 6a0957473 11-21 01:23 `Merge branch 'main' into TASK-717` (-)
-- 019caff49 11-21 01:15 `Merge agent/town4: town4: stage 2 guards, chunk preconditions and shop read the supply plan behind town.plan>=2 (default 0)` (town4)
-- 6288cd22f 11-21 01:14 `Merge branch 'main' into town4` (-)
-- d28021ec7 11-21 01:06 `Merge agent/town3: town3: supply NeedFor/Solve, profiles, knob town.plan default 0, stage 1 shadow trace (no behaviour change)` (town3)
-- 05417d792 11-21 01:05 `Merge branch 'main' into town3` (-)
-- e10888fad 11-21 00:53 `Merge agent/town2: town2: internal/supply one potion counter, bot and town counters call it (no behaviour change at stage 0)` (town2)
-- 401f842fa 11-21 00:52 `Merge branch 'main' into town2` (-)
 <!-- statusgen:end -->
