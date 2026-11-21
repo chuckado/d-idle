@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/supply"
 	"d2lod-bot/internal/town/belt"
 )
 
@@ -143,8 +144,35 @@ func (t *Town) kitPotions(plan ChorePlan) int {
 
 // healingCarried is the healing and rejuvenation potions in belt and pack (the bot side counts the same set, codefix67 F6).
 func (t *Town) healingCarried(s *d2.Snapshot) int {
-	bs := belt.Read(t.e.Data, s.Inventory)
-	return bs.Count[belt.HP] + bs.Count[belt.RV] + belt.PackCount(t.e.Data, s.Inventory, belt.HP) + belt.PackCount(t.e.Data, s.Inventory, belt.RV)
+	return t.supplyCount(s).Healing()
+}
+
+// supplyCount is the town side of the one supply counter (internal/supply): belt and pack potions of the snapshot.
+func (t *Town) supplyCount(s *d2.Snapshot) supply.Count {
+	var ps []supply.Potion
+	if s != nil && s.Inventory != nil {
+		for _, w := range []d2.Container{d2.ContBelt, d2.ContInventory} {
+			for _, u := range s.Inventory.Container(w) {
+				if u.Class < 0 || u.Class >= len(t.e.Data.Items) {
+					continue
+				}
+				b := t.e.Data.Items[u.Class]
+				var k supply.Kind
+				switch belt.PotionKind(b) {
+				case belt.HP:
+					k = supply.HP
+				case belt.MP:
+					k = supply.MP
+				case belt.RV:
+					k = supply.RV
+				default:
+					continue
+				}
+				ps = append(ps, supply.Potion{Kind: k, Tier: belt.Tier(b), InBelt: w == d2.ContBelt})
+			}
+		}
+	}
+	return supply.CountOf(ps, supply.Floors{})
 }
 
 // needWithdraw is the BELTFIX5 knob-free rule: a character with no healing potion anywhere and less gold in the pack
