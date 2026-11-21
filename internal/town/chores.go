@@ -183,7 +183,22 @@ func (t *Town) potionsWanted(s *d2.Snapshot) map[belt.Kind]int {
 		}
 	}
 	t.ensureHealing(s, band, bs, want)
+	t.ensureKitHealing(s, band, want)
 	return want
+}
+
+// ensureKitHealing tops the healing want up to the route guard's kit minimum (resource.kitMinHP, from kitGateLevel):
+// the belt plan may reserve fewer healing columns than the guard counts (a 4 slot belt with a mana column holds 3), and
+// the pack counts for the guard, so the rest is bought into the pack. Without it the guard refused the quest road at
+// 3 healing potions while the shop saw nothing to buy (Proving Ground act1more, act1.tools.malus).
+func (t *Town) ensureKitHealing(s *d2.Snapshot, band belt.Band, want map[belt.Kind]int) {
+	r := t.e.Tune.Resource
+	if s.Player.Level < r.KitGateLevel || band.Capacity(belt.HP, belt.Columns) == 0 {
+		return
+	}
+	if short := r.KitMinHP - t.healingCarried(s) - want[belt.HP]; short > 0 {
+		want[belt.HP] += short
+	}
 }
 
 func (t *Town) needScrolls(s *d2.Snapshot) bool {
