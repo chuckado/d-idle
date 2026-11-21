@@ -146,6 +146,21 @@
     "body": "The request was not understood."
   },
   "noAnswer": "The vault did not answer.",
+  "slotAll": "All",
+  "slotsLabel": "Quick filter by item type",
+  "slots": [
+    {"id": "weap", "label": "Weapons"},
+    {"id": "tors", "label": "Body armor"},
+    {"id": "helm", "label": "Helmets"},
+    {"id": "glov", "label": "Gloves"},
+    {"id": "boot", "label": "Boots"},
+    {"id": "belt", "label": "Belts"},
+    {"id": "shld", "label": "Shields"},
+    {"id": "ring", "label": "Rings"},
+    {"id": "amul", "label": "Amulets"},
+    {"id": "jewl", "label": "Jewels"},
+    {"id": "char", "label": "Charms"}
+  ],
   "kinds": [
     {
       "id": "unique",
