@@ -26,4 +26,4 @@ different release the chunk is retried once (history kept in retries_after_relea
 under the new release. Parks that need the player stay until the player acts (Q5)."
 
 ## Live checklist (not run)
-RED then green on a lab slot with `D2BOT_RELEASE_ID` unset vs set; Tower builder LONG lane, determinism pair.
+RED then green on a lab slot with `D2BOT_RELEASE_ID` unset vs set; the builder long lane, determinism pair.
