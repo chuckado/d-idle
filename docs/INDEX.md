@@ -995,6 +995,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `probes/`
 
 - [boardorder-2026-11-20.md](probes/boardorder-2026-11-20.md): boardorder scenarios, builder long lane, 2026-11-20 (CHEATED setups: mechanics only)
+- [boardsm-scenarios-2026-11-21.md](probes/boardsm-scenarios-2026-11-21.md): Quest board state machine scenarios, first live run (2026-11-21) (status: current. Tags: V verified (run id named), S secondary, U unverified. Host: the second worker host (16...)
 - [bot-cpu-2026-11-16.md](probes/bot-cpu-2026-11-16.md): Bot CPU bursts in town walks (card botcpu, 2026-11-16) (status: partial. Offline profile only; the live repair-trip profile is a checklist (section 4). Trigger:...)
 - [bot-cpu-fix-2026-11-16.md](probes/bot-cpu-fix-2026-11-16.md): Bot CPU fixes after the live calm-window profile (2026-11-16) (status: current. Follows docs/probes/bot-cpu-live-2026-11-16.md (Ledger.load 30 percent, DB.IsA 14.5 percent). All...)
 - [bot-cpu-live-2026-11-16.md](probes/bot-cpu-live-2026-11-16.md): Bot CPU on the sandbox, live profile (card botcpulive, 2026-11-16) (status: partial. Calm-window profile captured (V); NO profile inside a burst (the built-in profiler is one-shot,...)
