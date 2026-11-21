@@ -43,3 +43,16 @@
 @layer shell {
   .sk-tip .tip-line[data-k="dim"], .sk-tip .tip-line[data-k="type"] { color: var(--d-tip-dim); }
 }
+@layer shell {
+  /* kind badge: a label strip across the top of the tile, glyph plus word, solid token pairs (4.5:1 in both themes) */
+  .sk-kind { position: absolute; inset: 0 0 auto 0; z-index: 2; display: flex; gap: 2px; align-items: center; justify-content: center; padding: 1px 2px; font: 700 .58rem/1.25 var(--d-font-body); letter-spacing: .01em; }
+  .sk-kind[data-kind="active"] { background: var(--d-info); color: var(--d-on-info); }
+  .sk-kind[data-kind="aura"] { background: var(--d-warn); color: var(--d-on-warn); }
+  .sk-kind[data-kind="passive"] { background: var(--d-good); color: var(--d-on-good); }
+  .sk-kg { font-size: .5rem; }
+  .sk-tile[hidden] { display: none; }
+  .sk-board[data-filtered="1"] .sk-arrows { display: none; }
+  /* chips wrap (no inner scroll box, the page is one scrolling document); 44 px tap targets */
+  .sk-filter { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); margin-block: var(--d-sp-2); }
+  .sk-chip { min-block-size: 44px; min-inline-size: 44px; justify-content: center; font: inherit; color: var(--d-text); cursor: pointer; }
+}
