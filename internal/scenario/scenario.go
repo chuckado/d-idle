@@ -171,9 +171,11 @@ type Matrix struct {
 	Seeds   []int64  `json:"seeds"`
 }
 
-// classIndex is d2d's UI-order index for a NEW character (internal/d2dinput.Spec; V 1 Necromancer, 2 Paladin, 4
-// Sorceress; the others follow the character screen order and are U).
-var classIndex = map[string]int{"Amazon": 0, "Necromancer": 1, "Paladin": 2, "Barbarian": 3, "Sorceress": 4, "Druid": 5, "Assassin": 6}
+// classIndex is d2d's UI-order index for a NEW character (internal/d2dinput.Spec, docs/d2d-fidelity.md: 0 Barbarian,
+// 1 Necromancer, 2 Paladin, 3 Amazon, 4 Sorceress, 5 Druid, 6 Assassin). V live for Paladin, Necromancer and Sorceress;
+// V by a failed Proving Ground run (barb1, job 20261120-200655-c7ae): index 3 made an Amazon, so the old Amazon 0 and
+// Barbarian 3 were swapped. Druid and Assassin are S (data/smoke/rules.json).
+var classIndex = map[string]int{"Barbarian": 0, "Necromancer": 1, "Paladin": 2, "Amazon": 3, "Sorceress": 4, "Druid": 5, "Assassin": 6}
 
 // ClassIndex returns the d2d class index or an error naming the class (never a silent Sorceress).
 func ClassIndex(name string) (int, error) {

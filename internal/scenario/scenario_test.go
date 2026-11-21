@@ -327,3 +327,16 @@ func TestSkillAssertions(t *testing.T) {
 		t.Fatal("right_skill_is needs skill")
 	}
 }
+
+// barb1: the d2d class index follows the character screen (Barbarian 0, Amazon 3), the same table as data/smoke/rules.json;
+// the old table had them swapped and a Barbarian scenario ran an Amazon.
+func TestClassIndexMatchesSmokeRules(t *testing.T) {
+	for name, want := range map[string]int{"Barbarian": 0, "Necromancer": 1, "Paladin": 2, "Amazon": 3, "Sorceress": 4, "Druid": 5, "Assassin": 6} {
+		if got, err := ClassIndex(name); err != nil || got != want {
+			t.Errorf("%s: %d %v, want %d", name, got, err, want)
+		}
+	}
+	if _, err := ClassIndex("Warlock"); err == nil {
+		t.Error("an unknown class must be an error")
+	}
+}

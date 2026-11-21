@@ -29,6 +29,8 @@ owns:
   - "tools/provingground/scenarios/points.json"
   - "docs/process/barbarian-support.md"
   - "docs/agency.md"
+  - "internal/scenario/scenario.go"
+  - "internal/scenario/scenario_test.go"
 exclusive: []
 contracts: []
 ---
