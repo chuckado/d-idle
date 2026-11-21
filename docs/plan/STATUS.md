@@ -361,7 +361,7 @@
 | pgpage | proposed | - | `docs/process/proving-ground-status.md`<br>`tools/provingground/status_doc.sh` | - |
 | mgonejob | proposed | - | `docs/process/pg-ops-mgonejob.md` | - |
 | town1 | in-progress | - | `tools/provingground/scenarios/townplan.json`<br>`internal/scenario/state.go`<br>`internal/scenario/newkinds_test.go`<br>`docs/probes/town-plan-scenarios.md` | - |
-| mgcache | proposed | - | `docs/process/pg-ops-mgcache.md` | - |
+| mgcache | in-progress | - | `docs/process/pg-ops-mgcache.md` | - |
 | bsm2 | proposed | - | `internal/questboard/sm.go`<br>`internal/questboard/sm_reason.go`<br>`internal/questboard/sm_test.go` | - |
 | fabledecisions2 | proposed | - | `docs/adr/`<br>`docs/decisions.md`<br>`GLOSSARY.md` | - |
 | mgwatchdog | in-progress | - | `docs/process/pg-ops-mgwatchdog.md` | - |
@@ -416,6 +416,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d3341adfa 11-21 10:41 `Merge agent/pgc3: mgcache: gate stats, replay measurement, nightly uncached race doc and card (TASK-747)` (pgc3)
+- cf0e806ab 11-21 10:40 `Merge branch 'main' into mgcache` (-)
 - f0c3330a4 11-21 10:33 `Merge agent/vaultequip: Merge branch 'main' into vaultequip` (vaultequip)
 - 352164657 11-21 10:32 `Merge branch 'main' into vaultequip` (-)
 - 45bd666e2 11-21 10:27 `Merge agent/mobilequests: Merge branch 'main' into mobilequests` (mobilequests)
@@ -424,6 +426,4 @@
 - b5b112d58 11-21 10:23 `Merge branch 'main' into mgwatchdog` (-)
 - 55aaba5df 11-21 10:17 `Merge agent/pgc1: mglanes: lane policy doc and card (TASK-749); ops lockrun quotas, merge priority, two long slots, warn-only` (pgc1)
 - 45fb97c90 11-21 09:25 `Merge branch 'main' into mobilequests` (-)
-- 331e415c1 11-21 09:18 `Merge origin/main into agent/vaultequip` (-)
-- c731907e6 11-21 09:07 `Merge agent/cmbdoc: combat foundation record doc` (cmbdoc)
 <!-- statusgen:end -->
