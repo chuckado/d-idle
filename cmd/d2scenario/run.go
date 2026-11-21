@@ -210,6 +210,7 @@ func cmdExecOne(args []string) error {
 	if res.State != nil {
 		res.Digest = scenario.DigestState(*res.State)
 	}
+	res.AssertDigest = scenario.AssertDigest(res)
 	b, _ := json.MarshalIndent(res, "", " ")
 	return os.WriteFile(filepath.Join(*out, resultName(r)), b, 0o644)
 }

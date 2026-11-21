@@ -38,8 +38,11 @@ type Result struct {
 	// Taps are the board taps the driver made ("start scroll", "handin read"), in order (trigger.driver board-taps).
 	Taps  []string `json:"taps,omitempty"`
 	State *State   `json:"state,omitempty"`
-	// Digest is the hash of the observed state: the determinism check compares it, not only the verdict.
+	// Digest is the hash of the whole observed state. It is a DRIFT report: the determinism check shows a difference but
+	// does not fail on it (gold 700 against 712 with the same verdict is the same run). AssertDigest gates.
 	Digest string `json:"digest,omitempty"`
+	// AssertDigest is D1 (assertion digest.go): verdict-level facts only; equal verdict and equal D1 are the gate.
+	AssertDigest string `json:"assert_digest,omitempty"`
 	// Prov records the binaries, host role, load and pace of the run (nil in results written before it existed).
 	Prov *Provenance `json:"prov,omitempty"`
 }
