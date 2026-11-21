@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -151,5 +152,76 @@ func TestAddTrailReadsTheBotLog(t *testing.T) {
 	addTrail(&none, f+".missing")
 	if none.AreaChanges != nil {
 		t.Fatal("no log: not observed")
+	}
+}
+
+// vboard serves /api/thoughts with a virtual clock the test advances and a board that offers the chunk from a given
+// virtual second on; it records the virtual second of each POST.
+type vboard struct {
+	mu      sync.Mutex
+	now     float64
+	offerAt float64
+	posts   []float64
+}
+
+func (b *vboard) handler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		b.mu.Lock()
+		defer b.mu.Unlock()
+		switch {
+		case r.Method == http.MethodPost:
+			b.posts = append(b.posts, b.now)
+			w.WriteHeader(202)
+		case r.URL.Path == "/api/thoughts":
+			fmt.Fprintf(w, `{"now":%v}`, b.now)
+		case len(b.posts) > 0:
+			io.WriteString(w, `{"running":{"quest":"q","chunk":"a","state":"running"}}`)
+		case b.now >= b.offerAt:
+			io.WriteString(w, `{"offers":[{"quest":"q","chunk":"a","startable":true}]}`)
+		default:
+			io.WriteString(w, `{"offers":[]}`)
+		}
+	})
+}
+
+func (b *vboard) advance(to float64) { b.mu.Lock(); b.now = to; b.mu.Unlock() }
+
+// The tap lands on the first grid point of VIRTUAL time at or after the offer, however fast the wall poll runs and
+// however far the clock jumped between two polls.
+func TestRunVirtualTapsOnTheVirtualGrid(t *testing.T) {
+	for _, poll := range []time.Duration{2 * time.Millisecond, 15 * time.Millisecond} {
+		b := &vboard{offerAt: 47}
+		srv := httptest.NewServer(b.handler())
+		tp := newTapper(srv.URL, srv.URL, "tok", "q", nil, io.Discard)
+		ctx, cancel := context.WithCancel(context.Background())
+		done := make(chan struct{})
+		go func() { tp.RunVirtual(ctx, 30, poll, time.Minute); close(done) }()
+		for _, v := range []float64{5, 29, 46, 47, 55, 61, 62, 100} {
+			b.advance(v)
+			time.Sleep(60 * time.Millisecond)
+		}
+		cancel()
+		<-done
+		srv.Close()
+		if len(tp.Taps) != 1 || tp.Taps[0] != "start a" {
+			t.Fatalf("poll %v: taps %v", poll, tp.Taps)
+		}
+		if len(tp.TapsAt) != 1 || tp.TapsAt[0] < 60 || tp.TapsAt[0] >= 90 {
+			t.Fatalf("poll %v: the tap must land on the grid point 60 (first read at or after it), got %v", poll, tp.TapsAt)
+		}
+	}
+}
+
+func TestRunVirtualFallsBackToTheWallClock(t *testing.T) {
+	b := &board{view: `{"offers":[{"quest":"q","chunk":"a","startable":true}]}`}
+	srv := httptest.NewServer(b.handler(t)) // its GET /api/thoughts reply has no "now"
+	defer srv.Close()
+	var log strings.Builder
+	tp := newTapper(srv.URL, srv.URL, "tok", "q", nil, &log)
+	ctx, cancel := context.WithTimeout(context.Background(), 400*time.Millisecond)
+	defer cancel()
+	tp.RunVirtual(ctx, 30, 5*time.Millisecond, 50*time.Millisecond)
+	if !strings.Contains(log.String(), "falling back") {
+		t.Fatalf("log %q", log.String())
 	}
 }

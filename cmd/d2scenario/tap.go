@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math"
 	"net/http"
 	"os"
 	"strings"
@@ -23,7 +24,9 @@ type tapper struct {
 	chunks                     map[string]bool // empty: every chunk
 	client                     *http.Client
 	log                        io.Writer
-	Taps                       []string // "start scroll", "handin read" in order
+	Taps                       []string  // "start scroll", "handin read" in order
+	TapsAt                     []float64 // the bot's virtual second of each tap (RunVirtual); 0 for a wall-clock run
+	vnow                       float64
 }
 
 func newTapper(view, answer, token, quest string, chunks []string, log io.Writer) *tapper {
@@ -110,6 +113,7 @@ func (t *tapper) Step(ctx context.Context) (tap string, blocked bool, err error)
 	}
 	if tap != "" {
 		t.Taps = append(t.Taps, tap)
+		t.TapsAt = append(t.TapsAt, t.vnow)
 	}
 	return tap, false, nil
 }
@@ -126,6 +130,66 @@ func (t *tapper) Run(ctx context.Context, interval time.Duration) {
 		select {
 		case <-ctx.Done():
 		case <-time.After(interval):
+		}
+	}
+}
+
+// VirtualNow reads the bot's virtual clock: GET /api/thoughts "now", in virtual seconds since the bot started (the
+// thoughts ladder runs on the env clock, internal/bot/thoughts.go; under lockstep that is game time). U live: that the
+// same field advances under the lab d2d the scenarios run on; RunVirtual falls back to the wall clock when it does not.
+func (t *tapper) VirtualNow(ctx context.Context) (float64, error) {
+	req, _ := http.NewRequestWithContext(ctx, "GET", t.view+"/api/thoughts", nil)
+	req.Header.Set("Authorization", "Bearer "+t.token)
+	resp, err := t.client.Do(req)
+	if err != nil {
+		return 0, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return 0, fmt.Errorf("thoughts: HTTP %d", resp.StatusCode)
+	}
+	var v struct {
+		Now *float64 `json:"now"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&v); err != nil || v.Now == nil {
+		return 0, fmt.Errorf("thoughts: no virtual clock in the reply (%v)", err)
+	}
+	return *v.Now, nil
+}
+
+// RunVirtual evaluates the board on a grid of VIRTUAL time: at the first read of the bot's clock at or after each multiple
+// of every (virtual seconds) it does one Step. The wall poll (pollWall) only decides how soon the crossing is noticed, so
+// the tap lands at the first grid point after the board offers it, not at a wall-clock instant that is 25 virtual seconds
+// to 5 virtual minutes wide (design 2026-11-21 H1). When the clock cannot be read for fallbackWall the tapper falls back
+// to the old wall-clock polling and says so in the log (such a run is not a determinism witness).
+func (t *tapper) RunVirtual(ctx context.Context, every float64, pollWall, fallbackWall time.Duration) {
+	last := time.Now()
+	next := every
+	for ctx.Err() == nil {
+		v, err := t.VirtualNow(ctx)
+		switch {
+		case err != nil:
+			if time.Since(last) > fallbackWall {
+				fmt.Fprintf(t.log, "%s virtual clock unreadable for %s (%v): falling back to wall-clock polling\n", time.Now().Format("15:04:05"), fallbackWall, err)
+				t.Run(ctx, 5*time.Second)
+				return
+			}
+		default:
+			last = time.Now()
+			if v >= next {
+				t.vnow = v
+				if _, blocked, err := t.Step(ctx); blocked {
+					fmt.Fprintf(t.log, "%s board parked the quest (virtual %.0f s)\n", time.Now().Format("15:04:05"), v)
+					return
+				} else if err != nil && ctx.Err() == nil {
+					fmt.Fprintf(t.log, "%s board read failed: %v\n", time.Now().Format("15:04:05"), err)
+				}
+				next = (math.Floor(v/every) + 1) * every
+			}
+		}
+		select {
+		case <-ctx.Done():
+		case <-time.After(pollWall):
 		}
 	}
 }
