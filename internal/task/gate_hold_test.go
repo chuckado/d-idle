@@ -96,7 +96,7 @@ func TestViaCarriesTheInsertingFaultCode(t *testing.T) {
 	for name, w := range holdWorlds() {
 		t.Run(name, func(t *testing.T) {
 			trips := 0
-			chores := Step{ID: "guard/chores", Title: "Chores", Need: func(World) (bool, Evidence) { return true, EvMemory },
+			chores := Step{ID: "guard/chores", Title: "Chores", Need: func(World) (bool, Evidence) { return trips == 0, EvMemory },
 				Do: func(context.Context, Actions) error { trips++; return nil }}
 			step := Step{ID: "quest.x/go", Title: "Go", Need: func(World) (bool, Evidence) { return true, EvMemory },
 				Ready: func(World) *Fault {
@@ -114,6 +114,30 @@ func TestViaCarriesTheInsertingFaultCode(t *testing.T) {
 			}
 			if res, _ = ex.Tick(context.Background(), pl); res.Via != "" {
 				t.Fatalf("a step nothing inserted carries no hold: %+v", res)
+			}
+		})
+	}
+}
+
+// The inserted trip ran clean and the shortage stays (a belt that cannot hold the minimum): a hold, never a counted
+// failure, so the chunk is not parked by the failure counter however often the trip repeats.
+func TestInsertedTripThatChangesNothingIsAHold(t *testing.T) {
+	for name, w := range holdWorlds() {
+		t.Run(name, func(t *testing.T) {
+			chores := Step{ID: "guard/chores", Title: "Chores", Need: func(World) (bool, Evidence) { return true, EvMemory },
+				Do: func(context.Context, Actions) error { return nil }}
+			step := Step{ID: "quest.x/go", Title: "Go", Need: func(World) (bool, Evidence) { return true, EvMemory },
+				Ready: func(World) *Fault {
+					return &Fault{Kind: KindResource, Code: "needs_potions", Why: "3 healing potions < 4", Insert: []Step{chores}}
+				},
+				Do: func(context.Context, Actions) error { return nil }}
+			ex := NewExecutor(holdEnv{w}, nil)
+			pl := holdPlanner{Plan{ID: "quest.x", Group: "x", Nodes: []Node{{Step: step}}}}
+			for i := 0; i < 8; i++ {
+				res, _ := ex.Tick(context.Background(), pl)
+				if res.Outcome != OutRetry || !res.Hold || res.Code != "needs_potions" || res.Via != "needs_potions" {
+					t.Fatalf("tick %d: %+v", i, res)
+				}
 			}
 		})
 	}

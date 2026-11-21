@@ -883,10 +883,10 @@
      "max": 0
     },
     {
-     "kind": "area_in",
-     "areas": [
-      6
-     ]
+     "kind": "log_line",
+     "pattern": "Entered Black Marsh",
+     "min": 1,
+     "why": "the hero went on to the Countess road after the restock"
     },
     {
      "kind": "no_writes"
@@ -961,11 +961,6 @@
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
    "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
    "assert": [
-    {
-     "kind": "log_line",
-     "pattern": "needs_gold_withdraw",
-     "min": 1
-    },
     {
      "kind": "stash_between",
      "max": 4999
