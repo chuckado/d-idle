@@ -29,7 +29,7 @@ result: "With quests.boardSM=1: guards in task/gate.go return coded faults (need
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Card 5 of docs/design/fable-review-2026-11-21/quest-board.md section 5. Scope note: routeguard.go is not touched (route and tower reasons already arrive as World strings); the codes are attached in gate.go. U: area_banned/route_closed/too_weak are held and the hero trains meanwhile (boardTrain), needs a live scenario.
+Card 5 of docs/design/fable-review-2026-11-21/quest-board.md section 5. Scope note: routeguard.go is not touched (route and Countess-guard reasons already arrive as World strings); the codes are attached in gate.go. U: area_banned and route_closed/too_weak are held and the hero trains meanwhile (boardTrain), needs a live scenario.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
