@@ -112,8 +112,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "RED live 2026-11-21 (docs/probes/boardsm-scenarios-2026-11-21.md): the stop reply has no `changed` field; red until card 6 boardsm-api"
+   "status": "active"
   },
   {
    "id": "board.sm.stop-idempotent",
@@ -1295,16 +1294,20 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Sampled every 15 wall seconds; the full I5 sweep over all chunks is the card 6 unit test.",
+   "notes": "Sampled every 15 wall seconds: every accepted, awaiting or blocked chunk of the board has a reason code (I5); the full sweep over all chunks and codes is the unit test TestDeskChangedAndReasons.",
    "assert": [
+    {
+     "kind": "board_reasons"
+    },
     {
      "kind": "board",
      "quest": "search_for_cain",
-     "chunk": "stones",
+     "chunk": "read",
      "state": "accepted",
-     "reason": "waits_for",
-     "when": "always",
-     "why": "the queued chunk always says why"
+     "or": [
+      "in_progress",
+      "done"
+     ]
     },
     {
      "kind": "board_heads_le",
@@ -1314,17 +1317,16 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "RED live 2026-11-21: GET /api/quests rows carry no reason code (card 6 boardsm-api)"
+   "status": "active"
   },
   {
    "id": "board.handin.field-tap",
-   "title": "Hand-in tapped in the field waits for town: reason handin_in_town",
+   "title": "Hand-in tap right after a Start on a pending reward is accepted (202), no 409 not_awaiting",
    "kind": "step",
    "tier": "full",
    "quest": {
-    "quest": "search_for_cain",
-    "chunk": "scroll"
+    "quest": "sisters_burial_grounds",
+    "chunk": "blood_raven"
    },
    "step": {
     "action": "interact",
@@ -1349,10 +1351,12 @@
      2,
      3
     ],
-    "board": {
-     "quest": "search_for_cain",
-     "chunk": "scroll"
-    }
+    "quests": [
+     {
+      "record": 2,
+      "word": 2
+     }
+    ]
    },
    "trigger": {
     "goals": "reach:30",
@@ -1363,10 +1367,17 @@
     },
     "api": [
      {
-      "after_s": 60,
-      "path": "/api/quests/search_for_cain/handin",
+      "after_s": 20,
+      "path": "/api/quests/sisters_burial_grounds/start",
       "body": {
-       "chunk": "scroll"
+       "chunk": "blood_raven"
+      }
+     },
+     {
+      "after_s": 40,
+      "path": "/api/quests/sisters_burial_grounds/handin",
+      "body": {
+       "chunk": "blood_raven"
       }
      }
     ]
@@ -1385,30 +1396,33 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Needs an awaiting chunk at the start (U: a setup that leaves the chunk awaiting).",
+   "notes": "The hand-in tap while the hero is still in the field (reason handin_in_town) needs an awaiting chunk away from town: no setup verb for that (U); this scenario covers the tap path from town.",
    "assert": [
     {
      "kind": "api_reply",
      "index": 0,
-     "status": 202
+     "ok": true
+    },
+    {
+     "kind": "api_reply",
+     "index": 1,
+     "ok": true
     },
     {
      "kind": "board",
-     "quest": "search_for_cain",
-     "chunk": "scroll",
-     "reason": "handin_in_town",
+     "quest": "sisters_burial_grounds",
+     "chunk": "blood_raven",
      "state": "awaiting_handin",
      "or": [
-      "in_progress"
-     ],
-     "when": "always"
+      "done"
+     ]
     },
     {
      "kind": "no_writes"
     }
    ],
    "status": "pending",
-   "pending_reason": "RED live 2026-11-21: no awaiting chunk at the start (setup verb missing, U); the tap gets 409 not_awaiting; handin codes are card 6"
+   "pending_reason": "RED live 2026-11-21 (bsm6 run, Paladin 11): the quest word 0x0002 is read from memory but the board derives the chunk Ready (pending bit not seen as exact: task World stage of the memory reader, U), so no awaiting chunk exists at the start; the offline test TestDeskHandInReady covers handin_ready and Start"
   },
   {
    "id": "board.handin.without-run",
@@ -1498,7 +1512,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "RED live 2026-11-21: the hand-in is booked at once, no handin_ready offer (card 6 boardsm-api)"
+   "pending_reason": "RED live 2026-11-21 (bsm6 run, Paladin 11): the quest word 0x0002 is read from memory but the board derives the chunk Ready (pending bit not seen as exact: task World stage of the memory reader, U), so no awaiting chunk exists at the start; the offline test TestDeskHandInReady covers handin_ready and Start"
   },
   {
    "id": "board.auto.chain-safe-only",

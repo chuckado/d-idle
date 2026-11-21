@@ -419,6 +419,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 1e0ad25aa 11-21 13:28 `Merge agent/bsm6: Merge branch 'main' into bsm6` (bsm6)
+- f450d3ee4 11-21 13:27 `Merge branch 'main' into bsm6` (-)
 - b78530494 11-21 12:12 `Merge agent/boardsmrun: Merge branch 'main' into boardsmrun` (boardsmrun)
 - 47772d90c 11-21 12:11 `Merge branch 'main' into boardsmrun` (-)
 - b6d4ffb6f 11-21 11:12 `Merge agent/vaultreveal: Merge branch 'main' into vaultreveal` (vaultreveal)
@@ -427,6 +429,4 @@
 - f202af3c1 11-21 11:05 `Merge branch 'main' into TASK-721` (-)
 - 3e70158f6 11-21 11:01 `Merge agent/pgc6: pg gate group 2 record (cost-cut cards, measurements, what is enforced)` (pgc6)
 - e475e2ade 11-21 11:01 `Merge agent/survhold8: Merge branch 'main' into survhold8` (survhold8)
-- 54c9494d2 11-21 10:58 `Merge branch 'main' into pgc6` (-)
-- 585d6f347 11-21 10:58 `Merge branch 'main' into survhold8` (-)
 <!-- statusgen:end -->

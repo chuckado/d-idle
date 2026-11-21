@@ -94,7 +94,9 @@ type Reply struct {
 	State   string `json:"state,omitempty"` // the chunk's state after the call
 	Mode    string `json:"mode,omitempty"`
 	Awarded []Pay  `json:"awarded,omitempty"` // a hand-in that finished at once (already done) booked this now
-	Status  int    `json:"-"`                 // HTTP status the route uses
+	// Changed lists every run the verb touched (the chunk and its chain or dependants) with state and reason after it.
+	Changed []ChangedRow `json:"changed,omitempty"`
+	Status  int          `json:"-"` // HTTP status the route uses
 }
 
 func refuse(status int, code, format string, a ...any) Reply {
@@ -205,27 +207,31 @@ type ChunkRow struct {
 	Readiness Word   `json:"readiness,omitempty"`
 	Why       string `json:"why,omitempty"`
 	Confirmed bool   `json:"confirmed,omitempty"`
+	// Reason is why a live part does not move (closed code of appendix B.1 plus its sentence); nil for a part that
+	// moves or is not live.
+	Reason *ReasonView `json:"reason,omitempty"`
 }
 
 // RunView is the accepted chunk: running, awaiting the tap or parked.
 type RunView struct {
-	Quest      string    `json:"quest"`
-	QuestTitle string    `json:"questTitle"`
-	Chunk      string    `json:"chunk"`
-	Title      string    `json:"title"`
-	State      State     `json:"state"`
-	Step       string    `json:"step,omitempty"`
-	StepNo     int       `json:"stepNo,omitempty"`    // 1-based position of the current step ("step 2 of 4")
-	StepCount  int       `json:"stepCount,omitempty"` // steps of the chunk definition
-	Steps      []StepRow `json:"steps,omitempty"`
-	PartNo     int       `json:"partNo,omitempty"`    // 1-based chunk position inside the quest ("part 2 of 4"); 0 for a one-chunk quest
-	PartCount  int       `json:"partCount,omitempty"` // chunks of the quest: the honest length of the chain
-	NPC        string    `json:"npc,omitempty"`       // who the hero walks to or waits at
-	Why        string    `json:"why,omitempty"`
-	Failures   int       `json:"failures,omitempty"`
-	Deaths     int       `json:"deaths,omitempty"`
-	Auto       bool      `json:"auto,omitempty"` // the board started this chunk by itself
-	Queued     string    `json:"queued,omitempty"`
+	Quest      string      `json:"quest"`
+	QuestTitle string      `json:"questTitle"`
+	Chunk      string      `json:"chunk"`
+	Title      string      `json:"title"`
+	State      State       `json:"state"`
+	Step       string      `json:"step,omitempty"`
+	StepNo     int         `json:"stepNo,omitempty"`    // 1-based position of the current step ("step 2 of 4")
+	StepCount  int         `json:"stepCount,omitempty"` // steps of the chunk definition
+	Steps      []StepRow   `json:"steps,omitempty"`
+	PartNo     int         `json:"partNo,omitempty"`    // 1-based chunk position inside the quest ("part 2 of 4"); 0 for a one-chunk quest
+	PartCount  int         `json:"partCount,omitempty"` // chunks of the quest: the honest length of the chain
+	NPC        string      `json:"npc,omitempty"`       // who the hero walks to or waits at
+	Why        string      `json:"why,omitempty"`
+	Failures   int         `json:"failures,omitempty"`
+	Deaths     int         `json:"deaths,omitempty"`
+	Auto       bool        `json:"auto,omitempty"` // the board started this chunk by itself
+	Queued     string      `json:"queued,omitempty"`
+	Reason     *ReasonView `json:"reason,omitempty"` // why the run does not move now (hold, wait, park, hand-in)
 }
 
 // StepRow is one step of the running chunk, by its data name; State is done, now or todo.
@@ -369,6 +375,19 @@ func (d *Desk) build() View {
 	plan, _, _ := st.Load()
 	busy := status.Active != nil
 	l := x.Ledger()
+	smRuns := x.SMRuns()
+	headTitle := ""
+	if a := status.Active; a != nil {
+		if c, err := d.b.Chunk(a.Quest, a.Chunk); err == nil {
+			headTitle = c.Title
+		}
+	}
+	d.mu.Lock()
+	handing := map[string]bool{}
+	for k := range d.hand {
+		handing[k] = true
+	}
+	d.mu.Unlock()
 	class := ""
 	if d.cfg.Class != nil {
 		class = d.cfg.Class()
@@ -394,7 +413,28 @@ func (d *Desk) build() View {
 					why = rd.Sentence
 				}
 			}
-			row.Chunks = append(row.Chunks, ChunkRow{ID: cv.ID, Title: c.Title, State: cv.State, Readiness: cv.Reason, Why: why, Confirmed: cv.Confirmed})
+			cr := ChunkRow{ID: cv.ID, Title: c.Title, State: cv.State, Readiness: cv.Reason, Why: why, Confirmed: cv.Confirmed}
+			key := ChunkKey(qv.ID, cv.ID)
+			var run *Run
+			if r, ok := smRuns[key]; ok {
+				run = &r
+			}
+			npc := ""
+			switch {
+			case c.Giver != nil:
+				npc = c.Giver.NPC
+			case q.Accept != nil:
+				npc = q.Accept.NPC
+			}
+			if run != nil && afterOnly(cv) {
+				// A queued run waits for an earlier part: the sheet says "accepted" (wire state of RunQueued, B.4), not locked.
+				cv.State, cr.State = Accepted, Accepted
+			}
+			cr.Reason = d.chunkReason(qv.ID, cv, run, status.Active, handing[key], map[string]string{"head": headTitle, "quest": q.Title, "npc": npc})
+			if cv.State == Awaiting && !plan.accepted(status.Diff, qv.ID, cv.ID) {
+				cr.Reason = handInReady() // case C5: the game counts the field work done, Start goes straight to the hand-in
+			}
+			row.Chunks = append(row.Chunks, cr)
 			if cv.State == Ready {
 				v.Offers = append(v.Offers, d.offer(q, c, cv, plan.AutoStart(status.Diff, qv.ID), !busy, class, level, v.Paused, status.Diff, l))
 			}
@@ -420,6 +460,16 @@ func (d *Desk) build() View {
 		rv.Auto = plan.autoRecord(status.Diff, a.Quest, a.Chunk)
 		if a.State == Accepted || a.State == InProgress {
 			rv.Queued = d.queued(a.State)
+		}
+		for _, row := range v.Quests {
+			if row.ID != a.Quest {
+				continue
+			}
+			for _, cr := range row.Chunks {
+				if cr.ID == a.Chunk {
+					rv.Reason = cr.Reason
+				}
+			}
 		}
 		switch {
 		case a.State == Awaiting:
@@ -710,6 +760,27 @@ func (d *Desk) pick(x *Exec, quest, chunk string, start bool) (string, State, *R
 	return "", "", &r
 }
 
+// changedRows reads the state and reason of the touched runs from a fresh view.
+func (d *Desk) changedRows(refs []Ref) []ChangedRow {
+	if len(refs) == 0 {
+		return nil
+	}
+	v := d.View()
+	var out []ChangedRow
+	for _, r := range refs {
+		row := ChangedRow{Quest: r.Quest, Chunk: r.Chunk}
+		for _, q := range v.Quests {
+			for _, c := range q.Chunks {
+				if q.ID == r.Quest && c.ID == r.Chunk {
+					row.State, row.Reason = c.State, c.Reason
+				}
+			}
+		}
+		out = append(out, row)
+	}
+	return out
+}
+
 func (d *Desk) title(quest string) string {
 	if q, err := d.b.Quest(quest); err == nil {
 		return q.Title
@@ -728,12 +799,13 @@ func (d *Desk) Start(quest, chunk string) Reply {
 		return *bad
 	}
 	base := Reply{Quest: quest, Chunk: chunk}
-	switch state {
-	case Accepted, InProgress, Awaiting:
+	handInReady := x.SMOn() && state == Awaiting && !x.HasRecord(quest, chunk) // C5: the game counts the field work done
+	switch {
+	case state == Accepted, state == InProgress, state == Awaiting && !handInReady:
 		base.OK, base.Already, base.State, base.Status = true, true, string(state), http.StatusOK
 		base.Reason = d.title(quest) + " is already started."
 		return base
-	case Done:
+	case state == Done:
 		return withBase(base, refuse(http.StatusConflict, CodeDone, "%s is already done.", d.title(quest)))
 	}
 	if d.paused() {
@@ -742,7 +814,7 @@ func (d *Desk) Start(quest, chunk string) Reply {
 	if m, merr := st.Mode(); merr == nil {
 		x.SetMode(m) // the record carries the mode the player picked, also after a restart
 	}
-	err := x.Accept(quest, chunk)
+	refs, err := x.AcceptRuns(quest, chunk)
 	if err != nil {
 		code, status := CodeNotReady, http.StatusConflict
 		if s := err.Error(); strings.Contains(s, "already accepted") {
@@ -753,6 +825,10 @@ func (d *Desk) Start(quest, chunk string) Reply {
 	d.invalidate()
 	base.OK, base.State, base.Status = true, string(Accepted), http.StatusOK
 	base.Reason = d.title(quest) + " started."
+	if handInReady {
+		base.State, base.Reason = string(Awaiting), d.title(quest)+": the hero goes to hand it in."
+	}
+	base.Changed = d.changedRows(refs)
 	return base
 }
 
@@ -784,11 +860,13 @@ func (d *Desk) Cancel(quest, chunk string) Reply {
 		}
 	}
 	deps := x.Dependants(quest, chunk)
-	if err := x.Cancel(quest, chunk); err != nil {
+	refs, err := x.CancelRuns(quest, chunk)
+	if err != nil {
 		return withBase(base, refuse(http.StatusInternalServerError, CodeInternal, "Could not stop it: %v", err))
 	}
 	d.invalidate()
 	base.OK, base.State, base.Status, base.Reason = true, string(Ready), http.StatusOK, d.title(quest)+" stopped."
+	base.Changed = d.changedRows(refs)
 	if len(deps) > 0 {
 		var ts []string
 		for _, id := range deps {
@@ -816,9 +894,10 @@ func (d *Desk) Retry(quest, chunk string) Reply {
 		base.OK, base.Already, base.Status, base.Reason = true, true, http.StatusOK, d.title(quest)+" is not stuck."
 		return base
 	}
-	x.Unblock(quest, chunk)
+	refs := x.UnblockRuns(quest, chunk)
 	d.invalidate()
 	base.OK, base.Status, base.Reason = true, http.StatusOK, d.title(quest)+": trying again."
+	base.Changed = d.changedRows(refs)
 	return base
 }
 
