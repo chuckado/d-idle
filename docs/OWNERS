@@ -1338,7 +1338,9 @@ internal/questboard/chunks_test.go  credit-runner  cain5b
 internal/questboard/chunks_test.go  credit-runner  quests7b
 internal/questboard/def.go  credit-runner  cainfix3
 internal/questboard/desk.go  credit-runner  andariel1
+internal/questboard/desk.go  credit-runner  bsm8
 internal/questboard/desk.go  credit-runner  questrun
+internal/questboard/desk_reason_test.go  credit-runner  bsm8
 internal/questboard/desk_test.go  credit-runner  andariel1
 internal/questboard/desk_test.go  credit-runner  questrun
 internal/questboard/exec.go  credit-runner  bsm4
@@ -1712,6 +1714,7 @@ internal/watch/testdata/quests  credit-runner  quests7
 internal/watch/testdata/quests  credit-runner  quests8
 internal/watch/testdata/questui  credit-runner  quests10
 internal/watch/testdata/questui  credit-runner  quests8
+internal/watch/testdata/questui/quest_ui.mjs  credit-runner  bsm8
 internal/watch/testdata/reset  credit-runner  botreset
 internal/watch/testdata/reset  credit-runner  resetinstant
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail
@@ -1882,6 +1885,7 @@ internal/watch/web/panels/progress/  credit-runner  uis3
 internal/watch/web/panels/quest-board  credit-runner  boardorder
 internal/watch/web/panels/quest-board  credit-runner  quests10
 internal/watch/web/panels/quest-board  credit-runner  quests8
+internal/watch/web/panels/quest-board/panel.js  credit-runner  bsm8
 internal/watch/web/panels/quest-list  credit-runner  quests8
 internal/watch/web/panels/quest-strip  credit-runner  quests8
 internal/watch/web/panels/statusline/  credit-runner  uifix1
