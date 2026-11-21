@@ -461,6 +461,7 @@ docs/knobs.md  credit-runner  bsm4
 docs/knobs.md  credit-runner  bulkid
 docs/knobs.md  credit-runner  cainfix3
 docs/knobs.md  credit-runner  countess3
+docs/knobs.md  credit-runner  dlv-expect
 docs/knobs.md  credit-runner  exploredpct
 docs/knobs.md  credit-runner  freshstart
 docs/knobs.md  credit-runner  gearsets
@@ -1116,6 +1117,7 @@ internal/env/tuning_bot.go  credit-runner  lootwireL4
 internal/env/tuning_bot.go  credit-runner  staletarget
 internal/env/tuning_bot.go  credit-runner  survfix2
 internal/env/tuning_combat.go  credit-runner  cainfix3
+internal/env/tuning_combat.go  credit-runner  dlv-expect
 internal/env/tuning_identify.go  credit-runner  bulkid
 internal/env/tuning_input.go  credit-runner  q13input
 internal/env/tuning_invdesk.go  credit-runner  botinstant
