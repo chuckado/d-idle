@@ -828,7 +828,6 @@ internal/bot/hpfields.go  credit-runner  intake
 internal/bot/killtime.go  credit-runner  swingmodel
 internal/bot/killtime_test.go  credit-runner  swingmodel
 internal/bot/kitgate.go  credit-runner  survhold2
-internal/bot/kitgate.go  credit-runner  town2
 internal/bot/kitlevel_test.go  credit-runner  survhold2
 internal/bot/ladder_t0_test.go  credit-runner  questrun
 internal/bot/leveling.go  credit-runner  agencyp0
@@ -921,6 +920,7 @@ internal/bot/staletarget.go  credit-runner  cainchain
 internal/bot/staletarget.go  credit-runner  staletarget
 internal/bot/staletarget_test.go  credit-runner  staletarget
 internal/bot/state.go  credit-runner  resetinstant
+internal/bot/supplycount.go  credit-runner  town2
 internal/bot/task.go  credit-runner  boardmoderace
 internal/bot/task.go  credit-runner  botstuck
 internal/bot/task.go  credit-runner  cain5b

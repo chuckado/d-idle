@@ -359,7 +359,7 @@
 | mgonejob | proposed | - | `docs/process/pg-ops-mgonejob.md` | - |
 | town1 | in-progress | - | `tools/provingground/scenarios/townplan.json`<br>`internal/scenario/state.go`<br>`internal/scenario/newkinds_test.go`<br>`docs/probes/town-plan-scenarios.md` | - |
 | mgcache | proposed | - | `docs/process/pg-ops-mgcache.md` | - |
-| town2 | proposed | - | `internal/supply`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/bot/kitgate.go`<br>`internal/town/basicsfix.go` | - |
+| town2 | in-progress | - | `internal/supply`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/bot/supplycount.go`<br>`internal/town/basicsfix.go` | - |
 | mglanes | proposed | - | `docs/process/pg-ops-mglanes.md` | - |
 | fabledecisions2 | proposed | - | `docs/adr/`<br>`docs/decisions.md`<br>`GLOSSARY.md` | - |
 | mgwatchdog | proposed | - | `docs/process/pg-ops-mgwatchdog.md` | - |
@@ -410,6 +410,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- e10888fad 11-21 00:53 `Merge agent/town2: town2: internal/supply one potion counter, bot and town counters call it (no behaviour change at stage 0)` (town2)
+- 401f842fa 11-21 00:52 `Merge branch 'main' into town2` (-)
 - 9e2b6cf06 11-21 00:47 `Merge agent/town1: town1: planner scenarios (12 B4 sketches) and belt_at_least assertion, not run` (town1)
 - fda7178c2 11-21 00:46 `Merge branch 'main' into town1` (-)
 - df91428e3 11-21 00:44 `Merge agent/pgcards: pgcards: 16 Proving Ground and merge gate cards` (pgcards)
@@ -418,6 +420,4 @@
 - 346082f06 11-21 00:44 `Merge agent/towncards: town planner: 12 migration cards TASK-746..765 (docs/backlog only)` (towncards)
 - 5a5b7c337 11-21 00:37 `Merge branch 'main' into pgcards` (-)
 - 1ebb38cb5 11-21 00:37 `Merge branch 'main' into fabledecisions2` (-)
-- 12b543079 11-21 00:37 `Merge branch 'main' into combatcards` (-)
-- 98fd96105 11-21 00:37 `Merge branch 'main' into towncards` (-)
 <!-- statusgen:end -->
