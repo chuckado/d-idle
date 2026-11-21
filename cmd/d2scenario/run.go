@@ -639,6 +639,12 @@ func addTrail(st *scenario.State, trace string) {
 func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scenario.Result, prep *d2dinput.Process, c *d2dctl.Client, bot, data, sock, inst, trace string) scenario.Result {
 	hero := scenario.HeroName(s.ID, r.Class, r.Seed)
 	_ = c.Close() // the d2d takes one control client: the bot gets it, then we take it back
+	// The lab d2d has its verbs on, so nothing refuses a bot write: the bot's command journal says what it sent (card bsm10).
+	jnl := os.Getenv(journalEnv)
+	if jnl == "" {
+		jnl = strings.TrimSuffix(trace, ".bot.log") + ".jnl"
+		os.Setenv(journalEnv, jnl) // exec-one runs one scenario per process; runBot inherits it
+	}
 	_, taps, tapsAt, berr := runBot(ctx, s, r, bot, os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA"), data, "", sock, inst, hero, trace, true)
 	res.Taps, res.TapsAt = taps, tapsAt
 	if why := botFailure(trace); why != "" {
@@ -650,7 +656,11 @@ func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scen
 		return withVerdict(res, blocked("%s", why))
 	}
 	cc := d2dctl.New(sock, d2dctl.Options{})
-	st := observe(ctx, cc, -1, true)
+	writes := -1
+	if n, ok := journalWrites(jnl); ok {
+		writes = n
+	}
+	st := observe(ctx, cc, writes, true)
 	st.Source = "d2d-live-attach"
 	addTrail(&st, trace)
 	addRunFacts(&st, s, r, trace)

@@ -1493,18 +1493,25 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Sisters' Burial Grounds record 2 word 0x0002 is reward pending (V docs/forkcheats.md). Word 0x000e: pending bit plus started bits; the bare pending word 0x0002 reads as 'needed' (internal/quest/state.go Interpret needs a started bit), so no awaiting chunk existed (bsm9 diagnosis).",
+   "notes": "Sisters' Burial Grounds record 2 word 0x0002 is reward pending (V docs/forkcheats.md). Word 0x000e: pending bit plus started bits; the bare pending word 0x0002 reads as 'needed' (internal/quest/state.go Interpret needs a started bit), so no awaiting chunk existed (bsm9 diagnosis). Start on the pending reward creates the run (handin_ready, C5: before bsm6 the reply was already:true and no run existed); the board then waits for the tap or, when the hero's own quest goal hands in first, reads done.",
    "assert": [
     {
      "kind": "api_reply",
      "index": 0,
-     "ok": true
+     "ok": true,
+     "already": false,
+     "changed_has": [
+      "sisters_burial_grounds/blood_raven"
+     ]
     },
     {
      "kind": "board",
      "quest": "sisters_burial_grounds",
      "chunk": "blood_raven",
-     "state": "awaiting_handin"
+     "state": "awaiting_handin",
+     "or": [
+      "done"
+     ]
     },
     {
      "kind": "no_writes"
