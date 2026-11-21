@@ -19,12 +19,16 @@ Minute line `tp 32, invPct 82`; `inv-tp-dump portal_items`: ONE tome (class 518,
 - Sell chore (`looseScrollSurplus`, `internal/town/shop.go`): with a tome of the same kind in the pack, loose scrolls beyond the keep are sold (the one exception to never-sell scrolls), at any pack fill, which also raises the sell visit (`needSell`). Without a tome nothing is sold.
 - Build-specific part: none (no class or build check).
 
+## The failed casts (V, lab run)
+
+The first Sorceress scenario run was RED on `town portal did not appear` with `area=1` (the town): after two failed clicks on a stale portal (`back to field: portal click failed ... still 1`) `BackToField` fell back to `fallback=newportal` and cast a scroll IN TOWN. game.exe opens no portal in a town (V fork source `components/game/world/travel.cpp:363`, FUN_005be290; d2d returns before the cast), so that branch can never work; it was never verified live (task-11). It is not a loose-scroll problem: toolQty was 1 because the tome had 0 and one scroll was left. Fix: the branch is removed, the fallback goes straight to the waypoint and the walk; `TestBackToFieldStalePortalDroppedNoScrollCast` (Sorceress, Barbarian). U: whether all three sandbox failures were this path (the sandbox lines carry no area; the dump shows a tool of class tsc with qty 1, which fits).
+
 ## Not resolved
 
-- Why a cast from a loose scroll sometimes fails ("town portal did not appear", 3 times in 2 hours): U. The cast path is the same right-click as the tome's; the likely contributors are the adjacent-monster exposure and the 4.5 s settle, not the item. Fewer loose scrolls make the tome the usual source. No fork defect found: d2d does merge on pickup (V source), so no fork finding.
+- No fork finding: d2d merges on pickup (V source). Control run: with `town.looseScrollKeep` 99 the Paladin kept 6 loose scrolls (RED); with the fix the Paladin and Sorceress runs are GREEN.
 - A scroll in the pack that could still go into a tome with room is sold (about 50 gold) and the tome refilled by the shop (100): a drag onto the tome would save the difference; no hand action for it exists (U for the cursor click form).
 
 ## Checks
 
 - Unit: `TestLooseScrollsCappedBesideTome` (Paladin and Sorceress, TP and ID), `TestLooseScrollsBesideTomeAreSold` (needs the game tables), `TestItemInPackMax`.
-- Scenario `town.tp-scroll-hoard` (tome plus 12 loose scrolls given to the pack, CHEATED setup, mechanics only); control `town.tp-scroll-hoard.red` with `town.looseScrollKeep` 99 stands for the old behaviour. Results: see the card result.
+- Scenario `town.tp-scroll-hoard` (tome plus 12 loose scrolls given to the pack, CHEATED setup, mechanics only); the control run was the same scenario with the trigger knob `town.looseScrollKeep` 99 (the old behaviour; a temporary copy, not committed). Results (builder long lane, 2026-11-20, CHEATED setup): control RED (Paladin seed 11, 6 loose scrolls left), fix GREEN (Sorceress 3, Paladin 11). Unit runs with the game tables (`-race`, `-count=20` on the town tests) passed on the builder.

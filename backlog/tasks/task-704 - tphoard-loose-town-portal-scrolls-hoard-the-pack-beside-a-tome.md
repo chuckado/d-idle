@@ -24,8 +24,11 @@ owns:
   - "tools/provingground/scenarios/behaviours.json"
   - "docs/knobs.md"
   - "docs/tphoard.md"
+  - "internal/town/trip.go"
+  - "internal/town/staleportal_test.go"
 exclusive: []
 contracts: []
+result: "Loose TP/ID scrolls beside a tome capped by town.looseScrollKeep (2) in the pickup rule and sold down by the sell chore; the in-town fresh-portal cast (cause of the failed casts) removed. Scenario town.tp-scroll-hoard RED (control knob 99) then GREEN on the builder lab slots (Paladin, Sorceress), CHEATED setup, mechanics only; not verified on the sandbox hero."
 ---
 
 ## Description
@@ -38,8 +41,8 @@ Sandbox hero: a tome of 10 plus 22 loose TP scrolls, pack 82 percent. Done when 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 pickup rule caps loose scrolls beside a tome (town.looseScrollKeep), two-class test
-- [ ] #2 sell chore sells the surplus loose scrolls, two-class test
-- [ ] #3 scenario town.tp-scroll-hoard RED before, GREEN after on the builder
-- [ ] #4 knobs doc, contracts and backlog checks, leakcheck clean
+- [x] #1 pickup rule caps loose scrolls beside a tome (town.looseScrollKeep), two-class test
+- [x] #2 sell chore sells the surplus loose scrolls, two-class test
+- [x] #3 scenario town.tp-scroll-hoard RED before, GREEN after on the builder
+- [x] #4 knobs doc, contracts and backlog checks, leakcheck clean
 <!-- AC:END -->
