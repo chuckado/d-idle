@@ -282,6 +282,81 @@
    }
   },
   {
+   "class": "paladin",
+   "build": "hammerdin",
+   "bands": [
+    {
+     "minLevel": 18,
+     "requires": "Blessed Hammer",
+     "attack": [
+      "Blessed Hammer",
+      "Smite",
+      "Attack"
+     ],
+     "aura": [
+      {
+       "name": "Prayer",
+       "restLifePct": 70
+      },
+      {
+       "name": "Concentration"
+      },
+      {
+       "name": "Might"
+      }
+     ]
+    },
+    {
+     "minLevel": 2,
+     "requires": "Smite",
+     "attack": [
+      "Smite",
+      "Attack"
+     ]
+    },
+    {
+     "attack": [
+      "Attack"
+     ]
+    }
+   ],
+   "aura": [
+    {
+     "name": "Prayer",
+     "restLifePct": 70
+    },
+    {
+     "name": "Might"
+    },
+    {
+     "name": "Thorns"
+    }
+   ],
+   "buffs": [
+    [
+     "Holy Shield"
+    ]
+   ],
+   "layout": {
+    "Smite": "f1",
+    "Blessed Hammer": "f2",
+    "Holy Shield": "f3",
+    "Concentration": "f4",
+    "Vigor": "f5",
+    "Might": "f6",
+    "Prayer": "f7",
+    "Thorns": "f8"
+   },
+   "melee": {
+    "reach": 4,
+    "holdMs": 600,
+    "retreatLifePct": 40,
+    "surround": 4,
+    "surroundLifePct": 65,
+    "manaReserve": 4
+   }
+  },
+  {
    "class": "amazon",
    "bands": [
     {
