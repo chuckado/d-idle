@@ -7,7 +7,7 @@
    "kind": "behaviour",
    "tier": "full",
    "status": "pending",
-   "pending_reason": "not run: the runner cannot seed vault records yet. Missing: a `pre.vault_records` SETUP that writes N add events into the hero's vault log (internal/vault Store.Add on the throwaway hero) before the start, a drop driver (`debug give` a worthwhile item onto the floor in the area), and the assertions `vault_count`, `vault_records_present`, `vault_missed` and `vault_api` that read the log and the API. The same rules are covered offline by TestFullVaultNeverTrimsByDefault, TestVaultFullDoesNotTrimUnlessAutoTrim (Paladin and Sorceress), TestMarkedSalesWaitForConfirm and TestVaultFullPageShowsMissedAndMarked.",
+   "pending_reason": "not run: the runner cannot seed vault records yet. Missing: a `pre.vault_records` SETUP (400 of 400 unpinned normal records) that writes N add events into the hero's vault log (internal/vault Store.Add on the throwaway hero) before the start, a drop driver (`debug give` a worthwhile item onto the floor in the area), and the assertions `vault_count`, `vault_records_present`, `vault_missed` and `vault_api` that read the log and the API. The same rules are covered offline by TestFullVaultNeverTrimsByDefault, TestVaultFullDoesNotTrimUnlessAutoTrim (Paladin and Sorceress), TestMarkedSalesWaitForConfirm and TestVaultFullPageShowsMissedAndMarked. The vault assertions of this scenario are not expressible yet and are listed in notes.",
    "covers": [
     "town.vault"
    ],
@@ -20,13 +20,7 @@
    "pre": {
     "level": 20,
     "gold": 5000,
-    "stash": 0,
-    "vault_records": {
-     "count": 400,
-     "capacity": 400,
-     "quality": "normal",
-     "pinned": 0
-    }
+    "stash": 0
    },
    "trigger": {
     "goals": "reach:25",
@@ -50,22 +44,6 @@
    },
    "provenance": "Hero created fresh; the vault log is seeded by the new setup key `pre.vault_records` (not yet supported by the runner): CHEATED setup, mechanics evidence only.",
    "assert": [
-    {
-     "kind": "vault_count",
-     "min": 400,
-     "max": 400,
-     "why": "nothing left and nothing was added"
-    },
-    {
-     "kind": "vault_records_present",
-     "which": "seeded",
-     "why": "every seeded record is still there"
-    },
-    {
-     "kind": "vault_missed",
-     "min": 1,
-     "why": "the worthwhile drop is counted as missed, not recorded"
-    },
     {
      "kind": "gold_between",
      "min": 4900,
@@ -76,7 +54,7 @@
      "kind": "no_writes"
     }
    ],
-   "notes": "Vault seeded at capacity (400) with unpinned low-value records, loot.vaultAutoTrim 0 (default), a worthwhile unique drops. Expected: vault count unchanged, every seeded record present, no archive entry, nothing sold, the new drop not recorded and left on the ground, missed counter 1, no Ether gained. RED on the old code is the trim of the lowest record."
+   "notes": "Vault seeded at capacity (400) with unpinned low-value records, loot.vaultAutoTrim 0 (default), a worthwhile unique drops. Expected: vault count unchanged, every seeded record present, no archive entry, nothing sold, the new drop not recorded and left on the ground, missed counter 1, no Ether gained. RED on the old code is the trim of the lowest record. Assertions to add with the runner support: vault_count 400, vault_records_present seeded, vault_missed >= 1."
   },
   {
    "id": "vault.full-notice",
@@ -84,7 +62,7 @@
    "kind": "behaviour",
    "tier": "full",
    "status": "pending",
-   "pending_reason": "not run: the runner cannot seed vault records yet. Missing: a `pre.vault_records` SETUP that writes N add events into the hero's vault log (internal/vault Store.Add on the throwaway hero) before the start, a drop driver (`debug give` a worthwhile item onto the floor in the area), and the assertions `vault_count`, `vault_records_present`, `vault_missed` and `vault_api` that read the log and the API. The same rules are covered offline by TestFullVaultNeverTrimsByDefault, TestVaultFullDoesNotTrimUnlessAutoTrim (Paladin and Sorceress), TestMarkedSalesWaitForConfirm and TestVaultFullPageShowsMissedAndMarked.",
+   "pending_reason": "not run: the runner cannot seed vault records yet. Missing: a `pre.vault_records` SETUP (400 of 400 unpinned normal records) that writes N add events into the hero's vault log (internal/vault Store.Add on the throwaway hero) before the start, a drop driver (`debug give` a worthwhile item onto the floor in the area), and the assertions `vault_count`, `vault_records_present`, `vault_missed` and `vault_api` that read the log and the API. The same rules are covered offline by TestFullVaultNeverTrimsByDefault, TestVaultFullDoesNotTrimUnlessAutoTrim (Paladin and Sorceress), TestMarkedSalesWaitForConfirm and TestVaultFullPageShowsMissedAndMarked. The vault assertions of this scenario are not expressible yet and are listed in notes.",
    "covers": [
     "town.vault"
    ],
@@ -97,13 +75,7 @@
    "pre": {
     "level": 20,
     "gold": 5000,
-    "stash": 0,
-    "vault_records": {
-     "count": 400,
-     "capacity": 400,
-     "quality": "normal",
-     "pinned": 0
-    }
+    "stash": 0
    },
    "trigger": {
     "goals": "reach:25",
@@ -128,25 +100,10 @@
    "provenance": "Hero created fresh; the vault log is seeded by the new setup key `pre.vault_records` (not yet supported by the runner): CHEATED setup, mechanics evidence only.",
    "assert": [
     {
-     "kind": "vault_api",
-     "path": "capacity.level",
-     "equals": "full",
-     "why": "the API shows the full state"
-    },
-    {
-     "kind": "vault_api",
-     "path": "missed.count",
-     "min": 1,
-     "why": "missed drops are listed"
-    },
-    {
-     "kind": "vault_api",
-     "path": "autoTrim",
-     "equals": false,
-     "why": "the rule is the default"
+     "kind": "no_writes"
     }
    ],
-   "notes": "Same seed as vault.full-no-trim. GET /api/vault must show capacity.level full, autoTrim false, missed.count >= 1 with the best names, and the banner text 'Vault full: 400/400. New drops are not recorded until you make room.'."
+   "notes": "Same seed as vault.full-no-trim. GET /api/vault must show capacity.level full, autoTrim false, missed.count >= 1 with the best names, and the banner text 'Vault full: 400/400. New drops are not recorded until you make room.'. Assertions to add: vault_api capacity.level == full, missed.count >= 1, autoTrim == false."
   }
  ]
 }
