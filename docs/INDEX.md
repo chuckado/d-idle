@@ -883,6 +883,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [dispatcher-brief-proposed.md](process/dispatcher-brief-proposed.md): Dispatcher brief, proposed replacement (agent ROADMAP, 2026-10-31) (status: PROPOSAL (its WIP limit 3 and milestone rule were ADOPTED by the user on 2026-10-31, docs/roadmap.md...)
 - [dispatcher-brief.md](process/dispatcher-brief.md): Dispatcher brief (status: moved to the private ops repo (d2lod-ops, `docs/process/dispatcher-brief.md`). Not part of the public tree.)
 - [doc-audit.md](process/doc-audit.md): Doc audit (2026-10-30)
+- [druid-support.md](process/druid-support.md): Druid fire: what the engine plays, and what a later card must build (status: current (card druid1, 2026-11-20; Fable roadmap Q8, class 5 after the Sorceress fire build, the...)
 - [feed-after-events.md](process/feed-after-events.md): Feed after events (status: current rule (card feeds, 2026-11-01). The helper is `tools/discord/feed.py`; details in...)
 - [flaky-tests.md](process/flaky-tests.md): Flaky tests: the waiting pattern (status: current. Load-sensitive tests cost 45-minute gate re-runs; this is the rule that keeps new ones out.)
 - [fork-rebase.md](process/fork-rebase.md): Fork rebase routine (status: current (task forkrebase, user decision 2026-11-19: rebase the private d2d fork onto upstream main...)
