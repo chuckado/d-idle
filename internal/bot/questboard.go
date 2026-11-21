@@ -785,6 +785,12 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 	case !ok:
 		out.Outcome = questboard.StepWaiting
 	}
+	if out.Outcome == questboard.StepRan && res.Via != "" {
+		// quests.boardSM: a coded refusal (a potion shortage) sent the hero to the chores trip that just ran. The board shows
+		// the hold for the trip; nothing is counted, and the next slice clears it when the guard lets the step through.
+		out = questboard.StepResult{Outcome: questboard.StepHeld, Code: res.Via, Why: nonEmptyStr(res.ViaWhy, "a town trip fixes it")}
+		r.boardNote("hold "+questboard.ChunkKey(d.Quest, d.Chunk)+" "+res.Via, "quest board: hold "+res.Via+": "+out.Why)
+	}
 	if out.Outcome == questboard.StepFailed {
 		k := questboard.ChunkKey(d.Quest, d.Chunk)
 		rt.mu.Lock()

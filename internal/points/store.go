@@ -106,11 +106,18 @@ func (a *Audit) Recent(n int) []Event {
 	return all
 }
 
-// Settings is the per-hero file <hero>.points.json. Autopilot is the player's per-hero switch: off (the default) means
-// points are banked and the player is asked; on means the bot may spend them from its plan table. A guide track comes later.
+// Settings is the per-hero file <hero>.points.json (the hero's plan file; additive fields only, so older files read as
+// "no build"). Autopilot is the player's per-hero switch: off (the default) means points are banked and the player is
+// asked; on means the bot may spend them from its plan table. Build, Locked, LockedAtLevel and Respecs are the
+// automatic allocator's state (docs/autoalloc.md): a locked build stays until a paid respec (a later card) clears it.
 type Settings struct {
-	Autopilot bool      `json:"autopilot"`
-	Changed   time.Time `json:"changed,omitzero"`
+	Autopilot     bool      `json:"autopilot"`
+	Changed       time.Time `json:"changed,omitzero"`
+	Build         string    `json:"build,omitempty"`
+	Locked        bool      `json:"locked,omitempty"`
+	LockedAtLevel int       `json:"lockedAtLevel,omitempty"`
+	LockedAt      time.Time `json:"lockedAt,omitzero"`
+	Respecs       int       `json:"respecs,omitempty"`
 }
 
 // Store reads and writes Settings; safe for concurrent use.
@@ -129,10 +136,7 @@ func NewStore(dir, hero string) *Store {
 	return s
 }
 
-// Get returns the settings; a missing or unreadable file is the default (autopilot off).
-func (s *Store) Get() Settings {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+func (s *Store) read() Settings {
 	if s.path == "" {
 		return s.mem
 	}
@@ -143,15 +147,21 @@ func (s *Store) Get() Settings {
 	return v
 }
 
-// SetAutopilot stores the switch and reports whether it changed.
-func (s *Store) SetAutopilot(on bool, now time.Time) (changed bool, err error) {
-	cur := s.Get()
-	if cur.Autopilot == on {
-		return false, nil
-	}
-	cur.Autopilot, cur.Changed = on, now
+// Get returns the settings; a missing or unreadable file is the default (autopilot off, no build).
+func (s *Store) Get() Settings {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+	return s.read()
+}
+
+// update applies f to the settings under the lock and saves them when f reports a change.
+func (s *Store) update(f func(*Settings) bool) (bool, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	cur := s.read()
+	if !f(&cur) {
+		return false, nil
+	}
 	if s.path == "" {
 		s.mem = cur
 		return true, nil
@@ -165,6 +175,39 @@ func (s *Store) SetAutopilot(on bool, now time.Time) (changed bool, err error) {
 		return false, err
 	}
 	return true, os.Rename(tmp, s.path)
+}
+
+// SetAutopilot stores the switch and reports whether it changed.
+func (s *Store) SetAutopilot(on bool, now time.Time) (changed bool, err error) {
+	return s.update(func(c *Settings) bool {
+		if c.Autopilot == on {
+			return false
+		}
+		c.Autopilot, c.Changed = on, now
+		return true
+	})
+}
+
+// LockBuild stores the chosen build and locks it. Locking the same build again changes nothing.
+func (s *Store) LockBuild(name string, level int, now time.Time) (changed bool, err error) {
+	return s.update(func(c *Settings) bool {
+		if c.Locked && c.Build == name {
+			return false
+		}
+		c.Build, c.Locked, c.LockedAtLevel, c.LockedAt, c.Changed = name, true, level, now, now
+		return true
+	})
+}
+
+// ClearBuild is what a paid respec does (the respec card calls it after the game took the refund): the build and the
+// lock go, the hero's respec count goes up by one.
+func (s *Store) ClearBuild(now time.Time) error {
+	_, err := s.update(func(c *Settings) bool {
+		c.Build, c.Locked, c.LockedAtLevel, c.LockedAt, c.Changed = "", false, 0, time.Time{}, now
+		c.Respecs++
+		return true
+	})
+	return err
 }
 
 // safeName keeps a hero name usable as a file stem; anything else gives "".

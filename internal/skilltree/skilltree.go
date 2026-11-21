@@ -68,6 +68,25 @@ type Prereq struct {
 	Have bool   `json:"have"` // the hero has at least one hard point in it
 }
 
+// Skill kinds shown as a badge on the Skills page.
+const (
+	KindActive  = "active"  // cast, attack, summon, buff or utility the hero uses
+	KindAura    = "aura"    // skills.txt `aura`: switched on once, stays on
+	KindPassive = "passive" // skills.txt `passive`: always on, nothing to cast
+)
+
+// KindOf classifies a skill from its own skills.txt flags: `aura` first (V: Resist Fire has both a passivestate and
+// aura=1, and it is an aura), then `passive`, everything else is active. No per-skill names.
+func KindOf(s *data.Skill) string {
+	switch {
+	case s.Aura:
+		return KindAura
+	case s.Passive:
+		return KindPassive
+	}
+	return KindActive
+}
+
 // Node is one skill square of a tree.
 type Node struct {
 	ID       int      `json:"id"`
@@ -83,6 +102,7 @@ type Node struct {
 	MaxLevel int      `json:"maxLevel"`
 	Passive  bool     `json:"passive,omitempty"`
 	Aura     bool     `json:"aura,omitempty"`
+	Kind     string   `json:"kind"` // KindActive, KindAura or KindPassive (see KindOf)
 	Prereqs  []Prereq `json:"prereqs,omitempty"`
 	Base     int      `json:"base"`
 	Bonus    int      `json:"bonus,omitempty"`
@@ -203,7 +223,7 @@ func Build(t Tables, h Hero, iconKey func(s *data.Skill) string) View {
 		pt := h.Points[s.ID]
 		n := Node{
 			ID: s.ID, Name: nameOf(s), Row: s.Row, Col: s.Column, W: TileSize, H: TileSize, ReqLevel: s.ReqLevel, MaxLevel: s.MaxLevel,
-			Passive: s.Passive, Aura: s.Aura, Base: pt.Base, Bonus: pt.Bonus, Level: pt.Base + pt.Bonus,
+			Passive: s.Passive, Aura: s.Aura, Kind: KindOf(s), Base: pt.Base, Bonus: pt.Bonus, Level: pt.Base + pt.Bonus,
 			Short: text(s.ShortKey), Long: text(s.LongKey),
 		}
 		if iconKey != nil {

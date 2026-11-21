@@ -298,7 +298,7 @@ func (f *VaultFake) VaultCaps(context.Context) (VaultCaps, error) {
 	if f.FlagOff {
 		return VaultCaps{}, nil
 	}
-	return VaultCaps{GroundFull: true, GroundTake: true, ItemFull: true, ItemCreate: true, ItemVault: true}, nil
+	return VaultCaps{GroundFull: true, GroundTake: true, ItemFull: true, ItemCreate: true, ItemVault: true, PayGold: true}, nil
 }
 
 var (

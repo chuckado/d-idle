@@ -203,8 +203,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | loot.vaultSellPerVisit | 10 | 1..50 | items | 50 | 1 | Most vault items the Sell errand creates in the pack and sells at the vendor in one town visit (docs/vault.md, Sell); the rest follows at the next safe moment. |
 | loot.vaultSellPrompt | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1): when the town budget (repair, potion floor, mercenary reserve) is short of gold, a Needs-you row offers to sell the lowest-value unpinned vault items (never rare or better); Yes queues them for the Sell errand. 0 (default): no prompt. Nothing is ever sold without the answer. |
 | loot.vaultPoorPickup | 1 | 0..1 | 0/1 | 1 | 1 | 1 (default, with loot.vault 1): below loot.poorGoldBelow gold the looter picks up the items worth loot.poorMinSell gold or more instead of only recording them, so a broke hero earns gold (docs/vault.md). 0: it records them. |
-| loot.vaultRevealGold | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1 and loot.vaultKeep 1): the Reveal bar of the Vault page offers Gold as a payment. The order makes the bot buy that many Scrolls of Identify at the vendor at the next town visit (real gold, never below the repair and potion-kit reserve) and read them on the vault items the same visit (docs/vault.md, Reveal paid in gold). 0 (default): off. |
-| loot.vaultRevealGoldConfirm | 2000 | 0..1e+05 | gold | 1e+05 | 1 | A gold reveal that costs this much or more asks for a second confirming press on the page. |
+| loot.vaultRevealGold | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1 and loot.vaultKeep 1): the Reveal bar of the Vault page offers Gold as a payment. A gold reveal is an order the player gives: the price (the vendor price of one Scroll of Identify per item) is subtracted from the STASH gold at once through the d2d fork's `debug paygold` (needs d2d --vault-pay; ledgered with the reason 'vault gold reveal order <id>'; ADR 0029) and the items whose affixes the vault holds are revealed in the same moment: no town visit, no scroll, no tome charge. Never in a measured run (D2BOT_RUN), never above the stash gold, never the purse. 0 (default): off. |
+| loot.vaultRevealGoldConfirm | 2000 | 0..1e+05 | gold | 1e+05 | 1 | A gold reveal that costs this much or more (paid from the stash gold) asks for a second confirming press on the page. |
 | loot.vaultAll | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1): every ground item that is not gold, a gem or a stack and that no other rule takes is recorded too, plain and low items included. 0 (default): the Vault preset only. |
 | loot.pickRadius | 30 | 5..60 | subtiles | 5 | 2 | Ground items within this distance are considered. |
 | loot.pickStrictness | 1 | 0..3 | level | 3 | 4 | 0 loose (also items worth selling), 1 normal, 2 keepers only, 3 gold/runes/gems/uniques only. |
@@ -259,7 +259,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.leaveSlack | 0 | 0..6 | levels | 6 | 9 | Levels past a step's leave level before moving to the next area. Higher wastes time in easy areas. |
 | bot.corpseRetries | 1 | 0..1 | count | 0 | 1 | Max attempts to recover the corpse after a softcore death. 0 abandons the gear. |
 | bot.portalSettleMs | 600 | 600..4500 | ms | 4500 | 1 | Pause in town after chores before going back out. |
-| bot.clearRadius | 30 | 12..45 | subtiles | 12 | 30 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
+| bot.clearRadius | 30 | 12..45 | subtiles | 12 | 32 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
 | bot.exploredPct | 100 | 30..100 | % | 100 | 2 | Share of a zone's roam coverage points the hero must have visited before a clear run calls the zone explored and moves on (the planner then takes the next area or a fresh game). 100 visits every point (the old behaviour). Quest and boss runs always explore everything. Needs a roaming (fully known map) backend; others ignore it. docs/exploredpct.md. |
 | bot.farmReset | 0 | 0..1 | bool | 0 | 3 | 1: in a leveling zone, once its coverage reaches bot.farmResetPct and a fresh game pays (the zone's current XP per minute is below what a reset yields after the 15 s restart and the walk back, measured in this run), the hero goes home, takes a fresh game (monsters respawn) and returns to the same zone. Never during a fight, a quest step, a boss run, a named run, a recovery or within 180 s of one. docs/farmloop.md. |
 | bot.farmResetPct | 85 | 50..100 | % | 85 | 2 | Share of a zone's roam coverage points that must be visited before the farm loop may reset it (bot.farmReset). Keep it at or above bot.exploredPct, which would end the clear first. A zone below this share is never reset. |
@@ -505,6 +505,12 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | invdesk.instant | 0 | 0..1 | bool | 0 | 1 | 1: with invdesk.verbs on and a backend that advertises the verbs, an item action the player gives (equip, unequip, drop, identify, and stash, take and gold at the chest) runs at once through the verbs instead of waiting for the bot's next safe moment. 0 (default): every action queues. Off until the user has seen the fast lane work live (docs/inventory-actions.md, Instant actions). |
 | invdesk.maxSets | 8 | 1..20 | sets | 8 | 1 | How many named gear sets the player may save per hero on the inventory page (docs/gearsets.md). A set is applied only when the player clicks Apply; the bot never chooses one. |
 
+### ui.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| ui.managementFast | 0 | 0..1 | bool | 0 | 0 | 1: the viewer's management actions (equip, unequip, drop, identify, stash and take, gold) run at once through the backend's item verbs, not behind the bot's goal loop, and Recall now (POST /api/recall) takes the hero to town at the next safe moment. Needs a backend that advertises the item verbs; without them, in a named run, or when the lane refuses, the action queues as before and the page names the reason. Driving orders (farm, quest, pause) stay queued. 0 (default): everything queues. Off until the user has seen it work live (docs/process/management-fast-path.md). |
+
 ### watch.*
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
@@ -548,6 +554,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
+| agency.autoAlloc | 0 | 0..1 | 0/1 | 0 | 0 | 0 (default): off, points are banked for the player. 1: a hero whose build is locked (chosen on the Points page) puts every new stat and skill point where that build's table says, at a calm moment, by verb. A skill the hero cannot use yet is skipped with a visible reason and the point stays banked (docs/autoalloc.md). |
 | agency.planner | 0 | 0..1 | mode | 0 | 0 | 0 (default): off. 1: shadow. Once a minute the hero logs a `planner shadow:` line with the attack and aura the planner would pick from the skills the player actually bought, next to what the combat profile picks, and GET /api/hero/plan and the Points page show the derived rotation, the warnings and the viability line. Shadow only: it never changes what the hero does (docs/agency.md). |
 
 ### items.*
@@ -555,6 +562,17 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
 | items.ladderRunewords | 0 | 0..1 | bool | 0 | 3 | 1: the planner may socket the ladder-only runewords (Spirit, Insight and the rest of the Runes.txt server rows) and the Return screen shows 'ladder runewords: on'. Set it only together with the fork flag --ladder-runewords (ADR 0024, d.idle mode); read at start. 0 (default, vanilla): they stay unavailable, as in every gate and fidelity run. |
+
+### respec.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| respec.baseGold | 500 | 0..1e+06 | gold | 500 | 0 | Fixed part of the price of a respec (all skill and stat points refunded). price = clamp(minGold, maxGold, baseGold + perLevel x level) x (1 + perRespecPct/100 x paid respecs). PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.perLevel | 250 | 0..1e+05 | gold | 250 | 0 | Gold added per character level before the escalation. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.perRespecPct | 50 | 0..1000 | % | 50 | 0 | Percent added to the price for every respec this hero already paid for. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.firstFree | 0 | 0..10 | count | 0 | 0 | How many of a hero's first respecs cost nothing (they do not count for the escalation). 0 = every respec is paid. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.minGold | 1000 | 0..1e+06 | gold | 1000 | 0 | The price before the escalation is at least this. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.maxGold | 1e+05 | 0..1e+07 | gold | 1e+05 | 0 | The price before the escalation is at most this (0 = no cap). PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)

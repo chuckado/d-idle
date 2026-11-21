@@ -1,4 +1,4 @@
-// The Vault page Reveal bar against a fake bot (TestVaultRevealBarJS): the picker, the confirm step, the order and its cancel.
+// The Vault page Reveal bar against a fake bot (TestVaultRevealBarJS): the picker, the confirm step, the paid order chain and the stash gold line.
 import { readFileSync } from 'fs';
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
@@ -51,35 +51,45 @@ await find('reveal-bar-go').click();
 ok(posts[0] === '/api/vault/reveal {"ids":["v1","v2"],"ether":true}', 'ether post ' + posts[0]);
 
 // gold under the threshold: one press posts the order with the quoted cap
-posts = []; reply = { ok: true, done: ['v1', 'v2', 'v3', 'v4'], order: { id: 'g-1', state: 'queued' } };
+posts = []; reply = { ok: true, done: ['v1', 'v2', 'v3', 'v4'], order: { id: 'g-1', state: 'revealed', line: 'Gold reveal done: 4 items revealed for 320 gold. Stash gold: 380' } };
 await find('pay-gold').click();
 await find('reveal-bar-go').click();
 ok(posts[0] === '/api/vault/revealgold {"ids":["v1","v2","v3","v4"],"maxGold":320,"confirm":false}', 'gold post ' + posts[0]);
-ok(has('buys the scrolls at the next town visit'), 'order message');
+ok(has('Gold reveal done: 4 items revealed for 320 gold. Stash gold: 380'), 'the order line says what was paid and what the stash holds');
 
 // over the confirm threshold: the first press only asks, Back posts nothing, Yes posts with confirm
 posts = [];
 act = { reveal: rev(bar([o('gold', { cost: 5800, confirm: true })], 'gold', 4), { on: true }), sell };
 await page.reload(false);
 await find('reveal-bar-go').click();
-ok(posts.length === 0 && has('Spend up to 5,800 gold'), 'the confirm step asks first');
+ok(posts.length === 0 && has('Pay 5,800 gold from your stash'), 'the confirm step asks first');
 ok(find('reveal-bar-go').hidden, 'the press is replaced by the question');
 await find('reveal-bar-back').click();
 ok(posts.length === 0 && !find('reveal-bar-go').hidden, 'Back posts nothing');
 await find('reveal-bar-go').click(); await find('reveal-bar-yes').click();
 ok(posts[0] === '/api/vault/revealgold {"ids":["v1","v2","v3","v4"],"maxGold":5800,"confirm":true}', 'confirmed post ' + posts[0]);
 
-// a running order: the chain, the progress, Cancel; no second order is offered
+// a payment not yet confirmed: the chain, the progress, Cancel; no second order is offered
 posts = []; reply = { ok: true };
-act = { reveal: rev(bar([o('gold', { ok: false, why: 'a gold reveal is already running', count: 0, ids: [] })], '', 4), { on: true, order: { id: 'g-1', state: 'revealing', total: 4, done: 1, spent: 240, line: 'x' } }), sell };
+act = { reveal: rev(bar([o('gold', { ok: false, why: 'a gold reveal is already running', count: 0, ids: [] })], '', 4), { on: true, order: { id: 'g-1', state: 'queued', total: 4, want: 4, done: 0, paid: 0, line: 'x' } }), sell };
 await page.reload(false);
-ok(has('Buying scrolls at the next town visit') && has('1 of 4 revealed'), 'chain and progress');
+ok(has('Queued') && has('Paid') && has('Revealed') && has('0 of 4 revealed'), 'chain and progress');
 ok(find('reveal-bar-go').disabled, 'no second order');
 await find('reveal-bar-cancel').click();
 ok(posts[0] === '/api/vault/revealgold/cancel {}' && has('Gold reveal cancelled.'), 'cancel ' + posts[0]);
 
+// a paid and revealed order: the stash gold after the payment, no cancel
+act = { reveal: rev(bar([], '', 0), { on: true, order: { id: 'g-1', state: 'revealed', total: 4, want: 4, done: 4, paid: 5800, stashAfter: 1400, line: 'x' } }), sell };
+await page.reload(false);
+ok(find('reveal-bar-cancel').hidden && has('4 of 4 revealed') && has('5,800 gold paid') && has('Stash gold: 1,400'), 'revealed order shows the payment and the stash gold: ' + texts().join(' | '));
+
+// a failed order shows why
+act = { reveal: rev(bar([], '', 0), { on: true, order: { id: 'g-2', state: 'failed', total: 2, want: 2, done: 0, paid: 0, note: 'the gold was refused: short of gold', line: 'x' } }), sell };
+await page.reload(false);
+ok(has('Failed') && has('short of gold') && find('reveal-bar-cancel').hidden, 'failed order');
+
 // a finished order has no cancel
-act = { reveal: rev(bar([], '', 0), { on: true, order: { id: 'g-1', state: 'partial', total: 4, done: 2, spent: 160, note: 'short of gold', line: 'x' } }), sell };
+act = { reveal: rev(bar([], '', 0), { on: true, order: { id: 'g-1', state: 'partial', total: 2, want: 4, done: 2, paid: 160, stashAfter: 3, note: 'short of gold', line: 'x' } }), sell };
 await page.reload(false);
 ok(find('reveal-bar-cancel').hidden && has('short of gold') && has('Done in part'), 'finished order');
 

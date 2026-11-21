@@ -40,7 +40,7 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 	if r.playerPauseStep(ctx, snap, c) {
 		return true
 	}
-	if r.playerActionStep(ctx, snap, c) || r.errandTripStep(ctx, snap, c) || r.vaultKeepStep(ctx, snap, c) {
+	if r.recallStep(ctx, snap, c) || r.playerActionStep(ctx, snap, c) || r.errandTripStep(ctx, snap, c) || r.vaultKeepStep(ctx, snap, c) {
 		return true
 	}
 	if c.spec.kind == goals.Idle {

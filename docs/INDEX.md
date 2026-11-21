@@ -39,6 +39,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0026-combat-engine-capability-table-and-grammar.md](adr/0026-combat-engine-capability-table-and-grammar.md): 0026: Combat engine: one capability table, generated tiers, delivery grammar, reads a player can see
 - [0027-proving-ground-gate-and-night-window.md](adr/0027-proving-ground-gate-and-night-window.md): 0027: Proving Ground gate: assertion digest, tiers, quotas, ledger, quarantine; standing night window
 - [0028-one-supply-need-town-planner.md](adr/0028-one-supply-need-town-planner.md): 0028: One supply need (town planner)
+- [0029-vault-gold-payment.md](adr/0029-vault-gold-payment.md): 0029: The vault gold reveal is paid at once from the stash gold (amends ADR 0014 for one purpose)
 - [adr/README.md](adr/README.md): Architecture decision records
 - [decisions.md](decisions.md): Decisions (user, with date)
 
@@ -239,6 +240,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [areametrics.md](areametrics.md): Per-area gold and XP log (change areametrics)
 - [areathrash.md](areathrash.md): Area thrash, cave-mouth holds and the Dark Wood exit (fun killer 5) (status: analysis V (sandbox log), fix OFFLINE ONLY (unit tests, not run live). Source:...)
 - [armorcut.md](armorcut.md): armorcut: a Frozen Armor recast cut in a fight (card armorcut) (status: current, offline fix, awaits the live proof. Tags: V = verified (read in a log or test), S = read in code...)
+- [autoalloc.md](autoalloc.md): Automatic Allocate Skills (mechanics) (status: built 2026-11-21 (agent autoalloc), knob `agency.autoAlloc` default 0 (off); not run live. The design, the...)
 - [basics-audit.md](basics-audit.md): Basics audit: town and inventory scenarios against the code (agent BASICSAUDIT, 2026-10-31) (status: current. Offline audit for the milestone in BACKLOG.md section 0. Read-only on production code; no game,...)
 - [belt-plan.md](belt-plan.md): Belt plan knob (TASK-164) (status: built and tested offline; the live drill is below. Tags: V = proven by a test in this tree, S = from a...)
 - [beltfill.md](beltfill.md): Belt fill (BELTFILL)
@@ -324,6 +326,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `design/`
 
+- [autoalloc-and-currencies-2026-11-21.md](design/autoalloc-and-currencies-2026-11-21.md): Automatic Allocate Skills, the gold respec and the currency consolidation (design, 2026-11-21) (status: DESIGN plus a built first slice (agent autoalloc). Tags: **V** verified (how said), **S** secondary, **U**...)
 - [bulk-identify-2026-11-18.md](design/bulk-identify-2026-11-18.md): Bulk identify: Cain-free, lazy reveal, filter (design, 2026-11-18) (status: BUILT offline (B1-B5 and the town adapters, scroll path and Ether tap payer of slice B6, task bulkid2),...)
 
 `design/fable-review-2026-11-19/`
@@ -901,6 +904,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [hammerdin-support.md](process/hammerdin-support.md): Paladin Hammerdin: what the engine plays, and what a later card must build (status: current (card hammer1, 2026-11-20; Fable roadmap Q8, class 3 after the Sorceress fire build and the...)
 - [hooks.md](process/hooks.md): Hooks (change card `hooks`) (status: current since OpenSpec removal stage 5 (2026-11-04): changecheck and `openspec/` are gone; the pre-push...)
 - [layout-read.md](process/layout-read.md): Level layout read (K1, ADR 0022) (status: current (2026-11-20). Tags: V = verified (say how), U = unverified.)
+- [management-fast-path.md](process/management-fast-path.md): Management fast path (audit, lane design, first slice) (status: current (2026-11-21, branch agent/mgmtfast). Built offline and tested; the live RED and green runs are NOT...)
 - [matt-pocock-skills-fit.md](process/matt-pocock-skills-fit.md): Matt Pocock skills plugin: fit for d2lod-bot (PLUGINFIT, 2026-10-30) (status: 2026-10-30 plugin fit; its "tracker = OpenSpec change cards" answer is superseded: OpenSpec is retired for...)
 - [mini-grill.md](process/mini-grill.md): Mini-grill: small and medium decisions asked inline
 - [mpq-data-reading.md](process/mpq-data-reading.md): Reading 1.14d tables with mpq-cat (trap and recipe)
