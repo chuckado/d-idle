@@ -28,7 +28,17 @@ const (
 )
 
 // PointsRoutes are the viewer routes the handler serves: the sheet, the page and its two assets.
-var PointsRoutes = []string{PointsRoute, "/watch/points", "/watch/points.js", "/watch/points.css"}
+var PointsRoutes = []string{PointsRoute, BuildRoute, "/watch/points", "/watch/points.js", "/watch/points.css"}
+
+// BuildRoute is the automatic allocator's build choice: GET on the viewer listener (the picker and the lock state), POST
+// {"build": name, "confirm": bool} on the answer listener (docs/autoalloc.md). Idempotent; refused while locked.
+const BuildRoute = "/api/hero/build"
+
+// BuildDesk is the part of the points desk the build routes need; a desk without it answers 501.
+type BuildDesk interface {
+	BuildView() points.BuildView
+	SetBuild(name string, confirm bool) points.Reply
+}
 
 // PointsDesk is what the routes need from the points service (points.Desk).
 type PointsDesk interface {
@@ -63,6 +73,14 @@ func (a *PointsAPI) Handler() http.Handler {
 	return readOnly(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PointsRoute:
+		case BuildRoute:
+			bd, _ := a.desk().(BuildDesk)
+			if bd == nil {
+				writeJSON(w, http.StatusServiceUnavailable, policyReply{Code: "off", Error: "the build picker is not available yet"})
+				return
+			}
+			writeJSON(w, 200, bd.BuildView())
+			return
 		case "/watch/points":
 			pactHdr(w, "text/html; charset=utf-8")
 			io.WriteString(w, pointsPage)
@@ -189,3 +207,37 @@ func PointsSection(get func() PointsDesk) ReturnSection {
 
 // PointsPage is the path of the page.
 const PointsPage = "/watch/points"
+
+type buildBody struct {
+	Build   string `json:"build"`
+	Confirm bool   `json:"confirm"`
+}
+
+// BuildPostHandler serves POST /api/hero/build behind the same gate as the points POSTs. Audited like them.
+func (a *PointsAPI) BuildPostHandler(o AnswerOptions) http.Handler {
+	return http.HandlerFunc(func(w0 http.ResponseWriter, r *http.Request) {
+		w := &statusWriter{ResponseWriter: w0, code: http.StatusOK}
+		var b buildBody
+		if !policyGate(o, w, r, &b) {
+			return
+		}
+		d := a.desk()
+		bd, _ := d.(BuildDesk)
+		if bd == nil {
+			writeJSON(w, http.StatusServiceUnavailable, policyReply{Code: "off", Error: "the build picker is not available yet"})
+			return
+		}
+		if strings.TrimSpace(b.Build) == "" {
+			writeJSON(w, http.StatusBadRequest, policyReply{Code: "body", Error: `send {"build": "<name>"}`})
+			return
+		}
+		rep := bd.SetBuild(b.Build, b.Confirm)
+		code := rep.Status
+		if code == 0 {
+			code = http.StatusOK
+		}
+		d.Record(points.Event{Path: safePath(r.URL.Path), Remote: remoteClass(r.RemoteAddr), Agent: agentFamily(r.UserAgent()), Action: "build",
+			Target: safeID(b.Build), Confirm: b.Confirm, OK: rep.OK, Status: code, Code: rep.Code, Reason: rep.Reason})
+		writeJSON(w, code, rep)
+	})
+}

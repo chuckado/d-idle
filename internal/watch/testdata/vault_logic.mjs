@@ -171,16 +171,19 @@ ok('bar: nothing payable disables the press and says why', () => {
 ok('bar: hidden without items or an order; shown for an order alone', () => {
   assert.equal(L.revealBarModel({ bar: { total: 0, options: [] } }, '', RT).show, false);
   assert.equal(L.revealBarModel(undefined, '', RT).show, false);
-  const r = { bar: { total: 0, options: [] }, gold: { order: { id: 'g', state: 'buying', total: 40, done: 12, spent: 960 } } };
+  const r = { bar: { total: 0, options: [] }, gold: { order: { id: 'g', state: 'queued', total: 40, want: 40, done: 12, paid: 0 } } };
   const m = L.revealBarModel(r, '', RT);
   assert.equal(m.show, true); assert.equal(m.order.active, true); assert.equal(m.order.progress, '12 of 40 revealed');
-  assert.deepEqual(m.order.steps.map((s) => s.current), [false, true, false, false]);
+  assert.deepEqual(m.order.steps.map((s) => s.current), [true, false, false]);
 });
 ok('bar: a finished or cancelled order ends the chain and cannot be cancelled', () => {
-  for (const [st, label] of [['done', 'Done'], ['partial', 'Done in part'], ['cancelled', 'Cancelled']]) {
-    const o = L.orderModel({ id: 'g', state: st, total: 4, done: 4 }, RT);
-    assert.equal(o.active, false); assert.equal(o.steps[3].current, true); assert.equal(o.steps[3].label, label);
+  for (const [st, label] of [['revealed', 'Revealed'], ['partial', 'Done in part'], ['failed', 'Failed'], ['cancelled', 'Cancelled']]) {
+    const o = L.orderModel({ id: 'g', state: st, total: 4, want: 4, done: 4, paid: 320, stashAfter: 80 }, RT);
+    assert.equal(o.active, false); assert.equal(o.steps[2].current, true); assert.equal(o.steps[2].label, label);
+    assert.equal(o.paidText, '320 gold paid'); assert.equal(o.stashText, 'Stash gold: 80');
   }
+  assert.equal(L.orderModel({ id: 'g', state: 'paid', total: 4, want: 4, done: 0, paid: 320 }, RT).active, false);
+  assert.equal(L.orderModel({ id: 'g', state: 'queued', total: 4, want: 4, done: 0 }, RT).active, true);
 });
 ok('bar: Ether and free words', () => {
   const r = rev(); r.bar.options = [opt('free', { count: 1, ids: ['a'] }), opt('ether', { cost: 29, count: 29 })]; r.bar.default = 'free';

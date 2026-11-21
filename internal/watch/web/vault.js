@@ -362,7 +362,7 @@ export function mountVault(d) {
     rbOrder.hidden = !o;
     if (o) {
       rbSteps.replaceChildren(...o.steps.map((x) => { const li = el('li', x.current ? 'cur' : x.past ? 'past' : '', x.label); if (x.current) li.setAttribute('aria-current', 'step'); return li; }));
-      rbProg.textContent = o.progress + (o.spent ? ' · ' + o.spent + ' gold' : ''); rbNote.textContent = o.note;
+      rbProg.textContent = [o.progress, o.paidText, o.stashText].filter(Boolean).join(' · '); rbNote.textContent = o.note;
       rbCancel.hidden = !o.active; rbCancel.disabled = ro;
     }
   }
@@ -719,13 +719,15 @@ export function mountVault(d) {
     etherAct(p.ids);
   });
   const sellAct = (ids, now) => act('/api/vault/sell', ids, true, { now });
-  // The bar's press: free and Ether use the ordinary reveal routes; gold is an order the bot fills at the next town visit.
+  // The bar's press: free and Ether use the ordinary reveal routes; gold is an order that pays from the stash and reveals at once.
   async function goldOrder(ids, cost, confirm) {
     const r = await d.post('/api/vault/revealgold', { ids, maxGold: cost, confirm: !!confirm });
     RB.confirming = false;
+    const line = r && r.order && r.order.line;
     if (!r) setMsg('bad', T.noAnswer);
-    else if (r.ok) setMsg('good', RT.sent);
-    else setMsg('bad', ((r.failed && r.failed[0] && r.failed[0].error) || r.error || T.noAnswer));
+    else if (r.ok) setMsg('good', line || RT.sent);
+    else if (r.done && r.done.length) setMsg('info', line || RT.sent);
+    else setMsg('bad', ((r.failed && r.failed[0] && r.failed[0].error) || (line && r.order && r.order.note) || r.error || T.noAnswer));
     await reload(true);
   }
   rbGo.addEventListener('click', () => {
@@ -821,7 +823,16 @@ export function mountVault(d) {
     equipDraw(it, null);
     equipLoad(it);
   }
+  // Recall now (management fast path): the state of the command, read with the sheet; null when the route is absent.
+  let recallView = null;
+  async function recallPress(it) {
+    const r = await d.post('/api/recall', {});
+    if (r && r.ok) setMsg('good', T.recallSent);
+    else setMsg('bad', (r && (r.error || r.reason)) || T.noAnswer);
+    equipLoad(it);
+  }
   async function equipLoad(it) {
+    recallView = await d.get('/api/recall');
     const sh = await d.get('/api/vault/equip/' + encodeURIComponent(it.id));
     if (!S.sheet || S.sheet.equip !== it.id) return; // closed or another sheet meanwhile
     equipDraw(it, sh || false);
@@ -887,6 +898,19 @@ export function mountVault(d) {
       const cx = btn(T.equipCancel, { key: 'equip-cancel', variant: 'ghost' });
       cx.addEventListener('click', async () => { const r = await d.post('/api/vault/equipcancel', { ids: [it.id] }); if (!(r && r.ok)) setMsg('bad', (r && r.failed && r.failed[0] && r.failed[0].error) || T.noAnswer); await reload(true); equipLoad(it); });
       row.appendChild(cx);
+    }
+    // Do it now: only when the command exists (knob on), the hero is in the field and an order is waiting for town.
+    const rv = recallView;
+    if (rv && rv.enabled && pl.state === 'active') {
+      if (rv.state && rv.state !== 'idle') {
+        const rs = el('p', 'vt-eq-state', fmt((T.recallStates || {})[rv.state] || rv.state, { why: rv.reason || '' })); rs.setAttribute('role', 'status'); rs.dataset.key = 'recall-state';
+        sheetCard.appendChild(rs);
+      }
+      if (!rv.in_town && rv.state !== 'going') {
+        const rb = btn(T.recallBtn, { key: 'equip-recall-now' });
+        rb.addEventListener('click', () => recallPress(it));
+        row.appendChild(rb);
+      }
     }
     const take = btn(T.equipTakeOut, { key: 'equip-takeout', variant: 'ghost' });
     take.addEventListener('click', () => { closeSheet(true); keepAct([it.id], false); });

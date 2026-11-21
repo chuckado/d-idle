@@ -1,0 +1,9 @@
+# Automatic Allocate Skills (mechanics)
+
+> status: built 2026-11-21 (agent autoalloc), knob `agency.autoAlloc` default 0 (off); not run live. The design, the respec and the currency proposal are in [design/autoalloc-and-currencies-2026-11-21.md](design/autoalloc-and-currencies-2026-11-21.md). Tags: V verified by a test named here, U not.
+
+- Choose a build on the Points page (`GET/POST /api/hero/build`); the choice locks (stored in `<hero>.points.json`: `build`, `locked`, `lockedAtLevel`, `respecs`). Another build is refused while locked (`locked`, 409); the lock ends only with a paid respec (not built: the pay button says "coming soon"). V `TestSetBuildLocksAndRefusesSwitch`, `TestBuildAPITwoClasses`.
+- With the knob on and a lock, `Desk.AutoAllocOnce` (a 3 s loop in `cmd/d2bot/autoallocwire.go`) spends one point per tick from the build's next row through the Points desk (legality, verb, read-back), at a calm moment. A skill the hero cannot use yet is held with a reason, never spent silently. Trace: `auto-alloc: clvl N -> skill X (build B)`. V `TestAutoAllocFollowsBuildTwoClasses`, `TestAutoAllocHoldsUnsupportedAttackAndSpendsNext`, `TestAutoAllocStatThenSkill`; the plan itself `TestAutoAllocPlanFollowsRowsTwoClasses` (leveler).
+- While locked and on, the leveler's own spending is closed (`Desk.Locked`), so nothing double-spends. Manual `+` presses stay allowed; the allocator plans around them.
+- Respec price knobs `respec.*` (placeholders) and the model `points.RespecPrice` (V `TestRespecPrice`); the live price line is on the Points card.
+- Scenarios (tools/provingground/scenarios/autoalloc.json): `points.autoalloc-follows-build` (Paladin, `paladin-normal30-v2`), `points.autoalloc-follows-build-sorc-fire` (Sorceress, `sorceress_fire_normal30`), `points.autoalloc-refuses-locked-switch`. They are CHEATED-setup mechanics runs; not run yet (see the card result).

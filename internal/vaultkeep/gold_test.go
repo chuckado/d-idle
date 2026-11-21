@@ -3,62 +3,55 @@ package vaultkeep
 import (
 	"context"
 	"errors"
+	"fmt"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
+
+	"d2lod-bot/internal/d2dctl"
 )
 
-// fakeShop is the vendor side of a gold order: it sells identify scrolls at price into the rig's fakeTools and keeps the
-// purse, the stash and the reserve the town guards hold back.
-type fakeShop struct {
-	r                    *rig
-	price                int
-	purse, stash, reserv int
-	bought               int
-	err                  error
+// fakePayer is the payment side of a gold order over d2dctl.PayFake (the same refusals as the fork's `debug paygold`).
+type fakePayer struct {
+	*d2dctl.PayFake
+	price   int
+	readErr error
 }
 
-func (s *fakeShop) Price() int { return s.price }
-func (s *fakeShop) Purse(context.Context) (int, int, int, error) {
-	return s.purse, s.stash, s.reserv, nil
-}
-func (s *fakeShop) Buy(_ context.Context, n int) error {
-	if s.err != nil {
-		return s.err
+func (p *fakePayer) Price() int { return p.price }
+func (p *fakePayer) Stash(context.Context) (int, error) {
+	if p.readErr != nil {
+		return 0, p.readErr
 	}
-	for i := 0; i < n && s.purse+s.stash-s.reserv >= s.price; i++ {
-		if s.purse < s.price { // take the missing gold out of the stash
-			d := s.price - s.purse
-			s.stash, s.purse = s.stash-d, s.purse+d
-		}
-		s.purse -= s.price
-		s.r.tools.charges++
-		s.bought++
-	}
-	return nil
+	return p.Stash0(), nil
 }
 
-func (r *rig) wireShop() {
-	if r.shop == nil {
+// Stash0 is the stash gold the fork holds right now.
+func (p *fakePayer) Stash0() int { return p.PayFake.Stash }
+
+func (r *rig) wirePay() {
+	if r.pay == nil {
 		return
 	}
-	r.k.Shop = r.shop
+	r.k.Payer = r.pay
 	r.k.GoldOn = func() bool { return r.goldOn }
 	r.k.GoldConfirm = func() int { return r.confirm }
 	r.k.OrderFile = func() string { return filepath.Join(r.dir, "revealgold.json") }
+	r.k.Measured = func() bool { return r.measured }
 }
 
-func (r *rig) withShop(purse, stash, reserve, price int) {
+func (r *rig) withPay(stash, price int) {
 	r.goldOn = true
-	r.shop = &fakeShop{r: r, price: price, purse: purse, stash: stash, reserv: reserve}
-	r.wireShop()
+	r.pay = &fakePayer{PayFake: &d2dctl.PayFake{Stash: stash, Purse: 300}, price: price}
+	r.wirePay()
 }
 
-func (r *rig) unids(n int) []string {
+// sealeds records n unidentified items whose affixes the vault holds.
+func (r *rig) sealeds(n int) []string {
 	var ids []string
 	for i := 1; i <= n; i++ {
-		ids = append(ids, r.addUnid(i, "wsp"))
+		ids = append(ids, r.addSealed(i, "wsp"))
 	}
 	return ids
 }
@@ -73,188 +66,311 @@ func (r *rig) revealed(ids []string) int {
 	return n
 }
 
-func TestGoldRevealBuysScrollsAndRevealsInOneVisit(t *testing.T) {
+func (r *rig) gold(ids []string, maxGold int, confirm bool) ([]Result, *GoldView) {
+	return r.k.EnqueueRevealGold(context.Background(), ids, maxGold, confirm)
+}
+
+// The order pays from the stash at once, reveals in the same call, buys no scroll and visits no town.
+func TestGoldRevealPaysFromTheStashAndRevealsAtOnce(t *testing.T) {
 	for _, class := range classes {
 		t.Run(class, func(t *testing.T) {
 			r := newRig(t, class)
-			r.withTools(1)
-			r.withShop(300, 700, 200, 80)
-			ids := r.unids(5)
-			res, v := r.k.EnqueueRevealGold(context.Background(), ids, 0, false)
+			r.withTools(0) // no scroll, no tome charge, Cain not here: gold must not need any
+			r.withPay(7200, 80)
+			ids := r.sealeds(5)
+			res, v := r.gold(ids, 0, false)
 			for _, x := range res {
 				if !x.OK {
 					t.Fatalf("refused: %+v", x)
 				}
 			}
-			if v == nil || v.State != OrderQueued || v.Max != 4*80 {
-				t.Fatalf("view %+v (4 missing scrolls at 80 is the cap)", v)
+			if v == nil || v.State != OrderRevealed || v.Done != 5 || v.Paid != 400 || v.StashAfter != 6800 {
+				t.Fatalf("view %+v", v)
 			}
-			if r.k.Pending() == 0 || !r.k.GoldPending() {
-				t.Fatal("the bot step must see the order")
+			if !strings.Contains(v.Line, "Stash gold: 6,800") {
+				t.Fatalf("line %q", v.Line)
 			}
-			// idempotent while it runs; a different set is refused
-			if again, _ := r.k.EnqueueRevealGold(context.Background(), ids, 0, false); !again[0].OK || !again[0].Already {
-				t.Fatalf("same ids must be Already: %+v", again[0])
+			if r.revealed(ids) != 5 || r.pay.Stash0() != 6800 || r.pay.Purse != 300 {
+				t.Fatalf("revealed %d stash %d purse %d", r.revealed(ids), r.pay.Stash0(), r.pay.Purse)
 			}
-			if other, _ := r.k.EnqueueRevealGold(context.Background(), ids[:2], 0, false); other[0].Code != "active" {
-				t.Fatalf("a second order must be refused: %+v", other[0])
+			if len(r.pay.Calls) != 1 || r.pay.Calls[0] != fmt.Sprintf("400 %s", v.ID) {
+				t.Fatalf("one payment of the whole order: %v", r.pay.Calls)
 			}
-			if r.revealed(ids) != 0 || r.shop.bought != 0 {
-				t.Fatal("nothing happens before the visit")
+			if r.k.GoldPending() || r.k.Pending() != 0 || r.tools.charges != 0 || !r.heroEmpty() {
+				t.Fatal("nothing is queued, no scroll or tome charge is used, nothing is created in the hero")
 			}
-			lines := r.run()
-			if n := r.revealed(ids); n != 5 {
-				t.Fatalf("revealed %d of 5; lines %v", n, lines)
+			for _, id := range ids {
+				if rec := r.state(id); rec.Props == "" || rec.Sealed != "" || !rec.Unlocked {
+					t.Fatalf("the affixes appear only now: %+v", rec)
+				}
 			}
-			if r.shop.bought != 4 || r.shop.purse+r.shop.stash != 1000-4*80 || r.tools.charges != 0 {
-				t.Fatalf("bought %d gold left %d charges %d", r.shop.bought, r.shop.purse+r.shop.stash, r.tools.charges)
-			}
-			o := r.k.GoldView()
-			if o == nil || o.State != OrderDone || o.Done != 5 || o.Spent != 320 || o.Bought != 4 {
-				t.Fatalf("order %+v", o)
-			}
-			if !r.heroEmpty() {
-				t.Fatal("temporary copies must leave the hero")
+			if lines := r.run(); len(lines) != 0 {
+				t.Fatalf("a town visit finds nothing to do for a paid order: %v", lines)
 			}
 		})
 	}
 }
 
-func TestGoldRevealShortKeepsTheReserve(t *testing.T) {
+// The stash pays for as many as it can, in the player's list order, and says so.
+func TestGoldRevealPartialInListOrder(t *testing.T) {
 	for _, class := range classes {
 		t.Run(class, func(t *testing.T) {
 			r := newRig(t, class)
 			r.withTools(0)
-			r.withShop(400, 0, 300, 80) // 100 gold above the reserve: one scroll
-			ids := r.unids(4)
-			if res, _ := r.k.EnqueueRevealGold(context.Background(), ids, 4*80, false); !res[0].OK {
-				t.Fatalf("%+v", res[0])
+			r.withPay(250, 80) // three of five
+			ids := r.sealeds(5)
+			want := []string{ids[3], ids[1], ids[4], ids[0], ids[2]} // the player's order, not the vault's
+			res, v := r.gold(want, 0, false)
+			if v == nil || v.State != OrderPartial || v.Done != 3 || v.Want != 5 || v.Paid != 240 || v.StashAfter != 10 {
+				t.Fatalf("view %+v", v)
 			}
-			r.run()
-			o := r.k.GoldView()
-			if o.State != OrderPartial || o.Done != 1 || o.Bought != 1 || !strings.Contains(o.Line, "short of gold") {
-				t.Fatalf("order %+v", o)
+			if !strings.Contains(v.Line, "3 of 5") || !strings.Contains(v.Note, "stash paid for those") {
+				t.Fatalf("line %q note %q", v.Line, v.Note)
 			}
-			if got := r.revealed(ids); got != 1 {
-				t.Fatalf("revealed %d", got)
+			for i, x := range res {
+				if (i < 3) != x.OK || (i >= 3 && x.Code != "gold") {
+					t.Fatalf("result %d: %+v", i, x)
+				}
 			}
-			if r.shop.purse+r.shop.stash < r.shop.reserv {
-				t.Fatalf("the reserve was spent: %d < %d", r.shop.purse+r.shop.stash, r.shop.reserv)
-			}
-			if r.k.GoldPending() {
-				t.Fatal("a finished order must not keep the bot busy")
+			if !r.state(ids[3]).Identified || !r.state(ids[1]).Identified || !r.state(ids[4]).Identified || r.state(ids[0]).Identified || r.state(ids[2]).Identified {
+				t.Fatal("the first three of the player's list are revealed, the rest stay sealed")
 			}
 		})
 	}
 }
 
-func TestGoldRevealCapAndNothingAffordable(t *testing.T) {
-	r := newRig(t, "sorceress")
-	r.withTools(0)
-	r.withShop(5000, 0, 100, 80)
-	ids := r.unids(6)
-	r.k.EnqueueRevealGold(context.Background(), ids, 170, false) // two scrolls fit the cap
-	r.run()
-	if o := r.k.GoldView(); o.Bought != 2 || o.Spent != 160 || o.State != OrderPartial || !strings.Contains(o.Note, "cap") {
-		t.Fatalf("%+v", o)
-	}
-	r2 := newRig(t, "paladin")
-	r2.withTools(0)
-	r2.withShop(100, 0, 100, 80) // nothing above the reserve
-	ids = r2.unids(3)
-	r2.k.EnqueueRevealGold(context.Background(), ids, 240, false)
-	r2.run()
-	if o := r2.k.GoldView(); o.State != OrderPartial || o.Bought != 0 || r2.shop.purse != 100 || r2.revealed(ids) != 0 {
-		t.Fatalf("%+v purse %d", o, r2.shop.purse)
+func TestGoldRevealOverdraftAndEmptyStashRefused(t *testing.T) {
+	for _, class := range classes {
+		r := newRig(t, class)
+		r.withTools(0)
+		r.withPay(79, 80)
+		ids := r.sealeds(2)
+		res, v := r.gold(ids, 0, false)
+		if v != nil || res[0].OK || res[0].Code != "gold" || !strings.Contains(res[0].Why, "short of gold") || len(r.pay.Calls) != 0 || r.revealed(ids) != 0 || r.pay.Stash0() != 79 {
+			t.Fatalf("%s: %+v %+v calls %v", class, res[0], v, r.pay.Calls)
+		}
+		// the fork refuses after the bot's read was stale: the unlock is taken back, the order ends failed with the reason
+		r.pay.PayFake.Stash = 500
+		r.pay.price = 80
+		r.k.Payer = &staleRead{fakePayer: r.pay, shown: 500, real: 100}
+		_, v = r.gold(ids, 0, false)
+		if v == nil || v.State != OrderFailed || !strings.Contains(v.Note, "short of gold") || r.revealed(ids) != 0 {
+			t.Fatalf("%s: refused payment: %+v", class, v)
+		}
+		for _, id := range ids {
+			if rec := r.state(id); rec.Unlocked || rec.Sealed == "" {
+				t.Fatalf("%s: a refused payment must leave the item sealed: %+v", class, rec)
+			}
+		}
+		if r.k.GoldPending() {
+			t.Fatal("a failed order must not keep the bot busy")
+		}
 	}
 }
 
-func TestGoldRevealCainIsFree(t *testing.T) {
+// staleRead shows the bot a bigger stash than the fork holds.
+type staleRead struct {
+	*fakePayer
+	shown, real int
+}
+
+func (s *staleRead) Stash(context.Context) (int, error) { return s.shown, nil }
+func (s *staleRead) PayGold(ctx context.Context, amount int, order string) (d2dctl.PayResult, error) {
+	s.PayFake.Stash = s.real
+	return s.fakePayer.PayGold(ctx, amount, order)
+}
+
+// A repeated press, or a repeated order id at the fork, is never charged twice.
+func TestGoldRevealIdempotent(t *testing.T) {
+	for _, class := range classes {
+		r := newRig(t, class)
+		r.withTools(0)
+		r.withPay(1000, 100)
+		ids := r.sealeds(3)
+		_, v := r.gold(ids, 0, false)
+		again, _ := r.gold(ids, 0, false)
+		if !again[0].OK || !again[0].Already || !again[2].Already || r.pay.Stash0() != 700 || len(r.pay.Calls) != 1 {
+			t.Fatalf("%s: second press %+v stash %d calls %v", class, again, r.pay.Stash0(), r.pay.Calls)
+		}
+		// the same order id at the fork: paid 0, already
+		res, err := r.pay.PayGold(context.Background(), 300, v.ID)
+		if err != nil || res.Paid != 0 || !res.Already || r.pay.Stash0() != 700 {
+			t.Fatalf("%s: repeat of the order id: %+v %v stash %d", class, res, err, r.pay.Stash0())
+		}
+	}
+}
+
+// A lost reply: the order stays queued, the gold may already be gone; the settle repeats the same order id and ends it.
+func TestGoldRevealLostReplyIsSettledOnce(t *testing.T) {
 	r := newRig(t, "paladin")
 	r.withTools(0)
-	r.tools.cain = true
-	r.withShop(500, 0, 100, 80)
-	ids := r.unids(3)
-	r.k.EnqueueRevealGold(context.Background(), ids, 0, false)
-	r.run()
-	if o := r.k.GoldView(); o.State != OrderDone || o.Spent != 0 || r.shop.bought != 0 || r.revealed(ids) != 3 {
-		t.Fatalf("%+v bought %d", o, r.shop.bought)
+	r.withPay(1000, 100)
+	ids := r.sealeds(2)
+	lossy := &lostReply{fakePayer: r.pay}
+	r.k.Payer = lossy
+	_, v := r.gold(ids, 0, false)
+	if v == nil || v.State != OrderQueued || !r.k.GoldPending() {
+		t.Fatalf("an unanswered payment keeps the order queued: %+v", v)
+	}
+	if r.pay.Stash0() != 800 { // the fork took the gold, the reply never came
+		t.Fatalf("stash %d", r.pay.Stash0())
+	}
+	r.open() // the bot restarts; the order is read back from the file
+	r.wirePay()
+	r.k.Payer = lossy
+	lossy.lose = false
+	if lines := r.run(); len(lines) == 0 {
+		t.Fatal("the visit settles the order")
+	}
+	o := r.k.GoldView()
+	if o == nil || o.State != OrderRevealed || r.pay.Stash0() != 800 || r.revealed(ids) != 2 || o.Paid != 200 {
+		t.Fatalf("%+v stash %d", o, r.pay.Stash0())
+	}
+	if len(r.pay.Calls) != 2 || r.pay.Calls[0] != r.pay.Calls[1] {
+		t.Fatalf("the retry carries the same order id: %v", r.pay.Calls)
 	}
 }
 
-func TestGoldRevealRefusalsAndCancel(t *testing.T) {
+// lostReply takes the gold at the fork but answers with a transport error once.
+type lostReply struct {
+	*fakePayer
+	lose bool
+	done bool
+}
+
+func (l *lostReply) PayGold(ctx context.Context, amount int, order string) (d2dctl.PayResult, error) {
+	res, err := l.fakePayer.PayGold(ctx, amount, order)
+	if !l.done {
+		l.done, l.lose = true, true
+	}
+	if l.lose && err == nil {
+		l.lose = false
+		return d2dctl.PayResult{}, errors.New("read: connection reset")
+	}
+	return res, err
+}
+
+// A measured run never pays: the bot refuses before the fork is asked, and the fork's own refusal is handled too.
+func TestGoldRevealMeasuredRunRefuses(t *testing.T) {
+	for _, class := range classes {
+		r := newRig(t, class)
+		r.withTools(0)
+		r.withPay(1000, 100)
+		ids := r.sealeds(2)
+		r.measured = true
+		res, v := r.gold(ids, 0, false)
+		if v != nil || res[0].OK || res[0].Code != "measured" || len(r.pay.Calls) != 0 || r.pay.Stash0() != 1000 || r.revealed(ids) != 0 {
+			t.Fatalf("%s: %+v %+v", class, res[0], v)
+		}
+		if f := r.k.GoldFacts(context.Background()); f.On {
+			t.Fatal("the bar must not offer gold in a measured run")
+		}
+		r.measured = false
+		r.pay.PayFake.Measured = true // the fork says measured though the bot did not know
+		res, v = r.gold(ids, 0, false)
+		if v == nil || v.State != OrderFailed || res[0].Code != "measured" || r.revealed(ids) != 0 || r.pay.Stash0() != 1000 {
+			t.Fatalf("%s: fork refusal %+v %+v", class, res[0], v)
+		}
+		if rec := r.state(ids[0]); rec.Unlocked {
+			t.Fatal("a refused payment must not leave an unlocked item")
+		}
+	}
+}
+
+func TestGoldRevealFlagOffAtTheFork(t *testing.T) {
 	r := newRig(t, "sorceress")
 	r.withTools(0)
-	r.withShop(5000, 0, 100, 100)
-	ids := r.unids(3)
+	r.withPay(1000, 100)
+	r.pay.PayFake.FlagOff = true
+	ids := r.sealeds(1)
+	res, v := r.gold(ids, 0, false)
+	if v == nil || v.State != OrderFailed || res[0].Code != "payoff" || !strings.Contains(v.Note, "--vault-pay") || r.revealed(ids) != 0 {
+		t.Fatalf("%+v %+v", res[0], v)
+	}
+}
+
+// The price rule is the vendor price of one Scroll of Identify per item; an unknown price or an unsealed item refuses.
+func TestGoldRevealRefusals(t *testing.T) {
+	r := newRig(t, "sorceress")
+	r.withTools(0)
+	r.withPay(5000, 100)
 	ctx := context.Background()
+	ids := r.sealeds(3)
+	plain := r.addUnid(9, "wsp")
 	r.goldOn = false
-	if res, _ := r.k.EnqueueRevealGold(ctx, ids, 0, false); res[0].Code != "off" {
+	if res, _ := r.gold(ids, 0, false); res[0].Code != "off" {
 		t.Fatalf("knob 0: %+v", res[0])
 	}
 	r.goldOn, r.confirm = true, 250
-	if res, _ := r.k.EnqueueRevealGold(ctx, ids, 0, false); res[0].Code != "confirm" {
+	if res, _ := r.gold(ids, 0, false); res[0].Code != "confirm" || len(r.pay.Calls) != 0 {
 		t.Fatalf("a 300 gold order needs confirm: %+v", res[0])
 	}
-	if res, _ := r.k.EnqueueRevealGold(ctx, ids, 0, true); !res[0].OK {
-		t.Fatalf("confirmed: %+v", res[0])
+	if res, _ := r.gold([]string{plain}, 0, false); res[0].Code != "nosealed" {
+		t.Fatalf("no held affixes: %+v", res[0])
 	}
-	v, ok := r.k.CancelGold()
-	if !ok || v.State != OrderCancelled {
-		t.Fatalf("cancel %+v %v", v, ok)
+	if res, _ := r.gold(ids, 150, true); !res[0].OK || res[1].OK || res[1].Code != "gold" || res[2].OK {
+		t.Fatalf("a cap of 150 pays one item: %+v", res)
 	}
-	r.run()
-	if r.shop.bought != 0 || r.revealed(ids) != 0 || r.k.GoldPending() {
-		t.Fatal("a cancelled order buys and reveals nothing")
+	if res, _ := r.gold(ids[2:], 50, true); res[0].Code != "gold" || !strings.Contains(res[0].Why, "cap") {
+		t.Fatalf("a cap below one reveal: %+v", res[0])
 	}
-	// a finished order is replaced by a new one
-	if res, _ := r.k.EnqueueRevealGold(ctx, ids[:1], 0, true); !res[0].OK {
-		t.Fatalf("after cancel: %+v", res[0])
+	r.pay.price = 0
+	if res, _ := r.gold(ids[2:], 0, true); res[0].Code != "noshop" {
+		t.Fatalf("unknown price: %+v", res[0])
+	}
+	r.pay.price, r.pay.readErr = 100, errors.New("no snapshot")
+	if res, _ := r.gold(ids[2:], 0, true); res[0].Code != "state" {
+		t.Fatalf("unreadable stash: %+v", res[0])
+	}
+	if res, _ := r.k.EnqueueRevealGold(ctx, nil, 0, false); len(res) != 0 {
+		t.Fatal("no ids")
 	}
 }
 
-func TestGoldRevealSurvivesARestart(t *testing.T) {
+func TestGoldRevealSurvivesARestartAndFadesWhenOld(t *testing.T) {
 	r := newRig(t, "paladin")
 	r.withTools(0)
-	r.withShop(2000, 0, 100, 80)
-	ids := r.unids(2)
-	r.k.EnqueueRevealGold(context.Background(), ids, 0, false)
-	r.open() // the bot restarts: the order is read back from the file
-	if !r.k.GoldPending() {
-		t.Fatal("the order must survive a restart")
-	}
-	r.run()
-	if o := r.k.GoldView(); o.State != OrderDone || r.revealed(ids) != 2 {
+	r.withPay(2000, 80)
+	ids := r.sealeds(2)
+	r.gold(ids, 0, false)
+	r.open() // the bot restarts: the finished order is read back from the file
+	r.wirePay()
+	if o := r.k.GoldView(); o == nil || o.State != OrderRevealed || r.k.GoldPending() {
 		t.Fatalf("%+v", o)
-	}
-}
-
-func TestGoldRevealShopErrorBuysNothing(t *testing.T) {
-	r := newRig(t, "sorceress")
-	r.withTools(0)
-	r.withShop(2000, 0, 100, 80)
-	r.shop.err = errors.New("the vendor is not in reach")
-	ids := r.unids(2)
-	r.k.EnqueueRevealGold(context.Background(), ids, 0, false)
-	lines := r.run()
-	o := r.k.GoldView()
-	if o.State != OrderPartial || o.Spent != 0 || r.revealed(ids) != 0 || !strings.Contains(strings.Join(lines, ";"), "vendor") {
-		t.Fatalf("%+v %v", o, lines)
-	}
-}
-
-func TestGoldOrderFadesFromThePageWhenOld(t *testing.T) {
-	r := newRig(t, "paladin")
-	r.withTools(0)
-	r.withShop(2000, 0, 100, 80)
-	ids := r.unids(1)
-	r.k.EnqueueRevealGold(context.Background(), ids, 0, false)
-	r.run()
-	if r.k.GoldView() == nil {
-		t.Fatal("a fresh result must show")
 	}
 	r.now = r.now.Add(time.Hour)
 	if r.k.GoldView() != nil {
 		t.Fatal("an old result must not stay on the page")
+	}
+}
+
+func TestGoldCancelOnlyBeforePayment(t *testing.T) {
+	r := newRig(t, "sorceress")
+	r.withTools(0)
+	r.withPay(1000, 100)
+	ids := r.sealeds(2)
+	if _, ok := r.k.CancelGold(); ok {
+		t.Fatal("nothing to cancel")
+	}
+	r.k.Payer = &lostReply{fakePayer: r.pay}
+	r.gold(ids, 0, false) // unanswered: queued, items unlocked
+	v, ok := r.k.CancelGold()
+	if !ok || v.State != OrderCancelled || r.revealed(ids) != 0 {
+		t.Fatalf("cancel %+v %v", v, ok)
+	}
+	r.k.Payer = r.pay
+	r.gold(ids, 0, false)
+	if _, ok := r.k.CancelGold(); ok {
+		t.Fatal("a paid order cannot be cancelled")
+	}
+}
+
+// Cain standing here: the page offers the free reveal and no gold; gold orders need the payer wired.
+func TestGoldNoPayerIsNoShop(t *testing.T) {
+	r := newRig(t, "paladin")
+	r.withTools(0)
+	ids := r.sealeds(1)
+	if res, _ := r.gold(ids, 0, false); res[0].Code != "noshop" {
+		t.Fatalf("%+v", res[0])
 	}
 }

@@ -8,7 +8,8 @@ import (
 	"d2lod-bot/internal/vault"
 )
 
-// Reveal paid in gold (docs/vault.md, "Reveal paid in gold"): the order routes and the Reveal bar the page draws.
+// Reveal paid in gold (docs/vault.md, "Reveal paid in gold"; ADR 0029): the order routes and the Reveal bar the page draws.
+// An order settles in the same request: the stash pays, the items are revealed, the answer carries the order.
 
 const (
 	VaultRevealGoldRoute       = "/api/vault/revealgold"        // POST {ids, maxGold, confirm}
@@ -17,26 +18,24 @@ const (
 
 // VaultGoldOrder is the gold order as the page shows it (cmd/d2bot copies internal/vaultkeep.GoldView).
 type VaultGoldOrder struct {
-	ID     string `json:"id"`
-	State  string `json:"state"` // queued, buying, revealing, done, partial, cancelled
-	Total  int    `json:"total"`
-	Done   int    `json:"done"`
-	Failed int    `json:"failed"`
-	Bought int    `json:"bought"`
-	Spent  int    `json:"spent"`
-	Max    int    `json:"max"`
-	Note   string `json:"note,omitempty"`
-	Line   string `json:"line"`
+	ID         string `json:"id"`
+	State      string `json:"state"` // queued, paid, revealed, partial, failed, cancelled
+	Total      int    `json:"total"` // items the stash pays for
+	Want       int    `json:"want"`  // items the player asked for
+	Done       int    `json:"done"`
+	Paid       int    `json:"paid"`
+	StashAfter int    `json:"stashAfter"` // the stash gold after the payment
+	Note       string `json:"note,omitempty"`
+	Line       string `json:"line"`
 }
 
-// VaultGoldInfo is what the bar needs of the hero's purse and the order, read per request.
+// VaultGoldInfo is what the bar needs of the stash gold and the order, read per request.
 type VaultGoldInfo struct {
-	On         bool            `json:"on"` // loot.vaultRevealGold with a shop wired
-	ScrollGold int             `json:"scrollGold"`
-	Purse      int             `json:"purse"`
-	Stash      int             `json:"stash"`
-	Reserve    int             `json:"reserve"`
+	On         bool            `json:"on"`         // loot.vaultRevealGold with a payer wired, not a measured run
+	ScrollGold int             `json:"scrollGold"` // the price of one reveal
+	Stash      int             `json:"stash"`      // the stash gold a gold reveal pays from
 	ConfirmAt  int             `json:"confirmAt"`
+	Why        string          `json:"why,omitempty"` // why gold cannot be offered now
 	Order      *VaultGoldOrder `json:"order,omitempty"`
 }
 
@@ -52,8 +51,8 @@ func (d *VaultDesk) bar(ctx context.Context, recs []vault.Rec, r VaultRevealView
 	in := bulkid.BarIn{Free: r.Free, Charges: r.Charges, EtherPer: r.EtherPer, EtherBal: r.Balance}
 	if ga, ok := d.Act.(VaultGoldActor); ok {
 		gi := ga.GoldInfo(ctx)
-		in.GoldOn, in.ScrollGold, in.Purse, in.Stash, in.Reserve, in.ConfirmAt = gi.On, gi.ScrollGold, gi.Purse, gi.Stash, gi.Reserve, gi.ConfirmAt
-		if gi.Order != nil && (gi.Order.State == "queued" || gi.Order.State == "buying" || gi.Order.State == "revealing") {
+		in.GoldOn, in.ScrollGold, in.Stash, in.ConfirmAt, in.GoldWhy = gi.On, gi.ScrollGold, gi.Stash, gi.ConfirmAt, gi.Why
+		if gi.Order != nil && (gi.Order.State == "queued" || gi.Order.State == "paid") {
 			in.ActiveGoldOrderID = gi.Order.ID
 		}
 	}
@@ -61,11 +60,12 @@ func (d *VaultDesk) bar(ctx context.Context, recs []vault.Rec, r VaultRevealView
 	return &b
 }
 
-// goldRoute serves the order and its cancel. The gate is the same as Reveal's (the bot must be able to identify at all).
+// goldRoute serves the order and its cancel. Like an Ether reveal it needs no game step and no gate: the keeper refuses
+// by itself (knob off, measured run, no payer, the stash short).
 func (a *VaultAPI) goldRoute(w http.ResponseWriter, r *http.Request, d *VaultDesk, route string, b *vaultBody) {
 	ga, ok := d.Act.(VaultGoldActor)
 	if d.Act == nil || !ok {
-		writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "this bot cannot buy scrolls for a reveal"})
+		writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "this bot cannot pay a reveal in gold"})
 		return
 	}
 	type reply struct {
@@ -83,10 +83,6 @@ func (a *VaultAPI) goldRoute(w http.ResponseWriter, r *http.Request, d *VaultDes
 			code = http.StatusConflict
 		}
 		writeJSON(w, code, rep)
-		return
-	}
-	if ok, code, why := d.Act.GateReveal(r.Context()); !ok {
-		writeJSON(w, http.StatusConflict, policyReply{Code: code, Error: why})
 		return
 	}
 	res, order := ga.EnqueueRevealGold(r.Context(), b.IDs, b.MaxGold, b.Confirm)
