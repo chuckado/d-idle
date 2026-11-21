@@ -193,6 +193,9 @@ func memQuestSource(e *env.Env) memQuests {
 
 // runD2D is runLive for the d2d backend: same runner, goal manager, API and shutdown order, no Game.exe, no
 // recycler (a d2d restart is Cycler.NewGame, not memory heap hygiene).
+// seeDeps lets a test read the runner's dependencies as runD2D assembled them (the wiring test); nil in production.
+var seeDeps func(bot.Deps)
+
 func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	cfg, err := bot.LoadConfig(o.config)
 	if err != nil {
@@ -342,6 +345,9 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	}
 	cy := be.Cycler
 	e.Emit = nil // bot.New installs the runner's own and lateEmit forwards to it
+	if seeDeps != nil {
+		seeDeps(deps)
+	}
 	runner, err := bot.New(e, deps, cfg)
 	if err == nil {
 		ref.p.Store(runner)
