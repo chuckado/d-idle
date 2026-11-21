@@ -78,10 +78,11 @@ const maxLinkTries = 20
 
 // World is a nav.worldSource over one d2d socket. Not safe for concurrent use, like d2map.Tracker.
 type World struct {
-	v    Verbs
-	o    Options
-	levs map[int]*lvl
-	cur  *lvl
+	layoutLogged string // signature of the last levelmap diagnostic line
+	v            Verbs
+	o            Options
+	levs         map[int]*lvl
+	cur          *lvl
 
 	resetNext atomic.Bool // ResetNext: forget the levels at the start of the next update, on the reader's goroutine
 
@@ -375,8 +376,9 @@ func (w *World) borders(ctx context.Context, l *lvl) {
 		}
 	}
 	lr := d2map.Rect{X: l.m.Rect.X, Y: l.m.Rect.Y, W: 5 * own.W, H: 5 * own.H}
-	adj, pending, unlinked := adjacent(own, lr, places, linked, l.m.Grid, across)
+	adj, unproven, pending, unlinked := adjacent(own, lr, places, linked, l.m.Grid, across)
 	l.m.Adjacent, l.pending, l.unlinked = keepBorders(l.m.Adjacent, adj), pending, unlinked
+	l.m.Pending, l.m.Unproven = pending, unproven
 	if l.pending == 0 {
 		l.tries = 0
 	}
@@ -596,6 +598,25 @@ func (w *World) mergeLayout(ctx context.Context, l *lvl, sub func(x, y float64) 
 	if err != nil || doc == nil || doc.Level != l.own.Level {
 		return
 	}
+	var wps, listed []string
+	for _, o := range doc.Objects {
+		if o.Kind == "waypoint" {
+			wps = append(wps, fmt.Sprintf("%d@%.0f,%.0f", o.Class, o.X, o.Y))
+		}
+		if len(listed) < 24 {
+			listed = append(listed, fmt.Sprintf("%d:%s", o.Class, o.Kind))
+		}
+	}
+	var presetRooms []string
+	for _, r := range doc.Rooms {
+		if r.Preset {
+			presetRooms = append(presetRooms, fmt.Sprintf("%d@%d,%d", r.Def, r.X, r.Y))
+		}
+	}
+	if sig := fmt.Sprint(doc.Level, len(doc.Objects), len(wps)); sig != w.layoutLogged {
+		w.layoutLogged = sig // diagnostics only on change: the verb is read at every fetch
+		w.logf("d2dworld: levelmap level %d: %d objects, %d rooms, waypoints %v, preset rooms %v, first %v", doc.Level, len(doc.Objects), len(doc.Rooms), wps, presetRooms, listed)
+	}
 	for _, o := range doc.Objects {
 		if o.Class == 0 {
 			continue
@@ -609,7 +630,7 @@ func (w *World) mergeLayout(ctx context.Context, l *lvl, sub func(x, y float64) 
 			}
 		}
 		if !known {
-			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: o.Class, Pos: at})
+			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: o.Class, Pos: at, Waypoint: o.Kind == "waypoint"})
 			l.names = append(l.names, o.Name)
 		}
 	}

@@ -211,13 +211,17 @@ func kitWhy(w World) string {
 
 // kitWhyFor is the kit check with the healing and mana counts given (mana 0 = not needed).
 func kitWhyFor(w World, healing, mana int) string {
+	portals := routePortals
+	if k := w.KitPlan; k != nil { // the plan's minima, clamped to what the hero can carry (an impossible line never blocks)
+		healing, mana, portals = k.Healing, k.Mana, k.Portals
+	}
 	switch {
 	case w.Potions < healing:
 		return fmt.Sprintf("%d healing potions < %d", w.Potions, healing)
 	case !w.HasTP:
 		return "no town portal"
-	case w.TPKnown && w.TPCharges < routePortals:
-		return fmt.Sprintf("%d portal charges < %d", w.TPCharges, routePortals)
+	case w.TPKnown && w.TPCharges < portals:
+		return fmt.Sprintf("%d portal charges < %d", w.TPCharges, portals)
 	case mana > 0 && w.ManaPotions < mana:
 		return fmt.Sprintf("%d mana potions < %d (caster)", w.ManaPotions, mana)
 	}

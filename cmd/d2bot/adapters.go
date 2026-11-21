@@ -16,6 +16,7 @@ import (
 	"d2lod-bot/internal/leveler"
 	"d2lod-bot/internal/loot"
 	"d2lod-bot/internal/nav"
+	"d2lod-bot/internal/supply"
 	"d2lod-bot/internal/task"
 	"d2lod-bot/internal/town"
 )
@@ -168,7 +169,7 @@ func (a townAdapter) Chores(ctx context.Context, p bot.ChorePlan) (bot.ChoreRepo
 	// Every visit may restock: the shop chore checks its own need, so a trip that came for a quest, a heal or a full
 	// pack still buys the town portal and the potion kit when gold allows (G1 attempt 6).
 	tp := town.ChorePlan{Heal: p.Heal, Identify: p.Identify, Sell: p.Sell, Potions: true, Scrolls: true, Repair: p.Repair,
-		Stash: p.Stash, Gold: true, Insure: p.Insure, Ammo: true, Force: p.Poverty, PotionFloor: p.PotionFloor, ReserveGold: p.ReserveGold, Antidotes: p.Antidotes, KitHealing: p.KitHealing, Cube: a.e.Tune.Bot.CubeJobs && p.Stash}
+		Stash: p.Stash, Gold: true, Insure: p.Insure, Ammo: true, Force: p.Poverty, PotionFloor: p.PotionFloor, ReserveGold: p.ReserveGold, Antidotes: p.Antidotes, KitHealing: p.KitHealing, KitMana: p.KitMana, Cube: a.e.Tune.Bot.CubeJobs && p.Stash}
 	rep, err := a.t.Chores(ctx, tp)
 	out := bot.ChoreReport{}
 	for _, s := range rep.Steps {
@@ -377,4 +378,9 @@ func (a questAdapter) Claim(ctx context.Context, quest string) error {
 		return nil
 	}
 	return errors.New("no skill point after talking to Akara (quest not complete, or the dialog missed)")
+}
+
+// SupplyPlan lets the bot's guards read the town planner (knob town.plan >= 2) without importing the town package.
+func (a townAdapter) SupplyPlan(s *d2.Snapshot, profile string, reserve int) (supply.Plan, error) {
+	return a.t.SupplyPlan(s, profile, reserve)
 }

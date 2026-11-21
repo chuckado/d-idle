@@ -319,6 +319,7 @@
 | countess2 | proposed | - | `tools/provingground/scenarios/act1.json`<br>`tools/provingground/countess-check.sh`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
 | barb1 | proposed | - | `data/capabilities/capabilities.json`<br>`internal/buildfile/frenzy_test.go`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/buildfile/testdata/barbarian-frenzy-guide.json`<br>`internal/plandata/build-barbarian_frenzy_guide.json`<br>`docs/plan/data/build-barbarian_frenzy_guide.json`<br>`internal/leveler/frenzy_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/frenzy_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/agency/planner_test.go`<br>`internal/agency/testdata/agreement.json`<br>`tools/provingground/scenarios/points.json`<br>`docs/process/barbarian-support.md`<br>`docs/agency.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/scenario_test.go` | - |
 | druid1 | proposed | - | `data/capabilities/capabilities.json`<br>`internal/buildfile/druidfire_test.go`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/buildfile/testdata/druid-fire-guide.json`<br>`internal/plandata/build-druid_fire_guide.json`<br>`docs/plan/data/build-druid_fire_guide.json`<br>`internal/leveler/druidfire_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/druidfire_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/agency/planner_test.go`<br>`internal/agency/testdata/agreement.json`<br>`tools/provingground/scenarios/points.json`<br>`docs/process/druid-support.md`<br>`docs/agency.md`<br>`internal/scenario/scenario_test.go` | - |
+| andariel1 | proposed | - | `internal/questboard/desk.go`<br>`cmd/d2scenario/tap.go`<br>`internal/nav/exit.go`<br>`tools/provingground/scenarios/act1more.json`<br>`internal/d2map/tracker.go`<br>`internal/d2dworld/world.go`<br>`internal/d2dworld/world_test.go`<br>`internal/nav/exit_test.go`<br>`internal/questboard/desk_test.go`<br>`cmd/d2scenario/tap_test.go` | - |
 | boardprereq | proposed | - | `internal/questboard`<br>`tools/provingground/scenarios/cain.json` | - |
 | countess3 | proposed | - | `internal/d2dctl`<br>`internal/d2dworld`<br>`internal/boss`<br>`internal/d2map`<br>`cmd/d2bot/boss.go`<br>`docs/process/layout-read.md`<br>`docs/probes/provingground-countess-2026-11-20.md`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | `fork-branch:didle/level-monsters-20261121` |
 | chores2 | proposed | - | `internal/town/chores.go`<br>`internal/town/kithealing_test.go`<br>`internal/town/town.go`<br>`internal/task/gate.go`<br>`internal/task/route_test.go`<br>`internal/bot/task.go`<br>`internal/bot/contracts.go`<br>`cmd/d2bot/adapters.go`<br>`docs/probes/chores2-2026-11-21.md` | - |
@@ -326,6 +327,8 @@
 | fablecombat | in-progress | - | `docs/design/fable-review-2026-11-21/combat-engine*` | - |
 | fableboard | proposed | - | `docs/design/fable-review-2026-11-21/quest-board*` | - |
 | fabletown | in-progress | - | `docs/design/fable-review-2026-11-21/town-planner*` | - |
+| wpstep | proposed | - | `internal/task/executor.go`<br>`internal/task/timeoutpolicy_test.go`<br>`internal/d2map/static.go`<br>`internal/d2map/tracker.go`<br>`internal/d2map/tracker_test.go`<br>`internal/d2dworld/`<br>`internal/bot/task.go`<br>`tools/provingground/scenarios/cain.json` | - |
+| bsm1 | proposed | - | `tools/provingground/scenarios/board.json`<br>`internal/scenario`<br>`cmd/d2scenario` | - |
 | dlv-data | proposed | - | `data/capabilities/`<br>`internal/delivery/`<br>`tools/capgen/` | - |
 | dlv-rotation | proposed | - | `internal/delivery/`<br>`internal/combat/`<br>`internal/agency/` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -359,13 +362,13 @@
 | mgonejob | proposed | - | `docs/process/pg-ops-mgonejob.md` | - |
 | town1 | in-progress | - | `tools/provingground/scenarios/townplan.json`<br>`internal/scenario/state.go`<br>`internal/scenario/newkinds_test.go`<br>`docs/probes/town-plan-scenarios.md` | - |
 | mgcache | proposed | - | `docs/process/pg-ops-mgcache.md` | - |
-| town2 | proposed | - | `internal/supply`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/bot/kitgate.go`<br>`internal/town/basicsfix.go` | - |
 | mglanes | proposed | - | `docs/process/pg-ops-mglanes.md` | - |
+| bsm2 | proposed | - | `internal/questboard/sm.go`<br>`internal/questboard/sm_reason.go`<br>`internal/questboard/sm_test.go` | - |
 | fabledecisions2 | proposed | - | `docs/adr/`<br>`docs/decisions.md`<br>`GLOSSARY.md` | - |
 | mgwatchdog | proposed | - | `docs/process/pg-ops-mgwatchdog.md` | - |
-| town3 | proposed | - | `internal/supply`<br>`data/supply`<br>`internal/env/tuning_town.go`<br>`docs/knobs.md` | - |
+| town3 | in-progress | - | `internal/supply`<br>`internal/town/planshadow.go`<br>`internal/town/chores.go`<br>`internal/town/town.go`<br>`internal/env/tuning_town.go`<br>`internal/bot/observe.go`<br>`docs/knobs.md` | - |
 | pgnightly | proposed | - | `docs/process/pg-ops-pgnightly.md`<br>`tools/provingground/nightly.sh` | - |
-| town4 | proposed | - | `internal/task`<br>`internal/town`<br>`internal/bot`<br>`internal/supply` | - |
+| town4 | in-progress | - | `internal/task`<br>`internal/town`<br>`internal/bot`<br>`internal/supply`<br>`cmd/d2bot`<br>`docs/knobs.md` | - |
 | pgearned | proposed | - | `internal/scenario/earned.go`<br>`tools/provingground/earned` | - |
 | town5 | proposed | - | `internal/town`<br>`internal/resource`<br>`town-basics` | - |
 | town6 | proposed | - | `internal/town`<br>`internal/loot` | - |
@@ -375,6 +378,8 @@
 | town10 | proposed | - | `internal/arbiter`<br>`internal/supply` | - |
 | town11 | proposed | - | `internal/town`<br>`docs/town.md`<br>`town-basics` | - |
 | town12 | proposed | - | `docs/design/fable-review-2026-11-21/town-profiles-sme.md` | - |
+| countess3b | proposed | - | `cmd/d2bot/boss.go`<br>`cmd/d2bot/boss_levelmonsters_test.go`<br>`internal/nav/nav.go`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
+| bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -410,14 +415,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 9e2b6cf06 11-21 00:47 `Merge agent/town1: town1: planner scenarios (12 B4 sketches) and belt_at_least assertion, not run` (town1)
-- fda7178c2 11-21 00:46 `Merge branch 'main' into town1` (-)
-- df91428e3 11-21 00:44 `Merge agent/pgcards: pgcards: 16 Proving Ground and merge gate cards` (pgcards)
-- 7295f4ba1 11-21 00:44 `Merge agent/fabledecisions2: Merge branch 'main' into fabledecisions2` (fabledecisions2)
-- 6a35831bb 11-21 00:44 `Merge agent/combatcards: combatcards: 17 dlv-* combat-engine cards (docs/backlog only)` (combatcards)
-- 346082f06 11-21 00:44 `Merge agent/towncards: town planner: 12 migration cards TASK-746..765 (docs/backlog only)` (towncards)
-- 5a5b7c337 11-21 00:37 `Merge branch 'main' into pgcards` (-)
-- 1ebb38cb5 11-21 00:37 `Merge branch 'main' into fabledecisions2` (-)
-- 12b543079 11-21 00:37 `Merge branch 'main' into combatcards` (-)
-- 98fd96105 11-21 00:37 `Merge branch 'main' into towncards` (-)
+- c2118b36b 11-21 02:45 `Merge agent/andariel1: Merge branch 'main' into andariel1` (andariel1)
+- e94174c16 11-21 02:44 `Merge branch 'main' into andariel1` (-)
+- 4cef37c7c 11-21 02:34 `Merge agent/wpstep: Merge branch 'main' into TASK-716` (wpstep)
+- 8eb46e0e3 11-21 02:33 `Merge branch 'main' into TASK-716` (-)
+- b62c45349 11-21 02:25 `Merge agent/bsm5: Merge branch 'main' into TASK-768` (bsm5)
+- ffe284f81 11-21 02:24 `Merge branch 'main' into TASK-768` (-)
+- 07712c446 11-21 02:23 `Merge agent/druid1: Merge branch 'main' into druid1` (druid1)
+- 0db4e11df 11-21 02:22 `Merge branch 'main' into druid1` (-)
+- b66c4d189 11-21 02:16 `Merge agent/countess3b: Merge branch 'main' into countess3b` (countess3b)
+- b78539912 11-21 02:15 `Merge branch 'main' into countess3b` (-)
 <!-- statusgen:end -->

@@ -21,6 +21,8 @@ type Fake struct {
 	// Steps done per chunk key: the handler progress that the game itself holds (items, position, kills).
 	Progress  map[string]int
 	ChunkDone map[string]Tier
+	// Denied marks chunks whose exact evidence says "not done" (ChunkFact.Denied).
+	Denied map[string]bool
 	// Scripts: Script is consumed before the default (a step that progresses).
 	Script []StepResult
 	// HandIn script: errors first, then silent no-ops (the dialogue ran, nothing registered), then success at
@@ -75,6 +77,7 @@ func (f *Fake) Chunk(q Quest, c Chunk) ChunkFact {
 	if t, ok := f.ChunkDone[k]; ok {
 		cf.Done, cf.Tier = true, t
 	}
+	cf.Denied = f.Denied[k]
 	return cf
 }
 

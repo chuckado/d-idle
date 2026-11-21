@@ -131,6 +131,7 @@ backlog/merge-lines/decomp34.txt  credit-runner  decomp34
 cmd/bossrun/adapter.go  pro-runner  levelplan3
 cmd/d2bot  credit-runner  cainfix
 cmd/d2bot  credit-runner  survsd
+cmd/d2bot  credit-runner  town4
 cmd/d2bot  credit-runner  wiring2
 cmd/d2bot/adapters.go  credit-runner  cainfix3
 cmd/d2bot/adapters.go  credit-runner  chores2
@@ -143,7 +144,9 @@ cmd/d2bot/behaviors.go  credit-runner  quests4
 cmd/d2bot/behaviors.go  credit-runner  vaultv5
 cmd/d2bot/beltfill_adapter.go  credit-runner  beltfix
 cmd/d2bot/boss.go  credit-runner  countess3
+cmd/d2bot/boss.go  credit-runner  countess3b
 cmd/d2bot/boss.go  pro-runner  levelplan3
+cmd/d2bot/boss_levelmonsters_test.go  credit-runner  countess3b
 cmd/d2bot/cain.go  credit-runner  cain45
 cmd/d2bot/cain5b_test.go  credit-runner  cain5b
 cmd/d2bot/cain_test.go  credit-runner  cain45
@@ -326,6 +329,7 @@ cmd/d2dview  credit-runner  videofeed2
 cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
 cmd/d2scenario  credit-runner  boardorder
+cmd/d2scenario  credit-runner  bsm1
 cmd/d2scenario/  credit-runner  pgexpand
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/journal.go  credit-runner  pgjournal
@@ -333,7 +337,9 @@ cmd/d2scenario/ledger.go  credit-runner  pgledger
 cmd/d2scenario/main_test.go  credit-runner  agencyp0
 cmd/d2scenario/run.go  credit-runner  agencyp0
 cmd/d2scenario/run.go  credit-runner  pgprov
+cmd/d2scenario/tap.go  credit-runner  andariel1
 cmd/d2scenario/tap.go  credit-runner  pgtaps
+cmd/d2scenario/tap_test.go  credit-runner  andariel1
 cmd/d2scenario/validate.go  credit-runner  pgselfcheck
 data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
@@ -356,7 +362,6 @@ data/questboard/act1.json  credit-runner  cain5b
 data/questboard/act1.json  credit-runner  cainfix
 data/questboard/act1.json  credit-runner  cainfix3
 data/questspec  credit-runner  questspec
-data/supply  credit-runner  town3
 data/unlocks  credit-runner  nocards
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
@@ -452,6 +457,7 @@ docs/knobs.md  credit-runner  agencyp0
 docs/knobs.md  credit-runner  botcpu2
 docs/knobs.md  credit-runner  botinstant
 docs/knobs.md  credit-runner  botstuck
+docs/knobs.md  credit-runner  bsm4
 docs/knobs.md  credit-runner  bulkid
 docs/knobs.md  credit-runner  cainfix3
 docs/knobs.md  credit-runner  countess3
@@ -472,6 +478,7 @@ docs/knobs.md  credit-runner  survfix2
 docs/knobs.md  credit-runner  survsd
 docs/knobs.md  credit-runner  tidy
 docs/knobs.md  credit-runner  town3
+docs/knobs.md  credit-runner  town4
 docs/knobs.md  credit-runner  vaultv3
 docs/knobs.md  credit-runner  vaultv5
 docs/knobs.md  credit-runner  vaultv6
@@ -532,6 +539,7 @@ docs/probes/provingground-cainchain-2026-11-20.md  credit-runner  cainchain
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess2
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess3
+docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess3b
 docs/probes/provingground-run-2026-11-19.md  credit-runner  pgexpand
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
@@ -813,7 +821,6 @@ internal/bot/goal.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  survB
 internal/bot/goal.go  credit-runner  survhold2
 internal/bot/goal.go  credit-runner  survrecover
-internal/bot/goal.go  credit-runner  town2
 internal/bot/goal.go  credit-runner  uib1
 internal/bot/goal.go  credit-runner  vaultv5
 internal/bot/goal.go  pro-runner  levelplan3
@@ -828,7 +835,6 @@ internal/bot/hpfields.go  credit-runner  intake
 internal/bot/killtime.go  credit-runner  swingmodel
 internal/bot/killtime_test.go  credit-runner  swingmodel
 internal/bot/kitgate.go  credit-runner  survhold2
-internal/bot/kitgate.go  credit-runner  town2
 internal/bot/kitlevel_test.go  credit-runner  survhold2
 internal/bot/ladder_t0_test.go  credit-runner  questrun
 internal/bot/leveling.go  credit-runner  agencyp0
@@ -857,6 +863,7 @@ internal/bot/observe.go  credit-runner  passagebounce
 internal/bot/observe.go  credit-runner  staletarget
 internal/bot/observe.go  credit-runner  survreask
 internal/bot/observe.go  credit-runner  survrecover
+internal/bot/observe.go  credit-runner  town3
 internal/bot/observe.go  pro-runner  bounce3
 internal/bot/ordersguard.go  credit-runner  staletarget
 internal/bot/parkstep_test.go  credit-runner  botstuck
@@ -879,6 +886,7 @@ internal/bot/pointsgate_test.go  credit-runner  agencyp0
 internal/bot/portalburn_test.go  credit-runner  survhold2
 internal/bot/questauto.go  credit-runner  quests8
 internal/bot/questauto_test.go  credit-runner  quests8
+internal/bot/questboard.go  credit-runner  bsm4
 internal/bot/questboard.go  credit-runner  cainchain
 internal/bot/questboard.go  credit-runner  questrun
 internal/bot/questboard.go  credit-runner  quests10
@@ -895,7 +903,6 @@ internal/bot/questboard_test.go  credit-runner  quests4
 internal/bot/questboard_test.go  credit-runner  quests7
 internal/bot/repairtrip.go  credit-runner  repairtrip
 internal/bot/repairtrip_test.go  credit-runner  repairtrip
-internal/bot/resource.go  credit-runner  town2
 internal/bot/resource.go  pro-runner  levelplan3
 internal/bot/routeguard.go  credit-runner  questrun
 internal/bot/runner.go  credit-runner  agencyp0
@@ -931,6 +938,7 @@ internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  quests3
 internal/bot/task.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  staletarget
+internal/bot/task.go  credit-runner  wpstep
 internal/bot/task_acts_test.go  credit-runner  cain5b
 internal/bot/vaultkeep.go  credit-runner  vaultv5
 internal/bot/waypoints.go  credit-runner  boardmoderace
@@ -1067,7 +1075,14 @@ internal/d2dsrc/source_test.go  credit-runner  survB
 internal/d2dsrc/srv_test.go  credit-runner  botcpu
 internal/d2dworld  credit-runner  countess3
 internal/d2dworld  live-agent  k1layout
+internal/d2dworld/  credit-runner  wpstep
+internal/d2dworld/world.go  credit-runner  andariel1
+internal/d2dworld/world_test.go  credit-runner  andariel1
 internal/d2map  credit-runner  countess3
+internal/d2map/static.go  credit-runner  wpstep
+internal/d2map/tracker.go  credit-runner  andariel1
+internal/d2map/tracker.go  credit-runner  wpstep
+internal/d2map/tracker_test.go  credit-runner  wpstep
 internal/danger  credit-runner  dangerfit2
 internal/danger/  credit-runner  survA
 internal/danger/areaunits.json  pro-runner  decomp28
@@ -1113,6 +1128,7 @@ internal/env/tuning_loot.go  credit-runner  vaultv3
 internal/env/tuning_loot.go  credit-runner  vaultv5
 internal/env/tuning_loot.go  credit-runner  vaultv6
 internal/env/tuning_nav.go  credit-runner  pursuers
+internal/env/tuning_quests.go  credit-runner  bsm4
 internal/env/tuning_quests.go  credit-runner  countess3
 internal/env/tuning_quests.go  credit-runner  quests3
 internal/env/tuning_quests.go  credit-runner  quests8
@@ -1226,10 +1242,13 @@ internal/nav/covview.go  credit-runner  maptrail
 internal/nav/covview_test.go  credit-runner  maphistoryC
 internal/nav/covview_test.go  credit-runner  maptrail
 internal/nav/cpuprobe_test.go  credit-runner  botcpu
+internal/nav/exit.go  credit-runner  andariel1
 internal/nav/exit.go  credit-runner  pursuers
+internal/nav/exit_test.go  credit-runner  andariel1
 internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/mouthgate.go  credit-runner  botstuck
+internal/nav/nav.go  credit-runner  countess3b
 internal/nav/nav.go  credit-runner  maphistoryC
 internal/nav/nav.go  credit-runner  pursuers
 internal/nav/pursuit.go  credit-runner  pursuers
@@ -1281,9 +1300,17 @@ internal/questboard/chunks_test.go  credit-runner  cain45
 internal/questboard/chunks_test.go  credit-runner  cain5b
 internal/questboard/chunks_test.go  credit-runner  quests7b
 internal/questboard/def.go  credit-runner  cainfix3
+internal/questboard/desk.go  credit-runner  andariel1
 internal/questboard/desk.go  credit-runner  questrun
+internal/questboard/desk_test.go  credit-runner  andariel1
 internal/questboard/desk_test.go  credit-runner  questrun
+internal/questboard/exec.go  credit-runner  bsm4
 internal/questboard/exec.go  credit-runner  questrun
+internal/questboard/exec_sm.go  credit-runner  bsm4
+internal/questboard/exec_sm_test.go  credit-runner  bsm4
+internal/questboard/sm.go  credit-runner  bsm2
+internal/questboard/sm_reason.go  credit-runner  bsm2
+internal/questboard/sm_test.go  credit-runner  bsm2
 internal/questboard/state_test.go  credit-runner  cain45
 internal/questboard/state_test.go  credit-runner  quests7b
 internal/questspec  credit-runner  questspec
@@ -1301,6 +1328,7 @@ internal/resource/tuning.go  credit-runner  agencyp0
 internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
 internal/scenario  credit-runner  boardorder
+internal/scenario  credit-runner  bsm1
 internal/scenario/  credit-runner  dlv-reads
 internal/scenario/  credit-runner  pgexpand
 internal/scenario/determinism.go  credit-runner  pgdigest
@@ -1332,7 +1360,6 @@ internal/skilltree/skilltree.go  credit-runner  agencyp0
 internal/status/inventory.go  credit-runner  itemcolour2
 internal/status/inventory.go  credit-runner  jewelicons
 internal/supply  credit-runner  town10
-internal/supply  credit-runner  town2
 internal/supply  credit-runner  town3
 internal/supply  credit-runner  town4
 internal/supply  credit-runner  town7
@@ -1362,6 +1389,7 @@ internal/task/cainstones_test.go  credit-runner  cain45
 internal/task/campaign.go  credit-runner  campaign1
 internal/task/executor.go  credit-runner  botstuck
 internal/task/executor.go  credit-runner  staletarget
+internal/task/executor.go  credit-runner  wpstep
 internal/task/executor_unpark_test.go  credit-runner  staletarget
 internal/task/gate.go  credit-runner  cainfix3
 internal/task/gate.go  credit-runner  chores2
@@ -1372,6 +1400,7 @@ internal/task/route_test.go  credit-runner  chores2
 internal/task/s7b_test.go  credit-runner  quests7b
 internal/task/testdata  credit-runner  quests7b
 internal/task/testdata/plans/act1.txt  credit-runner  cain5b
+internal/task/timeoutpolicy_test.go  credit-runner  wpstep
 internal/task/world.go  credit-runner  cainfix
 internal/task/world.go  credit-runner  cainfix3
 internal/task/world.go  credit-runner  quests7b
@@ -1382,7 +1411,6 @@ internal/town  credit-runner  town5
 internal/town  credit-runner  town6
 internal/town  credit-runner  town7
 internal/town  credit-runner  town8
-internal/town/basicsfix.go  credit-runner  town2
 internal/town/belt  credit-runner  beltfix
 internal/town/beltfill.go  credit-runner  beltfix
 internal/town/beltfix6_test.go  credit-runner  beltfix
@@ -1392,10 +1420,12 @@ internal/town/chores.go  credit-runner  chores2
 internal/town/chores.go  credit-runner  idfast
 internal/town/chores.go  credit-runner  repairtrip
 internal/town/chores.go  credit-runner  tidy
+internal/town/chores.go  credit-runner  town3
 internal/town/idtome_test.go  credit-runner  idtome
 internal/town/imbue_test.go  credit-runner  q4runes
 internal/town/invstash_test.go  credit-runner  towntests
 internal/town/kithealing_test.go  credit-runner  chores2
+internal/town/planshadow.go  credit-runner  town3
 internal/town/playerid.go  credit-runner  itemverbs2
 internal/town/playerstash.go  credit-runner  itemverbs2
 internal/town/playerstash_test.go  credit-runner  towntests
@@ -1414,6 +1444,7 @@ internal/town/town.go  credit-runner  chores2
 internal/town/town.go  credit-runner  itemverbs2
 internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
+internal/town/town.go  credit-runner  town3
 internal/town/trip.go  credit-runner  cainchain
 internal/vault  credit-runner  vaultv2
 internal/vault  credit-runner  vaultv5
@@ -1949,10 +1980,13 @@ tools/provingground/nightly.sh  credit-runner  pgnightly
 tools/provingground/scenarios/act1.json  credit-runner  countess
 tools/provingground/scenarios/act1.json  credit-runner  countess2
 tools/provingground/scenarios/act1more.json  credit-runner  act1more
+tools/provingground/scenarios/act1more.json  credit-runner  andariel1
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
+tools/provingground/scenarios/board.json  credit-runner  bsm1
 tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
+tools/provingground/scenarios/cain.json  credit-runner  wpstep
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/provingground/scenarios/points.json  credit-runner  barb1
 tools/provingground/scenarios/points.json  credit-runner  druid1
