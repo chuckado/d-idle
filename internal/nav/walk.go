@@ -26,7 +26,7 @@ type walkOpts struct {
 	escape     bool             // a stalled walk tries the Escape hook (town portal) before it gives up (GoTo, GoToUnit)
 	oneClick   bool             // click the goal itself while it is in line of sight (the step away from a cave mouth, FIXMOUTH3)
 	pursuit    bool             // a wander: monsters that keep following within nav.pursuitRadius hand the walk over to the fight (pursuit.go)
-	goal       *input.Point     // fixed goal of a GoTo: the mouth gate extends a refused waypoint toward it (mouthgate.go gateExtend)
+	goal       *input.Point     // fixed goal of a GoTo: the mouth gate lets a waypoint inside an exit bound through when the goal lies beyond (mouthgate.go gateClick)
 	flee       *fleeState       // the step away from a cave mouth: re-checked on every replan (FIXMOUTH4)
 }
 

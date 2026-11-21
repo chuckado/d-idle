@@ -36,6 +36,11 @@ const (
 	// gatePocketFor: after an escalation, holds from inside a trigger disc are answered with the pocket rule for this
 	// long, so a walk out of the pocket does not need three refusals per step.
 	gatePocketFor = 30 * time.Second
+	// mouthCoreR: a GoTo whose goal lies beyond a refused waypoint may send it anyway when it stays this far from the
+	// exit (see gateClick). V (D2DLOOP, d2d Blood Moor, comment on exitAvoidR in nav.go): the trigger area reaches about
+	// 10 subtiles from the warp; the 15 of mouthTriggerR keeps a margin over the logged firing clicks (13.0 in the Den).
+	// U: whether a click 10 to 15 away fires in the Tower Cellars (the Tower Cellar 5 corridor passes at 13.5).
+	mouthCoreR = 10.0
 	// gateDetourMargin: the detour waypoint lies this far outside the bound.
 	gateDetourMargin = 5.0
 )
@@ -115,13 +120,16 @@ func (n *Navigator) MouthClickOK(from, to input.Point) bool {
 // step-away waypoint at 12.1 fired, DRILLS17), while long step-away clicks to targets 20 and more away never fired. From
 // outside the bound the straight segment must stay outside too (the game walks roughly that line); from inside
 // (arrival offset, after a swing or knockback) it may only move outward (leavesExit).
-func mouthClickOK(from, to, ex input.Point) bool {
-	if dist(to, ex) < mouthTriggerR {
+func mouthClickOK(from, to, ex input.Point) bool { return mouthClickOKR(from, to, ex, mouthTriggerR) }
+
+// mouthClickOKR is mouthClickOK for a bound of r subtiles.
+func mouthClickOKR(from, to, ex input.Point, r float64) bool {
+	if dist(to, ex) < r {
 		return false
 	}
 	d0 := dist(from, ex)
-	if d0 >= mouthTriggerR {
-		return segDist(ex, from, to) >= mouthTriggerR
+	if d0 >= r {
+		return segDist(ex, from, to) >= r
 	}
 	return leavesExit(from, to, d2map.Point{X: ex.X, Y: ex.Y}, d0)
 }
@@ -129,6 +137,32 @@ func mouthClickOK(from, to, ex input.Point) bool {
 func clickOKAll(from, to input.Point, exits []input.Point) bool {
 	for _, e := range exits {
 		if !mouthClickOK(from, to, e) {
+			return false
+		}
+	}
+	return true
+}
+
+// goalPocketOK is the invariant for an exit whose disc holds the walk's own goal (a GoTo to a point 14 subtiles from the
+// arrival stairs: the Countess stands there). The bound is a heuristic (V: the real trigger reaches about 10 subtiles,
+// exitAvoidR); a goal inside it cannot be reached by a click that ends outside it, so refusing every such click fails
+// the walk for good. The click may end inside, but the straight segment must never come nearer to the exit than the
+// closer of its start and the goal: the walk moves around the exit, never toward it.
+func goalPocketOK(from, to, ex, goal input.Point) bool {
+	d := math.Min(dist(from, ex), dist(goal, ex))
+	return segDist(ex, from, to) >= d-0.5
+}
+
+// okAll is clickOKAll for the click of a walk: exits whose disc holds the walk's goal use goalPocketOK.
+func (n *Navigator) okAll(from, to input.Point, exits []input.Point) bool {
+	for _, e := range exits {
+		ok := false
+		if n.goalSet && dist(n.goal, e) < mouthTriggerR {
+			ok = goalPocketOK(from, to, e, n.goal)
+		} else {
+			ok = mouthClickOK(from, to, e)
+		}
+		if !ok {
 			return false
 		}
 	}
@@ -145,13 +179,21 @@ func (n *Navigator) gateClick(ctl input.Controller, p input.Point) (input.Point,
 	if err != nil {
 		from = n.lastPos
 	}
-	if clickOKAll(from, p, exits) {
+	if n.okAll(from, p, exits) {
 		return p, nil
 	}
 	if n.gateRewrites >= gateMaxRewrites {
 		return n.hold(lm, from, p, exits, "rewrite cap")
 	}
 	q, how := n.gateRewrite(lm, from, p, exits)
+	if how == "" && n.goalSet && n.coreOK(from, p, exits) {
+		// The walk has a goal beyond this waypoint and no route clears the 15 subtile bound (V, Tower Cellar 5: the only
+		// corridor west of the arrival passes the stairs at 13.5, the click was refused for good). Send it: outside the
+		// core a fired trigger is only a level change the walk handles (ErrLevelChanged), a refusal is a dead walk.
+		n.gateRewrites++
+		n.log.Info("nav mouth gate: click sent inside the bound, goal beyond", "from", from, "to", p, "goal", n.goal, "rewrites", n.gateRewrites)
+		return p, nil
+	}
 	if how == "" {
 		return n.hold(lm, from, p, exits, "no safe click")
 	}
@@ -167,14 +209,14 @@ func (n *Navigator) gateClick(ctl input.Controller, p input.Point) (input.Point,
 func (n *Navigator) gateRewrite(lm *d2map.LevelMap, from, to input.Point, exits []input.Point) (q input.Point, how string) {
 	ex, best := exits[0], math.MaxFloat64
 	for _, e := range exits {
-		if d := dist(from, e); !mouthClickOK(from, to, e) && d < best {
+		if d := dist(from, e); !n.okAll(from, to, []input.Point{e}) && d < best {
 			ex, best = e, d
 		}
 	}
 	d0 := dist(from, ex)
 	if d0 >= mouthTriggerR {
 		c, ok := clipOutside(from, to, ex)
-		ok = ok && dist(from, c) >= gateMinClip && clickOKAll(from, c, exits)
+		ok = ok && dist(from, c) >= gateMinClip && n.okAll(from, c, exits)
 		if ok && dist(from, c) >= gateUsefulClip {
 			return c, "clip"
 		}
@@ -182,9 +224,6 @@ func (n *Navigator) gateRewrite(lm *d2map.LevelMap, from, to input.Point, exits 
 		// failed (g2e: 104 / 295 / 47 refusals per seed). Go around the disc instead.
 		if w, found := n.gateDetour(lm, from, to, ex, exits); found {
 			return w, "detour"
-		}
-		if w, found := n.gateExtend(lm, from, exits); found {
-			return w, "extend"
 		}
 		if ok {
 			return c, "clip"
@@ -213,7 +252,7 @@ func (n *Navigator) gateRewrite(lm *d2map.LevelMap, from, to input.Point, exits 
 					}
 					c = input.Point{X: x, Y: y}
 				}
-				if clickOKAll(from, c, exits) {
+				if n.okAll(from, c, exits) {
 					return c, "away"
 				}
 			}
@@ -281,10 +320,10 @@ func (n *Navigator) gateDetour(lm *d2map.LevelMap, from, to, ex input.Point, exi
 			}
 			c = input.Point{X: x, Y: y}
 		}
-		if dist(from, c) < gateMinClip || !clickOKAll(from, c, exits) {
+		if dist(from, c) < gateMinClip || !n.okAll(from, c, exits) {
 			continue
 		}
-		through := clickOKAll(c, to, exits)
+		through := n.okAll(c, to, exits)
 		cost := dist(from, c) + dist(c, to)
 		if through && !bestThrough || through == bestThrough && cost < bestCost {
 			best, bestCost, bestThrough, found = c, cost, through, true
@@ -293,48 +332,14 @@ func (n *Navigator) gateDetour(lm *d2map.LevelMap, from, to, ex input.Point, exi
 	return best, found
 }
 
-// gateExtend replaces a waypoint that lies inside an unwanted exit's bound by a click farther along toward the walk's
-// goal. Nav clicks the planner's next waypoint, and with a goal far outside the known map (a boss preset 100 subtiles
-// away) that waypoint is the edge of the known grid, which can lie within mouthTriggerR of the arrival stairs: the
-// Tower Cellar 5 hero at (125,76), stairs at (130,60), waypoint (121,70) 13.5 from them, refused for good (V, job
-// 20261121-005917). The click may go anywhere that passes the invariant (target outside the bound, segment clear),
-// is walkable in line of sight and gets closer to the goal; the one nearest the goal wins. Only for a GoTo (goalSet).
-func (n *Navigator) gateExtend(lm *d2map.LevelMap, from input.Point, exits []input.Point) (input.Point, bool) {
-	if !n.goalSet || lm == nil {
-		return input.Point{}, false
-	}
-	f := n.fieldFor(lm)
-	if f == nil {
-		return input.Point{}, false
-	}
-	d0 := dist(from, n.goal)
-	if d0 < 1 {
-		return input.Point{}, false
-	}
-	ux, uy := float64(n.goal.X-from.X)/d0, float64(n.goal.Y-from.Y)/d0
-	var best input.Point
-	bestD, found := d0-gateMinClip, false
-	for _, l := range []float64{40, 30, 20, 12} {
-		for _, deg := range []float64{0, 20, -20, 40, -40, 60, -60, 90, -90} {
-			a := deg * math.Pi / 180
-			c := input.Point{
-				X: from.X + int(math.Round(l*(ux*math.Cos(a)-uy*math.Sin(a)))),
-				Y: from.Y + int(math.Round(l*(ux*math.Sin(a)+uy*math.Cos(a)))),
-			}
-			x, y, ok := f.nearestWalkable(c.X, c.Y, 3)
-			if !ok || !f.los(from.X, from.Y, x, y, 0) {
-				continue
-			}
-			c = input.Point{X: x, Y: y}
-			if dist(from, c) < gateUsefulClip || !clickOKAll(from, c, exits) {
-				continue
-			}
-			if d := dist(c, n.goal); d < bestD {
-				best, bestD, found = c, d, true
-			}
+// coreOK: the click keeps the invariant for the core bound mouthCoreR around every gated exit.
+func (n *Navigator) coreOK(from, to input.Point, exits []input.Point) bool {
+	for _, e := range exits {
+		if !mouthClickOKR(from, to, e, mouthCoreR) {
+			return false
 		}
 	}
-	return best, found
+	return true
 }
 
 func (n *Navigator) refuse() error {
@@ -378,7 +383,7 @@ func (n *Navigator) hold(lm *d2map.LevelMap, from, p input.Point, exits []input.
 		n.log.Info("nav mouth gate: pocket escape", "from", from, "to", p, "as", q, "how", how, "why", why, "holds", h.count)
 		return q, nil
 	}
-	n.log.Info("nav mouth gate: click held", "from", from, "to", p, "why", why, "holds", h.count, "exits", exits)
+	n.log.Info("nav mouth gate: click held", "from", from, "to", p, "why", why, "holds", h.count, "exits", exits, "goal", n.goal, "goalSet", n.goalSet)
 	return input.Point{}, n.refuse()
 }
 

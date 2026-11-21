@@ -1,7 +1,6 @@
 package nav
 
 import (
-	"context"
 	"testing"
 
 	"d2lod-bot/internal/d2map"
@@ -36,50 +35,48 @@ var cellar5Starts = []struct {
 	class string
 	start input.Point
 }{
-	{"Paladin", input.Point{X: 125, Y: 76}},
-	{"Sorceress", input.Point{X: 124, Y: 74}}, // the second click of the logged walk
+	{"Paladin", input.Point{X: 124, Y: 74}}, // the second click of the logged walk
+	{"Sorceress", input.Point{X: 121, Y: 73}},
 }
 
-// Fails (ErrMouthGate, no click) without gateExtend.
-func TestGateExtendsAWaypointInsideTheStairsBound(t *testing.T) {
-	ex := mp(cellar5Stairs.Pos)
+// Fails (ErrMouthGate, no click) without the goal rule in gateClick.
+func TestGoToWaypointInsideStairsBoundGoesThroughWhenGoalBeyond(t *testing.T) {
 	for _, c := range cellar5Starts {
-		_, n := cellar5Nav(t, c.start)
+		s, n := cellar5Nav(t, c.start)
 		n.goal, n.goalSet = cellar5Goal, true
 		_, exits := n.gatedExits()
 		if clickOKAll(c.start, cellar5Edge, exits) {
-			t.Fatalf("%s: test geometry: the waypoint must be refused", c.class)
+			t.Fatalf("%s: test geometry: the waypoint must fail the 15 subtile bound", c.class)
 		}
-		q, err := n.gateClick(n.in, cellar5Edge)
-		if err != nil {
+		if err := n.in.ClickWorld(cellar5Edge); err != nil {
 			t.Fatalf("%s: gate refused the waypoint: %v", c.class, err)
 		}
-		if q == cellar5Edge || !mouthClickOK(c.start, q, ex) || dist(q, cellar5Goal) >= dist(c.start, cellar5Goal) || dist(c.start, q) < gateUsefulClip {
-			t.Fatalf("%s: sent %v from %v (%.1f from the stairs): not a safe click toward the goal", c.class, q, c.start, dist(q, ex))
+		if len(s.clicks) != 1 || s.clicks[0] != cellar5Edge {
+			t.Fatalf("%s: clicks %v", c.class, s.clicks)
 		}
 	}
 }
 
-// Whole walk: GoTo the Countess' stand makes progress west (clicks sent, no refusal) instead of failing at once.
-func TestGoToFarGoalPastStairsBound(t *testing.T) {
+// The core stays protected: a waypoint within mouthCoreR of the stairs, or a segment over them, is refused even with a goal.
+func TestGoalDoesNotOpenTheCore(t *testing.T) {
 	for _, c := range cellar5Starts {
 		s, n := cellar5Nav(t, c.start)
-		_ = n.GoTo(context.Background(), cellar5Goal) // the far end may not be reachable in the sim; the first leg is the point
-		if got := n.gateRefused.Load(); got != 0 {
-			t.Errorf("%s: %d refusals", c.class, got)
-		}
-		if len(s.clicks) == 0 {
-			t.Fatalf("%s: no click sent", c.class)
+		n.goal, n.goalSet = cellar5Goal, true
+		for _, to := range []input.Point{{X: 128, Y: 64}, {X: 135, Y: 55}} {
+			if err := n.in.ClickWorld(to); err == nil && len(s.clicks) > 0 && s.clicks[len(s.clicks)-1] == to {
+				t.Errorf("%s: click %v (%.1f from the stairs) went through", c.class, to, dist(to, mp(cellar5Stairs.Pos)))
+			}
 		}
 	}
 }
 
-// Without a walk goal (a swing, a step-away) nothing is extended and the old refusal stands.
-func TestNoExtendWithoutGoal(t *testing.T) {
-	_, n := cellar5Nav(t, input.Point{X: 125, Y: 76})
-	lm, exits := n.gatedExits()
-	if q, found := n.gateExtend(lm, input.Point{X: 125, Y: 76}, exits); found {
-		t.Fatalf("extended to %v without a goal", q)
+// Without a walk goal (a swing, a step-away) nothing changes: the click inside the bound is refused.
+func TestNoGoalNoPass(t *testing.T) {
+	for _, c := range cellar5Starts {
+		s, n := cellar5Nav(t, c.start)
+		if err := n.in.ClickWorld(cellar5Edge); err == nil && len(s.clicks) > 0 && s.clicks[len(s.clicks)-1] == cellar5Edge {
+			t.Errorf("%s: sent without a goal", c.class)
+		}
 	}
 }
 
