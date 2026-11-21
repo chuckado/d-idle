@@ -65,6 +65,10 @@ type Run struct {
 	At       time.Time `json:"at"`
 	Failures int       `json:"failures,omitempty"` // kept with a park
 	Deaths   int       `json:"deaths,omitempty"`
+	// Release is the bot release that stored a gave_up park; RetriesAfterRelease counts the one automatic retry a new
+	// release gets (additive in plan file v1: old files read both as zero).
+	Release             string `json:"release,omitempty"`
+	RetriesAfterRelease int    `json:"retries_after_release,omitempty"`
 }
 
 // Latch marks a chunk as seen done (3.6). Tier only rises.

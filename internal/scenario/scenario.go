@@ -159,6 +159,9 @@ type Trigger struct {
 	// RestartAtS stops the bot once, this many wall seconds after it started, and starts it again on the same hero and
 	// state directory with the rest of the budget (a restart of the service; managed runs only). 0: no restart.
 	RestartAtS int `json:"restart_at_s,omitempty"`
+	// RestartNewRelease makes the restart look like a new bot release: the first leg runs with D2BOT_RELEASE_ID
+	// scenario-release-1, the second with scenario-release-2 (needs restart_at_s).
+	RestartNewRelease bool `json:"restart_new_release,omitempty"`
 }
 
 // APICall is one request of Trigger.API. Path starts with /api/; the body is sent as JSON.
@@ -325,6 +328,9 @@ func (s Scenario) Validate() error {
 		if !strings.HasPrefix(c.Path, "/api/") || c.After < 0 || (c.Method != "" && c.Method != "GET" && c.Method != "POST") {
 			return fmt.Errorf("%s: trigger.api[%d]: want path /api/..., after_s >= 0, method GET or POST", at, i)
 		}
+	}
+	if s.Trigger.RestartNewRelease && s.Trigger.RestartAtS <= 0 {
+		return fmt.Errorf("%s: trigger.restart_new_release needs restart_at_s", at)
 	}
 	if s.Trigger.RestartAtS < 0 {
 		return fmt.Errorf("%s: trigger.restart_at_s must be >= 0", at)

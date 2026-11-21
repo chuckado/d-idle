@@ -2,8 +2,10 @@ package bot
 
 import (
 	"context"
+	"d2lod-bot/internal/buildinfo"
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -81,6 +83,7 @@ func (r *Runner) newQuestBoard(b *questboard.Board, st *questboard.Store, hero s
 	rt.exec = questboard.NewExec(b, st, boardEnv{rt}, boardActions{rt}, questboard.Options{
 		Enabled: r.questBoardOn(),
 		SM:      r.e.Tune.Quests.BoardSM != 0,
+		Release: botReleaseID(),
 		Log:     func(msg string, kv ...any) { r.e.Log.Info(msg, kv...) },
 		Now:     r.e.Clock.Now,
 		Auto:    r.questAutoOptions(),
@@ -1093,4 +1096,13 @@ func (r *Runner) boardPreemptsWhy(snap *d2.Snapshot, c control) (bool, string) {
 		rt.mu.Unlock()
 	}
 	return false, ""
+}
+
+// botReleaseID is the release this bot was built as (buildinfo, the ldflags stamp). D2BOT_RELEASE_ID overrides it so
+// a Proving Ground scenario can fake a new release across a restart.
+func botReleaseID() string {
+	if v := os.Getenv("D2BOT_RELEASE_ID"); v != "" {
+		return v
+	}
+	return buildinfo.Current()
 }

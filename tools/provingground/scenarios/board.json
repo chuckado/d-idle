@@ -1587,6 +1587,88 @@
    ],
    "status": "pending",
    "pending_reason": "GREEN but vacuous 2026-11-21: no allowed-auto multi-part quest exists in act 1, so nothing is tested (U until one does)"
+  },
+  {
+   "id": "board.park-retry-after-release",
+   "title": "A gave_up park of an older release is retried once after a new release starts",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 6,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    },
+    "restart_at_s": 300,
+    "restart_new_release": true
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "trigger.restart_new_release: leg 1 runs as D2BOT_RELEASE_ID scenario-release-1, leg 2 as scenario-release-2. The chunk must park with gave_up in leg 1 (U: a deterministic failing step), then leg 2 logs the one retry and, if it fails again, parks again without a third attempt. docs/probes/park-retry-after-release-2026-11-21.md.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "park cleared after release scenario-release-1 -> scenario-release-2: retrying once",
+     "min": 1,
+     "why": "the new release retries the park once"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "park cleared after release",
+     "max": 1,
+     "why": "no loop: one retry only"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "not run (no lab slot in this branch): RED first (knob off or old bot), then green; needs a deterministic gave_up park in leg 1 (U), the unit tests in internal/questboard cover the rule"
   }
  ]
 }

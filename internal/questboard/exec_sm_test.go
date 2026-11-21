@@ -205,3 +205,86 @@ func TestSMHoldIsNoFailureAndTimesOut(t *testing.T) {
 		t.Fatal("unknown hold code: see the failure counters")
 	}
 }
+
+// Park retry after a release (Q5 stays for parks that need the player): a gave_up park of another release is retried once.
+func (r *rig) restartRelease(rel string) {
+	r.t.Helper()
+	st, err := Open(r.b, r.dir, r.hero)
+	if err != nil {
+		r.t.Fatal(err)
+	}
+	r.x = NewExec(r.b, st, r.f, r.f, Options{Enabled: true, SM: true, Release: rel, Ledger: func() Ledger { return r.led }})
+}
+
+func releaseParkRig(t *testing.T, class string) *rig {
+	r := newRigSM(t, class, 6, true)
+	r.restartRelease("A")
+	if err := r.x.Accept(den, clr); err != nil {
+		t.Fatal(err)
+	}
+	fail := StepResult{StepFailed, "no path to the Den", ""}
+	r.f.Script = []StepResult{fail, fail, fail}
+	r.tick(3)
+	if d := r.next(); d.Kind != DecBlocked {
+		t.Fatalf("not parked: %+v", d)
+	}
+	return r
+}
+
+func TestSMReleaseRetriesGaveUpOnce(t *testing.T) {
+	for _, class := range smClasses {
+		t.Run(class, func(t *testing.T) {
+			// (2) same release: stays parked
+			r := releaseParkRig(t, class)
+			r.restartRelease("A")
+			if d := r.next(); d.Kind != DecBlocked {
+				t.Fatalf("same release must stay parked: %+v", d)
+			}
+			// (1) new release: retried once
+			r.restartRelease("B")
+			if d := r.next(); d.Kind != DecRun {
+				t.Fatalf("release B must retry the park: %+v", d)
+			}
+			// (4) fails again: parked, stored with B, and a restart under B does not retry again
+			fail := StepResult{StepFailed, "no path to the Den", ""}
+			r.f.Script = []StepResult{fail, fail, fail}
+			r.tick(3)
+			if d := r.next(); d.Kind != DecBlocked {
+				t.Fatalf("second failure must park again: %+v", d)
+			}
+			r.restartRelease("B")
+			if d := r.next(); d.Kind != DecBlocked {
+				t.Fatalf("no third attempt on release B: %+v", d)
+			}
+			m, _ := r.x.st.LoadSM(nil)
+			run := m.find(den, clr, "normal")
+			if run == nil || run.Release != "B" || run.RetriesAfterRelease != 1 {
+				t.Fatalf("history: %+v", run)
+			}
+		})
+	}
+}
+
+// (3) a park that needs the player is never auto-retried, and (5) the fields round trip.
+func TestSMReleaseKeepsOtherParks(t *testing.T) {
+	for _, class := range smClasses {
+		t.Run(class, func(t *testing.T) {
+			r := releaseParkRig(t, class)
+			if err := r.x.st.UpdateSM(nil, func(m *SM) error {
+				run := m.find(den, clr, "normal")
+				run.Code = "hold_timeout"
+				return nil
+			}); err != nil {
+				t.Fatal(err)
+			}
+			r.restartRelease("B")
+			if d := r.next(); d.Kind != DecBlocked {
+				t.Fatalf("hold_timeout park must stay: %+v", d)
+			}
+			m, _ := r.x.st.LoadSM(nil)
+			if run := m.find(den, clr, "normal"); run.Release != "A" || run.RetriesAfterRelease != 0 {
+				t.Fatalf("round trip: %+v", run)
+			}
+		})
+	}
+}

@@ -590,9 +590,12 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 			tap.RunVirtual(tctx, tapEveryVirtual, 250*time.Millisecond, 90*time.Second)
 		}
 	}()
-	runLeg := func(c context.Context, hrs string) error {
+	runLeg := func(c context.Context, hrs, release string) error {
 		cmd := exec.CommandContext(c, "nice", append([]string{"-n", "10", bot}, args...)...)
 		cmd.Env = append(os.Environ(), "D2BOT_INSTANCE="+inst, "D2DSOAK_HOURS="+hrs, "D2D_BIN="+d2dBin, "D2D_DATA="+gamedata)
+		if release != "" {
+			cmd.Env = append(cmd.Env, "D2BOT_RELEASE_ID="+release)
+		}
 		cmd.Stdout, cmd.Stderr = f, f
 		// a stop is the bot's own save and quit (SIGTERM), as a restart of the service would do; only a hang is killed
 		cmd.Cancel = func() error { return cmd.Process.Signal(syscall.SIGTERM) }
@@ -603,16 +606,20 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 		// trigger.restart_at_s: the bot process is stopped once and started again on the same hero and state directory
 		// (the plan file lives there), with the rest of the virtual budget. The game restarts with it (managed mode).
 		leg, stopLeg := context.WithTimeout(ctx, time.Duration(at)*time.Second)
-		err = runLeg(leg, hours)
+		rel1, rel2 := "", ""
+		if s.Trigger.RestartNewRelease {
+			rel1, rel2 = "scenario-release-1", "scenario-release-2"
+		}
+		err = runLeg(leg, hours, rel1)
 		stopLeg()
 		if ctx.Err() == nil {
 			b, _ := os.ReadFile(trace)
 			rest := restHours(s.Budget.VirtualMin, lastVirtualMin(b))
 			_, _ = fmt.Fprintf(f, "\nd2scenario: bot restarted after %d s (virtual %.1f min done)\n", at, lastVirtualMin(b))
-			err = runLeg(ctx, rest)
+			err = runLeg(ctx, rest, rel2)
 		}
 	} else {
-		err = runLeg(ctx, hours)
+		err = runLeg(ctx, hours, "")
 	}
 	stopTap()
 	<-done
