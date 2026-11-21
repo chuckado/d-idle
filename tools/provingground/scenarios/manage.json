@@ -1,0 +1,271 @@
+{
+  "version": "didle.scenario/1",
+  "scenarios": [
+    {
+      "id": "manage.equip-immediate",
+      "title": "Hero fighting in a field with an upgrade in the pack: equipped from the Inventory sheet within 2 s of the tap, no town visit, the fight continues, the old item stays in the pack",
+      "kind": "behaviour",
+      "tier": "fast",
+      "status": "pending",
+      "pending_reason": "the runner cannot substitute the id of a given item into trigger.api bodies ({{item.1}}) nor read the Recall state; the bot side, the routes and the offline tests are done (docs/process/management-fast-path.md). Run as the live checklist there.",
+      "covers": [
+        "manage.equip-instant"
+      ],
+      "touches": [
+        "internal/invdesk/instant.go",
+        "cmd/d2bot/invverbs.go"
+      ],
+      "pre": {
+        "level": 14,
+        "gold": 0,
+        "items": [
+          {
+            "code": "cap",
+            "where": "pack",
+            "quality": 4
+          },
+          {
+            "code": "cap",
+            "where": "body",
+            "quality": 2
+          }
+        ]
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "ui.managementFast": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/inventory/equip",
+            "body": {
+              "id": "{{item.1}}",
+              "slot": "head"
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 6
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.equip"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level and the given items by the debug give verb. Not evidence about balance or parity.",
+      "notes": "Both classes wear a helm (cap). RED first: with ui.managementFast 0 the same request waits for the bot's safe moment and the assert on the 2 s window fails.",
+      "assert": [
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "body",
+          "why": "the upgrade is worn"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "pack",
+          "min": 1,
+          "why": "the swapped-out helm stays in the pack, never dropped"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "(drop|trash|sold|sell).*cap",
+          "max": 0,
+          "why": "nothing was dropped or sold"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "totown|to town",
+          "max": 0,
+          "why": "no town visit"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    },
+    {
+      "id": "manage.identify-immediate",
+      "title": "An unidentified item in the pack and an identify scroll: identified from the sheet at once, in the field",
+      "kind": "behaviour",
+      "tier": "fast",
+      "status": "pending",
+      "pending_reason": "the runner cannot substitute the id of a given item into trigger.api bodies ({{item.1}}) nor read the Recall state; the bot side, the routes and the offline tests are done (docs/process/management-fast-path.md). Run as the live checklist there.",
+      "covers": [
+        "manage.identify-instant"
+      ],
+      "touches": [
+        "internal/invdesk/instant.go",
+        "cmd/d2bot/invverbs.go"
+      ],
+      "pre": {
+        "level": 14,
+        "gold": 0,
+        "items": [
+          {
+            "code": "cap",
+            "where": "pack",
+            "quality": 4
+          },
+          {
+            "code": "isc",
+            "where": "pack"
+          }
+        ]
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "ui.managementFast": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/inventory/identify",
+            "body": {
+              "id": "{{item.1}}"
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 6
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.identify"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level and the given items by the debug give verb. Not evidence about balance or parity.",
+      "notes": "U: the assertion that the item reads identified needs the observer; the log line is the weaker stand-in.",
+      "assert": [
+        {
+          "kind": "log_line",
+          "pattern": "identify.*cap",
+          "min": 1,
+          "why": "the lane identified it"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "totown|to town",
+          "max": 0,
+          "why": "no town visit"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    },
+    {
+      "id": "manage.recall-now",
+      "title": "Hero in the field, a Vault item to equip: Recall now walks home at the next safe moment, the order runs in town, the hero returns to the goal",
+      "kind": "behaviour",
+      "tier": "fast",
+      "status": "pending",
+      "pending_reason": "the runner cannot substitute the id of a given item into trigger.api bodies ({{item.1}}) nor read the Recall state; the bot side, the routes and the offline tests are done (docs/process/management-fast-path.md). Run as the live checklist there. It also needs the vault record seeding of vault.equip-one-tap.",
+      "covers": [
+        "manage.recall-now"
+      ],
+      "touches": [
+        "internal/bot/recall.go",
+        "internal/watch/recallapi.go",
+        "internal/vaultkeep/equip.go"
+      ],
+      "pre": {
+        "level": 14,
+        "gold": 500,
+        "items": [
+          {
+            "code": "cap",
+            "where": "vault",
+            "quality": 4
+          }
+        ]
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "ui.managementFast": 1,
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.1}}"
+              ],
+              "slot": "auto"
+            }
+          },
+          {
+            "after_s": 22,
+            "path": "/api/recall",
+            "body": {}
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 6
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level and the given items by the debug give verb. Not evidence about balance or parity.",
+      "notes": "The hero must leave town before the second call: start in the field area.",
+      "assert": [
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "body",
+          "why": "the helm is worn"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "recall trip",
+          "min": 1,
+          "why": "the recall walk ran"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    }
+  ]
+}
