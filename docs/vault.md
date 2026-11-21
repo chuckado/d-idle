@@ -208,3 +208,31 @@ Record the `.bak` of the hero before step 2 and restore it if anything differs.
 The account wallet is ETHER, implemented in `internal/ether` and described in [ether.md](ether.md): it implements `vault.Account` and `vault.Wallet`, derives the owned capacity steps and the balance by ledger replay, and serves `GET /api/ether`, `POST /api/vault/upgrade` and `POST /api/vault/downgrade` (`internal/watch/etherapi.go`). The store's `Options.Capacity` is `wallet.Capacity(override)`; shrinking (refund of the last step) is allowed only while the active hero's count fits the lower tier. Wired into the bot in V7b behind `loot.vault` (docs/ether.md "Wiring"); not run live.
 
 The old Cards tab and its count are gone (docs/unlock-idreveal.md, 2026-11-19); a reveal is a tap on the row.
+
+## Equip (one tap: `internal/vaultkeep/equip.go`, `POST /api/vault/equip`)
+
+> status: BUILT offline, NOT run against a live game (U). V: `go test -race -count=20 ./internal/vaultkeep ./internal/invdesk ./internal/watch -run 'Equip|Vault'` (orders against `d2dctl.VaultFake` and a fake hero body on a Sorceress and a Paladin, must-fail tests, node tests of the sheet logic). The Proving Ground scenarios `vault.equip-one-tap`, `vault.equip-swap`, `vault.equip-ring-left`, `vault.equip-ring-right` (`tools/provingground/scenarios/vaultequip.json`) are declared `pending`: the runner cannot yet seed a vault record, a worn start item or the record id in an API body. The RED then green run on the lab d2d is the live checklist below.
+
+What it is: the item sheet of a Vault item offers Equip beside Take out (Keep). Equip is Keep to the backpack plus the equip in the SAME town visit. Knob `loot.vaultEquip` (default 0; needs `loot.vault` 1 and `loot.vaultKeep` 1; forced off in measured runs, `D2BOT_RUN`): with 0 the sheet button is hidden and every route answers 409 `off`.
+
+Routes (answer listener, same auth as the other vault orders; the page sends them, nothing else may use the live token):
+| Route | What |
+|---|---|
+| `POST /api/vault/equip` | `{ids:[one id], slot: auto\|left\|right, now}`; queues the Keep (target inv) and records the order. Idempotent: the same item and slot again answers ok with `already`; another slot for an item with an active order, or a slot another active order claims, is refused (`busy`, `slot`). `now` asks for the Keep-now errand trip (the bot walks home at the next safe moment, as Keep now: no fight, no trip; the existing Town Portal path of `errandTripStep`). Refusals with the real sentence: `reveal` (unidentified: Reveal first), `unwearable` (charms, potions; belt and backpack items are out of scope), `requirements` (level, strength, dexterity, class, two-hand), `off`, `dead`, `verbs`, `state` |
+| `POST /api/vault/equipcancel` | `{ids:[id]}`; withdraws an order whose Keep has not started; after the withdraw it only stops the order |
+| `GET /api/vault/equip/<id>` | the sheet: `enabled`, `offWhy`, `wearable`, `why`, `reveal`, `req`, `slots[]` (`slot`, `label`, `side` left/right for rings, `worn` {name, lines, score}, `can`, `why`, `note`, `upgrade`), `order` and `line`; polled every 3 s by the open sheet while an order is active |
+
+Order states: `queued` (waiting for town) -> `withdrawing` -> `equipping` -> `done` | `failed(reason)` | `cancelled`. Persisted in `<hero>/vault/equip.json` (one hero per process, as the Keeper). Executor `Keeper.runEquip` runs after `runKeep` in `Run` (town, safe moment, hero ready): find the created unit, `Hand.Pick` the slot, `Hand.Wear` (`invdesk.Desk.EquipNow`: the same checks and the verified verb-or-click executor the Inventory page uses, then the slot PIN), read the equipment back (`WornUnit`: a verb that answered ok but did not wear fails the order `verify`), then every item that came off (the replaced one, and the shield a two-hander pushed off) is recorded in the vault BEFORE it leaves the hero (`ItemVault`); if the vault cannot take it (full, pinned) it stays in the backpack under the keep mark (never dropped or sold) and the order says `where: backpack`; if the removal fails after the record, the record is archived again so the item exists once.
+
+Slots: `auto` takes an empty slot first, else the weaker worn one (the gear rule's score); a ring also has `left` (the game's left ring, `lring`) and `right` (`rring`), the words of the Inventory page. S: which ring is drawn on which side of the paperdoll differs between the art and the grid fallback of the Inventory page; U live. The other ring is untouched (test `TestEquipRingSidesAndAuto`). No other slot is paired.
+
+Pin: the slot pin of the desk (`invdesk.Pin`), so the bot's gear logic (`leveler` pinned score, `town.SetPinned`) never undoes the pick. The existing decision (user, 2026-11-09) is a pin without expiry until the player unpins or changes the slot; there is no N-minute timer.
+
+Upgrade hint: from the gear rule's score on a stand-in unit built from the record; shown only for plain and superior candidates (affixed items cannot be scored from the record: the sheet then says "compare the lines"). U.
+
+Live checklist (not run; lab d2d build with the item verbs and `--vault-verbs`, hidden slot, throwaway hero, `loot.vault` 1, `loot.vaultKeep` 1, `loot.vaultEquip` 1, NO `D2BOT_RUN` for the order part):
+1. Seed one helm in the Vault (give it, read `item full`, `item vault`, add the record) and one worn helm; Paladin 11 and Sorceress 3.
+2. `POST /api/vault/equip` with the record id and slot `auto` using a scenario-local token; poll `GET /api/vault/equip/<id>`: queued, withdrawing, equipping, done within one visit.
+3. Read the equipment: the vault helm is worn, the old helm is a live vault record and not in the hero, `writes after start: 0`.
+4. Rings: both fingers worn, press left, then right in a second run: only the chosen slot changes.
+5. Repeat with the vault full of pinned records: the old item stays in the backpack, marked keep, and is not sold at the next chore.
