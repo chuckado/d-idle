@@ -377,6 +377,7 @@
 | town10 | proposed | - | `internal/arbiter`<br>`internal/supply` | - |
 | town11 | proposed | - | `internal/town`<br>`docs/town.md`<br>`town-basics` | - |
 | town12 | proposed | - | `docs/design/fable-review-2026-11-21/town-profiles-sme.md` | - |
+| bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -412,6 +413,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 15543d7d7 11-21 02:03 `Merge agent/bsm4: agent/bsm4 quest board state machine card` (bsm4)
 - d167f6aa5 11-21 01:57 `Merge agent/bsm3: agent/bsm3 quest board state machine card` (bsm3)
 - d91bf5058 11-21 01:36 `Merge agent/bsm2: agent/bsm2 quest board state machine card` (bsm2)
 - 2e5f6968d 11-21 01:35 `Merge branch 'main' into TASK-750` (-)
@@ -421,5 +423,4 @@
 - 6a0957473 11-21 01:23 `Merge branch 'main' into TASK-717` (-)
 - 019caff49 11-21 01:15 `Merge agent/town4: town4: stage 2 guards, chunk preconditions and shop read the supply plan behind town.plan>=2 (default 0)` (town4)
 - 6288cd22f 11-21 01:14 `Merge branch 'main' into town4` (-)
-- d28021ec7 11-21 01:06 `Merge agent/town3: town3: supply NeedFor/Solve, profiles, knob town.plan default 0, stage 1 shadow trace (no behaviour change)` (town3)
 <!-- statusgen:end -->

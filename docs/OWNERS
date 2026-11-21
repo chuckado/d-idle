@@ -453,6 +453,7 @@ docs/knobs.md  credit-runner  agencyp0
 docs/knobs.md  credit-runner  botcpu2
 docs/knobs.md  credit-runner  botinstant
 docs/knobs.md  credit-runner  botstuck
+docs/knobs.md  credit-runner  bsm4
 docs/knobs.md  credit-runner  bulkid
 docs/knobs.md  credit-runner  cainfix3
 docs/knobs.md  credit-runner  countess3
@@ -880,6 +881,7 @@ internal/bot/pointsgate_test.go  credit-runner  agencyp0
 internal/bot/portalburn_test.go  credit-runner  survhold2
 internal/bot/questauto.go  credit-runner  quests8
 internal/bot/questauto_test.go  credit-runner  quests8
+internal/bot/questboard.go  credit-runner  bsm4
 internal/bot/questboard.go  credit-runner  cainchain
 internal/bot/questboard.go  credit-runner  questrun
 internal/bot/questboard.go  credit-runner  quests10
@@ -1113,6 +1115,7 @@ internal/env/tuning_loot.go  credit-runner  vaultv3
 internal/env/tuning_loot.go  credit-runner  vaultv5
 internal/env/tuning_loot.go  credit-runner  vaultv6
 internal/env/tuning_nav.go  credit-runner  pursuers
+internal/env/tuning_quests.go  credit-runner  bsm4
 internal/env/tuning_quests.go  credit-runner  countess3
 internal/env/tuning_quests.go  credit-runner  quests3
 internal/env/tuning_quests.go  credit-runner  quests8
@@ -1283,7 +1286,10 @@ internal/questboard/chunks_test.go  credit-runner  quests7b
 internal/questboard/def.go  credit-runner  cainfix3
 internal/questboard/desk.go  credit-runner  questrun
 internal/questboard/desk_test.go  credit-runner  questrun
+internal/questboard/exec.go  credit-runner  bsm4
 internal/questboard/exec.go  credit-runner  questrun
+internal/questboard/exec_sm.go  credit-runner  bsm4
+internal/questboard/exec_sm_test.go  credit-runner  bsm4
 internal/questboard/plan.go  credit-runner  bsm3
 internal/questboard/sm.go  credit-runner  bsm2
 internal/questboard/sm_reason.go  credit-runner  bsm2

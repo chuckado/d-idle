@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- agent/bsm4 quest board state machine card <!--sg:agent/bsm4-->
 - agent/bsm3 quest board state machine card <!--sg:agent/bsm3-->
 - agent/bsm2 quest board state machine card <!--sg:agent/bsm2-->
 - town planner stage 1 and 2 record (docs only) <!--sg:agent/townprobe-->
