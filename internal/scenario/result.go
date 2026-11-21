@@ -45,6 +45,8 @@ type Result struct {
 	Digest string `json:"digest,omitempty"`
 	// AssertDigest is D1 (assertion digest.go): verdict-level facts only; equal verdict and equal D1 are the gate.
 	AssertDigest string `json:"assert_digest,omitempty"`
+	// Journal is the path of the d2dctl command journal of the bot run (run -journal), for d2ddet compare.
+	Journal string `json:"journal,omitempty"`
 	// Prov records the binaries, host role, load and pace of the run (nil in results written before it existed).
 	Prov *Provenance `json:"prov,omitempty"`
 }

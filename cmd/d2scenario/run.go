@@ -37,6 +37,7 @@ func cmdRun(args []string, w io.Writer) error {
 	dry := fs.Bool("dry-run", false, "print what would run, start nothing")
 	slot := fs.String("slot", "tools/d2dslot.sh", "slot wrapper")
 	bot := fs.String("bot", os.Getenv("D2BOT_BIN"), "d2bot binary (env D2BOT_BIN)")
+	journal := fs.Bool("journal", false, "write the d2dctl command journal of each bot run next to its trace (determinism finder, cmd/d2ddet)")
 	if _, err := parseArgs(fs, args); err != nil {
 		return err
 	}
@@ -89,6 +90,9 @@ func cmdRun(args []string, w io.Writer) error {
 	cmdFor := func(r scenario.Run) []string {
 		a := []string{*slot, "run", "-w", "3000", "-t", strconv.Itoa(by[r.ID].Budget.WallMin*60 + 600), "--", self, "exec-one",
 			"-dir", *dir, "-id", r.ID, "-class", r.Class, "-seed", strconv.FormatInt(r.Seed, 10), "-out", *out, "-bot", *bot}
+		if *journal {
+			a = append(a, "-journal")
+		}
 		return a
 	}
 	if *dry {
@@ -180,6 +184,7 @@ func cmdExecOne(args []string) error {
 	seed := fs.Int64("seed", 0, "seed")
 	out := fs.String("out", "", "output directory")
 	bot := fs.String("bot", "", "d2bot binary")
+	journal := fs.Bool("journal", false, "write the d2dctl journal of the bot run")
 	if _, err := parseArgs(fs, args); err != nil {
 		return err
 	}
@@ -193,7 +198,13 @@ func cmdExecOne(args []string) error {
 	}
 	r := scenario.Run{ID: s.ID, Class: *class, Seed: *seed}
 	start := time.Now()
+	if *journal {
+		os.Setenv(journalEnv, filepath.Join(*out, strings.TrimSuffix(resultName(r), ".json")+".jnl"))
+	}
 	res := execOne(s, r, *out, *bot)
+	if *journal {
+		res.Journal = os.Getenv(journalEnv)
+	}
 	res.Version, res.Run = scenario.ResultVersion, r
 	if res.Status == "" { // not blocked by the infrastructure: judge the observed state
 		if res.State == nil {
@@ -464,6 +475,10 @@ func writeBoardAndTuning(state, hero string, su scenario.Setup) error {
 	}
 	return nil
 }
+
+// journalEnv is the variable cmd/d2bot (internal/d2denv) reads to write the d2dctl command journal; exec-one sets it for
+// the bot it starts (runBot inherits the environment) when run -journal asks for it.
+const journalEnv = "D2DCTL_JOURNAL"
 
 // tapEveryVirtual is the virtual-second grid of the board tapper (was: 20 wall s, then every 5 wall s).
 const tapEveryVirtual = 30
