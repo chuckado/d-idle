@@ -21,7 +21,9 @@ owns:
   - "internal/bot/task.go"
   - "internal/bot/contracts.go"
   - "cmd/d2bot/adapters.go"
+  - "docs/probes/chores2-2026-11-21.md"
 exclusive: []
+result: "Restock and stash withdraw now satisfy the route guard kit (belt+pack, KitHealing), kit-only guard block inserts chores; unit tests Paladin+Sorceress green on the builder; live on the builder the guard restocks, but act1.tools.malus Paladin 11 stays BLOCKED (cheated hero drains potions on the road); not verified GREEN"
 contracts: []
 ---
 
@@ -35,6 +37,6 @@ Why: the route guard counts 4 healing potions (belt + pack), the belt plan of a 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Must-fail unit tests on Paladin and Sorceress: a belt full to the plan but under KitMinHP healing buys, withdraws from the stash
+- [x] #1 Must-fail unit tests on Paladin and Sorceress: a belt full to the plan but under KitMinHP healing buys, withdraws from the stash
 - [ ] #2 act1.tools.malus Paladin 11 and Sorceress 3 GREEN on the builder (CHEATED setup, mechanics only)
 <!-- AC:END -->
