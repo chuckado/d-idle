@@ -465,5 +465,50 @@
   "plan": "Blessed Hammer",
   "best": "Blessed Hammer",
   "agree": true
+ },
+ {
+  "table": "barbarian_frenzy_guide",
+  "class": "barbarian",
+  "clvl": 6,
+  "profile": "Double Swing",
+  "plan": "Double Swing",
+  "best": "Bash",
+  "agree": true
+ },
+ {
+  "table": "barbarian_frenzy_guide",
+  "class": "barbarian",
+  "clvl": 12,
+  "profile": "Double Swing",
+  "plan": "Double Swing",
+  "best": "Bash",
+  "agree": true
+ },
+ {
+  "table": "barbarian_frenzy_guide",
+  "class": "barbarian",
+  "clvl": 18,
+  "profile": "Double Swing",
+  "plan": "Double Swing",
+  "best": "Bash",
+  "agree": true
+ },
+ {
+  "table": "barbarian_frenzy_guide",
+  "class": "barbarian",
+  "clvl": 24,
+  "profile": "Double Swing",
+  "plan": "Double Swing",
+  "best": "Bash",
+  "agree": true
+ },
+ {
+  "table": "barbarian_frenzy_guide",
+  "class": "barbarian",
+  "clvl": 30,
+  "profile": "Frenzy",
+  "plan": "Frenzy",
+  "best": "Frenzy",
+  "agree": true
  }
 ]

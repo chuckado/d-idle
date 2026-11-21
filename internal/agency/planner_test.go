@@ -29,7 +29,7 @@ type agreementRow struct {
 var agreementTables = []string{
 	"sorceress_normal30", "fallback-lightning-v2", "sorceress_blizzard_endgame90",
 	"paladin-zealot-lite", "paladin-normal30-v2", "paladin_hammerdin_endgame90",
-	"barbarian_melee_normal30", "necromancer_summoner_normal30", "necromancer_summoner_guide", "paladin_hammerdin_guide", // paper: no engine support needed, the table marks the kinds
+	"barbarian_melee_normal30", "necromancer_summoner_normal30", "necromancer_summoner_guide", "paladin_hammerdin_guide", "barbarian_frenzy_guide", // paper: no engine support needed, the table marks the kinds
 }
 
 func computeAgreement(t *testing.T) []agreementRow {
