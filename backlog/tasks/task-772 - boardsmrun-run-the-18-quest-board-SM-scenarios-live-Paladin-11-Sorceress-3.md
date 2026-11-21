@@ -1,10 +1,11 @@
 ---
 id: TASK-772
 title: 'boardsmrun: run the 18 quest-board SM scenarios live (Paladin 11, Sorceress 3)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T13:46:00Z'
+updated_date: '2026-11-21T17:23:00Z'
 labels:
   - bot
   - probe

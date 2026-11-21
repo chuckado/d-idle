@@ -334,7 +334,6 @@ cmd/d2dview  credit-runner  videofeed2
 cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
 cmd/d2scenario  credit-runner  boardorder
-cmd/d2scenario  credit-runner  boardsmrun
 cmd/d2scenario  credit-runner  bsm1
 cmd/d2scenario/  credit-runner  pgexpand
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
@@ -539,7 +538,6 @@ docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/points.md  credit-runner  agencyp0
-docs/probes/boardsm-scenarios-2026-11-21.md  credit-runner  boardsmrun
 docs/probes/bot-cpu-2026-11-16.md  credit-runner  botcpu
 docs/probes/bot-cpu-fix-2026-11-16.md  credit-runner  botcpu2
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
@@ -1362,7 +1360,6 @@ internal/resource/tuning.go  credit-runner  agencyp0
 internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
 internal/scenario  credit-runner  boardorder
-internal/scenario  credit-runner  boardsmrun
 internal/scenario  credit-runner  bsm1
 internal/scenario/  credit-runner  dlv-reads
 internal/scenario/  credit-runner  pgexpand
@@ -2053,7 +2050,6 @@ tools/provingground/scenarios/act1more.json  credit-runner  act1more
 tools/provingground/scenarios/act1more.json  credit-runner  andariel1
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/behaviours.json  credit-runner  vaultequip
-tools/provingground/scenarios/board.json  credit-runner  boardsmrun
 tools/provingground/scenarios/board.json  credit-runner  bsm1
 tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
