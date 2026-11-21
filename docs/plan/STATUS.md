@@ -384,6 +384,7 @@
 | pgledgeron | in-progress | - | `docs/process/pg-ledger-ops.md`<br>`tools/provingground/run.sh`<br>`tools/provingground/pgenv.sh`<br>`tools/provingground/pgenv_test.sh` | - |
 | vaultreveal | proposed | - | `internal/vaultkeep`<br>`internal/bulkid`<br>`internal/watch/vaultapi_gold.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.json`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultapi_gold_test.go`<br>`internal/watch/vaultreveal_ui_test.go`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`internal/watch/testdata/vault_logic.mjs`<br>`internal/env/tuning_loot.go`<br>`internal/town/playerid.go`<br>`docs/knobs.md`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`tools/provingground/scenarios/vaultreveal.json` | - |
 | heavyguard | proposed | - | `tools/lib/heavy-guard.sh`<br>`tools/lib/heavy-guard-test.sh`<br>`tools/uishots.sh`<br>`docs/process/worker-capacity.md` | - |
+| bsm6 | proposed | - | `internal/questboard/desk.go`<br>`internal/questboard/desk_reason.go`<br>`internal/questboard/desk_reason_test.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec.go`<br>`internal/watch/questsapi.go`<br>`docs/questboard.md`<br>`docs/probes/boardsm-progress-2026-11-21.md`<br>`tools/provingground/scenarios/board.json`<br>`internal/scenario/board.go`<br>`internal/scenario/board_test.go`<br>`internal/scenario/state.go`<br>`internal/watch/testdata/quests/` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -419,6 +420,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 1e0ad25aa 11-21 13:28 `Merge agent/bsm6: Merge branch 'main' into bsm6` (bsm6)
+- f450d3ee4 11-21 13:27 `Merge branch 'main' into bsm6` (-)
 - b78530494 11-21 12:12 `Merge agent/boardsmrun: Merge branch 'main' into boardsmrun` (boardsmrun)
 - 47772d90c 11-21 12:11 `Merge branch 'main' into boardsmrun` (-)
 - b6d4ffb6f 11-21 11:12 `Merge agent/vaultreveal: Merge branch 'main' into vaultreveal` (vaultreveal)
@@ -427,6 +430,4 @@
 - f202af3c1 11-21 11:05 `Merge branch 'main' into TASK-721` (-)
 - 3e70158f6 11-21 11:01 `Merge agent/pgc6: pg gate group 2 record (cost-cut cards, measurements, what is enforced)` (pgc6)
 - e475e2ade 11-21 11:01 `Merge agent/survhold8: Merge branch 'main' into survhold8` (survhold8)
-- 54c9494d2 11-21 10:58 `Merge branch 'main' into pgc6` (-)
-- 585d6f347 11-21 10:58 `Merge branch 'main' into survhold8` (-)
 <!-- statusgen:end -->

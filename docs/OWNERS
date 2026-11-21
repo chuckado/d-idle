@@ -538,6 +538,7 @@ docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/points.md  credit-runner  agencyp0
+docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm6
 docs/probes/bot-cpu-2026-11-16.md  credit-runner  botcpu
 docs/probes/bot-cpu-fix-2026-11-16.md  credit-runner  botcpu2
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
@@ -614,6 +615,7 @@ docs/process/worker-capacity.md  credit-runner  heavyguard
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
 docs/quest-hints.md  live-agent  questdrill
+docs/questboard.md  credit-runner  bsm6
 docs/questboard.md  credit-runner  cain45
 docs/questboard.md  credit-runner  cain5b
 docs/questboard.md  credit-runner  cainfix3
@@ -1333,12 +1335,17 @@ internal/questboard/chunks_test.go  credit-runner  cain5b
 internal/questboard/chunks_test.go  credit-runner  quests7b
 internal/questboard/def.go  credit-runner  cainfix3
 internal/questboard/desk.go  credit-runner  andariel1
+internal/questboard/desk.go  credit-runner  bsm6
 internal/questboard/desk.go  credit-runner  questrun
+internal/questboard/desk_reason.go  credit-runner  bsm6
+internal/questboard/desk_reason_test.go  credit-runner  bsm6
 internal/questboard/desk_test.go  credit-runner  andariel1
 internal/questboard/desk_test.go  credit-runner  questrun
 internal/questboard/exec.go  credit-runner  bsm4
+internal/questboard/exec.go  credit-runner  bsm6
 internal/questboard/exec.go  credit-runner  questrun
 internal/questboard/exec_sm.go  credit-runner  bsm4
+internal/questboard/exec_sm.go  credit-runner  bsm6
 internal/questboard/exec_sm_test.go  credit-runner  bsm4
 internal/questboard/sm.go  credit-runner  bsm2
 internal/questboard/sm_reason.go  credit-runner  bsm2
@@ -1365,6 +1372,8 @@ internal/scenario/  credit-runner  dlv-reads
 internal/scenario/  credit-runner  pgexpand
 internal/scenario/assertdigest.go  credit-runner  pgdigest
 internal/scenario/assertdigest_test.go  credit-runner  pgdigest
+internal/scenario/board.go  credit-runner  bsm6
+internal/scenario/board_test.go  credit-runner  bsm6
 internal/scenario/determinism.go  credit-runner  pgdigest
 internal/scenario/earned.go  credit-runner  pgearned
 internal/scenario/hero  credit-runner  pghero
@@ -1382,6 +1391,7 @@ internal/scenario/scenario_test.go  credit-runner  barb1
 internal/scenario/scenario_test.go  credit-runner  druid1
 internal/scenario/stability.go  credit-runner  pgstability
 internal/scenario/state.go  credit-runner  agencyp0
+internal/scenario/state.go  credit-runner  bsm6
 internal/scenario/state.go  credit-runner  town1
 internal/scenario/taps.go  credit-runner  pgtaps
 internal/senses  credit-runner  botcpu
@@ -1606,6 +1616,7 @@ internal/watch/pointsapi.go  credit-runner  agencyp0
 internal/watch/pointsapi_test.go  credit-runner  agencyp0
 internal/watch/pointsui.go  credit-runner  agencyp0
 internal/watch/pprofapi.go  credit-runner  botcpu2
+internal/watch/questsapi.go  credit-runner  bsm6
 internal/watch/questsapi.go  credit-runner  quests4
 internal/watch/questsapi.go  credit-runner  quests8
 internal/watch/questsapi_test.go  credit-runner  quests10
@@ -1699,6 +1710,7 @@ internal/watch/testdata/quests  credit-runner  quests10
 internal/watch/testdata/quests  credit-runner  quests4
 internal/watch/testdata/quests  credit-runner  quests7
 internal/watch/testdata/quests  credit-runner  quests8
+internal/watch/testdata/quests/  credit-runner  bsm6
 internal/watch/testdata/questui  credit-runner  quests10
 internal/watch/testdata/questui  credit-runner  quests8
 internal/watch/testdata/reset  credit-runner  botreset
@@ -2051,6 +2063,7 @@ tools/provingground/scenarios/act1more.json  credit-runner  andariel1
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/behaviours.json  credit-runner  vaultequip
 tools/provingground/scenarios/board.json  credit-runner  bsm1
+tools/provingground/scenarios/board.json  credit-runner  bsm6
 tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
