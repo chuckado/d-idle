@@ -600,7 +600,10 @@ func (n needsOf) Want(kind string, b *data.ItemBase) bool {
 			}
 		}
 		if tomeU != nil {
-			return n.tomeQty(*tomeU) < TomeCap // user rule: only until the tome is full, no loose scrolls beside it
+			// Only until the tome is full (d2d and game.exe put a picked scroll into a tome with room). A tome that is
+			// full, or whose count read short (a missing stat 70 reads as empty), leaves the scroll loose in a cell:
+			// the sandbox hero held 22 of them. The loose count is capped whatever the read said.
+			return n.tomeQty(*tomeU) < TomeCap && have < n.l.e.Tune.Town.LooseScrollKeep
 		}
 		// No tome: scrolls do not stack, each takes a cell, so carry only the shopping target (a pack of 20 loose
 		// scrolls was half the backpack).

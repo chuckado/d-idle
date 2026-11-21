@@ -603,6 +603,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [townshop.md](townshop.md): Town resupply in Gate 2 (townshop) (status: current. Tags: V = counted in the Gate 2 bot log (read-only), S = code, U = unverified.)
 - [towntests.md](towntests.md): Table-dependent tests that rotted (TASK-401)
 - [townwedge.md](townwedge.md): townwedge: the permanent town-exit wedge (status: fix merged with card townwedge. Tags: VERIFIED = log line or test, INFERRED = reading. Evidence:...)
+- [tphoard.md](tphoard.md): tphoard: loose town portal scrolls beside a tome (status: current (card tphoard, 2026-11-20). Tags: V verified (command or source named), S secondary, U unverified.)
 - [ui-design-system.md](ui-design-system.md): d.idle watch UI design system (TASK-228, uidesign) (status: accepted design (user decisions 2026-11-09 in section 13), being implemented in small PRs (section 15)....)
 - [ui-overlays.md](ui-overlays.md): Watch UI overlays: one at a time, one layer scale
 - [ui-regression-plan.md](ui-regression-plan.md): Watch UI regression tests and migration plan (TASK-228, uidesign) (status: proposal (2026-11-09); built so far: see ui-design-system.md section 15 (row 14 `uilayout` is section...)
@@ -844,6 +845,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [api-credits.md](process/api-credits.md): API credits: PR review and the optional Haiku tick
 - [backlog-board-nas.md](process/backlog-board-nas.md): Backlog.md web board on the NAS (read-only mirror) (status: DEPLOYED 2026-11-05 as a NAS Docker-tab template (variant B: own br0 address behind Nginx Proxy Manager...)
+- [barbarian-support.md](process/barbarian-support.md): Barbarian Frenzy: what the engine plays, and what a later card must build (status: current (card barb1, 2026-11-20; Fable roadmap Q8, class 4 after the Sorceress fire build, the Necromancer...)
 - [baseline-runs.md](process/baseline-runs.md): Baseline runs: the extra original-game runs (card baselineruns) (status: current, PREPARED ONLY (2026-11-01). Nothing here was run live; no game was started. The launcher is...)
 - [board-cards.md](process/board-cards.md): Board cards (status: moved to the private ops repo (d2lod-ops, `docs/process/board-cards.md`). Not part of the public tree.)
 - [build-hosts-2026-11-14.md](process/build-hosts-2026-11-14.md): Build hosts: moving builds off the worker host (2026-11-14) (status: study, nothing applied. Request (user, 2026-11-14): stop building on the worker host while the user plays;...)
@@ -874,6 +876,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [grill-queue-2026-11-11.md](process/grill-queue-2026-11-11.md): Grill queue 2026-11-11: paste-ready decisions, ADR drafts and glossary text (status: input for the user's next grill session (TASK-342). Docs only. Nothing here is written to...)
 - [grill-workflow.md](process/grill-workflow.md): Grill workflow: deciding with the user in a dedicated session (status: the "create change cards with changecheck new" step is retired for new work (OpenSpec retired, user...)
 - [guarded-proposals.md](process/guarded-proposals.md): Guarded-file proposals from the roadmap decisions (2026-10-31) (status: APPLIED 2026-10-31 by card grillapply: the decisions index has the lines, the milestones/WIP ADR is ADR...)
+- [hammerdin-support.md](process/hammerdin-support.md): Paladin Hammerdin: what the engine plays, and what a later card must build (status: current (card hammer1, 2026-11-20; Fable roadmap Q8, class 3 after the Sorceress fire build and the...)
 - [hooks.md](process/hooks.md): Hooks (change card `hooks`) (status: current since OpenSpec removal stage 5 (2026-11-04): changecheck and `openspec/` are gone; the pre-push...)
 - [layout-read.md](process/layout-read.md): Level layout read (K1, ADR 0022) (status: current (2026-11-20). Tags: V = verified (say how), U = unverified.)
 - [matt-pocock-skills-fit.md](process/matt-pocock-skills-fit.md): Matt Pocock skills plugin: fit for d2lod-bot (PLUGINFIT, 2026-10-30) (status: 2026-10-30 plugin fit; its "tracker = OpenSpec change cards" answer is superseded: OpenSpec is retired for...)

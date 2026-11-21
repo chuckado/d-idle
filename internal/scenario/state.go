@@ -79,7 +79,7 @@ type StateObject struct {
 
 // Assertion kinds. Each reads one kind of fact from State.
 const (
-	AItemInPack     = "item_in_pack"   // code, min (default 1): items of that code in pack, belt, stash or body
+	AItemInPack     = "item_in_pack"   // code, min (default 1; 0 when max is set), max: items of that code in pack, belt, stash or body
 	AItemAbsent     = "item_absent"    // code
 	AQuestBits      = "quest_bits"     // record, set (mask all set), clear (mask all clear)
 	AAreaIs         = "area_is"        // area
@@ -244,8 +244,11 @@ func evalOne(a Assert, st State) AssertResult {
 			return AssertResult{OK: n == 0, Want: "no " + a.Code, Got: fmt.Sprintf("%d x %s", n, a.Code)}
 		}
 		min := a.Min
-		if min == 0 {
+		if min == 0 && a.Max == nil {
 			min = 1
+		}
+		if a.Max != nil { // an upper bound (a hoard check): min stays as given, 0 by default
+			return AssertResult{OK: n >= min && n <= *a.Max, Want: fmt.Sprintf("%d..%d x %s", min, *a.Max, a.Code), Got: fmt.Sprintf("%d x %s", n, a.Code)}
 		}
 		return AssertResult{OK: n >= min, Want: fmt.Sprintf(">= %d x %s", min, a.Code), Got: fmt.Sprintf("%d x %s", n, a.Code)}
 	case AQuestBits:

@@ -124,7 +124,7 @@ type View struct {
 	Stopped    []StoppedRow `json:"stopped,omitempty"` // quests the player stopped in the last day (audit ring)
 	Needs      []NeedRow    `json:"needs"`
 	Strip      *Strip       `json:"strip,omitempty"`
-	Extra      []string     `json:"extra,omitempty"`     // further accepted chunks in the plan file (never run)
+	Extra      []string     `json:"extra,omitempty"`     // further accepted chunks in the plan file, each waits for the running one
 	WhileAway  *AwayCard    `json:"whileAway,omitempty"` // what the board did by itself while the player was away (slice S8)
 	Generated  time.Time    `json:"generated"`
 }
@@ -426,7 +426,7 @@ func (d *Desk) build() View {
 	}
 	v.WhileAway = d.awayCard(x)
 	for _, r := range status.Extra {
-		v.Extra = append(v.Extra, r.String())
+		v.Extra = append(v.Extra, r.String()+" "+WaitsFor(Ref{status.Active.Quest, status.Active.Chunk}))
 	}
 	v.HandIn = last
 	v.Needs = d.needs(v)
@@ -769,9 +769,12 @@ func (d *Desk) Cancel(quest, chunk string) Reply {
 		return withBase(base, refuse(http.StatusConflict, CodeDone, "%s is already done; nothing to stop.", d.title(quest)))
 	case Accepted, InProgress, Awaiting, Blocked:
 	default:
-		base.OK, base.Already, base.State, base.Status = true, true, string(state), http.StatusOK
-		base.Reason = d.title(quest) + " is not running."
-		return base
+		// A queued chunk (accepted, but its predecessor is not done) derives Locked; the player's Stop still withdraws it.
+		if !x.HasRecord(quest, chunk) {
+			base.OK, base.Already, base.State, base.Status = true, true, string(state), http.StatusOK
+			base.Reason = d.title(quest) + " is not running."
+			return base
+		}
 	}
 	if err := x.Cancel(quest, chunk); err != nil {
 		return withBase(base, refuse(http.StatusInternalServerError, CodeInternal, "Could not stop it: %v", err))
