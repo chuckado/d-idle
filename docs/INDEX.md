@@ -39,6 +39,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0026-combat-engine-capability-table-and-grammar.md](adr/0026-combat-engine-capability-table-and-grammar.md): 0026: Combat engine: one capability table, generated tiers, delivery grammar, reads a player can see
 - [0027-proving-ground-gate-and-night-window.md](adr/0027-proving-ground-gate-and-night-window.md): 0027: Proving Ground gate: assertion digest, tiers, quotas, ledger, quarantine; standing night window
 - [0028-one-supply-need-town-planner.md](adr/0028-one-supply-need-town-planner.md): 0028: One supply need (town planner)
+- [0029-vault-gold-payment.md](adr/0029-vault-gold-payment.md): 0029: The vault gold reveal is paid at once from the stash gold (amends ADR 0014 for one purpose)
 - [adr/README.md](adr/README.md): Architecture decision records
 - [decisions.md](decisions.md): Decisions (user, with date)
 
