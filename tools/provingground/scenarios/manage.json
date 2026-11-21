@@ -6,8 +6,6 @@
       "title": "Hero fighting in a field with an upgrade in the pack: equipped from the Inventory sheet within 2 s of the tap, no town visit, the fight continues, the old item stays in the pack",
       "kind": "behaviour",
       "tier": "fast",
-      "status": "pending",
-      "pending_reason": "the runner cannot substitute the id of a given item into trigger.api bodies ({{item.1}}) nor read the Recall state; the bot side, the routes and the offline tests are done (docs/process/management-fast-path.md). Run as the live checklist there.",
       "covers": [
         "manage.equip-instant"
       ],
@@ -16,17 +14,18 @@
         "cmd/d2bot/invverbs.go"
       ],
       "pre": {
-        "level": 14,
+        "level": 30,
         "gold": 0,
-        "items": [
+        "pack": [
           {
             "code": "cap",
-            "where": "pack",
             "quality": 4
-          },
+          }
+        ],
+        "worn": [
           {
             "code": "cap",
-            "where": "body",
+            "slot": "head",
             "quality": 2
           }
         ]
@@ -38,17 +37,17 @@
         },
         "api": [
           {
-            "after_s": 20,
+            "after_s": 3,
             "path": "/api/inventory/equip",
             "body": {
-              "id": "{{item.1}}",
+              "id": "{{pack.item[name=cap].id}}",
               "slot": "head"
             }
           }
         ]
       },
       "budget": {
-        "virtual_min": 6
+        "virtual_min": 12
       },
       "matrix": {
         "classes": [
@@ -63,9 +62,16 @@
       "needs": [
         "item.equip"
       ],
-      "provenance": "SETUP (CHEATED, mechanics only): level and the given items by the debug give verb. Not evidence about balance or parity.",
+      "provenance": "SETUP (CHEATED, mechanics only): level, gold, the given and worn items and the vault record come from lab verbs and the runner's seeding. Not evidence about balance or parity.",
       "notes": "Both classes wear a helm (cap). RED first: with ui.managementFast 0 the same request waits for the bot's safe moment and the assert on the 2 s window fails.",
       "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the route took the order"
+        },
         {
           "kind": "item_in_pack",
           "code": "cap",
@@ -89,7 +95,8 @@
           "kind": "log_line",
           "pattern": "totown|to town",
           "max": 0,
-          "why": "no town visit"
+          "why": "no town visit (first two virtual minutes: a coarse bound, the bot's own sell trips come later)",
+          "to_min": 2
         },
         {
           "kind": "no_writes"
@@ -101,8 +108,6 @@
       "title": "An unidentified item in the pack and an identify scroll: identified from the sheet at once, in the field",
       "kind": "behaviour",
       "tier": "fast",
-      "status": "pending",
-      "pending_reason": "the runner cannot substitute the id of a given item into trigger.api bodies ({{item.1}}) nor read the Recall state; the bot side, the routes and the offline tests are done (docs/process/management-fast-path.md). Run as the live checklist there.",
       "covers": [
         "manage.identify-instant"
       ],
@@ -111,17 +116,16 @@
         "cmd/d2bot/invverbs.go"
       ],
       "pre": {
-        "level": 14,
+        "level": 30,
         "gold": 0,
-        "items": [
+        "pack": [
           {
             "code": "cap",
-            "where": "pack",
-            "quality": 4
+            "quality": 4,
+            "unid": true
           },
           {
-            "code": "isc",
-            "where": "pack"
+            "code": "isc"
           }
         ]
       },
@@ -132,16 +136,16 @@
         },
         "api": [
           {
-            "after_s": 20,
+            "after_s": 3,
             "path": "/api/inventory/identify",
             "body": {
-              "id": "{{item.1}}"
+              "id": "{{pack.item[name=cap].id}}"
             }
           }
         ]
       },
       "budget": {
-        "virtual_min": 6
+        "virtual_min": 12
       },
       "matrix": {
         "classes": [
@@ -156,20 +160,34 @@
       "needs": [
         "item.identify"
       ],
-      "provenance": "SETUP (CHEATED, mechanics only): level and the given items by the debug give verb. Not evidence about balance or parity.",
+      "provenance": "SETUP (CHEATED, mechanics only): level, gold, the given and worn items and the vault record come from lab verbs and the runner's seeding. Not evidence about balance or parity.",
       "notes": "U: the assertion that the item reads identified needs the observer; the log line is the weaker stand-in.",
       "assert": [
         {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the route took the order"
+        },
+        {
           "kind": "log_line",
-          "pattern": "identify.*cap",
+          "pattern": "player identify Cap",
           "min": 1,
           "why": "the lane identified it"
         },
         {
           "kind": "log_line",
+          "pattern": "identify .* failed",
+          "max": 0,
+          "why": "the identify verb's change shows in the game"
+        },
+        {
+          "kind": "log_line",
           "pattern": "totown|to town",
           "max": 0,
-          "why": "no town visit"
+          "why": "no town visit (first two virtual minutes: a coarse bound, the bot's own sell trips come later)",
+          "to_min": 2
         },
         {
           "kind": "no_writes"
@@ -181,8 +199,6 @@
       "title": "Hero in the field, a Vault item to equip: Recall now walks home at the next safe moment, the order runs in town, the hero returns to the goal",
       "kind": "behaviour",
       "tier": "fast",
-      "status": "pending",
-      "pending_reason": "the runner cannot substitute the id of a given item into trigger.api bodies ({{item.1}}) nor read the Recall state; the bot side, the routes and the offline tests are done (docs/process/management-fast-path.md). Run as the live checklist there. It also needs the vault record seeding of vault.equip-one-tap.",
       "covers": [
         "manage.recall-now"
       ],
@@ -192,15 +208,16 @@
         "internal/vaultkeep/equip.go"
       ],
       "pre": {
-        "level": 14,
+        "level": 30,
         "gold": 500,
-        "items": [
-          {
-            "code": "cap",
-            "where": "vault",
-            "quality": 4
-          }
-        ]
+        "vault_records": {
+          "items": [
+            {
+              "code": "cap",
+              "quality": 4
+            }
+          ]
+        }
       },
       "trigger": {
         "goals": "campaign",
@@ -212,24 +229,25 @@
         },
         "api": [
           {
-            "after_s": 20,
+            "after_s": 10,
             "path": "/api/vault/equip",
             "body": {
               "ids": [
-                "{{vault.1}}"
+                "{{vault.0.id}}"
               ],
-              "slot": "auto"
+              "slot": "auto",
+              "now": false
             }
           },
           {
-            "after_s": 22,
+            "after_s": 12,
             "path": "/api/recall",
             "body": {}
           }
         ]
       },
       "budget": {
-        "virtual_min": 6
+        "virtual_min": 12
       },
       "matrix": {
         "classes": [
@@ -247,9 +265,22 @@
         "item.vault",
         "item.equip"
       ],
-      "provenance": "SETUP (CHEATED, mechanics only): level and the given items by the debug give verb. Not evidence about balance or parity.",
+      "provenance": "SETUP (CHEATED, mechanics only): level, gold, the given and worn items and the vault record come from lab verbs and the runner's seeding. Not evidence about balance or parity.",
       "notes": "The hero must leave town before the second call: start in the field area.",
       "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the equip order was accepted"
+        },
+        {
+          "kind": "api_reply",
+          "index": 1,
+          "status": 200,
+          "why": "the recall route answered"
+        },
         {
           "kind": "item_in_pack",
           "code": "cap",

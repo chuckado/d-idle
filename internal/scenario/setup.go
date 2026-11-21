@@ -3,6 +3,7 @@ package scenario
 import (
 	"fmt"
 	"sort"
+	"strings"
 
 	"d2lod-bot/internal/telemetry"
 )
@@ -35,6 +36,13 @@ type Setup struct {
 	LifePct int `json:"life_pct,omitempty"`
 	// Field is true when the hero is warped and the live d2d is handed to the bot (pre.start field).
 	Field bool `json:"field"`
+	// Seeds are the steps that need a read of the game between verbs (a unit id): worn items and vault records, in order.
+	// The runner does them after Verbs (cmd/d2scenario/seed.go).
+	Seeds []Seed `json:"seeds,omitempty"`
+	// Ether is the wallet balance to credit before the start.
+	Ether int `json:"ether,omitempty"`
+	// VaultVerbs is true when the d2d of the run needs --vault-verbs (a vault seed, or the scenario's needs list an item verb).
+	VaultVerbs bool `json:"vault_verbs,omitempty"`
 	// Unsupported lists declared preconditions the builder cannot construct yet (no verb known). A run with any is BLOCKED.
 	Unsupported []string `json:"unsupported,omitempty"`
 }
@@ -89,7 +97,8 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		tags["quest-word"] = true
 	}
 	var floor [][2]string // ground items, dropped after the position verb: a drop before it lands where the hero stood (the town)
-	for _, it := range p.Items {
+	items := append(append([]Item(nil), p.Items...), p.Pack...)
+	for _, it := range items {
 		n := it.Count
 		if n <= 0 {
 			n = 1
@@ -141,6 +150,25 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		su.Field = true
 		tags["position"] = true
 	}
+	for _, w := range p.Worn {
+		su.Seeds = append(su.Seeds, Seed{Kind: SeedWorn, Code: w.Code, Slot: BodySlot[w.Slot], SlotName: w.Slot,
+			Give: GiveLine(w.Code, w.Quality, w.Unid), Reason: reason("worn " + w.Code + " in " + w.Slot)})
+		tags["worn"] = true
+	}
+	if p.Vault != nil {
+		su.Seeds = append(su.Seeds, vaultSeeds(*p.Vault, reason)...)
+		tags["vault-records"] = true
+		su.VaultVerbs = true
+	}
+	if p.Ether > 0 {
+		su.Ether = p.Ether
+		tags["ether"] = true
+	}
+	for _, n := range s.Needs {
+		if strings.HasPrefix(n, "item.") && n != "item.equip" && n != "item.identify" {
+			su.VaultVerbs = true
+		}
+	}
 	for _, f := range floor {
 		add(f[0], f[1])
 	}
@@ -156,7 +184,7 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		}
 		su.Tuning[k] = v
 	}
-	cheated := tags["position"] || tags["waypoint"] || tags["given-item"] || tags["quest-word"] || tags["merc"] || tags["difficulty"]
+	cheated := tags["worn"] || tags["vault-records"] || tags["ether"] || tags["position"] || tags["waypoint"] || tags["given-item"] || tags["quest-word"] || tags["merc"] || tags["difficulty"]
 	if cheated {
 		su.Tags = append(su.Tags, "CHEATED")
 	} else {
@@ -190,4 +218,63 @@ func HeroName(scenarioID, class string, seed int64) string {
 		n = n[len(n)-5:]
 	}
 	return string(b) + n
+}
+
+// Seed kinds.
+const (
+	SeedWorn  = "worn"
+	SeedVault = "vault"
+)
+
+// Seed is one ordered step of the seeding: give the item, find its unit id, then wear it (worn) or take it into the vault.
+type Seed struct {
+	Kind     string `json:"kind"`
+	Code     string `json:"code"`
+	Give     string `json:"give"` // the `debug give` line
+	Slot     int    `json:"slot,omitempty"`
+	SlotName string `json:"slot_name,omitempty"`
+	Pin      bool   `json:"pin,omitempty"`
+	Unid     bool   `json:"unid,omitempty"`
+	Sealed   string `json:"sealed,omitempty"`
+	// Filler marks a record whose item is any distinct real item (the count of a full vault); Fill is its running number.
+	Filler bool   `json:"filler,omitempty"`
+	Fill   int    `json:"fill,omitempty"`
+	Reason string `json:"reason"`
+}
+
+// GiveLine is the verb that puts an item in the pack (V docs/forkcheats.md: `give <code> pack q<n> [unid]`).
+func GiveLine(code string, quality int, unid bool) string {
+	l := "debug give " + code + " pack"
+	if quality > 0 {
+		l += fmt.Sprintf(" q%d", quality)
+	}
+	if unid {
+		l += " unid"
+	}
+	return l
+}
+
+// FillerCodes are base items of every class that fit a pack: the first fillers are one normal item of each, later ones
+// are magic items (their affixes differ), so the vault never sees two identical records.
+var FillerCodes = []string{"cap", "lea", "buc", "ssd", "hax", "clb", "sst", "bsd", "lgl", "lbt", "lbl", "spr", "jav", "xsh", "scl", "stu", "wnd", "hbt", "gts", "cst"}
+
+func vaultSeeds(v VaultSeed, reason func(string) string) []Seed {
+	var out []Seed
+	pin := func(i int) bool { return i < v.Pinned }
+	for _, it := range v.Items {
+		for k := 0; k < max(it.N, 1); k++ {
+			out = append(out, Seed{Kind: SeedVault, Code: it.Code, Give: GiveLine(it.Code, it.Quality, it.Unid), Unid: it.Unid, Sealed: it.Sealed,
+				Pin: it.Pin || pin(len(out)), Reason: reason("vault record " + it.Code)})
+		}
+	}
+	q, _ := v.FillerQuality()
+	for f := 0; f < v.Count; f++ {
+		code, quality := FillerCodes[f%len(FillerCodes)], q
+		if f >= len(FillerCodes) {
+			quality = 4
+		}
+		out = append(out, Seed{Kind: SeedVault, Code: code, Give: GiveLine(code, quality, false), Filler: true, Fill: f,
+			Pin: pin(len(out)), Reason: reason(fmt.Sprintf("vault filler record %d", f))})
+	}
+	return out
 }
