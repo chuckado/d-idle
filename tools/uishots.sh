@@ -16,6 +16,7 @@ while [ $# -gt 0 ]; do
 	*) echo "uishots: unknown argument $1" >&2; exit 2 ;;
 	esac
 done
+. "$(dirname "$0")/lib/heavy-guard.sh" && heavy_guard uishots || exit $?   # memory guard: docs/process/worker-capacity.md
 golden=${UISHOTS_GOLDEN:-$HOME/.cache/didle-uishots/golden}
 chrome=$(command -v google-chrome-stable || command -v chromium || command -v chromium-browser) || { echo "uishots: no Chrome or Chromium on this host" >&2; exit 2; }
 command -v Xvfb >/dev/null || { echo "uishots: no Xvfb on this host" >&2; exit 2; }
