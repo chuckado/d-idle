@@ -356,7 +356,7 @@ func (t *Town) TidyDropped(u d2.Unit) bool {
 // neverSellUnit is the town's own never-sell list (quest items, the Cube, keys) for the shadow stage's item facts.
 func (t *Town) neverSellUnit(u d2.Unit) bool {
 	b := t.base(u)
-	return b != nil && (neverSell[b.Code] || b.Type == "key")
+	return b != nil && (neverSell[b.Code] || b.Type == "key" || questBase(b))
 }
 
 // shadowPass starts the loot rules shadow pass on the looter that judges (nil when the judge is something else or the
