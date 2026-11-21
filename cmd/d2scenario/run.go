@@ -37,6 +37,7 @@ func cmdRun(args []string, w io.Writer) error {
 	dry := fs.Bool("dry-run", false, "print what would run, start nothing")
 	slot := fs.String("slot", "tools/d2dslot.sh", "slot wrapper")
 	bot := fs.String("bot", os.Getenv("D2BOT_BIN"), "d2bot binary (env D2BOT_BIN)")
+	journal := fs.Bool("journal", false, "write the d2dctl command journal of each bot run next to its trace (determinism finder, cmd/d2ddet)")
 	if _, err := parseArgs(fs, args); err != nil {
 		return err
 	}
@@ -89,6 +90,9 @@ func cmdRun(args []string, w io.Writer) error {
 	cmdFor := func(r scenario.Run) []string {
 		a := []string{*slot, "run", "-w", "3000", "-t", strconv.Itoa(by[r.ID].Budget.WallMin*60 + 600), "--", self, "exec-one",
 			"-dir", *dir, "-id", r.ID, "-class", r.Class, "-seed", strconv.FormatInt(r.Seed, 10), "-out", *out, "-bot", *bot}
+		if *journal {
+			a = append(a, "-journal")
+		}
 		return a
 	}
 	if *dry {
@@ -180,6 +184,7 @@ func cmdExecOne(args []string) error {
 	seed := fs.Int64("seed", 0, "seed")
 	out := fs.String("out", "", "output directory")
 	bot := fs.String("bot", "", "d2bot binary")
+	journal := fs.Bool("journal", false, "write the d2dctl journal of the bot run")
 	if _, err := parseArgs(fs, args); err != nil {
 		return err
 	}
@@ -193,7 +198,13 @@ func cmdExecOne(args []string) error {
 	}
 	r := scenario.Run{ID: s.ID, Class: *class, Seed: *seed}
 	start := time.Now()
+	if *journal {
+		os.Setenv(journalEnv, filepath.Join(*out, strings.TrimSuffix(resultName(r), ".json")+".jnl"))
+	}
 	res := execOne(s, r, *out, *bot)
+	if *journal {
+		res.Journal = os.Getenv(journalEnv)
+	}
 	res.Version, res.Run = scenario.ResultVersion, r
 	if res.Status == "" { // not blocked by the infrastructure: judge the observed state
 		if res.State == nil {
@@ -205,11 +216,18 @@ func cmdExecOne(args []string) error {
 	}
 	res.BudgetMin = s.Budget.VirtualMin
 	res.WallSec = int(time.Since(start).Seconds())
+	res.Prov = collectProv(*bot)
+	res.Prov.Pace = scenario.PaceOf(res.VirtualMin, res.WallSec)
 	if res.State != nil {
 		res.Digest = scenario.DigestState(*res.State)
 	}
+	res.AssertDigest = scenario.AssertDigest(res)
 	b, _ := json.MarshalIndent(res, "", " ")
-	return os.WriteFile(filepath.Join(*out, resultName(r)), b, 0o644)
+	if err := os.WriteFile(filepath.Join(*out, resultName(r)), b, 0o644); err != nil {
+		return err
+	}
+	shipLedger(res, s.Tier, *out, start)
+	return nil
 }
 
 func blocked(why string, a ...any) scenario.Result {
@@ -295,10 +313,13 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	if s.Build == "sandbox" {
 		d2dBot = os.Getenv("D2D_BIN_SANDBOX")
 	}
-	refused, taps, berr := runBot(ctx, s, r, botBin, d2dBot, gamedata, data, home, sock, inst, hero, trace, false)
-	res.Taps = taps
+	refused, taps, tapsAt, berr := runBot(ctx, s, r, botBin, d2dBot, gamedata, data, home, sock, inst, hero, trace, false)
+	res.Taps, res.TapsAt = taps, tapsAt
 	if why := botFailure(trace); why != "" {
 		return withVerdict(res, blocked("the bot exited with an error, it did not play: %s", why))
+	}
+	if why := cutReason(trace); why != "" {
+		return withVerdict(res, blocked("%s", why))
 	}
 	if !after(newestSave(home), before) {
 		res.State = &scenario.State{Version: scenario.StateVersion, Source: "none", WritesAfterStart: refused}
@@ -460,12 +481,19 @@ func writeBoardAndTuning(state, hero string, su scenario.Setup) error {
 	return nil
 }
 
+// journalEnv is the variable cmd/d2bot (internal/d2denv) reads to write the d2dctl command journal; exec-one sets it for
+// the bot it starts (runBot inherits the environment) when run -journal asks for it.
+const journalEnv = "D2DCTL_JOURNAL"
+
+// tapEveryVirtual is the virtual-second grid of the board tapper (was: 20 wall s, then every 5 wall s).
+const tapEveryVirtual = 30
+
 // runBot starts the real bot like tools/survival/abrun.sh does and returns how many gated writes the d2d refused (the
 // bot tried a write after the start; the CRUTCH RULE line) and the bot's exit error.
-func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBin, gamedata, data, home, sock, inst, hero, trace string, attach bool) (int, []string, error) {
+func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBin, gamedata, data, home, sock, inst, hero, trace string, attach bool) (int, []string, []float64, error) {
 	f, err := os.Create(trace)
 	if err != nil {
-		return -1, nil, err
+		return -1, nil, nil, err
 	}
 	defer f.Close()
 	hours := strconv.FormatFloat(s.Budget.VirtualMin/60, 'f', -1, 64)
@@ -484,7 +512,7 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 		tokFile := filepath.Join(data, "wtoken")
 		tok, err := newWatchToken(tokFile)
 		if err != nil {
-			return -1, nil, err
+			return -1, nil, nil, err
 		}
 		slot, _ := strconv.Atoi(os.Getenv("D2D_SLOT"))
 		vp := 9300 + slot*10 // the L3 harness's port plan; the answer route is the next port
@@ -529,12 +557,8 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 			apiRun(tctx)
 		}
 		if tap != nil {
-			select {
-			case <-tctx.Done():
-				return
-			case <-time.After(20 * time.Second): // the watch server comes up with the bot
-			}
-			tap.Run(tctx, 5*time.Second)
+			// The watch server comes up with the bot; the board is evaluated on a grid of the bot's virtual clock.
+			tap.RunVirtual(tctx, tapEveryVirtual, 250*time.Millisecond, 90*time.Second)
 		}
 	}()
 	cmd := exec.CommandContext(ctx, "nice", append([]string{"-n", "10", bot}, args...)...)
@@ -546,10 +570,11 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 	<-sdone
 	b, _ := os.ReadFile(trace)
 	var taps []string
+	var tapsAt []float64
 	if tap != nil {
-		taps = tap.Taps
+		taps, tapsAt = tap.Taps, tap.TapsAt
 	}
-	return strings.Count(string(b), "err lab verbs off"), taps, err
+	return strings.Count(string(b), "err lab verbs off"), taps, tapsAt, err
 }
 
 // writeBotConfig writes the bot's config file (<data>/config.json, the default of d2bot --config, S cmd/d2bot/main.go) with
@@ -593,11 +618,15 @@ func addTrail(st *scenario.State, trace string) {
 func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scenario.Result, prep *d2dinput.Process, c *d2dctl.Client, bot, data, sock, inst, trace string) scenario.Result {
 	hero := scenario.HeroName(s.ID, r.Class, r.Seed)
 	_ = c.Close() // the d2d takes one control client: the bot gets it, then we take it back
-	_, taps, berr := runBot(ctx, s, r, bot, os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA"), data, "", sock, inst, hero, trace, true)
-	res.Taps = taps
+	_, taps, tapsAt, berr := runBot(ctx, s, r, bot, os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA"), data, "", sock, inst, hero, trace, true)
+	res.Taps, res.TapsAt = taps, tapsAt
 	if why := botFailure(trace); why != "" {
 		_ = prep.Stop()
 		return withVerdict(res, blocked("the bot exited with an error, it did not play: %s", why))
+	}
+	if why := cutReason(trace); why != "" {
+		_ = prep.Stop()
+		return withVerdict(res, blocked("%s", why))
 	}
 	cc := d2dctl.New(sock, d2dctl.Options{})
 	st := observe(ctx, cc, -1, true)

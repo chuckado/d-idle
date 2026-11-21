@@ -1,0 +1,119 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "vault.reveal-gold",
+   "title": "Vault: a gold reveal buys the scrolls and reveals every held item",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "not run: needs two things the framework lacks: a SETUP that seeds N unidentified vault records (give N unidentified magic items with `debug give <code> pack q4 unid`, read them with `item full`, add them to the hero's vault log, remove them from the pack) and a driver that posts the order to the answer listener (`POST /api/vault/revealgold`, as the board-taps driver does for the quest board), plus assertions that read the vault log (`vault_identified`, `vault_order_state`). The lab d2d must run with --vault-verbs (the fork's item create verb).",
+   "covers": [
+    "town.vault",
+    "town.identify-cain"
+   ],
+   "touches": [
+    "internal/vaultkeep/",
+    "internal/bulkid/",
+    "cmd/d2bot/vaultkeep.go",
+    "internal/town/playerid.go"
+   ],
+   "pre": {
+    "level": 20,
+    "gold": 5000,
+    "stash": 0
+   },
+   "trigger": {
+    "goals": "reach:25",
+    "knobs": {
+     "loot.vault": 1,
+     "loot.vaultKeep": 1,
+     "loot.vaultRevealGold": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, level and purse by stat verbs, the unidentified vault records seeded from items given by `debug give ... unid` (CHEATED setup: mechanics evidence only, never balance).",
+   "assert": [
+    {
+     "kind": "gold_between",
+     "min": 4400,
+     "max": 4600,
+     "why": "6 scrolls at 80 gold left the purse (the reserve is far below this)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "notes": "Hero in town, 6 unidentified held items (vault records), 5000 gold in the purse and none in the stash, knob loot.vaultRevealGold 1, an order for all 6 posted before the first town visit. Expected: all 6 records identified, the purse down by about 6 scrolls at the vendor price (80 each) and not below the potion-kit reserve, no item sold, the order ends done. RED on today's main is the order route not existing; GREEN is the physical chain buy, read, supersede."
+  },
+  {
+   "id": "vault.reveal-gold-short",
+   "title": "Vault: a short purse reveals what it can pay and says so",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "not run: needs two things the framework lacks: a SETUP that seeds N unidentified vault records (give N unidentified magic items with `debug give <code> pack q4 unid`, read them with `item full`, add them to the hero's vault log, remove them from the pack) and a driver that posts the order to the answer listener (`POST /api/vault/revealgold`, as the board-taps driver does for the quest board), plus assertions that read the vault log (`vault_identified`, `vault_order_state`). The lab d2d must run with --vault-verbs (the fork's item create verb).",
+   "covers": [
+    "town.vault",
+    "town.identify-cain"
+   ],
+   "touches": [
+    "internal/vaultkeep/",
+    "internal/bulkid/",
+    "cmd/d2bot/vaultkeep.go",
+    "internal/town/playerid.go"
+   ],
+   "pre": {
+    "level": 20,
+    "gold": 420,
+    "stash": 0
+   },
+   "trigger": {
+    "goals": "reach:25",
+    "knobs": {
+     "loot.vault": 1,
+     "loot.vaultKeep": 1,
+     "loot.vaultRevealGold": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, level and purse by stat verbs, the unidentified vault records seeded from items given by `debug give ... unid` (CHEATED setup: mechanics evidence only, never balance).",
+   "assert": [
+    {
+     "kind": "gold_between",
+     "min": 300,
+     "max": 420,
+     "why": "the purse never went below the kit reserve"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "notes": "As vault.reveal-gold, but the purse holds 420 gold and the repair and potion-kit reserve is about 300: only the scrolls above the reserve are bought, the rest of the order ends partial with the reason, the potion kit is untouched (belt full), no item sold."
+  }
+ ]
+}

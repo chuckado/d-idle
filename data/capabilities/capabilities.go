@@ -6,3 +6,8 @@ import _ "embed"
 
 //go:embed capabilities.json
 var JSON []byte
+
+// Proven lists the skills with a green Proving Ground row per backend; a tier of supported needs one (internal/delivery).
+//
+//go:embed proven.json
+var Proven []byte

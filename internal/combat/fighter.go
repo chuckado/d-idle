@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/delivery"
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/gear"
 	"d2lod-bot/internal/goals"
@@ -69,8 +70,9 @@ type Fighter struct {
 	heal          healEffect // the healing potion still working (potioneffect.go)
 	manaChickenAt time.Time  // last chicken caused by the mana-burn watch (hard.go)
 	lastCast      time.Time
-	clog          castLog // log-only cast outcome tracking (castlog.go)
-	lastCastName  string  // skill of lastCast: the gap before the next cast covers ITS cast length
+	clog          castLog      // log-only cast outcome tracking (castlog.go)
+	expect        expectLedger // cast expectations and demotion (expect.go)
+	lastCastName  string       // skill of lastCast: the gap before the next cast covers ITS cast length
 	lastCastSkill map[int]time.Time
 	buffAt        map[int]time.Time
 	buffTries     map[int]int // consecutive casts cut by a hit, per skill (card armorcut)
@@ -689,10 +691,11 @@ func (f *Fighter) buffPass(ctx context.Context, snap *d2.Snapshot) (cast bool, e
 	}
 	known := KnownSkills(p, f.cat, f.keys)
 	mana := p.Mana
-	for _, group := range f.profileFor(p).Buffs {
+	has := func(n string) bool { _, ok := known[n]; return ok }
+	for _, group := range f.profileFor(p).Rotation(p.Level, has).Groups() {
 		for _, name := range group {
 			sp, ok := known[name]
-			if !ok || curseNames[name] || (sp.Key == "" && p.RightSkill != sp.ID) {
+			if !ok || curseNames[name] || f.expectDemoted(name) || (sp.Key == "" && p.RightSkill != sp.ID) {
 				continue
 			}
 			if !f.buffDue(p, sp) {
@@ -801,6 +804,7 @@ func (f *Fighter) cast(snap *d2.Snapshot, sp SkillSpec, at input.Point) error {
 	f.lastCastSkill[sp.ID] = f.lastCast
 	f.noteCast(sp.ID, f.lastCast)
 	f.castLogStart(snap, sp)
+	f.expectRecord(snap, sp)
 	return err
 }
 
@@ -831,14 +835,14 @@ func (f *Fighter) attackSkills(p *d2.Player) []SkillSpec {
 		reserve = pr.Melee.ManaReserve
 	}
 	var out []SkillSpec
-	for _, name := range pr.AttackNames(p.Level, func(n string) bool { _, ok := known[n]; return ok }) {
+	for _, name := range pr.Rotation(p.Level, func(n string) bool { _, ok := known[n]; return ok }).Names(delivery.RoleAttack) {
 		sp, ok := known[name]
 		if !ok && name == meleeSpec().Name {
 			// The skill dump may omit the basic attack (live 2026-11-09: known had no Attack), yet it is always usable
 			// and is the only attack left when gear rules out the build's skill (Smite needs a shield).
 			sp, ok = meleeSpec(), true
 		}
-		if !ok || (pr.costsLife(name) && !f.lifePriceOK()) {
+		if !ok || f.expectDemoted(name) || (pr.costsLife(name) && !f.lifePriceOK()) {
 			continue
 		}
 		if sp.Hand == HandLeft {

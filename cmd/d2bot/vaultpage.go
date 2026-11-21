@@ -104,7 +104,7 @@ func vaultAPIWith(root string, on func() bool, hero func() string, eh *etherHome
 	}
 	home := vaultHomeFor(root)
 	api := watch.NewVaultAPI()
-	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}, Act: actFace{home}, Tip: vaultTipFor(db), Quality: loot.QualityName, ScrollGold: scrollGold(db)}
+	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}, Act: actFace{home}, Equip: equipFace{home}, Tip: vaultTipFor(db), Quality: loot.QualityName, ScrollGold: scrollGold(db)}
 	if f, ferr := bulkid.DefaultFilter(); ferr == nil {
 		desk.MassFilter = f
 	}

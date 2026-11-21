@@ -28,7 +28,18 @@ type Reader struct {
 
 	mu     sync.Mutex
 	last   *d2dsrc.Result
-	lastAt time.Time // wall time the last snapshot completed (Recent)
+	lastAt time.Time // Now() when the last snapshot completed (Recent)
+	// Now is the clock Recent measures a snapshot's age on: the env clock (virtual under lockstep), so whether the guard reuses
+	// the last snapshot or queues a fresh read does not depend on machine load (docs/probes/pg-gate-group2-2026-11-21.md).
+	// nil = the wall clock.
+	Now func() time.Time
+}
+
+func (r *Reader) now() time.Time {
+	if r.Now != nil {
+		return r.Now()
+	}
+	return time.Now()
 }
 
 // Recent returns the last full snapshot when it completed within maxAge. It is for background readers (the safety
@@ -38,7 +49,7 @@ type Reader struct {
 func (r *Reader) Recent(maxAge time.Duration) (*d2.Snapshot, bool) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	if r.last == nil || r.last.Snap == nil || time.Since(r.lastAt) > maxAge {
+	if r.last == nil || r.last.Snap == nil || r.now().Sub(r.lastAt) > maxAge {
 		return nil, false
 	}
 	return r.last.Snap, true
@@ -65,7 +76,7 @@ func (r *Reader) Snapshot() (*d2.Snapshot, error) {
 	_ = r.Source.FillMissiles(ctx, res)
 	addrFromID(res.Snap)
 	r.mu.Lock()
-	r.last, r.lastAt = res, time.Now()
+	r.last, r.lastAt = res, r.now()
 	r.mu.Unlock()
 	return res.Snap, nil
 }

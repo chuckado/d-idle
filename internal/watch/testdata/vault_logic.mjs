@@ -144,4 +144,65 @@ ok('windowRange draws the rows near the view and pads the rest', () => {
   for (let top = 0; top < 400 * 70; top += 333) { const q = w({ top }); assert.ok(q.last - q.first <= 6 * (10 + 8 + 2), 'window stays small at ' + top); }
 });
 
+// The Reveal bar model: the default payment, the one cost line per option, the skipped line, the confirm step, the order chain.
+import { readFileSync } from 'node:fs';
+const RT = JSON.parse(readFileSync(new URL('../web/vault.json', import.meta.url), 'utf8')).revealBar;
+const opt = (id, o) => Object.assign({ id, label: id, line: id + ' line', ok: true, count: 3, ids: ['a', 'b', 'c'], cost: 0, skipped: [] }, o);
+const rev = (o) => Object.assign({ enabled: true, bar: { total: 5, default: 'gold', line: 'x', options: [opt('free', { ok: false, count: 0, ids: [] }), opt('gold', { cost: 5800, count: 5, confirm: true, skipped: [] })] }, gold: { on: true } }, o);
+ok('bar: default option, one plain line, the press words', () => {
+  const m = L.revealBarModel(rev(), '', RT);
+  assert.equal(m.show, true); assert.equal(m.sel, 'gold'); assert.equal(m.title, 'Reveal 5 items in this filter');
+  assert.equal(m.go, 'Reveal 5 for 5,800 gold'); assert.equal(m.goOff, false); assert.equal(m.confirm, true); assert.match(m.confirmAsk, /5,800 gold/);
+  assert.deepEqual(m.options.map((o) => [o.id, o.checked]), [['free', false], ['gold', true]]);
+});
+ok('bar: a pick that cannot be paid falls back to the default', () => {
+  assert.equal(L.revealBarModel(rev(), 'free', RT).sel, 'gold');
+});
+ok('bar: skipped items are counted and named', () => {
+  const r = rev(); r.bar.options[1].count = 3; r.bar.options[1].skipped = [{ n: 2, why: 'not enough gold' }];
+  const m = L.revealBarModel(r, 'gold', RT);
+  assert.equal(m.skippedN, 2); assert.equal(m.skipTitle, '2 skipped'); assert.deepEqual(m.skipped, [{ n: 2, why: 'not enough gold' }]);
+});
+ok('bar: nothing payable disables the press and says why', () => {
+  const r = rev(); r.bar.default = ''; r.bar.options = [opt('free', { ok: false, count: 0, ids: [], why: 'no scroll' })];
+  const m = L.revealBarModel(r, '', RT);
+  assert.equal(m.sel, ''); assert.equal(m.goOff, true); assert.equal(m.why, 'no scroll');
+});
+ok('bar: hidden without items or an order; shown for an order alone', () => {
+  assert.equal(L.revealBarModel({ bar: { total: 0, options: [] } }, '', RT).show, false);
+  assert.equal(L.revealBarModel(undefined, '', RT).show, false);
+  const r = { bar: { total: 0, options: [] }, gold: { order: { id: 'g', state: 'buying', total: 40, done: 12, spent: 960 } } };
+  const m = L.revealBarModel(r, '', RT);
+  assert.equal(m.show, true); assert.equal(m.order.active, true); assert.equal(m.order.progress, '12 of 40 revealed');
+  assert.deepEqual(m.order.steps.map((s) => s.current), [false, true, false, false]);
+});
+ok('bar: a finished or cancelled order ends the chain and cannot be cancelled', () => {
+  for (const [st, label] of [['done', 'Done'], ['partial', 'Done in part'], ['cancelled', 'Cancelled']]) {
+    const o = L.orderModel({ id: 'g', state: st, total: 4, done: 4 }, RT);
+    assert.equal(o.active, false); assert.equal(o.steps[3].current, true); assert.equal(o.steps[3].label, label);
+  }
+});
+ok('bar: Ether and free words', () => {
+  const r = rev(); r.bar.options = [opt('free', { count: 1, ids: ['a'] }), opt('ether', { cost: 29, count: 29 })]; r.bar.default = 'free';
+  assert.equal(L.revealBarModel(r, '', RT).go, 'Reveal 1 item');
+  assert.equal(L.revealBarModel(r, 'ether', RT).go, 'Reveal 29 with 29 Ether');
+});
+
+ok('equipPlan: ring gets left, right and auto; other items one button; states', () => {
+  const ring = { enabled: true, wearable: true, slots: [{ slot: 'lring', side: 'left', can: true, worn: { name: 'A' }, upgrade: true }, { slot: 'rring', side: 'right', can: false, why: 'needs level 30' }] };
+  let p = L.equipPlan(ring);
+  assert.deepEqual(p.buttons.map((b) => b.slot + (b.can ? '+' : '-')), ['auto+', 'left+', 'right-']);
+  assert.equal(p.state, 'ready'); assert.equal(p.ring, true);
+  p = L.equipPlan({ enabled: true, wearable: true, slots: [{ slot: 'head', can: true }] });
+  assert.deepEqual(p.buttons.map((b) => b.slot), ['auto']);
+  p = L.equipPlan({ enabled: true, wearable: false, why: 'charms are not equipped', slots: [] });
+  assert.equal(p.state, 'blocked'); assert.equal(p.buttons.length, 0);
+  assert.equal(L.equipPlan({ enabled: true, wearable: false, reveal: true, slots: [] }).state, 'reveal');
+  assert.equal(L.equipPlan({ enabled: false, offWhy: 'off', wearable: true, slots: [{ slot: 'head', can: true }] }).state, 'off');
+  assert.equal(L.equipPlan(Object.assign({ order: { state: 'withdrawing' } }, ring)).state, 'active');
+  assert.equal(L.equipPlan(Object.assign({ order: { state: 'done' } }, ring)).state, 'done');
+  assert.equal(L.equipPlan(Object.assign({ order: { state: 'failed' } }, ring)).state, 'failed');
+  assert.equal(L.equipUpgradeWord({ worn: null }), 'empty'); assert.equal(L.equipUpgradeWord({ worn: {}, upgrade: false }), 'worse'); assert.equal(L.equipUpgradeWord({ worn: {} }), '');
+});
+
 console.log('vault logic: ' + n + ' groups ok');

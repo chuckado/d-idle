@@ -251,6 +251,7 @@ func (f *Fighter) fight(ctx context.Context, sp fightSpec, snap *d2.Snapshot) (r
 		ft.Area, ft.Diff = p.Area, int(p.Difficulty)
 		ft.Danger = max(ft.Danger, f.packDanger(p, hs))
 		f.castLogTick(p)
+		f.expectTick(p)
 		f.noteKills(snap, hs, st, &res)
 
 		// 1. survival

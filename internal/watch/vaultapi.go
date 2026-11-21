@@ -31,7 +31,10 @@ const (
 	VaultRevealRoute  = "/api/vault/reveal"
 	VaultSellRoute    = "/api/vault/sell"
 	VaultCancelRoute  = "/api/vault/cancel"
-	VaultPromptRoute  = "/api/vault/sellprompt" // POST {"dismiss":true}: mute the "short on gold" prompt
+	VaultEquipRoute   = "/api/vault/equip"       // POST {ids:[one id], slot: auto|left|right, now}: one-tap Equip (docs/vault.md, Equip)
+	VaultEquipCancel  = "/api/vault/equipcancel" // POST {ids}: cancel an Equip order that has not started
+	VaultEquipGet     = "/api/vault/equip/"      // GET /api/vault/equip/<id>: the sheet's data and the order's status (polled)
+	VaultPromptRoute  = "/api/vault/sellprompt"  // POST {"dismiss":true}: mute the "short on gold" prompt
 	vaultSchema       = "watch.vault/1"
 
 	vaultPageLimit = 60  // rows per page when the client names none
@@ -41,8 +44,8 @@ const (
 
 // VaultRoutes are the viewer paths (the page and its files, the two GET routes); VaultPostRoutes the answer ones.
 var (
-	VaultRoutes     = []string{VaultRoute, VaultItemRoute, "/watch/vault", "/watch/vault.js", "/watch/vault-logic.js", "/watch/vault.css", "/watch/vault.json"}
-	VaultPostRoutes = []string{VaultPinRoute, VaultUnpinRoute, VaultDiscardRoute, VaultKeepRoute, VaultRevealRoute, VaultSellRoute, VaultCancelRoute, VaultPromptRoute}
+	VaultRoutes     = []string{VaultRoute, VaultItemRoute, VaultEquipGet, "/watch/vault", "/watch/vault.js", "/watch/vault-logic.js", "/watch/vault.css", "/watch/vault.json"}
+	VaultPostRoutes = []string{VaultPinRoute, VaultUnpinRoute, VaultDiscardRoute, VaultKeepRoute, VaultRevealRoute, VaultSellRoute, VaultCancelRoute, VaultPromptRoute, VaultEquipRoute, VaultEquipCancel, VaultRevealGoldRoute, VaultRevealGoldCancelRoute}
 )
 
 // VaultDesk is what the routes need from the bot side (cmd/d2bot/vaultwire.go). Every field is a func read per request, so a
@@ -54,6 +57,7 @@ type VaultDesk struct {
 	Owned func() []string     // purchased capacity steps (V7); nil: none
 	Keep  VaultKeeper         // the Keep queue (V5); nil: Keep is not part of this bot
 	Act   VaultActor          // Reveal, Sell and the sell prompt (V6); nil: not part of this bot
+	Equip VaultEquipper       // one-tap Equip (loot.vaultEquip); nil: not part of this bot
 	Tip   VaultTipFunc        // the tooltip facts of a row (base type, art, stat lines); nil: rows carry none
 	// MassFilter is the identify filter table (data/bulkid); nil: no mass reveal preview. Quality names a quality number; ScrollGold is a scroll's price (information).
 	MassFilter *bulkid.Filter
@@ -127,6 +131,9 @@ type VaultRevealView struct {
 	Note string `json:"note,omitempty"`
 	// Mass previews the "Reveal filtered" button: the ids it would queue (to /api/vault/reveal) and the cost sentence.
 	Mass *bulkid.Mass `json:"mass,omitempty"`
+	// Bar is the one Reveal bar: the payments (free, Ether, gold) with a cost line each, the default and the skipped items.
+	Bar  *bulkid.Bar    `json:"bar,omitempty"`
+	Gold *VaultGoldInfo `json:"gold,omitempty"`
 }
 
 type VaultSellView struct {
@@ -154,6 +161,21 @@ type VaultKeeper interface {
 	Gate(ctx context.Context) (ok bool, code, why string)
 	Enqueue(ctx context.Context, ids []string, target string, now bool) []VaultKeepResult
 	Progress() VaultKeepView
+}
+
+// VaultEquipper is one-tap Equip as the routes see it (cmd/d2bot adapts internal/vaultkeep). Preview returns a JSON-able
+// value: the slots, what is worn, whether each fits and why not, plus the order's status.
+type VaultEquipper interface {
+	Gate(ctx context.Context) (ok bool, code, why string)
+	Preview(id string) (view any, found bool)
+	Enqueue(ctx context.Context, id, slot string, now bool) VaultKeepResult
+	Cancel(id string) VaultKeepResult
+}
+
+// VaultEquipFlag says whether the sheet may offer Equip.
+type VaultEquipFlag struct {
+	Enabled bool   `json:"enabled"`
+	Why     string `json:"why,omitempty"`
 }
 
 // VaultKeepResult is the outcome of queueing one id.
@@ -384,21 +406,22 @@ type vaultFacet struct {
 
 // VaultView is the reply of GET /api/vault.
 type VaultView struct {
-	Schema    string         `json:"schema"`
-	Mode      string         `json:"mode"`   // "on", or "off" while loot.vault is 0 (read only)
-	Exists    bool           `json:"exists"` // a vault is on disk for the hero
-	Hero      string         `json:"hero,omitempty"`
-	Total     int            `json:"total"`
-	Offset    int            `json:"offset"`
-	Limit     int            `json:"limit"`
-	Items     []VaultItem    `json:"items"`
-	Capacity  VaultCapacity  `json:"capacity"`
-	Upgrade   VaultUpgrade   `json:"upgrade"`
-	Kinds     []vaultKind    `json:"kinds,omitempty"`
-	Types     []vaultFacet   `json:"types,omitempty"`
-	Anomalies int            `json:"anomalies,omitempty"`
-	Keep      *VaultKeepView `json:"keep,omitempty"` // schema additive: absent when the bot has no Keep queue
-	Act       *VaultActView  `json:"act,omitempty"`  // Reveal and Sell (V6); absent when the bot has neither
+	Schema    string          `json:"schema"`
+	Mode      string          `json:"mode"`   // "on", or "off" while loot.vault is 0 (read only)
+	Exists    bool            `json:"exists"` // a vault is on disk for the hero
+	Hero      string          `json:"hero,omitempty"`
+	Total     int             `json:"total"`
+	Offset    int             `json:"offset"`
+	Limit     int             `json:"limit"`
+	Items     []VaultItem     `json:"items"`
+	Capacity  VaultCapacity   `json:"capacity"`
+	Upgrade   VaultUpgrade    `json:"upgrade"`
+	Kinds     []vaultKind     `json:"kinds,omitempty"`
+	Types     []vaultFacet    `json:"types,omitempty"`
+	Anomalies int             `json:"anomalies,omitempty"`
+	Equip     *VaultEquipFlag `json:"equip,omitempty"` // one-tap Equip: offered (knob on) or why not; absent when the bot has none
+	Keep      *VaultKeepView  `json:"keep,omitempty"`  // schema additive: absent when the bot has no Keep queue
+	Act       *VaultActView   `json:"act,omitempty"`   // Reveal and Sell (V6); absent when the bot has neither
 }
 
 type vaultQuery struct {
@@ -653,6 +676,13 @@ func (d *VaultDesk) view(ctx context.Context, q vaultQuery, kinds vaultTexts) Va
 		}
 		v.Keep = &kv
 	}
+	if d.Equip != nil {
+		ok, _, why := d.Equip.Gate(ctx)
+		if !d.on() {
+			ok, why = false, "the vault is read only while loot.vault is 0"
+		}
+		v.Equip = &VaultEquipFlag{Enabled: ok, Why: why}
+	}
 	if d.Act != nil {
 		av := d.Act.Act(ctx)
 		if !d.on() {
@@ -676,6 +706,11 @@ func (d *VaultDesk) view(ctx context.Context, q vaultQuery, kinds vaultTexts) Va
 		r := v.Act.Reveal
 		m := bulkid.MassReveal(d.MassFilter, recs, d.Quality, bulkid.Price{Free: r.Free, Charges: r.Charges, ScrollGold: d.ScrollGold, EtherPer: r.EtherPer, EtherBal: r.Balance})
 		v.Act.Reveal.Mass = &m
+		v.Act.Reveal.Bar = d.bar(ctx, recs, r)
+		if ga, ok := d.Act.(VaultGoldActor); ok {
+			gi := ga.GoldInfo(ctx)
+			v.Act.Reveal.Gold = &gi
+		}
 	}
 	recs, total := st.Query(q.f)
 	v.Total = total
@@ -803,6 +838,19 @@ func (a *VaultAPI) Handler() http.Handler {
 		}
 		writeJSON(w, 200, detailOf(&rec, d.Tip, !d.on(), d.keepAction(r.Context(), &rec), d.revealAction(r.Context(), &rec), d.sellAction(r.Context(), &rec)))
 	})
+	m.HandleFunc(VaultEquipGet, func(w http.ResponseWriter, r *http.Request) {
+		d := a.desk()
+		if d == nil || d.Equip == nil {
+			writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "this bot cannot equip from the vault"})
+			return
+		}
+		v, ok := d.Equip.Preview(strings.TrimPrefix(r.URL.Path, VaultEquipGet))
+		if !ok {
+			writeJSON(w, http.StatusNotFound, policyReply{Code: "missing", Error: "no such item"})
+			return
+		}
+		writeJSON(w, 200, v)
+	})
 	static := func(path, file, ctype string) {
 		m.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 			b, err := webFS.ReadFile("web/" + file)
@@ -826,9 +874,11 @@ type vaultBody struct {
 	IDs     []string `json:"ids"`
 	Confirm bool     `json:"confirm"`
 	Target  string   `json:"target,omitempty"`  // keep: stash (default) or inv
+	MaxGold int      `json:"maxGold,omitempty"` // revealgold: the most gold the order may spend (0: the quote)
 	Ether   bool     `json:"ether,omitempty"`   // reveal: pay with Ether (an explicit tap; identify.etherPerReveal)
 	Now     bool     `json:"now,omitempty"`     // keep, reveal, sell: also ask the bot to walk home for it
 	Dismiss bool     `json:"dismiss,omitempty"` // sellprompt: mute the prompt
+	Slot    string   `json:"slot,omitempty"`    // equip: auto (default), left or right (rings)
 }
 
 type vaultFail struct {
@@ -874,6 +924,10 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 			writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "the vault is read only (loot.vault is 0 or there is no vault yet)"})
 			return
 		}
+		if route == VaultRevealGoldCancelRoute {
+			a.goldRoute(w, r, d, route, &b)
+			return
+		}
 		if route == VaultPromptRoute {
 			if d.Act == nil || !b.Dismiss {
 				writeJSON(w, http.StatusBadRequest, policyReply{Code: "dismiss", Error: "send dismiss: true"})
@@ -887,8 +941,16 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 			writeJSON(w, http.StatusBadRequest, policyReply{Code: "ids", Error: "send 1 to " + strconv.Itoa(vaultMaxIDs) + " ids"})
 			return
 		}
+		if route == VaultRevealGoldRoute {
+			a.goldRoute(w, r, d, route, &b)
+			return
+		}
 		if route == VaultDiscardRoute && !b.Confirm {
 			writeJSON(w, http.StatusBadRequest, policyReply{Code: "confirm", Error: "discard needs confirm: true"})
+			return
+		}
+		if route == VaultEquipRoute || route == VaultEquipCancel {
+			a.equip(w, r, d, route, &b)
 			return
 		}
 		if route == VaultKeepRoute {
@@ -1004,6 +1066,49 @@ func (a *VaultAPI) keep(w http.ResponseWriter, r *http.Request, d *VaultDesk, b 
 		default:
 			rep.Failed = append(rep.Failed, vaultFail{ID: res.ID, Code: res.Code, Error: res.Why})
 		}
+	}
+	rep.OK = len(rep.Failed) == 0
+	code := 200
+	if len(rep.Done) == 0 {
+		code = http.StatusConflict
+	}
+	writeJSON(w, code, rep)
+}
+
+// equip takes ONE order (the sheet sends the id and the slot) or cancels it. The reply has the same shape as keep; the page
+// reads the order back from GET /api/vault/equip/<id>, so a toast never says more than what the bot holds.
+func (a *VaultAPI) equip(w http.ResponseWriter, r *http.Request, d *VaultDesk, route string, b *vaultBody) {
+	if d.Equip == nil {
+		writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "this bot cannot equip from the vault"})
+		return
+	}
+	if len(b.IDs) != 1 {
+		writeJSON(w, http.StatusBadRequest, policyReply{Code: "ids", Error: "send exactly one id"})
+		return
+	}
+	var res VaultKeepResult
+	if route == VaultEquipCancel {
+		res = d.Equip.Cancel(b.IDs[0])
+	} else {
+		if b.Slot != "" && b.Slot != "auto" && b.Slot != "left" && b.Slot != "right" {
+			writeJSON(w, http.StatusBadRequest, policyReply{Code: "slot", Error: "slot is auto, left or right"})
+			return
+		}
+		if ok, code, why := d.Equip.Gate(r.Context()); !ok {
+			writeJSON(w, http.StatusConflict, policyReply{Code: code, Error: why})
+			return
+		}
+		res = d.Equip.Enqueue(r.Context(), b.IDs[0], b.Slot, b.Now)
+	}
+	rep := vaultReply{Done: []string{}}
+	switch {
+	case res.OK && res.Already:
+		rep.Already = append(rep.Already, res.ID)
+		rep.Done = append(rep.Done, res.ID)
+	case res.OK:
+		rep.Done = append(rep.Done, res.ID)
+	default:
+		rep.Failed = append(rep.Failed, vaultFail{ID: res.ID, Code: res.Code, Error: res.Why})
 	}
 	rep.OK = len(rep.Failed) == 0
 	code := 200
