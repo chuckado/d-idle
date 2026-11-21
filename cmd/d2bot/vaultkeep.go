@@ -18,6 +18,7 @@ import (
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/ether"
 	"d2lod-bot/internal/invdesk"
+	"d2lod-bot/internal/merc"
 	"d2lod-bot/internal/town"
 	"d2lod-bot/internal/vault"
 	"d2lod-bot/internal/vaultkeep"
@@ -99,6 +100,17 @@ func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir, curren
 		k.Ether = &bulkid.EtherPayer{W: lazyWallet{func() *ether.Wallet { return etherFor(dir, "", nil, nil).Wallet() }}, Price: func() int { return e.Tune.Identify.EtherPerReveal }}
 	}
 	k.Namer = ha.name
+	k.Hand = equipHand{ref: ref, e: e, snap: snap}
+	k.EquipOn = equipOn(e)
+	k.EquipPath = filepath.Join(dataDir, "vaults", hero(), "vault", "equip.json")
+	if e.Data != nil {
+		k.Chain = func(code string) []string {
+			if b := e.Data.ItemByCode(code); b != nil {
+				return merc.TypeChain(e.Data, b.Type)
+			}
+			return nil
+		}
+	}
 	home.mu.Lock()
 	home.keep = k
 	home.mu.Unlock()
