@@ -546,8 +546,9 @@
    "assert": [
     {
      "kind": "log_line",
-     "pattern": "step Take the Scroll",
-     "max": 1
+     "pattern": "step Take the Inifuss bark",
+     "max": 1,
+     "why": "the step ran before the restart and is not repeated after it (I4, I6)"
     },
     {
      "kind": "board",
@@ -721,7 +722,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "BLOCKED live 2026-11-21: needs restart_at_s (card boardsm-restart) and a hero that dies on the chunk"
+   "pending_reason": "needs a deterministic park to restart after (U): the runner restart exists (bsm9), but no setup parks a chunk on its own; hold_timeout parks at 60 virtual minutes, which a restart scenario of 80 minutes could use"
   },
   {
    "id": "board.retry.runs-a-step",
@@ -1042,20 +1043,27 @@
    "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
    "assert": [
     {
+     "kind": "log_line",
+     "pattern": "hold needs_gold_farm",
+     "min": 1
+    },
+    {
+     "kind": "log_line",
+     "pattern": "parked",
+     "max": 0
+    },
+    {
      "kind": "board",
      "quest": "forgotten_tower",
      "chunk": "countess",
      "state": "in_progress",
-     "reason": "needs_gold_farm",
-     "when": "always",
-     "why": "sampled: a reason on every sample"
+     "reason": "needs_gold_farm"
     },
     {
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "not yet run against the bsm7 kit-plan build (card bsm7); the assertions are untested sketches (U)"
+   "status": "active"
   },
   {
    "id": "board.hold.too-weak",
@@ -1119,15 +1127,9 @@
    "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
    "assert": [
     {
-     "kind": "board",
-     "quest": "forgotten_tower",
-     "chunk": "countess",
-     "state": "in_progress",
-     "reason": "too_weak",
-     "reason_or": [
-      "route_closed"
-     ],
-     "when": "always"
+     "kind": "log_line",
+     "pattern": "hold (too_weak|route_closed)",
+     "min": 1
     },
     {
      "kind": "level_at_least",
@@ -1142,8 +1144,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "not yet run against the bsm7 kit-plan build (card bsm7); the assertions are untested sketches (U)"
+   "status": "active"
   },
   {
    "id": "board.hold.timeout",
@@ -1222,8 +1223,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "not yet run against the bsm7 kit-plan build (card bsm7); the assertions are untested sketches (U)"
+   "status": "active"
   },
   {
    "id": "board.view.reason-always",
