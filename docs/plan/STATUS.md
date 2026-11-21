@@ -362,6 +362,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 1dd2b99c0 11-20 23:08 `Merge agent/boardorder4: board scenario assertions fixed, probe note` (boardorder4)
+- 016ab686e 11-20 23:07 `Merge branch 'main' into boardorder4` (-)
 - 92389015f 11-20 23:05 `Merge agent/fablecombat: Merge branch 'main' into fablecombat` (fablecombat)
 - 5978c2729 11-20 23:05 `Merge agent/fableboard: Merge branch 'main' into fableboard` (fableboard)
 - ae8e2b1be 11-20 23:05 `Merge agent/fabletown: town and chores planner design review: supply need, town plan, 16 rule conflicts, scenarios, migration cards (docs only)` (fabletown)
@@ -370,6 +372,4 @@
 - 3fb0432b7 11-20 23:01 `Merge branch 'main' into fableboard` (-)
 - 6dad67b70 11-20 23:01 `Merge branch 'main' into fabletown` (-)
 - 5d153db66 11-20 23:01 `Merge branch 'main' into fablepg` (-)
-- e590a2a88 11-20 22:21 `Merge agent/countess3: Merge branch 'main' into countess3` (countess3)
-- 27233215e 11-20 22:20 `Merge branch 'main' into countess3` (-)
 <!-- statusgen:end -->
