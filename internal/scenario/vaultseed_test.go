@@ -151,6 +151,7 @@ func TestVaultAssertions(t *testing.T) {
 		{"log equipped none", Assert{Kind: AVaultLog, Pattern: `^equipped .* head`, Max: new(int)}, false},
 		{"log skipped", Assert{Kind: AVaultLog, Pattern: `skipped \(full\)`, Min: 1}, true},
 		{"log sold must be zero", Assert{Kind: AVaultLog, Pattern: `^sold`, Max: new(int)}, true},
+		{"revealed none", Assert{Kind: AVaultRevealed, Min: 1}, false},
 		{"missed min", Assert{Kind: AVaultMissed, Min: 2}, true},
 		{"missed too few", Assert{Kind: AVaultMissed, Min: 3}, false},
 		{"missed at most", Assert{Kind: AVaultMissed, Max: &three}, true},
@@ -169,6 +170,10 @@ func TestVaultAssertions(t *testing.T) {
 		if len(res) != 1 || res[0].OK != c.ok || res[0].Unobserved {
 			t.Errorf("%s: %+v, want ok=%v", c.name, res, c.ok)
 		}
+	}
+	st.Vault.Records[0].Unlocked = true
+	if r := Evaluate([]Assert{{Kind: AVaultRevealed, Min: 1, Max: &one}}, st); !r[0].OK {
+		t.Errorf("one unlocked live record is revealed: %+v", r)
 	}
 	// a trimmed seeded record fails vault_records_present, an unread vault is UNOBSERVED, not red
 	st.Vault.Records[1].State = "trimmed"
