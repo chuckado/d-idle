@@ -16,10 +16,10 @@ card: "town5"
 owns:
   - "internal/town"
   - "internal/resource"
-  - "docs/contracts/town-basics.md"
+  - "town-basics"
 exclusive: []
 contracts:
-  - "docs/contracts/town-basics.md"
+  - "town-basics"
 ---
 
 ## Description
