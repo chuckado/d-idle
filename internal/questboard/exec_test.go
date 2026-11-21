@@ -8,6 +8,17 @@ import (
 	"testing"
 )
 
+// testSM runs the whole executor suite on the run machine: QUESTBOARD_SM=1 go test ./internal/questboard. A test that
+// states an old behaviour the machine changes on purpose (design section 3.7) skips itself with skipSM.
+var testSM = os.Getenv("QUESTBOARD_SM") == "1"
+
+func skipSM(t *testing.T, why string) {
+	t.Helper()
+	if testSM {
+		t.Skip("changed on purpose by the run machine: " + why)
+	}
+}
+
 type rig struct {
 	t    *testing.T
 	b    *Board
@@ -15,13 +26,16 @@ type rig struct {
 	dir  string
 	hero string
 	x    *Exec
+	sm   bool   // run this rig's Exec on the run machine whatever QUESTBOARD_SM says
 	led  Ledger // the account wallet of the rig (nil: none); see ledger_test.go
 }
 
-func newRig(t *testing.T, class string, clvl int) *rig {
+func newRig(t *testing.T, class string, clvl int) *rig { return newRigSM(t, class, clvl, false) }
+
+func newRigSM(t *testing.T, class string, clvl int, sm bool) *rig {
 	t.Helper()
 	b := mustBoard(t)
-	r := &rig{t: t, b: b, f: NewFake(b, class, clvl), dir: t.TempDir(), hero: "Testy"}
+	r := &rig{t: t, b: b, f: NewFake(b, class, clvl), dir: t.TempDir(), hero: "Testy", sm: sm}
 	r.restart()
 	return r
 }
@@ -32,7 +46,7 @@ func (r *rig) restart() {
 	if err != nil {
 		r.t.Fatal(err)
 	}
-	r.x = NewExec(r.b, st, r.f, r.f, Options{Enabled: true, Ledger: func() Ledger { return r.led }})
+	r.x = NewExec(r.b, st, r.f, r.f, Options{Enabled: true, SM: testSM || r.sm, Ledger: func() Ledger { return r.led }})
 }
 
 func (r *rig) tick(n int) Decision {
@@ -276,6 +290,12 @@ func TestHandInReadBack(t *testing.T) {
 		}
 		r.restart() // a restart forgets the park and the chunk is tried again from the evidence
 		r.f.HandInSilent = 0
+		if testSM { // Q5: with the run machine a park survives the restart until the player retries
+			if d := r.next(); d.Kind != DecBlocked {
+				t.Fatalf("after restart: %v", d)
+			}
+			r.x.Unblock(den, clr)
+		}
 		if d := r.next(); d.Kind != DecAwait {
 			t.Fatalf("after restart: %v", d)
 		}
@@ -290,7 +310,7 @@ func TestHandInReadBack(t *testing.T) {
 }
 
 func TestFailureDeathParkResume(t *testing.T) {
-	fail := StepResult{StepFailed, "no path to the Den"}
+	fail := StepResult{StepFailed, "no path to the Den", ""}
 	t.Run("failures park with a visible reason, no silent loop", func(t *testing.T) {
 		r := newRig(t, "Sorceress", 6)
 		r.x.Accept(den, clr)
@@ -327,15 +347,15 @@ func TestFailureDeathParkResume(t *testing.T) {
 	t.Run("death resumes after recovery, a second death parks", func(t *testing.T) {
 		r := newRig(t, "Paladin", 6)
 		r.x.Accept(den, clr)
-		r.f.Script = []StepResult{{Outcome: StepRan}, {StepDied, "Fallen pack"}}
+		r.f.Script = []StepResult{{Outcome: StepRan}, {StepDied, "Fallen pack", ""}}
 		r.tick(2)
 		if d := r.next(); d.Kind != DecRun {
 			t.Fatalf("after one death: %v", d)
 		}
 		r.restart() // the bot restarts while recovering: progress comes from the evidence
-		r.f.Script = []StepResult{{StepDied, "Fallen pack"}}
+		r.f.Script = []StepResult{{StepDied, "Fallen pack", ""}}
 		r.tick(1)
-		r.x.Report(Decision{Quest: den, Chunk: clr}, StepResult{StepDied, "again"})
+		r.x.Report(Decision{Quest: den, Chunk: clr}, StepResult{StepDied, "again", ""})
 		d := r.next()
 		if d.Kind != DecBlocked || !strings.Contains(d.Why, "died 2 times") {
 			t.Fatalf("%v", d)
@@ -355,7 +375,7 @@ func TestFailureDeathParkResume(t *testing.T) {
 func TestResetPauseCancel(t *testing.T) {
 	r := newRig(t, "Paladin", 6)
 	r.x.Accept(den, clr)
-	r.f.Script = []StepResult{{Outcome: StepRan}, {StepFailed, "x"}, {StepFailed, "x"}}
+	r.f.Script = []StepResult{{Outcome: StepRan}, {StepFailed, "x", ""}, {StepFailed, "x", ""}}
 	r.tick(3)
 	r.x.Reset()
 	if r.f.Count("stop") != 1 {
@@ -455,7 +475,12 @@ func TestTwoAcceptedRecordsRunInChainOrder(t *testing.T) {
 				t.Fatalf("%+v %v", d, err)
 			}
 			st, err := r.x.State()
-			if err != nil || st.Active == nil || st.Active.Chunk != "scroll" || len(st.Extra) != 1 || st.Extra[0].Chunk != "stones" {
+			// with the machine the missing middle part (read) is added at load (D4), so two chunks wait
+			wantExtra := 1
+			if testSM {
+				wantExtra = 2
+			}
+			if err != nil || st.Active == nil || st.Active.Chunk != "scroll" || len(st.Extra) != wantExtra || st.Extra[wantExtra-1].Chunk != "stones" {
 				t.Fatalf("%+v %v", st, err)
 			}
 			if w := WaitsFor(Ref{st.Active.Quest, st.Active.Chunk}); w != "waits for "+cain+"/scroll" {

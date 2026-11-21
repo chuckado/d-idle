@@ -1094,6 +1094,166 @@
      "kind": "no_writes"
     }
    ]
+  },
+  {
+   "id": "act1.wp.dark-wood",
+   "title": "Dark Wood waypoint: walk from Stony Field and activate it (any waypoint step, layout read or explore)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "travel",
+    "target": "Dark Wood waypoint",
+    "nodes": [
+     "wp-dark-wood"
+    ]
+   },
+   "covers": [
+    "travel.waypoint"
+   ],
+   "touches": [
+    "internal/task/",
+    "internal/nav/",
+    "internal/d2dworld/",
+    "internal/d2map/",
+    "internal/bot/task.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     0,
+     1,
+     2
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+    "quests.layoutRead": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level 17 by stat verbs, 5000 gold, waypoints Rogue Encampment to Stony Field by debug wp (SETUP); the Dark Wood waypoint is NOT set. Mechanics only, never balance.",
+   "notes": "Sandbox hero explored the Dark Wood for an hour on this step (step timeout, no waypoint touched). Runs with quests.layoutRead 1 (the fork objpresets feed the waypoint position at arrival); the step must finish (ran or skipped with a 'step timeout N (explored X%)' reason) inside the budget, never spin.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^task step .*outcome=(ran|done) .*step=\\S*wp-dark-wood( |$)",
+     "min": 1,
+     "why": "the waypoint step finished by touching the waypoint (Need reads the waypoint bit after the Do)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^step timeout ",
+     "max": 0,
+     "why": "no timeout: the waypoint is found within the 4 minute step budget"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "act1.wp.dark-wood.layout",
+   "title": "Dark Wood waypoint with the layout read on (quests.layoutRead 1): the waypoint object is walked to, not explored for",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "travel",
+    "target": "Dark Wood waypoint",
+    "nodes": [
+     "wp-dark-wood"
+    ]
+   },
+   "covers": [
+    "travel.waypoint"
+   ],
+   "touches": [
+    "internal/task/",
+    "internal/nav/",
+    "internal/d2dworld/",
+    "internal/d2map/",
+    "internal/bot/task.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     0,
+     1,
+     2
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "quests.layoutRead": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level 17 by stat verbs, 5000 gold, waypoints Rogue Encampment to Stony Field by debug wp (SETUP); the Dark Wood waypoint is NOT set. Mechanics only, never balance.",
+   "notes": "As act1.wp.dark-wood with the fork levelmap read on: needs a d2d with debug levelmap (devp15 and later).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^task step .*outcome=(ran|done) .*step=\\S*wp-dark-wood( |$)",
+     "min": 1,
+     "why": "the waypoint step finished by touching the waypoint (Need reads the waypoint bit after the Do)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^step timeout ",
+     "max": 0,
+     "why": "no timeout: the waypoint is found within the 4 minute step budget"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
   }
  ]
 }

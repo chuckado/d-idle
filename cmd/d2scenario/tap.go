@@ -24,6 +24,7 @@ type tapper struct {
 	client                     *http.Client
 	log                        io.Writer
 	Taps                       []string // "start scroll", "handin read" in order
+	lastWhy                    string   // the last "not startable" line written, so a long wait logs each change once
 }
 
 func newTapper(view, answer, token, quest string, chunks []string, log io.Writer) *tapper {
@@ -50,6 +51,11 @@ type boardView struct {
 		Startable    bool
 	} `json:"offers"`
 	History []struct{ Quest, Chunk string } `json:"history"`
+	Quests  []struct {
+		ID     string
+		State  string
+		Chunks []struct{ ID, State, Readiness, Why string }
+	} `json:"quests"`
 }
 
 func (t *tapper) allowed(chunk string) bool { return len(t.chunks) == 0 || t.chunks[chunk] }
@@ -110,8 +116,30 @@ func (t *tapper) Step(ctx context.Context) (tap string, blocked bool, err error)
 	}
 	if tap != "" {
 		t.Taps = append(t.Taps, tap)
+	} else if v.Running == nil && v.Awaiting == nil {
+		t.logWhyNot(v)
 	}
 	return tap, false, nil
+}
+
+// logWhyNot writes the board's own reason when the wanted chunk is not startable (state, readiness word, why), once per
+// change: a quest that is never offered must say why in the taps log (card andariel1; before it the log stayed silent).
+func (t *tapper) logWhyNot(v boardView) {
+	for _, q := range v.Quests {
+		if q.ID != t.quest {
+			continue
+		}
+		for _, c := range q.Chunks {
+			if !t.allowed(c.ID) {
+				continue
+			}
+			line := fmt.Sprintf("not startable %s/%s: state %s readiness %q why %q", q.ID, c.ID, c.State, c.Readiness, c.Why)
+			if line != t.lastWhy {
+				t.lastWhy = line
+				fmt.Fprintf(t.log, "%s %s\n", time.Now().Format("15:04:05"), line)
+			}
+		}
+	}
 }
 
 // Run polls every interval until ctx ends or the board parks the quest.
@@ -145,15 +173,17 @@ func newWatchToken(path string) (string, error) {
 	return tok, os.WriteFile(path, []byte(tok), 0o600)
 }
 
-// runAPICalls sends the scenario's trigger.api calls to the bot's answer listener, once each in order, and writes the
-// reply to the taps log. The token is the scenario-local one of newWatchToken.
-func runAPICalls(ctx context.Context, base, token string, calls []scenario.APICall, log io.Writer) {
+// runAPICalls sends the scenario's trigger.api calls to the bot's answer listener, once each in order, writes the
+// reply to the taps log and returns the parsed replies for the api_reply assertion. The token is the scenario-local one
+// of newWatchToken.
+func runAPICalls(ctx context.Context, base, token string, calls []scenario.APICall, log io.Writer) []scenario.APIReply {
 	client := &http.Client{Timeout: 10 * time.Second}
 	start := time.Now()
-	for _, c := range calls {
+	var out []scenario.APIReply
+	for i, c := range calls {
 		select {
 		case <-ctx.Done():
-			return
+			return out
 		case <-time.After(time.Until(start.Add(time.Duration(c.After) * time.Second))):
 		}
 		method := c.Method
@@ -169,8 +199,14 @@ func runAPICalls(ctx context.Context, base, token string, calls []scenario.APICa
 			fmt.Fprintf(log, "%s api %s %s: error %v\n", time.Now().Format("15:04:05"), method, c.Path, err)
 			continue
 		}
-		body, _ := io.ReadAll(io.LimitReader(resp.Body, 300))
+		body, _ := io.ReadAll(io.LimitReader(resp.Body, 64<<10))
 		resp.Body.Close()
-		fmt.Fprintf(log, "%s api %s %s: HTTP %d %s\n", time.Now().Format("15:04:05"), method, c.Path, resp.StatusCode, strings.TrimSpace(string(body)))
+		short := strings.TrimSpace(string(body))
+		if len(short) > 300 {
+			short = short[:300]
+		}
+		fmt.Fprintf(log, "%s api %s %s: HTTP %d %s\n", time.Now().Format("15:04:05"), method, c.Path, resp.StatusCode, short)
+		out = append(out, parseReply(i, c.Path, resp.StatusCode, body))
 	}
+	return out
 }
