@@ -1,10 +1,11 @@
 ---
 id: TASK-704
 title: 'tphoard: loose town portal scrolls hoard the pack beside a tome'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T00:26:00Z'
+updated_date: '2026-11-21T02:30:00Z'
 labels:
   - bot
   - bug
