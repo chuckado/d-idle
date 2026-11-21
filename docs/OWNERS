@@ -126,6 +126,7 @@ docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-minutes.jsonl.gz  gaterun  gat
 docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-extras.jsonl.gz  gaterun  gate2multi-20261107-1811-g2h
 
 # BEGIN GENERATED OWNERS (tools/sharedgen/sharedgen.py from the owns: keys of open tasks; do not edit between the markers)
+GLOSSARY.md  credit-runner  fabledecisions2
 backlog/merge-lines/decomp34.txt  credit-runner  decomp34
 cmd/bossrun/adapter.go  pro-runner  levelplan3
 cmd/d2bot  credit-runner  cainfix
@@ -360,6 +361,7 @@ deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 deploy/d2d-container/tester_image_test.go  credit-runner  charsup
 deploy/nas/imgbuild.sh  credit-runner  buildhosts3
 docs/actbot.md  credit-runner  cain45
+docs/adr/  credit-runner  fabledecisions2
 docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md  credit-runner  adrfable
 docs/adr/0020-proving-ground-and-stat-skill-agency.md  credit-runner  adrfable
 docs/adr/README.md  credit-runner  adrfable
@@ -382,6 +384,7 @@ docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/contracts/merc-policy.md  credit-runner  mercrevive2
 docs/d2d-loot.md  credit-runner  groundquality
 docs/decisions.md  credit-runner  adrfable
+docs/decisions.md  credit-runner  fabledecisions2
 docs/design/bulk-identify-2026-11-18.md  credit-runner  bulkid-design
 docs/design/fable-review-2026-11-19  user  fablereview
 docs/design/fable-review-2026-11-21/combat-engine*  pro-runner  fablecombat

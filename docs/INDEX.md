@@ -35,6 +35,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0022-hero-knowledge-reads-never-cheat.md](adr/0022-hero-knowledge-reads-never-cheat.md): 0022: Hero knowledge: engine facts exposed as reads never make a run CHEATED
 - [0023-fidelity-by-rule-differentials.md](adr/0023-fidelity-by-rule-differentials.md): 0023: Fidelity acceptance: per-rule differentials replace the A:B verdict; no play on Game.exe
 - [0024-ladder-runewords-in-didle-mode.md](adr/0024-ladder-runewords-in-didle-mode.md): 0024: Ladder-only runewords enabled in d.idle mode
+- [0025-quest-board-lifecycle-stored-runs.md](adr/0025-quest-board-lifecycle-stored-runs.md): 0025: Quest board lifecycle: stored runs, accept chain, stop cascade, restart-persistent parks
+- [0026-combat-engine-capability-table-and-grammar.md](adr/0026-combat-engine-capability-table-and-grammar.md): 0026: Combat engine: one capability table, generated tiers, delivery grammar, reads a player can see
+- [0027-proving-ground-gate-and-night-window.md](adr/0027-proving-ground-gate-and-night-window.md): 0027: Proving Ground gate: assertion digest, tiers, quotas, ledger, quarantine; standing night window
+- [0028-one-supply-need-town-planner.md](adr/0028-one-supply-need-town-planner.md): 0028: One supply need (town planner)
 - [adr/README.md](adr/README.md): Architecture decision records
 - [decisions.md](decisions.md): Decisions (user, with date)
 

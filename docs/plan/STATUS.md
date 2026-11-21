@@ -348,6 +348,7 @@
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
 | town1 | proposed | - | `tools/provingground/scenarios/town.plan.*`<br>`internal/scenario/state.go`<br>`docs/probes/town-plan-scenarios.md` | - |
 | town2 | proposed | - | `internal/supply`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/bot/kitgate.go`<br>`internal/town/basicsfix.go` | - |
+| fabledecisions2 | proposed | - | `docs/adr/`<br>`docs/decisions.md`<br>`GLOSSARY.md` | - |
 | town3 | proposed | - | `internal/supply`<br>`data/supply`<br>`internal/env/tuning_town.go`<br>`docs/knobs.md` | - |
 | town4 | proposed | - | `internal/task`<br>`internal/town`<br>`internal/bot`<br>`internal/supply` | - |
 | town5 | proposed | - | `internal/town`<br>`internal/resource`<br>`town-basics` | - |
@@ -393,14 +394,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 7295f4ba1 11-21 00:44 `Merge agent/fabledecisions2: Merge branch 'main' into fabledecisions2` (fabledecisions2)
 - 6a35831bb 11-21 00:44 `Merge agent/combatcards: combatcards: 17 dlv-* combat-engine cards (docs/backlog only)` (combatcards)
 - 346082f06 11-21 00:44 `Merge agent/towncards: town planner: 12 migration cards TASK-746..765 (docs/backlog only)` (towncards)
+- 1ebb38cb5 11-21 00:37 `Merge branch 'main' into fabledecisions2` (-)
 - 12b543079 11-21 00:37 `Merge branch 'main' into combatcards` (-)
 - 98fd96105 11-21 00:37 `Merge branch 'main' into towncards` (-)
 - a3e821b57 11-21 00:11 `Merge agent/chores2: Merge branch 'main' into chores2` (chores2)
 - acd82d6e2 11-21 00:10 `Merge branch 'main' into chores2` (-)
 - 134d42aab 11-20 23:16 `Merge agent/druid1: Merge branch 'main' into druid1` (druid1)
 - 18cf1885d 11-20 23:15 `Merge branch 'main' into druid1` (-)
-- 1dd2b99c0 11-20 23:08 `Merge agent/boardorder4: board scenario assertions fixed, probe note` (boardorder4)
-- 016ab686e 11-20 23:07 `Merge branch 'main' into boardorder4` (-)
 <!-- statusgen:end -->
