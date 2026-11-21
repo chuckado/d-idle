@@ -845,6 +845,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [api-credits.md](process/api-credits.md): API credits: PR review and the optional Haiku tick
 - [backlog-board-nas.md](process/backlog-board-nas.md): Backlog.md web board on the NAS (read-only mirror) (status: DEPLOYED 2026-11-05 as a NAS Docker-tab template (variant B: own br0 address behind Nginx Proxy Manager...)
+- [barbarian-support.md](process/barbarian-support.md): Barbarian Frenzy: what the engine plays, and what a later card must build (status: current (card barb1, 2026-11-20; Fable roadmap Q8, class 4 after the Sorceress fire build, the Necromancer...)
 - [baseline-runs.md](process/baseline-runs.md): Baseline runs: the extra original-game runs (card baselineruns) (status: current, PREPARED ONLY (2026-11-01). Nothing here was run live; no game was started. The launcher is...)
 - [board-cards.md](process/board-cards.md): Board cards (status: moved to the private ops repo (d2lod-ops, `docs/process/board-cards.md`). Not part of the public tree.)
 - [build-hosts-2026-11-14.md](process/build-hosts-2026-11-14.md): Build hosts: moving builds off the worker host (2026-11-14) (status: study, nothing applied. Request (user, 2026-11-14): stop building on the worker host while the user plays;...)

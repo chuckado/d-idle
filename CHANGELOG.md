@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-706 <!--sg:agent/barb1-->
 - Merge branch 'main' into tphoard <!--sg:agent/tphoard-->
 - Merge branch 'main' into boardorder <!--sg:agent/boardorder-->
 - hammer1: scenario bound from the first run, card result, run record <!--sg:agent/hammer1-->
