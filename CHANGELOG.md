@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into countess3 <!--sg:agent/countess3-->
+- boardprereq: task result <!--sg:agent/boardprereq-->
 - Merge branch 'main' into countess2 <!--sg:agent/countess2-->
 - Merge branch 'main' into act1more <!--sg:agent/act1more-->
 - proving-ground.md: trigger.api exists <!--sg:agent/boardorder2-->

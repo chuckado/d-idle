@@ -29,12 +29,9 @@ func (x Match) Is(m Mon) bool {
 // Anchor says where the fight happens. Preferred source is a preset (works for random layouts); Hint is a fixed
 // world coordinate from Kolbot used only as a cross-check and as a last-resort walk target (S, U for 1.14d).
 type Anchor struct {
-	Preset *PresetRef
-	Also   []*PresetRef // tried in order when Preset is absent from the level
-	Hint   *Pt
-	// Spawns are known positions of the boss tried in order after the Hint (and after a missing preset): d2d lists no
-	// monster presets and every level map is whole, so exploring finds nothing; walking to where she lies does.
-	Spawns   []Pt
+	Preset   *PresetRef
+	Also     []*PresetRef // tried in order when Preset is absent from the level
+	Hint     *Pt
 	Boss     bool // the boss unit itself is the anchor: no preset, wait/explore until it is in the monster list
 	HintSlop int  // subtiles the resolved stand may differ from Hint before a note is recorded (default 60)
 	// Teleport: the arena is islands over a void (Arcane Sanctuary), so walking cannot reach the anchor; when the
@@ -50,6 +47,9 @@ type Teleporter interface {
 // PresetRef selects a preset and the stand point derived from it.
 type PresetRef struct {
 	Kind, ID int
+	// Name matches a monster preset by its name when the ID differs between sources (the fork's layout read names the
+	// superunique preset; the Kolbot ID is S): "The Countess" equals "Countess" and "countess".
+	Name     string
 	Off      Pt        // stand = preset.Pos + Off when no variant matches
 	Variants []Variant // layouts told apart by the preset's X (Countess chest: 12565 / 12526)
 }
