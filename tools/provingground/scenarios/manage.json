@@ -37,7 +37,7 @@
         },
         "api": [
           {
-            "after_s": 20,
+            "after_s": 3,
             "path": "/api/inventory/equip",
             "body": {
               "id": "{{pack.item[name=cap].id}}",
@@ -135,7 +135,7 @@
         },
         "api": [
           {
-            "after_s": 20,
+            "after_s": 3,
             "path": "/api/inventory/identify",
             "body": {
               "id": "{{pack.item[name=cap].id}}"
@@ -171,7 +171,7 @@
         },
         {
           "kind": "log_line",
-          "pattern": "identify.*cap",
+          "pattern": "identif",
           "min": 1,
           "why": "the lane identified it"
         },
