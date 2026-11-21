@@ -35,6 +35,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0022-hero-knowledge-reads-never-cheat.md](adr/0022-hero-knowledge-reads-never-cheat.md): 0022: Hero knowledge: engine facts exposed as reads never make a run CHEATED
 - [0023-fidelity-by-rule-differentials.md](adr/0023-fidelity-by-rule-differentials.md): 0023: Fidelity acceptance: per-rule differentials replace the A:B verdict; no play on Game.exe
 - [0024-ladder-runewords-in-didle-mode.md](adr/0024-ladder-runewords-in-didle-mode.md): 0024: Ladder-only runewords enabled in d.idle mode
+- [0025-quest-board-lifecycle-stored-runs.md](adr/0025-quest-board-lifecycle-stored-runs.md): 0025: Quest board lifecycle: stored runs, accept chain, stop cascade, restart-persistent parks
+- [0026-combat-engine-capability-table-and-grammar.md](adr/0026-combat-engine-capability-table-and-grammar.md): 0026: Combat engine: one capability table, generated tiers, delivery grammar, reads a player can see
+- [0027-proving-ground-gate-and-night-window.md](adr/0027-proving-ground-gate-and-night-window.md): 0027: Proving Ground gate: assertion digest, tiers, quotas, ledger, quarantine; standing night window
+- [0028-one-supply-need-town-planner.md](adr/0028-one-supply-need-town-planner.md): 0028: One supply need (town planner)
 - [adr/README.md](adr/README.md): Architecture decision records
 - [decisions.md](decisions.md): Decisions (user, with date)
 
@@ -989,6 +993,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [bot-cpu-fix-2026-11-16.md](probes/bot-cpu-fix-2026-11-16.md): Bot CPU fixes after the live calm-window profile (2026-11-16) (status: current. Follows docs/probes/bot-cpu-live-2026-11-16.md (Ledger.load 30 percent, DB.IsA 14.5 percent). All...)
 - [bot-cpu-live-2026-11-16.md](probes/bot-cpu-live-2026-11-16.md): Bot CPU on the sandbox, live profile (card botcpulive, 2026-11-16) (status: partial. Calm-window profile captured (V); NO profile inside a burst (the built-in profiler is one-shot,...)
 - [cainstart-2026-11-19.md](probes/cainstart-2026-11-19.md): cainstart: why `cain.scroll` stayed RED from the camp (2026-11-19) (status: current (card cainstart). Tags: V verified (run named), U unverified. CHEATED setup (clvl 17, waypoints,...)
+- [chores2-2026-11-21.md](probes/chores2-2026-11-21.md): chores2: restock to the route guard kit, stash pays (2026-11-21) (status: current. Tags: V verified (named run or test), S secondary, U unverified. Setups of the scenario runs are...)
 - [classpacing.md](probes/classpacing.md): classpacing probe (status: see `docs/soaks/classpacing.md` (the result doc of TASK-147); scripts and per-minute data are in...)
 - [currency1.md](probes/currency1.md): Probe: currency slice 1, the Raven's Mark rows (TASK-63) (status: UNVERIFIED live, 2026-11-06. Offline checks passed; the live run was not started because Gate 2 seeds were...)
 - [deploy-cockpit-2026-11-15.md](probes/deploy-cockpit-2026-11-15.md): Deploy record: cockpit UI to the sandbox, 2026-11-15 (status: record. Task TASK-490. Tags: V = verified in this run (command named), U = not verified.)

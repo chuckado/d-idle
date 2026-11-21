@@ -8,6 +8,11 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- pgcards: 16 Proving Ground and merge gate cards <!--sg:agent/pgcards-->
+- Merge branch 'main' into fabledecisions2 <!--sg:agent/fabledecisions2-->
+- combatcards: 17 dlv-* combat-engine cards (docs/backlog only) <!--sg:agent/combatcards-->
+- town planner: 12 migration cards TASK-746..765 (docs/backlog only) <!--sg:agent/towncards-->
+- Merge branch 'main' into chores2 <!--sg:agent/chores2-->
 - Merge branch 'main' into druid1 <!--sg:agent/druid1-->
 - board scenario assertions fixed, probe note <!--sg:agent/boardorder4-->
 - Merge branch 'main' into fablecombat <!--sg:agent/fablecombat-->
