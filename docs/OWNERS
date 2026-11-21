@@ -203,6 +203,7 @@ cmd/d2bot/glancewire_pause.go  credit-runner  uifix1
 cmd/d2bot/glancewire_pause_test.go  credit-runner  uifix1
 cmd/d2bot/glancewire_reset.go  credit-runner  botreset
 cmd/d2bot/glancewire_test.go  credit-runner  uib5
+cmd/d2bot/goalsclock_test.go  credit-runner  pgclock
 cmd/d2bot/goldfarmwire_test.go  credit-runner  repairtrip
 cmd/d2bot/hotkeymapwire.go  credit-runner  q13input
 cmd/d2bot/hotkeymapwire_test.go  credit-runner  q13input
@@ -406,6 +407,7 @@ docs/charselect.md  credit-runner  charsup
 docs/combat.md  credit-runner  cainfix3
 docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/contracts/merc-policy.md  credit-runner  mercrevive2
+docs/d2d-determinism.md  credit-runner  pgclock
 docs/d2d-loot.md  credit-runner  groundquality
 docs/decisions.md  credit-runner  adrfable
 docs/decisions.md  credit-runner  fabledecisions2
@@ -821,6 +823,7 @@ internal/bot/exploredpct.go  credit-runner  exploredpct
 internal/bot/exploredpct_test.go  credit-runner  exploredpct
 internal/bot/failsafe_test.go  credit-runner  flakefix
 internal/bot/farm.go  credit-runner  pgclock
+internal/bot/farmclock_test.go  credit-runner  pgclock
 internal/bot/farmreset.go  credit-runner  farmloop
 internal/bot/farmreset_test.go  credit-runner  farmloop
 internal/bot/geargate.go  credit-runner  staletarget
@@ -1070,6 +1073,9 @@ internal/d2dctl/vault_verbs.go  credit-runner  vaulttip
 internal/d2dctl/vault_verbs_test.go  credit-runner  vaulttip
 internal/d2dctl/verbs.go  credit-runner  arrivalsettle
 internal/d2denv  live-agent  k1layout
+internal/d2denv/env.go  credit-runner  pgclock
+internal/d2denv/reader.go  credit-runner  pgclock
+internal/d2denv/recent_test.go  credit-runner  pgclock
 internal/d2dinput  pro-runner  bounce3
 internal/d2dinput/  credit-runner  dlv-cast-verbs
 internal/d2dinput/controller.go  credit-runner  arrivalsettle

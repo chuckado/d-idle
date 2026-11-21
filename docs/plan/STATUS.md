@@ -352,7 +352,7 @@
 | dlv-cleanup | proposed | - | `internal/combat/`<br>`internal/power/`<br>`tools/ci/` | - |
 | pgjournal | in-progress | - | `cmd/d2scenario/journal.go`<br>`docs/probes/pg-journal-pair-2026-11-21.md`<br>`docs/probes/pg-gate-group1-2026-11-21.md`<br>`cmd/d2scenario/detrun.go`<br>`cmd/d2scenario/detrun_test.go`<br>`tools/provingground/run.sh` | - |
 | pgtaps | in-progress | - | `cmd/d2bot/ladder.go`<br>`cmd/d2scenario/tap.go`<br>`internal/scenario/taps.go`<br>`cmd/d2scenario/run.go`<br>`cmd/d2scenario/tap_test.go`<br>`internal/scenario/result.go` | - |
-| pgclock | proposed | - | `cmd/d2bot/d2dbackend.go`<br>`internal/bot/farm.go`<br>`internal/goals/clock_test.go` | - |
+| pgclock | in-progress | - | `cmd/d2bot/d2dbackend.go`<br>`internal/bot/farm.go`<br>`internal/goals/clock_test.go`<br>`internal/bot/farmclock_test.go`<br>`internal/d2denv/reader.go`<br>`internal/d2denv/recent_test.go`<br>`internal/d2denv/env.go`<br>`cmd/d2bot/goalsclock_test.go`<br>`docs/d2d-determinism.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
 | pgstability | proposed | - | `internal/scenario/stability.go`<br>`tools/provingground/scenarios/tiers.json` | - |
 | pghero | proposed | - | `internal/scenario/hero`<br>`tools/ab/prep`<br>`tools/survival` | - |
@@ -417,6 +417,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- edcfd5121 11-21 10:48 `Merge agent/pgc5: pgclock: goals manager, farm timers and the guard snapshot reuse window on the env clock (TASK-739)` (pgc5)
+- 8691cf517 11-21 10:46 `Merge branch 'main' into pgclock` (-)
 - 759c72151 11-21 10:45 `Merge agent/pgc4: pgledgeron: ledger environment for builder runs, pull path, doc and card (TASK-777)` (pgc4)
 - 6928ca8b4 11-21 10:43 `Merge branch 'main' into pgledgeron` (-)
 - d3341adfa 11-21 10:41 `Merge agent/pgc3: mgcache: gate stats, replay measurement, nightly uncached race doc and card (TASK-747)` (pgc3)
@@ -425,6 +427,4 @@
 - 352164657 11-21 10:32 `Merge branch 'main' into vaultequip` (-)
 - 45bd666e2 11-21 10:27 `Merge agent/mobilequests: Merge branch 'main' into mobilequests` (mobilequests)
 - 71e89ba39 11-21 10:26 `Merge branch 'main' into mobilequests` (-)
-- 625057758 11-21 10:24 `Merge agent/pgc2: mgwatchdog: merge queue watchdog doc and card (TASK-752); ops watchdog, phase budgets, status exit code` (pgc2)
-- b5b112d58 11-21 10:23 `Merge branch 'main' into mgwatchdog` (-)
 <!-- statusgen:end -->
