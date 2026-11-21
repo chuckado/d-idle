@@ -318,6 +318,7 @@
 | boardorder | proposed | - | `internal/questboard`<br>`cmd/d2scenario`<br>`internal/scenario`<br>`tools/provingground/scenarios/cain.json`<br>`internal/watch/web/panels/quest-board` | - |
 | countess2 | proposed | - | `tools/provingground/scenarios/act1.json`<br>`tools/provingground/countess-check.sh`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
 | barb1 | proposed | - | `data/capabilities/capabilities.json`<br>`internal/buildfile/frenzy_test.go`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/buildfile/testdata/barbarian-frenzy-guide.json`<br>`internal/plandata/build-barbarian_frenzy_guide.json`<br>`docs/plan/data/build-barbarian_frenzy_guide.json`<br>`internal/leveler/frenzy_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/frenzy_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/agency/planner_test.go`<br>`internal/agency/testdata/agreement.json`<br>`tools/provingground/scenarios/points.json`<br>`docs/process/barbarian-support.md`<br>`docs/agency.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/scenario_test.go` | - |
+| druid1 | proposed | - | `data/capabilities/capabilities.json`<br>`internal/buildfile/druidfire_test.go`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/buildfile/testdata/druid-fire-guide.json`<br>`internal/plandata/build-druid_fire_guide.json`<br>`docs/plan/data/build-druid_fire_guide.json`<br>`internal/leveler/druidfire_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/druidfire_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/agency/planner_test.go`<br>`internal/agency/testdata/agreement.json`<br>`tools/provingground/scenarios/points.json`<br>`docs/process/druid-support.md`<br>`docs/agency.md`<br>`internal/scenario/scenario_test.go` | - |
 | boardprereq | proposed | - | `internal/questboard`<br>`tools/provingground/scenarios/cain.json` | - |
 | countess3 | proposed | - | `internal/d2dctl`<br>`internal/d2dworld`<br>`internal/boss`<br>`internal/d2map`<br>`cmd/d2bot/boss.go`<br>`docs/process/layout-read.md`<br>`docs/probes/provingground-countess-2026-11-20.md`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | `fork-branch:didle/level-monsters-20261121` |
 | fablepg | proposed | - | `docs/design/fable-review-2026-11-21/proving-ground-gate.md`<br>`docs/design/fable-review-2026-11-21/proving-ground-gate-catalog.md` | - |
@@ -362,6 +363,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 134d42aab 11-20 23:16 `Merge agent/druid1: Merge branch 'main' into druid1` (druid1)
+- 18cf1885d 11-20 23:15 `Merge branch 'main' into druid1` (-)
 - 1dd2b99c0 11-20 23:08 `Merge agent/boardorder4: board scenario assertions fixed, probe note` (boardorder4)
 - 016ab686e 11-20 23:07 `Merge branch 'main' into boardorder4` (-)
 - 92389015f 11-20 23:05 `Merge agent/fablecombat: Merge branch 'main' into fablecombat` (fablecombat)
@@ -370,6 +373,4 @@
 - 623f72aa4 11-20 23:05 `Merge agent/fablepg: fablepg: Proving Ground determinism, tiers, merge gate and builder scheduling design review (docs only)` (fablepg)
 - 8176155a0 11-20 23:01 `Merge branch 'main' into fablecombat` (-)
 - 3fb0432b7 11-20 23:01 `Merge branch 'main' into fableboard` (-)
-- 6dad67b70 11-20 23:01 `Merge branch 'main' into fabletown` (-)
-- 5d153db66 11-20 23:01 `Merge branch 'main' into fablepg` (-)
 <!-- statusgen:end -->
