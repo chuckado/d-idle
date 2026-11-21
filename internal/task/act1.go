@@ -1,10 +1,17 @@
 package task
 
-import "time"
+import (
+	"time"
+
+	"d2lod-bot/internal/saves"
+)
 
 // Normal Act 1 quest handlers (docs/goals/execution.md section 3, planner.md). A handler is data plus a few lines:
 // it returns the nodes of one quest. Tags: area ids are V per the repo docs (levels.txt not re-read here), quest
 // stage proxies and talk option names are U until the dialog layer and the quest reader are verified live.
+
+// QuestWord is the raw record word of q as the reader gave it (0 when no reader knows it).
+func (w World) QuestWord(q string) uint16 { return w.Quests[q].Raw }
 
 // Quest returns the state of q: the reader's value (EvMemory/EvSave) or, when the reader knows less, a stage derived
 // from this game's observations (EvProxy). A proxy can say Cleared; it never says Done, except where the world
@@ -197,6 +204,12 @@ func cainNodes() []Node {
 	// the board's own group (cainReportNodes), so no field step may stay needed until that talk is done (S7b; U: whether
 	// the game sets Cleared at the cage or Done at once).
 	free := stageAtLeast(q, StageCleared)
+	// stonesDone: record bit 4 (the cairn stones were done, saves.QEnteredArea, V fork CainQuest comment "4 the stones done").
+	// The scroll was taken, read and the key used for it, so the field steps before the stones are over for this hero
+	// whatever the pack holds: a hero joined with this bit has the tree marked used (fork CainQuest rejoin: tree_used) and
+	// the tree never drops a second scroll, so waiting for one is a stall (sandbox hero 2026-11-21, word 0x0018).
+	stonesDone := func(w World) bool { return w.QuestWord(q)&saves.QEnteredArea != 0 }
+	passed := func(w World) bool { return free(w) || stonesDone(w) }
 	// The stones do nothing without the Key to the Cairn Stones (bkd) in the pack: every click is ignored (V lab drill
 	// L1). Without it the step is a prerequisite fault with the reason, so the board shows why and does not click.
 	withKey := func(s Step) Step {
@@ -229,16 +242,16 @@ func cainNodes() []Node {
 	}
 	cage.Evidence = free // the board reads the quest word, not "not in Tristram"
 	return []Node{
-		{Step: StepWaypoint(id(q, "wp-dark-wood"), DarkWood, free)},
-		{Step: StepTravel(id(q, "to-wood"), "Go to the Dark Wood", DarkWood, func(w World) bool { return w.Items[ItemBark] > 0 || w.Items[ItemCainSc] > 0 || free(w) })},
+		{Step: StepWaypoint(id(q, "wp-dark-wood"), DarkWood, passed)},
+		{Step: StepTravel(id(q, "to-wood"), "Go to the Dark Wood", DarkWood, func(w World) bool { return w.Items[ItemBark] > 0 || w.Items[ItemCainSc] > 0 || passed(w) })},
 		req(Node{Step: StepInteract(id(q, "tree"), "Take the Inifuss bark", "Tree of Inifuss",
-			func(w World) bool { return w.Items[ItemBark] > 0 || w.Items[ItemCainSc] > 0 || free(w) }, func(w World) bool { return w.Area == DarkWood })}, id(q, "to-wood")),
+			func(w World) bool { return w.Items[ItemBark] > 0 || w.Items[ItemCainSc] > 0 || passed(w) }, func(w World) bool { return w.Area == DarkWood })}, id(q, "to-wood")),
 		{Step: StepTalk(id(q, "read"), "Give the bark to Akara", NPCAkara, "bark",
-			func(w World) bool { return w.Items[ItemBark] == 0 || free(w) }, nil)},
-		{Step: StepTravel(id(q, "to-stony"), "Go to Stony Field", StonyField, func(w World) bool { return opened(w) || free(w) })},
+			func(w World) bool { return w.Items[ItemBark] == 0 || passed(w) }, nil)},
+		{Step: StepTravel(id(q, "to-stony"), "Go to Stony Field", StonyField, func(w World) bool { return opened(w) || passed(w) })},
 		req(Node{Step: withKey(StepInteract(id(q, "stones"), "Touch the cairn stones", "cairn-stones",
-			func(w World) bool { return opened(w) || free(w) }, func(w World) bool { return w.Area == StonyField }))}, id(q, "to-stony")),
-		{Step: StepTravel(id(q, "to-tristram"), "Enter Tristram", Tristram, func(w World) bool { return inTristram(w) || free(w) })},
+			func(w World) bool { return opened(w) || passed(w) }, func(w World) bool { return w.Area == StonyField }))}, id(q, "to-stony")),
+		{Step: StepTravel(id(q, "to-tristram"), "Enter Tristram", Tristram, func(w World) bool { return inTristram(w) || passed(w) })},
 		{Step: cage},
 		{Step: withEvidence(StepTravel(id(q, "home"), "Return to camp", RogueEncampment, func(w World) bool { return !free(w) && w.Area != Tristram || w.InTown }),
 			func(w World) bool { return free(w) && w.InTown })},
