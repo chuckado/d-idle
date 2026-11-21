@@ -85,10 +85,9 @@ func (f *Fighter) expectRecord(snap *d2.Snapshot, sp SkillSpec) {
 		return
 	}
 	mana, cost := snap.Player.Mana, sp.Cost
-	window := time.Duration(max(castTicks(sp.Name, f.tune().CastFCR, f.D2D), 10)+4) * tickMs * time.Millisecond
 	f.expect.pending = append(f.expect.pending, expectation{
 		key:      expectKey{sp.Name, expectReasonMana},
-		deadline: f.now().Add(window),
+		deadline: f.now().Add(f.castWindow(sp.Name)),
 		check: func(p *d2.Player) (bool, bool, bool) {
 			if mana-p.Mana >= cost {
 				return true, true, false
