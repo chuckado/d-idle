@@ -138,7 +138,7 @@
     }
    },
    "budget": {
-    "virtual_min": 20
+    "virtual_min": 6
    },
    "matrix": {
     "classes": [
@@ -163,9 +163,15 @@
     },
     {
      "kind": "log_line",
-     "pattern": "quest board: step Take the Inifuss bark",
+     "pattern": "quest board: starting chunk search_for_cain/scroll",
      "max": 0,
-     "why": "no tree click: the record says the scroll was taken long ago"
+     "why": "the record says the scroll was taken long ago: the chunk reads done and never starts (before the fix it started and walked to the tree)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: step (Activate waypoint|Take the Inifuss bark)",
+     "max": 0,
+     "why": "no waypoint walk and no tree click"
     },
     {
      "kind": "log_line",
@@ -239,7 +245,7 @@
     }
    },
    "budget": {
-    "virtual_min": 20
+    "virtual_min": 6
    },
    "matrix": {
     "classes": [
@@ -264,9 +270,15 @@
     },
     {
      "kind": "log_line",
-     "pattern": "quest board: step Take the Inifuss bark",
+     "pattern": "quest board: starting chunk search_for_cain/scroll",
      "max": 0,
-     "why": "no tree click: the record says the scroll was taken long ago"
+     "why": "the record says the scroll was taken long ago: the chunk reads done and never starts (before the fix it started and walked to the tree)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: step (Activate waypoint|Take the Inifuss bark)",
+     "max": 0,
+     "why": "no waypoint walk and no tree click"
     },
     {
      "kind": "log_line",
