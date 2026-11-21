@@ -220,6 +220,7 @@ func (h equipHand) Pick(unit uint32, slot string) (string, error) {
 	if d == nil {
 		return "", errors.New("equipping is not available on this bot")
 	}
+	defer h.ref.holdSnap(h.fresh())()
 	fits, err := d.FitSlots(unit)
 	if err != nil {
 		return "", err
@@ -257,7 +258,9 @@ func (h equipHand) Wear(ctx context.Context, unit uint32, slot string) ([]vaultk
 	if d == nil {
 		return nil, errors.New("equipping is not available on this bot")
 	}
-	before := wornUnits(h.fresh())
+	fresh := h.fresh()
+	defer h.ref.holdSnap(fresh)()
+	before := wornUnits(fresh)
 	names := map[uint32]string{}
 	for _, u := range before {
 		names[u.ID] = "item"
@@ -295,6 +298,7 @@ func (h equipHand) Protect(unit uint32) {
 	if h.ref.inv == nil {
 		return
 	}
+	defer h.ref.holdSnap(h.fresh())()
 	for try := 0; try < 6; try++ {
 		err := h.ref.inv.SetMark(unit, invdesk.MarkKeep)
 		var rf *invdesk.Refusal

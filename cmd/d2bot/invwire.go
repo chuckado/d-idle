@@ -44,12 +44,7 @@ func newInvDesk(stateDir string, d *display, ref *runnerRef) error {
 			}
 			return ""
 		},
-		Snap: func() *d2.Snapshot {
-			if r := ref.p.Load(); r != nil {
-				return r.LastSnapshot()
-			}
-			return nil
-		},
+		Snap: ref.deskSnap,
 	}
 	if stateDir != "" {
 		cfg.Path = filepath.Join(stateDir, invdesk.StateFile)
