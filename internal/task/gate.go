@@ -273,14 +273,26 @@ func fieldReady(a Area) func(World) *Fault {
 			}
 			return &Fault{Kind: KindDanger, Why: "not ready: " + why}
 		case w.RouteBlocked != "" && RouteGuarded(a):
-			return &Fault{Kind: KindDanger, Why: "not ready: route guard (" + w.RouteBlocked + ")"}
+			return guardFault("route guard", "route", w.RouteBlocked, RouteLevelWhy(w) == "")
 		case w.TowerBlocked != "" && TowerGuarded(a):
-			return &Fault{Kind: KindDanger, Why: "not ready: tower guard (" + w.TowerBlocked + ")"}
+			return guardFault("tower guard", "ftower", w.TowerBlocked, TowerLevelWhy(w) == "")
 		case w.Gated && a != w.SafeArea:
 			return &Fault{Kind: KindDanger, Why: "not ready: " + w.GatedWhy}
 		}
 		return nil
 	}
+}
+
+// guardFault is the fault of a closed guarded road. A level shortage is danger (the planner levels first); a kit-only
+// shortage (potions, portal, mana) is a resource fault that inserts a chores trip, as gateReady does for the boss
+// quests. Before, a hero at 3 healing potions of 4 was refused with danger, the planner went on leveling and the kit
+// was never restocked (Proving Ground act1more, act1.tools.malus Paladin 11).
+func guardFault(name, stepID, why string, kitOnly bool) *Fault {
+	msg := "not ready: " + name + " (" + why + ")"
+	if !kitOnly {
+		return &Fault{Kind: KindDanger, Why: msg}
+	}
+	return &Fault{Kind: KindResource, Why: msg, Insert: []Step{StepChores("guard/" + stepID + "/chores")}}
 }
 
 // gatedReady is the Ready of the quest steps that start a boss quest (greeting, waypoint, walk): a gear-gated character
