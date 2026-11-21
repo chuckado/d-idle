@@ -31,7 +31,7 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 	deadline := n.clk.Now().Add(2 * t.WalkTimeout())
 	settled := false
 	start := n.levelNow()
-	if n.recentNoExit(start, levelNo) {
+	if n.recentNoExit(start, levelNo) && !n.gateShown(levelNo) {
 		return fmt.Errorf("%w: level %d from %d (nothing new since the last search)", ErrNoExit, levelNo, start)
 	}
 	fruitless := 0
@@ -96,6 +96,11 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 				// Right after an arrival the client may still be loading rooms: give the map one chance to grow.
 				if !settled && n.mapGrows(ctx, 3*time.Second) {
 					settled = true
+					continue
+				}
+				// A border that d2dworld still probes (a linked neighbour whose collision is not built yet) is late, not
+				// missing: andariel1, Monastery Gate to Outer Cloister, "no exit" 0.2 s after arrival with pending 1.
+				if n.pendingGate(ctx, o.lm, levelNo) {
 					continue
 				}
 				n.markNoExit(o.level, levelNo, known)
@@ -193,6 +198,38 @@ func (n *Navigator) recentNoExit(from, to int) bool {
 	for _, m := range n.noExit {
 		if m.from == from && m.to == to && now.Before(m.until) && m.known == lm.Grid.KnownCount() {
 			return true
+		}
+	}
+	return false
+}
+
+// gateShown reports that the current level map shows a way to levelNo now (an earlier "nothing found" mark is stale then:
+// the map did not grow, but its borders did).
+func (n *Navigator) gateShown(levelNo int) bool {
+	lm := n.w.Current()
+	return lm != nil && lm.Grid != nil && hasGate(lm, levelNo)
+}
+
+// pendingWait bounds the wait for a late border (nav clock: virtual in a lockstep run, which steps the game).
+const pendingWait = 30 * time.Second
+
+// pendingGate waits while the level still has borders it cannot read, for a gate to levelNo to show up. It reports
+// whether one did.
+func (n *Navigator) pendingGate(ctx context.Context, lm *d2map.LevelMap, levelNo int) bool {
+	if lm == nil || lm.Pending == 0 {
+		return false
+	}
+	end := n.clk.Now().Add(pendingWait)
+	for n.clk.Now().Before(end) && ctx.Err() == nil {
+		n.clk.Sleep(n.tune().Poll())
+		if _, err := n.observeWait(ctx); err != nil {
+			return false
+		}
+		if n.gateShown(levelNo) {
+			return true
+		}
+		if cur := n.w.Current(); cur == nil || cur.Pending == 0 {
+			return false
 		}
 	}
 	return false

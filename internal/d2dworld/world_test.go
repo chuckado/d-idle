@@ -559,7 +559,7 @@ func TestLinkedButNothingOpenIsPending(t *testing.T) {
 	b.openRow = func(float64) bool { return false } // neighbour listed, collision not built yet
 	w := New(b, Options{})
 	w.Update()
-	if w.cur.pending != 2 || len(w.Current().Adjacent) != 0 { // level 2 (nothing open) and level 3 (not linked)
+	if w.cur.pending != 2 || w.Current().Pending != 2 || len(w.Current().Adjacent) != 0 { // level 2 (nothing open) and level 3 (not linked)
 		t.Fatalf("pending %d adjacent %+v", w.cur.pending, w.Current().Adjacent)
 	}
 }

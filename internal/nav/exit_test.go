@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"testing"
+	"time"
 
 	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/input"
@@ -13,13 +14,15 @@ import (
 // town (level 1) at x 3000..3200 next to a wide wilderness (level 2) at x 2800..3000. The wall between is at
 // x=2999..3000; the real gap is only y 3050..3064, like the Rogue Encampment gate, although the wilderness is
 // walkable along its whole edge.
-func gateWorld() (*sim, *d2map.Grid) {
+func gateWorld() (*sim, *d2map.Grid) { return gateWorldAt(input.Point{X: 3100, Y: 3090}) }
+
+func gateWorldAt(start input.Point) (*sim, *d2map.Grid) {
 	g := openField(2800, 3000, 400, 120)
 	blockRect(g, d2map.Rect{X: 2999, Y: 3000, W: 2, H: 50})
 	blockRect(g, d2map.Rect{X: 2999, Y: 3065, W: 2, H: 55})
 	l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 200, H: 120}}
 	l2 := &simLevel{no: 2, rect: d2map.Rect{X: 2800, Y: 3000, W: 200, H: 120}}
-	return newSim(g, input.Point{X: 3100, Y: 3090}, l1, l2), g
+	return newSim(g, start, l1, l2), g
 }
 
 func TestExitToThroughBorderGap(t *testing.T) {
@@ -415,5 +418,45 @@ func TestRouteAvoidLevels(t *testing.T) {
 	n.SetAvoidLevels(nil)
 	if r, _ := n.Route(3, 4); len(r) != 2 {
 		t.Fatalf("cleared set restores the old route: %v", r)
+	}
+}
+
+// andariel1 (Monastery Gate to Outer Cloister, "no exit" 0.2 s after arrival with pending 1): a border the world still
+// probes is late, not missing. The exit search must wait for it instead of marking the link dead, and a stale
+// "nothing found" mark must not hide a gate that showed up since.
+func TestExitToWaitsForALateBorder(t *testing.T) {
+	s, _ := gateWorldAt(input.Point{X: 3030, Y: 3057})
+	l1 := s.levels[0]
+	adj := l1.lm.Adjacent
+	l1.lm.Adjacent, l1.lm.Pending = nil, 1
+	t0 := s.now
+	s.onStep = func(s *sim) {
+		if s.now.Sub(t0) > 6*time.Second && l1.lm.Pending > 0 {
+			l1.lm.Adjacent, l1.lm.Pending = adj, 0 // d2d built the neighbour's collision
+		}
+	}
+	n := s.navigator()
+	n.exploreFn = func(context.Context, func() bool, *input.Point) error { return ErrExplored }
+	if err := n.ExitTo(ctxT(t), 2); err != nil {
+		t.Fatalf("late border: %v", err)
+	}
+	if s.cur().no != 2 {
+		t.Fatalf("still in level %d", s.cur().no)
+	}
+}
+
+func TestExitToIgnoresAStaleNoExitMark(t *testing.T) {
+	s, _ := gateWorldAt(input.Point{X: 3030, Y: 3057})
+	l1 := s.levels[0]
+	adj := l1.lm.Adjacent
+	l1.lm.Adjacent = nil
+	n := s.navigator()
+	n.exploreFn = func(context.Context, func() bool, *input.Point) error { return ErrExplored }
+	if err := n.ExitTo(ctxT(t), 2); !errors.Is(err, ErrNoExit) {
+		t.Fatalf("no border at all: %v", err)
+	}
+	l1.lm.Adjacent = adj // the border was only late: the grid did not grow, the borders did
+	if err := n.ExitTo(ctxT(t), 2); err != nil {
+		t.Fatalf("stale mark held the gate back: %v", err)
 	}
 }

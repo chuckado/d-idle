@@ -22,8 +22,11 @@ type LevelMap struct {
 	Presets  []Preset // all preset units of all Room2s, sorted
 	Exits    []Exit
 	Adjacent []Adjacent
-	Warps    []Point // Level.WarpX/Y, UNVERIFIED semantics
-	Rooms    []Room2 // static Room2 list
+	// Pending counts abutting levels whose border is not readable yet (not linked, or linked with no open cell across):
+	// a missing gate may only be late (d2dworld keeps probing). Zero on backends without a layout.
+	Pending int
+	Warps   []Point // Level.WarpX/Y, UNVERIFIED semantics
+	Rooms   []Room2 // static Room2 list
 	// RoomRows are the d2d level-generator rooms with a type (the "room" rows of debug presets): Pos is the room
 	// origin plus half a cell. Empty on Game.exe and on d2d builds that do not print them.
 	RoomRows []RoomRow
