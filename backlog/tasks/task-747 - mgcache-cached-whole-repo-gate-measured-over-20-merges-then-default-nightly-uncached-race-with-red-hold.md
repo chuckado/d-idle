@@ -29,7 +29,7 @@ Design 4.2 and 4.3, 7 card 12. Private ops repo work. Design: docs/design/fable-
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [x] #1 Measure cached vs -count=1 gate over 20 merges
+- [ ] #1 Measure cached vs -count=1 gate over 20 merges
 - [ ] #2 drop -count=1 from the merge gate afterwards (Q3)
 - [x] #3 nightly uncached whole-repo -race with red hold
 <!-- AC:END -->
