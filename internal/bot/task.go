@@ -958,12 +958,20 @@ func (a taskActs) ActivateWaypoint(ctx context.Context, ar task.Area) error {
 }
 
 func (a taskActs) Chores(ctx context.Context) error {
-	_, err := a.r.d.Town.Chores(ctx, a.r.fullChores("task"))
+	plan := a.r.fullChores("task")
+	// the route guard counts belt and pack: buy up to its minimum plus a buffer (the road drinks potions), not only to the belt plan
+	plan.KitHealing = a.r.e.Tune.Resource.KitMinHP + kitHealingBuffer
+	_, err := a.r.d.Town.Chores(ctx, plan)
+	a.r.poll() // the executor confirms the step on the latest snapshot: it must see what was just bought
 	if err != nil {
 		return task.Wrap(task.KindResource, err)
 	}
 	return nil
 }
+
+// kitHealingBuffer is the healing potions the task chores buy above the guard minimum (U: judgment; a hero at exactly the
+// minimum drank below it on the first fight and parked the quest, Proving Ground act1.tools.malus).
+const kitHealingBuffer = 2
 
 // portalOnlyIdleMax bounds the LevelTo slices spent waiting in a portal-only level (2 s each).
 const portalOnlyIdleMax = 30
