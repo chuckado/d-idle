@@ -79,6 +79,7 @@ const maxLinkTries = 20
 // World is a nav.worldSource over one d2d socket. Not safe for concurrent use, like d2map.Tracker.
 type World struct {
 	layoutLogged string // signature of the last levelmap diagnostic line
+	objPresetsLogged string // signature of the last levelmonsters objpresets diagnostic line
 	v            Verbs
 	o            Options
 	levs         map[int]*lvl
@@ -671,6 +672,16 @@ func (w *World) mergeMonsterPresets(ctx context.Context, l *lvl, sub func(x, y f
 	doc, err := lm.LevelMonsters(ctx)
 	if err != nil || doc == nil || doc.Level != l.own.Level {
 		return
+	}
+	if sig := fmt.Sprint(doc.Level, len(doc.ObjPresets)); sig != w.objPresetsLogged {
+		w.objPresetsLogged = sig // diagnostics only on change: the verb is read at every fetch
+		var wps []string
+		for _, o := range doc.ObjPresets {
+			if o.Kind == "waypoint" || o.Kind == "tree" || o.Kind == "cage" {
+				wps = append(wps, fmt.Sprintf("%s:%d@%.1f,%.1f built=%v", o.Kind, o.Class, o.X, o.Y, o.Built))
+			}
+		}
+		w.logf("d2dworld: levelmonsters level %d: %d object presets, key objects %v", doc.Level, len(doc.ObjPresets), wps)
 	}
 	w.mergeObjectPresets(l, doc.ObjPresets, sub)
 	for _, p := range doc.Presets {
