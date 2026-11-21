@@ -12,6 +12,7 @@ import (
 const (
 	ABoard        = "board"           // quest, chunk, state (+ or), reason (+ reason_or), when end|always|never
 	ABoardHeadsLE = "board_heads_le"  // max: in every sample at most max chunks are in_progress or awaiting_handin
+	ABoardReasons = "board_reasons"   // no args: in every sample each accepted, awaiting_handin or blocked chunk has a reason code (I5)
 	AAPIReply     = "api_reply"       // index, status, ok, already, code, changed_has: the recorded reply of trigger.api[index]
 	BoardWhenEnd  = "end"             // the last sample (default)
 	BoardAlways   = "always"          // every sample
@@ -149,6 +150,26 @@ func evalBoardHeads(a Assert, st State) AssertResult {
 	return AssertResult{OK: worst <= *a.Max, Want: want, Got: fmt.Sprintf("at most %d", worst)}
 }
 
+// evalBoardReasons is the sampled form of I5: a live chunk that does not move says why. A running head (in_progress)
+// needs none; the page and the checker treat a hold as a reason.
+func evalBoardReasons(st State) AssertResult {
+	want := "every accepted, awaiting or blocked chunk has a reason code in every sample"
+	if !st.has("board") || len(st.Board) == 0 {
+		return unobs(want, "the quest board")
+	}
+	for i, s := range st.Board {
+		for _, c := range s.Chunks {
+			switch c.State {
+			case "accepted", boardLiveB, "blocked":
+				if c.Reason == "" {
+					return AssertResult{Want: want, Got: fmt.Sprintf("sample %d: %s/%s is %s with no reason", i, c.Quest, c.Chunk, c.State)}
+				}
+			}
+		}
+	}
+	return AssertResult{OK: true, Want: want, Got: fmt.Sprintf("%d samples", len(st.Board))}
+}
+
 func evalAPIReply(a Assert, st State) AssertResult {
 	want := fmt.Sprintf("reply %d", *a.Index)
 	if a.Status != 0 {
@@ -211,7 +232,7 @@ func LogSpan(log []byte) (first, last time.Time, ok bool) {
 // the sampler even for a scenario with no api calls and no tapper.
 func NeedsBoardSamples(s Scenario) bool {
 	for _, a := range s.Assert {
-		if a.Kind == ABoard || a.Kind == ABoardHeadsLE {
+		if a.Kind == ABoard || a.Kind == ABoardHeadsLE || a.Kind == ABoardReasons {
 			return true
 		}
 	}

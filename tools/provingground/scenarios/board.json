@@ -1301,16 +1301,16 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Sampled every 15 wall seconds; the full I5 sweep over all chunks is the card 6 unit test.",
+   "notes": "Sampled every 15 wall seconds: every accepted, awaiting or blocked chunk of the board has a reason code (I5); the full sweep over all chunks and codes is the unit test TestDeskChangedAndReasons.",
    "assert": [
+    {
+     "kind": "board_reasons"
+    },
     {
      "kind": "board",
      "quest": "search_for_cain",
-     "chunk": "stones",
-     "state": "accepted",
-     "reason": "waits_for",
-     "when": "always",
-     "why": "the queued chunk always says why"
+     "chunk": "read",
+     "state": "done"
     },
     {
      "kind": "board_heads_le",
