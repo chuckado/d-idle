@@ -20,6 +20,8 @@ type Setup struct {
 	Verbs []Verb `json:"verbs"`
 	// Board is the chunk the player accepted; the runner writes it with the real questboard store (<hero>.quests.json).
 	Board *QuestRef `json:"board,omitempty"`
+	// BoardAlso are further accepted chunks, written after Board in order.
+	BoardAlso []QuestRef `json:"board_also,omitempty"`
 	// Tuning are knob overrides for the bot run (state/tuning.json), after the scenario's own Trigger.Knobs.
 	Tuning map[string]any `json:"tuning,omitempty"`
 	// Build is trigger.build: the runner writes it as levelerBuild into the bot's config.json.
@@ -143,6 +145,7 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		add(f[0], f[1])
 	}
 	su.Board = p.Board
+	su.BoardAlso = p.BoardAlso
 	su.Build = s.Trigger.Build
 	if p.Board != nil {
 		su.Tuning = map[string]any{"quests.board": 1}

@@ -312,6 +312,10 @@
 | q4runes | in-progress | - | `internal/env/tuning_items.go`<br>`internal/plandata/ladder_runewords.go`<br>`internal/plandata/ladder_runewords_test.go`<br>`docs/knobs.md`<br>`internal/env/tuning.go`<br>`internal/data/db.go`<br>`internal/data/extra.go`<br>`internal/data/data_test.go`<br>`internal/town/imbue_test.go`<br>`internal/watch/returnscreen.go`<br>`internal/watch/returnscreen_test.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/funwire.go`<br>`cmd/d2bot/ladder.go` | - |
 | decomp44 | proposed | - | `docs/research/decomp44-pet-block-trace.md`<br>`docs/research/decomp43-monster-block-trace.md`<br>`docs/upstream/bodies/monster-block-body.md` | - |
 | necro1 | proposed | - | `data/capabilities/capabilities.json`<br>`internal/buildfile/necrosummoner_test.go`<br>`internal/buildfile/testdata/necromancer-summoner-guide.json`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/plandata/build-necromancer_summoner_guide.json`<br>`docs/plan/data/build-necromancer_summoner_guide.json`<br>`internal/leveler/necrosummoner_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/necrosummoner_test.go`<br>`internal/agency/planner_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/agency/testdata/agreement.json`<br>`tools/provingground/scenarios/points.json`<br>`docs/process/necromancer-support.md`<br>`docs/agency.md` | - |
+| act1more | proposed | - | `tools/provingground/scenarios/act1more.json`<br>`internal/questspec/act1boss_test.go`<br>`docs/probes/provingground-act1more-2026-11-20.md` | - |
+| hammer1 | proposed | - | `internal/buildfile/hammerdin_test.go`<br>`internal/buildfile/testdata/paladin-hammerdin-guide.json`<br>`internal/plandata/build-paladin_hammerdin_guide.json`<br>`docs/plan/data/build-paladin_hammerdin_guide.json`<br>`internal/leveler/hammerdin_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/hammerdin_test.go`<br>`internal/agency/planner_test.go`<br>`internal/agency/testdata/agreement.json`<br>`tools/provingground/scenarios/points.json`<br>`docs/process/hammerdin-support.md`<br>`docs/agency.md` | - |
+| boardorder | proposed | - | `internal/questboard`<br>`cmd/d2scenario`<br>`internal/scenario`<br>`tools/provingground/scenarios/cain.json`<br>`internal/watch/web/panels/quest-board` | - |
+| barb1 | proposed | - | `data/capabilities/capabilities.json`<br>`internal/buildfile/frenzy_test.go`<br>`internal/buildfile/tablecheck_test.go`<br>`internal/buildfile/testdata/barbarian-frenzy-guide.json`<br>`internal/plandata/build-barbarian_frenzy_guide.json`<br>`docs/plan/data/build-barbarian_frenzy_guide.json`<br>`internal/leveler/frenzy_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/profileid_test.go`<br>`internal/agency/frenzy_test.go`<br>`internal/agency/buildrules_test.go`<br>`internal/agency/planner_test.go`<br>`internal/agency/testdata/agreement.json`<br>`tools/provingground/scenarios/points.json`<br>`docs/process/barbarian-support.md`<br>`docs/agency.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/scenario_test.go` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -350,14 +354,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- fd3cc0c96 11-20 17:18 `Merge agent/devp15: Merge branch 'main' into devp15` (devp15)
-- bb98709b8 11-20 17:16 `Merge branch 'main' into devp15` (-)
-- cf9958700 11-20 16:33 `Merge agent/pgfix4: pgfix4: knob entry, knobs.md, refresh the d2drill portal copy (whole-repo gate findings)` (pgfix4)
-- 221de028f 11-20 16:02 `Merge branch 'main' into pgfix4` (-)
-- 8cf9a9e10 11-20 15:53 `Merge agent/act1next: Merge branch 'main' into act1next` (act1next)
-- 4d2fa8dba 11-20 15:52 `Merge branch 'main' into act1next` (-)
-- afe07bebe 11-20 15:50 `Merge agent/decomp44: Merge branch 'main' into decomp44` (decomp44)
-- 0c5fec3e3 11-20 15:50 `Merge agent/secondworker: Merge branch 'main' into w2worker` (secondworker)
-- 763d6d70f 11-20 15:48 `Merge branch 'main' into decomp44` (-)
-- ff55fd030 11-20 15:48 `Merge branch 'main' into w2worker` (-)
+- 389505fb9 11-20 21:38 `Merge agent/act1more: Merge branch 'main' into act1more` (act1more)
+- 85ef7f640 11-20 21:36 `Merge branch 'main' into act1more` (-)
+- 4a623ace2 11-20 21:31 `Merge agent/boardorder2: proving-ground.md: trigger.api exists` (boardorder2)
+- 464141bab 11-20 21:30 `Merge branch 'main' into boardorder2` (-)
+- 09641c32a 11-20 21:25 `Merge agent/barb1: Merge branch 'main' into TASK-706` (barb1)
+- 71efb3052 11-20 21:24 `Merge branch 'main' into TASK-706` (-)
+- 39403b563 11-20 20:45 `Merge agent/tphoard: Merge branch 'main' into tphoard` (tphoard)
+- 1ff13e214 11-20 20:44 `Merge branch 'main' into tphoard` (-)
+- 41a771cdd 11-20 19:57 `Merge agent/boardorder: Merge branch 'main' into boardorder` (boardorder)
+- 9cd0444b9 11-20 19:56 `Merge branch 'main' into boardorder` (-)
 <!-- statusgen:end -->

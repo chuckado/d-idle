@@ -139,6 +139,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | town.beltFillPct | 100 | 25..100 | % | 25 | 1 | Refill each potion type to this share of its planned columns. |
 | town.equipKindFails | 2 | 1..10 | count | 10 | 1 | Failed equips of one item kind (base class) into one slot before that kind is skipped until the character gains a level. The memory is by kind, so a fresh game (new item ids) does not repeat the same refused swap (g2g E1: Cap to head failed in every game). |
 | town.tpScrollTarget | 2 | 1..20 | count | 1 | 5 | Scrolls to hold when no tome is owned. |
+| town.looseScrollKeep | 2 | 0..10 | count | 0 | 3 | Town portal and identify scrolls kept loose in the pack while a tome of the same kind is owned. The pickup rule takes no more, and the sell chore sells the surplus (sandbox hero: 22 loose scrolls beside a tome of 10 filled the pack to 82%). |
 | town.tpReserve | 2 | 1..5 | count | 1 | 3 | Town portal scrolls a poor character buys once it carries its minimal healing kit (a dive then does not start with the only scroll spent). 1 = one scroll, the old cap. |
 | town.tpMinGold | 0 | 0..1000 | gold | 1000 | 1 | Below this gold the first town portal scroll is not bought and a missing scroll is no trip reason, so a poor character puts its gold into potions first (XPGAP: 62% of the gold of a fresh d2d character went to scrolls). 0 = always buy at the scroll price. |
 | town.tpTomeMinGold | 450 | 0..5000 | gold | 5000 | 4 | Buy a Tome of Town Portal when gold is at least this. |

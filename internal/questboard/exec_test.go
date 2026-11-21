@@ -434,17 +434,34 @@ func TestSwitchOffKeepsRecords(t *testing.T) {
 	}
 }
 
-func TestTwoAcceptedRecordsNeverRun(t *testing.T) {
-	r := newRig(t, "Paladin", 12)
-	r.x.Accept(den, clr)
-	p, _, _ := r.x.st.Load()
-	p.Accepted = append(p.Accepted, Record{Quest: brq, Chunk: brc, Diff: "normal"})
-	if err := r.x.st.file.Save(p); err != nil {
-		t.Fatal(err)
-	}
-	d := r.tick(3)
-	if d.Kind != DecBlocked || !strings.Contains(d.Why, "more than one") || r.f.Count("step") != 0 {
-		t.Fatalf("%v %v", d, r.f.Calls)
+// Sandbox 2026-11-20: a plan file with two accepted Cain chunks parked both. The board now runs them one at a
+// time in chain order whatever the tap order, and the second waits with a visible reason.
+func TestTwoAcceptedRecordsRunInChainOrder(t *testing.T) {
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		t.Run(class, func(t *testing.T) {
+			const cain = "search_for_cain"
+			r := newRig(t, class, 17)
+			if err := r.x.Accept(cain, "scroll"); err != nil {
+				t.Fatal(err)
+			}
+			p, _, _ := r.x.st.Load()
+			// stones first in the file: the file order must not decide
+			p.Accepted = append([]Record{{Quest: cain, Chunk: "stones", Diff: "normal"}}, p.Accepted...)
+			if err := r.x.st.file.Save(p); err != nil {
+				t.Fatal(err)
+			}
+			d, err := r.x.Next()
+			if err != nil || d.Kind != DecRun || d.Quest != cain || d.Chunk != "scroll" {
+				t.Fatalf("%+v %v", d, err)
+			}
+			st, err := r.x.State()
+			if err != nil || st.Active == nil || st.Active.Chunk != "scroll" || len(st.Extra) != 1 || st.Extra[0].Chunk != "stones" {
+				t.Fatalf("%+v %v", st, err)
+			}
+			if w := WaitsFor(Ref{st.Active.Quest, st.Active.Chunk}); w != "waits for "+cain+"/scroll" {
+				t.Fatal(w)
+			}
+		})
 	}
 }
 

@@ -395,26 +395,8 @@ func (t *Town) BackToField(ctx context.Context, levelNo int) error {
 			return cerr
 		}
 	}
-	if len(t.droppedPortals) > 0 {
-		if s, err = t.current(); err != nil {
-			return err
-		}
-		if data.IsTown(s.Player.Area) {
-			t.e.Log.Info("back to field: fallback=newportal reason=stale portal dropped", "dropped", len(t.droppedPortals))
-			if portal, err := t.openPortal(ctx); err != nil {
-				t.e.Log.Warn("back to field: new portal failed", "err", err)
-			} else if err := t.enterPortal(ctx, portal); err != nil {
-				t.e.Log.Warn("back to field: new portal click failed", "err", err)
-				if werr := t.wrongLevel(levelNo); werr != nil {
-					return werr
-				}
-			} else if _, err := t.waitArea(ctx, levelNo, 15*time.Second); err == nil {
-				return nil
-			} else if werr := t.wrongLevel(levelNo); werr != nil {
-				return werr
-			}
-		}
-	}
+	// No fresh portal here: game.exe opens none in a town (V fork source travel.cpp:363, FUN_005be290; d2d returns the
+	// same), so a scroll cast now only logs "town portal did not appear" (3 times in 2 sandbox hours). Waypoint, then walk.
 	if lvl := t.e.Data.AreaByID(levelNo); lvl != nil && lvl.Waypoint != 255 && lvl.Waypoint != 0 && t.e.Tune.Nav.UseWaypoints {
 		if len(t.droppedPortals) > 0 {
 			t.e.Log.Info("back to field: fallback=waypoint reason=no working portal", "level", levelNo)

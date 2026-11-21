@@ -90,7 +90,10 @@
   {
    "class": "sorceress",
    "build": "lightning",
-   "avoid": ["Chain Lightning", "Lightning"],
+   "avoid": [
+    "Chain Lightning",
+    "Lightning"
+   ],
    "bands": [
     {
      "minLevel": 0,
@@ -271,6 +274,81 @@
     "Thorns": "f6",
     "Resist Fire": "f7",
     "Prayer": "f8"
+   },
+   "melee": {
+    "reach": 4,
+    "holdMs": 600,
+    "retreatLifePct": 40,
+    "surround": 4,
+    "surroundLifePct": 65,
+    "manaReserve": 4
+   }
+  },
+  {
+   "class": "paladin",
+   "build": "hammerdin",
+   "bands": [
+    {
+     "minLevel": 18,
+     "requires": "Blessed Hammer",
+     "attack": [
+      "Blessed Hammer",
+      "Smite",
+      "Attack"
+     ],
+     "aura": [
+      {
+       "name": "Prayer",
+       "restLifePct": 70
+      },
+      {
+       "name": "Concentration"
+      },
+      {
+       "name": "Might"
+      }
+     ]
+    },
+    {
+     "minLevel": 2,
+     "requires": "Smite",
+     "attack": [
+      "Smite",
+      "Attack"
+     ]
+    },
+    {
+     "attack": [
+      "Attack"
+     ]
+    }
+   ],
+   "aura": [
+    {
+     "name": "Prayer",
+     "restLifePct": 70
+    },
+    {
+     "name": "Might"
+    },
+    {
+     "name": "Thorns"
+    }
+   ],
+   "buffs": [
+    [
+     "Holy Shield"
+    ]
+   ],
+   "layout": {
+    "Smite": "f1",
+    "Blessed Hammer": "f2",
+    "Holy Shield": "f3",
+    "Concentration": "f4",
+    "Vigor": "f5",
+    "Might": "f6",
+    "Prayer": "f7",
+    "Thorns": "f8"
    },
    "melee": {
     "reach": 4,
@@ -500,6 +578,61 @@
     "Shadow Warrior": "f5",
     "Lightning Sentry": "f6",
     "Charged Bolt Sentry": "f7"
+   }
+  },
+  {
+   "class": "barbarian",
+   "build": "frenzy",
+   "bands": [
+    {
+     "minLevel": 24,
+     "requires": "Frenzy",
+     "attack": [
+      "Frenzy",
+      "Double Swing",
+      "Attack"
+     ]
+    },
+    {
+     "minLevel": 6,
+     "requires": "Double Swing",
+     "attack": [
+      "Double Swing",
+      "Attack"
+     ]
+    },
+    {
+     "attack": [
+      "Bash",
+      "Attack"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Battle Orders"
+    ],
+    [
+     "Shout"
+    ]
+   ],
+   "layout": {
+    "Bash": "f1",
+    "Double Swing": "f2",
+    "Frenzy": "f3",
+    "Battle Orders": "f4",
+    "Shout": "f5",
+    "Howl": "f6",
+    "Berserk": "f7",
+    "Concentrate": "f8"
+   },
+   "melee": {
+    "reach": 4,
+    "holdMs": 500,
+    "retreatLifePct": 40,
+    "surround": 4,
+    "surroundLifePct": 65,
+    "manaReserve": 4
    }
   }
  ]

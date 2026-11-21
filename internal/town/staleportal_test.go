@@ -49,17 +49,20 @@ func walked(r *rig) bool {
 	return false
 }
 
-func TestBackToFieldStalePortalDroppedFreshPortal(t *testing.T) {
+// A stale portal is dropped after two clicks and the way back is the waypoint or the walk: no portal opens in a town
+// (V fork source travel.cpp:363), so a scroll is never cast there (tphoard).
+func TestBackToFieldStalePortalDroppedNoScrollCast(t *testing.T) {
 	for _, class := range []d2.Class{d2.Sorceress, d2.Barbarian} {
 		r, d, id := staleRig(t, class, 2)
-		if err := r.T.BackToField(context.Background(), 6); err != nil || r.W.Player.Area != 6 {
-			t.Fatalf("class %v: err %v area %d", class, err, r.W.Player.Area)
-		}
+		_ = r.T.BackToField(context.Background(), 6)
 		if d.clicks[id] != 2 {
 			t.Errorf("class %v: %d clicks on the stale portal, want 2", class, d.clicks[id])
 		}
-		if walked(r) {
-			t.Errorf("class %v: walked or took the waypoint: %v", class, r.Mv.Calls)
+		if !walked(r) {
+			t.Errorf("class %v: no waypoint or walk after the stale portal: %v", class, r.Mv.Calls)
+		}
+		if n := countCode(r, "tsc"); n != 2 {
+			t.Errorf("class %v: %d scrolls left, want 2 (none cast in town)", class, n)
 		}
 	}
 }

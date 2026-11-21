@@ -645,6 +645,7 @@ func (t *Town) sellableIf(s *d2.Snapshot, full bool) (out []d2.Unit) {
 	sp := t.sellPass(s)
 	kept := map[string]int{}
 	rvOver := t.rejuvOverCap(s)
+	loose := map[string]int{}
 	for _, u := range s.Inventory.Container(d2.ContInventory) {
 		if u.Item.Flags&d2.FlagStartItem != 0 {
 			continue
@@ -661,6 +662,11 @@ func (t *Town) sellableIf(s *d2.Snapshot, full bool) (out []d2.Unit) {
 			}
 		}
 		if t.sellMarksOnly {
+			continue
+		}
+		if t.looseScrollSurplus(s, u, loose) {
+			t.e.Log.Info("sell: loose scroll beside a tome", "item", t.nameOf(u), "keep", t.tune().LooseScrollKeep)
+			out = append(out, u)
 			continue
 		}
 		v := t.judge.EvaluateUnit(u)
@@ -700,6 +706,28 @@ func (t *Town) sellableIf(s *d2.Snapshot, full bool) (out []d2.Unit) {
 		}
 	}
 	return out
+}
+
+// looseScrollSurplus reports whether u is a loose town portal or identify scroll beyond town.looseScrollKeep while a
+// tome of the same kind is in the pack (the tome absorbs scrolls, the loose ones only fill cells: the sandbox hero held
+// 22 beside a tome of 10). It is the one exception to "scrolls are never sold" (neverSell). seen counts per code, in
+// pack order. Without a tome the shopping targets rule and nothing is sold.
+func (t *Town) looseScrollSurplus(s *d2.Snapshot, u d2.Unit, seen map[string]int) bool {
+	b := t.base(u)
+	if b == nil || b.Code != "tsc" && b.Code != "isc" {
+		return false
+	}
+	tome := "tbk"
+	if b.Code == "isc" {
+		tome = "ibk"
+	}
+	for _, c := range s.Inventory.Container(d2.ContInventory) {
+		if cb := t.base(c); cb != nil && cb.Code == tome {
+			seen[b.Code]++
+			return seen[b.Code] > t.tune().LooseScrollKeep
+		}
+	}
+	return false
 }
 
 // rejuvOverCap returns the pack rejuvenation potions beyond Loot.RejuvSpare counting the belt, regular ones first so
