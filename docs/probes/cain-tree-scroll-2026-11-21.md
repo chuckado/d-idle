@@ -22,7 +22,18 @@ Sandbox hero Doofer (Paladin clvl 18, release 0.0.261121135709, deploy 23): the 
 
 ## Scenario verdicts (builder lab slot on the second worker, Paladin 11)
 
-RESULTS_PLACEHOLDER
+V, second worker (Orion) lab slots, lab d2d devp16, bot of this branch vs origin/main plus the new scenarios, `tools/provingground/run.sh -parallel 1`:
+
+| scenario | unfixed | fixed |
+|---|---|---|
+| cain.scroll-already-taken Paladin 11 | RED (chunk started, walked to the Dark Wood) | GREEN |
+| cain.scroll-already-taken Sorceress 3 | not run | GREEN |
+| cain.scroll-already-taken.key Paladin 11 | not run | GREEN |
+| cain.scroll Paladin 11 | not run | GREEN |
+| cain.scroll Sorceress 3 | RED (died once, still exploring for the tree) | RED, same (pre-existing on this host, not a regression) |
+| cain.chain Paladin 11 | GREEN 80 virtual min | GREEN 80 virtual min (a first fixed run under host load 25 was cut by the wall limit: BLOCKED, not judged) |
+
+The first version of the scenario asserted only "no tree click" and was GREEN on the unfixed tree because the hero never found the tree in 20 virtual minutes; it now asserts the chunk never starts. Every setup is CHEATED (quest word written), mechanics only.
 
 ## Not covered
 

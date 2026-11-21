@@ -40,8 +40,8 @@ Sandbox hero Doofer parked search_for_cain/scroll: tree clicked, no scroll (reco
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Diagnosis doc: where the scroll is, root cause, bit table
-- [ ] #2 Scenario cain.scroll-already-taken RED on the unfixed bot, GREEN with the fix; cain.scroll and cain.chain stay green
-- [ ] #3 Board evidence follows record bit 4; quest items of Acts 1 and 2 never sold; must-fail tests on two builds
-- [ ] #4 -race -count=20, check.sh, contracts, backlog, leakcheck clean
+- [x] #1 Diagnosis doc: where the scroll is, root cause, bit table
+- [x] #2 Scenario cain.scroll-already-taken RED on the unfixed bot, GREEN with the fix; cain.scroll and cain.chain stay green
+- [x] #3 Board evidence follows record bit 4; quest items of Acts 1 and 2 never sold; must-fail tests on two builds
+- [x] #4 -race -count=20, check.sh, contracts, backlog, leakcheck clean
 <!-- AC:END -->
