@@ -346,18 +346,18 @@
 | dlv-press | proposed | - | `internal/combat/`<br>`internal/d2dcombat/` | - |
 | dlv-move-tele | proposed | - | `internal/combat/`<br>`internal/nav/` | - |
 | dlv-move-melee | proposed | - | `internal/combat/` | - |
-| pgprov | proposed | - | `internal/scenario/result.go`<br>`cmd/d2scenario/run.go` | - |
+| pgprov | in-progress | - | `internal/scenario/result.go`<br>`cmd/d2scenario/run.go`<br>`internal/scenario/prov.go`<br>`cmd/d2scenario/prov.go` | - |
 | dlv-whirl | proposed | - | `internal/combat/` | - |
-| pgdigest | proposed | - | `internal/scenario/determinism.go`<br>`cmd/d2scenario/cmds.go` | - |
+| pgdigest | in-progress | - | `internal/scenario/determinism.go`<br>`cmd/d2scenario/cmds.go`<br>`internal/scenario/assertdigest.go`<br>`internal/scenario/assertdigest_test.go`<br>`internal/scenario/result.go` | - |
 | dlv-cleanup | proposed | - | `internal/combat/`<br>`internal/power/`<br>`tools/ci/` | - |
-| pgjournal | proposed | - | `cmd/d2scenario/journal.go`<br>`docs/probes/pg-journal-pair-2026-11-21.md` | - |
-| pgtaps | proposed | - | `cmd/d2bot/ladder.go`<br>`cmd/d2scenario/tap.go`<br>`internal/scenario/taps.go` | - |
+| pgjournal | in-progress | - | `cmd/d2scenario/journal.go`<br>`docs/probes/pg-journal-pair-2026-11-21.md`<br>`docs/probes/pg-gate-group1-2026-11-21.md`<br>`cmd/d2scenario/detrun.go`<br>`cmd/d2scenario/detrun_test.go`<br>`tools/provingground/run.sh` | - |
+| pgtaps | in-progress | - | `cmd/d2bot/ladder.go`<br>`cmd/d2scenario/tap.go`<br>`internal/scenario/taps.go`<br>`cmd/d2scenario/run.go`<br>`cmd/d2scenario/tap_test.go`<br>`internal/scenario/result.go` | - |
 | pgclock | proposed | - | `cmd/d2bot/d2dbackend.go`<br>`internal/bot/farm.go`<br>`internal/goals/clock_test.go` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
 | pgstability | proposed | - | `internal/scenario/stability.go`<br>`tools/provingground/scenarios/tiers.json` | - |
 | pghero | proposed | - | `internal/scenario/hero`<br>`tools/ab/prep`<br>`tools/survival` | - |
 | pgselfcheck | proposed | - | `internal/scenario/hero/selfcheck.go`<br>`cmd/d2scenario/validate.go` | - |
-| pgledger | proposed | - | `cmd/d2scenario/ledger.go`<br>`internal/scenario/ledger.go`<br>`docs/process/pg-ledger-ops.md` | - |
+| pgledger | in-progress | - | `cmd/d2scenario/ledger.go`<br>`internal/scenario/ledger.go`<br>`docs/process/pg-ledger-ops.md`<br>`internal/scenario/ledger_test.go`<br>`cmd/d2scenario/ledger_test.go`<br>`cmd/d2scenario/run.go`<br>`cmd/d2scenario/main.go` | - |
 | pgpage | proposed | - | `docs/process/proving-ground-status.md`<br>`tools/provingground/status_doc.sh` | - |
 | mgonejob | proposed | - | `docs/process/pg-ops-mgonejob.md` | - |
 | town1 | in-progress | - | `tools/provingground/scenarios/townplan.json`<br>`internal/scenario/state.go`<br>`internal/scenario/newkinds_test.go`<br>`docs/probes/town-plan-scenarios.md` | - |
@@ -416,14 +416,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a45c10a1c 11-21 08:55 `Merge agent/pggroup1: pggroup1 (rebased): Proving Ground gate group 1` (pggroup1)
+- 782f2fe65 11-21 08:54 `Merge branch 'main' into pgprov` (-)
 - b442e454f 11-21 08:48 `Merge agent/cmb3: dlv-expect: cast expectation ledger, knob combat.deliveryExpect, tests` (cmb3)
 - e1b4f2ad4 11-21 08:47 `Merge branch 'main' into cmb3` (-)
 - 87636c8c1 11-21 08:42 `Merge agent/cmb2: dlv-rotation: Rotation type, Profile.Rotation adapter, Fighter reads slots, golden parity` (cmb2)
 - a2a46da3d 11-21 08:41 `Merge branch 'main' into cmb2` (-)
 - a698c969b 11-21 08:36 `Merge agent/cmb1: dlv-data: cap/2 delivery object, generated skills/skillKinds/tiers, golden parity` (cmb1)
 - 405c84e94 11-21 08:35 `Merge branch 'main' into cmb1` (-)
+- 6de3783d9 11-21 08:33 `Merge origin/main into pggroup1 (tap.go: virtual tapper plus why-not-startable log)` (-)
 - b308724f1 11-21 08:32 `Merge branch 'agent/cmb2' into agent/cmb3` (cmb2)
-- a00c04783 11-21 08:32 `Merge branch 'agent/cmb1' into agent/cmb2` (cmb1)
-- e9213efc4 11-21 08:32 `Merge branch 'agent/cmb1' into agent/cmb3` (cmb1)
-- 1f3fe49dc 11-21 08:32 `Merge origin/main into cmb1 (druid1 rows) and re-apply the cap/2 migration` (-)
 <!-- statusgen:end -->
