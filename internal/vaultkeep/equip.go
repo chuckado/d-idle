@@ -59,7 +59,8 @@ type SlotView struct {
 	Side    string  `json:"side,omitempty"` // left or right for the ring slots, else ""
 	Worn    *Worn   `json:"worn,omitempty"` // nil: empty
 	Can     bool    `json:"can"`
-	Why     string  `json:"why,omitempty"` // when not Can
+	Why     string  `json:"why,omitempty"`  // when not Can
+	Note    string  `json:"note,omitempty"` // when Can: what else happens (a shield comes off for a two-hander)
 	Upgrade *bool   `json:"upgrade,omitempty"`
 	Gain    float64 `json:"gain,omitempty"`
 }
