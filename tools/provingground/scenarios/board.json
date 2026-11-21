@@ -1310,7 +1310,11 @@
      "kind": "board",
      "quest": "search_for_cain",
      "chunk": "read",
-     "state": "done"
+     "state": "accepted",
+     "or": [
+      "in_progress",
+      "done"
+     ]
     },
     {
      "kind": "board_heads_le",
