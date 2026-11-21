@@ -90,14 +90,17 @@ func (r *Runner) RecallView() RecallView {
 	if v.State == "" {
 		v.State = RecallIdle
 	}
-	if v.State != RecallIdle {
-		since := rc.since
-		v.Since = &since
-	}
 	if r.e.Read != nil {
 		if sn, err := r.e.Snapshot(); err == nil && sn != nil && sn.Player != nil {
 			v.InTown = sn.Player.InTown()
 		}
+	}
+	if v.State == RecallArrived && !v.InTown { // the hero went back out: the command is history
+		v.State, v.Reason = RecallIdle, ""
+	}
+	if v.State != RecallIdle {
+		since := rc.since
+		v.Since = &since
 	}
 	return v
 }

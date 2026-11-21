@@ -25,12 +25,10 @@ func wireItemVerbs(ref *runnerRef, tw *town.Town, lv *leveler.Leveler, c *d2dctl
 	if ref == nil || ref.inv == nil || c == nil || e == nil {
 		return
 	}
-	// ui.managementFast stands for invdesk.verbs, invdesk.instant and input.planner together (docs/process/management-fast-path.md).
-	fast := func() bool { return e.Tune != nil && e.Tune.UI.ManagementFast != 0 }
-	on := func() bool { return e.Tune != nil && e.Tune.Invdesk.Verbs != 0 || fast() }
+	on, _, _ := verbKnobs(e)
 	verbs := invdesk.Serial{Ch: invdesk.NewChannel(), V: coder{d2dctl.ItemVerbs{C: c}}}
 	// The input.* capability names (the verbs became ordinary input, Q13) count only with the input planner on.
-	inputCaps := func() bool { return e.Tune != nil && e.Tune.Input.Planner == 1 || fast() }
+	_, inputCaps, instant := verbKnobs(e)
 	mover := invdesk.NewVerbMover(verbs, on)
 	mover.InputCaps = inputCaps
 	mover.Fresh = e.Snapshot
@@ -50,13 +48,23 @@ func wireItemVerbs(ref *runnerRef, tw *town.Town, lv *leveler.Leveler, c *d2dctl
 		On:    on,
 		// The lane has its own knob (default 0): the verbs may be on for the bot's executors long before the instant lane
 		// has been seen working live.
-		Instant: func() bool { return e.Tune != nil && e.Tune.Invdesk.Instant != 0 || fast() },
+		Instant: instant,
 		// A named run (gate, soak, drill, D2BOT_RUN) keeps the queue path: whether a verb in a measured run satisfies the
 		// crutch rule is the user's decision (item-verbs section 10), so the lane stays off there. Read once at wiring.
 		Named: namedRun(os.Getenv("D2BOT_RUN") != ""),
 		Hold:  inputHeld(func() bool { r := ref.p.Load(); return r != nil && r.SafetyBusy() }),
 		Fresh: e.Snapshot,
 	})
+}
+
+// verbKnobs reads the three switches of the item verbs at call time. ui.managementFast stands for invdesk.verbs,
+// invdesk.instant and input.planner together (docs/process/management-fast-path.md).
+func verbKnobs(e *env.Env) (verbs, inputCaps, instant func() bool) {
+	fast := func() bool { return e.Tune != nil && e.Tune.UI.ManagementFast != 0 }
+	verbs = func() bool { return e.Tune != nil && e.Tune.Invdesk.Verbs != 0 || fast() }
+	inputCaps = func() bool { return e.Tune != nil && e.Tune.Input.Planner == 1 || fast() }
+	instant = func() bool { return e.Tune != nil && e.Tune.Invdesk.Instant != 0 || fast() }
+	return
 }
 
 func namedRun(v bool) func() bool { return func() bool { return v } }

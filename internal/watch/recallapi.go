@@ -58,9 +58,11 @@ func (a *RecallAPI) PostHandler(o AnswerOptions) http.Handler {
 			writeJSON(w, http.StatusServiceUnavailable, policyReply{Code: "off", Error: "recall is not available"})
 			return
 		}
-		v := d.Recall()
+		var v any
 		if b.Cancel {
 			v = d.Cancel()
+		} else {
+			v = d.Recall()
 		}
 		var m map[string]any
 		if !decode(marshal(v), &m) || m == nil {
