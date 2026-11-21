@@ -161,3 +161,25 @@ func TestLayoutReadMonstersOffOrAbsentChangesNothing(t *testing.T) {
 		}
 	}
 }
+
+// A waypoint the fork classifies by OperateFn (Kind "waypoint") counts even when its class is missing from the static
+// waypoint table (data-driven: no per-level or per-class literal).
+func TestLayoutReadWaypointKindCountsWithoutTableClass(t *testing.T) {
+	s := newStub()
+	s.lm = &d2dctl.LevelMap{Level: 1, Unit: "cell",
+		Objects: []d2dctl.LayoutObject{{Index: 3, Class: 9999, Name: "Waypoint", X: 60.5, Y: 40.5, Kind: "waypoint"}}}
+	w := New(s, Options{LayoutRead: func() bool { return true }})
+	if _, err := w.Update(); err != nil {
+		t.Fatal(err)
+	}
+	lm := w.Current()
+	var far int
+	for _, p := range lm.Waypoints() {
+		if p.ID == 9999 {
+			far++
+		}
+	}
+	if far != 1 {
+		t.Fatalf("layout waypoint not in Waypoints(): %+v", lm.Presets)
+	}
+}
