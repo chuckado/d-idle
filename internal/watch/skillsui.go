@@ -27,6 +27,8 @@ const skillsPage = `<!DOCTYPE html>
   <div class="d-card-head"><h2 id="t-sum">Skills</h2><span class="meta" id="summeta"></span></div>
   <p class="d-hint" id="sumnote">Read only: points are spent by the player in the game, nothing here changes them.</p>
   <div class="d-legend" aria-label="Legend"><span><b class="sk-lg" data-state="learned"></b>learned</span><span><b class="sk-lg" data-state="learnable"></b>can be learned</span><span><b class="sk-lg" data-state="locked"></b>needs a level or a prerequisite</span><span><b class="sk-lg" data-state="bonus"></b>only +skills from items</span></div>
+  <div class="sk-filter" id="kindbar" role="group" aria-label="Show skills of kind"></div>
+  <p class="d-hint" id="kindlegend">Active: cast or used by the hero. Aura: switched on once, stays on. Passive: always on, nothing to cast.</p>
  </section>
  <div class="sk-trees" id="trees"></div>
 </main>
