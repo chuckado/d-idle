@@ -371,6 +371,7 @@
 | town5 | proposed | - | `internal/town`<br>`internal/resource`<br>`town-basics` | - |
 | town6 | proposed | - | `internal/town`<br>`internal/loot` | - |
 | town7 | proposed | - | `internal/supply`<br>`internal/town`<br>`internal/resource` | - |
+| bsm3 | proposed | - | `internal/questboard/store_sm.go`<br>`internal/questboard/store_sm_test.go`<br>`internal/questboard/plan.go` | - |
 | town8 | proposed | - | `internal/supply`<br>`internal/town` | - |
 | town9 | proposed | - | `internal/watch`<br>`internal/supply` | - |
 | town10 | proposed | - | `internal/arbiter`<br>`internal/supply` | - |
@@ -411,6 +412,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d167f6aa5 11-21 01:57 `Merge agent/bsm3: agent/bsm3 quest board state machine card` (bsm3)
 - d91bf5058 11-21 01:36 `Merge agent/bsm2: agent/bsm2 quest board state machine card` (bsm2)
 - 2e5f6968d 11-21 01:35 `Merge branch 'main' into TASK-750` (-)
 - 04538c3c9 11-21 01:30 `Merge agent/townprobe: town planner stage 1 and 2 record (docs only)` (townprobe)
@@ -420,5 +422,4 @@
 - 019caff49 11-21 01:15 `Merge agent/town4: town4: stage 2 guards, chunk preconditions and shop read the supply plan behind town.plan>=2 (default 0)` (town4)
 - 6288cd22f 11-21 01:14 `Merge branch 'main' into town4` (-)
 - d28021ec7 11-21 01:06 `Merge agent/town3: town3: supply NeedFor/Solve, profiles, knob town.plan default 0, stage 1 shadow trace (no behaviour change)` (town3)
-- 05417d792 11-21 01:05 `Merge branch 'main' into town3` (-)
 <!-- statusgen:end -->
