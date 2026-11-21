@@ -112,11 +112,11 @@ func countess() *Script {
 		Route: []int{AreaForgottenTower, AreaTowerCellar1, 22, 23, 24, AreaTowerCellar5}, Arena: AreaTowerCellar5,
 		Match: Match{UniqueNo: -1, Name: NameCountess},
 		Anchor: Anchor{
-			Preset: &PresetRef{Kind: PresetNPC, ID: presetCountessSpawn},
+			// The ID is Kolbot's (S); on d2d the spawn point comes from the fork's `debug levelmonsters` (knob
+			// quests.layoutRead) and is matched by Name. The Tower Cellar 5 layout is random per game, so no fixed
+			// coordinate holds (V: scenario act1.forgotten.countess, 2026-11-20); without the read she is explored for.
+			Preset: &PresetRef{Kind: PresetNPC, ID: presetCountessSpawn, Name: NameCountess},
 			Hint:   &hint,
-			// Where the preset 836 row put her on d2d, and where she stood (V live, i2, 2026-10-29, one game): the hint is
-			// next to the arrival stairs and nav refuses the click there (scenario act1.forgotten.countess, 2026-11-20).
-			Spawns: []Pt{{12534, 11040}, {12542, 11036}},
 		},
 		Hazards:  []Hazard{NoPotionLowLife(30), RaisedAdds(5, 12, 10*time.Second)},
 		MinLevel: [3]int{14, 42, 67}, RouteMinLifePct: 40, MinPotions: 2,

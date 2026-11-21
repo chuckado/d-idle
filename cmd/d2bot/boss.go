@@ -175,7 +175,7 @@ func (g *bossGame) Presets(ctx context.Context) ([]boss.Preset, error) {
 	out := make([]boss.Preset, 0, len(lm.Presets))
 	var npcs []string
 	for _, p := range lm.Presets {
-		out = append(out, boss.Preset{Kind: p.Kind, ID: p.ID, Pos: boss.Pt{X: p.Pos.X, Y: p.Pos.Y}})
+		out = append(out, boss.Preset{Kind: p.Kind, ID: p.ID, Pos: boss.Pt{X: p.Pos.X, Y: p.Pos.Y}, Name: p.Name})
 		if p.Kind == d2map.PresetNPC && g.logPresets[lm.No] != len(lm.Presets) {
 			npcs = append(npcs, fmt.Sprintf("%d@%d,%d", p.ID, p.Pos.X, p.Pos.Y))
 		}
