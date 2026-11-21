@@ -275,7 +275,7 @@ func fieldReady(a Area) func(World) *Fault {
 		case w.RouteBlocked != "" && RouteGuarded(a):
 			return guardFault("route guard", "route", w.RouteBlocked, RouteLevelWhy(w) == "")
 		case w.TowerBlocked != "" && TowerGuarded(a):
-			return guardFault("tower guard", "tower", w.TowerBlocked, TowerLevelWhy(w) == "")
+			return guardFault("tower guard", "ftower", w.TowerBlocked, TowerLevelWhy(w) == "")
 		case w.Gated && a != w.SafeArea:
 			return &Fault{Kind: KindDanger, Why: "not ready: " + w.GatedWhy}
 		}
