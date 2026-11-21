@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- pg gate group 2 record (cost-cut cards, measurements, what is enforced) <!--sg:agent/pgc6-->
 - Merge branch 'main' into survhold8 <!--sg:agent/survhold8-->
 - Merge branch 'main' into heavyguard <!--sg:agent/heavyguard-->
 - pgclock: goals manager, farm timers and the guard snapshot reuse window on the env clock (TASK-739) <!--sg:agent/pgc5-->

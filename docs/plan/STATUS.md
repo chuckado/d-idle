@@ -419,7 +419,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 3e70158f6 11-21 11:01 `Merge agent/pgc6: pg gate group 2 record (cost-cut cards, measurements, what is enforced)` (pgc6)
 - e475e2ade 11-21 11:01 `Merge agent/survhold8: Merge branch 'main' into survhold8` (survhold8)
+- 54c9494d2 11-21 10:58 `Merge branch 'main' into pgc6` (-)
 - 585d6f347 11-21 10:58 `Merge branch 'main' into survhold8` (-)
 - 3314b62e3 11-21 10:57 `Merge agent/heavyguard: Merge branch 'main' into heavyguard` (heavyguard)
 - d78daa12f 11-21 10:56 `Merge branch 'main' into heavyguard` (-)
@@ -427,6 +429,4 @@
 - 8691cf517 11-21 10:46 `Merge branch 'main' into pgclock` (-)
 - 759c72151 11-21 10:45 `Merge agent/pgc4: pgledgeron: ledger environment for builder runs, pull path, doc and card (TASK-777)` (pgc4)
 - 6928ca8b4 11-21 10:43 `Merge branch 'main' into pgledgeron` (-)
-- d3341adfa 11-21 10:41 `Merge agent/pgc3: mgcache: gate stats, replay measurement, nightly uncached race doc and card (TASK-747)` (pgc3)
-- cf0e806ab 11-21 10:40 `Merge branch 'main' into mgcache` (-)
 <!-- statusgen:end -->
