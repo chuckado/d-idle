@@ -37,5 +37,5 @@ Why: TODO. Done when: TODO.
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
 - [ ] #1 Reply.changed lists the runs a verb touched; the view carries reason codes per chunk row; handin_ready offer
-- [ ] #2 scenarios stop-cascades, view.reason-always, handin.field-tap, handin.without-run green live (Orion)
+- [ ] #2 scenarios stop-cascades, view.reason-always, handin.field-tap, handin.without-run green live (the second worker)
 <!-- AC:END -->
