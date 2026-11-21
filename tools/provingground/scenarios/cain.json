@@ -919,6 +919,183 @@
      "kind": "no_writes"
     }
    ]
+  },
+  {
+   "id": "board.prereq-not-accepted",
+   "title": "Quest board: a stones record whose scroll step is not accepted starts the scroll step itself, never parks for ever",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/task/",
+    "internal/d2dsrc/",
+    "internal/nav/",
+    "internal/questboard/",
+    "internal/bot/questboard.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "stones"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs (points as a played level gives), purse 5000 (a played clvl 17 carries more than the kit; at 500 the bot buys a Tome, drops under the kit price and its recovery defers the chunk, see docs/probes/cainstart-2026-11-19.md), waypoints Cold Plains to Dark Wood, board record: stones only, its prerequisite scroll step not accepted (the sandbox state after the player stopped the scroll step, 2026-11-20). CHEATED: waypoints are set by debug wp and the level by stat verbs (SETUP) (mechanics evidence only, never balance).",
+   "notes": "Sandbox 2026-11-20 (deploy 21): stones accepted, the scroll step stopped by the player: the board logged 'stones parked: after Have Akara read the scroll' and nothing ran. Expected: the board accepts the prerequisite chain in questspec order at board load and logs 'stones waits for scroll (auto-started)'; scroll runs, stones is never parked.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "quest board: stones waits for scroll",
+     "min": 1,
+     "why": "the board starts the missing prerequisite step itself"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: starting chunk search_for_cain/scroll",
+     "min": 1,
+     "why": "the prerequisite step runs"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "search_for_cain/stones parked",
+     "max": 0,
+     "why": "never parked behind a step nobody runs"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "board.prereq-start-tap",
+   "title": "Quest board: a Start tap on stones accepts its prerequisite chain in order and the scroll step runs",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/task/",
+    "internal/d2dsrc/",
+    "internal/nav/",
+    "internal/questboard/",
+    "internal/bot/questboard.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    },
+    "api": [
+     {
+      "after_s": 20,
+      "path": "/api/quests/search_for_cain/start",
+      "body": {
+       "chunk": "stones"
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs (points as a played level gives), purse 5000 (a played clvl 17 carries more than the kit; at 500 the bot buys a Tome, drops under the kit price and its recovery defers the chunk, see docs/probes/cainstart-2026-11-19.md), waypoints Cold Plains to Dark Wood, board record: none (the Start tap on stones is the trigger). CHEATED: waypoints are set by debug wp and the level by stat verbs (SETUP) (mechanics evidence only, never balance).",
+   "notes": "The player taps Start on the stones chunk while the scroll step is not accepted (POST /api/quests/search_for_cain/start). Expected: one accepted record per chunk of the chain (scroll, read, stones), shown as stones (after: scroll, read), scroll runs first; no silent park, no refusal.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "quest board: accepted search_for_cain/stones \\(after: scroll, read\\)",
+     "min": 1,
+     "why": "the tap accepted the chain"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "quest board: starting chunk search_for_cain/scroll",
+     "min": 1,
+     "why": "the prerequisite step runs first"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "search_for_cain/stones parked",
+     "max": 0,
+     "why": "never parked"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
   }
  ]
 }
