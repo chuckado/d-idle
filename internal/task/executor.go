@@ -40,6 +40,9 @@ type Result struct {
 	// Code and Hold carry the Fault of a refused step to the quest board (Fault.Code, Fault.Hold).
 	Code string
 	Hold bool
+	// Via and ViaWhy are the Code and words of the coded fault that spliced this step in (a potion shortage sends the
+	// hero to the chores step): the board shows that hold while the trip runs (quests.boardSM).
+	Via, ViaWhy string
 }
 
 // Policy is the retry/escape policy (tasklayer.md sections 3 and 6). Counters live in memory only; a restart forgets
@@ -319,6 +322,7 @@ func (e *Executor) Tick(ctx context.Context, p Planner) (Result, error) {
 	)
 	// A Ready fault with prerequisites splices them in front and the first one runs in this same tick, so a restart
 	// between ticks cannot lose the splice.
+	var via, viaWhy string
 	for try := 0; ; try++ {
 		nodes := append(append([]Node(nil), e.inserted...), plan.Nodes...)
 		n, ev, ok, pending = e.pick(nodes, w)
@@ -330,12 +334,17 @@ func (e *Executor) Tick(ctx context.Context, p Planner) (Result, error) {
 			if f := n.Step.Ready(w); f != nil {
 				r = e.handleFault(plan, n.Step, f, r)
 				if r.Outcome == OutInserted && try < e.Policy.norm().MaxInsert {
+					if f.Code != "" {
+						via, viaWhy = f.Code, f.Why
+					}
 					continue
 				}
 				return r, nil
 			}
 		}
-		return e.run(ctx, w, plan, n.Step, r), nil
+		res := e.run(ctx, w, plan, n.Step, r)
+		res.Via, res.ViaWhy = via, viaWhy
+		return res, nil
 	}
 	if !ok {
 		if pending {
