@@ -604,11 +604,24 @@ func (d *Desk) needs(v View) []NeedRow {
 		if why == "" {
 			why = "the step failed"
 		}
+		body := map[string]any{"chunk": b.Chunk}
+		retry := Verb{Label: "Try again", Post: QuestRoute(b.Quest, "retry"), Body: body}
+		stop := Verb{Label: "Stop", Post: QuestRoute(b.Quest, "cancel"), Body: body}
+		acts := []Verb{retry, stop}
+		if b.Reason != nil { // B.1: the code decides the buttons, never the sentence
+			switch b.Reason.Code {
+			case "hold_timeout":
+				retry.Label = "Keep waiting"
+				acts = []Verb{retry, stop}
+			case "prereq_missing", "quest_locked", "unsupported":
+				acts = []Verb{stop}
+			case "game_failed":
+				acts = []Verb{}
+			}
+		}
 		out = append(out, NeedRow{ID: "quest:blocked:" + b.Quest + "/" + b.Chunk, Kind: "quest_blocked", Sev: "warn",
-			Text: fmt.Sprintf("%s is stuck: %s", b.QuestTitle, why),
-			Actions: []Verb{
-				{Label: "Try again", Post: QuestRoute(b.Quest, "retry"), Body: map[string]any{"chunk": b.Chunk}},
-				{Label: "Stop", Post: QuestRoute(b.Quest, "cancel"), Body: map[string]any{"chunk": b.Chunk}}}})
+			Text:    fmt.Sprintf("%s is stuck: %s", b.QuestTitle, why),
+			Actions: acts})
 	}
 	if w := v.WhileAway; w != nil && len(w.Events) > 0 {
 		text := "While you were away: " + strings.ToLower(w.Events[0].Text[:1]) + w.Events[0].Text[1:]
