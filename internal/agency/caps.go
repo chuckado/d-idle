@@ -13,10 +13,14 @@ import (
 	capdata "d2lod-bot/data/capabilities"
 	"d2lod-bot/internal/combat"
 	"d2lod-bot/internal/data"
+	"d2lod-bot/internal/delivery"
 	"d2lod-bot/internal/power"
 )
 
-const capsSchema = "didle.cap/1"
+const capsSchema = delivery.Schema
+
+// capsBackend is the backend whose Proving Ground rows lift a skill to supported (data/capabilities/proven.json).
+const capsBackend = "d2d"
 
 // Tiers: what the combat engine can do with a skill today (not a judgement of the build).
 const (
@@ -45,9 +49,9 @@ type ManaSrc struct {
 // Cap is one row of the capability table.
 type Cap struct {
 	Class    string `json:"class"`
-	Role     string `json:"kind"`     // damage | aura | buff | curse | summon | utility | movement | passive
-	Delivery string `json:"delivery"` // melee | projectile | nova | ground | trap | pet | self
-	Tier     string `json:"tier"`
+	Role     string `json:"kind"`    // damage | aura | buff | curse | summon | utility | movement | passive
+	Delivery string `json:"shape"`   // melee | projectile | nova | ground | trap | pet | self
+	Tier     string `json:"-"`       // computed at load by the delivery rule (internal/delivery TierOf), never typed
 	Element  string `json:"element"` // fire cold ltng pois mag phys, "" none or not an attack
 	// Note is why the tier is what it is; required for every row that is not supported.
 	Note string `json:"reason"`
@@ -97,6 +101,19 @@ func LoadCaps() (*Caps, error) {
 	}
 	if c.Schema != capsSchema {
 		return nil, fmt.Errorf("agency: capabilities.json schema %q, want %q", c.Schema, capsSchema)
+	}
+	dt, err := delivery.Load(capdata.JSON)
+	if err != nil {
+		return nil, fmt.Errorf("agency: %w", err)
+	}
+	proven, err := delivery.ProvenSkills(capdata.Proven, capsBackend)
+	if err != nil {
+		return nil, fmt.Errorf("agency: %w", err)
+	}
+	for n, t := range dt.Tiers(proven) {
+		s := c.Skills[n]
+		s.Tier = t
+		c.Skills[n] = s
 	}
 	roles := map[string]bool{RoleAttack: true, RoleAura: true, RoleBuff: true, RoleSummon: true, RoleCurse: true, RoleMovement: true, RolePassive: true, RoleUtility: true}
 	dels := map[string]bool{"melee": true, "projectile": true, "nova": true, "ground": true, "trap": true, "pet": true, "self": true}

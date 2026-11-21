@@ -85,7 +85,7 @@ func (f *Fighter) auraActive(p *d2.Player, id int) bool {
 func (f *Fighter) wantAura(p *d2.Player, pr *Profile, tg *Target, resting bool) (SkillSpec, bool) {
 	known := KnownSkills(p, f.cat, f.keys)
 	has := func(n string) bool { _, ok := known[n]; return ok }
-	ladder := pr.AuraLadder(p.Level, has)
+	ladder := auraPrefs(pr.Rotation(p.Level, has))
 	reachable := func(a AuraPref) (SkillSpec, bool) {
 		sp, ok := known[a.Name]
 		return sp, ok && (sp.Key != "" || p.RightSkill == sp.ID)

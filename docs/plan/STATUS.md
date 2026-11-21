@@ -332,7 +332,7 @@
 | dlv-data | proposed | - | `data/capabilities/`<br>`internal/delivery/`<br>`tools/capgen/` | - |
 | dlv-rotation | proposed | - | `internal/delivery/`<br>`internal/combat/`<br>`internal/agency/` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
-| dlv-expect | proposed | - | `internal/combat/` | - |
+| dlv-expect | proposed | - | `internal/combat/`<br>`internal/env/tuning_combat.go`<br>`docs/knobs.md` | - |
 | dlv-reads | proposed | - | `internal/d2dctl/`<br>`internal/scenario/`<br>`tools/provingground/` | `fork-branch:didle/combat-reads`<br>`d2d-lab-binary` |
 | dlv-upkeep-state | proposed | - | `internal/combat/`<br>`internal/data/` | - |
 | dlv-upkeep-minions | proposed | - | `internal/combat/` | - |
@@ -416,14 +416,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 40116d00d 11-21 02:58 `Merge agent/levelobjects: Merge branch 'main' into levelobjects` (levelobjects)
-- 3b87f2610 11-21 02:57 `Merge branch 'main' into levelobjects` (-)
-- d8984d3c7 11-21 02:52 `Merge agent/mouthgate: Merge branch 'main' into mouthgate` (mouthgate)
-- 9c0703d7c 11-21 02:51 `Merge branch 'main' into mouthgate` (-)
-- c2118b36b 11-21 02:45 `Merge agent/andariel1: Merge branch 'main' into andariel1` (andariel1)
-- e94174c16 11-21 02:44 `Merge branch 'main' into andariel1` (-)
-- 4cef37c7c 11-21 02:34 `Merge agent/wpstep: Merge branch 'main' into TASK-716` (wpstep)
-- 8eb46e0e3 11-21 02:33 `Merge branch 'main' into TASK-716` (-)
-- b62c45349 11-21 02:25 `Merge agent/bsm5: Merge branch 'main' into TASK-768` (bsm5)
-- ffe284f81 11-21 02:24 `Merge branch 'main' into TASK-768` (-)
+- b442e454f 11-21 08:48 `Merge agent/cmb3: dlv-expect: cast expectation ledger, knob combat.deliveryExpect, tests` (cmb3)
+- e1b4f2ad4 11-21 08:47 `Merge branch 'main' into cmb3` (-)
+- 87636c8c1 11-21 08:42 `Merge agent/cmb2: dlv-rotation: Rotation type, Profile.Rotation adapter, Fighter reads slots, golden parity` (cmb2)
+- a2a46da3d 11-21 08:41 `Merge branch 'main' into cmb2` (-)
+- a698c969b 11-21 08:36 `Merge agent/cmb1: dlv-data: cap/2 delivery object, generated skills/skillKinds/tiers, golden parity` (cmb1)
+- 405c84e94 11-21 08:35 `Merge branch 'main' into cmb1` (-)
+- b308724f1 11-21 08:32 `Merge branch 'agent/cmb2' into agent/cmb3` (cmb2)
+- a00c04783 11-21 08:32 `Merge branch 'agent/cmb1' into agent/cmb2` (cmb1)
+- e9213efc4 11-21 08:32 `Merge branch 'agent/cmb1' into agent/cmb3` (cmb1)
+- 1f3fe49dc 11-21 08:32 `Merge origin/main into cmb1 (druid1 rows) and re-apply the cap/2 migration` (-)
 <!-- statusgen:end -->
