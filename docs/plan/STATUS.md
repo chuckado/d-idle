@@ -410,6 +410,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 04538c3c9 11-21 01:30 `Merge agent/townprobe: town planner stage 1 and 2 record (docs only)` (townprobe)
+- b4c549016 11-21 01:29 `Merge branch 'main' into townprobe` (-)
 - 8089cfba8 11-21 01:24 `Merge agent/bsm1: bsm1: quest board SM scenarios and assert kinds` (bsm1)
 - 6a0957473 11-21 01:23 `Merge branch 'main' into TASK-717` (-)
 - 019caff49 11-21 01:15 `Merge agent/town4: town4: stage 2 guards, chunk preconditions and shop read the supply plan behind town.plan>=2 (default 0)` (town4)
@@ -418,6 +420,4 @@
 - 05417d792 11-21 01:05 `Merge branch 'main' into town3` (-)
 - e10888fad 11-21 00:53 `Merge agent/town2: town2: internal/supply one potion counter, bot and town counters call it (no behaviour change at stage 0)` (town2)
 - 401f842fa 11-21 00:52 `Merge branch 'main' into town2` (-)
-- 9e2b6cf06 11-21 00:47 `Merge agent/town1: town1: planner scenarios (12 B4 sketches) and belt_at_least assertion, not run` (town1)
-- fda7178c2 11-21 00:46 `Merge branch 'main' into town1` (-)
 <!-- statusgen:end -->
