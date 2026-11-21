@@ -352,7 +352,7 @@
 | dlv-cleanup | proposed | - | `internal/combat/`<br>`internal/power/`<br>`tools/ci/` | - |
 | pgjournal | in-progress | - | `cmd/d2scenario/journal.go`<br>`docs/probes/pg-journal-pair-2026-11-21.md`<br>`docs/probes/pg-gate-group1-2026-11-21.md`<br>`cmd/d2scenario/detrun.go`<br>`cmd/d2scenario/detrun_test.go`<br>`tools/provingground/run.sh` | - |
 | pgtaps | in-progress | - | `cmd/d2bot/ladder.go`<br>`cmd/d2scenario/tap.go`<br>`internal/scenario/taps.go`<br>`cmd/d2scenario/run.go`<br>`cmd/d2scenario/tap_test.go`<br>`internal/scenario/result.go` | - |
-| pgclock | proposed | - | `cmd/d2bot/d2dbackend.go`<br>`internal/bot/farm.go`<br>`internal/goals/clock_test.go` | - |
+| pgclock | in-progress | - | `cmd/d2bot/d2dbackend.go`<br>`internal/bot/farm.go`<br>`internal/goals/clock_test.go`<br>`internal/bot/farmclock_test.go`<br>`internal/d2denv/reader.go`<br>`internal/d2denv/recent_test.go`<br>`internal/d2denv/env.go`<br>`cmd/d2bot/goalsclock_test.go`<br>`docs/d2d-determinism.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
 | pgstability | proposed | - | `internal/scenario/stability.go`<br>`tools/provingground/scenarios/tiers.json` | - |
 | pghero | proposed | - | `internal/scenario/hero`<br>`tools/ab/prep`<br>`tools/survival` | - |
@@ -361,11 +361,10 @@
 | pgpage | proposed | - | `docs/process/proving-ground-status.md`<br>`tools/provingground/status_doc.sh` | - |
 | mgonejob | proposed | - | `docs/process/pg-ops-mgonejob.md` | - |
 | town1 | in-progress | - | `tools/provingground/scenarios/townplan.json`<br>`internal/scenario/state.go`<br>`internal/scenario/newkinds_test.go`<br>`docs/probes/town-plan-scenarios.md` | - |
-| mgcache | proposed | - | `docs/process/pg-ops-mgcache.md` | - |
-| mglanes | proposed | - | `docs/process/pg-ops-mglanes.md` | - |
+| mgcache | in-progress | - | `docs/process/pg-ops-mgcache.md` | - |
 | bsm2 | proposed | - | `internal/questboard/sm.go`<br>`internal/questboard/sm_reason.go`<br>`internal/questboard/sm_test.go` | - |
 | fabledecisions2 | proposed | - | `docs/adr/`<br>`docs/decisions.md`<br>`GLOSSARY.md` | - |
-| mgwatchdog | proposed | - | `docs/process/pg-ops-mgwatchdog.md` | - |
+| mgwatchdog | in-progress | - | `docs/process/pg-ops-mgwatchdog.md` | - |
 | town3 | in-progress | - | `internal/supply`<br>`internal/town/planshadow.go`<br>`internal/town/chores.go`<br>`internal/town/town.go`<br>`internal/env/tuning_town.go`<br>`internal/bot/observe.go`<br>`docs/knobs.md` | - |
 | pgnightly | proposed | - | `docs/process/pg-ops-pgnightly.md`<br>`tools/provingground/nightly.sh` | - |
 | town4 | in-progress | - | `internal/task`<br>`internal/town`<br>`internal/bot`<br>`internal/supply`<br>`cmd/d2bot`<br>`docs/knobs.md` | - |
@@ -381,6 +380,9 @@
 | countess3b | proposed | - | `cmd/d2bot/boss.go`<br>`cmd/d2bot/boss_levelmonsters_test.go`<br>`internal/nav/nav.go`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
 | bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
 | mouthgate | proposed | - | `internal/nav` | - |
+| vaultequip | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/equipnow.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/watch/vaultequip_test.go`<br>`tools/provingground/scenarios/vaultequip.json`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/vaultapi.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/keep_test.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`internal/watch/testdata/vault_logic.mjs`<br>`tools/provingground/scenarios/behaviours.json` | - |
+| pgledgeron | in-progress | - | `docs/process/pg-ledger-ops.md`<br>`tools/provingground/run.sh`<br>`tools/provingground/pgenv.sh`<br>`tools/provingground/pgenv_test.sh` | - |
+| heavyguard | proposed | - | `tools/lib/heavy-guard.sh`<br>`tools/lib/heavy-guard-test.sh`<br>`tools/uishots.sh`<br>`docs/process/worker-capacity.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -416,14 +418,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- c731907e6 11-21 09:07 `Merge agent/cmbdoc: combat foundation record doc` (cmbdoc)
-- 21255ccc8 11-21 09:07 `Merge agent/devp16: Merge branch 'main' into devp16` (devp16)
-- dfa784c08 11-21 09:05 `Merge branch 'main' into cmbdoc` (-)
-- 656278cbe 11-21 09:05 `Merge branch 'main' into devp16` (-)
-- a45c10a1c 11-21 08:55 `Merge agent/pggroup1: pggroup1 (rebased): Proving Ground gate group 1` (pggroup1)
-- 782f2fe65 11-21 08:54 `Merge branch 'main' into pgprov` (-)
-- b442e454f 11-21 08:48 `Merge agent/cmb3: dlv-expect: cast expectation ledger, knob combat.deliveryExpect, tests` (cmb3)
-- e1b4f2ad4 11-21 08:47 `Merge branch 'main' into cmb3` (-)
-- 87636c8c1 11-21 08:42 `Merge agent/cmb2: dlv-rotation: Rotation type, Profile.Rotation adapter, Fighter reads slots, golden parity` (cmb2)
-- a2a46da3d 11-21 08:41 `Merge branch 'main' into cmb2` (-)
+- 3e70158f6 11-21 11:01 `Merge agent/pgc6: pg gate group 2 record (cost-cut cards, measurements, what is enforced)` (pgc6)
+- e475e2ade 11-21 11:01 `Merge agent/survhold8: Merge branch 'main' into survhold8` (survhold8)
+- 54c9494d2 11-21 10:58 `Merge branch 'main' into pgc6` (-)
+- 585d6f347 11-21 10:58 `Merge branch 'main' into survhold8` (-)
+- 3314b62e3 11-21 10:57 `Merge agent/heavyguard: Merge branch 'main' into heavyguard` (heavyguard)
+- d78daa12f 11-21 10:56 `Merge branch 'main' into heavyguard` (-)
+- edcfd5121 11-21 10:48 `Merge agent/pgc5: pgclock: goals manager, farm timers and the guard snapshot reuse window on the env clock (TASK-739)` (pgc5)
+- 8691cf517 11-21 10:46 `Merge branch 'main' into pgclock` (-)
+- 759c72151 11-21 10:45 `Merge agent/pgc4: pgledgeron: ledger environment for builder runs, pull path, doc and card (TASK-777)` (pgc4)
+- 6928ca8b4 11-21 10:43 `Merge branch 'main' into pgledgeron` (-)
 <!-- statusgen:end -->

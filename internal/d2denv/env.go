@@ -87,6 +87,7 @@ func Build(ctx context.Context, cfg Config) (*Backend, error) {
 	src := d2dsrc.New(c, d2dsrc.Options{Tables: tables, BuffStates: true, Tooltips: true, Logf: func(f string, a ...any) { cfg.Log.Info("d2dsrc", "msg", sprintf(f, a...)) }})
 	rd := NewReader(src)
 	clk := &LateClock{c: c, ctx: ctx}
+	rd.Now = clk.Now
 	ctl := d2dinput.New(c)
 	ctl.Ctx, ctl.Clock = ctx, clk
 	if nav.TraceEnv() {

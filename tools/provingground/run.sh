@@ -19,6 +19,7 @@ go build -o "$W/bin/d2scenario" ./cmd/d2scenario || exit 1
 go build -o "$W/bin/d2ddet" ./cmd/d2ddet || exit 1 # determinism-run compares journals with it
 [ -n "$dry" ] || go build -o "$W/bin/d2bot" ./cmd/d2bot || exit 1
 export D2D_BIN=${PG_D2D_BIN:-/data/d2d-lab/survhold/bin/d2d.lab} D2D_DATA=${PG_DATA:-/data/d2d-lab/data} D2BOT_BIN=$W/bin/d2bot
+. "$here/pgenv.sh" # the results ledger: PG_EVENT, PG_BRANCH, PG_JOB and the host-config ingest command (docs/process/pg-ledger-ops.md)
 export D2D_HOST_ROLE=${D2D_HOST_ROLE:-builder} D2LOD_BOT_COMMIT=${D2LOD_BOT_COMMIT:-$(git rev-parse --short HEAD 2>/dev/null)} # recorded in every result (prov)
 out=provingground-out/$(date +%Y%m%d-%H%M%S)
 sub=run; if [ "${1:-}" = determinism-run ]; then sub=determinism-run; shift; fi # N repetitions, journals compared
