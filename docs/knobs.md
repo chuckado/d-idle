@@ -198,7 +198,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 |---|---|---|---|---|---|---|
 | loot.vault | 0 | 0..1 | 0/1 | 1 | 6 | 1: items the Vault preset (docs/vault.md) selects are peeked and recorded in the vault instead of being picked up; the bot walks to them as for a pickup, sends no pickup click and uses no pack space. Gold, potions, scrolls, keys, gems and stacks keep their own rules. Needs d2d started with --vault-verbs; without it the knob does nothing and a Needs-you info line says why. Forced off in measured runs (gates, soaks, baselines: D2BOT_RUN). 0 (default): today's pickit, byte-identical. |
 | loot.vaultKeep | 1 | 0..1 | 0/1 | 1 | 1 | 1 (default, with loot.vault 1): the Keep button of the Ethereal Vault queues the item and the bot creates it in the hero's stash at the next safe moment in town, exactly as dropped (docs/vault.md, Keep). 0: the queue stops creating at once (kill switch); queued items stay queued. Needs d2d with --vault-verbs; forced off in measured runs (D2BOT_RUN). |
-| loot.vaultEquip | 0 | 0..1 | 0/1 | 1 | 0 | 1 (with loot.vault 1 and loot.vaultKeep 1): the item sheet of the Ethereal Vault offers Equip: the bot takes the item out and wears it in the same town visit, vaults the item it replaced and pins the slot (docs/vault.md, Equip). 0 (default): the sheet offers Take out only. Forced off in measured runs (D2BOT_RUN). |
+| loot.vaultEquip | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1 and loot.vaultKeep 1): the item sheet of the Ethereal Vault offers Equip: the bot takes the item out and wears it in the same town visit, vaults the item it replaced and pins the slot (docs/vault.md, Equip). 0 (default): the sheet offers Take out only. Forced off in measured runs (D2BOT_RUN). |
 | loot.vaultKeepPerVisit | 20 | 1..100 | items | 100 | 1 | Most items the Keep queue creates in one town visit, so a long queue does not stall the trip; the rest follows at the next safe moment. |
 | loot.vaultSellPerVisit | 10 | 1..50 | items | 50 | 1 | Most vault items the Sell errand creates in the pack and sells at the vendor in one town visit (docs/vault.md, Sell); the rest follows at the next safe moment. |
 | loot.vaultSellPrompt | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1): when the town budget (repair, potion floor, mercenary reserve) is short of gold, a Needs-you row offers to sell the lowest-value unpinned vault items (never rare or better); Yes queues them for the Sell errand. 0 (default): no prompt. Nothing is ever sold without the answer. |
@@ -548,6 +548,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
+| agency.autoAlloc | 0 | 0..1 | 0/1 | 0 | 0 | 0 (default): off, points are banked for the player. 1: a hero whose build is locked (chosen on the Points page) puts every new stat and skill point where that build's table says, at a calm moment, by verb. A skill the hero cannot use yet is skipped with a visible reason and the point stays banked (docs/autoalloc.md). |
 | agency.planner | 0 | 0..1 | mode | 0 | 0 | 0 (default): off. 1: shadow. Once a minute the hero logs a `planner shadow:` line with the attack and aura the planner would pick from the skills the player actually bought, next to what the combat profile picks, and GET /api/hero/plan and the Points page show the derived rotation, the warnings and the viability line. Shadow only: it never changes what the hero does (docs/agency.md). |
 
 ### items.*
@@ -555,6 +556,17 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
 | items.ladderRunewords | 0 | 0..1 | bool | 0 | 3 | 1: the planner may socket the ladder-only runewords (Spirit, Insight and the rest of the Runes.txt server rows) and the Return screen shows 'ladder runewords: on'. Set it only together with the fork flag --ladder-runewords (ADR 0024, d.idle mode); read at start. 0 (default, vanilla): they stay unavailable, as in every gate and fidelity run. |
+
+### respec.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| respec.baseGold | 500 | 0..1e+06 | gold | 500 | 0 | Fixed part of the price of a respec (all skill and stat points refunded). price = clamp(minGold, maxGold, baseGold + perLevel x level) x (1 + perRespecPct/100 x paid respecs). PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.perLevel | 250 | 0..1e+05 | gold | 250 | 0 | Gold added per character level before the escalation. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.perRespecPct | 50 | 0..1000 | % | 50 | 0 | Percent added to the price for every respec this hero already paid for. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.firstFree | 0 | 0..10 | count | 0 | 0 | How many of a hero's first respecs cost nothing (they do not count for the escalation). 0 = every respec is paid. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.minGold | 1000 | 0..1e+06 | gold | 1000 | 0 | The price before the escalation is at least this. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+| respec.maxGold | 1e+05 | 0..1e+07 | gold | 1e+05 | 0 | The price before the escalation is at most this (0 = no cap). PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)

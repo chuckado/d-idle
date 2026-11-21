@@ -912,6 +912,7 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	}
 	if f.Points != nil {
 		m.Handle(PointsPrefix, f.Points.PostHandler(o))
+		m.Handle(BuildRoute, f.Points.BuildPostHandler(o))
 	}
 	if f.ZoneClear != nil {
 		m.Handle(ZoneClearRoute, f.ZoneClear.PostHandler(o))
