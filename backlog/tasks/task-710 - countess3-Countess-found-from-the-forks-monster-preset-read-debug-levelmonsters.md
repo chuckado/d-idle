@@ -37,7 +37,7 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 client, fake, d2dworld merge, boss anchor by name, dead Anchor.Spawns removed; must-fail tests Paladin and Sorceress
+- [x] #1 client, fake, d2dworld merge, boss anchor by name, dead Anchor.Spawns removed; must-fail tests Paladin and Sorceress
 - [ ] #2 fork verb built and differential 0 differences (live-check)
 - [ ] #3 act1.forgotten.countess Paladin 11 run with the new binary
 <!-- AC:END -->
