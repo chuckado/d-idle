@@ -132,6 +132,7 @@ cmd/d2bot  credit-runner  cainfix
 cmd/d2bot  credit-runner  survsd
 cmd/d2bot  credit-runner  wiring2
 cmd/d2bot/adapters.go  credit-runner  cainfix3
+cmd/d2bot/adapters.go  credit-runner  chores2
 cmd/d2bot/adapters.go  credit-runner  goldprio
 cmd/d2bot/adapters.go  credit-runner  idfast
 cmd/d2bot/behaviors.go  credit-runner  agencyp0
@@ -502,6 +503,7 @@ docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
 docs/probes/cainl0  credit-runner  cainl0
 docs/probes/cainl2  credit-runner  cainl2
 docs/probes/cainl3  live-agent  cainl3
+docs/probes/chores2-2026-11-21.md  credit-runner  chores2
 docs/probes/deploy-cockpit-2026-11-15.md  credit-runner  deploycockpit
 docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
 docs/probes/firsthour.md  live-agent  firsthour
@@ -757,6 +759,7 @@ internal/bot/areaskip_test.go  credit-runner  staletarget
 internal/bot/areaskip_test.go  pro-runner  bounce3
 internal/bot/broke.go  credit-runner  survrecover
 internal/bot/catalog.go  credit-runner  botcpu2
+internal/bot/contracts.go  credit-runner  chores2
 internal/bot/contracts.go  credit-runner  goldprio
 internal/bot/contracts.go  credit-runner  vaultv5
 internal/bot/drought.go  credit-runner  freshstart
@@ -888,6 +891,7 @@ internal/bot/task.go  credit-runner  botstuck
 internal/bot/task.go  credit-runner  cain5b
 internal/bot/task.go  credit-runner  cainchain
 internal/bot/task.go  credit-runner  cainfix
+internal/bot/task.go  credit-runner  chores2
 internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  quests3
 internal/bot/task.go  credit-runner  resetinstant
@@ -1277,9 +1281,11 @@ internal/task/executor.go  credit-runner  botstuck
 internal/task/executor.go  credit-runner  staletarget
 internal/task/executor_unpark_test.go  credit-runner  staletarget
 internal/task/gate.go  credit-runner  cainfix3
+internal/task/gate.go  credit-runner  chores2
 internal/task/guided.go  credit-runner  campaign1
 internal/task/guided_test.go  credit-runner  campaign1
 internal/task/guided_test.go  pro-runner  levelplan3
+internal/task/route_test.go  credit-runner  chores2
 internal/task/s7b_test.go  credit-runner  quests7b
 internal/task/testdata  credit-runner  quests7b
 internal/task/testdata/plans/act1.txt  credit-runner  cain5b
@@ -1292,12 +1298,14 @@ internal/town/beltfill.go  credit-runner  beltfix
 internal/town/beltfix6_test.go  credit-runner  beltfix
 internal/town/beltfix_test.go  credit-runner  beltfix
 internal/town/beltrepair.go  credit-runner  beltfix
+internal/town/chores.go  credit-runner  chores2
 internal/town/chores.go  credit-runner  idfast
 internal/town/chores.go  credit-runner  repairtrip
 internal/town/chores.go  credit-runner  tidy
 internal/town/idtome_test.go  credit-runner  idtome
 internal/town/imbue_test.go  credit-runner  q4runes
 internal/town/invstash_test.go  credit-runner  towntests
+internal/town/kithealing_test.go  credit-runner  chores2
 internal/town/playerid.go  credit-runner  itemverbs2
 internal/town/playerstash.go  credit-runner  itemverbs2
 internal/town/playerstash_test.go  credit-runner  towntests
@@ -1312,6 +1320,7 @@ internal/town/tidy_test.go  credit-runner  lootwireL4
 internal/town/tidy_test.go  credit-runner  tidy
 internal/town/tidy_test.go  credit-runner  towntests
 internal/town/town.go  credit-runner  cainchain
+internal/town/town.go  credit-runner  chores2
 internal/town/town.go  credit-runner  itemverbs2
 internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
