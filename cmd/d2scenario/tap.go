@@ -287,21 +287,36 @@ func runAPICalls(ctx context.Context, base, view, token string, calls []scenario
 	return out
 }
 
-// resolveCall substitutes the placeholders of one call; the inventory is read only when a placeholder needs it.
+// resolveCall substitutes the placeholders of one call; the inventory is read only when a placeholder needs it, and read
+// again for up to 20 s while the item is not there yet (the desk is bound a little after the bot starts).
 func resolveCall(ctx context.Context, client *http.Client, view, token string, c scenario.APICall, vaultIDs []string) (string, map[string]any, error) {
 	r := scenario.Resolver{VaultIDs: vaultIDs}
-	if scenario.NeedsInventory(c.Body) {
-		req, _ := http.NewRequestWithContext(ctx, "GET", view+"/api/inventory", nil)
-		req.Header.Set("Authorization", "Bearer "+token)
-		if resp, err := client.Do(req); err == nil {
-			r.Inventory, _ = io.ReadAll(io.LimitReader(resp.Body, 4<<20))
-			resp.Body.Close()
+	need := scenario.NeedsInventory(c.Body)
+	deadline := time.Now().Add(20 * time.Second)
+	for {
+		status := 0
+		if need {
+			req, _ := http.NewRequestWithContext(ctx, "GET", view+"/api/inventory", nil)
+			req.Header.Set("Authorization", "Bearer "+token)
+			if resp, err := client.Do(req); err == nil {
+				r.Inventory, _ = io.ReadAll(io.LimitReader(resp.Body, 4<<20))
+				status = resp.StatusCode
+				resp.Body.Close()
+			}
+		}
+		path, err := r.ResolveString(c.Path)
+		if err == nil {
+			var body map[string]any
+			if body, err = r.ResolveBody(c.Body); err == nil {
+				return path, body, nil
+			}
+		}
+		if !need || time.Now().After(deadline) || ctx.Err() != nil {
+			return "", nil, fmt.Errorf("%w (GET /api/inventory: HTTP %d, %d bytes)", err, status, len(r.Inventory))
+		}
+		select {
+		case <-ctx.Done():
+		case <-time.After(2 * time.Second):
 		}
 	}
-	path, err := r.ResolveString(c.Path)
-	if err != nil {
-		return "", nil, err
-	}
-	body, err := r.ResolveBody(c.Body)
-	return path, body, err
 }

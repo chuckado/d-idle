@@ -47,7 +47,7 @@
         ]
       },
       "budget": {
-        "virtual_min": 6
+        "virtual_min": 12
       },
       "matrix": {
         "classes": [
@@ -144,7 +144,7 @@
         ]
       },
       "budget": {
-        "virtual_min": 6
+        "virtual_min": 12
       },
       "matrix": {
         "classes": [
@@ -221,7 +221,7 @@
         },
         "api": [
           {
-            "after_s": 20,
+            "after_s": 10,
             "path": "/api/vault/equip",
             "body": {
               "ids": [
@@ -231,14 +231,14 @@
             }
           },
           {
-            "after_s": 22,
+            "after_s": 12,
             "path": "/api/recall",
             "body": {}
           }
         ]
       },
       "budget": {
-        "virtual_min": 6
+        "virtual_min": 12
       },
       "matrix": {
         "classes": [
