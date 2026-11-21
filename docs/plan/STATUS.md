@@ -389,6 +389,7 @@
 | vaultfull | proposed | - | `internal/vault/`<br>`internal/vaultkeep/`<br>`internal/loot/vault.go`<br>`internal/loot/vault_test.go`<br>`internal/loot/pickup.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultapi_test.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault-logic.js`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/env/tuning_loot.go`<br>`docs/vault.md`<br>`docs/knobs.md`<br>`tools/provingground/scenarios/vaultfull.json` | - |
 | vaultpay | proposed | - | `internal/vaultkeep`<br>`internal/bulkid`<br>`internal/d2dctl/paygold.go`<br>`internal/d2dctl/paygold_test.go`<br>`internal/d2dctl/vault_verbs.go`<br>`internal/d2dctl/vault_fake.go`<br>`internal/watch/vaultapi_gold.go`<br>`internal/watch/vaultapi_gold_test.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`internal/watch/testdata/vault_logic.mjs`<br>`cmd/d2bot/vaultkeep.go`<br>`internal/town/playerid.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`docs/cheats.md`<br>`docs/adr/0014-memory-writes-allowed-no-crutch.md`<br>`docs/adr/0029-vault-gold-payment.md`<br>`docs/adr/README.md`<br>`docs/decisions.md`<br>`tools/provingground/scenarios/vaultreveal.json` | `fork-branch:didle/devp17-20261121` |
 | verbs2 | proposed | - | `internal/d2dctl/world_verbs.go`<br>`internal/d2dctl/world_verbs_test.go`<br>`internal/d2dctl/fake/fake.go`<br>`internal/input/worldverbs.go`<br>`internal/input/worldfake.go`<br>`internal/d2dinput/worldverbs.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`internal/d2dcombat/rig.go`<br>`internal/d2dtown/adapter.go`<br>`internal/town/shop.go`<br>`internal/town/worldverbs_test.go`<br>`internal/town/worldverbs_unit_test.go`<br>`internal/town/export_world_test.go`<br>`internal/nav/waypoint.go`<br>`internal/nav/wpverb_test.go`<br>`internal/env/tuning_input.go`<br>`docs/knobs.md`<br>`data/input/caps/d2d-fork-input-verbs2.json`<br>`data/input/caps_test.go`<br>`docs/process/input-verbs2.md` | - |
+| bsm9 | proposed | - | `cmd/d2scenario/run.go`<br>`cmd/d2scenario/restart.go`<br>`cmd/d2scenario/restart_test.go`<br>`cmd/d2scenario/fieldledger.go`<br>`cmd/d2scenario/fieldledger_test.go`<br>`internal/scenario/scenario.go`<br>`tools/provingground/scenarios/board.json`<br>`docs/probes/boardsm-progress-2026-11-21.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -424,14 +425,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 8af7d79c6 11-21 15:32 `Merge agent/bsm9: Merge branch 'main' into bsm9` (bsm9)
+- 786283e22 11-21 15:31 `Merge branch 'main' into bsm9` (-)
 - caadfa33f 11-21 15:19 `Merge agent/cainscroll: Merge branch 'main' into cainscroll` (cainscroll)
 - 87f94536e 11-21 15:18 `Merge branch 'main' into cainscroll` (-)
 - 72fb9cc59 11-21 15:11 `Merge agent/vaultfull: Full Vault never trims or sells; missed drops; knob loot.vaultAutoTrim` (vaultfull)
 - 943595cdb 11-21 15:10 `Merge branch 'main' into vaultfull` (-)
+- 682a8b0ea 11-21 15:07 `Merge remote-tracking branch 'origin/main' into agent/bsm9` (-)
 - 229170d9d 11-21 15:03 `Merge agent/verbs2: Merge branch 'main' into verbs2` (verbs2)
 - 16104ab89 11-21 15:02 `Merge origin/main into vaultfull` (vaultfull)
 - 4975e5169 11-21 15:01 `Merge branch 'main' into verbs2` (-)
-- d4815b337 11-21 14:54 `Merge agent/autoalloc: Merge branch 'main' into TASK-787` (autoalloc)
-- 58119931c 11-21 14:53 `Merge origin/main into agent/cainscroll` (-)
-- d5bdb2385 11-21 14:53 `Merge branch 'main' into TASK-787` (-)
 <!-- statusgen:end -->
