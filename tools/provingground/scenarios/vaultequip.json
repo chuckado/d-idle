@@ -43,7 +43,8 @@
               "ids": [
                 "{{vault.0.id}}"
               ],
-              "slot": "auto"
+              "slot": "auto",
+              "now": true
             }
           }
         ]
@@ -159,7 +160,8 @@
               "ids": [
                 "{{vault.0.id}}"
               ],
-              "slot": "auto"
+              "slot": "auto",
+              "now": true
             }
           }
         ]
@@ -281,7 +283,8 @@
               "ids": [
                 "{{vault.0.id}}"
               ],
-              "slot": "left"
+              "slot": "left",
+              "now": true
             }
           }
         ]
@@ -398,7 +401,8 @@
               "ids": [
                 "{{vault.0.id}}"
               ],
-              "slot": "right"
+              "slot": "right",
+              "now": true
             }
           }
         ]
