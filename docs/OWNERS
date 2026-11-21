@@ -538,6 +538,7 @@ docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/points.md  credit-runner  agencyp0
+docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm7
 docs/probes/bot-cpu-2026-11-16.md  credit-runner  botcpu
 docs/probes/bot-cpu-fix-2026-11-16.md  credit-runner  botcpu2
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
@@ -859,6 +860,7 @@ internal/bot/killtime.go  credit-runner  swingmodel
 internal/bot/killtime_test.go  credit-runner  swingmodel
 internal/bot/kitgate.go  credit-runner  survhold2
 internal/bot/kitlevel_test.go  credit-runner  survhold2
+internal/bot/kitplan_test.go  credit-runner  bsm7
 internal/bot/ladder_t0_test.go  credit-runner  questrun
 internal/bot/leveling.go  credit-runner  agencyp0
 internal/bot/leveling.go  credit-runner  hourfix
@@ -910,6 +912,7 @@ internal/bot/portalburn_test.go  credit-runner  survhold2
 internal/bot/questauto.go  credit-runner  quests8
 internal/bot/questauto_test.go  credit-runner  quests8
 internal/bot/questboard.go  credit-runner  bsm4
+internal/bot/questboard.go  credit-runner  bsm7
 internal/bot/questboard.go  credit-runner  cainchain
 internal/bot/questboard.go  credit-runner  questrun
 internal/bot/questboard.go  credit-runner  quests10
@@ -927,6 +930,7 @@ internal/bot/questboard_test.go  credit-runner  quests7
 internal/bot/repairtrip.go  credit-runner  repairtrip
 internal/bot/repairtrip_test.go  credit-runner  repairtrip
 internal/bot/resource.go  pro-runner  levelplan3
+internal/bot/routeguard.go  credit-runner  bsm7
 internal/bot/routeguard.go  credit-runner  questrun
 internal/bot/runner.go  credit-runner  agencyp0
 internal/bot/runner.go  credit-runner  botinstant
@@ -1333,7 +1337,9 @@ internal/questboard/chunks_test.go  credit-runner  cain5b
 internal/questboard/chunks_test.go  credit-runner  quests7b
 internal/questboard/def.go  credit-runner  cainfix3
 internal/questboard/desk.go  credit-runner  andariel1
+internal/questboard/desk.go  credit-runner  bsm8
 internal/questboard/desk.go  credit-runner  questrun
+internal/questboard/desk_reason_test.go  credit-runner  bsm8
 internal/questboard/desk_test.go  credit-runner  andariel1
 internal/questboard/desk_test.go  credit-runner  questrun
 internal/questboard/exec.go  credit-runner  bsm4
@@ -1426,11 +1432,13 @@ internal/task/cainreenter_test.go  credit-runner  cainchain
 internal/task/cainstones_test.go  credit-runner  cain45
 internal/task/campaign.go  credit-runner  campaign1
 internal/task/executor.go  credit-runner  botstuck
+internal/task/executor.go  credit-runner  bsm7
 internal/task/executor.go  credit-runner  staletarget
 internal/task/executor.go  credit-runner  wpstep
 internal/task/executor_unpark_test.go  credit-runner  staletarget
 internal/task/gate.go  credit-runner  cainfix3
 internal/task/gate.go  credit-runner  chores2
+internal/task/gate_hold_test.go  credit-runner  bsm7
 internal/task/guided.go  credit-runner  campaign1
 internal/task/guided_test.go  credit-runner  campaign1
 internal/task/guided_test.go  pro-runner  levelplan3
@@ -1701,6 +1709,7 @@ internal/watch/testdata/quests  credit-runner  quests7
 internal/watch/testdata/quests  credit-runner  quests8
 internal/watch/testdata/questui  credit-runner  quests10
 internal/watch/testdata/questui  credit-runner  quests8
+internal/watch/testdata/questui/quest_ui.mjs  credit-runner  bsm8
 internal/watch/testdata/reset  credit-runner  botreset
 internal/watch/testdata/reset  credit-runner  resetinstant
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail
@@ -1871,6 +1880,7 @@ internal/watch/web/panels/progress/  credit-runner  uis3
 internal/watch/web/panels/quest-board  credit-runner  boardorder
 internal/watch/web/panels/quest-board  credit-runner  quests10
 internal/watch/web/panels/quest-board  credit-runner  quests8
+internal/watch/web/panels/quest-board/panel.js  credit-runner  bsm8
 internal/watch/web/panels/quest-list  credit-runner  quests8
 internal/watch/web/panels/quest-strip  credit-runner  quests8
 internal/watch/web/panels/statusline/  credit-runner  uifix1
@@ -2051,6 +2061,7 @@ tools/provingground/scenarios/act1more.json  credit-runner  andariel1
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/behaviours.json  credit-runner  vaultequip
 tools/provingground/scenarios/board.json  credit-runner  bsm1
+tools/provingground/scenarios/board.json  credit-runner  bsm7
 tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3

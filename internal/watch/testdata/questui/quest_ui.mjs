@@ -62,6 +62,21 @@ for (const cls of ['paladin', 'sorceress']) {
   assert.equal(m.secondary, null, 'one primary button at a time');
 }
 
+// a hold (appendix B.4): "On hold" with the hold's sentence and a Stop, never "Running" with a step that does not move
+for (const cls of ['paladin', 'sorceress']) {
+  const v = clone(gold('running-' + cls));
+  v.running.reason = { code: 'needs_potions', text: 'Going to town for potions: 3 of 4 healing potions.', remedy: 'chore' };
+  const m = B.stripModel(v, fresh());
+  assert.equal(m.kind, 'held', cls);
+  assert.equal(m.label, 'On hold');
+  assert.equal(m.head, 'Den of Evil: on hold');
+  assert.equal(m.sub, 'Going to town for potions: 3 of 4 healing potions.');
+  assert.deepEqual([m.primary.label, m.primary.verb, m.primary.confirm], ['Stop', 'cancel', true]);
+  const b = clone(gold('running-' + cls)); // a parked run says the park's sentence
+  b.blocked = Object.assign({}, b.running, { state: 'blocked', why: 'old', reason: { code: 'died_too_often', text: 'Den of Evil is stuck: the hero died 2 times on this part.', remedy: 'player' } }); delete b.running;
+  assert.equal(B.stripModel(b, fresh()).sub, 'Den of Evil is stuck: the hero died 2 times on this part.');
+}
+
 // the board is off: the exact knob, no button
 {
   const m = B.stripModel({ schema: 'watch.quests/1', enabled: false, reason: 'the quest board is off (knob quests.board is 0)' }, fresh());
