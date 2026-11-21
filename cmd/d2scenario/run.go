@@ -205,6 +205,8 @@ func cmdExecOne(args []string) error {
 	}
 	res.BudgetMin = s.Budget.VirtualMin
 	res.WallSec = int(time.Since(start).Seconds())
+	res.Prov = collectProv(*bot)
+	res.Prov.Pace = scenario.PaceOf(res.VirtualMin, res.WallSec)
 	if res.State != nil {
 		res.Digest = scenario.DigestState(*res.State)
 	}
@@ -299,6 +301,9 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	res.Taps = taps
 	if why := botFailure(trace); why != "" {
 		return withVerdict(res, blocked("the bot exited with an error, it did not play: %s", why))
+	}
+	if why := cutReason(trace); why != "" {
+		return withVerdict(res, blocked("%s", why))
 	}
 	if !after(newestSave(home), before) {
 		res.State = &scenario.State{Version: scenario.StateVersion, Source: "none", WritesAfterStart: refused}
@@ -579,6 +584,10 @@ func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scen
 	if why := botFailure(trace); why != "" {
 		_ = prep.Stop()
 		return withVerdict(res, blocked("the bot exited with an error, it did not play: %s", why))
+	}
+	if why := cutReason(trace); why != "" {
+		_ = prep.Stop()
+		return withVerdict(res, blocked("%s", why))
 	}
 	cc := d2dctl.New(sock, d2dctl.Options{})
 	st := observe(ctx, cc, -1, true)

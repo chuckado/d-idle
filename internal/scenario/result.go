@@ -40,6 +40,8 @@ type Result struct {
 	State *State   `json:"state,omitempty"`
 	// Digest is the hash of the observed state: the determinism check compares it, not only the verdict.
 	Digest string `json:"digest,omitempty"`
+	// Prov records the binaries, host role, load and pace of the run (nil in results written before it existed).
+	Prov *Provenance `json:"prov,omitempty"`
 }
 
 // Verdict derives Status and Reason from the assertion results. A failed assertion makes the run RED even when others
