@@ -36,10 +36,19 @@ type Result struct {
 	// Trace is the path of the bot's decision trace (what it chose and why): output for the human, never asserted on.
 	Trace string `json:"trace,omitempty"`
 	// Taps are the board taps the driver made ("start scroll", "handin read"), in order (trigger.driver board-taps).
-	Taps  []string `json:"taps,omitempty"`
-	State *State   `json:"state,omitempty"`
-	// Digest is the hash of the observed state: the determinism check compares it, not only the verdict.
+	Taps []string `json:"taps,omitempty"`
+	// TapsAt is the bot's virtual second of each tap (same order); two runs of one seed should tap at equal values.
+	TapsAt []float64 `json:"taps_at,omitempty"`
+	State  *State    `json:"state,omitempty"`
+	// Digest is the hash of the whole observed state. It is a DRIFT report: the determinism check shows a difference but
+	// does not fail on it (gold 700 against 712 with the same verdict is the same run). AssertDigest gates.
 	Digest string `json:"digest,omitempty"`
+	// AssertDigest is D1 (assertion digest.go): verdict-level facts only; equal verdict and equal D1 are the gate.
+	AssertDigest string `json:"assert_digest,omitempty"`
+	// Journal is the path of the d2dctl command journal of the bot run (run -journal), for d2ddet compare.
+	Journal string `json:"journal,omitempty"`
+	// Prov records the binaries, host role, load and pace of the run (nil in results written before it existed).
+	Prov *Provenance `json:"prov,omitempty"`
 }
 
 // Verdict derives Status and Reason from the assertion results. A failed assertion makes the run RED even when others

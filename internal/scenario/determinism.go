@@ -32,6 +32,18 @@ func DigestState(st State) string {
 	return hex.EncodeToString(h[:8])
 }
 
+// d1 is the assertion digest of a result: the recorded one, else computed from its asserts (so results written before
+// the digest existed can be compared); "" when the result carries neither.
+func d1(r Result) string {
+	if r.AssertDigest != "" {
+		return r.AssertDigest
+	}
+	if len(r.Asserts) > 0 {
+		return AssertDigest(r)
+	}
+	return ""
+}
+
 // Divergence is one run key whose two executions disagree.
 type Divergence struct {
 	Key    string `json:"key"`
@@ -41,9 +53,10 @@ type Divergence struct {
 }
 
 // CheckDeterminism pairs the results of two executions of the same plan by run key. The same seed must give the same
-// verdict (hard), and the same state digest (reported: a differing digest with the same verdict is a warning because
-// the bot loop is not yet fully deterministic, docs/d2d-determinism.md). A flaky scenario is a failed scenario: any
-// verdict difference makes ok false.
+// verdict and the same assertion digest (both hard, returned in verdictDiffs); the whole-state digest is only reported
+// as drift in digestDiffs (the bot loop is not yet fully deterministic, docs/d2d-determinism.md). An assertion digest
+// is compared only when both results carry asserts or one (a result with neither is not). A flaky scenario is a
+// failed scenario: any verdict or assertion-digest difference makes ok false.
 func CheckDeterminism(a, b []Result) (ok bool, verdictDiffs, digestDiffs []Divergence, missing []string) {
 	bm := map[string]Result{}
 	for _, r := range b {
@@ -60,6 +73,9 @@ func CheckDeterminism(a, b []Result) (ok bool, verdictDiffs, digestDiffs []Diver
 		delete(bm, ra.Key())
 		if ra.Status != rb.Status {
 			verdictDiffs = append(verdictDiffs, Divergence{Key: ra.Key(), A: ra.Status, B: rb.Status, Detail: fmt.Sprintf("%s vs %s", ra.Reason, rb.Reason)})
+			ok = false
+		} else if da, db := d1(ra), d1(rb); da != "" && db != "" && da != db {
+			verdictDiffs = append(verdictDiffs, Divergence{Key: ra.Key(), A: da, B: db, Detail: "same verdict, different assertion digest"})
 			ok = false
 		} else if ra.Digest != rb.Digest {
 			digestDiffs = append(digestDiffs, Divergence{Key: ra.Key(), A: ra.Digest, B: rb.Digest, Detail: "same verdict, different state digest"})

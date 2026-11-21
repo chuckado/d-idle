@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- combat foundation record doc <!--sg:agent/cmbdoc-->
+- Merge branch 'main' into devp16 <!--sg:agent/devp16-->
+- pggroup1 (rebased): Proving Ground gate group 1 <!--sg:agent/pggroup1-->
 - dlv-expect: cast expectation ledger, knob combat.deliveryExpect, tests <!--sg:agent/cmb3-->
 - dlv-rotation: Rotation type, Profile.Rotation adapter, Fighter reads slots, golden parity <!--sg:agent/cmb2-->
 - dlv-data: cap/2 delivery object, generated skills/skillKinds/tiers, golden parity <!--sg:agent/cmb1-->
