@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -220,8 +221,19 @@ func open(vs []QuestView, plan Plan, diff int) []Ref {
 			out = append(out, Ref{r.Quest, r.Chunk})
 		}
 	}
+	// Chain order (the questspec data order), not the order of the taps: the first runs, the rest wait for it.
+	pos := map[Ref]int{}
+	for _, v := range vs {
+		for _, c := range v.Chunks {
+			pos[Ref{v.ID, c.ID}] = len(pos)
+		}
+	}
+	sort.SliceStable(out, func(i, j int) bool { return pos[out[i]] < pos[out[j]] })
 	return out
 }
+
+// WaitsFor is the visible reason of a queued chunk: it waits for the one that runs.
+func WaitsFor(running Ref) string { return "waits for " + running.String() }
 
 // Offer is one chunk that raises an offer now (state Ready).
 type Offer struct {
@@ -319,6 +331,15 @@ func (e *Exec) acceptLocked(vs []QuestView, plan Plan, diff int, quest, chunk st
 	return nil
 }
 
+// HasRecord reports whether the plan file holds an accepted record of the chunk in this difficulty, whatever state
+// the evidence derives for it (a queued chunk whose predecessor is not done derives Locked).
+func (e *Exec) HasRecord(quest, chunk string) bool {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	p, _, err := e.st.Load()
+	return err == nil && p.accepted(e.env.Diff(), quest, chunk)
+}
+
 // Cancel withdraws an accepted chunk (the player's Stop): the record goes, the running slice is stopped, the
 // chunk is Ready again. Cancelling something that is not accepted is a no-op.
 func (e *Exec) Cancel(quest, chunk string) error {
@@ -382,7 +403,7 @@ type Status struct {
 	Diff    int
 	Views   []QuestView
 	Active  *Active // the accepted chunk that is not done, nil when none
-	// Extra lists further accepted chunks when the plan file holds more than one (never run; Needs you).
+	// Extra lists the further accepted chunks of the plan file in chain order; they wait for Active.
 	Extra []Ref
 }
 
@@ -457,17 +478,8 @@ func (e *Exec) Next() (Decision, error) {
 		return Decision{}, err
 	}
 	o := open(vs, plan, diff)
-	switch len(o) {
-	case 0:
+	if len(o) == 0 {
 		return Decision{Kind: DecIdle}, nil
-	case 1:
-	default:
-		names := make([]string, len(o))
-		for i, r := range o {
-			names[i] = r.String()
-		}
-		return Decision{Kind: DecBlocked, Quest: o[0].Quest, Chunk: o[0].Chunk,
-			Why: "more than one chunk is accepted (" + strings.Join(names, ", ") + "); not running any"}, nil
 	}
 	r := o[0]
 	_, c, _ := chunkView(vs, r.Quest, r.Chunk)

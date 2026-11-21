@@ -262,3 +262,37 @@ func TestDeskQueuedReason(t *testing.T) {
 		})
 	}
 }
+
+// Sandbox 2026-11-20: Stop then Confirm on a chunk of a plan file with two accepted chunks changed nothing.
+func TestDeskStopOfOneOfTwoAcceptedChunks(t *testing.T) {
+	const cain = "search_for_cain"
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		t.Run(class, func(t *testing.T) {
+			r := newRig(t, class, 17)
+			paused := false
+			d := r.desk(&paused)
+			if a := d.Start(cain, "scroll"); !a.OK {
+				t.Fatalf("%+v", a)
+			}
+			p, _, _ := r.x.st.Load()
+			p.Accepted = append(p.Accepted, Record{Quest: cain, Chunk: "stones", Diff: "normal"})
+			if err := r.x.st.file.Save(p); err != nil {
+				t.Fatal(err)
+			}
+			a := d.Cancel(cain, "stones")
+			if !a.OK || a.Already || a.State != "ready" {
+				t.Fatalf("stop stones: %+v", a)
+			}
+			st, _ := r.x.State()
+			if st.Active == nil || st.Active.Chunk != "scroll" || len(st.Extra) != 0 {
+				t.Fatalf("%+v", st)
+			}
+			if a := d.Cancel(cain, "scroll"); !a.OK || a.Already {
+				t.Fatalf("stop scroll: %+v", a)
+			}
+			if st, _ := r.x.State(); st.Active != nil {
+				t.Fatalf("still accepted: %+v", st.Active)
+			}
+		})
+	}
+}

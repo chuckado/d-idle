@@ -104,10 +104,12 @@ type Pre struct {
 	Waypoints  []int     `json:"waypoints,omitempty"`  // waypoint bits to activate (internal/saves waypointTable order)
 	Quests     []QWord   `json:"quests,omitempty"`     // quest records written as the hero's own state
 	Board      *QuestRef `json:"board,omitempty"`      // chunk the player accepted (the plan store)
-	Items      []Item    `json:"items,omitempty"`
-	Belt       []string  `json:"belt,omitempty"` // potion codes in belt order
-	Merc       *int      `json:"merc,omitempty"` // hireling.txt Id, nil: none
-	LifePct    int       `json:"life_pct,omitempty"`
+	// BoardAlso lists further chunks accepted in the same game (a plan file that holds more than one record).
+	BoardAlso []QuestRef `json:"board_also,omitempty"`
+	Items     []Item     `json:"items,omitempty"`
+	Belt      []string   `json:"belt,omitempty"` // potion codes in belt order
+	Merc      *int       `json:"merc,omitempty"` // hireling.txt Id, nil: none
+	LifePct   int        `json:"life_pct,omitempty"`
 }
 
 // QWord is one quest record (fork layout: act 1 records 0..6, docs/forkcheats.md) and its 16-bit word.
@@ -142,6 +144,17 @@ type Trigger struct {
 	TapQuest string `json:"tap_quest,omitempty"`
 	// TapChunks limits the taps to these chunks of the scenario's quest (empty: every chunk, a whole chain).
 	TapChunks []string `json:"tap_chunks,omitempty"`
+	// API are calls the runner makes on the bot's answer listener, with a scenario-local token, as the viewer would
+	// (the bot runs with --ladder --watch). Each is sent once, in order, After wall seconds after the bot started.
+	API []APICall `json:"api,omitempty"`
+}
+
+// APICall is one request of Trigger.API. Path starts with /api/; the body is sent as JSON.
+type APICall struct {
+	After  int            `json:"after_s"`
+	Method string         `json:"method,omitempty"` // default POST
+	Path   string         `json:"path"`
+	Body   map[string]any `json:"body,omitempty"`
 }
 
 // TappedQuest is the quest id the board driver taps ("" when the scenario has no driver).
@@ -293,6 +306,11 @@ func (s Scenario) Validate() error {
 		}
 	default:
 		return fmt.Errorf("%s: trigger.driver %q", at, s.Trigger.Driver)
+	}
+	for i, c := range s.Trigger.API {
+		if !strings.HasPrefix(c.Path, "/api/") || c.After < 0 || (c.Method != "" && c.Method != "GET" && c.Method != "POST") {
+			return fmt.Errorf("%s: trigger.api[%d]: want path /api/..., after_s >= 0, method GET or POST", at, i)
+		}
 	}
 	if s.Trigger.Build != "" {
 		lb, err := leveler.LoadBuild(s.Trigger.Build, "")
