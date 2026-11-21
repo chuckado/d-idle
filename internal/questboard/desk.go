@@ -387,7 +387,14 @@ func (d *Desk) build() View {
 			if l != nil {
 				row.Paid = append(row.Paid, paidFor(q, c, status.Diff, l)...)
 			}
-			row.Chunks = append(row.Chunks, ChunkRow{ID: cv.ID, Title: c.Title, State: cv.State, Readiness: cv.Reason, Why: cv.Why, Confirmed: cv.Confirmed})
+			why := cv.Why
+			// A chunk held back by the readiness word says the model's reasons, not only "too hard for now" (card andariel1).
+			if cv.State == Available && cv.Reason == ReadyTooHard && d.cfg.Explain != nil {
+				if rd, ok := d.cfg.Explain(q, c); ok && rd.Sentence != "" {
+					why = rd.Sentence
+				}
+			}
+			row.Chunks = append(row.Chunks, ChunkRow{ID: cv.ID, Title: c.Title, State: cv.State, Readiness: cv.Reason, Why: why, Confirmed: cv.Confirmed})
 			if cv.State == Ready {
 				v.Offers = append(v.Offers, d.offer(q, c, cv, plan.AutoStart(status.Diff, qv.ID), !busy, class, level, v.Paused, status.Diff, l))
 			}

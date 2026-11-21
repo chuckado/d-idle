@@ -296,3 +296,34 @@ func TestDeskStopOfOneOfTwoAcceptedChunks(t *testing.T) {
 		})
 	}
 }
+
+// A chunk the readiness word holds back (too hard) shows the model's sentence on the sheet row, not only "too hard for
+// now" (card andariel1: Andariel was never offered and the board said nothing useful).
+func TestDeskTooHardRowSaysWhy(t *testing.T) {
+	const quest = "sisters_to_the_slaughter"
+	for _, bd := range builds {
+		t.Run(bd.class, func(t *testing.T) {
+			r := newRig(t, bd.class, 6)
+			d := r.desk(nil)
+			row := func() ChunkRow {
+				for _, q := range d.viewFresh().Quests {
+					if q.ID == quest {
+						return q.Chunks[0]
+					}
+				}
+				t.Fatal("no quest row")
+				return ChunkRow{}
+			}
+			c := row()
+			if c.Readiness != ReadyTooHard || c.Why != "too hard for now" {
+				t.Fatalf("without the model: %+v", c)
+			}
+			d.cfg.Explain = func(q Quest, c Chunk) (Readiness, bool) {
+				return Readiness{Word: ReadyTooHard, Sentence: "You have no merc and would likely lose to Andariel: too hard"}, true
+			}
+			if c := row(); !strings.Contains(c.Why, "would likely lose to Andariel") {
+				t.Fatalf("with the model: %+v", c)
+			}
+		})
+	}
+}

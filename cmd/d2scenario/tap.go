@@ -24,6 +24,7 @@ type tapper struct {
 	client                     *http.Client
 	log                        io.Writer
 	Taps                       []string // "start scroll", "handin read" in order
+	lastWhy                    string   // the last "not startable" line written, so a long wait logs each change once
 }
 
 func newTapper(view, answer, token, quest string, chunks []string, log io.Writer) *tapper {
@@ -50,6 +51,11 @@ type boardView struct {
 		Startable    bool
 	} `json:"offers"`
 	History []struct{ Quest, Chunk string } `json:"history"`
+	Quests  []struct {
+		ID     string
+		State  string
+		Chunks []struct{ ID, State, Readiness, Why string }
+	} `json:"quests"`
 }
 
 func (t *tapper) allowed(chunk string) bool { return len(t.chunks) == 0 || t.chunks[chunk] }
@@ -110,8 +116,30 @@ func (t *tapper) Step(ctx context.Context) (tap string, blocked bool, err error)
 	}
 	if tap != "" {
 		t.Taps = append(t.Taps, tap)
+	} else if v.Running == nil && v.Awaiting == nil {
+		t.logWhyNot(v)
 	}
 	return tap, false, nil
+}
+
+// logWhyNot writes the board's own reason when the wanted chunk is not startable (state, readiness word, why), once per
+// change: a quest that is never offered must say why in the taps log (card andariel1; before it the log stayed silent).
+func (t *tapper) logWhyNot(v boardView) {
+	for _, q := range v.Quests {
+		if q.ID != t.quest {
+			continue
+		}
+		for _, c := range q.Chunks {
+			if !t.allowed(c.ID) {
+				continue
+			}
+			line := fmt.Sprintf("not startable %s/%s: state %s readiness %q why %q", q.ID, c.ID, c.State, c.Readiness, c.Why)
+			if line != t.lastWhy {
+				t.lastWhy = line
+				fmt.Fprintf(t.log, "%s %s\n", time.Now().Format("15:04:05"), line)
+			}
+		}
+	}
 }
 
 // Run polls every interval until ctx ends or the board parks the quest.
