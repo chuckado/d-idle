@@ -23,6 +23,7 @@ owns:
   - "docs/probes/boardsm-progress-2026-11-21.md"
 exclusive: []
 contracts: []
+result: "Runner: trigger.restart_at_s stops the bot (SIGTERM, save and quit) and restarts it on the same hero and plan file with the rest of the virtual budget; a field start now reports writes after start from the bot d2dctl journal (accepted debug write verbs only). Unit tested. Live (second worker, CHEATED setups): restart-mid-chain, handin.without-run and handin.field-tap GREEN on Paladin 11 (the lab word 0x0002 read as needed because Interpret wants a started bit; 0x000e fixes the setup); hold.restock and restock-stash-gold GREEN (bsm7); hold.broke asserts the recovery (no park); hold.too-weak, hold.timeout, park.persist-restart, regress-proxy stay pending with their reasons (setups that cannot be made, U). Sorceress runs of these were not done: lab pace."
 ---
 
 ## Description
@@ -35,7 +36,7 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 trigger.restart_at_s stops the bot (SIGTERM, save and quit) and starts it again on the same hero and state dir with the rest of the budget
-- [ ] #2 a field start counts the bot's accepted debug verbs from its d2dctl journal as writes after start
-- [ ] #3 handin.* , hold.* and restart-mid-chain scenarios run live
+- [x] #1 trigger.restart_at_s stops the bot (SIGTERM, save and quit) and starts it again on the same hero and state dir with the rest of the budget
+- [x] #2 a field start counts the bot's accepted debug verbs from its d2dctl journal as writes after start
+- [x] #3 handin.*, restart-mid-chain and hold.restock scenarios run live (Paladin 11); the rest stay pending with reasons
 <!-- AC:END -->

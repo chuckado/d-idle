@@ -6,9 +6,22 @@ import (
 	"strings"
 )
 
-// writeVerbs are the first words of the lab verbs that change the game (docs/forkcheats.md): a bot that sends one after
-// the start of a measured run made a gameplay-affecting write. Reads (dump, state, items, ...) are not listed.
-var writeVerbs = map[string]bool{"debug": true} // U: the item and vault verbs of --item-verbs are not counted
+// debugWrites are the `debug <sub>` verbs that change the game (V docs/forkcheats.md: act, hit, merc hire|kill|revive|hurt,
+// give, durability, belt clear, unequip, spawn, quest set|bit|join, pin). The bot also sends many `debug` reads (players,
+// portals, states, missiles, level, objects, presets, blocked, warps, grid, layout: V the journal of a live run), which are
+// not writes. U: a new write verb of the fork must be added here.
+var debugWrites = map[string]bool{"act": true, "hit": true, "merc": true, "give": true, "durability": true, "belt": true,
+	"unequip": true, "spawn": true, "pin": true}
+
+func isWriteVerb(w []string) bool {
+	if len(w) < 2 || w[0] != "debug" {
+		return false
+	}
+	if w[1] == "quest" {
+		return len(w) > 2 && w[2] != "list"
+	}
+	return debugWrites[w[1]]
+}
 
 // journalWrites counts the mutating commands the bot sent that the d2d did not refuse, from its d2dctl command journal
 // (">\t<tick>\t<command>\t<reply>\t<site>"). A field start has no refused-write counter (the verbs are on), so this is
@@ -28,7 +41,7 @@ func journalWrites(path string) (int, bool) {
 			continue
 		}
 		w := strings.Fields(p[2])
-		if len(w) > 0 && writeVerbs[w[0]] && !strings.HasPrefix(p[3], "err:") && !strings.HasPrefix(p[3], "fail:") {
+		if isWriteVerb(w) && !strings.HasPrefix(p[3], "err:") && !strings.HasPrefix(p[3], "fail:") {
 			n++
 		}
 	}

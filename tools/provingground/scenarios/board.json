@@ -640,7 +640,8 @@
      "kind": "no_writes"
     }
    ],
-   "status": "active"
+   "status": "pending",
+   "pending_reason": "RED live 2026-11-21 (Paladin 11, bsm9): the field start now has its write line (writes after start 0 from the bot journal), but the setup still cannot leave the cairn stones done, so the step runs; needs a quest word that reads the stones done (U)"
   },
   {
    "id": "board.park.persist-restart",
