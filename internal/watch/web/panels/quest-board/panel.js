@@ -222,6 +222,7 @@ export async function act(ctx, verb, quest, chunk, local = shared, redraw = null
     if (verb === 'handin') { local.handing = null; local.error = { quest, chunk, reason }; }
     ctx.toast('warn', reason);
   } else if (!j && verb === 'handin') local.handing = null;
+  else if (j && j.ok && verb === 'cancel' && !j.already && j.reason) ctx.toast('good', j.reason); // the Stop took effect
   if (redraw) redraw();
   ctx.refresh();
   return j;

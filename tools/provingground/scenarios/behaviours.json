@@ -294,6 +294,12 @@
    "group": "input",
    "title": "select the right or left skill (aura) through the input planner: verb, key, verified click",
    "where": "internal/combat/bindleft.go setPlanned; internal/input/planner.go"
+  },
+  {
+   "id": "town.scroll-hoard",
+   "group": "town-chore",
+   "title": "loose town portal scrolls beside a tome stay at the cap (pickup rule and sell chore)",
+   "where": "internal/loot/loot.go needsOf, internal/town/shop.go looseScrollSurplus"
   }
  ]
 }

@@ -10,6 +10,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"d2lod-bot/internal/scenario"
 )
 
 // tapper plays the part of the person on the quest board of the watch screen: it taps Start on the offered chunk of one
@@ -141,4 +143,34 @@ func newWatchToken(path string) (string, error) {
 	}
 	tok := fmt.Sprintf("%x", b)
 	return tok, os.WriteFile(path, []byte(tok), 0o600)
+}
+
+// runAPICalls sends the scenario's trigger.api calls to the bot's answer listener, once each in order, and writes the
+// reply to the taps log. The token is the scenario-local one of newWatchToken.
+func runAPICalls(ctx context.Context, base, token string, calls []scenario.APICall, log io.Writer) {
+	client := &http.Client{Timeout: 10 * time.Second}
+	start := time.Now()
+	for _, c := range calls {
+		select {
+		case <-ctx.Done():
+			return
+		case <-time.After(time.Until(start.Add(time.Duration(c.After) * time.Second))):
+		}
+		method := c.Method
+		if method == "" {
+			method = "POST"
+		}
+		b, _ := json.Marshal(c.Body)
+		req, _ := http.NewRequestWithContext(ctx, method, base+c.Path, bytes.NewReader(b))
+		req.Header.Set("Authorization", "Bearer "+token)
+		req.Header.Set("Content-Type", "application/json")
+		resp, err := client.Do(req)
+		if err != nil {
+			fmt.Fprintf(log, "%s api %s %s: error %v\n", time.Now().Format("15:04:05"), method, c.Path, err)
+			continue
+		}
+		body, _ := io.ReadAll(io.LimitReader(resp.Body, 300))
+		resp.Body.Close()
+		fmt.Fprintf(log, "%s api %s %s: HTTP %d %s\n", time.Now().Format("15:04:05"), method, c.Path, resp.StatusCode, strings.TrimSpace(string(body)))
+	}
 }

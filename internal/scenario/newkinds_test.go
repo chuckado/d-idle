@@ -170,3 +170,19 @@ func TestDigestIgnoresLog(t *testing.T) {
 		t.Fatal("log lines changed the digest")
 	}
 }
+
+func TestItemInPackMax(t *testing.T) {
+	two := 2
+	st := State{Has: []string{"items"}, Items: []StateItem{{Code: "tsc", Where: "pack"}, {Code: "tsc", Where: "pack"}, {Code: "tsc", Where: "pack"}}}
+	if r := Evaluate([]Assert{{Kind: AItemInPack, Code: "tsc", Max: &two}}, st); r[0].OK {
+		t.Errorf("3 scrolls passed max 2")
+	}
+	st.Items = st.Items[:2]
+	if r := Evaluate([]Assert{{Kind: AItemInPack, Code: "tsc", Max: &two}}, st); !r[0].OK {
+		t.Errorf("2 scrolls failed max 2: %+v", r[0])
+	}
+	st.Items = nil
+	if r := Evaluate([]Assert{{Kind: AItemInPack, Code: "tsc", Max: &two}}, st); !r[0].OK {
+		t.Errorf("0 scrolls failed max 2")
+	}
+}

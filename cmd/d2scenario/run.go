@@ -447,7 +447,16 @@ func writeBoardAndTuning(state, hero string, su scenario.Setup) error {
 	if err != nil {
 		return err
 	}
-	return st.Accept(su.Board.Quest, su.Board.Chunk, 0, "train")
+	if err := st.Accept(su.Board.Quest, su.Board.Chunk, 0, "train"); err != nil {
+		return err
+	}
+	// The store refuses a second concurrent chunk; a plan file that holds two is the state under test.
+	for _, q := range su.BoardAlso {
+		if err := st.AcceptIf(q.Quest, q.Chunk, 0, "train", func(questboard.Record) bool { return true }); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // runBot starts the real bot like tools/survival/abrun.sh does and returns how many gated writes the d2d refused (the
@@ -469,7 +478,8 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 		args = append(args, "--managed", "--d2d-class", "-1", "--d2d-args", "--lockstep")
 	}
 	var tap *tapper
-	if s.Trigger.Driver == scenario.DriverBoardTaps {
+	var apiRun func(context.Context)
+	if s.Trigger.Driver == scenario.DriverBoardTaps || len(s.Trigger.API) > 0 {
 		tokFile := filepath.Join(data, "wtoken")
 		tok, err := newWatchToken(tokFile)
 		if err != nil {
@@ -485,13 +495,21 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 		} else {
 			tlog = os.Stderr
 		}
-		tap = newTapper("http://"+view, "http://"+ans, tok, s.TappedQuest(), s.Trigger.TapChunks, tlog)
+		if s.Trigger.Driver == scenario.DriverBoardTaps {
+			tap = newTapper("http://"+view, "http://"+ans, tok, s.TappedQuest(), s.Trigger.TapChunks, tlog)
+		}
+		if len(s.Trigger.API) > 0 {
+			apiRun = func(c context.Context) { runAPICalls(c, "http://"+ans, tok, s.Trigger.API, tlog) }
+		}
 	}
 	tctx, stopTap := context.WithCancel(ctx)
 	defer stopTap()
 	done := make(chan struct{})
 	go func() {
 		defer close(done)
+		if apiRun != nil {
+			apiRun(tctx)
+		}
 		if tap != nil {
 			select {
 			case <-tctx.Done():
