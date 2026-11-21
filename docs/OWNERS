@@ -591,6 +591,7 @@ docs/process/layout-read.md  credit-runner  countess3
 docs/process/layout-read.md  live-agent  k1layout
 docs/process/necromancer-support.md  credit-runner  necro1
 docs/process/pg-ledger-ops.md  credit-runner  pgledger
+docs/process/pg-ledger-ops.md  credit-runner  pgledgeron
 docs/process/pg-ops-mgcache.md  credit-runner  mgcache
 docs/process/pg-ops-mgonejob.md  credit-runner  mgonejob
 docs/process/pg-ops-mgwatchdog.md  credit-runner  mgwatchdog
@@ -2012,7 +2013,10 @@ tools/provingground/  credit-runner  pgexpand
 tools/provingground/countess-check.sh  credit-runner  countess2
 tools/provingground/earned  credit-runner  pgearned
 tools/provingground/nightly.sh  credit-runner  pgnightly
+tools/provingground/pgenv.sh  credit-runner  pgledgeron
+tools/provingground/pgenv_test.sh  credit-runner  pgledgeron
 tools/provingground/run.sh  credit-runner  pgjournal
+tools/provingground/run.sh  credit-runner  pgledgeron
 tools/provingground/scenarios/act1.json  credit-runner  countess
 tools/provingground/scenarios/act1.json  credit-runner  countess2
 tools/provingground/scenarios/act1more.json  credit-runner  act1more

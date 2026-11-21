@@ -381,6 +381,7 @@
 | bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
 | mouthgate | proposed | - | `internal/nav` | - |
 | vaultequip | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/equipnow.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/watch/vaultequip_test.go`<br>`tools/provingground/scenarios/vaultequip.json`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/vaultapi.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/keep_test.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`internal/watch/testdata/vault_logic.mjs`<br>`tools/provingground/scenarios/behaviours.json` | - |
+| pgledgeron | in-progress | - | `docs/process/pg-ledger-ops.md`<br>`tools/provingground/run.sh`<br>`tools/provingground/pgenv.sh`<br>`tools/provingground/pgenv_test.sh` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -416,6 +417,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 759c72151 11-21 10:45 `Merge agent/pgc4: pgledgeron: ledger environment for builder runs, pull path, doc and card (TASK-777)` (pgc4)
+- 6928ca8b4 11-21 10:43 `Merge branch 'main' into pgledgeron` (-)
 - d3341adfa 11-21 10:41 `Merge agent/pgc3: mgcache: gate stats, replay measurement, nightly uncached race doc and card (TASK-747)` (pgc3)
 - cf0e806ab 11-21 10:40 `Merge branch 'main' into mgcache` (-)
 - f0c3330a4 11-21 10:33 `Merge agent/vaultequip: Merge branch 'main' into vaultequip` (vaultequip)
@@ -424,6 +427,4 @@
 - 71e89ba39 11-21 10:26 `Merge branch 'main' into mobilequests` (-)
 - 625057758 11-21 10:24 `Merge agent/pgc2: mgwatchdog: merge queue watchdog doc and card (TASK-752); ops watchdog, phase budgets, status exit code` (pgc2)
 - b5b112d58 11-21 10:23 `Merge branch 'main' into mgwatchdog` (-)
-- 55aaba5df 11-21 10:17 `Merge agent/pgc1: mglanes: lane policy doc and card (TASK-749); ops lockrun quotas, merge priority, two long slots, warn-only` (pgc1)
-- 45fb97c90 11-21 09:25 `Merge branch 'main' into mobilequests` (-)
 <!-- statusgen:end -->
