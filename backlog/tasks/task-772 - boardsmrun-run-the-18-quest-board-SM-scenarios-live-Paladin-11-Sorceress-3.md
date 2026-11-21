@@ -19,7 +19,7 @@ owns:
   - "docs/probes/boardsm-scenarios-2026-11-21.md"
 exclusive: []
 contracts: []
-result: "18 scenarios run live on Orion (survtune-base d2d), Paladin 11 and Sorceress 3, CHEATED setups: 5 GREEN with determinism pair (now active), 8 RED (card 6 boardsm-api missing, potion-kit hold finding), 3 BLOCKED, 1 vacuous green; tooling fix for board samples. Record docs/probes/boardsm-scenarios-2026-11-21.md."
+result: "18 scenarios run live on the worker host (survtune-base d2d), Paladin 11 and Sorceress 3, CHEATED setups: 5 GREEN with determinism pair (now active), 8 RED (card 6 boardsm-api missing, potion-kit hold finding), 3 BLOCKED, 1 vacuous green; tooling fix for board samples. Record docs/probes/boardsm-scenarios-2026-11-21.md."
 ---
 
 ## Description
