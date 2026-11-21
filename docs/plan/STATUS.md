@@ -386,7 +386,6 @@
 | heavyguard | proposed | - | `tools/lib/heavy-guard.sh`<br>`tools/lib/heavy-guard-test.sh`<br>`tools/uishots.sh`<br>`docs/process/worker-capacity.md` | - |
 | bsm7 | proposed | - | `internal/task/executor.go`<br>`internal/task/gate_hold_test.go`<br>`internal/bot/routeguard.go`<br>`internal/bot/questboard.go`<br>`internal/bot/kitplan_test.go`<br>`tools/provingground/scenarios/board.json`<br>`docs/probes/boardsm-progress-2026-11-21.md` | - |
 | bsm8 | proposed | - | `internal/watch/web/panels/quest-board/panel.js`<br>`internal/watch/testdata/questui/quest_ui.mjs`<br>`internal/questboard/desk.go`<br>`internal/questboard/desk_reason_test.go` | - |
-| skillsbadge | proposed | - | `internal/skilltree`<br>`internal/watch/web/skills.js`<br>`internal/watch/web/skills.css`<br>`internal/watch/skillsui.go`<br>`internal/watch/skillsjs_test.go`<br>`internal/watch/testdata`<br>`tools/uishots/fixtures_skills.go`<br>`docs/skilltrees.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |

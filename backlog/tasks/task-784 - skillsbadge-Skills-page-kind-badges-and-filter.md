@@ -1,10 +1,11 @@
 ---
 id: TASK-784
 title: 'skillsbadge: Skills page kind badges and filter'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T19:05:00Z'
+updated_date: '2026-11-21T19:32:00Z'
 labels:
   - watch
   - feature
