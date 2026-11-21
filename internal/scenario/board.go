@@ -206,3 +206,14 @@ func LogSpan(log []byte) (first, last time.Time, ok bool) {
 	}
 	return first, last, ok && last.After(first)
 }
+
+// NeedsBoardSamples is true when an assertion reads the board samples, so the runner must start the watch server and
+// the sampler even for a scenario with no api calls and no tapper.
+func NeedsBoardSamples(s Scenario) bool {
+	for _, a := range s.Assert {
+		if a.Kind == ABoard || a.Kind == ABoardHeadsLE {
+			return true
+		}
+	}
+	return false
+}

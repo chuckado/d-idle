@@ -508,7 +508,7 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 	}
 	var tap *tapper
 	var apiRun, sampler func(context.Context)
-	if s.Trigger.Driver == scenario.DriverBoardTaps || len(s.Trigger.API) > 0 {
+	if s.Trigger.Driver == scenario.DriverBoardTaps || len(s.Trigger.API) > 0 || scenario.NeedsBoardSamples(s) {
 		tokFile := filepath.Join(data, "wtoken")
 		tok, err := newWatchToken(tokFile)
 		if err != nil {
@@ -527,18 +527,18 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 		if s.Trigger.Driver == scenario.DriverBoardTaps {
 			tap = newTapper("http://"+view, "http://"+ans, tok, s.TappedQuest(), s.Trigger.TapChunks, tlog)
 		}
+		sp, rp := boardFiles(trace)
 		if len(s.Trigger.API) > 0 {
-			sp, rp := boardFiles(trace)
 			apiRun = func(c context.Context) {
 				replies := runAPICalls(c, "http://"+ans, tok, s.Trigger.API, tlog)
 				if b, err := json.Marshal(replies); err == nil {
 					_ = os.WriteFile(rp, b, 0o644)
 				}
 			}
-			if f, err := os.Create(sp); err == nil {
-				defer f.Close()
-				sampler = func(c context.Context) { sampleBoard(c, "http://"+view, tok, 15*time.Second, f) }
-			}
+		}
+		if f, err := os.Create(sp); err == nil {
+			defer f.Close()
+			sampler = func(c context.Context) { sampleBoard(c, "http://"+view, tok, 15*time.Second, f) }
 		}
 	}
 	tctx, stopTap := context.WithCancel(ctx)

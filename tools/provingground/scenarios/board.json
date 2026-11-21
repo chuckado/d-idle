@@ -104,7 +104,7 @@
     {
      "kind": "log_line",
      "pattern": "quest board: starting chunk search_for_cain",
-     "max": 1,
+     "max": 0,
      "from_min": 3,
      "why": "nothing of the chain starts after the stop"
     },
@@ -113,7 +113,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (the `changed` reply field)"
+   "pending_reason": "RED live 2026-11-21 (docs/probes/boardsm-scenarios-2026-11-21.md): the stop reply has no `changed` field; red until card 6 boardsm-api"
   },
   {
    "id": "board.sm.stop-idempotent",
@@ -216,8 +216,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (idempotent verbs)"
+   "status": "active"
   },
   {
    "id": "board.sm.start-idempotent",
@@ -312,8 +311,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (idempotent verbs)"
+   "status": "active"
   },
   {
    "id": "board.sm.one-head",
@@ -395,8 +393,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 4 boardsm-exec (the run model)"
+   "status": "active"
   },
   {
    "id": "board.sm.busy-second-quest",
@@ -479,8 +476,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (the busy code)"
+   "status": "active"
   },
   {
    "id": "board.sm.restart-mid-chain",
@@ -564,7 +560,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 4 boardsm-exec (runner trigger restart_at_s)"
+   "pending_reason": "BLOCKED live 2026-11-21: the runner has no restart_at_s trigger, the run never restarted (card boardsm-restart)"
   },
   {
    "id": "board.sm.regress-proxy",
@@ -645,7 +641,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 4 boardsm-exec (the latch)"
+   "pending_reason": "BLOCKED live 2026-11-21: the setup cannot leave the cairn stones done (no verb, U), so the step runs; also no write ledger on a field start"
   },
   {
    "id": "board.park.persist-restart",
@@ -726,7 +722,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 4 boardsm-exec (persisted parks and the restart trigger)"
+   "pending_reason": "BLOCKED live 2026-11-21: needs restart_at_s (card boardsm-restart) and a hero that dies on the chunk"
   },
   {
    "id": "board.retry.runs-a-step",
@@ -808,8 +804,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 4 boardsm-exec (retry clearing the executor group)"
+   "status": "active"
   },
   {
    "id": "board.hold.restock",
@@ -898,7 +893,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+   "pending_reason": "RED live 2026-11-21: no hold fired; the town trip leaves 3 healing potions of 4 (belt column taken by mana) and the step fails 3 times (finding boardsm-kit-belt)"
   },
   {
    "id": "board.hold.restock-stash-gold",
@@ -986,7 +981,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+   "pending_reason": "RED live 2026-11-21: no withdraw hold fired and the stash was not drawn (finding boardsm-kit-belt)"
   },
   {
    "id": "board.hold.broke",
@@ -1068,7 +1063,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+   "pending_reason": "RED live 2026-11-21: no hold fired and the chunk view carries no reason code (card 6 boardsm-api)"
   },
   {
    "id": "board.hold.too-weak",
@@ -1156,7 +1151,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+   "pending_reason": "RED live 2026-11-21: no hold fired within the budget and the chunk view carries no reason code (card 6 boardsm-api)"
   },
   {
    "id": "board.hold.timeout",
@@ -1236,7 +1231,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+   "pending_reason": "RED live 2026-11-21: parked by the old failure counter (3 tries), no hold_timeout hold (finding boardsm-kit-belt)"
   },
   {
    "id": "board.view.reason-always",
@@ -1327,7 +1322,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (the `reason` view field)"
+   "pending_reason": "RED live 2026-11-21: GET /api/quests rows carry no reason code (card 6 boardsm-api)"
   },
   {
    "id": "board.handin.field-tap",
@@ -1420,7 +1415,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (handin codes)"
+   "pending_reason": "RED live 2026-11-21: no awaiting chunk at the start (setup verb missing, U); the tap gets 409 not_awaiting; handin codes are card 6"
   },
   {
    "id": "board.handin.without-run",
@@ -1510,7 +1505,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (the handin_ready offer)"
+   "pending_reason": "RED live 2026-11-21: the hand-in is booked at once, no handin_ready offer (card 6 boardsm-api)"
   },
   {
    "id": "board.auto.chain-safe-only",
@@ -1584,7 +1579,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (an auto-start multi-part quest)"
+   "pending_reason": "GREEN but vacuous 2026-11-21: no allowed-auto multi-part quest exists in act 1, so nothing is tested (U until one does)"
   }
  ]
 }
