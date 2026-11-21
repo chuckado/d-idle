@@ -306,5 +306,40 @@
   "downgradeGo": "Refund {refund} {cur}",
   "okUpgrade": "Capacity is now {capacity}. {balance} {cur} left.",
   "okDowngrade": "Refunded. Capacity is now {capacity}. {balance} {cur} in the wallet.",
-  "etherAlready": "That step was already bought; nothing was charged."
+  "etherAlready": "That step was already bought; nothing was charged.",
+  "revealBar": {
+    "label": "Reveal items",
+    "title": "Reveal {n} items in this filter",
+    "titleOne": "Reveal 1 item in this filter",
+    "pay": {
+      "free": "Free",
+      "ether": "Ether",
+      "gold": "Gold"
+    },
+    "goFree": "Reveal {n} items",
+    "goFreeOne": "Reveal 1 item",
+    "goEther": "Reveal {n} with {cost} Ether",
+    "goGold": "Reveal {n} for {cost} gold",
+    "goGoldOne": "Reveal 1 for {cost} gold",
+    "confirmGold": "Spend up to {cost} gold on scrolls to reveal {n} items?",
+    "confirmYes": "Yes, spend it",
+    "confirmNo": "Back",
+    "skipped": "{n} skipped",
+    "skipOther": "not covered by this payment",
+    "nothingPayable": "Nothing can be paid right now.",
+    "progress": "{done} of {total} revealed",
+    "cancel": "Cancel the gold reveal",
+    "steps": {
+      "queued": "Queued",
+      "buying": "Buying scrolls at the next town visit",
+      "revealing": "Revealing",
+      "done": "Done",
+      "partial": "Done in part",
+      "cancelled": "Cancelled"
+    },
+    "sent": "Gold reveal ordered: the bot buys the scrolls at the next town visit.",
+    "cancelled": "Gold reveal cancelled.",
+    "payLabel": "Pay with",
+    "skipNote": "Why only these"
+  }
 }

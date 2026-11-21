@@ -225,3 +225,44 @@ export function windowRange(o) {
   const lr = Math.min(rows, Math.max(fr + 1, Math.ceil((top + view) / rowH) + over));
   return { first: fr * cols, last: Math.min(n, lr * cols), padTop: fr * rowH, padBot: (rows - lr) * rowH };
 }
+
+// The Reveal bar (docs/vault.md, "Reveal paid in gold"): one bar over the list instead of a notice paragraph. The model is pure:
+// the server's quote (act.reveal.bar, act.reveal.gold) and the player's pick in, what to draw out.
+const ORDER_STEPS = ['queued', 'buying', 'revealing', 'done'];
+const f2 = (s, o) => String(s || '').replace(/\{(\w+)\}/g, (m, k) => (o && o[k] !== undefined ? o[k] : ''));
+const grp = (n) => String(Math.max(0, n | 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+// orderModel words a gold order: the chain queued -> buying -> revealing -> done, where it stands, and whether it can be cancelled.
+export function orderModel(o, T) {
+  if (!o) return null;
+  const ended = o.state === 'done' || o.state === 'partial' || o.state === 'cancelled';
+  const at = ended ? ORDER_STEPS.length - 1 : Math.max(0, ORDER_STEPS.indexOf(o.state));
+  const steps = ORDER_STEPS.map((s, i) => ({ id: s, label: T.steps[s], current: i === at, past: i < at }));
+  if (o.state === 'partial' || o.state === 'cancelled') steps[steps.length - 1].label = T.steps[o.state];
+  return { id: o.id, state: o.state, steps, active: !ended, progress: f2(T.progress, { done: o.done, total: o.total }), spent: o.spent, line: o.line, note: o.note || '' };
+}
+
+// revealBarModel is what the bar draws. rev is act.reveal of GET /api/vault, pay the option the player picked ('' = the server's
+// default). show is false when there is nothing to reveal and no order to follow.
+export function revealBarModel(rev, pay, T) {
+  const bar = rev && rev.bar, order = orderModel(rev && rev.gold && rev.gold.order, T);
+  if (!bar || (!bar.total && !order)) return { show: false };
+  const opts = bar.options || [];
+  const pick = opts.find((o) => o.id === pay && o.ok) || opts.find((o) => o.id === bar.default) || null;
+  const m = { show: true, total: bar.total, title: f2(bar.total === 1 ? T.titleOne : T.title, { n: bar.total }), line: bar.line, order, sel: pick ? pick.id : '', confirm: false, go: '', goOff: true, why: '', skipped: [], skippedN: 0, note: rev.note || '' };
+  m.options = opts.map((o) => ({ id: o.id, label: T.pay[o.id] || o.label, line: o.line, ok: o.ok, why: o.why || '', checked: !!pick && o.id === pick.id }));
+  if (!bar.total) return m;
+  if (!pick) { m.why = (opts.find((o) => o.id === 'free') || {}).why || T.nothingPayable; return m; }
+  const n = pick.count;
+  m.go = pick.id === 'gold' ? f2(n === 1 ? T.goGoldOne : T.goGold, { n, cost: grp(pick.cost) }) : pick.id === 'ether' ? f2(T.goEther, { n, cost: grp(pick.cost) }) : f2(n === 1 ? T.goFreeOne : T.goFree, { n });
+  m.goOff = !pick.ok || !rev.enabled && pick.id !== 'ether';
+  if (m.goOff && !pick.ok) m.why = pick.why;
+  else if (m.goOff) m.why = rev.why || '';
+  m.confirm = !!pick.confirm;
+  m.confirmAsk = pick.id === 'gold' ? f2(T.confirmGold, { cost: grp(pick.cost), n }) : '';
+  m.skipped = (pick.skipped || []).map((s) => ({ n: s.n, why: s.why }));
+  m.skippedN = Math.max(0, bar.total - n);
+  if (m.skippedN && !m.skipped.length) m.skipped = [{ n: m.skippedN, why: T.skipOther }];
+  m.skipTitle = f2(T.skipped, { n: m.skippedN });
+  return m;
+}
