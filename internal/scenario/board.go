@@ -45,6 +45,8 @@ type APIReply struct {
 	Code    string   `json:"code,omitempty"`
 	Reason  string   `json:"reason,omitempty"`
 	Changed []string `json:"changed,omitempty"`
+	// Body is the reply as sent (cut at 64 KiB), for the assertions that read a field by path.
+	Body json.RawMessage `json:"body,omitempty"`
 }
 
 // MapSampleTimes converts the wall times of samples into virtual minutes over the span [first,last] of the bot log.
@@ -77,6 +79,9 @@ func (a Assert) validateBoard() error {
 	case AAPIReply:
 		if a.Index == nil || *a.Index < 0 {
 			return fmt.Errorf("api_reply needs index")
+		}
+		if a.Path != "" && a.Equals == nil && a.Max == nil && a.Min == 0 {
+			return fmt.Errorf("api_reply path needs equals, min or max")
 		}
 	}
 	return nil
@@ -187,6 +192,9 @@ func evalAPIReply(a Assert, st State) AssertResult {
 	if len(a.ChangedHas) > 0 {
 		want += " changed has " + strings.Join(a.ChangedHas, ", ")
 	}
+	if a.Path != "" {
+		want += " field " + a.Path
+	}
 	var r *APIReply
 	for i := range st.APIReplies {
 		if st.APIReplies[i].Index == *a.Index {
@@ -200,6 +208,15 @@ func evalAPIReply(a Assert, st State) AssertResult {
 		(a.AlreadyIs == nil || r.Already == *a.AlreadyIs) && (a.Code == "" || r.Code == a.Code)
 	for _, w := range a.ChangedHas {
 		ok = ok && contains(r.Changed, w)
+	}
+	if a.Path != "" {
+		val, found := JSONPath(r.Body, a.Path)
+		if !found {
+			return AssertResult{Want: want, Got: fmt.Sprintf("status %d, no field %s in %s", r.Status, a.Path, clip(r.Body))}
+		}
+		fr := compareField(val, a, "")
+		ok = ok && fr.OK
+		return AssertResult{OK: ok, Want: want + fmt.Sprintf(" (%s)", strings.TrimSpace(strings.TrimPrefix(fr.Want, " "))), Got: fmt.Sprintf("status %d, %s = %v", r.Status, a.Path, val)}
 	}
 	return AssertResult{OK: ok, Want: want, Got: fmt.Sprintf("status %d ok %v already %v code %q changed %v", r.Status, r.OK, r.Already, r.Code, r.Changed)}
 }
@@ -237,4 +254,11 @@ func NeedsBoardSamples(s Scenario) bool {
 		}
 	}
 	return false
+}
+
+func clip(b []byte) string {
+	if len(b) > 120 {
+		return string(b[:120]) + "..."
+	}
+	return string(b)
 }

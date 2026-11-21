@@ -110,6 +110,15 @@ type Pre struct {
 	Belt      []string   `json:"belt,omitempty"` // potion codes in belt order
 	Merc      *int       `json:"merc,omitempty"` // hireling.txt Id, nil: none
 	LifePct   int        `json:"life_pct,omitempty"`
+	// Pack is the pack seed: items given to the backpack (the same as Items with where pack, for scenarios that read
+	// better with the two lists apart).
+	Pack []Item `json:"pack,omitempty"`
+	// Worn is the worn start state: each item is given and worn in its slot (lab verbs, before the save).
+	Worn []WornItem `json:"worn,omitempty"`
+	// Vault seeds the hero's Vault records (docs/process/proving-ground.md, pre.vault_records).
+	Vault *VaultSeed `json:"vault_records,omitempty"`
+	// Ether is the Ether balance of the account wallet at the start (a credit line in its ledger).
+	Ether int `json:"ether,omitempty"`
 }
 
 // QWord is one quest record (fork layout: act 1 records 0..6, docs/forkcheats.md) and its 16-bit word.
@@ -352,6 +361,19 @@ func (s Scenario) Validate() error {
 		if err := a.Validate(); err != nil {
 			return fmt.Errorf("%s: assert %d: %w", at, i, err)
 		}
+	}
+	for i, w := range s.Pre.Worn {
+		if err := w.Validate(); err != nil {
+			return fmt.Errorf("%s: worn %d: %w", at, i, err)
+		}
+	}
+	if s.Pre.Vault != nil {
+		if err := s.Pre.Vault.Validate(); err != nil {
+			return fmt.Errorf("%s: %w", at, err)
+		}
+	}
+	if s.Pre.Ether < 0 {
+		return fmt.Errorf("%s: pre.ether %d", at, s.Pre.Ether)
 	}
 	if s.Pre.Level < 0 || s.Pre.Level > 99 {
 		return fmt.Errorf("%s: pre.level %d", at, s.Pre.Level)

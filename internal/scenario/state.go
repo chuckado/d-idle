@@ -58,6 +58,8 @@ type State struct {
 	// Board are samples of GET /api/quests during the run and APIReplies the recorded answers of trigger.api (board.go).
 	Board      []BoardSample `json:"board,omitempty"`
 	APIReplies []APIReply    `json:"api_replies,omitempty"`
+	// Vault is what the runner read of the hero's Vault after the run (vaultassert.go); "vault" in Has when read.
+	Vault *VaultFacts `json:"vault,omitempty"`
 	// WritesAfterStart is the number of gameplay-affecting writes after the run start (d2cheat ledger), -1 unknown.
 	WritesAfterStart int `json:"writes_after_start"`
 }
@@ -144,6 +146,11 @@ type Assert struct {
 	OKIs       *bool    `json:"ok,omitempty"`
 	AlreadyIs  *bool    `json:"already,omitempty"`
 	ChangedHas []string `json:"changed_has,omitempty"`
+	// Path and Equals (api_reply, vault_api): a dotted path into the JSON of the reply or the vault sample and the value it
+	// must hold (Min and Max bound a number instead). Which (vault_records_present): "seeded".
+	Path   string `json:"path,omitempty"`
+	Equals any    `json:"equals,omitempty"`
+	Which  string `json:"which,omitempty"`
 }
 
 // Validate checks that the fields the kind needs are present.
@@ -213,6 +220,8 @@ func (a Assert) Validate() error {
 		}
 	case ABoard, ABoardHeadsLE, ABoardReasons, AAPIReply:
 		return a.validateBoard()
+	case AVaultLog, AVaultCount, AVaultPresent, AVaultMissed, AVaultAPI:
+		return a.validateVault()
 	case ANoWrites:
 	default:
 		return fmt.Errorf("unknown assertion kind %q", a.Kind)
@@ -400,6 +409,8 @@ func evalOne(a Assert, st State) AssertResult {
 		return evalBoardReasons(st)
 	case AAPIReply:
 		return evalAPIReply(a, st)
+	case AVaultLog, AVaultCount, AVaultPresent, AVaultMissed, AVaultAPI:
+		return evalVault(a, st)
 	case ANoWrites:
 		if st.WritesAfterStart < 0 {
 			return unobs("writes after start: 0", "write ledger")

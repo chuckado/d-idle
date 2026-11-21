@@ -270,7 +270,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	// 1. SETUP on a lab d2d (lab verbs on), every verb ledgered with its reason before it is sent.
 	bin, gamedata := os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA")
 	prep := &d2dinput.Process{Bin: bin, Data: gamedata, Sock: sock, ConfigDir: filepath.Join(home, "config"), DataDir: filepath.Join(home, "data"),
-		Nice: 10, ExtraArgs: []string{"--lockstep", "--lab-verbs", "--toggle", "autoloot=off,autoparty=off"}}
+		Nice: 10, ExtraArgs: withVault([]string{"--lockstep", "--lab-verbs", "--toggle", "autoloot=off,autoparty=off"}, su.VaultVerbs)}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(s.Budget.WallMin+15)*time.Minute)
 	defer cancel()
 	if err := prep.Start(ctx, d2dinput.Spec{Name: hero, Class: cidx, Seed: r.Seed}); err != nil {
@@ -284,6 +284,15 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	if err := applySetup(ctx, c, su, ledger); err != nil {
 		_ = prep.Stop()
 		return blocked("setup: %v", err)
+	}
+	seeded, err := applySeeds(ctx, c, su, ledger, data, gamedata, hero)
+	if err != nil {
+		_ = prep.Stop()
+		return blocked("seeding: %v", err)
+	}
+	if err := seedEther(state, su.Ether); err != nil {
+		_ = prep.Stop()
+		return blocked("ether seed: %v", err)
 	}
 	if _, err := c.Step(ctx, 50); err != nil {
 		_ = prep.Stop()
@@ -300,7 +309,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	res := scenario.Result{Tags: su.Tags, Trace: trace}
 
 	if su.Field {
-		return runField(ctx, s, r, res, prep, c, bot, data, sock, inst, trace)
+		return runField(ctx, s, r, res, prep, c, bot, data, sock, inst, trace, seeded, su.VaultVerbs)
 	}
 	if err := prep.SaveExit(ctx); err != nil {
 		return blocked("prep save: %v", err)
@@ -313,7 +322,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	if s.Build == "sandbox" {
 		d2dBot = os.Getenv("D2D_BIN_SANDBOX")
 	}
-	refused, taps, tapsAt, berr := runBot(ctx, s, r, botBin, d2dBot, gamedata, data, home, sock, inst, hero, trace, false)
+	refused, taps, tapsAt, berr := runBot(ctx, s, r, botBin, d2dBot, gamedata, data, home, sock, inst, hero, trace, false, seeded, su.VaultVerbs)
 	res.Taps, res.TapsAt = taps, tapsAt
 	if why := botFailure(trace); why != "" {
 		return withVerdict(res, blocked("the bot exited with an error, it did not play: %s", why))
@@ -342,6 +351,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	addTrail(&st, trace)
 	addRunFacts(&st, s, r, trace)
 	addBoardFacts(&st, s, trace)
+	addVaultFacts(&st, s, data, hero, trace, seeded)
 	res.State = &st
 	return withVerdict(res, scenario.Result{})
 }
@@ -490,7 +500,7 @@ const tapEveryVirtual = 30
 
 // runBot starts the real bot like tools/survival/abrun.sh does and returns how many gated writes the d2d refused (the
 // bot tried a write after the start; the CRUTCH RULE line) and the bot's exit error.
-func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBin, gamedata, data, home, sock, inst, hero, trace string, attach bool) (int, []string, []float64, error) {
+func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBin, gamedata, data, home, sock, inst, hero, trace string, attach bool, seeded seedOut, vaultVerbs bool) (int, []string, []float64, error) {
 	f, err := os.Create(trace)
 	if err != nil {
 		return -1, nil, nil, err
@@ -504,11 +514,11 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 	if attach {
 		args = append(args, "--attach", "--d2d-attach")
 	} else {
-		args = append(args, "--managed", "--d2d-class", "-1", "--d2d-args", "--lockstep")
+		args = append(args, "--managed", "--d2d-class", "-1", "--d2d-args", strings.Join(withVault([]string{"--lockstep"}, vaultVerbs), " "))
 	}
 	var tap *tapper
 	var apiRun, sampler func(context.Context)
-	if s.Trigger.Driver == scenario.DriverBoardTaps || len(s.Trigger.API) > 0 || scenario.NeedsBoardSamples(s) {
+	if s.Trigger.Driver == scenario.DriverBoardTaps || len(s.Trigger.API) > 0 || scenario.NeedsBoardSamples(s) || scenario.NeedsVaultSample(s) {
 		tokFile := filepath.Join(data, "wtoken")
 		tok, err := newWatchToken(tokFile)
 		if err != nil {
@@ -530,7 +540,7 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 		sp, rp := boardFiles(trace)
 		if len(s.Trigger.API) > 0 {
 			apiRun = func(c context.Context) {
-				replies := runAPICalls(c, "http://"+ans, tok, s.Trigger.API, tlog)
+				replies := runAPICalls(c, "http://"+ans, "http://"+view, tok, s.Trigger.API, seeded.VaultIDs, tlog)
 				if b, err := json.Marshal(replies); err == nil {
 					_ = os.WriteFile(rp, b, 0o644)
 				}
@@ -539,6 +549,17 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 		if f, err := os.Create(sp); err == nil {
 			defer f.Close()
 			sampler = func(c context.Context) { sampleBoard(c, "http://"+view, tok, 15*time.Second, f) }
+		}
+		if scenario.NeedsVaultSample(s) {
+			inner := sampler
+			sampler = func(c context.Context) {
+				go sampleVault(c, "http://"+view, tok, 10*time.Second, vaultSampleFile(trace))
+				if inner != nil {
+					inner(c)
+					return
+				}
+				<-c.Done()
+			}
 		}
 	}
 	tctx, stopTap := context.WithCancel(ctx)
@@ -615,10 +636,10 @@ func addTrail(st *scenario.State, trace string) {
 
 // runField is the field start: the lab d2d (verbs on) was warped by the setup and is now handed to the bot with
 // --attach; afterwards the same d2d is read. The write count is unknown (verbs stay on), so no_writes is UNOBSERVED.
-func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scenario.Result, prep *d2dinput.Process, c *d2dctl.Client, bot, data, sock, inst, trace string) scenario.Result {
+func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scenario.Result, prep *d2dinput.Process, c *d2dctl.Client, bot, data, sock, inst, trace string, seeded seedOut, vaultVerbs bool) scenario.Result {
 	hero := scenario.HeroName(s.ID, r.Class, r.Seed)
 	_ = c.Close() // the d2d takes one control client: the bot gets it, then we take it back
-	_, taps, tapsAt, berr := runBot(ctx, s, r, bot, os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA"), data, "", sock, inst, hero, trace, true)
+	_, taps, tapsAt, berr := runBot(ctx, s, r, bot, os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA"), data, "", sock, inst, hero, trace, true, seeded, vaultVerbs)
 	res.Taps, res.TapsAt = taps, tapsAt
 	if why := botFailure(trace); why != "" {
 		_ = prep.Stop()
@@ -634,6 +655,7 @@ func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scen
 	addTrail(&st, trace)
 	addRunFacts(&st, s, r, trace)
 	addBoardFacts(&st, s, trace)
+	addVaultFacts(&st, s, data, hero, trace, seeded)
 	res.State = &st
 	res.VirtualMin = s.Budget.VirtualMin
 	_ = prep.Stop()
@@ -793,4 +815,12 @@ func readPointDump(lines []string, rest string) (pointDump, bool) {
 	}
 	var d pointDump
 	return d, json.Unmarshal([]byte(line), &d) == nil
+}
+
+// withVault adds --vault-verbs (the fork's item create, item full and item vault) to d2d's arguments when asked.
+func withVault(args []string, on bool) []string {
+	if on {
+		return append(args, "--vault-verbs")
+	}
+	return args
 }

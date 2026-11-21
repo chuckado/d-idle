@@ -239,8 +239,10 @@ func newWatchToken(path string) (string, error) {
 
 // runAPICalls sends the scenario's trigger.api calls to the bot's answer listener, once each in order, writes the
 // reply to the taps log and returns the parsed replies for the api_reply assertion. The token is the scenario-local one
-// of newWatchToken.
-func runAPICalls(ctx context.Context, base, token string, calls []scenario.APICall, log io.Writer) []scenario.APIReply {
+// of newWatchToken. A {{...}} in a path or body is resolved just before the call (scenario.Resolver): a seeded vault
+// record from vaultIDs, a backpack or worn item from GET /api/inventory of the viewer listener view. A placeholder that
+// cannot be resolved sends nothing and records a reply with code "template", so the assertion on it fails with the reason.
+func runAPICalls(ctx context.Context, base, view, token string, calls []scenario.APICall, vaultIDs []string, log io.Writer) []scenario.APIReply {
 	client := &http.Client{Timeout: 10 * time.Second}
 	start := time.Now()
 	var out []scenario.APIReply
@@ -254,23 +256,52 @@ func runAPICalls(ctx context.Context, base, token string, calls []scenario.APICa
 		if method == "" {
 			method = "POST"
 		}
-		b, _ := json.Marshal(c.Body)
-		req, _ := http.NewRequestWithContext(ctx, method, base+c.Path, bytes.NewReader(b))
+		path, body, err := resolveCall(ctx, client, view, token, c, vaultIDs)
+		if err != nil {
+			fmt.Fprintf(log, "%s api %s %s: not sent: %v\n", time.Now().Format("15:04:05"), method, c.Path, err)
+			out = append(out, scenario.APIReply{Index: i, Path: c.Path, Code: "template", Reason: err.Error()})
+			continue
+		}
+		b, _ := json.Marshal(body)
+		req, _ := http.NewRequestWithContext(ctx, method, base+path, bytes.NewReader(b))
 		req.Header.Set("Authorization", "Bearer "+token)
 		req.Header.Set("Content-Type", "application/json")
 		resp, err := client.Do(req)
 		if err != nil {
-			fmt.Fprintf(log, "%s api %s %s: error %v\n", time.Now().Format("15:04:05"), method, c.Path, err)
+			fmt.Fprintf(log, "%s api %s %s: error %v\n", time.Now().Format("15:04:05"), method, path, err)
 			continue
 		}
-		body, _ := io.ReadAll(io.LimitReader(resp.Body, 64<<10))
+		rb, _ := io.ReadAll(io.LimitReader(resp.Body, 64<<10))
 		resp.Body.Close()
-		short := strings.TrimSpace(string(body))
+		short := strings.TrimSpace(string(rb))
 		if len(short) > 300 {
 			short = short[:300]
 		}
-		fmt.Fprintf(log, "%s api %s %s: HTTP %d %s\n", time.Now().Format("15:04:05"), method, c.Path, resp.StatusCode, short)
-		out = append(out, parseReply(i, c.Path, resp.StatusCode, body))
+		fmt.Fprintf(log, "%s api %s %s: HTTP %d %s\n", time.Now().Format("15:04:05"), method, path, resp.StatusCode, short)
+		rep := parseReply(i, path, resp.StatusCode, rb)
+		if json.Valid(rb) {
+			rep.Body = rb
+		}
+		out = append(out, rep)
 	}
 	return out
+}
+
+// resolveCall substitutes the placeholders of one call; the inventory is read only when a placeholder needs it.
+func resolveCall(ctx context.Context, client *http.Client, view, token string, c scenario.APICall, vaultIDs []string) (string, map[string]any, error) {
+	r := scenario.Resolver{VaultIDs: vaultIDs}
+	if scenario.NeedsInventory(c.Body) {
+		req, _ := http.NewRequestWithContext(ctx, "GET", view+"/api/inventory", nil)
+		req.Header.Set("Authorization", "Bearer "+token)
+		if resp, err := client.Do(req); err == nil {
+			r.Inventory, _ = io.ReadAll(io.LimitReader(resp.Body, 4<<20))
+			resp.Body.Close()
+		}
+	}
+	path, err := r.ResolveString(c.Path)
+	if err != nil {
+		return "", nil, err
+	}
+	body, err := r.ResolveBody(c.Body)
+	return path, body, err
 }
