@@ -1127,6 +1127,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - countess3: Countess found from the fork''s monster-preset read (debug levelmonsters) (TASK-710, merged 2026-11-20, acceptance 1 of 3) <!--sg:agent/countess3-->
 - fablepg: design review 2026-11-21, Proving Ground determinism, tiers, merge gate and builder scheduling (TASK-712, merged 2026-11-20, acceptance 3 of 3): docs only, nothing run live <!--sg:agent/fablepg-->
 - fabletown: town and chores planner design review (supply need, town plan) (TASK-715, merged 2026-11-20, acceptance 6 of 6): Docs only, nothing run and nothing verified live: three docs under docs/design/fable-review-2026-11-21/ (town-planner.md, appendix A current map with 16 rule conflicts, appendix B data model, 12 scenario sketches, 11 migration cards). ... <!--sg:agent/fabletown-->
+- fableboard: Fable design review of the quest board state machine (TASK-714, merged 2026-11-20, acceptance 3 of 3): Docs only, nothing verified live and no test run: quest-board.md plus appendices A (file:line evidence, read at 5b12ce5e7 and e77b53911) and B (reason codes, API, invariants and scenarios, panel spec). ... <!--sg:agent/fableboard-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
