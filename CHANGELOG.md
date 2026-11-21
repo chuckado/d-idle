@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into heavyguard <!--sg:agent/heavyguard-->
 - pgclock: goals manager, farm timers and the guard snapshot reuse window on the env clock (TASK-739) <!--sg:agent/pgc5-->
 - pgledgeron: ledger environment for builder runs, pull path, doc and card (TASK-777) <!--sg:agent/pgc4-->
 - mgcache: gate stats, replay measurement, nightly uncached race doc and card (TASK-747) <!--sg:agent/pgc3-->

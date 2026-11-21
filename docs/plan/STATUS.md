@@ -382,6 +382,7 @@
 | mouthgate | proposed | - | `internal/nav` | - |
 | vaultequip | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/equipnow.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/watch/vaultequip_test.go`<br>`tools/provingground/scenarios/vaultequip.json`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/vaultapi.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/keep_test.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`internal/watch/testdata/vault_logic.mjs`<br>`tools/provingground/scenarios/behaviours.json` | - |
 | pgledgeron | in-progress | - | `docs/process/pg-ledger-ops.md`<br>`tools/provingground/run.sh`<br>`tools/provingground/pgenv.sh`<br>`tools/provingground/pgenv_test.sh` | - |
+| heavyguard | proposed | - | `tools/lib/heavy-guard.sh`<br>`tools/lib/heavy-guard-test.sh`<br>`tools/uishots.sh`<br>`docs/process/worker-capacity.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -417,6 +418,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 3314b62e3 11-21 10:57 `Merge agent/heavyguard: Merge branch 'main' into heavyguard` (heavyguard)
+- d78daa12f 11-21 10:56 `Merge branch 'main' into heavyguard` (-)
 - edcfd5121 11-21 10:48 `Merge agent/pgc5: pgclock: goals manager, farm timers and the guard snapshot reuse window on the env clock (TASK-739)` (pgc5)
 - 8691cf517 11-21 10:46 `Merge branch 'main' into pgclock` (-)
 - 759c72151 11-21 10:45 `Merge agent/pgc4: pgledgeron: ledger environment for builder runs, pull path, doc and card (TASK-777)` (pgc4)
@@ -425,6 +428,4 @@
 - cf0e806ab 11-21 10:40 `Merge branch 'main' into mgcache` (-)
 - f0c3330a4 11-21 10:33 `Merge agent/vaultequip: Merge branch 'main' into vaultequip` (vaultequip)
 - 352164657 11-21 10:32 `Merge branch 'main' into vaultequip` (-)
-- 45bd666e2 11-21 10:27 `Merge agent/mobilequests: Merge branch 'main' into mobilequests` (mobilequests)
-- 71e89ba39 11-21 10:26 `Merge branch 'main' into mobilequests` (-)
 <!-- statusgen:end -->

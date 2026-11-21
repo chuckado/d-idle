@@ -607,6 +607,7 @@ docs/process/sandbox-devp12.md  credit-runner  devp12
 docs/process/sandbox-devp13.md  credit-runner  forkrebase2
 docs/process/sandbox-input-items.md  credit-runner  q13input
 docs/process/second-worker.md  credit-runner  w2worker
+docs/process/worker-capacity.md  credit-runner  heavyguard
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
 docs/quest-hints.md  live-agent  questdrill
@@ -2013,6 +2014,8 @@ tools/levelsim/farmreset.go  credit-runner  farmloop
 tools/levelsim/shadow.go  credit-runner  intake
 tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
+tools/lib/heavy-guard-test.sh  credit-runner  heavyguard
+tools/lib/heavy-guard.sh  credit-runner  heavyguard
 tools/play-session.sh  credit-runner  playsession
 tools/provingground/  credit-runner  dlv-reads
 tools/provingground/  credit-runner  pgexpand
@@ -2058,6 +2061,7 @@ tools/uishots  credit-runner  videoctl
 tools/uishots  credit-runner  videofeed4
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
+tools/uishots.sh  credit-runner  heavyguard
 tools/uishots.sh  credit-runner  labels
 tools/uishots.sh  credit-runner  quests10
 tools/uishots.sh  credit-runner  quests8
