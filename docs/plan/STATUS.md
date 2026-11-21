@@ -343,14 +343,30 @@
 | dlv-press | proposed | - | `internal/combat/`<br>`internal/d2dcombat/` | - |
 | dlv-move-tele | proposed | - | `internal/combat/`<br>`internal/nav/` | - |
 | dlv-move-melee | proposed | - | `internal/combat/` | - |
+| pgprov | proposed | - | `internal/scenario/result.go`<br>`cmd/d2scenario/run.go` | - |
 | dlv-whirl | proposed | - | `internal/combat/` | - |
+| pgdigest | proposed | - | `internal/scenario/determinism.go`<br>`cmd/d2scenario/cmds.go` | - |
 | dlv-cleanup | proposed | - | `internal/combat/`<br>`internal/power/`<br>`tools/ci/` | - |
+| pgjournal | proposed | - | `cmd/d2scenario/journal.go`<br>`docs/probes/pg-journal-pair-2026-11-21.md` | - |
+| pgtaps | proposed | - | `cmd/d2bot/ladder.go`<br>`cmd/d2scenario/tap.go`<br>`internal/scenario/taps.go` | - |
+| pgclock | proposed | - | `cmd/d2bot/d2dbackend.go`<br>`internal/bot/farm.go`<br>`internal/goals/clock_test.go` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
+| pgstability | proposed | - | `internal/scenario/stability.go`<br>`tools/provingground/scenarios/tiers.json` | - |
+| pghero | proposed | - | `internal/scenario/hero`<br>`tools/ab/prep`<br>`tools/survival` | - |
+| pgselfcheck | proposed | - | `internal/scenario/hero/selfcheck.go`<br>`cmd/d2scenario/validate.go` | - |
+| pgledger | proposed | - | `cmd/d2scenario/ledger.go`<br>`internal/scenario/ledger.go`<br>`docs/process/pg-ledger-ops.md` | - |
+| pgpage | proposed | - | `docs/process/proving-ground-status.md`<br>`tools/provingground/status_doc.sh` | - |
+| mgonejob | proposed | - | `docs/process/pg-ops-mgonejob.md` | - |
 | town1 | proposed | - | `tools/provingground/scenarios/town.plan.*`<br>`internal/scenario/state.go`<br>`docs/probes/town-plan-scenarios.md` | - |
+| mgcache | proposed | - | `docs/process/pg-ops-mgcache.md` | - |
 | town2 | proposed | - | `internal/supply`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/bot/kitgate.go`<br>`internal/town/basicsfix.go` | - |
+| mglanes | proposed | - | `docs/process/pg-ops-mglanes.md` | - |
 | fabledecisions2 | proposed | - | `docs/adr/`<br>`docs/decisions.md`<br>`GLOSSARY.md` | - |
+| mgwatchdog | proposed | - | `docs/process/pg-ops-mgwatchdog.md` | - |
 | town3 | proposed | - | `internal/supply`<br>`data/supply`<br>`internal/env/tuning_town.go`<br>`docs/knobs.md` | - |
+| pgnightly | proposed | - | `docs/process/pg-ops-pgnightly.md`<br>`tools/provingground/nightly.sh` | - |
 | town4 | proposed | - | `internal/task`<br>`internal/town`<br>`internal/bot`<br>`internal/supply` | - |
+| pgearned | proposed | - | `internal/scenario/earned.go`<br>`tools/provingground/earned` | - |
 | town5 | proposed | - | `internal/town`<br>`internal/resource`<br>`town-basics` | - |
 | town6 | proposed | - | `internal/town`<br>`internal/loot` | - |
 | town7 | proposed | - | `internal/supply`<br>`internal/town`<br>`internal/resource` | - |
@@ -394,14 +410,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- df91428e3 11-21 00:44 `Merge agent/pgcards: pgcards: 16 Proving Ground and merge gate cards` (pgcards)
 - 7295f4ba1 11-21 00:44 `Merge agent/fabledecisions2: Merge branch 'main' into fabledecisions2` (fabledecisions2)
 - 6a35831bb 11-21 00:44 `Merge agent/combatcards: combatcards: 17 dlv-* combat-engine cards (docs/backlog only)` (combatcards)
 - 346082f06 11-21 00:44 `Merge agent/towncards: town planner: 12 migration cards TASK-746..765 (docs/backlog only)` (towncards)
+- 5a5b7c337 11-21 00:37 `Merge branch 'main' into pgcards` (-)
 - 1ebb38cb5 11-21 00:37 `Merge branch 'main' into fabledecisions2` (-)
 - 12b543079 11-21 00:37 `Merge branch 'main' into combatcards` (-)
 - 98fd96105 11-21 00:37 `Merge branch 'main' into towncards` (-)
 - a3e821b57 11-21 00:11 `Merge agent/chores2: Merge branch 'main' into chores2` (chores2)
 - acd82d6e2 11-21 00:10 `Merge branch 'main' into chores2` (-)
-- 134d42aab 11-20 23:16 `Merge agent/druid1: Merge branch 'main' into druid1` (druid1)
-- 18cf1885d 11-20 23:15 `Merge branch 'main' into druid1` (-)
 <!-- statusgen:end -->
