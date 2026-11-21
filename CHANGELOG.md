@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- town and chores planner design review: supply need, town plan, 16 rule conflicts, scenarios, migration cards (docs only) <!--sg:agent/fabletown-->
 - fablepg: Proving Ground determinism, tiers, merge gate and builder scheduling design review (docs only) <!--sg:agent/fablepg-->
 - Merge branch 'main' into countess3 <!--sg:agent/countess3-->
 - boardprereq: task result <!--sg:agent/boardprereq-->

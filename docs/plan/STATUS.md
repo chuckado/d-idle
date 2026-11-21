@@ -321,6 +321,7 @@
 | boardprereq | proposed | - | `internal/questboard`<br>`tools/provingground/scenarios/cain.json` | - |
 | countess3 | proposed | - | `internal/d2dctl`<br>`internal/d2dworld`<br>`internal/boss`<br>`internal/d2map`<br>`cmd/d2bot/boss.go`<br>`docs/process/layout-read.md`<br>`docs/probes/provingground-countess-2026-11-20.md`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | `fork-branch:didle/level-monsters-20261121` |
 | fablepg | proposed | - | `docs/design/fable-review-2026-11-21/proving-ground-gate.md`<br>`docs/design/fable-review-2026-11-21/proving-ground-gate-catalog.md` | - |
+| fabletown | in-progress | - | `docs/design/fable-review-2026-11-21/town-planner*` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | fid-probe-equip | deferred | - | `docs/probes/fid/fid-probe-equip.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
@@ -359,7 +360,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ae8e2b1be 11-20 23:05 `Merge agent/fabletown: town and chores planner design review: supply need, town plan, 16 rule conflicts, scenarios, migration cards (docs only)` (fabletown)
 - 623f72aa4 11-20 23:05 `Merge agent/fablepg: fablepg: Proving Ground determinism, tiers, merge gate and builder scheduling design review (docs only)` (fablepg)
+- 6dad67b70 11-20 23:01 `Merge branch 'main' into fabletown` (-)
 - 5d153db66 11-20 23:01 `Merge branch 'main' into fablepg` (-)
 - e590a2a88 11-20 22:21 `Merge agent/countess3: Merge branch 'main' into countess3` (countess3)
 - 27233215e 11-20 22:20 `Merge branch 'main' into countess3` (-)
@@ -367,6 +370,4 @@
 - f9a89e05f 11-20 21:43 `Merge agent/countess2: Merge branch 'main' into countess2` (countess2)
 - 700023a41 11-20 21:42 `Merge branch 'main' into countess2` (-)
 - 389505fb9 11-20 21:38 `Merge agent/act1more: Merge branch 'main' into act1more` (act1more)
-- 85ef7f640 11-20 21:36 `Merge branch 'main' into act1more` (-)
-- 4a623ace2 11-20 21:31 `Merge agent/boardorder2: proving-ground.md: trigger.api exists` (boardorder2)
 <!-- statusgen:end -->
