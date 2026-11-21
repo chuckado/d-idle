@@ -34,6 +34,6 @@ func questsKnobs() []Knob {
 		{Key: "quests.autoDayCap", Label: "Auto-starts per day", Unit: "count", Default: 6, Min: 0, Max: 100, NoHandicap: true,
 			Desc: "At most this many auto-started chunks in 24 hours; 0 turns auto-start off."},
 		{Key: "quests.layoutRead", Label: "Read the level layout", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
-			Desc: "1: ask the private d2d fork for the current level's room layout and quest-object positions (read-only verb `debug levelmap`, ADR 0022: a read never makes a run CHEATED) and walk straight to the Tree of Inifuss, the cairn stones or Cain's cage instead of exploring for them; stock d2d or an error falls back to exploring. 0 (default): explore as before."},
+			Desc: "1: ask the private d2d fork for the current level's room layout and quest-object positions (read-only verb `debug levelmap`, ADR 0022: a read never makes a run CHEATED) and walk straight to the Tree of Inifuss, the cairn stones or Cain's cage instead of exploring for them; a second read (`debug levelmonsters`) gives a superunique's spawn point (the Countess in Tower Cellar 5) from the level's build; stock d2d or an error falls back to exploring. 0 (default): explore as before."},
 	}
 }

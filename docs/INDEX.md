@@ -333,6 +333,22 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [06-roadmap.md](design/fable-review-2026-11-19/06-roadmap.md): 06. Roadmap: phases, order, effort, risks, and the decisions only the owner can make (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only). Nothing here is decided or...)
 - [07-input-layer.md](design/fable-review-2026-11-19/07-input-layer.md): 07. The input layer: clicks, hotkeys and direct verbs (status: REVIEW for the owner (design review 2026-11-19, card fablereview, docs only; added on the owner's note of...)
 
+`design/fable-review-2026-11-21/`
+
+- [combat-engine-a-today.md](design/fable-review-2026-11-21/combat-engine-a-today.md): Appendix A. The combat engine today, per skill kind (status: REVIEW (card fablecombat, docs only). Part of combat-engine.md. All file and line references are to this...)
+- [combat-engine-b-grammar.md](design/fable-review-2026-11-21/combat-engine-b-grammar.md): Appendix B. The skill delivery grammar (status: REVIEW (card fablecombat, docs only). Part of combat-engine.md. A proposal: no schema, loader or data row...)
+- [combat-engine-c-tests.md](design/fable-review-2026-11-21/combat-engine-c-tests.md): Appendix C. Test strategy: simulator, Proving Ground, read verbs, differentials (status: REVIEW (card fablecombat, docs only). Part of combat-engine.md. Proposal; no assertion kind, verb or...)
+- [combat-engine-d-cards.md](design/fable-review-2026-11-21/combat-engine-d-cards.md): Appendix D. Rollout: sixteen cards and one parked (status: REVIEW (card fablecombat, docs only). Part of combat-engine.md. These are PROPOSED cards; none exists in...)
+- [combat-engine.md](design/fable-review-2026-11-21/combat-engine.md): Combat engine and skill delivery layer: what exists, and a data-driven design (status: REVIEW for the owner (design review 2026-11-21, card fablecombat, docs only). Nothing here is decided and...)
+- [proving-ground-gate-catalog.md](design/fable-review-2026-11-21/proving-ground-gate-catalog.md): Proving Ground: scenario catalogue and coverage map (2026-11-21) (status: snapshot for the design review proving-ground-gate.md (card fablepg, TASK-712). It is a hand-made table...)
+- [proving-ground-gate.md](design/fable-review-2026-11-21/proving-ground-gate.md): Proving Ground, merge gate and builder scheduling: design review (2026-11-21) (status: proposal for the owner (card fablepg, TASK-712). Docs only: nothing here changes Go, the merge scripts,...)
+- [quest-board-appendix-a-evidence.md](design/fable-review-2026-11-21/quest-board-appendix-a-evidence.md): Appendix A: evidence per bug (quest board review 2026-11-21) (status: appendix of quest-board.md. Code at `origin/main` `5b12ce5e7` unless a line says `e77b53911`...)
+- [quest-board-appendix-b-tables.md](design/fable-review-2026-11-21/quest-board-appendix-b-tables.md): Appendix B: tables (quest board review 2026-11-21) (status: appendix of quest-board.md; proposal. Everything here is design (I) unless tagged V. Wording follows the...)
+- [quest-board.md](design/fable-review-2026-11-21/quest-board.md): Quest board state machine: design review (Fable, 2026-11-21) (status: proposal, decision-ready. Docs only: no Go and no behaviour changes on main. Card `fableboard` (TASK-714)....)
+- [town-planner-a-current.md](design/fable-review-2026-11-21/town-planner-a-current.md): Town planner, appendix A: the chores today and where their rules disagree (status: current (design review 2026-11-21, docs only). Main doc: town-planner.md. Tree read: `origin/main` at...)
+- [town-planner-b-model.md](design/fable-review-2026-11-21/town-planner-b-model.md): Town planner, appendix B: data model, scenarios, migration (status: current (design review 2026-11-21, docs only; proposals, nothing built). Main doc: town-planner.md;...)
+- [town-planner.md](design/fable-review-2026-11-21/town-planner.md): Town and chores planner: one supply need, one town plan (status: current (Fable design review 2026-11-21, docs only; nothing here is built or decided). Tree read:...)
+
 `design/`
 
 - [item-colour-2026-11-18.md](design/item-colour-2026-11-18.md): Item colour in the inventory art: chain and slice plan (2026-11-18) (status: design, task-634 (card itemcolour). Follow-up to jewelcolor (task-632), which removed the invented wash....)
@@ -867,6 +883,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [dispatcher-brief-proposed.md](process/dispatcher-brief-proposed.md): Dispatcher brief, proposed replacement (agent ROADMAP, 2026-10-31) (status: PROPOSAL (its WIP limit 3 and milestone rule were ADOPTED by the user on 2026-10-31, docs/roadmap.md...)
 - [dispatcher-brief.md](process/dispatcher-brief.md): Dispatcher brief (status: moved to the private ops repo (d2lod-ops, `docs/process/dispatcher-brief.md`). Not part of the public tree.)
 - [doc-audit.md](process/doc-audit.md): Doc audit (2026-10-30)
+- [druid-support.md](process/druid-support.md): Druid fire: what the engine plays, and what a later card must build (status: current (card druid1, 2026-11-20; Fable roadmap Q8, class 5 after the Sorceress fire build, the...)
 - [feed-after-events.md](process/feed-after-events.md): Feed after events (status: current rule (card feeds, 2026-11-01). The helper is `tools/discord/feed.py`; details in...)
 - [flaky-tests.md](process/flaky-tests.md): Flaky tests: the waiting pattern (status: current. Load-sensitive tests cost 45-minute gate re-runs; this is the rule that keeps new ones out.)
 - [fork-rebase.md](process/fork-rebase.md): Fork rebase routine (status: current (task forkrebase, user decision 2026-11-19: rebase the private d2d fork onto upstream main...)
@@ -967,6 +984,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `probes/`
 
+- [boardorder-2026-11-20.md](probes/boardorder-2026-11-20.md): boardorder scenarios, builder long lane, 2026-11-20 (CHEATED setups: mechanics only)
 - [bot-cpu-2026-11-16.md](probes/bot-cpu-2026-11-16.md): Bot CPU bursts in town walks (card botcpu, 2026-11-16) (status: partial. Offline profile only; the live repair-trip profile is a checklist (section 4). Trigger:...)
 - [bot-cpu-fix-2026-11-16.md](probes/bot-cpu-fix-2026-11-16.md): Bot CPU fixes after the live calm-window profile (2026-11-16) (status: current. Follows docs/probes/bot-cpu-live-2026-11-16.md (Ledger.load 30 percent, DB.IsA 14.5 percent). All...)
 - [bot-cpu-live-2026-11-16.md](probes/bot-cpu-live-2026-11-16.md): Bot CPU on the sandbox, live profile (card botcpulive, 2026-11-16) (status: partial. Calm-window profile captured (V); NO profile inside a burst (the built-in profiler is one-shot,...)
@@ -1063,6 +1081,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [provingground-cain-2026-11-19.md](probes/provingground-cain-2026-11-19.md): Proving Ground rerun: Cain scroll scenarios on main with cainfix2 (2026-11-19) (status: current (card pgcain). Tags: V verified (run named), S secondary, U unverified. All runs on the builder...)
 - [provingground-cainchain-2026-11-20.md](probes/provingground-cainchain-2026-11-20.md): Proving Ground: Search for Cain chain (card cainchain, 2026-11-19/20) (status: current. Tags: V verified (run named), S secondary, U unverified. Host: the builder main lane, lab d2d...)
 - [provingground-cainfix3-2026-11-19.md](probes/provingground-cainfix3-2026-11-19.md): Proving Ground: Search for Cain fixes (card cainfix3, 2026-11-19) (status: current. Tags: V verified (run named), S secondary, U unverified. Builder, lab d2d slots, bot of branch...)
+- [provingground-countess-2026-11-20.md](probes/provingground-countess-2026-11-20.md): Forgotten Tower: finding the Countess on d2d (card countess, 2026-11-20) (status: current. Tags: V verified (named run), S secondary, U unverified. The scenario setup is CHEATED (level,...)
 - [provingground-pgfix4-2026-11-20.md](probes/provingground-pgfix4-2026-11-20.md): Proving Ground: chicken.recovery, loot ring, cancelled town-portal cast (card pgfix4, 2026-11-20) (status: current. Tags: V verified (job or stamp named), S secondary, U unverified. Host: the builder main lane,...)
 - [provingground-run-2026-11-19.md](probes/provingground-run-2026-11-19.md): Proving Ground: fast tier on the builder, and what the expansion makes runnable (2026-11-19) (status: current (card pgexpand). Tags: V verified (run named), S secondary, U unverified. Builder long lane job...)
 - [ptrclick.md](probes/ptrclick.md): ptrclick: is d2d's click-targeting a deviation from game.exe, or only our harness? (TASK-179) (status: plan, nothing run live. Tags: V verified (how stated), S read in code, U unverified. Card:...)

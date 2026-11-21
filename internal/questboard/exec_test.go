@@ -468,8 +468,13 @@ func TestTwoAcceptedRecordsRunInChainOrder(t *testing.T) {
 func TestStartCoversOnlyTheCurrentChunk(t *testing.T) {
 	r := newRig(t, "Paladin", 14)
 	const cain = "search_for_cain"
-	if err := r.x.Accept(cain, "read"); err == nil {
-		t.Fatal("a later chunk was startable before its predecessor")
+	// boardprereq: a tap on a later part accepts the earlier steps it waits for, in order (never a lone later record)
+	early := newRig(t, "Paladin", 14)
+	if err := early.x.Accept(cain, "read"); err != nil {
+		t.Fatalf("a later chunk accepts its prerequisite: %v", err)
+	}
+	if d := early.next(); d.Kind != DecRun || d.Chunk != "scroll" {
+		t.Fatalf("the prerequisite runs first: %+v", d)
 	}
 	if err := r.x.Accept(cain, "scroll"); err != nil {
 		t.Fatal(err)
@@ -505,5 +510,84 @@ func TestUnknownIDsNameThemselves(t *testing.T) {
 	f := NewFake(r.b, "Bard", 6)
 	if _, err := r.b.LegacyReadiness(f.Class, 6); err == nil || !strings.Contains(err.Error(), "Bard") {
 		t.Fatalf("%v", err)
+	}
+}
+
+// Sandbox 2026-11-20 (boardprereq): stones accepted, its prerequisite scroll step not (the player stopped it). The
+// board must not park for ever: it starts the scroll step itself, and a tap on the later chunk accepts the chain.
+func TestPrerequisiteChainIsAccepted(t *testing.T) {
+	const cain = "search_for_cain"
+	accepted := func(r *rig) []string {
+		p, _, _ := r.x.st.Load()
+		var out []string
+		for _, a := range p.Accepted {
+			out = append(out, a.Chunk)
+		}
+		return out
+	}
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		t.Run(class+"/tap", func(t *testing.T) {
+			r := newRig(t, class, 17)
+			if err := r.x.Accept(cain, "stones"); err != nil {
+				t.Fatal(err)
+			}
+			if got := accepted(r); strings.Join(got, ",") != "scroll,read,stones" {
+				t.Fatalf("records %v", got)
+			}
+			if d := r.next(); d.Kind != DecRun || d.Chunk != "scroll" {
+				t.Fatalf("%+v", d)
+			}
+		})
+		t.Run(class+"/repair", func(t *testing.T) {
+			r := newRig(t, class, 17)
+			p, _, _ := r.x.st.Load()
+			p.Accepted = append(p.Accepted, Record{Quest: cain, Chunk: "stones", Diff: "normal"})
+			if err := r.x.st.file.Save(p); err != nil {
+				t.Fatal(err)
+			}
+			d := r.next()
+			if d.Kind != DecRun || d.Chunk != "scroll" {
+				t.Fatalf("not repaired: %+v", d)
+			}
+			if got := accepted(r); strings.Join(got, ",") != "stones,scroll,read" {
+				t.Fatalf("records %v", got)
+			}
+			if d := r.next(); d.Kind != DecRun || d.Chunk != "scroll" || len(accepted(r)) != 3 {
+				t.Fatalf("second call changed it: %+v %v", d, accepted(r))
+			}
+		})
+		t.Run(class+"/stop", func(t *testing.T) {
+			r := newRig(t, class, 17)
+			if err := r.x.Accept(cain, "stones"); err != nil {
+				t.Fatal(err)
+			}
+			if deps := r.x.Dependants(cain, "scroll"); len(deps) != 2 || deps[0] != "read" || deps[1] != "stones" {
+				t.Fatalf("dependants %v", deps)
+			}
+			if err := r.x.Cancel(cain, "stones"); err != nil || len(accepted(r)) != 2 {
+				t.Fatalf("stones stop: %v %v", err, accepted(r))
+			}
+			if err := r.x.Accept(cain, "stones"); err != nil {
+				t.Fatal(err)
+			}
+			if len(accepted(r)) != 3 {
+				t.Fatalf("%v", accepted(r))
+			}
+			if err := r.x.Cancel(cain, "scroll"); err != nil || len(accepted(r)) != 0 {
+				t.Fatalf("scroll stop must withdraw stones: %v %v", err, accepted(r))
+			}
+			if d := r.next(); d.Kind != DecIdle {
+				t.Fatalf("%+v", d)
+			}
+		})
+		t.Run(class+"/single", func(t *testing.T) {
+			r := newRig(t, class, 17)
+			if err := r.x.Accept(cain, "scroll"); err != nil || len(accepted(r)) != 1 {
+				t.Fatalf("%v %v", err, accepted(r))
+			}
+			if d := r.next(); d.Kind != DecRun || d.Chunk != "scroll" {
+				t.Fatalf("%+v", d)
+			}
+		})
 	}
 }

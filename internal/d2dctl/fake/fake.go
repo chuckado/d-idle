@@ -16,24 +16,25 @@ import (
 
 // Fixtures are raw payload lines (tab separated like the real channel) per verb.
 type Fixtures struct {
-	State    string // the one "state" line
-	NPCs     []string
-	Monsters []string
-	Ground   []string
-	Menu     []string
-	Items    []string
-	Corpses  []string
-	Players  []string
-	Warps    []string
-	Presets  []string
-	Objects  []string
-	Portals  []string
-	Grid     []string
-	Level    string // rest of "debug level"
-	LevelMap string // the JSON line of "debug levelmap" (empty: the verb is missing, answers err)
-	Quest    string // rest of "debug quest <q> show"
-	Attack   string
-	Passives string
+	State         string // the one "state" line
+	NPCs          []string
+	Monsters      []string
+	Ground        []string
+	Menu          []string
+	Items         []string
+	Corpses       []string
+	Players       []string
+	Warps         []string
+	Presets       []string
+	Objects       []string
+	Portals       []string
+	Grid          []string
+	Level         string // rest of "debug level"
+	LevelMap      string // the JSON line of "debug levelmap" (empty: the verb is missing, answers err)
+	LevelMonsters string // the JSON line of "debug levelmonsters" (empty: the verb is missing, answers err)
+	Quest         string // rest of "debug quest <q> show"
+	Attack        string
+	Passives      string
 	// Caps is the fork's "caps" list (comma separated); empty: the verb is unknown, like stock d2d.
 	Caps string
 	// Realtime starts the fork free-running (clock says lockstep=0); "lockstep on|off" then switches it, "lockstep" is
@@ -351,6 +352,11 @@ func (s *Server) debug(f []string) (string, bool, bool) {
 			return "err unknown debug verb\n", false, false
 		}
 		return s.Fix.LevelMap + "\nok\n", false, false
+	case "levelmonsters":
+		if s.Fix.LevelMonsters == "" {
+			return "err unknown debug verb\n", false, false
+		}
+		return s.Fix.LevelMonsters + "\nok\n", false, false
 	case "portals":
 		return payload(s.Fix.Portals) + "ok\n", false, false
 	case "grid":
