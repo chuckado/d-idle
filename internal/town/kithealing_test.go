@@ -24,7 +24,7 @@ func TestKitHealingBoughtWhenPlanIsFull(t *testing.T) {
 		}
 		r.W.Add("mp1", d2.ContBelt, 3, 0)
 		r.W.Add("tsc", d2.ContInventory, 9, 3)
-		rep, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true, Scrolls: true, Gold: true})
+		rep, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true, Scrolls: true, Gold: true, KitHealing: 4})
 		if err != nil {
 			t.Fatalf("%s: %v", tc.name, err)
 		}
@@ -44,7 +44,7 @@ func TestKitHealingWithdrawsFromStash(t *testing.T) {
 		}
 		r.W.Add("mp1", d2.ContBelt, 3, 0)
 		r.W.Add("tsc", d2.ContInventory, 9, 3)
-		if _, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true, Scrolls: true, Gold: true}); err != nil {
+		if _, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true, Scrolls: true, Gold: true, KitHealing: 4}); err != nil {
 			t.Fatal(err)
 		}
 		if len(c.moves) == 0 || c.moves[0] >= 0 {
@@ -53,9 +53,9 @@ func TestKitHealingWithdrawsFromStash(t *testing.T) {
 	}
 }
 
-// Below kitGateLevel the minimum does not apply (the Den hero keeps its small belt shopping).
-func TestKitHealingNotBelowGateLevel(t *testing.T) {
-	r, _ := withdrawRig(t, 1500, 0, 3, false)
+// Without KitHealing (every chore plan but the task chores) the shopping is the belt plan's, as before.
+func TestKitHealingOffByDefault(t *testing.T) {
+	r, _ := withdrawRig(t, 1500, 0, 22, false)
 	for i := 0; i < 2; i++ {
 		r.W.Add("hp1", d2.ContBelt, i, 0)
 	}
@@ -67,6 +67,6 @@ func TestKitHealingNotBelowGateLevel(t *testing.T) {
 		t.Fatal(err)
 	}
 	if n := rep.Bought["Minor Healing Potion"]; n != 0 {
-		t.Errorf("bought %d healing potions below the gate level", n)
+		t.Errorf("bought %d healing potions without a kit minimum", n)
 	}
 }

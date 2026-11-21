@@ -187,16 +187,16 @@ func (t *Town) potionsWanted(s *d2.Snapshot) map[belt.Kind]int {
 	return want
 }
 
-// ensureKitHealing tops the healing want up to the route guard's kit minimum (resource.kitMinHP, from kitGateLevel):
+// ensureKitHealing tops the healing want up to the visit's kit minimum (ChorePlan.KitHealing, the task chores pass
+// resource.kitMinHP):
 // the belt plan may reserve fewer healing columns than the guard counts (a 4 slot belt with a mana column holds 3), and
 // the pack counts for the guard, so the rest is bought into the pack. Without it the guard refused the quest road at
 // 3 healing potions while the shop saw nothing to buy (Proving Ground act1more, act1.tools.malus).
 func (t *Town) ensureKitHealing(s *d2.Snapshot, band belt.Band, want map[belt.Kind]int) {
-	r := t.e.Tune.Resource
-	if s.Player.Level < r.KitGateLevel || band.Capacity(belt.HP, belt.Columns) == 0 {
+	if t.kitHealing <= 0 || band.Capacity(belt.HP, belt.Columns) == 0 {
 		return
 	}
-	if short := r.KitMinHP - t.healingCarried(s) - want[belt.HP]; short > 0 {
+	if short := t.kitHealing - t.healingCarried(s) - want[belt.HP]; short > 0 {
 		want[belt.HP] += short
 	}
 }
@@ -351,7 +351,7 @@ var vendorStep = map[string]bool{"sell": true, "ammo": true, "shop": true, "idto
 func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ error) {
 	rep = ChoreReport{Bought: map[string]int{}}
 	t.withdrew = false
-	t.reserveGold = 0
+	t.reserveGold, t.kitHealing = 0, plan.KitHealing
 	if t.tune().MercReserve != 0 {
 		t.reserveGold = plan.ReserveGold
 	}

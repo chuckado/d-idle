@@ -958,7 +958,9 @@ func (a taskActs) ActivateWaypoint(ctx context.Context, ar task.Area) error {
 }
 
 func (a taskActs) Chores(ctx context.Context) error {
-	_, err := a.r.d.Town.Chores(ctx, a.r.fullChores("task"))
+	plan := a.r.fullChores("task")
+	plan.KitHealing = a.r.e.Tune.Resource.KitMinHP // the route guard counts belt and pack: buy up to it, not only to the belt plan
+	_, err := a.r.d.Town.Chores(ctx, plan)
 	if err != nil {
 		return task.Wrap(task.KindResource, err)
 	}
