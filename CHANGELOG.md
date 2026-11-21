@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- dlv-rotation: Rotation type, Profile.Rotation adapter, Fighter reads slots, golden parity <!--sg:agent/cmb2-->
+- dlv-data: cap/2 delivery object, generated skills/skillKinds/tiers, golden parity <!--sg:agent/cmb1-->
 - Merge branch 'main' into levelobjects <!--sg:agent/levelobjects-->
 - Merge branch 'main' into mouthgate <!--sg:agent/mouthgate-->
 - Merge branch 'main' into andariel1 <!--sg:agent/andariel1-->
