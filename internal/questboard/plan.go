@@ -75,6 +75,11 @@ type Plan struct {
 	// those award keys. A key in Baseline never pays (user decision 2026-11-16: no backfill for old saves).
 	Based    []string `json:"based,omitempty"`
 	Baseline []string `json:"baseline,omitempty"`
+	// Runs and Latches are the lifecycle of the quest board state machine (sm.go, knob quests.boardSM). They are additive
+	// inside file version 1: an older build ignores them and keeps working from Accepted, which stays written from the
+	// live and finished runs for one release (store_sm.go).
+	Runs    []Run   `json:"runs,omitempty"`
+	Latches []Latch `json:"latches,omitempty"`
 	// Legacy is LegacySchema once the retired Journey's decisions were imported (ImportLegacy).
 	Legacy string `json:"legacy,omitempty"`
 }
