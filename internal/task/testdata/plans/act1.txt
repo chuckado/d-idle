@@ -20,7 +20,6 @@ quest.search_for_cain/read
 quest.search_for_cain/to-stony
 quest.search_for_cain/stones <- quest.search_for_cain/to-stony
 quest.search_for_cain/to-tristram
-quest.search_for_cain/clear
 quest.search_for_cain/cage
 quest.search_for_cain/home
 # tools_of_the_trade

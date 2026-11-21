@@ -260,16 +260,6 @@
       "reveal": {"title": "Quest log", "text": "The quests the hero holds, each with its current objective and why the hero is going there.", "teaser": "Take a quest from Akara."}
     },
     {
-      "id": "idreveal", "group": "ui",
-      "trigger": {"kind": "item_quality", "args": {"qualities": ["magic", "rare"]}},
-      "reveal": {"title": "Identify reveal", "text": "Magic and rare finds arrive as face-down cards. Flip a card to see what the item turned out to be: its quality, its colour and a sound.", "teaser": "Pick up a magic or rare item."}
-    },
-    {
-      "id": "idreveal_later", "group": "ui",
-      "trigger": {"kind": "codex_first", "args": {"sub": "drop", "ids": ["first_unique", "first_set"]}},
-      "reveal": {"title": "Unique and set cards", "text": "Unique, set and crafted finds now arrive as cards too.", "teaser": "Find your first unique or set item."}
-    },
-    {
       "id": "risk", "group": "ui",
       "trigger": {"kind": "seen", "args": {"what": "near_death_survived"}},
       "reveal": {"title": "Risk meter", "text": "Before a boss the hero reads its own numbers (potions, life, kit and the route guard) and tells you ready, marginal or turn back, by the same lines it fights by.", "teaser": "Survive a brush with death."}
@@ -320,9 +310,14 @@
       "reveal": {"title": "Always repair", "text": "The hero repairs damaged gear at every town visit. Policy sheet, row Repair gear.", "teaser": "Costs tally."}
     },
     {
+      "id": "orderloop", "group": "ui",
+      "trigger": {"kind": "seen", "args": {"what": "manual_repair_cycle"}},
+      "reveal": {"title": "Loop order", "text": "Send the hero to an area for a set time, home to repair, and out again, as many rounds as you say. One loop at a time; it stops when the hero dies or the repair cannot be paid.", "teaser": "Send the hero out, then repair its gear yourself once."}
+    },
+    {
       "id": "orderqueue", "group": "ui",
-      "trigger": {"kind": "quest_stage", "args": {"quest": "den_of_evil", "min": 2}},
-      "reveal": {"title": "Order queue, first slot", "text": "One order may now wait behind the running one: give an order and the hero goes on to the next when it ends. A queue never overrides the hero's own guard and stops when the hero dies.", "teaser": "Clear the Den of Evil."}
+      "trigger": {"kind": "seen", "args": {"what": "loop_rounds_3"}},
+      "reveal": {"title": "Order queue, first slot", "text": "One order may now wait behind the running one: give an order and the hero goes on to the next when it ends. A queue never overrides the hero's own guard and stops when the hero dies.", "teaser": "Finish three rounds of a Loop order."}
     },
     {
       "id": "orderqueue2", "group": "ui",

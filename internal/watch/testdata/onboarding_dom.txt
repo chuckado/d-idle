@@ -7,12 +7,12 @@
         li.- "d.idle plays your Diablo II hero for you: it fights, loots, heals and walks town. You watch, and you decide what matters."
         li.- "It does not touch your gear or your gold. You equip what you find and you decide what to buy; selling junk is yours to mark."
         li.- "Worn gear is repaired with one button, and you can order any area on the map when you want the hero somewhere else."
-        li.- "The Journey strip shows the path ahead. You never have to follow it."
+        li.- "The Quests tile offers the next quest. Nothing starts until you tap Start."
         li.- "Policies are the rules the hero lives by: open the policy sheet and pick how careful it should be."
       div.btnrow
         a.d-btn [welcome-inventory] href=/watch/inventory "Open Inventory"
         a.d-btn [welcome-policy] href=/watch/policy "Open Policy"
-        a.d-btn [welcome-journey] href=#p-journey-title "Show the Journey"
+        a.d-btn [welcome-journey] href=#p-quest-strip-title "Show the Quests"
         button.d-btn [welcome-dismiss] "Got it, hide this"
   div.help (hidden)
   div.art (hidden)
@@ -40,8 +40,8 @@
           button.d-btn [tick-fight] "Mark done"
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -77,8 +77,8 @@
           button.d-btn [tick-fight] "Mark done"
         li.step done=1
           span.tick "done"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
         li.step done=0
           span.tick "to do"
           a.d-btn name [step-junk] href=/watch/inventory "Mark junk for sale"
@@ -122,8 +122,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -136,6 +136,15 @@
   div.welcome (hidden)
   div.help
     div.help-card
+      section.what
+        h3.- "What does the bot do for me?"
+        ul.lines
+          li.- "It fights, picks up loot and walks town by itself. You do not need to play."
+          li.- "Potions: it drinks them from the belt on its own and buys more in town. Keep some gold for refills."
+          li.- "Safety: it leaves a fight or goes back to town when life gets low. A hero can still die in a hard spot."
+          li.- "Gear: the bot never equips or swaps gear for you. Equip upgrades yourself on the Inventory page (it only suggests). If you equip or take off something, the bot leaves it alone."
+          li.- "Items: it picks up by its loot rules and sells or stashes only what you marked or the rules say. The Items tab of the log shows what it picked up."
+          li.- "What drives it: hand-written rules in Go that read the game state. There is no trained model and no AI service, and it runs offline on your machine."
       button.d-btn [help-welcome] "Show the welcome card again"
       button.d-btn [help-list] "Show the first 30 minutes list again"
       button.d-btn [help-close] "Close"
@@ -168,8 +177,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=1
           span.tick "done"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
         li.step done=1
           span.tick "done"
           a.d-btn name [step-junk] href=/watch/inventory "Mark junk for sale"
@@ -203,8 +212,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -242,8 +251,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -281,8 +290,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -317,8 +326,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -364,8 +373,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -400,8 +409,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -440,8 +449,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -480,8 +489,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -516,8 +525,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -555,8 +564,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -591,8 +600,8 @@
           span.hint "It ticks by itself after the first kill. Watch the video or the Thoughts feed."
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"
@@ -629,8 +638,8 @@
           button.d-btn [tick-fight] "Mark done"
         li.step done=0
           span.tick "to do"
-          a.d-btn name [step-journey] href=#p-journey-title "Open the Journey strip"
-          span.hint "The path through the game, one chapter at a time."
+          a.d-btn name [step-journey] href=#p-quest-strip-title "Open the Quests tile"
+          span.hint "The next quest, in words. Start it when you want it done."
           button.d-btn [tick-journey] "Mark done"
         li.step done=0
           span.tick "to do"

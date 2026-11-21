@@ -1,0 +1,364 @@
+{
+ "schema": "power.profiles/1",
+ "skillKinds": {
+  "Arctic Blast": "spell",
+  "Armageddon": "spell",
+  "Attack": "melee",
+  "Bash": "melee",
+  "Berserk": "melee",
+  "Blade Fury": "melee",
+  "Blade Sentinel": "spell",
+  "Blade Shield": "spell",
+  "Blades of Ice": "melee",
+  "Blaze": "spell",
+  "Blessed Hammer": "spell",
+  "Blizzard": "spell",
+  "BloodGolem": "summon",
+  "Bone Spear": "spell",
+  "Bone Spirit": "spell",
+  "Chain Lightning": "spell",
+  "Charge": "melee",
+  "Charged Bolt": "spell",
+  "Charged Bolt Sentry": "spell",
+  "Charged Strike": "melee",
+  "Claws of Thunder": "melee",
+  "Clay Golem": "summon",
+  "Cobra Strike": "melee",
+  "Cold Arrow": "missile",
+  "Concentrate": "melee",
+  "Corpse Explosion": "spell",
+  "Death Sentry": "spell",
+  "Dopplezon": "summon",
+  "Double Swing": "melee",
+  "Double Throw": "melee",
+  "Dragon Claw": "melee",
+  "Dragon Tail": "melee",
+  "Dragon Talon": "melee",
+  "Eruption": "spell",
+  "Exploding Arrow": "missile",
+  "Fend": "melee",
+  "Feral Rage": "melee",
+  "Fire Arrow": "missile",
+  "Fire Ball": "spell",
+  "Fire Bolt": "spell",
+  "Fire Claws": "melee",
+  "Fire Trauma": "spell",
+  "Fire Wall": "spell",
+  "Firestorm": "spell",
+  "Fist of the Heavens": "spell",
+  "Fists of Fire": "melee",
+  "Freezing Arrow": "missile",
+  "Frenzy": "melee",
+  "Frost Nova": "spell",
+  "Frozen Orb": "spell",
+  "Fury": "melee",
+  "Glacial Spike": "spell",
+  "Golem Mastery": "summon",
+  "Guided Arrow": "missile",
+  "Holy Bolt": "spell",
+  "Hunger": "melee",
+  "Hurricane": "spell",
+  "Hydra": "spell",
+  "Ice Arrow": "missile",
+  "Ice Blast": "spell",
+  "Ice Bolt": "spell",
+  "Immolation Arrow": "missile",
+  "Impale": "melee",
+  "Inferno": "spell",
+  "Inferno Sentry": "spell",
+  "IronGolem": "summon",
+  "Jab": "melee",
+  "Kick": "melee",
+  "Leap": "melee",
+  "Leap Attack": "melee",
+  "Lightning": "spell",
+  "Lightning Bolt": "missile",
+  "Lightning Fury": "spell",
+  "Lightning Sentry": "spell",
+  "Lightning Strike": "melee",
+  "Magic Arrow": "missile",
+  "Maul": "melee",
+  "Meteor": "spell",
+  "Mind Blast": "spell",
+  "Molten Boulder": "spell",
+  "Multiple Shot": "missile",
+  "Nova": "spell",
+  "Oak Sage": "summon",
+  "Penetrate": "missile",
+  "Pierce": "missile",
+  "Plague Javelin": "missile",
+  "Poison Dagger": "melee",
+  "Poison Explosion": "spell",
+  "Poison Javelin": "missile",
+  "Poison Nova": "spell",
+  "Power Strike": "melee",
+  "Psychic Hammer": "spell",
+  "Rabies": "melee",
+  "Raise Skeletal Mage": "summon",
+  "Raise Skeleton": "summon",
+  "Raven": "summon",
+  "Revive": "summon",
+  "Royal Strike": "melee",
+  "Sacrifice": "melee",
+  "Shock Field": "spell",
+  "Shock Wave": "melee",
+  "Skeleton Mastery": "summon",
+  "Smite": "melee",
+  "Static Field": "spell",
+  "Strafe": "missile",
+  "Stun": "melee",
+  "Summon Fenris": "summon",
+  "Summon Grizzly": "summon",
+  "Summon Spirit Wolf": "summon",
+  "Teeth": "spell",
+  "Throw": "missile",
+  "Thunder Storm": "spell",
+  "Tiger Strike": "melee",
+  "Tornado": "spell",
+  "Twister": "spell",
+  "Valkyrie": "summon",
+  "Vengeance": "melee",
+  "Volcano": "spell",
+  "Wake of Fire Sentry": "spell",
+  "War Cry": "spell",
+  "Wearbear": "melee",
+  "Wearwolf": "melee",
+  "Whirlwind": "melee",
+  "Zeal": "melee"
+ },
+ "archetypes": [
+  {
+   "id": "bruiser",
+   "exposure": {
+    "mode": "contact",
+    "contactCap": 8,
+    "closeSeconds": 0,
+    "screenShare": 0,
+    "defenceCounts": true,
+    "secondPool": "none"
+   },
+   "offence": {
+    "mode": "sustained",
+    "areaFactor": "skill",
+    "resource": "none",
+    "rampSeconds": 0,
+    "immunityBlocks": false
+   },
+   "hazardWeights": {
+    "ranged": 1.2,
+    "fast": 1.0,
+    "mana_burn": 1.0,
+    "poison": 1.0,
+    "resurrect": 1.0,
+    "charge": 1.0,
+    "curse": 1.0
+   },
+   "escape": {
+    "portalInterruptible": false,
+    "mobilitySkill": "from_build"
+   },
+   "uncertainty": {
+    "derived": 0.85,
+    "default": 0.6
+   }
+  },
+  {
+   "id": "ranged_physical",
+   "exposure": {
+    "mode": "range",
+    "contactCap": 4,
+    "closeSeconds": 2.0,
+    "screenShare": 0,
+    "defenceCounts": true,
+    "secondPool": "none"
+   },
+   "offence": {
+    "mode": "sustained",
+    "areaFactor": "skill",
+    "resource": "ammo",
+    "rampSeconds": 0,
+    "immunityBlocks": true
+   },
+   "hazardWeights": {
+    "ranged": 1.2,
+    "fast": 1.4,
+    "mana_burn": 1.0,
+    "poison": 1.0,
+    "resurrect": 1.0,
+    "charge": 1.3,
+    "curse": 1.0
+   },
+   "escape": {
+    "portalInterruptible": true,
+    "mobilitySkill": "from_build"
+   },
+   "uncertainty": {
+    "derived": 0.85,
+    "default": 0.6
+   }
+  },
+  {
+   "id": "caster",
+   "exposure": {
+    "mode": "range",
+    "contactCap": 3,
+    "closeSeconds": 2.5,
+    "screenShare": 0,
+    "defenceCounts": false,
+    "secondPool": "none"
+   },
+   "offence": {
+    "mode": "mana_burst",
+    "areaFactor": "skill",
+    "resource": "mana",
+    "rampSeconds": 0,
+    "immunityBlocks": true
+   },
+   "hazardWeights": {
+    "ranged": 1.3,
+    "fast": 1.6,
+    "mana_burn": 2.0,
+    "poison": 1.0,
+    "resurrect": 1.0,
+    "charge": 1.5,
+    "curse": 1.0
+   },
+   "escape": {
+    "portalInterruptible": true,
+    "mobilitySkill": "from_build"
+   },
+   "uncertainty": {
+    "derived": 0.85,
+    "default": 0.6
+   }
+  },
+  {
+   "id": "summoner",
+   "exposure": {
+    "mode": "screened",
+    "contactCap": 3,
+    "closeSeconds": 3.0,
+    "screenShare": 0.4,
+    "defenceCounts": false,
+    "secondPool": "none"
+   },
+   "offence": {
+    "mode": "pet",
+    "areaFactor": "pets",
+    "resource": "mana",
+    "rampSeconds": 30,
+    "immunityBlocks": false
+   },
+   "hazardWeights": {
+    "ranged": 1.3,
+    "fast": 1.4,
+    "mana_burn": 1.5,
+    "poison": 1.0,
+    "resurrect": 1.0,
+    "charge": 1.2,
+    "curse": 1.0
+   },
+   "escape": {
+    "portalInterruptible": true,
+    "mobilitySkill": "from_build"
+   },
+   "uncertainty": {
+    "derived": 0.85,
+    "default": 0.6
+   }
+  },
+  {
+   "id": "hybrid_tank_caster",
+   "exposure": {
+    "mode": "contact",
+    "contactCap": 8,
+    "closeSeconds": 0,
+    "screenShare": 0,
+    "defenceCounts": true,
+    "secondPool": "none"
+   },
+   "offence": {
+    "mode": "mana_burst",
+    "areaFactor": "skill",
+    "resource": "mana",
+    "rampSeconds": 0,
+    "immunityBlocks": true
+   },
+   "hazardWeights": {
+    "ranged": 1.2,
+    "fast": 1.0,
+    "mana_burn": 1.8,
+    "poison": 1.0,
+    "resurrect": 1.0,
+    "charge": 1.0,
+    "curse": 1.0
+   },
+   "escape": {
+    "portalInterruptible": false,
+    "mobilitySkill": "from_build"
+   },
+   "uncertainty": {
+    "derived": 0.85,
+    "default": 0.6
+   }
+  }
+ ],
+ "dials": [
+  {
+   "id": "cautious",
+   "enter": 2.0,
+   "stay": 1.6
+  },
+  {
+   "id": "balanced",
+   "enter": 1.5,
+   "stay": 1.2
+  },
+  {
+   "id": "bold",
+   "enter": 1.2,
+   "stay": 1.0
+  }
+ ],
+ "defaultDial": "balanced",
+ "params": {
+  "chickenPct": 0.3,
+  "potionHeal": 45,
+  "potionEffectSeconds": 6,
+  "swingSeconds": 1.28,
+  "defaultDpsPerClvl": 2.5,
+  "mercDpsPerLevel": 3.0,
+  "mercHold": 0.3,
+  "elemShare": 0.5,
+  "eliteLifeMul": 3.0,
+  "eliteDmgMul": 1.5,
+  "manaPerSecond": 4.0,
+  "manaFloor": 0.35,
+  "refDefence": 60,
+  "maxMargin": 99,
+  "tags": {
+   "chickenPct": "U",
+   "potionHeal": "U",
+   "potionEffectSeconds": "U",
+   "swingSeconds": "U",
+   "defaultDpsPerClvl": "U",
+   "mercDpsPerLevel": "U",
+   "mercHold": "U",
+   "elemShare": "U",
+   "eliteLifeMul": "U",
+   "eliteDmgMul": "U",
+   "manaPerSecond": "U",
+   "manaFloor": "U",
+   "refDefence": "U",
+   "maxMargin": "I"
+  }
+ },
+ "elementIndex": {
+  "fire": 0,
+  "cold": 1,
+  "ltng": 2,
+  "lightning": 2,
+  "pois": 3,
+  "poison": 3
+ }
+}

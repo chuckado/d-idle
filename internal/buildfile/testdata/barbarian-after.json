@@ -1,0 +1,16 @@
+{
+ "schema": "didle.build/1",
+ "name": "Frenzy with Iron Skin after Frenzy 10",
+ "class": "barbarian",
+ "skills": [
+  {"skill": "Bash", "to": 5},
+  {"skill": "Frenzy", "to": 20},
+  {"skill": "Iron Skin", "to": 10, "when": {"after": {"skill": "Frenzy", "level": 10}}},
+  {"skill": "Howl", "to": 1}
+ ],
+ "stats": [
+  {"stat": "str", "to": 80},
+  {"stat": "dex", "to": 50},
+  {"stat": "vit", "to": "rest"}
+ ]
+}

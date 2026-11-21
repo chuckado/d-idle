@@ -4,6 +4,7 @@ import (
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/env"
+	"d2lod-bot/internal/resource"
 )
 
 // Belt columns are 0..3, drunk with the keys "1".."4" (docs/plan/data/hotkeys.json). The front potion of a column
@@ -120,8 +121,13 @@ type SafetyInput struct {
 	HealReady  bool // healing potion cooldown elapsed
 	ManaReady  bool
 	RejuvReady bool
+	CastGuard  resource.CastGuard // portal exposure test (resource/castguard.go); the zero value is the old count rule
+	Quest      bool               // a player-started quest chunk runs: CrowdAbandonQuestN applies (SetQuestCrowd)
 	Tune       env.CombatTuning
 }
+
+// castBlocked reports whether a town portal cast is too exposed now, with the reason.
+func (in SafetyInput) castBlocked() (bool, string) { return in.CastGuard.Blocked(in.Adjacent, in.Life) }
 
 func pct(v, max int) int {
 	if max <= 0 {
@@ -142,13 +148,18 @@ func Decide(in SafetyInput) SafetyAction {
 	return meleeCastGuard(in, decideBase(in))
 }
 
-// meleeCastGuard replaces a town portal cast that melee would cut (card fixportalmelee, docs/fixportalmelee.md). A cast
-// takes game time and a hit interrupts it, so with resource.CastAdjacentMax or more attackers in reach it is not an
-// escape (soak 2 death: scroll spent, character died). Order: drink if a potion is ready, else leave the game. A step
+// meleeCastGuard replaces a town portal cast that is too exposed (cards fixportalmelee, portalguard). A hit does NOT
+// interrupt the cast (V run, decomp28 Q5); the cast and the walk into the portal take game time during which the
+// attackers keep hitting (soak 2 death: scroll spent, character died). Too exposed is resource.CastGuard: the count
+// rule (resource.CastAdjacentMax adjacent) or, with bot.portalGuard 1, expected damage over the exposure. Order: drink
+// if a potion is ready, else leave the game. A step
 // away is not offered: melee monsters follow at walking speed and the hits continue (INFERRED, UNVERIFIED live).
 // Only fights count; quiet town trips and every case below the adjacent count are untouched.
 func meleeCastGuard(in SafetyInput, a SafetyAction) SafetyAction {
-	if a != TownPortal || !in.InFight || in.Adjacent < crowdAdjacentMax {
+	if a != TownPortal || !in.InFight {
+		return a
+	}
+	if blocked, _ := in.castBlocked(); !blocked {
 		return a
 	}
 	switch {

@@ -214,12 +214,24 @@ func TestResistBothBasisCases(t *testing.T) {
 		if state(r, "resist") != Pass {
 			t.Errorf("%s shown 75 in Hell must pass, got %s", class, state(r, "resist"))
 		}
-		// raw 120 caps at 75 before the penalty
+		// raw 120 in Hell: the penalty comes first (decomp37 B1), 20 is under the warn line 25 and above the fail line 0
 		h.Basis, h.Resist = ResistRaw, Resists{Fire: 120, Cold: 120, Lightning: 120, Poison: 120}
 		r, _ = ev.Evaluate(h, "Blood Moor")
-		if state(r, "resist") != Fail {
-			t.Errorf("%s raw 120 caps at 75 then -100: fail, got %s", class, state(r, "resist"))
+		if state(r, "resist") != Warn {
+			t.Errorf("%s raw 120 in Hell is 20 after the penalty: warn, got %s", class, state(r, "resist"))
 		}
+		// raw 175 in Hell is 75 (capped after the penalty): pass; the old order read 75-100 = -25: fail
+		h.Resist = Resists{Fire: 175, Cold: 175, Lightning: 175, Poison: 175}
+		r, _ = ev.Evaluate(h, "Blood Moor")
+		if state(r, "resist") != Pass {
+			t.Errorf("%s raw 175 in Hell is 75: pass, got %s", class, state(r, "resist"))
+		}
+		// +10 max resist lifts the cap to 85: raw 185 in Hell reads 85
+		h.Resist, h.MaxBonus = Resists{Fire: 185, Cold: 185, Lightning: 185, Poison: 185}, Resists{Fire: 10, Cold: 10, Lightning: 10, Poison: 10}
+		if w, _ := worstResist(params{"cap": 75, "poison": 1}, h, 2); w != 85 {
+			t.Errorf("%s cap 75+10: want 85, got %d", class, w)
+		}
+		h.MaxBonus = Resists{}
 	}
 	h := hero("paladin", "nightmare", 60)
 	h.Resist = Resists{Fire: 50, Cold: 30, Lightning: 60, Poison: 0}

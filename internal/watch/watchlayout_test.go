@@ -83,6 +83,20 @@ func TestVideoPanelReconnectAndCollapse(t *testing.T) {
 	runNode(t, "testdata/video_panel.js", "web/panels/video/panel.js")
 }
 
+func TestVideoPanelLosslessFeedPathAndFallback(t *testing.T) {
+	runNode(t, "testdata/video_pal_panel.js", "web/panels/video/panel.js")
+}
+
+// At most one video transport is open at a time and a stalled capability probe cannot hold the MJPEG stream beside it (the viewer's
+// NO SIGNAL: a browser keeps about six connections per host).
+func TestVideoPanelOneTransportAndNoLeak(t *testing.T) {
+	runNode(t, "testdata/video_conns.js", "web/panels/video/panel.js")
+}
+
+func TestVideoPanelLabelsButton(t *testing.T) {
+	runNode(t, "testdata/video_labels_panel.js", "web/panels/video/panel.js")
+}
+
 func TestMapPanelStitchedWorldAndNeighbourCache(t *testing.T) {
 	runNode(t, "testdata/map_panel.js", "web/panels/map/panel.js")
 }

@@ -1,0 +1,49 @@
+<div class="d-panel">
+  <div class="d-slotbody">
+    <button class="h-btn" data-key="open" data-worst="ok" aria-haspopup="true" type="button">
+      <span class="h-h">
+        <b> "Health"
+      <span class="h-lights">
+        <span class="h-light" data-k="life" data-l="ok" title="Life: 150/150">
+          <i>
+          <b> "Life"
+          <span> "150/150"
+        <span class="h-light" data-k="gear" data-l="ok" title="Gear: sound">
+          <i>
+          <b> "Gear"
+          <span> "sound"
+        <span class="h-light" data-k="readiness" data-l="ok" title="Ready: safe">
+          <i>
+          <b> "Ready"
+          <span> "safe"
+        <span class="h-light" data-k="merc" data-l="unknown" title="Merc: not reported">
+          <i>
+          <b> "Merc"
+          <span> "not reported"
+        <span class="h-light" data-k="supplies" data-l="unknown" title="Supply: not reported">
+          <i>
+          <b> "Supply"
+          <span> "not reported"
+      <dl class="h-detail">
+        <dt> "Life"
+        <dd data-l="ok"> "150/150"
+        <dt> "Gear"
+        <dd data-l="ok"> "sound"
+        <dt> "Ready"
+        <dd data-l="ok"> "safe"
+        <dt> "Merc"
+        <dd data-l="unknown"> "not reported"
+        <dt> "Supply"
+        <dd data-l="unknown"> "not reported"
+    <div class="h-pop" aria-label="Health in detail" popover="auto" role="dialog">
+      <dl class="h-rows">
+        <dt> "Life"
+        <dd> "150/150"
+        <dt> "Gear"
+        <dd> "sound"
+        <dt> "Ready"
+        <dd> "safe"
+        <dt> "Merc"
+        <dd> "not reported"
+        <dt> "Supply"
+        <dd> "not reported"

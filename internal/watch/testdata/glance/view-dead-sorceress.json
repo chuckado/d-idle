@@ -1,0 +1,55 @@
+{
+  "health": {
+    "gear": {
+      "light": "unknown",
+      "word": "unknown"
+    },
+    "life": {
+      "light": "bad",
+      "word": "0/120"
+    },
+    "merc": {
+      "light": "unknown",
+      "word": "unknown"
+    },
+    "readiness": {
+      "detail": "Lightning resistance is under the line.",
+      "light": "warn",
+      "word": "risky"
+    },
+    "supplies": {
+      "light": "unknown",
+      "word": "unknown"
+    }
+  },
+  "needs": [],
+  "progress": {
+    "goldPerHour": null,
+    "goldSeries": [],
+    "level": {
+      "etaSeconds": null,
+      "from": 7,
+      "pct": 50,
+      "to": 8
+    },
+    "xpPerHour": null,
+    "xpSeries": []
+  },
+  "schema": "watch.glance/1",
+  "sentence": {
+    "margin": "risky",
+    "place": "Cold Plains",
+    "reason": "Fighting in Cold Plains, my life is 72%",
+    "tone": "danger",
+    "uptime": "",
+    "voice": "",
+    "why": {
+      "change": "Life under my retreat line sends me to town; an order from you ends the fight sooner.",
+      "code": "fight",
+      "next": "No order from you: the hero follows its own plan.",
+      "now": "Fighting in Cold Plains, my life is 72%."
+    },
+    "word": "Dead"
+  },
+  "seq": 4
+}

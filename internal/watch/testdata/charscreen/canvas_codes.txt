@@ -1,0 +1,14 @@
+pack item-1 usable= who= badge= title=usable by both
+pack item-2 usable= who= badge= title=hero only
+pack item-3 usable= who=merc badge=MERC/info/Only your mercenary can use it. needs level 9 (you are 7) title=merc only (level) - needs level 9 (you are 7)
+pack item-4 usable=no who= badge=STR/bad/needs 41 strength (you have 38) title=nobody (str) - needs 41 strength (you have 38)
+pack item-5 usable=no who= badge=DEX/bad/needs 45 dexterity (you have 25) title=nobody (dex) - needs 45 dexterity (you have 25)
+pack item-6 usable=no who= badge=CLS/bad/Paladin only title=class - Paladin only
+pack item-7 usable=no who= badge=UNID/bad/not identified title=unidentified - not identified
+pack item-8 usable= who=merc badge=MERC/info/Only your mercenary can use it. the shield is worn title=two-hander - the shield is worn
+pack item-9 usable= who=merc badge=MERC/info/Only your mercenary can use it. not equipment for this class title=slot - not equipment for this class
+pack item-10 usable= who= badge= title=merc dead
+pack item-11 usable= who= badge=BRK/warn/Broken: repair it before it is worn title=broken (warn only)
+pack item-12 usable= who= badge= title=hero only, no merc
+
+

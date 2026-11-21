@@ -102,9 +102,9 @@ func TestFailsafePanelLeftOpen(t *testing.T) {
 	g := failsafeRig(t)
 	g.mover.exploreFn = blockExplore
 	g.w.set(func(w *world) { w.area = 2 })
+	g.r.d.Loot = fakeLoot{w: g.w, err: errors.New("hand: panels still open")} // before run: the runner goroutine reads d
 	g.run()
 	defer g.finish()
-	g.r.d.Loot = fakeLoot{w: g.w, err: errors.New("hand: panels still open")}
 	g.r.Start(farm("Blood Moor"))
 	assertPausedWithReason(t, g)
 	ordered(t, g, "pickup", "closeall")

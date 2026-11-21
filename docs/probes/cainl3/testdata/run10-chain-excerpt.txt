@@ -1,0 +1,212 @@
+{"time":"2026-11-19T11:30:48.024587282-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:30:49.062538439-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":2,"npc":[127,70]}
+{"time":"2026-11-19T11:30:49.093509396-05:00","level":"INFO","msg":"memory quest words","inst":"cl3","normalQuestWords":["den_of_evil=0x0004"]}
+{"time":"2026-11-19T11:30:49.093614644-05:00","level":"INFO","msg":"Quest progress: den_of_evil","inst":"cl3","type":"quest","goal":"g1"}
+{"time":"2026-11-19T11:30:49.182599723-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"isc x1, tbk x1, tsc x1","stash":""}
+{"time":"2026-11-19T11:30:49.187628896-05:00","level":"INFO","msg":"route guard: blocked monastery (0 mana potions < 2 (caster)); route guard: blocked tower (0 mana potions < 3 (caster)); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:30:49.187638635-05:00","level":"INFO","msg":"route guard: monastery floor=14 (merc=alive)","inst":"cl3"}
+{"time":"2026-11-19T11:30:49.187641825-05:00","level":"INFO","msg":"route guard: forgotten tower floor=14 (merc=alive)","inst":"cl3"}
+{"time":"2026-11-19T11:30:49.187645851-05:00","level":"INFO","msg":"route guard: andariel floor=15 (merc=alive)","inst":"cl3"}
+{"time":"2026-11-19T11:30:49.626858936-05:00","level":"INFO","msg":"Entered Blood Moor","inst":"cl3","type":"area_change","goal":"g1","area":"Blood Moor"}
+{"time":"2026-11-19T11:30:53.693438264-05:00","level":"INFO","msg":"Entered Cold Plains","inst":"cl3","type":"area_change","goal":"g1","area":"Cold Plains"}
+{"time":"2026-11-19T11:30:57.444948616-05:00","level":"INFO","msg":"Entered Stony Field","inst":"cl3","type":"area_change","goal":"g1","area":"Stony Field"}
+{"time":"2026-11-19T11:30:58.453728693-05:00","level":"INFO","msg":"Entered Underground Passage Level 1","inst":"cl3","type":"area_change","goal":"g1","area":"Underground Passage Level 1"}
+{"time":"2026-11-19T11:31:11.643039691-05:00","level":"INFO","msg":"Entered Dark Wood","inst":"cl3","type":"area_change","goal":"g1","area":"Dark Wood"}
+{"time":"2026-11-19T11:31:11.648376125-05:00","level":"INFO","msg":"route guard: monastery floor=14 (merc=dead)","inst":"cl3"}
+{"time":"2026-11-19T11:31:11.648417799-05:00","level":"INFO","msg":"route guard: forgotten tower floor=15 (merc=dead)","inst":"cl3"}
+{"time":"2026-11-19T11:31:11.648427082-05:00","level":"INFO","msg":"route guard: andariel floor=17 (merc=dead)","inst":"cl3"}
+{"time":"2026-11-19T11:31:11.648609145-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"level.33","outcome":"ran","kind":"none","err":null,"attention":""}
+{"time":"2026-11-19T11:31:11.660872085-05:00","level":"INFO","msg":"quest board: Training toward Sisters to the Slaughter: level is not the gap, the margin still says too hard (gear, potions or resistances).","inst":"cl3"}
+{"time":"2026-11-19T11:31:11.963178394-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"level.33","outcome":"ran","kind":"none","err":null,"attention":""}
+{"time":"2026-11-19T11:31:12.09514201-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:31:12.14021242-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:31:12.142190589-05:00","level":"INFO","msg":"route guard: monastery floor=14 (merc=alive)","inst":"cl3"}
+{"time":"2026-11-19T11:31:12.142197431-05:00","level":"INFO","msg":"route guard: forgotten tower floor=14 (merc=alive)","inst":"cl3"}
+{"time":"2026-11-19T11:31:12.142202803-05:00","level":"INFO","msg":"route guard: andariel floor=15 (merc=alive)","inst":"cl3"}
+{"time":"2026-11-19T11:31:12.150121601-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":88,"player_y":101,"attempt":1}
+{"time":"2026-11-19T11:31:12.185759048-05:00","level":"INFO","msg":"Entered Dark Wood","inst":"cl3","type":"area_change","goal":"g1","area":"Dark Wood"}
+{"time":"2026-11-19T11:31:15.875698108-05:00","level":"INFO","msg":"quest board: accepted search_for_cain/scroll","inst":"cl3","quest":"search_for_cain","chunk":"scroll"}
+{"time":"2026-11-19T11:31:25.556318372-05:00","level":"INFO","msg":"route guard: monastery floor=14 (merc=dead)","inst":"cl3"}
+{"time":"2026-11-19T11:31:25.556381705-05:00","level":"INFO","msg":"route guard: forgotten tower floor=15 (merc=dead)","inst":"cl3"}
+{"time":"2026-11-19T11:31:25.556392609-05:00","level":"INFO","msg":"route guard: andariel floor=17 (merc=dead)","inst":"cl3"}
+{"time":"2026-11-19T11:31:25.624062053-05:00","level":"INFO","msg":"route guard: blocked monastery (3 healing potions < 4); route guard: blocked tower (3 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:31:25.632937351-05:00","level":"INFO","msg":"quest board: starting chunk search_for_cain/scroll","inst":"cl3"}
+{"time":"2026-11-19T11:31:25.639388098-05:00","level":"INFO","msg":"quest board: step Activate waypoint","inst":"cl3"}
+{"time":"2026-11-19T11:31:25.691938283-05:00","level":"INFO","msg":"safety decision","inst":"cl3","action":"crowd-retreat","area":5,"life":197,"maxLife":304,"heal":3,"beltMP":0,"rejuv":0,"tome":1}
+{"time":"2026-11-19T11:31:26.959892418-05:00","level":"WARN","msg":"d2d: Save and Exit requested (chicken / leave game): the process quits and its socket goes away","inst":"cl3"}
+{"time":"2026-11-19T11:31:29.198524666-05:00","level":"INFO","msg":"quest board: waiting: context canceled","inst":"cl3"}
+{"time":"2026-11-19T11:31:29.203970176-05:00","level":"INFO","msg":"route guard: monastery floor=14 (merc=none)","inst":"cl3"}
+{"time":"2026-11-19T11:31:29.203975879-05:00","level":"INFO","msg":"route guard: forgotten tower floor=15 (merc=none)","inst":"cl3"}
+{"time":"2026-11-19T11:31:29.203978884-05:00","level":"INFO","msg":"route guard: andariel floor=17 (merc=none)","inst":"cl3"}
+{"time":"2026-11-19T11:31:29.206638086-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:31:29.29435337-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":3,"npc":[121,71]}
+{"time":"2026-11-19T11:31:29.36378164-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:31:29.414795932-05:00","level":"INFO","msg":"route guard: monastery floor=14 (merc=alive)","inst":"cl3"}
+{"time":"2026-11-19T11:31:29.414822294-05:00","level":"INFO","msg":"route guard: forgotten tower floor=14 (merc=alive)","inst":"cl3"}
+{"time":"2026-11-19T11:31:29.414829901-05:00","level":"INFO","msg":"route guard: andariel floor=15 (merc=alive)","inst":"cl3"}
+{"time":"2026-11-19T11:31:30.113534158-05:00","level":"INFO","msg":"Entered Cold Plains","inst":"cl3","type":"area_change","goal":"g1","area":"Cold Plains"}
+{"time":"2026-11-19T11:31:32.798858642-05:00","level":"INFO","msg":"Entered Stony Field","inst":"cl3","type":"area_change","goal":"g1","area":"Stony Field"}
+{"time":"2026-11-19T11:31:40.620001576-05:00","level":"INFO","msg":"Entered Underground Passage Level 1","inst":"cl3","type":"area_change","goal":"g1","area":"Underground Passage Level 1"}
+{"time":"2026-11-19T11:31:52.113235139-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/wp-dark-wood","outcome":"retry","kind":"ui","err":"exit to Dark Wood: nav: timeout: walk did not finish in 2m0s","attention":""}
+{"time":"2026-11-19T11:31:52.125142176-05:00","level":"INFO","msg":"quest board: search_for_cain/scroll: exit to Dark Wood: nav: timeout: walk did not finish in 2m0s","inst":"cl3"}
+{"time":"2026-11-19T11:31:52.129934427-05:00","level":"INFO","msg":"route guard: monastery floor=14 (merc=dead)","inst":"cl3"}
+{"time":"2026-11-19T11:31:52.12999586-05:00","level":"INFO","msg":"route guard: forgotten tower floor=15 (merc=dead)","inst":"cl3"}
+{"time":"2026-11-19T11:31:52.130005562-05:00","level":"INFO","msg":"route guard: andariel floor=17 (merc=dead)","inst":"cl3"}
+{"time":"2026-11-19T11:31:54.077081993-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:31:54.475812935-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":2,"npc":[122,74]}
+{"time":"2026-11-19T11:31:54.586313026-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:31:54.600690809-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":120,"player_y":76,"attempt":1}
+{"time":"2026-11-19T11:31:54.730845981-05:00","level":"INFO","msg":"Entered Underground Passage Level 1","inst":"cl3","type":"area_change","goal":"g1","area":"Underground Passage Level 1"}
+{"time":"2026-11-19T11:32:22.375208128-05:00","level":"INFO","msg":"Entered Dark Wood","inst":"cl3","type":"area_change","goal":"g1","area":"Dark Wood"}
+{"time":"2026-11-19T11:32:44.092484777-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:32:45.001271048-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":4,"npc":[127,69]}
+{"time":"2026-11-19T11:32:45.143243485-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:32:45.161158873-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":127,"player_y":73,"attempt":1}
+{"time":"2026-11-19T11:32:45.346464624-05:00","level":"INFO","msg":"Entered Dark Wood","inst":"cl3","type":"area_change","goal":"g1","area":"Dark Wood"}
+{"time":"2026-11-19T11:35:25.395816809-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/wp-dark-wood","outcome":"ran","kind":"none","err":null,"attention":""}
+{"time":"2026-11-19T11:35:25.659809457-05:00","level":"INFO","msg":"quest board: step Take the Inifuss bark","inst":"cl3"}
+{"time":"2026-11-19T11:36:20.77001893-05:00","level":"INFO","msg":"Found Scroll of Inifuss","inst":"cl3","type":"drop","goal":"g1"}
+{"time":"2026-11-19T11:36:21.053412481-05:00","level":"INFO","msg":"memory quest words","inst":"cl3","normalQuestWords":["den_of_evil=0x0004","search_for_cain=0x0008"]}
+{"time":"2026-11-19T11:36:21.053655255-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/tree","outcome":"retry","kind":"none","err":"quest.search_for_cain/tree ran but is still needed (evidence 2)","attention":""}
+{"time":"2026-11-19T11:36:21.090637608-05:00","level":"INFO","msg":"quest board: search_for_cain/scroll: quest.search_for_cain/tree ran but is still needed (evidence 2)","inst":"cl3"}
+{"time":"2026-11-19T11:36:21.774822319-05:00","level":"INFO","msg":"quest board: accepted search_for_cain/read","inst":"cl3","quest":"search_for_cain","chunk":"read"}
+{"time":"2026-11-19T11:36:32.820983107-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:36:33.021295568-05:00","level":"INFO","msg":"Quest progress: search_for_cain","inst":"cl3","type":"quest","goal":"g1"}
+{"time":"2026-11-19T11:36:35.393173486-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":3,"npc":[120,78]}
+{"time":"2026-11-19T11:36:36.579962323-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"bkd x1, isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:36:36.644089025-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":117,"player_y":75,"attempt":1}
+{"time":"2026-11-19T11:36:36.88227157-05:00","level":"INFO","msg":"quest board: accepted search_for_cain/stones","inst":"cl3","quest":"search_for_cain","chunk":"stones"}
+{"time":"2026-11-19T11:36:37.422223863-05:00","level":"WARN","msg":"back to field: portal click failed","inst":"cl3","err":"d2dctl: portal click did not change the level (still 1)"}
+{"time":"2026-11-19T11:36:37.425391621-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":117,"player_y":75,"attempt":2}
+{"time":"2026-11-19T11:36:38.218677371-05:00","level":"WARN","msg":"back to field: portal click failed","inst":"cl3","err":"d2dctl: portal click did not change the level (still 1)"}
+{"time":"2026-11-19T11:36:38.22018944-05:00","level":"WARN","msg":"back to field: portal id=805306369 failed 2 times, dropped","inst":"cl3"}
+{"time":"2026-11-19T11:36:38.221380902-05:00","level":"INFO","msg":"back to field: no portal in the unit table","inst":"cl3"}
+{"time":"2026-11-19T11:36:38.222524327-05:00","level":"INFO","msg":"back to field: fallback=newportal reason=stale portal dropped","inst":"cl3","dropped":1}
+{"time":"2026-11-19T11:36:38.842180207-05:00","level":"WARN","msg":"back to field: new portal failed","inst":"cl3","err":"town: portal did not appear"}
+{"time":"2026-11-19T11:36:38.842197804-05:00","level":"INFO","msg":"back to field: fallback=waypoint reason=no working portal","inst":"cl3","level":5}
+{"time":"2026-11-19T11:36:39.952592295-05:00","level":"INFO","msg":"Entered Dark Wood","inst":"cl3","type":"area_change","goal":"g1","area":"Dark Wood"}
+{"time":"2026-11-19T11:36:40.693731485-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:36:40.725805754-05:00","level":"INFO","msg":"npc: talk","inst":"cl3","npc":"Akara","pick":"bark","class":148,"path":["Talk"]}
+{"time":"2026-11-19T11:36:42.845844791-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":3,"npc":[122,76]}
+{"time":"2026-11-19T11:36:43.246631809-05:00","level":"INFO","msg":"quest board: handed in search_for_cain/read","inst":"cl3","quest":"search_for_cain","chunk":"read","outcome":"confirming","tier":"T3"}
+{"time":"2026-11-19T11:36:43.270547977-05:00","level":"WARN","msg":"d2d: Save and Exit requested (chicken / leave game): the process quits and its socket goes away","inst":"cl3"}
+{"time":"2026-11-19T11:36:44.947976111-05:00","level":"INFO","msg":"quest board: starting chunk search_for_cain/stones","inst":"cl3"}
+{"time":"2026-11-19T11:36:44.948134035-05:00","level":"INFO","msg":"quest board: step Go to Stony Field","inst":"cl3"}
+{"time":"2026-11-19T11:36:46.236018163-05:00","level":"INFO","msg":"Entered Cold Plains","inst":"cl3","type":"area_change","goal":"g1","area":"Cold Plains"}
+{"time":"2026-11-19T11:36:46.599701455-05:00","level":"INFO","msg":"quest board: waiting: context canceled","inst":"cl3"}
+{"time":"2026-11-19T11:36:48.045825375-05:00","level":"INFO","msg":"Entered Stony Field","inst":"cl3","type":"area_change","goal":"g1","area":"Stony Field"}
+{"time":"2026-11-19T11:36:48.047477277-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/to-stony","outcome":"ran","kind":"none","err":null,"attention":""}
+{"time":"2026-11-19T11:36:48.056386962-05:00","level":"INFO","msg":"quest board: step Touch the cairn stones","inst":"cl3"}
+{"time":"2026-11-19T11:37:12.994553619-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:37:13.37628979-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":2,"npc":[123,65]}
+{"time":"2026-11-19T11:37:13.558486811-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"bkd x1, isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:37:13.571003431-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":125,"player_y":63,"attempt":1}
+{"time":"2026-11-19T11:37:13.706589483-05:00","level":"WARN","msg":"back to field: portal click failed","inst":"cl3","err":"d2dctl: portal click did not change the level (still 1)"}
+{"time":"2026-11-19T11:37:13.708891293-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":124,"player_y":64,"attempt":2}
+{"time":"2026-11-19T11:37:13.838705005-05:00","level":"WARN","msg":"back to field: portal click failed","inst":"cl3","err":"d2dctl: portal click did not change the level (still 1)"}
+{"time":"2026-11-19T11:37:13.839936121-05:00","level":"WARN","msg":"back to field: portal id=805306369 failed 2 times, dropped","inst":"cl3"}
+{"time":"2026-11-19T11:37:13.840813545-05:00","level":"INFO","msg":"back to field: no portal in the unit table","inst":"cl3"}
+{"time":"2026-11-19T11:37:13.841648218-05:00","level":"INFO","msg":"back to field: fallback=newportal reason=stale portal dropped","inst":"cl3","dropped":1}
+{"time":"2026-11-19T11:37:13.949837551-05:00","level":"WARN","msg":"back to field: new portal failed","inst":"cl3","err":"town: portal did not appear"}
+{"time":"2026-11-19T11:37:13.949845867-05:00","level":"INFO","msg":"back to field: fallback=waypoint reason=no working portal","inst":"cl3","level":4}
+{"time":"2026-11-19T11:37:14.282650775-05:00","level":"WARN","msg":"back to field: fallback=walk reason=no working portal or waypoint","inst":"cl3","level":4}
+{"time":"2026-11-19T11:37:18.380950906-05:00","level":"INFO","msg":"Entered Blood Moor","inst":"cl3","type":"area_change","goal":"g1","area":"Blood Moor"}
+{"time":"2026-11-19T11:37:18.779830878-05:00","level":"INFO","msg":"quest board: step Go to Stony Field","inst":"cl3"}
+{"time":"2026-11-19T11:37:20.978493848-05:00","level":"INFO","msg":"Entered Cold Plains","inst":"cl3","type":"area_change","goal":"g1","area":"Cold Plains"}
+{"time":"2026-11-19T11:37:23.839104446-05:00","level":"INFO","msg":"Entered Stony Field","inst":"cl3","type":"area_change","goal":"g1","area":"Stony Field"}
+{"time":"2026-11-19T11:37:23.871440625-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/to-stony","outcome":"ran","kind":"none","err":null,"attention":""}
+{"time":"2026-11-19T11:37:23.912762054-05:00","level":"INFO","msg":"quest board: step Touch the cairn stones","inst":"cl3"}
+{"time":"2026-11-19T11:37:28.195392008-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:37:28.681786408-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":3,"npc":[123,66]}
+{"time":"2026-11-19T11:37:28.808798356-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"bkd x1, isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:37:28.827211889-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":125,"player_y":63,"attempt":1}
+{"time":"2026-11-19T11:37:28.985268663-05:00","level":"WARN","msg":"back to field: portal click failed","inst":"cl3","err":"d2dctl: portal click did not change the level (still 1)"}
+{"time":"2026-11-19T11:37:28.986754933-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":124,"player_y":65,"attempt":2}
+{"time":"2026-11-19T11:37:29.130541067-05:00","level":"WARN","msg":"back to field: portal click failed","inst":"cl3","err":"d2dctl: portal click did not change the level (still 1)"}
+{"time":"2026-11-19T11:37:29.131624679-05:00","level":"WARN","msg":"back to field: portal id=805306369 failed 2 times, dropped","inst":"cl3"}
+{"time":"2026-11-19T11:37:29.132442653-05:00","level":"INFO","msg":"back to field: no portal in the unit table","inst":"cl3"}
+{"time":"2026-11-19T11:37:29.133171571-05:00","level":"INFO","msg":"back to field: fallback=newportal reason=stale portal dropped","inst":"cl3","dropped":1}
+{"time":"2026-11-19T11:37:29.254407959-05:00","level":"WARN","msg":"back to field: new portal failed","inst":"cl3","err":"town: portal did not appear"}
+{"time":"2026-11-19T11:37:29.254439072-05:00","level":"INFO","msg":"back to field: fallback=waypoint reason=no working portal","inst":"cl3","level":4}
+{"time":"2026-11-19T11:37:29.676507441-05:00","level":"WARN","msg":"back to field: fallback=walk reason=no working portal or waypoint","inst":"cl3","level":4}
+{"time":"2026-11-19T11:37:30.430192341-05:00","level":"INFO","msg":"Entered Blood Moor","inst":"cl3","type":"area_change","goal":"g1","area":"Blood Moor"}
+{"time":"2026-11-19T11:37:31.364338722-05:00","level":"INFO","msg":"quest board: step Go to Stony Field","inst":"cl3"}
+{"time":"2026-11-19T11:37:34.04919094-05:00","level":"INFO","msg":"Entered Cold Plains","inst":"cl3","type":"area_change","goal":"g1","area":"Cold Plains"}
+{"time":"2026-11-19T11:37:38.077500354-05:00","level":"INFO","msg":"Entered Stony Field","inst":"cl3","type":"area_change","goal":"g1","area":"Stony Field"}
+{"time":"2026-11-19T11:37:38.114765146-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/to-stony","outcome":"ran","kind":"none","err":null,"attention":""}
+{"time":"2026-11-19T11:37:38.157811646-05:00","level":"INFO","msg":"quest board: step Touch the cairn stones","inst":"cl3"}
+{"time":"2026-11-19T11:37:49.535537477-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:37:50.531135968-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":2,"npc":[121,71]}
+{"time":"2026-11-19T11:37:50.721628234-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"bkd x1, isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:37:50.747792634-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":123,"player_y":73,"attempt":1}
+{"time":"2026-11-19T11:37:50.975816932-05:00","level":"INFO","msg":"Entered Stony Field","inst":"cl3","type":"area_change","goal":"g1","area":"Stony Field"}
+{"time":"2026-11-19T11:38:27.973826332-05:00","level":"INFO","msg":"route guard: blocked monastery (2 healing potions < 4); route guard: blocked tower (2 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:38:30.189046788-05:00","level":"INFO","msg":"route guard: blocked monastery (1 healing potions < 4); route guard: blocked tower (1 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:38:32.862282939-05:00","level":"INFO","msg":"route guard: blocked monastery (0 healing potions < 4); route guard: blocked tower (0 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:38:32.865850021-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:38:33.794019665-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":2,"npc":[119,74]}
+{"time":"2026-11-19T11:38:34.055567643-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"bkd x1, isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:38:34.078394736-05:00","level":"INFO","msg":"route guard: blocked monastery (3 healing potions < 4); route guard: blocked tower (3 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:38:34.087889032-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":121,"player_y":76,"attempt":1}
+{"time":"2026-11-19T11:38:34.290138419-05:00","level":"INFO","msg":"Entered Stony Field","inst":"cl3","type":"area_change","goal":"g1","area":"Stony Field"}
+{"time":"2026-11-19T11:39:28.583364119-05:00","level":"INFO","msg":"route guard: blocked monastery (2 healing potions < 4); route guard: blocked tower (2 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:39:35.195111956-05:00","level":"INFO","msg":"route guard: blocked monastery (1 healing potions < 4); route guard: blocked tower (1 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:39:38.834040756-05:00","level":"INFO","msg":"memory quest words","inst":"cl3","normalQuestWords":["den_of_evil=0x0004","search_for_cain=0x0018"]}
+{"time":"2026-11-19T11:39:38.834208744-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/stones","outcome":"ran","kind":"none","err":null,"attention":""}
+{"time":"2026-11-19T11:39:38.844349033-05:00","level":"INFO","msg":"Entered Tristram","inst":"cl3","type":"area_change","goal":"g1","area":"Tristram"}
+{"time":"2026-11-19T11:39:42.446372153-05:00","level":"INFO","msg":"quest board: accepted search_for_cain/free_cain","inst":"cl3","quest":"search_for_cain","chunk":"free_cain"}
+{"time":"2026-11-19T11:39:51.895370978-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:39:52.458496494-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":3,"npc":[123,69]}
+{"time":"2026-11-19T11:39:52.592048398-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:39:52.600852457-05:00","level":"INFO","msg":"route guard: blocked monastery (3 healing potions < 4); route guard: blocked tower (3 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:39:52.604239795-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":122,"player_y":72,"attempt":1}
+{"time":"2026-11-19T11:39:52.702476235-05:00","level":"INFO","msg":"Entered Tristram","inst":"cl3","type":"area_change","goal":"g1","area":"Tristram"}
+{"time":"2026-11-19T11:39:52.722764929-05:00","level":"INFO","msg":"quest board: starting chunk search_for_cain/free_cain","inst":"cl3"}
+{"time":"2026-11-19T11:39:52.724059879-05:00","level":"INFO","msg":"quest board: step Clear the guards and free Cain","inst":"cl3"}
+{"time":"2026-11-19T11:40:04.558372947-05:00","level":"INFO","msg":"quest board: waiting: context canceled","inst":"cl3"}
+{"time":"2026-11-19T11:40:05.833878799-05:00","level":"INFO","msg":"route guard: blocked monastery (2 healing potions < 4); route guard: blocked tower (2 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:40:07.141321863-05:00","level":"INFO","msg":"route guard: blocked monastery (1 healing potions < 4); route guard: blocked tower (1 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:40:07.225005278-05:00","level":"INFO","msg":"route guard: blocked monastery (0 healing potions < 4); route guard: blocked tower (0 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:40:07.227848713-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:40:07.738973616-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":3,"npc":[122,74]}
+{"time":"2026-11-19T11:40:07.965671434-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:40:07.979540044-05:00","level":"INFO","msg":"route guard: blocked monastery (3 healing potions < 4); route guard: blocked tower (3 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:40:07.983176814-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":120,"player_y":77,"attempt":1}
+{"time":"2026-11-19T11:40:08.113892957-05:00","level":"INFO","msg":"Entered Tristram","inst":"cl3","type":"area_change","goal":"g1","area":"Tristram"}
+{"time":"2026-11-19T11:40:15.041397506-05:00","level":"INFO","msg":"route guard: blocked monastery (2 healing potions < 4); route guard: blocked tower (2 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:40:29.345176506-05:00","level":"INFO","msg":"route guard: blocked monastery (1 healing potions < 4); route guard: blocked tower (1 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:40:30.801616371-05:00","level":"INFO","msg":"route guard: blocked monastery (0 healing potions < 4); route guard: blocked tower (0 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:40:30.804293218-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:40:31.072063249-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":3,"npc":[122,74]}
+{"time":"2026-11-19T11:40:31.218179046-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"isc x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:40:31.226725451-05:00","level":"INFO","msg":"route guard: blocked monastery (3 healing potions < 4); route guard: blocked tower (3 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:40:31.231255674-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":120,"player_y":77,"attempt":1}
+{"time":"2026-11-19T11:40:31.34248359-05:00","level":"INFO","msg":"Entered Tristram","inst":"cl3","type":"area_change","goal":"g1","area":"Tristram"}
+{"time":"2026-11-19T11:40:34.590032931-05:00","level":"INFO","msg":"route guard: blocked monastery (2 healing potions < 4); route guard: blocked tower (2 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:40:53.913070905-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/cage","outcome":"retry","kind":"danger","err":"3 hostile units are still near the cage; not opening it","attention":""}
+{"time":"2026-11-19T11:40:53.923020396-05:00","level":"INFO","msg":"quest board: search_for_cain/free_cain: 3 hostile units are still near the cage; not opening it","inst":"cl3"}
+{"time":"2026-11-19T11:40:55.648340437-05:00","level":"INFO","msg":"memory quest words","inst":"cl3","normalQuestWords":["den_of_evil=0x0004","search_for_cain=0x201a"]}
+{"time":"2026-11-19T11:40:55.649103465-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/cage","outcome":"ran","kind":"none","err":null,"attention":""}
+{"time":"2026-11-19T11:40:55.659943898-05:00","level":"INFO","msg":"quest board: step Return to camp","inst":"cl3"}
+{"time":"2026-11-19T11:40:55.719789122-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"quest.search_for_cain/home","outcome":"retry","kind":"none","err":"quest.search_for_cain/home ran but is still needed (evidence 2)","attention":""}
+{"time":"2026-11-19T11:40:55.722571541-05:00","level":"INFO","msg":"quest board: search_for_cain/free_cain: quest.search_for_cain/home ran but is still needed (evidence 2)","inst":"cl3"}
+{"time":"2026-11-19T11:40:55.726232152-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:40:55.953978752-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":3,"npc":[124,72]}
+{"time":"2026-11-19T11:40:55.979773736-05:00","level":"INFO","msg":"memory quest words","inst":"cl3","normalQuestWords":["den_of_evil=0x0004","search_for_cain=0x2019"]}
+{"time":"2026-11-19T11:40:55.979845516-05:00","level":"INFO","msg":"milestone","inst":"cl3","name":"cain","word":"0x2019","clvl":-1,"virtual":"47.4"}
+{"time":"2026-11-19T11:40:55.979972483-05:00","level":"INFO","msg":"Quest done: search_for_cain","inst":"cl3","type":"quest","goal":"g1"}
+{"time":"2026-11-19T11:40:56.115498182-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"isc x1, rin x1, tbk x1","stash":""}
+{"time":"2026-11-19T11:40:56.126457671-05:00","level":"INFO","msg":"route guard: blocked monastery (3 healing potions < 4); route guard: blocked tower (3 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:40:56.875559202-05:00","level":"INFO","msg":"Entered Dark Wood","inst":"cl3","type":"area_change","goal":"g1","area":"Dark Wood"}
+{"time":"2026-11-19T11:41:12.290089382-05:00","level":"INFO","msg":"task step","inst":"cl3","step":"level.33","outcome":"retry","kind":"ui","err":"exit to Black Marsh: nav: timeout: walk did not finish in 2m0s","attention":""}
+{"time":"2026-11-19T11:41:18.955619715-05:00","level":"INFO","msg":"route guard: blocked monastery (2 healing potions < 4); route guard: blocked tower (2 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:41:59.704456532-05:00","level":"INFO","msg":"Entered Rogue Encampment","inst":"cl3","type":"area_change","goal":"g1","area":"Rogue Encampment"}
+{"time":"2026-11-19T11:42:00.626328797-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":154,"try":1,"dist":3,"npc":[25,76]}
+{"time":"2026-11-19T11:42:00.978312171-05:00","level":"INFO","msg":"memory quest words","inst":"cl3","normalQuestWords":["den_of_evil=0x0004","search_for_cain=0x2019","tools_of_the_trade=0x0004"]}
+{"time":"2026-11-19T11:42:00.97844996-05:00","level":"INFO","msg":"Quest progress: tools_of_the_trade","inst":"cl3","type":"quest","goal":"g1"}
+{"time":"2026-11-19T11:42:01.877042958-05:00","level":"INFO","msg":"npc: interact","inst":"cl3","class":148,"try":1,"dist":3,"npc":[122,77]}
+{"time":"2026-11-19T11:42:02.122550833-05:00","level":"INFO","msg":"inventory contents","inst":"cl3","pack":"tbk x1","stash":""}
+{"time":"2026-11-19T11:42:02.140393562-05:00","level":"INFO","msg":"route guard: blocked monastery (3 healing potions < 4); route guard: blocked tower (3 healing potions < 4); imbue quest skipped: optional (class has no use for the imbue)","inst":"cl3"}
+{"time":"2026-11-19T11:42:02.151116023-05:00","level":"INFO","msg":"back to field: portal in town","inst":"cl3","id":805306369,"x":83,"y":128,"player_x":119,"player_y":77,"attempt":1}
+{"time":"2026-11-19T11:42:02.358660549-05:00","level":"INFO","msg":"memory quest words","inst":"cl3","normalQuestWords":["den_of_evil=0x0004","search_for_cain=0x2019","tools_of_the_trade=0x000c"]}
+{"time":"2026-11-19T11:42:02.362182256-05:00","level":"INFO","msg":"Entered Dark Wood","inst":"cl3","type":"area_change","goal":"g1","area":"Dark Wood"}

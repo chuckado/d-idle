@@ -24,9 +24,11 @@ const (
 
 // Quest ids follow docs/archive/goals-catalog.md ("quest.<id>").
 const (
-	QDen       = "den_of_evil"
-	QBurial    = "sisters_burial"
-	QCain      = "search_for_cain"
+	QDen    = "den_of_evil"
+	QBurial = "sisters_burial"
+	QCain   = "search_for_cain"
+	// QCainBoard is the board's own group for the report to Akara (slice S7b); the campaign never lists it.
+	QCainBoard = "search_for_cain_board"
 	QTower     = "forgotten_tower"
 	QTools     = "tools_of_the_trade"
 	QAndariel  = "sisters_to_slaughter"
@@ -42,8 +44,8 @@ const (
 	BossAndy   = "Andariel"
 	ItemMalus  = "Horadric Malus"
 	ItemBark   = "Scroll of Inifuss"
-	ItemCainSc = "Deckard Cain's Scroll"
-	ItemPortal = "Tristram portal" // pseudo item: the red portal is open
+	ItemCainSc = "Key to the Cairn Stones" // code bkd, what Akara hands back after reading the scroll (not Cain's own scroll)
+	ItemPortal = "Tristram portal"         // pseudo item: the red portal is open
 )
 
 // Stage is how far a quest got. Cleared means the objective is met but the reward is not claimed (Den cleared,
@@ -76,6 +78,13 @@ type QuestState struct {
 
 // World is the read-only value one tick decides on (finding F7: the same value goes to Need and Ready of every
 // candidate). The bot's Env assembles it from d2.Snapshot, the quest/waypoint readers and the pack.
+// KitPlan is the supply plan's answer for the guard kit (internal/supply, town-planner section 5.4): the minima the
+// guards compare against, already clamped to what the hero can carry, and the line the plan cannot close.
+type KitPlan struct {
+	Healing, Mana, Portals int
+	Short                  string // "" = the plan closes every min with the gold owned; else "short of gold: needs N more for healing"
+}
+
 type World struct {
 	Act         int
 	Difficulty  string
@@ -86,6 +95,7 @@ type World struct {
 	Gold        int
 	Potions     int // usable healing potions in belt and pack
 	HasTP       bool
+	KitPlan     *KitPlan              // the town planner's view of the guard kit (knob town.plan >= 2); nil = the constants below
 	ManaPotions int                   // mana potions in belt and pack
 	Caster      bool                  // the class lives on mana (Sorceress, Necromancer, Druid); the boss gate checks mana for it
 	WPs         map[Area]bool         // waypoints activated
@@ -108,9 +118,16 @@ type World struct {
 	// potions and no gold. Only towns and SafeArea (the first field, where it farms gold) are open to it; GatedWhy says why.
 	Gated    bool
 	GatedWhy string
+	// GatedFix is "potions" when the only thing that gates the character is a missing potion kit that a town visit with its
+	// gold fixes (knob quests.boardSM): the guard then sends it to town instead of refusing the step.
+	GatedFix string
+	// BoardSM mirrors the knob quests.boardSM: guards then return coded faults (Fault.Code) and holds (Fault.Hold).
+	BoardSM  bool
 	SafeArea Area
 	// Banned: areas the death-spiral breaker keeps the character out of for now (travel, clear and kill steps wait).
 	Banned map[Area]bool
+	// BanNote is the player-facing detail of a ban ("N deaths, until HH:MM"), empty when the bot has none.
+	BanNote map[Area]string
 
 	// Blood Raven kit gate inputs (gate.go brFloor/brShort). BRHigh: the class takes the higher caster floor (Sorceress,
 	// Druid, Amazon; the Necromancer and melee classes do not). BR holds the knobs, zero fields mean the defaults;

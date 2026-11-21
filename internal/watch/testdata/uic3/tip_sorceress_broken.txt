@@ -1,0 +1,15 @@
+div.inv-tip [role=tooltip data-rich=]
+  div.q-normal.tip-name [] "Chipped Plate"
+  div.tip-line [data-k=base] "Durability: 0 of 20 (broken)"
+  div.tip-line [data-k=prop] "Defense: 22"
+  div.tip-where [data-k=where] "In the pack"
+  div.tip-sec [data-ok=y data-who=hero]
+    div.tip-hd [] "You"
+    div.tip-req [data-ok=w] "! it is broken: repair it"
+  div.tip-sec [data-cmp=torso]
+    div.tip-hd [] "Against Quilted Armor (armour)"
+    div.tip-cmp [data-tone=up]
+      span.k [] "Defense"
+      span.v [] "11 → 22"
+      b.d [] "+11"
+  div.tip-hint [] "Right-click: all actions."

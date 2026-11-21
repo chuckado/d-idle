@@ -2,7 +2,8 @@
    style under style-src 'self'), prerequisite arrows in an SVG drawn by skills.js. Tokens only. */
 @layer shell {
   .sk-page { display: grid; gap: var(--d-gap); padding: 0 var(--d-gap) var(--d-gap); grid-template-columns: minmax(0, 1fr); align-items: start; }
-  .sk-trees { display: grid; gap: var(--d-gap); grid-template-columns: minmax(0, 1fr); }
+  /* each board is capped (a tree is read at a glance, not at poster size): beyond the cap the cards sit centred */
+  .sk-trees { max-inline-size: 78rem; margin-inline: auto; inline-size: 100%; display: grid; gap: var(--d-gap); grid-template-columns: minmax(0, 1fr); }
   @media (min-width: 56rem) { .sk-trees { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (min-width: 36rem) and (max-width: 55.99rem) { .sk-trees { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .sk-trees > .d-card { min-inline-size: 0; }
@@ -13,7 +14,7 @@
   .sk-lg { --sk-bg: var(--d-surface-3); display: inline-block; inline-size: .9rem; block-size: .9rem; border: 2px solid var(--sk-edge); border-radius: 2px; margin-inline-end: var(--d-sp-1); vertical-align: -.1em; background: var(--sk-bg); }
   /* The board is 300 by 504 grid units (internal/skilltree TreeW, TreeH) scaled to the card by width alone: tiles are placed
      in percent and the SVG has the same viewBox, so tiles and lines scale together from the first paint. */
-  .sk-board { position: relative; inline-size: 100%; aspect-ratio: 300 / 504; background: var(--d-surface-2); border-radius: var(--d-r-2); container-type: inline-size; }
+  .sk-board { position: relative; inline-size: 100%; max-inline-size: 22rem; margin-inline: auto; aspect-ratio: 300 / 504; background: var(--d-surface-2); border-radius: var(--d-r-2); container-type: inline-size; }
   .sk-arrows { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; z-index: 0; pointer-events: none; overflow: visible; }
   .sk-arrows line { stroke: var(--d-line-strong); stroke-width: 2; vector-effect: non-scaling-stroke; }
   .sk-arrows line[data-have="1"] { stroke: var(--d-accent); }

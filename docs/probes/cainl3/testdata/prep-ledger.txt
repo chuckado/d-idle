@@ -1,0 +1,8 @@
+{"time":"2026-11-19T11:30:45-05:00","verb":"debug stat 12 32","reason":"SETUP: late-start A/B hero, identical for both arms (docs/ab-design.md Variants)"}
+{"time":"2026-11-19T11:30:45-05:00","verb":"debug stat 13 6397855","reason":"SETUP: late-start A/B hero, identical for both arms (docs/ab-design.md Variants)"}
+{"time":"2026-11-19T11:30:45-05:00","verb":"debug statpts 155","reason":"SETUP: late-start A/B hero, identical for both arms (docs/ab-design.md Variants)"}
+{"time":"2026-11-19T11:30:45-05:00","verb":"debug skillpts 31","reason":"SETUP: late-start A/B hero, identical for both arms (docs/ab-design.md Variants)"}
+{"time":"2026-11-19T11:30:45-05:00","verb":"debug stat 14 20000","reason":"SETUP: late-start A/B hero, identical for both arms (docs/ab-design.md Variants)"}
+{"time":"2026-11-19T11:30:45-05:00","verb":"debug stat 15 0","reason":"SETUP: late-start A/B hero, identical for both arms (docs/ab-design.md Variants)"}
+{"time":"2026-11-19T11:30:45-05:00","verb":"debug merc hire 0","reason":"SETUP: late-start A/B hero, identical for both arms (docs/ab-design.md Variants)","reply":"present=1"}
+{"time":"2026-11-19T11:30:45-05:00","verb":"dump stats","reason":"READ-ONLY readback of the SETUP weapon","reply":"weapon sst slot 4 base 1-5; hero hand slot 4 dmg 1-5"}

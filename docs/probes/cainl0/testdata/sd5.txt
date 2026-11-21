@@ -1,0 +1,81 @@
+> debug goto 5
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> debug presets
+0	175	25.9	45.3	0	Loose Boulder
+1	175	25.9	32.7	0	Loose Boulder
+room	19	28	4
+room	17	36	4
+room	17	44	4
+room	17	52	4
+room	17	60	4
+room	22	68	4
+room	19	12	12
+room	17	20	12
+room	23	28	12
+room	41	44	12
+room	41	52	12
+room	41	44	20
+room	41	52	20
+room	30	60	12
+room	7	68	12
+room	19	4	20
+room	23	12	20
+room	48	20	20
+room	43	28	20
+room	49	60	20
+room	14	68	20
+room	10	76	20
+room	25	4	28
+room	7	76	28
+room	16	4	36
+room	40	12	36
+room	40	20	36
+room	40	12	44
+room	40	20	44
+room	15	44	36
+room	4	52	36
+room	12	60	36
+room	7	76	36
+room	16	4	44
+room	15	36	44
+room	11	44	44
+room	9	52	44
+room	13	60	44
+room	7	76	44
+room	16	4	52
+room	14	36	52
+room	10	44	52
+room	8	52	52
+room	12	60	52
+room	7	76	52
+room	18	4	60
+room	12	12	60
+room	14	44	60
+room	6	52	60
+room	13	60	60
+room	7	76	60
+room	8	12	68
+room	12	20	68
+room	29	52	68
+room	161	60	68
+room	7	76	68
+room	8	20	76
+room	4	28	76
+room	4	36	76
+room	4	44	76
+room	4	52	76
+room	4	60	76
+room	4	68	76
+room	11	76	76 err=<nil>
+> debug layout
+4	1000	1000	80	80
+3	920	984	80	80
+2	824	1024	96	56
+1	768	1032	56	40
+17	976	936	40	48
+39	5000	1148	80	80
+26	3000	1000	64	18
+7	3000	1018	80	80
+6	2920	1002	80	80
+5	2840	986	80	80 err=<nil>

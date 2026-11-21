@@ -16,6 +16,9 @@ type Preset struct {
 	ID    int // monster class (NPC), object id (object) or tile number (tile)
 	Pos   Point
 	Room2 uint32
+	Name  string // a monster preset's name when the source gives one (the fork's levelmonsters), else empty
+	// Waypoint marks an object the source itself classified as a waypoint (the fork's levelmap Kind), whatever its class id.
+	Waypoint bool
 }
 
 // RoomTile links a tile number to the Room2 on the other side of a level transition.
@@ -29,6 +32,10 @@ type Exit struct {
 	Dest  int
 	Pos   Point
 	Room2 uint32
+	// Click is where a click takes this warp when the backend says so (d2d: inside LvlWarp's Select box, see
+	// d2dctl.Warp); without HasClick the tile position is clicked, as before.
+	Click    Point
+	HasClick bool
 }
 
 // Adjacent is a neighbouring level seen through a Room2's near-room links.

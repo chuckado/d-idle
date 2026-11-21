@@ -1,0 +1,26 @@
+div.inv-tip [role=tooltip data-rich=]
+  div.q-normal.tip-name [] "Plain Ring"
+  div.tip-where [data-k=where] "In the pack"
+  div.tip-sec [data-ok=y data-who=hero]
+    div.tip-hd [] "You"
+    div.tip-req [data-ok=y] "✓ no requirements"
+  div.tip-sec [data-ok=n data-who=merc]
+    div.tip-hd [] "Desert Guard 14"
+    div.tip-req [data-ok=n] "✗ a Desert Guard wears helm, armor, spear or polearm"
+  div.tip-sec [data-cmp=lring]
+    div.tip-hd [] "Against Raven Grip (left ring)"
+    div.tip-cmp [data-tone=dn]
+      span.k [] "Fire Resist"
+      span.v [] "+8 → -"
+      b.d [] "-8"
+    div.tip-cmp [data-tone=dn]
+      span.k [] "Life"
+      span.v [] "+6 → -"
+      b.d [] "-6"
+  div.tip-sec [data-cmp=rring]
+    div.tip-hd [] "Against Coral Band (right ring)"
+    div.tip-cmp [data-tone=dn]
+      span.k [] "Life"
+      span.v [] "+10 → -"
+      b.d [] "-10"
+  div.tip-hint [] "Right-click: all actions."

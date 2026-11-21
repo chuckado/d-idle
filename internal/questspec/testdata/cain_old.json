@@ -1,0 +1,254 @@
+{
+ "schema": "questspec/2",
+ "id": "search_for_cain_old",
+ "initial": [
+  "quest_available(search_for_cain)"
+ ],
+ "areas": {
+  "rogue_encampment": {
+   "size": "small"
+  },
+  "dark_wood": {
+   "size": "large"
+  },
+  "stony_field": {
+   "size": "medium"
+  }
+ },
+ "steps": [
+  {
+   "id": "to_dark_wood",
+   "act": "travel",
+   "target": {
+    "kind": "area",
+    "name": "dark_wood"
+   },
+   "pre": [
+    "quest_available(search_for_cain)"
+   ],
+   "post": [
+    "visited(dark_wood)"
+   ],
+   "discover": "preset_always",
+   "budget_s": 300,
+   "on_fail": "retry",
+   "tries": 0
+  },
+  {
+   "id": "find_tree",
+   "act": "find_object",
+   "target": {
+    "kind": "object",
+    "name": "Tree of Inifuss"
+   },
+   "pre": [
+    "in_area(dark_wood)"
+   ],
+   "post": [
+    "object_known(tree_of_inifuss)"
+   ],
+   "discover": "preset_when_near",
+   "budget_s": 720,
+   "on_fail": "park",
+   "explore": {
+    "budget_s": 720,
+    "progress": "coverage_grows"
+   },
+   "tries": 0
+  },
+  {
+   "id": "take_scroll",
+   "act": "pickup",
+   "target": {
+    "kind": "item",
+    "name": "Scroll of Inifuss"
+   },
+   "pre": [
+    "in_area(dark_wood)",
+    "object_known(tree_of_inifuss)"
+   ],
+   "post": [
+    "has_item(bks)|has_item(bkd)"
+   ],
+   "discover": "spawned_by(find_tree)",
+   "budget_s": 60,
+   "on_fail": "retry",
+   "tries": 0
+  },
+  {
+   "id": "read_scroll",
+   "act": "talk",
+   "target": {
+    "kind": "npc",
+    "name": "Akara"
+   },
+   "pre": [
+    "in_area(rogue_encampment)",
+    "has_item(bks)"
+   ],
+   "post": [
+    "has_item(bkd)"
+   ],
+   "discover": "preset_always",
+   "budget_s": 300,
+   "on_fail": "retry",
+   "consumes": [
+    "has_item(bks)"
+   ],
+   "tries": 0
+  },
+  {
+   "id": "to_stony_field",
+   "act": "travel",
+   "target": {
+    "kind": "area",
+    "name": "stony_field"
+   },
+   "pre": [
+    "has_item(bkd)"
+   ],
+   "post": [
+    "visited(stony_field)"
+   ],
+   "discover": "preset_always",
+   "budget_s": 300,
+   "on_fail": "retry",
+   "tries": 0
+  },
+  {
+   "id": "find_stones",
+   "act": "find_object",
+   "target": {
+    "kind": "object",
+    "name": "cairn_stone",
+    "class": 17
+   },
+   "pre": [
+    "in_area(stony_field)"
+   ],
+   "post": [
+    "object_known(cairn_stone)"
+   ],
+   "discover": "preset_when_near",
+   "budget_s": 300,
+   "on_fail": "park",
+   "tries": 0
+  },
+  {
+   "id": "stone_1",
+   "act": "interact",
+   "target": {
+    "kind": "object",
+    "name": "cairn_stone",
+    "class": 17
+   },
+   "pre": [
+    "in_area(stony_field)",
+    "has_item(bkd)"
+   ],
+   "post": [
+    "stones_lit(1)"
+   ],
+   "discover": "preset_when_near",
+   "budget_s": 60,
+   "on_fail": "retry",
+   "verbs": [
+    "debug objects"
+   ],
+   "tries": 0
+  },
+  {
+   "id": "stone_2",
+   "act": "interact",
+   "target": {
+    "kind": "object",
+    "name": "cairn_stone",
+    "class": 17
+   },
+   "pre": [
+    "in_area(stony_field)",
+    "stones_lit(1)"
+   ],
+   "post": [
+    "stones_lit(2)"
+   ],
+   "discover": "preset_when_near",
+   "budget_s": 60,
+   "on_fail": "retry",
+   "verbs": [
+    "debug objects"
+   ],
+   "tries": 0
+  },
+  {
+   "id": "stone_3",
+   "act": "interact",
+   "target": {
+    "kind": "object",
+    "name": "cairn_stone",
+    "class": 17
+   },
+   "pre": [
+    "in_area(stony_field)",
+    "stones_lit(2)"
+   ],
+   "post": [
+    "stones_lit(3)"
+   ],
+   "discover": "preset_when_near",
+   "budget_s": 60,
+   "on_fail": "retry",
+   "verbs": [
+    "debug objects"
+   ],
+   "tries": 0
+  },
+  {
+   "id": "stone_4",
+   "act": "interact",
+   "target": {
+    "kind": "object",
+    "name": "cairn_stone",
+    "class": 17
+   },
+   "pre": [
+    "in_area(stony_field)",
+    "stones_lit(3)"
+   ],
+   "post": [
+    "stones_lit(4)"
+   ],
+   "discover": "preset_when_near",
+   "budget_s": 60,
+   "on_fail": "retry",
+   "verbs": [
+    "debug objects"
+   ],
+   "tries": 0
+  },
+  {
+   "id": "stone_5",
+   "act": "interact",
+   "target": {
+    "kind": "object",
+    "name": "cairn_stone",
+    "class": 17
+   },
+   "pre": [
+    "in_area(stony_field)",
+    "stones_lit(4)"
+   ],
+   "post": [
+    "stones_lit(5)",
+    "portal_open(tristram)"
+   ],
+   "discover": "preset_when_near",
+   "budget_s": 60,
+   "on_fail": "retry",
+   "verbs": [
+    "debug objects"
+   ],
+   "tries": 0
+  }
+ ]
+}

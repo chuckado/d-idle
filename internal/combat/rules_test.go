@@ -128,7 +128,7 @@ func TestResistPenaltyAndDanger(t *testing.T) {
 		t.Fatal("penalty")
 	}
 	r := PlayerResists{Fire: 80, Cold: 75, Lightning: 30, Poison: 0}
-	if e := r.Effective(d2.Hell); e.Fire != -25 || e.Cold != -25 || e.Lightning != -70 || e.Poison != -100 {
+	if e := r.Effective(d2.Hell); e.Fire != -20 || e.Cold != -25 || e.Lightning != -70 || e.Poison != -100 {
 		t.Fatalf("%+v", e)
 	}
 	ts := []Target{{Affixes: AffixLightningEnchanted}}
@@ -141,5 +141,31 @@ func TestResistPenaltyAndDanger(t *testing.T) {
 	ok := PlayerResists{Fire: 75, Cold: 75, Lightning: 75}
 	if got := ResistDanger(1, ts, ok, d2.Nightmare); got != 1 {
 		t.Fatalf("%d", got)
+	}
+}
+
+// Table from decomp37 B1 / Q5 (V read + V run): the penalty comes before the cap, the max-resist bonus raises the
+// cap, the floor is -100 and the percent absorb comes last (capped at 40). Two difficulties; want is
+// {fire, cold, lightning, poison}.
+func TestEffectiveGameOrder(t *testing.T) {
+	cases := []struct {
+		name string
+		r    PlayerResists
+		d    d2.Difficulty
+		want [4]int
+	}{
+		{"nightmare raw 90", PlayerResists{Fire: 90, Poison: 90}, d2.Nightmare, [4]int{50, -40, -40, 50}},
+		{"hell raw 120", PlayerResists{Fire: 120, Poison: 120}, d2.Hell, [4]int{20, -100, -100, 20}},
+		{"hell raw 190 max +20", PlayerResists{Fire: 190, Poison: 190, Max: d2.Resists{Fire: 20}}, d2.Hell, [4]int{90, -100, -100, 75}},
+		{"hell floor", PlayerResists{Fire: -50}, d2.Hell, [4]int{-100, -100, -100, -100}},
+		{"normal absorb 20 on res 50", PlayerResists{Fire: 50, AbsorbPct: d2.Resists{Fire: 20}}, d2.Normal, [4]int{60, 0, 0, 0}},
+		{"absorb 60 is 40", PlayerResists{AbsorbPct: d2.Resists{Cold: 60}}, d2.Normal, [4]int{0, 40, 0, 0}},
+		{"no absorb, no change", PlayerResists{Fire: 40}, d2.Normal, [4]int{40, 0, 0, 0}},
+	}
+	for _, c := range cases {
+		g := c.r.Effective(c.d)
+		if got := [4]int{g.Fire, g.Cold, g.Lightning, g.Poison}; got != c.want {
+			t.Errorf("%s: got %v want %v", c.name, got, c.want)
+		}
 	}
 }

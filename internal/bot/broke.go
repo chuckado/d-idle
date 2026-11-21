@@ -133,6 +133,21 @@ func (r *Runner) recoveryActive() bool { return r.loop.broke.on }
 // recoveryArea is the farm area of a recovering character: the plan area of a character PovertyLevels lower, restricted
 // to the safe tier in Normal act 1. Without a town portal only the first field qualifies (the walk home works there).
 func (r *Runner) recoveryArea(s *d2.Snapshot) (int, bool) {
+	a, ok := r.recoveryAreaBase(s, nil)
+	if !ok || r.zoneBurned(a) == "" {
+		return a, ok
+	}
+	// The zone just cost the hero something: the model chooses between it and the next area the recovery rules allow.
+	note := r.loop.broke.areaNote
+	alt, altOK := r.recoveryAreaBase(s, map[int]bool{a: true})
+	r.loop.broke.areaNote = note
+	if !altOK {
+		return a, ok
+	}
+	return r.zoneRecover(s, a, []int{a, alt}, "recovery"), true
+}
+
+func (r *Runner) recoveryAreaBase(s *d2.Snapshot, ban map[int]bool) (int, bool) {
 	diff := difficultyName(s.Player.Difficulty)
 	gate := r.kitGateActive(s)
 	if !r.resInput(s).HasTP {
@@ -146,6 +161,9 @@ func (r *Runner) recoveryArea(s *d2.Snapshot) (int, bool) {
 		ex[a] = true
 	}
 	for a := range r.avoidedNow() {
+		ex[a] = true
+	}
+	for a := range ban {
 		ex[a] = true
 	}
 	r.guardedAreas(s, ex)

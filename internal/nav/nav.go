@@ -104,6 +104,8 @@ type Navigator struct {
 	mouthFails  map[mouthKey]mouthFail
 	mouthLast   mouthKey
 	mouthLastOK bool
+	goal        input.Point // fixed goal of the GoTo in progress (goalSet): the mouth gate treats exits around it as pockets
+	goalSet     bool
 	wantExit    int // level whose exit tiles ExitTo is deliberately walking onto (0: none)
 	wpLevel     int // level of the last observation and when it was first seen: the waypoint cooldown (waypoint.go)
 	wpSince     time.Time
@@ -198,6 +200,25 @@ func (n *Navigator) UseWorld(w interface {
 	Level(no int) *d2map.LevelMap
 }) {
 	n.w = w
+}
+
+// CurrentMap is the level map the navigator walks on (nil before the first observation). On the d2d backend this is
+// the only map: Env.World is nil there.
+func (n *Navigator) CurrentMap() *d2map.LevelMap {
+	if n.w == nil {
+		return nil
+	}
+	return n.w.Current()
+}
+
+// RefreshMap observes the level once more (on the d2d backend this is the fetch that lists presets and, with the layout
+// read, the monster presets) and returns the map. Nil before the first observation or without a world.
+func (n *Navigator) RefreshMap() *d2map.LevelMap {
+	if n.w == nil {
+		return nil
+	}
+	_, _ = n.w.Update()
+	return n.w.Current()
 }
 
 func (n *Navigator) defaults() {
@@ -475,7 +496,7 @@ func emptyPathErr() error {
 // GoTo walks to p on the current level.
 func (n *Navigator) GoTo(ctx context.Context, p input.Point) error {
 	t := n.tune()
-	return n.walk(ctx, func(*obs) (input.Point, float64, error) { return p, t.ArriveTolerance, nil }, walkOpts{escape: true, fastPoll: true})
+	return n.walk(ctx, func(*obs) (input.Point, float64, error) { return p, t.ArriveTolerance, nil }, walkOpts{escape: true, fastPoll: true, goal: &p})
 }
 
 // unitTolerance is how close GoToUnit gets: inside interact range of NPCs and objects.

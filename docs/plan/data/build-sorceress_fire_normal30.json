@@ -1,0 +1,393 @@
+{
+ "build": "sorceress_fire_normal30",
+ "class": "sorceress",
+ "combat": "fire",
+ "selector": "sorceress_fire_normal30",
+ "tier": "experimental",
+ "schema": "per-clvl allocation applied on level-up (clvl = new level). skills: skill points spent that level. Quest points (see quest_points) are spent immediately on top; unspent quest points follow 'quest_point_policy'.",
+ "respec": null,
+ "note": "SORC2 (Fable roadmap Q8, user decision 2026-11-19): the second Sorceress build, fire line S1 of docs/design/fable-review-2026-11-19/03-classes-plan.md section 3.2 (Fire Bolt then Fire Ball, Fire Mastery, Teleport at 18). Guide-track provenance [S: SoloPlay and Koolo level Fire Bolt then Fire Ball, docs/design/fable-review-2026-11-19/03-classes-plan.md section 3.2; rows 2..30 are this repo's own arrangement, U]. Uses only skills the capability table marks supported (Fire Bolt, Frozen Armor, Warmth, Fire Mastery) or experimental (Fire Ball, Teleport); Telekinesis is a prerequisite point only and is never cast. Tier experimental until Fire Ball has a live verdict: Fire Ball is aimable but in no profile band before this table (profile sorceress/fire adds one), and Teleport hops are not planned by the walker (docs/capabilities.md). Stats copy sorceress_normal30 (5 Vitality per level, Strength at 25/26/30; U whether some Energy is better without Insight). Rows are a priority list (legality checked by buildfile.CheckTable). Opt-in by name (levelerBuild sorceress_fire_normal30); the default of a fresh Sorceress stays sorceress_normal30.",
+ "rows": [
+  {
+   "clvl": 2,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Bolt",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 3,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Bolt",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 4,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Bolt",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 5,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Bolt",
+     "points": 1
+    },
+    {
+     "skill": "Frozen Armor",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 6,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Warmth",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 7,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Bolt",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 8,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Bolt",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 9,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Bolt",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 10,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Bolt",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 11,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Bolt",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 12,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 13,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Telekinesis",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 14,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 15,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 16,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 17,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 18,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Teleport",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 19,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 20,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 21,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 22,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 23,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 24,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 25,
+   "strength": 5,
+   "dexterity": 0,
+   "vitality": 0,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 26,
+   "strength": 3,
+   "dexterity": 0,
+   "vitality": 2,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 27,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 28,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 29,
+   "strength": 0,
+   "dexterity": 0,
+   "vitality": 5,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Ball",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 30,
+   "strength": 5,
+   "dexterity": 0,
+   "vitality": 0,
+   "energy": 0,
+   "skills": [
+    {
+     "skill": "Fire Mastery",
+     "points": 1
+    }
+   ]
+  }
+ ]
+}
