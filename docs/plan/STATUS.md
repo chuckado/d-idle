@@ -413,6 +413,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 07712c446 11-21 02:23 `Merge agent/druid1: Merge branch 'main' into druid1` (druid1)
+- 0db4e11df 11-21 02:22 `Merge branch 'main' into druid1` (-)
 - b66c4d189 11-21 02:16 `Merge agent/countess3b: Merge branch 'main' into countess3b` (countess3b)
 - b78539912 11-21 02:15 `Merge branch 'main' into countess3b` (-)
 - 15543d7d7 11-21 02:03 `Merge agent/bsm4: agent/bsm4 quest board state machine card` (bsm4)
@@ -421,6 +423,4 @@
 - 2e5f6968d 11-21 01:35 `Merge branch 'main' into TASK-750` (-)
 - 04538c3c9 11-21 01:30 `Merge agent/townprobe: town planner stage 1 and 2 record (docs only)` (townprobe)
 - b4c549016 11-21 01:29 `Merge branch 'main' into townprobe` (-)
-- 8089cfba8 11-21 01:24 `Merge agent/bsm1: bsm1: quest board SM scenarios and assert kinds` (bsm1)
-- 6a0957473 11-21 01:23 `Merge branch 'main' into TASK-717` (-)
 <!-- statusgen:end -->
