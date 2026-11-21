@@ -286,6 +286,7 @@ func (r Resolver) invID(expr string, list func(map[string]json.RawMessage) ([]js
 	}
 	seen := 0
 	var codes []string
+	var first string
 	for _, raw := range items {
 		var it struct {
 			ID   float64 `json:"id"`
@@ -295,6 +296,12 @@ func (r Resolver) invID(expr string, list func(map[string]json.RawMessage) ([]js
 			continue
 		}
 		codes = append(codes, it.Code)
+		if first == "" {
+			first = string(raw)
+			if len(first) > 300 {
+				first = first[:300]
+			}
+		}
 		if code != "" && it.Code != code {
 			continue
 		}
@@ -303,7 +310,7 @@ func (r Resolver) invID(expr string, list func(map[string]json.RawMessage) ([]js
 		}
 		seen++
 	}
-	return nil, fmt.Errorf("template {{%s}}: no such item in the inventory (it lists %v; keys %s)", expr, codes, invKeys(inv))
+	return nil, fmt.Errorf("template {{%s}}: no such item in the inventory (it lists %v; first %s; keys %s)", expr, codes, first, invKeys(inv))
 }
 
 // ---- reading JSON replies ----
