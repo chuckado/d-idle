@@ -186,3 +186,21 @@ func TestItemInPackMax(t *testing.T) {
 		t.Errorf("0 scrolls failed max 2")
 	}
 }
+
+// belt_at_least counts one potion family in the belt alone: a pack potion does not count (town planner scenarios).
+func TestBeltAtLeast(t *testing.T) {
+	st := State{Has: []string{"items"}, Items: []StateItem{{Code: "hp1", Where: "belt"}, {Code: "hp2", Where: "belt"}, {Code: "hp1", Where: "pack"}, {Code: "mp1", Where: "belt"}}}
+	for _, c := range []struct {
+		code string
+		min  int
+		ok   bool
+	}{{"hp", 2, true}, {"hp", 3, false}, {"mp", 1, true}, {"rv", 1, false}} {
+		r := Evaluate([]Assert{{Kind: ABeltAtLeast, Code: c.code, Min: c.min}}, st)
+		if r[0].OK != c.ok {
+			t.Errorf("%s >= %d: %+v", c.code, c.min, r[0])
+		}
+	}
+	if err := (Assert{Kind: ABeltAtLeast, Code: "hp"}).Validate(); err == nil {
+		t.Error("min is required")
+	}
+}
