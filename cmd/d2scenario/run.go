@@ -285,7 +285,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 		_ = prep.Stop()
 		return blocked("setup: %v", err)
 	}
-	seeded, err := applySeeds(ctx, c, su, ledger, data, gamedata, hero)
+	seeded, err := applySeeds(ctx, c, su, ledger, data, gameChain(data, gamedata), hero)
 	if err != nil {
 		_ = prep.Stop()
 		return blocked("seeding: %v", err)

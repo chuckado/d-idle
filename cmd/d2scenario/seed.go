@@ -26,8 +26,35 @@ type seedOut struct {
 	Seq      int64
 }
 
-// itemIDs lists the unit ids of the carried items (`item full`, vault verbs on).
-func carriedIDs(ctx context.Context, c *d2dctl.Client) (map[int]bool, []d2dctl.VaultRecord, error) {
+// seedGame is the part of the d2d control client the seeding uses (a test double stands in for it).
+type seedGame interface {
+	Do(ctx context.Context, line string) (*d2dctl.Reply, error)
+	Step(ctx context.Context, n int) (d2dctl.ClockInfo, error)
+	Items(ctx context.Context) ([]d2dctl.Item, *d2dctl.Reply, error)
+	ItemFull(ctx context.Context, id int) ([]d2dctl.VaultRecord, error)
+}
+
+// chainFunc gives the item type chain and display name of a base code (the vault record fields the bot's recorder fills).
+type chainFunc func(code string) (chain []string, name string)
+
+// gameChain opens the item tables of the game install, cached under the bot's data dir like the bot does.
+func gameChain(dataDir, gameData string) func() (chainFunc, error) {
+	return func() (chainFunc, error) {
+		db, err := data.Open(gameData, filepath.Join(dataDir, "cache", "tables"))
+		if err != nil {
+			return nil, fmt.Errorf("item tables for the type chain: %w", err)
+		}
+		return func(code string) ([]string, string) {
+			if b := db.ItemByCode(code); b != nil {
+				return merc.TypeChain(db, b.Type), b.Display
+			}
+			return nil, ""
+		}, nil
+	}
+}
+
+// carriedIDs lists the unit ids of the carried items (`item full`, vault verbs on).
+func carriedIDs(ctx context.Context, c seedGame) (map[int]bool, []d2dctl.VaultRecord, error) {
 	recs, err := c.ItemFull(ctx, -1)
 	if err != nil {
 		return nil, nil, err
@@ -40,7 +67,7 @@ func carriedIDs(ctx context.Context, c *d2dctl.Client) (map[int]bool, []d2dctl.V
 }
 
 // packIDs lists the unit ids `items` reports (works without the vault verbs).
-func packIDs(ctx context.Context, c *d2dctl.Client) (map[int]d2dctl.Item, error) {
+func packIDs(ctx context.Context, c seedGame) (map[int]d2dctl.Item, error) {
 	items, _, err := c.Items(ctx)
 	if err != nil {
 		return nil, err
@@ -57,7 +84,7 @@ func packIDs(ctx context.Context, c *d2dctl.Client) (map[int]d2dctl.Item, error)
 // applySeeds does the ordered seeding of su.Seeds on the prep d2d: every give and equip is a ledgered SETUP verb; a vault
 // record is read with `item full`, taken off the hero with `item vault` and added to the hero's vault store under
 // data/vaults, exactly as the bot's own recorder does. It returns the record ids in seed order.
-func applySeeds(ctx context.Context, c *d2dctl.Client, su scenario.Setup, ledger, dataDir, gameData, hero string) (seedOut, error) {
+func applySeeds(ctx context.Context, c seedGame, su scenario.Setup, ledger, dataDir string, chainOf func() (chainFunc, error), hero string) (seedOut, error) {
 	var out seedOut
 	if len(su.Seeds) == 0 {
 		return out, nil
@@ -82,7 +109,7 @@ func applySeeds(ctx context.Context, c *d2dctl.Client, su scenario.Setup, ledger
 		return err
 	}
 	var st *vault.Store
-	var chain func(string) ([]string, string)
+	var chain chainFunc
 	for _, sd := range su.Seeds {
 		switch sd.Kind {
 		case scenario.SeedWorn:
@@ -117,15 +144,8 @@ func applySeeds(ctx context.Context, c *d2dctl.Client, su scenario.Setup, ledger
 					return out, err
 				}
 				defer st.Close() // a second Close after the explicit one is harmless
-				db, err := data.Open(gameData, filepath.Join(dataDir, "cache", "tables"))
-				if err != nil {
-					return out, fmt.Errorf("item tables for the type chain: %w", err)
-				}
-				chain = func(code string) ([]string, string) {
-					if b := db.ItemByCode(code); b != nil {
-						return merc.TypeChain(db, b.Type), b.Display
-					}
-					return nil, ""
+				if chain, err = chainOf(); err != nil {
+					return out, err
 				}
 			}
 			id, err := seedRecord(ctx, c, st, do, sd, chain)
@@ -183,7 +203,7 @@ const fillerRetries = 4
 
 // seedRecord gives one item, reads it, takes it off the hero and adds it to the vault. A filler that duplicates a record
 // already there is replaced (a magic item rolls other affixes); a named record never is: that is an error.
-func seedRecord(ctx context.Context, c *d2dctl.Client, st *vault.Store, do func(line, reason string) error, sd scenario.Seed, chain func(string) ([]string, string)) (string, error) {
+func seedRecord(ctx context.Context, c seedGame, st *vault.Store, do func(line, reason string) error, sd scenario.Seed, chain chainFunc) (string, error) {
 	give := sd.Give
 	for try := 0; ; try++ {
 		before, _, err := carriedIDs(ctx, c)
