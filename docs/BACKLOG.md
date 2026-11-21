@@ -1155,6 +1155,8 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/cmb2: dlv-rotation: Rotation type, Profile.Rotation adapter, Fighter reads slots, golden parity (merged 2026-11-21) <!--sg:agent/cmb2-->
 - agent/cmb3: dlv-expect: cast expectation ledger, knob combat.deliveryExpect, tests (merged 2026-11-21) <!--sg:agent/cmb3-->
 - agent/pggroup1: pggroup1 (rebased): Proving Ground gate group 1 (merged 2026-11-21) <!--sg:agent/pggroup1-->
+- devp16: sandbox image devp16 loaded (not switched) (TASK-773, merged 2026-11-21, acceptance 3 of 3): Image d2dbot:devp16 (id aef42872025d, code tip 54051ca0 = level-objects d904d735 + tests-only fix merge) built and loaded on the worker host; all listed tests rc 0 except smoke_d2d at the known line 512 (pre-existing since devp13). ... <!--sg:agent/devp16-->
+- agent/cmbdoc: combat foundation record doc (merged 2026-11-21) <!--sg:agent/cmbdoc-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
