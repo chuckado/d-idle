@@ -672,6 +672,7 @@ func (w *World) mergeMonsterPresets(ctx context.Context, l *lvl, sub func(x, y f
 	if err != nil || doc == nil || doc.Level != l.own.Level {
 		return
 	}
+	w.mergeObjectPresets(l, doc.ObjPresets, sub)
 	for _, p := range doc.Presets {
 		if p.Kind != "superunique" {
 			continue
@@ -687,6 +688,33 @@ func (w *World) mergeMonsterPresets(ctx context.Context, l *lvl, sub func(x, y f
 		if !known {
 			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetNPC, ID: p.ID, Pos: at, Name: p.Name})
 			l.names = append(l.names, p.Name)
+		}
+	}
+}
+
+// maxObjectClass is the last objects.txt Id the fork's objpresets names; above it a preset is a random shrine or chest.
+const maxObjectClass = 573
+
+// mergeObjectPresets adds the level's object presets of rooms not built yet ("debug levelmonsters" objpresets, the DS1
+// data of ALL rooms: a waypoint, the Tree, the Stones, the cage) as object presets, so the nav walks straight there
+// instead of exploring until the room is built. An object the level already lists (same class within layoutNear) is
+// not doubled; a random shrine or chest (class above objects.txt) is skipped.
+func (w *World) mergeObjectPresets(l *lvl, objs []d2dctl.ObjectPreset, sub func(x, y float64) d2map.Point) {
+	for _, o := range objs {
+		if o.Class <= 0 || o.Class > maxObjectClass {
+			continue
+		}
+		at := sub(o.X, o.Y)
+		known := false
+		for _, p := range l.m.Presets {
+			if p.Kind == d2map.PresetObject && p.ID == o.Class && at.X-p.Pos.X <= layoutNear && p.Pos.X-at.X <= layoutNear && at.Y-p.Pos.Y <= layoutNear && p.Pos.Y-at.Y <= layoutNear {
+				known = true
+				break
+			}
+		}
+		if !known {
+			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: o.Class, Pos: at, Waypoint: o.Kind == "waypoint"})
+			l.names = append(l.names, o.Name)
 		}
 	}
 }
