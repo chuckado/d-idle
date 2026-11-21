@@ -320,6 +320,7 @@ cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2dview  credit-runner  videofeed2
 cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
+cmd/d2scenario  credit-runner  boardorder
 cmd/d2scenario/  credit-runner  pgexpand
 cmd/d2scenario/main_test.go  credit-runner  agencyp0
 cmd/d2scenario/run.go  credit-runner  agencyp0
@@ -354,6 +355,7 @@ docs/actbot.md  credit-runner  cain45
 docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md  credit-runner  adrfable
 docs/adr/0020-proving-ground-and-stat-skill-agency.md  credit-runner  adrfable
 docs/adr/README.md  credit-runner  adrfable
+docs/agency.md  credit-runner  hammer1
 docs/agency.md  credit-runner  necro1
 docs/aggression.md  credit-runner  wiring2
 docs/archive  credit-runner  dietarchive
@@ -473,6 +475,7 @@ docs/plan/data  credit-runner  agencyp0
 docs/plan/data/build-fallback-lightning-v2.json  credit-runner  sorc2
 docs/plan/data/build-fallback-lightning.json  credit-runner  sorc2
 docs/plan/data/build-necromancer_summoner_guide.json  credit-runner  necro1
+docs/plan/data/build-paladin_hammerdin_guide.json  credit-runner  hammer1
 docs/plan/data/build-primary-blizzard.json  credit-runner  sorc2
 docs/plan/data/build-sorceress_fire_normal30.json  credit-runner  sorc2
 docs/plan/data/dropmodel-normal.json  credit-runner  decomp31
@@ -521,6 +524,7 @@ docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
 docs/process/fork-rebase.md  credit-runner  forkrebase2
+docs/process/hammerdin-support.md  credit-runner  hammer1
 docs/process/layout-read.md  live-agent  k1layout
 docs/process/necromancer-support.md  credit-runner  necro1
 docs/process/points-verbs-devp14.md  credit-runner  agencyp0
@@ -696,8 +700,11 @@ docs/video-feed.md  credit-runner  videofeed4
 docs/wiring.md  credit-runner  wiring2
 internal/agency/buildrules_test.go  credit-runner  necro1
 internal/agency/buildrules_test.go  credit-runner  sorc2
+internal/agency/hammerdin_test.go  credit-runner  hammer1
 internal/agency/necrosummoner_test.go  credit-runner  necro1
+internal/agency/planner_test.go  credit-runner  hammer1
 internal/agency/planner_test.go  credit-runner  necro1
+internal/agency/testdata/agreement.json  credit-runner  hammer1
 internal/agency/testdata/agreement.json  credit-runner  necro1
 internal/art/  credit-runner  itemcolour2
 internal/art/skillicons.go  credit-runner  skilltrees
@@ -872,12 +879,14 @@ internal/bot/zoneshadow.go  credit-runner  survfix2
 internal/bot/zoneshadow.go  credit-runner  survreask
 internal/bot/zoneshadow.go  credit-runner  survrecover
 internal/bot/zoneshadow_test.go  credit-runner  survC
+internal/buildfile/hammerdin_test.go  credit-runner  hammer1
 internal/buildfile/necrosummoner_test.go  credit-runner  necro1
 internal/buildfile/plans_test.go  credit-runner  sorc2
 internal/buildfile/tablecheck.go  credit-runner  sorc2
 internal/buildfile/tablecheck_test.go  credit-runner  necro1
 internal/buildfile/tablecheck_test.go  credit-runner  sorc2
 internal/buildfile/testdata/necromancer-summoner-guide.json  credit-runner  necro1
+internal/buildfile/testdata/paladin-hammerdin-guide.json  credit-runner  hammer1
 internal/bulkid  credit-runner  bulkid
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
@@ -891,6 +900,7 @@ internal/combat/  credit-runner  cainfix3
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/castfirst.go  credit-runner  survfix2
 internal/combat/classdata  credit-runner  palprofile2
+internal/combat/classdata/profiles.json  credit-runner  hammer1
 internal/combat/classdata/profiles.json  credit-runner  necro1
 internal/combat/classdata/profiles.json  credit-runner  sorc2
 internal/combat/dodge.go  credit-runner  survfix2
@@ -910,6 +920,7 @@ internal/combat/lifeprice.go  credit-runner  palprofile2
 internal/combat/packdrink.go  credit-runner  beltfix
 internal/combat/packdrink_test.go  credit-runner  beltfix
 internal/combat/playable.go  credit-runner  agencyp0
+internal/combat/profileid_test.go  credit-runner  hammer1
 internal/combat/profileid_test.go  credit-runner  necro1
 internal/combat/profileid_test.go  credit-runner  sorc2
 internal/combat/reach.go  credit-runner  maphistoryC
@@ -1042,6 +1053,7 @@ internal/invdesk/usable_test.go  credit-runner  charreq
 internal/invdesk/verbs.go  credit-runner  q13input
 internal/itemreq/  credit-runner  charreq
 internal/leveler/build.go  credit-runner  agencyp0
+internal/leveler/hammerdin_test.go  credit-runner  hammer1
 internal/leveler/itemreasons.go  credit-runner  charreq
 internal/leveler/judge.go  credit-runner  charreq
 internal/leveler/judge_test.go  credit-runner  charreq
@@ -1120,6 +1132,7 @@ internal/plandata/boss_levels_test.go  pro-runner  levelplan3
 internal/plandata/build-fallback-lightning-v2.json  credit-runner  sorc2
 internal/plandata/build-fallback-lightning.json  credit-runner  sorc2
 internal/plandata/build-necromancer_summoner_guide.json  credit-runner  necro1
+internal/plandata/build-paladin_hammerdin_guide.json  credit-runner  hammer1
 internal/plandata/build-primary-blizzard.json  credit-runner  sorc2
 internal/plandata/build-sorceress_fire_normal30.json  credit-runner  sorc2
 internal/plandata/dropmodel-normal.json  credit-runner  decomp31
@@ -1138,6 +1151,7 @@ internal/power/profiles.json  credit-runner  agencyp0
 internal/power/skilldamage_test.go  credit-runner  agencyp0
 internal/quest/act1.go  credit-runner  cainfix
 internal/quest/dialog.go  credit-runner  cain5b
+internal/questboard  credit-runner  boardorder
 internal/questboard  credit-runner  cainfix
 internal/questboard  credit-runner  quests1
 internal/questboard  credit-runner  quests10
@@ -1165,6 +1179,7 @@ internal/resource/swing_test.go  credit-runner  swingmodel
 internal/resource/tuning.go  credit-runner  agencyp0
 internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
+internal/scenario  credit-runner  boardorder
 internal/scenario/  credit-runner  pgexpand
 internal/scenario/scenario_test.go  credit-runner  agencyp0
 internal/scenario/state.go  credit-runner  agencyp0
@@ -1613,6 +1628,7 @@ internal/watch/web/panels/orders/panel.css  credit-runner  morefit
 internal/watch/web/panels/orders/panel.js  credit-runner  pausefix
 internal/watch/web/panels/orders/panel.js  credit-runner  vaultv4
 internal/watch/web/panels/progress/  credit-runner  uis3
+internal/watch/web/panels/quest-board  credit-runner  boardorder
 internal/watch/web/panels/quest-board  credit-runner  quests10
 internal/watch/web/panels/quest-board  credit-runner  quests8
 internal/watch/web/panels/quest-list  credit-runner  quests8
@@ -1768,8 +1784,10 @@ tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
 tools/provingground/  credit-runner  pgexpand
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
+tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
+tools/provingground/scenarios/points.json  credit-runner  hammer1
 tools/provingground/scenarios/points.json  credit-runner  necro1
 tools/provingground/scenarios/points.json  credit-runner  sorc2
 tools/survival  credit-runner  survhold2

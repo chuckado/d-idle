@@ -95,3 +95,43 @@ func TestNecromancerSummonerProfile(t *testing.T) {
 		}
 	}
 }
+
+// hammer1: the Paladin Hammerdin line is a second profile selected by name; the class default stays the Zeal and
+// Sacrifice line, and an unknown Paladin profile (or another class asking for "hammerdin") is an error that names it.
+func TestPaladinHammerdinProfile(t *testing.T) {
+	def, err := LookupProfile(d2.Paladin, "")
+	if err != nil || def.Build != "" || def.Bands[1].Attack[0] != "Zeal" {
+		t.Fatalf("paladin default changed: %v %+v", err, def)
+	}
+	hd, err := LookupProfile(d2.Paladin, "hammerdin")
+	if err != nil || hd.ProfileID() != "paladin/hammerdin" {
+		t.Fatalf("hammerdin profile: %v %+v", err, hd)
+	}
+	if hd.Bands[0].Attack[0] != "Blessed Hammer" {
+		t.Errorf("hammerdin does not lead with Blessed Hammer: %v", hd.Bands[0].Attack)
+	}
+	for _, n := range []string{"Blessed Hammer", "Holy Shield", "Concentration", "Vigor"} {
+		if _, ok := hd.Layout[n]; !ok {
+			t.Errorf("hammerdin layout has no key for %s: %v", n, hd.Layout)
+		}
+	}
+	// never a Zeal or Sacrifice attack, and no life price
+	for _, b := range hd.Bands {
+		for _, a := range b.Attack {
+			if a == "Zeal" || a == "Sacrifice" {
+				t.Errorf("hammerdin band attacks with %s", a)
+			}
+		}
+	}
+	if len(hd.LifePrice) != 0 {
+		t.Errorf("hammerdin pays life for %v", hd.LifePrice)
+	}
+	for _, c := range []struct {
+		class d2.Class
+		id    Build
+	}{{d2.Paladin, "zealot"}, {d2.Necromancer, "hammerdin"}, {d2.Sorceress, "hammerdin"}, {d2.Class(42), "hammerdin"}} {
+		if p, err := LookupProfile(c.class, c.id); err == nil || p != nil {
+			t.Errorf("%v %q: got %v, want an error", c.class, c.id, p)
+		}
+	}
+}

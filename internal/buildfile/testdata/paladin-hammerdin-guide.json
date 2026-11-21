@@ -1,0 +1,121 @@
+{
+  "schema": "didle.build/1",
+  "name": "paladin_hammerdin_guide",
+  "class": "paladin",
+  "author": "hammer1",
+  "source": "docs/design/fable-review-2026-11-19/03-classes-plan.md section 3.3 P2 Hammerdin and its guide-track bullet (SoloPlay and Koolo Paladin tracks, V helper A there); the shipped paladin_hammerdin_endgame90 table's schema text (V skills.txt prerequisites); buildfile/testdata/paladin-hammerdin.json",
+  "notes": "No respec. Smite and Might carry clvl 2 to 17 (the one-hand weapon and shield the Paladin starts with); Holy Bolt 1 is the Blessed Hammer prerequisite and waits for clvl 6; every point from clvl 18 goes into Blessed Hammer with Concentration (its only synergy, V skills.txt) rising beside it, Holy Shield 1 at 24 (Charge and Blessed Hammer prerequisites), then Vigor (Cleansing, Prayer, Defiance prerequisite points) and Concentration to 20. The community track respecs at 19 and plays Holy Fire to 24 (03 section 3.3); that needs a respec, so it is not this file. Stats: Str 60 for gear, Dex 70 at 2 per level for block with Holy Shield, rest Vitality, no Energy (U numbers, same as the endgame table's tags).",
+  "skills": [
+    {
+      "skill": "Might",
+      "to": 1
+    },
+    {
+      "skill": "Smite",
+      "to": 6
+    },
+    {
+      "skill": "Holy Bolt",
+      "to": 1
+    },
+    {
+      "skill": "Blessed Hammer",
+      "to": 8,
+      "when": {
+        "clvl": 18
+      }
+    },
+    {
+      "skill": "Concentration",
+      "to": 4,
+      "when": {
+        "clvl": 18
+      }
+    },
+    {
+      "skill": "Blessed Hammer",
+      "to": 14
+    },
+    {
+      "skill": "Holy Shield",
+      "to": 1,
+      "when": {
+        "clvl": 24
+      }
+    },
+    {
+      "skill": "Concentration",
+      "to": 8
+    },
+    {
+      "skill": "Blessed Hammer",
+      "to": 20
+    },
+    {
+      "skill": "Vigor",
+      "to": 5
+    },
+    {
+      "skill": "Concentration",
+      "to": 20
+    },
+    {
+      "skill": "Vigor",
+      "to": 20
+    }
+  ],
+  "stats": [
+    {
+      "stat": "str",
+      "to": 60,
+      "per": 3
+    },
+    {
+      "stat": "dex",
+      "to": 70,
+      "per": 2
+    },
+    {
+      "stat": "vit",
+      "to": "rest"
+    }
+  ],
+  "quest_points": [
+    {
+      "clvl": 8,
+      "skill": 1
+    },
+    {
+      "clvl": 15,
+      "skill": 1
+    },
+    {
+      "clvl": 26,
+      "skill": 2
+    },
+    {
+      "clvl": 38,
+      "skill": 1
+    },
+    {
+      "clvl": 44,
+      "skill": 1
+    },
+    {
+      "clvl": 56,
+      "skill": 2
+    },
+    {
+      "clvl": 68,
+      "skill": 1
+    },
+    {
+      "clvl": 72,
+      "skill": 1
+    },
+    {
+      "clvl": 82,
+      "skill": 2
+    }
+  ]
+}
