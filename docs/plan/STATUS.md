@@ -381,6 +381,7 @@
 | bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
 | mouthgate | proposed | - | `internal/nav` | - |
 | mobilequests | proposed | - | `internal/watch/web`<br>`internal/watch/vaultlink_test.go`<br>`tools/mobilescroll`<br>`docs/ui/mobile` | - |
+| vaultequip | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/equipnow.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/watch/vaultequip_test.go`<br>`tools/provingground/scenarios/vaultequip.json`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/vaultapi.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/keep_test.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`internal/watch/testdata/vault_logic.mjs`<br>`tools/provingground/scenarios/behaviours.json` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -416,14 +417,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f0c3330a4 11-21 10:33 `Merge agent/vaultequip: Merge branch 'main' into vaultequip` (vaultequip)
+- 352164657 11-21 10:32 `Merge branch 'main' into vaultequip` (-)
 - 45bd666e2 11-21 10:27 `Merge agent/mobilequests: Merge branch 'main' into mobilequests` (mobilequests)
 - 71e89ba39 11-21 10:26 `Merge branch 'main' into mobilequests` (-)
 - 625057758 11-21 10:24 `Merge agent/pgc2: mgwatchdog: merge queue watchdog doc and card (TASK-752); ops watchdog, phase budgets, status exit code` (pgc2)
 - b5b112d58 11-21 10:23 `Merge branch 'main' into mgwatchdog` (-)
 - 55aaba5df 11-21 10:17 `Merge agent/pgc1: mglanes: lane policy doc and card (TASK-749); ops lockrun quotas, merge priority, two long slots, warn-only` (pgc1)
 - 45fb97c90 11-21 09:25 `Merge branch 'main' into mobilequests` (-)
+- 331e415c1 11-21 09:18 `Merge origin/main into agent/vaultequip` (-)
 - c731907e6 11-21 09:07 `Merge agent/cmbdoc: combat foundation record doc` (cmbdoc)
-- 21255ccc8 11-21 09:07 `Merge agent/devp16: Merge branch 'main' into devp16` (devp16)
-- dfa784c08 11-21 09:05 `Merge branch 'main' into cmbdoc` (-)
-- 656278cbe 11-21 09:05 `Merge branch 'main' into devp16` (-)
 <!-- statusgen:end -->
