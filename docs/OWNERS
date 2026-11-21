@@ -144,7 +144,9 @@ cmd/d2bot/behaviors.go  credit-runner  quests4
 cmd/d2bot/behaviors.go  credit-runner  vaultv5
 cmd/d2bot/beltfill_adapter.go  credit-runner  beltfix
 cmd/d2bot/boss.go  credit-runner  countess3
+cmd/d2bot/boss.go  credit-runner  countess3b
 cmd/d2bot/boss.go  pro-runner  levelplan3
+cmd/d2bot/boss_levelmonsters_test.go  credit-runner  countess3b
 cmd/d2bot/cain.go  credit-runner  cain45
 cmd/d2bot/cain5b_test.go  credit-runner  cain5b
 cmd/d2bot/cain_test.go  credit-runner  cain45
@@ -535,6 +537,7 @@ docs/probes/provingground-cainchain-2026-11-20.md  credit-runner  cainchain
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess2
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess3
+docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess3b
 docs/probes/provingground-run-2026-11-19.md  credit-runner  pgexpand
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
@@ -1233,6 +1236,7 @@ internal/nav/exit.go  credit-runner  pursuers
 internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/mouthgate.go  credit-runner  botstuck
+internal/nav/nav.go  credit-runner  countess3b
 internal/nav/nav.go  credit-runner  maphistoryC
 internal/nav/nav.go  credit-runner  pursuers
 internal/nav/pursuit.go  credit-runner  pursuers
