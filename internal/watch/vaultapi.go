@@ -169,6 +169,12 @@ type VaultEquipper interface {
 	Cancel(id string) VaultKeepResult
 }
 
+// VaultEquipFlag says whether the sheet may offer Equip.
+type VaultEquipFlag struct {
+	Enabled bool   `json:"enabled"`
+	Why     string `json:"why,omitempty"`
+}
+
 // VaultKeepResult is the outcome of queueing one id.
 type VaultKeepResult struct {
 	ID      string
@@ -397,21 +403,22 @@ type vaultFacet struct {
 
 // VaultView is the reply of GET /api/vault.
 type VaultView struct {
-	Schema    string         `json:"schema"`
-	Mode      string         `json:"mode"`   // "on", or "off" while loot.vault is 0 (read only)
-	Exists    bool           `json:"exists"` // a vault is on disk for the hero
-	Hero      string         `json:"hero,omitempty"`
-	Total     int            `json:"total"`
-	Offset    int            `json:"offset"`
-	Limit     int            `json:"limit"`
-	Items     []VaultItem    `json:"items"`
-	Capacity  VaultCapacity  `json:"capacity"`
-	Upgrade   VaultUpgrade   `json:"upgrade"`
-	Kinds     []vaultKind    `json:"kinds,omitempty"`
-	Types     []vaultFacet   `json:"types,omitempty"`
-	Anomalies int            `json:"anomalies,omitempty"`
-	Keep      *VaultKeepView `json:"keep,omitempty"` // schema additive: absent when the bot has no Keep queue
-	Act       *VaultActView  `json:"act,omitempty"`  // Reveal and Sell (V6); absent when the bot has neither
+	Schema    string          `json:"schema"`
+	Mode      string          `json:"mode"`   // "on", or "off" while loot.vault is 0 (read only)
+	Exists    bool            `json:"exists"` // a vault is on disk for the hero
+	Hero      string          `json:"hero,omitempty"`
+	Total     int             `json:"total"`
+	Offset    int             `json:"offset"`
+	Limit     int             `json:"limit"`
+	Items     []VaultItem     `json:"items"`
+	Capacity  VaultCapacity   `json:"capacity"`
+	Upgrade   VaultUpgrade    `json:"upgrade"`
+	Kinds     []vaultKind     `json:"kinds,omitempty"`
+	Types     []vaultFacet    `json:"types,omitempty"`
+	Anomalies int             `json:"anomalies,omitempty"`
+	Equip     *VaultEquipFlag `json:"equip,omitempty"` // one-tap Equip: offered (knob on) or why not; absent when the bot has none
+	Keep      *VaultKeepView  `json:"keep,omitempty"`  // schema additive: absent when the bot has no Keep queue
+	Act       *VaultActView   `json:"act,omitempty"`   // Reveal and Sell (V6); absent when the bot has neither
 }
 
 type vaultQuery struct {
@@ -665,6 +672,13 @@ func (d *VaultDesk) view(ctx context.Context, q vaultQuery, kinds vaultTexts) Va
 			kv.Enabled, kv.Why = false, "the vault is read only while loot.vault is 0"
 		}
 		v.Keep = &kv
+	}
+	if d.Equip != nil {
+		ok, _, why := d.Equip.Gate(ctx)
+		if !d.on() {
+			ok, why = false, "the vault is read only while loot.vault is 0"
+		}
+		v.Equip = &VaultEquipFlag{Enabled: ok, Why: why}
 	}
 	if d.Act != nil {
 		av := d.Act.Act(ctx)
