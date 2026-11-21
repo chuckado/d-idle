@@ -134,31 +134,19 @@
     ],
     "items": [
      {
-      "code": "hp1",
+      "code": "hp2",
       "count": 16
      },
      {
-      "code": "mp1",
+      "code": "mp2",
       "count": 20
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "mp1",
-     "hp1",
-     "hp1",
-     "hp1",
-     "mp1",
-     "hp1",
-     "hp1",
-     "hp1",
-     "mp1",
-     "hp1",
-     "hp1",
-     "hp1",
-     "mp1"
+     "hp2",
+     "hp2",
+     "hp2",
+     "mp2"
     ]
    },
    "trigger": {
@@ -184,7 +172,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: level 24, 5000 gold, Cold Plains and Black Marsh waypoints and a full belt (12 healing, 4 mana) by SETUP verbs. Town start, nothing written after the start. Mechanics only.",
+   "provenance": "CHEATED: level 24, 5000 gold, Cold Plains and Black Marsh waypoints and Light potions (a clvl 24 hero sells Minor ones: potionfloor tier 2, V jobs 20261120-180344-84ae) by SETUP verbs. Town start, nothing written after the start. Mechanics only.",
    "notes": "U: the Countess kill sets record 5 bit 0 (docs/task.md: no turn-in, the kill completes the quest). If this is RED on the assertion with the Countess dead, probe the word and fix the assertion, not the bot. The Countess drop (runes) is not asserted: loot is random.",
    "assert": [
     {
@@ -241,31 +229,19 @@
     ],
     "items": [
      {
-      "code": "hp1",
+      "code": "hp2",
       "count": 16
      },
      {
-      "code": "mp1",
+      "code": "mp2",
       "count": 20
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "mp1",
-     "hp1",
-     "hp1",
-     "hp1",
-     "mp1",
-     "hp1",
-     "hp1",
-     "hp1",
-     "mp1",
-     "hp1",
-     "hp1",
-     "hp1",
-     "mp1"
+     "hp2",
+     "hp2",
+     "hp2",
+     "mp2"
     ]
    },
    "trigger": {
@@ -292,7 +268,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: level 24, 5000 gold, Cold Plains and Black Marsh waypoints and a full belt (12 healing, 4 mana) by SETUP verbs. Town start, nothing written after the start. Mechanics only.",
+   "provenance": "CHEATED: level 24, 5000 gold, Cold Plains and Black Marsh waypoints and Light potions (a clvl 24 hero sells Minor ones: potionfloor tier 2, V jobs 20261120-180344-84ae) by SETUP verbs. Town start, nothing written after the start. Mechanics only.",
    "notes": "Same as act1.forgotten.countess; the Sorceress needs her points spent (levelerBuild) or she has 35 mana and no attack and the mana guard holds every chunk (V job 20261120-180344-84ae log). U: the Countess kill sets record 5 bit 0 (docs/task.md: no turn-in, the kill completes the quest). If this is RED on the assertion with the Countess dead, probe the word and fix the assertion, not the bot. The Countess drop (runes) is not asserted: loot is random.",
    "assert": [
     {
