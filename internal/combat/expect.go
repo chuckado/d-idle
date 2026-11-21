@@ -72,7 +72,12 @@ func (f *Fighter) ExpectCounters() map[string]ExpectCounters {
 	return out
 }
 
-func (f *Fighter) expectMode() int { return f.tune().DeliveryExpect }
+func (f *Fighter) expectMode() int {
+	if f == nil || f.e == nil {
+		return expectOff
+	}
+	return f.tune().DeliveryExpect
+}
 
 // expectRecord notes the expectation of a cast just sent. A skill that costs nothing has nothing to observe by mana.
 func (f *Fighter) expectRecord(snap *d2.Snapshot, sp SkillSpec) {
