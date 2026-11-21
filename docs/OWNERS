@@ -203,6 +203,7 @@ cmd/d2bot/glancewire_pause.go  credit-runner  uifix1
 cmd/d2bot/glancewire_pause_test.go  credit-runner  uifix1
 cmd/d2bot/glancewire_reset.go  credit-runner  botreset
 cmd/d2bot/glancewire_test.go  credit-runner  uib5
+cmd/d2bot/goalsclock_test.go  credit-runner  pgclock
 cmd/d2bot/goldfarmwire_test.go  credit-runner  repairtrip
 cmd/d2bot/hotkeymapwire.go  credit-runner  q13input
 cmd/d2bot/hotkeymapwire_test.go  credit-runner  q13input
@@ -406,6 +407,7 @@ docs/charselect.md  credit-runner  charsup
 docs/combat.md  credit-runner  cainfix3
 docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/contracts/merc-policy.md  credit-runner  mercrevive2
+docs/d2d-determinism.md  credit-runner  pgclock
 docs/d2d-loot.md  credit-runner  groundquality
 docs/decisions.md  credit-runner  adrfable
 docs/decisions.md  credit-runner  fabledecisions2
@@ -584,6 +586,7 @@ docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/process/barbarian-support.md  credit-runner  barb1
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
+docs/process/combat-reads.md  credit-runner  dlv-reads
 docs/process/druid-support.md  credit-runner  druid1
 docs/process/fork-rebase.md  credit-runner  forkrebase2
 docs/process/hammerdin-support.md  credit-runner  hammer1
@@ -605,6 +608,7 @@ docs/process/sandbox-devp12.md  credit-runner  devp12
 docs/process/sandbox-devp13.md  credit-runner  forkrebase2
 docs/process/sandbox-input-items.md  credit-runner  q13input
 docs/process/second-worker.md  credit-runner  w2worker
+docs/process/worker-capacity.md  credit-runner  heavyguard
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
 docs/quest-hints.md  live-agent  questdrill
@@ -821,6 +825,7 @@ internal/bot/exploredpct.go  credit-runner  exploredpct
 internal/bot/exploredpct_test.go  credit-runner  exploredpct
 internal/bot/failsafe_test.go  credit-runner  flakefix
 internal/bot/farm.go  credit-runner  pgclock
+internal/bot/farmclock_test.go  credit-runner  pgclock
 internal/bot/farmreset.go  credit-runner  farmloop
 internal/bot/farmreset_test.go  credit-runner  farmloop
 internal/bot/geargate.go  credit-runner  staletarget
@@ -1070,6 +1075,9 @@ internal/d2dctl/vault_verbs.go  credit-runner  vaulttip
 internal/d2dctl/vault_verbs_test.go  credit-runner  vaulttip
 internal/d2dctl/verbs.go  credit-runner  arrivalsettle
 internal/d2denv  live-agent  k1layout
+internal/d2denv/env.go  credit-runner  pgclock
+internal/d2denv/reader.go  credit-runner  pgclock
+internal/d2denv/recent_test.go  credit-runner  pgclock
 internal/d2dinput  pro-runner  bounce3
 internal/d2dinput/  credit-runner  dlv-cast-verbs
 internal/d2dinput/controller.go  credit-runner  arrivalsettle
@@ -2007,6 +2015,8 @@ tools/levelsim/farmreset.go  credit-runner  farmloop
 tools/levelsim/shadow.go  credit-runner  intake
 tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
+tools/lib/heavy-guard-test.sh  credit-runner  heavyguard
+tools/lib/heavy-guard.sh  credit-runner  heavyguard
 tools/play-session.sh  credit-runner  playsession
 tools/provingground/  credit-runner  dlv-reads
 tools/provingground/  credit-runner  pgexpand
@@ -2052,6 +2062,7 @@ tools/uishots  credit-runner  videoctl
 tools/uishots  credit-runner  videofeed4
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
+tools/uishots.sh  credit-runner  heavyguard
 tools/uishots.sh  credit-runner  labels
 tools/uishots.sh  credit-runner  quests10
 tools/uishots.sh  credit-runner  quests8

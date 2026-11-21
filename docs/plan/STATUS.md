@@ -333,7 +333,7 @@
 | dlv-rotation | proposed | - | `internal/delivery/`<br>`internal/combat/`<br>`internal/agency/` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
 | dlv-expect | proposed | - | `internal/combat/`<br>`internal/env/tuning_combat.go`<br>`docs/knobs.md` | - |
-| dlv-reads | proposed | - | `internal/d2dctl/`<br>`internal/scenario/`<br>`tools/provingground/` | `fork-branch:didle/combat-reads`<br>`d2d-lab-binary` |
+| dlv-reads | proposed | - | `internal/d2dctl/`<br>`docs/process/combat-reads.md`<br>`internal/scenario/`<br>`tools/provingground/` | `fork-branch:didle/combat-reads`<br>`d2d-lab-binary` |
 | dlv-upkeep-state | proposed | - | `internal/combat/`<br>`internal/data/` | - |
 | dlv-upkeep-minions | proposed | - | `internal/combat/` | - |
 | dlv-mark | proposed | - | `internal/combat/` | - |
@@ -352,7 +352,7 @@
 | dlv-cleanup | proposed | - | `internal/combat/`<br>`internal/power/`<br>`tools/ci/` | - |
 | pgjournal | in-progress | - | `cmd/d2scenario/journal.go`<br>`docs/probes/pg-journal-pair-2026-11-21.md`<br>`docs/probes/pg-gate-group1-2026-11-21.md`<br>`cmd/d2scenario/detrun.go`<br>`cmd/d2scenario/detrun_test.go`<br>`tools/provingground/run.sh` | - |
 | pgtaps | in-progress | - | `cmd/d2bot/ladder.go`<br>`cmd/d2scenario/tap.go`<br>`internal/scenario/taps.go`<br>`cmd/d2scenario/run.go`<br>`cmd/d2scenario/tap_test.go`<br>`internal/scenario/result.go` | - |
-| pgclock | proposed | - | `cmd/d2bot/d2dbackend.go`<br>`internal/bot/farm.go`<br>`internal/goals/clock_test.go` | - |
+| pgclock | in-progress | - | `cmd/d2bot/d2dbackend.go`<br>`internal/bot/farm.go`<br>`internal/goals/clock_test.go`<br>`internal/bot/farmclock_test.go`<br>`internal/d2denv/reader.go`<br>`internal/d2denv/recent_test.go`<br>`internal/d2denv/env.go`<br>`cmd/d2bot/goalsclock_test.go`<br>`docs/d2d-determinism.md` | - |
 | fid-probe-regen-speed | deferred | - | `docs/probes/fid/fid-probe-regen-speed.md` | - |
 | pgstability | proposed | - | `internal/scenario/stability.go`<br>`tools/provingground/scenarios/tiers.json` | - |
 | pghero | proposed | - | `internal/scenario/hero`<br>`tools/ab/prep`<br>`tools/survival` | - |
@@ -382,6 +382,7 @@
 | mouthgate | proposed | - | `internal/nav` | - |
 | vaultequip | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/equipnow.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/watch/vaultequip_test.go`<br>`tools/provingground/scenarios/vaultequip.json`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/vaultapi.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/keep_test.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`internal/watch/testdata/vault_logic.mjs`<br>`tools/provingground/scenarios/behaviours.json` | - |
 | pgledgeron | in-progress | - | `docs/process/pg-ledger-ops.md`<br>`tools/provingground/run.sh`<br>`tools/provingground/pgenv.sh`<br>`tools/provingground/pgenv_test.sh` | - |
+| heavyguard | proposed | - | `tools/lib/heavy-guard.sh`<br>`tools/lib/heavy-guard-test.sh`<br>`tools/uishots.sh`<br>`docs/process/worker-capacity.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -417,14 +418,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 759c72151 11-21 10:45 `Merge agent/pgc4: pgledgeron: ledger environment for builder runs, pull path, doc and card (TASK-777)` (pgc4)
-- 6928ca8b4 11-21 10:43 `Merge branch 'main' into pgledgeron` (-)
-- d3341adfa 11-21 10:41 `Merge agent/pgc3: mgcache: gate stats, replay measurement, nightly uncached race doc and card (TASK-747)` (pgc3)
-- cf0e806ab 11-21 10:40 `Merge branch 'main' into mgcache` (-)
-- f0c3330a4 11-21 10:33 `Merge agent/vaultequip: Merge branch 'main' into vaultequip` (vaultequip)
-- 352164657 11-21 10:32 `Merge branch 'main' into vaultequip` (-)
-- 45bd666e2 11-21 10:27 `Merge agent/mobilequests: Merge branch 'main' into mobilequests` (mobilequests)
-- 71e89ba39 11-21 10:26 `Merge branch 'main' into mobilequests` (-)
-- 625057758 11-21 10:24 `Merge agent/pgc2: mgwatchdog: merge queue watchdog doc and card (TASK-752); ops watchdog, phase budgets, status exit code` (pgc2)
-- b5b112d58 11-21 10:23 `Merge branch 'main' into mgwatchdog` (-)
+- dba450f87 11-21 11:06 `Merge agent/combatreads: Merge branch 'main' into TASK-721` (combatreads)
+- f202af3c1 11-21 11:05 `Merge branch 'main' into TASK-721` (-)
+- 3e70158f6 11-21 11:01 `Merge agent/pgc6: pg gate group 2 record (cost-cut cards, measurements, what is enforced)` (pgc6)
+- e475e2ade 11-21 11:01 `Merge agent/survhold8: Merge branch 'main' into survhold8` (survhold8)
+- 54c9494d2 11-21 10:58 `Merge branch 'main' into pgc6` (-)
+- 585d6f347 11-21 10:58 `Merge branch 'main' into survhold8` (-)
+- 3314b62e3 11-21 10:57 `Merge agent/heavyguard: Merge branch 'main' into heavyguard` (heavyguard)
+- d78daa12f 11-21 10:56 `Merge branch 'main' into heavyguard` (-)
+- edcfd5121 11-21 10:48 `Merge agent/pgc5: pgclock: goals manager, farm timers and the guard snapshot reuse window on the env clock (TASK-739)` (pgc5)
+- 8691cf517 11-21 10:46 `Merge branch 'main' into pgclock` (-)
 <!-- statusgen:end -->
