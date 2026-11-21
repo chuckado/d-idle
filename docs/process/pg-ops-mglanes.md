@@ -16,7 +16,7 @@
 
 Who is who: the agent is the name of the worktree under `d2lod-wt/` (the builder mirror keeps the path), the merge class is the merge worktree or `LABRUN_CLASS=merge`; every other directory is class other (no quota, no refusal, still yields to a queued merge). A merge also holds priority for 2 minutes after it ends, so the second builder call of one code merge cannot be overtaken.
 
-Override for the coordinator: put `BLDR_ALLOW_WHOLE=1` in front of the command text (`labrun tower -- sh -c 'BLDR_ALLOW_WHOLE=1 go test ./...'`). Agents do not use it.
+Override for the coordinator: put `BLDR_ALLOW_WHOLE=1` in front of the command text (`labrun BUILDER -- sh -c 'BLDR_ALLOW_WHOLE=1 go test ./...'`). Agents do not use it.
 
 ## Rollout and reversal
 
