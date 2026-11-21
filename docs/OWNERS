@@ -327,6 +327,7 @@ cmd/d2dview  credit-runner  videofeed2
 cmd/d2dview  credit-runner  videofeed4
 cmd/d2firsthour/  live-agent  firsthour
 cmd/d2scenario  credit-runner  boardorder
+cmd/d2scenario  credit-runner  bsm1
 cmd/d2scenario/  credit-runner  pgexpand
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/journal.go  credit-runner  pgjournal
@@ -1300,6 +1301,7 @@ internal/resource/tuning.go  credit-runner  agencyp0
 internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
 internal/scenario  credit-runner  boardorder
+internal/scenario  credit-runner  bsm1
 internal/scenario/  credit-runner  dlv-reads
 internal/scenario/  credit-runner  pgexpand
 internal/scenario/determinism.go  credit-runner  pgdigest
@@ -1950,6 +1952,7 @@ tools/provingground/scenarios/act1.json  credit-runner  countess
 tools/provingground/scenarios/act1.json  credit-runner  countess2
 tools/provingground/scenarios/act1more.json  credit-runner  act1more
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
+tools/provingground/scenarios/board.json  credit-runner  bsm1
 tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
