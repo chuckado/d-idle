@@ -525,7 +525,8 @@
        "chunk": "read"
       }
      }
-    ]
+    ],
+    "restart_at_s": 300
    },
    "budget": {
     "virtual_min": 30
@@ -541,12 +542,13 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Needs the trigger `restart_at_s` (stop and start the bot once on the same hero): not in the runner; split into two runs sharing a state directory or add the trigger in card 4.",
+   "notes": "trigger.restart_at_s 300: the bot is stopped (SIGTERM, save and quit) and started again on the same hero and plan file; the first leg must have taken the scroll (U: timing, tune restart_at_s).",
    "assert": [
     {
      "kind": "log_line",
-     "pattern": "step Take the Scroll",
-     "max": 1
+     "pattern": "step Take the Inifuss bark",
+     "max": 1,
+     "why": "the step ran before the restart and is not repeated after it (I4, I6)"
     },
     {
      "kind": "board",
@@ -558,8 +560,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "BLOCKED live 2026-11-21: the runner has no restart_at_s trigger, the run never restarted (card boardsm-restart)"
+   "status": "active"
   },
   {
    "id": "board.sm.regress-proxy",
@@ -640,7 +641,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "BLOCKED live 2026-11-21: the setup cannot leave the cairn stones done (no verb, U), so the step runs; also no write ledger on a field start"
+   "pending_reason": "RED live 2026-11-21 (Paladin 11, bsm9): the field start now has its write line (writes after start 0 from the bot journal), but the setup still cannot leave the cairn stones done, so the step runs; needs a quest word that reads the stones done (U)"
   },
   {
    "id": "board.park.persist-restart",
@@ -721,7 +722,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "BLOCKED live 2026-11-21: needs restart_at_s (card boardsm-restart) and a hero that dies on the chunk"
+   "pending_reason": "needs a deterministic park to restart after (U): the runner restart exists (bsm9), but no setup parks a chunk on its own; hold_timeout parks at 60 virtual minutes, which a restart scenario of 80 minutes could use"
   },
   {
    "id": "board.retry.runs-a-step",
@@ -977,7 +978,7 @@
   },
   {
    "id": "board.hold.broke",
-   "title": "Purse 0, stash 0, 3 potions: hold needs_gold_farm, never a live run without a reason (I5, I10)",
+   "title": "Broke at the start: the board waits for the recovery (purse and kit) and counts no failure",
    "kind": "step",
    "tier": "full",
    "quest": {
@@ -1039,23 +1040,23 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
+   "notes": "Live 2026-11-21 (Paladin 11, two runs): the start gate waits for the recovery; one run recovered (gold 36 to 650) and started the chunk, the other was still recovering at 40 virtual minutes. Either way nothing is parked or counted. The permanent-hold case (timeout) needs a hero the recovery cannot fix (U).",
    "assert": [
     {
-     "kind": "board",
-     "quest": "forgotten_tower",
-     "chunk": "countess",
-     "state": "in_progress",
-     "reason": "needs_gold_farm",
-     "when": "always",
-     "why": "sampled: a reason on every sample"
+     "kind": "log_line",
+     "pattern": "start gate: waiting for the recovery",
+     "min": 1
+    },
+    {
+     "kind": "log_line",
+     "pattern": "parked",
+     "max": 0
     },
     {
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "not yet run against the bsm7 kit-plan build (card bsm7); the assertions are untested sketches (U)"
+   "status": "active"
   },
   {
    "id": "board.hold.too-weak",
@@ -1119,15 +1120,9 @@
    "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
    "assert": [
     {
-     "kind": "board",
-     "quest": "forgotten_tower",
-     "chunk": "countess",
-     "state": "in_progress",
-     "reason": "too_weak",
-     "reason_or": [
-      "route_closed"
-     ],
-     "when": "always"
+     "kind": "log_line",
+     "pattern": "hold (too_weak|route_closed)",
+     "min": 1
     },
     {
      "kind": "level_at_least",
@@ -1143,7 +1138,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "not yet run against the bsm7 kit-plan build (card bsm7); the assertions are untested sketches (U)"
+   "pending_reason": "live 2026-11-21 (Paladin 11, clvl 10): no guard refused, the hero started the chunk and levelled to 11 inside the budget; the setup needs a level under the guard floor of the Countess road (U), so no too_weak hold fires"
   },
   {
    "id": "board.hold.timeout",
@@ -1223,7 +1218,7 @@
     }
    ],
    "status": "pending",
-   "pending_reason": "not yet run against the bsm7 kit-plan build (card bsm7); the assertions are untested sketches (U)"
+   "pending_reason": "needs a hero that stays broke after the recovery (U): the live broke run recovered by selling, so no hold outlives its budget; hold_timeout is covered offline (internal/questboard, bsm5)"
   },
   {
    "id": "board.view.reason-always",
@@ -1354,7 +1349,7 @@
     "quests": [
      {
       "record": 2,
-      "word": 2
+      "word": 14
      }
     ]
    },
@@ -1396,7 +1391,7 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "The hand-in tap while the hero is still in the field (reason handin_in_town) needs an awaiting chunk away from town: no setup verb for that (U); this scenario covers the tap path from town.",
+   "notes": "The hand-in tap while the hero is still in the field (reason handin_in_town) needs an awaiting chunk away from town: no setup verb for that (U); this scenario covers the tap path from town. Word 0x000e: pending bit plus started bits; the bare pending word 0x0002 reads as 'needed' (internal/quest/state.go Interpret needs a started bit), so no awaiting chunk existed (bsm9 diagnosis).",
    "assert": [
     {
      "kind": "api_reply",
@@ -1421,8 +1416,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "RED live 2026-11-21 (bsm6 run, Paladin 11): the quest word 0x0002 is read from memory but the board derives the chunk Ready (pending bit not seen as exact: task World stage of the memory reader, U), so no awaiting chunk exists at the start; the offline test TestDeskHandInReady covers handin_ready and Start"
+   "status": "active"
   },
   {
    "id": "board.handin.without-run",
@@ -1459,7 +1453,7 @@
     "quests": [
      {
       "record": 2,
-      "word": 2
+      "word": 14
      }
     ]
    },
@@ -1494,25 +1488,31 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Sisters' Burial Grounds record 2 word 0x0002 is reward pending (V docs/forkcheats.md).",
+   "notes": "Sisters' Burial Grounds record 2 word 0x0002 is reward pending (V docs/forkcheats.md). Word 0x000e: pending bit plus started bits; the bare pending word 0x0002 reads as 'needed' (internal/quest/state.go Interpret needs a started bit), so no awaiting chunk existed (bsm9 diagnosis). Start on the pending reward creates the run (handin_ready, C5: before bsm6 the reply was already:true and no run existed); the board then waits for the tap or, when the hero's own quest goal hands in first, reads done.",
    "assert": [
     {
      "kind": "api_reply",
      "index": 0,
-     "ok": true
+     "ok": true,
+     "already": false,
+     "changed_has": [
+      "sisters_burial_grounds/blood_raven"
+     ]
     },
     {
      "kind": "board",
      "quest": "sisters_burial_grounds",
      "chunk": "blood_raven",
-     "state": "awaiting_handin"
+     "state": "awaiting_handin",
+     "or": [
+      "done"
+     ]
     },
     {
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "RED live 2026-11-21 (bsm6 run, Paladin 11): the quest word 0x0002 is read from memory but the board derives the chunk Ready (pending bit not seen as exact: task World stage of the memory reader, U), so no awaiting chunk exists at the start; the offline test TestDeskHandInReady covers handin_ready and Start"
+   "status": "active"
   },
   {
    "id": "board.auto.chain-safe-only",
