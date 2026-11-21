@@ -104,10 +104,12 @@ type Pre struct {
 	Waypoints  []int     `json:"waypoints,omitempty"`  // waypoint bits to activate (internal/saves waypointTable order)
 	Quests     []QWord   `json:"quests,omitempty"`     // quest records written as the hero's own state
 	Board      *QuestRef `json:"board,omitempty"`      // chunk the player accepted (the plan store)
-	Items      []Item    `json:"items,omitempty"`
-	Belt       []string  `json:"belt,omitempty"` // potion codes in belt order
-	Merc       *int      `json:"merc,omitempty"` // hireling.txt Id, nil: none
-	LifePct    int       `json:"life_pct,omitempty"`
+	// BoardAlso lists further chunks accepted in the same game (a plan file that holds more than one record).
+	BoardAlso []QuestRef `json:"board_also,omitempty"`
+	Items     []Item     `json:"items,omitempty"`
+	Belt      []string   `json:"belt,omitempty"` // potion codes in belt order
+	Merc      *int       `json:"merc,omitempty"` // hireling.txt Id, nil: none
+	LifePct   int        `json:"life_pct,omitempty"`
 }
 
 // QWord is one quest record (fork layout: act 1 records 0..6, docs/forkcheats.md) and its 16-bit word.

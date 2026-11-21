@@ -447,7 +447,16 @@ func writeBoardAndTuning(state, hero string, su scenario.Setup) error {
 	if err != nil {
 		return err
 	}
-	return st.Accept(su.Board.Quest, su.Board.Chunk, 0, "train")
+	if err := st.Accept(su.Board.Quest, su.Board.Chunk, 0, "train"); err != nil {
+		return err
+	}
+	// The store refuses a second concurrent chunk; a plan file that holds two is the state under test.
+	for _, q := range su.BoardAlso {
+		if err := st.AcceptIf(q.Quest, q.Chunk, 0, "train", func(questboard.Record) bool { return true }); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // runBot starts the real bot like tools/survival/abrun.sh does and returns how many gated writes the d2d refused (the
