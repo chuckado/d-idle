@@ -518,6 +518,12 @@ func (m *SM) Regress(b *Board, diff, quest, chunk string, tier Tier) (parked *Re
 	return &Ref{h.Quest, h.Chunk}, true
 }
 
+// closureExempt: a run parked because its earlier part regressed (R4) or could not start (D4) is the visible answer to
+// a missing part, not a breach of closure; the player decides (Run it again, Stop).
+func closureExempt(r Run) bool {
+	return r.Status == RunParked && (r.Code == "prereq_regressed" || r.Code == "prereq_missing")
+}
+
 // Violation is one broken invariant.
 type Violation struct{ Inv, Text string }
 
@@ -555,6 +561,9 @@ func (m *SM) Check(b *Board, diff string) []Violation {
 		}
 		anc, _ := ancestors(b, r.Quest, r.Chunk)
 		for _, a := range anc {
+			if closureExempt(r) {
+				break
+			}
 			if m.find(r.Quest, a, diff) == nil && m.latch(r.Quest, a, diff) == nil {
 				add("I2", "%s/%s lacks its earlier part %s", r.Quest, r.Chunk, a)
 			}
@@ -570,6 +579,9 @@ func (m *SM) Check(b *Board, diff string) []Violation {
 // parks the run with prereq_missing. It returns what it added and what it parked; the caller logs both.
 func (m *SM) Repair(b *Board, diff string, at time.Time, startable func(Ref) error) (added, parked []Ref) {
 	for _, r := range m.Live(b, diff) {
+		if closureExempt(r) {
+			continue
+		}
 		anc, _ := ancestors(b, r.Quest, r.Chunk)
 		for _, a := range anc {
 			if m.find(r.Quest, a, diff) != nil || m.latch(r.Quest, a, diff) != nil {
