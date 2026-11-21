@@ -453,3 +453,29 @@ func TestBloodRavenRetreatKnob(t *testing.T) {
 		t.Fatalf("err %v drinks %d town %d", err, f.did("drink"), f.townCalls)
 	}
 }
+
+// On d2d the Countess has no monster preset, the Kolbot hint is next to the arrival stairs (nav refuses that click) and
+// the level map is whole, so exploring reveals nothing: the walk must go to her known spawn. Two arrival spots stand for
+// the Paladin and the Sorceress (the script has no class data; the walk is the same from either).
+func TestCountessWalksToKnownSpawnWhenPresetAndHintFail(t *testing.T) {
+	for _, c := range []struct {
+		name  string
+		start Pt
+	}{{"paladin", Pt{12581, 11047}}, {"sorceress", Pt{12590, 11050}}} {
+		t.Run(c.name, func(t *testing.T) {
+			f := newFake()
+			f.level = 20
+			f.area = AreaTowerCellar5
+			f.pos = c.start
+			b := f.addBoss(Mon{Class: 45, UniqueNo: 6, Name: "The Countess", Pos: Pt{12542, 11036}}, AreaTowerCellar5, 40)
+			b.vis = 20
+			res, err := run(t, NameCountess, f, Opts{})
+			if err != nil || !res.Killed {
+				t.Fatalf("%v %v", err, f.log)
+			}
+			if f.did("goto 12534,11040") != 1 || f.did("explore") != 0 {
+				t.Fatalf("want one walk to the spawn and no explore: %v", f.log)
+			}
+		})
+	}
+}
