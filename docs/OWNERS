@@ -813,7 +813,6 @@ internal/bot/goal.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  survB
 internal/bot/goal.go  credit-runner  survhold2
 internal/bot/goal.go  credit-runner  survrecover
-internal/bot/goal.go  credit-runner  town2
 internal/bot/goal.go  credit-runner  uib1
 internal/bot/goal.go  credit-runner  vaultv5
 internal/bot/goal.go  pro-runner  levelplan3
@@ -894,7 +893,6 @@ internal/bot/questboard_test.go  credit-runner  quests4
 internal/bot/questboard_test.go  credit-runner  quests7
 internal/bot/repairtrip.go  credit-runner  repairtrip
 internal/bot/repairtrip_test.go  credit-runner  repairtrip
-internal/bot/resource.go  credit-runner  town2
 internal/bot/resource.go  pro-runner  levelplan3
 internal/bot/routeguard.go  credit-runner  questrun
 internal/bot/runner.go  credit-runner  agencyp0
@@ -920,7 +918,6 @@ internal/bot/staletarget.go  credit-runner  cainchain
 internal/bot/staletarget.go  credit-runner  staletarget
 internal/bot/staletarget_test.go  credit-runner  staletarget
 internal/bot/state.go  credit-runner  resetinstant
-internal/bot/supplycount.go  credit-runner  town2
 internal/bot/task.go  credit-runner  boardmoderace
 internal/bot/task.go  credit-runner  botstuck
 internal/bot/task.go  credit-runner  cain5b
@@ -1332,7 +1329,6 @@ internal/skilltree/skilltree.go  credit-runner  agencyp0
 internal/status/inventory.go  credit-runner  itemcolour2
 internal/status/inventory.go  credit-runner  jewelicons
 internal/supply  credit-runner  town10
-internal/supply  credit-runner  town2
 internal/supply  credit-runner  town3
 internal/supply  credit-runner  town4
 internal/supply  credit-runner  town7
@@ -1382,7 +1378,6 @@ internal/town  credit-runner  town5
 internal/town  credit-runner  town6
 internal/town  credit-runner  town7
 internal/town  credit-runner  town8
-internal/town/basicsfix.go  credit-runner  town2
 internal/town/belt  credit-runner  beltfix
 internal/town/beltfill.go  credit-runner  beltfix
 internal/town/beltfix6_test.go  credit-runner  beltfix

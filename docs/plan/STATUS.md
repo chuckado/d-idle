@@ -359,7 +359,6 @@
 | mgonejob | proposed | - | `docs/process/pg-ops-mgonejob.md` | - |
 | town1 | in-progress | - | `tools/provingground/scenarios/townplan.json`<br>`internal/scenario/state.go`<br>`internal/scenario/newkinds_test.go`<br>`docs/probes/town-plan-scenarios.md` | - |
 | mgcache | proposed | - | `docs/process/pg-ops-mgcache.md` | - |
-| town2 | in-progress | - | `internal/supply`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/bot/supplycount.go`<br>`internal/town/basicsfix.go` | - |
 | mglanes | proposed | - | `docs/process/pg-ops-mglanes.md` | - |
 | fabledecisions2 | proposed | - | `docs/adr/`<br>`docs/decisions.md`<br>`GLOSSARY.md` | - |
 | mgwatchdog | proposed | - | `docs/process/pg-ops-mgwatchdog.md` | - |
