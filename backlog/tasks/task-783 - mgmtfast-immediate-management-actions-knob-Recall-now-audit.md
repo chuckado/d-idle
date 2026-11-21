@@ -31,6 +31,7 @@ owns:
   - "cmd/d2bot/live.go"
   - "internal/env/tuning.go"
   - "internal/env/tuning_ui.go"
+  - "docs/knobs.md"
   - "docs/process/management-fast-path.md"
   - "tools/provingground/scenarios/manage.json"
   - "tools/provingground/scenarios/behaviours.json"
