@@ -112,8 +112,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (the `changed` reply field)"
+   "status": "active"
   },
   {
    "id": "board.sm.stop-idempotent",
@@ -216,8 +215,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (idempotent verbs)"
+   "status": "active"
   },
   {
    "id": "board.sm.start-idempotent",
@@ -312,8 +310,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (idempotent verbs)"
+   "status": "active"
   },
   {
    "id": "board.sm.one-head",
@@ -395,8 +392,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 4 boardsm-exec (the run model)"
+   "status": "active"
   },
   {
    "id": "board.sm.busy-second-quest",
@@ -479,8 +475,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (the busy code)"
+   "status": "active"
   },
   {
    "id": "board.sm.restart-mid-chain",
@@ -563,8 +558,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 4 boardsm-exec (runner trigger restart_at_s)"
+   "status": "active"
   },
   {
    "id": "board.sm.regress-proxy",
@@ -644,8 +638,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 4 boardsm-exec (the latch)"
+   "status": "active"
   },
   {
    "id": "board.park.persist-restart",
@@ -725,8 +718,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 4 boardsm-exec (persisted parks and the restart trigger)"
+   "status": "active"
   },
   {
    "id": "board.retry.runs-a-step",
@@ -808,8 +800,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 4 boardsm-exec (retry clearing the executor group)"
+   "status": "active"
   },
   {
    "id": "board.hold.restock",
@@ -897,8 +888,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+   "status": "active"
   },
   {
    "id": "board.hold.restock-stash-gold",
@@ -985,8 +975,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+   "status": "active"
   },
   {
    "id": "board.hold.broke",
@@ -1067,8 +1056,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+   "status": "active"
   },
   {
    "id": "board.hold.too-weak",
@@ -1155,8 +1143,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+   "status": "active"
   },
   {
    "id": "board.hold.timeout",
@@ -1235,8 +1222,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 5 boardsm-holds (guard refusals as hold codes)"
+   "status": "active"
   },
   {
    "id": "board.view.reason-always",
@@ -1326,8 +1312,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (the `reason` view field)"
+   "status": "active"
   },
   {
    "id": "board.handin.field-tap",
@@ -1419,8 +1404,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (handin codes)"
+   "status": "active"
   },
   {
    "id": "board.handin.without-run",
@@ -1509,8 +1493,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (the handin_ready offer)"
+   "status": "active"
   },
   {
    "id": "board.auto.chain-safe-only",
@@ -1583,8 +1566,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "red by design until card 6 boardsm-api (an auto-start multi-part quest)"
+   "status": "active"
   }
  ]
 }
