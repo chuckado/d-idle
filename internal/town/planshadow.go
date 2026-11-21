@@ -66,3 +66,9 @@ func (t *Town) logPlanShadow(s *d2.Snapshot, plan ChorePlan) {
 	}
 	t.e.Log.Info("town plan (shadow): " + pl.Trace())
 }
+
+// SupplyPlan solves the supply plan of a snapshot for an excursion profile; the bot's guards read it at stage 2 of the
+// knob town.plan. It reads and changes nothing.
+func (t *Town) SupplyPlan(s *d2.Snapshot, profile string, reserve int) (supply.Plan, error) {
+	return t.planOf(s, ChorePlan{Profile: profile, ReserveGold: reserve})
+}

@@ -180,3 +180,25 @@ func orNone(s []string) string {
 	}
 	return strings.Join(s, ",")
 }
+
+// MinOf is the effective (clamped) min of a line, 0 when the plan has no such line.
+func (p Plan) MinOf(l Line) int {
+	for _, ln := range p.Lines {
+		if ln.Line == l {
+			return ln.Min
+		}
+	}
+	return 0
+}
+
+// Why is the sentence a guard says when the plan cannot close a min line with the gold the hero owns, "" when it can
+// (town-planner section 5.4: a guard blocks only on a line the plan cannot close, and names it).
+func (p Plan) Why() string {
+	switch p.Verdict {
+	case ShortGold:
+		return fmt.Sprintf("short of gold: needs %d more for %s", p.Short, p.Open)
+	case Blocked:
+		return fmt.Sprintf("blocked: %s cannot be bought here", p.Open)
+	}
+	return ""
+}
