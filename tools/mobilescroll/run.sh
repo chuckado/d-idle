@@ -13,5 +13,9 @@ d=${1:-}
 url="http://127.0.0.1:$port/watch?first=0&needs=0&quests=running"
 OLD=${d:+1} CHROME=$chrome TMPDIR=$bin timeout 240 node --experimental-websocket tools/mobilescroll/probe.mjs "$url" ${MOBILESCROLL_SIZE:-412x915}
 rc=$?
+vurl="http://127.0.0.1:$port/watch/vault?vault=pop"
+OLD=${d:+1} CHROME=$chrome TMPDIR=$bin timeout 240 node --experimental-websocket tools/mobilescroll/vault.mjs "$vurl" ${MOBILESCROLL_SIZE:-412x915}
+rc2=$?
+[ $rc = 0 ] && rc=$rc2; [ $rc2 = 1 ] && rc=1
 if [ -n "$d" ]; then [ $rc = 1 ] && { echo "the old CSS is correctly caught"; exit 0; }; echo "the old CSS was NOT caught" >&2; exit 1; fi
 exit $rc
