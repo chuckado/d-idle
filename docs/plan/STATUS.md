@@ -379,7 +379,6 @@
 | town12 | proposed | - | `docs/design/fable-review-2026-11-21/town-profiles-sme.md` | - |
 | countess3b | proposed | - | `cmd/d2bot/boss.go`<br>`cmd/d2bot/boss_levelmonsters_test.go`<br>`internal/nav/nav.go`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
 | bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
-| bsm5 | proposed | - | `internal/task/gate.go`<br>`internal/task/kind.go`<br>`internal/task/executor.go`<br>`internal/task/world.go`<br>`internal/task/gate_hold_test.go`<br>`internal/bot/task.go` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |

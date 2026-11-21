@@ -1,10 +1,13 @@
 ---
 id: TASK-768
-title: 'bsm5: quest board SM holds (guard refusals as coded holds, potion kit is a town trip, hold budgets)'
-status: Proposed
+title: >-
+  bsm5: quest board SM holds (guard refusals as coded holds, potion kit is a
+  town trip, hold budgets)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T05:06:00Z'
+updated_date: '2026-11-21T07:42:00Z'
 labels:
   - bot
   - feature
