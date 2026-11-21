@@ -525,7 +525,8 @@
        "chunk": "read"
       }
      }
-    ]
+    ],
+    "restart_at_s": 300
    },
    "budget": {
     "virtual_min": 30
@@ -541,7 +542,7 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Needs the trigger `restart_at_s` (stop and start the bot once on the same hero): not in the runner; split into two runs sharing a state directory or add the trigger in card 4.",
+   "notes": "trigger.restart_at_s 300: the bot is stopped (SIGTERM, save and quit) and started again on the same hero and plan file; the first leg must have taken the scroll (U: timing, tune restart_at_s).",
    "assert": [
     {
      "kind": "log_line",
@@ -558,8 +559,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "BLOCKED live 2026-11-21: the runner has no restart_at_s trigger, the run never restarted (card boardsm-restart)"
+   "status": "active"
   },
   {
    "id": "board.sm.regress-proxy",
