@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 )
 
 // fakeShop is the vendor side of a gold order: it sells identify scrolls at price into the rig's fakeTools and keeps the
@@ -239,5 +240,21 @@ func TestGoldRevealShopErrorBuysNothing(t *testing.T) {
 	o := r.k.GoldView()
 	if o.State != OrderPartial || o.Spent != 0 || r.revealed(ids) != 0 || !strings.Contains(strings.Join(lines, ";"), "vendor") {
 		t.Fatalf("%+v %v", o, lines)
+	}
+}
+
+func TestGoldOrderFadesFromThePageWhenOld(t *testing.T) {
+	r := newRig(t, "paladin")
+	r.withTools(0)
+	r.withShop(2000, 0, 100, 80)
+	ids := r.unids(1)
+	r.k.EnqueueRevealGold(context.Background(), ids, 0, false)
+	r.run()
+	if r.k.GoldView() == nil {
+		t.Fatal("a fresh result must show")
+	}
+	r.now = r.now.Add(time.Hour)
+	if r.k.GoldView() != nil {
+		t.Fatal("an old result must not stay on the page")
 	}
 }

@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"slices"
 	"sort"
+	"time"
 
 	"d2lod-bot/internal/bulkid"
 	"d2lod-bot/internal/vault"
@@ -55,8 +56,12 @@ type GoldOrder struct {
 	Bought int      `json:"bought"`          // scrolls bought for this order
 	Spent  int      `json:"spent"`           // gold spent on them
 	Note   string   `json:"note,omitempty"`  // why the order ended early, in plain words
+	Ended  int64    `json:"ended,omitempty"` // unix time the order ended; the page forgets it after goldShown
 	Stop   bool     `json:"stop,omitempty"`  // the rest cannot be paid: finish what is queued, then end as partial
 }
+
+// goldShown is how long the page keeps showing a finished order.
+const goldShown = 30 * time.Minute
 
 // Active reports whether the order still moves.
 func (o *GoldOrder) Active() bool {
@@ -267,7 +272,7 @@ func (k *Keeper) CancelGold() (GoldView, bool) {
 		}
 	}
 	k.tally(o)
-	o.State = OrderCancelled
+	o.State, o.Ended = OrderCancelled, k.now().Unix()
 	o.Note = fmt.Sprintf("cancelled; %d revealed", o.Done)
 	if o.Bought > 0 {
 		o.Note += fmt.Sprintf(", %d bought scroll%s stay in the pack", o.Bought, plural(o.Bought))
@@ -286,6 +291,8 @@ func (k *Keeper) GoldView() *GoldView {
 	}
 	if o.Active() {
 		k.tally(o)
+	} else if o.Ended > 0 && k.now().Sub(time.Unix(o.Ended, 0)) > goldShown {
+		return nil
 	}
 	v := k.goldView(o)
 	return &v
@@ -379,7 +386,7 @@ func (k *Keeper) runGold(ctx context.Context, settle bool) []string {
 	}
 	finish := func(state, note string) []string {
 		k.tally(o)
-		o.State, o.Note = state, note
+		o.State, o.Note, o.Ended = state, note, k.now().Unix()
 		if err := k.saveOrder(o); err != nil {
 			return []string{"gold reveal: order not saved: " + err.Error()}
 		}
