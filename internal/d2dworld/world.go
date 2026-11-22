@@ -188,6 +188,14 @@ func (w *World) Update() (d2map.State, error) {
 	return w.update(ctx, false)
 }
 
+// Refetch makes the next Update read the level again whatever the character's distance and the rate limit say. A door
+// that was used changes collision cells without the character moving (card mapverify); nav calls it after using one.
+func (w *World) Refetch() {
+	if w.cur != nil {
+		w.cur.fetched = false
+	}
+}
+
 func (w *World) ctx() (context.Context, context.CancelFunc) {
 	return context.WithTimeout(context.Background(), w.o.Timeout+w.o.LinkWait)
 }
@@ -349,7 +357,9 @@ func (w *World) borders(ctx context.Context, l *lvl) {
 		return
 	}
 	var linked map[int]bool
-	if near, err := lay.Nearby(ctx); err == nil {
+	var near []Near
+	if nr, err := lay.Nearby(ctx); err == nil {
+		near = nr
 		linked = map[int]bool{}
 		for _, n := range near {
 			linked[n.Level] = true
@@ -381,6 +391,7 @@ func (w *World) borders(ctx context.Context, l *lvl) {
 			own.W, own.H = p.W, p.H // the layout's size, not the grid's
 		}
 	}
+	places = placeLinked(own, places, near)
 	lr := d2map.Rect{X: l.m.Rect.X, Y: l.m.Rect.Y, W: 5 * own.W, H: 5 * own.H}
 	adj, unproven, pending, unlinked := adjacent(own, lr, places, linked, l.m.Grid, across)
 	l.m.Adjacent, l.pending, l.unlinked = keepBorders(l.m.Adjacent, adj), pending, unlinked

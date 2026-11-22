@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into necrosme <!--sg:agent/necrosme-->
+- Merge branch 'main' into necro2 <!--sg:agent/necro-audit-->
+- Merge branch 'main' into mapverify <!--sg:agent/mapverify-->
 - Merge branch 'main' into vaultsell <!--sg:agent/vaultsell-->
 - Merge origin/main into equipswap <!--sg:agent/equipswap-->
 - Merge branch 'main' into identifyall <!--sg:agent/identifyall-->

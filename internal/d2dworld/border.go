@@ -100,6 +100,44 @@ func abut(own Placement, all []Placement) []abutting {
 	return out
 }
 
+// placeLinked adds a placement for every linked level (debug nearby) that "debug layout" does not list. V live (card
+// mapverify, probe tools/probes/strip.py, seed 5): the layout verb never lists the cloister chain (Outer Cloister 27
+// is linked at (0,-40) from the Monastery Gate 26 but absent from the layout, 40 s after arrival), so `abut` found
+// nothing and nav answered "no usable gate". The offset says where the neighbour starts; the size is only needed to
+// make it touch, so the extent across the edge is taken from the offset itself and the extent along it from our own
+// (the strip scan keeps only the cells whose far side `across` finds open). A level whose offset leaves a gap or is
+// past a corner is not placed.
+func placeLinked(own Placement, places []Placement, near []Near) []Placement {
+	if own.W <= 0 || own.H <= 0 {
+		return places
+	}
+	have := map[int]bool{}
+	for _, p := range places {
+		have[p.Level] = true
+	}
+	out := places
+	for _, n := range near {
+		if have[n.Level] || n.Level == own.Level {
+			continue
+		}
+		p := Placement{Level: n.Level, X: own.X + n.DX, Y: own.Y + n.DY}
+		switch {
+		case n.DY < 0 && n.DX > -own.W && n.DX < own.W: // above
+			p.W, p.H = own.W, -n.DY
+		case n.DY == own.H && n.DX > -own.W && n.DX < own.W: // below
+			p.W, p.H = own.W, own.H
+		case n.DX < 0 && n.DY > -own.H && n.DY < own.H: // left
+			p.W, p.H = -n.DX, own.H
+		case n.DX == own.W && n.DY > -own.H && n.DY < own.H: // right
+			p.W, p.H = own.W, own.H
+		default:
+			continue
+		}
+		out = append(out[:len(out):len(out)], p)
+	}
+	return out
+}
+
 // adjacent builds the d2map.Adjacent entries of one level. own and all are layout placements in act tiles; self is the
 // level's layout rectangle in subtiles: the strip is its last row or column, like Game.exe's Level rectangle (the d2d
 // grid is one tile larger, debug level says 57x41 for the 56x40 town, V live, and that margin is open beside the wall). linked, when non-nil, restricts the result to levels d2d has

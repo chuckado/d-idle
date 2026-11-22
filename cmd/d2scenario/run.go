@@ -467,6 +467,7 @@ func hurtTo(ctx context.Context, c *d2dctl.Client, pct int, enc *json.Encoder) e
 
 // writeBoardAndTuning writes the player's accepted chunk with the real plan store and the knob overrides.
 func writeBoardAndTuning(state, hero string, su scenario.Setup) error {
+	su.Tuning = envKnobs(su.Tuning, os.Getenv("D2SCEN_KNOBS"))
 	if len(su.Tuning) > 0 {
 		b, _ := json.Marshal(map[string]any{"version": 1, "data": map[string]any{"overrides": su.Tuning}})
 		if err := os.WriteFile(filepath.Join(state, "tuning.json"), b, 0o644); err != nil {
@@ -909,4 +910,21 @@ func missingCaps(needs, caps []string) []string {
 		}
 	}
 	return out
+}
+
+// envKnobs layers "k=v,k=v" (env D2SCEN_KNOBS, numbers only) over the scenario's tuning, so one scenario runs with and
+// without a knob (A/B probes) without a second scenario file. Anything that is not a number is ignored.
+func envKnobs(base map[string]any, spec string) map[string]any {
+	for _, kv := range strings.Split(spec, ",") {
+		k, v, ok := strings.Cut(strings.TrimSpace(kv), "=")
+		f, err := strconv.ParseFloat(v, 64)
+		if !ok || err != nil || k == "" {
+			continue
+		}
+		if base == nil {
+			base = map[string]any{}
+		}
+		base[k] = f
+	}
+	return base
 }
