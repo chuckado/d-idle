@@ -57,7 +57,13 @@ type boardView struct {
 	Quests  []struct {
 		ID     string
 		State  string
-		Chunks []struct{ ID, State, Readiness, Why string }
+		Chunks []struct {
+			ID, State, Readiness, Why string
+			Action                    *struct {
+				Verb     string
+				Disabled bool
+			} `json:"action"`
+		}
 	} `json:"quests"`
 }
 
@@ -78,8 +84,9 @@ func (t *tapper) get(ctx context.Context) (boardView, error) {
 	return v, json.NewDecoder(resp.Body).Decode(&v)
 }
 
-func (t *tapper) post(ctx context.Context, path string) string {
-	req, _ := http.NewRequestWithContext(ctx, "POST", t.answer+path, bytes.NewReader([]byte("{}")))
+func (t *tapper) post(ctx context.Context, path, chunk string) string {
+	body, _ := json.Marshal(map[string]string{"chunk": chunk})
+	req, _ := http.NewRequestWithContext(ctx, "POST", t.answer+path, bytes.NewReader(body))
 	req.Header.Set("Authorization", "Bearer "+t.token)
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := t.client.Do(req)
@@ -101,18 +108,26 @@ func (t *tapper) Step(ctx context.Context) (tap string, blocked bool, err error)
 	if v.Blocked != nil && v.Blocked.Quest == t.quest {
 		return "", true, nil
 	}
-	switch {
-	case v.Awaiting != nil && v.Awaiting.Quest == t.quest && v.HandIn == nil:
-		if !t.allowed(v.Awaiting.Chunk) {
-			return "", false, nil
-		}
-		tap = "handin " + v.Awaiting.Chunk
-		fmt.Fprintf(t.log, "%s tap %s: %s\n", time.Now().Format("15:04:05"), tap, t.post(ctx, "/api/quests/"+t.quest+"/handin"))
-	case v.Running == nil && v.Awaiting == nil:
-		for _, o := range v.Offers {
-			if o.Quest == t.quest && o.Startable && t.allowed(o.Chunk) {
-				tap = "start " + o.Chunk
-				fmt.Fprintf(t.log, "%s tap %s: %s\n", time.Now().Format("15:04:05"), tap, t.post(ctx, "/api/quests/"+t.quest+"/start"))
+	// The tap is the button the row renders: the server's `action` of the part (internal/questboard/desk_action.go), the same
+	// one the web panel draws, so a part that shows no button is never tapped and a missing button fails the scenario.
+	if v.HandIn == nil || v.Running == nil && v.Awaiting == nil {
+		for _, q := range v.Quests {
+			if q.ID != t.quest {
+				continue
+			}
+			for _, c := range q.Chunks {
+				a := c.Action
+				if a == nil || a.Disabled || !t.allowed(c.ID) || a.Verb != "start" && a.Verb != "handin" {
+					continue
+				}
+				if a.Verb == "handin" && v.HandIn != nil || a.Verb == "start" && v.Running != nil {
+					continue
+				}
+				tap = a.Verb + " " + c.ID
+				fmt.Fprintf(t.log, "%s tap %s: %s\n", time.Now().Format("15:04:05"), tap, t.post(ctx, "/api/quests/"+t.quest+"/"+a.Verb, c.ID))
+				break
+			}
+			if tap != "" {
 				break
 			}
 		}

@@ -362,8 +362,10 @@ cmd/d2scenario/run.go  credit-runner  pgledger
 cmd/d2scenario/run.go  credit-runner  pgprov
 cmd/d2scenario/run.go  credit-runner  pgtaps
 cmd/d2scenario/tap.go  credit-runner  andariel1
+cmd/d2scenario/tap.go  credit-runner  handinbtn
 cmd/d2scenario/tap.go  credit-runner  pgtaps
 cmd/d2scenario/tap_test.go  credit-runner  andariel1
+cmd/d2scenario/tap_test.go  credit-runner  handinbtn
 cmd/d2scenario/tap_test.go  credit-runner  pgtaps
 cmd/d2scenario/validate.go  credit-runner  pgselfcheck
 data/bulkid  credit-runner  bulkid
@@ -644,6 +646,7 @@ docs/quest-hints.md  live-agent  questdrill
 docs/questboard.md  credit-runner  cain45
 docs/questboard.md  credit-runner  cain5b
 docs/questboard.md  credit-runner  cainfix3
+docs/questboard.md  credit-runner  handinbtn
 docs/questboard.md  credit-runner  questrun
 docs/questboard.md  credit-runner  quests1
 docs/questboard.md  credit-runner  quests10
@@ -1396,7 +1399,10 @@ internal/questboard/chunks_test.go  credit-runner  quests7b
 internal/questboard/def.go  credit-runner  cainfix3
 internal/questboard/desk.go  credit-runner  andariel1
 internal/questboard/desk.go  credit-runner  bsm8
+internal/questboard/desk.go  credit-runner  handinbtn
 internal/questboard/desk.go  credit-runner  questrun
+internal/questboard/desk_action.go  credit-runner  handinbtn
+internal/questboard/desk_action_test.go  credit-runner  handinbtn
 internal/questboard/desk_reason_test.go  credit-runner  bsm8
 internal/questboard/desk_test.go  credit-runner  andariel1
 internal/questboard/desk_test.go  credit-runner  questrun
@@ -1774,9 +1780,11 @@ internal/watch/testdata/quests  credit-runner  quests10
 internal/watch/testdata/quests  credit-runner  quests4
 internal/watch/testdata/quests  credit-runner  quests7
 internal/watch/testdata/quests  credit-runner  quests8
+internal/watch/testdata/quests/  credit-runner  handinbtn
 internal/watch/testdata/questui  credit-runner  quests10
 internal/watch/testdata/questui  credit-runner  quests8
 internal/watch/testdata/questui/quest_ui.mjs  credit-runner  bsm8
+internal/watch/testdata/questui/quest_ui.mjs  credit-runner  handinbtn
 internal/watch/testdata/reset  credit-runner  botreset
 internal/watch/testdata/reset  credit-runner  resetinstant
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail
@@ -1957,6 +1965,7 @@ internal/watch/web/panels/quest-board  credit-runner  boardorder
 internal/watch/web/panels/quest-board  credit-runner  quests10
 internal/watch/web/panels/quest-board  credit-runner  quests8
 internal/watch/web/panels/quest-board/panel.js  credit-runner  bsm8
+internal/watch/web/panels/quest-board/panel.js  credit-runner  handinbtn
 internal/watch/web/panels/quest-list  credit-runner  quests8
 internal/watch/web/panels/quest-strip  credit-runner  quests8
 internal/watch/web/panels/statusline/  credit-runner  uifix1
