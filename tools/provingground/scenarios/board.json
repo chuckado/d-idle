@@ -1756,8 +1756,7 @@
      "kind": "no_writes"
     }
    ],
-   "status": "pending",
-   "pending_reason": "not yet run on a lab slot (U); the coordinator or the builder long lane runs it"
+   "status": "active"
   }
  ]
 }
