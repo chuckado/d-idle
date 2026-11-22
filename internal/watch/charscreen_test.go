@@ -66,8 +66,8 @@ func TestCharPageRoutes(t *testing.T) {
 	if got := body("/watch/inventory"); got != charPage {
 		t.Error("/watch/inventory is not the canvas")
 	}
-	if got := body("/watch/inventory?view=classic"); got != invPage {
-		t.Error("?view=classic is not the cards page")
+	if got := body("/watch/inventory?view=classic"); got != charPage {
+		t.Error("?view=classic still serves a page other than the canvas (the cards page is gone)")
 	}
 	for path, ctype := range map[string]string{"/watch/inventory-canvas.js": "text/javascript", "/watch/inventory-canvas.css": "text/css"} {
 		w := httptest.NewRecorder()

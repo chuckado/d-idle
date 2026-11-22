@@ -113,3 +113,29 @@ func TestNonNecromancerNeverReadsNecroData(t *testing.T) {
 		t.Fatalf("paladin curse: %v %v", done, err)
 	}
 }
+
+// necro3: the Poison Nova caster profile exists and curses differently from the summoner (two builds, one engine).
+func TestPoisonNovaProfileCurses(t *testing.T) {
+	h, w := newNecro(t)
+	known := KnownSkills(w.snap.Player, h.f.cat, h.f.keys)
+	p := w.snap.Player
+	tg := Target{Unit: mon(2, 1, 112, 100), Name: "f", Dist: 12, LifePct: 100}
+	caster, err := LookupProfile(d2.Necromancer, "poisonnova")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if sp, _ := curseFor(caster.Necro, known, p, tg); sp.Name != "Lower Resist" {
+		t.Fatalf("caster curses %q", sp.Name)
+	}
+	summ, _ := LookupProfile(d2.Necromancer, "summoner")
+	if sp, _ := curseFor(summ.Necro, known, p, tg); sp.Name != "Amplify Damage" {
+		t.Fatalf("summoner curses %q", sp.Name)
+	}
+	if _, err := LookupProfile(d2.Paladin, "poisonnova"); err == nil || !strings.Contains(err.Error(), "paladin") {
+		t.Fatalf("a Paladin must not get a necromancer profile: %v", err)
+	}
+	if caster.AttackNames(36, func(n string) bool { return true })[0] != "Poison Nova" ||
+		caster.AttackNames(20, func(n string) bool { return n != "Poison Nova" })[0] != "Bone Spear" {
+		t.Fatal("caster attack bands: Poison Nova from 30, Bone Spear from 18")
+	}
+}

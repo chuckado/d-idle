@@ -56,3 +56,21 @@ func TestNecromancerSummonerBuildSelectableAndDefaultsUnchanged(t *testing.T) {
 		t.Error("an unknown table must be an error")
 	}
 }
+
+// necro3: the SME tables are opt-in by name, name their combat line, and leave the default alone.
+func TestNecromancerSMETables(t *testing.T) {
+	for name, combat := range map[string]string{"necromancer_summoner_sme": "summoner", "necromancer_poison_nova_sme": "poisonnova"} {
+		if _, err := LoadBuild(name, ""); err != nil {
+			t.Fatalf("%s: %v", name, err)
+		}
+		if got := TableCombat(name); got != combat {
+			t.Errorf("%s combat %q want %q", name, got, combat)
+		}
+		if n := ResolveBuild(name, "necromancer"); n != name {
+			t.Errorf("%s resolves to %q", name, n)
+		}
+	}
+	if n := DefaultBuildName("necromancer"); n != "necromancer_summoner_normal30" {
+		t.Fatalf("default changed: %s", n)
+	}
+}

@@ -56,15 +56,17 @@ type SaleLine struct {
 
 // SaleOrder is the one sale of a hero, stored next to the vault log so a restart keeps it.
 type SaleOrder struct {
-	ID          string     `json:"id"`
-	Lines       []SaleLine `json:"lines"`
-	Total       int        `json:"total"`
-	State       string     `json:"state"`
-	Done        int        `json:"done"` // records that left the vault
-	StashBefore int        `json:"stashBefore,omitempty"`
-	StashAfter  int        `json:"stashAfter,omitempty"`
-	Note        string     `json:"note,omitempty"`
-	Ended       int64      `json:"ended,omitempty"`
+	ID          string       `json:"id"`
+	Lines       []SaleLine   `json:"lines"`
+	Total       int          `json:"total"`
+	State       string       `json:"state"`
+	Done        int          `json:"done"` // records that left the vault
+	StashBefore int          `json:"stashBefore,omitempty"`
+	StashAfter  int          `json:"stashAfter,omitempty"`
+	Note        string       `json:"note,omitempty"`
+	Ended       int64        `json:"ended,omitempty"`
+	All         bool         `json:"all,omitempty"`     // a "Sell all" order (sellall.go): the bot listed the records itself
+	Skipped     []SaleReason `json:"skipped,omitempty"` // All: the vault records left out and why
 }
 
 // Active reports whether the sale still moves.
@@ -74,15 +76,17 @@ func (o *SaleOrder) Active() bool {
 
 // SaleView is the sale as the page shows it.
 type SaleView struct {
-	ID          string `json:"id"`
-	State       string `json:"state"`
-	Items       int    `json:"items"`
-	Done        int    `json:"done"`
-	Gold        int    `json:"gold"`
-	StashBefore int    `json:"stashBefore"`
-	StashAfter  int    `json:"stashAfter"`
-	Note        string `json:"note,omitempty"`
-	Line        string `json:"line"`
+	ID          string       `json:"id"`
+	State       string       `json:"state"`
+	Items       int          `json:"items"`
+	Done        int          `json:"done"`
+	Gold        int          `json:"gold"`
+	StashBefore int          `json:"stashBefore"`
+	StashAfter  int          `json:"stashAfter"`
+	Note        string       `json:"note,omitempty"`
+	Line        string       `json:"line"`
+	All         bool         `json:"all,omitempty"`
+	Skipped     []SaleReason `json:"skipped,omitempty"`
 }
 
 // SaleSkip is one asked record that is not in the sale and why.
@@ -348,13 +352,17 @@ func dedupe(ids []string) []string {
 }
 
 func (k *Keeper) saleView(o *SaleOrder) SaleView {
-	v := SaleView{ID: o.ID, State: o.State, Items: len(o.Lines), Done: o.Done, Gold: o.Total, StashBefore: o.StashBefore, StashAfter: o.StashAfter, Note: o.Note}
+	v := SaleView{ID: o.ID, State: o.State, Items: len(o.Lines), Done: o.Done, Gold: o.Total, StashBefore: o.StashBefore, StashAfter: o.StashAfter, Note: o.Note, All: o.All, Skipped: o.Skipped}
 	switch o.State {
 	case SaleQueued:
 		v.Line = fmt.Sprintf("Selling %d items for %s gold: waiting for the stash to confirm", len(o.Lines), bulkid.Thousands(o.Total))
 	case SaleCredited:
 		v.Line = fmt.Sprintf("Sold for %s gold: removing %d items from the vault", bulkid.Thousands(o.Total), len(o.Lines))
 	case SaleDone:
+		if o.All {
+			v.Line = fmt.Sprintf("Sold %d for %s gold%s", o.Done, bulkid.Thousands(o.Total), skippedLine(o.Skipped))
+			break
+		}
 		v.Line = fmt.Sprintf("Sold %d items for %s gold. Stash gold: %s", o.Done, bulkid.Thousands(o.Total), bulkid.Thousands(o.StashAfter))
 	default:
 		v.Line = "Not sold: " + o.Note
@@ -365,7 +373,11 @@ func (k *Keeper) saleView(o *SaleOrder) SaleView {
 // SaleView returns the sale the page shows (the active one, or the last for ten minutes), nil when none.
 func (k *Keeper) SaleView() *SaleView {
 	o := k.saleOrder()
-	if o == nil || (!o.Active() && o.Ended > 0 && k.now().Sub(time.Unix(o.Ended, 0)) > saleShown) {
+	shown := saleShown
+	if o != nil && o.All {
+		shown = saleAllShown
+	}
+	if o == nil || (!o.Active() && o.Ended > 0 && k.now().Sub(time.Unix(o.Ended, 0)) > shown) {
 		return nil
 	}
 	v := k.saleView(o)

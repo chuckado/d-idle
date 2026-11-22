@@ -59,9 +59,12 @@ var vaultModes = map[string]vaultSet{
 	// Identify all (card identifyall): gold only; enough stash, and a stash that pays for 12 of the records
 	"identify":       {n: 140, capacity: 400, on: true, keep: "ok", act: "gold", stash: 560000},
 	"identify-short": {n: 140, capacity: 400, on: true, keep: "ok", act: "gold", stash: 960},
-	"revealnone":     {n: 140, capacity: 400, on: true, keep: "ok", act: "none"},
-	"revealcain":     {n: 140, capacity: 400, on: true, keep: "ok", act: "cain"},
-	"revealdead":     {n: 140, capacity: 400, on: true, keep: "ok", act: "dead"},
+	// Sell all (card sellall): the instant sale with a stash that takes everything, and one that takes only part of it
+	"sellall":      {n: 140, capacity: 400, on: true, keep: "ok", act: "sellall", stash: 7200},
+	"sellall-full": {n: 140, capacity: 400, on: true, keep: "ok", act: "sellall", stash: 2499000},
+	"revealnone":   {n: 140, capacity: 400, on: true, keep: "ok", act: "none"},
+	"revealcain":   {n: 140, capacity: 400, on: true, keep: "ok", act: "cain"},
+	"revealdead":   {n: 140, capacity: 400, on: true, keep: "ok", act: "dead"},
 	// the wallet states (V7b): enough Ether to buy, short, one step owned (the refund fits), one step owned and the vault too full for the lower tier, every step owned
 	"eth": {n: 140, on: true, eth: true, balance: 35}, "eth-short": {n: 140, on: true, eth: true, balance: 5},
 	"eth-owned": {n: 140, on: true, eth: true, balance: 15, owned: 1}, "eth-nofit": {n: 450, on: true, eth: true, balance: 15, owned: 1},
@@ -192,6 +195,9 @@ func newVaultFor(mode string, dir string) *watch.VaultAPI {
 			a.preset(ids)
 		}
 		desk.Act = a
+		if set.act == "sellall" {
+			desk.Act = &fixtureSellAllActor{fixtureActor: a, stash: set.stash}
+		}
 		if set.act == "gold" {
 			desk.Act = &fixtureGoldActor{fixtureActor: a, stash: set.stash}
 			desk.ScrollGold = 80
@@ -576,3 +582,82 @@ func (g *fixtureGoldActor) EnqueueRevealGoldAll(ctx context.Context, max int, co
 func (g *fixtureGoldActor) CancelGold() (watch.VaultGoldOrder, bool) {
 	return watch.VaultGoldOrder{}, false
 }
+
+// fixtureSellAllActor is the instant sale of the bot's page with Sell all: a record is worth its Value, the stash holds at most
+// 2,500,000, every vault record that is not pinned goes (the fixture has no orders).
+type fixtureSellAllActor struct {
+	*fixtureActor
+	stash int
+}
+
+func (f *fixtureSellAllActor) Act(ctx context.Context) watch.VaultActView {
+	v := f.fixtureActor.Act(ctx)
+	v.Sell.Instant, v.Sell.ConfirmAt = true, 2000
+	ids, _ := f.sellable()
+	pinned := 0
+	for _, r := range f.st.Dump() {
+		if r.State == vault.Recorded && r.Pin {
+			pinned++
+		}
+	}
+	v.Sell.All = &watch.VaultSellAll{N: len(ids)}
+	if pinned > 0 {
+		v.Sell.All.Left = []watch.VaultSaleReason{{Code: "pinned", N: pinned, Why: "pinned"}}
+	}
+	return v
+}
+
+func (f *fixtureSellAllActor) sellable() (ids []string, gold int) {
+	for _, r := range f.st.Dump() {
+		if r.State == vault.Recorded && !r.Pin {
+			ids, gold = append(ids, r.ID), gold+r.Value
+		}
+	}
+	return ids, gold
+}
+
+func (f *fixtureSellAllActor) SaleOn(context.Context) (bool, string) { return true, "" }
+
+func (f *fixtureSellAllActor) SaleQuote(_ context.Context, ids []string) watch.VaultSaleQuote {
+	return watch.VaultSaleQuote{Asked: len(ids), Why: "the fixture sells with Sell all only"}
+}
+
+func (f *fixtureSellAllActor) SellNow(_ context.Context, ids []string, _ bool) ([]watch.VaultKeepResult, *watch.VaultSale) {
+	return nil, nil
+}
+
+func (f *fixtureSellAllActor) SellAllQuote(context.Context) watch.VaultSaleQuote {
+	ids, gold := f.sellable()
+	q := watch.VaultSaleQuote{Asked: len(ids), Count: len(ids), Total: gold, Stash: f.stash, StashAfter: f.stash + gold, ConfirmAt: 2000}
+	room := max(2500000-f.stash, 0)
+	if gold > room { // the stash takes the first records that fit, the rest is "no room"
+		n, sum := 0, 0
+		for _, id := range ids {
+			r, _ := f.st.Get(id)
+			if sum+r.Value > room {
+				break
+			}
+			n, sum = n+1, sum+r.Value
+		}
+		q.Reasons = append(q.Reasons, watch.VaultSaleReason{Code: "room", N: len(ids) - n, Why: "no room in the stash"})
+		q.Count, q.Total, q.StashAfter = n, sum, f.stash+sum
+	}
+	return q
+}
+
+func (f *fixtureSellAllActor) SellAll(_ context.Context, orderID string) (string, string, *watch.VaultSale) {
+	q := f.SellAllQuote(context.Background())
+	ids, _ := f.sellable()
+	done := 0
+	for _, id := range ids[:q.Count] {
+		r, _ := f.st.Get(id)
+		if f.st.SellNow(id, r.Value, "sa-"+orderID) == nil {
+			done++
+		}
+	}
+	f.stash = q.StashAfter
+	return "", "", &watch.VaultSale{ID: "sa-" + orderID, State: "done", Items: q.Count, Done: done, Gold: q.Total, StashBefore: q.Stash, StashAfter: q.StashAfter, All: true,
+		Line: fmt.Sprintf("Sold %d for %d gold", done, q.Total)}
+}
+
+func (f *fixtureSellAllActor) SellAllIDs() []string { ids, _ := f.sellable(); return ids }

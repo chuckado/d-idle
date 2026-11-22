@@ -77,7 +77,7 @@ export function mountCharacters(d) {
   const root = d.root || doc.body;
   const head = el('header', 'cs-head');
   const back = el('a', 'd-btn', T.back);
-  back.dataset.variant = 'ghost'; back.dataset.size = 'md'; back.href = d.backHref || '/watch'; back.dataset.key = 'back'; back.setAttribute('aria-label', T.backLabel);
+  back.dataset.variant = 'ghost'; back.dataset.size = 'md'; back.href = d.backHref || '/watch?live=1'; back.dataset.key = 'back'; back.setAttribute('aria-label', T.backLabel);
   const title = el('h1', '', T.title);
   const nowEl = el('span', 'cs-now', '');
   const newTop = btn(T.newHero, { variant: 'primary', key: 'new-top' });
@@ -452,7 +452,7 @@ async function boot() {
   const texts = await get('/watch/characters.json');
   const root = doc.getElementById('cs-root');
   if (!texts || !root) { if (root) root.textContent = 'The Characters page could not load its texts.'; return; }
-  const back = qs.get('theme') ? '/watch?theme=' + qs.get('theme') : '/watch';
+  const back = qs.get('theme') ? '/watch?live=1&theme=' + qs.get('theme') : '/watch?live=1';
   let overlays = null;
   try { overlays = (await import('/watch/overlay.js')).overlays; } catch (e) { /* the sheet closes itself on Escape */ }
   mountCharacters({ doc, root, overlays, get, post, later: (f, ms) => setTimeout(f, ms), texts, now: Date.now, backHref: back }).start();

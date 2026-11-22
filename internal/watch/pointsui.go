@@ -45,7 +45,6 @@ const pointsPage = `<!DOCTYPE html>
   <p class="d-hint" id="boff" hidden></p>
   <div class="pt-row">
    <button class="d-btn" data-size="sm" id="bopen" type="button" aria-expanded="false" aria-controls="bpicker">Automatic Allocate Skills</button>
-   <button class="d-btn" data-size="sm" data-variant="ghost" id="brespec" type="button" disabled>Respec: coming soon</button>
   </div>
   <p class="d-hint" id="brespecline"></p>
   <ul class="pt-builds" id="bpicker" hidden></ul>
