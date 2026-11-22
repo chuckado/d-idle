@@ -3,7 +3,7 @@
 @layer panels {
   [data-chars] { margin: 0; background: var(--d-bg); color: var(--d-text); }
   .cs [hidden] { display: none; }
-  .cs { display: flex; flex-direction: column; block-size: 100dvh; min-inline-size: 0; }
+  .cs { display: flex; flex-direction: column; block-size: calc(100dvh - var(--d-nav-h, 0px)); min-inline-size: 0; }
   .cs-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-3); padding: var(--d-sp-2) var(--d-sp-4); border-block-end: var(--d-bw) solid var(--d-line); background: var(--d-surface-0); flex: none; }
   .cs-head h1 { margin: 0; font: 600 var(--d-fs-4)/var(--d-lh-tight) var(--d-font-display); color: var(--d-accent-text); }
   .cs-now { margin-inline-start: auto; color: var(--d-text-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }

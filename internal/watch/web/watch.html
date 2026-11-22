@@ -10,22 +10,18 @@
 <link rel="stylesheet" href="/watch/shell.css">
 <link rel="stylesheet" href="/watch/components.css">
 <link rel="stylesheet" href="/watch/utilities.css">
+<link rel="stylesheet" href="/watch/nav.css">
 </head><body>
 <div class="d-shell">
 <header class="top d-band-status" data-band="status">
  <div class="d-brand"><span class="d-brand-mark" aria-hidden="true"></span><h1>d.idle</h1></div>
  <div class="d-band-main">
  </div>
- <nav class="d-links" aria-label="Other pages">
-  <a class="d-btn" data-size="sm" data-variant="ghost" id="invlink" href="/watch/inventory">Inventory</a>
-  <a class="d-btn" data-size="sm" data-variant="ghost" id="skillslink" href="/watch/skills">Skills</a>
-  <a class="d-btn" data-size="sm" data-variant="ghost" id="pointslink" href="/watch/points">Points</a>
-  <a class="d-btn" data-size="sm" data-variant="ghost" id="vaultlink" href="/watch/vault">Vault</a>
-  <a class="d-btn" data-size="sm" data-variant="ghost" id="returnlink" href="/watch/return" hidden>Return screen</a>
+ <div class="d-links" data-nav-host>
   <button class="d-btn" data-size="sm" data-variant="ghost" id="btn-help" type="button">Help</button>
   <button class="d-btn" data-size="sm" data-variant="ghost" id="btn-layout" type="button">Edit layout</button>
   <button class="d-btn" data-size="sm" data-variant="ghost" id="btn-theme" type="button" aria-label="Switch colour theme">Theme: dark</button>
- </nav>
+ </div>
 </header>
 <div class="d-main">
 <div class="d-band-stage" data-band="stage" hidden></div>
@@ -117,6 +113,7 @@
 <div id="toasts" class="toasts d-toasts" role="status" aria-live="polite"></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title" hidden></div>
 <div class="toast" id="toast" role="status" hidden></div>
+<script src="/watch/nav.js"></script>
 <script type="module" src="/watch/shell.js"></script>
 <script src="/watch/app.js"></script>
 <script src="/watch/senses_units.js"></script>

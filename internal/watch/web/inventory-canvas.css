@@ -11,9 +11,9 @@
     --u: round(down, min(calc((100dvh - var(--cv-band) - var(--cv-bar) - 2 * var(--cv-g) - 2 * var(--cv-p) - 2 * var(--cv-h)) / 12),
       calc((100vw - 3 * var(--cv-g) - 5 * var(--cv-p)) / 22)), 1px);
     display: grid; grid-template-rows: var(--cv-band) var(--cv-bar) var(--cv-tabs) minmax(0, 1fr); gap: 0; padding: 0;
-    block-size: 100dvh; min-block-size: 0; overflow: hidden; background: var(--d-bg); }
+    block-size: calc(100dvh - var(--d-nav-h, 0px)); min-block-size: 0; overflow: hidden; background: var(--d-bg); }
   /* the frame's width class is a container query on the page body (a container cannot restyle itself) */
-  .cv-root { container: cv / size; block-size: 100dvh; margin: 0; overflow: hidden; }
+  .cv-root { container: cv / size; block-size: calc(100dvh - var(--d-nav-h, 0px)); margin: 0; overflow: hidden; }
   .cv > .d-band-status { position: static; box-sizing: border-box; block-size: var(--cv-band); padding-block: 0; grid-template-rows: 100%; }
   .cv > .d-band-status .d-band-main { flex-wrap: nowrap; overflow: hidden; }
   .cv > .d-band-status .d-links { flex-wrap: nowrap; }
@@ -335,7 +335,7 @@
 
     /* the selected item: a bottom sheet, opened by a tap on a cell or a slot, closed by its cross, Escape or a tap elsewhere */
     .cv .cv-sel { display: none; }
-    .cv[data-sheet="open"] .cv-sel { display: flex; position: fixed; inset-inline: 0; inset-block-end: 0; z-index: var(--d-z-sheet); box-sizing: border-box; max-block-size: 48dvh; padding: 6px 14px 0; gap: 6px;
+    .cv[data-sheet="open"] .cv-sel { display: flex; position: fixed; inset-inline: 0; inset-block-end: var(--d-nav-h, 0px); z-index: var(--d-z-sheet); box-sizing: border-box; max-block-size: 48dvh; padding: 6px 14px 0; gap: 6px;
       overflow-y: auto; overscroll-behavior: contain; container: none; background: var(--d-surface-2); border: 0; border-block-start: var(--d-bw) solid var(--d-line-strong); border-radius: 16px 16px 0 0; box-shadow: var(--d-shadow-2); }
     .cv-sel h3 { position: sticky; inset-block-start: 0; z-index: 1; display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin: 0 -14px; padding: 2px 14px 4px; white-space: normal; overflow: visible; text-overflow: clip;
       font-size: var(--d-fs-3); background: var(--d-surface-2); overflow-wrap: anywhere; }

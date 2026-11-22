@@ -265,6 +265,5 @@
      still works) and the rest get tighter. */
   .d-shell[data-narrow] .d-band-status .d-links { gap: var(--d-sp-1); }
   .d-shell[data-narrow] .d-band-status .d-links > .d-btn { padding-inline: var(--d-sp-2); }
-  .d-shell[data-narrow] .d-band-status .d-links > a[href="/watch/return"] { display: none; }
   .d-shell[data-narrow="phone"] .d-band-status .d-links > .d-btn { padding-inline: 5px; font-size: var(--d-fs-0); }
 }
