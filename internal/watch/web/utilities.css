@@ -36,6 +36,9 @@
   .d-main[data-cmode="phone"] .d-slottabs :is(.qb-box, .qb-list, .o-list, .o-items, .rows, .zm-list, .zc-scroll, .n-list, .d-slotbody[data-scroll], [data-scroll]) {
     flex: 0 0 auto; max-block-size: none; overflow: visible; overscroll-behavior: auto; scrollbar-gutter: auto; }
   .d-main[data-cmode="phone"] .d-slottabs .o-items { min-block-size: 0; }
+  /* the Act | Area switch is the first row of the map tile in the flow, not a float over the tab row above it (card mapphone, bug 2026-11-22) */
+  .d-main[data-cmode="phone"] .d-slottabs > .d-panel:has(> .d-mapswitch) { display: flex; flex-direction: column; gap: var(--d-sp-1); }
+  .d-main[data-cmode="phone"] .d-slottabs > .d-panel > .d-mapswitch { position: static; order: -1; align-self: flex-end; }
   /* the quest rows say their whole title (a wrapped line, never an ellipsis) and the badge sits under it when the row is narrow */
   .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-t, .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-t b { white-space: normal; overflow: visible; text-overflow: clip; min-inline-size: 0; overflow-wrap: anywhere; }
   .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-row { grid-template-columns: minmax(0, 1fr) auto; }
