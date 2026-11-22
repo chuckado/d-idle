@@ -404,6 +404,7 @@
 | equipswap | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/stash.go`<br>`internal/invdesk/stash_test.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/task/act1.go`<br>`internal/task/act2.go`<br>`internal/task/act3.go`<br>`internal/task/act4.go`<br>`tools/provingground/scenarios/manage.json`<br>`docs/vault.md`<br>`docs/questboard.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | necro2 | proposed | - | `docs/probes/necromancer-readiness-2026-11-22.md` | - |
+| necrosme | proposed | - | `docs/design/necromancer-sme-answers-2026-11-22.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -438,6 +439,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0b1c9d7b0 11-22 14:14 `Merge agent/necrosme: Merge branch 'main' into necrosme` (necrosme)
+- 26ff256f1 11-22 14:13 `Merge branch 'main' into necrosme` (-)
 - f85df9835 11-22 14:02 `Merge agent/necro-audit: Merge branch 'main' into necro2` (necro-audit)
 - c4d0f079e 11-22 14:00 `Merge branch 'main' into necro2` (-)
 - 2cd38eec9 11-22 13:46 `Merge agent/mapverify: Merge branch 'main' into mapverify` (mapverify)
@@ -446,6 +449,4 @@
 - 8bd91284e 11-22 11:36 `Merge branch 'main' into vaultsell` (-)
 - 4683bb790 11-22 11:31 `Merge origin/main into agent/vaultsell (identifyall touched vault.js)` (-)
 - 1984adebd 11-22 11:26 `Merge agent/equipswap: Merge origin/main into equipswap` (equipswap)
-- 6cd572085 11-22 11:22 `Merge origin/main into equipswap` (-)
-- 4ce4f7d65 11-22 11:20 `Merge origin/main into agent/vaultsell` (-)
 <!-- statusgen:end -->
