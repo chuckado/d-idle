@@ -28,7 +28,7 @@ owns:
   - "docs/vault.md"
   - "docs/questboard.md"
 exclusive: []
-result: "Sail east: root cause fixed (hop step read Done from Need = not needed while Andariel lives; Evidence is now the world act; must-fail tests on four hops). Equip swap: stash fallback and a room refusal (must-fail tests, Paladin and Sorceress); vault.equip-swap GREEN live on devp19, both classes. recall-now: Paladin trip ran, the assert read an unlogged label (fixed; scenario starts in the field; live result in the job). Sorceress cap later found in the pack: cause open (U)."
+result: "Sail east: root cause fixed (hop step read Done from Need = not needed while Andariel lives; Evidence is now the world act; must-fail tests on four hops). Equip swap: stash fallback and a room refusal (must-fail tests, Paladin and Sorceress); vault.equip-swap GREEN live on devp19, both classes. recall-now: Paladin GREEN live after the assert fix (it read an unlogged label). recall-now Sorceress 3 stays RED live, twice, to the second: the cap is worn after the equip and found in the backpack 13 s later with no unequip logged between (loot minute); cause open (U), not the equip logic (vault.equip-swap and equip-one-tap are GREEN) and not the chicken reload."
 contracts: []
 ---
 
@@ -42,8 +42,8 @@ Fixes found by the Vault Equip sandbox test of 2026-11-22. Done when the four bo
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Equip swap: displaced item goes to the Vault, else the stash, else stays in the backpack under the keep mark; an order with no home is refused with a reason (must-fail tests, Paladin and Sorceress)
-- [ ] #2 manage.recall-now: scenario starts in the field and reads the trip's log line (live Paladin 11 and Sorceress 3)
-- [ ] #3 Sail east to Act 2 reads done only when the world is in Act 2 (must-fail tests, four act hops)
+- [x] #1 Equip swap: displaced item goes to the Vault, else the stash, else stays in the backpack under the keep mark; an order with no home is refused with a reason (must-fail tests, Paladin and Sorceress)
+- [ ] #2 manage.recall-now reads the trip's log line (live: Paladin 11 GREEN, Sorceress 3 RED: the worn cap leaves the body, cause open)
+- [x] #3 Sail east to Act 2 reads done only when the world is in Act 2 (must-fail tests, four act hops)
 - [ ] #4 Scenarios vault.equip-swap and manage.recall-now green on the lab d2d, both classes (live, CHEATED setups)
 <!-- AC:END -->
