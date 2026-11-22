@@ -870,7 +870,7 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
+   "notes": "Chunk forgotten_forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
    "assert": [
     {
      "kind": "log_line",
@@ -959,7 +959,7 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
+   "notes": "Chunk forgotten_forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
    "assert": [
     {
      "kind": "stash_between",
@@ -1117,7 +1117,7 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
+   "notes": "Chunk forgotten_forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
    "assert": [
     {
      "kind": "log_line",
@@ -1204,7 +1204,7 @@
     ]
    },
    "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, board records as the scenario says. CHEATED: waypoints and level are SETUP writes (mechanics evidence only, never balance).",
-   "notes": "Chunk forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
+   "notes": "Chunk forgotten_forgotten_tower/countess with a short belt; area 6 is the Black Marsh (levels.txt, S). The belt is set by the setup (3 healing potions).",
    "assert": [
     {
      "kind": "board",
@@ -1669,6 +1669,94 @@
    ],
    "status": "pending",
    "pending_reason": "not run (no lab slot in this branch): RED first (knob off or old bot), then green; needs a deterministic gave_up park in leg 1 (U), the unit tests in internal/questboard cover the rule"
+  },
+  {
+   "id": "board.stale-accept-unblocks",
+   "title": "A stale accepted chunk of a quest that reads done does not block the next Start",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "forgotten_tower",
+    "chunk": "countess"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [],
+   "touches": [
+    "internal/questboard/",
+    "internal/bot/questboard.go",
+    "internal/task/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "forgotten_tower",
+     "chunk": "countess"
+    },
+    "quests": [
+     {
+      "record": 5,
+      "word": 1
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "quests.boardSM": 1,
+     "resource.pointsDecisions": 1
+    },
+    "api": [
+     {
+      "after_s": 30,
+      "path": "/api/quests/den_of_evil/start",
+      "body": {
+       "chunk": "clear_den"
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, record 5 (the Forgotten Tower) written done, board record as the scenario says. CHEATED: waypoints, level and the quest word are SETUP writes (mechanics evidence only, never balance).",
+   "notes": "User bug 2026-11-22: the accepted Forgotten Tower record outlived the done quest and every Start answered 409 busy. The load step must close the stale run (auto-finish), so the tap on the Den starts it. Unit test: TestStaleAcceptDoesNotBlock. U: not yet run live.",
+   "assert": [
+    {
+     "kind": "api_reply",
+     "index": 0,
+     "ok": true,
+     "status": 200
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "active"
   }
  ]
 }

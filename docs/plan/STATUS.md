@@ -398,6 +398,7 @@
 | handinbtn | proposed | - | `internal/questboard/desk_action.go`<br>`internal/questboard/desk_action_test.go`<br>`internal/questboard/desk.go`<br>`internal/watch/web/panels/quest-board/panel.js`<br>`internal/watch/testdata/questui/quest_ui.mjs`<br>`internal/watch/testdata/quests/`<br>`cmd/d2scenario/tap.go`<br>`cmd/d2scenario/tap_test.go`<br>`docs/questboard.md` | - |
 | warptrigger | proposed | - | `docs/probes/warptrigger-2026-11-22.md`<br>`internal/d2dctl/warptriggers.go`<br>`internal/d2dctl/warptriggers_test.go`<br>`internal/d2dctl/fake/fake.go`<br>`internal/nav/mouthgate.go`<br>`internal/nav/warpread_test.go`<br>`internal/d2map/static.go`<br>`internal/d2dworld/triggers_test.go`<br>`internal/d2denv/env.go` | `fork-branch:didle/warp-triggers-20261122` |
 | exitsread | proposed | - | `docs/probes/exitsread-2026-11-22.md`<br>`tools/probes/exitsread.py`<br>`tools/probes/exitscmp`<br>`internal/nav/hints_export.go`<br>`internal/nav/exitsread_test.go`<br>`internal/nav/route.go` | - |
+| staleaccept | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_stale_test.go`<br>`tools/provingground/scenarios/board.json`<br>`docs/questboard.md` | - |
 | mapphone | proposed | - | `internal/watch/web/panels/area-map`<br>`internal/watch/web/utilities.css`<br>`tools/uishots/mapphone.go`<br>`tools/uishots/mapphone.js`<br>`internal/watch/testdata/areamap`<br>`docs/ui/map-phone`<br>`tools/uishots.sh`<br>`tools/uishots/fit.go`<br>`tools/uishots/fixtures.go`<br>`tools/uishots/serve.go`<br>`docs/mapfog.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
@@ -434,6 +435,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 1f2524ed5 11-22 11:03 `Merge agent/staleaccept: Merge branch 'main' into staleaccept` (staleaccept)
+- 54f39b380 11-22 11:02 `Merge branch 'main' into staleaccept` (-)
 - f430eca93 11-22 10:51 `Merge agent/mapphone: mapphone: phone rules in utilities.css, uilint clean, leakcheck clean` (mapphone)
 - 52978338f 11-22 00:25 `Merge agent/map5: Merge origin/main into fogtrail` (map5)
 - aa0829869 11-22 00:20 `Merge origin/main into fogtrail` (-)
@@ -442,6 +445,4 @@
 - 5e3f23a9a 11-22 00:01 `Merge agent/map3: Merge branch 'main' into warptrigger` (map3)
 - 2c188690b 11-22 00:00 `Merge branch 'main' into warptrigger` (-)
 - 554e65ea4 11-21 23:55 `Merge agent/handinbtn: Merge branch 'main' into handinbtn` (handinbtn)
-- 360c4e719 11-21 23:54 `Merge branch 'main' into handinbtn` (-)
-- 2ea26f220 11-21 23:51 `Merge origin/main into warptrigger` (-)
 <!-- statusgen:end -->
