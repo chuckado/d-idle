@@ -5,7 +5,7 @@ import "testing"
 // A quest that reads done must never keep another quest from starting (user bug, deploy 31): the run of a chunk whose
 // own check lags behind the quest word was left live for ever, and a done row has no Stop control.
 func TestStaleAcceptDoesNotBlock(t *testing.T) {
-	const tower, countess = "forgotten_tower", "countess"
+	const ftower, countess = "forgotten_tower", "countess"
 	cases := []struct {
 		name      string
 		doneQuest bool // the quest word says done
@@ -24,19 +24,19 @@ func TestStaleAcceptDoesNotBlock(t *testing.T) {
 		for _, c := range cases {
 			t.Run(class+"/"+c.name, func(t *testing.T) {
 				r := newRigSM(t, class, 30, true)
-				if err := r.x.Accept(tower, countess); err != nil {
+				if err := r.x.Accept(ftower, countess); err != nil {
 					t.Fatal(err)
 				}
 				if c.stop {
-					if err := r.x.Cancel(tower, countess); err != nil {
+					if err := r.x.Cancel(ftower, countess); err != nil {
 						t.Fatal(err)
 					}
 				}
 				if c.doneQuest {
-					r.f.DoneQuest[tower] = TierSave
+					r.f.DoneQuest[ftower] = TierSave
 				}
 				if c.doneChunk {
-					r.f.ChunkDone[ChunkKey(tower, countess)] = TierSave
+					r.f.ChunkDone[ChunkKey(ftower, countess)] = TierSave
 				}
 				err := r.x.Accept(den, clr)
 				if c.blocks != (err != nil) {
@@ -44,7 +44,7 @@ func TestStaleAcceptDoesNotBlock(t *testing.T) {
 				}
 				if !c.blocks {
 					r.restart()
-					if d := r.next(); d.Quest == tower {
+					if d := r.next(); d.Quest == ftower {
 						t.Fatalf("stale run came back after a restart: %+v", d)
 					}
 				}

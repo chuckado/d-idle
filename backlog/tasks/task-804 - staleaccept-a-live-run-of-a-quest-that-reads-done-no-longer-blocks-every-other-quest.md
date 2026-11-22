@@ -28,7 +28,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-User bug 2026-11-22: tower/countess stayed a live run after the quest word read done; 409 busy for every quest. Done when the load step closes it (auto-finish).
+User bug 2026-11-22: forgotten_tower/countess stayed a live run after the quest word read done; 409 busy for every quest. Done when the load step closes it (auto-finish).
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
