@@ -1,10 +1,11 @@
 ---
 id: TASK-796
 title: 'mercbr: Blood Raven hand-in at Kashya and the free Act 1 merc'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T01:59:00Z'
+updated_date: '2026-11-22T02:20:00Z'
 labels:
   - bot
   - probe

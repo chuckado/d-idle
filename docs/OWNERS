@@ -358,7 +358,6 @@ cmd/d2scenario/main.go  credit-runner  pgledger
 cmd/d2scenario/main_test.go  credit-runner  agencyp0
 cmd/d2scenario/prov.go  credit-runner  pgprov
 cmd/d2scenario/run.go  credit-runner  agencyp0
-cmd/d2scenario/run.go  credit-runner  mercbr
 cmd/d2scenario/run.go  credit-runner  pgledger
 cmd/d2scenario/run.go  credit-runner  pgprov
 cmd/d2scenario/run.go  credit-runner  pgtaps
@@ -574,7 +573,6 @@ docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
 docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
-docs/probes/mercbr-2026-11-21.md  credit-runner  mercbr
 docs/probes/pg-gate-group1-2026-11-21.md  credit-runner  pgjournal
 docs/probes/pg-journal-pair-2026-11-21.md  credit-runner  pgjournal
 docs/probes/provingground-act1more-2026-11-20.md  credit-runner  act1more
@@ -1429,7 +1427,6 @@ internal/scenario/hero  credit-runner  pghero
 internal/scenario/hero/selfcheck.go  credit-runner  pgselfcheck
 internal/scenario/ledger.go  credit-runner  pgledger
 internal/scenario/ledger_test.go  credit-runner  pgledger
-internal/scenario/merc_test.go  credit-runner  mercbr
 internal/scenario/newkinds_test.go  credit-runner  town1
 internal/scenario/prov.go  credit-runner  pgprov
 internal/scenario/result.go  credit-runner  pgdigest
@@ -1441,7 +1438,6 @@ internal/scenario/scenario_test.go  credit-runner  barb1
 internal/scenario/scenario_test.go  credit-runner  druid1
 internal/scenario/stability.go  credit-runner  pgstability
 internal/scenario/state.go  credit-runner  agencyp0
-internal/scenario/state.go  credit-runner  mercbr
 internal/scenario/state.go  credit-runner  town1
 internal/scenario/taps.go  credit-runner  pgtaps
 internal/senses  credit-runner  botcpu
@@ -2141,7 +2137,6 @@ tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
 tools/provingground/scenarios/cain.json  credit-runner  wpstep
-tools/provingground/scenarios/merc.json  credit-runner  mercbr
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/provingground/scenarios/points.json  credit-runner  barb1
 tools/provingground/scenarios/points.json  credit-runner  druid1
