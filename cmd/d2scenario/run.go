@@ -728,6 +728,9 @@ func observe(ctx context.Context, c *d2dctl.Client, writes int, live bool) scena
 		if v, ok := sv.Int("lskill"); ok {
 			st.LeftSkill = &v
 		}
+		if m, ok := sv.M["merc"]; ok {
+			st.Merc = &m
+		}
 	}
 	if li, err := c.Level(ctx); err == nil {
 		a := li.ID

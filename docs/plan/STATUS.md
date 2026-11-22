@@ -426,6 +426,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- dc7a82607 11-21 21:07 `Merge agent/mercbr: Merge branch 'main' into mercbr` (mercbr)
+- e2c520612 11-21 21:06 `Merge branch 'main' into mercbr` (-)
+- c5c7142b2 11-21 20:54 `Merge agent/fablemap: Fable design review: whole-map knowledge against the known grid (docs only)` (fablemap)
 - 15f5df146 11-21 20:08 `Merge agent/vaultdesktop: vaultdesktop: card result, merge main` (vaultdesktop)
 - 537c7a083 11-21 16:49 `Merge agent/parkrelease: parkrelease: leakcheck wording` (parkrelease)
 - 11d0d6c11 11-21 16:24 `Merge agent/vaultwire: vaultwire: task card TASK-791 with result` (vaultwire)
@@ -433,7 +436,4 @@
 - a35f56347 11-21 15:37 `Merge origin/main into pgvault` (-)
 - 8af7d79c6 11-21 15:32 `Merge agent/bsm9: Merge branch 'main' into bsm9` (bsm9)
 - 786283e22 11-21 15:31 `Merge branch 'main' into bsm9` (-)
-- 80a801974 11-21 15:20 `Merge origin/main into pgvault` (-)
-- caadfa33f 11-21 15:19 `Merge agent/cainscroll: Merge branch 'main' into cainscroll` (cainscroll)
-- 87f94536e 11-21 15:18 `Merge branch 'main' into cainscroll` (-)
 <!-- statusgen:end -->
