@@ -23,5 +23,5 @@
 
 /* The Skills area's sub-tabs (web/nav.js sets body[data-subtab]): Points shows everything but the build card, Build shows only it. */
 @layer components {
-  body[data-subtab="build"] .pt-page > section:not([data-part="build"]), body[data-subtab="points"] .pt-page > [data-part="build"] { display: none; }
+  [data-subtab="build"] .pt-page > section:not([data-part="build"]), [data-subtab="points"] .pt-page > [data-part="build"] { display: none; }
 }

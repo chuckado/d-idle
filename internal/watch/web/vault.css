@@ -188,7 +188,7 @@
 
 /* The shared navigation adds a band above the page on a wide window and a bar under it on a phone (web/nav.js): the page fills what is left, so it does not scroll for them. */
 @layer utilities {
-  body[data-vault] { display: flex; flex-direction: column; min-block-size: 100dvh; }
-  body[data-vault] > .vt { flex: 1 1 auto; }
-  body[data-vault] .vt, body[data-vault] .vt-page { min-block-size: 0; }
+  [data-vault] { display: flex; flex-direction: column; min-block-size: 100dvh; }
+  [data-vault] > .vt { flex: 1 1 auto; }
+  [data-vault] .vt, [data-vault] .vt-page { min-block-size: 0; }
 }
