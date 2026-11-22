@@ -45,6 +45,7 @@ exclusive:
   - "d2d-lab-binary"
   - "fork-branch:didle/vaultsell-20261122"
 contracts: []
+result: "Sell is instant. Count bug: sellPlan skipped queued, pinned, sold and unloaded items without saying why (260 selected printed Sell (11)); the button now reads Sell n of N with the reasons on screen (node test, two fixtures, fails on main). Fork verbs debug creditgold (new, atomic, stash limit 2,500,000, idempotent, --vault-pay) and item price (read-only engine sell price) on didle/vaultsell-20261122 tip 63b1cecd, image d2dbot:devp20 (2cff4a367ccd) loaded not switched, builder tests green except itemdecode (also red on devp19). Bot: Keeper.SellNow credits the engine price and removes the records, falls back to the old queue. Scenario vault.sell-instant GREEN on a lab slot (Paladin 11, Sorceress 3; CHEATED setup, UNMEASURED run, mechanics only). Page not seen in a browser (fit pages not run)."
 ---
 
 ## Description
