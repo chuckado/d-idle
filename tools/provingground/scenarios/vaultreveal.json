@@ -241,8 +241,8 @@
           "kind": "api_reply",
           "index": 0,
           "status": 200,
-          "ok": true,
-          "why": "the order was accepted"
+          "ok": false,
+          "why": "the order answers 200 with ok false: some items were revealed, the rest named as short of gold"
         },
         {
           "kind": "vault_revealed",
