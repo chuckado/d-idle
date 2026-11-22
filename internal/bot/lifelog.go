@@ -5,6 +5,7 @@ import (
 
 	"d2lod-bot/internal/input"
 	"fmt"
+	"strings"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/power"
@@ -37,6 +38,18 @@ func (r *Runner) zoneEntry(s *d2.Snapshot, p *d2.Player) {
 	kv := []any{"area", p.Area, "clvl", p.Level, "life", fmt.Sprintf("%d/%d", p.Life, p.MaxLife),
 		"heal", k.BeltHP + k.PackHP, "mana", fmt.Sprintf("%d/%d", p.Mana, p.MaxMana), "tome", k.TownPortals, "merc", mercWord(s)}
 	r.e.Log.Info("zone entry", append(kv, heroTermsKV(p)...)...)
+	r.e.Log.Info("worn at zone entry", "worn", wornWord(s))
+}
+
+// wornWord lists what stands on the body as `<body slot>:<unit id>/<class>`, in body order (logging only).
+func wornWord(s *d2.Snapshot) string {
+	var parts []string
+	for body := 0; body < 16; body++ {
+		if u := s.Inventory.Equipped(body); u != nil {
+			parts = append(parts, fmt.Sprintf("%d:%d/%d", body, u.ID, u.Class))
+		}
+	}
+	return strings.Join(parts, " ")
 }
 
 // heroTermsKV is the power estimator's own inputs, appended to the zone entry line so a replay needs no default for them

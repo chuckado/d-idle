@@ -208,6 +208,7 @@ func (l *Looter) pickUp(ctx context.Context, o PickOpts) (PickReport, error) {
 		switch {
 		case err == nil:
 			after, _ := l.hand.Fresh()
+			l.noteWornChange(s, after, c)
 			g := 0
 			if after != nil && after.Player.Gold > goldBefore {
 				g = after.Player.Gold - goldBefore
@@ -741,3 +742,31 @@ func (l *Looter) LeftBehind() int { return int(l.leftBehind.Load()) }
 
 // ClearLeftBehind forgets the count (after a town trip).
 func (l *Looter) ClearLeftBehind() { l.leftBehind.Store(0) }
+
+// noteWornChange logs a worn item that left the body (or arrived) while one pickup ran. A pickup never takes anything off
+// on purpose; a line here names the pickup that did (card recallsorc: a worn cap went to the pack with no log line).
+func (l *Looter) noteWornChange(before, after *d2.Snapshot, c cand) {
+	if before == nil || after == nil {
+		return
+	}
+	worn := func(s *d2.Snapshot) map[int]uint32 {
+		m := map[int]uint32{}
+		for _, it := range s.Inventory.Items {
+			if it.Item != nil && it.Item.Where == d2.ContEquipment {
+				m[it.Item.Body] = it.ID
+			}
+		}
+		return m
+	}
+	b, a := worn(before), worn(after)
+	for body, id := range b {
+		if a[body] != id {
+			l.e.Log.Info("loot: worn item changed by a pickup", "picked", c.name, "body", body, "was", id, "now", a[body])
+		}
+	}
+	for body, id := range a {
+		if _, had := b[body]; !had {
+			l.e.Log.Info("loot: item worn by a pickup", "picked", c.name, "body", body, "now", id)
+		}
+	}
+}
