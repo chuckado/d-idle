@@ -336,7 +336,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	if why := botFailure(trace); why != "" {
 		return withVerdict(res, blocked("the bot exited with an error, it did not play: %s", why))
 	}
-	if why := cutReason(trace); why != "" {
+	if why := cutReason(trace); why != "" && !slices.Contains(s.Needs, "vault.paygold") { // a real-time run (no lockstep clock) is bounded by its wall minutes, not a virtual length
 		return withVerdict(res, blocked("%s", why))
 	}
 	if !after(newestSave(home), before) {
