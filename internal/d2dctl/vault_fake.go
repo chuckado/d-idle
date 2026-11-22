@@ -28,8 +28,12 @@ type VaultFake struct {
 	Gold         map[int]bool      // floor unit ids that are gold
 	Carried      []FakeCarried
 	Stats        VaultStats
-	keys         map[string]bool
-	nextID       int
+	// Bytes maps a record's norm hex to the item the fork's `item decode` would answer for it (the affixes its own bytes carry).
+	// A norm that is missing answers parse (an unknown record). Decodes counts the calls (a read: nothing else changes).
+	Bytes   map[string]VaultRecord
+	Decodes int
+	keys    map[string]bool
+	nextID  int
 }
 
 // Where an item sits on the hero.
@@ -298,7 +302,7 @@ func (f *VaultFake) VaultCaps(context.Context) (VaultCaps, error) {
 	if f.FlagOff {
 		return VaultCaps{}, nil
 	}
-	return VaultCaps{GroundFull: true, GroundTake: true, ItemFull: true, ItemCreate: true, ItemVault: true, PayGold: true}, nil
+	return VaultCaps{GroundFull: true, GroundTake: true, ItemFull: true, ItemCreate: true, ItemVault: true, PayGold: true, Decode: true}, nil
 }
 
 var (
@@ -349,4 +353,24 @@ func (f *VaultFake) Remove(id int) bool {
 func IdentifiedForm(norm string) string {
 	raw, _ := hex.DecodeString(norm)
 	return hex.EncodeToString(append(raw, []byte("+id")...))
+}
+
+// ItemDecode answers like the fork's `item decode`: the identified view of the bytes, nothing created, nothing changed.
+func (f *VaultFake) ItemDecode(_ context.Context, hexNorm string) (VaultRecord, error) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	if err := f.gate(); err != nil {
+		return VaultRecord{}, err
+	}
+	if err := ValidHex(hexNorm); err != nil {
+		return VaultRecord{}, err
+	}
+	f.Decodes++
+	rec, ok := f.Bytes[hexNorm]
+	if !ok {
+		return VaultRecord{}, &VaultRefused{Code: VaultErrParse, Why: "unknown bytes"}
+	}
+	rec.UnitID, rec.Identified = 0, true
+	rec.Raw, rec.Norm = hexNorm, hexNorm
+	return rec, nil
 }

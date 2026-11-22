@@ -490,7 +490,7 @@ function vaultPage(win, d, vis, cs) {
   o.state = sc ? sc.dataset.kind : '';
   o.mode = (d.querySelector('.vt-grid') || { dataset: {} }).dataset.mode || '';
   o.meter = !!d.querySelector('.vt-meter[role="meter"][aria-valuenow]');
-  const box = 'vt-card,.vt-sheet-card,.vt-banner,.vt-head,.vt-dcard,.vt-cell,.vt-bar';
+  const box = 'vt-card,.vt-sheet-card,.vt-banner,.vt-head,.vt-dcard,.vt-cell,.vt-actionbar';
   for (const n of root.querySelectorAll('*')) {
     if (!live(n) || n.closest('.d-sr-only') || !([...n.childNodes].some((c) => c.nodeType === 3 && c.nodeValue.trim()))) continue; // screen-reader-only text is clipped to a pixel on purpose
     const c0 = cs(n);
@@ -505,7 +505,7 @@ function vaultPage(win, d, vis, cs) {
   }
   const ctl = [...root.querySelectorAll('button, a.d-btn, input, select')].filter(live);
   for (const n of ctl) { const r = n.getBoundingClientRect(); if (r.height < 43.5) o.small.push(nm(n) + ' is ' + Math.round(r.height) + ' px high'); }
-  const above = [head, root.querySelector('.vt-banner'), root.querySelector('.vt-filters'), root.querySelector('.vt-bar'), root.querySelector('.vt-keeprow'), root.querySelector('.vt-actrow'), root.querySelector('.vt-promptrow'), root.querySelector('.vt-msg')].filter((n) => n && live(n));
+  const above = [head, root.querySelector('.vt-banner'), root.querySelector('.vt-tools'), root.querySelector('.vt-filters'), root.querySelector('.vt-actionbar')].filter((n) => n && live(n));
   const mr = main.getBoundingClientRect(), edge = Math.max(...above.map((n) => n.getBoundingClientRect().bottom));
   if (mr.top < edge - 1) o.under = 'the list starts at ' + Math.round(mr.top) + ' px, under the parts above it that end at ' + Math.round(edge);
   for (const n of ctl) {
@@ -518,7 +518,7 @@ function vaultPage(win, d, vis, cs) {
     const at = d.elementFromPoint(cx, cy);
     if (!at || !(at === n || n.contains(at) || at.contains(n) || (n.labels && [...n.labels].some((l) => l.contains(at))))) o.covered.push(nm(n) + (at ? ' under ' + nm(at) : ' at ' + Math.round(cx) + ',' + Math.round(cy) + ' of ' + vw + 'x' + vh));
   }
-  for (const n of root.querySelectorAll('.vt-head, .vt-filters, .vt-bar, .vt-body, .vt-main, .vt-grid, .vt-detail, .vt-sheet-card, .vt-banner')) {
+  for (const n of root.querySelectorAll('.vt-head, .vt-tools, .vt-filters, .vt-actionbar, .vt-body, .vt-main, .vt-grid, .vt-sheet-card, .vt-banner')) {
     if (!live(n)) continue;
     const r = n.getBoundingClientRect(), tall = n.matches('.vt-head, .vt-body, .vt-main, .vt-sheet-card');
     if (r.right > vw + 1 || r.left < -1 || (tall && (r.bottom > vh + 1 || r.top < -1))) o.outside.push(nm(n) + ' right ' + Math.round(r.right) + ' bottom ' + Math.round(r.bottom));

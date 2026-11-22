@@ -93,11 +93,23 @@
   "equipCancel": "Cancel order",
   "equipClose": "Close",
   "recallBtn": "Do it now: go to town",
-  "recallStates": {"waiting": "Going home as soon as it is safe: {why}", "going": "Walking home now", "arrived": "In town: the order runs now", "failed": "Could not get home yet: {why}"},
+  "recallStates": {
+    "waiting": "Going home as soon as it is safe: {why}",
+    "going": "Walking home now",
+    "arrived": "In town: the order runs now",
+    "failed": "Could not get home yet: {why}"
+  },
   "recallSent": "The hero is told to go to town now.",
   "equipNote": "Only in town, one town visit. The item you replace goes back into the vault, the slot stays yours until you change it. Charms and belt or backpack items are not equipped here.",
   "equipSent": "Equip queued",
-  "equipStates": {"queued": "Waiting for town", "withdrawing": "Taking it out of the vault", "equipping": "Putting it on", "done": "Done", "failed": "Not worn", "cancelled": "Cancelled"},
+  "equipStates": {
+    "queued": "Waiting for town",
+    "withdrawing": "Taking it out of the vault",
+    "equipping": "Putting it on",
+    "done": "Done",
+    "failed": "Not worn",
+    "cancelled": "Cancelled"
+  },
   "equipDone": "Worn in {slot}.",
   "equipDoneSwap": "Worn in {slot}. {old} went to the {where}.",
   "equipFailed": "Not worn: {why}. If it was taken out it is in your backpack.",
@@ -128,10 +140,14 @@
   "upgradeMax": "Every capacity step is owned",
   "capacity": "Capacity",
   "overBanner": "Over capacity: discard {over} to resume recording ({n} are held). Nothing is deleted.",
-  "fullBanner": "Vault full: {n}/{cap}. New drops are not recorded until you make room.",
+  "fullBanner": "Vault full {n}/{cap}: new drops are not recorded",
   "fullBannerTrim": "The vault is full. The next worthwhile drop will trim the least valuable unpinned item.",
   "markedText": "Marked for sale: {n} ({names}). Nothing is sold until you confirm.",
   "markedFold": "Marked for sale: {n}",
+  "markedChip": "Marked for sale {n}",
+  "dismiss": "Dismiss",
+  "detailClose": "Close",
+  "goldSelSub": "cost {cost}, stash {stash}",
   "markedGo": "Sell these {n} now",
   "offBanner": "Read only: nothing new is recorded and nothing can be changed while loot.vault is 0.",
   "showing": "Showing {n} of {total}",
@@ -189,17 +205,50 @@
   "slotAll": "All",
   "slotsLabel": "Quick filter by item type",
   "slots": [
-    {"id": "weap", "label": "Weapons"},
-    {"id": "tors", "label": "Body armor"},
-    {"id": "helm", "label": "Helmets"},
-    {"id": "glov", "label": "Gloves"},
-    {"id": "boot", "label": "Boots"},
-    {"id": "belt", "label": "Belts"},
-    {"id": "shld", "label": "Shields"},
-    {"id": "ring", "label": "Rings"},
-    {"id": "amul", "label": "Amulets"},
-    {"id": "jewl", "label": "Jewels"},
-    {"id": "char", "label": "Charms"}
+    {
+      "id": "weap",
+      "label": "Weapons"
+    },
+    {
+      "id": "tors",
+      "label": "Body armor"
+    },
+    {
+      "id": "helm",
+      "label": "Helmets"
+    },
+    {
+      "id": "glov",
+      "label": "Gloves"
+    },
+    {
+      "id": "boot",
+      "label": "Boots"
+    },
+    {
+      "id": "belt",
+      "label": "Belts"
+    },
+    {
+      "id": "shld",
+      "label": "Shields"
+    },
+    {
+      "id": "ring",
+      "label": "Rings"
+    },
+    {
+      "id": "amul",
+      "label": "Amulets"
+    },
+    {
+      "id": "jewl",
+      "label": "Jewels"
+    },
+    {
+      "id": "char",
+      "label": "Charms"
+    }
   ],
   "kinds": [
     {
@@ -374,8 +423,11 @@
     "goFree": "Reveal {n} items",
     "goFreeOne": "Reveal 1 item",
     "goEther": "Reveal {n} with {cost} Ether",
-    "goGold": "Reveal {n} for {cost} gold",
-    "goGoldOne": "Reveal 1 for {cost} gold",
+    "goGold": "Reveal {n} items for {cost} gold (stash {stash})",
+    "goGoldOne": "Reveal 1 item for {cost} gold (stash {stash})",
+    "goGoldLabel": "Reveal {n} items with gold",
+    "goGoldLabelOne": "Reveal 1 item with gold",
+    "goGoldSub": "cost {cost}, stash {stash}",
     "confirmGold": "Pay {cost} gold from your stash to reveal {n} items?",
     "confirmYes": "Yes, pay it",
     "confirmNo": "Back",
@@ -398,5 +450,11 @@
     "cancelled": "Gold reveal cancelled.",
     "payLabel": "Pay with",
     "skipNote": "Why only these"
-  }
+  },
+  "revealGoldSel": "Reveal with gold ({n})",
+  "revealGoldOne": "Reveal for {cost} gold",
+  "goldCost": "Reveal {n} items for {cost} gold (stash {stash})",
+  "goldPartial": "; the stash pays for {k}",
+  "goldShort": "Not enough gold in the stash ({price} each, you have {stash})",
+  "goldArm": "Pay {cost} gold? Press again"
 }

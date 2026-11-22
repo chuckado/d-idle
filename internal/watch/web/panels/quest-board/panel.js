@@ -249,7 +249,7 @@ export function boardModel(v, local = shared, now = Date.now()) {
       const w = wordOf(c.readiness || (o && o.readiness));
       const reason = (c.reason && c.reason.text) || (o && (o.sentence || ((o.reasons || [])[0] || {}).text)) || c.why || '';
       const lv = o && o.readiness !== 'safe' ? levelsText(o.levelsToGo) : '';
-      return { id: c.id, title: c.title, state: c.state, word: w, reason: lv || reason, minutes: o ? minutesText(o.minutes) : '', startable: !!(o && o.startable), why: o && !o.startable ? o.why : '', pays: o ? paysText(o.pays) : '' };
+      return { id: c.id, title: c.title, state: c.state, action: c.action || null, word: w, reason: lv || reason, minutes: o ? minutesText(o.minutes) : '', startable: !!(o && o.startable), why: o && !o.startable ? o.why : '', pays: o ? paysText(o.pays) : '' };
     });
     const g = GROUP_OF(q.state);
     if (!acts.has(q.act)) acts.set(q.act, []);
@@ -363,12 +363,17 @@ export function mountBoard(root, ctx, tab) {
     if (c.reason && c.state !== 'done') li.append(ctx.el('span', 'qb-r', c.reason));
     const meta = [c.minutes, c.pays].filter(Boolean).join(', ');
     if (meta && c.state !== 'done') li.append(ctx.el('span', 'qb-m', meta));
-    if (c.state === 'ready' && c.startable) {
-      const dis = m.paused;
-      const b = btn('Start', 'qb-btn qb-p', 'start-' + row.id + '-' + c.id, (x) => press('start', row.id, c.id, false, x), 'Start ' + row.title + (multi ? ', part ' + (idx + 1) : ''));
-      if (dis) { b.disabled = true; b.title = 'Paused: resume the bot first'; }
+    // The one button of the part comes from the server's `action` (the scenario tapper presses the same one). The Now tile of the
+    // drawer already carries the head's button, so the line skips it there.
+    const a = c.action;
+    const onNow = !tab && m.now && m.now.quest === row.id && m.now.chunk === c.id;
+    if (a && !onNow) {
+      const armed = a.confirm && stopArm === a.verb + row.id + c.id;
+      const b = btn(armed ? 'Stop it?' : a.label, 'qb-btn qb-p', a.verb + '-' + row.id + '-' + c.id, (x) => press(a.verb, row.id, c.id, a.confirm, x), a.label + ' ' + row.title + (multi ? ', part ' + (idx + 1) : ''));
+      if (armed) b.dataset.armed = '1';
+      if (a.disabled || (a.verb === 'start' && m.paused)) { b.disabled = true; b.title = a.why || 'Paused: resume the bot first'; }
       li.append(b);
-    } else if (c.state === 'ready' && c.why) li.append(ctx.el('span', 'qb-r', c.why));
+    } else if (!a && c.state === 'ready' && c.why) li.append(ctx.el('span', 'qb-r', c.why));
     return li;
   }
 

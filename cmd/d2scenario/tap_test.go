@@ -49,27 +49,27 @@ func TestTapperTapsOnlyWhatIsAskedFor(t *testing.T) {
 	tp := newTapper(srv.URL, srv.URL, "tok", "search_for_cain", []string{"read"}, &log)
 	ctx := context.Background()
 
-	b.set(`{"offers":[{"quest":"search_for_cain","chunk":"scroll","startable":true}]}`)
+	b.set(`{"quests":[{"id":"search_for_cain","chunks":[{"id":"scroll","state":"x","action":{"verb":"start"}}]}]}`)
 	if tap, _, err := tp.Step(ctx); err != nil || tap != "" {
 		t.Fatalf("scroll is not on the list: %q %v", tap, err)
 	}
-	b.set(`{"offers":[{"quest":"search_for_cain","chunk":"read","startable":false},{"quest":"den_of_evil","chunk":"read","startable":true}]}`)
+	b.set(`{"quests":[{"id":"search_for_cain","chunks":[{"id":"read","action":null}]},{"id":"den_of_evil","chunks":[{"id":"read","action":{"verb":"start"}}]}]}`)
 	if tap, _, _ := tp.Step(ctx); tap != "" {
 		t.Fatalf("not startable or another quest: %q", tap)
 	}
-	b.set(`{"offers":[{"quest":"search_for_cain","chunk":"read","startable":true}]}`)
+	b.set(`{"quests":[{"id":"search_for_cain","chunks":[{"id":"read","state":"x","action":{"verb":"start"}}]}]}`)
 	if tap, _, _ := tp.Step(ctx); tap != "start read" {
 		t.Fatalf("tap %q", tap)
 	}
-	b.set(`{"running":{"quest":"search_for_cain","chunk":"read","state":"running"},"offers":[{"quest":"search_for_cain","chunk":"read","startable":true}]}`)
+	b.set(`{"running":{"quest":"search_for_cain","chunk":"read","state":"running"},"quests":[{"id":"search_for_cain","chunks":[{"id":"read","state":"x","action":{"verb":"cancel"}}]}]}`)
 	if tap, _, _ := tp.Step(ctx); tap != "" {
 		t.Fatal("a running chunk is not tapped again")
 	}
-	b.set(`{"awaiting":{"quest":"search_for_cain","chunk":"read","state":"awaiting"}}`)
+	b.set(`{"awaiting":{"quest":"search_for_cain","chunk":"read","state":"awaiting"},"quests":[{"id":"search_for_cain","chunks":[{"id":"read","state":"x","action":{"verb":"handin"}}]}]}`)
 	if tap, _, _ := tp.Step(ctx); tap != "handin read" {
 		t.Fatalf("tap %q", tap)
 	}
-	b.set(`{"awaiting":{"quest":"search_for_cain","chunk":"read"},"handIn":{"state":"confirming"}}`)
+	b.set(`{"awaiting":{"quest":"search_for_cain","chunk":"read"},"handIn":{"state":"confirming"},"quests":[{"id":"search_for_cain","chunks":[{"id":"read","state":"x","action":{"verb":"handin""disabled":true}}]}]}`)
 	if tap, _, _ := tp.Step(ctx); tap != "" {
 		t.Fatal("hand-in already in progress")
 	}
@@ -86,7 +86,7 @@ func TestTapperTapsOnlyWhatIsAskedFor(t *testing.T) {
 }
 
 func TestTapperRunStopsWithTheContext(t *testing.T) {
-	b := &board{view: `{"offers":[{"quest":"q","chunk":"a","startable":true}]}`}
+	b := &board{view: `{"quests":[{"id":"q","chunks":[{"id":"a","state":"x","action":{"verb":"start"}}]}]}`}
 	srv := httptest.NewServer(b.handler(t))
 	defer srv.Close()
 	tp := newTapper(srv.URL, srv.URL, "tok", "q", nil, io.Discard)
@@ -177,7 +177,7 @@ func (b *vboard) handler() http.Handler {
 		case len(b.posts) > 0:
 			io.WriteString(w, `{"running":{"quest":"q","chunk":"a","state":"running"}}`)
 		case b.now >= b.offerAt:
-			io.WriteString(w, `{"offers":[{"quest":"q","chunk":"a","startable":true}]}`)
+			io.WriteString(w, `{"quests":[{"id":"q","chunks":[{"id":"a","state":"x","action":{"verb":"start"}}]}]}`)
 		default:
 			io.WriteString(w, `{"offers":[]}`)
 		}
@@ -213,7 +213,7 @@ func TestRunVirtualTapsOnTheVirtualGrid(t *testing.T) {
 }
 
 func TestRunVirtualFallsBackToTheWallClock(t *testing.T) {
-	b := &board{view: `{"offers":[{"quest":"q","chunk":"a","startable":true}]}`}
+	b := &board{view: `{"quests":[{"id":"q","chunks":[{"id":"a","state":"x","action":{"verb":"start"}}]}]}`}
 	srv := httptest.NewServer(b.handler(t)) // its GET /api/thoughts reply has no "now"
 	defer srv.Close()
 	var log strings.Builder
@@ -242,5 +242,23 @@ func TestTapperLogsWhyAChunkIsNotStartable(t *testing.T) {
 	got := log.String()
 	if strings.Count(got, "not startable") != 1 || !strings.Contains(got, `readiness "too_hard"`) || !strings.Contains(got, "no merc") {
 		t.Fatalf("log %q", got)
+	}
+}
+
+// The Kashya case (2026-11-21): the part reads awaiting_handin with no run, so the view has no `awaiting` object; the row's
+// button is Start and that is the tap, then Hand in once the run waits for it.
+func TestTapperPressesTheRowsButton(t *testing.T) {
+	b := &board{}
+	srv := httptest.NewServer(b.handler(t))
+	defer srv.Close()
+	tp := newTapper(srv.URL, srv.URL, "tok", "sisters_burial_grounds", nil, io.Discard)
+	ctx := context.Background()
+	b.set(`{"quests":[{"id":"sisters_burial_grounds","chunks":[{"id":"blood_raven","state":"awaiting_handin","action":{"verb":"start","label":"Start"}}]}]}`)
+	if tap, _, _ := tp.Step(ctx); tap != "start blood_raven" {
+		t.Fatalf("tap %q", tap)
+	}
+	b.set(`{"awaiting":{"quest":"sisters_burial_grounds","chunk":"blood_raven"},"quests":[{"id":"sisters_burial_grounds","chunks":[{"id":"blood_raven","state":"awaiting_handin","action":{"verb":"handin","label":"Hand in"}}]}]}`)
+	if tap, _, _ := tp.Step(ctx); tap != "handin blood_raven" {
+		t.Fatalf("tap %q", tap)
 	}
 }

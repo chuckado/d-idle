@@ -210,6 +210,9 @@ type ChunkRow struct {
 	// Reason is why a live part does not move (closed code of appendix B.1 plus its sentence); nil for a part that
 	// moves or is not live.
 	Reason *ReasonView `json:"reason,omitempty"`
+	// Action is the one button this part offers the player (the web row renders it, the scenario tapper presses it);
+	// nil: nothing to press, and Reason or Why says why.
+	Action *ActionView `json:"action,omitempty"`
 }
 
 // RunView is the accepted chunk: running, awaiting the tap or parked.
@@ -434,10 +437,14 @@ func (d *Desk) build() View {
 			if cv.State == Awaiting && !plan.accepted(status.Diff, qv.ID, cv.ID) {
 				cr.Reason = handInReady() // case C5: the game counts the field work done, Start goes straight to the hand-in
 			}
-			row.Chunks = append(row.Chunks, cr)
+			var off *OfferView
 			if cv.State == Ready {
-				v.Offers = append(v.Offers, d.offer(q, c, cv, plan.AutoStart(status.Diff, qv.ID), !busy, class, level, v.Paused, status.Diff, l))
+				o := d.offer(q, c, cv, plan.AutoStart(status.Diff, qv.ID), !busy, class, level, v.Paused, status.Diff, l)
+				off = &o
+				v.Offers = append(v.Offers, o)
 			}
+			cr.Action = chunkAction(cv.State, off, run, cr.Reason, v.Paused)
+			row.Chunks = append(row.Chunks, cr)
 			if cv.State == Done && plan.accepted(status.Diff, qv.ID, cv.ID) {
 				h := HistoryRow{Quest: qv.ID, Chunk: cv.ID, Title: c.Title, Accepted: acceptedAt(plan, status.Diff, qv.ID, cv.ID), Confirmed: cv.Confirmed}
 				if l != nil {

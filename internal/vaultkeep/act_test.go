@@ -59,6 +59,9 @@ func (a chaosAPI) ItemFull(ctx context.Context, id int) ([]d2dctl.VaultRecord, e
 	}
 	return r, err
 }
+func (a chaosAPI) ItemDecode(ctx context.Context, h string) (d2dctl.VaultRecord, error) { // a read: not a game step
+	return a.f.ItemDecode(ctx, h)
+}
 func (a chaosAPI) ItemVault(ctx context.Context, id int) (d2dctl.VaultRecord, error) {
 	run, lost := a.c.gate()
 	if !run {

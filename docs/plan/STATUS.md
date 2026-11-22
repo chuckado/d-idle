@@ -391,7 +391,12 @@
 | verbs2 | proposed | - | `internal/d2dctl/world_verbs.go`<br>`internal/d2dctl/world_verbs_test.go`<br>`internal/d2dctl/fake/fake.go`<br>`internal/input/worldverbs.go`<br>`internal/input/worldfake.go`<br>`internal/d2dinput/worldverbs.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`internal/d2dcombat/rig.go`<br>`internal/d2dtown/adapter.go`<br>`internal/town/shop.go`<br>`internal/town/worldverbs_test.go`<br>`internal/town/worldverbs_unit_test.go`<br>`internal/town/export_world_test.go`<br>`internal/nav/waypoint.go`<br>`internal/nav/wpverb_test.go`<br>`internal/env/tuning_input.go`<br>`docs/knobs.md`<br>`data/input/caps/d2d-fork-input-verbs2.json`<br>`data/input/caps_test.go`<br>`docs/process/input-verbs2.md` | - |
 | pgvault | proposed | - | `tools/provingground/`<br>`internal/scenario/`<br>`cmd/d2scenario/`<br>`docs/process/proving-ground.md` | - |
 | vaultwire | proposed | - | `cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/invwire.go`<br>`cmd/d2bot/vaultequip.go`<br>`cmd/d2bot/vaultequip_test.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/invverbs_test.go` | - |
-| mercbr | proposed | - | `tools/provingground/scenarios/merc.json`<br>`internal/scenario/state.go`<br>`internal/scenario/merc_test.go`<br>`cmd/d2scenario/run.go`<br>`docs/probes/mercbr-2026-11-21.md` | - |
+| gridwhole | proposed | - | `docs/probes/gridwhole-2026-11-22.md`<br>`tools/probes/gridwhole.py` | - |
+| knownedge | proposed | - | `internal/nav/fullgrid_test.go`<br>`internal/nav/roam.go`<br>`internal/nav/nav.go`<br>`internal/env/tuning_nav.go`<br>`internal/d2dworld/world.go`<br>`docs/knobs.md` | - |
+| vaultclean | proposed | - | `internal/watch/web/vault.html`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.json`<br>`internal/watch/vaultclean_test.go`<br>`internal/watch/testdata/vault_clean.mjs`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`tools/desktopscroll/vault.mjs`<br>`tools/uishots/fit.js`<br>`docs/ui/vault-cleanup`<br>`docs/vault.md`<br>`tools/uishots/vaultshots.sh` | - |
+| handinbtn | proposed | - | `internal/questboard/desk_action.go`<br>`internal/questboard/desk_action_test.go`<br>`internal/questboard/desk.go`<br>`internal/watch/web/panels/quest-board/panel.js`<br>`internal/watch/testdata/questui/quest_ui.mjs`<br>`internal/watch/testdata/quests/`<br>`cmd/d2scenario/tap.go`<br>`cmd/d2scenario/tap_test.go`<br>`docs/questboard.md` | - |
+| warptrigger | proposed | - | `docs/probes/warptrigger-2026-11-22.md`<br>`internal/d2dctl/warptriggers.go`<br>`internal/d2dctl/warptriggers_test.go`<br>`internal/d2dctl/fake/fake.go`<br>`internal/nav/mouthgate.go`<br>`internal/nav/warpread_test.go`<br>`internal/d2map/static.go`<br>`internal/d2dworld/triggers_test.go`<br>`internal/d2denv/env.go` | `fork-branch:didle/warp-triggers-20261122` |
+| exitsread | proposed | - | `docs/probes/exitsread-2026-11-22.md`<br>`tools/probes/exitsread.py`<br>`tools/probes/exitscmp`<br>`internal/nav/hints_export.go`<br>`internal/nav/exitsread_test.go`<br>`internal/nav/route.go` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -427,14 +432,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- dc7a82607 11-21 21:07 `Merge agent/mercbr: Merge branch 'main' into mercbr` (mercbr)
-- e2c520612 11-21 21:06 `Merge branch 'main' into mercbr` (-)
-- c5c7142b2 11-21 20:54 `Merge agent/fablemap: Fable design review: whole-map knowledge against the known grid (docs only)` (fablemap)
-- 15f5df146 11-21 20:08 `Merge agent/vaultdesktop: vaultdesktop: card result, merge main` (vaultdesktop)
-- 537c7a083 11-21 16:49 `Merge agent/parkrelease: parkrelease: leakcheck wording` (parkrelease)
-- 11d0d6c11 11-21 16:24 `Merge agent/vaultwire: vaultwire: task card TASK-791 with result` (vaultwire)
-- 4bdf35e8e 11-21 15:41 `Merge agent/pgvault: Merge origin/main into pgvault` (pgvault)
-- a35f56347 11-21 15:37 `Merge origin/main into pgvault` (-)
-- 8af7d79c6 11-21 15:32 `Merge agent/bsm9: Merge branch 'main' into bsm9` (bsm9)
-- 786283e22 11-21 15:31 `Merge branch 'main' into bsm9` (-)
+- 0572c3a6a 11-22 00:11 `Merge agent/map4: Merge origin/main into exitsread` (map4)
+- 3c7c1fa8f 11-22 00:08 `Merge origin/main into exitsread` (-)
+- 5e3f23a9a 11-22 00:01 `Merge agent/map3: Merge branch 'main' into warptrigger` (map3)
+- 2c188690b 11-22 00:00 `Merge branch 'main' into warptrigger` (-)
+- 554e65ea4 11-21 23:55 `Merge agent/handinbtn: Merge branch 'main' into handinbtn` (handinbtn)
+- 360c4e719 11-21 23:54 `Merge branch 'main' into handinbtn` (-)
+- 2ea26f220 11-21 23:51 `Merge origin/main into warptrigger` (-)
+- 1b28118d7 11-21 23:43 `Merge agent/map2: Merge origin/main into knownedge` (map2)
+- e23addaa3 11-21 23:25 `Merge origin/main into knownedge` (-)
+- 7945ad776 11-21 23:24 `Merge agent/map1: Merge branch 'main' into gridwhole` (map1)
 <!-- statusgen:end -->

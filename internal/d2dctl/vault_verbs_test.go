@@ -159,3 +159,34 @@ func TestParseVaultLinePicAndTint(t *testing.T) {
 		t.Fatalf("%+v", r)
 	}
 }
+
+// `item decode` answers `decode was=<0|1> <view fields>`; the record echoes the bytes and carries the property list.
+func TestParseDecodeLine(t *testing.T) {
+	rec, err := ParseDecodeLine("was=0 code=wsp q=4 ilvl=30 uid=0 id'd=1 eth=0 sock=0 def=-1 dur=34/44 qty=-1 pre=12 suf=40 rare=0,0 aff=12.40. set=-1 uniq=-1 rw=-1 nprops=2 props=7:0:20;93:0:10; children=0", "aabbccdd11")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if rec.Code != "wsp" || rec.Quality != 4 || !rec.Identified || rec.Props != "7:0:20;93:0:10;" || rec.Norm != "aabbccdd11" || rec.Prefix != 12 || rec.Suffix != 40 || rec.UnitID != 0 {
+		t.Fatalf("%+v", rec)
+	}
+	f := NewVaultFake("Sorceress")
+	f.Bytes = map[string]VaultRecord{"aabbccdd11": {Code: "wsp", Props: "7:0:20"}}
+	var _ Decoder = f
+	got, err := f.ItemDecode(context.Background(), "aabbccdd11")
+	if err != nil || got.Props != "7:0:20" || !got.Identified || f.Decodes != 1 {
+		t.Fatalf("fake %+v %v", got, err)
+	}
+	if _, err := f.ItemDecode(context.Background(), "aabbccdd22"); !errors.Is(err, ErrBadHex) {
+		t.Fatalf("unknown bytes refuse as parse: %v", err)
+	}
+	if _, err := f.ItemDecode(context.Background(), "zz"); !errors.Is(err, ErrBadHex) {
+		t.Fatalf("bad hex: %v", err)
+	}
+	f.FlagOff = true
+	if _, err := f.ItemDecode(context.Background(), "aabbccdd11"); !errors.Is(err, ErrVaultOff) {
+		t.Fatalf("flag off: %v", err)
+	}
+	if !VaultCapsOf([]string{"item.decode"}).Decode || VaultCapsOf(nil).Decode {
+		t.Fatal("caps")
+	}
+}

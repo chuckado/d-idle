@@ -1026,6 +1026,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `probes/`
 
+- [exitsread-2026-11-22.md](probes/exitsread-2026-11-22.md): exitsread: the engine's link table against the bot's exit data (card exitsread, 2026-11-22) (status: current. Card `exitsread` (map-knowledge review card 4). Tags: V = measured in a named run, S = source or...)
 - [farmloop-live-20261116.md](probes/farmloop-live-20261116.md): Farm loop live check in the sandbox, 2026-11-16 (status: record. Task farmlive (TASK-553). Tags: V = verified in this run (container logs, read only), U = not...)
 - [farmloop-measure.md](probes/farmloop-measure.md): Recipe: kills per minute against coverage (farm loop decay curve) (status: current. Tool `tools/farmloop/measure.py` (stdlib Python, reads stdin). Tags: V = ran once...)
 - [farmloop-on-20261115.md](probes/farmloop-on-20261115.md): Farm loop switched on in the sandbox, 2026-11-15 (status: record. Task farmloopon. Tags: V = verified in this run, U = not verified.)
@@ -1069,6 +1070,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [fidprobe.md](probes/fidprobe.md): d2fidprobe run recipe (same-save probe, slice 1) (status: first live run done 2026-11-07 (scenarios 1 to 4, see the last section); the recipe below is VERIFIED LIVE...)
 - [firsthour.md](probes/firsthour.md): First hour: fresh hero, 60 realtime minutes at 1x
+- [gridwhole-2026-11-22.md](probes/gridwhole-2026-11-22.md): gridwhole: is `debug grid 5` whole at arrival? (card gridwhole, 2026-11-22) (status: current. Card `gridwhole` (first slice of `docs/design/fable-review-2026-11-22/map-knowledge.md`, user...)
 - [hero14-analysis-2026-11-14.md](probes/hero14-analysis-2026-11-14.md): Hero Doofer (Paladin clvl 14 to 15): why it is poor and slow (2026-11-14) (status: analysis, docs only (task hero14). Tags: V verified (how is said), S secondary, U unverified. No code, no...)
 - [hour1-analysis-2026-11-12.md](probes/hour1-analysis-2026-11-12.md): Fresh Paladin first hour: where the 60 minutes went (2026-11-12) (status: analysis, no code changed. Source: the sandbox bot log from the reset (build 0.0.261112021709), window...)
 - [hour4-analysis-2026-11-14.md](probes/hour4-analysis-2026-11-14.md): Fresh Paladin first hour 4: where the 60 minutes went (2026-11-14) (status: analysis, no code changed. Source: the sandbox bot log, build 0.0.261113174258 on d2d devp6 (rebased...)
@@ -1144,6 +1146,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [waits-audit.md](probes/waits-audit.md): Waits audit: wall-clock waits for the game (card waits-audit) (status: current. Offline audit of every wait in the bot, the d2d wiring and the d2d backends; fixes in the same...)
 - [warp-sandbox-2026-11-12.md](probes/warp-sandbox-2026-11-12.md): Warp-arrival fix on the play sandbox (devp4), 2026-11-12
 - [warpclick-2026-11-14.md](probes/warpclick-2026-11-14.md): Warps on the rebased d2d need a Select-box click (TASK-412, 2026-11-14) (status: result record. Tags: V = run and seen on the worker host (headless throwaway heroes, seed 7 unless said);...)
+- [warptrigger-2026-11-22.md](probes/warptrigger-2026-11-22.md): warptrigger: the trigger areas of warps, read from the engine (card warptrigger, 2026-11-22) (status: current. Card `warptrigger` (first slice of `docs/design/fable-review-2026-11-22/map-knowledge.md`, user...)
 - [sentinel.md](sentinel.md): Sentinel: layer 2 failsafes (agent SENTINEL)
 - [soak-analysis.md](soak-analysis.md): Soaky soak analysis (SOAKANALYSIS, 2026-10-29) (status: SUPERSEDED in part: pre-fix baseline; the approved death rule is plan-v2 section 10.2 and...)
 - [soak-hosts.md](soak-hosts.md): Soak hosts (status: moved to the private ops repo (d2lod-ops, `docs/soak-hosts.md`). Not part of the public tree.)
