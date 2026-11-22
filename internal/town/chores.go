@@ -373,6 +373,16 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 	if err != nil {
 		return rep, err
 	}
+	t.purseSpend = 0
+	defer func() { t.purseSpend = 0 }()
+	if t.PlanStage() >= 3 {
+		if pl, perr := t.planOf(s, plan); perr != nil {
+			t.e.Log.Warn("town plan (purse): " + perr.Error())
+		} else {
+			t.purseSpend = pl.Spent
+			t.e.Log.Info(fmt.Sprintf("town plan: purse keep=%d spend=%d purse=%d stash=%d verdict=%s", t.goldKeep(s.Player.Level), pl.Spent, s.Player.Gold, s.Player.StashGold, pl.Verdict))
+		}
+	}
 	a := ActOfLevel(s.Player.Area)
 	if a == nil {
 		return rep, ErrNotInTown

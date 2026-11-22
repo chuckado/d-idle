@@ -63,6 +63,7 @@ func (r *Runner) updateRecovery(s *d2.Snapshot) bool {
 		return b.on
 	}
 	in := r.resInput(s)
+	in.Gold = r.wealthFor(s)
 	t := resource.FromEnv(*r.e.Tune)
 	healing, mana := in.Belt.HP+in.Belt.RV, in.Belt.MP
 	if plan, err := resource.SpecOf(t).PlanFor(in); err != nil {
@@ -74,19 +75,19 @@ func (r *Runner) updateRecovery(s *d2.Snapshot) bool {
 	streak := r.dlog.since(r.e.Clock.Now().Add(-resource.RecoveryForceMin*time.Minute), 0)
 	r.obMu.Unlock()
 	v := resource.RecoveryCheck(resource.RecoveryInput{
-		Gold: s.Player.Gold, Shortfall: resource.KitShortfall(in.HasTP, healing, mana, t), Sellable: in.Sellable,
+		Gold: in.Gold, Shortfall: resource.KitShortfall(in.HasTP, healing, mana, t), Sellable: in.Sellable,
 		SellMin: r.e.Tune.Bot.SellMinItems, Now: r.e.Clock.Now(), Since: b.since, LastEnd: b.lastEnd, Was: b.on,
 		Force: streak >= resource.RecoveryForceDeaths, StartGold: b.startGold, Stalled: b.stalled, LowKit: resource.KitLow(healing, t),
 	}, t)
 	now := r.e.Clock.Now()
 	switch {
 	case v.Start:
-		*b = brokeState{on: true, since: now, lastEnd: b.lastEnd, stalled: b.stalled, startGold: s.Player.Gold, startXP: int(s.Player.Exp), lastLog: now, cycles: b.cycles + 1, loot: r.lootTotals()}
-		r.e.Log.Warn(fmt.Sprintf("recovery: start (gold %d < kit %d)", s.Player.Gold, t.RecoveryKitGold), "level", s.Player.Level, "cycle", b.cycles)
+		*b = brokeState{on: true, since: now, lastEnd: b.lastEnd, stalled: b.stalled, startGold: in.Gold, startXP: int(s.Player.Exp), lastLog: now, cycles: b.cycles + 1, loot: r.lootTotals()}
+		r.e.Log.Warn(fmt.Sprintf("recovery: start (gold %d < kit %d)", in.Gold, t.RecoveryKitGold), "level", s.Player.Level, "cycle", b.cycles)
 	case v.End:
 		mins := max(int(now.Sub(b.since).Minutes()), 1)
-		gain := s.Player.Gold - b.startGold
-		r.e.Log.Info(fmt.Sprintf("recovery: end (gold %d, reason %s)", s.Player.Gold, v.Reason), "level", s.Player.Level)
+		gain := in.Gold - b.startGold
+		r.e.Log.Info(fmt.Sprintf("recovery: end (gold %d, reason %s)", in.Gold, v.Reason), "level", s.Player.Level)
 		r.e.Log.Info(fmt.Sprintf("recovery: gold %+d in %d min", gain, mins), "goldPerHour", gain*60/mins, "xpGained", int(s.Player.Exp)-b.startXP)
 		b.on, b.lastEnd, b.stalled = false, now, v.Reason == resource.StallReason
 		r.loop.stepArea = 0 // the quest planner picks again
@@ -97,8 +98,8 @@ func (r *Runner) updateRecovery(s *d2.Snapshot) bool {
 			"inventoryPct", r.packPct(s))
 		b.loot = lt
 		mins := max(int(now.Sub(b.since).Minutes()), 1)
-		gain := s.Player.Gold - b.startGold
-		r.e.Log.Info(fmt.Sprintf("recovery: gold %+d in %d min", gain, mins), "gold", s.Player.Gold, "goldPerHour", gain*60/mins, "sellable", in.Sellable, "area", s.Player.Area)
+		gain := in.Gold - b.startGold
+		r.e.Log.Info(fmt.Sprintf("recovery: gold %+d in %d min", gain, mins), "gold", in.Gold, "goldPerHour", gain*60/mins, "sellable", in.Sellable, "area", s.Player.Area)
 	}
 	r.syncKitGate(s)
 	if rl, ok := r.d.Loot.(recoveryLooter); ok {
@@ -324,4 +325,14 @@ func (r *Runner) brFinish(err error) {
 		level, gold = s.Player.Level, s.Player.Gold
 	}
 	r.brEnd(err, level, gold)
+}
+
+// wealthFor is the gold the recovery and poverty rules judge the hero by: purse plus stash at stage 3 of the knob
+// town.plan (town-planner question 4: a hero with gold in the stash is not broke; the purse settle moves it back before
+// the shop), else the purse alone. A stash that was never read counts as 0.
+func (r *Runner) wealthFor(s *d2.Snapshot) int {
+	if r.e.Tune.Town.Plan >= 3 {
+		return s.Player.Gold + s.Player.StashGold
+	}
+	return s.Player.Gold
 }

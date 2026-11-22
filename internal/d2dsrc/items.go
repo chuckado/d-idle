@@ -3,6 +3,7 @@ package d2dsrc
 import (
 	"context"
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -39,6 +40,7 @@ func (b *builder) items(ctx context.Context, nodump bool) error {
 		}
 		b.addItem(u)
 	}
+	b.s.noteDuplicateIDs(b.snap.Inventory.Items)
 	if b.s.o.Tooltips {
 		b.attachTips(ctx)
 	}
@@ -564,4 +566,47 @@ func (b *builder) ground(g d2dctl.GroundItem) {
 	}
 	rp.have("ground.code", "ground.label")
 	b.snap.Ground = append(b.snap.Ground, u)
+}
+
+// DuplicateCarriedIDs lists the unit ids that two or more carried items share, sorted. Ids below zero (not numbered yet)
+// are ignored. A fork that numbers a pick-up with the id of an item made by `item create` produces them (card recallsorc;
+// fixed in the fork, branch didle/recallsorc-20261122): the second item moved by id may be the wrong one.
+func DuplicateCarriedIDs(items []d2.Unit) []uint32 {
+	seen := map[uint32]int{}
+	for _, it := range items {
+		if it.Item != nil && it.ID != 0xffffffff {
+			seen[it.ID]++
+		}
+	}
+	var dup []uint32
+	for id, n := range seen {
+		if n > 1 {
+			dup = append(dup, id)
+		}
+	}
+	sort.Slice(dup, func(i, j int) bool { return dup[i] < dup[j] })
+	return dup
+}
+
+// noteDuplicateIDs names each shared carried id once.
+func (s *Source) noteDuplicateIDs(items []d2.Unit) {
+	dup := DuplicateCarriedIDs(items)
+	if len(dup) == 0 {
+		return
+	}
+	s.cmu.Lock()
+	defer s.cmu.Unlock()
+	if s.dupSaid == nil {
+		s.dupSaid = map[uint32]bool{}
+	}
+	var fresh []uint32
+	for _, id := range dup {
+		if !s.dupSaid[id] {
+			s.dupSaid[id] = true
+			fresh = append(fresh, id)
+		}
+	}
+	if len(fresh) > 0 {
+		s.o.Logf("d2dsrc: carried items share unit ids %v (a fork numbered a pick-up with the id of an item made by item create); an operation by id may move the wrong item", fresh)
+	}
 }

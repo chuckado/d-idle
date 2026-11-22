@@ -360,6 +360,11 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [town-planner-b-model.md](design/fable-review-2026-11-21/town-planner-b-model.md): Town planner, appendix B: data model, scenarios, migration (status: current (design review 2026-11-21, docs only; proposals, nothing built). Main doc: town-planner.md;...)
 - [town-planner.md](design/fable-review-2026-11-21/town-planner.md): Town and chores planner: one supply need, one town plan (status: current (Fable design review 2026-11-21, docs only; nothing here is built or decided). Tree read:...)
 
+`design/fable-review-2026-11-22/`
+
+- [ui-unification-appendix-pages.md](design/fable-review-2026-11-22/ui-unification-appendix-pages.md): UI unification review, appendix: page and panel inventory (status: current (review of 2026-11-22, card fableui). Belongs to ui-unification.md. Docs only.)
+- [ui-unification.md](design/fable-review-2026-11-22/ui-unification.md): UI unification review: navigation, cruft and readable build pages (2026-11-22) (status: DESIGN REVIEW, nothing built (card fableui). Docs only. The user decides the open questions in section F;...)
+
 `design/`
 
 - [item-colour-2026-11-18.md](design/item-colour-2026-11-18.md): Item colour in the inventory art: chain and slice plan (2026-11-18) (status: design, task-634 (card itemcolour). Follow-up to jewelcolor (task-632), which removed the invented wash....)
@@ -1142,6 +1147,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
 - [town-plan-scenarios.md](probes/town-plan-scenarios.md): Town planner scenarios (card town1) (status: current (2026-11-21). Source: docs/design/fable-review-2026-11-21/town-planner-b-model.md section B4.)
 - [town-plan-stage2-2026-11-21.md](probes/town-plan-stage2-2026-11-21.md): Town planner, stages 1 and 2 (2026-11-21) (status: current. Design: docs/design/fable-review-2026-11-21/town-planner.md and appendix B. Nothing here was run...)
+- [town-plan-stage3-2026-11-22.md](probes/town-plan-stage3-2026-11-22.md): Town planner, stage 3 (purse), 2026-11-22 (status: current. Design: docs/design/fable-review-2026-11-21/town-planner-b-model.md (card tp-purse, TASK-757)....)
 - [treefix3-2026-11-19.md](probes/treefix3-2026-11-19.md): treefix3: why the Inifuss tree was not found for 17 hours (2026-11-19)
 - [vault-spike-2026-11-16.md](probes/vault-spike-2026-11-16.md): Ethereal Vault V0 spike: capture and create on the d2d fork (result) (status: RESULT, 2026-11-16 (task TASK-578). Design: `docs/design/loot-vault-2026-11-16.md` section 1.7. Tags: V =...)
 - [video-feed-2026-11-15.md](probes/video-feed-2026-11-15.md): Probe: lossless delta feed on real d2d frames (card videofeed, 2026-11-15)

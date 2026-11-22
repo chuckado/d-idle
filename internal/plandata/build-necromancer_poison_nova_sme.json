@@ -1,0 +1,791 @@
+{
+ "build": "necromancer_poison_nova_sme",
+ "class": "necromancer",
+ "combat": "poisonnova",
+ "note": "NECRO3: Poison Nova caster per the d2-sme answers of 2026-11-22. Tier experimental, opt-in by name (levelerBuild necromancer_poison_nova_sme); defaults unchanged. Poison Nova, Poison Explosion, Poison Dagger synergy and the Lower Resist prerequisite chain numbers are U until read from skills.txt.",
+ "rows": [
+  {
+   "clvl": 2,
+   "energy": 5,
+   "skills": [
+    {
+     "skill": "Teeth",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 3,
+   "strength": 2,
+   "vitality": 1,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Bone Armor",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 4,
+   "strength": 2,
+   "vitality": 1,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Amplify Damage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 5,
+   "strength": 2,
+   "vitality": 1,
+   "energy": 2
+  },
+  {
+   "clvl": 6,
+   "strength": 2,
+   "vitality": 1,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 7,
+   "strength": 2,
+   "vitality": 1,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 8,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 9,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 10,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 11,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 12,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 13,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 14,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 15,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 16,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 17,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 18,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 19,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Bone Spear",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 20,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 21,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Bone Spear",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 22,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Bone Spear",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 23,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Bone Spear",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 24,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Bone Spear",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 25,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 26,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Clay Golem",
+     "points": 1
+    },
+    {
+     "skill": "Poison Dagger",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 27,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 28,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Dagger",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 29,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Iron Maiden",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 30,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 31,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 32,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 33,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 34,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 35,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 36,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 37,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 38,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 39,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Life Tap",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 40,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Weaken",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 41,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Terror",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 42,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Decrepify",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 43,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Lower Resist",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 44,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 45,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 46,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 47,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 48,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 49,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 50,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 51,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 52,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Poison Nova",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 53,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Bone Spear",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 54,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Bone Spear",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 55,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Bone Spear",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 56,
+   "vitality": 3,
+   "energy": 2,
+   "skills": [
+    {
+     "skill": "Bone Spear",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 57,
+   "vitality": 3,
+   "energy": 2
+  },
+  {
+   "clvl": 58,
+   "vitality": 5
+  },
+  {
+   "clvl": 59,
+   "vitality": 5
+  },
+  {
+   "clvl": 60,
+   "vitality": 5
+  },
+  {
+   "clvl": 61,
+   "vitality": 5
+  },
+  {
+   "clvl": 62,
+   "vitality": 5
+  },
+  {
+   "clvl": 63,
+   "vitality": 5
+  },
+  {
+   "clvl": 64,
+   "vitality": 5
+  },
+  {
+   "clvl": 65,
+   "vitality": 5
+  },
+  {
+   "clvl": 66,
+   "vitality": 5
+  },
+  {
+   "clvl": 67,
+   "vitality": 5
+  },
+  {
+   "clvl": 68,
+   "vitality": 5
+  },
+  {
+   "clvl": 69,
+   "vitality": 5
+  },
+  {
+   "clvl": 70,
+   "vitality": 5
+  },
+  {
+   "clvl": 71,
+   "vitality": 5
+  },
+  {
+   "clvl": 72,
+   "vitality": 5
+  },
+  {
+   "clvl": 73,
+   "vitality": 5
+  },
+  {
+   "clvl": 74,
+   "vitality": 5
+  },
+  {
+   "clvl": 75,
+   "vitality": 5
+  },
+  {
+   "clvl": 76,
+   "vitality": 5
+  },
+  {
+   "clvl": 77,
+   "vitality": 5
+  },
+  {
+   "clvl": 78,
+   "vitality": 5
+  },
+  {
+   "clvl": 79,
+   "vitality": 5
+  },
+  {
+   "clvl": 80,
+   "vitality": 5
+  },
+  {
+   "clvl": 81,
+   "vitality": 5
+  },
+  {
+   "clvl": 82,
+   "vitality": 5
+  },
+  {
+   "clvl": 83,
+   "vitality": 5
+  },
+  {
+   "clvl": 84,
+   "vitality": 5
+  },
+  {
+   "clvl": 85,
+   "vitality": 5
+  },
+  {
+   "clvl": 86,
+   "vitality": 5
+  },
+  {
+   "clvl": 87,
+   "vitality": 5
+  },
+  {
+   "clvl": 88,
+   "vitality": 5
+  },
+  {
+   "clvl": 89,
+   "vitality": 5
+  },
+  {
+   "clvl": 90,
+   "vitality": 5
+  },
+  {
+   "clvl": 91,
+   "vitality": 5
+  },
+  {
+   "clvl": 92,
+   "vitality": 5
+  },
+  {
+   "clvl": 93,
+   "vitality": 5
+  },
+  {
+   "clvl": 94,
+   "vitality": 5
+  },
+  {
+   "clvl": 95,
+   "vitality": 5
+  },
+  {
+   "clvl": 96,
+   "vitality": 5
+  },
+  {
+   "clvl": 97,
+   "vitality": 5
+  },
+  {
+   "clvl": 98,
+   "vitality": 5
+  },
+  {
+   "clvl": 99,
+   "vitality": 5
+  }
+ ],
+ "schema": null,
+ "selector": "necromancer_poison_nova_sme",
+ "tier": "experimental"
+}

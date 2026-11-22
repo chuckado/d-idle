@@ -1,0 +1,223 @@
+{
+ "schema": "didle.build/1",
+ "name": "necromancer_summoner_sme",
+ "class": "necromancer",
+ "author": "necro3",
+ "source": "docs/design/necromancer-sme-answers-2026-11-22.md (d2-sme advice, EXP and SRC tags there; numbers tagged UNVERIFIED must be read from skills.txt, see the card)",
+ "notes": "Summoner per the SME table: skeleton and mastery together, Clay at 6, Mage from 12, Amplify 1 and Bone Armor 3 near 18, Blood and Iron Golem prerequisite points from 26 and Revive 1 at 30, then Revive to 8 and the Weaken, Terror, Decrepify chain from 50. No Corpse Explosion, no Golem Mastery, no Summon Resist (SME). Stats: 3 energy at clvl 2 then 1 energy per level, strength to 25 over five levels at 2 per level, the rest vitality; the SME wants vitality earlier and strength spread over clvl 11 to 24 (U: the goal format cannot start a stat goal at a level).",
+ "skills": [
+  {
+   "skill": "Raise Skeleton",
+   "to": 1
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 1
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 3
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 2
+  },
+  {
+   "skill": "Clay Golem",
+   "to": 1
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 5
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 5
+  },
+  {
+   "skill": "Raise Skeletal Mage",
+   "to": 1
+  },
+  {
+   "skill": "Amplify Damage",
+   "to": 1
+  },
+  {
+   "skill": "Bone Armor",
+   "to": 3
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 6
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 6
+  },
+  {
+   "skill": "Raise Skeletal Mage",
+   "to": 2
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 9
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 9
+  },
+  {
+   "skill": "Raise Skeletal Mage",
+   "to": 4
+  },
+  {
+   "skill": "BloodGolem",
+   "to": 1,
+   "when": {
+    "clvl": 26
+   }
+  },
+  {
+   "skill": "IronGolem",
+   "to": 1,
+   "when": {
+    "clvl": 26
+   }
+  },
+  {
+   "skill": "Revive",
+   "to": 1,
+   "when": {
+    "clvl": 30
+   }
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 10
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 10
+  },
+  {
+   "skill": "Raise Skeletal Mage",
+   "to": 5
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 14
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 14
+  },
+  {
+   "skill": "Raise Skeletal Mage",
+   "to": 8
+  },
+  {
+   "skill": "Revive",
+   "to": 4
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 17
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 17
+  },
+  {
+   "skill": "Raise Skeletal Mage",
+   "to": 10
+  },
+  {
+   "skill": "Revive",
+   "to": 6
+  },
+  {
+   "skill": "Weaken",
+   "to": 1,
+   "when": {
+    "clvl": 50
+   }
+  },
+  {
+   "skill": "Terror",
+   "to": 1,
+   "when": {
+    "clvl": 50
+   }
+  },
+  {
+   "skill": "Decrepify",
+   "to": 1,
+   "when": {
+    "clvl": 50
+   }
+  },
+  {
+   "skill": "Raise Skeleton",
+   "to": 20
+  },
+  {
+   "skill": "Skeleton Mastery",
+   "to": 20
+  },
+  {
+   "skill": "Raise Skeletal Mage",
+   "to": 12
+  },
+  {
+   "skill": "Revive",
+   "to": 8
+  }
+ ],
+ "stats": [
+  {
+   "stat": "ene",
+   "to": 28,
+   "per": 3
+  },
+  {
+   "stat": "ene",
+   "to": 110,
+   "per": 1
+  },
+  {
+   "stat": "str",
+   "to": 25,
+   "per": 2
+  },
+  {
+   "stat": "vit",
+   "to": "rest"
+  }
+ ],
+ "quest_points": [
+  {
+   "clvl": 8,
+   "skill": 1
+  },
+  {
+   "clvl": 15,
+   "skill": 1
+  },
+  {
+   "clvl": 26,
+   "skill": 2
+  },
+  {
+   "clvl": 38,
+   "skill": 1
+  },
+  {
+   "clvl": 44,
+   "skill": 1
+  },
+  {
+   "clvl": 56,
+   "skill": 2
+  }
+ ]
+}
