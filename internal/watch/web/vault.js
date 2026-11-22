@@ -479,7 +479,7 @@ export function mountVault(d) {
     if (it.reveal) { const t = el('b', 'vt-tag', { queued: 'R', working: '...', failed: '!' }[it.reveal] || 'R'); t.dataset.tag = 'reveal-' + it.reveal; tags.appendChild(t); }
     if (it.sell) { const t = el('b', 'vt-tag', { queued: '$', selling: '...', sold: '$', failed: '!' }[it.sell] || '$'); t.dataset.tag = 'sell-' + it.sell; tags.appendChild(t); }
     b.appendChild(tags);
-    if (!it.identified) { const u = el('b', 'vt-unid', '?'); u.dataset.tag = 'unid'; u.setAttribute('aria-hidden', 'true'); b.appendChild(u); } // the only identified/unidentified mark: a revealed item carries none
+    if (!it.identified) { b.classList.add('unid'); const u = el('b', 'vt-unid', '?'); u.dataset.tag = 'unid'; u.setAttribute('aria-hidden', 'true'); b.appendChild(u); } // the only identified/unidentified mark: a revealed item carries none
     if (S.sel.has(it.id)) b.appendChild(el('span', 'vt-check-mark', '✓'));
     if (S.mode === 'list') {
       const meta = [T.qualities[it.q] || it.quality, fmt(T.ilvl, { n: it.ilvl })];

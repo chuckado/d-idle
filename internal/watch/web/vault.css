@@ -113,6 +113,8 @@
   .vt-tags { position: absolute; inset-block-start: 1px; inset-inline-end: 2px; display: flex; flex-direction: column; gap: 1px; }
   .vt-tag { font-size: .58rem; line-height: 1; font-weight: 700; padding: 1px 2px; border-radius: 2px; background: var(--d-surface-0); color: var(--d-text); }
   .vt-unid { position: absolute; inset-block-start: 3px; inset-inline-start: 3px; display: grid; place-items: center; inline-size: 1rem; block-size: 1rem; border-radius: var(--d-r-round); background: var(--d-warn); color: var(--d-surface-0); font-size: .7rem; line-height: 1; font-weight: 800; }
+  .vt-cell.unid .vt-name { padding-inline-start: 1.2rem; }
+  .vt-cell.unid.has-art .vt-name { padding-inline-start: 0; }
   .vt-tag[data-tag="pin"] { color: var(--d-accent-text); } .vt-tag[data-tag="eth"] { color: var(--d-info); }
   .vt-check-mark { position: absolute; inset-block-end: 1px; inset-inline-end: 3px; font-weight: 700; color: var(--d-accent-text); }
   .vt-grid[data-mode="list"] { grid-template-columns: minmax(0, 1fr); grid-auto-rows: 4rem; }

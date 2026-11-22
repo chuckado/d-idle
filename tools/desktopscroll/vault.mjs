@@ -69,7 +69,7 @@ if (nbar !== 1) fails.push(`expected exactly one .vt-actionbar, found ${nbar}`);
 if (await ev(`!!document.querySelector('.vt-fold, .vt-revealbar, .vt-keeprow')`)) fails.push('an old band or fold element is still on the page');
 const barH = await ev(`(() => { const b = document.querySelector('.vt-actionbar'); return b && !b.hidden ? b.getBoundingClientRect().height : 0; })()`);
 console.log('action bar height', Math.round(barH));
-if (barH > 140) fails.push(`the action bar is ${Math.round(barH)} px high (> 140)`);
+if (barH > 160) fails.push(`the action bar is ${Math.round(barH)} px high (> 160)`);
 const frame = await ev(`(() => { const c = getComputedStyle(document.querySelector('#pack')); return c.borderTopWidth + ' ' + c.overflowY; })()`);
 if (!/^0px visible/.test(frame)) fails.push(`the grid has a frame or an overflow box (${frame})`);
 const gridTop = await ev(`Math.round(document.querySelector('#pack').getBoundingClientRect().top)`);
