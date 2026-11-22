@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -286,5 +287,18 @@ func TestMissingCaps(t *testing.T) {
 	}
 	if got := missingCaps(needs, nil); len(got) != 3 {
 		t.Fatalf("a d2d without caps lacks %v", got)
+	}
+}
+
+// A scenario that needs vault.paygold is an unmeasured run: real time with --vault-pay, no --lockstep (the fork refuses the
+// payment under it); every other scenario keeps --lockstep and never gets --vault-pay.
+func TestBotD2dArgsForTheGoldPayment(t *testing.T) {
+	pay := botD2dArgs([]string{"item.decode", "vault.paygold"}, false)
+	if slices.Contains(pay, "--lockstep") || !slices.Contains(pay, "--vault-pay") || !slices.Contains(pay, "--vault-verbs") {
+		t.Fatalf("paygold scenario: %v", pay)
+	}
+	plain := botD2dArgs([]string{"item.full"}, true)
+	if !slices.Contains(plain, "--lockstep") || slices.Contains(plain, "--vault-pay") || !slices.Contains(plain, "--vault-verbs") {
+		t.Fatalf("plain scenario: %v", plain)
 	}
 }

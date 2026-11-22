@@ -252,6 +252,12 @@ export function orderModel(o, T) {
   return { id: o.id, state: o.state, steps, active: o.state === 'queued', progress: f2(T.progress, { done: o.done, total: o.want || o.total }), paidText, stashText, line: o.line, note: o.note || '' };
 }
 
+// revealMethods is the set of reveal payments the page draws: the server's act.reveal.methods (knob loot.vaultRevealMethods, default only
+// gold; the others are hidden for now, user decision 2026-11-21). Without the field (an older bot) all three show.
+export function revealMethods(rev) {
+  return new Set(rev && Array.isArray(rev.methods) ? rev.methods : ['free', 'ether', 'gold']);
+}
+
 // revealBarModel is what the bar draws. rev is act.reveal of GET /api/vault, pay the option the player picked ('' = the server's
 // default). show is false when there is nothing to reveal and no order to follow.
 export function revealBarModel(rev, pay, T) {
@@ -259,15 +265,17 @@ export function revealBarModel(rev, pay, T) {
   if (!bar || (!bar.total && !order)) return { show: false };
   const opts = bar.options || [];
   const pick = opts.find((o) => o.id === pay && o.ok) || opts.find((o) => o.id === bar.default) || null;
-  const m = { show: true, total: bar.total, title: f2(bar.total === 1 ? T.titleOne : T.title, { n: bar.total }), line: bar.line, order, sel: pick ? pick.id : '', confirm: false, go: '', goOff: true, why: '', skipped: [], skippedN: 0, note: rev.note || '' };
+  const m = { show: true, total: bar.total, title: f2(bar.total === 1 ? T.titleOne : T.title, { n: bar.total }), line: bar.line, order, sel: pick ? pick.id : '', confirm: false, go: '', goOff: true, why: '', skipped: [], skippedN: 0, note: revealMethods(rev).has('free') ? rev.note || '' : '' };
   m.options = opts.map((o) => ({ id: o.id, label: T.pay[o.id] || o.label, line: o.line, ok: o.ok, why: o.why || '', checked: !!pick && o.id === pick.id }));
   if (!bar.total) return m;
   if (!pick) { m.why = (opts.find((o) => o.id === 'free') || {}).why || T.nothingPayable; return m; }
   const n = pick.count;
-  m.go = pick.id === 'gold' ? f2(n === 1 ? T.goGoldOne : T.goGold, { n, cost: grp(pick.cost) }) : pick.id === 'ether' ? f2(T.goEther, { n, cost: grp(pick.cost) }) : f2(n === 1 ? T.goFreeOne : T.goFree, { n });
+  m.go = pick.id === 'gold' ? f2(n === 1 ? T.goGoldOne : T.goGold, { n, cost: grp(pick.cost), stash: grp(rev.gold ? rev.gold.stash : 0) }) : pick.id === 'ether' ? f2(T.goEther, { n, cost: grp(pick.cost) }) : f2(n === 1 ? T.goFreeOne : T.goFree, { n });
   m.goOff = !pick.ok || !rev.enabled && pick.id !== 'ether';
   if (m.goOff && !pick.ok) m.why = pick.why;
   else if (m.goOff) m.why = rev.why || '';
+  m.goLabel = m.go; m.goSub = '';
+  if (pick.id === 'gold') { m.goLabel = f2(n === 1 ? T.goGoldLabelOne : T.goGoldLabel, { n }); m.goSub = f2(T.goGoldSub, { cost: grp(pick.cost), stash: grp(rev.gold ? rev.gold.stash : 0) }); } // the cost is a muted line under the button's name
   m.confirm = !!pick.confirm;
   m.confirmAsk = pick.id === 'gold' ? f2(T.confirmGold, { cost: grp(pick.cost), n }) : '';
   m.skipped = (pick.skipped || []).map((s) => ({ n: s.n, why: s.why }));

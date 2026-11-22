@@ -44,6 +44,7 @@ type LootTuning struct {
 	VaultPoorPickup        int // 1 (with Vault): in poor mode an item worth selling is picked up instead of only recorded
 	VaultRevealGold        int // 1 (with Vault and Keep): the page may order a reveal paid in gold (the bot buys the scrolls at the next town visit); 0 (default) off
 	VaultRevealGoldConfirm int // gold from which the page asks for a confirm step before a gold reveal
+	VaultRevealMethods     int // which payments the Vault page offers for a reveal, a bit mask: 1 Free (Cain, scrolls, tome charge), 2 Ether, 4 Gold; default 4 (hidden for now: user decision 2026-11-21)
 	RulesEngine            int // loot rules engine stage: 0 off, 1 ground, 2 ground and tidy, 3 reserved (sell, needs a user decision; not implemented)
 }
 
@@ -53,7 +54,7 @@ func DefaultLootTuning() LootTuning {
 		GoldMinStack: 10, GoldPileShare: 50, FreeCellsKeep: 2, PotionBuffer: 4, PotionBufferMana: 2, RejuvSpare: 3, LowGoldBelow: 2000, MinValuePerCell: 100, ValuableMinGold: 1500, ValuableMinPrio: 70, CarryValuables: 0, MaxPerCall: 30,
 		PoorGoldBelow: 300, PoorMinSell: 20,
 		MemEnabled: 1, MemMinGold: 20, MemMaxDist: 120, MemMaxTrips: 6, MemCap: 64,
-		GoldPriority: 1, GoldGrabDist: 20, GoldSafeDist: 8, GoldMaxDanger: 0, GoldMinLifePct: 60, GoldRetries: 4, RulesEngine: 0, VaultKeep: 1, VaultKeepPerVisit: 20, VaultSellPerVisit: 10, VaultPoorPickup: 1, VaultRevealGoldConfirm: 2000,
+		GoldPriority: 1, GoldGrabDist: 20, GoldSafeDist: 8, GoldMaxDanger: 0, GoldMinLifePct: 60, GoldRetries: 4, RulesEngine: 0, VaultKeep: 1, VaultKeepPerVisit: 20, VaultSellPerVisit: 10, VaultPoorPickup: 1, VaultRevealGoldConfirm: 2000, VaultRevealMethods: 4,
 	}
 }
 
@@ -75,6 +76,7 @@ func lootKnobs() []Knob {
 		lootK("vaultPoorPickup", "Vault poor-mode pickup", "0/1", "1 (default, with loot.vault 1): below loot.poorGoldBelow gold the looter picks up the items worth loot.poorMinSell gold or more instead of only recording them, so a broke hero earns gold (docs/vault.md). 0: it records them.", d.VaultPoorPickup, 0, 1, false),
 		lootK("vaultRevealGold", "Vault reveal paid in gold", "0/1", "1 (with loot.vault 1 and loot.vaultKeep 1): the Reveal bar of the Vault page offers Gold as a payment. A gold reveal is an order the player gives: the price (the vendor price of one Scroll of Identify per item) is subtracted from the STASH gold at once through the d2d fork's `debug paygold` (needs d2d --vault-pay; ledgered with the reason 'vault gold reveal order <id>'; ADR 0029) and the items whose affixes the vault holds are revealed in the same moment: no town visit, no scroll, no tome charge. Never in a measured run (D2BOT_RUN), never above the stash gold, never the purse. 0 (default): off.", d.VaultRevealGold, 0, 1, false),
 		lootK("vaultRevealGoldConfirm", "Gold reveal confirm from", "gold", "A gold reveal that costs this much or more (paid from the stash gold) asks for a second confirming press on the page.", d.VaultRevealGoldConfirm, 0, 99999, false),
+		lootK("vaultRevealMethods", "Vault reveal payments offered", "mask", "Which ways to reveal an unidentified vault item the Vault page offers, a bit mask: 1 Free (Cain, scrolls, tome charge), 2 Ether, 4 Gold. Default 4: only Gold (hidden for now: user decision 2026-11-21). The other routes and the keeper still work; this only decides what the page draws and which payments the Reveal bar quotes.", d.VaultRevealMethods, 1, 7, false),
 		lootK("vaultAll", "Record everything non-gold", "0/1", "1 (with loot.vault 1): every ground item that is not gold, a gem or a stack and that no other rule takes is recorded too, plain and low items included. 0 (default): the Vault preset only.", d.VaultAll, 0, 1, false),
 		lootK("pickRadius", "Pickup radius", "subtiles", "Ground items within this distance are considered.", d.PickRadius, 5, 60, true),
 		lootK("pickStrictness", "Filter strictness", "level", "0 loose (also items worth selling), 1 normal, 2 keepers only, 3 gold/runes/gems/uniques only.", d.PickStrictness, 0, 3, false),

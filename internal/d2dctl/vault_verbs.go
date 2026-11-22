@@ -33,6 +33,7 @@ const (
 	CapItemCreate  = "item.create"
 	CapItemVault   = "item.vault"
 	CapVaultStats  = "vault.stats"
+	CapItemDecode  = "item.decode" // read-only `item decode <hex>` (fork branch didle/devp18-20261121)
 	vaultWhereStsh = "stash"
 	vaultWhereInv  = "inv"
 )
@@ -41,6 +42,7 @@ const (
 // started without --vault-verbs: `caps` then lists none of them) means "nothing": callers keep the pickup path.
 type VaultCaps struct {
 	GroundFull, GroundTake, ItemFull, ItemCreate, ItemVault bool
+	Decode                                                  bool // `item decode` (read-only); not part of Complete
 	PayGold                                                 bool // `debug paygold` (fork flag --vault-pay, ADR 0029); not part of Complete
 }
 
@@ -53,7 +55,7 @@ func (v VaultCaps) Complete() bool {
 func VaultCapsOf(caps []string) VaultCaps {
 	return VaultCaps{
 		GroundFull: HasCap(caps, CapGroundFull), GroundTake: HasCap(caps, CapGroundTake), ItemFull: HasCap(caps, CapItemFull),
-		ItemCreate: HasCap(caps, CapItemCreate), ItemVault: HasCap(caps, CapItemVault), PayGold: HasCap(caps, CapVaultPaygold),
+		ItemCreate: HasCap(caps, CapItemCreate), ItemVault: HasCap(caps, CapItemVault), PayGold: HasCap(caps, CapVaultPaygold), Decode: HasCap(caps, CapItemDecode),
 	}
 }
 
@@ -129,7 +131,7 @@ func mapVaultErr(err error) error {
 		return fmt.Errorf("%w: %s", ErrVaultUnsupported, msg)
 	case strings.HasPrefix(msg, "not in a game"):
 		return &VaultRefused{Code: VaultErrNoGame, Why: msg}
-	case strings.HasPrefix(msg, "item create <") || strings.HasPrefix(msg, "ground take <") || strings.HasPrefix(msg, "vault stats"):
+	case strings.HasPrefix(msg, "item decode <") || strings.HasPrefix(msg, "item create <") || strings.HasPrefix(msg, "ground take <") || strings.HasPrefix(msg, "vault stats"):
 		return &VaultRefused{Code: VaultErrUsage, Why: msg}
 	}
 	code, why, _ := strings.Cut(msg, " ")
@@ -474,4 +476,41 @@ func (r VaultRecord) FileIndex() int {
 		return max(r.SetID, 0)
 	}
 	return 0
+}
+
+// Decoder is the read-only decode verb: the bot codes against it where it needs the affixes of an item it only holds the bytes of.
+// *Client and *VaultFake implement it; a stock d2d or an older fork answers ErrVaultUnsupported.
+type Decoder interface {
+	ItemDecode(ctx context.Context, hex string) (VaultRecord, error)
+}
+
+// ItemDecode asks the fork what the item bytes (a record's norm or raw hex) show once identified: `item decode <hex>` answers
+// `decode was=<0|1> code=.. q=.. id'd=1 .. props=stat:param:value;...`. Nothing is created and no game state changes (V, fork test
+// tests/itemdecode_d2d.py: the state digest is equal before and after). The returned record has the identified flag forced on
+// (Identified true) and carries no unit, raw or norm of its own: Raw and Norm echo the argument.
+func (c *Client) ItemDecode(ctx context.Context, hexNorm string) (VaultRecord, error) {
+	if err := ValidHex(hexNorm); err != nil {
+		return VaultRecord{}, err
+	}
+	r, err := c.Do(ctx, "item decode "+hexNorm)
+	if err != nil {
+		return VaultRecord{}, mapVaultErr(err)
+	}
+	for _, l := range r.Lines {
+		if rest, ok := strings.CutPrefix(strings.TrimSpace(l), "decode "); ok {
+			return ParseDecodeLine(rest, hexNorm)
+		}
+	}
+	return VaultRecord{}, fmt.Errorf("d2dctl: item decode answered no decode line")
+}
+
+// ParseDecodeLine parses what follows "decode " in the verb's answer: `was=<0|1> <the view fields of a vault line>`.
+func ParseDecodeLine(rest, hexNorm string) (VaultRecord, error) {
+	_, view, _ := strings.Cut(strings.TrimSpace(rest), " ")
+	rec, err := ParseVaultLine("#0 raw=" + hexNorm + " norm=" + hexNorm + " " + view)
+	if err != nil {
+		return VaultRecord{}, err
+	}
+	rec.UnitID = 0
+	return rec, nil
 }

@@ -53,9 +53,6 @@ func (h *fakeHand) Preview(rec vault.Rec) Preview {
 	if sl == nil {
 		return Preview{Why: "charms and potions are not worn (belt and backpack are out of scope)"}
 	}
-	if !rec.Identified && rec.Quality >= 4 {
-		return Preview{Why: "unidentified: reveal it first", Reveal: true}
-	}
 	p := Preview{Wearable: true}
 	for _, s := range sl {
 		v := SlotView{Slot: s, Label: s, Can: true}
@@ -419,5 +416,30 @@ func TestEquipOffAndRestartResumes(t *testing.T) {
 	}
 	if h2.wornIn("head") == 0 {
 		t.Fatal("not worn after the restart")
+	}
+}
+
+// An UNREVEALED record equips: the game lets a player wear an item the affixes of which are unseen, so Equip never asks for a
+// reveal first (user decision 2026-11-21).
+func TestEquipUnrevealedRecord(t *testing.T) {
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			r, h := equipRig(t, class)
+			rec := d2dctl.FakeRecord(1, "cap", 4, 31, "unrevealed")
+			it, err := r.st.Add(vault.Item{Raw: rec.Norm, Code: "cap", Name: "Unidentified cap", Quality: 4, Ilvl: 31})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if res := r.order(it.ID, ""); !res.OK || res.Code == "reveal" {
+				t.Fatalf("an unrevealed record is refused: %+v", res)
+			}
+			r.run()
+			if o := r.k.EquipOrderOf(it.ID); o == nil || o.State != EqDone || h.wornIn("head") == 0 {
+				t.Fatalf("order %+v worn %d", o, h.wornIn("head"))
+			}
+			if got := r.state(it.ID); got.Identified {
+				t.Fatalf("wearing does not reveal it: %+v", got)
+			}
+		})
 	}
 }
