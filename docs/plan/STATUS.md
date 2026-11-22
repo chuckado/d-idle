@@ -398,6 +398,10 @@
 | handinbtn | proposed | - | `internal/questboard/desk_action.go`<br>`internal/questboard/desk_action_test.go`<br>`internal/questboard/desk.go`<br>`internal/watch/web/panels/quest-board/panel.js`<br>`internal/watch/testdata/questui/quest_ui.mjs`<br>`internal/watch/testdata/quests/`<br>`cmd/d2scenario/tap.go`<br>`cmd/d2scenario/tap_test.go`<br>`docs/questboard.md` | - |
 | warptrigger | proposed | - | `docs/probes/warptrigger-2026-11-22.md`<br>`internal/d2dctl/warptriggers.go`<br>`internal/d2dctl/warptriggers_test.go`<br>`internal/d2dctl/fake/fake.go`<br>`internal/nav/mouthgate.go`<br>`internal/nav/warpread_test.go`<br>`internal/d2map/static.go`<br>`internal/d2dworld/triggers_test.go`<br>`internal/d2denv/env.go` | `fork-branch:didle/warp-triggers-20261122` |
 | exitsread | proposed | - | `docs/probes/exitsread-2026-11-22.md`<br>`tools/probes/exitsread.py`<br>`tools/probes/exitscmp`<br>`internal/nav/hints_export.go`<br>`internal/nav/exitsread_test.go`<br>`internal/nav/route.go` | - |
+| staleaccept | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_stale_test.go`<br>`tools/provingground/scenarios/board.json`<br>`docs/questboard.md` | - |
+| identifyall | proposed | - | `internal/vaultkeep`<br>`internal/bulkid`<br>`internal/watch`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`docs/ui/vault-identify-all`<br>`tools/provingground/scenarios/vaultreveal.json`<br>`tools/uishots` | - |
+| mapphone | proposed | - | `internal/watch/web/panels/area-map`<br>`internal/watch/web/utilities.css`<br>`tools/uishots/mapphone.go`<br>`tools/uishots/mapphone.js`<br>`internal/watch/testdata/areamap`<br>`docs/ui/map-phone`<br>`tools/uishots.sh`<br>`tools/uishots/fit.go`<br>`tools/uishots/fixtures.go`<br>`tools/uishots/serve.go`<br>`docs/mapfog.md` | - |
+| equipswap | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/stash.go`<br>`internal/invdesk/stash_test.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/task/act1.go`<br>`internal/task/act2.go`<br>`internal/task/act3.go`<br>`internal/task/act4.go`<br>`tools/provingground/scenarios/manage.json`<br>`docs/vault.md`<br>`docs/questboard.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -433,14 +437,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 52978338f 11-22 00:25 `Merge agent/map5: Merge origin/main into fogtrail` (map5)
-- aa0829869 11-22 00:20 `Merge origin/main into fogtrail` (-)
-- 0572c3a6a 11-22 00:11 `Merge agent/map4: Merge origin/main into exitsread` (map4)
-- 3c7c1fa8f 11-22 00:08 `Merge origin/main into exitsread` (-)
-- 5e3f23a9a 11-22 00:01 `Merge agent/map3: Merge branch 'main' into warptrigger` (map3)
-- 2c188690b 11-22 00:00 `Merge branch 'main' into warptrigger` (-)
-- 554e65ea4 11-21 23:55 `Merge agent/handinbtn: Merge branch 'main' into handinbtn` (handinbtn)
-- 360c4e719 11-21 23:54 `Merge branch 'main' into handinbtn` (-)
-- 2ea26f220 11-21 23:51 `Merge origin/main into warptrigger` (-)
-- 1b28118d7 11-21 23:43 `Merge agent/map2: Merge origin/main into knownedge` (map2)
+- 840bcfe80 11-22 11:37 `Merge agent/vaultsell: Merge branch 'main' into vaultsell` (vaultsell)
+- 8bd91284e 11-22 11:36 `Merge branch 'main' into vaultsell` (-)
+- 4683bb790 11-22 11:31 `Merge origin/main into agent/vaultsell (identifyall touched vault.js)` (-)
+- 1984adebd 11-22 11:26 `Merge agent/equipswap: Merge origin/main into equipswap` (equipswap)
+- 6cd572085 11-22 11:22 `Merge origin/main into equipswap` (-)
+- 4ce4f7d65 11-22 11:20 `Merge origin/main into agent/vaultsell` (-)
+- 141d88796 11-22 11:15 `Merge agent/identifyall: Merge branch 'main' into identifyall` (identifyall)
+- 1a40a1292 11-22 11:14 `Merge branch 'main' into identifyall` (-)
+- a9864033b 11-22 11:07 `Merge origin/main into agent/identifyall` (-)
+- 1f2524ed5 11-22 11:03 `Merge agent/staleaccept: Merge branch 'main' into staleaccept` (staleaccept)
 <!-- statusgen:end -->

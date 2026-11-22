@@ -236,3 +236,38 @@ func TestShippedScenariosStillLoad(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+// vault_sold with an index: the records' gold, the reply's sale.gold and the stash read-back must agree exactly.
+func TestVaultSoldExactAgainstTheReply(t *testing.T) {
+	two := 2
+	mk := func(body string, g1, g2 int) State {
+		return State{Has: []string{"vault"}, Vault: &VaultFacts{Records: []VaultRecFact{{ID: "a", Code: "cap", State: "sold", Gold: g1}, {ID: "b", Code: "lea", State: "sold", Gold: g2}, {ID: "c", Code: "hax", State: "recorded"}}},
+			APIReplies: []APIReply{{Index: 0, Status: 200, OK: true, Body: json.RawMessage(body)}}}
+	}
+	idx := 0
+	a := Assert{Kind: AVaultSold, Min: 2, Max: &two, Index: &idx}
+	if err := a.Validate(); err != nil {
+		t.Fatal(err)
+	}
+	good := mk(`{"sale":{"gold":30,"stashBefore":7200,"stashAfter":7230}}`, 10, 20)
+	if r := Evaluate([]Assert{a}, good); !r[0].OK {
+		t.Fatalf("agreeing numbers: %+v", r)
+	}
+	for name, st := range map[string]State{
+		"records differ from the reply": mk(`{"sale":{"gold":31,"stashBefore":7200,"stashAfter":7231}}`, 10, 20),
+		"the stash grew by another sum": mk(`{"sale":{"gold":30,"stashBefore":7200,"stashAfter":7229}}`, 10, 20),
+		"no sale in the reply":          mk(`{"ok":true}`, 10, 20),
+	} {
+		if r := Evaluate([]Assert{a}, st); r[0].OK {
+			t.Errorf("%s must fail: %+v", name, r)
+		}
+	}
+	left := mk(`{"sale":{"gold":10,"stashBefore":0,"stashAfter":10}}`, 10, 0)
+	left.Vault.Records[1].State = "recorded"
+	if r := Evaluate([]Assert{a}, left); r[0].OK {
+		t.Errorf("a record still in the vault must fail: %+v", r)
+	}
+	if r := Evaluate([]Assert{{Kind: AVaultSold, Min: 1}}, good); !r[0].OK {
+		t.Errorf("a plain count: %+v", r)
+	}
+}

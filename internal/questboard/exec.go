@@ -208,6 +208,9 @@ func (e *Exec) derive() ([]QuestView, Plan, int, error) {
 		return e.derive() // the latches or the regression just written are now part of the stored state
 	}
 	vs, err := Derive(e.b, in)
+	if err == nil && sm != nil && e.smAutoFinish(vs, diff) {
+		return e.derive()
+	}
 	if err == nil && !plan.based(diff) {
 		// First sight of this hero in this difficulty: whatever is done now never pays (no backfill).
 		if berr := e.st.RecordBaseline(diff, doneKeys(vs, diff)); berr != nil {

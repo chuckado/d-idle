@@ -5,7 +5,7 @@
 // Reveal and Sell (slice V6) also only queue: the price is shown before the click (revealPlan) and the states come from the GET. The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
 // fed the rows as an inventory view); every text comes from /watch/vault.json or the API and goes in through textContent.
 // Every press is read back: the list is fetched again and what it says is what the page shows.
-import { PAGE, equipPlan, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, revealBarModel, revealMethods, revealPlan, sellPlan, toQuery, toTipView, when } from '/watch/vault-logic.js';
+import { PAGE, equipPlan, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, identifyAllPlan, revealBarModel, revealMethods, revealPlan, sellLabel, sellPlan, sellWhy, mergeQuotes, toQuery, toTipView, when } from '/watch/vault-logic.js';
 
 export const ROUTE = '/api/vault';
 const POLL_MS = 6000;
@@ -30,7 +30,7 @@ export function mountVault(d) {
     if (o && o.key) b.dataset.key = o.key;
     return b;
   };
-  const S = { eth: null, f: d.filters || defaultFilters(), items: [], total: 0, view: null, facets: { kinds: T.kinds || [], types: [] }, err: false, loading: true, sel: createSelection(),
+  const S = { sv: {}, eth: null, f: d.filters || defaultFilters(), items: [], total: 0, view: null, facets: { kinds: T.kinds || [], types: [] }, err: false, loading: true, sel: createSelection(),
     detail: null, detailId: '', mode: 'grid', fopen: false, sheet: null, msg: '', msgLevel: '', sig: '', lastLoaded: 0, tip: null };
   const root = d.root || doc.body;
 
@@ -129,10 +129,11 @@ export function mountVault(d) {
   const actLine = el('span', 'vt-keepline'); actLine.setAttribute('role', 'status');
   const buyB = btn(T.buyScrolls, { key: 'buy-scrolls', variant: 'ghost' }); buyB.title = T.buyScrollsWhy; buyB.hidden = true;
   const costLine = el('span', 'vt-costline'); costLine.setAttribute('role', 'status'); costLine.hidden = true;
+  const sellWhyLine = el('span', 'vt-costline'); sellWhyLine.dataset.key = 'sell-why'; sellWhyLine.setAttribute('role', 'status'); sellWhyLine.hidden = true;
   const promptLine = el('span', 'vt-keepline'); promptLine.setAttribute('role', 'status');
   const promptYes = btn(T.promptYes, { key: 'prompt-yes' }), promptNo = btn(T.promptNo, { key: 'prompt-no', variant: 'ghost' });
   const gNotes = el('div', 'vt-ab-notes'); gNotes.hidden = true;
-  gNotes.append(costLine, keepLine, keepNowB, actLine, buyB, promptLine, promptYes, promptNo);
+  gNotes.append(costLine, sellWhyLine, keepLine, keepNowB, actLine, buyB, promptLine, promptYes, promptNo);
   const bar = el('section', 'vt-actionbar'); bar.hidden = true; bar.setAttribute('aria-label', T.select);
   bar.append(gSel, gReveal, gOrder, gNotes);
   // the transient message (what a press did): a toast that goes after TOAST_MS or on dismiss
@@ -141,6 +142,9 @@ export function mountVault(d) {
   msg.append(msgText, msgX);
   // Marked for sale (flags the player has not confirmed) is one chip in the toolbar that opens a sheet with the list and the Sell button.
   const markChip = btn('', { key: 'marked-chip', variant: 'ghost' }); markChip.classList.add('vt-chip', 'vt-markchip'); markChip.hidden = true;
+
+  // Identify all (N): always in the toolbar, whatever the filter, search or selection; N is the whole vault's unrevealed count.
+  const identB = btn('', { key: 'identify-all', variant: 'ghost' }); identB.classList.add('vt-chip', 'vt-identall'); identB.hidden = true;
 
   // ---- the list and the card ----
   const body = el('div', 'vt-body');
@@ -172,7 +176,7 @@ export function mountVault(d) {
   }
   { const was = slotStore(); if (was && !S.f.type) S.f.type = was; }
   const page = el('div', 'vt-page');
-  tools.append(slotRow, search, ftoggle, sortSel, viewBtn, selBtn, markChip);
+  tools.append(slotRow, search, ftoggle, sortSel, viewBtn, selBtn, markChip, identB);
   page.append(head, banner, tools, filters, bar, body, msg);
   root.replaceChildren ? root.replaceChildren(page, sheetWrap) : (root.appendChild(page), root.appendChild(sheetWrap));
 
@@ -347,7 +351,7 @@ export function mountVault(d) {
     keepNowB.hidden = !(k && (k.queued + k.creating) > 0);
     keepNowB.disabled = ro || !k || !k.enabled;
     drawAct(n, ro);
-    gNotes.hidden = [costLine, keepLine, keepNowB, actLine, buyB, promptLine, promptYes, promptNo].every((x) => x.hidden);
+    gNotes.hidden = [costLine, sellWhyLine, keepLine, keepNowB, actLine, buyB, promptLine, promptYes, promptNo].every((x) => x.hidden);
     bar.hidden = gSel.hidden && gReveal.hidden && gOrder.hidden && gNotes.hidden; // nothing to do and nothing to say: no bar at all
   }
   // The order chip: an order that runs shows until it ends; one that ended shows for TOAST_MS the first time this browser sees it (or until dismissed).
@@ -400,7 +404,8 @@ export function mountVault(d) {
   // Reveal and Sell: the buttons, the cost line for the selection, the queue sentences and the opt-in prompt
   function drawAct(n, ro) {
     const a = S.view && S.view.act, ids = S.sel.ids();
-    const rp = revealPlan(S.items, ids, a), sp = sellPlan(S.items, ids);
+    const inst = !!(a && a.sell && a.sell.instant);
+    const rp = revealPlan(S.items, ids, a), sp = sellPlan(S.items, ids, inst);
     const via = revealMethods(a && a.reveal); // the payments the page draws: only gold unless loot.vaultRevealMethods says more
     revealB.hidden = !via.has('free');
     const gi = a && a.reveal && a.reveal.gold || {}, price = gi.scrollGold || 0, gOn = via.has('gold') && !via.has('free') && !!(a && a.reveal.gold && gi.on);
@@ -414,9 +419,12 @@ export function mountVault(d) {
     revealB.textContent = fmt(T.revealSel, { n: rp.n || n });
     revealB.disabled = ro || !a || !a.reveal.enabled;
     revealB.title = !a ? T.revealNote : (!a.reveal.enabled && a.reveal.why ? a.reveal.why : (!rp.n && n ? T.revealNone : ''));
-    sellB.textContent = fmt(T.sellSel, { n: sp.n || n });
+    sellB.textContent = sellLabel(sp, n, T);
     sellB.disabled = ro || !a || !a.sell.enabled;
-    sellB.title = !a ? T.sellNote : (!a.sell.enabled && a.sell.why ? a.sell.why : (!sp.n && n ? T.sellNone : ''));
+    const why = sp.skipped > 0 && n ? sellWhy(sp.reasons, T.sellWhyWords) : '';
+    sellB.title = !a ? T.sellNote : (!a.sell.enabled && a.sell.why ? a.sell.why : (why ? fmt(T.sellWhyLine, { k: sp.skipped, all: sp.all, why }) : ''));
+    sellWhyLine.textContent = why && !sellB.hidden && n ? fmt(T.sellWhyLine, { k: sp.skipped, all: sp.all, why }) : '';
+    sellWhyLine.hidden = !sellWhyLine.textContent;
     let cost = '';
     if (a && n && rp.n && via.has('free')) {
       cost = (rp.n === 1 ? T.revealCostOne : fmt(T.revealCost, { n: rp.n, c: rp.charges })) + (rp.free ? T.revealFree : (rp.have >= 0 ? fmt(T.revealHave, { have: rp.have }) : '')) + (rp.short ? T.revealShort : '');
@@ -441,6 +449,9 @@ export function mountVault(d) {
     promptLine.hidden = promptYes.hidden = promptNo.hidden = !p || ro;
     promptLine.textContent = p ? fmt(T.promptText, { short: p.short, n: p.ids.length, gold: p.gold }) : '';
     const mk = S.view && S.view.marked;
+    const ia = identifyAllPlan(a && a.reveal, T);
+    identB.hidden = !ia.show || ro;
+    if (ia.show) { identB.textContent = ia.label; identB.disabled = ia.off; identB.title = ia.why; }
     markChip.hidden = !mk || ro;
     if (mk) markChip.textContent = fmt(T.markedChip, { n: mk.n });
   }
@@ -614,6 +625,12 @@ export function mountVault(d) {
     const ul = el('ul', 'vt-dlines');
     lines(it, det).forEach((l) => ul.appendChild(el('li', '', l)));
     card.appendChild(ul);
+    const inst = !!(S.view && S.view.act && S.view.act.sell && S.view.act.sell.instant);
+    if (inst && (it.state === 'recorded' || it.sell === 'queued') && !it.pin) { // the engine's price for this item, asked once (a sale pays exactly this)
+      const g = S.sv[it.id] > 0 ? S.sv[it.id] : 0;
+      const sv = el('p', 'vt-dfound', g ? fmt(T.sellValue, { gold: grp(g) }) : ''); sv.dataset.key = 'sell-value'; sv.hidden = !g; card.appendChild(sv);
+      if (S.sv[it.id] === undefined) { S.sv[it.id] = -1; quoteAll([it.id]).then((q) => { if (q && q.count === 1) { S.sv[it.id] = q.lines[0].gold; if (S.detailId === it.id) drawDetail(); } }); }
+    }
     const w = det && det.where;
     if (w && w.time) card.appendChild(el('p', 'vt-dfound', fmt(w.area ? T.foundIn : T.found, { when: when(w.time, now()), area: w.area || '' })));
     else if (it.found) card.appendChild(el('p', 'vt-dfound', fmt(it.area ? T.foundIn : T.found, { when: when(it.found, now()), area: it.area || '' })));
@@ -630,7 +647,7 @@ export function mountVault(d) {
     if (via.has('gold') && !via.has('free') && gd.on && !it.identified) row.appendChild(mk(fmt(T.revealGoldOne, { cost: grp(gd.scrollGold || 0) }), 'reveal-gold', { ok: gd.scrollGold > 0 && gd.stash >= gd.scrollGold && !gd.why, reason: gd.why || fmt(T.goldShort, { price: grp(gd.scrollGold || 0), stash: grp(gd.stash || 0) }) }, () => goldOrder([it.id], gd.scrollGold, (gd.confirmAt || 0) > 0 && gd.scrollGold >= gd.confirmAt)));
     if (via.has('free')) row.appendChild(mk(T.reveal, 'reveal', act.reveal, () => revealAct([it.id], false)));
     if (ra && ra.etherPer > 0 && !ra.free && !it.identified && via.has('ether')) row.appendChild(mk(fmt(T.revealEtherOne, { cost: ra.etherPer }), 'reveal-ether', { ok: ra.balance >= ra.etherPer, reason: fmt(T.etherShort, { need: ra.etherPer, have: ra.balance }) }, () => etherAct([it.id])));
-    row.appendChild(mk(T.sell, 'sell', act.sell, () => openSell([it.id], row.lastChild)));
+    row.appendChild(mk(T.sell, 'sell', act.sell, () => sellFlow([it.id], row.lastChild)));
     if (it.reveal === 'queued' || it.sell === 'queued' || it.keep === 'queued') row.appendChild(mk(T.cancelQueued, 'cancel', { ok: true }, () => act1('/api/vault/cancel', [it.id]), 'ghost'));
     card.appendChild(row);
     aside.appendChild(card);
@@ -727,18 +744,20 @@ export function mountVault(d) {
   const CHUNK = 150; // the answer body is capped at 4 KiB: the server takes this many ids at a time
   async function act(route, ids, confirm, opts) {
     let j = null;
-    const failed = [], done = [], already = [];
+    const failed = [], done = [], already = [], sales = [];
     for (let i = 0; i < ids.length; i += CHUNK) {
       const body = { ids: ids.slice(i, i + CHUNK) };
       if (confirm) body.confirm = true;
       if (opts && opts.now) body.now = true;
       if (opts && opts.ether) body.ether = true;
+      if (opts && opts.ack) body.ack = true;
       const r = await d.post(route, body);
       if (!r) { j = null; break; }
       j = r;
       (r.done || []).forEach((x) => done.push(x));
       (r.failed || []).forEach((x) => failed.push(x));
       (r.already || []).forEach((x) => already.push(x));
+      if (r.sale) sales.push(r.sale);
       if (!r.done && !r.failed) { if (r.error && REAL.test(route)) failed.push(r); break; } // a refusal of the whole request (read only, bad body)
     }
     if (!j) { setMsg('bad', T.noAnswer); await reload(true); return false; }
@@ -746,7 +765,12 @@ export function mountVault(d) {
     const now = opts && opts.now;
     const word = route.endsWith('/pin') ? T.okPin : route.endsWith('/unpin') ? T.okUnpin : route.endsWith('/keep') ? (now ? T.okKeepNow : T.okKeep)
       : route.endsWith('/reveal') ? (opts && opts.ether ? T.okRevealEther : now ? T.okRevealNow : T.okReveal) : route.endsWith('/sell') ? (now ? T.okSellNow : T.okSell) : route.endsWith('/cancel') ? T.okCancel : T.okDiscard;
-    if (!failed.length && j.ok) {
+    if (sales.length) { // the instant sale: what was paid and what stayed, in the server's words
+      const gold = sales.reduce((a, x) => a + (x.state === 'done' ? x.gold : 0), 0), last = sales[sales.length - 1];
+      const left = sellWhy(groupFails(failed), T.sellWhyWords);
+      const text = done.length ? fmt(T.okSold, { n: done.length, gold: grp(gold), stash: grp(last.stashAfter || 0) }) + (failed.length ? fmt(T.okSoldLeft, { k: failed.length, why: left }) : '') : (failed[0] && failed[0].error) || last.line || T.noAnswer;
+      setMsg(done.length ? (failed.length ? 'info' : 'good') : 'bad', text);
+    } else if (!failed.length && j.ok) {
       const al = already.length;
       setMsg('good', al && al === done.length ? fmt(T.okKeepAlready, { n: al }) : fmt(word, { n: done.length - al }) + (al ? ' ' + fmt(T.okKeepAlready, { n: al }) : ''));
     } else {
@@ -770,7 +794,47 @@ export function mountVault(d) {
     if (!p.n) { setMsg('info', T.revealNone); return; }
     etherAct(p.ids);
   });
-  const sellAct = (ids, now) => act('/api/vault/sell', ids, true, { now });
+  const sellAct = (ids, now, ack) => act('/api/vault/sell', ids, true, { now, ack });
+  const groupFails = (failed) => { const m = new Map(); failed.forEach((x) => { const c = x.code || 'state'; m.set(c, (m.get(c) || 0) + 1); }); return [...m].map(([code, n]) => ({ code, n })); };
+  // The instant sale: ask the server what the sale pays (the engine's own price, the stash after, who is left out and why), then
+  // sell at once below loot.vaultSellConfirm gold, or ask first above it. An older bot or d2d (no act.sell.instant) queues as before.
+  async function quoteAll(ids) {
+    const qs = [];
+    for (let i = 0; i < ids.length; i += CHUNK) {
+      const q = await d.post('/api/vault/sellquote', { ids: ids.slice(i, i + CHUNK) });
+      if (!q || q.error) return null;
+      qs.push(q);
+    }
+    return mergeQuotes(qs);
+  }
+  async function sellFlow(ids, opener) {
+    const sv = S.view && S.view.act && S.view.act.sell;
+    if (!(sv && sv.instant)) { openSell(ids, opener); return; }
+    const q = await quoteAll(ids);
+    if (!q) { setMsg('bad', T.noAnswer); return; }
+    if (q.why) { setMsg('bad', q.why); return; }
+    const why = sellWhy(q.reasons, T.sellWhyWords);
+    if (!q.count) { setMsg('info', fmt(T.sellNothing, { why: why || T.sellNone })); return; }
+    const sellIds = q.lines.map((l) => l.id);
+    if (!q.needConfirm) { await sellAct(sellIds, false, false); return; }
+    openSellInstant(q, sellIds, why, opener);
+  }
+  function openSellInstant(q, ids, why, opener) {
+    sheetCard.replaceChildren();
+    const title = q.count === 1 ? fmt(T.sellInstantOne, { gold: grp(q.total) }) : fmt(T.sellInstantTitle, { n: q.count, gold: grp(q.total) });
+    sheetCard.setAttribute('aria-label', title);
+    sheetCard.appendChild(el('h2', '', title));
+    sheetCard.appendChild(el('p', '', fmt(T.sellInstantBody, { after: grp(q.stashAfter), stash: grp(q.stash), gold: grp(q.total) })));
+    if (why) sheetCard.appendChild(el('p', '', fmt(T.sellWhyLine, { k: q.asked - q.count, all: q.asked, why })));
+    const go = btn(fmt(T.sellInstantGo, { n: q.count, gold: grp(q.total) }), { key: 'sheet-go' });
+    const cancel = btn(T.cancel, { key: 'sheet-cancel', variant: 'ghost' });
+    const row = el('div', 'vt-row'); row.append(cancel, go); sheetCard.appendChild(row);
+    S.sheet = { opener, first: cancel };
+    sheetWrap.hidden = false;
+    cancel.addEventListener('click', closeSheet);
+    go.addEventListener('click', async () => { go.disabled = true; closeSheet(true); await sellAct(ids, false, true); });
+    cancel.focus();
+  }
   // The bar's press: free and Ether use the ordinary reveal routes; gold is an order that pays from the stash and reveals at once.
   async function goldOrder(ids, cost, confirm) {
     const r = await d.post('/api/vault/revealgold', { ids, maxGold: cost, confirm: !!confirm });
@@ -782,6 +846,32 @@ export function mountVault(d) {
     else setMsg('bad', ((r.failed && r.failed[0] && r.failed[0].error) || (line && r.order && r.order.note) || r.error || T.noAnswer));
     await reload(true);
   }
+  // Identify all: one confirm sheet, then ONE order of scope all_unrevealed; the bot lists the records itself when it runs.
+  function openIdentifyAll(opener) {
+    const p = identifyAllPlan(S.view && S.view.act && S.view.act.reveal, T);
+    if (!p.show || p.off) return;
+    sheetCard.replaceChildren();
+    sheetCard.setAttribute('aria-label', p.title);
+    sheetCard.appendChild(el('h2', '', p.title));
+    sheetCard.appendChild(el('p', '', p.body)).dataset.key = 'identify-all-body';
+    const go = btn(p.go, { key: 'sheet-go' });
+    const cancel = btn(T.cancel, { key: 'sheet-cancel', variant: 'ghost' });
+    const row = el('div', 'vt-row'); row.append(cancel, go); sheetCard.appendChild(row);
+    S.sheet = { opener, first: cancel };
+    sheetWrap.hidden = false;
+    cancel.addEventListener('click', closeSheet);
+    go.addEventListener('click', async () => { go.disabled = true; closeSheet(true); await identifyAll(p.cost); });
+    cancel.focus();
+  }
+  async function identifyAll(maxGold) {
+    const r = await d.post('/api/vault/revealgold', { scope: 'all_unrevealed', maxGold, confirm: true });
+    const line = r && r.order && r.order.line;
+    if (!r) setMsg('bad', T.noAnswer);
+    else if (r.ok || (r.done && r.done.length)) setMsg(r.ok ? 'good' : 'info', (line || RT.sent) + (!r.ok && r.failed && r.failed.length ? ' ' + fmt(T.identifyAllSkipped, { n: r.failed.length }) : ''));
+    else setMsg('bad', ((r.failed && r.failed[0] && r.failed[0].error) || r.error || T.noAnswer));
+    await reload(true);
+  }
+  identB.addEventListener('click', () => { if (!identB.disabled) openIdentifyAll(identB); });
   goldB.addEventListener('click', () => {
     const rp = revealPlan(S.items, S.sel.ids(), S.view && S.view.act), gi = (S.view && S.view.act && S.view.act.reveal.gold) || {};
     if (!rp.n || goldB.disabled) return;
@@ -815,15 +905,13 @@ export function mountVault(d) {
   });
   sellB.addEventListener('click', () => {
     if (!S.sel.size || sellB.disabled) return;
-    const p = sellPlan(S.items, S.sel.ids());
-    if (!p.n) { setMsg('info', T.sellNone); return; }
-    openSell(S.sel.ids(), sellB);
+    sellFlow(S.sel.ids(), sellB);
   });
   buyB.addEventListener('click', async () => { // the manual Buy action of the inventory page: the bot never buys scrolls on its own
     const r = await d.post('/api/inventory/buyid', {});
     setMsg(r && !r.error ? 'good' : 'bad', r && !r.error ? T.okBuy : (r && r.error) || T.noAnswer);
   });
-  promptYes.addEventListener('click', () => { const p = S.view && S.view.act && S.view.act.prompt; if (p) act('/api/vault/sell', p.ids, true, {}); });
+  promptYes.addEventListener('click', () => { const p = S.view && S.view.act && S.view.act.prompt; if (p) sellFlow(p.ids, promptYes); });
   markChip.addEventListener('click', () => openMarked(markChip));
   promptNo.addEventListener('click', async () => { await d.post('/api/vault/sellprompt', { dismiss: true }); await reload(true); });
   keepNowB.addEventListener('click', async () => { // any queued id will do: the server only needs one that is queued to ask for the trip
@@ -889,7 +977,7 @@ export function mountVault(d) {
     S.sheet = { opener, first: cancel };
     sheetWrap.hidden = false;
     cancel.addEventListener('click', closeSheet);
-    go.addEventListener('click', async () => { go.disabled = true; closeSheet(true); await act('/api/vault/sell', mk.ids, true, {}); });
+    go.addEventListener('click', async () => { go.disabled = true; closeSheet(true); await sellFlow(mk.ids, markChip); });
     cancel.focus();
   }
   // ---- the Equip sheet: what is worn against this item, can-equip with the reason, then one button per way to wear it ----
@@ -1091,7 +1179,7 @@ export function mountVault(d) {
     doc.body.appendChild(sc);
   }
   if (d.overlays) d.overlays.register('vault-sheet', sheetWrap, closeSheet); // the page's one modal: Escape and the one-at-a-time rule are the manager's (docs/ui-overlays.md)
-  return { start, reload, draw, state: S, changed, openDiscard, openSell, openConfirm, pressEther, refreshEther, closeSheet, act, main, grid, loadTip };
+  return { start, reload, draw, state: S, changed, openIdentifyAll, openDiscard, openSell, openConfirm, pressEther, refreshEther, closeSheet, act, main, grid, loadTip };
 }
 
 // ---- the page in a browser ----

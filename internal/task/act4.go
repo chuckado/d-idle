@@ -151,7 +151,7 @@ func act4HopNodes() []Node {
 	q := QAct4Done
 	done := func(w World) bool { return w.Act >= 5 }
 	ready := func(w World) bool { return w.Killed[BossDiablo] || a4Stage(w, QDiablo) >= StageCleared }
-	return []Node{
-		{Step: StepTalk(id(q, "tyrael"), "Travel to Harrogath", NPCTyrael, "harrogath", done, ready)},
-	}
+	tyrael := StepTalk(id(q, "tyrael"), "Travel to Harrogath", NPCTyrael, "harrogath", done, ready)
+	tyrael.Evidence = done // not needed until Diablo is dead is no evidence of a trip (see hopNodes)
+	return []Node{{Step: tyrael}}
 }

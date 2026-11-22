@@ -8,6 +8,11 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into vaultsell <!--sg:agent/vaultsell-->
+- Merge origin/main into equipswap <!--sg:agent/equipswap-->
+- Merge branch 'main' into identifyall <!--sg:agent/identifyall-->
+- Merge branch 'main' into staleaccept <!--sg:agent/staleaccept-->
+- mapphone: phone rules in utilities.css, uilint clean, leakcheck clean <!--sg:agent/mapphone-->
 - Merge origin/main into fogtrail <!--sg:agent/map5-->
 - Merge origin/main into exitsread <!--sg:agent/map4-->
 - Merge branch 'main' into warptrigger <!--sg:agent/map3-->

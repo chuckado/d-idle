@@ -18,7 +18,8 @@ type fakeHand struct {
 	names     map[int]string
 	protected map[uint32]bool
 	failWear  error
-	noWear    bool // Wear returns ok but nothing is worn (verify must catch it)
+	noWear    bool  // Wear returns ok but nothing is worn (verify must catch it)
+	noStash   error // the stash has no room (nil: it has)
 	class     string
 }
 
@@ -120,6 +121,21 @@ func (h *fakeHand) Wear(_ context.Context, unit uint32, slot string) ([]Worn, er
 		}
 	}
 	return off, nil
+}
+
+func (h *fakeHand) StashRoom(string) error { return h.noStash }
+
+func (h *fakeHand) Stash(_ context.Context, unit uint32) error {
+	if h.noStash != nil {
+		return h.noStash
+	}
+	for i := range h.api.Carried {
+		if uint32(h.api.Carried[i].Rec.UnitID) == unit && h.api.Carried[i].Where == d2dctl.FakePack {
+			h.api.Carried[i].Where = d2dctl.FakeStash
+			return nil
+		}
+	}
+	return errors.New("not in the backpack")
 }
 
 func (h *fakeHand) WornUnit(slot string) uint32 { return uint32(h.wornIn(slot)) }
@@ -241,6 +257,7 @@ func TestEquipSwapKeepsTheOldItem(t *testing.T) {
 // MUST FAIL if a full vault makes the swap drop the old item: it stays in the backpack, protected.
 func TestEquipSwapVaultFullKeepsItInBackpack(t *testing.T) {
 	r, h := equipRig(t, "paladin")
+	h.noStash = errors.New("the stash is full")
 	old := h.wear("head", "cap", "oldhelm")
 	id := r.addID(1, "cap")
 	extra := r.addID(2, "cap")
@@ -441,5 +458,92 @@ func TestEquipUnrevealedRecord(t *testing.T) {
 				t.Fatalf("wearing does not reveal it: %+v", got)
 			}
 		})
+	}
+}
+
+// MUST FAIL if a full Vault makes the displaced item land in the backpack although the stash has room, or loses it: the
+// order's own record left the Vault, a pinned record filled that place again, the stash takes the old helm.
+func TestEquipSwapFullVaultGoesToTheStash(t *testing.T) {
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			r, h := equipRig(t, class)
+			old := h.wear("head", "cap", "oldhelm")
+			id := r.addID(1, "cap")
+			extra := r.addID(2, "cap")
+			if err := r.st.Pin(extra); err != nil {
+				t.Fatal(err)
+			}
+			r.order(id, "")
+			r.cap = 1
+			r.run()
+			o := r.k.EquipOrderOf(id)
+			if o.State != EqDone || o.Where != "stash" || len(o.Displaced) != 1 {
+				t.Fatalf("order %+v", o)
+			}
+			if h.wornIn("head") == 0 || h.wornIn("head") == old {
+				t.Fatal("the new helm must be worn")
+			}
+			var stashed, packed int
+			for _, c := range r.api.VaultFake.Carried {
+				if c.Rec.UnitID == old {
+					switch c.Where {
+					case d2dctl.FakeStash:
+						stashed++
+					case d2dctl.FakePack:
+						packed++
+					}
+				}
+			}
+			if stashed != 1 || packed != 0 {
+				t.Fatalf("old helm: stash %d pack %d", stashed, packed)
+			}
+		})
+	}
+}
+
+// MUST FAIL if an order that would leave the old item without a home is accepted: the Vault is over its capacity and the
+// stash is full. The refusal names the reason and changes nothing (the record stays in the Vault, the body is untouched).
+func TestEquipRefusedWhenNothingCanTakeTheOldItem(t *testing.T) {
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			r, h := equipRig(t, class)
+			h.noStash = errors.New("the stash is full")
+			old := h.wear("head", "cap", "oldhelm")
+			id := r.addID(1, "cap")
+			r.addID(2, "cap")
+			r.cap = 1 // two records in a Vault of one: over capacity
+			res := r.order(id, "")
+			if res.OK || res.Code != "room" || res.Why != ReasonNoRoom {
+				t.Fatalf("order must be refused for room: %+v", res)
+			}
+			if r.k.EquipOrderOf(id) != nil || r.state(id).State != vault.Recorded {
+				t.Fatal("a refused order changes nothing")
+			}
+			if h.wornIn("head") != old {
+				t.Fatal("the worn helm must stay")
+			}
+			// an empty slot needs no home for anything: the same Vault accepts the order
+			h.body = map[int]string{}
+			for i := range r.api.VaultFake.Carried {
+				if r.api.VaultFake.Carried[i].Rec.UnitID == old {
+					r.api.VaultFake.Carried[i].Where = d2dctl.FakePack
+				}
+			}
+			if res := r.order(id, ""); !res.OK {
+				t.Fatalf("an empty slot must be accepted: %+v", res)
+			}
+		})
+	}
+}
+
+// With stash room an over-capacity Vault still takes the order (the old item goes to the stash).
+func TestEquipOverCapacityWithStashRoomIsAccepted(t *testing.T) {
+	r, h := equipRig(t, "sorceress")
+	h.wear("head", "cap", "oldhelm")
+	id := r.addID(1, "cap")
+	r.addID(2, "cap")
+	r.cap = 1
+	if res := r.order(id, ""); !res.OK {
+		t.Fatalf("%+v", res)
 	}
 }

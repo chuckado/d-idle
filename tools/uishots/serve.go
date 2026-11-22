@@ -162,7 +162,11 @@ func serve(addr, class string) error {
 		}
 		m.Handle("/api/senses", (&watch.Senses{Src: pub, Lock: watch.FixedTier(1)}).Handler())
 	} else {
-		m.HandleFunc("/api/senses", func(w http.ResponseWriter, r *http.Request) { js(w, sensesFixture()) })
+		if err := initMapFx(); err != nil {
+			return err
+		}
+		legacy := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { js(w, sensesFixture()) })
+		m.HandleFunc("/api/senses", func(w http.ResponseWriter, r *http.Request) { sensesFor(r, legacy).ServeHTTP(w, r) })
 	}
 	// the unit layer script of the map lives behind the senses routes; a Senses with no source still serves it
 	units := (&watch.Senses{}).Handler()

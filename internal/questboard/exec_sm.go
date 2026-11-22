@@ -345,3 +345,34 @@ func (e *Exec) holdLocked(d Decision, rs *runState, res StepResult) {
 		e.smPark(d.Quest, d.Chunk, "hold_timeout", rs)
 	}
 }
+
+// smAutoFinish closes the live run of a chunk whose view reads done or skipped although the chunk's own check does not
+// (the quest word says done for the whole quest). Without it that run stays live for ever, nothing can stop it from
+// the board (a done row has no Stop) and D5 blocks every other quest. It latches the chunk with source auto-finish and
+// reports whether it changed the file.
+func (e *Exec) smAutoFinish(vs []QuestView, diff int) bool {
+	d := Difficulties[diff]
+	var stale []Ref
+	var tiers []Tier
+	m, err := e.st.LoadSM(nil)
+	if err != nil {
+		return false
+	}
+	for _, r := range m.Live(e.b, d) {
+		if _, cv, ok := chunkView(vs, r.Quest, r.Chunk); ok && (cv.State == Done || cv.State == Skipped) {
+			stale = append(stale, Ref{r.Quest, r.Chunk})
+			tiers = append(tiers, cv.Tier)
+		}
+	}
+	if len(stale) == 0 {
+		return false
+	}
+	err = e.st.UpdateSM(nil, func(m *SM) error {
+		for i, r := range stale {
+			m.NoteDone(e.b, d, r.Quest, r.Chunk, tiers[i], e.o.Now(), "auto-finish")
+			e.o.Log("quest board: auto-finish "+r.String()+": the quest reads done, the stale run was closed", "quest", r.Quest, "chunk", r.Chunk)
+		}
+		return nil
+	})
+	return err == nil
+}
