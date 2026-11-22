@@ -605,6 +605,8 @@ function applyCockpit() {
   ck.plan = p;
   const main = ck.main, shell = ck.shell;
   shell.dataset.cmode = main.dataset.cmode = p.mode;
+  const editBtn = document.getElementById('btn-layout'); // a phone cannot edit the layout: no entry that only refuses
+  if (editBtn) editBtn.hidden = p.mode === 'phone';
   if (p.mode === 'phone') shell.dataset.narrow = 'phone'; else if (window.innerWidth < 1000) shell.dataset.narrow = 'mid'; else delete shell.dataset.narrow; // the header links (components.css)
   main.dataset.has = p.has;
   main.style.setProperty('--c-strip', p.sizes.strip + 'px');
