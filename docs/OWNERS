@@ -500,6 +500,7 @@ docs/knobs.md  credit-runner  freshstart
 docs/knobs.md  credit-runner  gearsets
 docs/knobs.md  credit-runner  goldprio
 docs/knobs.md  credit-runner  hourfix
+docs/knobs.md  credit-runner  knownedge
 docs/knobs.md  credit-runner  lootwire3
 docs/knobs.md  credit-runner  lootwireL4
 docs/knobs.md  credit-runner  pursuers
@@ -1150,6 +1151,7 @@ internal/d2dworld  credit-runner  countess3
 internal/d2dworld  live-agent  k1layout
 internal/d2dworld/  credit-runner  wpstep
 internal/d2dworld/world.go  credit-runner  andariel1
+internal/d2dworld/world.go  credit-runner  knownedge
 internal/d2dworld/world_test.go  credit-runner  andariel1
 internal/d2map  credit-runner  countess3
 internal/d2map/static.go  credit-runner  wpstep
@@ -1206,6 +1208,7 @@ internal/env/tuning_loot.go  credit-runner  vaultreveal
 internal/env/tuning_loot.go  credit-runner  vaultv3
 internal/env/tuning_loot.go  credit-runner  vaultv5
 internal/env/tuning_loot.go  credit-runner  vaultv6
+internal/env/tuning_nav.go  credit-runner  knownedge
 internal/env/tuning_nav.go  credit-runner  pursuers
 internal/env/tuning_quests.go  credit-runner  bsm4
 internal/env/tuning_quests.go  credit-runner  countess3
@@ -1333,12 +1336,15 @@ internal/nav/exit.go  credit-runner  pursuers
 internal/nav/exit_test.go  credit-runner  andariel1
 internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
+internal/nav/fullgrid_test.go  credit-runner  knownedge
 internal/nav/mouthgate.go  credit-runner  botstuck
 internal/nav/nav.go  credit-runner  countess3b
+internal/nav/nav.go  credit-runner  knownedge
 internal/nav/nav.go  credit-runner  maphistoryC
 internal/nav/nav.go  credit-runner  pursuers
 internal/nav/pursuit.go  credit-runner  pursuers
 internal/nav/pursuit_test.go  credit-runner  pursuers
+internal/nav/roam.go  credit-runner  knownedge
 internal/nav/roam.go  credit-runner  maphistoryC
 internal/nav/roam.go  credit-runner  maptrail
 internal/nav/roam.go  credit-runner  pursuers

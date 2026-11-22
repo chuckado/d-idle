@@ -392,6 +392,7 @@
 | pgvault | proposed | - | `tools/provingground/`<br>`internal/scenario/`<br>`cmd/d2scenario/`<br>`docs/process/proving-ground.md` | - |
 | vaultwire | proposed | - | `cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/invwire.go`<br>`cmd/d2bot/vaultequip.go`<br>`cmd/d2bot/vaultequip_test.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/invverbs_test.go` | - |
 | gridwhole | proposed | - | `docs/probes/gridwhole-2026-11-22.md`<br>`tools/probes/gridwhole.py` | - |
+| knownedge | proposed | - | `internal/nav/fullgrid_test.go`<br>`internal/nav/roam.go`<br>`internal/nav/nav.go`<br>`internal/env/tuning_nav.go`<br>`internal/d2dworld/world.go`<br>`docs/knobs.md` | - |
 | vaultclean | proposed | - | `internal/watch/web/vault.html`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.json`<br>`internal/watch/vaultclean_test.go`<br>`internal/watch/testdata/vault_clean.mjs`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`tools/desktopscroll/vault.mjs`<br>`tools/uishots/fit.js`<br>`docs/ui/vault-cleanup`<br>`docs/vault.md`<br>`tools/uishots/vaultshots.sh` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
@@ -428,6 +429,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 1b28118d7 11-21 23:43 `Merge agent/map2: Merge origin/main into knownedge` (map2)
+- e23addaa3 11-21 23:25 `Merge origin/main into knownedge` (-)
 - 7945ad776 11-21 23:24 `Merge agent/map1: Merge branch 'main' into gridwhole` (map1)
 - f2fcf4c92 11-21 23:23 `Merge branch 'main' into gridwhole` (-)
 - ed908ec7b 11-21 23:04 `Merge agent/vaultclean: vaultclean: unid badge placement, desktopscroll chrome check, pictures, docs, task card` (vaultclean)
@@ -436,6 +439,4 @@
 - dc7a82607 11-21 21:07 `Merge agent/mercbr: Merge branch 'main' into mercbr` (mercbr)
 - e2c520612 11-21 21:06 `Merge branch 'main' into mercbr` (-)
 - c5c7142b2 11-21 20:54 `Merge agent/fablemap: Fable design review: whole-map knowledge against the known grid (docs only)` (fablemap)
-- 1a7c86a15 11-21 20:25 `Merge remote-tracking branch 'origin/main' into agent/vaultid` (-)
-- 15f5df146 11-21 20:08 `Merge agent/vaultdesktop: vaultdesktop: card result, merge main` (vaultdesktop)
 <!-- statusgen:end -->
