@@ -3,6 +3,7 @@ package nav
 import (
 	"context"
 	"errors"
+	"math"
 	"time"
 
 	"d2lod-bot/internal/d2"
@@ -102,19 +103,44 @@ func (n *Navigator) approachGate(ctx context.Context, o *obs, levelNo int, g gat
 	if n.doorApproach[key] >= 2 {
 		return false
 	}
-	res, err := n.plan(o.lm, o.pos, g.at, 3, o.snap.Monsters, 0)
-	if err != nil && len(res.wps) == 0 {
-		return false
-	}
-	if dist(res.goal, g.at) > dist(o.pos, g.at)-10 { // no nearer reachable point: nothing to approach
+	cell, ok := n.nearestReachableTo(o, g.at)
+	if !ok || dist(cell, g.at) > dist(o.pos, g.at)-10 { // no reachable point nearer to the gate: nothing to approach
 		return false
 	}
 	n.doorApproach[key]++
-	n.log.Info("nav: the gate is cut off, walking to the nearest reachable cell to look for its door", "to", levelNo, "gate", g.at, "cell", res.goal, "from", o.pos)
-	if err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return res.goal, 3, nil }, walkOpts{}); err != nil && !errors.Is(err, ErrAlreadyThere) {
+	n.log.Info("nav: the gate is cut off, walking to the nearest reachable cell to look for its door", "to", levelNo, "gate", g.at, "cell", cell, "from", o.pos)
+	if err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return cell, 3, nil }, walkOpts{}); err != nil && !errors.Is(err, ErrAlreadyThere) {
 		n.log.Info("nav: could not walk to the cut-off gate", "err", err)
 	}
 	return true
+}
+
+// nearestReachableTo is the cell the character can walk to on the known grid that is nearest to target and has some
+// clearance from walls (a plan to the target itself fails, it is cut off, and a failed plan leaves no waypoints).
+func (n *Navigator) nearestReachableTo(o *obs, target input.Point) (input.Point, bool) {
+	n.planMu.Lock()
+	defer n.planMu.Unlock()
+	f := n.fieldFor(o.lm)
+	f.ClearDyn()
+	sx, sy, ok := f.nearestWalkable(o.pos.X, o.pos.Y, 8)
+	if !ok {
+		return input.Point{}, false
+	}
+	hops := floodHops(f, sx, sy)
+	best, bestD, found := input.Point{}, math.MaxFloat64, false
+	for i, h := range hops {
+		if h < 0 {
+			continue
+		}
+		x, y := f.pt(int32(i))
+		if f.Clearance(x, y) < 1.5 {
+			continue
+		}
+		if d := dist(input.Point{X: x, Y: y}, target); d < bestD {
+			best, bestD, found = input.Point{X: x, Y: y}, d, true
+		}
+	}
+	return best, found
 }
 
 // logNoDoor says once per level pair why no door was found beside the cut-off gate (what the map and the snapshot list).
