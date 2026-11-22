@@ -443,6 +443,7 @@ docs/design/fable-review-2026-11-21/proving-ground-gate-catalog.md  user  fablep
 docs/design/fable-review-2026-11-21/proving-ground-gate.md  user  fablepg
 docs/design/fable-review-2026-11-21/quest-board*  credit-runner  fableboard
 docs/design/fable-review-2026-11-21/town-planner*  credit-runner  fabletown
+docs/design/fable-review-2026-11-21/town-planner-b-model.md  credit-runner  town5
 docs/design/fable-review-2026-11-21/town-profiles-sme.md  credit-runner  town12
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vault
@@ -614,6 +615,7 @@ docs/probes/test-characters.md  credit-runner  survtune
 docs/probes/test-characters.md  live-agent  cainl3
 docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/town-plan-scenarios.md  credit-runner  town1
+docs/probes/town-plan-stage3-2026-11-22.md  credit-runner  town5
 docs/probes/tpreserve.md  live-agent  tpreserve-live
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed2
@@ -868,6 +870,7 @@ internal/bot/areaskip_test.go  credit-runner  passagebounce
 internal/bot/areaskip_test.go  credit-runner  staletarget
 internal/bot/areaskip_test.go  pro-runner  bounce3
 internal/bot/broke.go  credit-runner  survrecover
+internal/bot/broke.go  credit-runner  town5
 internal/bot/catalog.go  credit-runner  botcpu2
 internal/bot/contracts.go  credit-runner  chores2
 internal/bot/contracts.go  credit-runner  goldprio
@@ -912,6 +915,7 @@ internal/bot/kitplan_test.go  credit-runner  bsm7
 internal/bot/ladder_t0_test.go  credit-runner  questrun
 internal/bot/leveling.go  credit-runner  agencyp0
 internal/bot/leveling.go  credit-runner  hourfix
+internal/bot/leveling.go  credit-runner  town5
 internal/bot/levelplan3_test.go  pro-runner  levelplan3
 internal/bot/lifelog.go  credit-runner  arrivalsettle
 internal/bot/lifelog.go  credit-runner  hourfix
@@ -2244,6 +2248,7 @@ tools/provingground/scenarios/points.json  credit-runner  necro1
 tools/provingground/scenarios/points.json  credit-runner  sorc2
 tools/provingground/scenarios/tiers.json  credit-runner  pgstability
 tools/provingground/scenarios/townplan.json  credit-runner  town1
+tools/provingground/scenarios/townplan.json  credit-runner  town5
 tools/provingground/scenarios/vaultequip.json  credit-runner  vaultequip
 tools/provingground/scenarios/vaultfull.json  credit-runner  vaultfull
 tools/provingground/scenarios/vaultreveal.json  credit-runner  identifyall

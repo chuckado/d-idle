@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into town5 <!--sg:agent/townstage3-->
 - Merge branch 'main' into recallsorc <!--sg:agent/recallsorc-->
 - Merge branch 'main' into necro4 <!--sg:agent/necro4-->
 - Merge branch 'main' into necrosme <!--sg:agent/necrosme-->
