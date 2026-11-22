@@ -207,6 +207,15 @@ func TestFitPhoneRules(t *testing.T) {
 			}
 			continue
 		}
+		if rest, ok := strings.CutPrefix(name, "nav-"); ok { // the shared navigation: navdefect-NAME (fixtures_nav.go)
+			if !strings.Contains(string(sh), "\nnavdefect-"+rest+" ") {
+				t.Errorf("no fit page navdefect-%s", rest)
+			}
+			if _, ok := mustFail["fit-navdefect-"+rest+"-"]; !ok {
+				t.Errorf("mustFail has no entry for navdefect-%s", rest)
+			}
+			continue
+		}
 		if rest, ok := strings.CutPrefix(name, "vault-"); ok { // the Vault page: vaultdefect-NAME (fixtures_vault.go)
 			if !strings.Contains(string(sh), "\nvaultdefect-"+rest+" ") {
 				t.Errorf("no fit page vaultdefect-%s", rest)
