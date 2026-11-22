@@ -42,6 +42,7 @@ type NavTuning struct {
 	PursuitMinLifePct    float64 // the pursuit rule applies at or above this % life (below it the safety guard and the stuck ladder decide)
 	RoamSpacing          float64 // distance between roam coverage points on a fully known level (subtiles); the grid is made when the level is first roamed
 	RoamCover            float64 // a coverage point counts as visited when the hero comes within this Chebyshev radius (clamped to RoamSpacing)
+	FullGrid             bool    // a level whose grid is measured whole (every cell of its rectangle known) is planned on that grid alone: no optimistic walk toward unknown cells, no 'known edge' waypoint (docs/probes/gridwhole-2026-11-22.md)
 	CautionRadius        float64 // CorpseApproach stops when a living monster is this close (subtiles); its paths avoid monsters at twice the usual radius
 }
 
@@ -129,6 +130,8 @@ func navKnobs() []Knob {
 			Desc: "Deprecated, default 0 (no wait): game.exe has no arrival cooldown in single player (docs/research/waypoint-trace.md) and d2d dropped its own in #153. A value above 0 makes the bot wait this long (plus 1 s) after arriving before clicking a row, for an old d2d binary."},
 		{Key: "nav.badEdgeTTLSec", Label: "Bad route edge lifetime", Unit: "s", Default: d.BadEdgeTTLSec, Min: 0, Max: 3600, HigherIsBetter: false, NoHandicap: true,
 			Desc: "A level link or gate that a walk failed on is routed around for this long (game time), and forgotten at once when the game is re-entered; a link the level map itself shows is never marked. 0 restores the old behaviour: marks last for the rest of the run, and a character cut off from a gate it can see is not walked out of its pocket (townwedge)."},
+		{Key: "nav.fullGrid", Label: "Plan whole grids as whole", Unit: "bool", Default: b2f(d.FullGrid), Min: 0, Max: 1, HigherIsBetter: true, NoHandicap: true,
+			Desc: "1: a level whose grid is measured whole (every cell of its rectangle known, as d2d's debug grid is on arrival) is planned on that grid alone and treated as fully known only then; a goal outside it is refused (no path) instead of walked toward as a 'known edge'. A partial grid keeps the optimistic walk and the explore-to-reveal path. 0: the old behaviour (d2d always fully known, optimistic fallback). Default 0 until the Countess scenarios are green (docs/design/fable-review-2026-11-22/map-knowledge.md card 2)."},
 		{Key: "nav.cautionRadius", Label: "Corpse approach caution", Unit: "subtiles", Default: d.CautionRadius, Min: 8, Max: 40, HigherIsBetter: true,
 			Desc: "A corpse run stops and reports when a living monster comes this close; its paths avoid monsters at twice the usual radius."},
 		{Key: "nav.roamSpacing", Label: "Roam point spacing", Unit: "subtiles", Default: d.RoamSpacing, Min: 5, Max: 30, HigherIsBetter: false, NoHandicap: true,
