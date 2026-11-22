@@ -70,6 +70,7 @@ type CombatTuning struct {
 	RunnerGuard     int // 1 = no walk-away retreat while a monster that runs after the player is close (V run, monster-ai-trace D1-D5)
 	StandOK         int // 1 = a standing Fallen is not dropped as "never in range" (S, mon-wake-trace; off until a live drill)
 	MissileDodge    int // 1 = sidestep fire walls, lightning, hydra and chaos missiles (off: U until verified live)
+	MinionRead      int // 1 = count minions from the engine read (`debug minions`) when a reader is wired; 0 = the snapshot census (fork flag --read-combat needed)
 	CurseRetreatPct int // an Amplify/Iron Maiden curse on the player counts as danger and retreats below this life %
 	MaxApproaches   int // approach steps per target before it is dropped as unreachable
 	ReachSec        int // engaged this long without a single cast at a target: ignore it ("no-shot")
@@ -107,7 +108,7 @@ func DefaultCombatTuning() CombatTuning {
 		PotionGapMs: 1000, PotionEmergencyPct: 30, RejuvGapMs: 300, ReactionMs: 120, PollMs: 60,
 		TargetQuality: 100, RangeMargin: 3, ClearRadius: 40, FightRadius: 22, MaxTargetSec: 45, NoProgressSec: 12, ClearMaxSec: 180,
 		CastGapMs: 650, CastPerSkill: 1, CastMarginMs: 90, CastFCR: 0, LowManaWaitMs: 700, StaticCasts: 4, StaticCastsBR: 0, StaticFloorNorm: 25, StaticFloorNM: 33, StaticFloorHell: 50, NovaManaFloor: 25,
-		KiteEnabled: 1, KiteDistance: 10, KiteLifePct: 60, KiteMaxSteps: 6, KiteRetreat: 12, DodgeRadius: 4, MissileDodge: 0, ThreatDodge: 0, DodgeReactMs: 400, ShooterKillMin: 0, RunnerGuard: 1, StandOK: 0, CurseRetreatPct: 60, MaxApproaches: 12, ReachSec: 15, IgnoreMemorySec: 90,
+		KiteEnabled: 1, KiteDistance: 10, KiteLifePct: 60, KiteMaxSteps: 6, KiteRetreat: 12, DodgeRadius: 4, MissileDodge: 0, MinionRead: 0, ThreatDodge: 0, DodgeReactMs: 400, ShooterKillMin: 0, RunnerGuard: 1, StandOK: 0, CurseRetreatPct: 60, MaxApproaches: 12, ReachSec: 15, IgnoreMemorySec: 90,
 		BuffRecastSec: 150, BuffMarginSec: 6, AuraCheckMs: 1500, LeftFailSec: 60,
 		Sacrifice: 1, SacrificeMinLifePct: 70, SacrificeMinPotions: 1, HolyFireMinMonsters: 3, DeliveryExpect: 0,
 	}
@@ -163,6 +164,7 @@ func combatKnobs() []Knob {
 		k("kiteRetreat", "Kite step length", "subtiles", "Length of one retreat step.", float64(d.KiteRetreat), 6, 20, true),
 		k("dodgeRadius", "Missile dodge radius", "subtiles", "Step away from hostile missiles closer than this.", float64(d.DodgeRadius), 0, 8, true),
 		k("missileDodge", "Sidestep dangerous missiles", "bool", "1 sidesteps fire walls, lightning, hydra and chaos missiles (unverified live, off by default).", float64(d.MissileDodge), 0, 1, true),
+		k("minionRead", "Read minions from the engine", "bool", "1 counts the hero's summons from the fork read `debug minions` (needs --read-combat); a failed read falls back to the snapshot census. Off by default (U until a live drill).", float64(d.MinionRead), 0, 1, true),
 		k("threatDodge", "Threat-model dodge", "bool", "1 dodges only hostile missiles the missile threat table says can be dodged in dodgeReactMs and fights the owners of the fast ones first (card botthreat, off until a live drill).", float64(d.ThreatDodge), 0, 1, true),
 		k("dodgeReactMs", "Dodge reaction budget", "ms", "Poll plus click time the threat model assumes before the character moves; a missile reaching us sooner is not dodged (I).", float64(d.DodgeReactMs), 100, 800, true),
 		k("shooterKillMin", "Kill shooters first from", "pts", "Ranged monsters with an elemental-only attack and a peak hit of at least this are fought first; 0 = off (derived from monstats, U).", float64(d.ShooterKillMin), 0, 200, true),
