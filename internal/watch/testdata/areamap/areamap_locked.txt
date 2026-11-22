@@ -1,6 +1,9 @@
 <div class="d-panel">
   <div class="d-slotbody">
     <div class="am">
+      <div class="stage">
+        <canvas class="cv" aria-label="Top-down map of the area; the cross is the hero" role="img">
+        <div class="empty"> "The map opens with the first unlock."
       <div class="ctl">
         <button class="d-btn" data-key="zout" data-size="sm" aria-label="Zoom out" type="button"> "-"
         <button class="d-btn" data-key="zin" data-size="sm" aria-label="Zoom in" type="button"> "+"
@@ -17,6 +20,3 @@
           <button class="d-btn" data-key="coverage" data-size="sm" aria-label="Show the exploration coverage grid" aria-pressed="false" type="button"> "Coverage"
           <button class="d-btn" data-key="heat" data-size="sm" aria-label="Heat layer: kills, time spent or damage taken, per cell" type="button"> "Heat: off"
           <button class="d-btn" data-key="events" data-size="sm" aria-label="Event markers on the trail: key events, all, or off" type="button"> "Events: key"
-      <div class="stage">
-        <canvas class="cv" aria-label="Top-down map of the area; the cross is the hero" role="img">
-        <div class="empty"> "The map opens with the first unlock."

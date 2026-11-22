@@ -36,6 +36,14 @@
   .d-main[data-cmode="phone"] .d-slottabs :is(.qb-box, .qb-list, .o-list, .o-items, .rows, .zm-list, .zc-scroll, .n-list, .d-slotbody[data-scroll], [data-scroll]) {
     flex: 0 0 auto; max-block-size: none; overflow: visible; overscroll-behavior: auto; scrollbar-gutter: auto; }
   .d-main[data-cmode="phone"] .d-slottabs .o-items { min-block-size: 0; }
+  /* a phone is a scrolling page and its panels take their content's height (utilities.css), so the map has a box of its own: the
+     toolbar and the Layers list sit above it in the flow (nothing floats over the tab row), and the picture is square, at least
+     260 px and at most 70 % of the screen height. */
+  .d-main[data-cmode="phone"] [data-panel="area-map"] .am { position: static; block-size: auto; display: flex; flex-direction: column; gap: var(--d-sp-1); }
+  .d-main[data-cmode="phone"] [data-panel="area-map"] .ctl { position: static; inset: auto; order: -2; justify-content: flex-end; }
+  .d-main[data-cmode="phone"] [data-panel="area-map"] .ctl .d-btn { min-inline-size: 38px; min-block-size: 38px; }
+  .d-main[data-cmode="phone"] [data-panel="area-map"] .layers { position: static; inset: auto; order: -1; max-block-size: none; box-shadow: none; }
+  .d-main[data-cmode="phone"] [data-panel="area-map"] .stage { position: relative; inset: auto; inline-size: 100%; aspect-ratio: 1; min-block-size: 260px; max-block-size: 70dvh; }
   /* the Act | Area switch is the first row of the map tile in the flow, not a float over the tab row above it (card mapphone, bug 2026-11-22) */
   .d-main[data-cmode="phone"] .d-slottabs > .d-panel:has(> .d-mapswitch) { display: flex; flex-direction: column; gap: var(--d-sp-1); }
   .d-main[data-cmode="phone"] .d-slottabs > .d-panel > .d-mapswitch { position: static; order: -1; align-self: flex-end; }

@@ -126,14 +126,14 @@ assert.strictEqual(P.label('Cold Plains', -1), 'Cold Plains');
 // box, and the CSS gives that box a height and puts nothing over the tab row (the pixel check is tools/uishots.sh --map) ----
 {
   const { root, c, body } = make({}), api = P.mount(root, c), am = body.children[0];
-  assert.deepStrictEqual(am.children.map((k) => k.className), ['ctl', 'layers', 'stage'], 'toolbar and Layers list first, then the picture box');
-  const stage = am.children[2];
+  assert.deepStrictEqual(am.children.map((k) => k.className), ['stage', 'ctl', 'layers'], 'the picture box, then the toolbar and the Layers list (a phone orders them above it)');
+  const stage = am.children[0];
   assert.deepStrictEqual(stage.children.map((k) => k.className), ['cv', 'empty'], 'the canvas and its message share the box');
   api.update({ tiers_unlocked: [1, 2], waiting: true });
   assert.strictEqual(stage.children[1].textContent, 'Waiting for the first steps...', 'a hero not seen yet says why');
   assert.strictEqual(stage.children[1].hidden, false);
-  const css = fs.readFileSync(path.join(dir, 'area-map', 'panel.css'), 'utf8'), ph = css.split('\n').filter((l) => l.includes('data-cmode="phone"'));
-  const rule = (sel) => { const l = ph.find((x) => x.includes(sel + ' {')); assert.ok(l, 'a phone rule for ' + sel); return l; };
+  const css = fs.readFileSync(path.join(dir, '..', 'utilities.css'), 'utf8'), ph = css.split('\n').filter((l) => l.includes('data-cmode="phone"'));
+  const rule = (sel) => { const l = ph.find((x) => x.includes('[data-panel="area-map"] ' + sel + ' {')); assert.ok(l, 'a phone rule for ' + sel); return l; };
   assert.ok(/position: static/.test(rule('.ctl')), 'the toolbar is in the flow on a phone');
   assert.ok(/position: static/.test(rule('.layers')), 'the Layers list is in the flow on a phone');
   assert.ok(/aspect-ratio: 1/.test(rule('.stage')) && /min-block-size: 2[6-9]\dpx|min-block-size: [3-9]\d\dpx/.test(rule('.stage')), 'the picture box has a height of its own (over 200 px)');
