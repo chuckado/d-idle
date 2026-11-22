@@ -40,6 +40,10 @@ type Fighter struct {
 	// MercState reads the merc for the field rules (mercfield.go). Nil, the default, leaves them off.
 	MercState func() (merc.MercState, error)
 
+	// MinionRead, when set, lists the hero's summons from the engine (the d2d backend wires the `debug minions` read). It is
+	// used only when the combat.minionRead knob is 1; nil or a failed read leaves the snapshot census.
+	MinionRead func() ([]MinionRow, error)
+
 	// OnFight, when set, gets one FightEnd per finished fight that took damage or lasted FightMinSec (passive: the
 	// policy preview's feed, card previewfeed). It runs on the fight goroutine and must not block.
 	OnFight func(FightEnd)

@@ -407,6 +407,7 @@
 | necro4 | proposed | - | `internal/combat/classdata.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro.go`<br>`internal/combat/necro_corpse.go`<br>`internal/combat/necro_test.go`<br>`internal/combat/necro_data_test.go`<br>`internal/combat/fighter.go` | - |
 | necro3 | proposed | - | `internal/buildfile/testdata/necromancer-summoner-sme.json`<br>`internal/buildfile/testdata/necromancer-poison-nova-sme.json`<br>`internal/buildfile/necrosme_test.go`<br>`internal/plandata/build-necromancer_summoner_sme.json`<br>`internal/plandata/build-necromancer_poison_nova_sme.json`<br>`docs/plan/data/build-necromancer_summoner_sme.json`<br>`docs/plan/data/build-necromancer_poison_nova_sme.json`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro_data_test.go`<br>`internal/leveler/necrosummoner_test.go` | - |
 | sellall | proposed | - | `internal/vaultkeep`<br>`internal/watch`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`docs/ui/vault-sell-all`<br>`tools/provingground/scenarios/vaultsellall.json`<br>`tools/uishots`<br>`tools/uishots.sh` | - |
+| necro5 | proposed | - | `internal/combat/minionread.go`<br>`internal/combat/necro.go`<br>`internal/combat/fighter.go`<br>`internal/combat/necro_data_test.go`<br>`internal/d2dcombat/rig.go`<br>`internal/env/tuning_combat.go`<br>`docs/knobs.md` | - |
 | uinav | proposed | - | `internal/watch/linkmatrix_test.go`<br>`internal/watch/invui.go`<br>`internal/watch/skillsui.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/invapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/characters.js`<br>`internal/watch/testdata/vault_nav.mjs`<br>`docs/ui/nav-links`<br>`docs/ui-design-system.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -442,6 +443,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 8541d9a99 11-22 16:51 `Merge agent/necro5: necro5: fix merge of necro_data_test` (necro5)
+- ab07e295d 11-22 16:47 `Merge origin/main into necro5` (-)
 - 6b883a8cc 11-22 16:32 `Merge agent/buildcatalog: buildcatalog: points table test skips the catalogue file` (buildcatalog)
 - eb2d1a8aa 11-22 15:40 `Merge branch 'main' into buildcatalog` (-)
 - 3143bca58 11-22 15:28 `Merge agent/buildratings: Merge branch 'main' into buildratings` (buildratings)
@@ -450,6 +453,4 @@
 - 8449d5e6f 11-22 15:20 `Merge branch 'main' into uinav` (-)
 - c029ce3dc 11-22 15:14 `Merge origin/main into uinav` (-)
 - f3ab54d84 11-22 15:11 `Merge agent/sellall: Merge branch 'main' into sellall` (sellall)
-- 0e772e686 11-22 15:10 `Merge branch 'main' into sellall` (-)
-- afc522db3 11-22 15:04 `Merge agent/fableui: Merge branch 'main' into fableui` (fableui)
 <!-- statusgen:end -->

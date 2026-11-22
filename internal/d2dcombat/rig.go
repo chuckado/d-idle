@@ -78,6 +78,7 @@ func New(cfg Config) (*Rig, error) {
 	r.Nav.UseWorld(r.World)
 	r.Fighter = combat.New(r.Env, r.Nav)
 	r.Fighter.D2D = true
+	r.Fighter.MinionRead = minionReader(ctx, cfg.Ctl)
 	if cfg.Seed != 0 {
 		r.Fighter.SetSeed(cfg.Seed)
 	}
@@ -110,6 +111,7 @@ func Attach(ctx context.Context, e *env.Env, nv *nav.Navigator, ctl *d2dinput.Co
 	ce.Clock = r.Meter
 	r.Fighter = combat.New(r.Env, nv)
 	r.Fighter.D2D = true
+	r.Fighter.MinionRead = minionReader(ctx, ctl.C)
 	nv.Yield = r.yield()
 	return r
 }
@@ -168,5 +170,23 @@ func newPlanner(ctx context.Context, e *env.Env, c *d2dctl.Client) *input.Planne
 				e.Log.Info(msg, kv...)
 			}
 		},
+	}
+}
+
+// minionReader adapts `debug minions` for Fighter.MinionRead. Only the summons that stand (Here) count; the fork must run with
+// --read-combat or the read fails and the fighter keeps the snapshot census.
+func minionReader(ctx context.Context, c *d2dctl.Client) func() ([]combat.MinionRow, error) {
+	return func() ([]combat.MinionRow, error) {
+		m, err := c.Minions(ctx)
+		if err != nil {
+			return nil, err
+		}
+		var rows []combat.MinionRow
+		for _, x := range m.Minions {
+			if x.Here {
+				rows = append(rows, combat.MinionRow{Skill: x.Skill, Name: x.Name})
+			}
+		}
+		return rows, nil
 	}
 }
