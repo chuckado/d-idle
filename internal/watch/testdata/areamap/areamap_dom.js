@@ -122,4 +122,20 @@ assert.strictEqual(P.label('Cold Plains', -1), 'Cold Plains');
   const st = { heat: 'kills' }, { root, c } = make(st), api = P.mount(root, c);
   assert.ok(/hist=1&heat=1/.test(api.query()), 'a stored heat layer asks for the cells at once: ' + api.query());
 }
+// ---- phone layout (card mapphone, bug 2026-11-22): the toolbar comes before the picture in the flow, the picture sits in its own
+// box, and the CSS gives that box a height and puts nothing over the tab row (the pixel check is tools/uishots.sh --map) ----
+{
+  const { root, c, body } = make({}), api = P.mount(root, c), am = body.children[0];
+  assert.deepStrictEqual(am.children.map((k) => k.className), ['stage', 'ctl', 'layers'], 'the picture box, then the toolbar and the Layers list (a phone orders them above it)');
+  const stage = am.children[0];
+  assert.deepStrictEqual(stage.children.map((k) => k.className), ['cv', 'empty'], 'the canvas and its message share the box');
+  api.update({ tiers_unlocked: [1, 2], waiting: true });
+  assert.strictEqual(stage.children[1].textContent, 'Waiting for the first steps...', 'a hero not seen yet says why');
+  assert.strictEqual(stage.children[1].hidden, false);
+  const css = fs.readFileSync(path.join(dir, '..', 'utilities.css'), 'utf8'), ph = css.split('\n').filter((l) => l.includes('data-cmode="phone"'));
+  const rule = (sel) => { const l = ph.find((x) => x.includes('[data-panel="area-map"] ' + sel + ' {')); assert.ok(l, 'a phone rule for ' + sel); return l; };
+  assert.ok(/position: static/.test(rule('.ctl')), 'the toolbar is in the flow on a phone');
+  assert.ok(/position: static/.test(rule('.layers')), 'the Layers list is in the flow on a phone');
+  assert.ok(/aspect-ratio: 1/.test(rule('.stage')) && /min-block-size: 2[6-9]\dpx|min-block-size: [3-9]\d\dpx/.test(rule('.stage')), 'the picture box has a height of its own (over 200 px)');
+}
 console.log('areamap ok');
