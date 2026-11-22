@@ -49,8 +49,12 @@ func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool 
 	n.log.Info("nav: the gate is cut off by a door, opening it", "to", levelNo, "door", door.Class, "at", at, "from", o.pos)
 	err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return at, 4, nil }, walkOpts{})
 	if err != nil && !errors.Is(err, ErrAlreadyThere) {
-		n.log.Info("nav: could not reach the gate door", "err", err)
-		return true // tried: the counter above bounds the retries, the caller observes again
+		// a walk onto the door's own blocked cell ends stuck beside it: that is close enough to use it
+		cur, oerr := n.observeWait(ctx)
+		if oerr != nil || dist(cur.pos, at) > 8 {
+			n.log.Info("nav: could not reach the gate door", "err", err)
+			return true // tried: the counter above bounds the retries, the caller observes again
+		}
 	}
 	if err := n.in.Interact(input.Target{Type: uint32(d2.TypeObject), ID: door.ID, Pos: at}); err != nil {
 		n.log.Info("nav door interact failed", "err", err)

@@ -339,8 +339,14 @@ func (n *Navigator) fieldFor(lm *d2map.LevelMap) *Field {
 	return n.field
 }
 
-// invalidate forces the next plan to re-read the grid (a door opened, for example).
-func (n *Navigator) invalidate() { n.fieldKey.nonce++ }
+// invalidate forces the next plan to re-read the grid (a door opened, for example). The key's nonce alone did not do
+// it: fieldFor reads the nonce from the stored key, so the two always matched (V: TestExitToOpensTheDoorBesideACutOffGate
+// kept planning on the closed door); the cached field is dropped instead.
+func (n *Navigator) invalidate() {
+	n.planMu.Lock()
+	n.field = nil
+	n.planMu.Unlock()
+}
 
 type planResult struct {
 	wps        []input.Point // waypoints from the first step to the goal
