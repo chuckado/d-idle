@@ -349,7 +349,9 @@ func (w *World) borders(ctx context.Context, l *lvl) {
 		return
 	}
 	var linked map[int]bool
-	if near, err := lay.Nearby(ctx); err == nil {
+	var near []Near
+	if nr, err := lay.Nearby(ctx); err == nil {
+		near = nr
 		linked = map[int]bool{}
 		for _, n := range near {
 			linked[n.Level] = true
@@ -381,6 +383,7 @@ func (w *World) borders(ctx context.Context, l *lvl) {
 			own.W, own.H = p.W, p.H // the layout's size, not the grid's
 		}
 	}
+	places = placeLinked(own, places, near)
 	lr := d2map.Rect{X: l.m.Rect.X, Y: l.m.Rect.Y, W: 5 * own.W, H: 5 * own.H}
 	adj, unproven, pending, unlinked := adjacent(own, lr, places, linked, l.m.Grid, across)
 	l.m.Adjacent, l.pending, l.unlinked = keepBorders(l.m.Adjacent, adj), pending, unlinked
