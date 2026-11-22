@@ -96,7 +96,7 @@ Starting Str 15, Dex 25, Int(Energy) 25, Vit 15 (SRC). 5 points per clvl. Life +
 |---|---|---|
 | Blood Raven (Burial Grounds), fire arrows, 60 life at clvl 8 | fire arrow hits every second, skeletons die first, then you | clvl >= 10 with Clay + 3 skeletons; stay behind the minions, retreat if life < 50%; never fight with < 2 healing potions |
 | Cold Plains packs (clvl 5-8, fallen and gore packs) | 8 monsters, the 3 skeletons die and the necromancer is next | only after clvl 7 and RS >= 3; fight at a door or the bridge; re-raise before the next pack, never after the first hit |
-| Countess (Tower) | fire bolt hits, the level below has unique packs | not before clvl 14 with Clay up and 4+ potions; skip the Tower runes if the minion count is 0 |
+| Countess (her keep) | fire bolt hits, the level below has unique packs | not before clvl 14 with Clay up and 4+ potions; skip the keep runes if the minion count is 0 |
 | Andariel poison (Catacombs 4) | green life bar, no regeneration, the minions all die in 3 s | antidote potions or town after the first poison tick below 60% life; clvl >= 20 and Iron/Clay up; leave the fight when potions < 3 |
 | (extra) Act 2 packs and Radament | packs of 6+ with melee ranged mix | same re-raise-first rule; do not clear the lair at < 8 skeletons |
 
