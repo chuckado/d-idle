@@ -22,5 +22,9 @@ export function measureMap(win, variant) {
     if (variant === 'waiting') { if (!msg) why.push('waiting state shows no message'); } else if (px === 0) why.push('canvas has no drawn pixels' + (msg ? ' (message: ' + msg + ')' : ''));
   }
   if (msg) num.message = msg;
+  // the heights from the panel up to the page (a collapsed ancestor shows here): selector-ish name and px
+  const ch = [];
+  for (let n = d.querySelector('[data-panel="area-map"] canvas'); n && n !== d.body; n = n.parentElement) ch.push((n.className || n.tagName).toString().split(' ')[0] + ':' + Math.round(n.getBoundingClientRect().height) + (n.dataset && n.dataset.grow ? 'g' : ''));
+  num.chain = ch.join('<');
   return 'MAPPHONE ' + (why.length ? 'FAIL' : 'PASS') + ' ' + variant + ' ' + win.innerWidth + 'x' + win.innerHeight + ': ' + JSON.stringify(num) + (why.length ? '; ' + why.join('; ') : '');
 }
