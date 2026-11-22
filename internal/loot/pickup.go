@@ -214,7 +214,7 @@ func (l *Looter) pickUp(ctx context.Context, o PickOpts) (PickReport, error) {
 				g = after.Player.Gold - goldBefore
 				rep.GoldGained += g
 			}
-			if err := l.unwear(ctx, c.u); errors.Is(err, errDropped) {
+			if err := l.unwear(ctx, c.u, s); errors.Is(err, errDropped) {
 				failed[c.u.ID] = 2
 				continue
 			} else if err != nil {
@@ -267,7 +267,11 @@ func init() {
 // a quest item (noWear) or a weapon the class cannot use well. The game wears a picked weapon into a free weapon slot
 // (V live for quest items, docs/act2.md P1; KITSTALL2: the same happened to a Sorceress whose weapon slot was empty,
 // a looted Short Bow went on and her spells stopped, S from the bot log).
-func (l *Looter) unwear(ctx context.Context, u d2.Unit) error {
+//
+// before is the snapshot taken before the pickup. A ground item and a carried item can share a unit id (the game numbers
+// them apart), so the unit found under the picked id is the picked item only when it is of the same base and was not
+// already worn before the pickup; else a worn cap with the same number was taken off (card recallsorc).
+func (l *Looter) unwear(ctx context.Context, u d2.Unit, before *d2.Snapshot) error {
 	b := l.base(u.Class)
 	if b == nil || !noWear[b.Code] && !(b.Kind == data.KindWeapon && casterNoLauncher(l.e.Data, b)) {
 		return nil
@@ -276,8 +280,14 @@ func (l *Looter) unwear(ctx context.Context, u d2.Unit) error {
 	if err != nil {
 		return err
 	}
-	if w, ok := hand.Find(s.Inventory, u.ID); !ok || w.Item == nil || w.Item.Where != d2.ContEquipment {
+	w, ok := hand.Find(s.Inventory, u.ID)
+	if !ok || w.Item == nil || w.Item.Where != d2.ContEquipment || w.Class != u.Class {
 		return nil
+	}
+	if before != nil && before.Inventory != nil {
+		if was, had := hand.Find(before.Inventory, u.ID); had && was.Item != nil && was.Item.Where == d2.ContEquipment {
+			return nil // worn before the pickup: another item that carries the same number
+		}
 	}
 	if !noWear[b.Code] && !LauncherUnwanted(l.e.Data, b, s.Player.Class) {
 		return nil
