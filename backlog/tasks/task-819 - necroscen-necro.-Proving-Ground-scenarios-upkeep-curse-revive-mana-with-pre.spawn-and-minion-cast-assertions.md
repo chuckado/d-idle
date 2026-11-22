@@ -1,10 +1,13 @@
 ---
 id: TASK-819
-title: 'necroscen: necro.* Proving Ground scenarios (upkeep, curse, revive, mana) with pre.spawn and minion/cast assertions'
-status: Proposed
+title: >-
+  necroscen: necro.* Proving Ground scenarios (upkeep, curse, revive, mana) with
+  pre.spawn and minion/cast assertions
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T20:10:00Z'
+updated_date: '2026-11-22T22:27:00Z'
 labels:
   - bot
   - drill
