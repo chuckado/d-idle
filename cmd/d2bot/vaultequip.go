@@ -12,7 +12,6 @@ import (
 	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/invdesk"
-	"d2lod-bot/internal/itemreq"
 	"d2lod-bot/internal/leveler"
 	"d2lod-bot/internal/vault"
 	"d2lod-bot/internal/vaultkeep"
@@ -144,10 +143,9 @@ func (h equipHand) Preview(rec vault.Rec) vaultkeep.Preview {
 		return vaultkeep.Preview{Why: "this item is not in the game tables"}
 	}
 	b := db.Items[idx]
-	var flags uint32
-	if rec.Identified {
-		flags |= d2.FlagIdentified
-	}
+	// A player may wear an unidentified item (the affixes apply unseen): the candidate check counts it as identified, so an
+	// unrevealed record is as wearable as a revealed one (user decision 2026-11-21: Equip does not need a reveal).
+	flags := uint32(d2.FlagIdentified)
 	if rec.Eth {
 		flags |= d2.FlagEthereal
 	}
@@ -159,11 +157,6 @@ func (h equipHand) Preview(rec vault.Rec) vaultkeep.Preview {
 			why = "charms are not equipped: belt and backpack items are out of scope for Equip"
 		}
 		return vaultkeep.Preview{Why: why}
-	}
-	for _, r := range c.Reasons {
-		if r.Code == itemreq.Identified {
-			return vaultkeep.Preview{Why: "unidentified: reveal it first", Reveal: true}
-		}
 	}
 	p := vaultkeep.Preview{Wearable: true}
 	if c.Req.Lvl > 0 {
