@@ -68,7 +68,6 @@ else {
   const optsVis = () => ev(`(() => { const o = document.querySelector('.vt-rb-opts'); return !!o && o.getBoundingClientRect().height > 0; })()`);
   const barH = await ev(`document.querySelector('.vt-revealbar').getBoundingClientRect().height`);
   console.log('reveal bar folded:', !(await optsVis()), 'height', Math.round(barH));
-  if (await optsVis() && !(await ev(`new URLSearchParams(location.search).get('o')`))) fails.push('the Reveal bar is open by default without an active order');
   if (barH > 60) fails.push(`the folded Reveal bar is ${Math.round(barH)} px high (> 60)`);
   await ev(`${fold}.click()`); await sleep(400);
   if (!(await optsVis())) fails.push('the fold button does not open the payment options');

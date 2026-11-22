@@ -18,6 +18,8 @@ owns:
   - "internal/watch/web/vault.json"
   - "tools/desktopscroll"
   - "docs/ui/desktop"
+  - "docs/vault.md"
+  - "internal/watch/vaultdesktop_test.go"
 exclusive: []
 contracts: []
 ---
