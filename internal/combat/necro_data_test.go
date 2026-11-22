@@ -139,6 +139,8 @@ func TestCensusEngineRead(t *testing.T) {
 	h.f.MinionRead = func() ([]MinionRow, error) { return rows, nil }
 	if m := h.f.census(w.snap); m.Skeletons != 0 {
 		t.Fatalf("a Paladin must keep the snapshot census: %+v", m)
+	}
+}
 
 // necro3: the Poison Nova caster profile exists and curses differently from the summoner (two builds, one engine).
 func TestPoisonNovaProfileCurses(t *testing.T) {
