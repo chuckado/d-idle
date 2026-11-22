@@ -43,6 +43,9 @@ func (r *Runner) zoneEntry(s *d2.Snapshot, p *d2.Player) {
 
 // wornWord lists what stands on the body as `<body slot>:<unit id>/<class>`, in body order (logging only).
 func wornWord(s *d2.Snapshot) string {
+	if s == nil || s.Inventory == nil {
+		return ""
+	}
 	var parts []string
 	for body := 0; body < 16; body++ {
 		if u := s.Inventory.Equipped(body); u != nil {
@@ -100,6 +103,9 @@ func (r *Runner) noteArrival(o *observer, p *d2.Player, now time.Time) {
 
 // cursorWord says what the cursor holds as `<unit id>/<class>@<x>,<y>`, or "" (logging only).
 func cursorWord(s *d2.Snapshot) string {
+	if s == nil || s.Inventory == nil {
+		return ""
+	}
 	if c := s.Inventory.Cursor; c != nil {
 		return fmt.Sprintf("%d/%d@%d,%d", c.ID, c.Class, c.X, c.Y)
 	}
