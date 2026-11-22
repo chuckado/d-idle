@@ -493,3 +493,29 @@ func TestGoldRevealAllScopeResendIsIdempotent(t *testing.T) {
 		})
 	}
 }
+
+// A record the game cannot decode stays sealed: Identify all reveals and charges the rest and names the one it could not read.
+func TestGoldRevealAllScopeNamesWhatItCouldNotDecode(t *testing.T) {
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			r := newRig(t, class)
+			r.withTools(0)
+			r.withPay(5000, 100)
+			ids := r.sealeds(4)
+			plain := r.addUnid(9, "wsp")
+			res, v := r.goldAll(0, false)
+			if v == nil || v.State != OrderRevealed || v.Done != 4 || v.Paid != 400 || r.revealed(append(ids, plain)) != 4 {
+				t.Fatalf("view %+v", v)
+			}
+			var skipped int
+			for _, x := range res {
+				if x.ID == plain && x.Code == "nosealed" {
+					skipped++
+				}
+			}
+			if len(res) != 5 || skipped != 1 {
+				t.Fatalf("four paid and one named: %+v", res)
+			}
+		})
+	}
+}

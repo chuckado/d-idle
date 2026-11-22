@@ -541,12 +541,13 @@ func (k *Keeper) GoldFacts(ctx context.Context) GoldFacts {
 	return f
 }
 
-// allResults keeps what Identify all reports: the records the stash paid for, or, when none was, the one refusal that
-// applies to the order. The records that were not paid for are not listed one by one; the order's Want says how many.
+// allResults keeps what Identify all reports: the records the stash paid for, the records the game could not decode (they
+// stay sealed and the page says so), or, when none was paid, the one refusal that applies to the order. The records that
+// were not paid for because the stash is short are not listed one by one; the order's Want says how many.
 func allResults(res []Result) []Result {
 	var out []Result
 	for _, r := range res {
-		if r.OK {
+		if r.OK || r.Code == "nosealed" {
 			out = append(out, r)
 		}
 	}

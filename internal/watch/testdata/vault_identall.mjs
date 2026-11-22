@@ -97,4 +97,11 @@ await page.reload(false);
 ok(!ident().hidden && ident().textContent === 'Identify all (18)', 'the rest remain countable after a partial order');
 ok(shownText(cls('vt-ab-order')[0]).includes('12 of 30'), 'the chip shows the order: ' + shownText(cls('vt-ab-order')[0]));
 
+// a partial answer (some records could not be decoded) says so in the toast
+act = { reveal: gold(2, null, 30), sell };
+await page.reload(false);
+reply = { ok: false, done: ['a', 'b'], failed: [{ id: 'c', code: 'nosealed', error: 'x' }], order: { id: 'g-3', state: 'revealed', line: 'Gold reveal done: 29 items revealed' } };
+await ident().click(); await find('sheet-go').click();
+ok(/Gold reveal done: 29 items revealed 1 could not be read/.test(shownText(cls('vt-toast')[0])), 'the toast names the records that stay unrevealed: ' + shownText(cls('vt-toast')[0]));
+
 console.log(JSON.stringify({ fails }));

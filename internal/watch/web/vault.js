@@ -809,7 +809,7 @@ export function mountVault(d) {
     const r = await d.post('/api/vault/revealgold', { scope: 'all_unrevealed', maxGold, confirm: true });
     const line = r && r.order && r.order.line;
     if (!r) setMsg('bad', T.noAnswer);
-    else if (r.ok || (r.done && r.done.length)) setMsg(r.ok ? 'good' : 'info', line || RT.sent);
+    else if (r.ok || (r.done && r.done.length)) setMsg(r.ok ? 'good' : 'info', (line || RT.sent) + (!r.ok && r.failed && r.failed.length ? ' ' + fmt(T.identifyAllSkipped, { n: r.failed.length }) : ''));
     else setMsg('bad', ((r.failed && r.failed[0] && r.failed[0].error) || r.error || T.noAnswer));
     await reload(true);
   }
