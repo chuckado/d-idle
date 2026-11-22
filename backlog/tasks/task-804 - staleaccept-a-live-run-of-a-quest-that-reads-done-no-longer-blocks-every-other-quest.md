@@ -21,6 +21,7 @@ owns:
   - "docs/questboard.md"
 exclusive: []
 contracts: []
+result: "Fixed: Exec.smAutoFinish closes a live run whose chunk view reads done/skipped (quest word done), logged auto-finish; unit tests + table on 2 classes, -race x20 green; scenario board.stale-accept-unblocks GREEN on a lab slot (Paladin seed 11, CHEATED setup, mechanics only)."
 ---
 
 ## Description
@@ -33,7 +34,7 @@ User bug 2026-11-22: forgotten_tower/countess stayed a live run after the quest 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Unit test reproduces the stale accept and fails without the fix
-- [ ] #2 Busy check table over quest done x chunk done x stopped on two classes
-- [ ] #3 Scenario board.stale-accept-unblocks green on a lab slot
+- [x] #1 Unit test reproduces the stale accept and fails without the fix
+- [x] #2 Busy check table over quest done x chunk done x stopped on two classes
+- [x] #3 Scenario board.stale-accept-unblocks green on a lab slot
 <!-- AC:END -->
