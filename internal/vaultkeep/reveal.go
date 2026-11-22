@@ -650,3 +650,38 @@ func (k *Keeper) FillSealed(ctx context.Context, ids []string) int {
 	}
 	return n
 }
+
+// BackfillProps gives up to max identified records that carry no stat lines (marked revealed, no properties) the ones their
+// own bytes carry, decoded by the fork (read-only in the game). It returns how many it filled.
+func (k *Keeper) BackfillProps(ctx context.Context, max int) int {
+	st := k.store()
+	dec, ok := k.API.(d2dctl.Decoder)
+	if st == nil || !ok || max <= 0 {
+		return 0
+	}
+	n := 0
+	for _, r := range st.Dump() {
+		if n >= max || ctx.Err() != nil {
+			break
+		}
+		if !r.Identified || r.Props != "" || r.Raw == "" || r.State != vault.Recorded && r.State != vault.KeepQ && r.State != vault.SellQ {
+			continue
+		}
+		if _, done := k.nop.Load(r.ID); done {
+			continue
+		}
+		got, err := dec.ItemDecode(ctx, r.Raw)
+		if err != nil {
+			if errors.Is(err, d2dctl.ErrVaultOff) || errors.Is(err, d2dctl.ErrVaultUnsupported) || errors.Is(err, d2dctl.ErrVaultState) {
+				break
+			}
+			continue
+		}
+		if got.Props != "" && got.Code == r.Code && st.SetProps(r.ID, got.Props) == nil {
+			n++
+		} else {
+			k.nop.Store(r.ID, true)
+		}
+	}
+	return n
+}

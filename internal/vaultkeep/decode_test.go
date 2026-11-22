@@ -110,3 +110,32 @@ func TestFillSealedIsIdempotent(t *testing.T) {
 		t.Fatalf("held, never shown: %+v", rec)
 	}
 }
+
+// A record marked revealed that carries no stat lines gets the ones its bytes carry; one that decodes to nothing is tried once.
+func TestBackfillPropsOfRevealedRecords(t *testing.T) {
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			r := newRig(t, class)
+			rec := d2dctl.FakeRecord(1, "wsp", 6, 31, "revealed")
+			it, err := r.st.Add(vault.Item{Raw: rec.Norm, Code: "wsp", Name: "Rare", Quality: 6, Ilvl: 31, Identified: true})
+			if err != nil {
+				t.Fatal(err)
+			}
+			dec := rec
+			dec.Props = "7:0:20"
+			r.api.VaultFake.Bytes = map[string]d2dctl.VaultRecord{rec.Norm: dec}
+			other := r.add(2, "cap", 6) // identified, bytes the fork does not know
+			r.st.Get(other)
+			if n := r.k.BackfillProps(context.Background(), 10); n != 1 {
+				t.Fatalf("filled %d", n)
+			}
+			if got := r.state(it.ID); got.Props != "7:0:20" || !got.Identified {
+				t.Fatalf("%+v", got)
+			}
+			calls := r.api.VaultFake.Decodes
+			if n := r.k.BackfillProps(context.Background(), 10); n != 0 || r.api.VaultFake.Decodes != calls {
+				t.Fatalf("second pass filled %d, decodes %d -> %d", n, calls, r.api.VaultFake.Decodes)
+			}
+		})
+	}
+}

@@ -440,6 +440,15 @@ func (s *Store) apply(ev *event) error {
 			return ErrState
 		}
 		r.Sealed, r.Updated = ev.Reason, ev.T
+	case "props": // an identified record that carries no property text: the fork decoded its own bytes
+		r, err := need(Recorded, KeepQ, SellQ)
+		if err != nil {
+			return err
+		}
+		if !r.Identified || r.Props != "" || ev.Reason == "" {
+			return ErrState
+		}
+		r.Props, r.Updated = ev.Reason, ev.T
 	case "reseal": // undo an unseal whose payment failed
 		r, err := need(Recorded, KeepQ)
 		if err != nil {
@@ -830,6 +839,15 @@ func (s *Store) Seal(id, props string) error {
 		return ErrState
 	}
 	return s.op(id, event{Ev: "seal", Reason: props})
+}
+
+// SetProps gives an identified record with no property text the one decoded from its own bytes (`item decode`); ErrState
+// when it has some, is not identified, or props is empty.
+func (s *Store) SetProps(id, props string) error {
+	if props == "" {
+		return ErrState
+	}
+	return s.op(id, event{Ev: "props", Reason: props})
 }
 
 // Reseal takes an Unseal back (the Ether charge failed after it).

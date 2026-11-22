@@ -12,6 +12,7 @@ const POLL_MS = 6000;
 const LONG_PRESS_MS = 500;
 const TYPED_ABOVE = 10; // a discard of more items than this asks for the number typed
 const MAX_LOADED = 6000; // rows kept in memory at most (a vault holds a few thousand); only the rows near the view are drawn
+const grp = (n) => String(Math.max(Math.round(n) || 0, 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); // 5,800
 const LOAD = 200; // the server's page size cap: scrolling near the end of what is loaded fetches the next page
 const OVER_ROWS = 4; // rows drawn above and below the view
 
@@ -116,7 +117,8 @@ export function mountVault(d) {
   const keepB = btn(T.keep, { key: 'keep' });
   const revealB = btn(T.reveal, { key: 'reveal' }), sellB = btn(T.sell, { key: 'sell' });
   const etherB = btn(T.revealEther, { key: 'reveal-ether' }); etherB.hidden = true;
-  const acts = el('div', 'vt-acts'); acts.append(keepB, revealB, etherB, sellB, pinB, unpinB, discB);
+  const goldB = btn(T.revealGoldSel, { key: 'reveal-gold' }); goldB.hidden = true; // the one reveal button while only Gold is offered
+  const acts = el('div', 'vt-acts'); acts.append(keepB, revealB, etherB, goldB, sellB, pinB, unpinB, discB);
   bar.append(selBtn, selText, selAll, acts);
   // ---- the Reveal bar: one bar for the items of the identify filter, a payment picker with one cost line each ----
   const RT = T.revealBar || {};
@@ -393,6 +395,14 @@ export function mountVault(d) {
     const rp = revealPlan(S.items, ids, a), sp = sellPlan(S.items, ids);
     const via = revealMethods(a && a.reveal); // the payments the page draws: only gold unless loot.vaultRevealMethods says more
     revealB.hidden = !via.has('free');
+    const gi = a && a.reveal && a.reveal.gold || {}, price = gi.scrollGold || 0, gOn = via.has('gold') && !via.has('free') && !!(a && a.reveal.gold && gi.on);
+    const gcost = rp.n * price, gcap = price > 0 ? Math.floor((gi.stash || 0) / price) : 0;
+    goldB.hidden = !gOn; goldB.dataset.cost = String(gcost);
+    if (gOn) {
+      goldB.textContent = fmt(T.revealGoldSel, { n: rp.n });
+      goldB.disabled = ro || !rp.n || gcap < 1 || !!gi.why;
+      goldB.title = !rp.n ? T.revealNone : (gi.why || (gcap < 1 ? fmt(T.goldShort, { price: grp(price), stash: grp(gi.stash || 0) }) : ''));
+    }
     revealB.textContent = fmt(T.revealSel, { n: rp.n || n });
     revealB.disabled = ro || !a || !a.reveal.enabled;
     revealB.title = !a ? T.revealNote : (!a.reveal.enabled && a.reveal.why ? a.reveal.why : (!rp.n && n ? T.revealNone : ''));
@@ -400,6 +410,7 @@ export function mountVault(d) {
     sellB.disabled = ro || !a || !a.sell.enabled;
     sellB.title = !a ? T.sellNote : (!a.sell.enabled && a.sell.why ? a.sell.why : (!sp.n && n ? T.sellNone : ''));
     let cost = '';
+    if (gOn && n && rp.n) cost = fmt(T.goldCost, { n: rp.n, cost: grp(Math.min(rp.n, gcap) * price), stash: grp(gi.stash || 0) }) + (gcap < rp.n ? fmt(T.goldPartial, { k: gcap }) : '');
     if (a && n && rp.n && via.has('free')) {
       cost = (rp.n === 1 ? T.revealCostOne : fmt(T.revealCost, { n: rp.n, c: rp.charges })) + (rp.free ? T.revealFree : (rp.have >= 0 ? fmt(T.revealHave, { have: rp.have }) : '')) + (rp.short ? T.revealShort : '');
     }
@@ -606,6 +617,8 @@ export function mountVault(d) {
     const eqv = S.view && S.view.equip; // one-tap Equip: only when the bot offers it (loot.vaultEquip)
     if (eqv && eqv.enabled && it.state === 'recorded') { const eb = btn(T.equip, { key: 'd-equip' }); eb.addEventListener('click', () => openEquip(it, eb)); row.appendChild(eb); }
     const ra = S.view && S.view.act && S.view.act.reveal, via = revealMethods(ra);
+    const gd = ra && ra.gold || {};
+    if (via.has('gold') && !via.has('free') && gd.on && !it.identified) row.appendChild(mk(fmt(T.revealGoldOne, { cost: grp(gd.scrollGold || 0) }), 'reveal-gold', { ok: gd.scrollGold > 0 && gd.stash >= gd.scrollGold && !gd.why, reason: gd.why || fmt(T.goldShort, { price: grp(gd.scrollGold || 0), stash: grp(gd.stash || 0) }) }, () => goldOrder([it.id], gd.scrollGold, (gd.confirmAt || 0) > 0 && gd.scrollGold >= gd.confirmAt)));
     if (via.has('free')) row.appendChild(mk(T.reveal, 'reveal', act.reveal, () => revealAct([it.id], false)));
     if (ra && ra.etherPer > 0 && !ra.free && !it.identified && via.has('ether')) row.appendChild(mk(fmt(T.revealEtherOne, { cost: ra.etherPer }), 'reveal-ether', { ok: ra.balance >= ra.etherPer, reason: fmt(T.etherShort, { need: ra.etherPer, have: ra.balance }) }, () => etherAct([it.id])));
     row.appendChild(mk(T.sell, 'sell', act.sell, () => openSell([it.id], row.lastChild)));
@@ -760,6 +773,14 @@ export function mountVault(d) {
     else setMsg('bad', ((r.failed && r.failed[0] && r.failed[0].error) || (line && r.order && r.order.note) || r.error || T.noAnswer));
     await reload(true);
   }
+  goldB.addEventListener('click', () => {
+    const rp = revealPlan(S.items, S.sel.ids(), S.view && S.view.act), gi = (S.view && S.view.act && S.view.act.reveal.gold) || {};
+    if (!rp.n || goldB.disabled) return;
+    const n = Math.min(rp.n, Math.floor((gi.stash || 0) / (gi.scrollGold || 1))), cost = n * (gi.scrollGold || 0), big = (gi.confirmAt || 0) > 0 && cost >= gi.confirmAt;
+    if (big && !goldB.dataset.armed) { goldB.dataset.armed = '1'; goldB.textContent = fmt(T.goldArm, { cost: grp(cost) }); return; }
+    delete goldB.dataset.armed;
+    goldOrder(rp.ids.slice(0, n), cost, big);
+  });
   rbGo.addEventListener('click', () => {
     const rev = S.view && S.view.act && S.view.act.reveal, m = revealBarModel(rev, RB.pay, RT);
     const o = m.sel && rev.bar.options.find((x) => x.id === m.sel);

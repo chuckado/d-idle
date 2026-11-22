@@ -82,6 +82,7 @@ type Keeper struct {
 	OrderFile   func() string
 	Measured    func() bool // a measured run (D2BOT_RUN): a gold reveal is refused and never reaches the fork
 
+	nop    sync.Map // record ids whose bytes decoded to no properties (BackfillProps tries them once per process)
 	pmu    sync.Mutex // serialises one gold order's unlock, payment and settle (taken before omu)
 	omu    sync.Mutex // guards mem and loaded (never taken while mu is held)
 	mem    *GoldOrder

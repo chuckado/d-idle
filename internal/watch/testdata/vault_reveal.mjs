@@ -22,7 +22,8 @@ const sheet = () => all(root).find((n) => n.className === 'vt-sheet');
 const bar = (opts, def, total) => ({ total, default: def, line: 'line', options: opts });
 const o = (id, x) => Object.assign({ id, label: id, line: id + ' line', ok: true, count: 4, ids: ['v1', 'v2', 'v3', 'v4'], cost: 0, skipped: [] }, x);
 let act = null;
-const view = () => ({ schema: 'watch.vault/1', mode: 'on', hero: 'Sorc', total: 0, offset: 0, limit: 60, items: [], kinds: [], types: [], act,
+let items = [];
+const view = () => ({ schema: 'watch.vault/1', mode: 'on', hero: 'Sorc', total: items.length, offset: 0, limit: 60, items, kinds: [], types: [], act,
   capacity: { count: 4, capacity: 400, pins: 0, pinLimit: 0, percent: 1, level: 'ok' }, upgrade: { available: false, currency: 'Ether', reason: 'x', max: 2400 } });
 const rev = (b, gold) => ({ enabled: true, charges: 0, free: false, perItem: 1, balance: 665, queued: 0, working: 0, done: 0, bar: b, gold });
 const sell = { enabled: true, queued: 0, working: 0, sold: 0, gold: 0 };
@@ -54,6 +55,19 @@ ok(find('reveal-bar-go').textContent === 'Reveal 4 items for 320 gold (stash 700
 ok(find('reveal').hidden && find('reveal-ether').hidden && find('buy-scrolls').hidden, 'the scroll, Ether and Buy buttons are hidden');
 ok(!has('Cain is not rescued') && !has('scrolls: 3') && !has('no scroll or tome charge'), 'no scroll or Cain text: ' + texts().join(' | '));
 ok(has('Gold: 320 (stash 700)'), 'the gold line reads Gold: <total> (stash <S>)');
+// the selection toolbar: ONE reveal button, labelled with gold; no charges, Ether or scroll word anywhere in the Reveal UI
+items = ['v1', 'v2', 'v3'].map((id) => ({ id, code: 'cap', name: 'Cap', state: 'recorded', quality: 'magic', identified: false, kind: 'armor', value: 10, pin: false }));
+act = { reveal: Object.assign(rev(bar([o('gold', { cost: 160, count: 2, line: 'Gold: 160 (stash 200)' })], 'gold', 3), { on: true, order: null, stash: 200, scrollGold: 80, confirmAt: 0 }), { methods: ['gold'], etherPer: 1, charges: 7, balance: 937, note: 'Cain is not rescued', line: 'Revealing 16 items: at your next town visit' }), sell };
+await page.reload(false);
+await find('select-toggle').click(); await find('select-all').click();
+ok(find('reveal-gold') && !find('reveal-gold').hidden && find('reveal-gold').textContent === 'Reveal with gold (3)', 'the one gold button: ' + (find('reveal-gold') || {}).textContent);
+ok(find('reveal').hidden && find('reveal-ether').hidden && find('buy-scrolls').hidden, 'Reveal (charges), Reveal with Ether and Buy are hidden');
+ok(has('Reveal 3 items for 160 gold (stash 200); the stash pays for 2'), 'one gold cost line: ' + texts().join(' | '));
+ok(!texts().some((t) => /\bether\b|charge|scroll|cain/i.test(t)), 'no Ether, charges, scroll or Cain text while gold-only: ' + texts().filter((t) => /\bether\b|charge|scroll|cain/i.test(t)).join(' | '));
+posts = []; reply = { ok: true, done: ['v1', 'v2'] };
+await find('reveal-gold').click();
+ok(posts[0] && posts[0].startsWith('/api/vault/revealgold {"ids":["v1","v2"],"maxGold":160'), 'the press orders what the stash covers: ' + posts[0]);
+items = []; posts = [];
 // all three named: the old picker is back
 act = { reveal: Object.assign(rev(bar([o('free', { ok: false, count: 0, ids: [], why: 'no scroll' }), o('gold', { cost: 320, line: 'Gold: 320 (stash 700)' })], 'gold', 4), { on: true, order: null, stash: 700 }), { methods: ['free', 'ether', 'gold'] }), sell };
 await page.reload(false);

@@ -455,6 +455,7 @@ func (f actFace) Act(ctx context.Context) watch.VaultActView {
 		w := "this bot has no Reveal or Sell"
 		return watch.VaultActView{Reveal: watch.VaultRevealView{Why: w, Code: "off"}, Sell: watch.VaultSellView{Why: w, Code: "off"}}
 	}
+	k.BackfillProps(ctx, 10) // revealed records without stat lines get the ones their bytes carry (a few per page load)
 	in, p := k.Info(), k.RevealPrice(ctx)
 	v := watch.VaultActView{
 		Reveal: watch.VaultRevealView{Note: p.Note, Charges: p.Charges, Free: p.Free, PerItem: p.PerItem, EtherPer: p.EtherPer, Balance: p.Balance, Queued: in.RevQueued, Working: in.RevWorking, Done: in.Revealed, Line: k.RevealLine()},
