@@ -251,10 +251,12 @@ func act3HopNodes() []Node {
 	q := QAct3Done
 	done := func(w World) bool { return w.Act >= 4 }
 	kill := StepKill(id(q, "kill"), BossMephisto, Durance3, func(w World) bool { return done(w) || w.Killed[BossMephisto] }, 20*time.Minute)
+	portal := StepInteract(id(q, "portal"), "Take the red portal", "red portal", done, func(w World) bool { return w.Killed[BossMephisto] && w.Area == Durance3 })
+	portal.Evidence = done // not needed before Mephisto is dead is no evidence of a trip (see hopNodes)
 	return []Node{
 		{Step: withReady(StepTravelA2(id(q, "to"), "Go to Durance of Hate 3", Durance3, func(w World) bool { return done(w) || w.Killed[BossMephisto] }), gatePotions(28, "Mephisto needs clvl 28", minPotions, q))},
 		req(Node{Step: kill}, id(q, "to")),
-		{Step: StepInteract(id(q, "portal"), "Take the red portal", "red portal", done, func(w World) bool { return w.Killed[BossMephisto] && w.Area == Durance3 })},
+		{Step: portal},
 	}
 }
 

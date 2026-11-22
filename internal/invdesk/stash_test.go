@@ -270,3 +270,26 @@ func TestViewSchema6StashGolden(t *testing.T) {
 		}
 	}
 }
+
+// StashNow runs one visit for one backpack item and says why when the stash cannot take it (the vault's equip uses it for
+// the old item of a full Vault).
+func TestStashNow(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		d, fs, _ := stashRig(t, class, town1)
+		if err := d.StashNow(context.Background(), 1); err != nil {
+			t.Fatalf("%v: %v", class, err)
+		}
+		if len(fs.visits) != 1 || len(fs.visits[0].Stow) != 1 || fs.visits[0].Stow[0] != 1 {
+			t.Fatalf("%v: visits %+v", class, fs.visits)
+		}
+		fs.roomStash = false
+		if err := d.StashNow(context.Background(), 1); err == nil || len(fs.visits) != 1 {
+			t.Fatalf("%v: a full stash must refuse without a visit: %v", class, err)
+		}
+		fs.roomStash = true
+		fs.failID[1] = errors.New("the click failed")
+		if err := d.StashNow(context.Background(), 1); err == nil {
+			t.Fatalf("%v: the visit's error must come back", class)
+		}
+	}
+}

@@ -390,9 +390,11 @@ func act2HopNodes() []Node {
 	ready := a2At(QDuriel, StageCleared)
 	jerhyn := StepTalk(id(q, "jerhyn"), "Talk to Jerhyn", NPCJerhyn, "act2", a2At(QAct2Word, StageDone), ready)
 	jerhyn.Optional = true // U: the word may already be set by Tyrael
+	meshif := StepTalk(id(q, "meshif"), "Sail east with Meshif", NPCMeshif, "sail east", done, ready)
+	meshif.Evidence = done // not needed until Duriel is cleared is no evidence of a trip (see hopNodes)
 	return []Node{
 		{Step: jerhyn},
-		{Step: StepTalk(id(q, "meshif"), "Sail east with Meshif", NPCMeshif, "sail east", done, ready)},
+		{Step: meshif},
 	}
 }
 

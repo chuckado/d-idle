@@ -325,7 +325,27 @@ func (h equipHand) Protect(unit uint32) {
 	}
 }
 
-var _ vaultkeep.Hand = equipHand{}
+// StashRoom: the size of a worn item and the stash layout are not read before the wear, so the answer is no. An order whose
+// Vault is over its capacity is therefore refused up front; the stash only catches an item the Vault turns away after the
+// wear (Stash below, a backpack item the desk can check).
+func (h equipHand) StashRoom(string) error {
+	return errors.New("the stash room for a worn item is not read before the wear")
+}
+
+// Stash files the taken-off item (now in the backpack) in the stash through the desk's stash visit.
+func (h equipHand) Stash(ctx context.Context, unit uint32) error {
+	d := h.ref.inv
+	if d == nil {
+		return errors.New("the stash is not available on this bot")
+	}
+	defer h.ref.holdSnap(h.fresh())()
+	return d.StashNow(ctx, unit)
+}
+
+var (
+	_ vaultkeep.Hand    = equipHand{}
+	_ vaultkeep.Stasher = equipHand{}
+)
 
 // equipFace adapts the keeper of a vaultHome to watch.VaultEquipper.
 type equipFace struct{ h *vaultHome }

@@ -524,6 +524,11 @@ func (rt *boardRT) chunkFact(q questboard.Quest, c questboard.Chunk, w task.Worl
 	handed := rt.handed[key]
 	reached := rt.reached[key+"/"+w.Difficulty]
 	rt.mu.Unlock()
+	if q.Kind == "unlock" {
+		// An act hop is done when the world is in the next act (a live read), never because the dialogue ran: a talk
+		// that did not take the boat latched "Sail east: DONE" on a hero still in Act 1 (user screenshot 2026-11-21).
+		handed = false
+	}
 	if legacyChunk(q, c) {
 		st := w.Quest(taskID(q))
 		cf.Objective = need == 0 && st.Stage >= task.StageCleared
