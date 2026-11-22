@@ -90,6 +90,17 @@ type Hand interface {
 	Protect(unit uint32)
 }
 
+// Stasher is the optional second home of a displaced item: when the Vault cannot take it, the hand files it in the stash
+// (the backpack item, after the wear). StashRoom says before the wear whether the worn unit of slot would fit there.
+type Stasher interface {
+	StashRoom(slot string) error
+	Stash(ctx context.Context, unit uint32) error
+}
+
+// ReasonNoRoom is the refusal of an order whose displaced item has no home: the Vault is over its capacity and the stash
+// cannot take the item. The Vault is never trimmed and nothing is dropped or sold to make room.
+const ReasonNoRoom = "the Vault has no room for the item you would take off and the stash cannot take it: make room first"
+
 // EquipOrder is one one-tap order.
 type EquipOrder struct {
 	ID        string    `json:"id"` // vault record id
@@ -293,6 +304,10 @@ func (k *Keeper) EquipEnqueue(ctx context.Context, id, slot string, wantNow bool
 		}
 	}
 	k.mu.Unlock()
+	if why := k.displacedHasNoHome(st, pv, group); why != "" {
+		res.Code, res.Why = "room", why
+		return res
+	}
 	if err := st.KeepTo(id, vault.WhereInv); err != nil {
 		res.Code, res.Why = codeOf(err), err.Error()
 		return res
@@ -307,6 +322,30 @@ func (k *Keeper) EquipEnqueue(ctx context.Context, id, slot string, wantNow bool
 	k.mu.Unlock()
 	res.OK = true
 	return res
+}
+
+// displacedHasNoHome refuses an order that would take a worn item off with nowhere to put it. The Keep of the order itself
+// frees one Vault place, so the Vault only lacks room when it is over its capacity (an Ether step given back); then the
+// stash has to take the item. Nothing is trimmed, dropped or sold.
+func (k *Keeper) displacedHasNoHome(st *vault.Store, pv Preview, group []string) string {
+	occupied := ""
+	for _, sv := range pv.Slots {
+		if sv.Worn == nil {
+			continue
+		}
+		for _, g := range group {
+			if g == sv.Slot {
+				occupied = sv.Slot
+			}
+		}
+	}
+	if occupied == "" || !st.Status().Over {
+		return ""
+	}
+	if sh, ok := k.Hand.(Stasher); ok && sh.StashRoom(occupied) == nil {
+		return ""
+	}
+	return ReasonNoRoom
 }
 
 // orderGroup picks the slots the order claims and refuses with a specific reason when the item cannot go there.
@@ -547,8 +586,11 @@ func (k *Keeper) equipOne(ctx context.Context, st *vault.Store, id string) strin
 	var names []string
 	for _, w := range off {
 		names = append(names, w.Name)
-		if !k.vaultBack(ctx, st, w) {
+		switch p := k.vaultBack(ctx, st, w); {
+		case p == "backpack" || where == "backpack":
 			where = "backpack"
+		case p == "stash":
+			where = "stash"
 		}
 	}
 	if err := k.Save(ctx); err != nil {
@@ -579,14 +621,15 @@ func (k *Keeper) unitFor(ctx context.Context, rec vault.Rec) int {
 	return best
 }
 
-// vaultBack records the item that came off in the vault, then removes it from the hero. A failed record leaves it in the
-// backpack under the keep mark: never dropped, never sold. It reports whether the item is in the vault now.
-func (k *Keeper) vaultBack(ctx context.Context, st *vault.Store, w Worn) bool {
+// vaultBack records the item that came off in the vault, then removes it from the hero. When the Vault cannot take it the
+// stash does; when neither can, it stays in the backpack under the keep mark: never dropped, never sold. It returns where
+// the item is now: "vault", "stash" or "backpack".
+func (k *Keeper) vaultBack(ctx context.Context, st *vault.Store, w Worn) string {
 	recs, err := k.API.ItemFull(ctx, int(w.Unit))
 	if err != nil || len(recs) == 0 {
 		k.Hand.Protect(w.Unit)
 		k.note("equip-"+w.Name, "The "+w.Name+" you replaced is in your backpack: the game would not show it for the vault.")
-		return false
+		return "backpack"
 	}
 	r := recs[0]
 	it := vault.Item{Raw: r.Norm, Code: r.Code, Name: w.Name, Quality: r.Quality, Ilvl: r.ILvl, Identified: r.Identified,
@@ -602,9 +645,18 @@ func (k *Keeper) vaultBack(ctx context.Context, st *vault.Store, w Worn) bool {
 	}
 	rec, err := st.Add(it)
 	if err != nil && !errors.Is(err, vault.ErrDuplicate) {
+		if errors.Is(err, vault.ErrFull) || errors.Is(err, vault.ErrOverCapacity) {
+			if sh, ok := k.Hand.(Stasher); ok {
+				if serr := sh.Stash(ctx, w.Unit); serr == nil {
+					return "stash"
+				} else {
+					err = fmt.Errorf("%w; the stash could not take it either: %v", err, serr)
+				}
+			}
+		}
 		k.Hand.Protect(w.Unit)
 		k.note("equip-"+w.Name, "The "+w.Name+" you replaced stays in your backpack: the vault could not take it ("+err.Error()+").")
-		return false
+		return "backpack"
 	}
 	if _, err := k.API.ItemVault(ctx, int(w.Unit)); err != nil {
 		// still carried: archive the new record again so the item exists once, and keep the carried one safe
@@ -613,7 +665,7 @@ func (k *Keeper) vaultBack(ctx context.Context, st *vault.Store, w Worn) bool {
 		}
 		k.Hand.Protect(w.Unit)
 		k.note("equip-"+w.Name, "The "+w.Name+" you replaced stays in your backpack: "+err.Error())
-		return false
+		return "backpack"
 	}
-	return true
+	return "vault"
 }
