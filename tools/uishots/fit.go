@@ -24,6 +24,9 @@ import (
 //go:embed fit.js
 var fitJS []byte
 
+//go:embed mapphone.js
+var mapPhoneJS []byte
+
 // fitHarness is the page /__fit serves: the page under test in an iframe of exactly w by h (so innerWidth, innerHeight, dvh and
 // the container queries are those of a browser window of that size whatever the real window is: a headless Chromium
 // window carries browser chrome and has a least width), and the numbers of fit.js written into <pre id="fit-result">

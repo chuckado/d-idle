@@ -1,6 +1,7 @@
 @layer panels {
   /* the drawing fills the box the slot gives it and is scaled to fit whole (never cropped); the controls sit on top of it */
   [data-panel="area-map"] .am { position: relative; inline-size: 100%; block-size: 100%; min-block-size: 0; }
+  [data-panel="area-map"] .stage { position: absolute; inset: 0; }
   [data-panel="area-map"] .cv { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; display: block; background: var(--d-bg); border-radius: var(--d-r-2); touch-action: none; cursor: grab; }
   [data-panel="area-map"] .ctl { position: absolute; inset-block-end: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: var(--d-sp-1); align-items: center; }
   [data-panel="area-map"] .ctl .d-btn { min-inline-size: 28px; min-block-size: 28px; }

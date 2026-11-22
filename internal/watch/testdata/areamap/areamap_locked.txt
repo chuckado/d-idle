@@ -1,8 +1,9 @@
 <div class="d-panel">
   <div class="d-slotbody">
     <div class="am">
-      <canvas class="cv" aria-label="Top-down map of the area; the cross is the hero" role="img">
-      <div class="empty"> "The map opens with the first unlock."
+      <div class="stage">
+        <canvas class="cv" aria-label="Top-down map of the area; the cross is the hero" role="img">
+        <div class="empty"> "The map opens with the first unlock."
       <div class="ctl">
         <button class="d-btn" data-key="zout" data-size="sm" aria-label="Zoom out" type="button"> "-"
         <button class="d-btn" data-key="zin" data-size="sm" aria-label="Zoom in" type="button"> "+"

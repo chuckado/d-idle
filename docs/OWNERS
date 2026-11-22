@@ -541,6 +541,7 @@ docs/lootrules.md  credit-runner  lootwire3
 docs/lootrules.md  credit-runner  lootwireL4
 docs/lootrules.md  credit-runner  vaultv3
 docs/mapfog.md  credit-runner  fogtrail
+docs/mapfog.md  credit-runner  mapphone
 docs/merc-revive.md  credit-runner  botmerc
 docs/mercrevive.md  credit-runner  mercrevive2
 docs/onboarding-tour.md  credit-runner  onboardtour
@@ -740,6 +741,7 @@ docs/ui-design-system.md  credit-runner  nopins
 docs/ui-design-system.md  credit-runner  uic3
 docs/ui-overlays.md  credit-runner  menufit2
 docs/ui/friend-feedback-2026-11-15.md  credit-runner  friendfb
+docs/ui/map-phone  credit-runner  mapphone
 docs/ui/redesign-2026-11-14/reviews/c2c3-review.md  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/c2c3/  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/s1b-review.md  credit-runner  uis1breview
@@ -1753,6 +1755,7 @@ internal/watch/tallystrip.go  credit-runner  botcpu2
 internal/watch/tallystrip_test.go  credit-runner  botcpu2
 internal/watch/testdata  credit-runner  nocards
 internal/watch/testdata/  credit-runner  uifix1
+internal/watch/testdata/areamap  credit-runner  mapphone
 internal/watch/testdata/areamap/  credit-runner  uis6
 internal/watch/testdata/campaign  pro-runner  levelplan3
 internal/watch/testdata/characters  credit-runner  charselect
@@ -1947,6 +1950,7 @@ internal/watch/web/palfeed.js  credit-runner  videofeed
 internal/watch/web/palfeed.js  credit-runner  videofeed2
 internal/watch/web/palfeed.js  credit-runner  videofeed4
 internal/watch/web/panels/activity/panel.js  credit-runner  exploredpct
+internal/watch/web/panels/area-map  credit-runner  mapphone
 internal/watch/web/panels/area-map/  credit-runner  uis6
 internal/watch/web/panels/area-map/panel.json  credit-runner  uifix1
 internal/watch/web/panels/gear  credit-runner  repairtrip
@@ -2040,6 +2044,7 @@ internal/watch/web/streamstats.js  credit-runner  videofeed4
 internal/watch/web/tokens.css  credit-runner  uis1
 internal/watch/web/tokens.css  credit-runner  uis7
 internal/watch/web/update.js  credit-runner  uis7
+internal/watch/web/utilities.css  credit-runner  mapphone
 internal/watch/web/utilities.css  credit-runner  quests8
 internal/watch/web/vault-logic.js  credit-runner  vaultclean
 internal/watch/web/vault-logic.js  credit-runner  vaultequip
@@ -2219,6 +2224,7 @@ tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
 tools/uishots.sh  credit-runner  heavyguard
 tools/uishots.sh  credit-runner  labels
+tools/uishots.sh  credit-runner  mapphone
 tools/uishots.sh  credit-runner  quests10
 tools/uishots.sh  credit-runner  quests8
 tools/uishots.sh  credit-runner  resetinstant
@@ -2242,6 +2248,7 @@ tools/uishots/  credit-runner  uifix1
 tools/uishots/  credit-runner  uiphone
 tools/uishots/  credit-runner  uis3
 tools/uishots/  credit-runner  uis6
+tools/uishots/fit.go  credit-runner  mapphone
 tools/uishots/fit.go  credit-runner  resetinstant
 tools/uishots/fit.go  credit-runner  vaultv4
 tools/uishots/fit.go  credit-runner  vaultv7b
@@ -2254,6 +2261,7 @@ tools/uishots/fit.js  credit-runner  vaultv7b
 tools/uishots/fit_char_test.go  credit-runner  jewelicons
 tools/uishots/fit_char_test.go  credit-runner  vaultv4
 tools/uishots/fit_char_test.go  credit-runner  vaultv7b
+tools/uishots/fixtures.go  credit-runner  mapphone
 tools/uishots/fixtures.go  credit-runner  uic2
 tools/uishots/fixtures.go  credit-runner  vaultv4
 tools/uishots/fixtures_chars.go  credit-runner  charui
@@ -2281,10 +2289,13 @@ tools/uishots/genlayouts.js  credit-runner  uis1
 tools/uishots/genlayouts.js  credit-runner  uis7
 tools/uishots/layout-rows.json  credit-runner  uis1
 tools/uishots/layout-rows.json  credit-runner  uis7
+tools/uishots/mapphone.go  credit-runner  mapphone
+tools/uishots/mapphone.js  credit-runner  mapphone
 tools/uishots/pages.go  credit-runner  uic2
 tools/uishots/serve.go  credit-runner  friendfb
 tools/uishots/serve.go  credit-runner  labels
 tools/uishots/serve.go  credit-runner  maphistory
+tools/uishots/serve.go  credit-runner  mapphone
 tools/uishots/serve.go  credit-runner  maptrail
 tools/uishots/serve.go  credit-runner  uis7
 tools/uishots/serve.go  credit-runner  vaultv4
