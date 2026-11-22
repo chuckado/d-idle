@@ -362,7 +362,7 @@ func (e taskEnv) World(ctx context.Context) (task.World, error) {
 	if task.MercAlive != nil {
 		w.MercAlive, w.MercKnown = task.MercAlive()
 	}
-	w.Caster = p.Class == d2.Sorceress || p.Class == d2.Necromancer || p.Class == d2.Druid
+	w.Caster = p.Class.Caster()
 	bt := r.e.Tune.Boss
 	w.BRHigh = p.Class == d2.Sorceress || p.Class == d2.Druid || p.Class == d2.Amazon
 	w.BR = task.BRKnobs{CasterLevel: bt.BRCasterLevel, MeleeLevel: bt.BRMeleeLevel, Potions: bt.BRPotions, ManaPotions: bt.BRManaPotions, TPCharges: bt.BRTPCharges, Gold: bt.BRGold}
