@@ -26,5 +26,6 @@ export function measureMap(win, variant) {
   const ch = [];
   for (let n = d.querySelector('[data-panel="area-map"] canvas'); n && n !== d.body; n = n.parentElement) ch.push((n.className || n.tagName).toString().split(' ')[0] + ':' + Math.round(n.getBoundingClientRect().height) + (n.dataset && n.dataset.grow ? 'g' : ''));
   num.chain = ch.join('<');
+  num.slots = [...d.querySelectorAll('.d-main > [data-cockpit-slot]')].map((n) => n.dataset.cockpitSlot + ':' + Math.round(n.getBoundingClientRect().top) + '+' + Math.round(n.getBoundingClientRect().height)).join(' ');
   return 'MAPPHONE ' + (why.length ? 'FAIL' : 'PASS') + ' ' + variant + ' ' + win.innerWidth + 'x' + win.innerHeight + ': ' + JSON.stringify(num) + (why.length ? '; ' + why.join('; ') : '');
 }
