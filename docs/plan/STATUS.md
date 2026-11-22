@@ -391,6 +391,7 @@
 | verbs2 | proposed | - | `internal/d2dctl/world_verbs.go`<br>`internal/d2dctl/world_verbs_test.go`<br>`internal/d2dctl/fake/fake.go`<br>`internal/input/worldverbs.go`<br>`internal/input/worldfake.go`<br>`internal/d2dinput/worldverbs.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`internal/d2dcombat/rig.go`<br>`internal/d2dtown/adapter.go`<br>`internal/town/shop.go`<br>`internal/town/worldverbs_test.go`<br>`internal/town/worldverbs_unit_test.go`<br>`internal/town/export_world_test.go`<br>`internal/nav/waypoint.go`<br>`internal/nav/wpverb_test.go`<br>`internal/env/tuning_input.go`<br>`docs/knobs.md`<br>`data/input/caps/d2d-fork-input-verbs2.json`<br>`data/input/caps_test.go`<br>`docs/process/input-verbs2.md` | - |
 | pgvault | proposed | - | `tools/provingground/`<br>`internal/scenario/`<br>`cmd/d2scenario/`<br>`docs/process/proving-ground.md` | - |
 | vaultwire | proposed | - | `cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/invwire.go`<br>`cmd/d2bot/vaultequip.go`<br>`cmd/d2bot/vaultequip_test.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/invverbs_test.go` | - |
+| mercbr | proposed | - | `tools/provingground/scenarios/merc.json`<br>`internal/scenario/state.go`<br>`internal/scenario/merc_test.go`<br>`cmd/d2scenario/run.go`<br>`docs/probes/mercbr-2026-11-21.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -426,6 +427,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- dc7a82607 11-21 21:07 `Merge agent/mercbr: Merge branch 'main' into mercbr` (mercbr)
+- e2c520612 11-21 21:06 `Merge branch 'main' into mercbr` (-)
 - c5c7142b2 11-21 20:54 `Merge agent/fablemap: Fable design review: whole-map knowledge against the known grid (docs only)` (fablemap)
 - 15f5df146 11-21 20:08 `Merge agent/vaultdesktop: vaultdesktop: card result, merge main` (vaultdesktop)
 - 537c7a083 11-21 16:49 `Merge agent/parkrelease: parkrelease: leakcheck wording` (parkrelease)
@@ -434,6 +437,4 @@
 - a35f56347 11-21 15:37 `Merge origin/main into pgvault` (-)
 - 8af7d79c6 11-21 15:32 `Merge agent/bsm9: Merge branch 'main' into bsm9` (bsm9)
 - 786283e22 11-21 15:31 `Merge branch 'main' into bsm9` (-)
-- 80a801974 11-21 15:20 `Merge origin/main into pgvault` (-)
-- caadfa33f 11-21 15:19 `Merge agent/cainscroll: Merge branch 'main' into cainscroll` (cainscroll)
 <!-- statusgen:end -->
