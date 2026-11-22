@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"slices"
 	"sort"
 	"strings"
 	"time"
@@ -119,6 +120,9 @@ func (k *Keeper) runSell(ctx context.Context) []string {
 	st := k.store()
 	if st == nil || k.Vendor == nil {
 		return nil
+	}
+	if ok, _ := k.SaleOn(ctx); ok && !k.autoSell() && !slices.ContainsFunc(st.SellQueued(), func(r vault.Rec) bool { return r.Stage != "" }) {
+		return nil // the instant sale took over (flushQueued ran before); only a sale a restart left in flight still finishes at the vendor
 	}
 	var list []vault.Rec
 	for _, r := range st.SellQueued() {

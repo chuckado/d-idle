@@ -159,10 +159,12 @@ type PayFake struct {
 	Stash    int
 	Purse    int  // never touched
 	FlagOff  bool // d2d runs without --vault-pay
+	Limit    int  // the stash limit CreditGold enforces (0: StashLimit)
 	Measured bool // the fork's measured-run marker
 	Fail     error
 	Calls    []string // "<amount> <order>" of every request that reached the fork
 	paid     map[string]PayResult
+	credited map[string]CreditResult
 }
 
 // PayGold mirrors the verb.

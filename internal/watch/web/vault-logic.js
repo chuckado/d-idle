@@ -206,17 +206,58 @@ export function revealPlan(items, ids, act) {
 
 // sellPlan is what a Sell press would queue: live recorded items that are not pinned or queued; skipped counts the rest.
 // gold is the vault's lower-bound price of the queued ones.
-export function sellPlan(items, ids) {
+export function sellPlan(items, ids, instant) {
   const by = new Map((items || []).map((i) => [i.id, i]));
-  let n = 0, gold = 0, pinned = 0;
+  let n = 0, gold = 0, pinned = 0, selling = 0, queued = 0, state = 0, gone = 0;
   const ok = [];
   for (const id of ids || []) {
     const it = by.get(id);
-    if (!it || it.state !== 'recorded' || it.sell) continue;
+    if (!it) { gone++; continue; }
     if (it.pin) { pinned++; continue; }
+    if (it.sell === 'selling') { selling++; continue; }
+    if (it.sell === 'queued' && !instant) { queued++; continue; } // an instant sale also takes what the old queue still holds
+    if (it.state !== 'recorded' && !(instant && it.sell === 'queued')) { state++; continue; }
     n++; gold += it.value || 0; ok.push(id);
   }
-  return { n, ids: ok, gold, pinned, skipped: (ids || []).length - n };
+  const all = (ids || []).length;
+  // reasons: why the rest is left out, in the order the page words them (counts add up to all - n)
+  const reasons = [['queued', queued], ['selling', selling], ['pinned', pinned], ['state', state], ['gone', gone]].filter(([, c]) => c > 0).map(([code, c]) => ({ code, n: c }));
+  return { n, ids: ok, gold, pinned, skipped: all - n, all, queued, selling, state, gone, reasons };
+}
+
+// sellWhy words the reasons of a plan or a server quote ("169 already waiting to be sold, 20 pinned"). words maps a code to a
+// phrase with {n}; a code without one is shown as its server sentence (why) or the code itself.
+export function sellWhy(reasons, words) {
+  return (reasons || []).map((r) => {
+    const w = words && words[r.code];
+    return w ? w.replace('{n}', String(r.n)) : r.n + ' ' + (r.why || r.code);
+  }).join(', ');
+}
+
+// sellLabel is the Sell button's text: "Sell (11)" when every selected item can go, "Sell 11 of 260" when some cannot (the
+// reasons are shown next to the button and in the sheet; the number never silently differs from the selection).
+export function sellLabel(plan, selected, T) {
+  const total = plan.all || selected;
+  if (!total) return T.sell;
+  return plan.n === total ? T.sellSel.replace('{n}', String(plan.n)) : T.sellOf.replace('{n}', String(plan.n)).replace('{all}', String(total));
+}
+
+// mergeQuotes joins the answers of /api/vault/sellquote for a selection sent in chunks of up to `chunk` ids.
+export function mergeQuotes(qs) {
+  const out = { asked: 0, count: 0, lines: [], total: 0, stash: 0, stashAfter: 0, room: 0, reasons: [], confirmAt: 0, needConfirm: false, why: '' };
+  qs.forEach((q, i) => {
+    out.asked += q.asked || 0; out.count += q.count || 0; out.total += q.total || 0;
+    (q.lines || []).forEach((l) => out.lines.push(l));
+    if (i === 0) { out.stash = q.stash || 0; out.room = q.room || 0; out.confirmAt = q.confirmAt || 0; }
+    if (q.why && !out.why) out.why = q.why;
+    (q.reasons || []).forEach((r) => {
+      const x = out.reasons.find((y) => y.code === r.code);
+      if (x) x.n += r.n; else out.reasons.push({ code: r.code, n: r.n, why: r.why });
+    });
+  });
+  out.stashAfter = out.stash + out.total;
+  out.needConfirm = out.confirmAt > 0 && out.total >= out.confirmAt;
+  return out;
 }
 
 // windowRange says which cells of a long list to draw (the page keeps up to thousands of rows; only the rows near the view are

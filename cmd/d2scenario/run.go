@@ -336,7 +336,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	if why := botFailure(trace); why != "" {
 		return withVerdict(res, blocked("the bot exited with an error, it did not play: %s", why))
 	}
-	if why := cutReason(trace); why != "" && !slices.Contains(s.Needs, "vault.paygold") { // a real-time run (no lockstep clock) is bounded by its wall minutes, not a virtual length
+	if why := cutReason(trace); why != "" && !needsPay(s.Needs) { // a real-time run (no lockstep clock) is bounded by its wall minutes, not a virtual length
 		return withVerdict(res, blocked("%s", why))
 	}
 	if !after(newestSave(home), before) {
@@ -874,10 +874,16 @@ func withVault(args []string, on bool) []string {
 	return args
 }
 
+// needsPay is true for a scenario that needs a stash write of the fork: the gold reveal's paygold or the instant sale's creditgold
+// (both behind --vault-pay, both refused under --lockstep).
+func needsPay(needs []string) bool {
+	return slices.Contains(needs, "vault.paygold") || slices.Contains(needs, "vault.creditgold")
+}
+
 // withPay adds --vault-pay when the scenario needs the capability vault.paygold, so the SETUP d2d lists it in `caps` (it pays nothing: the
 // fork refuses the verb under --lockstep).
 func withPay(args, needs []string) []string {
-	if slices.Contains(needs, "vault.paygold") {
+	if needsPay(needs) {
 		return append(args, "--vault-pay")
 	}
 	return args
@@ -887,7 +893,7 @@ func withPay(args, needs []string) []string {
 // a player-paid write, ADR 0029, which the fork refuses under --lockstep): d2d then runs in real time with --vault-pay, and the
 // scenario's provenance names the write. Every other scenario keeps --lockstep.
 func botD2dArgs(needs []string, vaultVerbs bool) []string {
-	if slices.Contains(needs, "vault.paygold") {
+	if needsPay(needs) {
 		return append(withVault(nil, true), "--vault-pay")
 	}
 	return withVault([]string{"--lockstep"}, vaultVerbs)
