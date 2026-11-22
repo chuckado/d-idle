@@ -1,6 +1,10 @@
 package merc
 
-import "strings"
+import (
+	"strings"
+
+	"d2lod-bot/internal/d2"
+)
 
 // Reasons are the stable words in Decision.Reason and in the log lines (logs.go); harness code may grep them.
 const (
@@ -95,7 +99,8 @@ func ShouldClaimFreeRogue(s MercState, c FreeRogueCtx) Decision {
 // raises attack rating, survival first: U judgment). Nightmare has Might (physical classes) and Holy Freeze (casters)
 // ahead of those; Hell rows have neither (V hireling.tsv, docs/town.md).
 func AuraPrefs(class string, d Difficulty, bowOrJavelin bool) []string {
-	caster := class == "Sorceress" || class == "Necromancer" || class == "Druid"
+	t, _ := d2.TraitsByName(class) // an unknown class name is not a caster here (the callers pass d2 class names)
+	caster := t.Caster
 	var p []string
 	if d == Nightmare {
 		if caster {
