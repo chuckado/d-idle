@@ -16,6 +16,7 @@ owns:
   - "docs/design/necromancer-sme-answers-2026-11-22.md"
 exclusive: []
 contracts: []
+result: "Answers doc written from repo docs and veteran experience; no web sources fetched, numbers tagged EXP or UNVERIFIED; not verified live"
 ---
 
 ## Description
