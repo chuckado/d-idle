@@ -22,7 +22,7 @@ owns:
   - "docs/knobs.md"
 exclusive: []
 contracts: []
-result: "Fighter.MinionRead + census() behind combat.minionRead (default 0); offline tests only, not verified live; herdr root disk hit 100% on 11-22 (go clean -cache freed 21G), builds run on the worker host."
+result: "Fighter.MinionRead + census() behind combat.minionRead (default 0); offline tests only, not verified live; head box root disk hit 100% on 11-22 (go clean -cache freed 21G), builds run on the worker host."
 ---
 
 ## Description
