@@ -181,3 +181,50 @@ func TestFitJudgeAndDir(t *testing.T) {
 		t.Error("an empty directory is not a pass")
 	}
 }
+
+// The navigation verdicts (card uinav2): each way the shared navigation can be wrong is named, and a good one is silent.
+func TestFitNavJudge(t *testing.T) {
+	good := func() *fitNav {
+		return &fitNav{Labels: []string{"Live", "Gear", "Skills", "Vault", "More"}, Current: 1, Inside: true, Bar: true}
+	}
+	if bad := good().judge(390); len(bad) != 0 {
+		t.Fatalf("a good bar is judged: %v", bad)
+	}
+	wide := good()
+	wide.Bar = false
+	if bad := wide.judge(1366); len(bad) != 0 {
+		t.Fatalf("a good band is judged: %v", bad)
+	}
+	for name, c := range map[string]struct {
+		mut  func(*fitNav)
+		vw   int
+		want string
+	}{
+		"missing":   {func(n *fitNav) { n.Missing = true }, 390, "no navigation"},
+		"labels":    {func(n *fitNav) { n.Labels = []string{"Live", "Gear"} }, 390, "want Live,Gear,Skills,Vault,More"},
+		"two":       {func(n *fitNav) { n.Current = 2 }, 390, "marks 2 destinations"},
+		"none":      {func(n *fitNav) { n.Current = 0 }, 390, "marks 0 destinations"},
+		"bar wide":  {func(n *fitNav) {}, 1366, "bar=true"},
+		"band thin": {func(n *fitNav) { n.Bar = false }, 390, "bar=false"},
+		"outside":   {func(n *fitNav) { n.Inside = false }, 390, "not inside the window"},
+		"tiny":      {func(n *fitNav) { n.Tiny = []string{"More 75x20"} }, 390, "too small"},
+		"covers":    {func(n *fitNav) { n.Covers = []string{"main ends at 844"} }, 390, "covers content"},
+	} {
+		n := good()
+		c.mut(n)
+		found := false
+		for _, b := range n.judge(c.vw) {
+			found = found || strings.Contains(b, c.want)
+		}
+		if !found {
+			t.Errorf("%s: no verdict containing %q in %v", name, c.want, n.judge(c.vw))
+		}
+	}
+	var none *fitNav
+	if bad := none.judge(390); bad != nil {
+		t.Errorf("a page without it is not judged here: %v", bad)
+	}
+	if bad := (fitResult{Flow: true, VW: 390}).judge(); len(bad) != 1 || !strings.Contains(bad[0], "no navigation") {
+		t.Errorf("a navigation page with none: %v", bad)
+	}
+}

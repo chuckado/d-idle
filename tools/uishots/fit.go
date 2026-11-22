@@ -65,15 +65,21 @@ const pop = (d, sel, c) => {
 };
 const o = %s, f = document.getElementById('f'), out = document.getElementById('fit-result');
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+let stage = 'before load';
+// a measurement that never finishes says where it stopped (a thrown error in the page or the harness is a verdict, not a silence)
+setTimeout(() => { if (!out.textContent) out.textContent = JSON.stringify({ error: 'stalled after: ' + stage }); }, 21000);
+window.addEventListener('error', (e) => { if (!out.textContent) out.textContent = JSON.stringify({ error: 'script error: ' + e.message }); });
 f.addEventListener('load', async () => {
-  await wait(5000);
+  stage = 'loaded'; await wait(5000); stage = 'waited';
   // the character screen draws from its first view: measure only once its grids hold cells (a slow first answer is a late page, not a fit result)
   for (let i = 0; i < 30 && f.contentDocument.body.hasAttribute('data-canvas') && !(f.contentDocument.querySelector('#equip .d-slot2') && f.contentDocument.querySelector('#pack [data-key]') && f.contentDocument.getElementById('merc-sub').textContent && f.contentDocument.getElementById('cv-sel').firstChild && f.contentDocument.getElementById('hsheet').children.length > 4); i++) await wait(500);
   if (f.contentDocument.body.hasAttribute('data-canvas')) await wait(1500);
   // scroll: how far down (0 to 1) the Vault list is scrolled before the measurement: the rows far from the top must fit like the first ones
   if (o.scroll) { const sc = f.contentDocument.querySelector('[data-vscroll]'); if (sc) { sc.scrollTop = Number(o.scroll) * (sc.scrollHeight - sc.clientHeight); await wait(1500); } }
   try {
+    stage = 'panels.json';
     const pv = await (await fetch('/watch/panels.json')).json();
+    stage = 'measure';
     const m = measure(f.contentWindow, { scroll: (pv.panels || []).filter((p) => p.scroll).map((p) => p.id) });
     m.page = o.page;
     if (o.hover || o.ctx) {
@@ -254,8 +260,14 @@ func (r fitResult) broken() string {
 
 // judge returns what is wrong with a measured page; an empty list is a fit.
 func (r fitResult) judge() []string {
+	if r.Flow { // the navigation pages (nav-NAME): a document that scrolls on purpose; the page's own fit lane judges its content, this one the navigation
+		if r.Nav == nil {
+			return []string{"the page has no navigation (nav.js is not loaded)"}
+		}
+		return r.Nav.judge(r.VW)
+	}
 	var bad []string
-	if r.ScrollH > r.VH && !r.Flow {
+	if r.ScrollH > r.VH {
 		bad = append(bad, fmt.Sprintf("the page scrolls: scrollHeight %d > innerHeight %d", r.ScrollH, r.VH))
 	}
 	if r.ScrollW > r.VW {
@@ -273,7 +285,7 @@ func (r fitResult) judge() []string {
 	for _, u := range r.Unready {
 		bad = append(bad, "panel "+u+" is not ready")
 	}
-	if len(r.Slots) == 0 && r.Chars == nil && r.Vault == nil && !r.Flow {
+	if len(r.Slots) == 0 && r.Chars == nil && r.Vault == nil {
 		bad = append(bad, "no [data-cockpit-slot] on the page")
 	}
 	if c := r.Chars; c != nil {
@@ -283,7 +295,7 @@ func (r fitResult) judge() []string {
 	if v := r.Vault; v != nil {
 		bad = append(bad, v.judge()...)
 	}
-	if r.Hole > fitGap && r.Chars == nil && r.Vault == nil && !r.Flow {
+	if r.Hole > fitGap && r.Chars == nil && r.Vault == nil {
 		bad = append(bad, fmt.Sprintf("dead space: a %d px square is covered by no slot at %d,%d", r.Hole, r.HoleAt[0], r.HoleAt[1]))
 	}
 	if r.CV != nil {

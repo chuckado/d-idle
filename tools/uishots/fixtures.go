@@ -113,6 +113,10 @@ func fxLayout(name string) map[string]any {
 	}
 }
 
+// fitFramed are the pages the fit harness shows in an iframe of the exact window size (the framing ban is relaxed to this origin for them).
+var fitFramed = map[string]bool{"/watch": true, "/watch/inventory": true, "/watch/characters": true, "/watch/vault": true,
+	"/watch/skills": true, "/watch/points": true, "/watch/return": true, "/watch/policy": true, "/watch/hall": true}
+
 // mountFixturePanels wraps h: it adds the fixture manifests to /watch/panels.json and serves the fixture panels and
 // layouts; everything else is h's.
 func mountFixturePanels(h http.Handler) http.Handler {
@@ -125,7 +129,7 @@ func mountFixturePanels(h http.Handler) http.Handler {
 		switch {
 		case p == "/__fit":
 			fitHarness(w, r)
-		case (p == "/watch" || p == "/watch/inventory" || p == "/watch/characters" || p == "/watch/vault") && r.URL.Query().Get("fitframe") == "1":
+		case fitFramed[p] && r.URL.Query().Get("fitframe") == "1":
 			framedPage(h, w, r)
 		case strings.HasPrefix(p, "/__fit/defect-"):
 			if !serveDefectCSS(w, r) && !serveDefectJS(w, r) {
