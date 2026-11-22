@@ -796,7 +796,7 @@ func observe(ctx context.Context, c *d2dctl.Client, writes int, live bool) scena
 		}
 		st.Minions = &n
 	}
-	if l, err := c.CombatLog(ctx, 1024); err == nil && l.Enabled {
+	if l, err := c.CombatLog(ctx, 300); err == nil && l.Enabled {
 		if ss, err := c.SkillState(ctx); err == nil {
 			names := map[int]string{}
 			for _, r := range ss.Skills {

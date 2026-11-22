@@ -51,14 +51,14 @@
    "notes": "Eight Fallen (a pack) beside a clvl 24 summoner. RED with combat.minionRead 0 is not expected: the knob only changes how the army is counted, so the scenario is RED when the upkeep or the read fails. U: the SME table has Raise Skeleton and a golem by clvl 24; Clay Golem is the first cast.",
    "assert": [
     {
-     "kind": "hero_casts_at_least",
-     "code": "Clay Golem",
+     "kind": "log_line",
+     "pattern": "^combat summon .*grew=true.*skill=Clay Golem",
      "min": 1,
      "why": "the golem comes first"
     },
     {
-     "kind": "hero_casts_at_least",
-     "code": "Raise Skeleton",
+     "kind": "log_line",
+     "pattern": "^combat summon .*grew=true.*skill=Raise Skeleton",
      "min": 2,
      "why": "skeleton upkeep through the fight"
     },
@@ -128,10 +128,10 @@
    "notes": "One unique Fallen with three others. Amplify Damage is the first curse that applies to a non-magic-resistant target (profile order: Lower Resist when magicResist, Amplify Damage any, Decrepify and Weaken eliteOrBoss). U: Amplify Damage is learned by the SME table at clvl 30.",
    "assert": [
     {
-     "kind": "hero_casts_at_least",
-     "code": "Amplify Damage",
+     "kind": "log_line",
+     "pattern": "^combat curse .*skill=Amplify Damage",
      "min": 1,
-     "why": "the summoner's 'any' curse; Decrepify/Weaken (eliteOrBoss) follow when learned"
+     "why": "the summoner's any-target curse"
     },
     {
      "kind": "minions_at_least",
@@ -151,7 +151,7 @@
     "internal/combat/"
    ],
    "pre": {
-    "level": 32,
+    "level": 36,
     "gold": 3000,
     "start": "field",
     "area": 2,
@@ -191,11 +191,11 @@
     "read.minions"
    ],
    "provenance": "SETUP: level 32 with the points a played level gives (spent by the bot's leveler table), purse 3000, field start in the Blood Moor by debug goto 2 and monsters by debug spawn (CHEATED position and encounter: mechanics only, never evidence about balance).",
-   "notes": "A champion among a pack kills skeletons on the way, leaving corpses. U: Revive is learned at clvl 32 by the SME table (its count is tagged UNVERIFIED by the SME); a BLOCKED or RED result here may be the table, not the bot: read skills.txt for Revive's required level.",
+   "notes": "A champion among a pack kills skeletons on the way, leaving corpses. U: Revive is learned at clvl 32 by the SME table (its count is tagged UNVERIFIED by the SME); a BLOCKED or RED result here may be the table, not the bot: read skills.txt for Revive's required level. Level 36 so the clvl 30 Revive row of the SME table is inside the points a played level gives (level 30 allocated 29 points and stopped before it).",
    "assert": [
     {
-     "kind": "hero_casts_at_least",
-     "code": "Revive",
+     "kind": "log_line",
+     "pattern": "^combat summon .*grew=true.*skill=Revive",
      "min": 1,
      "why": "Revive upkeep (profile summon rule, kind revive)"
     },
@@ -252,18 +252,19 @@
     "read.minions"
    ],
    "provenance": "SETUP: level 30 with the points a played level gives (spent by the bot's leveler table), purse 3000, field start in the Blood Moor by debug goto 2 and monsters by debug spawn (CHEATED position and encounter: mechanics only, never evidence about balance).",
-   "notes": "Twelve Fallen over ten virtual minutes. Mana starvation shows as few attack casts. U: Teeth is the summoner's attack skill at clvl 30 (profile bands); the threshold of 20 is a floor, not a tuned number.",
+   "notes": "Twelve Fallen over ten virtual minutes. Mana starvation would show as few raises and kills. The SME table learns no attack skill (Teeth, Bone Spear), the army does the killing; the threshold 40 is a floor, not a tuned number (U).",
    "assert": [
     {
-     "kind": "hero_casts_at_least",
-     "code": "Raise Skeleton",
-     "min": 3
+     "kind": "log_line",
+     "pattern": "^combat summon .*grew=true.*skill=Raise Skeleton",
+     "min": 3,
+     "why": "upkeep keeps raising"
     },
     {
-     "kind": "hero_casts_at_least",
-     "code": "Teeth",
-     "min": 20,
-     "why": "attack casts continue over ten minutes (the journal keeps the last 1024 events)"
+     "kind": "log_line",
+     "pattern": "^combat kill",
+     "min": 40,
+     "why": "the fight goes on for ten minutes (a clvl 32 run killed 83 in ten)"
     },
     {
      "kind": "life_pct_at_least",
@@ -329,8 +330,10 @@
      "min": 40
     },
     {
-     "kind": "area_is",
-     "area": 2
+     "kind": "log_line",
+     "pattern": "^combat kill",
+     "min": 10,
+     "why": "the Paladin fights"
     }
    ]
   }
