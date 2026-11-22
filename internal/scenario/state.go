@@ -60,6 +60,11 @@ type State struct {
 	APIReplies []APIReply    `json:"api_replies,omitempty"`
 	// Vault is what the runner read of the hero's Vault after the run (vaultassert.go); "vault" in Has when read.
 	Vault *VaultFacts `json:"vault,omitempty"`
+	// Minions is the number of the hero's summons standing, from the fork read `debug minions` (needs --read-combat); nil: not read.
+	Minions *int `json:"minions,omitempty"`
+	// HeroCasts counts the hero's casts per skill name (resolved with `debug skillstate`) in the fork's combat journal (`debug combatlog`); nil: not read. The journal
+	// holds 1024 events, so a long run sees only its tail (the count is a floor, which is what the assertion asks).
+	HeroCasts map[string]int `json:"hero_casts,omitempty"`
 	// WritesAfterStart is the number of gameplay-affecting writes after the run start (d2cheat ledger), -1 unknown.
 	WritesAfterStart int `json:"writes_after_start"`
 	// Merc is the `merc=` value of the state verb ("x,y:RG", "-" none); nil: not observed. The hand-in scenario reads it
@@ -97,17 +102,19 @@ const (
 	AWealthBetween  = "wealth_between" // min, max (purse plus stash: a sale and the bank chore move gold between them)
 	ALevelAtLeast   = "level_at_least" // min
 	ALifePctAtLeast = "life_pct_at_least"
-	AObjectState    = "object_state"    // class, state: at least one object of the class has the state
-	AAreaChangesLE  = "area_changes_le" // max
-	APortalOpen     = "portal_open"     // area: a portal stands in that level (debug portals); needs a live observation
-	ARightSkillIs   = "right_skill_is"  // skill (the id on the right hand: the aura, the select verb's effect)
-	ALeftSkillIs    = "left_skill_is"   // skill
-	ANoWrites       = "no_writes"       // writes_after_start == 0 (the CRUTCH RULE line)
-	AMercHired      = "merc_hired"      // code (optional merc class code of the state verb, e.g. RG), min 0 = a merc must stand there, max 0 = no merc may
-	AStatBetween    = "stat_between"    // code (str dex vit ene statpts skillpts skillsspent), min, max
-	ASkillPoints    = "skill_points"    // skill (skills.txt id), min, max, at_level: hard points in one skill (skills.go)
-	ABeltAtLeast    = "belt_at_least"   // code (potion family prefix: hp, mp, rv), min: potions of that family in the BELT alone (item_in_pack cannot tell belt from pack when where is unset)
-	ALogLine        = "log_line"        // pattern, min (default 1), max, from_min, to_min: lines of the bot log (logline.go)
+	AObjectState    = "object_state"        // class, state: at least one object of the class has the state
+	AAreaChangesLE  = "area_changes_le"     // max
+	APortalOpen     = "portal_open"         // area: a portal stands in that level (debug portals); needs a live observation
+	ARightSkillIs   = "right_skill_is"      // skill (the id on the right hand: the aura, the select verb's effect)
+	ALeftSkillIs    = "left_skill_is"       // skill
+	ANoWrites       = "no_writes"           // writes_after_start == 0 (the CRUTCH RULE line)
+	AMercHired      = "merc_hired"          // code (optional merc class code of the state verb, e.g. RG), min 0 = a merc must stand there, max 0 = no merc may
+	AStatBetween    = "stat_between"        // code (str dex vit ene statpts skillpts skillsspent), min, max
+	ASkillPoints    = "skill_points"        // skill (skills.txt id), min, max, at_level: hard points in one skill (skills.go)
+	ABeltAtLeast    = "belt_at_least"       // code (potion family prefix: hp, mp, rv), min: potions of that family in the BELT alone (item_in_pack cannot tell belt from pack when where is unset)
+	AMinionsAtLeast = "minions_at_least"    // min: the hero's summons standing at the end (debug minions, fork flag --read-combat)
+	AHeroCasts      = "hero_casts_at_least" // code (the skill name), min (default 1): casts of that skill by the hero in the combat journal
+	ALogLine        = "log_line"            // pattern, min (default 1), max, from_min, to_min: lines of the bot log (logline.go)
 )
 
 var statKeys = map[string]bool{"str": true, "dex": true, "vit": true, "ene": true, "statpts": true, "skillpts": true, "skillsspent": true}
@@ -219,6 +226,11 @@ func (a Assert) Validate() error {
 		}
 		if a.Max == nil && a.Min == 0 {
 			return fmt.Errorf("skill_points needs min or max")
+		}
+	case AMinionsAtLeast:
+	case AHeroCasts:
+		if a.Code == "" {
+			return fmt.Errorf("hero_casts_at_least needs code (the skill name)")
 		}
 	case ALogLine:
 		if err := a.validateLogLine(); err != nil {
@@ -407,6 +419,17 @@ func evalOne(a Assert, st State) AssertResult {
 		return AssertResult{OK: *st.AreaChanges <= *a.Max, Want: want, Got: fmt.Sprintf("%d area changes", *st.AreaChanges)}
 	case ASkillPoints:
 		return evalSkillPoints(a, st)
+	case AMinionsAtLeast:
+		if st.Minions == nil {
+			return unobs(fmt.Sprintf("minions >= %d", a.Min), "debug minions")
+		}
+		return AssertResult{OK: *st.Minions >= a.Min, Want: fmt.Sprintf("minions >= %d", a.Min), Got: fmt.Sprintf("minions %d", *st.Minions)}
+	case AHeroCasts:
+		want := max(a.Min, 1)
+		if st.HeroCasts == nil {
+			return unobs(fmt.Sprintf("casts of %s >= %d", a.Code, want), "debug combatlog")
+		}
+		return AssertResult{OK: st.HeroCasts[a.Code] >= want, Want: fmt.Sprintf("casts of %s >= %d", a.Code, want), Got: fmt.Sprintf("casts %d", st.HeroCasts[a.Code])}
 	case ALogLine:
 		return evalLogLine(a, st)
 	case ABoard:
