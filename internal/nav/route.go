@@ -143,6 +143,12 @@ func (n *Navigator) levelNow() int {
 	return s.Player.Area
 }
 
+// portalOnly are levels Levels.txt lists in a Vis column although no exit leads there: the Pandemonium Run levels of the
+// Uber quest are reached by a portal only. V (docs/probes/exitsread-2026-11-22.md, the engine's link table of Burial
+// Grounds lists 17 -> 18 and 19, not 133); 134 and 135 are the same family (S). Without the filter the route graph
+// joined the Burial Grounds to the Uber levels and could route a walk through them.
+var portalOnly = map[int]bool{133: true, 134: true, 135: true}
+
 // edges collects every known directed edge with the strength of its source.
 func (n *Navigator) edges() map[int]map[int]int {
 	adj := map[int]map[int]int{}
@@ -164,6 +170,9 @@ func (n *Navigator) edges() map[int]map[int]int {
 	if n.e != nil && n.e.Data != nil {
 		for _, l := range n.e.Data.Levels {
 			for _, v := range l.Vis {
+				if portalOnly[l.ID] || portalOnly[v] {
+					continue
+				}
 				add(l.ID, v, srcVis)
 				add(v, l.ID, srcVis)
 			}
