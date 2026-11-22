@@ -143,7 +143,7 @@ def probe(d2d, data, level, seed, samples):
                     raw += [(x, y) for x in range(len(a[y])) if a[y][x] != b[y][x]]
             near = lambda c: any(abs(c[0] - mx) < 15 and abs(c[1] - my) < 15 for mx, my in mon)
             real = [c for c in raw if not near(c)]
-            res.update(diff_raw=len(raw), diff_after_unit_mask=len(real), diff_sample=real[:8],
+            res.update(diff_raw=len(raw), diff_after_unit_mask=len(real), diff_sample=real[:40], diff_bbox=([min(c[0] for c in real), min(c[1] for c in real), max(c[0] for c in real), max(c[1] for c in real)] if real else None),
                        diff_to_blocked=sum(1 for x, y in real if b[y][x] == "#"), diff_to_open=sum(1 for x, y in real if b[y][x] == "."),
                        walkable_A=sum(r.count(".") for r in a), walkable_B=sum(r.count(".") for r in b))
         res["blocked_mismatch_B"] = sample(b, mon)
