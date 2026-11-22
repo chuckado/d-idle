@@ -1,7 +1,7 @@
 // Vault page on a desktop window (card vaultdesktop). usage: node vault.mjs BASEURL "1366x768 1920x1080 ..."
 // For every size and fixture state: the page ITSELF scrolls (mouse wheel and the End key change scrollY), no inner scroll box holds the
-// grid, the LAST grid item can be brought into view, a wide window shows 6+ columns, and the Reveal block is a one-liner that unfolds and
-// remembers its state. OLD=1 puts the 100dvh frame back (the check must then fail).
+// grid, the LAST grid item can be brought into view, a wide window shows 6+ columns, and the chrome above the grid is one toolbar and
+// one slim action bar. OLD=1 puts the 100dvh frame back (the check must then fail).
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 const CH = process.env.CHROME || 'google-chrome-stable';
@@ -60,24 +60,21 @@ for (const size of sizes.split(/\s+/)) {
     console.log(`${tag}: ${n} cells, scrollH ${sh}, wheel ${y1}, End ${y2}, last visible ${vis}`);
   }
 }
-// the folds (default 1366x768): the Reveal block is a one-liner until opened; the choice survives a reload
+// the chrome (default 1366x768, card vaultclean): ONE slim action bar, no fold, no frame around the grid, the page above the grid stays short
 await send('Emulation.setDeviceMetricsOverride', { width: 1366, height: 768, deviceScaleFactor: 1, mobile: false });
 await ev('try { localStorage.clear(); } catch (e) {}');
 await load('revealing', '');
-const fold = `document.querySelector('.vt-revealbar .vt-fold')`;
-if (!(await ev(`!!${fold}`))) fails.push('the Reveal bar has no fold button (.vt-fold)');
-else {
-  const optsVis = () => ev(`(() => { const o = document.querySelector('.vt-rb-opts'); return !!o && o.getBoundingClientRect().height > 0; })()`);
-  const barH = await ev(`document.querySelector('.vt-revealbar').getBoundingClientRect().height`);
-  console.log('reveal bar folded:', !(await optsVis()), 'height', Math.round(barH));
-  if (barH > 60) fails.push(`the folded Reveal bar is ${Math.round(barH)} px high (> 60)`);
-  await ev(`${fold}.click()`); await sleep(400);
-  if (!(await optsVis())) fails.push('the fold button does not open the payment options');
-  await load('revealing', '');
-  if (!(await optsVis())) fails.push('the open state of the Reveal bar did not survive a reload');
-  await ev(`${fold}.click()`); await sleep(300); await load('revealing', '');
-  if (await optsVis()) fails.push('the closed state of the Reveal bar did not survive a reload');
-}
+const nbar = await ev(`document.querySelectorAll('.vt-actionbar').length`);
+if (nbar !== 1) fails.push(`expected exactly one .vt-actionbar, found ${nbar}`);
+if (await ev(`!!document.querySelector('.vt-fold, .vt-revealbar, .vt-keeprow')`)) fails.push('an old band or fold element is still on the page');
+const barH = await ev(`(() => { const b = document.querySelector('.vt-actionbar'); return b && !b.hidden ? b.getBoundingClientRect().height : 0; })()`);
+console.log('action bar height', Math.round(barH));
+if (barH > 140) fails.push(`the action bar is ${Math.round(barH)} px high (> 140)`);
+const frame = await ev(`(() => { const c = getComputedStyle(document.querySelector('#pack')); return c.borderTopWidth + ' ' + c.overflowY; })()`);
+if (!/^0px visible/.test(frame)) fails.push(`the grid has a frame or an overflow box (${frame})`);
+const gridTop = await ev(`Math.round(document.querySelector('#pack').getBoundingClientRect().top)`);
+console.log('grid starts at', gridTop, 'px');
+if (gridTop > 420) fails.push(`the grid starts ${gridTop} px down at 1366x768 (> 420): too much chrome above it`);
 ch.kill();
 if (fails.length) { console.log('FAIL\n' + fails.join('\n')); process.exit(1); }
 console.log('ok'); process.exit(0);
