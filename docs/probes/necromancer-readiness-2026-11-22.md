@@ -1,6 +1,6 @@
 # Necromancer readiness audit (card necro2, 2026-11-22)
 
-> status: current. Offline audit of the tree at origin/main; no live game was used (the run was outside the night window 23:00-07:00 EST and no builder slot was claimed). Tags: V verified (how said), S read in code or docs, U unverified.
+> status: current; section 6 (update after the merges of the same day) supersedes sections 1 to 3 where they differ. Offline audit of the tree at origin/main; no live game was used (the run was outside the night window 23:00-07:00 EST and no builder slot was claimed). Tags: V verified (how said), S read in code or docs, U unverified.
 
 Verdict: NOT ready to play. Most pieces exist as code but are `experimental`; the three gaps that block "ready" are (1) curse/golem/state rules are Go literals, not data (breaks AGENTS "Build flexibility"), (2) no `necro.*` scenario exists, so nothing is green, (3) no earned Act 1 run was ever done on a Necromancer. The earlier design note `docs/process/necromancer-support.md` (card necro1) is still accurate; this page grades it.
 
@@ -49,3 +49,38 @@ a. necro3 class traits + build tables as data (caster/manaNeed traits; Bone/Pois
 ## 5. Live checklist (not run)
 
 On a hidden instance (i1..i5) inside the night window, or a builder slot: create a fresh Necromancer through the OOG tooling, log it in docs/probes/test-characters.md, run `levelerBuild necromancer_summoner_guide`, confirm the start line shows combat profile `necromancer/summoner`, play to clvl 6, check Raise Skeleton and Clay Golem casts, read `debug minions` once, `writes after start: 0`.
+
+## 6. Update after the merges (2026-11-22, cards necro3, necro4, necro5, classtraits, necroscen)
+
+Verdict: still NOT ready to play. Data and engine gaps of section 1 are closed or switchable; no earned Act 1 run exists (section 6.3).
+
+### 6.1 S1 to S11 now
+| id | state | what changed (S = read in code; V = verified, how said) |
+|---|---|---|
+| S1 | MISSING | no act-length run; builder scenarios (V, run 20261122-170600, CHEATED setup, 6 to 10 virtual minutes) are green but are not an act |
+| S2 | MISSING | `wantMinions` still a guess; skills.txt not read for caps |
+| S3 | PARTIAL | curse list is data now (profile `necro.curses`, state numbers per rule, Decrepify before Weaken on elites); curse application on a unique V in `necro.curse-unique` (Amplify Damage); read-back through `debug skillstate` not wired |
+| S4 | PARTIAL | layout is data (profile `layout`); summoner stops at F8 so Decrepify and Weaken stay unbound (a bound key is needed, U how) |
+| S5 | DONE (offline) | golem ladder is profile data (`necro.golems`), names resolve through the catalog |
+| S6 | PARTIAL | Revive cast V in `necro.revive-after-death` at clvl 36; no corpse reservation rule |
+| S7 | PARTIAL | `necro.mana-budget-10min` green (U threshold); no cheapest-first recast |
+| S8, S9, S11 | MISSING | unchanged |
+| S10 | N/A | unchanged |
+| census | DONE behind a knob | `combat.minionRead` (default 0) counts from `debug minions`; needs the fork flag `--read-combat`; V that the read works in the builder runs, not V that it beats the snapshot census |
+| class traits | DONE | `internal/d2/classtraits.json` (caster, manaNeed); five copies removed |
+| build tables | DONE | `necromancer_summoner_sme` and `necromancer_poison_nova_sme` (opt-in by name), profile `necromancer/poisonnova` |
+| scenarios | DONE | five in `tools/provingground/scenarios/necro.json` (four Necromancer, one Paladin pair), GREEN 5 on the lab d2d devp20 |
+
+### 6.2 Known limits
+- Goal format: a stat goal cannot start at a given level, so the SME's Strength 25 by clvl 11 to 24 is spread over five levels (no scenario needs it yet).
+- Decrepify and Weaken are unbound at F8 (above).
+- Lower Resist lands near clvl 50 for the caster because the tool adds the Weaken, Terror, Decrepify chain first.
+- Teeth is not in the SME table: the army kills, the profile's attack skills are never cast by the summoner build.
+- Revive needs clvl 36 in the setup (level 30 grants 29 skill points and stops before the clvl 30 Revive row).
+- Still U: curse durations, Revive count and duration, Poison Nova numbers (SME tagged them UNVERIFIED; read skills.txt), `debug skillstate` skill names as `hero_casts_at_least` keys, whether the web builds picker lists the two builds (section 6.4).
+
+### 6.3 Earned Act 1 drill
+Not run at the time of this update; see the drill record in docs/probes/ when it exists.
+
+### 6.4 Viewer class and build picker
+The Go side of the picker was already generic: `allocWire.builds()` lists every leveler table by class, so a Necromancer hero is offered `necromancer_summoner_sme`, `necromancer_poison_nova_sme` and the older tables, a Paladin or Sorceress never sees them (V offline, test `TestAllocBuildListTwoClasses` with three classes). New: each entry carries the build catalogue's name and identity as `Note` (`internal/plandata/build-catalog.json` owns the tables). `agency.autoAlloc` and the respec knobs stay default off; the web cards (E6) are the UI agent's. Not verified in a browser (U).

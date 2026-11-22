@@ -170,13 +170,7 @@ func (in Input) hasFree() bool {
 // ManaNeed ranks how much a class depends on mana: 0 none (Barbarian), 1 occasional (Amazon, Paladin,
 // Assassin), 2 every attack (Sorceress, Necromancer, Druid). docs/classes/*.md section 7 (S).
 func ManaNeed(c d2.Class) int {
-	switch c {
-	case d2.Sorceress, d2.Necromancer, d2.Druid:
-		return 2
-	case d2.Barbarian:
-		return 0
-	}
-	return 1
+	return c.ManaNeed()
 }
 
 // RestSecs estimates the seconds to regenerate from Mana to target (see ManaPerSec).

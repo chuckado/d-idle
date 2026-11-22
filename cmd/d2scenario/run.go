@@ -787,6 +787,29 @@ func observe(ctx context.Context, c *d2dctl.Client, writes int, live bool) scena
 			}
 		}
 	}
+	if m, err := c.Minions(ctx); err == nil {
+		n := 0
+		for _, x := range m.Minions {
+			if x.Here {
+				n++
+			}
+		}
+		st.Minions = &n
+	}
+	if l, err := c.CombatLog(ctx, 300); err == nil && l.Enabled {
+		if ss, err := c.SkillState(ctx); err == nil {
+			names := map[int]string{}
+			for _, r := range ss.Skills {
+				names[r.ID] = r.Name
+			}
+			st.HeroCasts = map[string]int{}
+			for _, e := range l.Events {
+				if e.Kind == "cast" && e.ByHero {
+					st.HeroCasts[names[e.Skill]]++
+				}
+			}
+		}
+	}
 	if rep, err := c.Do(ctx, "debug objects"); err == nil {
 		st.Has = append(st.Has, "objects")
 		for _, l := range rep.Lines { // columns: index x y kind class locked state (V docs/probes/search-for-cain-l0)
@@ -897,7 +920,18 @@ func botD2dArgs(needs []string, vaultVerbs bool) []string {
 	if needsPay(needs) {
 		return append(withVault(nil, true), "--vault-pay")
 	}
-	return withVault([]string{"--lockstep"}, vaultVerbs)
+	return withRead(withVault([]string{"--lockstep"}, vaultVerbs), needs)
+}
+
+// withRead adds the fork's combat read verbs (`debug minions`, skillstate, combatlog: reads, never writes, ADR 0022) when the
+// scenario needs a read.* capability. --lab-verbs implies it already, so a field start needs nothing.
+func withRead(args, needs []string) []string {
+	for _, n := range needs {
+		if strings.HasPrefix(n, "read.") {
+			return append(args, "--read-combat")
+		}
+	}
+	return args
 }
 
 // missingCaps lists the d2d capabilities in needs (the fork's names: item.*, ground.*, vault.*) that caps does not list.
@@ -905,7 +939,7 @@ func botD2dArgs(needs []string, vaultVerbs bool) []string {
 func missingCaps(needs, caps []string) []string {
 	var out []string
 	for _, n := range needs {
-		if (strings.HasPrefix(n, "item.") || strings.HasPrefix(n, "ground.") || strings.HasPrefix(n, "vault.")) && !d2dctl.HasCap(caps, n) {
+		if (strings.HasPrefix(n, "item.") || strings.HasPrefix(n, "ground.") || strings.HasPrefix(n, "vault.") || strings.HasPrefix(n, "read.")) && !d2dctl.HasCap(caps, n) {
 			out = append(out, n)
 		}
 	}

@@ -117,8 +117,17 @@ type Pre struct {
 	Worn []WornItem `json:"worn,omitempty"`
 	// Vault seeds the hero's Vault records (docs/process/proving-ground.md, pre.vault_records).
 	Vault *VaultSeed `json:"vault_records,omitempty"`
+	// Spawn puts monsters beside the hero after the field warp (`debug spawn`, SETUP; field start only, the run is CHEATED).
+	Spawn []Spawn `json:"spawn,omitempty"`
 	// Ether is the Ether balance of the account wallet at the start (a credit line in its ledger).
 	Ether int `json:"ether,omitempty"`
+}
+
+// Spawn is one `debug spawn` of Pre.Spawn: a monsters.txt id, how many, and "" (normal), "champion" or "unique".
+type Spawn struct {
+	Monster string `json:"monster"`
+	N       int    `json:"n,omitempty"`
+	Mod     string `json:"mod,omitempty"`
 }
 
 // QWord is one quest record (fork layout: act 1 records 0..6, docs/forkcheats.md) and its 16-bit word.

@@ -150,6 +150,23 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		su.Field = true
 		tags["position"] = true
 	}
+	for _, sp := range p.Spawn {
+		if p.Start != StartField {
+			return Setup{}, fmt.Errorf("scenario %s: pre.spawn needs start field", s.ID)
+		}
+		switch sp.Mod {
+		case "", "champion", "unique":
+		default:
+			return Setup{}, fmt.Errorf("scenario %s: spawn mod %q", s.ID, sp.Mod)
+		}
+		n := max(sp.N, 1)
+		line := fmt.Sprintf("debug spawn %s %d", sp.Monster, n)
+		if sp.Mod != "" {
+			line += " " + sp.Mod
+		}
+		add(fmt.Sprintf("spawn %d %s %s", n, sp.Monster, sp.Mod), line)
+		tags["spawn"] = true
+	}
 	for _, w := range p.Worn {
 		su.Seeds = append(su.Seeds, Seed{Kind: SeedWorn, Code: w.Code, Slot: BodySlot[w.Slot], SlotName: w.Slot,
 			Give: GiveLine(w.Code, w.Quality, w.Unid), Reason: reason("worn " + w.Code + " in " + w.Slot)})

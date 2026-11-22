@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- necroready: picker notes from the catalogue, readiness doc update <!--sg:agent/necroready-->
+- necroscen: card result <!--sg:agent/necroscen-->
+- Merge branch 'main' into classtraits <!--sg:agent/classtraits-->
 - necro5: fix merge of necro_data_test <!--sg:agent/necro5-->
 - buildcatalog: points table test skips the catalogue file <!--sg:agent/buildcatalog-->
 - Merge branch 'main' into buildratings <!--sg:agent/buildratings-->
