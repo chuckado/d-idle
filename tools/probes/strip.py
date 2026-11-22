@@ -56,7 +56,13 @@ try:
         elif t[0] == o[0] + o[2]: side = "E"
         print("shared edge side", side)
         # tiles along the edge, in own-relative tile coordinates; grid is 5 subtiles per tile from the level origin
-        if side in ("S", "N"):
+        if side in ("S", "N"):   # the first 12 grid rows next to the edge (or last 12), only the columns that have an open cell
+            rows = range(0, 12) if side == "N" else range(len(g) - 12, len(g))
+            cols = [x for x in range(len(g[0])) if any(g[y][x] == "." for y in rows)]
+            if cols:
+                print("window rows", rows[0], "-", rows[-1], "cols", cols[0], "-", cols[-1])
+                for y in rows:
+                    print("  %3d %s" % (y, "".join(g[y][cols[0]:cols[-1] + 1])[:150]))
             lo, hi = max(o[0], t[0]) - o[0], min(o[0] + o[2], t[0] + t[2]) - o[0]
             row = (o[3] * 5 - 1) if side == "S" else 0
             for tx in range(lo, hi):
