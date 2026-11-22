@@ -59,7 +59,6 @@
     li.append(rl, mk(doc, 'p', 'bc-src', sourceWord(card.ratings)));
     const btn = mk(doc, 'button', 'd-btn bc-details', o.open ? 'Hide details' : 'Details');
     btn.type = 'button';
-    btn.setAttribute('data-size', 'sm');
     btn.setAttribute('aria-expanded', o.open ? 'true' : 'false');
     btn.setAttribute('aria-label', (o.open ? 'Hide details of ' : 'Details of ') + card.name);
     btn.addEventListener('click', () => { if (o.onDetails) o.onDetails(card, btn); });

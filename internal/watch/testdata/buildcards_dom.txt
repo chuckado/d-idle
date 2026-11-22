@@ -16,7 +16,7 @@ li.bc-card [aria-labelledby=bc-h-paladin_hammerdin data-build=paladin_hammerdin 
       span.bc-rl "Leveling "
       span.bc-stars [aria-label=Leveling: 3 of 5 stars, estimate role=img] "★★★☆☆"
   p.bc-src "Estimate"
-  button.d-btn.bc-details [aria-expanded=false aria-label=Details of Paladin Hammerdin data-size=sm type=button] "Details"
+  button.d-btn.bc-details [aria-expanded=false aria-label=Details of Paladin Hammerdin type=button] "Details"
 == detail, auto-allocation on ==
 div.bc-detail [data-build=paladin_hammerdin]
   p.bc-sum "Blessed Hammer from level 18 with Holy Shield and cheap gear. Slow early, then the sturdiest unattended caster. Hammers miss in corridors and drink mana."
