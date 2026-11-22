@@ -128,10 +128,12 @@
           "why": "6 reveals at 80 (480) left the stash: 7200 less the bot's own town spending (real time, unmeasured run: about 50 to 1700 in the runs seen) less 480"
         },
         {
-          "kind": "gold_between",
-          "min": 500,
-          "max": 500,
-          "why": "the purse is never touched"
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "path": "order.paid",
+          "equals": 480,
+          "why": "the order took 480 gold, 80 per item, from the stash (the bot plays in real time and spends some purse and stash gold of its own, so the purse is not asserted)"
         }
       ],
       "notes": "Hero in town, 6 unidentified held items (vault records), 5000 gold in the purse and none in the stash, knob loot.vaultRevealGold 1, an order for all 6 posted before the first town visit. Expected: all 6 records identified, the purse down by about 6 scrolls at the vendor price (80 each) and not below the potion-kit reserve, no item sold, the order ends done. RED on today's main is the order route not existing; GREEN is the physical chain buy, read, supersede. Records are bare (no held affixes): the order decodes each record's own bytes, pays from the stash and reveals in the same request; no scroll, no town visit, no item created in the hero.",
@@ -264,10 +266,12 @@
           "why": "two reveals at 80 left the stash; the bot spends about 50 of the stash in its first town visit (250 -> 200 at the order), so 200 - 160 = 40, and it may spend a little more after"
         },
         {
-          "kind": "gold_between",
-          "min": 500,
-          "max": 500,
-          "why": "the purse is never touched"
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "path": "order.paid",
+          "equals": 160,
+          "why": "the order took 160 gold, 80 per item, from the stash (the bot plays in real time and spends some purse and stash gold of its own, so the purse is not asserted)"
         }
       ],
       "notes": "As vault.reveal-gold, but the purse holds 420 gold and the repair and potion-kit reserve is about 300: only the scrolls above the reserve are bought, the rest of the order ends partial with the reason, the potion kit is untouched (belt full), no item sold. Records are bare (no held affixes): the order decodes each record's own bytes, pays from the stash and reveals in the same request; no scroll, no town visit, no item created in the hero.",
