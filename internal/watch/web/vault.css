@@ -39,6 +39,12 @@
   .vt-chip { border-block-end: 3px solid var(--q, var(--d-q-normal)); align-items: center; }
   .vt-markchip { border-block-end-color: var(--d-warn); font-weight: 650; }
   .vt-identall { font-weight: 650; border-block-end-color: var(--d-accent, currentColor); }
+  .vt-sellall { font-weight: 650; border-block-end-color: var(--d-warn); }
+  .vt-sellall[data-state="confirm"] { background: var(--d-bad); color: var(--d-on-bad); border-color: var(--d-bad); max-inline-size: 100%; white-space: normal; text-align: start; }
+  .vt-sellall[data-state="checking"], .vt-sellall[data-state="busy"] { opacity: .7; }
+  .vt-sachip { margin: 0; padding: var(--d-sp-1) var(--d-sp-4); font-size: var(--d-fs-1); background: var(--d-state-bg-info); border-block-end: var(--d-bw) solid var(--d-line); overflow-wrap: anywhere; }
+  .vt-sachip[data-level="good"] { background: var(--d-state-bg-ok); } .vt-sachip[data-level="bad"] { background: var(--d-state-bg-danger); }
+  .vt-sachip[hidden] { display: none; }
   .vt-fgrid { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); align-items: center; }
   .vt-fgrid > select { flex: 0 1 10rem; }
   .vt-fgrid > .d-btn { align-items: center; }

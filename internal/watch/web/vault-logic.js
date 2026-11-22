@@ -324,6 +324,41 @@ export function identifyAllPlan(rev, T) {
   return m;
 }
 
+// sellAllPlan is the always-visible "Sell all (N)" button. N is the server's count of the records a whole-vault sale would take
+// now (act.sell.all.n: not pinned, not kept, in no active order; the filter, search and selection never matter). The button is
+// hidden at N = 0; off says the press cannot go (the bot's reason).
+export function sellAllPlan(sell, T) {
+  const a = sell && sell.all, n = a ? a.n | 0 : 0;
+  const m = { show: n > 0, n, off: false, why: '', label: String(T.sellAll || '').replace('{n}', String(n)), instant: !!(sell && sell.instant) };
+  if (sell && !sell.enabled) { m.off = true; m.why = sell.why || ''; }
+  return m;
+}
+
+// sellAllConfirm words the armed button from the quote of scope all_sellable (the same plan the order uses, worked out now; the
+// bot lists the records again when the second tap arrives, so these numbers are an estimate). Without a quote (the old town-visit
+// queue) it names the count only. partial is true when the stash cannot take all of it.
+export function sellAllConfirm(q, n, T) {
+  const f = (str, o) => String(str || '').replace(/\{(\w+)\}/g, (x, key) => (o[key] !== undefined ? o[key] : ''));
+  if (!q) return { text: f(T.sellAllArmQueue, { n }), n, k: n, partial: false };
+  const room = ((q.reasons || []).find((r) => r.code === 'room') || {}).n | 0, k = q.count | 0, all = k + room;
+  const a = { n: k, all, gold: grp(q.total), stash: grp(q.stash), after: grp(q.stashAfter) };
+  return { text: room > 0 ? f(T.sellAllArmFull, a) : f(T.sellAllArm, a), n: k, k, all, partial: room > 0, gold: q.total | 0 };
+}
+
+// sellAllChip is the progress and result chip of a Sell all order: Queued, Paid, Sold n of N, then the server's result line
+// ("Sold 187 for 412,300 gold; 9 skipped: 4 pinned, 5 in an order"). null for any other sale.
+export function sellAllChip(sale, T) {
+  if (!sale || !sale.all) return null;
+  const f = (str, o) => String(str || '').replace(/\{(\w+)\}/g, (x, key) => (o[key] !== undefined ? o[key] : ''));
+  const a = { n: sale.done | 0, all: sale.items | 0, gold: grp(sale.gold) };
+  switch (sale.state) {
+    case 'queued': return { level: 'info', text: f(T.sellAllQueued, a), step: 'queued' };
+    case 'credited': return { level: 'info', text: f(T.sellAllPaid, a), step: 'paid' };
+    case 'done': return { level: sale.note ? 'info' : 'good', text: sale.line || f(T.sellAllDone, a), step: 'done' };
+    default: return { level: 'bad', text: sale.line || sale.note || '', step: 'failed' };
+  }
+}
+
 // revealBarModel is what the bar draws. rev is act.reveal of GET /api/vault, pay the option the player picked ('' = the server's
 // default). show is false when there is nothing to reveal and no order to follow.
 export function revealBarModel(rev, pay, T) {
