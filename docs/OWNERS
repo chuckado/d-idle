@@ -1079,10 +1079,12 @@ internal/combat/  credit-runner  dlv-whirl
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/castfirst.go  credit-runner  survfix2
 internal/combat/classdata  credit-runner  palprofile2
+internal/combat/classdata.go  credit-runner  necro4
 internal/combat/classdata/profiles.json  credit-runner  barb1
 internal/combat/classdata/profiles.json  credit-runner  druid1
 internal/combat/classdata/profiles.json  credit-runner  hammer1
 internal/combat/classdata/profiles.json  credit-runner  necro1
+internal/combat/classdata/profiles.json  credit-runner  necro4
 internal/combat/classdata/profiles.json  credit-runner  sorc2
 internal/combat/dodge.go  credit-runner  survfix2
 internal/combat/fight.go  credit-runner  goldprio
@@ -1095,9 +1097,14 @@ internal/combat/fightend.go  credit-runner  survfix2
 internal/combat/fighter.go  credit-runner  beltfix
 internal/combat/fighter.go  credit-runner  maphistory
 internal/combat/fighter.go  credit-runner  maphistoryC
+internal/combat/fighter.go  credit-runner  necro4
 internal/combat/fighter.go  pro-runner  levelplan3
 internal/combat/interlude_test.go  credit-runner  goldprio
 internal/combat/lifeprice.go  credit-runner  palprofile2
+internal/combat/necro.go  credit-runner  necro4
+internal/combat/necro_corpse.go  credit-runner  necro4
+internal/combat/necro_data_test.go  credit-runner  necro4
+internal/combat/necro_test.go  credit-runner  necro4
 internal/combat/packdrink.go  credit-runner  beltfix
 internal/combat/packdrink_test.go  credit-runner  beltfix
 internal/combat/playable.go  credit-runner  agencyp0
