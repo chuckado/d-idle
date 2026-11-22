@@ -5,11 +5,12 @@
 // Reveal and Sell (slice V6) also only queue: the price is shown before the click (revealPlan) and the states come from the GET. The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
 // fed the rows as an inventory view); every text comes from /watch/vault.json or the API and goes in through textContent.
 // Every press is read back: the list is fetched again and what it says is what the page shows.
-import { PAGE, equipPlan, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, identifyAllPlan, revealBarModel, revealMethods, revealPlan, sellLabel, sellPlan, sellWhy, mergeQuotes, toQuery, toTipView, when } from '/watch/vault-logic.js';
+import { PAGE, equipPlan, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, identifyAllPlan, revealBarModel, revealMethods, revealPlan, sellAllChip, sellAllConfirm, sellAllPlan, sellLabel, sellPlan, sellWhy, mergeQuotes, toQuery, toTipView, when } from '/watch/vault-logic.js';
 
 export const ROUTE = '/api/vault';
 const POLL_MS = 6000;
 const LONG_PRESS_MS = 500;
+const SELLALL_MS = 6000; // the armed Sell all button goes back after this long
 const TOAST_MS = 10000; // a status chip or toast stays this long, then goes (or on dismiss)
 const TYPED_ABOVE = 10; // a discard of more items than this asks for the number typed
 const MAX_LOADED = 6000; // rows kept in memory at most (a vault holds a few thousand); only the rows near the view are drawn
@@ -149,6 +150,12 @@ export function mountVault(d) {
   // Identify all (N): always in the toolbar, whatever the filter, search or selection; N is the whole vault's unrevealed count.
   const identB = btn('', { key: 'identify-all', variant: 'ghost' }); identB.classList.add('vt-chip', 'vt-identall'); identB.hidden = true;
 
+  // Sell all (N): always in the toolbar, whatever the filter, search or selection. One tap arms it IN PLACE (the button says what the
+  // second tap will do), the second tap sends ONE order of scope all_sellable; the bot lists the records itself when it runs.
+  const sellAllB = btn('', { key: 'sell-all', variant: 'ghost' }); sellAllB.classList.add('vt-chip', 'vt-sellall'); sellAllB.hidden = true;
+  const saChip = el('p', 'vt-sachip'); saChip.dataset.key = 'sell-all-chip'; saChip.hidden = true; saChip.setAttribute('role', 'status');
+  const SA = { phase: 'idle', id: '', text: '', timer: null, gen: 0 };
+
   // ---- the list and the card ----
   const body = el('div', 'vt-body');
   const main = el('main', 'vt-main'); main.id = 'vt-main'; main.tabIndex = 0; main.setAttribute('aria-label', T.title); main.dataset.vscroll = '1';
@@ -179,8 +186,8 @@ export function mountVault(d) {
   }
   { const was = slotStore(); if (was && !S.f.type) S.f.type = was; }
   const page = el('div', 'vt-page');
-  tools.append(slotRow, search, ftoggle, sortSel, viewBtn, selBtn, markChip, identB);
-  page.append(head, banner, tools, filters, bar, body, msg);
+  tools.append(slotRow, search, ftoggle, sortSel, viewBtn, selBtn, markChip, identB, sellAllB);
+  page.append(head, banner, tools, saChip, filters, bar, body, msg);
   root.replaceChildren ? root.replaceChildren(page, sheetWrap) : (root.appendChild(page), root.appendChild(sheetWrap));
 
   // ---- loading ----
@@ -233,7 +240,7 @@ export function mountVault(d) {
     } finally { S.busy = false; }
     if (added && S.items.length < S.total && rendered.last >= S.items.length - OVER_ROWS * geo.cols) loadMore(); // still near the end (a tall window): the next page
   }
-  const sig = (j) => (j.missed ? j.missed.count : 0) + '/' + (j.marked ? j.marked.n : 0) + '/' + (j.autoTrim ? 1 : 0) + '|' + j.total + '|' + (j.capacity && j.capacity.count) + '|' + (j.items[0] && j.items[0].id) + '|' + j.mode + '|' + (j.capacity && j.capacity.pins) + '|' + (j.keep ? j.keep.queued + ',' + j.keep.creating + ',' + j.keep.done + ',' + j.keep.line : '') + '|' + (j.act ? [j.act.reveal.queued, j.act.reveal.working, j.act.reveal.done, j.act.reveal.charges, j.act.reveal.free, j.act.sell.queued, j.act.sell.working, j.act.sell.sold, j.act.reveal.line, j.act.sell.line, j.act.prompt ? j.act.prompt.ids.length : 0].join(',') : '');
+  const sig = (j) => (j.missed ? j.missed.count : 0) + '/' + (j.marked ? j.marked.n : 0) + '/' + (j.autoTrim ? 1 : 0) + '|' + j.total + '|' + (j.capacity && j.capacity.count) + '|' + (j.items[0] && j.items[0].id) + '|' + j.mode + '|' + (j.capacity && j.capacity.pins) + '|' + (j.keep ? j.keep.queued + ',' + j.keep.creating + ',' + j.keep.done + ',' + j.keep.line : '') + '|' + (j.act ? [j.act.reveal.queued, j.act.reveal.working, j.act.reveal.done, j.act.reveal.charges, j.act.reveal.free, j.act.sell.queued, j.act.sell.working, j.act.sell.sold, (j.act.sell.all ? j.act.sell.all.n : ''), (j.act.sell.sale ? j.act.sell.sale.id + j.act.sell.sale.state + j.act.sell.sale.done : ''), j.act.reveal.line, j.act.sell.line, j.act.prompt ? j.act.prompt.ids.length : 0].join(',') : '');
   async function poll() {
     if (!S.sheet) {
       const j = await d.get(ROUTE + toQuery(S.f, { limit: 1 }));
@@ -455,9 +462,75 @@ export function mountVault(d) {
     const ia = identifyAllPlan(a && a.reveal, T);
     identB.hidden = !ia.show || ro;
     if (ia.show) { identB.textContent = ia.label; identB.disabled = ia.off; identB.title = ia.why; }
+    S.ro = ro; drawSellAll();
     markChip.hidden = !mk || ro;
     if (mk) markChip.textContent = fmt(T.markedChip, { n: mk.n });
   }
+
+  // Sell all: the button in its three states (idle, armed, busy) and the progress/result chip of the last order.
+  function drawSellAll() {
+    const a = S.view && S.view.act, p = sellAllPlan(a && a.sell, T);
+    if (!p.show && SA.phase === 'armed') saReset();
+    sellAllB.hidden = !p.show || !!S.ro;
+    sellAllB.dataset.state = SA.phase === 'armed' ? 'confirm' : SA.phase;
+    sellAllB.textContent = SA.phase === 'armed' ? SA.text : SA.phase === 'checking' ? T.sellAllChecking : SA.phase === 'busy' ? T.sellAllBusy : p.label;
+    sellAllB.disabled = SA.phase === 'idle' ? p.off : SA.phase !== 'armed';
+    sellAllB.title = p.off && SA.phase === 'idle' ? p.why : T.sellAllTitle;
+    const chip = sellAllChip(a && a.sell && a.sell.sale, T);
+    let live = !!chip;
+    if (chip && (chip.step === 'done' || chip.step === 'failed')) {
+      const key = a.sell.sale.id + ':' + a.sell.sale.state;
+      if (!S.saAt || S.saAt.key !== key) { S.saAt = { key, at: now() }; if (d.later) d.later(() => { if (S.saAt && S.saAt.key === key) drawSellAll(); }, TOAST_MS + 50); }
+      live = now() - S.saAt.at < TOAST_MS;
+    }
+    saChip.hidden = !live || !!S.ro;
+    if (live) { saChip.textContent = chip.text; saChip.dataset.level = chip.level; saChip.dataset.step = chip.step; }
+  }
+  function saReset() { if (SA.timer && d.clear) d.clear(SA.timer); SA.timer = null; SA.phase = 'idle'; SA.id = ''; SA.text = ''; SA.gen++; }
+  function saDisarm() { if (SA.phase === 'busy') return; if (SA.phase !== 'idle') { saReset(); drawSellAll(); } }
+  async function saArm() {
+    const a = S.view && S.view.act, p = sellAllPlan(a && a.sell, T);
+    if (!p.show || p.off) return;
+    saReset(); const gen = SA.gen;
+    SA.id = 'sa' + now().toString(36) + Math.floor(Math.random() * 1e9).toString(36); // the order's id: a resend of the same press never sells twice
+    if (!p.instant) { SA.text = sellAllConfirm(null, p.n, T).text; saStart(); return; }
+    SA.phase = 'checking'; drawSellAll();
+    const q = await d.post('/api/vault/sellquote', { scope: 'all_sellable' });
+    if (gen !== SA.gen) return; // reverted while the prices were read
+    if (!q || q.error || q.why || !q.count) {
+      saReset(); drawSellAll();
+      setMsg(q && q.count === 0 && !q.why ? 'info' : 'bad', !q ? T.noAnswer : q.why || q.error || fmt(T.sellAllNothing, { why: sellWhy(q.reasons, T.sellWhyWords) || T.sellNone }));
+      return;
+    }
+    SA.text = sellAllConfirm(q, p.n, T).text; saStart();
+  }
+  function saStart() {
+    SA.phase = 'armed';
+    SA.timer = d.later ? d.later(() => { SA.timer = null; saDisarm(); }, SELLALL_MS) : null;
+    drawSellAll();
+  }
+  async function saSell() {
+    const id = SA.id, gen = SA.gen;
+    if (SA.timer && d.clear) d.clear(SA.timer);
+    SA.timer = null; SA.phase = 'busy'; drawSellAll();
+    const r = await d.post('/api/vault/sell', { scope: 'all_sellable', confirm: true, orderId: id });
+    if (SA.gen === gen) { SA.phase = 'idle'; SA.id = ''; SA.text = ''; SA.gen++; }
+    const sale = r && r.sale;
+    if (!r) setMsg('bad', T.noAnswer);
+    else if (sale && sale.state === 'done') setMsg(sale.note ? 'info' : 'good', fmt(T.sellAllToast, { n: sale.done, gold: grp(sale.gold) }));
+    else if (sale && sale.state === 'queued') setMsg('info', sale.line);
+    else if (r.done && r.done.length) setMsg('good', fmt(T.sellAllQueuedToast, { n: r.done.length }));
+    else setMsg('bad', (sale && (sale.note || sale.line)) || r.error || (r.failed && r.failed[0] && r.failed[0].error) || T.noAnswer);
+    await reload(true);
+  }
+  sellAllB.addEventListener('click', () => {
+    if (sellAllB.disabled || sellAllB.hidden) return;
+    if (SA.phase === 'idle') saArm(); else if (SA.phase === 'armed') saSell();
+  });
+  // any other tap, a scroll or Escape takes the armed button back
+  doc.addEventListener('click', (e) => { if (e.target !== sellAllB) saDisarm(); }, true);
+  main.addEventListener('scroll', saDisarm, { passive: true });
+  if (win && win.addEventListener) win.addEventListener('scroll', saDisarm, { passive: true });
 
   function cellLabel(it) {
     const bits = [it.name, T.qualities[it.q] || it.quality, fmt(T.ilvl, { n: it.ilvl })];
@@ -1098,6 +1171,7 @@ export function mountVault(d) {
   }
   sheetWrap.addEventListener('click', (e) => { if (e.target === sheetWrap) closeSheet(); });
   doc.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && SA.phase === 'armed') { saDisarm(); return; }
     if (!S.sheet) return;
     if (e.key === 'Escape') { e.preventDefault(); closeSheet(); return; }
     if (e.key === 'Tab') { // keep the focus inside the sheet

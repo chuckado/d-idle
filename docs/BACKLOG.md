@@ -1208,6 +1208,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/townstage3: Merge branch 'main' into town5 (merged 2026-11-22) <!--sg:agent/townstage3-->
 - necro3: Necromancer SME builds (summoner and Poison Nova caster) as data (TASK-814, merged 2026-11-22, acceptance 3 of 3): Tables necromancer_summoner_sme and necromancer_poison_nova_sme (opt-in) from didle.build files; poisonnova profile; Decrepify before Weaken on elites in the summoner; offline only, not verified live. <!--sg:agent/necro3-->
 - fableui: Fable UI unification review (navigation, cruft, build pages), design doc only (TASK-815, merged 2026-11-22, acceptance 5 of 5): Design review written (two docs): 15 pages inventoried, link matrix with 56 of 80 links missing, 17 cruft items with file evidence, one nav and component vocabulary, build cards with seven star ratings from a catalogue file. ... <!--sg:agent/fableui-->
+- sellall: Vault Sell all button, two-tap confirm, scope all_sellable (TASK-816, merged 2026-11-22, acceptance 1 of 2) <!--sg:agent/sellall-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

@@ -406,6 +406,7 @@
 | necro2 | proposed | - | `docs/probes/necromancer-readiness-2026-11-22.md` | - |
 | necro4 | proposed | - | `internal/combat/classdata.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro.go`<br>`internal/combat/necro_corpse.go`<br>`internal/combat/necro_test.go`<br>`internal/combat/necro_data_test.go`<br>`internal/combat/fighter.go` | - |
 | necro3 | proposed | - | `internal/buildfile/testdata/necromancer-summoner-sme.json`<br>`internal/buildfile/testdata/necromancer-poison-nova-sme.json`<br>`internal/buildfile/necrosme_test.go`<br>`internal/plandata/build-necromancer_summoner_sme.json`<br>`internal/plandata/build-necromancer_poison_nova_sme.json`<br>`docs/plan/data/build-necromancer_summoner_sme.json`<br>`docs/plan/data/build-necromancer_poison_nova_sme.json`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro_data_test.go`<br>`internal/leveler/necrosummoner_test.go` | - |
+| sellall | proposed | - | `internal/vaultkeep`<br>`internal/watch`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`docs/ui/vault-sell-all`<br>`tools/provingground/scenarios/vaultsellall.json`<br>`tools/uishots`<br>`tools/uishots.sh` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -440,14 +441,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f3ab54d84 11-22 15:11 `Merge agent/sellall: Merge branch 'main' into sellall` (sellall)
+- 0e772e686 11-22 15:10 `Merge branch 'main' into sellall` (-)
 - afc522db3 11-22 15:04 `Merge agent/fableui: Merge branch 'main' into fableui` (fableui)
 - 2331496c0 11-22 15:03 `Merge branch 'main' into fableui` (-)
 - 7a917f2da 11-22 14:57 `Merge agent/necro3: Merge branch 'main' into necro3` (necro3)
 - 7cbbd4d17 11-22 14:56 `Merge branch 'main' into necro3` (-)
 - ac382a44b 11-22 14:47 `Merge agent/townstage3: Merge branch 'main' into town5` (townstage3)
 - 30259ce1b 11-22 14:45 `Merge branch 'main' into town5` (-)
+- d806d4b32 11-22 14:45 `Merge remote-tracking branch 'origin/main' into agent/sellall` (-)
 - f3447a84d 11-22 14:34 `Merge agent/recallsorc: Merge branch 'main' into recallsorc` (recallsorc)
-- 2beee7797 11-22 14:32 `Merge branch 'main' into recallsorc` (-)
-- dbb197eaa 11-22 14:26 `Merge agent/necro4: Merge branch 'main' into necro4` (necro4)
-- 7390d333c 11-22 14:24 `Merge branch 'main' into necro4` (-)
 <!-- statusgen:end -->
