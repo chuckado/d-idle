@@ -890,6 +890,7 @@ internal/bot/farm.go  credit-runner  pgclock
 internal/bot/farmclock_test.go  credit-runner  pgclock
 internal/bot/farmreset.go  credit-runner  farmloop
 internal/bot/farmreset_test.go  credit-runner  farmloop
+internal/bot/geargate.go  credit-runner  classtraits
 internal/bot/geargate.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  exploredpct
 internal/bot/goal.go  credit-runner  goldprio
@@ -992,6 +993,7 @@ internal/bot/repairtrip.go  credit-runner  repairtrip
 internal/bot/repairtrip_test.go  credit-runner  repairtrip
 internal/bot/resource.go  pro-runner  levelplan3
 internal/bot/routeguard.go  credit-runner  bsm7
+internal/bot/routeguard.go  credit-runner  classtraits
 internal/bot/routeguard.go  credit-runner  questrun
 internal/bot/runner.go  credit-runner  agencyp0
 internal/bot/runner.go  credit-runner  botinstant
@@ -1022,6 +1024,7 @@ internal/bot/task.go  credit-runner  cain5b
 internal/bot/task.go  credit-runner  cainchain
 internal/bot/task.go  credit-runner  cainfix
 internal/bot/task.go  credit-runner  chores2
+internal/bot/task.go  credit-runner  classtraits
 internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  quests3
 internal/bot/task.go  credit-runner  resetinstant
@@ -1139,6 +1142,9 @@ internal/combat/rules.go  credit-runner  resistorder
 internal/combat/safety.go  credit-runner  beltfix
 internal/combat/types.go  credit-runner  goldprio
 internal/currency  credit-runner  botcpu2
+internal/d2/classtraits.go  credit-runner  classtraits
+internal/d2/classtraits.json  credit-runner  classtraits
+internal/d2/classtraits_test.go  credit-runner  classtraits
 internal/d2/items.go  credit-runner  itemcolour2
 internal/d2/merc.go  credit-runner  decomp30
 internal/d2/merc_test.go  credit-runner  decomp30
@@ -1381,6 +1387,7 @@ internal/lootrules/vaultpreset_test.go  credit-runner  vaultv3
 internal/merc  credit-runner  mercrevive2
 internal/merc/playerrevive.go  credit-runner  botmerc
 internal/merc/playerrevive_test.go  credit-runner  botmerc
+internal/merc/policy.go  credit-runner  classtraits
 internal/merc/wear.go  credit-runner  lootwireL2
 internal/merc/wear.json  credit-runner  lootwireL2
 internal/merc/wear_test.go  credit-runner  lootwireL2
@@ -1497,6 +1504,7 @@ internal/resource/swing_test.go  credit-runner  swingmodel
 internal/resource/tuning.go  credit-runner  agencyp0
 internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
+internal/resource/types.go  credit-runner  classtraits
 internal/scenario  credit-runner  boardorder
 internal/scenario  credit-runner  bsm1
 internal/scenario/  credit-runner  dlv-reads
