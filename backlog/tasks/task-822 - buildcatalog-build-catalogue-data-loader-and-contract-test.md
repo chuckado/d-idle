@@ -1,10 +1,11 @@
 ---
 id: TASK-822
 title: 'buildcatalog: build catalogue data, loader and contract test'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T20:33:00Z'
+updated_date: '2026-11-22T21:44:00Z'
 labels:
   - bot
   - feature
