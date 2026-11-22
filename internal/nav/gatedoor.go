@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/input"
 )
 
@@ -25,38 +26,46 @@ func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool 
 	if len(cands) == 0 {
 		return false
 	}
-	var door *d2.Unit
-	best := gateDoorReach
-	for i := range o.snap.Objects {
-		u := &o.snap.Objects[i]
-		if !n.isDoorClass(u.Class) || n.doorTried[u.ID] >= maxDoorTries {
+	// The map's object presets, not the snapshot: the snapshot lists the objects near the character only, and the gate
+	// is usually far away when the cut-off shows (V live: the hero stood 80 subtiles off).
+	var at input.Point
+	best, found := gateDoorReach, false
+	for _, p := range o.lm.Presets {
+		if p.Kind != d2map.PresetObject || !n.isDoorClass(p.ID) || n.doorTried[p.Pos] >= maxDoorTries {
 			continue
 		}
 		for _, c := range cands {
-			if d := dist(input.Point{X: u.X, Y: u.Y}, c.at); d < best {
-				door, best = u, d
+			if d := dist(input.Point{X: p.Pos.X, Y: p.Pos.Y}, c.at); d < best {
+				at, best, found = input.Point{X: p.Pos.X, Y: p.Pos.Y}, d, true
 			}
 		}
 	}
-	if door == nil {
+	if !found {
 		return false
 	}
 	if n.doorTried == nil {
-		n.doorTried = map[uint32]int{}
+		n.doorTried = map[d2map.Point]int{}
 	}
-	n.doorTried[door.ID]++
-	at := input.Point{X: door.X, Y: door.Y}
-	n.log.Info("nav: the gate is cut off by a door, opening it", "to", levelNo, "door", door.Class, "at", at, "from", o.pos)
+	n.doorTried[d2map.Point{X: at.X, Y: at.Y}]++
+	n.log.Info("nav: the gate is cut off by a door, opening it", "to", levelNo, "door", at, "from", o.pos)
 	err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return at, 4, nil }, walkOpts{})
-	if err != nil && !errors.Is(err, ErrAlreadyThere) {
-		// a walk onto the door's own blocked cell ends stuck beside it: that is close enough to use it
-		cur, oerr := n.observeWait(ctx)
-		if oerr != nil || dist(cur.pos, at) > 8 {
-			n.log.Info("nav: could not reach the gate door", "err", err)
-			return true // tried: the counter above bounds the retries, the caller observes again
+	cur, oerr := n.observeWait(ctx)
+	if err != nil && !errors.Is(err, ErrAlreadyThere) && (oerr != nil || dist(cur.pos, at) > 8) {
+		// a walk onto the door's own blocked cell ends stuck beside it, which is close enough to use it
+		n.log.Info("nav: could not reach the gate door", "err", err)
+		return true // tried: the counter above bounds the retries, the caller observes again
+	}
+	tg := input.Target{Type: uint32(d2.TypeObject), Pos: at}
+	if oerr == nil {
+		bestD := 6.0
+		for i := range cur.snap.Objects {
+			u := &cur.snap.Objects[i]
+			if d := dist(input.Point{X: u.X, Y: u.Y}, at); d < bestD && n.isDoorClass(u.Class) {
+				tg, bestD = input.Target{Type: uint32(d2.TypeObject), ID: u.ID, Pos: input.Point{X: u.X, Y: u.Y}}, d
+			}
 		}
 	}
-	if err := n.in.Interact(input.Target{Type: uint32(d2.TypeObject), ID: door.ID, Pos: at}); err != nil {
+	if err := n.in.Interact(tg); err != nil {
 		n.log.Info("nav door interact failed", "err", err)
 	}
 	n.clk.Sleep(900 * time.Millisecond)
