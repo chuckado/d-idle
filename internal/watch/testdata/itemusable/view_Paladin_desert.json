@@ -1,0 +1,332 @@
+{
+ "schema": 8,
+ "equipment": {
+  "lhand": {
+   "id": 2,
+   "code": "shield",
+   "name": "Buckler",
+   "quality": "magic",
+   "level": 10,
+   "identified": true,
+   "x": 0,
+   "y": 0,
+   "w": 1,
+   "h": 2,
+   "noSell": "only backpack items are sold",
+   "noTrash": "trashing is not available on this bot",
+   "req": {
+    "lvl": 5,
+    "str": 20,
+    "class": [
+     "Paladin"
+    ]
+   },
+   "usable": {
+    "hero": {
+     "ok": true,
+     "reasons": []
+    },
+    "merc": {
+     "ok": true,
+     "reasons": []
+    }
+   }
+  },
+  "rhand": {
+   "id": 1,
+   "code": "sword",
+   "name": "Short Sword",
+   "quality": "magic",
+   "level": 10,
+   "identified": true,
+   "x": 0,
+   "y": 0,
+   "w": 1,
+   "h": 2,
+   "noSell": "only backpack items are sold",
+   "noTrash": "trashing is not available on this bot",
+   "req": {
+    "lvl": 5,
+    "str": 20,
+    "class": [
+     "Paladin"
+    ]
+   },
+   "usable": {
+    "hero": {
+     "ok": false,
+     "reasons": [
+      {
+       "code": "requirements",
+       "stat": "str",
+       "need": 40,
+       "have": 30,
+       "text": "needs 40 strength (you have 30)"
+      }
+     ]
+    },
+    "merc": {
+     "ok": true,
+     "reasons": []
+    }
+   }
+  }
+ },
+ "backpack": [
+  {
+   "id": 3,
+   "code": "staff",
+   "name": "War Staff",
+   "quality": "magic",
+   "level": 10,
+   "identified": true,
+   "x": 0,
+   "y": 0,
+   "w": 1,
+   "h": 2,
+   "canSell": true,
+   "noWear": "a two-handed weapon and a shield cannot be worn together; take the other one off first",
+   "noWearSlot": {
+    "belt": "War Staff: the item does not fit that slot",
+    "feet": "War Staff: the item does not fit that slot",
+    "gloves": "War Staff: the item does not fit that slot",
+    "head": "War Staff: the item does not fit that slot",
+    "lhand": "War Staff: the item does not fit that slot",
+    "lring": "War Staff: the item does not fit that slot",
+    "neck": "War Staff: the item does not fit that slot",
+    "rhand": "a two-handed weapon and a shield cannot be worn together; take the other one off first",
+    "rring": "War Staff: the item does not fit that slot",
+    "torso": "War Staff: the item does not fit that slot"
+   },
+   "noTrash": "trashing is not available on this bot",
+   "stashOp": "stash",
+   "req": {
+    "lvl": 5,
+    "str": 20,
+    "class": [
+     "Paladin"
+    ]
+   },
+   "usable": {
+    "hero": {
+     "ok": false,
+     "reasons": [
+      {
+       "code": "slot",
+       "text": "a two-handed weapon and a shield cannot be worn together; take the other one off first"
+      }
+     ]
+    },
+    "merc": {
+     "ok": false,
+     "reasons": [
+      {
+       "code": "merctype",
+       "text": "a desert cannot use that"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": 4,
+   "code": "helm",
+   "name": "Cap",
+   "quality": "magic",
+   "level": 10,
+   "identified": true,
+   "x": 1,
+   "y": 0,
+   "w": 1,
+   "h": 2,
+   "canSell": true,
+   "noWear": "thing: needs 47 strength (you have 30)",
+   "noWearSlot": {
+    "belt": "thing: needs 47 strength (you have 30)",
+    "feet": "thing: needs 47 strength (you have 30)",
+    "gloves": "thing: needs 47 strength (you have 30)",
+    "head": "thing: needs 47 strength (you have 30)",
+    "lhand": "thing: needs 47 strength (you have 30)",
+    "lring": "thing: needs 47 strength (you have 30)",
+    "neck": "thing: needs 47 strength (you have 30)",
+    "rhand": "thing: needs 47 strength (you have 30)",
+    "rring": "thing: needs 47 strength (you have 30)",
+    "torso": "thing: needs 47 strength (you have 30)"
+   },
+   "noTrash": "trashing is not available on this bot",
+   "stashOp": "stash",
+   "req": {
+    "lvl": 5,
+    "str": 20,
+    "class": [
+     "Paladin"
+    ]
+   },
+   "usable": {
+    "hero": {
+     "ok": false,
+     "reasons": [
+      {
+       "code": "requirements",
+       "stat": "str",
+       "need": 47,
+       "have": 30,
+       "text": "needs 47 strength (you have 30)"
+      },
+      {
+       "code": "class",
+       "need": "Paladin",
+       "have": "Paladin",
+       "text": "Paladin only"
+      }
+     ]
+    },
+    "merc": {
+     "ok": true,
+     "reasons": []
+    }
+   }
+  },
+  {
+   "id": 5,
+   "code": "ring",
+   "name": "Ring A",
+   "quality": "magic",
+   "level": 10,
+   "identified": true,
+   "maxDur": 20,
+   "x": 2,
+   "y": 0,
+   "w": 1,
+   "h": 2,
+   "canSell": true,
+   "canWear": [
+    "rring",
+    "lring"
+   ],
+   "noWearSlot": {
+    "belt": "Ring A: the item does not fit that slot",
+    "feet": "Ring A: the item does not fit that slot",
+    "gloves": "Ring A: the item does not fit that slot",
+    "head": "Ring A: the item does not fit that slot",
+    "lhand": "Ring A: the item does not fit that slot",
+    "neck": "Ring A: the item does not fit that slot",
+    "rhand": "Ring A: the item does not fit that slot",
+    "torso": "Ring A: the item does not fit that slot"
+   },
+   "noTrash": "trashing is not available on this bot",
+   "stashOp": "stash",
+   "req": {
+    "lvl": 5,
+    "str": 20,
+    "class": [
+     "Paladin"
+    ]
+   },
+   "usable": {
+    "hero": {
+     "ok": true,
+     "reasons": [
+      {
+       "code": "broken",
+       "text": "broken: it does nothing until repaired",
+       "warn": true
+      }
+     ]
+    },
+    "merc": {
+     "ok": true,
+     "reasons": []
+    }
+   }
+  },
+  {
+   "id": 6,
+   "code": "ring",
+   "name": "Ring B",
+   "quality": "magic",
+   "level": 10,
+   "identified": true,
+   "x": 3,
+   "y": 0,
+   "w": 1,
+   "h": 2,
+   "canSell": true,
+   "canWear": [
+    "rring",
+    "lring"
+   ],
+   "noWearSlot": {
+    "belt": "Ring B: the item does not fit that slot",
+    "feet": "Ring B: the item does not fit that slot",
+    "gloves": "Ring B: the item does not fit that slot",
+    "head": "Ring B: the item does not fit that slot",
+    "lhand": "Ring B: the item does not fit that slot",
+    "neck": "Ring B: the item does not fit that slot",
+    "rhand": "Ring B: the item does not fit that slot",
+    "torso": "Ring B: the item does not fit that slot"
+   },
+   "noTrash": "trashing is not available on this bot",
+   "stashOp": "stash",
+   "req": {
+    "lvl": 5,
+    "str": 20,
+    "class": [
+     "Paladin"
+    ]
+   },
+   "usable": {
+    "hero": {
+     "ok": true,
+     "reasons": []
+    },
+    "merc": {
+     "ok": true,
+     "reasons": []
+    }
+   }
+  }
+ ],
+ "merc": {
+  "state": "ready",
+  "owned": true,
+  "alive": true,
+  "class": 338,
+  "kind": "desert",
+  "level": 14,
+  "str": 60,
+  "dex": 40,
+  "slots": [
+   "mhead",
+   "mtorso",
+   "mrhand"
+  ],
+  "equipment": {
+   "mrhand": {
+    "id": 500,
+    "code": "spear",
+    "name": "",
+    "quality": "magic",
+    "identified": true,
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "req": {
+     "lvl": 5,
+     "str": 20,
+     "class": [
+      "Paladin"
+     ]
+    },
+    "usable": {
+     "merc": {
+      "ok": true,
+      "reasons": []
+     }
+    }
+   }
+  },
+  "actWhy": "the bot cannot change the mercenary's gear yet: the sets you save for him are kept, and you equip him by hand"
+ }
+}

@@ -1,0 +1,200 @@
+{
+ "version": "didle.scenario-result/1",
+ "results": [
+  {
+   "version": "didle.scenario-result/1",
+   "id": "cain.scroll",
+   "class": "Sorceress",
+   "seed": 3,
+   "status": "RED",
+   "reason": "item_in_pack: wanted \u003e= 1 x bks, got 0 x bks",
+   "asserts": [
+    {
+     "kind": "item_in_pack",
+     "ok": false,
+     "want": "\u003e= 1 x bks",
+     "got": "0 x bks",
+     "why": "the tree gave the bark scroll (bks); the pack holds bkd instead once Akara has read it (V provingground rerun 2026-11-19: the bot reads on its next town visit)"
+    },
+    {
+     "kind": "no_writes",
+     "ok": true,
+     "want": "writes after start: 0",
+     "got": "writes after start: 0"
+    }
+   ],
+   "virtual_min": 30,
+   "budget_min": 30,
+   "wall_sec": 156,
+   "tags": [
+    "CHEATED",
+    "waypoint"
+   ],
+   "trace": "provingground-out/20261119-174257/cain.scroll_Sorceress_3.bot.log",
+   "state": {
+    "version": "didle.scenario-state/1",
+    "source": "d2d-observer-reload",
+    "has": [
+     "items",
+     "portals",
+     "objects"
+    ],
+    "area": 1,
+    "level": 17,
+    "gold": 40,
+    "stash": 3800,
+    "life_pct": 93,
+    "right_skill": 0,
+    "left_skill": 0,
+    "quests": {
+     "1": 4,
+     "2": 16
+    },
+    "items": [
+     {
+      "code": "sst",
+      "where": "body"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "isc",
+      "where": "pack"
+     },
+     {
+      "code": "tbk",
+      "where": "pack"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     }
+    ],
+    "objects": [
+     {
+      "class": 385,
+      "state": "NU"
+     },
+     {
+      "class": 267,
+      "state": "NU"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 119,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     }
+    ],
+    "stats": {
+     "dex": 25,
+     "ene": 35,
+     "skillpts": 0,
+     "skillsspent": 17,
+     "statpts": 0,
+     "str": 12,
+     "vit": 88
+    },
+    "area_changes": 21,
+    "area_trail": [
+     1,
+     2,
+     3,
+     4,
+     10,
+     1,
+     10,
+     4,
+     3,
+     17,
+     19,
+     17,
+     3,
+     1,
+     3,
+     17,
+     3,
+     1,
+     17,
+     3,
+     4,
+     1
+    ],
+    "writes_after_start": 0
+   },
+   "digest": "d717feca3d2f0592"
+  }
+ ]
+}

@@ -121,3 +121,28 @@ func TestDrinkSkipReason(t *testing.T) {
 		t.Errorf("cooldown: %q", got)
 	}
 }
+
+// cainfix3 F2: a started quest chunk fights a crowd that the plain walk abandons; the quest line is a floor above the
+// default only, and the other lines (drink, portal, chicken) still act.
+func TestCrowdAbandonQuestOverride(t *testing.T) {
+	walk := func(quest bool, crowd, life int) SafetyInput {
+		return crowdIn(life, crowd, 0, func(i *SafetyInput) { i.Walking, i.Quest = true, quest })
+	}
+	for _, c := range []struct {
+		name string
+		in   SafetyInput
+		want SafetyAction
+	}{
+		{"26 hostiles on a plain walk abandon", walk(false, 26, 100), CrowdAbandon},
+		{"26 hostiles on a started chunk fight on", walk(true, 26, 100), SafetyNone},
+		{"41 hostiles on a started chunk abandon", walk(true, 41, 100), CrowdAbandon},
+		{"started chunk, 26 hostiles at 60% still portals", walk(true, 26, 60), TownPortal},
+		{"override 0 keeps today's line", crowdIn(100, 26, 0, func(i *SafetyInput) { i.Walking, i.Quest, i.Tune.CrowdAbandonQuestN = true, true, 0 }), CrowdAbandon},
+		{"override below the default never lowers it", crowdIn(100, 20, 0, func(i *SafetyInput) { i.Walking, i.Quest, i.Tune.CrowdAbandonQuestN = true, true, 5 }), CrowdAbandon},
+		{"abandon off stays off", crowdIn(100, 50, 0, func(i *SafetyInput) { i.Walking, i.Quest, i.Tune.CrowdAbandonN = true, true, 0 }), SafetyNone},
+	} {
+		if got := Decide(c.in); got != c.want {
+			t.Errorf("%s: got %v want %v", c.name, got, c.want)
+		}
+	}
+}

@@ -1,0 +1,1018 @@
+{
+ "schema": "questspec/2",
+ "act": 1,
+ "source": "docs/probes/search-for-cain-*.md, treefix3-2026-11-19.md, data/questboard/act1.json (chunk and step names), internal/task/act1.go (nodes); every fact tagged in docs/questspec.md",
+ "chains": [
+  {
+   "id": "den_of_evil",
+   "quest": "den_of_evil",
+   "initial": [
+    "quest_available(den_of_evil)"
+   ],
+   "areas": {
+    "rogue_encampment": {
+     "size": "small"
+    },
+    "blood_moor": {
+     "size": "large"
+    },
+    "den_of_evil": {
+     "size": "medium"
+    }
+   },
+   "steps": [
+    {
+     "id": "talk_akara",
+     "act": "talk",
+     "target": {
+      "kind": "npc",
+      "name": "akara",
+      "class": 148
+     },
+     "chunk": "clear_den",
+     "board": [
+      "talk_akara"
+     ],
+     "pre": [
+      "in_area(rogue_encampment)",
+      "quest_available(den_of_evil)"
+     ],
+     "post": [
+      "quest_state(den_of_evil,started)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3
+    },
+    {
+     "id": "walk_blood_moor",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "blood_moor"
+     },
+     "chunk": "clear_den",
+     "board": [
+      "walk_blood_moor"
+     ],
+     "pre": [
+      "quest_state(den_of_evil,started)"
+     ],
+     "post": [
+      "in_area(blood_moor)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "clear_den",
+     "act": "clear",
+     "target": {
+      "kind": "area",
+      "name": "den_of_evil"
+     },
+     "chunk": "clear_den",
+     "board": [
+      "clear_den"
+     ],
+     "pre": [
+      "quest_state(den_of_evil,started)"
+     ],
+     "post": [
+      "cleared(den_of_evil)|quest_state(den_of_evil,cleared)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 1200,
+     "on_fail": "park"
+    },
+    {
+     "id": "return_town",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "rogue_encampment"
+     },
+     "chunk": "clear_den",
+     "board": [],
+     "pre": [
+      "cleared(den_of_evil)"
+     ],
+     "post": [
+      "in_area(rogue_encampment)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "return_akara",
+     "act": "talk",
+     "target": {
+      "kind": "npc",
+      "name": "akara",
+      "class": 148
+     },
+     "chunk": "clear_den",
+     "board": [
+      "return_akara"
+     ],
+     "pre": [
+      "in_area(rogue_encampment)",
+      "cleared(den_of_evil)"
+     ],
+     "post": [
+      "quest_state(den_of_evil,done)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3
+    }
+   ]
+  },
+  {
+   "id": "sisters_burial_grounds",
+   "quest": "sisters_burial_grounds",
+   "initial": [
+    "quest_available(sisters_burial_grounds)"
+   ],
+   "areas": {
+    "rogue_encampment": {
+     "size": "small"
+    },
+    "cold_plains": {
+     "size": "large"
+    },
+    "burial_grounds": {
+     "size": "medium"
+    }
+   },
+   "steps": [
+    {
+     "id": "accept_kashya",
+     "act": "talk",
+     "target": {
+      "kind": "npc",
+      "name": "kashya",
+      "class": 150
+     },
+     "chunk": "blood_raven",
+     "board": [
+      "accept_kashya"
+     ],
+     "pre": [
+      "in_area(rogue_encampment)",
+      "quest_available(sisters_burial_grounds)"
+     ],
+     "post": [
+      "quest_state(sisters_burial_grounds,started)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3
+    },
+    {
+     "id": "travel_cold_plains",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "cold_plains"
+     },
+     "chunk": "blood_raven",
+     "board": [
+      "travel_cold_plains"
+     ],
+     "pre": [
+      "quest_state(sisters_burial_grounds,started)"
+     ],
+     "post": [
+      "in_area(cold_plains)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "enter_burial_grounds",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "burial_grounds"
+     },
+     "chunk": "blood_raven",
+     "board": [
+      "enter_burial_grounds"
+     ],
+     "pre": [],
+     "post": [
+      "in_area(burial_grounds)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "kill_blood_raven",
+     "act": "kill",
+     "target": {
+      "kind": "monster",
+      "name": "blood_raven"
+     },
+     "chunk": "blood_raven",
+     "board": [
+      "kill_blood_raven"
+     ],
+     "pre": [
+      "in_area(burial_grounds)"
+     ],
+     "post": [
+      "killed(blood_raven)|quest_state(sisters_burial_grounds,cleared)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 900,
+     "on_fail": "park"
+    },
+    {
+     "id": "return_town",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "rogue_encampment"
+     },
+     "chunk": "blood_raven",
+     "board": [],
+     "pre": [
+      "killed(blood_raven)"
+     ],
+     "post": [
+      "in_area(rogue_encampment)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "return_kashya",
+     "act": "talk",
+     "target": {
+      "kind": "npc",
+      "name": "kashya",
+      "class": 150
+     },
+     "chunk": "blood_raven",
+     "board": [
+      "return_kashya"
+     ],
+     "pre": [
+      "in_area(rogue_encampment)",
+      "killed(blood_raven)"
+     ],
+     "post": [
+      "quest_state(sisters_burial_grounds,done)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3
+    }
+   ]
+  },
+  {
+   "id": "search_for_cain",
+   "quest": "search_for_cain",
+   "initial": [
+    "quest_available(search_for_cain)"
+   ],
+   "areas": {
+    "rogue_encampment": {
+     "size": "small"
+    },
+    "dark_wood": {
+     "size": "large"
+    },
+    "stony_field": {
+     "size": "medium"
+    },
+    "tristram": {
+     "size": "small"
+    }
+   },
+   "steps": [
+    {
+     "id": "to_dark_wood",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "dark_wood"
+     },
+     "chunk": "scroll",
+     "board": [
+      "travel_dark_wood"
+     ],
+     "nodes": [
+      "wp-dark-wood",
+      "to-wood"
+     ],
+     "pre": [
+      "quest_available(search_for_cain)"
+     ],
+     "post": [
+      "in_area(dark_wood)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "find_tree",
+     "act": "find_object",
+     "target": {
+      "kind": "object",
+      "name": "tree_of_inifuss",
+      "class": 30
+     },
+     "chunk": "scroll",
+     "board": [],
+     "nodes": [
+      "tree"
+     ],
+     "pre": [
+      "in_area(dark_wood)"
+     ],
+     "post": [
+      "object_known(tree_of_inifuss)"
+     ],
+     "discover": "room_then_explore",
+     "budget_s": 720,
+     "on_fail": "park",
+     "verbs": [
+      "debug presets"
+     ],
+     "explore": {
+      "budget_s": 720,
+      "progress": "coverage_grows"
+     }
+    },
+    {
+     "id": "take_scroll",
+     "act": "pickup",
+     "target": {
+      "kind": "item",
+      "code": "bks"
+     },
+     "chunk": "scroll",
+     "board": [
+      "take_scroll"
+     ],
+     "nodes": [
+      "tree"
+     ],
+     "pre": [
+      "in_area(dark_wood)",
+      "object_known(tree_of_inifuss)"
+     ],
+     "post": [
+      "has_item(bks)|has_item(bkd)"
+     ],
+     "discover": "spawned_by(find_tree)",
+     "budget_s": 60,
+     "on_fail": "retry",
+     "tries": 3,
+     "verbs": [
+      "dump items"
+     ]
+    },
+    {
+     "id": "to_camp",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "rogue_encampment"
+     },
+     "chunk": "read",
+     "board": [
+      "return_town"
+     ],
+     "pre": [
+      "has_item(bks)"
+     ],
+     "post": [
+      "in_area(rogue_encampment)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "read_scroll",
+     "act": "talk",
+     "target": {
+      "kind": "npc",
+      "name": "akara",
+      "class": 148
+     },
+     "chunk": "read",
+     "board": [
+      "talk_akara"
+     ],
+     "pre": [
+      "in_area(rogue_encampment)",
+      "has_item(bks)"
+     ],
+     "post": [
+      "has_item(bkd)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 120,
+     "on_fail": "retry",
+     "tries": 3,
+     "consumes": [
+      "has_item(bks)"
+     ],
+     "verbs": [
+      "dump items"
+     ]
+    },
+    {
+     "id": "to_stony_field",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "stony_field"
+     },
+     "chunk": "stones",
+     "board": [
+      "travel_stony_field"
+     ],
+     "nodes": [
+      "to-stony"
+     ],
+     "pre": [
+      "has_item(bkd)"
+     ],
+     "post": [
+      "in_area(stony_field)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "touch_stones",
+     "act": "interact",
+     "target": {
+      "kind": "object",
+      "name": "cairn_stones",
+      "class": 17
+     },
+     "chunk": "stones",
+     "board": [
+      "touch_stones"
+     ],
+     "nodes": [
+      "stones"
+     ],
+     "pre": [
+      "in_area(stony_field)",
+      "has_item(bkd)"
+     ],
+     "post": [
+      "portal_open(tristram)"
+     ],
+     "discover": "preset_when_near",
+     "budget_s": 600,
+     "on_fail": "retry",
+     "tries": 3,
+     "verbs": [
+      "debug portals"
+     ]
+    },
+    {
+     "id": "enter_tristram",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "tristram"
+     },
+     "chunk": "stones",
+     "board": [
+      "enter_tristram"
+     ],
+     "nodes": [
+      "to-tristram"
+     ],
+     "pre": [
+      "portal_open(tristram)"
+     ],
+     "post": [
+      "in_area(tristram)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "free_cain",
+     "act": "interact",
+     "target": {
+      "kind": "object",
+      "name": "cains_gibbet",
+      "class": 26
+     },
+     "chunk": "free_cain",
+     "board": [
+      "clear_cage_guards",
+      "free_cain"
+     ],
+     "nodes": [
+      "cage"
+     ],
+     "pre": [
+      "in_area(tristram)"
+     ],
+     "post": [
+      "quest_state(search_for_cain,cleared)|quest_state(search_for_cain,done)"
+     ],
+     "discover": "preset_when_near",
+     "budget_s": 360,
+     "on_fail": "park"
+    },
+    {
+     "id": "return_camp",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "rogue_encampment"
+     },
+     "chunk": "free_cain",
+     "board": [
+      "return_camp"
+     ],
+     "nodes": [
+      "home"
+     ],
+     "pre": [
+      "quest_state(search_for_cain,cleared)"
+     ],
+     "post": [
+      "in_area(rogue_encampment)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "report_return",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "rogue_encampment"
+     },
+     "chunk": "report",
+     "board": [
+      "return_town"
+     ],
+     "pre": [
+      "quest_state(search_for_cain,cleared)"
+     ],
+     "post": [
+      "in_area(rogue_encampment)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "report_akara",
+     "act": "talk",
+     "target": {
+      "kind": "npc",
+      "name": "akara",
+      "class": 148
+     },
+     "chunk": "report",
+     "board": [
+      "talk_akara"
+     ],
+     "pre": [
+      "in_area(rogue_encampment)",
+      "quest_state(search_for_cain,cleared)"
+     ],
+     "post": [
+      "quest_state(search_for_cain,done)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 180,
+     "on_fail": "retry",
+     "tries": 3
+    }
+   ]
+  },
+  {
+   "id": "forgotten_tower",
+   "quest": "forgotten_tower",
+   "initial": [
+    "quest_available(forgotten_tower)"
+   ],
+   "areas": {
+    "black_marsh": {
+     "size": "large"
+    },
+    "cellar_5": {
+     "size": "medium"
+    },
+    "rogue_encampment": {
+     "size": "small"
+    }
+   },
+   "steps": [
+    {
+     "id": "travel_black_marsh",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "black_marsh"
+     },
+     "chunk": "countess",
+     "board": [
+      "travel_black_marsh"
+     ],
+     "pre": [
+      "quest_available(forgotten_tower)"
+     ],
+     "post": [
+      "in_area(black_marsh)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "descend_to_cellar",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "cellar_5"
+     },
+     "chunk": "countess",
+     "board": [
+      "descend_to_cellar"
+     ],
+     "pre": [],
+     "post": [
+      "in_area(cellar_5)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "kill_countess",
+     "act": "kill",
+     "target": {
+      "kind": "monster",
+      "name": "the_countess"
+     },
+     "chunk": "countess",
+     "board": [
+      "kill_countess"
+     ],
+     "pre": [
+      "in_area(cellar_5)"
+     ],
+     "post": [
+      "killed(the_countess)|quest_state(forgotten_tower,done)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 600,
+     "on_fail": "park"
+    },
+    {
+     "id": "return_town",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "rogue_encampment"
+     },
+     "chunk": "countess",
+     "board": [],
+     "pre": [
+      "killed(the_countess)|quest_state(forgotten_tower,done)"
+     ],
+     "post": [
+      "in_area(rogue_encampment)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    }
+   ]
+  },
+  {
+   "id": "tools_of_the_trade",
+   "quest": "tools_of_the_trade",
+   "initial": [
+    "quest_available(tools_of_the_trade)"
+   ],
+   "areas": {
+    "rogue_encampment": {
+     "size": "small"
+    },
+    "barracks": {
+     "size": "medium"
+    }
+   },
+   "steps": [
+    {
+     "id": "accept_charsi",
+     "act": "talk",
+     "target": {
+      "kind": "npc",
+      "name": "charsi",
+      "class": 154
+     },
+     "chunk": "malus",
+     "board": [
+      "accept_charsi"
+     ],
+     "pre": [
+      "in_area(rogue_encampment)",
+      "quest_available(tools_of_the_trade)"
+     ],
+     "post": [
+      "quest_state(tools_of_the_trade,started)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3
+    },
+    {
+     "id": "travel_barracks",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "barracks"
+     },
+     "chunk": "malus",
+     "board": [
+      "travel_barracks"
+     ],
+     "pre": [
+      "quest_state(tools_of_the_trade,started)"
+     ],
+     "post": [
+      "in_area(barracks)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "kill_smith",
+     "act": "kill",
+     "target": {
+      "kind": "monster",
+      "name": "the_smith"
+     },
+     "chunk": "malus",
+     "board": [
+      "kill_smith"
+     ],
+     "pre": [
+      "in_area(barracks)"
+     ],
+     "post": [
+      "killed(the_smith)|quest_state(tools_of_the_trade,cleared)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 480,
+     "on_fail": "park"
+    },
+    {
+     "id": "pick_malus",
+     "act": "pickup",
+     "target": {
+      "kind": "item",
+      "code": "hdm"
+     },
+     "chunk": "malus",
+     "board": [],
+     "pre": [
+      "in_area(barracks)",
+      "killed(the_smith)"
+     ],
+     "post": [
+      "has_item(hdm)"
+     ],
+     "discover": "spawned_by(kill_smith)",
+     "budget_s": 60,
+     "on_fail": "retry",
+     "tries": 3,
+     "verbs": [
+      "dump items"
+     ]
+    },
+    {
+     "id": "return_charsi",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "rogue_encampment"
+     },
+     "chunk": "malus",
+     "board": [
+      "return_charsi"
+     ],
+     "pre": [
+      "has_item(hdm)"
+     ],
+     "post": [
+      "in_area(rogue_encampment)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "pick_imbue",
+     "act": "talk",
+     "target": {
+      "kind": "npc",
+      "name": "charsi",
+      "class": 154
+     },
+     "chunk": "malus",
+     "board": [
+      "pick_imbue"
+     ],
+     "pre": [
+      "in_area(rogue_encampment)",
+      "has_item(hdm)"
+     ],
+     "post": [
+      "quest_state(tools_of_the_trade,done)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 180,
+     "on_fail": "retry",
+     "tries": 3
+    }
+   ]
+  },
+  {
+   "id": "sisters_to_the_slaughter",
+   "quest": "sisters_to_the_slaughter",
+   "initial": [
+    "quest_available(sisters_to_the_slaughter)"
+   ],
+   "areas": {
+    "catacombs_4": {
+     "size": "medium"
+    }
+   },
+   "steps": [
+    {
+     "id": "travel_catacombs",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "catacombs_4"
+     },
+     "chunk": "andariel",
+     "board": [
+      "travel_catacombs"
+     ],
+     "pre": [
+      "quest_available(sisters_to_the_slaughter)"
+     ],
+     "post": [
+      "in_area(catacombs_4)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "kill_andariel",
+     "act": "kill",
+     "target": {
+      "kind": "monster",
+      "name": "andariel"
+     },
+     "chunk": "andariel",
+     "board": [
+      "kill_andariel"
+     ],
+     "pre": [
+      "in_area(catacombs_4)"
+     ],
+     "post": [
+      "killed(andariel)|quest_state(sisters_to_the_slaughter,cleared)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 720,
+     "on_fail": "park"
+    }
+   ]
+  },
+  {
+   "id": "act1_done",
+   "quest": "act1_done",
+   "initial": [
+    "quest_available(act1_done)"
+   ],
+   "areas": {
+    "rogue_encampment": {
+     "size": "small"
+    }
+   },
+   "steps": [
+    {
+     "id": "travel_town",
+     "act": "travel",
+     "target": {
+      "kind": "area",
+      "name": "rogue_encampment"
+     },
+     "chunk": "sail_east",
+     "board": [
+      "travel_town"
+     ],
+     "pre": [
+      "quest_available(act1_done)"
+     ],
+     "post": [
+      "in_area(rogue_encampment)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 300,
+     "on_fail": "retry",
+     "tries": 3,
+     "idempotent": true
+    },
+    {
+     "id": "talk_warriv",
+     "act": "talk",
+     "target": {
+      "kind": "npc",
+      "name": "warriv",
+      "class": 155
+     },
+     "chunk": "sail_east",
+     "board": [
+      "talk_warriv"
+     ],
+     "pre": [
+      "in_area(rogue_encampment)",
+      "quest_available(act1_done)"
+     ],
+     "post": [
+      "quest_state(act1_done,done)"
+     ],
+     "discover": "preset_always",
+     "budget_s": 180,
+     "on_fail": "retry",
+     "tries": 3
+    }
+   ]
+  }
+ ]
+}

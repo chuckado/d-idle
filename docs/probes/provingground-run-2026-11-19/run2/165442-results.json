@@ -1,0 +1,228 @@
+{
+ "version": "didle.scenario-result/1",
+ "results": [
+  {
+   "version": "didle.scenario-result/1",
+   "id": "cain.stones",
+   "class": "Paladin",
+   "seed": 11,
+   "status": "RED",
+   "reason": "portal_open: wanted a portal in area 4, got portals in areas []",
+   "asserts": [
+    {
+     "kind": "portal_open",
+     "ok": false,
+     "want": "a portal in area 4",
+     "got": "portals in areas []",
+     "why": "V L1: the fifth lit stone opens the way to Tristram, listed by debug portals as level 4"
+    },
+    {
+     "kind": "quest_bits",
+     "ok": false,
+     "unobserved": true,
+     "want": "record 4 set 0x0010 clear 0x0000",
+     "got": "quest record 4 not observed",
+     "why": "V L2 a1: arriving in Tristram sets bit 4 of record 4"
+    },
+    {
+     "kind": "item_absent",
+     "ok": false,
+     "want": "no bkd",
+     "got": "1 x bkd",
+     "why": "S: the key is consumed at the fifth stone"
+    }
+   ],
+   "virtual_min": 25,
+   "budget_min": 25,
+   "wall_sec": 99,
+   "tags": [
+    "CHEATED",
+    "given-item",
+    "position"
+   ],
+   "trace": "provingground-out/20261119-165442/cain.stones_Paladin_11.bot.log",
+   "taps": [
+    "start stones"
+   ],
+   "state": {
+    "version": "didle.scenario-state/1",
+    "source": "d2d-live-attach",
+    "has": [
+     "items",
+     "portals",
+     "ground",
+     "objects"
+    ],
+    "area": 1,
+    "level": 20,
+    "gold": 5,
+    "stash": 0,
+    "life_pct": 96,
+    "right_skill": 0,
+    "left_skill": 0,
+    "quests": {
+     "1": 4
+    },
+    "items": [
+     {
+      "code": "isc",
+      "where": "pack"
+     },
+     {
+      "code": "bkd",
+      "where": "pack"
+     },
+     {
+      "code": "mp1",
+      "where": "belt"
+     },
+     {
+      "code": "lbl",
+      "where": "body"
+     },
+     {
+      "code": "qui",
+      "where": "body"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "clb",
+      "where": "body"
+     }
+    ],
+    "objects": [
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 267,
+      "state": "NU"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 119,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 385,
+      "state": "NU"
+     }
+    ],
+    "stats": {
+     "dex": 20,
+     "ene": 15,
+     "skillpts": 19,
+     "skillsspent": 0,
+     "statpts": 95,
+     "str": 25,
+     "vit": 25
+    },
+    "area_changes": 24,
+    "area_trail": [
+     4,
+     1,
+     2,
+     3,
+     4,
+     10,
+     1,
+     10,
+     1,
+     2,
+     3,
+     4,
+     1,
+     2,
+     3,
+     1,
+     3,
+     1,
+     3,
+     2,
+     1,
+     2,
+     1,
+     2,
+     1
+    ],
+    "writes_after_start": -1
+   },
+   "digest": "3ae39e6352888fdf"
+  }
+ ]
+}

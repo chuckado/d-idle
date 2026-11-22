@@ -1,0 +1,169 @@
+package danger
+
+import (
+	"encoding/csv"
+	"math"
+	"os"
+	"sort"
+	"strconv"
+	"testing"
+
+	"d2lod-bot/internal/data"
+)
+
+// realInstall is the game data dir: D2_MPQ_DIR (the builder mounts it at /gamedata), else /tmp/d2mpq.
+func realInstall() string {
+	if d := os.Getenv("D2_MPQ_DIR"); d != "" {
+		return d
+	}
+	return "/tmp/d2mpq"
+}
+
+func realTable(t *testing.T) (*data.DB, *Table) {
+	return realTableWith(t, DefaultParams())
+}
+
+func realTableWith(t *testing.T, p Params) (*data.DB, *Table) {
+	t.Helper()
+	if _, err := os.Stat(realInstall() + "/d2data.mpq"); err != nil {
+		t.Skip("no real install at " + realInstall())
+	}
+	db, err := data.Open(realInstall(), t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	ov, err := ShippedOverrides()
+	if err != nil {
+		t.Fatal(err)
+	}
+	tb, err := Build(db, p, ov)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return db, tb
+}
+
+// TestRealAnchors: monster levels of docs/difficulty.md section 2.1 and docs/research/areamon-trace.md Q2 (V run), and
+// Andariel from docs/research/boss1-trace.md (V run: level 12, life 1,024, defence 60, experience 1,282).
+func TestRealAnchors(t *testing.T) {
+	_, tb := realTable(t)
+	for _, c := range []struct {
+		area int
+		name string
+		mlvl [3]int
+	}{{2, "Blood Moor", [3]int{1, 36, 67}}, {3, "Cold Plains", [3]int{2, 0, 0}}, {6, "Black Marsh", [3]int{6, 0, 0}}} {
+		for d, dn := range DiffNames {
+			z, err := tb.Find(c.area, dn)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if z.Name != c.name {
+				t.Errorf("area %d is %q, want %q", c.area, z.Name, c.name)
+			}
+			if c.mlvl[d] != 0 && z.MLvl != c.mlvl[d] {
+				t.Errorf("%s %s mlvl %d, want %d", c.name, dn, z.MLvl, c.mlvl[d])
+			}
+			if len(z.Monsters) == 0 || z.Encounters.Bad.N < z.Encounters.Typical.N {
+				t.Errorf("%s %s: empty or inverted profile %+v", c.name, dn, z.Encounters)
+			}
+		}
+	}
+	a, err := tb.FindBoss("andariel", "normal")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("andariel %+v", *a)
+	if a.Level != 12 || math.Abs(float64(a.Life-1024)) > 0.15*1024 || a.Def < 50 || a.Def > 70 {
+		t.Errorf("andariel %+v does not match boss1-trace (level 12, life 1024, defence 60)", *a)
+	}
+	for _, k := range []string{"smith", "countess", "blood_raven"} {
+		b, err := tb.FindBoss(k, "normal")
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%s level %d life %d xp %d dmg %.1f", k, b.Level, b.Life, b.XP, b.Dmg)
+	}
+}
+
+// TestAreamonDiff compares the estimated units per clear with the V run population of areamon-table.csv (12 seeds,
+// Act 1 Normal). The estimate comes from MonDen x level size; the level generator's real room fill is not modelled,
+// so the tolerance is the median relative error over all 36 areas (fit: outdoor 20%, preset 18%, maze 55%, worst single area several times off); the numbers are logged for refitting
+// Params.UnitsPerDensityTile.
+func TestAreamonDiff(t *testing.T) {
+	p := DefaultParams()
+	p.AreaUnits = nil // the formula alone: the measured rows would make this comparison circular
+	db, tb := realTableWith(t, p)
+	f, err := os.Open("../../docs/research/areamon-table.csv")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer f.Close()
+	rows, err := csv.NewReader(f).ReadAll()
+	if err != nil {
+		t.Fatal(err)
+	}
+	col := map[string]int{}
+	for i, h := range rows[0] {
+		col[h] = i
+	}
+	var errs []float64
+	for _, r := range rows[1:] {
+		id, _ := strconv.Atoi(r[col["lid"]])
+		units, _ := strconv.ParseFloat(r[col["units_mean"]], 64)
+		uniq, _ := strconv.ParseFloat(r[col["unique"]], 64)
+		z, err := tb.Find(id, "normal")
+		if err != nil {
+			t.Errorf("area %d (%s): %v", id, r[col["area"]], err)
+			continue
+		}
+		l := levelOf(db, id)
+		gm := 0.0
+		for _, m := range z.Monsters {
+			gm += m.Share * math.Max(1, float64(m.Group[0]+m.Group[1])/2)
+		}
+		t.Logf("FIT %d|%s|drlg %d|size %dx%d|den %d|groupMean %.2f|csvUnits %.1f", id, r[col["area"]], l.DrlgType, l.SizeX[0], l.SizeY[0], l.MonDen[0], gm, units)
+		rel := (z.Density.Units - units) / units
+		errs = append(errs, math.Abs(rel))
+		t.Logf("%-22s units csv %6.1f model %6.1f (%+.0f%%)  uniques csv %.1f model %.1f  mlvl csv %s model %d",
+			r[col["area"]], units, z.Density.Units, rel*100, uniq, z.Uniques, r[col["mlvl_mean"]], z.MLvl)
+	}
+	sort.Float64s(errs)
+	if len(errs) == 0 {
+		t.Fatal("no csv rows")
+	}
+	med := errs[len(errs)/2]
+	t.Logf("median relative error %.0f%%, worst %.0f%% over %d areas", med*100, errs[len(errs)-1]*100, len(errs))
+	if med > 0.45 {
+		t.Errorf("median units error %.0f%% over the tolerance of 45%%", med*100)
+	}
+}
+
+func levelOf(db *data.DB, id int) *data.Level {
+	for _, l := range db.Levels {
+		if l.ID == id {
+			return l
+		}
+	}
+	return &data.Level{}
+}
+
+// TestAreaUnitsWired: a measured area (Normal, Acts 1 and 2) takes game.exe's units and units per screen; an area the
+// file lacks (Hell here) keeps the formula units and gets the fitted per-screen density, which is 10 to 22 in mazes
+// where the Levels.txt size gave 0.4 to 3 (docs/survival/units-fit-2026-11-15.md).
+func TestAreaUnitsWired(t *testing.T) {
+	_, tb := realTable(t)
+	z, err := tb.Find(35, "normal") // Catacombs 2, maze, measured: 96 units, 12.8 per screen
+	if err != nil {
+		t.Fatal(err)
+	}
+	if math.Abs(z.Density.Units-96) > 3 || z.Density.PerScreen < 10 || z.Density.PerScreen > 15 {
+		t.Errorf("catacombs 2 normal: %+v", z.Density)
+	}
+	h, err := tb.Find(35, "hell")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if h.Density.PerScreen < 5 || h.Density.PerScreen > 40 {
+		t.Errorf("catacombs 2 hell per screen %.1f, want the fitted 5 to 40", h.Density.PerScreen)
+	}
+}

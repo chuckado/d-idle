@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"d2lod-bot/internal/campaign"
 	"d2lod-bot/internal/gclock"
 	"errors"
 	"log/slog"
@@ -23,20 +22,27 @@ import (
 	"d2lod-bot/internal/leveler/townvendor"
 	"d2lod-bot/internal/loot"
 	"d2lod-bot/internal/nav"
+	"d2lod-bot/internal/points"
+	"d2lod-bot/internal/questboard"
 	"d2lod-bot/internal/repair"
 	"d2lod-bot/internal/town"
+	"d2lod-bot/internal/vaultkeep"
 )
 
 var errNeedTables = errors.New("live play needs the game tables (data.Open failed): set --gamedir / D2BOT_GAMEDIR")
 
 // runnerRef lets the behaviors (built before the Runner) call into it: the leveler's Pause hook.
 type runnerRef struct {
-	p   atomic.Pointer[bot.Runner]
-	inv *invdesk.Desk             // the inventory page desk (invwire.go); nil until newInvDesk
-	gf  *goldfarm.Controller      // the Farm gold order (repairwire.go); nil until newRepair
-	rep *repair.Controller        // the repair policy and request (repairwire.go); nil until newRepair
-	tw  atomic.Pointer[town.Town] // set by wireRepair, read by the gear readings
-	jc  *campaign.Controller      // the guided journey (journeywire.go); nil until wireJourney
+	p    atomic.Pointer[bot.Runner]
+	inv  *invdesk.Desk               // the inventory page desk (invwire.go); nil until newInvDesk
+	gf   *goldfarm.Controller        // the Farm gold order (repairwire.go); nil until newRepair
+	rep  *repair.Controller          // the repair policy and request (repairwire.go); nil until newRepair
+	tw   atomic.Pointer[town.Town]   // set by wireRepair, read by the gear readings
+	vk   *vaultkeep.Keeper           // the vault Keep queue (vaultkeep.go); nil until wireVaultKeep
+	qd   *questboard.Desk            // the quest board desk (questwire.go); nil until wireQuestBoard
+	pd   *points.Desk                // the points desk (pointswire.go); nil until wirePoints
+	hold atomic.Pointer[d2.Snapshot] // a fresh snapshot the desk reads while a vault Equip runs (deskSnap)
+	aw   *agencyWire                 // the shadow skill planner (agencywire.go); nil without game tables
 }
 
 // beat stamps the runner's watchdog heartbeat (a finished sub-step of a long restart); no-op before the runner exists.
@@ -46,6 +52,17 @@ func (r *runnerRef) beat() {
 			run.Beat()
 		}
 	}
+}
+
+// frozen reports whether the player's Pause has the game frozen (the health monitor stops reading the stopped game's
+// counters as a hang).
+func (r *runnerRef) frozen() bool {
+	if r != nil {
+		if run := r.p.Load(); run != nil {
+			return run.Frozen()
+		}
+	}
+	return false
 }
 
 func (r *runnerRef) pause(reason string) {
@@ -227,4 +244,29 @@ func packYield(e *env.Env, cb *combat.Fighter) func(context.Context, []d2.Unit) 
 			})
 		},
 	})
+}
+
+// deskSnap is the inventory desk's snapshot source: the runner's newest snapshot, or the held fresh one while a vault
+// Equip runs. The runner's snapshot is taken once per tick, BEFORE the Keep step created the item in the same tick, so the
+// desk answered "that item is not in the inventory any more" for the unit the Keep had just made (F2, pgvault live).
+func (r *runnerRef) deskSnap() *d2.Snapshot {
+	if r == nil {
+		return nil
+	}
+	if s := r.hold.Load(); s != nil {
+		return s
+	}
+	if run := r.p.Load(); run != nil {
+		return run.LastSnapshot()
+	}
+	return nil
+}
+
+// holdSnap makes the desk read s until the returned func is called.
+func (r *runnerRef) holdSnap(s *d2.Snapshot) func() {
+	if r == nil || s == nil {
+		return func() {}
+	}
+	r.hold.Store(s)
+	return func() { r.hold.Store(nil) }
 }

@@ -28,7 +28,7 @@ func pointsPending(s *d2.Snapshot) bool {
 // pointsDue is the guard's check: points are unspent, nothing hostile is near and the retry gap has passed. It reads
 // loop state that only the main goroutine writes, so it only looks at values that are stable while an action runs.
 func (r *Runner) pointsDue(s *d2.Snapshot, now time.Time) bool {
-	if r.d.Leveler == nil || !pointsPending(s) || r.loop.pointsFails >= 3 && r.loop.pointsFailLvl == s.Player.Level {
+	if r.d.Leveler == nil || !pointsPending(s) || !r.botMaySpendPoints() || r.loop.pointsFails >= 3 && r.loop.pointsFailLvl == s.Player.Level {
 		return false
 	}
 	if t := r.loop.pointsTryAt; !t.IsZero() && now.Sub(t) < time.Duration(r.e.Tune.Bot.PointsRetrySec)*time.Second {
@@ -43,7 +43,7 @@ func (r *Runner) pointsDue(s *d2.Snapshot, now time.Time) bool {
 func (r *Runner) pointsStep(ctx context.Context, snap *d2.Snapshot, c control) bool {
 	l := &r.loop
 	p := snap.Player
-	if r.d.Leveler == nil || !pointsPending(snap) {
+	if r.d.Leveler == nil || !pointsPending(snap) || !r.botMaySpendPoints() {
 		l.pointsFails = 0
 		return false
 	}

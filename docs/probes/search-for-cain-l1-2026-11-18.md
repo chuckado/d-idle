@@ -1,0 +1,32 @@
+# Search for Cain, drill L1: the five Cairn Stones and the way to Tristram (2026-11-18)
+
+> status: result of drill CAIN-L1, follow-up to `docs/probes/search-for-cain-l0-2026-11-18.md`. Same setup as L0 (d2d lab slot, lab binary `d2d.lab3-labverbs`, throwaway Sorceress "Drilly", `d2drill -probe`, every `debug` verb ledgered; NOT Game.exe, no Wine instance). Tags: V verified live (fixture), S secondary (fork source or decomp notes), U unverified. The character is CHEATED (warped, item given): mechanics only. Fixtures: `docs/probes/cainl1/testdata/`; command: `docs/probes/cainl1/run.sh LABEL 'verb;verb;...'` (worker host; the d2d's own log is in `d2d.out` in the slot's run directory on the worker host, copied to the `*.d2dlog.txt` fixtures).
+
+## Why L0 saw nothing (V)
+
+The stones do nothing without the item `bkd` ("Key to the Cairn Stones", the deciphered scroll) in the pack: the operate function returns early and only counts a voice hint (S: fork `world/quests/shared.cpp` `cain_operate`, `CainQuest::stone`; decomp notes `docs/research/re/quests-act1.md` "Stone operate"). L0 had no `bkd`. Giving it (`debug give bkd pack`, reply `pack 8 0 quality=2`, item `Key to the Cairn Stones` in `items`) was the only setup; NO quest record was written (V `c2`: `debug quest list` empty at the start, portal still opened). The Akara decipher step is therefore not a gate for the stones in d2d, only the item is (S: game.exe checks the same).
+
+## (1) The sequence rule (V)
+
+- The order is a random permutation of the five classes 17..21, drawn ONCE, at the first stone click of the game, from the world rng (S: `CainQuest::stone_order`; game.exe: the quest seed, U). It is NOT a fixed order: four runs, three different orders (V d2d log lines: `b1` `20 18 21 17 19`, `c1` `21 20 18 19 17`, `c2` `20 18 21 17 19`; the same verb script with the same seed gives the same order). The d2d log prints it ("Search for Cain: the stones' order ..."), the game shows it only on the deciphered scroll (S: packet 0x879 when `bkd` is read), so a bot that cannot read the scroll must search.
+- A click on the stone that is NEXT in the order lights it. A click on any other stone is silently ignored: no reset, no sound state, nothing turns off; progress is kept (V `b1`, `c2`: after 15 clicks cycling 10,11,12,14,15 the lit set only grew). So the search is a plain cycle: click all five repeatedly, each full cycle lights at least one more stone; at most 5+4+3+2+1 = 15 clicks, and in these runs 15 clicks (three cycles) were enough in the worst order shown below.
+- A stone already lit ignores later clicks (V). Wrong orders cost clicks only.
+- Order `20 18 21 17 19` with the cycle 17,20,21,19,18 (objects index 10,11,12,14,15) lit, after each click (bit string in the cycle order 17,20,21,19,18; V `c2`, `b1`): click 17 `00000`, 20 `01000`, 21 `01000`, 19 `01000`, 18 `01001` (first cycle: 20 then 18 lit), 17 `01001`, 20 `01001`, 21 `01101` (third), 19 `01101`, 18 `01101`, 17 `11101` (fourth), 20, 21 `11101`, 19 `11111` (fifth).
+
+## (2) What "lit" looks like (V) and the portal
+
+- `debug objects` column 7 (state): the stone's row goes `NU` -> `ON` the moment its click is accepted (the row layout is `index x y op9 class locked state`; stones are `op9`). Nothing else in the row changes; presets carry no state. This is the lit signal: one `debug objects` read per click, no blind permutation needed (V `b1`, `c2`). `cmd interact <index>` walks the player to the stone itself (needs the usual kick click after a warp; the interact reply is empty either way, so the reply is no signal).
+- The OBJECT INDEX is not stable: it counts the preset and torch rows that exist so far, so the five stones were 5..10 in one listing and 10,11,12,14,15 in another (V `a3` vs `a6`; `a3` is the dead end where the wrong indices clicked torches and nothing lit). Resolve the stones by class (17..21) from `npcs` or `debug objects` right before every click, never by a stored index.
+- The fifth lit stone opens the way: `debug portals` then lists `2 4 25.1 57.7` (which=2, level 4, x, y) and the d2d log says "the way to Tristram at (25.1, 57.7)". The spot is StoneLambda (class 21 at 19.1,60.7) plus (6,-3), moved to the nearest free cell (S: fork; V by coordinates). It is NOT the class 61 preset (20.5,60.5), which stayed a hidden, unlisted preset all along (V `c2`), and it is not in `debug presets` or `debug objects` at all: the portal exists only in `debug portals`. In game.exe the same spot holds the red portal, object 60 (S: `FUN_005a9930`, notes; U live). The `bkd` is consumed at the fifth stone (S).
+- Entering: `cmd interact -2002` (`-2000 - which`, `d2dctl.PortalNPC(2)`, `TakePortal`) after the kick click, 200 ticks: `debug level` before `4 20.79 60.14 80 80 1000 1000`, after `38 21.50 24.60 43 48 5000 1000` (columns id, x, y, w, h ...). Level 38 is Tristram (V). Arrival presets show Cain's Gibbet (class 26, preset 31 at 27.3,27.7), the quest cage (V `c2` presets). `debug portals` still lists the Stony Field portal afterwards (it is permanent).
+
+## What the bot needs (CAIN-4 / CAIN-5)
+
+1. Precondition: `bkd` in the pack (the tree gives `bks`, Akara deciphers to `bkd`). Without it clicks are ignored (V).
+2. Per click: re-resolve the stone by class from the object list, `Interact`, then read the list again; success = that stone's state column is `ON` (V lab verb `debug objects`, for Game.exe the mode of the unit, U: L0 found no mode change on the Wine side because it never held the key). Treat "still NU" as "wrong position", and do NOT re-click an `ON` stone.
+3. Loop: cycle the NU stones until the portal object appears (`debug portals` row in d2d; the red portal, class 60, near StoneLambda + (6,-3) in the game, U), at most 15 clicks; fail with the lit set in the error if no new stone lit in a whole cycle (then `bkd` or the quest is wrong).
+4. Take the portal with `TakePortal(which)` and verify the level id 38. The existing `solveCairn` model (backtracking, "a wrong stone resets the lit ones") is wrong in one detail: nothing resets, so no backtracking is needed, a cycle is enough.
+5. Not covered: the same on game.exe (U), a second player in a party (S: bit 4 to the party), what happens when the bot leaves and re-enters Stony Field with lit stones (S: the portal is re-made at StoneAlpha + (4,4); U live).
+
+## Dead ends
+`a3`: interact by the stale indices 5..10 (clicks hit torches, order generated, nothing lit). `c1`: the verb `level` does not exist, it is `debug level`.

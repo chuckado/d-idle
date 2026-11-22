@@ -16,6 +16,12 @@ function mk(tag) {
   e.addEventListener = (t, f) => { (e.listeners[t] = e.listeners[t] || []).push(f); };
   e.fire = (t) => (e.listeners[t] || []).forEach((f) => f({}));
   e.focus = () => {};
+  // descendants only, class selectors only (.a.b): enough for typeFallback's '.fbg' lookup
+  e.querySelector = (sel) => {
+    const cls = sel.split('.').slice(1);
+    const walk = (n) => { for (const c of n.children) { if (cls.length > 0 && cls.every((x) => c.classList.contains(x))) return c; const r = walk(c); if (r) return r; } return null; };
+    return walk(e);
+  };
   return e;
 }
 function ser(e, d) {

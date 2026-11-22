@@ -1,0 +1,533 @@
+> debug goto 4
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> debug warp 24 61
+ err=<nil>
+> step 25 err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> debug kill
+ err=<nil>
+> debug give bkd pack
+pack 8 0 quality=2 identified=1 err=<nil>
+> npcs
+Shrine	4831	418	0	0	53.5	34.5
+Chest	2703	-102	0	1	33.7	41.3
+Chest	1663	-222	0	2	25.7	46.3
+Chest	4703	-94	0	3	46.3	28.9
+Shrine	2911	-542	0	4	29.5	34.5
+Cairn Stone	111	26	0	10	19.1	59.1
+Cairn Stone	-1	210	0	11	20.7	62.1
+Cairn Stone	-17	90	0	12	19.1	60.7
+Cairn Stone	191	210	0	14	21.9	60.9
+Cairn Stone	239	90	0	15	20.7	59.1
+ err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	NU
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	21.03	59.54	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	NU
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	NU
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	21.06	60.14	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	NU
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	21.01	60.19	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	NU
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	21.01	60.19	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	NU
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	21.01	60.19	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	20.84	60.04	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	20.85	60.12	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	20.85	60.12	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	ON
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	20.85	60.12	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	ON
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	20.85	60.12	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	ON
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	20.79	60.06	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	ON
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	ON
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 11
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	20.79	60.14	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	ON
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	ON
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 12
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	20.79	60.14	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	ON
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	ON
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+ err=<nil>
+> cmd interact 14
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	20.79	60.14	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	ON
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	ON
+14	21.9	60.9	op9	19	-	ON
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+2	4	25.1	57.7 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 120 err=<nil>
+> debug players
+1	Drilly	20.79	60.14	-1	-1	0 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	ON
+11	20.7	62.1	op9	20	-	ON
+12	19.1	60.7	op9	21	-	ON
+14	21.9	60.9	op9	19	-	ON
+15	20.7	59.1	op9	18	-	ON
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON
+19	14.1	60.5	chest	8	-	NU err=<nil>
+> debug portals
+2	4	25.1	57.7 err=<nil>
+> debug presets
+0	83	53.5	34.5	0	Shrine
+1	139	33.7	41.3	0	Chest
+2	144	25.7	46.3	0	Chest
+3	141	46.3	28.9	0	Chest
+4	83	29.5	34.5	0	Shrine
+5	37	29.3	49.1	0	
+6	37	25.9	51.1	0	
+7	37	26.7	55.5	0	
+8	37	30.9	51.9	0	
+9	269	27.7	54.5	0	
+10	17	19.1	59.1	0	Cairn Stone
+11	20	20.7	62.1	0	Cairn Stone
+12	21	19.1	60.7	0	Cairn Stone
+13	22	18.1	63.1	0	
+14	19	21.9	60.9	0	Cairn Stone
+15	18	20.7	59.1	0	Cairn Stone
+16	61	20.5	60.5	0	
+17	37	9.5	62.3	0	
+18	37	12.7	57.5	0	
+19	140	14.1	60.5	0	Chest
+room	9	12	4
+room	6	20	4
+room	6	28	4
+room	6	36	4
+room	6	44	4
+room	6	52	4
+room	6	60	4
+room	10	68	4
+room	9	4	12
+room	13	12	12
+room	31	60	12
+room	7	68	12
+room	5	4	20
+room	162	28	20
+room	15	36	20
+room	12	44	20
+room	14	68	20
+room	10	76	20
+room	5	4	28
+room	49	20	28
+room	7	36	28
+room	5	44	28
+room	7	76	28
+room	5	4	36
+room	47	20	36
+room	14	36	36
+room	13	44	36
+room	15	68	36
+room	11	76	36
+room	5	4	44
+room	51	20	44
+room	14	68	44
+room	10	76	44
+room	5	4	52
+room	42	28	52
+room	15	36	52
+room	4	44	52
+room	12	52	52
+room	7	76	52
+room	5	4	60
+room	45	12	60
+room	160	20	60
+room	14	36	60
+room	10	44	60
+room	5	52	60
+room	15	68	60
+room	11	76	60
+room	8	4	68
+room	4	12	68
+room	12	20	68
+room	15	36	68
+room	11	44	68
+room	5	52	68
+room	7	68	68
+room	8	20	76
+room	4	28	76
+room	11	36	76
+room	8	52	76
+room	4	60	76
+room	11	68	76 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=20.79,60.14 walking=0 dir=9 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=15 str=10 life=40/43 mana=41/41 stamina=19712/19712 level=4 exp=4200 pmode=- missiles=0 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=3 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4679 music_old=4673 quake=0,0,0,0,0 sfx=237:0:0.34/0.09,2720:0:0.85/0.85,2721:0:0.85/0.85,2723:0:0.85/0.85,2723:0:0.85/0.85,2721:0:0.85/0.85,2722:0:0.85/0.85,2720:0:0.85/0.85,194:0:0.00/0.05,2723:0:0.85/0.85,2720:0:0.85/0.85,2720:0:0.86/0.86,2723:0:0.86/0.86,193:0:0.01/0.00,194:0:0.00/0.05,192:0:0.02/0.00,2722:0:0.85/0.85,195:0:0.00/0.04,194:0:0.00/0.04,2722:0:0.86/0.86,196:0:0.05/0.00,195:0:0.00/0.03,2720:0:0.86/0.86,2633:0:0.00/0.09,4:0:0.67/0.71,2217:0:0.29/0.38,3287:0:0.39/0.87,2721:0:0.85/0.85,2720:0:0.85/0.85,231:0:0.29/0.06,245:0:0.34/0.08,221:0:0.38/0.45
+ err=<nil>

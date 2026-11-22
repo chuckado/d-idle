@@ -140,13 +140,13 @@ func (r *Runner) farmStep(ctx context.Context, snap *d2.Snapshot, c control) boo
 	if r.farm.gen != c.gen {
 		r.farm = farmProgress{gen: c.gen, baseKill: c.goal.Progress.BossKills, baseSecs: c.goal.Progress.ActiveSeconds}
 	}
-	r.farm.started = time.Now()
+	r.farm.started = r.e.Clock.Now() // the env clock (virtual under lockstep), not the wall: a time-boxed farm must not end by machine load
 	runs, dur := farmRemaining(p, r.farm.baseKill+r.farm.kills, r.farm.baseSecs+int64(r.farm.spent.Seconds()))
 	call := FarmCall{Run: p.Area, Runs: runs, Duration: dur, FirstHere: !r.farm.ended, Ops: farmOps{r: r, c: c}}
 	r.farmMu.Unlock()
 	defer func() {
 		r.farmMu.Lock()
-		r.farm.spent += time.Since(r.farm.started)
+		r.farm.spent += r.e.Clock.Now().Sub(r.farm.started)
 		r.farmMu.Unlock()
 	}()
 	call.OnRun = func(run string, killed bool) {

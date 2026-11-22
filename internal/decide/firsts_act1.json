@@ -47,7 +47,7 @@
  "point": {
   "id": "t0.first",
   "tier": 0,
-  "question": "A first for this hero: the question is in the situation.",
+  "question": "First time for this hero (optional, the hero has a default).",
   "answers": [
    {
     "id": "yes",

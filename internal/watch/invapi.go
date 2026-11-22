@@ -19,8 +19,8 @@ var invViewTTL = 1500 * time.Millisecond
 // other answer routes (origin list, token or passcode cookie, JSON only, small body). The desk is late-bound.
 
 var (
-	InvRoutes     = []string{"/api/inventory", "/watch/inventory", "/watch/inventory.js", "/watch/inventory-tip.js", "/watch/inventory-tip.css", "/watch/inventory-actions.js", "/watch/inventory-actions.css", "/watch/inventory-merc.js", "/watch/inventory-merc.css", "/watch/inventory-drag.js", "/watch/inventory-sets.js", "/watch/inventory-sets.css", "/api/inventory/setpreview"}
-	InvPostRoutes = []string{"/api/inventory/mark", "/api/inventory/equip", "/api/inventory/unpin", "/api/inventory/trash", "/api/inventory/cancel", "/api/inventory/identify", "/api/inventory/buyid", "/api/inventory/cain", "/api/inventory/stash", "/api/inventory/take", "/api/inventory/gold", "/api/inventory/unequip", "/api/inventory/sets/save", "/api/inventory/sets/rename", "/api/inventory/sets/delete", "/api/inventory/sets/apply", "/api/inventory/sets/cancel"}
+	InvRoutes     = []string{"/api/inventory", "/watch/inventory", "/watch/inventory.js", "/watch/inventory-tip.js", "/watch/inventory-tip.css", "/watch/inventory-actions.js", "/watch/inventory-actions.css", "/watch/inventory-merc.js", "/watch/inventory-merc.css", "/watch/inventory-drag.js", "/watch/inventory-sets.js", "/watch/inventory-sets.css", "/watch/inventory-canvas.js", "/watch/inventory-canvas.css", "/api/inventory/setpreview"}
+	InvPostRoutes = []string{"/api/inventory/mark", "/api/inventory/equip", "/api/inventory/unpin", "/api/inventory/trash", "/api/inventory/cancel", "/api/inventory/identify", "/api/inventory/buyid", "/api/inventory/cain", "/api/inventory/stash", "/api/inventory/take", "/api/inventory/gold", RouteSellNow, "/api/inventory/unequip", "/api/inventory/sets/save", "/api/inventory/sets/rename", "/api/inventory/sets/delete", "/api/inventory/sets/apply", "/api/inventory/sets/cancel"}
 )
 
 // InvDesk is what the routes need from the bot side (internal/invdesk.Desk through invAdapter in cmd/d2bot).
@@ -180,7 +180,12 @@ func (a *InvAPI) Handler() http.Handler {
 	})
 	m.HandleFunc("/watch/inventory", func(w http.ResponseWriter, r *http.Request) {
 		pactHdr(w, "text/html; charset=utf-8")
-		io.WriteString(w, invPage)
+		// the character canvas is the page; ?view=classic keeps the cards page (invPage) until the canvas has been seen live
+		if r.URL.Query().Get("view") == "classic" {
+			io.WriteString(w, invPage)
+			return
+		}
+		io.WriteString(w, charPage)
 	})
 	static := func(file, ctype string) {
 		m.HandleFunc("/watch/"+file, func(w http.ResponseWriter, r *http.Request) {
@@ -203,6 +208,8 @@ func (a *InvAPI) Handler() http.Handler {
 	static("inventory-drag.js", "text/javascript; charset=utf-8") // drag and drop onto the doll (docs/gearsets.md)
 	static("inventory-sets.js", "text/javascript; charset=utf-8") // the gear sets panel
 	static("inventory-sets.css", "text/css; charset=utf-8")
+	static("inventory-canvas.js", "text/javascript; charset=utf-8") // the character canvas (bar, sheets, selected item)
+	static("inventory-canvas.css", "text/css; charset=utf-8")
 	return readOnly(m)
 }
 
@@ -289,6 +296,12 @@ func (a *InvAPI) PostHandler(o AnswerOptions) http.Handler {
 			res, err = d.RequestBuyID(b.Count)
 		case "/api/inventory/cain":
 			res, err = d.RequestCain()
+		case RouteSellNow:
+			var ok bool
+			if res, err, ok = sellNow(d); !ok {
+				sellNowOff(w)
+				return
+			}
 		case "/api/inventory/stash", "/api/inventory/take", "/api/inventory/gold":
 			sd, ok := d.(InvStashDesk)
 			if !ok {

@@ -1,0 +1,21 @@
+11:31:05 board [null, null, null, null, []] meter= Training toward Sisters to the Slaughter: level is not the gap, the margin still says too hard (gear, potions or resistances).
+11:31:15 tap start scroll {"ok":true,"reason":"The Search for Cain started.","quest":"search_for_cain","chunk":"scroll","state":"accepted"}
+
+11:31:20 board [["scroll", "in_progress", "take_scroll", null], null, null, null, []] meter= On a quest: The Search for Cain. After it the hero returns to train mode.
+11:36:21 board [null, null, null, null, ["scroll"]] meter= Training toward Sisters to the Slaughter: level is not the gap, the margin still says too hard (gear, potions or resistances).
+11:36:21 tap start read {"ok":true,"reason":"The Search for Cain started.","quest":"search_for_cain","chunk":"read","state":"accepted"}
+
+11:36:26 board [null, ["read", "awaiting_handin"], null, null, ["scroll"]] meter= On a quest: The Search for Cain. After it the hero returns to train mode.
+11:36:26 tap handin read {"ok":true,"pending":true,"reason":"Handing in The Search for Cain.","quest":"search_for_cain","chunk":"read","state":"awaiting_handin"}
+
+11:36:31 board [null, ["read", "awaiting_handin"], null, {"quest": "search_for_cain", "chunk": "read", "state": "running"}, ["scroll"]] meter= On a quest: The Search for Cain. After it the hero returns to train mode.
+11:36:36 board [null, null, null, {"quest": "search_for_cain", "chunk": "read", "state": "running"}, ["read", "scroll"]] meter= Training toward Sisters to the Slaughter: level is not the gap, the margin still says too hard (gear, potions or resistances).
+11:36:36 tap start stones {"ok":true,"reason":"The Search for Cain started.","quest":"search_for_cain","chunk":"stones","state":"accepted"}
+
+11:36:41 board [["stones", "in_progress", "touch_stones", null], null, null, {"quest": "search_for_cain", "chunk": "read", "state": "running"}, ["read", "scroll"]] meter= On a quest: The Search for Cain. After it the hero returns to train mode.
+11:36:46 board [["stones", "in_progress", "touch_stones", null], null, null, {"quest": "search_for_cain", "chunk": "read", "state": "confirming", "reason": "The reward was seen; waiting for the game to confirm it.", "attempts": 1, "at": "2026-11-19T16:36:43Z"}, ["read", "scroll"]] meter= On a quest: The Search for Cain. After it the hero returns to train mode.
+11:39:42 board [null, null, null, {"quest": "search_for_cain", "chunk": "read", "state": "confirming", "reason": "The reward was seen; waiting for the game to confirm it.", "attempts": 1, "at": "2026-11-19T16:36:43Z"}, ["stones", "read", "scroll"]] meter= Training toward Sisters to the Slaughter: level is not the gap, the margin still says too hard (gear, potions or resistances).
+11:39:42 tap start free_cain {"ok":true,"reason":"The Search for Cain started.","quest":"search_for_cain","chunk":"free_cain","state":"accepted"}
+
+11:39:47 board [["free_cain", "accepted", null, null], null, null, {"quest": "search_for_cain", "chunk": "read", "state": "confirming", "reason": "The reward was seen; waiting for the game to confirm it.", "attempts": 1, "at": "2026-11-19T16:36:43Z"}, ["stones", "read", "scroll"]] meter= On a quest: The Search for Cain. After it the hero returns to train mode.
+11:40:57 board [null, null, null, {"quest": "search_for_cain", "chunk": "read", "state": "confirming", "reason": "The reward was seen; waiting for the game to confirm it.", "attempts": 1, "at": "2026-11-19T16:36:43Z"}, ["free_cain", "stones", "read", "scroll"]] meter= Training toward Sisters to the Slaughter: level is not the gap, the margin still says too hard (gear, potions or resistances).

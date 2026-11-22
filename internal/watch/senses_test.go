@@ -278,3 +278,24 @@ func TestSensesExport(t *testing.T) {
 		t.Fatal("neighbours are left out")
 	}
 }
+
+// The objective rides /api/senses at tier 1, additive, and is absent when the bot has none or it is another area's.
+func TestSensesObjectiveKey(t *testing.T) {
+	p := sensesFixture(t)
+	h := (&Senses{Src: p, Lock: FixedTier(1)}).Handler()
+	if _, r := getReply(t, h, "/api/senses"); r.Objective != nil {
+		t.Fatalf("objective without one set: %+v", r.Objective)
+	}
+	p.SetObjective(senses.Objective{Area: 1, X: 3, Y: 1, Label: "Countess"}, true)
+	_, r := getReply(t, h, "/api/senses")
+	if r.Objective == nil || r.Objective.X != 3 || r.Objective.Y != 1 || r.Objective.Label != "Countess" || r.Objective.Area != 1 {
+		t.Fatalf("objective %+v", r.Objective)
+	}
+	p.SetObjective(senses.Objective{Area: 7, X: 3, Y: 1}, true)
+	if _, r := getReply(t, h, "/api/senses"); r.Objective != nil {
+		t.Fatalf("another area's objective was published: %+v", r.Objective)
+	}
+	if _, r := getReply(t, (&Senses{Src: p, Lock: FixedTier(0)}).Handler(), "/api/senses"); r.Objective != nil {
+		t.Fatal("a closed tier published the objective")
+	}
+}

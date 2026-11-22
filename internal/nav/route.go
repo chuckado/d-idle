@@ -34,7 +34,8 @@ var act1Hints = [][2]int{
 	{3, 4},   // Cold Plains - Stony Field
 	{4, 10},  // Stony Field - Underground Passage 1
 	{10, 5},  // Underground Passage 1 - Dark Wood (the only way on foot: levels.txt Cave 3 Vis = 4, 5)
-	{4, 38},  // Stony Field - Tristram
+	// Stony Field - Tristram is NOT an exit: Tristram is entered only through the red portal of the cairn stones (V lab drill L1;
+	// a walk there roamed 5 minutes, Proving Ground cain.chain). The step "enter-tristram" takes the portal.
 	{10, 14}, // Underground Passage 1 - Underground Passage 2 (levels.txt Cave 3 Treasure)
 	{5, 6},   // Dark Wood - Black Marsh
 	{6, 11},  // Black Marsh - Hole 1
@@ -142,6 +143,12 @@ func (n *Navigator) levelNow() int {
 	return s.Player.Area
 }
 
+// portalOnly are levels Levels.txt lists in a Vis column although no exit leads there: the Pandemonium Run levels of the
+// Uber quest are reached by a portal only. V (docs/probes/exitsread-2026-11-22.md, the engine's link table of Burial
+// Grounds lists 17 -> 18 and 19, not 133); 134 and 135 are the same family (S). Without the filter the route graph
+// joined the Burial Grounds to the Uber levels and could route a walk through them.
+var portalOnly = map[int]bool{133: true, 134: true, 135: true}
+
 // edges collects every known directed edge with the strength of its source.
 func (n *Navigator) edges() map[int]map[int]int {
 	adj := map[int]map[int]int{}
@@ -163,6 +170,9 @@ func (n *Navigator) edges() map[int]map[int]int {
 	if n.e != nil && n.e.Data != nil {
 		for _, l := range n.e.Data.Levels {
 			for _, v := range l.Vis {
+				if portalOnly[l.ID] || portalOnly[v] {
+					continue
+				}
 				add(l.ID, v, srcVis)
 				add(v, l.ID, srcVis)
 			}

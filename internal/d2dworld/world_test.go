@@ -28,6 +28,9 @@ type stub struct {
 	rows                []string
 	warps, presets, npc []string
 	calls               map[string]int
+	lm                  *d2dctl.LevelMap      // the fork's debug levelmap (nil: the verb errors)
+	mons                *d2dctl.LevelMonsters // the fork's debug levelmonsters (nil: the verb errors)
+	wt                  *d2dctl.WarpTriggers  // the fork's debug warptriggers (nil: the verb errors)
 }
 
 func (s *stub) n(k string) { s.calls[k]++ }
@@ -58,7 +61,15 @@ func (s *stub) Warps(context.Context) (d2dctl.List[d2dctl.Warp], error) {
 	return list(s.warps, d2dctl.ParseWarp)
 }
 func (s *stub) Presets(context.Context) (d2dctl.List[d2dctl.Preset], error) {
-	return list(s.presets, d2dctl.ParsePreset)
+	var rows []string
+	for _, x := range s.presets {
+		if !strings.HasPrefix(x, "room") {
+			rows = append(rows, x)
+		}
+	}
+	l, err := list(rows, d2dctl.ParsePreset)
+	l.Reply = &d2dctl.Reply{Lines: s.presets}
+	return l, err
 }
 func (s *stub) NPCs(context.Context) (d2dctl.List[d2dctl.NPC], error) {
 	return list(s.npc, d2dctl.ParseNPC)
@@ -106,6 +117,22 @@ func TestGridMatchesSyntheticMap(t *testing.T) {
 	}
 	if lm.Grid.Known(15, 0) || lm.Grid.Walkable(-1, 3) {
 		t.Fatal("outside the map must be unknown and not walkable")
+	}
+}
+
+func TestRoomRowsComeFromThePresetsReply(t *testing.T) {
+	s := newStub()
+	s.presets = append(s.presets, "room\t161\t2\t1")
+	w := New(s, Options{})
+	if _, err := w.Update(); err != nil {
+		t.Fatal(err)
+	}
+	lm := w.Current()
+	if len(lm.RoomRows) != 1 || lm.RoomRows[0].Type != 161 || lm.RoomRows[0].Pos != (d2map.Point{X: 12, Y: 7}) {
+		t.Fatalf("room rows %+v", lm.RoomRows)
+	}
+	if len(lm.Presets) != 2 {
+		t.Fatalf("presets %+v", lm.Presets)
 	}
 }
 
@@ -534,7 +561,7 @@ func TestLinkedButNothingOpenIsPending(t *testing.T) {
 	b.openRow = func(float64) bool { return false } // neighbour listed, collision not built yet
 	w := New(b, Options{})
 	w.Update()
-	if w.cur.pending != 2 || len(w.Current().Adjacent) != 0 { // level 2 (nothing open) and level 3 (not linked)
+	if w.cur.pending != 2 || w.Current().Pending != 2 || len(w.Current().Adjacent) != 0 { // level 2 (nothing open) and level 3 (not linked)
 		t.Fatalf("pending %d adjacent %+v", w.cur.pending, w.Current().Adjacent)
 	}
 }
@@ -552,5 +579,29 @@ func TestBordersSurviveAnEmptyProbeRound(t *testing.T) {
 	w.borders(context.Background(), w.cur)
 	if got := w.Current().BorderCells(2); len(got) != 5 {
 		t.Fatalf("border to level 2 lost: %d cells, adjacent %+v", len(got), w.Current().Adjacent)
+	}
+}
+
+// The strip toward a linked neighbour with nothing readable across is kept as unproven, so nav can walk there
+// (andariel1); a level that is simply not linked has none.
+func TestLinkedButClosedKeepsAnUnprovenStrip(t *testing.T) {
+	b := newBorderStub()
+	b.openRow = func(float64) bool { return false }
+	w := New(b, Options{})
+	w.Update()
+	lm := w.Current()
+	if len(lm.Adjacent) != 0 || len(lm.BorderCells(2)) != 0 {
+		t.Fatalf("nothing is proven: %+v", lm.Adjacent)
+	}
+	if cells := lm.UnprovenCells(2); len(cells) == 0 {
+		t.Fatalf("no unproven strip toward linked level 2: %+v", lm.Unproven)
+	}
+	if lm.UnprovenCells(3) != nil {
+		t.Fatal("an unlinked level has no strip")
+	}
+	b.openRow = func(cy float64) bool { return cy >= 1.0 } // d2d built it
+	w.borders(context.Background(), w.cur)
+	if len(w.Current().BorderCells(2)) != 5 || len(w.Current().UnprovenCells(2)) != 0 {
+		t.Fatalf("after: adj %+v unproven %+v", w.Current().Adjacent, w.Current().Unproven)
 	}
 }

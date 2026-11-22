@@ -4,6 +4,7 @@ import (
 	"context"
 	"d2lod-bot/internal/gclock"
 	"fmt"
+	"slices"
 	"time"
 
 	"d2lod-bot/internal/d2"
@@ -183,7 +184,35 @@ func (t *Town) potionsWanted(s *d2.Snapshot) map[belt.Kind]int {
 		}
 	}
 	t.ensureHealing(s, band, bs, want)
+	t.ensureKitHealing(s, band, want)
+	t.ensureKitMana(s, band, want)
 	return want
+}
+
+// ensureKitHealing tops the healing want up to the visit's kit minimum (ChorePlan.KitHealing, the task chores pass
+// resource.kitMinHP):
+// the belt plan may reserve fewer healing columns than the guard counts (a 4 slot belt with a mana column holds 3), and
+// the pack counts for the guard, so the rest is bought into the pack. Without it the guard refused the quest road at
+// 3 healing potions while the shop saw nothing to buy (Proving Ground act1more, act1.tools.malus).
+func (t *Town) ensureKitHealing(s *d2.Snapshot, band belt.Band, want map[belt.Kind]int) {
+	if t.kitHealing <= 0 || band.Capacity(belt.HP, belt.Columns) == 0 {
+		return
+	}
+	if short := t.kitHealing - t.healingCarried(s) - want[belt.HP]; short > 0 {
+		want[belt.HP] += short
+	}
+}
+
+// ensureKitMana is ensureKitHealing for mana (town.plan >= 2): the guard counts belt and pack, the belt plan may hold
+// one mana column, so the rest of the minimum is bought into the pack.
+func (t *Town) ensureKitMana(s *d2.Snapshot, band belt.Band, want map[belt.Kind]int) {
+	if t.kitMana <= 0 || band.Capacity(belt.MP, belt.Columns) == 0 {
+		return
+	}
+	have := belt.Read(t.e.Data, s.Inventory).Count[belt.MP] + belt.PackCount(t.e.Data, s.Inventory, belt.MP)
+	if short := t.kitMana - have - want[belt.MP]; short > 0 {
+		want[belt.MP] += short
+	}
 }
 
 func (t *Town) needScrolls(s *d2.Snapshot) bool {
@@ -193,7 +222,7 @@ func (t *Town) needScrolls(s *d2.Snapshot) bool {
 	if t.tune().KeyTarget > 0 && t.keyCount(s) < t.tune().KeyTarget {
 		return true
 	}
-	if t.tune().IDScrollTarget > 0 && t.idScrollWanted(s) {
+	if t.tune().IdentifyTome != 0 && t.tune().IDScrollTarget > 0 && t.idScrollWanted(s) {
 		if n, _ := t.scrollCount(s, "isc", "ibk"); n < t.tune().IDScrollTarget {
 			return true
 		}
@@ -327,7 +356,7 @@ func (t *Town) repairEstimate(s *d2.Snapshot) int {
 
 // vendorStep names the chores that work inside a vendor's trade window. One window serves consecutive chores of the
 // same NPC; any other chore closes it first.
-var vendorStep = map[string]bool{"sell": true, "ammo": true, "shop": true, "beltbuy": true, "repair": true}
+var vendorStep = map[string]bool{"sell": true, "ammo": true, "shop": true, "idtome": true, "beltbuy": true, "repair": true}
 
 // Chores runs the town chores in the order: identify, equip, sell, ammo, belt, repair (all at the repair vendor,
 // one visit), belt fill, potions and scrolls (the shop NPC, who also heals on opening: one visit), heal, stash, gold.
@@ -336,6 +365,10 @@ var vendorStep = map[string]bool{"sell": true, "ammo": true, "shop": true, "belt
 func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ error) {
 	rep = ChoreReport{Bought: map[string]int{}}
 	t.withdrew = false
+	t.reserveGold, t.kitHealing, t.kitMana = 0, plan.KitHealing, plan.KitMana
+	if t.tune().MercReserve != 0 {
+		t.reserveGold = plan.ReserveGold
+	}
 	s, err := t.current()
 	if err != nil {
 		return rep, err
@@ -345,10 +378,11 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		return rep, ErrNotInTown
 	}
 	rep.GoldBefore = s.Player.Gold
+	t.logPlanShadow(s, plan)
 	wasEmpty := t.portalEmpty
 	lowAtStart := plan.Heal && t.needHeal(s)
 	deadline := t.e.Clock.Now().Add(time.Duration(t.tune().ChoreBudgetS) * time.Second)
-	t.choreDeadline, t.budgetLogged = deadline, false
+	t.choreDeadline, t.budgetLogged, t.idTomeLogged = deadline, false, false
 	defer func() { t.choreDeadline = time.Time{} }()
 	defer func() {
 		if s, err := t.current(); err == nil {
@@ -359,9 +393,13 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		return rep, err
 	}
 
+	delta := map[string]int{} // gold change per chore that ran, for the town budget line
 	// step runs one chore if its need check says so (or Force).
 	step := func(name string, enabled bool, need func(*d2.Snapshot) bool, run func() error) error {
 		if !enabled {
+			if name == "identify" || name == "sell" {
+				rep.add(name, false, "not planned for this visit", nil)
+			}
 			return nil
 		}
 		if err := ctx.Err(); err != nil {
@@ -374,7 +412,7 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		// the player's repair policy is not overridden by a Force plan
 		force := plan.Force && !(name == "repair" && t.repairGate != nil)
 		if !force && !need(cur) {
-			rep.add(name, false, "not needed", nil)
+			rep.add(name, false, t.skipWhy(name, cur), nil)
 			return nil
 		}
 		if !t.e.Clock.Now().Before(deadline) {
@@ -386,9 +424,13 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 				return err
 			}
 		}
+		g0 := cur.Player.Gold
 		err = run()
 		if ce := ctx.Err(); ce != nil {
 			return ce
+		}
+		if after, aerr := t.current(); aerr == nil && after.Player.Gold != g0 {
+			delta[name] += after.Player.Gold - g0
 		}
 		rep.add(name, true, "", err)
 		if err != nil {
@@ -406,7 +448,11 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		need    func(*d2.Snapshot) bool
 		run     func() error
 	}{
+		// optional (town.identifyTome, off by default): a Tome of Identify bought and filled before identify and sell
+		{"idtome", plan.Scrolls && t.tune().IdentifyTome != 0, t.needIDTome, func() error { return t.buyIDTome(ctx, &rep) }},
 		{"identify", plan.Identify, t.identifyNeeded, func() error { return t.identify(ctx, a, &rep) }},
+		// after identify: Cain-free bulk identify of what the scroll chore leaves (docs/design/bulk-identify-2026-11-18.md)
+		{"bulkid", plan.Identify && t.bulk != nil, t.needBulk, func() error { return t.bulkTrip(ctx, a, &rep) }},
 		// before sell: a naked character wears what it found instead of selling it (G1 attempt 6)
 		{"equip", true, t.needEquipFound, func() error { _, err := t.EquipFound(ctx); return err }},
 		// the player's sell marks always run, whatever the trip was for (live 2026-11-11: potion and kit trips skipped it)
@@ -422,7 +468,9 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		// before shop: the surplus is banked first, so the shop cannot spend it (BASICSFIX bankFirst)
 		{"bank", plan.Gold, func(s *d2.Snapshot) bool { return t.needBank(s, plan) }, func() error { return t.bank(ctx, a) }},
 		// BELTFIX5: the bank is not out of reach when the belt is empty and the purse is thin (Gate 1 20261103-0338)
-		{"withdraw", plan.Potions && plan.Gold, t.needWithdraw, func() error { return t.withdraw(ctx, a) }},
+		{"withdraw", plan.Gold && (plan.Potions || plan.Scrolls), func(s *d2.Snapshot) bool {
+			return plan.Potions && t.needWithdraw(s) || t.needShopWithdraw(s, plan)
+		}, func() error { return t.withdraw(ctx, a, plan) }},
 		{"shop", plan.Potions || plan.Scrolls || plan.Antidotes > 0, func(s *d2.Snapshot) bool {
 			return plan.Potions && t.needPotions(s) || plan.Scrolls && t.needScrolls(s) || t.needAntidotes(plan, s)
 		}, func() error { return t.shopVisit(ctx, a, plan, &rep) }},
@@ -434,6 +482,22 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		{"stash", plan.Stash || plan.Gold, func(s *d2.Snapshot) bool { return t.needStash(s, plan) }, func() error { return t.doStash(ctx, a, plan, &rep) }},
 		// last: what the pickit chores left in the pack, by the tidy policy table (docs/tidy.md); never equipment or marked items
 		{"tidy", plan.Stash || plan.Sell, t.needTidy, func() error { return t.tidyPass(ctx, a, &rep) }},
+	}
+	// town.plan >= 2 (invariant T2): the belt takes the pack's potions BEFORE the sell chore, so the sale never sees a
+	// potion the belt still wants.
+	if t.PlanStage() >= 2 {
+		for i, st := range steps {
+			if st.name == "sell" {
+				bf := struct {
+					name    string
+					enabled bool
+					need    func(*d2.Snapshot) bool
+					run     func() error
+				}{"beltfirst", plan.Potions, t.NeedsBeltFill, func() error { _, err := t.FillBelt(ctx); return err }}
+				steps = slices.Insert(steps, i, bf)
+				break
+			}
+		}
 	}
 	// A requested repair is paid before the supplies: it moves up behind the sale, so the potions and portal scroll
 	// cannot spend its gold first (repairmanual fix, user report 2026-11-09).
@@ -461,6 +525,7 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 	if wasEmpty {
 		t.afterEmptyVisit()
 	}
+	t.logBudget(rep.GoldBefore, delta, plan.ReserveGold)
 	if err := t.h.CloseAll(ctx); err != nil {
 		rep.add("close", true, "", err)
 	}
@@ -850,4 +915,37 @@ func (t *Town) budgetHit(rep *ChoreReport) bool {
 		t.e.Log.Warn("town: resupply budget hit", "budgetS", t.tune().ChoreBudgetS, "spent", rep.Spent, "bought", rep.Bought)
 	}
 	return true
+}
+
+// logBudget writes the one "town budget" line of a visit: the gold in, what each chore that ran added (sell, banked
+// withdrawals) or took (shop, repair, belt, ...), the gold left and the merc revive money the plan asked to keep.
+func (t *Town) logBudget(goldIn int, delta map[string]int, reserve int) {
+	left := goldIn
+	for _, d := range delta {
+		left += d
+	}
+	if s, err := t.current(); err == nil {
+		left = s.Player.Gold
+	}
+	earned, spent := 0, 0
+	for _, d := range delta {
+		if d > 0 {
+			earned += d
+		} else {
+			spent -= d
+		}
+	}
+	t.e.Log.Info("town budget", "in", goldIn, "sold", delta["sell"], "earned", earned, "spent", spent, "byChore", delta, "left", left, "mercReserve", reserve)
+}
+
+// skipWhy names why a chore that was planned found nothing to do (the "chores done" log line); only identify has a
+// reason of its own, the rest keep "not needed".
+func (t *Town) skipWhy(name string, s *d2.Snapshot) string {
+	if name != "identify" {
+		return "not needed"
+	}
+	if len(t.needIdentify(s)) == 0 {
+		return "nothing to identify"
+	}
+	return "no scroll or tome and none to buy"
 }

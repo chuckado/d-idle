@@ -1,0 +1,22 @@
+/* Points page (docs/points.md): one card per block, the attribute list with a + per row. Tokens only. */
+@layer shell {
+  .pt-page { display: grid; gap: var(--d-gap); padding: 0 var(--d-gap) var(--d-gap); max-inline-size: 48rem; margin-inline: auto; inline-size: 100%; }
+  .pt-stats, .pt-gear, .pt-trail { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--d-sp-2); }
+  .pt-stat { display: grid; grid-template-columns: 1fr auto; gap: var(--d-sp-1) var(--d-gap); align-items: center; padding-block: var(--d-sp-2); border-top: 1px solid var(--d-line); }
+  .pt-stat:first-child { border-top: 0; }
+  .pt-name { font-weight: 600; }
+  .pt-prev, .pt-need, .pt-why { grid-column: 1; margin: 0; font-size: .9em; }
+  .pt-need[data-short="1"] { color: var(--d-bad); }
+  .pt-plus { grid-column: 2; grid-row: 1 / span 2; min-inline-size: 2.75rem; min-block-size: 2.75rem; }
+  .pt-trail li, .pt-gear li { font-size: .9em; }
+  .pt-trail [data-ok="0"] { color: var(--d-bad); }
+  .pt-row { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
+  .pt-builds { list-style: none; margin: var(--d-sp-2) 0 0; padding: 0; display: grid; gap: var(--d-sp-2); }
+  .pt-build { border-top: 1px solid var(--d-line); padding-block: var(--d-sp-2); display: grid; gap: var(--d-sp-1); }
+  .pt-build h3 { margin: 0; font-size: 1em; overflow-wrap: anywhere; }
+  .pt-build p { margin: 0; font-size: .9em; }
+  .pt-build[data-tier="experimental"] .pt-tier { color: var(--d-bad); }
+  .pt-warn { color: var(--d-bad); }
+  .pt-prev-list { margin: 0; padding-inline-start: 1.1rem; font-size: .85em; overflow-wrap: anywhere; }
+  .pt-build[data-chosen="1"] { background: var(--d-surface-2, transparent); }
+}

@@ -67,9 +67,58 @@ func (n *Navigator) Coverage() (visited, total int) {
 	return n.cov.visited(), len(n.cov.pts)
 }
 
+// ForgetCoverage drops every level's roam coverage: a new game is a new zone (its monsters are back), so the visited
+// points of the old one must not count toward "explored" (the farm loop thrashed on a carried-over 100 percent).
+func (n *Navigator) ForgetCoverage() {
+	n.covMu.Lock()
+	n.covs, n.cov = nil, nil
+	hook := n.onNewGame
+	n.covMu.Unlock()
+	if hook != nil {
+		hook()
+	}
+}
+
+// SetOnNewGame sets a hook that runs when ForgetCoverage says a new game began (the minimap forgets its walked
+// ground then: the new game's levels are laid out again).
+func (n *Navigator) SetOnNewGame(f func()) {
+	n.covMu.Lock()
+	n.onNewGame = f
+	n.covMu.Unlock()
+}
+
+// ObjectiveView is the goal of the walk in progress (a GoTo with a goal, an exit approach), ok false when the hero is
+// not walking to a known place. Call it on the navigator's goroutine, like the observe hook does.
+func (n *Navigator) ObjectiveView() (level int, p input.Point, ok bool) {
+	if !n.goalSet {
+		return 0, input.Point{}, false
+	}
+	lm := n.w.Current()
+	if lm == nil {
+		return 0, input.Point{}, false
+	}
+	return lm.No, n.goal, true
+}
+
+// fullyKnown: the world source says its maps arrive whole and, with nav.fullGrid, the current level's grid really is
+// whole (measured, not assumed).
 func (n *Navigator) fullyKnown() bool {
 	f, ok := n.w.(fullyKnown)
-	return ok && f.FullyKnown()
+	if !ok || !f.FullyKnown() {
+		return false
+	}
+	if !n.tune().FullGrid {
+		return true
+	}
+	return gridWhole(n.w.Current())
+}
+
+// gridWhole: every cell of the level's rectangle is known. A nil map or an empty rectangle is not whole.
+func gridWhole(lm *d2map.LevelMap) bool {
+	if lm == nil || lm.Grid == nil || lm.Rect.W <= 0 || lm.Rect.H <= 0 {
+		return false
+	}
+	return lm.Grid.KnownCount() >= lm.Rect.W*lm.Rect.H
 }
 
 // samplePoints picks one reachable walkable cell per spacing x spacing block (the one closest to the block centre).

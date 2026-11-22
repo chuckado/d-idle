@@ -1,0 +1,181 @@
+/* The Ethereal Vault page (docs/vault.md, UI section): ONE header row, one slim banner when full, ONE toolbar (category chips, search, Filters, sort,
+   view, Select, Marked for sale), ONE contextual action bar (only when there is something to do), then the grid at content height with no frame and
+   no inner scroll (one document). The item card docks on a wide window only while an item is open and is a bottom sheet on a phone. The cells are
+   the inventory page's look (components.css section 14), the tooltip is inventory-tip.css. Tokens only; both themes; targets 44 px; no motion. */
+@layer panels {
+  [data-vault] { margin: 0; background: var(--d-bg); color: var(--d-text); }
+  .vt [hidden], .vt-page [hidden], .vt-sheet[hidden] { display: none; }
+  .vt, .vt-page { display: flex; flex-direction: column; min-block-size: 100dvh; min-inline-size: 0; } /* one document: the page scrolls, no 100dvh frame (card vaultdesktop) */
+  .vt-page { flex: 1 1 auto; }
+
+  .vt-head { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-3); padding: var(--d-sp-2) var(--d-sp-4); border-block-end: var(--d-bw) solid var(--d-line); background: var(--d-surface-0); }
+  .vt-head h1 { margin: 0; font: 600 var(--d-fs-4)/var(--d-lh-tight) var(--d-font-display); color: var(--d-accent-text); }
+  .vt-hero { color: var(--d-text-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .vt-capacity { flex: 1 1 24rem; display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-3); min-inline-size: 0; }
+  .vt-meter { flex: 1 1 8rem; min-inline-size: 6rem; block-size: 12px; background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-round); overflow: hidden; }
+  .vt-fill { display: block; block-size: 100%; inline-size: var(--vt-pct, 0%); background: var(--d-good); }
+  .vt-meter[data-level="warn"] .vt-fill, .vt-meter[data-level="full"] .vt-fill { background: var(--d-warn); }
+  .vt-meter[data-level="over"] .vt-fill { background: var(--d-bad); }
+  .vt-count { font-weight: 650; font-variant-numeric: tabular-nums; }
+  .vt-pins, .vt-upgrade-why, .vt-down-why, .vt-keep-why, .vt-shown, .vt-hint { color: var(--d-text-2); font-size: var(--d-fs-0); overflow-wrap: anywhere; }
+  .vt-wallet { padding: 0 var(--d-sp-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-round); font-weight: 650; font-variant-numeric: tabular-nums; color: var(--d-accent-text); white-space: nowrap; }
+  .vt-upgrade-why, .vt-down-why { display: none; }
+  .vt-capacity .d-btn[aria-disabled="true"], .vt-bar .d-btn[aria-disabled="true"], .vt-dcard .d-btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+
+  .vt-banner { flex: none; margin: 0; padding: var(--d-sp-1) var(--d-sp-4); background: var(--d-state-bg-warn); border-block-end: var(--d-bw) solid var(--d-warn); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .vt-banner[data-level="over"] { background: var(--d-state-bg-danger); border-color: var(--d-bad); }
+  .vt-banner[data-level="info"] { background: var(--d-state-bg-info); border-color: var(--d-info); }
+
+  .vt-filters { flex: none; padding: 0 var(--d-sp-4); }
+  .vt-filters:not([data-open="1"]) { display: none; }
+  .vt-tools { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-2); padding: var(--d-sp-2) var(--d-sp-4); border-block-end: var(--d-bw) solid var(--d-line); background: var(--d-surface-0); }
+  .vt-search { flex: 1 1 10rem; min-inline-size: 0; max-inline-size: 22rem; }
+  .vt-input { min-block-size: 44px; padding: var(--d-sp-1) var(--d-sp-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); background: var(--d-surface-1); color: var(--d-text); min-inline-size: 0; font: inherit; box-sizing: border-box; }
+  .vt-num { inline-size: 7.5rem; }
+  .vt-fpanel { display: grid; gap: var(--d-sp-2); padding: var(--d-sp-2) 0; }
+  .vt-chips { display: flex; flex-wrap: wrap; gap: var(--d-sp-1) var(--d-sp-2); }
+  .vt-chip[data-q="magic"] { --q: var(--d-q-magic); } .vt-chip[data-q="rare"] { --q: var(--d-q-rare); } .vt-chip[data-q="set"] { --q: var(--d-q-set); }
+  .vt-chip[data-q="unique"] { --q: var(--d-q-unique); } .vt-chip[data-q="crafted"] { --q: var(--d-q-crafted); } .vt-chip[data-q="low"] { --q: var(--d-q-low); }
+  .vt-chip { border-block-end: 3px solid var(--q, var(--d-q-normal)); align-items: center; }
+  .vt-markchip { border-block-end-color: var(--d-warn); font-weight: 650; }
+  .vt-identall { font-weight: 650; border-block-end-color: var(--d-accent, currentColor); }
+  .vt-fgrid { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); align-items: center; }
+  .vt-fgrid > select { flex: 0 1 10rem; }
+  .vt-fgrid > .d-btn { align-items: center; }
+  .vt-tools > .d-btn, .vt-tools select { align-items: center; }
+
+  /* the one action bar: a calm single band, present only when there is something to do */
+  .vt-actionbar { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-3); padding: var(--d-sp-1) var(--d-sp-4); background: var(--d-surface-1); border-block-end: var(--d-bw) solid var(--d-line); }
+  .vt-actionbar [hidden] { display: none; }
+  .vt-actionbar .d-btn { align-items: center; }
+  .vt-actionbar > div { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-2); min-inline-size: 0; }
+  .vt-ab-sel, .vt-ab-reveal { flex: 1 1 auto; }
+  .vt-seltext { font-weight: 650; }
+  .vt-acts { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
+  .vt-b-label { display: block; }
+  .vt-sub { display: block; font-size: var(--d-fs-0); font-weight: 400; color: var(--d-text-2); line-height: 1.2; }
+  .d-btn:disabled .vt-sub, .d-btn[aria-disabled="true"] .vt-sub { color: inherit; }
+  .vt-rb-opts { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
+  .vt-rb-opt { display: grid; gap: 2px; min-block-size: 44px; padding: var(--d-sp-1) var(--d-sp-3); text-align: start; color: inherit; background: transparent; border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-2); cursor: pointer; font: inherit; }
+  .vt-rb-opt[aria-checked="true"] { border-color: var(--d-accent, currentColor); box-shadow: inset 0 0 0 1px var(--d-accent, currentColor); }
+  .vt-rb-opt[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+  .vt-rb-line, .vt-rb-why, .vt-rb-note, .vt-rb-prog, .vt-rb-skip, .vt-rb-ask { font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .vt-rb-why, .vt-rb-note, .vt-rb-prog { color: var(--d-text-2); }
+  .vt-rb-skip summary { cursor: pointer; min-block-size: 24px; color: var(--d-text-2); }
+  .vt-rb-skip ul { margin: var(--d-sp-1) 0 0; padding-inline-start: var(--d-sp-4); }
+  /* the order chip: a status pill that goes by itself */
+  .vt-ab-order { padding: var(--d-sp-1) var(--d-sp-3); background: var(--d-state-bg-info); border-radius: var(--d-r-round); }
+  .vt-rb-steps { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); margin: 0; padding: 0; list-style: none; font-size: var(--d-fs-1); }
+  .vt-rb-steps li + li::before { content: "\2192\00a0"; }
+  .vt-rb-steps li.past { opacity: .6; }
+  .vt-rb-steps li.cur { font-weight: 700; }
+  .vt-ab-notes { flex: 1 1 100%; color: var(--d-text-2); }
+  .vt-costline { font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .vt-keepline { flex: 0 1 auto; min-inline-size: 0; font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .vt-tag[data-tag^="reveal-"], .vt-tag[data-tag^="sell-"] { background: var(--d-state-bg-info); }
+  .vt-tag[data-tag="reveal-failed"], .vt-tag[data-tag="sell-failed"] { background: var(--d-state-bg-danger); }
+  .vt-tag[data-tag="sell-sold"] { background: var(--d-state-bg-ok); }
+  .vt-dkeep { margin: 0; font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .vt-dkeep[data-keep="failed"] { color: var(--d-danger); font-weight: 650; }
+  .vt-tag[data-tag="keep-failed"] { background: var(--d-state-bg-danger); }
+  .vt-tag[data-tag="keep-kept"] { background: var(--d-state-bg-ok); }
+  /* the toast: what a press did; it goes after 10 s or on dismiss */
+  .vt-toast { position: fixed; inset-inline: var(--d-sp-4); inset-block-end: var(--d-sp-4); inline-size: fit-content; max-inline-size: min(36rem, calc(100% - 2 * var(--d-sp-4))); margin: 0 auto 0 0; z-index: var(--d-z-banner); display: flex; align-items: center; gap: var(--d-sp-2); padding: var(--d-sp-1) var(--d-sp-2) var(--d-sp-1) var(--d-sp-3); font-size: var(--d-fs-1); background: var(--d-state-bg-info); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-3); box-shadow: var(--d-shadow-2); overflow-wrap: anywhere; }
+  .vt-toast[hidden] { display: none; }
+  .vt-toast[data-level="good"] { background: var(--d-state-bg-ok); } .vt-toast[data-level="bad"] { background: var(--d-state-bg-danger); }
+  .vt-toast .d-btn { align-items: center; }
+
+  .vt-body { flex: 1 1 auto; display: grid; grid-template-columns: minmax(0, 1fr); }
+  .vt-main { overflow: visible; padding: var(--d-sp-3) var(--d-sp-4) var(--d-sp-5); display: grid; gap: var(--d-sp-3); align-content: start; }
+  .vt-main:focus-visible { outline-offset: -2px; }
+  .vt-detail[hidden] { display: none; }
+  .vt-detail { position: fixed; inset-inline: 0; inset-block-end: 0; z-index: var(--d-z-banner); max-block-size: 60dvh; overflow-y: auto; padding: var(--d-sp-3) var(--d-sp-4); border-block-start: var(--d-bw) solid var(--d-line-strong); background: var(--d-surface-3); box-shadow: var(--d-shadow-2); } /* a phone: a bottom sheet while an item is open */
+  .vt-dhead { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--d-sp-2); }
+  .vt-dhead .d-btn { align-items: center; flex: none; }
+  @media (min-width: 900px) {
+    .vt-body[data-detail="1"] { grid-template-columns: minmax(0, 1fr) 20rem; } /* the grid takes the full width until an item is open */
+    .vt-detail { position: sticky; inset-block-start: 0; inset-inline: auto; z-index: auto; align-self: start; max-block-size: 100dvh; box-shadow: none; border-block-start: 0; border-inline-start: var(--d-bw) solid var(--d-line); background: var(--d-surface-0); }
+    .vt-upgrade-why, .vt-down-why { display: none; }
+  }
+
+  /* the cells: the look of `.d-cells .item` (components.css section 14) in a grid that fills the width */
+  .vt-grid { display: grid; gap: 2px; padding: 2px; --vt-cell-min: 4.75rem; --vt-pad-top: 0px; --vt-pad-bot: 0px; padding-block: calc(2px + var(--vt-pad-top)) calc(2px + var(--vt-pad-bot)); grid-template-columns: repeat(auto-fill, minmax(var(--vt-cell-min), 1fr)); grid-auto-rows: 4.25rem; } /* no frame, no fixed height: the grid is as tall as its rows */
+  .vt-cell { position: relative; display: flex; flex-direction: column; min-inline-size: 0; overflow: hidden; background: var(--d-surface-3); border: 0; border-block-start: 3px solid var(--q, var(--d-q-normal)); border-radius: 2px;
+    padding: 2px 3px; font: inherit; font-size: .62rem; line-height: 1.15; color: var(--q, var(--d-text)); text-align: start; cursor: pointer; }
+  .vt-cell:focus-visible { outline: 2px solid var(--d-focus); outline-offset: -2px; }
+  .vt-cell.sel { outline: 2px solid var(--d-focus); outline-offset: -2px; }
+  .vt-cell.on { box-shadow: inset 0 0 0 2px var(--d-accent); background: var(--d-surface-2); }
+  .vt-cell .ico { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; pointer-events: none; }
+  .vt-cell.has-art .vt-name { margin-block-start: auto; font-size: .56rem; color: var(--d-text); text-shadow: 0 0 2px var(--d-surface-0), 0 0 3px var(--d-surface-0), 0 1px 1px var(--d-surface-0); }
+  .vt-cell .vt-name, .vt-cell .vt-tags { position: relative; }
+  .vt-grid[data-mode="list"] .vt-cell .ico { display: none; }
+  .vt-grid[data-mode="list"] .vt-cell.has-art .vt-name { margin-block-start: 0; font-size: inherit; text-shadow: none; }
+  .vt-name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; overflow-wrap: anywhere; padding-inline-end: .8rem; }
+  .vt-tags { position: absolute; inset-block-start: 1px; inset-inline-end: 2px; display: flex; flex-direction: column; gap: 1px; }
+  .vt-tag { font-size: .58rem; line-height: 1; font-weight: 700; padding: 1px 2px; border-radius: 2px; background: var(--d-surface-0); color: var(--d-text); }
+  .vt-unid { position: absolute; inset-block-start: 3px; inset-inline-start: 3px; display: grid; place-items: center; inline-size: 1rem; block-size: 1rem; border-radius: var(--d-r-round); background: var(--d-warn); color: var(--d-surface-0); font-size: .7rem; line-height: 1; font-weight: 800; }
+  .vt-cell.unid .vt-name { padding-inline-start: 1.2rem; }
+  .vt-cell.unid.has-art .vt-name { padding-inline-start: 0; }
+  .vt-tag[data-tag="pin"] { color: var(--d-accent-text); } .vt-tag[data-tag="eth"] { color: var(--d-info); }
+  .vt-check-mark { position: absolute; inset-block-end: 1px; inset-inline-end: 3px; font-weight: 700; color: var(--d-accent-text); }
+  .vt-grid[data-mode="list"] { grid-template-columns: minmax(0, 1fr); grid-auto-rows: 4rem; }
+  .vt-grid[data-mode="list"] .vt-cell { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-content: center; font-size: var(--d-fs-1); padding: var(--d-sp-1) var(--d-sp-3); }
+  .vt-grid[data-mode="list"] .vt-name { -webkit-line-clamp: 2; padding-inline-end: 0; padding-inline-start: 1.3rem; }
+  .vt-grid[data-mode="list"] .vt-unid { inset-block-start: 5px; }
+  .vt-grid[data-mode="list"] .vt-tags { position: static; flex-direction: row; align-self: start; }
+  .vt-grid[data-mode="list"] .vt-meta { grid-column: 1 / -1; color: var(--d-text-2); font-size: var(--d-fs-0); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  /* a desktop window: bigger cells, so a 1366 px window shows about 9 columns and a 1920 px one about 10 (not 20 slivers) */
+  @media (min-width: 900px) { .vt-grid { --vt-cell-min: 7rem; grid-auto-rows: 5.5rem; } }
+  @media (min-width: 1600px) { .vt-grid { --vt-cell-min: 9rem; grid-auto-rows: 6rem; } }
+  .vt-shown { margin: 0; text-align: center; }
+  .vt-main > .d-btn { justify-self: center; align-items: center; }
+
+  .vt-state { display: grid; }
+  .vt-card { display: grid; gap: var(--d-sp-2); justify-items: start; padding: var(--d-pad); background: var(--d-surface-1); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-3); max-inline-size: 40rem; }
+  .vt-card h2 { margin: 0; font: 600 var(--d-fs-3)/var(--d-lh-tight) var(--d-font-display); }
+  .vt-card p { margin: 0; color: var(--d-text-2); overflow-wrap: anywhere; }
+  .vt-card .d-btn { align-items: center; }
+
+  .vt-dcard { display: grid; gap: var(--d-sp-2); }
+  .vt-dname { margin: 0; font: 600 var(--d-fs-3)/var(--d-lh-tight) var(--d-font-display); color: var(--q, var(--d-text)); overflow-wrap: anywhere; }
+  .vt-dname.q-magic { --q: var(--d-q-magic); } .vt-dname.q-rare { --q: var(--d-q-rare); } .vt-dname.q-set { --q: var(--d-q-set); }
+  .vt-dname.q-unique { --q: var(--d-q-unique); } .vt-dname.q-crafted { --q: var(--d-q-crafted); } .vt-dname.q-low { --q: var(--d-q-low); }
+  .vt-dstate, .vt-dfound { margin: 0; color: var(--d-text-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .vt-dlines { margin: 0; padding-inline-start: 1.1em; font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .vt-drow { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
+  .vt-drow .d-btn { align-items: center; flex: 1 1 6rem; }
+
+  .vt-sheet { position: fixed; inset: 0; z-index: var(--d-z-banner); display: grid; place-items: center; padding: var(--d-sp-3); background: var(--d-scrim); }
+  .vt-sheet-card { display: grid; gap: var(--d-sp-3); inline-size: min(100%, 30rem); max-block-size: 100%; overflow-y: auto; padding: var(--d-sp-4); background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-3); box-shadow: var(--d-shadow-2); }
+  .vt-sheet-card h2 { margin: 0; font: 600 var(--d-fs-3)/var(--d-lh-tight) var(--d-font-display); overflow-wrap: anywhere; }
+  .vt-sheet-card p { margin: 0; overflow-wrap: anywhere; }
+  .vt-label { display: grid; gap: var(--d-sp-1); font-size: var(--d-fs-1); color: var(--d-text-2); }
+  .vt-row { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--d-sp-2); }
+  .vt-row .d-btn { align-items: center; }
+  .vt-nojs { padding: var(--d-sp-4); }
+  .vt-eq-state { font-weight: 600; }
+  .vt-eq-slot { display: grid; gap: var(--d-sp-1); padding: var(--d-sp-2); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-2); }
+  .vt-eq-slot h3 { margin: 0; font-size: var(--d-fs-2); }
+  .vt-eq-slot p, .vt-eq-lines { margin: 0; overflow-wrap: anywhere; }
+  .vt-eq-lines { padding-inline-start: 1.1rem; }
+  .vt-eq-help, .vt-eq-note, .vt-eq-req { color: var(--d-text-2); font-size: var(--d-fs-1); }
+  .vt-sheet-card .vt-row { flex-wrap: wrap; }
+  .vt-sheet-card .vt-row .d-btn { flex: 1 1 9rem; min-block-size: 2.75rem; }
+}
+
+/* A phone is a page (card mobilequests, 2026-11-21: "can't scroll down"): the frame of 100dvh whose header ate the screen and left the grid a
+   sliver becomes one document that scrolls with the finger, no inner scroll box; the notice rows show two lines and open on a tap. */
+@layer utilities {
+  @media (max-width: 699px) {
+    .vt, .vt-page { block-size: auto; min-block-size: 100dvh; }
+    .vt-body, .vt-main { overflow: visible; min-block-size: auto; }
+  }
+}
+
+@layer panels {
+  /* the quick filter row: one line that scrolls sideways on its own on a phone (a window wraps it) (pan-y stays with the page), so it never traps the page's scroll */
+  .vt-slots { flex: 1 1 100%; display: flex; gap: var(--d-sp-2); overflow-x: auto; touch-action: pan-x pan-y; scrollbar-width: none; }
+  @media (min-width: 900px) { .vt-slots { flex: 1 1 auto; flex-wrap: wrap; overflow: visible; } }
+  .vt-slot { flex: none; min-block-size: 44px; align-items: center; white-space: nowrap; border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-round); padding-inline: var(--d-sp-3); }
+  .vt-slot[aria-pressed="true"] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
+}

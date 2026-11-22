@@ -6,3 +6,55 @@
   .d-muted { color: var(--d-text-2); }
   .d-hidden, [hidden] { display: none; }
 }
+@layer utilities {
+  /* a short phone (360x640): the Needs row and Orders below it share a few dozen pixels (quests8, the 9 px Orders overflow). The row's buttons take
+     the cockpit phone's 38 px, the row loses its padding, a lone row drops its heading (the row says what it is), two or more rows show the first
+     and the panel's own data-scroll list scrolls to the rest; Orders' verbs take 38 px too. Its own layer, after panels, so no important flag. */
+  @media (max-height: 700px) {
+    .d-main[data-cmode="phone"] [data-panel="needs-you"] .n-btn { block-size: 38px; min-block-size: 38px; }
+    .d-main[data-cmode="phone"] [data-panel="needs-you"] .n-row { padding-block: 0; }
+    .d-main[data-cmode="phone"] [data-panel="needs-you"] .n-list:has(> .n-row:nth-child(2)) { max-block-size: 40px; }
+    .d-main[data-cmode="phone"] [data-panel="needs-you"]:has(.n-list > .n-row:only-child):not(:has(.n-dots[data-more="1"])) .n-head { display: none; }
+    .d-main[data-cmode="phone"] [data-panel="orders"] .o-verbs .d-btn { min-block-size: 38px; block-size: 38px; line-height: 36px; }
+  }
+}
+
+/* The phone is a page, not a frame (card mobilequests, bug report 2026-11-21: "I can scroll the quests box but not the page"). The cockpit's
+   fixed 100dvh frame and the panels' own scroll boxes suit a desk window; on a phone a box that scrolls inside the page swallows the
+   finger, so the tab grows to its content and the page scrolls, the band stays on top. Its own layer, after panels (they set the scrollers). */
+@layer utilities {
+  .d-shell[data-template="cockpit"][data-cmode="phone"] { block-size: auto; min-block-size: calc(100dvh - var(--d-banner-h, 0px)); overflow: visible; grid-template-columns: minmax(0, 1fr); grid-template-rows: var(--c-band) auto; }
+  .d-shell[data-template="cockpit"][data-cmode="phone"] > .d-band-status { position: sticky; inset-block-start: 0; z-index: var(--d-z-band); }
+  .d-main[data-template="cockpit"][data-cmode="phone"] { grid-template-rows: auto; align-content: start; min-block-size: 0; }
+  .d-main[data-template="cockpit"][data-cmode="phone"][data-has="sp"] { grid-template-rows: auto auto; align-content: start; }
+  .d-main[data-template="cockpit"][data-cmode="phone"] > [data-cockpit-slot] { overflow: visible; }
+  .d-main[data-template="cockpit"][data-cmode="phone"] > [data-cockpit-slot="stage"] { overflow: hidden; }
+  .d-main[data-template="cockpit"][data-cmode="phone"] > [data-cockpit-slot="phoneTabs"] { grid-template-rows: auto auto; }
+  .d-main[data-cmode="phone"] .d-slottabs { overflow: visible; }
+  .d-main[data-cmode="phone"] .d-slottabs > .d-panel { overflow: visible; max-block-size: none; flex: 0 0 auto; }
+  .d-main[data-cmode="phone"] .d-slottabs > .d-panel > .d-slotbody { block-size: auto; overflow: visible; }
+  .d-main[data-cmode="phone"] .d-slottabs :is(.qb-box, .qb-list, .o-list, .o-items, .rows, .zm-list, .zc-scroll, .n-list, .d-slotbody[data-scroll], [data-scroll]) {
+    flex: 0 0 auto; max-block-size: none; overflow: visible; overscroll-behavior: auto; scrollbar-gutter: auto; }
+  .d-main[data-cmode="phone"] .d-slottabs .o-items { min-block-size: 0; }
+  /* a phone is a scrolling page and its panels take their content's height (utilities.css), so the map has a box of its own: the
+     toolbar and the Layers list sit above it in the flow (nothing floats over the tab row), and the picture is square, at least
+     260 px and at most 70 % of the screen height. */
+  .d-main[data-cmode="phone"] [data-panel="area-map"] .am { position: static; block-size: auto; display: flex; flex-direction: column; gap: var(--d-sp-1); }
+  .d-main[data-cmode="phone"] [data-panel="area-map"] .ctl { position: static; inset: auto; order: -2; justify-content: flex-end; }
+  .d-main[data-cmode="phone"] [data-panel="area-map"] .ctl .d-btn { min-inline-size: 38px; min-block-size: 38px; }
+  .d-main[data-cmode="phone"] [data-panel="area-map"] .layers { position: static; inset: auto; order: -1; max-block-size: none; box-shadow: none; }
+  .d-main[data-cmode="phone"] [data-panel="area-map"] .stage { position: relative; inset: auto; inline-size: 100%; aspect-ratio: 1; min-block-size: 260px; max-block-size: 70dvh; }
+  /* the Act | Area switch is the first row of the map tile in the flow, not a float over the tab row above it (card mapphone, bug 2026-11-22) */
+  .d-main[data-cmode="phone"] .d-slottabs > .d-panel:has(> .d-mapswitch) { display: flex; flex-direction: column; gap: var(--d-sp-1); }
+  .d-main[data-cmode="phone"] .d-slottabs > .d-panel > .d-mapswitch { position: static; order: -1; align-self: flex-end; }
+  /* the quest rows say their whole title (a wrapped line, never an ellipsis) and the badge sits under it when the row is narrow */
+  .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-t, .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-t b { white-space: normal; overflow: visible; text-overflow: clip; min-inline-size: 0; overflow-wrap: anywhere; }
+  .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-row > .qb-w, .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-row > .qb-auto { justify-self: start; }
+}
+
+@layer utilities {
+  /* the band's Vault link: a 44 px hit area on a 32 px button, like the header Reset */
+  .d-band-status .d-links > a[href^="/watch/vault"] { position: relative; }
+  .d-band-status .d-links > a[href^="/watch/vault"]::after { content: ""; position: absolute; inset: -6px -2px; }
+}

@@ -5,6 +5,7 @@
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAeNJREFUWIW9l7FLw0AUh1+K/QPE1GCG7HYpdOxQcMng3lFBl04OroIOdXRQcJAiKNS5q0OXQoSCS2qhtOLoUKmNuLl0qINcuLtc7t5dbH9Tcrn0+5J7d81ZwKVSLi74tv9MLxxZ9Hl8QoM/v76XAt/cWE+IWDR8WeA0kV44snKkcVVwnmWRp3+fTLV/qFrKAwBAMJhr3+u5DgAA5LLAm7dX0Dj2YxGdEGZO2VMCn44eYRZFxhJGAjScJIuEloAInlUCLSCDZ5FY04U7xV3mmsP1HQYtaBz7cHbZQc0OpQD/5O72gbR/p7kTvwmMhHQIRK+9365J4STY4UgVkI05kei3a/ExDdeREApgCg4blYRVKRcX9EpoAp9FkbJPwbYTNeG5jrgIh0ELBS7YNgAAPD2/omX5JIYgGMzh+iFU3ujXu/Hx+d2Hsv/L249wRghrACuBTRocRDVAp1rKw9FeOdFOPz2d08MtLXhqDZD83RgyEn69y6wFdAH69S4jIYOTKFdCXmIyvmeu00vxZLwPNxcnaDhKgJfgZ4hoBmDhoPNviC1MHbiWAEZCF64tIJMwgRsJiCRM4UCK0HMd7S9jUpiQ8bM83hmZfJpniec67M6IGK0KTiLcnC7rbdBgZnNKZ9Xb819x6julinCppwAAAABJRU5ErkJggg==">
 <link rel="stylesheet" href="/watch/tokens.css">
 <link rel="stylesheet" href="/watch/reset.css">
+<link rel="stylesheet" href="/watch/pause.css">
 <link rel="stylesheet" href="/watch/app.css">
 <link rel="stylesheet" href="/watch/shell.css">
 <link rel="stylesheet" href="/watch/components.css">
@@ -18,6 +19,8 @@
  <nav class="d-links" aria-label="Other pages">
   <a class="d-btn" data-size="sm" data-variant="ghost" id="invlink" href="/watch/inventory">Inventory</a>
   <a class="d-btn" data-size="sm" data-variant="ghost" id="skillslink" href="/watch/skills">Skills</a>
+  <a class="d-btn" data-size="sm" data-variant="ghost" id="pointslink" href="/watch/points">Points</a>
+  <a class="d-btn" data-size="sm" data-variant="ghost" id="vaultlink" href="/watch/vault">Vault</a>
   <a class="d-btn" data-size="sm" data-variant="ghost" id="returnlink" href="/watch/return" hidden>Return screen</a>
   <button class="d-btn" data-size="sm" data-variant="ghost" id="btn-help" type="button">Help</button>
   <button class="d-btn" data-size="sm" data-variant="ghost" id="btn-layout" type="button">Edit layout</button>
@@ -40,7 +43,6 @@
  <button type="button" data-view="chronicle" id="tab-chronicle" hidden>Chronicle</button>
  <button type="button" data-view="diary" id="tab-diary" hidden>Diary</button>
  <button type="button" data-view="quests" id="tab-quests" hidden>Quests</button>
- <button type="button" data-view="cards" id="tab-cards" hidden>Cards</button>
  <button type="button" data-view="bestiary" id="tab-bestiary" hidden>Cain's notes</button>
  <button type="button" data-view="atlas" id="tab-atlas" hidden>Atlas</button>
  <button type="button" data-view="alerts" id="tab-alerts" hidden>Alerts <span id="alertbadge" class="badge" hidden></span></button>
@@ -82,10 +84,6 @@
   <ul id="questlist" class="log-list quest-list"></ul>
   <p class="hint" id="questmore"></p>
  </section>
- <section class="card cards" data-lid="cards" id="cardspane" data-v="cards" hidden aria-labelledby="t-cards"><h2 id="t-cards">Find cards <small class="muted">(flip to identify)</small></h2>
-  <label class="hint"><input type="checkbox" id="revealsound" checked> Play a sound on the flip</label>
-  <ul id="cardlist" class="log-list card-list"></ul>
- </section>
  <section class="card silhouettes" data-lid="locked" id="lockedpane" data-v="journal" hidden aria-labelledby="t-locked"><h2 id="t-locked">Still locked <small class="muted">(each opens by itself as the hero plays)</small></h2>
   <ul id="lockedlist" class="log-list"></ul>
  </section>
@@ -118,10 +116,6 @@
 <div class="scrim" id="scrim" hidden></div>
 <div id="toasts" class="toasts d-toasts" role="status" aria-live="polite"></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title" hidden></div>
-<div class="sheet revealsheet" id="revealsheet" role="dialog" aria-modal="true" aria-labelledby="rv-title" hidden>
- <h2 id="rv-title"></h2><p id="rv-text"></p><p class="hint" id="rv-note"></p>
- <div class="btnrow"><button class="btn primary" id="rv-flip" type="button">Flip the card</button><button class="btn ghost" id="rv-close" type="button">Later</button></div>
-</div>
 <div class="toast" id="toast" role="status" hidden></div>
 <script type="module" src="/watch/shell.js"></script>
 <script src="/watch/app.js"></script>

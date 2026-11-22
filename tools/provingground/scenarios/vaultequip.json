@@ -1,0 +1,469 @@
+{
+  "version": "didle.scenario/1",
+  "scenarios": [
+    {
+      "id": "vault.equip-one-tap",
+      "title": "One tap on a Vault helm with the head slot empty: worn within minutes, gone from the Vault, nothing dropped",
+      "kind": "behaviour",
+      "tier": "fast",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 30,
+        "gold": 500,
+        "vault_records": {
+          "items": [
+            {
+              "code": "cap",
+              "quality": 4
+            }
+          ]
+        }
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.0.id}}"
+              ],
+              "slot": "auto",
+              "now": true
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 12
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "notes": "Paladin and Sorceress both wear a helm (cap, S). The vault record leaves the live state (kept): U, needs the vault observer.",
+      "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the order was accepted"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "body",
+          "why": "the helm is worn"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "pack",
+          "max": 0,
+          "why": "it is not left in the backpack"
+        },
+        {
+          "kind": "vault_log",
+          "pattern": "^kept cap",
+          "why": "the record left the vault by a Keep"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in head",
+          "why": "the bot logged the verified equip"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "(drop|trash|sold|sell).*(cap|rin)",
+          "max": 0,
+          "why": "nothing was dropped or sold"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    },
+    {
+      "id": "vault.equip-swap",
+      "title": "One tap on a Vault helm while another is worn: the old one lands in the Vault, nothing dropped or sold",
+      "kind": "behaviour",
+      "tier": "fast",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 30,
+        "gold": 500,
+        "worn": [
+          {
+            "code": "cap",
+            "slot": "head"
+          }
+        ],
+        "vault_records": {
+          "items": [
+            {
+              "code": "cap",
+              "quality": 4
+            }
+          ]
+        }
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.0.id}}"
+              ],
+              "slot": "auto",
+              "now": true
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 12
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "notes": "The old helm exists once: in the vault, not in the hero (the offline test TestEquipSwapKeepsTheOldItem pins it).",
+      "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the order was accepted"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "body",
+          "why": "a helm is worn"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in head, .* went to the vault",
+          "why": "the replaced helm went to the vault"
+        },
+        {
+          "kind": "vault_log",
+          "pattern": "^recorded cap",
+          "why": "the old helm is a vault record"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "pack",
+          "max": 0,
+          "why": "the old helm is not left in the backpack"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "(drop|trash|sold|sell).*(cap|rin)",
+          "max": 0,
+          "why": "nothing was dropped or sold"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    },
+    {
+      "id": "vault.equip-ring-left",
+      "title": "Both ring slots worn, one tap on the left ring button of a Vault ring: that slot swaps, the other is untouched",
+      "kind": "behaviour",
+      "tier": "fast",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 30,
+        "gold": 500,
+        "worn": [
+          {
+            "code": "rin",
+            "slot": "rring",
+            "quality": 4
+          },
+          {
+            "code": "rin",
+            "slot": "lring",
+            "quality": 4
+          }
+        ],
+        "vault_records": {
+          "items": [
+            {
+              "code": "rin",
+              "quality": 4
+            }
+          ]
+        }
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.0.id}}"
+              ],
+              "slot": "left",
+              "now": true
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 12
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "notes": "left is the game's left ring slot (lring) and right is rring, the Inventory page's words (S: which one is drawn on which side of the doll is U live).",
+      "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the order was accepted"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in lring",
+          "why": "the chosen ring slot was used"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in rring",
+          "max": 0,
+          "why": "the other ring slot was not touched"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "rin",
+          "where": "body",
+          "min": 2,
+          "why": "both fingers still wear a ring"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "(drop|trash|sold|sell).*(cap|rin)",
+          "max": 0,
+          "why": "nothing was dropped or sold"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    },
+    {
+      "id": "vault.equip-ring-right",
+      "title": "Both ring slots worn, one tap on the right ring button of a Vault ring: that slot swaps, the other is untouched",
+      "kind": "behaviour",
+      "tier": "fast",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 30,
+        "gold": 500,
+        "worn": [
+          {
+            "code": "rin",
+            "slot": "rring",
+            "quality": 4
+          },
+          {
+            "code": "rin",
+            "slot": "lring",
+            "quality": 4
+          }
+        ],
+        "vault_records": {
+          "items": [
+            {
+              "code": "rin",
+              "quality": 4
+            }
+          ]
+        }
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.0.id}}"
+              ],
+              "slot": "right",
+              "now": true
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 12
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "notes": "left is the game's left ring slot (lring) and right is rring, the Inventory page's words (S: which one is drawn on which side of the doll is U live).",
+      "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the order was accepted"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in rring",
+          "why": "the chosen ring slot was used"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in lring",
+          "max": 0,
+          "why": "the other ring slot was not touched"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "rin",
+          "where": "body",
+          "min": 2,
+          "why": "both fingers still wear a ring"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "(drop|trash|sold|sell).*(cap|rin)",
+          "max": 0,
+          "why": "nothing was dropped or sold"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,184 @@
+{
+ "version": "didle.scenario-result/1",
+ "results": [
+  {
+   "version": "didle.scenario-result/1",
+   "id": "loot.rare-ring-classified",
+   "class": "Paladin",
+   "seed": 11,
+   "status": "GREEN",
+   "asserts": [
+    {
+     "kind": "item_absent",
+     "ok": true,
+     "want": "no rin",
+     "got": "0 x rin",
+     "why": "the ring was picked up (the loot step saw it)"
+    }
+   ],
+   "virtual_min": 10,
+   "budget_min": 10,
+   "wall_sec": 60,
+   "tags": [
+    "CHEATED",
+    "given-item",
+    "position"
+   ],
+   "trace": "provingground-out/20261119-175822/loot.rare-ring-classified_Paladin_11.bot.log",
+   "state": {
+    "version": "didle.scenario-state/1",
+    "source": "d2d-live-attach",
+    "has": [
+     "items",
+     "portals",
+     "ground",
+     "objects"
+    ],
+    "area": 1,
+    "level": 10,
+    "gold": 0,
+    "stash": 0,
+    "life_pct": 100,
+    "right_skill": 98,
+    "left_skill": 0,
+    "quests": {
+     "1": 4
+    },
+    "items": [
+     {
+      "code": "isc",
+      "where": "pack"
+     },
+     {
+      "code": "tsc",
+      "where": "pack"
+     },
+     {
+      "code": "lgl",
+      "where": "ground"
+     },
+     {
+      "code": "aqv",
+      "where": "ground"
+     }
+    ],
+    "objects": [
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 267,
+      "state": "NU"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 119,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 385,
+      "state": "NU"
+     }
+    ],
+    "stats": {
+     "dex": 21,
+     "ene": 15,
+     "skillpts": 0,
+     "skillsspent": 9,
+     "statpts": 0,
+     "str": 42,
+     "vit": 52
+    },
+    "area_changes": 11,
+    "area_trail": [
+     2,
+     1,
+     2,
+     3,
+     4,
+     10,
+     5,
+     10,
+     1,
+     10,
+     4,
+     1
+    ],
+    "writes_after_start": -1
+   },
+   "digest": "fe9aa794c090dcca"
+  }
+ ]
+}

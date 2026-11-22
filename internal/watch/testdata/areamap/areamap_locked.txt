@@ -1,0 +1,22 @@
+<div class="d-panel">
+  <div class="d-slotbody">
+    <div class="am">
+      <div class="stage">
+        <canvas class="cv" aria-label="Top-down map of the area; the cross is the hero" role="img">
+        <div class="empty"> "The map opens with the first unlock."
+      <div class="ctl">
+        <button class="d-btn" data-key="zout" data-size="sm" aria-label="Zoom out" type="button"> "-"
+        <button class="d-btn" data-key="zin" data-size="sm" aria-label="Zoom in" type="button"> "+"
+        <button class="d-btn" data-key="layers" data-size="sm" aria-expanded="false" aria-label="Map layers: trail, coverage, heat, events" type="button"> "Layers"
+      <div class="layers" hidden>
+        <div class="lbl"> "Trail"
+        <div class="row">
+          <button class="d-btn" data-key="trail-30000" data-size="sm" aria-label="Trail window 30 s" type="button"> "30 s"
+          <button class="d-btn" data-key="trail-60000" data-size="sm" aria-label="Trail window 1 min" type="button"> "1 min"
+          <button class="d-btn" data-key="trail-300000" data-size="sm" aria-label="Trail window 5 min" type="button"> "5 min"
+          <button class="d-btn" data-key="trail-1800000" data-size="sm" aria-label="Trail window 30 min" type="button"> "30 min"
+        <div class="lbl"> "Layers"
+        <div class="row">
+          <button class="d-btn" data-key="coverage" data-size="sm" aria-label="Show the exploration coverage grid" aria-pressed="false" type="button"> "Coverage"
+          <button class="d-btn" data-key="heat" data-size="sm" aria-label="Heat layer: kills, time spent or damage taken, per cell" type="button"> "Heat: off"
+          <button class="d-btn" data-key="events" data-size="sm" aria-label="Event markers on the trail: key events, all, or off" type="button"> "Events: key"

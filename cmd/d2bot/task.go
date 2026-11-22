@@ -213,14 +213,18 @@ func (r *saveQuestReader) Read(diff int) (bot.QuestView, bool) {
 		if info.Evidence == quest.EvMemory {
 			ev = task.EvMemory
 		}
+		st := task.QuestState{Ev: ev, Raw: info.Raw}
 		switch {
 		case info.Status == quest.Done:
-			v.Quests[tid] = task.QuestState{Stage: task.StageDone, Ev: ev}
+			st.Stage = task.StageDone
 		case info.Status == quest.Started && info.Pending:
-			v.Quests[tid] = task.QuestState{Stage: task.StageCleared, Ev: ev}
+			st.Stage = task.StageCleared
 		case info.Status == quest.Started:
-			v.Quests[tid] = task.QuestState{Stage: task.StageStarted, Ev: ev}
+			st.Stage = task.StageStarted
+		default:
+			continue // untouched: left to the in-game proxies, as before
 		}
+		v.Quests[tid] = st
 	}
 	for _, wp := range prog.Difficulty[diff].Waypoints {
 		on := wp.Active
@@ -256,7 +260,7 @@ func newTaskDeps(ctx context.Context, o options, tw *town.Town, nv *nav.Navigato
 	rd.mem = memQuestSource(e) // questmem needs the memory reader; d2d has its own source (d2dbackend.go)
 	return &bot.TaskDeps{
 		Dialog:   talk.Adapter{T: tw, E: e, Status: rd.status},
-		Objects:  objectAdapter{e: e, nv: nv, clicked: &onceSet{}},
+		Objects:  objectAdapter{e: e, nv: nv, clicked: &onceSet{}, explored: &exploreTally{}},
 		Cube:     func(ctx context.Context, in []string) error { _, err := tw.Transmute(ctx, in); return err },
 		HireMerc: mercHirer(tw, e),
 		Waypoint: nv.ActivateWaypoint,

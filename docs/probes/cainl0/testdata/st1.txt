@@ -1,0 +1,78 @@
+> debug goto 4
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=38.62,38.62 walking=1 dir=6 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=0 str=10 life=40/40 mana=35/35 stamina=18944/18944 level=1 exp=0 pmode=- missiles=0 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=0 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4673 music_old=0 quake=0,0,0,0,0 sfx=2722:0:1.00/1.00,2720:0:1.00/1.00,2723:0:1.00/1.00,2722:0:1.00/1.00,2720:0:1.00/1.00
+ err=<nil>
+> debug presets
+0	83	53.5	34.5	0	Shrine
+1	139	33.7	41.3	0	Chest
+2	144	25.7	46.3	0	Chest
+3	141	46.3	28.9	0	Chest
+4	83	29.5	34.5	0	Shrine
+room	9	12	4
+room	6	20	4
+room	6	28	4
+room	6	36	4
+room	6	44	4
+room	6	52	4
+room	6	60	4
+room	10	68	4
+room	9	4	12
+room	13	12	12
+room	31	60	12
+room	7	68	12
+room	5	4	20
+room	162	28	20
+room	15	36	20
+room	12	44	20
+room	14	68	20
+room	10	76	20
+room	5	4	28
+room	49	20	28
+room	7	36	28
+room	5	44	28
+room	7	76	28
+room	5	4	36
+room	47	20	36
+room	14	36	36
+room	13	44	36
+room	15	68	36
+room	11	76	36
+room	5	4	44
+room	51	20	44
+room	14	68	44
+room	10	76	44
+room	5	4	52
+room	42	28	52
+room	15	36	52
+room	4	44	52
+room	12	52	52
+room	7	76	52
+room	5	4	60
+room	45	12	60
+room	160	20	60
+room	14	36	60
+room	10	44	60
+room	5	52	60
+room	15	68	60
+room	11	76	60
+room	8	4	68
+room	4	12	68
+room	12	20	68
+room	15	36	68
+room	11	44	68
+room	5	52	68
+room	7	68	68
+room	8	20	76
+room	4	28	76
+room	11	36	76
+room	8	52	76
+room	4	60	76
+room	11	68	76 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU err=<nil>

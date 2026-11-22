@@ -7,11 +7,15 @@ import (
 	"image/color"
 	"image/jpeg"
 	"image/png"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strconv"
 	"testing"
 	"time"
+
+	"d2lod-bot/internal/watch/palfeed"
 )
 
 // testFrame is a busy 800x600 picture (gradients and noise-like stripes), opaque like d2d's frames.
@@ -329,5 +333,119 @@ func TestHideCursorVerb(t *testing.T) {
 	fr.cursorOld = false
 	if _, err := fr.sample(ctx); err != nil {
 		t.Logf("sample: %v (the fake has no picture; the cursor verb must not be the cause)", err)
+	}
+}
+
+// The lossless feed gets every ring frame; the JPEG is encoded only while an MJPEG viewer touched the frames lately.
+func TestGrabRingFeedsPalHubAndSkipsJPEGWithoutMJPEGViewer(t *testing.T) {
+	mux, _, _, view := rig(t)
+	dir := t.TempDir()
+	fr, err := NewFrames(view, mux, dir, 25)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fr.Feed = filepath.Join(dir, "frames.ring")
+	fr.Pal = palfeed.NewHub()
+	w, err := os.OpenFile(fr.Feed, os.O_RDWR|os.O_CREATE, 0o600)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer w.Close()
+	fr.TouchPal() // only the lossless feed has a viewer
+	if !fr.watching() {
+		t.Fatal("a pal viewer must keep the sampler awake")
+	}
+	writeRing(w, 64, 48, testFrame(64, 48), 1, 40)
+	if _, fresh, err := fr.grabRing(); !fresh || err != nil {
+		t.Fatalf("fresh=%v err=%v", fresh, err)
+	}
+	if fr.Current().Data != nil {
+		t.Fatal("JPEG encoded with no MJPEG viewer")
+	}
+	srv := httptest.NewServer(fr.Pal.Capability(palfeed.Options{Auth: func(*http.Request) bool { return true }}))
+	defer srv.Close()
+	resp, err := http.Get(srv.URL)
+	if err != nil || resp.StatusCode != 200 {
+		t.Fatalf("capability %v %v", resp, err)
+	}
+	resp.Body.Close()
+	fr.Touch() // an MJPEG viewer joins
+	writeRing(w, 64, 48, testFrame(64, 48), 2, 80)
+	fr.grabRing()
+	if fr.Current().Data == nil {
+		t.Fatal("no JPEG for the MJPEG viewer")
+	}
+}
+
+// The 14-15 fps cap (docs/video-feed.md section 11): the ring divisor followed the JPEG's -fps target and back-off, so -fps 15
+// gave every 4th draw and -fps 25 every 3rd (20 fps). With a lossless-feed viewer it asks for every 2nd draw (30 fps).
+func TestDivisorFollowsRenderRateForPalViewers(t *testing.T) {
+	mux, _, _, view := rig(t)
+	fr, err := NewFrames(view, mux, t.TempDir(), 15)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fr.srcPeriod = time.Second / 60
+	fr.costEMA = 9 * time.Millisecond // a JPEG encode
+	if k := fr.divisor(); k != 4 {
+		t.Fatalf("-fps 15 without a pal viewer: every %d, want 4 (unchanged)", k)
+	}
+	fr.fps = 25
+	fr.every = 0
+	if k := fr.divisor(); k != 3 {
+		t.Fatalf("-fps 25: every %d, want 3 (unchanged)", k)
+	}
+	fr.Pal = palfeed.NewHub()
+	fr.TouchPal()
+	fr.every = 0
+	if k := fr.divisor(); k != 2 {
+		t.Fatalf("pal viewer: every %d, want 2 (30 fps)", k)
+	}
+	fr.srcPeriod = 33 * time.Millisecond // a d2d that draws at 30 Hz: every draw
+	fr.every = 0
+	if k := fr.divisor(); k != 1 {
+		t.Fatalf("30 Hz source: every %d, want 1", k)
+	}
+}
+
+func TestJPEGRunsAtItsOwnCadenceNextToTheFeed(t *testing.T) {
+	mux, _, _, view := rig(t)
+	fr, err := NewFrames(view, mux, t.TempDir(), 10)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fr.Pal = palfeed.NewHub()
+	fr.Touch()
+	fr.TouchPal()
+	fr.costEMA = time.Millisecond
+	fr.jpegAt = time.Now()
+	if fr.jpegWanted() {
+		t.Fatal("a JPEG right after the last one at -fps 10")
+	}
+	fr.jpegAt = time.Now().Add(-120 * time.Millisecond)
+	if !fr.jpegWanted() {
+		t.Fatal("no JPEG due after 120 ms at -fps 10")
+	}
+}
+
+// A throttled container (the sandbox's one-core quota, saturated by a bot burst) gets half the feed rate until it recovers.
+func TestDivisorHalvesTheFeedWhileTheContainerIsThrottled(t *testing.T) {
+	mux, _, _, view := rig(t)
+	fr, err := NewFrames(view, mux, t.TempDir(), 25)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fr.srcPeriod = time.Second / 60
+	fr.Pal = palfeed.NewHub()
+	fr.TouchPal()
+	fr.thr = 20
+	fr.every = 0
+	if k := fr.divisor(); k != 2 {
+		t.Fatalf("not throttled: every %d, want 2", k)
+	}
+	fr.thr = 80
+	fr.every = 0
+	if k := fr.divisor(); k != 4 {
+		t.Fatalf("throttled: every %d, want 4 (15 fps)", k)
 	}
 }

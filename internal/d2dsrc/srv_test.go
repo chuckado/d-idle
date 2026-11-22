@@ -43,7 +43,7 @@ func sampleReplies() map[string]string {
 	}
 }
 
-func startScript(t *testing.T, reply map[string]string) (*script, *d2dctl.Client) {
+func startScript(t testing.TB, reply map[string]string) (*script, *d2dctl.Client) {
 	t.Helper()
 	dir, err := os.MkdirTemp("", "d2dsrc")
 	if err != nil {
@@ -89,7 +89,7 @@ func startScript(t *testing.T, reply map[string]string) (*script, *d2dctl.Client
 	return s, cl
 }
 
-func readFile(t *testing.T, name string) string {
+func readFile(t testing.TB, name string) string {
 	t.Helper()
 	b, err := os.ReadFile(filepath.Join("testdata", name))
 	if err != nil {

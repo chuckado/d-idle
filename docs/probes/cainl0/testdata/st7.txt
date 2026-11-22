@@ -1,0 +1,163 @@
+> debug goto 4
+40.0 40.0 err=<nil>
+> step 25 err=<nil>
+> debug warp 24 56
+ err=<nil>
+> step 25 err=<nil>
+> debug kill
+ err=<nil>
+> click 400 300
+
+ err=<nil>
+> step 5 err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 60 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=20.79,58.12 walking=0 dir=5 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=15 str=10 life=40/43 mana=41/41 stamina=19712/19712 level=4 exp=4200 pmode=- missiles=0 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=3 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4679 music_old=4673 quake=0,0,0,0,0 sfx=237:0:0.00/0.00,2722:0:0.96/0.97,2723:0:0.96/0.97,2721:0:0.96/0.97,2723:0:0.96/0.97,2720:0:0.96/0.97,2722:0:0.96/0.97,2722:0:0.96/0.97,2721:0:0.96/0.97,2723:0:0.98/0.98,3279:0:1.00/1.00,2723:0:0.96/0.97,2720:0:0.96/0.97,900:0:0.59/0.33,901:0:0.58/0.32,900:0:0.60/0.40,904:0:0.45/0.23,685:0:0.18/0.49,685:0:0.52/0.70,2217:0:0.27/0.21,2217:0:0.07/0.12,2720:0:0.97/0.96,2720:0:0.96/0.97,243:0:0.00/0.02,3287:0:0.00/0.82,249:0:0.00/0.16,221:0:0.58/0.30,246:0:0.02/0.00,2720:0:0.96/0.97
+ err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	NU
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	NU
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 60 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=20.79,58.12 walking=0 dir=5 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=15 str=10 life=40/43 mana=41/41 stamina=19712/19712 level=4 exp=4200 pmode=- missiles=0 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=3 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4679 music_old=4673 quake=0,0,0,0,0 sfx=237:0:0.00/0.00,2722:0:0.96/0.97,2723:0:0.96/0.97,2721:0:0.96/0.97,2723:0:0.96/0.97,2720:0:0.96/0.97,2722:0:0.96/0.97,2722:0:0.96/0.97,2721:0:0.96/0.97,2723:0:0.98/0.98,3279:0:1.00/1.00,194:0:0.00/0.05,2723:0:0.96/0.97,2720:0:0.96/0.97,900:0:0.59/0.33,901:0:0.58/0.32,900:0:0.60/0.40,904:0:0.45/0.23,685:0:0.18/0.49,685:0:0.52/0.70,2217:0:0.27/0.21,2217:0:0.07/0.12,2720:0:0.97/0.96,2720:0:0.96/0.97,243:0:0.00/0.02,3287:0:0.00/0.82,249:0:0.00/0.16,221:0:0.58/0.30,246:0:0.02/0.00,2720:0:0.96/0.97
+ err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	NU
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	NU
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON err=<nil>
+> cmd interact 10
+
+ err=<nil>
+> step 60 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=20.79,58.12 walking=0 dir=5 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=15 str=10 life=40/43 mana=41/41 stamina=19712/19712 level=4 exp=4200 pmode=- missiles=0 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=3 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4679 music_old=4673 quake=0,0,0,0,0 sfx=237:0:0.00/0.00,2722:0:0.96/0.97,2723:0:0.96/0.97,2721:0:0.96/0.97,2723:0:0.96/0.97,2720:0:0.96/0.97,2722:0:0.96/0.97,2722:0:0.96/0.97,2721:0:0.96/0.97,2723:0:0.98/0.98,3279:0:1.00/1.00,194:0:0.00/0.05,2723:0:0.96/0.97,2720:0:0.96/0.97,900:0:0.59/0.33,901:0:0.58/0.32,900:0:0.60/0.40,904:0:0.45/0.23,685:0:0.18/0.49,685:0:0.52/0.70,2217:0:0.27/0.21,2217:0:0.07/0.12,2720:0:0.97/0.96,2720:0:0.96/0.97,243:0:0.00/0.02,3287:0:0.00/0.82,249:0:0.00/0.16,221:0:0.58/0.30,246:0:0.02/0.00,2720:0:0.96/0.97
+ err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	NU
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	NU
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 60 err=<nil>
+> cmd interact 15
+
+ err=<nil>
+> step 60 err=<nil>
+> debug objects
+0	53.5	34.5	shrine	1	-	NU
+1	33.7	41.3	chest	0	locked	NU
+2	25.7	46.3	chest	0	-	NU
+3	46.3	28.9	chest	0	-	NU
+4	29.5	34.5	shrine	15	-	NU
+5	29.3	49.1	op13	37	-	ON
+6	25.9	51.1	op13	37	-	ON
+7	26.7	55.5	op13	37	-	ON
+8	30.9	51.9	op13	37	-	ON
+9	27.7	54.5	op14	269	-	NU
+10	19.1	59.1	op9	17	-	NU
+11	20.7	62.1	op9	20	-	NU
+12	19.1	60.7	op9	21	-	NU
+14	21.9	60.9	op9	19	-	NU
+15	20.7	59.1	op9	18	-	NU
+17	9.5	62.3	op13	37	-	ON
+18	12.7	57.5	op13	37	-	ON err=<nil>
+> npcs
+Shrine	4907	656	0	0	53.5	34.5
+Chest	2779	136	0	1	33.7	41.3
+Chest	1739	16	0	2	25.7	46.3
+Chest	4779	144	0	3	46.3	28.9
+Shrine	2987	-304	0	4	29.5	34.5
+Cairn Stone	187	264	0	10	19.1	59.1
+Cairn Stone	75	448	0	11	20.7	62.1
+Cairn Stone	59	328	0	12	19.1	60.7
+Cairn Stone	267	448	0	14	21.9	60.9
+Cairn Stone	315	328	0	15	20.7	59.1
+ err=<nil>
+> ground
+gld	2 Gold	3627	704	#1	46.1	43.1
+rvs	Rejuvenation Potion	3451	1480	#2	54.7	53.9
+gld	9 Gold	3371	1472	#3	54.1	54.3
+tkf	Throwing Knife	3515	1464	#4	54.9	53.3
+gld	18 Gold	3723	976	#5	50.1	45.9
+lgl	Superior Leather Gloves	4507	408	#6	47.9	33.9
+gld	13 Gold	4443	392	#7	47.3	34.1
+cap	Cap	4459	432	#8	47.9	34.5
+gld	10 Gold	4539	424	#9	48.3	33.9
+ktr	Katar	2475	-176	#10	27.9	39.3
+hp1	Minor Healing Potion	2459	-184	#11	27.7	39.3
+hp2	Light Healing Potion	2491	-168	#12	28.1	39.3
+hp2	Light Healing Potion	2491	-184	#13	27.9	39.1
+hp1	Minor Healing Potion	2459	-168	#14	27.9	39.5
+hp1	Minor Healing Potion	-69	904	#15	25.5	68.7
+hp1	Minor Healing Potion	-133	920	#16	25.3	69.3
+tsc	Scroll of Town Portal	1435	168	#17	25.7	50.1
+hp1	Minor Healing Potion	1323	160	#18	24.9	50.7
+hp1	Minor Healing Potion	1339	568	#19	30.1	55.7
+buc	Crude Buckler	1291	464	#20	28.5	54.7
+mp2	Light Mana Potion	1339	344	#21	27.3	52.9
+aqv	Arrows	1531	392	#22	29.1	52.3
+gld	1 Gold	1371	360	#23	27.7	52.9
+isc	Scroll of Identify	1755	424	#24	30.9	51.3
+hp1	Minor Healing Potion	1819	408	#25	31.1	50.7
+hp1	Minor Healing Potion	1851	424	#26	31.5	50.7
+hp1	Minor Healing Potion	1691	552	#27	32.1	53.3
+dr1	Wolf Head	1627	488	#28	30.9	52.9
+ktr	Katar	123	376	#29	20.1	60.9
+pa1	Targe	107	368	#30	19.9	60.9
+hp1	Minor Healing Potion	139	384	#31	20.3	60.9
+hp1	Minor Healing Potion	139	368	#32	20.1	60.7
+hp2	Light Healing Potion	107	384	#33	20.1	61.1
+mp1	Minor Mana Potion	123	360	#34	19.9	60.7
+scm	Scimitar	187	440	#35	21.3	61.3
+gld	22 Gold	635	328	#36	22.7	57.1
+ err=<nil>

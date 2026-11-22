@@ -1,0 +1,227 @@
+{
+ "version": "didle.scenario-result/1",
+ "results": [
+  {
+   "version": "didle.scenario-result/1",
+   "id": "chicken.recovery",
+   "class": "Paladin",
+   "seed": 11,
+   "status": "RED",
+   "reason": "item_in_pack: wanted \u003e= 1 x hp1, got 0 x hp1",
+   "asserts": [
+    {
+     "kind": "life_pct_at_least",
+     "ok": true,
+     "want": "life \u003e= 60%",
+     "got": "life 100%",
+     "why": "rested or healed before going on"
+    },
+    {
+     "kind": "item_in_pack",
+     "ok": false,
+     "want": "\u003e= 1 x hp1",
+     "got": "0 x hp1",
+     "why": "restocked before re-entering the field"
+    },
+    {
+     "kind": "area_changes_le",
+     "ok": false,
+     "want": "area changes \u003c= 8",
+     "got": "18 area changes",
+     "why": "leave, heal, return: not a loop"
+    }
+   ],
+   "virtual_min": 15,
+   "budget_min": 15,
+   "wall_sec": 96,
+   "tags": [
+    "CHEATED",
+    "position"
+   ],
+   "trace": "provingground-out/20261119-175645/chicken.recovery_Paladin_11.bot.log",
+   "state": {
+    "version": "didle.scenario-state/1",
+    "source": "d2d-live-attach",
+    "has": [
+     "items",
+     "portals",
+     "ground",
+     "objects"
+    ],
+    "area": 1,
+    "level": 10,
+    "gold": 24,
+    "stash": 0,
+    "life_pct": 100,
+    "right_skill": 98,
+    "left_skill": 0,
+    "quests": {
+     "1": 4
+    },
+    "items": [
+     {
+      "code": "ssd",
+      "where": "body"
+     },
+     {
+      "code": "buc",
+      "where": "body"
+     },
+     {
+      "code": "isc",
+      "where": "pack"
+     },
+     {
+      "code": "tbk",
+      "where": "pack"
+     },
+     {
+      "code": "mp1",
+      "where": "belt"
+     },
+     {
+      "code": "dgr",
+      "where": "pack"
+     },
+     {
+      "code": "ssd",
+      "where": "pack"
+     }
+    ],
+    "objects": [
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 267,
+      "state": "NU"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 119,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 385,
+      "state": "NU"
+     }
+    ],
+    "stats": {
+     "dex": 21,
+     "ene": 15,
+     "skillpts": 0,
+     "skillsspent": 9,
+     "statpts": 0,
+     "str": 42,
+     "vit": 52
+    },
+    "portals": [
+     {
+      "which": 0,
+      "level": 2
+     },
+     {
+      "which": 1,
+      "level": 1
+     }
+    ],
+    "area_changes": 18,
+    "area_trail": [
+     2,
+     1,
+     2,
+     3,
+     4,
+     10,
+     1,
+     10,
+     5,
+     10,
+     4,
+     1,
+     2,
+     3,
+     4,
+     3,
+     1,
+     2,
+     1
+    ],
+    "writes_after_start": -1
+   },
+   "digest": "8e308ce8c9ac517f"
+  }
+ ]
+}
