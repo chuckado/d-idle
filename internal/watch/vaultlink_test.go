@@ -17,7 +17,7 @@ func TestBandVaultLink(t *testing.T) {
 		t.Error("shell.js: the Vault link does not take VAULT_URL (theme passthrough)")
 	}
 	vjs, _ := webFS.ReadFile("web/vault.js")
-	if !strings.Contains(string(vjs), "back.href = d.backHref || '/watch'") {
+	if !strings.Contains(string(vjs), "back.href = d.backHref || '/watch?live=1'") {
 		t.Error("vault.js: the Vault page has no Back link")
 	}
 }
