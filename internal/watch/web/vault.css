@@ -38,6 +38,7 @@
   .vt-chip[data-q="unique"] { --q: var(--d-q-unique); } .vt-chip[data-q="crafted"] { --q: var(--d-q-crafted); } .vt-chip[data-q="low"] { --q: var(--d-q-low); }
   .vt-chip { border-block-end: 3px solid var(--q, var(--d-q-normal)); align-items: center; }
   .vt-markchip { border-block-end-color: var(--d-warn); font-weight: 650; }
+  .vt-identall { font-weight: 650; border-block-end-color: var(--d-accent, currentColor); }
   .vt-fgrid { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); align-items: center; }
   .vt-fgrid > select { flex: 0 1 10rem; }
   .vt-fgrid > .d-btn { align-items: center; }
