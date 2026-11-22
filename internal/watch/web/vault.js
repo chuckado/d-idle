@@ -10,6 +10,7 @@ import { PAGE, equipPlan, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS,
 export const ROUTE = '/api/vault';
 const POLL_MS = 6000;
 const LONG_PRESS_MS = 500;
+const TOAST_MS = 10000; // a status chip or toast stays this long, then goes (or on dismiss)
 const TYPED_ABOVE = 10; // a discard of more items than this asks for the number typed
 const MAX_LOADED = 6000; // rows kept in memory at most (a vault holds a few thousand); only the rows near the view are drawn
 const grp = (n) => String(Math.max(Math.round(n) || 0, 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); // 5,800
@@ -55,30 +56,16 @@ export function mountVault(d) {
   meterBox.append(meterLabel, meter, meterText, pinsText, wallet, upgrade, downgrade, upgradeWhy, downWhy);
   head.append(back, h1, heroName, meterBox);
 
-  // Folds: a block that can fill the window (the Reveal bar, Marked for sale) is one line that opens on a tap; the choice is remembered per block.
-  const foldGet = (k) => { try { return localStorage.getItem('vt-fold-' + k); } catch (e) { return null; } };
-  const foldPut = (k, v) => { try { localStorage.setItem('vt-fold-' + k, v ? '1' : '0'); } catch (e) { /* storage blocked */ } };
-  function foldBtn(text) {
-    const b = el('button', 'vt-fold'); b.type = 'button'; b.append(el('span', 'vt-fold-caret'), text);
-    b.addEventListener('click', () => { const box = b.parentElement.closest('[data-fold]'); const open = box.dataset.open !== '1'; foldPut(box.dataset.fold, open); box.dataset.open = open ? '1' : '0'; b.setAttribute('aria-expanded', String(open)); });
-    return b;
-  }
-  function setFold(box, b, key, dflt) {
-    box.dataset.fold = key;
-    const v = foldGet(key), open = v === null ? dflt : v === '1';
-    box.dataset.open = open ? '1' : '0'; b.setAttribute('aria-expanded', String(open));
-  }
   const banner = el('p', 'vt-banner'); banner.hidden = true; banner.setAttribute('role', 'status');
 
   // ---- filters ----
   const filters = el('section', 'vt-filters'); filters.setAttribute('aria-label', T.filters);
-  const frow = el('div', 'vt-frow');
+  const tools = el('div', 'vt-tools'); // the one toolbar row: category chips, search, Filters, sort, view, Select, Marked for sale
   const search = el('input', 'vt-input vt-search'); search.type = 'search'; search.placeholder = T.searchHolder; search.setAttribute('aria-label', T.searchLabel); search.maxLength = 64; search.dataset.key = 'search';
   const ftoggle = btn(T.filters, { key: 'filters-toggle', variant: 'ghost' }); ftoggle.setAttribute('aria-expanded', 'false'); ftoggle.setAttribute('aria-controls', 'vt-fpanel'); ftoggle.classList.add('vt-ftoggle');
   const sortSel = el('select', 'vt-input'); sortSel.setAttribute('aria-label', T.sortLabel); sortSel.dataset.key = 'sort';
   SORTS.forEach((s) => { const o = el('option', '', T.sorts[s]); o.value = s; sortSel.appendChild(o); });
   const viewBtn = btn(T.viewList, { key: 'view-toggle', variant: 'ghost' }); viewBtn.setAttribute('aria-label', T.viewLabel); viewBtn.classList.add('vt-viewtoggle');
-  frow.append(search, ftoggle, sortSel, viewBtn);
   const fpanel = el('div', 'vt-fpanel'); fpanel.id = 'vt-fpanel';
   const chips = el('div', 'vt-chips'); chips.setAttribute('role', 'group'); chips.setAttribute('aria-label', T.qualityLabel);
   const qbtn = {};
@@ -106,51 +93,54 @@ export function mountVault(d) {
   const fgrid = el('div', 'vt-fgrid');
   fgrid.append(kindSel, typeSel, sockSel, lo, hi, stateSel, ethC.l, unidC.l, pinC.l, clear);
   fpanel.append(chips, fgrid);
-  filters.append(frow, fpanel);
+  filters.append(fpanel);
 
-  // ---- selection bar ----
-  const bar = el('section', 'vt-bar'); bar.setAttribute('aria-label', T.select);
-  const selBtn = btn(T.select, { key: 'select-toggle', variant: 'ghost' }); selBtn.setAttribute('aria-pressed', 'false');
+  // ---- the one action bar: what can be done now (reveal what the filter holds, or act on the selection), plus the order chip and the queue notes ----
+  const selBtn = btn(T.select, { key: 'select-toggle', variant: 'ghost' }); selBtn.setAttribute('aria-pressed', 'false'); selBtn.classList.add('vt-selbtn'); // in the toolbar
+  const doneB = btn(T.selectOff, { key: 'select-done', variant: 'ghost' });
   const selText = el('span', 'vt-seltext'); selText.setAttribute('aria-live', 'polite');
   const selAll = btn(T.selectAll, { key: 'select-all', variant: 'ghost' });
   const pinB = btn(T.pin, { key: 'pin' }), unpinB = btn(T.unpin, { key: 'unpin' }), discB = btn(T.discard, { key: 'discard', variant: 'danger' });
   const keepB = btn(T.keep, { key: 'keep' });
   const revealB = btn(T.reveal, { key: 'reveal' }), sellB = btn(T.sell, { key: 'sell' });
   const etherB = btn(T.revealEther, { key: 'reveal-ether' }); etherB.hidden = true;
-  const goldB = btn(T.revealGoldSel, { key: 'reveal-gold' }); goldB.hidden = true; // the one reveal button while only Gold is offered
+  const goldB = btn('', { key: 'reveal-gold' }); goldB.hidden = true; // the one reveal button while only Gold is offered
   const acts = el('div', 'vt-acts'); acts.append(keepB, revealB, etherB, goldB, sellB, pinB, unpinB, discB);
-  bar.append(selBtn, selText, selAll, acts);
-  // ---- the Reveal bar: one bar for the items of the identify filter, a payment picker with one cost line each ----
+  // a button with a muted second line (the cost): the label stays the button's name
+  const setBtn = (b, label, sub) => { b.replaceChildren(el('span', 'vt-b-label', label), ...(sub ? [el('small', 'vt-sub', sub)] : [])); };
+  const gSel = el('div', 'vt-ab-sel'); gSel.hidden = true; gSel.append(selText, selAll, acts, doneB);
   const RT = T.revealBar || {};
   const RB = { pay: '', confirming: false };
-  const rb = el('section', 'vt-revealbar'); rb.hidden = true; rb.setAttribute('aria-label', RT.label || '');
-  const rbTitle = el('p', 'vt-rb-title'); rbTitle.setAttribute('role', 'status');
-  const rbText = el('span', 'vt-fold-text'), rbFold = foldBtn(rbText); rbTitle.append(rbFold);
   const rbOpts = el('div', 'vt-rb-opts'); rbOpts.setAttribute('role', 'radiogroup'); rbOpts.setAttribute('aria-label', RT.payLabel || '');
   const rbGo = btn('', { key: 'reveal-bar-go' }), rbYes = btn(RT.confirmYes, { key: 'reveal-bar-yes' }), rbNo = btn(RT.confirmNo, { key: 'reveal-bar-back', variant: 'ghost' });
   const rbAsk = el('span', 'vt-rb-ask'); rbAsk.setAttribute('role', 'alert');
   const rbWhy = el('span', 'vt-rb-why');
-  const rbRow = el('div', 'vt-rb-row'); rbRow.append(rbGo, rbAsk, rbYes, rbNo, rbWhy);
   const rbSkip = el('details', 'vt-rb-skip'), rbSkipSum = el('summary'), rbSkipList = el('ul'); rbSkip.append(rbSkipSum, rbSkipList);
-  const rbOrder = el('div', 'vt-rb-order'), rbSteps = el('ol', 'vt-rb-steps'), rbProg = el('span', 'vt-rb-prog'), rbNote = el('span', 'vt-rb-note');
+  const gReveal = el('div', 'vt-ab-reveal'); gReveal.hidden = true; gReveal.setAttribute('aria-label', RT.label || '');
+  gReveal.append(rbGo, rbAsk, rbYes, rbNo, rbOpts, rbWhy, rbSkip);
+  // the order chain is a status chip: it shows while an order runs and for TOAST_MS after it ends, then goes (never a permanent band)
+  const rbSteps = el('ol', 'vt-rb-steps'), rbProg = el('span', 'vt-rb-prog'), rbNote = el('span', 'vt-rb-note');
   const rbCancel = btn(RT.cancel, { key: 'reveal-bar-cancel', variant: 'ghost' });
-  rbOrder.append(rbSteps, rbProg, rbNote, rbCancel);
-  const rbBody = el('div', 'vt-fold-body'); rbBody.append(rbOpts, rbRow, rbSkip, rbOrder);
-  rb.append(rbTitle, rbBody);
-  const keepRow = el('div', 'vt-keeprow'); keepRow.hidden = true;
+  const rbDismiss = btn('×', { key: 'status-dismiss', variant: 'ghost' }); rbDismiss.setAttribute('aria-label', T.dismiss || 'Dismiss');
+  const gOrder = el('div', 'vt-ab-order'); gOrder.hidden = true; gOrder.setAttribute('role', 'status');
+  gOrder.append(rbSteps, rbProg, rbNote, rbCancel, rbDismiss);
   const keepLine = el('span', 'vt-keepline'); keepLine.setAttribute('role', 'status');
   const keepNowB = btn(T.keepNow, { key: 'keep-now', variant: 'ghost' }); keepNowB.title = T.keepNowWhy;
-  keepRow.append(keepLine, keepNowB);
-  const actRow = el('div', 'vt-keeprow vt-actrow'); actRow.hidden = true;
   const actLine = el('span', 'vt-keepline'); actLine.setAttribute('role', 'status');
   const buyB = btn(T.buyScrolls, { key: 'buy-scrolls', variant: 'ghost' }); buyB.title = T.buyScrollsWhy; buyB.hidden = true;
   const costLine = el('span', 'vt-costline'); costLine.setAttribute('role', 'status'); costLine.hidden = true;
-  actRow.append(costLine, actLine, buyB);
-  const promptRow = el('div', 'vt-keeprow vt-promptrow'); promptRow.hidden = true;
   const promptLine = el('span', 'vt-keepline'); promptLine.setAttribute('role', 'status');
   const promptYes = btn(T.promptYes, { key: 'prompt-yes' }), promptNo = btn(T.promptNo, { key: 'prompt-no', variant: 'ghost' });
-  promptRow.append(promptLine, promptYes, promptNo);
-  const msg = el('p', 'vt-msg'); msg.hidden = true; msg.setAttribute('role', 'status');
+  const gNotes = el('div', 'vt-ab-notes'); gNotes.hidden = true;
+  gNotes.append(costLine, keepLine, keepNowB, actLine, buyB, promptLine, promptYes, promptNo);
+  const bar = el('section', 'vt-actionbar'); bar.hidden = true; bar.setAttribute('aria-label', T.select);
+  bar.append(gSel, gReveal, gOrder, gNotes);
+  // the transient message (what a press did): a toast that goes after TOAST_MS or on dismiss
+  const msg = el('p', 'vt-toast'); msg.hidden = true; msg.setAttribute('role', 'status');
+  const msgText = el('span', 'vt-toast-text'), msgX = btn('×', { key: 'toast-dismiss', variant: 'ghost' }); msgX.setAttribute('aria-label', T.dismiss || 'Dismiss');
+  msg.append(msgText, msgX);
+  // Marked for sale (flags the player has not confirmed) is one chip in the toolbar that opens a sheet with the list and the Sell button.
+  const markChip = btn('', { key: 'marked-chip', variant: 'ghost' }); markChip.classList.add('vt-chip', 'vt-markchip'); markChip.hidden = true;
 
   // ---- the list and the card ----
   const body = el('div', 'vt-body');
@@ -160,7 +150,7 @@ export function mountVault(d) {
   const more = btn('', { key: 'more', variant: 'ghost' });
   const shown = el('p', 'vt-shown');
   main.append(state, grid, shown, more);
-  const aside = el('aside', 'vt-detail'); aside.setAttribute('aria-label', T.detailEmpty);
+  const aside = el('aside', 'vt-detail'); aside.hidden = true; aside.setAttribute('aria-label', T.detailEmpty);
   body.append(main, aside);
 
   // ---- the confirm sheet ----
@@ -182,12 +172,8 @@ export function mountVault(d) {
   }
   { const was = slotStore(); if (was && !S.f.type) S.f.type = was; }
   const page = el('div', 'vt-page');
-  // Marked for sale (flags the player has not confirmed) is the player's to act on; missed drops are not shown on the page (user decision 2026-11-21).
-  const markRow = el('div', 'vt-keeprow vt-promptrow'); markRow.hidden = true;
-  const markFoldText = el('span', 'vt-fold-text'), markFold = foldBtn(markFoldText), markLine = el('span', 'vt-keepline vt-fold-body'); markLine.setAttribute('role', 'status');
-  const markGo = btn('', { key: 'marked-sell' });
-  markRow.append(markFold, markGo, markLine);
-  page.append(head, banner, slotRow, filters, rb, bar, keepRow, actRow, promptRow, markRow, msg, body);
+  tools.append(slotRow, search, ftoggle, sortSel, viewBtn, selBtn, markChip);
+  page.append(head, banner, tools, filters, bar, body, msg);
   root.replaceChildren ? root.replaceChildren(page, sheetWrap) : (root.appendChild(page), root.appendChild(sheetWrap));
 
   // ---- loading ----
@@ -251,7 +237,12 @@ export function mountVault(d) {
   }
 
   // ---- drawing ----
-  function setMsg(level, text) { S.msg = text; S.msgLevel = level; msg.hidden = !text; msg.textContent = text; msg.dataset.level = level || ''; }
+  let msgTimer = null;
+  function setMsg(level, text) {
+    S.msg = text; S.msgLevel = level; msg.hidden = !text; msgText.textContent = text; msg.dataset.level = level || '';
+    if (msgTimer && d.clear) d.clear(msgTimer);
+    msgTimer = text && d.later ? d.later(() => { msgTimer = null; setMsg('', ''); }, TOAST_MS) : null;
+  }
   function fillTypes() {
     const cur = S.f.type;
     kindSel.replaceChildren(); typeSel.replaceChildren();
@@ -340,40 +331,64 @@ export function mountVault(d) {
   }
   function drawBar() {
     const n = S.sel.size, ro = !S.view || S.view.mode === 'off';
-    selBtn.setAttribute('aria-pressed', String(S.sel.mode));
-    selBtn.textContent = S.sel.mode ? T.selectOff : T.select;
-    selText.textContent = n ? fmt(T.selected, { n }) : (S.sel.mode ? T.selectNone : '');
-    selAll.hidden = !S.sel.mode || !S.items.length;
+    const selecting = S.sel.mode || n > 0;
+    selBtn.hidden = selecting; selBtn.setAttribute('aria-pressed', String(S.sel.mode));
+    gSel.hidden = !selecting;
+    selText.textContent = n ? fmt(T.selected, { n }) : T.selectNone;
+    selAll.hidden = !S.items.length;
     acts.hidden = !n;
     for (const b of [pinB, unpinB, discB]) { b.disabled = ro; }
     const k = S.view && S.view.keep;
     keepB.textContent = fmt(T.keepSel, { n });
     keepB.disabled = ro || !k;
     keepB.title = !k ? T.keepNote : (!k.enabled && k.why ? k.why : '');
-    keepRow.hidden = !(k && k.line);
+    keepLine.hidden = !(k && k.line);
     keepLine.textContent = k && k.line ? k.line : '';
     keepNowB.hidden = !(k && (k.queued + k.creating) > 0);
     keepNowB.disabled = ro || !k || !k.enabled;
     drawAct(n, ro);
+    gNotes.hidden = [costLine, keepLine, keepNowB, actLine, buyB, promptLine, promptYes, promptNo].every((x) => x.hidden);
+    bar.hidden = gSel.hidden && gReveal.hidden && gOrder.hidden && gNotes.hidden; // nothing to do and nothing to say: no bar at all
+  }
+  // The order chip: an order that runs shows until it ends; one that ended shows for TOAST_MS the first time this browser sees it (or until dismissed).
+  const seenOrder = (key, put) => { try { const v = localStorage.getItem('vt-order-seen') === key; if (put) localStorage.setItem('vt-order-seen', key); return v; } catch (e) { const v = S.orderSeen === key; if (put) S.orderSeen = key; return v; } };
+  function orderLive(o) {
+    if (!o) return false;
+    if (o.active) return true;
+    const key = o.id + ':' + o.state;
+    if (S.orderGone === key) return false;
+    if (!S.orderAt || S.orderAt.key !== key) {
+      if (seenOrder(key, false)) return false; // ended and shown before (this or an earlier visit)
+      S.orderAt = { key, at: now() }; seenOrder(key, true);
+      if (d.later) d.later(() => { if (S.orderAt && S.orderAt.key === key) draw(); }, TOAST_MS + 50);
+    }
+    return now() - S.orderAt.at < TOAST_MS;
   }
   function drawRevealBar(ro) {
     const a = S.view && S.view.act, m = revealBarModel(a && a.reveal, RB.pay, RT);
-    rb.hidden = !m.show;
+    const idle = !(S.sel.mode || S.sel.size);
+    const o = m.show ? m.order : null, live = orderLive(o);
+    gOrder.hidden = !live;
+    if (live) {
+      rbSteps.replaceChildren(...o.steps.map((x) => { const li = el('li', x.current ? 'cur' : x.past ? 'past' : '', x.label); if (x.current) li.setAttribute('aria-current', 'step'); return li; }));
+      rbProg.textContent = [o.progress, o.paidText, o.stashText].filter(Boolean).join(' · '); rbNote.textContent = o.note;
+      rbCancel.hidden = !o.active; rbCancel.disabled = ro;
+      rbDismiss.hidden = o.active;
+    }
+    const show = m.show && m.total > 0 && idle;
+    gReveal.hidden = !show; // N = 0: no button, no chevron, nothing
     if (!m.show) return;
-    rbText.textContent = m.total ? m.title : '';
-    rbTitle.title = m.line || '';
-    setFold(rb, rbFold, 'reveal', !!(m.order && m.order.active)); // an order in progress opens the bar until the player says otherwise
-    rbOpts.replaceChildren(...m.options.map((o) => {
-      const b = el('button', 'vt-rb-opt'); b.type = 'button'; b.dataset.key = 'pay-' + o.id;
-      b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', o.checked ? 'true' : 'false');
-      if (!o.ok) { b.setAttribute('aria-disabled', 'true'); b.title = o.why; }
-      b.appendChild(el('strong', '', o.label)); b.appendChild(el('span', 'vt-rb-line', o.line));
-      b.addEventListener('click', () => { if (o.ok) { RB.pay = o.id; RB.confirming = false; draw(); } });
+    rbOpts.replaceChildren(...m.options.map((x) => {
+      const b = el('button', 'vt-rb-opt'); b.type = 'button'; b.dataset.key = 'pay-' + x.id;
+      b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', x.checked ? 'true' : 'false');
+      if (!x.ok) { b.setAttribute('aria-disabled', 'true'); b.title = x.why; }
+      b.appendChild(el('strong', '', x.label)); b.appendChild(el('span', 'vt-rb-line', x.line));
+      b.addEventListener('click', () => { if (x.ok) { RB.pay = x.id; RB.confirming = false; draw(); } });
       return b;
     }));
-    rbOpts.hidden = !m.total;
+    rbOpts.hidden = !m.total || m.options.length < 2; // one payment (gold only) needs no picker
     const ask = RB.confirming && m.confirm && m.sel === 'gold';
-    rbGo.hidden = !m.total || ask; rbGo.textContent = m.go; rbGo.disabled = ro || m.goOff;
+    rbGo.hidden = !m.total || ask; setBtn(rbGo, m.goLabel || m.go, m.goSub); rbGo.disabled = ro || m.goOff;
     rbGo.title = m.goOff ? m.why : '';
     rbAsk.hidden = rbYes.hidden = rbNo.hidden = !ask; rbAsk.textContent = ask ? m.confirmAsk : '';
     rbWhy.textContent = m.total && m.goOff ? m.why : ''; rbWhy.hidden = !rbWhy.textContent;
@@ -381,13 +396,6 @@ export function mountVault(d) {
     rbSkip.hidden = !(m.skippedN > 0 || tail.length);
     rbSkipSum.textContent = m.skippedN > 0 ? m.skipTitle : (RT.skipNote || '');
     rbSkipList.replaceChildren(...m.skipped.map((x) => el('li', '', x.n + ' · ' + x.why)), ...tail.map((t) => el('li', '', t)));
-    const o = m.order;
-    rbOrder.hidden = !o;
-    if (o) {
-      rbSteps.replaceChildren(...o.steps.map((x) => { const li = el('li', x.current ? 'cur' : x.past ? 'past' : '', x.label); if (x.current) li.setAttribute('aria-current', 'step'); return li; }));
-      rbProg.textContent = [o.progress, o.paidText, o.stashText].filter(Boolean).join(' · '); rbNote.textContent = o.note;
-      rbCancel.hidden = !o.active; rbCancel.disabled = ro;
-    }
   }
   // Reveal and Sell: the buttons, the cost line for the selection, the queue sentences and the opt-in prompt
   function drawAct(n, ro) {
@@ -399,7 +407,7 @@ export function mountVault(d) {
     const gcost = rp.n * price, gcap = price > 0 ? Math.floor((gi.stash || 0) / price) : 0;
     goldB.hidden = !gOn; goldB.dataset.cost = String(gcost);
     if (gOn) {
-      goldB.textContent = fmt(T.revealGoldSel, { n: rp.n });
+      setBtn(goldB, fmt(T.revealGoldSel, { n: rp.n }), n && rp.n ? fmt(T.goldSelSub, { cost: grp(Math.min(rp.n, gcap) * price), stash: grp(gi.stash || 0) }) + (gcap < rp.n ? fmt(T.goldPartial, { k: gcap }) : '') : '');
       goldB.disabled = ro || !rp.n || gcap < 1 || !!gi.why;
       goldB.title = !rp.n ? T.revealNone : (gi.why || (gcap < 1 ? fmt(T.goldShort, { price: grp(price), stash: grp(gi.stash || 0) }) : ''));
     }
@@ -410,7 +418,6 @@ export function mountVault(d) {
     sellB.disabled = ro || !a || !a.sell.enabled;
     sellB.title = !a ? T.sellNote : (!a.sell.enabled && a.sell.why ? a.sell.why : (!sp.n && n ? T.sellNone : ''));
     let cost = '';
-    if (gOn && n && rp.n) cost = fmt(T.goldCost, { n: rp.n, cost: grp(Math.min(rp.n, gcap) * price), stash: grp(gi.stash || 0) }) + (gcap < rp.n ? fmt(T.goldPartial, { k: gcap }) : '');
     if (a && n && rp.n && via.has('free')) {
       cost = (rp.n === 1 ? T.revealCostOne : fmt(T.revealCost, { n: rp.n, c: rp.charges })) + (rp.free ? T.revealFree : (rp.have >= 0 ? fmt(T.revealHave, { have: rp.have }) : '')) + (rp.short ? T.revealShort : '');
     }
@@ -429,13 +436,13 @@ export function mountVault(d) {
     drawRevealBar(ro);
     const line = a ? [via.has('free') ? a.reveal.line : '', a.sell.line].filter(Boolean).join(' · ') : '';
     actLine.textContent = line;
-    actRow.hidden = !(cost || line);
+    actLine.hidden = !line;
     const p = a && a.prompt;
-    promptRow.hidden = !p || ro;
+    promptLine.hidden = promptYes.hidden = promptNo.hidden = !p || ro;
     promptLine.textContent = p ? fmt(T.promptText, { short: p.short, n: p.ids.length, gold: p.gold }) : '';
     const mk = S.view && S.view.marked;
-    markRow.hidden = !mk || ro;
-    if (mk) { markFoldText.textContent = fmt(T.markedFold, { n: mk.n }); setFold(markRow, markFold, 'marked', false); markLine.textContent = fmt(T.markedText, { n: mk.n, names: (mk.names || []).join(', ') + (mk.n > (mk.names || []).length ? ', ...' : '') }); markGo.textContent = fmt(T.markedGo, { n: mk.n }); }
+    markChip.hidden = !mk || ro;
+    if (mk) markChip.textContent = fmt(T.markedChip, { n: mk.n });
   }
 
   function cellLabel(it) {
@@ -465,7 +472,6 @@ export function mountVault(d) {
     }
     b.appendChild(el('span', 'vt-name', it.name));
     const tags = el('span', 'vt-tags');
-    if (!it.identified) { const t = el('b', 'vt-tag', '?'); t.dataset.tag = 'unid'; tags.appendChild(t); }
     if (it.pin) { const t = el('b', 'vt-tag', 'P'); t.dataset.tag = 'pin'; tags.appendChild(t); }
     if (it.ethereal) { const t = el('b', 'vt-tag', 'E'); t.dataset.tag = 'eth'; tags.appendChild(t); }
     if (it.keep) { const t = el('b', 'vt-tag', { queued: 'Q', creating: '...', kept: 'K', failed: '!' }[it.keep] || 'K'); t.dataset.tag = 'keep-' + it.keep; tags.appendChild(t); }
@@ -473,6 +479,7 @@ export function mountVault(d) {
     if (it.reveal) { const t = el('b', 'vt-tag', { queued: 'R', working: '...', failed: '!' }[it.reveal] || 'R'); t.dataset.tag = 'reveal-' + it.reveal; tags.appendChild(t); }
     if (it.sell) { const t = el('b', 'vt-tag', { queued: '$', selling: '...', sold: '$', failed: '!' }[it.sell] || '$'); t.dataset.tag = 'sell-' + it.sell; tags.appendChild(t); }
     b.appendChild(tags);
+    if (!it.identified) { b.classList.add('unid'); const u = el('b', 'vt-unid', '?'); u.dataset.tag = 'unid'; u.setAttribute('aria-hidden', 'true'); b.appendChild(u); } // the only identified/unidentified mark: a revealed item carries none
     if (S.sel.has(it.id)) b.appendChild(el('span', 'vt-check-mark', '✓'));
     if (S.mode === 'list') {
       const meta = [T.qualities[it.q] || it.quality, fmt(T.ilvl, { n: it.ilvl })];
@@ -592,11 +599,13 @@ export function mountVault(d) {
   function drawDetail() {
     aside.replaceChildren();
     const it = S.items.find((x) => x.id === S.detailId);
-    if (!it) { aside.appendChild(el('p', 'vt-hint', T.detailEmpty)); return; }
+    aside.hidden = !it; body.dataset.detail = it ? '1' : ''; // docked (wide) or a bottom sheet (phone) only while an item is open; the grid has the width otherwise
+    if (!it) return;
     const det = S.detail && S.detail.item && S.detail.item.id === it.id ? S.detail : null;
     const card = el('div', 'vt-dcard');
     const nm = el('h2', 'vt-dname', it.name); nm.dataset.q = it.quality; nm.classList.add('q-' + (it.quality === 'normal' || it.quality === 'superior' ? 'normal' : it.quality));
-    card.appendChild(nm);
+    const dx = btn(T.detailClose || 'Close', { key: 'detail-close', variant: 'ghost' }); dx.addEventListener('click', () => { S.detailId = ''; S.detail = null; drawList(); drawDetail(); });
+    const hd = el('div', 'vt-dhead'); hd.append(nm, dx); card.appendChild(hd);
     const st = el('p', 'vt-dstate', (T.qualities[it.q] || it.quality) + ' · ' + it.status);
     card.appendChild(st);
     if (it.keep) { const kp = el('p', 'vt-dkeep', T.keepStates[it.keep] + ': ' + keepHint(it)); kp.dataset.keep = it.keep; kp.setAttribute('role', 'status'); card.appendChild(kp); }
@@ -707,10 +716,10 @@ export function mountVault(d) {
     const nx = grid.querySelector('[data-vid="' + (win && win.CSS && win.CSS.escape ? win.CSS.escape(S.items[to].id) : S.items[to].id) + '"]');
     if (nx) { nx.focus(); if (nx.scrollIntoView) nx.scrollIntoView({ block: 'nearest' }); }
   });
-  selBtn.addEventListener('click', () => {
-    if (S.sel.mode) S.sel.clear(); else { S.sel.mode = true; S.fopen = false; syncFilters(); } // the folded filter panel closes when selecting starts: on a phone it left no room for the list and the cost line
-    drawBar(); drawList();
-  });
+  selBtn.addEventListener('click', () => { S.sel.mode = true; S.fopen = false; syncFilters(); drawBar(); drawList(); }); // the folded filter panel closes when selecting starts
+  doneB.addEventListener('click', () => { S.sel.clear(); drawBar(); drawList(); });
+  msgX.addEventListener('click', () => setMsg('', ''));
+  rbDismiss.addEventListener('click', () => { const o = revealBarModel(S.view && S.view.act && S.view.act.reveal, RB.pay, RT).order; if (o) S.orderGone = o.id + ':' + o.state; drawBar(); });
   selAll.addEventListener('click', () => { S.sel.all(order()); drawBar(); drawList(); });
 
   // ---- presses ----
@@ -815,7 +824,7 @@ export function mountVault(d) {
     setMsg(r && !r.error ? 'good' : 'bad', r && !r.error ? T.okBuy : (r && r.error) || T.noAnswer);
   });
   promptYes.addEventListener('click', () => { const p = S.view && S.view.act && S.view.act.prompt; if (p) act('/api/vault/sell', p.ids, true, {}); });
-  markGo.addEventListener('click', () => { const mk = S.view && S.view.marked; if (mk) act('/api/vault/sell', mk.ids, true, {}); });
+  markChip.addEventListener('click', () => openMarked(markChip));
   promptNo.addEventListener('click', async () => { await d.post('/api/vault/sellprompt', { dismiss: true }); await reload(true); });
   keepNowB.addEventListener('click', async () => { // any queued id will do: the server only needs one that is queued to ask for the trip
     const q = S.items.find((i) => i.keep === 'queued' || i.keep === 'creating');
@@ -863,6 +872,24 @@ export function mountVault(d) {
     sheetWrap.hidden = false;
     cancel.addEventListener('click', closeSheet);
     go.addEventListener('click', async () => { go.disabled = true; closeSheet(true); await sellAct(ids, false); });
+    cancel.focus();
+  }
+  // ---- the Marked for sale sheet: the list and the Sell button (nothing is sold until it is pressed) ----
+  function openMarked(opener) {
+    const mk = S.view && S.view.marked;
+    if (!mk) return;
+    sheetCard.replaceChildren();
+    const title = fmt(T.markedFold, { n: mk.n });
+    sheetCard.setAttribute('aria-label', title);
+    sheetCard.appendChild(el('h2', '', title));
+    sheetCard.appendChild(el('p', '', fmt(T.markedText, { n: mk.n, names: (mk.names || []).join(', ') + (mk.n > (mk.names || []).length ? ', ...' : '') })));
+    const go = btn(fmt(T.markedGo, { n: mk.n }), { key: 'marked-sell' });
+    const cancel = btn(T.cancel, { key: 'sheet-cancel', variant: 'ghost' });
+    const row = el('div', 'vt-row'); row.append(cancel, go); sheetCard.appendChild(row);
+    S.sheet = { opener, first: cancel };
+    sheetWrap.hidden = false;
+    cancel.addEventListener('click', closeSheet);
+    go.addEventListener('click', async () => { go.disabled = true; closeSheet(true); await act('/api/vault/sell', mk.ids, true, {}); });
     cancel.focus();
   }
   // ---- the Equip sheet: what is worn against this item, can-equip with the reason, then one button per way to wear it ----

@@ -232,7 +232,7 @@ func (w *World) update(ctx context.Context, force bool) (d2map.State, error) {
 		l.own = Placement{Level: li.ID, X: li.OriginX, Y: li.OriginY, W: li.W, H: li.H}
 		st.NewRooms = w.fetch(ctx, l, rect, pos)
 		if st.LevelChanged {
-			w.logf("d2dworld: arrived in level %d: %s (pending %d, linkwait %v)", li.ID, w.LastBorderNote, l.pending, w.o.LinkWait)
+			w.logf("d2dworld: arrived in level %d: %s (pending %d, linkwait %v, known %d of %d cells)", li.ID, w.LastBorderNote, l.pending, w.o.LinkWait, l.m.Grid.KnownCount(), rect.W*rect.H)
 		}
 		if st.LevelChanged && l.pending > 0 && w.o.LinkWait > 0 {
 			t0 := time.Now()

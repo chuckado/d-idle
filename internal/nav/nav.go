@@ -417,10 +417,15 @@ func (n *Navigator) planHard(lm *d2map.LevelMap, start, goal input.Point, tol fl
 	goalUnknown := f.idx(gx, gy) >= 0 && f.flags[f.idx(gx, gy)]&fKnown == 0
 	f.passMask = fWalk
 	defer func() { f.passMask = fWalk }()
+	whole := t.FullGrid && gridWhole(lm)
+	if whole && f.idx(gx, gy) < 0 {
+		// a whole grid knows the level: a goal beyond it is not there, so no walk toward a "known edge"
+		return res, fmt.Errorf("%w: goal %v is outside the whole level grid", ErrNoPath, goal)
+	}
 	if !goalUnknown {
 		cells, partial = n.pl.Plan(f, sx, sy, gx, gy, reach, hw)
 	}
-	if goalUnknown || partial {
+	if !whole && (goalUnknown || partial) {
 		// Nothing known leads to the goal: assume the unknown part of the level is open (extra cost) and walk
 		// toward it; the executor replans as rooms load.
 		f.passMask = fWalk | fOpt
