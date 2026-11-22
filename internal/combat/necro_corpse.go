@@ -70,10 +70,13 @@ func pickExplosionCorpse(cs []d2.Unit, hs []Target, c Catalog, minHit int) (d2.U
 
 // corpseExplode casts Corpse Explosion at the best corpse, once. It runs only when no summon is wanted (necroTick
 // asks planSummon first), so it never eats a corpse the army needs. A corpse is used once (the id is blacklisted).
-func (f *Fighter) corpseExplode(ctx context.Context, snap *d2.Snapshot, hs []Target) (bool, error) {
+func (f *Fighter) corpseExplode(ctx context.Context, snap *d2.Snapshot, nd *NecroParams, hs []Target) (bool, error) {
 	p := snap.Player
 	f.necro.init()
-	sp, ok := KnownSkills(p, f.cat, f.keys)["Corpse Explosion"]
+	if nd.Explosion == "" {
+		return false, nil
+	}
+	sp, ok := KnownSkills(p, f.cat, f.keys)[nd.Explosion]
 	if !ok || (sp.Key == "" && p.RightSkill != sp.ID) || sp.Cost*2 > p.Mana || len(hs) == 0 {
 		return false, nil
 	}
