@@ -733,3 +733,49 @@ func TestUnsealRevealReseal(t *testing.T) {
 	}
 	s.Close()
 }
+
+// Seal stores the affixes decoded from the record's own bytes: held, never shown; Unseal then reveals them. It refuses an
+// identified record, one that holds affixes already and an empty text; it survives a restart.
+func TestSealHoldsDecodedAffixes(t *testing.T) {
+	dir := t.TempDir()
+	open := func() *Store {
+		s, err := OpenHero(dir, "Paladin", Options{Capacity: func() int { return 10 }, NoSync: true})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return s
+	}
+	s := open()
+	r, err := s.Add(Item{Raw: "aabbccdd", Code: "wsp", Quality: 4, Ilvl: 30})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := s.Unseal(r.ID); !errors.Is(err, ErrNothingSealed) {
+		t.Fatalf("nothing is held yet: %v", err)
+	}
+	if err := s.Seal(r.ID, ""); !errors.Is(err, ErrState) {
+		t.Fatalf("empty text: %v", err)
+	}
+	if err := s.Seal(r.ID, "7:0:20;93:0:10"); err != nil {
+		t.Fatal(err)
+	}
+	if err := s.Seal(r.ID, "1:0:1"); !errors.Is(err, ErrState) {
+		t.Fatalf("already held: %v", err)
+	}
+	s.Close()
+	s = open()
+	got, _ := s.Get(r.ID)
+	if got.Sealed != "7:0:20;93:0:10" || got.Props != "" || got.Identified {
+		t.Fatalf("held after a restart, not shown: %+v", got)
+	}
+	if err := s.Unseal(r.ID); err != nil {
+		t.Fatal(err)
+	}
+	got, _ = s.Get(r.ID)
+	if got.Props != "7:0:20;93:0:10" || !got.Identified || got.Sealed != "" {
+		t.Fatalf("unsealed: %+v", got)
+	}
+	if err := s.Seal(r.ID, "1:0:1"); !errors.Is(err, ErrState) {
+		t.Fatalf("an identified record: %v", err)
+	}
+}

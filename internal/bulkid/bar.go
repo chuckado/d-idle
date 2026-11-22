@@ -2,6 +2,7 @@ package bulkid
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -27,10 +28,13 @@ type BarIn struct {
 	EtherBal int
 	// Gold: ScrollGold is the price of one reveal, the vendor price of one scroll (0 unknown). Stash is the stash gold the
 	// order pays from (never the purse). GoldOn is knob loot.vaultRevealGold with a payer wired.
-	GoldOn            bool
-	ScrollGold        int
-	Stash             int
-	ConfirmAt         int // gold from which the order needs a confirming press (0: never)
+	GoldOn     bool
+	ScrollGold int
+	Stash      int
+	ConfirmAt  int // gold from which the order needs a confirming press (0: never)
+	// Decode: the fork can decode an item's affixes from its own bytes (`item decode`), so a gold reveal does not need the
+	// vault to hold them already: every unidentified candidate is gold-revealable (the order decodes it first).
+	Decode            bool
 	GoldWhy           string
 	ActiveGoldOrderID string // an order is running: a second one is refused until it ends
 }
@@ -139,7 +143,7 @@ func MakeBar(cs []Cand, in BarIn) Bar {
 		g := BarOption{ID: PayGold, Label: "Gold", IDs: []string{}}
 		var sids []string
 		for _, c := range cs {
-			if c.Sealed {
+			if c.Sealed || in.Decode {
 				sids = append(sids, c.ID)
 			}
 		}
@@ -192,4 +196,31 @@ func MakeBar(cs []Cand, in BarIn) Bar {
 	}
 	b.Line = strings.Join(lines, " · ")
 	return b
+}
+
+// Only keeps the options named in ids (the Vault page's offered payments, knob loot.vaultRevealMethods) and works the default
+// and the summary line out again; the other options are not hidden by the page but absent from the answer. ids nil keeps all.
+func (b Bar) Only(ids []string) Bar {
+	if ids == nil {
+		return b
+	}
+	out := Bar{Total: b.Total, Options: []BarOption{}}
+	for _, o := range b.Options {
+		if slices.Contains(ids, o.ID) {
+			out.Options = append(out.Options, o)
+		}
+	}
+	best := -1
+	var lines []string
+	for i, o := range out.Options {
+		lines = append(lines, o.Line)
+		if o.OK && (best < 0 || o.Count > out.Options[best].Count && out.Options[best].Count < b.Total) {
+			best = i
+		}
+	}
+	if best >= 0 {
+		out.Default = out.Options[best].ID
+	}
+	out.Line = strings.Join(lines, " · ")
+	return out
 }

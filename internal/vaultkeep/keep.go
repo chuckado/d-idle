@@ -76,8 +76,9 @@ type Keeper struct {
 
 	// Reveal paid in gold (gold.go): the payer, the knobs and where the order is kept. nil Payer: no gold orders.
 	Payer       GoldPayer
-	GoldOn      func() bool // loot.vaultRevealGold
-	GoldConfirm func() int  // loot.vaultRevealGoldConfirm
+	GoldOn      func() bool     // loot.vaultRevealGold
+	GoldConfirm func() int      // loot.vaultRevealGoldConfirm
+	Methods     func() []string // loot.vaultRevealMethods: the payments the page offers (free, ether, gold); nil: all
 	OrderFile   func() string
 	Measured    func() bool // a measured run (D2BOT_RUN): a gold reveal is refused and never reaches the fork
 
@@ -786,4 +787,13 @@ func (k *Keeper) ConfirmMarked() (int, error) {
 		return 0, nil
 	}
 	return st.ConfirmSell()
+}
+
+// OfferedMethods are the reveal payments the Vault page draws (hidden for now: user decision 2026-11-21, default only gold). The
+// keeper still runs every route; this is what the page is told.
+func (k *Keeper) OfferedMethods() []string {
+	if k.Methods == nil {
+		return []string{"free", "ether", "gold"}
+	}
+	return k.Methods()
 }

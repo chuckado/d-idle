@@ -34,14 +34,32 @@ const page = mountVault({ doc, root, get, post, later, texts: T, now: () => 0 })
 const bartext = () => all(find('reveal-bar-go') ? root : root).filter((n) => !n.hidden).map((n) => n.textContent).join(' | ');
 
 // gold is the cheapest full payer: it is picked, the title and the one press say what it costs; no notice paragraph
-act = { reveal: rev(bar([o('free', { ok: false, count: 0, ids: [], why: 'no scroll' }), o('ether', { count: 2, ids: ['v1', 'v2'], cost: 2, skipped: [{ n: 2, why: 'the vault holds no affixes for them' }] }), o('gold', { cost: 320, line: 'Gold: 320 (stash 700)' })], 'gold', 4), { on: true, order: null }), sell };
+act = { reveal: rev(bar([o('free', { ok: false, count: 0, ids: [], why: 'no scroll' }), o('ether', { count: 2, ids: ['v1', 'v2'], cost: 2, skipped: [{ n: 2, why: 'the vault holds no affixes for them' }] }), o('gold', { cost: 320, line: 'Gold: 320 (stash 700)' })], 'gold', 4), { on: true, order: null, stash: 700 }), sell };
 await page.start(); await tick();
 const rbx = all(root).find((n) => n.className === 'vt-revealbar');
 ok(rbx && !rbx.hidden, 'the bar shows');
 ok(has('Reveal 4 items in this filter'), 'title');
 ok(find('pay-gold').attrs['aria-checked'] === 'true' && find('pay-ether').attrs['aria-checked'] === 'false', 'default is gold');
-ok(find('reveal-bar-go').textContent === 'Reveal 4 for 320 gold', 'press words: ' + find('reveal-bar-go').textContent);
+ok(find('reveal-bar-go').textContent === 'Reveal 4 items for 320 gold (stash 700)', 'press words: ' + find('reveal-bar-go').textContent);
 ok(!has('Cain is not rescued'), 'no notice paragraph');
+
+// the hidden payments (user decision 2026-11-21): with methods ['gold'] the page draws only the gold option; the Free and Ether
+// options, their buttons, the cost line and the scroll notices are absent or hidden, and the gold press words stay
+const act0 = act;
+posts = [];
+act = { reveal: Object.assign(rev(bar([o('gold', { cost: 320, line: 'Gold: 320 (stash 700)' })], 'gold', 4), { on: true, order: null, stash: 700 }), { methods: ['gold'], etherPer: 1, charges: 3, note: 'Cain is not rescued: scrolls', line: 'scrolls: 3' }), sell };
+await page.reload(false);
+ok(find('pay-gold') && !find('pay-free') && !find('pay-ether'), 'only the gold option is in the DOM');
+ok(find('reveal-bar-go').textContent === 'Reveal 4 items for 320 gold (stash 700)', 'gold press words: ' + find('reveal-bar-go').textContent);
+ok(find('reveal').hidden && find('reveal-ether').hidden && find('buy-scrolls').hidden, 'the scroll, Ether and Buy buttons are hidden');
+ok(!has('Cain is not rescued') && !has('scrolls: 3') && !has('no scroll or tome charge'), 'no scroll or Cain text: ' + texts().join(' | '));
+ok(has('Gold: 320 (stash 700)'), 'the gold line reads Gold: <total> (stash <S>)');
+// all three named: the old picker is back
+act = { reveal: Object.assign(rev(bar([o('free', { ok: false, count: 0, ids: [], why: 'no scroll' }), o('gold', { cost: 320, line: 'Gold: 320 (stash 700)' })], 'gold', 4), { on: true, order: null, stash: 700 }), { methods: ['free', 'ether', 'gold'] }), sell };
+await page.reload(false);
+ok(find('pay-free') && find('pay-gold'), 'with methods free, ether, gold the free option shows again');
+act = act0;
+await page.reload(false);
 
 // the Ether pick and its press go to the ordinary route
 await find('pay-ether').click();

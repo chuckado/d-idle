@@ -431,6 +431,15 @@ func (s *Store) apply(ev *event) error {
 		r.Props, r.Sealed, r.Identified, r.Unlocked = r.Sealed, "", true, true
 		r.Value = s.opt.Values.Of(&r.Item)
 		r.RevQ, r.Reason, r.Updated = false, "", ev.T
+	case "seal": // the affixes the item's own bytes carry, decoded by the fork (item decode): held, never shown until paid
+		r, err := need(Recorded, KeepQ)
+		if err != nil {
+			return err
+		}
+		if r.Identified || r.Sealed != "" || ev.Reason == "" {
+			return ErrState
+		}
+		r.Sealed, r.Updated = ev.Reason, ev.T
 	case "reseal": // undo an unseal whose payment failed
 		r, err := need(Recorded, KeepQ)
 		if err != nil {
@@ -811,6 +820,16 @@ func (s *Store) Unseal(id string) error {
 		return ErrNothingSealed
 	}
 	return s.opLocked(id, event{Ev: "unseal"})
+}
+
+// Seal stores the affixes decoded from an unidentified record's own bytes (`item decode`, read-only in the game) so a
+// record that holds none can be revealed from the vault. props is "stat:param:value;..." as the fork words it. It refuses an
+// identified record, one that holds affixes already, and an empty text (ErrState). Nothing changes in the game.
+func (s *Store) Seal(id, props string) error {
+	if props == "" {
+		return ErrState
+	}
+	return s.op(id, event{Ev: "seal", Reason: props})
 }
 
 // Reseal takes an Unseal back (the Ether charge failed after it).

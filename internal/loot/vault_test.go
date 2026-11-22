@@ -341,3 +341,25 @@ func TestVaultPoorModePicksSellableItems(t *testing.T) {
 		}
 	}
 }
+
+// A drop whose peek carries no affixes is recorded with the ones its own bytes carry (item decode, a read): no record is left
+// that only the in-game identify can reveal. A fork without the verb records it as before.
+func TestVaultRecordFillsSealedFromDecode(t *testing.T) {
+	for _, cls := range vaultClasses {
+		v := newVaultRig(t, cls, 10)
+		v.drop(t, "r01", d2.QualityMagic, 110, 100, "a")
+		norm := v.api.Floor[0].Norm
+		v.api.Bytes = map[string]d2dctl.VaultRecord{norm: {Code: "r01", Props: "7:0:20;93:0:10;"}}
+		rep := v.pick(t)
+		if len(rep.Vaulted) != 1 {
+			t.Fatalf("%v: %+v", cls, rep)
+		}
+		recs := v.st.Dump()
+		if len(recs) != 1 || recs[0].Sealed != "7:0:20;93:0:10;" || recs[0].Identified || recs[0].Props != "" {
+			t.Fatalf("%v: held, not shown: %+v", cls, recs)
+		}
+		if v.api.Decodes != 1 {
+			t.Errorf("%v: decodes %d", cls, v.api.Decodes)
+		}
+	}
+}

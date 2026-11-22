@@ -86,3 +86,36 @@ func TestBarGoldOffOrRunning(t *testing.T) {
 		t.Fatal(got)
 	}
 }
+
+// With a fork that decodes (item decode) every unidentified candidate is gold-revealable, held affixes or not.
+func TestBarGoldDecodeCoversSealedLessItems(t *testing.T) {
+	in := BarIn{GoldOn: true, ScrollGold: 80, Stash: 7200, ConfirmAt: 2000}
+	b := MakeBar(cands(29, 0), in)
+	if g := opt(t, b, PayGold); g.OK {
+		t.Fatalf("without decode nothing is revealable: %+v", g)
+	}
+	in.Decode = true
+	b = MakeBar(cands(29, 0), in)
+	if g := opt(t, b, PayGold); !g.OK || g.Count != 29 || g.Cost != 29*80 || len(g.Skipped) != 0 {
+		t.Fatalf("with decode all 29: %+v", g)
+	}
+}
+
+// Only keeps the offered payments and works the default and the line out again; nil keeps everything.
+func TestBarOnlyKeepsTheOfferedPayments(t *testing.T) {
+	in := BarIn{Charges: 12, EtherPer: 1, EtherBal: 665, GoldOn: true, ScrollGold: 80, Stash: 7200, Decode: true}
+	b := MakeBar(cands(29, 0), in)
+	if len(b.Only(nil).Options) != len(b.Options) {
+		t.Fatal("nil keeps all")
+	}
+	g := b.Only([]string{PayGold})
+	if len(g.Options) != 1 || g.Options[0].ID != PayGold || g.Default != PayGold || g.Line != "Gold: 2,320 (stash 7,200)" || g.Total != 29 {
+		t.Fatalf("gold only: %+v", g)
+	}
+	// gold cannot pay (no stash gold): no default, the line still says Gold and no scroll or Cain word appears
+	in.Stash = 0
+	g = MakeBar(cands(3, 3), in).Only([]string{PayGold})
+	if g.Default != "" || !strings.HasPrefix(g.Line, "Gold: 0 (stash 0)") || strings.Contains(strings.ToLower(g.Line), "scroll") {
+		t.Fatalf("empty stash: %+v", g)
+	}
+}
