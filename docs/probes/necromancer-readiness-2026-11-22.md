@@ -83,4 +83,4 @@ Verdict: still NOT ready to play. Data and engine gaps of section 1 are closed o
 Not run at the time of this update; see the drill record in docs/probes/ when it exists.
 
 ### 6.4 Viewer class and build picker
-Go-side plan data only (the web part belongs to the UI cards); see the card necropick.
+The Go side of the picker was already generic: `allocWire.builds()` lists every leveler table by class, so a Necromancer hero is offered `necromancer_summoner_sme`, `necromancer_poison_nova_sme` and the older tables, a Paladin or Sorceress never sees them (V offline, test `TestAllocBuildListTwoClasses` with three classes). New: each entry carries the build catalogue's name and identity as `Note` (`internal/plandata/build-catalog.json` owns the tables). `agency.autoAlloc` and the respec knobs stay default off; the web cards (E6) are the UI agent's. Not verified in a browser (U).

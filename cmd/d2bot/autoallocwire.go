@@ -11,6 +11,7 @@ import (
 	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/leveler"
+	"d2lod-bot/internal/plandata"
 	"d2lod-bot/internal/points"
 	"d2lod-bot/internal/power"
 )
@@ -63,12 +64,18 @@ func (w *allocWire) tier(name string) (tier, why string, attack bool) {
 // would be (the tier is computed from capabilities.json, docs/agency.md).
 func (w *allocWire) builds() []points.BuildInfo {
 	var out []points.BuildInfo
+	cat, _ := plandata.Catalog() // the build catalogue names and describes a table; a table it does not own keeps its file name
 	for _, name := range leveler.TableNames() {
 		b, err := leveler.LoadBuild(name, "")
 		if err != nil {
 			continue
 		}
 		bi := points.BuildInfo{Name: name, Label: strings.ReplaceAll(name, "_", " "), Class: b.Class, Tier: points.BuildSupported}
+		if cat != nil {
+			if cb, err := cat.BuildForTable(name); err == nil && strings.EqualFold(cb.Class, b.Class) {
+				bi.Note = cb.Name + ": " + cb.Identity
+			}
+		}
 		seen := map[string]bool{}
 		for _, r := range b.Rows {
 			if r.Clvl > previewLevels {
