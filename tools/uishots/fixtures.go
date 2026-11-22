@@ -131,6 +131,11 @@ func mountFixturePanels(h http.Handler) http.Handler {
 			if !serveDefectCSS(w, r) && !serveDefectJS(w, r) {
 				http.NotFound(w, r)
 			}
+		case p == "/__mapphone":
+			mapPhoneHarness(w, r)
+		case p == "/__fit/mapphone.js":
+			w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
+			w.Write(mapPhoneJS)
 		case p == "/__fit/fit.js":
 			serveFitJS(w, r)
 		case strings.HasPrefix(p, "/watch/layouts/cockpit-") && strings.HasSuffix(p, ".json"):
