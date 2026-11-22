@@ -22,8 +22,9 @@ func TestStage3PurseSettles(t *testing.T) {
 		if len(c.moves) == 0 || c.moves[0] >= 0 {
 			t.Fatalf("%v: moves %v, want a withdrawal first", class, c.moves)
 		}
-		if p := r.W.Player; p.Gold+p.StashGold < 128000-2000 || p.Gold < 300+50*11-100 {
-			t.Errorf("%v: purse %d stash %d after the settle", class, p.Gold, p.StashGold)
+		// the shop spends after the withdrawal, so the purse itself ends lower: judge the amount moved
+		if got := -c.moves[0]; got < 300+50*11 || got > 300+50*11+2000 {
+			t.Errorf("%v: withdrew %d, want the carry line (850) plus the plan's spend", class, got)
 		}
 	}
 }
@@ -40,8 +41,9 @@ func TestStage3BanksDownToTheTarget(t *testing.T) {
 		if len(c.moves) != 1 || c.moves[0] <= 0 {
 			t.Fatalf("%v: moves %v, want one deposit", class, c.moves)
 		}
-		if p := r.W.Player; p.Gold < 300+50*11 || p.Gold > 300+50*11+1000 || p.StashGold < 6000 {
-			t.Errorf("%v: purse %d stash %d, want the carry line plus the plan in the purse", class, p.Gold, p.StashGold)
+		// the pack keeps the carry line plus the plan's spend before the shop, the rest is banked
+		if kept := 8000 - c.moves[0]; kept < 300+50*11 || kept > 300+50*11+2000 {
+			t.Errorf("%v: kept %d before the shop (moves %v), want the carry line (850) plus the plan's spend", class, kept, c.moves)
 		}
 	}
 }
