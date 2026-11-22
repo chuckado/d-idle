@@ -97,7 +97,7 @@ func (t *Town) bankKeep(level int) int { return t.goldKeep(level) }
 // needBank is the bankFirst knob: the surplus above the keep line goes to the stash before the shop, so the shop
 // (tome, spare scrolls, extra potions) cannot spend it (audit row 11: 40 of 1500 gold banked at clvl 5).
 func (t *Town) needBank(s *d2.Snapshot, plan ChorePlan) bool {
-	return plan.Gold && t.tune().BankFirst != 0 && s.Player.Gold > t.bankKeep(s.Player.Level)
+	return plan.Gold && (t.tune().BankFirst != 0 || t.PlanStage() >= 3) && s.Player.Gold > t.bankKeep(s.Player.Level)
 }
 
 func (t *Town) bank(ctx context.Context, a *Act) error {
@@ -228,6 +228,9 @@ func (t *Town) shopCost(s *d2.Snapshot, plan ChorePlan) int {
 
 // shopTarget is the pack gold a withdrawal for the shop aims at: the shopping list, never below the minimal kit.
 func (t *Town) shopTarget(s *d2.Snapshot, plan ChorePlan) int {
+	if t.PlanStage() >= 3 {
+		return max(t.shopCost(s, plan), t.kitGold(), t.goldKeep(s.Player.Level)) // the purse target: withdraw the gap
+	}
 	if t.tune().WithdrawShop == 0 {
 		return 0
 	}
@@ -238,13 +241,17 @@ func (t *Town) shopTarget(s *d2.Snapshot, plan ChorePlan) int {
 // rule only looked at an empty belt and ignored scrolls and tomes: a hero with 8 gold and 128k in the stash never
 // withdrew (tpfix diagnosis 2026-11-18). A stash that reads 0 is logged, since it may be unreadable.
 func (t *Town) needShopWithdraw(s *d2.Snapshot, plan ChorePlan) bool {
-	if t.tune().WithdrawShop == 0 || !plan.Gold || !plan.Potions && !plan.Scrolls {
+	stage3 := t.PlanStage() >= 3
+	if t.tune().WithdrawShop == 0 && !stage3 || !plan.Gold || !plan.Potions && !plan.Scrolls {
 		return false
 	}
 	if _, can := t.e.In.(goldMover); !can {
 		return false
 	}
 	cost := t.shopCost(s, plan)
+	if stage3 {
+		cost = t.shopTarget(s, plan)
+	}
 	if cost == 0 || s.Player.Gold >= max(cost, t.kitGold()) {
 		return false
 	}

@@ -131,7 +131,7 @@ func TestSetPreviewRoute(t *testing.T) {
 
 func TestGearSetsPageAndFiles(t *testing.T) {
 	for _, want := range []string{`href="/watch/inventory-sets.css"`, `src="/watch/inventory-drag.js"`, `src="/watch/inventory-sets.js"`, `id="gearsets"`} {
-		if !strings.Contains(invPage, want) {
+		if !strings.Contains(charPage, want) {
 			t.Errorf("inventory page lacks %s", want)
 		}
 	}

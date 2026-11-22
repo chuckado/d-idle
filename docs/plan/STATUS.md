@@ -369,7 +369,7 @@
 | pgnightly | proposed | - | `docs/process/pg-ops-pgnightly.md`<br>`tools/provingground/nightly.sh` | - |
 | town4 | in-progress | - | `internal/task`<br>`internal/town`<br>`internal/bot`<br>`internal/supply`<br>`cmd/d2bot`<br>`docs/knobs.md` | - |
 | pgearned | proposed | - | `internal/scenario/earned.go`<br>`tools/provingground/earned` | - |
-| town5 | proposed | - | `internal/town`<br>`internal/resource`<br>`town-basics` | - |
+| town5 | in-progress | - | `internal/town`<br>`internal/resource`<br>`internal/bot/broke.go`<br>`internal/bot/leveling.go`<br>`tools/provingground/scenarios/townplan.json`<br>`docs/probes/town-plan-stage3-2026-11-22.md`<br>`docs/design/fable-review-2026-11-21/town-planner-b-model.md`<br>`town-basics` | - |
 | town6 | proposed | - | `internal/town`<br>`internal/loot` | - |
 | town7 | proposed | - | `internal/supply`<br>`internal/town`<br>`internal/resource` | - |
 | town8 | proposed | - | `internal/supply`<br>`internal/town` | - |
@@ -403,9 +403,11 @@
 | mapphone | proposed | - | `internal/watch/web/panels/area-map`<br>`internal/watch/web/utilities.css`<br>`tools/uishots/mapphone.go`<br>`tools/uishots/mapphone.js`<br>`internal/watch/testdata/areamap`<br>`docs/ui/map-phone`<br>`tools/uishots.sh`<br>`tools/uishots/fit.go`<br>`tools/uishots/fixtures.go`<br>`tools/uishots/serve.go`<br>`docs/mapfog.md` | - |
 | equipswap | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/stash.go`<br>`internal/invdesk/stash_test.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/task/act1.go`<br>`internal/task/act2.go`<br>`internal/task/act3.go`<br>`internal/task/act4.go`<br>`tools/provingground/scenarios/manage.json`<br>`docs/vault.md`<br>`docs/questboard.md` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
-| recallsorc | proposed | - | `internal/d2dsrc/items.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/dupid_test.go`<br>`internal/bot/lifelog.go`<br>`internal/bot/observe.go`<br>`internal/loot/pickup.go`<br>`internal/loot/loot_test.go`<br>`docs/vault.md` | - |
 | necro2 | proposed | - | `docs/probes/necromancer-readiness-2026-11-22.md` | - |
 | necro4 | proposed | - | `internal/combat/classdata.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro.go`<br>`internal/combat/necro_corpse.go`<br>`internal/combat/necro_test.go`<br>`internal/combat/necro_data_test.go`<br>`internal/combat/fighter.go` | - |
+| necro3 | proposed | - | `internal/buildfile/testdata/necromancer-summoner-sme.json`<br>`internal/buildfile/testdata/necromancer-poison-nova-sme.json`<br>`internal/buildfile/necrosme_test.go`<br>`internal/plandata/build-necromancer_summoner_sme.json`<br>`internal/plandata/build-necromancer_poison_nova_sme.json`<br>`docs/plan/data/build-necromancer_summoner_sme.json`<br>`docs/plan/data/build-necromancer_poison_nova_sme.json`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro_data_test.go`<br>`internal/leveler/necrosummoner_test.go` | - |
+| sellall | proposed | - | `internal/vaultkeep`<br>`internal/watch`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`docs/ui/vault-sell-all`<br>`tools/provingground/scenarios/vaultsellall.json`<br>`tools/uishots`<br>`tools/uishots.sh` | - |
+| uinav | proposed | - | `internal/watch/linkmatrix_test.go`<br>`internal/watch/invui.go`<br>`internal/watch/skillsui.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/invapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/characters.js`<br>`internal/watch/testdata/vault_nav.mjs`<br>`docs/ui/nav-links`<br>`docs/ui-design-system.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -440,14 +442,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- f3447a84d 11-22 14:34 `Merge agent/recallsorc: Merge branch 'main' into recallsorc` (recallsorc)
-- 2beee7797 11-22 14:32 `Merge branch 'main' into recallsorc` (-)
-- dbb197eaa 11-22 14:26 `Merge agent/necro4: Merge branch 'main' into necro4` (necro4)
-- 7390d333c 11-22 14:24 `Merge branch 'main' into necro4` (-)
-- 0b1c9d7b0 11-22 14:14 `Merge agent/necrosme: Merge branch 'main' into necrosme` (necrosme)
-- 26ff256f1 11-22 14:13 `Merge branch 'main' into necrosme` (-)
-- f85df9835 11-22 14:02 `Merge agent/necro-audit: Merge branch 'main' into necro2` (necro-audit)
-- c4d0f079e 11-22 14:00 `Merge branch 'main' into necro2` (-)
-- 2cd38eec9 11-22 13:46 `Merge agent/mapverify: Merge branch 'main' into mapverify` (mapverify)
-- 0c004fb2f 11-22 13:45 `Merge branch 'main' into mapverify` (-)
+- 6b883a8cc 11-22 16:32 `Merge agent/buildcatalog: buildcatalog: points table test skips the catalogue file` (buildcatalog)
+- eb2d1a8aa 11-22 15:40 `Merge branch 'main' into buildcatalog` (-)
+- 3143bca58 11-22 15:28 `Merge agent/buildratings: Merge branch 'main' into buildratings` (buildratings)
+- 0ca940e0c 11-22 15:27 `Merge branch 'main' into buildratings` (-)
+- b4003f7db 11-22 15:21 `Merge agent/uinav: Merge branch 'main' into uinav` (uinav)
+- 8449d5e6f 11-22 15:20 `Merge branch 'main' into uinav` (-)
+- c029ce3dc 11-22 15:14 `Merge origin/main into uinav` (-)
+- f3ab54d84 11-22 15:11 `Merge agent/sellall: Merge branch 'main' into sellall` (sellall)
+- 0e772e686 11-22 15:10 `Merge branch 'main' into sellall` (-)
+- afc522db3 11-22 15:04 `Merge agent/fableui: Merge branch 'main' into fableui` (fableui)
 <!-- statusgen:end -->

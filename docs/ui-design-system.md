@@ -197,6 +197,20 @@ One sheet (`d-sheet`: bottom sheet under laptop, centred dialog from laptop; foc
 
 One scheduler with the existing SSE `/api/events` as the trigger and a 5 s safety poll; per-panel intervals from the manifest; a panel hidden by a tab or a fold is polled at a quarter rate; `document.hidden` pauses everything but the status band. Replaces the six independent timers of today.
 
+### 4.6 Page links (card uinav, until the shared navigation of the UI review exists)
+
+Every page has a way to its neighbours and a way back; plain `/watch` is never a back target (it can land on the Return screen), always `/watch?live=1`. Today's matrix, kept true by `TestPageLinkMatrix` and `TestVaultHeaderLinksJS` (`internal/watch/linkmatrix_test.go`):
+
+| page | links |
+|---|---|
+| Inventory | Live screen, Skills, Points, Vault, Policy in the band; Inventory, Skills, Points, Vault, Policy, Return in the phone `...` list |
+| Skills | Live screen, Inventory, Points, Policy |
+| Points | Live screen, Skills, Inventory |
+| Vault | Live screen (Back), Inventory, Skills |
+| Characters | Live screen (Back) |
+
+The five-destination bar that replaces these per-page lists is card E4 of the review (docs/design/fable-review-2026-11-22, branch agent/fableui commit fe101397a); it needs the user's decisions F1 and F4. A new page adds its row here and to the test.
+
 ## 5. Component catalogue
 
 Each component is a class `d-<name>` in `components.css` (`@layer components`), a factory in `components.js` that builds DOM with `textContent` only, a data-attribute API for state, and documented anatomy. Panels compose components; they do not restyle them. Props are data attributes; states are `data-state` or ARIA attributes.

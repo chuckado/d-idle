@@ -48,7 +48,7 @@ func TestItemTipJSNeverScrollsOrInjects(t *testing.T) {
 // The page loads the tooltip files and the routes serve them under the page CSP (style-src 'self').
 func TestItemTipRoutes(t *testing.T) {
 	for _, want := range []string{`href="/watch/inventory-tip.css"`, `src="/watch/inventory-tip.js"`} {
-		if !strings.Contains(invPage, want) {
+		if !strings.Contains(charPage, want) {
 			t.Errorf("inventory page lacks %s", want)
 		}
 	}

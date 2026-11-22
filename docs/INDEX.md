@@ -256,6 +256,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [botthreat.md](botthreat.md): botthreat: missile threat model, shooter priority, runner guard (status: current. Offline only (mem.Fake / table-driven tests); no live run. Findings come from...)
 - [bounce3.md](bounce3.md): bounce3: the warp arrival bounce, root cause and fix (status: current (TASK card bounce3). Supersedes the cause sections of passagebounce.md, fixdenbounce.md and the...)
 - [builder.md](builder.md): Linux builder (build host for fork binaries) (status: current. Specifics (container name, template, limits, host) are in the private ops repo,...)
+- [builds-catalog.md](builds-catalog.md): Build catalogue (build text and stars) (status: current (card buildcatalog). One file, `internal/plandata/build-catalog.json`, loaded by...)
 - [builds-endgame.md](builds-endgame.md): Endgame builds (clvl 2-90, Normal -> Nightmare -> Hell), one per class (agent BUILDS80)
 - [buildv3.md](buildv3.md): BUILDV3: the fresh Sorceress skill table, rewritten to the order the leveler follows (status: table shipped OPT-IN by name (`fallback-lightning-v3`); the default of a fresh Sorceress stays...)
 - [campaign.md](campaign.md): Campaign: the guided journey (status: SUPERSEDED 2026-11-17 (quest board slice S9, docs/questboard.md "Journey retired"): the Journey chapters,...)
@@ -360,6 +361,11 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [town-planner-b-model.md](design/fable-review-2026-11-21/town-planner-b-model.md): Town planner, appendix B: data model, scenarios, migration (status: current (design review 2026-11-21, docs only; proposals, nothing built). Main doc: town-planner.md;...)
 - [town-planner.md](design/fable-review-2026-11-21/town-planner.md): Town and chores planner: one supply need, one town plan (status: current (Fable design review 2026-11-21, docs only; nothing here is built or decided). Tree read:...)
 
+`design/fable-review-2026-11-22/`
+
+- [ui-unification-appendix-pages.md](design/fable-review-2026-11-22/ui-unification-appendix-pages.md): UI unification review, appendix: page and panel inventory (status: current (review of 2026-11-22, card fableui). Belongs to ui-unification.md. Docs only.)
+- [ui-unification.md](design/fable-review-2026-11-22/ui-unification.md): UI unification review: navigation, cruft and readable build pages (2026-11-22) (status: DESIGN REVIEW, nothing built (card fableui). Docs only. The user decides the open questions in section F;...)
+
 `design/`
 
 - [item-colour-2026-11-18.md](design/item-colour-2026-11-18.md): Item colour in the inventory art: chain and slice plan (2026-11-18) (status: design, task-634 (card itemcolour). Follow-up to jewelcolor (task-632), which removed the invented wash....)
@@ -367,6 +373,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [loot-vault-2026-11-16.md](design/loot-vault-2026-11-16.md): Ethereal Vault: a database of every drop, created in the game only on Keep (design and feasibility) (status: DESIGN, 2026-11-16. Nothing here was built or run; the fork was read, not changed. "Ethereal Vault" is the...)
 - [necromancer-sme-answers-2026-11-22.md](design/necromancer-sme-answers-2026-11-22.md): Necromancer build answers for the unattended bot (SME, 2026-11-22) (status: current. Answers the five questions of `docs/probes/necromancer-readiness-2026-11-22.md` section 4 (card...)
 - [quest-board-2026-11-16.md](design/quest-board-2026-11-16.md): Quest board: quests as events the player takes part in (status: design proposal (2026-11-16, card questdesign, TASK-575), not built; waits for the user's answers (section...)
+- [ui-build-ratings-sme-2026-11-22.md](design/ui-build-ratings-sme-2026-11-22.md): Build catalogue: ballpark star thresholds and first-draft ratings (SME, 2026-11-22) (status: current. Answers `docs/design/fable-review-2026-11-22/ui-unification.md` sections D3 and D5 (user decision...)
 - [desktop-app.md](desktop-app.md): Desktop app: d2idle-watch (status: the Go launcher is the FALLBACK; the main desktop app is now `apps/desktop-electron`...)
 - [desktop-electron.md](desktop-electron.md): Desktop app on Electron: d2idle-watch (status: built, not yet run on real desktops (TASK-289 skeleton, TASK-290 tray, autostart, hide-to-tray, update...)
 - [dev-reset.md](dev-reset.md): Reset the play sandbox to a fresh hero (status: CURRENT. Task: TASK-263 (devreset). Dev tooling for a DEV container such as `d2play-20261108`...)
@@ -1142,6 +1149,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
 - [town-plan-scenarios.md](probes/town-plan-scenarios.md): Town planner scenarios (card town1) (status: current (2026-11-21). Source: docs/design/fable-review-2026-11-21/town-planner-b-model.md section B4.)
 - [town-plan-stage2-2026-11-21.md](probes/town-plan-stage2-2026-11-21.md): Town planner, stages 1 and 2 (2026-11-21) (status: current. Design: docs/design/fable-review-2026-11-21/town-planner.md and appendix B. Nothing here was run...)
+- [town-plan-stage3-2026-11-22.md](probes/town-plan-stage3-2026-11-22.md): Town planner, stage 3 (purse), 2026-11-22 (status: current. Design: docs/design/fable-review-2026-11-21/town-planner-b-model.md (card tp-purse, TASK-757)....)
 - [treefix3-2026-11-19.md](probes/treefix3-2026-11-19.md): treefix3: why the Inifuss tree was not found for 17 hours (2026-11-19)
 - [vault-spike-2026-11-16.md](probes/vault-spike-2026-11-16.md): Ethereal Vault V0 spike: capture and create on the d2d fork (result) (status: RESULT, 2026-11-16 (task TASK-578). Design: `docs/design/loot-vault-2026-11-16.md` section 1.7. Tags: V =...)
 - [video-feed-2026-11-15.md](probes/video-feed-2026-11-15.md): Probe: lossless delta feed on real d2d frames (card videofeed, 2026-11-15)
