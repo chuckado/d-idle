@@ -444,4 +444,58 @@ for (const cls of ['paladin', 'sorceress']) {
   assert.deepEqual(seen, ['Den of Evil: walk blood moor, next Akara', 'Den of Evil: waiting for you at Akara', ''], 'published on change only');
   assert.doesNotMatch(fs.readFileSync(path.join(dir, 'video/panel.js'), 'utf8'), /fetch\(/);
 }
+// ---- every part state offers a button or says why not (user bug 2026-11-21: Blood Raven "waiting for you", no button) ----
+{
+  const act = (verb, label, x) => Object.assign({ verb, label }, x || {});
+  // the table of the board's chunk states: what the server sends, the one button the row must render (null: a stated reason)
+  const table = [
+    { state: 'ready', action: act('start', 'Start'), btn: 'start', post: 'start' },
+    { state: 'ready', action: null, why: 'Another quest is running', btn: null },
+    { state: 'available', action: null, readiness: 'too_hard', why: 'too hard for now', btn: null },
+    { state: 'locked', action: null, why: 'after Have Akara read the scroll', btn: null },
+    { state: 'accepted', action: act('cancel', 'Stop', { confirm: true }), btn: 'cancel' },
+    { state: 'in_progress', action: act('cancel', 'Stop', { confirm: true }), btn: 'cancel' },
+    { state: 'blocked', action: act('retry', 'Try again'), btn: 'retry', post: 'retry' },
+    { state: 'awaiting_handin', action: act('handin', 'Hand in'), btn: 'handin', post: 'handin', withAwaiting: true },
+    { state: 'awaiting_handin', action: act('handin', 'Hand in'), btn: 'handin', post: 'handin' }, // no `awaiting` object
+    { state: 'awaiting_handin', action: act('start', 'Start'), btn: 'start', post: 'start', reason: { code: 'handin_ready', text: 'The field work is already done: Start goes straight to the hand-in.' } },
+    { state: 'awaiting_handin', action: act('handin', 'Handing in...', { disabled: true, why: 'x' }), btn: 'handin', disabled: true },
+    { state: 'done', action: null, btn: null },
+    { state: 'skipped', action: null, btn: null },
+  ];
+  for (const tab of [false, true]) for (const r of table) {
+    fresh();
+    const posts = [], c = ctxFor(posts, { ok: true });
+    const b = tab ? L.mount(node('div', 'd-panel'), c) : B.mount(node('div', 'd-panel'), c);
+    const v = clone(gold('offers-paladin'));
+    const q = v.quests.find((x) => x.id === 'sisters_burial_grounds');
+    const ch = q.chunks[0];
+    Object.assign(ch, { state: r.state, readiness: r.readiness, why: r.why });
+    if (r.action) ch.action = r.action; else delete ch.action;
+    if (r.reason) ch.reason = r.reason;
+    q.state = r.state;
+    v.offers = v.offers.filter((o) => o.chunk !== 'blood_raven');
+    v.running = v.awaiting = null;
+    b.update(v);
+    const what = JSON.stringify(r) + ' tab=' + tab;
+    const line = all(c.body, (x) => x.className === 'qb-chunk' && x.dataset.state === r.state && /Blood Raven/.test(texts(x)))[0] || all(c.body, (x) => x.className === 'qb-chunk' && /Blood Raven/.test(texts(x)))[0];
+    if (r.state === 'done' || r.state === 'skipped') continue; // finished rows show no part line
+    assert.ok(line, 'part line ' + what);
+    const key = r.btn && r.btn + '-sisters_burial_grounds-blood_raven';
+    const buttons = all(line, (x) => x.tag === 'button');
+    if (!r.btn) {
+      assert.equal(buttons.length, 0, 'no button ' + what);
+      assert.ok(texts(line).length > ch.title.length + 3, 'a stated reason ' + what);
+      continue;
+    }
+    assert.equal(buttons.length, 1, 'exactly one button ' + what);
+    assert.equal(buttons[0].dataset.key, key, what);
+    assert.equal(!!buttons[0].disabled, !!r.disabled, what);
+    if (r.post) {
+      buttons[0].click(); await tick();
+      assert.deepEqual(posts[0], ['/api/quests/sisters_burial_grounds/' + r.post, { chunk: 'blood_raven' }], what);
+    }
+  }
+}
+
 console.log('quest ui ok');
