@@ -20,6 +20,13 @@ const (
 // GoldMax is the most items one gold order names (the POST body cap, internal/watch vaultMaxIDs).
 const GoldMax = 150
 
+// ScopeAllUnrevealed is the gold order scope "Identify all": the server lists every unrevealed record of the whole vault
+// itself when the order runs. GoldAllMax is the most records one such order takes (the order is stored, not posted).
+const (
+	ScopeAllUnrevealed = "all_unrevealed"
+	GoldAllMax         = 1000
+)
+
 // BarIn is what the quote reads.
 type BarIn struct {
 	Free     bool // Cain stands here

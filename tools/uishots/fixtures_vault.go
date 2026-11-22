@@ -40,6 +40,7 @@ type vaultSet struct {
 	keep           string // "": no Keep queue; ok, dead (the gate refuses: the hero is dead), full (a queue waiting for stash room)
 	preset         bool   // queued, creating, kept and failed rows are put in the store
 	act            string // "": no Reveal or Sell; ok (3 charges), none (no scroll), cain (free), dead (the gate refuses)
+	stash          int    // act "gold": the stash gold of the Identify all button (the price of one reveal is 80)
 	actPreset      bool   // reveal and sell rows in every state, and the "short on gold" prompt
 }
 
@@ -55,9 +56,12 @@ var vaultModes = map[string]vaultSet{
 	// Reveal and Sell (slice V6)
 	"revealing":   {n: 140, capacity: 400, on: true, keep: "ok", act: "ok", actPreset: true},
 	"revealpress": {n: 140, capacity: 400, on: true, keep: "ok", act: "ok"},
-	"revealnone":  {n: 140, capacity: 400, on: true, keep: "ok", act: "none"},
-	"revealcain":  {n: 140, capacity: 400, on: true, keep: "ok", act: "cain"},
-	"revealdead":  {n: 140, capacity: 400, on: true, keep: "ok", act: "dead"},
+	// Identify all (card identifyall): gold only; enough stash, and a stash that pays for 12 of the records
+	"identify":       {n: 140, capacity: 400, on: true, keep: "ok", act: "gold", stash: 560000},
+	"identify-short": {n: 140, capacity: 400, on: true, keep: "ok", act: "gold", stash: 960},
+	"revealnone":     {n: 140, capacity: 400, on: true, keep: "ok", act: "none"},
+	"revealcain":     {n: 140, capacity: 400, on: true, keep: "ok", act: "cain"},
+	"revealdead":     {n: 140, capacity: 400, on: true, keep: "ok", act: "dead"},
 	// the wallet states (V7b): enough Ether to buy, short, one step owned (the refund fits), one step owned and the vault too full for the lower tier, every step owned
 	"eth": {n: 140, on: true, eth: true, balance: 35}, "eth-short": {n: 140, on: true, eth: true, balance: 5},
 	"eth-owned": {n: 140, on: true, eth: true, balance: 15, owned: 1}, "eth-nofit": {n: 450, on: true, eth: true, balance: 15, owned: 1},
@@ -188,6 +192,10 @@ func newVaultFor(mode string, dir string) *watch.VaultAPI {
 			a.preset(ids)
 		}
 		desk.Act = a
+		if set.act == "gold" {
+			desk.Act = &fixtureGoldActor{fixtureActor: a, stash: set.stash}
+			desk.ScrollGold = 80
+		}
 		if f, ferr := bulkid.DefaultFilter(); ferr == nil { // the Reveal bar (one bar for the identify filter) needs the filter table, as the bot's page has
 			desk.MassFilter = f
 			desk.Quality = func(q int) string {
@@ -534,4 +542,37 @@ func vaultFixtureTip(in watch.VaultTipIn) watch.VaultTip {
 		t.Props = []string{"+20 to Strength", "10% Increased Attack Speed", "Adds 3-9 fire damage"}
 	}
 	return t
+}
+
+// fixtureGoldActor is the gold-only Reveal of the bot's page (loot.vaultRevealMethods 4) with a stash; a press changes nothing
+// (the viewer has no game): it answers like a refusal so a picture never shows a lie.
+type fixtureGoldActor struct {
+	*fixtureActor
+	stash int
+}
+
+func (g *fixtureGoldActor) Act(ctx context.Context) watch.VaultActView {
+	v := g.fixtureActor.Act(ctx)
+	v.Reveal.Methods = []string{"gold"}
+	return v
+}
+
+func (g *fixtureGoldActor) GoldInfo(context.Context) watch.VaultGoldInfo {
+	return watch.VaultGoldInfo{On: true, ScrollGold: 80, Stash: g.stash, Decode: true}
+}
+
+func (g *fixtureGoldActor) EnqueueRevealGold(_ context.Context, ids []string, _ int, _ bool) ([]watch.VaultKeepResult, *watch.VaultGoldOrder) {
+	out := make([]watch.VaultKeepResult, len(ids))
+	for i, id := range ids {
+		out[i] = watch.VaultKeepResult{ID: id, Code: "state", Why: "the fixture viewer has no game"}
+	}
+	return out, nil
+}
+
+func (g *fixtureGoldActor) EnqueueRevealGoldAll(ctx context.Context, max int, confirm bool) ([]watch.VaultKeepResult, *watch.VaultGoldOrder) {
+	return g.EnqueueRevealGold(ctx, []string{""}, max, confirm)
+}
+
+func (g *fixtureGoldActor) CancelGold() (watch.VaultGoldOrder, bool) {
+	return watch.VaultGoldOrder{}, false
 }

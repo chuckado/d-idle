@@ -742,6 +742,7 @@ func (d *VaultDesk) view(ctx context.Context, q vaultQuery, kinds vaultTexts) Va
 		v.Act.Reveal.Bar = d.bar(ctx, recs, r)
 		if ga, ok := d.Act.(VaultGoldActor); ok {
 			gi := ga.GoldInfo(ctx)
+			gi.Unrevealed = len(bulkid.UnrevealedIDs(recs, gi.Decode))
 			v.Act.Reveal.Gold = &gi
 		}
 	}
@@ -925,6 +926,7 @@ func (a *VaultAPI) Handler() http.Handler {
 
 type vaultBody struct {
 	IDs     []string `json:"ids"`
+	Scope   string   `json:"scope,omitempty"` // revealgold: all_unrevealed names every unrevealed record of the whole vault instead of ids
 	Confirm bool     `json:"confirm"`
 	Target  string   `json:"target,omitempty"`  // keep: stash (default) or inv
 	MaxGold int      `json:"maxGold,omitempty"` // revealgold: the most gold the order may spend (0: the quote)
@@ -1000,6 +1002,14 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 			}
 			d.Act.DismissOffer()
 			writeJSON(w, 200, vaultReply{OK: true, Done: []string{}})
+			return
+		}
+		if route == VaultRevealGoldRoute && b.Scope != "" {
+			if b.Scope != bulkid.ScopeAllUnrevealed || len(b.IDs) > 0 {
+				writeJSON(w, http.StatusBadRequest, policyReply{Code: "scope", Error: "scope is all_unrevealed, without ids"})
+				return
+			}
+			a.goldRoute(w, r, d, route, &b)
 			return
 		}
 		if len(b.IDs) == 0 || len(b.IDs) > vaultMaxIDs {
