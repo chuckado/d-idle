@@ -583,6 +583,7 @@ docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
+docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
 docs/probes/pg-gate-group1-2026-11-21.md  credit-runner  pgjournal
 docs/probes/pg-journal-pair-2026-11-21.md  credit-runner  pgjournal
 docs/probes/provingground-act1more-2026-11-20.md  credit-runner  act1more
