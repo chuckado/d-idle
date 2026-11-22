@@ -107,6 +107,8 @@ type BuildView struct {
 	AutoAlloc bool        `json:"autoAlloc"`
 	State     BuildState  `json:"state"`
 	Builds    []BuildInfo `json:"builds"`
+	Cards     []BuildCard `json:"cards"`
+	CardsErr  string      `json:"cardsError,omitempty"`
 	Held      []Held      `json:"held,omitempty"`
 	OffBuild  []string    `json:"offBuild,omitempty"`
 	Respec    RespecView  `json:"respec"`
@@ -141,7 +143,7 @@ func (d *Desk) buildsOf(class string) []BuildInfo {
 
 // BuildView is the picker and the state.
 func (d *Desk) BuildView() BuildView {
-	v := BuildView{Builds: []BuildInfo{}, AutoAlloc: d.autoOn()}
+	v := BuildView{Builds: []BuildInfo{}, Cards: []BuildCard{}, AutoAlloc: d.autoOn()}
 	s := d.store.Get()
 	v.State = BuildState{Build: s.Build, Locked: s.Locked, LockedAtLevel: s.LockedAtLevel, Respecs: s.Respecs}
 	var p *d2.Player
@@ -152,6 +154,10 @@ func (d *Desk) BuildView() BuildView {
 	if p != nil {
 		v.Class, v.Level, level = p.Class.String(), p.Level, p.Level
 		v.Builds = append(v.Builds, d.buildsOf(v.Class)...)
+		var err error
+		if v.Cards, err = d.Cards(v.Class); err != nil {
+			v.Cards, v.CardsErr = []BuildCard{}, err.Error()
+		}
 	}
 	for _, b := range v.Builds {
 		if b.Name == s.Build {

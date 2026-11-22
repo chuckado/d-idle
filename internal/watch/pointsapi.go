@@ -38,6 +38,7 @@ const BuildRoute = "/api/hero/build"
 type BuildDesk interface {
 	BuildView() points.BuildView
 	SetBuild(name string, confirm bool) points.Reply
+	BuildDetail(id string) (points.BuildDetail, error)
 }
 
 // PointsDesk is what the routes need from the points service (points.Desk).
@@ -77,6 +78,15 @@ func (a *PointsAPI) Handler() http.Handler {
 			bd, _ := a.desk().(BuildDesk)
 			if bd == nil {
 				writeJSON(w, http.StatusServiceUnavailable, policyReply{Code: "off", Error: "the build picker is not available yet"})
+				return
+			}
+			if id := r.URL.Query().Get("detail"); id != "" { // one card's detail, on demand (card buildcards)
+				det, err := bd.BuildDetail(id)
+				if err != nil {
+					writeJSON(w, http.StatusNotFound, policyReply{Code: "no_build", Error: err.Error()})
+					return
+				}
+				writeJSON(w, 200, det)
 				return
 			}
 			writeJSON(w, 200, bd.BuildView())
