@@ -8,9 +8,10 @@ chrome=$(command -v google-chrome-stable || command -v chromium) || exit 2
 go build -o "$bin/uishots" ./tools/uishots || exit 2
 timeout 200 "$bin/uishots" serve -addr 127.0.0.1:18977 >"$bin/s.log" 2>&1 &
 sp=$!; sleep 3
-for sz in 1366x768 1920x1080 390x844; do
+out=${OUT:-docs/ui/vault-cleanup}; mkdir -p "$out"
+for sz in ${SIZES:-1366x768 1920x1080 390x844}; do
  for st in ${STATES:-revealing}; do
-  timeout 60 $chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars --user-data-dir=$bin/p$sz --window-size=${sz%x*},${sz#*x} --virtual-time-budget=6000 --screenshot=docs/ui/vault-cleanup/$1-$st-$sz.png "http://127.0.0.1:18977/watch/vault?vault=$st&theme=dark" >/dev/null 2>&1
+  timeout 60 $chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars --user-data-dir=$bin/p$sz --window-size=${sz%x*},${sz#*x} --virtual-time-budget=6000 --screenshot=$out/$1-$st-$sz.png "http://127.0.0.1:18977/watch/vault?vault=$st&theme=dark" >/dev/null 2>&1
  done
 done
-ls docs/ui/vault-cleanup
+ls "$out"
