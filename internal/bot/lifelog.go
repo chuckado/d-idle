@@ -97,3 +97,11 @@ func (r *Runner) noteArrival(o *observer, p *d2.Player, now time.Time) {
 	r.e.Log.Info("arrival", "area", p.Area, "from", o.area, "x", p.X, "y", p.Y,
 		"arrivals", o.arrivals, "bounces", o.bounces) // cumulative since start: bounces/arrivals is the rate to compare per build
 }
+
+// cursorWord says what the cursor holds as `<unit id>/<class>@<x>,<y>`, or "" (logging only).
+func cursorWord(s *d2.Snapshot) string {
+	if c := s.Inventory.Cursor; c != nil {
+		return fmt.Sprintf("%d/%d@%d,%d", c.ID, c.Class, c.X, c.Y)
+	}
+	return ""
+}

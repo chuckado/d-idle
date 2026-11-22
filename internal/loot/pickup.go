@@ -637,6 +637,7 @@ func (l *Looter) pickOne(ctx context.Context, c cand, o PickOpts) error {
 			}
 			return err
 		}
+		l.e.Log.Info("loot: clicked", "item", c.name, "id", u.ID, "at", fmt.Sprintf("%d,%d", u.X, u.Y), "player", fmt.Sprintf("%d,%d", s.Player.X, s.Player.Y), "panel", hand.PanelOpen(s.UI), "ui", fmt.Sprint(s.UI))
 		walk := time.Duration(d) * 90 * time.Millisecond
 		timeout := time.Duration(t.ConfirmMs)*time.Millisecond + walk
 		ns, ok, werr := l.hand.Wait(ctx, timeout, func(s *d2.Snapshot) bool {

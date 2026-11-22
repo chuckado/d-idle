@@ -488,7 +488,7 @@ func (r *Runner) observe(s *d2.Snapshot, now time.Time) {
 			r.mu.Lock()
 			st := r.st
 			r.mu.Unlock()
-			r.e.Log.Info("worn set changed", "was", o.worn, "now", w, "state", st, "area", p.Area, "cursor", s.Inventory.Cursor != nil)
+			r.e.Log.Info("worn set changed", "was", o.worn, "now", w, "state", st, "area", p.Area, "cursor", cursorWord(s), "ui", fmt.Sprint(s.UI))
 		}
 		o.worn, o.init2 = w, true
 	}
