@@ -44,11 +44,11 @@ type CreditResult struct {
 
 // GoldCreditor is the surface the vault keeper codes against: *Pay (a fork) and *PayFake (tests).
 type GoldCreditor interface {
-	CreditGold(ctx context.Context, amount int, order string) (CreditResult, error)
+	CreditGold(ctx context.Context, amount int, order string, items int) (CreditResult, error)
 }
 
 // CreditGold adds amount gold to the stash for the order. The ledger line is written first (an unwritable ledger stops it).
-func (p *Pay) CreditGold(ctx context.Context, amount int, order string) (CreditResult, error) {
+func (p *Pay) CreditGold(ctx context.Context, amount int, order string, items int) (CreditResult, error) {
 	if p == nil || p.C == nil || p.Ledger == nil || p.Actor == "" {
 		return CreditResult{}, errors.New("d2dctl: Pay needs a client, a ledger and an actor")
 	}
@@ -61,7 +61,7 @@ func (p *Pay) CreditGold(ctx context.Context, amount int, order string) (CreditR
 		return CreditResult{}, fmt.Errorf("d2dctl: creditgold order id %q: 1..64 of [A-Za-z0-9._:-]", order)
 	}
 	e := cheat.Entry{Time: time.Now().UTC(), Actor: p.Actor, Instance: p.Instance, Character: p.Character, Kind: KindD2DDebug,
-		Params: map[string]any{"verb": "debug creditgold", "amount": amount, "order": order}, Reason: "player vault sale order " + order}
+		Params: map[string]any{"verb": "debug creditgold", "amount": amount, "order": order, "items": items}, Reason: "player vault sale order " + order}
 	if err := p.Ledger.Append(e); err != nil { // before anything is sent
 		return CreditResult{}, err
 	}
@@ -113,7 +113,7 @@ func mapCreditErr(err error) error {
 }
 
 // CreditGold mirrors the verb on the in-memory stash (limit StashLimit unless Limit is set).
-func (f *PayFake) CreditGold(_ context.Context, amount int, order string) (CreditResult, error) {
+func (f *PayFake) CreditGold(_ context.Context, amount int, order string, _ int) (CreditResult, error) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 	f.Calls = append(f.Calls, fmt.Sprintf("credit %d %s", amount, order))

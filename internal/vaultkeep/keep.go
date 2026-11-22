@@ -82,6 +82,19 @@ type Keeper struct {
 	OrderFile   func() string
 	Measured    func() bool // a measured run (D2BOT_RUN): a gold reveal is refused and never reaches the fork
 
+	// The instant sale (sale.go): the credit verb, the price verb, the stash read and the knobs. nil Credit or Pricer: the old queue.
+	Credit      d2dctl.GoldCreditor
+	Pricer      d2dctl.Pricer
+	StashGold   func(context.Context) (int, error) // the stash gold, fresh
+	SellInstant func() bool                        // loot.vaultSellInstant
+	SellConfirm func() int                         // loot.vaultSellConfirm
+	SaleFile    func() string                      // where the sale order is kept
+
+	smu     sync.Mutex // one sale at a time
+	smem    *SaleOrder
+	sloaded string
+	prices  sync.Map // record hash and identified flag -> gold
+
 	nop    sync.Map   // record ids whose bytes decoded to no properties (BackfillProps tries them once per process)
 	pmu    sync.Mutex // serialises one gold order's unlock, payment and settle (taken before omu)
 	omu    sync.Mutex // guards mem and loaded (never taken while mu is held)
@@ -364,6 +377,8 @@ type created struct {
 func (k *Keeper) Run(ctx context.Context) []string {
 	lines := k.runKeep(ctx)
 	lines = append(lines, k.resumeGold(ctx)...) // an order a restart or a lost reply left unsettled
+	lines = append(lines, k.resumeSale(ctx)...)
+	lines = append(lines, k.flushQueued(ctx)...)
 	lines = append(lines, k.runEquip(ctx)...)
 	lines = append(lines, k.runReveal(ctx)...)
 	return append(lines, k.runSell(ctx)...)
