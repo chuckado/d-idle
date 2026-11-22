@@ -75,9 +75,25 @@ func (n *Navigator) ForgetCoverage() {
 	n.covMu.Unlock()
 }
 
+// fullyKnown: the world source says its maps arrive whole and, with nav.fullGrid, the current level's grid really is
+// whole (measured, not assumed).
 func (n *Navigator) fullyKnown() bool {
 	f, ok := n.w.(fullyKnown)
-	return ok && f.FullyKnown()
+	if !ok || !f.FullyKnown() {
+		return false
+	}
+	if !n.tune().FullGrid {
+		return true
+	}
+	return gridWhole(n.w.Current())
+}
+
+// gridWhole: every cell of the level's rectangle is known. A nil map or an empty rectangle is not whole.
+func gridWhole(lm *d2map.LevelMap) bool {
+	if lm == nil || lm.Grid == nil || lm.Rect.W <= 0 || lm.Rect.H <= 0 {
+		return false
+	}
+	return lm.Grid.KnownCount() >= lm.Rect.W*lm.Rect.H
 }
 
 // samplePoints picks one reachable walkable cell per spacing x spacing block (the one closest to the block centre).
