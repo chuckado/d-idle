@@ -30,6 +30,7 @@ type stub struct {
 	calls               map[string]int
 	lm                  *d2dctl.LevelMap      // the fork's debug levelmap (nil: the verb errors)
 	mons                *d2dctl.LevelMonsters // the fork's debug levelmonsters (nil: the verb errors)
+	wt                  *d2dctl.WarpTriggers  // the fork's debug warptriggers (nil: the verb errors)
 }
 
 func (s *stub) n(k string) { s.calls[k]++ }

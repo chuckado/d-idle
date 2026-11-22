@@ -43,6 +43,10 @@ const (
 	mouthCoreR = 10.0
 	// gateDetourMargin: the detour waypoint lies this far outside the bound.
 	gateDetourMargin = 5.0
+	// readTriggerMargin: with a READ trigger area (nav.warpRead) a click within this many subtiles of a cell that takes
+	// the warp is refused too. The engine tests the click point itself; the margin covers a click sent a subtile off
+	// (rounding of the target, the replan) and costs a corridor 2 subtiles wide beside the area at most.
+	readTriggerMargin = 2
 )
 
 // ErrMouthGate: the click would cross the trigger area of an unwanted exit and no safe replacement exists. It wraps
@@ -61,6 +65,54 @@ func (g mouthGate) ClickWorld(p input.Point) error {
 		return err
 	}
 	return g.Controller.ClickWorld(q)
+}
+
+// splitAreas takes the exits that carry a read trigger area (only with nav.warpRead) out of the gated list: for those
+// the engine's own click set decides, the guessed bound keeps deciding for the rest.
+func (n *Navigator) splitAreas(lm *d2map.LevelMap, exits []input.Point) (areas []*d2map.Trigger, rest []input.Point) {
+	if lm == nil || !n.tune().WarpRead {
+		return nil, exits
+	}
+	for _, p := range exits {
+		var t *d2map.Trigger
+		for _, e := range lm.Exits {
+			if exitPoint(e.Pos) == p && e.Trigger != nil {
+				t = e.Trigger
+				break
+			}
+		}
+		if t != nil {
+			areas = append(areas, t)
+		} else {
+			rest = append(rest, p)
+		}
+	}
+	return areas, rest
+}
+
+func areasHit(areas []*d2map.Trigger, p input.Point) bool {
+	for _, t := range areas {
+		if t.ClickNear(p.X, p.Y, readTriggerMargin) {
+			return true
+		}
+	}
+	return false
+}
+
+// clickClear returns p when no read area takes it, else the last point of the segment from to p that none takes (at
+// least gateMinClip from from); ok is false when there is none.
+func clickClear(from, p input.Point, areas []*d2map.Trigger) (q input.Point, ok bool) {
+	if !areasHit(areas, p) {
+		return p, true
+	}
+	l := dist(from, p)
+	for t := l - 1; t >= gateMinClip; t-- {
+		c := input.Point{X: from.X + int(math.Round(float64(p.X-from.X)*t/l)), Y: from.Y + int(math.Round(float64(p.Y-from.Y)*t/l))}
+		if !areasHit(areas, c) {
+			return c, true
+		}
+	}
+	return input.Point{}, false
 }
 
 func exitPoint(p d2map.Point) input.Point { return input.Point{X: p.X, Y: p.Y} }
@@ -111,8 +163,9 @@ func (n *Navigator) exitBesideWanted(lm *d2map.LevelMap, e d2map.Exit) bool {
 // MouthClickOK reports whether a click at to, sent while the character stands at from, keeps the cave-mouth invariant.
 // The Fighter asks it before a swing (a left click walks the character to the monster).
 func (n *Navigator) MouthClickOK(from, to input.Point) bool {
-	_, exits := n.gatedExits()
-	return clickOKAll(from, to, exits)
+	lm, exits := n.gatedExits()
+	areas, exits := n.splitAreas(lm, exits)
+	return !areasHit(areas, to) && clickOKAll(from, to, exits)
 }
 
 // mouthClickOK is the invariant for one exit. The click target must lie outside the bound: every logged fired click had
@@ -178,6 +231,19 @@ func (n *Navigator) gateClick(ctl input.Controller, p input.Point) (input.Point,
 	from, err := ctl.Pos()
 	if err != nil {
 		from = n.lastPos
+	}
+	if areas, rest := n.splitAreas(lm, exits); len(areas) > 0 {
+		q, ok := clickClear(from, p, areas)
+		if !ok {
+			return n.hold(lm, from, p, rest, "inside a read trigger area")
+		}
+		if q != p {
+			n.log.Info("nav mouth gate: click clipped at a read trigger area", "from", from, "to", p, "as", q)
+			p = q
+		}
+		if exits = rest; len(exits) == 0 {
+			return p, nil
+		}
 	}
 	if n.okAll(from, p, exits) {
 		return p, nil
