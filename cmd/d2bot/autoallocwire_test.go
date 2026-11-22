@@ -37,7 +37,7 @@ func TestAllocBuildListTwoClasses(t *testing.T) {
 			t.Errorf("%s: experimental without a stated need", b.Name)
 		}
 	}
-	for _, class := range []string{"paladin", "sorceress"} {
+	for _, class := range []string{"paladin", "sorceress", "necromancer"} {
 		if len(by[class]) < 2 {
 			t.Fatalf("%s: builds %v", class, by[class])
 		}
@@ -47,7 +47,7 @@ func TestAllocBuildListTwoClasses(t *testing.T) {
 			t.Logf("%s %s tier=%s needs=%d", class, b.Name, b.Tier, len(b.Needs))
 		}
 	}
-	for _, want := range []string{"paladin-normal30-v2", "sorceress_normal30", "sorceress_fire_normal30"} {
+	for _, want := range []string{"necromancer_summoner_sme", "necromancer_poison_nova_sme", "paladin-normal30-v2", "sorceress_normal30", "sorceress_fire_normal30"} {
 		found := false
 		for _, bs := range by {
 			for _, b := range bs {
@@ -56,6 +56,23 @@ func TestAllocBuildListTwoClasses(t *testing.T) {
 		}
 		if !found {
 			t.Errorf("build %s is not offered", want)
+		}
+	}
+}
+
+// necropick: the picker offers each class only its own builds and takes the note from the build catalogue.
+func TestAllocPickerNecromancerNotes(t *testing.T) {
+	w := testAllocWire(t)
+	for _, b := range w.builds() {
+		switch b.Name {
+		case "necromancer_summoner_sme", "necromancer_poison_nova_sme":
+			if !strings.EqualFold(b.Class, "necromancer") || b.Note == "" {
+				t.Errorf("%s: class %q note %q", b.Name, b.Class, b.Note)
+			}
+		case "sorceress_normal30":
+			if !strings.EqualFold(b.Class, "sorceress") {
+				t.Errorf("%s: class %q", b.Name, b.Class)
+			}
 		}
 	}
 }
