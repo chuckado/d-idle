@@ -402,6 +402,7 @@
 | identifyall | proposed | - | `internal/vaultkeep`<br>`internal/bulkid`<br>`internal/watch`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`docs/ui/vault-identify-all`<br>`tools/provingground/scenarios/vaultreveal.json`<br>`tools/uishots` | - |
 | mapphone | proposed | - | `internal/watch/web/panels/area-map`<br>`internal/watch/web/utilities.css`<br>`tools/uishots/mapphone.go`<br>`tools/uishots/mapphone.js`<br>`internal/watch/testdata/areamap`<br>`docs/ui/map-phone`<br>`tools/uishots.sh`<br>`tools/uishots/fit.go`<br>`tools/uishots/fixtures.go`<br>`tools/uishots/serve.go`<br>`docs/mapfog.md` | - |
 | equipswap | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/stash.go`<br>`internal/invdesk/stash_test.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/task/act1.go`<br>`internal/task/act2.go`<br>`internal/task/act3.go`<br>`internal/task/act4.go`<br>`tools/provingground/scenarios/manage.json`<br>`docs/vault.md`<br>`docs/questboard.md` | - |
+| vaultsell | proposed | - | `cmd/d2bot/vaultkeep.go`<br>`cmd/d2scenario/run.go`<br>`cmd/d2scenario/vaultfacts.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`internal/d2dctl/credit.go`<br>`internal/d2dctl/credit_test.go`<br>`internal/d2dctl/paygold.go`<br>`internal/d2dctl/vault_fake.go`<br>`internal/d2dctl/vault_verbs.go`<br>`internal/env/tuning_loot.go`<br>`internal/scenario/state.go`<br>`internal/scenario/vaultassert.go`<br>`internal/scenario/vaultseed_test.go`<br>`internal/vault/store.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/sale.go`<br>`internal/vaultkeep/sale_test.go`<br>`internal/vaultkeep/sell.go`<br>`internal/watch/testdata/vault_logic.mjs`<br>`internal/watch/testdata/vault_sell.mjs`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultsale_test.go`<br>`internal/watch/vaultsell_ui_test.go`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`tools/provingground/scenarios/vaultsell.json` | `d2d-lab-binary`<br>`fork-branch:didle/vaultsell-20261122` |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -437,14 +438,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 840bcfe80 11-22 11:37 `Merge agent/vaultsell: Merge branch 'main' into vaultsell` (vaultsell)
+- 8bd91284e 11-22 11:36 `Merge branch 'main' into vaultsell` (-)
+- 4683bb790 11-22 11:31 `Merge origin/main into agent/vaultsell (identifyall touched vault.js)` (-)
 - 1984adebd 11-22 11:26 `Merge agent/equipswap: Merge origin/main into equipswap` (equipswap)
 - 6cd572085 11-22 11:22 `Merge origin/main into equipswap` (-)
+- 4ce4f7d65 11-22 11:20 `Merge origin/main into agent/vaultsell` (-)
 - 141d88796 11-22 11:15 `Merge agent/identifyall: Merge branch 'main' into identifyall` (identifyall)
 - 1a40a1292 11-22 11:14 `Merge branch 'main' into identifyall` (-)
 - a9864033b 11-22 11:07 `Merge origin/main into agent/identifyall` (-)
 - 1f2524ed5 11-22 11:03 `Merge agent/staleaccept: Merge branch 'main' into staleaccept` (staleaccept)
-- 54f39b380 11-22 11:02 `Merge branch 'main' into staleaccept` (-)
-- f430eca93 11-22 10:51 `Merge agent/mapphone: mapphone: phone rules in utilities.css, uilint clean, leakcheck clean` (mapphone)
-- 52978338f 11-22 00:25 `Merge agent/map5: Merge origin/main into fogtrail` (map5)
-- aa0829869 11-22 00:20 `Merge origin/main into fogtrail` (-)
 <!-- statusgen:end -->

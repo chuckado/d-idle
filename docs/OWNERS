@@ -328,6 +328,7 @@ cmd/d2bot/vaultkeep.go  credit-runner  vaultequip
 cmd/d2bot/vaultkeep.go  credit-runner  vaultfull
 cmd/d2bot/vaultkeep.go  credit-runner  vaultpay
 cmd/d2bot/vaultkeep.go  credit-runner  vaultreveal
+cmd/d2bot/vaultkeep.go  credit-runner  vaultsell
 cmd/d2bot/vaultkeep.go  credit-runner  vaultv5
 cmd/d2bot/vaultkeep.go  credit-runner  vaultv6
 cmd/d2bot/vaultpage.go  credit-runner  bulkid
@@ -364,6 +365,7 @@ cmd/d2scenario/run.go  credit-runner  agencyp0
 cmd/d2scenario/run.go  credit-runner  pgledger
 cmd/d2scenario/run.go  credit-runner  pgprov
 cmd/d2scenario/run.go  credit-runner  pgtaps
+cmd/d2scenario/run.go  credit-runner  vaultsell
 cmd/d2scenario/tap.go  credit-runner  andariel1
 cmd/d2scenario/tap.go  credit-runner  handinbtn
 cmd/d2scenario/tap.go  credit-runner  pgtaps
@@ -371,6 +373,7 @@ cmd/d2scenario/tap_test.go  credit-runner  andariel1
 cmd/d2scenario/tap_test.go  credit-runner  handinbtn
 cmd/d2scenario/tap_test.go  credit-runner  pgtaps
 cmd/d2scenario/validate.go  credit-runner  pgselfcheck
+cmd/d2scenario/vaultfacts.go  credit-runner  vaultsell
 data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
 data/capabilities/  credit-runner  dlv-data
@@ -523,6 +526,7 @@ docs/knobs.md  credit-runner  vaultequip
 docs/knobs.md  credit-runner  vaultfull
 docs/knobs.md  credit-runner  vaultpay
 docs/knobs.md  credit-runner  vaultreveal
+docs/knobs.md  credit-runner  vaultsell
 docs/knobs.md  credit-runner  vaultv3
 docs/knobs.md  credit-runner  vaultv5
 docs/knobs.md  credit-runner  vaultv6
@@ -810,6 +814,7 @@ docs/vault.md  credit-runner  vaultequip
 docs/vault.md  credit-runner  vaultfull
 docs/vault.md  credit-runner  vaultpay
 docs/vault.md  credit-runner  vaultreveal
+docs/vault.md  credit-runner  vaultsell
 docs/vault.md  credit-runner  vaulttip
 docs/vault.md  credit-runner  vaultv2
 docs/vault.md  credit-runner  vaultv3
@@ -1121,6 +1126,8 @@ internal/d2dcombat/rig.go  credit-runner  verbs2
 internal/d2dctl  credit-runner  countess3
 internal/d2dctl  live-agent  k1layout
 internal/d2dctl/  credit-runner  dlv-reads
+internal/d2dctl/credit.go  credit-runner  vaultsell
+internal/d2dctl/credit_test.go  credit-runner  vaultsell
 internal/d2dctl/fake/fake.go  credit-runner  verbs2
 internal/d2dctl/fake/fake.go  credit-runner  warptrigger
 internal/d2dctl/item_verbs.go  credit-runner  itemverbs2
@@ -1130,12 +1137,15 @@ internal/d2dctl/item_verbs_test.go  credit-runner  itemverbs2
 internal/d2dctl/labels.go  credit-runner  labels
 internal/d2dctl/labels_test.go  credit-runner  labels
 internal/d2dctl/paygold.go  credit-runner  vaultpay
+internal/d2dctl/paygold.go  credit-runner  vaultsell
 internal/d2dctl/paygold_test.go  credit-runner  vaultpay
 internal/d2dctl/points_verbs.go  credit-runner  agencyp0
 internal/d2dctl/points_verbs_test.go  credit-runner  agencyp0
 internal/d2dctl/vault_fake.go  credit-runner  vaultpay
+internal/d2dctl/vault_fake.go  credit-runner  vaultsell
 internal/d2dctl/vault_fake.go  credit-runner  vaultv6
 internal/d2dctl/vault_verbs.go  credit-runner  vaultpay
+internal/d2dctl/vault_verbs.go  credit-runner  vaultsell
 internal/d2dctl/vault_verbs.go  credit-runner  vaulttip
 internal/d2dctl/vault_verbs_test.go  credit-runner  vaulttip
 internal/d2dctl/verbs.go  credit-runner  arrivalsettle
@@ -1230,6 +1240,7 @@ internal/env/tuning_loot.go  credit-runner  vaultequip
 internal/env/tuning_loot.go  credit-runner  vaultfull
 internal/env/tuning_loot.go  credit-runner  vaultpay
 internal/env/tuning_loot.go  credit-runner  vaultreveal
+internal/env/tuning_loot.go  credit-runner  vaultsell
 internal/env/tuning_loot.go  credit-runner  vaultv3
 internal/env/tuning_loot.go  credit-runner  vaultv5
 internal/env/tuning_loot.go  credit-runner  vaultv6
@@ -1488,7 +1499,10 @@ internal/scenario/scenario_test.go  credit-runner  druid1
 internal/scenario/stability.go  credit-runner  pgstability
 internal/scenario/state.go  credit-runner  agencyp0
 internal/scenario/state.go  credit-runner  town1
+internal/scenario/state.go  credit-runner  vaultsell
 internal/scenario/taps.go  credit-runner  pgtaps
+internal/scenario/vaultassert.go  credit-runner  vaultsell
+internal/scenario/vaultseed_test.go  credit-runner  vaultsell
 internal/senses  credit-runner  botcpu
 internal/senses  credit-runner  maphistory
 internal/senses  credit-runner  maphistoryA
@@ -1608,6 +1622,7 @@ internal/vault  credit-runner  vaultv5
 internal/vault  credit-runner  vaultv6
 internal/vault/  credit-runner  vaultfull
 internal/vault/index.go  credit-runner  vaultv4
+internal/vault/store.go  credit-runner  vaultsell
 internal/vault/types.go  credit-runner  vaulttip
 internal/vaultkeep  credit-runner  identifyall
 internal/vaultkeep  credit-runner  vaultpay
@@ -1621,10 +1636,14 @@ internal/vaultkeep/equip_test.go  credit-runner  equipswap
 internal/vaultkeep/equip_test.go  credit-runner  vaultequip
 internal/vaultkeep/keep.go  credit-runner  bulkid
 internal/vaultkeep/keep.go  credit-runner  vaultequip
+internal/vaultkeep/keep.go  credit-runner  vaultsell
 internal/vaultkeep/keep_test.go  credit-runner  vaultequip
 internal/vaultkeep/note_test.go  credit-runner  bulkid
 internal/vaultkeep/reveal.go  credit-runner  bulkid
 internal/vaultkeep/reveal.go  credit-runner  vaulttip
+internal/vaultkeep/sale.go  credit-runner  vaultsell
+internal/vaultkeep/sale_test.go  credit-runner  vaultsell
+internal/vaultkeep/sell.go  credit-runner  vaultsell
 internal/watch  credit-runner  cainfix
 internal/watch  credit-runner  identifyall
 internal/watch  credit-runner  town9
@@ -1853,11 +1872,13 @@ internal/watch/testdata/vault_ether.mjs  credit-runner  vaultv7b
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultequip
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultpay
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultreveal
+internal/watch/testdata/vault_logic.mjs  credit-runner  vaultsell
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultv4
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultv6
 internal/watch/testdata/vault_reveal.mjs  credit-runner  vaultclean
 internal/watch/testdata/vault_reveal.mjs  credit-runner  vaultpay
 internal/watch/testdata/vault_reveal.mjs  credit-runner  vaultreveal
+internal/watch/testdata/vault_sell.mjs  credit-runner  vaultsell
 internal/watch/testdata/vault_tip.mjs  credit-runner  vaulttip
 internal/watch/testdata/video_conns.js  credit-runner  viewerconns
 internal/watch/testdata/video_labels_panel.js  credit-runner  brightness
@@ -1879,6 +1900,7 @@ internal/watch/vaultapi.go  credit-runner  bulkid
 internal/watch/vaultapi.go  credit-runner  vaultequip
 internal/watch/vaultapi.go  credit-runner  vaultfull
 internal/watch/vaultapi.go  credit-runner  vaultreveal
+internal/watch/vaultapi.go  credit-runner  vaultsell
 internal/watch/vaultapi.go  credit-runner  vaulttip
 internal/watch/vaultapi.go  credit-runner  vaultv4
 internal/watch/vaultapi.go  credit-runner  vaultv5
@@ -1897,6 +1919,8 @@ internal/watch/vaultequip_test.go  credit-runner  vaultequip
 internal/watch/vaultether_test.go  credit-runner  vaultv7b
 internal/watch/vaultmass_test.go  credit-runner  bulkid
 internal/watch/vaultreveal_ui_test.go  credit-runner  vaultreveal
+internal/watch/vaultsale_test.go  credit-runner  vaultsell
+internal/watch/vaultsell_ui_test.go  credit-runner  vaultsell
 internal/watch/vaulttip_test.go  credit-runner  vaulttip
 internal/watch/vaultui_test.go  credit-runner  vaultv4
 internal/watch/vaultui_test.go  credit-runner  vaultv5
@@ -2074,6 +2098,7 @@ internal/watch/web/vault-logic.js  credit-runner  vaultequip
 internal/watch/web/vault-logic.js  credit-runner  vaultfull
 internal/watch/web/vault-logic.js  credit-runner  vaultpay
 internal/watch/web/vault-logic.js  credit-runner  vaultreveal
+internal/watch/web/vault-logic.js  credit-runner  vaultsell
 internal/watch/web/vault-logic.js  credit-runner  vaulttip
 internal/watch/web/vault-logic.js  credit-runner  vaultv4
 internal/watch/web/vault-logic.js  credit-runner  vaultv6
@@ -2094,6 +2119,7 @@ internal/watch/web/vault.js  credit-runner  vaultfull
 internal/watch/web/vault.js  credit-runner  vaultpay
 internal/watch/web/vault.js  credit-runner  vaultphone
 internal/watch/web/vault.js  credit-runner  vaultreveal
+internal/watch/web/vault.js  credit-runner  vaultsell
 internal/watch/web/vault.js  credit-runner  vaulttip
 internal/watch/web/vault.js  credit-runner  vaultv4
 internal/watch/web/vault.js  credit-runner  vaultv5
@@ -2105,6 +2131,7 @@ internal/watch/web/vault.json  credit-runner  vaultequip
 internal/watch/web/vault.json  credit-runner  vaultfull
 internal/watch/web/vault.json  credit-runner  vaultpay
 internal/watch/web/vault.json  credit-runner  vaultreveal
+internal/watch/web/vault.json  credit-runner  vaultsell
 internal/watch/web/vault.json  credit-runner  vaultv4
 internal/watch/web/vault.json  credit-runner  vaultv5
 internal/watch/web/vault.json  credit-runner  vaultv6
@@ -2233,6 +2260,7 @@ tools/provingground/scenarios/vaultfull.json  credit-runner  vaultfull
 tools/provingground/scenarios/vaultreveal.json  credit-runner  identifyall
 tools/provingground/scenarios/vaultreveal.json  credit-runner  vaultpay
 tools/provingground/scenarios/vaultreveal.json  credit-runner  vaultreveal
+tools/provingground/scenarios/vaultsell.json  credit-runner  vaultsell
 tools/provingground/status_doc.sh  credit-runner  pgpage
 tools/survival  credit-runner  pghero
 tools/survival  credit-runner  survhold2
