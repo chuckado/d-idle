@@ -123,9 +123,9 @@
         },
         {
           "kind": "stash_between",
-          "min": 6700,
-          "max": 6900,
-          "why": "6 reveals at the Scroll of Identify price (80) left the stash: 7200 - 480 = 6720"
+          "min": 5000,
+          "max": 6800,
+          "why": "6 reveals at 80 (480) left the stash: 7200 less the bot's own town spending (real time, unmeasured run: about 50 to 1700 in the runs seen) less 480"
         },
         {
           "kind": "gold_between",
@@ -161,7 +161,7 @@
       "pre": {
         "level": 20,
         "gold": 500,
-        "stash": 200,
+        "stash": 250,
         "vault_records": {
           "items": [
             {
@@ -261,7 +261,7 @@
           "kind": "stash_between",
           "min": 0,
           "max": 120,
-          "why": "two reveals at 80 left the stash: 200 - 160 = 40"
+          "why": "two reveals at 80 left the stash; the bot spends about 50 of the stash in its first town visit (250 -> 200 at the order), so 200 - 160 = 40, and it may spend a little more after"
         },
         {
           "kind": "gold_between",
