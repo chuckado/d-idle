@@ -35,7 +35,7 @@
     "knobs": {
      "quests.board": 1,
      "resource.pointsDecisions": 1,
-     "town.plan": 2
+     "town.plan": 3
     },
     "driver": "board-taps",
     "tap_quest": "tools_of_the_trade",
@@ -111,7 +111,7 @@
    "trigger": {
     "goals": "reach:8",
     "knobs": {
-     "town.plan": 2
+     "town.plan": 3
     }
    },
    "budget": {
@@ -281,7 +281,7 @@
    "trigger": {
     "goals": "reach:20",
     "knobs": {
-     "town.plan": 2
+     "town.plan": 3
     }
    },
    "budget": {
@@ -546,7 +546,7 @@
    "trigger": {
     "goals": "reach:14",
     "knobs": {
-     "town.plan": 2
+     "town.plan": 3
     }
    },
    "budget": {
@@ -604,7 +604,7 @@
    "trigger": {
     "goals": "reach:8",
     "knobs": {
-     "town.plan": 2
+     "town.plan": 3
     }
    },
    "budget": {
@@ -683,7 +683,7 @@
     "knobs": {
      "quests.board": 1,
      "resource.pointsDecisions": 1,
-     "town.plan": 2
+     "town.plan": 3
     },
     "driver": "board-taps",
     "tap_quest": "tools_of_the_trade",
@@ -836,7 +836,7 @@
     "knobs": {
      "quests.board": 1,
      "resource.pointsDecisions": 1,
-     "town.plan": 2
+     "town.plan": 3
     },
     "driver": "board-taps",
     "tap_quest": "tools_of_the_trade",
