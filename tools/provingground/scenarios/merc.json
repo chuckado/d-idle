@@ -1,0 +1,90 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "merc.kashya-handin",
+   "title": "Kashya hand-in with the reward pending: quest reward taken and the free Act 1 mercenary stands beside the hero",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "sisters_burial_grounds",
+    "chunk": "blood_raven"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [
+    "merc.hire"
+   ],
+   "touches": [
+    "internal/bot/",
+    "internal/task/",
+    "internal/merc/",
+    "internal/d2dmerc/",
+    "internal/d2dtown/",
+    "cmd/d2bot/"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "quests": [
+     {
+      "record": 2,
+      "word": 8210
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "blood_raven"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs, purse 5000, waypoints Cold Plains to Dark Wood, record 2 set to 0x2012 (the sandbox hero's word: Blood Raven dead, reward pending). CHEATED: waypoints, level and the quest word are SETUP writes (mechanics evidence only, never balance). No merc at the start.",
+   "notes": "The user's hero Doofer (2026-11-21) stood at word 0x2012 with no merc. The tapper taps Start and then Hand in; Kashya's menu grants the free Rogue (V-d2d docs/d2d-probes.md section 1) and the reward bit 0 is set. Asserts the game state, not log lines.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 2,
+     "set": 1
+    },
+    {
+     "kind": "merc_hired"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "status": "active"
+  }
+ ]
+}
