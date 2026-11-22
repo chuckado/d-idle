@@ -441,6 +441,65 @@
     "Raise Skeletal Mage": "f6",
     "Lower Resist": "f7",
     "Clay Golem": "f8"
+   },
+   "necro": {
+    "golems": [
+     "FireGolem",
+     "Fire Golem",
+     "Clay Golem"
+    ],
+    "summons": [
+     {
+      "name": "Raise Skeleton",
+      "kind": "skeleton",
+      "max": 12
+     },
+     {
+      "name": "Raise Skeletal Mage",
+      "kind": "mage",
+      "max": 4
+     },
+     {
+      "name": "Revive",
+      "kind": "revive",
+      "max": 8
+     }
+    ],
+    "curses": [
+     {
+      "name": "Lower Resist",
+      "when": "magicResist"
+     },
+     {
+      "name": "Amplify Damage",
+      "state": 9,
+      "when": "any"
+     },
+     {
+      "name": "Weaken",
+      "state": 19,
+      "when": "eliteOrBoss"
+     },
+     {
+      "name": "Dim Vision"
+     },
+     {
+      "name": "Terror"
+     },
+     {
+      "name": "Confuse"
+     },
+     {
+      "name": "Life Tap"
+     },
+     {
+      "name": "Attract"
+     },
+     {
+      "name": "Decrepify"
+     }
+    ],
+    "explosion": "Corpse Explosion"
    }
   },
   {
@@ -468,6 +527,69 @@
     "Amplify Damage": "f6",
     "Corpse Explosion": "f7",
     "Revive": "f8"
+   },
+   "necro": {
+    "golems": [
+     "FireGolem",
+     "Fire Golem",
+     "Clay Golem"
+    ],
+    "summons": [
+     {
+      "name": "Raise Skeleton",
+      "kind": "skeleton",
+      "max": 12
+     },
+     {
+      "name": "Raise Skeletal Mage",
+      "kind": "mage",
+      "max": 4
+     },
+     {
+      "name": "Revive",
+      "kind": "revive",
+      "max": 8
+     }
+    ],
+    "curses": [
+     {
+      "name": "Lower Resist",
+      "when": "magicResist"
+     },
+     {
+      "name": "Amplify Damage",
+      "state": 9,
+      "when": "any"
+     },
+     {
+      "name": "Decrepify",
+      "when": "eliteOrBoss"
+     },
+     {
+      "name": "Weaken",
+      "state": 19,
+      "when": "eliteOrBoss"
+     },
+     {
+      "name": "Dim Vision"
+     },
+     {
+      "name": "Terror"
+     },
+     {
+      "name": "Confuse"
+     },
+     {
+      "name": "Life Tap"
+     },
+     {
+      "name": "Attract"
+     },
+     {
+      "name": "Decrepify"
+     }
+    ],
+    "explosion": "Corpse Explosion"
    }
   },
   {
@@ -671,6 +793,106 @@
     "Volcano": "f6",
     "Raven": "f7",
     "Summon Spirit Wolf": "f8"
+   }
+  },
+  {
+   "class": "necromancer",
+   "build": "poisonnova",
+   "bands": [
+    {
+     "minLevel": 30,
+     "requires": "Poison Nova",
+     "attack": [
+      "Poison Nova",
+      "Bone Spear",
+      "Teeth",
+      "Attack"
+     ]
+    },
+    {
+     "minLevel": 18,
+     "requires": "Bone Spear",
+     "attack": [
+      "Bone Spear",
+      "Teeth",
+      "Attack"
+     ]
+    },
+    {
+     "attack": [
+      "Teeth",
+      "Attack"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Bone Armor"
+    ]
+   ],
+   "layout": {
+    "Teeth": "f1",
+    "Bone Spear": "f2",
+    "Poison Nova": "f3",
+    "Bone Armor": "f4",
+    "Lower Resist": "f5",
+    "Clay Golem": "f6",
+    "Amplify Damage": "f7"
+   },
+   "necro": {
+    "golems": [
+     "Clay Golem"
+    ],
+    "summons": [
+     {
+      "name": "Raise Skeleton",
+      "kind": "skeleton",
+      "max": 12
+     },
+     {
+      "name": "Raise Skeletal Mage",
+      "kind": "mage",
+      "max": 4
+     },
+     {
+      "name": "Revive",
+      "kind": "revive",
+      "max": 8
+     }
+    ],
+    "curses": [
+     {
+      "name": "Lower Resist",
+      "when": "any"
+     },
+     {
+      "name": "Dim Vision"
+     },
+     {
+      "name": "Terror"
+     },
+     {
+      "name": "Confuse"
+     },
+     {
+      "name": "Life Tap"
+     },
+     {
+      "name": "Attract"
+     },
+     {
+      "name": "Decrepify"
+     },
+     {
+      "name": "Amplify Damage",
+      "state": 9
+     },
+     {
+      "name": "Weaken",
+      "state": 19
+     }
+    ],
+    "explosion": ""
    }
   }
  ]

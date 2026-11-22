@@ -208,12 +208,13 @@ func (l *Looter) pickUp(ctx context.Context, o PickOpts) (PickReport, error) {
 		switch {
 		case err == nil:
 			after, _ := l.hand.Fresh()
+			l.noteWornChange(s, after, c)
 			g := 0
 			if after != nil && after.Player.Gold > goldBefore {
 				g = after.Player.Gold - goldBefore
 				rep.GoldGained += g
 			}
-			if err := l.unwear(ctx, c.u); errors.Is(err, errDropped) {
+			if err := l.unwear(ctx, c.u, s); errors.Is(err, errDropped) {
 				failed[c.u.ID] = 2
 				continue
 			} else if err != nil {
@@ -266,7 +267,11 @@ func init() {
 // a quest item (noWear) or a weapon the class cannot use well. The game wears a picked weapon into a free weapon slot
 // (V live for quest items, docs/act2.md P1; KITSTALL2: the same happened to a Sorceress whose weapon slot was empty,
 // a looted Short Bow went on and her spells stopped, S from the bot log).
-func (l *Looter) unwear(ctx context.Context, u d2.Unit) error {
+//
+// before is the snapshot taken before the pickup. A ground item and a carried item can share a unit id (the game numbers
+// them apart), so the unit found under the picked id is the picked item only when it is of the same base and was not
+// already worn before the pickup; else a worn cap with the same number was taken off (card recallsorc).
+func (l *Looter) unwear(ctx context.Context, u d2.Unit, before *d2.Snapshot) error {
 	b := l.base(u.Class)
 	if b == nil || !noWear[b.Code] && !(b.Kind == data.KindWeapon && casterNoLauncher(l.e.Data, b)) {
 		return nil
@@ -275,8 +280,14 @@ func (l *Looter) unwear(ctx context.Context, u d2.Unit) error {
 	if err != nil {
 		return err
 	}
-	if w, ok := hand.Find(s.Inventory, u.ID); !ok || w.Item == nil || w.Item.Where != d2.ContEquipment {
+	w, ok := hand.Find(s.Inventory, u.ID)
+	if !ok || w.Item == nil || w.Item.Where != d2.ContEquipment || w.Class != u.Class {
 		return nil
+	}
+	if before != nil && before.Inventory != nil {
+		if was, had := hand.Find(before.Inventory, u.ID); had && was.Item != nil && was.Item.Where == d2.ContEquipment {
+			return nil // worn before the pickup: another item that carries the same number
+		}
 	}
 	if !noWear[b.Code] && !LauncherUnwanted(l.e.Data, b, s.Player.Class) {
 		return nil
@@ -636,6 +647,7 @@ func (l *Looter) pickOne(ctx context.Context, c cand, o PickOpts) error {
 			}
 			return err
 		}
+		l.e.Log.Info("loot: clicked", "item", c.name, "id", u.ID, "at", fmt.Sprintf("%d,%d", u.X, u.Y), "player", fmt.Sprintf("%d,%d", s.Player.X, s.Player.Y), "panel", hand.PanelOpen(s.UI), "ui", fmt.Sprint(s.UI))
 		walk := time.Duration(d) * 90 * time.Millisecond
 		timeout := time.Duration(t.ConfirmMs)*time.Millisecond + walk
 		ns, ok, werr := l.hand.Wait(ctx, timeout, func(s *d2.Snapshot) bool {
@@ -741,3 +753,31 @@ func (l *Looter) LeftBehind() int { return int(l.leftBehind.Load()) }
 
 // ClearLeftBehind forgets the count (after a town trip).
 func (l *Looter) ClearLeftBehind() { l.leftBehind.Store(0) }
+
+// noteWornChange logs a worn item that left the body (or arrived) while one pickup ran. A pickup never takes anything off
+// on purpose; a line here names the pickup that did (card recallsorc: a worn cap went to the pack with no log line).
+func (l *Looter) noteWornChange(before, after *d2.Snapshot, c cand) {
+	if before == nil || after == nil {
+		return
+	}
+	worn := func(s *d2.Snapshot) map[int]uint32 {
+		m := map[int]uint32{}
+		for _, it := range s.Inventory.Items {
+			if it.Item != nil && it.Item.Where == d2.ContEquipment {
+				m[it.Item.Body] = it.ID
+			}
+		}
+		return m
+	}
+	b, a := worn(before), worn(after)
+	for body, id := range b {
+		if a[body] != id {
+			l.e.Log.Info("loot: worn item changed by a pickup", "picked", c.name, "body", body, "was", id, "now", a[body])
+		}
+	}
+	for body, id := range a {
+		if _, had := b[body]; !had {
+			l.e.Log.Info("loot: item worn by a pickup", "picked", c.name, "body", body, "now", id)
+		}
+	}
+}

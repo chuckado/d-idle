@@ -41,7 +41,7 @@ With town.potionsFirst 1 (default) the shop SHALL buy healing potions first (up 
 - **THEN** a missing scroll is a trip reason again (TestAuditPurchaseOrderOldRuleKnobs)
 
 ### Requirement: Bank before the shop
-When carried gold exceeds the keep line (300 + 50 x clvl, death-rule spec) the stash deposit SHALL run before the shop, so the shop spends only from the kit budget and the surplus is banked. Source: docs/basics-audit.md row 11 and G6.
+When carried gold exceeds the keep line (300 + 50 x clvl, death-rule spec) the stash deposit SHALL run before the shop, so the shop spends only from the kit budget and the surplus is banked. At `town.plan` 3 or more the purse is settled once per visit instead: to the plan's spend of the visit (supply plan, chunk gold line included) plus the keep line, depositing the surplus and withdrawing the gap, whatever `town.bankFirst` and `town.withdrawShop` say. Source: docs/basics-audit.md row 11 and G6; town planner design question 11 (docs/design/fable-review-2026-11-21/town-planner.md).
 
 #### Scenario: Gold 1500 at clvl 5
 - **WHEN** a clvl 5 character enters town with 1500 gold
