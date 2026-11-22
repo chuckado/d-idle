@@ -844,10 +844,10 @@ function setupMenu(sel) {
   cb.dataset.size = 'sm'; cb.dataset.variant = 'ghost'; cb.dataset.key = 'characters-open';
   cb.href = CHARS_URL;
   cb.setAttribute('aria-label', 'Characters: switch, create or delete a hero');
-  const vb = el('a', 'd-btn', 'Ethereal Vault'); // a link too: every drop the bot recorded (docs/vault.md); it shares a row with Characters so the menu stays short
+  const vb = el('a', 'd-btn', 'Vault'); // a link too: every drop the bot recorded (docs/vault.md); it shares a row with Characters so the menu stays short
   vb.dataset.size = 'sm'; vb.dataset.variant = 'ghost'; vb.dataset.key = 'vault-open';
   vb.href = VAULT_URL;
-  vb.setAttribute('aria-label', 'Ethereal Vault: every drop the bot recorded');
+  vb.setAttribute('aria-label', 'Vault: every drop the bot recorded');
   const cpair = el('div', 'd-menu-pair');
   cpair.append(cb, vb);
   hero.unshift(cpair);
@@ -931,7 +931,7 @@ function layoutNote(sel, floating) {
   const box = el('div', 'd-layoutnote');
   box.setAttribute('role', 'note');
   if (floating) box.dataset.float = '1';
-  box.appendChild(el('span', '', sel.fell ? 'The new layout could not load, so this is Standard. Classic is in the menu.' : floating ? 'The layout changed. Classic is in the menu.' : 'The layout changed. Classic is in the menu.'));
+  box.appendChild(el('span', '', sel.fell ? 'The new layout could not load, so this is Standard. Classic is in the menu.' : 'The layout changed. Classic is in the menu.'));
   const x = ui.btn('Dismiss', { size: 'sm', variant: 'ghost' });
   x.addEventListener('click', () => { pref(NOTE, '1'); box.remove(); });
   box.appendChild(x);

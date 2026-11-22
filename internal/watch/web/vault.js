@@ -38,7 +38,7 @@ export function mountVault(d) {
   // ---- header: title, capacity meter, the placeholder Upgrade ----
   const head = el('header', 'vt-head');
   const back = el('a', 'd-btn', T.back);
-  back.dataset.variant = 'ghost'; back.dataset.size = 'md'; back.dataset.key = 'back'; back.href = d.backHref || '/watch'; back.setAttribute('aria-label', T.backLabel);
+  back.dataset.variant = 'ghost'; back.dataset.size = 'md'; back.dataset.key = 'back'; back.href = d.backHref || '/watch?live=1'; back.setAttribute('aria-label', T.backLabel);
   const h1 = el('h1', '', T.title);
   const heroName = el('span', 'vt-hero');
   const meterBox = el('div', 'vt-capacity');
@@ -55,7 +55,10 @@ export function mountVault(d) {
   downgrade.setAttribute('aria-describedby', 'vt-down-why');
   const downWhy = el('span', 'vt-down-why'); downWhy.id = 'vt-down-why';
   meterBox.append(meterLabel, meter, meterText, pinsText, wallet, upgrade, downgrade, upgradeWhy, downWhy);
-  head.append(back, h1, heroName, meterBox);
+  const pageLink = (key, label, href) => { const a = el('a', 'd-btn', label); a.dataset.variant = 'ghost'; a.dataset.size = 'md'; a.dataset.key = key; a.href = href; return a; };
+  const nav = el('nav', 'vt-nav'); nav.setAttribute('aria-label', T.navLabel);
+  nav.append(pageLink('nav-inventory', T.navInventory, '/watch/inventory'), pageLink('nav-skills', T.navSkills, '/watch/skills'));
+  head.append(back, h1, heroName, nav, meterBox);
 
   const banner = el('p', 'vt-banner'); banner.hidden = true; banner.setAttribute('role', 'status');
 
@@ -1273,7 +1276,7 @@ async function boot() {
   const root = doc.getElementById('vt-root');
   if (!texts || !root) { if (root) root.textContent = 'The Ethereal Vault page could not load its texts.'; return; }
   const f = fromQuery(location.search);
-  const back = qs.get('theme') ? '/watch?theme=' + qs.get('theme') : '/watch';
+  const back = qs.get('theme') ? '/watch?live=1&theme=' + qs.get('theme') : '/watch?live=1';
   let overlays = null;
   try { overlays = (await import('/watch/overlay.js')).overlays; } catch (e) { /* the sheet closes itself on Escape */ }
   const vt = mountVault({ doc, root, overlays, win: window, get, post, texts, now: Date.now, filters: f, backHref: back, IntersectionObserver: window.IntersectionObserver, ResizeObserver: window.ResizeObserver,

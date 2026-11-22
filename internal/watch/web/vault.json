@@ -1,7 +1,10 @@
 {
   "title": "Ethereal Vault",
-  "back": "Back",
-  "backLabel": "Back to the watch screen",
+  "back": "Live screen",
+  "backLabel": "Back to the live screen",
+  "navLabel": "Other pages",
+  "navInventory": "Inventory",
+  "navSkills": "Skills",
   "loading": "Loading the vault...",
   "loadError": "The vault could not be read.",
   "retry": "Try again",

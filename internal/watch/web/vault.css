@@ -9,6 +9,7 @@
   .vt-page { flex: 1 1 auto; }
 
   .vt-head { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-3); padding: var(--d-sp-2) var(--d-sp-4); border-block-end: var(--d-bw) solid var(--d-line); background: var(--d-surface-0); }
+  .vt-nav { display: flex; flex-wrap: wrap; gap: var(--d-sp-1); }
   .vt-head h1 { margin: 0; font: 600 var(--d-fs-4)/var(--d-lh-tight) var(--d-font-display); color: var(--d-accent-text); }
   .vt-hero { color: var(--d-text-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
   .vt-capacity { flex: 1 1 24rem; display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-3); min-inline-size: 0; }

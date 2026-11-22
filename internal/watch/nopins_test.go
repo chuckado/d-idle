@@ -11,13 +11,8 @@ import (
 // The Pin display is gone (docs/inventory-ui.md, docs/gear-policy.md): under the player-only gear policy the bot never
 // equips, so a pinned slot says nothing. The API keeps `pins` and /api/inventory/unpin as deprecated, read-only fields.
 func TestNoPinDisplay(t *testing.T) {
-	if strings.Contains(invPage, "PIN") || strings.Contains(invPage, "lg-pin") {
+	if strings.Contains(charPage, "PIN") || strings.Contains(charPage, "lg-pin") {
 		t.Error("inventory legend still shows PIN")
-	}
-	for _, want := range []string{`class="lg-sell"`, `class="lg-keep"`, "durability"} {
-		if !strings.Contains(invPage, want) {
-			t.Errorf("legend lacks %s", want)
-		}
 	}
 	re := regexp.MustCompile(`(?i)\bpin(ned)?\b|unpin|'pin'|data-badge="pin"`)
 	for _, f := range []string{"inventory.js", "inventory-actions.js", "inventory-tip.js", "inventory-tip.css", "inventory-merc.js"} {

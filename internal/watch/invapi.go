@@ -180,11 +180,6 @@ func (a *InvAPI) Handler() http.Handler {
 	})
 	m.HandleFunc("/watch/inventory", func(w http.ResponseWriter, r *http.Request) {
 		pactHdr(w, "text/html; charset=utf-8")
-		// the character canvas is the page; ?view=classic keeps the cards page (invPage) until the canvas has been seen live
-		if r.URL.Query().Get("view") == "classic" {
-			io.WriteString(w, invPage)
-			return
-		}
 		io.WriteString(w, charPage)
 	})
 	static := func(file, ctype string) {

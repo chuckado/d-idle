@@ -55,7 +55,7 @@ func TestMercFixturesDecodeIntoView(t *testing.T) {
 // (text through textContent, no style writes, no HTML sink, no scrolling, no polling of its own).
 func TestMercDollRoutesAndRules(t *testing.T) {
 	for _, want := range []string{`href="/watch/inventory-merc.css"`, `src="/watch/inventory-merc.js"`, `id="merc-doll"`} {
-		if !strings.Contains(invPage, want) {
+		if !strings.Contains(charPage, want) {
 			t.Errorf("inventory page lacks %s", want)
 		}
 	}
