@@ -230,7 +230,10 @@ export function mount(root, ctx) {
   const evBtn = btn('Events: ' + evMode, 'events', 'Event markers on the trail: key events, all, or off');
   const row = (name, ...bs) => { const r = el('div', 'row'); r.append(...bs); return [el('div', 'lbl', name), r]; };
   pop.append(...row('Trail', ...winBtns), ...row('Layers', covBtn, heatBtn, evBtn));
-  box.append(cv, empty, ctl, pop);
+  // the picture and its message share a box that has a height of its own; on a phone the toolbar and the Layers list are in the flow above it (utilities.css), never a float over the tab row
+  const stage = el('div', 'stage');
+  stage.append(cv, empty);
+  box.append(stage, ctl, pop);
   ctx.body.append(box);
 
   let map = null, cells = null, hero = null, units = [], version = 0, nbs = [], cov = null, heat = null, trail = [], trailArea = 0, evs = [];
@@ -286,7 +289,7 @@ export function mount(root, ctx) {
     drag = { x: ev.clientX, y: ev.clientY };
     draw();
   });
-  if (typeof ResizeObserver === 'function') new ResizeObserver(() => draw()).observe(box); // the slot's box changes with the window
+  if (typeof ResizeObserver === 'function') new ResizeObserver(() => draw()).observe(stage); // the slot's box changes with the window
 
   function takeNeighbours(list) {
     const keep = {};
@@ -317,7 +320,7 @@ export function mount(root, ctx) {
       units = r.units || [];
       cov = r.coverage && r.coverage.area === (map && map.areaId) ? r.coverage : null;
       if (r.trail) { trail = r.trail; trailArea = r.trail_area || 0; evs = r.events || []; legendNames = r.trail_legend || []; } else if (!r.waiting) { trail = []; evs = []; }
-      empty.textContent = map ? '' : (r.waiting ? 'Waiting for the first area...' : 'No map yet.');
+      empty.textContent = map ? '' : (r.waiting ? 'Waiting for the first steps...' : 'No map yet.');
       setLabel();
       replan(true);
       const share = activityShare(plan, legendNames);
