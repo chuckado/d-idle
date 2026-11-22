@@ -9,6 +9,8 @@ One JSON line per (level, seed) on stdout. Usage: gridwhole.py D2D DATA LEVEL[,L
 Stdlib only; talks to the control socket of a --headless --lab-verbs d2d (docs/control_channel.md of the fork)."""
 import json, os, random, socket, subprocess, sys, tempfile, time
 
+KILL = os.environ.get("GW_KILL") == "1"   # kill the level's monsters before each grid read (see above)
+
 def session(d2d, data, seed):
     home = tempfile.mkdtemp(prefix="gw_")
     os.makedirs(home + "/.config/d2d/save", exist_ok=True)
@@ -80,12 +82,14 @@ def objects(cmd):
 
 def probe(d2d, data, level, seed, samples):
     p, cmd = session(d2d, data, seed)
-    res = {"level": level, "seed": seed}
+    res = {"level": level, "seed": seed, "kill": KILL}
     try:
         r = cmd("debug goto %d" % level)
         if not r.startswith("ok"):
             res["error"] = "goto: " + r.strip()[:80]
             return res
+        if KILL:
+            cmd("debug kill")   # SETUP: no live unit stamps the grid at A (terrain and objects are untouched)
         time.sleep(1.5)
         lv = cmd("debug level").split()
         w, h = int(lv[4]), int(lv[5])
@@ -130,6 +134,8 @@ def probe(d2d, data, level, seed, samples):
             cmd("debug warp %.1f %.1f" % (x, y))
             warps += 1
             time.sleep(0.35)
+        if KILL:
+            cmd("debug kill")   # the monsters of the rooms that came up since
         time.sleep(1.5)
         up1, total = laid(cmd)
         res.update(rooms_up_final=up1, warps=warps)
