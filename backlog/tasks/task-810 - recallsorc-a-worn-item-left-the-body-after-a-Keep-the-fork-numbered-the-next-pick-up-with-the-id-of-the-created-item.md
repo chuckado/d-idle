@@ -1,10 +1,13 @@
 ---
 id: TASK-810
-title: 'recallsorc: a worn cap left the body on a pickup: unwear matched the ground item id against a worn item with the same number'
-status: Proposed
+title: >-
+  recallsorc: a worn cap left the body on a pickup: unwear matched the ground
+  item id against a worn item with the same number
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T18:37:00Z'
+updated_date: '2026-11-22T19:55:00Z'
 labels:
   - d2d
   - bug
