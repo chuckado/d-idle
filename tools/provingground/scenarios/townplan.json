@@ -154,7 +154,7 @@
   },
   {
    "id": "town.plan.malus-errand-gold",
-   "title": "8000 gold, default bankFirst, a full kit, the Malus chunk tapped: the chunk starts and the gold is not stranded in the stash",
+   "title": "8000 gold, an empty belt (pack potions), the Malus chunk tapped: the town visit settles the purse, the chunk starts, the gold is not stranded or carried into the field",
    "kind": "behaviour",
    "tier": "full",
    "covers": [
@@ -173,12 +173,6 @@
      1,
      4,
      5
-    ],
-    "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
     ],
     "items": [
      {
@@ -217,7 +211,7 @@
     ]
    },
    "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
-   "notes": "Invariant T4 of docs/design/fable-review-2026-11-21/town-planner.md. RED on today's main (I10; run 20261120-184924-bb3e: the bank chore moved 6900 into the stash). Needs stage 3.",
+   "notes": "Invariant T4 of docs/design/fable-review-2026-11-21/town-planner.md. RED on today's main (I10; run 20261120-184924-bb3e: the bank chore moved 6900 into the stash). Needs stage 3. 2026-11-22: the first builder run (belt of 4, full kit) never visited town before leaving, carried 8000 into Underground Passage at life 55 and died: no chores visit, so no purse settle; the setup now empties the belt so the guard's restock chores run first (scenario fault, not a finding).",
    "assert": [
     {
      "kind": "log_line",
@@ -231,6 +225,16 @@
      "min": 1,
      "to_min": 10,
      "why": "chunk starts by minute 10"
+    },
+    {
+     "kind": "stash_between",
+     "min": 5000,
+     "why": "the purse was settled to the carry line plus the plan (stage 3): the surplus is in the stash"
+    },
+    {
+     "kind": "gold_between",
+     "max": 3500,
+     "why": "the hero left town with the purse target, not the 8000 it came with"
     },
     {
      "kind": "quest_bits",
