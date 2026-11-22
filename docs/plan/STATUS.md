@@ -407,6 +407,7 @@
 | necro4 | proposed | - | `internal/combat/classdata.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro.go`<br>`internal/combat/necro_corpse.go`<br>`internal/combat/necro_test.go`<br>`internal/combat/necro_data_test.go`<br>`internal/combat/fighter.go` | - |
 | necro3 | proposed | - | `internal/buildfile/testdata/necromancer-summoner-sme.json`<br>`internal/buildfile/testdata/necromancer-poison-nova-sme.json`<br>`internal/buildfile/necrosme_test.go`<br>`internal/plandata/build-necromancer_summoner_sme.json`<br>`internal/plandata/build-necromancer_poison_nova_sme.json`<br>`docs/plan/data/build-necromancer_summoner_sme.json`<br>`docs/plan/data/build-necromancer_poison_nova_sme.json`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro_data_test.go`<br>`internal/leveler/necrosummoner_test.go` | - |
 | sellall | proposed | - | `internal/vaultkeep`<br>`internal/watch`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`docs/ui/vault-sell-all`<br>`tools/provingground/scenarios/vaultsellall.json`<br>`tools/uishots`<br>`tools/uishots.sh` | - |
+| uinav | proposed | - | `internal/watch/linkmatrix_test.go`<br>`internal/watch/invui.go`<br>`internal/watch/skillsui.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/invapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/characters.js`<br>`internal/watch/testdata/vault_nav.mjs`<br>`docs/ui/nav-links`<br>`docs/ui-design-system.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -441,6 +442,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b4003f7db 11-22 15:21 `Merge agent/uinav: Merge branch 'main' into uinav` (uinav)
+- 8449d5e6f 11-22 15:20 `Merge branch 'main' into uinav` (-)
+- c029ce3dc 11-22 15:14 `Merge origin/main into uinav` (-)
 - f3ab54d84 11-22 15:11 `Merge agent/sellall: Merge branch 'main' into sellall` (sellall)
 - 0e772e686 11-22 15:10 `Merge branch 'main' into sellall` (-)
 - afc522db3 11-22 15:04 `Merge agent/fableui: Merge branch 'main' into fableui` (fableui)
@@ -448,7 +452,4 @@
 - 7a917f2da 11-22 14:57 `Merge agent/necro3: Merge branch 'main' into necro3` (necro3)
 - 7cbbd4d17 11-22 14:56 `Merge branch 'main' into necro3` (-)
 - ac382a44b 11-22 14:47 `Merge agent/townstage3: Merge branch 'main' into town5` (townstage3)
-- 30259ce1b 11-22 14:45 `Merge branch 'main' into town5` (-)
-- d806d4b32 11-22 14:45 `Merge remote-tracking branch 'origin/main' into agent/sellall` (-)
-- f3447a84d 11-22 14:34 `Merge agent/recallsorc: Merge branch 'main' into recallsorc` (recallsorc)
 <!-- statusgen:end -->
