@@ -133,6 +133,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [data.md](data.md): internal/data: static game tables
 - [decomp-queue.md](decomp-queue.md): Decomp lane: ranked queue and rules (status: current, 2026-10-31 (agent DECOMPBELT created it; the user started the lane: "start decomp lane"). The...)
 
+`design/fable-review-2026-11-22/`
+
+- [map-knowledge.md](design/fable-review-2026-11-22/map-knowledge.md): Map knowledge: would revealing the whole map fix the Countess class of stuck steps? (status: current (2026-11-21, Fable design review, small; docs only, no Go or behaviour change). Card `fablemap`....)
+
 `digest/`
 
 - [d2d-fork-lab.md](digest/d2d-fork-lab.md): Digest: d2d fork and lab (status: current (TASK-310 digest; the area doc is the authority).)
