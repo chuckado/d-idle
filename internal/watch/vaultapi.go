@@ -36,6 +36,7 @@ const (
 	VaultEquipGet     = "/api/vault/equip/"      // GET /api/vault/equip/<id>: the sheet's data and the order's status (polled)
 	VaultMissedRoute  = "/api/vault/missed"      // POST {"dismiss":true}: clear the missed-drops counter and list
 	VaultPromptRoute  = "/api/vault/sellprompt"  // POST {"dismiss":true}: mute the "short on gold" prompt
+	VaultSellQuote    = "/api/vault/sellquote"   // POST {ids}: what a sale of them pays, the stash after and why some are left out (changes nothing)
 	vaultSchema       = "watch.vault/1"
 
 	vaultPageLimit = 60  // rows per page when the client names none
@@ -46,7 +47,7 @@ const (
 // VaultRoutes are the viewer paths (the page and its files, the two GET routes); VaultPostRoutes the answer ones.
 var (
 	VaultRoutes     = []string{VaultRoute, VaultItemRoute, VaultEquipGet, "/watch/vault", "/watch/vault.js", "/watch/vault-logic.js", "/watch/vault.css", "/watch/vault.json"}
-	VaultPostRoutes = []string{VaultPinRoute, VaultUnpinRoute, VaultDiscardRoute, VaultKeepRoute, VaultRevealRoute, VaultSellRoute, VaultCancelRoute, VaultPromptRoute, VaultMissedRoute, VaultEquipRoute, VaultEquipCancel, VaultRevealGoldRoute, VaultRevealGoldCancelRoute}
+	VaultPostRoutes = []string{VaultPinRoute, VaultUnpinRoute, VaultDiscardRoute, VaultKeepRoute, VaultRevealRoute, VaultSellRoute, VaultCancelRoute, VaultPromptRoute, VaultMissedRoute, VaultEquipRoute, VaultEquipCancel, VaultRevealGoldRoute, VaultRevealGoldCancelRoute, VaultSellQuote}
 )
 
 // VaultDesk is what the routes need from the bot side (cmd/d2bot/vaultwire.go). Every field is a func read per request, so a
@@ -142,15 +143,68 @@ type VaultRevealView struct {
 	Gold *VaultGoldInfo `json:"gold,omitempty"`
 }
 
+// VaultSale is the instant sale as the page shows it (internal/vaultkeep SaleView).
+type VaultSale struct {
+	ID         string `json:"id"`
+	State      string `json:"state"` // queued, credited, done, failed
+	Items      int    `json:"items"`
+	Done       int    `json:"done"`
+	Gold       int    `json:"gold"`
+	StashAfter int    `json:"stashAfter"`
+	Note       string `json:"note,omitempty"`
+	Line       string `json:"line"`
+}
+
+type VaultSaleLine struct {
+	ID   string `json:"id"`
+	Gold int    `json:"gold"`
+}
+
+// VaultSaleReason is one group of records a sale leaves out and why ("20 pinned (never sold)").
+type VaultSaleReason struct {
+	Code string `json:"code"`
+	N    int    `json:"n"`
+	Why  string `json:"why"`
+}
+
+// VaultSaleQuote answers POST /api/vault/sellquote: what a sale of the asked ids would do, without doing it.
+type VaultSaleQuote struct {
+	Asked       int               `json:"asked"`
+	Count       int               `json:"count"` // records in the sale
+	Lines       []VaultSaleLine   `json:"lines"`
+	Total       int               `json:"total"`
+	Stash       int               `json:"stash"`
+	StashAfter  int               `json:"stashAfter"`
+	Room        int               `json:"room"`
+	Reasons     []VaultSaleReason `json:"reasons,omitempty"`
+	ConfirmAt   int               `json:"confirmAt"`
+	NeedConfirm bool              `json:"needConfirm"`
+	Why         string            `json:"why,omitempty"` // the sale cannot run: shown as it is
+}
+
+// VaultSaleActor is the optional instant sale of a VaultActor (the actor of cmd/d2bot implements it): Sell removes the records
+// and credits the stash at once, with the price the engine pays. Without it, or while SaleOn says no, Sell queues as before.
+type VaultSaleActor interface {
+	SaleOn(ctx context.Context) (bool, string)
+	SaleQuote(ctx context.Context, ids []string) VaultSaleQuote
+	SellNow(ctx context.Context, ids []string, confirm bool) ([]VaultKeepResult, *VaultSale)
+}
+
 type VaultSellView struct {
-	Enabled bool   `json:"enabled"`
-	Why     string `json:"why,omitempty"`
-	Code    string `json:"code,omitempty"`
-	Queued  int    `json:"queued"`
-	Working int    `json:"working"`
-	Sold    int    `json:"sold"`
-	Gold    int    `json:"gold"` // earned in this process
-	Line    string `json:"line,omitempty"`
+	Enabled bool `json:"enabled"`
+	// Instant: Sell is instant now (the stash is credited and the records leave at once); the page asks the quote first and
+	// confirms at ConfirmAt gold. InstantWhy says why not (knob 0, an older d2d). Sale is the last sale (shown for ten minutes).
+	Instant    bool       `json:"instant"`
+	InstantWhy string     `json:"instantWhy,omitempty"`
+	ConfirmAt  int        `json:"confirmAt,omitempty"`
+	Sale       *VaultSale `json:"sale,omitempty"`
+	Why        string     `json:"why,omitempty"`
+	Code       string     `json:"code,omitempty"`
+	Queued     int        `json:"queued"`
+	Working    int        `json:"working"`
+	Sold       int        `json:"sold"`
+	Gold       int        `json:"gold"` // earned in this process
+	Line       string     `json:"line,omitempty"`
 }
 
 // VaultPrompt is the opt-in "short on gold: sell these?" offer; it exists only while loot.vaultSellPrompt is on.
@@ -652,12 +706,20 @@ func (d *VaultDesk) sellAction(ctx context.Context, r *vault.Rec) VaultAction {
 		return VaultAction{Reason: "this bot has no Sell"}
 	case !d.on():
 		return VaultAction{Reason: "the vault is read only while loot.vault is 0"}
-	case r.State == vault.SellQ:
+	}
+	inst := false
+	if sa, ok := saleActor(d); ok {
+		inst, _ = sa.SaleOn(ctx)
+	}
+	switch {
+	case r.State == vault.SellQ && !inst:
 		return VaultAction{Reason: "already queued: sold at your next town visit"}
 	case r.Pin:
 		return VaultAction{Reason: "pinned items are never sold: unpin it first"}
-	case r.State != vault.Recorded:
+	case r.State != vault.Recorded && !(inst && r.State == vault.SellQ):
 		return VaultAction{Reason: "the item is " + string(r.State)}
+	case inst:
+		return VaultAction{OK: true}
 	}
 	if ok, _, why := d.Act.GateSell(ctx); !ok {
 		return VaultAction{Reason: why}
@@ -931,6 +993,7 @@ type vaultBody struct {
 	Ether   bool     `json:"ether,omitempty"`   // reveal: pay with Ether (an explicit tap; identify.etherPerReveal)
 	Now     bool     `json:"now,omitempty"`     // keep, reveal, sell: also ask the bot to walk home for it
 	Dismiss bool     `json:"dismiss,omitempty"` // sellprompt: mute the prompt
+	Ack     bool     `json:"ack,omitempty"`     // sell: the player saw the gold and the stash after (needed from loot.vaultSellConfirm gold)
 	Slot    string   `json:"slot,omitempty"`    // equip: auto (default), left or right (rings)
 }
 
@@ -945,6 +1008,7 @@ type vaultReply struct {
 	Done    []string    `json:"done"`
 	Already []string    `json:"already,omitempty"` // keep: pressed before, nothing changed
 	Failed  []vaultFail `json:"failed,omitempty"`
+	Sale    *VaultSale  `json:"sale,omitempty"` // sell: the instant sale that ran (gold added to the stash, stash after)
 }
 
 func vaultCode(err error) string {
@@ -1010,6 +1074,14 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 			a.goldRoute(w, r, d, route, &b)
 			return
 		}
+		if route == VaultSellQuote {
+			if sa, ok := saleActor(d); ok {
+				writeJSON(w, 200, sa.SaleQuote(r.Context(), b.IDs))
+			} else {
+				writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "this bot has no instant sale"})
+			}
+			return
+		}
 		if route == VaultDiscardRoute && !b.Confirm {
 			writeJSON(w, http.StatusBadRequest, policyReply{Code: "confirm", Error: "discard needs confirm: true"})
 			return
@@ -1021,6 +1093,14 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 		if route == VaultKeepRoute {
 			a.keep(w, r, d, &b)
 			return
+		}
+		if route == VaultSellRoute {
+			if sa, ok := saleActor(d); ok {
+				if on, _ := sa.SaleOn(r.Context()); on {
+					a.sellNow(w, r, d, sa, &b)
+					return
+				}
+			}
 		}
 		if route == VaultRevealRoute || route == VaultSellRoute || route == VaultCancelRoute {
 			a.act(w, r, d, route, &b)
@@ -1050,6 +1130,38 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 		}
 		writeJSON(w, code, rep)
 	})
+}
+
+func saleActor(d *VaultDesk) (VaultSaleActor, bool) {
+	if d.Act == nil || !d.on() {
+		return nil, false
+	}
+	sa, ok := d.Act.(VaultSaleActor)
+	return sa, ok
+}
+
+// sellNow is the instant sale: the records leave and the stash is credited before the reply. Needs confirm (an order), and ack
+// from loot.vaultSellConfirm gold (the page showed the gold and the stash after).
+func (a *VaultAPI) sellNow(w http.ResponseWriter, r *http.Request, d *VaultDesk, sa VaultSaleActor, b *vaultBody) {
+	if !b.Confirm {
+		writeJSON(w, http.StatusBadRequest, policyReply{Code: "confirm", Error: "sell needs confirm: true"})
+		return
+	}
+	res, sale := sa.SellNow(r.Context(), b.IDs, b.Ack)
+	rep := vaultReply{Done: []string{}, Sale: sale}
+	for _, x := range res {
+		if x.OK {
+			rep.Done = append(rep.Done, x.ID)
+		} else {
+			rep.Failed = append(rep.Failed, vaultFail{ID: x.ID, Code: x.Code, Error: x.Why})
+		}
+	}
+	rep.OK = len(rep.Failed) == 0
+	code := 200
+	if len(rep.Done) == 0 {
+		code = http.StatusConflict
+	}
+	writeJSON(w, code, rep)
 }
 
 // act queues Reveal or Sell, or cancels queued requests of any kind. Same shape as keep: the gate first, then the real reason

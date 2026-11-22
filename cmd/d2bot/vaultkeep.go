@@ -105,8 +105,20 @@ func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir, curren
 		k.Ether = &bulkid.EtherPayer{W: lazyWallet{func() *ether.Wallet { return etherFor(dir, "", nil, nil).Wallet() }}, Price: func() int { return e.Tune.Identify.EtherPerReveal }}
 	}
 	k.Namer = ha.name
-	k.Payer = goldPayer{heroActs: ha, pay: &d2dctl.Pay{C: c, Ledger: cheat.NewLedger(cheat.DefaultLedgerPath()), Actor: "bot:vault", Instance: os.Getenv("D2BOT_INSTANCE"),
-		Character: hero(), Measured: measuredRun}}
+	pay := &d2dctl.Pay{C: c, Ledger: cheat.NewLedger(cheat.DefaultLedgerPath()), Actor: "bot:vault", Instance: os.Getenv("D2BOT_INSTANCE"),
+		Character: hero(), Measured: measuredRun}
+	k.Payer = goldPayer{heroActs: ha, pay: pay}
+	// The instant sale: the engine's price (read), the stash credit (ledgered write), the stash read; loot.vaultSellInstant.
+	k.Credit, k.Pricer, k.StashGold = pay, c, ha.Stash
+	k.SellInstant = func() bool { return e.Tune.Loot.VaultSellInstant != 0 }
+	k.SellConfirm = func() int { return e.Tune.Loot.VaultSellConfirm }
+	k.SaleFile = func() string {
+		h := hero()
+		if h == "" || vault.ValidHero(h) != nil {
+			return ""
+		}
+		return filepath.Join(vault.HeroDir(home.root, h), "sale.json")
+	}
 	k.Measured = measuredRun
 	k.GoldOn = func() bool { return keepOn(e)() && e.Tune.Loot.VaultRevealGold != 0 }
 	k.GoldConfirm = func() int { return e.Tune.Loot.VaultRevealGoldConfirm }
@@ -429,6 +441,46 @@ func (f actFace) EnqueueRevealEther(ctx context.Context, ids []string, now bool)
 	return nil
 }
 
+func saleOf(v *vaultkeep.SaleView) *watch.VaultSale {
+	if v == nil {
+		return nil
+	}
+	return &watch.VaultSale{ID: v.ID, State: v.State, Items: v.Items, Done: v.Done, Gold: v.Gold, StashAfter: v.StashAfter, Note: v.Note, Line: v.Line}
+}
+
+// SaleOn, SaleQuote and SellNow are the instant sale (watch.VaultSaleActor).
+func (f actFace) SaleOn(ctx context.Context) (bool, string) {
+	if k := f.k(); k != nil {
+		return k.SaleOn(ctx)
+	}
+	return false, "this bot has no Sell"
+}
+
+func (f actFace) SaleQuote(ctx context.Context, ids []string) watch.VaultSaleQuote {
+	k := f.k()
+	if k == nil {
+		return watch.VaultSaleQuote{Why: "this bot has no Sell"}
+	}
+	q := k.SaleQuote(ctx, ids)
+	out := watch.VaultSaleQuote{Asked: q.Asked, Total: q.Total, Stash: q.Stash, StashAfter: q.StashAfter, Room: q.Room, ConfirmAt: q.ConfirmAt, NeedConfirm: q.NeedConfirm, Why: q.Why, Count: len(q.Lines)}
+	for _, l := range q.Lines {
+		out.Lines = append(out.Lines, watch.VaultSaleLine{ID: l.ID, Gold: l.Gold})
+	}
+	for _, r := range q.Reasons {
+		out.Reasons = append(out.Reasons, watch.VaultSaleReason{Code: r.Code, N: r.N, Why: r.Why})
+	}
+	return out
+}
+
+func (f actFace) SellNow(ctx context.Context, ids []string, confirm bool) ([]watch.VaultKeepResult, *watch.VaultSale) {
+	k := f.k()
+	if k == nil {
+		return nil, nil
+	}
+	res, v := k.SellNow(ctx, ids, confirm)
+	return results(res), saleOf(v)
+}
+
 func (f actFace) EnqueueSell(ctx context.Context, ids []string, now bool) []watch.VaultKeepResult {
 	if k := f.k(); k != nil {
 		return results(k.EnqueueSell(ctx, ids, now))
@@ -473,6 +525,12 @@ func (f actFace) Act(ctx context.Context) watch.VaultActView {
 	if !v.Sell.Enabled {
 		v.Sell.Code = gateCode(v.Sell.Why)
 	}
+	sf := k.SaleFacts(ctx)
+	v.Sell.Instant, v.Sell.ConfirmAt, v.Sell.InstantWhy = sf.On, sf.ConfirmAt, sf.Why
+	if sf.On { // an instant sale needs no vendor and no town: only the knob, the verbs and a vault
+		v.Sell.Enabled, v.Sell.Why, v.Sell.Code = true, "", ""
+	}
+	v.Sell.Sale = saleOf(k.SaleView())
 	if o := k.Offer(); o != nil {
 		v.Prompt = &watch.VaultPrompt{Short: o.Short, IDs: o.IDs, Gold: o.Gold, Names: o.Names}
 	}
