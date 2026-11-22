@@ -154,7 +154,7 @@
   },
   {
    "id": "town.plan.malus-errand-gold",
-   "title": "8000 gold, an empty belt (pack potions), the Malus chunk tapped: the town visit settles the purse, the chunk starts, the gold is not stranded or carried into the field",
+   "title": "8000 gold, no healing potion anywhere, the Malus chunk tapped: the restock visit settles the purse, the chunk starts, the gold is neither stranded nor carried into the field",
    "kind": "behaviour",
    "tier": "full",
    "covers": [
@@ -176,13 +176,12 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
-     },
-     {
       "code": "mp1",
       "count": 6
      }
+    ],
+    "belt": [
+     "mp1"
     ]
    },
    "trigger": {
@@ -211,7 +210,7 @@
     ]
    },
    "provenance": "CHEATED: level, gold and items by SETUP verbs (docs/forkcheats.md); town start, nothing written after the start. Mechanics only, never evidence about balance or play.",
-   "notes": "Invariant T4 of docs/design/fable-review-2026-11-21/town-planner.md. RED on today's main (I10; run 20261120-184924-bb3e: the bank chore moved 6900 into the stash). Needs stage 3. 2026-11-22: the first builder run (belt of 4, full kit) never visited town before leaving, carried 8000 into Underground Passage at life 55 and died: no chores visit, so no purse settle; the setup now empties the belt so the guard's restock chores run first (scenario fault, not a finding).",
+   "notes": "Invariant T4 of docs/design/fable-review-2026-11-21/town-planner.md. RED on today's main (I10; run 20261120-184924-bb3e: the bank chore moved 6900 into the stash). Needs stage 3. 2026-11-22: the first builder run (belt of 4 healing, 8 in the pack) never visited town before leaving, carried 8000 into Underground Passage at life 55 and died: no chores visit, so no purse settle (scenario fault, not a finding). The setup now holds no healing potion, so the guard forces a restock visit first.",
    "assert": [
     {
      "kind": "log_line",
