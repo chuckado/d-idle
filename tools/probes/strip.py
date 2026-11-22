@@ -53,6 +53,7 @@ try:
     if os.environ.get("STRIP_FINE"):   # objects near the edge and the engine's own collision at fine steps across the strip
         for v in ("debug warps", "debug warptriggers"):
             print("##", v); print(cmd(v).strip()[:1500])
+        print("## presets (first 40 lines)"); print("\n".join(cmd("debug presets").split("\n")[:40])[:2500])
         print("## objects"); print("\n".join(cmd("debug objects").split("\n")[:60])[:3000])
         for yy in (-0.5, -0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1, 1.5, 2.5):
             print("blocked row %5.1f: %s" % (yy, "".join("#" if cmd("debug blocked %.2f %.2f" % (xx / 10, yy)).split()[1] == "1" else "." for xx in range(264, 300, 1))))

@@ -40,7 +40,21 @@ func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool 
 			}
 		}
 	}
+	// the snapshot's objects count too (they carry the unit id, and a door the map did not list is still a door)
+	for i := range o.snap.Objects {
+		u := &o.snap.Objects[i]
+		pt := d2map.Point{X: u.X, Y: u.Y}
+		if !n.isDoorClass(u.Class) || n.doorTried[pt] >= maxDoorTries {
+			continue
+		}
+		for _, c := range cands {
+			if d := dist(input.Point{X: u.X, Y: u.Y}, c.at); d < best {
+				at, best, found = input.Point{X: u.X, Y: u.Y}, d, true
+			}
+		}
+	}
 	if !found {
+		n.logNoDoor(o, levelNo, cands)
 		return false
 	}
 	if n.doorTried == nil {
@@ -71,6 +85,39 @@ func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool 
 	n.clk.Sleep(900 * time.Millisecond)
 	n.invalidate()
 	return true
+}
+
+// logNoDoor says once per level pair why no door was found beside the cut-off gate (what the map and the snapshot list).
+func (n *Navigator) logNoDoor(o *obs, levelNo int, cands []gate) {
+	key := [2]int{o.level, levelNo}
+	if n.doorLogged == nil {
+		n.doorLogged = map[[2]int]bool{}
+	}
+	if n.doorLogged[key] {
+		return
+	}
+	n.doorLogged[key] = true
+	nearest := func(pts []input.Point) float64 {
+		best := -1.0
+		for _, p := range pts {
+			for _, c := range cands {
+				if d := dist(p, c.at); best < 0 || d < best {
+					best = d
+				}
+			}
+		}
+		return best
+	}
+	var presets, snaps []input.Point
+	for _, p := range o.lm.Presets {
+		if p.Kind == d2map.PresetObject {
+			presets = append(presets, input.Point{X: p.Pos.X, Y: p.Pos.Y})
+		}
+	}
+	for i := range o.snap.Objects {
+		snaps = append(snaps, input.Point{X: o.snap.Objects[i].X, Y: o.snap.Objects[i].Y})
+	}
+	n.log.Info("nav: cut-off gate, no door beside it", "to", levelNo, "gate", cands[0].at, "presetObjects", len(presets), "nearestPreset", nearest(presets), "snapObjects", len(snaps), "nearestSnap", nearest(snaps))
 }
 
 func (n *Navigator) isDoorClass(class int) bool {
