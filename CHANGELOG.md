@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- uinav2: uilint (token, element selectors) <!--sg:agent/uinav2-->
 - necroready: picker notes from the catalogue, readiness doc update <!--sg:agent/necroready-->
 - necroscen: card result <!--sg:agent/necroscen-->
 - Merge branch 'main' into classtraits <!--sg:agent/classtraits-->

@@ -753,10 +753,12 @@ docs/towntests.md  credit-runner  towntests
 docs/ui-design-system.md  credit-runner  nopins
 docs/ui-design-system.md  credit-runner  uic3
 docs/ui-design-system.md  credit-runner  uinav
+docs/ui-design-system.md  credit-runner  uinav2
 docs/ui-overlays.md  credit-runner  menufit2
 docs/ui/friend-feedback-2026-11-15.md  credit-runner  friendfb
 docs/ui/map-phone  credit-runner  mapphone
 docs/ui/nav-links  credit-runner  uinav
+docs/ui/nav-shared  credit-runner  uinav2
 docs/ui/redesign-2026-11-14/reviews/c2c3-review.md  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/c2c3/  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/s1b-review.md  credit-runner  uis1breview
@@ -1705,12 +1707,14 @@ internal/watch/glance.go  credit-runner  viewerfps
 internal/watch/glance_questions.go  credit-runner  uis7
 internal/watch/glance_questions_test.go  credit-runner  uis7
 internal/watch/glancepanels_test.go  credit-runner  uis3
+internal/watch/hall.go  credit-runner  uinav2
 internal/watch/hero.go  credit-runner  exploredpct
 internal/watch/hero.go  credit-runner  uic3
 internal/watch/hero.go  credit-runner  vaultv7b
 internal/watch/heroexplored_test.go  credit-runner  exploredpct
 internal/watch/herosheet_test.go  credit-runner  uic3
 internal/watch/http_answer.go  credit-runner  uib4
+internal/watch/http_view.go  credit-runner  uinav2
 internal/watch/http_view.go  credit-runner  videofeed2
 internal/watch/http_view.go  credit-runner  videofeed4
 internal/watch/hub.go  credit-runner  exploredpct
@@ -1726,6 +1730,7 @@ internal/watch/invui.go  credit-runner  gearsets
 internal/watch/invui.go  credit-runner  nopins
 internal/watch/invui.go  credit-runner  uic2
 internal/watch/invui.go  credit-runner  uinav
+internal/watch/invui.go  credit-runner  uinav2
 internal/watch/invui.go  credit-runner  uiphone
 internal/watch/labelsapi.go  credit-runner  labels
 internal/watch/labelsapi_test.go  credit-runner  labels
@@ -1734,6 +1739,7 @@ internal/watch/layout.go  credit-runner  uis6
 internal/watch/layout_test.go  credit-runner  uis1
 internal/watch/layout_test.go  credit-runner  uis7
 internal/watch/linkmatrix_test.go  credit-runner  uinav
+internal/watch/linkmatrix_test.go  credit-runner  uinav2
 internal/watch/logtab.go  credit-runner  friendfb
 internal/watch/logtab.go  credit-runner  uis6
 internal/watch/logtab_test.go  credit-runner  uis6
@@ -1774,6 +1780,8 @@ internal/watch/pointsapi.go  credit-runner  agencyp0
 internal/watch/pointsapi_test.go  credit-runner  agencyp0
 internal/watch/pointsui.go  credit-runner  agencyp0
 internal/watch/pointsui.go  credit-runner  uinav
+internal/watch/pointsui.go  credit-runner  uinav2
+internal/watch/policysheet.go  credit-runner  uinav2
 internal/watch/pprofapi.go  credit-runner  botcpu2
 internal/watch/questsapi.go  credit-runner  quests4
 internal/watch/questsapi.go  credit-runner  quests8
@@ -1790,6 +1798,7 @@ internal/watch/resetapi_test.go  credit-runner  resetinstant
 internal/watch/resetui_test.go  credit-runner  botreset
 internal/watch/resetui_test.go  credit-runner  resetinstant
 internal/watch/returnscreen.go  credit-runner  q4runes
+internal/watch/returnscreen.go  credit-runner  uinav2
 internal/watch/returnscreen_test.go  credit-runner  q4runes
 internal/watch/senses.go  credit-runner  fogtrail
 internal/watch/senses.go  credit-runner  maphistory
@@ -1817,6 +1826,7 @@ internal/watch/skillsapi_test.go  credit-runner  skilltrees
 internal/watch/skillsapi_test.go  credit-runner  skilltrees2
 internal/watch/skillsui.go  credit-runner  skilltrees
 internal/watch/skillsui.go  credit-runner  uinav
+internal/watch/skillsui.go  credit-runner  uinav2
 internal/watch/survivalapi.go  credit-runner  survC
 internal/watch/survivalapi_test.go  credit-runner  survC
 internal/watch/tallystrip.go  credit-runner  botcpu2
@@ -1858,6 +1868,8 @@ internal/watch/testdata/map_panel.js  credit-runner  maphistoryC
 internal/watch/testdata/map_panel.js  credit-runner  maphistoryD
 internal/watch/testdata/map_panel.js  credit-runner  maptrail
 internal/watch/testdata/map_panel.js  credit-runner  maptrail2
+internal/watch/testdata/nav_dom.cjs  credit-runner  uinav2
+internal/watch/testdata/nav_test.cjs  credit-runner  uinav2
 internal/watch/testdata/onboarding_dom.js  credit-runner  firstminutes
 internal/watch/testdata/onboarding_dom.txt  credit-runner  friendfb
 internal/watch/testdata/orderloop/  credit-runner  uib7
@@ -1941,6 +1953,7 @@ internal/watch/vaultapi_test.go  credit-runner  vaultv6
 internal/watch/vaultclean_test.go  credit-runner  vaultclean
 internal/watch/vaultequip_test.go  credit-runner  vaultequip
 internal/watch/vaultether_test.go  credit-runner  vaultv7b
+internal/watch/vaultlink_test.go  credit-runner  uinav2
 internal/watch/vaultmass_test.go  credit-runner  bulkid
 internal/watch/vaultreveal_ui_test.go  credit-runner  vaultreveal
 internal/watch/vaulttip_test.go  credit-runner  vaulttip
@@ -1959,13 +1972,19 @@ internal/watch/watchlayout_test.go  credit-runner  labels
 internal/watch/watchlayout_test.go  credit-runner  videofeed2
 internal/watch/web  credit-runner  nocards
 internal/watch/web/app.css  credit-runner  toastfix
+internal/watch/web/app.js  credit-runner  uinav2
 internal/watch/web/characters.css  credit-runner  charui
+internal/watch/web/characters.css  credit-runner  uinav2
 internal/watch/web/characters.html  credit-runner  charui
+internal/watch/web/characters.html  credit-runner  uinav2
 internal/watch/web/characters.js  credit-runner  charui
 internal/watch/web/characters.js  credit-runner  uinav
+internal/watch/web/characters.js  credit-runner  uinav2
 internal/watch/web/characters.json  credit-runner  charui
+internal/watch/web/characters.json  credit-runner  uinav2
 internal/watch/web/components.css  credit-runner  jewelcolor
 internal/watch/web/components.css  credit-runner  jewelicons
+internal/watch/web/components.css  credit-runner  uinav2
 internal/watch/web/components.css  credit-runner  uis6
 internal/watch/web/components.css  credit-runner  uis7
 internal/watch/web/gear.js  credit-runner  repairtrip
@@ -1978,9 +1997,11 @@ internal/watch/web/inventory-actions.js  credit-runner  uic3
 internal/watch/web/inventory-canvas.css  credit-runner  jewelicons
 internal/watch/web/inventory-canvas.css  credit-runner  uic2
 internal/watch/web/inventory-canvas.css  credit-runner  uic3
+internal/watch/web/inventory-canvas.css  credit-runner  uinav2
 internal/watch/web/inventory-canvas.css  credit-runner  uiphone
 internal/watch/web/inventory-canvas.js  credit-runner  uic2
 internal/watch/web/inventory-canvas.js  credit-runner  uic3
+internal/watch/web/inventory-canvas.js  credit-runner  uinav2
 internal/watch/web/inventory-canvas.js  credit-runner  uiphone
 internal/watch/web/inventory-drag.js  credit-runner  gearsets
 internal/watch/web/inventory-drag.js  credit-runner  uic3
@@ -2014,6 +2035,9 @@ internal/watch/web/layouts/  credit-runner  uis7
 internal/watch/web/layouts/cockpit.json  credit-runner  uis6
 internal/watch/web/lootrulesui.js  credit-runner  lootwire3
 internal/watch/web/mjpeg.js  credit-runner  viewerfps
+internal/watch/web/nav.css  credit-runner  uinav2
+internal/watch/web/nav.js  credit-runner  uinav2
+internal/watch/web/nav.json  credit-runner  uinav2
 internal/watch/web/onboarding.css  credit-runner  onboardtour
 internal/watch/web/onboarding.js  credit-runner  onboardtour
 internal/watch/web/palfeed.js  credit-runner  videofeed
@@ -2081,6 +2105,7 @@ internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area
 internal/watch/web/pauseui.js  credit-runner  pausefix
 internal/watch/web/pauseui.js  credit-runner  pausemenufit
 internal/watch/web/points.css  credit-runner  agencyp0
+internal/watch/web/points.css  credit-runner  uinav2
 internal/watch/web/points.js  credit-runner  agencyp0
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
@@ -2090,6 +2115,7 @@ internal/watch/web/shell.css  credit-runner  menufit2
 internal/watch/web/shell.css  credit-runner  pausemenufit
 internal/watch/web/shell.css  credit-runner  resetinstant
 internal/watch/web/shell.css  credit-runner  uifix1
+internal/watch/web/shell.css  credit-runner  uinav2
 internal/watch/web/shell.css  credit-runner  uis1
 internal/watch/web/shell.css  credit-runner  uis6
 internal/watch/web/shell.css  credit-runner  uis7
@@ -2098,6 +2124,7 @@ internal/watch/web/shell.js  credit-runner  labels
 internal/watch/web/shell.js  credit-runner  minimapfix
 internal/watch/web/shell.js  credit-runner  resetinstant
 internal/watch/web/shell.js  credit-runner  uifix1
+internal/watch/web/shell.js  credit-runner  uinav2
 internal/watch/web/shell.js  credit-runner  uis1
 internal/watch/web/shell.js  credit-runner  uis6
 internal/watch/web/shell.js  credit-runner  uis7
@@ -2116,6 +2143,7 @@ internal/watch/web/tokens.css  credit-runner  uis7
 internal/watch/web/update.js  credit-runner  uis7
 internal/watch/web/utilities.css  credit-runner  mapphone
 internal/watch/web/utilities.css  credit-runner  quests8
+internal/watch/web/utilities.css  credit-runner  uinav2
 internal/watch/web/vault-logic.js  credit-runner  vaultclean
 internal/watch/web/vault-logic.js  credit-runner  vaultequip
 internal/watch/web/vault-logic.js  credit-runner  vaultfull
@@ -2125,6 +2153,7 @@ internal/watch/web/vault-logic.js  credit-runner  vaulttip
 internal/watch/web/vault-logic.js  credit-runner  vaultv4
 internal/watch/web/vault-logic.js  credit-runner  vaultv6
 internal/watch/web/vault.css  credit-runner  uinav
+internal/watch/web/vault.css  credit-runner  uinav2
 internal/watch/web/vault.css  credit-runner  vaultclean
 internal/watch/web/vault.css  credit-runner  vaultequip
 internal/watch/web/vault.css  credit-runner  vaultreveal
@@ -2133,10 +2162,12 @@ internal/watch/web/vault.css  credit-runner  vaultv4
 internal/watch/web/vault.css  credit-runner  vaultv5
 internal/watch/web/vault.css  credit-runner  vaultv6
 internal/watch/web/vault.css  credit-runner  vaultv7b
+internal/watch/web/vault.html  credit-runner  uinav2
 internal/watch/web/vault.html  credit-runner  vaultclean
 internal/watch/web/vault.html  credit-runner  vaultv4
 internal/watch/web/vault.js  credit-runner  bulkid
 internal/watch/web/vault.js  credit-runner  uinav
+internal/watch/web/vault.js  credit-runner  uinav2
 internal/watch/web/vault.js  credit-runner  vaultclean
 internal/watch/web/vault.js  credit-runner  vaultequip
 internal/watch/web/vault.js  credit-runner  vaultfull
@@ -2150,6 +2181,7 @@ internal/watch/web/vault.js  credit-runner  vaultv6
 internal/watch/web/vault.js  credit-runner  vaultv7b
 internal/watch/web/vault.json  credit-runner  bulkid
 internal/watch/web/vault.json  credit-runner  uinav
+internal/watch/web/vault.json  credit-runner  uinav2
 internal/watch/web/vault.json  credit-runner  vaultclean
 internal/watch/web/vault.json  credit-runner  vaultequip
 internal/watch/web/vault.json  credit-runner  vaultfull
@@ -2161,6 +2193,7 @@ internal/watch/web/vault.json  credit-runner  vaultv6
 internal/watch/web/vault.json  credit-runner  vaultv7b
 internal/watch/web/watch.html  credit-runner  agencyp0
 internal/watch/web/watch.html  credit-runner  uifix1
+internal/watch/web/watch.html  credit-runner  uinav2
 internal/watch/whychange.json  credit-runner  uifix1
 internal/watch/whyline.json  credit-runner  repairtrip
 internal/watch/whyline.json  credit-runner  staletarget
@@ -2298,6 +2331,7 @@ tools/uishots  credit-runner  gearsets
 tools/uishots  credit-runner  identifyall
 tools/uishots  credit-runner  lootwire3
 tools/uishots  credit-runner  sellall
+tools/uishots  credit-runner  uinav2
 tools/uishots  credit-runner  videoctl
 tools/uishots  credit-runner  videofeed4
 tools/uishots.sh  credit-runner  friendfb
@@ -2312,6 +2346,7 @@ tools/uishots.sh  credit-runner  sellall
 tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3
 tools/uishots.sh  credit-runner  uifix1
+tools/uishots.sh  credit-runner  uinav2
 tools/uishots.sh  credit-runner  uiphone
 tools/uishots.sh  credit-runner  uis3
 tools/uishots.sh  credit-runner  uis6
