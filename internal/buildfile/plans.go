@@ -19,7 +19,7 @@ func PlanNames() []string {
 	ents, _ := plandata.FS.ReadDir(".")
 	var out []string
 	for _, e := range ents {
-		if n := e.Name(); strings.HasPrefix(n, "build-") && strings.HasSuffix(n, ".json") {
+		if n := e.Name(); strings.HasPrefix(n, "build-") && strings.HasSuffix(n, ".json") && n != plandata.CatalogFile {
 			out = append(out, strings.TrimSuffix(strings.TrimPrefix(n, "build-"), ".json"))
 		}
 	}

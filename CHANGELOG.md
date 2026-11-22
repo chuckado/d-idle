@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- necro5: fix merge of necro_data_test <!--sg:agent/necro5-->
+- buildcatalog: points table test skips the catalogue file <!--sg:agent/buildcatalog-->
+- Merge branch 'main' into buildratings <!--sg:agent/buildratings-->
 - Merge branch 'main' into uinav <!--sg:agent/uinav-->
 - Merge branch 'main' into sellall <!--sg:agent/sellall-->
 - Merge branch 'main' into fableui <!--sg:agent/fableui-->
