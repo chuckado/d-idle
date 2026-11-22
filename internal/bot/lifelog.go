@@ -5,6 +5,7 @@ import (
 
 	"d2lod-bot/internal/input"
 	"fmt"
+	"strings"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/power"
@@ -37,6 +38,21 @@ func (r *Runner) zoneEntry(s *d2.Snapshot, p *d2.Player) {
 	kv := []any{"area", p.Area, "clvl", p.Level, "life", fmt.Sprintf("%d/%d", p.Life, p.MaxLife),
 		"heal", k.BeltHP + k.PackHP, "mana", fmt.Sprintf("%d/%d", p.Mana, p.MaxMana), "tome", k.TownPortals, "merc", mercWord(s)}
 	r.e.Log.Info("zone entry", append(kv, heroTermsKV(p)...)...)
+	r.e.Log.Info("worn at zone entry", "worn", wornWord(s))
+}
+
+// wornWord lists what stands on the body as `<body slot>:<unit id>/<class>`, in body order (logging only).
+func wornWord(s *d2.Snapshot) string {
+	if s == nil || s.Inventory == nil {
+		return ""
+	}
+	var parts []string
+	for body := 0; body < 16; body++ {
+		if u := s.Inventory.Equipped(body); u != nil {
+			parts = append(parts, fmt.Sprintf("%d:%d/%d", body, u.ID, u.Class))
+		}
+	}
+	return strings.Join(parts, " ")
 }
 
 // heroTermsKV is the power estimator's own inputs, appended to the zone entry line so a replay needs no default for them
@@ -83,4 +99,15 @@ func (r *Runner) noteArrival(o *observer, p *d2.Player, now time.Time) {
 	o.arrived = arrival{from: o.area, at: now, pos: input.Point{X: p.X, Y: p.Y}}
 	r.e.Log.Info("arrival", "area", p.Area, "from", o.area, "x", p.X, "y", p.Y,
 		"arrivals", o.arrivals, "bounces", o.bounces) // cumulative since start: bounces/arrivals is the rate to compare per build
+}
+
+// cursorWord says what the cursor holds as `<unit id>/<class>@<x>,<y>`, or "" (logging only).
+func cursorWord(s *d2.Snapshot) string {
+	if s == nil || s.Inventory == nil {
+		return ""
+	}
+	if c := s.Inventory.Cursor; c != nil {
+		return fmt.Sprintf("%d/%d@%d,%d", c.ID, c.Class, c.X, c.Y)
+	}
+	return ""
 }
