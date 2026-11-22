@@ -474,6 +474,13 @@
     "payLabel": "Pay with",
     "skipNote": "Why only these"
   },
+  "identifyAll": "Identify all ({n})",
+  "identifyAllTitle": "Identify {n} items?",
+  "identifyAllBody": "Identify {n} items for {cost} gold? Stash {stash}, left after: {after}",
+  "identifyAllShort": "Identify {k} of {n} for {cost} gold (stash {stash}): the rest later",
+  "identifyAllGo": "Identify {k}",
+  "identifyAllSkipped": "{n} could not be read from the game just now and stay unrevealed.",
+  "identifyAllRunning": "A gold reveal is still running",
   "revealGoldSel": "Reveal with gold ({n})",
   "revealGoldOne": "Reveal for {cost} gold",
   "goldCost": "Reveal {n} items for {cost} gold (stash {stash})",

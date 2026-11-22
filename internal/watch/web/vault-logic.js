@@ -299,6 +299,31 @@ export function revealMethods(rev) {
   return new Set(rev && Array.isArray(rev.methods) ? rev.methods : ['free', 'ether', 'gold']);
 }
 
+// identifyAllPlan is the always-visible "Identify all (N)" button and its confirm sheet. N is the server's count of unrevealed
+// records of the WHOLE vault (act.reveal.gold.unrevealed: no filter, search or selection applies). K is what the stash pays for.
+// show is false at N = 0, without gold, or while only other payments are offered; off says the press cannot go (a running order,
+// the server's reason, or a stash below one reveal).
+export function identifyAllPlan(rev, T) {
+  const g = rev && rev.gold, n = g ? g.unrevealed | 0 : 0, price = g ? g.scrollGold | 0 : 0, stash = g ? g.stash | 0 : 0;
+  const m = { show: false, n, k: 0, cost: 0, stash, after: stash, short: false, off: false, why: '', label: '', title: '', body: '', go: '' };
+  const f = (str, o) => String(str || '').replace(/\{(\w+)\}/g, (x, key) => (o[key] !== undefined ? o[key] : ''));
+  const via = revealMethods(rev);
+  if (!g || !g.on || n <= 0 || !via.has('gold') || via.has('free')) return m;
+  m.show = true;
+  m.k = price > 0 ? Math.min(n, Math.floor(stash / price)) : 0;
+  m.cost = m.k * price; m.after = stash - m.cost; m.short = m.k < n;
+  m.label = f(T.identifyAll, { n });
+  const o = g.order;
+  if (o && (o.state === 'queued' || o.state === 'paid')) { m.off = true; m.why = T.identifyAllRunning; }
+  else if (g.why) { m.off = true; m.why = g.why; }
+  else if (m.k < 1) { m.off = true; m.why = f(T.goldShort, { price: grp(price), stash: grp(stash) }); }
+  const a = { n, k: m.k, cost: grp(m.cost), stash: grp(stash), after: grp(m.after) };
+  m.title = f(T.identifyAllTitle, a);
+  m.body = m.short ? f(T.identifyAllShort, a) : f(T.identifyAllBody, a);
+  m.go = f(T.identifyAllGo, { k: m.k });
+  return m;
+}
+
 // revealBarModel is what the bar draws. rev is act.reveal of GET /api/vault, pay the option the player picked ('' = the server's
 // default). show is false when there is nothing to reveal and no order to follow.
 export function revealBarModel(rev, pay, T) {

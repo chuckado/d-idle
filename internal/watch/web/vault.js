@@ -5,7 +5,7 @@
 // Reveal and Sell (slice V6) also only queue: the price is shown before the click (revealPlan) and the states come from the GET. The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
 // fed the rows as an inventory view); every text comes from /watch/vault.json or the API and goes in through textContent.
 // Every press is read back: the list is fetched again and what it says is what the page shows.
-import { PAGE, equipPlan, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, revealBarModel, revealMethods, revealPlan, sellLabel, sellPlan, sellWhy, mergeQuotes, toQuery, toTipView, when } from '/watch/vault-logic.js';
+import { PAGE, equipPlan, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, identifyAllPlan, revealBarModel, revealMethods, revealPlan, sellLabel, sellPlan, sellWhy, mergeQuotes, toQuery, toTipView, when } from '/watch/vault-logic.js';
 
 export const ROUTE = '/api/vault';
 const POLL_MS = 6000;
@@ -143,6 +143,9 @@ export function mountVault(d) {
   // Marked for sale (flags the player has not confirmed) is one chip in the toolbar that opens a sheet with the list and the Sell button.
   const markChip = btn('', { key: 'marked-chip', variant: 'ghost' }); markChip.classList.add('vt-chip', 'vt-markchip'); markChip.hidden = true;
 
+  // Identify all (N): always in the toolbar, whatever the filter, search or selection; N is the whole vault's unrevealed count.
+  const identB = btn('', { key: 'identify-all', variant: 'ghost' }); identB.classList.add('vt-chip', 'vt-identall'); identB.hidden = true;
+
   // ---- the list and the card ----
   const body = el('div', 'vt-body');
   const main = el('main', 'vt-main'); main.id = 'vt-main'; main.tabIndex = 0; main.setAttribute('aria-label', T.title); main.dataset.vscroll = '1';
@@ -173,7 +176,7 @@ export function mountVault(d) {
   }
   { const was = slotStore(); if (was && !S.f.type) S.f.type = was; }
   const page = el('div', 'vt-page');
-  tools.append(slotRow, search, ftoggle, sortSel, viewBtn, selBtn, markChip);
+  tools.append(slotRow, search, ftoggle, sortSel, viewBtn, selBtn, markChip, identB);
   page.append(head, banner, tools, filters, bar, body, msg);
   root.replaceChildren ? root.replaceChildren(page, sheetWrap) : (root.appendChild(page), root.appendChild(sheetWrap));
 
@@ -446,6 +449,9 @@ export function mountVault(d) {
     promptLine.hidden = promptYes.hidden = promptNo.hidden = !p || ro;
     promptLine.textContent = p ? fmt(T.promptText, { short: p.short, n: p.ids.length, gold: p.gold }) : '';
     const mk = S.view && S.view.marked;
+    const ia = identifyAllPlan(a && a.reveal, T);
+    identB.hidden = !ia.show || ro;
+    if (ia.show) { identB.textContent = ia.label; identB.disabled = ia.off; identB.title = ia.why; }
     markChip.hidden = !mk || ro;
     if (mk) markChip.textContent = fmt(T.markedChip, { n: mk.n });
   }
@@ -840,6 +846,32 @@ export function mountVault(d) {
     else setMsg('bad', ((r.failed && r.failed[0] && r.failed[0].error) || (line && r.order && r.order.note) || r.error || T.noAnswer));
     await reload(true);
   }
+  // Identify all: one confirm sheet, then ONE order of scope all_unrevealed; the bot lists the records itself when it runs.
+  function openIdentifyAll(opener) {
+    const p = identifyAllPlan(S.view && S.view.act && S.view.act.reveal, T);
+    if (!p.show || p.off) return;
+    sheetCard.replaceChildren();
+    sheetCard.setAttribute('aria-label', p.title);
+    sheetCard.appendChild(el('h2', '', p.title));
+    sheetCard.appendChild(el('p', '', p.body)).dataset.key = 'identify-all-body';
+    const go = btn(p.go, { key: 'sheet-go' });
+    const cancel = btn(T.cancel, { key: 'sheet-cancel', variant: 'ghost' });
+    const row = el('div', 'vt-row'); row.append(cancel, go); sheetCard.appendChild(row);
+    S.sheet = { opener, first: cancel };
+    sheetWrap.hidden = false;
+    cancel.addEventListener('click', closeSheet);
+    go.addEventListener('click', async () => { go.disabled = true; closeSheet(true); await identifyAll(p.cost); });
+    cancel.focus();
+  }
+  async function identifyAll(maxGold) {
+    const r = await d.post('/api/vault/revealgold', { scope: 'all_unrevealed', maxGold, confirm: true });
+    const line = r && r.order && r.order.line;
+    if (!r) setMsg('bad', T.noAnswer);
+    else if (r.ok || (r.done && r.done.length)) setMsg(r.ok ? 'good' : 'info', (line || RT.sent) + (!r.ok && r.failed && r.failed.length ? ' ' + fmt(T.identifyAllSkipped, { n: r.failed.length }) : ''));
+    else setMsg('bad', ((r.failed && r.failed[0] && r.failed[0].error) || r.error || T.noAnswer));
+    await reload(true);
+  }
+  identB.addEventListener('click', () => { if (!identB.disabled) openIdentifyAll(identB); });
   goldB.addEventListener('click', () => {
     const rp = revealPlan(S.items, S.sel.ids(), S.view && S.view.act), gi = (S.view && S.view.act && S.view.act.reveal.gold) || {};
     if (!rp.n || goldB.disabled) return;
@@ -1147,7 +1179,7 @@ export function mountVault(d) {
     doc.body.appendChild(sc);
   }
   if (d.overlays) d.overlays.register('vault-sheet', sheetWrap, closeSheet); // the page's one modal: Escape and the one-at-a-time rule are the manager's (docs/ui-overlays.md)
-  return { start, reload, draw, state: S, changed, openDiscard, openSell, openConfirm, pressEther, refreshEther, closeSheet, act, main, grid, loadTip };
+  return { start, reload, draw, state: S, changed, openIdentifyAll, openDiscard, openSell, openConfirm, pressEther, refreshEther, closeSheet, act, main, grid, loadTip };
 }
 
 // ---- the page in a browser ----
