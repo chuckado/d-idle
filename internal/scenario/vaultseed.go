@@ -50,8 +50,11 @@ type VaultIt struct {
 	// Sealed is the held affix text ("stat:param:value;...") written when the fork sent none for the unidentified item
 	// (U: it may not), so a gold reveal has something to unseal.
 	Sealed string `json:"sealed,omitempty"`
-	Pin    bool   `json:"pin,omitempty"`
-	N      int    `json:"n,omitempty"` // copies (default 1); copies of a magic or better item are distinct items
+	// Bare stores the record WITHOUT held affixes (the shape of a record the fork sent none for, the user's Vault): its own
+	// bytes still carry them, so a gold reveal has to decode them (`item decode`). Needs Unid.
+	Bare bool `json:"bare,omitempty"`
+	Pin  bool `json:"pin,omitempty"`
+	N    int  `json:"n,omitempty"` // copies (default 1); copies of a magic or better item are distinct items
 }
 
 var qualityWords = map[string]int{"low": 1, "normal": 2, "superior": 3, "magic": 4, "rare": 6, "": 2}
@@ -91,6 +94,9 @@ func (v VaultSeed) Validate() error {
 	for i, it := range v.Items {
 		if it.Code == "" || len(it.Code) != 3 && len(it.Code) != 4 {
 			return fmt.Errorf("vault_records.items[%d]: code %q", i, it.Code)
+		}
+		if it.Bare && !it.Unid {
+			return fmt.Errorf("vault_records.items[%d]: bare needs unid", i)
 		}
 		if it.Quality < 0 || it.Quality > 8 || it.N < 0 {
 			return fmt.Errorf("vault_records.items[%d]: quality %d n %d", i, it.Quality, it.N)

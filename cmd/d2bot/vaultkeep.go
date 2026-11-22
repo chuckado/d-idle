@@ -110,6 +110,7 @@ func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir, curren
 	k.Measured = measuredRun
 	k.GoldOn = func() bool { return keepOn(e)() && e.Tune.Loot.VaultRevealGold != 0 }
 	k.GoldConfirm = func() int { return e.Tune.Loot.VaultRevealGoldConfirm }
+	k.Methods = func() []string { return revealMethods(e.Tune.Loot.VaultRevealMethods) }
 	k.OrderFile = func() string {
 		h := hero()
 		if h == "" || vault.ValidHero(h) != nil {
@@ -454,11 +455,13 @@ func (f actFace) Act(ctx context.Context) watch.VaultActView {
 		w := "this bot has no Reveal or Sell"
 		return watch.VaultActView{Reveal: watch.VaultRevealView{Why: w, Code: "off"}, Sell: watch.VaultSellView{Why: w, Code: "off"}}
 	}
+	k.BackfillProps(ctx, 10) // revealed records without stat lines get the ones their bytes carry (a few per page load)
 	in, p := k.Info(), k.RevealPrice(ctx)
 	v := watch.VaultActView{
 		Reveal: watch.VaultRevealView{Note: p.Note, Charges: p.Charges, Free: p.Free, PerItem: p.PerItem, EtherPer: p.EtherPer, Balance: p.Balance, Queued: in.RevQueued, Working: in.RevWorking, Done: in.Revealed, Line: k.RevealLine()},
 		Sell:   watch.VaultSellView{Queued: in.SellQueued, Working: in.SellWorking, Sold: in.Sold, Gold: in.GoldEarned, Line: k.SellLine()},
 	}
+	v.Reveal.Methods = k.OfferedMethods()
 	v.Reveal.Enabled, v.Reveal.Why = k.GateReveal(ctx)
 	if !v.Reveal.Enabled {
 		v.Reveal.Code = gateCode(v.Reveal.Why)
@@ -532,7 +535,7 @@ func (f actFace) GoldInfo(ctx context.Context) watch.VaultGoldInfo {
 		return watch.VaultGoldInfo{}
 	}
 	g := k.GoldFacts(ctx)
-	out := watch.VaultGoldInfo{On: g.On, ScrollGold: g.Price, Stash: g.Stash, ConfirmAt: g.Confirm, Why: g.Why}
+	out := watch.VaultGoldInfo{On: g.On, ScrollGold: g.Price, Stash: g.Stash, ConfirmAt: g.Confirm, Why: g.Why, Decode: g.Decode}
 	if v := k.GoldView(); v != nil {
 		o := viewOf(*v)
 		out.Order = &o
@@ -561,4 +564,19 @@ func (f actFace) CancelGold() (watch.VaultGoldOrder, bool) {
 	}
 	v, ok := k.CancelGold()
 	return viewOf(v), ok
+}
+
+// revealMethods names the payments of the knob loot.vaultRevealMethods bit mask (1 free, 2 ether, 4 gold). 0 is read as the
+// default (gold only): the page always offers at least one way.
+func revealMethods(mask int) []string {
+	if mask <= 0 {
+		mask = 4
+	}
+	var out []string
+	for i, name := range []string{"free", "ether", "gold"} {
+		if mask&(1<<i) != 0 {
+			out = append(out, name)
+		}
+	}
+	return out
 }

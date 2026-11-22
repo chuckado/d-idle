@@ -40,7 +40,7 @@ const (
 	ReasonRevDiffers = "the game identified a different item"
 	ReasonRevStill   = "the item is still unidentified"
 	ReasonRevDup     = "an identical identified item is already in the vault"
-	ReasonNoSealed   = "the vault holds no affixes for this item; use a scroll or Cain"
+	ReasonNoSealed   = "the vault holds no affixes for this item and the game could not decode them just now: try again in game"
 	revPrefix        = "reveal: "
 	revKey           = "vr-"
 )
@@ -561,6 +561,7 @@ func (k *Keeper) EnqueueRevealEther(ctx context.Context, ids []string, wantNow b
 	}
 	out := make([]Result, len(ids))
 	st := k.store()
+	k.FillSealed(ctx, ids)
 	eligible := 0
 	for i, id := range ids {
 		out[i] = Result{ID: id}
@@ -620,4 +621,67 @@ func (k *Keeper) EnqueueRevealEther(ctx context.Context, ids []string, wantNow b
 		k.mu.Unlock()
 	}
 	return out
+}
+
+// FillSealed gives every unidentified record in ids that holds no affixes the ones its own bytes carry: the fork's read-only
+// `item decode <raw>` answers the identified view of the dropped bytes, and the record keeps its property list as Sealed
+// (Store.Seal), exactly as the recorder does for a drop whose peek carried them. Nothing is created in the game and no
+// scroll, tome charge or town visit is needed. A fork without the verb, no game right now or a decode that finds no
+// properties leaves the record as it was (the caller then refuses it as nosealed). It returns how many records were filled.
+func (k *Keeper) FillSealed(ctx context.Context, ids []string) int {
+	st := k.store()
+	dec, ok := k.API.(d2dctl.Decoder)
+	if st == nil || !ok {
+		return 0
+	}
+	n := 0
+	for _, id := range ids {
+		rec, found := st.Get(id)
+		if !found || rec.Identified || rec.Sealed != "" || rec.Raw == "" || (rec.State != vault.Recorded && rec.State != vault.KeepQ) {
+			continue
+		}
+		got, err := dec.ItemDecode(ctx, rec.Raw)
+		if err != nil || got.Props == "" || got.Code != rec.Code {
+			continue
+		}
+		if st.Seal(id, got.Props) == nil {
+			n++
+		}
+	}
+	return n
+}
+
+// BackfillProps gives up to max identified records that carry no stat lines (marked revealed, no properties) the ones their
+// own bytes carry, decoded by the fork (read-only in the game). It returns how many it filled.
+func (k *Keeper) BackfillProps(ctx context.Context, max int) int {
+	st := k.store()
+	dec, ok := k.API.(d2dctl.Decoder)
+	if st == nil || !ok || max <= 0 {
+		return 0
+	}
+	n := 0
+	for _, r := range st.Dump() {
+		if n >= max || ctx.Err() != nil {
+			break
+		}
+		if !r.Identified || r.Props != "" || r.Raw == "" || r.State != vault.Recorded && r.State != vault.KeepQ && r.State != vault.SellQ {
+			continue
+		}
+		if _, done := k.nop.Load(r.ID); done {
+			continue
+		}
+		got, err := dec.ItemDecode(ctx, r.Raw)
+		if err != nil {
+			if errors.Is(err, d2dctl.ErrVaultOff) || errors.Is(err, d2dctl.ErrVaultUnsupported) || errors.Is(err, d2dctl.ErrVaultState) {
+				break
+			}
+			continue
+		}
+		if got.Props != "" && got.Code == r.Code && st.SetProps(r.ID, got.Props) == nil {
+			n++
+		} else {
+			k.nop.Store(r.ID, true)
+		}
+	}
+	return n
 }

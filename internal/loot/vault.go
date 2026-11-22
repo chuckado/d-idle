@@ -344,6 +344,15 @@ func (l *Looter) vaultOne(ctx context.Context, c cand, o PickOpts) (recorded boo
 	} else {
 		it.Sealed = rec.Props // held, never shown until the reveal is paid
 	}
+	if it.Sealed == "" && !rec.Identified {
+		// The peek carried no affixes: the fork's read-only decode of the record's own bytes gives them (no game state changes),
+		// so no record is ever left that only the in-game identify can reveal. A fork without the verb leaves it empty.
+		if dec, ok := v.w.API.(d2dctl.Decoder); ok {
+			if got, derr := dec.ItemDecode(ctx, rec.Norm); derr == nil && got.Code == rec.Code {
+				it.Sealed = got.Props
+			}
+		}
+	}
 	it.Pic, it.Tint, it.FileIndex = rec.Pic, rec.Tint, rec.FileIndex()
 	if b := l.base(u.Class); b != nil && l.e.Data != nil {
 		it.Chain = merc.TypeChain(l.e.Data, b.Type)

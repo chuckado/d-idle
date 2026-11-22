@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -271,7 +272,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	// 1. SETUP on a lab d2d (lab verbs on), every verb ledgered with its reason before it is sent.
 	bin, gamedata := os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA")
 	prep := &d2dinput.Process{Bin: bin, Data: gamedata, Sock: sock, ConfigDir: filepath.Join(home, "config"), DataDir: filepath.Join(home, "data"),
-		Nice: 10, ExtraArgs: withVault([]string{"--lockstep", "--lab-verbs", "--toggle", "autoloot=off,autoparty=off"}, su.VaultVerbs)}
+		Nice: 10, ExtraArgs: withPay(withVault([]string{"--lockstep", "--lab-verbs", "--toggle", "autoloot=off,autoparty=off"}, su.VaultVerbs), s.Needs)}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(s.Budget.WallMin+15)*time.Minute)
 	defer cancel()
 	if err := prep.Start(ctx, d2dinput.Spec{Name: hero, Class: cidx, Seed: r.Seed}); err != nil {
@@ -335,7 +336,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	if why := botFailure(trace); why != "" {
 		return withVerdict(res, blocked("the bot exited with an error, it did not play: %s", why))
 	}
-	if why := cutReason(trace); why != "" {
+	if why := cutReason(trace); why != "" && !slices.Contains(s.Needs, "vault.paygold") { // a real-time run (no lockstep clock) is bounded by its wall minutes, not a virtual length
 		return withVerdict(res, blocked("%s", why))
 	}
 	if !after(newestSave(home), before) {
@@ -522,7 +523,7 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 	if attach {
 		args = append(args, "--attach", "--d2d-attach")
 	} else {
-		args = append(args, "--managed", "--d2d-class", "-1", "--d2d-args", strings.Join(withVault([]string{"--lockstep"}, vaultVerbs), " "))
+		args = append(args, "--managed", "--d2d-class", "-1", "--d2d-args", strings.Join(botD2dArgs(s.Needs, vaultVerbs), " "))
 	}
 	var tap *tapper
 	var apiRun, sampler func(context.Context)
@@ -727,6 +728,9 @@ func observe(ctx context.Context, c *d2dctl.Client, writes int, live bool) scena
 		if v, ok := sv.Int("lskill"); ok {
 			st.LeftSkill = &v
 		}
+		if m, ok := sv.M["merc"]; ok {
+			st.Merc = &m
+		}
 	}
 	if li, err := c.Level(ctx); err == nil {
 		a := li.ID
@@ -868,6 +872,25 @@ func withVault(args []string, on bool) []string {
 		return append(args, "--vault-verbs")
 	}
 	return args
+}
+
+// withPay adds --vault-pay when the scenario needs the capability vault.paygold, so the SETUP d2d lists it in `caps` (it pays nothing: the
+// fork refuses the verb under --lockstep).
+func withPay(args, needs []string) []string {
+	if slices.Contains(needs, "vault.paygold") {
+		return append(args, "--vault-pay")
+	}
+	return args
+}
+
+// botD2dArgs are the d2d arguments of the bot phase. A scenario that needs `vault.paygold` is an UNMEASURED run (the stash payment is
+// a player-paid write, ADR 0029, which the fork refuses under --lockstep): d2d then runs in real time with --vault-pay, and the
+// scenario's provenance names the write. Every other scenario keeps --lockstep.
+func botD2dArgs(needs []string, vaultVerbs bool) []string {
+	if slices.Contains(needs, "vault.paygold") {
+		return append(withVault(nil, true), "--vault-pay")
+	}
+	return withVault([]string{"--lockstep"}, vaultVerbs)
 }
 
 // missingCaps lists the d2d capabilities in needs (the fork's names: item.*, ground.*, vault.*) that caps does not list.

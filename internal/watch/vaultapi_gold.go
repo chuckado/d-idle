@@ -35,7 +35,8 @@ type VaultGoldInfo struct {
 	ScrollGold int             `json:"scrollGold"` // the price of one reveal
 	Stash      int             `json:"stash"`      // the stash gold a gold reveal pays from
 	ConfirmAt  int             `json:"confirmAt"`
-	Why        string          `json:"why,omitempty"` // why gold cannot be offered now
+	Decode     bool            `json:"decode,omitempty"` // the fork decodes the affixes of an unidentified item from its bytes (item decode): any unidentified record can be gold-revealed
+	Why        string          `json:"why,omitempty"`    // why gold cannot be offered now
 	Order      *VaultGoldOrder `json:"order,omitempty"`
 }
 
@@ -51,12 +52,12 @@ func (d *VaultDesk) bar(ctx context.Context, recs []vault.Rec, r VaultRevealView
 	in := bulkid.BarIn{Free: r.Free, Charges: r.Charges, EtherPer: r.EtherPer, EtherBal: r.Balance}
 	if ga, ok := d.Act.(VaultGoldActor); ok {
 		gi := ga.GoldInfo(ctx)
-		in.GoldOn, in.ScrollGold, in.Stash, in.ConfirmAt, in.GoldWhy = gi.On, gi.ScrollGold, gi.Stash, gi.ConfirmAt, gi.Why
+		in.GoldOn, in.ScrollGold, in.Stash, in.ConfirmAt, in.GoldWhy, in.Decode = gi.On, gi.ScrollGold, gi.Stash, gi.ConfirmAt, gi.Why, gi.Decode
 		if gi.Order != nil && (gi.Order.State == "queued" || gi.Order.State == "paid") {
 			in.ActiveGoldOrderID = gi.Order.ID
 		}
 	}
-	b := bulkid.MakeBar(bulkid.Candidates(d.MassFilter, recs, d.Quality), in)
+	b := bulkid.MakeBar(bulkid.Candidates(d.MassFilter, recs, d.Quality), in).Only(r.Methods)
 	return &b
 }
 
