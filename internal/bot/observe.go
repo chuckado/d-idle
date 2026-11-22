@@ -39,6 +39,8 @@ type itemTrack struct {
 // observer turns the stream of snapshots into events and progress marks. All fields are guarded by Runner.obMu.
 type observer struct {
 	init      bool
+	worn      string // wornWord of the last look (logging only: a worn item that leaves the body is named in the log)
+	init2     bool
 	state     d2.State
 	menuSince time.Time
 	inGameAt  time.Time // when the current game was entered
@@ -479,6 +481,16 @@ func (r *Runner) observe(s *d2.Snapshot, now time.Time) {
 	o.init = true
 	if o.savedNew {
 		o.savedNew, o.savedExp = false, p.Exp
+	}
+
+	if w := wornWord(s); w != o.worn {
+		if o.init2 { // not the first look
+			r.mu.Lock()
+			st := r.st
+			r.mu.Unlock()
+			r.e.Log.Info("worn set changed", "was", o.worn, "now", w, "state", st, "area", p.Area, "cursor", cursorWord(s), "ui", fmt.Sprint(s.UI))
+		}
+		o.worn, o.init2 = w, true
 	}
 
 	if now.Sub(o.lastStat) >= 30*time.Second {

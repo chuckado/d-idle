@@ -1,10 +1,11 @@
 ---
 id: TASK-812
 title: 'necrosme: Necromancer SME answers for the five readiness build questions'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T19:06:00Z'
+updated_date: '2026-11-22T19:24:00Z'
 labels:
   - docs
   - research

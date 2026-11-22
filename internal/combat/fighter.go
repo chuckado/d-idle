@@ -692,10 +692,14 @@ func (f *Fighter) buffPass(ctx context.Context, snap *d2.Snapshot) (cast bool, e
 	known := KnownSkills(p, f.cat, f.keys)
 	mana := p.Mana
 	has := func(n string) bool { _, ok := known[n]; return ok }
+	var curses map[string]bool // a Necromancer's curses are cast at monsters, never as a buff at the own feet
+	if nd := f.profileFor(p).Necro; nd != nil {
+		curses = nd.curseSet()
+	}
 	for _, group := range f.profileFor(p).Rotation(p.Level, has).Groups() {
 		for _, name := range group {
 			sp, ok := known[name]
-			if !ok || curseNames[name] || f.expectDemoted(name) || (sp.Key == "" && p.RightSkill != sp.ID) {
+			if !ok || curses[name] || f.expectDemoted(name) || (sp.Key == "" && p.RightSkill != sp.ID) {
 				continue
 			}
 			if !f.buffDue(p, sp) {

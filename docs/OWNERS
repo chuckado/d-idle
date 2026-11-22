@@ -453,7 +453,6 @@ docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv5
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv6
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv7
 docs/design/loot-vault-2026-11-16.md"exclusive: []  credit-runner  vaultv7b
-docs/design/necromancer-sme-answers-2026-11-22.md  credit-runner  necrosme
 docs/design/quest-board-2026-11-16.md  credit-runner  quests1
 docs/design/quest-board-2026-11-16.md  credit-runner  quests10
 docs/design/quest-board-2026-11-16.md  credit-runner  quests3
@@ -807,6 +806,7 @@ docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
 docs/vault.md  credit-runner  equipswap
 docs/vault.md  credit-runner  identifyall
 docs/vault.md  credit-runner  nocards
+docs/vault.md  credit-runner  recallsorc
 docs/vault.md  credit-runner  vaultclean
 docs/vault.md  credit-runner  vaultequip
 docs/vault.md  credit-runner  vaultfull
@@ -916,6 +916,7 @@ internal/bot/levelplan3_test.go  pro-runner  levelplan3
 internal/bot/lifelog.go  credit-runner  arrivalsettle
 internal/bot/lifelog.go  credit-runner  hourfix
 internal/bot/lifelog.go  credit-runner  passagebounce
+internal/bot/lifelog.go  credit-runner  recallsorc
 internal/bot/lockguard_test.go  credit-runner  lockscan
 internal/bot/lockorder_test.go  credit-runner  lockscan
 internal/bot/loop.go  credit-runner  botinstant
@@ -933,6 +934,7 @@ internal/bot/observe.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  intake
 internal/bot/observe.go  credit-runner  lockscan
 internal/bot/observe.go  credit-runner  passagebounce
+internal/bot/observe.go  credit-runner  recallsorc
 internal/bot/observe.go  credit-runner  staletarget
 internal/bot/observe.go  credit-runner  survreask
 internal/bot/observe.go  credit-runner  survrecover
@@ -1080,10 +1082,12 @@ internal/combat/  credit-runner  dlv-whirl
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/castfirst.go  credit-runner  survfix2
 internal/combat/classdata  credit-runner  palprofile2
+internal/combat/classdata.go  credit-runner  necro4
 internal/combat/classdata/profiles.json  credit-runner  barb1
 internal/combat/classdata/profiles.json  credit-runner  druid1
 internal/combat/classdata/profiles.json  credit-runner  hammer1
 internal/combat/classdata/profiles.json  credit-runner  necro1
+internal/combat/classdata/profiles.json  credit-runner  necro4
 internal/combat/classdata/profiles.json  credit-runner  sorc2
 internal/combat/dodge.go  credit-runner  survfix2
 internal/combat/fight.go  credit-runner  goldprio
@@ -1096,9 +1100,14 @@ internal/combat/fightend.go  credit-runner  survfix2
 internal/combat/fighter.go  credit-runner  beltfix
 internal/combat/fighter.go  credit-runner  maphistory
 internal/combat/fighter.go  credit-runner  maphistoryC
+internal/combat/fighter.go  credit-runner  necro4
 internal/combat/fighter.go  pro-runner  levelplan3
 internal/combat/interlude_test.go  credit-runner  goldprio
 internal/combat/lifeprice.go  credit-runner  palprofile2
+internal/combat/necro.go  credit-runner  necro4
+internal/combat/necro_corpse.go  credit-runner  necro4
+internal/combat/necro_data_test.go  credit-runner  necro4
+internal/combat/necro_test.go  credit-runner  necro4
 internal/combat/packdrink.go  credit-runner  beltfix
 internal/combat/packdrink_test.go  credit-runner  beltfix
 internal/combat/playable.go  credit-runner  agencyp0
@@ -1162,11 +1171,14 @@ internal/d2dloot  credit-runner  groundquality
 internal/d2dsoakstat/minute.go  credit-runner  intake
 internal/d2dsrc/  credit-runner  itemcolour2
 internal/d2dsrc/cpuprobe_test.go  credit-runner  botcpu
+internal/d2dsrc/dupid_test.go  credit-runner  recallsorc
 internal/d2dsrc/gearstats.go  credit-runner  survB
 internal/d2dsrc/gearstats_test.go  credit-runner  survB
 internal/d2dsrc/items.go  credit-runner  cain45
+internal/d2dsrc/items.go  credit-runner  recallsorc
 internal/d2dsrc/player.go  credit-runner  survB
 internal/d2dsrc/points_sheet_test.go  credit-runner  agencyp0
+internal/d2dsrc/source.go  credit-runner  recallsorc
 internal/d2dsrc/source_test.go  credit-runner  botcpu
 internal/d2dsrc/source_test.go  credit-runner  cain45
 internal/d2dsrc/source_test.go  credit-runner  survB
@@ -1314,6 +1326,7 @@ internal/loot/fixpickup_test.go  credit-runner  beltfix
 internal/loot/ignore_test.go  credit-runner  tidy
 internal/loot/loot.go  credit-runner  lootwireL4
 internal/loot/loot.go  credit-runner  vaultv3
+internal/loot/loot_test.go  credit-runner  recallsorc
 internal/loot/lootshadow.go  credit-runner  lootwire3
 internal/loot/lootshadow.go  credit-runner  lootwireL4
 internal/loot/lootshadow.go  credit-runner  vaultv3
@@ -1321,6 +1334,7 @@ internal/loot/lootshadow_test.go  credit-runner  lootwire3
 internal/loot/lootshadow_test.go  credit-runner  lootwireL4
 internal/loot/lootskip_test.go  credit-runner  beltfix
 internal/loot/pickup.go  credit-runner  lootwireL4
+internal/loot/pickup.go  credit-runner  recallsorc
 internal/loot/pickup.go  credit-runner  vaultfull
 internal/loot/pickup.go  credit-runner  vaultv3
 internal/loot/pickup.go  credit-runner  vaultv6
