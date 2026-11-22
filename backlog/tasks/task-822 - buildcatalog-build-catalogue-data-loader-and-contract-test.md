@@ -19,6 +19,7 @@ owns:
   - "internal/plandata/plandata_test.go"
   - "internal/buildfile/plans.go"
   - "docs/builds-catalog.md"
+  - "internal/points/tables_test.go"
 exclusive: []
 contracts: []
 result: "build-catalog.json: 15 builds (30 plan tables, all covered, uncovered list empty), seven estimate ratings each from the SME doc (Summoner Defense N4/H3, Blizzard Idle 3), SME ballpark thresholds as data; catalog.go loader validates and builds the small card (Defense, two highest, lowest, fixed tie order) and accessible star text; TestBuildCatalog plus card tests on Paladin, Sorceress, Necromancer. Build-specific: all text and stars are per build data. Not verified live; all stars are unverified estimates. build-catalog.json is skipped by buildfile.PlanNames (shared build- prefix)."
