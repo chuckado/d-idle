@@ -13,10 +13,12 @@
 #   tools/uishots.sh --fit [--out DIR]                       the cockpit fit check (tools/uishots/fit.go), on the builder:
 #     every cockpit page at the supported sizes loads in an iframe of exactly that size; the page must not scroll, no slot
 #     may overflow, no dead space; the deliberately overflowing fixture must FAIL. No pictures, no golden set.
+#   tools/uishots.sh --map [--out DIR] [--sizes 'WxH ...'] [--only VARIANT]   the Map-tab check (card mapphone, tools/uishots/mapphone.js): the Area map of the cockpit in the senses states legacy, fresh, walked and waiting;
+#     a picture map-VARIANT-WxH.png and a MAPPHONE PASS|FAIL line per case; exit 1 when one fails
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 skills=0 charu= extra= sizes_only= theme=dark fx= tag= pics=0 pq= cs=0 vt=0
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 map=0 skills=0 charu= extra= sizes_only= theme=dark fx= tag= pics=0 pq= cs=0 vt=0
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
@@ -25,6 +27,7 @@ while [ $# -gt 0 ]; do
 	--fit) fit=1; shift ;;
 	--cockpit) cockpit=1; shift ;;
 	--char) char=1; shift ;;
+	--map) map=1; shift ;;
 	--pics) pics=1; shift ;;
 	--cs) cs=1; shift ;;
 	--vt) vt=1; shift ;;
@@ -86,6 +89,30 @@ drawer-start watch?layout=cockpit-demo&theme=dark&drawer=onboarding"
 	done
 	ls "$out" | wc -l
 	exit 0
+fi
+if [ "$map" = 1 ]; then
+	mkdir -p "$out" && rm -f "$out"/map-*
+	bad=0
+	click=$(printf %s '.d-mapswitch [data-view="1"]' | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g; s/"/%22/g; s/ /%20/g')
+	for fx in legacy fresh walked waiting; do
+		[ -n "$only" ] && [ "$only" != "$fx" ] && continue
+		for sz in ${sizes_only:-390x844 1366x768}; do
+			w=${sz%x*} h=${sz#*x}
+			url="http://127.0.0.1:$port/__mapphone?u=/watch%3Flayout=cockpit%26theme=dark%26tab=Map&w=$w&h=$h&fx=$fx&click=$click"
+			prof=$(mktemp -d)
+			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+				--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --dump-dom "$url" >"$out/map-$fx-$sz.html" 2>/dev/null
+			rm -rf "${prof:?}"; prof=$(mktemp -d)
+			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+				--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/map-$fx-$sz.png" "$url" >/dev/null 2>&1
+			rm -rf "${prof:?}"
+			line=$(grep -o 'MAPPHONE [A-Z]* [^<]*' "$out/map-$fx-$sz.html" | head -1)
+			[ -n "$line" ] || line="MAPPHONE FAIL $fx $sz: no result in the page"
+			echo "$line"
+			case $line in "MAPPHONE PASS"*) ;; *) bad=1 ;; esac
+		done
+	done
+	exit $bad
 fi
 if [ "$char" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/char-${tag}*
