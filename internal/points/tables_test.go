@@ -28,6 +28,9 @@ func shippedTables(t *testing.T) map[string]*leveler.Build {
 	}
 	out := map[string]*leveler.Build{}
 	for _, f := range files {
+		if filepath.Base(f) == "build-catalog.json" {
+			continue // the build text catalogue, not a plan table
+		}
 		b, err := os.ReadFile(f)
 		if err != nil {
 			t.Fatal(err)

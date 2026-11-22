@@ -17,6 +17,9 @@ func TestMatchesDocs(t *testing.T) {
 		t.Skip("docs/plan/data not present")
 	}
 	for _, e := range ents {
+		if e.Name() == CatalogFile {
+			continue // UI text, not a plan table: it has no copy under docs/plan/data
+		}
 		doc, err := os.ReadFile(filepath.Join(dir, e.Name()))
 		if err != nil {
 			// the endgame builds live one level down
