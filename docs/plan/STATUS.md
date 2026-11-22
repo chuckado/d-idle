@@ -438,6 +438,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0b1c9d7b0 11-22 14:14 `Merge agent/necrosme: Merge branch 'main' into necrosme` (necrosme)
+- 26ff256f1 11-22 14:13 `Merge branch 'main' into necrosme` (-)
 - f85df9835 11-22 14:02 `Merge agent/necro-audit: Merge branch 'main' into necro2` (necro-audit)
 - c4d0f079e 11-22 14:00 `Merge branch 'main' into necro2` (-)
 - 2cd38eec9 11-22 13:46 `Merge agent/mapverify: Merge branch 'main' into mapverify` (mapverify)
@@ -446,6 +448,4 @@
 - 8bd91284e 11-22 11:36 `Merge branch 'main' into vaultsell` (-)
 - 4683bb790 11-22 11:31 `Merge origin/main into agent/vaultsell (identifyall touched vault.js)` (-)
 - 1984adebd 11-22 11:26 `Merge agent/equipswap: Merge origin/main into equipswap` (equipswap)
-- 6cd572085 11-22 11:22 `Merge origin/main into equipswap` (-)
-- 4ce4f7d65 11-22 11:20 `Merge origin/main into agent/vaultsell` (-)
 <!-- statusgen:end -->
