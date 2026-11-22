@@ -612,6 +612,7 @@ docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed2
 docs/probes/viewer-brightness-2026-11-17.md  credit-runner  brightness
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
+docs/probes/warptrigger-2026-11-22.md  credit-runner  warptrigger
 docs/process/barbarian-support.md  credit-runner  barb1
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
@@ -1106,6 +1107,7 @@ internal/d2dctl  credit-runner  countess3
 internal/d2dctl  live-agent  k1layout
 internal/d2dctl/  credit-runner  dlv-reads
 internal/d2dctl/fake/fake.go  credit-runner  verbs2
+internal/d2dctl/fake/fake.go  credit-runner  warptrigger
 internal/d2dctl/item_verbs.go  credit-runner  itemverbs2
 internal/d2dctl/item_verbs_merc.go  credit-runner  uib9
 internal/d2dctl/item_verbs_merc_test.go  credit-runner  uib9
@@ -1122,10 +1124,13 @@ internal/d2dctl/vault_verbs.go  credit-runner  vaultpay
 internal/d2dctl/vault_verbs.go  credit-runner  vaulttip
 internal/d2dctl/vault_verbs_test.go  credit-runner  vaulttip
 internal/d2dctl/verbs.go  credit-runner  arrivalsettle
+internal/d2dctl/warptriggers.go  credit-runner  warptrigger
+internal/d2dctl/warptriggers_test.go  credit-runner  warptrigger
 internal/d2dctl/world_verbs.go  credit-runner  verbs2
 internal/d2dctl/world_verbs_test.go  credit-runner  verbs2
 internal/d2denv  live-agent  k1layout
 internal/d2denv/env.go  credit-runner  pgclock
+internal/d2denv/env.go  credit-runner  warptrigger
 internal/d2denv/reader.go  credit-runner  pgclock
 internal/d2denv/recent_test.go  credit-runner  pgclock
 internal/d2dinput  pro-runner  bounce3
@@ -1153,10 +1158,12 @@ internal/d2dtown/adapter.go  credit-runner  verbs2
 internal/d2dworld  credit-runner  countess3
 internal/d2dworld  live-agent  k1layout
 internal/d2dworld/  credit-runner  wpstep
+internal/d2dworld/triggers_test.go  credit-runner  warptrigger
 internal/d2dworld/world.go  credit-runner  andariel1
 internal/d2dworld/world.go  credit-runner  knownedge
 internal/d2dworld/world_test.go  credit-runner  andariel1
 internal/d2map  credit-runner  countess3
+internal/d2map/static.go  credit-runner  warptrigger
 internal/d2map/static.go  credit-runner  wpstep
 internal/d2map/tracker.go  credit-runner  andariel1
 internal/d2map/tracker.go  credit-runner  wpstep
@@ -1341,6 +1348,7 @@ internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/fullgrid_test.go  credit-runner  knownedge
 internal/nav/mouthgate.go  credit-runner  botstuck
+internal/nav/mouthgate.go  credit-runner  warptrigger
 internal/nav/nav.go  credit-runner  countess3b
 internal/nav/nav.go  credit-runner  knownedge
 internal/nav/nav.go  credit-runner  maphistoryC
@@ -1354,6 +1362,7 @@ internal/nav/roam.go  credit-runner  pursuers
 internal/nav/route.go  credit-runner  cainchain
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
+internal/nav/warpread_test.go  credit-runner  warptrigger
 internal/nav/waypoint.go  credit-runner  verbs2
 internal/nav/wpverb_test.go  credit-runner  verbs2
 internal/plandata  credit-runner  agencyp0
