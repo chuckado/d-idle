@@ -5,7 +5,7 @@ Usage: strip.py D2D DATA FROM TO SEED [WAIT_S]   (lab d2d, --headless --lab-verb
 Reads `debug layout` / `nearby` / `level` / `grid 5` at FROM after WAIT_S seconds, finds the shared edge with TO, and per tile
 (5 subtiles) prints: inside walkable (grid), and whether `debug blocked` just past the edge answers open (what
 internal/d2dworld border.go `across` asks). Prints raw replies of the verbs first so the layout is visible. Stdlib only."""
-import sys, time
+import os, sys, time
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
 from gridwhole import session, grid
 
@@ -37,6 +37,9 @@ try:
         if to in lay or time.time() - t0 > 10:
             break
         time.sleep(1)
+    if fr not in lay:   # the level itself is not in the layout either (27, 32): its own `debug level` gives origin and size
+        lv2 = cmd("debug level").split()
+        lay[fr] = (int(lv2[6]), int(lv2[7]), int(lv2[4]), int(lv2[5]))
     if to not in lay:   # linked (nearby) but not placed by the layout verb: derive the origin from nearby, size from the visit above
         for l in cmd("debug nearby").split("\n"):
             f = l.split()
@@ -47,6 +50,10 @@ try:
     print("layout has target after %.1f s: %s" % (time.time() - t0, to in lay))
     print("## nearby late"); print(cmd("debug nearby").strip()[:600])
     o, t = lay.get(fr), lay.get(to)
+    if os.environ.get("STRIP_FINE"):   # objects near the edge and the engine's own collision at fine steps across the strip
+        print("## objects"); print("\n".join(cmd("debug objects").split("\n")[:60])[:3000])
+        for yy in (-0.5, -0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1, 1.5, 2.5):
+            print("blocked row %5.1f: %s" % (yy, "".join("#" if cmd("debug blocked %.2f %.2f" % (xx / 10, yy)).split()[1] == "1" else "." for xx in range(264, 300, 1))))
     print("own", o, "target", t)
     if o and t:
         side = None
