@@ -1195,6 +1195,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/map3: Merge branch 'main' into warptrigger (merged 2026-11-22) <!--sg:agent/map3-->
 - agent/map4: Merge origin/main into exitsread (merged 2026-11-22) <!--sg:agent/map4-->
 - agent/map5: Merge origin/main into fogtrail (merged 2026-11-22) <!--sg:agent/map5-->
+- mapphone: Area map has a box and an in-flow toolbar on phones (TASK-806, merged 2026-11-22, acceptance 4 of 4): Root cause: the phone page became a scrolling page (mobilequests) and panels take their content height, but the Area map was an absolute canvas in a 100 percent box, so it had height 0 and its controls floated over the tab row. ... <!--sg:agent/mapphone-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
