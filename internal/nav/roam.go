@@ -72,7 +72,32 @@ func (n *Navigator) Coverage() (visited, total int) {
 func (n *Navigator) ForgetCoverage() {
 	n.covMu.Lock()
 	n.covs, n.cov = nil, nil
+	hook := n.onNewGame
 	n.covMu.Unlock()
+	if hook != nil {
+		hook()
+	}
+}
+
+// SetOnNewGame sets a hook that runs when ForgetCoverage says a new game began (the minimap forgets its walked
+// ground then: the new game's levels are laid out again).
+func (n *Navigator) SetOnNewGame(f func()) {
+	n.covMu.Lock()
+	n.onNewGame = f
+	n.covMu.Unlock()
+}
+
+// ObjectiveView is the goal of the walk in progress (a GoTo with a goal, an exit approach), ok false when the hero is
+// not walking to a known place. Call it on the navigator's goroutine, like the observe hook does.
+func (n *Navigator) ObjectiveView() (level int, p input.Point, ok bool) {
+	if !n.goalSet {
+		return 0, input.Point{}, false
+	}
+	lm := n.w.Current()
+	if lm == nil {
+		return 0, input.Point{}, false
+	}
+	return lm.No, n.goal, true
 }
 
 // fullyKnown: the world source says its maps arrive whole and, with nav.fullGrid, the current level's grid really is
