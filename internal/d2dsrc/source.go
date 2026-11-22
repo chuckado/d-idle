@@ -60,12 +60,13 @@ type Source struct {
 	o   Options
 	trk tracker
 
-	screen d2.Point   // cached from "info" (800x600 is fixed in d2d, V)
-	cmu    sync.Mutex // cursor tracking (cursor.go)
-	prev   []d2.Unit  // carried items of the previous read
-	cur    *d2.Unit   // the unit believed to be on the cursor
-	pmu    sync.Mutex // pset: the cached "debug presets" rows (items.go fieldObjects)
-	pset   struct {
+	screen  d2.Point        // cached from "info" (800x600 is fixed in d2d, V)
+	cmu     sync.Mutex      // cursor tracking (cursor.go)
+	prev    []d2.Unit       // carried items of the previous read
+	dupSaid map[uint32]bool // shared carried ids already named in the log (items.go), under cmu
+	cur     *d2.Unit        // the unit believed to be on the cursor
+	pmu     sync.Mutex      // pset: the cached "debug presets" rows (items.go fieldObjects)
+	pset    struct {
 		rows []d2dctl.Preset
 		area int
 		x, y int

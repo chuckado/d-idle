@@ -148,6 +148,16 @@ Sizing (U): cards 2 to 8 are each one package family and under about 400 lines w
 
 Dependencies: 1 before all; 2 before 3; 3 before 4 to 8; 9 after 3; 10 after 8 and after R4; 11 last. Cards 4, 5 and 6 touch `internal/town` together and must not run in parallel.
 
+## B5a. Status (updated 2026-11-22)
+
+| stage | card | state | evidence |
+|---|---|---|---|
+| 1 shadow | tp-need-shadow | merged | [stage 1-2 probe](../../probes/town-plan-stage2-2026-11-21.md) |
+| 2 guards and shop | tp-guards | merged, default stays 0 | same |
+| 3 purse | tp-purse (TASK-757) | on branch `agent/townstage3`, default stays 0 | [stage 3 probe](../../probes/town-plan-stage3-2026-11-22.md) |
+| 4 sell and pickup | tp-sell-pickup (TASK-758) | not started | |
+| 5 route | tp-route (TASK-761) | not started | |
+
 ## B6. Tests required by the build-flexibility rule
 
 Every `Solve` and `NeedFor` test runs for the default Sorceress and one other build (a mana-need-1 and a mana-need-0 build cover the three column layouts). `internal/supply` imports no class constant; a lint test greps the package for class names and skill ids.

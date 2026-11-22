@@ -369,7 +369,7 @@
 | pgnightly | proposed | - | `docs/process/pg-ops-pgnightly.md`<br>`tools/provingground/nightly.sh` | - |
 | town4 | in-progress | - | `internal/task`<br>`internal/town`<br>`internal/bot`<br>`internal/supply`<br>`cmd/d2bot`<br>`docs/knobs.md` | - |
 | pgearned | proposed | - | `internal/scenario/earned.go`<br>`tools/provingground/earned` | - |
-| town5 | proposed | - | `internal/town`<br>`internal/resource`<br>`town-basics` | - |
+| town5 | in-progress | - | `internal/town`<br>`internal/resource`<br>`internal/bot/broke.go`<br>`internal/bot/leveling.go`<br>`tools/provingground/scenarios/townplan.json`<br>`docs/probes/town-plan-stage3-2026-11-22.md`<br>`docs/design/fable-review-2026-11-21/town-planner-b-model.md`<br>`town-basics` | - |
 | town6 | proposed | - | `internal/town`<br>`internal/loot` | - |
 | town7 | proposed | - | `internal/supply`<br>`internal/town`<br>`internal/resource` | - |
 | town8 | proposed | - | `internal/supply`<br>`internal/town` | - |
@@ -439,14 +439,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ac382a44b 11-22 14:47 `Merge agent/townstage3: Merge branch 'main' into town5` (townstage3)
+- 30259ce1b 11-22 14:45 `Merge branch 'main' into town5` (-)
+- f3447a84d 11-22 14:34 `Merge agent/recallsorc: Merge branch 'main' into recallsorc` (recallsorc)
+- 2beee7797 11-22 14:32 `Merge branch 'main' into recallsorc` (-)
 - dbb197eaa 11-22 14:26 `Merge agent/necro4: Merge branch 'main' into necro4` (necro4)
 - 7390d333c 11-22 14:24 `Merge branch 'main' into necro4` (-)
+- 17391d641 11-22 14:16 `Merge branch 'main' into town5` (-)
 - 0b1c9d7b0 11-22 14:14 `Merge agent/necrosme: Merge branch 'main' into necrosme` (necrosme)
 - 26ff256f1 11-22 14:13 `Merge branch 'main' into necrosme` (-)
 - f85df9835 11-22 14:02 `Merge agent/necro-audit: Merge branch 'main' into necro2` (necro-audit)
-- c4d0f079e 11-22 14:00 `Merge branch 'main' into necro2` (-)
-- 2cd38eec9 11-22 13:46 `Merge agent/mapverify: Merge branch 'main' into mapverify` (mapverify)
-- 0c004fb2f 11-22 13:45 `Merge branch 'main' into mapverify` (-)
-- 840bcfe80 11-22 11:37 `Merge agent/vaultsell: Merge branch 'main' into vaultsell` (vaultsell)
-- 8bd91284e 11-22 11:36 `Merge branch 'main' into vaultsell` (-)
 <!-- statusgen:end -->
