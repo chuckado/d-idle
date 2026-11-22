@@ -16,6 +16,11 @@ card: "town5"
 owns:
   - "internal/town"
   - "internal/resource"
+  - "internal/bot/broke.go"
+  - "internal/bot/leveling.go"
+  - "tools/provingground/scenarios/townplan.json"
+  - "docs/probes/town-plan-stage3-2026-11-22.md"
+  - "docs/design/fable-review-2026-11-21/town-planner-b-model.md"
   - "town-basics"
 exclusive: []
 contracts:
@@ -27,7 +32,7 @@ contracts:
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Why: TODO. Done when: TODO.
+Why: the bank leaves the purse at the carry line, so a hero with gold in the stash is judged broke (I9) and a chunk with a gold line is starved (I10). Done when: at knob town.plan >= 3 one stash stop settles the purse to carry line + planned spend; recovery and poverty read wealth; default stays 0.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
