@@ -6,8 +6,7 @@
       "title": "Vault: a gold reveal buys the scrolls and reveals every held item",
       "kind": "behaviour",
       "tier": "full",
-      "status": "pending",
-      "pending_reason": "not runnable as a measured scenario yet: the runner now seeds the unidentified vault records (pre.vault_records, with held affixes) and posts the order with the record ids ({{vault.N.id}}), but the instant stash payment (ADR 0029, agent/vaultpay) is a player-paid write, `debug paygold`, which the lab d2d build devp16 lacks (it ships in devp17) and which the bot and the fork refuse in a measured run (`no_writes` would be red). Flip to active when a d2d with `debug paygold` is the lab build and the run is declared unmeasured with the paygold writes named in the record.",
+      "status": "active",
       "covers": [
         "town.vault"
       ],
@@ -27,37 +26,37 @@
               "code": "cap",
               "quality": 4,
               "unid": true,
-              "sealed": "7:0:20;93:0:10"
+              "bare": true
             },
             {
               "code": "lea",
               "quality": 4,
               "unid": true,
-              "sealed": "7:0:20;93:0:10"
+              "bare": true
             },
             {
               "code": "buc",
               "quality": 4,
               "unid": true,
-              "sealed": "7:0:20;93:0:10"
+              "bare": true
             },
             {
               "code": "ssd",
               "quality": 4,
               "unid": true,
-              "sealed": "7:0:20;93:0:10"
+              "bare": true
             },
             {
               "code": "hax",
               "quality": 4,
               "unid": true,
-              "sealed": "7:0:20;93:0:10"
+              "bare": true
             },
             {
               "code": "sst",
               "quality": 4,
               "unid": true,
-              "sealed": "7:0:20;93:0:10"
+              "bare": true
             }
           ]
         }
@@ -100,7 +99,7 @@
           3
         ]
       },
-      "provenance": "SETUP (CHEATED, mechanics only): level and gold by stat verbs; the unidentified vault records are real magic items given by `debug give ... unid` and taken into the vault by the runner, with held affixes written by the scenario. Mechanics evidence only, never balance.",
+      "provenance": "SETUP (CHEATED, mechanics only): level, gold and stash gold by stat verbs; the unidentified vault records are real magic items given by `debug give ... unid` and taken into the vault by the runner WITHOUT held affixes (bare: the shape of a record the fork sent none for), so the gold order must decode their own bytes (`item decode`). UNMEASURED run: the reveal pays from the stash with `debug paygold` (ADR 0029), a player-paid write the fork refuses under --lockstep, so the bot phase runs d2d in real time with --vault-pay; the one paygold write per order is the thing under test. Mechanics evidence only, never balance.",
       "assert": [
         {
           "kind": "api_reply",
@@ -134,12 +133,13 @@
           "why": "the purse is never touched"
         }
       ],
-      "notes": "Hero in town, 6 unidentified held items (vault records), 5000 gold in the purse and none in the stash, knob loot.vaultRevealGold 1, an order for all 6 posted before the first town visit. Expected: all 6 records identified, the purse down by about 6 scrolls at the vendor price (80 each) and not below the potion-kit reserve, no item sold, the order ends done. RED on today's main is the order route not existing; GREEN is the physical chain buy, read, supersede.",
+      "notes": "Hero in town, 6 unidentified held items (vault records), 5000 gold in the purse and none in the stash, knob loot.vaultRevealGold 1, an order for all 6 posted before the first town visit. Expected: all 6 records identified, the purse down by about 6 scrolls at the vendor price (80 each) and not below the potion-kit reserve, no item sold, the order ends done. RED on today's main is the order route not existing; GREEN is the physical chain buy, read, supersede. Records are bare (no held affixes): the order decodes each record's own bytes, pays from the stash and reveals in the same request; no scroll, no town visit, no item created in the hero.",
       "needs": [
         "item.create",
         "item.full",
         "item.vault",
-        "vault.paygold"
+        "vault.paygold",
+        "item.decode"
       ]
     },
     {
@@ -147,8 +147,7 @@
       "title": "Vault: a short purse reveals what it can pay and says so",
       "kind": "behaviour",
       "tier": "full",
-      "status": "pending",
-      "pending_reason": "not runnable as a measured scenario yet: the runner now seeds the unidentified vault records (pre.vault_records, with held affixes) and posts the order with the record ids ({{vault.N.id}}), but the instant stash payment (ADR 0029, agent/vaultpay) is a player-paid write, `debug paygold`, which the lab d2d build devp16 lacks (it ships in devp17) and which the bot and the fork refuse in a measured run (`no_writes` would be red). Flip to active when a d2d with `debug paygold` is the lab build and the run is declared unmeasured with the paygold writes named in the record.",
+      "status": "active",
       "covers": [
         "town.vault"
       ],
@@ -168,31 +167,31 @@
               "code": "cap",
               "quality": 4,
               "unid": true,
-              "sealed": "7:0:20;93:0:10"
+              "bare": true
             },
             {
               "code": "lea",
               "quality": 4,
               "unid": true,
-              "sealed": "7:0:20;93:0:10"
+              "bare": true
             },
             {
               "code": "buc",
               "quality": 4,
               "unid": true,
-              "sealed": "7:0:20;93:0:10"
+              "bare": true
             },
             {
               "code": "ssd",
               "quality": 4,
               "unid": true,
-              "sealed": "7:0:20;93:0:10"
+              "bare": true
             },
             {
               "code": "hax",
               "quality": 4,
               "unid": true,
-              "sealed": "7:0:20;93:0:10"
+              "bare": true
             }
           ]
         }
@@ -234,7 +233,7 @@
           3
         ]
       },
-      "provenance": "SETUP (CHEATED, mechanics only): level and gold by stat verbs; the unidentified vault records are real magic items given by `debug give ... unid` and taken into the vault by the runner, with held affixes written by the scenario. Mechanics evidence only, never balance.",
+      "provenance": "SETUP (CHEATED, mechanics only): level, gold and stash gold by stat verbs; the unidentified vault records are real magic items given by `debug give ... unid` and taken into the vault by the runner WITHOUT held affixes (bare: the shape of a record the fork sent none for), so the gold order must decode their own bytes (`item decode`). UNMEASURED run: the reveal pays from the stash with `debug paygold` (ADR 0029), a player-paid write the fork refuses under --lockstep, so the bot phase runs d2d in real time with --vault-pay; the one paygold write per order is the thing under test. Mechanics evidence only, never balance.",
       "assert": [
         {
           "kind": "api_reply",
@@ -269,12 +268,13 @@
           "why": "the purse is never touched"
         }
       ],
-      "notes": "As vault.reveal-gold, but the purse holds 420 gold and the repair and potion-kit reserve is about 300: only the scrolls above the reserve are bought, the rest of the order ends partial with the reason, the potion kit is untouched (belt full), no item sold.",
+      "notes": "As vault.reveal-gold, but the purse holds 420 gold and the repair and potion-kit reserve is about 300: only the scrolls above the reserve are bought, the rest of the order ends partial with the reason, the potion kit is untouched (belt full), no item sold. Records are bare (no held affixes): the order decodes each record's own bytes, pays from the stash and reveals in the same request; no scroll, no town visit, no item created in the hero.",
       "needs": [
         "item.create",
         "item.full",
         "item.vault",
-        "vault.paygold"
+        "vault.paygold",
+        "item.decode"
       ]
     }
   ]

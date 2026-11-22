@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -522,7 +523,7 @@ func runBot(ctx context.Context, s scenario.Scenario, r scenario.Run, bot, d2dBi
 	if attach {
 		args = append(args, "--attach", "--d2d-attach")
 	} else {
-		args = append(args, "--managed", "--d2d-class", "-1", "--d2d-args", strings.Join(withVault([]string{"--lockstep"}, vaultVerbs), " "))
+		args = append(args, "--managed", "--d2d-class", "-1", "--d2d-args", strings.Join(botD2dArgs(s.Needs, vaultVerbs), " "))
 	}
 	var tap *tapper
 	var apiRun, sampler func(context.Context)
@@ -868,6 +869,16 @@ func withVault(args []string, on bool) []string {
 		return append(args, "--vault-verbs")
 	}
 	return args
+}
+
+// botD2dArgs are the d2d arguments of the bot phase. A scenario that needs `vault.paygold` is an UNMEASURED run (the stash payment is
+// a player-paid write, ADR 0029, which the fork refuses under --lockstep): d2d then runs in real time with --vault-pay, and the
+// scenario's provenance names the write. Every other scenario keeps --lockstep.
+func botD2dArgs(needs []string, vaultVerbs bool) []string {
+	if slices.Contains(needs, "vault.paygold") {
+		return append(withVault(nil, true), "--vault-pay")
+	}
+	return withVault([]string{"--lockstep"}, vaultVerbs)
 }
 
 // missingCaps lists the d2d capabilities in needs (the fork's names: item.*, ground.*, vault.*) that caps does not list.

@@ -235,6 +235,7 @@ type Seed struct {
 	SlotName string `json:"slot_name,omitempty"`
 	Pin      bool   `json:"pin,omitempty"`
 	Unid     bool   `json:"unid,omitempty"`
+	Bare     bool   `json:"bare,omitempty"` // vault seed: store the record without held affixes
 	Sealed   string `json:"sealed,omitempty"`
 	// Filler marks a record whose item is any distinct real item (the count of a full vault); Fill is its running number.
 	Filler bool   `json:"filler,omitempty"`
@@ -263,7 +264,7 @@ func vaultSeeds(v VaultSeed, reason func(string) string) []Seed {
 	pin := func(i int) bool { return i < v.Pinned }
 	for _, it := range v.Items {
 		for k := 0; k < max(it.N, 1); k++ {
-			out = append(out, Seed{Kind: SeedVault, Code: it.Code, Give: GiveLine(it.Code, it.Quality, it.Unid), Unid: it.Unid, Sealed: it.Sealed,
+			out = append(out, Seed{Kind: SeedVault, Code: it.Code, Give: GiveLine(it.Code, it.Quality, it.Unid), Unid: it.Unid, Sealed: it.Sealed, Bare: it.Bare,
 				Pin: it.Pin || pin(len(out)), Reason: reason("vault record " + it.Code)})
 		}
 	}
