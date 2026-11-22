@@ -88,7 +88,7 @@ func TestVaultPageServedAndTexts(t *testing.T) {
 		t.Errorf("%d kinds", len(tx.Kinds))
 	}
 	// the three entry points to the page
-	for file, want := range map[string]string{"web/shell.js": "vault-open", "web/panels/orders/panel.js": "/watch/vault", "web/panels/log/panel.js": "vault-link"} {
+	for file, want := range map[string]string{"web/nav.json": "/watch/vault", "web/panels/orders/panel.js": "/watch/vault", "web/panels/log/panel.js": "vault-link"} {
 		src, err := webFS.ReadFile(file)
 		if err != nil || !strings.Contains(string(src), want) {
 			t.Errorf("%s has no %q entry", file, want)
