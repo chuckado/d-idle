@@ -28,7 +28,7 @@ const (
 )
 
 // PointsRoutes are the viewer routes the handler serves: the sheet, the page and its two assets.
-var PointsRoutes = []string{PointsRoute, BuildRoute, "/watch/points", "/watch/points.js", "/watch/points.css"}
+var PointsRoutes = []string{PointsRoute, BuildRoute, "/watch/points", "/watch/points.js", "/watch/buildcards.js", "/watch/points.css"}
 
 // BuildRoute is the automatic allocator's build choice: GET on the viewer listener (the picker and the lock state), POST
 // {"build": name, "confirm": bool} on the answer listener (docs/autoalloc.md). Idempotent; refused while locked.
@@ -95,7 +95,7 @@ func (a *PointsAPI) Handler() http.Handler {
 			pactHdr(w, "text/html; charset=utf-8")
 			io.WriteString(w, pointsPage)
 			return
-		case "/watch/points.js", "/watch/points.css":
+		case "/watch/points.js", "/watch/buildcards.js", "/watch/points.css":
 			b, err := webFS.ReadFile("web/" + strings.TrimPrefix(r.URL.Path, "/watch/"))
 			if err != nil {
 				http.NotFound(w, r)

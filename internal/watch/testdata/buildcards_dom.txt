@@ -1,0 +1,302 @@
+== small card ==
+li.bc-card [aria-labelledby=bc-h-paladin_hammerdin data-build=paladin_hammerdin data-open=0]
+  h3.bc-name [id=bc-h-paladin_hammerdin] "Paladin Hammerdin"
+  p.bc-id "The magic-hammer Paladin."
+  ul.bc-rates [aria-label=Ratings]
+    li.bc-r [data-rating=defense]
+      span.bc-rl "Defense "
+      span.bc-stars [aria-label=Defense: 5 of 5 stars, estimate (Normal 5, Hell 4) role=img] "★★★★★"
+    li.bc-r [data-rating=farmingItems]
+      span.bc-rl "Farming (items) "
+      span.bc-stars [aria-label=Farming (items): 5 of 5 stars, estimate role=img] "★★★★★"
+    li.bc-r [data-rating=farmingXP]
+      span.bc-rl "Farming (XP) "
+      span.bc-stars [aria-label=Farming (XP): 5 of 5 stars, estimate role=img] "★★★★★"
+    li.bc-r [data-rating=leveling]
+      span.bc-rl "Leveling "
+      span.bc-stars [aria-label=Leveling: 3 of 5 stars, estimate role=img] "★★★☆☆"
+  p.bc-src "Estimate"
+  button.d-btn.bc-details [aria-expanded=false aria-label=Details of Paladin Hammerdin data-size=sm type=button] "Details"
+== detail, auto-allocation on ==
+div.bc-detail [data-build=paladin_hammerdin]
+  p.bc-sum "Blessed Hammer from level 18 with Holy Shield and cheap gear. Slow early, then the sturdiest unattended caster. Hammers miss in corridors and drink mana."
+  div.bc-pc
+    div.bc-pros
+      h4 "Pros"
+      ul.bc-list-pros
+        li "Almost nothing resists its damage"
+        li "Very hard to kill with a shield"
+        li "Scales to the end with cheap gear"
+    div.bc-cons
+      h4 "Cons"
+      ul.bc-list-cons
+        li "Weak and slow before level 18"
+        li "Hammers miss in narrow corridors"
+        li "Uses a lot of mana"
+  h4 "Ratings (estimate)"
+  ul.bc-rates.bc-rates-all [aria-label=All ratings]
+    li.bc-r [data-rating=leveling]
+      span.bc-rl "Leveling "
+      span.bc-stars [aria-label=Leveling: 3 of 5 stars, estimate role=img] "★★★☆☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Slow before Blessed Hammer at 18"
+    li.bc-r [data-rating=farmingItems]
+      span.bc-rl "Farming (items) "
+      span.bc-stars [aria-label=Farming (items): 5 of 5 stars, estimate role=img] "★★★★★"
+      span.bc-rs " estimate"
+      span.bc-rn " - Magic damage suits endless runs"
+    li.bc-r [data-rating=farmingXP]
+      span.bc-rl "Farming (XP) "
+      span.bc-stars [aria-label=Farming (XP): 5 of 5 stars, estimate role=img] "★★★★★"
+      span.bc-rs " estimate"
+      span.bc-rn " - Dense areas give a lot of XP"
+    li.bc-r [data-rating=bossing]
+      span.bc-rl "Bossing "
+      span.bc-stars [aria-label=Bossing: 4 of 5 stars, estimate role=img] "★★★★☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Fine single-target damage"
+    li.bc-r [data-rating=defense]
+      span.bc-rl "Defense "
+      span.bc-stars [aria-label=Defense: 5 of 5 stars, estimate (Normal 5, Hell 4) role=img] "★★★★★"
+      span.bc-rs " estimate"
+      span.bc-rn " - Shield and block make it sturdy"
+    li.bc-r [data-rating=clearSpeed]
+      span.bc-rl "Clear speed "
+      span.bc-stars [aria-label=Clear speed: 4 of 5 stars, estimate role=img] "★★★★☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Good clear, walking costs time"
+    li.bc-r [data-rating=idle]
+      span.bc-rl "Hands-off "
+      span.bc-stars [aria-label=Hands-off: 3 of 5 stars, estimate role=img] "★★★☆☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Mana and corridors need watching"
+  p.bc-diff "Defense by difficulty: Normal ★★★★★ (5 of 5), Hell ★★★★☆ (4 of 5)."
+  h4 "Variants"
+  ul.bc-vars
+    li.bc-var [data-table=paladin-normal30 data-tier=supported]
+      p.bc-vn "paladin normal30 "
+        span.bc-tier "(supported)"
+      details.bc-prev
+        summary "First 2 levels"
+        ul.bc-prev-list
+          li "Level 2: Might"
+          li "Level 6: Blessed Hammer x2 [unsupported], +5 str"
+    li.bc-var [data-table=paladin_hammerdin_endgame90 data-tier=experimental]
+      p.bc-vn "paladin hammerdin endgame90 "
+        span.bc-tier "(experimental)"
+      p.bc-warn "The hero cannot use these yet and will hold the point for you: Concentration."
+      p.bc-note "1 more skill is not proven in the fighter yet."
+  button.d-btn.bc-choose [data-variant=primary type=button] "Choose this build"
+== detail, auto-allocation off ==
+div.bc-detail [data-build=paladin_hammerdin]
+  p.bc-sum "Blessed Hammer from level 18 with Holy Shield and cheap gear. Slow early, then the sturdiest unattended caster. Hammers miss in corridors and drink mana."
+  div.bc-pc
+    div.bc-pros
+      h4 "Pros"
+      ul.bc-list-pros
+        li "Almost nothing resists its damage"
+        li "Very hard to kill with a shield"
+        li "Scales to the end with cheap gear"
+    div.bc-cons
+      h4 "Cons"
+      ul.bc-list-cons
+        li "Weak and slow before level 18"
+        li "Hammers miss in narrow corridors"
+        li "Uses a lot of mana"
+  h4 "Ratings (estimate)"
+  ul.bc-rates.bc-rates-all [aria-label=All ratings]
+    li.bc-r [data-rating=leveling]
+      span.bc-rl "Leveling "
+      span.bc-stars [aria-label=Leveling: 3 of 5 stars, estimate role=img] "★★★☆☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Slow before Blessed Hammer at 18"
+    li.bc-r [data-rating=farmingItems]
+      span.bc-rl "Farming (items) "
+      span.bc-stars [aria-label=Farming (items): 5 of 5 stars, estimate role=img] "★★★★★"
+      span.bc-rs " estimate"
+      span.bc-rn " - Magic damage suits endless runs"
+    li.bc-r [data-rating=farmingXP]
+      span.bc-rl "Farming (XP) "
+      span.bc-stars [aria-label=Farming (XP): 5 of 5 stars, estimate role=img] "★★★★★"
+      span.bc-rs " estimate"
+      span.bc-rn " - Dense areas give a lot of XP"
+    li.bc-r [data-rating=bossing]
+      span.bc-rl "Bossing "
+      span.bc-stars [aria-label=Bossing: 4 of 5 stars, estimate role=img] "★★★★☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Fine single-target damage"
+    li.bc-r [data-rating=defense]
+      span.bc-rl "Defense "
+      span.bc-stars [aria-label=Defense: 5 of 5 stars, estimate (Normal 5, Hell 4) role=img] "★★★★★"
+      span.bc-rs " estimate"
+      span.bc-rn " - Shield and block make it sturdy"
+    li.bc-r [data-rating=clearSpeed]
+      span.bc-rl "Clear speed "
+      span.bc-stars [aria-label=Clear speed: 4 of 5 stars, estimate role=img] "★★★★☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Good clear, walking costs time"
+    li.bc-r [data-rating=idle]
+      span.bc-rl "Hands-off "
+      span.bc-stars [aria-label=Hands-off: 3 of 5 stars, estimate role=img] "★★★☆☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Mana and corridors need watching"
+  p.bc-diff "Defense by difficulty: Normal ★★★★★ (5 of 5), Hell ★★★★☆ (4 of 5)."
+  h4 "Variants"
+  ul.bc-vars
+    li.bc-var [data-table=paladin-normal30 data-tier=supported]
+      p.bc-vn "paladin normal30 "
+        span.bc-tier "(supported)"
+      details.bc-prev
+        summary "First 2 levels"
+        ul.bc-prev-list
+          li "Level 2: Might"
+          li "Level 6: Blessed Hammer x2 [unsupported], +5 str"
+    li.bc-var [data-table=paladin_hammerdin_endgame90 data-tier=experimental]
+      p.bc-vn "paladin hammerdin endgame90 "
+        span.bc-tier "(experimental)"
+      p.bc-warn "The hero cannot use these yet and will hold the point for you: Concentration."
+      p.bc-note "1 more skill is not proven in the fighter yet."
+  button.d-btn.bc-choose [aria-describedby=bc-why-paladin_hammerdin data-variant=primary type=button disabled] "Choose this build"
+  p.bc-why [id=bc-why-paladin_hammerdin] "Auto-allocation is off"
+== detail, locked to another build ==
+div.bc-detail [data-build=paladin_hammerdin]
+  p.bc-sum "Blessed Hammer from level 18 with Holy Shield and cheap gear. Slow early, then the sturdiest unattended caster. Hammers miss in corridors and drink mana."
+  div.bc-pc
+    div.bc-pros
+      h4 "Pros"
+      ul.bc-list-pros
+        li "Almost nothing resists its damage"
+        li "Very hard to kill with a shield"
+        li "Scales to the end with cheap gear"
+    div.bc-cons
+      h4 "Cons"
+      ul.bc-list-cons
+        li "Weak and slow before level 18"
+        li "Hammers miss in narrow corridors"
+        li "Uses a lot of mana"
+  h4 "Ratings (estimate)"
+  ul.bc-rates.bc-rates-all [aria-label=All ratings]
+    li.bc-r [data-rating=leveling]
+      span.bc-rl "Leveling "
+      span.bc-stars [aria-label=Leveling: 3 of 5 stars, estimate role=img] "★★★☆☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Slow before Blessed Hammer at 18"
+    li.bc-r [data-rating=farmingItems]
+      span.bc-rl "Farming (items) "
+      span.bc-stars [aria-label=Farming (items): 5 of 5 stars, estimate role=img] "★★★★★"
+      span.bc-rs " estimate"
+      span.bc-rn " - Magic damage suits endless runs"
+    li.bc-r [data-rating=farmingXP]
+      span.bc-rl "Farming (XP) "
+      span.bc-stars [aria-label=Farming (XP): 5 of 5 stars, estimate role=img] "★★★★★"
+      span.bc-rs " estimate"
+      span.bc-rn " - Dense areas give a lot of XP"
+    li.bc-r [data-rating=bossing]
+      span.bc-rl "Bossing "
+      span.bc-stars [aria-label=Bossing: 4 of 5 stars, estimate role=img] "★★★★☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Fine single-target damage"
+    li.bc-r [data-rating=defense]
+      span.bc-rl "Defense "
+      span.bc-stars [aria-label=Defense: 5 of 5 stars, estimate (Normal 5, Hell 4) role=img] "★★★★★"
+      span.bc-rs " estimate"
+      span.bc-rn " - Shield and block make it sturdy"
+    li.bc-r [data-rating=clearSpeed]
+      span.bc-rl "Clear speed "
+      span.bc-stars [aria-label=Clear speed: 4 of 5 stars, estimate role=img] "★★★★☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Good clear, walking costs time"
+    li.bc-r [data-rating=idle]
+      span.bc-rl "Hands-off "
+      span.bc-stars [aria-label=Hands-off: 3 of 5 stars, estimate role=img] "★★★☆☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Mana and corridors need watching"
+  p.bc-diff "Defense by difficulty: Normal ★★★★★ (5 of 5), Hell ★★★★☆ (4 of 5)."
+  h4 "Variants"
+  ul.bc-vars
+    li.bc-var [data-table=paladin-normal30 data-tier=supported]
+      p.bc-vn "paladin normal30 "
+        span.bc-tier "(supported)"
+      details.bc-prev
+        summary "First 2 levels"
+        ul.bc-prev-list
+          li "Level 2: Might"
+          li "Level 6: Blessed Hammer x2 [unsupported], +5 str"
+    li.bc-var [data-table=paladin_hammerdin_endgame90 data-tier=experimental]
+      p.bc-vn "paladin hammerdin endgame90 "
+        span.bc-tier "(experimental)"
+      p.bc-warn "The hero cannot use these yet and will hold the point for you: Concentration."
+      p.bc-note "1 more skill is not proven in the fighter yet."
+  button.d-btn.bc-choose [aria-describedby=bc-why-paladin_hammerdin data-variant=primary type=button disabled] "Choose this build"
+  p.bc-why [id=bc-why-paladin_hammerdin] "Locked to Another build. Respec to change."
+== detail, this build chosen ==
+div.bc-detail [data-build=paladin_hammerdin]
+  p.bc-sum "Blessed Hammer from level 18 with Holy Shield and cheap gear. Slow early, then the sturdiest unattended caster. Hammers miss in corridors and drink mana."
+  div.bc-pc
+    div.bc-pros
+      h4 "Pros"
+      ul.bc-list-pros
+        li "Almost nothing resists its damage"
+        li "Very hard to kill with a shield"
+        li "Scales to the end with cheap gear"
+    div.bc-cons
+      h4 "Cons"
+      ul.bc-list-cons
+        li "Weak and slow before level 18"
+        li "Hammers miss in narrow corridors"
+        li "Uses a lot of mana"
+  h4 "Ratings (estimate)"
+  ul.bc-rates.bc-rates-all [aria-label=All ratings]
+    li.bc-r [data-rating=leveling]
+      span.bc-rl "Leveling "
+      span.bc-stars [aria-label=Leveling: 3 of 5 stars, estimate role=img] "★★★☆☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Slow before Blessed Hammer at 18"
+    li.bc-r [data-rating=farmingItems]
+      span.bc-rl "Farming (items) "
+      span.bc-stars [aria-label=Farming (items): 5 of 5 stars, estimate role=img] "★★★★★"
+      span.bc-rs " estimate"
+      span.bc-rn " - Magic damage suits endless runs"
+    li.bc-r [data-rating=farmingXP]
+      span.bc-rl "Farming (XP) "
+      span.bc-stars [aria-label=Farming (XP): 5 of 5 stars, estimate role=img] "★★★★★"
+      span.bc-rs " estimate"
+      span.bc-rn " - Dense areas give a lot of XP"
+    li.bc-r [data-rating=bossing]
+      span.bc-rl "Bossing "
+      span.bc-stars [aria-label=Bossing: 4 of 5 stars, estimate role=img] "★★★★☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Fine single-target damage"
+    li.bc-r [data-rating=defense]
+      span.bc-rl "Defense "
+      span.bc-stars [aria-label=Defense: 5 of 5 stars, estimate (Normal 5, Hell 4) role=img] "★★★★★"
+      span.bc-rs " estimate"
+      span.bc-rn " - Shield and block make it sturdy"
+    li.bc-r [data-rating=clearSpeed]
+      span.bc-rl "Clear speed "
+      span.bc-stars [aria-label=Clear speed: 4 of 5 stars, estimate role=img] "★★★★☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Good clear, walking costs time"
+    li.bc-r [data-rating=idle]
+      span.bc-rl "Hands-off "
+      span.bc-stars [aria-label=Hands-off: 3 of 5 stars, estimate role=img] "★★★☆☆"
+      span.bc-rs " estimate"
+      span.bc-rn " - Mana and corridors need watching"
+  p.bc-diff "Defense by difficulty: Normal ★★★★★ (5 of 5), Hell ★★★★☆ (4 of 5)."
+  h4 "Variants"
+  ul.bc-vars
+    li.bc-var [data-table=paladin-normal30 data-tier=supported]
+      p.bc-vn "paladin normal30 "
+        span.bc-tier "(supported)"
+      details.bc-prev
+        summary "First 2 levels"
+        ul.bc-prev-list
+          li "Level 2: Might"
+          li "Level 6: Blessed Hammer x2 [unsupported], +5 str"
+    li.bc-var [data-table=paladin_hammerdin_endgame90 data-tier=experimental]
+      p.bc-vn "paladin hammerdin endgame90 "
+        span.bc-tier "(experimental)"
+      p.bc-warn "The hero cannot use these yet and will hold the point for you: Concentration."
+      p.bc-note "1 more skill is not proven in the fighter yet."
+  button.d-btn.bc-choose [aria-describedby=bc-why-paladin_hammerdin data-variant=primary type=button disabled] "Chosen"
+  p.bc-why [id=bc-why-paladin_hammerdin] "This is your build."
