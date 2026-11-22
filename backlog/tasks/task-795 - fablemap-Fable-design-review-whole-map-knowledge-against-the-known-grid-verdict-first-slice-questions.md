@@ -1,10 +1,13 @@
 ---
 id: TASK-795
-title: 'fablemap: Fable design review, whole-map knowledge against the known grid (verdict, first slice, questions)'
-status: Proposed
+title: >-
+  fablemap: Fable design review, whole-map knowledge against the known grid
+  (verdict, first slice, questions)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T01:50:00Z'
+updated_date: '2026-11-22T01:59:00Z'
 labels:
   - docs
   - research
