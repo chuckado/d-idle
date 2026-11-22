@@ -424,6 +424,7 @@ docs/away-drill.md  live-agent  awaydrill
 docs/backlog-howto.md  credit-runner  dietrule
 docs/beltfix.md  credit-runner  beltfix
 docs/bounce3.md  pro-runner  bounce3
+docs/builds-catalog.md  credit-runner  buildcatalog
 docs/campaign.md  credit-runner  campaign1
 docs/charselect-ui.md  credit-runner  charui
 docs/charselect.md  credit-runner  charselect
@@ -1051,6 +1052,7 @@ internal/buildfile/frenzy_test.go  credit-runner  barb1
 internal/buildfile/hammerdin_test.go  credit-runner  hammer1
 internal/buildfile/necrosme_test.go  credit-runner  necro3
 internal/buildfile/necrosummoner_test.go  credit-runner  necro1
+internal/buildfile/plans.go  credit-runner  buildcatalog
 internal/buildfile/plans_test.go  credit-runner  sorc2
 internal/buildfile/tablecheck.go  credit-runner  sorc2
 internal/buildfile/tablecheck_test.go  credit-runner  barb1
@@ -1416,6 +1418,7 @@ internal/plandata  credit-runner  agencyp0
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
 internal/plandata/build-barbarian_frenzy_guide.json  credit-runner  barb1
+internal/plandata/build-catalog.json  credit-runner  buildcatalog
 internal/plandata/build-druid_fire_guide.json  credit-runner  druid1
 internal/plandata/build-fallback-lightning-v2.json  credit-runner  sorc2
 internal/plandata/build-fallback-lightning.json  credit-runner  sorc2
@@ -1425,13 +1428,17 @@ internal/plandata/build-necromancer_summoner_sme.json  credit-runner  necro3
 internal/plandata/build-paladin_hammerdin_guide.json  credit-runner  hammer1
 internal/plandata/build-primary-blizzard.json  credit-runner  sorc2
 internal/plandata/build-sorceress_fire_normal30.json  credit-runner  sorc2
+internal/plandata/catalog.go  credit-runner  buildcatalog
+internal/plandata/catalog_test.go  credit-runner  buildcatalog
 internal/plandata/dropmodel-normal.json  credit-runner  decomp31
 internal/plandata/ladder_runewords.go  credit-runner  q4runes
 internal/plandata/ladder_runewords_test.go  credit-runner  q4runes
 internal/plandata/levelplan-normal.json  pro-runner  levelplan3
+internal/plandata/plandata_test.go  credit-runner  buildcatalog
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
 internal/points  credit-runner  agencyp0
+internal/points/tables_test.go  credit-runner  buildcatalog
 internal/power  credit-runner  dangerfit2
 internal/power  credit-runner  survsd
 internal/power/  credit-runner  dlv-cleanup

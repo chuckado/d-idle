@@ -256,6 +256,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [botthreat.md](botthreat.md): botthreat: missile threat model, shooter priority, runner guard (status: current. Offline only (mem.Fake / table-driven tests); no live run. Findings come from...)
 - [bounce3.md](bounce3.md): bounce3: the warp arrival bounce, root cause and fix (status: current (TASK card bounce3). Supersedes the cause sections of passagebounce.md, fixdenbounce.md and the...)
 - [builder.md](builder.md): Linux builder (build host for fork binaries) (status: current. Specifics (container name, template, limits, host) are in the private ops repo,...)
+- [builds-catalog.md](builds-catalog.md): Build catalogue (build text and stars) (status: current (card buildcatalog). One file, `internal/plandata/build-catalog.json`, loaded by...)
 - [builds-endgame.md](builds-endgame.md): Endgame builds (clvl 2-90, Normal -> Nightmare -> Hell), one per class (agent BUILDS80)
 - [buildv3.md](buildv3.md): BUILDV3: the fresh Sorceress skill table, rewritten to the order the leveler follows (status: table shipped OPT-IN by name (`fallback-lightning-v3`); the default of a fresh Sorceress stays...)
 - [campaign.md](campaign.md): Campaign: the guided journey (status: SUPERSEDED 2026-11-17 (quest board slice S9, docs/questboard.md "Journey retired"): the Journey chapters,...)
