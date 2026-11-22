@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- vaultclean: unid badge placement, desktopscroll chrome check, pictures, docs, task card <!--sg:agent/vaultclean-->
 - Merge remote-tracking branch 'origin/main' into agent/vaultid <!--sg:agent/vaultid-->
 - Merge branch 'main' into mercbr <!--sg:agent/mercbr-->
 - Fable design review: whole-map knowledge against the known grid (docs only) <!--sg:agent/fablemap-->
