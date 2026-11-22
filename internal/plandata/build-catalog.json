@@ -1,0 +1,1050 @@
+{
+ "version": 1,
+ "note": "Build text and stars. Every star is an estimate until a named scenario measures it (docs/builds-catalog.md).",
+ "thresholds": {
+  "source": "ballpark, SME, unverified",
+  "scale": "One row is a band, inclusive of its lower edge. Median of at least 3 runs of a named scenario. Defense score is the lowest of its columns. Replace a row only with measured numbers from a non-cheated character.",
+  "defense": [
+   {
+    "stars": 5,
+    "deathsPerHour": "under 0.02",
+    "chickensPerHour": "under 0.2",
+    "potionsPerHour": "up to 10",
+    "lowestLifePct": "40 or more"
+   },
+   {
+    "stars": 4,
+    "deathsPerHour": "0.02 to 0.05",
+    "chickensPerHour": "0.2 to 1",
+    "potionsPerHour": "10 to 25",
+    "lowestLifePct": "30 to 40"
+   },
+   {
+    "stars": 3,
+    "deathsPerHour": "0.05 to 0.1",
+    "chickensPerHour": "1 to 3",
+    "potionsPerHour": "25 to 50",
+    "lowestLifePct": "20 to 30"
+   },
+   {
+    "stars": 2,
+    "deathsPerHour": "0.1 to 0.25",
+    "chickensPerHour": "3 to 8",
+    "potionsPerHour": "50 to 100",
+    "lowestLifePct": "10 to 20"
+   },
+   {
+    "stars": 1,
+    "deathsPerHour": "0.25 or more",
+    "chickensPerHour": "8 or more",
+    "potionsPerHour": "over 100",
+    "lowestLifePct": "under 10"
+   }
+  ],
+  "clear": [
+   {
+    "stars": 5,
+    "monstersPerMin": "12 or more",
+    "relativePct": "150 or more"
+   },
+   {
+    "stars": 4,
+    "monstersPerMin": "8 to 12",
+    "relativePct": "120 to 150"
+   },
+   {
+    "stars": 3,
+    "monstersPerMin": "5 to 8",
+    "relativePct": "80 to 120"
+   },
+   {
+    "stars": 2,
+    "monstersPerMin": "3 to 5",
+    "relativePct": "50 to 80"
+   },
+   {
+    "stars": 1,
+    "monstersPerMin": "under 3",
+    "relativePct": "under 50"
+   }
+  ],
+  "leveling": [
+   {
+    "stars": 5,
+    "clvl1to30MinPerLevel": "6 or less",
+    "clvl30to60MinPerLevel": "15 or less",
+    "clvl60to85MinPerLevel": "60 or less"
+   },
+   {
+    "stars": 4,
+    "clvl1to30MinPerLevel": "6 to 9",
+    "clvl30to60MinPerLevel": "15 to 25",
+    "clvl60to85MinPerLevel": "60 to 120"
+   },
+   {
+    "stars": 3,
+    "clvl1to30MinPerLevel": "9 to 14",
+    "clvl30to60MinPerLevel": "25 to 40",
+    "clvl60to85MinPerLevel": "120 to 240"
+   },
+   {
+    "stars": 2,
+    "clvl1to30MinPerLevel": "14 to 22",
+    "clvl30to60MinPerLevel": "40 to 65",
+    "clvl60to85MinPerLevel": "240 to 480"
+   },
+   {
+    "stars": 1,
+    "clvl1to30MinPerLevel": "over 22",
+    "clvl30to60MinPerLevel": "over 65",
+    "clvl60to85MinPerLevel": "over 480"
+   }
+  ],
+  "bossing": [
+   {
+    "stars": 5,
+    "andarielSec": "under 20",
+    "durielSec": "under 15",
+    "mephistoSec": "under 20",
+    "diabloSec": "under 30",
+    "baalSec": "under 45"
+   },
+   {
+    "stars": 4,
+    "andarielSec": "20 to 40",
+    "durielSec": "15 to 30",
+    "mephistoSec": "20 to 45",
+    "diabloSec": "30 to 60",
+    "baalSec": "45 to 90"
+   },
+   {
+    "stars": 3,
+    "andarielSec": "40 to 90",
+    "durielSec": "30 to 75",
+    "mephistoSec": "45 to 100",
+    "diabloSec": "60 to 120",
+    "baalSec": "90 to 180"
+   },
+   {
+    "stars": 2,
+    "andarielSec": "90 to 180",
+    "durielSec": "75 to 150",
+    "mephistoSec": "100 to 200",
+    "diabloSec": "120 to 240",
+    "baalSec": "180 to 360"
+   },
+   {
+    "stars": 1,
+    "andarielSec": "over 180",
+    "durielSec": "over 150",
+    "mephistoSec": "over 200",
+    "diabloSec": "over 240",
+    "baalSec": "over 360"
+   }
+  ]
+ },
+ "builds": [
+  {
+   "id": "paladin_hammerdin",
+   "name": "Paladin Hammerdin",
+   "class": "paladin",
+   "tables": [
+    "paladin-normal30",
+    "paladin-normal30-v2",
+    "paladin_hammerdin_guide",
+    "paladin_hammerdin_endgame90"
+   ],
+   "identity": "The magic-hammer Paladin.",
+   "summary": "Blessed Hammer from level 18 with Holy Shield and cheap gear. Slow early, then the sturdiest unattended caster. Hammers miss in corridors and drink mana.",
+   "pros": [
+    "Almost nothing resists its damage",
+    "Very hard to kill with a shield",
+    "Scales to the end with cheap gear"
+   ],
+   "cons": [
+    "Weak and slow before level 18",
+    "Hammers miss in narrow corridors",
+    "Uses a lot of mana"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Slow before Blessed Hammer at 18"
+    },
+    "farmingItems": {
+     "stars": 5,
+     "source": "estimate",
+     "note": "Magic damage suits endless runs"
+    },
+    "farmingXP": {
+     "stars": 5,
+     "source": "estimate",
+     "note": "Dense areas give a lot of XP"
+    },
+    "bossing": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Fine single-target damage"
+    },
+    "defense": {
+     "stars": 5,
+     "source": "estimate",
+     "note": "Shield and block make it sturdy"
+    },
+    "clearSpeed": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good clear, walking costs time"
+    },
+    "idle": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Mana and corridors need watching"
+    }
+   },
+   "defenseByDifficulty": {
+    "normal": 5,
+    "hell": 4
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "paladin_zeal_start",
+   "name": "Paladin Zeal start",
+   "class": "paladin",
+   "tables": [
+    "paladin-zealot-lite",
+    "paladin_hammerdin_zeal_endgame90"
+   ],
+   "identity": "Melee Paladin that holds Zeal with cheap auras.",
+   "summary": "Zeal with Might or Holy Fire levels steadily and needs little mana. A bridge to hammers, weak if kept past them.",
+   "pros": [
+    "Steady early levels",
+    "Needs little mana",
+    "Good block"
+   ],
+   "cons": [
+    "Weak once monsters resist physical",
+    "Slow clear",
+    "Needs a switch to hammers"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Steady melee leveling"
+    },
+    "farmingItems": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Weak for item runs"
+    },
+    "farmingXP": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Physical resists cut XP late"
+    },
+    "bossing": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average on bosses"
+    },
+    "defense": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Block keeps it alive"
+    },
+    "clearSpeed": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Slow melee clear"
+    },
+    "idle": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Little upkeep"
+    }
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "sorceress_blizzard",
+   "name": "Sorceress Blizzard",
+   "class": "sorceress",
+   "tables": [
+    "sorceress_normal30",
+    "primary-blizzard",
+    "sorceress_blizzard_endgame90"
+   ],
+   "identity": "Teleporting cold caster.",
+   "summary": "Ground cold from range with Teleport. The classic Baal and Hell runner. Thin life, cold-immune packs must be skipped, and the bot cannot swap element.",
+   "pros": [
+    "Kills at range and slows",
+    "Teleport saves a lot of time",
+    "The classic Baal and Hell runner"
+   ],
+   "cons": [
+    "Thin life",
+    "Cold-immune packs",
+    "Mana and Frozen Armor upkeep"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Smooth caster leveling"
+    },
+    "farmingItems": {
+     "stars": 5,
+     "source": "estimate",
+     "note": "Teleport makes runs fast"
+    },
+    "farmingXP": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good XP in open areas"
+    },
+    "bossing": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Strong on bosses"
+    },
+    "defense": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Thin life, Hell hits hard"
+    },
+    "clearSpeed": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good ranged clear"
+    },
+    "idle": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Cannot swap element, mana upkeep"
+    }
+   },
+   "defenseByDifficulty": {
+    "normal": 3,
+    "hell": 2
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "sorceress_fire",
+   "name": "Sorceress Fire Ball",
+   "class": "sorceress",
+   "tables": [
+    "sorceress_fire_normal30"
+   ],
+   "identity": "Fire caster, simple and strong early.",
+   "summary": "Fire Bolt then Fire Ball is the simplest strong early caster. Fire immunes in Nightmare and Hell cut farming. Experimental in the bot today.",
+   "pros": [
+    "Strong and simple early",
+    "Fast single-target damage",
+    "Cheap points"
+   ],
+   "cons": [
+    "Many fire immunes later",
+    "Thin life",
+    "Experimental in the bot"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 5,
+     "source": "estimate",
+     "note": "Fastest early leveling"
+    },
+    "farmingItems": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Fire immunes limit runs"
+    },
+    "farmingXP": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Fire immunes limit XP"
+    },
+    "bossing": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good single-target damage"
+    },
+    "defense": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Thin life"
+    },
+    "clearSpeed": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good ranged clear"
+    },
+    "idle": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Little upkeep"
+    }
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "sorceress_lightning",
+   "name": "Sorceress Lightning",
+   "class": "sorceress",
+   "tables": [
+    "fallback-lightning",
+    "fallback-lightning-v2",
+    "fallback-lightning-v3"
+   ],
+   "identity": "Chain Lightning caster.",
+   "summary": "The highest clear speed when it works, with uneven damage and the biggest mana bill. The fighter cannot use its attacks well yet.",
+   "pros": [
+    "Fastest clear",
+    "Ranged",
+    "Static Field helps on bosses"
+   ],
+   "cons": [
+    "Uneven damage",
+    "Big mana bill",
+    "Lightning immunes"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Uneven early damage"
+    },
+    "farmingItems": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good for fast runs"
+    },
+    "farmingXP": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good XP when it works"
+    },
+    "bossing": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Static Field helps"
+    },
+    "defense": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Thin life"
+    },
+    "clearSpeed": {
+     "stars": 5,
+     "source": "estimate",
+     "note": "Highest clear speed"
+    },
+    "idle": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Mana stalls, weak fighter use"
+    }
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "necromancer_summoner",
+   "name": "Necromancer Summoner",
+   "class": "necromancer",
+   "tables": [
+    "necromancer_summoner_normal30",
+    "necromancer_summoner_endgame90",
+    "necromancer_summoner_guide",
+    "necromancer_summoner_sme"
+   ],
+   "identity": "Army caster with skeletons and mages.",
+   "summary": "Minions take the hits, so the hero rarely dies in Normal. Slow on bosses at clvl 25 to 35 and the army needs upkeep in every area.",
+   "pros": [
+    "Minions take the hits",
+    "Strong with Iron Golem",
+    "Hero rarely dies in Normal"
+   ],
+   "cons": [
+    "Slow on bosses",
+    "Minions die more in Hell",
+    "Upkeep in every area"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Slow start until the army grows"
+    },
+    "farmingItems": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average for item runs"
+    },
+    "farmingXP": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Steady XP"
+    },
+    "bossing": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Slow on bosses at clvl 25 to 35"
+    },
+    "defense": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Minions tank, hero has about 320 life at clvl 30"
+    },
+    "clearSpeed": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Slow clear"
+    },
+    "idle": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Minion upkeep each area"
+    }
+   },
+   "defenseByDifficulty": {
+    "normal": 4,
+    "hell": 3
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "necromancer_bone",
+   "name": "Necromancer Bone and Corpse Explosion",
+   "class": "necromancer",
+   "tables": [
+    "necromancer_leveling_normal30"
+   ],
+   "identity": "Ranged bone caster.",
+   "summary": "Teeth and Bone Spear from range, magic damage and a cheap start. Corpse Explosion needs a corpse and aim, and there is no tank.",
+   "pros": [
+    "Works early with Teeth and Bone Spear",
+    "Magic damage",
+    "Cheap start"
+   ],
+   "cons": [
+    "Corpse Explosion needs a corpse and aim",
+    "No tank",
+    "Weak late"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Fine early leveling"
+    },
+    "farmingItems": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Weak for item runs"
+    },
+    "farmingXP": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Fine XP in dense packs"
+    },
+    "bossing": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Bone Spear is decent"
+    },
+    "defense": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "No tank"
+    },
+    "clearSpeed": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average clear"
+    },
+    "idle": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Needs corpses and aim"
+    }
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "necromancer_poison_nova",
+   "name": "Necromancer Poison Nova",
+   "class": "necromancer",
+   "tables": [
+    "necromancer_poison_nova_sme"
+   ],
+   "identity": "Poison caster, no aim needed.",
+   "summary": "Flat 20 mana and strong on packs from clvl 36 to 40. Poison immunes hurt and life is thin (about 320 at clvl 30). Experimental.",
+   "pros": [
+    "No aim needed",
+    "Fixed 20 mana",
+    "Very strong on packs late"
+   ],
+   "cons": [
+    "Poison immunes",
+    "Fragile",
+    "Weak before level 36"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Weak before clvl 36"
+    },
+    "farmingItems": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Strong pack runs late"
+    },
+    "farmingXP": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Strong XP on packs"
+    },
+    "bossing": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Fair on bosses"
+    },
+    "defense": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Fragile, Hell hits hard"
+    },
+    "clearSpeed": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Strong area clear"
+    },
+    "idle": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Little upkeep"
+    }
+   },
+   "defenseByDifficulty": {
+    "normal": 2,
+    "hell": 1
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "amazon_bow",
+   "name": "Amazon Bow",
+   "class": "amazon",
+   "tables": [
+    "amazon_bow_normal30",
+    "amazon_multishot_endgame90"
+   ],
+   "identity": "Exploding Arrow then Multishot archer.",
+   "summary": "Strong from range with a merc. Arrows and quiver need upkeep and the Multishot endgame needs real gear. Second-pass rating, lower confidence.",
+   "pros": [
+    "Range",
+    "Strong with a merc",
+    "Good single-target damage"
+   ],
+   "cons": [
+    "Quiver upkeep",
+    "Physical immunes",
+    "Needs good gear"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Strong early from range"
+    },
+    "farmingItems": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good with gear"
+    },
+    "farmingXP": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good XP"
+    },
+    "bossing": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Fair on bosses"
+    },
+    "defense": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average defense"
+    },
+    "clearSpeed": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good clear"
+    },
+    "idle": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Quiver upkeep"
+    }
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "amazon_javelin",
+   "name": "Amazon Javelin",
+   "class": "amazon",
+   "tables": [
+    "amazon_javelin_normal30"
+   ],
+   "identity": "Poison Javelin and Lightning Fury thrower.",
+   "summary": "A great Normal leveler that needs good javelins. Lightning immunes cut it late. Second-pass rating, lower confidence.",
+   "pros": [
+    "Strong early",
+    "Poison Javelin helps on bosses",
+    "Cheap"
+   ],
+   "cons": [
+    "Needs good javelins",
+    "Lightning immunes",
+    "Fades if unlucky"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Great Normal leveler"
+    },
+    "farmingItems": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average for item runs"
+    },
+    "farmingXP": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average XP"
+    },
+    "bossing": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Poison helps on bosses"
+    },
+    "defense": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average defense"
+    },
+    "clearSpeed": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average clear"
+    },
+    "idle": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Javelin upkeep"
+    }
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "assassin_traps",
+   "name": "Assassin Traps",
+   "class": "assassin",
+   "tables": [
+    "assassin_fireblast_normal30",
+    "assassin_sentry_endgame90"
+   ],
+   "identity": "Trap layer with Wake of Fire and sentries.",
+   "summary": "Sentries do the damage but need placement and aim, so the bot must lay traps well. Second-pass rating, lower confidence.",
+   "pros": [
+    "Strong damage",
+    "Safe from range",
+    "Shadow helps"
+   ],
+   "cons": [
+    "Trap placement",
+    "Fire and lightning immunes",
+    "Fragile"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Traps need placement"
+    },
+    "farmingItems": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good for runs"
+    },
+    "farmingXP": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good XP"
+    },
+    "bossing": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Strong on bosses"
+    },
+    "defense": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average defense"
+    },
+    "clearSpeed": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average clear"
+    },
+    "idle": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Traps need steady laying"
+    }
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "barbarian_frenzy",
+   "name": "Barbarian Frenzy",
+   "class": "barbarian",
+   "tables": [
+    "barbarian_melee_normal30",
+    "barbarian_frenzy_guide"
+   ],
+   "identity": "Tanky melee fighter with Frenzy.",
+   "summary": "No mana problem and plenty of life, but it needs gear and a merc. Second-pass rating, lower confidence.",
+   "pros": [
+    "Tanky",
+    "No mana issue",
+    "Iron Skin"
+   ],
+   "cons": [
+    "Needs gear",
+    "Slow clear",
+    "Whirlwind aim"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Solid melee leveling"
+    },
+    "farmingItems": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average for item runs"
+    },
+    "farmingXP": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average XP"
+    },
+    "bossing": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good on bosses"
+    },
+    "defense": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Tanky"
+    },
+    "clearSpeed": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average clear"
+    },
+    "idle": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Little upkeep"
+    }
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "barbarian_warcry",
+   "name": "Barbarian War Cry",
+   "class": "barbarian",
+   "tables": [
+    "barbarian_warcry_endgame90"
+   ],
+   "identity": "Endgame stun and area damage.",
+   "summary": "War Cry stuns and hits an area, strong late and good on bosses. Mana hungry and an endgame table only. Second-pass rating, lower confidence.",
+   "pros": [
+    "Stuns and area damage",
+    "Strong late",
+    "Good on bosses"
+   ],
+   "cons": [
+    "Mana heavy",
+    "Endgame only",
+    "Positioning"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Endgame table only"
+    },
+    "farmingItems": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good for runs"
+    },
+    "farmingXP": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average XP"
+    },
+    "bossing": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Stuns help on bosses"
+    },
+    "defense": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average defense"
+    },
+    "clearSpeed": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average clear"
+    },
+    "idle": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Mana upkeep"
+    }
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "druid_fire",
+   "name": "Druid Fire",
+   "class": "druid",
+   "tables": [
+    "druid_fire_normal30",
+    "druid_fire_guide"
+   ],
+   "identity": "Fissure, Firestorm and Molten Boulder.",
+   "summary": "Easy early with strong area damage and cheap points. Fire immunes and mana limit it. Second-pass rating, lower confidence.",
+   "pros": [
+    "Simple early",
+    "Strong area damage",
+    "Cheap points"
+   ],
+   "cons": [
+    "Fire immunes",
+    "Mana",
+    "Fragile"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Easy early leveling"
+    },
+    "farmingItems": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Fire immunes limit runs"
+    },
+    "farmingXP": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average XP"
+    },
+    "bossing": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average on bosses"
+    },
+    "defense": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average defense"
+    },
+    "clearSpeed": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average clear"
+    },
+    "idle": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Mana upkeep"
+    }
+   },
+   "thresholdsRef": "thresholds"
+  },
+  {
+   "id": "druid_tornado",
+   "name": "Druid Tornado",
+   "class": "druid",
+   "tables": [
+    "druid_tornado_endgame90"
+   ],
+   "identity": "Endgame tornado caster.",
+   "summary": "Random hits at a distance with strong sustained damage. Random aim and heavy mana use, endgame table only. Second-pass rating, lower confidence.",
+   "pros": [
+    "Ranged random hits",
+    "Good sustained damage",
+    "Strong clear"
+   ],
+   "cons": [
+    "Random aim",
+    "Mana heavy",
+    "Endgame only"
+   ],
+   "ratings": {
+    "leveling": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Endgame table only"
+    },
+    "farmingItems": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average for item runs"
+    },
+    "farmingXP": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average XP"
+    },
+    "bossing": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average on bosses"
+    },
+    "defense": {
+     "stars": 3,
+     "source": "estimate",
+     "note": "Average defense"
+    },
+    "clearSpeed": {
+     "stars": 4,
+     "source": "estimate",
+     "note": "Good area clear"
+    },
+    "idle": {
+     "stars": 2,
+     "source": "estimate",
+     "note": "Mana stalls, random aim"
+    }
+   },
+   "thresholdsRef": "thresholds"
+  }
+ ],
+ "uncovered": []
+}
