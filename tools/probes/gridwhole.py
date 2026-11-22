@@ -97,16 +97,17 @@ def probe(d2d, data, level, seed, samples):
         res.update(rooms_up_arrival=up0, rooms_total=total)
         rng = random.Random(level * 1000 + seed)
         # engine's own collision at arrival
-        def sample(g):
+        def sample(g, stamps):
             bad = 0
             for _ in range(samples):
                 y = rng.randrange(len(g)); x = rng.randrange(len(g[0]))
                 r = cmd("debug blocked %.1f %.1f" % (x / 5, y / 5)).split()
                 if len(r) < 2 or r[0] != "ok":
                     continue
-                bad += (r[1] == "1") != (g[y][x] == "#")
+                if (r[1] == "1") != (g[y][x] == "#") and not any(abs(x - mx) < 15 and abs(y - my) < 15 for mx, my in stamps):
+                    bad += 1   # a disagreement away from every unit and object
             return bad
-        res["blocked_mismatch_A"] = sample(a)
+        res["blocked_mismatch_A"] = sample(a, mon_a)
         # bring every room up: warp over a lattice of walkable cells
         step = 5
         pts = []
@@ -145,7 +146,7 @@ def probe(d2d, data, level, seed, samples):
             res.update(diff_raw=len(raw), diff_after_unit_mask=len(real), diff_sample=real[:8],
                        diff_to_blocked=sum(1 for x, y in real if b[y][x] == "#"), diff_to_open=sum(1 for x, y in real if b[y][x] == "."),
                        walkable_A=sum(r.count(".") for r in a), walkable_B=sum(r.count(".") for r in b))
-        res["blocked_mismatch_B"] = sample(b)
+        res["blocked_mismatch_B"] = sample(b, mon)
         res["samples"] = samples
     finally:
         p.terminate()
