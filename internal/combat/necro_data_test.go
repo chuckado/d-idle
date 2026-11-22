@@ -2,6 +2,7 @@ package combat
 
 import (
 	"context"
+	"errors"
 	"strings"
 	"testing"
 
@@ -50,7 +51,7 @@ func TestValidateNecroErrorsNameTheProfile(t *testing.T) {
 // A Paladin asking for the necro data is an error that names the profile, never a fallback to Necromancer rules.
 func TestNecroParamsUnknownClassIsAnError(t *testing.T) {
 	h, w := newNecro(t)
-	w.snap.Player.Class = d2.Paladin
+	w.snap.Player.Class, w.snap.Player.Skills, h.f.Build = d2.Paladin, nil, ""
 	w.snap.Player.Skills = []d2.Skill{{ID: 1, Level: 1}} // no necromancer skill: the profile is the Paladin's
 	h.f.SetCatalog(MapCatalog{Skills: map[int]*data.Skill{}})
 	if _, err := h.f.necroParams(w.snap.Player); err == nil || !strings.Contains(err.Error(), "paladin") {
@@ -105,11 +106,38 @@ func TestCurseAndSummonFollowTheData(t *testing.T) {
 // KeepSummons for a non-Necromancer stays a no-op (the class gate), and Curse on a Paladin does not touch the data.
 func TestNonNecromancerNeverReadsNecroData(t *testing.T) {
 	h, w := newNecro(t)
-	w.snap.Player.Class = d2.Paladin
+	w.snap.Player.Class, w.snap.Player.Skills, h.f.Build = d2.Paladin, nil, ""
 	if n, err := h.f.KeepSummons(context.Background()); n != 0 || err != nil {
 		t.Fatalf("paladin summons: %d %v", n, err)
 	}
 	if done, err := h.f.Curse(context.Background(), w.snap, nil); done || err != nil {
 		t.Fatalf("paladin curse: %v %v", done, err)
+	}
+}
+
+// necro5: the engine read replaces the snapshot census only with the knob on, a reader and a profile with summon data; it
+// fails to the snapshot census otherwise. Must fail if census ignored the reader or the knob.
+func TestCensusEngineRead(t *testing.T) {
+	h, w := newNecro(t)
+	w.snap.Monsters = append(w.snap.Monsters, d2.Unit{ID: 600, Type: d2.TypeMonster, Class: clsGolem, Mode: d2.MonModeStand,
+		X: 100, Y: 100, Monster: &d2.MonsterInfo{LifePct: 100, States: []uint8{d2.StateMinion}}})
+	rows := []MinionRow{{Skill: idRaise}, {Skill: idRaise}, {Skill: idClay}}
+	h.f.MinionRead = func() ([]MinionRow, error) { return rows, nil }
+	if m := h.f.census(w.snap); m.Total() != 1 || m.Golems != 1 {
+		t.Fatalf("knob 0 must use the snapshot: %+v", m)
+	}
+	h.f.e.Tune.Combat.MinionRead = 1
+	if m := h.f.census(w.snap); m.Skeletons != 2 || m.Golems != 1 {
+		t.Fatalf("knob 1 must use the read: %+v", m)
+	}
+	h.f.MinionRead = func() ([]MinionRow, error) { return nil, errors.New("no flag") }
+	if m := h.f.census(w.snap); m.Total() != 1 {
+		t.Fatalf("a failed read must fall back: %+v", m)
+	}
+	// A Paladin has no necro block: the read is never consulted.
+	w.snap.Player.Class, w.snap.Player.Skills, h.f.Build = d2.Paladin, nil, ""
+	h.f.MinionRead = func() ([]MinionRow, error) { return rows, nil }
+	if m := h.f.census(w.snap); m.Skeletons != 0 {
+		t.Fatalf("a Paladin must keep the snapshot census: %+v", m)
 	}
 }

@@ -155,7 +155,7 @@ func isNecro(p *d2.Player) bool { return p != nil && p.Class == d2.Necromancer }
 const armyMin = 3
 
 func (f *Fighter) armyStands(snap *d2.Snapshot) bool {
-	return isNecro(snap.Player) && CountMinions(snap, f.cat).Total() >= armyMin
+	return isNecro(snap.Player) && f.census(snap).Total() >= armyMin
 }
 
 // wantMinions is how many of a kind we try to hold: the skill level up to the rule's Max (U: skills.txt params were
@@ -189,7 +189,7 @@ func (f *Fighter) planSummon(snap *d2.Snapshot, nd *NecroParams, allowWalk bool)
 		}
 		return s, true
 	}
-	have := CountMinions(snap, f.cat)
+	have := f.census(snap)
 	if have.Golems == 0 {
 		for _, g := range nd.Golems {
 			if s, ok := usable(g); ok {
@@ -285,7 +285,7 @@ func (f *Fighter) castSummon(ctx context.Context, snap *d2.Snapshot, nd *NecroPa
 	if corpse != nil {
 		at = input.Point{X: corpse.X, Y: corpse.Y}
 	}
-	before := CountMinions(snap, f.cat)
+	before := f.census(snap)
 	if err := f.cast(snap, sp, at); err != nil {
 		return false, err
 	}
@@ -299,7 +299,7 @@ func (f *Fighter) castSummon(ctx context.Context, snap *d2.Snapshot, nd *NecroPa
 	if err != nil {
 		return true, err
 	}
-	now := CountMinions(after, f.cat)
+	now := f.census(after)
 	paid := after.Player.Mana < p.Mana-sp.Cost/2
 	kind := ""
 	for _, r := range nd.Summons {

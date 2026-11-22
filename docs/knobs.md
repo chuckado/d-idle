@@ -109,6 +109,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | combat.kiteRetreat | 12 | 6..20 | subtiles | 6 | 10 | Length of one retreat step. |
 | combat.dodgeRadius | 4 | 0..8 | subtiles | 0 | 7 | Step away from hostile missiles closer than this. |
 | combat.missileDodge | 0 | 0..1 | bool | 0 | 1 | 1 sidesteps fire walls, lightning, hydra and chaos missiles (unverified live, off by default). |
+| combat.minionRead | 0 | 0..1 | bool | 0 | 3 | 1 counts the hero's summons from the fork read `debug minions` (needs --read-combat); a failed read falls back to the snapshot census. Off by default (U until a live drill). |
 | combat.threatDodge | 0 | 0..1 | bool | 0 | 2 | 1 dodges only hostile missiles the missile threat table says can be dodged in dodgeReactMs and fights the owners of the fast ones first (card botthreat, off until a live drill). |
 | combat.dodgeReactMs | 400 | 100..800 | ms | 100 | 2 | Poll plus click time the threat model assumes before the character moves; a missile reaching us sooner is not dodged (I). |
 | combat.shooterKillMin | 0 | 0..200 | pts | 0 | 4 | Ranged monsters with an elemental-only attack and a peak hit of at least this are fought first; 0 = off (derived from monstats, U). |
