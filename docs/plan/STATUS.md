@@ -440,6 +440,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- afc522db3 11-22 15:04 `Merge agent/fableui: Merge branch 'main' into fableui` (fableui)
+- 2331496c0 11-22 15:03 `Merge branch 'main' into fableui` (-)
 - 7a917f2da 11-22 14:57 `Merge agent/necro3: Merge branch 'main' into necro3` (necro3)
 - 7cbbd4d17 11-22 14:56 `Merge branch 'main' into necro3` (-)
 - ac382a44b 11-22 14:47 `Merge agent/townstage3: Merge branch 'main' into town5` (townstage3)
@@ -448,6 +450,4 @@
 - 2beee7797 11-22 14:32 `Merge branch 'main' into recallsorc` (-)
 - dbb197eaa 11-22 14:26 `Merge agent/necro4: Merge branch 'main' into necro4` (necro4)
 - 7390d333c 11-22 14:24 `Merge branch 'main' into necro4` (-)
-- 17391d641 11-22 14:16 `Merge branch 'main' into town5` (-)
-- 0b1c9d7b0 11-22 14:14 `Merge agent/necrosme: Merge branch 'main' into necrosme` (necrosme)
 <!-- statusgen:end -->

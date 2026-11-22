@@ -360,6 +360,11 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [town-planner-b-model.md](design/fable-review-2026-11-21/town-planner-b-model.md): Town planner, appendix B: data model, scenarios, migration (status: current (design review 2026-11-21, docs only; proposals, nothing built). Main doc: town-planner.md;...)
 - [town-planner.md](design/fable-review-2026-11-21/town-planner.md): Town and chores planner: one supply need, one town plan (status: current (Fable design review 2026-11-21, docs only; nothing here is built or decided). Tree read:...)
 
+`design/fable-review-2026-11-22/`
+
+- [ui-unification-appendix-pages.md](design/fable-review-2026-11-22/ui-unification-appendix-pages.md): UI unification review, appendix: page and panel inventory (status: current (review of 2026-11-22, card fableui). Belongs to ui-unification.md. Docs only.)
+- [ui-unification.md](design/fable-review-2026-11-22/ui-unification.md): UI unification review: navigation, cruft and readable build pages (2026-11-22) (status: DESIGN REVIEW, nothing built (card fableui). Docs only. The user decides the open questions in section F;...)
+
 `design/`
 
 - [item-colour-2026-11-18.md](design/item-colour-2026-11-18.md): Item colour in the inventory art: chain and slice plan (2026-11-18) (status: design, task-634 (card itemcolour). Follow-up to jewelcolor (task-632), which removed the invented wash....)
