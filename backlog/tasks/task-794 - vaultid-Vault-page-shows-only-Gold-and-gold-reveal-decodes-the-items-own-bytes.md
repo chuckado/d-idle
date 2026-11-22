@@ -1,10 +1,13 @@
 ---
 id: TASK-794
-title: 'vaultid: Vault page shows only Gold, and gold reveal decodes the item''s own bytes'
-status: Proposed
+title: >-
+  vaultid: Vault page shows only Gold, and gold reveal decodes the item's own
+  bytes
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T01:10:00Z'
+updated_date: '2026-11-22T02:56:00Z'
 labels:
   - watch
   - feature
