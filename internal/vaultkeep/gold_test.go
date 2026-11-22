@@ -374,3 +374,122 @@ func TestGoldNoPayerIsNoShop(t *testing.T) {
 		t.Fatalf("%+v", res[0])
 	}
 }
+
+func (r *rig) goldAll(maxGold int, confirm bool) ([]Result, *GoldView) {
+	r.now = r.now.Add(time.Second) // a new order id per press, as the real clock gives
+	return r.k.EnqueueRevealGoldAll(context.Background(), maxGold, confirm)
+}
+
+// Identify all (scope all_unrevealed): the keeper lists the whole vault itself; identified records and the ones already
+// unlocked are left alone, the exact gold leaves the stash once, for both classes.
+func TestGoldRevealAllScopeTakesTheWholeVault(t *testing.T) {
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			r := newRig(t, class)
+			r.withTools(0)
+			r.withPay(10000, 80)
+			ids := r.sealeds(30)
+			if _, v := r.gold(ids[:3], 0, false); v == nil || v.State != OrderRevealed { // three revealed earlier: not counted again
+				t.Fatalf("setup %+v", v)
+			}
+			res, v := r.goldAll(0, false)
+			if v == nil || v.State != OrderRevealed || v.Done != 27 || v.Want != 27 || v.Paid != 27*80 || v.StashAfter != 10000-30*80 {
+				t.Fatalf("view %+v", v)
+			}
+			if len(res) != 27 {
+				t.Fatalf("one result per paid record: %d", len(res))
+			}
+			if r.revealed(ids) != 30 || r.pay.Stash0() != 10000-30*80 || len(r.pay.Calls) != 2 {
+				t.Fatalf("revealed %d stash %d calls %v", r.revealed(ids), r.pay.Stash0(), r.pay.Calls)
+			}
+			// nothing is left: a refusal, no payment
+			res, v = r.goldAll(0, false)
+			if v != nil || len(res) != 1 || res[0].Code != "state" || len(r.pay.Calls) != 2 {
+				t.Fatalf("empty vault: %+v %+v calls %v", res, v, r.pay.Calls)
+			}
+		})
+	}
+}
+
+// A stash that is short pays for the best K, says "partial" with the asked count, and the rest stays sealed for later.
+func TestGoldRevealAllScopePartialWhenShort(t *testing.T) {
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			r := newRig(t, class)
+			r.withTools(0)
+			r.withPay(80*12+30, 80)
+			ids := r.sealeds(20)
+			res, v := r.goldAll(0, false)
+			if v == nil || v.State != OrderPartial || v.Done != 12 || v.Want != 20 || v.Paid != 960 || v.StashAfter != 30 {
+				t.Fatalf("view %+v", v)
+			}
+			if len(res) != 12 || r.revealed(ids) != 12 {
+				t.Fatalf("results %d revealed %d", len(res), r.revealed(ids))
+			}
+			// best value first: sealeds() values rise with the index, so the top twelve are the last twelve
+			for i, id := range ids {
+				if got := r.state(id).Identified; got != (i >= 8) {
+					t.Fatalf("record %d revealed=%v", i, got)
+				}
+			}
+			// an empty stash: refused, nothing paid
+			res, v = r.goldAll(0, false)
+			if v != nil || res[0].OK || res[0].Code != "gold" || len(r.pay.Calls) != 1 {
+				t.Fatalf("short stash: %+v %+v", res, v)
+			}
+		})
+	}
+}
+
+// The cap and the confirm threshold apply to the all scope; a repeated press takes only what is still unrevealed.
+func TestGoldRevealAllScopeCapConfirmAndRepeat(t *testing.T) {
+	r := newRig(t, classes[0])
+	r.withTools(0)
+	r.withPay(100000, 80)
+	r.confirm = 1000
+	ids := r.sealeds(30)
+	if res, v := r.goldAll(0, false); v != nil || res[0].Code != "confirm" || len(r.pay.Calls) != 0 {
+		t.Fatalf("confirm: %+v %+v", res, v)
+	}
+	if res, v := r.goldAll(400, true); v == nil || v.Done != 5 || len(res) != 5 || v.Paid != 400 {
+		t.Fatalf("cap of five: %+v %+v", res, v)
+	}
+	before := r.pay.Stash0()
+	if res, v := r.goldAll(0, true); v == nil || v.State != OrderRevealed || before-r.pay.Stash0() != 25*80 || len(res) != 25 {
+		t.Fatalf("rest: %+v %+v", res, v)
+	}
+	if r.revealed(ids) != 30 {
+		t.Fatal("all revealed")
+	}
+}
+
+// A lost reply to Identify all, then the same press again: the running order is settled with its own order id, the stash
+// is charged once and the paid items are revealed once.
+func TestGoldRevealAllScopeResendIsIdempotent(t *testing.T) {
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			r := newRig(t, class)
+			r.withTools(0)
+			r.withPay(5000, 100)
+			ids := r.sealeds(6)
+			lossy := &lostReply{fakePayer: r.pay}
+			r.k.Payer = lossy
+			if _, v := r.goldAll(0, false); v == nil || v.State != OrderQueued {
+				t.Fatalf("queued: %+v", v)
+			}
+			if r.pay.Stash0() != 4400 {
+				t.Fatalf("the fork took the gold: %d", r.pay.Stash0())
+			}
+			res, v := r.goldAll(0, false) // the page sends the same order again
+			if v == nil || v.State != OrderRevealed || v.Paid != 600 || r.pay.Stash0() != 4400 || r.revealed(ids) != 6 {
+				t.Fatalf("settled: %+v stash %d", v, r.pay.Stash0())
+			}
+			if len(res) != 6 || !res[0].Already {
+				t.Fatalf("answer %+v", res)
+			}
+			if len(r.pay.Calls) != 2 || r.pay.Calls[0] != r.pay.Calls[1] {
+				t.Fatalf("one order id for both sends: %v", r.pay.Calls)
+			}
+		})
+	}
+}

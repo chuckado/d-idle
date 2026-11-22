@@ -557,6 +557,20 @@ func (f actFace) EnqueueRevealGold(ctx context.Context, ids []string, maxGold in
 	return results(res), o
 }
 
+func (f actFace) EnqueueRevealGoldAll(ctx context.Context, maxGold int, confirm bool) ([]watch.VaultKeepResult, *watch.VaultGoldOrder) {
+	k := f.k()
+	if k == nil {
+		return nil, nil
+	}
+	res, v := k.EnqueueRevealGoldAll(ctx, maxGold, confirm)
+	var o *watch.VaultGoldOrder
+	if v != nil {
+		x := viewOf(*v)
+		o = &x
+	}
+	return results(res), o
+}
+
 func (f actFace) CancelGold() (watch.VaultGoldOrder, bool) {
 	k := f.k()
 	if k == nil {

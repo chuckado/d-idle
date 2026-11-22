@@ -173,10 +173,24 @@ func goldShort(price, stash int) string {
 // order may cost (0: no cap). A cost at or over the confirm threshold needs confirm. Refusals have a code: off, noshop,
 // measured, state, missing, nosealed, active, gold (the stash is short or the cap too low), confirm, payoff, pay.
 func (k *Keeper) EnqueueRevealGold(ctx context.Context, ids []string, maxGold int, confirm bool) (res []Result, view *GoldView) {
+	return k.enqueueGold(ctx, ids, maxGold, confirm, false)
+}
+
+// EnqueueRevealGoldAll is the order of scope all_unrevealed ("Identify all"): the keeper itself lists every unrevealed
+// record of the whole vault at the moment of the call (best value first), so the page never has to hold or send them. The
+// same refusals, cap, confirm and partial reveal as EnqueueRevealGold; one more code, "state", says nothing is left.
+func (k *Keeper) EnqueueRevealGoldAll(ctx context.Context, maxGold int, confirm bool) ([]Result, *GoldView) {
+	return k.enqueueGold(ctx, nil, maxGold, confirm, true)
+}
+
+func (k *Keeper) enqueueGold(ctx context.Context, ids []string, maxGold int, confirm, all bool) (res []Result, view *GoldView) {
 	fail := func(code, why string) ([]Result, *GoldView) {
 		out := make([]Result, len(ids))
 		for i, id := range ids {
 			out[i] = Result{ID: id, Code: code, Why: why}
+		}
+		if all {
+			out = []Result{{Code: code, Why: why}}
 		}
 		return out, nil
 	}
@@ -190,12 +204,15 @@ func (k *Keeper) EnqueueRevealGold(ctx context.Context, ids []string, maxGold in
 		return fail("measured", ReasonGoldMeasured)
 	case st == nil:
 		return fail("missing", "there is no vault for this hero yet")
-	case len(ids) == 0 || len(ids) > bulkid.GoldMax:
+	case !all && (len(ids) == 0 || len(ids) > bulkid.GoldMax):
 		return fail("ids", fmt.Sprintf("name 1 to %d items", bulkid.GoldMax))
 	}
 	k.pmu.Lock()
 	defer k.pmu.Unlock()
 	if o := k.order(); o.Active() {
+		if all {
+			ids = o.IDs // a repeated press of Identify all settles the running order, whatever the vault holds now
+		}
 		if !sameSet(o.IDs, ids) {
 			return fail("active", "a gold reveal is still being paid: wait a moment")
 		}
@@ -207,6 +224,17 @@ func (k *Keeper) EnqueueRevealGold(ctx context.Context, ids []string, maxGold in
 		}
 		v := k.goldView(k.order())
 		return out, &v
+	}
+	if all {
+		no := false
+		recs, _ := st.Query(vault.Filter{Identified: &no})
+		ids = bulkid.UnrevealedIDs(recs, true) // recomputed here, under the lock, from the records as they are now
+		if len(ids) == 0 {
+			return []Result{{Code: "state", Why: "nothing is left to identify"}}, nil
+		}
+		if len(ids) > bulkid.GoldAllMax {
+			ids = ids[:bulkid.GoldAllMax]
+		}
 	}
 	k.FillSealed(ctx, ids) // records that hold no affixes get them from their own bytes (read-only in the game)
 	res = make([]Result, len(ids))
@@ -230,6 +258,9 @@ func (k *Keeper) EnqueueRevealGold(ctx context.Context, ids []string, maxGold in
 			ok = append(ok, id)
 			at[id] = i
 		}
+	}
+	if all {
+		defer func() { res = allResults(res) }()
 	}
 	if len(ok) == 0 {
 		return res, nil
@@ -508,4 +539,19 @@ func (k *Keeper) GoldFacts(ctx context.Context) GoldFacts {
 		f.Stash = s
 	}
 	return f
+}
+
+// allResults keeps what Identify all reports: the records the stash paid for, or, when none was, the one refusal that
+// applies to the order. The records that were not paid for are not listed one by one; the order's Want says how many.
+func allResults(res []Result) []Result {
+	var out []Result
+	for _, r := range res {
+		if r.OK {
+			out = append(out, r)
+		}
+	}
+	if len(out) == 0 && len(res) > 0 {
+		out = append(out, res[0])
+	}
+	return out
 }

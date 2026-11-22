@@ -12,7 +12,7 @@ import (
 // An order settles in the same request: the stash pays, the items are revealed, the answer carries the order.
 
 const (
-	VaultRevealGoldRoute       = "/api/vault/revealgold"        // POST {ids, maxGold, confirm}
+	VaultRevealGoldRoute       = "/api/vault/revealgold"        // POST {ids | scope, maxGold, confirm}
 	VaultRevealGoldCancelRoute = "/api/vault/revealgold/cancel" // POST {}
 )
 
@@ -37,6 +37,7 @@ type VaultGoldInfo struct {
 	ConfirmAt  int             `json:"confirmAt"`
 	Decode     bool            `json:"decode,omitempty"` // the fork decodes the affixes of an unidentified item from its bytes (item decode): any unidentified record can be gold-revealed
 	Why        string          `json:"why,omitempty"`    // why gold cannot be offered now
+	Unrevealed int             `json:"unrevealed"`       // records of the WHOLE vault a gold reveal can still pay for (the "Identify all" count; no filter applies)
 	Order      *VaultGoldOrder `json:"order,omitempty"`
 }
 
@@ -44,6 +45,8 @@ type VaultGoldInfo struct {
 type VaultGoldActor interface {
 	GoldInfo(ctx context.Context) VaultGoldInfo
 	EnqueueRevealGold(ctx context.Context, ids []string, maxGold int, confirm bool) ([]VaultKeepResult, *VaultGoldOrder)
+	// EnqueueRevealGoldAll is the order of scope all_unrevealed: the bot lists the records itself when it runs.
+	EnqueueRevealGoldAll(ctx context.Context, maxGold int, confirm bool) ([]VaultKeepResult, *VaultGoldOrder)
 	CancelGold() (VaultGoldOrder, bool)
 }
 
@@ -86,7 +89,13 @@ func (a *VaultAPI) goldRoute(w http.ResponseWriter, r *http.Request, d *VaultDes
 		writeJSON(w, code, rep)
 		return
 	}
-	res, order := ga.EnqueueRevealGold(r.Context(), b.IDs, b.MaxGold, b.Confirm)
+	var res []VaultKeepResult
+	var order *VaultGoldOrder
+	if b.Scope == bulkid.ScopeAllUnrevealed {
+		res, order = ga.EnqueueRevealGoldAll(r.Context(), b.MaxGold, b.Confirm)
+	} else {
+		res, order = ga.EnqueueRevealGold(r.Context(), b.IDs, b.MaxGold, b.Confirm)
+	}
 	rep := reply{vaultReply: vaultReply{Done: []string{}}, Order: order}
 	for _, x := range res {
 		switch {

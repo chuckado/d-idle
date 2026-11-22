@@ -76,6 +76,29 @@ func Candidates(f *Filter, recs []vault.Rec, qname func(int) string) []Cand {
 	return cs
 }
 
+// UnrevealedIDs lists the vault records a gold reveal can still pay for, best value first (id breaks ties): live,
+// unidentified, not yet unlocked. decode says the fork decodes the affixes of a record that holds none, so every such
+// record counts; else only the sealed ones. It reads the whole vault: no page filter, search or selection applies.
+func UnrevealedIDs(recs []vault.Rec, decode bool) []string {
+	var out []vault.Rec
+	for _, r := range recs {
+		if !r.Identified && !r.Unlocked && (r.State == vault.Recorded || r.State == vault.KeepQ) && (decode || r.Sealed != "") {
+			out = append(out, r)
+		}
+	}
+	sort.SliceStable(out, func(i, j int) bool {
+		if out[i].Value != out[j].Value {
+			return out[i].Value > out[j].Value
+		}
+		return out[i].ID < out[j].ID
+	})
+	ids := make([]string, len(out))
+	for i, r := range out {
+		ids[i] = r.ID
+	}
+	return ids
+}
+
 // MassReveal picks the filtered, unidentified vault records the hero can pay for now: all of them at Cain, else as many
 // as it holds charges, best first (priority, value, id). Nothing is bought and nothing is queued here.
 func MassReveal(f *Filter, recs []vault.Rec, qname func(int) string, p Price) Mass {

@@ -37,6 +37,7 @@ type goldStub struct {
 	info   VaultGoldInfo
 	order  *VaultGoldOrder
 	posted int
+	allPosted, allMax int
 }
 
 func (g *goldStub) GoldInfo(context.Context) VaultGoldInfo {
@@ -60,6 +61,13 @@ func (g *goldStub) EnqueueRevealGold(_ context.Context, ids []string, max int, c
 		out = append(out, VaultKeepResult{ID: id, OK: true})
 	}
 	return out, g.order
+}
+func (g *goldStub) EnqueueRevealGoldAll(ctx context.Context, max int, confirm bool) ([]VaultKeepResult, *VaultGoldOrder) {
+	g.allPosted++
+	g.allMax = max
+	no := false
+	recs, _ := g.st.Query(vault.Filter{Identified: &no})
+	return g.EnqueueRevealGold(ctx, bulkid.UnrevealedIDs(recs, true), max, confirm)
 }
 func (g *goldStub) CancelGold() (VaultGoldOrder, bool) {
 	if g.order == nil || g.order.State != "queued" {
@@ -126,5 +134,32 @@ func TestVaultGoldRouteWithoutAPayer(t *testing.T) {
 	api := massAPI(t, s, &stubActor{st: s}, true)
 	if code, _, pr := postVault(t, api, VaultRevealGoldRoute, vaultBody{IDs: []string{"x"}}); code != 409 || pr.Code != "off" {
 		t.Fatalf("%d %+v", code, pr)
+	}
+}
+
+// Identify all: the page names a scope, not ids. The count it shows is the whole vault (no filter), the order reaches the actor
+// as the all scope, and a scope with ids or an unknown scope is refused.
+func TestVaultGoldAllScope(t *testing.T) {
+	s := sealedVault(t, 40, 200)
+	g := &goldStub{stubActor: &stubActor{st: s}, info: VaultGoldInfo{On: true, ScrollGold: 80, Stash: 7200}}
+	api := massAPI(t, s, g.stubActor, true)
+	api.Bind(VaultDesk{On: func() bool { return true }, Store: func() *vault.Store { return s }, Act: g, MassFilter: api.desk().MassFilter, Quality: api.desk().Quality, ScrollGold: 80})
+	// a page filter (ilvl) narrows the list and the Reveal bar; the Identify all count stays the whole vault
+	_, v := getVault(t, api, "/api/vault?limit=5&ilvlMin=60")
+	if v.Act.Reveal.Gold.Unrevealed != 40 {
+		t.Fatalf("whole-vault count: %d", v.Act.Reveal.Gold.Unrevealed)
+	}
+	for _, bad := range []vaultBody{{Scope: "everything"}, {Scope: bulkid.ScopeAllUnrevealed, IDs: []string{"x"}}} {
+		if code, _, pr := postVault(t, api, VaultRevealGoldRoute, bad); code != 400 || pr.Code != "scope" {
+			t.Fatalf("%+v: %d %+v", bad, code, pr)
+		}
+	}
+	code, rep, _ := postVault(t, api, VaultRevealGoldRoute, vaultBody{Scope: bulkid.ScopeAllUnrevealed, MaxGold: 3200, Confirm: true})
+	if code != 200 || g.allPosted != 1 || g.allMax != 3200 || len(rep.Done) != 40 {
+		t.Fatalf("all: %d posted %d %+v", code, g.allPosted, rep)
+	}
+	_, v = getVault(t, api, "/api/vault?limit=5")
+	if v.Act.Reveal.Gold.Order == nil || v.Act.Reveal.Gold.Order.Want != 40 {
+		t.Fatalf("order %+v", v.Act.Reveal.Gold.Order)
 	}
 }
