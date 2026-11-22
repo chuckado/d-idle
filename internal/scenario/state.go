@@ -62,6 +62,9 @@ type State struct {
 	Vault *VaultFacts `json:"vault,omitempty"`
 	// WritesAfterStart is the number of gameplay-affecting writes after the run start (d2cheat ledger), -1 unknown.
 	WritesAfterStart int `json:"writes_after_start"`
+	// Merc is the `merc=` value of the state verb ("x,y:RG", "-" none); nil: not observed. The hand-in scenario reads it
+	// (a merc that stands beside the hero), the dump's merc.present is the same fact.
+	Merc *string `json:"merc,omitempty"`
 }
 
 // StateItem is one carried item.
@@ -100,6 +103,7 @@ const (
 	ARightSkillIs   = "right_skill_is"  // skill (the id on the right hand: the aura, the select verb's effect)
 	ALeftSkillIs    = "left_skill_is"   // skill
 	ANoWrites       = "no_writes"       // writes_after_start == 0 (the CRUTCH RULE line)
+	AMercHired      = "merc_hired"      // code (optional merc class code of the state verb, e.g. RG), min 0 = a merc must stand there, max 0 = no merc may
 	AStatBetween    = "stat_between"    // code (str dex vit ene statpts skillpts skillsspent), min, max
 	ASkillPoints    = "skill_points"    // skill (skills.txt id), min, max, at_level: hard points in one skill (skills.go)
 	ABeltAtLeast    = "belt_at_least"   // code (potion family prefix: hp, mp, rv), min: potions of that family in the BELT alone (item_in_pack cannot tell belt from pack when where is unset)
@@ -160,6 +164,8 @@ func (a Assert) Validate() error {
 		if a.Code == "" {
 			return fmt.Errorf("%s needs code", a.Kind)
 		}
+	case AMercHired:
+		// no required fields: Code and Max are optional
 	case ABeltAtLeast:
 		if a.Code == "" || a.Min <= 0 {
 			return fmt.Errorf("belt_at_least needs code (hp, mp or rv) and min")
@@ -342,6 +348,8 @@ func evalOne(a Assert, st State) AssertResult {
 			return unobs(fmt.Sprintf("life >= %d%%", a.Min), "life")
 		}
 		return AssertResult{OK: *st.LifePct >= a.Min, Want: fmt.Sprintf("life >= %d%%", a.Min), Got: fmt.Sprintf("life %d%%", *st.LifePct)}
+	case AMercHired:
+		return evalMerc(a, st)
 	case AStatBetween:
 		want := fmt.Sprintf("%s >= %d", a.Code, a.Min)
 		if a.Max != nil {
@@ -472,4 +480,25 @@ func contains(l []string, c string) bool {
 		}
 	}
 	return false
+}
+
+// evalMerc: merc_hired says a merc stands beside the hero (and has class Code when given); with max 0 it says there is none.
+func evalMerc(a Assert, st State) AssertResult {
+	none := a.Max != nil && *a.Max == 0
+	want := "a merc"
+	if none {
+		want = "no merc"
+	} else if a.Code != "" {
+		want += " of class " + a.Code
+	}
+	if st.Merc == nil {
+		return unobs(want, "merc")
+	}
+	m := *st.Merc
+	has := m != "" && m != "-"
+	if none {
+		return AssertResult{OK: !has, Want: want, Got: "merc " + m}
+	}
+	ok := has && (a.Code == "" || strings.HasSuffix(m, ":"+a.Code))
+	return AssertResult{OK: ok, Want: want, Got: "merc " + m}
 }
