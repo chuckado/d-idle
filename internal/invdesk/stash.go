@@ -320,3 +320,26 @@ func (d *Desk) ErrandKind() string {
 	}
 	return ""
 }
+
+// StashNow files backpack item id in the stash at once, in the town visit that is running (the vault's equip puts the item
+// it took off there when the Vault is full). It runs the same check and the same visit as the queued stash job and
+// returns the reason when the stash cannot take it; nothing is queued and nothing is dropped or sold.
+func (d *Desk) StashNow(ctx context.Context, id uint32) error {
+	sv := d.stashSv()
+	if sv == nil {
+		return refuse("off", "the stash is not available on this bot")
+	}
+	_, s, ok := d.unit(id)
+	if !ok {
+		return refuse("item", "that item is not in the inventory any more")
+	}
+	if _, err := sv.CheckStashMove(s, id, true); err != nil {
+		return err
+	}
+	res := sv.StashVisit(ctx, StashPlan{Stow: []uint32{id}})
+	if err, found := res.Errs[id]; !found {
+		return context.Canceled
+	} else {
+		return err
+	}
+}

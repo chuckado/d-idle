@@ -251,3 +251,55 @@ func TestCainFreeChunkIsDoneOnTheQuestWordOnly(t *testing.T) {
 		t.Error("free_cain not done with Cain free and the hero in camp")
 	}
 }
+
+// User screenshot 2026-11-21: "Sail east to Act 2: DONE" while the hero stood in Act 1 and never took the boat. An act hop is
+// done when the world is in the next act; a hand-in dialogue that ran without the trip is no evidence (class-free: no
+// class, skill or build data is read).
+func TestActHopIsNotDoneByTheDialogueAlone(t *testing.T) {
+	for _, hop := range []struct {
+		quest, chunk string
+		from, to     int
+	}{{"act1_done", "sail_east", 1, 2}, {"act2_done", "", 2, 3}, {"act3_done", "", 3, 4}, {"act4_done", "", 4, 5}} {
+		q, c := s7bChunk(t, hop.quest, firstChunk(t, hop.quest, hop.chunk))
+		rt := &boardRT{handed: map[string]bool{questboard.ChunkKey(q.ID, c.ID): true}, reached: map[string]bool{}}
+		w := s7bWorld(map[string]int{}, map[string]task.QuestState{})
+		w.Act = hop.from
+		if rt.chunkFact(q, c, w).Done {
+			t.Errorf("%s: read done in act %d after a dialogue that did not travel", hop.quest, hop.from)
+		}
+		w.Act = hop.to
+		if !rt.chunkFact(q, c, w).Done {
+			t.Errorf("%s: not done in act %d", hop.quest, hop.to)
+		}
+	}
+}
+
+func firstChunk(t *testing.T, quest, chunk string) string {
+	t.Helper()
+	if chunk != "" {
+		return chunk
+	}
+	b, err := questboard.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	q, err := b.Quest(quest)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return q.Chunks[0].ID
+}
+
+// The same rule once Andariel is dead: the hero stands in Act 1 with the hand-in dialogue behind it and the boat not taken.
+func TestSailEastNeedsTheTripAfterAndarielToo(t *testing.T) {
+	q, c := s7bChunk(t, "act1_done", "sail_east")
+	rt := &boardRT{handed: map[string]bool{questboard.ChunkKey(q.ID, c.ID): true}, reached: map[string]bool{}}
+	w := s7bWorld(map[string]int{}, map[string]task.QuestState{task.QAndariel: {Stage: task.StageCleared, Ev: task.EvMemory}})
+	if rt.chunkFact(q, c, w).Done {
+		t.Fatal("sail east reads done in Act 1 after a dialogue that did not travel")
+	}
+	w.Act = 2
+	if !rt.chunkFact(q, c, w).Done {
+		t.Fatal("sail east not done in Act 2")
+	}
+}

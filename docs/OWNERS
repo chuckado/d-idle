@@ -318,6 +318,7 @@ cmd/d2bot/survivalwire.go  credit-runner  survfix2
 cmd/d2bot/survivalwire.go  credit-runner  survreask
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/vaultact_test.go  credit-runner  vaultv6
+cmd/d2bot/vaultequip.go  credit-runner  equipswap
 cmd/d2bot/vaultequip.go  credit-runner  vaultequip
 cmd/d2bot/vaultequip.go  credit-runner  vaultwire
 cmd/d2bot/vaultequip_test.go  credit-runner  vaultwire
@@ -652,6 +653,7 @@ docs/quest-hints.md  live-agent  questdrill
 docs/questboard.md  credit-runner  cain45
 docs/questboard.md  credit-runner  cain5b
 docs/questboard.md  credit-runner  cainfix3
+docs/questboard.md  credit-runner  equipswap
 docs/questboard.md  credit-runner  handinbtn
 docs/questboard.md  credit-runner  questrun
 docs/questboard.md  credit-runner  quests1
@@ -800,6 +802,7 @@ docs/upstream/verifier-p04-2026-11-15.md  live-agent  verifyp04
 docs/upstream/verifier-p17-2026-11-15.md  credit-runner  verifyp17
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
 docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
+docs/vault.md  credit-runner  equipswap
 docs/vault.md  credit-runner  identifyall
 docs/vault.md  credit-runner  nocards
 docs/vault.md  credit-runner  vaultclean
@@ -957,6 +960,7 @@ internal/bot/questauto_test.go  credit-runner  quests8
 internal/bot/questboard.go  credit-runner  bsm4
 internal/bot/questboard.go  credit-runner  bsm7
 internal/bot/questboard.go  credit-runner  cainchain
+internal/bot/questboard.go  credit-runner  equipswap
 internal/bot/questboard.go  credit-runner  questrun
 internal/bot/questboard.go  credit-runner  quests10
 internal/bot/questboard.go  credit-runner  quests3
@@ -967,6 +971,7 @@ internal/bot/questboard.go  credit-runner  quests8
 internal/bot/questboard_goal_test.go  credit-runner  cainchain
 internal/bot/questboard_goal_test.go  credit-runner  questrun
 internal/bot/questboard_s7b_test.go  credit-runner  cain5b
+internal/bot/questboard_s7b_test.go  credit-runner  equipswap
 internal/bot/questboard_s7b_test.go  credit-runner  quests7b
 internal/bot/questboard_test.go  credit-runner  quests4
 internal/bot/questboard_test.go  credit-runner  quests7
@@ -1275,7 +1280,9 @@ internal/invdesk/sellnow_test.go  credit-runner  botsell
 internal/invdesk/sets.go  credit-runner  charreq
 internal/invdesk/sets.go  credit-runner  uib9
 internal/invdesk/stash.go  credit-runner  botinstant
+internal/invdesk/stash.go  credit-runner  equipswap
 internal/invdesk/stash.go  credit-runner  itemverbs2
+internal/invdesk/stash_test.go  credit-runner  equipswap
 internal/invdesk/testdata/view_schema9_instant_*.json  credit-runner  botinstant
 internal/invdesk/unequip.go  credit-runner  botinstant
 internal/invdesk/usable.go  credit-runner  charreq
@@ -1518,9 +1525,13 @@ internal/task  credit-runner  town4
 internal/task/act1.go  credit-runner  cain45
 internal/task/act1.go  credit-runner  cain5b
 internal/task/act1.go  credit-runner  cainchain
+internal/task/act1.go  credit-runner  equipswap
 internal/task/act1.go  credit-runner  quests7b
+internal/task/act2.go  credit-runner  equipswap
 internal/task/act2.go  credit-runner  quests7b
+internal/task/act3.go  credit-runner  equipswap
 internal/task/act3.go  credit-runner  quests7b
+internal/task/act4.go  credit-runner  equipswap
 internal/task/banote_test.go  credit-runner  cainfix3
 internal/task/cainreenter_test.go  credit-runner  cainchain
 internal/task/cainstones_test.go  credit-runner  cain45
@@ -1604,7 +1615,9 @@ internal/vaultkeep  credit-runner  vaultreveal
 internal/vaultkeep  credit-runner  vaultv5
 internal/vaultkeep  credit-runner  vaultv6
 internal/vaultkeep/  credit-runner  vaultfull
+internal/vaultkeep/equip.go  credit-runner  equipswap
 internal/vaultkeep/equip.go  credit-runner  vaultequip
+internal/vaultkeep/equip_test.go  credit-runner  equipswap
 internal/vaultkeep/equip_test.go  credit-runner  vaultequip
 internal/vaultkeep/keep.go  credit-runner  bulkid
 internal/vaultkeep/keep.go  credit-runner  vaultequip
@@ -2206,6 +2219,7 @@ tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
 tools/provingground/scenarios/cain.json  credit-runner  wpstep
+tools/provingground/scenarios/manage.json  credit-runner  equipswap
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/provingground/scenarios/points.json  credit-runner  barb1
 tools/provingground/scenarios/points.json  credit-runner  druid1
