@@ -402,6 +402,7 @@
 | identifyall | proposed | - | `internal/vaultkeep`<br>`internal/bulkid`<br>`internal/watch`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`docs/ui/vault-identify-all`<br>`tools/provingground/scenarios/vaultreveal.json`<br>`tools/uishots` | - |
 | mapphone | proposed | - | `internal/watch/web/panels/area-map`<br>`internal/watch/web/utilities.css`<br>`tools/uishots/mapphone.go`<br>`tools/uishots/mapphone.js`<br>`internal/watch/testdata/areamap`<br>`docs/ui/map-phone`<br>`tools/uishots.sh`<br>`tools/uishots/fit.go`<br>`tools/uishots/fixtures.go`<br>`tools/uishots/serve.go`<br>`docs/mapfog.md` | - |
 | equipswap | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/stash.go`<br>`internal/invdesk/stash_test.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/task/act1.go`<br>`internal/task/act2.go`<br>`internal/task/act3.go`<br>`internal/task/act4.go`<br>`tools/provingground/scenarios/manage.json`<br>`docs/vault.md`<br>`docs/questboard.md` | - |
+| mapverify | proposed | - | `docs/probes/countess-knobs-2026-11-22.md`<br>`docs/probes/strip-monastery-2026-11-22.md`<br>`tools/probes/strip.py`<br>`tools/probes/knobsummary.py`<br>`tools/provingground/knobs3way.sh`<br>`cmd/d2scenario/run.go`<br>`cmd/d2scenario/envknobs_test.go`<br>`internal/d2dworld/border.go`<br>`internal/d2dworld/world.go`<br>`internal/d2dworld/placelinked_test.go`<br>`internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`internal/nav/nav.go`<br>`internal/nav/exit.go`<br>`tools/probes/objclass/main.go` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -437,6 +438,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2cd38eec9 11-22 13:46 `Merge agent/mapverify: Merge branch 'main' into mapverify` (mapverify)
+- 0c004fb2f 11-22 13:45 `Merge branch 'main' into mapverify` (-)
 - 840bcfe80 11-22 11:37 `Merge agent/vaultsell: Merge branch 'main' into vaultsell` (vaultsell)
 - 8bd91284e 11-22 11:36 `Merge branch 'main' into vaultsell` (-)
 - 4683bb790 11-22 11:31 `Merge origin/main into agent/vaultsell (identifyall touched vault.js)` (-)
@@ -445,6 +448,4 @@
 - 4ce4f7d65 11-22 11:20 `Merge origin/main into agent/vaultsell` (-)
 - 141d88796 11-22 11:15 `Merge agent/identifyall: Merge branch 'main' into identifyall` (identifyall)
 - 1a40a1292 11-22 11:14 `Merge branch 'main' into identifyall` (-)
-- a9864033b 11-22 11:07 `Merge origin/main into agent/identifyall` (-)
-- 1f2524ed5 11-22 11:03 `Merge agent/staleaccept: Merge branch 'main' into staleaccept` (staleaccept)
 <!-- statusgen:end -->
