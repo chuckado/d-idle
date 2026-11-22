@@ -393,6 +393,7 @@
 | vaultwire | proposed | - | `cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/invwire.go`<br>`cmd/d2bot/vaultequip.go`<br>`cmd/d2bot/vaultequip_test.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/invverbs_test.go` | - |
 | gridwhole | proposed | - | `docs/probes/gridwhole-2026-11-22.md`<br>`tools/probes/gridwhole.py` | - |
 | knownedge | proposed | - | `internal/nav/fullgrid_test.go`<br>`internal/nav/roam.go`<br>`internal/nav/nav.go`<br>`internal/env/tuning_nav.go`<br>`internal/d2dworld/world.go`<br>`docs/knobs.md` | - |
+| fogtrail | proposed | - | `internal/senses/objective.go`<br>`internal/senses/objective_test.go`<br>`internal/watch/web/panels/map`<br>`internal/watch/testdata/map_panel.js`<br>`internal/watch/senses.go`<br>`internal/watch/senses_test.go`<br>`internal/nav/roam.go`<br>`internal/nav/objectiveview_test.go`<br>`cmd/d2bot/sensesfeed.go`<br>`docs/mapfog.md` | - |
 | vaultclean | proposed | - | `internal/watch/web/vault.html`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.json`<br>`internal/watch/vaultclean_test.go`<br>`internal/watch/testdata/vault_clean.mjs`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`tools/desktopscroll/vault.mjs`<br>`tools/uishots/fit.js`<br>`docs/ui/vault-cleanup`<br>`docs/vault.md`<br>`tools/uishots/vaultshots.sh` | - |
 | handinbtn | proposed | - | `internal/questboard/desk_action.go`<br>`internal/questboard/desk_action_test.go`<br>`internal/questboard/desk.go`<br>`internal/watch/web/panels/quest-board/panel.js`<br>`internal/watch/testdata/questui/quest_ui.mjs`<br>`internal/watch/testdata/quests/`<br>`cmd/d2scenario/tap.go`<br>`cmd/d2scenario/tap_test.go`<br>`docs/questboard.md` | - |
 | warptrigger | proposed | - | `docs/probes/warptrigger-2026-11-22.md`<br>`internal/d2dctl/warptriggers.go`<br>`internal/d2dctl/warptriggers_test.go`<br>`internal/d2dctl/fake/fake.go`<br>`internal/nav/mouthgate.go`<br>`internal/nav/warpread_test.go`<br>`internal/d2map/static.go`<br>`internal/d2dworld/triggers_test.go`<br>`internal/d2denv/env.go` | `fork-branch:didle/warp-triggers-20261122` |
@@ -432,6 +433,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 52978338f 11-22 00:25 `Merge agent/map5: Merge origin/main into fogtrail` (map5)
+- aa0829869 11-22 00:20 `Merge origin/main into fogtrail` (-)
 - 0572c3a6a 11-22 00:11 `Merge agent/map4: Merge origin/main into exitsread` (map4)
 - 3c7c1fa8f 11-22 00:08 `Merge origin/main into exitsread` (-)
 - 5e3f23a9a 11-22 00:01 `Merge agent/map3: Merge branch 'main' into warptrigger` (map3)
@@ -440,6 +443,4 @@
 - 360c4e719 11-21 23:54 `Merge branch 'main' into handinbtn` (-)
 - 2ea26f220 11-21 23:51 `Merge origin/main into warptrigger` (-)
 - 1b28118d7 11-21 23:43 `Merge agent/map2: Merge origin/main into knownedge` (map2)
-- e23addaa3 11-21 23:25 `Merge origin/main into knownedge` (-)
-- 7945ad776 11-21 23:24 `Merge agent/map1: Merge branch 'main' into gridwhole` (map1)
 <!-- statusgen:end -->

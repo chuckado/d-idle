@@ -297,6 +297,7 @@ cmd/d2bot/resetwire_test.go  credit-runner  resetinstant
 cmd/d2bot/resource_test.go  credit-runner  agencyp0
 cmd/d2bot/resource_test.go  credit-runner  freshstart
 cmd/d2bot/sensesfeed.go  credit-runner  botcpu
+cmd/d2bot/sensesfeed.go  credit-runner  fogtrail
 cmd/d2bot/sensesfeed.go  credit-runner  maptrail
 cmd/d2bot/sensesfeed_test.go  credit-runner  botcpu
 cmd/d2bot/sensesfeed_test.go  credit-runner  maptrail
@@ -539,6 +540,7 @@ docs/lootrules.md  credit-runner  lootrules
 docs/lootrules.md  credit-runner  lootwire3
 docs/lootrules.md  credit-runner  lootwireL4
 docs/lootrules.md  credit-runner  vaultv3
+docs/mapfog.md  credit-runner  fogtrail
 docs/merc-revive.md  credit-runner  botmerc
 docs/mercrevive.md  credit-runner  mercrevive2
 docs/onboarding-tour.md  credit-runner  onboardtour
@@ -1356,8 +1358,10 @@ internal/nav/nav.go  credit-runner  countess3b
 internal/nav/nav.go  credit-runner  knownedge
 internal/nav/nav.go  credit-runner  maphistoryC
 internal/nav/nav.go  credit-runner  pursuers
+internal/nav/objectiveview_test.go  credit-runner  fogtrail
 internal/nav/pursuit.go  credit-runner  pursuers
 internal/nav/pursuit_test.go  credit-runner  pursuers
+internal/nav/roam.go  credit-runner  fogtrail
 internal/nav/roam.go  credit-runner  knownedge
 internal/nav/roam.go  credit-runner  maphistoryC
 internal/nav/roam.go  credit-runner  maptrail
@@ -1475,6 +1479,8 @@ internal/senses  credit-runner  maphistoryB
 internal/senses  credit-runner  maphistoryC
 internal/senses  credit-runner  maptrail
 internal/senses/coverage.go  credit-runner  maptrail2
+internal/senses/objective.go  credit-runner  fogtrail
+internal/senses/objective_test.go  credit-runner  fogtrail
 internal/senses/trail_test.go  credit-runner  maptrail2
 internal/skilltree  credit-runner  skilltrees
 internal/skilltree  credit-runner  skilltrees2
@@ -1716,6 +1722,7 @@ internal/watch/resetui_test.go  credit-runner  botreset
 internal/watch/resetui_test.go  credit-runner  resetinstant
 internal/watch/returnscreen.go  credit-runner  q4runes
 internal/watch/returnscreen_test.go  credit-runner  q4runes
+internal/watch/senses.go  credit-runner  fogtrail
 internal/watch/senses.go  credit-runner  maphistory
 internal/watch/senses.go  credit-runner  maphistoryA
 internal/watch/senses.go  credit-runner  maphistoryB
@@ -1724,6 +1731,7 @@ internal/watch/senses.go  credit-runner  maphistoryD
 internal/watch/senses.go  credit-runner  maptrail
 internal/watch/senses.go  credit-runner  maptrail2
 internal/watch/senses_stitch_test.go  credit-runner  maptrail
+internal/watch/senses_test.go  credit-runner  fogtrail
 internal/watch/senses_test.go  credit-runner  maphistory
 internal/watch/senses_test.go  credit-runner  maphistoryA
 internal/watch/senses_test.go  credit-runner  maphistoryB
@@ -1771,6 +1779,7 @@ internal/watch/testdata/layout_default.js  credit-runner  uis7
 internal/watch/testdata/logpanel  credit-runner  friendfb
 internal/watch/testdata/logpanel  credit-runner  vaultv4
 internal/watch/testdata/logpanel/  credit-runner  uis6
+internal/watch/testdata/map_panel.js  credit-runner  fogtrail
 internal/watch/testdata/map_panel.js  credit-runner  maphistory
 internal/watch/testdata/map_panel.js  credit-runner  maphistoryA
 internal/watch/testdata/map_panel.js  credit-runner  maphistoryB
@@ -1949,6 +1958,7 @@ internal/watch/web/panels/journey-strip/  credit-runner  uis3
 internal/watch/web/panels/log  credit-runner  friendfb
 internal/watch/web/panels/log  credit-runner  vaultv4
 internal/watch/web/panels/log/  credit-runner  uis6
+internal/watch/web/panels/map  credit-runner  fogtrail
 internal/watch/web/panels/map  credit-runner  maphistory
 internal/watch/web/panels/map  credit-runner  maphistoryA
 internal/watch/web/panels/map  credit-runner  maphistoryB
