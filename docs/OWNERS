@@ -660,6 +660,7 @@ docs/questboard.md  credit-runner  quests4
 docs/questboard.md  credit-runner  quests7
 docs/questboard.md  credit-runner  quests7b
 docs/questboard.md  credit-runner  quests8
+docs/questboard.md  credit-runner  staleaccept
 docs/questspec.md  credit-runner  questspec
 docs/releases/0.1.0.md  credit-runner  cut010b
 docs/releases/0.1.0.md  credit-runner  cut010d
@@ -1427,8 +1428,11 @@ internal/questboard/desk_test.go  credit-runner  andariel1
 internal/questboard/desk_test.go  credit-runner  questrun
 internal/questboard/exec.go  credit-runner  bsm4
 internal/questboard/exec.go  credit-runner  questrun
+internal/questboard/exec.go  credit-runner  staleaccept
 internal/questboard/exec_sm.go  credit-runner  bsm4
+internal/questboard/exec_sm.go  credit-runner  staleaccept
 internal/questboard/exec_sm_test.go  credit-runner  bsm4
+internal/questboard/exec_stale_test.go  credit-runner  staleaccept
 internal/questboard/sm.go  credit-runner  bsm2
 internal/questboard/sm_reason.go  credit-runner  bsm2
 internal/questboard/sm_test.go  credit-runner  bsm2
@@ -2191,6 +2195,7 @@ tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/behaviours.json  credit-runner  vaultequip
 tools/provingground/scenarios/board.json  credit-runner  bsm1
 tools/provingground/scenarios/board.json  credit-runner  bsm7
+tools/provingground/scenarios/board.json  credit-runner  staleaccept
 tools/provingground/scenarios/cain.json  credit-runner  boardorder
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
