@@ -146,6 +146,137 @@
       ]
     },
     {
+      "id": "vault.reveal-all",
+      "title": "Vault: Identify all reveals the whole vault in one order and takes the exact gold from the stash",
+      "kind": "behaviour",
+      "tier": "full",
+      "status": "active",
+      "covers": [
+        "town.vault"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/bulkid/",
+        "internal/d2dctl/paygold.go",
+        "cmd/d2bot/vaultkeep.go"
+      ],
+      "pre": {
+        "level": 20,
+        "gold": 500,
+        "stash": 7200,
+        "vault_records": {
+          "items": [
+            {
+              "code": "cap",
+              "quality": 4,
+              "unid": true,
+              "bare": true,
+              "n": 10
+            },
+            {
+              "code": "lea",
+              "quality": 4,
+              "unid": true,
+              "bare": true,
+              "n": 10
+            },
+            {
+              "code": "buc",
+              "quality": 4,
+              "unid": true,
+              "sealed": "7:0:20;93:0:10",
+              "n": 10
+            }
+          ]
+        }
+      },
+      "trigger": {
+        "goals": "reach:25",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultRevealGold": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/revealgold",
+            "body": {
+              "scope": "all_unrevealed",
+              "maxGold": 0,
+              "confirm": true
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 20,
+        "wall_min": 4
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "provenance": "SETUP (CHEATED, mechanics only): level, gold and stash gold by stat verbs; 30 unidentified vault records are real magic items given by `debug give ... unid` and taken into the vault by the runner, 20 of them WITHOUT held affixes (bare, so the order decodes their own bytes) and 10 with held affixes. UNMEASURED run: the order pays from the stash with `debug paygold` (ADR 0029), a player-paid write the fork refuses under --lockstep, so the bot phase runs d2d in real time with --vault-pay; the one paygold write per order is the thing under test. Mechanics evidence only, never balance.",
+      "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the whole-vault order was accepted without any id"
+        },
+        {
+          "kind": "vault_revealed",
+          "min": 30,
+          "max": 30,
+          "why": "every unrevealed record of the vault is revealed, sealed or bare"
+        },
+        {
+          "kind": "vault_log",
+          "pattern": "^revealed",
+          "min": 30,
+          "why": "thirty reveals in the journal"
+        },
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "path": "order.paid",
+          "equals": 2400,
+          "why": "the one order took 30 x 80 = 2400 gold from the stash (one paygold ledger line, once per order id)"
+        },
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "path": "order.done",
+          "equals": 30,
+          "why": "the order reports 30 revealed"
+        },
+        {
+          "kind": "stash_between",
+          "min": 3000,
+          "max": 4800,
+          "why": "7200 less the 2400 order, less the bot own town spending in real time (about 50 to 1700 in the runs seen)"
+        }
+      ],
+      "notes": "Hero in town, 30 unidentified vault records (20 bare, 10 sealed), stash 7200, knob loot.vaultRevealGold 1. One POST {scope: all_unrevealed} with no ids: the bot lists the records itself, pays 2400 from the stash in one paygold request and reveals all 30 in the same request. RED before the scope exists is a 400 on the body; GREEN is 30 revealed and the exact gold gone.",
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "vault.paygold",
+        "item.decode"
+      ]
+    },
+    {
       "id": "vault.reveal-gold-short",
       "title": "Vault: a short purse reveals what it can pay and says so",
       "kind": "behaviour",
