@@ -1,10 +1,11 @@
 ---
 id: TASK-793
 title: 'vaultdesktop: Vault page scrolls as one document on desktop'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T00:46:00Z'
+updated_date: '2026-11-22T01:21:00Z'
 labels:
   - watch
   - bug
