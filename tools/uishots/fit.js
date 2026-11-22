@@ -575,7 +575,10 @@ function navPage(win, d, vis, cs) {
     for (const n of d.body.querySelectorAll('*')) {
       if (nav.contains(n) || n.closest('.d-menu-pop, .d-toasts, .d-drawer, .d-drawer-back, [role="dialog"], .vt-toast, .vt-detail, .cv-sel, .inv-tip, .inv-act, script, style')) continue;
       const nr = vis(n);
-      if (!nr || cs(n).position === 'fixed' || cs(n).visibility === 'hidden') continue;
+      if (!nr || cs(n).visibility === 'hidden') continue;
+      let layer = false; // a fixed layer (the Reset progress, the pause banner) is not page content
+      for (let p = n; p && p !== d.body; p = p.parentElement) if (cs(p).position === 'fixed') { layer = true; break; }
+      if (layer) continue;
       let bottom = nr.bottom;
       for (let p = n.parentElement; p && p !== d.body && p !== d.documentElement; p = p.parentElement) { if (cs(p).overflowY !== 'visible' && cs(p).overflowY !== 'clip') bottom = Math.min(bottom, p.getBoundingClientRect().bottom); }
       if (bottom > low) { low = bottom; who = n.tagName.toLowerCase() + (typeof n.className === 'string' && n.className ? '.' + n.className.trim().split(/\s+/)[0] : ''); }

@@ -77,3 +77,9 @@
     .cs-card { transition: border-color var(--d-dur-2) var(--d-ease); }
   }
 }
+
+/* The shared navigation adds a band above the page on a wide window (web/nav.js): the page and the band share the window, so the page is a column. */
+@layer panels {
+  body[data-chars] { display: flex; flex-direction: column; block-size: calc(100dvh - var(--d-nav-h, 0px)); overflow: hidden; }
+  body[data-chars] > .cs { flex: 1 1 0; block-size: auto; min-block-size: 0; }
+}

@@ -1,5 +1,10 @@
 package watch
 
+import (
+	"io"
+	"net/http"
+)
+
 // The Points page (docs/points.md): the sheet of GET /api/hero/points with one + button per attribute, the banked skill
 // points with a link to the skills page, the per-hero autopilot switch and the trail of what came through the API. web/points.js
 // draws it; every text goes through textContent and nothing is inline (CSP style-src 'self').
@@ -61,3 +66,18 @@ const pointsPage = `<!DOCTYPE html>
 <script src="/watch/nav.js"></script>
 <script type="module" src="/watch/shell.js"></script>
 <script src="/watch/points.js"></script></body></html>`
+
+// MountPointsPage serves the page and its two assets without a desk behind them, for the screenshot suite's fixture viewer.
+func MountPointsPage(m *http.ServeMux) {
+	m.HandleFunc("/watch/points", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		io.WriteString(w, pointsPage)
+	})
+	for _, f := range []struct{ name, ct string }{{"points.js", "text/javascript; charset=utf-8"}, {"points.css", "text/css; charset=utf-8"}} {
+		m.HandleFunc("/watch/"+f.name, func(w http.ResponseWriter, r *http.Request) {
+			b, _ := webFS.ReadFile("web/" + f.name)
+			w.Header().Set("Content-Type", f.ct)
+			w.Write(b)
+		})
+	}
+}

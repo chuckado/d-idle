@@ -125,7 +125,7 @@
   .d-shell[data-template="cockpit"] > .d-editbar { position: fixed; inset-block-end: var(--c-gap); inset-inline-start: 50%; transform: translateX(-50%); max-inline-size: calc(100% - 2 * var(--c-gap)); margin: 0; flex-wrap: nowrap; z-index: var(--d-z-sheet); }
   .d-shell[data-template="cockpit"] > .d-editbar :is(.what, .d-btn) { white-space: nowrap; }
   .d-shell[data-template="cockpit"] > .d-editbar .keys { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
-  .d-main[data-template="cockpit"] { --c-fh: calc(100dvh - var(--d-banner-h, 0px) - var(--c-band) - 2 * var(--c-gap)); --c-stageh: var(--c-fh);
+  .d-main[data-template="cockpit"] { --c-fh: calc(100dvh - var(--d-banner-h, 0px) - var(--d-nav-h, 0px) - var(--c-band) - 2 * var(--c-gap)); --c-stageh: var(--c-fh);
     --c-left: minmax(0, min(calc(var(--c-stageh) * 4 / 3), calc(100% - var(--c-railmin) - var(--c-gap))));
     display: grid; gap: var(--c-gap); padding: var(--c-gap); min-block-size: 0; min-inline-size: 0; align-items: stretch; position: relative;
     grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); grid-template-areas: "s"; }
