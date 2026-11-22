@@ -208,6 +208,7 @@ func (k *Keeper) EnqueueRevealGold(ctx context.Context, ids []string, maxGold in
 		v := k.goldView(k.order())
 		return out, &v
 	}
+	k.FillSealed(ctx, ids) // records that hold no affixes get them from their own bytes (read-only in the game)
 	res = make([]Result, len(ids))
 	var ok []string
 	at := map[string]int{}
@@ -485,6 +486,7 @@ type GoldFacts struct {
 	On                    bool
 	Price, Stash, Confirm int
 	Why                   string // why the bar offers no gold although it is on ("" when it can)
+	Decode                bool   // the fork answers `item decode`: records that hold no affixes are decoded from their own bytes at the order
 }
 
 // GoldFacts reads them; an unreadable stash counts as empty.
@@ -495,8 +497,11 @@ func (k *Keeper) GoldFacts(ctx context.Context) GoldFacts {
 	}
 	f.Price = k.Payer.Price()
 	if k.API != nil {
-		if caps, known, err := k.vaultCaps(ctx, false); err == nil && known && !caps.PayGold {
-			f.Why = ReasonGoldNoFlag
+		if caps, known, err := k.vaultCaps(ctx, false); err == nil && known {
+			f.Decode = caps.Decode
+			if !caps.PayGold {
+				f.Why = ReasonGoldNoFlag
+			}
 		}
 	}
 	if s, err := k.Payer.Stash(ctx); err == nil {

@@ -8,17 +8,18 @@ import (
 )
 
 // Tower Cellar Level 5 on d2d (V, job 20261121-005917, Paladin 11, K1 fork): the stairs from level 24 list at (130,60),
-// the hero stands at (125,76), the Countess' read stand is (21,70), 100 subtiles west and outside the known map, so
-// the planner's next waypoint is the known grid's edge (121,70), 13.5 from the stairs, and the gate refused it for good
-// ("click {121 70}: no path: the click would cross the trigger area of an unwanted exit"). The nav has no class data:
-// the Paladin and the Sorceress differ only in where the walk starts.
+// the hero stands at (125,76), the Countess' read stand is (21,70), 100 subtiles west of the hero. The level grid is
+// 150 x 150 subtiles and whole at arrival (V, docs/probes/gridwhole-2026-11-22.md), so (21,70) and the planner's next
+// waypoint (121,70), 13.5 from the stairs, are both inside the known map: (121,70) was the first corner of a normal path,
+// not a grid edge, and the gate refused it for good ("click {121 70}: no path: the click would cross the trigger area of
+// an unwanted exit"). The nav has no class data: the Paladin and the Sorceress differ only in where the walk starts.
 var (
 	cellar5Stairs = d2map.Exit{Dest: 24, Pos: d2map.Point{X: 130, Y: 60}}
 	cellar5Goal   = input.Point{X: 21, Y: 70}
 	cellar5Edge   = input.Point{X: 121, Y: 70}
 )
 
-// cellar5Nav: an open level whose known map starts at x=120 (the Countess' side is not up yet).
+// cellar5Nav: an open level, known whole (like a d2d level).
 func cellar5Nav(t *testing.T, start input.Point) (*sim, *Navigator) {
 	t.Helper()
 	s, n := newKnown(t, openField(20, 20, 200, 120), start, true)
