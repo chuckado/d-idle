@@ -1,0 +1,214 @@
+{
+  "version": "didle.scenario/1",
+  "scenarios": [
+    {
+      "id": "vault.sell-all",
+      "title": "Vault: Sell all sells exactly the unmanaged records (the bot lists them), pinned and ordered ones stay",
+      "kind": "behaviour",
+      "tier": "full",
+      "status": "active",
+      "covers": [
+        "town.vault"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/d2dctl/credit.go",
+        "internal/vault/store.go",
+        "internal/watch/vaultapi.go",
+        "cmd/d2bot/vaultkeep.go",
+        "internal/vaultkeep/sellall.go",
+        "internal/watch/web/vault.js"
+      ],
+      "pre": {
+        "level": 30,
+        "gold": 500,
+        "stash": 7200,
+        "vault_records": {
+          "items": [
+            {
+              "code": "hax",
+              "quality": 4,
+              "pin": true
+            },
+            {
+              "code": "ssd",
+              "quality": 4,
+              "pin": true
+            },
+            {
+              "code": "buc",
+              "quality": 4,
+              "pin": true
+            },
+            {
+              "code": "sst",
+              "quality": 4,
+              "pin": true
+            },
+            {
+              "code": "wsp",
+              "quality": 4,
+              "pin": true
+            },
+            {
+              "code": "rin",
+              "quality": 4,
+              "pin": true
+            },
+            {
+              "code": "cap",
+              "quality": 4
+            },
+            {
+              "code": "amu",
+              "quality": 4
+            },
+            {
+              "code": "lbt",
+              "quality": 4
+            },
+            {
+              "code": "lgl",
+              "quality": 4
+            }
+          ],
+          "count": 20,
+          "quality": "magic"
+        }
+      },
+      "trigger": {
+        "goals": "reach:25",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultSellInstant": 1,
+          "loot.vaultEquip": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.6.id}}"
+              ],
+              "slot": "auto",
+              "now": true
+            }
+          },
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.7.id}}"
+              ],
+              "slot": "auto",
+              "now": true
+            }
+          },
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.8.id}}"
+              ],
+              "slot": "auto",
+              "now": true
+            }
+          },
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.9.id}}"
+              ],
+              "slot": "auto",
+              "now": true
+            }
+          },
+          {
+            "after_s": 20,
+            "path": "/api/vault/sell",
+            "body": {
+              "scope": "all_sellable",
+              "orderId": "scn-sellall-1",
+              "confirm": true
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 20,
+        "wall_min": 4
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "provenance": "SETUP (CHEATED, mechanics only): level, gold and stash gold by stat verbs; the 30 vault records are real magic items given by `debug give` and taken into the vault by the runner (6 pinned, 4 wearable ones that four equip orders hold, 20 plain). UNMEASURED run: the sale credits the stash with `debug creditgold` (ADR 0029 amendment, player-ordered write, refused under --lockstep), so the bot phase runs d2d in real time with --vault-pay. Mechanics evidence only, never balance.",
+      "assert": [
+        {
+          "kind": "api_reply",
+          "index": 4,
+          "status": 200,
+          "ok": true,
+          "why": "Sell all was accepted"
+        },
+        {
+          "kind": "api_reply",
+          "index": 4,
+          "status": 200,
+          "path": "sale.state",
+          "equals": "done",
+          "why": "the order ended done"
+        },
+        {
+          "kind": "api_reply",
+          "index": 4,
+          "status": 200,
+          "path": "sale.all",
+          "equals": true,
+          "why": "it was the whole-vault order, listed by the bot"
+        },
+        {
+          "kind": "vault_sold",
+          "min": 20,
+          "max": 20,
+          "index": 4,
+          "why": "exactly the 20 plain records left the vault and the stash grew by the sum of their engine prices (reply, records and stash agree)"
+        },
+        {
+          "kind": "vault_log",
+          "pattern": "^sold",
+          "min": 20,
+          "max": 20,
+          "why": "twenty sold lines, no more: no pinned or ordered record was sold"
+        },
+        {
+          "kind": "vault_api",
+          "path": "capacity.pins",
+          "equals": 6,
+          "why": "the six pinned records are intact"
+        }
+      ],
+      "notes": "Hero in town, 30 magic vault records: 6 pinned, 4 wearable ones with an equip order each (posted in the same second, `now`), 20 plain; knob loot.vaultSellInstant 1. One POST of scope all_sellable with an order id, no ids: the bot lists the records under the sale lock. Expected: exactly the 20 plain records are Sold, the stash rose by exactly sale.gold, the pinned records are untouched, the four ordered records are not sold (still in the vault under their order, or already worn), one `debug creditgold` ledger line `player vault sale order sa-scn-sellall-1` before the verb with the count and the gold. Needs the devp20 lab d2d (docs in the ops repo). NOT RUN here: no lab in the worker run; see the checklist in the task result.",
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.decode",
+        "item.price",
+        "vault.creditgold"
+      ]
+    }
+  ]
+}

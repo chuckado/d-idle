@@ -445,7 +445,17 @@ func saleOf(v *vaultkeep.SaleView) *watch.VaultSale {
 	if v == nil {
 		return nil
 	}
-	return &watch.VaultSale{ID: v.ID, State: v.State, Items: v.Items, Done: v.Done, Gold: v.Gold, StashBefore: v.StashBefore, StashAfter: v.StashAfter, Note: v.Note, Line: v.Line}
+	out := &watch.VaultSale{ID: v.ID, State: v.State, Items: v.Items, Done: v.Done, Gold: v.Gold, StashBefore: v.StashBefore, StashAfter: v.StashAfter, Note: v.Note, Line: v.Line, All: v.All}
+	out.Skipped = reasonsOf(v.Skipped)
+	return out
+}
+
+func reasonsOf(rs []vaultkeep.SaleReason) []watch.VaultSaleReason {
+	var out []watch.VaultSaleReason
+	for _, r := range rs {
+		out = append(out, watch.VaultSaleReason{Code: r.Code, N: r.N, Why: r.Why})
+	}
+	return out
 }
 
 // SaleOn, SaleQuote and SellNow are the instant sale (watch.VaultSaleActor).
@@ -466,10 +476,36 @@ func (f actFace) SaleQuote(ctx context.Context, ids []string) watch.VaultSaleQuo
 	for _, l := range q.Lines {
 		out.Lines = append(out.Lines, watch.VaultSaleLine{ID: l.ID, Gold: l.Gold})
 	}
-	for _, r := range q.Reasons {
-		out.Reasons = append(out.Reasons, watch.VaultSaleReason{Code: r.Code, N: r.N, Why: r.Why})
-	}
+	out.Reasons = reasonsOf(q.Reasons)
 	return out
+}
+
+// SellAllQuote, SellAll and SellAllIDs are the whole-vault sale (watch.VaultSellAllActor).
+func (f actFace) SellAllQuote(ctx context.Context) watch.VaultSaleQuote {
+	k := f.k()
+	if k == nil {
+		return watch.VaultSaleQuote{Why: "this bot has no Sell"}
+	}
+	q := k.SellAllPlan(ctx).Quote
+	out := watch.VaultSaleQuote{Asked: q.Asked, Total: q.Total, Stash: q.Stash, StashAfter: q.StashAfter, Room: q.Room, ConfirmAt: q.ConfirmAt, Why: q.Why, Count: len(q.Lines)}
+	out.Reasons = reasonsOf(q.Reasons)
+	return out
+}
+
+func (f actFace) SellAll(ctx context.Context, orderID string) (string, string, *watch.VaultSale) {
+	k := f.k()
+	if k == nil {
+		return "off", "this bot has no Sell", nil
+	}
+	o := k.SellAll(ctx, orderID)
+	return o.Code, o.Why, saleOf(o.View)
+}
+
+func (f actFace) SellAllIDs() []string {
+	if k := f.k(); k != nil {
+		return k.SellAllIDs()
+	}
+	return nil
 }
 
 func (f actFace) SellNow(ctx context.Context, ids []string, confirm bool) ([]watch.VaultKeepResult, *watch.VaultSale) {
@@ -531,6 +567,8 @@ func (f actFace) Act(ctx context.Context) watch.VaultActView {
 		v.Sell.Enabled, v.Sell.Why, v.Sell.Code = true, "", ""
 	}
 	v.Sell.Sale = saleOf(k.SaleView())
+	n, left := k.SellAllCount()
+	v.Sell.All = &watch.VaultSellAll{N: n, Left: reasonsOf(left)}
 	if o := k.Offer(); o != nil {
 		v.Prompt = &watch.VaultPrompt{Short: o.Short, IDs: o.IDs, Gold: o.Gold, Names: o.Names}
 	}
