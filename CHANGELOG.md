@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge origin/main into exitsread <!--sg:agent/map4-->
 - Merge branch 'main' into warptrigger <!--sg:agent/map3-->
 - Merge branch 'main' into handinbtn <!--sg:agent/handinbtn-->
 - Merge origin/main into knownedge <!--sg:agent/map2-->

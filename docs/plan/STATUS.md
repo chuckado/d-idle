@@ -396,6 +396,7 @@
 | vaultclean | proposed | - | `internal/watch/web/vault.html`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.json`<br>`internal/watch/vaultclean_test.go`<br>`internal/watch/testdata/vault_clean.mjs`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`tools/desktopscroll/vault.mjs`<br>`tools/uishots/fit.js`<br>`docs/ui/vault-cleanup`<br>`docs/vault.md`<br>`tools/uishots/vaultshots.sh` | - |
 | handinbtn | proposed | - | `internal/questboard/desk_action.go`<br>`internal/questboard/desk_action_test.go`<br>`internal/questboard/desk.go`<br>`internal/watch/web/panels/quest-board/panel.js`<br>`internal/watch/testdata/questui/quest_ui.mjs`<br>`internal/watch/testdata/quests/`<br>`cmd/d2scenario/tap.go`<br>`cmd/d2scenario/tap_test.go`<br>`docs/questboard.md` | - |
 | warptrigger | proposed | - | `docs/probes/warptrigger-2026-11-22.md`<br>`internal/d2dctl/warptriggers.go`<br>`internal/d2dctl/warptriggers_test.go`<br>`internal/d2dctl/fake/fake.go`<br>`internal/nav/mouthgate.go`<br>`internal/nav/warpread_test.go`<br>`internal/d2map/static.go`<br>`internal/d2dworld/triggers_test.go`<br>`internal/d2denv/env.go` | `fork-branch:didle/warp-triggers-20261122` |
+| exitsread | proposed | - | `docs/probes/exitsread-2026-11-22.md`<br>`tools/probes/exitsread.py`<br>`tools/probes/exitscmp`<br>`internal/nav/hints_export.go`<br>`internal/nav/exitsread_test.go`<br>`internal/nav/route.go` | - |
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -431,6 +432,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0572c3a6a 11-22 00:11 `Merge agent/map4: Merge origin/main into exitsread` (map4)
+- 3c7c1fa8f 11-22 00:08 `Merge origin/main into exitsread` (-)
 - 5e3f23a9a 11-22 00:01 `Merge agent/map3: Merge branch 'main' into warptrigger` (map3)
 - 2c188690b 11-22 00:00 `Merge branch 'main' into warptrigger` (-)
 - 554e65ea4 11-21 23:55 `Merge agent/handinbtn: Merge branch 'main' into handinbtn` (handinbtn)
@@ -439,6 +442,4 @@
 - 1b28118d7 11-21 23:43 `Merge agent/map2: Merge origin/main into knownedge` (map2)
 - e23addaa3 11-21 23:25 `Merge origin/main into knownedge` (-)
 - 7945ad776 11-21 23:24 `Merge agent/map1: Merge branch 'main' into gridwhole` (map1)
-- f2fcf4c92 11-21 23:23 `Merge branch 'main' into gridwhole` (-)
-- ed908ec7b 11-21 23:04 `Merge agent/vaultclean: vaultclean: unid badge placement, desktopscroll chrome check, pictures, docs, task card` (vaultclean)
 <!-- statusgen:end -->

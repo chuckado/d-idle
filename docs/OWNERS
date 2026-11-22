@@ -572,6 +572,7 @@ docs/probes/cainl2  credit-runner  cainl2
 docs/probes/cainl3  live-agent  cainl3
 docs/probes/chores2-2026-11-21.md  credit-runner  chores2
 docs/probes/deploy-cockpit-2026-11-15.md  credit-runner  deploycockpit
+docs/probes/exitsread-2026-11-22.md  credit-runner  exitsread
 docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
 docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
@@ -1344,9 +1345,11 @@ internal/nav/cpuprobe_test.go  credit-runner  botcpu
 internal/nav/exit.go  credit-runner  andariel1
 internal/nav/exit.go  credit-runner  pursuers
 internal/nav/exit_test.go  credit-runner  andariel1
+internal/nav/exitsread_test.go  credit-runner  exitsread
 internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/fullgrid_test.go  credit-runner  knownedge
+internal/nav/hints_export.go  credit-runner  exitsread
 internal/nav/mouthgate.go  credit-runner  botstuck
 internal/nav/mouthgate.go  credit-runner  warptrigger
 internal/nav/nav.go  credit-runner  countess3b
@@ -1360,6 +1363,7 @@ internal/nav/roam.go  credit-runner  maphistoryC
 internal/nav/roam.go  credit-runner  maptrail
 internal/nav/roam.go  credit-runner  pursuers
 internal/nav/route.go  credit-runner  cainchain
+internal/nav/route.go  credit-runner  exitsread
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
@@ -2151,6 +2155,8 @@ tools/levelsim/shadow_test.go  credit-runner  survB
 tools/lib/heavy-guard-test.sh  credit-runner  heavyguard
 tools/lib/heavy-guard.sh  credit-runner  heavyguard
 tools/play-session.sh  credit-runner  playsession
+tools/probes/exitscmp  credit-runner  exitsread
+tools/probes/exitsread.py  credit-runner  exitsread
 tools/probes/gridwhole.py  credit-runner  gridwhole
 tools/provingground/  credit-runner  dlv-reads
 tools/provingground/  credit-runner  pgexpand
