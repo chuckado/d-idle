@@ -1,17 +1,20 @@
 ---
 id: TASK-823
-title: 'uinav2: one shared navigation on every page, Skills area sub-tabs, old layout bar (review E4)'
-status: Proposed
-result: "Verified offline, not on a real phone: Go tests (TestNavEveryPage, TestNavJS, TestPageLinkMatrix, TestFitNavJudge), node test of nav.js (renders, one aria-current, More sheet focus in, Escape, focus back, Skills sub-tabs), and the fixture-viewer fit check on the worker host (full run: 1665 ok against 1634 on origin/main, no page that passed before fails except one flaky must-fail that passes alone; all nav-* pages and navdefect-* pass or fail as they must). Built: web/nav.json, nav.js, nav.css; every page loads it (live, Gear, Skills, Points, Vault, Characters, Return, Policy, Hall of Fame); the ... menu and the Inventory phone list are the More sheet; Points is the Points and Build sub-tabs of the Skills area; Old layout name and standing Switch back bar; Edit layout hidden on a phone; Hall of Fame in More, Pacts unlinked. Fit findings fixed: phone cockpit frame, Characters and Vault pages share the window with the bar and band. Pre-existing fit reds (vault scroll, 2 px overflows on Gear) are unchanged. Not done: Loot rules from non-live pages, Settings sheet beyond Theme (needs E10)."
+title: >-
+  uinav2: one shared navigation on every page, Skills area sub-tabs, old layout
+  bar (review E4)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T20:46:00Z'
+updated_date: '2026-11-22T23:46:00Z'
 labels:
   - watch
   - feature
 dependencies: []
 priority: medium
 ordinal: 375000
+result: "Verified offline, not on a real phone: Go tests (TestNavEveryPage, TestNavJS, TestPageLinkMatrix, TestFitNavJudge), node test of nav.js (renders, one aria-current, More sheet focus in, Escape, focus back, Skills sub-tabs), and the fixture-viewer fit check on the worker host (full run: 1665 ok against 1634 on origin/main, no page that passed before fails except one flaky must-fail that passes alone; all nav-* pages and navdefect-* pass or fail as they must). Built: web/nav.json, nav.js, nav.css; every page loads it (live, Gear, Skills, Points, Vault, Characters, Return, Policy, Hall of Fame); the ... menu and the Inventory phone list are the More sheet; Points is the Points and Build sub-tabs of the Skills area; Old layout name and standing Switch back bar; Edit layout hidden on a phone; Hall of Fame in More, Pacts unlinked. Fit findings fixed: phone cockpit frame, Characters and Vault pages share the window with the bar and band. Pre-existing fit reds (vault scroll, 2 px overflows on Gear) are unchanged. Not done: Loot rules from non-live pages, Settings sheet beyond Theme (needs E10)."
 card: "uinav2"
 owns:
   - "internal/watch/web/nav.json"
