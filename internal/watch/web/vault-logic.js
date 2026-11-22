@@ -144,9 +144,8 @@ export function createSelection() {
 // The full banner follows loot.vaultAutoTrim: off (default) nothing is removed and new drops are not recorded.
 function fullBanner(c, T, v) {
   if (v && v.autoTrim) return T.fullBannerTrim;
-  const miss = v && v.missed && v.missed.count;
   const fmt = (s, o) => String(s || '').replace(/\{(\w+)\}/g, (m, k) => (o && o[k] !== undefined ? o[k] : ''));
-  return fmt(miss ? T.fullBannerMissed : T.fullBanner, { n: c.count, cap: c.capacity, missed: miss });
+  return fmt(T.fullBanner, { n: c.count, cap: c.capacity });
 }
 
 // capacityView words the meter: the text, the level the colour follows, the bar width and the banner (over capacity).
