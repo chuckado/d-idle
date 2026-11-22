@@ -17,6 +17,7 @@ const root = mk('div'); doc.body.append(root);
 const find = (k) => all(root).find((n) => n.dataset && n.dataset.key === k);
 const texts = () => all(root).filter((n) => !n.hidden).map((n) => n.textContent).filter(Boolean);
 const has = (s) => texts().some((t) => t.includes(s));
+const bt = (n) => (n.children && n.children.length ? n.children.map(bt).join(' ').trim() : n.textContent || ''); // the text of a button with a muted second line
 const sheet = () => all(root).find((n) => n.className === 'vt-sheet');
 
 const bar = (opts, def, total) => ({ total, default: def, line: 'line', options: opts });
@@ -37,11 +38,12 @@ const bartext = () => all(find('reveal-bar-go') ? root : root).filter((n) => !n.
 // gold is the cheapest full payer: it is picked, the title and the one press say what it costs; no notice paragraph
 act = { reveal: rev(bar([o('free', { ok: false, count: 0, ids: [], why: 'no scroll' }), o('ether', { count: 2, ids: ['v1', 'v2'], cost: 2, skipped: [{ n: 2, why: 'the vault holds no affixes for them' }] }), o('gold', { cost: 320, line: 'Gold: 320 (stash 700)' })], 'gold', 4), { on: true, order: null, stash: 700 }), sell };
 await page.start(); await tick();
-const rbx = all(root).find((n) => n.className === 'vt-revealbar');
+const rbx = all(root).find((n) => n.className === 'vt-actionbar');
 ok(rbx && !rbx.hidden, 'the bar shows');
-ok(has('Reveal 4 items in this filter'), 'title');
+ok(all(root).filter((n) => n.className === 'vt-actionbar').length === 1, 'exactly one action bar');
+ok(!all(root).some((n) => /\bvt-fold\b/.test(n.className || '')), 'no fold element');
 ok(find('pay-gold').attrs['aria-checked'] === 'true' && find('pay-ether').attrs['aria-checked'] === 'false', 'default is gold');
-ok(find('reveal-bar-go').textContent === 'Reveal 4 items for 320 gold (stash 700)', 'press words: ' + find('reveal-bar-go').textContent);
+ok(bt(find('reveal-bar-go')) === 'Reveal 4 items with gold cost 320, stash 700', 'press words: ' + bt(find('reveal-bar-go')));
 ok(!has('Cain is not rescued'), 'no notice paragraph');
 
 // the hidden payments (user decision 2026-11-21): with methods ['gold'] the page draws only the gold option; the Free and Ether
@@ -51,7 +53,7 @@ posts = [];
 act = { reveal: Object.assign(rev(bar([o('gold', { cost: 320, line: 'Gold: 320 (stash 700)' })], 'gold', 4), { on: true, order: null, stash: 700 }), { methods: ['gold'], etherPer: 1, charges: 3, note: 'Cain is not rescued: scrolls', line: 'scrolls: 3' }), sell };
 await page.reload(false);
 ok(find('pay-gold') && !find('pay-free') && !find('pay-ether'), 'only the gold option is in the DOM');
-ok(find('reveal-bar-go').textContent === 'Reveal 4 items for 320 gold (stash 700)', 'gold press words: ' + find('reveal-bar-go').textContent);
+ok(bt(find('reveal-bar-go')) === 'Reveal 4 items with gold cost 320, stash 700', 'gold press words: ' + bt(find('reveal-bar-go')));
 ok(find('reveal').hidden && find('reveal-ether').hidden && find('buy-scrolls').hidden, 'the scroll, Ether and Buy buttons are hidden');
 ok(!has('Cain is not rescued') && !has('scrolls: 3') && !has('no scroll or tome charge'), 'no scroll or Cain text: ' + texts().join(' | '));
 ok(has('Gold: 320 (stash 700)'), 'the gold line reads Gold: <total> (stash <S>)');
@@ -60,9 +62,10 @@ items = ['v1', 'v2', 'v3'].map((id) => ({ id, code: 'cap', name: 'Cap', state: '
 act = { reveal: Object.assign(rev(bar([o('gold', { cost: 160, count: 2, line: 'Gold: 160 (stash 200)' })], 'gold', 3), { on: true, order: null, stash: 200, scrollGold: 80, confirmAt: 0 }), { methods: ['gold'], etherPer: 1, charges: 7, balance: 937, note: 'Cain is not rescued', line: 'Revealing 16 items: at your next town visit' }), sell };
 await page.reload(false);
 await find('select-toggle').click(); await find('select-all').click();
-ok(find('reveal-gold') && !find('reveal-gold').hidden && find('reveal-gold').textContent === 'Reveal with gold (3)', 'the one gold button: ' + (find('reveal-gold') || {}).textContent);
+ok(find('select-done') && !find('select-done').hidden && find('select-toggle').hidden, 'Done replaces Select while selecting');
+ok(find('reveal-gold') && !find('reveal-gold').hidden && bt(find('reveal-gold')).startsWith('Reveal with gold (3)'), 'the one gold button: ' + bt(find('reveal-gold')));
 ok(find('reveal').hidden && find('reveal-ether').hidden && find('buy-scrolls').hidden, 'Reveal (charges), Reveal with Ether and Buy are hidden');
-ok(has('Reveal 3 items for 160 gold (stash 200); the stash pays for 2'), 'one gold cost line: ' + texts().join(' | '));
+ok(bt(find('reveal-gold')) === 'Reveal with gold (3) cost 160, stash 200; the stash pays for 2', 'the cost is the muted subtitle of the one gold button: ' + bt(find('reveal-gold')));
 ok(!texts().some((t) => /\bether\b|charge|scroll|cain/i.test(t)), 'no Ether, charges, scroll or Cain text while gold-only: ' + texts().filter((t) => /\bether\b|charge|scroll|cain/i.test(t)).join(' | '));
 posts = []; reply = { ok: true, done: ['v1', 'v2'] };
 await find('reveal-gold').click();
@@ -77,7 +80,7 @@ await page.reload(false);
 
 // the Ether pick and its press go to the ordinary route
 await find('pay-ether').click();
-ok(find('reveal-bar-go').textContent === 'Reveal 2 with 2 Ether' && has('2 skipped') && has('the vault holds no affixes'), 'ether words and the skipped line: ' + find('reveal-bar-go').textContent);
+ok(bt(find('reveal-bar-go')) === 'Reveal 2 with 2 Ether' && has('2 skipped') && has('the vault holds no affixes'), 'ether words and the skipped line: ' + bt(find('reveal-bar-go')));
 reply = { ok: true, done: ['v1', 'v2'] };
 await find('reveal-bar-go').click();
 ok(posts[0] === '/api/vault/reveal {"ids":["v1","v2"],"ether":true}', 'ether post ' + posts[0]);

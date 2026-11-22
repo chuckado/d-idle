@@ -274,6 +274,8 @@ export function revealBarModel(rev, pay, T) {
   m.goOff = !pick.ok || !rev.enabled && pick.id !== 'ether';
   if (m.goOff && !pick.ok) m.why = pick.why;
   else if (m.goOff) m.why = rev.why || '';
+  m.goLabel = m.go; m.goSub = '';
+  if (pick.id === 'gold') { m.goLabel = f2(n === 1 ? T.goGoldLabelOne : T.goGoldLabel, { n }); m.goSub = f2(T.goGoldSub, { cost: grp(pick.cost), stash: grp(rev.gold ? rev.gold.stash : 0) }); } // the cost is a muted line under the button's name
   m.confirm = !!pick.confirm;
   m.confirmAsk = pick.id === 'gold' ? f2(T.confirmGold, { cost: grp(pick.cost), n }) : '';
   m.skipped = (pick.skipped || []).map((s) => ({ n: s.n, why: s.why }));
