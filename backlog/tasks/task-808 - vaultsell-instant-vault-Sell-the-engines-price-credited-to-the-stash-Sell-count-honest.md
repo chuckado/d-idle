@@ -57,9 +57,9 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Sell count honest: button states n of N with reasons (node test, two fixtures)
-- [ ] #2 fork creditgold and item price verbs, tests green on the builder
-- [ ] #3 Sell removes records and credits the engine price at once (Go tests, Paladin and Sorceress)
-- [ ] #4 image d2dbot:devp20 loaded, sandbox untouched
-- [ ] #5 scenario vault.sell-instant green on a lab slot
+- [x] #1 Sell count honest: button states n of N with reasons (node test, two fixtures)
+- [x] #2 fork creditgold and item price verbs, tests green on the builder
+- [x] #3 Sell removes records and credits the engine price at once (Go tests, Paladin and Sorceress)
+- [x] #4 image d2dbot:devp20 loaded, sandbox untouched
+- [x] #5 scenario vault.sell-instant green on a lab slot
 <!-- AC:END -->
