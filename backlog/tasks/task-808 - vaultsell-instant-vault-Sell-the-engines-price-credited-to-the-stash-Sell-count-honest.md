@@ -1,10 +1,13 @@
 ---
 id: TASK-808
-title: 'vaultsell: instant vault Sell, the engine''s price credited to the stash, Sell count honest'
-status: Proposed
+title: >-
+  vaultsell: instant vault Sell, the engine's price credited to the stash, Sell
+  count honest
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T16:02:00Z'
+updated_date: '2026-11-22T16:51:00Z'
 labels:
   - watch
   - feature
