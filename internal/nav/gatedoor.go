@@ -14,46 +14,36 @@ import (
 // maxDoorTries bounds how often ExitTo opens the same gate door: a door that does not clear the way is not clicked again.
 const maxDoorTries = 2
 
-// gateDoorReach is how near (subtiles) a door must stand to a gate cell to be the thing that closes it.
-const gateDoorReach = 12.0
+// gateDoorReach is how near (subtiles) a door must stand to both sides of the wall it shuts: the character's side
+// and the gate's side. A door is one subtile pair wide in the grid, its side cells are a few cells off its centre.
+const gateDoorReach = 14.0
 
-// openGateDoor: a gate to levelNo is on the map but no plan reaches it, and a door object stands beside it. V live
-// (card mapverify, probe tools/probes/strip.py): the 2 cells of the Monastery Gate border toward the Outer Cloister
-// sit behind an object (class 24, collision blocked until it is used), cut off from the rest of the grid; S that using
-// it opens the cell. Walk next to the door, use it once, and let the planner re-read the grid. It reports whether it
-// acted (the caller then observes again); false when there is no such door or it was tried enough.
+// openGateDoor: a gate to levelNo is on the map but no plan reaches it, and a door object stands between the
+// character's part of the level and the gate's. V live (card mapverify, probe tools/probes/strip.py, scenario
+// act1.andariel.slaughter): the Monastery Gate has two doors in the way of the Outer Cloister, class 27 across the
+// arrival area and class 24 on the 2 cells of the border itself, both objects.txt "Door", collision blocked until used;
+// S that using one opens its cells. Walk next to the door, use it once, and let the planner re-read the grid. It
+// reports whether it acted (the caller then observes again); false when there is no such door or it was tried enough.
 func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool {
 	cands := n.gateCands(o, levelNo)
 	if len(cands) == 0 {
 		return false
 	}
-	// The map's object presets, not the snapshot: the snapshot lists the objects near the character only, and the gate
-	// is usually far away when the cut-off shows (V live: the hero stood 80 subtiles off).
-	var at input.Point
-	best, found := gateDoorReach, false
+	// The map's object presets and the snapshot's objects: the presets list the rooms that are up, the snapshot the
+	// objects near the character.
+	var doors []input.Point
 	for _, p := range o.lm.Presets {
-		if p.Kind != d2map.PresetObject || !n.isDoorClass(p.ID) || n.doorTried[p.Pos] >= maxDoorTries {
-			continue
-		}
-		for _, c := range cands {
-			if d := dist(input.Point{X: p.Pos.X, Y: p.Pos.Y}, c.at); d < best {
-				at, best, found = input.Point{X: p.Pos.X, Y: p.Pos.Y}, d, true
-			}
+		if p.Kind == d2map.PresetObject && n.isDoorClass(p.ID) && n.doorTried[p.Pos] < maxDoorTries {
+			doors = append(doors, input.Point{X: p.Pos.X, Y: p.Pos.Y})
 		}
 	}
-	// the snapshot's objects count too (they carry the unit id, and a door the map did not list is still a door)
 	for i := range o.snap.Objects {
 		u := &o.snap.Objects[i]
-		pt := d2map.Point{X: u.X, Y: u.Y}
-		if !n.isDoorClass(u.Class) || n.doorTried[pt] >= maxDoorTries {
-			continue
-		}
-		for _, c := range cands {
-			if d := dist(input.Point{X: u.X, Y: u.Y}, c.at); d < best {
-				at, best, found = input.Point{X: u.X, Y: u.Y}, d, true
-			}
+		if n.isDoorClass(u.Class) && n.doorTried[d2map.Point{X: u.X, Y: u.Y}] < maxDoorTries {
+			doors = append(doors, input.Point{X: u.X, Y: u.Y})
 		}
 	}
+	at, found := n.doorBetween(o, cands, doors)
 	if !found {
 		if n.approachGate(ctx, o, levelNo, cands[0]) {
 			return true
@@ -113,6 +103,60 @@ func (n *Navigator) approachGate(ctx context.Context, o *obs, levelNo int, g gat
 		n.log.Info("nav: could not walk to the cut-off gate", "err", err)
 	}
 	return true
+}
+
+// doorBetween picks the door that joins the character's walkable part of the grid to the gate's: the one whose
+// nearest cell on each side is closest (both within gateDoorReach). False when the gate is reachable after all or no
+// door fits.
+func (n *Navigator) doorBetween(o *obs, cands []gate, doors []input.Point) (input.Point, bool) {
+	if len(doors) == 0 {
+		return input.Point{}, false
+	}
+	n.planMu.Lock()
+	defer n.planMu.Unlock()
+	f := n.fieldFor(o.lm)
+	f.ClearDyn()
+	sx, sy, ok := f.nearestWalkable(o.pos.X, o.pos.Y, 8)
+	if !ok {
+		return input.Point{}, false
+	}
+	here := floodHops(f, sx, sy)
+	var there [][]int32
+	for _, c := range cands {
+		gx, gy, ok := f.nearestWalkable(c.at.X, c.at.Y, 3)
+		if !ok {
+			continue
+		}
+		h := floodHops(f, gx, gy)
+		if here[f.idx(gx, gy)] >= 0 {
+			return input.Point{}, false // reachable: no door in the way
+		}
+		there = append(there, h)
+	}
+	near := func(hops []int32, p input.Point) float64 {
+		best := math.MaxFloat64
+		for i, h := range hops {
+			if h < 0 {
+				continue
+			}
+			x, y := f.pt(int32(i))
+			if d := dist(input.Point{X: x, Y: y}, p); d < best {
+				best = d
+			}
+		}
+		return best
+	}
+	var best input.Point
+	bestScore, found := gateDoorReach, false
+	for _, d := range doors {
+		dh := near(here, d)
+		for _, t := range there {
+			if score := math.Max(dh, near(t, d)); score < bestScore {
+				best, bestScore, found = d, score, true
+			}
+		}
+	}
+	return best, found
 }
 
 // nearestReachableTo is the cell the character can walk to on the known grid that is nearest to target and has some
