@@ -56,14 +56,15 @@ type SaleLine struct {
 
 // SaleOrder is the one sale of a hero, stored next to the vault log so a restart keeps it.
 type SaleOrder struct {
-	ID         string     `json:"id"`
-	Lines      []SaleLine `json:"lines"`
-	Total      int        `json:"total"`
-	State      string     `json:"state"`
-	Done       int        `json:"done"` // records that left the vault
-	StashAfter int        `json:"stashAfter,omitempty"`
-	Note       string     `json:"note,omitempty"`
-	Ended      int64      `json:"ended,omitempty"`
+	ID          string     `json:"id"`
+	Lines       []SaleLine `json:"lines"`
+	Total       int        `json:"total"`
+	State       string     `json:"state"`
+	Done        int        `json:"done"` // records that left the vault
+	StashBefore int        `json:"stashBefore,omitempty"`
+	StashAfter  int        `json:"stashAfter,omitempty"`
+	Note        string     `json:"note,omitempty"`
+	Ended       int64      `json:"ended,omitempty"`
 }
 
 // Active reports whether the sale still moves.
@@ -73,14 +74,15 @@ func (o *SaleOrder) Active() bool {
 
 // SaleView is the sale as the page shows it.
 type SaleView struct {
-	ID         string `json:"id"`
-	State      string `json:"state"`
-	Items      int    `json:"items"`
-	Done       int    `json:"done"`
-	Gold       int    `json:"gold"`
-	StashAfter int    `json:"stashAfter"`
-	Note       string `json:"note,omitempty"`
-	Line       string `json:"line"`
+	ID          string `json:"id"`
+	State       string `json:"state"`
+	Items       int    `json:"items"`
+	Done        int    `json:"done"`
+	Gold        int    `json:"gold"`
+	StashBefore int    `json:"stashBefore"`
+	StashAfter  int    `json:"stashAfter"`
+	Note        string `json:"note,omitempty"`
+	Line        string `json:"line"`
 }
 
 // SaleSkip is one asked record that is not in the sale and why.
@@ -346,7 +348,7 @@ func dedupe(ids []string) []string {
 }
 
 func (k *Keeper) saleView(o *SaleOrder) SaleView {
-	v := SaleView{ID: o.ID, State: o.State, Items: len(o.Lines), Done: o.Done, Gold: o.Total, StashAfter: o.StashAfter, Note: o.Note}
+	v := SaleView{ID: o.ID, State: o.State, Items: len(o.Lines), Done: o.Done, Gold: o.Total, StashBefore: o.StashBefore, StashAfter: o.StashAfter, Note: o.Note}
 	switch o.State {
 	case SaleQueued:
 		v.Line = fmt.Sprintf("Selling %d items for %s gold: waiting for the stash to confirm", len(o.Lines), bulkid.Thousands(o.Total))
@@ -502,7 +504,7 @@ func (k *Keeper) settleSale(ctx context.Context, o SaleOrder) {
 		cr, err := k.Credit.CreditGold(ctx, o.Total, o.ID, len(o.Lines))
 		switch {
 		case err == nil:
-			o.State, o.StashAfter = SaleCredited, cr.StashAfter
+			o.State, o.StashBefore, o.StashAfter = SaleCredited, cr.StashBefore, cr.StashAfter
 			k.saveSale(o)
 		case errors.Is(err, d2dctl.ErrCreditRoom):
 			end(SaleFailed, "the stash has no room for that much gold: "+err.Error())

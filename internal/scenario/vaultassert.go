@@ -14,6 +14,7 @@ const (
 	AVaultCount    = "vault_count"           // min, max: live records (recorded, keep queued, sell queued)
 	AVaultPresent  = "vault_records_present" // which "seeded" (default): every seeded record is still live
 	AVaultRevealed = "vault_revealed"        // min, max: live records that are revealed (identified, or unsealed by a paid reveal)
+	AVaultSold     = "vault_sold"            // min, max: records sold by the instant sale; with index: their gold added up equals the reply's sale.gold, and that equals sale.stashAfter - sale.stashBefore
 	AVaultMissed   = "vault_missed"          // min, max: missed.count of GET /api/vault
 	AVaultAPI      = "vault_api"             // path, equals or min or max: a field of the last GET /api/vault sample
 	vaultWhichSeed = "seeded"
@@ -28,6 +29,7 @@ type VaultRecFact struct {
 	Identified bool   `json:"identified,omitempty"`
 	Unlocked   bool   `json:"unlocked,omitempty"`
 	Seeded     bool   `json:"seeded,omitempty"`
+	Gold       int    `json:"gold,omitempty"` // a sold record: what the sale paid for it
 }
 
 // VaultFacts is what the runner read of the Vault: the store's records, the journal of what happened DURING the run (the
@@ -42,7 +44,7 @@ type VaultFacts struct {
 // ones the scenarios assert on: recorded, revealed, kept, sold, discarded, trimmed, pinned, queued-keep, queued-sell,
 // and `skipped (full)` for the bot's own line when a new drop found the vault full.
 func VaultJournal(ev, code, id string) (string, bool) {
-	w, ok := map[string]string{"add": "recorded", "reveal": "revealed", "unseal": "revealed", "kept": "kept", "sold": "sold",
+	w, ok := map[string]string{"add": "recorded", "reveal": "revealed", "unseal": "revealed", "kept": "kept", "sold": "sold", "soldnow": "sold",
 		"discard": "discarded", "pin": "pinned", "keepq": "queued-keep", "sellq": "queued-sell"}[ev]
 	if !ok {
 		return "", false
@@ -70,7 +72,7 @@ func (a Assert) validateVault() error {
 		if _, err := regexp.Compile(a.Pattern); err != nil {
 			return fmt.Errorf("vault_log pattern: %w", err)
 		}
-	case AVaultCount, AVaultMissed, AVaultRevealed:
+	case AVaultCount, AVaultMissed, AVaultRevealed, AVaultSold:
 		if a.Max == nil && a.Min == 0 {
 			return fmt.Errorf("%s needs min or max", a.Kind)
 		}
@@ -100,6 +102,41 @@ func evalVault(a Assert, st State) AssertResult {
 			}
 		}
 		return rangeResult(n, a.Min, a.Max, "live vault records")
+	case AVaultSold:
+		n, sum := 0, 0
+		for _, r := range v.Records {
+			if r.State == "sold" {
+				n++
+				sum += r.Gold
+			}
+		}
+		res := rangeResult(n, a.Min, a.Max, "sold vault records")
+		if a.Index == nil || !res.OK {
+			return res
+		}
+		var reply *APIReply
+		for i := range st.APIReplies {
+			if st.APIReplies[i].Index == *a.Index {
+				reply = &st.APIReplies[i]
+			}
+		}
+		if reply == nil {
+			return unobs(res.Want+", gold exact", "the api reply")
+		}
+		num := func(path string) (float64, bool) {
+			x, ok := JSONPath(reply.Body, path)
+			f, isNum := x.(float64)
+			return f, ok && isNum
+		}
+		gold, g1 := num("sale.gold")
+		after, g2 := num("sale.stashAfter")
+		before, g3 := num("sale.stashBefore")
+		want := fmt.Sprintf("%s, records' gold %d = sale.gold = stashAfter - stashBefore", res.Want, sum)
+		if !g1 || !g2 || !g3 {
+			return AssertResult{Want: want, Got: "the reply has no sale numbers: " + clip(reply.Body)}
+		}
+		exact := int(gold) == sum && int(after-before) == sum && sum > 0
+		return AssertResult{OK: exact, Want: want, Got: fmt.Sprintf("%d sold, records %d, sale.gold %d, stash %d -> %d", n, sum, int(gold), int(before), int(after))}
 	case AVaultRevealed:
 		n := 0
 		for _, r := range v.Records {
@@ -250,7 +287,7 @@ func NeedsVaultSample(s Scenario) bool {
 func NeedsVault(s Scenario) bool {
 	for _, a := range s.Assert {
 		switch a.Kind {
-		case AVaultLog, AVaultCount, AVaultPresent, AVaultMissed, AVaultAPI, AVaultRevealed:
+		case AVaultLog, AVaultCount, AVaultPresent, AVaultMissed, AVaultAPI, AVaultRevealed, AVaultSold:
 			return true
 		}
 	}

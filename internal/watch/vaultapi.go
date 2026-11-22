@@ -145,14 +145,15 @@ type VaultRevealView struct {
 
 // VaultSale is the instant sale as the page shows it (internal/vaultkeep SaleView).
 type VaultSale struct {
-	ID         string `json:"id"`
-	State      string `json:"state"` // queued, credited, done, failed
-	Items      int    `json:"items"`
-	Done       int    `json:"done"`
-	Gold       int    `json:"gold"`
-	StashAfter int    `json:"stashAfter"`
-	Note       string `json:"note,omitempty"`
-	Line       string `json:"line"`
+	ID          string `json:"id"`
+	State       string `json:"state"` // queued, credited, done, failed
+	Items       int    `json:"items"`
+	Done        int    `json:"done"`
+	Gold        int    `json:"gold"`
+	StashBefore int    `json:"stashBefore"`
+	StashAfter  int    `json:"stashAfter"`
+	Note        string `json:"note,omitempty"`
+	Line        string `json:"line"`
 }
 
 type VaultSaleLine struct {

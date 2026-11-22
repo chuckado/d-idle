@@ -445,7 +445,7 @@ func saleOf(v *vaultkeep.SaleView) *watch.VaultSale {
 	if v == nil {
 		return nil
 	}
-	return &watch.VaultSale{ID: v.ID, State: v.State, Items: v.Items, Done: v.Done, Gold: v.Gold, StashAfter: v.StashAfter, Note: v.Note, Line: v.Line}
+	return &watch.VaultSale{ID: v.ID, State: v.State, Items: v.Items, Done: v.Done, Gold: v.Gold, StashBefore: v.StashBefore, StashAfter: v.StashAfter, Note: v.Note, Line: v.Line}
 }
 
 // SaleOn, SaleQuote and SellNow are the instant sale (watch.VaultSaleActor).

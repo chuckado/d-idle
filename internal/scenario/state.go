@@ -226,7 +226,7 @@ func (a Assert) Validate() error {
 		}
 	case ABoard, ABoardHeadsLE, ABoardReasons, AAPIReply:
 		return a.validateBoard()
-	case AVaultLog, AVaultCount, AVaultPresent, AVaultMissed, AVaultAPI, AVaultRevealed:
+	case AVaultLog, AVaultCount, AVaultPresent, AVaultMissed, AVaultAPI, AVaultRevealed, AVaultSold:
 		return a.validateVault()
 	case ANoWrites:
 	default:
@@ -417,7 +417,7 @@ func evalOne(a Assert, st State) AssertResult {
 		return evalBoardReasons(st)
 	case AAPIReply:
 		return evalAPIReply(a, st)
-	case AVaultLog, AVaultCount, AVaultPresent, AVaultMissed, AVaultAPI, AVaultRevealed:
+	case AVaultLog, AVaultCount, AVaultPresent, AVaultMissed, AVaultAPI, AVaultRevealed, AVaultSold:
 		return evalVault(a, st)
 	case ANoWrites:
 		if st.WritesAfterStart < 0 {
