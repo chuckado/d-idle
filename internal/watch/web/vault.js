@@ -30,7 +30,7 @@ export function mountVault(d) {
     if (o && o.key) b.dataset.key = o.key;
     return b;
   };
-  const S = { eth: null, f: d.filters || defaultFilters(), items: [], total: 0, view: null, facets: { kinds: T.kinds || [], types: [] }, err: false, loading: true, sel: createSelection(),
+  const S = { sv: {}, eth: null, f: d.filters || defaultFilters(), items: [], total: 0, view: null, facets: { kinds: T.kinds || [], types: [] }, err: false, loading: true, sel: createSelection(),
     detail: null, detailId: '', mode: 'grid', fopen: false, sheet: null, msg: '', msgLevel: '', sig: '', lastLoaded: 0, tip: null };
   const root = d.root || doc.body;
 
@@ -619,6 +619,12 @@ export function mountVault(d) {
     const ul = el('ul', 'vt-dlines');
     lines(it, det).forEach((l) => ul.appendChild(el('li', '', l)));
     card.appendChild(ul);
+    const inst = !!(S.view && S.view.act && S.view.act.sell && S.view.act.sell.instant);
+    if (inst && (it.state === 'recorded' || it.sell === 'queued') && !it.pin) { // the engine's price for this item, asked once (a sale pays exactly this)
+      const g = S.sv[it.id] > 0 ? S.sv[it.id] : 0;
+      const sv = el('p', 'vt-dfound', g ? fmt(T.sellValue, { gold: grp(g) }) : ''); sv.dataset.key = 'sell-value'; sv.hidden = !g; card.appendChild(sv);
+      if (S.sv[it.id] === undefined) { S.sv[it.id] = -1; quoteAll([it.id]).then((q) => { if (q && q.count === 1) { S.sv[it.id] = q.lines[0].gold; if (S.detailId === it.id) drawDetail(); } }); }
+    }
     const w = det && det.where;
     if (w && w.time) card.appendChild(el('p', 'vt-dfound', fmt(w.area ? T.foundIn : T.found, { when: when(w.time, now()), area: w.area || '' })));
     else if (it.found) card.appendChild(el('p', 'vt-dfound', fmt(it.area ? T.foundIn : T.found, { when: when(it.found, now()), area: it.area || '' })));

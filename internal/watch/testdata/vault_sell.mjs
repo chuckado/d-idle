@@ -104,6 +104,13 @@ await find('sell').click();
 const s2 = posts.filter((p) => p.route === '/api/vault/sell');
 ok(s2.length === 1 && s2[0].body.ack !== true && s2[0].body.ids.length === 11 && sheet().length === 0, 'a small sale sells at once without a sheet: ' + JSON.stringify(s2.map((s) => s.body.ack)));
 
+// the item card shows the engine's price for the open item
+items = build().slice(0, 3); await page.reload(false);
+quoteReply = (b) => ({ asked: b.ids.length, count: b.ids.length, lines: b.ids.map((id) => ({ id, gold: 43 })), total: b.ids.length * 43, stash: 100, stashAfter: 143, room: 1, confirmAt: 2000, needConfirm: false, reasons: [] });
+page.state.detailId = 'r0'; page.draw(); await tick(); await tick();
+const sv = find('sell-value');
+ok(sv && !sv.hidden && /Sell value 43 gold/.test(sv.textContent), 'the card shows the engine price: ' + (sv && sv.textContent));
+
 // nothing sellable: the page says why instead of doing nothing
 items = build().slice(11 + 169, 11 + 169 + 20); await page.reload(false);
 page.state.sel.clear(); page.state.sel.all(allIds()); page.draw();

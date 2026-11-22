@@ -381,6 +381,7 @@
   "sellInstantRoom": "The stash holds at most 2,500,000 gold.",
   "sellInstantGo": "Sell {n} for {gold} gold",
   "sellNothing": "Nothing selected can be sold: {why}.",
+  "sellValue": "Sell value {gold} gold (the price the engine pays)",
   "sellChecking": "Working out the price ...",
   "okSold": "Sold {n} items for {gold} gold. Stash gold: {stash}.",
   "okSoldLeft": " {k} not sold: {why}.",
