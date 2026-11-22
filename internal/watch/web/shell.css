@@ -125,7 +125,7 @@
   .d-shell[data-template="cockpit"] > .d-editbar { position: fixed; inset-block-end: var(--c-gap); inset-inline-start: 50%; transform: translateX(-50%); max-inline-size: calc(100% - 2 * var(--c-gap)); margin: 0; flex-wrap: nowrap; z-index: var(--d-z-sheet); }
   .d-shell[data-template="cockpit"] > .d-editbar :is(.what, .d-btn) { white-space: nowrap; }
   .d-shell[data-template="cockpit"] > .d-editbar .keys { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
-  .d-main[data-template="cockpit"] { --c-fh: calc(100dvh - var(--d-banner-h, 0px) - var(--c-band) - 2 * var(--c-gap)); --c-stageh: var(--c-fh);
+  .d-main[data-template="cockpit"] { --c-fh: calc(100dvh - var(--d-banner-h, 0px) - var(--d-nav-h, 0px) - var(--c-band) - 2 * var(--c-gap)); --c-stageh: var(--c-fh);
     --c-left: minmax(0, min(calc(var(--c-stageh) * 4 / 3), calc(100% - var(--c-railmin) - var(--c-gap))));
     display: grid; gap: var(--c-gap); padding: var(--c-gap); min-block-size: 0; min-inline-size: 0; align-items: stretch; position: relative;
     grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); grid-template-areas: "s"; }
@@ -176,7 +176,6 @@
   .d-mapswitch { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: 0; z-index: 3; background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); }
   .d-mapswitch > .d-btn { min-inline-size: 0; padding-inline: var(--d-sp-2); }
   .d-panel:has(> .d-mapswitch) > .d-slotlabels { inset-inline-end: auto; inset-inline-start: var(--d-sp-2); inset-block-start: calc(var(--d-sp-1) + 5px); } /* the zone label makes room for the switch */
-  .d-menu-pop > [hidden] { display: none; }
 
   /* drawers: the log and the first-steps card open as a side sheet over the page (a full-width sheet on a phone) */
   .d-drawer-back { position: fixed; inset: 0; z-index: calc(var(--d-z-sheet) + 1); background: var(--d-scrim); }
@@ -212,29 +211,6 @@
   .d-ckdiv[data-axis="x"] { block-size: var(--ck-h, 0); inline-size: 6px; cursor: col-resize; }
 
   /* the "..." menu of the status band (Help, Edit layout, Theme, Layout) and the one-time layout note */
-  .d-menu { position: relative; }
-  /* a top-layer popover (shell.js setupMenu): above every tile, sheet and stacking context; placed by --menu-top / --menu-end */
-  .d-menu-pop { position: fixed; inset: auto; inset-block-start: var(--menu-top, 48px); inset-inline-end: var(--menu-end, 8px); margin: 0; z-index: var(--d-z-sheet); display: flex; flex-direction: column; gap: var(--d-sp-1); min-inline-size: 14rem; max-inline-size: calc(100vw - 16px);
-    max-block-size: calc(100dvh - var(--menu-top, 48px) - 8px); overflow: hidden; overscroll-behavior: contain; box-sizing: border-box; padding: var(--d-sp-2); color: var(--d-text);
-    background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
-  .d-menu-pop[hidden] { display: none; }
-  .d-menu-pop > .d-btn { inline-size: 100%; }
-  /* the body: the primary row never scrolls, the groups scroll inside the window with a hint (shell.js groupMenu, docs/ui-overlays.md) */
-  .d-menu-primary { flex: none; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(max-content, 1fr); gap: var(--d-sp-1); }
-  .d-menu-primary > .d-btn { inline-size: 100%; white-space: nowrap; }
-  .d-menu-body { flex: 1 1 auto; min-block-size: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-gutter: stable; scroll-padding-block: 28px; display: flex; flex-direction: column; gap: var(--d-sp-1); }
-  .d-menu-body[data-more="1"]::after { content: "\25BE  more"; position: sticky; inset-block-end: 0; flex: none; text-align: center; padding-block: 2px; font-size: var(--d-fs-0); color: var(--d-text-2); background: var(--d-surface-3); border-block-start: var(--d-bw) solid var(--d-line); }
-  .d-menu-group { display: grid; gap: var(--d-sp-1); }
-  .d-menu-gb { display: grid; gap: var(--d-sp-1); }
-  .d-menu-gb[hidden] { display: none; }
-  .d-menu-gh { display: flex; align-items: center; gap: var(--d-sp-2); inline-size: 100%; min-block-size: 24px; padding: 0 var(--d-sp-1); border: 0; background: none; color: var(--d-text-2); font-size: var(--d-fs-0); text-transform: uppercase; letter-spacing: .06em; cursor: pointer; text-align: start; }
-  .d-menu-gh::before { content: "\25BE"; }
-  .d-menu-gh[aria-expanded="false"]::before { content: "\25B8"; }
-  .d-menu-gb > .d-btn { inline-size: 100%; }
-  .d-menu-pair { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(max-content, 1fr); gap: var(--d-sp-1); }
-  .d-menu-pair > .d-btn { inline-size: 100%; white-space: nowrap; }
-  .d-menu-pop .d-menu-label { margin: var(--d-sp-1) var(--d-sp-1) 0; font-size: var(--d-fs-0); color: var(--d-text-2); text-transform: uppercase; letter-spacing: .06em; }
-  .d-menu-pop .d-btn[aria-checked="true"] { border-color: var(--d-accent); color: var(--d-accent-text); font-weight: 650; }
   .d-layoutnote { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-2) var(--d-sp-3); margin-inline: var(--d-gap); padding: var(--d-sp-2) var(--d-sp-3);
     background: var(--d-state-bg-info); border-radius: var(--d-r-2); font-size: var(--d-fs-1); }
   .d-layoutnote[hidden] { display: none; }

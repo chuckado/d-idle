@@ -197,19 +197,18 @@ One sheet (`d-sheet`: bottom sheet under laptop, centred dialog from laptop; foc
 
 One scheduler with the existing SSE `/api/events` as the trigger and a 5 s safety poll; per-panel intervals from the manifest; a panel hidden by a tab or a fold is polled at a quarter rate; `document.hidden` pauses everything but the status band. Replaces the six independent timers of today.
 
-### 4.6 Page links (card uinav, until the shared navigation of the UI review exists)
+### 4.6 Navigation: one list, one module, every page (card uinav2, review E4; user answers 2026-11-22)
 
-Every page has a way to its neighbours and a way back; plain `/watch` is never a back target (it can land on the Return screen), always `/watch?live=1`. Today's matrix, kept true by `TestPageLinkMatrix` and `TestVaultHeaderLinksJS` (`internal/watch/linkmatrix_test.go`):
+> status: built (branch agent/uinav2); V = `TestNavEveryPage`, `TestNavJS`, `TestPageLinkMatrix` (`internal/watch/linkmatrix_test.go`, `testdata/nav_test.cjs`) and the fit lane `tools/uishots.sh --fit --only 'nav*'`. U = not looked at on a real phone.
 
-| page | links |
-|---|---|
-| Inventory | Live screen, Skills, Points, Vault, Policy in the band; Inventory, Skills, Points, Vault, Policy, Return in the phone `...` list |
-| Skills | Live screen, Inventory, Points, Policy |
-| Points | Live screen, Skills, Inventory |
-| Vault | Live screen (Back), Inventory, Skills |
-| Characters | Live screen (Back) |
+`web/nav.json` is the ONE list of destinations; `web/nav.js` draws it on every page; `web/nav.css` styles it. A page loads `<link href="/watch/nav.css">` and `<script src="/watch/nav.js">` and writes no destination link of its own (no per-page header links, no Back button on a top-level page). A new page is added to `TestNavEveryPage` and fails until it loads both and its path is matched by exactly one destination in `nav.json`.
 
-The five-destination bar that replaces these per-page lists is card E4 of the review (docs/design/fable-review-2026-11-22, branch agent/fableui commit fe101397a); it needs the user's decisions F1 and F4. A new page adds its row here and to the test.
+- **Five destinations, in this order:** Live (`/watch?live=1`, never the bare `/watch`: that can land on the Return screen), Gear (`/watch/inventory`), Skills (`/watch/skills` and `/watch/points`), Vault (`/watch/vault`), More. The current one carries `aria-current="page"`, exactly one; More is current on Characters, Return, Policy and Hall of Fame.
+- **Under 700 px a bottom bar** (`--d-nav-h`, 56 px plus the safe area; 44 px or taller targets); **from 700 px the same list sits in the page's band** (`[data-nav-host]` or `.d-band-status .d-links`), and a page without a band (Vault, Characters, Return, Policy, Hall) gets one from the script. The bar is placed in `<body>` so no fixed frame can capture it. A scrolling page pads by `--d-nav-h`; a fixed frame (the inventory canvas, Characters) subtracts it from its own block size; the Vault's detail sheet and toast sit above the bar. The in-page tabs of a page (Orders, Map, Quests, Progress; Hero and mercenary, Pack and stash) stay where they are: the bar says which page, the tabs which part.
+- **More** is one sheet (`#menu-more`, the id the screenshot suite and the fit check use; opener `#btn-more`): a popover under the button from 700 px, a bottom sheet above the bar under it. Focus goes into it on opening, Escape and a press outside close it, Escape returns the focus to More. It holds the pages (Characters, Return screen, Hall of Fame, Policy, Help, Old layout) and Theme; a page adds its own groups with `dNav.group(id, title, nodes, open)` and a node to the primary row with `dNav.primary` (the live screen adds Reset and Pause there, and its Hero, Tools and Layout groups). An entry raises a cancelable `d2:nav` event first: the live screen answers Help in place. Pacts stays unlinked (user decision 2026-11-22).
+- **The Skills area** has three sub-tabs, Tree (`/watch/skills`), Points (`/watch/points`) and Build (`/watch/points?tab=build`), drawn by `nav.js` from `areas` in `nav.json` under the page's band (`nav.d-subtabs`, links with their own `aria-current`) and selected by `body[data-subtab]`; the old addresses keep working and open the right one.
+- **Old layout.** The pre-cockpit page is offered as "Old layout" (More > Layout, `?layout=classic`), the default as "New layout"; the old page shows a standing line "You are on the old layout:" with a Switch back button (`shell.js oldLayoutBar`). The word "Cockpit" is not shown to the user. The Stream strip and the overlay mode show no bar.
+- **Fit.** `nav-<page>` fit pages at 390x844 and 1366x768 judge ONLY the navigation (`flow=1`: five labels, one current, bar iff under 700 px, targets, nothing of the page under the bar once scrolled to its end, the open More sheet inside the window and clear of the bar); `navdefect-*` must fail (fixtures_nav.go). Pictures: `tools/uishots.sh --nav`, kept in `docs/ui/nav-shared/`.
 
 ## 5. Component catalogue
 

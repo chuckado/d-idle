@@ -8,19 +8,15 @@ const skillsPage = `<!DOCTYPE html>
 <meta name="color-scheme" content="dark light"><title>d.idle - skills</title><link rel="icon" href="data:,">
 <link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/reset.css"><link rel="stylesheet" href="/watch/shell.css">
 <link rel="stylesheet" href="/watch/components.css"><link rel="stylesheet" href="/watch/utilities.css">
-<link rel="stylesheet" href="/watch/inventory-tip.css"><link rel="stylesheet" href="/watch/skills.css">
+<link rel="stylesheet" href="/watch/inventory-tip.css"><link rel="stylesheet" href="/watch/skills.css"><link rel="stylesheet" href="/watch/nav.css">
 </head><body>
 <div class="d-shell">
 <header class="top d-band-status" data-band="status">
  <div class="d-brand"><span class="d-brand-mark" aria-hidden="true"></span><h1>d.idle</h1></div>
  <div class="d-band-main"></div>
- <nav class="d-links" aria-label="Other pages">
-  <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch?live=1">Live screen</a>
-  <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/inventory">Inventory</a>
-  <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/points">Points</a>
-  <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/policy">Policy</a>
+ <div class="d-links" data-nav-host>
   <button class="d-btn" data-size="sm" data-variant="ghost" id="btn-theme" type="button" aria-label="Switch colour theme">Theme: dark</button>
- </nav>
+ </div>
 </header>
 <main class="sk-page" id="sk">
  <p class="d-note" data-sev="alarm" id="msg" role="status" hidden></p>
@@ -35,5 +31,6 @@ const skillsPage = `<!DOCTYPE html>
 </main>
 </div>
 <div id="toasts" class="d-toasts" role="status" aria-live="polite"></div>
+<script src="/watch/nav.js"></script>
 <script type="module" src="/watch/shell.js"></script>
 <script src="/watch/skills.js"></script></body></html>`

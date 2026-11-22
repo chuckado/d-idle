@@ -51,12 +51,12 @@ func fitHarness(w http.ResponseWriter, r *http.Request) {
 	}
 	// hover and ctx: a selector to hover (pointerover, as a mouse does) or to right-click before the measurement; the tooltip or the
 	// menu it opens must lie inside the window and, beside a cell, not cover it
-	opts, _ := json.Marshal(map[string]any{"page": u, "click": strings.Split(q.Get("click"), "|"), "hit": strings.Split(hit, ","), "hover": q.Get("hover"), "scroll": q.Get("scroll"), "ctx": q.Get("ctx"), "expect": strings.Split(q.Get("expect"), "|")})
+	opts, _ := json.Marshal(map[string]any{"page": u, "click": strings.Split(q.Get("click"), "|"), "hit": strings.Split(hit, ","), "hover": q.Get("hover"), "scroll": q.Get("scroll"), "ctx": q.Get("ctx"), "expect": strings.Split(q.Get("expect"), "|"), "flow": q.Get("flow") == "1"})
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Fprintf(w, `<!doctype html><html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
 <iframe id="f" src="%s" width="%d" height="%d" style="border:0;display:block"></iframe><pre id="fit-result"></pre>
 <script type="module">
-import { measure, hits, expects, overlayState, charsNow, vaultNow } from '/__fit/fit.js';
+import { measure, hits, expects, overlayState, charsNow, vaultNow, navNow } from '/__fit/fit.js';
 const pop = (d, sel, c) => {
   const n = d.querySelector(sel), r = n && !n.hidden ? n.getBoundingClientRect() : null;
   if (!r || !r.width) return { open: false, sel };
@@ -65,15 +65,21 @@ const pop = (d, sel, c) => {
 };
 const o = %s, f = document.getElementById('f'), out = document.getElementById('fit-result');
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+let stage = 'before load';
+// a measurement that never finishes says where it stopped (a thrown error in the page or the harness is a verdict, not a silence)
+setTimeout(() => { if (!out.textContent) out.textContent = JSON.stringify({ error: 'stalled after: ' + stage }); }, 21000);
+window.addEventListener('error', (e) => { if (!out.textContent) out.textContent = JSON.stringify({ error: 'script error: ' + e.message }); });
 f.addEventListener('load', async () => {
-  await wait(5000);
+  stage = 'loaded'; await wait(5000); stage = 'waited';
   // the character screen draws from its first view: measure only once its grids hold cells (a slow first answer is a late page, not a fit result)
   for (let i = 0; i < 30 && f.contentDocument.body.hasAttribute('data-canvas') && !(f.contentDocument.querySelector('#equip .d-slot2') && f.contentDocument.querySelector('#pack [data-key]') && f.contentDocument.getElementById('merc-sub').textContent && f.contentDocument.getElementById('cv-sel').firstChild && f.contentDocument.getElementById('hsheet').children.length > 4); i++) await wait(500);
   if (f.contentDocument.body.hasAttribute('data-canvas')) await wait(1500);
   // scroll: how far down (0 to 1) the Vault list is scrolled before the measurement: the rows far from the top must fit like the first ones
   if (o.scroll) { const sc = f.contentDocument.querySelector('[data-vscroll]'); if (sc) { sc.scrollTop = Number(o.scroll) * (sc.scrollHeight - sc.clientHeight); await wait(1500); } }
   try {
+    stage = 'panels.json';
     const pv = await (await fetch('/watch/panels.json')).json();
+    stage = 'measure';
     const m = measure(f.contentWindow, { scroll: (pv.panels || []).filter((p) => p.scroll).map((p) => p.id) });
     m.page = o.page;
     if (o.hover || o.ctx) {
@@ -93,6 +99,8 @@ f.addEventListener('load', async () => {
       }
     }
     m.ov = overlayState(f.contentWindow);
+    if (steps.length) m.nav = navNow(f.contentWindow); // the page after its pressing: the More sheet is open now
+    m.flow = !!o.flow; // a page that is a document (Skills, Points, Return ...): it scrolls on purpose
     if (steps.length) m.hits = hits(f.contentWindow, o.hit);
     if (steps.length && f.contentDocument.body.hasAttribute('data-chars')) m.chars = charsNow(f.contentWindow); // the page with its sheet open
     if (steps.length && f.contentDocument.body.hasAttribute('data-vault')) m.vault = vaultNow(f.contentWindow);
@@ -166,6 +174,8 @@ type fitResult struct {
 		Sheet  any    `json:"sheet"`
 	} `json:"pop"`
 	Expect map[string]bool `json:"expect"`
+	Flow   bool            `json:"flow"`
+	Nav    *fitNav         `json:"nav"`
 	Chars  *fitChars       `json:"chars"`
 	Vault  *fitVault       `json:"vault"`
 	Ov     *struct {
@@ -250,6 +260,12 @@ func (r fitResult) broken() string {
 
 // judge returns what is wrong with a measured page; an empty list is a fit.
 func (r fitResult) judge() []string {
+	if r.Flow { // the navigation pages (nav-NAME): a document that scrolls on purpose; the page's own fit lane judges its content, this one the navigation
+		if r.Nav == nil {
+			return []string{"the page has no navigation (nav.js is not loaded)"}
+		}
+		return r.Nav.judge(r.VW)
+	}
 	var bad []string
 	if r.ScrollH > r.VH {
 		bad = append(bad, fmt.Sprintf("the page scrolls: scrollHeight %d > innerHeight %d", r.ScrollH, r.VH))
@@ -275,6 +291,7 @@ func (r fitResult) judge() []string {
 	if c := r.Chars; c != nil {
 		bad = append(bad, c.judge(r.VW)...)
 	}
+	bad = append(bad, r.Nav.judge(r.VW)...)
 	if v := r.Vault; v != nil {
 		bad = append(bad, v.judge()...)
 	}
@@ -566,6 +583,11 @@ var mustFail = map[string]string{
 	"fit-vaultdefect-noname-":     "control with no name",
 	"fit-vaultdefect-enabled-":    "placeholder: ",
 	"fit-vaultdefect-ethenabled-": "placeholder: ",
+	// the shared navigation (card uinav2): one defect each, put back by defectCSS "nav-*" (fixtures_nav.go)
+	"fit-navdefect-covers-": "the bottom bar covers content",
+	"fit-navdefect-small-":  "navigation target too small",
+	"fit-navdefect-sheet-":  "the More sheet overlaps the bottom bar",
+	"fit-navdefect-wide-":   "navigation is a bar=true",
 }
 
 var reSize = regexp.MustCompile(`-(\d+)x(\d+)$`)
@@ -659,4 +681,65 @@ func fitDir(dir string) ([]string, bool, error) {
 		}
 	}
 	return lines, ok, nil
+}
+
+// fitNav is the shared navigation as the page shows it (fit.js navPage).
+type fitNav struct {
+	Missing bool     `json:"missing"`
+	Bar     bool     `json:"bar"`
+	Labels  []string `json:"labels"`
+	Current int      `json:"current"`
+	Tiny    []string `json:"tiny"`
+	Covers  []string `json:"covers"`
+	Inside  bool     `json:"inside"`
+	Host    string   `json:"host"`
+	Sheet   *struct {
+		Inside     bool `json:"inside"`
+		ClearOfBar bool `json:"clearOfBar"`
+		First      bool `json:"first"`
+	} `json:"sheet"`
+}
+
+// fitNavPhone is the width under which the navigation is a bottom bar (web/nav.json "breakpoint").
+const fitNavPhone = 700
+
+// judge says what is wrong with the navigation; a nil one (a page without it) is not judged.
+func (n *fitNav) judge(vw int) []string {
+	if n == nil {
+		return nil
+	}
+	if n.Missing {
+		return []string{"the page has no navigation (nav.js did not draw it)"}
+	}
+	var bad []string
+	if got := strings.Join(n.Labels, ","); got != "Live,Gear,Skills,Vault,More" {
+		bad = append(bad, "navigation lists "+got+", want Live,Gear,Skills,Vault,More")
+	}
+	if n.Current != 1 {
+		bad = append(bad, fmt.Sprintf("navigation marks %d destinations as current, want exactly 1", n.Current))
+	}
+	if n.Bar != (vw < fitNavPhone) {
+		bad = append(bad, fmt.Sprintf("navigation is a bar=%v at %d px wide (a bar under %d px, the band above)", n.Bar, vw, fitNavPhone))
+	}
+	if !n.Inside {
+		bad = append(bad, "navigation is not inside the window")
+	}
+	for _, t := range n.Tiny {
+		bad = append(bad, "navigation target too small: "+t)
+	}
+	for _, c := range n.Covers {
+		bad = append(bad, "the bottom bar covers content: "+c)
+	}
+	if s := n.Sheet; s != nil {
+		if !s.Inside {
+			bad = append(bad, "the More sheet is not inside the window")
+		}
+		if !s.ClearOfBar {
+			bad = append(bad, "the More sheet overlaps the bottom bar")
+		}
+		if !s.First {
+			bad = append(bad, "the More sheet holds no focus after opening")
+		}
+	}
+	return bad
 }

@@ -56,7 +56,7 @@ func TestCharactersPageServedAndTexts(t *testing.T) {
 	if n < 15 {
 		t.Errorf("found only %d codes: the scan is wrong", n)
 	}
-	for file, want := range map[string]string{"web/shell.js": "characters-open", "web/panels/orders/panel.js": "/watch/characters"} { // the two entry points
+	for file, want := range map[string]string{"web/nav.json": "characters-open", "web/panels/orders/panel.js": "/watch/characters"} { // the two entry points
 		src, err := webFS.ReadFile(file)
 		if err != nil || !strings.Contains(string(src), want) {
 			t.Errorf("%s lacks the Characters entry %q", file, want)

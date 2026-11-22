@@ -17,8 +17,6 @@ const MAX_FAILS = 5;      // 404 or 401 this often in a row: the route is not mo
 const html = document.documentElement;
 const qs = new URLSearchParams(location.search);
 const CHARS_URL = '/watch/characters' + (/^(dark|light|auto)$/.test(qs.get('theme') || '') ? '?theme=' + qs.get('theme') : '');
-const VAULT_URL = '/watch/vault' + (/^(dark|light|auto)$/.test(qs.get('theme') || '') ? '?theme=' + qs.get('theme') : ''); // the Ethereal Vault page (docs/vault.md)
-{ const vl = document.getElementById('vaultlink'); if (vl) vl.href = VAULT_URL; } // the band's one-tap Vault link keeps the theme choice
 if (qs.get('view') === 'characters') location.replace(CHARS_URL); // /watch?view=characters is the Characters page (docs/charselect-ui.md)
 
 function el(tag, cls, text) {
@@ -607,9 +605,9 @@ function applyCockpit() {
   ck.plan = p;
   const main = ck.main, shell = ck.shell;
   shell.dataset.cmode = main.dataset.cmode = p.mode;
+  const editBtn = document.getElementById('btn-layout'); // a phone cannot edit the layout: no entry that only refuses
+  if (editBtn) editBtn.hidden = p.mode === 'phone';
   if (p.mode === 'phone') shell.dataset.narrow = 'phone'; else if (window.innerWidth < 1000) shell.dataset.narrow = 'mid'; else delete shell.dataset.narrow; // the header links (components.css)
-  const back = document.getElementById('returnlink'); // one word on the phone: the links stay on one line
-  if (back) back.textContent = p.mode === 'phone' ? 'Return' : 'Return screen';
   main.dataset.has = p.has;
   main.style.setProperty('--c-strip', p.sizes.strip + 'px');
   main.style.setProperty('--c-railmin', p.sizes.railMin + 'px');
@@ -782,55 +780,28 @@ async function onboardingChip(btn) {
   } catch (e) { /* the chip keeps its last text */ }
 }
 
-// ---- the "..." menu of the status band: Help, Edit layout, Theme and the layout presets ----
-// The buttons already on the page move into it (they keep their ids and listeners); the preset buttons store the choice
-// per browser and load the page again, because which panels are mounted (opt-in panels, the status band) follows the layout.
-const PRESET_LABEL = { cockpit: 'Cockpit', classic: 'Classic', simple: 'Simple', standard: 'Standard', stream: 'Stream', debug: 'Debug' };
-function setupMenu(sel) {
-  const nav = document.querySelector('.d-band-status .d-links');
-  if (!nav || document.getElementById('btn-more')) return;
-  const wrap = el('span', 'd-menu'), pop = el('div', 'd-menu-pop');
-  const more = ui.btn('...', { size: 'sm', variant: 'ghost' });
-  more.id = 'btn-more';
-  more.setAttribute('aria-label', 'More: help, layout, theme');
-  more.setAttribute('aria-haspopup', 'true');
-  more.setAttribute('aria-expanded', 'false');
-  pop.hidden = true;
-  pop.id = 'menu-more';
-  more.setAttribute('aria-controls', pop.id);
-  // A top-layer popover: it paints above every tile and sheet whatever their stacking contexts (the 2026-11-15 bug: a zone sheet
-  // covered the menu). Placed under the button by JS (the top layer has no containing block), scrolls inside when the window is short.
-  pop.setAttribute('popover', 'manual');
-  const place = () => {
-    const r = more.getBoundingClientRect();
-    pop.style.setProperty('--menu-top', Math.round(r.bottom + 4) + 'px');
-    pop.style.setProperty('--menu-end', Math.max(8, Math.round(window.innerWidth - r.right)) + 'px');
-  };
-  const shown = (on) => { try { if (on && !pop.matches(':popover-open')) pop.showPopover(); if (!on && pop.matches(':popover-open')) pop.hidePopover(); } catch (e) { /* no popover support: the z-index layer stands in */ } };
-  const close = (back) => { pop.hidden = true; shown(false); more.setAttribute('aria-expanded', 'false'); if (back) more.focus({ preventScroll: true }); };
-  more.addEventListener('click', () => {
-    pop.hidden = !pop.hidden;
-    if (!pop.hidden) { place(); shown(true); } else shown(false);
-    if (chip && !pop.hidden) onboardingChip(chip);
-    if (menuReturn) menuReturn.hidden = !!(retLink && retLink.hidden); // the band link is hidden while the bot has no return screen
-    more.setAttribute('aria-expanded', String(!pop.hidden));
-  });
-  window.addEventListener('resize', () => { if (!pop.hidden) place(); });
-  overlays.register('menu', pop, () => close(false));
-  document.addEventListener('click', (e) => { if (!pop.hidden && !wrap.contains(e.target)) close(false); });
-  wrap.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pop.hidden) { e.preventDefault(); close(true); } });
-  pop.addEventListener('click', (e) => { if (e.target.closest('button:not(.d-menu-gh)')) close(false); }); // a group header folds, it does not close the menu
-  const tools = [], hero = [], presets = []; // the menu's groups (groupMenu): Hero, Tools and the layout presets
-  for (const id of ['btn-layout', 'btn-help', 'btn-theme']) { const b = document.getElementById(id); if (b) tools.push(b); }
+// ---- the More sheet of the shared navigation (web/nav.js): this live screen adds its own groups to it ----
+// nav.js draws the bottom bar, the band links and the sheet with the pages (Characters, Return screen, Hall of Fame, Policy). The
+// buttons already on the page move into the sheet (they keep their ids and listeners); the preset buttons store the choice per
+// browser and load the page again, because which panels are mounted (opt-in panels, the status band) follows the layout.
+const PRESET_LABEL = { cockpit: 'New layout', classic: 'Old layout', simple: 'Simple', standard: 'Standard', stream: 'Stream', debug: 'Debug' };
+async function setupMenu(sel) {
+  const nv = window.dNav;
+  const host = document.querySelector('.d-band-status .d-links');
+  if (!nv || !host) return;
+  try { await Promise.race([nv.ready, new Promise((_, no) => setTimeout(() => no(new Error('no nav')), 3000))]); } catch (e) { return; }
+  if (document.getElementById('btn-reset')) return;
+  const more = nv.moreButton();
+  const tools = [], hero = [], presets = []; // the sheet's groups: Hero, Tools and the layout presets
+  for (const id of ['btn-layout', 'btn-help']) { const b = document.getElementById(id); if (b) tools.push(b); }
+  nv.drop('help'); nv.drop('oldlayout'); // this screen has the Help drawer and the Layout group itself
   const labelsItem = ui.btn('Item labels', { size: 'sm', variant: 'ghost' }); // the video tile's Labels button, so a tile in a drawer or a phone tab is still one tap away
   labelsItem.dataset.key = 'labels-menu';
   labelsItem.setAttribute('aria-label', 'Item labels: show or hide the names of items on the ground');
   labelsItem.hidden = true;
   labelsItem.addEventListener('click', () => { const b = document.querySelector('[data-key="labels"]'); if (b && !b.hidden) b.click(); });
-  more.addEventListener('click', () => { const b = document.querySelector('[data-key="labels"]'); labelsItem.hidden = !b || b.hidden; if (b) labelsItem.setAttribute('aria-pressed', b.getAttribute('aria-pressed') || 'false'); });
   tools.push(labelsItem);
-  let chip = null, menuReturn = null;
-  const retLink = document.getElementById('returnlink');
+  let chip = null;
   for (const [id, text] of [['log', 'Log'], ['quest-board', 'Quests'], ['onboarding', 'Getting started']]) { // the drawers a cockpit has
     if (!dr.boxes.has(id)) continue;
     const b = ui.btn(text, { size: 'sm', variant: 'ghost' });
@@ -840,19 +811,13 @@ function setupMenu(sel) {
     if (id === 'onboarding') { chip = b; b.hidden = true; }
   }
   if (chip) onboardingChip(chip);
-  const cb = el('a', 'd-btn', 'Characters'); // a link: it opens the Characters page (docs/charselect-ui.md)
-  cb.dataset.size = 'sm'; cb.dataset.variant = 'ghost'; cb.dataset.key = 'characters-open';
-  cb.href = CHARS_URL;
-  cb.setAttribute('aria-label', 'Characters: switch, create or delete a hero');
-  const vb = el('a', 'd-btn', 'Vault'); // a link too: every drop the bot recorded (docs/vault.md); it shares a row with Characters so the menu stays short
-  vb.dataset.size = 'sm'; vb.dataset.variant = 'ghost'; vb.dataset.key = 'vault-open';
-  vb.href = VAULT_URL;
-  vb.setAttribute('aria-label', 'Vault: every drop the bot recorded');
-  const cpair = el('div', 'd-menu-pair');
-  cpair.append(cb, vb);
-  hero.unshift(cpair);
-  // the band drops its Return screen link on a narrow window (components.css): the menu always has it
-  if (retLink) { menuReturn = el('a', 'd-btn', 'Return screen'); menuReturn.href = '/watch/return'; menuReturn.dataset.size = 'sm'; menuReturn.dataset.variant = 'ghost'; menuReturn.dataset.key = 'menu-return'; menuReturn.hidden = retLink.hidden; tools.push(menuReturn); }
+  // the Return screen link of the sheet shows only where the bot mounts the return screen (app.js sets data-return-screen on the page)
+  const syncReturn = () => nv.hide('return', html.dataset.returnScreen !== '1');
+  syncReturn();
+  new MutationObserver(syncReturn).observe(html, { attributes: true, attributeFilter: ['data-return-screen'] });
+  document.addEventListener('d2:nav', (e) => { // Help opens its drawer in place
+    if (e.detail && e.detail.id === 'help') { e.preventDefault(); openDrawer('onboarding', more); window.dispatchEvent(new Event('d2help')); }
+  });
   const rb = ui.btn('Reset', { size: 'sm', variant: 'ghost' });
   rb.dataset.key = 'reset-open';
   rb.setAttribute('aria-label', 'Reset bot (leaves the game and rejoins)');
@@ -877,43 +842,23 @@ function setupMenu(sel) {
     b.addEventListener('click', () => choosePreset(name));
     presets.push(b);
   }
-  const sync = groupMenu(pop, rb, [['Hero', hero, true], ['Tools', tools, true], ['Layout', presets, false]]);
-  more.addEventListener('click', () => { if (!pop.hidden) { sync(); requestAnimationFrame(sync); } });
-  window.addEventListener('resize', () => { if (!pop.hidden) requestAnimationFrame(sync); });
-  wrap.append(more, pop);
-  // the break-glass Reset: always visible next to the menu, one tap, no confirm (resetui.js wires it)
+  nv.primary.appendChild(rb); // the primary row (Reset, then Pause from pauseui.js) never scrolls out of reach
+  nv.group('hero', 'Hero', hero, true);
+  nv.group('tools', 'Tools', tools, true);
+  nv.group('layout', 'Layout', presets, false);
+  overlays.register('menu', nv.sheet, () => nv.close(false));
+  document.addEventListener('d2:nav-sheet', () => { // opening the sheet: the chips that read the bot
+    if (chip) onboardingChip(chip);
+    const b = document.querySelector('[data-key="labels"]');
+    labelsItem.hidden = !b || b.hidden;
+    if (b) labelsItem.setAttribute('aria-pressed', b.getAttribute('aria-pressed') || 'false');
+  });
+  // the break-glass Reset: always visible in the band, one tap, no confirm (resetui.js wires it)
   const rbtn = ui.btn('Reset', { size: 'sm', variant: 'ghost' });
   rbtn.id = 'btn-reset';
   rbtn.classList.add('d-reset-btn');
   rbtn.dataset.key = 'reset-header';
-  nav.append(rbtn, wrap);
-}
-// groupMenu builds the menu's body (docs/ui-overlays.md, card menufit2): the primary actions (Pause, Reset) sit on a row that
-// never scrolls; everything else lives in collapsible groups inside ONE scrolling body, so a new entry makes the menu scroll
-// (with a visible hint) instead of pushing an item out of reach. Returns the function that refreshes the scroll hint.
-function groupMenu(pop, reset, groups) {
-  const primary = el('div', 'd-menu-primary');
-  primary.dataset.slot = 'primary';
-  primary.appendChild(reset);
-  const body = el('div', 'd-menu-body');
-  body.dataset.scroll = '1';
-  const sync = () => { body.dataset.more = body.scrollHeight - body.clientHeight > 1 && body.scrollTop + body.clientHeight < body.scrollHeight - 1 ? '1' : '0'; };
-  for (const [title, nodes, open] of groups) {
-    if (!nodes.length) continue;
-    const g = el('div', 'd-menu-group'), gb = el('div', 'd-menu-gb');
-    const h = el('button', 'd-menu-gh', title);
-    h.type = 'button';
-    h.dataset.group = title.toLowerCase();
-    gb.hidden = !open;
-    h.setAttribute('aria-expanded', String(open));
-    h.addEventListener('click', () => { gb.hidden = !gb.hidden; h.setAttribute('aria-expanded', String(!gb.hidden)); sync(); });
-    gb.append(...nodes);
-    g.append(h, gb);
-    body.appendChild(g);
-  }
-  body.addEventListener('scroll', sync);
-  pop.replaceChildren(primary, body);
-  return sync;
+  host.append(rbtn);
 }
 
 function choosePreset(name) {
@@ -931,11 +876,28 @@ function layoutNote(sel, floating) {
   const box = el('div', 'd-layoutnote');
   box.setAttribute('role', 'note');
   if (floating) box.dataset.float = '1';
-  box.appendChild(el('span', '', sel.fell ? 'The new layout could not load, so this is Standard. Classic is in the menu.' : 'The layout changed. Classic is in the menu.'));
+  box.appendChild(el('span', '', sel.fell ? 'The new layout could not load, so this is the Standard layout. The old layout is in More.' : 'The layout changed. The old layout is in More.'));
   const x = ui.btn('Dismiss', { size: 'sm', variant: 'ghost' });
   x.addEventListener('click', () => { pref(NOTE, '1'); box.remove(); });
   box.appendChild(x);
   if (floating) document.body.appendChild(box); else top.after(box);
+}
+
+// The pre-cockpit page is called the old layout, and it always says so: one standing line under the band with the way back
+// (user decision 2026-11-22, review F8). The cockpit, the Stream strip and the overlay mode do not show it.
+function oldLayoutBar(sel, cockpit) {
+  if (!sel || cockpit || sel.preset === 'stream' || html.dataset.mode === 'overlay') return;
+  const top = document.querySelector('.d-band-status');
+  if (!top) return;
+  const box = el('div', 'd-layoutnote');
+  box.dataset.key = 'oldlayout-bar';
+  box.setAttribute('role', 'note');
+  box.appendChild(el('span', '', 'You are on the old layout:'));
+  const back = ui.btn('Switch back', { size: 'sm', variant: 'primary' });
+  back.dataset.key = 'oldlayout-back';
+  back.addEventListener('click', () => choosePreset('cockpit'));
+  box.appendChild(back);
+  top.after(box);
 }
 
 // A slot panel of the cockpit that fails to load leaves a hole: say so once, with the way back one click away.
@@ -947,7 +909,7 @@ function failedNote() {
   box.setAttribute('role', 'alert');
   box.dataset.float = '1';
   box.appendChild(el('span', '', 'Part of this layout did not load.'));
-  const go = ui.btn('Use Classic', { size: 'sm', variant: 'primary' });
+  const go = ui.btn('Use the old layout', { size: 'sm', variant: 'primary' });
   go.addEventListener('click', () => choosePreset('classic'));
   const x = ui.btn('Dismiss', { size: 'sm', variant: 'ghost' });
   x.addEventListener('click', () => box.remove());
@@ -1032,7 +994,7 @@ async function start() {
   }
   setupLayout(conf, sel, answerBase, cockpit ? ckRoots : null, slotList);
   if (cockpit) setupDrawers(drRoots, drTitles);
-  if (layoutReq) { setupMenu(sel); layoutNote(sel, cockpit); }
+  if (layoutReq) { await setupMenu(sel); layoutNote(sel, cockpit); oldLayoutBar(sel, cockpit); }
   // a new hero meets the first-steps card once, without opening a menu
   if (cockpit && sel.origin === 'newhero' && !pref(FIRST) && dr.boxes.has('onboarding') && !qs.has('drawer') && qs.get('first') !== '0') { pref(FIRST, '1'); openDrawer('onboarding'); }
   if (cockpit && qs.get('drawer')) openDrawer(qs.get('drawer')); // a link (and the screenshot suite) can open a drawer

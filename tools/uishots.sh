@@ -10,6 +10,7 @@
 #   tools/uishots.sh --vt [--out DIR] [--only GLOB] [--sizes 'WxH ...']   pictures of the Ethereal Vault page (/watch/vault, fake vaults), vt-NAME-WxH.png, in the fit harness
 #   tools/uishots.sh --skills [--out DIR] [--sizes 'WxH ...'] [--tag NAME]   pictures of the Skills page (/watch/skills, fake trees) at a few sizes
 #   tools/uishots.sh --pics [--out DIR] [--only GLOB]   pictures of the cockpit (strip and Needs you variants) at the eight fit sizes, in the fit harness
+#   tools/uishots.sh --nav [--out DIR] [--only GLOB] [--sizes 'WxH ...']   pictures of every page of the shared navigation (card uinav2, nav-NAME-WxH.png: the bottom bar at 390x844, the band at 1366x768), in the fit harness
 #   tools/uishots.sh --fit [--out DIR]                       the cockpit fit check (tools/uishots/fit.go), on the builder:
 #     every cockpit page at the supported sizes loads in an iframe of exactly that size; the page must not scroll, no slot
 #     may overflow, no dead space; the deliberately overflowing fixture must FAIL. No pictures, no golden set.
@@ -18,7 +19,7 @@
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 map=0 skills=0 charu= extra= sizes_only= theme=dark fx= tag= pics=0 pq= cs=0 vt=0
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 map=0 skills=0 charu= extra= sizes_only= theme=dark fx= tag= pics=0 pq= cs=0 vt=0 nav=0
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
@@ -31,6 +32,7 @@ while [ $# -gt 0 ]; do
 	--pics) pics=1; shift ;;
 	--cs) cs=1; shift ;;
 	--vt) vt=1; shift ;;
+	--nav) nav=1; shift ;;
 	--skills) skills=1; shift ;;
 	--url) charu=$(printf %s "$2" | sed 's/&/%26/g; s/?/%3F/g'); shift 2 ;;
 	--hover) extra="$extra&hover=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
@@ -60,6 +62,28 @@ sp=$!
 timeout 2400 Xvfb $disp -screen 0 1920x1200x24 -nolisten tcp >/dev/null 2>&1 &
 xp=$!
 sleep 2
+# The pages of the shared navigation (card uinav2; web/nav.js): name, query, optional click and hit. --fit judges them (nav-NAME: five
+# destinations, one aria-current, the bar clear of the content, the More sheet inside the window) and --nav draws them.
+navpages="nav-live watch?first=0&theme=dark&needs=0
+nav-gear watch/inventory?theme=dark
+nav-skills watch/skills?theme=dark
+nav-points watch/points?theme=dark
+nav-build watch/points?theme=dark&tab=build
+nav-vault watch/vault?theme=dark&vault=pop
+nav-characters watch/characters?theme=dark&chars=3
+nav-return watch/return?theme=dark
+nav-policy watch/policy?theme=dark
+nav-hall watch/hall?theme=dark
+nav-light-skills watch/skills?theme=light
+nav-more-live watch?first=0&theme=dark&needs=0 #btn-more #menu-more,#btn-more
+nav-more-gear watch/inventory?theme=dark #btn-more #menu-more,#btn-more
+nav-more-skills watch/skills?theme=dark #btn-more #menu-more,#btn-more
+nav-more-vault watch/vault?theme=dark&vault=pop #btn-more #menu-more,#btn-more
+nav-more-characters watch/characters?theme=dark&chars=3 #btn-more #menu-more,#btn-more
+navdefect-covers watch/skills?theme=dark&defect=nav-covers
+navdefect-small watch/skills?theme=dark&defect=nav-small
+navdefect-sheet watch/skills?theme=dark&defect=nav-sheet #btn-more #menu-more,#btn-more
+navdefect-wide watch/skills?theme=dark&defect=nav-wide"
 if [ "$cockpit" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/ck-*
 	sizes="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620 390x844"
@@ -124,6 +148,23 @@ if [ "$char" = 1 ]; then
 		rm -rf "${prof:?}"
 	done
 	ls "$out"/char-*
+	exit 0
+fi
+if [ "$nav" = 1 ]; then
+	mkdir -p "$out" && rm -f "$out"/nav-*.png
+	echo "$navpages" | while read -r pname pq pclick phit; do
+		case $pname in navdefect-*) continue ;; esac
+		[ -n "$only" ] && case $pname in $only) ;; *) continue ;; esac
+		for sz in ${sizes_only:-390x844 1366x768}; do
+			w=${sz%x*} h=${sz#*x}
+			ck=; [ -n "$pclick" ] && ck="&click=$(printf %s "$pclick" | sed 's/_/ /g; s/#/%23/g')"
+			prof=$(mktemp -d)
+			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+				--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/$pname-$sz.png" "http://127.0.0.1:$port/__fit?u=/$(printf %s "$pq" | sed 's/&/%26/g; s/?/%3F/g')&w=$w&h=$h&flow=1$ck" >/dev/null 2>&1
+			rm -rf "${prof:?}"
+		done
+	done
+	ls "$out"/nav-*.png | wc -l
 	exit 0
 fi
 if [ "$cs" = 1 ]; then
@@ -587,7 +628,7 @@ character-phone-light watch/inventory?theme=light&fx=phone&tab=pack
 character-phone-sheet watch/inventory?theme=dark&fx=phone&tab=pack&sheet=1 expect=.cv-acts>button
 character-phone-sheet-light watch/inventory?theme=light&fx=phone&tab=pack&sheet=1 expect=.cv-acts>button
 character-phone-errands watch/inventory?theme=dark&fx=phone&tab=pack ?#cv-errtoggle #errands,#stashgold
-character-phone-menu watch/inventory?theme=dark&fx=phone&tab=pack ?#cv-more .cv-morelist_a
+character-phone-menu watch/inventory?theme=dark&fx=phone&tab=pack ?#btn-more #menu-more
 character-phonehero watch/inventory?theme=dark
 phonedefect-label watch/inventory?theme=dark&fx=phone&tab=pack&defect=label
 phonedefect-acts watch/inventory?theme=dark&fx=phone&tab=pack&sheet=1&defect=acts
@@ -655,7 +696,6 @@ vault-reveal-multi-light watch/vault?theme=light&vault=revealcain [data-key=filt
 vault-reveal-dead watch/vault?theme=dark&vault=revealdead [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-toggle]
 vault-sell-sheet watch/vault?theme=dark&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=sell] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-sell-sheet-light watch/vault?theme=light&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=sell] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
-vault-menu-entry watch?first=0&theme=dark&needs=0 #btn-more [data-key=vault-open]
 vault-more-entry watch?first=0&theme=dark&needs=0 [data-key=verb-more] [data-key=more-vault]
 vaultdefect-clip watch/vault?theme=dark&vault=pop&defect=vault-clip
 vaultdefect-wide watch/vault?theme=dark&vault=pop&defect=vault-wide
@@ -665,7 +705,8 @@ vaultdefect-covered watch/vault?theme=dark&vault=pop&defect=vault-covered
 vaultdefect-sheet watch/vault?theme=dark&vault=pop&defect=vault-sheet [data-key=select-toggle]|.vt-cell|[data-key=discard] .vt-sheet-card,[data-key=sheet-cancel]
 vaultdefect-noname watch/vault?theme=dark&vault=pop&defect=vault-noname
 vaultdefect-enabled watch/vault?theme=dark&vault=pop&defect=vault-enabled
-vaultdefect-ethenabled watch/vault?theme=dark&vault=eth-short&defect=vault-ethenabled"
+vaultdefect-ethenabled watch/vault?theme=dark&vault=eth-short&defect=vault-ethenabled
+$navpages"
 	# in a click or hit selector "_" stands for a space and a leading "?" makes a step optional (no switch on a wide rail);
 	# a third column hover=SEL or ctx=SEL hovers or right-clicks that cell before the measurement (the tooltip, the menu)
 	echo "$pages" | while read -r pname pq pclick phit; do
@@ -680,7 +721,10 @@ vaultdefect-ethenabled watch/vault?theme=dark&vault=eth-short&defect=vault-ethen
 		charsdefect-*) szs="1280x620 412x780 360x640" ;;
 		chars-*) szs="$sizes 412x780 360x640" ;;
 		vaultdefect-*) szs="1280x620 412x780 360x640" ;;
-		vault-menu-entry | vault-more-entry) ;;
+		vault-more-entry) ;;
+		navdefect-wide) szs="1366x768" ;;
+		navdefect-*) szs="390x844" ;;
+		nav-*) szs="390x844 1366x768" ;;
 		vault-*) szs="$sizes 412x780 360x640" ;;
 		questdefect-words) szs="1366x768" ;;
 		questdefect-clip | questdefect-two) szs="1366x768 412x780" ;;
@@ -705,6 +749,7 @@ vaultdefect-ethenabled watch/vault?theme=dark&vault=eth-short&defect=vault-ethen
 			hover=* | ctx=* | expect=* | scroll=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g; s/|/%7C/g')" ;;
 			?*) ck="&click=$(enc "$pclick")" ;;
 			esac
+			case $pname in nav-* | navdefect-*) ck="$ck&flow=1" ;; esac
 			[ -n "$phit" ] && ck="$ck&hit=$(enc "$phit" | sed 's/%7C/|/g')"
 			if [ -n "$only" ]; then case $pname in $only) ;; *) continue ;; esac; fi
 			prof=$(mktemp -d)

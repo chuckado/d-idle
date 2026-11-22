@@ -1,8 +1,6 @@
 {
   "schema": "watch.characters.texts/1",
   "title": "Characters",
-  "back": "Back",
-  "backLabel": "Back to the hero",
   "loading": "Loading the characters...",
   "playing": "Playing",
   "playingNow": "Playing now: {name}",

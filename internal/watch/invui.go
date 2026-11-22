@@ -15,22 +15,15 @@ const charPage = `<!DOCTYPE html>
 <meta name="color-scheme" content="dark light"><title>d.idle - character</title><link rel="icon" href="data:,">
 <link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/reset.css"><link rel="stylesheet" href="/watch/shell.css">
 <link rel="stylesheet" href="/watch/components.css"><link rel="stylesheet" href="/watch/inventory.css"><link rel="stylesheet" href="/watch/utilities.css">
-<link rel="stylesheet" href="/watch/inventory-tip.css"><link rel="stylesheet" href="/watch/inventory-actions.css"><link rel="stylesheet" href="/watch/inventory-merc.css"><link rel="stylesheet" href="/watch/inventory-sets.css"><link rel="stylesheet" href="/watch/inventory-canvas.css">
+<link rel="stylesheet" href="/watch/inventory-tip.css"><link rel="stylesheet" href="/watch/inventory-actions.css"><link rel="stylesheet" href="/watch/inventory-merc.css"><link rel="stylesheet" href="/watch/inventory-sets.css"><link rel="stylesheet" href="/watch/inventory-canvas.css"><link rel="stylesheet" href="/watch/nav.css">
 </head><body class="cv-root" data-canvas>
 <div class="d-shell cv" id="cv" data-tab="hero">
 <header class="top d-band-status" data-band="status" data-cockpit-slot="band" data-fit-deep>
  <div class="d-brand"><span class="d-brand-mark" aria-hidden="true"></span><h1>d.idle</h1></div>
  <div class="d-band-main"></div>
- <nav class="d-links" aria-label="Other pages">
-  <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch?live=1">Live screen</a>
-  <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/skills">Skills</a>
-  <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/points">Points</a>
-  <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/vault">Vault</a>
-  <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/policy">Policy</a>
+ <div class="d-links" data-nav-host>
   <button class="d-btn" data-size="sm" data-variant="ghost" id="btn-theme" type="button" aria-label="Switch colour theme">Theme: dark</button>
-  <button class="d-btn cv-morebtn" data-size="sm" data-variant="ghost" id="cv-more" type="button" aria-label="More pages" aria-expanded="false" aria-controls="cv-morelist">&hellip;</button>
-  <div class="cv-morelist" id="cv-morelist" role="group" aria-label="Pages" hidden><a href="/watch/inventory" aria-current="page">Inventory</a><a href="/watch/skills">Skills</a><a href="/watch/points">Points</a><a href="/watch/vault">Vault</a><a href="/watch/policy">Policy</a><a href="/watch/return">Return</a></div>
- </nav>
+ </div>
 </header>
 <div class="cv-bar" id="cv-bar" role="toolbar" aria-label="Search, filters, gold and errands" data-cockpit-slot="band" data-fit-deep>
  <input class="cv-q" id="cv-q" type="search" placeholder="Search pack and stash  /" aria-label="Search pack and stash" autocomplete="off">
@@ -81,6 +74,7 @@ const charPage = `<!DOCTYPE html>
 <div class="cv-hidden" hidden><div id="repair"></div><div id="detail"></div><span id="note"></span></div>
 </div>
 <div id="toasts" class="d-toasts" role="status" aria-live="polite"></div>
+<script src="/watch/nav.js"></script>
 <script type="module" src="/watch/shell.js"></script>
 <script src="/watch/inventory.js"></script>
 <script src="/watch/inventory-tip.js"></script>

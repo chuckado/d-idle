@@ -118,7 +118,7 @@ export function measure(win, opts) {
   }
   const video = { controls: vn, overlap: vo };
   return {
-    video, orderCut, zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, chars: chx, vault: vtx, empty, unready, slots,
+    nav: navPage(win, d, vis, cs), video, orderCut, zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, chars: chx, vault: vtx, empty, unready, slots,
     covered: Math.round((covered * 100) / (cols * rows)), hole: best * cs2, holeAt: [(bx - best + 1) * cs2, (by - best + 1) * cs2],
   };
 }
@@ -553,4 +553,47 @@ function vaultPage(win, d, vis, cs) {
 export function vaultNow(win) {
   const vis = (n) => { const r = n.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null; };
   return vaultPage(win, win.document, vis, (n) => win.getComputedStyle(n));
+}
+
+// The shared navigation (web/nav.js, card uinav2): five destinations and one aria-current on every page; a bottom bar under 700 px
+// that sits in the window and covers no content, links in the band above; the More sheet, once open, inside the window and
+// clear of the bar. Returns null on a page without it (the harness page of a defect, a sign-in).
+const NAV_LABELS = ['Live', 'Gear', 'Skills', 'Vault', 'More'];
+function navPage(win, d, vis, cs) {
+  const nav = d.querySelector('nav[data-nav]');
+  const vw = win.innerWidth, vh = win.innerHeight;
+  if (!nav) return d.body.hasAttribute('data-nav') ? { missing: true } : null;
+  const r = nav.getBoundingClientRect(), bar = cs(nav).position === 'fixed';
+  const kids = [...nav.children];
+  const o = { missing: false, bar, labels: kids.map((k) => k.textContent), current: kids.filter((k) => k.getAttribute('aria-current')).length, tiny: [], covers: [], sheet: null,
+    inside: r.width > 0 && r.left >= -1 && r.top >= -1 && r.right <= vw + 1 && r.bottom <= vh + 1, host: nav.parentElement ? nav.parentElement.className : '', rect: [Math.round(r.left), Math.round(r.top), Math.round(r.right), Math.round(r.bottom)] };
+  for (const k of kids) { const kr = vis(k); if (!kr || kr.height < (bar ? 44 : 30) || kr.width < 40) o.tiny.push(k.textContent + ' ' + Math.round(kr ? kr.width : 0) + 'x' + Math.round(kr ? kr.height : 0)); }
+  if (bar) {
+    // the end of the page: nothing but fixed layers (the bar, sheets, toasts) may reach into the bar's strip
+    const se = d.scrollingElement; win.scrollTo(0, se.scrollHeight);
+    let low = 0, who = '';
+    for (const n of d.body.querySelectorAll('*')) {
+      if (nav.contains(n) || n.closest('.d-menu-pop, .d-toasts, .d-drawer, .d-drawer-back, [role="dialog"], .vt-toast, .vt-detail, .cv-sel, .inv-tip, .inv-act, script, style')) continue;
+      const nr = vis(n);
+      if (!nr || cs(n).visibility === 'hidden') continue;
+      let layer = false; // a fixed layer (the Reset progress, the pause banner) is not page content
+      for (let p = n; p && p !== d.body; p = p.parentElement) if (cs(p).position === 'fixed') { layer = true; break; }
+      if (layer) continue;
+      let bottom = nr.bottom;
+      for (let p = n.parentElement; p && p !== d.body && p !== d.documentElement; p = p.parentElement) { if (cs(p).overflowY !== 'visible' && cs(p).overflowY !== 'clip') bottom = Math.min(bottom, p.getBoundingClientRect().bottom); }
+      if (bottom > low) { low = bottom; who = n.tagName.toLowerCase() + (typeof n.className === 'string' && n.className ? '.' + n.className.trim().split(/\s+/)[0] : ''); }
+    }
+    if (low > r.top + 1) o.covers.push(who + ' ends at ' + Math.round(low) + ', the bar starts at ' + Math.round(r.top));
+    win.scrollTo(0, 0);
+  }
+  const sh = d.getElementById('menu-more');
+  if (sh && !sh.hidden) {
+    const sr = vis(sh);
+    o.sheet = sr ? { inside: sr.left >= -1 && sr.top >= -1 && sr.right <= vw + 1 && sr.bottom <= vh + 1, clearOfBar: !bar || sr.bottom <= r.top + 1, bottom: Math.round(sr.bottom), barTop: Math.round(r.top), first: d.activeElement && sh.contains(d.activeElement) } : { inside: false, clearOfBar: false };
+  }
+  return o;
+}
+export function navNow(win) {
+  const vis = (n) => { const r = n.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null; };
+  return navPage(win, win.document, vis, (n) => win.getComputedStyle(n));
 }

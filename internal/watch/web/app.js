@@ -442,7 +442,7 @@
   // The tally strip (TASK-129): one line from /api/tally, hidden while the route is missing or tally is off.
   function renderTally(t) {
     var box = $('tallystrip') || el('div'); clear(box); // the strip moved into the tally panel (side band)
-    $('returnlink').hidden = !t; // the route exists only where the bot mounts the return screen
+    if (t) document.documentElement.dataset.returnScreen = '1'; else delete document.documentElement.dataset.returnScreen; // the route exists only where the bot mounts the return screen (shell.js shows the sheet's link by it)
     box.hidden = !t || !t.enabled;
     if (box.hidden) return;
     box.appendChild(el('b', '', t.strip));

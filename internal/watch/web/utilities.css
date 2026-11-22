@@ -23,7 +23,7 @@
    fixed 100dvh frame and the panels' own scroll boxes suit a desk window; on a phone a box that scrolls inside the page swallows the
    finger, so the tab grows to its content and the page scrolls, the band stays on top. Its own layer, after panels (they set the scrollers). */
 @layer utilities {
-  .d-shell[data-template="cockpit"][data-cmode="phone"] { block-size: auto; min-block-size: calc(100dvh - var(--d-banner-h, 0px)); overflow: visible; grid-template-columns: minmax(0, 1fr); grid-template-rows: var(--c-band) auto; }
+  .d-shell[data-template="cockpit"][data-cmode="phone"] { block-size: auto; min-block-size: calc(100dvh - var(--d-banner-h, 0px) - var(--d-nav-h, 0px)); overflow: visible; grid-template-columns: minmax(0, 1fr); grid-template-rows: var(--c-band) auto; }
   .d-shell[data-template="cockpit"][data-cmode="phone"] > .d-band-status { position: sticky; inset-block-start: 0; z-index: var(--d-z-band); }
   .d-main[data-template="cockpit"][data-cmode="phone"] { grid-template-rows: auto; align-content: start; min-block-size: 0; }
   .d-main[data-template="cockpit"][data-cmode="phone"][data-has="sp"] { grid-template-rows: auto auto; align-content: start; }
@@ -51,10 +51,4 @@
   .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-t, .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-t b { white-space: normal; overflow: visible; text-overflow: clip; min-inline-size: 0; overflow-wrap: anywhere; }
   .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-row { grid-template-columns: minmax(0, 1fr) auto; }
   .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-row > .qb-w, .d-main[data-cmode="phone"] [data-panel="quest-list"] .qb-row > .qb-auto { justify-self: start; }
-}
-
-@layer utilities {
-  /* the band's Vault link: a 44 px hit area on a 32 px button, like the header Reset */
-  .d-band-status .d-links > a[href^="/watch/vault"] { position: relative; }
-  .d-band-status .d-links > a[href^="/watch/vault"]::after { content: ""; position: absolute; inset: -6px -2px; }
 }
