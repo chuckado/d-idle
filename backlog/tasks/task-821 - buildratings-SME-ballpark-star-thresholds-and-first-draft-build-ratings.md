@@ -1,10 +1,11 @@
 ---
 id: TASK-821
 title: 'buildratings: SME ballpark star thresholds and first-draft build ratings'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T20:18:00Z'
+updated_date: '2026-11-22T20:34:00Z'
 labels:
   - docs
   - research
