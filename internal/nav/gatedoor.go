@@ -54,6 +54,9 @@ func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool 
 		}
 	}
 	if !found {
+		if n.approachGate(ctx, o, levelNo, cands[0]) {
+			return true
+		}
 		n.logNoDoor(o, levelNo, cands)
 		return false
 	}
@@ -84,6 +87,33 @@ func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool 
 	}
 	n.clk.Sleep(900 * time.Millisecond)
 	n.invalidate()
+	return true
+}
+
+// approachGate walks to the reachable cell nearest to a cut-off gate, at most twice per level pair: the map lists the
+// objects of the rooms that are up, and a door at the far end of the level is not up while the hero stands at the
+// other end (V live, Monastery Gate: 5 objects listed from the arrival point, the nearest 42 subtiles off, the door
+// at the gate not among them). Once the rooms there load, the next pass finds the door. It reports whether it walked.
+func (n *Navigator) approachGate(ctx context.Context, o *obs, levelNo int, g gate) bool {
+	key := [2]int{o.level, levelNo}
+	if n.doorApproach == nil {
+		n.doorApproach = map[[2]int]int{}
+	}
+	if n.doorApproach[key] >= 2 {
+		return false
+	}
+	res, err := n.plan(o.lm, o.pos, g.at, 3, o.snap.Monsters, 0)
+	if err != nil && len(res.wps) == 0 {
+		return false
+	}
+	if dist(res.goal, g.at) > dist(o.pos, g.at)-10 { // no nearer reachable point: nothing to approach
+		return false
+	}
+	n.doorApproach[key]++
+	n.log.Info("nav: the gate is cut off, walking to the nearest reachable cell to look for its door", "to", levelNo, "gate", g.at, "cell", res.goal, "from", o.pos)
+	if err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return res.goal, 3, nil }, walkOpts{}); err != nil && !errors.Is(err, ErrAlreadyThere) {
+		n.log.Info("nav: could not walk to the cut-off gate", "err", err)
+	}
 	return true
 }
 

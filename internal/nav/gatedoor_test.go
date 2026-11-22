@@ -3,6 +3,7 @@ package nav
 import (
 	"context"
 	"errors"
+	"math"
 	"testing"
 
 	"d2lod-bot/internal/d2map"
@@ -23,7 +24,12 @@ func doorWorld(t *testing.T) (*sim, d2map.Rect) {
 	s := newSim(g, input.Point{X: 3100, Y: 3090}, l1, l2)
 	s.reveal = 300 // the whole level is in view, like a fully known d2d map
 	s.objects = append(s.objects, d2Unit(77, 24, 3002, 3057))
-	s.levels[0].lm.Presets = []d2map.Preset{{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: 3002, Y: 3057}}}
+	// the map lists the door only once the hero is near it (its room is up), like d2d's objects of the rooms laid
+	s.onStep = func(s *sim) {
+		if math.Hypot(s.px-3002, s.py-3057) < 60 {
+			s.levels[0].lm.Presets = []d2map.Preset{{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: 3002, Y: 3057}}}
+		}
+	}
 	return s, doorCells
 }
 
