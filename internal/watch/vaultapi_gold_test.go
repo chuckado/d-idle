@@ -34,9 +34,9 @@ func sealedVault(t testing.TB, n, capacity int) *vault.Store {
 // goldStub is a stubActor whose gold order settles in the call, like the real keeper: queued is never seen by the page.
 type goldStub struct {
 	*stubActor
-	info   VaultGoldInfo
-	order  *VaultGoldOrder
-	posted int
+	info              VaultGoldInfo
+	order             *VaultGoldOrder
+	posted            int
 	allPosted, allMax int
 }
 
