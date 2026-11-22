@@ -322,7 +322,9 @@ func andarielNodes() []Node {
 func hopNodes() []Node {
 	q := QAct1Done
 	done := func(w World) bool { return w.Act >= 2 }
-	return nodes(
-		StepTalk(id(q, "warriv"), "Sail east with Warriv", NPCWarriv, "go east", done, func(w World) bool { return QuestDone(w, QAndariel) || w.Quest(QAndariel).Stage >= StageCleared }),
-	)
+	warriv := StepTalk(id(q, "warriv"), "Sail east with Warriv", NPCWarriv, "go east", done, func(w World) bool { return QuestDone(w, QAndariel) || w.Quest(QAndariel).Stage >= StageCleared })
+	// Need says "not needed" while Andariel lives (the ready test is false); the board must read that as nothing, not as
+	// "sailed" (user screenshot 2026-11-21: Sail east DONE in Act 1). Only the world's act is evidence.
+	warriv.Evidence = done
+	return nodes(warriv)
 }
