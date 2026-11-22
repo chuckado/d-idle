@@ -441,6 +441,65 @@
     "Raise Skeletal Mage": "f6",
     "Lower Resist": "f7",
     "Clay Golem": "f8"
+   },
+   "necro": {
+    "golems": [
+     "FireGolem",
+     "Fire Golem",
+     "Clay Golem"
+    ],
+    "summons": [
+     {
+      "name": "Raise Skeleton",
+      "kind": "skeleton",
+      "max": 12
+     },
+     {
+      "name": "Raise Skeletal Mage",
+      "kind": "mage",
+      "max": 4
+     },
+     {
+      "name": "Revive",
+      "kind": "revive",
+      "max": 8
+     }
+    ],
+    "curses": [
+     {
+      "name": "Lower Resist",
+      "when": "magicResist"
+     },
+     {
+      "name": "Amplify Damage",
+      "state": 9,
+      "when": "any"
+     },
+     {
+      "name": "Weaken",
+      "state": 19,
+      "when": "eliteOrBoss"
+     },
+     {
+      "name": "Dim Vision"
+     },
+     {
+      "name": "Terror"
+     },
+     {
+      "name": "Confuse"
+     },
+     {
+      "name": "Life Tap"
+     },
+     {
+      "name": "Attract"
+     },
+     {
+      "name": "Decrepify"
+     }
+    ],
+    "explosion": "Corpse Explosion"
    }
   },
   {
@@ -468,6 +527,65 @@
     "Amplify Damage": "f6",
     "Corpse Explosion": "f7",
     "Revive": "f8"
+   },
+   "necro": {
+    "golems": [
+     "FireGolem",
+     "Fire Golem",
+     "Clay Golem"
+    ],
+    "summons": [
+     {
+      "name": "Raise Skeleton",
+      "kind": "skeleton",
+      "max": 12
+     },
+     {
+      "name": "Raise Skeletal Mage",
+      "kind": "mage",
+      "max": 4
+     },
+     {
+      "name": "Revive",
+      "kind": "revive",
+      "max": 8
+     }
+    ],
+    "curses": [
+     {
+      "name": "Lower Resist",
+      "when": "magicResist"
+     },
+     {
+      "name": "Amplify Damage",
+      "state": 9,
+      "when": "any"
+     },
+     {
+      "name": "Weaken",
+      "state": 19,
+      "when": "eliteOrBoss"
+     },
+     {
+      "name": "Dim Vision"
+     },
+     {
+      "name": "Terror"
+     },
+     {
+      "name": "Confuse"
+     },
+     {
+      "name": "Life Tap"
+     },
+     {
+      "name": "Attract"
+     },
+     {
+      "name": "Decrepify"
+     }
+    ],
+    "explosion": "Corpse Explosion"
    }
   },
   {

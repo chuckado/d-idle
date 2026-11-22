@@ -88,6 +88,105 @@ type Profile struct {
 	Buffs     [][]string        `json:"buffs"`
 	Layout    map[string]string `json:"layout"`
 	Melee     *MeleeParams      `json:"melee"`
+	// Necro is the summon, curse and golem data of a Necromancer profile (card necro4): required on every
+	// necromancer profile, rejected on any other class (validateNecro).
+	Necro *NecroParams `json:"necro"`
+}
+
+// NecroParams is the upkeep data of a Necromancer profile; combat/necro.go holds no skill name.
+type NecroParams struct {
+	// Golems in preference order; the first learned and affordable one is raised when no golem stands. Both
+	// spellings of a skill are listed where the catalog name is U (skills.txt "FireGolem", display "Fire Golem").
+	Golems []string `json:"golems"`
+	// Summons in raise order. Kind picks the census column and the corpse (revive takes the strongest corpse);
+	// Max caps the wanted count (the wish is min(skill level, Max); the real cap is found by evidence).
+	Summons []SummonRule `json:"summons"`
+	// Curses in priority order; the first whose When holds for the target and that is learned, bound and
+	// affordable is cast. A rule with no When is recognised as a curse (never cast at the own feet) but not cast.
+	Curses []CurseRule `json:"curses"`
+	// Explosion names the corpse-detonating skill ("" = none). It runs only when no summon wants the corpse.
+	Explosion string `json:"explosion"`
+}
+
+// SummonRule is one upkeep entry.
+type SummonRule struct {
+	Name string `json:"name"`
+	Kind string `json:"kind"` // skeleton, mage or revive
+	Max  int    `json:"max"`
+}
+
+// CurseRule is one curse. State is the monster state number the curse sets (0: not known, the cast memory stands
+// in). When: "magicResist" (target resists magic strongly and physical not), "eliteOrBoss", "any" or "" (never).
+type CurseRule struct {
+	Name  string `json:"name"`
+	State int    `json:"state"`
+	When  string `json:"when"`
+}
+
+// validateNecro checks the necro blocks at load time: an error names the profile and the field.
+func validateNecro(ps []Profile) error {
+	for _, p := range ps {
+		n := p.Necro
+		if p.Class != "necromancer" {
+			if n != nil {
+				return fmt.Errorf("profile %q: necro block on class %q", p.ProfileID(), p.Class)
+			}
+			continue
+		}
+		if n == nil {
+			return fmt.Errorf("profile %q: necromancer profile without a necro block", p.ProfileID())
+		}
+		if len(n.Golems) == 0 /* explosion may be empty */ || len(n.Summons) == 0 || len(n.Curses) == 0 {
+			return fmt.Errorf("profile %q: necro golems, summons and curses must not be empty", p.ProfileID())
+		}
+		for _, s := range n.Summons {
+			if s.Name == "" || s.Max < 1 || (s.Kind != "skeleton" && s.Kind != "mage" && s.Kind != "revive") {
+				return fmt.Errorf("profile %q: bad summon rule %+v", p.ProfileID(), s)
+			}
+		}
+		for _, c := range n.Curses {
+			switch c.When {
+			case "", "any", "eliteOrBoss", "magicResist":
+			default:
+				return fmt.Errorf("profile %q: curse %q has unknown when %q", p.ProfileID(), c.Name, c.When)
+			}
+			if c.Name == "" {
+				return fmt.Errorf("profile %q: curse rule without a name", p.ProfileID())
+			}
+		}
+	}
+	return nil
+}
+
+// necroParams is the necro block of the profile in use; an error names the class or profile that has none.
+func (f *Fighter) necroParams(p *d2.Player) (*NecroParams, error) {
+	pr, err := SelectProfileChecked(p, f.cat, f.Build)
+	if err != nil {
+		return nil, err
+	}
+	if pr.Necro == nil {
+		return nil, fmt.Errorf("combat: profile %q has no necro block (class %d)", pr.ProfileID(), int(p.Class))
+	}
+	return pr.Necro, nil
+}
+
+// curseSet is every curse name of the block (recognised, whether cast or not).
+func (n *NecroParams) curseSet() map[string]bool {
+	m := map[string]bool{}
+	for _, c := range n.Curses {
+		m[c.Name] = true
+	}
+	return m
+}
+
+// curseState is the state number of a curse (0: unknown).
+func (n *NecroParams) curseState(name string) int {
+	for _, c := range n.Curses {
+		if c.Name == name {
+			return c.State
+		}
+	}
+	return 0
 }
 
 type classData struct {
@@ -117,6 +216,9 @@ func loadClassData() *classData {
 		classDB.skills = map[string]skillMeta{}
 		for _, s := range sk.Skills {
 			classDB.skills[s.Name] = skillMeta{Kind: kindOf(s.Kind), Range: s.Range, Hand: handOf(s.Hand), Hold: s.Hold}
+		}
+		if err := validateNecro(pr.Profiles); err != nil {
+			panic("combat: classdata/profiles.json: " + err.Error())
 		}
 		classDB.profiles = pr.Profiles
 		classDB.names = map[string]bool{}
