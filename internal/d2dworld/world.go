@@ -188,6 +188,14 @@ func (w *World) Update() (d2map.State, error) {
 	return w.update(ctx, false)
 }
 
+// Refetch makes the next Update read the level again whatever the character's distance and the rate limit say. A door
+// that was used changes collision cells without the character moving (card mapverify); nav calls it after using one.
+func (w *World) Refetch() {
+	if w.cur != nil {
+		w.cur.fetched = false
+	}
+}
+
 func (w *World) ctx() (context.Context, context.CancelFunc) {
 	return context.WithTimeout(context.Background(), w.o.Timeout+w.o.LinkWait)
 }

@@ -69,3 +69,20 @@ func TestLinkedLevelMissingFromLayoutGetsBorderCells(t *testing.T) {
 		t.Fatal("level 5 is not linked")
 	}
 }
+
+// A used door changes the grid without the character moving: Refetch makes the next Update read it again.
+func TestRefetchReadsTheGridAgain(t *testing.T) {
+	b := newBorderStub()
+	w := New(b, Options{})
+	w.Update()
+	n := b.calls["grid"]
+	w.Update()
+	if b.calls["grid"] != n {
+		t.Fatalf("a still character refetched: %d -> %d", n, b.calls["grid"])
+	}
+	w.Refetch()
+	w.Update()
+	if b.calls["grid"] != n+1 {
+		t.Fatalf("Refetch did not read the grid again: %d", b.calls["grid"])
+	}
+}

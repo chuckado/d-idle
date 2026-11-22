@@ -77,6 +77,9 @@ func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool 
 		n.log.Info("nav door interact failed", "err", err)
 	}
 	n.clk.Sleep(900 * time.Millisecond)
+	if r, ok := n.w.(interface{ Refetch() }); ok {
+		r.Refetch() // the door changed collision cells where the character did not move: read the grid again
+	}
 	n.invalidate()
 	return true
 }
