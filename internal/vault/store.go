@@ -489,6 +489,13 @@ func (s *Store) apply(ev *event) error {
 		}
 		r.Gold, r.Stage, r.Reason = ev.N, "", ev.Reason
 		s.leave(r, Sold, ev.T)
+	case "soldnow": // the instant sale: the gold was credited to the stash by order ev.Reason
+		r, err := need(Recorded, SellQ)
+		if err != nil {
+			return err
+		}
+		r.Gold, r.Stage, r.Reason, r.Ordered = ev.N, "", ev.Reason, false
+		s.leave(r, Sold, ev.T)
 	case "discard":
 		r, err := need(Recorded)
 		if err != nil {
@@ -729,6 +736,16 @@ func (s *Store) dry(ev *event) error {
 		}
 	case "sellfail", "sellcancel", "sold":
 		return ok(SellQ)
+	case "soldnow":
+		if err := ok(Recorded, SellQ); err != nil {
+			return err
+		}
+		if r.Pin {
+			return ErrPinned
+		}
+		if r.Stage != "" {
+			return fmt.Errorf("%w: %s has a step in flight", ErrState, r.ID)
+		}
 	}
 	return nil
 }
@@ -995,6 +1012,25 @@ func (s *Store) Discard(id, reason string) error {
 		return err
 	}
 	return s.commit(&event{Ev: "discard", ID: id, Reason: reason})
+}
+
+// SellNow ends a sale the player ordered with the gold already credited to the stash by order `order`: the record is archived
+// first (the archive line is durable before the log line, as Discard), then marked sold with the gold. Pinned records and a
+// record with a step in flight are refused. Recorded and queued (sellq) records are both accepted.
+func (s *Store) SellNow(id string, gold int, order string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	r := s.byID[id]
+	if r == nil {
+		return ErrNotFound
+	}
+	if err := s.dry(&event{Ev: "soldnow", ID: id}); err != nil {
+		return err
+	}
+	if err := s.archive(r, fmt.Sprintf("sold: %d gold, order %s", gold, order)); err != nil {
+		return err
+	}
+	return s.commit(&event{Ev: "soldnow", ID: id, N: gold, Reason: order})
 }
 
 // Recover resolves every InFlight keep after a restart. present reports whether the item (matched by Raw hash

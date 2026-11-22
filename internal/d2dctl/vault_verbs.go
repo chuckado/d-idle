@@ -33,6 +33,7 @@ const (
 	CapItemCreate  = "item.create"
 	CapItemVault   = "item.vault"
 	CapVaultStats  = "vault.stats"
+	CapItemPrice   = "item.price"  // read-only `item price <hex> [npc]` (fork branch didle/vaultsell-20261122)
 	CapItemDecode  = "item.decode" // read-only `item decode <hex>` (fork branch didle/devp18-20261121)
 	vaultWhereStsh = "stash"
 	vaultWhereInv  = "inv"
@@ -44,6 +45,8 @@ type VaultCaps struct {
 	GroundFull, GroundTake, ItemFull, ItemCreate, ItemVault bool
 	Decode                                                  bool // `item decode` (read-only); not part of Complete
 	PayGold                                                 bool // `debug paygold` (fork flag --vault-pay, ADR 0029); not part of Complete
+	CreditGold                                              bool // `debug creditgold` (fork flag --vault-pay; the instant vault sale); not part of Complete
+	Price                                                   bool // `item price` (read-only engine sell price); not part of Complete
 }
 
 // Complete reports whether every verb of the keep flow is there (peek, take, create, and vault for the deposit side).
@@ -55,7 +58,7 @@ func (v VaultCaps) Complete() bool {
 func VaultCapsOf(caps []string) VaultCaps {
 	return VaultCaps{
 		GroundFull: HasCap(caps, CapGroundFull), GroundTake: HasCap(caps, CapGroundTake), ItemFull: HasCap(caps, CapItemFull),
-		ItemCreate: HasCap(caps, CapItemCreate), ItemVault: HasCap(caps, CapItemVault), PayGold: HasCap(caps, CapVaultPaygold), Decode: HasCap(caps, CapItemDecode),
+		ItemCreate: HasCap(caps, CapItemCreate), ItemVault: HasCap(caps, CapItemVault), PayGold: HasCap(caps, CapVaultPaygold), CreditGold: HasCap(caps, CapVaultCreditgold), Price: HasCap(caps, CapItemPrice), Decode: HasCap(caps, CapItemDecode),
 	}
 }
 

@@ -32,8 +32,11 @@ type VaultFake struct {
 	// A norm that is missing answers parse (an unknown record). Decodes counts the calls (a read: nothing else changes).
 	Bytes   map[string]VaultRecord
 	Decodes int
-	keys    map[string]bool
-	nextID  int
+	// Prices maps a record's norm hex to what the fork's `item price` answers for it. A missing norm answers parse. PriceCalls counts the calls.
+	Prices     map[string]ItemPrice
+	PriceCalls int
+	keys       map[string]bool
+	nextID     int
 }
 
 // Where an item sits on the hero.
@@ -302,7 +305,7 @@ func (f *VaultFake) VaultCaps(context.Context) (VaultCaps, error) {
 	if f.FlagOff {
 		return VaultCaps{}, nil
 	}
-	return VaultCaps{GroundFull: true, GroundTake: true, ItemFull: true, ItemCreate: true, ItemVault: true, PayGold: true, Decode: true}, nil
+	return VaultCaps{GroundFull: true, GroundTake: true, ItemFull: true, ItemCreate: true, ItemVault: true, PayGold: true, CreditGold: true, Price: true, Decode: true}, nil
 }
 
 var (
@@ -374,3 +377,23 @@ func (f *VaultFake) ItemDecode(_ context.Context, hexNorm string) (VaultRecord, 
 	rec.Raw, rec.Norm = hexNorm, hexNorm
 	return rec, nil
 }
+
+// ItemPrice answers like the fork's `item price`: the engine's sell price of the bytes, nothing created, nothing changed.
+func (f *VaultFake) ItemPrice(_ context.Context, hexNorm, _ string) (ItemPrice, error) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	if err := f.gate(); err != nil {
+		return ItemPrice{}, err
+	}
+	if err := ValidHex(hexNorm); err != nil {
+		return ItemPrice{}, err
+	}
+	f.PriceCalls++
+	p, ok := f.Prices[hexNorm]
+	if !ok {
+		return ItemPrice{}, &VaultRefused{Code: VaultErrParse, Why: "unknown bytes"}
+	}
+	return p, nil
+}
+
+var _ Pricer = (*VaultFake)(nil)
