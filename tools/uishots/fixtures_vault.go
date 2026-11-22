@@ -11,6 +11,7 @@ import (
 	"sync"
 	"time"
 
+	"d2lod-bot/internal/bulkid"
 	"d2lod-bot/internal/ether"
 	"d2lod-bot/internal/status"
 	"d2lod-bot/internal/vault"
@@ -187,6 +188,12 @@ func newVaultFor(mode string, dir string) *watch.VaultAPI {
 			a.preset(ids)
 		}
 		desk.Act = a
+		if f, ferr := bulkid.DefaultFilter(); ferr == nil { // the Reveal bar (one bar for the identify filter) needs the filter table, as the bot's page has
+			desk.MassFilter = f
+			desk.Quality = func(q int) string {
+				return [...]string{"?", "low", "normal", "superior", "magic", "set", "rare", "unique", "crafted"}[q%9]
+			}
+		}
 	}
 	desk.Store = func() *vault.Store { return s }
 	api.Bind(desk)

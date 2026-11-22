@@ -426,6 +426,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 15f5df146 11-21 20:08 `Merge agent/vaultdesktop: vaultdesktop: card result, merge main` (vaultdesktop)
 - 537c7a083 11-21 16:49 `Merge agent/parkrelease: parkrelease: leakcheck wording` (parkrelease)
 - 11d0d6c11 11-21 16:24 `Merge agent/vaultwire: vaultwire: task card TASK-791 with result` (vaultwire)
 - 4bdf35e8e 11-21 15:41 `Merge agent/pgvault: Merge origin/main into pgvault` (pgvault)
@@ -435,5 +436,4 @@
 - 80a801974 11-21 15:20 `Merge origin/main into pgvault` (-)
 - caadfa33f 11-21 15:19 `Merge agent/cainscroll: Merge branch 'main' into cainscroll` (cainscroll)
 - 87f94536e 11-21 15:18 `Merge branch 'main' into cainscroll` (-)
-- 72fb9cc59 11-21 15:11 `Merge agent/vaultfull: Full Vault never trims or sells; missed drops; knob loot.vaultAutoTrim` (vaultfull)
 <!-- statusgen:end -->

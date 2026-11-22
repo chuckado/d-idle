@@ -54,6 +54,19 @@ export function mountVault(d) {
   meterBox.append(meterLabel, meter, meterText, pinsText, wallet, upgrade, downgrade, upgradeWhy, downWhy);
   head.append(back, h1, heroName, meterBox);
 
+  // Folds: a block that can fill the window (the Reveal bar, Marked for sale) is one line that opens on a tap; the choice is remembered per block.
+  const foldGet = (k) => { try { return localStorage.getItem('vt-fold-' + k); } catch (e) { return null; } };
+  const foldPut = (k, v) => { try { localStorage.setItem('vt-fold-' + k, v ? '1' : '0'); } catch (e) { /* storage blocked */ } };
+  function foldBtn(text) {
+    const b = el('button', 'vt-fold'); b.type = 'button'; b.append(el('span', 'vt-fold-caret'), text);
+    b.addEventListener('click', () => { const box = b.parentElement.closest('[data-fold]'); const open = box.dataset.open !== '1'; foldPut(box.dataset.fold, open); box.dataset.open = open ? '1' : '0'; b.setAttribute('aria-expanded', String(open)); });
+    return b;
+  }
+  function setFold(box, b, key, dflt) {
+    box.dataset.fold = key;
+    const v = foldGet(key), open = v === null ? dflt : v === '1';
+    box.dataset.open = open ? '1' : '0'; b.setAttribute('aria-expanded', String(open));
+  }
   const banner = el('p', 'vt-banner'); banner.hidden = true; banner.setAttribute('role', 'status');
 
   // ---- filters ----
@@ -110,6 +123,7 @@ export function mountVault(d) {
   const RB = { pay: '', confirming: false };
   const rb = el('section', 'vt-revealbar'); rb.hidden = true; rb.setAttribute('aria-label', RT.label || '');
   const rbTitle = el('p', 'vt-rb-title'); rbTitle.setAttribute('role', 'status');
+  const rbText = el('span', 'vt-fold-text'), rbFold = foldBtn(rbText); rbTitle.append(rbFold);
   const rbOpts = el('div', 'vt-rb-opts'); rbOpts.setAttribute('role', 'radiogroup'); rbOpts.setAttribute('aria-label', RT.payLabel || '');
   const rbGo = btn('', { key: 'reveal-bar-go' }), rbYes = btn(RT.confirmYes, { key: 'reveal-bar-yes' }), rbNo = btn(RT.confirmNo, { key: 'reveal-bar-back', variant: 'ghost' });
   const rbAsk = el('span', 'vt-rb-ask'); rbAsk.setAttribute('role', 'alert');
@@ -119,7 +133,8 @@ export function mountVault(d) {
   const rbOrder = el('div', 'vt-rb-order'), rbSteps = el('ol', 'vt-rb-steps'), rbProg = el('span', 'vt-rb-prog'), rbNote = el('span', 'vt-rb-note');
   const rbCancel = btn(RT.cancel, { key: 'reveal-bar-cancel', variant: 'ghost' });
   rbOrder.append(rbSteps, rbProg, rbNote, rbCancel);
-  rb.append(rbTitle, rbOpts, rbRow, rbSkip, rbOrder);
+  const rbBody = el('div', 'vt-fold-body'); rbBody.append(rbOpts, rbRow, rbSkip, rbOrder);
+  rb.append(rbTitle, rbBody);
   const keepRow = el('div', 'vt-keeprow'); keepRow.hidden = true;
   const keepLine = el('span', 'vt-keepline'); keepLine.setAttribute('role', 'status');
   const keepNowB = btn(T.keepNow, { key: 'keep-now', variant: 'ghost' }); keepNowB.title = T.keepNowWhy;
@@ -165,16 +180,12 @@ export function mountVault(d) {
   }
   { const was = slotStore(); if (was && !S.f.type) S.f.type = was; }
   const page = el('div', 'vt-page');
-  // Marked for sale (flags the player has not confirmed) and Missed drops (the vault was full): both are the player's to act on.
+  // Marked for sale (flags the player has not confirmed) is the player's to act on; missed drops are not shown on the page (user decision 2026-11-21).
   const markRow = el('div', 'vt-keeprow vt-promptrow'); markRow.hidden = true;
-  const markLine = el('span', 'vt-keepline'); markLine.setAttribute('role', 'status');
+  const markFoldText = el('span', 'vt-fold-text'), markFold = foldBtn(markFoldText), markLine = el('span', 'vt-keepline vt-fold-body'); markLine.setAttribute('role', 'status');
   const markGo = btn('', { key: 'marked-sell' });
-  markRow.append(markLine, markGo);
-  const missRow = el('div', 'vt-keeprow'); missRow.hidden = true;
-  const missLine = el('span', 'vt-keepline'); missLine.setAttribute('role', 'status');
-  const missClear = btn(T.missedClear, { key: 'missed-clear', variant: 'ghost' });
-  missRow.append(missLine, missClear);
-  page.append(head, banner, slotRow, filters, rb, bar, keepRow, actRow, promptRow, markRow, missRow, msg, body);
+  markRow.append(markFold, markGo, markLine);
+  page.append(head, banner, slotRow, filters, rb, bar, keepRow, actRow, promptRow, markRow, msg, body);
   root.replaceChildren ? root.replaceChildren(page, sheetWrap) : (root.appendChild(page), root.appendChild(sheetWrap));
 
   // ---- loading ----
@@ -187,7 +198,7 @@ export function mountVault(d) {
   }
   async function reload(keep) {
     S.loading = !S.view; S.err = false;
-    if (!keep) main.scrollTop = 0; // a new query starts at the top
+    if (!keep && win && win.scrollTo && main.getBoundingClientRect && main.getBoundingClientRect().top < 0) win.scrollTo(0, win.scrollY + main.getBoundingClientRect().top); // a new query starts at the top of the list
     const limit = keep ? Math.min(Math.max(S.items.length, PAGE), MAX_LOADED) : PAGE;
     const [j] = await Promise.all([fetchPage(0, Math.min(limit, 200), !S.view || !S.facets.types.length), refreshEther()]);
     if (!j) { S.err = true; S.loading = false; draw(); return; }
@@ -347,8 +358,9 @@ export function mountVault(d) {
     const a = S.view && S.view.act, m = revealBarModel(a && a.reveal, RB.pay, RT);
     rb.hidden = !m.show;
     if (!m.show) return;
-    rbTitle.textContent = m.total ? m.title : '';
+    rbText.textContent = m.total ? m.title : '';
     rbTitle.title = m.line || '';
+    setFold(rb, rbFold, 'reveal', !!(m.order && m.order.active)); // an order in progress opens the bar until the player says otherwise
     rbOpts.replaceChildren(...m.options.map((o) => {
       const b = el('button', 'vt-rb-opt'); b.type = 'button'; b.dataset.key = 'pay-' + o.id;
       b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', o.checked ? 'true' : 'false');
@@ -412,10 +424,7 @@ export function mountVault(d) {
     promptLine.textContent = p ? fmt(T.promptText, { short: p.short, n: p.ids.length, gold: p.gold }) : '';
     const mk = S.view && S.view.marked;
     markRow.hidden = !mk || ro;
-    if (mk) { markLine.textContent = fmt(T.markedText, { n: mk.n, names: (mk.names || []).join(', ') + (mk.n > (mk.names || []).length ? ', ...' : '') }); markGo.textContent = fmt(T.markedGo, { n: mk.n }); }
-    const ms = S.view && S.view.missed;
-    missRow.hidden = !ms;
-    if (ms) missLine.textContent = fmt(T.missedTitle, { n: ms.count }) + ': ' + (ms.best || []).map((x) => fmt(T.missedItem, { name: x.name, quality: x.quality, ilvl: x.ilvl })).join('; ');
+    if (mk) { markFoldText.textContent = fmt(T.markedFold, { n: mk.n }); setFold(markRow, markFold, 'marked', false); markLine.textContent = fmt(T.markedText, { n: mk.n, names: (mk.names || []).join(', ') + (mk.n > (mk.names || []).length ? ', ...' : '') }); markGo.textContent = fmt(T.markedGo, { n: mk.n }); }
   }
 
   function cellLabel(it) {
@@ -479,6 +488,9 @@ export function mountVault(d) {
   }
   // ---- the windowed grid: only the rows near the view are cells; padding on the grid stands in for the rest ----
   let rendered = { first: -1, last: -1 }, geo = { cols: 1, rowH: 0 };
+  // the page scrolls, not the list: the view is the window, and the grid's offset is how far its top is above the window's top
+  const viewH = () => (win && win.innerHeight) || main.clientHeight;
+  const gridOff = () => (win && win.innerHeight ? -grid.getBoundingClientRect().top : main.getBoundingClientRect().top - grid.getBoundingClientRect().top);
   function measure() { // columns and row pitch of the laid-out grid; the columns are worked out from the width the way auto-fill does (the browser reports one track for a grid with no cells yet)
     const cs = win && win.getComputedStyle ? win.getComputedStyle(grid) : null;
     if (!cs) return geo;
@@ -493,10 +505,10 @@ export function mountVault(d) {
   function rangeFor(mustIdx) {
     const g = measure(), n = S.items.length;
     let top = 0;
-    if (main.getBoundingClientRect) top = main.getBoundingClientRect().top - grid.getBoundingClientRect().top;
-    let r = windowRange({ n, cols: g.cols, rowH: g.rowH, top, view: main.clientHeight, over: OVER_ROWS });
+    if (main.getBoundingClientRect) top = gridOff();
+    let r = windowRange({ n, cols: g.cols, rowH: g.rowH, top, view: viewH(), over: OVER_ROWS });
     if (mustIdx >= 0 && g.rowH > 0 && (mustIdx < r.first || mustIdx >= r.last)) { // keyboard to a cell outside the window
-      r = windowRange({ n, cols: g.cols, rowH: g.rowH, top: Math.floor(mustIdx / g.cols) * g.rowH, view: main.clientHeight, over: OVER_ROWS });
+      r = windowRange({ n, cols: g.cols, rowH: g.rowH, top: Math.floor(mustIdx / g.cols) * g.rowH, view: viewH(), over: OVER_ROWS });
     }
     return r;
   }
@@ -519,11 +531,12 @@ export function mountVault(d) {
   function onScroll() { // redraw only when the view leaves the rows already drawn (cheap check: no redraw while the drawn rows cover the view)
     const g = measure(), n = S.items.length;
     if (!(g.rowH > 0) || !n) return;
-    const top = Math.max(0, main.getBoundingClientRect().top - grid.getBoundingClientRect().top);
-    const fr = Math.floor(top / g.rowH) * g.cols, lr = Math.ceil((top + main.clientHeight) / g.rowH) * g.cols;
+    const top = Math.max(0, gridOff());
+    const fr = Math.floor(top / g.rowH) * g.cols, lr = Math.ceil((top + viewH()) / g.rowH) * g.cols;
     if (rendered.first < 0 || (fr < rendered.first && rendered.first > 0) || (lr > rendered.last && rendered.last < n)) drawList();
   }
   main.addEventListener('scroll', onScroll, { passive: true });
+  if (win && win.addEventListener) win.addEventListener('scroll', onScroll, { passive: true });
   const RO = d.ResizeObserver || (win && win.ResizeObserver); // the list's height settles after the first draw (filters fold, fonts load): draw again when it changes
   if (RO) { const ro = new RO(onScroll); ro.observe(main); ro.observe(grid); }
   if (win && win.addEventListener) win.addEventListener('resize', () => { measure(); drawList(); });
@@ -670,7 +683,7 @@ export function mountVault(d) {
     const c = cellOf(e.target);
     if (e.key === 'Escape' && S.sel.size) { S.sel.clear(); drawBar(); drawList(); e.preventDefault(); return; }
     if (!c || !/^(Arrow(Left|Right|Up|Down)|Home|End|Page(Up|Down))$/.test(e.key)) return;
-    const i = S.items.findIndex((x) => x.id === c.dataset.vid), cols = Math.max(1, measure().cols), page = Math.max(1, Math.floor(main.clientHeight / (geo.rowH || 1)) - 1) * cols;
+    const i = S.items.findIndex((x) => x.id === c.dataset.vid), cols = Math.max(1, measure().cols), page = Math.max(1, Math.floor(viewH() / (geo.rowH || 1)) - 1) * cols;
     const step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -cols, ArrowDown: cols, PageUp: -page, PageDown: page }[e.key];
     let to = e.key === 'Home' ? 0 : e.key === 'End' ? S.items.length - 1 : i + step;
     if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && (to < 0 || to >= S.items.length)) return; // a column does not wrap
@@ -782,7 +795,6 @@ export function mountVault(d) {
   });
   promptYes.addEventListener('click', () => { const p = S.view && S.view.act && S.view.act.prompt; if (p) act('/api/vault/sell', p.ids, true, {}); });
   markGo.addEventListener('click', () => { const mk = S.view && S.view.marked; if (mk) act('/api/vault/sell', mk.ids, true, {}); });
-  missClear.addEventListener('click', async () => { await d.post('/api/vault/missed', { dismiss: true }); await reload(true); });
   promptNo.addEventListener('click', async () => { await d.post('/api/vault/sellprompt', { dismiss: true }); await reload(true); });
   keepNowB.addEventListener('click', async () => { // any queued id will do: the server only needs one that is queued to ask for the trip
     const q = S.items.find((i) => i.keep === 'queued' || i.keep === 'creating');
