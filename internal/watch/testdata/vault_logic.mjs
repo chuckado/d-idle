@@ -148,12 +148,19 @@ ok('windowRange draws the rows near the view and pads the rest', () => {
 import { readFileSync } from 'node:fs';
 const RT = JSON.parse(readFileSync(new URL('../web/vault.json', import.meta.url), 'utf8')).revealBar;
 const opt = (id, o) => Object.assign({ id, label: id, line: id + ' line', ok: true, count: 3, ids: ['a', 'b', 'c'], cost: 0, skipped: [] }, o);
-const rev = (o) => Object.assign({ enabled: true, bar: { total: 5, default: 'gold', line: 'x', options: [opt('free', { ok: false, count: 0, ids: [] }), opt('gold', { cost: 5800, count: 5, confirm: true, skipped: [] })] }, gold: { on: true } }, o);
+const rev = (o) => Object.assign({ enabled: true, bar: { total: 5, default: 'gold', line: 'x', options: [opt('free', { ok: false, count: 0, ids: [] }), opt('gold', { cost: 5800, count: 5, confirm: true, skipped: [] })] }, gold: { on: true, stash: 7200 } }, o);
 ok('bar: default option, one plain line, the press words', () => {
   const m = L.revealBarModel(rev(), '', RT);
   assert.equal(m.show, true); assert.equal(m.sel, 'gold'); assert.equal(m.title, 'Reveal 5 items in this filter');
-  assert.equal(m.go, 'Reveal 5 for 5,800 gold'); assert.equal(m.goOff, false); assert.equal(m.confirm, true); assert.match(m.confirmAsk, /5,800 gold/);
+  assert.equal(m.go, 'Reveal 5 items for 5,800 gold (stash 7,200)'); assert.equal(m.goOff, false); assert.equal(m.confirm, true); assert.match(m.confirmAsk, /5,800 gold/);
   assert.deepEqual(m.options.map((o) => [o.id, o.checked]), [['free', false], ['gold', true]]);
+});
+ok('reveal methods: hidden for now, only gold unless the server names more (user decision 2026-11-21)', () => {
+  assert.deepEqual([...L.revealMethods({ methods: ['gold'] })], ['gold']);
+  assert.deepEqual([...L.revealMethods({})].sort(), ['ether', 'free', 'gold']); // an older bot: all three
+  const r = rev({ methods: ['gold'], note: 'Cain is not rescued' });
+  assert.equal(L.revealBarModel(r, '', RT).note, '', 'the Cain and scroll notice is gone with the free option');
+  assert.equal(L.revealBarModel(rev({ methods: ['free', 'gold'], note: 'n' }), '', RT).note, 'n');
 });
 ok('bar: a pick that cannot be paid falls back to the default', () => {
   assert.equal(L.revealBarModel(rev(), 'free', RT).sel, 'gold');

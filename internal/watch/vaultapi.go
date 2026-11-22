@@ -130,6 +130,9 @@ type VaultRevealView struct {
 	Working  int    `json:"working"`
 	Done     int    `json:"done"`
 	Line     string `json:"line,omitempty"`
+	// Methods are the payments the page offers (knob loot.vaultRevealMethods, default only "gold"): free, ether, gold. The other
+	// routes and the keeper still work; the page draws only these and the bar quotes only these. nil: all three (older bots).
+	Methods []string `json:"methods,omitempty"`
 	// Note says why identify is manual (Cain is not rescued while identify.policy counts on him).
 	Note string `json:"note,omitempty"`
 	// Mass previews the "Reveal filtered" button: the ids it would queue (to /api/vault/reveal) and the cost sentence.

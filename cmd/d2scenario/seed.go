@@ -237,6 +237,9 @@ func seedRecord(ctx context.Context, c seedGame, st *vault.Store, do func(line, 
 		} else if it.Sealed = rec.Props; it.Sealed == "" {
 			it.Sealed = sd.Sealed // the fork sent no affixes for the unidentified item: the scenario holds its own
 		}
+		if sd.Bare {
+			it.Sealed = "" // the legacy shape: nothing held, the bytes still carry the affixes (the gold reveal decodes them)
+		}
 		it.Pic, it.Tint, it.FileIndex = rec.Pic, rec.Tint, rec.FileIndex()
 		r, err := st.Add(it)
 		switch {
