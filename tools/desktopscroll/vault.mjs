@@ -21,7 +21,7 @@ await send('Page.enable'); await send('Page.setBypassCSP', { enabled: true });
 if (process.env.OLD) { const css = '.vt,.vt-page{block-size:100dvh!important;min-block-size:0!important}.vt-body{overflow:hidden!important;min-block-size:0!important}.vt-main{overflow-y:auto!important;min-block-size:0!important}'; await send('Page.addScriptToEvaluateOnNewDocument', { source: `document.addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.textContent = ${JSON.stringify(css)}; document.head.appendChild(s); });` }); }
 const fails = [];
 const wheel = async (W, H, dy) => { for (let i = 0; i < 6; i++) { await send('Input.dispatchMouseEvent', { type: 'mouseWheel', x: Math.round(W / 2), y: Math.round(H * 0.6), deltaX: 0, deltaY: dy / 6 }); await sleep(30); } await sleep(300); };
-const key = async (k, code, vk) => { for (const type of ['rawKeyDown', 'keyUp']) await send('Input.dispatchKeyEvent', { type, key: k, code, windowsVirtualKeyCode: vk }); await sleep(500); };
+const key = async (k, code, vk) => { for (const type of ['keyDown', 'keyUp']) await send('Input.dispatchKeyEvent', { type, key: k, code, windowsVirtualKeyCode: vk, ...(type === 'keyDown' && k === ' ' ? { text: ' ' } : {}) }); await sleep(500); };
 async function load(state, extra = '') { await send('Page.navigate', { url: `${base}/watch/vault?vault=${state}&theme=dark${extra}` }); await sleep(3500); }
 for (const size of sizes.split(/\s+/)) {
   const [W, H] = size.split('x').map(Number);
@@ -48,7 +48,9 @@ for (const size of sizes.split(/\s+/)) {
     if (!((await ev('scrollY')) > 0)) fails.push(`${tag}: the Space key does not scroll the page`);
     await ev('scrollTo(0, document.scrollingElement.scrollHeight)'); await sleep(400);
     const vis = await ev(`(() => { const g = document.querySelectorAll('#pack > *'); const r = g[g.length - 1].getBoundingClientRect(); return r.bottom <= innerHeight + 1 && r.top >= 0 ? 1 : 0; })()`);
-    if (!vis) fails.push(`${tag}: the last grid item cannot be brought into view`);
+    const bottom = await ev('Math.round(scrollY + innerHeight) >= document.scrollingElement.scrollHeight - 2 ? 1 : 0');
+    if (!vis && state !== 'big') fails.push(`${tag}: the last grid item cannot be brought into view`); // 'big' is windowed and loads more at the end: there only the bottom of the page counts
+    if (!bottom && state === 'big' && !((await ev('document.scrollingElement.scrollHeight')) > sh)) fails.push(`${tag}: the end of the page cannot be reached`);
     if (state === 'pop' && W >= 1600) {
       await ev('scrollTo(0, 0)');
       const cols = await ev(`new Set([...document.querySelectorAll('#pack > *')].map((c) => Math.round(c.getBoundingClientRect().left))).size`);
@@ -61,7 +63,7 @@ for (const size of sizes.split(/\s+/)) {
 // the folds (default 1366x768): the Reveal block is a one-liner until opened; the choice survives a reload
 await send('Emulation.setDeviceMetricsOverride', { width: 1366, height: 768, deviceScaleFactor: 1, mobile: false });
 await ev('try { localStorage.clear(); } catch (e) {}');
-await load('revealing');
+await load('revealing', '');
 const fold = `document.querySelector('.vt-revealbar .vt-fold')`;
 if (!(await ev(`!!${fold}`))) fails.push('the Reveal bar has no fold button (.vt-fold)');
 else {
@@ -71,9 +73,9 @@ else {
   if (barH > 60) fails.push(`the folded Reveal bar is ${Math.round(barH)} px high (> 60)`);
   await ev(`${fold}.click()`); await sleep(400);
   if (!(await optsVis())) fails.push('the fold button does not open the payment options');
-  await ev('location.reload()'); await sleep(3500);
+  await load('revealing', '');
   if (!(await optsVis())) fails.push('the open state of the Reveal bar did not survive a reload');
-  await ev(`${fold}.click()`); await sleep(300); await ev('location.reload()'); await sleep(3500);
+  await ev(`${fold}.click()`); await sleep(300); await load('revealing', '');
   if (await optsVis()) fails.push('the closed state of the Reveal bar did not survive a reload');
 }
 ch.kill();
