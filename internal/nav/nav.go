@@ -103,6 +103,8 @@ type Navigator struct {
 	wpMu        sync.Mutex
 	wpNew       []int
 	mouthFails  map[mouthKey]mouthFail
+	doorFn      func(class int) bool // test hook: is this object class a door (default: objects.txt IsDoor)
+	doorTried   map[uint32]int       // gate doors ExitTo already opened this game, by unit id (gatedoor.go)
 	mouthLast   mouthKey
 	mouthLastOK bool
 	goal        input.Point // fixed goal of the GoTo in progress (goalSet): the mouth gate treats exits around it as pockets
