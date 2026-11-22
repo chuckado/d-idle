@@ -406,7 +406,6 @@
 | necro2 | proposed | - | `docs/probes/necromancer-readiness-2026-11-22.md` | - |
 | necro4 | proposed | - | `internal/combat/classdata.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro.go`<br>`internal/combat/necro_corpse.go`<br>`internal/combat/necro_test.go`<br>`internal/combat/necro_data_test.go`<br>`internal/combat/fighter.go` | - |
 | necro3 | proposed | - | `internal/buildfile/testdata/necromancer-summoner-sme.json`<br>`internal/buildfile/testdata/necromancer-poison-nova-sme.json`<br>`internal/buildfile/necrosme_test.go`<br>`internal/plandata/build-necromancer_summoner_sme.json`<br>`internal/plandata/build-necromancer_poison_nova_sme.json`<br>`docs/plan/data/build-necromancer_summoner_sme.json`<br>`docs/plan/data/build-necromancer_poison_nova_sme.json`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro_data_test.go`<br>`internal/leveler/necrosummoner_test.go` | - |
-| fableui | in-progress | - | `docs/design/fable-review-2026-11-22/ui-unification*` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |

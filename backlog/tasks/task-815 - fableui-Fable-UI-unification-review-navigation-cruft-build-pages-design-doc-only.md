@@ -3,11 +3,11 @@ id: TASK-815
 title: >-
   fableui: Fable UI unification review (navigation, cruft, build pages), design
   doc only
-status: In Progress
+status: Done
 assignee:
   - user
 created_date: '2026-11-22T19:35:00Z'
-updated_date: '2026-11-22T19:41:00Z'
+updated_date: '2026-11-22T20:10:00Z'
 labels:
   - docs
   - research
