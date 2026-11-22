@@ -185,3 +185,9 @@
   .vt-slot { flex: none; min-block-size: 44px; align-items: center; white-space: nowrap; border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-round); padding-inline: var(--d-sp-3); }
   .vt-slot[aria-pressed="true"] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
 }
+
+/* The shared navigation adds a band above the page on a wide window and a bar under it on a phone (web/nav.js): the page fills what is left, so it does not scroll for them. */
+@layer utilities {
+  body[data-vault] { display: flex; flex-direction: column; min-block-size: 100dvh; }
+  body[data-vault] > .vt { flex: 1 1 auto; min-block-size: 0; }
+}
