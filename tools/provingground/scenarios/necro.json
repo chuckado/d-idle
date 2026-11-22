@@ -336,6 +336,63 @@
      "why": "the Paladin fights"
     }
    ]
+  },
+  {
+   "id": "necro.act1-earned",
+   "title": "Earned Act 1: a fresh Necromancer from the Rogue Encampment toward Andariel, zero setup writes",
+   "kind": "e2e",
+   "tier": "nightly",
+   "covers": [
+    "combat.fight"
+   ],
+   "touches": [
+    "internal/combat/",
+    "internal/bot/",
+    "internal/campaign/"
+   ],
+   "pre": {},
+   "trigger": {
+    "goals": "campaign:normal_act1",
+    "build": "necromancer_summoner_sme",
+    "knobs": {
+     "combat.minionRead": 1,
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 400,
+    "wall_min": 140
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "needs": [
+    "read.minions"
+   ],
+   "provenance": "No setup write at all: a fresh level 1 hero, town start, the bot on a d2d without lab verbs (the setup list is empty). Not CHEATED if no_writes holds. combat.minionRead 1 only reads.",
+   "notes": "The verdict of this drill is the end state: how far the campaign got. A red result is the finding (readiness doc section 6.3), not a scenario defect, unless the run is BLOCKED.",
+   "assert": [
+    {
+     "kind": "level_at_least",
+     "min": 10,
+     "why": "a played Act 1 reaches clvl 10 at the least"
+    },
+    {
+     "kind": "quest_bits",
+     "record": 6,
+     "set": 2,
+     "why": "Andariel killed (record 6 bit 1, V docs/d2d-probes.md per the act1more notes)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
   }
  ]
 }

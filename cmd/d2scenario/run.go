@@ -920,7 +920,18 @@ func botD2dArgs(needs []string, vaultVerbs bool) []string {
 	if needsPay(needs) {
 		return append(withVault(nil, true), "--vault-pay")
 	}
-	return withVault([]string{"--lockstep"}, vaultVerbs)
+	return withRead(withVault([]string{"--lockstep"}, vaultVerbs), needs)
+}
+
+// withRead adds the fork's combat read verbs (`debug minions`, skillstate, combatlog: reads, never writes, ADR 0022) when the
+// scenario needs a read.* capability. --lab-verbs implies it already, so a field start needs nothing.
+func withRead(args, needs []string) []string {
+	for _, n := range needs {
+		if strings.HasPrefix(n, "read.") {
+			return append(args, "--read-combat")
+		}
+	}
+	return args
 }
 
 // missingCaps lists the d2d capabilities in needs (the fork's names: item.*, ground.*, vault.*) that caps does not list.

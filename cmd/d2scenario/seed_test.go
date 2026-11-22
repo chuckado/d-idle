@@ -302,3 +302,12 @@ func TestBotD2dArgsForTheGoldPayment(t *testing.T) {
 		t.Fatalf("plain scenario: %v", plain)
 	}
 }
+
+func TestBotD2dArgsReadCombat(t *testing.T) {
+	if got := strings.Join(botD2dArgs([]string{"read.minions"}, false), " "); got != "--lockstep --read-combat" {
+		t.Errorf("a read need adds the flag: %q", got)
+	}
+	if got := strings.Join(botD2dArgs([]string{"item.full"}, false), " "); strings.Contains(got, "read-combat") {
+		t.Errorf("no read need, no flag: %q", got)
+	}
+}
