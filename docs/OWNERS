@@ -137,6 +137,8 @@ cmd/d2bot/adapters.go  credit-runner  cainfix3
 cmd/d2bot/adapters.go  credit-runner  chores2
 cmd/d2bot/adapters.go  credit-runner  goldprio
 cmd/d2bot/adapters.go  credit-runner  idfast
+cmd/d2bot/autoallocwire.go  credit-runner  necroready
+cmd/d2bot/autoallocwire_test.go  credit-runner  necroready
 cmd/d2bot/behaviors.go  credit-runner  agencyp0
 cmd/d2bot/behaviors.go  credit-runner  campaign1
 cmd/d2bot/behaviors.go  credit-runner  gearsets
@@ -589,6 +591,7 @@ docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
+docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necroready
 docs/probes/pg-gate-group1-2026-11-21.md  credit-runner  pgjournal
 docs/probes/pg-journal-pair-2026-11-21.md  credit-runner  pgjournal
 docs/probes/provingground-act1more-2026-11-20.md  credit-runner  act1more

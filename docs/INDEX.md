@@ -1106,7 +1106,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `probes/`
 
-- [necromancer-readiness-2026-11-22.md](probes/necromancer-readiness-2026-11-22.md): Necromancer readiness audit (card necro2, 2026-11-22) (status: current. Offline audit of the tree at origin/main; no live game was used (the run was outside the night...)
+- [necromancer-readiness-2026-11-22.md](probes/necromancer-readiness-2026-11-22.md): Necromancer readiness audit (card necro2, 2026-11-22) (status: current; section 6 (update after the merges of the same day) supersedes sections 1 to 3 where they differ....)
 - [pactnative.md](probes/pactnative.md): pactnative: do the native difficulty levers work offline on 1.14d? (TASK-170) (status: probe result of 2026-11-08 (overnight, one hidden instance). Facts for the Pact design note...)
 - [paladin-smoke.md](probes/paladin-smoke.md): Paladin smoke (pointer) (status: current. The results of TASK-142 are in `docs/paladinsmoke.md` (the card's owned file); the run scripts,...)
 - [panels-live.md](probes/panels-live.md): Live check of the watch panels against real lockstep runs (panelslive) (status: measured 2026-11-08 (EST). Tags: V verified live (how stated), S code reading, U unverified. Evidence is a...)

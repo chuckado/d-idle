@@ -410,6 +410,7 @@
 | classtraits | proposed | - | `internal/d2/classtraits.go`<br>`internal/d2/classtraits.json`<br>`internal/d2/classtraits_test.go`<br>`internal/bot/task.go`<br>`internal/bot/geargate.go`<br>`internal/bot/routeguard.go`<br>`internal/resource/types.go`<br>`internal/merc/policy.go` | - |
 | necroscen | proposed | - | `tools/provingground/scenarios/necro.json`<br>`internal/scenario/necro_test.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/state.go`<br>`internal/scenario/scenario.go`<br>`cmd/d2scenario/run.go` | - |
 | uinav | proposed | - | `internal/watch/linkmatrix_test.go`<br>`internal/watch/invui.go`<br>`internal/watch/skillsui.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/invapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/characters.js`<br>`internal/watch/testdata/vault_nav.mjs`<br>`docs/ui/nav-links`<br>`docs/ui-design-system.md` | - |
+| necroready | proposed | - | `docs/probes/necromancer-readiness-2026-11-22.md`<br>`cmd/d2bot/autoallocwire.go`<br>`cmd/d2bot/autoallocwire_test.go` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -444,6 +445,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d6fa3aba4 11-22 17:22 `Merge agent/necroready: necroready: picker notes from the catalogue, readiness doc update` (necroready)
 - 54078fad2 11-22 17:12 `Merge agent/necroscen: necroscen: card result` (necroscen)
 - 7eac95a9e 11-22 17:10 `Merge origin/main into necroscen` (-)
 - 5f7c91f5c 11-22 16:58 `Merge agent/classtraits: Merge branch 'main' into classtraits` (classtraits)
@@ -453,5 +455,4 @@
 - adac1d3e2 11-22 16:49 `Merge origin/main into classtraits` (-)
 - e6b8b7d71 11-22 16:49 `Merge origin/main into necroscen` (-)
 - ab07e295d 11-22 16:47 `Merge origin/main into necro5` (-)
-- 6b883a8cc 11-22 16:32 `Merge agent/buildcatalog: buildcatalog: points table test skips the catalogue file` (buildcatalog)
 <!-- statusgen:end -->
