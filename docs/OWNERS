@@ -362,8 +362,10 @@ cmd/d2scenario/run.go  credit-runner  pgledger
 cmd/d2scenario/run.go  credit-runner  pgprov
 cmd/d2scenario/run.go  credit-runner  pgtaps
 cmd/d2scenario/tap.go  credit-runner  andariel1
+cmd/d2scenario/tap.go  credit-runner  handinbtn
 cmd/d2scenario/tap.go  credit-runner  pgtaps
 cmd/d2scenario/tap_test.go  credit-runner  andariel1
+cmd/d2scenario/tap_test.go  credit-runner  handinbtn
 cmd/d2scenario/tap_test.go  credit-runner  pgtaps
 cmd/d2scenario/validate.go  credit-runner  pgselfcheck
 data/bulkid  credit-runner  bulkid
@@ -610,6 +612,7 @@ docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed2
 docs/probes/viewer-brightness-2026-11-17.md  credit-runner  brightness
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
+docs/probes/warptrigger-2026-11-22.md  credit-runner  warptrigger
 docs/process/barbarian-support.md  credit-runner  barb1
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
@@ -644,6 +647,7 @@ docs/quest-hints.md  live-agent  questdrill
 docs/questboard.md  credit-runner  cain45
 docs/questboard.md  credit-runner  cain5b
 docs/questboard.md  credit-runner  cainfix3
+docs/questboard.md  credit-runner  handinbtn
 docs/questboard.md  credit-runner  questrun
 docs/questboard.md  credit-runner  quests1
 docs/questboard.md  credit-runner  quests10
@@ -1103,6 +1107,7 @@ internal/d2dctl  credit-runner  countess3
 internal/d2dctl  live-agent  k1layout
 internal/d2dctl/  credit-runner  dlv-reads
 internal/d2dctl/fake/fake.go  credit-runner  verbs2
+internal/d2dctl/fake/fake.go  credit-runner  warptrigger
 internal/d2dctl/item_verbs.go  credit-runner  itemverbs2
 internal/d2dctl/item_verbs_merc.go  credit-runner  uib9
 internal/d2dctl/item_verbs_merc_test.go  credit-runner  uib9
@@ -1119,10 +1124,13 @@ internal/d2dctl/vault_verbs.go  credit-runner  vaultpay
 internal/d2dctl/vault_verbs.go  credit-runner  vaulttip
 internal/d2dctl/vault_verbs_test.go  credit-runner  vaulttip
 internal/d2dctl/verbs.go  credit-runner  arrivalsettle
+internal/d2dctl/warptriggers.go  credit-runner  warptrigger
+internal/d2dctl/warptriggers_test.go  credit-runner  warptrigger
 internal/d2dctl/world_verbs.go  credit-runner  verbs2
 internal/d2dctl/world_verbs_test.go  credit-runner  verbs2
 internal/d2denv  live-agent  k1layout
 internal/d2denv/env.go  credit-runner  pgclock
+internal/d2denv/env.go  credit-runner  warptrigger
 internal/d2denv/reader.go  credit-runner  pgclock
 internal/d2denv/recent_test.go  credit-runner  pgclock
 internal/d2dinput  pro-runner  bounce3
@@ -1150,10 +1158,12 @@ internal/d2dtown/adapter.go  credit-runner  verbs2
 internal/d2dworld  credit-runner  countess3
 internal/d2dworld  live-agent  k1layout
 internal/d2dworld/  credit-runner  wpstep
+internal/d2dworld/triggers_test.go  credit-runner  warptrigger
 internal/d2dworld/world.go  credit-runner  andariel1
 internal/d2dworld/world.go  credit-runner  knownedge
 internal/d2dworld/world_test.go  credit-runner  andariel1
 internal/d2map  credit-runner  countess3
+internal/d2map/static.go  credit-runner  warptrigger
 internal/d2map/static.go  credit-runner  wpstep
 internal/d2map/tracker.go  credit-runner  andariel1
 internal/d2map/tracker.go  credit-runner  wpstep
@@ -1338,6 +1348,7 @@ internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/fullgrid_test.go  credit-runner  knownedge
 internal/nav/mouthgate.go  credit-runner  botstuck
+internal/nav/mouthgate.go  credit-runner  warptrigger
 internal/nav/nav.go  credit-runner  countess3b
 internal/nav/nav.go  credit-runner  knownedge
 internal/nav/nav.go  credit-runner  maphistoryC
@@ -1351,6 +1362,7 @@ internal/nav/roam.go  credit-runner  pursuers
 internal/nav/route.go  credit-runner  cainchain
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
+internal/nav/warpread_test.go  credit-runner  warptrigger
 internal/nav/waypoint.go  credit-runner  verbs2
 internal/nav/wpverb_test.go  credit-runner  verbs2
 internal/plandata  credit-runner  agencyp0
@@ -1396,7 +1408,10 @@ internal/questboard/chunks_test.go  credit-runner  quests7b
 internal/questboard/def.go  credit-runner  cainfix3
 internal/questboard/desk.go  credit-runner  andariel1
 internal/questboard/desk.go  credit-runner  bsm8
+internal/questboard/desk.go  credit-runner  handinbtn
 internal/questboard/desk.go  credit-runner  questrun
+internal/questboard/desk_action.go  credit-runner  handinbtn
+internal/questboard/desk_action_test.go  credit-runner  handinbtn
 internal/questboard/desk_reason_test.go  credit-runner  bsm8
 internal/questboard/desk_test.go  credit-runner  andariel1
 internal/questboard/desk_test.go  credit-runner  questrun
@@ -1774,9 +1789,11 @@ internal/watch/testdata/quests  credit-runner  quests10
 internal/watch/testdata/quests  credit-runner  quests4
 internal/watch/testdata/quests  credit-runner  quests7
 internal/watch/testdata/quests  credit-runner  quests8
+internal/watch/testdata/quests/  credit-runner  handinbtn
 internal/watch/testdata/questui  credit-runner  quests10
 internal/watch/testdata/questui  credit-runner  quests8
 internal/watch/testdata/questui/quest_ui.mjs  credit-runner  bsm8
+internal/watch/testdata/questui/quest_ui.mjs  credit-runner  handinbtn
 internal/watch/testdata/reset  credit-runner  botreset
 internal/watch/testdata/reset  credit-runner  resetinstant
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail
@@ -1957,6 +1974,7 @@ internal/watch/web/panels/quest-board  credit-runner  boardorder
 internal/watch/web/panels/quest-board  credit-runner  quests10
 internal/watch/web/panels/quest-board  credit-runner  quests8
 internal/watch/web/panels/quest-board/panel.js  credit-runner  bsm8
+internal/watch/web/panels/quest-board/panel.js  credit-runner  handinbtn
 internal/watch/web/panels/quest-list  credit-runner  quests8
 internal/watch/web/panels/quest-strip  credit-runner  quests8
 internal/watch/web/panels/statusline/  credit-runner  uifix1

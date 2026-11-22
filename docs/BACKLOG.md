@@ -1191,6 +1191,8 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - vaultclean: calm Vault page chrome (one action bar, one toolbar) (TASK-800, merged 2026-11-21, acceptance 3 of 4): built and tested offline (go test ./internal/watch ./tools/uishots, node harnesses with fake timers, tools/desktopscroll/run.sh green on the builder, fixture-viewer pictures at 1366x768, 1920x1080, 390x844 in docs/ui/vault-cleanup/) ... <!--sg:agent/vaultclean-->
 - agent/map1: Merge branch 'main' into gridwhole (merged 2026-11-21) <!--sg:agent/map1-->
 - agent/map2: Merge origin/main into knownedge (merged 2026-11-21) <!--sg:agent/map2-->
+- handinbtn: quest row offers Hand in / Start for awaiting_handin, tapper presses the row''s button (TASK-801, merged 2026-11-21, acceptance 0 of 4) <!--sg:agent/handinbtn-->
+- agent/map3: Merge branch 'main' into warptrigger (merged 2026-11-22) <!--sg:agent/map3-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

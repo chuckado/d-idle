@@ -69,9 +69,12 @@ type Options struct {
 	// LayoutRead reports whether the fork's read-only "debug levelmap" feeds the level's presets and room rows (knob
 	// quests.layoutRead, ADR 0022); nil or false: today's behaviour, the verb is never sent.
 	LayoutRead func() bool
-	Now        func() time.Time                 // test seam (virtual or fake clock for MinRefetch)
-	Logf       func(format string, args ...any) // arrival diagnostics (nil: silent)
-	Sleep      func(time.Duration)              // LinkWait pause between polls (step the game here), nil: time.Sleep
+	// WarpRead reports whether the fork's read-only "debug warptriggers" gives the exits their trigger areas (knob
+	// nav.warpRead); nil or false: the verb is never sent.
+	WarpRead func() bool
+	Now      func() time.Time                 // test seam (virtual or fake clock for MinRefetch)
+	Logf     func(format string, args ...any) // arrival diagnostics (nil: silent)
+	Sleep    func(time.Duration)              // LinkWait pause between polls (step the game here), nil: time.Sleep
 }
 
 const maxLinkTries = 20
@@ -88,12 +91,13 @@ type World struct {
 	resetNext atomic.Bool // ResetNext: forget the levels at the start of the next update, on the reader's goroutine
 
 	// Diagnostics for tools and tests.
-	GridFetches    int
-	LastLinked     []int // levels the last neighbour list named (diagnostics)
-	LinkPolls      int   // neighbour-list polls made while waiting on arrival (LinkWait)
-	LastGridErr    error
-	LastGridNote   string
-	LastBorderNote string
+	GridFetches     int
+	LastLinked      []int // levels the last neighbour list named (diagnostics)
+	LinkPolls       int   // neighbour-list polls made while waiting on arrival (LinkWait)
+	LastGridErr     error
+	LastGridNote    string
+	LastTriggerNote string
+	LastBorderNote  string
 }
 
 type lvl struct {
@@ -316,6 +320,7 @@ func (w *World) fetch(ctx context.Context, l *lvl, rect d2map.Rect, pos d2map.Po
 			l.m.Exits = append(l.m.Exits, e)
 		}
 	}
+	w.mergeTriggers(ctx, l)
 	if ps, err := w.v.Presets(ctx); err == nil {
 		l.m.Presets, l.names = nil, nil
 		for _, p := range ps.Items {
@@ -729,4 +734,43 @@ func (w *World) mergeObjectPresets(l *lvl, objs []d2dctl.ObjectPreset, sub func(
 			l.names = append(l.names, o.Name)
 		}
 	}
+}
+
+// WarpTriggerer is the optional part of a Verbs that has the fork's "debug warptriggers".
+type WarpTriggerer interface {
+	WarpTriggers(ctx context.Context) (*d2dctl.WarpTriggers, error)
+}
+
+// mergeTriggers gives the level's exits their trigger areas. Only with Options.WarpRead on; warp i of the verb is
+// exit i of "debug warps" (checked by destination); any error, a missing verb or a mismatch leaves the exits as fetched.
+func (w *World) mergeTriggers(ctx context.Context, l *lvl) {
+	if w.o.WarpRead == nil || !w.o.WarpRead() {
+		return
+	}
+	tv, ok := w.v.(WarpTriggerer)
+	if !ok {
+		return
+	}
+	doc, err := tv.WarpTriggers(ctx)
+	if err != nil || doc.Level != l.m.No || len(doc.Warps) != len(l.m.Exits) {
+		w.LastTriggerNote = fmt.Sprintf("warptriggers unusable (%v)", err)
+		return
+	}
+	runs := func(in []d2dctl.Run) []d2map.TriggerRun {
+		out := make([]d2map.TriggerRun, len(in))
+		for i, r := range in {
+			out[i] = d2map.TriggerRun{Y: l.oy + r[0], X0: l.ox + r[1], X1: l.ox + r[2]}
+		}
+		return out
+	}
+	for i, t := range doc.Warps {
+		if t.Index != i || t.To != l.m.Exits[i].Dest {
+			w.LastTriggerNote = fmt.Sprintf("warptriggers warp %d does not match the exit list", i)
+			return
+		}
+	}
+	for i, t := range doc.Warps {
+		l.m.Exits[i].Trigger = &d2map.Trigger{Click: runs(t.Click), Reach: runs(t.Reach), Truncated: t.Truncated}
+	}
+	w.LastTriggerNote = fmt.Sprintf("warptriggers: %d areas", len(doc.Warps))
 }

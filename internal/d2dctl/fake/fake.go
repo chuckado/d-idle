@@ -32,6 +32,7 @@ type Fixtures struct {
 	Level         string // rest of "debug level"
 	LevelMap      string // the JSON line of "debug levelmap" (empty: the verb is missing, answers err)
 	LevelMonsters string // the JSON line of "debug levelmonsters" (empty: the verb is missing, answers err)
+	WarpTriggers  string // the JSON line of "debug warptriggers" (empty: the verb is missing, answers err)
 	// Minions, SkillState and CombatLog are the JSON lines of the combat read verbs (dlv-reads; empty: the verb answers
 	// "err read combat off", like a fork started without --read-combat).
 	Minions, SkillState, CombatLog string
@@ -368,6 +369,11 @@ func (s *Server) debug(f []string) (string, bool, bool) {
 			return "err unknown debug verb\n", false, false
 		}
 		return s.Fix.LevelMap + "\nok\n", false, false
+	case "warptriggers":
+		if s.Fix.WarpTriggers == "" {
+			return "err unknown debug verb\n", false, false
+		}
+		return s.Fix.WarpTriggers + "\nok\n", false, false
 	case "levelmonsters":
 		if s.Fix.LevelMonsters == "" {
 			return "err unknown debug verb\n", false, false

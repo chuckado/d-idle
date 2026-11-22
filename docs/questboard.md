@@ -402,3 +402,12 @@ On the first load of a hero's plan (`cmd/d2bot/questwire.go` `importJourney`, `q
 3. A hero that skipped the Countess shows her as skipped; Blood Raven's offer matches the hero's real quest state.
 4. `GET /api/campaign` answers 404.
 
+
+## One button per row (card handinbtn, 2026-11-21)
+
+> User bug: the Sisters' Burial Grounds row read NOW / "waiting for you" with the hint "Start goes straight to the hand-in" and had no button.
+
+- Cause (V, `docs/probes/mercbr-2026-11-21.md` plus the code): a part that reads `awaiting_handin` with no accepted record (case C5, the game counts the field work done) has no run, so the view has no `awaiting` object and the Now tile has nothing to draw; the phone's Quests tab has no Now tile at all, and the part line only drew Start for `ready`.
+- Rule: the server puts the one button of a part in `quests[].chunks[].action` (`{verb, label, disabled?, confirm?, why?}`, `internal/questboard/desk_action.go`): Start (ready and startable; awaiting without a record), Hand in (awaiting with a run; disabled "Handing in..." while the dialogue runs), Stop (accepted, in progress, asks once), Try again (blocked). Locked, available, done, skipped and ready-but-not-startable have none and say why in `reason` or `why`.
+- The web part line renders that action (the drawer skips it when the Now tile already carries the head's button); the Proving Ground tapper (`cmd/d2scenario/tap.go`) presses the same action, so a part without a button is never tapped. Tests: `TestChunkActionEveryState`, the table in `testdata/questui/quest_ui.mjs`, `TestTapperPressesTheRowsButton`.
+- The "Sail east to Act 2: DONE" row of the same screenshot (U): `act1_done` derives Done from the save's evidence for the Act 1 travel step; not reproducible offline, report only.
