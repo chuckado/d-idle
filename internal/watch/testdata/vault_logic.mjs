@@ -119,13 +119,28 @@ ok('reveal plan: the price shown before the click', () => {
   assert.equal(p.short, false); // unknown: the server decides
   assert.equal(L.revealPlan(items, ['a'], null).n, 1);
 });
-ok('sell plan: pinned and queued items are skipped, the gold is the lower bound', () => {
-  const items = [row({ id: 'a', value: 30 }), row({ id: 'b', value: 12 }), row({ id: 'c', pin: true, value: 99 }), row({ id: 'd', sell: 'queued', value: 7 }), row({ id: 'e', state: 'kept', value: 1 })];
-  const p = L.sellPlan(items, ['a', 'b', 'c', 'd', 'e']);
-  assert.deepEqual([p.n, p.gold, p.pinned, p.skipped], [2, 42, 1, 3]);
-  assert.deepEqual(L.sellPlan(items, []), { n: 0, ids: [], gold: 0, pinned: 0, skipped: 0 }); assert.deepEqual(p.ids, ['a', 'b']);
+ok('sell plan: pinned and queued items are skipped with a reason, the gold is the lower bound', () => {
+  const items = [row({ id: 'a', value: 30 }), row({ id: 'b', value: 12 }), row({ id: 'c', pin: true, value: 99 }), row({ id: 'd', sell: 'queued', state: 'sellq', value: 7 }), row({ id: 'e', state: 'kept', value: 1 })];
+  const p = L.sellPlan(items, ['a', 'b', 'c', 'd', 'e', 'zz']);
+  assert.deepEqual([p.n, p.gold, p.pinned, p.skipped, p.all], [2, 42, 1, 4, 6]);
+  assert.deepEqual(p.ids, ['a', 'b']);
+  assert.deepEqual(p.reasons, [{ code: 'queued', n: 1 }, { code: 'pinned', n: 1 }, { code: 'state', n: 1 }, { code: 'gone', n: 1 }]);
+  assert.equal(p.reasons.reduce((a, r) => a + r.n, 0) + p.n, p.all, 'the reasons add up to the selection');
+  const q = L.sellPlan(items, ['a', 'd'], true); // the instant sale also takes what the old queue holds
+  assert.deepEqual([q.n, q.queued], [2, 0]);
+  const e = L.sellPlan(items, []);
+  assert.deepEqual([e.n, e.ids, e.gold, e.pinned, e.skipped], [0, [], 0, 0, 0]);
+  const T = { sell: 'Sell', sellSel: 'Sell ({n})', sellOf: 'Sell {n} of {all}' };
+  assert.equal(L.sellLabel(L.sellPlan(items, ['a', 'b']), 2, T), 'Sell (2)');
+  assert.equal(L.sellLabel(p, 6, T), 'Sell 2 of 6');
+  assert.equal(L.sellLabel(L.sellPlan(items, []), 0, T), 'Sell');
+  assert.equal(L.sellWhy(p.reasons, { queued: '{n} waiting', pinned: '{n} pinned' }), '1 waiting, 1 pinned, 1 state, 1 gone');
 });
-
+ok('merged sell quotes: totals add, reasons group, the stash after follows', () => {
+  const m = L.mergeQuotes([{ asked: 150, count: 100, lines: [{ id: 'a', gold: 5 }], total: 500, stash: 1000, room: 9, confirmAt: 400, reasons: [{ code: 'pinned', n: 50 }] }, { asked: 20, count: 10, lines: [{ id: 'b', gold: 5 }], total: 50, stash: 1000, confirmAt: 400, reasons: [{ code: 'pinned', n: 4 }, { code: 'room', n: 6, why: 'x' }] }]);
+  assert.deepEqual([m.asked, m.count, m.total, m.stash, m.stashAfter, m.needConfirm, m.lines.length], [170, 110, 550, 1000, 1550, true, 2]);
+  assert.deepEqual(m.reasons.map((r) => [r.code, r.n]), [['pinned', 54], ['room', 6]]);
+});
 
 ok('windowRange draws the rows near the view and pads the rest', () => {
   const w = (o) => L.windowRange(Object.assign({ n: 2400, cols: 6, rowH: 70, view: 700, top: 0, over: 4 }, o));
