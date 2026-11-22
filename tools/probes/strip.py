@@ -12,7 +12,13 @@ from gridwhole import session, grid
 d2d, data, fr, to, seed = sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5])
 wait = float(sys.argv[6]) if len(sys.argv) > 6 else 1.5
 p, cmd = session(d2d, data, seed)
+TARGET_SIZE = (80, 40)
 try:
+    print("goto target first (its size)", cmd("debug goto %d" % to).strip()[:60])
+    time.sleep(wait)
+    tl = cmd("debug level").split()
+    print("target level", tl[:8], "layout lines", len(cmd("debug layout").strip().split("\n")) - 1)
+    TARGET_SIZE = (int(tl[4]), int(tl[5]))   # cells = tiles
     print("goto", cmd("debug goto %d" % fr).strip()[:60])
     time.sleep(wait)
     for v in ("debug level", "debug layout", "debug nearby"):
@@ -22,10 +28,24 @@ try:
     g = grid(cmd)
     print("grid rows", len(g), "cols", len(g[0]) if g else 0)
     lay = {}
-    for l in cmd("debug layout").split("\n"):
-        f = l.split()
-        if len(f) >= 5 and f[0].isdigit():
-            lay[int(f[0])] = tuple(int(x) for x in f[1:5])
+    t0 = time.time()
+    while True:   # the layout lists levels as d2d builds them: poll until the target shows (or 40 s)
+        for l in cmd("debug layout").split("\n"):
+            f = l.split()
+            if len(f) >= 5 and f[0].isdigit():
+                lay[int(f[0])] = tuple(int(x) for x in f[1:5])
+        if to in lay or time.time() - t0 > 10:
+            break
+        time.sleep(1)
+    if to not in lay:   # linked (nearby) but not placed by the layout verb: derive the origin from nearby, size from the visit above
+        for l in cmd("debug nearby").split("\n"):
+            f = l.split()
+            if len(f) == 3 and f[0] == str(to) and fr in lay:
+                tv = TARGET_SIZE
+                lay[to] = (lay[fr][0] + int(f[1]), lay[fr][1] + int(f[2]), tv[0], tv[1])
+                print("target synthesised from nearby:", lay[to])
+    print("layout has target after %.1f s: %s" % (time.time() - t0, to in lay))
+    print("## nearby late"); print(cmd("debug nearby").strip()[:600])
     o, t = lay.get(fr), lay.get(to)
     print("own", o, "target", t)
     if o and t:
