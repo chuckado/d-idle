@@ -405,6 +405,7 @@
 | fid-transitions | deferred | - | `docs/probes/fid/fid-transitions.md` | - |
 | necro2 | proposed | - | `docs/probes/necromancer-readiness-2026-11-22.md` | - |
 | necro4 | proposed | - | `internal/combat/classdata.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro.go`<br>`internal/combat/necro_corpse.go`<br>`internal/combat/necro_test.go`<br>`internal/combat/necro_data_test.go`<br>`internal/combat/fighter.go` | - |
+| necro3 | proposed | - | `internal/buildfile/testdata/necromancer-summoner-sme.json`<br>`internal/buildfile/testdata/necromancer-poison-nova-sme.json`<br>`internal/buildfile/necrosme_test.go`<br>`internal/plandata/build-necromancer_summoner_sme.json`<br>`internal/plandata/build-necromancer_poison_nova_sme.json`<br>`docs/plan/data/build-necromancer_summoner_sme.json`<br>`docs/plan/data/build-necromancer_poison_nova_sme.json`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro_data_test.go`<br>`internal/leveler/necrosummoner_test.go` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -439,6 +440,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 7a917f2da 11-22 14:57 `Merge agent/necro3: Merge branch 'main' into necro3` (necro3)
+- 7cbbd4d17 11-22 14:56 `Merge branch 'main' into necro3` (-)
 - ac382a44b 11-22 14:47 `Merge agent/townstage3: Merge branch 'main' into town5` (townstage3)
 - 30259ce1b 11-22 14:45 `Merge branch 'main' into town5` (-)
 - f3447a84d 11-22 14:34 `Merge agent/recallsorc: Merge branch 'main' into recallsorc` (recallsorc)
@@ -447,6 +450,4 @@
 - 7390d333c 11-22 14:24 `Merge branch 'main' into necro4` (-)
 - 17391d641 11-22 14:16 `Merge branch 'main' into town5` (-)
 - 0b1c9d7b0 11-22 14:14 `Merge agent/necrosme: Merge branch 'main' into necrosme` (necrosme)
-- 26ff256f1 11-22 14:13 `Merge branch 'main' into necrosme` (-)
-- f85df9835 11-22 14:02 `Merge agent/necro-audit: Merge branch 'main' into necro2` (necro-audit)
 <!-- statusgen:end -->

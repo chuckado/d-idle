@@ -560,7 +560,9 @@ docs/plan/data/build-barbarian_frenzy_guide.json  credit-runner  barb1
 docs/plan/data/build-druid_fire_guide.json  credit-runner  druid1
 docs/plan/data/build-fallback-lightning-v2.json  credit-runner  sorc2
 docs/plan/data/build-fallback-lightning.json  credit-runner  sorc2
+docs/plan/data/build-necromancer_poison_nova_sme.json  credit-runner  necro3
 docs/plan/data/build-necromancer_summoner_guide.json  credit-runner  necro1
+docs/plan/data/build-necromancer_summoner_sme.json  credit-runner  necro3
 docs/plan/data/build-paladin_hammerdin_guide.json  credit-runner  hammer1
 docs/plan/data/build-primary-blizzard.json  credit-runner  sorc2
 docs/plan/data/build-sorceress_fire_normal30.json  credit-runner  sorc2
@@ -1042,6 +1044,7 @@ internal/bot/zoneshadow_test.go  credit-runner  survC
 internal/buildfile/druidfire_test.go  credit-runner  druid1
 internal/buildfile/frenzy_test.go  credit-runner  barb1
 internal/buildfile/hammerdin_test.go  credit-runner  hammer1
+internal/buildfile/necrosme_test.go  credit-runner  necro3
 internal/buildfile/necrosummoner_test.go  credit-runner  necro1
 internal/buildfile/plans_test.go  credit-runner  sorc2
 internal/buildfile/tablecheck.go  credit-runner  sorc2
@@ -1051,7 +1054,9 @@ internal/buildfile/tablecheck_test.go  credit-runner  necro1
 internal/buildfile/tablecheck_test.go  credit-runner  sorc2
 internal/buildfile/testdata/barbarian-frenzy-guide.json  credit-runner  barb1
 internal/buildfile/testdata/druid-fire-guide.json  credit-runner  druid1
+internal/buildfile/testdata/necromancer-poison-nova-sme.json  credit-runner  necro3
 internal/buildfile/testdata/necromancer-summoner-guide.json  credit-runner  necro1
+internal/buildfile/testdata/necromancer-summoner-sme.json  credit-runner  necro3
 internal/buildfile/testdata/paladin-hammerdin-guide.json  credit-runner  hammer1
 internal/bulkid  credit-runner  bulkid
 internal/bulkid  credit-runner  identifyall
@@ -1088,6 +1093,7 @@ internal/combat/classdata/profiles.json  credit-runner  barb1
 internal/combat/classdata/profiles.json  credit-runner  druid1
 internal/combat/classdata/profiles.json  credit-runner  hammer1
 internal/combat/classdata/profiles.json  credit-runner  necro1
+internal/combat/classdata/profiles.json  credit-runner  necro3
 internal/combat/classdata/profiles.json  credit-runner  necro4
 internal/combat/classdata/profiles.json  credit-runner  sorc2
 internal/combat/dodge.go  credit-runner  survfix2
@@ -1107,6 +1113,7 @@ internal/combat/interlude_test.go  credit-runner  goldprio
 internal/combat/lifeprice.go  credit-runner  palprofile2
 internal/combat/necro.go  credit-runner  necro4
 internal/combat/necro_corpse.go  credit-runner  necro4
+internal/combat/necro_data_test.go  credit-runner  necro3
 internal/combat/necro_data_test.go  credit-runner  necro4
 internal/combat/necro_test.go  credit-runner  necro4
 internal/combat/packdrink.go  credit-runner  beltfix
@@ -1311,6 +1318,7 @@ internal/leveler/judge.go  credit-runner  charreq
 internal/leveler/judge_test.go  credit-runner  charreq
 internal/leveler/leveler.go  credit-runner  agencyp0
 internal/leveler/necrosummoner_test.go  credit-runner  necro1
+internal/leveler/necrosummoner_test.go  credit-runner  necro3
 internal/leveler/playerequip.go  credit-runner  charreq
 internal/leveler/playerequip_test.go  credit-runner  gearsets
 internal/leveler/playerunequip.go  credit-runner  gearsets
@@ -1406,7 +1414,9 @@ internal/plandata/build-barbarian_frenzy_guide.json  credit-runner  barb1
 internal/plandata/build-druid_fire_guide.json  credit-runner  druid1
 internal/plandata/build-fallback-lightning-v2.json  credit-runner  sorc2
 internal/plandata/build-fallback-lightning.json  credit-runner  sorc2
+internal/plandata/build-necromancer_poison_nova_sme.json  credit-runner  necro3
 internal/plandata/build-necromancer_summoner_guide.json  credit-runner  necro1
+internal/plandata/build-necromancer_summoner_sme.json  credit-runner  necro3
 internal/plandata/build-paladin_hammerdin_guide.json  credit-runner  hammer1
 internal/plandata/build-primary-blizzard.json  credit-runner  sorc2
 internal/plandata/build-sorceress_fire_normal30.json  credit-runner  sorc2
