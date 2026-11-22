@@ -57,6 +57,9 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 			return fmt.Errorf("%w: left level %d for %d but ended in %d", ErrLevelChanged, start, levelNo, o.level)
 		}
 		g, ok := n.findGate(o, levelNo)
+		if !ok && n.openGateDoor(ctx, o, levelNo) {
+			continue
+		}
 		if !ok && n.badTTL() > 0 && n.fullyKnown() {
 			// The map shows a way to levelNo (d2dworld hands out the whole level and its neighbours) but no plan reaches it
 			// from here: the character stands in a pocket of the walkable grid. Exploring cannot find anything on a map

@@ -98,19 +98,23 @@ type Navigator struct {
 	Escape func(ctx context.Context) error
 
 	// Hint biases informed exploration toward a point (zero value: none). Set with ExploreToward.
-	hint        *input.Point
-	caution     float64 // multiplier on monster avoidance (1, or 2 during CorpseApproach)
-	wpMu        sync.Mutex
-	wpNew       []int
-	mouthFails  map[mouthKey]mouthFail
-	mouthLast   mouthKey
-	mouthLastOK bool
-	goal        input.Point // fixed goal of the GoTo in progress (goalSet): the mouth gate treats exits around it as pockets
-	goalSet     bool
-	wantExit    int // level whose exit tiles ExitTo is deliberately walking onto (0: none)
-	wpLevel     int // level of the last observation and when it was first seen: the waypoint cooldown (waypoint.go)
-	wpSince     time.Time
-	wpClicks    int // interactions and row clicks of the current TakeWaypoint
+	hint         *input.Point
+	caution      float64 // multiplier on monster avoidance (1, or 2 during CorpseApproach)
+	wpMu         sync.Mutex
+	wpNew        []int
+	mouthFails   map[mouthKey]mouthFail
+	doorFn       func(class int) bool // test hook: is this object class a door (default: objects.txt IsDoor)
+	doorLogged   map[[2]int]bool
+	doorApproach map[[2]int]int
+	doorTried    map[d2map.Point]int // gate doors ExitTo already opened this game, by map position (gatedoor.go)
+	mouthLast    mouthKey
+	mouthLastOK  bool
+	goal         input.Point // fixed goal of the GoTo in progress (goalSet): the mouth gate treats exits around it as pockets
+	goalSet      bool
+	wantExit     int // level whose exit tiles ExitTo is deliberately walking onto (0: none)
+	wpLevel      int // level of the last observation and when it was first seen: the waypoint cooldown (waypoint.go)
+	wpSince      time.Time
+	wpClicks     int // interactions and row clicks of the current TakeWaypoint
 
 	e          *env.Env
 	w          worldSource
@@ -337,8 +341,14 @@ func (n *Navigator) fieldFor(lm *d2map.LevelMap) *Field {
 	return n.field
 }
 
-// invalidate forces the next plan to re-read the grid (a door opened, for example).
-func (n *Navigator) invalidate() { n.fieldKey.nonce++ }
+// invalidate forces the next plan to re-read the grid (a door opened, for example). The key's nonce alone did not do
+// it: fieldFor reads the nonce from the stored key, so the two always matched (V: TestExitToOpensTheDoorBesideACutOffGate
+// kept planning on the closed door); the cached field is dropped instead.
+func (n *Navigator) invalidate() {
+	n.planMu.Lock()
+	n.field = nil
+	n.planMu.Unlock()
+}
 
 type planResult struct {
 	wps        []input.Point // waypoints from the first step to the goal
