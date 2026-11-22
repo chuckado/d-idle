@@ -107,7 +107,7 @@ func (r *Runner) guardWorld(s *d2.Snapshot) *task.World {
 	w.Potions += in.Belt.PackHP + in.Belt.PackRV
 	w.HasTP, w.ManaPotions = in.HasTP, in.Belt.MP
 	r.fillKit(&w, s)
-	w.Caster = s.Player.Class == d2.Sorceress || s.Player.Class == d2.Necromancer || s.Player.Class == d2.Druid
+	w.Caster = s.Player.Class.Caster()
 	return &w
 }
 
@@ -322,9 +322,10 @@ func (r *Runner) fillRouteFacts(au *Autopsy, a aliveInfo, now time.Time) {
 // without a launcher, the melee knob for the melee classes and a bowed Amazon.
 func (r *Runner) denFloor(s *d2.Snapshot) int {
 	p, c := s.Player, r.e.Tune.Campaign
-	switch p.Class {
-	case d2.Sorceress, d2.Necromancer, d2.Druid:
+	if p.Class.Caster() {
 		return c.DenMinLevelCaster
+	}
+	switch p.Class {
 	case d2.Amazon:
 		if r.hasLauncher(s) {
 			return c.DenMinLevelMelee
