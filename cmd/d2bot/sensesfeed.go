@@ -9,6 +9,7 @@ import (
 	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/decide"
 	"d2lod-bot/internal/env"
+	"d2lod-bot/internal/input"
 	"d2lod-bot/internal/nav"
 	"d2lod-bot/internal/senses"
 	"d2lod-bot/internal/status"
@@ -85,7 +86,14 @@ func useSensesCoverage(rig *ladderRig, e *env.Env, mover any) {
 		return
 	}
 	prev, pub := e.OnObserve, rig.Senses
-	e.OnObserve = coverageThrottle(prev, func() { pub.SetCoverage(coverageFor(nv)) }, time.Now)
+	push := func() { pub.SetCoverage(coverageFor(nv)) }
+	if ov, ok := mover.(objectiveView); ok {
+		push = func() { pub.SetCoverage(coverageFor(nv)); pub.SetObjective(objectiveFor(ov)) }
+	}
+	e.OnObserve = coverageThrottle(prev, push, time.Now)
+	if h, ok := mover.(interface{ SetOnNewGame(func()) }); ok {
+		h.SetOnNewGame(pub.NewGame) // a new game lays its levels out again: the old walked ground must not reveal it
+	}
 	if h, ok := mover.(interface{ SetOnCoverChange(func()) }); ok {
 		h.SetOnCoverChange(func() { pub.SetCoverage(coverageFor(nv)) }) // detour positions flip cells at once
 	}
@@ -109,6 +117,19 @@ func coverageThrottle(prev func(*d2map.LevelMap, d2map.Point), push func(), now 
 		}
 		push()
 	}
+}
+
+// objectiveView is the goal of the walk in progress (nav.Navigator.ObjectiveView).
+type objectiveView interface {
+	ObjectiveView() (level int, p input.Point, ok bool)
+}
+
+func objectiveFor(ov objectiveView) (senses.Objective, bool) {
+	level, p, ok := ov.ObjectiveView()
+	if !ok {
+		return senses.Objective{}, false
+	}
+	return senses.Objective{Area: level, X: p.X, Y: p.Y}, true
 }
 
 func coverageFor(nv coverageView) senses.Coverage {

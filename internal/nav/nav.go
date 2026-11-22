@@ -65,6 +65,7 @@ type Navigator struct {
 	peakRung            atomic.Int32 // highest stuck-ladder rung since the last TakePeakRung (observability only)
 	cov                 *coverage    // roam state (roam.go); nil on backends that reveal unknown cells. covMu guards cov and its seen/failed/legs/held: NotePosition runs on the bot observer goroutine
 	covMu               sync.Mutex
+	onNewGame           func()            // runs after ForgetCoverage (roam.go); guarded by covMu
 	covs                map[int]*coverage // roam memory of this game by level number; n.cov is the current level's entry (selectCov)
 	onCover             func()            // called (no lock held) when NotePosition marked a point; set by SetOnCoverChange
 	// Guard, if set, runs on every observation while walking. A non-nil error stops the walk and is returned

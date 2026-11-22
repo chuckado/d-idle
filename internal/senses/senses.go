@@ -213,6 +213,8 @@ type Publisher struct {
 	heatAt                 time.Time
 	heatArea, heatX, heatY int
 	cover                  Coverage
+	obj                    Objective
+	hasObj                 bool
 	now                    func() time.Time // test clock; nil is time.Now
 }
 
