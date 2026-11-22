@@ -362,6 +362,7 @@ cmd/d2scenario/main.go  credit-runner  pgledger
 cmd/d2scenario/main_test.go  credit-runner  agencyp0
 cmd/d2scenario/prov.go  credit-runner  pgprov
 cmd/d2scenario/run.go  credit-runner  agencyp0
+cmd/d2scenario/run.go  credit-runner  necroscen
 cmd/d2scenario/run.go  credit-runner  pgledger
 cmd/d2scenario/run.go  credit-runner  pgprov
 cmd/d2scenario/run.go  credit-runner  pgtaps
@@ -1511,17 +1512,21 @@ internal/scenario/hero  credit-runner  pghero
 internal/scenario/hero/selfcheck.go  credit-runner  pgselfcheck
 internal/scenario/ledger.go  credit-runner  pgledger
 internal/scenario/ledger_test.go  credit-runner  pgledger
+internal/scenario/necro_test.go  credit-runner  necroscen
 internal/scenario/newkinds_test.go  credit-runner  town1
 internal/scenario/prov.go  credit-runner  pgprov
 internal/scenario/result.go  credit-runner  pgdigest
 internal/scenario/result.go  credit-runner  pgprov
 internal/scenario/result.go  credit-runner  pgtaps
 internal/scenario/scenario.go  credit-runner  barb1
+internal/scenario/scenario.go  credit-runner  necroscen
 internal/scenario/scenario_test.go  credit-runner  agencyp0
 internal/scenario/scenario_test.go  credit-runner  barb1
 internal/scenario/scenario_test.go  credit-runner  druid1
+internal/scenario/setup.go  credit-runner  necroscen
 internal/scenario/stability.go  credit-runner  pgstability
 internal/scenario/state.go  credit-runner  agencyp0
+internal/scenario/state.go  credit-runner  necroscen
 internal/scenario/state.go  credit-runner  town1
 internal/scenario/taps.go  credit-runner  pgtaps
 internal/senses  credit-runner  botcpu
@@ -2267,6 +2272,7 @@ tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
 tools/provingground/scenarios/cain.json  credit-runner  wpstep
 tools/provingground/scenarios/manage.json  credit-runner  equipswap
+tools/provingground/scenarios/necro.json  credit-runner  necroscen
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/provingground/scenarios/points.json  credit-runner  barb1
 tools/provingground/scenarios/points.json  credit-runner  druid1
