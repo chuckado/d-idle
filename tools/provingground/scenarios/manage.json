@@ -210,8 +210,6 @@
       "pre": {
         "level": 30,
         "gold": 500,
-        "start": "field",
-        "area": 2,
         "belt": ["hp1", "hp1", "hp1", "hp1"],
         "vault_records": {
           "items": [
@@ -269,7 +267,7 @@
         "item.equip"
       ],
       "provenance": "SETUP (CHEATED, mechanics only): level, gold, the given and worn items and the vault record come from lab verbs and the runner's seeding. Not evidence about balance or parity.",
-      "notes": "The hero starts in the field (Blood Moor, start field) with potions in the belt so a chicken does not bring it home by itself; the log line is the trip activity the runner sets (\"recall trip\" is only the do-label and is never logged, V 2026-11-22 run: the trip ran and the first version of this assert read 0 lines).",
+      "notes": "The hero starts in town (a field start cannot seed a Vault record: the seeding `item full` answers `#-1`, V 2026-11-22) and the campaign walks it out in the first seconds; it carries potions in the belt so a chicken does not bring it home by itself; the log line is the trip activity the runner sets (\"recall trip\" is only the do-label and is never logged, V 2026-11-22 run: the trip ran and the first version of this assert read 0 lines).",
       "assert": [
         {
           "kind": "api_reply",
