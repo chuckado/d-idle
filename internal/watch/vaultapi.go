@@ -145,15 +145,17 @@ type VaultRevealView struct {
 
 // VaultSale is the instant sale as the page shows it (internal/vaultkeep SaleView).
 type VaultSale struct {
-	ID          string `json:"id"`
-	State       string `json:"state"` // queued, credited, done, failed
-	Items       int    `json:"items"`
-	Done        int    `json:"done"`
-	Gold        int    `json:"gold"`
-	StashBefore int    `json:"stashBefore"`
-	StashAfter  int    `json:"stashAfter"`
-	Note        string `json:"note,omitempty"`
-	Line        string `json:"line"`
+	ID          string            `json:"id"`
+	State       string            `json:"state"` // queued, credited, done, failed
+	Items       int               `json:"items"`
+	Done        int               `json:"done"`
+	Gold        int               `json:"gold"`
+	StashBefore int               `json:"stashBefore"`
+	StashAfter  int               `json:"stashAfter"`
+	Note        string            `json:"note,omitempty"`
+	Line        string            `json:"line"`
+	All         bool              `json:"all,omitempty"`     // a Sell all order
+	Skipped     []VaultSaleReason `json:"skipped,omitempty"` // Sell all: the records left out and why
 }
 
 type VaultSaleLine struct {
@@ -191,8 +193,25 @@ type VaultSaleActor interface {
 	SellNow(ctx context.Context, ids []string, confirm bool) ([]VaultKeepResult, *VaultSale)
 }
 
+// VaultSellAll is the "Sell all (N)" button's number: the records a whole-vault sale would take now (no prices, no stash room: the
+// quote of the first tap says those) and the records it leaves out, by reason.
+type VaultSellAll struct {
+	N    int               `json:"n"`
+	Left []VaultSaleReason `json:"left,omitempty"`
+}
+
+// VaultSellAllActor is the optional whole-vault sale of a VaultSaleActor (scope all_sellable). The bot lists the records
+// itself when it runs; ids are never sent. Quote works the plan out without changing anything; IDs is the list the old
+// town-visit queue takes when the instant sale is not available.
+type VaultSellAllActor interface {
+	SellAllQuote(ctx context.Context) VaultSaleQuote
+	SellAll(ctx context.Context, orderID string) (code, why string, sale *VaultSale)
+	SellAllIDs() []string
+}
+
 type VaultSellView struct {
-	Enabled bool `json:"enabled"`
+	Enabled bool          `json:"enabled"`
+	All     *VaultSellAll `json:"all,omitempty"` // Sell all: the count of the whole vault (nil: this bot has no Sell all)
 	// Instant: Sell is instant now (the stash is credited and the records leave at once); the page asks the quote first and
 	// confirms at ConfirmAt gold. InstantWhy says why not (knob 0, an older d2d). Sale is the last sale (shown for ten minutes).
 	Instant    bool       `json:"instant"`
@@ -989,7 +1008,8 @@ func (a *VaultAPI) Handler() http.Handler {
 
 type vaultBody struct {
 	IDs     []string `json:"ids"`
-	Scope   string   `json:"scope,omitempty"` // revealgold: all_unrevealed names every unrevealed record of the whole vault instead of ids
+	Scope   string   `json:"scope,omitempty"`   // revealgold: all_unrevealed names every unrevealed record of the whole vault instead of ids; sell and sellquote: all_sellable
+	OrderID string   `json:"orderId,omitempty"` // sell, all_sellable: the page's idempotent id of the order (a resend never sells twice)
 	Confirm bool     `json:"confirm"`
 	Target  string   `json:"target,omitempty"`  // keep: stash (default) or inv
 	MaxGold int      `json:"maxGold,omitempty"` // revealgold: the most gold the order may spend (0: the quote)
@@ -1077,6 +1097,10 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 			a.goldRoute(w, r, d, route, &b)
 			return
 		}
+		if b.Scope != "" && (route == VaultSellRoute || route == VaultSellQuote) {
+			a.sellAll(w, r, d, route, &b)
+			return
+		}
 		if len(b.IDs) == 0 || len(b.IDs) > vaultMaxIDs {
 			writeJSON(w, http.StatusBadRequest, policyReply{Code: "ids", Error: "send 1 to " + strconv.Itoa(vaultMaxIDs) + " ids"})
 			return
@@ -1141,6 +1165,80 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 		}
 		writeJSON(w, code, rep)
 	})
+}
+
+// sellAll is the whole-vault sale (scope all_sellable, no ids): the bot lists the records when the order runs, the page only
+// carries its own order id. The quote route answers what the sale would do. Without the instant sale the same list goes to
+// the old town-visit queue, except in a measured run, where nothing is sold.
+func (a *VaultAPI) sellAll(w http.ResponseWriter, r *http.Request, d *VaultDesk, route string, b *vaultBody) {
+	sa, ok := saleActor(d)
+	var all VaultSellAllActor
+	if ok {
+		all, ok = sa.(VaultSellAllActor)
+	}
+	if b.Scope != "all_sellable" || len(b.IDs) > 0 || !ok {
+		writeJSON(w, http.StatusBadRequest, policyReply{Code: "scope", Error: "scope is all_sellable, without ids (and this bot must have Sell all)"})
+		return
+	}
+	on, why := sa.SaleOn(r.Context())
+	if route == VaultSellQuote {
+		q := all.SellAllQuote(r.Context())
+		if !on && q.Why == "" {
+			q.Why = why
+		}
+		writeJSON(w, 200, q)
+		return
+	}
+	if !b.Confirm {
+		writeJSON(w, http.StatusBadRequest, policyReply{Code: "confirm", Error: "sell needs confirm: true"})
+		return
+	}
+	if on {
+		code, msg, sale := all.SellAll(r.Context(), b.OrderID)
+		rep := vaultReply{Done: []string{}, Sale: sale}
+		if code != "" {
+			writeJSON(w, http.StatusConflict, policyReply{Code: code, Error: msg})
+			return
+		}
+		rep.OK = sale != nil && sale.State == "done" && sale.Done > 0
+		status := 200
+		if sale == nil || (sale.State == "failed") {
+			status = http.StatusConflict
+		}
+		writeJSON(w, status, rep)
+		return
+	}
+	if strings.Contains(why, "measured run") {
+		writeJSON(w, http.StatusConflict, policyReply{Code: "measured", Error: why})
+		return
+	}
+	if d.Act == nil {
+		writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "this bot has no Sell"})
+		return
+	}
+	if ok, code, why := d.Act.GateSell(r.Context()); !ok {
+		writeJSON(w, http.StatusConflict, policyReply{Code: code, Error: why})
+		return
+	}
+	ids := all.SellAllIDs()
+	if len(ids) == 0 {
+		writeJSON(w, http.StatusConflict, policyReply{Code: "state", Error: "nothing in the vault can be queued for sale now"})
+		return
+	}
+	rep := vaultReply{Done: []string{}}
+	for _, x := range d.Act.EnqueueSell(r.Context(), ids, false) {
+		if x.OK {
+			rep.Done = append(rep.Done, x.ID)
+		} else {
+			rep.Failed = append(rep.Failed, vaultFail{ID: x.ID, Code: x.Code, Error: x.Why})
+		}
+	}
+	rep.OK = len(rep.Failed) == 0
+	status := 200
+	if len(rep.Done) == 0 {
+		status = http.StatusConflict
+	}
+	writeJSON(w, status, rep)
 }
 
 func saleActor(d *VaultDesk) (VaultSaleActor, bool) {

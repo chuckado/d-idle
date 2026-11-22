@@ -157,11 +157,11 @@ func TestInventoryDOMGoldens(t *testing.T) {
 func TestInventoryPageOnTheShell(t *testing.T) {
 	for _, want := range []string{`href="/watch/tokens.css"`, `href="/watch/shell.css"`, `href="/watch/components.css"`, `href="/watch/inventory.css"`,
 		`data-band="status"`, `id="btn-theme"`, `class="d-doll"`, `id="pack"`, `src="/watch/shell.js"`, `src="/watch/inventory.js"`} {
-		if !strings.Contains(invPage, want) {
+		if !strings.Contains(charPage, want) {
 			t.Errorf("inventory page lacks %s", want)
 		}
 	}
-	if strings.Contains(invPage, "<style") || strings.Contains(invPage, "style=") {
+	if strings.Contains(charPage, "<style") || strings.Contains(charPage, "style=") {
 		t.Error("inventory page has inline styles")
 	}
 	runNode(t, "testdata/inventory_logic.js", "web/inventory.js")

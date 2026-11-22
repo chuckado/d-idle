@@ -202,7 +202,10 @@ revealingl vault=revealing&theme=light
 revealpress vault=revealpress&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=reveal]
 revealnone vault=revealnone&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=reveal]
 revealcain vault=revealcain&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=reveal]
-sellsheet vault=revealpress&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=sell]" | while read -r pname pq pclick; do
+sellsheet vault=revealpress&theme=dark [data-key=select-toggle]|.vt-cell|[data-key=sell]
+sellall vault=sellall&theme=dark
+sellallarm vault=sellall&theme=dark [data-key=sell-all]
+sellallfull vault=sellall-full&theme=dark [data-key=sell-all]" | while read -r pname pq pclick; do
 		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
 		for sz in ${sizes_only:-1914x930 1366x768 1280x620 412x780 360x640}; do
 			w=${sz%x*} h=${sz#*x}
@@ -213,7 +216,7 @@ sellsheet vault=revealpress&theme=dark [data-key=select-toggle]|.vt-cell|[data-k
 			esac
 			prof=$(mktemp -d)
 			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
-				--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/vt-$pname-$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/vault%3F$(printf %s "$pq" | sed 's/&/%26/g')&w=$w&h=$h$ck" >/dev/null 2>&1
+				--window-size="$w,$((h + 40))" --virtual-time-budget=${UISHOTS_VT_BUDGET:-25000} --timeout=40000 --screenshot="$out/vt-$pname-$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/vault%3F$(printf %s "$pq" | sed 's/&/%26/g')&w=$w&h=$h$ck" >/dev/null 2>&1
 			rm -rf "${prof:?}"
 		done
 	done

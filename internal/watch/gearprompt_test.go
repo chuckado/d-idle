@@ -13,10 +13,10 @@ import (
 // page: role=note, styled by tokens (a d-note), shown and hidden by the state alone, warning kind for the no-weapon
 // text, and it never moves focus or scroll.
 func TestInventoryGearPromptNote(t *testing.T) {
-	if !strings.Contains(invPage, `<p class="d-note" data-sev="info" id="gearprompt" role="note" hidden></p>`) {
+	if !strings.Contains(charPage, `<p class="d-note" data-sev="info" id="gearprompt" data-cv="prompt" role="note" hidden></p>`) {
 		t.Fatal("the inventory page has no gear prompt note")
 	}
-	if strings.Index(invPage, `id="gearprompt"`) > strings.Index(invPage, `id="equip"`) {
+	if strings.Index(charPage, `id="gearprompt"`) > strings.Index(charPage, `id="equip"`) {
 		t.Error("the prompt must sit above the equipment")
 	}
 	b, err := webFS.ReadFile("web/inventory.js")

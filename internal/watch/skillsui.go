@@ -17,6 +17,7 @@ const skillsPage = `<!DOCTYPE html>
  <nav class="d-links" aria-label="Other pages">
   <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch?live=1">Live screen</a>
   <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/inventory">Inventory</a>
+  <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/points">Points</a>
   <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/policy">Policy</a>
   <button class="d-btn" data-size="sm" data-variant="ghost" id="btn-theme" type="button" aria-label="Switch colour theme">Theme: dark</button>
  </nav>
@@ -25,7 +26,7 @@ const skillsPage = `<!DOCTYPE html>
  <p class="d-note" data-sev="alarm" id="msg" role="status" hidden></p>
  <section class="d-card sk-sum" aria-labelledby="t-sum">
   <div class="d-card-head"><h2 id="t-sum">Skills</h2><span class="meta" id="summeta"></span></div>
-  <p class="d-hint" id="sumnote">Read only: points are spent by the player in the game, nothing here changes them.</p>
+  <p class="d-hint" id="sumnote">Press a skill that can be learned to spend one skill point on it.</p>
   <div class="d-legend" aria-label="Legend"><span><b class="sk-lg" data-state="learned"></b>learned</span><span><b class="sk-lg" data-state="learnable"></b>can be learned</span><span><b class="sk-lg" data-state="locked"></b>needs a level or a prerequisite</span><span><b class="sk-lg" data-state="bonus"></b>only +skills from items</span></div>
   <div class="sk-filter" id="kindbar" role="group" aria-label="Show skills of kind"></div>
   <p class="d-hint" id="kindlegend">Active: cast or used by the hero. Aura: switched on once, stays on. Passive: always on, nothing to cast.</p>
