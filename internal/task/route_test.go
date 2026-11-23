@@ -178,3 +178,28 @@ func TestFieldReadyKitShortInsertsChores(t *testing.T) {
 		}
 	}
 }
+
+// A hero already on the guarded road keeps going with a kit that dropped a little (4 to 3 healing, 2 to 1 mana); the
+// guard that closed the road at the gate stays as it was. Must fail without RouteLeaveWhy (it equalled RouteWhy).
+func TestRouteLeaveWhyToleratesAThinnedKit(t *testing.T) {
+	for _, caster := range []bool{false, true} { // Paladin, Sorceress
+		w := routeWorld(19, func(w *task.World) {
+			w.HasMerc, w.Caster = true, caster
+			w.Potions, w.ManaPotions = 3, 1
+		})
+		if task.RouteWhy(w) == "" {
+			t.Fatalf("caster=%v: the gate guard must stay closed for this kit", caster)
+		}
+		if why := task.RouteLeaveWhy(w); why != "" {
+			t.Errorf("caster=%v: leave verdict %q", caster, why)
+		}
+		w.Potions = 1
+		if why := task.RouteLeaveWhy(w); why == "" {
+			t.Errorf("caster=%v: one potion left must still send the hero home", caster)
+		}
+		w.Potions, w.Level, w.HasMerc = 3, 12, false
+		if task.RouteLeaveWhy(w) == "" {
+			t.Errorf("caster=%v: a level shortfall must still send the hero home", caster)
+		}
+	}
+}
