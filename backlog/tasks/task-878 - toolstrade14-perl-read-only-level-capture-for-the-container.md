@@ -18,6 +18,7 @@ owns:
   - "docs/probes/tools-trade-2026-11-22.md"
 exclusive: []
 contracts: []
+result: "capture.pl: same read verbs as capture.py, JSON lines on stdout, nothing written in the container; tested against a fake socket; not yet run on the live container."
 ---
 
 ## Description
@@ -30,5 +31,5 @@ Size: S. The sandbox container has perl, no python. Done when merged.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 capture.pl captures one level through read verbs only, to stdout; allow-list and refusal tested against a fake socket
+- [x] #1 capture.pl captures one level through read verbs only, to stdout; allow-list and refusal tested against a fake socket
 <!-- AC:END -->
