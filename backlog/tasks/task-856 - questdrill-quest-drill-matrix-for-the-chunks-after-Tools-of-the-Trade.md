@@ -31,6 +31,7 @@ owns:
   - "internal/task/act4.go"
   - "internal/bot/questboard.go"
   - "internal/bot/questboard_s7b_test.go"
+  - "tools/probes/presets.py"
   - "internal/nav/exit.go"
   - "internal/nav/gatedoor.go"
   - "internal/nav/gatedoor_test.go"
