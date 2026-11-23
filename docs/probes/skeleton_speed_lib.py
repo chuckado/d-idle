@@ -4,7 +4,7 @@ import os, socket, subprocess, sys, tempfile, time
 
 class Session:
     def __init__(self, d2d, extra, name="Sk", cls=1, seed=5):
-        data = os.environ.get("D2_MPQ_DIR", "/data/gamedata")
+        data = os.environ["D2_MPQ_DIR"]
         self.home = tempfile.mkdtemp(prefix="d2d_skel_")
         os.makedirs(os.path.join(self.home, ".config/d2d/save"), exist_ok=True)
         self.sock = os.path.join(tempfile.gettempdir(), f"d2d_skel_{os.getpid()}.sock")
