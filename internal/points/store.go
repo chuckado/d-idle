@@ -118,6 +118,10 @@ type Settings struct {
 	LockedAtLevel int       `json:"lockedAtLevel,omitempty"`
 	LockedAt      time.Time `json:"lockedAt,omitzero"`
 	Respecs       int       `json:"respecs,omitempty"`
+	// Plan is the later table of the build the allocator follows after a horizon handoff ("" before); PlanAtLevel is
+	// the hero level when it took over.
+	Plan        string `json:"plan,omitempty"`
+	PlanAtLevel int    `json:"planAtLevel,omitempty"`
 }
 
 // Store reads and writes Settings; safe for concurrent use.
@@ -199,11 +203,24 @@ func (s *Store) LockBuild(name string, level int, now time.Time) (changed bool, 
 	})
 }
 
+// SetPlan records a horizon handoff to a later table of the locked build.
+func (s *Store) SetPlan(table string, level int, now time.Time) error {
+	_, err := s.update(func(c *Settings) bool {
+		if c.Plan == table {
+			return false
+		}
+		c.Plan, c.PlanAtLevel, c.Changed = table, level, now
+		return true
+	})
+	return err
+}
+
 // ClearBuild is what a paid respec does (the respec card calls it after the game took the refund): the build and the
 // lock go, the hero's respec count goes up by one.
 func (s *Store) ClearBuild(now time.Time) error {
 	_, err := s.update(func(c *Settings) bool {
 		c.Build, c.Locked, c.LockedAtLevel, c.LockedAt, c.Changed = "", false, 0, time.Time{}, now
+		c.Plan, c.PlanAtLevel = "", 0
 		c.Respecs++
 		return true
 	})
