@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"testing"
@@ -86,6 +87,9 @@ func TestEveryRuleFires(t *testing.T) {
 		{"css-token-exists", "components.css", `@layer components { .d-card { color: var(--d-nope); } }`},
 		{"css-token-exists", "panels/probe/panel.css", `@layer panels { [data-panel="probe"] .row { inline-size: var(--p-probe-undefined); } }`},
 		{"css-no-vw-in-panel", "panels/probe/panel.css", `@layer panels { [data-panel="probe"] .row { font-size: 2vw; } }`},
+		{"sev-scale", "components.css", `@layer components { .d-note[data-sev="alarm"] { padding: 0; } }`},
+		{"sev-scale", "watch.html", `<p class="d-note" data-sev="alarm"></p>`},
+		{"sev-scale", "shell.js", `n.dataset.sev = cond ? 'alarm' : 'warn';`},
 		{"html-no-style-attr", "watch.html", `<div style="color: red"></div>`},
 		{"html-no-style-element", "watch.html", `<style>.x{}</style>`},
 		{"html-no-inline-script", "watch.html", `<script>alert(1)</script>`},
@@ -290,5 +294,24 @@ func TestLayoutManifestRules(t *testing.T) {
 	files["shell.json"] = `{"status":[],"stage":[],"layout":{"aliases":{"old":"gone"}}}`
 	if fs := run(t, files); len(fs) != 1 || fs[0].Rule != "layout-alias" {
 		t.Errorf("an alias to nothing: %v", fs)
+	}
+}
+
+// The scale here and the one in web/toast.js are the same list.
+func TestSeverityScaleMatchesToastJS(t *testing.T) {
+	b, err := os.ReadFile("../../internal/watch/web/toast.js")
+	if err != nil {
+		t.Fatal(err)
+	}
+	m := regexp.MustCompile(`SEVERITIES = \[([^\]]*)\]`).FindSubmatch(b)
+	if m == nil {
+		t.Fatal("no SEVERITIES in toast.js")
+	}
+	var got []string
+	for _, q := range regexp.MustCompile(`'([a-z]+)'`).FindAllSubmatch(m[1], -1) {
+		got = append(got, string(q[1]))
+	}
+	if strings.Join(got, ",") != strings.Join(SeverityScale, ",") {
+		t.Fatalf("toast.js %v, uilint %v", got, SeverityScale)
 	}
 }

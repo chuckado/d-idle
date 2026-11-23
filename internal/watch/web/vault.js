@@ -135,10 +135,9 @@ export function mountVault(d) {
   gNotes.append(costLine, sellWhyLine, keepLine, keepNowB, actLine, buyB, promptLine, promptYes, promptNo);
   const bar = el('section', 'vt-actionbar'); bar.hidden = true; bar.setAttribute('aria-label', T.select);
   bar.append(gSel, gReveal, gOrder, gNotes);
-  // the transient message (what a press did): a toast that goes after TOAST_MS or on dismiss
-  const msg = el('p', 'vt-toast'); msg.hidden = true; msg.setAttribute('role', 'status');
-  const msgText = el('span', 'vt-toast-text'), msgX = btn('×', { key: 'toast-dismiss', variant: 'ghost' }); msgX.setAttribute('aria-label', T.dismiss || 'Dismiss');
-  msg.append(msgText, msgX);
+  // the transient message (what a press did): the shared toast (web/toast.js), one at a time; it goes by itself or on dismiss
+  const toasts = (d.toast || (win && win.dToast) || globalThis.dToast).create(doc, { host: d.toastHost, later: d.toastLater || d.later, clear: d.clear, dismissText: T.dismiss });
+  let msgNode = null;
   // Marked for sale (flags the player has not confirmed) is one chip in the toolbar that opens a sheet with the list and the Sell button.
   const markChip = btn('', { key: 'marked-chip', variant: 'ghost' }); markChip.classList.add('vt-chip', 'vt-markchip'); markChip.hidden = true;
 
@@ -182,7 +181,7 @@ export function mountVault(d) {
   { const was = slotStore(); if (was && !S.f.type) S.f.type = was; }
   const page = el('div', 'vt-page');
   tools.append(slotRow, search, ftoggle, sortSel, viewBtn, selBtn, markChip, identB, sellAllB);
-  page.append(head, banner, tools, saChip, filters, bar, body, msg);
+  page.append(head, banner, tools, saChip, filters, bar, body);
   root.replaceChildren ? root.replaceChildren(page, sheetWrap) : (root.appendChild(page), root.appendChild(sheetWrap));
 
   // ---- loading ----
@@ -246,11 +245,10 @@ export function mountVault(d) {
   }
 
   // ---- drawing ----
-  let msgTimer = null;
   function setMsg(level, text) {
-    S.msg = text; S.msgLevel = level; msg.hidden = !text; msgText.textContent = text; msg.dataset.level = level || '';
-    if (msgTimer && d.clear) d.clear(msgTimer);
-    msgTimer = text && d.later ? d.later(() => { msgTimer = null; setMsg('', ''); }, TOAST_MS) : null;
+    S.msg = text; S.msgLevel = level;
+    if (msgNode) { msgNode.dismiss(); msgNode = null; }
+    if (text) msgNode = toasts.show(level, text);
   }
   function fillTypes() {
     const cur = S.f.type;
@@ -806,7 +804,6 @@ export function mountVault(d) {
   });
   selBtn.addEventListener('click', () => { S.sel.mode = true; S.fopen = false; syncFilters(); drawBar(); drawList(); }); // the folded filter panel closes when selecting starts
   doneB.addEventListener('click', () => { S.sel.clear(); drawBar(); drawList(); });
-  msgX.addEventListener('click', () => setMsg('', ''));
   rbDismiss.addEventListener('click', () => { const o = revealBarModel(S.view && S.view.act && S.view.act.reveal, RB.pay, RT).order; if (o) S.orderGone = o.id + ':' + o.state; drawBar(); });
   selAll.addEventListener('click', () => { S.sel.all(order()); drawBar(); drawList(); });
 

@@ -64,7 +64,7 @@ const charPage = `<!DOCTYPE html>
       <div class="inv-errands" id="errands" hidden></div>
       <div class="inv-errands inv-stashgold" id="stashgold" hidden></div>
      </div>
-     <p class="d-note" data-sev="alarm" id="msg" data-cv="msg" role="status" hidden></p>
+     <p class="d-note" data-sev="bad" id="msg" data-cv="msg" role="status" hidden></p>
     </div>
    </div>
   </div>

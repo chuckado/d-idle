@@ -1,5 +1,7 @@
 // The Vault page Reveal bar against a fake bot (TestVaultRevealBarJS): the picker, the confirm step, the paid order chain and the stash gold line.
 import { readFileSync } from 'fs';
+import { createRequire } from 'module';
+globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -32,7 +34,7 @@ let posts = [], reply = null;
 const get = async (p) => (p === '/api/ether' ? { schema: 'watch.ether/1', enabled: false } : view());
 const post = async (p, b) => { posts.push(p + ' ' + JSON.stringify(b)); return typeof reply === 'function' ? reply(p, b) : reply; };
 const later = (f) => { later.q.push(f); }; later.q = [];
-const page = mountVault({ doc, root, get, post, later, texts: T, now: () => 0 });
+const page = mountVault({ toastHost: root, toastLater: () => null, doc, root, get, post, later, texts: T, now: () => 0 });
 const bartext = () => all(find('reveal-bar-go') ? root : root).filter((n) => !n.hidden).map((n) => n.textContent).join(' | ');
 
 // gold is the cheapest full payer: it is picked, the title and the one press say what it costs; no notice paragraph
