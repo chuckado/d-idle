@@ -638,6 +638,7 @@ func (n *Navigator) pocketTarget(o *obs, levelNo int) (input.Point, bool) {
 		return input.Point{}, false
 	}
 	si := f.idx(sx, sy)
+	strip := otherStrips(o.lm, levelNo)
 	best, bestD, found := input.Point{}, math.MaxFloat64, false
 	for _, c := range cands {
 		gx, gy, ok := f.nearestWalkable(c.at.X, c.at.Y, 3)
@@ -654,6 +655,9 @@ func (n *Navigator) pocketTarget(o *obs, levelNo int) (input.Point, bool) {
 			}
 			x, y := f.pt(int32(i))
 			if f.Clearance(x, y) < 1.5 { // a cell off the wall: the character is not pushed back into it
+				continue
+			}
+			if strip.near(x, y) { // a step onto another level's strip leaves the level
 				continue
 			}
 			if d := dist(o.pos, input.Point{X: x, Y: y}); d < bestD {
@@ -680,6 +684,39 @@ func (n *Navigator) leavePocket(ctx context.Context, o *obs, target input.Point)
 		k := math.Min(d, 10) / d
 		_ = n.in.ClickWorld(input.Point{X: cur.pos.X + int(math.Round(float64(target.X-cur.pos.X)*k)), Y: cur.pos.Y + int(math.Round(float64(target.Y-cur.pos.Y)*k))})
 		n.clk.Sleep(8 * t.Poll())
+	}
+	return false
+}
+
+// stripSet is the border cells of a level toward the neighbours other than the wanted one.
+type stripSet map[[2]int]bool
+
+// otherStrips collects them; near tells whether a cell lies on or within stripMargin subtiles of one.
+func otherStrips(lm *d2map.LevelMap, wanted int) stripSet {
+	s := stripSet{}
+	for _, a := range lm.Adjacent {
+		if a.LevelNo == wanted {
+			continue
+		}
+		for _, c := range lm.BorderCells(a.LevelNo) {
+			s[[2]int{c.X, c.Y}] = true
+		}
+	}
+	return s
+}
+
+const stripMargin = 2
+
+func (s stripSet) near(x, y int) bool {
+	if len(s) == 0 {
+		return false
+	}
+	for dy := -stripMargin; dy <= stripMargin; dy++ {
+		for dx := -stripMargin; dx <= stripMargin; dx++ {
+			if s[[2]int{x + dx, y + dy}] {
+				return true
+			}
+		}
 	}
 	return false
 }

@@ -593,6 +593,7 @@ docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
+docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  bankdoc
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  navexit2
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  necrodrill
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
@@ -1942,6 +1943,7 @@ internal/watch/testdata/vault_logic.mjs  credit-runner  vaultreveal
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultv4
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultv6
 internal/watch/testdata/vault_nav.mjs  credit-runner  uinav
+internal/watch/testdata/vault_reveal.mjs  credit-runner  fitfix2
 internal/watch/testdata/vault_reveal.mjs  credit-runner  uireason
 internal/watch/testdata/vault_reveal.mjs  credit-runner  uitoast
 internal/watch/testdata/vault_reveal.mjs  credit-runner  vaultclean
@@ -2191,6 +2193,7 @@ internal/watch/web/toast.js  credit-runner  uitoast
 internal/watch/web/tokens.css  credit-runner  uis1
 internal/watch/web/tokens.css  credit-runner  uis7
 internal/watch/web/update.js  credit-runner  uis7
+internal/watch/web/utilities.css  credit-runner  fitfix2
 internal/watch/web/utilities.css  credit-runner  mapphone
 internal/watch/web/utilities.css  credit-runner  quests8
 internal/watch/web/vault-logic.js  credit-runner  vaultclean
@@ -2216,6 +2219,7 @@ internal/watch/web/vault.html  credit-runner  uitoast
 internal/watch/web/vault.html  credit-runner  vaultclean
 internal/watch/web/vault.html  credit-runner  vaultv4
 internal/watch/web/vault.js  credit-runner  bulkid
+internal/watch/web/vault.js  credit-runner  fitfix2
 internal/watch/web/vault.js  credit-runner  uinav
 internal/watch/web/vault.js  credit-runner  uireason
 internal/watch/web/vault.js  credit-runner  uitoast
@@ -2384,6 +2388,7 @@ tools/uilint/lint.go  credit-runner  uis6
 tools/uilint/lint.go  credit-runner  uitoast
 tools/uilint/uilint_test.go  credit-runner  uitoast
 tools/uishots  credit-runner  fitfix
+tools/uishots  credit-runner  fitfix2
 tools/uishots  credit-runner  gearsets
 tools/uishots  credit-runner  identifyall
 tools/uishots  credit-runner  lootwire3
@@ -2391,6 +2396,7 @@ tools/uishots  credit-runner  sellall
 tools/uishots  credit-runner  videoctl
 tools/uishots  credit-runner  videofeed4
 tools/uishots.sh  credit-runner  fitfix
+tools/uishots.sh  credit-runner  fitfix2
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
 tools/uishots.sh  credit-runner  heavyguard
