@@ -72,6 +72,7 @@ export function mount(root, ctx) {
       if (b.disabled) { // off: the reason is a visible line beside the button, named by aria-describedby (card uireason)
         const w = ctx.el('p', 'd-why', b.why || 'Not available right now.');
         w.id = 'qs-why-' + k;
+        w.title = w.textContent;
         e.setAttribute('aria-describedby', w.id);
         acts.append(w);
       }
