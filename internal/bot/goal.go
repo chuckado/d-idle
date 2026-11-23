@@ -1185,7 +1185,7 @@ func (r *Runner) travel(ctx context.Context, s *d2.Snapshot, c control, target i
 	name := r.areaName(target)
 	r.setWhy(WhyWalk, "area", name, "level", itoa(s.Player.Level))
 	return r.do(ctx, c, StateTraveling, "Walking to "+name, sec(r.cfg.TravelTimeoutSec), "travel to "+name, func(ctx context.Context) error {
-		return r.travelTo(ctx, target)
+		return r.travelTo(context.WithValue(ctx, boardYieldKey{}, r.boardYield), target)
 	})
 }
 
@@ -1215,8 +1215,14 @@ func (r *Runner) waitArea(ctx context.Context, area int, d time.Duration) error 
 
 // travelTo walks from the current area to target: waypoint to the furthest waypoint area on the route when one works
 // (from an area that has a waypoint), otherwise exit by exit. Every hop is verified by the area id.
+// boardYieldKey carries the goal travel's yield test (boardYield) in the context of travelTo; quest steps do not set it.
+type boardYieldKey struct{}
+
 func (r *Runner) travelTo(ctx context.Context, target int) error {
 	for hops := 0; hops < 40; hops++ {
+		if y, _ := ctx.Value(boardYieldKey{}).(func() bool); y != nil && hops > 0 && y() {
+			return nil // a started chunk is runnable: the goal loop decides next tick, between two hops
+		}
 		cur := r.curArea()
 		if cur == 0 {
 			r.e.Clock.Sleep(time.Duration(r.e.Tune.Bot.WatchMs) * time.Millisecond)

@@ -65,6 +65,79 @@
      "why": "the exit was taken"
     }
    ]
+  },
+  {
+   "id": "nav.barracks-return",
+   "title": "Standing in the Barracks: walk back up to the Outer Cloister (the return leg of the Monastery road)",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "travel.area-transition"
+   ],
+   "touches": [
+    "internal/nav/"
+   ],
+   "pre": {
+    "level": 26,
+    "gold": 3000,
+    "start": "field",
+    "area": 28,
+    "items": [
+     {
+      "code": "hp2",
+      "count": 8
+     },
+     {
+      "code": "mp2",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp2",
+     "hp2",
+     "hp2",
+     "mp2"
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Outer Cloister",
+    "knobs": {
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0
+    }
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Necromancer"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "provenance": "SETUP: level 26, gold 3000, potions, field start in the Barracks (area 28) by debug goto 28 (CHEATED position). Mechanics only.",
+   "notes": "The return leg of the stage 1 failure (run 20261123-023115-028d: from the Barracks `nav no usable gate from 28 to 27`, `border not readable from here, walking to its strip`). Goal: leave the Barracks for the Outer Cloister. The forward leg is the toolstrade work (act1.tools.*).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Outer Cloister",
+     "min": 1,
+     "why": "the hero walked back up out of the Barracks"
+    },
+    {
+     "kind": "area_changes_le",
+     "max": 30
+    }
+   ],
+   "status": "pending",
+   "pending_reason": "a field start by debug goto puts the hero at (65,212), far from the arrival strip, and the planner finds no plan to the unproven strip from there (RED for Paladin and Necromancer, run 20261123-033306, with and without the fix); the real shape (arrival from the Outer Cloister, the strip reached, d2d still cannot read across) is covered by TestExitToCrossesAnUnprovenStripThatNeverProves. Needs a start that arrives by walking from the Outer Cloister."
   }
  ]
 }

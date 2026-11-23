@@ -485,3 +485,28 @@ func TestExitToWalksToAnUnprovenStrip(t *testing.T) {
 		t.Fatalf("still in level %d at %v", s.cur().no, s.pos())
 	}
 }
+
+// necro stage 1 / nav.barracks-return: the strip is walked to and d2d still cannot read across it (pending stays 1, no
+// border cell ever shows): the unproven strip is crossed by walking over it. Fails without the crossing fallback with
+// ErrNoExit, the live error of both classes.
+func TestExitToCrossesAnUnprovenStripThatNeverProves(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Necromancer"} {
+		t.Run(cls, func(t *testing.T) {
+			s, _ := gateWorld()
+			s.reveal = 300
+			l1 := s.levels[0]
+			adj := l1.lm.Adjacent
+			l1.lm.Adjacent, l1.lm.Pending = nil, 1
+			l1.lm.Unproven = []d2map.Adjacent{{LevelNo: 2, Rect: adj[0].Rect, Contact: adj[0].Contact}}
+			s.onStep = func(s *sim) { l1.lm.Adjacent, l1.lm.Pending = nil, 1 } // the border never reads
+			n := s.navigator()
+			n.exploreFn = func(context.Context, func() bool, *input.Point) error { return ErrExplored }
+			if err := n.ExitTo(ctxT(t), 2); err != nil {
+				t.Fatalf("%s: unproven strip: %v", cls, err)
+			}
+			if s.cur().no != 2 {
+				t.Fatalf("%s: still in level %d at %v", cls, s.cur().no, s.pos())
+			}
+		})
+	}
+}

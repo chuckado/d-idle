@@ -27,6 +27,7 @@ type tapper struct {
 	Taps                       []string  // "start scroll", "handin read" in order
 	TapsAt                     []float64 // the bot's virtual second of each tap (RunVirtual); 0 for a wall-clock run
 	vnow                       float64
+	handing                    string            // "quest/chunk" of a hand-in tap whose button the board still shows: no Start tap meanwhile
 	lastWhy                    map[string]string // per chunk, the last "not startable" line written: a long wait logs each change once
 }
 
@@ -124,6 +125,9 @@ func (t *tapper) Step(ctx context.Context) (tap string, blocked bool, err error)
 	}
 	// The tap is the button the row renders: the server's `action` of the part (internal/questboard/desk_action.go), the same
 	// one the web panel draws, so a part that shows no button is never tapped and a missing button fails the scenario.
+	if t.handing != "" && t.handInPending(v) {
+		return "", false, nil // a Start tap now would cancel the hand-in dialogue (necro.act1-stage1, 2026-11-23: 'waiting: context canceled')
+	}
 	if v.HandIn == nil || v.Running == nil && v.Awaiting == nil {
 		for _, q := range v.Quests {
 			if !t.wants(q.ID) {
@@ -138,6 +142,9 @@ func (t *tapper) Step(ctx context.Context) (tap string, blocked bool, err error)
 					continue
 				}
 				tap = a.Verb + " " + c.ID
+				if a.Verb == "handin" {
+					t.handing = q.ID + "/" + c.ID
+				}
 				fmt.Fprintf(t.log, "%s tap %s: %s\n", time.Now().Format("15:04:05"), tap, t.post(ctx, "/api/quests/"+q.ID+"/"+a.Verb, c.ID))
 				break
 			}
@@ -153,6 +160,23 @@ func (t *tapper) Step(ctx context.Context) (tap string, blocked bool, err error)
 		t.logWhyNot(v)
 	}
 	return tap, false, nil
+}
+
+// handInPending reports whether the chunk of the last hand-in tap still reads as waiting for it: its button is still the
+// hand-in, or its state says awaiting_handin. Clears the hold once the board has moved on.
+func (t *tapper) handInPending(v boardView) bool {
+	for _, q := range v.Quests {
+		for _, c := range q.Chunks {
+			if q.ID+"/"+c.ID != t.handing {
+				continue
+			}
+			if c.State == "awaiting_handin" || c.Action != nil && c.Action.Verb == "handin" && !c.Action.Disabled {
+				return true
+			}
+		}
+	}
+	t.handing = ""
+	return false
 }
 
 // logWhyNot writes the board's own reason when the wanted chunk is not startable (state, readiness word, why), once per
