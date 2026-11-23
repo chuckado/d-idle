@@ -57,6 +57,8 @@ status() { ops status 2>&1; }
 rows_of() { printf '%s\n' "$1" | awk -F'\t' -v q="$2" '{ split($1, a, "/"); if (a[1] == q && NF >= 2) print a[2] "\t" $2 }'; }
 # active_quest ST: the quest that has an accepted or in_progress chunk (the board runs one chunk at a time)
 active_quest() { printf '%s\n' "$1" | awk -F'\t' 'NF >= 2 && ($2 == "accepted" || $2 == "in_progress") { split($1, a, "/"); print a[1]; exit }'; }
+# parked ST QUEST: a chunk of the quest is blocked with a park code (the only state a retry may touch)
+parked() { printf '%s\n' "$1" | awk -F'\t' -v q="$2" '{ split($1, a, "/"); if (a[1] == q && $2 == "blocked" && $4 ~ /^code=./) f = 1 } END { exit !f }'; }
 kv() { printf '%s\n' "$1" | grep -o "$2=[^ ]*" | head -1 | cut -d= -f2-; }
 
 # run_quest QUEST: 0 done, 1 failed (budget), 3 skipped (locked), 4 deadline.
@@ -85,10 +87,16 @@ run_quest() {
       verb=""
     elif printf '%s\n' "$rows" | grep -q -P '\tawaiting_handin$'; then
       verb=""; [ $handed -eq 0 ] && { verb=handin; handed=1; }
-    elif printf '%s\n' "$rows" | grep -q -P '\tblocked$'; then
+    elif parked "$st" "$q"; then
+      $sleeper 5   # confirm on a second read: a retry on a chunk that moves on is refused by the bot, but do not ask
+      st=$(status)
+      if ! parked "$st" "$q"; then log "- $q changed while checking; reading again"; continue; fi
       verb=retry
-    else
+    elif printf '%s\n' "$rows" | grep -q -P '\t(ready|available)$'; then
       verb=start
+    else
+      log "- nothing to press for $q now ($(printf '%s' "$rows" | tr '\t\n' '= ' )); waiting ${backoff}s"
+      $sleeper "$backoff"; continue
     fi
     if [ -n "$verb" ]; then
       out=$(ops "$verb" "$q" --why "questloop try $try/$tries"); res=$?

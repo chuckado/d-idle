@@ -50,6 +50,10 @@ func (f *fakeDesk) Record(e questboard.AuditEvent) {
 }
 
 func newSrv(d *fakeDesk, env map[string]string) (*Server, *time.Time) {
+	if len(d.view.Quests) == 0 { // quests a and b are parked unless a test sets its own board
+		blocked := []questboard.ChunkRow{{ID: "c", State: questboard.Blocked}}
+		d.view.Quests = []questboard.QuestRow{{ID: "a", Chunks: blocked}, {ID: "b", Chunks: blocked}}
+	}
 	now := time.Date(2026, 11, 23, 3, 0, 0, 0, time.UTC)
 	s := New(Config{Desk: func() Desk { return d }, Getenv: func(k string) string { return env[k] }, Now: func() time.Time { return now }})
 	return s, &now
@@ -342,4 +346,30 @@ func TestProgressCounter(t *testing.T) {
 	if get() != 1 {
 		t.Fatal("step change must count")
 	}
+}
+
+func TestRetryOnlyWhenParked(t *testing.T) {
+	d := &fakeDesk{rep: questboard.Reply{OK: true}, view: questboard.View{Quests: []questboard.QuestRow{
+		{ID: "run", Chunks: []questboard.ChunkRow{{ID: "m", State: questboard.InProgress}}},
+		{ID: "acc", Chunks: []questboard.ChunkRow{{ID: "m", State: questboard.Accepted}}},
+		{ID: "rdy", Chunks: []questboard.ChunkRow{{ID: "m", State: questboard.Ready}}},
+		{ID: "two", Chunks: []questboard.ChunkRow{{ID: "x", State: questboard.Done}, {ID: "y", State: questboard.Blocked}}},
+	}}}
+	s, _ := newSrv(d, nil)
+	for _, q := range []string{"run", "acc", "rdy", "gone"} {
+		r := s.Handle(Request{Verb: "retry", Quest: q, Why: "x"})
+		if r.OK || r.Code != "not_parked" || !strings.Contains(r.Reason, "not blocked") {
+			t.Errorf("%s: %+v", q, r)
+		}
+	}
+	if len(d.calls) != 0 {
+		t.Fatalf("the desk was called: %v", d.calls)
+	}
+	if r := s.Handle(Request{Verb: "retry", Quest: "two", Why: "x"}); !r.OK {
+		t.Fatalf("a parked chunk of the quest: %+v", r)
+	}
+	if r := s.Handle(Request{Verb: "retry", Quest: "two", Chunk: "x", Why: "x"}); r.OK || r.Code != "not_parked" {
+		t.Fatalf("a done chunk named: %+v", r)
+	}
+	// the refusal books nothing: six real retries still pass later
 }

@@ -32,6 +32,8 @@ Every verb the desk ran adds a line to the hero's quest audit ring (`<Hero>.audi
 ## Limits (in the bot, per process)
 At most 6 mutating verbs per quest per hour, 30 per hour for the whole board, and a 60 s cooldown after a `retry` during which `retry` and `start` of that quest are refused (`cooldown`; `cancel` still works). Excess is `rate_limited` with the reason in words.
 
+A `retry` is also refused with `not_parked` (and books nothing) unless a matching chunk of the quest is `blocked`: retry clears a park and must never touch a chunk that runs. `tools/questloop.sh` only retries a chunk that is blocked with a park code, confirmed on a second status read.
+
 ## Threat model
 1. Anyone with `docker exec` on the host already owns the container, its state and its save; this adds no power they lack.
 2. The socket is not on the network: a unix socket, mode 0600, owned by the bot's user, created under a temporary name and renamed into place so it is never looser.
