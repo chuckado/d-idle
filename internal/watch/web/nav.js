@@ -192,6 +192,12 @@
     });
   }
 
+  // startFeed loads the alert feed (web/alerts-feed.js): the pages after the pre-shell one play the stored Alerts settings. It does nothing while both are off.
+  function startFeed(doc) {
+    const load = (name, have) => have ? Promise.resolve() : new Promise((res, rej) => { const s = doc.createElement('script'); s.src = '/watch/' + name; s.onload = res; s.onerror = rej; doc.head.appendChild(s); });
+    load('toast.js', g.dToast).then(() => load('alerts-feed.js', false)).catch(() => {});
+  }
+
   // ---- boot (a browser only) ----
   function boot() {
     const doc = g.document;
@@ -210,6 +216,7 @@
       nav.mount();
       const want = new URLSearchParams(g.location.search).get('settings');
       if (want) openSettings(doc, store, null, want);
+      startFeed(doc);
       const strip = subtabs(env, nav.current);
       if (strip) { const h = doc.querySelector('.d-band-status, .d-navband'); const at = h || null; if (at && at.after) at.after(strip); else doc.body.insertBefore(strip, doc.body.firstChild); }
       Object.assign(api, nav, { nav });

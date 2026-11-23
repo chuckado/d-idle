@@ -99,7 +99,7 @@ type Band struct {
 
 // SpecFromBuild reads a plandata build file (name without the build- prefix and .json) at clvl. The attack is the
 // build's main_attack band for that level; builds without one use the class's combat profile bands, the first band
-// whose requirement the build has paid a point for by clvl.
+// whose requirement the build has paid a point for by clvl (points of the whole build do not count: a hammer bought at clvl 24 is no attack at clvl 19, where the hero swings Zeal).
 func SpecFromBuild(fsys fs.FS, file string, clvl int, ca ClassAttacks) (BuildSpec, error) {
 	raw, err := fs.ReadFile(fsys, file)
 	if err != nil {
@@ -139,8 +139,8 @@ func SpecFromBuild(fsys fs.FS, file string, clvl int, ca ClassAttacks) (BuildSpe
 	s.Contact = contact
 	if s.Attack == "" {
 		for _, bd := range bands {
-			if clvl >= bd.MinLevel && (bd.Requires == "" || s.Points[bd.Requires] > 0) && len(bd.Attack) > 0 {
-				s.Attack = firstKnown(bd.Attack, s.Points)
+			if clvl >= bd.MinLevel && (bd.Requires == "" || spent[bd.Requires] > 0) && len(bd.Attack) > 0 {
+				s.Attack = firstKnown(bd.Attack, spent)
 				if s.Attack != "" {
 					break
 				}
