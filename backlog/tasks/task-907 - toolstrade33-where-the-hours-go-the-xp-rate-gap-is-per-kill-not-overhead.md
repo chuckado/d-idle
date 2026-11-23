@@ -1,10 +1,11 @@
 ---
 id: TASK-907
 title: 'toolstrade33: where the hours go: the xp rate gap is per kill, not overhead'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T22:59:00Z'
+updated_date: '2026-11-23T23:09:00Z'
 labels:
   - docs
   - probe
