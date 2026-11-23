@@ -340,3 +340,42 @@ func TestExitToWaitsForADoorThatOpensSlowly(t *testing.T) {
 		})
 	}
 }
+
+// A unit (a chest, an NPC) behind a closed door: GoToUnit opens the door between and walks on, as GoTo does for a spot (V
+// drill.act2.cube: "unreachable from" at the Cube chest). Must fail without the door step in GoToUnitOf.
+func TestGoToUnitOpensTheDoorToAUnitBehindIt(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			g := openField(3000, 3000, 200, 100)
+			blockRect(g, d2map.Rect{X: 3100, Y: 3000, W: 2, H: 100})
+			cells := d2map.Rect{X: 3100, Y: 3048, W: 2, H: 18}
+			l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 200, H: 100}}
+			s := newSim(g, input.Point{X: 3010, Y: 3057}, l1)
+			s.reveal = 300
+			chest := d2Unit(88, 580, 3150, 3057)
+			s.objects = append(s.objects, chest)
+			s.onStep = func(s *sim) {
+				if math.Hypot(s.px-3101, s.py-3057) < 60 && len(s.levels[0].lm.Presets) == 0 {
+					s.objects = append(s.objects, d2Unit(77, 24, 3101, 3057))
+					s.levels[0].lm.Presets = []d2map.Preset{{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: 3101, Y: 3057}}}
+				}
+			}
+			opened := 0
+			s.onInteract = func(s *sim, tg input.Target) error {
+				if tg.ID == 77 {
+					opened++
+					openDoor(s, cells)
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class == 24 }
+			if err := n.GoToUnitOf(ctxT(t), d2.TypeObject, 88); err != nil {
+				t.Fatalf("gotounit: %v", err)
+			}
+			if opened != 1 || dist(s.pos(), input.Point{X: 3150, Y: 3057}) > 6 {
+				t.Fatalf("door used %d times, at %v", opened, s.pos())
+			}
+		})
+	}
+}
