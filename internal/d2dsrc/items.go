@@ -10,6 +10,7 @@ import (
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
+	"d2lod-bot/internal/quest"
 )
 
 // items fills Inventory from "dump items" (or the stock "items" verb when nodump).
@@ -519,6 +520,9 @@ func (b *builder) npc(n d2dctl.NPC) {
 	if t := b.s.o.Tables; t != nil {
 		if c, ok := t.MonsterClass(n.Name); ok {
 			class, isNPC = c, true
+			if ac, ok := cainClassIn(n.Name, b.snap.Player); ok {
+				class = ac // one display name, five monstats rows: the name alone gives one of them
+			}
 		} else {
 			isNPC = false
 		}
@@ -538,6 +542,17 @@ func (b *builder) npc(n d2dctl.NPC) {
 	b.snap.Objects = append(b.snap.Objects, d2.Unit{Type: d2.TypeObject, Class: -1, ID: id, Mode: -1, X: x, Y: y})
 	rp.unknown("object.class", "npcs gives a name, not an objects.txt id (Class = -1; Extras.Names has the name)")
 	rp.unknown("object.mode", "open/closed state not in npcs")
+}
+
+// cainClassIn is the monstats class of Deckard Cain in the player's act: his display name is shared by one row per act, so a
+// class looked up by name is the same row in every act and the town search (class 244 in Lut Gholein) never finds him (V
+// drill.act2.assemble: "npc not found or not reachable" with Cain listed by `npcs`). The classes are internal/quest's.
+func cainClassIn(name string, p *d2.Player) (int, bool) {
+	if name != "Deckard Cain" || p == nil {
+		return 0, false
+	}
+	c, ok := map[int]int{0: quest.CainTown, 1: quest.CainA2, 2: quest.CainA3, 3: quest.CainA4, 4: quest.CainA5}[p.Act]
+	return c, ok
 }
 
 // WaypointClass stands for every waypoint object of every act: npcs names the object "Waypoint" but not its

@@ -96,7 +96,11 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		return Setup{}, fmt.Errorf("scenario %s: difficulty %q", s.ID, p.Difficulty)
 	}
 	for _, w := range p.Waypoints {
-		add(fmt.Sprintf("waypoint bit %d", w), fmt.Sprintf("debug wp %d", w))
+		if w < 0 { // -1: every waypoint (the fork's `debug wp all`), for scenarios that start deep in an act
+			add("every waypoint", "debug wp all")
+		} else {
+			add(fmt.Sprintf("waypoint bit %d", w), fmt.Sprintf("debug wp %d", w))
+		}
 		tags["waypoint"] = true
 	}
 	for _, q := range p.Quests {
