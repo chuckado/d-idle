@@ -1282,19 +1282,20 @@ func (r *Runner) travelTo(ctx context.Context, target int) error {
 }
 
 // wpOnly takes the waypoint of target when no walk reaches it (the Arcane Sanctuary is linked by a portal object, not by an
-// exit: V drill.act2.summoner, "no route from Lut Gholein (40) to Arcane Sanctuary (74)") and both areas have one and the
-// reader knows the target's is active. It reports whether the hero moved.
+// exit: V drill.act2.summoner, "no route from Lut Gholein (40) to Arcane Sanctuary (74)") and both areas have one (the reader's
+// view of the target's waypoint is not asked: the save lags the game). It reports whether the hero moved.
 func (r *Runner) wpOnly(ctx context.Context, cur, target int) bool {
 	if !r.e.Tune.Nav.UseWaypoints || !r.d.Plan.Waypoints[cur] || !r.d.Plan.Waypoints[target] {
 		r.e.Log.Info("wp: no walk and no waypoint route", "from", cur, "to", target, "use", r.e.Tune.Nav.UseWaypoints, "fromWP", r.d.Plan.Waypoints[cur], "toWP", r.d.Plan.Waypoints[target])
 		return false
 	}
 	snap := r.latest()
-	active, known := r.activeWaypoints(snap)
-	if !known || !active[target] || !r.wpTripWorthTrying(snap, target, active, known) {
-		r.e.Log.Info("wp: no walk and the target's waypoint is not known active", "from", cur, "to", target, "known", known, "active", active[target])
-		return false // a blind trip is not worth the panel round trip when nothing says the waypoint is active
+	r.loop.wp.init()
+	if r.e.Clock.Now().Before(r.loop.wp.failed[wpKey{diffOf(snap), target}]) {
+		return false
 	}
+	// No walk exists, so the trip is the only way: it is tried although the reader (the save, stale on d2d until the next
+	// Save and Exit) does not know the waypoint active; a failure is remembered like any other waypoint failure.
 	if err := r.d.Mover.TakeWaypoint(ctx, target); err != nil {
 		r.e.Log.Info("wp: not usable", "from", cur, "to", target, "err", err)
 		r.loop.wp.failed[wpKey{diffOf(snap), target}] = r.e.Clock.Now().Add(wpFailedFor)
