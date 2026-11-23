@@ -92,8 +92,8 @@ eq(p.sizes, { strip: 140, railMin: 480 });
 const list = [{ id: 'video', slot: true, band: 'stage' }, { id: 'hero-meters', slot: true, band: 'status' }, { id: 'hero-status', band: 'status' }, { id: 'map', band: 'side' },
   { id: 'orders', slot: true, optIn: true, band: 'side' }, { id: 'unused', slot: true, band: 'side' }];
 eq(L.selectPanels(list, file, '').map((m) => m.id), ['video', 'hero-meters', 'orders']);
-// the OBS strip is not a cockpit: under a cockpit it mounts exactly what it mounts under Classic (no opt-in panel of a slot)
-const classic = JSON.parse(fs.readFileSync(process.argv[3].replace('cockpit.json', 'classic.json'), 'utf8'));
+// the OBS strip is not a cockpit: under a cockpit it mounts exactly what it mounts under a plain grid layout (no opt-in panel of a slot)
+const classic = { schema: 'watch.layout/1', cols: 12, breakpoints: { wide: { cols: 12, panels: [] } } }; // a grid layout that names no opt-in panel
 eq(L.selectPanels(list, file, 'overlay').map((m) => m.id), L.selectPanels(list, classic, 'overlay').map((m) => m.id));
 assert.ok(!L.selectPanels(list, file, 'overlay').some((m) => m.id === 'orders'));
 eq(L.cockpitIds(file).size > 8, true);

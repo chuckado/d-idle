@@ -48,7 +48,7 @@ func TestWatchRoutesOnTheViewerAreReadOnly(t *testing.T) {
 		if w := do(h, "GET", "/api/thoughts", ""); w.Code != 200 || !strings.Contains(w.Body.String(), "watch.thoughts/1") {
 			t.Errorf("%s: GET /api/thoughts: %d", name, w.Code)
 		}
-		if w := do(h, "GET", "/watch", ""); w.Code != 200 || !strings.Contains(w.Body.String(), "/watch/app.js") {
+		if w := do(h, "GET", "/watch", ""); w.Code != 200 || !strings.Contains(w.Body.String(), "/watch/shell.js") {
 			t.Errorf("%s: GET /watch: %d", name, w.Code)
 		}
 		for _, p := range append(append([]string{}, watch.ViewRoutes...), "/api/answer", "/api/confirm", "/api/revoke", "/api/revoke-all") {

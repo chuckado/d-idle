@@ -388,7 +388,7 @@ func checkIDFallback(where, id, fallback string, known func(string) bool) error 
 
 // LayoutConf is the "layout" block of web/shell.json: how the ids of a layout file map onto the real page. Aliases
 // are editor ids that became another panel (the editor's "hero-status" card is the real "hero-vitals"); Compat are
-// the pre-shell cards of watch.html (their data-lid); Reserved are ids a layout may name before the panel exists
+// the pre-shell card ids (E11a deleted the cards; the ids stay valid so a saved layout that names one still loads); Reserved are ids a layout may name before the panel exists
 // (the shell skips them).
 type LayoutConf struct {
 	Aliases  map[string]string `json:"aliases"`

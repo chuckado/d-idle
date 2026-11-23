@@ -119,4 +119,4 @@ func TestAssetBudget(t *testing.T) {
 }
 
 // budgetCeiling is today's measured gzip total plus about 8 percent (docs/ui-design-system.md "Asset budget").
-var budgetCeiling = map[string]int{"watch.html": 193000, "vault.html": 69000}
+var budgetCeiling = map[string]int{"watch.html": 175000, "vault.html": 69000}

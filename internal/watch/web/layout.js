@@ -146,7 +146,7 @@ export function withShadows(saved, original) {
 }
 
 // ---- which panels the shell mounts ----
-export const PRESETS = ['classic', 'simple', 'standard', 'stream', 'debug'];
+export const PRESETS = ['stream'];
 
 // The ids a layout names on any breakpoint (placed, not hidden) and in its status list. A cockpit's slot ids are not here: the
 // cockpit mounts its own (selectPanels), and the OBS strip under a cockpit mounts what it mounts under any layout.
@@ -301,7 +301,7 @@ export function effectiveChoice(pref, picked) {
   return pref === 'simple' && !picked ? '' : pref || '';
 }
 
-// The cockpit's slot panels that the manifests do not offer (the startup self-check: a missing one sends the page to Standard).
+// The cockpit's slot panels that the manifests do not offer (the startup self-check: a missing one sends the page to Stream).
 export function missingSlots(layout, haveIds) {
   const have = new Set(haveIds);
   return [...cockpitIds(layout)].filter((id) => !have.has(id));

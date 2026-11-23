@@ -576,7 +576,6 @@ demo-help watch?layout=cockpit-demo&theme=dark #btn-more|#btn-help .d-drawer:not
 overflow-fixture watch?layout=cockpit-overflow&theme=dark
 overflow-nested watch?layout=cockpit-nested&theme=dark
 overflow-fakescroll watch?layout=cockpit-fakescroll&theme=dark
-overflow-classic watch?layout=classic&theme=dark
 blank-rail watch?layout=cockpit-blank&theme=dark
 tall-frame watch?layout=cockpit-tall&theme=dark
 chars-1 watch/characters?theme=dark&chars=1
@@ -817,15 +816,7 @@ watch-1920-dark 1920 1080 watch?theme=dark
 watch-1920full-dark 1920 2400 watch?theme=dark
 watch-1280full-dark 1280 2800 watch?theme=dark
 watch-768full-dark 768 5000 watch?theme=dark
-watch-1440-classic 1440 2600 watch?theme=dark&layout=classic
-watch-1440-simple 1440 2600 watch?theme=dark&layout=simple
-watch-1440-standard 1440 2600 watch?theme=dark&layout=standard
-watch-390-classic 390 844 watch?theme=dark&layout=classic
-watch-390-simple 390 844 watch?theme=dark&layout=simple
 watch-1440-nolayout 1440 2600 watch?theme=dark&layout=none
-watch-1920-mockup 1920 2400 watch?theme=dark&layout=mockup
-watch-1920-live 1920 2800 watch?theme=dark&layout=live
-watch-1920-command 1920 2600 watch?theme=dark&layout=command
 watch-1920-edit 1920 2400 watch?theme=dark&edit=1
 watch-1920-editdrag 1920 2400 watch?theme=dark&edit=1&drag=map:1:5
 watch-1280-edit 1280 2400 watch?theme=dark&edit=1

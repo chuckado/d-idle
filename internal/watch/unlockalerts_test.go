@@ -287,22 +287,6 @@ func TestAlertsAPIAndTokenGates(t *testing.T) {
 	if resp, _ := r.do("GET", r.view, AlertsRoute+"?since=abc", funToken, ""); resp.StatusCode != http.StatusBadRequest {
 		t.Errorf("bad since: %d", resp.StatusCode)
 	}
-	resp, b := r.do("GET", r.view, AlertsUIRoute, funToken, "")
-	if resp.StatusCode != 200 || !strings.Contains(string(b), "requestPermission") || strings.Contains(string(b), "requestPermission();") && !strings.Contains(string(b), "click") {
-		t.Errorf("ui script: %d", resp.StatusCode)
-	}
-	if resp, _ := r.do("GET", r.view, AlertsUIRoute, "", ""); resp.StatusCode != http.StatusUnauthorized {
-		t.Errorf("ui script without token: %d", resp.StatusCode)
-	}
-	// the page: permission is asked on a click only, never at load
-	js := string(b)
-	i := strings.Index(js, "requestPermission")
-	if i < 0 || !strings.Contains(js[max(0, i-120):i], "addEventListener('click'") {
-		t.Error("Notification.requestPermission must sit inside the click handler")
-	}
-	if !strings.Contains(js, "NOT built") {
-		t.Error("the script must say background push is not built")
-	}
 	v := alertsOf(r, 0)
 	if !strings.Contains(v.Notifications.Background, "not built") || v.Outbound.Enabled || v.Outbound.Consent != "Outbound alerts are off. Nothing leaves this machine." {
 		t.Errorf("view: %+v", v)

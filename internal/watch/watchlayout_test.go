@@ -26,8 +26,8 @@ func watchPage(t *testing.T) string {
 // header, video card and minimap markup are gone; the gear strip still finds header.top (gear.js anchors on it).
 func TestWatchPageIsTheShell(t *testing.T) {
 	html := watchPage(t)
-	order := []string{`class="d-shell"`, `<header class="top d-band-status" data-band="status">`, `id="btn-theme"`, `data-band="stage"`, `data-band="grid"`,
-		`class="d-compat"`, `<nav class="views"`, `<main id="main"`, `id="now"`, `src="/watch/shell.js"`, `src="/watch/app.js"`}
+	order := []string{`class="d-shell"`, `<header class="top d-band-status" data-band="status">`, `id="btn-theme"`, `<main class="d-main"`, `data-band="stage"`, `data-band="grid"`,
+		`src="/watch/shell.js"`}
 	last := -1
 	for _, k := range order {
 		i := strings.Index(html, k)
@@ -109,10 +109,8 @@ func TestWatchCSSPanelsAndStageSize(t *testing.T) {
 		t.Fatal(err)
 	}
 	css := string(b)
-	for _, want := range []string{".d-compat, .d-compat > main { display: contents; }", ".d-compat > main > .card { grid-column: span 1; }"} {
-		if !strings.Contains(css, want) {
-			t.Errorf("app.css lacks %q (the old cards are cells of the shell grid)", want)
-		}
+	if strings.Contains(css, ".d-compat") {
+		t.Error("app.css still styles the removed pre-shell cards")
 	}
 	if strings.Contains(css, "repeat(12, 1fr)") {
 		t.Error("the old 12-column main grid is back")
@@ -127,22 +125,6 @@ func TestWatchCSSPanelsAndStageSize(t *testing.T) {
 		if !strings.Contains(string(sh), want) {
 			t.Errorf("shell.css lacks %q", want)
 		}
-	}
-}
-
-func TestWatchFoldableCards(t *testing.T) {
-	js, err := os.ReadFile("web/unlockui.js")
-	if err != nil {
-		t.Fatal(err)
-	}
-	for _, id := range []string{"'rules'", "'lockedpane'", "'bestiarypane'", "'atlaspane'"} {
-		if !strings.Contains(string(js), id) {
-			t.Errorf("unlockui.js does not fold %s", id)
-		}
-	}
-	css, _ := os.ReadFile("web/app.css")
-	if !strings.Contains(string(css), ".card.folded >") {
-		t.Error("app.css lacks the .folded rule")
 	}
 }
 

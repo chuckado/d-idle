@@ -1,12 +1,11 @@
 // The alert feed of the new pages (card uialerts; review E10 gap): the pages after the pre-shell one had no feed that plays the stored
-// Alerts settings (web/settings.js). Same source as the old page (web/alerts.js): GET /api/alerts?since=N every few seconds. While the
+// Alerts settings (web/settings.js). Source: GET /api/alerts?since=N every few seconds. While the
 // sound setting is on, or the browser has granted desktop notifications, a NEW alert raises one toast (toast.js), a short cue and, with
-// the tab hidden, a desktop notification. With both off nothing is fetched and nothing changes. The old page keeps its own
-// alerts.js: this feed does not start where #alertspane exists. Text goes through textContent only.
+// the tab hidden, a desktop notification. With both off nothing is fetched and nothing changes. Text goes through textContent only.
 // Classic script: starts itself in a browser; module.exports for the node test (internal/watch/testdata/alertsfeed_test.cjs).
 (function (g) {
   'use strict';
-  const SOUND_KEY = 'd2lod.alerts.sound'; // the key settings.js and alerts.js share
+  const SOUND_KEY = 'd2lod.alerts.sound'; // the key settings.js and this feed share
   const CUES = { info: [[520, 90]], good: [[520, 90], [780, 120]], warn: [[400, 140], [400, 140]], alarm: [[300, 200], [220, 320]] };
   const EVERY = 4000, GIVE_UP = 5;
 
@@ -55,7 +54,7 @@
   const api = { start, SOUND_KEY };
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; return; }
   const d = g.document;
-  if (!d || d.getElementById('alertspane') || !g.dToast) return; // the old page has its own feed
+  if (!d || !g.dToast) return;
   start({ doc: d, fetch: g.fetch.bind(g), store: { get(k) { try { return g.localStorage.getItem(k); } catch (e) { return null; } } },
     notif: g.Notification || null, toast: g.dToast, audio: g.AudioContext || g.webkitAudioContext || null, later: (fn, ms) => setTimeout(fn, ms), clear: (h) => clearTimeout(h) });
 })(typeof window !== 'undefined' ? window : globalThis);

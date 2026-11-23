@@ -55,7 +55,7 @@ const tick = () => { const due = timers; timers = []; due.forEach((t) => t.f());
   reply('/api/hero', { v: 'h3' }); await settle();
   assert.ok(hero.slice(1).every((s) => s.got[s.got.length - 1] === 'h3'), 'one throwing panel does not stop the rest');
   assert.strictEqual(hero[0].inflight, false);
-  // the page has one event stream: the scheduler takes the one app.js opened
+  // the page has one event stream: the scheduler takes the one already open
   let made = 0;
   ctx.EventSource = ctx.window.EventSource = function () { made++; this.addEventListener = () => {}; };
   ctx.window.d2events = { addEventListener() {} };
@@ -63,6 +63,6 @@ const tick = () => { const due = timers; timers = []; due.forEach((t) => t.f());
   assert.strictEqual(made, 0, 'the shell does not open a second event stream');
   delete ctx.window.d2events;
   ctx.makeScheduler(); ctx.makeScheduler();
-  assert.strictEqual(made, 1, 'without app.js it opens exactly one');
+  assert.strictEqual(made, 1, 'without one it opens exactly one');
   console.log('ok');
 })().catch((e) => { console.error(e); process.exit(1); });

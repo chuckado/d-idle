@@ -194,8 +194,7 @@ function place(bands, m, root) {
     (band.querySelector('.d-band-main') || band).appendChild(root);
     return true;
   }
-  const compat = band.querySelector(':scope > .d-compat');
-  if (compat) band.insertBefore(root, compat); else band.appendChild(root);
+  band.appendChild(root);
   return true;
 }
 
@@ -292,7 +291,7 @@ function makeScheduler() {
     setTimeout(tick, 250);
   }
   if (window.EventSource) {
-    // the page's one event stream: app.js opens it on /watch (window.d2events), the other pages get their own here
+    // the page's one event stream (window.d2events); another script may have opened it already
     const es = window.d2events || (window.d2events = new EventSource('/api/events'));
     es.addEventListener('change', () => { changed = true; });
   }
@@ -302,18 +301,17 @@ function makeScheduler() {
 // ---- layout manifest (docs/ui-design-system.md section 6.4) ----
 // The layout in force comes from GET /api/layout (web/layout.json, or the profile's stored copy); ?layout=<preset>
 // loads one of the editor's presets instead and ?layout=none keeps the manifest placement. Every panel root in the
-// main area and every pre-shell card (data-lid) is a target; the plan (layout.js) says where each goes. Without a
+// main area is a target; the plan (layout.js) says where each goes. Without a
 // layout, or for a breakpoint the file does not cover, nothing is set and the manifest rules of shell.css place.
 const lay = { layout: null, conf: {}, targets: new Map(), plan: null, main: null, editor: null, bp: '', warned: false, rows: new Map(), fitAt: 0, fitQueued: false };
-const COMPAT_M = '.o-now, .o-map, .thoughts, .rules, .journal, .chronicle, .alerts';
 
 function layoutTargets() {
   const out = [];
   lay.targets.clear();
-  lay.main.querySelectorAll('.d-panel[data-panel], [data-lid]').forEach((n) => {
-    const id = n.dataset.panel || n.dataset.lid;
+  lay.main.querySelectorAll('.d-panel[data-panel]').forEach((n) => {
+    const id = n.dataset.panel;
     lay.targets.set(id, n);
-    out.push({ id, size: n.dataset.size || (n.matches(COMPAT_M) ? 'm' : 's'), hidden: n.hidden, rows: n.dataset.fit ? lay.rows.get(id) : 0 });
+    out.push({ id, size: n.dataset.size || 's', hidden: n.hidden, rows: n.dataset.fit ? lay.rows.get(id) : 0 });
   });
   return out;
 }
@@ -384,7 +382,7 @@ function applyLayout(pass) {
 // or Standard when a startup self-check finds a cockpit slot without its panel (start()). 'saved' in d2layout means "the stored copy"; d2layoutbase is the preset a
 // saved layout was started from, which Reset returns to. Every read of localStorage is guarded: it may be blocked.
 const PREF = 'd2layout', BASE = 'd2layoutbase', NOTE = 'd2layoutnote2', PICK = 'd2layoutpick', FIRST = 'd2firstrun';
-const MENU = ['cockpit'].concat(PRESETS); // what the Layout menu offers; the cockpit is the default, Classic is the way back
+const MENU = ['cockpit'].concat(PRESETS); // what the Layout menu offers; the cockpit is the default
 const chosen = () => effectiveChoice(pref(PREF), pref(PICK)); // layout.js: an auto-pinned Simple is not a choice
 function pref(k, v) {
   try {
@@ -408,7 +406,14 @@ async function newHero() {
 }
 
 // -> { layout, preset, origin: url|choice|stored|default, hasStored } or null (no layout: the manifest places)
+const REMOVED = ['classic', 'simple', 'standard', 'debug', 'mockup', 'live', 'command']; // presets E11a deleted: they load the cockpit and say so
+const MOVED = 'This panel moved. The new layout has it in the band, Progress or the log.';
 async function loadLayout() {
+  const sel = await loadLayout1();
+  if (sel && !sel.moved && (REMOVED.includes(qs.get('layout') || '') || REMOVED.includes(pref(PREF)) || REMOVED.includes(pref(BASE)))) sel.moved = true;
+  return sel;
+}
+async function loadLayout1() {
   const want = qs.get('layout') || '';
   if (want === 'none') return null;
   if (want === 'cockpit') { // "the cockpit, as I have it": a stored copy that started from it wins over the shipped file
@@ -417,7 +422,7 @@ async function loadLayout() {
     const l = await presetFile('cockpit');
     if (l) return { layout: l, preset: '', origin: 'url', hasStored: !!srv && srv.source !== 'default' };
   }
-  if (PRESETS.includes(want) || /^(mockup|live|command|cockpit[a-z0-9-]*)$/.test(want)) {
+  if (PRESETS.includes(want) || /^cockpit[a-z0-9-]*$/.test(want)) {
     const l = await presetFile(want);
     if (l) return { layout: l, preset: PRESETS.includes(want) ? want : '', origin: 'url', hasStored: false };
   }
@@ -430,7 +435,7 @@ async function loadLayout() {
   }
   if (hasStored && asLayout(srv.body)) return { layout: srv.body, preset: '', origin: 'stored', hasStored };
   // no layout of the hero's own: the default is the cockpit (web/layout.json). A new hero meets it without the layout note.
-  let name = html.dataset.mode === 'overlay' ? 'standard' : 'cockpit', origin = 'default'; // origin 'default' shows the layout note; the OBS strip keeps the layout it always had
+  let name = html.dataset.mode === 'overlay' ? 'stream' : 'cockpit', origin = 'default'; // origin 'default' shows the layout note; the OBS strip keeps the layout it always had
   if (choice === 'saved' && MENU.includes(base)) { name = base; origin = 'choice'; } else if (await newHero()) origin = 'newhero';
   let l = asLayout(srv && srv.body); // web/layout.json is the cockpit file
   if (name !== 'cockpit' || !l) l = await presetFile(name) || l;
@@ -451,22 +456,14 @@ function setupLayout(conf, sel, answerBase, ckRoots, ckList) {
   lay.layout = layout;
   lay.sel = sel;
   if (!lay.main) return;
-  for (const id of lay.conf.fit || []) { const n = lay.main.querySelector('[data-lid="' + id + '"]'); if (n) n.dataset.fit = '1'; }
   if (layout && layout.density === 'comfortable' && !html.dataset.density) html.dataset.density = 'comfortable';
-  if (layout) {
-    // the strips of the pre-shell page (voice line, message banner, phone tabs) are full-width rows without a grid
-    // position; under a layout they sit above the main area instead of falling into a hole of the grid
-    const strips = el('div', 'd-strips');
-    lay.main.querySelectorAll('.d-compat > :not(main)').forEach((n) => strips.appendChild(n));
-    lay.main.parentElement.insertBefore(strips, lay.main);
-  }
   applyLayout();
   // a panel that hides or opens (a 404 route, an unlock) changes which targets are packed
   let queued = false;
   const again = () => { queued = false; if (!lay.editor) applyLayout(); };
   new MutationObserver((ms) => {
     if (lay.editor) return;
-    if (!queued && ms.some((m) => m.type === 'attributes' && m.target.matches('.d-panel[data-panel], [data-lid]'))) { queued = true; requestAnimationFrame(again); }
+    if (!queued && ms.some((m) => m.type === 'attributes' && m.target.matches('.d-panel[data-panel]'))) { queued = true; requestAnimationFrame(again); }
     else scheduleFit(); // a card redrew itself or folded something: its content height may have changed
   }).observe(lay.main, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
   if (typeof ResizeObserver === 'function') new ResizeObserver(scheduleFit).observe(lay.main);
@@ -770,7 +767,7 @@ async function onboardingChip(btn) {
 // nav.js draws the bottom bar, the band links and the sheet with the pages (Characters, Return screen, Hall of Fame, Policy). The
 // buttons already on the page move into the sheet (they keep their ids and listeners); the preset buttons store the choice per
 // browser and load the page again, because which panels are mounted (opt-in panels, the status band) follows the layout.
-const PRESET_LABEL = { cockpit: 'New layout', classic: 'Old layout', simple: 'Simple', standard: 'Standard', stream: 'Stream', debug: 'Debug' };
+const PRESET_LABEL = { cockpit: 'Cockpit', stream: 'Stream' };
 async function setupMenu(sel) {
   const nv = window.dNav;
   const host = document.querySelector('.d-band-status .d-links');
@@ -780,7 +777,7 @@ async function setupMenu(sel) {
   const more = nv.moreButton();
   const tools = [], hero = [], presets = []; // the sheet's groups: Hero, Tools and the layout presets
   for (const id of ['btn-layout', 'btn-help']) { const b = document.getElementById(id); if (b) tools.push(b); }
-  nv.drop('help'); nv.drop('oldlayout'); // this screen has the Help drawer and the Layout group itself
+  nv.drop('help'); // this screen has the Help drawer and the Layout group itself
   const labelsItem = ui.btn('Item labels', { size: 'sm', variant: 'ghost' }); // the video tile's Labels button, so a tile in a drawer or a phone tab is still one tap away
   labelsItem.dataset.key = 'labels-menu';
   labelsItem.setAttribute('aria-label', 'Item labels: show or hide the names of items on the ground');
@@ -797,7 +794,7 @@ async function setupMenu(sel) {
     if (id === 'onboarding') { chip = b; b.hidden = true; }
   }
   if (chip) onboardingChip(chip);
-  // the Return screen link of the sheet shows only where the bot mounts the return screen (app.js sets data-return-screen on the page)
+  // the Return screen link of the sheet shows only where the bot mounts the return screen (probeReturn sets data-return-screen on the page)
   const syncReturn = () => nv.hide('return', html.dataset.returnScreen !== '1');
   syncReturn();
   new MutationObserver(syncReturn).observe(html, { attributes: true, attributeFilter: ['data-return-screen'] });
@@ -854,7 +851,7 @@ function choosePreset(name) {
 }
 
 // One line for a hero who now gets the cockpit by default, dismissed for good in this browser. A cockpit has no row for it
-// (the frame fills the window), so there it floats over the page like a toast; the old page keeps it under the band.
+// (the frame fills the window), so there it floats over the page like a toast; the Stream page keeps it under the band.
 function layoutNote(sel, floating) {
   if (!sel || sel.origin !== 'default' || html.dataset.mode === 'overlay' || pref(NOTE)) return;
   const shell = document.querySelector('.d-shell'), top = document.querySelector('.d-band-status');
@@ -862,28 +859,32 @@ function layoutNote(sel, floating) {
   const box = el('div', 'd-layoutnote');
   box.setAttribute('role', 'note');
   if (floating) box.dataset.float = '1';
-  box.appendChild(el('span', '', sel.fell ? 'The new layout could not load, so this is the Standard layout. The old layout is in More.' : 'The layout changed. The old layout is in More.'));
+  box.appendChild(el('span', '', sel.fell ? 'The new layout could not load, so this is the Stream layout.' : 'The layout changed.'));
   const x = ui.btn('Dismiss', { size: 'sm', variant: 'ghost' });
   x.addEventListener('click', () => { pref(NOTE, '1'); box.remove(); });
   box.appendChild(x);
   if (floating) document.body.appendChild(box); else top.after(box);
 }
 
-// The pre-cockpit page is called the old layout, and it always says so: one standing line under the band with the way back
-// (user decision 2026-11-22, review F8). The cockpit, the Stream strip and the overlay mode do not show it.
-function oldLayoutBar(sel, cockpit) {
-  if (!sel || cockpit || sel.preset === 'stream' || html.dataset.mode === 'overlay') return;
-  const top = document.querySelector('.d-band-status');
-  if (!top) return;
+// The Return screen link shows only where the bot mounts the route behind it: GET /api/tally answers there and 404s elsewhere.
+function probeReturn() {
+  fetch('/api/tally', { cache: 'no-store', credentials: 'same-origin' })
+    .then((r) => { if (r.ok) html.dataset.returnScreen = '1'; else delete html.dataset.returnScreen; })
+    .catch(() => { delete html.dataset.returnScreen; });
+}
+
+// A browser that still asks for a removed preset (?layout=classic, a saved choice) gets the cockpit and this one line, dismissed once.
+function movedNote(sel) {
+  if (!sel || !sel.moved) return;
   const box = el('div', 'd-layoutnote');
-  box.dataset.key = 'oldlayout-bar';
   box.setAttribute('role', 'note');
-  box.appendChild(el('span', '', 'You are on the old layout:'));
-  const back = ui.btn('Switch back', { size: 'sm', variant: 'primary' });
-  back.dataset.key = 'oldlayout-back';
-  back.addEventListener('click', () => choosePreset('cockpit'));
-  box.appendChild(back);
-  top.after(box);
+  box.dataset.float = '1';
+  box.dataset.key = 'moved-note';
+  box.appendChild(el('span', '', MOVED));
+  const x = ui.btn('Dismiss', { size: 'sm', variant: 'ghost' });
+  x.addEventListener('click', () => { pref(PREF, ''); pref(BASE, ''); box.remove(); });
+  box.appendChild(x);
+  document.body.appendChild(box);
 }
 
 // A slot panel of the cockpit that fails to load leaves a hole: say so once, with the way back one click away.
@@ -895,8 +896,8 @@ function failedNote() {
   box.setAttribute('role', 'alert');
   box.dataset.float = '1';
   box.appendChild(el('span', '', 'Part of this layout did not load.'));
-  const go = ui.btn('Use the old layout', { size: 'sm', variant: 'primary' });
-  go.addEventListener('click', () => choosePreset('classic'));
+  const go = ui.btn('Reload', { size: 'sm', variant: 'primary' });
+  go.addEventListener('click', () => location.reload());
   const x = ui.btn('Dismiss', { size: 'sm', variant: 'ghost' });
   x.addEventListener('click', () => box.remove());
   box.append(go, x);
@@ -936,9 +937,9 @@ async function selfCheck(sel, list, conf0) {
   if (!sel || sel.origin !== 'default' && sel.origin !== 'newhero' || !isCockpit(sel.layout) || sel.preset !== 'cockpit') return sel;
   const missing = missingSlots(sel.layout, list.filter((m) => m.slot || (conf0.slot || []).includes(m.id)).map((m) => m.id));
   if (!missing.length) return sel;
-  console.warn('d2lod: cockpit slot panel missing (' + missing.join(', ') + '), using Standard');
-  const l = await presetFile('standard');
-  return l ? { layout: l, preset: 'standard', origin: sel.origin, hasStored: false, fell: true } : sel;
+  console.warn('d2lod: cockpit slot panel missing (' + missing.join(', ') + '), using Stream');
+  const l = await presetFile('stream');
+  return l ? { layout: l, preset: 'stream', origin: sel.origin, hasStored: false, fell: true } : sel;
 }
 
 async function start() {
@@ -949,7 +950,7 @@ async function start() {
   try { cfg = await (await fetch('/api/config', { cache: 'no-store' })).json(); } catch (e) { /* the old code says so */ }
   const answerBase = cfg.answerBase || (cfg.answerPort ? location.protocol + '//' + location.hostname + ':' + cfg.answerPort : '');
   let list = [], conf = {};
-  const layoutReq = document.querySelector('.d-compat') ? loadLayout() : null; // the other pages share this shell without a layout
+  const layoutReq = document.querySelector('[data-band="grid"]') ? loadLayout() : null; // the other pages share this shell without a layout
   try {
     const pv = await (await fetch('/watch/panels.json', { cache: 'no-store' })).json();
     list = (pv.panels || []).filter((m) => !m.mergedInto); // a merged panel's id is an alias in the layout (shell.json)
@@ -980,7 +981,7 @@ async function start() {
   }
   setupLayout(conf, sel, answerBase, cockpit ? ckRoots : null, slotList);
   if (cockpit) setupDrawers(drRoots, drTitles);
-  if (layoutReq) { await setupMenu(sel); layoutNote(sel, cockpit); oldLayoutBar(sel, cockpit); }
+  if (layoutReq) { probeReturn(); await setupMenu(sel); layoutNote(sel, cockpit); movedNote(sel); }
   // a new hero meets the first-steps card once, without opening a menu
   if (cockpit && sel.origin === 'newhero' && !pref(FIRST) && dr.boxes.has('onboarding') && !qs.has('drawer') && qs.get('first') !== '0') { pref(FIRST, '1'); openDrawer('onboarding'); }
   if (cockpit && qs.get('drawer')) openDrawer(qs.get('drawer')); // a link (and the screenshot suite) can open a drawer
@@ -1003,7 +1004,7 @@ async function start() {
       if (cockpit && sel.origin !== 'url') failedNote();
       continue;
     }
-    if (cockpit) { // a slot has no title bar to fold, and a fold saved by the classic page must not blank the box
+    if (cockpit) { // a slot has no title bar to fold, and a fold saved by an old page must not blank the box
       parts.actions.querySelectorAll('[data-key="collapse"]').forEach((n) => n.remove());
       parts.body.hidden = false;
     }

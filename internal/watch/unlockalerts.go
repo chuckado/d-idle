@@ -25,15 +25,14 @@ import (
 
 // Alerts and pings (TASK-162, docs/unlock-alerts.md). A rules table (data/alerts/rules.json) turns events the watch
 // screen already sees into short alerts in the hero's voice. The in-page channel is GET /api/alerts plus a toast
-// centre (web/alerts.js). The outbound channel is the Sender interface; it is off unless the profile config switches it
+// centre (web/alerts-feed.js). The outbound channel is the Sender interface; it is off unless the profile config switches it
 // on, and nothing in the repo holds a URL. Death and low life are free (rules with free=true): basic safety info is
 // never behind the ladder row "alerts".
 
 const (
-	// AlertsRoute is GET (viewer); AlertsUIRoute serves web/alerts.js. AlertsID is the ladder row.
-	AlertsRoute   = "/api/alerts"
-	AlertsUIRoute = "/watch/alerts.js"
-	AlertsID      = "alerts"
+	// AlertsRoute is GET (viewer). AlertsID is the ladder row.
+	AlertsRoute = "/api/alerts"
+	AlertsID    = "alerts"
 
 	alertsSchema      = "watch.alerts/1"
 	alertsKeep        = 100
@@ -764,20 +763,5 @@ func (a *Alerts) Handler() http.Handler {
 			}
 		}
 		writeJSON(w, 200, a.View(since))
-	})
-}
-
-func alertsUIHandler() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		b, err := webFS.ReadFile("web/alerts.js")
-		if err != nil {
-			http.NotFound(w, r)
-			return
-		}
-		w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
-		w.Header().Set("X-Content-Type-Options", "nosniff")
-		w.Header().Set("Content-Security-Policy", pageCSP)
-		w.Header().Set("Cache-Control", "no-store")
-		w.Write(b)
 	})
 }

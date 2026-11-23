@@ -85,17 +85,13 @@ func TestHeroNeverWaitsForTheInventoryView(t *testing.T) {
 }
 
 // The page keeps its long-lived connections few (a browser has six per host and the video takes one): one event
-// stream shared by app.js and the shell, and one request per address in the shell's scheduler.
+// stream opened by the shell, and one request per address in the shell's scheduler.
 func TestWatchPageConnectionBudget(t *testing.T) {
-	app, _ := webFS.ReadFile("web/app.js")
 	sh, _ := webFS.ReadFile("web/shell.js")
-	if strings.Count(string(app), "new EventSource(") != 1 || !strings.Contains(string(app), "window.d2events = new EventSource('/api/events')") {
-		t.Error("app.js must open the page's one event stream and publish it as window.d2events")
-	}
 	if strings.Count(string(sh), "new EventSource(") != 1 || !strings.Contains(string(sh), "window.d2events || (window.d2events = new EventSource('/api/events'))") {
 		t.Error("shell.js must reuse window.d2events and only open a stream when there is none")
 	}
-	for _, name := range []string{"alerts.js", "unlockui.js", "update.js", "inventory.js", "layoutedit.js", "layout.js"} {
+	for _, name := range []string{"update.js", "inventory.js", "layoutedit.js", "layout.js"} {
 		if b, err := webFS.ReadFile("web/" + name); err == nil && strings.Contains(string(b), "EventSource(") {
 			t.Errorf("web/%s opens another event stream", name)
 		}

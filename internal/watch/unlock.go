@@ -26,26 +26,8 @@ const (
 	UnlocksRoute    = "/api/unlocks"
 	UnlocksBuyRoute = "/api/unlocks/buy"
 
-	// UnlockUIRoute serves the script of the unlocked panels (web/unlockui.js).
-	UnlockUIRoute = "/watch/unlockui.js"
-
 	unlocksSchema = "watch.unlocks/1"
 )
-
-func unlockUIHandler() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		b, err := webFS.ReadFile("web/unlockui.js")
-		if err != nil {
-			http.NotFound(w, r)
-			return
-		}
-		w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
-		w.Header().Set("X-Content-Type-Options", "nosniff")
-		w.Header().Set("Content-Security-Policy", pageCSP)
-		w.Header().Set("Cache-Control", "no-store")
-		w.Write(b)
-	})
-}
 
 // Unlocks connects the engine to the Hub, the away log and the tally.
 type Unlocks struct {
