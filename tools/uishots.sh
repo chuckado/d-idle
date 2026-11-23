@@ -711,12 +711,12 @@ vault-keep-dead watch/vault?theme=dark&vault=keepdead [data-key=select-toggle]|.
 vault-revealing watch/vault?theme=dark&vault=revealing
 vault-revealing-light watch/vault?theme=light&vault=revealing
 vault-revealing-list watch/vault?theme=dark&vault=revealing [data-key=view-toggle] .vt-cell,[data-key=view-toggle]
-vault-reveal-press watch/vault?theme=dark&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-done]
-vault-reveal-none watch/vault?theme=dark&vault=revealnone [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-done]
-vault-reveal-cain watch/vault?theme=dark&vault=revealcain [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-done]
-vault-reveal-multi watch/vault?theme=dark&vault=revealcain [data-key=filters-toggle]|[data-key=unid]|[data-key=select-toggle]|.vt-cell:nth-child(1)|.vt-cell:nth-child(2)|.vt-cell:nth-child(3) [data-key=select-done],.vt-costline
-vault-reveal-multi-light watch/vault?theme=light&vault=revealcain [data-key=filters-toggle]|[data-key=unid]|[data-key=select-toggle]|.vt-cell:nth-child(1)|.vt-cell:nth-child(2)|.vt-cell:nth-child(3) [data-key=select-done],.vt-costline
-vault-reveal-dead watch/vault?theme=dark&vault=revealdead [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-done]
+vault-reveal-press watch/vault?theme=dark&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=reveal] .vt-head
+vault-reveal-none watch/vault?theme=dark&vault=revealnone [data-key=select-toggle]|.vt-cell|[data-key=reveal] .vt-head
+vault-reveal-cain watch/vault?theme=dark&vault=revealcain [data-key=select-toggle]|.vt-cell|[data-key=reveal] .vt-head
+vault-reveal-multi watch/vault?theme=dark&vault=revealcain [data-key=filters-toggle]|[data-key=unid]|[data-key=select-toggle]|.vt-cell:nth-child(1)|.vt-cell:nth-child(2)|.vt-cell:nth-child(3) .vt-head,.vt-costline
+vault-reveal-multi-light watch/vault?theme=light&vault=revealcain [data-key=filters-toggle]|[data-key=unid]|[data-key=select-toggle]|.vt-cell:nth-child(1)|.vt-cell:nth-child(2)|.vt-cell:nth-child(3) .vt-head,.vt-costline
+vault-reveal-dead watch/vault?theme=dark&vault=revealdead [data-key=select-toggle]|.vt-cell|[data-key=reveal] .vt-head
 vault-sell-sheet watch/vault?theme=dark&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=sell] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-sell-sheet-light watch/vault?theme=light&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=sell] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-more-entry watch?first=0&theme=dark&needs=0 [data-key=verb-more] [data-key=more-vault]
