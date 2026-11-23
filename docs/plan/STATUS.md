@@ -466,6 +466,7 @@
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | handin | proposed | - | `internal/bot/goal.go`<br>`internal/bot/runner.go`<br>`internal/bot/questboard_test.go`<br>`tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
+| malus | proposed | - | `internal/boss/run.go`<br>`internal/boss/wire_test.go`<br>`cmd/d2bot/boss.go`<br>`tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
@@ -495,6 +496,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 82bf75395 11-23 17:18 `Merge agent/malus: malus: card and drill doc section 15` (malus)
+- 2b2c7bac3 11-23 17:14 `Merge remote-tracking branch 'origin/main' into agent/malus` (-)
 - c685b3211 11-23 17:05 `Merge agent/qd14: questdrill: the Smith drill with layoutRead and the sandbox knobs` (qd14)
 - a70080796 11-23 16:58 `Merge origin/main into qd14` (-)
 - 0c06ee62d 11-23 16:50 `Merge agent/qd15: d2bot: live waypoint bits are read without a save; objectlist probe` (qd15)
@@ -503,6 +506,4 @@
 - 888cea997 11-23 16:19 `Merge branch 'main' into handin` (-)
 - caa1d8621 11-23 16:09 `Merge agent/toolstrade28: toolstrade28: board floor of the Barracks in the same data as the Summoner's, one test` (toolstrade28)
 - 23ef66a46 11-23 16:04 `Merge remote-tracking branch 'origin/main' into agent/toolstrade28` (-)
-- 129194737 11-23 15:57 `Merge agent/qd13: Merge branch 'main' into qdmatrix` (qd13)
-- 3c6e0f8c8 11-23 15:56 `Merge branch 'main' into qdmatrix` (-)
 <!-- statusgen:end -->
