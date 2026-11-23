@@ -643,6 +643,7 @@ docs/probes/test-characters.md  credit-runner  survtune
 docs/probes/test-characters.md  live-agent  cainl3
 docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade10
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
@@ -1445,8 +1446,10 @@ internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/fullgrid_test.go  credit-runner  knownedge
 internal/nav/gatedoor.go  credit-runner  toolstrade
+internal/nav/gatedoor.go  credit-runner  toolstrade10
 internal/nav/gatedoor.go  credit-runner  toolstrade8
 internal/nav/gatedoor_test.go  credit-runner  toolstrade
+internal/nav/gatedoor_test.go  credit-runner  toolstrade10
 internal/nav/gatedoor_test.go  credit-runner  toolstrade2
 internal/nav/gatedoor_test.go  credit-runner  toolstrade8
 internal/nav/hints_export.go  credit-runner  exitsread
@@ -2416,6 +2419,7 @@ tools/provingground/scenarios/act1.json  credit-runner  countess
 tools/provingground/scenarios/act1.json  credit-runner  countess2
 tools/provingground/scenarios/act1more.json  credit-runner  act1more
 tools/provingground/scenarios/act1more.json  credit-runner  andariel1
+tools/provingground/scenarios/act1more.json  credit-runner  toolstrade10
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade2
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade5
 tools/provingground/scenarios/autoalloc.json  credit-runner  allocfix
