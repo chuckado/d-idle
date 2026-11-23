@@ -3,7 +3,7 @@
  "kit": {
   "pre": {
    "level": 24,
-   "gold": 200,
+   "gold": 3000,
    "stash": 500000,
    "waypoints": [
     -1
@@ -16,6 +16,10 @@
     {
      "code": "mp1",
      "count": 6
+    },
+    {
+     "code": "tsc",
+     "count": 3
     }
    ],
    "belt": [
@@ -74,7 +78,7 @@
     11
    ]
   },
-  "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero."
+  "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero."
  },
  "steps": [
   {

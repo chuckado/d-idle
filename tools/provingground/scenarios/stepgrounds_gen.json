@@ -46,7 +46,7 @@
      "chunk": "clear_den",
      "quest": "den_of_evil"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -55,6 +55,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -93,7 +97,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "clear_den",
     "quest": "den_of_evil"
@@ -164,7 +168,7 @@
      "chunk": "clear_den",
      "quest": "den_of_evil"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -173,6 +177,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -212,7 +220,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "clear_den",
     "quest": "den_of_evil"
@@ -282,7 +290,7 @@
      "chunk": "blood_raven",
      "quest": "sisters_burial_grounds"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -291,6 +299,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -329,7 +341,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "blood_raven",
     "quest": "sisters_burial_grounds"
@@ -399,7 +411,7 @@
      "chunk": "blood_raven",
      "quest": "sisters_burial_grounds"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -408,6 +420,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -447,7 +463,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "blood_raven",
     "quest": "sisters_burial_grounds"
@@ -517,7 +533,7 @@
      "chunk": "blood_raven",
      "quest": "sisters_burial_grounds"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -526,6 +542,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -571,7 +591,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "blood_raven",
     "quest": "sisters_burial_grounds"
@@ -640,7 +660,7 @@
      "chunk": "scroll",
      "quest": "search_for_cain"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -649,6 +669,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -687,7 +711,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "scroll",
     "quest": "search_for_cain"
@@ -757,7 +781,7 @@
      "chunk": "scroll",
      "quest": "search_for_cain"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -766,6 +790,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      },
      {
       "code": "bks",
@@ -810,7 +838,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "scroll",
     "quest": "search_for_cain"
@@ -880,7 +908,7 @@
      "chunk": "stones",
      "quest": "search_for_cain"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -889,6 +917,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -928,7 +960,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "stones",
     "quest": "search_for_cain"
@@ -998,7 +1030,7 @@
      "chunk": "countess",
      "quest": "forgotten_tower"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -1007,6 +1039,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -1046,7 +1082,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "countess",
     "quest": "forgotten_tower"
@@ -1116,7 +1152,7 @@
      "chunk": "countess",
      "quest": "forgotten_tower"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -1125,6 +1161,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -1164,7 +1204,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "countess",
     "quest": "forgotten_tower"
@@ -1234,7 +1274,7 @@
      "chunk": "malus",
      "quest": "tools_of_the_trade"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -1243,6 +1283,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -1282,7 +1326,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "malus",
     "quest": "tools_of_the_trade"
@@ -1352,7 +1396,7 @@
      "chunk": "andariel",
      "quest": "sisters_to_the_slaughter"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -1361,6 +1405,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -1400,7 +1448,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "andariel",
     "quest": "sisters_to_the_slaughter"
@@ -1470,7 +1518,7 @@
      "chunk": "radament",
      "quest": "radament"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -1479,6 +1527,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -1518,7 +1570,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "radament",
     "quest": "radament"
@@ -1588,7 +1640,7 @@
      "chunk": "radament",
      "quest": "radament"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -1597,6 +1649,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -1642,7 +1698,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "radament",
     "quest": "radament"
@@ -1712,7 +1768,7 @@
      "chunk": "shaft",
      "quest": "horadric_staff"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -1721,6 +1777,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -1760,7 +1820,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "shaft",
     "quest": "horadric_staff"
@@ -1830,7 +1890,7 @@
      "chunk": "shaft",
      "quest": "horadric_staff"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -1839,6 +1899,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -1878,7 +1942,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "shaft",
     "quest": "horadric_staff"
@@ -1948,7 +2012,7 @@
      "chunk": "portal",
      "quest": "arcane_sanctuary"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -1957,6 +2021,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -1996,7 +2064,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "portal",
     "quest": "arcane_sanctuary"
@@ -2067,7 +2135,7 @@
      "chunk": "kill_summoner",
      "quest": "summoner"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -2076,6 +2144,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -2121,7 +2193,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "kill_summoner",
     "quest": "summoner"
@@ -2193,7 +2265,7 @@
      "chunk": "duriel",
      "quest": "seven_tombs"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -2202,6 +2274,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -2247,7 +2323,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "duriel",
     "quest": "seven_tombs"
@@ -2319,7 +2395,7 @@
      "chunk": "mephisto",
      "quest": "guardian"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -2328,6 +2404,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -2373,7 +2453,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "mephisto",
     "quest": "guardian"
@@ -2445,7 +2525,7 @@
      "chunk": "diablo",
      "quest": "terrors_end"
     },
-    "gold": 200,
+    "gold": 3000,
     "items": [
      {
       "code": "hp2",
@@ -2454,6 +2534,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "level": 24,
@@ -2499,7 +2583,7 @@
      }
     ]
    },
-   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, 3000 gold, town portal scrolls, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero.",
    "quest": {
     "chunk": "diablo",
     "quest": "terrors_end"
