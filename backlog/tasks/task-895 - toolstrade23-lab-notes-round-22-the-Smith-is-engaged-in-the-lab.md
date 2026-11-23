@@ -1,10 +1,11 @@
 ---
 id: TASK-895
 title: 'toolstrade23: lab notes round 22, the Smith is engaged in the lab'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T12:36:00Z'
+updated_date: '2026-11-23T12:45:00Z'
 labels:
   - docs
   - probe
