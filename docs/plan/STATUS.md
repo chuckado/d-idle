@@ -466,6 +466,7 @@
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | handin | proposed | - | `internal/bot/goal.go`<br>`internal/bot/runner.go`<br>`internal/bot/questboard_test.go`<br>`tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
+| toolstrade29 | proposed | - | `internal/bot/routeguard.go`<br>`internal/bot/plan_test.go`<br>`internal/bot/beltfill_test.go`<br>`internal/task/route.go`<br>`internal/task/gate.go`<br>`docs/plan/data/levelplan-normal.json`<br>`internal/plandata/levelplan-normal.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | malus | proposed | - | `internal/boss/run.go`<br>`internal/boss/wire_test.go`<br>`cmd/d2bot/boss.go`<br>`tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
@@ -496,6 +497,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f7e81dc78 11-23 17:26 `Merge agent/toolstrade29: Merge branch 'main' into toolstrade29` (toolstrade29)
+- d3f962d86 11-23 17:25 `Merge branch 'main' into toolstrade29` (-)
 - 82bf75395 11-23 17:18 `Merge agent/malus: malus: card and drill doc section 15` (malus)
 - 2b2c7bac3 11-23 17:14 `Merge remote-tracking branch 'origin/main' into agent/malus` (-)
 - c685b3211 11-23 17:05 `Merge agent/qd14: questdrill: the Smith drill with layoutRead and the sandbox knobs` (qd14)
@@ -504,6 +507,4 @@
 - b2f3fc973 11-23 16:48 `Merge remote-tracking branch 'origin/main' into agent/qd14` (-)
 - 9ee8e56e5 11-23 16:21 `Merge agent/handin: Merge branch 'main' into handin` (handin)
 - 888cea997 11-23 16:19 `Merge branch 'main' into handin` (-)
-- caa1d8621 11-23 16:09 `Merge agent/toolstrade28: toolstrade28: board floor of the Barracks in the same data as the Summoner's, one test` (toolstrade28)
-- 23ef66a46 11-23 16:04 `Merge remote-tracking branch 'origin/main' into agent/toolstrade28` (-)
 <!-- statusgen:end -->
