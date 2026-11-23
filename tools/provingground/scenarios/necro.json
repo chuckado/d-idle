@@ -517,7 +517,6 @@
     {
      "kind": "log_line",
      "pattern": "^combat kill .*last_skill=Poison Nova",
-     "min": 0,
      "why": "no kill by the nova on a poison-immune pack",
      "max": 0
     },
