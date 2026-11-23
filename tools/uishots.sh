@@ -576,6 +576,7 @@ demo-help watch?layout=cockpit-demo&theme=dark #btn-more|#btn-help .d-drawer:not
 overflow-fixture watch?layout=cockpit-overflow&theme=dark
 overflow-nested watch?layout=cockpit-nested&theme=dark
 overflow-fakescroll watch?layout=cockpit-fakescroll&theme=dark
+overflow-pagescroll watch?layout=cockpit-pagescroll&theme=dark
 blank-rail watch?layout=cockpit-blank&theme=dark
 tall-frame watch?layout=cockpit-tall&theme=dark
 chars-1 watch/characters?theme=dark&chars=1
@@ -760,7 +761,7 @@ $buildspages"
 		vault-more-entry) ;;
 		navdefect-wide) szs="1366x768" ;;
 		# the must-fail fixtures of the desk frame (an overflowing, nested or fake-scrolling box, a tall frame): the phone cockpit is a scrolling page by design
-		overflow-fixture | overflow-nested | overflow-fakescroll | tall-frame) szs="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620" ;;
+		overflow-fixture | overflow-nested | overflow-fakescroll | overflow-pagescroll | tall-frame) szs="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620" ;;
 		navdefect-*) szs="390x844" ;;
 		nav-* | settings-*) szs="390x844 1366x768" ;;
 		ts200-* | tsdefect-*) szs="320x640" ;; # the reader's text size at 200 percent on the narrowest phone (card uia11y)

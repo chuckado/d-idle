@@ -35,6 +35,8 @@ var fxPanels = []fxPanel{
 	// the panel root, a data-scroll that does not scroll, a slot whose only panel is hidden, a frame taller than the window
 	{"fx-nested", "Nested", `const box = ctx.el('div', 'nest'); for (let i = 0; i < 60; i++) box.append(ctx.el('div', 'row', 'row ' + i + ' in a box that cuts')); ctx.body.append(box);`},
 	{"fx-fakescroll", "Fake scroll", `const box = ctx.el('div', 'fake'); box.dataset.scroll = '1'; for (let i = 0; i < 60; i++) box.append(ctx.el('div', 'row', 'row ' + i + ' under a data-scroll that does not scroll')); ctx.body.append(box);`},
+	// the page itself grows past the window (a spacer after the shell): the "page scrolls" verdict needs a real must-fail page since the old page is gone
+	{"fx-pagescroll", "Page scroll", `ctx.body.append(ctx.el('div', 'row', 'the page is taller than the window')); const sp = document.createElement('div'); sp.style.blockSize = '3000px'; document.body.append(sp);`},
 	{"fx-blank", "Blank", `ctx.hide(true);`},
 	{"fx-tall", "Tall", `ctx.body.append(ctx.el('div', 'row', 'a frame taller than the window'));`},
 	// not a stand-in: a panel that overflows its box on purpose, for the fixture the fit check must fail

@@ -89,7 +89,7 @@ func TestDeskFixturesRunAtDeskSizes(t *testing.T) {
 		t.Fatal(err)
 	}
 	sh := string(b)
-	i := strings.Index(sh, "overflow-fixture | overflow-nested | overflow-fakescroll | tall-frame) szs=")
+	i := strings.Index(sh, "overflow-fixture | overflow-nested | overflow-fakescroll | overflow-pagescroll | tall-frame) szs=")
 	if i < 0 {
 		t.Fatal("uishots.sh does not restrict the desk-frame fixtures to the desk sizes")
 	}

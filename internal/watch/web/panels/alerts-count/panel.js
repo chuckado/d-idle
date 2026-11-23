@@ -1,12 +1,19 @@
 // The alerts badge of the top band: how many alerts the notification centre holds, toned by the worst one, from GET
-// /api/alerts. It is a link to the Alerts card; with no alert, or with the alerts route off, the badge is not shown.
+// /api/alerts. It is a link to the Alerts section of the Settings sheet (?settings=alerts, nav.js opens it); with no alert, or with the alerts route off, the badge is not shown.
 export function tone(alerts) {
   return (alerts || []).some((a) => a.severity === 'alarm') ? 'bad' : 'warn';
 }
 
+// The page's own address with settings=alerts: the sheet opens on Alerts and the token and layout of the address stay.
+export function settingsHref(search) {
+  const kept = String(search || '').replace(/^\?/, '').split('&').filter((p) => p && !/^settings=/.test(p));
+  kept.push('settings=alerts');
+  return '?' + kept.join('&');
+}
+
 export function mount(root, ctx) {
   const a = ctx.el('a', 'd-badge');
-  a.href = '#alertspane';
+  a.href = settingsHref(typeof location === 'object' && location ? location.search : '');
   a.dataset.key = 'alerts';
   root.appendChild(a);
   return {
