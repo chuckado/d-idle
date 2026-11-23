@@ -1289,6 +1289,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - uibudget: viewer asset budget test (gzip JS+CSS of the cockpit and Vault pages) (TASK-890, merged 2026-11-23, acceptance 1 of 1): TestAssetBudget: cockpit 179,056 gzip bytes (ceiling 193,000), Vault 63,902 (ceiling 69,000); numbers in docs/ui-design-system.md section 18. <!--sg:agent/uibudget-->
 - agent/questdrill8: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/questdrill8-->
 - toolstrade20: the fight walks toward a target behind doors before it ignores it (TASK-892, merged 2026-11-23, acceptance 1 of 1): The fight calls GoTo (door-augmented since #1188) toward an unreachable target up to 3 times before ignoring it; unit-tested; lab and live effect not seen. <!--sg:agent/toolstrade20-->
+- agent/questdrill9: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/questdrill9-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

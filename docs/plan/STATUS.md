@@ -490,6 +490,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d66e9b09d 11-23 07:05 `Merge agent/questdrill9: Merge branch 'main' into qdmatrix` (questdrill9)
+- efdfb1883 11-23 07:04 `Merge branch 'main' into qdmatrix` (-)
 - 83b7ed53c 11-23 06:58 `Merge agent/toolstrade20: Merge branch 'main' into toolstrade20` (toolstrade20)
 - 79bc8e204 11-23 06:57 `Merge branch 'main' into toolstrade20` (-)
 - a443aec6e 11-23 06:50 `Merge agent/questdrill8: Merge branch 'main' into qdmatrix` (questdrill8)
@@ -498,6 +500,4 @@
 - 0f8d4d859 11-23 06:38 `Merge branch 'main' into uibudget` (-)
 - cbb60372e 11-23 06:32 `Merge agent/stage23: Merge branch 'main' into stage23` (stage23)
 - 5589b063f 11-23 06:30 `Merge branch 'main' into stage23` (-)
-- 798a702dc 11-23 06:28 `Merge remote-tracking branch 'origin/main' into agent/stage23` (-)
-- 752efedd3 11-23 06:19 `Merge agent/toolstrade19: Merge branch 'main' into toolstrade19` (toolstrade19)
 <!-- statusgen:end -->
