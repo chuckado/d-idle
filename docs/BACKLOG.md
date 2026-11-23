@@ -1303,6 +1303,9 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/e11a: Merge branch 'main' into e11a (merged 2026-11-23) <!--sg:agent/e11a-->
 - agent/e11a2: E11a2: needs-you list grows, alerts badge opens Settings Alerts, real page-scroll must-fail fixture, guards for stream layout and senses_units.js (merged 2026-11-23) <!--sg:agent/e11a2-->
 - agent/routes3: routes3: delete unused GET /api/bestiary, /api/atlas, /api/unlocks (user approved 2026-11-23); engine kept, guard test added (merged 2026-11-23) <!--sg:agent/routes3-->
+- toolstrade27: a town portal crossing is not a map edge; Barracks arrival numbers (TASK-899, merged 2026-11-23, acceptance 1 of 1): learn() no longer records a town portal crossing as an edge; unit-tested; live effect not seen; the Barracks survival analysis is in the probe doc. <!--sg:agent/toolstrade27-->
+- agent/qd13: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/qd13-->
+- toolstrade28: readiness gate for the Barracks (class level and life floors) (TASK-900, merged 2026-11-23, acceptance 2 of 2): Readiness floors for the Barracks as knobs (melee 24 and 400 life, caster 22 and 300 life; EXP numbers from the d2-sme), refusal too_weak with level N needed, questloop waits on it; unit and shell tests; not run live ... <!--sg:agent/toolstrade28-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

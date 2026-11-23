@@ -541,6 +541,7 @@ docs/knobs.md  credit-runner  staletarget
 docs/knobs.md  credit-runner  survfix2
 docs/knobs.md  credit-runner  survsd
 docs/knobs.md  credit-runner  tidy
+docs/knobs.md  credit-runner  toolstrade28
 docs/knobs.md  credit-runner  town3
 docs/knobs.md  credit-runner  town4
 docs/knobs.md  credit-runner  vaultequip
@@ -665,6 +666,8 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade20
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade22
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade25
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade27
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade28
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
 docs/probes/town-plan-scenarios.md  credit-runner  town1
@@ -1078,6 +1081,7 @@ internal/bot/routeguard.go  credit-runner  bsm7
 internal/bot/routeguard.go  credit-runner  classtraits
 internal/bot/routeguard.go  credit-runner  manapack
 internal/bot/routeguard.go  credit-runner  questrun
+internal/bot/routeguard.go  credit-runner  toolstrade28
 internal/bot/routeguard.go  credit-runner  toolstrade5
 internal/bot/runner.go  credit-runner  agencyp0
 internal/bot/runner.go  credit-runner  botinstant
@@ -1369,6 +1373,7 @@ internal/env/tuning_quests.go  live-agent  k1layout
 internal/env/tuning_resource.go  credit-runner  agencyp0
 internal/env/tuning_resource.go  credit-runner  freshstart
 internal/env/tuning_resource.go  live-agent  recoverypace
+internal/env/tuning_route.go  credit-runner  toolstrade28
 internal/env/tuning_town.go  credit-runner  tidy
 internal/env/tuning_town.go  credit-runner  town3
 internal/env/tuning_watch.go  credit-runner  videofeed2
@@ -1513,6 +1518,7 @@ internal/nav/gatedoor_test.go  credit-runner  toolstrade
 internal/nav/gatedoor_test.go  credit-runner  toolstrade10
 internal/nav/gatedoor_test.go  credit-runner  toolstrade15
 internal/nav/gatedoor_test.go  credit-runner  toolstrade2
+internal/nav/gatedoor_test.go  credit-runner  toolstrade27
 internal/nav/gatedoor_test.go  credit-runner  toolstrade8
 internal/nav/hints_export.go  credit-runner  exitsread
 internal/nav/mouthgate.go  credit-runner  botstuck
@@ -1535,6 +1541,7 @@ internal/nav/roam.go  credit-runner  maptrail
 internal/nav/roam.go  credit-runner  pursuers
 internal/nav/route.go  credit-runner  cainchain
 internal/nav/route.go  credit-runner  exitsread
+internal/nav/route.go  credit-runner  toolstrade27
 internal/nav/testdata/barracks28.grid  credit-runner  toolstrade15
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
@@ -1722,6 +1729,7 @@ internal/task/executor_unpark_test.go  credit-runner  toolstrade25
 internal/task/gate.go  credit-runner  cainfix3
 internal/task/gate.go  credit-runner  chores2
 internal/task/gate.go  credit-runner  toolstrade16
+internal/task/gate.go  credit-runner  toolstrade28
 internal/task/gate_hold_test.go  credit-runner  bsm7
 internal/task/guided.go  credit-runner  campaign1
 internal/task/guided_test.go  credit-runner  campaign1
@@ -1730,6 +1738,7 @@ internal/task/kind.go  credit-runner  toolstrade25
 internal/task/route.go  credit-runner  toolstrade5
 internal/task/route_test.go  credit-runner  chores2
 internal/task/route_test.go  credit-runner  toolstrade16
+internal/task/route_test.go  credit-runner  toolstrade28
 internal/task/route_test.go  credit-runner  toolstrade5
 internal/task/s7b_test.go  credit-runner  quests7b
 internal/task/testdata  credit-runner  quests7b
@@ -1738,6 +1747,7 @@ internal/task/timeoutpolicy_test.go  credit-runner  wpstep
 internal/task/world.go  credit-runner  cainfix
 internal/task/world.go  credit-runner  cainfix3
 internal/task/world.go  credit-runner  quests7b
+internal/task/world.go  credit-runner  toolstrade28
 internal/tidy  credit-runner  tidy
 internal/town  credit-runner  town11
 internal/town  credit-runner  town4
@@ -2565,8 +2575,10 @@ tools/provingground/scenarios/vaultsellall.json  credit-runner  sellall
 tools/provingground/status_doc.sh  credit-runner  pgpage
 tools/questloop.sh  credit-runner  opsquest
 tools/questloop.sh  credit-runner  opsquest4
+tools/questloop.sh  credit-runner  toolstrade28
 tools/questloop_test.sh  credit-runner  opsquest
 tools/questloop_test.sh  credit-runner  opsquest4
+tools/questloop_test.sh  credit-runner  toolstrade28
 tools/survival  credit-runner  pghero
 tools/survival  credit-runner  survhold2
 tools/survival  credit-runner  survtune

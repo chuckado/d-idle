@@ -64,6 +64,12 @@ func (n *Navigator) learn(from, to int) {
 	if from == 0 || to == 0 || from == to {
 		return
 	}
+	// A town reached from the field by a town portal, a waypoint or a chicken is no crossing of the map: recording it made
+	// the town a neighbour of the Outer Cloister and the next trip from the camp asked ExitTo for level 27 there (V live,
+	// sandbox 2026-11-23 20:13Z: "no exit to that level: level 27 from 1", the chunk parked after three).
+	if (townLevels[from] || townLevels[to]) && !n.staticallyAdjacent(from, to) {
+		return
+	}
 	if n.seen == nil {
 		n.seen = map[edgeKey]bool{}
 	}
@@ -78,6 +84,28 @@ func (n *Navigator) learn(from, to int) {
 	n.badGates = kept
 	delete(n.bad, edgeKey{from, to})
 	delete(n.bad, edgeKey{to, from})
+}
+
+// townLevels are the five act towns (levels.txt ids).
+var townLevels = map[int]bool{1: true, 40: true, 75: true, 103: true, 109: true}
+
+// staticallyAdjacent: the pair is an edge of the hint tables or a Vis link of levels.txt (what the map itself says).
+func (n *Navigator) staticallyAdjacent(a, b int) bool {
+	for _, h := range allHints() {
+		if h[0] == a && h[1] == b || h[0] == b && h[1] == a {
+			return true
+		}
+	}
+	if n.e != nil && n.e.Data != nil {
+		for _, l := range n.e.Data.Levels {
+			for _, v := range l.Vis {
+				if l.ID == a && v == b || l.ID == b && v == a {
+					return !portalOnly[a] && !portalOnly[b]
+				}
+			}
+		}
+	}
+	return false
 }
 
 // badEdge is a guessed edge a walk failed on. Unless the knob BadEdgeTTLSec is 0 it expires: after the TTL (game

@@ -232,3 +232,45 @@ func TestFieldReadyOnTheRoadToleratesAThinnedKit(t *testing.T) {
 		}
 	}
 }
+
+// The Barracks floor of the Tools of the Trade chunk (route.barracks*): below the class level or max life the gate says
+// what is needed and the travel step is refused as too weak (a hold, not a failure: the planner levels); at the floors
+// it passes. Melee and caster pairs (Paladin and Necromancer numbers). Must fail without Barracks on the QTools gate.
+func TestBarracksFloorHoldsTheChunkUntilTheHeroIsStrongEnough(t *testing.T) {
+	g, _ := task.GateFor(task.QTools)
+	for _, tc := range []struct {
+		name         string
+		caster       bool
+		level, life  int
+		wantNeed     string
+		minL, minLif int
+	}{
+		{"paladin level", false, 20, 279, "level 24 needed", 24, 400},
+		{"paladin life", false, 24, 300, "max life 400 needed", 24, 400},
+		{"necromancer level", true, 20, 250, "level 22 needed", 22, 300},
+		{"necromancer life", true, 22, 200, "max life 300 needed", 22, 300},
+	} {
+		mk := func(level, life int) task.World {
+			return routeWorld(level, func(w *task.World) {
+				w.HasMerc, w.Caster, w.BoardSM = true, tc.caster, true
+				w.BarracksMinLevel, w.BarracksMinLife, w.MaxLife = tc.minL, tc.minLif, life
+				w.RouteMinLevel, w.RouteMinLevelMerc = 14, 14
+			})
+		}
+		w := mk(tc.level, tc.life)
+		if why := g.NotReady(w); !strings.Contains(why, tc.wantNeed) {
+			t.Errorf("%s: NotReady %q, want %q", tc.name, why, tc.wantNeed)
+		}
+		if why := g.NotReady(mk(tc.minL, tc.minLif)); why != "" {
+			t.Errorf("%s: at the floors NotReady %q", tc.name, why)
+		}
+	}
+	// unreadable life: only the level counts
+	if why := g.NotReady(routeWorld(24, func(w *task.World) { w.HasMerc, w.BarracksMinLevel, w.BarracksMinLife, w.MaxLife = true, 24, 400, 0 })); why != "" {
+		t.Errorf("unreadable life: %q", why)
+	}
+	// Nightmare keeps the static floors
+	if why := g.NotReady(routeWorld(20, func(w *task.World) { w.HasMerc, w.Difficulty, w.BarracksMinLevel = true, "nightmare", 24 })); strings.Contains(why, "Barracks") {
+		t.Errorf("nightmare: %q", why)
+	}
+}
