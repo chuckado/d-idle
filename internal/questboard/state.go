@@ -274,7 +274,11 @@ func memoryDenies(q Quest, f Fact, cf ChunkFact) bool {
 func lockedBy(b *Board, q Quest, c Chunk, in Input) string {
 	for _, id := range append(append([]string{}, q.Requires...), c.Requires...) {
 		f := in.Facts.Quest(in.Diff, id)
-		if !(f.Known && f.Done && f.Tier.Exact()) {
+		// An act hop (kind unlock) waits for the boss's objective, not for its hand-in: the Warriv talk that sets the
+		// quest's done bit is the hop itself (V docs/d2d-probes.md: Andariel dead is 0x200a, the talk makes it 0x2009 and
+		// "go east" lands in Lut Gholein), so asking for done made Sail east unreachable.
+		hop := q.Kind == "unlock" && f.Pending
+		if !(f.Known && (f.Done || hop) && f.Tier.Exact()) {
 			t := id
 			if p, err := b.Quest(id); err == nil {
 				t = p.Title

@@ -621,6 +621,7 @@ docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess2
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess3
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess3b
 docs/probes/provingground-run-2026-11-19.md  credit-runner  pgexpand
+docs/probes/quest-drill-matrix-2026-11-23.md  credit-runner  qdmatrix
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/search-for-cain-2026-11-17.md  credit-runner  cainfix
@@ -1492,9 +1493,11 @@ internal/power  credit-runner  survsd
 internal/power/  credit-runner  dlv-cleanup
 internal/power/  credit-runner  powerwire
 internal/power/  credit-runner  survB
+internal/power/archetype.go  credit-runner  qdmatrix
 internal/power/margin.go  credit-runner  resistorder
 internal/power/profiles.json  credit-runner  agencyp0
 internal/power/skilldamage_test.go  credit-runner  agencyp0
+internal/power/skilldamage_test.go  credit-runner  qdmatrix
 internal/quest/act1.go  credit-runner  cainfix
 internal/quest/dialog.go  credit-runner  cain5b
 internal/questboard  credit-runner  boardorder
@@ -1530,7 +1533,9 @@ internal/questboard/exec_stale_test.go  credit-runner  staleaccept
 internal/questboard/sm.go  credit-runner  bsm2
 internal/questboard/sm_reason.go  credit-runner  bsm2
 internal/questboard/sm_test.go  credit-runner  bsm2
+internal/questboard/state.go  credit-runner  qdmatrix
 internal/questboard/state_test.go  credit-runner  cain45
+internal/questboard/state_test.go  credit-runner  qdmatrix
 internal/questboard/state_test.go  credit-runner  quests7b
 internal/questspec  credit-runner  questspec
 internal/questspec/act1boss_test.go  credit-runner  act1more
@@ -1605,6 +1610,8 @@ internal/survival/controller.go  credit-runner  survreask
 internal/survival/ledger.go  credit-runner  intake
 internal/survival/survival_test.go  credit-runner  survfix
 internal/talk/tables.go  credit-runner  quests7b
+internal/talk/talk.go  credit-runner  qdmatrix
+internal/talk/talk_test.go  credit-runner  qdmatrix
 internal/task  credit-runner  cainfix
 internal/task  credit-runner  town4
 internal/task/act1.go  credit-runner  cain45
@@ -2409,6 +2416,7 @@ tools/provingground/scenarios/points.json  credit-runner  druid1
 tools/provingground/scenarios/points.json  credit-runner  hammer1
 tools/provingground/scenarios/points.json  credit-runner  necro1
 tools/provingground/scenarios/points.json  credit-runner  sorc2
+tools/provingground/scenarios/questdrill.json  credit-runner  qdmatrix
 tools/provingground/scenarios/tiers.json  credit-runner  pgstability
 tools/provingground/scenarios/townplan.json  credit-runner  town1
 tools/provingground/scenarios/townplan.json  credit-runner  town5

@@ -1,0 +1,527 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "drill.andariel.clvl19",
+   "title": "Quest drill: Sisters to the Slaughter with a clvl 19 hero, merc and a realistic kit (board-driven)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "sisters_to_the_slaughter",
+    "chunk": "andariel"
+   },
+   "step": {
+    "action": "kill",
+    "target": "Andariel",
+    "nodes": [
+     "wp-cold-plains",
+     "to-catacombs",
+     "kill",
+     "home"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "data/questspec/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.sisters_to_the_slaughter.andariel",
+    "combat.fight",
+    "travel.waypoint",
+    "travel.area-transition"
+   ],
+   "pre": {
+    "level": 19,
+    "gold": 6000,
+    "waypoints": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "items": [
+     {
+      "code": "hp1",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head"
+     },
+     {
+      "code": "qui",
+      "slot": "torso"
+     },
+     {
+      "code": "ssd",
+      "slot": "rhand"
+     },
+     {
+      "code": "buc",
+      "slot": "lhand"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "andariel"
+    ]
+   },
+   "budget": {
+    "virtual_min": 45
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level 19, 6000 gold, waypoints Cold Plains to Catacombs 2, a Rogue merc and potions and basic gear by SETUP verbs. Mechanics only, never evidence for what a played hero survives.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md). Re-check of the readiness verdict for a clvl 19 hero with a merc (user hero state 2026-11-23). Asserts the board side via log lines.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 6,
+     "set": 2,
+     "why": "V docs/d2d-probes.md: record 6 bit 1 = Andariel killed (reward pending)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "the board offered Andariel to the tapper (Start)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death: the board holds the fight back, a death is a RED"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.andariel.kit19",
+   "title": "Quest drill: Sisters to the Slaughter, clvl 19 hero with merc and rare weapon, magic armour (board-driven)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "sisters_to_the_slaughter",
+    "chunk": "andariel"
+   },
+   "step": {
+    "action": "kill",
+    "target": "Andariel",
+    "nodes": [
+     "wp-cold-plains",
+     "to-catacombs",
+     "kill",
+     "home"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "data/questspec/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.sisters_to_the_slaughter.andariel",
+    "combat.fight",
+    "travel.waypoint",
+    "travel.area-transition"
+   ],
+   "pre": {
+    "level": 19,
+    "gold": 6000,
+    "waypoints": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "items": [
+     {
+      "code": "hp1",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head"
+     },
+     {
+      "code": "qui",
+      "slot": "torso"
+     },
+     {
+      "code": "ssd",
+      "slot": "rhand",
+      "quality": 4
+     },
+     {
+      "code": "buc",
+      "slot": "lhand"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "andariel"
+    ]
+   },
+   "budget": {
+    "virtual_min": 45
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level 19, 6000 gold, waypoints Cold Plains to Catacombs 2, a Rogue merc and potions and a rare weapon and magic armour by SETUP verbs. Mechanics only, never evidence for what a played hero survives.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md). Re-check of the readiness verdict for a clvl 19 hero with a merc (user hero state 2026-11-23). Asserts the board side via log lines.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 6,
+     "set": 2,
+     "why": "V docs/d2d-probes.md: record 6 bit 1 = Andariel killed (reward pending)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "the board offered Andariel to the tapper (Start)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death: the board holds the fight back, a death is a RED"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act1.sail",
+   "title": "Quest drill: Andariel dead, Warriv takes the hero east to Lut Gholein (board-driven hand-in)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "act1_done",
+    "chunk": "sail_east"
+   },
+   "step": {
+    "action": "talk",
+    "target": "Warriv",
+    "nodes": [
+     "travel_town",
+     "talk_warriv"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "data/questspec/"
+   ],
+   "covers": [
+    "quest.act1_done.sail_east"
+   ],
+   "pre": {
+    "level": 24,
+    "gold": 3000,
+    "waypoints": [
+     1
+    ],
+    "quests": [
+     {
+      "record": 6,
+      "word": 8202
+     }
+    ],
+    "items": [
+     {
+      "code": "hp1",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 4
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "sail_east"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level 24, gold, Andariel record 6 set to 0x200a (killed, reward pending) by SETUP verbs. Mechanics only.",
+   "notes": "Quest drill matrix. Row act1_done is locked until Andariel is done; the board must offer Hand in (Warriv, pick Go East) and the hero must end in Lut Gholein.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Lut Gholein",
+     "min": 1,
+     "why": "the act hop happened: the hero stands in Act 2 town"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act2.radament",
+   "title": "Quest drill: Radament's Lair from Lut Gholein (Atma, sewers, Book of Skill, report)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "radament",
+    "chunk": "radament"
+   },
+   "step": {
+    "action": "kill",
+    "target": "Radament",
+    "nodes": [
+     "talk_atma",
+     "travel_sewers",
+     "kill_radament",
+     "use_book",
+     "return_atma"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.radament.radament"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 40,
+    "level": 24,
+    "gold": 6000,
+    "waypoints": [
+     1,
+     9,
+     10
+    ],
+    "quests": [
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp1",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head"
+     },
+     {
+      "code": "qui",
+      "slot": "torso"
+     },
+     {
+      "code": "ssd",
+      "slot": "rhand",
+      "quality": 4
+     },
+     {
+      "code": "buc",
+      "slot": "lhand"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "radament"
+    ]
+   },
+   "budget": {
+    "virtual_min": 60
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 9,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Lut Gholein",
+     "min": 1,
+     "why": "the hero stands in the Act 2 town"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  }
+ ]
+}
