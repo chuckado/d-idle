@@ -447,6 +447,7 @@
 | uifit2 | proposed | - | `tools/uishots/fit.go`<br>`tools/uishots/fit_phone_test.go`<br>`docs/ui/fit-triage-2026-11-23.md` | - |
 | toolstrade13 | proposed | - | `tools/probes/capture.py`<br>`tools/probes/capture_test.py`<br>`internal/boss/run.go`<br>`internal/boss/boss_test.go`<br>`internal/boss/fake_test.go`<br>`internal/nav/gatedoor.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | uichars | proposed | - | `internal/charsel/store.go`<br>`internal/charsel/manager.go`<br>`internal/charsel/store_unsaved_test.go`<br>`internal/watch/web/characters.js`<br>`internal/watch/web/characters.json`<br>`internal/watch/charactersui_test.go`<br>`tools/uishots/fixtures_chars.go`<br>`docs/charselect.md` | - |
+| toolstrade14 | proposed | - | `tools/probes/capture.pl`<br>`tools/probes/capture_pl_test.py`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
@@ -479,6 +480,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 6b9810d00 11-23 04:00 `Merge agent/toolstrade14: Merge branch 'main' into toolstrade14` (toolstrade14)
+- 8f4176a99 11-23 03:59 `Merge branch 'main' into toolstrade14` (-)
 - 20e45ed74 11-23 03:52 `Merge agent/uichars: Merge branch 'main' into uichars` (uichars)
 - 2a99bebdc 11-23 03:50 `Merge branch 'main' into uichars` (-)
 - 9f0ff6050 11-23 03:43 `Merge agent/toolstrade13: Merge branch 'main' into toolstrade13` (toolstrade13)
@@ -487,6 +490,4 @@
 - 5754bef9c 11-23 03:31 `Merge branch 'main' into uifit2` (-)
 - 933be05ef 11-23 03:29 `Merge agent/stage1b: Merge branch 'main' into stage1b` (stage1b)
 - cc9385ba9 11-23 03:28 `Merge branch 'main' into stage1b` (-)
-- 0c10ea25e 11-23 03:21 `Merge agent/opsquest4: Merge branch 'main' into opsquest4` (opsquest4)
-- 038a740d4 11-23 03:20 `Merge branch 'main' into opsquest4` (-)
 <!-- statusgen:end -->
