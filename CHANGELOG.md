@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into plan3 <!--sg:agent/plan3-->
 - Merge branch 'main' into charselectdoc <!--sg:agent/charselectdoc-->
 - Merge branch 'main' into toolstrade5 <!--sg:agent/toolstrade5-->
 - Merge branch 'main' into TASK-845 <!--sg:agent/buildchoose-->
