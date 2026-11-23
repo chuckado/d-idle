@@ -130,12 +130,13 @@ export function createSelection() {
     },
     all(order) { order.forEach((id) => set.add(id)); mode = true; },
     clear() { set.clear(); anchor = null; mode = false; },
-    // prune drops ids that are no longer in the list (discarded, filtered away); the mode ends with the last one
+    // prune drops ids that are no longer in the list (discarded, filtered away); the mode ends with the last one (not on an empty selection)
     prune(order) {
       const keep = new Set(order);
-      for (const id of [...set]) if (!keep.has(id)) set.delete(id);
+      let dropped = false;
+      for (const id of [...set]) if (!keep.has(id)) { set.delete(id); dropped = true; }
       if (anchor !== null && !keep.has(anchor)) anchor = null;
-      if (!set.size) mode = false;
+      if (dropped && !set.size) mode = false; // only when the last selected item left: a refresh that arrives while Select is on and nothing is picked yet must not end it (the next tap would open the card)
     },
   };
   return api;
