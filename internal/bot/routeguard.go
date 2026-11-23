@@ -52,7 +52,7 @@ func (r *Runner) fillRoute(w *task.World, class d2.Class, p *d2.Player) {
 // and the guard falls back to the old floor (route.towerMinLevelNoLife) and says so in its log line.
 func (r *Runner) fillTower(w *task.World, rt env.RouteTuning, class d2.Class, p *d2.Player) {
 	w.TowerMinLife, w.TowerMinLevelNoLife = rt.TowerMinLife, rt.TowerMinLevelNoLife
-	w.BarracksMinLevel, w.BarracksMinLife = rt.BarracksMinLevel, rt.BarracksMinLife
+	w.BarracksMinLevel, w.BarracksMinLife, w.BarracksLifeWaiver = rt.BarracksMinLevel, rt.BarracksMinLife, rt.BarracksLifeWaiver
 	if class.Caster() {
 		w.BarracksMinLevel, w.BarracksMinLife = rt.BarracksMinLevelCaster, rt.BarracksMinLifeCaster
 	}
@@ -81,6 +81,9 @@ func (r *Runner) noteFloors(w task.World) {
 				lines[len(lines)-1] += task.TowerLifeNote(w)
 			}
 		}
+	}
+	if task.BarracksLifeWaived(w) {
+		lines = append(lines, fmt.Sprintf("route guard: barracks life floor waived (clvl %d, max life %d < %d)", w.Level, w.MaxLife, w.BarracksMinLife))
 	}
 	key := strings.Join(lines, "\n")
 	r.obMu.Lock()

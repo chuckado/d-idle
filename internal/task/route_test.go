@@ -246,9 +246,9 @@ func TestBarracksFloorHoldsTheChunkUntilTheHeroIsStrongEnough(t *testing.T) {
 		minL, minLif int
 	}{
 		{"paladin level", false, 20, 279, "level 24 needed", 24, 400},
-		{"paladin life", false, 24, 300, "max life 400 needed", 24, 400},
+		{"paladin life", false, 24, 300, "life 300/400 needed", 24, 400},
 		{"necromancer level", true, 20, 250, "level 22 needed", 22, 300},
-		{"necromancer life", true, 22, 200, "max life 300 needed", 22, 300},
+		{"necromancer life", true, 22, 200, "life 200/300 needed", 22, 300},
 	} {
 		mk := func(level, life int) task.World {
 			return routeWorld(level, func(w *task.World) {
@@ -272,5 +272,36 @@ func TestBarracksFloorHoldsTheChunkUntilTheHeroIsStrongEnough(t *testing.T) {
 	// Nightmare keeps the static floors
 	if why := g.NotReady(routeWorld(20, func(w *task.World) { w.HasMerc, w.Difficulty, w.BarracksMinLevel = true, "nightmare", 24 })); strings.Contains(why, "Barracks") {
 		t.Errorf("nightmare: %q", why)
+	}
+}
+
+// The Barracks life floor stops applying BarracksLifeWaiver levels above the level floor, so a build whose life grows
+// slowly (the live Paladin: 279 at clvl 20) cannot train forever; the level floor never waives. Paladin and Necromancer
+// numbers. Must fail without BarracksLifeWaived.
+func TestBarracksLifeFloorIsWaivedAfterFourLevels(t *testing.T) {
+	for _, tc := range []struct {
+		name        string
+		minL, minLf int
+		life        int
+	}{{"paladin", 24, 400, 300}, {"necromancer", 22, 300, 235}} {
+		mk := func(level int) task.World {
+			return routeWorld(level, func(w *task.World) {
+				w.HasMerc, w.BarracksMinLevel, w.BarracksMinLife, w.BarracksLifeWaiver, w.MaxLife = true, tc.minL, tc.minLf, 4, tc.life
+			})
+		}
+		if why := task.BarracksWhy(mk(tc.minL)); !strings.Contains(why, "life ") || !strings.Contains(why, "/") {
+			t.Errorf("%s at the level floor: %q, want the life shown as X/Y", tc.name, why)
+		}
+		if why := task.BarracksWhy(mk(tc.minL + 3)); why == "" {
+			t.Errorf("%s three levels above: the life floor must still hold", tc.name)
+		}
+		if why := task.BarracksWhy(mk(tc.minL + 4)); why != "" {
+			t.Errorf("%s four levels above: %q, want the life floor waived", tc.name, why)
+		}
+		if why := task.BarracksWhy(routeWorld(tc.minL-1, func(w *task.World) {
+			w.BarracksMinLevel, w.BarracksMinLife, w.BarracksLifeWaiver, w.MaxLife = tc.minL, tc.minLf, 4, 9999
+		})); why == "" {
+			t.Errorf("%s: the level floor never waives", tc.name)
+		}
 	}
 }
