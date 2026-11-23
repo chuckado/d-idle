@@ -26,6 +26,7 @@
   /* ---- the bar: search, four filters, gold, repair, sell ---- */
   .cv-bar { display: flex; align-items: center; gap: var(--cv-g); padding: 0 var(--cv-g); min-inline-size: 0; overflow: hidden; background: var(--d-bg); }
   .cv-bar > * { flex: none; }
+  .cv-whys { display: flex; gap: var(--cv-g); align-items: center; min-inline-size: 0; }
   .cv-q { box-sizing: border-box; inline-size: 12.5rem; max-inline-size: 100%; min-inline-size: 0; block-size: 28px; padding: 0 var(--d-sp-2); font: inherit; font-size: var(--d-fs-1);
     color: var(--d-text); background: var(--d-surface-0); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); }
   .cv-q::placeholder { color: var(--d-text-3); }
@@ -274,6 +275,9 @@
     .cv-bar .cv-chip { flex: none; block-size: 36px; padding: 0 14px; font-size: var(--d-fs-1); }
     .cv-bar > .cv-repair { grid-column: 2; grid-row: 2; }
     .cv-bar > .cv-sell { grid-column: 3; grid-row: 2; }
+    .cv-bar > .cv-whys { grid-column: 1 / -1; grid-row: 3; flex-wrap: wrap; gap: 0 var(--cv-g); }
+    .cv[data-why] { --cv-bar: 112px; }
+    .cv-whys:not(:has(.d-why:not([hidden]))) { display: none; }
     .cv-bar .cv-btn { block-size: 36px; }
     .cv-bar .cv-btn[data-s] { font-size: 0; padding: 0 12px; }
     .cv-bar .cv-btn[data-s]::before { content: attr(data-s); font-size: var(--d-fs-1); }

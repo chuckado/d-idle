@@ -57,6 +57,8 @@
   .vt-actionbar > div { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-2); min-inline-size: 0; }
   .vt-ab-sel, .vt-ab-reveal { flex: 1 1 auto; }
   .vt-seltext { font-weight: 650; }
+  .vt-whys { display: grid; gap: var(--d-sp-1); flex: 1 1 100%; min-inline-size: 0; }
+  .vt-whys:empty, .vt-whys:not(:has(.d-why:not([hidden]))) { display: none; }
   .vt-acts { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
   .vt-b-label { display: block; }
   .vt-sub { display: block; font-size: var(--d-fs-0); font-weight: 400; color: var(--d-text-2); line-height: 1.2; }
