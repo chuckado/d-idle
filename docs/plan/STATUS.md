@@ -430,7 +430,6 @@
 | toolstrade5 | proposed | - | `internal/task/route.go`<br>`internal/task/route_test.go`<br>`internal/bot/routeguard.go`<br>`tools/provingground/scenarios/act1more.json`<br>`tools/probes/strips.py`<br>`tools/probes/strips_test.py`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | plan3 | proposed | - | `docs/probes/town-plan-stage3-2026-11-22.md` | - |
 | allochandoff | proposed | - | `internal/points`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`docs/autoalloc.md`<br>`tools/provingground/scenarios/autoalloc.json` | - |
-| toolstrade6 | proposed | - | `internal/task/gate.go`<br>`internal/task/route_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |

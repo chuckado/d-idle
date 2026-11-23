@@ -1,10 +1,13 @@
 ---
 id: TASK-852
-title: 'toolstrade6: the next road step is ready for a hero on the road with a thinned kit'
-status: Proposed
+title: >-
+  toolstrade6: the next road step is ready for a hero on the road with a thinned
+  kit
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T04:27:00Z'
+updated_date: '2026-11-23T04:54:00Z'
 labels:
   - bot
   - bot-fix
