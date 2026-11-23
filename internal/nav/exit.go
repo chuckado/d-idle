@@ -21,10 +21,12 @@ type gate struct {
 
 // exitWalkOpts: the gate is the goal of the walk toward it, so the unwanted-exit gate lets a click that stays outside the core through
 // (see the call).
-func exitWalkOpts(g gate) walkOpts {
-	goal := g.at
-	return walkOpts{pursuit: true, goal: &goal}
-}
+func exitWalkOpts(g gate) walkOpts { return goalOpts(g.at, true) }
+
+// goalOpts is a walk toward p with p as its goal: every walk of an exit leg (the gate, its door, the strip before it) has
+// one, or the unwanted-exit gate holds a corridor that passes the arrival stairs for good (Halls of the Dead Level 1 and
+// Sewers Level 2, V drill.act2.* runs: the door walk was refused 100 times 13 subtiles from the stairs).
+func goalOpts(p input.Point, pursuit bool) walkOpts { return walkOpts{pursuit: pursuit, goal: &p} }
 
 // ExitTo leaves the current level for the neighbouring level levelNo. Outdoor links are borders: the cells of
 // this level that touch the neighbour (d2map LevelMap.BorderCells; the Rogue Encampment's 15-cell gap to the
@@ -89,7 +91,7 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 			if cell, found := n.unprovenTarget(o, levelNo); found {
 				approached++
 				n.log.Info("nav: border not readable from here, walking to its strip", "to", levelNo, "from", o.pos, "cell", cell)
-				err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return cell, 3, nil }, walkOpts{pursuit: true})
+				err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return cell, 3, nil }, goalOpts(cell, true))
 				if err != nil && !errors.Is(err, ErrAlreadyThere) {
 					if errors.Is(err, ErrLevelChanged) {
 						if no := n.levelNow(); no != 0 {
