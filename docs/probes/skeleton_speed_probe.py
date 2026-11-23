@@ -48,7 +48,7 @@ def dump(name):
             f.write(f"{ph},{tk},{len(lv)},{'|'.join(' '.join(x) for x in lv)}\n")
 def grid():
     return s.cmd("debug grid 5").splitlines()[:-1]
-def far_path(g, hx, hy, maxd=360):
+def far_path(g, hx, hy, maxd=125):
     """4-neighbour BFS over the SUBTILE grid (debug grid 5), obstacles grown by one subtile; path to the farthest cell
     within maxd steps. Returns cells (floats) every subtile."""
     import collections
