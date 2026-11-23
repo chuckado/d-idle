@@ -440,7 +440,6 @@
 | uivault | proposed | - | `internal/watch/web/utilities.css` | - |
 | toolstrade8 | proposed | - | `internal/nav/nav.go`<br>`internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | failspend | proposed | - | `internal/bot/questboard.go`<br>`internal/bot/questboard_test.go` | - |
-| opsquest2 | proposed | - | `internal/ops/**`<br>`cmd/d2bot/ops*.go`<br>`docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |

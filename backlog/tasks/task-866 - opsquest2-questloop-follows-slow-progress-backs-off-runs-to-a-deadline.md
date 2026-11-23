@@ -1,10 +1,11 @@
 ---
 id: TASK-866
 title: 'opsquest2: questloop follows slow progress, backs off, runs to a deadline'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T07:04:00Z'
+updated_date: '2026-11-23T07:26:00Z'
 labels:
   - bot
   - bot-fix
