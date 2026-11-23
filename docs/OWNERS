@@ -644,6 +644,7 @@ docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade7
 docs/probes/town-plan-scenarios.md  credit-runner  town1
 docs/probes/town-plan-stage3-2026-11-22.md  credit-runner  plan3
 docs/probes/town-plan-stage3-2026-11-22.md  credit-runner  town5
@@ -899,6 +900,7 @@ internal/boss/boss_test.go  credit-runner  countess
 internal/boss/boss_test.go  pro-runner  levelplan3
 internal/boss/fake_test.go  pro-runner  levelplan3
 internal/boss/run.go  credit-runner  countess
+internal/boss/run.go  credit-runner  toolstrade7
 internal/boss/run.go  pro-runner  levelplan3
 internal/boss/script.go  credit-runner  countess
 internal/boss/types.go  pro-runner  levelplan3
@@ -2390,6 +2392,7 @@ tools/provingground/scenarios/act1more.json  credit-runner  act1more
 tools/provingground/scenarios/act1more.json  credit-runner  andariel1
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade2
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade5
+tools/provingground/scenarios/act1more.json  credit-runner  toolstrade7
 tools/provingground/scenarios/autoalloc.json  credit-runner  allocfix
 tools/provingground/scenarios/autoalloc.json  credit-runner  allochandoff
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0

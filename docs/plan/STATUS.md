@@ -433,6 +433,7 @@
 | opsquest | proposed | - | `cmd/d2bot/ops*.go`<br>`cmd/d2bot/main.go`<br>`cmd/d2bot/questwire.go`<br>`internal/ops/**`<br>`internal/questboard/audit.go`<br>`docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
 | uisettings | proposed | - | `internal/watch/web/settings.js`<br>`internal/watch/web/nav.js`<br>`internal/watch/web/nav.json`<br>`internal/watch/web/nav.css`<br>`internal/watch/web/sheet.js`<br>`internal/watch/settingsjs_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/settings/`<br>`docs/ui-design-system.md` | - |
 | uisettings2 | proposed | - | `docs/design/fable-review-2026-11-22/e11-deletion-plan.md` | - |
+| toolstrade7 | proposed | - | `internal/boss/run.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -466,6 +467,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 79a238cc7 11-23 00:43 `Merge agent/toolstrade7: Merge branch 'main' into toolstrade7` (toolstrade7)
+- 8c5784f1a 11-23 00:41 `Merge branch 'main' into toolstrade7` (-)
 - 3a985a15d 11-23 00:39 `Merge agent/uisettings2: Merge branch 'main' into uisettings2` (uisettings2)
 - f83d567d0 11-23 00:38 `Merge branch 'main' into uisettings2` (-)
 - 7b0e338ac 11-23 00:31 `Merge agent/opsquest: Merge branch 'main' into opsquest` (opsquest)
@@ -474,6 +477,4 @@
 - b27369fe4 11-23 00:21 `Merge branch 'main' into uisettings` (-)
 - 66b1a6d6a 11-23 00:15 `Merge agent/novacap: novacap: task card` (novacap)
 - ae7081d15 11-22 23:41 `Merge agent/toolstrade6: Merge branch 'main' into toolstrade6` (toolstrade6)
-- c63b5287c 11-22 23:39 `Merge branch 'main' into toolstrade6` (-)
-- b9a9937ee 11-22 23:33 `Merge agent/allochandoff: Merge branch 'main' into allochandoff` (allochandoff)
 <!-- statusgen:end -->
