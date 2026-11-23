@@ -465,7 +465,6 @@
 | toolstrade27 | proposed | - | `internal/nav/route.go`<br>`internal/nav/gatedoor_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
-| toolstrade28 | proposed | - | `internal/env/tuning_route.go`<br>`internal/task/gate.go`<br>`internal/task/world.go`<br>`internal/task/route_test.go`<br>`internal/bot/routeguard.go`<br>`docs/knobs.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | handin | proposed | - | `internal/bot/goal.go`<br>`internal/bot/runner.go`<br>`internal/bot/questboard_test.go`<br>`tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
