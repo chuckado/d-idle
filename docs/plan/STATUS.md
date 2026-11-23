@@ -458,6 +458,7 @@
 | toolstrade17 | proposed | - | `internal/bot/loop.go`<br>`internal/bot/beltfill_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade18 | proposed | - | `docs/probes/tools-trade-2026-11-22.md` | - |
 | stage23 | proposed | - | `internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/necro.json`<br>`tools/provingground/scenarios/navexit.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
+| uibudget | proposed | - | `internal/watch/assetbudget_test.go`<br>`docs/ui-design-system.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
@@ -489,6 +490,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 1e454e546 11-23 06:40 `Merge agent/uibudget: Merge branch 'main' into uibudget` (uibudget)
+- 0f8d4d859 11-23 06:38 `Merge branch 'main' into uibudget` (-)
 - cbb60372e 11-23 06:32 `Merge agent/stage23: Merge branch 'main' into stage23` (stage23)
 - 5589b063f 11-23 06:30 `Merge branch 'main' into stage23` (-)
 - 798a702dc 11-23 06:28 `Merge remote-tracking branch 'origin/main' into agent/stage23` (-)
@@ -497,6 +500,4 @@
 - 83acd8c62 11-23 06:11 `Merge agent/questdrill7: Merge branch 'main' into qdmatrix` (questdrill7)
 - b3c993d72 11-23 06:09 `Merge branch 'main' into qdmatrix` (-)
 - a85cc97f6 11-23 06:05 `Merge origin/main into stage23` (-)
-- 9c6f5adc4 11-23 06:02 `Merge agent/uia11y: Merge branch 'main' into uia11y` (uia11y)
-- 8679bba1d 11-23 06:00 `Merge branch 'main' into uia11y` (-)
 <!-- statusgen:end -->

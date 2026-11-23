@@ -799,6 +799,7 @@ docs/towntests.md  credit-runner  towntests
 docs/ui-design-system.md  credit-runner  nopins
 docs/ui-design-system.md  credit-runner  uia11y
 docs/ui-design-system.md  credit-runner  uialerts
+docs/ui-design-system.md  credit-runner  uibudget
 docs/ui-design-system.md  credit-runner  uic3
 docs/ui-design-system.md  credit-runner  uinav
 docs/ui-design-system.md  credit-runner  uireason
@@ -1802,6 +1803,7 @@ internal/watch/a11ypages_test.go  credit-runner  uia11y
 internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/artembed_test.go  credit-runner  itemcolour2
 internal/watch/artembed_test.go  credit-runner  jewelcolor
+internal/watch/assetbudget_test.go  credit-runner  uibudget
 internal/watch/cardtext.go  credit-runner  friendfb
 internal/watch/charactersapi.go  credit-runner  charselect
 internal/watch/charactersapi_test.go  credit-runner  charselect
