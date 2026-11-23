@@ -361,11 +361,11 @@ func TestReturnNotesFeedTheRecord(t *testing.T) {
 	}
 }
 
-// The return and policy pages reuse app.css, whose `main` is a 12-column grid at >= 900 px; main.ret must reset it
-// (screenshot 2026-11-08: ~13 columns 25 px wide). Visual check not possible here; this pins the rule and the class.
+// The return and policy pages no longer load app.css (card uiframe): main.ret is a plain block column of the page's own CSS (the old
+// 12-column main grid is gone with app.css). Visual check: the fit pages nav-return and nav-policy.
 func TestReturnLayoutResetsMainGrid(t *testing.T) {
-	if !strings.Contains(returnCSS, "main.ret{display:block;grid-template-columns:none;") {
-		t.Fatal("return.css lost the main.ret grid reset")
+	if !strings.Contains(returnCSS, "main.ret{display:block;") {
+		t.Fatal("return.css lost the main.ret block layout")
 	}
 	for _, name := range []string{"sorceress.html", "paladin.html"} {
 		b, err := os.ReadFile("testdata/returnscreen/" + name)

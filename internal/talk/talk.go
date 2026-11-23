@@ -86,6 +86,12 @@ func (d Adapter) Talk(ctx context.Context, npc, pick string) error {
 	return err
 }
 
+// hopRows names the quest word that gates the travel row of each act hop pick (internal/quest dialog table).
+var hopRows = map[[2]string]string{
+	{task.NPCWarriv, "go east"}:   "act1_done",
+	{task.NPCMeshif, "sail east"}: "act2_done",
+}
+
 func (d Adapter) talkOnce(ctx context.Context, npc, pick string, flipRespec bool) error {
 	act := 0
 	if s, err := d.E.Snapshot(); err == nil && s.Player != nil {
@@ -126,6 +132,10 @@ func (d Adapter) talkOnce(ctx context.Context, npc, pick string, flipRespec bool
 				return quest.Started
 			}
 			return quest.Needed
+		case hopRows[[2]string{npc, pick}]:
+			// The caller talks to the boatman once the boss is dead; the row is in the game's menu then, whatever the
+			// "act complete" word reads (the Warriv menu lists Go East at the kill word 0x200a, V docs/d2d-probes.md).
+			return quest.Done
 		case "den_of_evil":
 			// The save lags and the reward is pending in memory: a reward claim never opens the topic list.
 			if pick == "reward" {

@@ -430,8 +430,13 @@
 | toolstrade5 | proposed | - | `internal/task/route.go`<br>`internal/task/route_test.go`<br>`internal/bot/routeguard.go`<br>`tools/provingground/scenarios/act1more.json`<br>`tools/probes/strips.py`<br>`tools/probes/strips_test.py`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | plan3 | proposed | - | `docs/probes/town-plan-stage3-2026-11-22.md` | - |
 | allochandoff | proposed | - | `internal/points`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`docs/autoalloc.md`<br>`tools/provingground/scenarios/autoalloc.json` | - |
-| novacap | proposed | - | `data/capabilities/capabilities.json`<br>`internal/combat/classdata/skills.json`<br>`internal/delivery/testdata/skills.golden.json`<br>`internal/combat/necro_data_test.go`<br>`tools/provingground/scenarios/necro.json` | - |
+| opsquest | proposed | - | `cmd/d2bot/ops*.go`<br>`cmd/d2bot/main.go`<br>`cmd/d2bot/questwire.go`<br>`internal/ops/**`<br>`internal/questboard/audit.go`<br>`docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
+| uisettings | proposed | - | `internal/watch/web/settings.js`<br>`internal/watch/web/nav.js`<br>`internal/watch/web/nav.json`<br>`internal/watch/web/nav.css`<br>`internal/watch/web/sheet.js`<br>`internal/watch/settingsjs_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/settings/`<br>`docs/ui-design-system.md` | - |
+| qdmatrix | proposed | - | `docs/probes/quest-drill-matrix-2026-11-23.md`<br>`tools/provingground/scenarios/questdrill.json`<br>`internal/power/archetype.go`<br>`internal/power/skilldamage_test.go`<br>`internal/questboard/state.go`<br>`internal/questboard/state_test.go`<br>`internal/nav/exit.go`<br>`internal/nav/exitgoal_test.go`<br>`internal/talk/talk.go`<br>`internal/talk/talk_test.go` | - |
+| uisettings2 | proposed | - | `docs/design/fable-review-2026-11-22/e11-deletion-plan.md` | - |
+| uialerts | proposed | - | `internal/watch/web/alerts-feed.js`<br>`internal/watch/testdata/alertsfeed_test.cjs`<br>`internal/watch/settingsjs_test.go`<br>`internal/watch/web/nav.js`<br>`internal/watch/http_view.go`<br>`docs/ui-design-system.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
+| uiframe | proposed | - | `internal/watch/returnscreen.go`<br>`internal/watch/policysheet.go`<br>`internal/watch/frame_test.go`<br>`internal/watch/returnscreen_test.go`<br>`internal/watch/testdata/returnscreen/`<br>`internal/watch/testdata/policysheet/` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
@@ -464,14 +469,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 66b1a6d6a 11-23 00:15 `Merge agent/novacap: novacap: task card` (novacap)
-- ae7081d15 11-22 23:41 `Merge agent/toolstrade6: Merge branch 'main' into toolstrade6` (toolstrade6)
-- c63b5287c 11-22 23:39 `Merge branch 'main' into toolstrade6` (-)
-- b9a9937ee 11-22 23:33 `Merge agent/allochandoff: Merge branch 'main' into allochandoff` (allochandoff)
-- 1b1ac2c18 11-22 23:31 `Merge branch 'main' into allochandoff` (-)
-- a4dde0450 11-22 23:29 `Merge agent/plan3: Merge branch 'main' into plan3` (plan3)
-- ddf370c43 11-22 23:29 `Merge agent/charselectdoc: Merge branch 'main' into charselectdoc` (charselectdoc)
-- ae2e09937 11-22 23:26 `Merge branch 'main' into plan3` (-)
-- 43239ea24 11-22 23:26 `Merge branch 'main' into charselectdoc` (-)
-- 712b80886 11-22 23:18 `Merge agent/toolstrade5: Merge branch 'main' into toolstrade5` (toolstrade5)
+- fdbadb174 11-23 01:16 `Merge agent/questdrill: Merge branch 'main' into qdmatrix` (questdrill)
+- 40bbb2d0a 11-23 01:14 `Merge branch 'main' into qdmatrix` (-)
+- 4e7d93f0d 11-23 01:08 `Merge agent/uiframe: Merge branch 'main' into uiframe` (uiframe)
+- 23bc61e75 11-23 01:06 `Merge branch 'main' into uiframe` (-)
+- 852945d18 11-23 00:58 `Merge agent/uialerts: Merge branch 'main' into uialerts` (uialerts)
+- 6b577a712 11-23 00:56 `Merge branch 'main' into uialerts` (-)
+- b00d2bef0 11-23 00:50 `Merge agent/questdrill: Merge branch 'main' into qdmatrix` (questdrill)
+- e31e5954d 11-23 00:48 `Merge branch 'main' into qdmatrix` (-)
+- 79a238cc7 11-23 00:43 `Merge agent/toolstrade7: Merge branch 'main' into toolstrade7` (toolstrade7)
+- 8c5784f1a 11-23 00:41 `Merge branch 'main' into toolstrade7` (-)
 <!-- statusgen:end -->

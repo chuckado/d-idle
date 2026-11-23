@@ -363,6 +363,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `design/fable-review-2026-11-22/`
 
+- [e11-deletion-plan.md](design/fable-review-2026-11-22/e11-deletion-plan.md): E11 deletion plan (PLAN ONLY: nothing is deleted by this document) (status: proposal for the user to approve. Source: ui-unification.md C2, C3, C4, C9, C15, F2; user answers...)
 - [ui-unification-appendix-pages.md](design/fable-review-2026-11-22/ui-unification-appendix-pages.md): UI unification review, appendix: page and panel inventory (status: current (review of 2026-11-22, card fableui). Belongs to ui-unification.md. Docs only.)
 - [ui-unification.md](design/fable-review-2026-11-22/ui-unification.md): UI unification review: navigation, cruft and readable build pages (2026-11-22) (status: DESIGN REVIEW, nothing built (card fableui). Docs only. The user decides the open questions in section F;...)
 
@@ -508,6 +509,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [npc.md](npc.md): NPC interaction (town/npc.go, cmd/d2bot/task.go)
 - [onboarding-slice-a.md](onboarding-slice-a.md): Onboarding slice A: setup stepper, go-ahead and access (status: BUILT offline (task TASK-44, card onboardA, 2026-11-06). Design and mock:...)
 - [onboarding.md](onboarding.md): Onboarding on /watch: welcome card, first 30 minutes, reconnect banners (status: BUILT offline (TASK-247 firstminutes, TASK-249 reconnectux, 2026-11-11). Node DOM goldens and Go tests...)
+- [operator.md](operator.md): Operator quest control (status: current (card opsquest). Code: `internal/ops`, `cmd/d2bot/ops*.go`, `tools/questloop.sh`.)
 - [overlay.md](overlay.md): Table overlay (d.idle mode): file format and rules (status: implemented, 2026-11-06, TASK-59. Fork side `--overlay-dir` on branch `d2d.lab4-overlay` of the private...)
 - [pact-away.md](pact-away.md): Pact away safety (TASK-169) (status: built and tested offline with fakes and httptest; NOT run against a live bot or a browser. Design:...)
 - [pact-botside.md](pact-botside.md): Bot-side Pacts (TASK-167) (status: built and tested offline with fakes; NOT run against a live bot. Design: `docs/research/pact-system.md` (a...)
@@ -1131,6 +1133,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [provingground-pgfix4-2026-11-20.md](probes/provingground-pgfix4-2026-11-20.md): Proving Ground: chicken.recovery, loot ring, cancelled town-portal cast (card pgfix4, 2026-11-20) (status: current. Tags: V verified (job or stamp named), S secondary, U unverified. Host: the builder main lane,...)
 - [provingground-run-2026-11-19.md](probes/provingground-run-2026-11-19.md): Proving Ground: fast tier on the builder, and what the expansion makes runnable (2026-11-19) (status: current (card pgexpand). Tags: V verified (run named), S secondary, U unverified. Builder long lane job...)
 - [ptrclick.md](probes/ptrclick.md): ptrclick: is d2d's click-targeting a deviation from game.exe, or only our harness? (TASK-179) (status: plan, nothing run live. Tags: V verified (how stated), S read in code, U unverified. Card:...)
+- [quest-drill-matrix-2026-11-23.md](probes/quest-drill-matrix-2026-11-23.md): Quest drill matrix, 2026-11-23 (card qdmatrix) (status: current, kept up to date through the night of 2026-11-22. Tags: V verified (named run), S secondary...)
 - [sandbox-fresh-20261115.md](probes/sandbox-fresh-20261115.md): Sandbox reset to a fresh hero, 2026-11-15 (status: record. Task sandboxfresh. Tags: V = verified in this run, U = not verified.)
 - [search-for-cain-2026-11-17.md](probes/search-for-cain-2026-11-17.md): The Search for Cain on the sandbox: diagnosis and fix plan (2026-11-17) (status: diagnosis, read-only and offline. No game was started and nothing was sent to the sandbox; the only live...)
 - [search-for-cain-45-2026-11-18.md](probes/search-for-cain-45-2026-11-18.md): Search for Cain, CAIN-4 and CAIN-5a: cairn stones and the way to Tristram (2026-11-18) (status: current, offline work (agent cain45). Tags: V verified (live lab drill L1 or a test), S source or doc...)

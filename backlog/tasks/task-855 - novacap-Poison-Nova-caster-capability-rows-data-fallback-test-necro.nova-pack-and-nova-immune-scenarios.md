@@ -1,10 +1,13 @@
 ---
 id: TASK-855
-title: 'novacap: Poison Nova caster capability rows (data), fallback test, necro.nova-pack and nova-immune scenarios'
-status: Proposed
+title: >-
+  novacap: Poison Nova caster capability rows (data), fallback test,
+  necro.nova-pack and nova-immune scenarios
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T05:09:00Z'
+updated_date: '2026-11-23T05:29:00Z'
 labels:
   - bot
   - feature
