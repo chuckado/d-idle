@@ -248,6 +248,11 @@ func (s *Server) handle(rq Request) Response {
 	if rq.Verb == "auto" && rq.On == nil {
 		return no("body", "auto needs on or off")
 	}
+	if rq.Verb == "retry" {
+		if r := notParked(d.View(), rq.Quest, rq.Chunk); r != nil {
+			return *r
+		}
+	}
 	if r := s.admit(rq.Verb, rq.Quest); r != nil {
 		return *r
 	}
@@ -296,4 +301,31 @@ func (s *Server) track(b *Board) {
 		}
 		r.Progress = p.n
 	}
+}
+
+// notParked refuses a retry unless a matching chunk of the quest is blocked: retry clears a park, and on a chunk that
+// runs it would disturb the run (it put a running chunk into "trying again" live).
+func notParked(v questboard.View, quest, chunk string) *Response {
+	state := ""
+	for _, q := range v.Quests {
+		if q.ID != quest {
+			continue
+		}
+		for _, c := range q.Chunks {
+			if chunk != "" && c.ID != chunk {
+				continue
+			}
+			if c.State == questboard.Blocked {
+				return nil
+			}
+			if state == "" || c.State == questboard.InProgress || c.State == questboard.Accepted {
+				state = string(c.State)
+			}
+		}
+	}
+	if state == "" {
+		state = "not on the board"
+	}
+	r := no("not_parked", "retry only clears a park; "+quest+" is "+state+", not blocked")
+	return &r
 }
