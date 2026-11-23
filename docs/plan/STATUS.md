@@ -458,7 +458,6 @@
 | toolstrade17 | proposed | - | `internal/bot/loop.go`<br>`internal/bot/beltfill_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade18 | proposed | - | `docs/probes/tools-trade-2026-11-22.md` | - |
 | stage23 | proposed | - | `internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/necro.json`<br>`tools/provingground/scenarios/navexit.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
-| uibudget | proposed | - | `internal/watch/assetbudget_test.go`<br>`docs/ui-design-system.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |

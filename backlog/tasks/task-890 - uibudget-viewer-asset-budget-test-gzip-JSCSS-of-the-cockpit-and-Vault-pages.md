@@ -1,10 +1,13 @@
 ---
 id: TASK-890
-title: 'uibudget: viewer asset budget test (gzip JS+CSS of the cockpit and Vault pages)'
-status: Proposed
+title: >-
+  uibudget: viewer asset budget test (gzip JS+CSS of the cockpit and Vault
+  pages)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T11:11:00Z'
+updated_date: '2026-11-23T11:46:00Z'
 labels:
   - watch
   - chore
