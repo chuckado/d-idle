@@ -104,8 +104,8 @@ func opsMain(args []string, out io.Writer) (int, error) {
 			return r.Board, nil
 		}
 		res := ops.Wait(poll, quest, *chunk, time.Duration(*timeout)*time.Second, 5*time.Second, time.Sleep, time.Now)
-		fmt.Fprintf(out, "RESULT outcome=%s quest=%s chunk=%s state=%s step=%s code=%s text=%q\n",
-			res.Outcome, res.Quest, res.Chunk, res.State, res.Step, res.Code, res.Text)
+		fmt.Fprintf(out, "RESULT outcome=%s quest=%s chunk=%s state=%s step=%s progress=%d code=%s text=%q\n",
+			res.Outcome, res.Quest, res.Chunk, res.State, res.Step, res.Progress, res.Code, res.Text)
 		switch res.Outcome {
 		case ops.OutFinished:
 			return 0, nil
@@ -121,7 +121,7 @@ func printBoard(out io.Writer, b *ops.Board, asJSON bool) {
 	fmt.Fprintf(out, "board enabled=%t difficulty=%s why=%q\n", b.Enabled, b.Difficulty, b.Why)
 	for _, r := range b.Rows {
 		if asJSON {
-			fmt.Fprintf(out, `{"quest":%q,"chunk":%q,"state":%q,"step":%q,"code":%q,"text":%q}`+"\n", r.Quest, r.Chunk, r.State, r.Step, r.Code, r.Text)
+			fmt.Fprintf(out, `{"quest":%q,"chunk":%q,"state":%q,"step":%q,"progress":%d,"code":%q,"text":%q}`+"\n", r.Quest, r.Chunk, r.State, r.Step, r.Progress, r.Code, r.Text)
 			continue
 		}
 		fmt.Fprintf(out, "%s/%s\t%s\tstep=%s\tcode=%s\t%s\n", r.Quest, r.Chunk, r.State, r.Step, r.Code, strings.ReplaceAll(r.Text, "\n", " "))
