@@ -462,6 +462,7 @@
 | toolstrade20 | proposed | - | `internal/combat/fight.go`<br>`internal/combat/sim_test.go`<br>`internal/combat/reach_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade22 | proposed | - | `tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade25 | proposed | - | `internal/task/kind.go`<br>`internal/task/executor.go`<br>`internal/task/executor_unpark_test.go`<br>`internal/bot/task.go`<br>`internal/bot/task_test.go`<br>`internal/bot/zz_cover_task_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| toolstrade26 | proposed | - | `internal/boss/act1.go`<br>`internal/boss/boss_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
@@ -493,6 +494,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b3d332cd2 11-23 08:25 `Merge agent/toolstrade26: Merge branch 'main' into toolstrade26` (toolstrade26)
+- 12b103845 11-23 08:24 `Merge branch 'main' into toolstrade26` (-)
 - fc7fbcef9 11-23 08:17 `Merge agent/questdrill12: Merge branch 'main' into qdmatrix` (questdrill12)
 - 251d7b715 11-23 08:16 `Merge branch 'main' into qdmatrix` (-)
 - d3accbc5f 11-23 08:08 `Merge agent/toolstrade25: Merge branch 'main' into toolstrade25` (toolstrade25)
@@ -501,6 +504,4 @@
 - 7ef47f1a3 11-23 07:48 `Merge agent/toolstrade24: toolstrade24: merge main` (toolstrade24)
 - 7b46eabc1 11-23 07:47 `toolstrade24: merge main` (-)
 - 47fdd2874 11-23 07:40 `Merge agent/toolstrade23: toolstrade23: lab notes round 22` (toolstrade23)
-- d56e55b24 11-23 07:27 `Merge agent/questdrill10: Merge branch 'main' into qdmatrix` (questdrill10)
-- 030e6f747 11-23 07:26 `Merge branch 'main' into qdmatrix` (-)
 <!-- statusgen:end -->

@@ -665,6 +665,7 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade20
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade22
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade25
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade26
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
 docs/probes/town-plan-scenarios.md  credit-runner  town1
@@ -925,8 +926,10 @@ internal/art/skillicons_test.go  credit-runner  skilltrees
 internal/boss  credit-runner  countess3
 internal/boss  credit-runner  wiring2
 internal/boss/act1.go  credit-runner  countess
+internal/boss/act1.go  credit-runner  toolstrade26
 internal/boss/boss_test.go  credit-runner  countess
 internal/boss/boss_test.go  credit-runner  toolstrade13
+internal/boss/boss_test.go  credit-runner  toolstrade26
 internal/boss/boss_test.go  pro-runner  levelplan3
 internal/boss/fake_test.go  credit-runner  toolstrade13
 internal/boss/fake_test.go  pro-runner  levelplan3
