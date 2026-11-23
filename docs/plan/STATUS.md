@@ -432,6 +432,7 @@
 | allochandoff | proposed | - | `internal/points`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`docs/autoalloc.md`<br>`tools/provingground/scenarios/autoalloc.json` | - |
 | opsquest | proposed | - | `cmd/d2bot/ops*.go`<br>`cmd/d2bot/main.go`<br>`cmd/d2bot/questwire.go`<br>`internal/ops/**`<br>`internal/questboard/audit.go`<br>`docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
 | uisettings | proposed | - | `internal/watch/web/settings.js`<br>`internal/watch/web/nav.js`<br>`internal/watch/web/nav.json`<br>`internal/watch/web/nav.css`<br>`internal/watch/web/sheet.js`<br>`internal/watch/settingsjs_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/settings/`<br>`docs/ui-design-system.md` | - |
+| qdmatrix | proposed | - | `docs/probes/quest-drill-matrix-2026-11-23.md`<br>`tools/provingground/scenarios/questdrill.json`<br>`internal/power/archetype.go`<br>`internal/power/skilldamage_test.go`<br>`internal/questboard/state.go`<br>`internal/questboard/state_test.go`<br>`internal/talk/talk.go`<br>`internal/talk/talk_test.go` | - |
 | uisettings2 | proposed | - | `docs/design/fable-review-2026-11-22/e11-deletion-plan.md` | - |
 | toolstrade7 | proposed | - | `internal/boss/run.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -467,6 +468,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b00d2bef0 11-23 00:50 `Merge agent/questdrill: Merge branch 'main' into qdmatrix` (questdrill)
+- e31e5954d 11-23 00:48 `Merge branch 'main' into qdmatrix` (-)
 - 79a238cc7 11-23 00:43 `Merge agent/toolstrade7: Merge branch 'main' into toolstrade7` (toolstrade7)
 - 8c5784f1a 11-23 00:41 `Merge branch 'main' into toolstrade7` (-)
 - 3a985a15d 11-23 00:39 `Merge agent/uisettings2: Merge branch 'main' into uisettings2` (uisettings2)
@@ -475,6 +478,4 @@
 - ab0a6d7e1 11-23 00:29 `Merge branch 'main' into opsquest` (-)
 - ebc42d7d2 11-23 00:22 `Merge agent/uisettings: Merge branch 'main' into uisettings` (uisettings)
 - b27369fe4 11-23 00:21 `Merge branch 'main' into uisettings` (-)
-- 66b1a6d6a 11-23 00:15 `Merge agent/novacap: novacap: task card` (novacap)
-- ae7081d15 11-22 23:41 `Merge agent/toolstrade6: Merge branch 'main' into toolstrade6` (toolstrade6)
 <!-- statusgen:end -->
