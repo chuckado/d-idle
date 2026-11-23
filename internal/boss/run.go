@@ -766,6 +766,12 @@ func (r *runner) kite(ctx context.Context, v View, boss Mon) error {
 	return nil
 }
 
+// questDropTries and questDropWait bound the wait for a quest item that lies on the ground a moment after the boss died.
+const (
+	questDropTries = 3
+	questDropWait  = 3 * time.Second
+)
+
 func (r *runner) finish(ctx context.Context) error {
 	s := r.s
 	r.res.Killed = true
@@ -788,14 +794,15 @@ func (r *runner) finish(ctx context.Context) error {
 		spec.Radius = 25
 	}
 	n, err := r.a.Loot(ctx, spec)
-	if err == nil && n == 0 && len(spec.Quest) > 0 {
-		// Quest drops can land a moment after the death animation: look once more before giving up.
-		r.note("quest item %v not picked up; retrying once", spec.Quest)
-		if err := r.w.Sleep(ctx, 2*time.Second); err != nil {
+	for try := 1; err == nil && n == 0 && len(spec.Quest) > 0 && try <= questDropTries; try++ {
+		// Quest drops can land a moment after the death animation (and a kill by the army, with no cast of the hero's own,
+		// ends the fight earlier than one by the hero): look again a few times before giving up.
+		r.note("quest item %v not picked up; retry %d of %d", spec.Quest, try, questDropTries)
+		if err := r.w.Sleep(ctx, questDropWait); err != nil {
 			return err
 		}
 		n, err = r.a.Loot(ctx, spec)
-		if err == nil && n == 0 {
+		if err == nil && n == 0 && try == questDropTries {
 			r.note("quest item %v still missing", spec.Quest)
 		}
 	}

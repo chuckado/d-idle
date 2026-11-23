@@ -152,6 +152,7 @@ cmd/d2bot/behaviors.go  credit-runner  vaultwire
 cmd/d2bot/beltfill_adapter.go  credit-runner  beltfix
 cmd/d2bot/boss.go  credit-runner  countess3
 cmd/d2bot/boss.go  credit-runner  countess3b
+cmd/d2bot/boss.go  credit-runner  malus
 cmd/d2bot/boss.go  pro-runner  levelplan3
 cmd/d2bot/boss_levelmonsters_test.go  credit-runner  countess3b
 cmd/d2bot/cain.go  credit-runner  cain45
@@ -617,6 +618,7 @@ docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  bankdoc
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  handin
+docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  malus
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  navexit2
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  necrodrill
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1doc
@@ -934,10 +936,12 @@ internal/boss/boss_test.go  pro-runner  levelplan3
 internal/boss/fake_test.go  credit-runner  toolstrade13
 internal/boss/fake_test.go  pro-runner  levelplan3
 internal/boss/run.go  credit-runner  countess
+internal/boss/run.go  credit-runner  malus
 internal/boss/run.go  credit-runner  toolstrade13
 internal/boss/run.go  pro-runner  levelplan3
 internal/boss/script.go  credit-runner  countess
 internal/boss/types.go  pro-runner  levelplan3
+internal/boss/wire_test.go  credit-runner  malus
 internal/bot  credit-runner  cainfix
 internal/bot  credit-runner  survsd
 internal/bot  credit-runner  town4
@@ -2449,8 +2453,10 @@ tools/dev-update-host.sh  credit-runner  buildhosts3
 tools/dev-update.sh  credit-runner  buildhosts3
 tools/emu  credit-runner  emurebuild
 tools/emu/am_batch.sh  credit-runner  areamon
+tools/emu/am_batch.sh  credit-runner  qdmatrix
 tools/emu/am_env.sh  credit-runner  areamon
 tools/emu/am_model.py  credit-runner  areamon
+tools/emu/am_model.py  credit-runner  qdmatrix
 tools/emu/bs_model.py  credit-runner  boss1
 tools/emu/bs_spawn.sh  credit-runner  boss1
 tools/emu/d35_  credit-runner  decomp35
@@ -2555,6 +2561,7 @@ tools/provingground/scenarios/navexit.json  credit-runner  navexit2
 tools/provingground/scenarios/navexit.json  credit-runner  stage1fix
 tools/provingground/scenarios/navexit.json  credit-runner  stage23
 tools/provingground/scenarios/necro.json  credit-runner  handin
+tools/provingground/scenarios/necro.json  credit-runner  malus
 tools/provingground/scenarios/necro.json  credit-runner  stage1fix
 tools/provingground/scenarios/necro.json  credit-runner  stage23
 tools/provingground/scenarios/points.json  credit-runner  agencyp0

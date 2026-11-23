@@ -140,7 +140,7 @@ func TestDrinkFailureAboveEscapeKeepsFighting(t *testing.T) {
 	}
 }
 
-func TestSmithQuestLootRetriedOnce(t *testing.T) {
+func TestSmithQuestLootRetried(t *testing.T) {
 	f := newFake()
 	f.level, f.area = 30, AreaBarracks
 	f.addBoss(Mon{Class: ClassSmith, Name: "The Smith", Pos: Pt{110, 100}, UniqueNo: -1}, AreaBarracks, 20).dmg = 0
@@ -151,12 +151,25 @@ func TestSmithQuestLootRetriedOnce(t *testing.T) {
 	}
 }
 
+// A kill by the army ends the fight early and the drop lands later than the first look and the first retry: the third retry
+// finds it (Proving Ground necro.act1-tools 2026-11-23: nothing on the ground 0.3 s after the Smith died). Fails with one retry.
+func TestSmithQuestLootLateDrop(t *testing.T) {
+	f := newFake()
+	f.level, f.area = 30, AreaBarracks
+	f.addBoss(Mon{Class: ClassSmith, Name: "The Smith", Pos: Pt{110, 100}, UniqueNo: -1}, AreaBarracks, 20).dmg = 0
+	f.lootSeq = []int{0, 0, 0, 1}
+	res, err := run(t, NameSmith, f, Opts{})
+	if err != nil || res.Loot != 1 || f.did("loot") != 4 {
+		t.Fatalf("%v loot %d %v", err, res.Loot, f.log)
+	}
+}
+
 func TestSmithQuestItemMissingIsNoted(t *testing.T) {
 	f := newFake()
 	f.level, f.area = 30, AreaBarracks
 	f.addBoss(Mon{Class: ClassSmith, Name: "The Smith", Pos: Pt{110, 100}, UniqueNo: -1}, AreaBarracks, 20).dmg = 0
 	res, err := run(t, NameSmith, f, Opts{})
-	if err != nil || !res.Killed || f.did("loot") != 2 || !strings.Contains(strings.Join(res.Notes, "|"), "still missing") {
+	if err != nil || !res.Killed || f.did("loot") != 1+questDropTries || !strings.Contains(strings.Join(res.Notes, "|"), "still missing") {
 		t.Fatalf("%v %v %v", err, f.log, res.Notes)
 	}
 }
