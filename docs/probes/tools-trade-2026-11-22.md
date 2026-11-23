@@ -26,3 +26,9 @@ First attempt now opens the door (141,2) from (142,4) and `Entered Outer Cloiste
 - Full chunk GREEN, Sorceress 3, and the both-knobs-off run after the fix.
 - A check of every Act 1 border exit for a reachable approach cell (needs the lab map reads per level; the existing `exitsread` probe reads the link table only). Proposed: extend `tools/probes/exitsread.py` with a `debug blocked` strip scan per border link and assert a cell connected to the interior.
 - parkrelease (#1090): the park stores release `a756ec2-dirty`; `smReleaseRetry` (internal/questboard/exec_sm.go) clears a `gave_up` park whose stored release differs from the running one, once (S, by reading; the next bot release differs, so the step retries once).
+
+## Round 2 (card toolstrade2)
+
+- V (run k3-202347 fixgw, bot log): after a town trip the hero arrives at the Monastery Gate at (162,86), 4 subtiles from the south border; the walk to the door at (140,78) was planned via (162,89) and (147,89), onto the strip toward level 7, and the level changed ("left level 26 for 27 but ended in 7"). Level ids are right (27 is the Outer Cloister); not an off-by-one: the planner only penalised tile exits, never border strips.
+- Fix: `penalizeBorders` (internal/nav/nav.go) puts a soft cost on the strip cells toward every neighbour other than `wantExit`, except near the goal. Must-fail test `TestWalkKeepsOffTheBorderStripOfAnotherLevel`.
+- Scenario hero: `act1.tools.malus` now clvl 19 with a Rogue merc and cap, quilted armor, short sword and buckler (CHEATED, mechanics only).

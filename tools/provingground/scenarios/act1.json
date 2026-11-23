@@ -57,7 +57,8 @@
     "goals": "reach:30",
     "knobs": {
      "quests.board": 1,
-     "resource.pointsDecisions": 1
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0
     },
     "driver": "board-taps",
     "tap_chunks": [
@@ -78,7 +79,7 @@
     ]
    },
    "provenance": "CHEATED: level 10, 8000 gold (2000 left the purse empty after the bank chore: the purse recovery then held the chunk, run 20261120-133340-b8dd) and potions by SETUP verbs (a played hero reaches the Den at about level 3 to 8). Town start, nothing written after the start. Mechanics only.",
-   "notes": "The tapper taps Start on the offered clear_den chunk and Hand in when the board waits. Done is record 1 bit 0 (V docs/cheats.md step 3: 0x0001 reads as completed).",
+   "notes": "The tapper taps Start on the offered clear_den chunk and Hand in when the board waits. Done is record 1 bit 0 (V docs/cheats.md step 3: 0x0001 reads as completed). town.bankFirst 0 (as the act1more scenarios): with the default the bank chore deposits 6000 of the 8000 gold in the first minute, the hero is then 'short' in purse and kit and leaves the Den to farm gold in Stony Field for the whole budget (Necromancer 11, run 20261122-205700: 409 kills, record 1 read 0x0014, Den entered at 20:57:33 and abandoned at 20:58:09). Bits of record 1: 0x0001 completed (V docs/cheats.md), 0x0004 talked to Akara, 0x0010 U (seen with the Den entered).",
    "assert": [
     {
      "kind": "quest_bits",
