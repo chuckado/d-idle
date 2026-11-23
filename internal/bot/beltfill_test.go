@@ -93,3 +93,25 @@ func TestFullChoresBuyUpToTheRouteKit(t *testing.T) {
 		}
 	}
 }
+
+// A potion trip built by the resource policy (a plan that buys potions and names no kit) gets the route guard kit before
+// it reaches the shop; a plan that names its own kit, or buys no potions, is left alone. Must fail without withRouteKit.
+func TestWithRouteKit(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		rg := newRig(t)
+		rg.r.e.Tune.Route.MonasteryMinLevel = 20
+		rg.r.obMu.Lock()
+		rg.r.ob.lastSnap = &d2.Snapshot{State: d2.StateInGame, Player: &d2.Player{Area: 1, Level: 19, Class: class, Difficulty: d2.Normal, Life: 100, MaxLife: 100}}
+		rg.r.obMu.Unlock()
+		want := rg.r.e.Tune.Resource.KitMinHP + kitHealingBuffer
+		if got := rg.r.withRouteKit(ChorePlan{Potions: true}); got.KitHealing != want {
+			t.Errorf("%v: potion trip KitHealing %d, want %d", class, got.KitHealing, want)
+		}
+		if got := rg.r.withRouteKit(ChorePlan{Potions: true, KitHealing: 9}); got.KitHealing != 9 {
+			t.Errorf("%v: own kit overwritten: %d", class, got.KitHealing)
+		}
+		if got := rg.r.withRouteKit(ChorePlan{Heal: true}); got.KitHealing != 0 {
+			t.Errorf("%v: a heal trip got a kit: %d", class, got.KitHealing)
+		}
+	}
+}
