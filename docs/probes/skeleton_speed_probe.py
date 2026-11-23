@@ -84,7 +84,7 @@ def scene(area, tag, goto_wait=100):
     log(tag, s.cmd(f"debug goto {area}").strip()); step(goto_wait)
     s.cmd("debug kill"); step(20)
     s.cmd("debug spawn fallen 3"); step(25); s.cmd("debug kill"); step(40)
-    for row in [l.split("\t") for l in s.cmd("monsters").splitlines() if l.count("\t") > 10 and "Fallen" in l]:
+    for row in [l.split("\t") for l in s.cmd("monsters").splitlines() if l.count("\t") > 10 and "Fallen" in l and not os.environ.get("NOPETS")]:
         s.cmd("debug mana full")
         s.cmd(f"debug cast 70 {row[1]} {row[2]}"); step(40)
     log(tag, "minions", len(mins()["minions"]), "foes", foes(0))
@@ -107,7 +107,7 @@ try:
         s.cmd("key r"); hop(path[::-1], "E_run_back"); s.cmd("key r"); rec("E_run_back_stop", 100)
         open(os.path.join(out, f"grid_area{area}.txt"), "w").write("\n".join(g))
         open(os.path.join(out, f"path_area{area}.txt"), "w").write(" ".join(f"{x:.1f},{y:.1f}" for x, y in path[::5]))
-    dump(f"trace_area{area}.csv")
+    dump(f"trace_area{area}{os.environ.get('TAG', '')}.csv")
     log("final", json.dumps(mins()))
 finally:
     s.close()
