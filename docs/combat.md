@@ -199,6 +199,7 @@ Trigger: Soaky died at one spot three times (G1 attempts 11, 12, 15; 22 hostiles
 - crowd >= `crowdN`, life <= `crowdPortalPct` (70), a portal scroll or tome exists and fewer than 3 hostiles are within 3 subtiles: `TownPortal`.
 - 3 or more adjacent (a portal cast takes about 2 s and fails when surrounded, U): drink at `crowdDrinkPct` (65); between 65 and 70 the new action `CrowdRetreat` steps away from the crowd (only offered when `awayPoint` finds a step, so the fight loop cannot spin).
 - crowd >= `crowdAbandonN` (15) on a travel or quest walk (`Fighter.SetWalking`, set by the bot around StateTraveling), or at life <= 70 anywhere: `CrowdAbandon` = retreat up to 8 steps until 20+ subtiles from the start, then open the portal; no scroll degrades to `CrowdRetreat`. The bot then plans no walk back into that area for 4 x `bot.navSkipSec` and runs a chores trip.
+- While a quest chunk the player started runs (readiness not too hard), `crowdAbandonQuestN` (40) replaces `crowdAbandonN` when larger (cainfix3: 21 to 30 hostiles stand at the arrival of Underground Passage and the Dark Wood, V Proving Ground L3). Only the abandon size changes.
 - Chicken (25) still wins; at <= 25 with a rejuvenation potion it drinks first. Tests: `crowd_test.go` (pure table, snapshot, abandon walk). The retreat goes straight away from the crowd (U: no bias toward the entry yet, the Fighter does not know it).
 - Autopsy facts and the potion counter fix: docs/deathautopsy.md "Route guard fields".
 
@@ -208,3 +209,4 @@ Under a lockstep d2d the clock (`d2dinput.Pacer`) only moves on sleeps and steps
 - `canRetreat` is false while pinned: no step-away is offered when it cannot work; the crowd is fought or the abort rules decide.
 - Fight-loop watchdog: `noProgressMax` (40) iterations without the clock moving force one poll sleep and log `combat no progress, holding` once per fight.
 - Audit: the other `for {` loops in nav, town, loot and bot sleep, are bounded by tries/hops, or end on a deadline; only the combat loop could iterate without sleeping. Shared combat code: needs a G1/G2 (Game.exe) check before it counts as verified there.
+- Resist (decomp37 B1): the bot's resist model follows `d2.ResistTable` (penalty, cap 75 + max bonus, floor, percent absorb); see docs/research/resistorder.md.

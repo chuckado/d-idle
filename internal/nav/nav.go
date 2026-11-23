@@ -65,6 +65,7 @@ type Navigator struct {
 	peakRung            atomic.Int32 // highest stuck-ladder rung since the last TakePeakRung (observability only)
 	cov                 *coverage    // roam state (roam.go); nil on backends that reveal unknown cells. covMu guards cov and its seen/failed/legs/held: NotePosition runs on the bot observer goroutine
 	covMu               sync.Mutex
+	onNewGame           func()            // runs after ForgetCoverage (roam.go); guarded by covMu
 	covs                map[int]*coverage // roam memory of this game by level number; n.cov is the current level's entry (selectCov)
 	onCover             func()            // called (no lock held) when NotePosition marked a point; set by SetOnCoverChange
 	// Guard, if set, runs on every observation while walking. A non-nil error stops the walk and is returned
@@ -97,17 +98,23 @@ type Navigator struct {
 	Escape func(ctx context.Context) error
 
 	// Hint biases informed exploration toward a point (zero value: none). Set with ExploreToward.
-	hint        *input.Point
-	caution     float64 // multiplier on monster avoidance (1, or 2 during CorpseApproach)
-	wpMu        sync.Mutex
-	wpNew       []int
-	mouthFails  map[mouthKey]mouthFail
-	mouthLast   mouthKey
-	mouthLastOK bool
-	wantExit    int // level whose exit tiles ExitTo is deliberately walking onto (0: none)
-	wpLevel     int // level of the last observation and when it was first seen: the waypoint cooldown (waypoint.go)
-	wpSince     time.Time
-	wpClicks    int // interactions and row clicks of the current TakeWaypoint
+	hint         *input.Point
+	caution      float64 // multiplier on monster avoidance (1, or 2 during CorpseApproach)
+	wpMu         sync.Mutex
+	wpNew        []int
+	mouthFails   map[mouthKey]mouthFail
+	doorFn       func(class int) bool // test hook: is this object class a door (default: objects.txt IsDoor)
+	doorLogged   map[[2]int]bool
+	doorApproach map[[2]int]int
+	doorTried    map[d2map.Point]int // gate doors ExitTo already opened this game, by map position (gatedoor.go)
+	mouthLast    mouthKey
+	mouthLastOK  bool
+	goal         input.Point // fixed goal of the GoTo in progress (goalSet): the mouth gate treats exits around it as pockets
+	goalSet      bool
+	wantExit     int // level whose exit tiles ExitTo is deliberately walking onto (0: none)
+	wpLevel      int // level of the last observation and when it was first seen: the waypoint cooldown (waypoint.go)
+	wpSince      time.Time
+	wpClicks     int // interactions and row clicks of the current TakeWaypoint
 
 	e          *env.Env
 	w          worldSource
@@ -198,6 +205,25 @@ func (n *Navigator) UseWorld(w interface {
 	Level(no int) *d2map.LevelMap
 }) {
 	n.w = w
+}
+
+// CurrentMap is the level map the navigator walks on (nil before the first observation). On the d2d backend this is
+// the only map: Env.World is nil there.
+func (n *Navigator) CurrentMap() *d2map.LevelMap {
+	if n.w == nil {
+		return nil
+	}
+	return n.w.Current()
+}
+
+// RefreshMap observes the level once more (on the d2d backend this is the fetch that lists presets and, with the layout
+// read, the monster presets) and returns the map. Nil before the first observation or without a world.
+func (n *Navigator) RefreshMap() *d2map.LevelMap {
+	if n.w == nil {
+		return nil
+	}
+	_, _ = n.w.Update()
+	return n.w.Current()
 }
 
 func (n *Navigator) defaults() {
@@ -315,8 +341,14 @@ func (n *Navigator) fieldFor(lm *d2map.LevelMap) *Field {
 	return n.field
 }
 
-// invalidate forces the next plan to re-read the grid (a door opened, for example).
-func (n *Navigator) invalidate() { n.fieldKey.nonce++ }
+// invalidate forces the next plan to re-read the grid (a door opened, for example). The key's nonce alone did not do
+// it: fieldFor reads the nonce from the stored key, so the two always matched (V: TestExitToOpensTheDoorBesideACutOffGate
+// kept planning on the closed door); the cached field is dropped instead.
+func (n *Navigator) invalidate() {
+	n.planMu.Lock()
+	n.field = nil
+	n.planMu.Unlock()
+}
 
 type planResult struct {
 	wps        []input.Point // waypoints from the first step to the goal
@@ -396,10 +428,15 @@ func (n *Navigator) planHard(lm *d2map.LevelMap, start, goal input.Point, tol fl
 	goalUnknown := f.idx(gx, gy) >= 0 && f.flags[f.idx(gx, gy)]&fKnown == 0
 	f.passMask = fWalk
 	defer func() { f.passMask = fWalk }()
+	whole := t.FullGrid && gridWhole(lm)
+	if whole && f.idx(gx, gy) < 0 {
+		// a whole grid knows the level: a goal beyond it is not there, so no walk toward a "known edge"
+		return res, fmt.Errorf("%w: goal %v is outside the whole level grid", ErrNoPath, goal)
+	}
 	if !goalUnknown {
 		cells, partial = n.pl.Plan(f, sx, sy, gx, gy, reach, hw)
 	}
-	if goalUnknown || partial {
+	if !whole && (goalUnknown || partial) {
 		// Nothing known leads to the goal: assume the unknown part of the level is open (extra cost) and walk
 		// toward it; the executor replans as rooms load.
 		f.passMask = fWalk | fOpt
@@ -475,7 +512,7 @@ func emptyPathErr() error {
 // GoTo walks to p on the current level.
 func (n *Navigator) GoTo(ctx context.Context, p input.Point) error {
 	t := n.tune()
-	return n.walk(ctx, func(*obs) (input.Point, float64, error) { return p, t.ArriveTolerance, nil }, walkOpts{escape: true, fastPoll: true})
+	return n.walk(ctx, func(*obs) (input.Point, float64, error) { return p, t.ArriveTolerance, nil }, walkOpts{escape: true, fastPoll: true, goal: &p})
 }
 
 // unitTolerance is how close GoToUnit gets: inside interact range of NPCs and objects.

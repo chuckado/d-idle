@@ -222,3 +222,20 @@ func TestD2DTownChainIsTPDiag(t *testing.T) {
 		}
 	}
 }
+
+// The cancelled-cast flag must reach the runner through the merc wrapper and the d2d wrapper (bot/portalretry.go reads it
+// through an optional interface; a wrapper that hides it turns the retry off silently).
+func TestPortalCancelledFlagForwards(t *testing.T) {
+	ta := townAdapter{t: &town.Town{}}
+	for name, tw := range map[string]interface{ TakePortalCancelled() bool }{
+		"townAdapter": ta, "d2dTown": d2dTown{townAdapter: ta}, "mercOverD2D": &mercTown{Townsman: d2dTown{townAdapter: ta}},
+	} {
+		if tw.TakePortalCancelled() {
+			t.Errorf("%s: flag set before any cancel", name)
+		}
+		ta.t.NoteCastCancelled()
+		if !tw.TakePortalCancelled() || tw.TakePortalCancelled() {
+			t.Errorf("%s: want the flag once, then cleared", name)
+		}
+	}
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
+<iframe id="f" src="/watch?first=0&amp;theme=dark&amp;needs=0&amp;quests=off&amp;tab=Quests&amp;fitframe=1" width="390" height="844" style="border:0;display:block"></iframe><pre id="fit-result">{"nav":{"missing":false,"bar":true,"labels":["Live","Gear","Skills","Vault","More"],"current":1,"tiny":[],"covers":[],"sheet":null,"inside":true,"host":"","rect":[0,788,390,844]},"video":{"controls":4,"overlap":[]},"orderCut":0,"zones":{"n":0,"rows":0,"minH":0,"cut":0,"menu":false,"host":"","overlap":0,"switchOverlap":0},"vw":390,"vh":844,"scrollH":844,"scrollW":390,"overflow":[],"outside":[],"cv":null,"chars":null,"vault":null,"empty":[],"unready":[],"slots":[{"slot":"band","x":0,"y":0,"w":390,"h":104},{"slot":"stage","x":8,"y":112,"w":374,"h":281},{"slot":"phoneTabs","x":8,"y":401,"w":374,"h":182}],"covered":65,"hole":260,"holeAt":[0,584],"page":"/watch?first=0&amp;theme=dark&amp;needs=0&amp;quests=off&amp;tab=Quests","ov":{"open":[],"menu":[],"menuScroll":[],"cut":[],"under":[],"charter":[],"small":[],"words":[]},"flow":false}</pre>
+<script type="module">
+import { measure, hits, expects, overlayState, charsNow, vaultNow, navNow } from '/__fit/fit.js';
+const pop = (d, sel, c) => {
+  const n = d.querySelector(sel), r = n && !n.hidden ? n.getBoundingClientRect() : null;
+  if (!r || !r.width) return { open: false, sel };
+  const vw = d.defaultView.innerWidth, vh = d.defaultView.innerHeight, ov = !(r.right <= c.left || r.left >= c.right || r.bottom <= c.top || r.top >= c.bottom);
+  return { open: true, sel, left: Math.round(r.left), top: Math.round(r.top), right: Math.round(r.right), bottom: Math.round(r.bottom), vw, vh, inside: r.left >= 0 && r.top >= 0 && r.right <= vw && r.bottom <= vh, covers: ov, sheet: n.dataset.sheet || n.dataset.mode === 'sheet' || '' };
+};
+const o = {"click":[""],"ctx":"","expect":[""],"flow":false,"hit":["#menu-more","#btn-layout"],"hover":"","page":"/watch?first=0\u0026theme=dark\u0026needs=0\u0026quests=off\u0026tab=Quests","scroll":""}, f = document.getElementById('f'), out = document.getElementById('fit-result');
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+let stage = 'before load';
+// a measurement that never finishes says where it stopped (a thrown error in the page or the harness is a verdict, not a silence)
+setTimeout(() => { if (!out.textContent) out.textContent = JSON.stringify({ error: 'stalled after: ' + stage }); }, 21000);
+window.addEventListener('error', (e) => { if (!out.textContent) out.textContent = JSON.stringify({ error: 'script error: ' + e.message }); });
+f.addEventListener('load', async () => {
+  stage = 'loaded'; await wait(5000); stage = 'waited';
+  // the character screen draws from its first view: measure only once its grids hold cells (a slow first answer is a late page, not a fit result)
+  for (let i = 0; i < 30 && f.contentDocument.body.hasAttribute('data-canvas') && !(f.contentDocument.querySelector('#equip .d-slot2') && f.contentDocument.querySelector('#pack [data-key]') && f.contentDocument.getElementById('merc-sub').textContent && f.contentDocument.getElementById('cv-sel').firstChild && f.contentDocument.getElementById('hsheet').children.length > 4); i++) await wait(500);
+  if (f.contentDocument.body.hasAttribute('data-canvas')) await wait(1500);
+  // scroll: how far down (0 to 1) the Vault list is scrolled before the measurement: the rows far from the top must fit like the first ones
+  if (o.scroll) { const sc = f.contentDocument.querySelector('[data-vscroll]'); if (sc) { sc.scrollTop = Number(o.scroll) * (sc.scrollHeight - sc.clientHeight); await wait(1500); } }
+  try {
+    stage = 'panels.json';
+    const pv = await (await fetch('/watch/panels.json')).json();
+    stage = 'measure';
+    const m = measure(f.contentWindow, { scroll: (pv.panels || []).filter((p) => p.scroll).map((p) => p.id) });
+    m.page = o.page;
+    if (o.hover || o.ctx) {
+      const t = f.contentDocument.querySelector(o.hover || o.ctx), r = t.getBoundingClientRect(), w = f.contentWindow;
+      const ev = (type, init) => new w.MouseEvent(type, Object.assign({ bubbles: true, cancelable: true, clientX: r.left + r.width / 2, clientY: r.top + r.height / 2 }, init));
+      if (o.hover) t.dispatchEvent(new w.PointerEvent('pointerover', { bubbles: true, pointerType: 'mouse', clientX: r.left + 4, clientY: r.top + 4 }));
+      else t.dispatchEvent(ev('contextmenu', {}));
+      await wait(600);
+      m.pop = pop(f.contentDocument, o.hover ? '#inv-tip' : '#inv-act', r);
+    }
+    const steps = (o.click || []).filter(Boolean);
+    if (steps.length) {
+      m.clicked = steps.join(' then ');
+      for (const raw of steps) {
+        const opt = raw[0] === '?', sel = opt ? raw.slice(1) : raw, b = f.contentDocument.querySelector(sel);
+        if (b) { b.click(); await wait(500); } else if (!opt) { m.missing = sel; break; }
+      }
+    }
+    m.ov = overlayState(f.contentWindow);
+    if (steps.length) m.nav = navNow(f.contentWindow); // the page after its pressing: the More sheet is open now
+    m.flow = !!o.flow; // a page that is a document (Skills, Points, Return ...): it scrolls on purpose
+    if (steps.length) m.hits = hits(f.contentWindow, o.hit);
+    if (steps.length && f.contentDocument.body.hasAttribute('data-chars')) m.chars = charsNow(f.contentWindow); // the page with its sheet open
+    if (steps.length && f.contentDocument.body.hasAttribute('data-vault')) m.vault = vaultNow(f.contentWindow);
+    const ex = (o.expect || []).filter(Boolean);
+    if (ex.length) m.expect = expects(f.contentWindow, ex);
+    out.textContent = JSON.stringify(m);
+  } catch (e) { out.textContent = JSON.stringify({ error: String(e) }); }
+});
+</script></body></html>

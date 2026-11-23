@@ -25,26 +25,19 @@ const (
 	curseCover   = 5  // a unit this close to a recent cast of the same curse counts as cursed (U radius; V live 2026-10-29: one cast per unit burned a cast every 1.2 s on a pack)
 )
 
-// States by name. stateBoneArmor and stateAmplify are V (docs/classes/smoke-necromancer.md findings 4-5); Weaken 19 is S
-// (states.txt row order from memory), Lower Resist and the rest are not listed (cast memory is used for them).
+// Buff states by name. stateBoneArmor is V (docs/classes/smoke-necromancer.md findings 4-5). The curse state numbers
+// (Amplify 9 V, Weaken 19 S) are data now: the necro block of classdata/profiles.json.
 const (
-	stateAmplify   = 9
 	stateBoneArmor = 14
 	// stateFrozenArmor is states.txt "frozenarmor" (S, stock row order; d2.StateFrozenArmor).
 	stateFrozenArmor = d2.StateFrozenArmor
-	stateWeaken      = 19
 )
 
 var (
-	curseStates = map[string]int{"Amplify Damage": stateAmplify, "Weaken": stateWeaken}
 	// Chilling 20, Energy Shield 30, Shiver 88: States.txt rows (V read, sk-armor-trace Q1); not seen live (U). Energy
 	// Shield ends at 0 mana in game.exe, so its state reads as gone when the clock would still say up.
 	buffStates = map[string]int{"Bone Armor": stateBoneArmor, "Frozen Armor": stateFrozenArmor, "Chilling Armor": d2.StateChillingArmor,
 		"Shiver Armor": d2.StateShiverArmor, "Energy Shield": d2.StateEnergyShield}
-	curseNames = map[string]bool{"Amplify Damage": true, "Weaken": true, "Lower Resist": true, "Dim Vision": true,
-		"Terror": true, "Confuse": true, "Life Tap": true, "Attract": true, "Decrepify": true}
-	// golems in preference order. Iron Golem needs an item in the world and Blood Golem costs life: not used (U).
-	golemLadder = []string{"Fire Golem", "Clay Golem"}
 )
 
 // Minions is the census of the player's own minions by kind.
@@ -162,24 +155,27 @@ func isNecro(p *d2.Player) bool { return p != nil && p.Class == d2.Necromancer }
 const armyMin = 3
 
 func (f *Fighter) armyStands(snap *d2.Snapshot) bool {
-	return isNecro(snap.Player) && CountMinions(snap, f.cat).Total() >= armyMin
+	return isNecro(snap.Player) && f.census(snap).Total() >= armyMin
 }
 
-// wantMinions is how many of a kind we try to hold. Raise Skeleton gives about one skeleton per skill level (U:
-// skills.txt param not read); the real cap is found by evidence (capSeen), so a high wish only costs one probe cast.
-func wantMinions(kind string, level int) int {
+// wantMinions is how many of a kind we try to hold: the skill level up to the rule's Max (U: skills.txt params were
+// not read); the real cap is found by evidence (capSeen), so a high wish only costs one probe cast.
+func wantMinions(r SummonRule, level int) int { return min(level, r.Max) }
+
+// Of is the census count of a summon rule kind.
+func (m Minions) Of(kind string) int {
 	switch kind {
+	case "skeleton":
+		return m.Skeletons
 	case "mage":
-		return min(level, 4)
-	case "revive":
-		return min(level, 8) // U: Revive count per level was not read from skills.txt; capSeen finds the real cap
+		return m.Mages
 	}
-	return min(level, 12)
+	return m.Other
 }
 
 // planSummon picks the next summon: a golem when none stands, then skeletons, then mages. corpse is nil for a golem.
 // Walk reports whether the corpse is farther than summonReach. Pure given the Fighter's memory.
-func (f *Fighter) planSummon(snap *d2.Snapshot, allowWalk bool) (sp SkillSpec, corpse *d2.Unit, walk bool, ok bool) {
+func (f *Fighter) planSummon(snap *d2.Snapshot, nd *NecroParams, allowWalk bool) (sp SkillSpec, corpse *d2.Unit, walk bool, ok bool) {
 	p := snap.Player
 	if !isNecro(p) || p.InTown() {
 		return
@@ -193,9 +189,9 @@ func (f *Fighter) planSummon(snap *d2.Snapshot, allowWalk bool) (sp SkillSpec, c
 		}
 		return s, true
 	}
-	have := CountMinions(snap, f.cat)
+	have := f.census(snap)
 	if have.Golems == 0 {
-		for _, g := range golemLadder {
+		for _, g := range nd.Golems {
 			if s, ok := usable(g); ok {
 				return s, nil, false, true
 			}
@@ -210,31 +206,25 @@ func (f *Fighter) planSummon(snap *d2.Snapshot, allowWalk bool) (sp SkillSpec, c
 	if len(cs) == 0 {
 		return
 	}
-	for _, c := range []struct {
-		name, kind string
-		n          int
-	}{{"Raise Skeleton", "skeleton", have.Skeletons}, {"Raise Skeletal Mage", "mage", have.Mages}} {
-		s, ok := usable(c.name)
-		if !ok || c.n >= wantMinions(c.kind, s.Level) {
+	for _, r := range nd.Summons {
+		s, ok := usable(r.Name)
+		n := have.Of(r.Kind)
+		if !ok || n >= wantMinions(r, s.Level) {
 			continue
 		}
-		if cap, capped := f.necro.capSeen[c.kind]; capped {
-			if c.n < cap {
-				delete(f.necro.capSeen, c.kind)
+		if cap, capped := f.necro.capSeen[r.Kind]; capped {
+			if n < cap {
+				delete(f.necro.capSeen, r.Kind)
 			} else {
 				continue
 			}
 		}
+		// Revive takes the strongest corpse in reach, the others the nearest.
 		u := cs[0]
-		return s, &u, dist(me.X, me.Y, u.X, u.Y) > summonReach, true
-	}
-	// Revive last: the skeletons are cheap and plentiful, the revive takes the strongest corpse in reach.
-	if s, ok := usable("Revive"); ok && have.Other < wantMinions("revive", s.Level) {
-		if cap, capped := f.necro.capSeen["revive"]; !capped || have.Other < cap {
-			delete(f.necro.capSeen, "revive")
-			u := bestRevivable(cs, f.cat)
-			return s, &u, dist(me.X, me.Y, u.X, u.Y) > summonReach, true
+		if r.Kind == "revive" {
+			u = bestRevivable(cs, f.cat)
 		}
+		return s, &u, dist(me.X, me.Y, u.X, u.Y) > summonReach, true
 	}
 	return
 }
@@ -259,7 +249,11 @@ func (f *Fighter) KeepSummons(ctx context.Context) (int, error) {
 				calm = false
 			}
 		}
-		sp, corpse, walk, ok := f.planSummon(snap, calm && f.mv != nil)
+		nd, err := f.necroParams(p)
+		if err != nil {
+			return casts, err
+		}
+		sp, corpse, walk, ok := f.planSummon(snap, nd, calm && f.mv != nil)
 		if !ok {
 			return casts, nil
 		}
@@ -273,7 +267,7 @@ func (f *Fighter) KeepSummons(ctx context.Context) (int, error) {
 			}
 			p = snap.Player
 		}
-		if done, err := f.castSummon(ctx, snap, sp, corpse); err != nil {
+		if done, err := f.castSummon(ctx, snap, nd, sp, corpse); err != nil {
 			return casts, err
 		} else if done {
 			casts++
@@ -285,13 +279,13 @@ func (f *Fighter) KeepSummons(ctx context.Context) (int, error) {
 }
 
 // castSummon casts one summon and records the result: corpse used (blacklist), cap reached (paid, nothing raised).
-func (f *Fighter) castSummon(ctx context.Context, snap *d2.Snapshot, sp SkillSpec, corpse *d2.Unit) (bool, error) {
+func (f *Fighter) castSummon(ctx context.Context, snap *d2.Snapshot, nd *NecroParams, sp SkillSpec, corpse *d2.Unit) (bool, error) {
 	p := snap.Player
 	at := input.Point{X: p.X, Y: p.Y}
 	if corpse != nil {
 		at = input.Point{X: corpse.X, Y: corpse.Y}
 	}
-	before := CountMinions(snap, f.cat)
+	before := f.census(snap)
 	if err := f.cast(snap, sp, at); err != nil {
 		return false, err
 	}
@@ -305,9 +299,14 @@ func (f *Fighter) castSummon(ctx context.Context, snap *d2.Snapshot, sp SkillSpe
 	if err != nil {
 		return true, err
 	}
-	now := CountMinions(after, f.cat)
+	now := f.census(after)
 	paid := after.Player.Mana < p.Mana-sp.Cost/2
-	kind := map[string]string{"Raise Skeleton": "skeleton", "Raise Skeletal Mage": "mage", "Revive": "revive"}[sp.Name]
+	kind := ""
+	for _, r := range nd.Summons {
+		if r.Name == sp.Name {
+			kind = r.Kind
+		}
+	}
 	grew := now.Total() > before.Total()
 	if kind != "" && paid && !grew {
 		f.necro.capSeen[kind] = map[string]int{"skeleton": now.Skeletons, "mage": now.Mages, "revive": now.Other}[kind]
@@ -347,24 +346,25 @@ func pickCurseTarget(hs []Target) (Target, bool) {
 	return best, found
 }
 
-// curseFor picks the curse for a target: Amplify Damage by default (the minions hit physically), Lower Resist when
-// the target resists magic (Teeth and Bone Spear are magic) strongly and physical not, Weaken on an elite or boss when
-// Amplify Damage is not learned. Only learned, bound curses are considered.
-func curseFor(known map[string]SkillSpec, p *d2.Player, tg Target) (SkillSpec, bool) {
-	ok := func(n string) (SkillSpec, bool) {
-		s, has := known[n]
-		return s, has && (s.Key != "" || p.RightSkill == s.ID) && s.Cost*2 <= p.Mana
-	}
-	if tg.HasRes && tg.Res[data.Physical] < 50 && tg.Res[data.Magic] >= 50 {
-		if s, has := ok("Lower Resist"); has {
-			return s, true
-		}
-	}
-	for _, n := range []string{"Amplify Damage", "Weaken"} {
-		if n == "Weaken" && !tg.Boss && !tg.Elite {
+// curseFor picks the curse for a target from the profile's curse rules, in their order: the first learned, bound and
+// affordable curse whose When holds. "magicResist": the target resists magic strongly and physical not (Teeth and
+// Bone Spear are magic); "eliteOrBoss": only elites and bosses; "any": every target.
+func curseFor(nd *NecroParams, known map[string]SkillSpec, p *d2.Player, tg Target) (SkillSpec, bool) {
+	for _, r := range nd.Curses {
+		switch r.When {
+		case "any":
+		case "eliteOrBoss":
+			if !tg.Boss && !tg.Elite {
+				continue
+			}
+		case "magicResist":
+			if !tg.HasRes || tg.Res[data.Physical] >= 50 || tg.Res[data.Magic] < 50 {
+				continue
+			}
+		default:
 			continue
 		}
-		if s, has := ok(n); has {
+		if s, has := known[r.Name]; has && (s.Key != "" || p.RightSkill == s.ID) && s.Cost*2 <= p.Mana {
 			return s, true
 		}
 	}
@@ -373,10 +373,11 @@ func curseFor(known map[string]SkillSpec, p *d2.Player, tg Target) (SkillSpec, b
 
 // curseUp says whether the target already carries this curse: state present when the state is proven readable, else
 // the cast memory. Any other known curse state also counts (a second curse would replace the first, no gain).
-func (f *Fighter) curseUp(u d2.Unit, sp SkillSpec) bool {
+func (f *Fighter) curseUp(nd *NecroParams, u d2.Unit, sp SkillSpec) bool {
 	f.necro.init()
-	for name, st := range curseStates {
-		if u.Monster.HasState(st) && (name == sp.Name || f.necro.learned[st]) {
+	for _, c := range nd.Curses {
+		name, st := c.Name, c.State
+		if st != 0 && u.Monster.HasState(st) && (name == sp.Name || f.necro.learned[st]) {
 			if name == sp.Name {
 				f.necro.learned[st] = true // seen present on a unit we cursed: the state is readable
 			}
@@ -395,7 +396,7 @@ func (f *Fighter) curseUp(u d2.Unit, sp SkillSpec) bool {
 	if rec.tries >= 3 {
 		return true // gave up on this unit: the cast does not register (too close, no line, immune), do not burn mana
 	}
-	if st, ok := curseStates[sp.Name]; ok && f.necro.learned[st] {
+	if st := nd.curseState(sp.Name); st != 0 && f.necro.learned[st] {
 		return f.now().Sub(rec.at) < 2*time.Second // cast just now: give the state time to show
 	}
 	return f.now().Sub(rec.at) < curseLifeSec*time.Second
@@ -413,9 +414,13 @@ func (f *Fighter) Curse(ctx context.Context, snap *d2.Snapshot, hs []Target) (bo
 	if !ok {
 		return false, nil
 	}
+	nd, err := f.necroParams(p)
+	if err != nil {
+		return false, err
+	}
 	known := KnownSkills(p, f.cat, f.keys)
-	sp, ok := curseFor(known, p, tg)
-	if !ok || f.curseUp(tg.Unit, sp) {
+	sp, ok := curseFor(nd, known, p, tg)
+	if !ok || f.curseUp(nd, tg.Unit, sp) {
 		return false, nil
 	}
 	key := curseKey{tg.Unit.ID, sp.ID}
@@ -431,7 +436,7 @@ func (f *Fighter) Curse(ctx context.Context, snap *d2.Snapshot, hs []Target) (bo
 	if after, err := f.read(ctx); err == nil {
 		for _, u := range after.Monsters {
 			if u.ID == tg.Unit.ID {
-				if st, ok := curseStates[sp.Name]; ok && u.Monster.HasState(st) {
+				if st := nd.curseState(sp.Name); st != 0 && u.Monster.HasState(st) {
 					f.necro.learned[st] = true
 					rec.tries = 0
 					f.necro.curseAt[key] = rec
@@ -440,7 +445,7 @@ func (f *Fighter) Curse(ctx context.Context, snap *d2.Snapshot, hs []Target) (bo
 			}
 		}
 	}
-	st := curseStates[sp.Name]
+	st := nd.curseState(sp.Name)
 	f.info("curse", "skill", sp.Name, "target", tg.Name, "dist", int(tg.Dist), "stateReadable", st != 0 && f.necro.learned[st])
 	return true, nil
 }
@@ -455,10 +460,14 @@ func (f *Fighter) necroTick(ctx context.Context, snap *d2.Snapshot) (bool, error
 	if done, err := f.Curse(ctx, snap, hs); done || err != nil {
 		return done, err
 	}
-	if sp, corpse, walk, ok := f.planSummon(snap, false); ok && !walk {
-		return f.castSummon(ctx, snap, sp, corpse)
+	nd, err := f.necroParams(p)
+	if err != nil {
+		return false, err
 	}
-	return f.corpseExplode(ctx, snap, hs)
+	if sp, corpse, walk, ok := f.planSummon(snap, nd, false); ok && !walk {
+		return f.castSummon(ctx, snap, nd, sp, corpse)
+	}
+	return f.corpseExplode(ctx, snap, nd, hs)
 }
 
 // buffDue says whether an armor or shield needs a cast.

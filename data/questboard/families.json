@@ -1,0 +1,22 @@
+{
+ "schema": "quests.families/1",
+ "families": {
+  "paladin": "melee",
+  "barbarian": "melee",
+  "amazon": "melee",
+  "assassin": "caster",
+  "sorceress": "caster",
+  "druid": "caster",
+  "necromancer": "summoner"
+ },
+ "tags": {
+  "paladin": "EXP",
+  "barbarian": "EXP",
+  "amazon": "UNSURE",
+  "assassin": "UNSURE",
+  "sorceress": "EXP",
+  "druid": "UNSURE",
+  "necromancer": "EXP",
+  "source": "data/quests/act1-hints.json families (d2-sme 2026-11-08); the one table the board and the hints share"
+ }
+}

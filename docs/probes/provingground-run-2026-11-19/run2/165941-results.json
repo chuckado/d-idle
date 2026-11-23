@@ -1,0 +1,303 @@
+{
+ "version": "didle.scenario-result/1",
+ "results": [
+  {
+   "version": "didle.scenario-result/1",
+   "id": "cain.chain",
+   "class": "Paladin",
+   "seed": 11,
+   "status": "RED",
+   "reason": "quest_bits: wanted record 4 set 0x0001 clear 0x0002, got 0x0008",
+   "asserts": [
+    {
+     "kind": "quest_bits",
+     "ok": false,
+     "want": "record 4 set 0x0001 clear 0x0002",
+     "got": "0x0008",
+     "why": "V L3 run 10: the quest word ends 0x2019: bit 0 done, bit 1 (reward pending) cleared"
+    },
+    {
+     "kind": "item_absent",
+     "ok": true,
+     "want": "no bks",
+     "got": "0 x bks",
+     "why": "the scroll was read"
+    },
+    {
+     "kind": "item_absent",
+     "ok": false,
+     "want": "no bkd",
+     "got": "1 x bkd",
+     "why": "the key was used at the fifth stone"
+    },
+    {
+     "kind": "no_writes",
+     "ok": true,
+     "want": "writes after start: 0",
+     "got": "writes after start: 0"
+    }
+   ],
+   "virtual_min": 80,
+   "budget_min": 80,
+   "wall_sec": 2106,
+   "tags": [
+    "CHEATED",
+    "merc"
+   ],
+   "trace": "provingground-out/20261119-165941/cain.chain_Paladin_11.bot.log",
+   "taps": [
+    "start scroll",
+    "start stones"
+   ],
+   "state": {
+    "version": "didle.scenario-state/1",
+    "source": "d2d-observer-reload",
+    "has": [
+     "items",
+     "portals",
+     "objects"
+    ],
+    "area": 1,
+    "level": 32,
+    "gold": 160,
+    "stash": 2460,
+    "life_pct": 100,
+    "right_skill": 0,
+    "left_skill": 0,
+    "quests": {
+     "1": 4,
+     "4": 8
+    },
+    "items": [
+     {
+      "code": "isc",
+      "where": "pack"
+     },
+     {
+      "code": "tbk",
+      "where": "pack"
+     },
+     {
+      "code": "mp1",
+      "where": "belt"
+     },
+     {
+      "code": "bkd",
+      "where": "pack"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "yps",
+      "where": "pack"
+     },
+     {
+      "code": "yps",
+      "where": "pack"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     }
+    ],
+    "objects": [
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 267,
+      "state": "NU"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 119,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 385,
+      "state": "NU"
+     }
+    ],
+    "stats": {
+     "dex": 20,
+     "ene": 15,
+     "skillpts": 31,
+     "skillsspent": 0,
+     "statpts": 155,
+     "str": 25,
+     "vit": 25
+    },
+    "area_changes": 86,
+    "area_trail": [
+     1,
+     2,
+     3,
+     4,
+     10,
+     1,
+     10,
+     1,
+     3,
+     4,
+     10,
+     1,
+     10,
+     1,
+     10,
+     1,
+     10,
+     5,
+     1,
+     3,
+     4,
+     10,
+     1,
+     10,
+     1,
+     10,
+     5,
+     1,
+     5,
+     1,
+     3,
+     4,
+     10,
+     1,
+     10,
+     1,
+     10,
+     5,
+     1,
+     5,
+     1,
+     5,
+     1,
+     3,
+     4,
+     10,
+     1,
+     10,
+     5,
+     1,
+     5,
+     1,
+     3,
+     4,
+     10,
+     1,
+     10,
+     1,
+     10,
+     5,
+     1,
+     3,
+     5,
+     1,
+     5,
+     3,
+     4,
+     1,
+     4,
+     1,
+     3,
+     4,
+     1,
+     4,
+     1,
+     3,
+     4,
+     1,
+     4,
+     1,
+     3,
+     4,
+     1,
+     4,
+     1,
+     4,
+     1
+    ],
+    "writes_after_start": 0
+   },
+   "digest": "222944c72912a6a4"
+  }
+ ]
+}

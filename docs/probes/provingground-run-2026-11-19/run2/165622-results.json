@@ -1,0 +1,243 @@
+{
+ "version": "didle.scenario-result/1",
+ "results": [
+  {
+   "version": "didle.scenario-result/1",
+   "id": "cain.cage",
+   "class": "Paladin",
+   "seed": 11,
+   "status": "RED",
+   "reason": "quest_bits: wanted record 4 set 0x0002 clear 0x0000, got 0x0018",
+   "asserts": [
+    {
+     "kind": "quest_bits",
+     "ok": false,
+     "want": "record 4 set 0x0002 clear 0x0000",
+     "got": "0x0018",
+     "why": "V L2/L3: record 4 bit 1 is set the moment the cage opens (0x2012, 0x201a)"
+    }
+   ],
+   "virtual_min": 25,
+   "budget_min": 25,
+   "wall_sec": 84,
+   "tags": [
+    "CHEATED",
+    "position",
+    "quest-word"
+   ],
+   "trace": "provingground-out/20261119-165622/cain.cage_Paladin_11.bot.log",
+   "state": {
+    "version": "didle.scenario-state/1",
+    "source": "d2d-live-attach",
+    "has": [
+     "items",
+     "portals",
+     "ground",
+     "objects"
+    ],
+    "area": 1,
+    "level": 24,
+    "gold": 16,
+    "stash": 0,
+    "life_pct": 100,
+    "right_skill": 0,
+    "left_skill": 0,
+    "quests": {
+     "1": 4,
+     "4": 24
+    },
+    "items": [
+     {
+      "code": "isc",
+      "where": "pack"
+     },
+     {
+      "code": "tbk",
+      "where": "pack"
+     },
+     {
+      "code": "mp1",
+      "where": "belt"
+     },
+     {
+      "code": "yps",
+      "where": "pack"
+     },
+     {
+      "code": "yps",
+      "where": "pack"
+     },
+     {
+      "code": "clb",
+      "where": "body"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "qui",
+      "where": "body"
+     },
+     {
+      "code": "dgr",
+      "where": "pack"
+     },
+     {
+      "code": "hp2",
+      "where": "belt"
+     }
+    ],
+    "objects": [
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 267,
+      "state": "NU"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 119,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 385,
+      "state": "NU"
+     }
+    ],
+    "stats": {
+     "dex": 20,
+     "ene": 15,
+     "skillpts": 23,
+     "skillsspent": 0,
+     "statpts": 115,
+     "str": 25,
+     "vit": 25
+    },
+    "portals": [
+     {
+      "which": 0,
+      "level": 3
+     },
+     {
+      "which": 1,
+      "level": 1
+     }
+    ],
+    "area_changes": 34,
+    "area_trail": [
+     38,
+     1,
+     38,
+     1,
+     38,
+     1,
+     38,
+     1,
+     38,
+     1,
+     38,
+     1,
+     2,
+     3,
+     4,
+     10,
+     1,
+     10,
+     1,
+     3,
+     4,
+     10,
+     1,
+     10,
+     1,
+     10,
+     1,
+     3,
+     4,
+     1,
+     2,
+     3,
+     1,
+     3,
+     1
+    ],
+    "writes_after_start": -1
+   },
+   "digest": "7ecc527ab85d10ab"
+  }
+ ]
+}

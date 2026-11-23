@@ -1,0 +1,5135 @@
+{
+ "schema": "didle.cap/2",
+ "tags": "SCHEMA cap/2 (card dlv-data): this file is the ONLY hand-edited skill table. The delivery object of each row says how the skill is cast; classdata/skills.json and power's skillKinds are GENERATED from it (go run ./tools/capgen; internal/delivery tests fail when they are stale). There is no tier key: the tier is computed at load (internal/delivery TierOf): no driver = unsupported, a passive = supported, a valid delivery with a driver = experimental, supported only with a green Proving Ground row on the backend in use (proven.json). The old key delivery (melee, projectile, ...) is now shape. Rows of Amazon, Assassin and the extra Barbarian and Necromancer skills are generated from the old combat table: class is S (game knowledge, no skills.txt on the build box). reqLevel/reqSkills: V for Sorceress (docs/research/sorc-skill-matrix.md, read from skills.txt), S for Paladin (SME read, leveler/palprobe_test.go). synergies: null = not known (never 'none'); [] = none; the runtime overlay (Caps.Overlay) replaces req and synergies by skills.txt when the tables are loaded. mana.source names where the cost per level comes from: skilldamage.json (V, game.exe functions run in the emulator) or the skills.txt columns. Necromancer (necro1, 2026-11-20): reqLevel and reqSkills of all 30 rows are V, read from the patched skills.txt of the worker host (charclass nec); synergies of damage rows are its DmgSymPerCalc/EDmgSymPerCalc, of summon rows the skill() references in its calc columns; skill names are the skills.txt names (BloodGolem, IronGolem, FireGolem). Tiers are read from internal/combat necro.go, necro_corpse.go and profiles.json (docs/process/necromancer-support.md). Barbarian (barb1, 2026-11-20): reqLevel and reqSkills of all 30 rows are V, read from the patched skills.txt of the worker host (charclass bar); synergies of damage rows are its DmgSymPerCalc (only War Cry has one), of buff rows the skill() references in their aura-length calc; Iron Skin is a passive in skills.txt (row corrected from buff). Tiers are read from internal/combat and profiles.json (docs/process/barbarian-support.md). Druid (druid1, 2026-11-20): reqLevel and reqSkills of all 30 rows are V, read from the patched skills.txt of the worker host (charclass dru); synergies of damage rows are its EDmgSymPerCalc and DmgSymPerCalc, of summon rows the skill() references in their calc columns; Wearwolf, Wearbear and Shape Shifting are Werewolf, Werebear and Lycanthropy in game; Fissure is Eruption. Tiers are read from internal/combat (druid.go, classdata/skills.json and profiles.json) and docs/process/druid-support.md; no row is supported because no Druid skill ever ran live.",
+ "mana": {
+  "note": "U: a simple sustain budget, not the game's regen formula",
+  "perEnergy": {
+   "sorceress": 2.0,
+   "necromancer": 2.0,
+   "paladin": 1.5,
+   "barbarian": 1.0,
+   "amazon": 1.5,
+   "druid": 2.0,
+   "assassin": 1.5
+  },
+  "perLevel": {
+   "sorceress": 2.0,
+   "necromancer": 2.0,
+   "paladin": 1.5,
+   "barbarian": 1.0,
+   "amazon": 1.5,
+   "druid": 2.0,
+   "assassin": 1.5
+  },
+  "base": 35,
+  "regenFracPerSec": 0.011,
+  "fightSeconds": 30
+ },
+ "planner": {
+  "priorMargin": 2.0,
+  "note": "U: the estimate must beat the combat profile's pick by this factor (design review 04 section 3.2: the band order is a prior and a tie-break). Not calibrated."
+ },
+ "classStart": {
+  "amazon": [
+   20,
+   25,
+   20,
+   15
+  ],
+  "sorceress": [
+   10,
+   25,
+   10,
+   35
+  ],
+  "necromancer": [
+   15,
+   25,
+   15,
+   25
+  ],
+  "paladin": [
+   25,
+   20,
+   25,
+   15
+  ],
+  "barbarian": [
+   30,
+   20,
+   25,
+   10
+  ],
+  "druid": [
+   15,
+   20,
+   25,
+   20
+  ],
+  "assassin": [
+   20,
+   20,
+   20,
+   25
+  ]
+ },
+ "classStartTag": "strength, dexterity, vitality, energy at clvl 1 (charstats.txt). V for the four classes of the repo's plan fixtures (internal/buildfile tests, the tables' first rows); S for the rest.",
+ "skills": {
+  "Fire Bolt": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "V live: the only skill of the old skillTable (classdata.go header)",
+   "element": "fire",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Fire Ball",
+    "Meteor"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Ice Bolt": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "in the cold and fallback bands; bolt aiming shared with Fire Bolt (U for Ice Bolt itself)",
+   "element": "cold",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Charged Bolt": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "opening attack of the Lightning and Blizzard lines; G1 soaks ran it",
+   "element": "ltng",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Lightning",
+    "Nova"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 10
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Ice Blast": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "in the cold/blizzard bands, not exercised live (classdata.go: every non-Fire-Bolt row is U)",
+   "element": "cold",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Ice Bolt"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Glacial Spike": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "in the blizzard/cold bands, U live",
+   "element": "cold",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Ice Blast"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Fire Ball": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "skills.json kind bolt, in no profile band: aimable, never selected today",
+   "element": "fire",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Fire Bolt"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Lightning": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "on every Sorceress profile avoid list (broken on the d2d build in use, classdata profiles.json); the engine never casts it",
+   "element": "ltng",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Charged Bolt"
+   ],
+   "synergies": [
+    "Charged Bolt",
+    "Nova"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Chain Lightning": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "on the lightning and cold profile avoid lists (broken on the d2d build in use); the engine never casts it",
+   "element": "ltng",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Lightning"
+   ],
+   "synergies": [
+    "Charged Bolt",
+    "Lightning"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Blizzard": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "blizzard band from clvl 26, ground aim, U live",
+   "element": "cold",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Frost Nova",
+    "Glacial Spike"
+   ],
+   "synergies": [
+    "Ice Bolt",
+    "Ice Blast",
+    "Glacial Spike"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 30
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Meteor": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "skills.json ground kind, no profile band",
+   "element": "fire",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Fire Ball",
+    "Fire Wall"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 30
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Nova": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "nova",
+   "reason": "skills.json self kind, no profile band",
+   "element": "ltng",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Static Field"
+   ],
+   "synergies": [
+    "Charged Bolt",
+    "Lightning"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Frost Nova": {
+   "class": "sorceress",
+   "kind": "utility",
+   "shape": "nova",
+   "reason": "skills.json self kind; a crowd-control cast, not a damage loop",
+   "element": "cold",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 5
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Static Field": {
+   "class": "sorceress",
+   "kind": "utility",
+   "shape": "nova",
+   "reason": "percent-of-life nova; live-verified use in the Sorceress melee-range loop per the brief (U for the exact engine file)",
+   "element": "ltng",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Frozen Armor": {
+   "class": "sorceress",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "in every Sorceress buff ladder; state 10 read (necro.go notes it S)",
+   "element": "cold",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Shiver Armor": {
+   "class": "sorceress",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "buff ladder fallback, state id U",
+   "element": "cold",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Ice Blast",
+    "Frozen Armor"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Chilling Armor": {
+   "class": "sorceress",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "buff ladder fallback, state id U",
+   "element": "cold",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Shiver Armor"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Energy Shield": {
+   "class": "sorceress",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "second buff slot of the cold and lightning profiles, U",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Teleport",
+    "Chain Lightning"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Thunder Storm": {
+   "class": "sorceress",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "skills.json buff kind, in no profile",
+   "element": "ltng",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Nova",
+    "Chain Lightning"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "power": "spell",
+    "driver": "buff"
+   }
+  },
+  "Teleport": {
+   "class": "sorceress",
+   "kind": "movement",
+   "shape": "self",
+   "reason": "profile layout key f2; the walker does not plan teleport hops (U)",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Telekinesis"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "move",
+    "driver": "move"
+   }
+  },
+  "Warmth": {
+   "class": "sorceress",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "mana recovery, no engine action needed",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "Fire Mastery": {
+   "class": "sorceress",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "passive, no action; damage not in skilldamage.json (mastery_none)",
+   "element": "fire",
+   "reqLevel": 30,
+   "reqSkills": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "Cold Mastery": {
+   "class": "sorceress",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "passive, no action; damage not in skilldamage.json",
+   "element": "cold",
+   "reqLevel": 30,
+   "reqSkills": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "Lightning Mastery": {
+   "class": "sorceress",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "passive, no action; damage not in skilldamage.json",
+   "element": "ltng",
+   "reqLevel": 30,
+   "reqSkills": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "Telekinesis": {
+   "class": "sorceress",
+   "kind": "utility",
+   "shape": "self",
+   "reason": "no engine support (no skills.json row)",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "utility",
+    "driver": "none"
+   }
+  },
+  "Inferno": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "channelled skill, no skills.json row, no hold loop for casters",
+   "element": "fire",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Blaze": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "no skills.json row",
+   "element": "fire",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Inferno"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Fire Wall": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "no skills.json row",
+   "element": "fire",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Blaze"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Hydra": {
+   "class": "sorceress",
+   "kind": "summon",
+   "shape": "ground",
+   "reason": "pet recognised by friendly.go (V live ids) but no cast or upkeep code",
+   "element": "fire",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Enchant"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Enchant": {
+   "class": "sorceress",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "targets a minion or merc; no engine row",
+   "element": "fire",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Warmth",
+    "Fire Ball"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "driver": "none"
+   }
+  },
+  "Frozen Orb": {
+   "class": "sorceress",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "no skills.json row",
+   "element": "cold",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Blizzard"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Zeal": {
+   "class": "paladin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "V live: Paladin Zeal/Holy Fire melee loop (classdata.go header, docs/classes/smoke-paladin.md)",
+   "element": "phys",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Sacrifice"
+   ],
+   "synergies": [
+    "Sacrifice"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "repeat"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Sacrifice": {
+   "class": "paladin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "in the profile bands with lifePrice rules, U live",
+   "element": "phys",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Redemption",
+    "Fanaticism"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Smite": {
+   "class": "paladin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "skills.json melee, plan tables use it to clvl 17; U live",
+   "element": "phys",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Blessed Hammer": {
+   "class": "paladin",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "profile band from clvl 18 with hold, but positioning (stand still in the pack) is not modelled",
+   "element": "mag",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Holy Bolt"
+   ],
+   "synergies": [
+    "Concentration"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "point",
+     "press": "repeat"
+    },
+    "reach": {
+     "range": 9
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Holy Bolt": {
+   "class": "paladin",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "skills.json bolt row, in no profile band",
+   "element": "mag",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Charge": {
+   "class": "paladin",
+   "kind": "movement",
+   "shape": "melee",
+   "reason": "skills.json melee row but in no band; a charge move is not an attack loop",
+   "element": "phys",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Smite"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "move",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Vengeance": {
+   "class": "paladin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "skills.json row, no band, elemental triple damage not in the estimator",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Zeal"
+   ],
+   "synergies": [
+    "Holy Fire",
+    "Holy Freeze",
+    "Holy Shock"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "repeat"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Conversion": {
+   "class": "paladin",
+   "kind": "utility",
+   "shape": "melee",
+   "reason": "no band",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Vengeance"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "utility",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "driver": "none"
+   }
+  },
+  "Fist of the Heavens": {
+   "class": "paladin",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "skills.json ground row, no band, needs the target-bound cast",
+   "element": "ltng",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Blessed Hammer",
+    "Conversion"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 30
+    },
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Might": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "V live: aura apply by cmd skill (aura.go, palready)",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Holy Fire": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "V live in the Zeal loop (classdata.go header)",
+   "element": "fire",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Might"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Prayer": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "profile aura ladder, resting aura, U",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Concentration": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "hammerdin aura in the band ladder, U live",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Blessed Aim"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Thorns": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "profile aura ladder fallback",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Holy Shield": {
+   "class": "paladin",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "profile buff slot, U live",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Charge",
+    "Blessed Hammer"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Blessed Aim": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Might"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Holy Freeze": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "element": "cold",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Holy Fire"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Holy Shock": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "element": "ltng",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Holy Freeze"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Sanctuary": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Thorns",
+    "Holy Freeze"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Fanaticism": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Concentration"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Conviction": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Sanctuary"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Redemption": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Vigor"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Salvation": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 30,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Resist Fire": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "element": "fire",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Resist Cold": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "element": "cold",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Resist Lightning": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "element": "ltng",
+   "reqLevel": 12,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Defiance": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Cleansing": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Prayer"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Vigor": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Cleansing",
+    "Defiance"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Meditation": {
+   "class": "paladin",
+   "kind": "aura",
+   "shape": "self",
+   "reason": "skills.json aura row; the ladder can only pick it if a band lists it (none does), U live",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Cleansing"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "aura"
+    },
+    "driver": "aura"
+   }
+  },
+  "Bash": {
+   "class": "barbarian",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "barbarian profile band (default profile and barbarian/frenzy); melee loop shared with the Paladin, never a measured live loop beyond clvl 5 (docs/classes/barbarian.md live results)",
+   "element": "phys",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Double Swing": {
+   "class": "barbarian",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "barbarian profile band; two swings per cast, gear check wants a melee weapon; never a measured live loop",
+   "element": "phys",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Bash"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Frenzy": {
+   "class": "barbarian",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "barbarian band from clvl 18 (default profile) and barbarian/frenzy; dual-wield pair rule is the bot's (combat gearcheck.go, U); sequence animation rate is U (power FlagSequenceRate)",
+   "element": "phys",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Double Throw"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Whirlwind": {
+   "class": "barbarian",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "skills.json row has hold but no profile lists it: movement while attacking (K12) is not planned, and d2d's Whirlwind radius deviates (review 03 A6)",
+   "element": "phys",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Leap Attack",
+    "Concentrate"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "repeat"
+    },
+    "reach": {
+     "range": 10,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Leap Attack": {
+   "class": "barbarian",
+   "kind": "movement",
+   "shape": "melee",
+   "reason": "a leap that attacks on landing: movement while attacking (K12), no band, no skills.json hold or aim rule",
+   "element": "phys",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Leap"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "move",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "War Cry": {
+   "class": "barbarian",
+   "kind": "damage",
+   "shape": "nova",
+   "reason": "stun nova, skills.json buff kind, no loop and no positioning rule; d2d deals it 8 times too strong (review 03)",
+   "element": "phys",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Battle Cry",
+    "Battle Orders"
+   ],
+   "synergies": [
+    "Howl",
+    "Taunt",
+    "Battle Cry"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Battle Orders": {
+   "class": "barbarian",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "profile buff ladder (K6), U live: life, mana and stamina to the party; the state number is not read back for Barbarian",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Shout"
+   ],
+   "synergies": [
+    "Shout",
+    "Battle Command"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Shout": {
+   "class": "barbarian",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "profile buff ladder (K6 timed buff upkeep), U live: the buff state number is not read back for Barbarian",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Howl"
+   ],
+   "synergies": [
+    "Battle Orders",
+    "Battle Command"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Iron Skin": {
+   "class": "barbarian",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "V skills.txt: no srvdofunc, passivestate ironskin: it is a passive (a defence bonus on the sheet), never cast; the default barbarian profile still lists it in its buff ladder, which can only do nothing",
+   "reqLevel": 18,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "driver": "passive"
+   }
+  },
+  "Howl": {
+   "class": "barbarian",
+   "kind": "utility",
+   "shape": "nova",
+   "reason": "skills.json buff row; a fear nova, no engine loop beyond the generic cast",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "utility",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "driver": "buff"
+   }
+  },
+  "Taunt": {
+   "class": "barbarian",
+   "kind": "utility",
+   "shape": "ground",
+   "reason": "skills.json buff row, no loop",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Howl"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "utility",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "driver": "buff"
+   }
+  },
+  "Double Throw": {
+   "class": "barbarian",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "skills.json melee row; it throws, so it needs throwing weapons and a quantity rule (K15); no band, and as the Frenzy prerequisite the guide builds put one point in it only",
+   "element": "phys",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Double Swing"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Natural Resistance": {
+   "class": "barbarian",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "passive, no action; effect is on the character sheet, nothing for the engine to cast",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Iron Skin"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "driver": "passive"
+   }
+  },
+  "Increased Stamina": {
+   "class": "barbarian",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "passive, no action; effect is on the character sheet, nothing for the engine to cast",
+   "reqLevel": 12,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "Axe Mastery": {
+   "class": "barbarian",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "passive, no action; effect is on the character sheet, nothing for the engine to cast",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "Sword Mastery": {
+   "class": "barbarian",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "passive, no action; effect is on the character sheet, nothing for the engine to cast",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "Amplify Damage": {
+   "class": "necromancer",
+   "kind": "curse",
+   "shape": "ground",
+   "reason": "Fighter.Curse casts it at a pack, an elite or a boss (necro.go curseFor); V live 2026-10-29 for the cast and the cover radius, the state 9 was never read back after a cast (U). Amplify breaks physical immunity in the game but that is not checked by the planner.",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "mark",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Teeth": {
+   "class": "necromancer",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "necromancer fallback band (profiles.json), U live as a measured loop",
+   "element": "mag",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Bone Wall",
+    "Bone Prison",
+    "Bone Spear",
+    "Bone Spirit"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Bone Armor": {
+   "class": "necromancer",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "V live: state 14 readable, recast by state (necro.go buffDue)",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Skeleton Mastery": {
+   "class": "necromancer",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "passive pet strength; see Raise Skeleton",
+   "reqLevel": 1,
+   "reqSkills": [
+    "Raise Skeleton"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "power": "summon",
+    "driver": "passive"
+   }
+  },
+  "Raise Skeleton": {
+   "class": "necromancer",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "V live 2026-10-29: skeletons raised from a corpse within 4 subtiles, census by IsFriendly, cap found by evidence (necro.go KeepSummons, docs/summon.md)",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Skeleton Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "power": "summon",
+    "driver": "summon"
+   }
+  },
+  "Dim Vision": {
+   "class": "necromancer",
+   "kind": "curse",
+   "shape": "ground",
+   "reason": "curseNames recognises it but curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "mark",
+    "driver": "none"
+   }
+  },
+  "Weaken": {
+   "class": "necromancer",
+   "kind": "curse",
+   "shape": "ground",
+   "reason": "curseFor picks it on an elite or boss when Amplify Damage is not learned; state 19 is S (necro.go), never seen live",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Amplify Damage"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "mark",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Poison Dagger": {
+   "class": "necromancer",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "poison line: no band, a weapon-skill modifier with no loop",
+   "element": "pois",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [
+    "Poison Explosion",
+    "Poison Nova"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Corpse Explosion": {
+   "class": "necromancer",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "Fighter.corpseExplode casts it at the best corpse when no summon is wanted (necro_corpse.go); needs a corpse, U live",
+   "element": "phys",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Teeth"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Clay Golem": {
+   "class": "necromancer",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "V live 2026-10-29: first summon in a fresh area, no corpse needed (necro.go golemLadder)",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [
+    "Golem Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "power": "summon",
+    "driver": "summon"
+   }
+  },
+  "Iron Maiden": {
+   "class": "necromancer",
+   "kind": "curse",
+   "shape": "ground",
+   "reason": "curseNames recognises it but curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Amplify Damage"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "mark",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "none"
+   }
+  },
+  "Terror": {
+   "class": "necromancer",
+   "kind": "curse",
+   "shape": "ground",
+   "reason": "curseNames recognises it but curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Weaken"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "mark",
+    "driver": "none"
+   }
+  },
+  "Bone Wall": {
+   "class": "necromancer",
+   "kind": "utility",
+   "shape": "ground",
+   "reason": "ground placement, no cast rule or minion-blocking logic",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Bone Armor"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "utility",
+    "driver": "none"
+   }
+  },
+  "Golem Mastery": {
+   "class": "necromancer",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "passive for golems; the Clay Golem and Fire Golem loop is shared, U",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Clay Golem"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "power": "summon",
+    "driver": "passive"
+   }
+  },
+  "Raise Skeletal Mage": {
+   "class": "necromancer",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "V live 2026-10-29: mages raised and counted (class 364), cap equals the skill level (docs/summon.md)",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Raise Skeleton"
+   ],
+   "synergies": [
+    "Skeleton Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "power": "summon",
+    "driver": "summon"
+   }
+  },
+  "Confuse": {
+   "class": "necromancer",
+   "kind": "curse",
+   "shape": "ground",
+   "reason": "curseNames recognises it but curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Dim Vision"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "mark",
+    "driver": "none"
+   }
+  },
+  "Life Tap": {
+   "class": "necromancer",
+   "kind": "curse",
+   "shape": "ground",
+   "reason": "curseNames recognises it but curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Iron Maiden"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "mark",
+    "driver": "none"
+   }
+  },
+  "Poison Explosion": {
+   "class": "necromancer",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "poison line: needs a corpse like Corpse Explosion, no band and no rule",
+   "element": "pois",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Poison Dagger",
+    "Corpse Explosion"
+   ],
+   "synergies": [
+    "Poison Dagger",
+    "Poison Nova"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Bone Spear": {
+   "class": "necromancer",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "band from clvl 18 (profiles.json necromancer), U live as a measured loop",
+   "element": "mag",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Corpse Explosion"
+   ],
+   "synergies": [
+    "Bone Wall",
+    "Bone Prison",
+    "Teeth",
+    "Bone Spirit"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "BloodGolem": {
+   "class": "necromancer",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "costs life to cast; not in golemLadder (necro.go): never cast by the engine",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Clay Golem"
+   ],
+   "synergies": [
+    "Golem Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "power": "summon",
+    "driver": "none"
+   }
+  },
+  "Attract": {
+   "class": "necromancer",
+   "kind": "curse",
+   "shape": "ground",
+   "reason": "curseNames recognises it but curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Confuse"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "mark",
+    "driver": "none"
+   }
+  },
+  "Decrepify": {
+   "class": "necromancer",
+   "kind": "curse",
+   "shape": "ground",
+   "reason": "in skills.json as a buff, curseNames recognises it, curseFor never picks it: no cast rule (necro.go)",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Terror"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "mark",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "none"
+   }
+  },
+  "Bone Prison": {
+   "class": "necromancer",
+   "kind": "utility",
+   "shape": "ground",
+   "reason": "ground placement, no cast rule",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Bone Wall",
+    "Bone Spear"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "utility",
+    "driver": "none"
+   }
+  },
+  "Summon Resist": {
+   "class": "necromancer",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "passive for minions, nothing to cast; the benefit is not modelled, U",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Golem Mastery"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "IronGolem": {
+   "class": "necromancer",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "needs an item in the world (Iron Golem is built from an item); not in golemLadder (necro.go)",
+   "reqLevel": 24,
+   "reqSkills": [
+    "BloodGolem"
+   ],
+   "synergies": [
+    "Golem Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "power": "summon",
+    "driver": "none"
+   }
+  },
+  "Lower Resist": {
+   "class": "necromancer",
+   "kind": "curse",
+   "shape": "ground",
+   "reason": "curseFor picks it when physical resist is under 50 and magic resist is 50 or more (necro.go); state number unknown, 30 s cast memory, never seen live",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Life Tap",
+    "Decrepify"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "mark",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Poison Nova": {
+   "class": "necromancer",
+   "kind": "damage",
+   "shape": "nova",
+   "reason": "poison line: no band and no nova rule for the Necromancer (Static Field and Frost Nova are special rules of the Sorceress profile)",
+   "element": "pois",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Poison Explosion"
+   ],
+   "synergies": [
+    "Poison Dagger",
+    "Poison Explosion"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 8
+    },
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Bone Spirit": {
+   "class": "necromancer",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "in skills.json as a bolt but in no band (profiles.json); the Bone line stops at Bone Spear",
+   "element": "mag",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Bone Spear"
+   ],
+   "synergies": [
+    "Bone Wall",
+    "Bone Prison",
+    "Teeth",
+    "Bone Spear"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "FireGolem": {
+   "class": "necromancer",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "second on golemLadder (necro.go planSummon), needs clvl 30 and a prerequisite chain; never raised live, U",
+   "reqLevel": 30,
+   "reqSkills": [
+    "IronGolem"
+   ],
+   "synergies": [
+    "Golem Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "driver": "summon"
+   }
+  },
+  "Revive": {
+   "class": "necromancer",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "planSummon raises it from the best corpse after skeletons and mages (necro_corpse.go bestRevivable); the Other census needs child state 105, U live (docs/summon.md)",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Raise Skeletal Mage",
+    "IronGolem"
+   ],
+   "synergies": [
+    "Skeleton Mastery"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "power": "summon",
+    "driver": "summon"
+   }
+  },
+  "Mace Mastery": {
+   "class": "barbarian",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "passive, no action; effect is on the character sheet, nothing for the engine to cast",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "Find Potion": {
+   "class": "barbarian",
+   "kind": "utility",
+   "shape": "ground",
+   "reason": "needs a corpse target and a weapon swap (Kolbot Barbarian.js, docs/classes/barbarian.md); no skills.json row, no loop",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "utility",
+    "driver": "none"
+   }
+  },
+  "Leap": {
+   "class": "barbarian",
+   "kind": "movement",
+   "shape": "self",
+   "reason": "a jump to a ground point: movement while attacking is not planned (kind K12, review 03 section 2); no skills.json row, no band",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "move",
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Pole Arm Mastery": {
+   "class": "barbarian",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "passive, no action; effect is on the character sheet, nothing for the engine to cast",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "Throwing Mastery": {
+   "class": "barbarian",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "passive, no action; effect is on the character sheet, nothing for the engine to cast",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "Spear Mastery": {
+   "class": "barbarian",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "passive, no action; effect is on the character sheet, nothing for the engine to cast",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "Stun": {
+   "class": "barbarian",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "skills.json melee row, generic melee path; no band lists it, never live; mostly a Concentrate prerequisite point",
+   "element": "phys",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Bash"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Find Item": {
+   "class": "barbarian",
+   "kind": "utility",
+   "shape": "ground",
+   "reason": "hork a corpse for loot: needs corpse targeting and a weapon swap (Kolbot Barbarian.js, docs/classes/barbarian.md); no skills.json row, no loop",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Find Potion"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "utility",
+    "driver": "none"
+   }
+  },
+  "Concentrate": {
+   "class": "barbarian",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "skills.json melee row, generic melee path (uninterruptible swing, review 03 build B3); no band in a shipped profile, never live",
+   "element": "phys",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Stun"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Battle Cry": {
+   "class": "barbarian",
+   "kind": "utility",
+   "shape": "nova",
+   "reason": "a defence and damage curse nova; no skills.json row, no loop, no state number",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Taunt"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "utility",
+    "driver": "none"
+   }
+  },
+  "Increased Speed": {
+   "class": "barbarian",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "passive, no action; effect is on the character sheet, nothing for the engine to cast",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Increased Stamina"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "passive"
+   }
+  },
+  "Grim Ward": {
+   "class": "barbarian",
+   "kind": "utility",
+   "shape": "ground",
+   "reason": "a totem placed on a corpse; needs corpse targeting; no skills.json row, no loop",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Find Item"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "utility",
+    "driver": "none"
+   }
+  },
+  "Berserk": {
+   "class": "barbarian",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "skills.json melee row; named by combat/rules.go classOptions as the magic-damage answer to a physical immune (U names), no band, never live",
+   "element": "mag",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Concentrate"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Battle Command": {
+   "class": "barbarian",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "a layout key (F4) in the default profile but in no buff ladder, so it is never cast; also +1 to skills for the party only",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Battle Orders"
+   ],
+   "synergies": [
+    "Shout",
+    "Battle Orders"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "none"
+   }
+  },
+  "Firestorm": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "profiles.json druid bands (the opener and the fallback) and skills.json ground row; U live: no Druid skill was ever seen cast in a game, d2d verdict on the effect open (review 02 A8)",
+   "element": "fire",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Molten Boulder",
+    "Eruption"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 14
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Molten Boulder": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "skills.json ground row (range 20) and the second band entry from clvl 12; a rolling boulder with a physical half (V docs/classes/druid.md); U live: no Druid skill was ever seen cast in a game",
+   "element": "fire",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Firestorm"
+   ],
+   "synergies": [
+    "Firestorm",
+    "Volcano"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Eruption": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "skills.txt name of Fissure: profiles.json druid band from clvl 12 (requires Eruption), skills.json ground row, cast at the monster's ground point; U live: no Druid skill was ever seen cast in a game, no cooldown or line-of-sight rule (docs/process/druid-support.md section 4)",
+   "element": "fire",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Molten Boulder"
+   ],
+   "synergies": [
+    "Firestorm",
+    "Volcano"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Volcano": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "skills.json ground row (range 25), key reserved on the fire profile but in no band: the engine can cast it, nothing chooses it; U live: no Druid skill was ever seen cast in a game",
+   "element": "fire",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Eruption"
+   ],
+   "synergies": [
+    "Molten Boulder",
+    "Eruption",
+    "Armageddon"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Armageddon": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "self",
+   "reason": "no skills.json row and in no band or buff ladder: a persistent fire rain around the caster (srvdofunc 124, V skills.txt) that needs a recast clock and a state number nobody read; its prerequisite Hurricane is unsupported too",
+   "element": "fire",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Volcano",
+    "Hurricane"
+   ],
+   "synergies": [
+    "Firestorm",
+    "Molten Boulder",
+    "Volcano"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Arctic Blast": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "skills.json bolt row with hold; in no band: only the prerequisite point of Cyclone Armor in the build; U live: no Druid skill was ever seen cast in a game",
+   "element": "cold",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [
+    "Cyclone Armor",
+    "Hurricane"
+   ],
+   "mana": {
+    "source": "skilldamage.json:mana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "repeat"
+    },
+    "reach": {
+     "range": 10
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Cyclone Armor": {
+   "class": "druid",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "default druid buff ladder (profiles.json), recast by the generic buff path; the state number is not read, so the recast clock is a guess (necro.go buffDue method), and the absorb is spent in a few hits (docs/classes/druid.md); U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Arctic Blast"
+   ],
+   "synergies": [
+    "Twister",
+    "Tornado",
+    "Hurricane"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Twister": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "skills.json bolt row, in no band: only the prerequisite point of Tornado; flight of the missile is without a d2d verdict (review 02 A8)",
+   "element": "phys",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Cyclone Armor"
+   ],
+   "synergies": [
+    "Tornado",
+    "Hurricane"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 15
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Tornado": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "an erratic travelling missile: kolbot aims it with a random offset and it must be cast close (review 03 D2); no band, no aim rule, d2d flight unmeasured (review 02 A8)",
+   "element": "phys",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Twister"
+   ],
+   "synergies": [
+    "Cyclone Armor",
+    "Twister",
+    "Hurricane"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 15
+    },
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Hurricane": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "self",
+   "reason": "a cold storm around the caster (srvdofunc 124, V skills.txt) that ends on a timer and cannot be cast in town: no buff ladder entry, no recast clock, no state read",
+   "element": "cold",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Tornado"
+   ],
+   "synergies": [
+    "Twister",
+    "Tornado"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "power": "spell",
+    "driver": "none"
+   }
+  },
+  "Raven": {
+   "class": "druid",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "druid.go planPet (census class 419, up to 5): upkeep by count with the cap found by evidence; no Druid summon was ever cast live, which skill makes which monster class is U",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "power": "summon",
+    "driver": "summon"
+   }
+  },
+  "Summon Spirit Wolf": {
+   "class": "druid",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "druid.go planPet (census class 420, up to 5): upkeep by count; U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 6,
+   "reqSkills": [
+    "Raven"
+   ],
+   "synergies": [
+    "Summon Fenris",
+    "Summon Grizzly"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "power": "summon",
+    "driver": "summon"
+   }
+  },
+  "Summon Fenris": {
+   "class": "druid",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "druid.go planPet (the Dire Wolf, census class 421, up to 3): upkeep by count; U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Oak Sage",
+    "Summon Spirit Wolf"
+   ],
+   "synergies": [
+    "Summon Spirit Wolf",
+    "Summon Grizzly"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "power": "summon",
+    "driver": "summon"
+   }
+  },
+  "Summon Grizzly": {
+   "class": "druid",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "druid.go planPet (census class 428, one): upkeep by count; U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Summon Fenris"
+   ],
+   "synergies": [
+    "Summon Fenris",
+    "Summon Spirit Wolf"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "power": "summon",
+    "driver": "summon"
+   }
+  },
+  "Oak Sage": {
+   "class": "druid",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "druid.go planPet (a totem spirit, census classes 422 to 424; which spirit is which is U): the first spirit skill; U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [
+    "Heart of Wolverine",
+    "Spirit of Barbs"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "power": "summon",
+    "driver": "summon"
+   }
+  },
+  "Heart of Wolverine": {
+   "class": "druid",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "druid.go planPet (second spirit); U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Oak Sage"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "driver": "summon"
+   }
+  },
+  "Spirit of Barbs": {
+   "class": "druid",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "druid.go planPet (third spirit); U live: no Druid skill was ever seen cast in a game",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Heart of Wolverine"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "driver": "summon"
+   }
+  },
+  "Vines": {
+   "class": "druid",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "the census counts vines (classes 425 to 427) but no plan casts them: no upkeep rule, and a vine is rooted where it is raised",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Cycle of Life"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "driver": "none"
+   }
+  },
+  "Cycle of Life": {
+   "class": "druid",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "a prerequisite of Vines (and Plague Poppy's line); no upkeep rule, nothing to cast for the bot",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Plague Poppy"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "driver": "none"
+   }
+  },
+  "Plague Poppy": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "a plant raised at a ground point (poison cloud): no skills.json row, no band, no placement rule",
+   "element": "pois",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [
+    "Cycle of Life",
+    "Rabies"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "driver": "none"
+   }
+  },
+  "Wearwolf": {
+   "class": "druid",
+   "kind": "utility",
+   "shape": "self",
+   "reason": "Werewolf form change. shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md)",
+   "reqLevel": 1,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "utility",
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Wearbear": {
+   "class": "druid",
+   "kind": "utility",
+   "shape": "self",
+   "reason": "Werebear form change. shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md)",
+   "reqLevel": 6,
+   "reqSkills": [],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "utility",
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Shape Shifting": {
+   "class": "druid",
+   "kind": "passive",
+   "shape": "self",
+   "reason": "Lycanthropy, the passive that lengthens the forms (no srvdofunc, V skills.txt): worthless without a form. shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md)",
+   "reqLevel": 1,
+   "reqSkills": [
+    "Wearwolf"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "none"
+   },
+   "delivery": {
+    "purpose": "passive",
+    "driver": "none"
+   }
+  },
+  "Feral Rage": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "a Werewolf melee skill (life steal): shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "phys",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Wearwolf"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Maul": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "a Werebear melee skill: shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "phys",
+   "reqLevel": 12,
+   "reqSkills": [
+    "Wearbear"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Rabies": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "a Werewolf melee skill (poison that spreads): shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "pois",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Feral Rage"
+   ],
+   "synergies": [
+    "Plague Poppy"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Fire Claws": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "a melee skill of either form (fire damage): shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "fire",
+   "reqLevel": 18,
+   "reqSkills": [
+    "Feral Rage",
+    "Maul"
+   ],
+   "synergies": [
+    "Firestorm",
+    "Molten Boulder",
+    "Volcano",
+    "Eruption"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Hunger": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "a Werewolf melee skill (leech): shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "phys",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Fire Claws"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Shock Wave": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "nova",
+   "reason": "a Werebear skill (stunning wave): shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "phys",
+   "reqLevel": 24,
+   "reqSkills": [
+    "Maul"
+   ],
+   "synergies": [
+    "Maul"
+   ],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 12
+    },
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Fury": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "a Werewolf melee skill (multi-hit): shapeshift state (kind K14, review 03 section 2): usable only while in the matching form; the engine has no form change (no cast of the form skill, no state read, no form-aware hotkeys) and the Druid cannot cast Firestorm or Fissure in form (V docs/sme/class-druid.md); skills.json has a melee row for the three hand skills but nothing enters the form",
+   "element": "phys",
+   "reqLevel": 30,
+   "reqSkills": [
+    "Rabies"
+   ],
+   "synergies": [],
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "none"
+   }
+  },
+  "Blade Fury": {
+   "class": "assassin",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "power": "melee",
+    "driver": "buff"
+   }
+  },
+  "Blade Sentinel": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 15
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Blades of Ice": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Charged Bolt Sentry": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 15
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Charged Strike": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Claws of Thunder": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Cloak of Shadows": {
+   "class": "assassin",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Cobra Strike": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Cold Arrow": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Death Sentry": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 15
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Dopplezon": {
+   "class": "amazon",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "power": "summon",
+    "driver": "summon"
+   }
+  },
+  "Dragon Claw": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Dragon Tail": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Dragon Talon": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Exploding Arrow": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Fade": {
+   "class": "assassin",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Fend": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "repeat"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Fire Arrow": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Fire Golem": {
+   "class": "necromancer",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "driver": "summon"
+   }
+  },
+  "Fire Trauma": {
+   "class": "druid",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 8
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Fists of Fire": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Guided Arrow": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Ice Arrow": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Impale": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Inferno Sentry": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 12
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Inner Sight": {
+   "class": "amazon",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Jab": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Lightning Bolt": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Lightning Fury": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Lightning Sentry": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 15
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Lightning Strike": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Magic Arrow": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Mind Blast": {
+   "class": "assassin",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "power": "spell",
+    "driver": "buff"
+   }
+  },
+  "Multiple Shot": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Plague Javelin": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Poison Javelin": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Power Strike": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Quickness": {
+   "class": "assassin",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Royal Strike": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Shadow Master": {
+   "class": "assassin",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Shadow Warrior": {
+   "class": "assassin",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Shock Field": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 15
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Slow Missiles": {
+   "class": "amazon",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Strafe": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "unit",
+     "press": "repeat"
+    },
+    "reach": {
+     "range": 25
+    },
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Tiger Strike": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "melee",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Valkyrie": {
+   "class": "amazon",
+   "kind": "summon",
+   "shape": "pet",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "minions"
+    },
+    "power": "summon",
+    "driver": "summon"
+   }
+  },
+  "Venom": {
+   "class": "assassin",
+   "kind": "buff",
+   "shape": "self",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "upkeep",
+    "use": {
+     "target": "self",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 0
+    },
+    "observe": {
+     "by": "state"
+    },
+    "driver": "buff"
+   }
+  },
+  "Wake of Fire Sentry": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "generated row: class is S (game knowledge, no skills.txt on the build box), delivery from the old combat table; no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 12
+    },
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Blade Shield": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "generated row: class is S (game knowledge), power kind from profiles.json skillKinds; no combat-table entry, no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "spell",
+    "driver": "attack"
+   }
+  },
+  "Freezing Arrow": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge), power kind from profiles.json skillKinds; no combat-table entry, no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Immolation Arrow": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge), power kind from profiles.json skillKinds; no combat-table entry, no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Penetrate": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge), power kind from profiles.json skillKinds; no combat-table entry, no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Pierce": {
+   "class": "amazon",
+   "kind": "damage",
+   "shape": "projectile",
+   "reason": "generated row: class is S (game knowledge), power kind from profiles.json skillKinds; no combat-table entry, no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "missile",
+    "driver": "attack"
+   }
+  },
+  "Psychic Hammer": {
+   "class": "assassin",
+   "kind": "damage",
+   "shape": "ground",
+   "reason": "generated row: class is S (game knowledge), power kind from profiles.json skillKinds; no combat-table entry, no live evidence",
+   "element": "",
+   "mana": {
+    "source": "skills.txt:mana,lvlmana,manashift,minmana"
+   },
+   "delivery": {
+    "purpose": "damage",
+    "power": "spell",
+    "driver": "attack"
+   }
+  }
+ },
+ "generic": {
+  "Attack": {
+   "reason": "the plain attack of the engine, not a skill of any class",
+   "delivery": {
+    "purpose": "damage",
+    "use": {
+     "hand": "left",
+     "target": "unit",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 7,
+     "stance": "contact"
+    },
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Kick": {
+   "reason": "a basic attack of the engine, not a skill of any class",
+   "delivery": {
+    "purpose": "damage",
+    "power": "melee",
+    "driver": "attack"
+   }
+  },
+  "Throw": {
+   "reason": "a basic attack of the engine, not a skill of any class",
+   "delivery": {
+    "purpose": "damage",
+    "power": "missile",
+    "driver": "attack"
+   }
+  }
+ }
+}

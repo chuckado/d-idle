@@ -10,7 +10,9 @@ import (
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/ladder"
 	"d2lod-bot/internal/leveler"
+	"d2lod-bot/internal/merc"
 	"d2lod-bot/internal/resource"
+	"d2lod-bot/internal/supply"
 )
 
 // resInput fills the policy input from a snapshot outside a fight (docs/resource.md: TownTripTrigger every idle tick).
@@ -34,38 +36,13 @@ func (r *Runner) resInput(s *d2.Snapshot) resource.Input {
 	in.HasTP = r.hasPortalSource(s)
 	mc := d2.FindMerc(s)
 	in.SetMerc(mc, r.merc.observe(mc, p.InTown(), r.e.Clock.Now()))
-	if r.d.Catalog == nil || s.Inventory == nil {
+	c, known := r.supplyCount(s)
+	if !known {
 		return in
 	}
-	for i := range s.Inventory.Items {
-		u := &s.Inventory.Items[i]
-		if u.Item == nil {
-			continue
-		}
-		m, ok := r.d.Catalog.Item(u.Class)
-		if !ok {
-			continue
-		}
-		switch u.Item.Where {
-		case d2.ContBelt:
-			switch m.Potion {
-			case PotionHealing:
-				in.Belt.HP++
-				in.Belt.HPTier = max(in.Belt.HPTier, m.Tier)
-			case PotionMana:
-				in.Belt.MP++
-			case PotionRejuv:
-				in.Belt.RV++
-			}
-		case d2.ContInventory:
-			switch m.Potion {
-			case PotionHealing:
-				in.Belt.PackHP++
-			case PotionRejuv:
-				in.Belt.PackRV++
-			}
-		}
-	}
+	in.Belt.HP, in.Belt.MP, in.Belt.RV = c.Belt[supply.HP], c.Belt[supply.MP], c.Belt[supply.RV]
+	in.Belt.HPTier = c.BeltTier[supply.HP]
+	in.Belt.PackHP, in.Belt.PackRV = c.Pack[supply.HP], c.Pack[supply.RV]
 	// BELTFIX5: with no healing potion anywhere the town visit withdraws the stash gold for the kit (Town.withdraw), so
 	// every purse test of the policy (poor, futile, trip floor, recovery) sees purse plus bank. Gate 1 20261103-0338:
 	// 6 gold in the pack, 1418 in the stash, 7 virtual minutes without a potion.
@@ -216,7 +193,45 @@ func (r *Runner) starveStep(s *d2.Snapshot, diff string) (int, bool) {
 	if first == 0 || r.loop.cleared[first] || r.banned(first) {
 		return 0, false
 	}
+	if a, ok := r.homeBandArea(s, diff, first); ok {
+		return a, true
+	}
 	return first, true
+}
+
+// homeReach is the set of areas a character without a town portal can leave for town: the first field (a short walk)
+// and every area whose waypoint is active (the bot takes it home, "no town portal: taking the waypoint to town").
+func (r *Runner) homeReach(s *d2.Snapshot, first int) map[int]bool {
+	reach := map[int]bool{first: true}
+	if wps, _ := r.activeWaypoints(s); wps != nil {
+		for a := range wps {
+			reach[a] = true
+		}
+	}
+	return reach
+}
+
+// homeBandArea picks the plan area of the character's own level among the areas it can leave without a portal. A clvl 14
+// hero was sent to Blood Moor (0.6 xp and 0.26 gold per kill) because the first field was the only option (sellskip,
+// docs/sellskip.md). ok is false when the band holds nothing reachable (the caller keeps the first field).
+func (r *Runner) homeBandArea(s *d2.Snapshot, diff string, first int) (int, bool) {
+	if r.kitGateActive(s) {
+		return 0, false // the early kit gate keeps the walk home short: first field only
+	}
+	reach := r.homeReach(s, first)
+	ex := map[int]bool{}
+	for _, st := range r.d.Plan.Steps[diff] {
+		if !reach[st.Area] || r.loop.cleared[st.Area] || r.banned(st.Area) {
+			ex[st.Area] = true
+		}
+	}
+	r.guardedAreas(s, ex)
+	t := r.e.Tune.Bot
+	st, ok := r.d.Plan.Pick(diff, s.Player.Level, PickOptions{Margin: t.LevelMargin, Slack: t.LeaveSlack, Acts: r.allowedActs(s), Exclude: ex, FullKit: r.fullKit(s), Melee: MeleeTank(s.Player.Class), Class: planClass(s.Player.Class), Merc: mercUp()})
+	if !ok || st.Area == first {
+		return 0, false
+	}
+	return st.Area, true
 }
 
 // povertySetter is the part of a Fighter that takes the poverty verdict (combat.Fighter.SetPoverty).
@@ -300,7 +315,7 @@ func (m *mercState) observe(mc d2.Merc, inTown bool, now time.Time) bool {
 // ladder installed the legacy verdict is put to point t2.mercenary (askMerc) after the merc lock is released.
 func (r *Runner) mercWanted(s *d2.Snapshot) string {
 	what := r.mercLegacy(s)
-	if what == "" {
+	if what == "" || what == "revive" && r.zoneLeaveMercDead() {
 		return ""
 	}
 	merc := "none"
@@ -433,4 +448,22 @@ func (r *Runner) hasPortalSource(s *d2.Snapshot) bool {
 		r.e.Log.Info("tp-debounce-"+ev.kind, "verdict", v, "raw", src != nil, "looks", ev.looks, "held_s", int(ev.held.Seconds()))
 	}
 	return v
+}
+
+// mercReserve is the gold a visit keeps for reviving a dead merc: the revive price (merc.ReviveCost of the merc's level,
+// else of the level a hire offers at clvl-5, which matched the quoted 600 at clvl 14). The shop honours it for optional
+// buys only (town.mercReserve). 0 when the merc is alive, unlisted or the knob is off.
+func (r *Runner) mercReserve(s *d2.Snapshot) int {
+	if r.e.Tune.Town.MercReserve == 0 || s == nil || s.Player == nil {
+		return 0
+	}
+	mc := d2.FindMerc(s)
+	if !mc.Present || mc.Alive {
+		return 0
+	}
+	lvl := mc.Level
+	if lvl <= 0 {
+		lvl = merc.OfferedLevel(s.Player.Level, 0)
+	}
+	return merc.ReviveCost(lvl)
 }

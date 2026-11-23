@@ -813,10 +813,8 @@ func (p *PolicySheet) PolicyAnswerHandler(o AnswerOptions) http.Handler {
 var policyTmpl = template.Must(template.New("policy").Parse(`<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><title>d.idle - policy sheet</title>
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
-<link rel="icon" href="data:,"><link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/app.css"><link rel="stylesheet" href="/watch/return.css">
+<link rel="icon" href="data:,"><link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/app.css"><link rel="stylesheet" href="/watch/return.css"><link rel="stylesheet" href="/watch/components.css"><link rel="stylesheet" href="/watch/nav.css">
 </head><body>
-<header class="top"><div class="brand"><span class="brand-mark" aria-hidden="true"></span><h1>d.idle</h1></div>
-<a class="btn" href="/watch/return">While you were away</a> <a class="btn primary" href="/watch?live=1">Live screen</a></header>
 <main class="ret" id="policy">
 <section class="card" aria-labelledby="p-head"><h2 id="p-head">Policy sheet ({{.Class}})</h2>
 <p>How the hero handles its chores. Set it once, change it any time. Poor choices are allowed: try them and read what they cost.</p>
@@ -833,6 +831,7 @@ var policyTmpl = template.Must(template.New("policy").Parse(`<!DOCTYPE html>
 </main>
 <p id="msg" class="hint" role="status"></p>
 <script src="/watch/policy.js"></script>
+<script src="/watch/nav.js"></script>
 </body></html>`))
 
 // RenderPolicy is the sheet as server-rendered HTML.

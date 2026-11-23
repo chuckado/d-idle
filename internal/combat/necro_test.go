@@ -12,6 +12,7 @@ import (
 const (
 	idAmplify, idBoneArmor, idRaise, idClay, idWeaken, idLowerRes = 66, 68, 70, 75, 72, 91
 	clsSkel, clsGolem                                             = 363, 289
+	stateAmplify                                                  = 9
 )
 
 // nworld is a one-snapshot world: casts are recorded and may spawn minions, walking moves the player.
@@ -219,24 +220,25 @@ func TestCurseTargetAndChoice(t *testing.T) {
 	h, w := newNecro(t)
 	known := KnownSkills(w.snap.Player, h.f.cat, h.f.keys)
 	p := w.snap.Player
-	if sp, ok := curseFor(known, p, a); !ok || sp.Name != "Amplify Damage" {
+	nd := ProfileFor(d2.Necromancer, "").Necro
+	if sp, ok := curseFor(nd, known, p, a); !ok || sp.Name != "Amplify Damage" {
 		t.Fatalf("default %v", sp.Name)
 	}
 	a.HasRes = true
 	a.Res[data.Magic] = 75
-	if sp, _ := curseFor(known, p, a); sp.Name != "Lower Resist" {
+	if sp, _ := curseFor(nd, known, p, a); sp.Name != "Lower Resist" {
 		t.Fatalf("magic resistant: %v", sp.Name)
 	}
 	delete(known, "Amplify Damage")
 	a.HasRes = false
-	if _, ok := curseFor(known, p, a); ok {
+	if _, ok := curseFor(nd, known, p, a); ok {
 		t.Fatal("weaken on trash")
 	}
-	if sp, ok := curseFor(known, p, boss); !ok || sp.Name != "Weaken" {
+	if sp, ok := curseFor(nd, known, p, boss); !ok || sp.Name != "Weaken" {
 		t.Fatal("weaken on boss")
 	}
 	p.Mana = 5
-	if _, ok := curseFor(known, p, boss); ok {
+	if _, ok := curseFor(nd, known, p, boss); ok {
 		t.Fatal("cursed without mana to spare")
 	}
 }
@@ -338,15 +340,16 @@ func TestCurseCoversNeighbours(t *testing.T) {
 	h, w := newNecro(t)
 	f := h.f
 	f.necro.init()
+	nd := ProfileFor(d2.Necromancer, "").Necro
 	sp := SkillSpec{ID: idAmplify, Name: "Amplify Damage"}
 	f.necro.curseAt[curseKey{7, idAmplify}] = curseRec{at: f.now(), tries: 1, x: 50, y: 50}
 	near := d2.Unit{ID: 8, X: 53, Y: 52, Monster: &d2.MonsterInfo{}}
 	far := d2.Unit{ID: 9, X: 70, Y: 50, Monster: &d2.MonsterInfo{}}
 	_ = w
-	if !f.curseUp(near, sp) {
+	if !f.curseUp(nd, near, sp) {
 		t.Fatal("neighbour of a fresh cast should count as cursed")
 	}
-	if f.curseUp(far, sp) {
+	if f.curseUp(nd, far, sp) {
 		t.Fatal("distant unit should not")
 	}
 }

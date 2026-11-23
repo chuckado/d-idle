@@ -25,8 +25,25 @@ const (
 	StatColdRes    = 43
 	StatPoisonRes  = 45
 	StatMagicRes   = 37
-	StatDmgReduce  = 36
-	StatMagicFind  = 80
+	// Max-resist stats: 0x26 (38) is V read from the game.exe row table (decomp37 section 2); 40/42/44/46 are the
+	// same table's neighbours by itemstatcost order (S, U live).
+	StatMaxMagicRes  = 38
+	StatMaxFireRes   = 40
+	StatMaxLightRes  = 42
+	StatMaxColdRes   = 44
+	StatMaxPoisonRes = 46
+	// Absorb stats 142..149: V read of the row table at 0x732980 (decomp37 section 2).
+	StatFireAbsorbPct  = 142
+	StatFireAbsorb     = 143
+	StatLightAbsorbPct = 144
+	StatLightAbsorb    = 145
+	StatMagicAbsorbPct = 146
+	StatMagicAbsorb    = 147
+	StatColdAbsorbPct  = 148
+	StatColdAbsorb     = 149
+	StatArmorClass     = 31 // defence, stat id of ItemStatCost "armorclass" (S: D2BS list; read via the d2d dump stats.defense, U live)
+	StatDmgReduce      = 36
+	StatMagicFind      = 80
 )
 
 // Stat list layout. VERIFIED LIVE (dump of the player's list and an item's list): the vector is at

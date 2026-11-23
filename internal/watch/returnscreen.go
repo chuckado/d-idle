@@ -345,6 +345,8 @@ type ReturnData struct {
 	Sections []SectionView `json:"sections"`
 	// Gaps names what the page could not show because no event carries it (honest list, U items of docs/return-screen.md).
 	Gaps []string `json:"gaps"`
+	// Rules are the mode rules in force ("ladder runewords: on"), shown under the headline.
+	Rules []string `json:"rules,omitempty"`
 }
 
 // ReturnInput is everything BuildReturn reads.
@@ -773,6 +775,8 @@ type ReturnConfig struct {
 	Sections *SectionRegistry
 	// Notes receives the three sentences of the session record (TASK-106). nil: the box says no record is connected.
 	Notes NotesSink
+	// Rules are the visible mode rules (ADR 0024) put on the page and in its data; nil: none.
+	Rules []string
 	// OnRead is called with the data of every served HTML return page (a card the viewer is shown); nil: none.
 	OnRead func(ReturnData)
 }
@@ -806,7 +810,9 @@ func (c ReturnConfig) Return(sinceOverride float64) ReturnData {
 			in.OpenAsk[t.Point]++
 		}
 	}
-	return BuildReturn(in)
+	d := BuildReturn(in)
+	d.Rules = c.Rules
+	return d
 }
 
 func (v *Visit) awayOK() (time.Duration, bool) {
@@ -1033,12 +1039,10 @@ var returnTmpl = template.Must(template.New("return").Funcs(template.FuncMap{"du
 }}).Parse(`<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><title>d.idle - while you were away</title>
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
-<link rel="icon" href="data:,"><link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/app.css"><link rel="stylesheet" href="/watch/return.css">
+<link rel="icon" href="data:,"><link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/app.css"><link rel="stylesheet" href="/watch/return.css"><link rel="stylesheet" href="/watch/components.css"><link rel="stylesheet" href="/watch/nav.css">
 </head><body>
-<header class="top"><div class="brand"><span class="brand-mark" aria-hidden="true"></span><h1>d.idle</h1></div>
-<a class="btn primary" href="/watch?live=1">Go to the live screen</a></header>
 <main class="ret" id="return">
-<section class="card" aria-labelledby="r-head"><h2 id="r-head">While you were away</h2><p class="headline">{{.Headline}}</p></section>
+<section class="card" aria-labelledby="r-head"><h2 id="r-head">While you were away</h2><p class="headline">{{.Headline}}</p><p><a class="btn primary" href="/watch?live=1">Go to the live screen</a></p>{{if .Rules}}<p class="hint">{{range $i, $r := .Rules}}{{if $i}}; {{end}}{{$r}}{{end}}</p>{{end}}</section>
 {{if .Moments}}<section class="card" aria-labelledby="r-moments"><h2 id="r-moments">The moments</h2><ul class="moments">
 {{range .Moments}}<li class="moment {{.Kind}}"><b>{{.Title}}</b> <span>{{.Text}}</span></li>{{end}}</ul></section>{{end}}
 {{if .Deaths}}<section class="card" aria-labelledby="r-deaths"><h2 id="r-deaths">Deaths</h2><ul>{{range .Deaths}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
@@ -1071,6 +1075,7 @@ var returnTmpl = template.Must(template.New("return").Funcs(template.FuncMap{"du
 </main>
 <p id="msg" class="hint" role="status"></p>
 <script src="/watch/return.js"></script>
+<script src="/watch/nav.js"></script>
 </body></html>
 {{define "sec"}}<section class="card" data-section="{{.ID}}" aria-label="{{.Title}}"><h2>{{.Title}}</h2>
 {{if .Lines}}<ul>{{range .Lines}}<li>{{.}}</li>{{end}}</ul>{{else}}<p class="empty">{{.Placeholder}}</p>{{end}}{{if .Buttons}}<div class="row">{{range .Buttons}}<button type="button" class="btn small" data-act="{{if .Act}}{{.Act}}{{else}}policy{{end}}" data-row="{{.Row}}" data-option="{{.Option}}">{{.Label}}</button>{{end}}</div>{{end}}</section>{{end}}`))

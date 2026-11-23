@@ -4,6 +4,7 @@
 //	uishots serve -addr 127.0.0.1:18941 [-class sorceress]   the frozen fixture viewer the pictures are taken of
 //	uishots diff -golden DIR -got DIR [-max 0.005]          compare PNGs; fail when an image changed more than max
 //	uishots check DIR                                       check the DOM dumps (*.html) against the panel contract
+//	uishots fit DIR                                         judge the fit-*.html dumps of tools/uishots.sh --fit (fit.go)
 //
 // Stdlib only.
 package main
@@ -57,12 +58,26 @@ func main() {
 			}
 			os.Exit(1)
 		}
+	case "fit":
+		if len(os.Args) < 3 {
+			usage()
+		}
+		lines, ok, err := fitDir(os.Args[2])
+		for _, l := range lines {
+			fmt.Println(l)
+		}
+		if err != nil || !ok {
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "uishots:", err)
+			}
+			os.Exit(1)
+		}
 	default:
 		usage()
 	}
 }
 
 func usage() {
-	fmt.Fprintln(os.Stderr, "usage: uishots serve|diff|check (see the package comment)")
+	fmt.Fprintln(os.Stderr, "usage: uishots serve|diff|check|fit (see the package comment)")
 	os.Exit(2)
 }

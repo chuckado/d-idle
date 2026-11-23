@@ -1,0 +1,53 @@
+{
+ "schema": "questcaps/2",
+ "backend": "old-2026-11-17",
+ "verbs": [
+  "debug portals",
+  "debug presets",
+  "dump items"
+ ],
+ "knowledge": [
+  "preset_list",
+  "preset_near"
+ ],
+ "readers": {
+  "quest_available": {
+   "tier": "memory"
+  },
+  "quest_state": {
+   "tier": "memory"
+  },
+  "has_item": {
+   "tier": "proxy",
+   "via": "dump items"
+  },
+  "visited": {
+   "tier": "proxy"
+  },
+  "portal_open": {
+   "tier": "proxy",
+   "via": "debug portals",
+   "note": "debug portals lists the Tristram way (L1 probe)"
+  },
+  "object_known": {
+   "tier": "none",
+   "note": "RC1: the tree preset row is hidden=1 or not built until the hero is near, so the listing never shows it (treefix3, U)"
+  },
+  "object_known/cairn_stone": {
+   "tier": "proxy",
+   "via": "debug presets"
+  },
+  "stones_lit": {
+   "tier": "none",
+   "note": "RC2: fieldObjects sets Mode -1 for every preset row; no stone ever reads lit"
+  },
+  "object_state/lit": {
+   "tier": "none",
+   "note": "RC2: same, object mode unreadable"
+  }
+ },
+ "item_match": "name",
+ "item_match_note": "RC3: scanQuestItems matches display names; the table said Deckard Cain's Scroll, the game says Key to the Cairn Stones",
+ "progress_rules": [],
+ "progress_note": "RC1: find restarts per try and counts a walk that still gained coverage as a failure"
+}

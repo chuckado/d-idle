@@ -90,7 +90,10 @@
   {
    "class": "sorceress",
    "build": "lightning",
-   "avoid": ["Chain Lightning", "Lightning"],
+   "avoid": [
+    "Chain Lightning",
+    "Lightning"
+   ],
    "bands": [
     {
      "minLevel": 0,
@@ -138,6 +141,41 @@
     "Lightning": "f6",
     "Fire Bolt": "f7",
     "Frost Nova": "f8"
+   }
+  },
+  {
+   "class": "sorceress",
+   "build": "fire",
+   "bands": [
+    {
+     "requires": "Fire Ball",
+     "attack": [
+      "Fire Ball",
+      "Fire Bolt",
+      "Charged Bolt"
+     ]
+    },
+    {
+     "attack": [
+      "Fire Bolt",
+      "Charged Bolt"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Frozen Armor",
+     "Shiver Armor",
+     "Chilling Armor"
+    ]
+   ],
+   "layout": {
+    "Static Field": "f1",
+    "Teleport": "f2",
+    "Frozen Armor": "f3",
+    "Fire Bolt": "f4",
+    "Fire Ball": "f5",
+    "Charged Bolt": "f6"
    }
   },
   {
@@ -247,6 +285,81 @@
    }
   },
   {
+   "class": "paladin",
+   "build": "hammerdin",
+   "bands": [
+    {
+     "minLevel": 18,
+     "requires": "Blessed Hammer",
+     "attack": [
+      "Blessed Hammer",
+      "Smite",
+      "Attack"
+     ],
+     "aura": [
+      {
+       "name": "Prayer",
+       "restLifePct": 70
+      },
+      {
+       "name": "Concentration"
+      },
+      {
+       "name": "Might"
+      }
+     ]
+    },
+    {
+     "minLevel": 2,
+     "requires": "Smite",
+     "attack": [
+      "Smite",
+      "Attack"
+     ]
+    },
+    {
+     "attack": [
+      "Attack"
+     ]
+    }
+   ],
+   "aura": [
+    {
+     "name": "Prayer",
+     "restLifePct": 70
+    },
+    {
+     "name": "Might"
+    },
+    {
+     "name": "Thorns"
+    }
+   ],
+   "buffs": [
+    [
+     "Holy Shield"
+    ]
+   ],
+   "layout": {
+    "Smite": "f1",
+    "Blessed Hammer": "f2",
+    "Holy Shield": "f3",
+    "Concentration": "f4",
+    "Vigor": "f5",
+    "Might": "f6",
+    "Prayer": "f7",
+    "Thorns": "f8"
+   },
+   "melee": {
+    "reach": 4,
+    "holdMs": 600,
+    "retreatLifePct": 40,
+    "surround": 4,
+    "surroundLifePct": 65,
+    "manaReserve": 4
+   }
+  },
+  {
    "class": "amazon",
    "bands": [
     {
@@ -328,6 +441,155 @@
     "Raise Skeletal Mage": "f6",
     "Lower Resist": "f7",
     "Clay Golem": "f8"
+   },
+   "necro": {
+    "golems": [
+     "FireGolem",
+     "Fire Golem",
+     "Clay Golem"
+    ],
+    "summons": [
+     {
+      "name": "Raise Skeleton",
+      "kind": "skeleton",
+      "max": 12
+     },
+     {
+      "name": "Raise Skeletal Mage",
+      "kind": "mage",
+      "max": 4
+     },
+     {
+      "name": "Revive",
+      "kind": "revive",
+      "max": 8
+     }
+    ],
+    "curses": [
+     {
+      "name": "Lower Resist",
+      "when": "magicResist"
+     },
+     {
+      "name": "Amplify Damage",
+      "state": 9,
+      "when": "any"
+     },
+     {
+      "name": "Weaken",
+      "state": 19,
+      "when": "eliteOrBoss"
+     },
+     {
+      "name": "Dim Vision"
+     },
+     {
+      "name": "Terror"
+     },
+     {
+      "name": "Confuse"
+     },
+     {
+      "name": "Life Tap"
+     },
+     {
+      "name": "Attract"
+     },
+     {
+      "name": "Decrepify"
+     }
+    ],
+    "explosion": "Corpse Explosion"
+   }
+  },
+  {
+   "class": "necromancer",
+   "build": "summoner",
+   "bands": [
+    {
+     "attack": [
+      "Teeth",
+      "Attack"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Bone Armor"
+    ]
+   ],
+   "layout": {
+    "Teeth": "f1",
+    "Raise Skeleton": "f2",
+    "Raise Skeletal Mage": "f3",
+    "Clay Golem": "f4",
+    "Bone Armor": "f5",
+    "Amplify Damage": "f6",
+    "Corpse Explosion": "f7",
+    "Revive": "f8"
+   },
+   "necro": {
+    "golems": [
+     "FireGolem",
+     "Fire Golem",
+     "Clay Golem"
+    ],
+    "summons": [
+     {
+      "name": "Raise Skeleton",
+      "kind": "skeleton",
+      "max": 12
+     },
+     {
+      "name": "Raise Skeletal Mage",
+      "kind": "mage",
+      "max": 4
+     },
+     {
+      "name": "Revive",
+      "kind": "revive",
+      "max": 8
+     }
+    ],
+    "curses": [
+     {
+      "name": "Lower Resist",
+      "when": "magicResist"
+     },
+     {
+      "name": "Amplify Damage",
+      "state": 9,
+      "when": "any"
+     },
+     {
+      "name": "Decrepify",
+      "when": "eliteOrBoss"
+     },
+     {
+      "name": "Weaken",
+      "state": 19,
+      "when": "eliteOrBoss"
+     },
+     {
+      "name": "Dim Vision"
+     },
+     {
+      "name": "Terror"
+     },
+     {
+      "name": "Confuse"
+     },
+     {
+      "name": "Life Tap"
+     },
+     {
+      "name": "Attract"
+     },
+     {
+      "name": "Decrepify"
+     }
+    ],
+    "explosion": "Corpse Explosion"
    }
   },
   {
@@ -438,6 +700,199 @@
     "Shadow Warrior": "f5",
     "Lightning Sentry": "f6",
     "Charged Bolt Sentry": "f7"
+   }
+  },
+  {
+   "class": "barbarian",
+   "build": "frenzy",
+   "bands": [
+    {
+     "minLevel": 24,
+     "requires": "Frenzy",
+     "attack": [
+      "Frenzy",
+      "Double Swing",
+      "Attack"
+     ]
+    },
+    {
+     "minLevel": 6,
+     "requires": "Double Swing",
+     "attack": [
+      "Double Swing",
+      "Attack"
+     ]
+    },
+    {
+     "attack": [
+      "Bash",
+      "Attack"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Battle Orders"
+    ],
+    [
+     "Shout"
+    ]
+   ],
+   "layout": {
+    "Bash": "f1",
+    "Double Swing": "f2",
+    "Frenzy": "f3",
+    "Battle Orders": "f4",
+    "Shout": "f5",
+    "Howl": "f6",
+    "Berserk": "f7",
+    "Concentrate": "f8"
+   },
+   "melee": {
+    "reach": 4,
+    "holdMs": 500,
+    "retreatLifePct": 40,
+    "surround": 4,
+    "surroundLifePct": 65,
+    "manaReserve": 4
+   }
+  },
+  {
+   "class": "druid",
+   "build": "fire",
+   "bands": [
+    {
+     "minLevel": 12,
+     "requires": "Eruption",
+     "attack": [
+      "Eruption",
+      "Firestorm",
+      "Molten Boulder",
+      "Attack"
+     ]
+    },
+    {
+     "attack": [
+      "Firestorm",
+      "Molten Boulder",
+      "Attack"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Cyclone Armor"
+    ]
+   ],
+   "layout": {
+    "Firestorm": "f1",
+    "Molten Boulder": "f2",
+    "Eruption": "f3",
+    "Cyclone Armor": "f4",
+    "Oak Sage": "f5",
+    "Volcano": "f6",
+    "Raven": "f7",
+    "Summon Spirit Wolf": "f8"
+   }
+  },
+  {
+   "class": "necromancer",
+   "build": "poisonnova",
+   "bands": [
+    {
+     "minLevel": 30,
+     "requires": "Poison Nova",
+     "attack": [
+      "Poison Nova",
+      "Bone Spear",
+      "Teeth",
+      "Attack"
+     ]
+    },
+    {
+     "minLevel": 18,
+     "requires": "Bone Spear",
+     "attack": [
+      "Bone Spear",
+      "Teeth",
+      "Attack"
+     ]
+    },
+    {
+     "attack": [
+      "Teeth",
+      "Attack"
+     ]
+    }
+   ],
+   "buffs": [
+    [
+     "Bone Armor"
+    ]
+   ],
+   "layout": {
+    "Teeth": "f1",
+    "Bone Spear": "f2",
+    "Poison Nova": "f3",
+    "Bone Armor": "f4",
+    "Lower Resist": "f5",
+    "Clay Golem": "f6",
+    "Amplify Damage": "f7"
+   },
+   "necro": {
+    "golems": [
+     "Clay Golem"
+    ],
+    "summons": [
+     {
+      "name": "Raise Skeleton",
+      "kind": "skeleton",
+      "max": 12
+     },
+     {
+      "name": "Raise Skeletal Mage",
+      "kind": "mage",
+      "max": 4
+     },
+     {
+      "name": "Revive",
+      "kind": "revive",
+      "max": 8
+     }
+    ],
+    "curses": [
+     {
+      "name": "Lower Resist",
+      "when": "any"
+     },
+     {
+      "name": "Dim Vision"
+     },
+     {
+      "name": "Terror"
+     },
+     {
+      "name": "Confuse"
+     },
+     {
+      "name": "Life Tap"
+     },
+     {
+      "name": "Attract"
+     },
+     {
+      "name": "Decrepify"
+     },
+     {
+      "name": "Amplify Damage",
+      "state": 9
+     },
+     {
+      "name": "Weaken",
+      "state": 19
+     }
+    ],
+    "explosion": ""
    }
   }
  ]

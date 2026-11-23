@@ -54,6 +54,7 @@ export function mount(root, ctx) {
   light.dataset.key = 'readiness';
   const why = ctx.el('span', 'd-hint');
   ready.append(light, why);
+  let wallet = null; // the account's Ether, a link to the Vault; created when the hero view carries it (loot.vault on), so the tile is unchanged otherwise
   ctx.body.append(who, bars, rate, stats, res, ready);
   return {
     update(h) {
@@ -69,6 +70,11 @@ export function mount(root, ctx) {
       rate.hidden = !xt;
       gold.set(num(h.gold), h.gold === null ? 'not reported' : 'on the hero');
       stash.set(num(h.stashGold), h.stashGold === null ? 'not reported' : 'in the stash');
+      if (h.ether && !wallet) {
+        wallet = ctx.el('a', 'd-chip ether'); wallet.dataset.key = 'ether'; wallet.href = '/watch/vault';
+        ctx.body.append(wallet);
+      }
+      if (wallet) { wallet.hidden = !h.ether; wallet.textContent = h.ether || ''; wallet.setAttribute('aria-label', h.ether ? h.ether + ' (open the Ethereal Vault)' : 'Ether'); }
       const s = h.stats;
       res.hidden = !s;
       if (s) for (const k in chips) { chips[k].b.textContent = s.resists[k] + '%'; const l = resistLevel(s.resists[k]); if (l) chips[k].c.dataset.level = l; else delete chips[k].c.dataset.level; }

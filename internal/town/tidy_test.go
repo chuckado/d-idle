@@ -6,6 +6,7 @@ import (
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/gear/geartest"
+	"d2lod-bot/internal/loot"
 	"d2lod-bot/internal/town"
 )
 
@@ -41,7 +42,7 @@ func TestTidyStashesByPolicyAndNeverTouchesEquipmentOrMarks(t *testing.T) {
 		r.W.Add("r07", d2.ContInventory, 0, 0)
 		marked := r.W.Add("r07", d2.ContInventory, 1, 0)
 		r.T.SetItemMarks(fakeMarks{marked.ID: "keep"})
-		rep, err := r.T.Chores(context.Background(), town.ChorePlan{Stash: true})
+		rep, err := r.T.Chores(context.Background(), town.ChorePlan{Sell: true}) // not Stash: the pickit stash chore runs before tidy and would bank both runes
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -67,5 +68,32 @@ func TestTidyOffDoesNothing(t *testing.T) {
 	rep, _ := r.T.Chores(context.Background(), town.ChorePlan{Sell: true})
 	if rep.Tidied != 0 {
 		t.Errorf("tidied %d", rep.Tidied)
+	}
+}
+
+// The loot rules shadow stage (bot.lootShadow, log only) is fed by the tidy and sell decisions and changes nothing: the
+// same chore result as with the knob off.
+func TestTidyAndSellFeedTheLootShadow(t *testing.T) {
+	geartest.Need(t)
+	run := func(on int) (stashed int, shadowTidy, shadowSell int) {
+		loot.DefaultShadow.Reset()
+		r := newRig(t)
+		r.Env.Tune.Bot.LootShadow = on
+		dressed(r.W)
+		r.W.Add("r07", d2.ContInventory, 0, 0)
+		r.W.Add("hax", d2.ContInventory, 1, 0)
+		if _, err := r.T.Chores(context.Background(), town.ChorePlan{Sell: true}); err != nil {
+			t.Fatal(err)
+		}
+		rep := loot.DefaultShadow.Report(on != 0)
+		return countIn(r, "r07", d2.ContStash), rep.Scopes[loot.ShadowTidy].Decisions, rep.Scopes[loot.ShadowSell].Decisions
+	}
+	offStash, offTidy, offSell := run(0)
+	onStash, onTidy, onSell := run(1)
+	if offStash != onStash {
+		t.Errorf("the shadow changed the outcome: %d runes stashed with it off, %d with it on", offStash, onStash)
+	}
+	if offTidy+offSell != 0 || onTidy == 0 || onSell == 0 {
+		t.Errorf("shadow decisions: off tidy %d sell %d, on tidy %d sell %d", offTidy, offSell, onTidy, onSell)
 	}
 }

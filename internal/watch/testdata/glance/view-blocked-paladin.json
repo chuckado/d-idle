@@ -1,0 +1,64 @@
+{
+  "health": {
+    "gear": {
+      "light": "unknown",
+      "word": "unknown"
+    },
+    "life": {
+      "light": "ok",
+      "word": "200/260"
+    },
+    "merc": {
+      "light": "unknown",
+      "word": "unknown"
+    },
+    "readiness": {
+      "detail": "Lightning resistance is under the line.",
+      "light": "warn",
+      "word": "risky"
+    },
+    "supplies": {
+      "light": "unknown",
+      "word": "unknown"
+    }
+  },
+  "needs": [
+    {
+      "actions": [],
+      "id": "journey",
+      "kind": "journey_blocked",
+      "sev": "warn",
+      "sub": "no mercenary yet",
+      "text": "The quest path is blocked"
+    }
+  ],
+  "progress": {
+    "goldPerHour": null,
+    "goldSeries": [],
+    "level": {
+      "etaSeconds": null,
+      "from": 12,
+      "pct": 49.9,
+      "to": 13
+    },
+    "xpPerHour": null,
+    "xpSeries": []
+  },
+  "schema": "watch.glance/1",
+  "sentence": {
+    "margin": "risky",
+    "place": "Black Marsh",
+    "reason": "Fighting in Black Marsh, my life is 72%",
+    "tone": "warn",
+    "uptime": "",
+    "voice": "",
+    "why": {
+      "change": "Life under my retreat line sends me to town; an order from you ends the fight sooner.",
+      "code": "fight",
+      "next": "No order from you: the hero follows its own plan.",
+      "now": "Fighting in Black Marsh, my life is 72%."
+    },
+    "word": "Waiting"
+  },
+  "seq": 4
+}

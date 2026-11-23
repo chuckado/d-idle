@@ -37,6 +37,12 @@ type Result struct {
 	Attention string // set with OutBlocked: text for goal.Note / needs_attention
 	Stuck     bool   // with OutBlocked: nothing else is runnable, the goal should pause
 	Err       error
+	// Code and Hold carry the Fault of a refused step to the quest board (Fault.Code, Fault.Hold).
+	Code string
+	Hold bool
+	// Via and ViaWhy are the Code and words of the coded fault that spliced this step in (a potion shortage sends the
+	// hero to the chores step): the board shows that hold while the trip runs (quests.boardSM).
+	Via, ViaWhy string
 }
 
 // Policy is the retry/escape policy (tasklayer.md sections 3 and 6). Counters live in memory only; a restart forgets
@@ -68,19 +74,28 @@ func (p Policy) norm() Policy {
 type Hooks struct {
 	OnStart func(s Step)
 	OnEnd   func(s Step, r Result)
+	// Progress reports how far the current area is explored (percent); ok is false where that is not measured (town, a
+	// backend that does not roam). A step that times out while it explored nothing new is not extended.
+	Progress func() (pct int, ok bool)
+	// OnTimeout is told of every step timeout: n counts them for the step, pct is the exploration at that moment (-1
+	// unknown), extend says the step runs once more, otherwise it is given up (skipped or parked with the reason).
+	OnTimeout func(s Step, n, pct int, extend bool)
 }
 
 // Executor runs one decision per Tick. It holds only failure counters, never a cursor.
 type Executor struct {
-	Env     Env
-	Act     Actions
-	Policy  Policy
-	Hooks   Hooks
-	Now     func() time.Time
-	Journal []Result // optional ring for tests/dashboard; appended when non-nil via Record
+	sticky, stickyWhy string // the coded fault whose inserted steps are still pending
+	via               string // the code of the coded fault that inserted the step being run ("" none)
+	Env               Env
+	Act               Actions
+	Policy            Policy
+	Hooks             Hooks
+	Now               func() time.Time
+	Journal           []Result // optional ring for tests/dashboard; appended when non-nil via Record
 
 	fails    map[string]int
 	timeouts map[string]int
+	startPct int // exploration percent when the running step started, -1 unknown
 	deaths   map[string]int
 	assumed  map[string]bool // steps whose Do succeeded but Need stays true on EvProxy/EvNone only
 	skipped  map[string]bool
@@ -151,6 +166,24 @@ func (e *Executor) Reset() {
 	e.assumed, e.skipped, e.blocked, e.finished, e.inserted, e.insDepth = map[string]bool{}, map[string]bool{}, map[string]string{}, map[string]bool{}, nil, 0
 	e.strikes = map[string]*strikeRec{}
 	e.kitBlocks = nil
+}
+
+// Park blocks group g with a reason so the planner moves on to the level plan; the bot Unparks it later.
+func (e *Executor) Park(g, why string) { e.blocked[g] = why }
+
+// Unpark lifts the block, strikes and failure counts of group g so the planner offers it again (the bot's retry after a
+// blocked journey: the hero farmed meanwhile and the world may have changed).
+func (e *Executor) Unpark(g string) {
+	delete(e.blocked, g)
+	delete(e.strikes, g)
+	delete(e.kitBlocks, g)
+	for _, m := range []map[string]int{e.fails, e.timeouts, e.deaths} {
+		for id := range m {
+			if strings.HasPrefix(id, "quest."+g+"/") {
+				delete(m, id)
+			}
+		}
+	}
 }
 
 // ForgetFails drops the failure bookkeeping (fails, timeouts, deaths, skips, blocks, spliced steps) but keeps what was
@@ -291,6 +324,7 @@ func (e *Executor) Tick(ctx context.Context, p Planner) (Result, error) {
 	)
 	// A Ready fault with prerequisites splices them in front and the first one runs in this same tick, so a restart
 	// between ticks cannot lose the splice.
+	var via, viaWhy string
 	for try := 0; ; try++ {
 		nodes := append(append([]Node(nil), e.inserted...), plan.Nodes...)
 		n, ev, ok, pending = e.pick(nodes, w)
@@ -302,12 +336,30 @@ func (e *Executor) Tick(ctx context.Context, p Planner) (Result, error) {
 			if f := n.Step.Ready(w); f != nil {
 				r = e.handleFault(plan, n.Step, f, r)
 				if r.Outcome == OutInserted && try < e.Policy.norm().MaxInsert {
+					if f.Code != "" {
+						via, viaWhy = f.Code, f.Why
+						e.sticky, e.stickyWhy = f.Code, f.Why
+					}
 					continue
 				}
 				return r, nil
 			}
 		}
-		return e.run(ctx, w, plan, n.Step, r), nil
+		if via == "" && e.sticky != "" { // a later tick runs the step an earlier coded fault inserted
+			for _, in := range e.inserted {
+				if in.Step.ID == n.Step.ID {
+					via, viaWhy = e.sticky, e.stickyWhy
+				}
+			}
+		}
+		e.via = via
+		res := e.run(ctx, w, plan, n.Step, r)
+		e.via = ""
+		if res.Outcome == OutRan || res.Outcome == OutSkipped {
+			e.sticky = ""
+		}
+		res.Via, res.ViaWhy = via, viaWhy
+		return res, nil
 	}
 	if !ok {
 		if pending {
@@ -332,6 +384,12 @@ func (e *Executor) run(ctx context.Context, w World, plan Plan, s Step, r Result
 	}
 	if e.Hooks.OnStart != nil {
 		e.Hooks.OnStart(s)
+	}
+	e.startPct = -1
+	if e.Hooks.Progress != nil {
+		if pct, ok := e.Hooks.Progress(); ok {
+			e.startPct = pct
+		}
 	}
 	err := s.Do(runCtx, e.Act)
 	// A deadline on the caller's ctx (the Runner's step budget) is an overrun and counts as a timeout; a plain cancel
@@ -380,6 +438,13 @@ func (e *Executor) run(ctx context.Context, w World, plan Plan, s Step, r Result
 		// 14: the Charsi greeting ran twice, 25 s, before it was skipped).
 		r.Err = errors.New(why)
 		return e.end(s, e.escape(plan, s, r, why))
+	}
+	if e.via != "" {
+		// A step a coded fault inserted (the potion chores trip) ran clean and the shortage stays: the belt cannot hold
+		// what the guard asks for or the purse is short. That is a hold (the board trains meanwhile and parks it with
+		// hold_timeout after its budget), not a failure to count.
+		r.Outcome, r.Err, r.Code, r.Hold = OutRetry, errors.New(why), e.via, true
+		return e.end(s, r)
 	}
 	return e.end(s, e.failure(plan, s, r, why))
 }
@@ -485,13 +550,41 @@ func (e *Executor) handleRunFault(plan Plan, s Step, f *Fault, r Result) Result 
 	case KindFatal:
 		r.Outcome = OutInterrupted
 		return r
+	case KindExploring:
+		r.Outcome = OutRetry // run the step again; nothing is counted
+		r.Err = errors.New(f.Why)
+		return r
 	case KindTimeout:
 		e.timeouts[s.ID]++
-		if e.timeouts[s.ID] <= pol.MaxTimeouts {
+		n, pct := e.timeouts[s.ID], -1
+		if e.Hooks.Progress != nil {
+			if p, ok := e.Hooks.Progress(); ok {
+				pct = p
+			}
+		}
+		// One extension, and only while the step still made exploration progress: a step that spins in a level it cannot
+		// finish must not run forever (live: Dark Wood waypoint step, an hour of exploring).
+		stalled := pct >= 0 && e.startPct >= 0 && pct <= e.startPct
+		extend := n <= pol.MaxTimeouts && !stalled
+		if e.Hooks.OnTimeout != nil {
+			e.Hooks.OnTimeout(s, n, pct, extend)
+		}
+		if extend {
 			r.Outcome = OutRetry
 			return r
 		}
-		return e.escape(plan, s, r, "timeout: "+f.Why)
+		why := fmt.Sprintf("step timeout %d", n)
+		if pct >= 0 {
+			why += fmt.Sprintf(" (explored %d%%)", pct)
+		}
+		if stalled {
+			why += ", no exploration progress"
+		}
+		r = e.escape(plan, s, r, why)
+		if r.Outcome == OutSkipped {
+			r.Attention = fmt.Sprintf("skipped: %s (%s): %s", s.Title, s.ID, why) // optional step: visible in the task log
+		}
+		return r
 	case KindPrereq, KindResource, KindDanger:
 		if f.Kind == KindDanger && e.strike(plan.Group, "too weak for "+s.Title) {
 			return e.block(plan, s, r, e.strikes[plan.Group].why)
@@ -516,7 +609,7 @@ func (e *Executor) givenUp(ins []Step) bool {
 
 // handleFault deals with a Ready fault (or a run fault of a precondition kind).
 func (e *Executor) handleFault(plan Plan, s Step, f *Fault, r Result) Result {
-	r.Kind = f.Kind
+	r.Kind, r.Code, r.Hold = f.Kind, f.Code, f.Hold
 	pol := e.Policy.norm()
 	if len(f.Insert) > 0 && e.insDepth < pol.MaxInsert && !e.givenUp(f.Insert) {
 		e.insDepth++
@@ -526,6 +619,11 @@ func (e *Executor) handleFault(plan Plan, s Step, f *Fault, r Result) Result {
 		}
 		e.inserted = append(front, e.inserted...) // prerequisites of a prerequisite run first
 		r.Outcome = OutInserted
+		return r
+	}
+	if f.Hold { // a hold is no failure: nothing is counted and the group is never escaped or blocked by it
+		r.Outcome = OutRetry
+		r.Err = errors.New(f.Why)
 		return r
 	}
 	if f.Kind == KindDanger || f.Kind == KindPrereq || f.Kind == KindResource {

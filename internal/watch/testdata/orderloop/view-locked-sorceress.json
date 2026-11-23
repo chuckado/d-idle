@@ -1,0 +1,8 @@
+{
+  "schema": "watch.orderloop/1",
+  "open": false,
+  "title": "Loop order",
+  "teaser": "Send the hero out, then repair its gear yourself once.",
+  "state": "locked",
+  "finished": 0
+}

@@ -33,8 +33,8 @@ Source: docs/research/player-power.md Part 3.4 (TASK-214 follow-up). Whyline exp
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Reason codes and templates (2 phrasings each) for red/amber checks; held-back planner steps show the reason
-- [ ] #2 Build flexibility: checks, floors and boss rows are data (per class and difficulty), no class or skill literal in Go; tests run with Paladin and Sorceress; an unknown class or table is an error naming it
+- [x] #1 Reason codes and templates (2 phrasings each) for red/amber checks; held-back planner steps show the reason
+- [x] #2 Build flexibility: checks, floors and boss rows are data (per class and difficulty), no class or skill literal in Go; tests run with Paladin and Sorceress; an unknown class or table is an error naming it
 <!-- AC:END -->
 
 ## Implementation Notes

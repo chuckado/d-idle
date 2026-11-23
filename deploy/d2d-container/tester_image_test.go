@@ -226,3 +226,36 @@ func TestTesterImageWorkflow(t *testing.T) {
 		}
 	}
 }
+
+// Character Select (docs/charselect.md): the tester profile runs d2bot supervised, plain bot mode does not, and an
+// active-char file written by a switch wins over D2D_NAME only when its save exists.
+func TestEntrypointCharacterSwitchSupport(t *testing.T) {
+	if o := dry(t, "tester"); !strings.Contains(o, "D2BOT_SUPERVISE=1") {
+		t.Errorf("tester profile is not supervised:\n%s", o)
+	}
+	if o := dry(t, "tester", "D2BOT_SUPERVISE=0"); !strings.Contains(o, "D2BOT_SUPERVISE=0") {
+		t.Errorf("D2BOT_SUPERVISE=0 not honoured:\n%s", o)
+	}
+	if o := dry(t, "bot"); strings.Contains(o, "D2BOT_SUPERVISE") {
+		t.Errorf("plain bot mode turned the supervisor on:\n%s", o)
+	}
+	data := t.TempDir()
+	inst := filepath.Join(data, "instances", "main")
+	save := filepath.Join(inst, "d2d", "config", "d2d", "save")
+	if err := os.MkdirAll(save, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	os.WriteFile(filepath.Join(save, "Zapp.d2s"), []byte("x"), 0o600)
+	active := func(n string) { os.WriteFile(filepath.Join(inst, "active-char"), []byte(n+"\n"), 0o600) }
+	env := []string{"D2BOT_DATA=" + data, "D2D_NAME=Holy"}
+	active("Zapp")
+	if o := dry(t, "bot", env...); !strings.Contains(o, "--char Zapp ") || !strings.Contains(o, "--d2d-class -1") {
+		t.Errorf("active character not preferred (loads its save):\n%s", o)
+	}
+	for _, bad := range []string{"Ghost", "../Zapp", "Zapp;id", ""} {
+		active(bad) // no save, or not a plain name: the env name stays
+		if o := dry(t, "bot", env...); !strings.Contains(o, "--char Holy ") {
+			t.Errorf("active-char %q was not ignored:\n%s", bad, o)
+		}
+	}
+}

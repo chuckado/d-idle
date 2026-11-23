@@ -11,6 +11,7 @@ import (
 	"d2lod-bot/internal/gear"
 	"d2lod-bot/internal/ladder"
 	"d2lod-bot/internal/resource"
+	"d2lod-bot/internal/supply"
 	"d2lod-bot/internal/task"
 )
 
@@ -105,7 +106,8 @@ func (r *Runner) guardWorld(s *d2.Snapshot) *task.World {
 	w.Potions, _, _ = r.beltAndInv(s)
 	w.Potions += in.Belt.PackHP + in.Belt.PackRV
 	w.HasTP, w.ManaPotions = in.HasTP, in.Belt.MP
-	w.Caster = s.Player.Class == d2.Sorceress || s.Player.Class == d2.Necromancer || s.Player.Class == d2.Druid
+	r.fillKit(&w, s)
+	w.Caster = s.Player.Class.Caster()
 	return &w
 }
 
@@ -127,18 +129,23 @@ func (r *Runner) towerGuardWhy(s *d2.Snapshot) string {
 
 // towerWhy is task.TowerWhy with point t0.area.toohard (docs/t0-slice.md): the level guard's verdict is the answer
 // (go when open, else lower with no kit, else skip) until the ladder, when installed, learns a rule for the context.
-// A learned go lifts the level block (the kit part of the guard stays); a learned skip or lower blocks an area the guard
-// would open. Asked only while the guard is on (Normal), so the other difficulties are untouched. p may be nil.
+// A learned go lifts the level block (the kit part of the guard stays); a learned skip or lower still blocks. The point
+// is asked only while the level guard blocks (never when the hero is at or above the floor). Asked only while the guard is on (Normal), so the other difficulties are untouched. p may be nil.
 func (r *Runner) towerWhy(w task.World, p *d2.Player) string {
 	why := task.TowerWhy(w)
 	l := ladder.Active()
 	if l == nil || p == nil || task.TowerFloor(w) == 0 {
 		return why
 	}
+	if task.TowerLevelWhy(w) == "" {
+		// The level passes (clvl at the floor counts): there is nothing "too hard" to ask about. The point used to be asked
+		// anyway, which put "the bot wants hero level 15 there and the hero is level 15" on the phone while only the kit
+		// was thin (live 2026-11-17). A thin kit stays a chores matter (why).
+		return why
+	}
 	kit := ladder.KitFor(w.HasTP, w.Potions)
 	legacy := "go"
 	switch {
-	case task.TowerLevelWhy(w) == "":
 	case kit == ladder.KitNone:
 		legacy = "lower"
 	default:
@@ -315,9 +322,10 @@ func (r *Runner) fillRouteFacts(au *Autopsy, a aliveInfo, now time.Time) {
 // without a launcher, the melee knob for the melee classes and a bowed Amazon.
 func (r *Runner) denFloor(s *d2.Snapshot) int {
 	p, c := s.Player, r.e.Tune.Campaign
-	switch p.Class {
-	case d2.Sorceress, d2.Necromancer, d2.Druid:
+	if p.Class.Caster() {
 		return c.DenMinLevelCaster
+	}
+	switch p.Class {
 	case d2.Amazon:
 		if r.hasLauncher(s) {
 			return c.DenMinLevelMelee
@@ -342,4 +350,51 @@ func (r *Runner) hasLauncher(s *d2.Snapshot) bool {
 // denGated says the character is below its Den floor in Normal.
 func (r *Runner) denGated(s *d2.Snapshot) bool {
 	return s != nil && s.Player != nil && s.Player.Difficulty == d2.Normal && s.Player.Level < r.denFloor(s)
+}
+
+// supplyPlanner is the town's planner, reached through an optional interface so a backend without one keeps the old
+// constants.
+type supplyPlanner interface {
+	SupplyPlan(s *d2.Snapshot, profile string, reserve int) (supply.Plan, error)
+}
+
+// kitProfile is the supply profile the route and tower guards ask for (internal/supply/profiles.json).
+const kitProfile = "monastery_road"
+
+// kitPlanOn: the guards and the shop read the supply plan at stage 2 of town.plan, and always with the quest board's
+// state machine (quests.boardSM). The guard's constants ask for more healing than a belt with a mana column holds, so a
+// chores trip ended one potion short and the chunk was parked (Proving Ground boardsmrun, hold.restock); the plan is
+// clamped to what the hero can carry and names the line it cannot close.
+func (r *Runner) kitPlanOn() bool { return r.e.Tune.Town.Plan >= 2 || r.e.Tune.Quests.BoardSM != 0 }
+
+// kitPlanOf is the town planner's view of the guard kit at stage 2 of the knob town.plan: nil at stage 0 or 1 (the
+// guards keep their constants) or when the planner cannot answer, which is logged once.
+func (r *Runner) kitPlanOf(s *d2.Snapshot) *task.KitPlan {
+	if !r.kitPlanOn() || s == nil || s.Player == nil {
+		return nil
+	}
+	sp, ok := r.d.Town.(supplyPlanner)
+	if !ok {
+		return nil
+	}
+	pl, err := sp.SupplyPlan(s, kitProfile, 0)
+	if err != nil {
+		r.planWarn.Do(func() { r.e.Log.Warn("town plan: " + err.Error()) })
+		return nil
+	}
+	return &task.KitPlan{Healing: pl.MinOf(supply.Healing), Mana: pl.MinOf(supply.Mana), Portals: pl.MinOf(supply.Portal), Short: pl.Why()}
+}
+
+// fillKit counts the kit by the one counter and, at stage 2, attaches the plan.
+func (r *Runner) fillKit(w *task.World, s *d2.Snapshot) {
+	// Mana counts belt plus pack at every stage, like the healing count and like the shop that decides what to buy (rule
+	// conflict I8): with the belt only a caster with its potions in the pack was refused "0 mana potions" by the quest
+	// gate while the shop saw nothing to buy (run 20261122-190434, 29 minutes stuck).
+	if c, ok := r.supplyCount(s); ok {
+		w.ManaPotions = c.Mana()
+	}
+	if !r.kitPlanOn() {
+		return
+	}
+	w.KitPlan = r.kitPlanOf(s)
 }

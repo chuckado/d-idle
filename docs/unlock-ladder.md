@@ -19,7 +19,7 @@ Shared framework behind the watch screen's unlocks: the senses tiers (`docs/rese
 | `retire_count` | `min` | `Event{Type: retire, N}`: running count (U: no emitter yet) |
 | `boss_kill` | `boss` (monster name), `difficulty` (`normal`/`nightmare`/`hell`; absent = any) | `Event{Type: boss_kill, Name, Sub: difficulty}`: a kill event, idempotent (opens once). Fed by `startPacts` (cmd/d2bot/pactwire.go) |
 | `quest_stage` | `quest` (id), `min` (stage 1 started, 2 cleared, 3 done) | a goals quest event with `Stage >= min` (the bot's quest reader, `pollQuests`) |
-| `item_quality` | `qualities` | an identified-item event of that quality (idreveal) |
+| `item_quality` | `qualities` | an identified-item event of that quality (no shipped row uses it since the card flow was removed, docs/unlock-idreveal.md) |
 | `seen` | `what` | a viewer-side moment (`Unlocks.Seen`): `expedition_card`, `near_death_survived` |
 | `tally_spend` | none; the entry's `price` | `POST /api/unlocks/buy` |
 
@@ -32,7 +32,6 @@ Counts carry the running total, so a repeated event can never count twice. Repla
 | `chronicle`, `chronicle_tape` | ui | first kill; the first expedition card shown | `docs/unlock-chronicle.md` |
 | `voice` | ui | level 2, or the first death | `docs/unlock-voice.md` |
 | `questlog` | ui | Den of Evil started (`quest_stage` 1) | `docs/unlock-questlog.md` |
-| `idreveal`, `idreveal_later` | ui | first magic or rare item; first unique or set | `docs/unlock-idreveal.md` |
 | `bestiary` | ui | any kind reaches 10 kills | `docs/unlock-bestiary.md` |
 | `bestiary_resists` | ui | any kind reaches 50 kills (resist details per kind) | `docs/unlock-bestiary.md` |
 | `atlas` | ui | the first waypoint taken (Codex `waypoint`) | `docs/unlock-atlas.md` |

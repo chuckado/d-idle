@@ -1,0 +1,398 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "necro.upkeep-pack",
+   "title": "Summon upkeep through a pack fight: golem and skeletons raised, minions standing at the end",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "combat.fight"
+   ],
+   "touches": [
+    "internal/combat/"
+   ],
+   "pre": {
+    "level": 24,
+    "gold": 3000,
+    "start": "field",
+    "area": 2,
+    "spawn": [
+     {
+      "monster": "fallen1",
+      "n": 8
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Blood Moor",
+    "knobs": {
+     "combat.minionRead": 1,
+     "resource.pointsDecisions": 1
+    },
+    "build": "necromancer_summoner_sme"
+   },
+   "budget": {
+    "virtual_min": 8
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach",
+    "read.minions"
+   ],
+   "provenance": "SETUP: level 24 with the points a played level gives (spent by the bot's leveler table), purse 3000, field start in the Blood Moor by debug goto 2 and monsters by debug spawn (CHEATED position and encounter: mechanics only, never evidence about balance).",
+   "notes": "Eight Fallen (a pack) beside a clvl 24 summoner. RED with combat.minionRead 0 is not expected: the knob only changes how the army is counted, so the scenario is RED when the upkeep or the read fails. U: the SME table has Raise Skeleton and a golem by clvl 24; Clay Golem is the first cast.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^combat summon .*grew=true.*skill=Clay Golem",
+     "min": 1,
+     "why": "the golem comes first"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^combat summon .*grew=true.*skill=Raise Skeleton",
+     "min": 2,
+     "why": "skeleton upkeep through the fight"
+    },
+    {
+     "kind": "minions_at_least",
+     "min": 2,
+     "why": "engine census (debug minions): the army stands at the end"
+    },
+    {
+     "kind": "life_pct_at_least",
+     "min": 40
+    }
+   ]
+  },
+  {
+   "id": "necro.curse-unique",
+   "title": "Curse on a unique: an elite target gets a curse from the profile order",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "combat.fight"
+   ],
+   "touches": [
+    "internal/combat/"
+   ],
+   "pre": {
+    "level": 30,
+    "gold": 3000,
+    "start": "field",
+    "area": 2,
+    "spawn": [
+     {
+      "monster": "fallen1",
+      "n": 1,
+      "mod": "unique"
+     },
+     {
+      "monster": "fallen1",
+      "n": 3
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Blood Moor",
+    "knobs": {
+     "combat.minionRead": 1,
+     "resource.pointsDecisions": 1
+    },
+    "build": "necromancer_summoner_sme"
+   },
+   "budget": {
+    "virtual_min": 6
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach",
+    "read.minions"
+   ],
+   "provenance": "SETUP: level 30 with the points a played level gives (spent by the bot's leveler table), purse 3000, field start in the Blood Moor by debug goto 2 and monsters by debug spawn (CHEATED position and encounter: mechanics only, never evidence about balance).",
+   "notes": "One unique Fallen with three others. Amplify Damage is the first curse that applies to a non-magic-resistant target (profile order: Lower Resist when magicResist, Amplify Damage any, Decrepify and Weaken eliteOrBoss). U: Amplify Damage is learned by the SME table at clvl 30.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^combat curse .*skill=Amplify Damage",
+     "min": 1,
+     "why": "the summoner's any-target curse"
+    },
+    {
+     "kind": "minions_at_least",
+     "min": 1
+    }
+   ]
+  },
+  {
+   "id": "necro.revive-after-death",
+   "title": "Revive after a minion death: a corpse is raised with Revive once skeletons have died",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "combat.fight"
+   ],
+   "touches": [
+    "internal/combat/"
+   ],
+   "pre": {
+    "level": 36,
+    "gold": 3000,
+    "start": "field",
+    "area": 2,
+    "spawn": [
+     {
+      "monster": "fallen1",
+      "n": 6
+     },
+     {
+      "monster": "fallen1",
+      "n": 1,
+      "mod": "champion"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Blood Moor",
+    "knobs": {
+     "combat.minionRead": 1,
+     "resource.pointsDecisions": 1
+    },
+    "build": "necromancer_summoner_sme"
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach",
+    "read.minions"
+   ],
+   "provenance": "SETUP: level 32 with the points a played level gives (spent by the bot's leveler table), purse 3000, field start in the Blood Moor by debug goto 2 and monsters by debug spawn (CHEATED position and encounter: mechanics only, never evidence about balance).",
+   "notes": "A champion among a pack kills skeletons on the way, leaving corpses. U: Revive is learned at clvl 32 by the SME table (its count is tagged UNVERIFIED by the SME); a BLOCKED or RED result here may be the table, not the bot: read skills.txt for Revive's required level. Level 36 so the clvl 30 Revive row of the SME table is inside the points a played level gives (level 30 allocated 29 points and stopped before it).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^combat summon .*grew=true.*skill=Revive",
+     "min": 1,
+     "why": "Revive upkeep (profile summon rule, kind revive)"
+    },
+    {
+     "kind": "minions_at_least",
+     "min": 2
+    }
+   ]
+  },
+  {
+   "id": "necro.mana-budget-10min",
+   "title": "10-minute mana budget: attack and upkeep casts keep going, no mana starvation",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "combat.fight"
+   ],
+   "touches": [
+    "internal/combat/"
+   ],
+   "pre": {
+    "level": 30,
+    "gold": 3000,
+    "start": "field",
+    "area": 2,
+    "spawn": [
+     {
+      "monster": "fallen1",
+      "n": 12
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Blood Moor",
+    "knobs": {
+     "combat.minionRead": 1,
+     "resource.pointsDecisions": 1
+    },
+    "build": "necromancer_summoner_sme"
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach",
+    "read.minions"
+   ],
+   "provenance": "SETUP: level 30 with the points a played level gives (spent by the bot's leveler table), purse 3000, field start in the Blood Moor by debug goto 2 and monsters by debug spawn (CHEATED position and encounter: mechanics only, never evidence about balance).",
+   "notes": "Twelve Fallen over ten virtual minutes. Mana starvation would show as few raises and kills. The SME table learns no attack skill (Teeth, Bone Spear), the army does the killing; the threshold 40 is a floor, not a tuned number (U).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^combat summon .*grew=true.*skill=Raise Skeleton",
+     "min": 3,
+     "why": "upkeep keeps raising"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^combat kill",
+     "min": 40,
+     "why": "the fight goes on for ten minutes (a clvl 32 run killed 83 in ten)"
+    },
+    {
+     "kind": "life_pct_at_least",
+     "min": 40
+    }
+   ]
+  },
+  {
+   "id": "necro.paladin-pack",
+   "title": "Regression pair: a Paladin with the same knob and pack never touches the summoner code",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "combat.fight"
+   ],
+   "touches": [
+    "internal/combat/"
+   ],
+   "pre": {
+    "level": 24,
+    "gold": 3000,
+    "start": "field",
+    "area": 2,
+    "spawn": [
+     {
+      "monster": "fallen1",
+      "n": 8
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Blood Moor",
+    "knobs": {
+     "combat.minionRead": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 8
+   },
+   "matrix": {
+    "classes": [
+     "Paladin"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach",
+    "read.minions"
+   ],
+   "provenance": "SETUP: level 24 with the points a played level gives (spent by the bot's leveler table), purse 3000, field start in the Blood Moor by debug goto 2 and monsters by debug spawn (CHEATED position and encounter: mechanics only, never evidence about balance).",
+   "notes": "The Paladin pair of the necro scenarios: same pack, combat.minionRead 1. It must be GREEN whatever the Necromancer ones do; it proves the knob and the new assertions do not disturb a melee class.",
+   "assert": [
+    {
+     "kind": "minions_at_least",
+     "min": 0,
+     "why": "the read works and finds no summons"
+    },
+    {
+     "kind": "life_pct_at_least",
+     "min": 40
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^combat kill",
+     "min": 10,
+     "why": "the Paladin fights"
+    }
+   ]
+  },
+  {
+   "id": "necro.act1-earned",
+   "title": "Earned Act 1: a fresh Necromancer from the Rogue Encampment toward Andariel, zero setup writes",
+   "kind": "e2e",
+   "tier": "nightly",
+   "covers": [
+    "combat.fight"
+   ],
+   "touches": [
+    "internal/combat/",
+    "internal/bot/",
+    "internal/campaign/"
+   ],
+   "pre": {},
+   "trigger": {
+    "goals": "campaign:normal_act1",
+    "build": "necromancer_summoner_sme",
+    "knobs": {
+     "combat.minionRead": 1,
+     "quests.board": 1,
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 400,
+    "wall_min": 140
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "needs": [
+    "read.minions"
+   ],
+   "provenance": "No setup write at all: a fresh level 1 hero, town start, the bot on a d2d without lab verbs (the setup list is empty). Not CHEATED if no_writes holds. combat.minionRead 1 only reads.",
+   "notes": "The verdict of this drill is the end state: how far the campaign got. A red result is the finding (readiness doc section 6.3), not a scenario defect, unless the run is BLOCKED.",
+   "assert": [
+    {
+     "kind": "level_at_least",
+     "min": 10,
+     "why": "a played Act 1 reaches clvl 10 at the least"
+    },
+    {
+     "kind": "quest_bits",
+     "record": 6,
+     "set": 2,
+     "why": "Andariel killed (record 6 bit 1, V docs/d2d-probes.md per the act1more notes)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  }
+ ]
+}

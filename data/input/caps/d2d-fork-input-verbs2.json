@@ -1,0 +1,6 @@
+{
+ "schema": "inputcaps/1",
+ "backend": "d2d-fork-input-verbs2",
+ "verbs": ["input.select", "input.repair", "input.menu-choose", "input.item-equip", "input.item-unequip", "input.item-move", "input.item-identify", "input.item-drop", "input.gold-stash", "input.buy", "input.sell", "input.waypoint", "input.portal", "input.pickup"],
+ "note": "U until a sandbox image of fork branch didle/input-verbs2-20261121 is loaded and switched in: buy, sell, waypoint, portal and pickup are the client's own messages with the refusal named first, no lab flag, after a 0-difference differential (fork tests/input_verbs2_diff_d2d.py; docs/process/input-verbs2.md). The bot adopts the names only with input.planner=1."
+}

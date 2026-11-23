@@ -153,7 +153,7 @@
   }
 
   // ---- Orders: Hero now, map, queue, sheet (docs/research/orders-ux-design.md). All text via textContent. ----
-  var om = null, ord = { orders: [] }, ordAt = 0, mapList = false, pend = null, sheetFrom = null, toastTimer = 0;
+  var om = null, ord = { orders: [] }, ordAt = 0, mapList = false, pend = null, sheetFrom = null;
   var DURS = [['10 min', 10], ['30 min', 30], ['1 h', 60], ['Until I cancel', 0]];
 
   function nodeById(id) { for (var i = 0; i < om.nodes.length; i++) if (om.nodes[i].id === id) return om.nodes[i]; return null; }
@@ -205,10 +205,7 @@
     for (var i = ord.orders.length - 1; i >= 0; i--) if (/^(done|failed|cancelled)$/.test(ord.orders[i].state)) return ord.orders[i];
     return null;
   }
-  function toast(m) {
-    var t = $('toast'); t.textContent = m; t.hidden = false;
-    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 3000);
-  }
+  function toast(m) { window.dToast.show('info', m); }
   function elapsedSec(o) { return Math.max(0, ord.now - o.startedAt + (performance.now() - ordAt) / 1000 * (th.speed || 1)); }
 
   function renderNow() {
@@ -395,8 +392,9 @@
     return post('/api/orders', body).then(function (j) {
       if (j && j.ok && j.order) { toast('Order given: ' + j.order.text); return; }
       // Above the zone range the hero asks for a charter in tally; nothing was placed or charged yet.
-      if (j && j.code === 'charter-needed' && j.charter && window.confirm(j.charter.text + ' Pay ' + j.charter.price + ' tally for the charter?')) {
-        body.approve = true; return send(body);
+      if (j && j.code === 'charter-needed' && j.charter) {
+        return window.dSheet.ask(document, { title: 'Pay for a charter?', lines: [j.charter.text, 'Pay ' + j.charter.price + ' tally for the charter?'], confirmText: 'Pay ' + j.charter.price + ' tally' })
+          .then(function (yes) { if (yes) { body.approve = true; return send(body); } });
       }
     });
   }
@@ -442,7 +440,7 @@
   // The tally strip (TASK-129): one line from /api/tally, hidden while the route is missing or tally is off.
   function renderTally(t) {
     var box = $('tallystrip') || el('div'); clear(box); // the strip moved into the tally panel (side band)
-    $('returnlink').hidden = !t; // the route exists only where the bot mounts the return screen
+    if (t) document.documentElement.dataset.returnScreen = '1'; else delete document.documentElement.dataset.returnScreen; // the route exists only where the bot mounts the return screen (shell.js shows the sheet's link by it)
     box.hidden = !t || !t.enabled;
     if (box.hidden) return;
     box.appendChild(el('b', '', t.strip));
@@ -467,7 +465,8 @@
   }
 
   $('revokeall').addEventListener('click', function () {
-    if (window.confirm('Revoke every rule? The hero will ask again.')) post('/api/revoke-all', { confirm: true });
+    window.dSheet.ask(document, { title: 'Revoke every rule?', lines: ['The hero will ask again.'], confirmText: 'Revoke all', danger: true, opener: $('revokeall') })
+      .then(function (yes) { if (yes) post('/api/revoke-all', { confirm: true }); });
   });
   $('scrim').addEventListener('click', closeSheet);
   document.addEventListener('keydown', trapTab);

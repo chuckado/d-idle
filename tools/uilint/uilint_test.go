@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"testing"
@@ -86,6 +87,9 @@ func TestEveryRuleFires(t *testing.T) {
 		{"css-token-exists", "components.css", `@layer components { .d-card { color: var(--d-nope); } }`},
 		{"css-token-exists", "panels/probe/panel.css", `@layer panels { [data-panel="probe"] .row { inline-size: var(--p-probe-undefined); } }`},
 		{"css-no-vw-in-panel", "panels/probe/panel.css", `@layer panels { [data-panel="probe"] .row { font-size: 2vw; } }`},
+		{"sev-scale", "components.css", `@layer components { .d-note[data-sev="alarm"] { padding: 0; } }`},
+		{"sev-scale", "watch.html", `<p class="d-note" data-sev="alarm"></p>`},
+		{"sev-scale", "shell.js", `n.dataset.sev = cond ? 'alarm' : 'warn';`},
 		{"html-no-style-attr", "watch.html", `<div style="color: red"></div>`},
 		{"html-no-style-element", "watch.html", `<style>.x{}</style>`},
 		{"html-no-inline-script", "watch.html", `<script>alert(1)</script>`},
@@ -206,7 +210,8 @@ func TestLayoutManifestRules(t *testing.T) {
 	p := func(id string, col, row, w, h, order int) string {
 		return fmt.Sprintf(`{"id":%q,"band":"grid","col":%d,"row":%d,"colSpan":%d,"rowSpan":%d,"collapsed":false,"order":%d}`, id, col, row, w, h, order)
 	}
-	shell := `{"status":[],"stage":[],"layout":{"aliases":{"old":"probe"},"compat":["now"],"reserved":["later"]}}`
+	fbp := func(e, to string) string { return e[:len(e)-1] + `,"fallback":"` + to + `"}` }
+	shell := `{"status":[],"stage":[],"layout":{"aliases":{"old":"probe"},"compat":["now"],"reserved":["later","later2"]}}`
 	cases := []struct {
 		name, file, body, rule string
 	}{
@@ -217,6 +222,17 @@ func TestLayoutManifestRules(t *testing.T) {
 		{"outside the columns", "layouts/x.json", lay(p("probe", 8, 1, 6, 3, 0)), "layout-manifest"},
 		{"order twice", "layout.json", lay(p("probe", 1, 1, 6, 3, 0) + "," + p("now", 7, 1, 6, 3, 0)), "layout-manifest"},
 		{"schema", "layout.json", `{"schema":"watch.layout/2"}`, "layout-manifest"},
+		// S1 keys: an unbuilt (reserved) id with a fallback to a card on the page is fine, so is a status list
+		{"fallback", "layout.json", lay(p("later", 1, 1, 6, 3, 0)[:len(p("later", 1, 1, 6, 3, 0))-1] + `,"fallback":"now"}`), ""},
+		{"fallback unknown", "layout.json", lay(p("later", 1, 1, 6, 3, 0)[:len(p("later", 1, 1, 6, 3, 0))-1] + `,"fallback":"nope"}`), "layout-manifest"},
+		{"fallback reserved", "layout.json", lay(p("later", 1, 1, 6, 3, 0)[:len(p("later", 1, 1, 6, 3, 0))-1] + `,"fallback":"later"}`), "layout-manifest"},
+		{"two fallbacks to one target", "layout.json", lay(fbp(p("later", 1, 1, 6, 3, 0), "now") + "," + fbp(p("later2", 7, 1, 6, 3, 1), "now")), "layout-manifest"},
+		{"fallback target also placed", "layout.json", lay(fbp(p("later", 1, 1, 6, 3, 0), "now") + "," + p("now", 7, 1, 6, 3, 1)), "layout-manifest"},
+		{"fallback target hidden", "layout.json", lay(fbp(p("later", 1, 1, 6, 3, 0), "now") + "," + strings.Replace(p("now", 7, 1, 6, 3, 1), `"order"`, `"hidden":true,"order"`, 1)), ""},
+		{"unknown id without fallback", "layout.json", lay(p("zz", 1, 1, 6, 3, 0)), "layout-manifest"},
+		{"status", "layout.json", strings.Replace(lay(p("probe", 1, 1, 6, 3, 0)), `"cols":12,"rowHeight"`, `"status":["probe",{"id":"later","fallback":"now"}],"cols":12,"rowHeight"`, 1), ""},
+		{"status unknown", "layout.json", strings.Replace(lay(p("probe", 1, 1, 6, 3, 0)), `"cols":12,"rowHeight"`, `"status":["nope"],"cols":12,"rowHeight"`, 1), "layout-manifest"},
+		{"status bad entry", "layout.json", strings.Replace(lay(p("probe", 1, 1, 6, 3, 0)), `"cols":12,"rowHeight"`, `"status":[7],"cols":12,"rowHeight"`, 1), "layout-manifest"},
 	}
 	for _, c := range cases {
 		files := good()
@@ -230,9 +246,72 @@ func TestLayoutManifestRules(t *testing.T) {
 			t.Errorf("%s: findings %v, want %q", c.name, got, c.rule)
 		}
 	}
+	// the cockpit template: slots take slot panels (or ids not built yet), only known slot names, sizes in range
+	ck := func(slots, extra string) string {
+		return `{"schema":"watch.layout/1","cols":12,"rowHeight":48,"template":"cockpit/1","slots":` + slots + `,"breakpoints":{}` + extra + `}`
+	}
+	ckShell := `{"status":[],"stage":[],"layout":{"aliases":{},"compat":["now"],"reserved":["later","later2","later3"],"slot":["probe"]}}`
+	for _, c := range []struct{ name, body, rule string }{
+		{"cockpit good", ck(`{"band":["later"],"stage":"probe","strip":["later2"],"rail":["later3"],"railWide":{"left":["later3"],"right":[]},"phoneTabs":{"A":["later"],"B":["later2"]}}`, `,"sizes":{"strip":112,"railMin":400}`), ""},
+		{"cockpit unknown slot", ck(`{"stage":"probe","side":["later"]}`, ""), "layout-manifest"},
+		{"cockpit card in a slot", ck(`{"stage":"probe","rail":["now"]}`, ""), "layout-manifest"},
+		{"cockpit unknown panel", ck(`{"stage":"probe","rail":["nope"]}`, ""), "layout-manifest"},
+		{"cockpit panel twice", ck(`{"stage":"probe","rail":["later","later"]}`, ""), "layout-manifest"},
+		{"cockpit no stage", ck(`{"rail":["later"]}`, ""), "layout-manifest"},
+		{"cockpit sizes", ck(`{"stage":"probe"}`, `,"sizes":{"strip":900}`), "layout-manifest"},
+		{"unknown template", strings.Replace(ck(`{"stage":"probe"}`, ""), "cockpit/1", "cockpit/9", 1), "layout-manifest"},
+	} {
+		files := good()
+		files["shell.json"] = ckShell
+		files["panels/probe/panel.json"] = strings.Replace(goodManifest, `"unlock":""`, `"unlock":"","slot":true`, 1)
+		files["layouts/ck.json"] = c.body
+		var got []string
+		for _, f := range run(t, files) {
+			got = append(got, f.Rule+": "+f.Msg)
+		}
+		if c.rule == "" && len(got) != 0 || c.rule != "" && (len(got) != 1 || !strings.HasPrefix(got[0], c.rule)) {
+			t.Errorf("%s: findings %v, want %q", c.name, got, c.rule)
+		}
+	}
+	// a panel that is not a slot panel cannot stand in a slot, even when the id exists
 	files := good()
+	files["shell.json"] = `{"status":[],"stage":[],"layout":{"aliases":{},"compat":[],"reserved":[]}}`
+	files["layouts/ck.json"] = ck(`{"stage":"probe"}`, "")
+	if fs := run(t, files); len(fs) != 1 || fs[0].Rule != "layout-manifest" {
+		t.Errorf("a non-slot panel in a slot: %v", fs)
+	}
+	// a manifest may carry optIn (and only a boolean)
+	files = good()
+	files["panels/probe/panel.json"] = strings.Replace(goodManifest, `"unlock":""`, `"unlock":"","optIn":true`, 1)
+	if fs := run(t, files); len(fs) != 0 {
+		t.Errorf("optIn: %v", fs)
+	}
+	files["panels/probe/panel.json"] = strings.Replace(goodManifest, `"unlock":""`, `"unlock":"","optIn":"yes"`, 1)
+	if fs := run(t, files); len(fs) != 1 || fs[0].Rule != "manifest-schema" {
+		t.Errorf("optIn as a string: %v", fs)
+	}
+	files = good()
 	files["shell.json"] = `{"status":[],"stage":[],"layout":{"aliases":{"old":"gone"}}}`
 	if fs := run(t, files); len(fs) != 1 || fs[0].Rule != "layout-alias" {
 		t.Errorf("an alias to nothing: %v", fs)
+	}
+}
+
+// The scale here and the one in web/toast.js are the same list.
+func TestSeverityScaleMatchesToastJS(t *testing.T) {
+	b, err := os.ReadFile("../../internal/watch/web/toast.js")
+	if err != nil {
+		t.Fatal(err)
+	}
+	m := regexp.MustCompile(`SEVERITIES = \[([^\]]*)\]`).FindSubmatch(b)
+	if m == nil {
+		t.Fatal("no SEVERITIES in toast.js")
+	}
+	var got []string
+	for _, q := range regexp.MustCompile(`'([a-z]+)'`).FindAllSubmatch(m[1], -1) {
+		got = append(got, string(q[1]))
+	}
+	if strings.Join(got, ",") != strings.Join(SeverityScale, ",") {
+		t.Fatalf("toast.js %v, uilint %v", got, SeverityScale)
 	}
 }

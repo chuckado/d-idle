@@ -48,7 +48,20 @@ var (
 	reTimer      = regexp.MustCompile(`\b(setInterval|setTimeout|fetch|EventSource)\s*\(`)
 	reDocQuery   = regexp.MustCompile(`\bdocument\.(querySelector|querySelectorAll|getElementById|getElementsBy\w+|body)\b`)
 	reBacktick   = regexp.MustCompile("(?s)`[^`]*`")
+	reSevAttr    = regexp.MustCompile(`data-sev\s*=\s*["']?([A-Za-z_-]*)`)
+	reSevSet     = regexp.MustCompile(`dataset\.sev\s*=[^=;]*|setAttribute\(\s*['"]data-sev['"]\s*,[^;]*`)
+	reCallArgs   = regexp.MustCompile(`\([^()]*\)`)
+	reQuoted     = regexp.MustCompile(`['"]([A-Za-z_-]+)['"]`)
 )
+
+// SeverityScale is the one list of values data-sev may take (card uitoast, web/toast.js SEVERITIES; a test keeps them equal).
+var SeverityScale = []string{"info", "good", "warn", "bad"}
+
+func (l *Linter) checkSev(f string, line int, v string) {
+	if !contains(SeverityScale, v) {
+		l.add(f, line, "sev-scale", "data-sev %q (the scale is %s)", v, strings.Join(SeverityScale, ", "))
+	}
+}
 
 // The CSS named colours a hand-written sheet is likely to use; transparent and currentColor stay allowed.
 var namedColours = map[string]bool{}
@@ -190,6 +203,9 @@ func (l *Linter) lintCSS(f string, bs []*block) {
 		}
 	}
 	for _, b := range bs {
+		for _, m := range reSevAttr.FindAllStringSubmatch(b.prelude, -1) {
+			l.checkSev(f, b.line, m[1])
+		}
 		if b.at == "layer" {
 			if b.stmt || strings.Contains(b.prelude, ",") {
 				l.layerStmts = append(l.layerStmts, Finding{File: f, Line: b.line, Msg: b.prelude})
@@ -308,6 +324,9 @@ func (l *Linter) lintHTML(f, s string, firstLine int, page bool) {
 	for _, m := range reOnAttr.FindAllStringIndex(s, -1) {
 		l.add(f, at(m[0]), "html-no-inline-script", "inline event handler attribute")
 	}
+	for _, m := range reSevAttr.FindAllStringSubmatch(s, -1) {
+		l.checkSev(f, firstLine, m[1])
+	}
 	if page {
 		for _, m := range reDataPanel.FindAllStringIndex(s, -1) {
 			l.add(f, at(m[0]), "html-panel-root", "data-panel in static HTML (shell.js creates panel roots)")
@@ -321,6 +340,12 @@ func (l *Linter) lintJS(f, s string) {
 	for i, ln := range lines {
 		n := i + 1
 		code := stripJSComment(ln)
+		for _, m := range reSevSet.FindAllString(code, -1) {
+			m = reCallArgs.ReplaceAllString(strings.Replace(strings.TrimPrefix(m, "dataset.sev"), "data-sev", "", 1), "") // quoted words inside a call are arguments, not values
+			for _, q := range reQuoted.FindAllStringSubmatch(m, -1) {
+				l.checkSev(f, n, q[1])
+			}
+		}
 		if reHTMLSink.MatchString(code) {
 			l.add(f, n, "js-text-only", "HTML sink (build DOM with textContent)")
 		}
@@ -383,6 +408,13 @@ type Manifest struct {
 	Unlock      string  `json:"unlock"`
 	Skeleton    int     `json:"skeleton"`
 	Fit         bool    `json:"fit"`
+	OptIn       bool    `json:"optIn"`       // mounted only when the layout in force names the panel (S1, D-layouts.md section 1)
+	MinBlock    int     `json:"minBlock"`    // least height in px as the last panel of a rail column (S6)
+	SwitchWith  string  `json:"switchWith"`  // shares a column with that panel under a switch (S6)
+	SwitchLabel string  `json:"switchLabel"` // the switch button text
+	Slot        bool    `json:"slot"`        // renders into a fixed box and may sit in a cockpit slot (S1b)
+	CockpitOnly bool    `json:"cockpitOnly"` // belongs to the cockpit template alone: a free-grid layout keeps its fallback (uis2)
+	Scroll      bool    `json:"scroll"`      // holds a list that scrolls inside the box (data-scroll); needs slot
 	MergedInto  string  `json:"mergedInto"`
 	Owner       string  `json:"owner"`
 	Doc         string  `json:"doc"`
@@ -412,7 +444,7 @@ func (l *Linter) lintManifests(files []string) {
 	ladder := l.ladderIDs()
 	seen := map[string]string{}
 	prio := map[string]map[int]string{}
-	dirs := map[string]bool{}
+	dirs, slots := map[string]bool{}, map[string]bool{}
 	for _, f := range files {
 		id := panelOf(f)
 		dirs[id] = true
@@ -453,6 +485,10 @@ func (l *Linter) lintManifests(files []string) {
 			l.add(f, 1, "manifest-id", "id %q also in %s", m.ID, other)
 		}
 		seen[m.ID] = f
+		slots[m.ID] = m.Slot
+		if m.Scroll && !m.Slot {
+			l.add(f, 1, "manifest-schema", "scroll: true on a panel that is not a slot panel")
+		}
 		lo, sz, hi := sizes[m.MinSize], sizes[m.Size], sizes[m.MaxSize]
 		if m.MinSize == "" {
 			lo = sz
@@ -516,16 +552,27 @@ func (l *Linter) lintManifests(files []string) {
 			l.add("panels/"+e.Name(), 0, "manifest-orphan", "panel directory without panel.json")
 		}
 	}
-	l.lintLayouts(shell.Layout, dirs)
+	l.lintLayouts(shell.Layout, dirs, slots)
 }
 
 // lintLayouts checks layout.json and layouts/*.json (watch.layout/1, docs/ui-design-system.md section 6.4): the file
 // parses, every id is a panel, an alias, a compat card or a reserved id of shell.json, nothing overlaps within a
-// breakpoint, spans stay inside the columns, order is unique.
-func (l *Linter) lintLayouts(c watch.LayoutConf, panels map[string]bool) {
+// breakpoint, spans stay inside the columns, order is unique; a cockpit file (template cockpit/1) names only known slots
+// and only panels that fit one.
+func (l *Linter) lintLayouts(c watch.LayoutConf, panels, slots map[string]bool) {
 	known := func(id string) bool {
 		_, alias := c.Aliases[id]
 		return panels[id] || alias || contains(c.Compat, id) || contains(c.Reserved, id)
+	}
+	// a cockpit slot takes a panel that fits one (manifest slot: true, or listed in shell.json "slot" until its manifest says so),
+	// or an id that is not built yet (reserved); never a card of the old page, an alias, or a panel that is not for slots
+	slotOK := func(id string) bool {
+		return slots[id] || contains(c.Slot, id) && panels[id] || !panels[id] && contains(c.Reserved, id)
+	}
+	for _, id := range c.Slot {
+		if !panels[id] {
+			l.add("shell.json", 1, "layout-slot", "slot panel %s is not a panel", id)
+		}
 	}
 	for a, to := range c.Aliases {
 		if !panels[to] && !contains(c.Compat, to) {
@@ -545,10 +592,68 @@ func (l *Linter) lintLayouts(c watch.LayoutConf, panels map[string]bool) {
 		if err == nil {
 			err = m.Check(known)
 		}
+		if err == nil {
+			err = m.CheckSlots(slotOK)
+		}
+		if err == nil {
+			err = checkFallbacks(m, c, panels)
+		}
 		if err != nil {
 			l.add(rel, 1, "layout-manifest", "%v", err)
 		}
 	}
+}
+
+// checkFallbacks: a fallback names something that is on the page today (a panel or a pre-shell card, or an alias of
+// one), never another not yet built tile (a reserved id), and an entry never falls back to itself.
+func checkFallbacks(m watch.LayoutManifest, c watch.LayoutConf, panels map[string]bool) error {
+	real := func(id string) bool {
+		if to, ok := c.Aliases[id]; ok {
+			id = to
+		}
+		return panels[id] || contains(c.Compat, id)
+	}
+	fb := func(where, id, to string) error {
+		switch {
+		case to == "":
+			return nil
+		case to == id:
+			return fmt.Errorf("layout %s: %q falls back to itself", where, id)
+		case !real(to):
+			return fmt.Errorf("layout %s: fallback %q of %q is not a panel or card on the page", where, to, id)
+		}
+		return nil
+	}
+	for _, e := range m.Status {
+		if err := fb("status", e.ID, e.Fallback); err != nil {
+			return err
+		}
+	}
+	for name, bp := range m.Breakpoints {
+		own := map[string]bool{}
+		for _, p := range bp.Panels {
+			own[p.ID] = p.Hidden
+		}
+		used := map[string]string{}
+		for _, p := range bp.Panels {
+			if err := fb(name, p.ID, p.Fallback); err != nil {
+				return err
+			}
+			if p.Fallback == "" {
+				continue
+			}
+			// one tile stands in for one entry (a second one plans to nothing and is lost when the layout is saved), and the
+			// target's own entry in the same breakpoint must be switched off, else it would leave its own cell
+			if other, dup := used[p.Fallback]; dup {
+				return fmt.Errorf("layout %s: %q and %q both fall back to %q", name, other, p.ID, p.Fallback)
+			}
+			used[p.Fallback] = p.ID
+			if h, named := own[p.Fallback]; named && !h {
+				return fmt.Errorf("layout %s: the target %q of the fallback of %q is also placed in its own cell (it must be hidden there)", name, p.Fallback, p.ID)
+			}
+		}
+	}
+	return nil
 }
 
 func (l *Linter) ladderIDs() map[string]bool {

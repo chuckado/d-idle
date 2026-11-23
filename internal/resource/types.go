@@ -60,14 +60,15 @@ type Input struct {
 	Poor          bool // poverty mode: no gold to refill potions
 	MaxPackDanger int  // with Poor and no healing potion: packs rated above this are not engaged
 
-	Hostiles     int   // awake hostile monsters inside the fight radius
-	PackSeen     int   // monsters of a not-yet-engaged pack in view (asleep or far)
-	ChampionPack bool  // a champion (not a boss) is among the hostiles in range: Tuning.ChampionEarlyPct applies in early Normal
-	WeakPack     bool  // every hostile in range is at most clvl+1: a weapon swing is enough, retreating is not (with Blow and Foe also needs a to-hit of WeakMinHitPct)
-	Blow         *Blow // the wielded weapon's blow model; nil = unknown (WeakPack and the pack limit stay level-only)
-	Foe          *Foe  // the pack's hardest target to hit and whether it is all undead; read with Melee
-	Adjacent     int   // awake hostiles in melee reach (within combat.crowdAdjacent subtiles, default 8); with CastAdjacentMax a portal cast is cut
-	PackDanger   int   // 0 trash, 1 champions/ranged shamans, 2 elite/boss/dangerous affix, 3 deadly (Hell uniques)
+	Hostiles     int       // awake hostile monsters inside the fight radius
+	PackSeen     int       // monsters of a not-yet-engaged pack in view (asleep or far)
+	ChampionPack bool      // a champion (not a boss) is among the hostiles in range: Tuning.ChampionEarlyPct applies in early Normal
+	WeakPack     bool      // every hostile in range is at most clvl+1: a weapon swing is enough, retreating is not (with Blow and Foe also needs a to-hit of WeakMinHitPct)
+	Blow         *Blow     // the wielded weapon's blow model; nil = unknown (WeakPack and the pack limit stay level-only)
+	Foe          *Foe      // the pack's hardest target to hit and whether it is all undead; read with Melee
+	Adjacent     int       // awake hostiles in melee reach (within combat.crowdAdjacent subtiles, default 8)
+	CastGuard    CastGuard // portal cast exposure test (castguard.go); the zero value is the old count rule
+	PackDanger   int       // 0 trash, 1 champions/ranged shamans, 2 elite/boss/dangerous affix, 3 deadly (Hell uniques)
 	SinceFight   float64
 	MercKnown    bool // a merc was hired this run
 	MercLifePct  int  // 0 = dead, only meaningful when MercKnown
@@ -79,8 +80,9 @@ type Input struct {
 }
 
 // CastAdjacentMax is the number of adjacent attackers from which a town portal cast (scroll, or tome with its delay)
-// is taken to be interrupted (U, the crowd rule's judgment; card fixportalmelee). Not a knob: it is the crowd rule's
-// existing constant.
+// counts as too exposed (U, the crowd rule's judgment; card fixportalmelee). It is NOT because a hit cuts the cast:
+// it does not (V run, decomp28 Q5); the risk is damage during the cast and the walk. Not a knob: it is the crowd
+// rule's existing constant and the fallback of CastGuard.
 const CastAdjacentMax = 3
 
 func pct(v, max int) int {
@@ -168,13 +170,7 @@ func (in Input) hasFree() bool {
 // ManaNeed ranks how much a class depends on mana: 0 none (Barbarian), 1 occasional (Amazon, Paladin,
 // Assassin), 2 every attack (Sorceress, Necromancer, Druid). docs/classes/*.md section 7 (S).
 func ManaNeed(c d2.Class) int {
-	switch c {
-	case d2.Sorceress, d2.Necromancer, d2.Druid:
-		return 2
-	case d2.Barbarian:
-		return 0
-	}
-	return 1
+	return c.ManaNeed()
 }
 
 // RestSecs estimates the seconds to regenerate from Mana to target (see ManaPerSec).

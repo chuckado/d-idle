@@ -339,7 +339,7 @@ func TestOrdersPageIsSelfContained(t *testing.T) {
 		}
 	}
 	html := r.get("/watch", nil).Body.String()
-	for _, id := range []string{`id="now"`, `id="svg"`, `id="maplist"`, `id="queue"`, `id="sheet"`, `role="dialog"`, `aria-modal="true"`, `id="scrim"`, `id="toast"`, `role="status"`, `id="viewtoggle"`} {
+	for _, id := range []string{`id="now"`, `id="svg"`, `id="maplist"`, `id="queue"`, `id="sheet"`, `role="dialog"`, `aria-modal="true"`, `id="scrim"`, `id="toasts"`, `role="status"`, `id="viewtoggle"`} {
 		if !strings.Contains(html, id) {
 			t.Errorf("page lacks %s", id)
 		}

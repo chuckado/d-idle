@@ -60,18 +60,21 @@ type Source struct {
 	o   Options
 	trk tracker
 
-	screen d2.Point   // cached from "info" (800x600 is fixed in d2d, V)
-	cmu    sync.Mutex // cursor tracking (cursor.go)
-	prev   []d2.Unit  // carried items of the previous read
-	cur    *d2.Unit   // the unit believed to be on the cursor
-	pmu    sync.Mutex // pset: the cached "debug presets" rows (items.go fieldObjects)
-	pset   struct {
+	screen  d2.Point        // cached from "info" (800x600 is fixed in d2d, V)
+	cmu     sync.Mutex      // cursor tracking (cursor.go)
+	prev    []d2.Unit       // carried items of the previous read
+	dupSaid map[uint32]bool // shared carried ids already named in the log (items.go), under cmu
+	cur     *d2.Unit        // the unit believed to be on the cursor
+	pmu     sync.Mutex      // pset: the cached "debug presets" rows (items.go fieldObjects)
+	pset    struct {
 		rows []d2dctl.Preset
 		area int
 		x, y int
+		at   time.Time
 		ok   bool
 	}
-	wmu    sync.Mutex // warned is touched by every reader goroutine (runner, quest source, merc, town)
+	now    func() time.Time // the clock of the preset cache age (tests set it)
+	wmu    sync.Mutex       // warned is touched by every reader goroutine (runner, quest source, merc, town)
 	warned map[string]bool
 	tips   tipCache
 	noBuff atomic.Bool // the binary answered an error to `debug states`: stop asking
@@ -85,7 +88,7 @@ func New(c *d2dctl.Client, o Options) *Source {
 	if o.Logf == nil {
 		o.Logf = log.Printf
 	}
-	s := &Source{c: c, o: o, warned: map[string]bool{}}
+	s := &Source{c: c, o: o, warned: map[string]bool{}, now: time.Now}
 	s.trk.logf = o.Logf
 	return s
 }

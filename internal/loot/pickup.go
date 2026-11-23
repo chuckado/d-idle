@@ -54,6 +54,7 @@ type Skipped struct {
 // PickReport is the outcome of a PickUp call.
 type PickReport struct {
 	Picked     []Picked
+	Vaulted    []Picked // recorded in the Ethereal Vault and left on the ground (loot.vault 1)
 	Skipped    []Skipped
 	Failed     []Skipped
 	GoldGained int
@@ -67,8 +68,9 @@ type cand struct {
 	v     Verdict
 	dist  float64
 	name  string
-	gold0 int // player gold when the candidate list was built
-	held0 int // items of the same class in the pack and belt when the list was built
+	gold0 int  // player gold when the candidate list was built
+	held0 int  // items of the same class in the pack and belt when the list was built
+	vault bool // record in the vault instead of picking up (vault.go)
 }
 
 var errGone = errors.New("loot: item left the ground without arriving in the pack")
@@ -127,6 +129,7 @@ func (l *Looter) pickUp(ctx context.Context, o PickOpts) (PickReport, error) {
 	if max <= 0 {
 		max = t.MaxPerCall
 	}
+	l.vaultCheck(ctx)
 	failed := map[uint32]int{}
 	noRoomLogged := map[uint32]bool{}
 	for len(rep.Picked) < max {
@@ -173,17 +176,45 @@ func (l *Looter) pickUp(ctx context.Context, o PickOpts) (PickReport, error) {
 			return rep, nil
 		}
 		c := cands[0]
+		if c.vault {
+			rec, verr := l.vaultOne(ctx, c, o)
+			switch {
+			case verr == nil:
+				if rec {
+					rep.Vaulted = append(rep.Vaulted, Picked{ID: c.u.ID, Class: c.u.Class, Name: c.name, Verdict: c.v})
+				}
+				l.forget(c.u.ID)
+			case errors.Is(verr, errVaultRetry):
+			case errors.Is(verr, context.Canceled), errors.Is(verr, context.DeadlineExceeded):
+				return rep, verr
+			case errors.Is(verr, errAborted):
+				rep.Aborted = true
+				return rep, nil
+			default:
+				failed[c.u.ID]++
+				l.e.Log.Debug("vault peek failed", "item", c.name, "id", c.u.ID, "err", verr)
+				if failed[c.u.ID] >= 2 {
+					rep.Failed = append(rep.Failed, Skipped{ID: c.u.ID, Name: c.name, Why: verr.Error()})
+					l.forget(c.u.ID)
+				}
+			}
+			if len(rep.Vaulted) >= max {
+				return rep, nil
+			}
+			continue
+		}
 		goldBefore := s.Player.Gold
 		err = l.pickOne(ctx, c, o)
 		switch {
 		case err == nil:
 			after, _ := l.hand.Fresh()
+			l.noteWornChange(s, after, c)
 			g := 0
 			if after != nil && after.Player.Gold > goldBefore {
 				g = after.Player.Gold - goldBefore
 				rep.GoldGained += g
 			}
-			if err := l.unwear(ctx, c.u); errors.Is(err, errDropped) {
+			if err := l.unwear(ctx, c.u, s); errors.Is(err, errDropped) {
 				failed[c.u.ID] = 2
 				continue
 			} else if err != nil {
@@ -236,7 +267,11 @@ func init() {
 // a quest item (noWear) or a weapon the class cannot use well. The game wears a picked weapon into a free weapon slot
 // (V live for quest items, docs/act2.md P1; KITSTALL2: the same happened to a Sorceress whose weapon slot was empty,
 // a looted Short Bow went on and her spells stopped, S from the bot log).
-func (l *Looter) unwear(ctx context.Context, u d2.Unit) error {
+//
+// before is the snapshot taken before the pickup. A ground item and a carried item can share a unit id (the game numbers
+// them apart), so the unit found under the picked id is the picked item only when it is of the same base and was not
+// already worn before the pickup; else a worn cap with the same number was taken off (card recallsorc).
+func (l *Looter) unwear(ctx context.Context, u d2.Unit, before *d2.Snapshot) error {
 	b := l.base(u.Class)
 	if b == nil || !noWear[b.Code] && !(b.Kind == data.KindWeapon && casterNoLauncher(l.e.Data, b)) {
 		return nil
@@ -245,8 +280,14 @@ func (l *Looter) unwear(ctx context.Context, u d2.Unit) error {
 	if err != nil {
 		return err
 	}
-	if w, ok := hand.Find(s.Inventory, u.ID); !ok || w.Item == nil || w.Item.Where != d2.ContEquipment {
+	w, ok := hand.Find(s.Inventory, u.ID)
+	if !ok || w.Item == nil || w.Item.Where != d2.ContEquipment || w.Class != u.Class {
 		return nil
+	}
+	if before != nil && before.Inventory != nil {
+		if was, had := hand.Find(before.Inventory, u.ID); had && was.Item != nil && was.Item.Where == d2.ContEquipment {
+			return nil // worn before the pickup: another item that carries the same number
+		}
 	}
 	if !noWear[b.Code] && !LauncherUnwanted(l.e.Data, b, s.Player.Class) {
 		return nil
@@ -380,12 +421,24 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 	}
 	lowGold := s.Player.Gold < t.LowGoldBelow
 	maxBuy := MaxBuyOf(s.Player)
+	packPct := 0
+	if u, ok := occ.(interface{ UsedPct() int }); ok {
+		packPct = u.UsedPct()
+	}
+	sp := l.ShadowPass(s, packPct, 0) // shadow stage: log-only, nil when off (lootshadow.go)
+	vlt := sp != nil && sp.vault
+	sp.SetGround(strict, lowGold)
 	for _, u := range s.Ground {
 		if u.Item == nil || u.Mode != d2.ItemModeGround {
 			continue
 		}
 		if l.ignored(u) {
 			continue // the player trashed it from the watch page: not a skip worth a report line either
+		}
+		if vlt {
+			if done, _ := l.vaultSeen(u); done {
+				continue // recorded already: nothing to walk to
+			}
 		}
 		name := l.itemName(u)
 		skip := func(why string) { skipped = append(skipped, Skipped{ID: u.ID, Name: name, Why: why}) }
@@ -407,15 +460,51 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 				c.Stats = st
 			}
 		}
+		if sp != nil && c.Stats == nil && l.stats != nil && u.Addr != 0 {
+			c.Stats, _ = l.stats(u.Addr) // the read EvaluateWith would make, kept for the shadow
+		}
 		v := l.EvaluateWith(u, c)
+		if ev, ok := sp.GroundVerdict(u, c.Stats); ok {
+			v = ev // loot.rulesEngine >= 1: the engine decides; the filters below stay today's
+		}
+		toVault := false
+		if vlt {
+			if _, fell := l.vaultSeen(u); !fell { // a failed peek keeps today's decision above
+				today := v
+				if vv, vd, ok := sp.VaultDecision(u, c.Stats); ok {
+					v, toVault = vd, vv
+				}
+				if toVault {
+					if pv, ok := l.vaultPoorPick(today, b, u, c); ok {
+						v, toVault = pv, false
+					}
+				}
+			}
+		}
 		if namedItem(o.Names, name, b) {
 			v = Verdict{Action: Keep, Tier: "S", Prio: 100, Rule: "named", Reason: "asked for by name"}
+			toVault = false
 		}
+		if toVault {
+			if v.Prio < o.MinPrio {
+				skip("below min prio")
+			} else if l.vaultBlockedNow() {
+				skip("vault full")
+				l.vaultMissSkip(u, name)
+			} else {
+				sp.Observe(ShadowGround, u, "vault", "", false, c.Stats)
+				out = append(out, cand{u: u, v: v, dist: d, name: name, gold0: s.Player.Gold, vault: true})
+			}
+			continue
+		}
+		shadow := func(today string) { sp.Observe(ShadowGround, u, today, "", false, c.Stats) }
 		if !passes(v, strict, lowGold) {
+			shadow("ignore")
 			skip("filtered: " + v.String())
 			continue
 		}
 		if v.Prio < o.MinPrio {
+			shadow("ignore")
 			skip("below min prio")
 			continue
 		}
@@ -427,10 +516,12 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 			// recovering: anything worth the PoorMinSell line is gold, the per-cell bar is for a character that can afford to wait
 			if l.recovering.Load() {
 				if strict == 1 && v.Rule != poorRule && SellValue(l.e.Data, b, u.Item, maxBuy) < t.PoorMinSell {
+					shadow("ignore")
 					skip("not worth selling")
 					continue
 				}
 			} else if strict == 1 && v.Rule != poorRule && SellValue(l.e.Data, b, u.Item, maxBuy)/cells < t.MinValuePerCell {
+				shadow("ignore")
 				skip("not worth selling")
 				continue
 			}
@@ -438,15 +529,18 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 		if b != nil && b.Type == "gold" {
 			// A broke character takes every pile: small piles are most of what Normal drops, and it needs the gold.
 			if amt := c.Stats.Get(d2.StatGold); c.Stats != nil && int(amt) < l.goldBar(s) && s.Player.Gold >= l.poorBelow() {
+				shadow("ignore")
 				skip("small gold pile")
 				continue
 			}
-			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
+			shadow("pickup")
+			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class), false})
 			continue
 		}
+		shadow("pickup") // every filter above said yes; pack room below is not a loot decision
 		// Potions the belt will take (a same-kind column with room or an empty column, B2) do not need pack space.
 		if k := belt.PotionKind(b); k != belt.None && belt.WillBelt(l.e.Data, s.Inventory, k) {
-			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
+			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class), false})
 			continue
 		}
 		w, h := 1, 1
@@ -472,7 +566,7 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 				continue
 			}
 		}
-		out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
+		out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class), false})
 	}
 	sort.SliceStable(out, func(i, j int) bool {
 		if out[i].v.Prio != out[j].v.Prio {
@@ -553,6 +647,7 @@ func (l *Looter) pickOne(ctx context.Context, c cand, o PickOpts) error {
 			}
 			return err
 		}
+		l.e.Log.Info("loot: clicked", "item", c.name, "id", u.ID, "at", fmt.Sprintf("%d,%d", u.X, u.Y), "player", fmt.Sprintf("%d,%d", s.Player.X, s.Player.Y), "panel", hand.PanelOpen(s.UI), "ui", fmt.Sprint(s.UI))
 		walk := time.Duration(d) * 90 * time.Millisecond
 		timeout := time.Duration(t.ConfirmMs)*time.Millisecond + walk
 		ns, ok, werr := l.hand.Wait(ctx, timeout, func(s *d2.Snapshot) bool {
@@ -658,3 +753,31 @@ func (l *Looter) LeftBehind() int { return int(l.leftBehind.Load()) }
 
 // ClearLeftBehind forgets the count (after a town trip).
 func (l *Looter) ClearLeftBehind() { l.leftBehind.Store(0) }
+
+// noteWornChange logs a worn item that left the body (or arrived) while one pickup ran. A pickup never takes anything off
+// on purpose; a line here names the pickup that did (card recallsorc: a worn cap went to the pack with no log line).
+func (l *Looter) noteWornChange(before, after *d2.Snapshot, c cand) {
+	if before == nil || after == nil {
+		return
+	}
+	worn := func(s *d2.Snapshot) map[int]uint32 {
+		m := map[int]uint32{}
+		for _, it := range s.Inventory.Items {
+			if it.Item != nil && it.Item.Where == d2.ContEquipment {
+				m[it.Item.Body] = it.ID
+			}
+		}
+		return m
+	}
+	b, a := worn(before), worn(after)
+	for body, id := range b {
+		if a[body] != id {
+			l.e.Log.Info("loot: worn item changed by a pickup", "picked", c.name, "body", body, "was", id, "now", a[body])
+		}
+	}
+	for body, id := range a {
+		if _, had := b[body]; !had {
+			l.e.Log.Info("loot: item worn by a pickup", "picked", c.name, "body", body, "now", id)
+		}
+	}
+}
