@@ -204,23 +204,20 @@
     "worn": [
      {
       "code": "cap",
-      "slot": "head",
-      "quality": 4
+      "slot": "head"
      },
      {
-      "code": "stu",
-      "slot": "torso",
-      "quality": 4
+      "code": "qui",
+      "slot": "torso"
      },
      {
       "code": "sbr",
       "slot": "rhand",
-      "quality": 6
+      "quality": 4
      },
      {
       "code": "buc",
-      "slot": "lhand",
-      "quality": 4
+      "slot": "lhand"
      }
     ]
    },
