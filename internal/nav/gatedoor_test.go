@@ -144,3 +144,29 @@ func truthCells(s *sim, r d2map.Rect) []uint16 {
 	}
 	return out
 }
+
+// A walk along the bottom of a level keeps off the strip that touches another level (V live: it stepped onto the strip
+// and ended in the neighbour). Must fail without penalizeBorders.
+func TestWalkKeepsOffTheBorderStripOfAnotherLevel(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			g := openField(3000, 3000, 200, 80)
+			blockRect(g, d2map.Rect{X: 3080, Y: 3000, W: 40, H: 56})
+			l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 200, H: 60}}
+			l3 := &simLevel{no: 3, rect: d2map.Rect{X: 3000, Y: 3060, W: 200, H: 20}}
+			s := newSim(g, input.Point{X: 3010, Y: 3058}, l1, l3)
+			s.reveal = 300
+			s.revealRooms()
+			n := s.navigator()
+			wps, err := n.PathTo(input.Point{X: 3190, Y: 3058})
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, w := range wps {
+				if w.X > 3085 && w.X < 3115 && w.Y > 3057 {
+					t.Fatalf("waypoint %v hugs the border strip: %v", w, wps)
+				}
+			}
+		})
+	}
+}
