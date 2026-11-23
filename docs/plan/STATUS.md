@@ -443,6 +443,7 @@
 | uifit1 | proposed | - | `tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/fit-triage-2026-11-23.md`<br>`internal/watch/web/utilities.css`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/panels/statusline/panel.css`<br>`internal/watch/web/panels/quest-strip/panel.css` | - |
 | toolstrade10 | proposed | - | `internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade11 | proposed | - | `internal/bot/resource.go`<br>`internal/bot/beltfill_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| opsquest4 | proposed | - | `internal/ops/**`<br>`cmd/d2bot/ops*.go`<br>`docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
@@ -475,6 +476,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0c10ea25e 11-23 03:21 `Merge agent/opsquest4: Merge branch 'main' into opsquest4` (opsquest4)
+- 038a740d4 11-23 03:20 `Merge branch 'main' into opsquest4` (-)
 - 60d48e453 11-23 03:11 `Merge agent/questdrill2: Merge branch 'main' into qdmatrix` (questdrill2)
 - 8eb28bdd1 11-23 03:10 `Merge branch 'main' into qdmatrix` (-)
 - 894801633 11-23 03:01 `Merge agent/toolstrade11: Merge branch 'main' into toolstrade11` (toolstrade11)
@@ -483,6 +486,4 @@
 - 9d4ce3580 11-23 02:48 `Merge branch 'main' into opsquest3` (-)
 - 23eea885b 11-23 02:42 `Merge agent/uigate: Merge branch 'main' into uifit1` (uigate)
 - 1472b59c7 11-23 02:41 `Merge branch 'main' into uifit1` (-)
-- a70c7deb1 11-23 02:34 `Merge agent/toolstrade10: Merge branch 'main' into toolstrade10` (toolstrade10)
-- 189673091 11-23 02:32 `Merge branch 'main' into toolstrade10` (-)
 <!-- statusgen:end -->

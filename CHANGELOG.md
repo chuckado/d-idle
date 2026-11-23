@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into opsquest4 <!--sg:agent/opsquest4-->
 - Merge branch 'main' into qdmatrix <!--sg:agent/questdrill2-->
 - Merge branch 'main' into toolstrade11 <!--sg:agent/toolstrade11-->
 - Merge branch 'main' into opsquest3 <!--sg:agent/opsquest3-->
