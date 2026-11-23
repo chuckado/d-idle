@@ -36,6 +36,14 @@ type allocFake struct {
 	on     bool
 	busy   bool
 	builds map[string][]string
+	late   string // tier of the endgame tables when set (a test makes them experimental)
+}
+
+func (f *allocFake) lateTier(def string) string {
+	if f.late != "" {
+		return f.late
+	}
+	return def
 }
 
 func (f *allocFake) desk(t *testing.T, dir string) *Desk {
@@ -76,6 +84,10 @@ func (f *allocFake) desk(t *testing.T, dir string) *Desk {
 				{Name: "pal_a", Class: "paladin", Tier: BuildSupported, Label: "pal a"},
 				{Name: "pal_x", Class: "paladin", Tier: BuildExperimental, Label: "pal x"},
 				{Name: "sor_a", Class: "sorceress", Tier: BuildSupported, Label: "sor a"},
+				{Name: "necromancer_summoner_normal30", Class: "necromancer", Tier: BuildSupported},
+				{Name: "necromancer_summoner_endgame90", Class: "necromancer", Tier: f.lateTier(BuildSupported)},
+				{Name: "paladin-normal30-v2", Class: "paladin", Tier: BuildSupported},
+				{Name: "paladin_hammerdin_endgame90", Class: "paladin", Tier: f.lateTier(BuildSupported)},
 			}
 		},
 		Next: func(build string, p *d2.Player) ([]Step, error) {
@@ -272,5 +284,100 @@ func TestBuildViewSaysUnspentSpentAndWaiting(t *testing.T) {
 		if v.Spent != 1 || v.Waiting != "" {
 			t.Errorf("%s after a spend: spent %d waiting %q", c.build, v.Spent, v.Waiting)
 		}
+	}
+}
+
+// The horizon handoff: a locked 30-level table continues with the build's next SUPPORTED table (catalogue fromLevel),
+// loudly, never into an experimental one.
+func TestAutoAllocHandoffTwoClasses(t *testing.T) {
+	ctx := context.Background()
+	for _, c := range []struct {
+		class        d2.Class
+		first, later string
+		want         string
+	}{
+		{d2.Necromancer, "necromancer_summoner_normal30", "necromancer_summoner_endgame90", "handoff normal30 -> endgame90 at clvl 30"},
+		{d2.Paladin, "paladin-normal30-v2", "paladin_hammerdin_endgame90", "handoff paladin-normal30-v2 -> endgame90 at clvl 30"},
+	} {
+		f := newAllocFake(c.class)
+		f.builds[c.first] = []string{"+vit"}
+		f.builds[c.later] = []string{"+vit"}
+		dir := t.TempDir()
+		d := f.desk(t, dir)
+		f.p.Level, f.p.StatPoints = 29, 1
+		if r := d.SetBuild(c.first, false); !r.OK {
+			t.Fatal(r)
+		}
+		if got := d.AutoAllocOnce(ctx); got != "stat vit" || d.store.Get().Plan != "" {
+			t.Fatalf("%s clvl 29: %q plan %q", c.first, got, d.store.Get().Plan)
+		}
+		if v := d.BuildView(); !strings.Contains(v.Plan, "moves on to the full plan") {
+			t.Errorf("%s plan line before: %q", c.first, v.Plan)
+		}
+		f.p.Level, f.p.StatPoints = 31, 1
+		if got := d.AutoAllocOnce(ctx); got != "stat vit" {
+			t.Fatalf("%s clvl 31: %q", c.first, got)
+		}
+		if s := d.store.Get(); s.Plan != c.later || s.PlanAtLevel != 31 {
+			t.Errorf("%s stored %+v", c.first, s)
+		}
+		found := false
+		for _, l := range f.logs {
+			found = found || strings.HasSuffix(l, strings.TrimSuffix(c.want, "30")+"31") && strings.Contains(l, "auto-alloc: handoff")
+		}
+		if !found {
+			t.Errorf("%s: no handoff trace in %v", c.first, f.logs)
+		}
+		if v := d.BuildView(); !strings.Contains(v.Plan, "now following the full plan from level 30") {
+			t.Errorf("%s plan line after: %q", c.first, v.Plan)
+		}
+		if f.p.StatPoints = 1; true {
+			d.AutoAllocOnce(ctx)
+		}
+		n := 0
+		for _, l := range f.logs {
+			if strings.Contains(l, "auto-alloc: handoff") {
+				n++
+			}
+		}
+		if n != 1 {
+			t.Errorf("%s: handoff logged %d times", c.first, n)
+		}
+		if s := f.desk(t, dir).store.Get(); s.Plan != c.later {
+			t.Errorf("%s: handoff lost over a restart: %+v", c.first, s)
+		}
+	}
+}
+
+func TestAutoAllocNoHandoffIntoExperimental(t *testing.T) {
+	for _, c := range []struct {
+		class d2.Class
+		first string
+	}{{d2.Necromancer, "necromancer_summoner_normal30"}, {d2.Paladin, "paladin-normal30-v2"}} {
+		f := newAllocFake(c.class)
+		f.late = BuildExperimental
+		f.builds[c.first] = []string{"+vit"}
+		d := f.desk(t, "")
+		f.p.Level, f.p.StatPoints = 35, 1
+		d.SetBuild(c.first, false)
+		d.AutoAllocOnce(context.Background())
+		if d.store.Get().Plan != "" {
+			t.Errorf("%s: handed off into an experimental table", c.first)
+		}
+		if v := d.BuildView(); !strings.Contains(v.Plan, "not supported yet") {
+			t.Errorf("%s plan line: %q", c.first, v.Plan)
+		}
+	}
+}
+
+// A table with no step left for unspent points hands off early to the nearest later supported table.
+func TestAutoAllocHandoffWhenTableExhausted(t *testing.T) {
+	f := newAllocFake(d2.Necromancer)
+	f.builds["necromancer_summoner_endgame90"] = []string{"+vit"}
+	d := f.desk(t, "")
+	f.p.Level, f.p.StatPoints = 27, 1
+	d.SetBuild("necromancer_summoner_normal30", false)
+	if got := d.AutoAllocOnce(context.Background()); got != "stat vit" || d.store.Get().Plan != "necromancer_summoner_endgame90" {
+		t.Fatalf("got %q plan %q", got, d.store.Get().Plan)
 	}
 }

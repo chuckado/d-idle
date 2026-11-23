@@ -109,6 +109,11 @@
       act.hidden = !st.locked;
       act.textContent = !st.locked ? '' : 'Spent by the build so far this run: ' + (b.spent || 0) + '. Unspent now: ' + (u.stat || 0) + ' stat, ' + (u.skill || 0) + ' skill.' + (b.waiting && ((u.stat || 0) + (u.skill || 0)) > 0 ? ' Waiting: ' + b.waiting : '');
     }
+    var pl = $('bplan');
+    if (pl) {
+      pl.hidden = !(b.plan || b.noPlan);
+      pl.textContent = pl.hidden ? '' : [b.plan, b.noPlan].filter(Boolean).join(' ');
+    }
     var h = $('bheld'); h.hidden = !(b.held && b.held.length);
     h.textContent = h.hidden ? '' : b.held.map(function (x) { return x.skill + ' (level ' + x.clvl + '): ' + x.reason; }).join(' ');
     var o = $('boff'); o.hidden = !(b.offBuild && b.offBuild.length);
