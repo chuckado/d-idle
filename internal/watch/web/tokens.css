@@ -81,7 +81,7 @@
     --d-z-band: 10; --d-z-sheet: 20; --d-z-toast: 30; --d-z-banner: 40;
     --d-nav-h: 0px; /* the height the shared navigation's bottom bar takes from the viewport (nav.css sets it under 700 px) */
     --d-banner-h: 0px; /* the height the update banner takes from the fixed cockpit frame; update.js sets it */
-    --d-dur-1: 120ms; --d-dur-2: 240ms; --d-dur-3: 600ms; --d-ease: cubic-bezier(.2, 0, 0, 1);
+    --d-dur-1: 120ms; --d-dur-2: 240ms; --d-dur-3: 600ms; --d-dur-pulse: 0.9s; --d-dur-fade: 2.4s; /* the inventory's sending and done outlines */ --d-ease: cubic-bezier(.2, 0, 0, 1);
     color-scheme: dark;
   }
   :root[data-density="comfortable"] { --d-gap: var(--d-sp-4); --d-pad: var(--d-sp-4); --d-pad-dense: var(--d-sp-3); --d-row-pad: var(--d-sp-2); }
@@ -112,8 +112,6 @@
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    :root { --d-dur-1: 0ms; --d-dur-2: 0ms; --d-dur-3: 0ms; }
-    /* every animation with a literal duration (the inventory pulse): one frame, no loop */
-    *, ::before, ::after { animation-duration: .01ms; animation-iteration-count: 1; }
+    :root { --d-dur-1: 0ms; --d-dur-2: 0ms; --d-dur-3: 0ms; --d-dur-pulse: 0ms; --d-dur-fade: 0ms; }
   }
 }

@@ -63,7 +63,8 @@ func TestMotionHonoursReducedMotion(t *testing.T) {
 	files, _ := filepath.Glob("web/*.css")
 	more, _ := filepath.Glob("web/panels/*/*.css")
 	tok, _ := os.ReadFile("web/tokens.css")
-	globalReduce := strings.Contains(string(tok), "prefers-reduced-motion: reduce") && strings.Contains(string(tok), "animation-duration: .01ms; animation-iteration-count: 1;")
+	globalReduce := false
+	_ = tok
 	moving := regexp.MustCompile(`(?m)^[^/\n]*\b(animation|transition):[^;}]*`)
 	for _, f := range append(files, more...) {
 		b, _ := os.ReadFile(f)
@@ -72,7 +73,7 @@ func TestMotionHonoursReducedMotion(t *testing.T) {
 			if strings.Contains(m, "var(--d-dur") || strings.Contains(m, "transition: none") || strings.Contains(m, "animation: none") {
 				continue
 			}
-			if !strings.Contains(s, "prefers-reduced-motion") && !globalReduce {
+			if !strings.Contains(s, "prefers-reduced-motion") {
 				t.Errorf("%s moves with a literal duration and has no prefers-reduced-motion rule: %s", f, strings.TrimSpace(m))
 			}
 		}
