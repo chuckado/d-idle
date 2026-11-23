@@ -452,6 +452,7 @@
 | stage1fix | proposed | - | `internal/nav/exit.go`<br>`internal/nav/exit_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_test.go`<br>`cmd/d2scenario/tap.go`<br>`cmd/d2scenario/tap_test.go`<br>`tools/provingground/scenarios/navexit.json`<br>`tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | toolstrade15 | proposed | - | `internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`internal/nav/testdata/barracks28.grid`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | stage1doc | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
+| uifit4 | proposed | - | `tools/uishots/fixtures_builds.go`<br>`tools/uishots.sh`<br>`docs/ui/fit-triage-2026-11-23.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
@@ -483,6 +484,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 44e2d51ee 11-23 05:10 `Merge agent/uifit4: Merge branch 'main' into uifit4` (uifit4)
+- e2c08a433 11-23 04:58 `Merge branch 'main' into uifit4` (-)
 - 87403be43 11-23 04:55 `Merge agent/stage1doc: Merge branch 'main' into stage1doc` (stage1doc)
 - 9b485f307 11-23 04:53 `Merge branch 'main' into stage1doc` (-)
 - dde5f844d 11-23 04:47 `Merge agent/toolstrade15: Merge branch 'main' into toolstrade15` (toolstrade15)
@@ -491,6 +494,4 @@
 - 57d18af4f 11-23 04:31 `Merge branch 'main' into stage1fix` (-)
 - 2958c57e0 11-23 04:25 `Merge agent/uifit3: Merge branch 'main' into uifit3` (uifit3)
 - d9b8098b0 11-23 04:24 `Merge branch 'main' into uifit3` (-)
-- a6b5aa529 11-23 04:16 `Merge agent/questdrill4: Merge branch 'main' into qdmatrix` (questdrill4)
-- 264088bc8 11-23 04:14 `Merge branch 'main' into qdmatrix` (-)
 <!-- statusgen:end -->
