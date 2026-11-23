@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- novacap: task card <!--sg:agent/novacap-->
 - Merge branch 'main' into toolstrade6 <!--sg:agent/toolstrade6-->
 - Merge branch 'main' into allochandoff <!--sg:agent/allochandoff-->
 - Merge branch 'main' into plan3 <!--sg:agent/plan3-->

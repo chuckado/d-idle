@@ -386,6 +386,7 @@ data/capabilities/  credit-runner  dlv-stance-pack
 data/capabilities/capabilities.json  credit-runner  barb1
 data/capabilities/capabilities.json  credit-runner  druid1
 data/capabilities/capabilities.json  credit-runner  necro1
+data/capabilities/capabilities.json  credit-runner  novacap
 data/idreveal  credit-runner  nocards
 data/input/caps/  credit-runner  dlv-cast-verbs
 data/input/caps/d2d-fork-input-items.json  credit-runner  q13input
@@ -1136,6 +1137,7 @@ internal/combat/classdata/profiles.json  credit-runner  necro1
 internal/combat/classdata/profiles.json  credit-runner  necro3
 internal/combat/classdata/profiles.json  credit-runner  necro4
 internal/combat/classdata/profiles.json  credit-runner  sorc2
+internal/combat/classdata/skills.json  credit-runner  novacap
 internal/combat/dodge.go  credit-runner  survfix2
 internal/combat/fight.go  credit-runner  goldprio
 internal/combat/fight.go  credit-runner  maphistory
@@ -1155,6 +1157,7 @@ internal/combat/necro.go  credit-runner  necro4
 internal/combat/necro_corpse.go  credit-runner  necro4
 internal/combat/necro_data_test.go  credit-runner  necro3
 internal/combat/necro_data_test.go  credit-runner  necro4
+internal/combat/necro_data_test.go  credit-runner  novacap
 internal/combat/necro_test.go  credit-runner  necro4
 internal/combat/packdrink.go  credit-runner  beltfix
 internal/combat/packdrink_test.go  credit-runner  beltfix
@@ -1264,6 +1267,7 @@ internal/decide/variants.go  credit-runner  qdensity
 internal/decide/variants_test.go  credit-runner  qdensity
 internal/delivery/  credit-runner  dlv-data
 internal/delivery/  credit-runner  dlv-rotation
+internal/delivery/testdata/skills.golden.json  credit-runner  novacap
 internal/env  credit-runner  survsd
 internal/env  credit-runner  wiring2
 internal/env/tuning.go  credit-runner  bulkid
@@ -2388,6 +2392,7 @@ tools/provingground/scenarios/cain.json  credit-runner  cainfix3
 tools/provingground/scenarios/cain.json  credit-runner  wpstep
 tools/provingground/scenarios/manage.json  credit-runner  equipswap
 tools/provingground/scenarios/navexit.json  credit-runner  navexit2
+tools/provingground/scenarios/necro.json  credit-runner  novacap
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/provingground/scenarios/points.json  credit-runner  barb1
 tools/provingground/scenarios/points.json  credit-runner  druid1
