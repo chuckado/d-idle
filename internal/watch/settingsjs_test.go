@@ -164,3 +164,25 @@ func TestNoPositiveTabindex(t *testing.T) {
 		}
 	}
 }
+
+// Static pages: nothing but a native button, link or field carries an inline click handler or a role=button without tabindex (so Enter and
+// Space and Tab work without script): Return, Policy, Hall and the page templates.
+func TestStaticPagesUseNativeControls(t *testing.T) {
+	live, _ := webFS.ReadFile("web/watch.html")
+	vault, _ := webFS.ReadFile("web/vault.html")
+	chars, _ := webFS.ReadFile("web/characters.html")
+	pages := map[string]string{"live": string(live), "inventory": charPage, "skills": skillsPage, "points": pointsPage, "vault": string(vault), "characters": string(chars),
+		"return": string(RenderReturn(ReturnData{}, false)), "policy": string(RenderPolicy(PolicyView{})), "hall": string(RenderHall(&HallView{}))}
+	click := regexp.MustCompile(`(?i)<(div|span|li|p|td|section|article)\b[^>]*\bonclick=`)
+	role := regexp.MustCompile(`(?i)<(?:div|span|li|p)\b[^>]*role="button"[^>]*>`)
+	for name, src := range pages {
+		if m := click.FindString(src); m != "" {
+			t.Errorf("%s: a non-native element carries onclick: %s", name, m)
+		}
+		for _, m := range role.FindAllString(src, -1) {
+			if !strings.Contains(m, "tabindex") {
+				t.Errorf("%s: role=button without tabindex (not reachable by Tab): %s", name, m)
+			}
+		}
+	}
+}
