@@ -1,10 +1,13 @@
 ---
 id: TASK-863
-title: 'drill2: staged Necromancer Act 1 drill night results, stage 1 scenario, tighter necro thresholds'
-status: Proposed
+title: >-
+  drill2: staged Necromancer Act 1 drill night results, stage 1 scenario,
+  tighter necro thresholds
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T06:23:00Z'
+updated_date: '2026-11-23T06:45:00Z'
 labels:
   - bot
   - drill
