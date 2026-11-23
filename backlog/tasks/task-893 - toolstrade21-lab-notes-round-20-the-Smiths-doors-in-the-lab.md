@@ -1,10 +1,11 @@
 ---
 id: TASK-893
 title: 'toolstrade21: lab notes round 20, the Smith''s doors in the lab'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T12:06:00Z'
+updated_date: '2026-11-23T12:23:00Z'
 labels:
   - docs
   - probe
