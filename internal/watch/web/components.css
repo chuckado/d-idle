@@ -276,6 +276,12 @@
   .d-sheet-line { margin: 0; overflow-wrap: anywhere; }
   .d-sheet-pick { display: grid; gap: var(--d-sp-1); }
   .d-sheet-opt { display: flex; gap: var(--d-sp-1); align-items: center; min-block-size: 44px; }
+  .d-sheet-adv { display: grid; gap: var(--d-sp-1); }
+  .d-sheet-adv-btn { justify-self: start; min-block-size: 44px; background: none; border: 0; padding: 0; color: var(--d-accent, inherit); text-decoration: underline; cursor: pointer; font: inherit; }
+  .d-sheet-opt { align-items: flex-start; padding-block: var(--d-sp-1); }
+  .d-sheet-opt-text { display: grid; gap: 2px; overflow-wrap: anywhere; }
+  .d-sheet-opt-why { color: var(--d-text-2); font-size: var(--d-fs-1); }
+  .d-sheet-opt-warn { color: var(--d-bad); font-size: var(--d-fs-1); }
   .d-sheet-row { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); justify-content: flex-end; }
   /* a reason line: why the control beside it is off. Always visible while it is off; the control names it with aria-describedby. */
   .d-why { margin: 0; color: var(--d-text-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }

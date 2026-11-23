@@ -74,16 +74,20 @@ div.bc-detail [data-build=paladin_hammerdin]
   h4 "Variants"
   ul.bc-vars
     li.bc-var [data-table=paladin-normal30 data-tier=supported]
-      p.bc-vn "paladin normal30 "
-        span.bc-tier "(supported)"
+      p.bc-vn "Leveling to level 30, earlier version"
+      p.bc-vwhy "The first plan we wrote for levels one to thirty."
       details.bc-prev
         summary "First 2 levels"
         ul.bc-prev-list
           li "Level 2: Might"
           li "Level 6: Blessed Hammer x2 [unsupported], +5 str"
+    li.bc-var [data-table=paladin-normal30-v2 data-tier=supported]
+      p.bc-vn "Leveling to level 30 (recommended)"
+      p.bc-vwhy "The plan for the first thirty levels, the one new heroes follow."
     li.bc-var [data-table=paladin_hammerdin_endgame90 data-tier=experimental]
-      p.bc-vn "paladin hammerdin endgame90 "
-        span.bc-tier "(experimental)"
+      p.bc-vn "Full plan to level 90"
+      p.bc-vwhy "The whole plan from level 30 up to level 90."
+      p.bc-warn "Newer plan, less tested: skills it has not proven yet are saved for you to spend by hand."
       p.bc-warn "The hero cannot use these yet and will hold the point for you: Concentration."
       p.bc-note "1 more skill is not proven in the fighter yet."
   button.d-btn.bc-choose [data-variant=primary type=button] "Choose this build"
@@ -144,16 +148,20 @@ div.bc-detail [data-build=paladin_hammerdin]
   h4 "Variants"
   ul.bc-vars
     li.bc-var [data-table=paladin-normal30 data-tier=supported]
-      p.bc-vn "paladin normal30 "
-        span.bc-tier "(supported)"
+      p.bc-vn "Leveling to level 30, earlier version"
+      p.bc-vwhy "The first plan we wrote for levels one to thirty."
       details.bc-prev
         summary "First 2 levels"
         ul.bc-prev-list
           li "Level 2: Might"
           li "Level 6: Blessed Hammer x2 [unsupported], +5 str"
+    li.bc-var [data-table=paladin-normal30-v2 data-tier=supported]
+      p.bc-vn "Leveling to level 30 (recommended)"
+      p.bc-vwhy "The plan for the first thirty levels, the one new heroes follow."
     li.bc-var [data-table=paladin_hammerdin_endgame90 data-tier=experimental]
-      p.bc-vn "paladin hammerdin endgame90 "
-        span.bc-tier "(experimental)"
+      p.bc-vn "Full plan to level 90"
+      p.bc-vwhy "The whole plan from level 30 up to level 90."
+      p.bc-warn "Newer plan, less tested: skills it has not proven yet are saved for you to spend by hand."
       p.bc-warn "The hero cannot use these yet and will hold the point for you: Concentration."
       p.bc-note "1 more skill is not proven in the fighter yet."
   button.d-btn.bc-choose [aria-describedby=bc-why-paladin_hammerdin data-variant=primary type=button disabled] "Choose this build"
@@ -215,16 +223,20 @@ div.bc-detail [data-build=paladin_hammerdin]
   h4 "Variants"
   ul.bc-vars
     li.bc-var [data-table=paladin-normal30 data-tier=supported]
-      p.bc-vn "paladin normal30 "
-        span.bc-tier "(supported)"
+      p.bc-vn "Leveling to level 30, earlier version"
+      p.bc-vwhy "The first plan we wrote for levels one to thirty."
       details.bc-prev
         summary "First 2 levels"
         ul.bc-prev-list
           li "Level 2: Might"
           li "Level 6: Blessed Hammer x2 [unsupported], +5 str"
+    li.bc-var [data-table=paladin-normal30-v2 data-tier=supported]
+      p.bc-vn "Leveling to level 30 (recommended)"
+      p.bc-vwhy "The plan for the first thirty levels, the one new heroes follow."
     li.bc-var [data-table=paladin_hammerdin_endgame90 data-tier=experimental]
-      p.bc-vn "paladin hammerdin endgame90 "
-        span.bc-tier "(experimental)"
+      p.bc-vn "Full plan to level 90"
+      p.bc-vwhy "The whole plan from level 30 up to level 90."
+      p.bc-warn "Newer plan, less tested: skills it has not proven yet are saved for you to spend by hand."
       p.bc-warn "The hero cannot use these yet and will hold the point for you: Concentration."
       p.bc-note "1 more skill is not proven in the fighter yet."
   button.d-btn.bc-choose [aria-describedby=bc-why-paladin_hammerdin data-variant=primary type=button disabled] "Choose this build"
@@ -286,16 +298,20 @@ div.bc-detail [data-build=paladin_hammerdin]
   h4 "Variants"
   ul.bc-vars
     li.bc-var [data-table=paladin-normal30 data-tier=supported]
-      p.bc-vn "paladin normal30 "
-        span.bc-tier "(supported)"
+      p.bc-vn "Leveling to level 30, earlier version"
+      p.bc-vwhy "The first plan we wrote for levels one to thirty."
       details.bc-prev
         summary "First 2 levels"
         ul.bc-prev-list
           li "Level 2: Might"
           li "Level 6: Blessed Hammer x2 [unsupported], +5 str"
+    li.bc-var [data-table=paladin-normal30-v2 data-tier=supported]
+      p.bc-vn "Leveling to level 30 (recommended)"
+      p.bc-vwhy "The plan for the first thirty levels, the one new heroes follow."
     li.bc-var [data-table=paladin_hammerdin_endgame90 data-tier=experimental]
-      p.bc-vn "paladin hammerdin endgame90 "
-        span.bc-tier "(experimental)"
+      p.bc-vn "Full plan to level 90"
+      p.bc-vwhy "The whole plan from level 30 up to level 90."
+      p.bc-warn "Newer plan, less tested: skills it has not proven yet are saved for you to spend by hand."
       p.bc-warn "The hero cannot use these yet and will hold the point for you: Concentration."
       p.bc-note "1 more skill is not proven in the fighter yet."
   button.d-btn.bc-choose [aria-describedby=bc-why-paladin_hammerdin data-variant=primary type=button disabled] "Chosen"

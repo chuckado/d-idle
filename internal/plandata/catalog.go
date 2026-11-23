@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/fs"
+	"regexp"
 	"sort"
 	"strings"
 	"sync"
@@ -56,12 +57,23 @@ type DefenseByDifficulty struct {
 	Hell   int `json:"hell"`
 }
 
+// VariantDef is the plain-language face of one plan table behind a build: a label and a one-line why a player can read.
+// FromLevel is the hero level from which the table is the better fit (0 for the table a new hero starts on).
+type VariantDef struct {
+	Table     string `json:"table"`
+	Label     string `json:"label"`
+	Why       string `json:"why"`
+	FromLevel int    `json:"fromLevel,omitempty"`
+}
+
 // Build is one real build: its text, its ratings and the plan tables that implement it.
 type Build struct {
 	ID                  string               `json:"id"`
 	Name                string               `json:"name"`
 	Class               string               `json:"class"`
 	Tables              []string             `json:"tables"`
+	Variants            []VariantDef         `json:"variants"`
+	DefaultVariant      string               `json:"defaultVariant"`
 	Identity            string               `json:"identity"`
 	Summary             string               `json:"summary"`
 	Pros                []string             `json:"pros"`
@@ -208,6 +220,9 @@ func (b *Build) validate(tables, classes map[string]bool) error {
 			return fail(fmt.Errorf("unknown plan table %q", t))
 		}
 	}
+	if err := b.validateVariants(); err != nil {
+		return fail(err)
+	}
 	if err := textOK("identity", b.Identity, maxIdentity); err != nil {
 		return fail(err)
 	}
@@ -257,6 +272,70 @@ func (b *Build) validate(tables, classes map[string]bool) error {
 		return fail(fmt.Errorf("thresholdsRef %q, want %q", b.ThresholdsRef, "thresholds"))
 	}
 	return nil
+}
+
+// validateVariants: one VariantDef per table, plain text (a raw table id is not a label), and exactly one default, which
+// is a table a new hero starts on (FromLevel 0).
+func (b *Build) validateVariants() error {
+	if len(b.Variants) != len(b.Tables) {
+		return fmt.Errorf("%d variants for %d tables", len(b.Variants), len(b.Tables))
+	}
+	own := map[string]bool{}
+	for _, t := range b.Tables {
+		own[t] = true
+	}
+	seen := map[string]bool{}
+	for _, v := range b.Variants {
+		if !own[v.Table] || seen[v.Table] {
+			return fmt.Errorf("variant table %q is not one of the build's tables, or is listed twice", v.Table)
+		}
+		seen[v.Table] = true
+		if err := textOK("variant "+v.Table+" label", v.Label, 60); err != nil {
+			return err
+		}
+		if err := textOK("variant "+v.Table+" why", v.Why, 120); err != nil {
+			return err
+		}
+		if strings.Contains(v.Label, "_") || strings.Contains(v.Label, v.Table) || rawIDWord.MatchString(v.Label+" "+v.Why) {
+			return fmt.Errorf("variant %q: label and why are for players, not plan table ids", v.Table)
+		}
+		if v.FromLevel < 0 || v.FromLevel > 99 {
+			return fmt.Errorf("variant %q: fromLevel %d out of range", v.Table, v.FromLevel)
+		}
+	}
+	if !seen[b.DefaultVariant] {
+		return fmt.Errorf("defaultVariant %q is not one of the build's tables", b.DefaultVariant)
+	}
+	for _, v := range b.Variants {
+		if v.Table == b.DefaultVariant && v.FromLevel != 0 {
+			return fmt.Errorf("defaultVariant %q has fromLevel %d, the default is the one a new hero starts on", v.Table, v.FromLevel)
+		}
+	}
+	return nil
+}
+
+var rawIDWord = regexp.MustCompile(`(?i)normal30|endgame90|\bsme\b|fallback-|primary-`)
+
+// RecommendedVariant is the table the hero should follow at that level: the variant with the highest FromLevel not above
+// it, among those usable says ok (the caller's "supported" test), else the default. Never an unusable table.
+func (b *Build) RecommendedVariant(level int, ok func(table string) bool) string {
+	best, bestFrom := b.DefaultVariant, 0
+	for _, v := range b.Variants {
+		if v.FromLevel > 0 && v.FromLevel <= level && v.FromLevel > bestFrom && (ok == nil || ok(v.Table)) {
+			best, bestFrom = v.Table, v.FromLevel
+		}
+	}
+	return best
+}
+
+// Variant is the plain text of a table of this build; an unknown table is an error naming it and the build.
+func (b *Build) Variant(table string) (VariantDef, error) {
+	for _, v := range b.Variants {
+		if v.Table == table {
+			return v, nil
+		}
+	}
+	return VariantDef{}, fmt.Errorf("catalog: build %q has no plan table %q", b.ID, table)
 }
 
 // RatingView is one rating as the UI shows it. Text is the accessible form: "Defense: 4 of 5 stars, estimate".

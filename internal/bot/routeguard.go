@@ -176,6 +176,17 @@ func (r *Runner) areaGuardWhy(s *d2.Snapshot, a int) string {
 	return ""
 }
 
+// areaLeaveWhy is areaGuardWhy for a hero that already stands in area a: the road guard uses its mid-route verdict.
+func (r *Runner) areaLeaveWhy(s *d2.Snapshot, a int) string {
+	if task.RouteGuarded(task.Area(a)) {
+		if w := r.guardWorld(s); w != nil {
+			return task.RouteLeaveWhy(*w)
+		}
+		return ""
+	}
+	return r.areaGuardWhy(s, a)
+}
+
 // MercGoldFarm is set by the merc wiring (cmd/d2bot/mercwire.go): true while the merc is missing, gold cannot pay the
 // next merc action and the character is below merc.goldFarmMaxLevel. nil = never.
 var MercGoldFarm func(s *d2.Snapshot) bool
@@ -241,7 +252,7 @@ func (r *Runner) guardedExit(ctx context.Context, snap *d2.Snapshot, c control) 
 	if p.InTown() {
 		return false
 	}
-	why := r.areaGuardWhy(snap, p.Area)
+	why := r.areaLeaveWhy(snap, p.Area)
 	if why == "" {
 		return false
 	}

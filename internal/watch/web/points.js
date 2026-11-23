@@ -103,6 +103,12 @@
     $('bstate').textContent = line;
     var off = $('boffnote'); off.hidden = !!b.autoAlloc;
     off.textContent = b.autoAlloc ? '' : 'Auto-allocation is off (knob agency.autoAlloc): you can read about the builds here, but choosing one stays closed until it is on.';
+    var u = b.unspent || {};
+    var act = $('bact');
+    if (act) {
+      act.hidden = !st.locked;
+      act.textContent = !st.locked ? '' : 'Spent by the build so far this run: ' + (b.spent || 0) + '. Unspent now: ' + (u.stat || 0) + ' stat, ' + (u.skill || 0) + ' skill.' + (b.waiting && ((u.stat || 0) + (u.skill || 0)) > 0 ? ' Waiting: ' + b.waiting : '');
+    }
     var h = $('bheld'); h.hidden = !(b.held && b.held.length);
     h.textContent = h.hidden ? '' : b.held.map(function (x) { return x.skill + ' (level ' + x.clvl + '): ' + x.reason; }).join(' ');
     var o = $('boff'); o.hidden = !(b.offBuild && b.offBuild.length);
@@ -130,13 +136,9 @@
     }).catch(function () { open[card.id] = false; say('could not read the build details'); });
   }
   function choose(det, btn) {
-    var price = bview && bview.respec ? bview.respec.price : '?';
     var vs = det.variants || [];
     var exp = function (n) { return vs.filter(function (v) { return v.name === n && v.tier === 'experimental'; }).length > 0; };
-    var lines = ['You can change later, but it costs gold to respec. A respec now would cost ' + price + ' gold and refunds every skill and stat point.',
-      'Every new point then follows this build.'];
-    if (vs.some(function (v) { return v.tier === 'experimental'; })) lines.push('Some variants are experimental: skills the fighter has not proven yet are held for you, not spent.');
-    sheet = BC.openSheet(document, { title: 'Choose ' + det.name + '?', lines: lines, variants: vs, confirmText: 'Choose and lock', opener: btn,
+    sheet = BC.chooseSheet(document, det, bview && bview.respec ? bview.respec.price : undefined, { opener: btn, onCancel: function () { sheet = null; },
       onConfirm: function (name) { sheet = null; pickBuild(name, exp(name)); } });
   }
   function pickBuild(name, confirmed) {
