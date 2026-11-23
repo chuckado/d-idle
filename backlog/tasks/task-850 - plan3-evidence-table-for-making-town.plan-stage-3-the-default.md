@@ -16,6 +16,7 @@ owns:
   - "docs/probes/town-plan-stage3-2026-11-22.md"
 exclusive: []
 contracts: []
+result: "Docs only. den.clear bankFirst 1: six runs, stage 3 never worse than stage 0, stage 0 RED only for Necromancer seed 11; gate scenarios broke-after-bank RED at both stages (different assertions) and malus-errand-gold BLOCKED at both: not a clean yes. Builder jobs 7b1a, 5342."
 ---
 
 ## Description
@@ -28,6 +29,6 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Stage 0 vs 3 table for Paladin, Necromancer, Sorceress with purse and stash numbers
-- [ ] #2 Gate scenarios rerun, what is missing stated, nothing flipped
+- [x] #1 Stage 0 vs 3 table for Paladin, Necromancer, Sorceress with purse and stash numbers
+- [x] #2 Gate scenarios rerun, what is missing stated, nothing flipped
 <!-- AC:END -->
