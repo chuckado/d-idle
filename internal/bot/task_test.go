@@ -493,3 +493,28 @@ func TestCampaignWalkCarriesOutSafetyInterrupt(t *testing.T) {
 		})
 	}
 }
+
+// A drink that cancels the boss run does not start the 30 s restart gap: the next call starts at once. Must fail
+// without the delete in KillBoss. Any other cancel (a stuck run) keeps the gap (TestBossRunStartsAtMostOncePer30s).
+func TestBossRunRestartsAtOnceAfterADrink(t *testing.T) {
+	g := newRig(t)
+	g.r.loop.brWorldFn = func(context.Context) (task.World, error) { return brWorld(30), nil }
+	var starts []time.Time
+	ctx, cancel := context.WithCancelCause(context.Background())
+	g.r.d.Task = &TaskDeps{Boss: func(ctx context.Context, name string) error {
+		starts = append(starts, g.r.e.Clock.Now())
+		return context.Canceled
+	}}
+	acts := taskActs{r: g.r}
+	cancel(safetyInterrupt{SafetyDrinkLife})
+	_ = acts.KillBoss(ctx, task.BossBR)
+	ctx2, cancel2 := context.WithCancelCause(context.Background())
+	cancel2(safetyInterrupt{SafetyDrinkLife})
+	_ = acts.KillBoss(ctx2, task.BossBR)
+	if len(starts) != 2 {
+		t.Fatalf("starts %d", len(starts))
+	}
+	if gap := starts[1].Sub(starts[0]); gap >= bossRestartGap {
+		t.Fatalf("the second start waited %v after a drink", gap)
+	}
+}
