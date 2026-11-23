@@ -37,7 +37,7 @@ func TestNoUnidentifiedCardFromDrops(t *testing.T) {
 					}
 				}
 			}
-			for _, route := range []string{"/api/unlocks", "/api/away", "/api/chronicle", "/api/needs"} {
+			for _, route := range []string{"/api/away", "/api/chronicle", "/api/needs"} {
 				_, body := r.do("GET", r.view, route, funToken, "")
 				for _, bad := range []string{"Unidentified item", "face-down", "Flip the card", "idreveal"} {
 					if strings.Contains(string(body), bad) {

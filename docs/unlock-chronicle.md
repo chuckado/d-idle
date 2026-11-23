@@ -17,7 +17,7 @@ Both opens write the ladder's reveal (Chronicle line `Unlocked: ...`, away event
 
 - `internal/watch/unlockchronicle.go`: `Chronicle` (ring of 300 lines), `GET /api/chronicle[?since=N]`, schema `watch.chronicle/1`. Locked: `open:false`, `teaser`, no lines, no trips. The tape is the return screen's trips (`ReturnConfig.Return`), oldest first.
 - `data/chronicle/wording.json`: the wording, 3 or more variants per kind (kill, kill_xp, boss, drop, area, level, death, first). The variant is chosen from the event `Seq` (stable on replay). An unknown kind or too few variants is an error naming it.
-- `internal/watch/web/unlockui.js` (route `/watch/unlockui.js`): polls `/api/unlocks` and the open features; shared by the later unlock panels. All text via `textContent`.
+- `internal/watch/web/unlockui.js` (route `/watch/unlockui.js`): (deleted by E11a; the `GET /api/unlocks` route it polled was deleted 2026-11-23).
 - Engine additions (`internal/unlock`): trigger kind `seen` (arg `what`), event `EvSeen`, `Engine.Has/Profile/Dir`. `Unlocks.OnGoalEvent` now counts kills per monster name (in memory, a replayed `Seq` never counts twice) and feeds `kills_of_kind`; `Unlocks.Seen(what)` reports a viewer-side moment. `ReturnConfig.OnRead` is called when the HTML return page is served.
 - `cmd/d2bot/funwire.go`: `newFun` opens the shipped ladder per profile (`FunConfig.Unlock`). This turns the whole ladder on in the real bot.
 

@@ -64,7 +64,7 @@ Every entry that opens (by trigger or by buying) writes one Chronicle line (`Hub
 
 ## API
 
-- `GET /api/unlocks` (viewer, same gate as the other viewer routes): `{schema: watch.unlocks/1, open[], locked[], balance?}`. A locked entry has `title`, `teaser`, `price`; its `text` is absent.
+- `GET /api/unlocks` was deleted 2026-11-23 (no client; `Unlocks.View()` keeps the shape): `{schema: watch.unlocks/1, open[], locked[], balance?}`. A locked entry has `title`, `teaser`, `price`; its `text` is absent.
 - `POST /api/unlocks/buy {id}` (answer listener): same origin list, token, JSON-only and small-body rules as the other answer routes. 200 with the entry; 402 `insufficient` when the tally is short (nothing booked); 404 unknown entry; 400 `not-for-sale`; 409 `already-open`; 503 `tally-off` without a ledger or in vanilla mode. The spend is a ledger `spend` entry (key `unlock/<profile>/<id>`, upgrade `unlock`), so the ledger's own check keeps the balance from going negative and a retry after a crash books once.
 
 ## Rules kept

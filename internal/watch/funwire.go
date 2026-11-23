@@ -668,9 +668,6 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.Proposals != nil {
 		m.Handle(ProposalsRoute, f.Proposals.Handler())
 	}
-	if f.Unlocks != nil {
-		m.Handle(UnlocksRoute, f.Unlocks.Handler())
-	}
 	if f.Chronicle != nil {
 		m.Handle(ChronicleRoute, f.Chronicle.Handler())
 	}
@@ -697,12 +694,6 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	}
 	if f.Loop != nil {
 		m.Handle(OrderLoopRoute, f.Loop.Handler())
-	}
-	if f.Bestiary != nil {
-		m.Handle(BestiaryRoute, f.Bestiary.Handler())
-	}
-	if f.Atlas != nil {
-		m.Handle(AtlasRoute, f.Atlas.Handler())
 	}
 	if f.Alerts != nil {
 		m.Handle(AlertsRoute, f.Alerts.Handler())

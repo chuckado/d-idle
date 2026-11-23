@@ -3,7 +3,6 @@ package watch
 import (
 	atlasdata "d2lod-bot/data/atlas"
 	"encoding/json"
-	"net/http"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -53,7 +52,7 @@ func (r *funRig) raiseProposal() {
 
 func atlasOf(r *funRig) AtlasView {
 	var v AtlasView
-	r.getJSON(AtlasRoute, &v)
+	v = r.fun.Atlas.View()
 	return v
 }
 
@@ -117,12 +116,6 @@ func TestAtlasReplayAndGates(t *testing.T) {
 	}
 	if n != 1 {
 		t.Fatalf("reveal lines: %d", n)
-	}
-	if resp, _ := r.do("GET", r.view, AtlasRoute, "", ""); resp.StatusCode != http.StatusUnauthorized {
-		t.Errorf("viewer without token: %d", resp.StatusCode)
-	}
-	if resp, _ := r.do("POST", r.view, AtlasRoute, funToken, "{}"); resp.StatusCode != http.StatusMethodNotAllowed && resp.StatusCode != http.StatusNotFound {
-		t.Errorf("POST: %d", resp.StatusCode)
 	}
 }
 

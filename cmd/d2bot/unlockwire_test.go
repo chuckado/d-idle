@@ -219,9 +219,6 @@ func TestBestiaryWiredWithTableAndRestart(t *testing.T) {
 		t.Run(class, func(t *testing.T) {
 			state := t.TempDir()
 			w := newWireRig(t, class, state, wireTable(t, "Returned"))
-			if code := httpDo(t, "GET", w.view+"/api/bestiary", nil, nil); code != 401 {
-				t.Errorf("bestiary without a token: %d", code)
-			}
 			errs := strings.Join(w.rig.Fun.Errors(), "|")
 			if !strings.Contains(errs, `"Returned"`) {
 				t.Errorf("the missing kind is not logged: %q", errs)
@@ -230,7 +227,7 @@ func TestBestiaryWiredWithTableAndRestart(t *testing.T) {
 				w.m.Handle(goals.Event{Type: goals.EvKill, Monster: "Fallen", XP: 1})
 			}
 			var bv watch.BestiaryView
-			waitUntil(t, "50 kills", func() bool { w.get(t, "/api/bestiary", &bv); return cardOf(bv, "fallen").Kills == 50 })
+			waitUntil(t, "50 kills", func() bool { bv = w.rig.Fun.Bestiary.View(); return cardOf(bv, "fallen").Kills == 50 })
 			c := cardOf(bv, "fallen")
 			if !bv.Open || c.State != "full" || c.Resists == nil || !bv.Tables {
 				t.Fatalf("fallen card: %+v (open %v tables %v)", c, bv.Open, bv.Tables)
@@ -238,16 +235,15 @@ func TestBestiaryWiredWithTableAndRestart(t *testing.T) {
 			if cardOf(bv, "returned").ID != "" {
 				t.Errorf("a kind absent from the table has a card")
 			}
-			var av watch.AtlasView
-			if code := w.get(t, "/api/atlas", &av); code != 200 {
-				t.Errorf("atlas: %d", code)
+			if w.rig.Fun.Atlas == nil {
+				t.Errorf("atlas not wired")
 			}
 			w.cancel()
 			time.Sleep(300 * time.Millisecond)
 
 			w2 := newWireRig(t, class, state, wireTable(t, "Returned"))
 			var bv2 watch.BestiaryView
-			w2.get(t, "/api/bestiary", &bv2)
+			bv2 = w2.rig.Fun.Bestiary.View()
 			if c := cardOf(bv2, "fallen"); c.Kills != 50 || c.State != "full" || !bv2.Open {
 				t.Fatalf("after the restart: %+v open %v", c, bv2.Open)
 			}
@@ -262,7 +258,7 @@ func TestBestiaryWithoutTablesIsFlavourOnly(t *testing.T) {
 		w.m.Handle(goals.Event{Type: goals.EvKill, Monster: "Fallen", XP: 1})
 	}
 	var bv watch.BestiaryView
-	waitUntil(t, "10 kills", func() bool { w.get(t, "/api/bestiary", &bv); return cardOf(bv, "fallen").Kills == 10 })
+	waitUntil(t, "10 kills", func() bool { bv = w.rig.Fun.Bestiary.View(); return cardOf(bv, "fallen").Kills == 10 })
 	if bv.Tables || cardOf(bv, "fallen").Resists != nil {
 		t.Errorf("tables %v card %+v", bv.Tables, cardOf(bv, "fallen"))
 	}

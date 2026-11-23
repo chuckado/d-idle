@@ -49,14 +49,14 @@ func TestUnlocksRevealAndReturnSection(t *testing.T) {
 		t.Run(class, func(t *testing.T) {
 			r, eng := unlockRig(t, class)
 			var v UnlocksView
-			r.getJSON(UnlocksRoute, &v)
+			v = r.fun.Unlocks.View()
 			if len(v.Open) != 0 || len(v.Locked) != 6 {
 				t.Fatalf("start: %+v", v)
 			}
 			r.feed(funStream()...)
 			r.wall = r.wall.Add(21 * time.Minute)
 			v = UnlocksView{}
-			r.getJSON(UnlocksRoute, &v)
+			v = r.fun.Unlocks.View()
 			var open []string
 			for _, s := range v.Open {
 				open = append(open, s.ID)
@@ -175,7 +175,7 @@ func TestUnlocksBuy(t *testing.T) {
 		t.Fatalf("no reveal for a bought entry: %v", got)
 	}
 	var v UnlocksView
-	r.getJSON(UnlocksRoute, &v)
+	v = r.fun.Unlocks.View()
 	if v.Balance == nil || *v.Balance != after.Spendable {
 		t.Fatalf("balance in view: %+v", v.Balance)
 	}
@@ -193,8 +193,8 @@ func TestUnlocksBuyWithoutTally(t *testing.T) {
 
 func TestUnlocksOffWithoutEngine(t *testing.T) {
 	r := newFunRig(t, "Sorceress", 1)
-	if resp, _ := r.do("GET", r.view, UnlocksRoute, funToken, ""); resp.StatusCode != http.StatusNotFound {
-		t.Fatalf("%d", resp.StatusCode)
+	if r.fun.Unlocks != nil {
+		t.Fatal("unlocks wired without an engine")
 	}
 }
 
@@ -217,7 +217,7 @@ func TestShippedPactUnlockReveals(t *testing.T) {
 			t.Fatalf("%s: %v", class, got)
 		}
 		var v UnlocksView
-		r.getJSON(UnlocksRoute, &v)
+		v = r.fun.Unlocks.View()
 		for _, s := range v.Locked {
 			if s.ID == "pact_baal_normal" && s.Text != "" {
 				t.Fatalf("%s: locked Pact leaks its text", class)
