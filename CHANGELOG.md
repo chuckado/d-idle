@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- toolstrade32: round 30, alloc lines, life arithmetic, xp options <!--sg:agent/toolstrade32-->
 - Merge branch 'main' into toolstrade30 <!--sg:agent/toolstrade30-->
 - Merge branch 'main' into qdmatrix <!--sg:agent/qd16-->
 - Merge branch 'main' into toolstrade29 <!--sg:agent/toolstrade29-->
