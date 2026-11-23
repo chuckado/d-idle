@@ -750,7 +750,8 @@ $buildspages"
 		vaultdefect-*) szs="1280x620 412x780 360x640" ;;
 		vault-more-entry) ;;
 		navdefect-wide) szs="1366x768" ;;
-		overflow-fakescroll) szs="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620" ;; # a fake inner scroll box of the desk layout: the phone has no such layout
+		# the must-fail fixtures of the desk frame (an overflowing, nested or fake-scrolling box, a tall frame): the phone cockpit is a scrolling page by design
+		overflow-fixture | overflow-nested | overflow-fakescroll | tall-frame) szs="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620" ;;
 		navdefect-*) szs="390x844" ;;
 		nav-* | settings-*) szs="390x844 1366x768" ;;
 		builds-*) szs="390x844 1366x768" ;;

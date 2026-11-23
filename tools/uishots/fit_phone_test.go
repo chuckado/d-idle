@@ -61,3 +61,23 @@ func TestFitPhoneCockpitScrolls(t *testing.T) {
 		t.Errorf("a wide page that scrolls must fail: %v", lines)
 	}
 }
+
+// The must-fail fixtures that build a desk-frame defect run at the desk sizes only: on a phone the cockpit scrolls as a page by design, so
+// the fixture cannot fail there and a run at 390x844 would be a false red (triage docs/ui/fit-triage-2026-11-23.md, family F6).
+func TestDeskFixturesRunAtDeskSizes(t *testing.T) {
+	b, err := os.ReadFile("../uishots.sh")
+	if err != nil {
+		t.Fatal(err)
+	}
+	sh := string(b)
+	i := strings.Index(sh, "overflow-fixture | overflow-nested | overflow-fakescroll | tall-frame) szs=")
+	if i < 0 {
+		t.Fatal("uishots.sh does not restrict the desk-frame fixtures to the desk sizes")
+	}
+	line := sh[i : i+strings.Index(sh[i:], "\n")]
+	for _, phone := range []string{"390x844", "412x780", "360x640", "393x700", "412x890"} {
+		if strings.Contains(line, phone) {
+			t.Errorf("a desk-frame fixture runs at the phone size %s", phone)
+		}
+	}
+}
