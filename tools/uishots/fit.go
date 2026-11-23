@@ -315,6 +315,7 @@ type fitTS struct {
 	VW      int      `json:"vw"`
 	Outside []string `json:"outside"`
 	Clipped []string `json:"clipped"`
+	VCut    []string `json:"vcut"`
 }
 
 func (t fitTS) judge() []string {
@@ -324,6 +325,9 @@ func (t fitTS) judge() []string {
 	}
 	for _, o := range t.Outside {
 		bad = append(bad, "at 200% text a control reaches past the window: "+o)
+	}
+	for _, v := range t.VCut {
+		bad = append(bad, "at 200% text a control is cut vertically: "+v)
 	}
 	for _, c := range t.Clipped {
 		bad = append(bad, "at 200% text a control's text is cut: "+c)
@@ -736,6 +740,7 @@ var mustFail = map[string]string{
 	"fit-vaultdefect-enabled-":    "placeholder: ",
 	"fit-vaultdefect-ethenabled-": "placeholder: ",
 	// the shared navigation (card uinav2): one defect each, put back by defectCSS "nav-*" (fixtures_nav.go)
+	"fit-tsdefect-vcut-":    "cut vertically",
 	"fit-navdefect-covers-": "the bottom bar covers content",
 	"fit-navdefect-small-":  "navigation target too small",
 	"fit-navdefect-sheet-":  "the More sheet overlaps the bottom bar",
