@@ -466,6 +466,24 @@
       "code": "buc",
       "slot": "lhand"
      }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 307200
+     },
+     {
+      "stat": 6,
+      "value": 307200
+     },
+     {
+      "stat": 17,
+      "value": 300
+     },
+     {
+      "stat": 18,
+      "value": 300
+     }
     ]
    },
    "trigger": {
@@ -611,6 +629,24 @@
       "code": "buc",
       "slot": "lhand"
      }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 307200
+     },
+     {
+      "stat": 6,
+      "value": 307200
+     },
+     {
+      "stat": 17,
+      "value": 300
+     },
+     {
+      "stat": 18,
+      "value": 300
+     }
     ]
    },
    "trigger": {
@@ -642,7 +678,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only.",
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: max life 1200, life 1200, enhanced damage 300 percent (stands for a geared hero).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -756,6 +792,24 @@
       "code": "buc",
       "slot": "lhand"
      }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 307200
+     },
+     {
+      "stat": 6,
+      "value": 307200
+     },
+     {
+      "stat": 17,
+      "value": 300
+     },
+     {
+      "stat": 18,
+      "value": 300
+     }
     ]
    },
    "trigger": {
@@ -787,7 +841,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only.",
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: max life 1200, life 1200, enhanced damage 300 percent (stands for a geared hero).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -898,6 +952,24 @@
       "code": "buc",
       "slot": "lhand"
      }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 307200
+     },
+     {
+      "stat": 6,
+      "value": 307200
+     },
+     {
+      "stat": 17,
+      "value": 300
+     },
+     {
+      "stat": 18,
+      "value": 300
+     }
     ]
    },
    "trigger": {
@@ -929,7 +1001,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only.",
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: max life 1200, life 1200, enhanced damage 300 percent (stands for a geared hero).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -1058,6 +1130,24 @@
       "code": "buc",
       "slot": "lhand"
      }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 307200
+     },
+     {
+      "stat": 6,
+      "value": 307200
+     },
+     {
+      "stat": 17,
+      "value": 300
+     },
+     {
+      "stat": 18,
+      "value": 300
+     }
     ]
    },
    "trigger": {
@@ -1089,7 +1179,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only.",
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: max life 1200, life 1200, enhanced damage 300 percent (stands for a geared hero).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -1210,6 +1300,24 @@
       "code": "buc",
       "slot": "lhand"
      }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 307200
+     },
+     {
+      "stat": 6,
+      "value": 307200
+     },
+     {
+      "stat": 17,
+      "value": 300
+     },
+     {
+      "stat": 18,
+      "value": 300
+     }
     ]
    },
    "trigger": {
@@ -1241,7 +1349,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only.",
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: max life 1200, life 1200, enhanced damage 300 percent (stands for a geared hero).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -1371,6 +1479,24 @@
       "code": "buc",
       "slot": "lhand"
      }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 307200
+     },
+     {
+      "stat": 6,
+      "value": 307200
+     },
+     {
+      "stat": 17,
+      "value": 300
+     },
+     {
+      "stat": 18,
+      "value": 300
+     }
     ]
    },
    "trigger": {
@@ -1402,7 +1528,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only.",
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: max life 1200, life 1200, enhanced damage 300 percent (stands for a geared hero).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -1516,6 +1642,24 @@
       "slot": "lhand",
       "quality": 4
      }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 307200
+     },
+     {
+      "stat": 6,
+      "value": 307200
+     },
+     {
+      "stat": 17,
+      "value": 300
+     },
+     {
+      "stat": 18,
+      "value": 300
+     }
     ]
    },
    "trigger": {
@@ -1547,7 +1691,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only.",
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: max life 1200, life 1200, enhanced damage 300 percent (stands for a geared hero).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {

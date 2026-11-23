@@ -24,6 +24,9 @@ owns:
   - "internal/nav/mouthgate.go"
   - "internal/bot/goal.go"
   - "internal/bot/goal_acts_test.go"
+  - "internal/scenario/scenario.go"
+  - "internal/scenario/setup.go"
+  - "internal/scenario/setup_test.go"
   - "internal/talk/talk.go"
   - "internal/talk/talk_test.go"
 exclusive: []
