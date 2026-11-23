@@ -455,6 +455,7 @@
 | uifit4 | proposed | - | `tools/uishots/fixtures_builds.go`<br>`tools/uishots.sh`<br>`docs/ui/fit-triage-2026-11-23.md` | - |
 | toolstrade16 | proposed | - | `internal/task/gate.go`<br>`internal/task/route_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade17 | proposed | - | `internal/bot/loop.go`<br>`internal/bot/beltfill_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| toolstrade18 | proposed | - | `docs/probes/tools-trade-2026-11-22.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
@@ -486,6 +487,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 37c126730 11-23 05:58 `Merge agent/toolstrade18: toolstrade18: lab notes round 17` (toolstrade18)
 - a3cd35aee 11-23 05:44 `Merge agent/toolstrade17: Merge branch 'main' into toolstrade17` (toolstrade17)
 - 047bb3ae1 11-23 05:42 `Merge branch 'main' into toolstrade17` (-)
 - c35f5906f 11-23 05:40 `Merge agent/questdrill6: Merge branch 'main' into qdmatrix` (questdrill6)
@@ -495,5 +497,4 @@
 - 1f4a8743d 11-23 05:19 `Merge agent/questdrill5: Merge branch 'main' into qdmatrix` (questdrill5)
 - ac51cf536 11-23 05:17 `Merge branch 'main' into qdmatrix` (-)
 - 42c67f69d 11-23 05:11 `Merge origin/main into questdrill5` (-)
-- 44e2d51ee 11-23 05:10 `Merge agent/uifit4: Merge branch 'main' into uifit4` (uifit4)
 <!-- statusgen:end -->
