@@ -1433,8 +1433,10 @@ internal/nav/covview_test.go  credit-runner  maptrail
 internal/nav/cpuprobe_test.go  credit-runner  botcpu
 internal/nav/exit.go  credit-runner  andariel1
 internal/nav/exit.go  credit-runner  pursuers
+internal/nav/exit.go  credit-runner  qdmatrix
 internal/nav/exit.go  credit-runner  toolstrade
 internal/nav/exit_test.go  credit-runner  andariel1
+internal/nav/exitgoal_test.go  credit-runner  qdmatrix
 internal/nav/exitsread_test.go  credit-runner  exitsread
 internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
