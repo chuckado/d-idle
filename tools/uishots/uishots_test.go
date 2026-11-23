@@ -111,6 +111,29 @@ func fitDump(name, json string) (string, string) {
 // The fit check judges the numbers fit.js measures: a cockpit that fills its viewport passes; a page that scrolls, a
 // panel that overflows its box and dead space each fail; the deliberately overflowing fixture must fail, and a pass there
 // is itself reported.
+// The Vault is one scrolling document since card vaultdesktop (2026-11-21): a page taller than the window passes, a page wider fails.
+func TestFitVaultScrollsButNotSideways(t *testing.T) {
+	vault := `"vault":{"meter":true,"cells":120}`
+	base := `{"vw":1440,"vh":900,"scrollH":4000,"scrollW":1440,"overflow":[],"slots":[],"covered":0,"hole":0,"holeAt":[0,0],` + vault + `}`
+	for _, c := range []struct{ json, want string }{
+		{base, ""},
+		{strings.Replace(base, `"scrollW":1440`, `"scrollW":1500`, 1), "sideways"},
+	} {
+		dir := t.TempDir()
+		n, body := fitDump("fit-vault-pop-1440x900", c.json)
+		if err := os.WriteFile(filepath.Join(dir, n+".html"), []byte(body), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		lines, ok, err := fitDir(dir)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if c.want == "" && !ok || c.want != "" && (ok || !strings.Contains(lines[0], c.want)) {
+			t.Errorf("%q: ok=%v %v, want %q", c.json, ok, lines, c.want)
+		}
+	}
+}
+
 func TestFitJudgeAndDir(t *testing.T) {
 	okJSON := `{"vw":1440,"vh":900,"scrollH":900,"scrollW":1440,"overflow":[],"slots":[{"slot":"band"},{"slot":"stage"}],"covered":96,"hole":8,"holeAt":[0,44]}`
 	cases := []struct{ name, json, want string }{
