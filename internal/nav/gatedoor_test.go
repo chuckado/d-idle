@@ -371,3 +371,52 @@ func TestGoToOpensTheDoorsOfTheLiveBarracks(t *testing.T) {
 		})
 	}
 }
+
+// The real Barracks (live capture 2026-11-23): the hero arrives from the Outer Cloister at about (191,324), 25 subtiles above
+// the south strip (open cells x 179..182 of row 349), and d2d never reads across that strip (pending stays 1, nothing
+// proves). The way back is to cross the unproven strip (stage 1 of the Necromancer drill; run 20261123-023115-028d,
+// `nav no usable gate from 28 to 27 ... borderCells 0 unproven 4 pending 1`). Both classes: the geometry knows none.
+func TestExitToCrossesTheLiveBarracksSouthStrip(t *testing.T) {
+	data, err := os.ReadFile("testdata/barracks28.grid")
+	if err != nil {
+		t.Fatal(err)
+	}
+	rows := strings.Split(strings.TrimSpace(string(data)), "\n")
+	const ox, oy = 1000, 1000
+	for _, cls := range []string{"Paladin", "Necromancer"} {
+		t.Run(cls, func(t *testing.T) {
+			g := d2map.NewGrid()
+			cells := make([]uint16, len(rows[0])*len(rows))
+			for y, r := range rows {
+				for x, c := range r {
+					if c == '#' {
+						cells[y*len(rows[0])+x] = 1
+					}
+				}
+			}
+			g.SetBlock(d2map.Rect{X: ox, Y: oy, W: len(rows[0]), H: len(rows)}, cells)
+			g.SetBlock(d2map.Rect{X: ox + 100, Y: oy + 350, W: 200, H: 120}, make([]uint16, 200*120)) // the Outer Cloister side, level 27
+			l28 := &simLevel{no: 28, rect: d2map.Rect{X: ox, Y: oy, W: len(rows[0]), H: len(rows)}}
+			l27 := &simLevel{no: 27, rect: d2map.Rect{X: ox + 100, Y: oy + 350, W: 200, H: 120}}
+			s := newSim(g, input.Point{X: ox + 191, Y: oy + 324}, l28, l27)
+			s.reveal = 400
+			s.revealRooms()
+			l := s.levels[0]
+			adj := l.lm.Adjacent
+			if len(adj) == 0 {
+				t.Skip("the sim builds no adjacency for this layout")
+			}
+			l.lm.Adjacent, l.lm.Pending = nil, 1
+			l.lm.Unproven = []d2map.Adjacent{{LevelNo: 27, Rect: adj[0].Rect, Contact: adj[0].Contact}}
+			s.onStep = func(s *sim) { l.lm.Adjacent, l.lm.Pending = nil, 1 } // d2d never reads across
+			n := s.navigator()
+			n.exploreFn = func(context.Context, func() bool, *input.Point) error { return ErrExplored }
+			if err := n.ExitTo(ctxT(t), 27); err != nil {
+				t.Fatalf("%s: %v (at %v)", cls, err, s.pos())
+			}
+			if s.cur().no != 27 {
+				t.Fatalf("%s: still in level %d at %v", cls, s.cur().no, s.pos())
+			}
+		})
+	}
+}
