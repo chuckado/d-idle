@@ -453,6 +453,7 @@
 | toolstrade15 | proposed | - | `internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`internal/nav/testdata/barracks28.grid`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | stage1doc | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | uifit4 | proposed | - | `tools/uishots/fixtures_builds.go`<br>`tools/uishots.sh`<br>`docs/ui/fit-triage-2026-11-23.md` | - |
+| uia11y | proposed | - | `internal/watch/a11ycontrast_test.go`<br>`internal/watch/a11ypages_test.go`<br>`internal/watch/web/tokens.css`<br>`internal/watch/web/components.css`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/panels/hero-status/panel.css`<br>`internal/watch/returnscreen.go`<br>`internal/watch/policysheet.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui-design-system.md` | - |
 | toolstrade16 | proposed | - | `internal/task/gate.go`<br>`internal/task/route_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade17 | proposed | - | `internal/bot/loop.go`<br>`internal/bot/beltfill_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade18 | proposed | - | `docs/probes/tools-trade-2026-11-22.md` | - |
@@ -487,14 +488,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 9c6f5adc4 11-23 06:02 `Merge agent/uia11y: Merge branch 'main' into uia11y` (uia11y)
+- 8679bba1d 11-23 06:00 `Merge branch 'main' into uia11y` (-)
 - 37c126730 11-23 05:58 `Merge agent/toolstrade18: toolstrade18: lab notes round 17` (toolstrade18)
+- ec726d54f 11-23 05:54 `Merge branch 'main' into uia11y` (-)
 - a3cd35aee 11-23 05:44 `Merge agent/toolstrade17: Merge branch 'main' into toolstrade17` (toolstrade17)
 - 047bb3ae1 11-23 05:42 `Merge branch 'main' into toolstrade17` (-)
 - c35f5906f 11-23 05:40 `Merge agent/questdrill6: Merge branch 'main' into qdmatrix` (questdrill6)
 - 2d0fedf5b 11-23 05:39 `Merge branch 'main' into qdmatrix` (-)
 - 1cfd94610 11-23 05:29 `Merge agent/toolstrade16: Merge branch 'main' into toolstrade16` (toolstrade16)
 - 73bffe3eb 11-23 05:28 `Merge branch 'main' into toolstrade16` (-)
-- 1f4a8743d 11-23 05:19 `Merge agent/questdrill5: Merge branch 'main' into qdmatrix` (questdrill5)
-- ac51cf536 11-23 05:17 `Merge branch 'main' into qdmatrix` (-)
-- 42c67f69d 11-23 05:11 `Merge origin/main into questdrill5` (-)
 <!-- statusgen:end -->
