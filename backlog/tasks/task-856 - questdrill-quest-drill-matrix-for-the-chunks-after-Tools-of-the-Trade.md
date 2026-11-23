@@ -40,7 +40,7 @@ owns:
   - "internal/talk/talk_test.go"
 exclusive: []
 contracts: []
-result: "Board: a proxy done never beats an unmet prerequisite (Duriel and Hellforge showed done on an Act 1 hero). Nav: the walk to a gate has the gate as its goal (Sewers Level 2). Quest drill matrix started (docs/probes/quest-drill-matrix-2026-11-23.md). Three bot fixes with must-fail tests: power attack pick counts only points paid by clvl (no more unread attack for a clvl 19 Paladin), act-hop row unlocks on the boss reward pending, Warriv and Meshif hop row clicked while the act word reads needed. Sail east (Act 1 boat) GREEN Paladin 11 in the lab (CHEATED setup, not verified on the live hero)."
+result: "Quest drill matrix through Act 2 (docs/probes/quest-drill-matrix-2026-11-23.md). Lab verdicts (CHEATED setups, mechanics only, not verified on the live hero): Sail east GREEN (Paladin, Sorceress), Radament GREEN, Horadric Cube GREEN, Assemble GREEN to Cain, Andariel held by readiness (correct for the kit); Tainted Sun, Maggot Lair shaft, Summoner, Duriel RED with named nav causes. Bot fixes with must-fail tests: attack pick by paid points, act hop unlock and dialog row, proxy done never beats a lock (Duriel and Hellforge done on an Act 1 hero), exit and door walks carry a goal, door wait, GoToUnit door, Deckard Cain class by act, Tainted Sun word, earlier act not reachable, waypoint when no walk, Seven Tombs canyon steps, pre.stats and pre.waypoints -1."
 ---
 
 ## Description
