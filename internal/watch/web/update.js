@@ -38,7 +38,7 @@
     } else if (s.state === 'ready' && a) {
       b.appendChild(el('span', 'Update ' + a.version + ' is downloaded and verified. ' + (a.notes || '')));
       b.appendChild(button('Install and restart', function () {
-        return post('/api/update/apply', { confirm: a.version }).then(function (j) { if (j && j.error) { alert(j.error); } });
+        return post('/api/update/apply', { confirm: a.version }).then(function (j) { if (j && j.error && window.dSheet) { window.dSheet.notice(document, { title: 'The update did not start', lines: [j.error] }); } });
       }));
       b.appendChild(button('Cancel', function () { return post('/api/update/cancel'); }));
     } else if (a && a.needs_image) {

@@ -267,3 +267,15 @@
   .d-shell[data-narrow] .d-band-status .d-links > .d-btn { padding-inline: var(--d-sp-2); }
   .d-shell[data-narrow="phone"] .d-band-status .d-links > .d-btn { padding-inline: 5px; font-size: var(--d-fs-0); }
 }
+
+@layer components {
+  /* The one confirm sheet (web/sheet.js): a centred card on a wide window, a bottom sheet on a phone. */
+  .d-sheet-back { position: fixed; inset: 0; z-index: var(--d-z-banner); display: grid; place-items: center; background: var(--d-scrim); padding: var(--d-gap); }
+  .d-sheet { display: grid; gap: var(--d-sp-2); inline-size: min(100%, 28rem); max-block-size: 100%; overflow-y: auto; box-sizing: border-box; background: var(--d-surface-2); border: 1px solid var(--d-line-strong); border-radius: var(--d-r-1); padding: var(--d-pad); box-shadow: var(--d-shadow-2); }
+  .d-sheet-title { margin: 0; font-size: var(--d-fs-2); overflow-wrap: anywhere; }
+  .d-sheet-line { margin: 0; overflow-wrap: anywhere; }
+  .d-sheet-pick { display: grid; gap: var(--d-sp-1); }
+  .d-sheet-opt { display: flex; gap: var(--d-sp-1); align-items: center; min-block-size: 44px; }
+  .d-sheet-row { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); justify-content: flex-end; }
+  .d-sheet-cancel, .d-sheet-ok { min-block-size: 44px; }
+}

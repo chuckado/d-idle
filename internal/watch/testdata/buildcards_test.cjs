@@ -65,7 +65,7 @@ ok(offDet.all().filter((n) => n.className === 'bc-r').length === 7, 'the detail 
   const s = BC.openSheet(d, { title: 'Choose X?', lines: ['You can change later, but it costs gold to respec.'], variants: [{ name: 'a', label: 'A', tier: 'supported' }, { name: 'b', label: 'B', tier: 'experimental' }], opener, onConfirm: (n) => { got = n; } });
   ok(s.sheet.attrs.role === 'dialog' && s.sheet.attrs['aria-modal'] === 'true' && s.sheet.attrs['aria-labelledby'], 'a modal dialog with a label');
   ok(d.activeElement && s.sheet.contains(d.activeElement), 'focus is inside the sheet after opening');
-  ok(d.body.children.filter((n) => n.className === 'bc-back').length === 1, 'exactly one sheet');
+  ok(d.body.children.filter((n) => n.className === 'd-sheet-back').length === 1, 'exactly one sheet');
   const radios = s.sheet.all().filter((n) => n.tag === 'input');
   ok(radios.length === 2 && radios[0].checked, 'two variants: two radios, the first picked');
   // Tab from the last control wraps to the first

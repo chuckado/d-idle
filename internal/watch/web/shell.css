@@ -337,3 +337,7 @@
   /* the phone's Quests tab: the tile takes what it needs (its list below scrolls inside), not at most half of a short tab */
   .d-slottabs > .d-panel[data-panel="quest-strip"]:not([data-grow]) { max-block-size: none; flex: 0 0 auto; }
 }
+@layer shell {
+  /* the confirm sheet (web/sheet.js) is a bottom sheet on a phone */
+  @media (max-width: 699.98px) { .d-sheet-back { place-items: end stretch; padding: 0; } .d-sheet { inline-size: auto; border-radius: var(--d-r-1) var(--d-r-1) 0 0; } }
+}
