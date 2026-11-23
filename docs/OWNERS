@@ -593,6 +593,7 @@ docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
+docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  bankdoc
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  navexit2
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  necrodrill
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
@@ -629,6 +630,7 @@ docs/probes/test-characters.md  live-agent  cainl3
 docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade4
 docs/probes/town-plan-scenarios.md  credit-runner  town1
 docs/probes/town-plan-stage3-2026-11-22.md  credit-runner  town5
 docs/probes/tpreserve.md  live-agent  tpreserve-live
@@ -1413,14 +1415,17 @@ internal/nav/cpuprobe_test.go  credit-runner  botcpu
 internal/nav/exit.go  credit-runner  andariel1
 internal/nav/exit.go  credit-runner  pursuers
 internal/nav/exit.go  credit-runner  toolstrade
+internal/nav/exit.go  credit-runner  toolstrade4
 internal/nav/exit_test.go  credit-runner  andariel1
 internal/nav/exitsread_test.go  credit-runner  exitsread
 internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/fullgrid_test.go  credit-runner  knownedge
 internal/nav/gatedoor.go  credit-runner  toolstrade
+internal/nav/gatedoor.go  credit-runner  toolstrade4
 internal/nav/gatedoor_test.go  credit-runner  toolstrade
 internal/nav/gatedoor_test.go  credit-runner  toolstrade2
+internal/nav/gatedoor_test.go  credit-runner  toolstrade4
 internal/nav/hints_export.go  credit-runner  exitsread
 internal/nav/mouthgate.go  credit-runner  botstuck
 internal/nav/mouthgate.go  credit-runner  warptrigger

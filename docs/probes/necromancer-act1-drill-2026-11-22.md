@@ -72,3 +72,19 @@ Revised blockers for the earned Act 1 drill (ranked):
 3. Fresh-hero pace: clvl 14 in 400 virtual minutes (section 2); not re-measured after the fixes.
 4. The fresh-drill exit refusal (37 lines, knobs OFF) is not reproduced by any staged scenario: U which walk and which position produced it.
 Is the drill feasible in stages now? Yes for single quests from fixtures: Den and Blood Raven are GREEN for the Necromancer on the lab d2d. Not yet for the chain Rogue Encampment to Andariel; the next step is stage scenarios (`tap_quest: "*"`, a level fixture and a 55-minute budget each) for Cain, the Countess and Andariel. Still NOT ready to play.
+
+## 7. Bank chore against the kit: does `town.plan` stage 3 cover it? (card bankdoc)
+
+Question: with `town.bankFirst` 1 (the default) the bank chore moved 6000 of 8000 gold to the stash, the Necromancer was short in purse and kit and left the Den to farm gold. Is that fixed by `town.plan` 3 (purse: one stash stop settles the purse to the carry line plus the planned spend; wealth for the recovery and poverty rules is purse plus stash, `wealthFor` in internal/bot/broke.go)?
+
+| run (builder long lane, lab d2d, `act1.den.clear` seed 11, CHEATED level 10 with 8000 gold) | knobs | verdict |
+|---|---|---|
+| 20261122-205642-49a0 and 195405-6208, Necromancer | `town.bankFirst` 1, `town.plan` 0 | RED (record 1 0x0014; Den left after 36 s, 409 kills farming gold) |
+| 20261122-213936-7ae3, Sorceress | `bankFirst` 1, plan 0 | GREEN |
+| 20261122-212018-1980, Necromancer and Paladin | `bankFirst` 0 | GREEN, GREEN |
+| 20261122-213936-7ae3, Necromancer | `bankFirst` 1, plan 3 | GREEN |
+| 20261122-213936-7ae3, Sorceress | `bankFirst` 1, plan 3 | GREEN |
+
+Reading (V for the verdicts; U for why the Sorceress is spared): at stage 0 the defect shows for the class that needs many mana potions (the Necromancer's kit gate asks 3 mana potions and its fights drain them), not for the Sorceress or the Paladin in the same scenario; stage 3 removes it for the Necromancer without touching the Sorceress. Stage 3 therefore already covers the defect when it is on, and no withdraw-when-short rule is written here.
+
+Proposal (NOT applied, defaults stay): set `town.plan` 3 as the default stage for the friends sandbox (it runs stage 1 today) and for the scenarios of Necromancer builds. Before flipping, a second seed and a Paladin run at stage 3 (`bankFirst` 1) should be green; one seed per class was run. The scenario fix of denfix (`town.bankFirst` 0 in `act1.den.clear`) can then be dropped.
