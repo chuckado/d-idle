@@ -47,3 +47,21 @@ func TestStage3BanksDownToTheTarget(t *testing.T) {
 		}
 	}
 }
+
+// The default path (town.plan 0, withdrawShop and bankFirst on): a thin purse over a rich stash is topped up to the
+// carry line (300 + 50 per level), not to the shopping list. Must fail without the carry line in withdraw. Two classes.
+func TestShopWithdrawTopsUpToTheCarryLine(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		r, c := withdrawRig(t, 150, 500000, 19, true)
+		r.W.Player.Class = class
+		if _, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true, Scrolls: true, Gold: true}); err != nil {
+			t.Fatalf("%v: %v", class, err)
+		}
+		if len(c.moves) == 0 || c.moves[0] >= 0 {
+			t.Fatalf("%v: moves %v, want a withdrawal first", class, c.moves)
+		}
+		if got := -c.moves[0]; got < 300+50*19-150 {
+			t.Errorf("%v: withdrew %d, want at least the carry line (1250) minus the purse", class, got)
+		}
+	}
+}

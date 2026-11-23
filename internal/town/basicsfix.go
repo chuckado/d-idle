@@ -270,7 +270,10 @@ func (t *Town) withdraw(ctx context.Context, a *Act, plan ChorePlan) error {
 	if err != nil {
 		return err
 	}
-	target := max(t.shopTarget(s, plan), t.bankKeep(s.Player.Level)*b2i(t.needWithdraw(s)))
+	// A withdrawal for the shop tops the purse up to the carry line (the line banking keeps), not only to the list: a
+	// stash of 500000 gold behind a purse of 150 paid one portal scroll and three Minor potions per visit and the hero
+	// walked home again (V live and lab, 2026-11-23). Banking leaves the pack at the same line, so nothing flips.
+	target := max(t.shopTarget(s, plan), t.bankKeep(s.Player.Level)*b2i(t.needWithdraw(s) || t.needShopWithdraw(s, plan)))
 	amount := min(target-s.Player.Gold, s.Player.StashGold)
 	if amount <= 0 {
 		return nil
