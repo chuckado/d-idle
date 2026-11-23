@@ -1,0 +1,70 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "nav.bloodmoor-coldplains",
+   "title": "Blood Moor to Cold Plains: the hero walks the exit and arrives (exit refusal baseline, knobs OFF then ON via D2SCEN_KNOBS)",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "travel.area-transition"
+   ],
+   "touches": [
+    "internal/nav/"
+   ],
+   "pre": {
+    "level": 8,
+    "gold": 1500,
+    "start": "field",
+    "area": 2
+   },
+   "trigger": {
+    "goals": "farm:Cold Plains",
+    "knobs": {
+     "resource.pointsDecisions": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Necromancer"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "provenance": "SETUP: level 8, purse 1500, field start in the Blood Moor by debug goto 2 (CHEATED position). Mechanics only.",
+   "notes": "Run twice per class and seed: defaults, then D2SCEN_KNOBS=nav.warpRead=1,nav.fullGrid=1. The evidence is the count of 'unwanted exit' and 'mouth gate' lines in the bot log next to the verdict (run 6208 and c261 never produced a refusal in the Blood Raven scenario; the refusal of the fresh drill happened on this walk). U: the farm goal walks to Cold Plains first.",
+   "assert": [
+    {
+     "kind": "area_in",
+     "areas": [
+      3,
+      1,
+      9,
+      4
+     ],
+     "why": "the hero crossed into Cold Plains (or went on from it / back to town)"
+    },
+    {
+     "kind": "area_changes_le",
+     "max": 30,
+     "why": "no exit-bounce loop"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Cold Plains",
+     "min": 1,
+     "why": "the exit was taken"
+    }
+   ]
+  }
+ ]
+}
