@@ -393,6 +393,138 @@
      "kind": "no_writes"
     }
    ]
+  },
+  {
+   "id": "necro.nova-pack",
+   "title": "Poison Nova caster at clvl 40: Poison Nova is the attack on a pack",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "combat.fight"
+   ],
+   "touches": [
+    "internal/combat/",
+    "data/capabilities/"
+   ],
+   "pre": {
+    "level": 40,
+    "gold": 4000,
+    "start": "field",
+    "area": 2,
+    "spawn": [
+     {
+      "monster": "fallen1",
+      "n": 10
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Blood Moor",
+    "build": "necromancer_poison_nova_sme",
+    "knobs": {
+     "combat.minionRead": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0
+    }
+   },
+   "budget": {
+    "virtual_min": 8
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach",
+    "read.minions"
+   ],
+   "provenance": "SETUP: level 40 with the points a played level gives (spent by the nova table), purse 4000, field start in the Blood Moor by debug goto 2 and monsters by debug spawn (CHEATED position and encounter: mechanics only).",
+   "notes": "Ten Fallen beside the nova build at clvl 40. U: the table has Poison Nova learned by clvl 40 (SME: main from clvl 36-40); a RED here may be the table, not the fighter.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^combat kill .*last_skill=Poison Nova",
+     "min": 3,
+     "why": "the nova kills (kill lines carry the last skill)"
+    },
+    {
+     "kind": "life_pct_at_least",
+     "min": 40
+    }
+   ]
+  },
+  {
+   "id": "necro.nova-immune",
+   "title": "Poison-immune pack: the nova caster does not rely on Poison Nova (skeletons die to the army and Bone Spear)",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "combat.fight"
+   ],
+   "touches": [
+    "internal/combat/",
+    "data/capabilities/"
+   ],
+   "pre": {
+    "level": 40,
+    "gold": 4000,
+    "start": "field",
+    "area": 2,
+    "spawn": [
+     {
+      "monster": "skeleton1",
+      "n": 14
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Blood Moor",
+    "build": "necromancer_poison_nova_sme",
+    "knobs": {
+     "combat.minionRead": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0
+    }
+   },
+   "budget": {
+    "virtual_min": 8
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach",
+    "read.minions"
+   ],
+   "provenance": "SETUP: level 40 with the points a played level gives (spent by the nova table), purse 4000, field start in the Blood Moor by debug goto 2 and monsters by debug spawn (CHEATED position and encounter: mechanics only).",
+   "notes": "Fourteen skeletons beside the nova build at clvl 40 (first run 20261123-000225: the golem killed the eight, the hero's last skill was Clay Golem, so a Bone Spear count cannot be asserted: U). The choice of Bone Spear against a poison-immune target is unit-tested (TestPoisonNovaAttackAndImmuneFallback); this scenario only proves the nova does not kill the immune pack.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^combat kill .*monster=Skeleton",
+     "min": 6,
+     "why": "the poison-immune pack dies"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^combat kill .*last_skill=Poison Nova .*monster=Skeleton",
+     "max": 0,
+     "why": "the nova never kills the poison-immune skeletons"
+    },
+    {
+     "kind": "life_pct_at_least",
+     "min": 40
+    }
+   ]
   }
  ]
 }
