@@ -303,3 +303,29 @@ func TestSailEastNeedsTheTripAfterAndarielToo(t *testing.T) {
 		t.Fatal("sail east not done in Act 2")
 	}
 }
+
+// An act hop reads done from the world's act at exact (live) evidence, so the next act's rows unlock (card qdmatrix).
+func TestHopFactReadsTheWorldAct(t *testing.T) {
+	b, err := questboard.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, c := range []struct {
+		quest string
+		act   int
+		done  bool
+	}{{"act1_done", 1, false}, {"act1_done", 2, true}, {"act3_done", 3, false}, {"act3_done", 4, true}, {"act4_done", 4, false}, {"act4_done", 5, true}} {
+		q, err := b.Quest(c.quest)
+		if err != nil {
+			t.Fatal(err)
+		}
+		f, ok := hopFact(q, task.World{Act: c.act})
+		if !ok || !f.Known || f.Done != c.done || !f.Tier.Exact() {
+			t.Errorf("%s in act %d: %+v ok %v", c.quest, c.act, f, ok)
+		}
+	}
+	q, _ := b.Quest("radament")
+	if _, ok := hopFact(q, task.World{Act: 2}); ok {
+		t.Error("a normal quest read as a hop")
+	}
+}
