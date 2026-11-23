@@ -649,7 +649,6 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade10
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade11
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade13
-docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade14
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
@@ -2437,9 +2436,7 @@ tools/levelsim/shadow_test.go  credit-runner  survB
 tools/lib/heavy-guard-test.sh  credit-runner  heavyguard
 tools/lib/heavy-guard.sh  credit-runner  heavyguard
 tools/play-session.sh  credit-runner  playsession
-tools/probes/capture.pl  credit-runner  toolstrade14
 tools/probes/capture.py  credit-runner  toolstrade13
-tools/probes/capture_pl_test.py  credit-runner  toolstrade14
 tools/probes/capture_test.py  credit-runner  toolstrade13
 tools/probes/exitscmp  credit-runner  exitsread
 tools/probes/exitsread.py  credit-runner  exitsread

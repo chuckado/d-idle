@@ -448,7 +448,6 @@
 | toolstrade13 | proposed | - | `tools/probes/capture.py`<br>`tools/probes/capture_test.py`<br>`internal/boss/run.go`<br>`internal/boss/boss_test.go`<br>`internal/boss/fake_test.go`<br>`internal/nav/gatedoor.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | uichars | proposed | - | `internal/charsel/store.go`<br>`internal/charsel/manager.go`<br>`internal/charsel/store_unsaved_test.go`<br>`internal/watch/web/characters.js`<br>`internal/watch/web/characters.json`<br>`internal/watch/charactersui_test.go`<br>`tools/uishots/fixtures_chars.go`<br>`docs/charselect.md` | - |
 | uiloot | proposed | - | `internal/watch/web/settings.js`<br>`internal/watch/web/shell.js`<br>`internal/watch/testdata/settings_test.cjs`<br>`internal/watch/settingsjs_test.go`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_builds.go`<br>`internal/watch/planwording_test.go`<br>`docs/ui/settings/` | - |
-| toolstrade14 | proposed | - | `tools/probes/capture.pl`<br>`tools/probes/capture_pl_test.py`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |

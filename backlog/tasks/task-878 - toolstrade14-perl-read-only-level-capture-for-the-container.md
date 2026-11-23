@@ -1,10 +1,11 @@
 ---
 id: TASK-878
 title: 'toolstrade14: perl read-only level capture for the container'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T08:52:00Z'
+updated_date: '2026-11-23T09:11:00Z'
 labels:
   - ops
   - probe
