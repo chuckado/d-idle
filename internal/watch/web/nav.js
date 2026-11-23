@@ -115,6 +115,7 @@
         const ev = new g.CustomEvent('d2:nav', { cancelable: true, detail: { id: m.id } });
         doc.dispatchEvent(ev);
         if (ev.defaultPrevented) e.preventDefault();
+        else if (m.id === 'settings' && env.settings) { e.preventDefault(); env.settings(a, 'rules'); } // the Settings sheet opens in place on every page
       });
       return a;
     });
@@ -179,6 +180,18 @@
     return bar;
   }
 
+  // openSettings loads the sheet, toast and settings scripts once (a page that has them already skips them) and opens the Settings sheet.
+  function openSettings(doc, store, opener, section) {
+    const load = (name, have) => have ? Promise.resolve() : new Promise((res, rej) => {
+      const s = doc.createElement('script'); s.src = '/watch/' + name; s.onload = res; s.onerror = rej; doc.head.appendChild(s);
+    });
+    return Promise.all([load('sheet.js', g.dSheet), load('toast.js', g.dToast)]).then(() => load('settings.js', g.dSettings)).then(() => {
+      const base = () => g.fetch('/api/config', { credentials: 'same-origin' }).then((r) => r.json())
+        .then((c) => c.answerBase || (c.answerPort ? g.location.protocol + '//' + g.location.hostname + ':' + c.answerPort : '')).catch(() => '');
+      return g.dSettings.open({ doc, sheet: g.dSheet, toast: g.dToast, fetch: g.fetch.bind(g), base, store, notif: g.Notification || null, opener, section });
+    });
+  }
+
   // ---- boot (a browser only) ----
   function boot() {
     const doc = g.document;
@@ -192,8 +205,11 @@
       const mq = g.matchMedia('(max-width: ' + (cfg.breakpoint - 0.02) + 'px)');
       const env = { doc, cfg, loc: g.location, narrow: () => mq.matches, width: () => g.innerWidth, store, later: (fn) => g.requestAnimationFrame(fn),
         onNarrow(fn) { mq.addEventListener('change', fn); }, onResize(fn) { g.addEventListener('resize', fn); } };
+      env.settings = (opener, section) => openSettings(doc, store, opener, section);
       const nav = createNav(env);
       nav.mount();
+      const want = new URLSearchParams(g.location.search).get('settings');
+      if (want) openSettings(doc, store, null, want);
       const strip = subtabs(env, nav.current);
       if (strip) { const h = doc.querySelector('.d-band-status, .d-navband'); const at = h || null; if (at && at.after) at.after(strip); else doc.body.insertBefore(strip, doc.body.firstChild); }
       Object.assign(api, nav, { nav });

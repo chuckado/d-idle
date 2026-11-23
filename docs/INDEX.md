@@ -363,6 +363,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `design/fable-review-2026-11-22/`
 
+- [e11-deletion-plan.md](design/fable-review-2026-11-22/e11-deletion-plan.md): E11 deletion plan (PLAN ONLY: nothing is deleted by this document) (status: proposal for the user to approve. Source: ui-unification.md C2, C3, C4, C9, C15, F2; user answers...)
 - [ui-unification-appendix-pages.md](design/fable-review-2026-11-22/ui-unification-appendix-pages.md): UI unification review, appendix: page and panel inventory (status: current (review of 2026-11-22, card fableui). Belongs to ui-unification.md. Docs only.)
 - [ui-unification.md](design/fable-review-2026-11-22/ui-unification.md): UI unification review: navigation, cruft and readable build pages (2026-11-22) (status: DESIGN REVIEW, nothing built (card fableui). Docs only. The user decides the open questions in section F;...)
 
@@ -508,6 +509,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [npc.md](npc.md): NPC interaction (town/npc.go, cmd/d2bot/task.go)
 - [onboarding-slice-a.md](onboarding-slice-a.md): Onboarding slice A: setup stepper, go-ahead and access (status: BUILT offline (task TASK-44, card onboardA, 2026-11-06). Design and mock:...)
 - [onboarding.md](onboarding.md): Onboarding on /watch: welcome card, first 30 minutes, reconnect banners (status: BUILT offline (TASK-247 firstminutes, TASK-249 reconnectux, 2026-11-11). Node DOM goldens and Go tests...)
+- [operator.md](operator.md): Operator quest control (status: current (card opsquest). Code: `internal/ops`, `cmd/d2bot/ops*.go`, `tools/questloop.sh`.)
 - [overlay.md](overlay.md): Table overlay (d.idle mode): file format and rules (status: implemented, 2026-11-06, TASK-59. Fork side `--overlay-dir` on branch `d2d.lab4-overlay` of the private...)
 - [pact-away.md](pact-away.md): Pact away safety (TASK-169) (status: built and tested offline with fakes and httptest; NOT run against a live bot or a browser. Design:...)
 - [pact-botside.md](pact-botside.md): Bot-side Pacts (TASK-167) (status: built and tested offline with fakes; NOT run against a live bot. Design: `docs/research/pact-system.md` (a...)
