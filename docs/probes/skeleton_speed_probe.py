@@ -29,6 +29,8 @@ def foes(tick):
     return live
 def rec(phase, n, every=10):
     for i in range(n):
+        if i % 3 == 0:
+            s.cmd("debug kill")   # natural monsters (alive foes) off; pets are in hero.pets, not in the level's list
         step(1)
         h = hero(); m = mins()
         rows.append((phase, m["tick"], h, [(k["id"], k["x"], k["y"], k["mode"]) for k in m["minions"]]))
@@ -69,17 +71,25 @@ def scene(area, tag, goto_wait=100):
         s.cmd("debug mana full")
         s.cmd(f"debug cast 70 {row[1]} {row[2]}"); step(40)
     log(tag, "minions", len(mins()["minions"]), "foes", foes(0))
+def walk_leg(phase, tx, ty, ticks, stop=100):
+    log(phase, s.cmd(f"cmd move {tx:.2f} {ty:.2f}").strip()); rec(phase, ticks); rec(phase + "_stop", stop)
 try:
-    scene(2, "bloodmoor")
+    area = int(sys.argv[4]) if len(sys.argv) > 4 else 2
+    scene(area, f"area{area}")
     hx, hy = hero(); log("hero", hx, hy)
     rec("A_idle", 50)
-    # seed 5 Blood Moor: row y=16 is free for x 20..43; first walk to its east end
-    log(s.cmd("cmd move 42.5 16.5")); rec("B_toRow", 120)
-    log("foes", foes(0))
-    log(s.cmd("cmd move 20.5 16.5")); rec("C_walk_west", 360); rec("D_stop", 100)
-    log("foes", foes(0))
-    s.cmd("key r"); log(s.cmd("cmd move 42.5 16.5")); rec("E_run_east", 260); rec("F_stop", 100)
-    s.cmd("key r")   # back to walking
-    dump("trace_bloodmoor.csv")
+    if area == 2:
+        # seed 5 Blood Moor: row y=16 is free for x 20..43; first walk to its east end
+        log(s.cmd("cmd move 42.5 16.5")); rec("B_toRow", 120)
+        walk_leg("C_walk_west", 20.5, 16.5, 360)
+        s.cmd("key r"); walk_leg("E_run_east", 42.5, 16.5, 260); s.cmd("key r")
+    else:
+        g = grid(); (tx, ty), d = far_target(g, hx, hy)
+        log("far target", tx, ty, "bfs steps", d)
+        walk_leg("C_walk_far", tx + 0.5, ty + 0.5, int(d * 14) + 50)
+        s.cmd("key r"); walk_leg("E_run_back", hx, hy, int(d * 10) + 50); s.cmd("key r")
+        open(os.path.join(out, f"grid_area{area}.txt"), "w").write("\n".join(g))
+    dump(f"trace_area{area}.csv")
+    log("final", json.dumps(mins()))
 finally:
     s.close()
