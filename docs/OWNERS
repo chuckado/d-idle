@@ -370,9 +370,11 @@ cmd/d2scenario/run.go  credit-runner  pgtaps
 cmd/d2scenario/tap.go  credit-runner  andariel1
 cmd/d2scenario/tap.go  credit-runner  handinbtn
 cmd/d2scenario/tap.go  credit-runner  pgtaps
+cmd/d2scenario/tap.go  credit-runner  tapall
 cmd/d2scenario/tap_test.go  credit-runner  andariel1
 cmd/d2scenario/tap_test.go  credit-runner  handinbtn
 cmd/d2scenario/tap_test.go  credit-runner  pgtaps
+cmd/d2scenario/tap_test.go  credit-runner  tapall
 cmd/d2scenario/validate.go  credit-runner  pgselfcheck
 data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
@@ -1529,6 +1531,7 @@ internal/scenario/result.go  credit-runner  pgdigest
 internal/scenario/result.go  credit-runner  pgprov
 internal/scenario/result.go  credit-runner  pgtaps
 internal/scenario/scenario.go  credit-runner  barb1
+internal/scenario/scenario.go  credit-runner  tapall
 internal/scenario/scenario_test.go  credit-runner  agencyp0
 internal/scenario/scenario_test.go  credit-runner  barb1
 internal/scenario/scenario_test.go  credit-runner  druid1
