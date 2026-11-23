@@ -528,7 +528,7 @@
   },
   {
    "id": "necro.act1-stage1",
-   "title": "Act 1 stage 1: Den of Evil then Blood Raven with the tap driver, a Necromancer from a level 14 fixture",
+   "title": "Act 1 stage 1: Den of Evil then Blood Raven with the tap driver, a Necromancer from a level 16 fixture",
    "kind": "e2e",
    "tier": "nightly",
    "covers": [
@@ -540,7 +540,7 @@
     "internal/questboard/"
    ],
    "pre": {
-    "level": 14,
+    "level": 16,
     "gold": 8000,
     "waypoints": [
      1
@@ -589,8 +589,8 @@
    "needs": [
     "read.minions"
    ],
-   "provenance": "CHEATED level (14, with the points a played level gives), 8000 gold, potions and the Rogue Encampment waypoint by SETUP verbs. Town start, nothing written after the start. Mechanics only, never evidence of how a played hero fares.",
-   "notes": "Stage 1 of the staged Necromancer Act 1 drill (docs/probes/necromancer-act1-drill-2026-11-22.md section 7). The tap driver (list form) taps Start on the Den and on Blood Raven in board order. Stages restart from fixtures: the runner cannot restore a save.",
+   "provenance": "CHEATED level (16, with the points a played level gives), 8000 gold, potions and the Rogue Encampment waypoint by SETUP verbs. Town start, nothing written after the start. Mechanics only, never evidence of how a played hero fares.",
+   "notes": "Stage 1 of the staged Necromancer Act 1 drill (docs/probes/necromancer-act1-drill-2026-11-22.md section 7). The tap driver (list form) taps Start on the Den and on Blood Raven in board order. Stages restart from fixtures: the runner cannot restore a save. Fixture level 16 (not 14): at clvl 14 the level plan sends the hero to Catacombs 3 through the Monastery (window 14-18) while the Blood Raven chunk waits in its start gate, the chunk then starts in the Barracks and cannot route back (run 20261123-023115-028d); at 16 the plan is the Mausoleum, as in the green Blood Raven runs.",
    "assert": [
     {
      "kind": "quest_bits",
