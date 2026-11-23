@@ -53,11 +53,56 @@ def one(cmd, level):
                 wx, wy = float(f[1]), float(f[2])
             except (ValueError, IndexError):
                 continue
-            cx, cy = int(wx * 5 - x0), int(wy * 5 - y0)
+            cx, cy = int(wx * 5), int(wy * 5)  # warp cells are level-local tiles (V probe 2026-11-23: dest 57 at 4,5 lies outside the rect origin)
             def comp(x, y):
                 return lab[y][x] if 0 <= y < len(lab) and 0 <= x < len(lab[0]) else None
-            ux, uy = int(float(f[4]) * 5 - x0), int(float(f[5]) * 5 - y0)
+            ux, uy = int(float(f[4]) * 5), int(float(f[5]) * 5)
+            near = {}
+            for dy in range(-12, 13):
+                for dx in range(-12, 13):
+                    v = comp(cx + dx, cy + dy)
+                    if v is not None and v >= 0:
+                        near[v] = near.get(v, 0) + 1
+            print("near components", dict(sorted(near.items(), key=lambda kv: -kv[1])[:4]))
             print("warp", f[:8], "cell", (cx, cy), "component", comp(cx, cy), "unit", (ux, uy), "component", comp(ux, uy))
+        # thinnest wall between every pair of the five biggest components (multi-source BFS through blocked cells)
+        h, w = len(rows), len(rows[0])
+        big = [k for k, _ in sorted(((v, sum(r.count(v) for r in lab)) for v in range(n)), key=lambda kv: -kv[1])[:6]]
+        for a in big:
+            dist, from_c = {}, {}
+            q = []
+            for y in range(h):
+                for x in range(w):
+                    if lab[y][x] == a:
+                        dist[(x, y)] = 0
+                        from_c[(x, y)] = (x, y)
+                        q.append((x, y))
+            best = {}
+            for cx0, cy0 in q:
+                pass
+            i = 0
+            while i < len(q):
+                cx0, cy0 = q[i]
+                i += 1
+                d = dist[(cx0, cy0)]
+                if d > 40:
+                    continue
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    nx, ny = cx0 + dx, cy0 + dy
+                    if not (0 <= nx < w and 0 <= ny < h) or (nx, ny) in dist:
+                        continue
+                    l2 = lab[ny][nx]
+                    if l2 >= 0 and l2 != a:
+                        key = l2
+                        if key not in best or d < best[key][0]:
+                            best[key] = (d, from_c[(cx0, cy0)], (nx, ny))
+                    dist[(nx, ny)] = d + 1
+                    from_c[(nx, ny)] = from_c[(cx0, cy0)]
+                    if l2 < 0:
+                        q.append((nx, ny))
+            for k2, (d, c1, c2) in sorted(best.items()):
+                if k2 > a:
+                    print("wall between", a, "and", k2, "thickness", d, "from", c1, "to", c2)
         sizes = {}
         for r in lab:
             for v in r:

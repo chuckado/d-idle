@@ -56,7 +56,7 @@ func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool 
 	}
 	n.doorTried[d2map.Point{X: at.X, Y: at.Y}]++
 	n.log.Info("nav: the gate is cut off by a door, opening it", "to", levelNo, "door", at, "from", o.pos)
-	err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return at, 4, nil }, walkOpts{})
+	err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return at, 4, nil }, goalOpts(at, false))
 	cur, oerr := n.observeWait(ctx)
 	if err != nil && !errors.Is(err, ErrAlreadyThere) && (oerr != nil || dist(cur.pos, at) > 8) {
 		// a walk onto the door's own blocked cell ends stuck beside it, which is close enough to use it
@@ -114,7 +114,7 @@ func (n *Navigator) approachGate(ctx context.Context, o *obs, levelNo int, g gat
 	}
 	n.doorApproach[key]++
 	n.log.Info("nav: the gate is cut off, walking to the nearest reachable cell to look for its door", "to", levelNo, "gate", g.at, "cell", cell, "from", o.pos)
-	if err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return cell, 3, nil }, walkOpts{}); err != nil && !errors.Is(err, ErrAlreadyThere) {
+	if err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return cell, 3, nil }, goalOpts(cell, false)); err != nil && !errors.Is(err, ErrAlreadyThere) {
 		n.log.Info("nav: could not walk to the cut-off gate", "err", err)
 	}
 	return true
