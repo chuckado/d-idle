@@ -127,6 +127,15 @@ var waypointTable = [39]struct {
 	{123, "Halls of Pain", 5}, {115, "Glacial Trail", 5}, {117, "Frozen Tundra", 5}, {118, "The Ancients' Way", 5}, {129, "Worldstone Keep Level 2", 5},
 }
 
+// WaypointLevels are the levels.txt ids of the 39 waypoints in file bit order, for a reader that has live bits and no save.
+func WaypointLevels() []int {
+	out := make([]int, len(waypointTable))
+	for i, w := range waypointTable {
+		out[i] = w.Level
+	}
+	return out
+}
+
 // Difficulty is the progression view of one difficulty.
 type Difficulty struct {
 	Name       string // normal, nightmare, hell
