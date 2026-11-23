@@ -272,7 +272,8 @@ func fieldReady(a Area) func(World) *Fault {
 				why = "area banned after " + n
 			}
 			return refusal(w, "area_banned", "not ready: "+why)
-		case w.RouteBlocked != "" && RouteGuarded(a):
+		case w.RouteBlocked != "" && RouteGuarded(a) && !(RouteGuarded(w.Area) && RouteLeaveWhy(w) == ""):
+			// a hero already on the road (in a guarded area) goes on with a kit that merely thinned: RouteLeaveWhy
 			return guardFault(w, "route guard", "route", w.RouteBlocked, RouteLevelWhy(w) == "")
 		case w.TowerBlocked != "" && TowerGuarded(a):
 			return guardFault(w, "tower guard", "ftower", w.TowerBlocked, TowerLevelWhy(w) == "")
