@@ -429,6 +429,10 @@
      {
       "record": 7,
       "word": 1
+     },
+     {
+      "record": 4,
+      "word": 8209
      }
     ],
     "items": [
@@ -595,6 +599,10 @@
      {
       "record": 9,
       "word": 1
+     },
+     {
+      "record": 4,
+      "word": 8209
      }
     ],
     "items": [
@@ -761,6 +769,10 @@
      {
       "record": 9,
       "word": 1
+     },
+     {
+      "record": 4,
+      "word": 8209
      }
     ],
     "items": [
@@ -924,6 +936,10 @@
      {
       "record": 7,
       "word": 1
+     },
+     {
+      "record": 4,
+      "word": 8209
      }
     ],
     "items": [
@@ -1093,6 +1109,10 @@
      {
       "record": 9,
       "word": 1
+     },
+     {
+      "record": 4,
+      "word": 8209
      }
     ],
     "items": [
@@ -1256,7 +1276,8 @@
     "waypoints": [
      1,
      9,
-     10
+     15,
+     16
     ],
     "quests": [
      {
@@ -1278,6 +1299,10 @@
      {
       "record": 9,
       "word": 1
+     },
+     {
+      "record": 4,
+      "word": 8209
      }
     ],
     "items": [
@@ -1430,7 +1455,7 @@
     "waypoints": [
      1,
      9,
-     10
+     17
     ],
     "quests": [
      {
@@ -1456,6 +1481,10 @@
      {
       "record": 9,
       "word": 1
+     },
+     {
+      "record": 4,
+      "word": 8209
      }
     ],
     "items": [
@@ -1623,6 +1652,10 @@
      {
       "record": 7,
       "word": 1
+     },
+     {
+      "record": 4,
+      "word": 8209
      }
     ],
     "items": [
@@ -1790,6 +1823,10 @@
      {
       "record": 9,
       "word": 30
+     },
+     {
+      "record": 4,
+      "word": 8209
      }
     ],
     "items": [

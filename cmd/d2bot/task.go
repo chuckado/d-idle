@@ -36,6 +36,7 @@ var taskQuestIDs = map[string]string{
 	// Act 2 (word index and name V saves/progress.go). The fetch legs (cube, viper, shaft) have no word of their own and
 	// run on the item proxies; "act2_complete" is the word set by Jerhyn's talk.
 	task.QRadament: "radament",
+	task.QViper:    "tainted_sun", // word 11: the board's Assemble chunk requires it exact (a proxy never unlocks)
 	task.QStaff:    "horadric_staff",
 	task.QArcane:   "arcane_sanctuary",
 	task.QSummoner: "summoner",
