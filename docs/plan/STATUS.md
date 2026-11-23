@@ -437,6 +437,12 @@
 | uialerts | proposed | - | `internal/watch/web/alerts-feed.js`<br>`internal/watch/testdata/alertsfeed_test.cjs`<br>`internal/watch/settingsjs_test.go`<br>`internal/watch/web/nav.js`<br>`internal/watch/http_view.go`<br>`docs/ui-design-system.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | uiframe | proposed | - | `internal/watch/returnscreen.go`<br>`internal/watch/policysheet.go`<br>`internal/watch/frame_test.go`<br>`internal/watch/returnscreen_test.go`<br>`internal/watch/testdata/returnscreen/`<br>`internal/watch/testdata/policysheet/` | - |
+| uivault | proposed | - | `internal/watch/web/utilities.css` | - |
+| toolstrade8 | proposed | - | `internal/nav/nav.go`<br>`internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| failspend | proposed | - | `internal/bot/questboard.go`<br>`internal/bot/questboard_test.go` | - |
+| uifit1 | proposed | - | `tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/fit-triage-2026-11-23.md`<br>`internal/watch/web/utilities.css`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/panels/statusline/panel.css`<br>`internal/watch/web/panels/quest-strip/panel.css` | - |
+| toolstrade10 | proposed | - | `internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| toolstrade11 | proposed | - | `internal/bot/resource.go`<br>`internal/bot/beltfill_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
@@ -469,14 +475,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- fdbadb174 11-23 01:16 `Merge agent/questdrill: Merge branch 'main' into qdmatrix` (questdrill)
-- 40bbb2d0a 11-23 01:14 `Merge branch 'main' into qdmatrix` (-)
-- 4e7d93f0d 11-23 01:08 `Merge agent/uiframe: Merge branch 'main' into uiframe` (uiframe)
-- 23bc61e75 11-23 01:06 `Merge branch 'main' into uiframe` (-)
-- 852945d18 11-23 00:58 `Merge agent/uialerts: Merge branch 'main' into uialerts` (uialerts)
-- 6b577a712 11-23 00:56 `Merge branch 'main' into uialerts` (-)
-- b00d2bef0 11-23 00:50 `Merge agent/questdrill: Merge branch 'main' into qdmatrix` (questdrill)
-- e31e5954d 11-23 00:48 `Merge branch 'main' into qdmatrix` (-)
-- 79a238cc7 11-23 00:43 `Merge agent/toolstrade7: Merge branch 'main' into toolstrade7` (toolstrade7)
-- 8c5784f1a 11-23 00:41 `Merge branch 'main' into toolstrade7` (-)
+- 894801633 11-23 03:01 `Merge agent/toolstrade11: Merge branch 'main' into toolstrade11` (toolstrade11)
+- 34fb1584c 11-23 03:00 `Merge branch 'main' into toolstrade11` (-)
+- 2b9a3202d 11-23 02:50 `Merge agent/opsquest3: Merge branch 'main' into opsquest3` (opsquest3)
+- 9d4ce3580 11-23 02:48 `Merge branch 'main' into opsquest3` (-)
+- 23eea885b 11-23 02:42 `Merge agent/uigate: Merge branch 'main' into uifit1` (uigate)
+- 1472b59c7 11-23 02:41 `Merge branch 'main' into uifit1` (-)
+- a70c7deb1 11-23 02:34 `Merge agent/toolstrade10: Merge branch 'main' into toolstrade10` (toolstrade10)
+- 189673091 11-23 02:32 `Merge branch 'main' into toolstrade10` (-)
+- dc78607a5 11-23 02:18 `Merge agent/stage1: Merge branch 'main' into failspend` (stage1)
+- 55bbca0fc 11-23 02:16 `Merge branch 'main' into failspend` (-)
 <!-- statusgen:end -->

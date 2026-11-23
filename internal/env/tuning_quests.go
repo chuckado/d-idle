@@ -14,7 +14,7 @@ type QuestsTuning struct {
 	AutoGapMin   int // minutes between two auto-started chunks
 	AutoDayCap   int // auto-started chunks per 24 hours
 
-	// LayoutRead 1: the d2d backend reads the fork's read-only `debug levelmap` and walks straight to known quest objects (ADR 0022); 0 (default): explore as before.
+	// LayoutRead 1: the d2d backend reads the fork's read-only `debug levelmap` and walks straight to known quest objects (ADR 0022); 0 (default): explore as before. PREREQUISITE of the Smith (and Countess) step: their spawn is a superunique preset read by name, so with 0 the run only explores for them and ends "needs quests.layoutRead 1".
 	LayoutRead int
 }
 

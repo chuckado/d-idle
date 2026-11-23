@@ -13,13 +13,14 @@ const (
 
 // Result is what Wait reports: the evidence a loop script needs without reading logs.
 type Result struct {
-	Outcome string
-	Quest   string
-	Chunk   string
-	State   string
-	Step    string
-	Code    string
-	Text    string
+	Outcome  string
+	Quest    string
+	Chunk    string
+	State    string
+	Step     string
+	Progress int
+	Code     string
+	Text     string
 }
 
 func active(s string) bool { return s == "accepted" || s == "in_progress" || s == "awaiting_handin" }
@@ -65,7 +66,7 @@ func Wait(poll func() (*Board, error), quest, chunk string, timeout, every time.
 				}
 			}
 			if cur != nil {
-				res.Chunk, res.State, res.Step, res.Code, res.Text = cur.Chunk, cur.State, cur.Step, cur.Code, cur.Text
+				res.Chunk, res.State, res.Step, res.Progress, res.Code, res.Text = cur.Chunk, cur.State, cur.Step, cur.Progress, cur.Code, cur.Text
 				switch {
 				case cur.State == "done" || cur.State == "skipped":
 					res.Outcome = OutFinished

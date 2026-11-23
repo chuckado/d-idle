@@ -4,8 +4,8 @@
   [data-panel="quest-strip"] .qs-box { flex: 1 1 auto; min-inline-size: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 2px; }
   [data-panel="quest-strip"] .qs-h { display: flex; justify-content: space-between; align-items: baseline; gap: var(--d-sp-2); font-size: var(--d-fs-0); font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-2); white-space: nowrap; min-inline-size: 0; }
   [data-panel="quest-strip"] .qs-side { font-weight: 400; letter-spacing: 0; text-transform: none; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
-  [data-panel="quest-strip"] .qs-line { font-size: var(--d-fs-1); font-weight: 650; color: var(--d-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
-  [data-panel="quest-strip"] .qs-sub { font-size: var(--d-fs-0); color: var(--d-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
+  [data-panel="quest-strip"] .qs-line { line-height: 1.25; font-size: var(--d-fs-1); font-weight: 650; color: var(--d-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
+  [data-panel="quest-strip"] .qs-sub { line-height: 1.25; font-size: var(--d-fs-0); color: var(--d-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
   [data-panel="quest-strip"] [data-kind="awaiting"] .qs-label, [data-panel="quest-strip"] [data-kind="offer"] .qs-label, [data-panel="quest-strip"] [data-kind="countdown"] .qs-label { color: var(--d-accent-text); }
   [data-panel="quest-strip"] [data-kind="blocked"] .qs-label, [data-panel="quest-strip"] [data-kind="failed"] .qs-label { color: var(--d-warn); }
   [data-panel="quest-strip"] [data-kind="blocked"] .qs-sub, [data-panel="quest-strip"] [data-kind="failed"] .qs-sub { color: var(--d-warn); }

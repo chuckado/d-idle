@@ -68,3 +68,28 @@ First attempt now opens the door (141,2) from (142,4) and `Entered Outer Cloiste
 
 - S (docs/process/layout-read.md): `debug presets` lists objects; the monster presets of all rooms, superuniques included, come from `debug levelmonsters` and reach the bot only with `quests.layoutRead` 1 (d2dworld adds each superunique preset as an NPC preset with its name). The Smith script asked for table id 754 (U) without a name, so even with the knob on it could not match. Fix: the anchor carries `Name: "The Smith"` (the Countess works this way). Test `TestSmithAnchorResolvesByName` (fails without the name).
 - Consequence for the sandbox: the Smith step needs `quests.layoutRead` 1 there too (without it the hero explores the Barracks for him, U).
+
+## Round 9 (card toolstrade8): the Smith's room is behind doors
+
+- V (run k3-005744 lr, lab d2d devp20 binary `PG_D2D_BIN=.../d2d.devp20`, knobs `nav.fullGrid 1, nav.warpRead 1, quests.layoutRead 1`, Paladin 11 level 28): `boss presets level 28 presets 66 monsterPresets ["754@23,57"]`, so preset 754 IS The Smith, at subtile (23,57). The earlier runs used the default lab binary (`survhold/bin/d2d.lab`), which has no `debug levelmonsters`: that was the whole "not found" (and the knob was off in some). With the preset the boss script's `goto anchor` fails: `nav: no path: reached the closest reachable point {114 257} to {23 57}` then `{23 57} is unreachable`: the Barracks has closed doors (`debug presets` lists classes 15 and 16, "Closed Door"), the Smith's room is behind them. `monsters in view` at the arena: classes 60, 21, 384, 172, 46, no Smith (his room is not up).
+- Fix: `Navigator.GoTo` opens the door between the character and an unreachable spot (`openDoorToward`, up to four doors per call, no approach walk), then walks again. Test `TestGoToOpensTheDoorToASpotBehindIt` (fails without it).
+- Needs for the sandbox: `quests.layoutRead` 1 and the d2d with `debug levelmonsters` (devp16 and later; the sandbox image is devp22).
+
+## Round 10 (card toolstrade9)
+
+- S (reading `internal/bot/loop.go`, `task.go`): the guard cancels the step on `SafetyDrinkLife` (`safetyInterrupt`), `do` drinks and the loop plans again; the Smith step re-enters `KillBoss`, which waited `bossRestartGap` (30 s) since the last start: 30 s standing in the Barracks crowd after every drink. Fix: a drink-type interrupt clears the start mark so the run restarts at once (`TestBossRunRestartsAtOnceAfterADrink`; the gap stays for every other cancel, `TestBossRunStartsAtMostOncePer30s`). The boss run itself restarts from `locate`, which walks to the anchor from where the hero stands, so no position is lost.
+- Merc (U): the scenario pre sets `merc: 0`; the `minute` lines of the runs do not print the merc state. The route guard lines show `(merc=alive)` at the start of the chunk and `(merc=dead)` later in the same runs: the merc dies in the Outer Cloister crowd and is revived at the next town visit.
+- `quests.layoutRead` prerequisite: see `docs/process/layout-read.md` (new section). Test `TestBossNotFoundNamesTheLayoutKnob`.
+
+## Round 11 (card toolstrade10), lab run 20261123-020938-7cf9 (RED, 1212 s)
+
+- V (log): Paladin 11 reaches the Barracks and the Smith preset (`754@23,57`, quests.layoutRead on, devp20 binary); `goto anchor` ends `reached the closest reachable point {114 257}` (one door, (125,360), opened in an earlier run, the others not), the hero is hit while it walks (drink-life cancels, five in a minute), the belt empties (`belt hp=0`, six healing potions still in the PACK: only the 4-box belt, 3 healing and 1 mana column, is drunk in the field) and the hero chickens at life 140 of 289. The Smith was never seen, so no fight.
+- Fix 1: `doorOnTheWay` (GoTo): with several doors in a row no single door joins both sides, so the door touching the hero's region that is nearest the goal is opened, then the walk repeats. Test `TestGoToOpensTwoDoorsInARow`.
+- Fix 2 (scenario): the hero wears a mesh belt (12 boxes; the live hero has 5 to 6 healing in the belt), so the potion plan fills the belt from the pack.
+- U: the Smith's own damage and the fight rules are not reached yet; the in-field refill of the belt from the pack is not implemented (open finding).
+
+## Round 12 (card toolstrade11): the field belt refill
+
+- S (reading): a field refill exists (`beltFillStep`, `internal/bot/goal.go` before the quest board step; `FillBelt` is safe in the field) and a pack drink exists (`internal/combat/packdrink.go`, only below `combat.drinkRejuvPct`, and the chicken line stays above it by design: a minor potion does not save a hero at the chicken line). The refill was gated on NO hostile within the 30 subtile sweep radius: in the Barracks that never holds, so the belt stayed empty with six potions in the pack (V lab run 7cf9: `belt hp=0`, chicken at life 140 of 289).
+- Fix: with no healing in the belt and healing in the pack the gate is 12 subtiles (`beltFillUrgentRadius`). Test `TestBeltFillStepUrgentRadius` (Paladin and Sorceress; fails without the shorter radius). U: how long a refill takes in a live crowd; the 90 s backoff stays.
+- Not done: the `belt: move failed: hand: unexpected cursor state` path (not reproduced here); a field variant of `town.plan.belt-refill-from-pack` (the scenario needs a field start with hostiles near: not written).

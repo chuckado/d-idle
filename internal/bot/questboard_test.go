@@ -331,3 +331,13 @@ func TestCainChunkEvidenceFollowsTheChain(t *testing.T) {
 		t.Fatal("Cain's scroll in the pack: both parts are done")
 	}
 }
+
+// A failed board step must spend game time, or a lockstep clock never reaches the failure gap and the chunk spins forever.
+func TestFailSpend(t *testing.T) {
+	if failSpend(true, false) <= 0 || failSpend(true, false) >= boardFailGap {
+		t.Fatalf("a failed non-idle step spends a part of the gap: %v", failSpend(true, false))
+	}
+	if failSpend(false, false) != 0 || failSpend(true, true) != 0 {
+		t.Fatal("a step that did not fail, or an idle tick that already waits, spends nothing extra")
+	}
+}

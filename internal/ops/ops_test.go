@@ -327,3 +327,19 @@ func TestWait(t *testing.T) {
 		}
 	}
 }
+
+func TestProgressCounter(t *testing.T) {
+	d := &fakeDesk{view: questboard.View{Enabled: true, Quests: []questboard.QuestRow{{ID: "q", Chunks: []questboard.ChunkRow{{ID: "c", State: questboard.InProgress}}}},
+		Running: &questboard.RunView{Quest: "q", Chunk: "c", Step: "a"}}}
+	s, _ := newSrv(d, nil)
+	get := func() int { return s.Handle(Request{Verb: "status"}).Board.Rows[0].Progress }
+	if get() != 0 || get() != 0 {
+		t.Fatal("unchanged board must not count")
+	}
+	d.mu.Lock()
+	d.view.Running = &questboard.RunView{Quest: "q", Chunk: "c", Step: "b"}
+	d.mu.Unlock()
+	if get() != 1 {
+		t.Fatal("step change must count")
+	}
+}
