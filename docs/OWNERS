@@ -646,7 +646,6 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
-docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade9
 docs/probes/town-plan-scenarios.md  credit-runner  town1
 docs/probes/town-plan-stage3-2026-11-22.md  credit-runner  plan3
 docs/probes/town-plan-stage3-2026-11-22.md  credit-runner  town5
@@ -666,7 +665,6 @@ docs/process/fork-sync-cadence.md  credit-runner  forksync
 docs/process/hammerdin-support.md  credit-runner  hammer1
 docs/process/input-verbs2.md  credit-runner  verbs2
 docs/process/layout-read.md  credit-runner  countess3
-docs/process/layout-read.md  credit-runner  toolstrade9
 docs/process/layout-read.md  live-agent  k1layout
 docs/process/necromancer-support.md  credit-runner  necro1
 docs/process/pg-ledger-ops.md  credit-runner  pgledger
@@ -900,7 +898,6 @@ internal/art/skillicons_test.go  credit-runner  skilltrees
 internal/boss  credit-runner  countess3
 internal/boss  credit-runner  wiring2
 internal/boss/act1.go  credit-runner  countess
-internal/boss/act1.go  credit-runner  toolstrade9
 internal/boss/boss_test.go  credit-runner  countess
 internal/boss/boss_test.go  pro-runner  levelplan3
 internal/boss/fake_test.go  pro-runner  levelplan3
@@ -1073,10 +1070,8 @@ internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  quests3
 internal/bot/task.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  staletarget
-internal/bot/task.go  credit-runner  toolstrade9
 internal/bot/task.go  credit-runner  wpstep
 internal/bot/task_acts_test.go  credit-runner  cain5b
-internal/bot/task_test.go  credit-runner  toolstrade9
 internal/bot/vaultkeep.go  credit-runner  vaultv5
 internal/bot/waypoints.go  credit-runner  boardmoderace
 internal/bot/whyline.go  credit-runner  repairtrip
@@ -1316,7 +1311,6 @@ internal/env/tuning_quests.go  credit-runner  bsm4
 internal/env/tuning_quests.go  credit-runner  countess3
 internal/env/tuning_quests.go  credit-runner  quests3
 internal/env/tuning_quests.go  credit-runner  quests8
-internal/env/tuning_quests.go  credit-runner  toolstrade9
 internal/env/tuning_quests.go  live-agent  k1layout
 internal/env/tuning_resource.go  credit-runner  agencyp0
 internal/env/tuning_resource.go  credit-runner  freshstart
