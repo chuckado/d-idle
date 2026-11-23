@@ -647,6 +647,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `ui/`
 
+- [fit-triage-2026-11-23.md](ui/fit-triage-2026-11-23.md): Fit suite triage, 2026-11-23 (card uifit1) (status: current. Source: the full fit suite (`tools/uishots.sh --fit`, every page at its sizes, on the worker...)
 - [friend-feedback-2026-11-15.md](ui/friend-feedback-2026-11-15.md): Friend feedback, release 0.1.3 (2026-11-15): what each remark became (status: current. UI and docs only; the bot's behaviour is unchanged. Tags: V verified (named test or picture), S...)
 
 `ui/redesign-2026-11-14/`

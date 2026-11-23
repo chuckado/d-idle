@@ -8,6 +8,24 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into uiloot <!--sg:agent/uiloot-->
+- Merge branch 'main' into toolstrade14 <!--sg:agent/toolstrade14-->
+- Merge branch 'main' into uichars <!--sg:agent/uichars-->
+- Merge branch 'main' into toolstrade13 <!--sg:agent/toolstrade13-->
+- Merge branch 'main' into uifit2 <!--sg:agent/uifit2-->
+- Merge branch 'main' into stage1b <!--sg:agent/stage1b-->
+- Merge branch 'main' into opsquest4 <!--sg:agent/opsquest4-->
+- Merge branch 'main' into qdmatrix <!--sg:agent/questdrill2-->
+- Merge branch 'main' into toolstrade11 <!--sg:agent/toolstrade11-->
+- Merge branch 'main' into opsquest3 <!--sg:agent/opsquest3-->
+- Merge branch 'main' into uifit1 <!--sg:agent/uigate-->
+- Merge branch 'main' into toolstrade10 <!--sg:agent/toolstrade10-->
+- Merge branch 'main' into failspend <!--sg:agent/stage1-->
+- Merge branch 'main' into opsquest2 <!--sg:agent/opsquest2-->
+- Merge branch 'main' into toolstrade9 <!--sg:agent/toolstrade9-->
+- Merge branch 'main' into drill2 <!--sg:agent/drill2-->
+- Merge branch 'main' into uivault <!--sg:agent/uivault-->
+- Merge branch 'main' into toolstrade8 <!--sg:agent/toolstrade8-->
 - Merge branch 'main' into uiframe <!--sg:agent/uiframe-->
 - Merge branch 'main' into uialerts <!--sg:agent/uialerts-->
 - Merge branch 'main' into qdmatrix <!--sg:agent/questdrill-->

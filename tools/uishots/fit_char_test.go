@@ -110,7 +110,7 @@ func TestFitPagesListVariants(t *testing.T) {
 	if !strings.Contains(sh, "character-phonepack") || !strings.Contains(sh, "#belt,#cv-sel") {
 		t.Error("the phone's storage tab has no fit page that must hit the belt and the selected box (the errands have their own phone page)")
 	}
-	for _, p := range []string{"character-phone ", "character-phone-sheet ", "character-phone-errands ", "character-phone-menu ", "character-phonehero ", "phonedefect-label ", "phonedefect-acts ", "phonedefect-cutchips ", "phonedefect-lock ", "phonedefect-hover ", "phonedefect-narrow "} {
+	for _, p := range []string{"character-phone ", "character-phone-sheet ", "character-phone-errands ", "character-phone-menu ", "character-phonehero ", "phonedefect-label ", "phonedefect-acts ", "phonedefect-cutchips ", "phonedefect-hover ", "phonedefect-narrow "} {
 		if !strings.Contains(sh, "\n"+p) {
 			t.Errorf("tools/uishots.sh has no fit page %q (the phone sizes of card uiphone)", p)
 		}

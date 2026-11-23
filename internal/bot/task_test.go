@@ -2,6 +2,7 @@ package bot
 
 import (
 	"context"
+	"d2lod-bot/internal/boss"
 	"errors"
 	"strings"
 	"sync"
@@ -491,5 +492,52 @@ func TestCampaignWalkCarriesOutSafetyInterrupt(t *testing.T) {
 			g.w.set(func(w *world) { w.area = 2 }) // out in the field
 			g.waitFor("safety action", func() bool { return g.w.count("act "+a.String()) > 0 })
 		})
+	}
+}
+
+// A drink that cancels the boss run does not start the 30 s restart gap: the next call starts at once. Must fail
+// without the delete in KillBoss. Any other cancel (a stuck run) keeps the gap (TestBossRunStartsAtMostOncePer30s).
+func TestBossRunRestartsAtOnceAfterADrink(t *testing.T) {
+	g := newRig(t)
+	g.r.loop.brWorldFn = func(context.Context) (task.World, error) { return brWorld(30), nil }
+	var starts []time.Time
+	ctx, cancel := context.WithCancelCause(context.Background())
+	g.r.d.Task = &TaskDeps{Boss: func(ctx context.Context, name string) error {
+		starts = append(starts, g.r.e.Clock.Now())
+		return context.Canceled
+	}}
+	acts := taskActs{r: g.r}
+	cancel(safetyInterrupt{SafetyDrinkLife})
+	_ = acts.KillBoss(ctx, task.BossBR)
+	ctx2, cancel2 := context.WithCancelCause(context.Background())
+	cancel2(safetyInterrupt{SafetyDrinkLife})
+	_ = acts.KillBoss(ctx2, task.BossBR)
+	if len(starts) != 2 {
+		t.Fatalf("starts %d", len(starts))
+	}
+	if gap := starts[1].Sub(starts[0]); gap >= bossRestartGap {
+		t.Fatalf("the second start waited %v after a drink", gap)
+	}
+}
+
+// A boss that is only found by his layout preset says so when quests.layoutRead is 0 (the sandbox saw a mystery "boss not
+// found in the arena"). Must fail without the hint in KillBoss. Blood Raven (no named preset) never gets it.
+func TestBossNotFoundNamesTheLayoutKnob(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		knob int
+		want bool
+	}{{boss.NameSmith, 0, true}, {boss.NameCountess, 0, true}, {boss.NameSmith, 1, false}, {boss.NameBloodRaven, 0, false}} {
+		g := newRig(t)
+		g.r.e.Tune.Quests.LayoutRead = tc.knob
+		g.r.loop.brWorldFn = func(context.Context) (task.World, error) { return brWorld(30), nil }
+		g.r.d.Task = &TaskDeps{Boss: func(ctx context.Context, name string) error { return boss.ErrBossNotFound }}
+		err := taskActs{r: g.r}.KillBoss(context.Background(), tc.name)
+		if err == nil {
+			t.Fatalf("%s: no error", tc.name)
+		}
+		if got := strings.Contains(err.Error(), "needs quests.layoutRead"); got != tc.want {
+			t.Errorf("%s knob %d: hint %v, want %v: %v", tc.name, tc.knob, got, tc.want, err)
+		}
 	}
 }

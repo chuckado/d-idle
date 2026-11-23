@@ -799,6 +799,7 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		out = questboard.StepResult{Outcome: questboard.StepHeld, Code: res.Via, Why: nonEmptyStr(res.ViaWhy, "a town trip fixes it")}
 		r.boardNote("hold "+questboard.ChunkKey(d.Quest, d.Chunk)+" "+res.Via, "quest board: hold "+res.Via+": "+out.Why)
 	}
+	failed := out.Outcome == questboard.StepFailed
 	if out.Outcome == questboard.StepFailed {
 		k := questboard.ChunkKey(d.Quest, d.Chunk)
 		rt.mu.Lock()
@@ -812,6 +813,12 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		r.boardNote("fail "+k, fmt.Sprintf("quest board: %s: %s", k, out.Why))
 	}
 	rt.exec.Report(d, out)
+	if d := failSpend(failed, idle); d > 0 {
+		// A refused step that ran nothing (a path or exit error, Proving Ground necro.act1-stage1 2026-11-23: the hero stood in
+		// the Barracks and the tick loop spun 49 minutes wall with the lockstep clock stopped) spends no game time, so the
+		// failure gap never elapses and the three counted failures that park the chunk never come. Spend a third of the gap.
+		r.e.Clock.Sleep(d)
+	}
 	if held {
 		return r.boardTrain(ctx, snap, c)
 	}
@@ -827,6 +834,14 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		return r.rest(ctx, snap, c)
 	}
 	return ok
+}
+
+// failSpend is the game time one board tick spends after a failed step that did not already wait (idle ticks spend theirs below).
+func failSpend(failed, idle bool) time.Duration {
+	if failed && !idle {
+		return boardFailGap / 3
+	}
+	return 0
 }
 
 func whyOf(res task.Result) string {

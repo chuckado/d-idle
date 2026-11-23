@@ -513,8 +513,24 @@ func emptyPathErr() error {
 // GoTo walks to p on the current level.
 func (n *Navigator) GoTo(ctx context.Context, p input.Point) error {
 	t := n.tune()
-	return n.walk(ctx, func(*obs) (input.Point, float64, error) { return p, t.ArriveTolerance, nil }, walkOpts{escape: true, fastPoll: true, goal: &p})
+	n.doorTried, n.doorApproach = nil, nil
+	var err error
+	for try := 0; ; try++ {
+		err = n.walk(ctx, func(*obs) (input.Point, float64, error) { return p, t.ArriveTolerance, nil }, walkOpts{escape: true, fastPoll: true, goal: &p})
+		// The spot lies behind a closed door (V live, scenario act1.tools.malus: the Smith's room in the Barracks, "reached
+		// the closest reachable point"): open the door between and walk again.
+		if !errors.Is(err, ErrNoPath) || errors.Is(err, ErrAlreadyThere) || try >= goDoorTries {
+			return err
+		}
+		o, oerr := n.observeWait(ctx)
+		if oerr != nil || !n.openDoorToward(ctx, o, []gate{{at: p, push: p}}, -o.level, false) {
+			return err
+		}
+	}
 }
+
+// goDoorTries bounds the doors GoTo opens on the way to one spot.
+const goDoorTries = 4
 
 // unitTolerance is how close GoToUnit gets: inside interact range of NPCs and objects.
 const unitTolerance = 4.0

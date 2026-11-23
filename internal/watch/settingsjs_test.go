@@ -110,3 +110,13 @@ func mustReadFS(t *testing.T, p string) []byte {
 	}
 	return b
 }
+
+// Settings > Rules links to the Loot rules sheet (the old Inventory entry) and the live screen opens it from ?lootrules=1 (card uiloot).
+func TestSettingsLinksLootRules(t *testing.T) {
+	if !strings.Contains(string(mustReadFS(t, "web/shell.js")), "qs.get('lootrules') === '1'") {
+		t.Error("shell.js does not open the Loot rules sheet from ?lootrules=1")
+	}
+	if !strings.Contains(string(mustReadFS(t, "web/settings.js")), "/watch?live=1&lootrules=1") {
+		t.Error("settings.js has no link to the Loot rules sheet")
+	}
+}

@@ -1028,6 +1028,7 @@ async function start() {
       .then((r) => r.json().then((j) => ({ status: r.status, j }))).catch(() => { toast('bad', 'the answer route is not reachable'); return null; }) });
   mountSupport({ ui, toast, doc: document, post: (path, body) => postJSON(answerBase, path, body),
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
+  if (qs.get('lootrules') === '1') document.dispatchEvent(new CustomEvent('d2:lootrules-ask', { detail: {} })); // Settings > Rules links here from every page
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted
   const edit = document.getElementById('btn-layout');
   if (edit && !cockpit && qs.get('edit') === '1') edit.click();

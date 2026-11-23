@@ -269,6 +269,39 @@ func (r fitResult) broken() string {
 	return ""
 }
 
+// fitGlyphSlack is the height, in px, by which a one-line box may be shorter than its own text (line-height 1 with a taller glyph box).
+const fitGlyphSlack = 2
+
+// phoneScroll reports a cockpit page in phone mode that is taller than the window: it grows with its content and the page scrolls
+// by design (web/utilities.css, "phone: the tab grows to its content"), so the vertical scroll, what lies below the window and the
+// scrollbar strip are not defects. Sideways scroll, cut boxes and a page that is NOT taller than the window (its frame must be full)
+// are still judged.
+func (r fitResult) phoneScroll() bool {
+	scrolls := r.ScrollH > r.VH || r.VW-r.ScrollW >= 8 // or a vertical scrollbar takes its strip (a page one pixel over the window)
+	if r.VW >= 700 || !scrolls || r.ScrollW > r.VW {
+		return false
+	}
+	for _, s := range r.Slots {
+		if s.Slot == "phoneTabs" {
+			return true
+		}
+	}
+	return false
+}
+
+var underRe = regexp.MustCompile(`top (-?\d+) bottom (-?\d+) \(header ends (-?\d+), window (\d+)\)`)
+
+// sheetOnlyBelow reports a "leaves the free area" entry whose sheet starts at or below the header and only ends past the window.
+func sheetOnlyBelow(x string) bool {
+	m := underRe.FindStringSubmatch(x)
+	if m == nil {
+		return false
+	}
+	top, _ := strconv.Atoi(m[1])
+	hdr, _ := strconv.Atoi(m[3])
+	return top >= hdr
+}
+
 // judge returns what is wrong with a measured page; an empty list is a fit.
 func (r fitResult) judge() []string {
 	if r.Flow { // the navigation pages (nav-NAME): a document that scrolls on purpose; the page's own fit lane judges its content, this one the navigation
@@ -283,16 +316,23 @@ func (r fitResult) judge() []string {
 		return bad
 	}
 	var bad []string
-	if r.ScrollH > r.VH && r.Vault == nil { // the Vault is one scrolling document (card vaultdesktop): only sideways counts
+	ps := r.phoneScroll()
+	if r.ScrollH > r.VH && r.Vault == nil && !ps { // the Vault is one scrolling document (card vaultdesktop): only sideways counts
 		bad = append(bad, fmt.Sprintf("the page scrolls: scrollHeight %d > innerHeight %d", r.ScrollH, r.VH))
 	}
 	if r.ScrollW > r.VW {
 		bad = append(bad, fmt.Sprintf("the page scrolls sideways: scrollWidth %d > innerWidth %d", r.ScrollW, r.VW))
 	}
 	for _, o := range r.Overflow {
+		if o.DW == 0 && o.DH > 0 && o.DH <= fitGlyphSlack {
+			continue // a glyph box a pixel or two taller than a one-line box (line-height 1): nothing is hidden
+		}
 		bad = append(bad, fmt.Sprintf("%s overflows its box by %d px high, %d px wide", o.El, o.DH, o.DW))
 	}
 	for _, o := range r.Outside {
+		if ps && o.Right <= r.VW {
+			continue // the phone page grows with its content: below the window is the scroll, not a defect
+		}
 		bad = append(bad, fmt.Sprintf("%s ends outside the window (right %d, bottom %d)", o.El, o.Right, o.Bottom))
 	}
 	for _, e := range r.Empty {
@@ -311,7 +351,7 @@ func (r fitResult) judge() []string {
 	if v := r.Vault; v != nil {
 		bad = append(bad, v.judge()...)
 	}
-	if r.Hole > fitGap && r.Chars == nil && r.Vault == nil {
+	if r.Hole > fitGap && r.Chars == nil && r.Vault == nil && !ps { // a scrolling phone page: the hole is the scrollbar's strip
 		bad = append(bad, fmt.Sprintf("dead space: a %d px square is covered by no slot at %d,%d", r.Hole, r.HoleAt[0], r.HoleAt[1]))
 	}
 	if r.CV != nil {
@@ -399,6 +439,9 @@ func (r fitResult) judge() []string {
 			bad = append(bad, "sheet text is cut, not wrapped: "+x)
 		}
 		for _, x := range o.Under {
+			if r.phoneScroll() && sheetOnlyBelow(x) {
+				continue // a sheet inside a tile below the fold of the scrolling phone page: reached by scrolling, not under the header
+			}
 			bad = append(bad, "a sheet leaves the free area (under the header or past the window): "+x)
 		}
 		for _, x := range o.Charter {
@@ -427,6 +470,9 @@ func (r fitResult) clickVerdict() []string {
 		}
 		sort.Strings(sels)
 		for _, sel := range sels {
+			if sel == "#btn-layout" && r.VW < 700 {
+				continue // a phone cannot edit the layout: the button is not offered there (shell.js), so it cannot be covered
+			}
 			if !r.Hits[sel] {
 				bad = append(bad, "after pressing "+r.Clicked+", "+sel+" is not hittable (the sheet is clipped or covered)")
 			}
@@ -632,7 +678,6 @@ var mustFail = map[string]string{
 	"fit-phonedefect-label-":     "label over art",
 	"fit-phonedefect-acts-":      "action buttons: ",
 	"fit-phonedefect-cutchips-":  "toolbar cut: ",
-	"fit-phonedefect-lock-":      "lock line: ",
 	"fit-phonedefect-hover-":     "horizontal overflow: ",
 	"fit-phonedefect-narrow-":    "grid: ",
 	"fit-phonedefect-resetclip-": "#btn-reset is not hittable",

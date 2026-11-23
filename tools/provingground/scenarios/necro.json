@@ -59,8 +59,8 @@
     {
      "kind": "log_line",
      "pattern": "^combat summon .*grew=true.*skill=Raise Skeleton",
-     "min": 2,
-     "why": "skeleton upkeep through the fight"
+     "min": 3,
+     "why": "skeleton upkeep through the fight (observed 5 grew in run 20261122-170602, 13 casts)"
     },
     {
      "kind": "minions_at_least",
@@ -130,8 +130,8 @@
     {
      "kind": "log_line",
      "pattern": "^combat curse .*skill=Amplify Damage",
-     "min": 1,
-     "why": "the summoner's any-target curse"
+     "min": 8,
+     "why": "the summoner's any-target curse (observed 20 curse lines)"
     },
     {
      "kind": "minions_at_least",
@@ -197,7 +197,7 @@
      "kind": "log_line",
      "pattern": "^combat summon .*grew=true.*skill=Revive",
      "min": 1,
-     "why": "Revive upkeep (profile summon rule, kind revive)"
+     "why": "Revive upkeep (profile summon rule, kind revive) (observed 1 grew Revive, 87 kills, 0 deaths)"
     },
     {
      "kind": "minions_at_least",
@@ -258,13 +258,13 @@
      "kind": "log_line",
      "pattern": "^combat summon .*grew=true.*skill=Raise Skeleton",
      "min": 3,
-     "why": "upkeep keeps raising"
+     "why": "upkeep keeps raising (observed 5 grew)"
     },
     {
      "kind": "log_line",
      "pattern": "^combat kill",
-     "min": 40,
-     "why": "the fight goes on for ten minutes (a clvl 32 run killed 83 in ten)"
+     "min": 50,
+     "why": "the fight goes on for ten minutes (observed 84 kills, run 20261122-170602)"
     },
     {
      "kind": "life_pct_at_least",
@@ -523,6 +523,95 @@
     {
      "kind": "life_pct_at_least",
      "min": 40
+    }
+   ]
+  },
+  {
+   "id": "necro.act1-stage1",
+   "title": "Act 1 stage 1: Den of Evil then Blood Raven with the tap driver, a Necromancer from a level 16 fixture",
+   "kind": "e2e",
+   "tier": "nightly",
+   "covers": [
+    "combat.fight"
+   ],
+   "touches": [
+    "internal/bot/",
+    "internal/combat/",
+    "internal/questboard/"
+   ],
+   "pre": {
+    "level": 16,
+    "gold": 8000,
+    "waypoints": [
+     1
+    ],
+    "items": [
+     {
+      "code": "hp1",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "build": "necromancer_summoner_sme",
+    "driver": "board-taps",
+    "tap_quest": "den_of_evil,sisters_burial_grounds",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "combat.minionRead": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 90,
+    "wall_min": 50
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "needs": [
+    "read.minions"
+   ],
+   "provenance": "CHEATED level (16, with the points a played level gives), 8000 gold, potions and the Rogue Encampment waypoint by SETUP verbs. Town start, nothing written after the start. Mechanics only, never evidence of how a played hero fares.",
+   "notes": "Stage 1 of the staged Necromancer Act 1 drill (docs/probes/necromancer-act1-drill-2026-11-22.md section 7). The tap driver (list form) taps Start on the Den and on Blood Raven in board order. Stages restart from fixtures: the runner cannot restore a save. Fixture level 16 (not 14): at clvl 14 the level plan sends the hero to Catacombs 3 through the Monastery (window 14-18) while the Blood Raven chunk waits in its start gate, the chunk then starts in the Barracks and cannot route back (run 20261123-023115-028d); at 16 the plan is the Mausoleum, as in the green Blood Raven runs.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 1,
+     "set": 1,
+     "why": "Den of Evil completed (bit 0)"
+    },
+    {
+     "kind": "quest_bits",
+     "record": 2,
+     "set": 1,
+     "why": "Sisters' Burial Grounds record 2 bit 0 (V docs/forkcheats.md)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death"
+    },
+    {
+     "kind": "no_writes"
     }
    ]
   }

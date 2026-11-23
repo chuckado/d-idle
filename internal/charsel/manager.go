@@ -104,7 +104,8 @@ type ListView struct {
 	Caps       Caps         `json:"caps"`
 	Switch     *SwitchView  `json:"switch,omitempty"`
 	Characters []Entry      `json:"characters"`
-	Deleted    []ArchiveRef `json:"deleted"` // archives of characters that are no longer in the folder (restorable)
+	Deleted    []ArchiveRef `json:"deleted"`           // archives of characters that are no longer in the folder (restorable)
+	Unsaved    []string     `json:"unsaved,omitempty"` // parked heroes with no .d2s yet (the first save lists them)
 }
 
 // Result answers the four POST verbs.
@@ -187,7 +188,7 @@ func (m *Manager) List() (any, *Refusal) {
 	if del == nil {
 		del = []ArchiveRef{}
 	}
-	v := ListView{Schema: ListSchema, Active: m.active(), Caps: m.caps(), Characters: es, Deleted: del}
+	v := ListView{Schema: ListSchema, Active: m.active(), Caps: m.caps(), Characters: es, Deleted: del, Unsaved: m.Store.Unsaved(m.active(), es)}
 	if in, ok := m.pending(); ok {
 		v.Switch = &SwitchView{From: in.From, To: in.To, Creating: in.Create, Since: in.At}
 	}

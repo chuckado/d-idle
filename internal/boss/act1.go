@@ -72,6 +72,13 @@ func Lookup(name string) (*Script, bool) {
 	return s, ok
 }
 
+// NeedsLayoutRead reports that the boss's spawn point is a super unique preset found by NAME, which only the level layout
+// read (knob quests.layoutRead, fork verb `debug levelmonsters`) delivers: without it the run can only explore for him.
+func NeedsLayoutRead(name string) bool {
+	s, ok := Lookup(name)
+	return ok && s.Anchor.Preset != nil && s.Anchor.Preset.Name != ""
+}
+
 // WithUniqueNo returns a copy whose Match also recognises the super unique number (from superuniques.txt).
 func (s *Script) WithUniqueNo(no int) *Script {
 	c := *s
