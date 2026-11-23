@@ -417,6 +417,7 @@
 | uireason | proposed | - | `docs/ui-design-system.md`<br>`docs/ui/uireason`<br>`internal/watch/invui.go`<br>`internal/watch/reasonlines_test.go`<br>`internal/watch/testdata/questui/quest_ui.mjs`<br>`internal/watch/testdata/vault_clean.mjs`<br>`internal/watch/testdata/vault_ether.mjs`<br>`internal/watch/testdata/vault_identall.mjs`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`internal/watch/testdata/vault_sell.mjs`<br>`internal/watch/testdata/vault_sellall.mjs`<br>`internal/watch/vaultclean_test.go`<br>`internal/watch/vaultether_test.go`<br>`internal/watch/vaultidentall_test.go`<br>`internal/watch/vaultreveal_ui_test.go`<br>`internal/watch/vaultsell_ui_test.go`<br>`internal/watch/vaultsellall_ui_test.go`<br>`internal/watch/web/components.css`<br>`internal/watch/web/inventory-actions.js`<br>`internal/watch/web/inventory-canvas.css`<br>`internal/watch/web/inventory-canvas.js`<br>`internal/watch/web/panels/quest-board/panel.js`<br>`internal/watch/web/panels/quest-strip/panel.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/why.js` | - |
 | manapack | proposed | - | `internal/bot/routeguard.go`<br>`internal/bot/kitplan_test.go` | - |
 | forksync | in-progress | - | `docs/process/fork-sync-cadence.md` | - |
+| toolstrade2 | proposed | - | `internal/nav/nav.go`<br>`internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -451,6 +452,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d5b81876e 11-22 21:26 `Merge agent/toolstrade2: toolstrade2: card and probe notes` (toolstrade2)
 - 8d9c46bc3 11-22 21:14 `Merge agent/toolstrade: Merge branch 'main' into toolstrade` (toolstrade)
 - a5f66000a 11-22 21:12 `Merge branch 'main' into toolstrade` (-)
 - db89486db 11-22 21:10 `Merge agent/forksync: Merge branch 'main' into forksync` (forksync)
@@ -460,5 +462,4 @@
 - 5376d1ad3 11-22 20:57 `Merge agent/uireason: Merge branch 'main' into uireason` (uireason)
 - f0b708e8b 11-22 20:56 `Merge branch 'main' into uireason` (-)
 - 5cb82cacf 11-22 20:48 `Merge agent/manapack: Merge branch 'main' into manapack` (manapack)
-- 9b7184df0 11-22 20:46 `Merge branch 'main' into manapack` (-)
 <!-- statusgen:end -->
