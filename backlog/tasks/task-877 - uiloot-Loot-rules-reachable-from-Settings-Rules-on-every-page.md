@@ -18,9 +18,12 @@ owns:
   - "internal/watch/testdata/settings_test.cjs"
   - "internal/watch/settingsjs_test.go"
   - "tools/uishots.sh"
+  - "tools/uishots/fixtures_builds.go"
+  - "internal/watch/planwording_test.go"
+  - "docs/ui/settings/"
 exclusive: []
 contracts: []
-result: "Settings > Rules has a Loot rules link (the old Inventory entry) to /watch?live=1&lootrules=1; shell.js opens the sheet from that param. DOM rows, Go test, fit pages lootrules-link and settings-* pass on the worker host. Not tried against a real hero."
+result: "Settings > Rules has a Loot rules link (the old Inventory entry) to /watch?live=1&lootrules=1; shell.js opens the sheet from that param. DOM rows, Go test, fit pages lootrules-link and settings-* pass on the worker host. Also: the Build tab plan handoff line and the Points spent/unspent/waiting text checked at 390x844 and 1366x768 (fit builds-list with a locked fixture, picture docs/ui/settings/build-plan-handoff-390.png, test TestPlanWordingWrapsOnAPhone): readable, wraps. Not tried against a real hero."
 ---
 
 ## Description
