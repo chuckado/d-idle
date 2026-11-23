@@ -1,10 +1,13 @@
 ---
 id: TASK-869
-title: 'opsquest3: questloop waits on the active chunk first, hands in, treats busy as a switch'
-status: Proposed
+title: >-
+  opsquest3: questloop waits on the active chunk first, hands in, treats busy as
+  a switch
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T07:36:00Z'
+updated_date: '2026-11-23T08:00:00Z'
 labels:
   - bot
   - bot-fix

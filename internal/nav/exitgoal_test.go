@@ -82,3 +82,15 @@ func TestRewriteCapDoesNotHoldAWalkWithAGoalOutsideTheCore(t *testing.T) {
 		}
 	}
 }
+
+// The door walk and the strip walk of an exit leg carry their target as the goal too (see goalOpts).
+func TestGoalOptsCarryTheTarget(t *testing.T) {
+	for _, p := range []input.Point{{X: 121, Y: 180}, {X: 20, Y: 25}} {
+		for _, pursuit := range []bool{true, false} {
+			wo := goalOpts(p, pursuit)
+			if wo.goal == nil || *wo.goal != p || wo.pursuit != pursuit {
+				t.Errorf("goalOpts(%v, %v) = %+v", p, pursuit, wo)
+			}
+		}
+	}
+}
