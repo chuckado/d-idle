@@ -139,6 +139,33 @@ func (s *Store) List(active string) ([]Entry, []ArchiveRef, error) {
 	return out, deleted, nil
 }
 
+// Unsaved lists the heroes that have parked bot state under StateRoot but no .d2s in the save folder (a hero the game never saved,
+// or whose save was removed by hand), apart from the one playing now: a new hero is listed only after its first save, so a folder
+// like this is a hero that is waiting for it. It never reads game files.
+func (s *Store) Unsaved(active string, saved []Entry) []string {
+	out := []string{}
+	if s.StateRoot == "" {
+		return out
+	}
+	des, err := os.ReadDir(s.StateRoot)
+	if err != nil {
+		return out
+	}
+	have := map[string]bool{}
+	for _, e := range saved {
+		have[strings.ToLower(e.Name)] = true
+	}
+	for _, de := range des {
+		n := de.Name()
+		if !de.IsDir() || ValidFileName(n) != nil || have[strings.ToLower(n)] || (active != "" && sameName(n, active)) {
+			continue
+		}
+		out = append(out, n)
+	}
+	sort.Slice(out, func(i, j int) bool { return strings.ToLower(out[i]) < strings.ToLower(out[j]) })
+	return out
+}
+
 // Find returns the entry named name (case-insensitive).
 func (s *Store) Find(name string) (Entry, error) { return s.FindActive(name, "") }
 

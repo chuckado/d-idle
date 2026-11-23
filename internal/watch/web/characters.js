@@ -155,6 +155,29 @@ export function mountCharacters(d) {
     return li;
   }
 
+  // a hero the game has not saved yet is not in the folder listing (docs/charselect.md): the one just created, or playing, shows as "Creating"
+  // with the reason, and a parked hero with no save (v.unsaved) says "not saved yet" instead of looking like nothing happened
+  function pendingCard(name) {
+    const li = el('li', 'cs-card cs-pending');
+    li.dataset.key = 'char-pending-' + name; li.dataset.state = 'unsaved';
+    const top = el('div', 'cs-top'), id = el('div', 'cs-id');
+    id.append(el('h3', 'cs-name', name), el('p', 'cs-sub', fmt(T.pendingSub, { name })));
+    top.append(el('span', 'cs-mark', name.slice(0, 1)), id);
+    const chips = el('div', 'cs-chips'); chips.appendChild(el('span', 'cs-chip', T.unsavedChip));
+    li.append(top, chips);
+    return li;
+  }
+  function unsavedCard(name) {
+    const li = el('li', 'cs-card cs-unsaved');
+    li.dataset.key = 'char-unsaved-' + name; li.dataset.state = 'unsaved';
+    const top = el('div', 'cs-top'), id = el('div', 'cs-id');
+    id.append(el('h3', 'cs-name', name), el('p', 'cs-sub', T.unsavedSub));
+    top.append(el('span', 'cs-mark', name.slice(0, 1)), id);
+    const chips = el('div', 'cs-chips'); chips.appendChild(el('span', 'cs-chip', T.unsavedChip));
+    li.append(top, chips);
+    return li;
+  }
+
   function newTile() {
     const li = el('li', 'cs-card cs-newcard');
     li.dataset.key = 'new-tile';
@@ -209,10 +232,16 @@ export function mountCharacters(d) {
       sec.appendChild(h);
       const c = caps();
       if (!c.switch && c.why) { const w = el('p', 'cs-why', fmt(T.switchOff, { why: c.why })); w.id = 'cs-why'; sec.appendChild(w); }
-      if (!(v.characters || []).length) sec.appendChild(panel(T.emptyTitle, T.emptyBody));
+      const listed = (n) => (v.characters || []).some((x) => String(x.name).toLowerCase() === String(n).toLowerCase());
+      const creating = (v.switch && v.switch.creating && v.switch.to) || (S.pend && S.pend.creating && S.pend.to) || '';
+      const waiting = creating && !listed(creating) ? creating : (v.active && !listed(v.active) ? v.active : '');
+      const unsaved = (v.unsaved || []).filter((n) => !listed(n) && n !== waiting);
+      if (!(v.characters || []).length && !waiting && !unsaved.length) sec.appendChild(panel(T.emptyTitle, T.emptyBody));
       const ul = el('ul', 'cs-grid');
       ul.setAttribute('aria-label', T.heroes);
+      if (waiting) ul.appendChild(pendingCard(waiting));
       for (const ch of v.characters || []) ul.appendChild(card(ch));
+      for (const n of unsaved) ul.appendChild(unsavedCard(n));
       ul.appendChild(newTile());
       sec.appendChild(ul);
       kids.push(sec);
