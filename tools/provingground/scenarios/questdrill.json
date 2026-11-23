@@ -701,7 +701,7 @@
     },
     {
      "kind": "log_line",
-     "pattern": "^Entered Lut Gholein",
+     "pattern": "^Entered Kurast Docks",
      "min": 1,
      "why": "the hero stands in the Act 2 town"
     },
@@ -1869,6 +1869,670 @@
     {
      "kind": "log_line",
      "pattern": "^Entered Lut Gholein",
+     "min": 1,
+     "why": "the hero stands in the Act 2 town"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act3.lam_esen",
+   "title": "Quest drill: Lam Esen's Tome (Kurast Bazaar altar, Alkor hand-in)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "lam_esen",
+    "chunk": "tome"
+   },
+   "step": {
+    "action": "talk",
+    "target": "Alkor",
+    "nodes": [
+     "tome"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.lam_esen.tome"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 75,
+    "level": 28,
+    "gold": 6000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 90
+     },
+     {
+      "stat": 2,
+      "value": 60
+     },
+     {
+      "stat": 7,
+      "value": 307200
+     },
+     {
+      "stat": 6,
+      "value": 307200
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "tome"
+    ]
+   },
+   "budget": {
+    "virtual_min": 60
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: Act 3 start in the Kurast Docks by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 17,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Kurast Docks",
+     "min": 1,
+     "why": "the hero stands in the Act 2 town"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act3.blade",
+   "title": "Quest drill: Blade of the Old Religion (Gidbinn in the Flayer Jungle, Ormus hand-in)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "blade_old_religion",
+    "chunk": "gidbinn"
+   },
+   "step": {
+    "action": "talk",
+    "target": "Ormus",
+    "nodes": [
+     "gidbinn"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.blade_old_religion.gidbinn"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 75,
+    "level": 28,
+    "gold": 6000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 90
+     },
+     {
+      "stat": 2,
+      "value": 60
+     },
+     {
+      "stat": 7,
+      "value": 307200
+     },
+     {
+      "stat": 6,
+      "value": 307200
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "gidbinn"
+    ]
+   },
+   "budget": {
+    "virtual_min": 60
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: Act 3 start in the Kurast Docks by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 19,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Kurast Docks",
+     "min": 1,
+     "why": "the hero stands in the Act 2 town"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act3.golden_bird",
+   "title": "Quest drill: The Golden Bird (Jade Figurine, Alkor)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "golden_bird",
+    "chunk": "bird"
+   },
+   "step": {
+    "action": "talk",
+    "target": "Alkor",
+    "nodes": [
+     "bird"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.golden_bird.bird"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 75,
+    "level": 28,
+    "gold": 6000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 90
+     },
+     {
+      "stat": 2,
+      "value": 60
+     },
+     {
+      "stat": 7,
+      "value": 307200
+     },
+     {
+      "stat": 6,
+      "value": 307200
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "bird"
+    ]
+   },
+   "budget": {
+    "virtual_min": 60
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: Act 3 start in the Kurast Docks by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 20,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Kurast Docks",
+     "min": 1,
+     "why": "the hero stands in the Act 2 town"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act3.council",
+   "title": "Quest drill: The Blackened Temple (Travincal council)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "blackened_temple",
+    "chunk": "council"
+   },
+   "step": {
+    "action": "talk",
+    "target": "Council",
+    "nodes": [
+     "council"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.blackened_temple.council"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 75,
+    "level": 28,
+    "gold": 6000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 90
+     },
+     {
+      "stat": 2,
+      "value": 60
+     },
+     {
+      "stat": 7,
+      "value": 307200
+     },
+     {
+      "stat": 6,
+      "value": 307200
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "council"
+    ]
+   },
+   "budget": {
+    "virtual_min": 90
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: Act 3 start in the Kurast Docks by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 21,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Kurast Docks",
      "min": 1,
      "why": "the hero stands in the Act 2 town"
     },
