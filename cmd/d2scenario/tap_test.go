@@ -262,3 +262,41 @@ func TestTapperPressesTheRowsButton(t *testing.T) {
 		t.Fatalf("tap %q", tap)
 	}
 }
+
+// necro drill (blocker 2): "*" taps every quest of the board in its own order, the row's own button, one chunk at a time, and
+// logs why each skipped chunk is not startable once per change. A list taps only the named quests.
+func TestTapperCampaignDriver(t *testing.T) {
+	b := &board{}
+	srv := httptest.NewServer(b.handler(t))
+	defer srv.Close()
+	var log strings.Builder
+	tp := newTapper(srv.URL, srv.URL, "tok", "*", nil, &log)
+	ctx := context.Background()
+	b.set(`{"quests":[{"id":"den_of_evil","chunks":[{"id":"clear_den","state":"offered","action":{"verb":"start","label":"Start"}}]},
+	 {"id":"sisters_burial_grounds","chunks":[{"id":"blood_raven","state":"locked","readiness":"too hard","why":"clvl 14 of 16","action":{"verb":"start","disabled":true}}]}]}`)
+	if tap, _, _ := tp.Step(ctx); tap != "start clear_den" {
+		t.Fatalf("first tap %q", tap)
+	}
+	if tap, _, _ := tp.Step(ctx); tap != "start clear_den" { // still offered: the fake does not change state
+		t.Fatalf("second tap %q", tap)
+	}
+	b.set(`{"running":{"quest":"den_of_evil","chunk":"clear_den"},"quests":[{"id":"sisters_burial_grounds","chunks":[{"id":"blood_raven","state":"locked","readiness":"too hard","why":"clvl 14 of 16","action":{"verb":"start","disabled":true}}]}]}`)
+	b.set(`{"quests":[{"id":"sisters_burial_grounds","chunks":[{"id":"blood_raven","state":"locked","readiness":"too hard","why":"clvl 14 of 16","action":{"verb":"start","disabled":true}}]}]}`)
+	for i := 0; i < 3; i++ {
+		if tap, _, _ := tp.Step(ctx); tap != "" {
+			t.Fatalf("a disabled button must not be tapped: %q", tap)
+		}
+	}
+	if n := strings.Count(log.String(), "not startable sisters_burial_grounds/blood_raven"); n != 1 {
+		t.Fatalf("the reason is logged once per change, got %d:\n%s", n, log.String())
+	}
+	// A named list leaves the other quests alone (a stage of a campaign).
+	b2 := &board{}
+	srv2 := httptest.NewServer(b2.handler(t))
+	defer srv2.Close()
+	tl := newTapper(srv2.URL, srv2.URL, "tok", "search_for_cain,den_of_evil", nil, io.Discard)
+	b2.set(`{"quests":[{"id":"sisters_burial_grounds","chunks":[{"id":"blood_raven","state":"offered","action":{"verb":"start"}}]}]}`)
+	if tap, _, _ := tl.Step(ctx); tap != "" {
+		t.Fatalf("a quest outside the list was tapped: %q", tap)
+	}
+}

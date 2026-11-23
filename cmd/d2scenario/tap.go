@@ -27,7 +27,7 @@ type tapper struct {
 	Taps                       []string  // "start scroll", "handin read" in order
 	TapsAt                     []float64 // the bot's virtual second of each tap (RunVirtual); 0 for a wall-clock run
 	vnow                       float64
-	lastWhy                    string // the last "not startable" line written, so a long wait logs each change once
+	lastWhy                    map[string]string // per chunk, the last "not startable" line written: a long wait logs each change once
 }
 
 func newTapper(view, answer, token, quest string, chunks []string, log io.Writer) *tapper {
@@ -65,6 +65,20 @@ type boardView struct {
 			} `json:"action"`
 		}
 	} `json:"quests"`
+}
+
+// wants says whether the tapper plays this quest: quest is one id, a comma list in board order, or "*" for every quest of the
+// board (a campaign driver: Start on each startable chunk, in the board's own order, until the budget ends).
+func (t *tapper) wants(id string) bool {
+	if t.quest == "*" {
+		return true
+	}
+	for _, q := range strings.Split(t.quest, ",") {
+		if strings.TrimSpace(q) == id {
+			return true
+		}
+	}
+	return false
 }
 
 func (t *tapper) allowed(chunk string) bool { return len(t.chunks) == 0 || t.chunks[chunk] }
@@ -105,14 +119,14 @@ func (t *tapper) Step(ctx context.Context) (tap string, blocked bool, err error)
 	if err != nil {
 		return "", false, err
 	}
-	if v.Blocked != nil && v.Blocked.Quest == t.quest {
+	if v.Blocked != nil && t.quest != "*" && !strings.Contains(t.quest, ",") && v.Blocked.Quest == t.quest {
 		return "", true, nil
 	}
 	// The tap is the button the row renders: the server's `action` of the part (internal/questboard/desk_action.go), the same
 	// one the web panel draws, so a part that shows no button is never tapped and a missing button fails the scenario.
 	if v.HandIn == nil || v.Running == nil && v.Awaiting == nil {
 		for _, q := range v.Quests {
-			if q.ID != t.quest {
+			if !t.wants(q.ID) {
 				continue
 			}
 			for _, c := range q.Chunks {
@@ -124,7 +138,7 @@ func (t *tapper) Step(ctx context.Context) (tap string, blocked bool, err error)
 					continue
 				}
 				tap = a.Verb + " " + c.ID
-				fmt.Fprintf(t.log, "%s tap %s: %s\n", time.Now().Format("15:04:05"), tap, t.post(ctx, "/api/quests/"+t.quest+"/"+a.Verb, c.ID))
+				fmt.Fprintf(t.log, "%s tap %s: %s\n", time.Now().Format("15:04:05"), tap, t.post(ctx, "/api/quests/"+q.ID+"/"+a.Verb, c.ID))
 				break
 			}
 			if tap != "" {
@@ -145,7 +159,7 @@ func (t *tapper) Step(ctx context.Context) (tap string, blocked bool, err error)
 // change: a quest that is never offered must say why in the taps log (card andariel1; before it the log stayed silent).
 func (t *tapper) logWhyNot(v boardView) {
 	for _, q := range v.Quests {
-		if q.ID != t.quest {
+		if !t.wants(q.ID) {
 			continue
 		}
 		for _, c := range q.Chunks {
@@ -153,8 +167,11 @@ func (t *tapper) logWhyNot(v boardView) {
 				continue
 			}
 			line := fmt.Sprintf("not startable %s/%s: state %s readiness %q why %q", q.ID, c.ID, c.State, c.Readiness, c.Why)
-			if line != t.lastWhy {
-				t.lastWhy = line
+			if key := q.ID + "/" + c.ID; line != t.lastWhy[key] {
+				if t.lastWhy == nil {
+					t.lastWhy = map[string]string{}
+				}
+				t.lastWhy[key] = line
 				fmt.Fprintf(t.log, "%s %s\n", time.Now().Format("15:04:05"), line)
 			}
 		}

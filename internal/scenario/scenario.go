@@ -158,7 +158,8 @@ type Trigger struct {
 	// Driver plays the part of the person: "" (none) or "board-taps", which runs the bot like the friend sandbox does
 	// (--ladder --watch, the quest board is built) and taps Start and Hand in on the board of Quest (V docs/probes/cainl3/poll.py).
 	Driver string `json:"driver,omitempty"`
-	// TapQuest names the quest whose board is tapped; empty means the scenario's own quest (a behaviour scenario names it).
+	// TapQuest names the quest whose board is tapped; empty means the scenario's own quest (a behaviour scenario names it). A comma
+	// list taps those quests in board order, "*" every quest of the board (a campaign stage; the budget bounds the stage).
 	TapQuest string `json:"tap_quest,omitempty"`
 	// TapChunks limits the taps to these chunks of the scenario's quest (empty: every chunk, a whole chain).
 	TapChunks []string `json:"tap_chunks,omitempty"`

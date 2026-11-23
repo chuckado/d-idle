@@ -1,17 +1,18 @@
 ---
 id: TASK-825
 title: 'buildcards: Build tab as cards from the catalogue (review E6)'
-status: Proposed
-result: "Verified offline, not live: Go tests (cards for Paladin, Sorceress, Necromancer, unknown class, detail 404), node DOM golden and sheet tests, fit pages builds-list and builds-detail at 390x844 and 1366x768 on the worker host, pictures in docs/ui/build-cards. Build tab = cards from the catalogue with variants behind them, one confirm sheet, Choose disabled with Auto-allocation is off when the knob is off (default unchanged). The sheet has no picture. Build-specific data lives in plandata build-catalog.json."
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T23:48:00Z'
+updated_date: '2026-11-23T00:24:00Z'
 labels:
   - watch
   - feature
 dependencies: []
 priority: medium
 ordinal: 377000
+result: "Verified offline, not live: Go tests (cards for Paladin, Sorceress, Necromancer, unknown class, detail 404), node DOM golden and sheet tests, fit pages builds-list and builds-detail at 390x844 and 1366x768 on the worker host, pictures in docs/ui/build-cards. Build tab = cards from the catalogue with variants behind them, one confirm sheet, Choose disabled with Auto-allocation is off when the knob is off (default unchanged). The sheet has no picture. Build-specific data lives in plandata build-catalog.json."
 card: "buildcards"
 owns:
   - "internal/points/buildcards.go"

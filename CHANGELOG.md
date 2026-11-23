@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into tapall <!--sg:agent/navexit-->
 - Merge branch 'main' into buildcards <!--sg:agent/buildcards-->
 - necrodrill: Necromancer earned Act 1 drill verdict (BLOCKED) <!--sg:agent/necrodrill-->
 - uinav2: uilint (token, element selectors) <!--sg:agent/uinav2-->
