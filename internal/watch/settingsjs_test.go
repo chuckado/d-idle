@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -118,5 +119,70 @@ func TestSettingsLinksLootRules(t *testing.T) {
 	}
 	if !strings.Contains(string(mustReadFS(t, "web/settings.js")), "/watch?live=1&lootrules=1") {
 		t.Error("settings.js has no link to the Loot rules sheet")
+	}
+}
+
+// The keyboard walk (card uikeys): Tab order, wrap, Shift+Tab, native controls, Escape and focus back on the Settings and More sheets;
+// and no positive tabindex anywhere in the viewer's pages and scripts (the order is the document order).
+func TestKeyboardWalk(t *testing.T) {
+	node, err := exec.LookPath("node")
+	if err != nil {
+		t.Skip("no node")
+	}
+	dir := t.TempDir()
+	for src, dst := range map[string]string{"web/sheet.js": "sheet.cjs", "web/toast.js": "toast.cjs", "web/settings.js": "settings.cjs", "web/nav.js": "nav.cjs", "web/nav.json": "nav.json"} {
+		os.WriteFile(filepath.Join(dir, dst), mustReadFS(t, src), 0o600)
+	}
+	for _, f := range []string{"nav_dom.cjs", "keywalk_test.cjs"} {
+		os.WriteFile(filepath.Join(dir, f), mustRead(t, "testdata/"+f), 0o600)
+	}
+	out, err := exec.Command(node, filepath.Join(dir, "keywalk_test.cjs"), dir).CombinedOutput()
+	if err != nil {
+		t.Fatalf("node: %v\n%s", err, out)
+	}
+	var res struct{ Fails []string }
+	if err := json.Unmarshal(out[strings.Index(string(out), "{"):], &res); err != nil {
+		t.Fatalf("%v\n%s", err, out)
+	}
+	for _, f := range res.Fails {
+		t.Error(f)
+	}
+}
+
+func TestNoPositiveTabindex(t *testing.T) {
+	bad := regexp.MustCompile(`tabindex="[1-9]|tabIndex\s*=\s*[1-9]|tabindex', '[1-9]`)
+	for _, dirGlob := range []string{"web/*.js", "web/panels/*/*.js", "web/*.html", "*.go"} {
+		files, _ := filepath.Glob(dirGlob)
+		for _, f := range files {
+			if strings.HasSuffix(f, "_test.go") {
+				continue
+			}
+			b, _ := os.ReadFile(f)
+			if m := bad.Find(b); m != nil {
+				t.Errorf("%s sets a positive tabindex (%s): the tab order is the document order", f, m)
+			}
+		}
+	}
+}
+
+// Static pages: nothing but a native button, link or field carries an inline click handler or a role=button without tabindex (so Enter and
+// Space and Tab work without script): Return, Policy, Hall and the page templates.
+func TestStaticPagesUseNativeControls(t *testing.T) {
+	live, _ := webFS.ReadFile("web/watch.html")
+	vault, _ := webFS.ReadFile("web/vault.html")
+	chars, _ := webFS.ReadFile("web/characters.html")
+	pages := map[string]string{"live": string(live), "inventory": charPage, "skills": skillsPage, "points": pointsPage, "vault": string(vault), "characters": string(chars),
+		"return": string(RenderReturn(ReturnData{}, false)), "policy": string(RenderPolicy(PolicyView{})), "hall": string(RenderHall(&HallView{}))}
+	click := regexp.MustCompile(`(?i)<(div|span|li|p|td|section|article)\b[^>]*\bonclick=`)
+	role := regexp.MustCompile(`(?i)<(?:div|span|li|p)\b[^>]*role="button"[^>]*>`)
+	for name, src := range pages {
+		if m := click.FindString(src); m != "" {
+			t.Errorf("%s: a non-native element carries onclick: %s", name, m)
+		}
+		for _, m := range role.FindAllString(src, -1) {
+			if !strings.Contains(m, "tabindex") {
+				t.Errorf("%s: role=button without tabindex (not reachable by Tab): %s", name, m)
+			}
+		}
 	}
 }

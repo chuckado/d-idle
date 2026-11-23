@@ -628,12 +628,20 @@ export function navNow(win) {
 export function textScale(win) {
   // a box inside an ancestor that clips sideways at or inside the window is cut by it, not a cause of the page's sideways scroll
   const clippedWithin = (n) => { for (let p = n.parentElement; p && p !== win.document.body; p = p.parentElement) { const c = win.getComputedStyle(p), r = p.getBoundingClientRect(); if (/^(hidden|clip)$/.test(c.overflowX) && r.right <= win.innerWidth + 1) return true; } return false; };
-  const d = win.document, vw = win.innerWidth, se = d.scrollingElement, out = [], cut = [];
+  const d = win.document, vw = win.innerWidth, se = d.scrollingElement, out = [], cut = [], vcut = [];
   const nm = (n) => n.tagName.toLowerCase() + (n.dataset && n.dataset.key ? '[' + n.dataset.key + ']' : n.className && typeof n.className === 'string' ? '.' + n.className.trim().split(/\s+/)[0] : '') + ' "' + (n.textContent || n.getAttribute('aria-label') || '').trim().slice(0, 24) + '"';
   for (const n of d.querySelectorAll('button, a[href], input, select, textarea, [role=button]')) {
     const r = n.getBoundingClientRect(), c = win.getComputedStyle(n);
     if (!r.width || !r.height || c.visibility === 'hidden' || n.closest('[hidden]')) continue;
     if (r.right > vw + 1 && !n.closest('[data-hscroll], [data-vscroll]')) out.push(nm(n));
+    // vertical: a control cut by an ancestor that clips (overflow hidden) or by its own box: the larger text no longer fits its fixed height
+    for (let p = n.parentElement; p && p !== d.documentElement; p = p.parentElement) {
+      const pc = win.getComputedStyle(p);
+      if (!/^(hidden|clip)$/.test(pc.overflowY) || p.hasAttribute('data-vscroll') || p.hasAttribute('data-hscroll')) continue;
+      const pr = p.getBoundingClientRect();
+      if (pr.height && (r.bottom > pr.bottom + 1 || r.top < pr.top - 1)) { vcut.push(nm(n) + ' is cut by ' + (p.className && typeof p.className === 'string' ? '.' + p.className.trim().split(/\s+/)[0] : p.tagName.toLowerCase())); break; }
+    }
+    if (/^(hidden|clip)$/.test(c.overflowY) && n.scrollHeight > n.clientHeight + 1 && c.display !== 'inline') vcut.push(nm(n) + ' [' + n.scrollHeight + '/' + n.clientHeight + '] is taller than its box');
     const clips = /^(hidden|clip)$/.test(c.overflowX) && c.textOverflow !== 'ellipsis';
     if (clips && n.scrollWidth > n.clientWidth + 1) cut.push(nm(n) + ' [' + n.scrollWidth + '/' + n.clientWidth + ']');
   }
@@ -643,5 +651,5 @@ export function textScale(win) {
       .sort((a, b) => b.getBoundingClientRect().right - a.getBoundingClientRect().right).slice(0, 4);
     for (const n of wide.reverse()) out.unshift('box ' + nm(n) + ' ends at ' + Math.round(n.getBoundingClientRect().right));
   }
-  return { scrollW: se.scrollWidth, vw: vw, outside: out.slice(0, 8), clipped: cut.slice(0, 6) };
+  return { scrollW: se.scrollWidth, vw: vw, outside: out.slice(0, 8), clipped: cut.slice(0, 6), vcut: vcut.slice(0, 6) };
 }

@@ -17,8 +17,8 @@
     return e;
   }
   // the controls Tab may land on inside the sheet (a real DOM or the node test's stub)
-  const focusables = (sh) => (sh.querySelectorAll ? [...sh.querySelectorAll('button:not([disabled]),input:not([disabled])')]
-    : sh.all().filter((n) => !n.disabled && (n.tag === 'button' || n.tag === 'input')));
+  const focusables = (sh) => (sh.querySelectorAll ? [...sh.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href]')]
+    : sh.all().filter((n) => !n.disabled && (n.tag === 'button' || n.tag === 'input' || n.tag === 'select' || n.tag === 'textarea' || (n.tag === 'a' && n.href))));
 
   function open(doc, o) {
     const id = 'd-sheet-' + (++seq);
