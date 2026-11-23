@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"d2lod-bot/internal/env"
 )
 
 type facts map[int]map[string]Fact
@@ -460,6 +462,24 @@ func TestSummonerFloorIsTwentyEight(t *testing.T) {
 		floor, ok, err := b.Floor(q, class)
 		if err != nil || !ok || floor < 28 {
 			t.Errorf("%s: floor %d ok %v err %v", class, floor, ok, err)
+		}
+	}
+}
+
+// The Barracks floor of Tools of the Trade lives in the board data (legacyFloor, like the Summoner's) and in the task
+// gate's knobs (route.barracks*): one test keeps the two equal for the melee and the caster family (d2-sme 2026-11-23,
+// EXP: Paladin clvl 24 to 26, Necromancer 22 to 24).
+func TestBarracksFloorMatchesTheGateKnobs(t *testing.T) {
+	b := mustBoard(t)
+	q, err := b.Quest("tools_of_the_trade")
+	if err != nil {
+		t.Fatal(err)
+	}
+	rt := env.DefaultRouteTuning()
+	for class, want := range map[string]int{"Paladin": rt.BarracksMinLevel, "Sorceress": rt.BarracksMinLevelCaster, "Necromancer": rt.BarracksMinLevelCaster} {
+		floor, ok, err := b.Floor(q, class)
+		if err != nil || !ok || floor != want {
+			t.Errorf("%s: board floor %d ok %v err %v, gate knob %d", class, floor, ok, err, want)
 		}
 	}
 }
