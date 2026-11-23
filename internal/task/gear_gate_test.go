@@ -92,3 +92,41 @@ func TestGatedCharacterDoesNotStartToolsQuest(t *testing.T) {
 		t.Fatalf("healthy character never talked: %v", healthy.Log)
 	}
 }
+
+// The Horadric Malus comes from a click on the Malus stand, not from the Smith's death (V fork code and lab 2026-11-23): the
+// chunk kills the Smith, clicks the stand, picks the Malus up, and only then hands it in. A melee hero (imbue useful) and a
+// caster (no imbue use: the Smith still dies and the stand is still clicked when the chunk runs). Must fail while the step is
+// a bare pick-up (the stand click never happens and the pick-up finds nothing).
+func TestMalusComesFromTheStand(t *testing.T) {
+	for _, tc := range []struct {
+		name  string
+		melee bool
+	}{{"paladin", true}, {"necromancer", false}} {
+		g := sim.New(true)
+		g.SetLevel(28)
+		g.XPStep = 0
+		g.W.Potions, g.W.HasTP, g.W.InTown, g.W.Caster = 10, true, true, !tc.melee
+		g.W.ImbueUseful = tc.melee
+		g.W.RouteMinLevel, g.W.RouteMinLevelMerc = 0, 0
+		g.MarkDone(task.QDen)
+		ex := task.NewExecutor(g, g)
+		c := task.NormalAct1(task.Act1Options{SkipTower: true})
+		for i := 0; i < 60; i++ {
+			if _, err := ex.Tick(context.Background(), c); err != nil {
+				t.Fatal(err)
+			}
+		}
+		idx := func(prefix string) int {
+			for i, l := range g.Log {
+				if strings.HasPrefix(l, prefix) {
+					return i
+				}
+			}
+			return -1
+		}
+		kill, stand, pick := idx("kill:The Smith"), idx("interact:Malus stand"), idx("pickup:Horadric Malus")
+		if kill < 0 || stand < kill || pick < stand {
+			t.Errorf("%s: kill %d, stand %d, pick-up %d (log %v)", tc.name, kill, stand, pick, g.Log)
+		}
+	}
+}

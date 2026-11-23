@@ -278,7 +278,9 @@ cmd/d2bot/mercwire_test.go  credit-runner  mercrevive2
 cmd/d2bot/objects.go  credit-runner  botstuck
 cmd/d2bot/objects.go  credit-runner  cain5b
 cmd/d2bot/objects.go  credit-runner  cainfix
+cmd/d2bot/objects.go  credit-runner  toolstrade34
 cmd/d2bot/objects.go  live-agent  k1layout
+cmd/d2bot/objects_layout_test.go  credit-runner  toolstrade34
 cmd/d2bot/objects_layout_test.go  live-agent  k1layout
 cmd/d2bot/objects_test.go  credit-runner  cainfix
 cmd/d2bot/ops*.go  credit-runner  opsquest
@@ -675,6 +677,7 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade25
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade27
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade29
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade30
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade34
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
 docs/probes/town-plan-scenarios.md  credit-runner  town1
@@ -961,6 +964,7 @@ internal/bot/beltfill_test.go  credit-runner  toolstrade17
 internal/bot/beltfill_test.go  credit-runner  toolstrade29
 internal/bot/broke.go  credit-runner  survrecover
 internal/bot/broke.go  credit-runner  town5
+internal/bot/campsim_objects_test.go  credit-runner  toolstrade34
 internal/bot/catalog.go  credit-runner  botcpu2
 internal/bot/contracts.go  credit-runner  chores2
 internal/bot/contracts.go  credit-runner  goldprio
@@ -1601,6 +1605,7 @@ internal/power/skilldamage_test.go  credit-runner  agencyp0
 internal/power/skilldamage_test.go  credit-runner  qdmatrix
 internal/quest/act1.go  credit-runner  cainfix
 internal/quest/dialog.go  credit-runner  cain5b
+internal/quest/dialog.go  credit-runner  toolstrade34
 internal/questboard  credit-runner  boardorder
 internal/questboard  credit-runner  boardprereq
 internal/questboard  credit-runner  cainfix
@@ -1724,6 +1729,7 @@ internal/task/act1.go  credit-runner  cain5b
 internal/task/act1.go  credit-runner  cainchain
 internal/task/act1.go  credit-runner  equipswap
 internal/task/act1.go  credit-runner  quests7b
+internal/task/act1.go  credit-runner  toolstrade34
 internal/task/act2.go  credit-runner  equipswap
 internal/task/act2.go  credit-runner  qdmatrix
 internal/task/act2.go  credit-runner  quests7b
@@ -1748,6 +1754,7 @@ internal/task/gate.go  credit-runner  chores2
 internal/task/gate.go  credit-runner  toolstrade16
 internal/task/gate.go  credit-runner  toolstrade29
 internal/task/gate_hold_test.go  credit-runner  bsm7
+internal/task/gear_gate_test.go  credit-runner  toolstrade34
 internal/task/guided.go  credit-runner  campaign1
 internal/task/guided_test.go  credit-runner  campaign1
 internal/task/guided_test.go  pro-runner  levelplan3
@@ -1760,6 +1767,8 @@ internal/task/route_test.go  credit-runner  toolstrade16
 internal/task/route_test.go  credit-runner  toolstrade30
 internal/task/route_test.go  credit-runner  toolstrade5
 internal/task/s7b_test.go  credit-runner  quests7b
+internal/task/sim/sim.go  credit-runner  toolstrade34
+internal/task/steps.go  credit-runner  toolstrade34
 internal/task/testdata  credit-runner  quests7b
 internal/task/testdata/plans/act1.txt  credit-runner  cain5b
 internal/task/timeoutpolicy_test.go  credit-runner  wpstep

@@ -70,6 +70,19 @@ func StepPickUp(id, item string, done Pred, ready Pred) Step {
 		Do:   func(ctx context.Context, x Actions) error { return x.PickUp(ctx, item) }}
 }
 
+// StepStandPickUp clicks the stand an item drops from (the Malus stand) and picks the item up: done only when the item is in
+// the pack. A click that a crowd interrupts is repeated by the adapter (the stand's mode must change) and by the executor.
+func StepStandPickUp(id, stand, item string, done, ready Pred) Step {
+	return Step{ID: id, Title: "Pick up " + item + " from the " + stand, Phase: "fight", Budget: 3 * time.Minute, Est: 40 * time.Second,
+		Need: needIf(func(w World) bool { return done(w) || w.Items[item] > 0 }, ready),
+		Do: func(ctx context.Context, x Actions) error {
+			if err := x.Interact(ctx, stand); err != nil {
+				return err
+			}
+			return x.PickUp(ctx, item)
+		}}
+}
+
 // StepInteract clicks an object (tree, cage, stones).
 func StepInteract(id, title, object string, done, ready Pred) Step {
 	return Step{ID: id, Title: title, Phase: "fight", Budget: 3 * time.Minute, Est: 60 * time.Second,

@@ -285,7 +285,11 @@ func toolsNodes() []Node {
 		{Step: StepWaypoint(id(q, "wp-cold-plains"), ColdPlains, cleared)},
 		{Step: withReady(StepTravel(id(q, "to-barracks"), "Go to the Barracks", Barracks, cleared), lvl)},
 		req(Node{Step: StepKill(id(q, "kill"), BossSmith, Barracks, func(w World) bool { return w.Killed[BossSmith] || cleared(w) }, 8*time.Minute)}, id(q, "to-barracks")),
-		{Step: optional(StepPickUp(id(q, "malus"), ItemMalus, stageAtLeast(q, StageDone), func(w World) bool { return w.Killed[BossSmith] }))},
+		// The Malus drops from a click on the Malus stand of the Smith's room (object 108), not from the Smith (V fork code and lab,
+		// 2026-11-23: a kill by the hero or a golem gives ordinary loot only). One step clicks the stand and picks the Malus up;
+		// it stays optional as before (without a quest word reader nothing tells "handed in" after the hand-in empties the pack, and a
+		// required step would click the stand for ever); Charsi's imbue talk needs hdm in the pack anyway.
+		{Step: optional(StepStandPickUp(id(q, "malus"), "Malus stand", ItemMalus, stageAtLeast(q, StageDone), func(w World) bool { return w.Killed[BossSmith] }))},
 		{Step: StepTravel(id(q, "home"), "Return to camp", RogueEncampment, not(turnIn(q)))},
 		{Step: StepTalk(id(q, "reward"), "Give the Malus to Charsi", NPCCharsi, "imbue:best", not(turnIn(q)), nil)},
 	}
