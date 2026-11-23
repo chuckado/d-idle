@@ -146,3 +146,27 @@ The earned Act 1 drill is still NOT green for the Necromancer: Den to Blood Rave
 After the three fixes and one fixture change, `necro.act1-stage1` (Necromancer 11, clvl 16 fixture, tap list Den then Blood Raven, sandbox nav knobs, CHEATED setup) is GREEN for the 90 virtual minutes: record 1 bit 0 (Den reward taken) and record 2 bit 0 (Blood Raven) set, no death, `writes after start: 0`.
 The open cause of section 11 was the fixture's belt: with four healing potions and no mana potion the kit gate sent the hero to town (`kit: mana potions 0/3`) the moment the Den was cleared, while the Hand in tap was landing, and the Akara talk paid no skill point. With one mana potion in the belt (as in `act1.den.clear`) there is no trip and the hand-in is paid. That is a real interaction (a town trip between the clear and the hand-in loses the reward for the run) which a played Necromancer can meet: card `den hand-in after a town trip` (U whether the board retries the hand-in after the trip; here it parked after three tries).
 Staged drill status: stage 1 GREEN, stage 2 (Countess) GREEN, Tools of the Trade not live, stage 3 (Andariel) unrun. Still not ready to play: a whole act has not been run, and every stage here starts from a CHEATED fixture.
+
+## 13. Stages 1 to 3 on current main (night of 2026-11-23, builder long lane, lab d2d devp20, sandbox nav knobs `nav.warpRead` 1 and `nav.fullGrid` 1; ALL setups CHEATED: level, gold, potions, worn items, merc, waypoints by SETUP verbs, field or town start as declared)
+
+| stage | scenario | verdict | what it shows |
+|---|---|---|---|
+| 1 | `necro.act1-stage1` (clvl 16, Den then Blood Raven, tap list) | GREEN (job 20261123-041955-81fd) | Den reward and Blood Raven record set, no death, writes after start 0 |
+| 2 | `act1.forgotten.countess` with `-class Necromancer` (clvl 24) | GREEN (job 20261123-011245-cb7e) | record 5 bit 0 |
+| 2b | `necro.act1-tools` (clvl 28, merc, wand and light armor, `quests.layoutRead` 1) | RED (job 20261123-060356-7538) | with the Tools fix in the tree the Necromancer walks Rogue Encampment, Cold Plains, ... Monastery Gate, Outer Cloister, Barracks through the doors (`nav: door used` x 9), reads the Smith's spawn (23,57), reaches (52,55), and the boss run ends `attack failed 5 times: combat: gave up on the target`; the chunk parks after 3 tries; record 3 stays 0x000c. Before the Tools merge in the tree (job 20261123-055757-afa6): `goto anchor: nav: no path: reached the closest reachable point {63 204} to {23 57}` |
+| 3 | `necro.act1-andariel` (clvl 26, merc, antidotes, `boss.andarielHold` 0, `quests.layoutRead` 1) | GREEN (job 20261123-055502-d15d, 421 s) but the assertion is the milestone only (`Entered Outer Cloister`, no death), not the kill. With the hold on (`boss.andarielHold` default) the chunk stays held ("throwaway fight has not won yet", job 20261123-045906); without antidotes it parks on `0 antidotes < 2` (job 20261123-051442) |
+
+### What the stages did not show
+- No stage ran an uncheated fresh hero beyond the first hours (the fresh drill of section 2 reached clvl 14 and the Den in 400 virtual minutes).
+- Andariel was never killed; Tools of the Trade was never completed; Cain was not run.
+- The bot's own save point and the 60-minute limit of detached jobs keep each stage short; stages restart from fixtures.
+
+### Ready to play? NO.
+A Necromancer run from Rogue Encampment to Andariel has not been shown, only separate CHEATED stages, two of them red or milestone-only. Ranked blockers:
+1. Boss attacks by a summoner (stage 2b): `Fighter.Kill` on a unique boss ends `attack failed 5 times: combat: gave up on the target` for the SME summoner build (U: it has no learned attack skill early, Teeth and Bone Spear come late; the army kills trash but the boss loop wants the hero's own cast). Card `necro boss kill: the army fights, the hero keeps casting upkeep and curses` (owner combat/boss).
+2. The Smith spawn is reached only at (52,55) of (23,57) (U: a door or pocket still shut; toolstrade round notes).
+3. Hand-in after a town trip (section 12): the kit gate can send the hero to town between the Den clear and the hand-in, and the reward is lost for the run.
+4. The Andariel chunk needs the `boss.andarielHold` throwaway fight and 2 antidotes: both gates are right for a played hero, but no staged run satisfies them honestly yet.
+5. Return leg from the Barracks to the Outer Cloister crossing an unproven strip is fixed and unit-tested on the real map (this card) but not shown in a scenario.
+6. Pace and mana (sections 2 and 5): the unattended Necromancer is mana-potion hungry and slow to level.
+Next cards: 1, 3, then a stage-4 scenario `Andariel kill` with the hold on and the antidotes bought by the bot.
