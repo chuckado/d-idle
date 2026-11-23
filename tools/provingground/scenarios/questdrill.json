@@ -751,7 +751,7 @@
    "pre": {
     "start": "field",
     "area": 40,
-    "level": 22,
+    "level": 30,
     "gold": 6000,
     "waypoints": [
      1,
@@ -835,7 +835,7 @@
     "merc_level": 20
    },
    "trigger": {
-    "goals": "reach:30",
+    "goals": "reach:45",
     "knobs": {
      "quests.board": 1,
      "resource.pointsDecisions": 1,
@@ -1364,7 +1364,7 @@
     "merc_level": 20
    },
    "trigger": {
-    "goals": "reach:30",
+    "goals": "reach:45",
     "knobs": {
      "quests.board": 1,
      "resource.pointsDecisions": 1,
@@ -1548,7 +1548,7 @@
     "merc_level": 20
    },
    "trigger": {
-    "goals": "reach:30",
+    "goals": "reach:45",
     "knobs": {
      "quests.board": 1,
      "resource.pointsDecisions": 1,
