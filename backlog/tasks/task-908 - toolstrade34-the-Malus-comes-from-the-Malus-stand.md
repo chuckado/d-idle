@@ -14,6 +14,7 @@ ordinal: 413000
 card: "toolstrade34"
 owns:
   - "internal/task/act1.go"
+  - "internal/bot/campsim_objects_test.go"
   - "internal/task/steps.go"
   - "internal/task/sim/sim.go"
   - "internal/task/gear_gate_test.go"
