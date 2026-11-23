@@ -1552,6 +1552,133 @@
      "kind": "no_writes"
     }
    ]
+  },
+  {
+   "id": "drill.act2.radament.handin",
+   "title": "Quest drill: Radament killed (word 0x001e), the board offers the hand-in to Atma in Lut Gholein",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "radament",
+    "chunk": "radament"
+   },
+   "step": {
+    "action": "kill",
+    "target": "Radament",
+    "nodes": [
+     "talk_atma",
+     "travel_sewers",
+     "kill_radament",
+     "use_book",
+     "return_atma"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.radament.radament"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 40,
+    "level": 24,
+    "gold": 6000,
+    "waypoints": [
+     1,
+     9,
+     10
+    ],
+    "quests": [
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 9,
+      "word": 30
+     }
+    ],
+    "items": [
+     {
+      "code": "hp1",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ],
+    "merc": 0
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "radament"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: Act 2 start, Radament record 9 set to 0x001e (killed, reward pending) by a SETUP verb, level and gold. Mechanics of the board hand-in only.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 9,
+     "set": 1,
+     "why": "the Atma hand-in sets the done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Lut Gholein",
+     "min": 1,
+     "why": "the hero stands in the Act 2 town"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
   }
  ]
 }
