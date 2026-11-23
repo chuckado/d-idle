@@ -170,3 +170,19 @@ A Necromancer run from Rogue Encampment to Andariel has not been shown, only sep
 5. Return leg from the Barracks to the Outer Cloister crossing an unproven strip is fixed and unit-tested on the real map (this card) but not shown in a scenario.
 6. Pace and mana (sections 2 and 5): the unattended Necromancer is mana-potion hungry and slow to level.
 Next cards: 1, 3, then a stage-4 scenario `Andariel kill` with the hold on and the antidotes bought by the bot.
+
+## 14. Reruns after the Smith/crowd fix (#1215) and the door approach (#1204), and the hand-in hold (card handin; 2026-11-23 afternoon, builder long lane, lab d2d devp20, sandbox nav knobs, CHEATED setups)
+
+| run | verdict | what it shows |
+|---|---|---|
+| `necro.act1-tools` (job 20261123-154454-3b8e) | RED, but further than ever | the Necromancer's army KILLED The Smith (`boss run killed: true`, 18 s), then `quest item [Horadric Malus] not picked up; retrying once; quest item still missing`; the chunk parks 3 min later on `to-barracks: not ready: route guard: kit (1 mana potions < 2 (caster))`; record 3 stays 0x000c. The earlier hypothesis that a summoner cannot kill a boss without its own attack skill is WRONG for this boss: the army did it |
+| `necro.den-l16` (same job) | GREEN | Den alone at clvl 16, SME build |
+| `necro.act1-stage1-nomp` (new, job 20261123-155622-a226) | GREEN (520 s) | stage 1 with no mana potion in the belt, the fixture that was RED in job 20261123-035544-7536 (memory word 0x2016 at the clear, then a kit trip by portal, then 0x0004 and no reward). With the reward hold the trip waits, the board walks home and the hand-in pays |
+
+### The hand-in loss, corrected (V)
+In the failing run the word 0x0004 after the trip was read from LIVE MEMORY (`memory quest words`), not from the save: the earlier reading in section 13 was wrong on that point. So the pending reward is lost game-side when the hero leaves the Den by town portal right after the clear (U why: the d2d quest hook); the bot cannot prefer another read. Fix (card handin): a non-emergency restock trip waits while the live quest reader lists a quest as cleared with its reward pending (`holdTripForReward`, at most 2 virtual minutes, then the trip goes anyway); unit test `TestHoldTripForReward`. Baseline on main without the hold (job 20261123-161058-9a44, same scenario): BLOCKED, the bot run was cut before its virtual budget (not judged), so the pair is GREEN with the hold against not green without it (the cut is the stuck-after-failed-hand-in pattern; U that it is the same stall).
+
+### Still open for stage 2b
+1. Malus pickup after the Smith dies (`quest item not picked up`): owner toolstrade; the item may drop out of the pickup radius or under the crowd (U).
+2. The kit gate against a caster: `1 mana potions < 2 (caster)` parks the chunk after it was nearly done; the route guard wants 2 mana potions for the Barracks road while the shop plan wants 3 and the hero had spent them in the fight.
+Not ready to play. Stage 3 (Andariel kill) was not attempted: stage 2b is not green.

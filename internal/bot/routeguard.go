@@ -52,6 +52,10 @@ func (r *Runner) fillRoute(w *task.World, class d2.Class, p *d2.Player) {
 // and the guard falls back to the old floor (route.towerMinLevelNoLife) and says so in its log line.
 func (r *Runner) fillTower(w *task.World, rt env.RouteTuning, class d2.Class, p *d2.Player) {
 	w.TowerMinLife, w.TowerMinLevelNoLife = rt.TowerMinLife, rt.TowerMinLevelNoLife
+	w.BarracksMinLevel, w.BarracksMinLife = rt.BarracksMinLevel, rt.BarracksMinLife
+	if class.Caster() {
+		w.BarracksMinLevel, w.BarracksMinLife = rt.BarracksMinLevelCaster, rt.BarracksMinLifeCaster
+	}
 	if p != nil {
 		w.MaxLife = p.MaxLife
 	}

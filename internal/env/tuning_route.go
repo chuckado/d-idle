@@ -15,18 +15,22 @@ type CampaignTuning struct {
 
 // RouteTuning holds the route guard knob (internal/task/route.go).
 type RouteTuning struct {
-	MonasteryMinLevel     int // clvl that opens the Monastery road (Tamoe Highland to the Catacombs) without a living merc; 0 = guard off
-	MonasteryMinLevelMerc int // same with a living merc; 0 = a living merc opens the road at any level (the old rule)
-	TowerMinLevel         int // clvl that opens the Forgotten Tower (areas 20-25, Countess) without a living merc; 0 = guard off
-	TowerMinLevelMerc     int // same with a living merc (used while TowerNeedsMerc is 0)
-	TowerNeedsMerc        int // 1: a living merc opens the tower at any level (the old rule); 0: a living merc only lowers the floor to TowerMinLevelMerc
-	TowerMinLife          int // max life the tower needs without a living merc; 0 = no life rule (then TowerMinLevel alone)
-	TowerMinLevelNoLife   int // no-merc clvl floor while max life is unreadable (the pre-life rule)
-	TowerKitMana          int // mana potions the tower kit wants for a class with a mana column in the belt plan
-	FreshGapSec           int // min seconds between two fresh-game restarts while the last one gained under FreshMinXP; 0 = no gap
-	FreshMaxNoGain        int // fresh-game restarts in a row without FreshMinXP gained before the blocked state; 0 = bound off
-	FreshMinXP            int // experience a cycle must gain to count as progress and reset the no-gain count
-	FreshBlockedSec       int // seconds between restart probes once FreshMaxNoGain was reached (the blocked state waits in town)
+	MonasteryMinLevel      int // clvl that opens the Monastery road (Tamoe Highland to the Catacombs) without a living merc; 0 = guard off
+	MonasteryMinLevelMerc  int // same with a living merc; 0 = a living merc opens the road at any level (the old rule)
+	TowerMinLevel          int // clvl that opens the Forgotten Tower (areas 20-25, Countess) without a living merc; 0 = guard off
+	TowerMinLevelMerc      int // same with a living merc (used while TowerNeedsMerc is 0)
+	TowerNeedsMerc         int // 1: a living merc opens the tower at any level (the old rule); 0: a living merc only lowers the floor to TowerMinLevelMerc
+	TowerMinLife           int // max life the tower needs without a living merc; 0 = no life rule (then TowerMinLevel alone)
+	TowerMinLevelNoLife    int // no-merc clvl floor while max life is unreadable (the pre-life rule)
+	TowerKitMana           int // mana potions the tower kit wants for a class with a mana column in the belt plan
+	BarracksMinLevel       int // clvl the Barracks (Tools of the Trade, the Smith) needs for a melee class; 0 = no Barracks floor
+	BarracksMinLevelCaster int // same for a caster class
+	BarracksMinLife        int // max life the Barracks needs for a melee class (0 = no life rule)
+	BarracksMinLifeCaster  int // same for a caster class
+	FreshGapSec            int // min seconds between two fresh-game restarts while the last one gained under FreshMinXP; 0 = no gap
+	FreshMaxNoGain         int // fresh-game restarts in a row without FreshMinXP gained before the blocked state; 0 = bound off
+	FreshMinXP             int // experience a cycle must gain to count as progress and reset the no-gain count
+	FreshBlockedSec        int // seconds between restart probes once FreshMaxNoGain was reached (the blocked state waits in town)
 }
 
 func DefaultCampaignTuning() CampaignTuning {
@@ -36,6 +40,7 @@ func DefaultCampaignTuning() CampaignTuning {
 func DefaultRouteTuning() RouteTuning {
 	return RouteTuning{MonasteryMinLevel: 14, MonasteryMinLevelMerc: 14, TowerMinLevel: 15, TowerMinLevelMerc: 14, TowerNeedsMerc: 0,
 		TowerMinLife: 150, TowerMinLevelNoLife: 16, TowerKitMana: 3,
+		BarracksMinLevel: 24, BarracksMinLevelCaster: 22, BarracksMinLife: 400, BarracksMinLifeCaster: 300,
 		FreshGapSec: 600, FreshMaxNoGain: 3, FreshMinXP: 200, FreshBlockedSec: 1800}
 }
 
@@ -71,6 +76,14 @@ func routeKnobs() []Knob {
 			Desc: "Mana potions the Forgotten Tower kit wants for a class that uses mana every attack (Sorceress, Necromancer, Druid; resource.ManaNeed 2). A melee build such as the Barbarian is not asked. U: SME number."},
 		{Key: "route.towerNeedsMerc", Label: "Tower: a merc opens it at any level", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
 			Desc: "0: a living mercenary only lowers the Forgotten Tower floor to route.towerMinLevelMerc (an unknown merc counts as none). 1: a living merc opens the tower at any level (the old rule)."},
+		{Key: "route.barracksMinLevel", Label: "Barracks level floor (melee)", Unit: "levels", Default: 24, Min: 0, Max: 60, HigherIsBetter: true, NoHandicap: true,
+			Desc: "The Tools of the Trade chunk (the Smith in the Barracks) is not started below this clvl for a melee class; the board shows 'level N needed' and the hero levels instead. Live and lab 2026-11-23: a clvl 20 Paladin with 279 life lost 150 to 250 life in the first seconds of the arrival (Plague Fester, Ice Fang, Sin Kill, four Champion Black Rogues, 19 to 35 more) and never reached the Smith. d2-sme ballpark (EXP, not looked up): clvl 24 to 26 with 400 life. 0 = no floor."},
+		{Key: "route.barracksMinLevelCaster", Label: "Barracks level floor (caster)", Unit: "levels", Default: 22, Min: 0, Max: 60, HigherIsBetter: true, NoHandicap: true,
+			Desc: "The same floor for a caster class (Sorceress, Necromancer, Druid): d2-sme ballpark clvl 22 to 24 with 300 life and a crowd answer (summons or Poison Nova), EXP. 0 = no floor."},
+		{Key: "route.barracksMinLife", Label: "Barracks max life floor (melee)", Unit: "life", Default: 400, Min: 0, Max: 3000, HigherIsBetter: true, NoHandicap: true,
+			Desc: "Max life a melee class needs besides the level (unspent stat points do not count: the allocator or the player must spend them). While max life is unreadable (0) only the level counts. 0 = no life rule."},
+		{Key: "route.barracksMinLifeCaster", Label: "Barracks max life floor (caster)", Unit: "life", Default: 300, Min: 0, Max: 3000, HigherIsBetter: true, NoHandicap: true,
+			Desc: "The same max life floor for a caster class. 0 = no life rule."},
 		{Key: "route.freshGapSec", Label: "Fresh game: min gap after a no-gain restart", Unit: "s", Default: 600, Min: 0, Max: 7200, HigherIsBetter: true, NoHandicap: true,
 			Desc: "When every leveling area is cleared or blocked the bot starts a fresh game. If the previous fresh game gained under route.freshMinXP the next restart waits until this many seconds have passed (in town, log: leveling: fresh game held back). Gate 2 rerun seed 13 (clvl 15) restarted 75 times in 4 h with no XP. 0 = no gap."},
 		{Key: "route.freshMaxNoGain", Label: "Fresh game: no-gain restarts before blocked", Unit: "restarts", Default: 3, Min: 0, Max: 50, HigherIsBetter: true, NoHandicap: true,

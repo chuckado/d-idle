@@ -107,7 +107,13 @@ run_quest() {
           cooldown) $sleeper "$backoff"; continue ;;
           busy) log "  busy: another chunk runs, looking for it"; $sleeper "$backoff"; continue ;;
           rate_limited) log "  rate limited, waiting ${tries_backoff}s"; $sleeper "$tries_backoff"; continue ;;
-          not_ready|locked|unavailable) log "- skipped: refused ($ocode)"; return 3 ;;
+          # a hold on the hero's strength (the readiness gate: "level N needed", too_weak, needs_potions) is waiting, not a failed
+          # try: the hero levels or restocks meanwhile, and the start is asked again after the back-off
+          too_weak|needs_potions|needs_gold_farm) log "  held ($ocode): waiting ${tries_backoff}s"; $sleeper "$tries_backoff"; continue ;;
+          not_ready) if printf '%s' "$out" | grep -q -E 'level [0-9]+ needed|max life [0-9]+ needed|Too hard'; then
+                       log "  held (too weak): waiting ${tries_backoff}s"; $sleeper "$tries_backoff"; continue; fi
+                     log "- skipped: refused ($ocode)"; return 3 ;;
+          locked|unavailable) log "- skipped: refused ($ocode)"; return 3 ;;
         esac
         try=$((try + 1)); $sleeper "$backoff"
         if [ $try -gt $tries ]; then log "  tries used up, backing off ${tries_backoff}s and going on"; $sleeper "$tries_backoff"; try=1; fi

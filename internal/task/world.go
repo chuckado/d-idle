@@ -174,6 +174,9 @@ type World struct {
 	// floor of the tower; TowerMinLevelNoLife the clvl floor used instead while MaxLife is unreadable; TowerKitMana the
 	// mana potions the tower kit wants (0 = the road's count for a Caster); the bot sets it for a mana-column class only.
 	MaxLife, TowerMinLife, TowerMinLevelNoLife, TowerKitMana int
+	// BarracksMinLevel and BarracksMinLife are the class's floors for the Tools of the Trade chunk (route.barracks*, the bot
+	// fills the melee or the caster pair); 0 = no rule.
+	BarracksMinLevel, BarracksMinLife int
 	// DenMinLevel is the Normal clvl floor of Den of Evil for this class (caster or melee knob, bot fills it); 0 = no class floor.
 	DenMinLevel int
 

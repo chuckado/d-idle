@@ -367,3 +367,25 @@ func TestBoardYieldOncePerChunk(t *testing.T) {
 		})
 	}
 }
+
+// Stage 1 of the Necromancer drill: a restock trip by portal right after the Den clear lost the reward. A pending reward holds a
+// non-emergency restock trip for at most rewardHoldMax; nothing pending, nothing held.
+func TestHoldTripForReward(t *testing.T) {
+	t0 := time.Date(2026, 11, 23, 12, 0, 0, 0, time.UTC)
+	if hold, since := holdTripForReward(false, time.Time{}, t0); hold || !since.IsZero() {
+		t.Fatalf("no reward pending: hold %v since %v", hold, since)
+	}
+	hold, since := holdTripForReward(true, time.Time{}, t0)
+	if !hold || !since.Equal(t0) {
+		t.Fatalf("first sight must hold: %v %v", hold, since)
+	}
+	if hold, _ := holdTripForReward(true, since, t0.Add(rewardHoldMax-time.Second)); !hold {
+		t.Fatal("must still hold inside the bound")
+	}
+	if hold, _ := holdTripForReward(true, since, t0.Add(rewardHoldMax)); hold {
+		t.Fatal("a reward nobody takes must not block the restock for good")
+	}
+	if hold, since := holdTripForReward(false, since, t0.Add(time.Hour)); hold || !since.IsZero() {
+		t.Fatal("the hold resets when the reward is taken")
+	}
+}

@@ -440,9 +440,9 @@
     "hell": 5
    },
    "legacyFloor": {
-    "melee": 12,
-    "caster": 14,
-    "summoner": 15
+    "melee": 24,
+    "caster": 22,
+    "summoner": 22
    }
   },
   {

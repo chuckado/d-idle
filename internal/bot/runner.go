@@ -303,6 +303,7 @@ type loopState struct {
 	beltFillNext    time.Time      // no belt fill attempt before this
 	diffBan         map[string]time.Time
 	forceTrip       bool
+	rewardSince     time.Time   // when a restock trip first waited for a pending quest reward (holdTripForReward)
 	healFails       int         // failed heal attempts while below the resume line; reset when life is back above it
 	portalRetried   bool        // the cancelled-cast retry was used since the last arrival in town (portalretry.go)
 	noPortalSince   time.Time   // first heal-trip failure for lack of a town portal in this stretch (noPortalLeave)

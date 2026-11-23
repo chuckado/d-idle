@@ -15,6 +15,7 @@ import (
 	"d2lod-bot/internal/repair"
 	"d2lod-bot/internal/resource"
 	"d2lod-bot/internal/supply"
+	"d2lod-bot/internal/task"
 	"d2lod-bot/internal/town"
 )
 
@@ -299,7 +300,53 @@ func (r *Runner) needChores(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool)
 	if ok && emergency && r.townLatched(s) {
 		return plan, emergency, false
 	}
+	if ok && !emergency && restockReason(plan.Reason) {
+		pend := r.questRewardPending()
+		hold, since := holdTripForReward(pend, r.loop.rewardSince, r.e.Clock.Now())
+		r.loop.rewardSince = since
+		if hold {
+			r.e.Log.Info("restock trip held: a quest reward is pending, the board walks home first", "reason", plan.Reason)
+			return plan, false, false
+		}
+	}
 	return plan, emergency, ok
+}
+
+// rewardHoldMax bounds how long a restock trip waits for a pending quest reward (virtual clock).
+const rewardHoldMax = 2 * time.Minute
+
+// holdTripForReward says whether a non-emergency restock trip waits because a quest is cleared with its reward still to be
+// taken, and the time the hold began. Leaving by town portal right after a clear loses the Den reward in the lab (stage 1
+// of the Necromancer drill 2026-11-23: memory word 0x2016 at the clear, 0x0004 after the portal trip, Akara paid no skill
+// point); the board's own return step walks home and the chores follow it. Bounded, so a reward nobody takes never blocks
+// the restock.
+func holdTripForReward(pending bool, since, now time.Time) (hold bool, newSince time.Time) {
+	if !pending {
+		return false, time.Time{}
+	}
+	if since.IsZero() {
+		since = now
+	}
+	return now.Sub(since) < rewardHoldMax, since
+}
+
+// questRewardPending reports whether the live quest reader lists a quest as cleared with its reward not yet taken.
+func (r *Runner) questRewardPending() bool {
+	td := r.d.Task
+	s := r.latest()
+	if td == nil || td.Quests == nil || !td.QuestsLive || s == nil || s.Player == nil {
+		return false
+	}
+	v, ok := td.Quests.Read(int(s.Player.Difficulty))
+	if !ok {
+		return false
+	}
+	for _, st := range v.Quests {
+		if st.Stage == task.StageCleared {
+			return true
+		}
+	}
+	return false
 }
 
 // rebuyDue sends a naked character that has earned the gold (resource.GearGate CanRebuy) to town for the poverty rebuy:

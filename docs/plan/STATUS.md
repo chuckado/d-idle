@@ -465,6 +465,7 @@
 | toolstrade27 | proposed | - | `internal/nav/route.go`<br>`internal/nav/gatedoor_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
+| handin | proposed | - | `internal/bot/goal.go`<br>`internal/bot/runner.go`<br>`internal/bot/questboard_test.go`<br>`tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
@@ -494,14 +495,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 9ee8e56e5 11-23 16:21 `Merge agent/handin: Merge branch 'main' into handin` (handin)
+- 888cea997 11-23 16:19 `Merge branch 'main' into handin` (-)
+- caa1d8621 11-23 16:09 `Merge agent/toolstrade28: toolstrade28: board floor of the Barracks in the same data as the Summoner's, one test` (toolstrade28)
+- 23ef66a46 11-23 16:04 `Merge remote-tracking branch 'origin/main' into agent/toolstrade28` (-)
 - 129194737 11-23 15:57 `Merge agent/qd13: Merge branch 'main' into qdmatrix` (qd13)
 - 3c6e0f8c8 11-23 15:56 `Merge branch 'main' into qdmatrix` (-)
 - 6c2360b29 11-23 15:49 `Merge agent/toolstrade27: toolstrade27: town portal crossings are no map edges, Barracks numbers` (toolstrade27)
 - fd1bcdfbc 11-23 12:07 `Merge agent/routes3: routes3: delete unused GET /api/bestiary, /api/atlas, /api/unlocks (user approved 2026-11-23); engine kept, guard test added` (routes3)
 - 6cbe0947f 11-23 11:54 `Merge agent/e11a2: E11a2: needs-you list grows, alerts badge opens Settings Alerts, real page-scroll must-fail fixture, guards for stream layout and senses_units.js` (e11a2)
 - 431248e24 11-23 11:16 `Merge agent/e11a: Merge branch 'main' into e11a` (e11a)
-- 263094f14 11-23 11:15 `Merge branch 'main' into e11a` (-)
-- 5edb915f2 11-23 10:09 `Merge agent/adrs: ADR 0030 operator quest control; ADR 0029 amended for vault sell credit` (adrs)
-- b3d332cd2 11-23 08:25 `Merge agent/toolstrade26: Merge branch 'main' into toolstrade26` (toolstrade26)
-- 12b103845 11-23 08:24 `Merge branch 'main' into toolstrade26` (-)
 <!-- statusgen:end -->
