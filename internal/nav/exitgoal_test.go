@@ -49,3 +49,36 @@ func TestExitWalkIsAWalkWithAGoal(t *testing.T) {
 		})
 	}
 }
+
+// After the rewrite cap the click of a walk with a goal goes through when it stays outside the core (the Sewers case: the
+// rewrites shuttled the hero, then the cap held every click for good); without a goal the cap still holds.
+func TestRewriteCapDoesNotHoldAWalkWithAGoalOutsideTheCore(t *testing.T) {
+	back := d2map.Exit{Dest: 47, Pos: d2map.Point{X: 255, Y: 125}}
+	for _, c := range []struct {
+		class string
+		start input.Point
+	}{{"Paladin", input.Point{X: 264, Y: 137}}, {"Sorceress", input.Point{X: 263, Y: 138}}} {
+		s, n := newKnown(t, openField(100, 0, 220, 200), c.start, true)
+		o, err := n.observe()
+		if err != nil {
+			t.Fatal(err)
+		}
+		o.lm.Exits = []d2map.Exit{back}
+		n.stayLevel = o.level
+		click := input.Point{X: 259, Y: 138}
+		n.gateRewrites = gateMaxRewrites
+		if err := n.in.ClickWorld(click); err == nil {
+			t.Fatalf("%s: without a goal the capped gate must hold", c.class)
+		}
+		n.goal, n.goalSet = input.Point{X: 135, Y: 25}, true
+		s.clicks = nil
+		n.gateRewrites = gateMaxRewrites
+		if err := n.in.ClickWorld(click); err != nil || len(s.clicks) != 1 {
+			t.Fatalf("%s: the capped gate held a click with a goal beyond: %v %v", c.class, err, s.clicks)
+		}
+		n.gateRewrites = gateMaxRewrites
+		if err := n.in.ClickWorld(input.Point{X: 256, Y: 129}); err == nil {
+			t.Fatalf("%s: a click inside the core went through", c.class)
+		}
+	}
+}
