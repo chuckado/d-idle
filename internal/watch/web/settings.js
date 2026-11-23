@@ -1,12 +1,12 @@
 // The Settings sheet (card uisettings, review docs/design/fable-review-2026-11-22/ui-unification.md C2/E10): the two controls that used
 // to live only on the pre-shell page, in the shared sheet component (sheet.js): 'Rules' (revoke one learned rule or all of them:
 // GET /api/rules, POST /api/revoke and /api/revoke-all on the answer route) and 'Alerts' (sound on a new alert, desktop notifications:
-// the same device settings alerts.js keeps). More (nav.js) opens it on every page. Every control has a visible label; a control that is
+// the device settings alerts-feed.js reads). More (nav.js) opens it on every page. Every control has a visible label; a control that is
 // off names why in a visible line beside it (why.js). Text goes through textContent only.
 // Classic script: window.dSettings, or module.exports for the node test (internal/watch/testdata/settings_test.cjs).
 (function (g) {
   'use strict';
-  const SOUND_KEY = 'd2lod.alerts.sound'; // the key alerts.js of the old page reads: one setting for both pages
+  const SOUND_KEY = 'd2lod.alerts.sound'; // the key alerts-feed.js reads
 
   function mk(doc, tag, cls, text) {
     const e = doc.createElement(tag);

@@ -57,11 +57,6 @@
     .d-band-grid > .d-panel[data-size="m"] { grid-column: span 7; }
   }
 
-  /* the strips above the main area (voice line, message banner, the phone tabs of the pre-shell cards) */
-  .d-strips { display: grid; gap: var(--d-sp-2); padding-inline: var(--d-gap); }
-  .d-strips:not(:has(> :not([hidden]))) { display: none; }
-  @media (min-width: 56.25rem) { .d-strips:not(:has(> :not([hidden], .views))) { display: none; } }
-
   /* layout manifest (section 6.4, shell.js applyLayout): every panel and pre-shell card is a cell of one 12-column
      grid at the position the layout names. data-layout="grid" (laptop and wider): fixed rows of --l-rowh that grow
      with their content, so nothing is clipped. data-layout="flow" (phone, tablet): the column span and the order

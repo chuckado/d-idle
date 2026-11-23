@@ -670,7 +670,6 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	}
 	if f.Unlocks != nil {
 		m.Handle(UnlocksRoute, f.Unlocks.Handler())
-		m.Handle(UnlockUIRoute, unlockUIHandler())
 	}
 	if f.Chronicle != nil {
 		m.Handle(ChronicleRoute, f.Chronicle.Handler())
@@ -707,7 +706,6 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	}
 	if f.Alerts != nil {
 		m.Handle(AlertsRoute, f.Alerts.Handler())
-		m.Handle(AlertsUIRoute, alertsUIHandler())
 	}
 	if f.Hall != nil {
 		hh := f.Hall.Handler()

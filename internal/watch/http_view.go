@@ -70,8 +70,6 @@ func (h *Hub) ViewHandler() http.Handler {
 		case "/watch/video", "/watch/game":
 			// The video used to be the "Game" tab; it now sits at the top of /watch. Old links land there, token kept.
 			http.Redirect(w, r, "/watch"+queryOf(r), http.StatusFound)
-		case "/watch/app.js":
-			asset("app.js", "text/javascript; charset=utf-8")(w, r)
 		case "/watch/characters": // the Characters page (docs/charselect-ui.md); the script and the texts are plain assets
 			asset("characters.html", "text/html; charset=utf-8")(w, r)
 		case "/watch/nav.json": // the one list of destinations, drawn by nav.js on every page
@@ -82,10 +80,8 @@ func (h *Hub) ViewHandler() http.Handler {
 			asset(strings.TrimPrefix(r.URL.Path, "/watch/"), "text/css; charset=utf-8")(w, r)
 		case "/watch/shell.js", "/watch/resetui.js", "/watch/pauseui.js", "/watch/supportui.js", "/watch/lootrulesui.js", "/watch/overlay.js", "/watch/characters.js", "/watch/layout.js", "/watch/layoutedit.js", "/watch/mjpeg.js", "/watch/palfeed.js", "/watch/streamstats.js", "/watch/nav.js", "/watch/sheet.js", "/watch/toast.js", "/watch/settings.js", "/watch/alerts-feed.js":
 			asset(strings.TrimPrefix(r.URL.Path, "/watch/"), "text/javascript; charset=utf-8")(w, r)
-		case "/watch/layouts/mockup.json", "/watch/layouts/live.json", "/watch/layouts/command.json",
-			"/watch/layouts/classic.json", "/watch/layouts/simple.json", "/watch/layouts/standard.json", "/watch/layouts/stream.json", "/watch/layouts/debug.json", "/watch/layouts/cockpit.json":
-			// the editor's three presets and the four redesign ones (classic is the pre-redesign default), for ?layout=<name>
-			// and the "..." menu (the screenshot suite renders them)
+		case "/watch/layouts/stream.json", "/watch/layouts/cockpit.json":
+			// the two layouts left (E11a removed the other presets), for ?layout=<name> and the "..." menu
 			asset(strings.TrimPrefix(r.URL.Path, "/watch/"), "application/json; charset=utf-8")(w, r)
 		default:
 			if !servePanels(w, r, asset) {

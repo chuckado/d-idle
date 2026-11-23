@@ -1,5 +1,5 @@
 /* Compatibility CSS of the pre-shell watch screen (docs/ui-design-system.md section 10): the old names map onto the
-   design tokens (tokens.css), so the old cards follow the dark default and the theme switch. Shrinks panel by panel. */
+   design tokens (tokens.css), so the old cards follow the dark default and the theme switch. Only what the cockpit panels and the Return and Policy pages still use stays (E11a). */
 @layer shell {
 :root {
   --bg: var(--d-bg); --surface: var(--d-surface-1); --surface2: var(--d-surface-2); --line: var(--d-line);
@@ -40,62 +40,13 @@ select, input[type=number] { background: var(--surface); border: 1px solid var(-
 input[type=number] { width: 5rem; }
 .banner { margin: 12px 16px 0; padding: 10px 14px; border-radius: var(--radius); background: var(--surface2); border: 1px solid var(--warn); color: var(--bad); font-weight: 600; }
 
-.views { display: flex; gap: var(--d-sp-1); overflow-x: auto; border-bottom: 1px solid var(--line); }
-.views button { background: transparent; border: 0; border-radius: 0; border-bottom: 2px solid transparent; padding: var(--d-sp-1) var(--d-sp-3); white-space: nowrap; min-height: 44px; color: var(--muted); }
-.views button[aria-current="page"] { border-bottom-color: var(--accent); font-weight: 650; color: var(--text); }
 
-main { display: grid; gap: 16px; padding: 16px; max-width: 1280px; margin: 0 auto; grid-template-columns: 1fr; }
-@media (max-width: 899px) { main [data-v] { display: none; } main[data-view="thoughts"] .thoughts, main[data-view="orders"] .o-now, main[data-view="orders"] .o-map, main[data-view="orders"] .o-queue, main[data-view="rules"] .rules, main[data-view="journal"] .journal, main[data-view="journal"] .silhouettes, main[data-view="chronicle"] .chronicle, main[data-view="diary"] .diary, main[data-view="quests"] .quests { display: block; } main[data-view="spend"] .spend { display: block; } }
-main .spend[hidden] { display: none !important; }
-@media (min-width: 900px) { .views { display: none; } }
-/* The pre-shell cards are cells of the shell's grid band (docs/ui-design-system.md section 15): the compatibility
-   wrapper and the old main dissolve, each card takes one column or two like the mockup, in the mockup's order. */
-.d-compat, .d-compat > main { display: contents; }
-.d-compat > :not(main) { grid-column: 1 / -1; }
-.d-compat > main > .card { grid-column: span 1; }
-.d-compat > main > :is(.o-now, .o-map, .thoughts, .rules, .journal, .chronicle, .alerts) { grid-column: span min(2, var(--d-cols)); }
-.d-compat > main > .spend { grid-column: 1 / -1; }
-@media (min-width: 56.25rem) {
-  .d-compat > main > .card { grid-column: span 5; }
-  .d-compat > main > :is(.o-now, .o-map, .thoughts, .rules, .journal, .chronicle, .alerts) { grid-column: span 7; }
-  .d-compat > main > .spend { grid-column: 1 / -1; }
-}
-.d-compat > main > .o-now { order: 10; } .d-compat > main > .o-queue { order: 12; } .d-compat > main > .o-map { order: 14; }
-.d-compat > main > .thoughts { order: 20; } .d-compat > main > .spend { order: 40; } .d-compat > main > .chronicle { order: 50; }
-.d-compat > main > .diary { order: 52; } .d-compat > main > .journal { order: 60; } .d-compat > main > .quests { order: 70; }
-.d-compat > main > .bestiary { order: 72; } .d-compat > main > .atlas { order: 73; }
-.d-compat > main > .alerts { order: 90; } .d-compat > main > .rules { order: 92; } .d-compat > main > .silhouettes { order: 95; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--d-r-3); padding: var(--d-pad); min-width: 0; }
 .card-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-3); margin-bottom: var(--d-sp-2); }
 .card-head h2 { margin: 0 auto 0 0; }
 
-.thought { border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: var(--d-r-2); padding: var(--d-sp-3); margin-bottom: var(--d-sp-2); background: var(--surface); }
-.thought.confirm { border-color: var(--warn); }
-.thought.fading { opacity: .6; }
-.thought .q { font-weight: 600; overflow-wrap: anywhere; }
-.thought .ctx, .thought .meanwhile { color: var(--muted); font-size: .85rem; margin-top: 3px; }
-.thought .urg { color: var(--warn); font-size: .85rem; font-weight: 650; margin-top: 3px; }
-.thought .ask { font-size: .85rem; margin-top: 3px; }
-.thought .ifnothing { font-size: .88rem; margin-top: 6px; padding: 5px 8px; background: var(--surface2); border-radius: 6px; }
-.thought .rulenote { display: block; margin: 0 0 8px; font-size: .75rem; overflow-wrap: anywhere; }
-.choices { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
-.choices .btn { display: flex; flex-direction: column; align-items: flex-start; text-align: left; flex: 1 1 11rem; max-width: 100%; }
-.choices .btn .lbl { font-weight: 600; }
-.choices .btn .does { font-size: .78rem; color: var(--muted); }
-.choices .btn.primary .does { color: inherit; opacity: .85; }
-.bar { height: 6px; background: var(--surface2); border-radius: var(--d-r-round); overflow: hidden; border: 1px solid var(--line); }
-.bar > i { display: block; height: 100%; background: var(--accent); border-radius: 4px; transition: width .4s ease; }
-.thought .left { font-size: .8rem; }
 
-.log-list { list-style: none; margin: 0; padding: 0; font-size: var(--d-fs-1); }
-.log-list li { padding: var(--d-row-pad) 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
-.log-list li:last-child { border-bottom: 0; }
-#journal { max-height: 420px; overflow: auto; }
 .t { color: var(--d-text-3); font: var(--d-fs-0) var(--d-font-num); font-variant-numeric: tabular-nums; margin-right: var(--d-sp-2); }
-.k-incident { color: var(--bad); } .k-idle, .k-story { color: var(--info); } .k-learned, .k-confirm-yes { color: var(--good); }
-.k-missed, .k-late { color: var(--warn); } .k-revoked, .k-revoked-all { color: var(--muted); }
-.rule.revoked .txt { text-decoration: line-through; opacity: .6; }
-.why { margin: 6px 0 4px 12px; padding: 6px 10px; background: var(--surface2); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; }
 a { color: var(--accent-text); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
@@ -117,78 +68,40 @@ svg.map { width: 100%; height: auto; max-height: 30rem; display: block; }
 .node text.st { font-size: 10.5px; fill: var(--muted); font-weight: 600; }
 .node:hover rect.b, .node:focus-visible rect.b { stroke: var(--focus); stroke-width: 3; }
 .node:focus { outline: none; }
-.maplist ul { list-style: none; margin: 0; padding: 0; }
-.maplist li { border-bottom: 1px solid var(--line); }
-.maplist button { width: 100%; text-align: left; background: none; border: 0; border-radius: 0; display: flex; justify-content: space-between; gap: 8px; align-items: center; }
 .maplist[hidden], svg.map[hidden], .scrim[hidden], .sheet[hidden] { display: none; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { border: 1px solid var(--line); background: var(--surface2); border-radius: var(--d-r-round); padding: var(--d-sp-1) var(--d-sp-3); }
 .chip[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 650; }
 .chip[aria-pressed="true"]::before { content: "\2713\00a0"; }
 .quick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.crumbs { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-size: .85rem; margin: 6px 0; }
 .crumbs .s { padding: 2px 8px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface2); }
 .crumbs .s.done { color: var(--good); border-color: var(--good); }
 .crumbs .s.now { border-color: var(--accent); font-weight: 700; }
-.warnbox { border: 2px solid var(--warn); border-left-width: 6px; border-radius: 8px; padding: 10px 12px; margin: 10px 0; background: var(--surface2); }
-.warnbox b { color: var(--warn); }
-.sub-h { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 0 6px; font-weight: 650; }
 .scrim { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 20; }
 .sheet { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-radius: 16px 16px 0 0; padding: 14px 16px 18px; max-height: 92vh; overflow: auto; z-index: 21; box-shadow: 0 -6px 24px rgba(0,0,0,.3); }
 @media (min-width: 900px) { .sheet { left: 50%; right: auto; width: 480px; bottom: auto; top: 50%; transform: translate(-50%, -50%); border-radius: var(--radius); } }
 .progress { margin: 6px 0; }
-.q-list { list-style: none; margin: 0; padding: 0; }
-.q-list li { display: flex; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); }
 .q-list .t2 { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .last { margin-top: 8px; padding: 6px 10px; background: var(--surface2); border-radius: 6px; font-size: .9rem; overflow-wrap: anywhere; }
 
 /* currency strip and spend sheet (docs/currency.md); hidden unless the bot runs in d.idle mode */
-.curstrip { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; font-size: .9rem; }
-.curstrip[hidden] { display: none; }
 .curstrip .cur { white-space: nowrap; }
 .curstrip .cur b { font-variant-numeric: tabular-nums; }
 .curstrip .off { color: var(--muted); }
 .tallystrip { font-size: .9rem; white-space: nowrap; }
 .tallystrip[hidden] { display: none; }
 .tallystrip .off { color: var(--muted); }
-.spendrow { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 8px 0; border-top: 1px solid var(--line); }
-.spendrow .sp-main { flex: 1 1 14rem; min-width: 0; }
-.spendrow .sp-name { font-weight: 600; }
-.spendrow .sp-effect, .spendrow .sp-why { font-size: .85rem; color: var(--muted); }
-.spendrow .sp-cost { font-variant-numeric: tabular-nums; white-space: nowrap; }
-.spendrow button:disabled { opacity: .55; cursor: not-allowed; }
 
 
 /* unlockable panels (docs/unlock-ladder.md): hidden until the ladder opens them; locked ones are silhouettes */
-main [data-v][hidden] { display: none !important; }
-.chron { max-height: 22rem; overflow-y: auto; }
-.chron li { font-family: Georgia, "Times New Roman", serif; }
-.chron li.kind-boss, .chron li.kind-death { font-weight: 600; }
-.chron li.kind-first { color: var(--accent-text); }
 .tape { margin: 6px 0 0; padding-left: 1.4rem; font-size: .88rem; }
-.silhouettes li { opacity: .65; border-style: dashed; }
-.silhouettes li b { letter-spacing: .08em; }
-.voicestrip { margin: 6px 12px; padding: 6px 10px; border-left: 3px solid var(--accent); background: var(--surface2); font-family: Georgia, "Times New Roman", serif; font-style: italic; }
-.voicestrip[hidden] { display: none; }
-.voicestrip q { quotes: "\201C" "\201D"; }
-.diary-list li b { display: block; font-style: normal; font-size: .8rem; color: var(--muted); }
 .quest-list li.done { opacity: .7; }
 .quest-list .qname { font-weight: 650; }
 .quest-list .qstate { margin-left: 6px; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent-text); }
 .quest-list .qwhy, .quest-list .qreward { display: block; color: var(--muted); font-size: .85rem; }
-.card-list li { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
-.card-list .cface { font-style: italic; color: var(--muted); }
 .card-list .q-magic { color: var(--q-magic); } .card-list .q-rare { color: var(--q-rare); } .card-list .q-set { color: var(--q-set); }
 .card-list .q-unique { color: var(--q-unique); } .card-list .q-crafted { color: var(--q-crafted); }
 
-/* alerts (TASK-162) */
-.alert-list .alert.alarm b { color: var(--bad); }
-/* foldable cards (unlockui.js): the title is the toggle, .folded keeps only the title row */
-h2.foldable { cursor: pointer; }
-h2.foldable::before { content: "\25BE "; color: var(--muted); }
-.card.folded h2.foldable::before { content: "\25B8 "; }
-.card.folded > :not(h2):not(.card-head) { display: none; }
-.card.folded .card-head > :not(h2) { display: none; }
 
 /* Gear condition strip (gear.js): wrapping chip list, never wider than its area. */
 #gearstrip { display: flex; flex-wrap: wrap; gap: .35rem .5rem; align-items: center; padding: .25rem .75rem; font-size: .85rem; max-width: 100%; min-width: 0; }
