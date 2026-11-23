@@ -39,6 +39,10 @@ The "143 at 390x844" quoted earlier came from `--fit --sizes 390x844`, which for
 | F6 | `overflow-fixture`, `overflow-nested`, `overflow-fakescroll`, `tall-frame` must fail, run at 390x844 | 3 (+ the same at the forced size) | FIXTURE ARTIFACT: desk-frame defects that cannot occur on the scrolling phone | those pages run at desk sizes only; test `TestDeskFixturesRunAtDeskSizes` | `fit-overflow-fakescroll-390x844` |
 | R4 | quest tile text cut (`Handing in ...`, 5 px) | 6 | REAL | line-height 1.25 on the two lines (`panels/quest-strip/panel.css`): fixed at 1280x620 to 1920x1080 except two sizes, see open | `fit-quest-handing-1366x768` |
 
+## Final full re-measure (main after cards uichars, uiloot, uifit3): 14 red of 2751 runs
+
+Red per size: 360x640 10 (all R5, the needs-you list), 390x844 2 and 1366x768 2 (a regression of mine: card uiloot's locked-build fixture removed the Choose button from the `builds-choose*` pages; fixed in card uifit4 by giving the locked hero only to the new page `builds-plan`), every other size 0. After uifit4 the open count is the 10 R5 runs.
+
 ## Closed by card uifit3
 
 | id | what | verdict | done |
