@@ -137,7 +137,9 @@ cmd/d2bot/adapters.go  credit-runner  cainfix3
 cmd/d2bot/adapters.go  credit-runner  chores2
 cmd/d2bot/adapters.go  credit-runner  goldprio
 cmd/d2bot/adapters.go  credit-runner  idfast
+cmd/d2bot/autoallocwire.go  credit-runner  allocfix
 cmd/d2bot/autoallocwire.go  credit-runner  necroready
+cmd/d2bot/autoallocwire_test.go  credit-runner  allocfix
 cmd/d2bot/autoallocwire_test.go  credit-runner  necroready
 cmd/d2bot/behaviors.go  credit-runner  agencyp0
 cmd/d2bot/behaviors.go  credit-runner  campaign1
@@ -425,6 +427,7 @@ docs/agency.md  credit-runner  hammer1
 docs/agency.md  credit-runner  necro1
 docs/aggression.md  credit-runner  wiring2
 docs/archive  credit-runner  dietarchive
+docs/autoalloc.md  credit-runner  allocfix
 docs/away-drill.md  live-agent  awaydrill
 docs/backlog-howto.md  credit-runner  dietrule
 docs/beltfix.md  credit-runner  beltfix
@@ -569,6 +572,7 @@ docs/plan/data/build-fallback-lightning-v2.json  credit-runner  sorc2
 docs/plan/data/build-fallback-lightning.json  credit-runner  sorc2
 docs/plan/data/build-necromancer_poison_nova_sme.json  credit-runner  necro3
 docs/plan/data/build-necromancer_summoner_guide.json  credit-runner  necro1
+docs/plan/data/build-necromancer_summoner_normal30.json  credit-runner  allocfix
 docs/plan/data/build-necromancer_summoner_sme.json  credit-runner  necro3
 docs/plan/data/build-paladin_hammerdin_guide.json  credit-runner  hammer1
 docs/plan/data/build-primary-blizzard.json  credit-runner  sorc2
@@ -578,6 +582,7 @@ docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/points.md  credit-runner  agencyp0
+docs/probes/autoalloc-necro-summoner-default-2026-11-23.md  credit-runner  allocprobe
 docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm7
 docs/probes/bot-cpu-2026-11-16.md  credit-runner  botcpu
 docs/probes/bot-cpu-fix-2026-11-16.md  credit-runner  botcpu2
@@ -630,7 +635,6 @@ docs/probes/test-characters.md  live-agent  cainl3
 docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
-docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade4
 docs/probes/town-plan-scenarios.md  credit-runner  town1
 docs/probes/town-plan-stage3-2026-11-22.md  credit-runner  town5
 docs/probes/tpreserve.md  live-agent  tpreserve-live
@@ -1415,17 +1419,14 @@ internal/nav/cpuprobe_test.go  credit-runner  botcpu
 internal/nav/exit.go  credit-runner  andariel1
 internal/nav/exit.go  credit-runner  pursuers
 internal/nav/exit.go  credit-runner  toolstrade
-internal/nav/exit.go  credit-runner  toolstrade4
 internal/nav/exit_test.go  credit-runner  andariel1
 internal/nav/exitsread_test.go  credit-runner  exitsread
 internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/fullgrid_test.go  credit-runner  knownedge
 internal/nav/gatedoor.go  credit-runner  toolstrade
-internal/nav/gatedoor.go  credit-runner  toolstrade4
 internal/nav/gatedoor_test.go  credit-runner  toolstrade
 internal/nav/gatedoor_test.go  credit-runner  toolstrade2
-internal/nav/gatedoor_test.go  credit-runner  toolstrade4
 internal/nav/hints_export.go  credit-runner  exitsread
 internal/nav/mouthgate.go  credit-runner  botstuck
 internal/nav/mouthgate.go  credit-runner  warptrigger
@@ -1458,6 +1459,7 @@ internal/plandata/build-fallback-lightning-v2.json  credit-runner  sorc2
 internal/plandata/build-fallback-lightning.json  credit-runner  sorc2
 internal/plandata/build-necromancer_poison_nova_sme.json  credit-runner  necro3
 internal/plandata/build-necromancer_summoner_guide.json  credit-runner  necro1
+internal/plandata/build-necromancer_summoner_normal30.json  credit-runner  allocfix
 internal/plandata/build-necromancer_summoner_sme.json  credit-runner  necro3
 internal/plandata/build-paladin_hammerdin_guide.json  credit-runner  hammer1
 internal/plandata/build-primary-blizzard.json  credit-runner  sorc2
@@ -1469,6 +1471,7 @@ internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
 internal/points  credit-runner  agencyp0
+internal/points  credit-runner  allocfix
 internal/power  credit-runner  dangerfit2
 internal/power  credit-runner  survsd
 internal/power/  credit-runner  dlv-cleanup
@@ -1805,6 +1808,7 @@ internal/watch/pausefix_test.go  credit-runner  pausefix
 internal/watch/pointsapi.go  credit-runner  agencyp0
 internal/watch/pointsapi_test.go  credit-runner  agencyp0
 internal/watch/pointsui.go  credit-runner  agencyp0
+internal/watch/pointsui.go  credit-runner  allocfix
 internal/watch/pointsui.go  credit-runner  uinav
 internal/watch/pointsui.go  credit-runner  uitoast
 internal/watch/pprofapi.go  credit-runner  botcpu2
@@ -1941,12 +1945,14 @@ internal/watch/testdata/vault_ether.mjs  credit-runner  uitoast
 internal/watch/testdata/vault_ether.mjs  credit-runner  vaultv7b
 internal/watch/testdata/vault_identall.mjs  credit-runner  uireason
 internal/watch/testdata/vault_identall.mjs  credit-runner  uitoast
+internal/watch/testdata/vault_logic.mjs  credit-runner  fitfix3
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultequip
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultpay
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultreveal
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultv4
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultv6
 internal/watch/testdata/vault_nav.mjs  credit-runner  uinav
+internal/watch/testdata/vault_reveal.mjs  credit-runner  fitfix2
 internal/watch/testdata/vault_reveal.mjs  credit-runner  uireason
 internal/watch/testdata/vault_reveal.mjs  credit-runner  uitoast
 internal/watch/testdata/vault_reveal.mjs  credit-runner  vaultclean
@@ -2162,6 +2168,7 @@ internal/watch/web/pauseui.js  credit-runner  pausefix
 internal/watch/web/pauseui.js  credit-runner  pausemenufit
 internal/watch/web/points.css  credit-runner  agencyp0
 internal/watch/web/points.js  credit-runner  agencyp0
+internal/watch/web/points.js  credit-runner  allocfix
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
@@ -2196,8 +2203,10 @@ internal/watch/web/toast.js  credit-runner  uitoast
 internal/watch/web/tokens.css  credit-runner  uis1
 internal/watch/web/tokens.css  credit-runner  uis7
 internal/watch/web/update.js  credit-runner  uis7
+internal/watch/web/utilities.css  credit-runner  fitfix2
 internal/watch/web/utilities.css  credit-runner  mapphone
 internal/watch/web/utilities.css  credit-runner  quests8
+internal/watch/web/vault-logic.js  credit-runner  fitfix3
 internal/watch/web/vault-logic.js  credit-runner  vaultclean
 internal/watch/web/vault-logic.js  credit-runner  vaultequip
 internal/watch/web/vault-logic.js  credit-runner  vaultfull
@@ -2221,6 +2230,7 @@ internal/watch/web/vault.html  credit-runner  uitoast
 internal/watch/web/vault.html  credit-runner  vaultclean
 internal/watch/web/vault.html  credit-runner  vaultv4
 internal/watch/web/vault.js  credit-runner  bulkid
+internal/watch/web/vault.js  credit-runner  fitfix2
 internal/watch/web/vault.js  credit-runner  uinav
 internal/watch/web/vault.js  credit-runner  uireason
 internal/watch/web/vault.js  credit-runner  uitoast
@@ -2351,6 +2361,7 @@ tools/provingground/scenarios/act1.json  credit-runner  countess2
 tools/provingground/scenarios/act1more.json  credit-runner  act1more
 tools/provingground/scenarios/act1more.json  credit-runner  andariel1
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade2
+tools/provingground/scenarios/autoalloc.json  credit-runner  allocfix
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/behaviours.json  credit-runner  vaultequip
 tools/provingground/scenarios/board.json  credit-runner  bsm1
@@ -2389,6 +2400,8 @@ tools/uilint/lint.go  credit-runner  uis6
 tools/uilint/lint.go  credit-runner  uitoast
 tools/uilint/uilint_test.go  credit-runner  uitoast
 tools/uishots  credit-runner  fitfix
+tools/uishots  credit-runner  fitfix2
+tools/uishots  credit-runner  fitfix3
 tools/uishots  credit-runner  gearsets
 tools/uishots  credit-runner  identifyall
 tools/uishots  credit-runner  lootwire3
@@ -2396,6 +2409,8 @@ tools/uishots  credit-runner  sellall
 tools/uishots  credit-runner  videoctl
 tools/uishots  credit-runner  videofeed4
 tools/uishots.sh  credit-runner  fitfix
+tools/uishots.sh  credit-runner  fitfix2
+tools/uishots.sh  credit-runner  fitfix3
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
 tools/uishots.sh  credit-runner  heavyguard

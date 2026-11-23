@@ -207,7 +207,31 @@
     "normal": 5,
     "hell": 4
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "paladin-normal30-v2",
+   "variants": [
+    {
+     "table": "paladin-normal30",
+     "label": "Leveling to level 30, earlier version",
+     "why": "The first plan we wrote for levels one to thirty."
+    },
+    {
+     "table": "paladin-normal30-v2",
+     "label": "Leveling to level 30",
+     "why": "The plan for the first thirty levels, the one new heroes follow."
+    },
+    {
+     "table": "paladin_hammerdin_guide",
+     "label": "Guide path",
+     "why": "Follows a written community guide."
+    },
+    {
+     "table": "paladin_hammerdin_endgame90",
+     "label": "Full plan to level 90",
+     "why": "The whole plan from level 30 up to level 90.",
+     "fromLevel": 30
+    }
+   ]
   },
   {
    "id": "paladin_zeal_start",
@@ -266,7 +290,21 @@
      "note": "Little upkeep"
     }
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "paladin-zealot-lite",
+   "variants": [
+    {
+     "table": "paladin-zealot-lite",
+     "label": "Zealot start, light plan",
+     "why": "Starts with Zeal and keeps the point list short."
+    },
+    {
+     "table": "paladin_hammerdin_zeal_endgame90",
+     "label": "Full plan to level 90",
+     "why": "The whole plan from level 30 up to level 90.",
+     "fromLevel": 30
+    }
+   ]
   },
   {
    "id": "sorceress_blizzard",
@@ -330,7 +368,26 @@
     "normal": 3,
     "hell": 2
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "sorceress_normal30",
+   "variants": [
+    {
+     "table": "sorceress_normal30",
+     "label": "Leveling to level 30",
+     "why": "The plan for the first thirty levels."
+    },
+    {
+     "table": "primary-blizzard",
+     "label": "Blizzard plan, first version",
+     "why": "The original Blizzard point list."
+    },
+    {
+     "table": "sorceress_blizzard_endgame90",
+     "label": "Full plan to level 90",
+     "why": "The whole plan from level 30 up to level 90.",
+     "fromLevel": 30
+    }
+   ]
   },
   {
    "id": "sorceress_fire",
@@ -388,7 +445,15 @@
      "note": "Little upkeep"
     }
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "sorceress_fire_normal30",
+   "variants": [
+    {
+     "table": "sorceress_fire_normal30",
+     "label": "Leveling to level 30",
+     "why": "The plan for the first thirty levels."
+    }
+   ]
   },
   {
    "id": "sorceress_lightning",
@@ -448,7 +513,25 @@
      "note": "Mana stalls, weak fighter use"
     }
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "fallback-lightning-v2",
+   "variants": [
+    {
+     "table": "fallback-lightning",
+     "label": "Lightning plan, original",
+     "why": "The first Lightning point list; older heroes still run it."
+    },
+    {
+     "table": "fallback-lightning-v2",
+     "label": "Lightning plan",
+     "why": "The Lightning point list new heroes follow."
+    },
+    {
+     "table": "fallback-lightning-v3",
+     "label": "Lightning plan, veteran rows (newer)",
+     "why": "Changes a few rows after a veteran's advice; newer and less proven."
+    }
+   ]
   },
   {
    "id": "necromancer_summoner",
@@ -513,7 +596,31 @@
     "normal": 4,
     "hell": 3
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "necromancer_summoner_normal30",
+   "variants": [
+    {
+     "table": "necromancer_summoner_normal30",
+     "label": "Leveling to level 30",
+     "why": "The plan for the first thirty levels."
+    },
+    {
+     "table": "necromancer_summoner_endgame90",
+     "label": "Full plan to level 90",
+     "why": "The whole plan from level 30 up to level 90.",
+     "fromLevel": 30
+    },
+    {
+     "table": "necromancer_summoner_guide",
+     "label": "Guide path",
+     "why": "Follows a written community guide."
+    },
+    {
+     "table": "necromancer_summoner_sme",
+     "label": "Veteran's path (newer)",
+     "why": "A plan from a Diablo II veteran; newer and less proven."
+    }
+   ]
   },
   {
    "id": "necromancer_bone",
@@ -571,7 +678,15 @@
      "note": "Needs corpses and aim"
     }
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "necromancer_leveling_normal30",
+   "variants": [
+    {
+     "table": "necromancer_leveling_normal30",
+     "label": "Leveling to level 30",
+     "why": "The plan for the first thirty levels."
+    }
+   ]
   },
   {
    "id": "necromancer_poison_nova",
@@ -633,7 +748,15 @@
     "normal": 2,
     "hell": 1
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "necromancer_poison_nova_sme",
+   "variants": [
+    {
+     "table": "necromancer_poison_nova_sme",
+     "label": "Veteran's path",
+     "why": "A plan from a Diablo II veteran for the whole build."
+    }
+   ]
   },
   {
    "id": "amazon_bow",
@@ -692,7 +815,21 @@
      "note": "Quiver upkeep"
     }
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "amazon_bow_normal30",
+   "variants": [
+    {
+     "table": "amazon_bow_normal30",
+     "label": "Leveling to level 30",
+     "why": "The plan for the first thirty levels."
+    },
+    {
+     "table": "amazon_multishot_endgame90",
+     "label": "Full plan to level 90",
+     "why": "The whole plan from level 30 up to level 90.",
+     "fromLevel": 30
+    }
+   ]
   },
   {
    "id": "amazon_javelin",
@@ -750,7 +887,15 @@
      "note": "Javelin upkeep"
     }
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "amazon_javelin_normal30",
+   "variants": [
+    {
+     "table": "amazon_javelin_normal30",
+     "label": "Leveling to level 30",
+     "why": "The plan for the first thirty levels."
+    }
+   ]
   },
   {
    "id": "assassin_traps",
@@ -809,7 +954,21 @@
      "note": "Traps need steady laying"
     }
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "assassin_fireblast_normal30",
+   "variants": [
+    {
+     "table": "assassin_fireblast_normal30",
+     "label": "Leveling to level 30",
+     "why": "The plan for the first thirty levels."
+    },
+    {
+     "table": "assassin_sentry_endgame90",
+     "label": "Full plan to level 90",
+     "why": "The whole plan from level 30 up to level 90.",
+     "fromLevel": 30
+    }
+   ]
   },
   {
    "id": "barbarian_frenzy",
@@ -868,7 +1027,20 @@
      "note": "Little upkeep"
     }
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "barbarian_melee_normal30",
+   "variants": [
+    {
+     "table": "barbarian_melee_normal30",
+     "label": "Leveling to level 30",
+     "why": "The plan for the first thirty levels."
+    },
+    {
+     "table": "barbarian_frenzy_guide",
+     "label": "Guide path",
+     "why": "Follows a written community guide."
+    }
+   ]
   },
   {
    "id": "barbarian_warcry",
@@ -926,7 +1098,15 @@
      "note": "Mana upkeep"
     }
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "barbarian_warcry_endgame90",
+   "variants": [
+    {
+     "table": "barbarian_warcry_endgame90",
+     "label": "Full plan to level 90",
+     "why": "The whole plan up to level 90."
+    }
+   ]
   },
   {
    "id": "druid_fire",
@@ -985,7 +1165,20 @@
      "note": "Mana upkeep"
     }
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "druid_fire_normal30",
+   "variants": [
+    {
+     "table": "druid_fire_normal30",
+     "label": "Leveling to level 30",
+     "why": "The plan for the first thirty levels."
+    },
+    {
+     "table": "druid_fire_guide",
+     "label": "Guide path",
+     "why": "Follows a written community guide."
+    }
+   ]
   },
   {
    "id": "druid_tornado",
@@ -1043,7 +1236,15 @@
      "note": "Mana stalls, random aim"
     }
    },
-   "thresholdsRef": "thresholds"
+   "thresholdsRef": "thresholds",
+   "defaultVariant": "druid_tornado_endgame90",
+   "variants": [
+    {
+     "table": "druid_tornado_endgame90",
+     "label": "Full plan to level 90",
+     "why": "The whole plan up to level 90."
+    }
+   ]
   }
  ],
  "uncovered": []

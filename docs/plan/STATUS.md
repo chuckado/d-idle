@@ -422,7 +422,10 @@
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fitfix | proposed | - | `tools/uishots`<br>`tools/uishots.sh`<br>`docs/ui-regression-plan.md` | - |
 | bankdoc | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
-| toolstrade4 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| fitfix2 | proposed | - | `tools/uishots`<br>`tools/uishots.sh`<br>`internal/watch/web/utilities.css`<br>`internal/watch/web/vault.js`<br>`internal/watch/testdata/vault_reveal.mjs` | - |
+| fitfix3 | proposed | - | `tools/uishots`<br>`tools/uishots.sh`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/testdata/vault_logic.mjs` | - |
+| allocfix | proposed | - | `cmd/d2bot/autoallocwire.go`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/points`<br>`internal/plandata/build-necromancer_summoner_normal30.json`<br>`docs/plan/data/build-necromancer_summoner_normal30.json`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`docs/autoalloc.md`<br>`tools/provingground/scenarios/autoalloc.json` | - |
+| allocprobe | proposed | - | `docs/probes/autoalloc-necro-summoner-default-2026-11-23.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -456,14 +459,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 443b4a555 11-22 22:12 `Merge agent/toolstrade4: Merge branch 'main' into toolstrade4` (toolstrade4)
-- 7559ad1f3 11-22 22:10 `Merge branch 'main' into toolstrade4` (-)
-- ab9d8c353 11-22 22:08 `Merge agent/bankdoc: Merge branch 'main' into bankdoc` (bankdoc)
-- 201ac0474 11-22 22:07 `Merge branch 'main' into bankdoc` (-)
-- 72161fb9e 11-22 22:01 `Merge agent/fitfix: Merge branch 'main' into fitfix` (fitfix)
-- 9f442431a 11-22 22:00 `Merge branch 'main' into fitfix` (-)
-- ee6596339 11-22 21:48 `Merge agent/toolstrade3: Merge branch 'main' into toolstrade3` (toolstrade3)
-- 6a097352f 11-22 21:47 `Merge branch 'main' into toolstrade3` (-)
-- 452220018 11-22 21:41 `Merge agent/navexit2: navexit2: scenario, drill doc stage results` (navexit2)
-- d7b0b74cc 11-22 21:37 `Merge remote-tracking branch 'origin/main' into agent/navexit2` (-)
+- 18d4de4c4 11-22 23:06 `Merge agent/buildchoose: Merge branch 'main' into TASK-845` (buildchoose)
+- bbd16edfd 11-22 23:05 `Merge branch 'main' into TASK-845` (-)
+- 7f7f869fc 11-22 23:03 `Merge agent/allocprobe: allocprobe: card` (allocprobe)
+- b9e53b381 11-22 23:00 `Merge origin/main into buildchoose` (-)
+- 756c9a7a7 11-22 22:50 `Merge agent/allocfix: Merge branch 'main' into allocfix` (allocfix)
+- 58f127ca6 11-22 22:49 `Merge branch 'main' into allocfix` (-)
+- e6b5d3a48 11-22 22:37 `Merge agent/fitfix3: Merge branch 'main' into fitfix3` (fitfix3)
+- c559fd26f 11-22 22:36 `Merge branch 'main' into fitfix3` (-)
+- 54b08cdab 11-22 22:21 `Merge agent/fitfix2: Merge branch 'main' into fitfix2` (fitfix2)
+- 201a58a0b 11-22 22:19 `Merge branch 'main' into fitfix2` (-)
 <!-- statusgen:end -->

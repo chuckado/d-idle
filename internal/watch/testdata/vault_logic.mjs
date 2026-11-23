@@ -87,6 +87,7 @@ ok('selection: select all, prune, clear', () => {
   s.prune([]); assert.equal(s.size, 0); assert.equal(s.mode, false, 'the mode ends with the last item');
   s.toggle('a'); s.clear(); assert.equal(s.size, 0); assert.equal(s.anchor, null); assert.equal(s.mode, false);
   s.mode = true; assert.equal(s.mode, true);
+  s.prune(['a', 'b']); assert.equal(s.mode, true, 'a refresh while Select is on and nothing is picked keeps the mode (2026-11-22 fit flake)');
 });
 
 ok('capacity words', () => {
