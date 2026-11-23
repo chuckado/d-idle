@@ -439,7 +439,6 @@
 | uiframe | proposed | - | `internal/watch/returnscreen.go`<br>`internal/watch/policysheet.go`<br>`internal/watch/frame_test.go`<br>`internal/watch/returnscreen_test.go`<br>`internal/watch/testdata/returnscreen/`<br>`internal/watch/testdata/policysheet/` | - |
 | uivault | proposed | - | `internal/watch/web/utilities.css` | - |
 | toolstrade8 | proposed | - | `internal/nav/nav.go`<br>`internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
-| toolstrade9 | proposed | - | `internal/bot/task.go`<br>`internal/bot/task_test.go`<br>`internal/boss/act1.go`<br>`internal/env/tuning_quests.go`<br>`docs/process/layout-read.md`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
