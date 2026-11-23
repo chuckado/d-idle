@@ -930,6 +930,7 @@ internal/bot/killtime_test.go  credit-runner  swingmodel
 internal/bot/kitgate.go  credit-runner  survhold2
 internal/bot/kitlevel_test.go  credit-runner  survhold2
 internal/bot/kitplan_test.go  credit-runner  bsm7
+internal/bot/kitplan_test.go  credit-runner  manapack
 internal/bot/ladder_t0_test.go  credit-runner  questrun
 internal/bot/leveling.go  credit-runner  agencyp0
 internal/bot/leveling.go  credit-runner  hourfix
@@ -1004,6 +1005,7 @@ internal/bot/repairtrip_test.go  credit-runner  repairtrip
 internal/bot/resource.go  pro-runner  levelplan3
 internal/bot/routeguard.go  credit-runner  bsm7
 internal/bot/routeguard.go  credit-runner  classtraits
+internal/bot/routeguard.go  credit-runner  manapack
 internal/bot/routeguard.go  credit-runner  questrun
 internal/bot/runner.go  credit-runner  agencyp0
 internal/bot/runner.go  credit-runner  botinstant
