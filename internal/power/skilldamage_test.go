@@ -275,3 +275,24 @@ func TestSkillKindsCoverAttacks(t *testing.T) {
 		}
 	}
 }
+
+// TestAttackIsOnlyWhatTheBuildHasPaidFor (card qdmatrix): a combat band opens at a level, but its attack counts only when
+// the build has bought a point of it by that clvl. Before, the whole build's points decided and a clvl 19 Paladin was
+// judged by a Blessed Hammer bought at clvl 21 (level 0, so the estimate fell back to a plain swing of 2 to 7) while the
+// hero really swings Zeal; a clvl 12 Sorceress was judged by Ice Blast at level 0.
+func TestAttackIsOnlyWhatTheBuildHasPaidFor(t *testing.T) {
+	ca := profileBands(t)
+	for _, c := range []struct {
+		file  string
+		clvl  int
+		skill string
+	}{{"build-paladin-normal30-v2.json", 19, "Zeal"}, {"build-sorceress_normal30.json", 12, "Charged Bolt"}} {
+		s, err := SpecFromBuild(plandata.FS, c.file, c.clvl, ca)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if s.Attack != c.skill || s.AttackLevel < 1 {
+			t.Errorf("%s@%d: attack %q level %d, want %s with at least one point", c.file, c.clvl, s.Attack, s.AttackLevel, c.skill)
+		}
+	}
+}
