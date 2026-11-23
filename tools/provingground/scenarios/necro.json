@@ -59,8 +59,8 @@
     {
      "kind": "log_line",
      "pattern": "^combat summon .*grew=true.*skill=Raise Skeleton",
-     "min": 2,
-     "why": "skeleton upkeep through the fight"
+     "min": 3,
+     "why": "skeleton upkeep through the fight (observed 5 grew in run 20261122-170602, 13 casts)"
     },
     {
      "kind": "minions_at_least",
@@ -130,8 +130,8 @@
     {
      "kind": "log_line",
      "pattern": "^combat curse .*skill=Amplify Damage",
-     "min": 1,
-     "why": "the summoner's any-target curse"
+     "min": 8,
+     "why": "the summoner's any-target curse (observed 20 curse lines)"
     },
     {
      "kind": "minions_at_least",
@@ -197,7 +197,7 @@
      "kind": "log_line",
      "pattern": "^combat summon .*grew=true.*skill=Revive",
      "min": 1,
-     "why": "Revive upkeep (profile summon rule, kind revive)"
+     "why": "Revive upkeep (profile summon rule, kind revive) (observed 1 grew Revive, 87 kills, 0 deaths)"
     },
     {
      "kind": "minions_at_least",
@@ -258,13 +258,13 @@
      "kind": "log_line",
      "pattern": "^combat summon .*grew=true.*skill=Raise Skeleton",
      "min": 3,
-     "why": "upkeep keeps raising"
+     "why": "upkeep keeps raising (observed 5 grew)"
     },
     {
      "kind": "log_line",
      "pattern": "^combat kill",
-     "min": 40,
-     "why": "the fight goes on for ten minutes (a clvl 32 run killed 83 in ten)"
+     "min": 50,
+     "why": "the fight goes on for ten minutes (observed 84 kills, run 20261122-170602)"
     },
     {
      "kind": "life_pct_at_least",
