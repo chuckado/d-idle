@@ -439,6 +439,7 @@
 | uiframe | proposed | - | `internal/watch/returnscreen.go`<br>`internal/watch/policysheet.go`<br>`internal/watch/frame_test.go`<br>`internal/watch/returnscreen_test.go`<br>`internal/watch/testdata/returnscreen/`<br>`internal/watch/testdata/policysheet/` | - |
 | uivault | proposed | - | `internal/watch/web/utilities.css` | - |
 | toolstrade8 | proposed | - | `internal/nav/nav.go`<br>`internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| failspend | proposed | - | `internal/bot/questboard.go`<br>`internal/bot/questboard_test.go` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
@@ -471,14 +472,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- dc78607a5 11-23 02:18 `Merge agent/stage1: Merge branch 'main' into failspend` (stage1)
+- 55bbca0fc 11-23 02:16 `Merge branch 'main' into failspend` (-)
+- c54b1348b 11-23 02:09 `Merge agent/opsquest2: Merge branch 'main' into opsquest2` (opsquest2)
+- 972b7d1d0 11-23 02:08 `Merge branch 'main' into opsquest2` (-)
+- 9b7eaf384 11-23 01:59 `Merge branch 'main' into failspend` (-)
 - eb7f39ce3 11-23 01:51 `Merge agent/toolstrade9: Merge branch 'main' into toolstrade9` (toolstrade9)
 - 8d1e8921d 11-23 01:49 `Merge branch 'main' into toolstrade9` (-)
 - cae6f829d 11-23 01:36 `Merge agent/drill2: Merge branch 'main' into drill2` (drill2)
 - 2696ed8c5 11-23 01:35 `Merge branch 'main' into drill2` (-)
 - 91ecf94b9 11-23 01:32 `Merge agent/uivault: Merge branch 'main' into uivault` (uivault)
-- dd34bcf0d 11-23 01:31 `Merge branch 'main' into uivault` (-)
-- d1ce7e723 11-23 01:24 `Merge agent/toolstrade8: Merge branch 'main' into toolstrade8` (toolstrade8)
-- e13589fc9 11-23 01:23 `Merge remote-tracking branch 'origin/main' into agent/drill2` (-)
-- fea9efae8 11-23 01:23 `Merge branch 'main' into toolstrade8` (-)
-- fdbadb174 11-23 01:16 `Merge agent/questdrill: Merge branch 'main' into qdmatrix` (questdrill)
 <!-- statusgen:end -->
