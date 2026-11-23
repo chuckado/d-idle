@@ -236,3 +236,39 @@ Read-only live log, `auto-alloc` lines since the restart with autoAlloc on (15:1
 XP (V, `minute` lines, clvl 20, 22:51Z): xp 564205 at clvl 20; the hero earned about 32 per minute in the last hour (561609 to 562557 in 30 minutes). Per kill 2 to 4 xp in Dark Wood (V, `combat kill` lines). The d2-sme (one question, EXP, no sources) answered 30 to 50 thousand per hour for Dark Wood, Black Marsh, Burial Grounds and 30 to 45 thousand for Tamoe and the Forgotten Tower Cellars, and "40 to 60 hours" for clvl 20 to 24: the live number is 1900 per hour, about 20 times lower; the live log wins (AREAMON per kill at clvl 16 for Dark Wood is 8.6, `areaxp.csv`). The only places that pay are the dangerous ones: the Barracks 525 per minute-line (31000 per hour, V) matches the SME's figure, which is what the hero cannot survive.
 - Verdict: from clvl 20, 775000 more xp (clvl 24 is 1312287, DefaultExpForLevel) is not reachable in Act 1 in a day by the safe areas: at 1900 per hour it is about 400 hours; the Forgotten Tower Cellars row added in #1227 is the best safe row by the table (estimated 2 to 3 times Dark Wood, so 4000 to 6000 per hour, about 130 to 190 hours) and has not been measured: the hero has not visited the Cellars yet.
 - Options for the user (not done here): (a) lower the Barracks floors to what the hero can meet (route.barracksMinLevel 22, route.barracksMinLife 0) and rely on the merc, Greater potions and the door; (b) keep the floors, hold Tools of the Trade, and let the other ungated quests and the Cellars run (the board already trains while a chunk is held); (c) move to Act 2 for xp (needs Andariel, which needs the same road); (d) a respec to put vitality first, at the cost of gold. The numbers (levels, life, hours) are the evidence for that decision.
+
+## Round 31 (card toolstrade33): where the hours go (live minute lines, last 8 hours, 477 lines, 7.99 hours)
+
+**Hours per bucket (V, `state` and `rstate` of each minute line, time to the next line):**
+
+| bucket | hours | share |
+|---|---|---|
+| quest travel (the board's walks to the Barracks and back) | 2.65 | 33 % |
+| clearing, state `other` (the planner's clear runs) | 2.09 | 26 % |
+| town chores (shop, stash, repair, merc) | 1.42 | 18 % |
+| farming (the level goal, clearing) | 1.10 | 14 % |
+| quest fight (the Smith attempts) | 0.58 | 7 % |
+| other traveling | 0.13 | 2 % |
+| other resupplying | 0.02 | 0 % |
+
+Split at deploy 55 (21:30Z, the Barracks floor and the potion fixes live): before it 6.63 h: quest travel 2.63 h (40 %), clearing other 2.09 h (31 %), town chores 1.21 h (18 %), quest fight 0.57 h (9 %); after it 1.33 h: farming 1.10 h (83 %), town chores 0.18 h (14 %), quest travel 0.02 h (1 %). So the overhead was the Barracks loop (51 percent of eight hours in quest travel and fights that earned nothing: chickens, portals, parks); it is gone since deploy 55.
+
+**XP per area (V, xp delta per interval, kills from `killsGame`):**
+
+| area | hours | xp | kills | xp per hour | kills per hour | xp per kill |
+|---|---|---|---|---|---|---|
+| Dark Wood (5) | 2.42 | 4708 | 1819 | 1945 | 751 | 2.6 |
+| Rogue Encampment (1, chores and walks) | 1.69 | 5381 | 661 | 3189 | 391 | 8.1 |
+| Black Marsh (6) | 1.07 | 2904 | 819 | 2719 | 766 | 3.5 |
+| Barracks (28) | 0.63 | 9297 | 263 | 14665 | 414 | 35.4 |
+| Outer Cloister (27) | 0.52 | 1865 | 271 | 3599 | 523 | 6.9 |
+| Tamoe Highland (7) | 0.41 | 1886 | 302 | 4574 | 732 | 6.2 |
+| Underground Passage 1 (10) | 0.37 | 692 | 296 | 1885 | 806 | 2.3 |
+| Stony Field (4) | 0.35 | 742 | 351 | 2119 | 1002 | 2.1 |
+| Cold Plains (3) | 0.27 | 399 | 281 | 1495 | 1053 | 1.4 |
+
+Since deploy 55: 2596 xp in 1.33 h (1950 per hour) with 911 kills (685 per hour, 2.85 xp per kill).
+
+**Verdict (V):** the gap to the SME's 30 to 50 thousand per hour is not overhead. With 83 percent of the time farming the hero kills 685 to 1000 monsters an hour; the limit is xp per kill: 1.4 to 3.5 in the low areas at clvl 20 (AREAMON, `areaxp.csv`: Dark Wood 8.6 at clvl 16), 35 in the Barracks. For 30000 xp per hour the Dark Wood would need about 11000 to 14000 kills an hour (16 to 20 times the real rate, impossible), the Barracks about 850 (twice the real 414, the area that kills the hero). Even a perfect 100 percent of fighting time would give about 2 to 2.5 thousand per hour in the low areas. The SME figure belongs to areas of monster level 15 and up (per kill xp 30 and more), not to the low Act 1 fields.
+- The lever (S, from the same table): per kill xp at clvl 16 in the Forgotten Tower Cellars is 109, 99, 78 and 131 (units 16 to 21, about 6 clear minutes each): 12 to 15 times Dark Wood per kill; at 300 kills per hour that is of the order of 20000 xp per hour at clvl 16, less at clvl 20 (U: the per kill xp falls with the level; not measured; the hero has not visited the Cellars). The `forgotten_cellars` row (#1227, 17:35 EST, after deploy 55) is not live yet. That row, not the efficiency, is what can make 775000 xp reachable (about 40 to 80 hours at 10 to 20 thousand per hour).
+- Proposed, not changed: (a) deploy #1227 and measure the Cellars xp per hour from the minute lines before anything else; (b) if it measures under 5000 per hour, lower `route.barracksMinLevel` to 22 and rely on the merc, as the user decides; (c) knobs for efficiency (town chores 14 to 18 percent, `bot.clearRadius` 40) are worth at most 15 to 20 percent and are not touched.
