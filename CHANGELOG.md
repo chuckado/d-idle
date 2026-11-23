@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- navexit2: scenario, drill doc stage results <!--sg:agent/navexit2-->
 - Merge branch 'main' into denfix <!--sg:agent/denfix-->
 - toolstrade2: card and probe notes <!--sg:agent/toolstrade2-->
 - Merge branch 'main' into toolstrade <!--sg:agent/toolstrade-->

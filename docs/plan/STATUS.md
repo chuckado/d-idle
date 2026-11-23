@@ -419,6 +419,7 @@
 | forksync | in-progress | - | `docs/process/fork-sync-cadence.md` | - |
 | toolstrade2 | proposed | - | `internal/nav/nav.go`<br>`internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | denfix | proposed | - | `tools/provingground/scenarios/act1.json` | - |
+| navexit2 | proposed | - | `tools/provingground/scenarios/navexit.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -453,6 +454,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 452220018 11-22 21:41 `Merge agent/navexit2: navexit2: scenario, drill doc stage results` (navexit2)
+- d7b0b74cc 11-22 21:37 `Merge remote-tracking branch 'origin/main' into agent/navexit2` (-)
 - b617db299 11-22 21:35 `Merge agent/denfix: Merge branch 'main' into denfix` (denfix)
 - b21deb7a2 11-22 21:33 `Merge branch 'main' into denfix` (-)
 - d5b81876e 11-22 21:26 `Merge agent/toolstrade2: toolstrade2: card and probe notes` (toolstrade2)
@@ -461,6 +464,4 @@
 - db89486db 11-22 21:10 `Merge agent/forksync: Merge branch 'main' into forksync` (forksync)
 - cface0d6d 11-22 21:10 `Merge agent/skelspeed: Merge branch 'main' into skelspeed` (skelspeed)
 - 43e24fef5 11-22 21:08 `Merge branch 'main' into forksync` (-)
-- 6503e3d29 11-22 21:08 `Merge branch 'main' into skelspeed` (-)
-- 5376d1ad3 11-22 20:57 `Merge agent/uireason: Merge branch 'main' into uireason` (uireason)
 <!-- statusgen:end -->
