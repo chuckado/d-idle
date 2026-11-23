@@ -2506,6 +2506,7 @@ tools/probes/capture_test.py  credit-runner  toolstrade13
 tools/probes/exitscmp  credit-runner  exitsread
 tools/probes/exitsread.py  credit-runner  exitsread
 tools/probes/gridwhole.py  credit-runner  gridwhole
+tools/probes/presets.py  credit-runner  qdmatrix
 tools/probes/strips.py  credit-runner  toolstrade5
 tools/probes/strips_test.py  credit-runner  toolstrade5
 tools/provingground/  credit-runner  dlv-reads
