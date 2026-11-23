@@ -1,10 +1,11 @@
 ---
 id: TASK-864
 title: 'toolstrade9: boss restart after a drink, layoutRead hint on boss not found'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T06:35:00Z'
+updated_date: '2026-11-23T07:07:00Z'
 labels:
   - bot
   - bot-fix

@@ -280,6 +280,7 @@ cmd/d2bot/objects.go  live-agent  k1layout
 cmd/d2bot/objects_layout_test.go  live-agent  k1layout
 cmd/d2bot/objects_test.go  credit-runner  cainfix
 cmd/d2bot/ops*.go  credit-runner  opsquest
+cmd/d2bot/ops*.go  credit-runner  opsquest2
 cmd/d2bot/pausewire.go  credit-runner  uib1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
 cmd/d2bot/pointswire.go  credit-runner  agencyp0
@@ -567,6 +568,7 @@ docs/onboarding-tour.md  credit-runner  onboardtour
 docs/onboarding.md  credit-runner  firstminutes
 docs/onboarding.md  credit-runner  reconnectux
 docs/operator.md  credit-runner  opsquest
+docs/operator.md  credit-runner  opsquest2
 docs/palprofile.md  credit-runner  palprofile2
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
@@ -646,7 +648,6 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
-docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade9
 docs/probes/town-plan-scenarios.md  credit-runner  town1
 docs/probes/town-plan-stage3-2026-11-22.md  credit-runner  plan3
 docs/probes/town-plan-stage3-2026-11-22.md  credit-runner  town5
@@ -666,7 +667,6 @@ docs/process/fork-sync-cadence.md  credit-runner  forksync
 docs/process/hammerdin-support.md  credit-runner  hammer1
 docs/process/input-verbs2.md  credit-runner  verbs2
 docs/process/layout-read.md  credit-runner  countess3
-docs/process/layout-read.md  credit-runner  toolstrade9
 docs/process/layout-read.md  live-agent  k1layout
 docs/process/necromancer-support.md  credit-runner  necro1
 docs/process/pg-ledger-ops.md  credit-runner  pgledger
@@ -900,7 +900,6 @@ internal/art/skillicons_test.go  credit-runner  skilltrees
 internal/boss  credit-runner  countess3
 internal/boss  credit-runner  wiring2
 internal/boss/act1.go  credit-runner  countess
-internal/boss/act1.go  credit-runner  toolstrade9
 internal/boss/boss_test.go  credit-runner  countess
 internal/boss/boss_test.go  pro-runner  levelplan3
 internal/boss/fake_test.go  pro-runner  levelplan3
@@ -1073,10 +1072,8 @@ internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  quests3
 internal/bot/task.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  staletarget
-internal/bot/task.go  credit-runner  toolstrade9
 internal/bot/task.go  credit-runner  wpstep
 internal/bot/task_acts_test.go  credit-runner  cain5b
-internal/bot/task_test.go  credit-runner  toolstrade9
 internal/bot/vaultkeep.go  credit-runner  vaultv5
 internal/bot/waypoints.go  credit-runner  boardmoderace
 internal/bot/whyline.go  credit-runner  repairtrip
@@ -1316,7 +1313,6 @@ internal/env/tuning_quests.go  credit-runner  bsm4
 internal/env/tuning_quests.go  credit-runner  countess3
 internal/env/tuning_quests.go  credit-runner  quests3
 internal/env/tuning_quests.go  credit-runner  quests8
-internal/env/tuning_quests.go  credit-runner  toolstrade9
 internal/env/tuning_quests.go  live-agent  k1layout
 internal/env/tuning_resource.go  credit-runner  agencyp0
 internal/env/tuning_resource.go  credit-runner  freshstart
@@ -1478,6 +1474,7 @@ internal/nav/warpread_test.go  credit-runner  warptrigger
 internal/nav/waypoint.go  credit-runner  verbs2
 internal/nav/wpverb_test.go  credit-runner  verbs2
 internal/ops/**  credit-runner  opsquest
+internal/ops/**  credit-runner  opsquest2
 internal/plandata  credit-runner  agencyp0
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
@@ -2453,7 +2450,9 @@ tools/provingground/scenarios/vaultreveal.json  credit-runner  vaultreveal
 tools/provingground/scenarios/vaultsellall.json  credit-runner  sellall
 tools/provingground/status_doc.sh  credit-runner  pgpage
 tools/questloop.sh  credit-runner  opsquest
+tools/questloop.sh  credit-runner  opsquest2
 tools/questloop_test.sh  credit-runner  opsquest
+tools/questloop_test.sh  credit-runner  opsquest2
 tools/survival  credit-runner  pghero
 tools/survival  credit-runner  survhold2
 tools/survival  credit-runner  survtune

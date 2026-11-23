@@ -70,8 +70,11 @@ type Row struct {
 	Chunk string `json:"chunk"`
 	State string `json:"state"`
 	Step  string `json:"step,omitempty"`
-	Code  string `json:"code,omitempty"`
-	Text  string `json:"text,omitempty"`
+	// Progress counts the changes of state or step the server has seen for this chunk since it started; a wait that
+	// times out with a moved counter is slow progress, not a stall.
+	Progress int    `json:"progress,omitempty"`
+	Code     string `json:"code,omitempty"`
+	Text     string `json:"text,omitempty"`
 }
 
 func boardOf(v questboard.View) *Board {
@@ -126,6 +129,7 @@ type Server struct {
 	all  []time.Time
 	per  map[string][]time.Time
 	last map[string]time.Time // last retry per quest
+	prog map[string]*progress
 }
 
 func New(c Config) *Server {
@@ -138,7 +142,7 @@ func New(c Config) *Server {
 	if c.Logf == nil {
 		c.Logf = func(string, ...any) {}
 	}
-	return &Server{cfg: c, per: map[string][]time.Time{}, last: map[string]time.Time{}}
+	return &Server{cfg: c, per: map[string][]time.Time{}, last: map[string]time.Time{}, prog: map[string]*progress{}}
 }
 
 func no(code, reason string) Response { return Response{Code: code, Reason: reason} }
@@ -224,7 +228,9 @@ func (s *Server) handle(rq Request) Response {
 		return no("off", "the quest board is not available yet")
 	}
 	if rq.Verb == "status" {
-		return Response{OK: true, Board: boardOf(d.View())}
+		b := boardOf(d.View())
+		s.track(b)
+		return Response{OK: true, Board: b}
 	}
 	if s.cfg.Getenv("D2BOT_RUN") != "" {
 		return no("measured_run", "a measured run never takes operator verbs (D2BOT_RUN is set)")
@@ -266,4 +272,28 @@ func (s *Server) handle(rq Request) Response {
 		Remote: "operator", Agent: "ops-cli", Why: why, OK: rep.OK, Already: rep.Already, Status: st, Code: rep.Code, Reason: rep.Reason})
 	s.cfg.Logf("operator verb", "verb", rq.Verb, "quest", rq.Quest, "chunk", rq.Chunk, "ok", rep.OK, "code", rep.Code)
 	return Response{OK: rep.OK, Code: rep.Code, Reason: rep.Reason, Reply: &rep}
+}
+
+type progress struct {
+	sig string
+	n   int
+}
+
+// track numbers the state and step changes of each chunk across status calls.
+func (s *Server) track(b *Board) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	for i := range b.Rows {
+		r := &b.Rows[i]
+		k := r.Quest + "/" + r.Chunk
+		p := s.prog[k]
+		if p == nil {
+			p = &progress{sig: r.State + "|" + r.Step}
+			s.prog[k] = p
+		}
+		if sig := r.State + "|" + r.Step; sig != p.sig {
+			p.sig, p.n = sig, p.n+1
+		}
+		r.Progress = p.n
+	}
 }
