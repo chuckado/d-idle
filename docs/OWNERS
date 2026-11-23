@@ -409,6 +409,7 @@ data/questboard/act1.json  credit-runner  cain45
 data/questboard/act1.json  credit-runner  cain5b
 data/questboard/act1.json  credit-runner  cainfix
 data/questboard/act1.json  credit-runner  cainfix3
+data/questboard/act2.json  credit-runner  qdmatrix
 data/questspec  credit-runner  questspec
 data/unlocks  credit-runner  nocards
 data/unlocks/ladder.json  credit-runner  gearsets
@@ -1468,6 +1469,8 @@ internal/merc/wear.json  credit-runner  lootwireL2
 internal/merc/wear_test.go  credit-runner  lootwireL2
 internal/nav  credit-runner  mouthgate
 internal/nav/  credit-runner  dlv-move-tele
+internal/nav/act2hints.go  credit-runner  qdmatrix
+internal/nav/act2hints_test.go  credit-runner  qdmatrix
 internal/nav/covview.go  credit-runner  maptrail
 internal/nav/covview_test.go  credit-runner  maphistoryC
 internal/nav/covview_test.go  credit-runner  maptrail
@@ -1478,6 +1481,7 @@ internal/nav/exit.go  credit-runner  qdmatrix
 internal/nav/exit.go  credit-runner  stage1fix
 internal/nav/exit.go  credit-runner  toolstrade
 internal/nav/exit_test.go  credit-runner  andariel1
+internal/nav/exit_test.go  credit-runner  qdmatrix
 internal/nav/exit_test.go  credit-runner  stage1fix
 internal/nav/exitgoal_test.go  credit-runner  qdmatrix
 internal/nav/exitsread_test.go  credit-runner  exitsread
