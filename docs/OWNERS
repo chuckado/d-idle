@@ -593,6 +593,7 @@ docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
+docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  navexit2
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  necrodrill
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necrodrill
@@ -626,6 +627,9 @@ docs/probes/test-characters.md  credit-runner  survab8
 docs/probes/test-characters.md  credit-runner  survtune
 docs/probes/test-characters.md  live-agent  cainl3
 docs/probes/test-characters.md  live-agent  fid-fixtures
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade3
 docs/probes/town-plan-scenarios.md  credit-runner  town1
 docs/probes/town-plan-stage3-2026-11-22.md  credit-runner  town5
 docs/probes/tpreserve.md  live-agent  tpreserve-live
@@ -640,6 +644,7 @@ docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
 docs/process/combat-reads.md  credit-runner  dlv-reads
 docs/process/druid-support.md  credit-runner  druid1
 docs/process/fork-rebase.md  credit-runner  forkrebase2
+docs/process/fork-sync-cadence.md  credit-runner  forksync
 docs/process/hammerdin-support.md  credit-runner  hammer1
 docs/process/input-verbs2.md  credit-runner  verbs2
 docs/process/layout-read.md  credit-runner  countess3
@@ -1407,11 +1412,17 @@ internal/nav/covview_test.go  credit-runner  maptrail
 internal/nav/cpuprobe_test.go  credit-runner  botcpu
 internal/nav/exit.go  credit-runner  andariel1
 internal/nav/exit.go  credit-runner  pursuers
+internal/nav/exit.go  credit-runner  toolstrade
+internal/nav/exit.go  credit-runner  toolstrade3
 internal/nav/exit_test.go  credit-runner  andariel1
 internal/nav/exitsread_test.go  credit-runner  exitsread
 internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/fullgrid_test.go  credit-runner  knownedge
+internal/nav/gatedoor.go  credit-runner  toolstrade
+internal/nav/gatedoor_test.go  credit-runner  toolstrade
+internal/nav/gatedoor_test.go  credit-runner  toolstrade2
+internal/nav/gatedoor_test.go  credit-runner  toolstrade3
 internal/nav/hints_export.go  credit-runner  exitsread
 internal/nav/mouthgate.go  credit-runner  botstuck
 internal/nav/mouthgate.go  credit-runner  warptrigger
@@ -1419,6 +1430,8 @@ internal/nav/nav.go  credit-runner  countess3b
 internal/nav/nav.go  credit-runner  knownedge
 internal/nav/nav.go  credit-runner  maphistoryC
 internal/nav/nav.go  credit-runner  pursuers
+internal/nav/nav.go  credit-runner  toolstrade2
+internal/nav/nav.go  credit-runner  toolstrade3
 internal/nav/objectiveview_test.go  credit-runner  fogtrail
 internal/nav/pursuit.go  credit-runner  pursuers
 internal/nav/pursuit_test.go  credit-runner  pursuers
@@ -2335,6 +2348,8 @@ tools/provingground/scenarios/act1.json  credit-runner  countess
 tools/provingground/scenarios/act1.json  credit-runner  countess2
 tools/provingground/scenarios/act1more.json  credit-runner  act1more
 tools/provingground/scenarios/act1more.json  credit-runner  andariel1
+tools/provingground/scenarios/act1more.json  credit-runner  toolstrade2
+tools/provingground/scenarios/act1more.json  credit-runner  toolstrade3
 tools/provingground/scenarios/behaviours.json  credit-runner  agencyp0
 tools/provingground/scenarios/behaviours.json  credit-runner  vaultequip
 tools/provingground/scenarios/board.json  credit-runner  bsm1
@@ -2345,6 +2360,7 @@ tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
 tools/provingground/scenarios/cain.json  credit-runner  wpstep
 tools/provingground/scenarios/manage.json  credit-runner  equipswap
+tools/provingground/scenarios/navexit.json  credit-runner  navexit2
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/provingground/scenarios/points.json  credit-runner  barb1
 tools/provingground/scenarios/points.json  credit-runner  druid1

@@ -907,6 +907,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [feed-after-events.md](process/feed-after-events.md): Feed after events (status: current rule (card feeds, 2026-11-01). The helper is `tools/discord/feed.py`; details in...)
 - [flaky-tests.md](process/flaky-tests.md): Flaky tests: the waiting pattern (status: current. Load-sensitive tests cost 45-minute gate re-runs; this is the rule that keeps new ones out.)
 - [fork-rebase.md](process/fork-rebase.md): Fork rebase routine (status: current (task forkrebase, user decision 2026-11-19: rebase the private d2d fork onto upstream main...)
+- [fork-sync-cadence.md](process/fork-sync-cadence.md): Fork sync cadence (status: current (card forksync, 2026-11-23). Keeps the private d2d fork close to upstream so a rebase stays small....)
 - [friends-gamedata-2026-11-15.md](process/friends-gamedata-2026-11-15.md): Friends game-data bundle (2026-11-15)
 - [gamecode-guard.md](process/gamecode-guard.md): Game-code guard, labpath class, path scrubber
 - [grill-agent.md](process/grill-agent.md): The grill agent: one command to be interviewed
@@ -1135,6 +1136,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [search-for-cain-l2-2026-11-18.md](probes/search-for-cain-l2-2026-11-18.md): Search for Cain, drill L2: free Cain, return, report to Akara (2026-11-18) (status: result of drill CAIN-L2, follow-up to `search-for-cain-l1-2026-11-18.md` (stones, portal, arrival). Same...)
 - [search-for-cain-l3-2026-11-19.md](probes/search-for-cain-l3-2026-11-19.md): Search for Cain, drill L3: the real bot chain on a d2d lab slot (2026-11-19) (status: result of drill CAIN-L3 (task `cainl3`), follow-up to `search-for-cain-l2-2026-11-18.md`. NOT Game.exe, no...)
 - [shortdrills.md](probes/shortdrills.md): Short live drills for the g2e/g2f fixes (card shortdrills) (status: current (2026-11-06). Tags: V = run live on the worker host, S = secondary, U = unverified.)
+- [skeleton-speed-2026-11-23.md](probes/skeleton-speed-2026-11-23.md): Skeleton minions: speed and pathing on the lab d2d (2026-11-23) (status: probe record, current. Question (user, 2026-11-22): "skeleton minions seem way too fast and their...)
 - [strip-monastery-2026-11-22.md](probes/strip-monastery-2026-11-22.md): Monastery Gate to Outer Cloister: why nav finds "no usable gate" (card mapverify, 2026-11-22) (status: current. Probe `tools/probes/strip.py` (lab d2d of the fork branch `didle/rebase-20261122-fix1`, 611fc53b,...)
 - [survival-ab-8seed-2026-11-16.md](probes/survival-ab-8seed-2026-11-16.md): Survival A/B 8-seed confirmation, Paladin, bot.zoneModel 0 vs 1, 2026-11-16 (status: current (TASK-568). Follows the 3-seed rescreen. Harness: ab-harness. Tags: V verified (run logs,...)
 - [survival-ab-8seed-rerun-2026-11-16.md](probes/survival-ab-8seed-rerun-2026-11-16.md): Survival A/B 8-seed rerun, Paladin (and a Sorceress screen), fixed harness and retuned controller, 2026-11-16 (status: current (TASK-572). Follows the 8-seed run (FAIL on XP). Harness: ab-harness sections 6 to 9. Tags: V...)
@@ -1148,6 +1150,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [survival-holdout5-2026-11-21.md](probes/survival-holdout5-2026-11-21.md): Survival A/B holdout 5: Sorceress 8 fresh seeds, Paladin 2 (2026-11-21) (status: current (card survhold8). Tags: V verified (abreport and bot logs of this run), I inferred....)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
+- [tools-trade-2026-11-22.md](probes/tools-trade-2026-11-22.md): Tools of the Trade stuck at a border exit (card toolstrade, 2026-11-22) (status: current. Tags: V = measured in a named run, S = source reading, U = unverified. Setups are CHEATED...)
 - [town-plan-scenarios.md](probes/town-plan-scenarios.md): Town planner scenarios (card town1) (status: current (2026-11-21). Source: docs/design/fable-review-2026-11-21/town-planner-b-model.md section B4.)
 - [town-plan-stage2-2026-11-21.md](probes/town-plan-stage2-2026-11-21.md): Town planner, stages 1 and 2 (2026-11-21) (status: current. Design: docs/design/fable-review-2026-11-21/town-planner.md and appendix B. Nothing here was run...)
 - [town-plan-stage3-2026-11-22.md](probes/town-plan-stage3-2026-11-22.md): Town planner, stage 3 (purse), 2026-11-22 (status: current. Design: docs/design/fable-review-2026-11-21/town-planner-b-model.md (card tp-purse, TASK-757)....)

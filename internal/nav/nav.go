@@ -106,7 +106,7 @@ type Navigator struct {
 	doorFn       func(class int) bool // test hook: is this object class a door (default: objects.txt IsDoor)
 	doorLogged   map[[2]int]bool
 	doorApproach map[[2]int]int
-	doorTried    map[d2map.Point]int // gate doors ExitTo already opened this game, by map position (gatedoor.go)
+	doorTried    map[d2map.Point]int // gate doors the current ExitTo already opened, by map position (gatedoor.go)
 	mouthLast    mouthKey
 	mouthLastOK  bool
 	goal         input.Point // fixed goal of the GoTo in progress (goalSet): the mouth gate treats exits around it as pockets
@@ -406,6 +406,7 @@ func (n *Navigator) planHard(lm *d2map.LevelMap, start, goal input.Point, tol fl
 		n.applyHard(f, start, goal)
 	}
 	n.penalizeExits(f, lm, goal)
+	n.penalizeBorders(f, lm, goal)
 
 	sx, sy, ok := f.nearestWalkable(start.X, start.Y, 8)
 	if !ok {
@@ -596,6 +597,31 @@ func (n *Navigator) penalizeExits(f *Field, lm *d2map.LevelMap, goal input.Point
 			continue
 		}
 		f.AddDisc(p.X, p.Y, exitPenaltyR, exitAvoidPeak)
+	}
+}
+
+// borderAvoidR and borderAvoidPeak shape the cost along a border strip toward a level the walk does not want: stepping
+// onto the strip changes the level (V live, scenario act1.tools.malus: a walk from the Monastery Gate arrival to a door
+// 22 subtiles away routed along the south edge and ended in the Tamoe Highland). A soft cost, so a goal beside the
+// strip is still reachable.
+const (
+	borderAvoidR    = 4.0
+	borderAvoidPeak = 31.0
+	borderStride    = 3
+)
+
+// penalizeBorders makes the strips toward neighbours other than wantExit costly, except near the goal.
+func (n *Navigator) penalizeBorders(f *Field, lm *d2map.LevelMap, goal input.Point) {
+	for _, a := range lm.Adjacent {
+		if a.LevelNo == n.wantExit {
+			continue
+		}
+		for i, c := range lm.BorderCells(a.LevelNo) {
+			if i%borderStride != 0 || dist(input.Point{X: c.X, Y: c.Y}, goal) <= borderAvoidR+2 {
+				continue
+			}
+			f.AddDisc(c.X, c.Y, borderAvoidR, borderAvoidPeak)
+		}
 	}
 }
 

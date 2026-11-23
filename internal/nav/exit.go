@@ -28,6 +28,9 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 	n.wantExit = levelNo
 	defer func() { n.wantExit = prev }()
 	t := n.tune()
+	// The door budgets are per call: a level read again after a town trip has its doors shut again (V live, scenario
+	// act1.tools.malus: the Monastery Gate doors were refused on the third visit and the step parked).
+	n.doorTried, n.doorApproach = nil, nil
 	deadline := n.clk.Now().Add(2 * t.WalkTimeout())
 	settled := false
 	start := n.levelNow()
@@ -167,6 +170,9 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 				} else if uerr != nil {
 					return uerr
 				}
+			}
+			if errors.Is(err, ErrNoPath) && n.doorAfterShortWalk(ctx, levelNo) {
+				continue
 			}
 			return err
 		}

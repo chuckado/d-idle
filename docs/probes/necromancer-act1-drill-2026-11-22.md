@@ -57,3 +57,18 @@ The guard counts belt plus pack for mana only at `town.plan` stage 2 or `quests.
 - `quest gate: count pack mana potions like healing ones` (owner task/bot): fix `World.ManaPotions` at stage 0 and 1, or make `quests.boardSM` the default; must-fail test on Necromancer and Sorceress with mana in the pack and none in the belt. Then rerun `act1.burial.blood_raven` for the Necromancer.
 - `scenario stage: Blood Moor to Cold Plains walk, knobs OFF then ON` to settle the default flip.
 - `act1.den.clear` for the Necromancer stays RED with and without the knobs (record 1 0x0014 against 0x0001); the Den log of run 6208 (V, read): 409 kills, 4 boss kills, 0 deaths, 33 potions in 45 virtual minutes, but the hero went back to town again and again for `low on mana potions` and `mp belt columns below 50%` (Cave, area 9, then area 13 and Cold Plains), so mana potion supply, not survival, set the pace and the Den bit was not set in time.
+
+## 6. Stage results after the fixes (2026-11-22, late evening) and the revised blocker list
+
+| stage run | verdict | note |
+|---|---|---|
+| 20261122-205642-49a0 `act1.burial.blood_raven`, Necromancer 11 | GREEN (60 virtual minutes) | after the pack-mana fix (manapack, #1135); before it: stuck 29 minutes on "0 mana potions < 2" |
+| 20261122-205642-49a0 `act1.den.clear`, Necromancer 11 | RED, then GREEN | RED cause: the bank chore moved 6000 of 8000 gold into the stash, the hero left the Den after 36 s to farm gold (denfix, #1140); with `town.bankFirst 0` GREEN for the Necromancer and the Paladin (job 20261122-212018-1980). Record 1 0x0014 = 0x4 Akara talked, 0x10 U, not the completed bit 0 |
+| 20261122-213319-0b57 `nav.bloodmoor-coldplains`, Paladin and Necromancer, seeds 11 and 3, knobs OFF and ON | GREEN 8 of 8 | 0 `unwanted exit`, 0 `mouth gate` lines in all eight logs, Cold Plains entered in each: the Blood Moor to Cold Plains walk does not reproduce the 37 refusals of the fresh drill with or without `nav.warpRead` and `nav.fullGrid`. So there is still no default-flip evidence for the two knobs from this card |
+
+Revised blockers for the earned Act 1 drill (ranked):
+1. Whole-act run: the tap driver now exists (`trigger.tap_quest` list or `*`, tapall #1130) but no multi-quest stage scenario uses it yet; stages must restart from declared level fixtures (the runner cannot restore a save) and each job must stay under the 60-minute limit of a detached job.
+2. Bank chore against the quest kit: with the default `town.bankFirst` the purse is emptied before the kit is bought (card in progress; a Necromancer needs many mana potions, so it shows first).
+3. Fresh-hero pace: clvl 14 in 400 virtual minutes (section 2); not re-measured after the fixes.
+4. The fresh-drill exit refusal (37 lines, knobs OFF) is not reproduced by any staged scenario: U which walk and which position produced it.
+Is the drill feasible in stages now? Yes for single quests from fixtures: Den and Blood Raven are GREEN for the Necromancer on the lab d2d. Not yet for the chain Rogue Encampment to Andariel; the next step is stage scenarios (`tap_quest: "*"`, a level fixture and a 55-minute budget each) for Cain, the Countess and Andariel. Still NOT ready to play.
