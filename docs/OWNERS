@@ -793,6 +793,7 @@ docs/ui-design-system.md  credit-runner  uitoast
 docs/ui-overlays.md  credit-runner  menufit2
 docs/ui-regression-plan.md  credit-runner  fitfix
 docs/ui/fit-triage-2026-11-23.md  credit-runner  uifit1
+docs/ui/fit-triage-2026-11-23.md  credit-runner  uifit2
 docs/ui/friend-feedback-2026-11-15.md  credit-runner  friendfb
 docs/ui/map-phone  credit-runner  mapphone
 docs/ui/nav-links  credit-runner  uinav
@@ -2532,6 +2533,7 @@ tools/uishots/  credit-runner  uis6
 tools/uishots/  credit-runner  uisettings
 tools/uishots/fit.go  credit-runner  mapphone
 tools/uishots/fit.go  credit-runner  resetinstant
+tools/uishots/fit.go  credit-runner  uifit2
 tools/uishots/fit.go  credit-runner  vaultv4
 tools/uishots/fit.go  credit-runner  vaultv7b
 tools/uishots/fit.js  credit-runner  uis7
@@ -2544,6 +2546,7 @@ tools/uishots/fit.js  credit-runner  vaultv7b
 tools/uishots/fit_char_test.go  credit-runner  jewelicons
 tools/uishots/fit_char_test.go  credit-runner  vaultv4
 tools/uishots/fit_char_test.go  credit-runner  vaultv7b
+tools/uishots/fit_phone_test.go  credit-runner  uifit2
 tools/uishots/fixtures.go  credit-runner  mapphone
 tools/uishots/fixtures.go  credit-runner  uic2
 tools/uishots/fixtures.go  credit-runner  vaultv4
