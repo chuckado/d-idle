@@ -1,0 +1,132 @@
+## verbs
+err debug wp <index|all|level <id>>|collision|automap|portals|objects|net|statpts <n>|skillpts <n>|wear|unid|level|blocked <x> <y>|warp <x> <y>|act <1-5>|help|hit <dmg>|merc hire <type>|kill|revive|hurt <dmg>|pin on|off|cast <skill> <x> <y>|unit <id>|near|mana full|mon set <id> life|frac|maxlife|dmg|res ...|states set|clear <skill>|spawn <monster> [n] [champion|unique]|quest list|set|bit|join|durability <slot|all> <v>|belt clear|unequip <slot|belt>|give <code> pack|belt|stat <id> <v>|quest <q>|skill left|right <id>|points <id> <n>
+goto ok 25.0 28.0
+## debug level
+ok 28 25.00 28.00 50 56 2982 904
+## debug presets
+0	15	20.1	35.1	0	Closed Door
+1	16	25.1	30.1	0	Closed Door
+2	29	26.7	31.1	0	
+3	180	24.5	33.3	0	Bookshelf
+4	29	32.3	37.3	0	
+5	7	35.3	38.1	0	
+6	7	36.3	37.5	0	Barrel
+7	7	37.3	38.1	0	Barrel
+8	7	35.3	40.1	0	Barrel
+9	7	36.3	40.3	0	Barrel
+10	7	31.3	38.1	0	Barrel
+11	16	25.1	38.1	0	Closed Door
+12	5	26.3	37.3	0	Chest
+13	15	30.1	35.1	0	Closed Door
+14	7	36.3	31.3	0	Barrel
+15	7	37.3	30.5	0	Barrel
+16	7	33.3	35.3	0	Barrel
+17	7	35.1	32.1	0	Barrel
+18	7	31.3	32.3	0	Barrel
+19	29	33.3	24.1	0	
+20	37	25.3	23.3	0	
+21	37	24.3	22.3	0	
+22	37	26.3	22.3	0	
+23	5	25.1	22.1	0	Chest
+24	37	23.3	23.3	0	
+25	37	27.3	23.3	0	
+26	269	22.3	22.1	0	
+27	269	26.1	23.1	0	
+28	16	15.1	37.1	0	Closed Door
+29	29	13.1	37.7	0	
+30	5	14.7	39.1	0	Chest
+31	264	19.1	23.7	0	Shrine
+32	15	10.1	35.1	0	Closed Door
+33	16	15.1	30.1	0	Closed Door
+34	5	16.3	33.9	0	Chest
+35	29	16.1	25.1	0	
+room	167	44	46
+room	167	49	46
+room	167	44	53
+room	167	49	53
+room	204	34	4
+room	204	39	4
+room	204	34	11
+room	204	39	11
+room	176	34	18
+room	176	39	18
+room	176	34	25
+room	176	39	25
+room	172	44	32
+room	172	49	32
+room	172	44	39
+room	172	49	39
+room	199	4	32
+room	199	9	32
+room	199	4	39
+room	199	9	39
+room	185	34	32
+room	185	39	32
+room	185	34	39
+room	185	39	39
+room	171	14	4
+room	171	19	4
+room	171	14	11
+room	171	19	11
+room	178	14	32
+room	178	19	32
+room	178	14	39
+room	178	19	39
+room	196	14	18
+room	196	19	18
+room	196	14	25
+room	196	19	25
+room	189	24	18
+room	189	29	18
+room	189	24	25
+room	189	29	25
+room	178	24	32
+room	178	29	32
+room	178	24	39
+room	178	29	39
+ok
+## debug objects
+0	20.1	35.1	op8	15	-	NU
+1	25.1	30.1	op8	16	-	NU
+2	26.7	31.1	op11	29	-	ON
+3	24.5	33.3	op26	180	-	NU
+4	32.3	37.3	op11	29	-	ON
+5	35.3	38.1	op5	7	-	ON
+6	36.3	37.5	op5	7	-	NU
+7	37.3	38.1	op5	7	-	NU
+8	35.3	40.1	op5	7	-	NU
+9	36.3	40.3	op5	7	-	NU
+10	31.3	38.1	op5	7	-	NU
+11	25.1	38.1	op8	16	-	NU
+12	26.3	37.3	chest	0	-	NU
+13	30.1	35.1	op8	15	-	NU
+14	36.3	31.3	op5	7	-	NU
+15	37.3	30.5	op5	7	-	NU
+16	33.3	35.3	op5	7	-	NU
+17	35.1	32.1	op5	7	-	NU
+18	31.3	32.3	op5	7	-	NU
+19	33.3	24.1	op11	29	-	ON
+20	25.3	23.3	op13	37	-	ON
+21	24.3	22.3	op13	37	-	ON
+22	26.3	22.3	op13	37	-	ON
+23	25.1	22.1	chest	0	-	NU
+24	23.3	23.3	op13	37	-	ON
+25	27.3	23.3	op13	37	-	ON
+26	22.3	22.1	op14	269	-	ON
+27	26.1	23.1	op14	269	-	ON
+28	15.1	37.1	op8	16	-	ON
+29	13.1	37.7	op11	29	-	ON
+30	14.7	39.1	chest	0	-	NU
+31	19.1	23.7	shrine	2	-	NU
+32	10.1	35.1	op8	15	-	ON
+33	15.1	30.1	op8	16	-	NU
+34	16.3	33.9	chest	0	-	NU
+35	16.1	25.1	op11	29	-	ON
+ok
+## debug monsters
+err debug wp <index|all|level <id>>|collision|automap|portals|objects|net|statpts <n>|skillpts <n>|wear|unid|level|blocked <x> <y>|warp <x> <y>|act <1-5>|help|hit <dmg>|merc hire <type>|kill|revive|hurt <dmg>|pin on|off|cast <skill> <x> <y>|unit <id>|near|mana full|mon set <id> life|frac|maxlife|dmg|res ...|states set|clear <skill>|spawn <monster> [n] [champion|unique]|quest list|set|bit|join|durability <slot|all> <v>|belt clear|unequip <slot|belt>|give <code> pack|belt|stat <id> <v>|quest <q>|skill left|right <id>|points <id> <n>
+## debug units
+err debug wp <index|all|level <id>>|collision|automap|portals|objects|net|statpts <n>|skillpts <n>|wear|unid|level|blocked <x> <y>|warp <x> <y>|act <1-5>|help|hit <dmg>|merc hire <type>|kill|revive|hurt <dmg>|pin on|off|cast <skill> <x> <y>|unit <id>|near|mana full|mon set <id> life|frac|maxlife|dmg|res ...|states set|clear <skill>|spawn <monster> [n] [champion|unique]|quest list|set|bit|join|durability <slot|all> <v>|belt clear|unequip <slot|belt>|give <code> pack|belt|stat <id> <v>|quest <q>|skill left|right <id>|points <id> <n>
+## debug nearby
+27	18	56
+ok
