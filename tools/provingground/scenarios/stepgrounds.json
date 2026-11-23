@@ -149,6 +149,157 @@
    ],
    "needs": [
     "lab-verbs-attach"
+   ],
+   "status": "pending",
+   "pending_reason": "The lab d2d leaves no Malus after a spawned Smith dies: V tools/probes/stepdrop.py devp23 seed 11, spawn smith (plain and unique), quest 3 = 0x000c, debug kill: ground has no hdm row (49 other rows). Needs a fork verb that forces the quest drop or spawns the level superunique with its quest treasure class (fork request F2)."
+  },
+  {
+   "id": "step.act1.smith.malus_pickup",
+   "title": "Step ground: a Malus lies in the Barracks, the bot picks it up",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "tools_of_the_trade",
+    "chunk": "malus"
+   },
+   "step": {
+    "action": "kill",
+    "target": "The Smith",
+    "nodes": [
+     "kill",
+     "malus"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "data/questspec/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.tools_of_the_trade.malus",
+    "combat.fight",
+    "travel.waypoint",
+    "travel.area-transition"
+   ],
+   "pre": {
+    "level": 24,
+    "gold": 200,
+    "stash": 500000,
+    "waypoints": [
+     -1
+    ],
+    "items": [
+     {
+      "code": "hp2",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     },
+     {
+      "code": "hdm",
+      "where": "ground",
+      "quality": 2
+     }
+    ],
+    "belt": [
+     "hp2",
+     "hp2",
+     "hp2",
+     "hp2"
+    ],
+    "merc": 0,
+    "quests": [
+     {
+      "record": 3,
+      "word": 12
+     }
+    ],
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head"
+     },
+     {
+      "code": "qui",
+      "slot": "torso"
+     },
+     {
+      "code": "ssd",
+      "slot": "rhand"
+     },
+     {
+      "code": "buc",
+      "slot": "lhand"
+     }
+    ],
+    "merc_level": 17,
+    "stats": [
+     {
+      "stat": 7,
+      "value": 102400
+     },
+     {
+      "stat": 6,
+      "value": 102400
+     }
+    ],
+    "start": "field",
+    "area": 28,
+    "board": {
+     "quest": "tools_of_the_trade",
+     "chunk": "malus"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "quests.layoutRead": 1,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 6
+   },
+   "matrix": {
+    "classes": [
+     "Paladin"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero.",
+   "notes": "The pickup half of Tools of the Trade, apart from the kill: the Malus is given at the hero's feet in the Barracks (debug give hdm 2, SETUP). U: whether the bot's loot picks a quest item at once or only inside the boss script. A RED here is a bot finding; GREEN says nothing about the drop (step.act1.smith.drop_pickup, pending on fork verb F2).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^loot: clicked .*item=Horadric Malus",
+     "min": 1,
+     "why": "the bot clicked the dropped Malus (log is the bot's report, S)"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "hdm",
+     "why": "the Malus is carried at the end (V design: a quest item is not sold or dropped by this chunk before Charsi)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death"
+    }
+   ],
+   "needs": [
+    "lab-verbs-attach"
    ]
   },
   {
@@ -277,7 +428,7 @@
     ]
    },
    "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero.",
-   "notes": "Control of step.act1.smith.drop_pickup: must be GREEN; if it is RED the pickup assertion of the main scenario proves nothing.",
+   "notes": "Control of the pickup scenarios: no Malus, no Smith: must be GREEN; if it is RED the pickup assertions of step.act1.smith.malus_pickup prove nothing.",
    "assert": [
     {
      "kind": "item_absent",
