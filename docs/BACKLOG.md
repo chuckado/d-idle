@@ -1314,6 +1314,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/qd16: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/qd16-->
 - toolstrade30: the Barracks life floor is waived four levels above the level floor (TASK-904, merged 2026-11-23, acceptance 1 of 1): Life floor waived 4 levels above the level floor, logged once; hold text life X/Y; unit-tested; not live. <!--sg:agent/toolstrade30-->
 - toolstrade32: what autoAlloc spent and why clvl 20 to 24 is out of reach in Act 1 (TASK-905, merged 2026-11-23, acceptance 1 of 1): Analysis only (live log read-only); no code change; recommendations in the doc. <!--sg:agent/toolstrade32-->
+- malus2: Malus control run (Paladin drops it, army kill does not): lab gap, drill doc section 16 (TASK-906, merged 2026-11-23, acceptance 2 of 2): Docs and scenario notes only. Paladin control (job 174602-c2e4, route.barracksMinLife 0) killed the Smith and picked up the Malus with the same fixture word 0x000c; the Necromancer army kill left nothing within 25 subtiles. ... <!--sg:agent/malus2-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

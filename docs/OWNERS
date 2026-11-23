@@ -621,6 +621,7 @@ docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  bankdoc
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  handin
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  malus
+docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  malus2
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  navexit2
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  necrodrill
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1doc
@@ -2578,6 +2579,7 @@ tools/provingground/scenarios/navexit.json  credit-runner  stage1fix
 tools/provingground/scenarios/navexit.json  credit-runner  stage23
 tools/provingground/scenarios/necro.json  credit-runner  handin
 tools/provingground/scenarios/necro.json  credit-runner  malus
+tools/provingground/scenarios/necro.json  credit-runner  malus2
 tools/provingground/scenarios/necro.json  credit-runner  stage1fix
 tools/provingground/scenarios/necro.json  credit-runner  stage23
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
