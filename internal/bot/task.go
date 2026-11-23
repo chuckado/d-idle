@@ -533,10 +533,10 @@ func (a taskActs) tag(err error) error {
 	r := a.r
 	switch {
 	case errors.Is(err, ErrLeftGame):
-		// A chicken exit is a failed attempt: three of them in one step block the quest (like deaths), so a boss that is
-		// too strong does not loop forever through fresh games.
+		// A chicken exit is a failed attempt, counted against its own (higher) limit: a boss that is too strong does not
+		// loop forever through fresh games, but a kit that drinks and retreats at the Smith is not "too weak" after three.
 		r.loop.task.err = err
-		return task.Wrap(task.KindDeath, err)
+		return task.Wrap(task.KindChicken, err)
 	case errors.Is(err, ErrPortalOpened):
 		r.loop.task.err = err
 		return task.Wrap(task.KindFatal, err)
