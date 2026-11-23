@@ -499,6 +499,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0877d4fb5 11-23 18:30 `Merge agent/stepgrounds: Merge branch 'main' into stepgrounds` (stepgrounds)
+- b8dc8f848 11-23 18:29 `Merge branch 'main' into stepgrounds` (-)
 - 2f43f54a7 11-23 18:04 `Merge agent/toolstrade33: Merge branch 'main' into toolstrade33` (toolstrade33)
 - fcc885326 11-23 18:02 `Merge branch 'main' into toolstrade33` (-)
 - 4eef0017d 11-23 18:00 `Merge agent/malus2: Merge branch 'main' into malus2` (malus2)
@@ -507,6 +509,4 @@
 - 1e068b388 11-23 17:52 `Merge remote-tracking branch 'origin/main' into agent/malus2` (-)
 - afd51a379 11-23 17:41 `Merge agent/toolstrade30: Merge branch 'main' into toolstrade30` (toolstrade30)
 - dd1f389cf 11-23 17:40 `Merge branch 'main' into toolstrade30` (-)
-- 9308c4286 11-23 17:37 `Merge agent/qd16: Merge branch 'main' into qdmatrix` (qd16)
-- 583e51b61 11-23 17:35 `Merge branch 'main' into qdmatrix` (-)
 <!-- statusgen:end -->

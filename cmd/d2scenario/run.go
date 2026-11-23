@@ -787,6 +787,14 @@ func observe(ctx context.Context, c *d2dctl.Client, writes int, live bool) scena
 			}
 		}
 	}
+	if rep, err := c.Do(ctx, "debug quest words"); err == nil { // records 16 to 47 (devp23 labverbs; see questWords)
+		if w := questWords(rep.Lines, rep.Rest); w != nil {
+			if st.Quests == nil {
+				st.Quests = map[int]uint16{}
+			}
+			mergeQuestWords(st.Quests, w)
+		}
+	}
 	if m, err := c.Minions(ctx); err == nil {
 		n := 0
 		for _, x := range m.Minions {
