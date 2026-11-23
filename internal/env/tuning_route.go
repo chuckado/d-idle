@@ -27,6 +27,7 @@ type RouteTuning struct {
 	BarracksMinLevelCaster int // same for a caster class
 	BarracksMinLife        int // max life the Barracks needs for a melee class (0 = no life rule)
 	BarracksMinLifeCaster  int // same for a caster class
+	BarracksLifeWaiver     int // the life floor stops applying this many levels above the level floor (0 = never waived)
 	FreshGapSec            int // min seconds between two fresh-game restarts while the last one gained under FreshMinXP; 0 = no gap
 	FreshMaxNoGain         int // fresh-game restarts in a row without FreshMinXP gained before the blocked state; 0 = bound off
 	FreshMinXP             int // experience a cycle must gain to count as progress and reset the no-gain count
@@ -40,7 +41,7 @@ func DefaultCampaignTuning() CampaignTuning {
 func DefaultRouteTuning() RouteTuning {
 	return RouteTuning{MonasteryMinLevel: 14, MonasteryMinLevelMerc: 14, TowerMinLevel: 15, TowerMinLevelMerc: 14, TowerNeedsMerc: 0,
 		TowerMinLife: 150, TowerMinLevelNoLife: 16, TowerKitMana: 3,
-		BarracksMinLevel: 24, BarracksMinLevelCaster: 22, BarracksMinLife: 400, BarracksMinLifeCaster: 300,
+		BarracksMinLevel: 24, BarracksMinLevelCaster: 22, BarracksMinLife: 400, BarracksMinLifeCaster: 300, BarracksLifeWaiver: 4,
 		FreshGapSec: 600, FreshMaxNoGain: 3, FreshMinXP: 200, FreshBlockedSec: 1800}
 }
 
@@ -84,6 +85,8 @@ func routeKnobs() []Knob {
 			Desc: "Max life a melee class needs besides the level (unspent stat points do not count: the allocator or the player must spend them). While max life is unreadable (0) only the level counts. 0 = no life rule."},
 		{Key: "route.barracksMinLifeCaster", Label: "Barracks max life floor (caster)", Unit: "life", Default: 300, Min: 0, Max: 3000, HigherIsBetter: true, NoHandicap: true,
 			Desc: "The same max life floor for a caster class. 0 = no life rule."},
+		{Key: "route.barracksLifeWaiver", Label: "Barracks life floor waived after N levels", Unit: "levels", Default: 4, Min: 0, Max: 40, HigherIsBetter: false, NoHandicap: true,
+			Desc: "The max life floor of the Barracks stops applying once the character is this many levels above the level floor (the log says 'life floor waived'), so a build whose life grows slowly (a Paladin with its points mostly in strength, a caster with little vitality) cannot train forever. 0 = never waived."},
 		{Key: "route.freshGapSec", Label: "Fresh game: min gap after a no-gain restart", Unit: "s", Default: 600, Min: 0, Max: 7200, HigherIsBetter: true, NoHandicap: true,
 			Desc: "When every leveling area is cleared or blocked the bot starts a fresh game. If the previous fresh game gained under route.freshMinXP the next restart waits until this many seconds have passed (in town, log: leveling: fresh game held back). Gate 2 rerun seed 13 (clvl 15) restarted 75 times in 4 h with no XP. 0 = no gap."},
 		{Key: "route.freshMaxNoGain", Label: "Fresh game: no-gain restarts before blocked", Unit: "restarts", Default: 3, Min: 0, Max: 50, HigherIsBetter: true, NoHandicap: true,

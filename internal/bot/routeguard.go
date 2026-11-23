@@ -52,7 +52,7 @@ func (r *Runner) fillRoute(w *task.World, class d2.Class, p *d2.Player) {
 // and the guard falls back to the old floor (route.towerMinLevelNoLife) and says so in its log line.
 func (r *Runner) fillTower(w *task.World, rt env.RouteTuning, class d2.Class, p *d2.Player) {
 	w.TowerMinLife, w.TowerMinLevelNoLife = rt.TowerMinLife, rt.TowerMinLevelNoLife
-	w.BarracksMinLevel, w.BarracksMinLife = rt.BarracksMinLevel, rt.BarracksMinLife
+	w.BarracksMinLevel, w.BarracksMinLife, w.BarracksLifeWaiver = rt.BarracksMinLevel, rt.BarracksMinLife, rt.BarracksLifeWaiver
 	if class.Caster() {
 		w.BarracksMinLevel, w.BarracksMinLife = rt.BarracksMinLevelCaster, rt.BarracksMinLifeCaster
 	}
@@ -81,6 +81,9 @@ func (r *Runner) noteFloors(w task.World) {
 				lines[len(lines)-1] += task.TowerLifeNote(w)
 			}
 		}
+	}
+	if task.BarracksLifeWaived(w) {
+		lines = append(lines, fmt.Sprintf("route guard: barracks life floor waived (clvl %d, max life %d < %d)", w.Level, w.MaxLife, w.BarracksMinLife))
 	}
 	key := strings.Join(lines, "\n")
 	r.obMu.Lock()
@@ -173,7 +176,10 @@ func (r *Runner) towerWhy(w task.World, p *d2.Player) string {
 func (r *Runner) areaGuardWhy(s *d2.Snapshot, a int) string {
 	switch {
 	case task.RouteGuarded(task.Area(a)):
-		return r.routeGuardWhy(s)
+		if why := r.routeGuardWhy(s); why != "" {
+			return why
+		}
+		return r.barracksGuardWhy(s, a)
 	case task.TowerGuarded(task.Area(a)):
 		return r.towerGuardWhy(s)
 	}
@@ -184,11 +190,26 @@ func (r *Runner) areaGuardWhy(s *d2.Snapshot, a int) string {
 func (r *Runner) areaLeaveWhy(s *d2.Snapshot, a int) string {
 	if task.RouteGuarded(task.Area(a)) {
 		if w := r.guardWorld(s); w != nil {
-			return task.RouteLeaveWhy(*w)
+			if why := task.RouteLeaveWhy(*w); why != "" {
+				return why
+			}
 		}
-		return ""
+		return r.barracksGuardWhy(s, a)
 	}
 	return r.areaGuardWhy(s, a)
+}
+
+// barracksGuardWhy is the Barracks floor for the areas that need it (28 to 37): a hero below the class level or max life
+// neither walks through the Barracks arrival nor farms past it (V live 2026-11-23: the farm walk to the Catacombs crossed
+// it at clvl 20 and chickened or portalled out seven times in ten minutes).
+func (r *Runner) barracksGuardWhy(s *d2.Snapshot, a int) string {
+	if !task.BarracksBeyond(task.Area(a)) || r.e.Tune.Route.MonasteryMinLevel <= 0 { // the road guard knob 0 turns the Barracks floor off too
+		return ""
+	}
+	if w := r.guardWorld(s); w != nil {
+		return task.BarracksWhy(*w)
+	}
+	return ""
 }
 
 // MercGoldFarm is set by the merc wiring (cmd/d2bot/mercwire.go): true while the merc is missing, gold cannot pay the
@@ -233,6 +254,11 @@ func (r *Runner) guardedAreasNoFarm(s *d2.Snapshot, ex map[int]bool) {
 		ex[areaDenOfEvil] = true // the Den waits for its class floor (campaign.denMinLevel*): level in Blood Moor
 	}
 	route, tower := r.routeGuardWhy(s) != "", r.towerGuardWhy(s) != ""
+	if r.barracksGuardWhy(s, int(task.Barracks)) != "" {
+		for a := int(task.Barracks); a <= 37; a++ {
+			ex[a] = true // the picker never offers the Barracks or what lies past it below the floor
+		}
+	}
 	for a := 7; a <= 37; a++ {
 		if (route && task.RouteGuarded(task.Area(a))) || (tower && task.TowerGuarded(task.Area(a))) {
 			ex[a] = true

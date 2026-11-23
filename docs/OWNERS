@@ -543,6 +543,7 @@ docs/knobs.md  credit-runner  staletarget
 docs/knobs.md  credit-runner  survfix2
 docs/knobs.md  credit-runner  survsd
 docs/knobs.md  credit-runner  tidy
+docs/knobs.md  credit-runner  toolstrade30
 docs/knobs.md  credit-runner  town3
 docs/knobs.md  credit-runner  town4
 docs/knobs.md  credit-runner  vaultequip
@@ -596,6 +597,7 @@ docs/plan/data/build-paladin_hammerdin_guide.json  credit-runner  hammer1
 docs/plan/data/build-primary-blizzard.json  credit-runner  sorc2
 docs/plan/data/build-sorceress_fire_normal30.json  credit-runner  sorc2
 docs/plan/data/dropmodel-normal.json  credit-runner  decomp31
+docs/plan/data/levelplan-normal.json  credit-runner  toolstrade29
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
@@ -670,6 +672,8 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade20
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade22
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade25
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade27
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade29
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade30
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
 docs/probes/town-plan-scenarios.md  credit-runner  town1
@@ -953,6 +957,7 @@ internal/bot/areaskip_test.go  credit-runner  staletarget
 internal/bot/areaskip_test.go  pro-runner  bounce3
 internal/bot/beltfill_test.go  credit-runner  toolstrade11
 internal/bot/beltfill_test.go  credit-runner  toolstrade17
+internal/bot/beltfill_test.go  credit-runner  toolstrade29
 internal/bot/broke.go  credit-runner  survrecover
 internal/bot/broke.go  credit-runner  town5
 internal/bot/catalog.go  credit-runner  botcpu2
@@ -1036,6 +1041,7 @@ internal/bot/observe.go  pro-runner  bounce3
 internal/bot/ordersguard.go  credit-runner  staletarget
 internal/bot/parkstep_test.go  credit-runner  botstuck
 internal/bot/plan.go  pro-runner  levelplan3
+internal/bot/plan_test.go  credit-runner  toolstrade29
 internal/bot/playeraction.go  credit-runner  idfast
 internal/bot/playeraction.go  credit-runner  uib1
 internal/bot/playeraction_test.go  credit-runner  botinstant
@@ -1087,6 +1093,8 @@ internal/bot/routeguard.go  credit-runner  bsm7
 internal/bot/routeguard.go  credit-runner  classtraits
 internal/bot/routeguard.go  credit-runner  manapack
 internal/bot/routeguard.go  credit-runner  questrun
+internal/bot/routeguard.go  credit-runner  toolstrade29
+internal/bot/routeguard.go  credit-runner  toolstrade30
 internal/bot/routeguard.go  credit-runner  toolstrade5
 internal/bot/runner.go  credit-runner  agencyp0
 internal/bot/runner.go  credit-runner  botinstant
@@ -1379,6 +1387,7 @@ internal/env/tuning_quests.go  live-agent  k1layout
 internal/env/tuning_resource.go  credit-runner  agencyp0
 internal/env/tuning_resource.go  credit-runner  freshstart
 internal/env/tuning_resource.go  live-agent  recoverypace
+internal/env/tuning_route.go  credit-runner  toolstrade30
 internal/env/tuning_town.go  credit-runner  tidy
 internal/env/tuning_town.go  credit-runner  town3
 internal/env/tuning_watch.go  credit-runner  videofeed2
@@ -1572,6 +1581,7 @@ internal/plandata/build-sorceress_fire_normal30.json  credit-runner  sorc2
 internal/plandata/dropmodel-normal.json  credit-runner  decomp31
 internal/plandata/ladder_runewords.go  credit-runner  q4runes
 internal/plandata/ladder_runewords_test.go  credit-runner  q4runes
+internal/plandata/levelplan-normal.json  credit-runner  toolstrade29
 internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
@@ -1735,14 +1745,18 @@ internal/task/executor_unpark_test.go  credit-runner  toolstrade25
 internal/task/gate.go  credit-runner  cainfix3
 internal/task/gate.go  credit-runner  chores2
 internal/task/gate.go  credit-runner  toolstrade16
+internal/task/gate.go  credit-runner  toolstrade29
 internal/task/gate_hold_test.go  credit-runner  bsm7
 internal/task/guided.go  credit-runner  campaign1
 internal/task/guided_test.go  credit-runner  campaign1
 internal/task/guided_test.go  pro-runner  levelplan3
 internal/task/kind.go  credit-runner  toolstrade25
+internal/task/route.go  credit-runner  toolstrade29
+internal/task/route.go  credit-runner  toolstrade30
 internal/task/route.go  credit-runner  toolstrade5
 internal/task/route_test.go  credit-runner  chores2
 internal/task/route_test.go  credit-runner  toolstrade16
+internal/task/route_test.go  credit-runner  toolstrade30
 internal/task/route_test.go  credit-runner  toolstrade5
 internal/task/s7b_test.go  credit-runner  quests7b
 internal/task/testdata  credit-runner  quests7b
@@ -1751,6 +1765,7 @@ internal/task/timeoutpolicy_test.go  credit-runner  wpstep
 internal/task/world.go  credit-runner  cainfix
 internal/task/world.go  credit-runner  cainfix3
 internal/task/world.go  credit-runner  quests7b
+internal/task/world.go  credit-runner  toolstrade30
 internal/tidy  credit-runner  tidy
 internal/town  credit-runner  town11
 internal/town  credit-runner  town4

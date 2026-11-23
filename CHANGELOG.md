@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into toolstrade30 <!--sg:agent/toolstrade30-->
+- Merge branch 'main' into qdmatrix <!--sg:agent/qd16-->
+- Merge branch 'main' into toolstrade29 <!--sg:agent/toolstrade29-->
 - malus: card and drill doc section 15 <!--sg:agent/malus-->
 - questdrill: the Smith drill with layoutRead and the sandbox knobs <!--sg:agent/qd14-->
 - d2bot: live waypoint bits are read without a save; objectlist probe <!--sg:agent/qd15-->
