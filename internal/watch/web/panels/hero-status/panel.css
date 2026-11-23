@@ -8,5 +8,5 @@
   [data-panel="hero-status"] .up { color: var(--d-text-2); font-size: var(--d-fs-1); white-space: nowrap; }
   [data-panel="hero-status"] .up b { color: var(--d-text); font-weight: 600; }
   [data-panel="hero-status"] .clock { color: var(--d-text-2); font-size: var(--d-fs-1); white-space: nowrap; }
-  [data-panel="hero-status"] .state .word { white-space: nowrap; }
+  [data-panel="hero-status"] .state .word { min-inline-size: 0; overflow-wrap: anywhere; } /* wraps at a large text size instead of pushing the page sideways (ts200 pages) */
 }

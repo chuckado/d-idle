@@ -162,8 +162,8 @@
   [data-cockpit-slot="strip"] > [data-panel="quest-strip"] { flex-grow: 2.2; } /* the quest tile needs the width of two cells (offer text, three buttons) */
   .d-slotcol > .d-panel, .d-slottabs > .d-panel, [data-cockpit-slot="strip"] > .d-panel { background: var(--d-surface-1); border-radius: var(--d-r-2); padding: var(--d-sp-2); overflow: hidden; box-sizing: border-box; position: relative; }
   .d-slottabs { display: flex; flex-direction: column; gap: var(--c-gap); min-block-size: 0; }
-  .d-tabbar { display: flex; gap: var(--d-sp-1); }
-  .d-tabbar > .d-btn { flex: 1 1 0; }
+  .d-tabbar { display: flex; flex-wrap: wrap; gap: var(--d-sp-1); } /* wraps at a large text size (ts200 pages) */
+  .d-tabbar > .d-btn { flex: 1 1 auto; }
   /* a slot panel is bare: its picture or content fills the box, and its title bar actions are two small labels on the edge */
   .d-panel[data-cockpit-panel] > .d-slotbody { block-size: 100%; min-block-size: 0; }
   .d-panel[data-cockpit-panel] > .d-slotlabels { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: var(--d-sp-1); align-items: center; z-index: 2;

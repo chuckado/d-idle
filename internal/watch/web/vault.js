@@ -180,7 +180,8 @@ export function mountVault(d) {
   sheetWrap.appendChild(sheetCard);
 
   // quick filter chips: one tap for a slot (card mobilequests). A chip is the Type filter with a name and a count; the slot list is data (vault.json "slots").
-  const slotRow = el('div', 'vt-slots'); slotRow.setAttribute('role', 'group'); slotRow.setAttribute('aria-label', T.slotsLabel || ''); slotRow.hidden = !(T.slots && T.slots.length);
+  const slotRow = el('div', 'vt-slots'); slotRow.setAttribute('role', 'group'); slotRow.dataset.hscroll = ''; // a row that scrolls sideways on purpose (the slot chips)
+   slotRow.setAttribute('aria-label', T.slotsLabel || ''); slotRow.hidden = !(T.slots && T.slots.length);
   const SLOT_KEY = 'vt-slot';
   const slotStore = (v) => { try { if (v === undefined) return localStorage.getItem(SLOT_KEY) || ''; localStorage.setItem(SLOT_KEY, v); } catch (e) { /* storage blocked */ } return ''; };
   function pickSlot(id) { S.f.type = id; slotStore(id); changed(); }

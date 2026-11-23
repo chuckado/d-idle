@@ -1042,7 +1042,7 @@ var returnTmpl = template.Must(template.New("return").Funcs(template.FuncMap{"du
 <link rel="icon" href="data:,"><link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/reset.css"><link rel="stylesheet" href="/watch/return.css"><link rel="stylesheet" href="/watch/components.css"><link rel="stylesheet" href="/watch/nav.css">
 </head><body>
 <main class="ret" id="return">
-<section class="d-card" aria-labelledby="r-head"><h2 id="r-head">While you were away</h2><p class="headline">{{.Headline}}</p><p><a class="d-btn" data-variant="primary" href="/watch?live=1">Go to the live screen</a></p>{{if .Rules}}<p class="d-hint">{{range $i, $r := .Rules}}{{if $i}}; {{end}}{{$r}}{{end}}</p>{{end}}</section>
+<section class="d-card" aria-labelledby="r-head"><h1 id="r-head">While you were away</h1><p class="headline">{{.Headline}}</p><p><a class="d-btn" data-variant="primary" href="/watch?live=1">Go to the live screen</a></p>{{if .Rules}}<p class="d-hint">{{range $i, $r := .Rules}}{{if $i}}; {{end}}{{$r}}{{end}}</p>{{end}}</section>
 {{if .Moments}}<section class="d-card" aria-labelledby="r-moments"><h2 id="r-moments">The moments</h2><ul class="moments">
 {{range .Moments}}<li class="moment {{.Kind}}"><b>{{.Title}}</b> <span>{{.Text}}</span></li>{{end}}</ul></section>{{end}}
 {{if .Deaths}}<section class="d-card" aria-labelledby="r-deaths"><h2 id="r-deaths">Deaths</h2><ul>{{range .Deaths}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
@@ -1095,7 +1095,7 @@ func RenderReturn(d ReturnData, notes bool) []byte {
 }
 
 // The Return and Policy pages share the one frame (reset.css, tokens.css, components.css, nav.css); this is the page's own layout on the tokens.
-const returnCSS = `body{background:var(--d-bg);color:var(--d-text)}h2{font:600 var(--d-fs-3)/var(--d-lh-tight) var(--d-font-display);margin:0 0 var(--d-sp-2)}:focus-visible{outline:2px solid var(--d-focus);outline-offset:2px}small{color:var(--d-text-2)}
+const returnCSS = `body{background:var(--d-bg);color:var(--d-text)}h1,h2{font:600 var(--d-fs-3)/var(--d-lh-tight) var(--d-font-display);margin:0 0 var(--d-sp-2)}:focus-visible{outline:2px solid var(--d-focus);outline-offset:2px}small{color:var(--d-text-2)}
 main.ret{display:block;max-width:46rem;margin:0 auto;padding:12px}.ret .d-card{min-width:0;overflow-wrap:anywhere;margin-bottom:12px;padding:12px 14px}
 .headline{font-size:1.1rem;margin:0}.moments{list-style:none;margin:0;padding:0}.moment{padding:6px 0;border-bottom:1px solid var(--d-line)}
 .trip,.missed{border:1px solid var(--d-line);border-radius:8px;padding:8px 12px;margin-bottom:8px}.trip h3,.missed h3{margin:0;font-size:.95rem}
