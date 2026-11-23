@@ -203,7 +203,7 @@ export function hits(win, selectors) {
   const d = win.document, out = {};
   for (const sel of selectors) {
     const n = d.querySelector(sel);
-    if (n && n.scrollIntoView && !n.closest('.cv-sel')) n.scrollIntoView({ block: 'start' }); // a target below the fold of a scrolling page is reached by scrolling, as a thumb does
+    if (n && n.scrollIntoView && !n.closest('.cv-sel')) n.scrollIntoView({ block: d.body.hasAttribute('data-vault') ? 'center' : 'start' }); // a target below the fold of a scrolling page is reached by scrolling, as a thumb does (the Vault is a scrolling document under a fixed band: a target at the very top would sit under it)
     const r = n && n.getBoundingClientRect();
     if (!r || !r.width) { out[sel] = false; continue; }
     const at = d.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
@@ -513,15 +513,19 @@ function vaultPage(win, d, vis, cs) {
     if (open !== inSheet) continue; // an open sheet: only its own controls; behind the scrim is by design
     const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     if (cx <= 2 || cy <= 2 || cx >= vw - 2 || cy >= vh - 2 || (inMain && (cy <= mr.top + 2 || cy >= mr.bottom - 2))) continue; // scrolled out of the list (a centre within 2 px of an edge is out, the browser returns no element there): a thumb scrolls to it
+    const sl = n.closest('.vt-slots'); // the quick filter row scrolls sideways on its own: a chip scrolled out of it is not covered
+    if (sl) { const sr = sl.getBoundingClientRect(); if (cx < sr.left || cx > sr.right) continue; }
     const fp = n.closest('.vt-fpanel');
     if (fp) { const pr = fp.getBoundingClientRect(); if (cy < pr.top || cy > pr.bottom) continue; } // inside the folded panel's own scroll
     const at = d.elementFromPoint(cx, cy);
+    if (inMain && at && at.closest('.d-navhost, [class*="d-nav"]')) continue; // the page scrolls under the fixed bar or band: the nav lane judges the bar
     if (!at || !(at === n || n.contains(at) || at.contains(n) || (n.labels && [...n.labels].some((l) => l.contains(at))))) o.covered.push(nm(n) + (at ? ' under ' + nm(at) : ' at ' + Math.round(cx) + ',' + Math.round(cy) + ' of ' + vw + 'x' + vh));
   }
   for (const n of root.querySelectorAll('.vt-head, .vt-tools, .vt-filters, .vt-actionbar, .vt-body, .vt-main, .vt-grid, .vt-sheet-card, .vt-banner')) {
     if (!live(n)) continue;
-    const r = n.getBoundingClientRect(), tall = n.matches('.vt-head, .vt-body, .vt-main, .vt-sheet-card');
-    if (r.right > vw + 1 || r.left < -1 || (tall && (r.bottom > vh + 1 || r.top < -1))) o.outside.push(nm(n) + ' right ' + Math.round(r.right) + ' bottom ' + Math.round(r.bottom));
+    const r = n.getBoundingClientRect(), sheetCard = n.matches('.vt-sheet-card');
+    // only sideways (the open sheet is fixed and stays inside the window): the Vault is one scrolling document since card vaultdesktop (2026-11-21), so a box below or above the window is by design
+    if (r.right > vw + 1 || r.left < -1 || (sheetCard && (r.bottom > vh + 1 || r.top < -1))) o.outside.push(nm(n) + ' right ' + Math.round(r.right) + ' bottom ' + Math.round(r.bottom));
   }
   const card = d.querySelector('.vt-sheet-card');
   if (open && card && card.scrollHeight > card.clientHeight + 1) o.sheet = 'the sheet scrolls or is cut [' + card.scrollHeight + '/' + card.clientHeight + ']';

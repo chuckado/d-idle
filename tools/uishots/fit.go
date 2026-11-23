@@ -273,7 +273,7 @@ func (r fitResult) judge() []string {
 		return bad
 	}
 	var bad []string
-	if r.ScrollH > r.VH {
+	if r.ScrollH > r.VH && r.Vault == nil { // the Vault is one scrolling document (card vaultdesktop): only sideways counts
 		bad = append(bad, fmt.Sprintf("the page scrolls: scrollHeight %d > innerHeight %d", r.ScrollH, r.VH))
 	}
 	if r.ScrollW > r.VW {
