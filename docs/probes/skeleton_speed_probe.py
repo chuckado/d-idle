@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Skeleton speed probe: a Necromancer raises skeletons on a lockstep d2d, the hero walks, we record per tick positions.
 Usage: skeleton_speed_probe.py <d2d> <outdir> [seed]. Reads only plus SETUP verbs (--lab-verbs, throwaway char, no save)."""
-import json, os, re, sys, time
+import json, math, os, re, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from skeleton_speed_lib import Session
 d2d, out = sys.argv[1], sys.argv[2]
@@ -48,20 +48,34 @@ def dump(name):
             f.write(f"{ph},{tk},{len(lv)},{'|'.join(' '.join(x) for x in lv)}\n")
 def grid():
     return s.cmd("debug grid 1").splitlines()[:-1]
-def far_target(g, hx, hy, minlen=30):
-    """BFS over free cells from the hero; the farthest-reachable cell within 60 steps with a bend (4-neighbour)."""
+def far_path(g, hx, hy, maxd=70):
+    """4-neighbour BFS over free cells from the hero; the path to the farthest reachable cell within maxd steps."""
     import collections
     H, W = len(g), len(g[0]); sx, sy = int(hx), int(hy)
-    dist = {(sx, sy): 0}; q = collections.deque([(sx, sy)])
+    par = {(sx, sy): None}; dist = {(sx, sy): 0}; q = collections.deque([(sx, sy)])
     while q:
         x, y = q.popleft()
+        if dist[(x, y)] >= maxd:
+            continue
         for dx, dy in ((1,0),(-1,0),(0,1),(0,-1)):
-            nx, ny = x+dx, y+dy
-            if 0 <= nx < W and 0 <= ny < H and (nx, ny) not in dist and g[ny][nx] == ".":
-                dist[(nx, ny)] = dist[(x, y)] + 1; q.append((nx, ny))
-    cand = [(d, c) for c, d in dist.items() if d <= 60]
-    d, c = max(cand)
-    return c, d
+            n = (x+dx, y+dy)
+            if 0 <= n[0] < W and 0 <= n[1] < H and n not in dist and g[n[1]][n[0]] == ".":
+                dist[n] = dist[(x, y)] + 1; par[n] = (x, y); q.append(n)
+    far = max(dist, key=lambda c: (dist[c], c))
+    path = []; c = far
+    while c is not None:
+        path.append(c); c = par[c]
+    return path[::-1]
+def hop(path, phase, hopn=6, per_hop=160):
+    """walk the hero along the path in hops of hopn cells (a fresh cmd move each), recording every tick"""
+    for i in range(hopn, len(path) + hopn, hopn):
+        c = path[min(i, len(path) - 1)]
+        s.cmd(f"cmd move {c[0]+0.5:.2f} {c[1]+0.5:.2f}")
+        for _ in range(per_hop // 10):
+            rec(phase, 10)
+            h = hero()
+            if math.dist(h, (c[0]+0.5, c[1]+0.5)) < 0.7:
+                break
 def scene(area, tag, goto_wait=100):
     s.cmd("debug points 70 3"); s.cmd("debug points 69 5")
     log(tag, s.cmd(f"debug goto {area}").strip()); step(goto_wait)
@@ -84,11 +98,12 @@ try:
         walk_leg("C_walk_west", 20.5, 16.5, 360)
         s.cmd("key r"); walk_leg("E_run_east", 42.5, 16.5, 260); s.cmd("key r")
     else:
-        g = grid(); (tx, ty), d = far_target(g, hx, hy)
-        log("far target", tx, ty, "bfs steps", d)
-        walk_leg("C_walk_far", tx + 0.5, ty + 0.5, int(d * 14) + 50)
-        s.cmd("key r"); walk_leg("E_run_back", hx, hy, int(d * 10) + 50); s.cmd("key r")
+        g = grid(); path = far_path(g, hx, hy)
+        log("path cells", len(path), "from", path[0], "to", path[-1])
+        hop(path, "C_walk_far"); rec("C_walk_far_stop", 100)
+        s.cmd("key r"); hop(path[::-1], "E_run_back"); s.cmd("key r"); rec("E_run_back_stop", 100)
         open(os.path.join(out, f"grid_area{area}.txt"), "w").write("\n".join(g))
+        open(os.path.join(out, f"path_area{area}.txt"), "w").write(" ".join(f"{x},{y}" for x, y in path))
     dump(f"trace_area{area}.csv")
     log("final", json.dumps(mins()))
 finally:
