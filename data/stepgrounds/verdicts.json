@@ -1,0 +1,164 @@
+{
+ "step.act1.smith.malus_pickup": {
+  "verdict": "GREEN",
+  "run": "20261123-175946",
+  "tag": "V",
+  "note": "Paladin 11; the Malus on the ground is clicked and carried"
+ },
+ "step.act1.smith.malus_pickup.sorc": {
+  "verdict": "GREEN",
+  "run": "20261123-180122",
+  "tag": "V",
+  "note": "Sorceress 3"
+ },
+ "step.act1.smith.drop_pickup.control": {
+  "verdict": "GREEN",
+  "run": "20261123-175946",
+  "tag": "V",
+  "note": "control: no Malus without a Smith"
+ },
+ "step.act1.smith.drop_pickup.control.sorc": {
+  "verdict": "GREEN",
+  "run": "20261123-180122",
+  "tag": "V",
+  "note": ""
+ },
+ "step.act1.smith.drop_pickup": {
+  "verdict": "BLOCKED",
+  "run": "probe stepdrop.py",
+  "tag": "V",
+  "note": "a spawned and killed Smith leaves no Malus on the lab d2d (fork request F1)"
+ },
+ "drill.act1.sail": {
+  "verdict": "GREEN",
+  "run": "20261123-002950-167e",
+  "tag": "V",
+  "note": "Paladin and Sorceress, matrix table"
+ },
+ "drill.andariel.stand": {
+  "verdict": "GREEN",
+  "run": "20261123-165901",
+  "tag": "V",
+  "note": "clvl 30 stand-in, matrix note 35"
+ },
+ "drill.act2.radament": {
+  "verdict": "GREEN",
+  "run": "20261123-014151",
+  "tag": "V",
+  "note": "stand-in stats, matrix note 8"
+ },
+ "drill.act2.radament.handin": {
+  "verdict": "GREEN",
+  "run": "matrix-2026-11-23",
+  "tag": "V",
+  "note": "matrix table row"
+ },
+ "drill.act2.cube": {
+  "verdict": "GREEN",
+  "run": "20261123-052834",
+  "tag": "V",
+  "note": "matrix table"
+ },
+ "drill.act2.amulet": {
+  "verdict": "GREEN",
+  "run": "20261123-063211-a223",
+  "tag": "V",
+  "note": "matrix note 23"
+ },
+ "drill.act2.assemble": {
+  "verdict": "BLOCKED",
+  "run": "20261123-034952",
+  "tag": "V",
+  "note": "GREEN to Cain's menu; the done bit after the talk is U (matrix)"
+ },
+ "drill.act2.shaft": {
+  "verdict": "RED",
+  "run": "20261123-014519",
+  "tag": "V",
+  "note": "Maggot Lair 1 arrival nook, seed 7 needed for the chest (matrix notes 9, 34)"
+ },
+ "drill.act2.summoner": {
+  "verdict": "RED",
+  "run": "20261123-045154",
+  "tag": "V",
+  "note": "travel GREEN, the maze kills the hero (matrix note 22)"
+ },
+ "drill.act2.duriel": {
+  "verdict": "RED",
+  "run": "20261123-045350",
+  "tag": "V",
+  "note": "no exit found Valley of Snakes to Canyon (matrix note 20)"
+ },
+ "drill.act3.lam_esen": {
+  "verdict": "RED",
+  "run": "20261123-062233",
+  "tag": "V",
+  "note": "Great Marsh packs (matrix notes 24, 25)"
+ },
+ "drill.act3.blade": {
+  "verdict": "RED",
+  "run": "20261123-062233",
+  "tag": "V",
+  "note": "matrix note 25"
+ },
+ "drill.act3.golden_bird": {
+  "verdict": "BLOCKED",
+  "run": "20261123-062233",
+  "tag": "V",
+  "note": "board parks it (matrix note 25)"
+ },
+ "drill.act3.council": {
+  "verdict": "RED",
+  "run": "20261123-062233",
+  "tag": "V",
+  "note": "matrix note 25"
+ },
+ "drill.act4.izual": {
+  "verdict": "RED",
+  "run": "20261123-070440",
+  "tag": "V",
+  "note": "stops at a named nav cause (matrix notes 6, 26)"
+ },
+ "drill.act4.hellforge": {
+  "verdict": "RED",
+  "run": "20261123-070440",
+  "tag": "V",
+  "note": "matrix notes 6, 26"
+ },
+ "drill.act5.siege": {
+  "verdict": "RED",
+  "run": "20261123-071114",
+  "tag": "V",
+  "note": "matrix notes 6, 26"
+ },
+ "drill.act5.prison": {
+  "verdict": "RED",
+  "run": "20261123-071114",
+  "tag": "V",
+  "note": "matrix notes 6, 26"
+ },
+ "drill.act5.betrayal": {
+  "verdict": "RED",
+  "run": "20261123-071114",
+  "tag": "V",
+  "note": "Nihlathak portal object not found (matrix note 6)"
+ },
+ "drill.act5.ancients": {
+  "verdict": "RED",
+  "run": "20261123-071114",
+  "tag": "V",
+  "note": "matrix notes 6, 26"
+ },
+ "drill.act5.baal": {
+  "verdict": "RED",
+  "run": "20261123-071114",
+  "tag": "V",
+  "note": "matrix notes 6, 26"
+ },
+ "drill.tools.merc17": {
+  "verdict": "RED",
+  "run": "20261123-171725",
+  "tag": "V",
+  "note": "fight GREEN, the done bit RED (matrix note 38)"
+ }
+}

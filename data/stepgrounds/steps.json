@@ -1,0 +1,849 @@
+{
+ "schema": "stepgrounds/1",
+ "kit": {
+  "pre": {
+   "level": 24,
+   "gold": 200,
+   "stash": 500000,
+   "waypoints": [
+    -1
+   ],
+   "items": [
+    {
+     "code": "hp2",
+     "count": 8
+    },
+    {
+     "code": "mp1",
+     "count": 6
+    }
+   ],
+   "belt": [
+    "hp2",
+    "hp2",
+    "hp2",
+    "hp2"
+   ],
+   "merc": 0,
+   "merc_level": 17,
+   "worn": [
+    {
+     "code": "cap",
+     "slot": "head"
+    },
+    {
+     "code": "qui",
+     "slot": "torso"
+    },
+    {
+     "code": "ssd",
+     "slot": "rhand"
+    },
+    {
+     "code": "buc",
+     "slot": "lhand"
+    }
+   ],
+   "stats": [
+    {
+     "stat": 7,
+     "value": 102400
+    },
+    {
+     "stat": 6,
+     "value": 102400
+    }
+   ]
+  },
+  "trigger": {
+   "goals": "reach:30",
+   "knobs": {
+    "quests.board": 1,
+    "resource.pointsDecisions": 1,
+    "quests.layoutRead": 1,
+    "nav.warpRead": 1,
+    "nav.fullGrid": 1,
+    "quests.boardSM": 1
+   }
+  },
+  "matrix": {
+   "classes": [
+    "Paladin"
+   ],
+   "seeds": [
+    11
+   ]
+  },
+  "provenance": "CHEATED: clvl 24, 400 life (raw stat), a level 17 merc (devp23 labverbs), every waypoint, potions, cap, quilted armor, sword and buckler, the chunk accepted in the plan store, a field start by debug goto and monsters or items by debug spawn and debug give. Mechanics only, never evidence about balance or the live hero."
+ },
+ "steps": [
+  {
+   "id": "den_of_evil/clear_den/talk_akara",
+   "chunk": [
+    "act1.den.clear"
+   ]
+  },
+  {
+   "id": "den_of_evil/clear_den/walk_blood_moor",
+   "gen": {
+    "enter": "Blood Moor"
+   }
+  },
+  {
+   "id": "den_of_evil/clear_den/clear_den",
+   "gen": {
+    "start": "Den of Evil",
+    "kills": 5,
+    "pending": "U: never run; the Den is a real level population, the quest word of record 1 is not asserted"
+   }
+  },
+  {
+   "id": "den_of_evil/clear_den/return_akara",
+   "chunk": [
+    "act1.den.clear"
+   ]
+  },
+  {
+   "id": "sisters_burial_grounds/blood_raven/accept_kashya",
+   "chunk": [
+    "act1.burial.blood_raven"
+   ]
+  },
+  {
+   "id": "sisters_burial_grounds/blood_raven/travel_cold_plains",
+   "gen": {
+    "enter": "Cold Plains"
+   }
+  },
+  {
+   "id": "sisters_burial_grounds/blood_raven/enter_burial_grounds",
+   "gen": {
+    "start": "Cold Plains",
+    "enter": "Burial Grounds"
+   }
+  },
+  {
+   "id": "sisters_burial_grounds/blood_raven/kill_blood_raven",
+   "gen": {
+    "start": "Burial Grounds",
+    "spawn": [
+     {
+      "monster": "bloodraven",
+      "n": 1
+     }
+    ],
+    "kill": "Blood Raven"
+   },
+   "note": "debug spawn bloodraven works (V probe spawnids.py, hp 113); the quest word after a real kill is not asserted (spawn is a plain unit)."
+  },
+  {
+   "id": "sisters_burial_grounds/blood_raven/return_kashya",
+   "chunk": [
+    "act1.burial.blood_raven"
+   ]
+  },
+  {
+   "id": "search_for_cain/scroll/travel_dark_wood",
+   "gen": {
+    "enter": "Dark Wood"
+   }
+  },
+  {
+   "id": "search_for_cain/scroll/take_scroll",
+   "gen": {
+    "start": "Dark Wood",
+    "ground": [
+     "bks"
+    ],
+    "picked": "Scroll of Inifuss"
+   },
+   "note": "Pickup half only: the tree that gives the scroll is a level object (F2)."
+  },
+  {
+   "id": "search_for_cain/read/return_town",
+   "chunk": [
+    "cain.read"
+   ]
+  },
+  {
+   "id": "search_for_cain/read/talk_akara",
+   "chunk": [
+    "cain.read"
+   ]
+  },
+  {
+   "id": "search_for_cain/stones/travel_stony_field",
+   "gen": {
+    "start": "Cold Plains",
+    "enter": "Stony Field"
+   }
+  },
+  {
+   "id": "search_for_cain/stones/touch_stones",
+   "chunk": [
+    "cain.stones"
+   ]
+  },
+  {
+   "id": "search_for_cain/stones/enter_tristram",
+   "chunk": [
+    "cain.stones"
+   ]
+  },
+  {
+   "id": "search_for_cain/free_cain/clear_cage_guards",
+   "scenario": "cain.cage"
+  },
+  {
+   "id": "search_for_cain/free_cain/free_cain",
+   "scenario": "cain.cage"
+  },
+  {
+   "id": "search_for_cain/free_cain/return_camp",
+   "chunk": [
+    "cain.cage"
+   ]
+  },
+  {
+   "id": "search_for_cain/report/return_town",
+   "chunk": [
+    "cain.report"
+   ]
+  },
+  {
+   "id": "search_for_cain/report/talk_akara",
+   "chunk": [
+    "cain.report"
+   ]
+  },
+  {
+   "id": "forgotten_tower/countess/travel_black_marsh",
+   "gen": {
+    "start": "Dark Wood",
+    "enter": "Black Marsh"
+   }
+  },
+  {
+   "id": "forgotten_tower/countess/descend_to_cellar",
+   "gen": {
+    "start": "Forgotten Tower",
+    "enter": "Tower Cellar( Level)? 1"
+   }
+  },
+  {
+   "id": "forgotten_tower/countess/kill_countess",
+   "missing": "F1: `debug spawn countess` answers \"no such monster\"; the Countess is a level-placed superunique with its own rune treasure class (spawn by superunique name or index, with its drops)"
+  },
+  {
+   "id": "tools_of_the_trade/malus/accept_charsi",
+   "chunk": [
+    "act1.tools.malus.basic"
+   ]
+  },
+  {
+   "id": "tools_of_the_trade/malus/travel_barracks",
+   "gen": {
+    "start": "Outer Cloister",
+    "enter": "Barracks"
+   }
+  },
+  {
+   "id": "tools_of_the_trade/malus/kill_smith",
+   "scenario": "step.act1.smith.drop_pickup",
+   "also": [
+    "step.act1.smith.malus_pickup",
+    "step.act1.smith.malus_pickup.sorc",
+    "step.act1.smith.drop_pickup.control"
+   ]
+  },
+  {
+   "id": "tools_of_the_trade/malus/return_charsi",
+   "chunk": [
+    "act1.tools.malus.basic"
+   ]
+  },
+  {
+   "id": "tools_of_the_trade/malus/pick_imbue",
+   "chunk": [
+    "act1.tools.malus.basic"
+   ]
+  },
+  {
+   "id": "sisters_to_the_slaughter/andariel/travel_catacombs",
+   "gen": {
+    "start": "Cathedral",
+    "enter": "Catacombs( Level)? 1"
+   }
+  },
+  {
+   "id": "sisters_to_the_slaughter/andariel/kill_andariel",
+   "scenario": "drill.andariel.stand"
+  },
+  {
+   "id": "act1_done/sail_east/travel_town",
+   "scenario": "drill.act1.sail"
+  },
+  {
+   "id": "act1_done/sail_east/talk_warriv",
+   "scenario": "drill.act1.sail"
+  },
+  {
+   "id": "radament/radament/talk_atma",
+   "chunk": [
+    "drill.act2.radament"
+   ]
+  },
+  {
+   "id": "radament/radament/travel_sewers",
+   "gen": {
+    "start": "Sewers 2",
+    "enter": "Sewers( Level)? 3"
+   }
+  },
+  {
+   "id": "radament/radament/kill_radament",
+   "gen": {
+    "start": "Sewers 3",
+    "spawn": [
+     {
+      "monster": "radament",
+      "n": 1
+     }
+    ],
+    "kill": "Radament"
+   },
+   "note": "debug spawn radament works (V probe, hp 278); the Book of Skill drop is F1."
+  },
+  {
+   "id": "radament/radament/use_book",
+   "missing": "bot: no assertion kind reads the unspent skill point count (scenario format); the book drop itself is F1"
+  },
+  {
+   "id": "radament/radament/return_atma",
+   "scenario": "drill.act2.radament.handin"
+  },
+  {
+   "id": "tainted_sun/amulet/travel_lost_city",
+   "chunk": [
+    "drill.act2.amulet"
+   ]
+  },
+  {
+   "id": "tainted_sun/amulet/travel_claw_viper",
+   "chunk": [
+    "drill.act2.amulet"
+   ]
+  },
+  {
+   "id": "tainted_sun/amulet/kill_fangskin",
+   "missing": "F1: `debug spawn fangskin` answers \"no such monster\" (Fangskin is a level-placed superunique with its own drop)"
+  },
+  {
+   "id": "tainted_sun/amulet/take_amulet",
+   "scenario": "drill.act2.amulet"
+  },
+  {
+   "id": "horadric_staff/cube/travel_halls_of_the_dead",
+   "chunk": [
+    "drill.act2.cube"
+   ]
+  },
+  {
+   "id": "horadric_staff/cube/take_cube",
+   "scenario": "drill.act2.cube"
+  },
+  {
+   "id": "horadric_staff/shaft/travel_far_oasis",
+   "gen": {
+    "start": "Dry Hills",
+    "enter": "Far Oasis"
+   }
+  },
+  {
+   "id": "horadric_staff/shaft/travel_maggot_lair",
+   "gen": {
+    "start": "Far Oasis",
+    "enter": "Maggot Lair( Level)? 1"
+   }
+  },
+  {
+   "id": "horadric_staff/shaft/take_shaft",
+   "scenario": "drill.act2.shaft"
+  },
+  {
+   "id": "horadric_staff/assemble/open_cube",
+   "scenario": "drill.act2.assemble"
+  },
+  {
+   "id": "horadric_staff/assemble/transmute",
+   "scenario": "drill.act2.assemble"
+  },
+  {
+   "id": "horadric_staff/assemble/talk_cain",
+   "scenario": "drill.act2.assemble"
+  },
+  {
+   "id": "arcane_sanctuary/portal/talk_jerhyn",
+   "missing": "bot: no talk-step assertion (the scenario format reads quest words, not a dialog); Jerhyn is not drilled"
+  },
+  {
+   "id": "arcane_sanctuary/portal/travel_palace_cellar",
+   "gen": {
+    "start": "Harem 2",
+    "enter": "Palace Cellar( Level)? 1"
+   }
+  },
+  {
+   "id": "arcane_sanctuary/portal/enter_arcane",
+   "chunk": [
+    "drill.act2.summoner"
+   ]
+  },
+  {
+   "id": "summoner/kill_summoner/travel_arcane",
+   "chunk": [
+    "drill.act2.summoner"
+   ]
+  },
+  {
+   "id": "summoner/kill_summoner/find_summoner",
+   "chunk": [
+    "drill.act2.summoner"
+   ]
+  },
+  {
+   "id": "summoner/kill_summoner/kill_summoner",
+   "gen": {
+    "start": "Arcane Sanctuary",
+    "spawn": [
+     {
+      "monster": "summoner",
+      "n": 1
+     }
+    ],
+    "kill": "The Summoner",
+    "pending": "U: the maze kills the stand-in hero (matrix note 22); a lone spawned Summoner (lvl 18, hp 103) is not the maze"
+   },
+   "note": "debug spawn summoner works (V probe)."
+  },
+  {
+   "id": "seven_tombs/duriel/travel_canyon",
+   "chunk": [
+    "drill.act2.duriel"
+   ]
+  },
+  {
+   "id": "seven_tombs/duriel/find_tomb",
+   "chunk": [
+    "drill.act2.duriel"
+   ]
+  },
+  {
+   "id": "seven_tombs/duriel/place_staff",
+   "chunk": [
+    "drill.act2.duriel"
+   ]
+  },
+  {
+   "id": "seven_tombs/duriel/kill_duriel",
+   "gen": {
+    "start": "Duriel's Lair",
+    "spawn": [
+     {
+      "monster": "duriel",
+      "n": 1
+     }
+    ],
+    "kill": "Duriel",
+    "pending": "U: Duriel (hp 3995, V probe) against the clvl 24 stand-in is not expected to be a fair fight; needs a stronger kit decision"
+   },
+   "note": "debug spawn duriel works (V probe)."
+  },
+  {
+   "id": "act2_done/sail_east/travel_harbor",
+   "missing": "bot: the Act 2 to 3 hop is not drilled (matrix: act2_done not run; needs Duriel done)"
+  },
+  {
+   "id": "act2_done/sail_east/talk_meshif",
+   "missing": "bot: the Act 2 to 3 hop is not drilled (matrix: act2_done not run; needs Duriel done)"
+  },
+  {
+   "id": "lam_esen/tome/travel_bazaar",
+   "chunk": [
+    "drill.act3.lam_esen"
+   ]
+  },
+  {
+   "id": "lam_esen/tome/travel_ruined_temple",
+   "chunk": [
+    "drill.act3.lam_esen"
+   ]
+  },
+  {
+   "id": "lam_esen/tome/take_tome",
+   "chunk": [
+    "drill.act3.lam_esen"
+   ]
+  },
+  {
+   "id": "lam_esen/tome/talk_alkor",
+   "chunk": [
+    "drill.act3.lam_esen"
+   ]
+  },
+  {
+   "id": "blade_old_religion/gidbinn/travel_flayer_jungle",
+   "chunk": [
+    "drill.act3.blade"
+   ]
+  },
+  {
+   "id": "blade_old_religion/gidbinn/take_gidbinn",
+   "chunk": [
+    "drill.act3.blade"
+   ]
+  },
+  {
+   "id": "blade_old_religion/gidbinn/talk_hratli",
+   "chunk": [
+    "drill.act3.blade"
+   ]
+  },
+  {
+   "id": "golden_bird/bird/talk_meshif",
+   "chunk": [
+    "drill.act3.golden_bird"
+   ]
+  },
+  {
+   "id": "golden_bird/bird/talk_alkor",
+   "chunk": [
+    "drill.act3.golden_bird"
+   ]
+  },
+  {
+   "id": "blackened_temple/council/travel_travincal",
+   "chunk": [
+    "drill.act3.council"
+   ]
+  },
+  {
+   "id": "blackened_temple/council/kill_council",
+   "chunk": [
+    "drill.act3.council"
+   ]
+  },
+  {
+   "id": "blackened_temple/council/take_flail",
+   "chunk": [
+    "drill.act3.council"
+   ]
+  },
+  {
+   "id": "khalims_will/eye/travel_spider_cavern",
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+  },
+  {
+   "id": "khalims_will/eye/take_eye",
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+  },
+  {
+   "id": "khalims_will/brain/travel_flayer_dungeon",
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+  },
+  {
+   "id": "khalims_will/brain/take_brain",
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+  },
+  {
+   "id": "khalims_will/heart/travel_sewers",
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+  },
+  {
+   "id": "khalims_will/heart/take_heart",
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+  },
+  {
+   "id": "khalims_will/assemble/open_cube",
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+  },
+  {
+   "id": "khalims_will/assemble/transmute",
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+  },
+  {
+   "id": "khalims_will/orb/travel_travincal",
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+  },
+  {
+   "id": "khalims_will/orb/equip_will",
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+  },
+  {
+   "id": "khalims_will/orb/smash_orb",
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+  },
+  {
+   "id": "guardian/mephisto/travel_durance2",
+   "missing": "bot: Durance route not drilled; needs the clvl 60 stand-in kit (matrix note 26)"
+  },
+  {
+   "id": "guardian/mephisto/travel_durance3",
+   "missing": "bot: Durance route not drilled; needs the clvl 60 stand-in kit (matrix note 26)"
+  },
+  {
+   "id": "guardian/mephisto/kill_mephisto",
+   "gen": {
+    "start": "Durance of Hate 3",
+    "spawn": [
+     {
+      "monster": "mephisto",
+      "n": 1
+     }
+    ],
+    "kill": "Mephisto",
+    "pending": "U: needs the clvl 60 stand-in kit (matrix note 26); Mephisto hp 6036 (V probe)"
+   }
+  },
+  {
+   "id": "act3_done/portal/travel_durance3",
+   "missing": "F3: the act hop reads a quest word of record 23 or 24 that the lab cannot observe (matrix note 30)"
+  },
+  {
+   "id": "act3_done/portal/take_portal",
+   "missing": "F3: the act hop reads a quest word of record 23 or 24 that the lab cannot observe (matrix note 30)"
+  },
+  {
+   "id": "izual/izual/travel_city_of_the_damned",
+   "chunk": [
+    "drill.act4.izual"
+   ]
+  },
+  {
+   "id": "izual/izual/travel_plains_of_despair",
+   "chunk": [
+    "drill.act4.izual"
+   ]
+  },
+  {
+   "id": "izual/izual/kill_izual",
+   "chunk": [
+    "drill.act4.izual"
+   ]
+  },
+  {
+   "id": "izual/izual/talk_tyrael",
+   "chunk": [
+    "drill.act4.izual"
+   ]
+  },
+  {
+   "id": "hellforge/hammer/travel_river_of_flame",
+   "chunk": [
+    "drill.act4.hellforge"
+   ]
+  },
+  {
+   "id": "hellforge/hammer/kill_hephasto",
+   "chunk": [
+    "drill.act4.hellforge"
+   ]
+  },
+  {
+   "id": "hellforge/hammer/take_hammer",
+   "chunk": [
+    "drill.act4.hellforge"
+   ]
+  },
+  {
+   "id": "hellforge/smash/place_soulstone",
+   "missing": "F2: the Hellforge anvil is a level object that cannot be placed or read in the lab"
+  },
+  {
+   "id": "hellforge/smash/return_town",
+   "missing": "F2: part of the smash step, see place_soulstone"
+  },
+  {
+   "id": "terrors_end/seals/open_seals",
+   "missing": "F2: the five seals are level objects (state read and placement); superuniques by name are F1"
+  },
+  {
+   "id": "terrors_end/seals/kill_vizier",
+   "missing": "F2: the five seals are level objects (state read and placement); superuniques by name are F1"
+  },
+  {
+   "id": "terrors_end/seals/kill_de_seis",
+   "missing": "F2: the five seals are level objects (state read and placement); superuniques by name are F1"
+  },
+  {
+   "id": "terrors_end/seals/kill_infector",
+   "missing": "F2: the five seals are level objects (state read and placement); superuniques by name are F1"
+  },
+  {
+   "id": "terrors_end/diablo/travel_river_of_flame",
+   "missing": "bot: not drilled (matrix: Act 4 and 5 chunks not run past Izual and the Hellforge)"
+  },
+  {
+   "id": "terrors_end/diablo/travel_chaos_sanctuary",
+   "missing": "bot: not drilled (matrix: Act 4 and 5 chunks not run past Izual and the Hellforge)"
+  },
+  {
+   "id": "terrors_end/diablo/kill_diablo",
+   "gen": {
+    "start": "Chaos Sanctuary",
+    "spawn": [
+     {
+      "monster": "diablo",
+      "n": 1
+     }
+    ],
+    "kill": "Diablo",
+    "pending": "U: needs the clvl 60 stand-in kit; Diablo hp 13818 (V probe)"
+   }
+  },
+  {
+   "id": "terrors_end/diablo/talk_tyrael",
+   "missing": "bot: not drilled (matrix: Act 4 and 5 chunks not run past Izual and the Hellforge)"
+  },
+  {
+   "id": "act4_done/portal/talk_tyrael",
+   "missing": "F3: the act hop reads a quest word that the lab cannot observe (matrix note 30)"
+  },
+  {
+   "id": "act4_done/portal/take_portal",
+   "missing": "F3: the act hop reads a quest word that the lab cannot observe (matrix note 30)"
+  },
+  {
+   "id": "siege_harrogath/shenk/travel_bloody_foothills",
+   "chunk": [
+    "drill.act5.siege"
+   ]
+  },
+  {
+   "id": "siege_harrogath/shenk/kill_shenk",
+   "chunk": [
+    "drill.act5.siege"
+   ]
+  },
+  {
+   "id": "siege_harrogath/shenk/talk_larzuk",
+   "chunk": [
+    "drill.act5.siege"
+   ]
+  },
+  {
+   "id": "rescue_arreat/doors/travel_frigid_highlands",
+   "missing": "bot: not drilled (no scenario for the barricade doors)"
+  },
+  {
+   "id": "rescue_arreat/doors/break_doors",
+   "missing": "F2: the barricade doors are level objects that cannot be placed or broken by a verb"
+  },
+  {
+   "id": "rescue_arreat/doors/talk_qual_kehk",
+   "missing": "bot: not drilled (no talk-step assertion)"
+  },
+  {
+   "id": "prison_of_ice/find/travel_frigid_highlands",
+   "chunk": [
+    "drill.act5.prison"
+   ]
+  },
+  {
+   "id": "prison_of_ice/find/travel_frozen_river",
+   "chunk": [
+    "drill.act5.prison"
+   ]
+  },
+  {
+   "id": "prison_of_ice/find/touch_anya",
+   "chunk": [
+    "drill.act5.prison"
+   ]
+  },
+  {
+   "id": "prison_of_ice/find/return_town",
+   "chunk": [
+    "drill.act5.prison"
+   ]
+  },
+  {
+   "id": "prison_of_ice/potion/talk_malah",
+   "missing": "bot: not drilled (no talk-step assertion)"
+  },
+  {
+   "id": "prison_of_ice/thaw/travel_frozen_river",
+   "missing": "bot: not drilled; Anya (a level object) is F2"
+  },
+  {
+   "id": "prison_of_ice/thaw/thaw_anya",
+   "missing": "F2: Anya in the ice is a level object (placement and state)"
+  },
+  {
+   "id": "prison_of_ice/thaw/return_town",
+   "missing": "bot: not drilled; see thaw_anya"
+  },
+  {
+   "id": "prison_of_ice/scroll/talk_anya",
+   "missing": "bot: not drilled (no talk-step assertion)"
+  },
+  {
+   "id": "prison_of_ice/read/read_scroll",
+   "missing": "bot: not drilled (the resistance scroll read changes a stat, no assertion kind reads it)"
+  },
+  {
+   "id": "betrayal_harrogath/nihlathak/travel_halls_of_pain",
+   "chunk": [
+    "drill.act5.betrayal"
+   ]
+  },
+  {
+   "id": "betrayal_harrogath/nihlathak/kill_nihlathak",
+   "chunk": [
+    "drill.act5.betrayal"
+   ]
+  },
+  {
+   "id": "betrayal_harrogath/nihlathak/talk_anya",
+   "chunk": [
+    "drill.act5.betrayal"
+   ]
+  },
+  {
+   "id": "rite_of_passage/ancients/travel_arreat_summit",
+   "chunk": [
+    "drill.act5.ancients"
+   ]
+  },
+  {
+   "id": "rite_of_passage/ancients/kill_ancients",
+   "chunk": [
+    "drill.act5.ancients"
+   ]
+  },
+  {
+   "id": "rite_of_passage/ancients/talk_qual_kehk",
+   "chunk": [
+    "drill.act5.ancients"
+   ]
+  },
+  {
+   "id": "eve_of_destruction/baal/travel_worldstone_keep",
+   "chunk": [
+    "drill.act5.baal"
+   ]
+  },
+  {
+   "id": "eve_of_destruction/baal/clear_throne",
+   "chunk": [
+    "drill.act5.baal"
+   ]
+  },
+  {
+   "id": "eve_of_destruction/baal/kill_baal",
+   "chunk": [
+    "drill.act5.baal"
+   ]
+  }
+ ]
+}
