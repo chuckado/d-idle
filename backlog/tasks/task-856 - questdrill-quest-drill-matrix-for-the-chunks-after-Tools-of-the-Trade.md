@@ -22,6 +22,8 @@ owns:
   - "internal/d2dsrc/items.go"
   - "internal/d2dsrc/srv_test.go"
   - "internal/nav/nav.go"
+  - "internal/task/act2.go"
+  - "internal/task/act2_test.go"
   - "internal/nav/exit.go"
   - "internal/nav/gatedoor.go"
   - "internal/nav/gatedoor_test.go"
