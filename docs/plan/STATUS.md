@@ -469,7 +469,6 @@
 | toolstrade29 | proposed | - | `internal/bot/routeguard.go`<br>`internal/bot/plan_test.go`<br>`internal/bot/beltfill_test.go`<br>`internal/task/route.go`<br>`internal/task/gate.go`<br>`docs/plan/data/levelplan-normal.json`<br>`internal/plandata/levelplan-normal.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | malus | proposed | - | `internal/boss/run.go`<br>`internal/boss/wire_test.go`<br>`cmd/d2bot/boss.go`<br>`tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | toolstrade30 | proposed | - | `internal/env/tuning_route.go`<br>`internal/task/route.go`<br>`internal/task/world.go`<br>`internal/task/route_test.go`<br>`internal/bot/routeguard.go`<br>`docs/knobs.md`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
-| toolstrade32 | proposed | - | `docs/probes/tools-trade-2026-11-22.md` | - |
 | malus2 | proposed | - | `tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |

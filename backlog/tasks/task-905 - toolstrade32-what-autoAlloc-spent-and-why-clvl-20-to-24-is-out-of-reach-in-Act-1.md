@@ -1,10 +1,13 @@
 ---
 id: TASK-905
-title: 'toolstrade32: what autoAlloc spent and why clvl 20 to 24 is out of reach in Act 1'
-status: Proposed
+title: >-
+  toolstrade32: what autoAlloc spent and why clvl 20 to 24 is out of reach in
+  Act 1
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T22:52:00Z'
+updated_date: '2026-11-23T23:02:00Z'
 labels:
   - docs
   - probe
