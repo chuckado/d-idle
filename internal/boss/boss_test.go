@@ -192,7 +192,8 @@ func TestSmithQuestLootAndRetreat(t *testing.T) {
 	sm.dmg = 0
 	f.pos = Pt{480, 500}
 	for i := 0; i < 7; i++ {
-		m := f.addBoss(Mon{Class: 50, Pos: Pt{485 + i, 505}, UniqueNo: -1}, AreaBarracks, 10)
+		// named: the fake's sweep leaves named monsters standing, so the crowd hazard of the fight is still exercised
+		m := f.addBoss(Mon{Class: 50, Name: "Guard", Pos: Pt{485 + i, 505}, UniqueNo: -1}, AreaBarracks, 10)
 		m.Mon.ID = uint32(100 + i)
 	}
 	f.life = 48
@@ -521,5 +522,24 @@ func TestBossNotFoundSaysTheAnchorIsUnreachable(t *testing.T) {
 		if !errors.Is(err, ErrBossNotFound) || !strings.Contains(err.Error(), "could not be reached") {
 			t.Errorf("%s: %v", name, err)
 		}
+	}
+}
+
+// The Smith's run sweeps the monsters around the arrival before it walks to him (V live 2026-11-23: 35 hostiles in the
+// Barracks, the hero reached his room at a quarter of its life). Must fail without Script.OuterClear on the Smith.
+func TestSmithClearsTheArrivalCrowdFirst(t *testing.T) {
+	f := newFake()
+	f.area = AreaBarracks
+	f.level = 40
+	f.pos = Pt{181, 342}
+	f.presets = []Preset{{Kind: PresetNPC, ID: 754, Name: NameSmith, Pos: Pt{65, 270}}}
+	sm := f.addBoss(Mon{Class: ClassSmith, Name: NameSmith, Pos: Pt{65, 270}, UniqueNo: -1}, AreaBarracks, 100)
+	sm.approach = 20
+	for i := 0; i < 8; i++ {
+		f.addBoss(Mon{Class: 60, Name: "", Pos: Pt{175 + i, 340}, UniqueNo: -1}, AreaBarracks, 5)
+	}
+	res, _ := run(t, NameSmith, f, Opts{})
+	if len(f.log) == 0 || f.log[0] != "clear 40" || !has(res, "outer-clear") {
+		t.Fatalf("outer clear not first: %v %v", f.log, res.Phases)
 	}
 }
