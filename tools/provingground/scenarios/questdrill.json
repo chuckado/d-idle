@@ -2546,6 +2546,1766 @@
      "kind": "no_writes"
     }
    ]
+  },
+  {
+   "id": "drill.act3s.lam_esen",
+   "title": "Act 3 strong: Lam Esen's Tome",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "lam_esen",
+    "chunk": "tome"
+   },
+   "step": {
+    "action": "talk",
+    "target": "lam_esen",
+    "nodes": [
+     "tome"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.lam_esen.tome"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 75,
+    "level": 60,
+    "gold": 20000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 150
+     },
+     {
+      "stat": 2,
+      "value": 100
+     },
+     {
+      "stat": 7,
+      "value": 768000
+     },
+     {
+      "stat": 6,
+      "value": 768000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:90",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "tome"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 17,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "board offered and started the chunk (board evidence)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act3s.blade",
+   "title": "Act 3 strong: Blade of the Old Religion",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "blade_old_religion",
+    "chunk": "gidbinn"
+   },
+   "step": {
+    "action": "talk",
+    "target": "blade_old_religion",
+    "nodes": [
+     "gidbinn"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.blade_old_religion.gidbinn"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 75,
+    "level": 60,
+    "gold": 20000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 150
+     },
+     {
+      "stat": 2,
+      "value": 100
+     },
+     {
+      "stat": 7,
+      "value": 768000
+     },
+     {
+      "stat": 6,
+      "value": 768000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:90",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "gidbinn"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 19,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "board offered and started the chunk (board evidence)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act3s.golden_bird",
+   "title": "Act 3 strong: The Golden Bird",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "golden_bird",
+    "chunk": "bird"
+   },
+   "step": {
+    "action": "talk",
+    "target": "golden_bird",
+    "nodes": [
+     "bird"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.golden_bird.bird"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 75,
+    "level": 60,
+    "gold": 20000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 150
+     },
+     {
+      "stat": 2,
+      "value": 100
+     },
+     {
+      "stat": 7,
+      "value": 768000
+     },
+     {
+      "stat": 6,
+      "value": 768000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:90",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "bird"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 20,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "board offered and started the chunk (board evidence)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act4.izual",
+   "title": "Act 4: The Fallen Angel (Izual)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "izual",
+    "chunk": "izual"
+   },
+   "step": {
+    "action": "talk",
+    "target": "izual",
+    "nodes": [
+     "izual"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.izual.izual"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 103,
+    "level": 60,
+    "gold": 20000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     },
+     {
+      "record": 22,
+      "word": 1
+     },
+     {
+      "record": 23,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 150
+     },
+     {
+      "stat": 2,
+      "value": 100
+     },
+     {
+      "stat": 7,
+      "value": 768000
+     },
+     {
+      "stat": 6,
+      "value": 768000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:90",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "izual"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 25,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "board offered and started the chunk (board evidence)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act4.hellforge",
+   "title": "Act 4: Hell's Forge, the hammer",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "hellforge",
+    "chunk": "hammer"
+   },
+   "step": {
+    "action": "talk",
+    "target": "hellforge",
+    "nodes": [
+     "hammer"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.hellforge.hammer"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 103,
+    "level": 60,
+    "gold": 20000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     },
+     {
+      "record": 18,
+      "word": 1
+     },
+     {
+      "record": 22,
+      "word": 1
+     },
+     {
+      "record": 23,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 150
+     },
+     {
+      "stat": 2,
+      "value": 100
+     },
+     {
+      "stat": 7,
+      "value": 768000
+     },
+     {
+      "stat": 6,
+      "value": 768000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:90",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "hammer"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 26,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "board offered and started the chunk (board evidence)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act5.siege",
+   "title": "Act 5: Siege on Harrogath (Shenk)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "siege_harrogath",
+    "chunk": "shenk"
+   },
+   "step": {
+    "action": "talk",
+    "target": "siege_harrogath",
+    "nodes": [
+     "shenk"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.siege_harrogath.shenk"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 109,
+    "level": 60,
+    "gold": 20000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     },
+     {
+      "record": 22,
+      "word": 1
+     },
+     {
+      "record": 23,
+      "word": 1
+     },
+     {
+      "record": 25,
+      "word": 1
+     },
+     {
+      "record": 27,
+      "word": 1
+     },
+     {
+      "record": 28,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 150
+     },
+     {
+      "stat": 2,
+      "value": 100
+     },
+     {
+      "stat": 7,
+      "value": 768000
+     },
+     {
+      "stat": 6,
+      "value": 768000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:90",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "shenk"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 35,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "board offered and started the chunk (board evidence)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act5.prison",
+   "title": "Act 5: Prison of Ice (Anya, find the prison)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "prison_of_ice",
+    "chunk": "find"
+   },
+   "step": {
+    "action": "talk",
+    "target": "prison_of_ice",
+    "nodes": [
+     "find"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.prison_of_ice.find"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 109,
+    "level": 60,
+    "gold": 20000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     },
+     {
+      "record": 22,
+      "word": 1
+     },
+     {
+      "record": 23,
+      "word": 1
+     },
+     {
+      "record": 25,
+      "word": 1
+     },
+     {
+      "record": 27,
+      "word": 1
+     },
+     {
+      "record": 28,
+      "word": 1
+     },
+     {
+      "record": 35,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 150
+     },
+     {
+      "stat": 2,
+      "value": 100
+     },
+     {
+      "stat": 7,
+      "value": 768000
+     },
+     {
+      "stat": 6,
+      "value": 768000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:90",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "find"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 37,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "board offered and started the chunk (board evidence)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act5.betrayal",
+   "title": "Act 5: Betrayal of Harrogath (Nihlathak)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "betrayal_harrogath",
+    "chunk": "nihlathak"
+   },
+   "step": {
+    "action": "talk",
+    "target": "betrayal_harrogath",
+    "nodes": [
+     "nihlathak"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.betrayal_harrogath.nihlathak"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 109,
+    "level": 60,
+    "gold": 20000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     },
+     {
+      "record": 22,
+      "word": 1
+     },
+     {
+      "record": 23,
+      "word": 1
+     },
+     {
+      "record": 25,
+      "word": 1
+     },
+     {
+      "record": 27,
+      "word": 1
+     },
+     {
+      "record": 28,
+      "word": 1
+     },
+     {
+      "record": 35,
+      "word": 1
+     },
+     {
+      "record": 37,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 150
+     },
+     {
+      "stat": 2,
+      "value": 100
+     },
+     {
+      "stat": 7,
+      "value": 768000
+     },
+     {
+      "stat": 6,
+      "value": 768000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:90",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "nihlathak"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 38,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "board offered and started the chunk (board evidence)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act5.ancients",
+   "title": "Act 5: Rite of Passage (the Ancients)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "rite_of_passage",
+    "chunk": "ancients"
+   },
+   "step": {
+    "action": "talk",
+    "target": "rite_of_passage",
+    "nodes": [
+     "ancients"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.rite_of_passage.ancients"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 109,
+    "level": 60,
+    "gold": 20000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     },
+     {
+      "record": 22,
+      "word": 1
+     },
+     {
+      "record": 23,
+      "word": 1
+     },
+     {
+      "record": 25,
+      "word": 1
+     },
+     {
+      "record": 27,
+      "word": 1
+     },
+     {
+      "record": 28,
+      "word": 1
+     },
+     {
+      "record": 35,
+      "word": 1
+     },
+     {
+      "record": 37,
+      "word": 1
+     },
+     {
+      "record": 38,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 150
+     },
+     {
+      "stat": 2,
+      "value": 100
+     },
+     {
+      "stat": 7,
+      "value": 768000
+     },
+     {
+      "stat": 6,
+      "value": 768000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:90",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "ancients"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 39,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "board offered and started the chunk (board evidence)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.act5.baal",
+   "title": "Act 5: Eve of Destruction (Baal)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "eve_of_destruction",
+    "chunk": "baal"
+   },
+   "step": {
+    "action": "talk",
+    "target": "eve_of_destruction",
+    "nodes": [
+     "baal"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.eve_of_destruction.baal"
+   ],
+   "pre": {
+    "start": "field",
+    "area": 109,
+    "level": 60,
+    "gold": 20000,
+    "waypoints": [
+     1,
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 15,
+      "word": 1
+     },
+     {
+      "record": 22,
+      "word": 1
+     },
+     {
+      "record": 23,
+      "word": 1
+     },
+     {
+      "record": 25,
+      "word": 1
+     },
+     {
+      "record": 27,
+      "word": 1
+     },
+     {
+      "record": 28,
+      "word": 1
+     },
+     {
+      "record": 35,
+      "word": 1
+     },
+     {
+      "record": 37,
+      "word": 1
+     },
+     {
+      "record": 38,
+      "word": 1
+     },
+     {
+      "record": 39,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 150
+     },
+     {
+      "stat": 2,
+      "value": 100
+     },
+     {
+      "stat": 7,
+      "value": 768000
+     },
+     {
+      "stat": 6,
+      "value": 768000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:90",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "baal"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 40,
+     "set": 1,
+     "why": "U docs/progression/quests.md: the quest word's done bit"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "board offered and started the chunk (board evidence)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
   }
  ]
 }

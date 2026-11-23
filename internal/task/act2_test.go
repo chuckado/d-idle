@@ -400,3 +400,23 @@ func TestDurielChunkGoesToTheCanyonBeforeTheDoor(t *testing.T) {
 		}
 	}
 }
+
+// The Hellforge steps are not "done" because the hero has no Soulstone (Need false): only the quest word says done. Two
+// worlds (caster and not) read the same; the board showed the row DONE on a hero that never saw it (card qdmatrix).
+func TestHellforgeIsNotDoneWithoutItsWord(t *testing.T) {
+	for _, caster := range []bool{false, true} {
+		w := task.World{Act: 4, Level: 60, Caster: caster, Items: map[string]int{}, Killed: map[string]bool{}, WPs: map[task.Area]bool{},
+			Quests: map[string]task.QuestState{task.QGuardian: {Stage: task.StageDone, Ev: task.EvMemory}}}
+		for _, n := range task.Handler(task.QHellforge) {
+			if n.Step.Done(w) {
+				t.Errorf("caster %v: %s reads done without the Hellforge word", caster, n.Step.ID)
+			}
+		}
+		w.Quests[task.QHellforge] = task.QuestState{Stage: task.StageDone, Ev: task.EvMemory}
+		for _, n := range task.Handler(task.QHellforge) {
+			if !n.Step.Done(w) {
+				t.Errorf("caster %v: %s not done with the word", caster, n.Step.ID)
+			}
+		}
+	}
+}

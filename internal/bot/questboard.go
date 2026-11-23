@@ -342,6 +342,20 @@ func evTier(ev task.Evidence) questboard.Tier {
 	return questboard.TierNone
 }
 
+// hopFact is the quest fact of an act hop (kind unlock): the hop has no quest word of its own for every act (Act 3 and 4
+// have none the reader maps), and a fact that is only a proxy never unlocks the next act's quests (lockedBy wants exact
+// evidence), so every Act 4 and 5 row stayed locked (V lab drill.act5.siege: "locked until Take Tyrael's portal to
+// Act 5"). The world's act is a live read: done when the hero stands in the next act.
+func hopFact(q questboard.Quest, w task.World) (questboard.Fact, bool) {
+	if q.Kind != "unlock" {
+		return questboard.Fact{}, false
+	}
+	if w.Act == 0 {
+		return questboard.Fact{}, true
+	}
+	return questboard.Fact{Known: true, Tier: questboard.TierMemory, Done: w.Act >= q.Act+1}, true
+}
+
 func (f boardFacts) Quest(diff int, id string) questboard.Fact {
 	if diff != (boardEnv{f.rt}).Diff() {
 		return questboard.Fact{}
@@ -351,6 +365,9 @@ func (f boardFacts) Quest(diff int, id string) questboard.Fact {
 		return questboard.Fact{}
 	}
 	w, _, _ := f.rt.world()
+	if hf, ok := hopFact(q, w); ok {
+		return hf
+	}
 	st := w.Quest(taskID(q))
 	t := evTier(st.Ev)
 	return questboard.Fact{Known: st.Ev != task.EvNone || st.Stage != task.StageNone, Tier: t,
