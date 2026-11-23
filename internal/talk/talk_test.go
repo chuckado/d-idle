@@ -314,3 +314,32 @@ func TestAkaraRespecLineCount(t *testing.T) {
 		t.Errorf("tries clicked %v, want of=%d then of=%d", svc.picks, counts[false][1], counts[true][1])
 	}
 }
+
+// The travel row of an act hop is clicked while the "act complete" word still reads needed: the boss kill leaves the word
+// at its pending value and the boatman's talk is what completes the act (card qdmatrix, run drill.act1.sail:
+// "row not present in the dialog table" three times, then the board parked). Both hops.
+func TestHopRowDoesNotWaitForTheActWord(t *testing.T) {
+	for _, c := range []struct {
+		npc, pick, label string
+		act, class       int
+	}{{task.NPCWarriv, "go east", "Go East", 1, quest.Warriv}, {task.NPCMeshif, "sail east", "Sail East", 2, quest.Meshif}} {
+		svc := &fakeServices{}
+		ad, _, _ := rig(c.act, svc)
+		ad.Status = func(q string) quest.Status {
+			if q == "act1_done" || q == "act2_done" {
+				return quest.Needed
+			}
+			return testStatus(q)
+		}
+		if err := ad.Talk(context.Background(), c.npc, c.pick); err != nil {
+			t.Fatalf("%s: %v", c.npc, err)
+		}
+		idx, n, _, err := quest.RowIndex(c.class, quest.LevelMain, c.label, testStatus)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(svc.picks, []pick{{idx, n}}) {
+			t.Errorf("%s: clicked %v, want %d of %d", c.npc, svc.picks, idx, n)
+		}
+	}
+}
