@@ -395,8 +395,9 @@
     return post('/api/orders', body).then(function (j) {
       if (j && j.ok && j.order) { toast('Order given: ' + j.order.text); return; }
       // Above the zone range the hero asks for a charter in tally; nothing was placed or charged yet.
-      if (j && j.code === 'charter-needed' && j.charter && window.confirm(j.charter.text + ' Pay ' + j.charter.price + ' tally for the charter?')) {
-        body.approve = true; return send(body);
+      if (j && j.code === 'charter-needed' && j.charter) {
+        return window.dSheet.ask(document, { title: 'Pay for a charter?', lines: [j.charter.text, 'Pay ' + j.charter.price + ' tally for the charter?'], confirmText: 'Pay ' + j.charter.price + ' tally' })
+          .then(function (yes) { if (yes) { body.approve = true; return send(body); } });
       }
     });
   }
@@ -467,7 +468,8 @@
   }
 
   $('revokeall').addEventListener('click', function () {
-    if (window.confirm('Revoke every rule? The hero will ask again.')) post('/api/revoke-all', { confirm: true });
+    window.dSheet.ask(document, { title: 'Revoke every rule?', lines: ['The hero will ask again.'], confirmText: 'Revoke all', danger: true, opener: $('revokeall') })
+      .then(function (yes) { if (yes) post('/api/revoke-all', { confirm: true }); });
   });
   $('scrim').addEventListener('click', closeSheet);
   document.addEventListener('keydown', trapTab);

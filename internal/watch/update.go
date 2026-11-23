@@ -158,7 +158,7 @@ func UpdateAnswerHandler(u Updater, o AnswerOptions) http.Handler {
 
 // withUpdateBanner adds the update script to the screens' HTML without touching the pages themselves.
 func withUpdateBanner(next http.Handler) http.Handler {
-	const tag = `<script src="/watch/update.js"></script>`
+	const tag = `<script src="/watch/sheet.js"></script><script src="/watch/update.js"></script>`
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet || !strings.HasPrefix(r.URL.Path, "/watch") || strings.Contains(r.URL.Path[1:], ".") {
 			next.ServeHTTP(w, r)

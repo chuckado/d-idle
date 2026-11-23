@@ -64,6 +64,7 @@ const pointsPage = `<!DOCTYPE html>
 <div id="toasts" class="d-toasts" role="status" aria-live="polite"></div>
 <script src="/watch/nav.js"></script>
 <script type="module" src="/watch/shell.js"></script>
+<script src="/watch/sheet.js"></script>
 <script src="/watch/buildcards.js"></script>
 <script src="/watch/points.js"></script></body></html>`
 

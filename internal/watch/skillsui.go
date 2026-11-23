@@ -33,4 +33,5 @@ const skillsPage = `<!DOCTYPE html>
 <div id="toasts" class="d-toasts" role="status" aria-live="polite"></div>
 <script src="/watch/nav.js"></script>
 <script type="module" src="/watch/shell.js"></script>
+<script src="/watch/sheet.js"></script>
 <script src="/watch/skills.js"></script></body></html>`

@@ -24,16 +24,16 @@
   .bc-card { display: grid; gap: var(--d-sp-1); align-content: start; min-inline-size: 0; border: 1px solid var(--d-line); border-radius: var(--d-r-1); padding: var(--d-pad); background: var(--d-surface-1); }
   .bc-card[data-open="1"] { border-color: var(--d-line-strong); }
   .bc-name { margin: 0; font-size: var(--d-fs-3); overflow-wrap: anywhere; }
-  .bc-id, .bc-sum, .bc-diff, .bc-why, .bc-note, .bc-warn, .bc-sl { margin: 0; overflow-wrap: anywhere; }
+  .bc-id, .bc-sum, .bc-diff, .bc-why, .bc-note, .bc-warn { margin: 0; overflow-wrap: anywhere; }
   .bc-id { color: var(--d-text-2); }
   .bc-rates { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--d-sp-1); }
   .bc-r { overflow-wrap: anywhere; }
   .bc-stars { font-family: var(--d-font-num); letter-spacing: .1em; color: var(--d-gold-11); white-space: nowrap; }
   .bc-rs, .bc-rn, .bc-src { color: var(--d-text-2); font-size: var(--d-fs-1); }
   .bc-src { margin: 0; }
-  .bc-details, .bc-choose, .bc-cancel, .bc-confirm { min-block-size: 44px; justify-self: start; }
+  .bc-details, .bc-choose { min-block-size: 44px; justify-self: start; }
   .bc-detail { display: grid; gap: var(--d-sp-2); border-top: 1px solid var(--d-line); padding-block-start: var(--d-sp-2); }
-  .bc-detail h4, .bc-sheet h2 { margin: 0; font-size: var(--d-fs-2); }
+  .bc-detail h4 { margin: 0; font-size: var(--d-fs-2); }
   .bc-pc { display: grid; gap: var(--d-sp-2); grid-template-columns: minmax(0, 1fr); }
   .bc-pc ul, .bc-vars { margin: 0; padding-inline-start: 1.1rem; }
   .bc-list-pros li::marker { color: var(--d-good); content: "+ "; }
@@ -43,12 +43,6 @@
   .bc-var[data-tier="experimental"] .bc-tier, .bc-warn { color: var(--d-bad); }
   .bc-prev-list { margin: 0; padding-inline-start: 1.1rem; font-size: var(--d-fs-1); overflow-wrap: anywhere; }
   .bc-why { color: var(--d-text-2); }
-  .bc-back { position: fixed; inset: 0; z-index: var(--d-z-banner); display: grid; place-items: center; background: var(--d-scrim); padding: var(--d-gap); }
-  .bc-sheet { display: grid; gap: var(--d-sp-2); inline-size: min(100%, 28rem); max-block-size: 100%; overflow-y: auto; box-sizing: border-box; background: var(--d-surface-2); border: 1px solid var(--d-line-strong); border-radius: var(--d-r-1); padding: var(--d-pad); box-shadow: var(--d-shadow-2); }
-  .bc-pick { display: grid; gap: var(--d-sp-1); }
-  .bc-opt { display: flex; gap: var(--d-sp-1); align-items: center; min-block-size: 44px; }
-  .bc-row { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); justify-content: flex-end; }
-  @media (max-width: 699.98px) { .bc-back { place-items: end stretch; padding: 0; } .bc-sheet { inline-size: auto; border-radius: var(--d-r-1) var(--d-r-1) 0 0; } }
   @media (min-width: 700px) {
     [data-subtab="build"] .pt-page { max-inline-size: 72rem; }
     .bc-list { grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr)); }

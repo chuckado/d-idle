@@ -107,7 +107,7 @@
       return fetch(u + '/api/hero/points/skill', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ skill: id, confirm: !!confirm }) });
     }).then(function (r) {
       return r.json().then(function (j) {
-        if (j.needsConfirm && !confirm) { if (window.confirm(j.reason)) allocate(id, true); return; }
+        if (j.needsConfirm && !confirm) { window.dSheet.ask(document, { title: 'Spend the point here?', lines: [j.reason], confirmText: 'Spend it' }).then(function (yes) { if (yes) allocate(id, true); }); return; }
         if (!r.ok) throw new Error(j.reason || j.error || ('error ' + r.status));
         say(''); load(true);
       });

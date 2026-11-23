@@ -135,72 +135,10 @@
     return box;
   }
 
-  // the controls Tab may land on inside the sheet (a real DOM or the node test's stub)
-  const focusables = (sh) => (sh.querySelectorAll ? [...sh.querySelectorAll('button:not([disabled]),input:not([disabled])')]
-    : sh.all().filter((n) => !n.disabled && (n.tag === 'button' || n.tag === 'input')));
-
-  // The one confirm sheet. o = { title, lines: [text], variants: [{name,label,tier}], pick (name), confirmText, onConfirm(name), opener, parent }.
-  // Focus goes into it, Tab stays inside, Escape or a press on the backdrop or Cancel closes it and puts the focus back on the opener.
+  // The build confirm: the shared sheet (web/sheet.js) with the variant picker. Kept as openSheet for points.js and the test.
   function openSheet(doc, o) {
-    const back = mk(doc, 'div', 'bc-back');
-    const sh = mk(doc, 'div', 'bc-sheet');
-    sh.setAttribute('role', 'dialog');
-    sh.setAttribute('aria-modal', 'true');
-    const title = mk(doc, 'h2', 'bc-st', o.title);
-    title.id = 'bc-sheet-title';
-    title.setAttribute('tabindex', '-1');
-    sh.setAttribute('aria-labelledby', title.id);
-    sh.append(title);
-    for (const t of o.lines || []) sh.append(mk(doc, 'p', 'bc-sl', t));
-    let pick = o.pick || (o.variants && o.variants[0] && o.variants[0].name) || '';
-    if (o.variants && o.variants.length > 1) {
-      const fs = mk(doc, 'div', 'bc-pick');
-      fs.setAttribute('role', 'radiogroup');
-      fs.setAttribute('aria-label', 'Variant');
-      for (const v of o.variants) {
-        const lab = mk(doc, 'label', 'bc-opt');
-        const r = mk(doc, 'input', '');
-        r.type = 'radio';
-        r.name = 'bc-variant';
-        r.value = v.name;
-        r.checked = v.name === pick;
-        r.addEventListener('change', () => { pick = v.name; });
-        lab.append(r, mk(doc, 'span', '', ' ' + v.label + ' (' + v.tier + ')'));
-        fs.append(lab);
-      }
-      sh.append(fs);
-    }
-    const row = mk(doc, 'div', 'bc-row');
-    const cancel = mk(doc, 'button', 'd-btn bc-cancel', 'Cancel');
-    cancel.type = 'button';
-    const ok = mk(doc, 'button', 'd-btn bc-confirm', o.confirmText || 'Choose and lock');
-    ok.type = 'button';
-    ok.setAttribute('data-variant', 'primary');
-    row.append(cancel, ok);
-    sh.append(row);
-    back.append(sh);
-    let closed = false;
-    function close(restore) {
-      if (closed) return;
-      closed = true;
-      if (back.remove) back.remove();
-      if (restore !== false && o.opener && o.opener.focus) o.opener.focus();
-    }
-    cancel.addEventListener('click', () => close());
-    ok.addEventListener('click', () => { const p = pick; close(false); if (o.onConfirm) o.onConfirm(p); });
-    back.addEventListener('click', (e) => { if (e.target === back) close(); });
-    back.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') { e.preventDefault(); close(); return; }
-      if (e.key !== 'Tab') return;
-      const fs = focusables(sh);
-      if (!fs.length) return;
-      const first = fs[0], last = fs[fs.length - 1], at = doc.activeElement;
-      if (e.shiftKey && (at === first || at === title)) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && at === last) { e.preventDefault(); first.focus(); }
-    });
-    (o.parent || doc.body).append(back);
-    title.focus();
-    return { close, node: back, sheet: sh, confirm: ok, cancel };
+    const S = typeof module !== 'undefined' && module.exports ? require('./sheet.cjs') : g.dSheet;
+    return S.open(doc, Object.assign({ confirmText: 'Choose and lock' }, o));
   }
 
   const api = { stars, ratingRow, sourceWord, cardNode, detailNode, variantNode, openSheet };

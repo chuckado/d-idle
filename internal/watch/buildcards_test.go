@@ -46,6 +46,8 @@ func TestBuildCardsDOM(t *testing.T) {
 	js, _ := webFS.ReadFile("web/buildcards.js")
 	os.WriteFile(filepath.Join(dir, "data.json"), b, 0o600)
 	os.WriteFile(filepath.Join(dir, "buildcards.cjs"), js, 0o600)
+	sj, _ := webFS.ReadFile("web/sheet.js")
+	os.WriteFile(filepath.Join(dir, "sheet.cjs"), sj, 0o600)
 	for _, f := range []string{"nav_dom.cjs", "buildcards_test.cjs", "buildcards_dom.txt"} {
 		src, err := os.ReadFile(filepath.Join("testdata", f))
 		if err != nil && f != "buildcards_dom.txt" {
@@ -71,5 +73,34 @@ func TestBuildCardsDOM(t *testing.T) {
 	}
 	if got, err := os.ReadFile(filepath.Join(dir, "buildcards_dom.got")); err == nil {
 		t.Logf("got:\n%s", got)
+	}
+}
+
+// web/sheet.js in a stub DOM (node, skipped without it): roles, focus, Tab wrap, Escape, backdrop, notice, ask.
+func TestSheetDOM(t *testing.T) {
+	node, err := exec.LookPath("node")
+	if err != nil {
+		t.Skip("no node")
+	}
+	dir := t.TempDir()
+	sj, _ := webFS.ReadFile("web/sheet.js")
+	os.WriteFile(filepath.Join(dir, "sheet.cjs"), sj, 0o600)
+	for _, f := range []string{"nav_dom.cjs", "sheet_test.cjs"} {
+		src, err := os.ReadFile(filepath.Join("testdata", f))
+		if err != nil {
+			t.Fatal(err)
+		}
+		os.WriteFile(filepath.Join(dir, f), src, 0o600)
+	}
+	out, err := exec.Command(node, filepath.Join(dir, "sheet_test.cjs"), dir).CombinedOutput()
+	if err != nil {
+		t.Fatalf("node: %v\n%s", err, out)
+	}
+	var res struct{ Fails []string }
+	if err := json.Unmarshal(out[strings.Index(string(out), "{"):], &res); err != nil {
+		t.Fatalf("%v\n%s", err, out)
+	}
+	for _, f := range res.Fails {
+		t.Error(f)
 	}
 }
