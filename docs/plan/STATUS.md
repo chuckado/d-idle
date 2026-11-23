@@ -430,6 +430,7 @@
 | toolstrade5 | proposed | - | `internal/task/route.go`<br>`internal/task/route_test.go`<br>`internal/bot/routeguard.go`<br>`tools/provingground/scenarios/act1more.json`<br>`tools/probes/strips.py`<br>`tools/probes/strips_test.py`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | plan3 | proposed | - | `docs/probes/town-plan-stage3-2026-11-22.md` | - |
 | allochandoff | proposed | - | `internal/points`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`docs/autoalloc.md`<br>`tools/provingground/scenarios/autoalloc.json` | - |
+| novacap | proposed | - | `data/capabilities/capabilities.json`<br>`internal/combat/classdata/skills.json`<br>`internal/delivery/testdata/skills.golden.json`<br>`internal/combat/necro_data_test.go`<br>`tools/provingground/scenarios/necro.json` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -463,6 +464,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 66b1a6d6a 11-23 00:15 `Merge agent/novacap: novacap: task card` (novacap)
 - ae7081d15 11-22 23:41 `Merge agent/toolstrade6: Merge branch 'main' into toolstrade6` (toolstrade6)
 - c63b5287c 11-22 23:39 `Merge branch 'main' into toolstrade6` (-)
 - b9a9937ee 11-22 23:33 `Merge agent/allochandoff: Merge branch 'main' into allochandoff` (allochandoff)
@@ -472,5 +474,4 @@
 - ae2e09937 11-22 23:26 `Merge branch 'main' into plan3` (-)
 - 43239ea24 11-22 23:26 `Merge branch 'main' into charselectdoc` (-)
 - 712b80886 11-22 23:18 `Merge agent/toolstrade5: Merge branch 'main' into toolstrade5` (toolstrade5)
-- 8bb64c665 11-22 23:16 `Merge branch 'main' into toolstrade5` (-)
 <!-- statusgen:end -->

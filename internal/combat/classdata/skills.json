@@ -107,6 +107,7 @@
 {"name":"Plague Javelin","kind":"bolt","range":20},
 {"name":"Plague Poppy","kind":"summon","range":0},
 {"name":"Poison Dagger","kind":"melee","range":7,"hand":"left"},
+{"name":"Poison Explosion","kind":"ground","range":20},
 {"name":"Poison Javelin","kind":"bolt","range":20},
 {"name":"Poison Nova","kind":"self","range":8},
 {"name":"Power Strike","kind":"melee","range":7},
