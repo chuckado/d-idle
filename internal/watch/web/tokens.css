@@ -17,7 +17,7 @@
     --d-surface-2: var(--d-stone-4);
     --d-surface-3: var(--d-stone-5);
     --d-line: var(--d-stone-6);
-    --d-line-strong: var(--d-stone-7);
+    --d-line-strong: var(--d-stone-7); --d-line-control: var(--d-stone-9); /* a control's border: 3:1 on the surfaces (WCAG 1.4.11); the plain lines stay quiet */
     --d-text: var(--d-stone-12);
     --d-text-2: var(--d-stone-11);
     --d-text-3: var(--d-stone-9);
@@ -87,9 +87,9 @@
   :root[data-density="comfortable"] { --d-gap: var(--d-sp-4); --d-pad: var(--d-sp-4); --d-pad-dense: var(--d-sp-3); --d-row-pad: var(--d-sp-2); }
   :root[data-theme="light"] {
     --d-bg: #f3efe6; --d-surface-0: #ece6d8; --d-surface-1: #fffdf8; --d-surface-2: #f1ece1; --d-surface-3: #fff;
-    --d-line: #d6ccb8; --d-line-strong: #b9ad96; --d-text: #231e17; --d-text-2: #5e5547; --d-text-3: #8a8070;
+    --d-line: #d6ccb8; --d-line-strong: #b9ad96; --d-line-control: #857a64; --d-text: #231e17; --d-text-2: #5e5547; --d-text-3: #8a8070;
     --d-accent: #9a6407; --d-accent-text: #7a4f00; --d-on-accent: #fff; --d-focus: #1f5fd6; --d-ornament: #b5760f;
-    --d-good: #2f7d3a; --d-on-good: #fff; --d-warn: #9a6200; --d-on-warn: #fff; --d-bad: #b3342a; --d-on-bad: #fff;
+    --d-good: #286f33; --d-on-good: #fff; --d-warn: #8a5700; --d-on-warn: #fff; --d-bad: #b3342a; --d-on-bad: #fff;
     --d-info: #2a63a8; --d-on-info: #fff; --d-life: #c0352b; --d-mana: #2f62c9; --d-xp: #b5760f;
     --d-state-bg-ok: color-mix(in srgb, var(--d-good) 7%, var(--d-surface-1)); --d-state-bg-warn: color-mix(in srgb, var(--d-warn) 7%, var(--d-surface-1)); /* 4.5:1 for the word on its chip (S7) */
     --d-q-normal: #3a3328; --d-q-low: #7d7669; --d-q-magic: #2f55c9; --d-q-rare: #8a6d00; --d-q-set: #2f8a3f;
@@ -100,9 +100,9 @@
   @media (prefers-color-scheme: light) {
     :root[data-theme="auto"] {
       --d-bg: #f3efe6; --d-surface-0: #ece6d8; --d-surface-1: #fffdf8; --d-surface-2: #f1ece1; --d-surface-3: #fff;
-      --d-line: #d6ccb8; --d-line-strong: #b9ad96; --d-text: #231e17; --d-text-2: #5e5547; --d-text-3: #8a8070;
+      --d-line: #d6ccb8; --d-line-strong: #b9ad96; --d-line-control: #857a64; --d-text: #231e17; --d-text-2: #5e5547; --d-text-3: #8a8070;
       --d-accent: #9a6407; --d-accent-text: #7a4f00; --d-on-accent: #fff; --d-focus: #1f5fd6; --d-ornament: #b5760f;
-      --d-good: #2f7d3a; --d-on-good: #fff; --d-warn: #9a6200; --d-on-warn: #fff; --d-bad: #b3342a; --d-on-bad: #fff;
+      --d-good: #286f33; --d-on-good: #fff; --d-warn: #8a5700; --d-on-warn: #fff; --d-bad: #b3342a; --d-on-bad: #fff;
       --d-info: #2a63a8; --d-on-info: #fff; --d-life: #c0352b; --d-mana: #2f62c9; --d-xp: #b5760f;
     --d-state-bg-ok: color-mix(in srgb, var(--d-good) 7%, var(--d-surface-1)); --d-state-bg-warn: color-mix(in srgb, var(--d-warn) 7%, var(--d-surface-1)); /* 4.5:1 for the word on its chip (S7) */
       --d-q-normal: #3a3328; --d-q-low: #7d7669; --d-q-magic: #2f55c9; --d-q-rare: #8a6d00; --d-q-set: #2f8a3f;
