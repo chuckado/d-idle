@@ -645,6 +645,7 @@ docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
 docs/probes/town-plan-scenarios.md  credit-runner  town1
 docs/probes/town-plan-stage3-2026-11-22.md  credit-runner  plan3
 docs/probes/town-plan-stage3-2026-11-22.md  credit-runner  town5
@@ -1442,8 +1443,10 @@ internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/fullgrid_test.go  credit-runner  knownedge
 internal/nav/gatedoor.go  credit-runner  toolstrade
+internal/nav/gatedoor.go  credit-runner  toolstrade8
 internal/nav/gatedoor_test.go  credit-runner  toolstrade
 internal/nav/gatedoor_test.go  credit-runner  toolstrade2
+internal/nav/gatedoor_test.go  credit-runner  toolstrade8
 internal/nav/hints_export.go  credit-runner  exitsread
 internal/nav/mouthgate.go  credit-runner  botstuck
 internal/nav/mouthgate.go  credit-runner  warptrigger
@@ -1452,6 +1455,7 @@ internal/nav/nav.go  credit-runner  knownedge
 internal/nav/nav.go  credit-runner  maphistoryC
 internal/nav/nav.go  credit-runner  pursuers
 internal/nav/nav.go  credit-runner  toolstrade2
+internal/nav/nav.go  credit-runner  toolstrade8
 internal/nav/objectiveview_test.go  credit-runner  fogtrail
 internal/nav/pursuit.go  credit-runner  pursuers
 internal/nav/pursuit_test.go  credit-runner  pursuers
@@ -2253,6 +2257,7 @@ internal/watch/web/update.js  credit-runner  uis7
 internal/watch/web/utilities.css  credit-runner  fitfix2
 internal/watch/web/utilities.css  credit-runner  mapphone
 internal/watch/web/utilities.css  credit-runner  quests8
+internal/watch/web/utilities.css  credit-runner  uivault
 internal/watch/web/vault-logic.js  credit-runner  fitfix3
 internal/watch/web/vault-logic.js  credit-runner  vaultclean
 internal/watch/web/vault-logic.js  credit-runner  vaultequip

@@ -25,7 +25,13 @@ const gateDoorReach = 14.0
 // S that using one opens its cells. Walk next to the door, use it once, and let the planner re-read the grid. It
 // reports whether it acted (the caller then observes again); false when there is no such door or it was tried enough.
 func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool {
-	cands := n.gateCands(o, levelNo)
+	return n.openDoorToward(ctx, o, n.gateCands(o, levelNo), levelNo, true)
+}
+
+// openDoorToward is openGateDoor for any goals: cands are the points the character wants to reach (gates, or one spot
+// a walk could not reach), key names the attempt in the logs and the approach budget; approach false never walks
+// toward the cands when no door is in sight.
+func (n *Navigator) openDoorToward(ctx context.Context, o *obs, cands []gate, levelNo int, approach bool) bool {
 	if len(cands) == 0 {
 		return false
 	}
@@ -45,7 +51,7 @@ func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool 
 	}
 	at, found := n.doorBetween(o, cands, doors)
 	if !found {
-		if n.approachGate(ctx, o, levelNo, cands[0]) {
+		if approach && n.approachGate(ctx, o, levelNo, cands[0]) {
 			return true
 		}
 		n.logNoDoor(o, levelNo, cands)
