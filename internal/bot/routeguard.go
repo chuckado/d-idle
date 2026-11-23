@@ -385,14 +385,16 @@ func (r *Runner) kitPlanOf(s *d2.Snapshot) *task.KitPlan {
 	return &task.KitPlan{Healing: pl.MinOf(supply.Healing), Mana: pl.MinOf(supply.Mana), Portals: pl.MinOf(supply.Portal), Short: pl.Why()}
 }
 
-// fillKit counts the kit by the one counter and, at stage 2, attaches the plan. Stage 0 and 1 keep the old counts byte for
-// byte (mana in the belt only).
+// fillKit counts the kit by the one counter and, at stage 2, attaches the plan.
 func (r *Runner) fillKit(w *task.World, s *d2.Snapshot) {
+	// Mana counts belt plus pack at every stage, like the healing count and like the shop that decides what to buy (rule
+	// conflict I8): with the belt only a caster with its potions in the pack was refused "0 mana potions" by the quest
+	// gate while the shop saw nothing to buy (run 20261122-190434, 29 minutes stuck).
+	if c, ok := r.supplyCount(s); ok {
+		w.ManaPotions = c.Mana()
+	}
 	if !r.kitPlanOn() {
 		return
-	}
-	if c, ok := r.supplyCount(s); ok {
-		w.ManaPotions = c.Mana() // the guard counts belt plus pack for mana too (town-planner I8)
 	}
 	w.KitPlan = r.kitPlanOf(s)
 }
