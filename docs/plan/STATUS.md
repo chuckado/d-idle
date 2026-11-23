@@ -442,7 +442,6 @@
 | failspend | proposed | - | `internal/bot/questboard.go`<br>`internal/bot/questboard_test.go` | - |
 | uifit1 | proposed | - | `tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/fit-triage-2026-11-23.md`<br>`internal/watch/web/utilities.css`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/panels/statusline/panel.css`<br>`internal/watch/web/panels/quest-strip/panel.css` | - |
 | toolstrade10 | proposed | - | `internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
-| opsquest3 | proposed | - | `docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
