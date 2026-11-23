@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into uireason <!--sg:agent/uireason-->
 - Merge branch 'main' into manapack <!--sg:agent/manapack-->
 - Merge branch 'main' into navdoc <!--sg:agent/navdoc-->
 - Merge origin/main into agent/uitoast <!--sg:agent/uitoast-->
