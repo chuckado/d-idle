@@ -13,6 +13,7 @@
     { "id": "return", "label": "Return screen", "href": "/watch/return", "key": "menu-return" },
     { "id": "hall", "label": "Hall of Fame", "href": "/watch/hall" },
     { "id": "policy", "label": "Policy", "href": "/watch/policy" },
+    { "id": "settings", "label": "Settings", "href": "?settings=1", "key": "menu-settings" },
     { "id": "help", "label": "Help", "href": "/watch?live=1&drawer=onboarding" },
     { "id": "oldlayout", "label": "Old layout", "href": "/watch?layout=classic" }
   ],
