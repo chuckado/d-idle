@@ -106,3 +106,24 @@ Not ready to play.
 
 ## 9. Thresholds of the necro scenarios from lab traces (card drill2)
 From run 20261122-170602 (one run per scenario, CHEATED, so a floor rather than a tuned number): `necro.upkeep-pack` 71 kills, 5 Raise Skeleton raises that grew the army, 2 Raise Skeletal Mage, 1 Clay Golem, 15 Amplify Damage curse lines; `necro.curse-unique` 75 kills, 20 curse lines, 5 skeleton raises; `necro.revive-after-death` 87 kills, 1 Revive that grew the army, 6 skeleton raises; `necro.mana-budget-10min` 94 kills, 5 skeleton raises, 18 curse lines. The scenario floors are now: upkeep Raise Skeleton raises >= 3 (was 2), curse lines >= 8 (was 1), mana budget kills >= 50 (was 40); Revive stays at 1 raise. All four GREEN again with the new floors (job 20261123-012125-173a). One run per scenario: the variance is U; the floors sit at about half of the observed counts.
+
+## 10. Reruns after failspend (#1170) and the two blocker cards (night of 2026-11-23, builder long lane, lab d2d devp20, sandbox nav knobs `nav.warpRead` 1 and `nav.fullGrid` 1, CHEATED fixtures)
+
+### The 49-minute clock freeze (V, bot log of run 20261123-002147-61e0 and code reading)
+Not a lab artifact of the runner and not a hang: a spin. The board step `quest.sisters_burial/to-burial` was refused with a `ui` error (`exit to Outer Cloister: nav: no exit to that level`), which ran nothing. `boardRun` returned true without any clock sleep, so under the lockstep clock no game time passed, the 15-second failure gap (`boardFailGap`) never elapsed, the three counted failures that park a chunk never came, and the loop polled snapshots about 130 times a second while the d2d tick counter stood still. In real play the wall clock moves, so the chunk would park after three tries; in the lab it burned the wall budget. Fix merged as failspend (#1170): a failed non-idle board step spends a third of the gap (`failSpend`, unit test). V: the rerun (job 20261123-023115-028d) parks the chunk within 4 virtual seconds (`parked ... gave up after 3 tries`) and then runs its full 90 virtual minutes in 1272 s.
+
+### Stage 1 reruns
+| run | fixture | verdict | what it shows |
+|---|---|---|---|
+| 20261123-023115-028d | level 14 | RED (a death in the Outer Cloister, Rust Shard) | after the Den hand-in the level plan (window 14-18, Catacombs 3) walks the hero Dark Wood, Black Marsh, Tamoe Highland, Monastery Gate, Outer Cloister, Barracks while the Blood Raven chunk waits in its start gate (`start gate: waiting for the fight to end`); the chunk then starts in the Barracks and `to-burial` cannot route back (`nav no usable gate from 28 to 27`, `border not readable`). With the fix it parks and the hero goes on into the Monastery and dies at clvl 14 |
+| 20261123-025322-bafd | level 16 (the fixture of the green Blood Raven runs) | RED: record 1 read 0x0004 | the Den chunk reaches `awaiting_handin` 11 s after Start (00:00:02 to 00:00:13) and the hand-in fails 3 times: `no skill point after talking to Akara (quest not complete, or the dialog...)`; Blood Raven stays `ready` and is never started in 90 virtual minutes |
+
+So stage 1 is still NOT green. Two concrete defects:
+1. The Den chunk of a level 16 Necromancer is judged done after 11 s (no kill reads as complete) and the hand-in is refused by the game: the board's completion test for `clear_den` reads a state the fixture sets (U: quest word 0x0004 from the SETUP, the save, not the kill). The denfix runs (level 10 fixture) clear the Den for real and are GREEN; the difference is the fixture level (U).
+2. The level plan and a queued quest start run at the same time (a chunk waiting 30 s for the fight to end while the plan travels toward the Monastery), and the nav cannot route back from the Barracks to the Outer Cloister.
+
+### Stage 2 and 3
+Stage 2 (`act1.forgotten.countess`, Necromancer 11): GREEN (job 20261123-011245-cb7e, 494 s). Stage 3 (Andariel) and the Tools of the Trade stage were not run: the Tools fix was not live at 23:49 EST, and Andariel needs a geared hero (act1more finding 3).
+
+### Verdict
+The earned Act 1 drill is NOT green for the Necromancer: the Den to Blood Raven stage fails on a Den completion test and a plan/quest overlap, the Countess stage passes, Andariel is unrun. Not ready to play. Cards: `quest board: clear_den completion test at a fixture level` (owner questboard), `level plan: do not travel while a chunk waits in its start gate` (owner bot), `nav: route back from the Barracks to the Outer Cloister` (owner nav, toolstrade family).

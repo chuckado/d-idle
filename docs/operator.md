@@ -32,6 +32,8 @@ Every verb the desk ran adds a line to the hero's quest audit ring (`<Hero>.audi
 ## Limits (in the bot, per process)
 At most 6 mutating verbs per quest per hour, 30 per hour for the whole board, and a 60 s cooldown after a `retry` during which `retry` and `start` of that quest are refused (`cooldown`; `cancel` still works). Excess is `rate_limited` with the reason in words.
 
+A `retry` is also refused with `not_parked` (and books nothing) unless a matching chunk of the quest is `blocked`: retry clears a park and must never touch a chunk that runs. `tools/questloop.sh` only retries a chunk that is blocked with a park code, confirmed on a second status read.
+
 ## Threat model
 1. Anyone with `docker exec` on the host already owns the container, its state and its save; this adds no power they lack.
 2. The socket is not on the network: a unix socket, mode 0600, owned by the bot's user, created under a temporary name and renamed into place so it is never looser.
@@ -50,6 +52,7 @@ At most 6 mutating verbs per quest per hour, 30 per hour for the whole board, an
 - Per quest: status, then start (retry when parked; nothing when a chunk already runs, so restarting the loop is safe), then `wait` in `--wait` second windows with one heartbeat line per window (elapsed, try, step, progress).
 - Slow progress is not a failure: `status` rows carry a `progress` counter (the server counts each change of state or step it sees for a chunk), and `wait` prints it. A window that ends with a moved step or counter just continues. `--stall` windows without any move, a park, a cancel or a refusal count as a failed try.
 - After `--max-tries` tries the loop backs off `--tries-backoff` s (20 min, under the 6 per quest per hour limit) and goes on with the same quest until the per-chunk `--budget` (3 h) or the `--deadline` (HH:MM local time, default 07:30, or `@EPOCH`) passes. A refused `cooldown` or `rate_limited` waits and is not a try; `not_ready`/`locked`/`unavailable` skips the quest with a line.
+- The board runs one chunk at a time, so the loop never works on a quest while another has an accepted or running chunk: at every pass, if another quest is active it logs `waiting on <quest> ...; skipping <x>: busy` and waits on that quest first (retry only when it is parked). A `busy` refusal is not a try; the next pass finds the active quest and switches to it. A chunk in `awaiting_handin` gets the `handin` verb (once, then waits), never `start`, and only when nothing else is active. Locked or unavailable quests and `not_ready` refusals are skipped without a try.
 - A finished chunk moves on (the next chunk of the quest, then the next quest). `--all` walks the board in order, skips done and locked quests, repeats until nothing is startable, and exits 1 if any quest used up its budget or the deadline passed.
 - Hero deaths are not exposed by the board, so they are not a stop condition. The area is not exposed either; progress is the step and state counter.
 - Offline test: `bash tools/questloop_test.sh` (a fake `docker` shim and a fake clock).

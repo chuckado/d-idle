@@ -267,12 +267,25 @@ type BeltFiller interface {
 // beltFillBackoff spaces the attempts, so a belt fill that does nothing is not clicked again every tick.
 const beltFillBackoff = 90 * time.Second
 
+// beltFillUrgentRadius is the calm radius (subtiles) of a belt fill when the belt holds no healing potion at all.
+const beltFillUrgentRadius = 12
+
 // beltFillStep fills the belt from the pack when no hostile is near and the pack holds potions the belt has room for.
 // It reports whether it acted (the caller then takes a fresh snapshot).
 func (r *Runner) beltFillStep(ctx context.Context, s *d2.Snapshot) bool {
 	bf, ok := r.d.Town.(BeltFiller)
-	if !ok || s.Inventory == nil || r.e.Clock.Now().Before(r.loop.beltFillNext) || !bf.NeedsBeltFill(s) ||
-		r.hostileNear(s, r.e.Tune.Bot.ClearRadius) > 0 {
+	if !ok || s.Inventory == nil || r.e.Clock.Now().Before(r.loop.beltFillNext) || !bf.NeedsBeltFill(s) {
+		return false
+	}
+	// The calm radius is the sweep radius (30 subtiles), which a crowded level such as the Barracks never clears: a belt
+	// with no healing potion and a pack full of them then stayed empty until the hero chickened (V live, scenario
+	// act1.tools.malus: belt hp=0, six potions in the pack). With the belt out of healing the gate shrinks to
+	// beltFillUrgentRadius: nothing within easy reach of the hero.
+	radius := r.e.Tune.Bot.ClearRadius
+	if in := r.resInput(s); in.Belt.HP+in.Belt.RV == 0 && in.Belt.PackHP+in.Belt.PackRV > 0 {
+		radius = min(radius, beltFillUrgentRadius)
+	}
+	if r.hostileNear(s, radius) > 0 {
 		return false
 	}
 	r.loop.beltFillNext = r.e.Clock.Now().Add(beltFillBackoff)

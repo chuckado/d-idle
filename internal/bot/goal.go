@@ -695,11 +695,19 @@ func lowGoldSellOK(sell int, hasTP bool, minItems, min int) bool {
 
 func (r *Runner) allowedActs(s *d2.Snapshot) map[int]bool {
 	m := map[int]bool{}
-	for _, a := range r.cfg.Acts {
-		m[a] = true
-	}
+	cur := 0
 	if s != nil && s.Player != nil {
-		m[s.Player.Act+1] = true
+		cur = s.Player.Act + 1
+	}
+	for _, a := range r.cfg.Acts {
+		// The boat only goes east: a hero in Act 2 cannot walk to an Act 1 zone (V drill.act2.* runs: "no route from Lut
+		// Gholein (40) to Catacombs Level 3", then the failsafe ladder), so an earlier act is not reachable.
+		if a >= cur {
+			m[a] = true
+		}
+	}
+	if cur > 0 {
+		m[cur] = true
 	}
 	return m
 }

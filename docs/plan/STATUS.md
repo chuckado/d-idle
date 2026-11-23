@@ -432,7 +432,7 @@
 | allochandoff | proposed | - | `internal/points`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`docs/autoalloc.md`<br>`tools/provingground/scenarios/autoalloc.json` | - |
 | opsquest | proposed | - | `cmd/d2bot/ops*.go`<br>`cmd/d2bot/main.go`<br>`cmd/d2bot/questwire.go`<br>`internal/ops/**`<br>`internal/questboard/audit.go`<br>`docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
 | uisettings | proposed | - | `internal/watch/web/settings.js`<br>`internal/watch/web/nav.js`<br>`internal/watch/web/nav.json`<br>`internal/watch/web/nav.css`<br>`internal/watch/web/sheet.js`<br>`internal/watch/settingsjs_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/settings/`<br>`docs/ui-design-system.md` | - |
-| qdmatrix | proposed | - | `docs/probes/quest-drill-matrix-2026-11-23.md`<br>`tools/provingground/scenarios/questdrill.json`<br>`internal/power/archetype.go`<br>`internal/power/skilldamage_test.go`<br>`internal/questboard/state.go`<br>`internal/questboard/state_test.go`<br>`internal/nav/exit.go`<br>`internal/nav/exitgoal_test.go`<br>`internal/talk/talk.go`<br>`internal/talk/talk_test.go` | - |
+| qdmatrix | proposed | - | `docs/probes/quest-drill-matrix-2026-11-23.md`<br>`tools/provingground/scenarios/questdrill.json`<br>`internal/power/archetype.go`<br>`internal/power/skilldamage_test.go`<br>`internal/questboard/state.go`<br>`internal/questboard/state_test.go`<br>`internal/nav/exit.go`<br>`internal/nav/exitgoal_test.go`<br>`internal/nav/mouthgate.go`<br>`internal/bot/goal.go`<br>`internal/bot/goal_acts_test.go`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/setup_test.go`<br>`internal/talk/talk.go`<br>`internal/talk/talk_test.go` | - |
 | uisettings2 | proposed | - | `docs/design/fable-review-2026-11-22/e11-deletion-plan.md` | - |
 | uialerts | proposed | - | `internal/watch/web/alerts-feed.js`<br>`internal/watch/testdata/alertsfeed_test.cjs`<br>`internal/watch/settingsjs_test.go`<br>`internal/watch/web/nav.js`<br>`internal/watch/http_view.go`<br>`docs/ui-design-system.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -442,6 +442,9 @@
 | failspend | proposed | - | `internal/bot/questboard.go`<br>`internal/bot/questboard_test.go` | - |
 | uifit1 | proposed | - | `tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/fit-triage-2026-11-23.md`<br>`internal/watch/web/utilities.css`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/panels/statusline/panel.css`<br>`internal/watch/web/panels/quest-strip/panel.css` | - |
 | toolstrade10 | proposed | - | `internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| toolstrade11 | proposed | - | `internal/bot/resource.go`<br>`internal/bot/beltfill_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| opsquest4 | proposed | - | `internal/ops/**`<br>`cmd/d2bot/ops*.go`<br>`docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
+| stage1b | proposed | - | `tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
@@ -474,14 +477,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 23eea885b 11-23 02:42 `Merge agent/uigate: Merge branch 'main' into uifit1` (uigate)
-- 1472b59c7 11-23 02:41 `Merge branch 'main' into uifit1` (-)
-- a70c7deb1 11-23 02:34 `Merge agent/toolstrade10: Merge branch 'main' into toolstrade10` (toolstrade10)
-- 189673091 11-23 02:32 `Merge branch 'main' into toolstrade10` (-)
-- dc78607a5 11-23 02:18 `Merge agent/stage1: Merge branch 'main' into failspend` (stage1)
-- 55bbca0fc 11-23 02:16 `Merge branch 'main' into failspend` (-)
-- c54b1348b 11-23 02:09 `Merge agent/opsquest2: Merge branch 'main' into opsquest2` (opsquest2)
-- 972b7d1d0 11-23 02:08 `Merge branch 'main' into opsquest2` (-)
-- 9b7eaf384 11-23 01:59 `Merge branch 'main' into failspend` (-)
-- eb7f39ce3 11-23 01:51 `Merge agent/toolstrade9: Merge branch 'main' into toolstrade9` (toolstrade9)
+- 933be05ef 11-23 03:29 `Merge agent/stage1b: Merge branch 'main' into stage1b` (stage1b)
+- cc9385ba9 11-23 03:28 `Merge branch 'main' into stage1b` (-)
+- 0c10ea25e 11-23 03:21 `Merge agent/opsquest4: Merge branch 'main' into opsquest4` (opsquest4)
+- 038a740d4 11-23 03:20 `Merge branch 'main' into opsquest4` (-)
+- 60d48e453 11-23 03:11 `Merge agent/questdrill2: Merge branch 'main' into qdmatrix` (questdrill2)
+- 8eb28bdd1 11-23 03:10 `Merge branch 'main' into qdmatrix` (-)
+- bdad4b6aa 11-23 03:07 `Merge remote-tracking branch 'origin/main' into agent/stage1b` (-)
+- 894801633 11-23 03:01 `Merge agent/toolstrade11: Merge branch 'main' into toolstrade11` (toolstrade11)
+- 34fb1584c 11-23 03:00 `Merge branch 'main' into toolstrade11` (-)
+- 2b9a3202d 11-23 02:50 `Merge agent/opsquest3: Merge branch 'main' into opsquest3` (opsquest3)
 <!-- statusgen:end -->

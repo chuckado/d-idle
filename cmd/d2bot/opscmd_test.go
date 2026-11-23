@@ -14,7 +14,8 @@ type cliDesk struct{ calls []string }
 
 func (c *cliDesk) View() questboard.View {
 	return questboard.View{Enabled: true, Difficulty: "normal", Quests: []questboard.QuestRow{{ID: "den",
-		Chunks: []questboard.ChunkRow{{ID: "c1", State: questboard.Done}}}}}
+		Chunks: []questboard.ChunkRow{{ID: "c1", State: questboard.Done}}},
+		{ID: "bk", Chunks: []questboard.ChunkRow{{ID: "c1", State: questboard.Blocked}}}}}
 }
 func (c *cliDesk) rep(s string) questboard.Reply {
 	c.calls = append(c.calls, s)
@@ -47,10 +48,10 @@ func TestOpsCLI(t *testing.T) {
 		}
 		return code, b.String()
 	}
-	if c, o := run("quest", "retry", "den", "--why", "overnight"); c != 0 || !strings.Contains(o, "ok=true") {
+	if c, o := run("quest", "retry", "bk", "--why", "overnight"); c != 0 || !strings.Contains(o, "ok=true") {
 		t.Fatalf("%d %s", c, o)
 	}
-	if c, o := run("quest", "retry", "den", "--why", "again"); c != 1 || !strings.Contains(o, "code=cooldown") {
+	if c, o := run("quest", "retry", "bk", "--why", "again"); c != 1 || !strings.Contains(o, "code=cooldown") {
 		t.Fatalf("%d %s", c, o)
 	}
 	if c, o := run("quest", "start", "den"); c != 1 || !strings.Contains(o, "code=why") {

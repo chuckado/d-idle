@@ -1,6 +1,7 @@
 package scenario
 
 import (
+	"slices"
 	"strings"
 	"testing"
 )
@@ -26,6 +27,35 @@ func TestGroundItemAfterPosition(t *testing.T) {
 		}
 		if goto_ < 0 || give < 0 || give < goto_ {
 			t.Errorf("%s: goto at %d, give at %d: the ring must be dropped after the hero is in the field", class, goto_, give)
+		}
+	}
+}
+
+// pre.stats writes the raw stat after the level verbs (a level write would otherwise reset it) and marks the run CHEATED.
+func TestRawStatsFollowTheLevel(t *testing.T) {
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		s := Scenario{ID: "x.stats", Kind: KindBehaviour, Pre: Pre{Level: 20, Stats: []StatSet{{Stat: 7, Value: 307200}}}}
+		su, err := BuildSetup(s, class, 3)
+		if err != nil {
+			t.Fatal(err)
+		}
+		lvl, raw := -1, -1
+		for i, v := range su.Verbs {
+			switch v.Line {
+			case "debug stat 12 20":
+				lvl = i
+			case "debug stat 7 307200":
+				raw = i
+			}
+		}
+		if lvl < 0 || raw < lvl {
+			t.Errorf("%s: level verb at %d, raw stat at %d", class, lvl, raw)
+		}
+		if !slices.Contains(su.Tags, "CHEATED") {
+			t.Errorf("%s: a raw stat write must mark the run CHEATED", class)
+		}
+		if _, err := BuildSetup(Scenario{ID: "x.bad", Kind: KindBehaviour, Pre: Pre{Stats: []StatSet{{Stat: 9999}}}}, class, 3); err == nil {
+			t.Errorf("%s: stat id 9999 accepted", class)
 		}
 	}
 }
