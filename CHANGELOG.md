@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- toolstrade23: lab notes round 22 <!--sg:agent/toolstrade23-->
 - Merge branch 'main' into qdmatrix <!--sg:agent/questdrill10-->
 - toolstrade22: basic scenario with Light potions, merc verb request <!--sg:agent/toolstrade22-->
 - Merge branch 'main' into toolstrade21 <!--sg:agent/toolstrade21-->

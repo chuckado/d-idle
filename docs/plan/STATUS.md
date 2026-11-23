@@ -492,6 +492,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 47fdd2874 11-23 07:40 `Merge agent/toolstrade23: toolstrade23: lab notes round 22` (toolstrade23)
 - d56e55b24 11-23 07:27 `Merge agent/questdrill10: Merge branch 'main' into qdmatrix` (questdrill10)
 - 030e6f747 11-23 07:26 `Merge branch 'main' into qdmatrix` (-)
 - df8eb3ae3 11-23 07:24 `Merge agent/toolstrade22: toolstrade22: basic scenario with Light potions, merc verb request` (toolstrade22)
@@ -501,5 +502,4 @@
 - 709194169 11-23 07:09 `Merge agent/uikeys: Merge branch 'main' into uikeys` (uikeys)
 - 033844e66 11-23 07:08 `Merge branch 'main' into uikeys` (-)
 - d66e9b09d 11-23 07:05 `Merge agent/questdrill9: Merge branch 'main' into qdmatrix` (questdrill9)
-- 62faabb0a 11-23 07:04 `Merge origin/main into uikeys` (-)
 <!-- statusgen:end -->
