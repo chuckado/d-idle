@@ -373,6 +373,55 @@ func TestGoToOpensTheDoorsOfTheLiveBarracks(t *testing.T) {
 	}
 }
 
+// The real Barracks (live capture 2026-11-23): the hero arrives from the Outer Cloister at about (191,324), 25 subtiles above
+// the south strip (open cells x 179..182 of row 349), and d2d never reads across that strip (pending stays 1, nothing
+// proves). The way back is to cross the unproven strip (stage 1 of the Necromancer drill; run 20261123-023115-028d,
+// `nav no usable gate from 28 to 27 ... borderCells 0 unproven 4 pending 1`). Both classes: the geometry knows none.
+func TestExitToCrossesTheLiveBarracksSouthStrip(t *testing.T) {
+	data, err := os.ReadFile("testdata/barracks28.grid")
+	if err != nil {
+		t.Fatal(err)
+	}
+	rows := strings.Split(strings.TrimSpace(string(data)), "\n")
+	const ox, oy = 1000, 1000
+	for _, cls := range []string{"Paladin", "Necromancer"} {
+		t.Run(cls, func(t *testing.T) {
+			g := d2map.NewGrid()
+			cells := make([]uint16, len(rows[0])*len(rows))
+			for y, r := range rows {
+				for x, c := range r {
+					if c == '#' {
+						cells[y*len(rows[0])+x] = 1
+					}
+				}
+			}
+			g.SetBlock(d2map.Rect{X: ox, Y: oy, W: len(rows[0]), H: len(rows)}, cells)
+			g.SetBlock(d2map.Rect{X: ox + 100, Y: oy + 350, W: 200, H: 120}, make([]uint16, 200*120)) // the Outer Cloister side, level 27
+			l28 := &simLevel{no: 28, rect: d2map.Rect{X: ox, Y: oy, W: len(rows[0]), H: len(rows)}}
+			l27 := &simLevel{no: 27, rect: d2map.Rect{X: ox + 100, Y: oy + 350, W: 200, H: 120}}
+			s := newSim(g, input.Point{X: ox + 191, Y: oy + 324}, l28, l27)
+			s.reveal = 400
+			s.revealRooms()
+			l := s.levels[0]
+			adj := l.lm.Adjacent
+			if len(adj) == 0 {
+				t.Skip("the sim builds no adjacency for this layout")
+			}
+			l.lm.Adjacent, l.lm.Pending = nil, 1
+			l.lm.Unproven = []d2map.Adjacent{{LevelNo: 27, Rect: adj[0].Rect, Contact: adj[0].Contact}}
+			s.onStep = func(s *sim) { l.lm.Adjacent, l.lm.Pending = nil, 1 } // d2d never reads across
+			n := s.navigator()
+			n.exploreFn = func(context.Context, func() bool, *input.Point) error { return ErrExplored }
+			if err := n.ExitTo(ctxT(t), 27); err != nil {
+				t.Fatalf("%s: %v (at %v)", cls, err, s.pos())
+			}
+			if s.cur().no != 27 {
+				t.Fatalf("%s: still in level %d at %v", cls, s.cur().no, s.pos())
+			}
+		})
+	}
+}
+
 // A door that takes 2.5 s to open (the grid still reads it shut right after the use) is waited for, not used again: a
 // second use of an open door closes it (card qdmatrix, tomb doors of Act 2). Both classes read the same geometry.
 func TestExitToWaitsForADoorThatOpensSlowly(t *testing.T) {
@@ -443,6 +492,51 @@ func TestGoToUnitOpensTheDoorToAUnitBehindIt(t *testing.T) {
 			}
 			if opened != 1 || dist(s.pos(), input.Point{X: 3150, Y: 3057}) > 6 {
 				t.Fatalf("door used %d times, at %v", opened, s.pos())
+			}
+		})
+	}
+}
+
+// Two doors in a row between the hero and a GATE: no single door joins both sides, ExitTo opens the first on the way, walks,
+// and opens the next (V drill.act2.amulet: Claw Viper Temple 1, "cut-off gate, no door beside it, nearest preset 45").
+// Must fail without the chain step for gates.
+func TestExitToOpensTwoDoorsInARow(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			g := openField(3000, 3000, 340, 100)
+			blockRect(g, d2map.Rect{X: 3080, Y: 3000, W: 2, H: 100})
+			blockRect(g, d2map.Rect{X: 3160, Y: 3000, W: 2, H: 100})
+			c1 := d2map.Rect{X: 3080, Y: 3048, W: 2, H: 18}
+			c2 := d2map.Rect{X: 3160, Y: 3048, W: 2, H: 18}
+			l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 240, H: 100}}
+			l2 := &simLevel{no: 2, rect: d2map.Rect{X: 3240, Y: 3000, W: 100, H: 100}}
+			s := newSim(g, input.Point{X: 3010, Y: 3057}, l1, l2)
+			s.reveal = 400
+			s.levels[0].lm.Presets = []d2map.Preset{
+				{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: 3081, Y: 3057}},
+				{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: 3161, Y: 3057}},
+			}
+			s.objects = []d2.Unit{d2Unit(77, 24, 3081, 3057), d2Unit(78, 24, 3161, 3057)}
+			opened := 0
+			s.onInteract = func(s *sim, tg input.Target) error {
+				switch tg.ID {
+				case 77:
+					opened++
+					openDoor(s, c1)
+				case 78:
+					opened++
+					openDoor(s, c2)
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class == 24 }
+			n.exploreFn = func(_ context.Context, _ func() bool, _ *input.Point) error { return ErrExplored }
+			if err := n.ExitTo(ctxT(t), 2); err != nil {
+				t.Fatalf("%s: exit: %v", cls, err)
+			}
+			if opened != 2 || s.cur().no != 2 {
+				t.Fatalf("%s: doors used %d, level %d at %v", cls, opened, s.cur().no, s.pos())
 			}
 		})
 	}

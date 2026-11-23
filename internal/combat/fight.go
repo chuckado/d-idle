@@ -36,6 +36,7 @@ type track struct {
 	bestLife        int
 	casts           int
 	approaches      int
+	doorGoTos       int  // walks toward an unreachable target that may open doors on the way (doorGoToMax)
 	inShot          bool // was in range with a clear line at least once
 	assessAt        time.Time
 	plan            reachPlan
@@ -729,6 +730,17 @@ func (f *Fighter) engage(ctx context.Context, snap *d2.Snapshot, tg Target, sp f
 			return nil
 		}
 		plan, fp := f.assess(tr, me, tg, reach)
+		if plan == planNone && tr.doorGoTos < doorGoToMax {
+			// The target stands behind closed or unbuilt doors (V lab, the Smith's room in the Barracks: "unreachable, no path
+			// and no firing position (dist 32)" with the doors still shut): the navigator's walk plans through doors and opens
+			// them, the fight's own assessment does not. Walk toward the target once or twice before writing it off.
+			tr.doorGoTos++
+			f.info("door-augmented approach", "to", input.Point{X: target.X, Y: target.Y}, "dist", int(tg.Dist), "try", tr.doorGoTos)
+			if err := f.mv.GoTo(ctx, input.Point{X: target.X, Y: target.Y}); err == nil || ctx.Err() != nil {
+				return err
+			}
+			plan, fp = f.assess(tr, me, tg, reach)
+		}
 		if plan == planNone {
 			f.ignore(st, tg, IgnoreUnreachable, "no path and no firing position with a clear line of sight")
 			return nil
@@ -1063,3 +1075,6 @@ func (st *fightState) lifeDropping(now time.Time, life int) bool {
 	}
 	return dropping
 }
+
+// doorGoToMax bounds the door-augmented walks the fight makes toward one unreachable target.
+const doorGoToMax = 3

@@ -7,8 +7,9 @@ import "d2lod-bot/internal/input"
 // order); each hop is confirmed or marked bad by the first ExitTo. Canyon of the Magi (46): levels.txt Vis (V, dumped
 // from the 1.14d tables) lists ONLY the seven tombs 66..72, so it has no data-backed outdoor neighbour. ACT2LIVE2
 // found the desert chain 43-44-45 by Adjacent contacts (V) and the Valley of Snakes (45) a dead end for plain nav
-// (its only listed exit is Dest 58; a teleport west was blocked by rocks). The 45-46 hop below is therefore U: the
-// first ExitTo decides (a failed hop is marked bad and routed around). The reliable way to 46 is its waypoint
+// (its only listed exit is Dest 58; a teleport west was blocked by rocks). There is NO 45-46 hop (V lab 2026-11-23, tools/probes/exitsread.py and strip.py: 45 has one warp, to 58, and the
+// layout puts 46 at (2500,1000), 1400 tiles away with no neighbour): the Canyon opens by the red portal that the
+// Summoner's journal makes, then by its waypoint. The reliable way to 46 is its waypoint
 // (TakeWaypoint(46)) once any visit activated it; the tombs are in levels.txt Vis.
 var act2Hints = [][2]int{
 	{40, 41}, // Lut Gholein - Rocky Waste
@@ -16,7 +17,6 @@ var act2Hints = [][2]int{
 	{42, 43}, // Dry Hills - Far Oasis
 	{43, 44}, // Far Oasis - Lost City
 	{44, 45}, // Lost City - Valley of Snakes
-	{45, 46}, // Valley of Snakes - Canyon of the Magi (U, see above)
 }
 
 // knownWaypointPos: waypoint positions for levels where the preset streams in late. Lut Gholein (40): object 156 at
