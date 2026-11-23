@@ -32,6 +32,8 @@ owns:
   - "internal/bot/questboard.go"
   - "internal/bot/questboard_s7b_test.go"
   - "tools/probes/presets.py"
+  - "tools/emu/am_batch.sh"
+  - "tools/emu/am_model.py"
   - "internal/nav/exit.go"
   - "internal/nav/gatedoor.go"
   - "internal/nav/gatedoor_test.go"

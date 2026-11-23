@@ -28,9 +28,14 @@ NAMES = {2: "Blood Moor", 3: "Cold Plains", 4: "Stony Field", 5: "Dark Wood", 6:
          21: "Tower Cellar 1", 22: "Tower Cellar 2", 23: "Tower Cellar 3", 24: "Tower Cellar 4", 25: "Tower Cellar 5",
          26: "Monastery Gate", 27: "Outer Cloister", 28: "Barracks", 29: "Jail 1", 30: "Jail 2", 31: "Jail 3",
          32: "Inner Cloister", 33: "Cathedral", 34: "Catacombs 1", 35: "Catacombs 2", 36: "Catacombs 3", 37: "Catacombs 4",
-         38: "Tristram"}
+         38: "Tristram",
+         # Act 2 (levels.txt ids, card qdmatrix; ids 41..45 are the desert fields, treated as overworld by the time model: U)
+         41: "Rocky Waste", 42: "Dry Hills", 43: "Far Oasis", 44: "Lost City", 45: "Valley of Snakes", 47: "Sewers 1",
+         48: "Sewers 2", 49: "Sewers 3", 55: "Stony Tomb 1", 56: "Halls of the Dead 1", 57: "Halls of the Dead 2",
+         58: "Claw Viper Temple 1", 59: "Stony Tomb 2", 60: "Halls of the Dead 3", 61: "Claw Viper Temple 2", 62: "Maggot Lair 1",
+         63: "Maggot Lair 2", 64: "Maggot Lair 3", 65: "Ancient Tunnels"}
 CLVLS = [1, 3, 5, 8, 12, 16]
-OVERWORLD = range(2, 8)
+OVERWORLD = list(range(2, 8)) + list(range(41, 46))
 OVERHEAD_MIN = 1.0
 BIG = {8, 9, 10, 11, 12, 18, 19, 21, 22, 23, 24, 28, 29, 30, 31, 34, 35, 36}   # SizeX = SizeY = 200 in Levels.txt
 
