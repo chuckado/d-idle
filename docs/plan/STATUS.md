@@ -449,6 +449,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- cface0d6d 11-22 21:10 `Merge agent/skelspeed: Merge branch 'main' into skelspeed` (skelspeed)
+- 6503e3d29 11-22 21:08 `Merge branch 'main' into skelspeed` (-)
 - 5376d1ad3 11-22 20:57 `Merge agent/uireason: Merge branch 'main' into uireason` (uireason)
 - f0b708e8b 11-22 20:56 `Merge branch 'main' into uireason` (-)
 - 5cb82cacf 11-22 20:48 `Merge agent/manapack: Merge branch 'main' into manapack` (manapack)
@@ -457,6 +459,4 @@
 - bf09bca83 11-22 20:40 `Merge branch 'main' into uireason` (-)
 - bb17292c7 11-22 20:38 `Merge agent/navdoc: Merge branch 'main' into navdoc` (navdoc)
 - 8f8a4189b 11-22 20:36 `Merge branch 'main' into navdoc` (-)
-- 420e75560 11-22 20:36 `Merge origin/main into agent/uireason` (-)
-- 967ae57c9 11-22 20:28 `Merge agent/uitoast: Merge origin/main into agent/uitoast` (uitoast)
 <!-- statusgen:end -->
