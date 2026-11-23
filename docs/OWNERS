@@ -616,6 +616,7 @@ docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  bankdoc
+docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  handin
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  navexit2
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  necrodrill
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1doc
@@ -967,6 +968,7 @@ internal/bot/geargate.go  credit-runner  classtraits
 internal/bot/geargate.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  exploredpct
 internal/bot/goal.go  credit-runner  goldprio
+internal/bot/goal.go  credit-runner  handin
 internal/bot/goal.go  credit-runner  hourfix
 internal/bot/goal.go  credit-runner  hourfix2
 internal/bot/goal.go  credit-runner  maphistoryA
@@ -1070,6 +1072,7 @@ internal/bot/questboard_s7b_test.go  credit-runner  equipswap
 internal/bot/questboard_s7b_test.go  credit-runner  qdmatrix
 internal/bot/questboard_s7b_test.go  credit-runner  quests7b
 internal/bot/questboard_test.go  credit-runner  failspend
+internal/bot/questboard_test.go  credit-runner  handin
 internal/bot/questboard_test.go  credit-runner  quests4
 internal/bot/questboard_test.go  credit-runner  quests7
 internal/bot/questboard_test.go  credit-runner  stage1fix
@@ -1088,6 +1091,7 @@ internal/bot/runner.go  credit-runner  botinstant
 internal/bot/runner.go  credit-runner  cainchain
 internal/bot/runner.go  credit-runner  campaign1
 internal/bot/runner.go  credit-runner  goldprio
+internal/bot/runner.go  credit-runner  handin
 internal/bot/runner.go  credit-runner  hourfix
 internal/bot/runner.go  credit-runner  lockscan
 internal/bot/runner.go  credit-runner  maphistoryA
@@ -2554,6 +2558,7 @@ tools/provingground/scenarios/manage.json  credit-runner  equipswap
 tools/provingground/scenarios/navexit.json  credit-runner  navexit2
 tools/provingground/scenarios/navexit.json  credit-runner  stage1fix
 tools/provingground/scenarios/navexit.json  credit-runner  stage23
+tools/provingground/scenarios/necro.json  credit-runner  handin
 tools/provingground/scenarios/necro.json  credit-runner  stage1fix
 tools/provingground/scenarios/necro.json  credit-runner  stage23
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
