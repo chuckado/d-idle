@@ -48,7 +48,20 @@ var (
 	reTimer      = regexp.MustCompile(`\b(setInterval|setTimeout|fetch|EventSource)\s*\(`)
 	reDocQuery   = regexp.MustCompile(`\bdocument\.(querySelector|querySelectorAll|getElementById|getElementsBy\w+|body)\b`)
 	reBacktick   = regexp.MustCompile("(?s)`[^`]*`")
+	reSevAttr    = regexp.MustCompile(`data-sev\s*=\s*["']?([A-Za-z_-]*)`)
+	reSevSet     = regexp.MustCompile(`dataset\.sev\s*=[^=;]*|setAttribute\(\s*['"]data-sev['"]\s*,[^;]*`)
+	reCallArgs   = regexp.MustCompile(`\([^()]*\)`)
+	reQuoted     = regexp.MustCompile(`['"]([A-Za-z_-]+)['"]`)
 )
+
+// SeverityScale is the one list of values data-sev may take (card uitoast, web/toast.js SEVERITIES; a test keeps them equal).
+var SeverityScale = []string{"info", "good", "warn", "bad"}
+
+func (l *Linter) checkSev(f string, line int, v string) {
+	if !contains(SeverityScale, v) {
+		l.add(f, line, "sev-scale", "data-sev %q (the scale is %s)", v, strings.Join(SeverityScale, ", "))
+	}
+}
 
 // The CSS named colours a hand-written sheet is likely to use; transparent and currentColor stay allowed.
 var namedColours = map[string]bool{}
@@ -190,6 +203,9 @@ func (l *Linter) lintCSS(f string, bs []*block) {
 		}
 	}
 	for _, b := range bs {
+		for _, m := range reSevAttr.FindAllStringSubmatch(b.prelude, -1) {
+			l.checkSev(f, b.line, m[1])
+		}
 		if b.at == "layer" {
 			if b.stmt || strings.Contains(b.prelude, ",") {
 				l.layerStmts = append(l.layerStmts, Finding{File: f, Line: b.line, Msg: b.prelude})
@@ -308,6 +324,9 @@ func (l *Linter) lintHTML(f, s string, firstLine int, page bool) {
 	for _, m := range reOnAttr.FindAllStringIndex(s, -1) {
 		l.add(f, at(m[0]), "html-no-inline-script", "inline event handler attribute")
 	}
+	for _, m := range reSevAttr.FindAllStringSubmatch(s, -1) {
+		l.checkSev(f, firstLine, m[1])
+	}
 	if page {
 		for _, m := range reDataPanel.FindAllStringIndex(s, -1) {
 			l.add(f, at(m[0]), "html-panel-root", "data-panel in static HTML (shell.js creates panel roots)")
@@ -321,6 +340,12 @@ func (l *Linter) lintJS(f, s string) {
 	for i, ln := range lines {
 		n := i + 1
 		code := stripJSComment(ln)
+		for _, m := range reSevSet.FindAllString(code, -1) {
+			m = reCallArgs.ReplaceAllString(strings.Replace(strings.TrimPrefix(m, "dataset.sev"), "data-sev", "", 1), "") // quoted words inside a call are arguments, not values
+			for _, q := range reQuoted.FindAllStringSubmatch(m, -1) {
+				l.checkSev(f, n, q[1])
+			}
+		}
 		if reHTMLSink.MatchString(code) {
 			l.add(f, n, "js-text-only", "HTML sink (build DOM with textContent)")
 		}

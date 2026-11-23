@@ -24,7 +24,7 @@ const pointsPage = `<!DOCTYPE html>
  </div>
 </header>
 <main class="pt-page" id="pt">
- <p class="d-note" data-sev="alarm" id="msg" role="status" hidden></p>
+ <p class="d-note" data-sev="bad" id="msg" role="status" hidden></p>
  <section class="d-card" aria-labelledby="t-sum">
   <div class="d-card-head"><h2 id="t-sum">Points</h2><span class="meta" id="sum"></span></div>
   <p class="d-hint" id="waiting"></p>
@@ -47,7 +47,7 @@ const pointsPage = `<!DOCTYPE html>
   <p class="d-hint" id="bheld" hidden></p>
   <p class="d-hint" id="boff" hidden></p>
   <p class="d-hint" id="brespecline"></p>
-  <p class="d-note" data-sev="alarm" id="bcerr" role="status" hidden></p>
+  <p class="d-note" data-sev="bad" id="bcerr" role="status" hidden></p>
   <ul class="bc-list" id="bcards"></ul>
  </section>
  <section class="d-card" aria-labelledby="t-auto">

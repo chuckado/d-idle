@@ -9,19 +9,18 @@ import (
 	"testing"
 )
 
-// The stack toast (.toast on --surface) once kept the old inverted colour (--bg on a dark surface): unreadable text
-// and Dismiss button on the phone. Toast text must follow --text on --surface in both themes, at least 4.5:1.
+// The one toast (.d-toast, components.css) sits on --d-surface-3 and never sets an inverted text colour (the old .toast once
+// kept --bg on a dark surface: unreadable text and Dismiss button on the phone). Its text follows --d-text, at least 4.5:1, in both themes.
 func TestToastTextContrastBothThemes(t *testing.T) {
 	tok, _ := os.ReadFile("web/tokens.css")
-	app, _ := os.ReadFile("web/app.css")
-	css := string(app)
-	if m := regexp.MustCompile(`(?m)^\.toast \{[^}]*\}`).FindAllString(css, -1); len(m) != 1 || !strings.Contains(m[0], "color: var(--text)") {
-		t.Fatalf("exactly one .toast rule, and it sets color: var(--text): %q", m)
+	comp, _ := os.ReadFile("web/components.css")
+	if m := regexp.MustCompile(`(?m)^\s*\.d-toast \{[^}]*\}`).FindAllString(string(comp), -1); len(m) != 1 || strings.Contains(m[0], "color: var(--d-bg") || !strings.Contains(m[0], "var(--d-surface-3)") {
+		t.Fatalf("exactly one .d-toast rule, on --d-surface-3, with no inverted colour: %q", m)
 	}
 	dark := tokenBlock(t, string(tok), ":root {")
 	light := tokenBlock(t, string(tok), `:root[data-theme="light"] {`)
 	for name, vars := range map[string]map[string]string{"dark": dark, "light": merge(dark, light)} {
-		fg, bg := resolveHex(t, vars, "--d-text"), resolveHex(t, vars, "--d-surface-1")
+		fg, bg := resolveHex(t, vars, "--d-text"), resolveHex(t, vars, "--d-surface-3")
 		if r := contrast(fg, bg); r < 4.5 {
 			t.Errorf("%s theme: toast text %s on %s is %.2f:1", name, fg, bg, r)
 		}

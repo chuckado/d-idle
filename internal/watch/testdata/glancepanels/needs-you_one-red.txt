@@ -4,7 +4,7 @@
       <span> "Needs you"
       <button class="n-dots" data-key="menu" data-more="" aria-haspopup="true" aria-label="All needs and notification setting" type="button"> "..."
     <div class="n-list" data-scroll="">
-      <div class="n-row" data-id="gear" data-sev="danger" title="Weapon broken - repair is about 180 gold">
+      <div class="n-row" data-id="gear" data-need="danger" title="Weapon broken - repair is about 180 gold">
         <span class="n-shape">
         <span class="n-t">
           <b> "Weapon broken"
@@ -13,7 +13,7 @@
           <button class="n-btn n-p" data-key="act-gear-0" type="button"> "Repair now"
     <div class="n-pop" aria-label="Everything that needs you" popover="auto" role="dialog">
       <div class="n-all">
-        <div class="n-row" data-id="gear" data-sev="danger" title="Weapon broken - repair is about 180 gold">
+        <div class="n-row" data-id="gear" data-need="danger" title="Weapon broken - repair is about 180 gold">
           <span class="n-shape">
           <span class="n-t">
             <b> "Weapon broken"

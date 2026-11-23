@@ -206,6 +206,17 @@ There is one vocabulary for "are you sure" and nothing else. Pick the form by wh
 
 Pages that keep their own sheet, and why: the Vault's sheet (`.vt-sheet`: Sell now, Identify all) is bound to the Vault DOM keys, its tests and its fit page and moves in a later card; the live screen's order sheet (`#sheet` in `app.js`: area, minutes, "Go now") is a form, not a confirm; the nav More menu (`#menu-more`) is a menu; the Inventory item menu and the Policy sheet are their own components.
 
+### 4.4b Toasts and one severity scale (card uitoast, review C10, E8)
+
+> status: built (branch agent/uitoast); V = `TestToastDOM` (node, stub DOM), `TestSeverityScaleMatchesToastJS` and the uilint rule `sev-scale` (tools/uilint), the Vault node tests (they now read the shared toast), `TestToastTextContrastBothThemes`, the fit suite on the worker host. U = not looked at on a real phone; the order and Vault status CHIPS (`data-level` ok, warn, bad) and the badges (`data-tone`) still use their own attribute and are not on this scale yet.
+
+There is ONE toast: `web/toast.js` (`window.dToast`; the shell, the Vault, the live screen and the alert feed all call it), styled once as `.d-toast` in `components.css` inside the `.d-toasts` stack in `shell.css` (top end, `--d-z-toast`). The four older ones (`shell.js` `toast()`, `app.js` `#toast`, `alerts.js` `.toast`, the Vault `.vt-toast`) are gone.
+
+- **Severity.** `data-sev` on a toast or a note takes exactly `info`, `good`, `warn`, `bad` (the list is `SEVERITIES` in `toast.js`; `tools/uilint` rule `sev-scale` rejects any other value in CSS, HTML, Go page templates and JS, and a test keeps the two lists equal). `alarm`, `danger` and `error` map to `bad`, `ok` to `good` when a toast is shown. The Needs you rows keep their own server vocabulary (danger, warn, event, info) under `data-need`, not `data-sev`.
+- **Announced.** The stack is `role=status` with `aria-live=polite`; a `bad` toast is `role=alert`, so it is read out at once.
+- **Time.** One table, `TIMES` in `toast.js`: info and good 6 s, warn 10 s, bad 20 s, a toast with an action 8 s (an action may give its own `ms`). The stack keeps four.
+- **Use.** `dToast.show(sev, text, {label, run, ms})` on any page; a page that loads shell.js has it already, a classic page adds `<script src="/watch/toast.js">`. `dToast.create(doc, {host, later, clear})` gives a stack on a stub DOM for node tests.
+
 ### 4.5 Fetch scheduler
 
 One scheduler with the existing SSE `/api/events` as the trigger and a 5 s safety poll; per-panel intervals from the manifest; a panel hidden by a tab or a fold is polled at a quarter rate; `document.hidden` pauses everything but the status band. Replaces the six independent timers of today.

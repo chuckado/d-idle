@@ -1,6 +1,8 @@
 // The Vault Sell button and the instant sale against a fake bot (TestVaultSellJS): the button never silently differs from the selection,
 // the reasons are shown, the confirm sheet states the gold and the stash after, the press sells at once. Two fixture states (the screenshot of 2026-11-22: 260 selected).
 import { readFileSync } from 'fs';
+import { createRequire } from 'module';
+globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -36,7 +38,7 @@ const post = async (route, body) => {
   return { ok: true, done: [] };
 };
 const reveal0 = { enabled: false, charges: 0, free: false, balance: 0, queued: 0, working: 0, done: 0, methods: ['gold'], bar: { total: 0, default: '', line: '', options: [] }, gold: { on: false } };
-const page = mountVault({ doc, root, get, post, later, clear, texts: T, now: () => clock });
+const page = mountVault({ toastHost: root, doc, root, get, post, later, clear, texts: T, now: () => clock });
 const allIds = () => items.map((i) => i.id);
 
 // the 260 of the screenshot: 11 can be sold, 169 are already waiting for the next town visit, 20 are pinned, 60 are gone from the vault

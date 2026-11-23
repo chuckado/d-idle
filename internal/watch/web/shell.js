@@ -2,6 +2,7 @@
 // fetch scheduler (the SSE change event plus per-panel polls), focus keeping across updates, and the ctx a panel gets.
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
+import '/watch/toast.js';
 import { mountReset } from '/watch/resetui.js';
 import { mountPause } from '/watch/pauseui.js';
 import { mountSupport } from '/watch/supportui.js';
@@ -87,23 +88,8 @@ const ui = {
   clear(n) { while (n.firstChild) n.removeChild(n.firstChild); },
 };
 
-// ---- toasts ----
-// act ({label, run, ms}): a toast with one action button (Undo) that stays ms (default 8000); the action runs once.
-function toast(sev, text, act) {
-  const box = document.getElementById('toasts');
-  if (!box) return null;
-  const t = el('div', 'd-toast');
-  t.dataset.sev = sev || 'info';
-  t.appendChild(el('span', '', text));
-  const b = el('button', 'd-btn', act ? act.label : 'Dismiss');
-  b.type = 'button'; b.dataset.size = 'sm'; b.dataset.variant = 'ghost';
-  b.addEventListener('click', () => { t.remove(); if (act) act.run(); });
-  t.appendChild(b);
-  box.appendChild(t);
-  while (box.children.length > 4) box.firstChild.remove();
-  setTimeout(() => t.remove(), (act && act.ms) || 8000);
-  return t;
-}
+// ---- toasts ---- the one toast (web/toast.js, window.dToast); act ({label, run, ms}): one action button (Undo), the action runs once.
+function toast(sev, text, act) { return window.dToast.show(sev, text, act); }
 
 // A sheet over a tile: the shell owns overlays. where 'self' covers the panel's own tile; 'beside' is the area-map tile when it
 // stands to the right of this one on the same rows (a two-column rail), else the Orders tile above this one, else the own tile
@@ -454,7 +440,7 @@ async function loadLayout() {
 function postJSON(answerBase, path, body) {
   return fetch(answerBase + path, {
     method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}),
-  }).then((r) => r.json()).catch(() => { toast('alarm', 'the answer route is not reachable'); return null; });
+  }).then((r) => r.json()).catch(() => { toast('bad', 'the answer route is not reachable'); return null; });
 }
 
 function setupLayout(conf, sel, answerBase, ckRoots, ckList) {
@@ -496,7 +482,7 @@ function setupLayout(conf, sel, answerBase, ckRoots, ckList) {
     if (lay.editor) return;
     if (!lay.plan || lay.plan.flow) { toast('info', lay.layout ? 'Edit layout needs a window at least 1024 px wide.' : 'No layout is loaded.'); return; }
     let mod;
-    try { mod = await import('/watch/layoutedit.js'); } catch (e) { toast('alarm', 'The layout editor did not load.'); return; }
+    try { mod = await import('/watch/layoutedit.js'); } catch (e) { toast('bad', 'The layout editor did not load.'); return; }
     const saved = lay.layout;
     lay.editor = { stop() {} }; // from here the plan carries the hidden panels along (flagged) and the editor owns the cells
     applyLayout();
@@ -688,7 +674,7 @@ function setupCockpit(sel, answerBase, roots, slotList) {
     if (ck.editor) return;
     if (ck.plan.mode === 'phone') { toast('info', 'Edit layout needs a window at least 700 px wide.'); return; }
     let mod;
-    try { mod = await import('/watch/layoutedit.js'); } catch (e) { toast('alarm', 'The layout editor did not load.'); return; }
+    try { mod = await import('/watch/layoutedit.js'); } catch (e) { toast('bad', 'The layout editor did not load.'); return; }
     const saved = ck.layout;
     ck.editor = mod.startCockpit({
       el, toast, main: ck.main, shell: ck.shell, roots: ck.roots, layout: saved, slotPanels: slotList,
@@ -1037,9 +1023,9 @@ async function start() {
   mountLootRules({ ui, toast, doc: document, overlays,
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
     put: (path, body) => fetch(answerBase + path, { method: 'PUT', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) })
-      .then((r) => r.json().then((j) => ({ status: r.status, j }))).catch(() => { toast('alarm', 'the answer route is not reachable'); return null; }),
+      .then((r) => r.json().then((j) => ({ status: r.status, j }))).catch(() => { toast('bad', 'the answer route is not reachable'); return null; }),
     post: (path, body) => fetch(answerBase + path, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) })
-      .then((r) => r.json().then((j) => ({ status: r.status, j }))).catch(() => { toast('alarm', 'the answer route is not reachable'); return null; }) });
+      .then((r) => r.json().then((j) => ({ status: r.status, j }))).catch(() => { toast('bad', 'the answer route is not reachable'); return null; }) });
   mountSupport({ ui, toast, doc: document, post: (path, body) => postJSON(answerBase, path, body),
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted

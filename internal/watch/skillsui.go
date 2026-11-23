@@ -19,7 +19,7 @@ const skillsPage = `<!DOCTYPE html>
  </div>
 </header>
 <main class="sk-page" id="sk">
- <p class="d-note" data-sev="alarm" id="msg" role="status" hidden></p>
+ <p class="d-note" data-sev="bad" id="msg" role="status" hidden></p>
  <section class="d-card sk-sum" aria-labelledby="t-sum">
   <div class="d-card-head"><h2 id="t-sum">Skills</h2><span class="meta" id="summeta"></span></div>
   <p class="d-hint" id="sumnote">Press a skill that can be learned to spend one skill point on it.</p>
