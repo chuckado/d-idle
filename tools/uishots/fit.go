@@ -277,7 +277,8 @@ const fitGlyphSlack = 2
 // scrollbar strip are not defects. Sideways scroll, cut boxes and a page that is NOT taller than the window (its frame must be full)
 // are still judged.
 func (r fitResult) phoneScroll() bool {
-	if r.VW >= 700 || r.ScrollH <= r.VH || r.ScrollW > r.VW {
+	scrolls := r.ScrollH > r.VH || r.VW-r.ScrollW >= 8 // or a vertical scrollbar takes its strip (a page one pixel over the window)
+	if r.VW >= 700 || !scrolls || r.ScrollW > r.VW {
 		return false
 	}
 	for _, s := range r.Slots {

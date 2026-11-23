@@ -17,6 +17,7 @@ func TestFitPhoneCockpitScrolls(t *testing.T) {
 	cases := []struct{ name, json, want string }{
 		{"a long phone cockpit scrolls by design", mk("1176", "22", `,"outside":[{"el":"panel orders","right":367,"bottom":1112}]`), ""},
 		{"a phone page that is NOT taller than the window keeps its dead-space rule", mk("844", "84", ""), "dead space"},
+		{"a scrollbar strip on a page one pixel over the window is the same scroll", strings.Replace(mk("844", "22", ""), `"scrollW":390`, `"scrollW":375`, 1), ""},
 		{"a phone page that scrolls sideways fails", strings.Replace(mk("1176", "22", ""), `"scrollW":390`, `"scrollW":500`, 1), "sideways"},
 		{"a phone page with a cut box fails even when it scrolls", mk("1176", "22", `,"overflow":[{"el":"panel orders","dh":40,"dw":0}]`), "overflows its box"},
 		{"a phone panel pushed out to the right fails", mk("1176", "22", `,"outside":[{"el":"panel orders","right":500,"bottom":900}]`), "ends outside the window"},
