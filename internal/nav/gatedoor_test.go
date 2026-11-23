@@ -5,6 +5,7 @@ import (
 	"errors"
 	"math"
 	"testing"
+	"time"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2map"
@@ -299,6 +300,42 @@ func TestGoToOpensTwoDoorsInARow(t *testing.T) {
 			}
 			if opened != 2 || dist(s.pos(), input.Point{X: 3230, Y: 3057}) > 6 {
 				t.Fatalf("doors used %d, at %v", opened, s.pos())
+			}
+		})
+	}
+}
+
+// A door that takes 2.5 s to open (the grid still reads it shut right after the use) is waited for, not used again: a
+// second use of an open door closes it (card qdmatrix, tomb doors of Act 2). Both classes read the same geometry.
+func TestExitToWaitsForADoorThatOpensSlowly(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			s, cells := doorWorld(t)
+			var openAt time.Time
+			base := s.onStep
+			s.onStep = func(s *sim) {
+				base(s)
+				if !openAt.IsZero() && !s.now.Before(openAt) {
+					openAt = time.Time{}
+					openDoor(s, cells)
+				}
+			}
+			uses := 0
+			s.onInteract = func(s *sim, tg input.Target) error {
+				if tg.ID == 77 {
+					uses++
+					openAt = s.now.Add(2500 * time.Millisecond)
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class == 24 }
+			n.exploreFn = func(_ context.Context, _ func() bool, _ *input.Point) error { return ErrExplored }
+			if err := n.ExitTo(ctxT(t), 2); err != nil {
+				t.Fatalf("%s: exit: %v", cls, err)
+			}
+			if uses != 1 || s.cur().no != 2 {
+				t.Fatalf("%s: door used %d times, level %d", cls, uses, s.cur().no)
 			}
 		})
 	}

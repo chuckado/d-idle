@@ -16,6 +16,12 @@ import (
 // maxDoorTries bounds how often ExitTo opens the same gate door: a door that does not clear the way is not clicked again.
 const maxDoorTries = 2
 
+// doorOpenPoll and doorOpenWait: how long a used door is waited for before the grid is trusted again.
+const (
+	doorOpenPoll = 600 * time.Millisecond
+	doorOpenWait = 4800 * time.Millisecond
+)
+
 // gateDoorReach is how near (subtiles) a door must stand to both sides of the wall it shuts: the character's side
 // and the gate's side. A door is one subtile pair wide in the grid, its side cells are a few cells off its centre.
 const gateDoorReach = 14.0
@@ -87,11 +93,23 @@ func (n *Navigator) openDoorToward(ctx context.Context, o *obs, cands []gate, le
 	if err := n.in.Interact(tg); err != nil {
 		n.log.Info("nav door interact failed", "err", err)
 	}
-	n.clk.Sleep(900 * time.Millisecond)
-	if r, ok := n.w.(interface{ Refetch() }); ok {
-		r.Refetch() // the door changed collision cells where the character did not move: read the grid again
+	// A door opens over a second or more (V drill.act2.cube: the cell still read blocked 0.9 s after the use, and the second try,
+	// which used the same door again, may close it): read the grid again until the door's cell is open, up to doorOpenWait.
+	for waited := time.Duration(0); ; waited += doorOpenPoll {
+		n.clk.Sleep(doorOpenPoll)
+		if r, ok := n.w.(interface{ Refetch() }); ok {
+			r.Refetch() // the door changed collision cells where the character did not move: read the grid again
+		}
+		n.invalidate()
+		if waited+doorOpenPoll >= doorOpenWait {
+			break
+		}
+		if o2, err := n.observeWait(ctx); err == nil {
+			if f, ok := o2.lm.Grid.Flags(at.X, at.Y); ok && f&d2map.BlockWalk == 0 {
+				break
+			}
+		}
 	}
-	n.invalidate()
 	if after, aerr := n.observeWait(ctx); aerr == nil {
 		// what the use did (card qdmatrix, tomb doors that stay shut): the object's mode and the grid cell at the door
 		mode := -99

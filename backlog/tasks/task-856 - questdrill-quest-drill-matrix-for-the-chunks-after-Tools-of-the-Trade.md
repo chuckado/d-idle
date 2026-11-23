@@ -20,6 +20,8 @@ owns:
   - "internal/questboard/state.go"
   - "internal/questboard/state_test.go"
   - "internal/nav/exit.go"
+  - "internal/nav/gatedoor.go"
+  - "internal/nav/gatedoor_test.go"
   - "internal/nav/exitgoal_test.go"
   - "internal/nav/mouthgate.go"
   - "internal/bot/goal.go"
