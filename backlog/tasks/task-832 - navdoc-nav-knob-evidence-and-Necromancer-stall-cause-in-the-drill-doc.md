@@ -1,10 +1,11 @@
 ---
 id: TASK-832
 title: 'navdoc: nav knob evidence and Necromancer stall cause in the drill doc'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T01:33:00Z'
+updated_date: '2026-11-23T01:45:00Z'
 labels:
   - bot
   - probe
