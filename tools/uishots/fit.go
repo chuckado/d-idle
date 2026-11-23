@@ -247,8 +247,10 @@ type fitResult struct {
 }
 
 // fitInner is the largest empty square inside a panel of the character screen that still reads as a layout gap (px). The first
-// review's dead zones were 330 px (no mercenary) and 145 px (the selected box).
-const fitInner = 135
+// review's dead zones were 330 px (no mercenary) and 145 px (the selected box). The line sits between the 136 px square of the
+// character page with an identify pending at 1920x1080 (the same layout as its 108 to 124 px neighbours: the pending row adds a
+// line under the mercenary box, nothing is cut) and the 145 px that was a real defect (card uifit3, docs/ui/fit-triage-2026-11-23.md R7).
+const fitInner = 140
 
 // fitInnerPhone: the same on a phone, where a tall screen leaves the storage tab spare height under the stash (the cells are
 // limited by the width, ten of them) that no layout can fill with anything but more boxes.

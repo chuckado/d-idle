@@ -54,7 +54,13 @@
     const list = mk(doc, 'ul', 'd-set-list');
     const all = btn(doc, 'Revoke all', 'danger', 'revoke-all');
     const allRow = row(doc, all, id + '-allwhy');
-    rules.append(rt, hint, list, allRow.row);
+    // the Loot rules sheet lives on the live screen (the pre-Settings Inventory page had its entry): one link reaches it from every page
+    const loot = mk(doc, 'a', 'd-btn', 'Loot rules...');
+    loot.href = '/watch?live=1&lootrules=1'; loot.dataset.size = 'md'; loot.dataset.variant = 'ghost'; loot.dataset.key = 'lootrules-link';
+    loot.setAttribute('aria-describedby', id + '-lootwhy');
+    const lootWhy = mk(doc, 'p', 'd-set-hint', 'What the bot picks up, stashes and sells. Opens on the live screen.'); lootWhy.id = id + '-lootwhy';
+    const lootRow = mk(doc, 'div', 'd-set-row'); lootRow.append(loot, lootWhy);
+    rules.append(rt, lootRow, hint, list, allRow.row);
 
     // ---- Rules ----
     let busy = false, live = 0;

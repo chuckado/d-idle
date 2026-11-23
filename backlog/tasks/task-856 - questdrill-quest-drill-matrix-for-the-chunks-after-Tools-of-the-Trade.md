@@ -27,6 +27,8 @@ owns:
   - "internal/scenario/scenario.go"
   - "internal/scenario/setup.go"
   - "internal/scenario/setup_test.go"
+  - "cmd/d2bot/task.go"
+  - "cmd/d2bot/acts_test.go"
   - "internal/talk/talk.go"
   - "internal/talk/talk_test.go"
 exclusive: []

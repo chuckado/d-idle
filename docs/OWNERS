@@ -133,6 +133,7 @@ cmd/d2bot  credit-runner  cainfix
 cmd/d2bot  credit-runner  survsd
 cmd/d2bot  credit-runner  town4
 cmd/d2bot  credit-runner  wiring2
+cmd/d2bot/acts_test.go  credit-runner  qdmatrix
 cmd/d2bot/adapters.go  credit-runner  cainfix3
 cmd/d2bot/adapters.go  credit-runner  chores2
 cmd/d2bot/adapters.go  credit-runner  goldprio
@@ -325,6 +326,7 @@ cmd/d2bot/survivalwire.go  credit-runner  survC
 cmd/d2bot/survivalwire.go  credit-runner  survfix
 cmd/d2bot/survivalwire.go  credit-runner  survfix2
 cmd/d2bot/survivalwire.go  credit-runner  survreask
+cmd/d2bot/task.go  credit-runner  qdmatrix
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/vaultact_test.go  credit-runner  vaultv6
 cmd/d2bot/vaultequip.go  credit-runner  equipswap
@@ -795,6 +797,8 @@ docs/ui-overlays.md  credit-runner  menufit2
 docs/ui-regression-plan.md  credit-runner  fitfix
 docs/ui/fit-triage-2026-11-23.md  credit-runner  uifit1
 docs/ui/fit-triage-2026-11-23.md  credit-runner  uifit2
+docs/ui/fit-triage-2026-11-23.md  credit-runner  uifit3
+docs/ui/fit-triage/  credit-runner  uifit3
 docs/ui/friend-feedback-2026-11-15.md  credit-runner  friendfb
 docs/ui/map-phone  credit-runner  mapphone
 docs/ui/nav-links  credit-runner  uinav
@@ -802,6 +806,7 @@ docs/ui/redesign-2026-11-14/reviews/c2c3-review.md  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/c2c3/  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/s1b-review.md  credit-runner  uis1breview
 docs/ui/redesign-2026-11-14/stash-anywhere.md  credit-runner  stashany
+docs/ui/settings/  credit-runner  uiloot
 docs/ui/settings/  credit-runner  uisettings
 docs/ui/uireason  credit-runner  uireason
 docs/ui/uitoast  credit-runner  uitoast
@@ -1868,6 +1873,7 @@ internal/watch/pauseapi.go  credit-runner  pausefix
 internal/watch/pauseapi.go  credit-runner  uib1
 internal/watch/pauseapi_test.go  credit-runner  uib1
 internal/watch/pausefix_test.go  credit-runner  pausefix
+internal/watch/planwording_test.go  credit-runner  uiloot
 internal/watch/pointsapi.go  credit-runner  agencyp0
 internal/watch/pointsapi_test.go  credit-runner  agencyp0
 internal/watch/pointsui.go  credit-runner  agencyp0
@@ -1917,6 +1923,7 @@ internal/watch/serve.go  credit-runner  botcpu2
 internal/watch/serve.go  credit-runner  uis6
 internal/watch/serve.go  credit-runner  videofeed2
 internal/watch/settingsjs_test.go  credit-runner  uialerts
+internal/watch/settingsjs_test.go  credit-runner  uiloot
 internal/watch/settingsjs_test.go  credit-runner  uisettings
 internal/watch/skillsapi.go  credit-runner  agencyp0
 internal/watch/skillsapi.go  credit-runner  skilltrees
@@ -2001,6 +2008,7 @@ internal/watch/testdata/senses-failures.json  credit-runner  maphistoryC
 internal/watch/testdata/senses-trail.json  credit-runner  maphistory
 internal/watch/testdata/senses-trail.json  credit-runner  maphistoryA
 internal/watch/testdata/senses-trail.json  credit-runner  maptrail
+internal/watch/testdata/settings_test.cjs  credit-runner  uiloot
 internal/watch/testdata/skills_paladin.json  credit-runner  skilltrees
 internal/watch/testdata/skills_paladin.json  credit-runner  skilltrees2
 internal/watch/testdata/skills_sorceress.json  credit-runner  skilltrees
@@ -2187,6 +2195,7 @@ internal/watch/web/panels/area-map/panel.json  credit-runner  uifix1
 internal/watch/web/panels/gear  credit-runner  repairtrip
 internal/watch/web/panels/health/  credit-runner  uifix1
 internal/watch/web/panels/health/  credit-runner  uis3
+internal/watch/web/panels/health/panel.css  credit-runner  uifit3
 internal/watch/web/panels/hero-vitals/panel.js  credit-runner  vaultv7b
 internal/watch/web/panels/journey-strip/  credit-runner  uifix1
 internal/watch/web/panels/journey-strip/  credit-runner  uis3
@@ -2229,6 +2238,7 @@ internal/watch/web/panels/quest-board/panel.js  credit-runner  handinbtn
 internal/watch/web/panels/quest-board/panel.js  credit-runner  uireason
 internal/watch/web/panels/quest-list  credit-runner  quests8
 internal/watch/web/panels/quest-strip  credit-runner  quests8
+internal/watch/web/panels/quest-strip/  credit-runner  uifit3
 internal/watch/web/panels/quest-strip/panel.css  credit-runner  uifit1
 internal/watch/web/panels/quest-strip/panel.js  credit-runner  uireason
 internal/watch/web/panels/statusline/  credit-runner  uifix1
@@ -2254,6 +2264,7 @@ internal/watch/web/points.js  credit-runner  allochandoff
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
+internal/watch/web/settings.js  credit-runner  uiloot
 internal/watch/web/settings.js  credit-runner  uisettings
 internal/watch/web/sheet.js  credit-runner  uisettings
 internal/watch/web/shell.css  credit-runner  lootwire3
@@ -2270,6 +2281,7 @@ internal/watch/web/shell.js  credit-runner  labels
 internal/watch/web/shell.js  credit-runner  minimapfix
 internal/watch/web/shell.js  credit-runner  resetinstant
 internal/watch/web/shell.js  credit-runner  uifix1
+internal/watch/web/shell.js  credit-runner  uiloot
 internal/watch/web/shell.js  credit-runner  uis1
 internal/watch/web/shell.js  credit-runner  uis6
 internal/watch/web/shell.js  credit-runner  uis7
@@ -2523,6 +2535,7 @@ tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3
 tools/uishots.sh  credit-runner  uifit1
 tools/uishots.sh  credit-runner  uifix1
+tools/uishots.sh  credit-runner  uiloot
 tools/uishots.sh  credit-runner  uiphone
 tools/uishots.sh  credit-runner  uis3
 tools/uishots.sh  credit-runner  uis6
@@ -2546,6 +2559,7 @@ tools/uishots/  credit-runner  uisettings
 tools/uishots/fit.go  credit-runner  mapphone
 tools/uishots/fit.go  credit-runner  resetinstant
 tools/uishots/fit.go  credit-runner  uifit2
+tools/uishots/fit.go  credit-runner  uifit3
 tools/uishots/fit.go  credit-runner  vaultv4
 tools/uishots/fit.go  credit-runner  vaultv7b
 tools/uishots/fit.js  credit-runner  uis7
@@ -2556,12 +2570,14 @@ tools/uishots/fit.js  credit-runner  vaultv5
 tools/uishots/fit.js  credit-runner  vaultv6
 tools/uishots/fit.js  credit-runner  vaultv7b
 tools/uishots/fit_char_test.go  credit-runner  jewelicons
+tools/uishots/fit_char_test.go  credit-runner  uifit3
 tools/uishots/fit_char_test.go  credit-runner  vaultv4
 tools/uishots/fit_char_test.go  credit-runner  vaultv7b
 tools/uishots/fit_phone_test.go  credit-runner  uifit2
 tools/uishots/fixtures.go  credit-runner  mapphone
 tools/uishots/fixtures.go  credit-runner  uic2
 tools/uishots/fixtures.go  credit-runner  vaultv4
+tools/uishots/fixtures_builds.go  credit-runner  uiloot
 tools/uishots/fixtures_chars.go  credit-runner  charui
 tools/uishots/fixtures_chars.go  credit-runner  uichars
 tools/uishots/fixtures_commands.go  credit-runner  labels

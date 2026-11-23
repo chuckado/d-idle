@@ -484,6 +484,7 @@ support-sheet-light watch?first=0&theme=light&needs=0 #btn-more|[data-key=suppor
 support-preview watch?first=0&theme=dark&needs=0 #btn-more|[data-key=support-open]|#support-build #support-sheet,#support-send,#support-save-file,[data-key=support-back],[data-key=support-cancel]
 support-preview-light watch?first=0&theme=light&needs=0 #btn-more|[data-key=support-open]|#support-build #support-sheet,#support-send,#support-save-file,[data-key=support-back],[data-key=support-cancel]
 lootrules-sheet watch?first=0&theme=dark&needs=0 #btn-more|[data-key=lootrules-open] #lootrules-sheet,[data-key=lr-mode-starter],[data-key=lr-mode-custom],#lr-apply,[data-key=lr-close]
+lootrules-link watch?first=0&theme=dark&needs=0&lootrules=1 ?.d-lr-card #lootrules-sheet,[data-key=lr-mode-starter],[data-key=lr-mode-custom],#lr-apply,[data-key=lr-close]
 lootrules-sheet-light watch?first=0&theme=light&needs=0 #btn-more|[data-key=lootrules-open] #lootrules-sheet,[data-key=lr-mode-starter],[data-key=lr-mode-custom],#lr-apply,[data-key=lr-close]
 lootrules-custom watch?first=0&theme=dark&needs=0&lootrules=custom #btn-more|[data-key=lootrules-open] #lootrules-sheet,[data-key=lr-mode-starter],[data-key=lr-save],[data-key=lr-close]
 lootrules-custom-light watch?first=0&theme=light&needs=0&lootrules=custom #btn-more|[data-key=lootrules-open] #lootrules-sheet,[data-key=lr-mode-starter],[data-key=lr-save],[data-key=lr-close]

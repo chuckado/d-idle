@@ -10,7 +10,9 @@
   [data-panel="quest-strip"] [data-kind="blocked"] .qs-label, [data-panel="quest-strip"] [data-kind="failed"] .qs-label { color: var(--d-warn); }
   [data-panel="quest-strip"] [data-kind="blocked"] .qs-sub, [data-panel="quest-strip"] [data-kind="failed"] .qs-sub { color: var(--d-warn); }
   [data-panel="quest-strip"] .qs-row { display: flex; align-items: center; justify-content: space-between; gap: var(--d-sp-2); min-inline-size: 0; }
-  [data-panel="quest-strip"] .qs-acts { display: flex; gap: var(--d-sp-1); min-inline-size: 0; }
+  [data-panel="quest-strip"] .qs-acts { display: flex; gap: var(--d-sp-1); min-inline-size: 0; align-items: center; }
+  /* the reason beside an off button takes at most two short lines (it used to wrap to five and squeeze the tile's text to nothing); the full text is its title */
+  [data-panel="quest-strip"] .qs-acts .d-why { flex: 1 1 0; min-inline-size: 0; font-size: var(--d-fs-0); line-height: 1.25; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
   [data-panel="quest-strip"] .qs-btn { block-size: var(--q-touch, 26px); min-block-size: var(--q-touch, 26px); padding: 0 var(--d-sp-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); background: var(--d-surface-2); color: var(--d-text);
     font: inherit; font-size: var(--d-fs-0); white-space: nowrap; cursor: pointer; }
   [data-panel="quest-strip"] .qs-btn:hover { background: var(--d-surface-3); }

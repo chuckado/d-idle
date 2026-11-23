@@ -1235,6 +1235,9 @@ func (r *Runner) travelTo(ctx context.Context, target int) error {
 			return nil
 		}
 		hops, err := r.d.Mover.Route(cur, target) // nav owns the exit graph, with its own seen-exit and hint fallbacks
+		if (err != nil || len(hops) == 0) && r.wpOnly(ctx, cur, target) {
+			continue
+		}
 		if err != nil || len(hops) == 0 {
 			return fmt.Errorf("no route from %s (%d) to %s (%d): %v", r.areaName(cur), cur, r.areaName(target), target, err)
 		}
@@ -1282,6 +1285,30 @@ func (r *Runner) travelTo(ctx context.Context, target int) error {
 		}
 	}
 	return errors.New("travel: too many hops")
+}
+
+// wpOnly takes the waypoint of target when no walk reaches it (the Arcane Sanctuary is linked by a portal object, not by an
+// exit: V drill.act2.summoner, "no route from Lut Gholein (40) to Arcane Sanctuary (74)") and both areas have one and the
+// reader knows the target's is active. It reports whether the hero moved.
+func (r *Runner) wpOnly(ctx context.Context, cur, target int) bool {
+	if !r.e.Tune.Nav.UseWaypoints || !r.d.Plan.Waypoints[cur] || !r.d.Plan.Waypoints[target] {
+		return false
+	}
+	snap := r.latest()
+	active, known := r.activeWaypoints(snap)
+	if !known || !active[target] || !r.wpTripWorthTrying(snap, target, active, known) {
+		return false // a blind trip is not worth the panel round trip when nothing says the waypoint is active
+	}
+	if err := r.d.Mover.TakeWaypoint(ctx, target); err != nil {
+		r.e.Log.Info("wp: not usable", "from", cur, "to", target, "err", err)
+		r.loop.wp.failed[wpKey{diffOf(snap), target}] = r.e.Clock.Now().Add(wpFailedFor)
+		return false
+	}
+	if err := r.waitArea(ctx, target, 30*time.Second); err != nil {
+		return false
+	}
+	r.markTouched(snap, cur, target)
+	return true
 }
 
 // ---- clearing -----------------------------------------------------------------------------------

@@ -92,6 +92,17 @@ func (n *Navigator) openDoorToward(ctx context.Context, o *obs, cands []gate, le
 		r.Refetch() // the door changed collision cells where the character did not move: read the grid again
 	}
 	n.invalidate()
+	if after, aerr := n.observeWait(ctx); aerr == nil {
+		// what the use did (card qdmatrix, tomb doors that stay shut): the object's mode and the grid cell at the door
+		mode := -99
+		for i := range after.snap.Objects {
+			if u := &after.snap.Objects[i]; u.ID == tg.ID {
+				mode = int(u.Mode)
+			}
+		}
+		fl, _ := after.lm.Grid.Flags(at.X, at.Y)
+		n.log.Info("nav: door used", "door", at, "target", tg.ID, "mode", mode, "cellFlags", fl, "pos", after.pos)
+	}
 	return true
 }
 

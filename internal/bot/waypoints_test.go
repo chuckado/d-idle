@@ -174,3 +174,37 @@ func TestLevelToSkipsTargetAfterNavTimeout(t *testing.T) {
 		}
 	}
 }
+
+// An area no exit leads to (the Arcane Sanctuary: a portal object links it) is reached by its waypoint when both ends have
+// one the reader has not ruled out (card qdmatrix). Without the fallback travelTo fails with "no route from". The fake
+// level graph stands in for the Act 2 levels; the rule reads no class.
+func TestTravelTakesTheWaypointWhenNoWalkReaches(t *testing.T) {
+	q := &fakeQuests{}
+	q.v.WPs = map[int]bool{4: true, 6: true}
+	g := campaignRig(t, q, 12)
+	g.mover.routeFn = func(from, to int) ([]int, error) { return nil, errors.New("no exit to that level") }
+	g.w.set(func(w *world) { w.area = 4 })
+	g.r.poll()
+	if err := g.r.travelTo(context.Background(), 6); err != nil {
+		t.Fatal(err)
+	}
+	if g.w.count("wp 6") != 1 {
+		t.Fatalf("calls: %v", g.w.log())
+	}
+}
+
+// ...and a target the reader knows to be inactive stays unreachable (no blind waypoint panel trip).
+func TestTravelDoesNotTryAnInactiveWaypointWhenNoWalkReaches(t *testing.T) {
+	q := &fakeQuests{}
+	q.v.WPs = map[int]bool{4: true}
+	g := campaignRig(t, q, 12)
+	g.mover.routeFn = func(from, to int) ([]int, error) { return nil, errors.New("no exit to that level") }
+	g.w.set(func(w *world) { w.area = 4 })
+	g.r.poll()
+	if err := g.r.travelTo(context.Background(), 6); err == nil {
+		t.Fatal("travelled with no route and no active waypoint")
+	}
+	if n := g.w.count("wp "); n != 0 {
+		t.Fatalf("waypoint tried %d times", n)
+	}
+}

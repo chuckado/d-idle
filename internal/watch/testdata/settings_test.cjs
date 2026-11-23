@@ -106,6 +106,13 @@ const byKey = (d, k) => nodes(d).filter((n) => n.dataset && n.dataset.key === k)
     ok(lab && /Play a sound on a new alert/.test(lab.children.map((c) => c.textContent).join('')) && lab.contains(sound), 'the checkbox has a visible label');
     sound.checked = false; sound.dispatchEvent(new Ev('change')); ok(r.st.kv['d2lod.alerts.sound'] === '0', 'unchecking stores 0 under the key the old page reads');
   }
+  // 5b. the Loot rules entry stays reachable from Settings (the old Inventory entry): a labelled link to the live screen's sheet
+  {
+    const r = rig([]); const h = Set.open(r.env); await h.ready;
+    const a = byKey(r.doc, 'lootrules-link')[0];
+    ok(a && a.tag === 'a' && a.textContent === 'Loot rules...' && a.href === '/watch?live=1&lootrules=1', 'Settings has a Loot rules link to the live screen sheet');
+    ok(a && r.doc.getElementById(a.attrs['aria-describedby']) && /picks up, stashes and sells/.test(r.doc.getElementById(a.attrs['aria-describedby']).textContent), 'with a visible line saying what it is');
+  }
   // 6. every button and checkbox carries a visible label
   {
     const r = rig([rule('a', 'x')]); const h = Set.open(r.env); await h.ready;

@@ -16,6 +16,9 @@ func TestFitCharacterRules(t *testing.T) {
 	}
 	cases := []struct{ name, extra, want string }{
 		{"a clean character page", cv("", "", "", 60), ""},
+		{"an identify pending at 1920x1080: 136 px is inside the line (R7 of the triage)", cv("", "", "", 136), ""},
+		{"140 px is the last square that passes", cv("", "", "", 140), ""},
+		{"141 px is a gap", cv("", "", "", 141), "dead space inside char-who"},
 		{"no mercenary: 330 px empty beside the hero (R3)", cv("", "", "", 330), "dead space inside char-who"},
 		{"the selected box with its empty band (R5)", cv("", "", "", 145), "dead space inside char-who"},
 		{"the phone's storage side column, 0 px wide (R1)", cv(`"char-store div.cv-store"`, "", "", 60), "content with no width"},
