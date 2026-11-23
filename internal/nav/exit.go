@@ -13,6 +13,9 @@ import (
 	"d2lod-bot/internal/input"
 )
 
+// timeoutProgress is how much nearer to the gate (subtiles) a timed out walk must have come for ExitTo to walk on.
+const timeoutProgress = 30.0
+
 // gate is a way into a neighbouring level: stand on at, then keep walking toward push.
 type gate struct {
 	at, push input.Point
@@ -195,6 +198,14 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 			}
 			if errors.Is(err, ErrNoPath) && n.doorAfterShortWalk(ctx, levelNo) {
 				continue
+			}
+			// A long outdoor leg with fights on the way outlasts one walk (V drill.act3s.lam_esen: 513 subtiles of path, 330 net in
+			// 2 minutes, the board parked the step after three such timeouts): a walk that timed out but came 30 subtiles nearer
+			// the gate goes on; the call's own deadline and attempt count still bound it.
+			if errors.Is(err, ErrTimeout) {
+				if cur, oerr := n.observeWait(ctx); oerr == nil && cur.level == o.level && dist(cur.pos, g.at) < dist(o.pos, g.at)-timeoutProgress {
+					continue
+				}
 			}
 			return err
 		}
