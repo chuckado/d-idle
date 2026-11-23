@@ -816,7 +816,7 @@ var policyTmpl = template.Must(template.New("policy").Parse(`<!DOCTYPE html>
 <link rel="icon" href="data:,"><link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/reset.css"><link rel="stylesheet" href="/watch/return.css"><link rel="stylesheet" href="/watch/components.css"><link rel="stylesheet" href="/watch/nav.css">
 </head><body>
 <main class="ret" id="policy">
-<section class="d-card" aria-labelledby="p-head"><h2 id="p-head">Policy sheet ({{.Class}})</h2>
+<section class="d-card" aria-labelledby="p-head"><h1 id="p-head">Policy sheet ({{.Class}})</h1>
 <p>How the hero handles its chores. Set it once, change it any time. Poor choices are allowed: try them and read what they cost.</p>
 <p class="d-hint">{{.Legend}}</p></section>
 {{range .Rows}}<section class="d-card" data-row="{{.ID}}" aria-labelledby="row-{{.ID}}"><h2 id="row-{{.ID}}">{{.Label}}</h2><p>{{.Help}}</p>
