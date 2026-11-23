@@ -1,6 +1,7 @@
 package nav
 
 import (
+	"context"
 	"testing"
 
 	"d2lod-bot/internal/d2map"
@@ -92,5 +93,29 @@ func TestGoalOptsCarryTheTarget(t *testing.T) {
 				t.Errorf("goalOpts(%v, %v) = %+v", p, pursuit, wo)
 			}
 		}
+	}
+}
+
+// A walk to a far border gate that outlasts the per-walk timeout but makes progress goes on instead of failing the exit (V
+// drill.act3s.lam_esen). The call's deadline (two walk timeouts) still ends a walk that never arrives. Both classes: the
+// geometry has none.
+func TestExitToGoesOnAfterAWalkTimeoutWithProgress(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			g := openField(3000, 3000, 640, 60)
+			l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 540, H: 60}}
+			l2 := &simLevel{no: 2, rect: d2map.Rect{X: 3540, Y: 3000, W: 100, H: 60}}
+			s := newSim(g, input.Point{X: 3010, Y: 3030}, l1, l2)
+			s.reveal = 700
+			n := s.navigator()
+			tuningOf(n).Nav.WalkTimeoutSec = 60 // one walk of 530 subtiles at 6 per second needs about 88 s
+			n.exploreFn = func(_ context.Context, _ func() bool, _ *input.Point) error { return ErrExplored }
+			if err := n.ExitTo(ctxT(t), 2); err != nil {
+				t.Fatalf("%s: exit: %v", cls, err)
+			}
+			if s.cur().no != 2 {
+				t.Fatalf("%s: level %d at %v", cls, s.cur().no, s.pos())
+			}
+		})
 	}
 }
