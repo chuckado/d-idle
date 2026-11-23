@@ -152,7 +152,7 @@
     "travel.area-transition"
    ],
    "pre": {
-    "level": 22,
+    "level": 19,
     "gold": 8000,
     "waypoints": [
      1,
@@ -174,6 +174,25 @@
      "hp1",
      "hp1",
      "hp1"
+    ],
+    "merc": 0,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head"
+     },
+     {
+      "code": "qui",
+      "slot": "torso"
+     },
+     {
+      "code": "ssd",
+      "slot": "rhand"
+     },
+     {
+      "code": "buc",
+      "slot": "lhand"
+     }
     ]
    },
    "trigger": {
@@ -201,7 +220,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: level 22, 8000 gold, waypoints Cold Plains, Black Marsh and Outer Cloister, and potions by SETUP verbs. Town start, nothing written after the start. Mechanics only.",
+   "provenance": "CHEATED: level 19 (the sandbox hero), a Rogue mercenary, cap, quilted armor, short sword and buckler worn, 8000 gold, waypoints Cold Plains, Black Marsh and Outer Cloister, and potions by SETUP verbs. Town start, nothing written after the start. Mechanics only.",
    "notes": "The tapper taps Start on malus and Hand in. U: record 3 is Tools of the Trade (docs/progression/quests.md index list); the Malus is picked from the Smith's drop and consumed by the Charsi hand-in, so the end state is record 3 bit 0, not an item. The imbue item pick is imbue:best (no chooser, docs/actbot.md): if the hand-in stalls on the pick this is a finding, not a scenario fault. Whether the shipped Normal offline offers the imbue at all is U. town.bankFirst 0: with the default the bank chore moved 6900 of the 8000 gold into the stash in the first minute and the chunk then waited 28 minutes on chores it could not pay (run 20261120-184924-bb3e, finding in the probe doc). Belt is four healing potions: the kit gate asked for 'healing potions 3/4' with a 3+1 belt and the chunk sat on its chores step (run 20261120-192148-b1a8).",
    "assert": [
     {
