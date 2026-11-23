@@ -81,6 +81,24 @@ func gen(root string) error {
 		g := row.Gen
 		pre := clone(asMap(sp.Kit["pre"]))
 		trig := clone(asMap(sp.Kit["trigger"]))
+		if g.Kit != "" {
+			k, ok := sp.Kits[g.Kit]
+			if !ok {
+				return fmt.Errorf("%s: unknown kit %q", row.ID, g.Kit)
+			}
+			for key, v := range asMap(k["pre"]) {
+				pre[key] = v
+			}
+			for key, v := range asMap(k["trigger"]) {
+				if key != "knobs" {
+					trig[key] = v
+				}
+			}
+			kn := asMap(trig["knobs"])
+			for key, v := range asMap(asMap(k["trigger"])["knobs"]) {
+				kn[key] = v
+			}
+		}
 		if g.Start != "" {
 			id, ok := areas[g.Start]
 			if !ok {
