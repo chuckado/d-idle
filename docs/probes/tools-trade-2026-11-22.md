@@ -93,3 +93,21 @@ First attempt now opens the door (141,2) from (142,4) and `Entered Outer Cloiste
 - S (reading): a field refill exists (`beltFillStep`, `internal/bot/goal.go` before the quest board step; `FillBelt` is safe in the field) and a pack drink exists (`internal/combat/packdrink.go`, only below `combat.drinkRejuvPct`, and the chicken line stays above it by design: a minor potion does not save a hero at the chicken line). The refill was gated on NO hostile within the 30 subtile sweep radius: in the Barracks that never holds, so the belt stayed empty with six potions in the pack (V lab run 7cf9: `belt hp=0`, chicken at life 140 of 289).
 - Fix: with no healing in the belt and healing in the pack the gate is 12 subtiles (`beltFillUrgentRadius`). Test `TestBeltFillStepUrgentRadius` (Paladin and Sorceress; fails without the shorter radius). U: how long a refill takes in a live crowd; the 90 s backoff stays.
 - Not done: the `belt: move failed: hand: unexpected cursor state` path (not reproduced here); a field variant of `town.plan.belt-refill-from-pack` (the scenario needs a field start with hostiles near: not written).
+
+## Round 13 (card toolstrade13): the Smith anchor is unreachable on the real engine
+
+- V (sandbox log 2026-11-23 08:27 to 08:30Z, release with #1166 and #1175, layoutRead 1, devp22): the hero in the Barracks opens the door (175,290) (`nav: the gate is cut off by a door`, `to -28`), then `nav: cut-off gate, no door beside it ... gate {73 267} presetObjects 51 nearestPreset 16.1 snapObjects 14 nearestSnap 34.8`; `goto anchor ... closest reachable point {152 267} to {73 267}`; the preset list holds doors of classes 14, 15 and 16 and objects of class 29 (many), 180, 179, a shrine and chests; `boss presets level 28 presets 54 monsterPresets ["754@73,267"]`. The anchor and the closest point are on the SAME ROW, 79 subtiles apart.
+- S (reading `doorBetween`, `doorOnTheWay`): a door is only used when it lies within `gateDoorReach` (14 subtiles) of a cell of the character's walkable region. The nearest object preset is 16 subtiles from the spot, none within reach of the closest point: so either a door class the data does not know stands in the way, a non-door blocker (class 29 objects are many; barrels and racks are solid in d2d's collision, S), or the hero's region is joined to the spot by a route the planner does not find. Not decided: the listing added to the cut-off log (`nearCharacter`, `nearGate`: class@x,y/distance) answers it from the next live run, and `tools/probes/capture.py` captures the whole level through read verbs when the hero is in area 28.
+- Coordinates (S): the preset position is in subtiles of the level, like the grid (`mergeMonsterPresets` converts the engine's cells through the level origin); lab 754@23,57 and live 754@73,267 are different layouts (the Barracks DS1 is chosen per game), not an off-by-room error; U until the capture shows the Smith's room.
+- Fix here (message only): `boss: boss not found in the arena: its spawn point {x y} could not be reached (...)` when the walk to the anchor failed (`TestBossNotFoundSaysTheAnchorIsUnreachable`, Smith and Countess).
+- Capture, read only (ADR 0014): `python3 tools/probes/capture.py SOCK OUTDIR 28` waits up to an hour for area 28, then writes `level, levelmap, levelmonsters, levelobjects, presets, objects, warps, warptriggers, nearby, layout, grid_5, blocked, state, info` replies and `capture.json`. The allow-list is checked before every send (`capture_test.py`).
+
+## Capture in the container (card toolstrade14)
+
+The sandbox container has perl and no python. `tools/probes/capture.pl` is the port: the script is piped on stdin, everything goes to STDOUT as one JSON line per read verb (`{"verb","reply","refused"}`), nothing is written inside the container:
+
+```
+docker exec -i d2play-20261108 perl - /run/d2d/d2d.sock.ctl 28 2700 6 < tools/probes/capture.pl > barracks-capture.jsonl
+```
+
+Arguments: socket, area (28), wait in seconds (2700), grace in seconds (6). Exit 2 when the area did not show. Test: `cd tools/probes && python3 -m unittest capture_pl_test` (fake socket: reads every verb once; a write verb passed through `CAPTURE_EXTRA` is refused and never sent; a wrong area times out).

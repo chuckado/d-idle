@@ -84,3 +84,6 @@ A Characters page reachable from the "..." menu and the Orders More sheet (not a
 10. V (the container exited on SIGTERM of the child and Docker restarted it): `docker restart` the container: it loads the LAST SWITCHED hero (Nec in the run), not the `D2D_NAME` hero.
 11. U: Kill the child 11 times within an hour (one `kill` each, bounded): the supervisor gives up and the container ends; a single kill restarts the same hero.
 12. U: Remove Zapp's save by hand (test volume only), restart: the entrypoint falls back to `D2D_NAME`.
+
+### A hero the game has not saved yet (card uichars)
+The list shows only saved heroes (V: charsel.Store.List reads the .d2s files). So the page shows what the listing cannot: the hero being created or playing but not in the list is a "Creating <name>..." row with "it appears in this list after the game saves" (no Delete or Switch: nothing to act on), and `GET /api/characters` carries `unsaved` (`Store.Unsaved`: parked state folders under the instance's `characters/` with no .d2s, apart from the playing hero) which the page shows as "not saved yet", with no Delete (nothing to lose; creating the same name again is not blocked by it, because Create checks the save folder). Tests: `TestUnsavedParkedHeroes`, the Characters node test; fit pages `chars-unsaved`, `chars-switching`.
