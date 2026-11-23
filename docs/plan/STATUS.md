@@ -450,6 +450,7 @@
 | uiloot | proposed | - | `internal/watch/web/settings.js`<br>`internal/watch/web/shell.js`<br>`internal/watch/testdata/settings_test.cjs`<br>`internal/watch/settingsjs_test.go`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_builds.go`<br>`internal/watch/planwording_test.go`<br>`docs/ui/settings/` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | stage1fix | proposed | - | `internal/nav/exit.go`<br>`internal/nav/exit_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_test.go`<br>`cmd/d2scenario/tap.go`<br>`cmd/d2scenario/tap_test.go`<br>`tools/provingground/scenarios/navexit.json`<br>`tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
+| toolstrade15 | proposed | - | `internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`internal/nav/testdata/barracks28.grid`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
@@ -481,6 +482,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- dde5f844d 11-23 04:47 `Merge agent/toolstrade15: Merge branch 'main' into toolstrade15` (toolstrade15)
+- beab17cca 11-23 04:45 `Merge branch 'main' into toolstrade15` (-)
 - a4483bcb9 11-23 04:33 `Merge agent/barrret: Merge branch 'main' into stage1fix` (barrret)
 - 57d18af4f 11-23 04:31 `Merge branch 'main' into stage1fix` (-)
 - 2958c57e0 11-23 04:25 `Merge agent/uifit3: Merge branch 'main' into uifit3` (uifit3)
@@ -489,6 +492,4 @@
 - 264088bc8 11-23 04:14 `Merge branch 'main' into qdmatrix` (-)
 - 831d73ba5 11-23 04:04 `Merge agent/uiloot: Merge branch 'main' into uiloot` (uiloot)
 - b4f44d6b2 11-23 04:02 `Merge branch 'main' into uiloot` (-)
-- ae0fed7f2 11-23 04:02 `Merge remote-tracking branch 'origin/main' into agent/barrret` (-)
-- 6b9810d00 11-23 04:00 `Merge agent/toolstrade14: Merge branch 'main' into toolstrade14` (toolstrade14)
 <!-- statusgen:end -->
