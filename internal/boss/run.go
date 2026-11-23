@@ -412,7 +412,31 @@ func (r *runner) locate(ctx context.Context) (Mon, error) {
 	if m, ok, err := try(r.o.LocatePolls); err != nil || ok {
 		return m, err
 	}
+	if v, err := r.w.View(ctx); err == nil {
+		r.note("monsters in view: %s", monsterSummary(v.Monsters))
+	}
 	return Mon{}, ErrBossNotFound
+}
+
+// monsterSummary lists the distinct class, unique number and name of the monsters in view (at most 16), so a "boss not
+// found" says what stood there instead (V need: the Smith of the Barracks, lab run 2026-11-23).
+func monsterSummary(ms []Mon) string {
+	seen := map[string]int{}
+	var order []string
+	for _, m := range ms {
+		k := fmt.Sprintf("%d/%d/%q", m.Class, m.UniqueNo, m.Name)
+		if seen[k] == 0 {
+			order = append(order, k)
+		}
+		seen[k]++
+	}
+	if len(order) > 16 {
+		order = order[:16]
+	}
+	for i, k := range order {
+		order[i] = fmt.Sprintf("%s x%d", k, seen[k])
+	}
+	return strings.Join(order, ", ")
 }
 
 func (r *runner) checkHint(p Pt) {

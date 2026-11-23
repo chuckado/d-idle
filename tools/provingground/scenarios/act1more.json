@@ -176,6 +176,12 @@
      "hp1"
     ],
     "merc": 0,
+    "quests": [
+     {
+      "record": 3,
+      "word": 12
+     }
+    ],
     "worn": [
      {
       "code": "cap",

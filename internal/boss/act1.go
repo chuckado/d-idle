@@ -135,7 +135,7 @@ func smith() *Script {
 		// Preset 754 = 734 + The Smith's superuniques hcIdx 20 (S: Kolbot's superunique presets run from 734; V: 754@15119,4389
 		// is in the Barracks preset dump of BOSSLIVE2 and no other class/preset row fits). The Malus object (objects.txt 108,
 		// V real table) sits in his room (S). Neither is verified as the spawn point (U): Explore stays the fallback.
-		Anchor:   Anchor{Preset: &PresetRef{Kind: PresetNPC, ID: presetSmith}, Also: []*PresetRef{{Kind: PresetObject, ID: objMalus}}},
+		Anchor:   Anchor{Preset: &PresetRef{Kind: PresetNPC, ID: presetSmith, Name: NameSmith}, Also: []*PresetRef{{Kind: PresetObject, ID: objMalus}}},
 		Hazards:  []Hazard{NoPotionLowLife(30), CrowdedAndHurt(6, 15, 50), RaisedAdds(8, 12, 10*time.Second)},
 		MinLevel: [3]int{8, 40, 60}, MinPotions: 1,
 		Timeout: 8 * time.Minute, ExploreBudget: 4 * time.Minute, EscapePct: 25, DrinkPct: 45, PostKillWait: 2 * time.Second,
