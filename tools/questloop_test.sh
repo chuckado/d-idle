@@ -15,7 +15,7 @@ echo "$*" >> "$FAKE/calls"
 case $verb in
   status) cat "$FAKE/status.$(cat "$FAKE/phase")" ;;
   handin) echo ok=true code= state=awaiting_handin reason=\"x\"; echo 2 > "$FAKE/phase" ;;
-  start|retry) echo ok=true code= state=accepted reason=\"x\"; echo 1 > "$FAKE/phase" ;;
+  start|retry) if [ -s "$FAKE/startout" ] && [ ! -e "$FAKE/startdone" ]; then touch "$FAKE/startdone"; cat "$FAKE/startout"; exit 1; fi; echo ok=true code= state=accepted reason=\"x\"; echo 1 > "$FAKE/phase" ;;
   wait)
     n=$(( $(cat "$FAKE/n") + 1 )); echo $n > "$FAKE/n"
     echo $(( $(cat "$FAKE/clock") + 300 )) > "$FAKE/clock"
@@ -121,6 +121,16 @@ calls=$(cat "$tmp/calls")
 check "$calls" "^wait tools_of_the_trade" "waits on the running chunk"
 nocheck "$calls" "^retry" "no retry on in_progress"
 nocheck "$calls" "^start" "no start while one chunk runs"
+
+# a hold on the hero's strength is waiting, not a failed try and not a skip: the start is asked again after the back-off
+reset 0 finished
+echo 'ok=false code=not_ready state=ready reason="level 24 needed for the Barracks (clvl 20)"' > "$tmp/startout"; rm -f "$tmp/startdone"
+out=$(run a); rc=$?
+[ $rc -eq 0 ] || { echo "FAIL: held-then-start exit $rc"; echo "$out"; fail=1; }
+check "$out" "held (too weak): waiting 1200s" "hold is waiting"
+nocheck "$out" "skipped: refused" "hold is no skip"
+check "$out" "DONE" "start after the hold"
+rm -f "$tmp/startout" "$tmp/startdone"
 
 [ $fail -eq 0 ] && echo "questloop_test: ok"
 exit $fail
