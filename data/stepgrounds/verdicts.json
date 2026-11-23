@@ -11,23 +11,23 @@
   "tag": "V",
   "note": "Sorceress 3"
  },
- "step.act1.smith.drop_pickup.control": {
+ "step.act1.smith.stand_click_pickup.control": {
   "verdict": "GREEN",
   "run": "20261123-175946",
   "tag": "V",
   "note": "control: no Malus without a Smith"
  },
- "step.act1.smith.drop_pickup.control.sorc": {
+ "step.act1.smith.stand_click_pickup.control.sorc": {
   "verdict": "GREEN",
   "run": "20261123-180122",
   "tag": "V",
   "note": ""
  },
- "step.act1.smith.drop_pickup": {
+ "step.act1.smith.stand_click_pickup": {
   "verdict": "BLOCKED",
   "run": "probe stepdrop.py",
   "tag": "V",
-  "note": "a spawned and killed Smith leaves no Malus on the lab d2d (fork request F1)"
+  "note": "the d2d drops the Malus only from the stand (object 108): waits for the bot's stand click (toolstrade a7b2ec8e)"
  },
  "drill.act1.sail": {
   "verdict": "GREEN",

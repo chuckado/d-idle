@@ -253,11 +253,11 @@
   },
   {
    "id": "tools_of_the_trade/malus/kill_smith",
-   "scenario": "step.act1.smith.drop_pickup",
+   "scenario": "step.act1.smith.stand_click_pickup",
    "also": [
     "step.act1.smith.malus_pickup",
     "step.act1.smith.malus_pickup.sorc",
-    "step.act1.smith.drop_pickup.control"
+    "step.act1.smith.stand_click_pickup.control"
    ]
   },
   {
@@ -316,11 +316,11 @@
     ],
     "kill": "Radament"
    },
-   "note": "debug spawn radament works (V probe, hp 278); the Book of Skill drop is F1."
+   "note": "debug spawn radament works (V probe, hp 278); whether the Book of Skill drops from a spawned Radament is U (the Smith case showed quest drops can be object-driven)."
   },
   {
    "id": "radament/radament/use_book",
-   "missing": "bot: no assertion kind reads the unspent skill point count (scenario format); the book drop itself is F1"
+   "missing": "bot: no assertion kind reads the unspent skill point count (scenario format); the book drop itself is U"
   },
   {
    "id": "radament/radament/return_atma",

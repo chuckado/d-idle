@@ -6,11 +6,11 @@
 
 `debug goto <area>`, `debug warp <x> <y>`, `debug spawn <id> [n] [champion|unique]` (probe `tools/probes/spawnids.py`: accepted bloodraven, smith, andariel, radament, summoner, duriel, izual, hephasto, diablo, mephisto, baal, nihlathak, councilmember1, griswold; refused "no such monster": countess, fangskin, shenk, bishibosh, coldcrow, rakanishu, treehead, pitspawn, bonebreaker, corpsefire, blooddiablo), `debug kill` (kills every monster of the level and leaves the normal drops; `tools/probes/stepdrop.py`), `debug give <code> <q>` (an item on the ground at the hero's feet, listed by `ground`; `tools/probes/giveground.py`), `debug quest set`, `debug mon set <id> life|...`, `debug merc hire|level|heal`.
 
-## F1: force the quest drop (or spawn a level-placed superunique with its own treasure class)
+## F1: spawn a level-placed superunique with its own treasure class (superuniques by name)
 
-- Evidence (V, `tools/probes/stepdrop.py D2D DATA 11 28 smith` with and without `QSET=3:0x000c`, plain and `unique`): a Smith made by `debug spawn smith` and killed by `debug kill` leaves 49 ground rows and NO `hdm` (Horadric Malus); the same for the `unique` spawn (it becomes a random unique "Chaos Dancer the Cold" with 404 hp, not The Smith). The level-placed Barracks Smith is not reachable by the probe's warp lattice (U), so whether the real one drops the Malus in the lab d2d is open; the matrix run 20261123-171725 killed the real one and the Malus did not register (note 38), so the lab d2d may lack the quest drop altogether (S).
-- Ask (either): `debug spawn super <name|index>` that places the superunique of superuniques.txt with its mods, treasure class and quest flag exactly as level generation does (also unblocks `countess`, `fangskin`, `shenk`, `bishibosh` ...); or `debug drop quest <code> [x y]` that runs the quest-item drop rule for the quest of that code, independent of who killed (user fact: the quest drop does not depend on the killer).
-- Unblocks: Smith drop (the pending scenario `step.act1.smith.drop_pickup`), Countess, Fangskin, Radament's book, Khalim's parts, Hephasto's hammer, Shenk, Nihlathak.
+- Evidence (V, `tools/probes/spawnids.py`): `debug spawn countess|fangskin|shenk|bishibosh|coldcrow|rakanishu|treehead|pitspawn|bonebreaker|corpsefire|blooddiablo` answers "no such monster"; `debug spawn <x> unique` makes a RANDOM unique, not the named one.
+- CORRECTION (coordinator, devp24 doc): the Smith's Malus is NOT a fork gap. The d2d drops it only when a player operates the Malus stand (object 108), never from the corpse; the Smith step scenario is `step.act1.smith.stand_click_pickup` (waits for the bot's stand click, card toolstrade a7b2ec8e). My probe `stepdrop.py` agrees (no hdm after a spawned Smith dies).
+- Ask: `debug spawn super <name|index>` placing the superunique of superuniques.txt with its mods, treasure class and quest flag. Unblocks Countess, Fangskin, Shenk.
 
 ## F2: place or drive a level object
 

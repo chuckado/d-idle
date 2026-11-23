@@ -36,7 +36,7 @@ MISSING by cause: F1 2; F2 8; F3 15; bot 16; (F<n> is a fork verb request, docs/
 | 1 | `forgotten_tower/countess/kill_countess` | MISSING | BLOCKED | F1: `debug spawn countess` answers "no such monster"; the Countess is a level-placed superunique with its own rune treasure class (spawn by superunique name or index, with its drops) |
 | 1 | `tools_of_the_trade/malus/accept_charsi` | chunk: act1.tools.malus.basic | PENDING |  |
 | 1 | `tools_of_the_trade/malus/travel_barracks` | step.act1.tools_of_the_trade.malus.travel_barracks | PENDING |  |
-| 1 | `tools_of_the_trade/malus/kill_smith` | step.act1.smith.drop_pickup | BLOCKED |  [V run probe stepdrop.py] a spawned and killed Smith leaves no Malus on the lab d2d (fork request F1) also step.act1.smith.malus_pickup GREEN; also step.act1.smith.malus_pickup.sorc GREEN; also step.act1.smith.drop_pickup.control GREEN; |
+| 1 | `tools_of_the_trade/malus/kill_smith` | step.act1.smith.stand_click_pickup | BLOCKED |  [V run probe stepdrop.py] the d2d drops the Malus only from the stand (object 108): waits for the bot's stand click (toolstrade a7b2ec8e) also step.act1.smith.malus_pickup GREEN; also step.act1.smith.malus_pickup.sorc GREEN; also step.act1.smith.stand_click_pickup.control GREEN; |
 | 1 | `tools_of_the_trade/malus/return_charsi` | chunk: act1.tools.malus.basic | PENDING |  |
 | 1 | `tools_of_the_trade/malus/pick_imbue` | chunk: act1.tools.malus.basic | PENDING |  |
 | 1 | `sisters_to_the_slaughter/andariel/travel_catacombs` | step.act1.sisters_to_the_slaughter.andariel.travel_catacombs | PENDING |  |
@@ -45,8 +45,8 @@ MISSING by cause: F1 2; F2 8; F3 15; bot 16; (F<n> is a fork verb request, docs/
 | 1 | `act1_done/sail_east/talk_warriv` | drill.act1.sail | GREEN |  [V run 20261123-002950-167e] Paladin and Sorceress, matrix table |
 | 2 | `radament/radament/talk_atma` | chunk: drill.act2.radament | GREEN |  |
 | 2 | `radament/radament/travel_sewers` | step.act2.radament.radament.travel_sewers | PENDING |  |
-| 2 | `radament/radament/kill_radament` | step.act2.radament.radament.kill_radament | PENDING | debug spawn radament works (V probe, hp 278); the Book of Skill drop is F1. |
-| 2 | `radament/radament/use_book` | MISSING | BLOCKED | bot: no assertion kind reads the unspent skill point count (scenario format); the book drop itself is F1 |
+| 2 | `radament/radament/kill_radament` | step.act2.radament.radament.kill_radament | PENDING | debug spawn radament works (V probe, hp 278); whether the Book of Skill drops from a spawned Radament is U (the Smith case showed quest drops can be object-driven). |
+| 2 | `radament/radament/use_book` | MISSING | BLOCKED | bot: no assertion kind reads the unspent skill point count (scenario format); the book drop itself is U |
 | 2 | `radament/radament/return_atma` | drill.act2.radament.handin | GREEN |  [V run matrix-2026-11-23] matrix table row |
 | 2 | `tainted_sun/amulet/travel_lost_city` | chunk: drill.act2.amulet | GREEN |  |
 | 2 | `tainted_sun/amulet/travel_claw_viper` | chunk: drill.act2.amulet | GREEN |  |

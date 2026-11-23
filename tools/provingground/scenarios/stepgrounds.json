@@ -2,8 +2,8 @@
  "version": "didle.scenario/1",
  "scenarios": [
   {
-   "id": "step.act1.smith.drop_pickup",
-   "title": "Step ground: the Smith dies in the Barracks, the Malus drops and the bot picks it up",
+   "id": "step.act1.smith.stand_click_pickup",
+   "title": "Step ground: the Smith dies, the room is clear, the bot clicks the Malus stand and carries the Malus",
    "kind": "step",
    "tier": "full",
    "quest": {
@@ -127,13 +127,13 @@
     ]
    },
    "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero.",
-   "notes": "Step 'kill_smith' + the pickup half of 'return_charsi'. The drop is quest-driven and independent of who kills (user fact). U: a debug-spawned smith carries the quest drop (plain make_monster, forkcheats.md); if no Malus drops this is a FORK request (force quest drop), not a bot fault. Control: step.act1.smith.drop_pickup.control.",
+   "notes": "Step kill_smith and the pickup: a spawned Smith is killed by the hero (V run 20261123-175218: killed in 2 s), then the bot must walk to the stand and click it; end state hdm in the pack. Control: .control (no Smith, no click: no hdm). U: whether a debug-spawned Smith in the arrival nook leaves the stand reachable; the stand lies in the real Smith room, so the scenario may need a warp to the stand (a pre.warp hook, bot or format gap).",
    "assert": [
     {
      "kind": "log_line",
-     "pattern": "^loot: clicked .*item=Horadric Malus",
+     "pattern": "^loot: clicked .*item=Horadric Malus|^quest board: .*stand",
      "min": 1,
-     "why": "the bot clicked the dropped Malus (log is the bot's report, S)"
+     "why": "the bot clicked the stand or the dropped Malus (S, log; the exact stand log line is the toolstrade card's)"
     },
     {
      "kind": "item_in_pack",
@@ -151,7 +151,7 @@
     "lab-verbs-attach"
    ],
    "status": "pending",
-   "pending_reason": "The lab d2d leaves no Malus after a spawned Smith dies: V tools/probes/stepdrop.py devp23 seed 11, spawn smith (plain and unique), quest 3 = 0x000c, debug kill: ground has no hdm row (49 other rows). Needs a fork verb that forces the quest drop or spawns the level superunique with its quest treasure class (fork request F2)."
+   "pending_reason": "Waits for the bot's Malus stand click (card toolstrade a7b2ec8e). The d2d drops the Malus only when a player operates the stand (object 108), never from the Smith's corpse (V fork agent, devp24 doc; my probes stepdrop.py agree: a spawned and killed Smith leaves no hdm). Run it after the bot card merges."
   },
   {
    "id": "step.act1.smith.malus_pickup",
@@ -277,7 +277,7 @@
     ]
    },
    "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero.",
-   "notes": "The pickup half of Tools of the Trade, apart from the kill: the Malus is given at the hero's feet in the Barracks (debug give hdm 2, SETUP). U: whether the bot's loot picks a quest item at once or only inside the boss script. A RED here is a bot finding; GREEN says nothing about the drop (step.act1.smith.drop_pickup, pending on fork verb F2). First run (V, run 20261123-175729, no monsters): RED, the bot never clicked the ground Malus while the boss script ran (loot sweeps follow fights): two Fallen are spawned so a fight, then a loot sweep, happens. Second run (V, run 20261123-175828): RED again, the leveling plan walked the hero toward Tower Cellar 3 before the board started and no loot line names the Malus; the scenario now farms the Barracks so the bot fights and loots where the Malus lies. Third run (V, run 20261123-175917, Paladin 11): GREEN, log 'loot: clicked item=Horadric Malus', 'Found Horadric Malus', hdm in the pack.",
+   "notes": "The pickup half of Tools of the Trade, apart from the kill: the Malus is given at the hero's feet in the Barracks (debug give hdm 2, SETUP). U: whether the bot's loot picks a quest item at once or only inside the boss script. A RED here is a bot finding; GREEN says nothing about the drop (step.act1.smith.stand_click_pickup, pending on fork verb F2). First run (V, run 20261123-175729, no monsters): RED, the bot never clicked the ground Malus while the boss script ran (loot sweeps follow fights): two Fallen are spawned so a fight, then a loot sweep, happens. Second run (V, run 20261123-175828): RED again, the leveling plan walked the hero toward Tower Cellar 3 before the board started and no loot line names the Malus; the scenario now farms the Barracks so the bot fights and loots where the Malus lies. Third run (V, run 20261123-175917, Paladin 11): GREEN, log 'loot: clicked item=Horadric Malus', 'Found Horadric Malus', hdm in the pack.",
    "assert": [
     {
      "kind": "log_line",
@@ -413,7 +413,7 @@
     ]
    },
    "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero. Sorceress variant: cap only (a Sorceress cannot wear the quilted armor and sword of the Paladin kit).",
-   "notes": "The pickup half of Tools of the Trade, apart from the kill: the Malus is given at the hero's feet in the Barracks (debug give hdm 2, SETUP). U: whether the bot's loot picks a quest item at once or only inside the boss script. A RED here is a bot finding; GREEN says nothing about the drop (step.act1.smith.drop_pickup, pending on fork verb F2). First run (V, run 20261123-175729, no monsters): RED, the bot never clicked the ground Malus while the boss script ran (loot sweeps follow fights): two Fallen are spawned so a fight, then a loot sweep, happens. Second run (V, run 20261123-175828): RED again, the leveling plan walked the hero toward Tower Cellar 3 before the board started and no loot line names the Malus; the scenario now farms the Barracks so the bot fights and loots where the Malus lies. Third run (V, run 20261123-175917, Paladin 11): GREEN, log 'loot: clicked item=Horadric Malus', 'Found Horadric Malus', hdm in the pack.",
+   "notes": "The pickup half of Tools of the Trade, apart from the kill: the Malus is given at the hero's feet in the Barracks (debug give hdm 2, SETUP). U: whether the bot's loot picks a quest item at once or only inside the boss script. A RED here is a bot finding; GREEN says nothing about the drop (step.act1.smith.stand_click_pickup, pending on fork verb F2). First run (V, run 20261123-175729, no monsters): RED, the bot never clicked the ground Malus while the boss script ran (loot sweeps follow fights): two Fallen are spawned so a fight, then a loot sweep, happens. Second run (V, run 20261123-175828): RED again, the leveling plan walked the hero toward Tower Cellar 3 before the board started and no loot line names the Malus; the scenario now farms the Barracks so the bot fights and loots where the Malus lies. Third run (V, run 20261123-175917, Paladin 11): GREEN, log 'loot: clicked item=Horadric Malus', 'Found Horadric Malus', hdm in the pack.",
    "assert": [
     {
      "kind": "log_line",
@@ -438,7 +438,7 @@
    ]
   },
   {
-   "id": "step.act1.smith.drop_pickup.control",
+   "id": "step.act1.smith.stand_click_pickup.control",
    "title": "Must-fail control: no Smith, only fallen, no Malus appears",
    "kind": "step",
    "tier": "full",
@@ -556,7 +556,7 @@
     ]
    },
    "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero.",
-   "notes": "Control of the pickup scenarios: no Malus, no Smith: must be GREEN; if it is RED the pickup assertions of step.act1.smith.malus_pickup prove nothing.",
+   "notes": "Must-fail control of the stand scenario: no click, no Malus.",
    "assert": [
     {
      "kind": "item_absent",
@@ -575,7 +575,7 @@
    ]
   },
   {
-   "id": "step.act1.smith.drop_pickup.control.sorc",
+   "id": "step.act1.smith.stand_click_pickup.control.sorc",
    "title": "Must-fail control: no Smith, only fallen, no Malus appears (Sorceress)",
    "kind": "step",
    "tier": "full",
@@ -681,7 +681,7 @@
     ]
    },
    "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero. Sorceress variant: cap only (a Sorceress cannot wear the quilted armor and sword of the Paladin kit).",
-   "notes": "Control of the pickup scenarios: no Malus, no Smith: must be GREEN; if it is RED the pickup assertions of step.act1.smith.malus_pickup prove nothing.",
+   "notes": "Must-fail control of the stand scenario: no click, no Malus.",
    "assert": [
     {
      "kind": "item_absent",
