@@ -177,6 +177,7 @@ type World struct {
 	// BarracksMinLevel and BarracksMinLife are the class's floors for the Tools of the Trade chunk (route.barracks*, the bot
 	// fills the melee or the caster pair); 0 = no rule.
 	BarracksMinLevel, BarracksMinLife int
+	BarracksLifeWaiver                int // levels above BarracksMinLevel after which the life floor is waived (0 = never)
 	// DenMinLevel is the Normal clvl floor of Den of Evil for this class (caster or melee knob, bot fills it); 0 = no class floor.
 	DenMinLevel int
 
