@@ -248,3 +248,29 @@ func TestLockedGate(t *testing.T) {
 		t.Error("the allocator owns the points only while the knob is on")
 	}
 }
+
+// The Points page must say what the allocator did and why it waits (user report 2026-11-23: a necromancer showed
+// nothing for minutes while points were pending behind a fight).
+func TestBuildViewSaysUnspentSpentAndWaiting(t *testing.T) {
+	for _, c := range []struct {
+		class d2.Class
+		build string
+	}{{d2.Sorceress, "sor_a"}, {d2.Paladin, "pal_a"}} {
+		f := newAllocFake(c.class)
+		f.p.Level, f.p.SkillPoints, f.p.StatPoints = 4, 1, 1
+		d := f.desk(t, "")
+		d.SetBuild(c.build, false)
+		f.busy = true
+		d.AutoAllocOnce(context.Background())
+		v := d.BuildView()
+		if v.Unspent.Skill != 1 || v.Unspent.Stat != 1 || v.Spent != 0 || !strings.Contains(v.Waiting, "fight") {
+			t.Fatalf("%s busy view: %+v", c.build, v)
+		}
+		f.busy = false
+		d.AutoAllocOnce(context.Background())
+		v = d.BuildView()
+		if v.Spent != 1 || v.Waiting != "" {
+			t.Errorf("%s after a spend: spent %d waiting %q", c.build, v.Spent, v.Waiting)
+		}
+	}
+}

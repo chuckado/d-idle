@@ -111,12 +111,25 @@ type BuildView struct {
 	CardsErr  string      `json:"cardsError,omitempty"`
 	Held      []Held      `json:"held,omitempty"`
 	OffBuild  []string    `json:"offBuild,omitempty"`
-	Respec    RespecView  `json:"respec"`
+	// Unspent, Spent and Waiting say plainly what the allocator is doing: points still on the sheet, points it spent
+	// since the bot started, and why nothing was spent last tick ("a fight is on").
+	Unspent UnspentView `json:"unspent"`
+	Spent   int         `json:"spent"`
+	Waiting string      `json:"waiting,omitempty"`
+	Respec  RespecView  `json:"respec"`
+}
+
+// UnspentView is the hero's unspent points as the game shows them.
+type UnspentView struct {
+	Stat  int `json:"stat"`
+	Skill int `json:"skill"`
 }
 
 type autoState struct {
-	mu   sync.Mutex
-	held []Held
+	mu      sync.Mutex
+	held    []Held
+	spent   int
+	waiting string
 }
 
 func (d *Desk) autoOn() bool { return d.c.AutoOn != nil && d.c.AutoOn() }
@@ -171,7 +184,11 @@ func (d *Desk) BuildView() BuildView {
 	v.Respec = RespecView{Price: RespecPrice(rp, level, s.Respecs), Note: "Respec: coming soon. The price is shown from the tuning knobs; paying it needs the respec command of the game, which is not built yet."}
 	d.auto.mu.Lock()
 	v.Held = append(v.Held, d.auto.held...)
+	v.Spent, v.Waiting = d.auto.spent, d.auto.waiting
 	d.auto.mu.Unlock()
+	if p != nil {
+		v.Unspent = UnspentView{Stat: p.StatPoints, Skill: p.SkillPoints}
+	}
 	if p != nil && s.Locked && d.c.OffBuild != nil {
 		v.OffBuild = d.c.OffBuild(s.Build, p)
 	}
@@ -248,9 +265,15 @@ func (d *Desk) AutoAllocOnce(ctx context.Context) (did string) {
 		return ""
 	}
 	p, bad := d.precheck()
-	if bad != nil || p.StatPoints+p.SkillPoints <= 0 {
+	if bad != nil {
+		d.setWaiting(bad.Reason)
 		return ""
 	}
+	if p.StatPoints+p.SkillPoints <= 0 {
+		d.setWaiting("")
+		return ""
+	}
+	d.setWaiting("")
 	steps, err := d.c.Next(s.Build, p)
 	if err != nil {
 		d.setHeld([]Held{{Clvl: p.Level, Reason: "the build cannot be read: " + err.Error()}})
@@ -265,6 +288,7 @@ func (d *Desk) AutoAllocOnce(ctx context.Context) (did string) {
 				continue
 			}
 			if r := d.SpendStat(ctx, st.Stat); r.OK {
+				d.countSpent()
 				d.logf("auto-alloc: clvl "+fmt.Sprint(p.Level)+" -> +1 "+st.Stat+" (build "+s.Build+")", "build", s.Build)
 				return "stat " + st.Stat
 			} else if r.Code == "busy" || r.Code == "no_verb" || r.Code == "verb_failed" || r.Code == "not_taken" {
@@ -276,6 +300,7 @@ func (d *Desk) AutoAllocOnce(ctx context.Context) (did string) {
 			}
 			r := d.SpendSkill(ctx, st.Skill, false)
 			if r.OK {
+				d.countSpent()
 				d.logf("auto-alloc: clvl "+fmt.Sprint(p.Level)+" -> skill "+st.Name+" (build "+s.Build+")", "build", s.Build)
 				return "skill " + st.Name
 			}
@@ -296,5 +321,17 @@ func (d *Desk) AutoAllocOnce(ctx context.Context) (did string) {
 func (d *Desk) setHeld(h []Held) {
 	d.auto.mu.Lock()
 	d.auto.held = h
+	d.auto.mu.Unlock()
+}
+
+func (d *Desk) setWaiting(why string) {
+	d.auto.mu.Lock()
+	d.auto.waiting = why
+	d.auto.mu.Unlock()
+}
+
+func (d *Desk) countSpent() {
+	d.auto.mu.Lock()
+	d.auto.spent++
 	d.auto.mu.Unlock()
 }

@@ -108,7 +108,9 @@ func (w *allocWire) builds() []points.BuildInfo {
 	return out
 }
 
-// next is the build's remaining steps for the hero, stats first then skills, each group in table order.
+// next is the build's remaining steps for the hero, skills first then stats, each group in table order. Skill points are
+// the scarce ones (a level gives one, a stat batch five) and they bring the army, so a hero with a pile of unspent stats
+// never waits minutes of calm moments for its first skill (user report 2026-11-23, necromancer at clvl 4).
 func (w *allocWire) next(build string, p *d2.Player) ([]points.Step, error) {
 	b, err := leveler.LoadBuild(build, "")
 	if err != nil {
@@ -128,7 +130,7 @@ func (w *allocWire) next(build string, p *d2.Player) ([]points.Step, error) {
 		}
 		out = append(out, points.Step{Kind: "skill", Skill: sk.ID, Name: a.Skill})
 	}
-	return out, nil
+	return skillsFirst(out), nil
 }
 
 func (w *allocWire) offBuild(build string, p *d2.Player) []string {
@@ -178,4 +180,17 @@ func runAutoAlloc(ctx context.Context, d *points.Desk, every time.Duration) {
 			cancel()
 		}
 	}
+}
+
+// skillsFirst keeps each group's order and puts the skill steps before the stat steps.
+func skillsFirst(steps []points.Step) []points.Step {
+	var skills, stats []points.Step
+	for _, st := range steps {
+		if st.Kind == "skill" {
+			skills = append(skills, st)
+		} else {
+			stats = append(stats, st)
+		}
+	}
+	return append(skills, stats...)
 }
