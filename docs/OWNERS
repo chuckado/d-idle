@@ -567,6 +567,7 @@ docs/onboarding-tour.md  credit-runner  onboardtour
 docs/onboarding.md  credit-runner  firstminutes
 docs/onboarding.md  credit-runner  reconnectux
 docs/operator.md  credit-runner  opsquest
+docs/operator.md  credit-runner  opsquest3
 docs/palprofile.md  credit-runner  palprofile2
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
@@ -2458,7 +2459,9 @@ tools/provingground/scenarios/vaultreveal.json  credit-runner  vaultreveal
 tools/provingground/scenarios/vaultsellall.json  credit-runner  sellall
 tools/provingground/status_doc.sh  credit-runner  pgpage
 tools/questloop.sh  credit-runner  opsquest
+tools/questloop.sh  credit-runner  opsquest3
 tools/questloop_test.sh  credit-runner  opsquest
+tools/questloop_test.sh  credit-runner  opsquest3
 tools/survival  credit-runner  pghero
 tools/survival  credit-runner  survhold2
 tools/survival  credit-runner  survtune

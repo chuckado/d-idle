@@ -442,6 +442,7 @@
 | failspend | proposed | - | `internal/bot/questboard.go`<br>`internal/bot/questboard_test.go` | - |
 | uifit1 | proposed | - | `tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/fit-triage-2026-11-23.md`<br>`internal/watch/web/utilities.css`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/panels/statusline/panel.css`<br>`internal/watch/web/panels/quest-strip/panel.css` | - |
 | toolstrade10 | proposed | - | `internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| opsquest3 | proposed | - | `docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
@@ -474,6 +475,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2b9a3202d 11-23 02:50 `Merge agent/opsquest3: Merge branch 'main' into opsquest3` (opsquest3)
+- 9d4ce3580 11-23 02:48 `Merge branch 'main' into opsquest3` (-)
 - 23eea885b 11-23 02:42 `Merge agent/uigate: Merge branch 'main' into uifit1` (uigate)
 - 1472b59c7 11-23 02:41 `Merge branch 'main' into uifit1` (-)
 - a70c7deb1 11-23 02:34 `Merge agent/toolstrade10: Merge branch 'main' into toolstrade10` (toolstrade10)
@@ -482,6 +485,4 @@
 - 55bbca0fc 11-23 02:16 `Merge branch 'main' into failspend` (-)
 - c54b1348b 11-23 02:09 `Merge agent/opsquest2: Merge branch 'main' into opsquest2` (opsquest2)
 - 972b7d1d0 11-23 02:08 `Merge branch 'main' into opsquest2` (-)
-- 9b7eaf384 11-23 01:59 `Merge branch 'main' into failspend` (-)
-- eb7f39ce3 11-23 01:51 `Merge agent/toolstrade9: Merge branch 'main' into toolstrade9` (toolstrade9)
 <!-- statusgen:end -->
