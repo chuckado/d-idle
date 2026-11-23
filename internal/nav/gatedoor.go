@@ -6,10 +6,12 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strings"
 	"time"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2map"
+	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/input"
 )
 
@@ -287,8 +289,14 @@ func (n *Navigator) isDoorClass(class int) bool {
 	if n.e == nil || n.e.Data == nil {
 		return false
 	}
-	ob := n.e.Data.ObjectByID(class)
-	return ob != nil && ob.IsDoor
+	return opensLikeADoor(n.e.Data.ObjectByID(class))
+}
+
+// opensLikeADoor: objects.txt IsDoor, or the Act 5 town gate (class 449 "gate", 1x7, selectable, IsDoor false): V lab
+// drill.act5.siege, Harrogath to Bloody Foothills "cut-off gate, no door beside it" with a class 449 object 5 subtiles from
+// the hero and class 436 posts at the west wall.
+func opensLikeADoor(ob *data.Object) bool {
+	return ob != nil && (ob.IsDoor || (ob.Selectable && strings.EqualFold(ob.Name, "gate")))
 }
 
 // doorOnTheWay picks, among the doors the character's walkable part touches (within gateDoorReach), the one nearest to

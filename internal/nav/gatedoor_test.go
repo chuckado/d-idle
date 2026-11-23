@@ -11,6 +11,7 @@ import (
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2map"
+	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/input"
 )
 
@@ -539,5 +540,25 @@ func TestExitToOpensTwoDoorsInARow(t *testing.T) {
 				t.Fatalf("%s: doors used %d, level %d at %v", cls, opened, s.cur().no, s.pos())
 			}
 		})
+	}
+}
+
+// The Act 5 town gate (class 449, name "gate") opens like a door although objects.txt does not flag it IsDoor (V lab
+// drill.act5.siege); the posts and flags beside it (436, 441) and an ordinary selectable object do not.
+func TestHarrogathGateOpensLikeADoor(t *testing.T) {
+	for _, c := range []struct {
+		name string
+		ob   *data.Object
+		want bool
+	}{
+		{"door", &data.Object{ID: 24, Name: "Door", IsDoor: true}, true},
+		{"town gate", &data.Object{ID: 449, Name: "gate", Selectable: true}, true},
+		{"post", &data.Object{ID: 436, Name: "ettr"}, false},
+		{"chest", &data.Object{ID: 580, Name: "chest", Selectable: true}, false},
+		{"none", nil, false},
+	} {
+		if got := opensLikeADoor(c.ob); got != c.want {
+			t.Errorf("%s: %v, want %v", c.name, got, c.want)
+		}
 	}
 }
