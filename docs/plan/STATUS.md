@@ -422,6 +422,7 @@
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fitfix | proposed | - | `tools/uishots`<br>`tools/uishots.sh`<br>`docs/ui-regression-plan.md` | - |
 | bankdoc | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
+| toolstrade4 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -455,6 +456,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 443b4a555 11-22 22:12 `Merge agent/toolstrade4: Merge branch 'main' into toolstrade4` (toolstrade4)
+- 7559ad1f3 11-22 22:10 `Merge branch 'main' into toolstrade4` (-)
 - ab9d8c353 11-22 22:08 `Merge agent/bankdoc: Merge branch 'main' into bankdoc` (bankdoc)
 - 201ac0474 11-22 22:07 `Merge branch 'main' into bankdoc` (-)
 - 72161fb9e 11-22 22:01 `Merge agent/fitfix: Merge branch 'main' into fitfix` (fitfix)
@@ -463,6 +466,4 @@
 - 6a097352f 11-22 21:47 `Merge branch 'main' into toolstrade3` (-)
 - 452220018 11-22 21:41 `Merge agent/navexit2: navexit2: scenario, drill doc stage results` (navexit2)
 - d7b0b74cc 11-22 21:37 `Merge remote-tracking branch 'origin/main' into agent/navexit2` (-)
-- b617db299 11-22 21:35 `Merge agent/denfix: Merge branch 'main' into denfix` (denfix)
-- b21deb7a2 11-22 21:33 `Merge branch 'main' into denfix` (-)
 <!-- statusgen:end -->
