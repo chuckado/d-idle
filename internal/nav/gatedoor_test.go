@@ -562,3 +562,30 @@ func TestHarrogathGateOpensLikeADoor(t *testing.T) {
 		}
 	}
 }
+
+// A town reached by portal from the Outer Cloister is no neighbour of it: learn() must not record the pair, or the next
+// route from the camp starts with ExitTo(27) (V live 2026-11-23). The camp and the Blood Moor stay joined. Must fail
+// without the town rule in learn. The graph is data, no class: both classes share the navigator.
+func TestLearnIgnoresATownPortalCrossing(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			g := openField(3000, 3000, 100, 100)
+			l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 100, H: 100}}
+			s := newSim(g, input.Point{X: 3050, Y: 3050}, l1)
+			n := s.navigator()
+			n.learn(27, 1)
+			n.learn(40, 28)
+			if n.edges()[1][27] != 0 || n.edges()[27][1] != 0 {
+				t.Errorf("1 and 27 became neighbours: %v", n.edges()[1])
+			}
+			route, err := n.Route(1, 28)
+			if err != nil || len(route) == 0 || route[0] == 27 {
+				t.Errorf("route %v %v", route, err)
+			}
+			n.learn(1, 2)
+			if _, ok := n.edges()[1][2]; !ok {
+				t.Error("the camp and the Blood Moor must stay joined")
+			}
+		})
+	}
+}

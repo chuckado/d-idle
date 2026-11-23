@@ -462,6 +462,7 @@
 | toolstrade20 | proposed | - | `internal/combat/fight.go`<br>`internal/combat/sim_test.go`<br>`internal/combat/reach_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade22 | proposed | - | `tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade25 | proposed | - | `internal/task/kind.go`<br>`internal/task/executor.go`<br>`internal/task/executor_unpark_test.go`<br>`internal/bot/task.go`<br>`internal/bot/task_test.go`<br>`internal/bot/zz_cover_task_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| toolstrade27 | proposed | - | `internal/nav/route.go`<br>`internal/nav/gatedoor_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
@@ -493,6 +494,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 6c2360b29 11-23 15:49 `Merge agent/toolstrade27: toolstrade27: town portal crossings are no map edges, Barracks numbers` (toolstrade27)
 - fd1bcdfbc 11-23 12:07 `Merge agent/routes3: routes3: delete unused GET /api/bestiary, /api/atlas, /api/unlocks (user approved 2026-11-23); engine kept, guard test added` (routes3)
 - 6cbe0947f 11-23 11:54 `Merge agent/e11a2: E11a2: needs-you list grows, alerts badge opens Settings Alerts, real page-scroll must-fail fixture, guards for stream layout and senses_units.js` (e11a2)
 - 431248e24 11-23 11:16 `Merge agent/e11a: Merge branch 'main' into e11a` (e11a)
@@ -502,5 +504,4 @@
 - 12b103845 11-23 08:24 `Merge branch 'main' into toolstrade26` (-)
 - fc7fbcef9 11-23 08:17 `Merge agent/questdrill12: Merge branch 'main' into qdmatrix` (questdrill12)
 - 251d7b715 11-23 08:16 `Merge branch 'main' into qdmatrix` (-)
-- d3accbc5f 11-23 08:08 `Merge agent/toolstrade25: Merge branch 'main' into toolstrade25` (toolstrade25)
 <!-- statusgen:end -->
