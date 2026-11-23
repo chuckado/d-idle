@@ -459,7 +459,7 @@
   },
   {
    "id": "necro.nova-immune",
-   "title": "Poison-immune pack: the nova caster falls back to Bone Spear",
+   "title": "Poison-immune pack: the nova caster does not rely on Poison Nova (skeletons die to the army and Bone Spear)",
    "kind": "behaviour",
    "tier": "full",
    "covers": [
@@ -477,7 +477,7 @@
     "spawn": [
      {
       "monster": "skeleton1",
-      "n": 8
+      "n": 14
      }
     ]
    },
@@ -506,19 +506,19 @@
     "read.minions"
    ],
    "provenance": "SETUP: level 40 with the points a played level gives (spent by the nova table), purse 4000, field start in the Blood Moor by debug goto 2 and monsters by debug spawn (CHEATED position and encounter: mechanics only).",
-   "notes": "Eight skeletons (poison immune in monstats, U that skeleton1 is immune here) beside the nova build. U: Bone Spear is learned by the table at clvl 40.",
+   "notes": "Fourteen skeletons beside the nova build at clvl 40 (first run 20261123-000225: the golem killed the eight, the hero's last skill was Clay Golem, so a Bone Spear count cannot be asserted: U). The choice of Bone Spear against a poison-immune target is unit-tested (TestPoisonNovaAttackAndImmuneFallback); this scenario only proves the nova does not kill the immune pack.",
    "assert": [
     {
      "kind": "log_line",
-     "pattern": "^combat kill .*last_skill=Bone Spear",
-     "min": 2,
-     "why": "Bone Spear kills the immune skeletons"
+     "pattern": "^combat kill .*monster=Skeleton",
+     "min": 6,
+     "why": "the poison-immune pack dies"
     },
     {
      "kind": "log_line",
-     "pattern": "^combat kill .*last_skill=Poison Nova",
-     "why": "no kill by the nova on a poison-immune pack",
-     "max": 0
+     "pattern": "^combat kill .*last_skill=Poison Nova .*monster=Skeleton",
+     "max": 0,
+     "why": "the nova never kills the poison-immune skeletons"
     },
     {
      "kind": "life_pct_at_least",
