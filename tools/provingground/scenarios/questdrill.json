@@ -701,7 +701,7 @@
     },
     {
      "kind": "log_line",
-     "pattern": "^Entered Kurast Docks",
+     "pattern": "^Entered Kurast Docktown",
      "min": 1,
      "why": "the hero stands in the Act 2 town"
     },
@@ -2034,7 +2034,7 @@
     },
     {
      "kind": "log_line",
-     "pattern": "^Entered Kurast Docks",
+     "pattern": "^Entered Kurast Docktown",
      "min": 1,
      "why": "the hero stands in the Act 2 town"
     },
@@ -2200,7 +2200,7 @@
     },
     {
      "kind": "log_line",
-     "pattern": "^Entered Kurast Docks",
+     "pattern": "^Entered Kurast Docktown",
      "min": 1,
      "why": "the hero stands in the Act 2 town"
     },
@@ -2366,7 +2366,7 @@
     },
     {
      "kind": "log_line",
-     "pattern": "^Entered Kurast Docks",
+     "pattern": "^Entered Kurast Docktown",
      "min": 1,
      "why": "the hero stands in the Act 2 town"
     },
@@ -2532,7 +2532,7 @@
     },
     {
      "kind": "log_line",
-     "pattern": "^Entered Kurast Docks",
+     "pattern": "^Entered Kurast Docktown",
      "min": 1,
      "why": "the hero stands in the Act 2 town"
     },
