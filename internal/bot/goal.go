@@ -1286,11 +1286,13 @@ func (r *Runner) travelTo(ctx context.Context, target int) error {
 // reader knows the target's is active. It reports whether the hero moved.
 func (r *Runner) wpOnly(ctx context.Context, cur, target int) bool {
 	if !r.e.Tune.Nav.UseWaypoints || !r.d.Plan.Waypoints[cur] || !r.d.Plan.Waypoints[target] {
+		r.e.Log.Info("wp: no walk and no waypoint route", "from", cur, "to", target, "use", r.e.Tune.Nav.UseWaypoints, "fromWP", r.d.Plan.Waypoints[cur], "toWP", r.d.Plan.Waypoints[target])
 		return false
 	}
 	snap := r.latest()
 	active, known := r.activeWaypoints(snap)
 	if !known || !active[target] || !r.wpTripWorthTrying(snap, target, active, known) {
+		r.e.Log.Info("wp: no walk and the target's waypoint is not known active", "from", cur, "to", target, "known", known, "active", active[target])
 		return false // a blind trip is not worth the panel round trip when nothing says the waypoint is active
 	}
 	if err := r.d.Mover.TakeWaypoint(ctx, target); err != nil {
