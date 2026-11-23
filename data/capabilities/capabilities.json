@@ -2184,7 +2184,7 @@
    "class": "necromancer",
    "kind": "damage",
    "shape": "melee",
-   "reason": "poison line: no band, a weapon-skill modifier with no loop",
+   "reason": "prerequisite and synergy: the SME build puts 20 points in it and never casts it (the nova is the attack); a driver is listed so the picker does not flag the build, U live",
    "element": "pois",
    "reqLevel": 6,
    "reqSkills": [],
@@ -2207,7 +2207,7 @@
      "stance": "contact"
     },
     "power": "melee",
-    "driver": "none"
+    "driver": "attack"
    }
   },
   "Corpse Explosion": {
@@ -2420,7 +2420,7 @@
    "class": "necromancer",
    "kind": "damage",
    "shape": "ground",
-   "reason": "poison line: needs a corpse like Corpse Explosion, no band and no rule",
+   "reason": "prerequisite and synergy: the SME build puts points in it for Poison Nova and never casts it (Corpse Explosion is never cast in that build); delivery as Corpse Explosion, U live",
    "element": "pois",
    "reqLevel": 18,
    "reqSkills": [
@@ -2436,8 +2436,15 @@
    },
    "delivery": {
     "purpose": "damage",
+    "use": {
+     "target": "point",
+     "press": "tap"
+    },
+    "reach": {
+     "range": 20
+    },
     "power": "spell",
-    "driver": "none"
+    "driver": "attack"
    }
   },
   "Bone Spear": {
@@ -2640,7 +2647,7 @@
    "class": "necromancer",
    "kind": "damage",
    "shape": "nova",
-   "reason": "poison line: no band and no nova rule for the Necromancer (Static Field and Frost Nova are special rules of the Sorceress profile)",
+   "reason": "data rule (profiles.json necromancer/poisonnova, SME 2026-11-22): the main attack from clvl 30 (band), cast on a pack within 8 subtiles, flat 20 mana; a poison-immune target falls back to Bone Spear (PickByResist); U live as a measured loop (scenario necro.nova-pack)",
    "element": "pois",
    "reqLevel": 30,
    "reqSkills": [
@@ -2663,7 +2670,7 @@
      "range": 8
     },
     "power": "spell",
-    "driver": "none"
+    "driver": "attack"
    }
   },
   "Bone Spirit": {
