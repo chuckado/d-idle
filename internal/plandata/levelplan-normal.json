@@ -23,7 +23,7 @@
     {"id": "jail", "kind": "farm", "areas": [29], "entry": 11, "exit": 14, "no_merc_add": 2, "way_in": "waypoint", "via_wp": 29, "why": "911-920 XP/min, filler on the way to the Catacombs; first reach walks the Barracks (the Smith's level, U)"},
     {"id": "tools_of_the_trade", "kind": "quest", "chapter": "tools_of_the_trade", "why": "optional; the Smith's floor is 16, 14 with block (I)"},
     {"id": "catacombs", "kind": "farm", "areas": [35, 36], "entry": 12, "exit": 18, "no_merc_add": 2, "way_in": "waypoint", "via_wp": 35, "why": "Catacombs 2 1,268 and Catacombs 3 1,629 XP/min at clvl 12, the best Act 1 fields to Andariel (plan v2 entered at 13 / 14)"},
-    {"id": "tower_cellars", "kind": "farm", "areas": [24, 21, 22, 23], "entry": 15, "exit": 24, "way_in": "walk", "via_wp": 6, "why": "clvl 15 to 24, from the live log of 2026-11-23: a clvl 20 Paladin below the Barracks floor earned about 28 XP/min in Dark Wood, Black Marsh and the caves because every Act 1 window ended at 18; AREAMON per kill at clvl 16: Tower Cellar 1 109, 2 99, 3 78, 4 131 XP, 16 to 21 units, about 6 clear minutes each (Cellar 4 about 365 XP/min against 146 in Dark Wood); the tower guard (route.towerMinLevel) keeps a thin kit out"},
+    {"id": "forgotten_cellars", "kind": "farm", "areas": [24, 21, 22, 23], "entry": 15, "exit": 24, "way_in": "walk", "via_wp": 6, "why": "clvl 15 to 24, from the live log of 2026-11-23: a clvl 20 Paladin below the Barracks floor earned about 28 XP/min in Dark Wood, Black Marsh and the caves because every Act 1 window ended at 18; AREAMON per kill at clvl 16: Forgotten Tower Cellar 1 109, 2 99, 3 78, 4 131 XP, 16 to 21 units, about 6 clear minutes each (Cellar 4 about 365 XP/min against 146 in Dark Wood); the Forgotten Tower guard (route.towerMinLevel) keeps a thin kit out"},
     {"id": "andariel", "kind": "quest", "chapter": "andariel", "why": "Act 1 done; 18 with a merc, 20 alone (I, boss1)"}
    ]
   },
@@ -45,7 +45,7 @@
     {"id": "tools_of_the_trade", "kind": "quest", "chapter": "tools_of_the_trade", "why": "optional"},
     {"id": "jail", "kind": "farm", "areas": [29], "entry": 13, "exit": 16, "way_in": "waypoint", "via_wp": 29, "why": "today's row"},
     {"id": "catacombs", "kind": "farm", "areas": [35, 36], "entry": 13, "exit": 18, "way_in": "waypoint", "via_wp": 35, "why": "today's Catacombs 2 row"},
-    {"id": "tower_cellars", "kind": "farm", "areas": [24, 21, 22, 23], "entry": 15, "exit": 24, "way_in": "walk", "via_wp": 6, "why": "clvl 15 to 24, from the live log of 2026-11-23: a clvl 20 Paladin below the Barracks floor earned about 28 XP/min in Dark Wood, Black Marsh and the caves because every Act 1 window ended at 18; AREAMON per kill at clvl 16: Tower Cellar 1 109, 2 99, 3 78, 4 131 XP, 16 to 21 units, about 6 clear minutes each (Cellar 4 about 365 XP/min against 146 in Dark Wood); the tower guard (route.towerMinLevel) keeps a thin kit out"},
+    {"id": "forgotten_cellars", "kind": "farm", "areas": [24, 21, 22, 23], "entry": 15, "exit": 24, "way_in": "walk", "via_wp": 6, "why": "clvl 15 to 24, from the live log of 2026-11-23: a clvl 20 Paladin below the Barracks floor earned about 28 XP/min in Dark Wood, Black Marsh and the caves because every Act 1 window ended at 18; AREAMON per kill at clvl 16: Forgotten Tower Cellar 1 109, 2 99, 3 78, 4 131 XP, 16 to 21 units, about 6 clear minutes each (Cellar 4 about 365 XP/min against 146 in Dark Wood); the Forgotten Tower guard (route.towerMinLevel) keeps a thin kit out"},
     {"id": "andariel", "kind": "quest", "chapter": "andariel", "why": "Act 1 done"}
    ]
   },
@@ -66,7 +66,7 @@
     {"id": "countess", "kind": "quest", "chapter": "countess", "why": "optional"},
     {"id": "jail", "kind": "farm", "areas": [29], "entry": 13, "exit": 16, "way_in": "waypoint", "via_wp": 29, "why": "today's row"},
     {"id": "catacombs", "kind": "farm", "areas": [35, 36], "entry": 13, "exit": 18, "way_in": "waypoint", "via_wp": 35, "why": "today's Catacombs 2 row"},
-    {"id": "tower_cellars", "kind": "farm", "areas": [24, 21, 22, 23], "entry": 15, "exit": 24, "way_in": "walk", "via_wp": 6, "why": "clvl 15 to 24, from the live log of 2026-11-23: a clvl 20 Paladin below the Barracks floor earned about 28 XP/min in Dark Wood, Black Marsh and the caves because every Act 1 window ended at 18; AREAMON per kill at clvl 16: Tower Cellar 1 109, 2 99, 3 78, 4 131 XP, 16 to 21 units, about 6 clear minutes each (Cellar 4 about 365 XP/min against 146 in Dark Wood); the tower guard (route.towerMinLevel) keeps a thin kit out"},
+    {"id": "forgotten_cellars", "kind": "farm", "areas": [24, 21, 22, 23], "entry": 15, "exit": 24, "way_in": "walk", "via_wp": 6, "why": "clvl 15 to 24, from the live log of 2026-11-23: a clvl 20 Paladin below the Barracks floor earned about 28 XP/min in Dark Wood, Black Marsh and the caves because every Act 1 window ended at 18; AREAMON per kill at clvl 16: Forgotten Tower Cellar 1 109, 2 99, 3 78, 4 131 XP, 16 to 21 units, about 6 clear minutes each (Cellar 4 about 365 XP/min against 146 in Dark Wood); the Forgotten Tower guard (route.towerMinLevel) keeps a thin kit out"},
     {"id": "andariel", "kind": "quest", "chapter": "andariel", "why": "Act 1 done"}
    ]
   }

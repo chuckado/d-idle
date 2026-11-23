@@ -436,9 +436,9 @@ func TestBurialGroundsMeleeEntryIsHigher(t *testing.T) {
 	}
 }
 
-// A clvl 19 to 24 hero below the Barracks floor (areas 28 to 37 excluded by the guard) is sent to the Tower Cellars, not to
+// A clvl 19 to 24 hero below the Barracks floor (areas 28 to 37 excluded by the guard) is sent to the Forgotten Tower Cellars, not to
 // a window that closed at clvl 3 to 14 (V live 2026-11-23: Blood Moor, Cave 2, Black Marsh at about 28 XP/min; the plan's
-// Act 1 windows ended at 18). Paladin and Sorceress plan rows; fails without the tower_cellars rows of levelplan-normal.json.
+// Act 1 windows ended at 18). Paladin and Sorceress plan rows; fails without the forgotten_cellars rows of levelplan-normal.json.
 func TestPickBelowTheBarracksFloorUsesTheTowerCellars(t *testing.T) {
 	p, _ := LoadPlan("")
 	ex := map[int]bool{}
