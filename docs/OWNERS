@@ -663,7 +663,7 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade17
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade18
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade20
-docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade21
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade22
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
 docs/probes/town-plan-scenarios.md  credit-runner  town1
@@ -2516,6 +2516,7 @@ tools/provingground/scenarios/act1more.json  credit-runner  toolstrade10
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade16
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade17
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade2
+tools/provingground/scenarios/act1more.json  credit-runner  toolstrade22
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade5
 tools/provingground/scenarios/autoalloc.json  credit-runner  allocfix
 tools/provingground/scenarios/autoalloc.json  credit-runner  allochandoff

@@ -460,7 +460,7 @@
 | stage23 | proposed | - | `internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/necro.json`<br>`tools/provingground/scenarios/navexit.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | uikeys | proposed | - | `internal/watch/testdata/keywalk_test.cjs`<br>`internal/watch/settingsjs_test.go`<br>`internal/watch/web/sheet.js`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui-design-system.md` | - |
 | toolstrade20 | proposed | - | `internal/combat/fight.go`<br>`internal/combat/sim_test.go`<br>`internal/combat/reach_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
-| toolstrade21 | proposed | - | `docs/probes/tools-trade-2026-11-22.md` | - |
+| toolstrade22 | proposed | - | `tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
@@ -492,6 +492,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- df8eb3ae3 11-23 07:24 `Merge agent/toolstrade22: toolstrade22: basic scenario with Light potions, merc verb request` (toolstrade22)
 - fbdb57251 11-23 07:17 `Merge agent/toolstrade21: Merge branch 'main' into toolstrade21` (toolstrade21)
 - 1b8b5fb82 11-23 07:16 `Merge branch 'main' into toolstrade21` (-)
 - 709194169 11-23 07:09 `Merge agent/uikeys: Merge branch 'main' into uikeys` (uikeys)
@@ -501,5 +502,4 @@
 - efdfb1883 11-23 07:04 `Merge branch 'main' into qdmatrix` (-)
 - 83b7ed53c 11-23 06:58 `Merge agent/toolstrade20: Merge branch 'main' into toolstrade20` (toolstrade20)
 - 79bc8e204 11-23 06:57 `Merge branch 'main' into toolstrade20` (-)
-- a443aec6e 11-23 06:50 `Merge agent/questdrill8: Merge branch 'main' into qdmatrix` (questdrill8)
 <!-- statusgen:end -->
