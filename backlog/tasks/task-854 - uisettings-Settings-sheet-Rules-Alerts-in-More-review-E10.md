@@ -25,7 +25,7 @@ owns:
   - "docs/ui-design-system.md"
 exclusive: []
 contracts: []
-result: "Settings sheet (Rules: revoke one/all; Alerts: sound, desktop notifications) in More on every page; node DOM tests + Go tests pass; fit pages settings-rules/-alerts pass on Orion at 390x844 and 1366x768 (fixture data). Not live-verified against a real answer route. Gap: new pages have no alert feed that plays the stored settings."
+result: "Settings sheet (Rules: revoke one/all; Alerts: sound, desktop notifications) in More on every page; node DOM tests + Go tests pass; fit pages settings-rules/-alerts pass on the worker host at 390x844 and 1366x768 (fixture data). Not live-verified against a real answer route. Gap: new pages have no alert feed that plays the stored settings."
 ---
 
 ## Description
