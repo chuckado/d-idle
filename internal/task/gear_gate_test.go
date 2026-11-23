@@ -124,7 +124,14 @@ func TestMalusComesFromTheStand(t *testing.T) {
 			}
 			return -1
 		}
-		kill, stand, pick := idx("kill:The Smith"), idx("interact:Malus stand"), idx("pickup:Horadric Malus")
+		kill, stand := idx("kill:The Smith"), idx("interact:Malus stand")
+		pick := -1 // the pick-up after the click (one may come first: the Malus may already lie on the floor)
+		for i, l := range g.Log {
+			if i > stand && stand >= 0 && strings.HasPrefix(l, "pickup:Horadric Malus") {
+				pick = i
+				break
+			}
+		}
 		if kill < 0 || stand < kill || pick < stand {
 			t.Errorf("%s: kill %d, stand %d, pick-up %d (log %v)", tc.name, kill, stand, pick, g.Log)
 		}
