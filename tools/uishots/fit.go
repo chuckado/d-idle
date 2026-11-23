@@ -612,6 +612,7 @@ var mustFail = map[string]string{
 	"fit-menudefect-primary-":  "is below the fold",
 	"fit-menudefect-hint-":     "shows no hint",
 	"fit-moredefect-clip-":     "the More list shows",
+	"fit-moredefect-phone-":    "the More sheet is",
 	// the quest board (slice S5): one defect each, put back by defectCSS and overlayJS in fixtures_quests.go
 	"fit-questdefect-clip-":  "sheet text is cut",
 	"fit-questdefect-small-": "target under 44 px",
