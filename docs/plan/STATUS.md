@@ -500,6 +500,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f21c9796f 11-23 18:50 `Merge agent/stepgrounds: Merge branch 'main' into stepgrounds` (stepgrounds)
+- af4f02e9d 11-23 18:48 `Merge branch 'main' into stepgrounds` (-)
 - dfa228ff2 11-23 18:37 `Merge agent/toolstrade34: Merge branch 'main' into toolstrade34` (toolstrade34)
 - 1b7fce688 11-23 18:36 `Merge branch 'main' into toolstrade34` (-)
 - 0877d4fb5 11-23 18:30 `Merge agent/stepgrounds: Merge branch 'main' into stepgrounds` (stepgrounds)
@@ -508,6 +510,4 @@
 - fcc885326 11-23 18:02 `Merge branch 'main' into toolstrade33` (-)
 - 4eef0017d 11-23 18:00 `Merge agent/malus2: Merge branch 'main' into malus2` (malus2)
 - 37c70de1a 11-23 17:58 `Merge branch 'main' into malus2` (-)
-- 754583b4a 11-23 17:56 `Merge agent/toolstrade32: toolstrade32: round 30, alloc lines, life arithmetic, xp options` (toolstrade32)
-- 1e068b388 11-23 17:52 `Merge remote-tracking branch 'origin/main' into agent/malus2` (-)
 <!-- statusgen:end -->
