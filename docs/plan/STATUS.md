@@ -489,14 +489,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a443aec6e 11-23 06:50 `Merge agent/questdrill8: Merge branch 'main' into qdmatrix` (questdrill8)
+- 86136b2a7 11-23 06:49 `Merge branch 'main' into qdmatrix` (-)
+- 1e454e546 11-23 06:40 `Merge agent/uibudget: Merge branch 'main' into uibudget` (uibudget)
+- 0f8d4d859 11-23 06:38 `Merge branch 'main' into uibudget` (-)
 - cbb60372e 11-23 06:32 `Merge agent/stage23: Merge branch 'main' into stage23` (stage23)
 - 5589b063f 11-23 06:30 `Merge branch 'main' into stage23` (-)
 - 798a702dc 11-23 06:28 `Merge remote-tracking branch 'origin/main' into agent/stage23` (-)
 - 752efedd3 11-23 06:19 `Merge agent/toolstrade19: Merge branch 'main' into toolstrade19` (toolstrade19)
 - 136e77149 11-23 06:17 `Merge branch 'main' into toolstrade19` (-)
 - 83acd8c62 11-23 06:11 `Merge agent/questdrill7: Merge branch 'main' into qdmatrix` (questdrill7)
-- b3c993d72 11-23 06:09 `Merge branch 'main' into qdmatrix` (-)
-- a85cc97f6 11-23 06:05 `Merge origin/main into stage23` (-)
-- 9c6f5adc4 11-23 06:02 `Merge agent/uia11y: Merge branch 'main' into uia11y` (uia11y)
-- 8679bba1d 11-23 06:00 `Merge branch 'main' into uia11y` (-)
 <!-- statusgen:end -->

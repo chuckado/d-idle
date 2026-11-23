@@ -641,3 +641,7 @@ Dropped, not moved (user answer 2026-11-22; E11 deletes them): Cain's notes (`/a
 - **Text size:** the fit pages `ts200-vault`, `ts200-quests`, `ts200-build`, `ts200-settings` run at 320x640 with the root font at 200% (`?ts=1` on the harness): no sideways scroll, no control past the window, no control text cut (`TestFitTextScale`, `fit.js textScale`). Rows that may scroll sideways on purpose are marked `data-hscroll` (the Vault slot chips).
 - **Motion:** every `--d-dur-*` is 0 under `prefers-reduced-motion`, (the inventory pulse takes `--d-dur-pulse` and `--d-dur-fade`, also 0 there); `TestMotionHonoursReducedMotion` fails for a stylesheet with a literal duration and no such rule.
 - Not covered yet: vertical clipping at 200% (the 104 px phone band), a keyboard walk of every page, screen-reader checks.
+
+## 18. Asset budget (card uibudget)
+
+`TestAssetBudget` (`internal/watch/assetbudget_test.go`) counts the JS and CSS a page loads (what its HTML links, the scripts those import, and for the cockpit the panels `layouts/cockpit.json` and `shell.json` name) as gzip level 6 bytes, and fails over a ceiling or far under it (so the number is kept current). Measured 2026-11-23 (V: the test's own log): cockpit `/watch` 61 files, 179,056 bytes (this includes the pre-shell page's `app.js`, `unlockui.js`, `alerts.js` and `app.css`, which E11 removes); Vault 12 files, 63,902 bytes. Ceilings: 193,000 and 69,000. A change that adds weight raises its ceiling in the same commit and says why.
