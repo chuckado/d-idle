@@ -493,6 +493,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- fd1bcdfbc 11-23 12:07 `Merge agent/routes3: routes3: delete unused GET /api/bestiary, /api/atlas, /api/unlocks (user approved 2026-11-23); engine kept, guard test added` (routes3)
 - 6cbe0947f 11-23 11:54 `Merge agent/e11a2: E11a2: needs-you list grows, alerts badge opens Settings Alerts, real page-scroll must-fail fixture, guards for stream layout and senses_units.js` (e11a2)
 - 431248e24 11-23 11:16 `Merge agent/e11a: Merge branch 'main' into e11a` (e11a)
 - 263094f14 11-23 11:15 `Merge branch 'main' into e11a` (-)
@@ -502,5 +503,4 @@
 - fc7fbcef9 11-23 08:17 `Merge agent/questdrill12: Merge branch 'main' into qdmatrix` (questdrill12)
 - 251d7b715 11-23 08:16 `Merge branch 'main' into qdmatrix` (-)
 - d3accbc5f 11-23 08:08 `Merge agent/toolstrade25: Merge branch 'main' into toolstrade25` (toolstrade25)
-- bd7cda6d2 11-23 08:06 `Merge branch 'main' into toolstrade25` (-)
 <!-- statusgen:end -->
