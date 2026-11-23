@@ -54,8 +54,8 @@ func TestHandlerObjectsAreKnownToTheAdapter(t *testing.T) {
 	for _, o := range []string{"Anya's portal", "Arcane Sanctuary portal", "Cain's Cage", "cage", "duriel-door", "red portal", "Summoner's journal"} {
 		plain[o] = "door, portal or cage: the area or quest word shows the effect"
 	}
-	for _, o := range []string{"Horadric Cube chest", "Horadric Scroll chest", "Khalim's Brain chest", "Khalim's Eye chest", "Khalim's Heart chest", "Staff of Kings chest", "taintedsunaltar"} {
-		plain[o] = "drops an item the handler picks up next"
+	for _, o := range []string{"Horadric Cube chest", "Horadric Scroll chest", "Malus stand", "Khalim's Brain chest", "Khalim's Eye chest", "Khalim's Heart chest", "Staff of Kings chest", "taintedsunaltar"} {
+		plain[o] = "drops an item the handler picks up next (the Malus stand: the pick-up is the same step)"
 	}
 	var unknown []string
 	for o := range rec.objects {

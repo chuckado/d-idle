@@ -24,11 +24,12 @@ const (
 
 // Object classes (U unless noted).
 const (
-	ObjTreeInifuss  = 30 // U: Tree of Inifuss, Dark Wood
-	ObjCairnStone   = 17 // U: Stony Field cairn stones (class of the first stone)
-	ObjCainGibbet   = 26 // V: Cain's Gibbet in Tristram (lab drill L2, debug objects row op10 class 26)
-	ObjRedPortal    = 60 // generic "Portal": V live at the Arcane/Canyon portal (docs/act2.md), S Kolbot for Anya's portal in Harrogath; NOT the Act 3 to 4 portal, see ObjRedPortalA3
-	ObjTownPortal   = 59 // V-ish: town.ObjPortal (UNVERIFIED live there too)
+	ObjTreeInifuss  = 30  // U: Tree of Inifuss, Dark Wood
+	ObjMalusStand   = 108 // V (fork World::malus_stand, ToolsQuest::operate, lab 2026-11-23): the stand in the Smith's room; the Horadric Malus drops from a click on it, never from the Smith's death
+	ObjCairnStone   = 17  // U: Stony Field cairn stones (class of the first stone)
+	ObjCainGibbet   = 26  // V: Cain's Gibbet in Tristram (lab drill L2, debug objects row op10 class 26)
+	ObjRedPortal    = 60  // generic "Portal": V live at the Arcane/Canyon portal (docs/act2.md), S Kolbot for Anya's portal in Harrogath; NOT the Act 3 to 4 portal, see ObjRedPortalA3
+	ObjTownPortal   = 59  // V-ish: town.ObjPortal (UNVERIFIED live there too)
 	ObjWaypointAct1 = 119
 	ObjWaypointAct2 = 156
 	ObjWaypointAct3 = 237

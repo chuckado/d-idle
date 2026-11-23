@@ -90,6 +90,7 @@ var objSpecs = map[string]objSpec{
 	// Act 1 (docs/quest.md check 7): classes 30, 26 are U (objects.txt names not re-read), 60 is S (Kolbot RedPortal), 473 V.
 	"Tree of Inifuss": {quest.ObjTreeInifuss, objClick, ""},
 	"Tristram portal": {quest.ObjRedPortal, objLeave, ""},
+	"Malus stand":     {quest.ObjMalusStand, objOrb, ""},   // click until its mode changes: a crowd interrupts single clicks (lab: 3 of 4 tries)
 	"Cain's Cage":     {quest.ObjCainGibbet, objClick, ""}, // one cage; the step may click again until the quest word flips
 	"cage":            {quest.ObjCage, objOnce, ""},        // Rescue on Mount Arreat: the step calls this three times
 }

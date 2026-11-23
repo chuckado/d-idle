@@ -97,3 +97,12 @@ func TestLayoutReadOffOrVerbAbsentDoesNotWalk(t *testing.T) {
 		}
 	}
 }
+
+// The Malus stand is object 108 and is clicked until its mode changes (a crowd interrupts single clicks: 3 of 4 lab tries);
+// the step of the task layer names it "Malus stand". Must fail without the spec.
+func TestMalusStandIsAClickUntilItChangesObject(t *testing.T) {
+	spec, ok := objSpecs["Malus stand"]
+	if !ok || spec.class != 108 || spec.kind != objOrb {
+		t.Fatalf("spec %+v ok %v", spec, ok)
+	}
+}

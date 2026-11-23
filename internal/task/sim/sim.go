@@ -20,6 +20,7 @@ type Game struct {
 	Reader    bool                  // true: quest stages are visible (the T2 reader exists)
 	stage     map[string]task.Stage // true quest bits
 	ground    map[string]bool       // items lying around (dropped by bosses)
+	standUsed bool                  // the Malus stand gave its Horadric Malus
 	Log       []string              // every action, in order
 	Fail      map[string][]error    // "kill:Andariel" -> errors to return, one per call
 	DieOn     map[string]int        // action key -> times to "die" (returns ErrDied after teleporting to town)
@@ -181,8 +182,7 @@ func (g *Game) KillBoss(_ context.Context, name string) error {
 	case task.BossBR:
 		g.set(task.QBurial, task.StageCleared)
 	case task.BossSmith:
-		g.ground[task.ItemMalus] = true
-		g.set(task.QTools, task.StageStarted)
+		g.set(task.QTools, task.StageStarted) // ordinary loot only: the Malus drops from the stand (Interact)
 	case task.BossCount:
 		g.set(task.QTower, task.StageDone)
 	case task.BossAndy:
@@ -240,6 +240,15 @@ func (g *Game) Interact(_ context.Context, object string) error {
 		g.W.Items[task.ItemBark] = 1
 	case "cairn-stones":
 		g.W.Items[task.ItemPortal] = 1
+	case "Malus stand":
+		if !g.W.Killed[task.BossSmith] {
+			return task.Errorf(task.KindNotFound, "no Malus stand reachable: the Smith lives")
+		}
+		if g.standUsed { // one drop per game, like the real stand (U)
+			return task.Errorf(task.KindNotFound, "the Malus stand is spent")
+		}
+		g.standUsed = true
+		g.ground[task.ItemMalus] = true
 	case "Cain's Cage":
 		g.stage[task.QCain] = task.StageDone
 	}
