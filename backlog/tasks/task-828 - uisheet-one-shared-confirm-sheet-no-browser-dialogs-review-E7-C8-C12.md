@@ -1,10 +1,11 @@
 ---
 id: TASK-828
 title: 'uisheet: one shared confirm sheet, no browser dialogs (review E7, C8, C12)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T00:16:00Z'
+updated_date: '2026-11-23T00:38:00Z'
 labels:
   - watch
   - feature

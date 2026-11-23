@@ -412,7 +412,7 @@
 | necroready | proposed | - | `docs/probes/necromancer-readiness-2026-11-22.md`<br>`cmd/d2bot/autoallocwire.go`<br>`cmd/d2bot/autoallocwire_test.go` | - |
 | necrodrill | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md`<br>`docs/probes/necromancer-readiness-2026-11-22.md` | - |
 | tapall | proposed | - | `cmd/d2scenario/tap.go`<br>`cmd/d2scenario/tap_test.go`<br>`internal/scenario/scenario.go` | - |
-| uisheet | proposed | - | `internal/watch/web/sheet.js`<br>`internal/watch/web/buildcards.js`<br>`internal/watch/web/app.js`<br>`internal/watch/web/skills.js`<br>`internal/watch/web/update.js`<br>`internal/watch/web/watch.html`<br>`internal/watch/web/components.css`<br>`internal/watch/web/points.css`<br>`internal/watch/web/shell.css`<br>`internal/watch/pointsui.go`<br>`internal/watch/skillsui.go`<br>`internal/watch/update.go`<br>`internal/watch/http_view.go`<br>`internal/watch/sheet_noprompt_test.go`<br>`internal/watch/buildcards_test.go`<br>`internal/watch/testdata/sheet_test.cjs`<br>`internal/watch/testdata/buildcards_test.cjs`<br>`docs/ui/uisheet`<br>`docs/ui-design-system.md` | - |
+| uitoast | proposed | - | `docs/OWNERS`<br>`docs/plan/STATUS.md`<br>`docs/ui-design-system.md`<br>`docs/ui/uitoast`<br>`internal/watch/http_view.go`<br>`internal/watch/invui.go`<br>`internal/watch/ordersmap_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/skillsui.go`<br>`internal/watch/testdata/glancepanels/needs-you_five-rows.txt`<br>`internal/watch/testdata/glancepanels/needs-you_one-red.txt`<br>`internal/watch/testdata/glancepanels/needs-you_red-amber.txt`<br>`internal/watch/testdata/toast_test.cjs`<br>`internal/watch/testdata/vault_clean.mjs`<br>`internal/watch/testdata/vault_ether.mjs`<br>`internal/watch/testdata/vault_identall.mjs`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`internal/watch/testdata/vault_sell.mjs`<br>`internal/watch/testdata/vault_sellall.mjs`<br>`internal/watch/toast_test.go`<br>`internal/watch/toastcontrast_test.go`<br>`internal/watch/vaultclean_test.go`<br>`internal/watch/vaultether_test.go`<br>`internal/watch/vaultidentall_test.go`<br>`internal/watch/vaultreveal_ui_test.go`<br>`internal/watch/vaultsell_ui_test.go`<br>`internal/watch/vaultsellall_ui_test.go`<br>`internal/watch/web/alerts.js`<br>`internal/watch/web/app.css`<br>`internal/watch/web/app.js`<br>`internal/watch/web/components.css`<br>`internal/watch/web/inventory.js`<br>`internal/watch/web/layoutedit.js`<br>`internal/watch/web/panels/needs-you/panel.css`<br>`internal/watch/web/panels/needs-you/panel.js`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/toast.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.html`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/watch.html`<br>`tools/uilint/lint.go`<br>`tools/uilint/uilint_test.go`<br>`tools/uishots/fit.js` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -447,6 +447,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 967ae57c9 11-22 20:28 `Merge agent/uitoast: Merge origin/main into agent/uitoast` (uitoast)
+- dc9c61adc 11-22 20:09 `Merge origin/main into agent/uitoast` (-)
 - 455cece47 11-22 19:25 `Merge agent/uisheet: Merge branch 'main' into uisheet` (uisheet)
 - 3a808c7a1 11-22 19:24 `Merge branch 'main' into uisheet` (-)
 - 2e539c616 11-22 19:19 `Merge agent/navexit: Merge branch 'main' into tapall` (navexit)
@@ -455,6 +457,4 @@
 - fc434b589 11-22 19:03 `Merge branch 'main' into buildcards` (-)
 - 313c51cd4 11-22 19:01 `Merge agent/necrodrill: necrodrill: Necromancer earned Act 1 drill verdict (BLOCKED)` (necrodrill)
 - a5930329f 11-22 18:50 `Merge origin/main into agent/buildcards` (-)
-- e0c412eb0 11-22 18:32 `Merge agent/uinav2: uinav2: uilint (token, element selectors)` (uinav2)
-- e83605e77 11-22 18:18 `Merge origin/main into uinav2` (-)
 <!-- statusgen:end -->
