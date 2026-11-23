@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- E11a2: needs-you list grows, alerts badge opens Settings Alerts, real page-scroll must-fail fixture, guards for stream layout and senses_units.js <!--sg:agent/e11a2-->
 - Merge branch 'main' into e11a <!--sg:agent/e11a-->
 - ADR 0030 operator quest control; ADR 0029 amended for vault sell credit <!--sg:agent/adrs-->
 - Merge branch 'main' into toolstrade26 <!--sg:agent/toolstrade26-->

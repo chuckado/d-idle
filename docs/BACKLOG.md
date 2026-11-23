@@ -1301,6 +1301,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - toolstrade26: the Smith run sweeps the arrival crowd first (TASK-898, merged 2026-11-23, acceptance 1 of 1): The Smith run now sweeps the arrival crowd before it walks to him (OuterClear, as Blood Raven); unit-tested, live effect not seen; the cause analysis is in the probe doc. <!--sg:agent/toolstrade26-->
 - agent/adrs: ADR 0030 operator quest control; ADR 0029 amended for vault sell credit (merged 2026-11-23) <!--sg:agent/adrs-->
 - agent/e11a: Merge branch 'main' into e11a (merged 2026-11-23) <!--sg:agent/e11a-->
+- agent/e11a2: E11a2: needs-you list grows, alerts badge opens Settings Alerts, real page-scroll must-fail fixture, guards for stream layout and senses_units.js (merged 2026-11-23) <!--sg:agent/e11a2-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

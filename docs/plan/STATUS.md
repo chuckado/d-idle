@@ -493,6 +493,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 6cbe0947f 11-23 11:54 `Merge agent/e11a2: E11a2: needs-you list grows, alerts badge opens Settings Alerts, real page-scroll must-fail fixture, guards for stream layout and senses_units.js` (e11a2)
 - 431248e24 11-23 11:16 `Merge agent/e11a: Merge branch 'main' into e11a` (e11a)
 - 263094f14 11-23 11:15 `Merge branch 'main' into e11a` (-)
 - 5edb915f2 11-23 10:09 `Merge agent/adrs: ADR 0030 operator quest control; ADR 0029 amended for vault sell credit` (adrs)
@@ -502,5 +503,4 @@
 - 251d7b715 11-23 08:16 `Merge branch 'main' into qdmatrix` (-)
 - d3accbc5f 11-23 08:08 `Merge agent/toolstrade25: Merge branch 'main' into toolstrade25` (toolstrade25)
 - bd7cda6d2 11-23 08:06 `Merge branch 'main' into toolstrade25` (-)
-- 0f1e01b49 11-23 08:06 `Merge remote-tracking branch 'origin/main' into agent/questdrill12` (-)
 <!-- statusgen:end -->
