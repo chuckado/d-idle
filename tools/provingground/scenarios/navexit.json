@@ -135,7 +135,9 @@
      "kind": "area_changes_le",
      "max": 30
     }
-   ]
+   ],
+   "status": "pending",
+   "pending_reason": "a field start by debug goto puts the hero at (65,212), far from the arrival strip, and the planner finds no plan to the unproven strip from there (RED for Paladin and Necromancer, run 20261123-033306, with and without the fix); the real shape (arrival from the Outer Cloister, the strip reached, d2d still cannot read across) is covered by TestExitToCrossesAnUnprovenStripThatNeverProves. Needs a start that arrives by walking from the Outer Cloister."
   }
  ]
 }
