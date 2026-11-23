@@ -1299,6 +1299,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - toolstrade25: chickens count against their own limit, not the three of a death (TASK-897, merged 2026-11-23, acceptance 1 of 1): Chickens park a quest after 8 in 90 minutes instead of 3; deaths stay at 3; unit-tested, live effect not seen; the Smith fight itself is unchanged. <!--sg:agent/toolstrade25-->
 - agent/questdrill12: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/questdrill12-->
 - toolstrade26: the Smith run sweeps the arrival crowd first (TASK-898, merged 2026-11-23, acceptance 1 of 1): The Smith run now sweeps the arrival crowd before it walks to him (OuterClear, as Blood Raven); unit-tested, live effect not seen; the cause analysis is in the probe doc. <!--sg:agent/toolstrade26-->
+- agent/adrs: ADR 0030 operator quest control; ADR 0029 amended for vault sell credit (merged 2026-11-23) <!--sg:agent/adrs-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

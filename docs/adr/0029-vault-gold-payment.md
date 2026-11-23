@@ -29,3 +29,12 @@ ADR 0014 gains a fifth allowed write purpose: a PLAYER-PAID VAULT COST on an exp
 - Order chain on the Reveal bar: queued, paid, revealed (seconds), or failed with the reason.
 - ADR 0014's CRUTCH RULE and the four earlier purposes stand; docs/cheats.md keeps the general rule, docs/vault.md describes the mechanism.
 - Items without held affixes cannot be revealed with gold (same limit as Ether); scrolls, tome and Cain stay the other ways.
+
+## Amended 2026-11-23: the vault sell path credits gold (user decision, vaultsell 2026-11-22)
+
+Source: user approval 2026-11-23, on the instant vault sale built in the vaultsell work (docs/vault.md, "Sell is instant"). The fifth write purpose of this ADR (a player-ordered vault gold movement) now covers the other direction too: a vault SALE adds gold, not only a reveal subtracting it.
+
+- Player-ordered Sell and Sell all credit the sale gold to the hero's STASH gold at once (never the purse). The amount is what the engine's own sell function pays, read with the fork's `item price` verb (and the `debug creditgold` call that adds it, one call per order). The verb is `debug creditgold <amount> <orderid>` (fork flag `--vault-pay`, caps `vault.creditgold`).
+- It is a player-ordered action in the UI with a two-tap confirm: a sale worth `loot.vaultSellConfirm` (2000) gold or more needs a second confirming press (`ack`). The instant path is the knob `loot.vaultSellInstant` (default 1); 0 or a fork without the verbs keeps the old town-visit queue.
+- All guard rails 1 to 7 above hold unchanged for the credit: never autonomous (the bot never sells on its own through this path), never in a measured run (fork and bot refuse), bounded (the stash may not pass 2,500,000; the sale then stops at the records that fit), idempotent by order id, ledgered BEFORE the verb (reason `player vault sale order <id>`), off without the flag, and the bot's own play never depends on it.
+- Refusals leave every record in the Vault. The CRUTCH RULE of ADR 0014 is unchanged.
