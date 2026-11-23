@@ -410,6 +410,7 @@
 | classtraits | proposed | - | `internal/d2/classtraits.go`<br>`internal/d2/classtraits.json`<br>`internal/d2/classtraits_test.go`<br>`internal/bot/task.go`<br>`internal/bot/geargate.go`<br>`internal/bot/routeguard.go`<br>`internal/resource/types.go`<br>`internal/merc/policy.go` | - |
 | uinav | proposed | - | `internal/watch/linkmatrix_test.go`<br>`internal/watch/invui.go`<br>`internal/watch/skillsui.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/invapi.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/characters.js`<br>`internal/watch/testdata/vault_nav.mjs`<br>`docs/ui/nav-links`<br>`docs/ui-design-system.md` | - |
 | necroready | proposed | - | `docs/probes/necromancer-readiness-2026-11-22.md`<br>`cmd/d2bot/autoallocwire.go`<br>`cmd/d2bot/autoallocwire_test.go` | - |
+| buildcards | proposed | - | `internal/points/buildcards.go`<br>`internal/points/buildcards_test.go`<br>`internal/points/autoalloc.go`<br>`internal/plandata/catalog.go`<br>`internal/watch/pointsapi.go`<br>`internal/watch/pointsapi_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/buildcards_test.go`<br>`internal/watch/web/buildcards.js`<br>`internal/watch/web/points.js`<br>`internal/watch/web/points.css`<br>`internal/watch/testdata/buildcards_test.cjs`<br>`internal/watch/testdata/buildcards_dom.txt`<br>`tools/uishots/fixtures_builds.go`<br>`tools/uishots/fit.go`<br>`tools/uishots/fit.js`<br>`tools/uishots/pages.go`<br>`tools/uishots/uishots_test.go`<br>`tools/uishots.sh`<br>`docs/ui/build-cards`<br>`docs/builds-catalog.md`<br>`docs/ui-design-system.md` | - |
 | necrodrill | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md`<br>`docs/probes/necromancer-readiness-2026-11-22.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -445,14 +446,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2a42174c2 11-22 19:04 `Merge agent/buildcards: Merge branch 'main' into buildcards` (buildcards)
+- fc434b589 11-22 19:03 `Merge branch 'main' into buildcards` (-)
 - 313c51cd4 11-22 19:01 `Merge agent/necrodrill: necrodrill: Necromancer earned Act 1 drill verdict (BLOCKED)` (necrodrill)
+- a5930329f 11-22 18:50 `Merge origin/main into agent/buildcards` (-)
 - e0c412eb0 11-22 18:32 `Merge agent/uinav2: uinav2: uilint (token, element selectors)` (uinav2)
 - e83605e77 11-22 18:18 `Merge origin/main into uinav2` (-)
 - d6fa3aba4 11-22 17:22 `Merge agent/necroready: necroready: picker notes from the catalogue, readiness doc update` (necroready)
 - 54078fad2 11-22 17:12 `Merge agent/necroscen: necroscen: card result` (necroscen)
 - 7eac95a9e 11-22 17:10 `Merge origin/main into necroscen` (-)
 - 5f7c91f5c 11-22 16:58 `Merge agent/classtraits: Merge branch 'main' into classtraits` (classtraits)
-- 5ed59c8ff 11-22 16:58 `Merge origin/main into uinav2` (-)
-- 1f8253889 11-22 16:57 `Merge branch 'main' into classtraits` (-)
-- c09f9efdb 11-22 16:57 `Merge origin/main into necroscen` (-)
 <!-- statusgen:end -->
