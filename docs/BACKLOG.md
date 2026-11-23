@@ -1307,6 +1307,8 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/qd13: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/qd13-->
 - toolstrade28: readiness gate for the Barracks (class level and life floors) (TASK-900, merged 2026-11-23, acceptance 2 of 2): Readiness floors for the Barracks as knobs (melee 24 and 400 life, caster 22 and 300 life; EXP numbers from the d2-sme), refusal too_weak with level N needed, questloop waits on it; unit and shell tests; not run live ... <!--sg:agent/toolstrade28-->
 - handin: hold a restock trip while a quest reward is pending (Den reward lost to a portal trip) (TASK-901, merged 2026-11-23, acceptance 2 of 2): holdTripForReward: a non-emergency restock trip waits (max 2 virtual minutes) while the live quest reader lists a quest as cleared with its reward pending; unit test ... <!--sg:agent/handin-->
+- agent/qd15: d2bot: live waypoint bits are read without a save; objectlist probe (merged 2026-11-23) <!--sg:agent/qd15-->
+- agent/qd14: questdrill: the Smith drill with layoutRead and the sandbox knobs (merged 2026-11-23) <!--sg:agent/qd14-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
