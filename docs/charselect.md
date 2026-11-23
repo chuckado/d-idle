@@ -1,6 +1,6 @@
 # Character Select: list, create, switch, delete (archive first), restore
 
-> status: Phase A BUILT offline (card charselect, 2026-11-15): backend and routes with fakes and temp dirs; no UI, nothing run live. Phase B (the page) follows. Tags: V verified in this job (named test or file), S secondary, U unverified.
+> status: Phase A and B built; LIVE-VERIFIED on a test bed 2026-11-22/23 (image devp20, bot release 0.0.261123011225, `D2BOT_SUPERVISE=1`): steps 1-4, 7-10; open: 5, 6, 11, 12, friends image. Tags: V verified (observed live or named test), S secondary, U unverified.
 
 User request 2026-11-15: a Character Select screen that loads, creates and deletes characters. Decisions (popups): the audience is the owner AND friends (guard rails everywhere); delete = archive, then delete, with the typed name and a restore from the list; load = switch immediately (leave the game like Reset and start the chosen character).
 
@@ -60,24 +60,27 @@ Restart persistence: at a switch the supervisor writes `<instance>/active-char` 
 ### Friends pack impact (NEXT FRIENDS RELEASE needed)
 The pack ships the image tarball; the entrypoint and `d2bot` live in the image, so Character Select switching reaches friends only with a rebuilt image and a new pack (after friends 0.1.1; the staged 0.1.1 does not have it). Pack files: `tools/friendpack/compose.yml` needs no change (the profile defaults to supervised; an optional `D2BOT_SUPERVISE` pass-through can be added by the pack owner). The data volume already carries `instances/*/active-char`, parked state, archives and saves, so `docker stop` and updates keep them. U: the installer-pack (non-container) paths.
 
-### Failure modes
-Save missing or damaged: 404 or `damaged`/`corrupt`, nothing changes. Name exists on create or restore: 409 `exists`. Delete of the active hero: `active`. Measured run: `measured_run` for all four verbs. Two presses: `switch_in_progress`. d2d does not answer the save: `save_failed`, the hero keeps playing (the runner state is not reset: U if BeginHardReset has already marked the runner; see checklist 5). The bot dies between the intent and its exit: an intent older than 5 minutes is dropped by the next verb or list (V: `TestStaleIntentIsDropped`); the supervisor only reads it on exit 6.
+PORT RULE for compose files (V: learned on the first test bed): the Characters page posts to `location.hostname:cfg.answerPort`, and `answerPort` is the bot's INTERNAL answer port. A container that maps host ports differently from the internal ones breaks create, switch and delete with 'No answer from the bot' (on the first test bed the POST went to another container's answer port and CORS blocked it). Rule: internal ports must equal host ports. Access (V): a token-only viewer opens the page with `?t=<token>` (cookie `d2dview`); a passcode viewer needs the login.
 
-## Live checklist (U, not run; needs the sandbox, one hidden instance, supervised bot, a Paladin and a Sorceress save)
-1. Start the image (tester profile) or `d2bot --managed --backend d2d --supervise --char Holy ...`; check the entrypoint log shows the supervisor child; `GET /api/characters` lists both saves with the right class and level and `active` on Holy.
-2. `POST switch {"name":"Zapp"}` from town: game leaves in about 15 s, log `supervise: switching character`, Zapp loads in town, `goals.json` is Zapp's, Holy's files sit in `characters/Holy/`. Switch back: Holy's orders, pause and ledger are back.
-3. `POST` create `Newb` as Paladin: new level 1 hero in town, list shows it after the first save, then a kill of d2bot (not a switch) restarts and LOADS Newb.
-4. Delete Zapp while Holy plays: archive appears under `characters-archive/Zapp/`, files gone, list shows it under `deleted`; restore brings it back identical; delete of Holy: 409 `active`.
-5. Switch while a fight runs: Save and Exit works mid-fight; the runner does not rejoin Holy between exit and restart.
-6. With `D2BOT_RUN` set: all four verbs 409 `measured_run`.
-7. Whether the created hero's `.d2s` lands in the folder `saveFolder` finds; record the real path here.
+### Failure modes
+Save missing or damaged: 404 or `damaged`/`corrupt`, nothing changes. Name exists on create or restore: 409 `exists`. Delete of the active hero: `active`. Measured run: `measured_run` for all four verbs. Two presses: `switch_in_progress`. d2d does not answer the save: `save_failed`, the hero keeps playing (the runner state is not reset: U if BeginHardReset has already marked the runner; see checklist 5). The page shows no 'creating...' feedback row while a create runs (V, UX card). A new hero is listed only after its first save (V: TestyNec and Nec both appeared; the time to first save was not measured, U). The bot dies between the intent and its exit: an intent older than 5 minutes is dropped by the next verb or list (V: `TestStaleIntentIsDropped`); the supervisor only reads it on exit 6.
+
+## Live checklist (first live run 2026-11-22/23 on a test bed container, the user clicked through the Characters page, the coordinator verified server-side read-only)
+1. V: image started (tester profile, supervised); the page lists the active hero.
+2. V: switches Nec to Tester, Tester to Nec, Nec to Tester, Tester to Nec all worked; log `supervise: switching character`; per-hero files parked under `characters/<Name>/` (goals.json, ledger.json, state/); per-hero tuning swapped with the hero (`agency.autoAlloc=1` stayed with Nec, Tester kept its own tuning.json); the container never restarted for a switch (StartedAt unchanged).
+3. V: created a Necromancer (`Nec`, d2d class index 1) from New hero: first start `--char Nec --d2d-class 1`, then `--d2d-class -1` (load) afterwards; `active-char` = Nec. A second created hero `TestyNec` also exists with a save and both were listed. Open (U): time to first save not measured.
+4. V: delete archived Nec to `characters-archive/Nec/20261123T035325Z/` (Nec.d2s .key .ma0 .map meta.json state/) while Tester was active; restore from the Deleted list plus a switch brought saves and state back (autoAlloc tuning present). The active hero's delete was refused on the page (V: user report, page message).
+5. U: switch while a fight runs not asserted (the hero was clearing Blood Moor during the switches, so likely fine, not checked).
+6. U: with `D2BOT_RUN` set, all four verbs 409 `measured_run`: not run.
+7. V: the created hero's save lands in `/data/instances/main/d2d/config/d2d/save/<Name>.d2s` (+ .key .ma0 .map), the folder `saveFolder` finds.
+Not exercised (U): friends pack image, hardcore (refused by design), fleet (switch off).
 
 ## Phase B plan (UI, not in this card)
 A Characters page reachable from the "..." menu and the Orders More sheet (not a cockpit slot), phone-first: a list of cards (class icon, name, level, last played, "playing now" badge), Switch with a confirm sheet ("Leave the game and play Zapp?"), New hero sheet (name field with the live rule hint, class chips from `classes`), Delete in a row menu with a type-the-name confirm and a line "It is archived first and can be restored", a Deleted section with Restore, a "Switching..." strip while `switch` is set, and the `caps.why` text in place of disabled buttons. Texts in the d.idle voice from a data file; fit fixtures at the eight sizes plus 412x780 and 360x640 like reset.
 
-## Live checklist for the container supervisor (U, not run; needs the rebuilt sandbox or friends image, two saved heroes)
-8. `docker run` the tester profile with `D2D_NAME=Holy`; `docker exec` shows `d2bot` as the supervisor with a child and `D2BOT_SUPERVISE=1`.
-9. Switch to Zapp; the container stays up (no exit), log `supervise: switching character`; `/data/instances/*/active-char` holds `Zapp`.
-10. `docker restart` the container: it loads Zapp (not Holy), goals and orders are Zapp's.
-11. Kill the child 11 times within an hour (one `kill` each, bounded): the supervisor gives up and the container ends; a single kill restarts the same hero.
-12. Remove Zapp's save by hand (test volume only), restart: the entrypoint falls back to `D2D_NAME`.
+## Live checklist for the container supervisor (8-10 V on the test bed 2026-11-22/23; 11 and 12 U, not run)
+8. V: `docker run` the tester profile with `D2D_NAME=Holy`; `docker exec` shows `d2bot` as the supervisor with a child and `D2BOT_SUPERVISE=1`.
+9. V: Switch to Zapp; the container stays up (no exit), log `supervise: switching character`; `/data/instances/*/active-char` holds `Zapp`.
+10. V (the container exited on SIGTERM of the child and Docker restarted it): `docker restart` the container: it loads the LAST SWITCHED hero (Nec in the run), not the `D2D_NAME` hero.
+11. U: Kill the child 11 times within an hour (one `kill` each, bounded): the supervisor gives up and the container ends; a single kill restarts the same hero.
+12. U: Remove Zapp's save by hand (test volume only), restart: the entrypoint falls back to `D2D_NAME`.

@@ -210,10 +210,16 @@ func kitWhy(w World) string {
 }
 
 // kitWhyFor is the kit check with the healing and mana counts given (mana 0 = not needed).
-func kitWhyFor(w World, healing, mana int) string {
+func kitWhyFor(w World, healing, mana int) string { return kitWhyAt(w, healing, mana, false) }
+
+// kitWhyAt is kitWhyFor, with the potion floors halved when mid is set (a hero already on the road).
+func kitWhyAt(w World, healing, mana int, mid bool) string {
 	portals := routePortals
 	if k := w.KitPlan; k != nil { // the plan's minima, clamped to what the hero can carry (an impossible line never blocks)
 		healing, mana, portals = k.Healing, k.Mana, k.Portals
+	}
+	if mid {
+		healing, mana = max(1, healing/2), mana/2
 	}
 	switch {
 	case w.Potions < healing:
@@ -234,6 +240,25 @@ func RouteWhy(w World) string {
 		return why
 	}
 	return RouteKitWhy(w)
+}
+
+// RouteLeaveWhy is RouteWhy for a hero that already stands on the guarded road: the level grounds are the same, the
+// potion floors are halved. The guard closes the road to a hero that sets out with a thin kit; a hero that drank one
+// potion on the way (4 to 3) must not turn round at every crowd, the portal then fails the crowd rule and the walk home
+// loops (V live, act1.tools.malus Paladin 11: "guard: leaving guarded area 27 first (3 healing potions < 4)", chunk
+// parked after three tries). U: the halving is judgment.
+func RouteLeaveWhy(w World) string {
+	if why := RouteLevelWhy(w); why != "" {
+		return why
+	}
+	if w.RouteMinLevel <= 0 || !normalDiff(w) {
+		return ""
+	}
+	n := 0
+	if w.Caster {
+		n = routeMana
+	}
+	return kitWhyAt(w, routeHealing, n, true)
 }
 
 // RouteLine is the log line of the guard verdict: `route guard: blocked monastery (why)` or `route guard: open`.
