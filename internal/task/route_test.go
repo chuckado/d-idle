@@ -219,10 +219,13 @@ func TestFieldReadyOnTheRoadToleratesAThinnedKit(t *testing.T) {
 		if ready() == nil {
 			t.Errorf("caster=%v: from town the thin kit must still ask for chores", caster)
 		}
-		w.Area = 27
-		if f := ready(); f != nil {
-			t.Errorf("caster=%v: on the road: %+v", caster, f)
+		for _, a := range []task.Area{27, task.ColdPlains, task.DarkWood} { // the Barracks and the unguarded road to them
+			w.Area = a
+			if f := ready(); f != nil {
+				t.Errorf("caster=%v area %d: on the road: %+v", caster, a, f)
+			}
 		}
+		w.Area = 27
 		w.Potions = 1
 		if ready() == nil {
 			t.Errorf("caster=%v: one potion left must still turn the hero round", caster)
