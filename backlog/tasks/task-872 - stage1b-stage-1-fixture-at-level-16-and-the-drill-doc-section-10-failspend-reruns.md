@@ -1,10 +1,13 @@
 ---
 id: TASK-872
-title: 'stage1b: stage 1 fixture at level 16 and the drill doc section 10 (failspend reruns)'
-status: Proposed
+title: >-
+  stage1b: stage 1 fixture at level 16 and the drill doc section 10 (failspend
+  reruns)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T08:07:00Z'
+updated_date: '2026-11-23T08:38:00Z'
 labels:
   - bot
   - drill
