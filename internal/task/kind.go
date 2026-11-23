@@ -22,10 +22,14 @@ const (
 	// KindExploring is progress, not failure: a search for a far object is still gaining ground. It never counts toward
 	// a step's or a chunk's failure limit; the adapter that returns it owns the total budget and ends with KindNotFound.
 	KindExploring
+	// KindChicken is a left game to survive (the chicken line): a failed attempt like a death, but it counts against its
+	// own, higher limit (Policy.MaxChickens): a stocked kit that drinks and retreats at a boss fight is no sign the boss
+	// is too strong after three tries (V live and lab, the Smith: parked after three chickens in a minute).
+	KindChicken
 )
 
 func (k Kind) String() string {
-	return [...]string{"none", "prereq", "resource", "not_found", "danger", "ui", "timeout", "death", "fatal", "exploring"}[k]
+	return [...]string{"none", "prereq", "resource", "not_found", "danger", "ui", "timeout", "death", "fatal", "exploring", "chicken"}[k]
 }
 
 // Fault says why a step cannot or did not run. Insert holds prerequisite steps the executor may splice in front.
