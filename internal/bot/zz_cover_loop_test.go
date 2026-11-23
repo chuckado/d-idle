@@ -58,6 +58,7 @@ func TestCoverTravelToNoRouteAndCancel(t *testing.T) {
 	g := newRig(t)
 	g.r.poll()
 	g.mover.routeFn = func(from, to int) ([]int, error) { return nil, errors.New("unknown level") }
+	g.mover.wpErr = errors.New("no waypoint") // with no route the waypoint is tried (Arcane Sanctuary); here it fails too
 	if err := g.r.travelTo(context.Background(), 6); err == nil || !strings.Contains(err.Error(), "no route") {
 		t.Fatalf("got %v", err)
 	}

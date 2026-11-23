@@ -68,3 +68,28 @@ func TestBeltFillStepUrgentRadius(t *testing.T) {
 		}
 	}
 }
+
+// Every town visit buys healing up to the route guard's floor (belt and pack) while the guard is on in Normal from the kit
+// gate level: the loop's own trips used to fill only the belt plan and leave a four box belt one potion short. Must fail
+// without routeKit in fullChores. Both classes; guard off, Nightmare and a low level ask for nothing.
+func TestFullChoresBuyUpToTheRouteKit(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, tc := range []struct {
+			name  string
+			guard int
+			diff  d2.Difficulty
+			lvl   int
+			want  bool
+		}{{"guard on", 20, d2.Normal, 19, true}, {"guard off", 0, d2.Normal, 19, false}, {"nightmare", 20, d2.Nightmare, 19, false}, {"below the kit gate", 20, d2.Normal, 3, false}} {
+			rg := newRig(t)
+			rg.r.e.Tune.Route.MonasteryMinLevel = tc.guard
+			rg.r.obMu.Lock()
+			rg.r.ob.lastSnap = &d2.Snapshot{State: d2.StateInGame, Player: &d2.Player{Area: 1, Level: tc.lvl, Class: class, Difficulty: tc.diff, Life: 100, MaxLife: 100}}
+			rg.r.obMu.Unlock()
+			p := rg.r.fullChores("loop")
+			if got := p.KitHealing > 0; got != tc.want || tc.want && p.KitHealing != rg.r.e.Tune.Resource.KitMinHP+kitHealingBuffer {
+				t.Errorf("%v %s: KitHealing %d, want set %v", class, tc.name, p.KitHealing, tc.want)
+			}
+		}
+	}
+}
