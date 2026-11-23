@@ -52,6 +52,7 @@ type Policy struct {
 	MaxTimeouts int // timeout retries before escape (default 1)
 	MaxDeaths   int // deaths in one step before the group is blocked (default 3)
 	MaxInsert   int // splice depth (default 2)
+	MaxChickens int // chicken exits of one quest within strikeWindow before the group is blocked (default 8)
 }
 
 func (p Policy) norm() Policy {
@@ -66,6 +67,9 @@ func (p Policy) norm() Policy {
 	}
 	if p.MaxInsert <= 0 {
 		p.MaxInsert = 2
+	}
+	if p.MaxChickens <= 0 {
+		p.MaxChickens = 8
 	}
 	return p
 }
@@ -127,7 +131,8 @@ const strikeWindow = 90 * time.Minute
 
 type strikeRec struct {
 	at     []time.Time
-	level  int // clvl of the latest strike
+	ch     []time.Time // chicken exits, counted against Policy.MaxChickens
+	level  int         // clvl of the latest strike
 	parked bool
 	why    string
 }
@@ -219,7 +224,14 @@ func (e *Executor) expireStrikes() {
 			}
 		}
 		r.at = keep
-		if len(keep) == 0 || (e.level > r.level && r.level > 0) {
+		kc := r.ch[:0]
+		for _, t := range r.ch {
+			if now.Sub(t) < strikeWindow {
+				kc = append(kc, t)
+			}
+		}
+		r.ch = kc
+		if len(keep)+len(kc) == 0 || (e.level > r.level && r.level > 0) {
 			delete(e.strikes, g)
 			if r.parked {
 				delete(e.blocked, g)
@@ -246,6 +258,28 @@ func (e *Executor) strike(g, why string) bool {
 	r.at, r.level = append(r.at, e.now()), e.level
 	if len(r.at) >= e.Policy.norm().MaxDeaths {
 		r.parked, r.why = true, fmt.Sprintf("%s; %d failed attempts in %v, parked until it expires or the character levels up", why, len(r.at), strikeWindow)
+		return true
+	}
+	return false
+}
+
+// strikeChicken is strike for a chicken exit: it counts against Policy.MaxChickens, apart from the deaths.
+func (e *Executor) strikeChicken(g, why string) bool {
+	if g == "" {
+		return false
+	}
+	if e.strikes == nil {
+		e.strikes = map[string]*strikeRec{}
+	}
+	e.expireStrikes()
+	r := e.strikes[g]
+	if r == nil {
+		r = &strikeRec{}
+		e.strikes[g] = r
+	}
+	r.ch, r.level = append(r.ch, e.now()), e.level
+	if n := e.Policy.norm().MaxChickens; len(r.ch) >= n {
+		r.parked, r.why = true, fmt.Sprintf("%s; %d chicken exits in %v, parked until it expires or the character levels up", why, len(r.ch), strikeWindow)
 		return true
 	}
 	return false
@@ -543,6 +577,12 @@ func (e *Executor) handleRunFault(plan Plan, s Step, f *Fault, r Result) Result 
 			return e.block(plan, s, r, fmt.Sprintf("died %d times; level up or change gear", e.deaths[s.ID]))
 		}
 		if e.strike(plan.Group, "died or left the game in "+s.Title) {
+			return e.block(plan, s, r, e.strikes[plan.Group].why)
+		}
+		r.Outcome = OutDeath
+		return r
+	case KindChicken:
+		if e.strikeChicken(plan.Group, "chickened out of "+s.Title) {
 			return e.block(plan, s, r, e.strikes[plan.Group].why)
 		}
 		r.Outcome = OutDeath

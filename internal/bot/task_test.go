@@ -541,3 +541,16 @@ func TestBossNotFoundNamesTheLayoutKnob(t *testing.T) {
 		}
 	}
 }
+
+// A chicken exit during a task step is tagged KindChicken (its own limit in the executor), a portal opening stays fatal.
+// Must fail while tag maps ErrLeftGame to KindDeath.
+func TestTagChickenIsItsOwnKind(t *testing.T) {
+	g := newRig(t)
+	acts := taskActs{r: g.r}
+	if k := task.Classify(acts.tag(ErrLeftGame)); k != task.KindChicken {
+		t.Errorf("left game: kind %v", k)
+	}
+	if k := task.Classify(acts.tag(ErrPortalOpened)); k != task.KindFatal {
+		t.Errorf("portal: kind %v", k)
+	}
+}

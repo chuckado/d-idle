@@ -461,6 +461,7 @@
 | uikeys | proposed | - | `internal/watch/testdata/keywalk_test.cjs`<br>`internal/watch/settingsjs_test.go`<br>`internal/watch/web/sheet.js`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui-design-system.md` | - |
 | toolstrade20 | proposed | - | `internal/combat/fight.go`<br>`internal/combat/sim_test.go`<br>`internal/combat/reach_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade22 | proposed | - | `tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| toolstrade25 | proposed | - | `internal/task/kind.go`<br>`internal/task/executor.go`<br>`internal/task/executor_unpark_test.go`<br>`internal/bot/task.go`<br>`internal/bot/task_test.go`<br>`internal/bot/zz_cover_task_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
@@ -492,6 +493,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d3accbc5f 11-23 08:08 `Merge agent/toolstrade25: Merge branch 'main' into toolstrade25` (toolstrade25)
+- bd7cda6d2 11-23 08:06 `Merge branch 'main' into toolstrade25` (-)
 - 7ef47f1a3 11-23 07:48 `Merge agent/toolstrade24: toolstrade24: merge main` (toolstrade24)
 - 7b46eabc1 11-23 07:47 `toolstrade24: merge main` (-)
 - 47fdd2874 11-23 07:40 `Merge agent/toolstrade23: toolstrade23: lab notes round 22` (toolstrade23)
@@ -500,6 +503,4 @@
 - df8eb3ae3 11-23 07:24 `Merge agent/toolstrade22: toolstrade22: basic scenario with Light potions, merc verb request` (toolstrade22)
 - d6a2a9231 11-23 07:21 `Merge origin/main into questdrill10` (-)
 - fbdb57251 11-23 07:17 `Merge agent/toolstrade21: Merge branch 'main' into toolstrade21` (toolstrade21)
-- 1b8b5fb82 11-23 07:16 `Merge branch 'main' into toolstrade21` (-)
-- 709194169 11-23 07:09 `Merge agent/uikeys: Merge branch 'main' into uikeys` (uikeys)
 <!-- statusgen:end -->

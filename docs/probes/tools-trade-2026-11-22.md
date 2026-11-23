@@ -177,3 +177,9 @@ Paladin 11, clvl 19, no belt, gold 200, stash 500000, merc 0 (no Rogue in the fi
 - Fix: `withRouteKit` adds the guard kit to any plan that buys potions and names none, at the place the trip's plan reaches the shop (`goal.go`, the chores of a trip). Test `TestWithRouteKit` (both classes; a plan with its own kit or no potions is untouched).
 - Log: `shop: potion stock` names the healing and mana potions the vendor holds with prices and the band's maximum tier, so the next live run says whether Akara's stock is Minor only (U: the live buys are Minor at 27 gold; Light Mana was bought earlier, so Light healing may exist).
 - Not done: the Smith fight (the live hero meets him and drinks away at 24 s and 8 s; hazards `adds` and `crowded` fire; the lab round 22 shows the same).
+
+## Round 24 (card toolstrade25): a chicken is not three deaths
+
+- V (live 07:12 to 07:40 EST and lab job 4c3e): the Smith runs end in `left the game to survive` after seconds; each one was tagged KindDeath, three in `strikeWindow` (90 minutes) blocked the chunk (`too weak for Kill The Smith; 3 failed attempts`, parked until a level-up) although the kit was stocked (`heal 11` at the start in the lab).
+- Fix: a chicken exit is `task.KindChicken` (bot `tag`); the executor counts it apart (`strikeRec.ch`, `strikeChicken`) against the data knob `Policy.MaxChickens` (default 8, same window and level reset); deaths keep `MaxDeaths` (3). A drink never counted (it is no exit). Tests `TestChickensHaveTheirOwnLimit`, `TestTagChickenIsItsOwnKind`; `zz_cover_task_test.go` expected the old kind.
+- Not done: retry the same boss run after the refill without going home (the chicken leaves the game; the next game starts from town by design); the Smith's damage and the retreat rules.

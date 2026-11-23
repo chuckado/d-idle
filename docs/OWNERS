@@ -664,6 +664,7 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade18
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade20
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade22
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade25
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
 docs/probes/town-plan-scenarios.md  credit-runner  town1
@@ -1112,8 +1113,10 @@ internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  quests3
 internal/bot/task.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  staletarget
+internal/bot/task.go  credit-runner  toolstrade25
 internal/bot/task.go  credit-runner  wpstep
 internal/bot/task_acts_test.go  credit-runner  cain5b
+internal/bot/task_test.go  credit-runner  toolstrade25
 internal/bot/vaultkeep.go  credit-runner  vaultv5
 internal/bot/waypoints.go  credit-runner  boardmoderace
 internal/bot/whyline.go  credit-runner  repairtrip
@@ -1133,6 +1136,7 @@ internal/bot/zoneshadow.go  credit-runner  survfix2
 internal/bot/zoneshadow.go  credit-runner  survreask
 internal/bot/zoneshadow.go  credit-runner  survrecover
 internal/bot/zoneshadow_test.go  credit-runner  survC
+internal/bot/zz_cover_task_test.go  credit-runner  toolstrade25
 internal/buildfile/druidfire_test.go  credit-runner  druid1
 internal/buildfile/frenzy_test.go  credit-runner  barb1
 internal/buildfile/hammerdin_test.go  credit-runner  hammer1
@@ -1711,8 +1715,10 @@ internal/task/campaign.go  credit-runner  campaign1
 internal/task/executor.go  credit-runner  botstuck
 internal/task/executor.go  credit-runner  bsm7
 internal/task/executor.go  credit-runner  staletarget
+internal/task/executor.go  credit-runner  toolstrade25
 internal/task/executor.go  credit-runner  wpstep
 internal/task/executor_unpark_test.go  credit-runner  staletarget
+internal/task/executor_unpark_test.go  credit-runner  toolstrade25
 internal/task/gate.go  credit-runner  cainfix3
 internal/task/gate.go  credit-runner  chores2
 internal/task/gate.go  credit-runner  toolstrade16
@@ -1720,6 +1726,7 @@ internal/task/gate_hold_test.go  credit-runner  bsm7
 internal/task/guided.go  credit-runner  campaign1
 internal/task/guided_test.go  credit-runner  campaign1
 internal/task/guided_test.go  pro-runner  levelplan3
+internal/task/kind.go  credit-runner  toolstrade25
 internal/task/route.go  credit-runner  toolstrade5
 internal/task/route_test.go  credit-runner  chores2
 internal/task/route_test.go  credit-runner  toolstrade16

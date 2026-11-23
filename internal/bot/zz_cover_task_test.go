@@ -28,7 +28,7 @@ func TestCoverTagClassifiesFaults(t *testing.T) {
 		err  error
 		want task.Kind
 	}{
-		{ErrLeftGame, task.KindDeath},
+		{ErrLeftGame, task.KindChicken},
 		{ErrPortalOpened, task.KindFatal},
 		{errors.New("nav: no route from 1 to 99"), task.KindNotFound},
 	}
@@ -126,7 +126,7 @@ func TestCoverKillBossBranches(t *testing.T) {
 		g.r.poll()
 		g.r.d.Fighter = killFails{g.fight, ErrLeftGame}
 		err := acts.KillBoss(ctx, "Andariel")
-		if task.Classify(err) != task.KindDeath {
+		if task.Classify(err) != task.KindChicken {
 			t.Fatalf("got %v", err)
 		}
 		if g.r.killedBoss("Andariel") {
