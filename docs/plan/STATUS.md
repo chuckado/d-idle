@@ -412,6 +412,7 @@
 | necroready | proposed | - | `docs/probes/necromancer-readiness-2026-11-22.md`<br>`cmd/d2bot/autoallocwire.go`<br>`cmd/d2bot/autoallocwire_test.go` | - |
 | necrodrill | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md`<br>`docs/probes/necromancer-readiness-2026-11-22.md` | - |
 | tapall | proposed | - | `cmd/d2scenario/tap.go`<br>`cmd/d2scenario/tap_test.go`<br>`internal/scenario/scenario.go` | - |
+| uisheet | proposed | - | `internal/watch/web/sheet.js`<br>`internal/watch/web/buildcards.js`<br>`internal/watch/web/app.js`<br>`internal/watch/web/skills.js`<br>`internal/watch/web/update.js`<br>`internal/watch/web/watch.html`<br>`internal/watch/web/components.css`<br>`internal/watch/web/points.css`<br>`internal/watch/web/shell.css`<br>`internal/watch/pointsui.go`<br>`internal/watch/skillsui.go`<br>`internal/watch/update.go`<br>`internal/watch/http_view.go`<br>`internal/watch/sheet_noprompt_test.go`<br>`internal/watch/buildcards_test.go`<br>`internal/watch/testdata/sheet_test.cjs`<br>`internal/watch/testdata/buildcards_test.cjs`<br>`docs/ui/uisheet`<br>`docs/ui-design-system.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -446,6 +447,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 455cece47 11-22 19:25 `Merge agent/uisheet: Merge branch 'main' into uisheet` (uisheet)
+- 3a808c7a1 11-22 19:24 `Merge branch 'main' into uisheet` (-)
 - 2e539c616 11-22 19:19 `Merge agent/navexit: Merge branch 'main' into tapall` (navexit)
 - c9d37b389 11-22 19:17 `Merge branch 'main' into tapall` (-)
 - 2a42174c2 11-22 19:04 `Merge agent/buildcards: Merge branch 'main' into buildcards` (buildcards)
@@ -454,6 +457,4 @@
 - a5930329f 11-22 18:50 `Merge origin/main into agent/buildcards` (-)
 - e0c412eb0 11-22 18:32 `Merge agent/uinav2: uinav2: uilint (token, element selectors)` (uinav2)
 - e83605e77 11-22 18:18 `Merge origin/main into uinav2` (-)
-- d6fa3aba4 11-22 17:22 `Merge agent/necroready: necroready: picker notes from the catalogue, readiness doc update` (necroready)
-- 54078fad2 11-22 17:12 `Merge agent/necroscen: necroscen: card result` (necroscen)
 <!-- statusgen:end -->
