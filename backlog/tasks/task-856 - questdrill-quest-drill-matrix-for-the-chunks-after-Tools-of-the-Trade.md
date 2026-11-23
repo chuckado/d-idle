@@ -14,9 +14,16 @@ ordinal: 387000
 card: "qdmatrix"
 owns:
   - "docs/probes/quest-drill-matrix-2026-11-23.md"
-  - "tools/provingground/scenarios/qdmatrix.json"
+  - "tools/provingground/scenarios/questdrill.json"
+  - "internal/power/archetype.go"
+  - "internal/power/skilldamage_test.go"
+  - "internal/questboard/state.go"
+  - "internal/questboard/state_test.go"
+  - "internal/talk/talk.go"
+  - "internal/talk/talk_test.go"
 exclusive: []
 contracts: []
+result: "Quest drill matrix started (docs/probes/quest-drill-matrix-2026-11-23.md). Three bot fixes with must-fail tests: power attack pick counts only points paid by clvl (no more unread attack for a clvl 19 Paladin), act-hop row unlocks on the boss reward pending, Warriv and Meshif hop row clicked while the act word reads needed. Sail east (Act 1 boat) GREEN Paladin 11 in the lab (CHEATED setup, not verified on the live hero)."
 ---
 
 ## Description
