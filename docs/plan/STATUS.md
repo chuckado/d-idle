@@ -497,6 +497,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 9308c4286 11-23 17:37 `Merge agent/qd16: Merge branch 'main' into qdmatrix` (qd16)
+- 583e51b61 11-23 17:35 `Merge branch 'main' into qdmatrix` (-)
 - f7e81dc78 11-23 17:26 `Merge agent/toolstrade29: Merge branch 'main' into toolstrade29` (toolstrade29)
 - d3f962d86 11-23 17:25 `Merge branch 'main' into toolstrade29` (-)
 - 82bf75395 11-23 17:18 `Merge agent/malus: malus: card and drill doc section 15` (malus)
@@ -505,6 +507,4 @@
 - a70080796 11-23 16:58 `Merge origin/main into qd14` (-)
 - 0c06ee62d 11-23 16:50 `Merge agent/qd15: d2bot: live waypoint bits are read without a save; objectlist probe` (qd15)
 - b2f3fc973 11-23 16:48 `Merge remote-tracking branch 'origin/main' into agent/qd14` (-)
-- 9ee8e56e5 11-23 16:21 `Merge agent/handin: Merge branch 'main' into handin` (handin)
-- 888cea997 11-23 16:19 `Merge branch 'main' into handin` (-)
 <!-- statusgen:end -->
