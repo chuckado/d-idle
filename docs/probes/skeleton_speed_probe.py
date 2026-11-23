@@ -47,11 +47,15 @@ def dump(name):
         for ph, tk, lv in mons:
             f.write(f"{ph},{tk},{len(lv)},{'|'.join(' '.join(x) for x in lv)}\n")
 def grid():
-    return s.cmd("debug grid 1").splitlines()[:-1]
-def far_path(g, hx, hy, maxd=70):
-    """4-neighbour BFS over free cells from the hero; the path to the farthest reachable cell within maxd steps."""
+    return s.cmd("debug grid 5").splitlines()[:-1]
+def far_path(g, hx, hy, maxd=360):
+    """4-neighbour BFS over the SUBTILE grid (debug grid 5), obstacles grown by one subtile; path to the farthest cell
+    within maxd steps. Returns cells (floats) every subtile."""
     import collections
-    H, W = len(g), len(g[0]); sx, sy = int(hx), int(hy)
+    H, W = len(g), len(g[0])
+    free = [[g[y][x] == "." for x in range(W)] for y in range(H)]
+    ok = [[free[y][x] and all(free[min(H-1, max(0, y+dy))][min(W-1, max(0, x+dx))] for dx in (-1,0,1) for dy in (-1,0,1)) for x in range(W)] for y in range(H)]
+    sx, sy = int(hx * 5), int(hy * 5)
     par = {(sx, sy): None}; dist = {(sx, sy): 0}; q = collections.deque([(sx, sy)])
     while q:
         x, y = q.popleft()
@@ -59,22 +63,21 @@ def far_path(g, hx, hy, maxd=70):
             continue
         for dx, dy in ((1,0),(-1,0),(0,1),(0,-1)):
             n = (x+dx, y+dy)
-            if 0 <= n[0] < W and 0 <= n[1] < H and n not in dist and g[n[1]][n[0]] == ".":
+            if 0 <= n[0] < W and 0 <= n[1] < H and n not in dist and ok[n[1]][n[0]]:
                 dist[n] = dist[(x, y)] + 1; par[n] = (x, y); q.append(n)
     far = max(dist, key=lambda c: (dist[c], c))
     path = []; c = far
     while c is not None:
-        path.append(c); c = par[c]
+        path.append(((c[0] + 0.5) / 5, (c[1] + 0.5) / 5)); c = par[c]
     return path[::-1]
-def hop(path, phase, hopn=6, per_hop=160):
-    """walk the hero along the path in hops of hopn cells (a fresh cmd move each), recording every tick"""
+def hop(path, phase, hopn=25, per_hop=200):
+    """walk the hero along the path in hops of hopn subtiles (a fresh cmd move each), recording every tick"""
     for i in range(hopn, len(path) + hopn, hopn):
         c = path[min(i, len(path) - 1)]
-        s.cmd(f"cmd move {c[0]+0.5:.2f} {c[1]+0.5:.2f}")
+        s.cmd(f"cmd move {c[0]:.2f} {c[1]:.2f}")
         for _ in range(per_hop // 10):
             rec(phase, 10)
-            h = hero()
-            if math.dist(h, (c[0]+0.5, c[1]+0.5)) < 0.7:
+            if math.dist(hero(), c) < 0.5:
                 break
 def scene(area, tag, goto_wait=100):
     s.cmd("debug points 70 3"); s.cmd("debug points 69 5")
@@ -103,7 +106,7 @@ try:
         hop(path, "C_walk_far"); rec("C_walk_far_stop", 100)
         s.cmd("key r"); hop(path[::-1], "E_run_back"); s.cmd("key r"); rec("E_run_back_stop", 100)
         open(os.path.join(out, f"grid_area{area}.txt"), "w").write("\n".join(g))
-        open(os.path.join(out, f"path_area{area}.txt"), "w").write(" ".join(f"{x},{y}" for x, y in path))
+        open(os.path.join(out, f"path_area{area}.txt"), "w").write(" ".join(f"{x:.1f},{y:.1f}" for x, y in path[::5]))
     dump(f"trace_area{area}.csv")
     log("final", json.dumps(mins()))
 finally:
