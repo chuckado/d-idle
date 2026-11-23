@@ -244,7 +244,8 @@
      }
     ],
     "kill": "The Countess",
-    "budget": 10
+    "budget": 10,
+    "goals": "farm:Tower Cellar Level 5"
    },
    "note": "devp25 `debug spawn super countess` (V fork proof: her own treasure class drops). The spawn is the unit, not her level-placed room."
   },
@@ -364,7 +365,8 @@
     ],
     "kill": "Fangskin",
     "budget": 10,
-    "kit": "act2"
+    "kit": "act2",
+    "goals": "farm:Claw Viper Temple Level 2"
    }
   },
   {
@@ -717,7 +719,7 @@
      }
     ],
     "budget": 10,
-    "pending": "U: needs the Hellforge hammer and soulstone state and the anvil operate rule; run to read the log first"
+    "pending": "ran (run 20261123-185041) but asserts only that nothing died; the effect assertion (object state, quest word) is U until its value is read from a run log"
    }
   },
   {
@@ -747,7 +749,7 @@
      }
     ],
     "budget": 10,
-    "pending": "U: the seal operate quest state and the mode after opening are unknown (object_state not asserted); run to read the log first"
+    "pending": "ran (run 20261123-185041) but asserts only that nothing died; the effect assertion (object state, quest word) is U until its value is read from a run log"
    }
   },
   {
@@ -762,7 +764,7 @@
     ],
     "kill": "Grand Vizier of Chaos",
     "budget": 10,
-    "pending": "U: super name folding of devp25 (blanks and \"the\" dropped) not tried for this row; the stand-in hero may die (matrix notes 24 to 26)"
+    "goals": "farm:Chaos Sanctuary"
    }
   },
   {
@@ -777,7 +779,7 @@
     ],
     "kill": "Lord De Seis",
     "budget": 10,
-    "pending": "U: super name folding of devp25 (blanks and \"the\" dropped) not tried for this row; the stand-in hero may die (matrix notes 24 to 26)"
+    "goals": "farm:Chaos Sanctuary"
    }
   },
   {
@@ -792,7 +794,7 @@
     ],
     "kill": "Infector of Souls",
     "budget": 10,
-    "pending": "U: super name folding of devp25 (blanks and \"the\" dropped) not tried for this row; the stand-in hero may die (matrix notes 24 to 26)"
+    "goals": "farm:Chaos Sanctuary"
    }
   },
   {
@@ -934,7 +936,7 @@
      }
     ],
     "budget": 10,
-    "pending": "U: the thaw needs the potion from Malah and the Anya operate rule; run to read the log first"
+    "pending": "ran (run 20261123-185041) but asserts only that nothing died; the effect assertion (object state, quest word) is U until its value is read from a run log"
    }
   },
   {
