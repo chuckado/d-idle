@@ -1,6 +1,8 @@
 // Sell all against a fake bot (TestVaultSellAllJS): the button never silently differs from the selection,
 // the reasons are shown, the confirm sheet states the gold and the stash after, the press sells at once. Two fixture states (the screenshot of 2026-11-22: 260 selected).
 import { readFileSync } from 'fs';
+import { createRequire } from 'module';
+globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -40,7 +42,7 @@ const post = async (route, body) => {
   if (route === '/api/vault/sell') return sellReply(body);
   return { ok: true, done: [] };
 };
-const page = mountVault({ doc, win, root, get, post, later, clear, texts: T, now: () => clock });
+const page = mountVault({ toastHost: root, doc, win, root, get, post, later, clear, texts: T, now: () => clock });
 const sells = () => posts.filter((p) => p.route === '/api/vault/sell');
 const quotes = () => posts.filter((p) => p.route === '/api/vault/sellquote');
 const sa = () => find('sell-all');

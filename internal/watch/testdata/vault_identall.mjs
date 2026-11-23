@@ -1,6 +1,8 @@
 // Identify all (TASK identifyall, TestVaultIdentifyAllJS): the toolbar button counts the WHOLE vault, hides at 0, the confirm sheet words enough and short
 // stashes, the order payload carries scope all_unrevealed, and the stash accounting holds on two fixture states.
 import { readFileSync } from 'fs';
+import { createRequire } from 'module';
+globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -34,7 +36,7 @@ const gold = (total, order, un, stash) => ({ enabled: true, charges: 0, free: fa
   bar: { total, default: total ? 'gold' : '', line: '', options: total ? [{ id: 'gold', label: 'Gold', line: 'g', ok: true, count: total, ids: items.map((i) => i.id), cost: total * 80, skipped: [] }] : [] },
   gold: { on: true, order: order || null, stash: stash === undefined ? 5000 : stash, scrollGold: 80, confirmAt: 0, unrevealed: un === undefined ? total : un } });
 const sell = { enabled: true, queued: 0, working: 0, sold: 0, gold: 0 };
-const page = mountVault({ doc, root, get, post, later, clear, texts: T, now: () => clock });
+const page = mountVault({ toastHost: root, doc, root, get, post, later, clear, texts: T, now: () => clock });
 const bar = () => cls('vt-actionbar');
 
 
@@ -102,6 +104,6 @@ act = { reveal: gold(2, null, 30), sell };
 await page.reload(false);
 reply = { ok: false, done: ['a', 'b'], failed: [{ id: 'c', code: 'nosealed', error: 'x' }], order: { id: 'g-3', state: 'revealed', line: 'Gold reveal done: 29 items revealed' } };
 await ident().click(); await find('sheet-go').click();
-ok(/Gold reveal done: 29 items revealed 1 could not be read/.test(shownText(cls('vt-toast')[0])), 'the toast names the records that stay unrevealed: ' + shownText(cls('vt-toast')[0]));
+ok(/Gold reveal done: 29 items revealed 1 could not be read/.test(shownText(cls('d-toast')[0])), 'the toast names the records that stay unrevealed: ' + shownText(cls('d-toast')[0]));
 
 console.log(JSON.stringify({ fails }));

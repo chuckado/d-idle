@@ -573,7 +573,7 @@ function navPage(win, d, vis, cs) {
     const se = d.scrollingElement; win.scrollTo(0, se.scrollHeight);
     let low = 0, who = '';
     for (const n of d.body.querySelectorAll('*')) {
-      if (nav.contains(n) || n.closest('.d-menu-pop, .d-toasts, .d-drawer, .d-drawer-back, [role="dialog"], .vt-toast, .vt-detail, .cv-sel, .inv-tip, .inv-act, script, style')) continue;
+      if (nav.contains(n) || n.closest('.d-menu-pop, .d-toasts, .d-drawer, .d-drawer-back, [role="dialog"], .vt-detail, .cv-sel, .inv-tip, .inv-act, script, style')) continue;
       const nr = vis(n);
       if (!nr || cs(n).visibility === 'hidden') continue;
       let layer = false; // a fixed layer (the Reset progress, the pause banner) is not page content

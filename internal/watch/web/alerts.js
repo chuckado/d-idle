@@ -27,15 +27,7 @@
   try { $('alertsound').checked = localStorage.getItem(KEY) === '1'; } catch (e) { /* storage off */ }
   $('alertsound').addEventListener('change', function () { try { localStorage.setItem(KEY, soundOn() ? '1' : '0'); } catch (e) { /* storage off */ } });
 
-  function toast(a) {
-    var t = el('div', 'toast ' + a.severity), box = $('toasts');
-    t.appendChild(el('span', '', a.text));
-    var x = el('button', 'btn ghost small', 'Dismiss'); x.type = 'button';
-    x.addEventListener('click', function () { if (t.parentNode) t.parentNode.removeChild(t); });
-    t.appendChild(x); box.appendChild(t);
-    while (box.children.length > 4) box.removeChild(box.firstChild);
-    setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, a.severity === 'alarm' ? 20000 : 8000);
-  }
+  function toast(a) { window.dToast.show(a.severity, a.text); }
 
   function browserNote(a) {
     if (!('Notification' in window) || Notification.permission !== 'granted' || !document.hidden) return;
