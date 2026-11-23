@@ -294,6 +294,8 @@ type DetailView struct {
 	Pros    []string `json:"pros"`
 	Cons    []string `json:"cons"`
 	Tables  []string `json:"tables"`
+	// DefenseByDifficulty is set when Normal and Hell differ a lot (the detail view shows both).
+	DefenseByDifficulty *DefenseByDifficulty `json:"defenseByDifficulty,omitempty"`
 }
 
 // Card builds the small card: Defense, then the two highest of the other six, then the lowest of the remaining four.
@@ -325,7 +327,7 @@ func (b *Build) Card() CardView {
 // Detail builds the full view with all seven ratings.
 func (b *Build) Detail() DetailView {
 	d := DetailView{CardView: CardView{ID: b.ID, Name: b.Name, Class: b.Class, Identity: b.Identity},
-		Summary: b.Summary, Pros: b.Pros, Cons: b.Cons, Tables: b.Tables}
+		Summary: b.Summary, Pros: b.Pros, Cons: b.Cons, Tables: b.Tables, DefenseByDifficulty: b.DefenseByDifficulty}
 	for _, k := range RatingKeys {
 		d.Ratings = append(d.Ratings, ratingView(b, k))
 	}
@@ -352,4 +354,20 @@ func (d *CatalogDoc) BuildForTable(table string) (*Build, error) {
 		}
 	}
 	return nil, fmt.Errorf("catalog: no build owns plan table %q", table)
+}
+
+// ForClass returns the builds of a class in catalogue order. A class without an unlocks table is an error that names it
+// (no fallback to another class); a known class with no catalogue build gives an empty list.
+func (d *CatalogDoc) ForClass(class string) ([]*Build, error) {
+	c := strings.ToLower(strings.TrimSpace(class))
+	if !classIDs(FS)[c] {
+		return nil, fmt.Errorf("catalog: unknown class %q", class)
+	}
+	var out []*Build
+	for i := range d.Builds {
+		if d.Builds[i].Class == c {
+			out = append(out, &d.Builds[i])
+		}
+	}
+	return out, nil
 }

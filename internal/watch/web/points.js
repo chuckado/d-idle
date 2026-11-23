@@ -87,66 +87,67 @@
     }).catch(function () { $('buildline').hidden = true; });
   }
 
-  // Automatic Allocate Skills (docs/autoalloc.md): GET /api/hero/build, POST the pick (it locks), refusals read back in words.
-  var bview = null, pickerOpen = false;
+  // The Build tab (docs/autoalloc.md, card buildcards): GET /api/hero/build gives cards from the catalogue; a card's detail comes
+  // on demand (?detail=ID); Choose opens ONE confirm sheet and POSTs the table (variant) the player picked, which locks it.
+  var bview = null, bkey = '', open = {}, details = {}, sheet = null, BC = window.dBuildCards;
+  function bstate() { var st = bview.state || {}; return { autoAlloc: !!bview.autoAlloc, locked: !!st.locked, chosen: st.build, label: st.label }; }
   function renderBuild(b) {
-    bview = b;
+    var key = JSON.stringify(b);
+    if (key === bkey) return; // nothing changed: keep the DOM, the focus and the open details as they are
+    bkey = key; bview = b;
     var st = b.state || {};
     $('bmeta').textContent = st.locked ? 'locked' : (b.autoAlloc ? 'on' : 'off');
     var line = st.locked
       ? 'Locked to ' + (st.label || st.build) + ' since level ' + st.lockedAtLevel + '. Respec to change.'
       : 'No build chosen: points are banked for you. Choose a build and the hero puts every new point where it says.';
-    if (!b.autoAlloc) line += ' The allocator is switched off (knob agency.autoAlloc), so nothing is spent automatically yet.';
     $('bstate').textContent = line;
+    var off = $('boffnote'); off.hidden = !!b.autoAlloc;
+    off.textContent = b.autoAlloc ? '' : 'Auto-allocation is off (knob agency.autoAlloc): you can read about the builds here, but choosing one stays closed until it is on.';
     var h = $('bheld'); h.hidden = !(b.held && b.held.length);
     h.textContent = h.hidden ? '' : b.held.map(function (x) { return x.skill + ' (level ' + x.clvl + '): ' + x.reason; }).join(' ');
     var o = $('boff'); o.hidden = !(b.offBuild && b.offBuild.length);
     o.textContent = o.hidden ? '' : 'Off-build points you spent yourself (the allocator plans around them): ' + b.offBuild.join(', ') + '.';
     $('brespecline').textContent = b.respec ? 'A respec now would cost ' + b.respec.price + ' gold and refund every skill and stat point. ' + b.respec.note : '';
-    var bo = $('bopen');
-    bo.disabled = !!st.locked;
-    bo.title = st.locked ? 'Locked. Respec to change the build.' : '';
-    bo.onclick = function () { pickerOpen = !pickerOpen; renderPicker(); };
-    renderPicker();
+    renderCards();
   }
-  function renderPicker() {
-    var ul = $('bpicker'), b = bview; clear(ul);
-    $('bopen').setAttribute('aria-expanded', pickerOpen ? 'true' : 'false');
-    ul.hidden = !pickerOpen || !b;
-    if (ul.hidden) return;
-    if (!b.builds.length) { ul.appendChild(el('li', 'pt-build', 'No build files for this class.')); return; }
-    b.builds.forEach(function (x) {
-      var li = el('li', 'pt-build'); li.setAttribute('data-tier', x.tier); li.setAttribute('data-chosen', b.state.build === x.name ? '1' : '0');
-      var h = el('h3', '', x.label + ' '); h.appendChild(el('span', 'pt-tier', '(' + x.tier + ')')); li.appendChild(h);
-      var bad = (x.needs || []).filter(function (n) { return n.tier === 'unsupported'; });
-      var meh = (x.needs || []).length - bad.length;
-      if (bad.length) li.appendChild(el('p', 'pt-warn', 'The hero cannot use these yet and will hold the point for you: ' + bad.map(function (n) { return n.skill; }).join(', ') + '.'));
-      if (meh) li.appendChild(el('p', '', meh + ' more skill' + (meh === 1 ? ' is' : 's are') + ' not proven in the fighter yet.'));
-      var d = el('details'); d.appendChild(el('summary', '', 'First ' + x.preview.length + ' levels'));
-      var pl = el('ul', 'pt-prev-list');
-      x.preview.forEach(function (r) {
-        var parts = (r.skills || []).map(function (s) { return s.skill + (s.points > 1 ? ' x' + s.points : '') + (s.tier && s.tier !== 'supported' ? ' [' + s.tier + ']' : ''); });
-        var stats = Object.keys(r.stats || {}).map(function (k) { return '+' + r.stats[k] + ' ' + k; });
-        pl.appendChild(el('li', '', 'Level ' + r.clvl + ': ' + parts.concat(stats).join(', ')));
-      });
-      d.appendChild(pl); li.appendChild(d);
-      var btn = el('button', 'd-btn', b.state.build === x.name ? 'Chosen' : 'Choose and lock'); btn.type = 'button'; btn.setAttribute('data-size', 'sm');
-      btn.disabled = !!b.state.locked;
-      btn.addEventListener('click', function () { pickBuild(x, false); });
-      li.appendChild(btn);
+  function renderCards() {
+    var ul = $('bcards'), b = bview; clear(ul);
+    var err = $('bcerr'); err.hidden = !b.cardsError; err.textContent = b.cardsError || '';
+    if (!(b.cards || []).length) { if (!b.cardsError) ul.appendChild(el('li', 'bc-empty', b.class ? 'No builds are listed for this class yet.' : 'The hero is not in a game yet, so no builds are listed.')); return; }
+    b.cards.forEach(function (c) {
+      var li = BC.cardNode(document, c, { open: !!open[c.id], onDetails: function (card, btn) { toggle(card, btn); } });
+      if (open[c.id] && details[c.id]) li.appendChild(BC.detailNode(document, details[c.id], bstate(), { onChoose: choose }));
       ul.appendChild(li);
     });
   }
-  function pickBuild(x, confirmed) {
+  function toggle(card, btn) {
+    if (open[card.id]) { open[card.id] = false; renderCards(); return; }
+    open[card.id] = true;
+    if (details[card.id]) { renderCards(); return; }
+    fetch('/api/hero/build?detail=' + encodeURIComponent(card.id), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
+      if (j.code || j.error) { open[card.id] = false; say(j.error || 'the build details are not available'); return; }
+      details[card.id] = j; renderCards();
+    }).catch(function () { open[card.id] = false; say('could not read the build details'); });
+  }
+  function choose(det, btn) {
     var price = bview && bview.respec ? bview.respec.price : '?';
-    if (!confirmed && !window.confirm('Lock to ' + x.label + '? Every new point follows it. Changing it later means a respec (about ' + price + ' gold now) that refunds all skill and stat points.')) return;
-    post('/api/hero/build', { build: x.name, confirm: confirmed }).then(function (j) {
-      if (j.needsConfirm && !confirmed) { if (window.confirm(j.reason)) pickBuild(x, true); return; }
-      if (!j.ok) say(j.reason || j.error || ('error ' + j.status)); else { say(''); pickerOpen = false; }
-      loadBuild();
+    var vs = det.variants || [];
+    var exp = function (n) { return vs.filter(function (v) { return v.name === n && v.tier === 'experimental'; }).length > 0; };
+    var lines = ['You can change later, but it costs gold to respec. A respec now would cost ' + price + ' gold and refunds every skill and stat point.',
+      'Every new point then follows this build.'];
+    if (vs.some(function (v) { return v.tier === 'experimental'; })) lines.push('Some variants are experimental: skills the fighter has not proven yet are held for you, not spent.');
+    sheet = BC.openSheet(document, { title: 'Choose ' + det.name + '?', lines: lines, variants: vs, confirmText: 'Choose and lock', opener: btn,
+      onConfirm: function (name) { sheet = null; pickBuild(name, exp(name)); } });
+  }
+  function pickBuild(name, confirmed) {
+    post('/api/hero/build', { build: name, confirm: confirmed }).then(function (j) {
+      if (j.needsConfirm && !confirmed) { pickBuild(name, true); return; }
+      say(j.ok ? '' : (j.reason || j.error || ('error ' + j.status)));
+      loadBuild(); $('t-build').focus();
     }).catch(function () { say('the answer route is not reachable'); });
   }
   function loadBuild() {
+    if (sheet) return; // a sheet is open: do not redraw under it
     fetch('/api/hero/build', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
       if (j.code) { $('bstate').textContent = j.error || 'the build picker is not available'; return; }
       renderBuild(j);

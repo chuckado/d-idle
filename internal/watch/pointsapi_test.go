@@ -224,3 +224,32 @@ func TestBuildAPITwoClasses(t *testing.T) {
 		}
 	}
 }
+
+// The build list carries cards from the catalogue and one card's detail comes on demand; a build of another class or no
+// build at all is a 404 naming it.
+func TestBuildAPICardsAndDetail(t *testing.T) {
+	for _, c := range []struct {
+		class       d2.Class
+		mine, other string
+	}{{d2.Sorceress, "sorceress_fire", "paladin_hammerdin"}, {d2.Paladin, "paladin_hammerdin", "sorceress_fire"}} {
+		r := newPointsRig(t, c.class)
+		api := NewPointsAPI()
+		api.Bind(r.desk)
+		get := func(q string) *httptest.ResponseRecorder {
+			w := httptest.NewRecorder()
+			api.Handler().ServeHTTP(w, httptest.NewRequest("GET", BuildRoute+q, nil))
+			return w
+		}
+		if w := get(""); w.Code != 200 || !strings.Contains(w.Body.String(), `"cards":[`) || !strings.Contains(w.Body.String(), `"id":"`+c.mine+`"`) || strings.Contains(w.Body.String(), `"id":"`+c.other+`"`) {
+			t.Errorf("%s list: %d %s", c.class, w.Code, w.Body)
+		}
+		if w := get("?detail=" + c.mine); w.Code != 200 || !strings.Contains(w.Body.String(), `"summary"`) || !strings.Contains(w.Body.String(), `"estimate"`) {
+			t.Errorf("%s detail: %d %s", c.class, w.Code, w.Body)
+		}
+		for _, id := range []string{c.other, "nope"} {
+			if w := get("?detail=" + id); w.Code != 404 || !strings.Contains(w.Body.String(), id) {
+				t.Errorf("%s detail %s: %d %s", c.class, id, w.Code, w.Body)
+			}
+		}
+	}
+}

@@ -10,3 +10,9 @@
 - Small card: Defense, the two highest of the other six, then the lowest of the remaining four; ties go to the earlier key in the order leveling, farmingItems, farmingXP, bossing, defense, clearSpeed, idle. The detail view shows all seven.
 - Accessibility text: `Defense: 4 of 5 stars, estimate` (Defense adds `(Normal 5, Hell 4)` where the file has `defenseByDifficulty`).
 - `build-catalog.json` shares the `build-` prefix with the plan tables; `plandata.TableIDs` and `buildfile.PlanNames` skip it.
+
+## The Build tab (card buildcards, review E6)
+
+- `GET /api/hero/build` carries `cards[]` for the hero's class (`internal/points/buildcards.go`): one `BuildCard` per catalogue build, keyed by the catalogue id, the small-card ratings (each with `text`) and `variants[]` = the plan tables behind it that the leveler can load (the name is what `POST /api/hero/build` takes). `cardsError` names an unknown class; there is no fallback to another class. `GET /api/hero/build?detail=<id>` is one card's detail (all seven ratings, summary, pros and cons, `defenseByDifficulty`, variants with needs and the first levels); another class or an unknown id is a 404 naming it.
+- The page draws it with `web/buildcards.js` (`docs/ui-design-system.md` section 4.7). Auto-allocation off (`agency.autoAlloc`, default off) = browsing only: Choose is disabled with the visible line "Auto-allocation is off".
+- Tests: `TestCardsThreeClasses` and friends (`internal/points/buildcards_test.go`), `TestBuildAPICardsAndDetail`, `TestBuildCardsDOM` (golden `internal/watch/testdata/buildcards_dom.txt`), fit pages `builds-list` and `builds-detail`. Pictures: `docs/ui/build-cards/`.

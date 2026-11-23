@@ -43,7 +43,7 @@ func mountPages(m *http.ServeMux, sim *watch.Sim, class string) {
 	m.Handle("/watch/art/", artH)
 	mountDemos(m)
 	hallFixture(m)
-	watch.MountPointsPage(m)
+	mountBuilds(m)
 	rc := watch.ReturnConfig{Hub: sim.Hub, Events: watch.NewAwayLog(nil), Visit: watch.NewVisit("", func() time.Time { return time.Unix(1700000000, 0) }), Speed: 1}
 	rh := rc.ReturnHandler(nil)
 	for _, p := range watch.ReturnRoutes {

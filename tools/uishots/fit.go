@@ -176,6 +176,7 @@ type fitResult struct {
 	Expect map[string]bool `json:"expect"`
 	Flow   bool            `json:"flow"`
 	Nav    *fitNav         `json:"nav"`
+	Builds *fitBuilds      `json:"builds"`
 	Chars  *fitChars       `json:"chars"`
 	Vault  *fitVault       `json:"vault"`
 	Ov     *struct {
@@ -264,7 +265,12 @@ func (r fitResult) judge() []string {
 		if r.Nav == nil {
 			return []string{"the page has no navigation (nav.js is not loaded)"}
 		}
-		return r.Nav.judge(r.VW)
+		bad := r.Nav.judge(r.VW)
+		bad = append(bad, r.Builds.judge(r.VW, r.ScrollW)...)
+		if r.Builds != nil { // the Build tab's detail page presses Details and expects Choose to be reachable
+			bad = append(bad, r.clickVerdict()...)
+		}
+		return bad
 	}
 	var bad []string
 	if r.ScrollH > r.VH {
@@ -395,6 +401,12 @@ func (r fitResult) judge() []string {
 			bad = append(bad, "quest words (no chapter counter, no margin number): "+x)
 		}
 	}
+	return append(bad, r.clickVerdict()...)
+}
+
+// clickVerdict judges the press the harness made (click=) and the elements it expects to be hittable afterwards (hit=).
+func (r fitResult) clickVerdict() []string {
+	var bad []string
 	if r.Missing != "" {
 		bad = append(bad, "there is nothing to press at "+r.Missing+" (the page lacks it)")
 	}
@@ -409,6 +421,58 @@ func (r fitResult) judge() []string {
 				bad = append(bad, "after pressing "+r.Clicked+", "+sel+" is not hittable (the sheet is clipped or covered)")
 			}
 		}
+	}
+	return bad
+}
+
+// fitBuilds is the Build tab as the page shows it (fit.js buildsPage).
+type fitBuilds struct {
+	Cards  int      `json:"cards"`
+	Open   int      `json:"open"`
+	Cols   int      `json:"cols"`
+	Past   []string `json:"past"`
+	Boxes  []string `json:"boxes"`
+	Cut    []string `json:"cut"`
+	Small  []string `json:"small"`
+	Notext []string `json:"notext"`
+}
+
+// judge says what is wrong with the cards: one column under 700 px and a grid above (while no detail is open: the open card
+// takes the whole row), the page scrolls and no box inside it does, nothing past the window or cut, 44 px buttons, a text
+// equivalent on every star row. A nil one (a page without the list) is not judged.
+func (b *fitBuilds) judge(vw, scrollW int) []string {
+	if b == nil {
+		return nil
+	}
+	var bad []string
+	if b.Cards == 0 {
+		bad = append(bad, "the build list has no card")
+	}
+	if b.Open == 0 && b.Cards > 1 {
+		if vw < fitNavPhone && b.Cols != 1 {
+			bad = append(bad, fmt.Sprintf("build cards in %d columns at %d px wide, want 1 on a phone", b.Cols, vw))
+		}
+		if vw >= fitNavPhone && b.Cols < 2 {
+			bad = append(bad, fmt.Sprintf("build cards in %d column at %d px wide, want a grid", b.Cols, vw))
+		}
+	}
+	if scrollW > vw {
+		bad = append(bad, fmt.Sprintf("the page scrolls sideways: scrollWidth %d > innerWidth %d", scrollW, vw))
+	}
+	for _, s := range b.Past {
+		bad = append(bad, "build card ends outside the window: "+s)
+	}
+	for _, s := range b.Boxes {
+		bad = append(bad, "build cards hold a scroll box: "+s)
+	}
+	for _, s := range b.Cut {
+		bad = append(bad, "build card text is cut: "+s)
+	}
+	for _, s := range b.Small {
+		bad = append(bad, "build card button too small: "+s)
+	}
+	for _, s := range b.Notext {
+		bad = append(bad, "build card stars lack their text equivalent: "+s)
 	}
 	return bad
 }

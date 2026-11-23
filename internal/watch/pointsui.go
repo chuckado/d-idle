@@ -41,15 +41,14 @@ const pointsPage = `<!DOCTYPE html>
   <ul class="pt-gear" id="gear"></ul>
  </section>
  <section class="d-card" data-part="build" aria-labelledby="t-build">
-  <div class="d-card-head"><h2 id="t-build">Automatic Allocate Skills</h2><span class="meta" id="bmeta"></span></div>
+  <div class="d-card-head"><h2 id="t-build" tabindex="-1">Build</h2><span class="meta" id="bmeta"></span></div>
   <p class="d-hint" id="bstate"></p>
+  <p class="d-note" data-sev="info" id="boffnote" hidden></p>
   <p class="d-hint" id="bheld" hidden></p>
   <p class="d-hint" id="boff" hidden></p>
-  <div class="pt-row">
-   <button class="d-btn" data-size="sm" id="bopen" type="button" aria-expanded="false" aria-controls="bpicker">Automatic Allocate Skills</button>
-  </div>
   <p class="d-hint" id="brespecline"></p>
-  <ul class="pt-builds" id="bpicker" hidden></ul>
+  <p class="d-note" data-sev="alarm" id="bcerr" role="status" hidden></p>
+  <ul class="bc-list" id="bcards"></ul>
  </section>
  <section class="d-card" aria-labelledby="t-auto">
   <div class="d-card-head"><h2 id="t-auto">Autopilot</h2></div>
@@ -65,6 +64,7 @@ const pointsPage = `<!DOCTYPE html>
 <div id="toasts" class="d-toasts" role="status" aria-live="polite"></div>
 <script src="/watch/nav.js"></script>
 <script type="module" src="/watch/shell.js"></script>
+<script src="/watch/buildcards.js"></script>
 <script src="/watch/points.js"></script></body></html>`
 
 // MountPointsPage serves the page and its two assets without a desk behind them, for the screenshot suite's fixture viewer.
@@ -73,7 +73,7 @@ func MountPointsPage(m *http.ServeMux) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		io.WriteString(w, pointsPage)
 	})
-	for _, f := range []struct{ name, ct string }{{"points.js", "text/javascript; charset=utf-8"}, {"points.css", "text/css; charset=utf-8"}} {
+	for _, f := range []struct{ name, ct string }{{"points.js", "text/javascript; charset=utf-8"}, {"buildcards.js", "text/javascript; charset=utf-8"}, {"points.css", "text/css; charset=utf-8"}} {
 		m.HandleFunc("/watch/"+f.name, func(w http.ResponseWriter, r *http.Request) {
 			b, _ := webFS.ReadFile("web/" + f.name)
 			w.Header().Set("Content-Type", f.ct)

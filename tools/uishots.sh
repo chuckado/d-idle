@@ -8,6 +8,7 @@
 #   tools/uishots.sh --char --url '/watch?layout=cockpit-demo&theme=dark' --click '#btn-more|#btn-help' --sizes '1366x768 390x844' --tag NAME   the same for any /watch page (a cockpit sheet or drawer), after the clicks
 #   tools/uishots.sh --char [--out DIR] [--hover SEL | --ctx SEL | --click SEL] [--sizes 'WxH ...'] [--theme dark|light] [--fx VARIANT] [--tag NAME]   pictures of the character canvas (/watch/inventory) at the eight fit sizes, in the fit harness
 #   tools/uishots.sh --vt [--out DIR] [--only GLOB] [--sizes 'WxH ...']   pictures of the Ethereal Vault page (/watch/vault, fake vaults), vt-NAME-WxH.png, in the fit harness
+#   tools/uishots.sh --builds [--out DIR] [--only GLOB]   pictures of the Build tab (card buildcards, builds-NAME-WIDTH.png: the card list and one opened detail, 390 px and 1366 px wide, full height), fixture Paladin, no real hero data
 #   tools/uishots.sh --skills [--out DIR] [--sizes 'WxH ...'] [--tag NAME]   pictures of the Skills page (/watch/skills, fake trees) at a few sizes
 #   tools/uishots.sh --pics [--out DIR] [--only GLOB]   pictures of the cockpit (strip and Needs you variants) at the eight fit sizes, in the fit harness
 #   tools/uishots.sh --nav [--out DIR] [--only GLOB] [--sizes 'WxH ...']   pictures of every page of the shared navigation (card uinav2, nav-NAME-WxH.png: the bottom bar at 390x844, the band at 1366x768), in the fit harness
@@ -19,7 +20,7 @@
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 map=0 skills=0 charu= extra= sizes_only= theme=dark fx= tag= pics=0 pq= cs=0 vt=0 nav=0
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 map=0 skills=0 charu= extra= sizes_only= theme=dark fx= tag= pics=0 pq= cs=0 vt=0 nav=0 builds=0
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
@@ -33,6 +34,7 @@ while [ $# -gt 0 ]; do
 	--cs) cs=1; shift ;;
 	--vt) vt=1; shift ;;
 	--nav) nav=1; shift ;;
+	--builds) builds=1; shift ;;
 	--skills) skills=1; shift ;;
 	--url) charu=$(printf %s "$2" | sed 's/&/%26/g; s/?/%3F/g'); shift 2 ;;
 	--hover) extra="$extra&hover=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
@@ -84,6 +86,10 @@ navdefect-covers watch/skills?theme=dark&defect=nav-covers
 navdefect-small watch/skills?theme=dark&defect=nav-small
 navdefect-sheet watch/skills?theme=dark&defect=nav-sheet #btn-more #menu-more,#btn-more
 navdefect-wide watch/skills?theme=dark&defect=nav-wide"
+# The Build tab (card buildcards; web/buildcards.js): name, query, click, hit. --fit judges them (builds-NAME: one column on a phone, a grid
+# above, no scroll box, 44 px buttons, a text equivalent on every star row) and --builds draws them.
+buildspages="builds-list watch/points?theme=dark&tab=build
+builds-detail watch/points?theme=dark&tab=build .bc-details .bc-choose"
 if [ "$cockpit" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/ck-*
 	sizes="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620 390x844"
@@ -165,6 +171,22 @@ if [ "$nav" = 1 ]; then
 		done
 	done
 	ls "$out"/nav-*.png | wc -l
+	exit 0
+fi
+if [ "$builds" = 1 ]; then
+	mkdir -p "$out" && rm -f "$out"/builds-*.png
+	echo "$buildspages" | while read -r pname pq pclick phit; do
+		[ -n "$only" ] && case $pname in $only) ;; *) continue ;; esac
+		for sz in ${sizes_only:-390x2400 1366x1500}; do
+			w=${sz%x*} h=${sz#*x}
+			ck=; [ -n "$pclick" ] && ck="&click=$(printf %s "$pclick" | sed 's/_/ /g; s/#/%23/g')"
+			prof=$(mktemp -d)
+			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+				--window-size="$w,$h" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/$pname-$w.png" "http://127.0.0.1:$port/__fit?u=/$(printf %s "$pq" | sed 's/&/%26/g; s/?/%3F/g')&w=$w&h=$h&flow=1$ck" >/dev/null 2>&1
+			rm -rf "${prof:?}"
+		done
+	done
+	ls "$out"/builds-*.png
 	exit 0
 fi
 if [ "$cs" = 1 ]; then
@@ -706,7 +728,8 @@ vaultdefect-sheet watch/vault?theme=dark&vault=pop&defect=vault-sheet [data-key=
 vaultdefect-noname watch/vault?theme=dark&vault=pop&defect=vault-noname
 vaultdefect-enabled watch/vault?theme=dark&vault=pop&defect=vault-enabled
 vaultdefect-ethenabled watch/vault?theme=dark&vault=eth-short&defect=vault-ethenabled
-$navpages"
+$navpages
+$buildspages"
 	# in a click or hit selector "_" stands for a space and a leading "?" makes a step optional (no switch on a wide rail);
 	# a third column hover=SEL or ctx=SEL hovers or right-clicks that cell before the measurement (the tooltip, the menu)
 	echo "$pages" | while read -r pname pq pclick phit; do
@@ -725,6 +748,7 @@ $navpages"
 		navdefect-wide) szs="1366x768" ;;
 		navdefect-*) szs="390x844" ;;
 		nav-*) szs="390x844 1366x768" ;;
+		builds-*) szs="390x844 1366x768" ;;
 		vault-*) szs="$sizes 412x780 360x640" ;;
 		questdefect-words) szs="1366x768" ;;
 		questdefect-clip | questdefect-two) szs="1366x768 412x780" ;;
@@ -749,7 +773,7 @@ $navpages"
 			hover=* | ctx=* | expect=* | scroll=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g; s/|/%7C/g')" ;;
 			?*) ck="&click=$(enc "$pclick")" ;;
 			esac
-			case $pname in nav-* | navdefect-*) ck="$ck&flow=1" ;; esac
+			case $pname in nav-* | navdefect-* | builds-*) ck="$ck&flow=1" ;; esac
 			[ -n "$phit" ] && ck="$ck&hit=$(enc "$phit" | sed 's/%7C/|/g')"
 			if [ -n "$only" ]; then case $pname in $only) ;; *) continue ;; esac; fi
 			prof=$(mktemp -d)
