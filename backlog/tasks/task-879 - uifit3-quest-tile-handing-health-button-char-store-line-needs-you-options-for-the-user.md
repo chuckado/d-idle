@@ -1,10 +1,13 @@
 ---
 id: TASK-879
-title: 'uifit3: quest tile handing, health button, char-store line; needs-you options for the user'
-status: Proposed
+title: >-
+  uifit3: quest tile handing, health button, char-store line; needs-you options
+  for the user
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T08:54:00Z'
+updated_date: '2026-11-23T09:42:00Z'
 labels:
   - watch
   - bug
