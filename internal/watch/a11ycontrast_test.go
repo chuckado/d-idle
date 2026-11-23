@@ -62,9 +62,6 @@ func TestTokenContrastAA(t *testing.T) {
 func TestMotionHonoursReducedMotion(t *testing.T) {
 	files, _ := filepath.Glob("web/*.css")
 	more, _ := filepath.Glob("web/panels/*/*.css")
-	tok, _ := os.ReadFile("web/tokens.css")
-	globalReduce := false
-	_ = tok
 	moving := regexp.MustCompile(`(?m)^[^/\n]*\b(animation|transition):[^;}]*`)
 	for _, f := range append(files, more...) {
 		b, _ := os.ReadFile(f)
