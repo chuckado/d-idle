@@ -291,7 +291,7 @@ function makeScheduler() {
     setTimeout(tick, 250);
   }
   if (window.EventSource) {
-    // the page's one event stream: app.js opens it on /watch (window.d2events), the other pages get their own here
+    // the page's one event stream (window.d2events); another script may have opened it already
     const es = window.d2events || (window.d2events = new EventSource('/api/events'));
     es.addEventListener('change', () => { changed = true; });
   }
@@ -794,7 +794,7 @@ async function setupMenu(sel) {
     if (id === 'onboarding') { chip = b; b.hidden = true; }
   }
   if (chip) onboardingChip(chip);
-  // the Return screen link of the sheet shows only where the bot mounts the return screen (app.js sets data-return-screen on the page)
+  // the Return screen link of the sheet shows only where the bot mounts the return screen (probeReturn sets data-return-screen on the page)
   const syncReturn = () => nv.hide('return', html.dataset.returnScreen !== '1');
   syncReturn();
   new MutationObserver(syncReturn).observe(html, { attributes: true, attributeFilter: ['data-return-screen'] });
@@ -864,6 +864,13 @@ function layoutNote(sel, floating) {
   x.addEventListener('click', () => { pref(NOTE, '1'); box.remove(); });
   box.appendChild(x);
   if (floating) document.body.appendChild(box); else top.after(box);
+}
+
+// The Return screen link shows only where the bot mounts the route behind it: GET /api/tally answers there and 404s elsewhere.
+function probeReturn() {
+  fetch('/api/tally', { cache: 'no-store', credentials: 'same-origin' })
+    .then((r) => { if (r.ok) html.dataset.returnScreen = '1'; else delete html.dataset.returnScreen; })
+    .catch(() => { delete html.dataset.returnScreen; });
 }
 
 // A browser that still asks for a removed preset (?layout=classic, a saved choice) gets the cockpit and this one line, dismissed once.
@@ -974,7 +981,7 @@ async function start() {
   }
   setupLayout(conf, sel, answerBase, cockpit ? ckRoots : null, slotList);
   if (cockpit) setupDrawers(drRoots, drTitles);
-  if (layoutReq) { await setupMenu(sel); layoutNote(sel, cockpit); movedNote(sel); }
+  if (layoutReq) { probeReturn(); await setupMenu(sel); layoutNote(sel, cockpit); movedNote(sel); }
   // a new hero meets the first-steps card once, without opening a menu
   if (cockpit && sel.origin === 'newhero' && !pref(FIRST) && dr.boxes.has('onboarding') && !qs.has('drawer') && qs.get('first') !== '0') { pref(FIRST, '1'); openDrawer('onboarding'); }
   if (cockpit && qs.get('drawer')) openDrawer(qs.get('drawer')); // a link (and the screenshot suite) can open a drawer

@@ -134,7 +134,7 @@ func TestCurrencyOffMeansUnchanged(t *testing.T) {
 func TestCurrencyPageHasNoThirdPartyUrl(t *testing.T) {
 	r := newRig(t, "sorceress")
 	url := regexp.MustCompile(`(?i)(https?:)?//[a-z0-9.-]+\.[a-z]{2,}`)
-	for _, p := range []string{"/watch", "/watch/app.js", "/watch/app.css"} {
+	for _, p := range []string{"/watch", "/watch/app.css"} {
 		body := r.get(p, nil).Body.String()
 		if m := url.FindString(body); m != "" && !strings.HasPrefix(m, "//") { // "//" alone starts a JS comment
 			t.Errorf("%s has an external reference: %s", p, m)
@@ -147,8 +147,8 @@ func TestCurrencyPageHasNoThirdPartyUrl(t *testing.T) {
 	if strings.Contains(html, "style=") || strings.Contains(html, "<style") {
 		t.Error("inline style")
 	}
-	app := r.get("/watch/app.js", nil).Body.String()
-	if !strings.Contains(app, "/api/currency") || strings.Contains(app, "innerHTML") {
-		t.Error("app.js does not read /api/currency through textContent")
+	cur, _ := webFS.ReadFile("web/panels/currency/panel.js")
+	if !strings.Contains(string(cur), "/api/currency") || strings.Contains(string(cur), "innerHTML") {
+		t.Error("the currency panel does not read /api/currency through textContent")
 	}
 }

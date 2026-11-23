@@ -8,7 +8,7 @@ assert.ok(L.isCockpit(def), 'web/layout.json is a cockpit');
 // a Simple that no menu click wrote (an older shell pinned it for a new hero) is no choice; every real choice is kept
 assert.strictEqual(L.effectiveChoice('simple', ''), '', 'auto-pinned simple follows the default');
 assert.strictEqual(L.effectiveChoice('simple', '1'), 'simple', 'a menu choice of simple is kept');
-for (const c of ['classic', 'standard', 'stream', 'debug', 'saved', 'cockpit']) {
+for (const c of ['stream', 'saved', 'cockpit']) {
   assert.strictEqual(L.effectiveChoice(c, ''), c, c + ' is kept without the marker');
   assert.strictEqual(L.effectiveChoice(c, '1'), c, c + ' is kept with the marker');
 }

@@ -47,7 +47,7 @@ const readJSON = (f) => JSON.parse(fs.readFileSync(f, 'utf8'));
 //    plan to exactly the cells the shell before S1 gave them (the golden was produced by that shell's layout.js).
 {
   const golden = readJSON(goldenFile);
-  const files = ['layout-v1-mockup.json', 'layout-v1-live.json', 'layout-v1-command.json'].map((n) => path.join(compatDir, n)).concat(path.join(webDir, 'layouts/classic.json'));
+  const files = ['layout-v1-mockup.json', 'layout-v1-live.json', 'layout-v1-command.json'].map((n) => path.join(compatDir, n));
   const now = goldenOf(L, files);
   eq(Object.keys(now).sort(), Object.keys(golden).sort(), 'the same files');
   for (const f of Object.keys(golden)) for (const w of WIDTHS) eq(now[f][w], golden[f][w], f + ' at ' + w + ' plans to the cells it had before S1');
@@ -62,7 +62,7 @@ function today(layout) {
 }
 const FALLBACKS = { 'needs-you': 'gear', orders: 'now', 'zone-map': 'orders-map', health: 'why', progress: 'tally', log: 'thoughts' }; // D.4
 const built = (id) => manifests.some((m) => m.id === id); // a slice that ships a panel takes it off the fallback list (S4: orders)
-for (const name of ['standard', 'simple', 'stream', 'debug']) {
+for (const name of ['stream']) {
   const layout = readJSON(path.join(webDir, 'layouts', name + '.json'));
   const targets = today(layout), have = new Set(targets.map((t) => t.id));
   for (const t of targets) assert.ok(!['needs-you', 'orders', 'health', 'progress', 'zone-map', 'log', 'statusline', 'needs-count'].filter((id) => !built(id)).includes(t.id), name + ': no new panel exists yet');
@@ -98,7 +98,7 @@ for (const name of ['standard', 'simple', 'stream', 'debug']) {
 }
 // an old layout has no status key: the band is the page's own list
 {
-  const classic = readJSON(path.join(webDir, 'layouts/classic.json'));
+  const classic = readJSON(path.join(compatDir, 'layout-v1-mockup.json')); // an editor export: no status key
   assert.strictEqual(L.statusIds(classic, manifests), null);
   eq(L.selectPanels(manifests, classic).length, manifests.filter((m) => !m.cockpitOnly && !m.optIn).length, 'classic mounts every panel but the cockpit-only and opt-in ones');
 }
@@ -123,7 +123,7 @@ for (const name of ['standard', 'simple', 'stream', 'debug']) {
 
 // 4. a stand-in saves as the tile it stands in for, and the entry it displaced comes back (Edit layout still saves)
 {
-  const layout = readJSON(path.join(webDir, 'layouts/standard.json'));
+  const layout = readJSON(path.join(webDir, 'layouts/stream.json'));
   const targets = today(layout), p = L.plan(layout, 1920, '', shell, targets), pe = L.plan(layout, 1920, '', shell, targets, true); // pe: what the editor holds
   const bands = {};
   layout.breakpoints.wide.panels.forEach((e) => { bands[e.id] = e.band; });
@@ -144,20 +144,20 @@ for (const name of ['standard', 'simple', 'stream', 'debug']) {
 }
 // 5. R1: a stand-in the user switched off stays off after saving and loading again
 {
-  const layout = readJSON(path.join(webDir, 'layouts/standard.json'));
+  const layout = readJSON(path.join(webDir, 'layouts/stream.json'));
   const targets = today(layout), saved = JSON.parse(JSON.stringify(layout));
-  for (const bp of Object.values(saved.breakpoints)) { const e = bp.panels.find((x) => x.id === 'needs-you'); e.hidden = true; }
+  for (const bp of Object.values(saved.breakpoints)) { const e = bp.panels.find((x) => x.id === 'progress'); e.hidden = true; }
   const p = L.plan(saved, 1920, '', shell, targets, true);
-  assert.ok(!p.items.some((i) => i.id === 'gear' && !i.hidden), 'a switched-off stand-in is not shown');
-  assert.ok(p.off.includes('gear'), 'it is switched off');
+  assert.ok(!p.items.some((i) => i.id === 'tally' && !i.hidden), 'a switched-off stand-in is not shown');
+  assert.ok(p.off.includes('tally'), 'it is switched off');
   const out = L.withShadows(Object.assign({}, saved, { breakpoints: { wide: { cols: 12, panels: L.toPanels(p.items, {}) } } }), saved);
-  const e = out.breakpoints.wide.panels.find((x) => x.id === 'needs-you');
-  assert.ok(e && e.hidden && e.fallback === 'gear', 'saved as the hidden tile with its fallback');
-  assert.ok(!L.plan(out, 1920, '', shell, targets).items.some((i) => i.id === 'gear'), 'still off after a reload');
+  const e = out.breakpoints.wide.panels.find((x) => x.id === 'progress');
+  assert.ok(e && e.hidden && e.fallback === 'tally', 'saved as the hidden tile with its fallback');
+  assert.ok(!L.plan(out, 1920, '', shell, targets).items.some((i) => i.id === 'tally'), 'still off after a reload');
 }
 // 6. R2: the OBS strip (overlay mode) keeps the page's own status band, whatever the layout lists
 {
-  const layout = readJSON(path.join(webDir, 'layouts/standard.json'));
+  const layout = readJSON(path.join(webDir, 'layouts/stream.json'));
   eq(L.selectPanels(manifests, layout, 'overlay').filter((m) => m.band === 'status').map((m) => m.id).sort(), manifests.filter((m) => m.band === 'status' && !m.cockpitOnly).map((m) => m.id).sort(), 'overlay band');
 }
 console.log('ok');

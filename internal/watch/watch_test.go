@@ -579,7 +579,7 @@ func TestViewerIsReadOnly(t *testing.T) {
 	r.fight()
 	th := r.nextThought()
 	log := len(r.sim.Store.Log())
-	for _, path := range append(append([]string{}, ViewRoutes...), "/watch/app.js", "/api/answer", "/api/revoke", "/api/orders") {
+	for _, path := range append(append([]string{}, ViewRoutes...), "/api/answer", "/api/revoke", "/api/orders") {
 		for _, m := range []string{"POST", "PUT", "DELETE", "PATCH"} {
 			w := httptest.NewRecorder()
 			body, _ := json.Marshal(map[string]any{"thought": th.ID, "answer": "drink"})
@@ -659,14 +659,14 @@ func TestXSSIsInertText(t *testing.T) {
 	}
 	// The page: no inline script, no HTML sinks, no CDN, CSP set.
 	page := r.get("/watch", nil)
-	app := r.get("/watch/app.js", nil).Body.String()
+	app := r.get("/watch/shell.js", nil).Body.String()
 	html := page.Body.String()
 	if strings.Contains(html, "<script>") || strings.Contains(html, "onclick") || strings.Contains(html, "http://") || strings.Contains(html, "https://") {
 		t.Error("page has inline script or an external reference")
 	}
 	for _, bad := range []string{"innerHTML", "outerHTML", "insertAdjacentHTML", "document.write", "eval(", "new Function", "srcdoc"} {
 		if strings.Contains(app, bad) {
-			t.Errorf("app.js uses %s", bad)
+			t.Errorf("shell.js uses %s", bad)
 		}
 	}
 	if csp := page.Header().Get("Content-Security-Policy"); !strings.Contains(csp, "script-src 'self'") || strings.Contains(csp, "unsafe-inline") {
@@ -720,7 +720,7 @@ func TestJournalKeepsEverythingInOrder(t *testing.T) {
 func TestWatchAssetsHaveNoThirdPartyURL(t *testing.T) {
 	r := newRig(t, "sorceress")
 	re := regexp.MustCompile(`(?i)(src|href)\s*=\s*["']?(https?:)?//|url\(\s*["']?(https?:)?//|@import`)
-	for _, p := range []string{"/watch", "/watch/app.css", "/watch/app.js"} {
+	for _, p := range []string{"/watch", "/watch/app.css", "/watch/shell.js"} {
 		if m := re.FindString(r.get(p, nil).Body.String()); m != "" {
 			t.Errorf("%s has an external reference: %q", p, m)
 		}

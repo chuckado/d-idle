@@ -69,7 +69,7 @@ for (const [p, , d] of cases.filter((c) => c[2])) {
   ok(sheet.hidden, 'a press outside closes it');
   // the entries: characters, return, hall, policy, help, old layout; theme in the settings group
   const links = sheet.all().filter((n) => n.tag === 'a').map((n) => n.href);
-  for (const h of ['/watch/characters', '/watch/return', '/watch/hall', '/watch/policy', '/watch?live=1&drawer=onboarding', '/watch?layout=classic']) ok(links.includes(h), 'the sheet links ' + h);
+  for (const h of ['/watch/characters', '/watch/return', '/watch/hall', '/watch/policy', '/watch?live=1&drawer=onboarding']) ok(links.includes(h), 'the sheet links ' + h);
   ok(sheet.all().some((n) => n.id === 'btn-theme'), 'the sheet holds the theme button (adopted)');
   ok(sheet.id === 'menu-more' && more.id === 'btn-more', 'ids the screenshot suite and fit check use');
   // the live screen can answer Help in place

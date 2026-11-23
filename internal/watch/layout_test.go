@@ -2,7 +2,6 @@ package watch
 
 import (
 	"bytes"
-	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"net/http/httptest"
@@ -21,8 +20,7 @@ func TestShippedLayoutsAreValid(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, f := range []string{"web/layout.json", "web/layouts/mockup.json", "web/layouts/live.json", "web/layouts/command.json",
-		"web/layouts/classic.json", "web/layouts/simple.json", "web/layouts/standard.json", "web/layouts/stream.json", "web/layouts/debug.json"} {
+	for _, f := range []string{"web/layout.json", "web/layouts/stream.json"} {
 		b, err := webFS.ReadFile(f)
 		if err != nil {
 			t.Fatal(err)
@@ -40,47 +38,13 @@ func TestShippedLayoutsAreValid(t *testing.T) {
 			}
 		}
 	}
-	// the default is the cockpit, byte for byte (S7); Standard keeps its own file; classic is the pre-redesign default, frozen (docs/ui/redesign-2026-11-14/D-layouts.md section 4)
+	// the default is the cockpit, byte for byte (S7); Stream is the one other preset (E11a deleted the rest)
 	def, _ := webFS.ReadFile("web/layout.json")
 	ck, _ := webFS.ReadFile("web/layouts/cockpit.json")
 	if !bytes.Equal(def, ck) {
 		t.Error("web/layout.json is not web/layouts/cockpit.json")
 	}
-	classic, _ := webFS.ReadFile("web/layouts/classic.json")
-	if sum := fmt.Sprintf("%x", sha256.Sum256(classic)); sum != classicLayoutSHA256 {
-		t.Errorf("web/layouts/classic.json changed (sha256 %s): it is the layout of before the redesign and is only ever added to", sum)
-	}
-	// a preset names every panel of the main area (placed or switched off) and every card, so nothing is left to the packer;
-	// an opt-in panel is named only where the preset wants it
-	ms, _ := Manifests()
-	lc, _ := shellLayoutConf()
-	for _, f := range []string{"web/layouts/classic.json", "web/layouts/simple.json", "web/layouts/standard.json", "web/layouts/stream.json", "web/layouts/debug.json"} {
-		if f == "web/layouts/stream.json" || f == "web/layouts/simple.json" {
-			continue // short presets by design: the rest is left to the packer, which never mounts an opt-in panel it does not name
-		}
-		b, _ := webFS.ReadFile(f)
-		l, _ := ParseLayout(b)
-		named := map[string]bool{}
-		for _, p := range l.Breakpoints["wide"].Panels {
-			named[p.ID] = true
-		}
-		for _, m := range ms {
-			if m.Band != "status" && m.MergedInto == "" && !m.OptIn && !named[m.ID] {
-				t.Errorf("%s does not name the panel %s", f, m.ID)
-			}
-		}
-		if f != "web/layouts/classic.json" {
-			for _, id := range lc.Compat {
-				if !named[id] {
-					t.Errorf("%s does not name the card %s", f, id)
-				}
-			}
-		}
-	}
 }
-
-// sha256 of web/layouts/classic.json, which is web/layout.json as it was before the redesign (origin/main at 2026-11-14).
-const classicLayoutSHA256 = "2e8e5c1447908cd9536800e0ecc2cc818eab94fc855a6a5f91cddf9bfc866fa0"
 
 // Check catches what the loader lets through.
 func TestLayoutCheck(t *testing.T) {
@@ -210,20 +174,16 @@ func TestLayoutAssetsAndConf(t *testing.T) {
 		t.Errorf("layout conf: %+v", pv.Layout)
 	}
 	page, _ := webFS.ReadFile("web/watch.html")
-	for _, id := range pv.Layout.Compat {
-		if !bytes.Contains(page, []byte(`data-lid="`+id+`"`)) {
-			t.Errorf("watch.html has no card with data-lid=%q", id)
-		}
+	if bytes.Contains(page, []byte("data-lid=")) {
+		t.Error("watch.html still has a pre-shell card (E11a deleted them; shell.json keeps the ids only so a saved layout that names one loads)")
 	}
 	for a, to := range pv.Layout.Aliases {
 		if _, err := webFS.ReadFile("web/panels/" + to + "/panel.json"); err != nil && !containsStr(pv.Layout.Compat, to) {
 			t.Errorf("alias %s points at %s, which is not on the page", a, to)
 		}
 	}
-	for p, ctype := range map[string]string{"/watch/layout.js": "text/javascript", "/watch/layoutedit.js": "text/javascript", "/watch/layouts/mockup.json": "application/json",
-		"/watch/layouts/live.json": "application/json", "/watch/layouts/command.json": "application/json", "/watch/layouts/classic.json": "application/json",
-		"/watch/layouts/simple.json": "application/json", "/watch/layouts/standard.json": "application/json", "/watch/layouts/stream.json": "application/json",
-		"/watch/layouts/debug.json": "application/json"} {
+	for p, ctype := range map[string]string{"/watch/layout.js": "text/javascript", "/watch/layoutedit.js": "text/javascript",
+		"/watch/layouts/cockpit.json": "application/json", "/watch/layouts/stream.json": "application/json"} {
 		w := httptest.NewRecorder()
 		r.view.ServeHTTP(w, httptest.NewRequest("GET", p, nil))
 		if w.Code != 200 || !strings.HasPrefix(w.Header().Get("Content-Type"), ctype) {
@@ -285,7 +245,7 @@ func TestLayoutPlanJS(t *testing.T) {
 		t.Skip("node not available")
 	}
 	args := []string{"testdata/layout_plan.js", "web/layout.js", "testdata/compat/layout-v1-mockup.json", "testdata/compat/layout-v1-live.json",
-		"testdata/compat/layout-v1-command.json", "web/layouts/classic.json", "web/layouts/mockup.json", "web/layouts/live.json", "web/layouts/command.json"}
+		"testdata/compat/layout-v1-command.json"}
 	if out, err := exec.Command(node, args...).CombinedOutput(); err != nil {
 		t.Fatalf("%v\n%s", err, out)
 	}
@@ -312,7 +272,7 @@ func TestLayoutMoveJS(t *testing.T) {
 	if err != nil {
 		t.Skip("node not available")
 	}
-	if out, err := exec.Command(node, "testdata/layout_move.js", "web/layout.js", "web/layouts/standard.json").CombinedOutput(); err != nil {
+	if out, err := exec.Command(node, "testdata/layout_move.js", "web/layout.js", "web/layouts/stream.json").CombinedOutput(); err != nil {
 		t.Fatalf("%v\n%s", err, out)
 	}
 }
@@ -367,42 +327,16 @@ func TestLayoutEditJS(t *testing.T) {
 	}
 }
 
-// Every card on /watch is a layout target: each pre-shell <section> carries a data-lid that shell.json lists, each
-// panel outside the top band is placed by the default layout, and the editor frames them all the same way (the frame
-// test is testdata/layout_edit.js). What is not a card stays out on purpose: the top band and the strips above the grid.
-func TestEveryWatchCardIsALayoutTarget(t *testing.T) {
+// Every panel root is a layout target (the pre-shell cards are gone, E11a): shell.js takes the panel roots, shell.json keeps the card ids
+// valid for a saved layout, and the editor frames them without putting its handle inside a panel.
+func TestEveryWatchPanelIsALayoutTarget(t *testing.T) {
 	page, _ := webFS.ReadFile("web/watch.html")
-	lc, err := shellLayoutConf()
-	if err != nil {
-		t.Fatal(err)
-	}
-	secs := regexp.MustCompile(`<section\b[^>]*>`).FindAll(page, -1)
-	if len(secs) < 10 {
-		t.Fatalf("only %d sections found on the page", len(secs))
-	}
-	lid := regexp.MustCompile(`data-lid="([a-z0-9-]+)"`)
-	seen := map[string]bool{}
-	for _, s := range secs {
-		m := lid.FindSubmatch(s)
-		switch {
-		case m == nil:
-			t.Errorf("a card without a layout id cannot be edited: %s", s)
-		case !containsStr(lc.Compat, string(m[1])):
-			t.Errorf("data-lid %q is not in the compat list of shell.json", m[1])
-		case seen[string(m[1])]:
-			t.Errorf("data-lid %q twice", m[1])
-		default:
-			seen[string(m[1])] = true
-		}
-	}
-	for _, id := range lc.Compat {
-		if !seen[id] {
-			t.Errorf("shell.json lists the card %q, the page has none", id)
-		}
+	if regexp.MustCompile(`<section\b`).Match(page) {
+		t.Error("watch.html has a pre-shell <section> card again")
 	}
 	js, _ := webFS.ReadFile("web/shell.js")
-	if !strings.Contains(string(js), `querySelectorAll('.d-panel[data-panel], [data-lid]')`) {
-		t.Error("shell.js must take every panel root and every data-lid card as a layout target")
+	if !strings.Contains(string(js), `querySelectorAll('.d-panel[data-panel]')`) {
+		t.Error("shell.js must take every panel root as a layout target")
 	}
 	ed, _ := webFS.ReadFile("web/layoutedit.js")
 	if regexp.MustCompile(`\bn\.(append|appendChild|prepend|insertBefore)\(`).Match(ed) {
@@ -430,25 +364,6 @@ func TestVideoPictureFitsItsPanel(t *testing.T) {
 	js, _ := webFS.ReadFile("web/panels/video/panel.js")
 	if !strings.Contains(string(js), "root.dataset.aspect = '4/3'") {
 		t.Error("the video panel must declare its aspect for the editor")
-	}
-	// the default layout gives the picture rows that match 4:3 at the width of each breakpoint (within one row)
-	// (Standard's picture is a fit panel too: its stored span is not used, so the rule is for the layouts that predate fit)
-	raw, _ := webFS.ReadFile("web/layouts/classic.json")
-	l, err := ParseLayout(raw)
-	if err != nil {
-		t.Fatal(err)
-	}
-	for bp, width := range map[string]float64{"laptop": 1280, "wide": 1920} {
-		for _, p := range l.Breakpoints[bp].Panels {
-			if p.ID != "video" {
-				continue
-			}
-			colw := (width - 24 - 11*12) / 12
-			need := (62 + (float64(p.ColSpan)*colw+float64(p.ColSpan-1)*12-24)*3/4 + 12) / 60
-			if d := float64(p.RowSpan) - need; d < -0.01 || d > 1 {
-				t.Errorf("%s: video spans %d rows, 4:3 needs %.1f", bp, p.RowSpan, need)
-			}
-		}
 	}
 }
 
@@ -665,8 +580,7 @@ func TestTemplatelessLayoutsRenderTheSameCells(t *testing.T) {
 	if err != nil {
 		t.Skip("node not available")
 	}
-	args := []string{"testdata/layout_cells.js", "web/layout.js", "testdata/layout_cells.golden", "web/layouts/classic.json", "web/layouts/debug.json",
-		"web/layouts/simple.json", "web/layouts/standard.json", "web/layouts/stream.json", "web/layouts/mockup.json", "web/layouts/live.json", "web/layouts/command.json",
+	args := []string{"testdata/layout_cells.js", "web/layout.js", "testdata/layout_cells.golden", "web/layouts/stream.json",
 		"testdata/compat/layout-v1-mockup.json", "testdata/compat/layout-v1-live.json", "testdata/compat/layout-v1-command.json"}
 	if out, err := exec.Command(node, args...).CombinedOutput(); err != nil {
 		t.Fatalf("%v\n%s", err, out)
