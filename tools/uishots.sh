@@ -66,6 +66,7 @@ xp=$!
 sleep 2
 # The pages of the shared navigation (card uinav2; web/nav.js): name, query, optional click and hit. --fit judges them (nav-NAME: five
 # destinations, one aria-current, the bar clear of the content, the More sheet inside the window) and --nav draws them.
+# settings-rules and settings-alerts (card uisettings): the Settings sheet open over the Skills page (?settings=SECTION opens it as More > Settings does).
 navpages="nav-live watch?first=0&theme=dark&needs=0
 nav-gear watch/inventory?theme=dark
 nav-skills watch/skills?theme=dark
@@ -82,6 +83,8 @@ nav-more-gear watch/inventory?theme=dark #btn-more #menu-more,#btn-more
 nav-more-skills watch/skills?theme=dark #btn-more #menu-more,#btn-more
 nav-more-vault watch/vault?theme=dark&vault=pop #btn-more #menu-more,#btn-more
 nav-more-characters watch/characters?theme=dark&chars=3 #btn-more #menu-more,#btn-more
+settings-rules watch/skills?theme=dark&settings=rules ?#btn-more .d-sheet-ok,.d-set-sec
+settings-alerts watch/skills?theme=dark&settings=alerts ?#btn-more .d-sheet-ok,.d-set-sec
 navdefect-covers watch/skills?theme=dark&defect=nav-covers
 navdefect-small watch/skills?theme=dark&defect=nav-small
 navdefect-sheet watch/skills?theme=dark&defect=nav-sheet #btn-more #menu-more,#btn-more
@@ -750,7 +753,7 @@ $buildspages"
 		vault-more-entry) ;;
 		navdefect-wide) szs="1366x768" ;;
 		navdefect-*) szs="390x844" ;;
-		nav-*) szs="390x844 1366x768" ;;
+		nav-* | settings-*) szs="390x844 1366x768" ;;
 		builds-*) szs="390x844 1366x768" ;;
 		vault-*) szs="$sizes 412x780 360x640" ;;
 		questdefect-words) szs="1366x768" ;;
@@ -777,7 +780,7 @@ $buildspages"
 			hover=* | ctx=* | expect=* | scroll=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g; s/|/%7C/g')" ;;
 			?*) ck="&click=$(enc "$pclick")" ;;
 			esac
-			case $pname in nav-* | navdefect-* | builds-*) ck="$ck&flow=1" ;; esac
+			case $pname in nav-* | navdefect-* | builds-* | settings-*) ck="$ck&flow=1" ;; esac
 			[ -n "$phit" ] && ck="$ck&hit=$(enc "$phit" | sed 's/%7C/|/g')"
 			if [ -n "$only" ]; then case $pname in $only) ;; *) continue ;; esac; fi
 			prof=$(mktemp -d)
