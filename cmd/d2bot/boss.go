@@ -5,6 +5,7 @@ import (
 	"d2lod-bot/internal/gclock"
 	"errors"
 	"fmt"
+	"math"
 	"strings"
 	"time"
 
@@ -276,7 +277,28 @@ func (a bossActs) Loot(ctx context.Context, spec boss.LootSpec) (int, error) {
 		}
 	}
 	rep, err := a.g.lt.PickUp(ctx, o)
+	if err == nil && len(rep.Picked) == 0 && len(spec.Quest) > 0 {
+		a.logGround(spec) // the quest item is not in reach: say what the engine's ground list holds (Proving Ground necro.act1-tools 2026-11-23)
+	}
 	return len(rep.Picked), err
+}
+
+// logGround logs every ground item near the loot center with its class, flags and distance, so a missing quest drop can be
+// told from one that lies outside the radius or under another name.
+func (a bossActs) logGround(spec boss.LootSpec) {
+	s, err := a.g.e.Snapshot()
+	if err != nil || s == nil || s.Player == nil {
+		return
+	}
+	var items []string
+	for _, u := range s.Ground {
+		d := math.Hypot(float64(u.X-spec.Center.X), float64(u.Y-spec.Center.Y))
+		items = append(items, fmt.Sprintf("class%d@%.0f", u.Class, d))
+		if len(items) >= 30 {
+			break
+		}
+	}
+	a.g.e.Log.Info("boss quest drop: nothing picked, ground list", "quest", spec.Quest, "center", spec.Center, "player", [2]int{s.Player.X, s.Player.Y}, "ground", items)
 }
 
 func (a bossActs) ToTown(ctx context.Context) error { return a.g.toTown(ctx) }
