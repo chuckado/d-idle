@@ -118,19 +118,19 @@ func (w *allocWire) next(build string, p *d2.Player) ([]points.Step, error) {
 	}
 	have := leveler.HaveFor(w.db, p, nil)
 	acts := b.Plan(have, leveler.DBRule(w.db, leveler.ClassCode(w.db, p.Class.String())), nil)
-	var skills, stats []points.Step
+	var out []points.Step
 	for _, a := range acts {
 		if a.Kind == leveler.KindStat {
-			stats = append(stats, points.Step{Kind: "stat", Stat: leveler.StatKey(a.Attr), Name: a.String()})
+			out = append(out, points.Step{Kind: "stat", Stat: leveler.StatKey(a.Attr), Name: a.String()})
 			continue
 		}
 		sk := w.db.SkillByName(a.Skill)
 		if sk == nil {
 			continue
 		}
-		skills = append(skills, points.Step{Kind: "skill", Skill: sk.ID, Name: a.Skill})
+		out = append(out, points.Step{Kind: "skill", Skill: sk.ID, Name: a.Skill})
 	}
-	return append(skills, stats...), nil
+	return skillsFirst(out), nil
 }
 
 func (w *allocWire) offBuild(build string, p *d2.Player) []string {
@@ -180,4 +180,17 @@ func runAutoAlloc(ctx context.Context, d *points.Desk, every time.Duration) {
 			cancel()
 		}
 	}
+}
+
+// skillsFirst keeps each group's order and puts the skill steps before the stat steps.
+func skillsFirst(steps []points.Step) []points.Step {
+	var skills, stats []points.Step
+	for _, st := range steps {
+		if st.Kind == "skill" {
+			skills = append(skills, st)
+		} else {
+			stats = append(stats, st)
+		}
+	}
+	return append(skills, stats...)
 }

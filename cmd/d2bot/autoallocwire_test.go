@@ -97,3 +97,23 @@ func TestSummonerTableStatsAreVitalityFirst(t *testing.T) {
 		t.Errorf("clvl 2-10: energy %d vitality %d", ene, vit)
 	}
 }
+
+func TestSkillsFirstTwoClasses(t *testing.T) {
+	for _, in := range [][]points.Step{
+		{{Kind: "stat", Stat: "ene"}, {Kind: "stat", Stat: "vit"}, {Kind: "skill", Name: "Raise Skeleton"}, {Kind: "skill", Name: "Skeleton Mastery"}},
+		{{Kind: "stat", Stat: "vit"}, {Kind: "skill", Name: "Fire Bolt"}, {Kind: "stat", Stat: "ene"}},
+	} {
+		out := skillsFirst(in)
+		if len(out) != len(in) || out[0].Kind != "skill" {
+			t.Fatalf("got %+v", out)
+		}
+		seenStat := false
+		for _, st := range out {
+			if st.Kind == "stat" {
+				seenStat = true
+			} else if seenStat {
+				t.Fatalf("a skill after a stat: %+v", out)
+			}
+		}
+	}
+}
