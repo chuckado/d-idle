@@ -1,10 +1,13 @@
 ---
 id: TASK-858
-title: 'toolstrade7: boss not found says what stood in view; tools scenario starts started'
-status: Proposed
+title: >-
+  toolstrade7: boss not found says what stood in view; tools scenario starts
+  started
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T05:32:00Z'
+updated_date: '2026-11-23T05:56:00Z'
 labels:
   - bot
   - probe
