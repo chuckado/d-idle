@@ -432,7 +432,7 @@
 | allochandoff | proposed | - | `internal/points`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`docs/autoalloc.md`<br>`tools/provingground/scenarios/autoalloc.json` | - |
 | opsquest | proposed | - | `cmd/d2bot/ops*.go`<br>`cmd/d2bot/main.go`<br>`cmd/d2bot/questwire.go`<br>`internal/ops/**`<br>`internal/questboard/audit.go`<br>`docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
 | uisettings | proposed | - | `internal/watch/web/settings.js`<br>`internal/watch/web/nav.js`<br>`internal/watch/web/nav.json`<br>`internal/watch/web/nav.css`<br>`internal/watch/web/sheet.js`<br>`internal/watch/settingsjs_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/settings/`<br>`docs/ui-design-system.md` | - |
-| qdmatrix | proposed | - | `docs/probes/quest-drill-matrix-2026-11-23.md`<br>`tools/provingground/scenarios/questdrill.json`<br>`internal/power/archetype.go`<br>`internal/power/skilldamage_test.go`<br>`internal/questboard/state.go`<br>`internal/questboard/state_test.go`<br>`internal/nav/exit.go`<br>`internal/nav/exitgoal_test.go`<br>`internal/nav/mouthgate.go`<br>`internal/bot/goal.go`<br>`internal/bot/goal_acts_test.go`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/setup_test.go`<br>`internal/talk/talk.go`<br>`internal/talk/talk_test.go` | - |
+| qdmatrix | proposed | - | `docs/probes/quest-drill-matrix-2026-11-23.md`<br>`tools/provingground/scenarios/questdrill.json`<br>`internal/power/archetype.go`<br>`internal/power/skilldamage_test.go`<br>`internal/questboard/state.go`<br>`internal/questboard/state_test.go`<br>`internal/nav/exit.go`<br>`internal/nav/exitgoal_test.go`<br>`internal/nav/mouthgate.go`<br>`internal/bot/goal.go`<br>`internal/bot/goal_acts_test.go`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/setup_test.go`<br>`cmd/d2bot/task.go`<br>`cmd/d2bot/acts_test.go`<br>`internal/talk/talk.go`<br>`internal/talk/talk_test.go` | - |
 | uisettings2 | proposed | - | `docs/design/fable-review-2026-11-22/e11-deletion-plan.md` | - |
 | uialerts | proposed | - | `internal/watch/web/alerts-feed.js`<br>`internal/watch/testdata/alertsfeed_test.cjs`<br>`internal/watch/settingsjs_test.go`<br>`internal/watch/web/nav.js`<br>`internal/watch/http_view.go`<br>`docs/ui-design-system.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -445,6 +445,9 @@
 | toolstrade11 | proposed | - | `internal/bot/resource.go`<br>`internal/bot/beltfill_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | opsquest4 | proposed | - | `internal/ops/**`<br>`cmd/d2bot/ops*.go`<br>`docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
 | uifit2 | proposed | - | `tools/uishots/fit.go`<br>`tools/uishots/fit_phone_test.go`<br>`docs/ui/fit-triage-2026-11-23.md` | - |
+| toolstrade13 | proposed | - | `tools/probes/capture.py`<br>`tools/probes/capture_test.py`<br>`internal/boss/run.go`<br>`internal/boss/boss_test.go`<br>`internal/boss/fake_test.go`<br>`internal/nav/gatedoor.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| uichars | proposed | - | `internal/charsel/store.go`<br>`internal/charsel/manager.go`<br>`internal/charsel/store_unsaved_test.go`<br>`internal/watch/web/characters.js`<br>`internal/watch/web/characters.json`<br>`internal/watch/charactersui_test.go`<br>`tools/uishots/fixtures_chars.go`<br>`docs/charselect.md` | - |
+| uiloot | proposed | - | `internal/watch/web/settings.js`<br>`internal/watch/web/shell.js`<br>`internal/watch/testdata/settings_test.cjs`<br>`internal/watch/settingsjs_test.go`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_builds.go`<br>`internal/watch/planwording_test.go`<br>`docs/ui/settings/` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
@@ -477,14 +480,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 0531b5b92 11-23 03:32 `Merge agent/uifit2: Merge branch 'main' into uifit2` (uifit2)
-- 5754bef9c 11-23 03:31 `Merge branch 'main' into uifit2` (-)
-- 933be05ef 11-23 03:29 `Merge agent/stage1b: Merge branch 'main' into stage1b` (stage1b)
-- cc9385ba9 11-23 03:28 `Merge branch 'main' into stage1b` (-)
-- 0c10ea25e 11-23 03:21 `Merge agent/opsquest4: Merge branch 'main' into opsquest4` (opsquest4)
-- 038a740d4 11-23 03:20 `Merge branch 'main' into opsquest4` (-)
-- 60d48e453 11-23 03:11 `Merge agent/questdrill2: Merge branch 'main' into qdmatrix` (questdrill2)
-- 8eb28bdd1 11-23 03:10 `Merge branch 'main' into qdmatrix` (-)
-- bdad4b6aa 11-23 03:07 `Merge remote-tracking branch 'origin/main' into agent/stage1b` (-)
-- 894801633 11-23 03:01 `Merge agent/toolstrade11: Merge branch 'main' into toolstrade11` (toolstrade11)
+- a6b5aa529 11-23 04:16 `Merge agent/questdrill4: Merge branch 'main' into qdmatrix` (questdrill4)
+- 264088bc8 11-23 04:14 `Merge branch 'main' into qdmatrix` (-)
+- 831d73ba5 11-23 04:04 `Merge agent/uiloot: Merge branch 'main' into uiloot` (uiloot)
+- b4f44d6b2 11-23 04:02 `Merge branch 'main' into uiloot` (-)
+- 6b9810d00 11-23 04:00 `Merge agent/toolstrade14: Merge branch 'main' into toolstrade14` (toolstrade14)
+- 8f4176a99 11-23 03:59 `Merge branch 'main' into toolstrade14` (-)
+- 20e45ed74 11-23 03:52 `Merge agent/uichars: Merge branch 'main' into uichars` (uichars)
+- 2a99bebdc 11-23 03:50 `Merge branch 'main' into uichars` (-)
+- 9f0ff6050 11-23 03:43 `Merge agent/toolstrade13: Merge branch 'main' into toolstrade13` (toolstrade13)
+- f53993461 11-23 03:41 `Merge branch 'main' into toolstrade13` (-)
 <!-- statusgen:end -->

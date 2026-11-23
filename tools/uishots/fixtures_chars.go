@@ -13,7 +13,7 @@ import (
 // rules come from the real handler. Times are relative to now, so "3 h ago" stays true.
 //
 //	1 one hero, 3 (default) three, 8 eight of every class with a hardcore, a dead and a damaged one, long names, deleted (archives),
-//	switching, creating, empty, off, nosave, measured (the backend cannot change anything)
+//	switching, creating, unsaved, empty, off, nosave, measured (the backend cannot change anything)
 func charsFixture(w http.ResponseWriter, r *http.Request) {
 	mode := "3"
 	if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("chars") != "" {
@@ -74,6 +74,10 @@ func charsFixture(w http.ResponseWriter, r *http.Request) {
 		v["switch"] = map[string]any{"from": "Holy", "to": "Zapp", "since": ago(5 * time.Second)}
 	case "creating":
 		v["switch"] = map[string]any{"from": "Holy", "to": "Newb", "creating": true, "since": ago(5 * time.Second)}
+	case "unsaved":
+		// a new hero is playing but not saved yet, and a parked folder with no save (card uichars)
+		chars[0].(map[string]any)["active"] = false
+		v["active"], v["unsaved"] = "Newb", []any{"Ghost"}
 	case "empty":
 		chars, v["active"] = []any{}, ""
 	case "measured":

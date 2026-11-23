@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/data"
@@ -24,6 +25,9 @@ func mountBuilds(m *http.ServeMux) {
 		return points.PreviewRow{Clvl: n, Skills: []points.PreviewSkill{{Skill: s, Points: pts}}}
 	}
 	dir, _ := os.MkdirTemp("", "uishots-points-")
+	// a locked build that took over its later table (the allocator handoff line, cards #1155 and #1176): the Build tab and the Points page
+	// then carry the long plan sentence and the spent / unspent / waiting text
+	os.WriteFile(filepath.Join(dir, "Fixture.points.json"), []byte(`{"autopilot":true,"build":"paladin-normal30","locked":true,"lockedAtLevel":12,"plan":"paladin-normal30-v2","planAtLevel":30}`), 0o600)
 	d := points.NewDesk(points.Config{
 		Hero: "Fixture", T: tb, Dir: dir,
 		AutoOn: func() bool { return true },

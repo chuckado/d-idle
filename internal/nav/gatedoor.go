@@ -3,7 +3,9 @@ package nav
 import (
 	"context"
 	"errors"
+	"fmt"
 	"math"
+	"sort"
 	"time"
 
 	"d2lod-bot/internal/d2"
@@ -90,6 +92,17 @@ func (n *Navigator) openDoorToward(ctx context.Context, o *obs, cands []gate, le
 		r.Refetch() // the door changed collision cells where the character did not move: read the grid again
 	}
 	n.invalidate()
+	if after, aerr := n.observeWait(ctx); aerr == nil {
+		// what the use did (card qdmatrix, tomb doors that stay shut): the object's mode and the grid cell at the door
+		mode := -99
+		for i := range after.snap.Objects {
+			if u := &after.snap.Objects[i]; u.ID == tg.ID {
+				mode = int(u.Mode)
+			}
+		}
+		fl, _ := after.lm.Grid.Flags(at.X, at.Y)
+		n.log.Info("nav: door used", "door", at, "target", tg.ID, "mode", mode, "cellFlags", fl, "pos", after.pos)
+	}
 	return true
 }
 
@@ -242,6 +255,8 @@ func (n *Navigator) logNoDoor(o *obs, levelNo int, cands []gate) {
 	for i := range o.snap.Objects {
 		snaps = append(snaps, input.Point{X: o.snap.Objects[i].X, Y: o.snap.Objects[i].Y})
 	}
+	n.log.Info("nav: cut-off gate, objects beside the character and the gate", "to", levelNo, "from", o.pos,
+		"nearCharacter", nearestObjects(o.lm.Presets, o.pos, 8), "nearGate", nearestObjects(o.lm.Presets, cands[0].at, 8))
 	n.log.Info("nav: cut-off gate, no door beside it", "to", levelNo, "gate", cands[0].at, "presetObjects", len(presets), "nearestPreset", nearest(presets), "snapObjects", len(snaps), "nearestSnap", nearest(snaps))
 }
 
@@ -290,4 +305,27 @@ func (n *Navigator) doorOnTheWay(o *obs, goal input.Point, doors []input.Point) 
 		}
 	}
 	return best, found
+}
+
+// nearestObjects lists the n object presets nearest to p as "class@x,y/distance": what stands around a spot that no door
+// opens (a barrel, a rack or a door class the data does not know), for the next live log.
+func nearestObjects(ps []d2map.Preset, p input.Point, n int) []string {
+	type row struct {
+		s string
+		d float64
+	}
+	var rows []row
+	for _, q := range ps {
+		if q.Kind != d2map.PresetObject {
+			continue
+		}
+		d := dist(p, input.Point{X: q.Pos.X, Y: q.Pos.Y})
+		rows = append(rows, row{fmt.Sprintf("%d@%d,%d/%d", q.ID, q.Pos.X, q.Pos.Y, int(d)), d})
+	}
+	sort.Slice(rows, func(i, j int) bool { return rows[i].d < rows[j].d })
+	var out []string
+	for i := 0; i < len(rows) && i < n; i++ {
+		out = append(out, rows[i].s)
+	}
+	return out
 }

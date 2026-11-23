@@ -506,3 +506,20 @@ func TestSameName(t *testing.T) {
 		}
 	}
 }
+
+// The anchor is found but the walk to it fails: "not found" says the spawn point could not be reached (V live
+// 2026-11-23: "boss not found in the arena" for a Smith whose room was behind walls). Must fail without anchorErr.
+func TestBossNotFoundSaysTheAnchorIsUnreachable(t *testing.T) {
+	for _, name := range []string{NameSmith, NameCountess} {
+		f := newFake()
+		s, _ := Lookup(name)
+		f.area = s.Arena
+		f.level = 40
+		f.presets = []Preset{{Kind: PresetNPC, ID: 99999, Name: name, Pos: Pt{73, 267}}}
+		f.gotoErr = errors.New("nav: no path: unreachable")
+		_, err := run(t, name, f, Opts{})
+		if !errors.Is(err, ErrBossNotFound) || !strings.Contains(err.Error(), "could not be reached") {
+			t.Errorf("%s: %v", name, err)
+		}
+	}
+}
