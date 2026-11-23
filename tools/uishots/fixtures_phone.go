@@ -153,7 +153,6 @@ var defectCSS = map[string]string{
 	"label":    `.cv .d-cells .item[data-shown] { font-size: 12px !important; }`,
 	"acts":     `.cv .cv-sel .cv-acts { max-block-size: 30px !important; overflow: hidden !important; }`,
 	"cutchips": `.cv .cv-bar { display: flex !important; flex-wrap: nowrap; overflow: hidden; } .cv .cv-bar > * { flex: none !important; } .cv .cv-chips { overflow: visible !important; mask-image: none !important; }`,
-	"lock":     `.cv .cv-side > .cv-lock { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }`,
 	"hover":    `.cv .cv-storez #stash { inline-size: 130% !important; max-inline-size: none !important; }`,
 	"narrow":   `.cv #pack, .cv #stash { --u: 20px !important; }`,
 	// the video card (card videoctl): the controls laid over the top-left of the picture, where the quest caption is

@@ -1260,6 +1260,8 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - opsquest2: questloop follows slow progress, backs off, runs to a deadline (TASK-866, merged 2026-11-23, acceptance 3 of 3): questloop follows slow progress (progress counter), budget, deadline, 20 min backoff after tries, heartbeat, idempotent restart, --all continues; fake-docker test; not run live. <!--sg:agent/opsquest2-->
 - agent/stage1: Merge branch 'main' into failspend (merged 2026-11-23) <!--sg:agent/stage1-->
 - toolstrade10: GoTo opens doors in a row; tools scenario hero wears a belt (TASK-868, merged 2026-11-23, acceptance 1 of 1): GoTo walks a corridor of doors one door at a time; unit-tested; lab Smith kill still pending. <!--sg:agent/toolstrade10-->
+- agent/uigate: Merge branch 'main' into uifit1 (merged 2026-11-23) <!--sg:agent/uigate-->
+- opsquest3: questloop waits on the active chunk first, hands in, treats busy as a switch (TASK-869, merged 2026-11-23, acceptance 3 of 3): questloop waits on the active chunk first, uses handin for awaiting_handin, busy switches instead of counting a try; fake-docker test; not run live. <!--sg:agent/opsquest3-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

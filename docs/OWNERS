@@ -788,6 +788,7 @@ docs/ui-design-system.md  credit-runner  uisettings
 docs/ui-design-system.md  credit-runner  uitoast
 docs/ui-overlays.md  credit-runner  menufit2
 docs/ui-regression-plan.md  credit-runner  fitfix
+docs/ui/fit-triage-2026-11-23.md  credit-runner  uifit1
 docs/ui/friend-feedback-2026-11-15.md  credit-runner  friendfb
 docs/ui/map-phone  credit-runner  mapphone
 docs/ui/nav-links  credit-runner  uinav
@@ -2203,8 +2204,10 @@ internal/watch/web/panels/quest-board/panel.js  credit-runner  handinbtn
 internal/watch/web/panels/quest-board/panel.js  credit-runner  uireason
 internal/watch/web/panels/quest-list  credit-runner  quests8
 internal/watch/web/panels/quest-strip  credit-runner  quests8
+internal/watch/web/panels/quest-strip/panel.css  credit-runner  uifit1
 internal/watch/web/panels/quest-strip/panel.js  credit-runner  uireason
 internal/watch/web/panels/statusline/  credit-runner  uifix1
+internal/watch/web/panels/statusline/panel.css  credit-runner  uifit1
 internal/watch/web/panels/video  credit-runner  labels
 internal/watch/web/panels/video  credit-runner  videoctl
 internal/watch/web/panels/video  credit-runner  videofeed2
@@ -2232,6 +2235,7 @@ internal/watch/web/shell.css  credit-runner  lootwire3
 internal/watch/web/shell.css  credit-runner  menufit2
 internal/watch/web/shell.css  credit-runner  pausemenufit
 internal/watch/web/shell.css  credit-runner  resetinstant
+internal/watch/web/shell.css  credit-runner  uifit1
 internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
 internal/watch/web/shell.css  credit-runner  uis6
@@ -2262,6 +2266,7 @@ internal/watch/web/update.js  credit-runner  uis7
 internal/watch/web/utilities.css  credit-runner  fitfix2
 internal/watch/web/utilities.css  credit-runner  mapphone
 internal/watch/web/utilities.css  credit-runner  quests8
+internal/watch/web/utilities.css  credit-runner  uifit1
 internal/watch/web/utilities.css  credit-runner  uivault
 internal/watch/web/vault-logic.js  credit-runner  fitfix3
 internal/watch/web/vault-logic.js  credit-runner  vaultclean
@@ -2487,6 +2492,7 @@ tools/uishots.sh  credit-runner  resetinstant
 tools/uishots.sh  credit-runner  sellall
 tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3
+tools/uishots.sh  credit-runner  uifit1
 tools/uishots.sh  credit-runner  uifix1
 tools/uishots.sh  credit-runner  uiphone
 tools/uishots.sh  credit-runner  uis3
@@ -2502,6 +2508,7 @@ tools/uishots.sh  credit-runner  vaultv7b
 tools/uishots.sh  credit-runner  videoctl
 tools/uishots.sh  credit-runner  videofeed4
 tools/uishots/  credit-runner  uic3
+tools/uishots/  credit-runner  uifit1
 tools/uishots/  credit-runner  uifix1
 tools/uishots/  credit-runner  uiphone
 tools/uishots/  credit-runner  uis3
