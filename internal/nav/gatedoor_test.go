@@ -170,3 +170,26 @@ func TestWalkKeepsOffTheBorderStripOfAnotherLevel(t *testing.T) {
 		})
 	}
 }
+
+// The door budget is per ExitTo call: the level is read again after a town trip with its doors shut. Must fail
+// without the reset in ExitTo (the third visit used to refuse the door).
+func TestExitToOpensTheSameDoorOnEveryVisit(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			s, cells := doorWorld(t)
+			s.onInteract = func(s *sim, tg input.Target) error {
+				if tg.ID == 77 {
+					openDoor(s, cells)
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class == 24 }
+			n.exploreFn = func(_ context.Context, _ func() bool, _ *input.Point) error { return ErrExplored }
+			n.doorTried = map[d2map.Point]int{{X: 3002, Y: 3057}: maxDoorTries} // earlier visits used it up
+			if err := n.ExitTo(ctxT(t), 2); err != nil {
+				t.Fatalf("exit: %v", err)
+			}
+		})
+	}
+}
