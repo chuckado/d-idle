@@ -267,6 +267,7 @@ cmd/d2bot/looteradapter_test.go  credit-runner  goldprio
 cmd/d2bot/lootruleswire.go  credit-runner  lootwire3
 cmd/d2bot/lootruleswire_test.go  credit-runner  lootwire3
 cmd/d2bot/lootshadowwire.go  credit-runner  lootwireL4
+cmd/d2bot/main.go  credit-runner  opsquest
 cmd/d2bot/mercplayer.go  credit-runner  botmerc
 cmd/d2bot/mercplayer_test.go  credit-runner  botmerc
 cmd/d2bot/mercwire.go  credit-runner  botmerc
@@ -278,6 +279,7 @@ cmd/d2bot/objects.go  credit-runner  cainfix
 cmd/d2bot/objects.go  live-agent  k1layout
 cmd/d2bot/objects_layout_test.go  live-agent  k1layout
 cmd/d2bot/objects_test.go  credit-runner  cainfix
+cmd/d2bot/ops*.go  credit-runner  opsquest
 cmd/d2bot/pausewire.go  credit-runner  uib1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
 cmd/d2bot/pointswire.go  credit-runner  agencyp0
@@ -288,6 +290,7 @@ cmd/d2bot/powerwire.go  credit-runner  survC
 cmd/d2bot/powerwire_test.go  credit-runner  survB
 cmd/d2bot/powerwire_test.go  credit-runner  survC
 cmd/d2bot/powerwire_test.go  credit-runner  survfix
+cmd/d2bot/questwire.go  credit-runner  opsquest
 cmd/d2bot/questwire.go  credit-runner  questrun
 cmd/d2bot/questwire.go  credit-runner  quests10
 cmd/d2bot/questwire.go  credit-runner  quests4
@@ -562,6 +565,7 @@ docs/mercrevive.md  credit-runner  mercrevive2
 docs/onboarding-tour.md  credit-runner  onboardtour
 docs/onboarding.md  credit-runner  firstminutes
 docs/onboarding.md  credit-runner  reconnectux
+docs/operator.md  credit-runner  opsquest
 docs/palprofile.md  credit-runner  palprofile2
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
@@ -1458,6 +1462,7 @@ internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
 internal/nav/waypoint.go  credit-runner  verbs2
 internal/nav/wpverb_test.go  credit-runner  verbs2
+internal/ops/**  credit-runner  opsquest
 internal/plandata  credit-runner  agencyp0
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
@@ -1500,6 +1505,7 @@ internal/questboard  credit-runner  quests3
 internal/questboard  credit-runner  quests4
 internal/questboard  credit-runner  quests7
 internal/questboard  credit-runner  quests8
+internal/questboard/audit.go  credit-runner  opsquest
 internal/questboard/chunks_test.go  credit-runner  cain45
 internal/questboard/chunks_test.go  credit-runner  cain5b
 internal/questboard/chunks_test.go  credit-runner  quests7b
@@ -2412,6 +2418,8 @@ tools/provingground/scenarios/vaultreveal.json  credit-runner  vaultpay
 tools/provingground/scenarios/vaultreveal.json  credit-runner  vaultreveal
 tools/provingground/scenarios/vaultsellall.json  credit-runner  sellall
 tools/provingground/status_doc.sh  credit-runner  pgpage
+tools/questloop.sh  credit-runner  opsquest
+tools/questloop_test.sh  credit-runner  opsquest
 tools/survival  credit-runner  pghero
 tools/survival  credit-runner  survhold2
 tools/survival  credit-runner  survtune
