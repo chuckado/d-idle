@@ -201,3 +201,17 @@ The `route guard: kit (1 mana potions < 2 (caster))` park of run 20261123-154454
 `quest board: not startable ... max life 300 needed for the Barracks (have 235)` at clvl 28 and `(have 283)` at clvl 34 (taps logs of runs 20261123-164135-8aad and 164921-809c): the Necromancer needs about clvl 36 to 40 for 300 life without gear. The scenario `necro.act1-tools` is now a clvl 40 stand-in with `reach:50` (a clvl 34 hero idles with the default `reach:30`). A played Necromancer therefore waits at the gate for levels, which is what the gate is for.
 
 Stage 2b: still RED (Smith killed by the army, no Malus). Stage 3 not attempted. Not ready to play.
+
+## 16. The Malus: control run and the lab gap (card malus2; 2026-11-23 evening, builder long lane, PG_DIR pg-necro, lab d2d devp20, CHEATED setups)
+
+Authoritative answer (user, 2026-11-23): the Smith drops the Malus whoever lands the killing blow; so the hypothesis "the hero's own blow is needed" is dropped and no profile flag is built. The d2-sme agent answered the same from memory (U, no source): minion kills drop normally, no Charsi acceptance needed.
+
+| run | who killed | fixture | result |
+|---|---|---|---|
+| 20261123-165530-314a `necro.act1-tools` | the Necromancer's army (hero only buffs and curses) | record 3 word 0x000c, clvl 40 | `killed: true`, `loot: 0`; ground list within 25 subtiles of the corpse empty for 9 s (4 looks) |
+| 20261123-174602-c2e4 `necro.tools-paladin-control` (`route.barracksMinLife` 0) | the Paladin, own blows (clvl 60 fixture, merc) | the same word 0x000c | `killed: true`, `loot: 1`: the quest item was picked up |
+| 20261123-173540-9415 Necromancer with Teeth (default table, `route.barracksMinLifeCaster` 100) | n/a | same word | the 265-life hero chickened twice in the Barracks crowd (`left the game to survive`), the chunk parked after two deaths: no kill to read |
+
+Reading (V for the two kill results, U for the mechanism): with the identical quest word the Malus exists after a hero kill and not after an army kill, so the Charsi state of the fixture is NOT the cause (the Paladin drop used it). Since the real game drops it for a minion kill (user), the gap is in the lab binary (U: the d2d engine credits a quest drop only to a player kill, or reads the owner of the killing blow as the monster's pet). That is a fork question, not a bot one: the drop for a pet kill should be credited to the pet's owner. Cards: `d2d fork: quest/boss drops for a kill by the player's minions` (owner fork), and until then any lab stage with the Necromancer's army killing a quest boss stays RED for a lab reason.
+The ground list verbs of devp23 (`debug objectlist`) list objects, not ground items; the bot's `ground` list (logged by `boss quest drop: ... ground list`) is the right read, and it was empty near the corpse.
+Not run: the fixture without the quest word (`pre.quests` empty) and with word 0x0004 only: not needed, the Paladin control already used the same 0x000c.
