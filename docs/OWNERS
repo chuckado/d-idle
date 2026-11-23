@@ -2342,7 +2342,6 @@ tools/provingground/run.sh  credit-runner  pgjournal
 tools/provingground/run.sh  credit-runner  pgledgeron
 tools/provingground/scenarios/act1.json  credit-runner  countess
 tools/provingground/scenarios/act1.json  credit-runner  countess2
-tools/provingground/scenarios/act1.json  credit-runner  denfix
 tools/provingground/scenarios/act1more.json  credit-runner  act1more
 tools/provingground/scenarios/act1more.json  credit-runner  andariel1
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade2

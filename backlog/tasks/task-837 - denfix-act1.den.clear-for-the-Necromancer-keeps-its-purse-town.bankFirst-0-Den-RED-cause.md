@@ -1,10 +1,13 @@
 ---
 id: TASK-837
-title: 'denfix: act1.den.clear for the Necromancer keeps its purse (town.bankFirst 0), Den RED cause'
-status: Proposed
+title: >-
+  denfix: act1.den.clear for the Necromancer keeps its purse (town.bankFirst 0),
+  Den RED cause
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T02:30:00Z'
+updated_date: '2026-11-23T02:43:00Z'
 labels:
   - bot
   - drill
