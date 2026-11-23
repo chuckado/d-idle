@@ -2276,6 +2276,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "j34",
+      "count": 1
      }
     ],
     "belt": [
@@ -2355,7 +2359,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: Act 3 start in the Kurast Docks by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
+   "provenance": "CHEATED: Act 3 start in the Kurast Docks by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero). The Jade Figurine (a random drop) is given by a SETUP verb.",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -2928,6 +2932,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "j34",
+      "count": 1
      }
     ],
     "belt": [
@@ -3007,7 +3015,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets. The Jade Figurine (a random drop) is given by a SETUP verb.",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
