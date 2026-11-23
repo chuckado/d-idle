@@ -939,6 +939,7 @@ internal/bot/goal.go  credit-runner  goldprio
 internal/bot/goal.go  credit-runner  hourfix
 internal/bot/goal.go  credit-runner  hourfix2
 internal/bot/goal.go  credit-runner  maphistoryA
+internal/bot/goal.go  credit-runner  qdmatrix
 internal/bot/goal.go  credit-runner  questrun
 internal/bot/goal.go  credit-runner  quests3
 internal/bot/goal.go  credit-runner  repairtrip
@@ -949,6 +950,7 @@ internal/bot/goal.go  credit-runner  survrecover
 internal/bot/goal.go  credit-runner  uib1
 internal/bot/goal.go  credit-runner  vaultv5
 internal/bot/goal.go  pro-runner  levelplan3
+internal/bot/goal_acts_test.go  credit-runner  qdmatrix
 internal/bot/goldfarm.go  credit-runner  repairtrip
 internal/bot/goldprio.go  credit-runner  goldprio
 internal/bot/goldprio_test.go  credit-runner  goldprio
@@ -1458,6 +1460,7 @@ internal/nav/gatedoor_test.go  credit-runner  toolstrade2
 internal/nav/gatedoor_test.go  credit-runner  toolstrade8
 internal/nav/hints_export.go  credit-runner  exitsread
 internal/nav/mouthgate.go  credit-runner  botstuck
+internal/nav/mouthgate.go  credit-runner  qdmatrix
 internal/nav/mouthgate.go  credit-runner  warptrigger
 internal/nav/nav.go  credit-runner  countess3b
 internal/nav/nav.go  credit-runner  knownedge
@@ -1587,10 +1590,13 @@ internal/scenario/result.go  credit-runner  pgdigest
 internal/scenario/result.go  credit-runner  pgprov
 internal/scenario/result.go  credit-runner  pgtaps
 internal/scenario/scenario.go  credit-runner  barb1
+internal/scenario/scenario.go  credit-runner  qdmatrix
 internal/scenario/scenario.go  credit-runner  tapall
 internal/scenario/scenario_test.go  credit-runner  agencyp0
 internal/scenario/scenario_test.go  credit-runner  barb1
 internal/scenario/scenario_test.go  credit-runner  druid1
+internal/scenario/setup.go  credit-runner  qdmatrix
+internal/scenario/setup_test.go  credit-runner  qdmatrix
 internal/scenario/stability.go  credit-runner  pgstability
 internal/scenario/state.go  credit-runner  agencyp0
 internal/scenario/state.go  credit-runner  town1
