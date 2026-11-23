@@ -8,6 +8,7 @@ import (
 	"d2lod-bot/internal/boss"
 	"d2lod-bot/internal/bot"
 	"d2lod-bot/internal/quest"
+	"d2lod-bot/internal/questboard"
 	"d2lod-bot/internal/questmem"
 	"d2lod-bot/internal/talk"
 	"d2lod-bot/internal/task"
@@ -165,5 +166,33 @@ func TestMercHirerRefusesKashya(t *testing.T) {
 	err := mercHirer(nil, nil)(context.Background(), 1, "")
 	if err == nil || task.Classify(err) != task.KindPrereq {
 		t.Fatalf("err %v kind %v", err, task.Classify(err))
+	}
+}
+
+// A board quest whose id is a quest word of the save (internal/saves questTable) must read that word through the task id it
+// runs under, or its done state can only come from item proxies, which never unlock a quest that requires it (T3 is not
+// exact): the Tainted Sun ran on "viper_amulet", had no word, and "Assemble the Horadric Staff" stayed locked until the
+// Tainted Sun for good (lab run drill.act2.assemble, 2026-11-23).
+func TestEveryBoardQuestWithAWordReadsIt(t *testing.T) {
+	b, err := questboard.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	var bad []string
+	for _, q := range b.Quests() {
+		if _, ok := questmem.QuestIndex(q.ID); !ok || q.Kind == "unlock" { // a hop is read from the world's act
+			continue
+		}
+		tid := q.TaskID
+		if tid == "" {
+			tid = q.ID
+		}
+		if taskQuestIDs[tid] != q.ID && tid != q.ID {
+			bad = append(bad, q.ID+" runs as "+tid)
+		}
+	}
+	sort.Strings(bad)
+	if len(bad) > 0 {
+		t.Fatalf("the quest word of these board quests is never read: %v", bad)
 	}
 }
