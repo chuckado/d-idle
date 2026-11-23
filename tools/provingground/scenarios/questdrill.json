@@ -330,24 +330,6 @@
      "hp1",
      "hp1",
      "hp1"
-    ],
-    "worn": [
-     {
-      "code": "cap",
-      "slot": "head"
-     },
-     {
-      "code": "qui",
-      "slot": "torso"
-     },
-     {
-      "code": "ssd",
-      "slot": "rhand"
-     },
-     {
-      "code": "buc",
-      "slot": "lhand"
-     }
     ]
    },
    "trigger": {
@@ -379,7 +361,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: level 24, gold, Andariel record 6 set to 0x200a (killed, reward pending) and basic gear by SETUP verbs. Mechanics only.",
+   "provenance": "CHEATED: level 24, gold, Andariel record 6 set to 0x200a (killed, reward pending) by SETUP verbs. Mechanics only.",
    "notes": "Quest drill matrix. Row act1_done is locked until Andariel is done; the board must offer Hand in (Warriv, pick Go East) and the hero must end in Lut Gholein.",
    "assert": [
     {
