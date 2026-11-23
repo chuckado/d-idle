@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- ADR 0030 operator quest control; ADR 0029 amended for vault sell credit <!--sg:agent/adrs-->
 - Merge branch 'main' into toolstrade26 <!--sg:agent/toolstrade26-->
 - Merge branch 'main' into qdmatrix <!--sg:agent/questdrill12-->
 - Merge branch 'main' into toolstrade25 <!--sg:agent/toolstrade25-->
