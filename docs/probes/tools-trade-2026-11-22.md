@@ -32,3 +32,9 @@ First attempt now opens the door (141,2) from (142,4) and `Entered Outer Cloiste
 - V (run k3-202347 fixgw, bot log): after a town trip the hero arrives at the Monastery Gate at (162,86), 4 subtiles from the south border; the walk to the door at (140,78) was planned via (162,89) and (147,89), onto the strip toward level 7, and the level changed ("left level 26 for 27 but ended in 7"). Level ids are right (27 is the Outer Cloister); not an off-by-one: the planner only penalised tile exits, never border strips.
 - Fix: `penalizeBorders` (internal/nav/nav.go) puts a soft cost on the strip cells toward every neighbour other than `wantExit`, except near the goal. Must-fail test `TestWalkKeepsOffTheBorderStripOfAnotherLevel`.
 - Scenario hero: `act1.tools.malus` now clvl 19 with a Rogue merc and cap, quilted armor, short sword and buckler (CHEATED, mechanics only).
+
+## Round 3 (card toolstrade3)
+
+- V (run k3-212315 off, bot log): the Monastery Gate door budget (`maxDoorTries` 2 per door per game) was used up by the first two visits; from the third visit on every ExitTo failed with "gate to level 27 is on the map but not reachable (cut off, no way out found)" and the board parked. The level is generated again after each town trip with its doors shut. Fix: `doorTried` and `doorApproach` are reset at the start of each ExitTo call. Must-fail test `TestExitToOpensTheSameDoorOnEveryVisit`.
+- Scenario `act1.tools.barracks`: the chunk from a field start in the Outer Cloister (CHEATED, level 26) to reach the Barracks leg without the arrival crowd deciding.
+- Observed, not fixed: with the clvl 19 hero and a merc the run keeps going home (merc dies, portal casts cancelled by the crowd rule, `guard/route/chores/home ran but is still needed`) and parks after three tries: a combat and safety finding at the Outer Cloister arrival, not nav.

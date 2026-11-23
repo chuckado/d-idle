@@ -106,7 +106,7 @@ type Navigator struct {
 	doorFn       func(class int) bool // test hook: is this object class a door (default: objects.txt IsDoor)
 	doorLogged   map[[2]int]bool
 	doorApproach map[[2]int]int
-	doorTried    map[d2map.Point]int // gate doors ExitTo already opened this game, by map position (gatedoor.go)
+	doorTried    map[d2map.Point]int // gate doors the current ExitTo already opened, by map position (gatedoor.go)
 	mouthLast    mouthKey
 	mouthLastOK  bool
 	goal         input.Point // fixed goal of the GoTo in progress (goalSet): the mouth gate treats exits around it as pockets
