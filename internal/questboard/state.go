@@ -202,7 +202,10 @@ func deriveChunk(b *Board, q Quest, c Chunk, fact Fact, in Input) ChunkView {
 	case fact.Known && fact.Done:
 		cv.State, cv.Tier, cv.Confirmed = Done, fact.Tier, fact.Tier.Exact()
 		return cv
-	case cf.Done && !memoryDenies(q, fact, cf):
+	// A proxy read never beats an unmet prerequisite: a step that is "not needed" only because its ready test is false
+	// (Duriel's door without the Staff, the Hellforge without a Soulstone) reads done, and an Act 1 hero showed Duriel and
+	// the Hellforge done (sandbox 2026-11-23). Exact evidence (T1/T2) of a later part still counts.
+	case cf.Done && !memoryDenies(q, fact, cf) && (cf.Tier.Exact() || lockedBy(b, q, c, in) == ""):
 		cv.State, cv.Tier, cv.Confirmed = Done, cf.Tier, cf.Tier.Exact()
 		return cv
 	}
