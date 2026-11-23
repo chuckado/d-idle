@@ -570,6 +570,10 @@
      {
       "record": 7,
       "word": 1
+     },
+     {
+      "record": 9,
+      "word": 1
      }
     ],
     "items": [
@@ -710,6 +714,10 @@
      },
      {
       "record": 7,
+      "word": 1
+     },
+     {
+      "record": 9,
       "word": 1
      }
     ],
@@ -997,6 +1005,10 @@
      {
       "record": 11,
       "word": 1
+     },
+     {
+      "record": 9,
+      "word": 1
      }
     ],
     "items": [
@@ -1157,6 +1169,10 @@
      {
       "record": 12,
       "word": 1
+     },
+     {
+      "record": 9,
+      "word": 1
      }
     ],
     "items": [
@@ -1309,6 +1325,10 @@
      },
      {
       "record": 13,
+      "word": 1
+     },
+     {
+      "record": 9,
       "word": 1
      }
     ],
