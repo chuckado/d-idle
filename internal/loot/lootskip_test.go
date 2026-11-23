@@ -172,3 +172,29 @@ func TestPackBufferHealingAndManaApart(t *testing.T) {
 		}
 	}
 }
+
+// Hoard guard (tphoard): a tome with room absorbs a picked scroll, but a read that says "room" while the tome is full
+// (stat 70 dropout) must not pile loose scrolls into the pack. Loose scrolls beside a tome stop at town.looseScrollKeep.
+func TestLooseScrollsCappedBesideTome(t *testing.T) {
+	for _, cls := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, c := range []struct{ scroll, tome string }{{"tsc", "tbk"}, {"isc", "ibk"}} {
+			l, r := newLooter(t)
+			w := r.W
+			w.Player.Class = cls
+			w.Player.Level = 18
+			keep := l.Env().Tune.Town.LooseScrollKeep
+			if keep < 1 {
+				t.Fatalf("looseScrollKeep default %d: must be a small positive cap", keep)
+			}
+			tb := w.Add(c.tome, d2.ContInventory, 0, 0)
+			delete(w.Stats, tb.Addr) // the dropout read: no stat list, indistinguishable from an empty tome
+			for i := 0; i < keep+5; i++ {
+				got := l.EvaluateUnit(w.NewItem(c.scroll, 2)).Rule == "town scrolls"
+				if want := i < keep; got != want {
+					t.Fatalf("%v %s with %d loose beside the tome: wanted %v, want %v", cls, c.scroll, i, got, want)
+				}
+				w.Add(c.scroll, d2.ContInventory, 1+i%9, 1+i/9)
+			}
+		}
+	}
+}

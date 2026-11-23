@@ -816,3 +816,63 @@ func TestClearOrDropFallsBackToGround(t *testing.T) {
 		t.Fatalf("cursor %v ground %d", w.Cursor != nil, len(w.Ground))
 	}
 }
+
+// pgfix4 (Proving Ground loot.rare-ring-classified, Sorceress seed 3): a ground ring whose quality the d2d label cannot
+// tell (the verb answered nothing: quality 0) fell to the pickit default ("drop: no rule matches") and was left lying.
+// Rings, amulets and circlets never drop normal, so every unidentified one is worth taking to the identify step.
+func TestUnknownQualityJewelryIsTaken(t *testing.T) {
+	for _, cl := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		t.Run(cl.String(), func(t *testing.T) {
+			l, r := newLooter(t)
+			r.W.Player.Level = 10
+			r.W.Player.Class = cl
+			for _, code := range []string{"rin", "amu"} {
+				u := r.W.NewItem(code, 0)
+				u.Item.Flags = 0
+				if v := l.EvaluateWith(u, loot.Ctx{CLvl: 10, Gold: 300}); v.Action != loot.Keep || v.Rule != "jewelry unknown quality" || !v.NeedID {
+					t.Errorf("%s quality unknown: %v rule %q needId %v, want keep by jewelry unknown quality", code, v.Action, v.Rule, v.NeedID)
+				}
+			}
+		})
+	}
+}
+
+// A ground item and a carried item can share a unit id (the game numbers them apart, docs/tomestat.md). unwear looked the
+// picked item up by that id, found the worn cap with the same number and took the CAP off because the picked throwing
+// weapon is no weapon for the class (card recallsorc: manage.recall-now, a Sorceress lost the cap an Equip order had put
+// on; the worn cap went to the cursor with no log line).
+func TestPickUpDoesNotTakeOffAWornItemThatSharesTheGroundId(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		l, r := newLooter(t)
+		w := r.W
+		w.Player.Class = class
+		cap := w.Add("cap", d2.ContEquipment, 0, 0)
+		for i := range w.Items {
+			if w.Items[i].ID == cap.ID {
+				w.Items[i].Item.Body = d2.BodyHead
+			}
+		}
+		jav := w.AddGround("gps", 2, 6021, 4931)
+		w.Ground[len(w.Ground)-1].ID = cap.ID // the same number as the worn cap
+		_ = jav
+		rep, err := l.PickUp(context.Background(), loot.PickOpts{Names: []string{"Strangling Gas Potion"}})
+		if err != nil {
+			t.Fatalf("%v: %v", class, err)
+		}
+		if len(rep.Picked) != 1 {
+			t.Fatalf("%v: potion not picked: %+v", class, rep)
+		}
+		if w.Cursor != nil {
+			t.Fatalf("%v: item on the cursor: the worn cap was taken off", class)
+		}
+		worn := false
+		for _, it := range w.Items {
+			if it.Class == cap.Class && it.Item.Where == d2.ContEquipment {
+				worn = true
+			}
+		}
+		if !worn {
+			t.Fatalf("%v: the cap left the body", class)
+		}
+	}
+}

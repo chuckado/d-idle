@@ -1,0 +1,6 @@
+{
+ "schema": "inputcaps/1",
+ "backend": "d2d-lab",
+ "verbs": [],
+ "note": "Same as the sandbox build in use; the list grows when a fork build advertises input.* names in caps."
+}

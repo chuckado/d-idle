@@ -1,0 +1,341 @@
+<title>d.idle Watch Cockpit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: a cockpit that fills the viewport and never scrolls. Band on top; the game picture sized by the viewport height;
+   under it one strip (progress, journey, health); the rest of the width is the command rail (needs you, orders, map). */
+:root{
+  color-scheme:dark;
+  --bg:#0b0907;--s1:#17130f;--s2:#201a14;--s3:#2a231b;--line:#342b21;--line2:#4a3f31;
+  --text:#ece2cf;--text2:#b9aa94;--text3:#857560;
+  --accent:#c7a44a;--accent-text:#e6c76f;--on-accent:#1a1408;--focus:#8db8ff;
+  --ok:#7cc47e;--warn:#e3a93a;--danger:#ec7d6c;--info:#7ab0e8;
+  --ok-bg:#1c2819;--warn-bg:#33270e;--danger-bg:#371a14;--info-bg:#15222f;
+  --life:#c8433a;--mana:#4f7fe0;--hatch:#120f0c;
+  --display:Georgia,"Iowan Old Style","Palatino Linotype",serif;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --num:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --g:8px;--band:44px;--strip:112px;--rail-min:400px;
+  --vh:min(calc(100dvh - var(--band) - var(--strip) - 3 * var(--g)), calc((100vw - var(--rail-min) - 3 * var(--g)) * .75));
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  color-scheme:light;--bg:#e9e1d1;--s1:#f8f2e6;--s2:#efe6d4;--s3:#e3d8c1;--line:#d6c9ad;--line2:#b9a988;
+  --text:#231c12;--text2:#55493a;--text3:#7a6c58;--accent:#8a6a14;--accent-text:#6f540c;--on-accent:#fff8e6;--focus:#1f5fbf;
+  --ok:#2c7a34;--warn:#8f5f00;--danger:#b23a2a;--info:#1f5f9f;--ok-bg:#dcecd6;--warn-bg:#f3e3bb;--danger-bg:#f5d9d2;--info-bg:#d7e5f3;
+  --life:#b8362c;--mana:#3564c4;--hatch:#ddd3bd;
+}}
+:root[data-theme="light"]{
+  color-scheme:light;--bg:#e9e1d1;--s1:#f8f2e6;--s2:#efe6d4;--s3:#e3d8c1;--line:#d6c9ad;--line2:#b9a988;
+  --text:#231c12;--text2:#55493a;--text3:#7a6c58;--accent:#8a6a14;--accent-text:#6f540c;--on-accent:#fff8e6;--focus:#1f5fbf;
+  --ok:#2c7a34;--warn:#8f5f00;--danger:#b23a2a;--info:#1f5f9f;--ok-bg:#dcecd6;--warn-bg:#f3e3bb;--danger-bg:#f5d9d2;--info-bg:#d7e5f3;
+  --life:#b8362c;--mana:#3564c4;--hatch:#ddd3bd;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:12.5px/1.35 var(--body);overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.num{font-family:var(--num);font-variant-numeric:tabular-nums}
+.app{height:100dvh;display:grid;grid-template-rows:var(--band) minmax(0,1fr)}
+
+/* band */
+.band{display:flex;align-items:center;gap:14px;background:var(--s1);border-bottom:1px solid var(--line);min-width:0;
+  padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+.brand{font:700 16px var(--display);color:var(--accent-text);display:flex;align-items:center;gap:6px;flex:none}
+.brand i{width:9px;height:9px;background:var(--accent);transform:rotate(45deg)}
+.say{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:9px;background:none;border:0;padding:0;text-align:left;height:100%}
+.word{flex:none;font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:var(--ok-bg);color:var(--ok)}
+.say[data-tone="warn"] .word{background:var(--warn-bg);color:var(--warn)}.say[data-tone="info"] .word{background:var(--info-bg);color:var(--info)}
+.txt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px;font-weight:600}
+.txt span{font-weight:400;color:var(--text2)}
+.vl{color:var(--text3);font-size:10px}
+.vit{flex:none;display:grid;grid-template-columns:auto 86px 30px;gap:3px 6px;align-items:center;font-size:10.5px}
+.bar{height:5px;border-radius:3px;background:var(--s3);overflow:hidden}.bar i{display:block;height:100%}
+.pill{flex:none;border:0;border-radius:999px;padding:4px 11px;font-weight:700;font-size:11px;background:var(--danger-bg);color:var(--danger)}
+.pill[data-n="0"]{background:var(--s2);color:var(--text3)}
+.nav{flex:none;display:flex;gap:4px}
+.nav button{background:none;border:1px solid var(--line2);border-radius:4px;padding:4px 10px;color:var(--text2)}
+
+/* stage */
+.stage{min-height:0;display:grid;gap:var(--g);padding-block:var(--g);
+  padding-left:max(var(--g),env(safe-area-inset-left,0px));padding-right:max(var(--g),env(safe-area-inset-right,0px));
+  grid-template-columns:calc(var(--vh) * 4 / 3) minmax(0,1fr);grid-template-rows:var(--vh) minmax(0,1fr);
+  grid-template-areas:"video rail" "strip rail"}
+.video{grid-area:video;position:relative;background:repeating-linear-gradient(135deg,var(--hatch) 0 16px,var(--bg) 16px 32px);border:1px solid var(--line2);border-radius:4px;display:grid;place-items:center;color:var(--text3);text-align:center;min-width:0;overflow:hidden}
+.video .where{position:absolute;left:8px;bottom:8px;background:rgb(0 0 0 / .62);color:#ece2cf;padding:3px 8px;border-radius:3px;font-size:11px}
+.video .mm{position:absolute;right:8px;top:8px;display:flex;gap:4px}
+.video .mm button{background:rgb(0 0 0 / .62);border:1px solid rgb(255 255 255 / .18);color:#ece2cf;border-radius:3px;padding:2px 8px;font-size:11px}
+.strip{grid-area:strip;min-height:0;display:grid;gap:var(--g);grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1.1fr)}
+.rail{grid-area:rail;min-height:0;min-width:0;display:grid;gap:var(--g);grid-template-rows:auto auto minmax(0,1fr);grid-template-columns:minmax(0,1fr)}
+.tile{background:var(--s1);border-radius:4px;padding:8px 10px;min-width:0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.tile>h2{flex:none;margin:0 0 6px;font:700 10px var(--body);letter-spacing:.11em;text-transform:uppercase;color:var(--text3);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tile>h2 em{font-style:normal;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text2);font-size:11px}
+.needs:empty{display:none}
+
+/* rows */
+.row{display:grid;grid-template-columns:16px minmax(0,auto) minmax(0,1fr) auto auto;gap:8px;align-items:center;min-height:28px;border-top:1px solid var(--line);padding:2px 0}
+.row:first-of-type{border-top:0}
+.row .ix{font:10.5px var(--num);color:var(--text3);text-align:center}
+.row .t{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .r{color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px}
+.row.plan .t{font-weight:400;color:var(--text2)}
+.row[data-s="done"] .t{color:var(--text3);font-weight:400}
+.chip{font-size:10px;padding:1px 7px;border-radius:999px;background:var(--s3);color:var(--text2);white-space:nowrap;text-transform:uppercase;letter-spacing:.05em}
+.chip[data-s="active"]{background:var(--ok-bg);color:var(--ok)}.chip[data-s="waiting"],.chip[data-s="next"]{background:var(--info-bg);color:var(--info)}.chip[data-s="failed"]{background:var(--danger-bg);color:var(--danger)}
+.x{background:none;border:0;color:var(--text3);padding:0 4px;font-size:15px;line-height:1}
+.x:hover{color:var(--danger)}
+.alert{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:8px;align-items:center;min-height:32px;padding:3px 8px;border-radius:3px;background:var(--info-bg)}
+.alert+.alert{margin-top:4px}
+.alert[data-sev="danger"]{background:var(--danger-bg)}.alert[data-sev="warn"]{background:var(--warn-bg)}
+.alert p{margin:0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.alert p b{font-weight:600}.alert p span{color:var(--text2)}
+.shape{width:10px;height:10px;background:var(--info);border-radius:50%}
+[data-sev="warn"] .shape{background:var(--warn);border-radius:0;clip-path:polygon(50% 0,100% 100%,0 100%)}
+[data-sev="danger"] .shape{background:var(--danger);border-radius:0;clip-path:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%)}
+.btn{height:26px;padding:0 10px;border-radius:3px;border:1px solid var(--line2);background:var(--s2);white-space:nowrap}
+.btn:hover{background:var(--s3)}
+.btn.p{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.btn kbd{font:10px var(--num);opacity:.6;margin-left:5px}
+.verbs{flex:none;display:flex;gap:4px;margin-bottom:4px;position:relative}
+.verbs .btn{flex:1 1 0;padding:0 4px}
+.rows{min-height:0;overflow:auto}
+.more{position:absolute;right:0;top:30px;z-index:5;background:var(--s2);border:1px solid var(--line2);border-radius:4px;padding:4px;display:grid;min-width:190px;box-shadow:0 8px 24px rgb(0 0 0 / .4)}
+.more button{background:none;border:0;text-align:left;padding:5px 8px;border-radius:3px}.more button:hover{background:var(--s3)}
+
+/* map */
+.maptile{position:relative}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:3px;overflow:hidden}
+.seg button{background:none;border:0;padding:1px 8px;font-size:10.5px;color:var(--text2);letter-spacing:0;text-transform:none;font-weight:400}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.act{container-type:size;position:relative;flex:1 1 auto;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(10,minmax(0,1fr));gap:5px 14px}
+.act svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.act line{stroke:var(--line2);stroke-width:1.5;vector-effect:non-scaling-stroke}.act line.dun{stroke-dasharray:3 4}
+.act polyline{fill:none;stroke:var(--accent);stroke-width:2.5;vector-effect:non-scaling-stroke}
+.node{position:relative;z-index:1;background:var(--s2);border:1px solid var(--line2);border-left:3px solid var(--text3);border-radius:3px;padding:0 6px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:4px;min-width:0;font-size:11px;white-space:nowrap;overflow:hidden}
+.node:hover{background:var(--s3)}
+.node>span:first-child{overflow:hidden;text-overflow:ellipsis;min-width:0;line-height:1.25}
+.node em{display:none;font-style:normal;color:var(--text3);font-size:10px;overflow:hidden;text-overflow:ellipsis}
+@container (min-height:430px){.node em{display:block}}
+.node small{color:var(--text3);font:9.5px var(--num);flex:none}
+.node[data-b="in"]{border-left-color:var(--ok)}.node[data-b="above"]{border-left-color:var(--warn)}.node[data-b="hard"]{border-left-color:var(--danger)}
+.node[data-b="locked"]{border-style:dashed;color:var(--text3)}
+.node[data-here]{box-shadow:0 0 0 1.5px var(--info)}
+.node[data-target]{box-shadow:0 0 0 2px var(--accent);background:var(--s3)}
+.node .pin{background:var(--accent);color:var(--on-accent);border-radius:50%;width:14px;height:14px;display:grid;place-items:center;font:700 9px var(--num);flex:none}
+.legend{grid-column:1;grid-row:1 / span 3;display:flex;flex-direction:column;justify-content:flex-start;gap:3px;font-size:10.5px;color:var(--text3);min-width:0}
+.legend span{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.legend span::before{content:"";width:3px;height:12px;background:var(--text3);flex:none}
+.legend span[data-b="in"]::before{background:var(--ok)}.legend span[data-b="above"]::before{background:var(--warn)}.legend span[data-b="hard"]::before{background:var(--danger)}
+.acts{grid-column:3;grid-row:1 / span 3;display:flex;gap:3px;align-items:flex-start;justify-content:flex-end}
+.acts button{width:26px;height:22px;background:none;border:1px solid var(--line2);border-radius:3px;font:11px var(--display);color:var(--text2);padding:0}
+.acts button[aria-pressed="true"]{background:var(--s3);color:var(--accent-text);border-color:var(--accent)}.acts button[disabled]{color:var(--text3);border-style:dashed;cursor:default}
+.area{flex:1 1 auto;min-height:0}
+.area svg{width:100%;height:100%;display:block}
+.area rect{fill:var(--s3);stroke:var(--line2)}.area .tr{fill:none;stroke:var(--info);stroke-width:2}.area .ft{fill:none;stroke:var(--danger);stroke-width:2}
+.menu{position:absolute;left:8px;right:8px;bottom:8px;z-index:4;background:var(--s2);border:1px solid var(--line2);border-radius:4px;padding:10px;box-shadow:0 10px 28px rgb(0 0 0 / .5)}
+.menu h3{margin:0;font:700 13.5px var(--body);display:flex;justify-content:space-between}
+.menu p{margin:3px 0 0;color:var(--text2);font-size:11.5px}.menu p.w{color:var(--warn)}
+.menu .d{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.menu .d .btn[aria-pressed="true"]{background:var(--s3);border-color:var(--accent);color:var(--accent-text)}
+
+/* strip */
+.pg{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;min-height:0}
+.pg .m{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center}
+.pg .m .meter{margin:0}
+.pg .v{display:flex;gap:18px;align-items:baseline}
+.pg .v span{white-space:nowrap}
+.pg label{display:block;font-size:10.5px;color:var(--text2)}
+.pg strong{font:600 17px var(--num);font-variant-numeric:tabular-nums}
+.meter{height:7px;border-radius:4px;background:var(--s3);overflow:hidden;margin:5px 0 3px}.meter i{display:block;height:100%;background:var(--accent)}
+.sub{font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spark polyline{fill:none;stroke:var(--text2);stroke-width:1.5}.spark circle{fill:var(--accent)}
+.tile.s{justify-content:flex-start}
+.jbody{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.path{display:flex;align-items:center;gap:0;margin:0 0 8px}
+.path i{flex:1;height:2px;background:var(--line2)}.path i.d{background:var(--ok)}
+.path b{flex:none;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font:700 9.5px var(--num);background:var(--s3);color:var(--text3)}
+.path b.d{background:var(--ok-bg);color:var(--ok)}.path b.c{background:var(--accent);color:var(--on-accent);width:21px;height:21px}
+.jr{display:flex;align-items:center;gap:8px;min-width:0}.jr .sub{flex:1}
+.lights{flex:1;align-content:center;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;align-items:center}
+.light{background:none;border:0;padding:2px;text-align:center;min-width:0;border-radius:3px}
+.light:hover{background:var(--s2)}
+.light i{display:block;width:9px;height:9px;border-radius:50%;margin:0 auto 5px;background:var(--ok)}
+.light[data-l="warn"] i{background:var(--warn)}.light[data-l="danger"] i{background:var(--danger)}
+.light b{display:block;font-size:10.5px;font-weight:600}.light span{display:block;font-size:10.5px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.pop{position:fixed;z-index:9;top:calc(var(--band) + 4px);left:120px;max-width:560px;background:var(--s2);border:1px solid var(--line2);border-radius:4px;padding:10px 12px;box-shadow:0 10px 28px rgb(0 0 0 / .5);display:grid;grid-template-columns:max-content 1fr;gap:4px 12px}
+.pop dt{color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.08em;padding-top:2px}.pop dd{margin:0}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:9;background:var(--s3);border:1px solid var(--line2);border-radius:4px;padding:6px 10px;display:flex;gap:10px;align-items:center;box-shadow:0 8px 24px rgb(0 0 0 / .45)}
+.demo{position:relative;flex:none;font-size:10.5px;color:var(--text3)}
+.demo div{position:absolute;right:0;top:24px;z-index:12;width:170px}
+.demo summary{cursor:pointer;list-style:none;background:var(--s2);border:1px dashed var(--line2);border-radius:3px;padding:2px 7px;display:inline-block}
+.demo div{background:var(--s2);border:1px dashed var(--line2);border-radius:4px;padding:6px;margin-top:4px;display:grid;gap:4px}
+.demo button{background:none;border:1px solid var(--line2);border-radius:3px;padding:2px 6px;color:var(--text2);text-align:left}
+.demo button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-text)}
+.tabs{display:none}
+
+/* wide: the rail has room for both maps side by side */
+@media (min-width:1700px){
+  .rail{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);grid-template-areas:"needs needs" "orders orders" "act area"}
+  .needs{grid-area:needs}.orders{grid-area:orders}.maptile{grid-area:act}.areatile{grid-area:area;display:flex!important}
+  .maptile .seg{display:none}
+}
+.areatile{display:none}
+/* phone: band, picture, vitals strip, then one tab at a time; still no page scroll */
+@media (max-width:700px){
+  :root{--band:auto}
+  .band{flex-wrap:wrap;gap:4px 10px;padding-block:6px}
+  .say{flex-basis:100%;order:3}.txt{font-size:13px;white-space:normal}
+  .nav button:nth-child(2){display:none}
+  .app{grid-template-rows:auto minmax(0,1fr)}
+  .stage{display:flex;flex-direction:column}
+  .video{flex:none;aspect-ratio:4/3;width:100%}
+  .tabs{display:flex;gap:4px;flex:none}
+  .tabs button{flex:1;height:34px;background:var(--s1);border:1px solid var(--line);border-radius:4px;color:var(--text2)}
+  .tabs button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
+  .rail,.strip{display:contents}
+  .tile{flex:1 1 0}
+  .stage[data-tab="orders"] .tile:not(.needs):not(.orders),.stage[data-tab="map"] .tile:not(.maptile),.stage[data-tab="hero"] .tile:not(.s){display:none}
+  .needs{flex:0 0 auto}
+  .btn,.verbs .btn{height:38px}.row{min-height:38px}.verbs kbd{display:none}
+  .demo{display:none}
+}
+@media (prefers-reduced-motion:no-preference){.meter i,.bar i{transition:width .24s}}
+</style>
+
+<div class="app">
+<header class="band">
+  <div class="brand"><i></i>d.idle</div>
+  <button class="say" id="say" aria-expanded="false" aria-live="polite"></button>
+  <div class="vit" aria-label="Life and mana"><span class="vl">life</span><span class="bar"><i style="width:72%;background:var(--life)"></i></span><span class="num">86</span><span class="vl">mana</span><span class="bar"><i style="width:75%;background:var(--mana)"></i></span><span class="num">105</span></div>
+  <button class="pill" id="pill"></button>
+  <nav class="nav"><button>Character</button><button>Skills</button><button aria-label="More: layout, theme, help">...</button></nav>
+  <details class="demo"><summary>demo</summary><div id="demo"></div></details>
+</header>
+<main class="stage" id="stage" data-tab="orders">
+  <section class="video" aria-label="Game"><div>Game picture<br><small>live, 4:3, about 20 frames a second</small></div>
+    <span class="where">Cold Plains, explored 64%</span><span class="mm"><button>Full screen</button></span></section>
+  <div class="tabs" id="tabs"></div>
+  <div class="strip">
+    <section class="tile s"><h2>Progress <em>level 7</em></h2>
+      <div class="pg"><div class="m"><span class="sub">to 10</span><div class="meter"><i style="width:62%"></i></div><span class="sub">62% · 25 min</span></div>
+      <div class="v"><span><strong>12.4k</strong> <label style="display:inline">xp/h</label> <svg class="spark" width="52" height="16" viewBox="0 0 52 18" aria-hidden="true"><polyline points="0,14 7,13 14,15 21,10 28,11 35,7 42,8 50,4"/><circle cx="50" cy="4" r="2"/></svg></span><span><strong>2.1k</strong> <label style="display:inline">gold/h</label></span></div></div></section>
+    <section class="tile s"><h2>Journey <em>chapter 3 of 9</em></h2>
+      <div class="jbody"><div class="path" aria-hidden="true"><b class="d">1</b><i class="d"></i><b class="d">2</b><i class="d"></i><b class="c">3</b><i></i><b>4</b><i></i><b>5</b><i></i><b>6</b><i></i><b>7</b><i></i><b>8</b><i></i><b>9</b></div>
+      <div class="jr"><div class="sub"><b style="color:var(--text)">Blood Raven</b>: too early (floor 9)</div><button class="btn" id="jgo">Go now</button><button class="btn">Hold</button></div></div></section>
+    <section class="tile s"><h2>Health</h2><div class="lights" id="lights"></div></section>
+  </div>
+  <div class="rail">
+    <section class="tile needs" id="needs" aria-label="Needs you" aria-live="polite"></section>
+    <section class="tile orders"><h2>Orders <em id="oc"></em></h2><div class="verbs" id="verbs"></div><div class="rows" id="rows"></div></section>
+    <section class="tile maptile"><h2>Where to <em>click a zone to send the hero</em><span class="seg" id="mapseg"></span></h2>
+      <div class="act" id="act"></div><div class="area" id="area" hidden></div><div class="menu" id="menu" hidden></div></section>
+    <section class="tile areatile"><h2>Area <em>Cold Plains, explored 64%</em></h2><div class="area" id="area2"></div></section>
+  </div>
+</main>
+</div>
+<dl class="pop" id="pop" hidden></dl>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function btn(t,c,f,k){var b=el('button','btn'+(c?' '+c:''),t);b.type='button';if(k)b.appendChild(el('kbd','',k));b.addEventListener('click',f);return b}
+var NODES=[['line','Monastery line',2,1,'locked',''],['oc','Outer Cloister',2,2,'hard','wp'],['mg','Monastery Gate',2,3,'hard',''],['pit','Pit',1,4,'hard','16-24'],['tam','Tamoe Highland',2,4,'hard','14-20'],['cell','Tower Cellars',3,4,'locked',''],
+['hole','Hole',1,5,'hard','12+'],['bmarsh','Black Marsh',2,5,'hard','12-18'],['ftw','Forgotten Tower',3,5,'hard','15-22'],['dw','Dark Wood',2,6,'above','10-16'],['up','Underground Pass',2,7,'above','10-16'],
+['den','Den of Evil',1,8,'in','1-8'],['sf','Stony Field',2,8,'above','10-16'],['crypt','Crypt',3,8,'above','8-14'],['bm','Blood Moor',1,9,'below','1-8'],['cp','Cold Plains',2,9,'in','6-12'],['bg','Burial Grounds',3,9,'above','8-14'],
+['camp','Rogue Encampment',1,10,'town','town'],['cave','Cave',2,10,'in','6-10']];
+var EDGES=[['camp','bm'],['bm','den',1],['bm','cp'],['cp','cave',1],['cp','bg'],['bg','crypt',1],['cp','sf'],['sf','up',1],['up','dw',1],['dw','bmarsh'],['bmarsh','hole',1],['bmarsh','ftw',1],['ftw','cell',1],['bmarsh','tam'],['tam','pit',1],['tam','mg'],['mg','oc'],['oc','line',1]];
+var WHY={bm:'safe first xp',den:'quest, small cave',cp:'open ground, waypoint',cave:'small, quick',bg:'Blood Raven shoots from range',crypt:'small, a chest',sf:'open ground, easy to path',up:'the way to Dark Wood',dw:'the Inifuss tree',bmarsh:'waypoint, two side dungeons',hole:'dense packs',ftw:'a long chain, no waypoint',tam:'leads to the Monastery',pit:'dense, no quest',mg:'the gate',oc:'waypoint',line:'to Andariel, not yet',cell:'the Countess, not yet',camp:'town: errands'};
+var N={};NODES.forEach(function(n){N[n[0]]={id:n[0],name:n[1],c:n[2],r:n[3],b:n[4],rg:n[5]}});
+var S={scen:'needs',gold:'enough',paused:false,here:'cp',orders:[],needs:[],seq:9,menu:null,dur:'30 min',map:'act',undo:null,timers:[]};
+var SCEN={
+ needs:['Needs you',[{i:'go',z:'cp',t:'Farm Cold Plains 30 min',s:'active',r:'12 min left, 41 kills'}],[{k:'gear',sev:'danger',t:'Weapon broken',s:'repair is about 180 gold'},{k:'ask',sev:'warn',t:'Go for Blood Raven at level 9?',s:'plan waits for 10'}]],
+ daily:['Quiet',[{i:'go',z:'cp',t:'Farm Cold Plains 30 min',s:'active',r:'12 min left, 41 kills'}],[]],
+ queue:['Queue, one failed',[{i:'go',z:'cp',t:'Farm Cold Plains 30 min',s:'active',r:'12 min left, 41 kills'},{i:'id',t:'Identify all (3)',s:'waiting',n:1,r:'next safe moment: 2 monsters near'},{i:'repair',t:'Repair now',s:'failed',r:'no way home; retry in 14 min'},{i:'go',z:'sf',t:'Farm Stony Field 1 h',s:'queued',r:'after Cold Plains'}],[{k:'failed',sev:'warn',t:'Repair failed: no way home',s:'buy a scroll, or retry in 14 min'}]],
+ blocked:['Journey blocked',[],[{k:'blocked',sev:'warn',t:'Journey blocked: Den of Evil',s:'needs 2 healing potions, has 0'}]],
+ empty:['No orders',[],[]]};
+function load(k){S.timers.forEach(clearTimeout);S.timers=[];S.scen=k;S.paused=false;S.menu=null;S.orders=SCEN[k][1].map(function(o){var c=Object.assign({},o);c.id=++S.seq;return c});S.needs=SCEN[k][2].map(function(n){return Object.assign({},n)});render()}
+function open(){return S.orders.filter(function(o){return o.s!=='done'&&o.s!=='cancelled'})}
+function toast(t,undo){var b=$('toast');b.textContent='';b.appendChild(el('span','',t));S.undo=undo||null;if(undo)b.appendChild(btn('Undo','',function(){undo();hide()},'z'));b.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(hide,5000)}
+function hide(){$('toast').hidden=true;S.undo=null}
+function add(o,first){o.id=++S.seq;if(first)S.orders.unshift(o);else S.orders.push(o);render();toast('Order added: '+o.t,function(){S.orders=S.orders.filter(function(x){return x!==o});render()});return o}
+function later(ms,f){S.timers.push(setTimeout(f,ms))}
+function repair(){if(S.orders.some(function(o){return o.i==='repair'&&(o.s==='active'||o.s==='waiting')}))return;
+ S.orders=S.orders.filter(function(o){return !(o.i==='repair'&&o.s==='failed')});S.needs=S.needs.filter(function(n){return n.k!=='gear'&&n.k!=='failed'});
+ if(S.gold==='enough'){var o=add({i:'repair',t:'Repair now',s:'waiting',n:1,r:'next safe moment: finishing this pack'},true);
+  later(2400,function(){o.s='active';o.n=0;o.r='going to town by portal';render()});later(4800,function(){o.r='at the smith';render()});later(7000,function(){o.s='done';o.r='weapon 18/18, back in Cold Plains';render()})}
+ else add({i:'repair',t:'Farm until repair',s:'active',r:'46 of 300 gold'},true)}
+function town(){S.orders=S.orders.filter(function(o){return !(o.i==='go'&&o.s==='active')});add({i:'town',z:'camp',t:'Rest in town',s:'active',r:'walking home'},true)}
+function pause(){S.paused=!S.paused;render();toast(S.paused?'Pausing: the hero walks to town, then stops':'Resumed')}
+function band(){var a=S.orders.filter(function(o){return o.s==='active'})[0],s=$('say'),tone='ok',w='Farming',t='Cold Plains',y='for level 10, to unlock Blood Raven';
+ if(S.paused){tone='info';w='Paused';t='in town';y='you paused it'}
+ else if(a&&a.i==='repair'){tone='info';w=a.t==='Repair now'?'Repair trip':'Farming gold';t=a.t==='Repair now'?'from Cold Plains':'Blood Moor';y=a.r}
+ else if(a&&a.i==='town'){tone='info';w='Going home';t='Rogue Encampment';y='you ordered it'}
+ else if(S.scen==='blocked'){tone='warn';t='Blood Moor';y='the Den of Evil is blocked: 2 healing potions needed'}
+ else if(a&&a.i==='go'){t=N[a.z].name;y='you ordered it, '+a.r.split(',')[0]}
+ s.dataset.tone=tone;s.textContent='';s.appendChild(el('span','word',w));var x=el('span','txt',t+' ');x.appendChild(el('span','','· '+y));s.appendChild(x);
+ var p=$('pop');p.textContent='';[['Now',w+' '+t+': '+y+'.'],['Would change it','An order from you. Life under the retreat line sends the hero to town.'],['Next',open().length>1?open()[1].t:'The plan: level 10, then Blood Raven.'],['Uptime','99.2% over 6 h 12 min']].forEach(function(r){p.appendChild(el('dt','',r[0]));p.appendChild(el('dd','',r[1]))});
+ var n=S.needs.length,c=$('pill');c.dataset.n=n;c.textContent=n?n+(n>1?' need you':' needs you'):'all quiet'}
+function needs(){var b=$('needs');b.textContent='';if(!S.needs.length)return;var h=el('h2','','Needs you');b.appendChild(h);
+ S.needs.forEach(function(n){var a=el('div','alert');a.dataset.sev=n.sev;a.appendChild(el('span','shape'));var p=el('p');p.appendChild(el('b','',n.t));p.appendChild(el('span','','  '+n.s));a.appendChild(p);var g=el('span');g.style.display='flex';g.style.gap='4px';
+  function drop(){S.needs=S.needs.filter(function(x){return x!==n});render()}
+  if(n.k==='gear')g.appendChild(btn(S.gold==='enough'?'Repair now':'Farm until repair','p',repair));
+  if(n.k==='failed')g.appendChild(btn('Retry','',repair));
+  if(n.k==='ask'){g.appendChild(btn('Go now','p',function(){drop();add({i:'journey',z:'bg',t:'Journey: Blood Raven',s:'queued',r:'after the current order'})}));g.appendChild(btn('Not yet','',drop))}
+  if(n.k==='blocked'){g.appendChild(btn('Buy potions','p',function(){drop();add({i:'errand',t:'Buy 2 healing potions',s:'waiting',n:1,r:'next safe moment'},true)}));g.appendChild(btn('Hold','',drop))}
+  a.appendChild(g);b.appendChild(a)})}
+function orders(){var v=$('verbs');v.textContent='';v.appendChild(btn('Go to','p',function(){S.map='act';render();var f=document.querySelector('.node[data-here]');if(f)f.focus()},'g'));v.appendChild(btn('Town','',town,'t'));
+ v.appendChild(btn(S.gold==='enough'?'Repair':'Farm for repair','',repair,'r'));v.appendChild(btn(S.paused?'Resume':'Pause','',pause,'p'));
+ v.appendChild(btn('More','',function(){$('more').hidden=!$('more').hidden}));var m=el('div','more');m.id='more';m.hidden=true;
+ [['Identify all','next safe moment'],['Sell marked items','walks home at the next safe moment'],['Revive mercenary','needs 600 gold in town'],['Apply gear set: Fire resist','instant'],['Fight here','until you cancel']].forEach(function(r){var b=el('button','',r[0]);b.type='button';b.addEventListener('click',function(){m.hidden=true;add({i:'x',t:r[0],s:'waiting',n:1,r:r[1]},true)});m.appendChild(b)});v.appendChild(m);
+ var R=$('rows');R.textContent='';var i=0;
+ S.orders.forEach(function(o){var live=o.s!=='done'&&o.s!=='failed',r=el('div','row');r.dataset.s=o.s;r.appendChild(el('span','ix',o.s==='active'?'>':live?String(++i):o.s==='failed'?'!':'✓'));
+  r.appendChild(el('span','t',o.t));r.appendChild(el('span','r',o.r||''));var c=el('span','chip',o.n&&o.s==='waiting'?'next':o.s);c.dataset.s=o.n&&o.s==='waiting'?'next':o.s;r.appendChild(c);
+  var x=el('button','x','×');x.type='button';x.setAttribute('aria-label',(live?'Cancel: ':'Dismiss: ')+o.t);x.addEventListener('click',function(){S.orders=S.orders.filter(function(y){return y!==o});render();if(live)toast('Cancelled: '+o.t,function(){S.orders.push(o);render()})});r.appendChild(x);R.appendChild(r)});
+ var p=el('div','row plan');p.appendChild(el('span','ix','~'));p.appendChild(el('span','t',open().length?'Then the plan':'The plan'));p.appendChild(el('span','r','farm Cold Plains to level 10, then Blood Raven'));R.appendChild(p);
+ $('oc').textContent=open().length?open().length+' open':'none: the hero follows the plan'}
+function pathTo(id){var prev={},q=[S.here];prev[S.here]=null;while(q.length){var c=q.shift();if(c===id)break;EDGES.forEach(function(e){var o=e[0]===c?e[1]:e[1]===c?e[0]:null;if(o&&!(o in prev)){prev[o]=c;q.push(o)}})}var out=[],c2=id;while(c2){out.unshift(c2);c2=prev[c2]}return out}
+function pt(n){return ((n.c-.5)/3*100)+','+((n.r-.5)/10*100)}
+function act(){var a=$('act');a.textContent='';var s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('viewBox','0 0 100 100');s.setAttribute('preserveAspectRatio','none');
+ EDGES.forEach(function(e){var l=document.createElementNS(s.namespaceURI,'line'),p=pt(N[e[0]]).split(','),q=pt(N[e[1]]).split(',');l.setAttribute('x1',p[0]);l.setAttribute('y1',p[1]);l.setAttribute('x2',q[0]);l.setAttribute('y2',q[1]);if(e[2])l.setAttribute('class','dun');s.appendChild(l)});
+ var zo=S.orders.filter(function(o){return o.z&&o.s!=='done'}),tg=zo.filter(function(o){return o.s==='active'})[0];
+ if(tg&&tg.z!==S.here){var pl=document.createElementNS(s.namespaceURI,'polyline');pl.setAttribute('points',pathTo(tg.z).map(function(i){return pt(N[i])}).join(' '));s.appendChild(pl)}
+ a.appendChild(s);var pin=0;
+ var lg=el('div','legend');[['in','in your range'],['above','above it'],['hard','too hard now'],['locked','not open yet']].forEach(function(r){var x=el('span','',r[1]);x.dataset.b=r[0];lg.appendChild(x)});a.appendChild(lg);
+ var ac=el('div','acts');['I','II','III','IV','V'].forEach(function(t,k){var x=el('button','',t);x.type='button';x.disabled=k>0;x.setAttribute('aria-pressed',String(k===0));x.title=k?'Act '+t+': not reached':'Act I';ac.appendChild(x)});a.appendChild(ac);
+ NODES.forEach(function(r){var n=N[r[0]],b=el('button','node');b.type='button';b.style.gridColumn=n.c;b.style.gridRow=n.r;b.dataset.b=n.b;if(n.id===S.here)b.setAttribute('data-here','');if(tg&&tg.z===n.id)b.setAttribute('data-target','');
+  var nm=el('span','',n.name);nm.appendChild(el('em','',(n.rg&&n.rg!=='town'&&n.rg!=='wp'?n.rg+' · ':'')+(WHY[n.id]||'')));b.appendChild(nm);var q=zo.filter(function(o){return o.z===n.id&&o.s!=='active'})[0];
+  if(q)b.appendChild(el('span','pin',String(++pin)));else if(n.id===S.here)b.appendChild(el('small','','here'));
+  b.setAttribute('aria-label',n.name+', level '+n.rg);b.addEventListener('click',function(){S.menu=n.id;menu()});a.appendChild(b)});
+ menu()}
+function menu(){var m=$('menu');m.textContent='';if(!S.menu||S.map!=='act'){m.hidden=true;return}m.hidden=false;var n=N[S.menu];
+ var h=el('h3','',n.name),x=el('button','x','×');x.type='button';x.setAttribute('aria-label','Close');x.addEventListener('click',function(){S.menu=null;menu()});h.appendChild(x);m.appendChild(h);
+ function done(o,f){S.menu=null;add(o,f)}
+ if(n.b==='locked'){m.appendChild(el('p','','Not orderable yet.'));return}
+ if(n.b==='town'){m.appendChild(el('p','','Town: errands happen here.'));var d0=el('div','d');d0.appendChild(btn('Rest in town','p',function(){S.menu=null;town()}));d0.appendChild(btn('Repair','',function(){S.menu=null;repair()}));d0.appendChild(btn('Identify all','',function(){done({i:'id',t:'Identify all (3)',s:'waiting',n:1,r:'next safe moment'},true)}));d0.appendChild(btn('Sell marked','',function(){done({i:'sell',t:'Sell marked items',s:'waiting',n:1,r:'walks home at the next safe moment'},true)}));m.appendChild(d0);return}
+ m.appendChild(el('p','','Level '+n.rg+'. You are level 7: '+({below:'below your range',in:'in range',above:'above your range',hard:'too hard now'})[n.b]+'. Route: '+pathTo(n.id).map(function(i){return N[i].name}).join(' > ')));
+ if(n.b==='hard')m.appendChild(el('p','w','The guard refuses this zone at level 7. You can ask; the guard keeps the last word.'));
+ if(n.id===S.here){var d1=el('div','d');d1.appendChild(btn('Stay and fight here','p',function(){done({i:'go',z:n.id,t:'Fight here',s:'active',r:'until you cancel'},true)}));m.appendChild(d1);return}
+ var d=el('div','d');['30 min','1 h','to level 8','no limit'].forEach(function(t){var b=btn(t,'',function(){S.dur=t;menu()});b.setAttribute('aria-pressed',String(S.dur===t));d.appendChild(b)});m.appendChild(d);
+ var d2=el('div','d'),text='Farm '+n.name+' '+S.dur;
+ d2.appendChild(btn(n.b==='hard'?'Ask anyway':'Go now','p',function(){S.orders=S.orders.filter(function(o){return !(o.i==='go'&&o.s==='active')});done({i:'go',z:n.id,t:text,s:'active',r:'walking there'},true)}));
+ d2.appendChild(btn('Loop: go, repair, repeat','',function(){done({i:'go',z:n.id,t:'Loop '+n.name+' 20 min + repair',s:'queued',r:'round 1 of 5, after the current order'})}));
+ d2.appendChild(btn('Add to queue','',function(){done({i:'go',z:n.id,t:text,s:'queued',r:'after the current order'})}));m.appendChild(d2)}
+function area(id){$(id).innerHTML='<svg viewBox="0 0 300 150" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Local map: trail, two monsters"><rect x="10" y="20" width="90" height="50"/><rect x="100" y="36" width="80" height="18"/><rect x="180" y="14" width="110" height="70"/><rect x="210" y="84" width="24" height="30"/><rect x="150" y="114" width="140" height="28"/><polyline class="tr" points="30,46 80,44 130,45 176,45"/><polyline class="ft" points="176,45 205,48 222,60"/><circle cx="246" cy="52" r="4" style="fill:var(--danger)"/><circle cx="258" cy="66" r="4" style="fill:var(--danger)"/><rect x="217" y="55" width="10" height="10" transform="rotate(45 222 60)" style="fill:var(--accent);stroke:none"/></svg>'}
+function lights(){var br=S.needs.some(function(n){return n.k==='gear'||n.k==='failed'}),L=$('lights');L.textContent='';
+ [['Life','ok','86/120'],['Gear',br?'danger':'ok',br?'broken':'fine'],['Ready','warn','risky'],['Merc','ok','alive'],['Supply','ok','4 pots']].forEach(function(r){var b=el('button','light');b.type='button';b.dataset.l=r[1];b.appendChild(el('i'));b.appendChild(el('b','',r[0]));b.appendChild(el('span','',r[2]));L.appendChild(b)})}
+function segs(id,opts,cur,fn){var b=$(id);b.textContent='';opts.forEach(function(o){var x=el('button','',o[1]);x.type='button';x.setAttribute('aria-pressed',String(cur()===o[0]));x.addEventListener('click',function(){fn(o[0])});b.appendChild(x)})}
+function render(){band();needs();orders();act();lights();area('area');area('area2');
+ $('act').hidden=S.map!=='act';$('area').hidden=S.map!=='area';
+ segs('mapseg',[['act','Zones'],['area','Area']],function(){return S.map},function(v){S.map=v;S.menu=null;render()});
+ segs('tabs',[['orders','Orders'],['map','Map'],['hero','Progress']],function(){return $('stage').dataset.tab},function(v){$('stage').dataset.tab=v;render()});
+ var d=$('demo');d.textContent='';Object.keys(SCEN).forEach(function(k){var b=el('button','',SCEN[k][0]);b.type='button';b.setAttribute('aria-pressed',String(S.scen===k));b.addEventListener('click',function(){load(k)});d.appendChild(b)});
+ var gb=el('button','','Gold: '+(S.gold==='enough'?'1,240 (enough)':'46 (short)'));gb.type='button';gb.addEventListener('click',function(){S.gold=S.gold==='enough'?'short':'enough';render()});d.appendChild(gb)}
+$('say').addEventListener('click',function(){var p=$('pop');p.hidden=!p.hidden;this.setAttribute('aria-expanded',String(!p.hidden))});
+$('jgo').addEventListener('click',function(){add({i:'journey',z:'bg',t:'Journey: Blood Raven',s:'queued',r:'after the current order'})});
+document.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey)return;if(e.key==='Escape'){S.menu=null;menu();$('pop').hidden=true;$('more').hidden=true;return}
+ ({g:function(){S.map='act';render();var f=document.querySelector('.node[data-here]');if(f)f.focus()},t:town,r:repair,p:pause,z:function(){if(S.undo){S.undo();hide()}}}[e.key]||function(){})()});
+load((location.hash||'#needs').slice(1) in SCEN?(location.hash||'#needs').slice(1):'needs');
+})();
+</script>

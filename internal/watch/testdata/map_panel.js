@@ -138,4 +138,30 @@ assert.strictEqual(P.eventText({ k: 'potion' }), 'potion');
 }
 assert.strictEqual(P.coverSummary({ state: 'roaming', total: 100, drawn: 10, hidden: 90, seen: 3, failed: 0, legs: 2, cells: [[0, 0, 0]] }), 'roam: 3/100 points seen, 0 failed, leg 2, 90 not explored yet');
 assert.strictEqual(P.coverSummary({ state: 'roaming', total: 100, drawn: 0, hidden: 100, seen: 0, failed: 0, legs: 0, cells: [] }), 'roam: 0/100 points seen, 0 failed, leg 0, 100 not explored yet');
+// ---- the objective marker (card fogtrail): the one thing drawn beyond the walked ground ----
+assert.strictEqual(P.objectiveFor(null, 2), null);
+assert.strictEqual(P.objectiveFor({ area: 3, x: 1, y: 1 }, 2), null, 'the objective of another area is not drawn');
+assert.strictEqual(P.objectiveFor({ area: 2, x: 'a', y: 1 }, 2), null, 'a malformed point is dropped');
+assert.strictEqual(JSON.stringify(P.objectiveFor({ area: 2, x: 14, y: 1, label: 'Countess' }, 2)), JSON.stringify({ x: 14, y: 1, label: 'Countess' }));
+assert.strictEqual(P.objectiveText({ x: 1, y: 1, label: 'Countess' }), 'Goal: Countess.');
+assert.strictEqual(P.objectiveText(null), '');
+{
+  const rec = [], sc = shellCtx({}, {}, []), el0 = sc.c.el;
+  sc.c.el = (tag, cls, text) => {
+    const e = el0(tag, cls, text);
+    if (tag === 'canvas') e.getContext = () => new Proxy({}, { get: (t, k) => (k in t ? t[k] : (...a) => { rec.push([k, ...a]); return { width: 1 }; }), set: (t, k, v) => { t[k] = v; return true; } });
+    return e;
+  };
+  const api = P.mount(sc.root, sc.c);
+  const rings = () => rec.filter((r) => r[0] === 'arc' && r[3] === 8).length;
+  api.update({ tiers_unlocked: [1], version: 2, map: cur, hero: { x: 18, y: 1 } });
+  assert.strictEqual(rings(), 0, 'no objective, no ring');
+  rec.length = 0;
+  api.update({ tiers_unlocked: [1], version: 2, hero: { x: 18, y: 1 }, objective: { area: 2, x: 14, y: 1, label: 'Countess' } });
+  assert.strictEqual(rings(), 1, 'the objective is a ring on the canvas');
+  assert.ok(/the ring is the goal/.test(sc.c.body.children.map((k) => k.textContent).join('|')), 'the note says what the ring is');
+  rec.length = 0;
+  api.update({ tiers_unlocked: [1], version: 2, hero: { x: 18, y: 1 }, objective: { area: 9, x: 14, y: 1 } });
+  assert.strictEqual(rings(), 0, 'a stale objective of another area draws nothing');
+}
 console.log('ok');

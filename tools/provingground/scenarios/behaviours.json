@@ -1,0 +1,335 @@
+{
+ "version": "didle.behaviours/1",
+ "behaviours": [
+  {
+   "id": "hook.prepare",
+   "group": "loop-hook",
+   "title": "bind hotkeys once per game",
+   "where": "internal/bot/goal.go runGoal: r.d.Prepare"
+  },
+  {
+   "id": "hook.points",
+   "group": "loop-hook",
+   "title": "spend stat and skill points (leveler)",
+   "where": "internal/bot/leveling.go pointsStep"
+  },
+  {
+   "id": "hook.player-pause",
+   "group": "loop-hook",
+   "title": "player pause and resume orders",
+   "where": "internal/bot/playerpause.go playerPauseStep"
+  },
+  {
+   "id": "hook.player-action",
+   "group": "loop-hook",
+   "title": "player one-shot actions (errands, sell, stash)",
+   "where": "internal/bot/playeraction.go playerActionStep, errandTripStep"
+  },
+  {
+   "id": "hook.vault-keep",
+   "group": "loop-hook",
+   "title": "vault keep step (keep, sell or send to the vault)",
+   "where": "internal/bot/vaultkeep.go vaultKeepStep"
+  },
+  {
+   "id": "hook.idle-rest",
+   "group": "loop-hook",
+   "title": "idle goal parks and rests",
+   "where": "internal/bot/goal.go rest"
+  },
+  {
+   "id": "hook.repair-trip",
+   "group": "loop-hook",
+   "title": "repair trip when durability is low",
+   "where": "internal/bot/repairtrip.go repairTripStep"
+  },
+  {
+   "id": "hook.belt-fill",
+   "group": "loop-hook",
+   "title": "belt fill step",
+   "where": "internal/bot/resource.go beltFillStep"
+  },
+  {
+   "id": "hook.flail-hold",
+   "group": "loop-hook",
+   "title": "anti-flail hold after N area changes without progress",
+   "where": "internal/bot/flail.go flailHold"
+  },
+  {
+   "id": "hook.town-trip",
+   "group": "loop-hook",
+   "title": "needChores: resupply trip with cooldown and emergency gap",
+   "where": "internal/bot/goal.go needChores, advanceTrip"
+  },
+  {
+   "id": "hook.heal-in-town",
+   "group": "loop-hook",
+   "title": "free heal in town below the resume line",
+   "where": "internal/bot/goal.go runGoal heal trip"
+  },
+  {
+   "id": "hook.low-life-gate",
+   "group": "loop-hook",
+   "title": "low life gate (go home or hold)",
+   "where": "internal/bot/goal.go lowLifeGate"
+  },
+  {
+   "id": "hook.gear",
+   "group": "loop-hook",
+   "title": "gear step: equip better items in town",
+   "where": "internal/bot/leveling.go gearStep"
+  },
+  {
+   "id": "hook.claim",
+   "group": "loop-hook",
+   "title": "quest reward claim in town",
+   "where": "internal/bot/leveling.go claimStep"
+  },
+  {
+   "id": "hook.save-point",
+   "group": "loop-hook",
+   "title": "save point after chores",
+   "where": "internal/bot/savepoint.go savePointStep"
+  },
+  {
+   "id": "hook.claim-trip",
+   "group": "loop-hook",
+   "title": "claim trip from the field",
+   "where": "internal/bot/goal.go runGoal claimTrip"
+  },
+  {
+   "id": "hook.ensure-difficulty",
+   "group": "loop-hook",
+   "title": "difficulty change when the hero outgrows it",
+   "where": "internal/bot/goal.go ensureDifficulty"
+  },
+  {
+   "id": "hook.farm",
+   "group": "loop-hook",
+   "title": "farm goal (areas, packs)",
+   "where": "internal/bot/farm.go farmStep"
+  },
+  {
+   "id": "hook.board",
+   "group": "loop-hook",
+   "title": "quest board step (accepted chunk runs, hand-in waits)",
+   "where": "internal/bot/questboard.go boardStep, boardPreempts"
+  },
+  {
+   "id": "hook.task",
+   "group": "loop-hook",
+   "title": "task layer step (campaign quest handlers)",
+   "where": "internal/bot/task.go taskStep"
+  },
+  {
+   "id": "hook.recovery",
+   "group": "recovery",
+   "title": "recovery mode after death or poverty",
+   "where": "internal/bot/broke.go recoveryStep, updateRecovery"
+  },
+  {
+   "id": "hook.gold-farm",
+   "group": "recovery",
+   "title": "gold farm order",
+   "where": "internal/bot/goldfarm.go goldFarmStep"
+  },
+  {
+   "id": "hook.travel",
+   "group": "travel",
+   "title": "travel to a target area (waypoint, portal, walk)",
+   "where": "internal/bot/goal.go travel, travelTo"
+  },
+  {
+   "id": "hook.sweep",
+   "group": "travel",
+   "title": "sweep an area",
+   "where": "internal/bot/goal.go sweep, sweepPass"
+  },
+  {
+   "id": "town.stash-gold",
+   "group": "town-chore",
+   "title": "withdraw stash gold when the purse is below the kit cost",
+   "where": "internal/town (stash), internal/bot/goal.go needChores"
+  },
+  {
+   "id": "town.resupply",
+   "group": "town-chore",
+   "title": "buy potions, scrolls and tome (kit)",
+   "where": "internal/town"
+  },
+  {
+   "id": "town.repair",
+   "group": "town-chore",
+   "title": "repair at the smith",
+   "where": "internal/repair"
+  },
+  {
+   "id": "town.stash-items",
+   "group": "town-chore",
+   "title": "stash or sell loot",
+   "where": "internal/town/stash.go"
+  },
+  {
+   "id": "town.identify-cain",
+   "group": "town-chore",
+   "title": "identify at Deckard Cain (free, after Cain is rescued)",
+   "where": "internal/bot identify policy, cmd/d2bot/bulkidwire.go"
+  },
+  {
+   "id": "town.vault",
+   "group": "town-chore",
+   "title": "vault keep of valuables",
+   "where": "internal/loot/vault.go"
+  },
+  {
+   "id": "resource.belt-policy",
+   "group": "resource",
+   "title": "belt and potion column policy per class",
+   "where": "internal/resource, internal/town/belt"
+  },
+  {
+   "id": "resource.chicken",
+   "group": "resource",
+   "title": "chicken (leave game) at the life line",
+   "where": "internal/bot loop guard"
+  },
+  {
+   "id": "resource.potion-drink",
+   "group": "resource",
+   "title": "drink potions in a fight",
+   "where": "internal/combat"
+  },
+  {
+   "id": "loot.pickup-classify",
+   "group": "loot",
+   "title": "pickup and classification (rare ring on the ground)",
+   "where": "internal/loot/pickup.go, rules.go"
+  },
+  {
+   "id": "loot.gold-pickup",
+   "group": "loot",
+   "title": "gold pickup priority",
+   "where": "internal/loot/goldprio.go"
+  },
+  {
+   "id": "travel.waypoint",
+   "group": "travel",
+   "title": "use a waypoint",
+   "where": "internal/d2dctl/town_verbs.go OpenWaypoint"
+  },
+  {
+   "id": "travel.portal-return",
+   "group": "travel",
+   "title": "town portal and return to the field",
+   "where": "internal/bot BackToField"
+  },
+  {
+   "id": "travel.area-transition",
+   "group": "travel",
+   "title": "walk through area exits, cave mouth step-away",
+   "where": "internal/nav"
+  },
+  {
+   "id": "merc.hire",
+   "group": "merc",
+   "title": "hire a mercenary",
+   "where": "internal/merc, cmd/d2bot/mercwire.go"
+  },
+  {
+   "id": "merc.revive",
+   "group": "merc",
+   "title": "revive a dead mercenary",
+   "where": "cmd/d2bot/mercwire.go"
+  },
+  {
+   "id": "shrine.use",
+   "group": "shrine",
+   "title": "use a shrine worth using",
+   "where": "internal/bot (shrines)"
+  },
+  {
+   "id": "combat.fight",
+   "group": "combat",
+   "title": "fight a pack (class driver)",
+   "where": "internal/combat"
+  },
+  {
+   "id": "death.recover-corpse",
+   "group": "recovery",
+   "title": "recover the corpse after death",
+   "where": "internal/bot/death.go"
+  },
+  {
+   "id": "difficulty.change",
+   "group": "difficulty",
+   "title": "start the next difficulty",
+   "where": "internal/bot/goal.go ensureDifficulty, launcher"
+  },
+  {
+   "id": "points.bank",
+   "group": "points",
+   "title": "points are banked, not spent, until the player acts (resource.pointsDecisions 0)",
+   "where": "internal/bot/pointsgate.go, internal/bot/leveling.go pointsStep"
+  },
+  {
+   "id": "points.verb",
+   "group": "points",
+   "title": "stat and skill points spent by the d2d verbs with a read-back (autopilot or the API)",
+   "where": "internal/leveler runVerbs, internal/points Desk, internal/d2dctl points_verbs.go"
+  },
+  {
+   "id": "points.api",
+   "group": "points",
+   "title": "the points API: sheet, explicit spend, refusal of an illegal skill, audit",
+   "where": "internal/watch/pointsapi.go, internal/points"
+  },
+  {
+   "id": "points.autoalloc",
+   "group": "points",
+   "title": "a locked build puts every new stat and skill point where its rows say; a second build is refused while locked (knob agency.autoAlloc 1)",
+   "where": "internal/points autoalloc.go, internal/leveler autoalloc.go, cmd/d2bot/autoallocwire.go, internal/watch/pointsapi.go"
+  },
+  {
+   "id": "agency.plan",
+   "group": "points",
+   "title": "the shadow planner derives the attack and aura from the skills the hero has and logs it next to the combat profile's pick (knob agency.planner 1)",
+   "where": "internal/agency, cmd/d2bot/agencywire.go"
+  },
+  {
+   "id": "input.skill-select",
+   "group": "input",
+   "title": "select the right or left skill (aura) through the input planner: verb, key, verified click",
+   "where": "internal/combat/bindleft.go setPlanned; internal/input/planner.go"
+  },
+  {
+   "id": "town.scroll-hoard",
+   "group": "town-chore",
+   "title": "loose town portal scrolls beside a tome stay at the cap (pickup rule and sell chore)",
+   "where": "internal/loot/loot.go needsOf, internal/town/shop.go looseScrollSurplus"
+  },
+  {
+   "id": "town.vault-equip",
+   "group": "town-chore",
+   "title": "one-tap Equip of a Vault item (withdraw, wear, swap back, pin) in one town visit",
+   "where": "internal/vaultkeep/equip.go, internal/invdesk/equipnow.go, cmd/d2bot/vaultequip.go"
+  },
+  {
+   "id": "manage.equip-instant",
+   "group": "town-chore",
+   "title": "a pack item equipped from the sheet at once through the item verbs, in the field, swap-back kept in the pack",
+   "where": "internal/invdesk/instant.go, cmd/d2bot/invverbs.go"
+  },
+  {
+   "id": "manage.identify-instant",
+   "group": "town-chore",
+   "title": "a pack item identified from the sheet at once through the item verbs",
+   "where": "internal/invdesk/instant.go, cmd/d2bot/invverbs.go"
+  },
+  {
+   "id": "manage.recall-now",
+   "group": "town-chore",
+   "title": "Recall now: the hero walks home at the next safe moment because the player asked, queued town work runs on arrival",
+   "where": "internal/bot/recall.go, internal/watch/recallapi.go"
+  }
+ ]
+}

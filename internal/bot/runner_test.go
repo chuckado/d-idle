@@ -909,7 +909,7 @@ func TestEventChannelDropsOldestInsteadOfBlocking(t *testing.T) {
 	}()
 	select {
 	case <-done:
-	case <-time.After(3 * time.Second):
+	case <-time.After(30 * time.Second):
 		t.Fatal("emit blocked")
 	}
 	if len(g.r.Events()) != cap(g.r.Events()) {

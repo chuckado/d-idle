@@ -1,0 +1,67 @@
+/* The shared navigation (web/nav.js, docs/ui-design-system.md "Navigation"): five destinations as a bottom bar under 700 px and as
+   links in the top band above, one aria-current, and the More sheet. Every page loads this file; --d-nav-h is the height the bar
+   takes from the viewport (0 on a wide window), so a fixed frame subtracts it and a scrolling page pads by it. Tokens only. */
+@layer components {
+  .d-nav { display: flex; align-items: center; gap: var(--d-sp-1); margin: 0; }
+  .d-nav-i { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; min-block-size: 36px; padding: 0 var(--d-sp-3); border: 0; border-radius: var(--d-r-1);
+    background: none; color: var(--d-text-2); font: inherit; font-size: var(--d-fs-1); text-decoration: none; white-space: nowrap; cursor: pointer; }
+  .d-nav-i:hover { background: var(--d-surface-3); color: var(--d-text); }
+  .d-nav-i[aria-current] { color: var(--d-accent-text); font-weight: 650; box-shadow: inset 0 -2px 0 var(--d-accent); }
+  .d-nav-i:focus-visible, .d-subtab:focus-visible { outline: 2px solid var(--d-focus); outline-offset: 1px; }
+  .d-nav-g { display: none; }
+  /* a page without a band of its own (Vault, Characters, Return, Policy, Hall of Fame) gets this one: brand left, the links right */
+  .d-navband { display: flex; align-items: center; gap: var(--d-sp-4); padding: var(--d-sp-1) var(--d-sp-4); background: var(--d-surface-0); border-block-end: var(--d-bw) solid var(--d-line); }
+  .d-navband[hidden] { display: none; }
+  .d-navbrand { display: flex; align-items: center; gap: var(--d-sp-2); color: var(--d-accent-text); font-family: var(--d-font-display); font-size: var(--d-fs-3); }
+  .d-navmark { inline-size: 10px; block-size: 10px; border-radius: var(--d-r-round); background: var(--d-accent); }
+  .d-navhost { margin-inline-start: auto; }
+  .d-subtabs { display: flex; gap: var(--d-sp-1); padding: var(--d-sp-1) var(--d-sp-4); border-block-end: var(--d-bw) solid var(--d-line); background: var(--d-surface-0); }
+  .d-subtab { display: inline-flex; align-items: center; min-block-size: 36px; padding: 0 var(--d-sp-3); color: var(--d-text-2); text-decoration: none; border-radius: var(--d-r-1); }
+  .d-subtab[aria-current] { color: var(--d-accent-text); font-weight: 650; box-shadow: inset 0 -2px 0 var(--d-accent); }
+  .d-subtab:hover { background: var(--d-surface-3); color: var(--d-text); }
+  .d-navsheet { z-index: var(--d-z-banner); }
+  .d-navsheet .d-menu-primary:empty, .d-navsheet .d-menu-primary[hidden] { display: none; }
+
+  /* the old "..." menu's shape, now the More sheet: a top-layer popover under its button on a wide window, a bottom sheet above the bar on a phone */
+  .d-menu { position: relative; }
+  /* a top-layer popover (shell.js setupMenu): above every tile, sheet and stacking context; placed by --menu-top / --menu-end */
+  .d-menu-pop { position: fixed; inset: auto; inset-block-start: var(--menu-top, 48px); inset-inline-end: var(--menu-end, 8px); margin: 0; z-index: var(--d-z-sheet); display: flex; flex-direction: column; gap: var(--d-sp-1); min-inline-size: 14rem; max-inline-size: calc(100vw - 16px);
+    max-block-size: calc(100dvh - var(--menu-top, 48px) - 8px); overflow: hidden; overscroll-behavior: contain; box-sizing: border-box; padding: var(--d-sp-2); color: var(--d-text);
+    background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
+  .d-menu-pop[hidden] { display: none; }
+  .d-menu-pop > .d-btn { inline-size: 100%; }
+  /* the body: the primary row never scrolls, the groups scroll inside the window with a hint (shell.js groupMenu, docs/ui-overlays.md) */
+  .d-menu-primary { flex: none; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(max-content, 1fr); gap: var(--d-sp-1); }
+  .d-menu-primary > .d-btn { inline-size: 100%; white-space: nowrap; }
+  .d-menu-body { flex: 1 1 auto; min-block-size: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-gutter: stable; scroll-padding-block: 28px; display: flex; flex-direction: column; gap: var(--d-sp-1); }
+  .d-menu-body[data-more="1"]::after { content: "\25BE  more"; position: sticky; inset-block-end: 0; flex: none; text-align: center; padding-block: 2px; font-size: var(--d-fs-0); color: var(--d-text-2); background: var(--d-surface-3); border-block-start: var(--d-bw) solid var(--d-line); }
+  .d-menu-group { display: grid; gap: var(--d-sp-1); }
+  .d-menu-gb { display: grid; gap: var(--d-sp-1); }
+  .d-menu-gb[hidden] { display: none; }
+  .d-menu-gh { display: flex; align-items: center; gap: var(--d-sp-2); inline-size: 100%; min-block-size: 24px; padding: 0 var(--d-sp-1); border: 0; background: none; color: var(--d-text-2); font-size: var(--d-fs-0); text-transform: uppercase; letter-spacing: .06em; cursor: pointer; text-align: start; }
+  .d-menu-gh::before { content: "\25BE"; }
+  .d-menu-gh[aria-expanded="false"]::before { content: "\25B8"; }
+  .d-menu-gb > .d-btn { inline-size: 100%; }
+  .d-menu-pair { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(max-content, 1fr); gap: var(--d-sp-1); }
+  .d-menu-pair > .d-btn { inline-size: 100%; white-space: nowrap; }
+  .d-menu-pop .d-menu-label { margin: var(--d-sp-1) var(--d-sp-1) 0; font-size: var(--d-fs-0); color: var(--d-text-2); text-transform: uppercase; letter-spacing: .06em; }
+  .d-menu-pop .d-btn[aria-checked="true"] { border-color: var(--d-accent); color: var(--d-accent-text); font-weight: 650; }
+  .d-menu-pop > [hidden] { display: none; }
+  .d-menu-pop .d-btn[data-nav] { justify-content: flex-start; }
+}
+
+@layer components {
+  @media (pointer: coarse) { .d-menu-pop .d-btn, .d-menu-gh { min-block-size: 44px; } }
+  @media (max-width: 699.98px) {
+    :root { --d-nav-h: calc(56px + env(safe-area-inset-bottom, 0px)); }
+    :root > body { padding-block-end: var(--d-nav-h); }
+    :root > body.cv-root, :root > body[data-chars] { padding-block-end: 0; } /* fixed frames: they take the bar's height off their own block size instead */
+    .d-nav { position: fixed; inset-inline: 0; inset-block-end: 0; z-index: var(--d-z-sheet); display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 0; box-sizing: border-box;
+      block-size: var(--d-nav-h); padding-block-end: env(safe-area-inset-bottom, 0px); background: var(--d-surface-1); border-block-start: var(--d-bw) solid var(--d-line-strong); }
+    .d-nav-i { min-block-size: 56px; border-radius: 0; padding: 0 var(--d-sp-1); font-size: var(--d-fs-1); }
+    .d-nav-i[aria-current] { box-shadow: inset 0 3px 0 var(--d-accent); }
+    .d-navsheet { inset-block-start: auto; inset-block-end: var(--d-nav-h); inset-inline: 0; inline-size: auto; max-inline-size: none; border-radius: var(--d-r-3) var(--d-r-3) 0 0; max-block-size: calc(100dvh - var(--d-nav-h) - var(--d-sp-5)); }
+    .d-subtabs { padding-inline: var(--d-sp-2); }
+    .d-shell:not([data-template]) { min-block-size: calc(100dvh - var(--d-nav-h)); }
+  }
+}

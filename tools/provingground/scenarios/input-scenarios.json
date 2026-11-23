@@ -1,0 +1,62 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "input.skill-select-verb",
+   "title": "Paladin aura selected by the select verb: the right hand reads Might afterwards, no popup clicks",
+   "kind": "behaviour",
+   "tier": "full",
+   "status": "pending",
+   "pending_reason": "needs the sandbox build d2dbot:devp14 (cmd select sets the hand, loaded on the sandbox host but NOT switched in; the switch needs the owner's go) and its first live run; on devp13 the planner falls back to the popup click and the scenario is expected to stay green through it only if the popup path works (U)",
+   "covers": [
+    "input.skill-select",
+    "combat.fight"
+   ],
+   "touches": [
+    "internal/input/",
+    "internal/combat/bindleft.go",
+    "internal/combat/aura.go",
+    "internal/d2dcombat/"
+   ],
+   "needs": [
+    "input.select"
+   ],
+   "build": "sandbox",
+   "pre": {
+    "level": 12,
+    "gold": 500,
+    "start": "field",
+    "area": 2
+   },
+   "trigger": {
+    "goals": "reach:13",
+    "knobs": {
+     "input.planner": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 20
+   },
+   "matrix": {
+    "classes": [
+     "Paladin"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "provenance": "SETUP: level 12 and the field start (Blood Moor) are CHEATED setup writes; mechanics evidence only (does the select verb set the aura), never evidence about balance or parity.",
+   "notes": "Might is skills.txt id 98 (S: classic skills table; confirm with debug skills on the first run). The Paladin profile's aura ladder puts Might first (internal/combat/classdata/profiles.json). The verdict reads the hand from the state verb (rskill) after the run; the path used is in the bot log as 'input path ... path=verb' and the minute line field input=verb/key/click (trace only, never asserted).",
+   "assert": [
+    {
+     "kind": "right_skill_is",
+     "skill": 98,
+     "why": "the aura the build wants is on the right hand"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  }
+ ]
+}

@@ -29,14 +29,17 @@ const (
 // Act 3 quest ids. They are the saves ids where one exists (golden_bird, blade_old_religion, lam_esen, guardian); the relic
 // legs, the Council and the orb have no save word of their own (Khalim's Will is word 18), so they run on item proxies.
 const (
-	QEye         = "khalims_eye"
-	QBrain       = "khalims_brain"
-	QHeart       = "khalims_heart"
-	QCouncil     = "blackened_temple" // the three-member kill that drops the Flail (word 21)
-	QKhalim      = "khalims_will"     // cube the Will, equip it, smash the Compelling Orb (word 18)
-	QGuardian    = "guardian"         // Mephisto (word 22)
-	QAct3Done    = "act3_hop"         // the red portal; done when the world is in act 4
-	QGolden      = "golden_bird"
+	QEye      = "khalims_eye"
+	QBrain    = "khalims_brain"
+	QHeart    = "khalims_heart"
+	QCouncil  = "blackened_temple" // the three-member kill that drops the Flail (word 21)
+	QKhalim   = "khalims_will"     // cube the Will, equip it, smash the Compelling Orb (word 18)
+	QGuardian = "guardian"         // Mephisto (word 22)
+	QAct3Done = "act3_hop"         // the red portal; done when the world is in act 4
+	QGolden   = "golden_bird"
+	// QGoldenBoard is the board's own group over the same quest (slice S7b): its steps need positive evidence (the quest
+	// word), where goldenNodes only watches the pack, so the campaign keeps its old behaviour.
+	QGoldenBoard = "golden_bird_board"
 	QBlade       = "blade_old_religion"
 	QLamEsen     = "lam_esen"
 	QMercAct3    = "merc_act3"
@@ -73,6 +76,7 @@ func init() {
 	handlers[QGuardian] = guardianNodes
 	handlers[QAct3Done] = act3HopNodes
 	handlers[QGolden] = goldenNodes
+	handlers[QGoldenBoard] = goldenBoardNodes
 	handlers[QBlade] = bladeNodes
 	handlers[QLamEsen] = lamEsenNodes
 	handlers[QMercAct3] = merc3Nodes
@@ -247,10 +251,12 @@ func act3HopNodes() []Node {
 	q := QAct3Done
 	done := func(w World) bool { return w.Act >= 4 }
 	kill := StepKill(id(q, "kill"), BossMephisto, Durance3, func(w World) bool { return done(w) || w.Killed[BossMephisto] }, 20*time.Minute)
+	portal := StepInteract(id(q, "portal"), "Take the red portal", "red portal", done, func(w World) bool { return w.Killed[BossMephisto] && w.Area == Durance3 })
+	portal.Evidence = done // not needed before Mephisto is dead is no evidence of a trip (see hopNodes)
 	return []Node{
 		{Step: withReady(StepTravelA2(id(q, "to"), "Go to Durance of Hate 3", Durance3, func(w World) bool { return done(w) || w.Killed[BossMephisto] }), gatePotions(28, "Mephisto needs clvl 28", minPotions, q))},
 		req(Node{Step: kill}, id(q, "to")),
-		{Step: StepInteract(id(q, "portal"), "Take the red portal", "red portal", done, func(w World) bool { return w.Killed[BossMephisto] && w.Area == Durance3 })},
+		{Step: portal},
 	}
 }
 
@@ -261,6 +267,33 @@ func goldenNodes() []Node {
 	meshif := StepTalk(id(q, "meshif"), "Give the figurine to Meshif", NPCMeshif, "golden bird", func(w World) bool { return w.Items[ItemJade] == 0 }, nil)
 	alkor := StepTalk(id(q, "alkor"), "Give the Golden Bird to Alkor", NPCAlkor, "golden bird", func(w World) bool { return w.Items[ItemGolden] == 0 }, nil)
 	return []Node{{Step: optional(meshif)}, {Step: optional(alkor)}}
+}
+
+// goldenBoardNodes is the Golden Bird as the quest board runs it (S7b). The Jade Figurine is a random drop (U: the dropper
+// is unknown; this handler never fetches it): the chunk is startable only with the figurine or the bird in the pack and
+// says so otherwise. Unlike goldenNodes a step is never "done" for lack of its item: it is done on the quest word
+// (T1/T2) alone, or, for Meshif, once the bird is in the pack. So a hero that never had a figurine does not read as done.
+// The dialogue rows are U (internal/talk Paths: the plain Talk).
+func goldenBoardNodes() []Node {
+	done := a3At(QGolden, StageDone)
+	// mine runs before the town check of StepTalk, so a missing item is a readiness fact and not a trip home.
+	needs := func(s Step, item, why string) Step {
+		town := s.Ready
+		s.Ready = func(w World) *Fault {
+			if w.Items[item] == 0 {
+				return &Fault{Kind: KindPrereq, Why: why}
+			}
+			return town(w)
+		}
+		return s
+	}
+	meshif := StepTalk(id(QGoldenBoard, "meshif"), "Give the figurine to Meshif", NPCMeshif, "golden bird",
+		func(w World) bool { return done(w) || w.Items[ItemGolden] > 0 }, nil)
+	alkor := StepTalk(id(QGoldenBoard, "alkor"), "Give the Golden Bird to Alkor", NPCAlkor, "golden bird", done, nil)
+	return []Node{
+		{Step: needs(meshif, ItemJade, "no Jade Figurine in the pack (a random drop in Act 3)")},
+		{Step: needs(alkor, ItemGolden, "no Golden Bird in the pack (Meshif makes it from the Jade Figurine)")},
+	}
 }
 
 // Blade of the Old Religion (optional): the Gidbinn altar in the Flayer Jungle, Hratli takes it. Flow U.

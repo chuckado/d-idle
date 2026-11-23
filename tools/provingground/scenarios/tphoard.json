@@ -1,0 +1,77 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "town.tp-scroll-hoard",
+   "title": "Hoard: a tome plus 12 loose town portal scrolls in the pack: the visit sells down to the cap and no portal cast fails",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": [
+    "town.scroll-hoard",
+    "town.resupply",
+    "hook.town-trip"
+   ],
+   "touches": [
+    "internal/loot/",
+    "internal/town/",
+    "internal/bot/tpdump.go",
+    "internal/combat/portal.go"
+   ],
+   "pre": {
+    "level": 18,
+    "gold": 600,
+    "items": [
+     {
+      "code": "tbk",
+      "where": "pack"
+     },
+     {
+      "code": "tsc",
+      "where": "pack",
+      "count": 12
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "campaign"
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED items: `debug give tsc pack` skips the tome merge (docs/forkcheats.md), so the 12 scrolls stay loose beside the tome exactly as the sandbox hero held them (a tome plus 22 loose scrolls, pack 82 percent, the cause of the loose scrolls is U: a tome read as having room while it was full). Mechanics only: it proves the bot sells the surplus down to town.looseScrollKeep (default 2), not how a played hero reaches the state.",
+   "notes": "RED before tphoard (scrolls are never sold, neverSell); the field half (scrolls on the ground and a tome with room: d2d merges them on pickup, SRC rules.hpp pick_up) is not scenario-covered yet.",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "tsc",
+     "max": 3,
+     "why": "loose scrolls at most the cap 2 (one more may be a fresh buy) beside the tome"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "tbk",
+     "why": "the tome stays"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "town portal did not appear",
+     "max": 0,
+     "why": "no failed portal cast"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  }
+ ]
+}

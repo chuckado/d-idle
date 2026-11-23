@@ -14,19 +14,21 @@ import (
 	"sync/atomic"
 	"time"
 
-	journey "d2lod-bot/internal/campaign"
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/decide"
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/event"
 	"d2lod-bot/internal/goals"
 	"d2lod-bot/internal/input"
+	"d2lod-bot/internal/questboard"
 	"d2lod-bot/internal/task"
 )
 
 // Deps are the collaborators of a Runner. Mover, Fighter and Town are required; the rest are optional and each
 // missing one has a documented fallback (docs/bot.md).
 type Deps struct {
+	// Freezer stops the game itself for the player's Pause (freeze.go); nil: Pause walks home and stops the bot only.
+	Freezer Freezer
 	Mover   Mover
 	Fighter Fighter
 	Town    Townsman
@@ -40,8 +42,10 @@ type Deps struct {
 	Gear    Gear    // nil: no equip, no gear shopping
 	// PlayerGear runs the player's queued equips at the gear step (in town); nil: none.
 	PlayerGear PlayerGear
-	Quester    Quester   // nil: quest rewards are not claimed
-	Task       *TaskDeps // nil: campaign goals are refused at Start
+	// VaultKeep creates the vault items the player kept (vaultkeep.go); nil: none.
+	VaultKeep VaultKeep
+	Quester   Quester   // nil: quest rewards are not claimed
+	Task      *TaskDeps // nil: campaign goals are refused at Start
 	// Prepare runs once, in a game with nothing hostile near, before the first goal action (hotkey binding). A failure is
 	// retried up to three times, then the bot carries on without.
 	Prepare func(ctx context.Context) error
@@ -64,6 +68,27 @@ type Deps struct {
 	// Bus, if set, receives every event the bot emits (internal/event/MIGRATION.md steps 1 and 2). The Runner then
 	// feeds Events() from its own bus subscription through event.ToGoals, so the goal manager keeps working unchanged.
 	Bus *event.Bus
+	// ZoneShadow, if set, returns the `zone shadow:` log line for the area the planner just chose (survival slice S-B,
+	// docs/survival/power.md): the margin of the hero against the zone, for the log only. potions is the healing potion
+	// count of the kit, -1 when the belt was not read. An empty line logs nothing. It must not change any decision.
+	ZoneShadow func(s *d2.Snapshot, area int, diff string, potions int) string
+	// ZoneChoice, if set, returns log lines (separated by newline) of the survival controller's shadow choice for the
+	// plan's candidate zones of this difficulty (survival slice S-C, docs/survival/ledger.md). Log and API only: nothing
+	// reads the result. It must not block and must not change any decision.
+	ZoneChoice func(s *d2.Snapshot, area int, diff string, potions int, cands []ZoneCand) string
+	// ZoneObserve, if set, receives the hard events and the area summaries the per-zone ledger learns from. Passive.
+	ZoneObserve func(ZoneEvent)
+	// ZoneDecide, if set and bot.zoneModel is 1, is asked for the leveling zone (survival slice S-D): the controller's
+	// choice among cands with the dial id (cautious, balanced, bold). An error makes the planner use the plan tables.
+	ZoneDecide func(s *d2.Snapshot, area int, diff string, potions int, dial string, cands []ZoneCand) (ZoneVerdict, error)
+	// BossMargin, if set and bot.zoneModel is 1, says whether the hero's margin against a boss exists and its word; ok is
+	// false without margin data for that boss (the legacy level floor then stays).
+	BossMargin func(s *d2.Snapshot, key, diff, dial string) (word string, ok bool)
+	// QuestMargin, if set, is the quest board's read-only margin query (slice S4, docs/questboard.md "Readiness"): the hero as
+	// readiness sees it and the hero's margin against a boss (nil without data for that boss; boss "" asks for the hero only).
+	// potions is the healing potion count, -1 when the belt was not read. ok is false when the hero is unreadable. It must not
+	// change any decision; bot.zoneModel is not consulted.
+	QuestMargin func(s *d2.Snapshot, boss, diff string, potions int) (hero questboard.Hero, enc *questboard.Encounter, ok bool)
 }
 
 // goalSpec is a goal compiled at Start (names resolved, nothing left to fail later except travel).
@@ -88,20 +113,26 @@ type control struct {
 // Runner is the real goals.Runner: a state machine driven by a tick loop on d2.Snapshot. Create it with New, start
 // its goroutine with Run, and hand it to goals.New. See docs/bot.md.
 type Runner struct {
-	readiness *readiness.Evaluator // nil: no readiness model wired (TASK-218)
+	pointsGate atomic.Pointer[func() bool] // who spends points: nil = the bot (pointsgate.go)
+	readiness  *readiness.Evaluator        // nil: no readiness model wired (TASK-218)
 
-	e   *env.Env
-	d   Deps
-	cfg Config
-	ch  chan goals.Event
-	bus *event.Bus
-	sub *event.Sub // bridge subscription (bus -> ch), nil without a bus
+	e *env.Env
+	d Deps
 
-	gf       *goldfarm.Controller // the player's Farm gold order (SetGoldFarm); nil: no order
-	journey  *journey.Controller  // the guided journey (SetJourney, guided.go); nil: the floor planner alone
-	gfRepair func() int           // gold Repair All would cost now
-	gfArea   int                  // last farm zone logged
-	rep      *repair.Controller   // the player's Repair now request (SetRepairTrip); nil: no repair trips
+	planWarn sync.Once // a failing town planner is logged once (routeguard.go kitPlanOf)
+	cfg      Config
+	ch       chan goals.Event
+	bus      *event.Bus
+	sub      *event.Sub // bridge subscription (bus -> ch), nil without a bus
+
+	gf       *goldfarm.Controller     // the player's Farm gold order (SetGoldFarm); nil: no order
+	qb       *boardRT                 // the quest board executor (NewQuestBoard, questboard.go); nil: not wired
+	qbMu     sync.Mutex               // guards qb and qbMake (the API goroutine builds the board of a hero too)
+	qbLedger func() questboard.Ledger // the account wallet of the quest board (nil: no Ether hook); guarded by qbMu
+	qbMake   QuestBoardMaker          // builds the board of the loaded hero (cmd/d2bot opens the plan store); nil: only NewQuestBoard
+	gfRepair func() int               // gold Repair All would cost now
+	gfArea   int                      // last farm zone logged
+	rep      *repair.Controller       // the player's Repair now request (SetRepairTrip); nil: no repair trips
 
 	wpHook func(areaID int, name string) // SetWaypointHook
 	firsts *decide.Firsts                // SetLadderFirsts
@@ -139,6 +170,9 @@ type Runner struct {
 	healthMu       sync.Mutex // serialises Health.Step, which runs outside obMu (see healthProbe)
 	tpBuyMin       int        // scrolls bought this minute, set by tpDiag under obMu for failsafeKV
 	ob             observer
+	arb            arbShadow               // intent arbiter in shadow mode (shadow.go); idle unless bot.arbiterShadow is 1
+	zst            zoneState               // the last zone model verdict (zonemodel.go)
+	zmerc          zoneMerc                // merc alive/dead edge detection for ZoneObserve (zoneshadow.go)
 	deathW         combat.DeathWeights     // lessons of Nightmare/Hell deaths, guarded by obMu (deathweights.go)
 	dlog           *deathLog               // guarded by obMu
 	avoid          map[int]time.Time       // areas out of play (death spiral, nav faults), guarded by obMu
@@ -159,15 +193,31 @@ type Runner struct {
 	merc           mercState            // sticky merc knowledge and chore backoff (resource.go)
 	drank          atomic.Int64         // potions drunk, counted from every EvPotion event (combat emits them live; the observer's own diff is off there)
 	playerCancelNs atomic.Int64         // clock of the last guard interrupt for a player command (playerDue)
+	stepMu         sync.Mutex           // held for a whole loop step: the loop state is only touched under it or from the step itself (questboard.go world)
+	parkedBoard    atomic.Bool          // quest board Idle mode: standing in town on purpose, the stall watchdog stays quiet (boardmode.go)
 	noTP           atomic.Bool          // the running task step has Constraints.NoTownPortal: no safety portal, no trip
 	farmMu         sync.Mutex           // guards farm
 	farm           farmProgress         // runs goal progress across farmStep restarts (farm.go)
 	why            goals.Why            // reason of the current activity (whyline.go); guarded by mu
 	pendingWhy     goals.Why            // announced by setWhy, taken by the next setLocked; guarded by mu
+	journeyWhy     string               // why the quest journey is blocked now, guarded by mu (staletarget.go)
+	portalOnlyIdle atomic.Int32         // LevelTo slices spent waiting in a portal-only level (reset on leaving it)
+	banWaive       atomic.Bool          // a player-started board chunk runs with a readiness below "too hard": a death-spiral ban does not stop it (boardRun)
+	questTravel    atomic.Bool          // a quest step is walking: a border-loop ban does not stop it (staletarget.go)
+	inTown         atomic.Bool          // the hero stands in a town area (observe.go): the roam coverage is not read there
+	farmOff        string               // why the farm loop is off for this session (mu)
 	bossRun        atomic.Bool          // a boss script is running (Deps.Task.Boss): routine town trips wait, the guard's re-plan cancels are off
+	safetyBusy     atomic.Int32         // safety actions in flight (carryOut); the item fast lane stays closed meanwhile (SafetyBusy)
 	bossStart      map[string]time.Time // start of the last unfinished boss run by name (taskActs.KillBoss, loop goroutine only)
 	levelerPaused  bool                 // selfStop came from the leveler (LevelerPause), guarded by mu
 	autoResumeAt   time.Time            // a failsafe self pause ends by itself at this time (zero: waits for Resume), guarded by mu
+	plp            playerPause          // the player's Pause command (playerpause.go), guarded by mu
+	rcl            recallState          // the player's Recall now command (recall.go), guarded by mu
+	frz            freezeState          // the frozen Pause (freeze.go), guarded by mu
+	wall           func() time.Time     // wall clock of the pause cap and its display; nil: time.Now (tests set it)
+	freshBusy      atomic.Bool          // startFreshGame is running (task.go)
+	freshEnd       atomic.Int64         // clock nanos when the last startFreshGame ended
+	rst            playerReset          // the player's Reset command (playerreset.go), guarded by mu
 	lastSelfPause  time.Time            // for the self pause backoff, guarded by mu
 	pauseStreak    int
 	panicTimes     []time.Time // recovered panics inside PanicWindow, guarded by mu
@@ -197,6 +247,7 @@ type loopState struct {
 	trip             *trip
 	stuckAt          time.Time
 	cleared          map[int]bool // areas fully explored in this game
+	farm             farmLoop     // the farm loop's visit, pending reset and return zone (farmreset.go)
 	freshAt          time.Time    // when the last fresh game started (survives forgetGame: it is the cross-game progress check)
 	freshExp         uint32       // experience at that moment
 	freshNoGain      int          // fresh games in a row that gained under Route.FreshMinXP
@@ -225,6 +276,8 @@ type loopState struct {
 	playerWhyAt      time.Time // last "waits for a safe moment" log line (noteDelayed)
 	errandSkipUntil  time.Time // no errand trip before this (errandTripStep)
 	playerActAt      time.Time // last attempt of the player's queued item actions (playerActionStep)
+	vaultKeepNext    time.Time // no vault keep attempt before this while nothing changed (vaultKeepStep)
+	vaultKeepPend    int       // queue length at the last attempt: a change makes the next attempt immediate
 	// repair trip (repairtrip.go): when the wait for a safe moment began, retreat steps taken, loot pass done, no attempt before
 	repairWaitSince time.Time
 	repairRetreats  int
@@ -251,10 +304,13 @@ type loopState struct {
 	diffBan         map[string]time.Time
 	forceTrip       bool
 	healFails       int         // failed heal attempts while below the resume line; reset when life is back above it
+	portalRetried   bool        // the cancelled-cast retry was used since the last arrival in town (portalretry.go)
 	noPortalSince   time.Time   // first heal-trip failure for lack of a town portal in this stretch (noPortalLeave)
 	recoveredAt     time.Time   // end of the last lost-game recovery (freshHold)
 	lowLifeUntil    time.Time   // end of the current low-life wait (lowLifeWait); zero when not waiting
 	reentries       []time.Time // recent re-entries after a chicken (notInGame), pruned to reentryWindow
+	flail           flailGuard  // anti-flail guard (flail.go)
+	areaDoneAt      time.Time   // last "area done" trip home from the field (noTarget rate limit)
 	futile          bool
 	futilePos       input.Point
 	futileUntil     time.Time
@@ -461,6 +517,9 @@ func (r *Runner) Pause() error {
 
 // Resume implements goals.Runner.
 func (r *Runner) Resume() error {
+	if r.d.Freezer != nil && r.Frozen() {
+		r.freezeOff(false, false) // a Resume from any source ends a frozen pause too (a failed thaw is logged and retried by the next press)
+	}
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.paused = false
@@ -468,6 +527,10 @@ func (r *Runner) Resume() error {
 		r.selfStop, r.message = false, ""
 	}
 	r.autoResumeAt = time.Time{}
+	if r.plp.want { // the manager's Resume ends the player's pause too
+		r.plp.want, r.plp.held, r.plp.reason, r.plp.since = false, false, "", time.Time{}
+		r.plp.save()
+	}
 	return nil
 }
 
@@ -501,7 +564,7 @@ func (r *Runner) Stop() error {
 func (r *Runner) Status() goals.Status {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	s := goals.Status{Activity: r.activity, Why: r.why, Message: r.message, Character: r.char, Updated: r.updated}
+	s := goals.Status{Activity: r.activity, Why: r.why, Message: r.message, Character: r.char, Updated: r.updated, JourneyBlocked: r.journeyWhy, FarmResetOff: r.farmOff}
 	if r.goal != nil {
 		s.GoalID = r.goal.ID
 	}
@@ -612,7 +675,7 @@ func (r *Runner) compile(g goals.Goal) (goalSpec, error) {
 		if r.d.Task == nil {
 			return spec, errors.New("task layer not wired (Deps.Task is nil)")
 		}
-		spec.camp = r.withQuestGivers(task.Template(p.Template, p.Cain).WithRogueClaim()).WithGuide(r.journeyGuide())
+		spec.camp = r.withQuestGivers(task.Template(p.Template, p.Cain).WithRogueClaim())
 		if spec.camp == nil {
 			return spec, fmt.Errorf("unknown campaign template %q", p.Template)
 		}

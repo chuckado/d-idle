@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -17,7 +18,7 @@ import (
 func mountPages(m *http.ServeMux, sim *watch.Sim, class string) {
 	inv := watch.NewInvAPI()
 	inv.Bind(fixtureDesk{})
-	ih := inv.Handler()
+	ih := withVariants(inv.Handler())
 	for _, p := range watch.InvRoutes {
 		m.Handle(p, ih)
 	}
@@ -33,7 +34,16 @@ func mountPages(m *http.ServeMux, sim *watch.Sim, class string) {
 			}
 		}
 	}
+	artH := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !artFor(w, r) {
+			http.NotFound(w, r)
+		}
+	})
+	m.Handle("/api/art", artH)
+	m.Handle("/watch/art/", artH)
 	mountDemos(m)
+	hallFixture(m)
+	mountBuilds(m)
 	rc := watch.ReturnConfig{Hub: sim.Hub, Events: watch.NewAwayLog(nil), Visit: watch.NewVisit("", func() time.Time { return time.Unix(1700000000, 0) }), Speed: 1}
 	rh := rc.ReturnHandler(nil)
 	for _, p := range watch.ReturnRoutes {
@@ -54,28 +64,50 @@ func item(id int, code, name, q string, x, y, w, h int, extra map[string]any) ma
 	return it
 }
 
+// usable is the schema 8 verdict of an item: the hero's and the mercenary's, each a list of reasons (none: usable).
+func usable(hero, merc []any) map[string]any {
+	side := func(rs []any) map[string]any {
+		if len(rs) == 0 {
+			return map[string]any{"ok": true, "reasons": []any{}}
+		}
+		return map[string]any{"ok": false, "reasons": rs}
+	}
+	return map[string]any{"hero": side(hero), "merc": side(merc)}
+}
+
+// need is a requirement reason in the server's words ("needs 41 strength (you have 38)").
+func need(stat string, n, have int, what string) any {
+	return map[string]any{"code": "requirements", "stat": stat, "need": n, "have": have, "text": fmt.Sprintf("needs %s (you have %d)", what, have)}
+}
+
+func why(code, text string) any { return map[string]any{"code": code, "text": text} }
+
 func (fixtureDesk) View() any {
 	return map[string]any{
-		"schema": 7, "inTown": true, "class": "Sorceress", "gold": 1240, "stashGold": 5300,
+		"schema": 10, "sellPending": 1,
+		"identify": map[string]any{"tool": "tome", "tome": 4, "tomeCap": 20, "scrolls": 0, "unid": 1, "buyDefault": 16, "buyMax": 20, "cain": "open"},
+		"stashOps": map[string]any{"depositMax": 1240, "withdrawMax": 5300}, "inTown": true, "class": "Sorceress", "gold": 1240, "stashGold": 5300,
 		"prompt": "No weapon equipped. Equip one on the Inventory page; the bot will not do it for you.",
 		"equipment": map[string]any{
-			"rhand":  item(1, "sst", "Short Staff", "normal", 0, 0, 1, 3, map[string]any{"maxDur": 18}),
+			"rhand":  item(1, "sst", "Short Staff", "normal", 0, 0, 1, 3, map[string]any{"maxDur": 18, "props": []string{"Two-Hand Damage: 1 to 5"}}),
 			"head":   item(2, "cap", "Cap", "normal", 0, 0, 2, 2, map[string]any{"dur": 8, "maxDur": 12}),
-			"torso":  item(3, "qui", "Sturdy Quilted Armor", "magic", 0, 0, 2, 3, map[string]any{"dur": 5, "maxDur": 24, "why": "you put it on at 12:50"}),
+			"torso":  item(3, "qui", "Sturdy Quilted Armor", "magic", 0, 0, 2, 3, map[string]any{"dur": 5, "maxDur": 24, "why": "you put it on at 12:50", "props": []string{"Defense: 11", "Fire Resist +4%"}}),
 			"gloves": item(4, "lgl", "Leather Gloves", "normal", 0, 0, 2, 2, map[string]any{"dur": 11, "maxDur": 12}),
 			"belt":   item(5, "lbl", "Sash", "normal", 0, 0, 2, 1, map[string]any{"dur": 12, "maxDur": 12}),
 			"feet":   item(6, "lbt", "Boots", "normal", 0, 0, 2, 2, map[string]any{"dur": 10, "maxDur": 12}),
-			"lring":  item(7, "rin", "Raven Grip", "rare", 0, 0, 1, 1, nil),
+			"lring":  item(7, "rin", "Raven Grip", "rare", 0, 0, 1, 1, map[string]any{"props": []string{"Fire Resist +8%", "+6 Life"}}),
 		},
 		"backpack": []any{
-			item(10, "8ss", "Staff of Charged Bolt", "magic", 0, 0, 1, 3, map[string]any{"canSell": true, "canWear": []string{"rhand"}, "noWearSlot": noSlot("rhand")}),
-			item(11, "rin", "Ring", "rare", 1, 0, 1, 1, map[string]any{"canWear": []string{"lring", "rring"}, "noWearSlot": noSlot("lring", "rring")}),
+			item(10, "8ss", "Staff of Charged Bolt", "magic", 0, 0, 1, 3, map[string]any{"canSell": true, "canWear": []string{"rhand"}, "noWearSlot": noSlot("rhand"), "stashOp": "stash", "level": 12, "props": []string{"Two-Hand Damage: 2 to 8", "+2 to Charged Bolt", "+8 to Energy", "Requires Level 6"}, "req": map[string]any{"lvl": 6}, "usable": usable(nil, []any{why("merctype", "a Desert Guard wears helm, armor, spear or polearm")})}),
+			item(11, "rin", "Ring", "rare", 1, 0, 1, 1, map[string]any{"props": []string{"Fire Resist +11%", "+12 Life", "+3 Dexterity"}, "canWear": []string{"lring", "rring"}, "noWearSlot": noSlot("lring", "rring")}),
 			item(12, "ssd", "Short Sword", "normal", 2, 0, 1, 3, map[string]any{"mark": "sell", "canSell": true, "maxDur": 24, "dur": 3}),
 			item(13, "tsc", "Scroll of Town Portal", "normal", 3, 0, 1, 1, nil),
 			item(14, "isc", "Scroll of Identify", "normal", 4, 0, 1, 1, nil),
 			item(15, "tbk", "Tome of Town Portal", "normal", 3, 1, 1, 2, nil),
-			item(16, "ltp", "Light Plate", "normal", 0, 3, 2, 1, map[string]any{"mark": "keep", "maxDur": 60, "dur": 60}),
-			item(17, "box", "Horadric Cube", "unique", 8, 2, 2, 2, map[string]any{"mark": "keep"}),
+			item(16, "ltp", "Light Plate", "normal", 0, 3, 2, 1, map[string]any{"mark": "keep", "maxDur": 60, "dur": 60, "req": map[string]any{"str": 41, "lvl": 9}, "usable": usable([]any{need("lvl", 9, 7, "level 9"), need("str", 41, 38, "41 strength")}, nil), "noWear": "needs 41 strength (you have 38)"}),
+			item(18, "tar", "Targe", "magic", 5, 0, 2, 2, map[string]any{"req": map[string]any{"str": 16, "class": []string{"Paladin"}}, "usable": usable([]any{why("class", "only a Paladin can use it")}, []any{why("merctype", "a Desert Guard wears helm, armor, spear or polearm")}), "noWear": "Paladin only"}),
+			item(19, "pik", "Pike", "normal", 7, 0, 2, 4, map[string]any{"req": map[string]any{"lvl": 9, "str": 60, "dex": 45}, "usable": usable([]any{need("lvl", 9, 7, "level 9"), need("str", 60, 38, "60 strength")}, []any{need("dex", 45, 40, "45 dexterity")})}),
+			item(17, "box", "Horadric Cube", "unique", 5, 2, 2, 2, map[string]any{"mark": "keep"}),
 		},
 		"belt": []any{
 			item(20, "hp1", "Minor Healing Potion", "normal", 0, 0, 1, 1, nil),
@@ -84,14 +116,18 @@ func (fixtureDesk) View() any {
 		},
 		"stash": []any{
 			item(30, "rin", "Ring", "magic", 0, 0, 1, 1, nil),
-			item(31, "ltp", "Light Plate", "magic", 1, 0, 2, 3, nil),
+			item(31, "ltp", "Light Plate", "magic", 1, 0, 2, 3, map[string]any{"stashOp": "take", "props": []string{"Defense: 60", "Cold Resist +11%"}}),
 			item(32, "tsc", "Scroll of Town Portal", "normal", 3, 0, 1, 1, nil),
 		},
 		"pins": []any{map[string]any{"slot": "lring", "id": 7, "name": "Raven Grip", "since": 0}},
 		"queue": []any{map[string]any{"id": 11, "slot": "rring", "name": "Ring", "state": "queued", "at": 0},
 			map[string]any{"id": 12, "kind": "unequip", "slot": "lring", "name": "Raven Grip", "state": "queued", "at": 0, "group": "a1", "groupName": "Fire damage", "seq": 1},
 			map[string]any{"id": 10, "slot": "rhand", "name": "Staff of Charged Bolt", "state": "queued", "at": 0, "group": "a1", "groupName": "Fire damage", "seq": 2}},
-		"recent": []any{},
+		"recent": []any{
+			map[string]any{"id": 31, "slot": "head", "name": "Skull Cap", "kind": "identify", "state": "done", "at": 0, "result": "Skull Cap is a Skull Cap of the Fox"},
+			map[string]any{"id": 5, "slot": "lring", "name": "Raven Grip", "state": "done", "at": 0},
+			map[string]any{"id": 19, "kind": "stash", "name": "Tir Rune", "state": "done", "at": 0},
+			map[string]any{"id": 14, "kind": "trash", "name": "Buckler", "state": "failed", "at": 0, "reason": "not in town"}},
 		"merc": map[string]any{"state": "ready", "owned": true, "alive": true, "class": 338, "kind": "desert", "level": 14, "str": 60, "dex": 40, "lifePct": 90,
 			"slots": []string{"mhead", "mtorso", "mrhand"}, "equipment": map[string]any{"mhead": item(1001, "cap", "Desert Cap", "magic", 0, 0, 2, 2, nil)},
 			"actWhy": "the bot cannot change the mercenary's gear yet: the sets you save for him are kept, and you equip him by hand"},

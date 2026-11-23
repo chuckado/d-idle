@@ -1,0 +1,234 @@
+{
+ "version": "didle.scenario-result/1",
+ "results": [
+  {
+   "version": "didle.scenario-result/1",
+   "id": "cain.stones",
+   "class": "Sorceress",
+   "seed": 3,
+   "status": "RED",
+   "reason": "portal_open: wanted a portal in area 4, got portals in areas [3 1]",
+   "asserts": [
+    {
+     "kind": "portal_open",
+     "ok": false,
+     "want": "a portal in area 4",
+     "got": "portals in areas [3 1]",
+     "why": "V L1: the fifth lit stone opens the way to Tristram, listed by debug portals as level 4"
+    },
+    {
+     "kind": "quest_bits",
+     "ok": false,
+     "unobserved": true,
+     "want": "record 4 set 0x0010 clear 0x0000",
+     "got": "quest record 4 not observed",
+     "why": "V L2 a1: arriving in Tristram sets bit 4 of record 4"
+    },
+    {
+     "kind": "item_absent",
+     "ok": false,
+     "want": "no bkd",
+     "got": "1 x bkd",
+     "why": "S: the key is consumed at the fifth stone"
+    }
+   ],
+   "virtual_min": 25,
+   "budget_min": 25,
+   "wall_sec": 108,
+   "tags": [
+    "CHEATED",
+    "given-item",
+    "position"
+   ],
+   "trace": "provingground-out/20261119-174535/cain.stones_Sorceress_3.bot.log",
+   "taps": [
+    "start stones"
+   ],
+   "state": {
+    "version": "didle.scenario-state/1",
+    "source": "d2d-live-attach",
+    "has": [
+     "items",
+     "portals",
+     "ground",
+     "objects"
+    ],
+    "area": 1,
+    "level": 20,
+    "gold": 69,
+    "stash": 0,
+    "life_pct": 94,
+    "right_skill": 0,
+    "left_skill": 0,
+    "quests": {
+     "1": 4
+    },
+    "items": [
+     {
+      "code": "sst",
+      "where": "body"
+     },
+     {
+      "code": "isc",
+      "where": "pack"
+     },
+     {
+      "code": "bkd",
+      "where": "pack"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "hp1",
+      "where": "belt"
+     },
+     {
+      "code": "isc",
+      "where": "pack"
+     },
+     {
+      "code": "lgl",
+      "where": "body"
+     },
+     {
+      "code": "tbk",
+      "where": "pack"
+     }
+    ],
+    "objects": [
+     {
+      "class": 385,
+      "state": "NU"
+     },
+     {
+      "class": 267,
+      "state": "NU"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 119,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     },
+     {
+      "class": 37,
+      "state": "ON"
+     }
+    ],
+    "stats": {
+     "dex": 25,
+     "ene": 35,
+     "skillpts": 0,
+     "skillsspent": 20,
+     "statpts": 0,
+     "str": 12,
+     "vit": 103
+    },
+    "portals": [
+     {
+      "which": 0,
+      "level": 3
+     },
+     {
+      "which": 1,
+      "level": 1
+     }
+    ],
+    "area_changes": 20,
+    "area_trail": [
+     4,
+     1,
+     4,
+     10,
+     1,
+     10,
+     1,
+     10,
+     4,
+     3,
+     4,
+     3,
+     2,
+     1,
+     2,
+     3,
+     4,
+     1,
+     4,
+     3,
+     1
+    ],
+    "writes_after_start": -1
+   },
+   "digest": "9c38fbd7cf5a56aa"
+  }
+ ]
+}

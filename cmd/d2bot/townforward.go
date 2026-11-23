@@ -78,3 +78,6 @@ func (t *mercTown) FillBelt(ctx context.Context) (int, error) {
 	}
 	return 0, nil
 }
+
+// TakePortalCancelled forwards the town's "the portal cast was cancelled before the click" flag (bot/portalretry.go).
+func (a townAdapter) TakePortalCancelled() bool { return a.t.TakePortalCancelled() }

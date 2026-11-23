@@ -1,6 +1,10 @@
 package merc
 
-import "strings"
+import (
+	"strings"
+
+	"d2lod-bot/internal/d2"
+)
 
 // Reasons are the stable words in Decision.Reason and in the log lines (logs.go); harness code may grep them.
 const (
@@ -19,7 +23,6 @@ const (
 	// ReasonGearWorn: the player decides equipment, so a replacing hire waits until the merc is bare.
 	ReasonGearWorn      = "merc wears gear: unequip your merc first"
 	ReasonGold          = "gold"
-	ReasonKit           = "kit"
 	ReasonCap           = "revive cap"
 	ReasonStopped       = "stopped by deaths"
 	ReasonNotFirstVisit = "not first visit"
@@ -96,7 +99,8 @@ func ShouldClaimFreeRogue(s MercState, c FreeRogueCtx) Decision {
 // raises attack rating, survival first: U judgment). Nightmare has Might (physical classes) and Holy Freeze (casters)
 // ahead of those; Hell rows have neither (V hireling.tsv, docs/town.md).
 func AuraPrefs(class string, d Difficulty, bowOrJavelin bool) []string {
-	caster := class == "Sorceress" || class == "Necromancer" || class == "Druid"
+	t, _ := d2.TraitsByName(class) // an unknown class name is not a caster here (the callers pass d2 class names)
+	caster := t.Caster
 	var p []string
 	if d == Nightmare {
 		if caster {
@@ -209,7 +213,7 @@ func hasGear(s MercState) bool {
 	return false
 }
 
-// ShouldRevive: the dead merc is revived in town with gold >= reviveGoldMult x price plus the revive reserve, with a TP and potions,
+// ShouldRevive: the dead merc is revived in town with gold >= reviveGoldMult x price plus the revive reserve (the game wants gold only, no portal or potions: V read, docs/mercrevive.md),
 // at most reviveMaxPerHour times an hour; more than stopDeathsPerHour merc deaths in the hour raises the gold bar to
 // stopGoldMult x price. price is the quote read from the dialog, or 0 to use the formula (needs the merc level).
 func ShouldRevive(s MercState, c Ctx, price int) (Decision, int) {
@@ -230,8 +234,6 @@ func ShouldRevive(s MercState, c Ctx, price int) (Decision, int) {
 	switch {
 	case c.RevivesLastHour >= c.Knobs.ReviveMaxPerHour:
 		return no(ReasonCap), price
-	case !c.HaveTP || !c.HavePotions:
-		return no(ReasonKit), price
 	}
 	why := ReasonGold
 	if c.DeathsLastHour > c.Knobs.StopDeathsPerHour {

@@ -1,0 +1,85 @@
+/* The Characters page (docs/charselect-ui.md): a header, an optional strip and note, one region that scrolls inside the window
+   (the page itself never scrolls), and a modal sheet. Tokens only; both themes; targets 44 px; no motion under reduced-motion. */
+@layer panels {
+  [data-chars] { margin: 0; background: var(--d-bg); color: var(--d-text); }
+  .cs [hidden] { display: none; }
+  .cs { display: flex; flex-direction: column; block-size: calc(100dvh - var(--d-nav-h, 0px)); min-inline-size: 0; }
+  .cs-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-3); padding: var(--d-sp-2) var(--d-sp-4); border-block-end: var(--d-bw) solid var(--d-line); background: var(--d-surface-0); flex: none; }
+  .cs-head h1 { margin: 0; font: 600 var(--d-fs-4)/var(--d-lh-tight) var(--d-font-display); color: var(--d-accent-text); }
+  .cs-now { margin-inline-start: auto; color: var(--d-text-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .cs-strip { flex: none; padding: var(--d-sp-2) var(--d-sp-4); background: var(--d-state-bg-info); border-block-end: var(--d-bw) solid var(--d-info); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .cs-strip[data-state="failed"] { background: var(--d-state-bg-danger); border-color: var(--d-bad); }
+  .cs-note { flex: none; display: flex; align-items: center; justify-content: space-between; gap: var(--d-sp-3); padding: var(--d-sp-1) var(--d-sp-4); background: var(--d-state-bg-ok); border-block-end: var(--d-bw) solid var(--d-good); font-size: var(--d-fs-1); }
+  .cs-note[data-sev="warn"] { background: var(--d-state-bg-warn); border-color: var(--d-warn); }
+  .cs-note-text { min-inline-size: 0; overflow-wrap: anywhere; }
+  .cs-main { flex: 1 1 auto; min-block-size: 0; overflow-y: auto; overflow-x: hidden; padding: var(--d-sp-3) var(--d-sp-4) var(--d-sp-5); display: grid; gap: var(--d-sp-4); align-content: start; }
+  .cs-main:focus-visible { outline-offset: -2px; }
+  .cs-sec { display: grid; gap: var(--d-sp-2); min-inline-size: 0; }
+  .cs-sec h2, .cs-state h2 { margin: 0; font: 600 var(--d-fs-3)/var(--d-lh-tight) var(--d-font-display); }
+  .cs-why, .cs-sub { margin: 0; color: var(--d-text-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .cs-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--d-gap); grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+  .cs-card { display: grid; gap: var(--d-sp-2); align-content: start; padding: var(--d-pad); background: var(--d-surface-1); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-3); min-inline-size: 0; }
+  .cs-card[data-active] { border-color: var(--d-accent); border-block-start: 2px solid var(--d-accent); }
+  .cs-top { display: flex; align-items: center; gap: var(--d-sp-3); min-inline-size: 0; }
+  .cs-id { min-inline-size: 0; flex: 1 1 auto; }
+  .cs-name { margin: 0; font: 600 var(--d-fs-3)/var(--d-lh-tight) var(--d-font-display); overflow-wrap: anywhere; }
+  .cs-mark { flex: none; inline-size: 40px; block-size: 40px; display: grid; place-items: center; border-radius: var(--d-r-round); font: 700 var(--d-fs-3)/1 var(--d-font-display); color: var(--d-text); --cs-c: var(--d-accent);
+    background: var(--d-surface-2); border: 2px solid var(--cs-c); }
+  [data-class="amazon"] { --cs-c: var(--d-q-crafted); } [data-class="sorceress"] { --cs-c: var(--d-info); } [data-class="necromancer"] { --cs-c: var(--d-q-magic); } [data-class="paladin"] { --cs-c: var(--d-accent); }
+  [data-class="barbarian"] { --cs-c: var(--d-bad); } [data-class="druid"] { --cs-c: var(--d-good); } [data-class="assassin"] { --cs-c: var(--d-q-set); }
+  .cs-badge { flex: none; padding: 2px var(--d-sp-2); border-radius: var(--d-r-round); background: var(--d-accent); color: var(--d-on-accent); font-size: var(--d-fs-0); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+  .cs-chips { display: flex; flex-wrap: wrap; gap: var(--d-sp-1) var(--d-sp-2); }
+  .cs-chip { padding: 1px var(--d-sp-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-round); background: var(--d-surface-2); font-size: var(--d-fs-0); color: var(--d-text-2); }
+  .cs-chip[data-level="warn"] { border-color: var(--d-warn); color: var(--d-text); background: var(--d-state-bg-warn); }
+  .cs-chip[data-level="bad"] { border-color: var(--d-bad); color: var(--d-text); background: var(--d-state-bg-danger); }
+  .cs-last { margin: 0; color: var(--d-text-2); font-size: var(--d-fs-1); }
+  .cs-warn { margin: 0; color: var(--d-text); background: var(--d-state-bg-danger); border-radius: var(--d-r-1); padding: var(--d-sp-1) var(--d-sp-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .cs-acts { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
+  .cs-acts .d-btn { flex: 1 1 6rem; align-items: center; }
+  .cs-newcard { align-content: center; justify-items: start; border-style: dashed; background: transparent; }
+  .cs-newbtn { inline-size: 100%; align-items: center; }
+  .cs-dellist { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--d-sp-2); }
+  .cs-delrow { display: flex; align-items: center; justify-content: space-between; gap: var(--d-sp-3); padding: var(--d-sp-2) var(--d-sp-3); background: var(--d-surface-1); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-2); }
+  .cs-deltext { display: grid; min-inline-size: 0; }
+  .cs-deltext b { overflow-wrap: anywhere; }
+  .cs-state { display: grid; gap: var(--d-sp-2); justify-items: start; padding: var(--d-pad); background: var(--d-surface-1); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-3); max-inline-size: 40rem; }
+  .cs-state p { margin: 0; color: var(--d-text-2); overflow-wrap: anywhere; }
+  .cs-nojs { padding: var(--d-sp-4); }
+
+  .cs-sheet { position: fixed; inset: 0; z-index: var(--d-z-banner); display: grid; place-items: center; padding: var(--d-sp-3); background: var(--d-scrim); }
+  .cs-sheet-card { display: grid; gap: var(--d-sp-3); inline-size: min(100%, 30rem); max-block-size: 100%; overflow-y: auto; padding: var(--d-sp-4); background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-3); box-shadow: var(--d-shadow-2); }
+  .cs-sheet-card h2 { margin: 0; font: 600 var(--d-fs-3)/var(--d-lh-tight) var(--d-font-display); overflow-wrap: anywhere; }
+  .cs-sheet-card p { margin: 0; overflow-wrap: anywhere; }
+  .cs-row { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--d-sp-2); }
+  .cs-row .d-btn { align-items: center; }
+  .cs-label { font-size: var(--d-fs-1); color: var(--d-text-2); overflow-wrap: anywhere; }
+  .cs-input { min-block-size: 44px; padding: var(--d-sp-1) var(--d-sp-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); background: var(--d-surface-1); color: var(--d-text); min-inline-size: 0; inline-size: 100%; }
+  .cs-hint { font-size: var(--d-fs-1); color: var(--d-text-2); }
+  .cs-hint[data-level="bad"] { color: var(--d-bad); }
+  .cs-hint[data-level="good"] { color: var(--d-good); }
+  .cs-err { color: var(--d-bad); background: var(--d-state-bg-danger); padding: var(--d-sp-2); border-radius: var(--d-r-1); }
+  .cs-classes { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); margin: 0; padding: 0; border: 0; min-inline-size: 0; }
+  .cs-classes legend { padding: 0; margin-block-end: var(--d-sp-1); font-size: var(--d-fs-1); color: var(--d-text-2); }
+  .cs-chipbtn { display: inline-flex; align-items: center; gap: var(--d-sp-2); min-block-size: 44px; padding: 0 var(--d-sp-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-round); background: var(--d-surface-2); cursor: pointer; }
+  .cs-chipbtn:has(input:checked) { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
+  .cs-chipbtn:has(input:focus-visible) { outline: 2px solid var(--d-focus); outline-offset: 2px; }
+  .cs-chipbtn input { inline-size: 18px; block-size: 18px; margin: 0; accent-color: var(--d-accent); }
+
+  @media (max-width: 700px) {
+    .cs-head { padding: var(--d-sp-1) var(--d-sp-3); gap: var(--d-sp-1) var(--d-sp-2); }
+    .cs-head h1 { font-size: var(--d-fs-3); }
+    .cs-main { padding: var(--d-sp-2) var(--d-sp-3) var(--d-sp-4); gap: var(--d-sp-3); }
+    .cs-sheet { align-items: end; padding: 0; }
+    .cs-sheet-card { inline-size: 100%; border-end-start-radius: 0; border-end-end-radius: 0; }
+    .cs-now { margin-inline-start: 0; flex: 1 1 100%; order: 3; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .cs-card { transition: border-color var(--d-dur-2) var(--d-ease); }
+  }
+}
+
+/* The shared navigation adds a band above the page on a wide window (web/nav.js): the page and the band share the window, so the page is a column. */
+@layer panels {
+  [data-chars] { display: flex; flex-direction: column; block-size: calc(100dvh - var(--d-nav-h, 0px)); overflow: hidden; }
+  [data-chars] > .cs { flex: 1 1 0; block-size: auto; min-block-size: 0; }
+}

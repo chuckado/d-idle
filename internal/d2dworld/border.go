@@ -100,13 +100,51 @@ func abut(own Placement, all []Placement) []abutting {
 	return out
 }
 
+// placeLinked adds a placement for every linked level (debug nearby) that "debug layout" does not list. V live (card
+// mapverify, probe tools/probes/strip.py, seed 5): the layout verb never lists the cloister chain (Outer Cloister 27
+// is linked at (0,-40) from the Monastery Gate 26 but absent from the layout, 40 s after arrival), so `abut` found
+// nothing and nav answered "no usable gate". The offset says where the neighbour starts; the size is only needed to
+// make it touch, so the extent across the edge is taken from the offset itself and the extent along it from our own
+// (the strip scan keeps only the cells whose far side `across` finds open). A level whose offset leaves a gap or is
+// past a corner is not placed.
+func placeLinked(own Placement, places []Placement, near []Near) []Placement {
+	if own.W <= 0 || own.H <= 0 {
+		return places
+	}
+	have := map[int]bool{}
+	for _, p := range places {
+		have[p.Level] = true
+	}
+	out := places
+	for _, n := range near {
+		if have[n.Level] || n.Level == own.Level {
+			continue
+		}
+		p := Placement{Level: n.Level, X: own.X + n.DX, Y: own.Y + n.DY}
+		switch {
+		case n.DY < 0 && n.DX > -own.W && n.DX < own.W: // above
+			p.W, p.H = own.W, -n.DY
+		case n.DY == own.H && n.DX > -own.W && n.DX < own.W: // below
+			p.W, p.H = own.W, own.H
+		case n.DX < 0 && n.DY > -own.H && n.DY < own.H: // left
+			p.W, p.H = -n.DX, own.H
+		case n.DX == own.W && n.DY > -own.H && n.DY < own.H: // right
+			p.W, p.H = own.W, own.H
+		default:
+			continue
+		}
+		out = append(out[:len(out):len(out)], p)
+	}
+	return out
+}
+
 // adjacent builds the d2map.Adjacent entries of one level. own and all are layout placements in act tiles; self is the
 // level's layout rectangle in subtiles: the strip is its last row or column, like Game.exe's Level rectangle (the d2d
 // grid is one tile larger, debug level says 57x41 for the 56x40 town, V live, and that margin is open beside the wall). linked, when non-nil, restricts the result to levels d2d has
 // already linked (their collision answers "debug blocked" past the edge); pending counts abutting levels that are
 // not linked yet. isOpen decides per subtile position inside the level at the shared edge whether the cell across
 // can be walked (nil: trust the inside cell only).
-func adjacent(own Placement, self d2map.Rect, all []Placement, linked map[int]bool, grid *d2map.Grid, across func(side, sx, sy int) bool) (adj []d2map.Adjacent, pending, unlinked int) {
+func adjacent(own Placement, self d2map.Rect, all []Placement, linked map[int]bool, grid *d2map.Grid, across func(side, sx, sy int) bool) (adj, unproven []d2map.Adjacent, pending, unlinked int) {
 	for _, a := range abut(own, all) {
 		if linked != nil && !linked[a.p.Level] {
 			pending++
@@ -131,58 +169,66 @@ func adjacent(own Placement, self d2map.Rect, all []Placement, linked map[int]bo
 		if !horizontal {
 			n = strip.H
 		}
-		runStart := -1
+		// scan appends the open runs of the strip to dst; with crossed false it trusts the inside cell only.
+		scan := func(dst *[]d2map.Adjacent, crossed bool) {
+			runStart := -1
+			flush := func(end int) {
+				if runStart < 0 {
+					return
+				}
+				c := strip
+				if horizontal {
+					c.X, c.W = strip.X+runStart, end-runStart
+				} else {
+					c.Y, c.H = strip.Y+runStart, end-runStart
+				}
+				*dst = append(*dst, d2map.Adjacent{LevelNo: a.p.Level, Rect: nb, Contact: c})
+				runStart = -1
+			}
+			const step = 5 // the probe grain: one tile; a gate is at least that wide
+			at := func(i int) (int, int) {
+				if horizontal {
+					return strip.X + i, strip.Y
+				}
+				return strip.X, strip.Y + i
+			}
+			tiles := map[int]bool{}
+			tileOpen := func(i int) bool {
+				if !crossed || across == nil {
+					return true
+				}
+				k := i / step
+				v, ok := tiles[k]
+				if !ok {
+					sx, sy := at(min(k*step+step/2, n-1))
+					v = across(a.side, sx, sy)
+					tiles[k] = v
+				}
+				return v
+			}
+			for i := 0; i < n; i++ {
+				sx, sy := at(i)
+				open := grid.Walkable(sx, sy) && tileOpen(i)
+				if open && runStart < 0 {
+					runStart = i
+				}
+				if !open {
+					flush(i)
+				}
+			}
+			flush(n)
+		}
 		before := len(adj)
-		flush := func(end int) {
-			if runStart < 0 {
-				return
-			}
-			c := strip
-			if horizontal {
-				c.X, c.W = strip.X+runStart, end-runStart
-			} else {
-				c.Y, c.H = strip.Y+runStart, end-runStart
-			}
-			adj = append(adj, d2map.Adjacent{LevelNo: a.p.Level, Rect: nb, Contact: c})
-			runStart = -1
-		}
-		const step = 5 // the probe grain: one tile; a gate is at least that wide
-		at := func(i int) (int, int) {
-			if horizontal {
-				return strip.X + i, strip.Y
-			}
-			return strip.X, strip.Y + i
-		}
-		tiles := map[int]bool{}
-		tileOpen := func(i int) bool {
-			if across == nil {
-				return true
-			}
-			k := i / step
-			v, ok := tiles[k]
-			if !ok {
-				sx, sy := at(min(k*step+step/2, n-1))
-				v = across(a.side, sx, sy)
-				tiles[k] = v
-			}
-			return v
-		}
-		for i := 0; i < n; i++ {
-			sx, sy := at(i)
-			open := grid.Walkable(sx, sy) && tileOpen(i)
-			if open && runStart < 0 {
-				runStart = i
-			}
-			if !open {
-				flush(i)
-			}
-		}
-		flush(n)
+		scan(&adj, true)
 		if linked != nil && across != nil && len(adj) == before {
 			// listed as linked but no cell is open across yet: d2d may not have its collision built (V live: the
 			// level list showed Cold Plains before the first probe could see it), so keep looking, like a pending link.
+			// The strip's own walkable cells are kept as unproven: d2d builds the neighbour's collision near the
+			// player, so walking there is how the border becomes readable (andariel1: Monastery Gate to Outer Cloister,
+			// log 20261120-230516-0e0d: linked, nothing open across from the arrival point).
 			pending++
+			scan(&unproven, false)
 		}
 	}
-	return adj, pending, unlinked
+	return adj, unproven, pending, unlinked
 }

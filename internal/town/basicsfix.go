@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/supply"
 	"d2lod-bot/internal/town/belt"
 )
 
@@ -57,6 +58,10 @@ func (t *Town) identifyNeeded(s *d2.Snapshot) bool {
 	if _, have := t.idTool(s); have {
 		return true
 	}
+	if t.tune().IdentifyTome == 0 {
+		t.logNoIDTool()
+		return false
+	}
 	return t.idScrollWanted(s)
 }
 
@@ -92,7 +97,7 @@ func (t *Town) bankKeep(level int) int { return t.goldKeep(level) }
 // needBank is the bankFirst knob: the surplus above the keep line goes to the stash before the shop, so the shop
 // (tome, spare scrolls, extra potions) cannot spend it (audit row 11: 40 of 1500 gold banked at clvl 5).
 func (t *Town) needBank(s *d2.Snapshot, plan ChorePlan) bool {
-	return plan.Gold && t.tune().BankFirst != 0 && s.Player.Gold > t.bankKeep(s.Player.Level)
+	return plan.Gold && (t.tune().BankFirst != 0 || t.PlanStage() >= 3) && s.Player.Gold > t.bankKeep(s.Player.Level)
 }
 
 func (t *Town) bank(ctx context.Context, a *Act) error {
@@ -139,8 +144,35 @@ func (t *Town) kitPotions(plan ChorePlan) int {
 
 // healingCarried is the healing and rejuvenation potions in belt and pack (the bot side counts the same set, codefix67 F6).
 func (t *Town) healingCarried(s *d2.Snapshot) int {
-	bs := belt.Read(t.e.Data, s.Inventory)
-	return bs.Count[belt.HP] + bs.Count[belt.RV] + belt.PackCount(t.e.Data, s.Inventory, belt.HP) + belt.PackCount(t.e.Data, s.Inventory, belt.RV)
+	return t.supplyCount(s).Healing()
+}
+
+// supplyCount is the town side of the one supply counter (internal/supply): belt and pack potions of the snapshot.
+func (t *Town) supplyCount(s *d2.Snapshot) supply.Count {
+	var ps []supply.Potion
+	if s != nil && s.Inventory != nil {
+		for _, w := range []d2.Container{d2.ContBelt, d2.ContInventory} {
+			for _, u := range s.Inventory.Container(w) {
+				if u.Class < 0 || u.Class >= len(t.e.Data.Items) {
+					continue
+				}
+				b := t.e.Data.Items[u.Class]
+				var k supply.Kind
+				switch belt.PotionKind(b) {
+				case belt.HP:
+					k = supply.HP
+				case belt.MP:
+					k = supply.MP
+				case belt.RV:
+					k = supply.RV
+				default:
+					continue
+				}
+				ps = append(ps, supply.Potion{Kind: k, Tier: belt.Tier(b), InBelt: w == d2.ContBelt})
+			}
+		}
+	}
+	return supply.CountOf(ps, supply.Floors{})
 }
 
 // needWithdraw is the BELTFIX5 knob-free rule: a character with no healing potion anywhere and less gold in the pack
@@ -168,16 +200,89 @@ func (t *Town) NeedWithdrawForTest() (bool, error) {
 	return t.needWithdraw(s), nil
 }
 
-func (t *Town) withdraw(ctx context.Context, a *Act) error {
+// shopCost is the gold the shop pass of this plan would spend: missing town portal scrolls, a portal tome when none
+// is owned (TPTomeMinGold is its price, S), the identify tome when the chore keeps one, and the belt's potion shortfall at
+// the kit prices. The potion mix comes from the belt plan, so it follows the class.
+func (t *Town) shopCost(s *d2.Snapshot, plan ChorePlan) int {
+	r, tu := &t.e.Tune.Resource, t.tune()
+	cost := 0
+	if plan.Scrolls {
+		n, hasTome := t.scrollCount(s, "tsc", "tbk")
+		cost += max(tu.TPScrollTarget-n, 0) * r.KitTPGold
+		if !hasTome {
+			cost += tu.TPTomeMinGold
+		}
+		if tu.IdentifyTome != 0 && t.idScrollWanted(s) {
+			if _, has := t.scrollCount(s, "isc", "ibk"); !has {
+				cost += tu.TPTomeMinGold
+			}
+		}
+	}
+	if plan.Potions {
+		for _, n := range t.potionsWanted(s) {
+			cost += n * r.KitPotionGold
+		}
+	}
+	return cost
+}
+
+// shopTarget is the pack gold a withdrawal for the shop aims at: the shopping list, never below the minimal kit.
+func (t *Town) shopTarget(s *d2.Snapshot, plan ChorePlan) int {
+	if t.PlanStage() >= 3 {
+		return max(t.shopCost(s, plan), t.kitGold(), t.goldKeep(s.Player.Level)) // the purse target: withdraw the gap
+	}
+	if t.tune().WithdrawShop == 0 {
+		return 0
+	}
+	return max(t.shopCost(s, plan), t.kitGold())
+}
+
+// needShopWithdraw: the stash has gold, the pack cannot pay the shopping list, and the input can move gold. The old
+// rule only looked at an empty belt and ignored scrolls and tomes: a hero with 8 gold and 128k in the stash never
+// withdrew (tpfix diagnosis 2026-11-18). A stash that reads 0 is logged, since it may be unreadable.
+func (t *Town) needShopWithdraw(s *d2.Snapshot, plan ChorePlan) bool {
+	stage3 := t.PlanStage() >= 3
+	if t.tune().WithdrawShop == 0 && !stage3 || !plan.Gold || !plan.Potions && !plan.Scrolls {
+		return false
+	}
+	if _, can := t.e.In.(goldMover); !can {
+		return false
+	}
+	cost := t.shopCost(s, plan)
+	if stage3 {
+		cost = t.shopTarget(s, plan)
+	}
+	if cost == 0 || s.Player.Gold >= max(cost, t.kitGold()) {
+		return false
+	}
+	if s.Player.StashGold <= 0 {
+		t.e.Log.Info("town: no withdrawal for the shop, stash gold reads 0 (empty or unknown)", "gold", s.Player.Gold, "need", cost)
+		return false
+	}
+	return true
+}
+
+func (t *Town) withdraw(ctx context.Context, a *Act, plan ChorePlan) error {
+	if _, can := t.e.In.(goldMover); !can {
+		return nil // a forced round runs every chore; this input cannot move gold
+	}
 	s, err := t.current()
 	if err != nil {
 		return err
 	}
-	amount := min(t.bankKeep(s.Player.Level)-s.Player.Gold, s.Player.StashGold)
+	target := max(t.shopTarget(s, plan), t.bankKeep(s.Player.Level)*b2i(t.needWithdraw(s)))
+	amount := min(target-s.Player.Gold, s.Player.StashGold)
 	if amount <= 0 {
 		return nil
 	}
 	return t.withdrawAmount(ctx, a, s, amount, "for the kit")
+}
+
+func b2i(b bool) int {
+	if b {
+		return 1
+	}
+	return 0
 }
 
 // ErrNoGoldMover: the input cannot move gold through the game's own command, so the stash cannot be emptied.
@@ -227,4 +332,12 @@ func (t *Town) withdrawAmount(ctx context.Context, a *Act, s *d2.Snapshot, amoun
 		first = err
 	}
 	return first
+}
+
+// logNoIDTool is the reason when the identify chore has no tool and may not buy one (town.identifyTome 0); once per visit.
+func (t *Town) logNoIDTool() {
+	if !t.idTomeLogged {
+		t.idTomeLogged = true
+		t.e.Log.Info("town: identify skipped", "reason", "no scroll/tome (buy on request)")
+	}
 }

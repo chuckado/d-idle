@@ -37,7 +37,7 @@ func TestItemActionsJSNeverScrollsOrInjects(t *testing.T) {
 		}
 	}
 	// the errand strip never rebuilds on a poll (a typed count must survive) and the page has its mount point
-	if !strings.Contains(invPage, `id="errands"`) {
+	if !strings.Contains(charPage, `id="errands"`) {
 		t.Error("inventory page lacks the errands mount point")
 	}
 	css, _ := webFS.ReadFile("web/inventory-actions.css")
@@ -53,7 +53,7 @@ func TestItemActionsJSNeverScrollsOrInjects(t *testing.T) {
 
 func TestItemActionsRoutesAndPage(t *testing.T) {
 	for _, want := range []string{`href="/watch/inventory-actions.css"`, `src="/watch/inventory-actions.js"`} {
-		if !strings.Contains(invPage, want) {
+		if !strings.Contains(charPage, want) {
 			t.Errorf("inventory page lacks %s", want)
 		}
 	}

@@ -1,0 +1,147 @@
+{
+  "version": "didle.scenario/1",
+  "scenarios": [
+    {
+      "id": "vault.sell-instant",
+      "title": "Vault: Sell removes the records at once and credits the engine's price to the stash gold",
+      "kind": "behaviour",
+      "tier": "full",
+      "status": "active",
+      "covers": [
+        "town.vault"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/d2dctl/credit.go",
+        "internal/vault/store.go",
+        "internal/watch/vaultapi.go",
+        "cmd/d2bot/vaultkeep.go"
+      ],
+      "pre": {
+        "level": 20,
+        "gold": 500,
+        "stash": 7200,
+        "vault_records": {
+          "items": [
+            {
+              "code": "cap",
+              "quality": 4,
+              "unid": true,
+              "bare": true
+            },
+            {
+              "code": "lea",
+              "quality": 4,
+              "unid": true,
+              "bare": true
+            },
+            {
+              "code": "buc",
+              "quality": 4,
+              "unid": true,
+              "bare": true
+            },
+            {
+              "code": "ssd",
+              "quality": 4,
+              "unid": true,
+              "bare": true
+            },
+            {
+              "code": "hax",
+              "quality": 4,
+              "unid": true,
+              "bare": true
+            },
+            {
+              "code": "sst",
+              "quality": 4,
+              "unid": true,
+              "bare": true
+            }
+          ]
+        }
+      },
+      "trigger": {
+        "goals": "reach:25",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultSellInstant": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/sell",
+            "body": {
+              "ids": [
+                "{{vault.0.id}}",
+                "{{vault.1.id}}",
+                "{{vault.2.id}}",
+                "{{vault.3.id}}",
+                "{{vault.4.id}}",
+                "{{vault.5.id}}"
+              ],
+              "confirm": true,
+              "ack": true
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 20,
+        "wall_min": 4
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "provenance": "SETUP (CHEATED, mechanics only): level, gold and stash gold by stat verbs; the six unidentified vault records are real magic items given by `debug give ... unid` and taken into the vault by the runner. UNMEASURED run: the sale credits the stash with `debug creditgold` (ADR 0029 amendment, player-ordered write, refused under --lockstep), so the bot phase runs d2d in real time with --vault-pay; the one creditgold write per order is the thing under test. Mechanics evidence only, never balance.",
+      "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the sale was accepted"
+        },
+        {
+          "kind": "vault_sold",
+          "min": 6,
+          "max": 6,
+          "index": 0,
+          "why": "all six records left the vault and the stash grew by exactly the sum of the engine prices the reply, the records and the stash read-back agree on"
+        },
+        {
+          "kind": "vault_log",
+          "pattern": "^sold",
+          "min": 6,
+          "why": "six sold lines in the journal"
+        },
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "path": "sale.state",
+          "equals": "done",
+          "why": "the order ended done, nothing was queued for a town visit"
+        }
+      ],
+      "notes": "Hero in town, 6 unidentified magic vault records, 7200 stash gold, knob loot.vaultSellInstant 1. The order is posted to /api/vault/sell with confirm and ack. Expected: the records are Sold and gone from the live vault, the stash rose by exactly the sale gold the reply states (the sum of `item price` of each record's bytes at the default vendor), no item was created in the hero. RED on today's main: Sell only queues for the next town visit. Records are unidentified, so each is priced as its base (the engine pays no affix value for an unidentified item).",
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.decode",
+        "item.price",
+        "vault.creditgold"
+      ]
+    }
+  ]
+}

@@ -51,6 +51,20 @@ type CoverageSource interface {
 	CoverageOf() (senses.Coverage, bool)
 }
 
+// ObjectiveSource is an optional part of a SensesSource: where the hero is walking to in the current area.
+type ObjectiveSource interface {
+	ObjectiveOf() (senses.Objective, bool)
+}
+
+// SenseObjective is the additive objective key of /api/senses: the goal of the walk in progress, in the map's
+// coordinates. It is not fogged (the level around it is), see docs/mapfog.md.
+type SenseObjective struct {
+	Area  int    `json:"area"`
+	X     int    `json:"x"`
+	Y     int    `json:"y"`
+	Label string `json:"label,omitempty"`
+}
+
 // SenseCoverage is the additive coverage key of /api/senses: Cells are [x, y, state] (0 unseen, 1 seen, 2 failed),
 // State is "roaming" or "explored", Total counts the points before the cap.
 type SenseCoverage struct {
@@ -128,7 +142,9 @@ type SensesReply struct {
 	History *HistoryReply `json:"history,omitempty"`
 	// Coverage is the roam coverage grid of the current area (tier 1, additive), absent when the bot is not roaming.
 	Coverage *SenseCoverage `json:"coverage,omitempty"`
-	Waiting  bool           `json:"waiting,omitempty"`
+	// Objective is where the hero is walking to, tier 1, additive: the one marker beyond the walked ground.
+	Objective *SenseObjective `json:"objective,omitempty"`
+	Waiting   bool            `json:"waiting,omitempty"`
 	// Locked lists the tiers not open yet (titles and hints only) and Next is the lowest of them; both are present only
 	// when the Unlocker is a Teaser. A locked tier's data keys stay absent.
 	Locked []SenseLock `json:"locked,omitempty"`
@@ -296,6 +312,11 @@ func (s *Senses) ReplyNb(have uint64, haveNb map[int]uint64) SensesReply {
 					sc.Target = &[2]int{c.Target.X, c.Target.Y}
 				}
 				r.Coverage = sc
+			}
+		}
+		if os, ok := s.Src.(ObjectiveSource); ok {
+			if o, ok := os.ObjectiveOf(); ok {
+				r.Objective = &SenseObjective{Area: o.Area, X: o.X, Y: o.Y, Label: o.Label}
 			}
 		}
 		if ts, ok := s.Src.(TrailSource); ok {

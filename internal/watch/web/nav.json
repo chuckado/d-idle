@@ -1,0 +1,34 @@
+{
+  "schema": "watch.nav/1",
+  "breakpoint": 700,
+  "destinations": [
+    { "id": "live", "label": "Live", "href": "/watch?live=1", "match": ["/watch", "/watch/"] },
+    { "id": "gear", "label": "Gear", "href": "/watch/inventory", "match": ["/watch/inventory"] },
+    { "id": "skills", "label": "Skills", "href": "/watch/skills", "match": ["/watch/skills", "/watch/points"] },
+    { "id": "vault", "label": "Vault", "href": "/watch/vault", "match": ["/watch/vault"] },
+    { "id": "more", "label": "More", "sheet": true, "match": ["/watch/return", "/watch/policy", "/watch/hall", "/watch/characters"] }
+  ],
+  "more": [
+    { "id": "characters", "label": "Characters", "href": "/watch/characters", "key": "characters-open" },
+    { "id": "return", "label": "Return screen", "href": "/watch/return", "key": "menu-return" },
+    { "id": "hall", "label": "Hall of Fame", "href": "/watch/hall" },
+    { "id": "policy", "label": "Policy", "href": "/watch/policy" },
+    { "id": "help", "label": "Help", "href": "/watch?live=1&drawer=onboarding" },
+    { "id": "oldlayout", "label": "Old layout", "href": "/watch?layout=classic" }
+  ],
+  "areas": {
+    "skills": [
+      { "id": "tree", "label": "Tree", "href": "/watch/skills" },
+      { "id": "points", "label": "Points", "href": "/watch/points" },
+      { "id": "build", "label": "Build", "href": "/watch/points?tab=build" }
+    ]
+  },
+  "texts": {
+    "main": "Main",
+    "moreTitle": "More",
+    "close": "Close",
+    "pages": "Pages",
+    "area": "Skills area",
+    "theme": "Theme: "
+  }
+}

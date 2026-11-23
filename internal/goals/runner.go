@@ -75,13 +75,17 @@ type Why struct {
 }
 
 type Status struct {
-	State     RunnerState `json:"state"`
-	Activity  string      `json:"activity"` // short human text: "Fighting", "Walking to Cold Plains", "Selling in town"
-	Why       Why         `json:"why,omitempty"`
-	GoalID    string      `json:"goalId,omitempty"`
-	Message   string      `json:"message,omitempty"`
-	Character Character   `json:"character"`
-	Updated   time.Time   `json:"updated"`
+	State    RunnerState `json:"state"`
+	Activity string      `json:"activity"` // short human text: "Fighting", "Walking to Cold Plains", "Selling in town"
+	Why      Why         `json:"why,omitempty"`
+	GoalID   string      `json:"goalId,omitempty"`
+	Message  string      `json:"message,omitempty"`
+	// JourneyBlocked says why the quest step is refused while the hero farms the level plan meanwhile ("" = not blocked).
+	JourneyBlocked string `json:"journeyBlocked,omitempty"`
+	// FarmResetOff says why the farm loop switched itself off for this session ("" = not off): too many resets in a short time.
+	FarmResetOff string    `json:"farmResetOff,omitempty"`
+	Character    Character `json:"character"`
+	Updated      time.Time `json:"updated"`
 }
 
 type EventType string

@@ -16,6 +16,9 @@ type Preset struct {
 	ID    int // monster class (NPC), object id (object) or tile number (tile)
 	Pos   Point
 	Room2 uint32
+	Name  string // a monster preset's name when the source gives one (the fork's levelmonsters), else empty
+	// Waypoint marks an object the source itself classified as a waypoint (the fork's levelmap Kind), whatever its class id.
+	Waypoint bool
 }
 
 // RoomTile links a tile number to the Room2 on the other side of a level transition.
@@ -29,6 +32,37 @@ type Exit struct {
 	Dest  int
 	Pos   Point
 	Room2 uint32
+	// Click is where a click takes this warp when the backend says so (d2d: inside LvlWarp's Select box, see
+	// d2dctl.Warp); without HasClick the tile position is clicked, as before.
+	Click    Point
+	HasClick bool
+	// Trigger is the exit's trigger area as the engine reports it (d2d fork "debug warptriggers"), nil when the
+	// backend does not say: the nav mouth gate then keeps its guessed bound.
+	Trigger *Trigger
+}
+
+// TriggerRun is a row of subtile cells Y, X0..X1 inclusive, in the level map's coordinates.
+type TriggerRun struct{ Y, X0, X1 int }
+
+// Trigger is a warp's trigger area: Click holds the cells whose click takes the warp, Reach the cells from which that
+// click is taken at once. Truncated: the backend's scan edge cut the lists, so absence from them proves nothing near
+// the edge. Runs are sorted by Y then X0.
+type Trigger struct {
+	Click, Reach []TriggerRun
+	Truncated    bool
+}
+
+// ClickNear reports whether a click at (x, y), or within margin subtiles of it (Chebyshev), takes the warp.
+func (t *Trigger) ClickNear(x, y, margin int) bool {
+	if t == nil {
+		return false
+	}
+	for _, r := range t.Click {
+		if r.Y >= y-margin && r.Y <= y+margin && r.X1 >= x-margin && r.X0 <= x+margin {
+			return true
+		}
+	}
+	return false
 }
 
 // Adjacent is a neighbouring level seen through a Room2's near-room links.

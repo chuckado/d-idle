@@ -1,0 +1,62 @@
+<div class="d-panel">
+  <div class="d-slotbody">
+    <div class="n-head">
+      <span> "Needs you"
+      <button class="n-dots" data-key="menu" data-more="1" aria-haspopup="true" aria-label="All needs and notification setting" type="button"> "+2 more"
+    <div class="n-list" data-scroll="">
+      <div class="n-row" data-id="gear" data-need="danger" title="Weapon broken - repair is about 180 gold">
+        <span class="n-shape">
+        <span class="n-t">
+          <b> "Weapon broken"
+          <span class="n-s"> " repair is about 180 gold"
+        <span class="n-acts">
+          <button class="n-btn n-p" data-key="act-gear-0" type="button"> "Repair now"
+      <div class="n-row" data-id="raven" data-need="warn" title="Go for Blood Raven at level 9?">
+        <span class="n-shape">
+        <span class="n-t">
+          <b> "Go for Blood Raven at level 9?"
+        <span class="n-acts">
+          <button class="n-btn n-p" data-key="act-raven-0" type="button"> "Go now"
+          <button class="n-btn" data-key="act-raven-1" type="button"> "Not yet"
+      <div class="n-row" data-id="merc" data-need="warn" title="Mercenary is dead">
+        <span class="n-shape">
+        <span class="n-t">
+          <b> "Mercenary is dead"
+        <span class="n-acts">
+          <button class="n-btn n-p" data-key="act-merc-0" type="button"> "Revive"
+    <div class="n-pop" aria-label="Everything that needs you" popover="auto" role="dialog">
+      <div class="n-all">
+        <div class="n-row" data-id="gear" data-need="danger" title="Weapon broken - repair is about 180 gold">
+          <span class="n-shape">
+          <span class="n-t">
+            <b> "Weapon broken"
+            <span class="n-s"> " repair is about 180 gold"
+          <span class="n-acts">
+            <button class="n-btn n-p" data-key="act-gear-0" type="button"> "Repair now"
+        <div class="n-row" data-id="raven" data-need="warn" title="Go for Blood Raven at level 9?">
+          <span class="n-shape">
+          <span class="n-t">
+            <b> "Go for Blood Raven at level 9?"
+          <span class="n-acts">
+            <button class="n-btn n-p" data-key="act-raven-0" type="button"> "Go now"
+            <button class="n-btn" data-key="act-raven-1" type="button"> "Not yet"
+        <div class="n-row" data-id="merc" data-need="warn" title="Mercenary is dead">
+          <span class="n-shape">
+          <span class="n-t">
+            <b> "Mercenary is dead"
+          <span class="n-acts">
+            <button class="n-btn n-p" data-key="act-merc-0" type="button"> "Revive"
+        <div class="n-row" data-id="belt" data-need="info" title="Belt is empty - buy potions in town">
+          <span class="n-shape">
+          <span class="n-t">
+            <b> "Belt is empty"
+            <span class="n-s"> " buy potions in town"
+          <span class="n-acts">
+            <button class="n-btn n-p" data-key="act-belt-0" type="button"> "Buy"
+        <div class="n-row" data-id="stash" data-need="info" title="Stash is full">
+          <span class="n-shape">
+          <span class="n-t">
+            <b> "Stash is full"
+          <span class="n-acts">
+      <button class="n-sw" data-key="notify" data-on="0" aria-checked="false" role="switch" type="button"> "Desktop notification for a new red alert"
+        <em> "off"

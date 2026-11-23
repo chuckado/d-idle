@@ -1,0 +1,1016 @@
+{
+ "build": "necromancer_summoner_guide",
+ "class": "necromancer",
+ "combat": "summoner",
+ "note": "NECRO1 (Fable roadmap Q8, user decision 2026-11-19): the Necromancer Summoner, class 2 after the Sorceress fire build; review row N1 of docs/design/fable-review-2026-11-19/03-classes-plan.md section 3.3. Guide-track provenance [S: Maxroll summoner and leveling guides via docs/classes/necromancer.md section 3, V there; the row order is this repo's own arrangement, U]. Tier experimental: the summon upkeep and Amplify Damage have a short live check (docs/summon.md), Corpse Explosion, Weaken, Lower Resist, Fire Golem and Revive were never run live, and Decrepify, Terror and the Blood and Iron Golem points are prerequisite points only (docs/process/necromancer-support.md). Opt-in by name (levelerBuild necromancer_summoner_guide); the default Necromancer table (necromancer_summoner_normal30 then necromancer_summoner_endgame90) is unchanged.",
+ "respec": null,
+ "rows": [
+  {
+   "clvl": 2,
+   "energy": 5,
+   "skills": [
+    {
+     "skill": "Teeth",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 3,
+   "energy": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 4,
+   "energy": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 5,
+   "energy": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 6,
+   "strength": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 7,
+   "strength": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 8,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    },
+    {
+     "skill": "Clay Golem",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 9,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Amplify Damage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 10,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 11,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 12,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 13,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 14,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 15,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    },
+    {
+     "skill": "Bone Armor",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 16,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeletal Mage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 17,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeletal Mage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 18,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeletal Mage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 19,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 20,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 21,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 22,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 23,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 24,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 25,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 26,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 3
+    }
+   ]
+  },
+  {
+   "clvl": 27,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 28,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeletal Mage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 29,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeletal Mage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 30,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeletal Mage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 31,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Amplify Damage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 32,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Amplify Damage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 33,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Amplify Damage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 34,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Amplify Damage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 35,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 36,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 37,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 38,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 39,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 40,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 41,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 42,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 43,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 44,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeletal Mage",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 45,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 46,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 47,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 48,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 49,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 50,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Weaken",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 51,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Terror",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 52,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Decrepify",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 53,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Clay Golem",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 54,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Clay Golem",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 55,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Clay Golem",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 56,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Clay Golem",
+     "points": 1
+    },
+    {
+     "skill": "Golem Mastery",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 57,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Golem Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 58,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Golem Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 59,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Golem Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 60,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 61,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 62,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 63,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 64,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeleton",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 65,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 66,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 67,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 68,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Skeleton Mastery",
+     "points": 2
+    }
+   ]
+  },
+  {
+   "clvl": 69,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeletal Mage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 70,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeletal Mage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 71,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeletal Mage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 72,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Raise Skeletal Mage",
+     "points": 1
+    },
+    {
+     "skill": "BloodGolem",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 73,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "IronGolem",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 74,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "FireGolem",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 75,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Revive",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 76,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Revive",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 77,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Revive",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 78,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Revive",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 79,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Revive",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 80,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Iron Maiden",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 81,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Life Tap",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 82,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Lower Resist",
+     "points": 1
+    },
+    {
+     "skill": "Summon Resist",
+     "points": 1
+    },
+    {
+     "skill": "Revive",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 83,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Revive",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 84,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Revive",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 85,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Revive",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 86,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Revive",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 87,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Amplify Damage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 88,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Amplify Damage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 89,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Amplify Damage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 90,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Amplify Damage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 91,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Amplify Damage",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 92,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 93,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 94,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 95,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 96,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 97,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 98,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  },
+  {
+   "clvl": 99,
+   "vitality": 5,
+   "skills": [
+    {
+     "skill": "Corpse Explosion",
+     "points": 1
+    }
+   ]
+  }
+ ],
+ "schema": "per-clvl allocation, same shape as build-paladin-normal30.json (leveler.ParseBuild); rows are generated from internal/buildfile/testdata/necromancer-summoner-guide.json (didle.build/1) by TestNecromancerSummonerGoalFileMatchesTable (UPDATE=1), never edited by hand.",
+ "selector": "necromancer_summoner_guide",
+ "tier": "experimental"
+}

@@ -66,6 +66,12 @@ type Options struct {
 	// nothing; a few hundred ticks did), so Sleep must advance the game (d2dwalk passes the Pacer's). 0: no wait; the
 	// pending retries of Update look again later, and nav may give up on an exit before the neighbour exists.
 	LinkWait time.Duration
+	// LayoutRead reports whether the fork's read-only "debug levelmap" feeds the level's presets and room rows (knob
+	// quests.layoutRead, ADR 0022); nil or false: today's behaviour, the verb is never sent.
+	LayoutRead func() bool
+	// WarpRead reports whether the fork's read-only "debug warptriggers" gives the exits their trigger areas (knob
+	// nav.warpRead); nil or false: the verb is never sent.
+	WarpRead func() bool
 	Now      func() time.Time                 // test seam (virtual or fake clock for MinRefetch)
 	Logf     func(format string, args ...any) // arrival diagnostics (nil: silent)
 	Sleep    func(time.Duration)              // LinkWait pause between polls (step the game here), nil: time.Sleep
@@ -75,20 +81,23 @@ const maxLinkTries = 20
 
 // World is a nav.worldSource over one d2d socket. Not safe for concurrent use, like d2map.Tracker.
 type World struct {
-	v    Verbs
-	o    Options
-	levs map[int]*lvl
-	cur  *lvl
+	layoutLogged     string // signature of the last levelmap diagnostic line
+	objPresetsLogged string // signature of the last levelmonsters objpresets diagnostic line
+	v                Verbs
+	o                Options
+	levs             map[int]*lvl
+	cur              *lvl
 
 	resetNext atomic.Bool // ResetNext: forget the levels at the start of the next update, on the reader's goroutine
 
 	// Diagnostics for tools and tests.
-	GridFetches    int
-	LastLinked     []int // levels the last neighbour list named (diagnostics)
-	LinkPolls      int   // neighbour-list polls made while waiting on arrival (LinkWait)
-	LastGridErr    error
-	LastGridNote   string
-	LastBorderNote string
+	GridFetches     int
+	LastLinked      []int // levels the last neighbour list named (diagnostics)
+	LinkPolls       int   // neighbour-list polls made while waiting on arrival (LinkWait)
+	LastGridErr     error
+	LastGridNote    string
+	LastTriggerNote string
+	LastBorderNote  string
 }
 
 type lvl struct {
@@ -179,6 +188,14 @@ func (w *World) Update() (d2map.State, error) {
 	return w.update(ctx, false)
 }
 
+// Refetch makes the next Update read the level again whatever the character's distance and the rate limit say. A door
+// that was used changes collision cells without the character moving (card mapverify); nav calls it after using one.
+func (w *World) Refetch() {
+	if w.cur != nil {
+		w.cur.fetched = false
+	}
+}
+
 func (w *World) ctx() (context.Context, context.CancelFunc) {
 	return context.WithTimeout(context.Background(), w.o.Timeout+w.o.LinkWait)
 }
@@ -227,7 +244,7 @@ func (w *World) update(ctx context.Context, force bool) (d2map.State, error) {
 		l.own = Placement{Level: li.ID, X: li.OriginX, Y: li.OriginY, W: li.W, H: li.H}
 		st.NewRooms = w.fetch(ctx, l, rect, pos)
 		if st.LevelChanged {
-			w.logf("d2dworld: arrived in level %d: %s (pending %d, linkwait %v)", li.ID, w.LastBorderNote, l.pending, w.o.LinkWait)
+			w.logf("d2dworld: arrived in level %d: %s (pending %d, linkwait %v, known %d of %d cells)", li.ID, w.LastBorderNote, l.pending, w.o.LinkWait, l.m.Grid.KnownCount(), rect.W*rect.H)
 		}
 		if st.LevelChanged && l.pending > 0 && w.o.LinkWait > 0 {
 			t0 := time.Now()
@@ -304,16 +321,27 @@ func (w *World) fetch(ctx context.Context, l *lvl, rect d2map.Rect, pos d2map.Po
 	if ws, err := w.v.Warps(ctx); err == nil {
 		l.m.Exits = nil
 		for _, x := range ws.Items {
-			l.m.Exits = append(l.m.Exits, d2map.Exit{Dest: x.To, Pos: sub(x.X, x.Y)})
+			e := d2map.Exit{Dest: x.To, Pos: sub(x.X, x.Y)}
+			if x.HasClick {
+				e.Click, e.HasClick = sub(x.ClickX, x.ClickY), true
+			}
+			l.m.Exits = append(l.m.Exits, e)
 		}
 	}
+	w.mergeTriggers(ctx, l)
 	if ps, err := w.v.Presets(ctx); err == nil {
 		l.m.Presets, l.names = nil, nil
 		for _, p := range ps.Items {
 			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: p.ObjectID, Pos: sub(p.X, p.Y)})
 			l.names = append(l.names, p.Name)
 		}
+		l.m.RoomRows = nil
+		for _, r := range d2dctl.Rooms(ps.Reply) {
+			l.m.RoomRows = append(l.m.RoomRows, d2map.RoomRow{Type: r.Type, Pos: sub(r.X+0.5, r.Y+0.5)})
+		}
 	}
+	w.mergeLayout(ctx, l, sub)
+	w.mergeMonsterPresets(ctx, l, sub)
 	return max(0, l.m.Grid.KnownCount()-before)
 }
 
@@ -329,7 +357,9 @@ func (w *World) borders(ctx context.Context, l *lvl) {
 		return
 	}
 	var linked map[int]bool
-	if near, err := lay.Nearby(ctx); err == nil {
+	var near []Near
+	if nr, err := lay.Nearby(ctx); err == nil {
+		near = nr
 		linked = map[int]bool{}
 		for _, n := range near {
 			linked[n.Level] = true
@@ -361,9 +391,11 @@ func (w *World) borders(ctx context.Context, l *lvl) {
 			own.W, own.H = p.W, p.H // the layout's size, not the grid's
 		}
 	}
+	places = placeLinked(own, places, near)
 	lr := d2map.Rect{X: l.m.Rect.X, Y: l.m.Rect.Y, W: 5 * own.W, H: 5 * own.H}
-	adj, pending, unlinked := adjacent(own, lr, places, linked, l.m.Grid, across)
+	adj, unproven, pending, unlinked := adjacent(own, lr, places, linked, l.m.Grid, across)
 	l.m.Adjacent, l.pending, l.unlinked = keepBorders(l.m.Adjacent, adj), pending, unlinked
+	l.m.Pending, l.m.Unproven = pending, unproven
 	if l.pending == 0 {
 		l.tries = 0
 	}
@@ -559,3 +591,197 @@ func ASCII(lm *d2map.LevelMap, maxW, maxH int) string {
 // FullyKnown tells nav the level maps arrive whole (`debug level`/layout), so there is nothing to reveal by
 // exploring and clearing has to roam instead (nav.roam).
 func (w *World) FullyKnown() bool { return true }
+
+// LevelMapper is the optional part of a Verbs that has the fork's "debug levelmap" (read-only room layout and objects
+// of the current level). Stock d2d, or an "err" reply, leaves the world as it was.
+type LevelMapper interface {
+	LevelMap(ctx context.Context) (*d2dctl.LevelMap, error)
+}
+
+// layoutNear is how close (cells) a layout object must be to a listed preset of the same class to count as the same.
+const layoutNear = 4 // in subtiles (0.8 cell)
+
+// mergeLayout adds what "debug levelmap" knows and "debug presets" does not yet (objects of rooms not built, preset
+// rooms) to the level's presets and room rows. Only with Options.LayoutRead on; any error leaves the level as fetched.
+func (w *World) mergeLayout(ctx context.Context, l *lvl, sub func(x, y float64) d2map.Point) {
+	if w.o.LayoutRead == nil || !w.o.LayoutRead() {
+		return
+	}
+	lm, ok := w.v.(LevelMapper)
+	if !ok {
+		return
+	}
+	doc, err := lm.LevelMap(ctx)
+	if err != nil || doc == nil || doc.Level != l.own.Level {
+		return
+	}
+	var wps, listed []string
+	for _, o := range doc.Objects {
+		if o.Kind == "waypoint" {
+			wps = append(wps, fmt.Sprintf("%d@%.0f,%.0f", o.Class, o.X, o.Y))
+		}
+		if len(listed) < 24 {
+			listed = append(listed, fmt.Sprintf("%d:%s", o.Class, o.Kind))
+		}
+	}
+	var presetRooms []string
+	for _, r := range doc.Rooms {
+		if r.Preset {
+			presetRooms = append(presetRooms, fmt.Sprintf("%d@%d,%d", r.Def, r.X, r.Y))
+		}
+	}
+	if sig := fmt.Sprint(doc.Level, len(doc.Objects), len(wps)); sig != w.layoutLogged {
+		w.layoutLogged = sig // diagnostics only on change: the verb is read at every fetch
+		w.logf("d2dworld: levelmap level %d: %d objects, %d rooms, waypoints %v, preset rooms %v, first %v", doc.Level, len(doc.Objects), len(doc.Rooms), wps, presetRooms, listed)
+	}
+	for _, o := range doc.Objects {
+		if o.Class == 0 {
+			continue
+		}
+		at := sub(o.X, o.Y)
+		known := false
+		for _, p := range l.m.Presets {
+			if p.ID == o.Class && at.X-p.Pos.X <= layoutNear && p.Pos.X-at.X <= layoutNear && at.Y-p.Pos.Y <= layoutNear && p.Pos.Y-at.Y <= layoutNear {
+				known = true
+				break
+			}
+		}
+		if !known {
+			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: o.Class, Pos: at, Waypoint: o.Kind == "waypoint"})
+			l.names = append(l.names, o.Name)
+		}
+	}
+	for _, r := range doc.Rooms {
+		if !r.Preset || r.Def < 0 {
+			continue
+		}
+		pos := sub(float64(r.X+r.W/2)+0.5, float64(r.Y+r.H/2)+0.5)
+		known := false
+		for _, row := range l.m.RoomRows {
+			if row.Type == r.Def && row.Pos == pos {
+				known = true
+				break
+			}
+		}
+		if !known {
+			l.m.RoomRows = append(l.m.RoomRows, d2map.RoomRow{Type: r.Def, Pos: pos})
+		}
+	}
+}
+
+// LevelMonsterer is the optional part of a Verbs that has the fork's "debug levelmonsters" (read-only: the level's
+// monster presets, a superunique's spawn point among them, and the monsters made so far).
+type LevelMonsterer interface {
+	LevelMonsters(ctx context.Context) (*d2dctl.LevelMonsters, error)
+}
+
+// mergeMonsterPresets adds the level's superunique spawn points ("debug levelmonsters" presets, known from the level's
+// build although her room is not up and she is not made yet) as NPC presets with their name, the way `debug presets`
+// does not list them. Only with Options.LayoutRead on; any error or a missing verb leaves the level as fetched.
+func (w *World) mergeMonsterPresets(ctx context.Context, l *lvl, sub func(x, y float64) d2map.Point) {
+	if w.o.LayoutRead == nil || !w.o.LayoutRead() {
+		return
+	}
+	lm, ok := w.v.(LevelMonsterer)
+	if !ok {
+		return
+	}
+	doc, err := lm.LevelMonsters(ctx)
+	if err != nil || doc == nil || doc.Level != l.own.Level {
+		return
+	}
+	if sig := fmt.Sprint(doc.Level, len(doc.ObjPresets)); sig != w.objPresetsLogged {
+		w.objPresetsLogged = sig // diagnostics only on change: the verb is read at every fetch
+		var wps []string
+		for _, o := range doc.ObjPresets {
+			if o.Kind == "waypoint" || o.Kind == "tree" || o.Kind == "cage" {
+				wps = append(wps, fmt.Sprintf("%s:%d@%.1f,%.1f built=%v", o.Kind, o.Class, o.X, o.Y, o.Built))
+			}
+		}
+		w.logf("d2dworld: levelmonsters level %d: %d object presets, key objects %v", doc.Level, len(doc.ObjPresets), wps)
+	}
+	w.mergeObjectPresets(l, doc.ObjPresets, sub)
+	for _, p := range doc.Presets {
+		if p.Kind != "superunique" {
+			continue
+		}
+		at := sub(p.X, p.Y)
+		known := false
+		for _, q := range l.m.Presets {
+			if q.Kind == d2map.PresetNPC && q.ID == p.ID && at.X-q.Pos.X <= layoutNear && q.Pos.X-at.X <= layoutNear && at.Y-q.Pos.Y <= layoutNear && q.Pos.Y-at.Y <= layoutNear {
+				known = true
+				break
+			}
+		}
+		if !known {
+			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetNPC, ID: p.ID, Pos: at, Name: p.Name})
+			l.names = append(l.names, p.Name)
+		}
+	}
+}
+
+// maxObjectClass is the last objects.txt Id the fork's objpresets names; above it a preset is a random shrine or chest.
+const maxObjectClass = 573
+
+// mergeObjectPresets adds the level's object presets of rooms not built yet ("debug levelmonsters" objpresets, the DS1
+// data of ALL rooms: a waypoint, the Tree, the Stones, the cage) as object presets, so the nav walks straight there
+// instead of exploring until the room is built. An object the level already lists (same class within layoutNear) is
+// not doubled; a random shrine or chest (class above objects.txt) is skipped.
+func (w *World) mergeObjectPresets(l *lvl, objs []d2dctl.ObjectPreset, sub func(x, y float64) d2map.Point) {
+	for _, o := range objs {
+		if o.Class <= 0 || o.Class > maxObjectClass {
+			continue
+		}
+		at := sub(o.X, o.Y)
+		known := false
+		for _, p := range l.m.Presets {
+			if p.Kind == d2map.PresetObject && p.ID == o.Class && at.X-p.Pos.X <= layoutNear && p.Pos.X-at.X <= layoutNear && at.Y-p.Pos.Y <= layoutNear && p.Pos.Y-at.Y <= layoutNear {
+				known = true
+				break
+			}
+		}
+		if !known {
+			l.m.Presets = append(l.m.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: o.Class, Pos: at, Waypoint: o.Kind == "waypoint"})
+			l.names = append(l.names, o.Name)
+		}
+	}
+}
+
+// WarpTriggerer is the optional part of a Verbs that has the fork's "debug warptriggers".
+type WarpTriggerer interface {
+	WarpTriggers(ctx context.Context) (*d2dctl.WarpTriggers, error)
+}
+
+// mergeTriggers gives the level's exits their trigger areas. Only with Options.WarpRead on; warp i of the verb is
+// exit i of "debug warps" (checked by destination); any error, a missing verb or a mismatch leaves the exits as fetched.
+func (w *World) mergeTriggers(ctx context.Context, l *lvl) {
+	if w.o.WarpRead == nil || !w.o.WarpRead() {
+		return
+	}
+	tv, ok := w.v.(WarpTriggerer)
+	if !ok {
+		return
+	}
+	doc, err := tv.WarpTriggers(ctx)
+	if err != nil || doc.Level != l.m.No || len(doc.Warps) != len(l.m.Exits) {
+		w.LastTriggerNote = fmt.Sprintf("warptriggers unusable (%v)", err)
+		return
+	}
+	runs := func(in []d2dctl.Run) []d2map.TriggerRun {
+		out := make([]d2map.TriggerRun, len(in))
+		for i, r := range in {
+			out[i] = d2map.TriggerRun{Y: l.oy + r[0], X0: l.ox + r[1], X1: l.ox + r[2]}
+		}
+		return out
+	}
+	for i, t := range doc.Warps {
+		if t.Index != i || t.To != l.m.Exits[i].Dest {
+			w.LastTriggerNote = fmt.Sprintf("warptriggers warp %d does not match the exit list", i)
+			return
+		}
+	}
+	for i, t := range doc.Warps {
+		l.m.Exits[i].Trigger = &d2map.Trigger{Click: runs(t.Click), Reach: runs(t.Reach), Truncated: t.Truncated}
+	}
+	w.LastTriggerNote = fmt.Sprintf("warptriggers: %d areas", len(doc.Warps))
+}

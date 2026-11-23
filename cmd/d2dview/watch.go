@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"time"
 
+	"d2lod-bot/internal/buildinfo"
 	"d2lod-bot/internal/watch"
 )
 
@@ -23,6 +24,7 @@ type watchOpts struct {
 	origins    string
 	class      string
 	speed      float64
+	pal        *watch.PalFeed // the lossless feed to advertise (its routes are mounted by main), nil: MJPEG only
 }
 
 // startWatch builds the simulated runner, starts it and the answer listener, and returns the read-only handler.
@@ -42,8 +44,10 @@ func startWatch(ctx context.Context, o watchOpts, viewAddr, token string, open, 
 	if p, err := strconv.Atoi(port); err == nil {
 		sim.Hub.SetAnswerPort(p)
 	}
+	sim.Hub.SetBuild(buildinfo.Current())
 	if hasFrames {
 		sim.Hub.SetFrameURL("/stream.mjpg")
+		sim.Hub.SetPalFeed(o.pal)
 	}
 	ans := &http.Server{Handler: sim.Hub.AnswerHandler(watch.AnswerOptions{Token: token, Origins: watchOrigins(o.origins, viewAddr)})}
 	go ans.Serve(ln)

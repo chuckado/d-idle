@@ -108,7 +108,120 @@
   .d-editbar .what { font-weight: 650; }
   .d-editbar .keys { color: var(--d-text-2); margin-inline-end: auto; }
 
+  /* the cockpit template (layout "template": "cockpit/1", shell.js mountCockpit; J-second-attempt.md section 2): a frame
+     that fills the viewport and never scrolls. Slots: band (the status header), stage (the picture, 4:3 of the height
+     left by band and strip, never wider than the rail allows), strip (cells under the picture), rail (the command
+     column; two columns on a wide window), phoneTabs (under the picture on a phone). A slot with nothing in it is not
+     built, so its neighbours take the room. Nothing in a slot has a content-driven height. */
+  .d-shell[data-template="cockpit"] { --c-band: 44px; --c-gap: 8px; --c-strip: 112px; --c-railmin: 400px; display: grid; grid-template-rows: var(--c-band) minmax(0, 1fr);
+    gap: 0; padding: 0; block-size: calc(100dvh - var(--d-banner-h, 0px)); min-block-size: 0; overflow: hidden; }
+  .d-shell[data-template="cockpit"][data-cmode="phone"] { --c-band: 104px; }
+  .d-shell[data-template="cockpit"] > .d-band-status { grid-template-rows: 100%; }
+  .d-shell[data-template="cockpit"] > .d-band-status .d-links { flex-wrap: nowrap; }
+  .d-shell[data-template="cockpit"][data-cmode="phone"] > .d-band-status { grid-template-rows: 36px minmax(0, 1fr); align-content: start; row-gap: 0; }
+  .d-shell[data-template="cockpit"] > .d-band-status { position: static; box-sizing: border-box; block-size: var(--c-band); padding-block: 0; } /* not clipped: the "..." menu opens out of it; .d-band-main clips the sentence */
+  .d-shell[data-template="cockpit"] > .d-band-status .d-band-main { flex-wrap: nowrap; overflow: hidden; }
+  .d-shell[data-template="cockpit"][data-cmode="phone"] > .d-band-status .d-band-main { flex-wrap: wrap; }
+  .d-shell[data-template="cockpit"] > .d-editbar { position: fixed; inset-block-end: var(--c-gap); inset-inline-start: 50%; transform: translateX(-50%); max-inline-size: calc(100% - 2 * var(--c-gap)); margin: 0; flex-wrap: nowrap; z-index: var(--d-z-sheet); }
+  .d-shell[data-template="cockpit"] > .d-editbar :is(.what, .d-btn) { white-space: nowrap; }
+  .d-shell[data-template="cockpit"] > .d-editbar .keys { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
+  .d-main[data-template="cockpit"] { --c-fh: calc(100dvh - var(--d-banner-h, 0px) - var(--d-nav-h, 0px) - var(--c-band) - 2 * var(--c-gap)); --c-stageh: var(--c-fh);
+    --c-left: minmax(0, min(calc(var(--c-stageh) * 4 / 3), calc(100% - var(--c-railmin) - var(--c-gap))));
+    display: grid; gap: var(--c-gap); padding: var(--c-gap); min-block-size: 0; min-inline-size: 0; align-items: stretch; position: relative;
+    grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); grid-template-areas: "s"; }
+  .d-main[data-template="cockpit"] > :not([data-cockpit-slot], .d-ckdiv) { display: none; }
+  .d-main[data-template="cockpit"][data-has*="t"] { --c-stageh: calc(var(--c-fh) - var(--c-strip) - var(--c-gap)); }
+  .d-main[data-template="cockpit"][data-has="str"] { grid-template-columns: var(--c-left) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) var(--c-strip); grid-template-areas: "s r" "t r"; }
+  .d-main[data-template="cockpit"][data-has="sr"] { grid-template-columns: var(--c-left) minmax(0, 1fr); grid-template-areas: "s r"; }
+  .d-main[data-template="cockpit"][data-has="st"] { grid-template-rows: minmax(0, 1fr) var(--c-strip); grid-template-areas: "s" "t"; }
+  .d-main[data-template="cockpit"][data-has="tr"] { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "t r"; }
+  .d-main[data-template="cockpit"][data-has="t"] { grid-template-areas: "t"; }
+  .d-main[data-template="cockpit"][data-has="r"] { grid-template-areas: "r"; }
+  .d-main[data-template="cockpit"][data-has="sp"] { grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "s" "p"; }
+  .d-main[data-template="cockpit"][data-cmode="phone"] { grid-template-columns: minmax(0, 1fr); }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot] { min-inline-size: 0; min-block-size: 0; overflow: hidden; }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="stage"] { grid-area: s; container: stage / size; display: grid; place-items: center; background: var(--d-video-bg); border-radius: var(--d-r-2); }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="stage"] > .d-panel { inline-size: min(100cqw, calc(100cqh * 4 / 3)); aspect-ratio: 4 / 3; position: relative; }
+  .d-main[data-template="cockpit"][data-has="sp"] > [data-cockpit-slot="stage"] { aspect-ratio: 4 / 3; }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="strip"] { grid-area: t; display: flex; gap: var(--c-gap); }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="rail"] { grid-area: r; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: var(--c-gap); }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="rail"][data-cols="2"] { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="rail"][data-top]:not([data-cols="0"]) { grid-template-rows: fit-content(40%) minmax(0, 1fr); } /* the top panels take what they need, at most 40 % of the rail */
+  .d-slottop { grid-column: 1 / -1; }
+  .d-slotcol.d-slottop > .d-panel:not([data-grow]) { max-block-size: none; }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="phoneTabs"] { grid-area: p; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: var(--c-gap); }
+  .d-slotcol { display: flex; flex-direction: column; gap: var(--c-gap); min-block-size: 0; min-inline-size: 0; }
+  .d-slotcol > .d-panel, .d-slottabs > .d-panel { flex: 0 1 auto; min-block-size: 0; }
+  .d-slotcol > .d-panel:not([data-grow]), .d-slottabs > .d-panel:not([data-grow]) { max-block-size: 50%; } /* a panel that is not the last takes at most half the column: its list scrolls inside */
+  .d-slotcol[data-growmin] > .d-panel:not([data-grow]) { max-block-size: min(50%, calc((100% - var(--c-growmin) - 2 * var(--c-gap)) / 2)); } /* the last panel keeps its minimum; the ones above it scroll inside */
+  .d-slotcol > .d-panel[data-grow], .d-slottabs > .d-panel[data-grow] { flex: 1 1 0; }
+  .d-slotcol > .d-panel[data-grow] { min-block-size: var(--c-growmin, 0px); }
+  [data-cockpit-slot="strip"] > .d-panel { flex: 1 1 0; min-block-size: 0; }
+  [data-cockpit-slot="strip"] > .d-panel:nth-child(2) { flex-grow: 1.25; }
+  [data-cockpit-slot="strip"] > .d-panel:nth-child(3) { flex-grow: 1.1; }
+  [data-cockpit-slot="strip"] > [data-panel="quest-strip"] { flex-grow: 2.2; } /* the quest tile needs the width of two cells (offer text, three buttons) */
+  .d-slotcol > .d-panel, .d-slottabs > .d-panel, [data-cockpit-slot="strip"] > .d-panel { background: var(--d-surface-1); border-radius: var(--d-r-2); padding: var(--d-sp-2); overflow: hidden; box-sizing: border-box; position: relative; }
+  .d-slottabs { display: flex; flex-direction: column; gap: var(--c-gap); min-block-size: 0; }
+  .d-tabbar { display: flex; gap: var(--d-sp-1); }
+  .d-tabbar > .d-btn { flex: 1 1 0; }
+  /* a slot panel is bare: its picture or content fills the box, and its title bar actions are two small labels on the edge */
+  .d-panel[data-cockpit-panel] > .d-slotbody { block-size: 100%; min-block-size: 0; }
+  .d-panel[data-cockpit-panel] > .d-slotlabels { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: var(--d-sp-1); align-items: center; z-index: 2;
+    font-size: var(--d-fs-0); color: var(--d-video-text); }
+  .d-panel[data-cockpit-panel] > .d-slotlabels:not(:has(*)) { display: none; }
+  .d-panel[data-cockpit-panel] > .d-slotlabels .meta:empty { display: none; }
+
+  /* two maps in one rail column: a switch shows one at a time (shell.js mapSwitch); a panel switched off takes no room */
+  .d-panel[data-off] { display: none; }
+  .d-mapswitch { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: 0; z-index: 3; background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); }
+  .d-mapswitch > .d-btn { min-inline-size: 0; padding-inline: var(--d-sp-2); }
+  .d-panel:has(> .d-mapswitch) > .d-slotlabels { inset-inline-end: auto; inset-inline-start: var(--d-sp-2); inset-block-start: calc(var(--d-sp-1) + 5px); } /* the zone label makes room for the switch */
+
+  /* drawers: the log and the first-steps card open as a side sheet over the page (a full-width sheet on a phone) */
+  .d-drawer-back { position: fixed; inset: 0; z-index: calc(var(--d-z-sheet) + 1); background: var(--d-scrim); }
+  .d-drawer-back[hidden], .d-drawer[hidden] { display: none; }
+  .d-drawer { position: fixed; inset-block: 0; inset-inline-end: 0; z-index: calc(var(--d-z-sheet) + 2); inline-size: min(440px, 100vw); box-sizing: border-box; display: flex; flex-direction: column;
+    background: var(--d-surface-2); border-inline-start: var(--d-bw) solid var(--d-line-strong); box-shadow: var(--d-shadow-1); }
+  .d-drawer-head { display: flex; align-items: center; justify-content: space-between; gap: var(--d-sp-2); padding: var(--d-sp-2) var(--d-sp-3); flex: none; }
+  .d-drawer-head h2 { margin: 0; font-size: var(--d-fs-3); }
+  .d-drawer-body { flex: 1 1 0; min-block-size: 0; padding: 0 var(--d-sp-3) var(--d-sp-3); display: flex; flex-direction: column; }
+  .d-drawer-body > .d-panel { flex: 1 1 0; min-block-size: 0; position: relative; overflow: auto; }
+  .d-drawer-body > .d-panel[hidden] { display: none; }
+  .d-drawer-empty { display: none; margin: 0; color: var(--d-text-2); }
+  .d-drawer-body > .d-panel[hidden] ~ .d-drawer-empty { display: block; }
+  .d-drawer-body > .d-panel { display: flex; flex-direction: column; }
+  .d-drawer .d-panel[data-cockpit-panel] > .d-slotlabels { position: static; order: -1; justify-content: flex-end; color: var(--d-text-2); }
+  .d-drawer .d-slotbody { flex: 1 1 auto; min-block-size: 0; block-size: auto; }
+
+  /* phone: tall touch targets in the tab bar, the map switch and the drawer's close */
+  .d-shell[data-template="cockpit"][data-cmode="phone"] ~ .d-drawer, .d-shell[data-template="cockpit"][data-cmode="phone"] { --c-touch: 38px; }
+  .d-slottabs { overflow: hidden; }
+
+  /* cockpit editor (layoutedit.js startCockpit): a handle on each tile, two dividers */
+  .d-main[data-editing-cockpit] [data-cockpit-panel] { position: relative; outline: 1px dashed var(--d-line-strong); outline-offset: -2px; cursor: grab; }
+  .d-main[data-editing-cockpit] [data-cockpit-panel][data-ckdrop] { outline: 2px solid var(--d-accent); }
+  .d-main[data-editing-cockpit] [data-cockpit-panel][data-ckdrag] { opacity: .6; }
+  .d-cktag { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 4; display: flex; gap: var(--d-sp-1); align-items: center; padding: 1px var(--d-sp-1);
+    background: var(--d-surface-3); border-end-end-radius: var(--d-r-2); font-size: var(--d-fs-0); color: var(--d-text-2); pointer-events: auto; }
+  .d-cktag select { font: inherit; max-inline-size: 11rem; }
+  .d-cktag > span { cursor: grab; }
+  .d-ckdiv { position: absolute; inset-inline-start: var(--ck-l, 0); inset-block-start: var(--ck-t, 0); z-index: 5; background: var(--d-accent); opacity: .55; touch-action: none; }
+  .d-ckdiv:hover, .d-ckdiv[data-drag] { opacity: 1; }
+  .d-ckdiv[data-axis="y"] { inline-size: var(--ck-w, 0); block-size: 6px; cursor: row-resize; }
+  .d-ckdiv[data-axis="x"] { block-size: var(--ck-h, 0); inline-size: 6px; cursor: col-resize; }
+
+  /* the "..." menu of the status band (Help, Edit layout, Theme, Layout) and the one-time layout note */
+  .d-layoutnote { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-2) var(--d-sp-3); margin-inline: var(--d-gap); padding: var(--d-sp-2) var(--d-sp-3);
+    background: var(--d-state-bg-info); border-radius: var(--d-r-2); font-size: var(--d-fs-1); }
+  .d-layoutnote[hidden] { display: none; }
+
   /* the shell's toast stack (ctx.toast); the old toasts share the element until their panels move */
+  /* a sheet over one tile (ctx.tileSheet): fills the tile it is in, scrolls inside, never leaves it */
+  .d-tilesheet { position: absolute; inset: 0; min-inline-size: 0; overflow-x: hidden; overflow-wrap: anywhere; z-index: var(--d-z-sheet); display: flex; flex-direction: column; gap: var(--d-sp-1); padding: var(--d-sp-2); overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; background: var(--d-surface-2); border-radius: var(--d-r-2); }
+  .d-tilesheet[hidden] { display: none; }
+  .d-tilesheet[data-float] { position: fixed; inset: auto; inset-block-start: var(--ts-top, 0); inset-inline-start: var(--ts-left, 0); inline-size: var(--ts-w, auto); block-size: var(--ts-h, 232px); box-shadow: var(--d-shadow-1); }
+  /* a block of a sheet that stays at its bottom edge while the rest scrolls (the zone sheet's charter and "Pay and go") */
+  .d-tilesheet > [data-pin="end"] { position: sticky; inset-block-end: 0; background: var(--d-surface-2); }
   .d-toasts { position: fixed; inset-block-start: var(--d-sp-3); inset-inline-end: var(--d-sp-3); z-index: var(--d-z-toast); display: grid; gap: var(--d-sp-2); max-inline-size: min(92vw, 380px); }
 
   /* overlay mode (?mode=overlay, user 2026-11-09: the stream overlay is a mode of this shell): the status band alone on
@@ -119,4 +232,112 @@
   :root[data-mode="overlay"] .d-band-status { position: static; grid-template-areas: "brand main"; grid-template-columns: auto minmax(0, 1fr); font-size: var(--d-fs-4); }
   :root[data-mode="overlay"] .d-band-status > .d-links { display: none; }
   :root[data-mode="overlay"] body > :not(.d-shell) { display: none; }
+}
+/* A popover of a band panel (the status sentence's): the shell owns overlays, so a panel adds the class and the shell places
+   it under the band, out of the band's clip. The phone gives it the screen's width and the whole band's two lines of room. */
+@layer shell {
+  .d-bandpop { position: fixed; inset-block-start: calc(var(--c-band, 44px) + var(--d-sp-1)); inset-inline-start: calc(var(--d-sp-6) * 4); z-index: var(--d-z-sheet); max-inline-size: min(560px, calc(100% - var(--d-sp-4))); }
+  .d-bandpop[hidden] { display: none; }
+  .d-shell[data-cmode="phone"] .d-bandpop { inset-inline: var(--d-sp-2); max-inline-size: none; }
+  /* the phone's band is two lines: the sentence on the first, the meters side by side and the count on the second; the band panels read these */
+  .d-shell[data-cmode="phone"] { --c-sentence: 100%; --c-meterflex: 1 1 0; --c-meterflow: column; --c-meterbar: minmax(24px, 1fr); --c-meterlbl: 3.4em; --c-metergap: var(--d-sp-5); }
+  /* S7: under a coarse pointer the controls outside the fixed frame (the "..." menu, the drawers, the layout note) are 44 px; the frame's own rows use --c-touch */
+  @media (pointer: coarse) { .d-menu-pop .d-btn, .d-menu-gh, .d-drawer-head .d-btn, .d-layoutnote .d-btn { min-block-size: 44px; } }
+}
+
+@layer shell {
+  /* Reset (resetui.js): the confirm sheet over the page and the progress strip; the sheet is a card at any size */
+  .d-reset-sheet { position: fixed; inset: 0; z-index: var(--d-z-banner); display: grid; place-items: center; padding: var(--d-sp-3); background: var(--d-scrim); box-sizing: border-box; }
+  .d-reset-sheet[hidden], .d-reset-strip[hidden] { display: none; }
+  .d-reset-card { inline-size: min(100%, 24rem); max-block-size: 100%; overflow-y: auto; display: grid; gap: var(--d-sp-3); padding: var(--d-sp-4); box-sizing: border-box;
+    background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
+  .d-reset-card h2 { margin: 0; font-size: var(--d-fs-3); }
+  .d-reset-card p { margin: 0; font-size: var(--d-fs-1); color: var(--d-text-2); }
+  .d-reset-card .d-reset-err { color: var(--d-bad); }
+  .d-reset-card .d-reset-err[hidden] { display: none; }
+  .d-reset-row { display: flex; gap: var(--d-sp-2); justify-content: flex-end; }
+  .d-reset-row .d-btn { flex: 1 1 0; min-block-size: 44px; align-items: center; }
+  .d-reset-card > .d-btn { min-block-size: 44px; align-items: center; }
+  .d-reset-card > .d-btn[hidden] { display: none; }
+  /* Support bundle (supportui.js): the same card as Reset, taller, scrolling inside itself so it fits every size */
+  .d-sup-sheet { position: fixed; inset: 0; z-index: var(--d-z-banner); display: grid; place-items: center; padding: var(--d-sp-3); background: var(--d-scrim); box-sizing: border-box; }
+  .d-sup-sheet[hidden], .d-sup-card [hidden] { display: none; }
+  .d-sup-card { inline-size: min(100%, 30rem); max-block-size: 100%; overflow-y: auto; display: grid; gap: var(--d-sp-3); padding: var(--d-sp-4); box-sizing: border-box;
+    background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
+  .d-sup-card h2 { margin: 0; font-size: var(--d-fs-3); }
+  .d-sup-card p { margin: 0; font-size: var(--d-fs-1); color: var(--d-text-2); overflow-wrap: anywhere; }
+  .d-sup-card .d-sup-err { color: var(--d-bad); }
+  .d-sup-card .d-sup-note { font-size: var(--d-fs-0); }
+  .d-sup-card .d-sup-code { font-size: var(--d-fs-3); font-family: var(--d-font-num); letter-spacing: 0.15em; color: var(--d-text); user-select: all; }
+  .d-sup-form, .d-sup-prev, .d-sup-done { display: grid; gap: var(--d-sp-2); }
+  .d-sup-check { display: flex; gap: var(--d-sp-2); align-items: center; min-block-size: 44px; font-size: var(--d-fs-1); }
+  .d-sup-check input { inline-size: 24px; block-size: 24px; flex: none; }
+  .d-sup-files { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--d-sp-1); font-size: var(--d-fs-1); font-family: var(--d-font-num); overflow-wrap: anywhere; }
+  .d-sup-log { margin: 0; max-block-size: 10rem; overflow: auto; padding: var(--d-sp-2); white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--d-fs-1); background: var(--d-surface-1); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); }
+  .d-sup-file { display: grid; gap: var(--d-sp-1); }
+  .d-sup-fhead { overflow-wrap: anywhere; }
+  .d-sup-file .d-btn { justify-self: start; min-block-size: 44px; }
+  .d-sup-row { display: flex; gap: var(--d-sp-2); justify-content: flex-end; }
+  .d-sup-row .d-btn { flex: 1 1 0; min-block-size: 44px; align-items: center; }
+  .d-sup-alt { display: flex; flex-wrap: wrap; gap: var(--d-sp-3); align-items: center; justify-content: space-between; }
+  .d-sup-link { display: inline-flex; align-items: center; min-block-size: 44px; font-size: var(--d-fs-1); color: var(--d-accent-text); }
+  .d-sup-alt .d-btn { min-block-size: 44px; }
+  /* Loot rules (lootrulesui.js): the same card family as the support sheet, wider, one scroll inside the card */
+  .d-lr-sheet { position: fixed; inset: 0; z-index: var(--d-z-banner); display: grid; place-items: center; padding: var(--d-sp-3); background: var(--d-scrim); box-sizing: border-box; }
+  .d-lr-sheet[hidden], .d-lr-card [hidden] { display: none; }
+  .d-lr-card { inline-size: min(100%, 38rem); max-block-size: 100%; overflow-y: auto; display: grid; gap: var(--d-sp-3); padding: var(--d-sp-4); box-sizing: border-box; align-content: start;
+    background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
+  .d-lr-card h2, .d-lr-card h3 { margin: 0; font-size: var(--d-fs-3); }
+  .d-lr-card h3 { font-size: var(--d-fs-2); }
+  .d-lr-card p, .d-lr-card li { margin: 0; font-size: var(--d-fs-1); color: var(--d-text-2); overflow-wrap: anywhere; min-inline-size: 0; }
+  .d-lr-card .d-lr-err { color: var(--d-bad); }
+  .d-lr-card .d-lr-note { font-size: var(--d-fs-0); }
+  .d-lr-modes { display: flex; gap: var(--d-sp-2); }
+  .d-lr-modes .d-btn { flex: 1 1 0; min-block-size: 44px; align-items: center; }
+  .d-lr-modes .d-btn[aria-pressed="true"] { border-color: var(--d-accent-text); color: var(--d-text); }
+  .d-lr-simple, .d-lr-custom, .d-lr-why, .d-lr-prot { display: grid; gap: var(--d-sp-2); }
+  .d-lr-simple { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); align-items: end; }
+  .d-lr-simple .d-btn { grid-column: 1 / -1; min-block-size: 44px; align-items: center; }
+  .d-lr-field { display: grid; gap: var(--d-sp-1); font-size: var(--d-fs-1); }
+  .d-lr-field select, .d-lr-field input { min-block-size: 44px; box-sizing: border-box; inline-size: 100%; font: inherit; }
+  .d-lr-check { display: flex; gap: var(--d-sp-2); align-items: center; min-block-size: 44px; font-size: var(--d-fs-1); }
+  .d-lr-check input { inline-size: 24px; block-size: 24px; flex: none; }
+  .d-lr-rules, .d-lr-plist, .d-lr-recent, .d-lr-pv { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--d-sp-1); }
+  .d-lr-rules { max-block-size: 16rem; overflow-y: auto; border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); }
+  .d-lr-rule { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--d-sp-2); align-items: center; padding: var(--d-sp-1) var(--d-sp-2); border-block-end: var(--d-bw) solid var(--d-line); }
+  .d-lr-rule input { inline-size: 24px; block-size: 24px; }
+  .d-lr-rule.is-off .d-lr-text { text-decoration: line-through; opacity: 0.6; }
+  .d-lr-act { display: flex; gap: var(--d-sp-1); }
+  .d-lr-act .d-btn, .d-lr-why .d-btn, .d-lr-prot .d-btn { min-block-size: 44px; align-items: center; }
+  .d-lr-recent { max-block-size: 12rem; overflow-y: auto; }
+  .d-lr-dec[data-differs="1"] { color: var(--d-text); border-inline-start: 3px solid var(--d-accent-text); padding-inline-start: var(--d-sp-2); }
+  .d-lr-tools { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
+  .d-lr-tools .d-btn { flex: 1 1 6rem; min-block-size: 44px; align-items: center; justify-content: center; text-align: center; }
+  .d-lr-preview { display: grid; gap: var(--d-sp-2); padding: var(--d-sp-2); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); }
+  .d-lr-plist strong { color: var(--d-text); }
+  .d-lr-row { display: flex; justify-content: flex-end; }
+  .d-lr-row .d-btn { flex: 1 1 0; min-block-size: 44px; align-items: center; }
+  .d-reset-strip { position: fixed; inset-inline: var(--d-sp-3); inset-block-end: var(--d-sp-3); z-index: var(--d-z-banner); margin-inline: auto; inline-size: fit-content; max-inline-size: calc(100% - 2 * var(--d-sp-3));
+    padding: var(--d-sp-2) var(--d-sp-3); background: var(--d-state-bg-info); color: var(--d-text); border-radius: var(--d-r-2); font-size: var(--d-fs-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: var(--d-shadow-1);
+    display: flex; align-items: center; gap: var(--d-sp-2); }
+  .d-reset-strip .d-reset-text { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+  .d-reset-strip .d-btn { flex: none; min-block-size: 36px; }
+  .d-reset-strip .d-btn[hidden] { display: none; }
+  /* the header Reset: one tap, never wider than its busy label, a 44 px hit area on a 32 px button */
+  .d-reset-btn { position: relative; flex: none; min-inline-size: 0; justify-content: center; white-space: nowrap; border-color: var(--d-line-strong); }
+  .d-reset-btn::after { content: ""; position: absolute; inset: -6px -2px; }
+  .d-reset-btn[data-busy="1"] { color: var(--d-accent-text); border-color: var(--d-accent); }
+}
+
+/* the quest board (slice S5): what depends on the window, kept here because panels hold no media queries. The panels size their buttons
+   by --q-touch (a property, so the layer order does not matter): 44 px on a touch screen and in a phone's full-width drawer */
+@layer shell {
+  @media (pointer: coarse) { :root { --q-touch: 44px; } }
+  .d-shell[data-cmode="phone"] ~ .d-drawer { --q-touch: 44px; }
+  /* the phone's Quests tab: the tile takes what it needs (its list below scrolls inside), not at most half of a short tab */
+  .d-slottabs > .d-panel[data-panel="quest-strip"]:not([data-grow]) { max-block-size: none; flex: 0 0 auto; }
+}
+@layer shell {
+  /* the confirm sheet (web/sheet.js) is a bottom sheet on a phone */
+  @media (max-width: 699.98px) { .d-sheet-back { place-items: end stretch; padding: 0; } .d-sheet { inline-size: auto; border-radius: var(--d-r-1) var(--d-r-1) 0 0; } }
 }

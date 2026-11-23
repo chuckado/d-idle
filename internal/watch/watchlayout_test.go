@@ -83,6 +83,20 @@ func TestVideoPanelReconnectAndCollapse(t *testing.T) {
 	runNode(t, "testdata/video_panel.js", "web/panels/video/panel.js")
 }
 
+func TestVideoPanelLosslessFeedPathAndFallback(t *testing.T) {
+	runNode(t, "testdata/video_pal_panel.js", "web/panels/video/panel.js")
+}
+
+// At most one video transport is open at a time and a stalled capability probe cannot hold the MJPEG stream beside it (the viewer's
+// NO SIGNAL: a browser keeps about six connections per host).
+func TestVideoPanelOneTransportAndNoLeak(t *testing.T) {
+	runNode(t, "testdata/video_conns.js", "web/panels/video/panel.js")
+}
+
+func TestVideoPanelLabelsButton(t *testing.T) {
+	runNode(t, "testdata/video_labels_panel.js", "web/panels/video/panel.js")
+}
+
 func TestMapPanelStitchedWorldAndNeighbourCache(t *testing.T) {
 	runNode(t, "testdata/map_panel.js", "web/panels/map/panel.js")
 }
@@ -143,11 +157,11 @@ func TestInventoryDOMGoldens(t *testing.T) {
 func TestInventoryPageOnTheShell(t *testing.T) {
 	for _, want := range []string{`href="/watch/tokens.css"`, `href="/watch/shell.css"`, `href="/watch/components.css"`, `href="/watch/inventory.css"`,
 		`data-band="status"`, `id="btn-theme"`, `class="d-doll"`, `id="pack"`, `src="/watch/shell.js"`, `src="/watch/inventory.js"`} {
-		if !strings.Contains(invPage, want) {
+		if !strings.Contains(charPage, want) {
 			t.Errorf("inventory page lacks %s", want)
 		}
 	}
-	if strings.Contains(invPage, "<style") || strings.Contains(invPage, "style=") {
+	if strings.Contains(charPage, "<style") || strings.Contains(charPage, "style=") {
 		t.Error("inventory page has inline styles")
 	}
 	runNode(t, "testdata/inventory_logic.js", "web/inventory.js")

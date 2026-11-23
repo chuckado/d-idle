@@ -163,3 +163,24 @@ func TestKitMissingList(t *testing.T) {
 		t.Fatal("a build without mana need is complete")
 	}
 }
+
+// Card survhold2 (holdout seed 149): a recovering hero from clvl 8 with a portal, an empty belt and gold under one
+// potion stays on Blood Moor and Cold Plains and never takes the XP-best dungeon; with the price in hand the hold lifts
+// (the kit trip buys the potion first). Both builds: the rule reads the kit, not the class.
+func TestKitGateHoldsBrokeHeroWithoutPotions(t *testing.T) {
+	for _, cl := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		g, s := kitField(t, 12, 0, true, 5)
+		g.w.set(func(w *world) { w.class = cl })
+		s, _ = g.w.snapshot()
+		if !g.r.kitGateActive(s) {
+			t.Fatalf("%v: broke, no potion, portal in the pack: the gate must hold", cl)
+		}
+		if a, ok := g.r.recoveryArea(s); ok && !kitSafeTier[a] {
+			t.Errorf("%v: recovery area %d is outside Blood Moor / Cold Plains", cl, a)
+		}
+		g, s = kitField(t, 12, 0, true, 30)
+		if g.r.kitGateActive(s) {
+			t.Errorf("%v: gold for one potion: the hold lifts so the trip can buy it", cl)
+		}
+	}
+}

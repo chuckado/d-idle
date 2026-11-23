@@ -6,10 +6,12 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"d2lod-bot/internal/boss"
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/goals"
 	"d2lod-bot/internal/input"
 	"d2lod-bot/internal/task"
@@ -74,7 +76,8 @@ type TaskDeps struct {
 type taskState struct {
 	ex         *task.Executor
 	gen        uint64
-	err        error // sentinel error an action hit (portal opened, left the game ...) for r.do to react to
+	err        error      // sentinel error an action hit (portal opened, left the game ...) for r.do to react to
+	mu         sync.Mutex // guards wp and the per-game resets of syncTaskGame: the quest board builds the world off the loop goroutine
 	wp         map[int]bool
 	killed     map[string]bool
 	scene      int            // number of new games seen when killed/wp were last reset
@@ -85,6 +88,10 @@ type taskState struct {
 	refused    map[string]bool // refusals already logged (noteStepRefused)
 	andyLine   string          // last Andariel gate line logged (noteAndariel)
 	andyRowErr string          // last class-row error logged by fillAndariel (once per text)
+	pb         map[string]int  // planning blocks per quest step id, see parkStep
+	parked     map[string]parkedGroup
+	stepTitle  string         // title of the step the tick runs (the park reason names it)
+	bj         blockedJourney // blocked quest step: spin guard and farm fallback (staletarget.go)
 }
 
 type taskReport struct {
@@ -152,39 +159,71 @@ func phaseState(phase string) (State, string) {
 	return StateTraveling, "Quest step"
 }
 
+// ensureTaskExecutor creates the executor of goal generation c.gen once per goal; the quest board slices share it.
+func (r *Runner) ensureTaskExecutor(c control) {
+	l := &r.loop
+	if l.task.ex != nil && l.task.gen == c.gen {
+		return
+	}
+	ex := task.NewExecutor(taskEnv{r}, taskActs{r, c})
+	ex.Now = r.e.Clock.Now // strike expiry on the env clock: virtual under d2d lockstep (docs/d2d-determinism.md), wall on Game.exe as before
+	ex.Hooks.OnStart = func(s task.Step) { r.noTP.Store(s.Constraints.NoTownPortal) }
+	ex.Hooks.Progress = func() (int, bool) {
+		_, _, pct, _, ok := r.Explored()
+		return pct, ok
+	}
+	ex.Hooks.OnTimeout = func(s task.Step, n, pct int, extend bool) {
+		r.e.Log.Info("step timeout", "step", s.ID, "n", n, "explored", pct, "extend", extend)
+	}
+	ex.Hooks.OnEnd = func(s task.Step, res task.Result) {
+		r.noTP.Store(false)
+		if res.Outcome == task.OutInterrupted {
+			return // the guard's safety and trip interrupts are routine
+		}
+		r.e.Log.Info("task step", "step", s.ID, "outcome", res.Outcome.String(), "kind", res.Kind.String(), "err", res.Err, "attention", res.Attention)
+	}
+	l.task = taskState{ex: ex, gen: c.gen}
+	r.obMu.Lock()
+	r.ob.taskRep = taskReport{}
+	r.obMu.Unlock()
+}
+
 // taskStep runs one executor tick of the campaign goal.
 func (r *Runner) taskStep(ctx context.Context, snap *d2.Snapshot, c control) bool {
 	l := &r.loop
 	camp := c.spec.camp
-	if l.task.ex == nil || l.task.gen != c.gen {
-		ex := task.NewExecutor(taskEnv{r}, taskActs{r, c})
-		ex.Now = r.e.Clock.Now // strike expiry on the env clock: virtual under d2d lockstep (docs/d2d-determinism.md), wall on Game.exe as before
-		ex.Hooks.OnStart = func(s task.Step) { r.noTP.Store(s.Constraints.NoTownPortal) }
-		ex.Hooks.OnEnd = func(s task.Step, res task.Result) {
-			r.noTP.Store(false)
-			if res.Outcome == task.OutInterrupted {
-				return // the guard's safety and trip interrupts are routine
-			}
-			r.e.Log.Info("task step", "step", s.ID, "outcome", res.Outcome.String(), "kind", res.Kind.String(), "err", res.Err, "attention", res.Attention)
-		}
-		l.task = taskState{ex: ex, gen: c.gen}
-		r.obMu.Lock()
-		r.ob.taskRep = taskReport{}
-		r.obMu.Unlock()
-	}
+	r.ensureTaskExecutor(c)
 	ex := l.task.ex
 	env := taskEnv{r}
 	w, err := env.World(ctx)
 	if err != nil {
 		return false
 	}
+	// A target area left over from the leveling slice must not make the guard cancel the quest step (hero14 log: 1,906
+	// re-plans); a step that clears sets its own target.
+	r.setTargetArea(0)
+	r.unparkDue(ex)
 	plan := camp.Plan(w, ex)
 	r.noteAndariel(w)
+	if isBlockedPlan(plan) || !l.task.bj.retryAt.IsZero() {
+		why := plan.Why
+		if why == "" || !isBlockedPlan(plan) {
+			why = l.task.bj.why
+		}
+		if r.journeyBlocked(ctx, snap, c, ex, strings.TrimPrefix(why, "blocked: ")) {
+			return true
+		}
+		if w, err = env.World(ctx); err != nil {
+			return false
+		}
+		plan = camp.Plan(w, ex)
+	}
 	step, _, hasStep := ex.Peek(plan, w)
 	st, act := StateTraveling, "Quest: planning"
 	if hasStep {
 		st, act = phaseState(step.Phase)
 		act += " (" + step.Title + ")"
+		l.task.stepTitle = step.Title
 	}
 	if plan.Done {
 		return r.campaignFinished(ctx, snap, c, w)
@@ -216,11 +255,20 @@ func (r *Runner) taskStep(ctx context.Context, snap *d2.Snapshot, c control) boo
 			return res.Err
 		case task.OutRan, task.OutDone, task.OutSkipped:
 			l.task.blocks = 0
+			delete(l.task.pb, res.StepID)
 		}
 		return nil
 	})
 	if w2, werr := env.World(ctx); werr == nil {
 		r.setTaskReport(c.gen, camp.Report(w2, ex))
+	}
+	switch res.Outcome {
+	case task.OutRan, task.OutDone, task.OutSkipped:
+		r.journeyOK()
+	case task.OutRetry, task.OutBlocked:
+		if res.Err != nil && res.Kind == task.KindDanger {
+			r.noteRefusal(ctx, res)
+		}
 	}
 	switch res.Outcome {
 	case task.OutDone:
@@ -307,25 +355,40 @@ func (e taskEnv) World(ctx context.Context) (task.World, error) {
 	in := r.resInput(s)
 	w.Potions += in.Belt.PackHP + in.Belt.PackRV // World.Potions says belt and pack
 	w.HasTP, w.ManaPotions = in.HasTP, in.Belt.MP
+	r.fillKit(&w, s)
 	r.fillAndariel(&w, p.Class)
 	w.AndarielHold = r.e.Tune.Boss.AndarielHold != 0
 	w.Antidotes = r.antidotes(s)
 	if task.MercAlive != nil {
 		w.MercAlive, w.MercKnown = task.MercAlive()
 	}
-	w.Caster = p.Class == d2.Sorceress || p.Class == d2.Necromancer || p.Class == d2.Druid
+	w.Caster = p.Class.Caster()
 	bt := r.e.Tune.Boss
 	w.BRHigh = p.Class == d2.Sorceress || p.Class == d2.Druid || p.Class == d2.Amazon
 	w.BR = task.BRKnobs{CasterLevel: bt.BRCasterLevel, MeleeLevel: bt.BRMeleeLevel, Potions: bt.BRPotions, ManaPotions: bt.BRManaPotions, TPCharges: bt.BRTPCharges, Gold: bt.BRGold}
 	w.BRWaitLevel = l.br.waitLvl
+	w.BoardSM = r.e.Tune.Quests.BoardSM != 0
 	if g := r.gearVerdict(s); g.Gated {
 		w.Gated, w.GatedWhy, w.SafeArea = true, g.Reason, task.Area(r.safeFarmArea(s))
+		if !g.Naked && w.Potions == 0 && w.Gold > 0 {
+			w.GatedFix = "potions" // the kit is the only reason and the purse pays for it: a town visit fixes it
+		}
 	}
 	for a := range r.avoidedNow() {
+		if r.avoidWhyOf(a) == whyBorderLoop {
+			continue // the loop breaker never blocks a quest step (staletarget.go)
+		}
+		// A nav-fault skip (150 s "unreachable" or "nav-stuck") is no danger either: after the stones step the whole Act 1 chain
+		// read "banned" and the re-entry through Stony Field was refused (Proving Ground cain.chain, 2026-11-19).
+		if why := r.avoidWhyOf(a); r.banWaive.Load() && (dangerBan(why) || why == whyUnreachable || why == whyNavStuck) {
+			continue // the player started this chunk and its readiness is not "too hard": the farm area's ban does not apply
+		}
 		if w.Banned == nil {
 			w.Banned = map[task.Area]bool{}
+			w.BanNote = map[task.Area]string{}
 		}
 		w.Banned[task.Area(a)] = true
+		w.BanNote[task.Area(a)] = r.banNote(a)
 	}
 	w.HasMerc = d2.FindMerc(s).Alive
 	r.fillRoute(&w, p.Class, p)
@@ -350,9 +413,11 @@ func (e taskEnv) World(ctx context.Context) (task.World, error) {
 	}
 	r.syncGames() // the cleared set read below belongs to this game (the task path never passes runGoal)
 	r.syncTaskGame()
+	l.task.mu.Lock()
 	for a, on := range l.task.wp {
 		w.WPs[task.Area(a)] = w.WPs[task.Area(a)] || on
 	}
+	l.task.mu.Unlock()
 	l.wp.init()
 	r.drainTouched(s)
 	for k := range l.wp.touched {
@@ -392,6 +457,8 @@ func (r *Runner) syncTaskGame() {
 	n := r.ob.newGames
 	r.obMu.Unlock()
 	t := &r.loop.task
+	t.mu.Lock()
+	defer t.mu.Unlock()
 	if t.wp == nil || t.killed == nil || t.scene != n {
 		if t.scene != n {
 			if t.ex != nil {
@@ -420,6 +487,10 @@ var questItemNames = []string{task.ItemMalus, task.ItemBark, task.ItemCainSc,
 	// Acts 4 and 5 (names U until a live run read them, codes mss, hfh, ice, tr2 are V)
 	task.ItemSoulstone, task.ItemHammer, task.ItemMalahPotion, task.ItemResScroll}
 
+// questItemCodes maps the base codes of the Cain chain items to the name the steps ask for. The code wins over the
+// display name: names differ by locale and by table build (V code internal/quest/act1.go ItemInifussScroll, ItemCairnKey).
+var questItemCodes = map[string]string{"bks": task.ItemBark, "bkd": task.ItemCainSc}
+
 func (r *Runner) scanQuestItems(s *d2.Snapshot, out map[string]int) {
 	if r.d.Catalog == nil || s.Inventory == nil {
 		return
@@ -432,6 +503,10 @@ func (r *Runner) scanQuestItems(s *d2.Snapshot, out map[string]int) {
 		}
 		m, ok := r.d.Catalog.Item(u.Class)
 		if !ok {
+			continue
+		}
+		if n, ok := questItemCodes[m.Code]; ok && m.Code != "" {
+			out[n]++
 			continue
 		}
 		for _, n := range questItemNames {
@@ -478,6 +553,8 @@ func (a taskActs) tag(err error) error {
 }
 
 func (a taskActs) Travel(ctx context.Context, ar task.Area) error {
+	a.r.questTravel.Store(true)
+	defer a.r.questTravel.Store(false)
 	return a.tag(a.r.travelTo(ctx, int(ar)))
 }
 
@@ -520,7 +597,10 @@ func (a taskActs) Clear(ctx context.Context, ar task.Area) error {
 	r := a.r
 	area := int(ar)
 	if cur := r.curArea(); cur != area {
-		if err := r.travelTo(ctx, area); err != nil {
+		r.questTravel.Store(true)
+		err := r.travelTo(ctx, area)
+		r.questTravel.Store(false)
+		if err != nil {
 			return a.tag(err)
 		}
 	}
@@ -706,6 +786,9 @@ func (a taskActs) Interact(ctx context.Context, object string) error {
 		}
 		holdsPotion = held[task.ItemMalahPotion] > 0
 	}
+	if object == CageObject {
+		return a.freeCain(ctx, td)
+	}
 	if err := a.tag(td.Objects.Interact(ctx, object)); err != nil {
 		return err
 	}
@@ -720,12 +803,39 @@ func (a taskActs) Interact(ctx context.Context, object string) error {
 	}
 	if object == TreeObject {
 		// the click only drops the scroll (U); the task node has no pick-up of its own
-		if err := a.PickUp(ctx, task.ItemBark); err != nil {
+		if err := a.pickUpAfterTree(ctx); err != nil {
 			return err
 		}
 	}
 	a.setPseudo(interactPseudo[object])
 	return nil
+}
+
+// The scroll drops after the tree animation, not on the click (U, no live trace yet): look again for a few seconds
+// before reporting that the click gave nothing.
+const (
+	treeDropPolls = 6
+	treeDropWait  = time.Second
+)
+
+func (a taskActs) pickUpAfterTree(ctx context.Context) error {
+	if a.r.d.Loot == nil {
+		return task.Errorf(task.KindNotFound, "no looter: cannot pick up %s", task.ItemBark)
+	}
+	for i := 0; i < treeDropPolls; i++ {
+		rep, err := a.r.d.Loot.PickUp(ctx, PickOpts{Radius: 30, Names: []string{task.ItemBark}})
+		if err == nil && rep.Picked > 0 {
+			return nil
+		}
+		if err != nil && task.Classify(a.tag(err)) != task.KindNotFound {
+			return a.tag(err)
+		}
+		if ctx.Err() != nil {
+			return a.tag(ctx.Err())
+		}
+		a.r.e.Clock.Sleep(treeDropWait)
+	}
+	return task.Errorf(task.KindNotFound, "tree clicked, but no %s dropped within %d polls", task.ItemBark, treeDropPolls)
 }
 
 // TreeObject is the Tree of Inifuss in the Dark Wood.
@@ -853,17 +963,33 @@ func (a taskActs) ActivateWaypoint(ctx context.Context, ar task.Area) error {
 		return a.tag(err)
 	}
 	r.syncTaskGame()
+	r.loop.task.mu.Lock()
 	r.loop.task.wp[int(ar)] = true
+	r.loop.task.mu.Unlock()
 	return nil
 }
 
 func (a taskActs) Chores(ctx context.Context) error {
-	_, err := a.r.d.Town.Chores(ctx, a.r.fullChores("task"))
+	plan := a.r.fullChores("task")
+	// the route guard counts belt and pack: buy up to its minimum plus a buffer (the road drinks potions), not only to the belt plan
+	plan.KitHealing = a.r.e.Tune.Resource.KitMinHP + kitHealingBuffer
+	if k := a.r.kitPlanOf(a.r.latest()); k != nil { // town.plan >= 2: the shop buys to the plan's minima, belt plus pack
+		plan.KitHealing, plan.KitMana = k.Healing+kitHealingBuffer, k.Mana
+	}
+	_, err := a.r.d.Town.Chores(ctx, plan)
+	a.r.poll() // the executor confirms the step on the latest snapshot: it must see what was just bought
 	if err != nil {
 		return task.Wrap(task.KindResource, err)
 	}
 	return nil
 }
+
+// kitHealingBuffer is the healing potions the task chores buy above the guard minimum (U: judgment; a hero at exactly the
+// minimum drank below it on the first fight and parked the quest, Proving Ground act1.tools.malus).
+const kitHealingBuffer = 2
+
+// portalOnlyIdleMax bounds the LevelTo slices spent waiting in a portal-only level (2 s each).
+const portalOnlyIdleMax = 30
 
 // noAreaMsg is the text of LevelTo's no-target error; recovery treats it as a planning block.
 const noAreaMsg = "no eligible reachable leveling area"
@@ -876,6 +1002,19 @@ func (a taskActs) LevelTo(ctx context.Context, n int) error {
 		return task.Errorf(task.KindUI, "not in a game")
 	}
 	r.syncGames() // a fresh game forgets its predecessor's cleared areas, else freshGameToLevel restarts in a loop
+	if done, err := r.farmResetStep(ctx, s); done {
+		return a.tag(err)
+	}
+	// A portal-only level (Tristram) has no walkable way out, so every farm target reads "no route", gets skipped as
+	// unreachable for 150 s and the hero is sent to town: the free_cain chunk, accepted a second later, then found the Act 1
+	// map banned (Proving Ground cain.chain, 2026-11-19; also the source of its run-to-run differences). Wait there for the
+	// board instead, a bounded number of slices; then the normal way out (town portal) applies.
+	if cur := s.Player.Area; data.PortalOnly(cur) && r.portalOnlyIdle.Add(1) <= portalOnlyIdleMax {
+		r.e.Clock.Sleep(2 * time.Second)
+		return nil
+	} else if !data.PortalOnly(cur) {
+		r.portalOnlyIdle.Store(0)
+	}
 	c := a.c
 	c.spec = goalSpec{kind: goals.ReachLevel, level: n, label: fmt.Sprintf("reach level %d", n)}
 	// the planner reads the goal's level through c.goal.Params.Level
@@ -966,15 +1105,7 @@ func (r *Runner) freshGameToLevel(ctx context.Context, s *d2.Snapshot) (done boo
 	}
 	r.e.Log.Info("leveling: everything worth farming is cleared, starting a fresh game", "level", s.Player.Level, "cleared", len(r.loop.cleared),
 		"noGainRestarts", r.loop.freshNoGain, "reason", "no area left to pick")
-	err = r.newGameRun(func(ctx context.Context) error {
-		return r.d.Cycler.NewGame(ctx, difficultyName(s.Player.Difficulty))
-	})(ctx)
-	if err == nil {
-		// d2d restarts the process without a menu poll, so the observer's newGames never moves (live: restarts 0
-		// after 38 fresh games) and syncGames cannot forget: the cleared set belongs to the old game.
-		r.forgetGame()
-	}
-	return true, err
+	return true, r.startFreshGame(ctx, s)
 }
 
 // freshAllowed is the progress check in front of a fresh game. It compares the experience with the one at the previous
@@ -1148,6 +1279,9 @@ func (r *Runner) planningBlock(ctx context.Context, res task.Result) error {
 		r.pause(ctx, 5*time.Second)
 		return nil
 	}
+	if r.parkStep(res) {
+		return nil
+	}
 	l.task.blocks++
 	if res.Kind != task.KindNotFound {
 		return nil // a quest that is not ready: the executor routes around it on the next tick, no waiting needed
@@ -1181,4 +1315,102 @@ func (r *Runner) planningBlock(ctx context.Context, res task.Result) error {
 		r.rearm()
 	}
 	return nil
+}
+
+// CageObject is Cain's Gibbet in Tristram (the task node's object name; the adapter resolves it by object class).
+const CageObject = "Cain's Cage"
+
+// Bounds of the cage step. V drill L2 (docs/probes/search-for-cain-l2-2026-11-18.md): three awake Champion Skeleton
+// Archers stand 2 to 3 cells from the arrival and killed a level 4 hero in under 200 ticks; opening the cage flips the
+// quest word at once (0x0010 to 0x2012), no delay. cageGuardBudget bounds the fight, cageStalls the number of Clear
+// calls that kill nothing while hostiles remain (unreachable or set aside by the fighter), cageClicks the tries to
+// open the cage and cageWordWait how long the word is polled after a click.
+const (
+	cageGuardBudget = 150 * time.Second
+	cageStalls      = 3
+	cageClicks      = 3
+	cageWordWait    = 6 * time.Second
+)
+
+// freeCain is the Interact of the cage: first the hostiles around the hero are fought with the normal Fighter (its
+// survival and chicken logic stays active, so the class profile decides how), then the cage is clicked until the quest
+// word of Search for Cain reads "reward pending" (bit 1, V). The click never starts while a hostile lives within the
+// clear radius: it ends in a Danger fault instead. Without a live quest reader the click is taken as done (the word is
+// then known from the save only).
+func (a taskActs) freeCain(ctx context.Context, td *TaskDeps) error {
+	if err := a.clearGuards(ctx); err != nil {
+		return err
+	}
+	for try := 0; try < cageClicks; try++ {
+		if err := a.tag(td.Objects.Interact(ctx, CageObject)); err != nil {
+			return err
+		}
+		if td.Quests == nil || !td.QuestsLive {
+			return nil
+		}
+		if a.awaitStage(ctx, td, task.QCain, task.StageCleared, cageWordWait) {
+			return nil
+		}
+		a.r.e.Log.Info("cage: quest word unchanged after the click", "try", try+1)
+	}
+	return task.Errorf(task.KindNotFound, "the cage was clicked %d times but the quest word does not show Cain free", cageClicks)
+}
+
+// clearGuards fights until no hostile is within the clear radius, bounded by time and by stalls.
+func (a taskActs) clearGuards(ctx context.Context) error {
+	r := a.r
+	radius := r.e.Tune.Bot.ClearRadius
+	deadline := r.e.Clock.Now().Add(cageGuardBudget)
+	stalls, buffed := 0, false
+	for {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		s, err := r.d.Snapshot()
+		if err != nil {
+			return a.tag(err)
+		}
+		n := r.hostileNear(s, radius)
+		if n == 0 {
+			return nil
+		}
+		if !r.e.Clock.Now().Before(deadline) || stalls >= cageStalls {
+			return task.Errorf(task.KindDanger, "%d hostile units are still near the cage; not opening it", n)
+		}
+		if !buffed {
+			buffed = true
+			if err := r.d.Fighter.Buff(ctx); err != nil {
+				r.e.Log.Warn("cage guards: buff failed", "err", err)
+			}
+		}
+		res, err := r.d.Fighter.Clear(ctx, ClearOpts{Radius: radius, Interlude: r.goldGrab})
+		if err != nil {
+			return a.tag(err)
+		}
+		if res.Killed == 0 {
+			stalls++
+			r.pause(ctx, time.Duration(r.e.Tune.Bot.TickMs)*time.Millisecond)
+		} else {
+			stalls = 0
+		}
+	}
+}
+
+// awaitStage polls the quest reader until the quest reaches the stage or the wait ends.
+func (a taskActs) awaitStage(ctx context.Context, td *TaskDeps, q string, want task.Stage, wait time.Duration) bool {
+	r := a.r
+	deadline := r.e.Clock.Now().Add(wait)
+	for {
+		diff := 0
+		if s, err := r.d.Snapshot(); err == nil && s != nil && s.Player != nil {
+			diff = int(s.Player.Difficulty)
+		}
+		if v, ok := td.Quests.Read(diff); ok && v.Quests[q].Stage >= want {
+			return true
+		}
+		if ctx.Err() != nil || !r.e.Clock.Now().Before(deadline) {
+			return false
+		}
+		r.e.Clock.Sleep(500 * time.Millisecond)
+	}
 }

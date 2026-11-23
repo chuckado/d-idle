@@ -17,6 +17,7 @@ func plan2() town.ChorePlan {
 // A rare ring in the pack is worth a scroll: it is bought and the ring identified.
 func TestIDScrollBoughtForUnidentifiedRare(t *testing.T) {
 	r := audit(t, 400, 5, true)
+	r.Env.Tune.Town.IdentifyTome = 1
 	r.W.Add("tsc", d2.ContInventory, 9, 3)
 	r.W.Add("rin", d2.ContInventory, 0, 0)
 	r.W.Items[len(r.W.Items)-1].Item.Quality = d2.QualityRare
@@ -31,6 +32,7 @@ func TestIDScrollBoughtForUnidentifiedRare(t *testing.T) {
 func TestIDScrollNeedOffRestoresOldTopUp(t *testing.T) {
 	r := audit(t, 120, 1, true)
 	r.Env.Tune.Town.IDScrollNeed = 0
+	r.Env.Tune.Town.IdentifyTome = 1
 	r.W.Add("tsc", d2.ContInventory, 9, 3)
 	rep := run(t, r)
 	if rep.Bought["Scroll of Identify"] != 1 {

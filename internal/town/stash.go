@@ -124,8 +124,11 @@ func (t *Town) stashItems(ctx context.Context, rep *ChoreReport, insure bool) er
 func (t *Town) goldKeep(level int) int {
 	tu := t.tune()
 	keep := tu.StashGoldBase + level*tu.StashGoldPerLvl
-	if tu.BankFirst != 0 {
+	if tu.BankFirst != 0 || t.PlanStage() >= 3 {
 		keep = max(keep, t.kitGold()) // BASICSFIX: banking never cuts into the minimal kit
+	}
+	if t.PlanStage() >= 3 {
+		keep += t.purseSpend // the one purse target of the visit: planned spend plus the carry line (town-planner 5.1)
 	}
 	return keep
 }
@@ -257,6 +260,7 @@ func (t *Town) DepositForTest(ctx context.Context, amount int) error {
 
 // doStash runs the whole stash visit.
 func (t *Town) doStash(ctx context.Context, a *Act, plan ChorePlan, rep *ChoreReport) error {
+	t.bulkIdle = -1 // the stash is about to change: a trip that found nothing may find something now
 	if err := t.openStash(ctx, a); err != nil {
 		return err
 	}

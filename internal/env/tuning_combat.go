@@ -20,6 +20,9 @@ type CombatTuning struct {
 	CrowdDrinkPct  int // in a crowd: drink a healing potion below this life % (when the portal cannot be cast)
 	CrowdAdjacent  int // subtiles: a hostile this close is in melee reach and counts as adjacent (crowd rule, melee cast guard)
 	CrowdAbandonN  int // hostiles within 8 subtiles on a walk: abandon the walk, retreat 20+ subtiles, then portal
+	// CrowdAbandonQuestN replaces CrowdAbandonN while a player-started quest chunk runs and its readiness is not "too hard"
+	// (0 = no override). Proving Ground L3: 21 to 30 hostiles stand at the arrival of the Dark Wood and Underground Passage.
+	CrowdAbandonQuestN int
 
 	// Potion timing.
 	PotionGapMs        int // minimum gap between healing/mana potions (a potion heals over 5 to 10 s, see PotionEmergencyPct)
@@ -67,6 +70,7 @@ type CombatTuning struct {
 	RunnerGuard     int // 1 = no walk-away retreat while a monster that runs after the player is close (V run, monster-ai-trace D1-D5)
 	StandOK         int // 1 = a standing Fallen is not dropped as "never in range" (S, mon-wake-trace; off until a live drill)
 	MissileDodge    int // 1 = sidestep fire walls, lightning, hydra and chaos missiles (off: U until verified live)
+	MinionRead      int // 1 = count minions from the engine read (`debug minions`) when a reader is wired; 0 = the snapshot census (fork flag --read-combat needed)
 	CurseRetreatPct int // an Amplify/Iron Maiden curse on the player counts as danger and retreats below this life %
 	MaxApproaches   int // approach steps per target before it is dropped as unreachable
 	ReachSec        int // engaged this long without a single cast at a target: ignore it ("no-shot")
@@ -84,19 +88,29 @@ type CombatTuning struct {
 	Sacrifice           int // 1 = a profile may attack with Sacrifice (its band lists it); 0 = never, plain Attack instead
 	SacrificeMinLifePct int // Sacrifice only at or above this life %; below it plain Attack until life is back 10 points above
 	SacrificeMinPotions int // Sacrifice only with at least this many healing/rejuvenation potions in the belt
+	// DeliveryExpect: the cast expectation ledger (internal/combat/expect.go): 0 off, 1 log only, 2 skip skills that failed three casts in a row.
+	DeliveryExpect      int
 	HolyFireMinMonsters int // an aura marked needsCrowd (Holy Fire) is wanted only with this many hostiles within 8 subtiles
+}
+
+// AbandonN is the crowd-abandon size in force: the quest override while a started quest chunk runs, else the default.
+func (t CombatTuning) AbandonN(quest bool) int {
+	if quest && t.CrowdAbandonQuestN > t.CrowdAbandonN {
+		return t.CrowdAbandonQuestN
+	}
+	return t.CrowdAbandonN
 }
 
 func DefaultCombatTuning() CombatTuning {
 	return CombatTuning{
 		DrinkLifePct: 55, DrinkRejuvPct: 35, DrinkRejuvBossPct: 50, ChampionEarlyPct: 10, ChickenPct: 25, ChickenHellPct: 30, DrinkManaPct: 25, TownPotionMin: 2,
-		CrowdN: 8, CrowdAdjacent: 8, CrowdPortalPct: 70, CrowdDrinkPct: 65, CrowdAbandonN: 15,
+		CrowdN: 8, CrowdAdjacent: 8, CrowdPortalPct: 70, CrowdDrinkPct: 65, CrowdAbandonN: 15, CrowdAbandonQuestN: 40,
 		PotionGapMs: 1000, PotionEmergencyPct: 30, RejuvGapMs: 300, ReactionMs: 120, PollMs: 60,
 		TargetQuality: 100, RangeMargin: 3, ClearRadius: 40, FightRadius: 22, MaxTargetSec: 45, NoProgressSec: 12, ClearMaxSec: 180,
 		CastGapMs: 650, CastPerSkill: 1, CastMarginMs: 90, CastFCR: 0, LowManaWaitMs: 700, StaticCasts: 4, StaticCastsBR: 0, StaticFloorNorm: 25, StaticFloorNM: 33, StaticFloorHell: 50, NovaManaFloor: 25,
-		KiteEnabled: 1, KiteDistance: 10, KiteLifePct: 60, KiteMaxSteps: 6, KiteRetreat: 12, DodgeRadius: 4, MissileDodge: 0, ThreatDodge: 0, DodgeReactMs: 400, ShooterKillMin: 0, RunnerGuard: 1, StandOK: 0, CurseRetreatPct: 60, MaxApproaches: 12, ReachSec: 15, IgnoreMemorySec: 90,
+		KiteEnabled: 1, KiteDistance: 10, KiteLifePct: 60, KiteMaxSteps: 6, KiteRetreat: 12, DodgeRadius: 4, MissileDodge: 0, MinionRead: 0, ThreatDodge: 0, DodgeReactMs: 400, ShooterKillMin: 0, RunnerGuard: 1, StandOK: 0, CurseRetreatPct: 60, MaxApproaches: 12, ReachSec: 15, IgnoreMemorySec: 90,
 		BuffRecastSec: 150, BuffMarginSec: 6, AuraCheckMs: 1500, LeftFailSec: 60,
-		Sacrifice: 1, SacrificeMinLifePct: 70, SacrificeMinPotions: 1, HolyFireMinMonsters: 3,
+		Sacrifice: 1, SacrificeMinLifePct: 70, SacrificeMinPotions: 1, HolyFireMinMonsters: 3, DeliveryExpect: 0,
 	}
 }
 
@@ -119,6 +133,7 @@ func combatKnobs() []Knob {
 		k("crowdDrinkPct", "Crowd drink below life", "%", "In a crowd, drink a healing potion below this life percent (the portal cannot be cast when surrounded); the normal rule drinks at 55.", float64(d.CrowdDrinkPct), 40, 85, true),
 		k("crowdAdjacent", "Melee reach for adjacent", "subtiles", "A hostile within this distance (centre to centre) is in melee reach and counts as adjacent: three or more make a town portal cast a non-escape (potion, else leave the game) and a crowd 'surrounded'. Default 8 from the live zombie reads (drills11), UNVERIFIED for other monsters.", float64(d.CrowdAdjacent), 3, 12, false),
 		k("crowdAbandonN", "Crowd abandon size", "count", "Hostiles within 8 subtiles on a travel or quest walk that make the bot abandon the walk at once, retreat 20+ subtiles and open a portal. 0 turns it off.", float64(d.CrowdAbandonN), 0, 30, false),
+		k("crowdAbandonQuestN", "Crowd abandon size (started quest)", "count", "Like crowdAbandonN, but while a quest chunk the player started runs and the hero's readiness for it is not too hard: the hero fights the crowd instead of leaving. 0 = use crowdAbandonN. The drink, portal and chicken lines still apply.", float64(d.CrowdAbandonQuestN), 0, 60, false),
 		k("potionGapMs", "Potion gap", "ms", "Minimum time between healing or mana potions.", float64(d.PotionGapMs), 900, 3000, false),
 		k("potionEmergencyPct", "Potion emergency line", "%", "Below this life percent a healing potion is drunk even while an earlier one is still working. Above it the bot drinks again only for a higher tier: the game adds a same-tier drink to the running effect (longer, not faster; fid-potions.md Q5).", float64(d.PotionEmergencyPct), 10, 50, true),
 		k("rejuvGapMs", "Rejuvenation gap", "ms", "Minimum time between rejuvenation potions.", float64(d.RejuvGapMs), 250, 1500, false),
@@ -149,6 +164,7 @@ func combatKnobs() []Knob {
 		k("kiteRetreat", "Kite step length", "subtiles", "Length of one retreat step.", float64(d.KiteRetreat), 6, 20, true),
 		k("dodgeRadius", "Missile dodge radius", "subtiles", "Step away from hostile missiles closer than this.", float64(d.DodgeRadius), 0, 8, true),
 		k("missileDodge", "Sidestep dangerous missiles", "bool", "1 sidesteps fire walls, lightning, hydra and chaos missiles (unverified live, off by default).", float64(d.MissileDodge), 0, 1, true),
+		k("minionRead", "Read minions from the engine", "bool", "1 counts the hero's summons from the fork read `debug minions` (needs --read-combat); a failed read falls back to the snapshot census. Off by default (U until a live drill).", float64(d.MinionRead), 0, 1, true),
 		k("threatDodge", "Threat-model dodge", "bool", "1 dodges only hostile missiles the missile threat table says can be dodged in dodgeReactMs and fights the owners of the fast ones first (card botthreat, off until a live drill).", float64(d.ThreatDodge), 0, 1, true),
 		k("dodgeReactMs", "Dodge reaction budget", "ms", "Poll plus click time the threat model assumes before the character moves; a missile reaching us sooner is not dodged (I).", float64(d.DodgeReactMs), 100, 800, true),
 		k("shooterKillMin", "Kill shooters first from", "pts", "Ranged monsters with an elemental-only attack and a peak hit of at least this are fought first; 0 = off (derived from monstats, U).", float64(d.ShooterKillMin), 0, 200, true),
@@ -163,6 +179,7 @@ func combatKnobs() []Knob {
 		k("sacrifice", "Paladin Sacrifice attack", "bool", "1 lets a profile attack with Sacrifice (about x1.9 damage over Attack, costs 8 percent of the damage dealt in life, docs/palprofile.md); 0 keeps plain Attack.", float64(d.Sacrifice), 0, 1, true),
 		k("sacrificeMinLifePct", "Sacrifice life floor", "%", "Sacrifice only at or above this life percent; below it plain Attack until life is 10 points above the floor again.", float64(d.SacrificeMinLifePct), 40, 100, true),
 		k("sacrificeMinPotions", "Sacrifice potion floor", "count", "Sacrifice only with at least this many healing or rejuvenation potions in the belt (and no dead merc).", float64(d.SacrificeMinPotions), 0, 8, true),
+		k("deliveryExpect", "Cast expectation ledger", "mode", "0 = off; 1 = record what each paid cast should change, settle it from later snapshots and log failures (decisions unchanged); 2 = also skip a skill after three failed casts in a row for a growing back-off (combat plan section 3.4).", float64(d.DeliveryExpect), 0, 2, false),
 		k("holyFireMinMonsters", "Holy Fire crowd size", "count", "A needsCrowd aura (Holy Fire) is wanted only with at least this many hostiles within 8 subtiles; fewer and Might is used (Might wins below about 3 monsters, docs/palprofile.md).", float64(d.HolyFireMinMonsters), 1, 10, false),
 		k("buffRecastSec", "Buff recast", "s", "Upper bound and fallback: recast armors and shields this long after the last cast. An armor whose real duration is known (Frozen Armor 120 s at level 1) is recast earlier, see buffMarginSec.", float64(d.BuffRecastSec), 60, 300, false),
 		k("buffMarginSec", "Buff recast margin", "s", "Recast an armor or shield this many seconds before its real duration (Skills.txt auralencalc at the skill's level) runs out.", float64(d.BuffMarginSec), 0, 30, false),

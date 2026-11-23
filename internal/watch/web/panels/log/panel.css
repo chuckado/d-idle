@@ -1,0 +1,24 @@
+@layer panels {
+  /* the log drawer's content: a tab bar and one list that scrolls inside the box the drawer gives it */
+  [data-panel="log"] .lg { display: flex; flex-direction: column; gap: var(--d-sp-2); block-size: 100%; min-block-size: 0; }
+  [data-panel="log"] .tabs { display: flex; gap: var(--d-sp-1); flex: none; }
+  [data-panel="log"] .tabs .d-btn { flex: 1 1 0; }
+  [data-panel="log"] .tabs .d-btn[aria-selected="true"] { border-color: var(--d-accent); color: var(--d-accent-text); font-weight: 650; }
+  [data-panel="log"] .rows { flex: 1 1 0; min-block-size: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 1px; }
+  [data-panel="log"] .row { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: var(--d-sp-2); align-items: baseline; padding: var(--d-sp-1) var(--d-sp-2); min-block-size: 28px; border-radius: var(--d-r-1); }
+  [data-panel="log"] .row:nth-child(odd) { background: var(--d-surface-2); }
+  [data-panel="log"] .row .when { color: var(--d-text-2); font-size: var(--d-fs-0); font-variant-numeric: tabular-nums; }
+  [data-panel="log"] .row .txt { font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  [data-panel="log"] .row[data-level="warn"] .txt { color: var(--d-warn); }
+  [data-panel="log"] .row[data-level="alarm"] .txt { color: var(--d-bad); }
+  [data-panel="log"] .row[data-quality] .txt { color: var(--d-q-normal); font-weight: 600; }
+  [data-panel="log"] .row[data-quality="magic"] .txt { color: var(--d-q-magic); }
+  [data-panel="log"] .row[data-quality="rare"] .txt { color: var(--d-q-rare); }
+  [data-panel="log"] .row[data-quality="set"] .txt { color: var(--d-q-set); }
+  [data-panel="log"] .row[data-quality="unique"] .txt { color: var(--d-q-unique); }
+  [data-panel="log"] .row[data-quality="crafted"] .txt { color: var(--d-q-crafted); }
+  [data-panel="log"] .note { margin: 0; color: var(--d-text-2); font-size: var(--d-fs-1); flex: none; }
+  [data-panel="log"] .note:empty { display: none; }
+  [data-panel="log"] .lg > [data-key="vault-link"] { flex: none; align-self: start; }
+  [data-panel="log"] .lg > [hidden] { display: none; }
+}

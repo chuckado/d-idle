@@ -1,0 +1,34 @@
+---
+id: TASK-567
+title: 'flakefix: TestFailsafePanelLeftOpen data race'
+status: Proposed
+assignee:
+  - credit-runner
+created_date: '2026-11-16T21:52:00Z'
+labels:
+  - bot
+  - bug
+dependencies: []
+priority: medium
+ordinal: 296000
+card: "flakefix"
+owns:
+  - "internal/bot/failsafe_test.go"
+exclusive: []
+contracts: []
+result: "Root cause: the test assigned g.r.d.Loot after g.run() started the runner goroutine, which reads d (data race under -race, not timing). Moved the assignment before run. Not live (offline test)."
+---
+
+## Description
+
+<!-- SECTION:DESCRIPTION:BEGIN -->
+Size: M
+
+Why: TODO. Done when: TODO.
+<!-- SECTION:DESCRIPTION:END -->
+
+## Acceptance Criteria
+<!-- AC:BEGIN -->
+- [x] #1 Race fixed (Loot set before the runner starts)
+- [ ] #2 go test -race -count=500 green
+<!-- AC:END -->

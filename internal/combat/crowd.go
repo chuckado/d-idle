@@ -15,7 +15,7 @@ import (
 // (combat.crowdN, crowdPortalPct, crowdDrinkPct, crowdAbandonN); the radii below are U (judgment, not measured).
 const (
 	crowdRadius      = 8                        // subtiles: a hostile this close counts to the crowd
-	crowdAdjacentMax = resource.CastAdjacentMax // this many adjacent monsters or more: a 2 s portal cast fails (U)
+	crowdAdjacentMax = resource.CastAdjacentMax // this many adjacent monsters or more: the portal cast and walk are too exposed (U; a hit does not cut it)
 	crowdRetreatDist = 20                       // subtiles an abandon retreat goes before the portal
 	crowdMaxSteps    = 8                        // retreat steps of one abandon
 )
@@ -50,7 +50,7 @@ func crowdDecide(in SafetyInput, lp int, heal, rejuv bool) (SafetyAction, bool) 
 		}
 		return SafetyNone, false
 	}
-	if t.CrowdAbandonN > 0 && in.Crowd >= t.CrowdAbandonN && (in.Walking || lp <= t.CrowdPortalPct) {
+	if t.CrowdAbandonN > 0 && in.Crowd >= t.AbandonN(in.Quest) && (in.Walking || lp <= t.CrowdPortalPct) {
 		if surrounded && lp < t.CrowdDrinkPct {
 			if a, ok := drink(); ok {
 				return a, true // cannot walk away from three attackers at this life: drink first
@@ -63,7 +63,7 @@ func crowdDecide(in SafetyInput, lp int, heal, rejuv bool) (SafetyAction, bool) 
 			return CrowdRetreat, true
 		}
 	}
-	if lp <= t.CrowdPortalPct && in.HasPortal && !surrounded {
+	if blocked, _ := in.castBlocked(); lp <= t.CrowdPortalPct && in.HasPortal && !blocked {
 		return TownPortal, true
 	}
 	if lp < t.CrowdDrinkPct {
@@ -76,6 +76,10 @@ func crowdDecide(in SafetyInput, lp int, heal, rejuv bool) (SafetyAction, bool) 
 	}
 	return SafetyNone, false
 }
+
+// SetQuestCrowd tells the fighter a player-started quest chunk runs (the quest crowd-abandon size applies). Safe from
+// any goroutine.
+func (f *Fighter) SetQuestCrowd(on bool) { f.questCrowd.Store(on) }
 
 // SetWalking tells the fighter whether the bot is on a travel or quest walk (the crowd-abandon rule is for walks; in a
 // fight the same crowd is fought). Safe from any goroutine.

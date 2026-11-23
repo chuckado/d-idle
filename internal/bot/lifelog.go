@@ -5,8 +5,10 @@ import (
 
 	"d2lod-bot/internal/input"
 	"fmt"
+	"strings"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/power"
 )
 
 // Life log fields (docs/lifelog.md): logging only, nothing here feeds a decision.
@@ -33,8 +35,43 @@ func (r *Runner) vitalsKV(s *d2.Snapshot, p *d2.Player) []any {
 // tome=<n> merc=<alive|dead|none>`. heal is belt plus pack healing potions, tome the town portals in the kit.
 func (r *Runner) zoneEntry(s *d2.Snapshot, p *d2.Player) {
 	k := r.kitOf(s)
-	r.e.Log.Info("zone entry", "area", p.Area, "clvl", p.Level, "life", fmt.Sprintf("%d/%d", p.Life, p.MaxLife),
-		"heal", k.BeltHP+k.PackHP, "mana", fmt.Sprintf("%d/%d", p.Mana, p.MaxMana), "tome", k.TownPortals, "merc", mercWord(s))
+	kv := []any{"area", p.Area, "clvl", p.Level, "life", fmt.Sprintf("%d/%d", p.Life, p.MaxLife),
+		"heal", k.BeltHP + k.PackHP, "mana", fmt.Sprintf("%d/%d", p.Mana, p.MaxMana), "tome", k.TownPortals, "merc", mercWord(s)}
+	r.e.Log.Info("zone entry", append(kv, heroTermsKV(p)...)...)
+	r.e.Log.Info("worn at zone entry", "worn", wornWord(s))
+}
+
+// wornWord lists what stands on the body as `<body slot>:<unit id>/<class>`, in body order (logging only).
+func wornWord(s *d2.Snapshot) string {
+	if s == nil || s.Inventory == nil {
+		return ""
+	}
+	var parts []string
+	for body := 0; body < 16; body++ {
+		if u := s.Inventory.Equipped(body); u != nil {
+			parts = append(parts, fmt.Sprintf("%d:%d/%d", body, u.ID, u.Class))
+		}
+	}
+	return strings.Join(parts, " ")
+}
+
+// heroTermsKV is the power estimator's own inputs, appended to the zone entry line so a replay needs no default for them
+// (card survcal): `def=<armour class> block=<gear block percent> dmg=<min>-<max> dmgpct=<n> ar=<n>`. A stat the player read
+// does not carry is left out (never a zero standing for unknown). The weapon is the min-max damage with enhanced damage
+// of the stat vector. Logging only: no decision reads it.
+func heroTermsKV(p *d2.Player) []any {
+	h := power.HeroFromPlayer(p, nil, -1)
+	var kv []any
+	if h.Quality[power.TermDefence] == power.Measured {
+		kv = append(kv, "def", h.Defence)
+	}
+	if h.Quality[power.TermBlock] >= power.Derived {
+		kv = append(kv, "block", h.BlockPct)
+	}
+	if h.DmgMax > 0 {
+		kv = append(kv, "dmg", fmt.Sprintf("%d-%d", h.DmgMin, h.DmgMax), "dmgpct", h.DmgPct, "ar", h.AR)
+	}
+	return kv
 }
 
 // arrival is how the character came into the current area.
@@ -58,7 +95,19 @@ func (r *Runner) noteArrival(o *observer, p *d2.Player, now time.Time) {
 		}
 	}
 	o.arrivals++
+	r.loop.flail.noteMove(now, p.Area, o.real)
 	o.arrived = arrival{from: o.area, at: now, pos: input.Point{X: p.X, Y: p.Y}}
 	r.e.Log.Info("arrival", "area", p.Area, "from", o.area, "x", p.X, "y", p.Y,
 		"arrivals", o.arrivals, "bounces", o.bounces) // cumulative since start: bounces/arrivals is the rate to compare per build
+}
+
+// cursorWord says what the cursor holds as `<unit id>/<class>@<x>,<y>`, or "" (logging only).
+func cursorWord(s *d2.Snapshot) string {
+	if s == nil || s.Inventory == nil {
+		return ""
+	}
+	if c := s.Inventory.Cursor; c != nil {
+		return fmt.Sprintf("%d/%d@%d,%d", c.ID, c.Class, c.X, c.Y)
+	}
+	return ""
 }

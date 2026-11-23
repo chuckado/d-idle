@@ -166,6 +166,9 @@ func (t *Town) buyUnit(ctx context.Context, lay *panel.Layout, it d2.Unit) (int,
 	if b := t.base(it); b != nil && g0 < b.Cost/2 { // sure to fail: cheap items cost exactly Cost, gear 0.9-1.5x (VERIFIED LIVE)
 		return 0, fmt.Errorf("%w: %s costs about %d, have %d", ErrNoMoney, t.nameOf(it), b.Cost, g0)
 	}
+	if paid, handled, err := t.buyByVerb(ctx, it, g0); handled {
+		return paid, err
+	}
 	if err := t.selectTab(it); err != nil {
 		return 0, err
 	}
@@ -506,7 +509,7 @@ func (t *Town) buyScrolls(ctx context.Context, npc d2.Unit, rep *ChoreReport) er
 		target       int
 	}
 	for _, j := range []job{{"tsc", "tbk", t.tune().TPScrollTarget}, {"isc", "ibk", t.tune().IDScrollTarget}} {
-		if j.target <= 0 {
+		if j.target <= 0 || j.scroll == "isc" && t.tune().IdentifyTome == 0 { // identify scrolls are bought on request only
 			continue
 		}
 		cur, err := t.current()
@@ -514,7 +517,7 @@ func (t *Town) buyScrolls(ctx context.Context, npc d2.Unit, rep *ChoreReport) er
 			return err
 		}
 		have, hasTome := t.scrollCount(cur, j.scroll, j.tome)
-		if !hasTome && j.scroll == "tsc" && cur.Player.Gold >= t.tune().TPTomeMinGold {
+		if !hasTome && j.scroll == "tsc" && cur.Player.Gold >= t.tune().TPTomeMinGold && t.aboveReserve(cur.Player.Gold, t.tomeCost(find)) {
 			tu, ok := find(j.tome)
 			if !ok {
 				t.e.Log.Warn("shop: no tome in stock", "gold", cur.Player.Gold, "stock", len(stock))
@@ -566,7 +569,7 @@ func (t *Town) buyScrolls(ctx context.Context, npc d2.Unit, rep *ChoreReport) er
 				return err
 			}
 			b := t.base(su)
-			if cur.Player.Gold-b.Cost < t.tune().MinGoldReserve && have > 0 {
+			if cur.Player.Gold-b.Cost < t.tune().MinGoldReserve && have > 0 || have > 0 && !t.aboveReserve(cur.Player.Gold, b.Cost) {
 				break
 			}
 			price, err := t.buyUnit(ctx, lay, su)
@@ -639,11 +642,13 @@ func (t *Town) sellable(s *d2.Snapshot, lay *panel.Layout) []d2.Unit {
 }
 
 // sellableIf is sellable with the "pack is full" decision made by the caller (MakeRoom forces it).
-func (t *Town) sellableIf(s *d2.Snapshot, full bool) []d2.Unit {
-	var out []d2.Unit
+func (t *Town) sellableIf(s *d2.Snapshot, full bool) (out []d2.Unit) {
+	defer func() { t.shadowSell(s, out, full) }()
 	t.ReconcileMarks(s)
+	sp := t.sellPass(s)
 	kept := map[string]int{}
 	rvOver := t.rejuvOverCap(s)
+	loose := map[string]int{}
 	for _, u := range s.Inventory.Container(d2.ContInventory) {
 		if u.Item.Flags&d2.FlagStartItem != 0 {
 			continue
@@ -662,7 +667,29 @@ func (t *Town) sellableIf(s *d2.Snapshot, full bool) []d2.Unit {
 		if t.sellMarksOnly {
 			continue
 		}
+		if t.looseScrollSurplus(s, u, loose) {
+			t.e.Log.Info("sell: loose scroll beside a tome", "item", t.nameOf(u), "keep", t.tune().LooseScrollKeep)
+			out = append(out, u)
+			continue
+		}
 		v := t.judge.EvaluateUnit(u)
+		if sp != nil {
+			// loot.rulesEngine 3: the rules decide sell or keep; a failure of the engine falls through to today's code
+			// for this item. The rejuvenation cap and the spare-supply surplus are supply counts, not rules, and stay.
+			if sell, rule, why, ok := sp.SellDecision(u, "", t.neverSellUnit(u), t.sellCtx(s, u, full)); ok {
+				switch {
+				case rvOver[u.ID]:
+					t.e.Log.Info("rejuvenation sold", "reason", "over cap", "cap", t.e.Tune.Loot.RejuvSpare, "code", t.base(u).Code)
+					out = append(out, u)
+				case sell:
+					t.e.Log.Debug("sell: rules say sell", "item", t.nameOf(u), "rule", rule, "why", why)
+					out = append(out, u)
+				case full && t.spareSurplus(u, v, kept):
+					out = append(out, u)
+				}
+				continue
+			}
+		}
 		if v.NeedID && !u.Item.Identified() {
 			// The identify step ran before this and could not read it (no scroll, no gold): a full pack must not hold
 			// it for ever. Unidentified jewelry sells as is (SME: no ID tome early); charms are stashed instead.
@@ -682,6 +709,28 @@ func (t *Town) sellableIf(s *d2.Snapshot, full bool) []d2.Unit {
 		}
 	}
 	return out
+}
+
+// looseScrollSurplus reports whether u is a loose town portal or identify scroll beyond town.looseScrollKeep while a
+// tome of the same kind is in the pack (the tome absorbs scrolls, the loose ones only fill cells: the sandbox hero held
+// 22 beside a tome of 10). It is the one exception to "scrolls are never sold" (neverSell). seen counts per code, in
+// pack order. Without a tome the shopping targets rule and nothing is sold.
+func (t *Town) looseScrollSurplus(s *d2.Snapshot, u d2.Unit, seen map[string]int) bool {
+	b := t.base(u)
+	if b == nil || b.Code != "tsc" && b.Code != "isc" {
+		return false
+	}
+	tome := "tbk"
+	if b.Code == "isc" {
+		tome = "ibk"
+	}
+	for _, c := range s.Inventory.Container(d2.ContInventory) {
+		if cb := t.base(c); cb != nil && cb.Code == tome {
+			seen[b.Code]++
+			return seen[b.Code] > t.tune().LooseScrollKeep
+		}
+	}
+	return false
 }
 
 // rejuvOverCap returns the pack rejuvenation potions beyond Loot.RejuvSpare counting the belt, regular ones first so
@@ -770,7 +819,16 @@ func (t *Town) sellTo(ctx context.Context, list []d2.Unit, rep *ChoreReport) (re
 		}
 		var after *d2.Snapshot
 		ok = false
-		if !t.sellByCursor {
+		if a, handled, vok, verr := t.sellByVerb(ctx, fresh, sold); handled {
+			if verr != nil {
+				return refused, verr
+			}
+			if !vok {
+				refused = append(refused, u)
+				continue
+			}
+			after, ok = a, true
+		} else if !t.sellByCursor {
 			if err := t.h.RightClick(fresh, lay.Inventory); err != nil {
 				return refused, err
 			}
@@ -1021,3 +1079,113 @@ func (t *Town) TPCount(s *d2.Snapshot) int {
 
 // TakeTPBought returns the town portal scrolls bought since the last call (minute line field tpBuy).
 func (t *Town) TakeTPBought() int { return int(t.tpBought.Swap(0)) }
+
+// aboveReserve says whether spending cost of gold leaves the merc revive money (ChorePlan.ReserveGold) in the purse. Only
+// optional buys ask: the kit potions and the first portal scroll are survival and never wait for the merc.
+func (t *Town) aboveReserve(gold, cost int) bool { return gold-cost >= t.reserveGold }
+
+// tomeCost is the vendor price of the town portal tome, 0 when it is not in stock (the caller then logs it).
+func (t *Town) tomeCost(find func(string) (d2.Unit, bool)) int {
+	if u, ok := find("tbk"); ok {
+		if b := t.base(u); b != nil {
+			return b.Cost
+		}
+	}
+	return 0
+}
+
+// shadowSell feeds the loot rules shadow stage (bot.lootShadow, log only) with what the sell chore decided: sold or not.
+func (t *Town) shadowSell(s *d2.Snapshot, sold []d2.Unit, full bool) {
+	if s == nil || s.Player == nil || s.Inventory == nil {
+		return
+	}
+	c := t.tidyCtx(s)
+	sp := t.shadowPass(s, c.PackFullPct, c.StashFullPct)
+	if sp == nil {
+		return
+	}
+	isSold := map[uint32]bool{}
+	for _, u := range sold {
+		isSold[u.ID] = true
+	}
+	for _, u := range s.Inventory.Container(d2.ContInventory) {
+		today := "keep"
+		if isSold[u.ID] {
+			today = "sell"
+		}
+		sp.Observe(loot.ShadowSell, u, today, t.markOf(u), t.neverSellUnit(u), nil, t.sellCtx(s, u, full))
+	}
+}
+
+// sellPass is the engine's sell stage for this snapshot: nil unless loot.rulesEngine is 3 and the judge is the looter.
+func (t *Town) sellPass(s *d2.Snapshot) *loot.ShadowPass {
+	if l, ok := t.judge.(*loot.Looter); !ok || l.EngineStage() < loot.StageSell || s == nil || s.Player == nil || s.Inventory == nil {
+		return nil
+	}
+	c := t.tidyCtx(s)
+	return t.shadowPass(s, c.PackFullPct, c.StashFullPct)
+}
+
+// sellCtx is what the sell stage needs from the town: the full-pack call of the visit, whether an unidentified plain
+// item is not worth a scroll, and the pickit's valuable priority.
+func (t *Town) sellCtx(s *d2.Snapshot, u d2.Unit, full bool) loot.SellCtx {
+	return loot.SellCtx{Full: full, SellUnid: t.sellUnidentified(s, u), ValuableMinPr: t.e.Tune.Loot.ValuableMinPrio}
+}
+
+// buyByVerb buys a vendor item with the fork's buy verb when the knob input.planner is on and the backend lists
+// input.buy (docs/process/input-verbs2.md): no tab click, no cell geometry, and a refusal names its cause. handled false
+// leaves the click path to the caller (knob off, no verb, an older build, an item the stock dump does not list). A sent
+// verb is never repeated by a click: the purchase either shows in the gold or the call fails.
+func (t *Town) buyByVerb(ctx context.Context, it d2.Unit, g0 int) (paid int, handled bool, err error) {
+	if !t.e.Planner.On() || !t.e.Planner.HasCap(input.CapBuy) || it.Item == nil {
+		return 0, false, nil
+	}
+	wv, ok := input.AsWorldVerbs(t.e.In)
+	if !ok {
+		return 0, false, nil
+	}
+	if verr := wv.BuyAt(it.Item.Page, it.X, it.Y); verr != nil {
+		if !input.IsRuleRefusal(verr) {
+			t.e.Log.Info("shop: buy verb unavailable, clicking", "item", t.nameOf(it), "err", verr)
+			return 0, false, nil
+		}
+		if input.RefusalCode(verr) == "gold" {
+			return 0, true, fmt.Errorf("%w: %s: %v", ErrNoMoney, t.nameOf(it), verr)
+		}
+		return 0, true, fmt.Errorf("town: buying %s: %w", t.nameOf(it), verr)
+	}
+	t.e.Planner.Count(input.PathVerb)
+	s, ok, werr := t.h.Wait(ctx, t.uiTimeout(), func(s *d2.Snapshot) bool { return s.Player.Gold < g0 })
+	if werr != nil {
+		return 0, true, werr
+	}
+	if !ok {
+		return 0, true, fmt.Errorf("town: buying %s: the buy verb was sent but the gold did not change", t.nameOf(it))
+	}
+	paid = g0 - s.Player.Gold
+	t.e.Log.Info("shop: bought", "item", t.nameOf(it), "price", paid, "gold left", s.Player.Gold, "path", "verb")
+	return paid, true, nil
+}
+
+// sellByVerb sells pack item u with the fork's sell verb (same conditions as buyByVerb). handled true: the item is
+// sold (sold true) or refused by the vendor for a named reason; false: the caller clicks.
+func (t *Town) sellByVerb(ctx context.Context, u d2.Unit, sold func(*d2.Snapshot) bool) (after *d2.Snapshot, handled, ok bool, err error) {
+	if !t.e.Planner.On() || !t.e.Planner.HasCap(input.CapSell) {
+		return nil, false, false, nil
+	}
+	wv, has := input.AsWorldVerbs(t.e.In)
+	if !has {
+		return nil, false, false, nil
+	}
+	if verr := wv.SellItem(u.ID); verr != nil {
+		if !input.IsRuleRefusal(verr) {
+			t.e.Log.Info("sell: verb unavailable, clicking", "item", t.nameOf(u), "err", verr)
+			return nil, false, false, nil
+		}
+		t.e.Log.Warn("sell: the vendor refused", "item", t.nameOf(u), "err", verr)
+		return nil, true, false, nil
+	}
+	t.e.Planner.Count(input.PathVerb)
+	after, ok, err = t.h.Wait(ctx, t.uiTimeout(), sold)
+	return after, true, ok, err
+}

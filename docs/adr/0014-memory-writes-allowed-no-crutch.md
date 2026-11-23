@@ -1,5 +1,5 @@
 ---
-status: accepted
+status: accepted (amended 2026-11-21 by ADR 0029: a fifth write purpose, a player-paid vault cost)
 date: 2026-11-02
 decision-makers: user
 ---

@@ -543,7 +543,7 @@ func HallHandler(s *HallStore) http.Handler {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("X-Content-Type-Options", "nosniff")
-		w.Header().Set("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'")
+		w.Header().Set("Content-Security-Policy", "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'")
 		if err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			io.WriteString(w, "The Hall could not be read: "+html.EscapeString(err.Error()))
@@ -558,8 +558,9 @@ func HallHandler(s *HallStore) http.Handler {
 func RenderHall(v *HallView) []byte {
 	var b bytes.Buffer
 	b.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>Hall of Fame</title>")
-	b.WriteString("<style>body{font:16px/1.4 system-ui,sans-serif;background:#14110f;color:#e8dcc8;margin:0;padding:1rem}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #3a322a;padding:.4rem .5rem;text-align:left}h1{font-size:1.3rem}.dead{color:#c98}.fl{color:#9a8f7c;font-style:italic}a{color:#d9b46a}</style></head><body>")
-	b.WriteString("<p><a href=\"/watch/return\">Back to the return screen</a></p><h1>Hall of Fame</h1><p>" + html.EscapeString(v.Account) + "</p>")
+	b.WriteString("<meta name=\"color-scheme\" content=\"dark light\"><link rel=\"stylesheet\" href=\"/watch/tokens.css\"><link rel=\"stylesheet\" href=\"/watch/components.css\"><link rel=\"stylesheet\" href=\"/watch/nav.css\">")
+	b.WriteString("<style>body{font:var(--d-fs-2)/1.4 var(--d-font-body, system-ui, sans-serif);background:var(--d-bg);color:var(--d-text);margin:0}main{padding:var(--d-sp-4);overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid var(--d-line);padding:.4rem .5rem;text-align:left}h1{font-size:1.3rem}.dead{color:var(--d-bad)}.fl{color:var(--d-text-2);font-style:italic}a{color:var(--d-accent-text)}</style></head><body><main>")
+	b.WriteString("<h1>Hall of Fame</h1><p>" + html.EscapeString(v.Account) + "</p>")
 	if len(v.Heroes) == 0 {
 		b.WriteString("<p>No hero has retired or fallen yet.</p>")
 	} else {
@@ -579,7 +580,7 @@ func RenderHall(v *HallView) []byte {
 		}
 		b.WriteString("</tbody></table>")
 	}
-	b.WriteString("</body></html>")
+	b.WriteString("</main><script src=\"/watch/nav.js\"></script></body></html>")
 	return b.Bytes()
 }
 

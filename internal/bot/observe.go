@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 	"time"
@@ -37,6 +39,8 @@ type itemTrack struct {
 // observer turns the stream of snapshots into events and progress marks. All fields are guarded by Runner.obMu.
 type observer struct {
 	init      bool
+	worn      string // wornWord of the last look (logging only: a worn item that leaves the body is named in the log)
+	init2     bool
 	state     d2.State
 	menuSince time.Time
 	inGameAt  time.Time // when the current game was entered
@@ -76,6 +80,7 @@ type observer struct {
 	real          uint64    // progress that resets the failsafe ladder
 	killXPAt      time.Time // last kill or xp gain (drought watchdog); fieldSince: entry into the current non-town area
 	fieldSince    time.Time
+	townLeftAt    time.Time   // last departure from a town area (the farm loop measures the walk back from it)
 	droughtAt     time.Time   // last drought action (drought.go)
 	killTimes     []time.Time // recent kills for the slow-field rule (drought.go)
 	droughtStage  int         // consecutive drought actions with no kill or XP gain in between
@@ -124,6 +129,8 @@ type observer struct {
 	lastDeathAt   time.Time
 	deathPending  bool // a death was recorded and the loop has not opened its recovery yet
 	targetArea    int  // the area the loop wants to be clearing
+	fromTown      bool // the current area was entered from a town (portal, waypoint, walk out): a jump, never a border crossing
+	crossArea     int  // the area whose border-crossing stamp was already taken (one stamp per arrival)
 	stepLevel     int  // level the reach_level planner last chose for
 
 	lastHealth   time.Time
@@ -283,7 +290,10 @@ func (r *Runner) oogRun(f func(context.Context) error) func(context.Context) err
 // newGames never moves there. Save points are planned and use oogRun directly.
 func (r *Runner) newGameRun(f func(context.Context) error) func(context.Context) error {
 	run := r.oogRun(f)
+	_, file, line, _ := runtime.Caller(1) // who asked: every Save and Exit in the d2d log is told apart by this line
+	from := fmt.Sprintf("%s:%d", filepath.Base(file), line)
 	return func(ctx context.Context) error {
+		r.e.Log.Info("new game requested", "from", from)
 		err := run(ctx)
 		if err == nil {
 			r.noteRecycle()
@@ -403,7 +413,7 @@ func (r *Runner) stuckCheck(now time.Time) string {
 	idleGoal := goal != nil && goal.Type == goals.Idle
 	paused := r.paused
 	r.mu.Unlock()
-	if goal == nil || paused || skippedState(st, idleGoal) {
+	if goal == nil || paused || skippedState(st, idleGoal) || r.parkedBoard.Load() {
 		return ""
 	}
 	r.obMu.Lock()
@@ -473,6 +483,16 @@ func (r *Runner) observe(s *d2.Snapshot, now time.Time) {
 		o.savedNew, o.savedExp = false, p.Exp
 	}
 
+	if w := wornWord(s); w != o.worn {
+		if o.init2 { // not the first look
+			r.mu.Lock()
+			st := r.st
+			r.mu.Unlock()
+			r.e.Log.Info("worn set changed", "was", o.worn, "now", w, "state", st, "area", p.Area, "cursor", cursorWord(s), "ui", fmt.Sprint(s.UI))
+		}
+		o.worn, o.init2 = w, true
+	}
+
 	if now.Sub(o.lastStat) >= 30*time.Second {
 		o.lastStat = now
 		r.mu.Lock()
@@ -506,11 +526,17 @@ func (r *Runner) observe(s *d2.Snapshot, now time.Time) {
 			o.portalFrom = o.area
 		}
 		r.noteArrival(o, p, now)
+		o.fromTown = o.area != 0 && r.d.Plan.IsTown(o.area)
+		o.crossArea = 0
 		o.area = p.Area
+		r.inTown.Store(r.d.Plan.IsTown(p.Area))
 		o.noteRoute(p.Area)
 		o.mons = map[uint32]monTrack{}
 		o.bump(now)
 		o.fieldSince = time.Time{}
+		if !r.d.Plan.IsTown(p.Area) && o.fromTown {
+			o.townLeftAt = now
+		}
 		if !r.d.Plan.IsTown(p.Area) {
 			o.campaignAt = now
 			o.fieldSince = now
@@ -870,6 +896,7 @@ func (r *Runner) trackAlive(s *d2.Snapshot, now time.Time) {
 	if mc := d2.FindMerc(s); mc.Present {
 		alive := mc.Alive
 		a.merc = &alive
+		r.zoneMercEdge(p, alive, now)
 	}
 	if s.Inventory != nil {
 		for _, u := range s.Inventory.Container(d2.ContEquipment) {
@@ -959,6 +986,8 @@ func (r *Runner) recordDeath(p *d2.Player, now time.Time) {
 		msg = "Killed by " + rec.Killer + " in " + rec.AreaName
 	}
 	r.e.Log.Warn("death autopsy: "+rec.Autopsy.Summary, "area", rec.AreaName, "killer", rec.Killer, "killerType", rec.Autopsy.KillerType, "killerLevel", rec.Autopsy.KillerLevel, "hostiles", rec.Autopsy.HostilesNear, "lastSafety", rec.Autopsy.LastSafety, "bug", rec.Autopsy.Bug, "beltHP", rec.Autopsy.BeltHP)
+	r.zoneObserve(ZoneEvent{Kind: ZoneEvDeath, Area: rec.Area, Diff: difficultyName(p.Difficulty), At: now})
+	r.zoneCostAt("death", rec.Area)
 	r.e.Log.Warn("character died", "area", rec.Area, "killer", rec.Killer, "x", rec.Pos.X, "y", rec.Pos.Y, "corpseValue", rec.CorpseValue,
 		"life", p.Life, "maxLife", p.MaxLife, "heal", a.kit.BeltHP+a.kit.PackHP, "beltMP", a.kit.BeltMP, "rejuv", a.kit.BeltRV, "tome", a.kit.TownPortals)
 	di := combat.DeathInfo{Area: rec.Area, Difficulty: p.Difficulty, CharLevel: p.Level, MonsterName: a.killerName, MonsterClass: rec.KillerClass,
@@ -1056,13 +1085,32 @@ func (r *Runner) minuteLine(s *d2.Snapshot, p *d2.Player, now time.Time) {
 	if !expOK {
 		expPct = -1 // no roam coverage here (town, or a backend that does not roam)
 	}
+	lifeLost, hitsTaken, hpPolls := o.takeIntake()
 	r.e.Log.Info("minute", append([]any{"area", p.Area, "explored", expPct, "clvl", p.Level, "xp", p.Exp, "kills", r.lifetimeKills(p.Name), "killsGame", o.kills, "deaths", o.deaths,
 		"potions", kit.BeltHP, "mana", kit.BeltMP, "packHP", packHP, "packMP", packMP, "beltBoxes", beltBoxes, "potionsUsed", int(r.drank.Load()), "tp", tp,
 		"gold", p.Gold, "stashGold", p.StashGold, "restarts", restartCount(o.newGames, o.plannedGames, o.recycles, o.lostRestarts), "xpRisk", o.xpAtRiskLocked(r.d.SavedExp), "xpLost", o.xpLost, "rung", rung, "goal", goal, "step", step,
-		"state", group, "rstate", rstate, "life", p.Life, "maxLife", p.MaxLife, "mp", p.Mana, "maxMana", p.MaxMana, "table", r.buildName(p), "invPct", invPct, "dmgTaken", o.hp.dmg, "hpMinPct", o.takeHPMin(), "armor", combat.ArmorState(p), "goldPickup", o.goldPickupMin,
-		"arrivals", o.arrivals, "bounces", o.bounces, "bouncesPer100", bouncesPer100(o.bounces, o.arrivals)}, append(r.failsafeKV(o), r.runKV()...)...)...)
+		"state", group, "rstate", rstate, "life", p.Life, "maxLife", p.MaxLife, "mp", p.Mana, "maxMana", p.MaxMana, "table", r.buildName(p), "invPct", invPct, "dmgTaken", o.hp.dmg, "hpMinPct", o.takeHPMin(), "lifeLost", lifeLost, "hitsTaken", hitsTaken, "hpPolls", hpPolls, "armor", combat.ArmorState(p), "goldPickup", o.goldPickupMin,
+		"arrivals", o.arrivals, "bounces", o.bounces, "bouncesPer100", bouncesPer100(o.bounces, o.arrivals)}, append(r.failsafeKV(o), append(r.runKV(), append(r.inputKV(), append(r.planKV(), r.arb.minuteKV()...)...)...)...)...)...)
 	o.goldPickupMin = 0
 	r.noteGoldNextMinute(p.Gold, now)
+}
+
+// planKV records the town planner stage (knob town.plan) on the minute line so a measured run record carries it
+// (town-planner question 10); nothing at stage 0, so the default line is unchanged.
+func (r *Runner) planKV() []any {
+	if st := r.e.Tune.Town.Plan; st > 0 {
+		return []any{"townPlan", st}
+	}
+	return nil
+}
+
+// inputKV is the planner's path counters for the minute line, "input" = verb/key/click (docs/process/sandbox-devp14.md).
+// Nothing while the knob input.planner is off, so the default line is unchanged.
+func (r *Runner) inputKV() []any {
+	if r.e.Planner.On() {
+		return []any{"input", r.e.Planner.Summary()}
+	}
+	return nil
 }
 
 // bouncesPer100 is arrival bounces per 100 arrivals since start (docs/bounce3.md), one decimal; 0 before any arrival.

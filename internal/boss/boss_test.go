@@ -57,6 +57,23 @@ func TestAndarielFullRunPoisonAndKite(t *testing.T) {
 	}
 }
 
+// TestAndarielMeleeHeroDoesNotKite (boss1-trace B1): the same fight with a melee hero never takes the kite step.
+func TestAndarielMeleeHeroDoesNotKite(t *testing.T) {
+	f := newFake()
+	f.antidotes, f.level, f.melee = 2, 24, true
+	b := f.addBoss(Mon{Class: ClassAndariel, Name: "Andariel", Pos: Pt{22549, 9514}, UniqueNo: -1}, AreaCatacombs4, 150)
+	b.approach, b.dmg = 3, 5
+	f.pos = Pt{22549, 9520}
+	f.arriveFn = func(f *fake, a int) { f.pos = Pt{22549, 9500} }
+	res, err := run(t, NameAndariel, f, Opts{})
+	if err != nil || !res.Killed {
+		t.Fatalf("res %+v err %v", res, err)
+	}
+	if has(res, "kite") || !has(res, "attack") {
+		t.Fatalf("phases %v", res.Phases)
+	}
+}
+
 func TestAndarielPoisonCloudStepsAway(t *testing.T) {
 	f := newFake()
 	f.area = AreaCatacombs4
@@ -434,5 +451,58 @@ func TestBloodRavenRetreatKnob(t *testing.T) {
 	f, _, err := brFight(t, Opts{MaxRetreats: 3})
 	if !errors.Is(err, ErrEscaped) || f.did("drink") != 2 || f.townCalls != 1 {
 		t.Fatalf("err %v drinks %d town %d", err, f.did("drink"), f.townCalls)
+	}
+}
+
+// On d2d the Tower Cellar 5 layout is random per game, so no fixed spawn holds; the fork's layout read (knob
+// quests.layoutRead) lists her spawn preset by NAME with an ID that need not be Kolbot's. The walk goes to that preset,
+// wherever the layout put it. Two arrival spots stand for the Paladin and the Sorceress (the script has no class data).
+func TestCountessWalksToReadSpawnPresetByName(t *testing.T) {
+	for _, c := range []struct {
+		name  string
+		start Pt
+		spawn Pt
+	}{{"paladin", Pt{12581, 11047}, Pt{12610, 11120}}, {"sorceress", Pt{12590, 11050}, Pt{9100, 9230}}} {
+		t.Run(c.name, func(t *testing.T) {
+			f := newFake()
+			f.level = 20
+			f.area = AreaTowerCellar5
+			f.pos = c.start
+			f.presets = []Preset{{Kind: PresetNPC, ID: 740, Name: "TheCountess", Pos: c.spawn}}
+			b := f.addBoss(Mon{Class: 45, UniqueNo: 6, Name: "The Countess", Pos: Pt{c.spawn.X + 6, c.spawn.Y}}, AreaTowerCellar5, 40)
+			b.vis = 20
+			res, err := run(t, NameCountess, f, Opts{})
+			if err != nil || !res.Killed {
+				t.Fatalf("%v %v", err, f.log)
+			}
+			if want := fmt.Sprintf("goto %d,%d", c.spawn.X, c.spawn.Y); f.did(want) != 1 || f.did("explore") != 0 {
+				t.Fatalf("want one walk to %s and no explore: %v", want, f.log)
+			}
+		})
+	}
+}
+
+// Without the read (knob off, stock d2d) there is no preset: the walk to the hint and exploring stay as before.
+func TestCountessWithoutSpawnPresetExplores(t *testing.T) {
+	f := newFake()
+	f.level = 20
+	f.area = AreaTowerCellar5
+	f.pos = Pt{12581, 11047}
+	b := f.addBoss(Mon{Class: 45, UniqueNo: 6, Name: "The Countess", Pos: Pt{9000, 9000}}, AreaTowerCellar5, 40)
+	b.vis = 20
+	f.exploreFn = func(f *fake) { f.pos = Pt{9005, 9005} }
+	if res, err := run(t, NameCountess, f, Opts{}); err != nil || !res.Killed || f.did("explore") != 1 {
+		t.Fatalf("%v %v", err, f.log)
+	}
+}
+
+func TestSameName(t *testing.T) {
+	for _, c := range []struct {
+		a, b string
+		want bool
+	}{{"TheCountess", "The Countess", true}, {"countess", "The Countess", true}, {"The Smith", "The Countess", false}, {"", "", false}} {
+		if got := sameName(c.a, c.b); got != c.want {
+			t.Errorf("sameName(%q,%q)=%v", c.a, c.b, got)
+		}
 	}
 }

@@ -192,6 +192,14 @@ export function trailAlpha(ago, win) {
 }
 
 // The coverage status line: 'roam: 41/118 points seen, 3 failed, leg 17'. cov is the /api/senses coverage block.
+// The objective marker: where the hero is walking to. It is the one thing drawn beyond the walked ground (docs/mapfog.md).
+// Only the goal of the current area counts; its label names it for the note and the tooltip.
+export function objectiveFor(o, areaId) {
+  if (!o || typeof o.x !== 'number' || typeof o.y !== 'number' || o.area !== areaId) return null;
+  return { x: o.x, y: o.y, label: o.label || '' };
+}
+export function objectiveText(o) { return o ? 'Goal: ' + (o.label || 'the place the hero is walking to') + '.' : ''; }
+
 export function coverSummary(cov) {
   if (!cov || !cov.cells || (!cov.cells.length && !cov.total)) return '';
   let seen = cov.seen, failed = cov.failed; // counted by the server over every point, not only the drawn ones
@@ -233,7 +241,7 @@ export function mount(root, ctx) {
   covBtn.type = 'button'; covBtn.dataset.size = 'sm'; covBtn.dataset.key = 'coverage'; covBtn.setAttribute('aria-label', 'Show the exploration coverage grid');
   covBtn.setAttribute('aria-pressed', String(covOn));
   const covLine = ctx.el('p', 'note cover-line');
-  let cov = null;
+  let cov = null, obj = null;
   function covText() {
     covLine.textContent = covOn ? (coverSummary(cov) || 'Coverage: the bot is not roaming this area.') : '';
     covLine.hidden = !covOn;
@@ -421,6 +429,7 @@ export function mount(root, ctx) {
     drawHeat(at);
     drawCoverage(at);
     drawTrail(at);
+    drawObjective(at);
     if (scrub !== null) {
       const sp = posAt(plan.pts, scrub);
       if (sp) { const a = at(sp); g.strokeStyle = css('--d-accent', '#c7a44a'); g.lineWidth = 3; g.beginPath(); g.arc(a[0], a[1], 8, 0, 6.2832); g.stroke(); }
@@ -466,6 +475,16 @@ export function mount(root, ctx) {
       g.globalAlpha = 1; g.lineWidth = 2; g.strokeStyle = css('--d-accent', '#c7a44a');
       g.beginPath(); g.arc(a[0], a[1], Math.max(6, half * 0.7), 0, 6.2832); g.stroke();
     }
+    g.restore();
+  }
+  // The objective is a ring with a dot in the accent colour, over the fog: a marker, never an outline of the level around it.
+  function drawObjective(at) {
+    if (!obj) return;
+    const a = at({ x: obj.x, y: obj.y });
+    g.save();
+    g.globalAlpha = 1; g.lineWidth = 2; g.strokeStyle = css('--d-accent', '#c7a44a'); g.fillStyle = css('--d-accent', '#c7a44a');
+    g.beginPath(); g.arc(a[0], a[1], 8, 0, 6.2832); g.stroke();
+    g.beginPath(); g.arc(a[0], a[1], 2.5, 0, 6.2832); g.fill();
     g.restore();
   }
   // The trail sits under the hero cross and the units. Each segment is stroked on its own so its alpha follows its age.
@@ -545,7 +564,7 @@ export function mount(root, ctx) {
       const fe = cb && fightAt(evs, cb.ago);
       if (fe) openCard(fe);
     }
-    cv.title = tip.textContent;
+    cv.title = tip.textContent || objectiveText(obj);
   }
   // Neighbours arrive with their map only when the page lacks that version.
   function takeNeighbours(list) {
@@ -602,10 +621,11 @@ export function mount(root, ctx) {
       takeNeighbours(r.neighbours);
       units = r.units || [];
       cov = r.coverage && r.coverage.area === (map && map.areaId) ? r.coverage : null;
+      obj = objectiveFor(r.objective, map && map.areaId);
       covText();
       if (r.trail) { trail = r.trail; trailTs = r.ts || 0; trailArea = r.trail_area || 0; evs = r.events || []; legendNames = r.trail_legend || []; } else if (!r.waiting) { trail = []; evs = []; }
       note.textContent = r.waiting ? 'Waiting for the first area...' : 'Legend: cross hero, diamond waypoint, square exit' +
-        (nbs.length ? '; dimmer areas are the ones next door' : '') + '. Fog clears as the hero walks.';
+        (nbs.length ? '; dimmer areas are the ones next door' : '') + '. Only ground the hero has walked shows' + (obj ? '; the ring is the goal' : '') + '.';
       replan(true);
     },
   };

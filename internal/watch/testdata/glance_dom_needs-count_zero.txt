@@ -1,0 +1,2 @@
+<div>
+  <span class="pill" data-n="0" data-tone="none"> "all quiet"

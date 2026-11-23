@@ -21,20 +21,20 @@ var errHardActed = errors.New("combat: hard tick acted")
 func (f *Fighter) packDanger(p *d2.Player, hs []Target) int {
 	d := CurseDanger(p, PackDanger(hs, p.Difficulty, p.Level))
 	if p.Difficulty != d2.Normal {
-		d = ResistDanger(d, hs, PlayerResists{p.Resist.Fire, p.Resist.Cold, p.Resist.Lightning, p.Resist.Poison}, p.Difficulty)
+		d = ResistDanger(d, hs, ResistsOf(p), p.Difficulty)
 	}
 	return d
 }
 
 // TODO(live check, review finding 10): every resist use in this file goes through PlayerResists.Effective, which
-// subtracts ResistPenalty. If the stat read (d2/player.go) already contains the difficulty penalty it is applied twice.
+// adds ResistPenalty before the cap. If the stat read (d2/player.go) already contains the difficulty penalty it is applied twice.
 // One d2doctor read of a Nightmare character with known gear resists settles it; the only place to change is
 // Effective in rules.go (swap its penalty for 0), not these callers. U until then.
 //
 // hellCtx is the potion policy context: poison state, antidotes held, poison resist, a Mana Burn unit in view.
 func (f *Fighter) hellCtx(snap *d2.Snapshot, hs []Target) resource.HellCtx {
 	p := snap.Player
-	pr := PlayerResists{p.Resist.Fire, p.Resist.Cold, p.Resist.Lightning, p.Resist.Poison}
+	pr := ResistsOf(p)
 	h := resource.HellCtx{Poisoned: p.Poisoned(), Antidotes: f.Antidotes(snap), PoisonRes: pr.Effective(p.Difficulty).Poison}
 	for _, t := range hs {
 		if t.Affixes&AffixManaBurn != 0 && t.Dist <= float64(f.tune().FightRadius) {

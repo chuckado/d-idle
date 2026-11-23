@@ -36,20 +36,23 @@ import (
 
 // Match is the condition part of a Rule.
 type Match struct {
-	Codes      []string   `json:"codes,omitempty"`
-	Types      []string   `json:"types,omitempty"`
-	NotTypes   []string   `json:"notTypes,omitempty"`
-	Qualities  []string   `json:"qualities,omitempty"`
-	Quest      bool       `json:"quest,omitempty"`
-	Identified *bool      `json:"identified,omitempty"`
-	Ethereal   *bool      `json:"ethereal,omitempty"`
-	ClvlMin    int        `json:"clvlMin,omitempty"`
-	ClvlMax    int        `json:"clvlMax,omitempty"`
-	ILvlMin    int        `json:"ilvlMin,omitempty"`
-	ILvlMax    int        `json:"ilvlMax,omitempty"`
-	Stats      []StatCond `json:"stats,omitempty"`
-	AnyStats   []StatCond `json:"anyStats,omitempty"`
-	Needed     string     `json:"needed,omitempty"`
+	Codes     []string `json:"codes,omitempty"`
+	Types     []string `json:"types,omitempty"`
+	NotTypes  []string `json:"notTypes,omitempty"`
+	Qualities []string `json:"qualities,omitempty"`
+	// QualityUnknown matches an item whose quality could not be read (0): the d2d floor label of a never-normal base
+	// (ring, amulet, circlet) without the `ground full` answer.
+	QualityUnknown bool       `json:"qualityUnknown,omitempty"`
+	Quest          bool       `json:"quest,omitempty"`
+	Identified     *bool      `json:"identified,omitempty"`
+	Ethereal       *bool      `json:"ethereal,omitempty"`
+	ClvlMin        int        `json:"clvlMin,omitempty"`
+	ClvlMax        int        `json:"clvlMax,omitempty"`
+	ILvlMin        int        `json:"ilvlMin,omitempty"`
+	ILvlMax        int        `json:"ilvlMax,omitempty"`
+	Stats          []StatCond `json:"stats,omitempty"`
+	AnyStats       []StatCond `json:"anyStats,omitempty"`
+	Needed         string     `json:"needed,omitempty"`
 }
 
 // StatCond compares a (shifted) item stat. Max 0 means no upper bound.

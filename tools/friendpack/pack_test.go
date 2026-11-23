@@ -178,8 +178,12 @@ exit 0`)
 	if o, err := install("--yes", "--game-dir", game); err == nil || !strings.Contains(o, "missing in") || !strings.Contains(o, "d2data.mpq") {
 		t.Fatalf("empty game dir: %v\n%s", err, o)
 	}
-	for _, n := range []string{"d2data.mpq", "D2EXP.MPQ", "d2char.mpq", "Patch_D2.mpq"} {
+	for _, n := range []string{"d2data.mpq", "D2EXP.MPQ", "d2char.mpq", "Patch_D2.mpq", "d2sfx.mpq"} {
 		os.WriteFile(filepath.Join(game, n), []byte("x"), 0o644)
+	}
+	// decoys that must never reach the container: the key file, the game, a DLL, a save, a video archive
+	for _, n := range []string{"default.key", "Game.exe", "D2Client.dll", "Hero.d2s", "d2video.mpq", "d2.key"} {
+		os.WriteFile(filepath.Join(game, n), []byte("decoy"), 0o644)
 	}
 	if o, err := install("--yes", "--game-dir", game, "--port", "80"); err == nil || !strings.Contains(o, "--port") {
 		t.Fatalf("low port: %v\n%s", err, o)
@@ -193,10 +197,30 @@ exit 0`)
 	}
 	env, _ := os.ReadFile(filepath.Join(root, ".env"))
 	for _, w := range []string{"COMPOSE_PROJECT_NAME=didle-test", "D2_IMAGE=didle-friends:0.1.0", "D2_ANSWER_PORT=19392", "D2_PUBLISH=127.0.0.1",
-		"D2_WATCH_ORIGIN=http://localhost:19391,http://127.0.0.1:19391", "D2BOT_UPDATE_FEED=https://feed.example/d2", "D2_GAME_DIR=" + game} {
+		"D2_WATCH_ORIGIN=http://localhost:19391,http://127.0.0.1:19391", "D2BOT_UPDATE_FEED=https://feed.example/d2", "D2_GAME_DIR='" + game + "'"} {
 		if !strings.Contains(string(env), w+"\n") {
 			t.Errorf(".env lacks %q:\n%s", w, env)
 		}
+	}
+	gc, _ := os.ReadFile(filepath.Join(root, "compose.game.yml"))
+	for _, w := range []string{"/game/d2data.mpq", "/game/d2exp.mpq", "/game/d2char.mpq", "/game/patch_d2.mpq", "/game/d2sfx.mpq", "read_only: true"} {
+		if !strings.Contains(string(gc), w) {
+			t.Errorf("compose.game.yml lacks %q:\n%s", w, gc)
+		}
+	}
+	for _, bad := range []string{"default.key", "d2.key", "Game.exe", "D2Client.dll", "Hero.d2s", "d2video", ".key"} {
+		if strings.Contains(string(gc), bad) || strings.Contains(string(env), bad) {
+			t.Errorf("%q must not be mounted or named in the container setup:\n%s", bad, gc)
+		}
+	}
+	if strings.Contains(string(gc), "target: /game\n") {
+		t.Errorf("the whole folder is mounted:\n%s", gc)
+	}
+	if !strings.Contains(string(env), "COMPOSE_FILE=compose.yml:compose.game.yml\n") {
+		t.Errorf(".env lacks COMPOSE_FILE:\n%s", env)
+	}
+	if cy, _ := os.ReadFile(filepath.Join(root, "compose.yml")); strings.Contains(string(cy), "D2_GAME_DIR") {
+		t.Errorf("compose.yml still mounts the game folder")
 	}
 	if fi, _ := os.Stat(filepath.Join(root, ".env")); fi.Mode().Perm() != 0o600 {
 		t.Errorf(".env mode %v", fi.Mode().Perm())
@@ -205,6 +229,27 @@ exit 0`)
 	os.WriteFile(filepath.Join(root, "README.txt"), []byte("changed"), 0o644)
 	if o, err := install("--yes", "--game-dir", game); err == nil || !strings.Contains(o, "damaged") {
 		t.Fatalf("tampered pack: %v\n%s", err, o)
+	}
+	os.WriteFile(filepath.Join(root, "README.txt"), mustRead(t, filepath.Join("README.txt")), 0o644)
+	// a folder name with a space (the unzipped "Diablo II") and the unzip root one level above it
+	zip := t.TempDir()
+	spaced := filepath.Join(zip, "Diablo II")
+	os.MkdirAll(spaced, 0o755)
+	for _, n := range []string{"d2data.mpq", "d2exp.mpq", "d2char.mpq", "Patch_D2.mpq"} {
+		os.WriteFile(filepath.Join(spaced, n), []byte("x"), 0o644)
+	}
+	if o, err := install("--yes", "--game-dir", zip, "--port", "19391"); err != nil || !strings.Contains(o, "using that folder") {
+		t.Fatalf("unzip root: %v\n%s", err, o)
+	}
+	env, _ = os.ReadFile(filepath.Join(root, ".env"))
+	if !strings.Contains(string(env), "D2_GAME_DIR='"+spaced+"'\n") {
+		t.Errorf("spaced path not quoted:\n%s", env)
+	}
+	// ./didle sources .env as shell: it must survive the space (status with the docker shim)
+	dc := exec.Command("bash", "-c", "set -a; . ./.env; set +a; printf %s \"$D2_GAME_DIR\"")
+	dc.Dir = root
+	if b, err := dc.CombinedOutput(); err != nil || string(b) != spaced {
+		t.Errorf("sourcing .env: %v %q", err, b)
 	}
 	// --host publishes on all interfaces and prints that name
 	os.WriteFile(filepath.Join(root, "README.txt"), mustRead(t, filepath.Join("README.txt")), 0o644)

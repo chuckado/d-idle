@@ -45,6 +45,11 @@ func (f *Fighter) castLogStart(snap *d2.Snapshot, sp SkillSpec) {
 	c.targets = 0
 }
 
+// castWindow is how long after a cast of the skill its outcome is looked for: the modelled cast length plus slack.
+func (f *Fighter) castWindow(name string) time.Duration {
+	return time.Duration(max(castTicks(name, f.tune().CastFCR, f.D2D), 10)+4) * tickMs * time.Millisecond
+}
+
 // castLogTargets tells the log how many monsters the next cast is aimed at (the crowd nova counts them). The combat
 // code has no missile-hit signal, so this is the only per-cast hit figure it knows (S).
 func (f *Fighter) castLogTargets(n int) {

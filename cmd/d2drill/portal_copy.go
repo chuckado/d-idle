@@ -40,7 +40,7 @@ func busyPMode(m int) bool {
 }
 
 func portalDead(ctx context.Context) error {
-	return fmt.Errorf("d2d portal: cancelled, nothing clicked (%v)", context.Cause(ctx))
+	return fmt.Errorf("d2d portal: cancelled, nothing clicked (%v): %w", context.Cause(ctx), town.ErrPortalCancelled)
 }
 
 // portalCut is the error of a cast whose context died after the click: d2d may have spent the charge (Gate 1 20261102
@@ -219,6 +219,7 @@ type d2dTown struct {
 }
 
 func (t d2dTown) ToTown(ctx context.Context) error {
+	cancelled := false
 	if s, err := t.e.Snapshot(); err == nil && s.Player != nil && !s.Player.InTown() && t.portal != nil {
 		open := false
 		for _, o := range s.Objects {
@@ -227,10 +228,15 @@ func (t d2dTown) ToTown(ctx context.Context) error {
 		if !open {
 			if err := t.portal(ctx); err != nil && !errors.Is(err, combat.ErrNoPortal) {
 				t.e.Log.Info("d2d town: no portal opened, falling back", "err", err)
+				cancelled = errors.Is(err, town.ErrPortalCancelled)
 			}
 		}
 	}
-	return t.townAdapter.ToTown(ctx)
+	err := t.townAdapter.ToTown(ctx)
+	if err != nil && cancelled {
+		t.t.NoteCastCancelled() // the bot retries the cast once (bot/portalretry.go)
+	}
+	return err
 }
 
 type townAdapter struct {
