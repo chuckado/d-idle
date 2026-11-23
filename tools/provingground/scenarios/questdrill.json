@@ -436,8 +436,8 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
@@ -445,10 +445,10 @@
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -605,8 +605,8 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
@@ -614,10 +614,10 @@
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -774,8 +774,8 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
@@ -783,10 +783,10 @@
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -940,8 +940,8 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
@@ -949,10 +949,10 @@
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -1112,31 +1112,19 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
       "count": 6
-     },
-     {
-      "code": "box",
-      "count": 1
-     },
-     {
-      "code": "msf",
-      "count": 1
-     },
-     {
-      "code": "vip",
-      "count": 1
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -1306,8 +1294,8 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
@@ -1315,10 +1303,10 @@
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -1487,23 +1475,19 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
       "count": 6
-     },
-     {
-      "code": "hst",
-      "count": 1
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -1657,8 +1641,8 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
@@ -1666,10 +1650,10 @@
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
