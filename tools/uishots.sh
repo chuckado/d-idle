@@ -661,7 +661,6 @@ character-phonehero watch/inventory?theme=dark
 phonedefect-label watch/inventory?theme=dark&fx=phone&tab=pack&defect=label
 phonedefect-acts watch/inventory?theme=dark&fx=phone&tab=pack&sheet=1&defect=acts
 phonedefect-cutchips watch/inventory?theme=dark&fx=phone&tab=pack&defect=cutchips
-phonedefect-lock watch/inventory?theme=dark&fx=phone&tab=pack&defect=lock
 phonedefect-hover watch/inventory?theme=dark&fx=phone&tab=pack&defect=hover
 phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow
 charsdefect-clip watch/characters?theme=dark&chars=long&defect=chars-clip
