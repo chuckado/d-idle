@@ -1284,6 +1284,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - toolstrade18: lab notes round 17, the door chain works in the Barracks (TASK-887, merged 2026-11-23, acceptance 1 of 1): Lab notes only; verified in the lab (job d4b9), not live. <!--sg:agent/toolstrade18-->
 - uia11y: accessibility and text-scale pass (contrast, names, landmarks, reduced motion, 200% text) (TASK-884, merged 2026-11-23, acceptance 3 of 3): Tokens: control border token (3:1) and light good/warn darkened to pass AA; Return and Policy got an h1; the inventory pulse honours reduced motion ... <!--sg:agent/uia11y-->
 - agent/questdrill7: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/questdrill7-->
+- toolstrade19: the shop withdrawal tops the purse up to the carry line (TASK-888, merged 2026-11-23, acceptance 1 of 1): Withdraw for the shop tops the purse up to the carry line; test passes on the builder (tables); the must-fail run did not finish, reasoning only; live effect not seen. <!--sg:agent/toolstrade19-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
