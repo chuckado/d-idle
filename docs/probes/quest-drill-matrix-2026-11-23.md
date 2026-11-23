@@ -4,20 +4,23 @@
 
 Knobs of the sandbox as scenario tuning: `nav.warpRead=1 nav.fullGrid=1 quests.boardSM=1 town.plan=1` (a baseline with the knobs off is a second run).
 
-| chunk | scenario | class / seed | verdict | first failing step | fix / card | merged sha |
+| chunk | scenario | class / seed | verdict (lab, CHEATED setups) | first failing step | fix / card | merged sha |
 |---|---|---|---|---|---|---|
-| board: Duriel/Hellforge/Act 2+ rows done on an Act 1 hero | unit TestStatesPerEvidence | board | FIXED | proxy done beat the lock (note 3) | qdmatrix | fdbadb174 |
-| sisters_to_the_slaughter/andariel | drill.andariel.clvl19, kit19 | Paladin 11 | HELD (board: too hard, correct for this kit); not killed | readiness text said "unread attack" (note 1) | qdmatrix power fix | b00d2bef0 |
-| act1_done/sail_east | drill.act1.sail | Paladin 11, Sorceress 3 | GREEN both | locked row; dialog row (note 2) | qdmatrix | b00d2bef0 |
-| radament/radament | drill.act2.radament | Paladin 11 (stand-in stats) | GREEN | nav: Sewers 2 stairs gate (note 4); gear (note 8) | qdmatrix nav, pre.stats | fdbadb174, 60d48e453 |
+| board: Duriel/Hellforge/Act 2+ rows done on an Act 1 hero | TestStatesPerEvidence | unit | FIXED | proxy done beat the lock (note 3) | qdmatrix | fdbadb174 |
+| sisters_to_the_slaughter/andariel | drill.andariel.clvl19, kit19 | Paladin 11 | HELD by readiness (too hard for this kit, correct); kill not drilled | readiness text said "unread attack" (note 1) | qdmatrix power fix | b00d2bef0 |
+| act1_done/sail_east | drill.act1.sail | Paladin 11, Sorceress 3 | GREEN both | locked row, dialog row (note 2) | qdmatrix | b00d2bef0 |
+| radament/radament | drill.act2.radament | Paladin 11 (stand-in stats) | GREEN (also with all waypoints) | Sewers 2 stairs gate (note 4); gear (note 8) | qdmatrix nav, pre.stats | fdbadb174, 60d48e453 |
 | radament hand-in | drill.act2.radament.handin | Paladin 11 | GREEN | | | |
-| horadric_staff/cube | drill.act2.cube | Paladin 11 | RED (nav) | Halls of the Dead doors and the chest room (notes 9, 14) | qdmatrix nav; card: tomb doors | a6b5aa529 + pending |
-| tainted_sun/amulet | drill.act2.amulet | Paladin 11 | RED (nav) | Claw Viper Temple 1 pocket (note 9) | card: tomb doors | |
-| horadric_staff/shaft | drill.act2.shaft | Paladin 11 | RED (nav) | Maggot Lair 1 arrival nook inside the stairs core (note 9) | card: nav arrival nook | |
-| horadric_staff/assemble | drill.act2.assemble | Paladin 11 | GREEN to Cain's menu (done bit U) | Cain class (note 15); tainted sun word (note 11) | qdmatrix d2dsrc, d2bot | a6b5aa529 + pending |
-| summoner/kill_summoner | drill.act2.summoner | Paladin 11 | travel GREEN (waypoint, note 12); kill RED | the hero dies in the Sanctuary maze (no Teleport) | optional quest | pending |
-| seven_tombs/duriel | drill.act2.duriel | Paladin 11 | RED (nav) | Valley of Snakes to Canyon exit not found; Staff placement steps were missing (note 16) | qdmatrix task; card: border 45 to 46 | pending |
+| horadric_staff/cube | drill.act2.cube | Paladin 11 | GREEN on merged main (run 20261123-052834 series) | tomb doors, chest door (notes 9, 14) | qdmatrix nav | 1f4a8743d |
+| horadric_staff/assemble | drill.act2.assemble | Paladin 11 | GREEN to Cain's menu; the done bit after the talk is U | Cain class (note 15), Tainted Sun word (note 11) | qdmatrix d2dsrc, d2bot | a6b5aa529, 1f4a8743d |
+| tainted_sun/amulet | drill.act2.amulet | Paladin 11 | RED (nav) | Claw Viper Temple 1: the gate to level 61 cut off, `leavePocket` finds no way (note 9) | CARD nav: Claw Viper 1 pocket | |
+| horadric_staff/shaft | drill.act2.shaft | Paladin 11 | RED (nav) | Maggot Lair 1 arrival nook inside the stairs core (note 9) | CARD nav: arrival nook | |
+| summoner/kill_summoner | drill.act2.summoner | Paladin 11 | travel GREEN (waypoint, note 12); kill RED | the hero dies in the maze (no Teleport); optional quest | | a6b5aa529, 1f4a8743d |
+| seven_tombs/duriel | drill.act2.duriel | Paladin 11 | RED (nav) | Valley of Snakes to Canyon: no exit found (note 16) | CARD nav/d2dworld border 45 to 46; qdmatrix task (Staff placement) | 1f4a8743d |
 | act2_done/sail_east | not drilled | | not run | needs Duriel | | |
+| Act 3 to 5 chunks | not in scope tonight | | not run | | | |
+
+The BLOCKED lines "bot halted: campaign stalled ... no progress for 60 virtual min" for summoner and duriel are the run's end after the board parked the chunk (the lab bot exits on a stall); the cause is the parked reason in each note.
 
 ## Notes
 
@@ -39,3 +42,11 @@ Knobs of the sandbox as scenario tuning: `nav.warpRead=1 nav.fullGrid=1 quests.b
 14. Tomb doors (V runs 20261123-043148 on): `nav: door used` shows the grid cell still blocked 0.6 to 0.9 s after the use (mode -1: preset objects carry no live mode). A door opens over seconds and the second try used the same door again (maxDoorTries 2), which can close it. `openGateDoor` now waits (polls the grid every 0.6 s, at most 4.8 s) until the door cell is open before it trusts the grid; must-fail `TestExitToWaitsForADoorThatOpensSlowly`. With it the cube run passes several doors of Halls of the Dead 1 and reaches Halls of the Dead 3, then stops at the chest: `{203 198} is unreachable from {202 178}` (the chest room has a door of its own and `GoToUnitOf` had no door step): `GoToUnitOf` now opens the door between the hero and the unit like `GoTo` (must-fail `TestGoToUnitOpensTheDoorToAUnitBehindIt`). Bot behaviour change: nav.
 15. Deckard Cain on d2d (V runs 20261123-033535 ... 042715, `npc: walk failed classes [244] seen false` although `npcs` lists "Deckard Cain" in Lut Gholein): d2dsrc gives an `npcs` row the monstats class found by display name, and Cain's name is shared by one row per act, so the row had the same class in every act and every Cain talk after Act 1 (Act 2 Assemble hand-in, Act 3 to 5 reads) could not find him. `cainClassIn` gives the class of the player's act (`TestCainClassFollowsTheAct`). Bot behaviour change: town (every act).
 16. Seven Tombs (V run 20261123-044433 then -045350): the chunk's handler had only door, kill, Tyrael, home; the Staff quest word is done at the hand-in to Cain with the Staff still in the pack, so `staffPlaced` read true and the step looked for the lair door in town ("object class 100 not found"). The handler now walks to the Canyon and places the Staff first (`TestDurielChunkGoesToTheCanyonBeforeTheDoor`). The next stop is nav: from Valley of Snakes (45) `exit to Canyon of the Magi: no exit to that level (nothing new since the last search)`, and the waypoint is skipped because the reader (the stale save) does not list it active. CARD: nav/d2dworld border Valley of Snakes to Canyon of the Magi.
+
+## Deploy list (merged fixes that change bot behaviour, oldest first)
+
+- b00d2bef0: power (attack pick by points paid by clvl: readiness no longer says "unread attack" for a clvl 19 Paladin), board (act hop unlocks on the boss reward pending), talk (Go East and Sail East rows clicked while the act word reads needed).
+- fdbadb174: board (a proxy done never beats an unmet prerequisite: Duriel, Hellforge and every later act row read locked on an Act 1 hero, not done), nav (the walk to a gate has the gate as goal; a capped gate lets a click through outside the core).
+- 60d48e453: bot (an earlier act is not reachable: an Act 2 hero is no longer planned into Act 1 zones and the failsafe restart ladder), nav (door and strip walks carry a goal), scenarios (pre.stats).
+- a6b5aa529: d2bot (The Tainted Sun reads its quest word: Assemble unlocks), bot (waypoint when no walk reaches the target: Arcane Sanctuary), nav (door use logging).
+- 1f4a8743d: nav (a door is waited for and not used twice; GoToUnit opens the door to a chest), d2dsrc (Deckard Cain class by act: every Cain talk after Act 1), task (Seven Tombs walks to the canyon and places the Staff first), bot (waypoint fallback without the stale-save check), scenarios (pre.waypoints -1).
