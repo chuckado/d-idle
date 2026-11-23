@@ -127,3 +127,23 @@ func TestIgnoredMonsterThatComesCloseIsFought(t *testing.T) {
 		t.Fatalf("%v %v", res, err)
 	}
 }
+
+// The target stands behind a closed door: the fight's own assessment finds no path and no firing position, but a walk
+// toward it opens the door (the navigator plans through doors, #1188). The fighter walks once before writing it off, and
+// kills it (V lab, the Smith's room in the Barracks: "unreachable, no path and no firing position (dist 32)"). Must fail
+// without the door-augmented approach. The walk is class-free (the harness fighter is the default profile; the shot
+// logic after the walk is covered by TestShootsAcrossRiver for a caster).
+func TestUnreachableBehindADoorGetsAWalkFirst(t *testing.T) {
+	for _, name := range []string{"first pass", "second pass (fresh fighter)"} {
+		h := newHarness(t)
+		opened := false
+		h.s.noPath = func(p input.Point) bool { return p.X >= 122 && !opened }
+		h.s.doorGo = func(p input.Point) bool { opened = true; return true }
+		h.f.sight = func(a, b input.Point) bool { return opened || !(a.X < 122 && b.X >= 122) }
+		h.s.addMon(10, clsFallen, 135, 100, 24, 0, 0)
+		res, err := h.f.Clear(context.Background(), ClearOpts{})
+		if err != nil || res.Kills != 1 || len(res.Ignored) != 0 || !opened {
+			t.Fatalf("%s: %v %v opened=%v", name, res, err, opened)
+		}
+	}
+}

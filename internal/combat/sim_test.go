@@ -69,6 +69,7 @@ type sim struct {
 	left_       int
 	onCast      func()
 	noPath      func(p input.Point) bool // tests: points the mover cannot reach
+	doorGo      func(p input.Point) bool // tests: a GoTo toward an unreachable point that opens the door in the way (true) or not
 }
 
 func newSim() *sim {
@@ -248,6 +249,12 @@ func (s *sim) CastAt(key string, w input.Point) error {
 func (s *sim) GoTo(ctx context.Context, p input.Point) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+	if s.noPath != nil && s.noPath(p) {
+		// like the navigator: a spot behind a wall is refused; behind a door the walk opens it (doorGo) and goes on
+		if s.doorGo == nil || !s.doorGo(p) {
+			return errors.New("nav: no path")
+		}
+	}
 	s.moves = append(s.moves, p)
 	d := math.Hypot(float64(p.X)-s.px, float64(p.Y)-s.py)
 	s.advance(time.Duration(d / s.walkSpeed * float64(time.Second)))

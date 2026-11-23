@@ -662,6 +662,7 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade16
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade17
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade18
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade20
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
 docs/probes/town-plan-scenarios.md  credit-runner  town1
@@ -1191,6 +1192,7 @@ internal/combat/fight.go  credit-runner  goldprio
 internal/combat/fight.go  credit-runner  maphistory
 internal/combat/fight.go  credit-runner  maphistoryC
 internal/combat/fight.go  credit-runner  survfix2
+internal/combat/fight.go  credit-runner  toolstrade20
 internal/combat/fightend.go  credit-runner  maphistory
 internal/combat/fightend.go  credit-runner  maphistoryC
 internal/combat/fightend.go  credit-runner  survfix2
@@ -1215,8 +1217,10 @@ internal/combat/profileid_test.go  credit-runner  hammer1
 internal/combat/profileid_test.go  credit-runner  necro1
 internal/combat/profileid_test.go  credit-runner  sorc2
 internal/combat/reach.go  credit-runner  maphistoryC
+internal/combat/reach_test.go  credit-runner  toolstrade20
 internal/combat/rules.go  credit-runner  resistorder
 internal/combat/safety.go  credit-runner  beltfix
+internal/combat/sim_test.go  credit-runner  toolstrade20
 internal/combat/types.go  credit-runner  goldprio
 internal/currency  credit-runner  botcpu2
 internal/d2/classtraits.go  credit-runner  classtraits
