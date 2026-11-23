@@ -1937,6 +1937,7 @@ internal/watch/testdata/vault_ether.mjs  credit-runner  uitoast
 internal/watch/testdata/vault_ether.mjs  credit-runner  vaultv7b
 internal/watch/testdata/vault_identall.mjs  credit-runner  uireason
 internal/watch/testdata/vault_identall.mjs  credit-runner  uitoast
+internal/watch/testdata/vault_logic.mjs  credit-runner  fitfix3
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultequip
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultpay
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultreveal
@@ -2196,6 +2197,7 @@ internal/watch/web/update.js  credit-runner  uis7
 internal/watch/web/utilities.css  credit-runner  fitfix2
 internal/watch/web/utilities.css  credit-runner  mapphone
 internal/watch/web/utilities.css  credit-runner  quests8
+internal/watch/web/vault-logic.js  credit-runner  fitfix3
 internal/watch/web/vault-logic.js  credit-runner  vaultclean
 internal/watch/web/vault-logic.js  credit-runner  vaultequip
 internal/watch/web/vault-logic.js  credit-runner  vaultfull
@@ -2389,6 +2391,7 @@ tools/uilint/lint.go  credit-runner  uitoast
 tools/uilint/uilint_test.go  credit-runner  uitoast
 tools/uishots  credit-runner  fitfix
 tools/uishots  credit-runner  fitfix2
+tools/uishots  credit-runner  fitfix3
 tools/uishots  credit-runner  gearsets
 tools/uishots  credit-runner  identifyall
 tools/uishots  credit-runner  lootwire3
@@ -2397,6 +2400,7 @@ tools/uishots  credit-runner  videoctl
 tools/uishots  credit-runner  videofeed4
 tools/uishots.sh  credit-runner  fitfix
 tools/uishots.sh  credit-runner  fitfix2
+tools/uishots.sh  credit-runner  fitfix3
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
 tools/uishots.sh  credit-runner  heavyguard

@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into fitfix3 <!--sg:agent/fitfix3-->
 - Merge branch 'main' into fitfix2 <!--sg:agent/fitfix2-->
 - Merge branch 'main' into toolstrade4 <!--sg:agent/toolstrade4-->
 - Merge branch 'main' into bankdoc <!--sg:agent/bankdoc-->
