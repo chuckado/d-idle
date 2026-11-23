@@ -278,8 +278,10 @@
     "start": "Catacombs 3",
     "enter": "Catacombs( Level)? 4",
     "budget": 12,
-    "kit": "stand30"
-   }
+    "kit": "stand30",
+    "goals": "farm:Catacombs Level 4"
+   },
+   "note": "The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100)."
   },
   {
    "id": "sisters_to_the_slaughter/andariel/kill_andariel",
@@ -323,7 +325,7 @@
   },
   {
    "id": "radament/radament/use_book",
-   "missing": "bot: no assertion kind for unspent skill or stat points: the observer already reads them (cmd/d2scenario state.Stats skillpts) but internal/scenario has no `stat_value` kind; the book's code is U"
+   "missing": "bot: no assertion kind for unspent skill or stat points: the observer already reads them (cmd/d2scenario state.Stats skillpts) but internal/scenario has no `stat_value` kind; the book's code is U [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec]"
   },
   {
    "id": "radament/radament/return_atma",
@@ -393,15 +395,17 @@
   },
   {
    "id": "arcane_sanctuary/portal/talk_jerhyn",
-   "missing": "bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half)"
+   "missing": "bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half) [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec]"
   },
   {
    "id": "arcane_sanctuary/portal/travel_palace_cellar",
    "gen": {
     "start": "Harem 2",
     "enter": "Palace Cellar( Level)? 1",
-    "kit": "act2"
-   }
+    "kit": "act2",
+    "goals": "farm:Palace Cellar Level 1"
+   },
+   "note": "The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100)."
   },
   {
    "id": "arcane_sanctuary/portal/enter_arcane",
@@ -471,11 +475,11 @@
   },
   {
    "id": "act2_done/sail_east/travel_harbor",
-   "missing": "bot: the Act 2 to 3 hop needs Duriel done (matrix): a gen row with the act2 kit and the Seven Tombs word is possible once the Duriel word is known (U)"
+   "missing": "bot: the Act 2 to 3 hop needs Duriel done (matrix): a gen row with the act2 kit and the Seven Tombs word is possible once the Duriel word is known (U) [code area: data only, this file]"
   },
   {
    "id": "act2_done/sail_east/talk_meshif",
-   "missing": "bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half)"
+   "missing": "bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half) [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec]"
   },
   {
    "id": "lam_esen/tome/travel_bazaar",
@@ -551,47 +555,47 @@
   },
   {
    "id": "khalims_will/eye/travel_spider_cavern",
-   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "khalims_will/eye/take_eye",
-   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "khalims_will/brain/travel_flayer_dungeon",
-   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "khalims_will/brain/take_brain",
-   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "khalims_will/heart/travel_sewers",
-   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "khalims_will/heart/take_heart",
-   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "khalims_will/assemble/open_cube",
-   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "khalims_will/assemble/transmute",
-   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "khalims_will/orb/travel_travincal",
-   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "khalims_will/orb/equip_will",
-   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "khalims_will/orb/smash_orb",
-   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2)"
+   "missing": "F3: no scenario yet and the quest words of records 17 to 40 are not observable in the lab (matrix note 30); the three parts are monster or chest drops (F1, F2) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "guardian/mephisto/travel_durance2",
@@ -599,8 +603,10 @@
     "kit": "stand60",
     "start": "Durance of Hate 1",
     "enter": "Durance of Hate( Level)? 2",
-    "budget": 12
-   }
+    "budget": 12,
+    "goals": "farm:Durance of Hate Level 2"
+   },
+   "note": "The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100)."
   },
   {
    "id": "guardian/mephisto/travel_durance3",
@@ -608,8 +614,10 @@
     "kit": "stand60",
     "start": "Durance of Hate 2",
     "enter": "Durance of Hate( Level)? 3",
-    "budget": 12
-   }
+    "budget": 12,
+    "goals": "farm:Durance of Hate Level 3"
+   },
+   "note": "The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100)."
   },
   {
    "id": "guardian/mephisto/kill_mephisto",
@@ -627,11 +635,11 @@
   },
   {
    "id": "act3_done/portal/travel_durance3",
-   "missing": "F3: the act hop reads a quest word of record 23 or 24 that the lab cannot observe (matrix note 30)"
+   "missing": "F3: the act hop reads a quest word of record 23 or 24 that the lab cannot observe (matrix note 30) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "act3_done/portal/take_portal",
-   "missing": "F3: the act hop reads a quest word of record 23 or 24 that the lab cannot observe (matrix note 30)"
+   "missing": "F3: the act hop reads a quest word of record 23 or 24 that the lab cannot observe (matrix note 30) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "izual/izual/travel_city_of_the_damned",
@@ -705,8 +713,10 @@
     "kit": "stand60",
     "start": "City of the Damned",
     "enter": "River of Flame",
-    "budget": 12
-   }
+    "budget": 12,
+    "goals": "farm:River of Flame"
+   },
+   "note": "The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100)."
   },
   {
    "id": "terrors_end/diablo/travel_chaos_sanctuary",
@@ -714,8 +724,10 @@
     "kit": "stand60",
     "start": "River of Flame",
     "enter": "Chaos Sanctuary",
-    "budget": 12
-   }
+    "budget": 12,
+    "goals": "farm:Chaos Sanctuary"
+   },
+   "note": "The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100)."
   },
   {
    "id": "terrors_end/diablo/kill_diablo",
@@ -733,15 +745,15 @@
   },
   {
    "id": "terrors_end/diablo/talk_tyrael",
-   "missing": "bot: no talk-step assertion (see talk_jerhyn)"
+   "missing": "bot: no talk-step assertion (see talk_jerhyn) [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec]"
   },
   {
    "id": "act4_done/portal/talk_tyrael",
-   "missing": "F3: the act hop reads a quest word that the lab cannot observe (matrix note 30)"
+   "missing": "F3: the act hop reads a quest word that the lab cannot observe (matrix note 30) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "act4_done/portal/take_portal",
-   "missing": "F3: the act hop reads a quest word that the lab cannot observe (matrix note 30)"
+   "missing": "F3: the act hop reads a quest word that the lab cannot observe (matrix note 30) [observer half done: cmd/d2scenario/questwords.go reads records 16 to 47; what is left is a scenario and the word value per step, U]"
   },
   {
    "id": "siege_harrogath/shenk/travel_bloody_foothills",
@@ -767,8 +779,10 @@
     "kit": "stand60",
     "start": "Harrogath",
     "enter": "Frigid Highlands",
-    "budget": 12
-   }
+    "budget": 12,
+    "goals": "farm:Frigid Highlands"
+   },
+   "note": "The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100)."
   },
   {
    "id": "rescue_arreat/doors/break_doors",
@@ -776,7 +790,7 @@
   },
   {
    "id": "rescue_arreat/doors/talk_qual_kehk",
-   "missing": "bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half)"
+   "missing": "bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half) [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec]"
   },
   {
    "id": "prison_of_ice/find/travel_frigid_highlands",
@@ -804,7 +818,7 @@
   },
   {
    "id": "prison_of_ice/potion/talk_malah",
-   "missing": "bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half)"
+   "missing": "bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half) [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec]"
   },
   {
    "id": "prison_of_ice/thaw/travel_frozen_river",
@@ -813,8 +827,10 @@
     "start": "Harrogath",
     "enter": "Frozen River",
     "budget": 12,
-    "note": "Anya (the object) is F2; this proves the walk only."
-   }
+    "note": "Anya (the object) is F2; this proves the walk only.",
+    "goals": "farm:Frozen River"
+   },
+   "note": "The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100)."
   },
   {
    "id": "prison_of_ice/thaw/thaw_anya",
@@ -826,11 +842,11 @@
   },
   {
    "id": "prison_of_ice/scroll/talk_anya",
-   "missing": "bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half)"
+   "missing": "bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half) [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec]"
   },
   {
    "id": "prison_of_ice/read/read_scroll",
-   "missing": "bot: no assertion kind for resistance stats (internal/scenario state has no resist read); the scroll's pack code is U"
+   "missing": "bot: no assertion kind for resistance stats (internal/scenario state has no resist read); the scroll's pack code is U [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec]"
   },
   {
    "id": "betrayal_harrogath/nihlathak/travel_halls_of_pain",
