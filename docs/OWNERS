@@ -657,6 +657,7 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade11
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade13
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade15
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade16
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade17
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
@@ -936,6 +937,7 @@ internal/bot/areaskip_test.go  credit-runner  passagebounce
 internal/bot/areaskip_test.go  credit-runner  staletarget
 internal/bot/areaskip_test.go  pro-runner  bounce3
 internal/bot/beltfill_test.go  credit-runner  toolstrade11
+internal/bot/beltfill_test.go  credit-runner  toolstrade17
 internal/bot/broke.go  credit-runner  survrecover
 internal/bot/broke.go  credit-runner  town5
 internal/bot/catalog.go  credit-runner  botcpu2
@@ -1001,6 +1003,7 @@ internal/bot/loop.go  credit-runner  resetinstant
 internal/bot/loop.go  credit-runner  staletarget
 internal/bot/loop.go  credit-runner  survreask
 internal/bot/loop.go  credit-runner  survrecover
+internal/bot/loop.go  credit-runner  toolstrade17
 internal/bot/loop.go  pro-runner  bounce3
 internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  arrivalsettle
@@ -2485,6 +2488,7 @@ tools/provingground/scenarios/act1more.json  credit-runner  act1more
 tools/provingground/scenarios/act1more.json  credit-runner  andariel1
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade10
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade16
+tools/provingground/scenarios/act1more.json  credit-runner  toolstrade17
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade2
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade5
 tools/provingground/scenarios/autoalloc.json  credit-runner  allocfix
