@@ -6,6 +6,7 @@ import (
 	"math"
 	"testing"
 
+	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/input"
 )
@@ -255,6 +256,49 @@ func TestGoToOpensTheDoorToASpotBehindIt(t *testing.T) {
 			}
 			if opened != 1 || dist(s.pos(), input.Point{X: 3190, Y: 3057}) > 6 {
 				t.Fatalf("door used %d times, at %v", opened, s.pos())
+			}
+		})
+	}
+}
+
+// Two doors in a row between the hero and the spot: no single door joins both sides, GoTo opens the near one, walks, and
+// opens the next (the Barracks corridor of the Smith, V lab: door (125,360) opened, then "closest reachable point"
+// again). Must fail without doorOnTheWay.
+func TestGoToOpensTwoDoorsInARow(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			g := openField(3000, 3000, 240, 100)
+			blockRect(g, d2map.Rect{X: 3080, Y: 3000, W: 2, H: 100})
+			blockRect(g, d2map.Rect{X: 3160, Y: 3000, W: 2, H: 100})
+			c1 := d2map.Rect{X: 3080, Y: 3048, W: 2, H: 18}
+			c2 := d2map.Rect{X: 3160, Y: 3048, W: 2, H: 18}
+			l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 240, H: 100}}
+			s := newSim(g, input.Point{X: 3010, Y: 3057}, l1)
+			s.reveal = 300
+			s.levels[0].lm.Presets = []d2map.Preset{
+				{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: 3081, Y: 3057}},
+				{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: 3161, Y: 3057}},
+			}
+			s.objects = []d2.Unit{d2Unit(77, 24, 3081, 3057), d2Unit(78, 24, 3161, 3057)}
+			opened := 0
+			s.onInteract = func(s *sim, tg input.Target) error {
+				switch tg.ID {
+				case 77:
+					opened++
+					openDoor(s, c1)
+				case 78:
+					opened++
+					openDoor(s, c2)
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class == 24 }
+			if err := n.GoTo(ctxT(t), input.Point{X: 3230, Y: 3057}); err != nil {
+				t.Fatalf("goto: %v", err)
+			}
+			if opened != 2 || dist(s.pos(), input.Point{X: 3230, Y: 3057}) > 6 {
+				t.Fatalf("doors used %d, at %v", opened, s.pos())
 			}
 		})
 	}
