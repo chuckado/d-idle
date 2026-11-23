@@ -79,3 +79,68 @@ func TestExitToLeavesAnObjectThatIsNoDoorAlone(t *testing.T) {
 		t.Logf("refused with %v", err)
 	}
 }
+
+// The plan to the gate looked complete when it was picked (the cells behind the door were read as open) and the walk
+// then found them shut: the walk ends at "the closest reachable point" and ExitTo used to return that error without
+// looking for the door (V live, scenario act1.tools.malus, Monastery Gate to Outer Cloister). Must fail without
+// doorAfterShortWalk. Both classes: the geometry knows no class, the navigator is built from the same world.
+func TestExitToOpensTheDoorAfterAShortWalk(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			s, cells := doorWorld(t)
+			// the known grid shows the door cells open until the hero is near, then reads them shut like the truth
+			base := s.onStep
+			doorOpen := false
+			s.revealRooms() // the first read already shows the cells open
+			s.levels[0].known.SetBlock(cells, make([]uint16, cells.W*cells.H))
+			s.onStep = func(s *sim) {
+				base(s)
+				near := math.Hypot(s.px-3002, s.py-3057) < 60
+				l := s.levels[0]
+				if _, ok := l.known.Flags(cells.X, cells.Y); !ok {
+					return
+				}
+				if !near && !doorOpen {
+					l.known.SetBlock(cells, make([]uint16, cells.W*cells.H))
+				}
+				if near {
+					if !doorOpen {
+						// a newly read cell: the planner rebuilds its field when the known count changes
+						l.known.SetBlock(d2map.Rect{X: 2000, Y: 2000, W: 1, H: 1}, []uint16{0})
+					}
+					doorOpen = true
+					// back to the truth: the cells are wall until the door is used
+					l.known.SetBlock(cells, truthCells(s, cells))
+				}
+			}
+			opened := 0
+			s.onInteract = func(s *sim, tg input.Target) error {
+				if tg.ID == 77 {
+					opened++
+					openDoor(s, cells)
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class == 24 }
+			n.exploreFn = func(_ context.Context, _ func() bool, _ *input.Point) error { return ErrExplored }
+			if err := n.ExitTo(ctxT(t), 2); err != nil {
+				t.Fatalf("%s: exit: %v", cls, err)
+			}
+			if opened != 1 || s.cur().no != 2 {
+				t.Fatalf("%s: door used %d times, level %d at %v", cls, opened, s.cur().no, s.pos())
+			}
+		})
+	}
+}
+
+func truthCells(s *sim, r d2map.Rect) []uint16 {
+	out := make([]uint16, 0, r.W*r.H)
+	for y := r.Y; y < r.Y+r.H; y++ {
+		for x := r.X; x < r.X+r.W; x++ {
+			f, _ := s.truth.Flags(x, y)
+			out = append(out, f)
+		}
+	}
+	return out
+}

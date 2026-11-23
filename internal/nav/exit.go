@@ -168,6 +168,9 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 					return uerr
 				}
 			}
+			if errors.Is(err, ErrNoPath) && n.doorAfterShortWalk(ctx, levelNo) {
+				continue
+			}
 			return err
 		}
 		if n.pushThrough(ctx, g, levelNo) {
