@@ -1,0 +1,35 @@
+# Necromancer earned Act 1 drill (card necrodrill, 2026-11-22)
+
+> status: current. Verdict: BLOCKED, NOT ready to play. Tags: V verified in a named run, S read in a log, U unverified. Builder LONG lane, lab d2d devp20 (`--read-combat`), `combat.minionRead` 1, build `necromancer_summoner_sme`.
+
+## 1. Runs
+
+| run | what | verdict |
+|---|---|---|
+| 20261122-172117-b149 (V) | `necro.act1-earned`: a fresh clvl 1 Necromancer, town start, goal `campaign:normal_act1`, NO setup write, `writes after start: 0` | BLOCKED: quest record 6 (Andariel) not observed in 400 virtual minutes. The job was cut at 3604 s wall by the 60-minute hard limit of a detached job (the scenario's own 140-minute wall budget never applied); the result file was written at 3586 s |
+| 20261122-182247-6965 (V) | stage 1 as the existing act1 scenarios with `-class Necromancer -seed 11` (CHEATED level fixtures, default table `necromancer_summoner_normal30`): `act1.den.clear` and `act1.burial.blood_raven` | `act1.den.clear` RED (record 1 read 0x0014, wanted bit 0 set; Start was tapped only 4 wall minutes before the end); `act1.burial.blood_raven` BLOCKED (bot run cut before its virtual budget; the hero ended at clvl 16 in the Rogue Encampment) |
+
+The ledger refusal ("missing bot_commit") is a launch detail: `run.sh` reads `git rev-parse` in the synced mirror, which has no `.git`; passing `env D2LOD_BOT_COMMIT=<hash>` on the labrun command line fixes it (V: no refusal in run 6965).
+
+## 2. How far the fresh hero got (V from the bot log and result file of run b149)
+
+- clvl 14, 5381 kills, 77 boss kills, 0 deaths, 168 potions, 13 level-ups in 24008 active seconds (11448 xp/h). Level by wall-time hour: 1, 6, 9, 12, 13, 13, 14.
+- Quests: Den of Evil done (`Quest done: den_of_evil` after about five virtual minutes; record 1 ended 0x2001). Nothing else: no Blood Raven, no Cain, no Countess, no Andariel.
+- Where the time went: 88 "Quest: fighting (Level up to N)" states (N = 12 to 15), 45 "Recovery: farming gold", 102 town trips (heal below the resume line 39, healing potions 25), 327 area changes (Rogue Encampment to Cold Plains and back about 60 times), stash 29341 gold with 423 in the purse, skill points all spent (15 hard points, `skill_levels` Raise Skeleton 5, Skeleton Mastery 5, Clay Golem 1).
+- What stopped it: the board said "Training toward Sisters to the Slaughter: N levels to go" (10 lines) and the bot kept levelling; 38 "quest board step" actions failed, 37 with `exit to Cold Plains: nav: click {149 330}: no path: the click would cross the trigger area of an unwanted exit`, three failsafe-ladder escalations, and one `back to field ... portal led to another level`. The campaign goal without the board-taps driver starts no chunk (autoStart is never), so only the Den (a goal of its own) completed.
+
+## 3. Blockers, ranked
+
+1. Nav: the Rogue Encampment exit to Cold Plains click is refused as crossing an unwanted exit trigger (37 failures in one run). It sits on every Act 1 quest. Not Necromancer-specific (U: the Paladin runs used the same exit; the dev logs of act1more show the same family for the Outer Cloister).
+2. Quest start: the drill cannot start the chunks after the Den. The `board-taps` driver taps one quest per scenario; a whole-act run needs a driver that taps every offered chunk in order (the Cain scenario taps only its own). Until then an earned multi-quest drill cannot be built from the scenario format.
+3. Pace: clvl 14 after 400 virtual minutes (11.4k xp/h) with 102 town trips; the "Level up to N" training loop is the time sink, and the hero at that level is below the board's readiness line for Blood Raven (U: the board's reason is not logged, same finding as act1more finding 3). The army kills (5381 kills, 0 deaths), so this is throughput, not survival.
+4. Tooling: a detached labrun job has a 60-minute hard limit regardless of `budget.wall_min`; a 400-virtual-minute drill needs stages, and `act1.burial.blood_raven` for a Necromancer hit a bot-run cut before its budget (cause U, the log tail shows a normal stop).
+5. Den for the Necromancer under the act1 scenario (CHEATED level 10, default table) did not complete in 45 virtual minutes although the fresh hero finished it in five (U why: different build table and fixture level; read the Den log of run 6965 before drawing a conclusion).
+
+## 4. Next cards
+
+- `nav: Rogue Encampment to Cold Plains exit click refused as an unwanted exit trigger` (owner nav; blocker 1).
+- `scenario driver: tap every offered chunk of a campaign in order (board-taps all)` (owner scenario/provingground; blocker 2), then stage the drill as three jobs each under 60 minutes: Rogue Encampment to Cain (record 4), to Countess, to Andariel, restoring the saved hero between stages.
+- `quest board: log why a chunk is not startable at the hero's level` (blocker 3, also act1more finding 3).
+- `scenario: necro stage runs with the SME build and the Necromancer matrix on act1.*` (blocker 5).
+- Test character: none created by this drill (the builder runner creates and deletes its own heroes; the provenance is the scenario's `provenance` text). A hidden-instance Necromancer in docs/probes/test-characters.md waits for the 23:00-07:00 EST window.
