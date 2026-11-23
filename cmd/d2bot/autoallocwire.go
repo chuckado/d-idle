@@ -108,7 +108,9 @@ func (w *allocWire) builds() []points.BuildInfo {
 	return out
 }
 
-// next is the build's remaining steps for the hero, stats first then skills, each group in table order.
+// next is the build's remaining steps for the hero, skills first then stats, each group in table order. Skill points are
+// the scarce ones (a level gives one, a stat batch five) and they bring the army, so a hero with a pile of unspent stats
+// never waits minutes of calm moments for its first skill (user report 2026-11-23, necromancer at clvl 4).
 func (w *allocWire) next(build string, p *d2.Player) ([]points.Step, error) {
 	b, err := leveler.LoadBuild(build, "")
 	if err != nil {
@@ -116,19 +118,19 @@ func (w *allocWire) next(build string, p *d2.Player) ([]points.Step, error) {
 	}
 	have := leveler.HaveFor(w.db, p, nil)
 	acts := b.Plan(have, leveler.DBRule(w.db, leveler.ClassCode(w.db, p.Class.String())), nil)
-	var out []points.Step
+	var skills, stats []points.Step
 	for _, a := range acts {
 		if a.Kind == leveler.KindStat {
-			out = append(out, points.Step{Kind: "stat", Stat: leveler.StatKey(a.Attr), Name: a.String()})
+			stats = append(stats, points.Step{Kind: "stat", Stat: leveler.StatKey(a.Attr), Name: a.String()})
 			continue
 		}
 		sk := w.db.SkillByName(a.Skill)
 		if sk == nil {
 			continue
 		}
-		out = append(out, points.Step{Kind: "skill", Skill: sk.ID, Name: a.Skill})
+		skills = append(skills, points.Step{Kind: "skill", Skill: sk.ID, Name: a.Skill})
 	}
-	return out, nil
+	return append(skills, stats...), nil
 }
 
 func (w *allocWire) offBuild(build string, p *d2.Player) []string {

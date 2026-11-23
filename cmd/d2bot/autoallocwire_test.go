@@ -1,6 +1,7 @@
 package main
 
 import (
+	"d2lod-bot/internal/leveler"
 	"strings"
 	"testing"
 
@@ -74,5 +75,25 @@ func TestAllocPickerNecromancerNotes(t *testing.T) {
 				t.Errorf("%s: class %q", b.Name, b.Class)
 			}
 		}
+	}
+}
+
+// The summoner opens with Vitality, 3 Energy at clvl 2 only (SME answers 2026-11-22); the table once put 10 Energy first
+// and the hero sat at clvl 4 with its mana pool grown and no Vitality (user report 2026-11-23).
+func TestSummonerTableStatsAreVitalityFirst(t *testing.T) {
+	b, err := leveler.LoadBuild("necromancer_summoner_normal30", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	ene, vit := 0, 0
+	for _, r := range b.Rows {
+		if r.Clvl > 10 {
+			break
+		}
+		ene += r.Attr[3]
+		vit += r.Attr[2]
+	}
+	if ene != 3 || vit != 5*9-3 {
+		t.Errorf("clvl 2-10: energy %d vitality %d", ene, vit)
 	}
 }

@@ -103,6 +103,12 @@
     $('bstate').textContent = line;
     var off = $('boffnote'); off.hidden = !!b.autoAlloc;
     off.textContent = b.autoAlloc ? '' : 'Auto-allocation is off (knob agency.autoAlloc): you can read about the builds here, but choosing one stays closed until it is on.';
+    var u = b.unspent || {};
+    var act = $('bact');
+    if (act) {
+      act.hidden = !st.locked;
+      act.textContent = !st.locked ? '' : 'Spent by the build so far this run: ' + (b.spent || 0) + '. Unspent now: ' + (u.stat || 0) + ' stat, ' + (u.skill || 0) + ' skill.' + (b.waiting && ((u.stat || 0) + (u.skill || 0)) > 0 ? ' Waiting: ' + b.waiting : '');
+    }
     var h = $('bheld'); h.hidden = !(b.held && b.held.length);
     h.textContent = h.hidden ? '' : b.held.map(function (x) { return x.skill + ' (level ' + x.clvl + '): ' + x.reason; }).join(' ');
     var o = $('boff'); o.hidden = !(b.offBuild && b.offBuild.length);
