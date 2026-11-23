@@ -71,6 +71,13 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		add("stat points a played level gives", fmt.Sprintf("debug statpts %d", 5*(p.Level-1)))
 		add("skill points a played level gives", fmt.Sprintf("debug skillpts %d", p.Level-1))
 	}
+	for _, st := range p.Stats {
+		if st.Stat < 0 || st.Stat > 400 {
+			return Setup{}, fmt.Errorf("scenario %s: stat id %d", s.ID, st.Stat)
+		}
+		add(fmt.Sprintf("raw stat %d", st.Stat), fmt.Sprintf("debug stat %d %d", st.Stat, st.Value))
+		tags["stat-write"] = true
+	}
 	if p.Gold > 0 {
 		add("purse", fmt.Sprintf("debug stat 14 %d", p.Gold))
 	}
@@ -201,7 +208,7 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		}
 		su.Tuning[k] = v
 	}
-	cheated := tags["worn"] || tags["vault-records"] || tags["ether"] || tags["position"] || tags["waypoint"] || tags["given-item"] || tags["quest-word"] || tags["merc"] || tags["difficulty"]
+	cheated := tags["worn"] || tags["vault-records"] || tags["ether"] || tags["position"] || tags["waypoint"] || tags["given-item"] || tags["quest-word"] || tags["stat-write"] || tags["merc"] || tags["difficulty"]
 	if cheated {
 		su.Tags = append(su.Tags, "CHEATED")
 	} else {

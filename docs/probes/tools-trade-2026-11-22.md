@@ -87,3 +87,9 @@ First attempt now opens the door (141,2) from (142,4) and `Entered Outer Cloiste
 - Fix 1: `doorOnTheWay` (GoTo): with several doors in a row no single door joins both sides, so the door touching the hero's region that is nearest the goal is opened, then the walk repeats. Test `TestGoToOpensTwoDoorsInARow`.
 - Fix 2 (scenario): the hero wears a mesh belt (12 boxes; the live hero has 5 to 6 healing in the belt), so the potion plan fills the belt from the pack.
 - U: the Smith's own damage and the fight rules are not reached yet; the in-field refill of the belt from the pack is not implemented (open finding).
+
+## Round 12 (card toolstrade11): the field belt refill
+
+- S (reading): a field refill exists (`beltFillStep`, `internal/bot/goal.go` before the quest board step; `FillBelt` is safe in the field) and a pack drink exists (`internal/combat/packdrink.go`, only below `combat.drinkRejuvPct`, and the chicken line stays above it by design: a minor potion does not save a hero at the chicken line). The refill was gated on NO hostile within the 30 subtile sweep radius: in the Barracks that never holds, so the belt stayed empty with six potions in the pack (V lab run 7cf9: `belt hp=0`, chicken at life 140 of 289).
+- Fix: with no healing in the belt and healing in the pack the gate is 12 subtiles (`beltFillUrgentRadius`). Test `TestBeltFillStepUrgentRadius` (Paladin and Sorceress; fails without the shorter radius). U: how long a refill takes in a live crowd; the 90 s backoff stays.
+- Not done: the `belt: move failed: hand: unexpected cursor state` path (not reproduced here); a field variant of `town.plan.belt-refill-from-pack` (the scenario needs a field start with hostiles near: not written).

@@ -119,6 +119,10 @@ type Pre struct {
 	Vault *VaultSeed `json:"vault_records,omitempty"`
 	// Spawn puts monsters beside the hero after the field warp (`debug spawn`, SETUP; field start only, the run is CHEATED).
 	Spawn []Spawn `json:"spawn,omitempty"`
+	// Stats are raw `debug stat <id> <value>` writes after the level (stat ids of stats.txt, values as the game stores them:
+	// life and mana are fixed point, value x 256). SETUP only: a hero that stands for a geared one in a mechanics drill
+	// (card qdmatrix), the run is CHEATED.
+	Stats []StatSet `json:"stats,omitempty"`
 	// Ether is the Ether balance of the account wallet at the start (a credit line in its ledger).
 	Ether int `json:"ether,omitempty"`
 }
@@ -413,4 +417,10 @@ func validID(id string) bool {
 	return strings.IndexFunc(id, func(r rune) bool {
 		return !(r >= 'a' && r <= 'z' || r >= '0' && r <= '9' || r == '.' || r == '-' || r == '_')
 	}) < 0
+}
+
+// StatSet is one raw stat write of Pre.Stats.
+type StatSet struct {
+	Stat  int `json:"stat"`
+	Value int `json:"value"`
 }
