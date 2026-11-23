@@ -4424,7 +4424,8 @@
      "nav.warpRead": 1,
      "nav.fullGrid": 1,
      "quests.boardSM": 1,
-     "town.plan": 1
+     "town.plan": 1,
+     "boss.andarielHold": 0
     },
     "driver": "board-taps",
     "tap_chunks": [
@@ -4445,7 +4446,7 @@
     ]
    },
    "provenance": "CHEATED: clvl 30 stand-in (strength 120, dexterity 80, max life 2000, a rare broad sword), gold and waypoints by SETUP verbs. Above the readiness gate level. Mechanics only.",
-   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md). boss.andarielHold 0: the unattended hold (a deliberate gate of card m3-andariel) would keep the board from starting her; the drill tests the kill mechanics, not the gate.",
    "assert": [
     {
      "kind": "quest_bits",
