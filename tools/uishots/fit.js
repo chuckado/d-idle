@@ -118,7 +118,7 @@ export function measure(win, opts) {
   }
   const video = { controls: vn, overlap: vo };
   return {
-    nav: navPage(win, d, vis, cs), video, orderCut, zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, chars: chx, vault: vtx, empty, unready, slots,
+    nav: navPage(win, d, vis, cs), builds: buildsPage(win, d, vis, cs), video, orderCut, zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, chars: chx, vault: vtx, empty, unready, slots,
     covered: Math.round((covered * 100) / (cols * rows)), hole: best * cs2, holeAt: [(bx - best + 1) * cs2, (by - best + 1) * cs2],
   };
 }
@@ -591,6 +591,25 @@ function navPage(win, d, vis, cs) {
     const sr = vis(sh);
     o.sheet = sr ? { inside: sr.left >= -1 && sr.top >= -1 && sr.right <= vw + 1 && sr.bottom <= vh + 1, clearOfBar: !bar || sr.bottom <= r.top + 1, bottom: Math.round(sr.bottom), barTop: Math.round(r.top), first: d.activeElement && sh.contains(d.activeElement) } : { inside: false, clearOfBar: false };
   }
+  return o;
+}
+// The Build tab (card buildcards): cards in one column on a phone and a grid from 700 px, no scroll box inside the page, no card past
+// the window, buttons 44 px high, every star row carrying its text equivalent, and an open detail with its Choose button.
+// Returns null on a page without the list.
+function buildsPage(win, d, vis, cs) {
+  const list = d.getElementById('bcards');
+  if (!list || !vis(list)) return null;
+  const vw = win.innerWidth;
+  const cards = [...list.querySelectorAll('.bc-card')].filter((c) => vis(c));
+  const o = { cards: cards.length, open: list.querySelectorAll('.bc-detail').length, cols: 0, past: [], boxes: [], cut: [], small: [], notext: [], noLabel: 0 };
+  if (cards.length) { const top = vis(cards[0]).top; o.cols = cards.filter((c) => Math.abs(vis(c).top - top) < 2).length; }
+  for (const c of cards) { const r = vis(c); if (r.left < -1 || r.right > vw + 1) o.past.push(c.dataset.build + ' ' + Math.round(r.left) + '..' + Math.round(r.right)); }
+  for (const n of list.querySelectorAll('*')) {
+    if (/^(auto|scroll)$/.test(cs(n).overflowY) || /^(auto|scroll)$/.test(cs(n).overflowX)) o.boxes.push(n.tagName.toLowerCase() + '.' + (n.className || ''));
+    if (vis(n) && n.clientWidth && n.scrollWidth > n.clientWidth + 1 && cs(n).display !== 'inline') o.cut.push(n.tagName.toLowerCase() + '.' + n.className + ' [' + n.scrollWidth + '/' + n.clientWidth + ']');
+  }
+  for (const b of list.querySelectorAll('.bc-details, .bc-choose')) { const r = vis(b); if (r && r.height < 43.5) o.small.push(b.className + ' ' + Math.round(r.height)); }
+  for (const st of list.querySelectorAll('.bc-stars')) if (!/: [1-5] of 5 stars, (estimate|measured)/.test(st.getAttribute('aria-label') || '') || !/^[\u2605\u2606]{5}$/.test(st.textContent)) o.notext.push(st.getAttribute('aria-label') || '(none)');
   return o;
 }
 export function navNow(win) {

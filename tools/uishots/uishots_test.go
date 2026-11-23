@@ -228,3 +228,45 @@ func TestFitNavJudge(t *testing.T) {
 		t.Errorf("a navigation page with none: %v", bad)
 	}
 }
+
+// The Build tab verdicts (card buildcards): one column on a phone, a grid above, no scroll box, no sideways page, 44 px buttons,
+// the text equivalent of every star row.
+func TestFitBuildsJudge(t *testing.T) {
+	good := &fitBuilds{Cards: 5, Cols: 1}
+	if bad := good.judge(390, 390); len(bad) != 0 {
+		t.Errorf("a phone list of one column is a fit: %v", bad)
+	}
+	grid := &fitBuilds{Cards: 5, Cols: 3}
+	if bad := grid.judge(1366, 1366); len(bad) != 0 {
+		t.Errorf("a wide grid is a fit: %v", bad)
+	}
+	for name, c := range map[string]struct {
+		b      *fitBuilds
+		vw, sw int
+		want   string
+	}{
+		"grid on a phone": {&fitBuilds{Cards: 5, Cols: 2}, 390, 390, "want 1 on a phone"},
+		"one wide column": {&fitBuilds{Cards: 5, Cols: 1}, 1366, 1366, "want a grid"},
+		"sideways":        {&fitBuilds{Cards: 5, Cols: 1}, 390, 520, "scrolls sideways"},
+		"scroll box":      {&fitBuilds{Cards: 5, Cols: 1, Boxes: []string{"ul.x"}}, 390, 390, "scroll box"},
+		"small":           {&fitBuilds{Cards: 5, Cols: 1, Small: []string{"bc-details 30"}}, 390, 390, "too small"},
+		"no text":         {&fitBuilds{Cards: 5, Cols: 1, Notext: []string{"(none)"}}, 390, 390, "text equivalent"},
+		"no cards":        {&fitBuilds{}, 390, 390, "no card"},
+	} {
+		found := false
+		for _, b := range c.b.judge(c.vw, c.sw) {
+			found = found || strings.Contains(b, c.want)
+		}
+		if !found {
+			t.Errorf("%s: no verdict containing %q", name, c.want)
+		}
+	}
+	// an open detail takes the whole row: the column count is not judged then
+	if bad := (&fitBuilds{Cards: 5, Open: 1, Cols: 1}).judge(1366, 1366); len(bad) != 0 {
+		t.Errorf("an open detail on a wide window: %v", bad)
+	}
+	var none *fitBuilds
+	if none.judge(390, 390) != nil {
+		t.Error("a page without the list is not judged here")
+	}
+}
