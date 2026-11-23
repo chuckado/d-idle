@@ -193,3 +193,31 @@ func TestExitToOpensTheSameDoorOnEveryVisit(t *testing.T) {
 		})
 	}
 }
+
+// The nearest reachable cell toward a cut-off gate must not lie on the strip toward another level: walking there
+// changes the level (V live, scenario act1.tools.barracks: the Monastery Gate arrival pocket, the cell chosen was on
+// the south strip and the hero ended in the Tamoe Highland). Must fail without the strip filter.
+func TestApproachCellKeepsOffOtherLevelsStrip(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			g := openField(3000, 3000, 200, 120)
+			l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 200, H: 120}}
+			l3 := &simLevel{no: 3, rect: d2map.Rect{X: 3000, Y: 3120, W: 200, H: 40}}
+			s := newSim(g, input.Point{X: 3100, Y: 3050}, l1, l3)
+			s.reveal = 300
+			s.revealRooms()
+			n := s.navigator()
+			o, err := n.observeWait(ctxT(t))
+			if err != nil {
+				t.Fatal(err)
+			}
+			cell, ok := n.nearestReachableTo(o, input.Point{X: 3100, Y: 3140}, 2)
+			if !ok {
+				t.Fatal("no cell")
+			}
+			if cell.Y >= 3117 {
+				t.Fatalf("cell %v is on or beside the strip toward level 3", cell)
+			}
+		})
+	}
+}
