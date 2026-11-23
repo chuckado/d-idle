@@ -55,11 +55,13 @@ log() { printf '%s\n' "$*"; }
 status() { ops status 2>&1; }
 # rows of one quest: "chunk<TAB>state"
 rows_of() { printf '%s\n' "$1" | awk -F'\t' -v q="$2" '{ split($1, a, "/"); if (a[1] == q && NF >= 2) print a[2] "\t" $2 }'; }
+# active_quest ST: the quest that has an accepted or in_progress chunk (the board runs one chunk at a time)
+active_quest() { printf '%s\n' "$1" | awk -F'\t' 'NF >= 2 && ($2 == "accepted" || $2 == "in_progress") { split($1, a, "/"); print a[1]; exit }'; }
 kv() { printf '%s\n' "$1" | grep -o "$2=[^ ]*" | head -1 | cut -d= -f2-; }
 
 # run_quest QUEST: 0 done, 1 failed (budget), 3 skipped (locked), 4 deadline.
 run_quest() {
-  local q=$1 try=1 st rows verb out res outcome t0 stall=0 lastp="" cool=0 p ocode
+  local q=$1 try=1 st rows verb out res outcome t0 stall=0 lastp="" cool=0 p ocode act handed=0
   t0=$(now)
   log "## $q"
   while :; do
@@ -72,8 +74,17 @@ run_quest() {
     if ! printf '%s\n' "$rows" | grep -v -P '\t(done|skipped)$' | grep -qv -P '\t(locked|unavailable)$'; then
       log "- skipped: locked or unavailable"; return 3
     fi
-    if printf '%s\n' "$rows" | grep -q -P '\t(accepted|in_progress|awaiting_handin)$'; then
+    act=$(active_quest "$st")
+    if [ -n "$act" ] && [ "$act" != "$q" ]; then
+      log "- waiting on $act (accepted or running); skipping $q: busy"
+      run_quest "$act"; res=$?
+      [ $res -eq 4 ] && return 4
+      continue
+    fi
+    if printf '%s\n' "$rows" | grep -q -P '\t(accepted|in_progress)$'; then
       verb=""
+    elif printf '%s\n' "$rows" | grep -q -P '\tawaiting_handin$'; then
+      verb=""; [ $handed -eq 0 ] && { verb=handin; handed=1; }
     elif printf '%s\n' "$rows" | grep -q -P '\tblocked$'; then
       verb=retry
     else
@@ -86,6 +97,7 @@ run_quest() {
         ocode=$(kv "$out" code)
         case $ocode in
           cooldown) $sleeper "$backoff"; continue ;;
+          busy) log "  busy: another chunk runs, looking for it"; $sleeper "$backoff"; continue ;;
           rate_limited) log "  rate limited, waiting ${tries_backoff}s"; $sleeper "$tries_backoff"; continue ;;
           not_ready|locked|unavailable) log "- skipped: refused ($ocode)"; return 3 ;;
         esac
@@ -98,7 +110,7 @@ run_quest() {
     outcome=$(kv "$out" outcome)
     log "- [$(( $(now) - t0 ))s, try $try/$tries] $outcome step=$(kv "$out" step) chunk=$(kv "$out" chunk) progress=$(kv "$out" progress)"
     case $outcome in
-      finished) try=1; stall=0; lastp=""; t0=$(now); continue ;;
+      finished) try=1; stall=0; lastp=""; handed=0; t0=$(now); continue ;;
       timeout)
         p="$(kv "$out" step)/$(kv "$out" progress)"
         if [ "$p" != "$lastp" ]; then lastp=$p; stall=0; continue; fi
