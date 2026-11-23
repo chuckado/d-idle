@@ -167,3 +167,50 @@ func TestPoisonNovaProfileCurses(t *testing.T) {
 		t.Fatal("caster attack bands: Poison Nova from 30, Bone Spear from 18")
 	}
 }
+
+// necro nova: the Poison Nova caster profile reads its attack order from data; Poison Nova leads from clvl 30, a poison-immune
+// target falls back to Bone Spear, and a Paladin never gets a Necromancer attack (two classes, one rule).
+func TestPoisonNovaAttackAndImmuneFallback(t *testing.T) {
+	const idNova, idSpear, idTeeth = 92, 84, 67
+	cat := MapCatalog{Skills: map[int]*data.Skill{
+		idNova:  {ID: idNova, Key: "Poison Nova", Name: "Poison Nova", EType: "pois", Mana: 20, ManaShift: 8, MinMana: 20},
+		idSpear: {ID: idSpear, Key: "Bone Spear", Name: "Bone Spear", EType: "mag", Mana: 7, ManaShift: 8, MinMana: 7},
+		idTeeth: {ID: idTeeth, Key: "Teeth", Name: "Teeth", EType: "mag", Mana: 3, ManaShift: 8, MinMana: 3},
+	}}
+	p := &d2.Player{Class: d2.Necromancer, Level: 40, Mana: 200, MaxMana: 200,
+		Skills: []d2.Skill{{ID: idNova, Level: 20}, {ID: idSpear, Level: 10}, {ID: idTeeth, Level: 5}}}
+	keys := map[int]string{idNova: "f3", idSpear: "f2", idTeeth: "f1"}
+	known := KnownSkills(p, cat, keys)
+	pr, err := LookupProfile(d2.Necromancer, "poisonnova")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var order []SkillSpec
+	for _, n := range pr.AttackNames(40, func(n string) bool { _, ok := known[n]; return ok }) {
+		if sp, ok := known[n]; ok {
+			order = append(order, sp)
+		}
+	}
+	normal := &Target{HasRes: true}
+	if sp, why := PickByResist(order, normal, 200, nil); why != PickOK || sp.Name != "Poison Nova" || sp.Kind != KindSelf {
+		t.Fatalf("a normal pack gets Poison Nova: %v %v", sp.Name, why)
+	}
+	immune := &Target{HasRes: true, Res: [6]int{0, 0, 0, 0, 0, 0}}
+	immune.Res[data.Poison] = 100
+	if sp, why := PickByResist(order, immune, 200, nil); why != PickOK || sp.Name != "Bone Spear" {
+		t.Fatalf("a poison-immune target falls back to Bone Spear: %v %v", sp.Name, why)
+	}
+	// Below clvl 30 the band is Bone Spear first: the profile, not Go, holds the level.
+	if got := pr.AttackNames(20, func(n string) bool { return n != "Poison Nova" }); len(got) == 0 || got[0] != "Bone Spear" {
+		t.Fatalf("clvl 20 order %v", got)
+	}
+	// The same rule for a Paladin: no necro profile, the poison skills are not in its attack order.
+	if _, err := LookupProfile(d2.Paladin, "poisonnova"); err == nil {
+		t.Fatal("a Paladin must not get the poisonnova profile")
+	}
+	for _, n := range ProfileFor(d2.Paladin, "").AttackNames(40, func(string) bool { return true }) {
+		if n == "Poison Nova" {
+			t.Fatalf("the Paladin order holds Poison Nova")
+		}
+	}
+}

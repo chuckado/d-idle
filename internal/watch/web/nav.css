@@ -65,3 +65,20 @@
     .d-shell:not([data-template]) { min-block-size: calc(100dvh - var(--d-nav-h)); }
   }
 }
+
+@layer components {
+  /* The Settings sheet (web/settings.js, on the shared .d-sheet): two sections, labels visible, a reason line beside every off control. */
+  .d-sheet.d-set { inline-size: min(100%, 34rem); }
+  .d-set-sec { display: grid; gap: var(--d-sp-2); padding-block: var(--d-sp-2); border-block-start: 1px solid var(--d-line); }
+  .d-set-h { margin: 0; font-size: var(--d-fs-2); }
+  .d-set-hint, .d-set-why, .d-set-meta { margin: 0; color: var(--d-text-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .d-set-why[hidden] { display: none; }
+  .d-set-row { display: grid; gap: var(--d-sp-1); justify-items: start; }
+  .d-set-list { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--d-sp-2); }
+  .d-set-rule { display: grid; gap: var(--d-sp-1); justify-items: start; overflow-wrap: anywhere; }
+  .d-set-empty { color: var(--d-text-2); }
+  .d-set-check { display: flex; gap: var(--d-sp-2); align-items: center; min-block-size: 44px; }
+  .d-set .d-btn { min-block-size: 44px; }
+  .d-set-toasts { display: grid; gap: var(--d-sp-1); }
+  .d-set-toasts:empty { display: none; }
+}

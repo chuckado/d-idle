@@ -32,6 +32,7 @@ type AuditEvent struct {
 	Status  int       `json:"status"`
 	Code    string    `json:"code,omitempty"`
 	Reason  string    `json:"reason,omitempty"`
+	Why     string    `json:"why,omitempty"` // the operator's stated reason (internal/ops); empty for the viewer
 }
 
 // Audit is the ring file <hero>.audit.jsonl next to the plan file. Concurrent use is safe within one process.
