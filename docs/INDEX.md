@@ -363,6 +363,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `design/fable-review-2026-11-22/`
 
+- [e11-deletion-plan.md](design/fable-review-2026-11-22/e11-deletion-plan.md): E11 deletion plan (PLAN ONLY: nothing is deleted by this document) (status: proposal for the user to approve. Source: ui-unification.md C2, C3, C4, C9, C15, F2; user answers...)
 - [ui-unification-appendix-pages.md](design/fable-review-2026-11-22/ui-unification-appendix-pages.md): UI unification review, appendix: page and panel inventory (status: current (review of 2026-11-22, card fableui). Belongs to ui-unification.md. Docs only.)
 - [ui-unification.md](design/fable-review-2026-11-22/ui-unification.md): UI unification review: navigation, cruft and readable build pages (2026-11-22) (status: DESIGN REVIEW, nothing built (card fableui). Docs only. The user decides the open questions in section F;...)
 

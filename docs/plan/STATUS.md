@@ -432,6 +432,7 @@
 | allochandoff | proposed | - | `internal/points`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`docs/autoalloc.md`<br>`tools/provingground/scenarios/autoalloc.json` | - |
 | opsquest | proposed | - | `cmd/d2bot/ops*.go`<br>`cmd/d2bot/main.go`<br>`cmd/d2bot/questwire.go`<br>`internal/ops/**`<br>`internal/questboard/audit.go`<br>`docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
 | uisettings | proposed | - | `internal/watch/web/settings.js`<br>`internal/watch/web/nav.js`<br>`internal/watch/web/nav.json`<br>`internal/watch/web/nav.css`<br>`internal/watch/web/sheet.js`<br>`internal/watch/settingsjs_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/settings/`<br>`docs/ui-design-system.md` | - |
+| uisettings2 | proposed | - | `docs/design/fable-review-2026-11-22/e11-deletion-plan.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -465,6 +466,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 3a985a15d 11-23 00:39 `Merge agent/uisettings2: Merge branch 'main' into uisettings2` (uisettings2)
+- f83d567d0 11-23 00:38 `Merge branch 'main' into uisettings2` (-)
 - 7b0e338ac 11-23 00:31 `Merge agent/opsquest: Merge branch 'main' into opsquest` (opsquest)
 - ab0a6d7e1 11-23 00:29 `Merge branch 'main' into opsquest` (-)
 - ebc42d7d2 11-23 00:22 `Merge agent/uisettings: Merge branch 'main' into uisettings` (uisettings)
@@ -473,6 +476,4 @@
 - ae7081d15 11-22 23:41 `Merge agent/toolstrade6: Merge branch 'main' into toolstrade6` (toolstrade6)
 - c63b5287c 11-22 23:39 `Merge branch 'main' into toolstrade6` (-)
 - b9a9937ee 11-22 23:33 `Merge agent/allochandoff: Merge branch 'main' into allochandoff` (allochandoff)
-- 1b1ac2c18 11-22 23:31 `Merge branch 'main' into allochandoff` (-)
-- a4dde0450 11-22 23:29 `Merge agent/plan3: Merge branch 'main' into plan3` (plan3)
 <!-- statusgen:end -->
