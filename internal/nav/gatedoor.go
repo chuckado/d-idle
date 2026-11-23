@@ -58,7 +58,7 @@ func (n *Navigator) openDoorToward(ctx context.Context, o *obs, cands []gate, le
 		}
 	}
 	at, found := n.doorBetween(o, cands, doors)
-	if !found && !approach { // a spot behind several doors: the first closed door on the way is the next step
+	if !found { // a goal behind several doors: the first closed door on the way is the next step (gates too: Claw Viper Temple 1)
 		if at, found = n.doorOnPath(o, cands[0].at, doors); !found {
 			at, found = n.doorOnTheWay(o, cands[0].at, doors)
 		}

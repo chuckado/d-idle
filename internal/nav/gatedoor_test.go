@@ -447,3 +447,48 @@ func TestGoToUnitOpensTheDoorToAUnitBehindIt(t *testing.T) {
 		})
 	}
 }
+
+// Two doors in a row between the hero and a GATE: no single door joins both sides, ExitTo opens the first on the way, walks,
+// and opens the next (V drill.act2.amulet: Claw Viper Temple 1, "cut-off gate, no door beside it, nearest preset 45").
+// Must fail without the chain step for gates.
+func TestExitToOpensTwoDoorsInARow(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			g := openField(3000, 3000, 340, 100)
+			blockRect(g, d2map.Rect{X: 3080, Y: 3000, W: 2, H: 100})
+			blockRect(g, d2map.Rect{X: 3160, Y: 3000, W: 2, H: 100})
+			c1 := d2map.Rect{X: 3080, Y: 3048, W: 2, H: 18}
+			c2 := d2map.Rect{X: 3160, Y: 3048, W: 2, H: 18}
+			l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 240, H: 100}}
+			l2 := &simLevel{no: 2, rect: d2map.Rect{X: 3240, Y: 3000, W: 100, H: 100}}
+			s := newSim(g, input.Point{X: 3010, Y: 3057}, l1, l2)
+			s.reveal = 400
+			s.levels[0].lm.Presets = []d2map.Preset{
+				{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: 3081, Y: 3057}},
+				{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: 3161, Y: 3057}},
+			}
+			s.objects = []d2.Unit{d2Unit(77, 24, 3081, 3057), d2Unit(78, 24, 3161, 3057)}
+			opened := 0
+			s.onInteract = func(s *sim, tg input.Target) error {
+				switch tg.ID {
+				case 77:
+					opened++
+					openDoor(s, c1)
+				case 78:
+					opened++
+					openDoor(s, c2)
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class == 24 }
+			n.exploreFn = func(_ context.Context, _ func() bool, _ *input.Point) error { return ErrExplored }
+			if err := n.ExitTo(ctxT(t), 2); err != nil {
+				t.Fatalf("%s: exit: %v", cls, err)
+			}
+			if opened != 2 || s.cur().no != 2 {
+				t.Fatalf("%s: doors used %d, level %d at %v", cls, opened, s.cur().no, s.pos())
+			}
+		})
+	}
+}
