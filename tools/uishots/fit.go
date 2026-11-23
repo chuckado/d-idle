@@ -65,6 +65,16 @@ const pop = (d, sel, c) => {
 };
 const o = %s, f = document.getElementById('f'), out = document.getElementById('fit-result');
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+// settle: a press is judged after the page has answered it, not after a guessed time. Waits until no fetch of the page is in flight and the
+// DOM has been quiet for a moment (card fitfix3: the reveal, select and sheet pages flipped between runs when a re-render landed after the judge).
+const settle = async (w, quiet = 300, max = 1500) => {
+  if (!w.__fitBusy) { w.__fitBusy = { n: 0 }; const of = w.fetch.bind(w); w.fetch = (...a) => { w.__fitBusy.n++; return of(...a).finally(() => { w.__fitBusy.n--; }); }; }
+  let since = 0;
+  const mo = new w.MutationObserver(() => { since = 0; });
+  mo.observe(w.document.documentElement, { subtree: true, childList: true, attributes: true, characterData: true });
+  for (let t = 0; t < max; t += 50) { await wait(50); since += 50; if (w.__fitBusy.n === 0 && since >= quiet) break; }
+  mo.disconnect();
+};
 let stage = 'before load';
 // a measurement that never finishes says where it stopped (a thrown error in the page or the harness is a verdict, not a silence)
 setTimeout(() => { if (!out.textContent) out.textContent = JSON.stringify({ error: 'stalled after: ' + stage }); }, 21000);
@@ -95,13 +105,13 @@ f.addEventListener('load', async () => {
       m.clicked = steps.join(' then ');
       for (const raw of steps) {
         const opt = raw[0] === '?', sel = opt ? raw.slice(1) : raw, b = f.contentDocument.querySelector(sel);
-        if (b) { b.click(); await wait(f.contentDocument.body.hasAttribute('data-vault') ? 900 : 500); } else if (!opt) { m.missing = sel; break; }
+        if (b) { b.click(); await wait(500); await settle(f.contentWindow); } else if (!opt) { m.missing = sel; break; }
       }
     }
     m.ov = overlayState(f.contentWindow);
     if (steps.length) m.nav = navNow(f.contentWindow); // the page after its pressing: the More sheet is open now
     m.flow = !!o.flow; // a page that is a document (Skills, Points, Return ...): it scrolls on purpose
-    if (steps.length) m.hits = hits(f.contentWindow, o.hit);
+    if (steps.length) { m.hits = hits(f.contentWindow, o.hit); for (let k = 0; k < 4 && Object.values(m.hits).includes(false); k++) { await settle(f.contentWindow, 400, 800); m.hits = hits(f.contentWindow, o.hit); } } // a target that is not there yet is waited for; one that never comes is the verdict
     if (steps.length && f.contentDocument.body.hasAttribute('data-chars')) m.chars = charsNow(f.contentWindow); // the page with its sheet open
     if (steps.length && f.contentDocument.body.hasAttribute('data-vault')) m.vault = vaultNow(f.contentWindow);
     const ex = (o.expect || []).filter(Boolean);
