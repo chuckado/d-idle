@@ -39,14 +39,29 @@ The "143 at 390x844" quoted earlier came from `--fit --sizes 390x844`, which for
 | F6 | `overflow-fixture`, `overflow-nested`, `overflow-fakescroll`, `tall-frame` must fail, run at 390x844 | 3 (+ the same at the forced size) | FIXTURE ARTIFACT: desk-frame defects that cannot occur on the scrolling phone | those pages run at desk sizes only; test `TestDeskFixturesRunAtDeskSizes` | `fit-overflow-fakescroll-390x844` |
 | R4 | quest tile text cut (`Handing in ...`, 5 px) | 6 | REAL | line-height 1.25 on the two lines (`panels/quest-strip/panel.css`): fixed at 1280x620 to 1920x1080 except two sizes, see open | `fit-quest-handing-1366x768` |
 
-## Open (16 runs in the full re-measure after cards uifit1; none silenced)
+## Closed by card uifit3
+
+| id | what | verdict | done |
+|---|---|---|---|
+| R4b | quest tile "handing" at 1536x730 and 1904x1000 | REAL: the reason line beside the disabled button wrapped to five lines and squeezed the tile's two text lines to 0 px | the reason takes at most two short lines (line clamp, full text as its title) (`panels/quest-strip`); all `quest-*` pages pass at every size except the R5 ones |
+| R6 | `health .h-btn` 7 px at 1280x620 | REAL, small: the unknown light's word wrapped to two lines in a short cell | one line with an ellipsis in a short cell (`panels/health/panel.css`); `strip-unknown-1280x620` passes |
+| R7 | `char-store` 136 px empty square at 1920x1080 | BORDERLINE: 1 px over a line of 135 px; the layout is the same as its 108 to 124 px neighbours | `fitInner` 135 to 140 with rows at 136 (pass), 140 (pass), 141 and 145 (fail) in `fit_char_test.go` |
+
+## Open
+
+### R5: the needs-you list on a 360x640 phone (10 runs; a design decision for you)
+
+In the compact phone strip the needs-you list is a 40 px box when two or more things need you; the rest is reached by scrolling inside the box. The fit rule calls that an overflow because the box is not a declared scroller, and your rule for phones is "no inner scroll box". Two options:
+
+- **A. Keep the 40 px box** and declare it (`data-scroll`) so the fit rule accepts it. The strip stays short: the picture, tabs and Orders stay in view. You scroll inside a small box to see the second and third need. Picture: `docs/ui/fit-triage/needs-you-option-a-360x640.png` (fixture data).
+- **B. Let the list grow** on a phone (remove the 40 px limit; the page already scrolls). Every need is visible and tappable at once, the box has no inner scroll; the page grows by about 82 px with three needs, pushing the tabs down. Picture: `docs/ui/fit-triage/needs-you-option-b-360x640.png`.
+
+My recommendation: B (it follows the no-inner-scroll rule and a hero with three needs wants all three visible). The change is one line (`web/utilities.css`, the `max-block-size: 40px` of the phone needs-you list) plus the fit pages `menu-groups`, `quest-needs3`, `quest-away` would pass.
+
+### Other
 
 | id | what | runs | verdict | next step |
 |---|---|---|---|---|
-| R5 | `needs-you .n-list` 40 px box with 2+ rows at 360x640 (overflows by 32 to 82 px) | 10 | DESIGN question: the list is a small scroll box (`overflow-y: auto`) in a compact phone strip; the fit rule wants a declared scroller. Brief rule: no inner scroll box on a phone | decision for the user: page-grow the list on a phone, or declare `data-scroll` |
-| R4b | quest tile at 1536x730 (13 px) and 1904x1000 (12 px) in the "handing" state | 2 | REAL | the tile needs about 108 px and gets 96; compact the state or give the strip cell more |
-| R6 | `health .h-btn` 7 px high at 1280x620 (`strip-unknown`) | 1 | REAL, small | health tile at a short window |
-| R7 | `char-store` 136 px empty square at 1920x1080 (`character-iddoing`) | 2 | REAL layout hole | character screen with a pending identify |
-| R8 | orders sheet past the window at 360x640 (`chars-more-entry`) | 1 | STALE (F1 family): the sheet sits in a tile below the fold of the scrolling phone page | closed in card uifit2: `sheetOnlyBelow` (a sheet that starts under the header and only ends past the window, on a scrolling phone page); a sheet under the header or on a wide window still fails. Checked with the single page on the worker host |
+| R8 | orders sheet past the window at 360x640 | closed in card uifit2 | | |
 
-Not touched: `gate.go` (the sign-in page) uses the setup wizard's own `/login.css` (class `.btn` there), not `app.css`, so it does not block removing `app.css`; moving it to the watch components would need those stylesheets served before sign-in (not done).
+Not touched: `gate.go` (the sign-in page) uses the setup wizard's own `/login.css` (class `.btn` there), not `app.css`, so it does not block removing `app.css`.
