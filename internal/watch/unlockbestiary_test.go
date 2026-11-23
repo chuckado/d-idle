@@ -50,7 +50,7 @@ func bestiaryRig(t *testing.T, class string) (*funRig, *unlock.Engine) {
 
 func bestiaryOf(r *funRig) BestiaryView {
 	var v BestiaryView
-	r.getJSON(BestiaryRoute, &v)
+	v = r.fun.Bestiary.View()
 	return v
 }
 
@@ -110,7 +110,7 @@ func TestBestiarySpoilerRule(t *testing.T) {
 	r, _ := bestiaryRig(t, "Sorceress")
 	r.feed(kills("Fallen", 49, 1)...)
 	r.feed(kills("Zombie", 2, 50)...)
-	_, raw := r.do("GET", r.view, BestiaryRoute, funToken, "")
+	raw, _ := json.Marshal(r.fun.Bestiary.View())
 	if strings.Contains(string(raw), "resists") || strings.Contains(string(raw), "immune") {
 		t.Fatalf("resist details before the 50th kill: %s", raw)
 	}

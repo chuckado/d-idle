@@ -3,7 +3,6 @@ package watch
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"strings"
 
 	atlasdata "d2lod-bot/data/atlas"
@@ -14,9 +13,8 @@ import (
 // trigger codex_first waypoint). View only: lit comes from the Codex, the proposal from the zone proposals.
 
 const (
-	// AtlasRoute is GET (viewer); AtlasID is the ladder row.
-	AtlasRoute = "/api/atlas"
-	AtlasID    = "atlas"
+	// AtlasID is the ladder row.
+	AtlasID = "atlas"
 
 	atlasSchema = "watch.atlas/1"
 )
@@ -80,7 +78,7 @@ type AtlasSlot struct {
 	Next   bool   `json:"next,omitempty"` // the hero proposes this zone next
 }
 
-// AtlasView is GET /api/atlas. Locked: open false, the teaser, no slots.
+// AtlasView is the atlas data (no route). Locked: open false, the teaser, no slots.
 type AtlasView struct {
 	Schema string      `json:"schema"`
 	Open   bool        `json:"open"`
@@ -138,15 +136,4 @@ func (a *Atlas) View() AtlasView {
 		v.Slots = append(v.Slots, s)
 	}
 	return v
-}
-
-// Handler serves GET /api/atlas.
-func (a *Atlas) Handler() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet && r.Method != http.MethodHead {
-			http.Error(w, "GET only", http.StatusMethodNotAllowed)
-			return
-		}
-		writeJSON(w, 200, a.View())
-	})
 }

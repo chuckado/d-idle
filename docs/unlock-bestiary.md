@@ -17,7 +17,7 @@ Spoiler rule: no resist or immunity field is sent before the 50th kill of that k
 
 ## Pieces
 
-- `internal/watch/unlockbestiary.go`: `Bestiary`, `GET /api/bestiary`, schema `watch.bestiary/1`, the return screen section "New in Cain's notes" (cards and resist pages opened since the viewer left).
+- `internal/watch/unlockbestiary.go`: `Bestiary` (the `GET /api/bestiary` route was deleted 2026-11-23), schema `watch.bestiary/1`, the return screen section "New in Cain's notes" (cards and resist pages opened since the viewer left).
 - `data/bestiary/notes.json`: the kinds (name, family, flavour, drops, tip, tipTag S or U). Type, attack pattern and resists come from the extracted tables (`data.Monster`), through the `MonsterTables` interface (`FunConfig.Monsters`). With no tables the cards carry flavour only (`tables:false`). With tables, a kind missing from the monster table is an error naming it.
 - `internal/watch/web/unlockui.js`, `watch.html`: the panel.
 - Kills are counted per kind from the goals kill events (a replayed `Seq` never counts twice). `cmd/d2bot` keeps them in `bestiary-<profile>.json` in the state dir (`FunConfig.BestiaryPath`, `Bestiary.SetStore`), so a restart goes on from the old counts (V `TestBestiaryWiredWithTableAndRestart`).

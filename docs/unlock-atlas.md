@@ -13,7 +13,7 @@ The Act 1 waypoints as numbered nodes: lit for the ones the hero has taken, silh
 ## Pieces
 
 - `data/atlas/waypoints.json`: the nine Act 1 waypoints in the SME's order (S, `docs/research/fun-ideas.md` Q-S6): Rogue Encampment, Cold Plains, Stony Field, Dark Wood, Black Marsh, Outer Cloister, Jail Level 1, Inner Cloister, Catacombs Level 2. Each has the levels.txt area id (V `internal/saves/progress.go` waypointTable) and the Codex id that records it (V `internal/decide/firsts_act1.json`, checked by `TestAtlasTableAndErrors`). Nothing outside Act 1 yet.
-- `internal/watch/unlockatlas.go`: `Atlas`, `GET /api/atlas`, schema `watch.atlas/1`. Lit comes from `decide.Codex.Has`, the proposal from the first pending `ProposalDesk` item. The town waypoint is lit from the start (S: it is active in a new game).
+- `internal/watch/unlockatlas.go`: `Atlas`, (the `GET /api/atlas` route was deleted 2026-11-23), schema `watch.atlas/1`. Lit comes from `decide.Codex.Has`, the proposal from the first pending `ProposalDesk` item. The town waypoint is lit from the start (S: it is active in a new game).
 - `internal/watch/web/unlockui.js`, `watch.html`: the panel.
 
 ## Rules kept
@@ -24,7 +24,7 @@ The Act 1 waypoints as numbered nodes: lit for the ones the hero has taken, silh
 
 ## Wiring
 
-`cmd/d2bot` needs no config for the atlas (TASK-185): `NewFun` builds it from the ladder row, the Codex and the proposal desk. V `TestBestiaryWiredWithTableAndRestart` fetches `/api/atlas` through the real wiring.
+`cmd/d2bot` needs no config for the atlas (TASK-185): `NewFun` builds it from the ladder row, the Codex and the proposal desk. V `TestBestiaryWiredWithTableAndRestart` checks the atlas is wired.
 
 ## Verified
 

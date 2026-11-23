@@ -22,8 +22,7 @@ const (
 	AwayUnlock = "unlock"
 	// UnlocksSectionID is the return screen section id.
 	UnlocksSectionID = "unlocks"
-	// UnlocksRoute is GET (viewer); UnlocksBuyRoute is POST (answer listener).
-	UnlocksRoute    = "/api/unlocks"
+	// UnlocksBuyRoute is POST (answer listener).
 	UnlocksBuyRoute = "/api/unlocks/buy"
 
 	unlocksSchema = "watch.unlocks/1"
@@ -146,7 +145,7 @@ func (u *Unlocks) OnFired(fired []decide.Fired) {
 	}
 }
 
-// UnlocksView is GET /api/unlocks. Locked entries carry the teaser, never the text.
+// UnlocksView is the unlocks list (no route; the ladder and return screen use it). Locked entries carry the teaser, never the text.
 type UnlocksView struct {
 	Schema  string         `json:"schema"`
 	Open    []unlock.State `json:"open"`
@@ -171,17 +170,6 @@ func (u *Unlocks) View() UnlocksView {
 		}
 	}
 	return v
-}
-
-// Handler serves GET /api/unlocks.
-func (u *Unlocks) Handler() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet && r.Method != http.MethodHead {
-			http.Error(w, "GET only", http.StatusMethodNotAllowed)
-			return
-		}
-		writeJSON(w, 200, u.View())
-	})
 }
 
 // Section is the return screen's "Unlocked since you left". Hidden when nothing opened in the window.

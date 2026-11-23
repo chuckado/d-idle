@@ -3,7 +3,6 @@ package watch
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -20,8 +19,7 @@ import (
 // kill events the tally reads and reads the extracted tables through MonsterTables; it never reads the game.
 
 const (
-	// BestiaryRoute is GET (viewer). The two ladder rows gate the panel and the resist details.
-	BestiaryRoute         = "/api/bestiary"
+	// The two ladder rows gate the panel and the resist details.
 	BestiaryID            = "bestiary"
 	BestiaryResistsID     = "bestiary_resists"
 	BestiarySectionID     = "bestiary"
@@ -118,7 +116,7 @@ type BestiaryCard struct {
 	Resists *BestiaryDetails `json:"resists,omitempty"`
 }
 
-// BestiaryView is GET /api/bestiary. Locked: open false, the teaser, no cards.
+// BestiaryView is the bestiary panel data (no route). Locked: open false, the teaser, no cards.
 type BestiaryView struct {
 	Schema string         `json:"schema"`
 	Open   bool           `json:"open"`
@@ -351,17 +349,6 @@ func (b *Bestiary) View() BestiaryView {
 		v.Cards = append(v.Cards, c)
 	}
 	return v
-}
-
-// Handler serves GET /api/bestiary.
-func (b *Bestiary) Handler() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet && r.Method != http.MethodHead {
-			http.Error(w, "GET only", http.StatusMethodNotAllowed)
-			return
-		}
-		writeJSON(w, 200, b.View())
-	})
 }
 
 // Section is the return screen's "New in Cain's notes": the cards and resist pages that opened since the viewer left.
