@@ -18,7 +18,7 @@ owns:
   - "docs/probes/tools-trade-2026-11-22.md"
 exclusive: []
 contracts: []
-result: "Diagnostic only: the next lab run names the monsters in the Barracks; the Smith is still not found in the lab (V runs, level 28 hero, knobs on and off)."
+result: "Smith anchor resolves by name (quests.layoutRead + debug levelmonsters) and a not-found boss run notes the monsters in view; unit-tested, lab run with the knob on pending."
 ---
 
 ## Description
