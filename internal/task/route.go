@@ -34,10 +34,17 @@ func BarracksWhy(w World) string {
 	if w.BarracksMinLevel > 0 && w.Level < w.BarracksMinLevel {
 		return fmt.Sprintf("level %d needed for the Barracks (clvl %d)", w.BarracksMinLevel, w.Level)
 	}
-	if w.BarracksMinLife > 0 && w.MaxLife > 0 && w.MaxLife < w.BarracksMinLife {
-		return fmt.Sprintf("max life %d needed for the Barracks (have %d)", w.BarracksMinLife, w.MaxLife)
+	if w.BarracksMinLife > 0 && w.MaxLife > 0 && w.MaxLife < w.BarracksMinLife && !BarracksLifeWaived(w) {
+		return fmt.Sprintf("life %d/%d needed for the Barracks (clvl %d)", w.MaxLife, w.BarracksMinLife, w.Level)
 	}
 	return ""
+}
+
+// BarracksLifeWaived: the character is BarracksLifeWaiver levels above the level floor, so the life floor no longer holds
+// it back (a build whose life grows slowly must not train forever; docs/probes/tools-trade-2026-11-22.md round 29).
+func BarracksLifeWaived(w World) bool {
+	return w.BarracksLifeWaiver > 0 && w.BarracksMinLevel > 0 && w.Level >= w.BarracksMinLevel+w.BarracksLifeWaiver &&
+		w.BarracksMinLife > 0 && w.MaxLife > 0 && w.MaxLife < w.BarracksMinLife
 }
 
 // Tower guard (TOWERGUARD, G1 attempt 17: Soaky, clvl 14 caster, no merc, empty belt, died twice in the Tower Cellar for
