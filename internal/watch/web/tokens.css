@@ -113,5 +113,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     :root { --d-dur-1: 0ms; --d-dur-2: 0ms; --d-dur-3: 0ms; }
+    /* every animation with a literal duration (the inventory pulse): one frame, no loop */
+    *, ::before, ::after { animation-duration: .01ms; animation-iteration-count: 1; }
   }
 }

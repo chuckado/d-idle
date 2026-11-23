@@ -51,12 +51,12 @@ func fitHarness(w http.ResponseWriter, r *http.Request) {
 	}
 	// hover and ctx: a selector to hover (pointerover, as a mouse does) or to right-click before the measurement; the tooltip or the
 	// menu it opens must lie inside the window and, beside a cell, not cover it
-	opts, _ := json.Marshal(map[string]any{"page": u, "click": strings.Split(q.Get("click"), "|"), "hit": strings.Split(hit, ","), "hover": q.Get("hover"), "scroll": q.Get("scroll"), "ctx": q.Get("ctx"), "expect": strings.Split(q.Get("expect"), "|"), "flow": q.Get("flow") == "1"})
+	opts, _ := json.Marshal(map[string]any{"page": u, "click": strings.Split(q.Get("click"), "|"), "hit": strings.Split(hit, ","), "hover": q.Get("hover"), "scroll": q.Get("scroll"), "ctx": q.Get("ctx"), "expect": strings.Split(q.Get("expect"), "|"), "flow": q.Get("flow") == "1", "ts": q.Get("ts") == "1"})
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Fprintf(w, `<!doctype html><html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
 <iframe id="f" src="%s" width="%d" height="%d" style="border:0;display:block"></iframe><pre id="fit-result"></pre>
 <script type="module">
-import { measure, hits, expects, overlayState, charsNow, vaultNow, navNow } from '/__fit/fit.js';
+import { measure, hits, expects, overlayState, charsNow, vaultNow, navNow, textScale } from '/__fit/fit.js';
 const pop = (d, sel, c) => {
   const n = d.querySelector(sel), r = n && !n.hidden ? n.getBoundingClientRect() : null;
   if (!r || !r.width) return { open: false, sel };
@@ -81,6 +81,8 @@ setTimeout(() => { if (!out.textContent) out.textContent = JSON.stringify({ erro
 window.addEventListener('error', (e) => { if (!out.textContent) out.textContent = JSON.stringify({ error: 'script error: ' + e.message }); });
 f.addEventListener('load', async () => {
   stage = 'loaded'; await wait(5000); stage = 'waited';
+  // ts: a reader's text size at 200 percent (the browser setting scales the root font size); the page is judged after it has reflowed
+  if (o.ts) { f.contentDocument.documentElement.style.fontSize = '200%%'; await wait(1500); }
   // the character screen draws from its first view: measure only once its grids hold cells (a slow first answer is a late page, not a fit result)
   for (let i = 0; i < 30 && f.contentDocument.body.hasAttribute('data-canvas') && !(f.contentDocument.querySelector('#equip .d-slot2') && f.contentDocument.querySelector('#pack [data-key]') && f.contentDocument.getElementById('merc-sub').textContent && f.contentDocument.getElementById('cv-sel').firstChild && f.contentDocument.getElementById('hsheet').children.length > 4); i++) await wait(500);
   if (f.contentDocument.body.hasAttribute('data-canvas')) await wait(1500);
@@ -110,6 +112,7 @@ f.addEventListener('load', async () => {
     }
     m.ov = overlayState(f.contentWindow);
     if (steps.length) m.nav = navNow(f.contentWindow); // the page after its pressing: the More sheet is open now
+    if (o.ts) m.ts = textScale(f.contentWindow);
     m.flow = !!o.flow; // a page that is a document (Skills, Points, Return ...): it scrolls on purpose
     if (steps.length) { m.hits = hits(f.contentWindow, o.hit); for (let k = 0; k < 4 && Object.values(m.hits).includes(false); k++) { await settle(f.contentWindow, 400, 800); m.hits = hits(f.contentWindow, o.hit); } } // a target that is not there yet is waited for; one that never comes is the verdict
     if (steps.length && f.contentDocument.body.hasAttribute('data-chars')) m.chars = charsNow(f.contentWindow); // the page with its sheet open
@@ -185,6 +188,7 @@ type fitResult struct {
 	} `json:"pop"`
 	Expect map[string]bool `json:"expect"`
 	Flow   bool            `json:"flow"`
+	TS     *fitTS          `json:"ts"`
 	Nav    *fitNav         `json:"nav"`
 	Builds *fitBuilds      `json:"builds"`
 	Chars  *fitChars       `json:"chars"`
@@ -304,8 +308,34 @@ func sheetOnlyBelow(x string) bool {
 	return top >= hdr
 }
 
+// fitTS is what fit.js textScale measures with the root font size at 200 percent: the page scrolls sideways, a control reaches past the
+// window, a control's own text is cut (a clipped box that is not an ellipsis by design).
+type fitTS struct {
+	ScrollW int      `json:"scrollW"`
+	VW      int      `json:"vw"`
+	Outside []string `json:"outside"`
+	Clipped []string `json:"clipped"`
+}
+
+func (t fitTS) judge() []string {
+	var bad []string
+	if t.ScrollW > t.VW {
+		bad = append(bad, fmt.Sprintf("at 200%% text the page scrolls sideways: scrollWidth %d > innerWidth %d", t.ScrollW, t.VW))
+	}
+	for _, o := range t.Outside {
+		bad = append(bad, "at 200% text a control reaches past the window: "+o)
+	}
+	for _, c := range t.Clipped {
+		bad = append(bad, "at 200% text a control's text is cut: "+c)
+	}
+	return bad
+}
+
 // judge returns what is wrong with a measured page; an empty list is a fit.
 func (r fitResult) judge() []string {
+	if r.TS != nil { // a text-size page (ts200-NAME): only what the larger text breaks is judged here; the page's own lane judges its content
+		return r.TS.judge()
+	}
 	if r.Flow { // the navigation pages (nav-NAME): a document that scrolls on purpose; the page's own fit lane judges its content, this one the navigation
 		if r.Nav == nil {
 			return []string{"the page has no navigation (nav.js is not loaded)"}
