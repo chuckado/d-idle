@@ -412,7 +412,6 @@
 | necroready | proposed | - | `docs/probes/necromancer-readiness-2026-11-22.md`<br>`cmd/d2bot/autoallocwire.go`<br>`cmd/d2bot/autoallocwire_test.go` | - |
 | necrodrill | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md`<br>`docs/probes/necromancer-readiness-2026-11-22.md` | - |
 | tapall | proposed | - | `cmd/d2scenario/tap.go`<br>`cmd/d2scenario/tap_test.go`<br>`internal/scenario/scenario.go` | - |
-| uisheet | proposed | - | `internal/watch/web/sheet.js`<br>`internal/watch/web/buildcards.js`<br>`internal/watch/web/app.js`<br>`internal/watch/web/skills.js`<br>`internal/watch/web/update.js`<br>`internal/watch/web/watch.html`<br>`internal/watch/web/components.css`<br>`internal/watch/web/points.css`<br>`internal/watch/web/shell.css`<br>`internal/watch/pointsui.go`<br>`internal/watch/skillsui.go`<br>`internal/watch/update.go`<br>`internal/watch/http_view.go`<br>`internal/watch/sheet_noprompt_test.go`<br>`internal/watch/buildcards_test.go`<br>`internal/watch/testdata/sheet_test.cjs`<br>`internal/watch/testdata/buildcards_test.cjs`<br>`docs/ui/uisheet`<br>`docs/ui-design-system.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
