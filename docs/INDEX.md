@@ -1150,6 +1150,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [survival-holdout5-2026-11-21.md](probes/survival-holdout5-2026-11-21.md): Survival A/B holdout 5: Sorceress 8 fresh seeds, Paladin 2 (2026-11-21) (status: current (card survhold8). Tags: V verified (abreport and bot logs of this run), I inferred....)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
+- [tools-trade-2026-11-22.md](probes/tools-trade-2026-11-22.md): Tools of the Trade stuck at a border exit (card toolstrade, 2026-11-22) (status: current. Tags: V = measured in a named run, S = source reading, U = unverified. Setups are CHEATED...)
 - [town-plan-scenarios.md](probes/town-plan-scenarios.md): Town planner scenarios (card town1) (status: current (2026-11-21). Source: docs/design/fable-review-2026-11-21/town-planner-b-model.md section B4.)
 - [town-plan-stage2-2026-11-21.md](probes/town-plan-stage2-2026-11-21.md): Town planner, stages 1 and 2 (2026-11-21) (status: current. Design: docs/design/fable-review-2026-11-21/town-planner.md and appendix B. Nothing here was run...)
 - [town-plan-stage3-2026-11-22.md](probes/town-plan-stage3-2026-11-22.md): Town planner, stage 3 (purse), 2026-11-22 (status: current. Design: docs/design/fable-review-2026-11-21/town-planner-b-model.md (card tp-purse, TASK-757)....)

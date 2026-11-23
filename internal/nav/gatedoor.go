@@ -84,6 +84,18 @@ func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool 
 	return true
 }
 
+// doorAfterShortWalk: the walk toward a gate ended at "the closest reachable point" (the plan looked complete when the
+// gate was picked, the strip behind a closed door turned out not to be: V live, scenario act1.tools.malus, Monastery
+// Gate to Outer Cloister, the walk stopped 5 subtiles short of the border row and ExitTo gave up, the board step
+// parked after three of those). Look for the door at the character's new position. Reports whether it acted.
+func (n *Navigator) doorAfterShortWalk(ctx context.Context, levelNo int) bool {
+	cur, err := n.observeWait(ctx)
+	if err != nil || cur.level == levelNo {
+		return false
+	}
+	return n.openGateDoor(ctx, cur, levelNo)
+}
+
 // approachGate walks to the reachable cell nearest to a cut-off gate, at most twice per level pair: the map lists the
 // objects of the rooms that are up, and a door at the far end of the level is not up while the hero stands at the
 // other end (V live, Monastery Gate: 5 objects listed from the arrival point, the nearest 42 subtiles off, the door
