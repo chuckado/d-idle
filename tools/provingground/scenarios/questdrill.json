@@ -283,6 +283,129 @@
      "kind": "no_writes"
     }
    ]
+  },
+  {
+   "id": "drill.act1.sail",
+   "title": "Quest drill: Andariel dead, Warriv takes the hero east to Lut Gholein (board-driven hand-in)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "act1_done",
+    "chunk": "sail_east"
+   },
+   "step": {
+    "action": "talk",
+    "target": "Warriv",
+    "nodes": [
+     "travel_town",
+     "talk_warriv"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "data/questspec/"
+   ],
+   "covers": [
+    "quest.act1_done.sail_east"
+   ],
+   "pre": {
+    "level": 24,
+    "gold": 3000,
+    "waypoints": [
+     1
+    ],
+    "quests": [
+     {
+      "record": 6,
+      "word": 8202
+     }
+    ],
+    "items": [
+     {
+      "code": "hp1",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 4
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ],
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head"
+     },
+     {
+      "code": "qui",
+      "slot": "torso"
+     },
+     {
+      "code": "ssd",
+      "slot": "rhand"
+     },
+     {
+      "code": "buc",
+      "slot": "lhand"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "sail_east"
+    ]
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: level 24, gold, Andariel record 6 set to 0x200a (killed, reward pending) and basic gear by SETUP verbs. Mechanics only.",
+   "notes": "Quest drill matrix. Row act1_done is locked until Andariel is done; the board must offer Hand in (Warriv, pick Go East) and the hero must end in Lut Gholein.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Lut Gholein",
+     "min": 1,
+     "why": "the act hop happened: the hero stands in Act 2 town"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
   }
  ]
 }
