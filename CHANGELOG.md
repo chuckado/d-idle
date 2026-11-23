@@ -8,6 +8,12 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into forksync <!--sg:agent/forksync-->
+- Merge branch 'main' into skelspeed <!--sg:agent/skelspeed-->
+- Merge branch 'main' into uireason <!--sg:agent/uireason-->
+- Merge branch 'main' into manapack <!--sg:agent/manapack-->
+- Merge branch 'main' into navdoc <!--sg:agent/navdoc-->
+- Merge origin/main into agent/uitoast <!--sg:agent/uitoast-->
 - Merge branch 'main' into uisheet <!--sg:agent/uisheet-->
 - Merge branch 'main' into tapall <!--sg:agent/navexit-->
 - Merge branch 'main' into buildcards <!--sg:agent/buildcards-->

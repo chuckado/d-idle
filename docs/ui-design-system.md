@@ -206,6 +206,28 @@ There is one vocabulary for "are you sure" and nothing else. Pick the form by wh
 
 Pages that keep their own sheet, and why: the Vault's sheet (`.vt-sheet`: Sell now, Identify all) is bound to the Vault DOM keys, its tests and its fit page and moves in a later card; the live screen's order sheet (`#sheet` in `app.js`: area, minutes, "Go now") is a form, not a confirm; the nav More menu (`#menu-more`) is a menu; the Inventory item menu and the Policy sheet are their own components.
 
+### 4.4b Toasts and one severity scale (card uitoast, review C10, E8)
+
+> status: built (branch agent/uitoast); V = `TestToastDOM` (node, stub DOM), `TestSeverityScaleMatchesToastJS` and the uilint rule `sev-scale` (tools/uilint), the Vault node tests (they now read the shared toast), `TestToastTextContrastBothThemes`, the fit suite on the worker host. U = not looked at on a real phone; the order and Vault status CHIPS (`data-level` ok, warn, bad) and the badges (`data-tone`) still use their own attribute and are not on this scale yet.
+
+There is ONE toast: `web/toast.js` (`window.dToast`; the shell, the Vault, the live screen and the alert feed all call it), styled once as `.d-toast` in `components.css` inside the `.d-toasts` stack in `shell.css` (top end, `--d-z-toast`). The four older ones (`shell.js` `toast()`, `app.js` `#toast`, `alerts.js` `.toast`, the Vault `.vt-toast`) are gone.
+
+- **Severity.** `data-sev` on a toast or a note takes exactly `info`, `good`, `warn`, `bad` (the list is `SEVERITIES` in `toast.js`; `tools/uilint` rule `sev-scale` rejects any other value in CSS, HTML, Go page templates and JS, and a test keeps the two lists equal). `alarm`, `danger` and `error` map to `bad`, `ok` to `good` when a toast is shown. The Needs you rows keep their own server vocabulary (danger, warn, event, info) under `data-need`, not `data-sev`.
+- **Announced.** The stack is `role=status` with `aria-live=polite`; a `bad` toast is `role=alert`, so it is read out at once.
+- **Time.** One table, `TIMES` in `toast.js`: info and good 6 s, warn 10 s, bad 20 s, a toast with an action 8 s (an action may give its own `ms`). The stack keeps four.
+- **Use.** `dToast.show(sev, text, {label, run, ms})` on any page; a page that loads shell.js has it already, a classic page adds `<script src="/watch/toast.js">`. `dToast.create(doc, {host, later, clear})` gives a stack on a stub DOM for node tests.
+
+### 4.4c Reason lines: a control that is off says why, in text (card uireason, review C13, E9)
+
+> status: built (branch agent/uireason); V = the Vault node tests (`vault_*.mjs`), `TestQuestUIJS`, `TestStaticDisabledControlsHaveReasonLines` (all run `web/why.js` over the rendered or static DOM), fit pages on the worker host. U = not looked at on a real phone; the Inventory item menu already has a visible line under each off entry (`.act-why`, not yet named by `aria-describedby`: its DOM goldens would all change); the Inventory "Instant actions: on (closed now)" label still keeps its rule in a tooltip (a status label, not a control).
+
+The rule: a control that is disabled (or `aria-disabled`) and on screen has a visible reason line beside it, in the same group, as a `p.d-why` (muted, `components.css`), and names it with `aria-describedby`. The `title` attribute is never the reason (a phone has no hover; a screen reader gets the line through `aria-describedby`). A hover tooltip may still say what an ENABLED control will do.
+
+- **Vault**: Keep, Reveal (all payments), Sell, Pin, Unpin, Discard, Keep now, Buy scrolls, Identify all, Sell all, the pay options of the reveal bar, the detail card buttons and the equip sheet buttons each have a line (`.vt-whys` under the action group, under the toolbar, under the card). A button that is off for a reason the server did not state reads "Not available right now."; when the vault is off the line says so (`offWhy` in `vault.json`).
+- **Quests board and strip**: a disabled Start, Hand in or primary button has a line next to it in the same row or tile.
+- **Inventory**: the Sell marked and Repair buttons of the bar (`.cv-whys`: inline on a desktop, a third row on a phone; the bar grows by one line while a reason shows, `data-why` on `.cv`).
+- **The test**: `web/why.js` `unexplained(nodes)` returns every control that is off, on screen and without a visible non-empty reason line inside its grandparent (or with a `title`). The node tests run it over the Vault states, the quest board states and the quest panels; a Go test runs the same rule over the static markup of the pages.
+
 ### 4.5 Fetch scheduler
 
 One scheduler with the existing SSE `/api/events` as the trigger and a 5 s safety poll; per-panel intervals from the manifest; a panel hidden by a tab or a fold is polled at a quarter rate; `document.hidden` pauses everything but the status band. Replaces the six independent timers of today.

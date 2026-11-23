@@ -1,6 +1,9 @@
 // The Vault page chrome (card vaultclean, TestVaultCleanChromeJS): no empty fold, one action bar, status chips that go, one marked chip,
 // the unidentified badge only on unidentified tiles, the docked card only while an item is open. Two fixture states: all identified; mixed.
 import { readFileSync } from 'fs';
+import { createRequire } from 'module';
+globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
+const dWhy = createRequire(import.meta.url)('./why.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -33,7 +36,7 @@ const gold = (total, order) => ({ enabled: true, charges: 0, free: false, balanc
   bar: { total, default: total ? 'gold' : '', line: '', options: total ? [{ id: 'gold', label: 'Gold', line: 'g', ok: true, count: total, ids: items.map((i) => i.id), cost: total * 80, skipped: [] }] : [] },
   gold: { on: true, order: order || null, stash: 5000, scrollGold: 80, confirmAt: 0 } });
 const sell = { enabled: true, queued: 0, working: 0, sold: 0, gold: 0 };
-const page = mountVault({ doc, root, get, post, later, clear, texts: T, now: () => clock });
+const page = mountVault({ toastHost: root, doc, root, get, post, later, clear, texts: T, now: () => clock });
 const bar = () => cls('vt-actionbar');
 
 // ---- state 1: everything identified, nothing to reveal ----
@@ -101,7 +104,7 @@ ok(chip.hidden, 'dismiss hides the chip at once');
 // ---- the toast ----
 reply = { ok: true, done: ['v1'] };
 await page.act('/api/vault/pin', ['v1']);
-const toast = cls('vt-toast')[0];
+const toast = cls('d-toast')[0];
 ok(!toast.hidden && shownText(toast).includes('Pinned'), 'a press says what it did in a toast: ' + shownText(toast));
 await advance(10500);
 ok(toast.hidden, 'the toast goes after 10 s');
@@ -140,4 +143,5 @@ ok(cls('vt-ab-reveal')[0].hidden, 'the idle Reveal button gives way to the selec
 await find('select-done').click();
 ok(cls('vt-ab-sel')[0].hidden && !cls('vt-ab-reveal')[0].hidden, 'Done returns to the idle bar');
 
+for (const w of dWhy.unexplained(all(root))) fails.push('why: ' + w);
 console.log(JSON.stringify({ fails }));

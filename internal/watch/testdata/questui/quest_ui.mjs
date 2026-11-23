@@ -4,6 +4,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { createRequire } from 'node:module';
+const { unexplained } = createRequire(import.meta.url)('../../web/why.js');
 
 const dir = path.resolve(process.argv[2]);
 const gold = (n) => JSON.parse(fs.readFileSync(path.join(dir, '..', '..', 'testdata', 'quests', n + '.json'), 'utf8'));
@@ -255,6 +257,7 @@ for (const cls of ['paladin', 'sorceress']) {
   assert.deepEqual(posts.at(-1), ['/api/quests/den_of_evil/handin', { chunk: 'clear_den' }]);
   assert.equal(texts(byKey(c.body, 'primary')), 'Handing in...');
   assert.equal(byKey(c.body, 'primary').disabled, true);
+  assert.deepEqual(unexplained(all(c.body, () => true)), [], 'a disabled button has a visible reason line');
   // the GET says done: the toast fires once, the tile shows the next offer
   const done = gold('offers-paladin');
   done.quests[0].state = 'done'; done.quests[0].chunks[0].state = 'done'; done.offers.shift();
@@ -491,6 +494,7 @@ for (const cls of ['paladin', 'sorceress']) {
     assert.equal(buttons.length, 1, 'exactly one button ' + what);
     assert.equal(buttons[0].dataset.key, key, what);
     assert.equal(!!buttons[0].disabled, !!r.disabled, what);
+    assert.deepEqual(unexplained(all(c.body, () => true)), [], 'a disabled button has a visible reason line ' + what);
     if (r.post) {
       buttons[0].click(); await tick();
       assert.deepEqual(posts[0], ['/api/quests/sisters_burial_grounds/' + r.post, { chunk: 'blood_raven' }], what);

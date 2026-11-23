@@ -58,7 +58,17 @@
     var n = v.sellPending || 0, b = $('cv-sell');
     b.textContent = 'Sell marked (' + n + ')'; b.dataset.s = 'Sell (' + n + ')'; // the phone shows data-s (CSS), the full words stay the accessible name
     if (n > 0) b.removeAttribute('aria-disabled'); else b.setAttribute('aria-disabled', 'true');
-    b.title = n > 0 ? 'Walk home and sell the items marked for sale' : 'Nothing is marked for sale';
+    // off: the reason is a visible line beside the button (card uireason), not a tooltip; on: the tooltip says what it will do
+    if (n > 0) b.title = 'Walk home and sell the items marked for sale'; else b.removeAttribute('title');
+    whyShow(b, $('cv-sell-why'), n > 0 ? '' : 'Nothing is marked for sale.');
+  }
+  // a control that is off names its reason line (aria-describedby) and the bar makes room for it on a phone (data-why on .cv)
+  function whyShow(b, line, text) {
+    line.textContent = text; line.hidden = !text;
+    if (text) b.setAttribute('aria-describedby', line.id); else b.removeAttribute('aria-describedby');
+    var any = false, ls = document.querySelectorAll('.cv-whys .d-why');
+    for (var i = 0; i < ls.length; i++) if (!ls[i].hidden) any = true;
+    if (any) $('cv').dataset.why = '1'; else delete $('cv').dataset.why;
   }
   function drawRepair(v, r) {
     var b = $('cv-repair');
@@ -71,16 +81,18 @@
     var broken = brokenCount(v) > 0;
     if (broken) b.dataset.danger = ''; else delete b.dataset.danger;
     b.dataset.action = bt.action; b.dataset.s = bt.action === 'cancel' ? 'Cancel' : b.textContent;
-    if (!bt.enabled || bt.action === 'none') b.setAttribute('aria-disabled', 'true'); else b.removeAttribute('aria-disabled');
+    var off = !bt.enabled || bt.action === 'none';
+    if (off) b.setAttribute('aria-disabled', 'true'); else b.removeAttribute('aria-disabled');
     var tip = [];
     if (r.worst) tip.push(r.worst);
     if (t && t.line) tip.push(t.line); else if (q && q.state) tip.push('Last request: ' + q.state);
     if (bt.reason) tip.push(bt.reason);
-    b.title = tip.join('. ') || bt.label;
+    if (off) { b.removeAttribute('title'); whyShow(b, $('cv-repair-why'), bt.reason || (t && t.line) || 'Nothing to repair right now.'); }
+    else { b.title = tip.join('. ') || bt.label; whyShow(b, $('cv-repair-why'), ''); }
   }
   function onRepairClick() {
     var b = $('cv-repair'), a = api();
-    if (!a || b.hasAttribute('aria-disabled')) { if (b.title) say(b.title); return; }
+    if (!a || b.hasAttribute('aria-disabled')) { var rl = $('cv-repair-why'); if (rl && rl.textContent) say(rl.textContent); return; }
     a.post(b.dataset.action === 'cancel' ? '/api/repair/cancel' : '/api/repair/request', {});
   }
   function chips() {

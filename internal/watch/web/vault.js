@@ -31,6 +31,18 @@ export function mountVault(d) {
     if (o && o.key) b.dataset.key = o.key;
     return b;
   };
+  // A control that is off says why in a visible line beside it, named by aria-describedby; the title attribute is never the reason (card uireason).
+  // host: the element the line goes in (a sibling of the control or of its group); name: prefixes the line when several controls share one host.
+  const whys = new Map();
+  function why(b, text, host, name) {
+    let p = whys.get(b);
+    if (!p) { p = el('p', 'd-why'); p.id = 'vt-why-' + (b.dataset.key || whys.size); p.hidden = true; host.appendChild(p); whys.set(b, p); }
+    const off = b.disabled || b.getAttribute('aria-disabled') === 'true';
+    const t = off ? (text || T.whyNone) : '';
+    p.textContent = t && name ? name + ': ' + t : t; p.hidden = !t;
+    if (t) b.setAttribute('aria-describedby', p.id); else b.removeAttribute('aria-describedby');
+    b.removeAttribute('title');
+  }
   const S = { sv: {}, eth: null, f: d.filters || defaultFilters(), items: [], total: 0, view: null, facets: { kinds: T.kinds || [], types: [] }, err: false, loading: true, sel: createSelection(),
     detail: null, detailId: '', mode: 'grid', fopen: false, sheet: null, msg: '', msgLevel: '', sig: '', lastLoaded: 0, tip: null };
   const root = d.root || doc.body;
@@ -107,7 +119,8 @@ export function mountVault(d) {
   const acts = el('div', 'vt-acts'); acts.append(keepB, revealB, etherB, goldB, sellB, pinB, unpinB, discB);
   // a button with a muted second line (the cost): the label stays the button's name
   const setBtn = (b, label, sub) => { b.replaceChildren(el('span', 'vt-b-label', label), ...(sub ? [el('small', 'vt-sub', sub)] : [])); };
-  const gSel = el('div', 'vt-ab-sel'); gSel.hidden = true; gSel.append(selText, selAll, acts, doneB);
+  const actWhys = el('div', 'vt-whys');
+  const gSel = el('div', 'vt-ab-sel'); gSel.hidden = true; gSel.append(selText, selAll, acts, actWhys, doneB);
   const RT = T.revealBar || {};
   const RB = { pay: '', confirming: false };
   const rbOpts = el('div', 'vt-rb-opts'); rbOpts.setAttribute('role', 'radiogroup'); rbOpts.setAttribute('aria-label', RT.payLabel || '');
@@ -135,10 +148,9 @@ export function mountVault(d) {
   gNotes.append(costLine, sellWhyLine, keepLine, keepNowB, actLine, buyB, promptLine, promptYes, promptNo);
   const bar = el('section', 'vt-actionbar'); bar.hidden = true; bar.setAttribute('aria-label', T.select);
   bar.append(gSel, gReveal, gOrder, gNotes);
-  // the transient message (what a press did): a toast that goes after TOAST_MS or on dismiss
-  const msg = el('p', 'vt-toast'); msg.hidden = true; msg.setAttribute('role', 'status');
-  const msgText = el('span', 'vt-toast-text'), msgX = btn('×', { key: 'toast-dismiss', variant: 'ghost' }); msgX.setAttribute('aria-label', T.dismiss || 'Dismiss');
-  msg.append(msgText, msgX);
+  // the transient message (what a press did): the shared toast (web/toast.js), one at a time; it goes by itself or on dismiss
+  const toasts = (d.toast || (win && win.dToast) || globalThis.dToast).create(doc, { host: d.toastHost, later: d.toastLater || d.later, clear: d.clear, dismissText: T.dismiss });
+  let msgNode = null;
   // Marked for sale (flags the player has not confirmed) is one chip in the toolbar that opens a sheet with the list and the Sell button.
   const markChip = btn('', { key: 'marked-chip', variant: 'ghost' }); markChip.classList.add('vt-chip', 'vt-markchip'); markChip.hidden = true;
 
@@ -182,7 +194,8 @@ export function mountVault(d) {
   { const was = slotStore(); if (was && !S.f.type) S.f.type = was; }
   const page = el('div', 'vt-page');
   tools.append(slotRow, search, ftoggle, sortSel, viewBtn, selBtn, markChip, identB, sellAllB);
-  page.append(head, banner, tools, saChip, filters, bar, body, msg);
+  const identWhys = el('div', 'vt-whys'); // the reasons of Identify all and Sell all, under the toolbar
+  page.append(head, banner, tools, identWhys, saChip, filters, bar, body);
   root.replaceChildren ? root.replaceChildren(page, sheetWrap) : (root.appendChild(page), root.appendChild(sheetWrap));
 
   // ---- loading ----
@@ -246,11 +259,10 @@ export function mountVault(d) {
   }
 
   // ---- drawing ----
-  let msgTimer = null;
   function setMsg(level, text) {
-    S.msg = text; S.msgLevel = level; msg.hidden = !text; msgText.textContent = text; msg.dataset.level = level || '';
-    if (msgTimer && d.clear) d.clear(msgTimer);
-    msgTimer = text && d.later ? d.later(() => { msgTimer = null; setMsg('', ''); }, TOAST_MS) : null;
+    S.msg = text; S.msgLevel = level;
+    if (msgNode) { msgNode.dismiss(); msgNode = null; }
+    if (text) msgNode = toasts.show(level, text);
   }
   function fillTypes() {
     const cur = S.f.type;
@@ -350,11 +362,13 @@ export function mountVault(d) {
     const k = S.view && S.view.keep;
     keepB.textContent = fmt(T.keepSel, { n });
     keepB.disabled = ro || !k;
-    keepB.title = !k ? T.keepNote : (!k.enabled && k.why ? k.why : '');
+    why(keepB, ro ? T.offWhy : !k ? T.keepNote : (!k.enabled && k.why ? k.why : ''), actWhys, T.keep);
+    for (const b of [pinB, unpinB, discB]) why(b, T.offWhy, actWhys, b === pinB ? T.pin : b === unpinB ? T.unpin : T.discard);
     keepLine.hidden = !(k && k.line);
     keepLine.textContent = k && k.line ? k.line : '';
     keepNowB.hidden = !(k && (k.queued + k.creating) > 0);
     keepNowB.disabled = ro || !k || !k.enabled;
+    why(keepNowB, ro ? T.offWhy : k && k.why, gNotes, T.keepNow);
     drawAct(n, ro);
     gNotes.hidden = [costLine, sellWhyLine, keepLine, keepNowB, actLine, buyB, promptLine, promptYes, promptNo].every((x) => x.hidden);
     bar.hidden = gSel.hidden && gReveal.hidden && gOrder.hidden && gNotes.hidden; // nothing to do and nothing to say: no bar at all
@@ -387,18 +401,19 @@ export function mountVault(d) {
     const show = m.show && m.total > 0 && idle;
     gReveal.hidden = !show; // N = 0: no button, no chevron, nothing
     if (!m.show) return;
-    rbOpts.replaceChildren(...m.options.map((x) => {
+    rbOpts.replaceChildren(...m.options.flatMap((x) => {
       const b = el('button', 'vt-rb-opt'); b.type = 'button'; b.dataset.key = 'pay-' + x.id;
       b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', x.checked ? 'true' : 'false');
-      if (!x.ok) { b.setAttribute('aria-disabled', 'true'); b.title = x.why; }
+      if (!x.ok) b.setAttribute('aria-disabled', 'true');
       b.appendChild(el('strong', '', x.label)); b.appendChild(el('span', 'vt-rb-line', x.line));
       b.addEventListener('click', () => { if (x.ok) { RB.pay = x.id; RB.confirming = false; draw(); } });
+      if (!x.ok) { const w = el('p', 'd-why', x.why || T.whyNone); w.id = 'vt-why-pay-' + x.id; b.setAttribute('aria-describedby', w.id); return [b, w]; }
       return b;
     }));
     rbOpts.hidden = !m.total || m.options.length < 2; // one payment (gold only) needs no picker
     const ask = RB.confirming && m.confirm && m.sel === 'gold';
     rbGo.hidden = !m.total || ask; setBtn(rbGo, m.goLabel || m.go, m.goSub); rbGo.disabled = ro || m.goOff;
-    rbGo.title = m.goOff ? m.why : '';
+    why(rbGo, ro ? T.offWhy : m.goOff ? m.why : '', gReveal);
     rbAsk.hidden = rbYes.hidden = rbNo.hidden = !ask; rbAsk.textContent = ask ? m.confirmAsk : '';
     rbWhy.textContent = m.total && m.goOff ? m.why : ''; rbWhy.hidden = !rbWhy.textContent;
     const tail = [m.note].filter(Boolean);
@@ -419,16 +434,16 @@ export function mountVault(d) {
     if (gOn) {
       setBtn(goldB, fmt(T.revealGoldSel, { n: rp.n }), n && rp.n ? fmt(T.goldSelSub, { cost: grp(Math.min(rp.n, gcap) * price), stash: grp(gi.stash || 0) }) + (gcap < rp.n ? fmt(T.goldPartial, { k: gcap }) : '') : '');
       goldB.disabled = ro || !rp.n || gcap < 1 || !!gi.why;
-      goldB.title = !rp.n ? T.revealNone : (gi.why || (gcap < 1 ? fmt(T.goldShort, { price: grp(price), stash: grp(gi.stash || 0) }) : ''));
+      why(goldB, ro ? T.offWhy : !rp.n ? T.revealNone : (gi.why || (gcap < 1 ? fmt(T.goldShort, { price: grp(price), stash: grp(gi.stash || 0) }) : '')), actWhys, T.revealGoldName);
     }
     revealB.textContent = fmt(T.revealSel, { n: rp.n || n });
     revealB.disabled = ro || !a || !a.reveal.enabled;
-    revealB.title = !a ? T.revealNote : (!a.reveal.enabled && a.reveal.why ? a.reveal.why : (!rp.n && n ? T.revealNone : ''));
+    why(revealB, ro ? T.offWhy : !a ? T.revealNote : (!a.reveal.enabled && a.reveal.why ? a.reveal.why : (!rp.n && n ? T.revealNone : '')), actWhys, T.reveal);
     sellB.textContent = sellLabel(sp, n, T);
     sellB.disabled = ro || !a || !a.sell.enabled;
-    const why = sp.skipped > 0 && n ? sellWhy(sp.reasons, T.sellWhyWords) : '';
-    sellB.title = !a ? T.sellNote : (!a.sell.enabled && a.sell.why ? a.sell.why : (why ? fmt(T.sellWhyLine, { k: sp.skipped, all: sp.all, why }) : ''));
-    sellWhyLine.textContent = why && !sellB.hidden && n ? fmt(T.sellWhyLine, { k: sp.skipped, all: sp.all, why }) : '';
+    const skipWhy = sp.skipped > 0 && n ? sellWhy(sp.reasons, T.sellWhyWords) : '';
+    why(sellB, ro ? T.offWhy : !a ? T.sellNote : (!a.sell.enabled && a.sell.why ? a.sell.why : ''), actWhys, T.sell);
+    sellWhyLine.textContent = skipWhy && !sellB.hidden && n ? fmt(T.sellWhyLine, { k: sp.skipped, all: sp.all, why: skipWhy }) : '';
     sellWhyLine.hidden = !sellWhyLine.textContent;
     let cost = '';
     if (a && n && rp.n && via.has('free')) {
@@ -441,11 +456,12 @@ export function mountVault(d) {
       const need = rp.n * per;
       etherB.textContent = fmt(T.revealEtherSel, { n: rp.n || n });
       etherB.disabled = ro || !rp.n || bal < need;
-      etherB.title = !rp.n ? T.revealNone : (bal < need ? fmt(T.etherShort, { need, have: bal }) : '');
+      why(etherB, ro ? T.offWhy : !rp.n ? T.revealNone : (bal < need ? fmt(T.etherShort, { need, have: bal }) : ''), actWhys, T.revealEther);
       if (cost) cost += fmt(T.revealEtherOr, { cost: need, have: bal });
     }
     costLine.textContent = cost; costLine.hidden = !cost;
     buyB.hidden = !(cost && rp.short && via.has('free')); buyB.disabled = ro;
+    if (buyB.disabled && !buyB.hidden) why(buyB, T.offWhy, gNotes, T.buyScrolls);
     drawRevealBar(ro);
     const line = a ? [via.has('free') ? a.reveal.line : '', a.sell.line].filter(Boolean).join(' · ') : '';
     actLine.textContent = line;
@@ -456,7 +472,7 @@ export function mountVault(d) {
     const mk = S.view && S.view.marked;
     const ia = identifyAllPlan(a && a.reveal, T);
     identB.hidden = !ia.show || ro;
-    if (ia.show) { identB.textContent = ia.label; identB.disabled = ia.off; identB.title = ia.why; }
+    if (ia.show) { identB.textContent = ia.label; identB.disabled = ia.off; why(identB, ia.why, identWhys, T.identAllName); }
     S.ro = ro; drawSellAll();
     markChip.hidden = !mk || ro;
     if (mk) markChip.textContent = fmt(T.markedChip, { n: mk.n });
@@ -470,7 +486,9 @@ export function mountVault(d) {
     sellAllB.dataset.state = SA.phase === 'armed' ? 'confirm' : SA.phase;
     sellAllB.textContent = SA.phase === 'armed' ? SA.text : SA.phase === 'checking' ? T.sellAllChecking : SA.phase === 'busy' ? T.sellAllBusy : p.label;
     sellAllB.disabled = SA.phase === 'idle' ? p.off : SA.phase !== 'armed';
-    sellAllB.title = p.off && SA.phase === 'idle' ? p.why : T.sellAllTitle;
+    sellAllB.title = T.sellAllTitle; // a hint on an enabled button; the reason of a disabled one is the line below
+    why(sellAllB, SA.phase === 'idle' && p.off ? p.why : '', identWhys, T.sellAllName);
+    if (!sellAllB.disabled) sellAllB.title = T.sellAllTitle;
     const chip = sellAllChip(a && a.sell && a.sell.sale, T);
     let live = !!chip;
     if (chip && (chip.step === 'done' || chip.step === 'failed')) {
@@ -707,7 +725,8 @@ export function mountVault(d) {
     else if (it.found) card.appendChild(el('p', 'vt-dfound', fmt(it.area ? T.foundIn : T.found, { when: when(it.found, now()), area: it.area || '' })));
     const row = el('div', 'vt-drow');
     const act = det && det.actions || {};
-    const mk = (label, key, a, fn, variant) => { const b = btn(label, { key: 'd-' + key, variant }); if (!a || !a.ok) { b.setAttribute('aria-disabled', 'true'); if (a && a.reason) b.title = a.reason; } b.addEventListener('click', () => { if (a && a.ok) fn(); }); return b; };
+    const dWhys = el('div', 'vt-whys');
+    const mk = (label, key, a, fn, variant) => { const b = btn(label, { key: 'd-' + key, variant }); if (!a || !a.ok) { b.setAttribute('aria-disabled', 'true'); why(b, a && a.reason, dWhys, label); } b.addEventListener('click', () => { if (a && a.ok) fn(); }); return b; };
     row.append(it.pin ? mk(T.unpin, 'unpin', act.unpin, () => act1('/api/vault/unpin', [it.id])) : mk(T.pin, 'pin', act.pin, () => act1('/api/vault/pin', [it.id])),
       mk(T.discard, 'discard', act.discard, () => openDiscard([it.id], row.lastChild), 'danger'));
     row.appendChild(mk(T.keep, 'keep', act.keep, () => keepAct([it.id], false)));
@@ -721,6 +740,7 @@ export function mountVault(d) {
     row.appendChild(mk(T.sell, 'sell', act.sell, () => sellFlow([it.id], row.lastChild)));
     if (it.reveal === 'queued' || it.sell === 'queued' || it.keep === 'queued') row.appendChild(mk(T.cancelQueued, 'cancel', { ok: true }, () => act1('/api/vault/cancel', [it.id]), 'ghost'));
     card.appendChild(row);
+    card.appendChild(dWhys);
     aside.appendChild(card);
   }
   function draw() {
@@ -806,7 +826,6 @@ export function mountVault(d) {
   });
   selBtn.addEventListener('click', () => { S.sel.mode = true; S.fopen = false; syncFilters(); drawBar(); drawList(); }); // the folded filter panel closes when selecting starts
   doneB.addEventListener('click', () => { S.sel.clear(); drawBar(); drawList(); });
-  msgX.addEventListener('click', () => setMsg('', ''));
   rbDismiss.addEventListener('click', () => { const o = revealBarModel(S.view && S.view.act && S.view.act.reveal, RB.pay, RT).order; if (o) S.orderGone = o.id + ':' + o.state; drawBar(); });
   selAll.addEventListener('click', () => { S.sel.all(order()); drawBar(); drawList(); });
 
@@ -1119,11 +1138,12 @@ export function mountVault(d) {
     });
     const recall = el('label', 'vt-label'); const cb = el('input'); cb.type = 'checkbox'; cb.dataset.key = 'equip-recall'; recall.append(cb, doc.createTextNode(' ' + T.equipRecall));
     const row = el('div', 'vt-row'); row.dataset.key = 'equip-row';
+    const eqWhys = el('div', 'vt-whys');
     if (pl.state === 'ready') {
       pl.buttons.forEach((b) => {
         const label = b.slot === 'auto' ? (pl.ring ? T.equipGoAuto : T.equipGo) : b.slot === 'left' ? T.equipGoLeft : T.equipGoRight;
         const bb = btn(label, { key: 'equip-' + b.slot, variant: b.slot === 'auto' ? undefined : 'ghost' });
-        if (!b.can) { bb.setAttribute('aria-disabled', 'true'); bb.title = b.why; }
+        if (!b.can) { bb.setAttribute('aria-disabled', 'true'); why(bb, b.why, eqWhys, label); }
         bb.addEventListener('click', () => { if (b.can) equipPress(it, b.slot, cb.checked); });
         row.appendChild(bb);
       });
@@ -1155,6 +1175,7 @@ export function mountVault(d) {
     if (pl.state !== 'active' && pl.state !== 'done') row.appendChild(take);
     row.appendChild(close);
     sheetCard.appendChild(row);
+    sheetCard.appendChild(eqWhys);
     sheetCard.appendChild(el('p', 'vt-eq-help', T.equipNote));
     if (S.sheet) S.sheet.first = close;
   }

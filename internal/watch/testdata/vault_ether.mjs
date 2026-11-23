@@ -1,5 +1,8 @@
 // The Vault page against a fake bot with an ETHER wallet (TestVaultEtherUIJS).
 import { readFileSync } from 'fs';
+import { createRequire } from 'module';
+globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
+const dWhy = createRequire(import.meta.url)('./why.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -28,7 +31,7 @@ const eth = (balance, owned) => ({ schema: 'watch.ether/1', enabled: true, curre
 const get = async (p) => { if (p === '/api/ether') return wallet && typeof wallet === 'function' ? wallet() : wallet; return vaultView(vcount, vcap); };
 const post = async (p, b) => { posts.push(p + ' ' + JSON.stringify(b)); return typeof reply === 'function' ? reply(p, b) : reply; };
 const later = (f) => { later.q.push(f); }; later.q = [];
-const page = mountVault({ doc, root, get, post, later, texts: T, now: () => 0 });
+const page = mountVault({ toastHost: root, toastLater: () => null, doc, root, get, post, later, texts: T, now: () => 0 });
 await page.start(); await tick();
 
 // wallet off (loot.vault 0): no chip, the placeholder stands, a press says why and posts nothing
@@ -100,4 +103,5 @@ ok(has('the server says'), 'unknown code falls back to the server sentence');
 wallet = eth(99, ['v1']); later.q.splice(0).forEach((f) => f()); await tick(); await tick();
 ok(find('wallet').textContent === 'Ether 99', 'poll refreshes the chip: ' + find('wallet').textContent);
 
+for (const w of dWhy.unexplained(all(root))) fails.push('why: ' + w);
 console.log(JSON.stringify({ fails }));

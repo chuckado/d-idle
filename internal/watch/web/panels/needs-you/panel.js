@@ -68,7 +68,7 @@ export function mount(root, ctx) {
   const opened = new Set(); // question rows the player expanded: a tap on the text shows all of it (a phone has no tooltip)
   function row(n) {
     const e = ctx.el('div', 'n-row');
-    e.dataset.sev = sevOf(n);
+    e.dataset.need = sevOf(n);
     e.dataset.id = n.id;
     if (/^quest_/.test(n.kind)) e.dataset.kind = n.kind;
     if (n.kind === 'question') e.dataset.q = ctx.short && ctx.short() ? 's' : '1'; // two lines of text (one on a short window), the answers on a line of their own

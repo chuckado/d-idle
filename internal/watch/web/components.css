@@ -89,11 +89,11 @@
   .d-note { display: flex; gap: var(--d-sp-2); align-items: start; padding: var(--d-sp-2) var(--d-sp-3); border-radius: var(--d-r-2); background: var(--d-surface-2); border-inline-start: 4px solid var(--d-info); font-size: var(--d-fs-1); }
   .d-note[data-sev="good"] { border-inline-start-color: var(--d-good); }
   .d-note[data-sev="warn"] { border-inline-start-color: var(--d-warn); }
-  .d-note[data-sev="alarm"] { border-inline-start-color: var(--d-bad); }
+  .d-note[data-sev="bad"] { border-inline-start-color: var(--d-bad); }
   .d-toast { display: flex; gap: var(--d-sp-2); align-items: center; justify-content: space-between; padding: var(--d-sp-2) var(--d-sp-3); border-radius: var(--d-r-2); background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line); border-inline-start-width: 5px; box-shadow: var(--d-shadow-2); font-size: var(--d-fs-1); }
   .d-toast[data-sev="good"] { border-inline-start-color: var(--d-good); }
   .d-toast[data-sev="warn"] { border-inline-start-color: var(--d-warn); }
-  .d-toast[data-sev="alarm"] { border-inline-start-color: var(--d-bad); }
+  .d-toast[data-sev="bad"] { border-inline-start-color: var(--d-bad); }
 
   /* 9 Badge */
   .d-badge { display: inline-block; font-size: var(--d-fs-0); font-weight: 650; letter-spacing: .04em; padding: 1px 7px; border-radius: var(--d-r-round); border: var(--d-bw) solid var(--d-line); color: var(--d-text-2); white-space: nowrap; font-variant-numeric: tabular-nums; vertical-align: middle; }
@@ -277,5 +277,7 @@
   .d-sheet-pick { display: grid; gap: var(--d-sp-1); }
   .d-sheet-opt { display: flex; gap: var(--d-sp-1); align-items: center; min-block-size: 44px; }
   .d-sheet-row { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); justify-content: flex-end; }
+  /* a reason line: why the control beside it is off. Always visible while it is off; the control names it with aria-describedby. */
+  .d-why { margin: 0; color: var(--d-text-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
   .d-sheet-cancel, .d-sheet-ok { min-block-size: 44px; }
 }

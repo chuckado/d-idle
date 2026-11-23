@@ -252,7 +252,7 @@
     var q = v.request, pend = q && q.state === 'requested', t = v.trip;
     var mode = (v.modes || []).filter(function (m) { return m.current; }).map(function (m) { return m.label; })[0] || v.mode;
     b.appendChild(el('p', 'd-muted', 'Repair mode: ' + mode + ' (change it on the policy sheet)'));
-    if (v.worst) { var w = el('p', 'd-note', v.worst); w.dataset.sev = v.worst.indexOf('Broken') === 0 || /broken/i.test(v.worst) ? 'alarm' : 'warn'; b.appendChild(w); }
+    if (v.worst) { var w = el('p', 'd-note', v.worst); w.dataset.sev = v.worst.indexOf('Broken') === 0 || /broken/i.test(v.worst) ? 'bad' : 'warn'; b.appendChild(w); }
     if (v.estimate && !t) b.appendChild(el('p', '', 'Repair All costs at least ' + v.estimate + ' gold.'));
     if (t) {
       b.appendChild(el('p', 'd-muted', 'Repair All costs at least ' + (t.estimate || 0) + ' gold; with the margin ' + (t.need || 0) + ', you have ' + (t.gold || 0) + '.'));

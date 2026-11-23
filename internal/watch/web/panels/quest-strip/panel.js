@@ -47,7 +47,7 @@ export function mount(root, ctx) {
     e.type = 'button';
     e.dataset.key = k;
     if (armed) e.dataset.armed = '1';
-    if (b.disabled) { e.disabled = true; if (b.why) e.title = b.why; }
+    if (b.disabled) e.disabled = true;
     e.addEventListener('click', () => press(b, e));
     return e;
   }
@@ -65,8 +65,17 @@ export function mount(root, ctx) {
     ctx.ui.clear(acts);
     ctx.ui.clear(modes);
     ctx.ui.clear(side);
-    if (m.primary) acts.append(button(m.primary, true, 'primary'));
-    if (m.secondary) acts.append(button(m.secondary, false, 'secondary'));
+    for (const [b, primary, k] of [[m.primary, true, 'primary'], [m.secondary, false, 'secondary']]) {
+      if (!b) continue;
+      const e = button(b, primary, k);
+      acts.append(e);
+      if (b.disabled) { // off: the reason is a visible line beside the button, named by aria-describedby (card uireason)
+        const w = ctx.el('p', 'd-why', b.why || 'Not available right now.');
+        w.id = 'qs-why-' + k;
+        e.setAttribute('aria-describedby', w.id);
+        acts.append(w);
+      }
+    }
     if (v && v.enabled) {
       if (!m.secondary) {
       const all = ctx.el('button', 'qs-btn qs-all', 'All quests');

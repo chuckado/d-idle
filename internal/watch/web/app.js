@@ -153,7 +153,7 @@
   }
 
   // ---- Orders: Hero now, map, queue, sheet (docs/research/orders-ux-design.md). All text via textContent. ----
-  var om = null, ord = { orders: [] }, ordAt = 0, mapList = false, pend = null, sheetFrom = null, toastTimer = 0;
+  var om = null, ord = { orders: [] }, ordAt = 0, mapList = false, pend = null, sheetFrom = null;
   var DURS = [['10 min', 10], ['30 min', 30], ['1 h', 60], ['Until I cancel', 0]];
 
   function nodeById(id) { for (var i = 0; i < om.nodes.length; i++) if (om.nodes[i].id === id) return om.nodes[i]; return null; }
@@ -205,10 +205,7 @@
     for (var i = ord.orders.length - 1; i >= 0; i--) if (/^(done|failed|cancelled)$/.test(ord.orders[i].state)) return ord.orders[i];
     return null;
   }
-  function toast(m) {
-    var t = $('toast'); t.textContent = m; t.hidden = false;
-    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 3000);
-  }
+  function toast(m) { window.dToast.show('info', m); }
   function elapsedSec(o) { return Math.max(0, ord.now - o.startedAt + (performance.now() - ordAt) / 1000 * (th.speed || 1)); }
 
   function renderNow() {

@@ -1,0 +1,100 @@
+phase,tick,n_live,live
+A_idle,306,0,
+A_idle,316,0,
+A_idle,326,0,
+A_idle,336,0,
+A_idle,346,0,
+B_toRow,356,0,
+B_toRow,366,0,
+B_toRow,376,0,
+B_toRow,386,0,
+B_toRow,396,0,
+B_toRow,406,0,
+B_toRow,416,0,
+B_toRow,426,0,
+B_toRow,436,0,
+B_toRow,446,0,
+B_toRow,456,0,
+B_toRow,466,0,
+C_walk_west,476,0,
+C_walk_west,486,0,
+C_walk_west,496,0,
+C_walk_west,506,0,
+C_walk_west,516,0,
+C_walk_west,526,0,
+C_walk_west,536,0,
+C_walk_west,546,0,
+C_walk_west,556,0,
+C_walk_west,566,0,
+C_walk_west,576,0,
+C_walk_west,586,0,
+C_walk_west,596,0,
+C_walk_west,606,0,
+C_walk_west,616,20,Fallen #18 16.70 28.50 NU|Fallen #19 16.70 29.10 NU|Fallen #20 17.30 28.30 NU|Fallen #21 17.30 28.70 NU|Fallen #22 19.50 25.30 NU|Fallen #23 20.10 25.70 NU|Fallen #24 19.50 24.70 NU|Quill Rat #25 17.90 28.70 NU|Quill Rat #26 18.10 28.10 NU| #27 20.70 20.30 NU|Zombie #28 17.10 21.90 NU|Zombie #29 17.50 21.30 NU|Fallen #30 23.50 18.50 NU|Fallen #31 23.30 19.10 NU|Fallen #32 23.50 17.90 NU|Fallen #33 23.90 19.10 NU|Fallen #34 17.30 15.50 NU|Fallen #35 16.70 15.70 NU|Fallen #36 17.30 14.90 NU|Fallen #37 16.70 15.30 NU
+C_walk_west,626,1, #27 20.70 20.30 NU
+C_walk_west,636,1, #27 20.70 20.30 NU
+C_walk_west,646,1, #27 20.70 20.30 NU
+C_walk_west,656,1, #27 20.70 20.30 NU
+C_walk_west,666,1, #27 20.70 20.30 NU
+C_walk_west,676,1, #27 20.70 20.30 NU
+C_walk_west,686,1, #27 20.70 20.30 NU
+C_walk_west,696,1, #27 20.70 20.30 NU
+C_walk_west,706,1, #27 20.70 20.30 NU
+C_walk_west,716,1, #27 20.70 20.30 NU
+C_walk_west,726,1, #27 20.70 20.30 NU
+C_walk_west,736,1, #27 20.70 20.30 NU
+C_walk_west,746,1, #27 20.70 20.30 NU
+C_walk_west,756,1, #27 20.70 20.30 NU
+C_walk_west,766,1, #27 20.70 20.30 NU
+C_walk_west,776,1, #27 20.70 20.30 NU
+C_walk_west,786,1, #27 20.70 20.30 NU
+C_walk_west,796,1, #27 20.70 20.30 NU
+C_walk_west,806,1, #27 20.70 20.30 NU
+C_walk_west,816,1, #27 20.70 20.30 NU
+C_walk_west,826,1, #27 20.70 20.30 NU
+C_walk_west_stop,836,1, #27 20.70 20.30 NU
+C_walk_west_stop,846,1, #27 20.70 20.30 NU
+C_walk_west_stop,856,1, #27 20.70 20.30 NU
+C_walk_west_stop,866,1, #27 20.70 20.30 NU
+C_walk_west_stop,876,1, #27 20.70 20.30 NU
+C_walk_west_stop,886,1, #27 20.70 20.30 NU
+C_walk_west_stop,896,1, #27 20.70 20.30 NU
+C_walk_west_stop,906,1, #27 20.70 20.30 NU
+C_walk_west_stop,916,1, #27 20.70 20.30 NU
+C_walk_west_stop,926,1, #27 20.70 20.30 NU
+E_run_east,936,1, #27 20.70 20.30 NU
+E_run_east,946,1, #27 20.70 20.30 NU
+E_run_east,956,1, #27 20.70 20.30 NU
+E_run_east,966,1, #27 20.70 20.30 NU
+E_run_east,976,1, #27 20.70 20.30 NU
+E_run_east,986,1, #27 20.70 20.30 NU
+E_run_east,996,1, #27 20.70 20.30 NU
+E_run_east,1006,1, #27 20.70 20.30 NU
+E_run_east,1016,1, #27 20.70 20.30 NU
+E_run_east,1026,1, #27 20.70 20.30 NU
+E_run_east,1036,1, #27 20.70 20.30 NU
+E_run_east,1046,1, #27 20.70 20.30 NU
+E_run_east,1056,1, #27 20.70 20.30 NU
+E_run_east,1066,1, #27 20.70 20.30 NU
+E_run_east,1076,1, #27 20.70 20.30 NU
+E_run_east,1086,1, #27 20.70 20.30 NU
+E_run_east,1096,1, #27 20.70 20.30 NU
+E_run_east,1106,1, #27 20.70 20.30 NU
+E_run_east,1116,1, #27 20.70 20.30 NU
+E_run_east,1126,1, #27 20.70 20.30 NU
+E_run_east,1136,1, #27 20.70 20.30 NU
+E_run_east,1146,1, #27 20.70 20.30 NU
+E_run_east,1156,1, #27 20.70 20.30 NU
+E_run_east,1166,1, #27 20.70 20.30 NU
+E_run_east,1176,1, #27 20.70 20.30 NU
+E_run_east,1186,1, #27 20.70 20.30 NU
+E_run_east_stop,1196,1, #27 20.70 20.30 NU
+E_run_east_stop,1206,1, #27 20.70 20.30 NU
+E_run_east_stop,1216,1, #27 20.70 20.30 NU
+E_run_east_stop,1226,1, #27 20.70 20.30 NU
+E_run_east_stop,1236,1, #27 20.70 20.30 NU
+E_run_east_stop,1246,1, #27 20.70 20.30 NU
+E_run_east_stop,1256,1, #27 20.70 20.30 NU
+E_run_east_stop,1266,1, #27 20.70 20.30 NU
+E_run_east_stop,1276,1, #27 20.70 20.30 NU
+E_run_east_stop,1286,1, #27 20.70 20.30 NU

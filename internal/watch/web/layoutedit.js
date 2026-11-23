@@ -255,11 +255,11 @@ export function start(api) {
     revert();
     const r = await api.save(work);
     if (r && r.ok) { kept = r.layout || work; dirty = false; api.toast('good', 'Layout saved.'); }
-    else if (r) api.toast('alarm', 'Not saved: ' + (r.error || 'the answer route refused it'));
+    else if (r) api.toast('bad', 'Not saved: ' + (r.error || 'the answer route refused it'));
   });
   reset.addEventListener('click', async () => {
     const r = await api.reset();
-    if (!r || !r.ok || !r.layout) { if (r) api.toast('alarm', 'Not reset: ' + (r.error || 'the answer route refused it')); return; }
+    if (!r || !r.ok || !r.layout) { if (r) api.toast('bad', 'Not reset: ' + (r.error || 'the answer route refused it')); return; }
     kept = r.layout;
     api.toast('good', 'Layout reset to the default.');
     stop();
@@ -436,11 +436,11 @@ export function startCockpit(api) {
   save.addEventListener('click', async () => {
     const r = await api.save(layout);
     if (r && r.ok) { kept = r.layout || layout; dirty = false; api.toast('good', 'Layout saved.'); }
-    else if (r) api.toast('alarm', 'Not saved: ' + (r.error || 'the answer route refused it'));
+    else if (r) api.toast('bad', 'Not saved: ' + (r.error || 'the answer route refused it'));
   });
   reset.addEventListener('click', async () => {
     const r = await api.reset();
-    if (!r || !r.ok || !r.layout) { if (r) api.toast('alarm', 'Not reset: ' + (r.error || 'the answer route refused it')); return; }
+    if (!r || !r.ok || !r.layout) { if (r) api.toast('bad', 'Not reset: ' + (r.error || 'the answer route refused it')); return; }
     kept = r.layout;
     api.toast('good', 'Layout reset to the default.');
     stop();

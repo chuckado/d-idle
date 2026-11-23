@@ -57,6 +57,8 @@
   .vt-actionbar > div { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-2); min-inline-size: 0; }
   .vt-ab-sel, .vt-ab-reveal { flex: 1 1 auto; }
   .vt-seltext { font-weight: 650; }
+  .vt-whys { display: grid; gap: var(--d-sp-1); flex: 1 1 100%; min-inline-size: 0; }
+  .vt-whys:empty, .vt-whys:not(:has(.d-why:not([hidden]))) { display: none; }
   .vt-acts { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
   .vt-b-label { display: block; }
   .vt-sub { display: block; font-size: var(--d-fs-0); font-weight: 400; color: var(--d-text-2); line-height: 1.2; }
@@ -85,11 +87,6 @@
   .vt-dkeep[data-keep="failed"] { color: var(--d-danger); font-weight: 650; }
   .vt-tag[data-tag="keep-failed"] { background: var(--d-state-bg-danger); }
   .vt-tag[data-tag="keep-kept"] { background: var(--d-state-bg-ok); }
-  /* the toast: what a press did; it goes after 10 s or on dismiss */
-  .vt-toast { position: fixed; inset-inline: var(--d-sp-4); inset-block-end: calc(var(--d-sp-4) + var(--d-nav-h, 0px)); inline-size: fit-content; max-inline-size: min(36rem, calc(100% - 2 * var(--d-sp-4))); margin: 0 auto 0 0; z-index: var(--d-z-banner); display: flex; align-items: center; gap: var(--d-sp-2); padding: var(--d-sp-1) var(--d-sp-2) var(--d-sp-1) var(--d-sp-3); font-size: var(--d-fs-1); background: var(--d-state-bg-info); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-3); box-shadow: var(--d-shadow-2); overflow-wrap: anywhere; }
-  .vt-toast[hidden] { display: none; }
-  .vt-toast[data-level="good"] { background: var(--d-state-bg-ok); } .vt-toast[data-level="bad"] { background: var(--d-state-bg-danger); }
-  .vt-toast .d-btn { align-items: center; }
 
   .vt-body { flex: 1 1 auto; display: grid; grid-template-columns: minmax(0, 1fr); }
   .vt-main { overflow: visible; padding: var(--d-sp-3) var(--d-sp-4) var(--d-sp-5); display: grid; gap: var(--d-sp-3); align-content: start; }

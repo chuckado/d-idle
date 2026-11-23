@@ -1,6 +1,9 @@
 // Identify all (TASK identifyall, TestVaultIdentifyAllJS): the toolbar button counts the WHOLE vault, hides at 0, the confirm sheet words enough and short
 // stashes, the order payload carries scope all_unrevealed, and the stash accounting holds on two fixture states.
 import { readFileSync } from 'fs';
+import { createRequire } from 'module';
+globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
+const dWhy = createRequire(import.meta.url)('./why.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -34,7 +37,7 @@ const gold = (total, order, un, stash) => ({ enabled: true, charges: 0, free: fa
   bar: { total, default: total ? 'gold' : '', line: '', options: total ? [{ id: 'gold', label: 'Gold', line: 'g', ok: true, count: total, ids: items.map((i) => i.id), cost: total * 80, skipped: [] }] : [] },
   gold: { on: true, order: order || null, stash: stash === undefined ? 5000 : stash, scrollGold: 80, confirmAt: 0, unrevealed: un === undefined ? total : un } });
 const sell = { enabled: true, queued: 0, working: 0, sold: 0, gold: 0 };
-const page = mountVault({ doc, root, get, post, later, clear, texts: T, now: () => clock });
+const page = mountVault({ toastHost: root, doc, root, get, post, later, clear, texts: T, now: () => clock });
 const bar = () => cls('vt-actionbar');
 
 
@@ -79,7 +82,8 @@ ok(posts[0] && posts[0][1].maxGold === 960 && posts[0][1].scope === 'all_unrevea
 // stash below one reveal: disabled, no sheet
 act = { reveal: gold(2, null, 30, 50), sell };
 await page.reload(false);
-ok(ident().disabled && /Not enough gold/.test(ident().title), 'a stash below one reveal disables the button with the reason: ' + ident().title);
+const identWhy = find('why-identify-all') || all(root).find((n) => n.id === ident().attrs['aria-describedby']);
+ok(ident().disabled && identWhy && !identWhy.hidden && /Not enough gold/.test(identWhy.textContent) && !ident().attrs.title, 'a stash below one reveal disables the button with a visible reason line: ' + (identWhy && identWhy.textContent));
 
 // a running order disables it
 act = { reveal: gold(2, { id: 'g-1', state: 'paid', total: 12, want: 30, done: 0, paid: 960, line: 'x' }, 30, 40), sell };
@@ -102,6 +106,7 @@ act = { reveal: gold(2, null, 30), sell };
 await page.reload(false);
 reply = { ok: false, done: ['a', 'b'], failed: [{ id: 'c', code: 'nosealed', error: 'x' }], order: { id: 'g-3', state: 'revealed', line: 'Gold reveal done: 29 items revealed' } };
 await ident().click(); await find('sheet-go').click();
-ok(/Gold reveal done: 29 items revealed 1 could not be read/.test(shownText(cls('vt-toast')[0])), 'the toast names the records that stay unrevealed: ' + shownText(cls('vt-toast')[0]));
+ok(/Gold reveal done: 29 items revealed 1 could not be read/.test(shownText(cls('d-toast')[0])), 'the toast names the records that stay unrevealed: ' + shownText(cls('d-toast')[0]));
 
+for (const w of dWhy.unexplained(all(root))) fails.push('why: ' + w);
 console.log(JSON.stringify({ fails }));

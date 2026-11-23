@@ -17,7 +17,7 @@ func TestVaultEtherUIJS(t *testing.T) {
 		t.Skip("no node")
 	}
 	dir := t.TempDir()
-	for n, name := range map[string]string{"vault.js": "vault.mjs", "vault-logic.js": "vault-logic.mjs", "vault.json": "vault.json"} {
+	for n, name := range map[string]string{"vault.js": "vault.mjs", "toast.js": "toast.cjs", "why.js": "why.cjs", "vault-logic.js": "vault-logic.mjs", "vault.json": "vault.json"} {
 		b, err := webFS.ReadFile("web/" + n)
 		if err != nil {
 			t.Fatal(err)
