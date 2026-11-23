@@ -32,6 +32,9 @@
   .d-main[data-template="cockpit"][data-cmode="phone"] > [data-cockpit-slot="phoneTabs"] { grid-template-rows: auto minmax(auto, 1fr); }
   .d-main[data-cmode="phone"] .d-slottabs { overflow: visible; }
   .d-main[data-cmode="phone"] .d-slottabs > .d-panel { overflow: visible; max-block-size: none; flex: 1 0 auto; } /* the shown panel takes what is left of the frame: no dead strip above the bar */
+  /* the zone map's grid asks for its rows' least height on a phone (a flex basis of 0 let the page end 17 px short, under the bottom bar) */
+  .d-main[data-cmode="phone"] [data-panel="zone-map"] .zm { flex: 1 0 auto; }
+  .d-main[data-cmode="phone"] [data-panel="zone-map"] .zm-grid { flex: 1 0 auto; min-block-size: calc(var(--zm-rows, 10) * 20px + (var(--zm-rows, 10) - 1) * 2px); }
   .d-main[data-cmode="phone"] .d-slottabs > .d-panel > .d-slotbody { block-size: auto; overflow: visible; }
   .d-main[data-cmode="phone"] .d-slottabs :is(.qb-box, .qb-list, .o-list, .o-items, .rows, .zm-list, .zc-scroll, .n-list, .d-slotbody[data-scroll], [data-scroll]:not(.d-tilesheet)) {
     flex: 0 0 auto; max-block-size: none; overflow: visible; overscroll-behavior: auto; scrollbar-gutter: auto; }

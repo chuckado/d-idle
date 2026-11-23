@@ -50,6 +50,9 @@ func (n *Navigator) openDoorToward(ctx context.Context, o *obs, cands []gate, le
 		}
 	}
 	at, found := n.doorBetween(o, cands, doors)
+	if !found && !approach { // a spot behind several doors: the nearest door on the way is the next step
+		at, found = n.doorOnTheWay(o, cands[0].at, doors)
+	}
 	if !found {
 		if approach && n.approachGate(ctx, o, levelNo, cands[0]) {
 			return true
@@ -251,4 +254,40 @@ func (n *Navigator) isDoorClass(class int) bool {
 	}
 	ob := n.e.Data.ObjectByID(class)
 	return ob != nil && ob.IsDoor
+}
+
+// doorOnTheWay picks, among the doors the character's walkable part touches (within gateDoorReach), the one nearest to
+// the goal, if it is nearer to it than the character is. With two doors in a row no single door joins the two sides:
+// each is opened in turn (the caller walks again after every one).
+func (n *Navigator) doorOnTheWay(o *obs, goal input.Point, doors []input.Point) (input.Point, bool) {
+	if len(doors) == 0 {
+		return input.Point{}, false
+	}
+	n.planMu.Lock()
+	defer n.planMu.Unlock()
+	f := n.fieldFor(o.lm)
+	f.ClearDyn()
+	sx, sy, ok := f.nearestWalkable(o.pos.X, o.pos.Y, 8)
+	if !ok {
+		return input.Point{}, false
+	}
+	here := floodHops(f, sx, sy)
+	best, bestD, found := input.Point{}, dist(o.pos, goal), false
+	for _, d := range doors {
+		near := math.MaxFloat64
+		for i, h := range here {
+			if h < 0 {
+				continue
+			}
+			x, y := f.pt(int32(i))
+			near = math.Min(near, dist(input.Point{X: x, Y: y}, d))
+		}
+		if near > gateDoorReach {
+			continue
+		}
+		if dg := dist(d, goal); dg < bestD {
+			best, bestD, found = d, dg, true
+		}
+	}
+	return best, found
 }
