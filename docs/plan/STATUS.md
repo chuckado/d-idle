@@ -413,6 +413,7 @@
 | necrodrill | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md`<br>`docs/probes/necromancer-readiness-2026-11-22.md` | - |
 | tapall | proposed | - | `cmd/d2scenario/tap.go`<br>`cmd/d2scenario/tap_test.go`<br>`internal/scenario/scenario.go` | - |
 | uitoast | proposed | - | `docs/OWNERS`<br>`docs/plan/STATUS.md`<br>`docs/ui-design-system.md`<br>`docs/ui/uitoast`<br>`internal/watch/http_view.go`<br>`internal/watch/invui.go`<br>`internal/watch/ordersmap_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/skillsui.go`<br>`internal/watch/testdata/glancepanels/needs-you_five-rows.txt`<br>`internal/watch/testdata/glancepanels/needs-you_one-red.txt`<br>`internal/watch/testdata/glancepanels/needs-you_red-amber.txt`<br>`internal/watch/testdata/toast_test.cjs`<br>`internal/watch/testdata/vault_clean.mjs`<br>`internal/watch/testdata/vault_ether.mjs`<br>`internal/watch/testdata/vault_identall.mjs`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`internal/watch/testdata/vault_sell.mjs`<br>`internal/watch/testdata/vault_sellall.mjs`<br>`internal/watch/toast_test.go`<br>`internal/watch/toastcontrast_test.go`<br>`internal/watch/vaultclean_test.go`<br>`internal/watch/vaultether_test.go`<br>`internal/watch/vaultidentall_test.go`<br>`internal/watch/vaultreveal_ui_test.go`<br>`internal/watch/vaultsell_ui_test.go`<br>`internal/watch/vaultsellall_ui_test.go`<br>`internal/watch/web/alerts.js`<br>`internal/watch/web/app.css`<br>`internal/watch/web/app.js`<br>`internal/watch/web/components.css`<br>`internal/watch/web/inventory.js`<br>`internal/watch/web/layoutedit.js`<br>`internal/watch/web/panels/needs-you/panel.css`<br>`internal/watch/web/panels/needs-you/panel.js`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/toast.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.html`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/watch.html`<br>`tools/uilint/lint.go`<br>`tools/uilint/uilint_test.go`<br>`tools/uishots/fit.js` | - |
+| manapack | proposed | - | `internal/bot/routeguard.go`<br>`internal/bot/kitplan_test.go` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -447,6 +448,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 5cb82cacf 11-22 20:48 `Merge agent/manapack: Merge branch 'main' into manapack` (manapack)
+- 9b7184df0 11-22 20:46 `Merge branch 'main' into manapack` (-)
 - bb17292c7 11-22 20:38 `Merge agent/navdoc: Merge branch 'main' into navdoc` (navdoc)
 - 8f8a4189b 11-22 20:36 `Merge branch 'main' into navdoc` (-)
 - 967ae57c9 11-22 20:28 `Merge agent/uitoast: Merge origin/main into agent/uitoast` (uitoast)
@@ -455,6 +458,4 @@
 - 3a808c7a1 11-22 19:24 `Merge branch 'main' into uisheet` (-)
 - 2e539c616 11-22 19:19 `Merge agent/navexit: Merge branch 'main' into tapall` (navexit)
 - c9d37b389 11-22 19:17 `Merge branch 'main' into tapall` (-)
-- 2a42174c2 11-22 19:04 `Merge agent/buildcards: Merge branch 'main' into buildcards` (buildcards)
-- fc434b589 11-22 19:03 `Merge branch 'main' into buildcards` (-)
 <!-- statusgen:end -->
