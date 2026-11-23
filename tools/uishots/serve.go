@@ -130,6 +130,13 @@ func serve(addr, class string) error {
 			w.Write(b)
 		})
 	}
+	// two learned rules and one revoked (fixture text), for the Settings sheet's Rules section
+	m.HandleFunc("/api/rules", func(w http.ResponseWriter, r *http.Request) {
+		js(w, map[string]any{"schema": "watch.rules/1", "seq": 3, "now": 30, "live": 2, "rules": []any{
+			map[string]any{"key": "r1", "text": "When asked \"Buy a Town Portal scroll?\" (in town), I buy one.", "risk": "low", "revoked": false},
+			map[string]any{"key": "r2", "text": "When asked \"Drink a rejuvenation potion at 40% life?\" (in a fight), I drink it.", "risk": "medium", "revoked": false},
+			map[string]any{"key": "r3", "text": "When asked \"Sell the rare gloves?\" (in town), I keep them.", "risk": "low", "revoked": true}}})
+	})
 	m.HandleFunc("/api/alerts", func(w http.ResponseWriter, r *http.Request) {
 		js(w, map[string]any{"schema": "watch.alerts/1", "open": false, "seq": 2, "alerts": []any{
 			map[string]any{"seq": 1, "t": 12, "rule": "gear", "kind": "gear", "severity": "warn", "free": true, "text": "Short Staff is broken."},

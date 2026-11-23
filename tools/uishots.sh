@@ -83,8 +83,8 @@ nav-more-gear watch/inventory?theme=dark #btn-more #menu-more,#btn-more
 nav-more-skills watch/skills?theme=dark #btn-more #menu-more,#btn-more
 nav-more-vault watch/vault?theme=dark&vault=pop #btn-more #menu-more,#btn-more
 nav-more-characters watch/characters?theme=dark&chars=3 #btn-more #menu-more,#btn-more
-settings-rules watch/skills?theme=dark&settings=rules ?#btn-more .d-sheet-ok,.d-set-sec
-settings-alerts watch/skills?theme=dark&settings=alerts ?#btn-more .d-sheet-ok,.d-set-sec
+settings-rules watch/skills?theme=dark&settings=rules ?.d-set-h .d-sheet-ok,.d-set-sec
+settings-alerts watch/skills?theme=dark&settings=alerts ?.d-set-h .d-sheet-ok,.d-set-sec
 navdefect-covers watch/skills?theme=dark&defect=nav-covers
 navdefect-small watch/skills?theme=dark&defect=nav-small
 navdefect-sheet watch/skills?theme=dark&defect=nav-sheet #btn-more #menu-more,#btn-more
