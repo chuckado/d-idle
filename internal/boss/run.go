@@ -338,6 +338,8 @@ func (r *runner) poll(ctx context.Context, n int) (Mon, bool, error) {
 // locate finds the boss: look, walk to the preset stand point, look, walk to the hint, look, explore, look.
 func (r *runner) locate(ctx context.Context) (Mon, error) {
 	r.phase("locate")
+	var anchorErr error // the walk to the spawn point failed (not cancelled): "not found" then means "unreachable"
+	var anchorAt Pt
 	try := func(n int) (Mon, bool, error) { return r.poll(ctx, n) }
 	if m, ok, err := try(1); err != nil || ok {
 		return m, err
@@ -368,6 +370,9 @@ func (r *runner) locate(ctx context.Context) (Mon, error) {
 			}
 			if err := r.a.GoTo(ctx, p); err != nil {
 				r.note("goto anchor: %v", err)
+				if ctx.Err() == nil {
+					anchorErr, anchorAt = err, p
+				}
 			}
 			if m, ok, err := try(r.o.LocatePolls); err != nil || ok {
 				return m, err
@@ -414,6 +419,9 @@ func (r *runner) locate(ctx context.Context) (Mon, error) {
 	}
 	if v, err := r.w.View(ctx); err == nil {
 		r.note("monsters in view: %s", monsterSummary(v.Monsters))
+	}
+	if anchorErr != nil {
+		return Mon{}, fmt.Errorf("%w: its spawn point %v could not be reached (%v)", ErrBossNotFound, anchorAt, anchorErr)
 	}
 	return Mon{}, ErrBossNotFound
 }
