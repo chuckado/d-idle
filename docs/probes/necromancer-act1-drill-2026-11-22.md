@@ -141,3 +141,8 @@ The earned Act 1 drill is NOT green for the Necromancer: the Den to Blood Raven 
 
 ### Verdict
 The earned Act 1 drill is still NOT green for the Necromancer: Den to Blood Raven fails at the Den hand-in in the stage-1 setup (cause open), the Countess stage is GREEN, Andariel is unrun. Not ready to play. What is fixed (offline tests, not yet shown in a scenario): the return leg from the Barracks, the plan overlap with a queued chunk, the driver's Start-during-hand-in.
+
+## 12. Stage 1 GREEN (job 20261123-041955-81fd, 718 s wall; supersedes the verdict of section 11)
+After the three fixes and one fixture change, `necro.act1-stage1` (Necromancer 11, clvl 16 fixture, tap list Den then Blood Raven, sandbox nav knobs, CHEATED setup) is GREEN for the 90 virtual minutes: record 1 bit 0 (Den reward taken) and record 2 bit 0 (Blood Raven) set, no death, `writes after start: 0`.
+The open cause of section 11 was the fixture's belt: with four healing potions and no mana potion the kit gate sent the hero to town (`kit: mana potions 0/3`) the moment the Den was cleared, while the Hand in tap was landing, and the Akara talk paid no skill point. With one mana potion in the belt (as in `act1.den.clear`) there is no trip and the hand-in is paid. That is a real interaction (a town trip between the clear and the hand-in loses the reward for the run) which a played Necromancer can meet: card `den hand-in after a town trip` (U whether the board retries the hand-in after the trip; here it parked after three tries).
+Staged drill status: stage 1 GREEN, stage 2 (Countess) GREEN, Tools of the Trade not live, stage 3 (Andariel) unrun. Still not ready to play: a whole act has not been run, and every stage here starts from a CHEATED fixture.
