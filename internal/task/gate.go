@@ -141,16 +141,10 @@ func (g BossGate) floor(w World) int {
 // barracksShort says why the Barracks is closed to w beyond the route guard ("" = open): the class level floor, then the
 // max life floor (only while the life is readable). The text is what the board shows as the hold.
 func (g BossGate) barracksShort(w World) string {
-	if !g.Barracks || !normalDiff(w) {
+	if !g.Barracks {
 		return ""
 	}
-	if w.BarracksMinLevel > 0 && w.Level < w.BarracksMinLevel {
-		return fmt.Sprintf("level %d needed for the Barracks (clvl %d)", w.BarracksMinLevel, w.Level)
-	}
-	if w.BarracksMinLife > 0 && w.MaxLife > 0 && w.MaxLife < w.BarracksMinLife {
-		return fmt.Sprintf("max life %d needed for the Barracks (have %d)", w.BarracksMinLife, w.MaxLife)
-	}
-	return ""
+	return BarracksWhy(w)
 }
 
 func (g BossGate) baseFloor(w World) int {

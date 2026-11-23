@@ -115,3 +115,32 @@ func TestWithRouteKit(t *testing.T) {
 		}
 	}
 }
+
+// Below the class floor of the Barracks (route.barracks*) the picker never offers the Barracks or what lies past it
+// (Jail to Catacombs: the farm walk crosses the arrival), and a walk through them is refused with the reason. At the
+// floors both are open. Paladin and Sorceress; fails without barracksGuardWhy.
+func TestBarracksFloorKeepsTheFarmWalkOut(t *testing.T) {
+	for _, tc := range []struct {
+		class       d2.Class
+		level, life int
+		closed      bool
+	}{
+		{d2.Paladin, 20, 279, true}, {d2.Paladin, 24, 420, false}, {d2.Paladin, 24, 300, true},
+		{d2.Sorceress, 21, 300, true}, {d2.Sorceress, 22, 300, false},
+	} {
+		rg := newRig(t)
+		s := &d2.Snapshot{State: d2.StateInGame, Player: &d2.Player{Area: 5, Level: tc.level, Class: tc.class, Difficulty: d2.Normal, Life: tc.life, MaxLife: tc.life}}
+		why := rg.r.barracksGuardWhy(s, 30)
+		ex := map[int]bool{}
+		rg.r.guardedAreasNoFarm(s, ex)
+		if (why != "") != tc.closed {
+			t.Errorf("%v clvl %d life %d: why %q, closed want %v", tc.class, tc.level, tc.life, why, tc.closed)
+		}
+		for _, a := range []int{28, 29, 33, 35, 37} {
+			// at the floors the route guard may still close them (the rig has no kit): only the closed case is asserted
+			if tc.closed && !ex[a] {
+				t.Errorf("%v clvl %d life %d: area %d not excluded below the floor", tc.class, tc.level, tc.life, a)
+			}
+		}
+	}
+}

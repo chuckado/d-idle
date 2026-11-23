@@ -435,3 +435,24 @@ func TestBurialGroundsMeleeEntryIsHigher(t *testing.T) {
 		}
 	}
 }
+
+// A clvl 19 to 24 hero below the Barracks floor (areas 28 to 37 excluded by the guard) is sent to the Tower Cellars, not to
+// a window that closed at clvl 3 to 14 (V live 2026-11-23: Blood Moor, Cave 2, Black Marsh at about 28 XP/min; the plan's
+// Act 1 windows ended at 18). Paladin and Sorceress plan rows; fails without the tower_cellars rows of levelplan-normal.json.
+func TestPickBelowTheBarracksFloorUsesTheTowerCellars(t *testing.T) {
+	p, _ := LoadPlan("")
+	ex := map[int]bool{}
+	for a := 28; a <= 37; a++ {
+		ex[a] = true
+	}
+	// Only the Paladin has an active v3 plan today (the Sorceress and Barbarian rows are inactive: their rows carry the same
+	// slice for the day they are switched on); the other classes keep the progression rows.
+	for _, class := range []string{"paladin"} {
+		for _, level := range []int{16, 20, 22, 24} {
+			s, ok := p.Pick("normal", level, PickOptions{Acts: map[int]bool{1: true}, Exclude: ex, Class: class, FullKit: true})
+			if !ok || s.Area < 21 || s.Area > 24 {
+				t.Errorf("%s clvl %d: picked area %d (%v), want a Tower Cellar 21 to 24", class, level, s.Area, ok)
+			}
+		}
+	}
+}
