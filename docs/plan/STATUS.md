@@ -419,7 +419,6 @@
 | forksync | in-progress | - | `docs/process/fork-sync-cadence.md` | - |
 | toolstrade2 | proposed | - | `internal/nav/nav.go`<br>`internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | navexit2 | proposed | - | `tools/provingground/scenarios/navexit.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
-| toolstrade3 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/nav.go`<br>`internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
