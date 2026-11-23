@@ -170,6 +170,32 @@ while (later.q.length) later.q.shift()(); await tick(); await tick();
 ok(find('strip').hidden && has('Now playing Zapp.'), 'strip gone, done note from the read-back');
 getFail = null; view = JSON.parse(JSON.stringify(LIST)); await page.refresh();
 
+// a hero the game has not saved yet (card uichars): "Creating" while the switch runs and after it, until the first save lists it
+{
+  const base = JSON.parse(JSON.stringify(LIST));
+  view = Object.assign(JSON.parse(JSON.stringify(base)), { switch: { from: 'Holy', to: 'Newbie', creating: true, since: 'x' } });
+  await page.refresh();
+  ok(!!find('char-pending-Newbie') && has('Creating Newbie... it appears in this list after the game saves.'), 'a row for the hero being created, with the plain line');
+  ok(!find('char-pending-Newbie').children.some((n) => n.className === 'cs-acts'), 'the pending row has no Delete or Switch (nothing to act on yet)');
+  view = Object.assign(JSON.parse(JSON.stringify(base)), { active: 'Newbie' });
+  view.characters[0].active = false;
+  await page.refresh();
+  ok(!!find('char-pending-Newbie') && has('not saved yet'), 'after the switch the playing hero is still shown until its first save');
+  view = JSON.parse(JSON.stringify(base)); view.characters.push({ name: 'Newbie', class: 'paladin', className: 'Paladin', level: 1, hardcore: false, expansion: true, lastPlayed: '2025-11-15T09:46:40Z', active: false, archived: [] });
+  await page.refresh();
+  ok(!find('char-pending-Newbie') && !!find('switch-Newbie'), 'once the save lists it the pending row is gone');
+  // an orphan: a parked folder with no .d2s
+  view = Object.assign(JSON.parse(JSON.stringify(base)), { unsaved: ['Ghost', 'Zapp'] });
+  await page.refresh();
+  ok(!!find('char-unsaved-Ghost') && has('The game has not saved this hero yet.') && !find('char-unsaved-Zapp'), 'an orphan folder is shown as not saved yet; a saved name is not');
+  ok(!find('delete-Ghost'), 'an orphan has nothing to delete');
+  // the empty state is not drawn over a waiting hero
+  view = { schema: 'watch.characters/1', active: 'Newbie', caps: LIST.caps, characters: [], deleted: [] };
+  await page.refresh();
+  ok(!!find('char-pending-Newbie') && !has(T.emptyTitle), 'no empty-state panel while a hero waits for its first save');
+  view = JSON.parse(JSON.stringify(LIST)); await page.refresh();
+}
+
 // delete: the active hero is refused with the reason, no API call
 posts = [];
 await find('delete-Holy').click();

@@ -443,6 +443,7 @@ docs/charselect-ui.md  credit-runner  charui
 docs/charselect.md  credit-runner  charselect
 docs/charselect.md  credit-runner  charselectdoc
 docs/charselect.md  credit-runner  charsup
+docs/charselect.md  credit-runner  uichars
 docs/cheats.md  credit-runner  vaultpay
 docs/combat.md  credit-runner  cainfix3
 docs/contracts/decision-queue.md  credit-runner  qqueue
@@ -1133,8 +1134,11 @@ internal/campaign/campaign_test.go  pro-runner  levelplan3
 internal/charsel  credit-runner  charselect
 internal/charsel  credit-runner  charsup
 internal/charsel/lootrulesstate_test.go  credit-runner  lootwire3
+internal/charsel/manager.go  credit-runner  uichars
 internal/charsel/perchar.json  credit-runner  lootwire3
 internal/charsel/rules.go  credit-runner  charui
+internal/charsel/store.go  credit-runner  uichars
+internal/charsel/store_unsaved_test.go  credit-runner  uichars
 internal/combat  credit-runner  wiring2
 internal/combat/  credit-runner  cainfix3
 internal/combat/  credit-runner  dlv-aim-corpse
@@ -1762,6 +1766,7 @@ internal/watch/cardtext.go  credit-runner  friendfb
 internal/watch/charactersapi.go  credit-runner  charselect
 internal/watch/charactersapi_test.go  credit-runner  charselect
 internal/watch/charactersui_test.go  credit-runner  charui
+internal/watch/charactersui_test.go  credit-runner  uichars
 internal/watch/charscreen_test.go  credit-runner  uic2
 internal/watch/commands.go  credit-runner  uib6
 internal/watch/commands.go  credit-runner  uis4
@@ -2105,8 +2110,10 @@ internal/watch/web/app.js  credit-runner  uitoast
 internal/watch/web/characters.css  credit-runner  charui
 internal/watch/web/characters.html  credit-runner  charui
 internal/watch/web/characters.js  credit-runner  charui
+internal/watch/web/characters.js  credit-runner  uichars
 internal/watch/web/characters.js  credit-runner  uinav
 internal/watch/web/characters.json  credit-runner  charui
+internal/watch/web/characters.json  credit-runner  uichars
 internal/watch/web/components.css  credit-runner  jewelcolor
 internal/watch/web/components.css  credit-runner  jewelicons
 internal/watch/web/components.css  credit-runner  uireason
@@ -2556,6 +2563,7 @@ tools/uishots/fixtures.go  credit-runner  mapphone
 tools/uishots/fixtures.go  credit-runner  uic2
 tools/uishots/fixtures.go  credit-runner  vaultv4
 tools/uishots/fixtures_chars.go  credit-runner  charui
+tools/uishots/fixtures_chars.go  credit-runner  uichars
 tools/uishots/fixtures_commands.go  credit-runner  labels
 tools/uishots/fixtures_commands.go  credit-runner  uis4
 tools/uishots/fixtures_glance.go  credit-runner  uis7
