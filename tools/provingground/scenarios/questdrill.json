@@ -1117,6 +1117,10 @@
      {
       "record": 4,
       "word": 8209
+     },
+     {
+      "record": 9,
+      "word": 1
      }
     ],
     "items": [
@@ -1127,6 +1131,18 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "box",
+      "count": 1
+     },
+     {
+      "code": "msf",
+      "count": 1
+     },
+     {
+      "code": "vip",
+      "count": 1
      }
     ],
     "belt": [
@@ -1209,7 +1225,7 @@
      11
     ]
    },
-   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero). The cube, the shaft and the amulet are given by SETUP verbs (the drill covers the assembly, not the finds).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md). The quest word after the Cain talk was 0x0c78 in the lab (bit 0 not set): whether the talk completes the quest is U, so the scenario asserts the staff item and the menu, not record 10.",
    "assert": [
     {
