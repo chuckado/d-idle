@@ -647,6 +647,7 @@ docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade10
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade11
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade13
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
@@ -905,9 +906,12 @@ internal/boss  credit-runner  countess3
 internal/boss  credit-runner  wiring2
 internal/boss/act1.go  credit-runner  countess
 internal/boss/boss_test.go  credit-runner  countess
+internal/boss/boss_test.go  credit-runner  toolstrade13
 internal/boss/boss_test.go  pro-runner  levelplan3
+internal/boss/fake_test.go  credit-runner  toolstrade13
 internal/boss/fake_test.go  pro-runner  levelplan3
 internal/boss/run.go  credit-runner  countess
+internal/boss/run.go  credit-runner  toolstrade13
 internal/boss/run.go  pro-runner  levelplan3
 internal/boss/script.go  credit-runner  countess
 internal/boss/types.go  pro-runner  levelplan3
@@ -1456,6 +1460,7 @@ internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/fullgrid_test.go  credit-runner  knownedge
 internal/nav/gatedoor.go  credit-runner  toolstrade
 internal/nav/gatedoor.go  credit-runner  toolstrade10
+internal/nav/gatedoor.go  credit-runner  toolstrade13
 internal/nav/gatedoor.go  credit-runner  toolstrade8
 internal/nav/gatedoor_test.go  credit-runner  toolstrade
 internal/nav/gatedoor_test.go  credit-runner  toolstrade10
@@ -2418,6 +2423,8 @@ tools/levelsim/shadow_test.go  credit-runner  survB
 tools/lib/heavy-guard-test.sh  credit-runner  heavyguard
 tools/lib/heavy-guard.sh  credit-runner  heavyguard
 tools/play-session.sh  credit-runner  playsession
+tools/probes/capture.py  credit-runner  toolstrade13
+tools/probes/capture_test.py  credit-runner  toolstrade13
 tools/probes/exitscmp  credit-runner  exitsread
 tools/probes/exitsread.py  credit-runner  exitsread
 tools/probes/gridwhole.py  credit-runner  gridwhole
