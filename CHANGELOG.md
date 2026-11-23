@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- allocprobe: card <!--sg:agent/allocprobe-->
 - Merge branch 'main' into allocfix <!--sg:agent/allocfix-->
 - Merge branch 'main' into fitfix3 <!--sg:agent/fitfix3-->
 - Merge branch 'main' into fitfix2 <!--sg:agent/fitfix2-->
