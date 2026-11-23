@@ -17,6 +17,7 @@ type BossGate struct {
 	Antidotes int  // antidote potions wanted; only checked while the character can afford them (antidoteGold)
 	Andy      bool // MinLevel is the Andariel knob, see andarielFloor
 	Route     bool // the walk is the Monastery road: the route guard (route.go) applies on top
+	Barracks  bool // the Smith's Barracks: the class floors World.BarracksMinLevel and BarracksMinLife apply on top
 	BR        bool // Blood Raven: the floor, kit counts and gold come from World.BR (brFloor, brShort), not from the fields above
 }
 
@@ -131,7 +132,25 @@ func (g BossGate) floor(w World) int {
 	if g.Route {
 		f = max(f, routeFloor(w))
 	}
+	if g.Barracks && normalDiff(w) {
+		f = max(f, w.BarracksMinLevel)
+	}
 	return f
+}
+
+// barracksShort says why the Barracks is closed to w beyond the route guard ("" = open): the class level floor, then the
+// max life floor (only while the life is readable). The text is what the board shows as the hold.
+func (g BossGate) barracksShort(w World) string {
+	if !g.Barracks || !normalDiff(w) {
+		return ""
+	}
+	if w.BarracksMinLevel > 0 && w.Level < w.BarracksMinLevel {
+		return fmt.Sprintf("level %d needed for the Barracks (clvl %d)", w.BarracksMinLevel, w.Level)
+	}
+	if w.BarracksMinLife > 0 && w.MaxLife > 0 && w.MaxLife < w.BarracksMinLife {
+		return fmt.Sprintf("max life %d needed for the Barracks (have %d)", w.BarracksMinLife, w.MaxLife)
+	}
+	return ""
 }
 
 func (g BossGate) baseFloor(w World) int {
@@ -179,7 +198,7 @@ var bossGates = map[string]BossGate{
 	// Barracks / Monastery Gate: V, G1 attempts 11 to 13 died there 10 times (docs/deathautopsy.md), once with 2 minor
 	// potions and no scroll. Kit of 4 healing potions, a scroll or tome and 2 mana potions for a caster is a supply
 	// gate (U: the counts are judgment), not a level floor.
-	QTools:    {MinLevel: 8, Potions: 4, NeedTP: true, ManaPots: 2, Route: true},
+	QTools:    {MinLevel: 8, Potions: 4, NeedTP: true, ManaPots: 2, Route: true, Barracks: true},
 	QTower:    {MinLevel: 14, Potions: 4, NeedTP: true, ManaPots: 2},
 	QAndariel: {MinLevel: env.DefaultAndarielMinLevel, Potions: minPotions, NeedTP: true, ManaPots: 3, Antidotes: 2, Andy: true, Route: true},
 }
@@ -191,6 +210,9 @@ func (g BossGate) NotReady(w World) string {
 	}
 	if g.Route && w.Level < routeFloor(w) {
 		return "route guard: blocked monastery (" + RouteLevelWhy(w) + ")"
+	}
+	if why := g.barracksShort(w); why != "" {
+		return why
 	}
 	if w.Level < g.floor(w) {
 		return fmt.Sprintf("clvl %d < %d", w.Level, g.floor(w))
@@ -240,7 +262,7 @@ func gateReady(q string) func(World) *Fault {
 		switch {
 		case why == "":
 			return nil
-		case w.Level < g.floor(w):
+		case w.Level < g.floor(w), g.barracksShort(w) != "":
 			return refusal(w, "too_weak", "not ready: "+why)
 		case g.BR && normalDiff(w) && brShort(w) == "":
 			// only gold is short: a chores trip buys nothing, the planner levels and farms first (recovery)
