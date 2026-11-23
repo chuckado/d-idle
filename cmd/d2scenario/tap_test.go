@@ -300,3 +300,29 @@ func TestTapperCampaignDriver(t *testing.T) {
 		t.Fatalf("a quest outside the list was tapped: %q", tap)
 	}
 }
+
+// necro.act1-stage1 (2026-11-23): the driver tapped Start on the next chunk the moment it tapped Hand in, which cancelled the
+// hand-in dialogue and left the Den unfinished. The next Start waits until the board no longer shows the hand-in.
+func TestTapperWaitsForTheHandInBeforeTheNextStart(t *testing.T) {
+	b := &board{}
+	srv := httptest.NewServer(b.handler(t))
+	defer srv.Close()
+	tp := newTapper(srv.URL, srv.URL, "tok", "den_of_evil,sisters_burial_grounds", nil, io.Discard)
+	ctx := context.Background()
+	hand := `{"quests":[{"id":"den_of_evil","chunks":[{"id":"clear_den","state":"awaiting_handin","action":{"verb":"handin"}}]},
+	 {"id":"sisters_burial_grounds","chunks":[{"id":"blood_raven","state":"ready","action":{"verb":"start"}}]}]}`
+	b.set(hand)
+	if tap, _, _ := tp.Step(ctx); tap != "handin clear_den" {
+		t.Fatalf("first tap %q", tap)
+	}
+	for i := 0; i < 3; i++ { // the board still shows the hand-in: no Start for the other quest
+		if tap, _, _ := tp.Step(ctx); tap != "" {
+			t.Fatalf("tapped %q while the hand-in is pending", tap)
+		}
+	}
+	b.set(`{"quests":[{"id":"den_of_evil","chunks":[{"id":"clear_den","state":"done"}]},
+	 {"id":"sisters_burial_grounds","chunks":[{"id":"blood_raven","state":"ready","action":{"verb":"start"}}]}]}`)
+	if tap, _, _ := tp.Step(ctx); tap != "start blood_raven" {
+		t.Fatalf("after the hand-in: %q", tap)
+	}
+}

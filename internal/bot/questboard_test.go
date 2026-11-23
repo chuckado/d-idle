@@ -341,3 +341,29 @@ func TestFailSpend(t *testing.T) {
 		t.Fatal("a step that did not fail, or an idle tick that already waits, spends nothing extra")
 	}
 }
+
+// necro stage 1: a long goal travel yields once to a runnable chunk, never to the same chunk twice, and never without one.
+func TestBoardYieldOncePerChunk(t *testing.T) {
+	for _, class := range []d2.Class{d2.Necromancer, d2.Paladin} {
+		t.Run(class.String(), func(t *testing.T) {
+			g, x := boardRig(t, true)
+			g.w.set(func(w *world) { w.class = class; w.area = 2 })
+			snap, _ := g.w.snapshot()
+			g.r.obMu.Lock()
+			g.r.ob.lastSnap = snap
+			g.r.obMu.Unlock()
+			if g.r.boardYield() {
+				t.Fatal("no accepted chunk: nothing to yield to")
+			}
+			if err := x.Accept("den_of_evil", "clear_den"); err != nil {
+				t.Fatal(err)
+			}
+			if !g.r.boardYield() {
+				t.Fatal("an accepted runnable chunk must stop the travel at the next hop")
+			}
+			if g.r.boardYield() {
+				t.Fatal("the same chunk must not stop the travel twice (starvation)")
+			}
+		})
+	}
+}
