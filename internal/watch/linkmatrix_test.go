@@ -88,6 +88,13 @@ func TestNavEveryPage(t *testing.T) {
 		{"hall", "/watch/hall", string(RenderHall(&HallView{}))},
 	}
 	c := loadNav(t)
+	hasSettings := false
+	for _, m := range c.More {
+		hasSettings = hasSettings || m.ID == "settings"
+	}
+	if !hasSettings {
+		t.Error("nav.json More has no Settings entry (rule revoking and alert settings live there; every page below loads nav.js, so every page reaches it)")
+	}
 	for _, p := range pages {
 		for _, want := range []string{`<script src="/watch/nav.js"></script>`, `href="/watch/nav.css"`} {
 			if !strings.Contains(p.src, want) {

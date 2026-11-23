@@ -1,6 +1,7 @@
 // The one confirm sheet (card uisheet, docs/ui-design-system.md "Sheets and confirms"). Every "are you sure" on the web pages goes
 // through here; window.confirm, alert and prompt are not used anywhere (sheet_noprompt_test.go greps for them).
 // o = { title, lines: [text], variants: [{name,label,tier}], advanced: {summary, variants: [{name,label,why,recommended,warn}]}, pick (name), confirmText, cancelText, danger, notice, onConfirm(pick), onCancel, opener, parent }.
+// panel: a titled dialog that carries nodes of its own (o.nodes, appended after the lines) and one Close button (confirmText, default "Close"): the Settings sheet.
 // notice: a one-button message (the replacement for alert). danger: the confirm button is the red one and the dialog is an alertdialog.
 // Focus goes into the sheet, Tab stays inside, Escape, a press on the backdrop or Cancel closes it and returns the focus to the opener.
 // advanced: a collapsed button that, when pressed, shows the variants as radios (none are rendered while collapsed); the radios
@@ -23,7 +24,7 @@
     const id = 'd-sheet-' + (++seq);
     const back = mk(doc, 'div', 'd-sheet-back');
     const sh = mk(doc, 'div', 'd-sheet');
-    sh.setAttribute('role', o.danger || o.notice ? 'alertdialog' : 'dialog');
+    sh.setAttribute('role', (o.danger || o.notice) && !o.panel ? 'alertdialog' : 'dialog');
     sh.setAttribute('aria-modal', 'true');
     const title = mk(doc, 'h2', 'd-sheet-title', o.title);
     title.id = id + '-t';
@@ -32,6 +33,7 @@
     sh.append(title);
     const lines = o.lines || [];
     lines.forEach((t, i) => { const p = mk(doc, 'p', 'd-sheet-line', t); if (!i) { p.id = id + '-d'; sh.setAttribute('aria-describedby', p.id); } sh.append(p); });
+    if (o.nodes) sh.append(...o.nodes);
     let pick = o.pick || (o.variants && o.variants[0] && o.variants[0].name) || '';
     if (o.variants && o.variants.length > 1) {
       const fs = mk(doc, 'div', 'd-sheet-pick');
@@ -88,10 +90,10 @@
     const row = mk(doc, 'div', 'd-sheet-row');
     const cancel = mk(doc, 'button', 'd-btn d-sheet-cancel', o.cancelText || 'Cancel');
     cancel.type = 'button';
-    const ok = mk(doc, 'button', 'd-btn d-sheet-ok', o.confirmText || (o.notice ? 'OK' : 'Confirm'));
+    const ok = mk(doc, 'button', 'd-btn d-sheet-ok', o.confirmText || (o.panel ? 'Close' : o.notice ? 'OK' : 'Confirm'));
     ok.type = 'button';
     ok.setAttribute('data-variant', o.danger ? 'danger' : 'primary');
-    if (!o.notice) row.append(cancel);
+    if (!o.notice && !o.panel) row.append(cancel);
     row.append(ok);
     sh.append(row);
     back.append(sh);
@@ -104,7 +106,7 @@
     }
     function dismiss() { if (closed) return; close(); if (o.onCancel) o.onCancel(); }
     cancel.addEventListener('click', dismiss);
-    ok.addEventListener('click', () => { const p = pick; close(o.notice ? true : false); if (o.onConfirm) o.onConfirm(p); });
+    ok.addEventListener('click', () => { const p = pick; close(o.notice || o.panel ? true : false); if (o.onConfirm) o.onConfirm(p); });
     back.addEventListener('click', (e) => { if (e.target === back) dismiss(); });
     back.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') { e.preventDefault(); dismiss(); return; }

@@ -89,6 +89,18 @@ for (const [p, , d] of cases.filter((c) => c[2])) {
   const cur = m.n.sheet.all().filter((n) => n.attrs && n.attrs['aria-current']);
   ok(cur.length === 1 && cur[0].dataset.nav === 'policy', 'and the sheet marks Policy');
 }
+// 4b. Settings: an entry on every page's sheet opens the Settings sheet in place (the page gets no navigation)
+for (const [p, kind] of [['/watch/inventory', 'band'], ['/watch/vault', 'bare'], ['/watch/hall', 'bare'], ['/watch', 'band']]) {
+  const doc = makeDoc(); page(doc, kind);
+  let asked = null;
+  const env = { doc, cfg, loc: { pathname: p, search: '' }, narrow: () => true, width: () => 390, store: { get: () => null, set() {} }, later: (f) => f(), onNarrow() {}, onResize() {}, settings: (o, sec) => { asked = [o, sec]; } };
+  const n = createNav(env); n.mount();
+  const a = n.sheet.all().find((x) => x.dataset.nav === 'settings');
+  ok(a && a.tag === 'a' && a.textContent === 'Settings', p + ': the More sheet has a Settings entry');
+  const ce = new Ev('click', { cancelable: true }); a.dispatchEvent(ce);
+  ok(asked && asked[0] === a && ce.defaultPrevented, p + ': pressing Settings opens the sheet in place');
+}
+
 // 5. the theme button of a page that has none
 {
   const m = mount('/watch/vault', '', { v: false }, 'bare');
