@@ -253,7 +253,13 @@
     "board": {
      "quest": "tools_of_the_trade",
      "chunk": "malus"
-    }
+    },
+    "spawn": [
+     {
+      "monster": "fallen1",
+      "n": 2
+     }
+    ]
    },
    "trigger": {
     "goals": "reach:30",
@@ -278,7 +284,7 @@
     ]
    },
    "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero.",
-   "notes": "The pickup half of Tools of the Trade, apart from the kill: the Malus is given at the hero's feet in the Barracks (debug give hdm 2, SETUP). U: whether the bot's loot picks a quest item at once or only inside the boss script. A RED here is a bot finding; GREEN says nothing about the drop (step.act1.smith.drop_pickup, pending on fork verb F2).",
+   "notes": "The pickup half of Tools of the Trade, apart from the kill: the Malus is given at the hero's feet in the Barracks (debug give hdm 2, SETUP). U: whether the bot's loot picks a quest item at once or only inside the boss script. A RED here is a bot finding; GREEN says nothing about the drop (step.act1.smith.drop_pickup, pending on fork verb F2). First run (V, run 20261123-175729, no monsters): RED, the bot never clicked the ground Malus while the boss script ran (loot sweeps follow fights): two Fallen are spawned so a fight, then a loot sweep, happens.",
    "assert": [
     {
      "kind": "log_line",
