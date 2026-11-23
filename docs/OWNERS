@@ -660,7 +660,6 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade15
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade16
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade17
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade18
-docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade19
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
@@ -1728,7 +1727,6 @@ internal/town  credit-runner  town5
 internal/town  credit-runner  town6
 internal/town  credit-runner  town7
 internal/town  credit-runner  town8
-internal/town/basicsfix.go  credit-runner  toolstrade19
 internal/town/belt  credit-runner  beltfix
 internal/town/beltfill.go  credit-runner  beltfix
 internal/town/beltfix6_test.go  credit-runner  beltfix
@@ -1751,7 +1749,6 @@ internal/town/playerid.go  credit-runner  vaultreveal
 internal/town/playerstash.go  credit-runner  itemverbs2
 internal/town/playerstash_test.go  credit-runner  towntests
 internal/town/portalonly_test.go  credit-runner  cainchain
-internal/town/purserig_test.go  credit-runner  toolstrade19
 internal/town/repairtrip_test.go  credit-runner  repairtrip
 internal/town/shop.go  credit-runner  lootwire3
 internal/town/shop.go  credit-runner  lootwireL4

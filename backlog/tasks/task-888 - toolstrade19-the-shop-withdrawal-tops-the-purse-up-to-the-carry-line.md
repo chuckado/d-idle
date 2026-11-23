@@ -1,10 +1,11 @@
 ---
 id: TASK-888
 title: 'toolstrade19: the shop withdrawal tops the purse up to the carry line'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T11:07:00Z'
+updated_date: '2026-11-23T11:30:00Z'
 labels:
   - bot
   - bot-fix
