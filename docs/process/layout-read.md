@@ -26,3 +26,9 @@ The private d2d fork has a read-only control verb `debug levelmap` (fork branch 
 - Verb (private fork, branch `didle/level-monsters-20261121`, read-only, on the allow-list): one JSON line `{level, unit:"cell", rooms_up, presets:[{index,kind,id,super,name,x,y,room,up}], monsters:[{id,type,name,display,x,y,boss,super,mode,life,alive}]}`; `presets` are the monster-type preset units (kind monster, superunique or place), `monsters` the units made so far (the same walk as the `monsters` verb).
 - Bot side: `d2dctl.Client.LevelMonsters` (+ fake fixture `LevelMonsters`); with `quests.layoutRead` on, `d2dworld` adds each superunique preset as an NPC preset with its name; the boss script resolves her anchor by NAME (`PresetRef.Name`, "The Countess" equals "TheCountess"), then walks there. Knob off or verb absent: today's behaviour (hint, then explore).
 - Offline must-fail test: `TestCountessWalksToReadSpawnPresetByName` (Paladin and Sorceress arrivals), fails without the name match.
+
+## Prerequisite of the Smith and Countess steps (card toolstrade9, 2026-11-23)
+
+- V (lab runs, docs/probes/tools-trade-2026-11-22.md rounds 7 to 9): The Smith's spawn is a superunique preset (`754@23,57` in the Barracks) that only `debug levelmonsters` lists, and the bot only reads it with `quests.layoutRead` 1 and a d2d that has the verb (the fork's devp16 and later; the default lab binary `survhold/bin/d2d.lab` has not). With the knob at 0 the run explores for him and fails with "boss not found in the arena".
+- The board step now says so: `boss: boss not found in the arena: needs quests.layoutRead 1 (...)` when the knob is 0 and the boss script anchors by name (`boss.NeedsLayoutRead`: Countess and Smith). Test `TestBossNotFoundNamesTheLayoutKnob`.
+- A drink that cancels the boss run no longer starts the 30 s restart gap (`TestBossRunRestartsAtOnceAfterADrink`).

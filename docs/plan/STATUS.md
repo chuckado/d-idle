@@ -439,7 +439,7 @@
 | uiframe | proposed | - | `internal/watch/returnscreen.go`<br>`internal/watch/policysheet.go`<br>`internal/watch/frame_test.go`<br>`internal/watch/returnscreen_test.go`<br>`internal/watch/testdata/returnscreen/`<br>`internal/watch/testdata/policysheet/` | - |
 | uivault | proposed | - | `internal/watch/web/utilities.css` | - |
 | toolstrade8 | proposed | - | `internal/nav/nav.go`<br>`internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
-| drill2 | proposed | - | `tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
+| toolstrade9 | proposed | - | `internal/bot/task.go`<br>`internal/bot/task_test.go`<br>`internal/boss/act1.go`<br>`internal/env/tuning_quests.go`<br>`docs/process/layout-read.md`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
@@ -472,6 +472,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- eb7f39ce3 11-23 01:51 `Merge agent/toolstrade9: Merge branch 'main' into toolstrade9` (toolstrade9)
+- 8d1e8921d 11-23 01:49 `Merge branch 'main' into toolstrade9` (-)
 - cae6f829d 11-23 01:36 `Merge agent/drill2: Merge branch 'main' into drill2` (drill2)
 - 2696ed8c5 11-23 01:35 `Merge branch 'main' into drill2` (-)
 - 91ecf94b9 11-23 01:32 `Merge agent/uivault: Merge branch 'main' into uivault` (uivault)
@@ -480,6 +482,4 @@
 - e13589fc9 11-23 01:23 `Merge remote-tracking branch 'origin/main' into agent/drill2` (-)
 - fea9efae8 11-23 01:23 `Merge branch 'main' into toolstrade8` (-)
 - fdbadb174 11-23 01:16 `Merge agent/questdrill: Merge branch 'main' into qdmatrix` (questdrill)
-- 40bbb2d0a 11-23 01:14 `Merge branch 'main' into qdmatrix` (-)
-- 4e7d93f0d 11-23 01:08 `Merge agent/uiframe: Merge branch 'main' into uiframe` (uiframe)
 <!-- statusgen:end -->
