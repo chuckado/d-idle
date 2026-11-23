@@ -1,10 +1,11 @@
 ---
 id: TASK-842
 title: 'toolstrade4: pocket and approach cells keep off other levels'' border strips'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T03:08:00Z'
+updated_date: '2026-11-23T03:27:00Z'
 labels:
   - bot
   - bot-fix

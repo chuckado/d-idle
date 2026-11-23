@@ -422,7 +422,6 @@
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fitfix | proposed | - | `tools/uishots`<br>`tools/uishots.sh`<br>`docs/ui-regression-plan.md` | - |
 | bankdoc | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
-| toolstrade4 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fitfix2 | proposed | - | `tools/uishots`<br>`tools/uishots.sh`<br>`internal/watch/web/utilities.css`<br>`internal/watch/web/vault.js`<br>`internal/watch/testdata/vault_reveal.mjs` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
