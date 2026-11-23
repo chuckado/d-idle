@@ -654,6 +654,7 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade10
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade11
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade13
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade15
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
@@ -1476,9 +1477,11 @@ internal/nav/fullgrid_test.go  credit-runner  knownedge
 internal/nav/gatedoor.go  credit-runner  toolstrade
 internal/nav/gatedoor.go  credit-runner  toolstrade10
 internal/nav/gatedoor.go  credit-runner  toolstrade13
+internal/nav/gatedoor.go  credit-runner  toolstrade15
 internal/nav/gatedoor.go  credit-runner  toolstrade8
 internal/nav/gatedoor_test.go  credit-runner  toolstrade
 internal/nav/gatedoor_test.go  credit-runner  toolstrade10
+internal/nav/gatedoor_test.go  credit-runner  toolstrade15
 internal/nav/gatedoor_test.go  credit-runner  toolstrade2
 internal/nav/gatedoor_test.go  credit-runner  toolstrade8
 internal/nav/hints_export.go  credit-runner  exitsread
@@ -1501,6 +1504,7 @@ internal/nav/roam.go  credit-runner  maptrail
 internal/nav/roam.go  credit-runner  pursuers
 internal/nav/route.go  credit-runner  cainchain
 internal/nav/route.go  credit-runner  exitsread
+internal/nav/testdata/barracks28.grid  credit-runner  toolstrade15
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger

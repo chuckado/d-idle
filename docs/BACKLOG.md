@@ -1274,6 +1274,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/questdrill4: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/questdrill4-->
 - uifit3: quest tile handing, health button, char-store line; needs-you options for the user (TASK-879, merged 2026-11-23, acceptance 3 of 3): R4b quest tile, R6 health button fixed and re-measured (quest-* and strip-unknown pass at all sizes on the worker host); R7 line 135 to 140 with rows; R5 needs-you at 360x640 left for the user with two options and pictures in docs/ui/fit-triage-2026-11-23.md. ... <!--sg:agent/uifit3-->
 - agent/barrret: Merge branch 'main' into stage1fix (merged 2026-11-23) <!--sg:agent/barrret-->
+- toolstrade15: GoTo plans through closed doors (live Barracks capture fixture) (TASK-881, merged 2026-11-23, acceptance 1 of 1): doorOnPath: plan on a copy of the grid with every unused door open, open the first closed door on that path; unit-tested on the live Barracks grid; live effect not yet seen. <!--sg:agent/toolstrade15-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
