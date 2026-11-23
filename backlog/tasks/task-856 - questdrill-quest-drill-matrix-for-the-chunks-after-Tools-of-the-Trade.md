@@ -19,6 +19,8 @@ owns:
   - "internal/power/skilldamage_test.go"
   - "internal/questboard/state.go"
   - "internal/questboard/state_test.go"
+  - "internal/d2dsrc/items.go"
+  - "internal/d2dsrc/srv_test.go"
   - "internal/nav/exit.go"
   - "internal/nav/gatedoor.go"
   - "internal/nav/gatedoor_test.go"
