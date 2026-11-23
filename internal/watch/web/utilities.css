@@ -13,7 +13,7 @@
   @media (max-height: 700px) {
     .d-main[data-cmode="phone"] [data-panel="needs-you"] .n-btn { block-size: 38px; min-block-size: 38px; }
     .d-main[data-cmode="phone"] [data-panel="needs-you"] .n-row { padding-block: 0; }
-    .d-main[data-cmode="phone"] [data-panel="needs-you"] .n-list:has(> .n-row:nth-child(2)) { max-block-size: 40px; }
+    .d-main[data-cmode="phone"] [data-panel="needs-you"] .n-list:has(> .n-row:nth-child(2)) { max-block-size: 40px; overflow-y: auto; }
     .d-main[data-cmode="phone"] [data-panel="needs-you"]:has(.n-list > .n-row:only-child):not(:has(.n-dots[data-more="1"])) .n-head { display: none; }
     .d-main[data-cmode="phone"] [data-panel="orders"] .o-verbs .d-btn { min-block-size: 38px; block-size: 38px; line-height: 36px; }
   }
