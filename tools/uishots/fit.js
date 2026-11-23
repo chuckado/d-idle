@@ -335,7 +335,8 @@ function phoneChecks(win, d, vis, cs) {
   const pack = d.getElementById('cv') && d.getElementById('cv').dataset.tab === 'pack';
   if (pack) {
     const lock = d.getElementById('cv-lock'), lr = lock && vis(lock);
-    if (!lr) o.lock.push('the lock line is not on the storage tab');
+    if (!lock) { /* the lock line was removed from the storage tab (card uinav E3, stale texts): nothing to judge */ }
+    else if (!lr) o.lock.push('the lock line is not on the storage tab');
     else if (lock.scrollWidth > lock.clientWidth + 1 || lock.scrollHeight > lock.clientHeight + 1 || (cs(lock).textOverflow === 'ellipsis' && cs(lock).whiteSpace === 'nowrap')) o.lock.push('the lock line is cut [' + lock.scrollWidth + '/' + lock.clientWidth + ' ' + lock.scrollHeight + '/' + lock.clientHeight + ']');
     const cv = d.getElementById('inv'), cr = cv && vis(cv);
     if (cr) {

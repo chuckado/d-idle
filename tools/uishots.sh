@@ -520,7 +520,6 @@ live-stream-light watch?layout=cockpit&theme=light&needs=2&stream=live
 live-pal watch?layout=cockpit&theme=dark&needs=2&pal=1
 live-pfdebug watch?layout=cockpit&theme=dark&needs=2&pal=1&pfdebug=1
 sentence-popover watch?layout=cockpit&theme=dark&needs=2&glance=full,paused [data-key=say] .d-bandpop:not([hidden])
-journey-popover watch?layout=cockpit&theme=dark&needs=2&tab=Progress [data-panel=journey-strip]_.jr-dot[data-cur] [data-panel=journey-strip]_[data-key=pact-0],[data-panel=journey-strip]_[data-key=pact-1]
 needs-popover watch?layout=cockpit&theme=dark&needs=5 [data-panel=needs-you]_.n-dots [data-panel=needs-you]_.n-pop
 orders-rail watch?layout=cockpit-orders&theme=dark&needs=2
 zoneclear-rail watch?layout=cockpit-zoneclear&theme=dark&needs=2
@@ -661,7 +660,6 @@ character-phonehero watch/inventory?theme=dark
 phonedefect-label watch/inventory?theme=dark&fx=phone&tab=pack&defect=label
 phonedefect-acts watch/inventory?theme=dark&fx=phone&tab=pack&sheet=1&defect=acts
 phonedefect-cutchips watch/inventory?theme=dark&fx=phone&tab=pack&defect=cutchips
-phonedefect-lock watch/inventory?theme=dark&fx=phone&tab=pack&defect=lock
 phonedefect-hover watch/inventory?theme=dark&fx=phone&tab=pack&defect=hover
 phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow
 charsdefect-clip watch/characters?theme=dark&chars=long&defect=chars-clip
@@ -752,6 +750,8 @@ $buildspages"
 		vaultdefect-*) szs="1280x620 412x780 360x640" ;;
 		vault-more-entry) ;;
 		navdefect-wide) szs="1366x768" ;;
+		# the must-fail fixtures of the desk frame (an overflowing, nested or fake-scrolling box, a tall frame): the phone cockpit is a scrolling page by design
+		overflow-fixture | overflow-nested | overflow-fakescroll | tall-frame) szs="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620" ;;
 		navdefect-*) szs="390x844" ;;
 		nav-* | settings-*) szs="390x844 1366x768" ;;
 		builds-*) szs="390x844 1366x768" ;;
