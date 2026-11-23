@@ -19,6 +19,13 @@ type gate struct {
 	border   bool
 }
 
+// exitWalkOpts: the gate is the goal of the walk toward it, so the unwanted-exit gate lets a click that stays outside the core through
+// (see the call).
+func exitWalkOpts(g gate) walkOpts {
+	goal := g.at
+	return walkOpts{pursuit: true, goal: &goal}
+}
+
 // ExitTo leaves the current level for the neighbouring level levelNo. Outdoor links are borders: the cells of
 // this level that touch the neighbour (d2map LevelMap.BorderCells; the Rogue Encampment's 15-cell gap to the
 // Blood Moor at x=5960, y=4945..4959 is VERIFIED LIVE by MAP). Tile exits (LevelMap.Exits: caves, stairs) are
@@ -145,7 +152,9 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 				return err
 			}
 		}
-		err = n.walk(ctx, func(*obs) (input.Point, float64, error) { return g.at, 2, nil }, walkOpts{pursuit: true})
+		// The gate is the walk's goal: a corridor that passes the stairs of the level we came by (Sewers Level 2, 11
+		// subtiles from the arrival stairs) must not be refused for good by the unwanted-exit gate (mouthgate.go).
+		err = n.walk(ctx, func(*obs) (input.Point, float64, error) { return g.at, 2, nil }, exitWalkOpts(g))
 		// Standing next to a tile exit (the return tile of the level we arrived by) the planner has nothing to walk: that
 		// is "arrived", the push and step-off below take it from here (D2DLOOP r4, V live: Den of Evil, "no path: empty
 		// path" five times in a row, then the failsafe ladder).
