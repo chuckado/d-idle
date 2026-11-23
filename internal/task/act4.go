@@ -120,7 +120,7 @@ func hellforgeNodes() []Node {
 			}
 			return f.UseForge(ctx, ItemSoulstone, ItemHammer)
 		}}
-	return []Node{
+	nodes := []Node{
 		{Step: StepWaypoint(id(q, "wp"), RiverOfFlame, func(w World) bool { return done(w) || !hasStone(w) })},
 		{Step: withReady(StepTravelA2(id(q, "to"), "Go to the River of Flame", RiverOfFlame, func(w World) bool { return done(w) || !hasStone(w) || w.Items[ItemHammer] > 0 }),
 			gatePotions(30, "the Hellforge needs clvl 30", minPotions, q))},
@@ -129,6 +129,12 @@ func hellforgeNodes() []Node {
 		req(Node{Step: place}, id(q, "to")),
 		{Step: home2(id(q, "home"), RiverOfFlame, func(w World) bool { return done(w) || !hasStone(w) })},
 	}
+	// "Not needed" without the Soulstone is not "done": the board read the Hellforge done on a hero that never saw it (V lab
+	// drill.act4.hellforge: state done with the guardian done and no Hellforge word). Only the quest word says done.
+	for k := range nodes {
+		nodes[k].Step.Evidence = done
+	}
+	return nodes
 }
 
 // Terror's End: River of Flame waypoint, the Chaos Sanctuary, Diablo (boss.RunDiablo opens the five seals and kills the
