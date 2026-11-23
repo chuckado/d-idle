@@ -2,6 +2,7 @@
 import { readFileSync } from 'fs';
 import { createRequire } from 'module';
 globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
+const dWhy = createRequire(import.meta.url)('./why.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -102,4 +103,5 @@ ok(has('the server says'), 'unknown code falls back to the server sentence');
 wallet = eth(99, ['v1']); later.q.splice(0).forEach((f) => f()); await tick(); await tick();
 ok(find('wallet').textContent === 'Ether 99', 'poll refreshes the chip: ' + find('wallet').textContent);
 
+for (const w of dWhy.unexplained(all(root))) fails.push('why: ' + w);
 console.log(JSON.stringify({ fails }));

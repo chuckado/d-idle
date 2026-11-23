@@ -277,5 +277,7 @@
   .d-sheet-pick { display: grid; gap: var(--d-sp-1); }
   .d-sheet-opt { display: flex; gap: var(--d-sp-1); align-items: center; min-block-size: 44px; }
   .d-sheet-row { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); justify-content: flex-end; }
+  /* a reason line: why the control beside it is off. Always visible while it is off; the control names it with aria-describedby. */
+  .d-why { margin: 0; color: var(--d-text-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
   .d-sheet-cancel, .d-sheet-ok { min-block-size: 44px; }
 }

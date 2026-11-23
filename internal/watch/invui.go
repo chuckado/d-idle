@@ -32,7 +32,8 @@ const charPage = `<!DOCTYPE html>
  <span class="cv-kv">Gold <b id="cv-gold">-</b></span>
  <span class="cv-kv cv-opt">Stash <b id="cv-stashgold">-</b></span>
  <button class="cv-btn cv-repair" id="cv-repair" type="button" hidden></button>
- <button class="cv-btn cv-sell" id="cv-sell" type="button" aria-disabled="true">Sell marked (0)</button>
+ <button class="cv-btn cv-sell" id="cv-sell" type="button" aria-disabled="true" aria-describedby="cv-sell-why">Sell marked (0)</button>
+ <span class="cv-whys"><span class="d-why" id="cv-repair-why" hidden></span><span class="d-why" id="cv-sell-why">Nothing is marked for sale.</span></span>
 </div>
 <div class="cv-tabbar" id="cv-tabbar" role="group" aria-label="Page part" data-cockpit-slot="band"></div>
 <main class="cv-canvas" id="inv" data-vscroll>

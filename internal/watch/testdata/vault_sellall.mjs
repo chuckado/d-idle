@@ -3,6 +3,7 @@
 import { readFileSync } from 'fs';
 import { createRequire } from 'module';
 globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
+const dWhy = createRequire(import.meta.url)('./why.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -149,4 +150,5 @@ sellReply = (b) => ({ ok: true, done: ['a', 'b', 'c'] });
 await sa().click();
 ok(sells().length === 1 && /Queued 3 items/.test(shownText(root)), 'queue result');
 
+for (const w of dWhy.unexplained(all(root))) fails.push('why: ' + w);
 console.log(JSON.stringify({ fails }));

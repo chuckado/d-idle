@@ -2,6 +2,7 @@
 import { readFileSync } from 'fs';
 import { createRequire } from 'module';
 globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
+const dWhy = createRequire(import.meta.url)('./why.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -130,4 +131,5 @@ act = { reveal: rev(bar([], '', 0), { on: true, order: { id: 'g-1', state: 'part
 await page.reload(false);
 ok(find('reveal-bar-cancel').hidden && has('short of gold') && has('Done in part'), 'finished order');
 
+for (const w of dWhy.unexplained(all(root))) fails.push('why: ' + w);
 console.log(JSON.stringify({ fails }));

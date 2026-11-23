@@ -245,7 +245,7 @@
       if (e.reason) { b.setAttribute('aria-disabled', 'true'); b.dataset.off = ''; }
       b.addEventListener('click', function () { run(e, m); });
       n.appendChild(b);
-      if (e.reason) { var w = el('div', 'act-why', e.reason); w.dataset.for = b.dataset.act; n.appendChild(w); }
+      if (e.reason) { var w = el('div', 'act-why', e.reason); w.dataset.for = b.dataset.act; w.id = 'act-why-' + b.dataset.act; b.setAttribute('aria-describedby', w.id); n.appendChild(w); }
     });
     var note = el('div', 'act-note'); note.setAttribute('role', 'status'); n.appendChild(note);
     if (confirming) { var no = el('button', 'act', 'Keep it'); no.type = 'button'; no.dataset.act = 'back'; no.setAttribute('role', 'menuitem'); no.addEventListener('click', function () { confirming = false; draw(true); }); n.appendChild(no); }

@@ -3,6 +3,7 @@
 import { readFileSync } from 'fs';
 import { createRequire } from 'module';
 globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
+const dWhy = createRequire(import.meta.url)('./why.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -142,4 +143,5 @@ ok(cls('vt-ab-reveal')[0].hidden, 'the idle Reveal button gives way to the selec
 await find('select-done').click();
 ok(cls('vt-ab-sel')[0].hidden && !cls('vt-ab-reveal')[0].hidden, 'Done returns to the idle bar');
 
+for (const w of dWhy.unexplained(all(root))) fails.push('why: ' + w);
 console.log(JSON.stringify({ fails }));

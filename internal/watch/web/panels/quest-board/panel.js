@@ -371,10 +371,18 @@ export function mountBoard(root, ctx, tab) {
       const armed = a.confirm && stopArm === a.verb + row.id + c.id;
       const b = btn(armed ? 'Stop it?' : a.label, 'qb-btn qb-p', a.verb + '-' + row.id + '-' + c.id, (x) => press(a.verb, row.id, c.id, a.confirm, x), a.label + ' ' + row.title + (multi ? ', part ' + (idx + 1) : ''));
       if (armed) b.dataset.armed = '1';
-      if (a.disabled || (a.verb === 'start' && m.paused)) { b.disabled = true; b.title = a.why || 'Paused: resume the bot first'; }
       li.append(b);
+      if (a.disabled || (a.verb === 'start' && m.paused)) { b.disabled = true; li.append(whyLine(b, a.why || 'Paused: resume the bot first')); }
     } else if (!a && c.state === 'ready' && c.why) li.append(ctx.el('span', 'qb-r', c.why));
     return li;
+  }
+
+  // a button that is off says why in a visible line beside it, named by aria-describedby (card uireason; web/why.js audits it)
+  function whyLine(b, text) {
+    const w = ctx.el('p', 'd-why', text);
+    w.id = 'qb-why-' + b.dataset.key;
+    b.setAttribute('aria-describedby', w.id);
+    return w;
   }
 
   function redraw() { sig = ''; render(last); }
@@ -404,8 +412,8 @@ export function mountBoard(root, ctx, tab) {
         const armed = b.confirm && stopArm === b.verb + b.quest + b.chunk;
         const x = btn(armed ? 'Stop it?' : b.label, b === m.now.primary ? 'qb-btn qb-p' : 'qb-btn', 'now-' + b.verb, (e) => press(b.verb, b.quest, b.chunk, b.confirm, e));
         if (armed) x.dataset.armed = '1';
-        if (b.disabled) x.disabled = true;
         n.append(x);
+        if (b.disabled) { x.disabled = true; n.append(whyLine(x, b.why || 'Not available right now.')); }
       }
       box.append(n);
     }

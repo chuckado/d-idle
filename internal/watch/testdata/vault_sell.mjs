@@ -3,6 +3,7 @@
 import { readFileSync } from 'fs';
 import { createRequire } from 'module';
 globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
+const dWhy = createRequire(import.meta.url)('./why.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -63,7 +64,7 @@ ok(sb.textContent === 'Sell 11 of 260', 'the button states the count it will act
 const why = find('sell-why');
 ok(why && !why.hidden, 'the reasons are on screen, not only in a tooltip');
 ok(/169 already waiting to be sold/.test(why.textContent) && /20 pinned/.test(why.textContent) && /60 already sold, kept or discarded/.test(why.textContent) && /Not selling 249 of 260/.test(why.textContent), 'the breakdown names every group: ' + why.textContent);
-ok(sb.title === why.textContent, 'the tooltip carries the same sentence');
+ok(!sb.attrs.title, 'and no tooltip is the reason');
 // a selection that is all sellable says nothing extra
 items = build().slice(0, 11); act.sell.queued = 0; await page.reload(false);
 page.state.sel.clear(); page.state.sel.all(allIds()); page.draw();
@@ -122,4 +123,5 @@ ok(find('sell').textContent === 'Sell 0 of 20', 'nothing sellable: ' + find('sel
 await find('sell').click();
 ok(/Nothing selected can be sold: 20 pinned/.test(shownText(root)) && !posts.some((p) => p.route === '/api/vault/sell'), 'the reason is shown and nothing is posted: ' + (shownText(root).match(/Nothing[^]{0,60}/) || [''])[0]);
 
+for (const w of dWhy.unexplained(all(root))) fails.push('why: ' + w);
 console.log(JSON.stringify({ fails }));

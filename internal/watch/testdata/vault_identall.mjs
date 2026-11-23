@@ -3,6 +3,7 @@
 import { readFileSync } from 'fs';
 import { createRequire } from 'module';
 globalThis.dToast = createRequire(import.meta.url)('./toast.cjs');
+const dWhy = createRequire(import.meta.url)('./why.cjs');
 import { mountVault } from './vault.mjs';
 const T = JSON.parse(readFileSync(new URL('./vault.json', import.meta.url), 'utf8'));
 const fails = [];
@@ -81,7 +82,8 @@ ok(posts[0] && posts[0][1].maxGold === 960 && posts[0][1].scope === 'all_unrevea
 // stash below one reveal: disabled, no sheet
 act = { reveal: gold(2, null, 30, 50), sell };
 await page.reload(false);
-ok(ident().disabled && /Not enough gold/.test(ident().title), 'a stash below one reveal disables the button with the reason: ' + ident().title);
+const identWhy = find('why-identify-all') || all(root).find((n) => n.id === ident().attrs['aria-describedby']);
+ok(ident().disabled && identWhy && !identWhy.hidden && /Not enough gold/.test(identWhy.textContent) && !ident().attrs.title, 'a stash below one reveal disables the button with a visible reason line: ' + (identWhy && identWhy.textContent));
 
 // a running order disables it
 act = { reveal: gold(2, { id: 'g-1', state: 'paid', total: 12, want: 30, done: 0, paid: 960, line: 'x' }, 30, 40), sell };
@@ -106,4 +108,5 @@ reply = { ok: false, done: ['a', 'b'], failed: [{ id: 'c', code: 'nosealed', err
 await ident().click(); await find('sheet-go').click();
 ok(/Gold reveal done: 29 items revealed 1 could not be read/.test(shownText(cls('d-toast')[0])), 'the toast names the records that stay unrevealed: ' + shownText(cls('d-toast')[0]));
 
+for (const w of dWhy.unexplained(all(root))) fails.push('why: ' + w);
 console.log(JSON.stringify({ fails }));
