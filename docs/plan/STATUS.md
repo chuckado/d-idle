@@ -425,6 +425,7 @@
 | fitfix2 | proposed | - | `tools/uishots`<br>`tools/uishots.sh`<br>`internal/watch/web/utilities.css`<br>`internal/watch/web/vault.js`<br>`internal/watch/testdata/vault_reveal.mjs` | - |
 | fitfix3 | proposed | - | `tools/uishots`<br>`tools/uishots.sh`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/testdata/vault_logic.mjs` | - |
 | allocfix | proposed | - | `cmd/d2bot/autoallocwire.go`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/points`<br>`internal/plandata/build-necromancer_summoner_normal30.json`<br>`docs/plan/data/build-necromancer_summoner_normal30.json`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`docs/autoalloc.md`<br>`tools/provingground/scenarios/autoalloc.json` | - |
+| allocprobe | proposed | - | `docs/probes/autoalloc-necro-summoner-default-2026-11-23.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -458,6 +459,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 7f7f869fc 11-22 23:03 `Merge agent/allocprobe: allocprobe: card` (allocprobe)
 - 756c9a7a7 11-22 22:50 `Merge agent/allocfix: Merge branch 'main' into allocfix` (allocfix)
 - 58f127ca6 11-22 22:49 `Merge branch 'main' into allocfix` (-)
 - e6b5d3a48 11-22 22:37 `Merge agent/fitfix3: Merge branch 'main' into fitfix3` (fitfix3)
@@ -467,5 +469,4 @@
 - 443b4a555 11-22 22:12 `Merge agent/toolstrade4: Merge branch 'main' into toolstrade4` (toolstrade4)
 - 7559ad1f3 11-22 22:10 `Merge branch 'main' into toolstrade4` (-)
 - ab9d8c353 11-22 22:08 `Merge agent/bankdoc: Merge branch 'main' into bankdoc` (bankdoc)
-- 201ac0474 11-22 22:07 `Merge branch 'main' into bankdoc` (-)
 <!-- statusgen:end -->
