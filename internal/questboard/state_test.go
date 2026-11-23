@@ -431,3 +431,20 @@ func TestActGateIsPerDifficulty(t *testing.T) {
 		t.Errorf("nm radament = %s, want locked until the nm hop", got)
 	}
 }
+
+// The Canyon of the Magi (Duriel's tombs) opens by the red portal that touching the Summoner's journal makes, so the Seven
+// Tombs wait for the Summoner (V lab 2026-11-23: no exit leads to the Canyon from any field; card qdmatrix).
+func TestSevenTombsWaitForTheSummoner(t *testing.T) {
+	b := mustBoard(t)
+	q, err := b.Quest("seven_tombs")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var has bool
+	for _, r := range q.Requires {
+		has = has || r == "summoner"
+	}
+	if !has {
+		t.Fatalf("seven_tombs requires %v", q.Requires)
+	}
+}

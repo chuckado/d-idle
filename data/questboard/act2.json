@@ -458,7 +458,8 @@
     "legacyFloor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)"
    },
    "requires": [
-    "horadric_staff"
+    "horadric_staff",
+    "summoner"
    ],
    "boss": "duriel",
    "rewards": [

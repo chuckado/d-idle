@@ -409,6 +409,7 @@ data/questboard/act1.json  credit-runner  cain45
 data/questboard/act1.json  credit-runner  cain5b
 data/questboard/act1.json  credit-runner  cainfix
 data/questboard/act1.json  credit-runner  cainfix3
+data/questboard/act2.json  credit-runner  qdmatrix
 data/questspec  credit-runner  questspec
 data/unlocks  credit-runner  nocards
 data/unlocks/ladder.json  credit-runner  gearsets
@@ -618,6 +619,7 @@ docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  navexit2
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  necrodrill
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1doc
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1fix
+docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage23
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necrodrill
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necroready
@@ -1468,6 +1470,8 @@ internal/merc/wear.json  credit-runner  lootwireL2
 internal/merc/wear_test.go  credit-runner  lootwireL2
 internal/nav  credit-runner  mouthgate
 internal/nav/  credit-runner  dlv-move-tele
+internal/nav/act2hints.go  credit-runner  qdmatrix
+internal/nav/act2hints_test.go  credit-runner  qdmatrix
 internal/nav/covview.go  credit-runner  maptrail
 internal/nav/covview_test.go  credit-runner  maphistoryC
 internal/nav/covview_test.go  credit-runner  maptrail
@@ -1478,6 +1482,7 @@ internal/nav/exit.go  credit-runner  qdmatrix
 internal/nav/exit.go  credit-runner  stage1fix
 internal/nav/exit.go  credit-runner  toolstrade
 internal/nav/exit_test.go  credit-runner  andariel1
+internal/nav/exit_test.go  credit-runner  qdmatrix
 internal/nav/exit_test.go  credit-runner  stage1fix
 internal/nav/exitgoal_test.go  credit-runner  qdmatrix
 internal/nav/exitsread_test.go  credit-runner  exitsread
@@ -1491,6 +1496,7 @@ internal/nav/gatedoor.go  credit-runner  toolstrade13
 internal/nav/gatedoor.go  credit-runner  toolstrade15
 internal/nav/gatedoor.go  credit-runner  toolstrade8
 internal/nav/gatedoor_test.go  credit-runner  qdmatrix
+internal/nav/gatedoor_test.go  credit-runner  stage23
 internal/nav/gatedoor_test.go  credit-runner  toolstrade
 internal/nav/gatedoor_test.go  credit-runner  toolstrade10
 internal/nav/gatedoor_test.go  credit-runner  toolstrade15
@@ -2516,7 +2522,9 @@ tools/provingground/scenarios/cain.json  credit-runner  wpstep
 tools/provingground/scenarios/manage.json  credit-runner  equipswap
 tools/provingground/scenarios/navexit.json  credit-runner  navexit2
 tools/provingground/scenarios/navexit.json  credit-runner  stage1fix
+tools/provingground/scenarios/navexit.json  credit-runner  stage23
 tools/provingground/scenarios/necro.json  credit-runner  stage1fix
+tools/provingground/scenarios/necro.json  credit-runner  stage23
 tools/provingground/scenarios/points.json  credit-runner  agencyp0
 tools/provingground/scenarios/points.json  credit-runner  barb1
 tools/provingground/scenarios/points.json  credit-runner  druid1
