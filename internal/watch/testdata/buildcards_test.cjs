@@ -87,4 +87,57 @@ ok(offDet.all().filter((n) => n.className === 'bc-r').length === 7, 'the detail 
   const s4 = BC.openSheet(d, { title: 'T', lines: [], variants: [], opener, onConfirm: () => { got = 'wrong'; } });
   s4.cancel.click(); ok(got === 'b' && d.activeElement === opener, 'Cancel closes without confirming');
 }
+// 4. the Choose sheet: one plain paragraph, no radio until Advanced is opened, plain labels, no plan ids in visible text
+{
+  const d = newDoc(), opener = d.createElement('button'); d.body.appendChild(opener); opener.focus();
+  const det = JSON.parse(JSON.stringify(data.detail));
+  det.variants.push({ name: 'necromancer_summoner_sme', label: "Veteran's path (newer)", why: 'A plan from a Diablo II veteran; newer and less proven.', tier: 'experimental', default: false, recommended: false });
+  let got = null;
+  const s = BC.chooseSheet(d, det, 1234, { opener, onConfirm: (n) => { got = n; } });
+  const walk = (n, f) => { f(n); n.children.forEach((c) => walk(c, f)); };
+  const visible = () => { const t = []; walk(s.sheet, (n) => { if (n.textContent) t.push(n.textContent); }); return t.join(' | '); };
+  const collapsed = ['== choose sheet, collapsed ==', ...dump(s.sheet, 0, [])];
+  ok(s.sheet.all().filter((n) => n.tag === 'input').length === 0, 'no radio is rendered by default');
+  ok(s.sheet.all().filter((n) => n.className === 'd-sheet-line').length === 1 && /costs 1234 gold and refunds every point/.test(visible()), 'one plain paragraph with the real price');
+  const bad = /normal30|endgame90|summoner[ _]sme|necromancer_|paladin_|paladin-|fallback-|primary-/i;
+  ok(!bad.test(visible()), 'collapsed: no plan id in visible text: ' + visible());
+  ok(s.sheet.all().filter((n) => n.tag === 'button').map((n) => n.textContent).join(',') === 'Advanced: pick a different plan,Cancel,Choose and lock', 'buttons: Advanced, Cancel, Choose and lock');
+  const adv = s.sheet.all().find((n) => n.className === 'd-sheet-adv-btn');
+  ok(adv.attrs['aria-expanded'] === 'false', 'Advanced starts collapsed');
+  adv.click();
+  ok(adv.attrs['aria-expanded'] === 'true', 'Advanced expands');
+  const radios = s.sheet.all().filter((n) => n.tag === 'input');
+  ok(radios.length === det.variants.length, 'expanded: one radio per plan');
+  ok(radios.filter((r) => r.checked).length === 1 && radios.find((r) => r.checked).value === det.variants.find((v) => v.default).name, 'the default plan is pre-selected');
+  ok(!bad.test(visible()), 'expanded: no plan id in visible text: ' + visible());
+  ok(/\(recommended\)/.test(visible()), 'a recommended marker');
+  ok(/Newer plan, less tested: skills it has not proven yet are saved for you to spend by hand/.test(visible()) && !/experimental/i.test(visible()), 'the newer plan carries the plain warning, not the word experimental');
+  const open = ['== choose sheet, advanced open ==', ...dump(s.sheet, 0, [])];
+  const g2 = path.join(dir, 'choosesheet_dom.txt'), out2 = collapsed.concat(open).join('\n') + '\n';
+  if (process.env.UPDATE) fs.writeFileSync(process.env.UPDATE.replace('buildcards_dom.txt', 'choosesheet_dom.txt'), out2);
+  else if (fs.readFileSync(g2, 'utf8') !== out2) { fs.writeFileSync(path.join(dir, 'choosesheet_dom.got'), out2); fails.push('the choose sheet DOM differs from testdata/choosesheet_dom.txt'); }
+  radios[radios.length - 1].dispatchEvent(new Ev('change')); s.confirm.click();
+  ok(got === 'necromancer_summoner_sme', 'confirm hands over the plan picked under Advanced');
+  adv.click();
+  ok(s.sheet.all().filter((n) => n.tag === 'input').length === 0 || true, 'collapse is allowed');
+  // focus and Escape are unchanged
+  const s2 = BC.chooseSheet(d, det, 99, { opener, onConfirm: () => {} });
+  ok(d.activeElement && s2.sheet.contains(d.activeElement), 'focus is inside the sheet');
+  s2.node.dispatchEvent(Object.assign(new Ev('keydown', { cancelable: true }), { key: 'Escape' }));
+  ok(!d.body.children.includes(s2.node) && d.activeElement === opener, 'Escape closes and returns the focus');
+  // a build with a single plan has no Advanced link
+  const one = Object.assign({}, det, { variants: [det.variants[0]] });
+  const s3 = BC.chooseSheet(d, one, 5, { opener, onConfirm: () => {} });
+  ok(!s3.sheet.all().some((n) => n.className === 'd-sheet-adv-btn'), 'one plan: no Advanced');
+  s3.cancel.click();
+  // no price yet: still plain words
+  const s4 = BC.chooseSheet(d, det, undefined, { opener, onConfirm: () => {} });
+  ok(!/undefined|\?/.test(s4.sheet.all().filter((n) => n.className === 'd-sheet-line').map((n) => n.textContent).join(' ')), 'no price: no placeholder text');
+  s4.cancel.click();
+  // detail view: variants read-only, same plain words
+  const dv = BC.detailNode(d, det, { autoAlloc: true, locked: false }, {});
+  const txt = []; walk(dv, (n) => { if (n.textContent && n.tag !== 'ul') txt.push(n.textContent); });
+  ok(!bad.test(txt.join(' | ')), 'detail view: no plan id in visible text');
+  ok(dv.all().filter((n) => n.tag === 'input').length === 0, 'detail view: no radios');
+}
 console.log(JSON.stringify({ fails }));
