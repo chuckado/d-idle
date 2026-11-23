@@ -954,7 +954,16 @@ func (a taskActs) PickUp(ctx context.Context, item string) error {
 	if a.r.d.Loot == nil {
 		return task.Errorf(task.KindNotFound, "no looter: cannot pick up %s", item)
 	}
-	_, err := a.r.d.Loot.PickUp(ctx, PickOpts{Radius: 30, Names: []string{item}})
+	rep, err := a.r.d.Loot.PickUp(ctx, PickOpts{Radius: 30, Names: []string{item}})
+	if err == nil && rep.Picked == 0 {
+		// nothing was taken: say so, so a step that clicks a stand first (the Malus) can tell "not on the ground" from "done" (V lab
+		// 2026-11-23: a pick-up that took nothing returned nil and the board step was only "still needed")
+		why := "not on the ground within reach"
+		if rep.Skipped > 0 {
+			why = fmt.Sprintf("seen but not taken (%d skipped)", rep.Skipped)
+		}
+		return task.Errorf(task.KindNotFound, "no %s: %s", item, why)
+	}
 	return a.tag(err)
 }
 
