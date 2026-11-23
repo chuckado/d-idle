@@ -213,18 +213,13 @@
       "quality": 4
      },
      {
-      "code": "bsd",
+      "code": "sbr",
       "slot": "rhand",
       "quality": 6
      },
      {
-      "code": "kit",
+      "code": "buc",
       "slot": "lhand",
-      "quality": 4
-     },
-     {
-      "code": "lbt",
-      "slot": "feet",
       "quality": 4
      }
     ]
