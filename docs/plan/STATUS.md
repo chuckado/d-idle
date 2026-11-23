@@ -424,7 +424,6 @@
 | bankdoc | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | fitfix2 | proposed | - | `tools/uishots`<br>`tools/uishots.sh`<br>`internal/watch/web/utilities.css`<br>`internal/watch/web/vault.js`<br>`internal/watch/testdata/vault_reveal.mjs` | - |
 | fitfix3 | proposed | - | `tools/uishots`<br>`tools/uishots.sh`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/testdata/vault_logic.mjs` | - |
-| buildchoose | proposed | - | `internal/plandata/build-catalog.json`<br>`internal/plandata/catalog.go`<br>`internal/plandata/catalog_test.go`<br>`internal/points/buildcards.go`<br>`internal/points/buildcards_test.go`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/watch/web/sheet.js`<br>`internal/watch/web/buildcards.js`<br>`internal/watch/web/points.js`<br>`internal/watch/web/components.css`<br>`internal/watch/testdata`<br>`internal/watch/buildcards_test.go`<br>`tools/uishots.sh`<br>`docs/ui/build-choose`<br>`docs/builds-catalog.md`<br>`docs/ui-design-system.md` | - |
 | allocfix | proposed | - | `cmd/d2bot/autoallocwire.go`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/points`<br>`internal/plandata/build-necromancer_summoner_normal30.json`<br>`docs/plan/data/build-necromancer_summoner_normal30.json`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`docs/autoalloc.md`<br>`tools/provingground/scenarios/autoalloc.json` | - |
 | allocprobe | proposed | - | `docs/probes/autoalloc-necro-summoner-default-2026-11-23.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |

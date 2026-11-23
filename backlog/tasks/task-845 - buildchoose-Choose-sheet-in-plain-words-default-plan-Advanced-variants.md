@@ -1,10 +1,11 @@
 ---
 id: TASK-845
 title: 'buildchoose: Choose sheet in plain words, default plan, Advanced variants'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T03:43:00Z'
+updated_date: '2026-11-23T04:13:00Z'
 labels:
   - watch
   - feature
