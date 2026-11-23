@@ -1742,6 +1742,7 @@ internal/watch/etherapi.go  credit-runner  vaultv7
 internal/watch/etherapi.go  credit-runner  vaultv7b
 internal/watch/etherapi_test.go  credit-runner  vaultv7
 internal/watch/etherapi_test.go  credit-runner  vaultv7b
+internal/watch/frame_test.go  credit-runner  uiframe
 internal/watch/funwire.go  credit-runner  agencyp0
 internal/watch/funwire.go  credit-runner  friendfb
 internal/watch/funwire.go  credit-runner  labels
@@ -1839,6 +1840,7 @@ internal/watch/pointsui.go  credit-runner  allocfix
 internal/watch/pointsui.go  credit-runner  allochandoff
 internal/watch/pointsui.go  credit-runner  uinav
 internal/watch/pointsui.go  credit-runner  uitoast
+internal/watch/policysheet.go  credit-runner  uiframe
 internal/watch/pprofapi.go  credit-runner  botcpu2
 internal/watch/questsapi.go  credit-runner  quests4
 internal/watch/questsapi.go  credit-runner  quests8
@@ -1856,7 +1858,9 @@ internal/watch/resetapi_test.go  credit-runner  resetinstant
 internal/watch/resetui_test.go  credit-runner  botreset
 internal/watch/resetui_test.go  credit-runner  resetinstant
 internal/watch/returnscreen.go  credit-runner  q4runes
+internal/watch/returnscreen.go  credit-runner  uiframe
 internal/watch/returnscreen_test.go  credit-runner  q4runes
+internal/watch/returnscreen_test.go  credit-runner  uiframe
 internal/watch/senses.go  credit-runner  fogtrail
 internal/watch/senses.go  credit-runner  maphistory
 internal/watch/senses.go  credit-runner  maphistoryA
@@ -1940,6 +1944,7 @@ internal/watch/testdata/panel_harness.js  credit-runner  videoctl
 internal/watch/testdata/panel_harness.js  credit-runner  videofeed2
 internal/watch/testdata/panel_harness.js  credit-runner  videofeed4
 internal/watch/testdata/pause/  credit-runner  uib1
+internal/watch/testdata/policysheet/  credit-runner  uiframe
 internal/watch/testdata/quests  credit-runner  cain45
 internal/watch/testdata/quests  credit-runner  cain5b
 internal/watch/testdata/quests  credit-runner  quests10
@@ -1954,6 +1959,7 @@ internal/watch/testdata/questui/quest_ui.mjs  credit-runner  handinbtn
 internal/watch/testdata/questui/quest_ui.mjs  credit-runner  uireason
 internal/watch/testdata/reset  credit-runner  botreset
 internal/watch/testdata/reset  credit-runner  resetinstant
+internal/watch/testdata/returnscreen/  credit-runner  uiframe
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail2
 internal/watch/testdata/senses-failures.json  credit-runner  maphistoryC
