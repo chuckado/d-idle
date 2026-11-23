@@ -351,7 +351,7 @@ func summonerNodes() []Node {
 	journal.Optional = true
 	return []Node{
 		{Step: StepWaypoint(id(q, "wp-arcane"), ArcaneSanctuary, killed)},
-		{Step: withReady(StepTravelA2(id(q, "to-arcane"), "Go to the Arcane Sanctuary", ArcaneSanctuary, killed), a2gate(24, "the Summoner needs clvl 24"))},
+		{Step: withReady(StepTravelA2(id(q, "to-arcane"), "Go to the Arcane Sanctuary", ArcaneSanctuary, killed), a2gate(28, "the Summoner needs clvl 28 without Teleport (SME 2026-11-23, EXP)"))},
 		req(Node{Step: StepKill(id(q, "kill"), BossSummoner, ArcaneSanctuary, killed, 12*time.Minute)}, id(q, "to-arcane")),
 		{Step: journal},
 		{Step: home2(id(q, "home"), ArcaneSanctuary, killed)},
