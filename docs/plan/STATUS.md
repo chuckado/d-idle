@@ -437,6 +437,7 @@
 | uialerts | proposed | - | `internal/watch/web/alerts-feed.js`<br>`internal/watch/testdata/alertsfeed_test.cjs`<br>`internal/watch/settingsjs_test.go`<br>`internal/watch/web/nav.js`<br>`internal/watch/http_view.go`<br>`docs/ui-design-system.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | uiframe | proposed | - | `internal/watch/returnscreen.go`<br>`internal/watch/policysheet.go`<br>`internal/watch/frame_test.go`<br>`internal/watch/returnscreen_test.go`<br>`internal/watch/testdata/returnscreen/`<br>`internal/watch/testdata/policysheet/` | - |
+| toolstrade8 | proposed | - | `internal/nav/nav.go`<br>`internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
@@ -469,6 +470,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d1ce7e723 11-23 01:24 `Merge agent/toolstrade8: Merge branch 'main' into toolstrade8` (toolstrade8)
+- fea9efae8 11-23 01:23 `Merge branch 'main' into toolstrade8` (-)
 - fdbadb174 11-23 01:16 `Merge agent/questdrill: Merge branch 'main' into qdmatrix` (questdrill)
 - 40bbb2d0a 11-23 01:14 `Merge branch 'main' into qdmatrix` (-)
 - 4e7d93f0d 11-23 01:08 `Merge agent/uiframe: Merge branch 'main' into uiframe` (uiframe)
@@ -477,6 +480,4 @@
 - 6b577a712 11-23 00:56 `Merge branch 'main' into uialerts` (-)
 - b00d2bef0 11-23 00:50 `Merge agent/questdrill: Merge branch 'main' into qdmatrix` (questdrill)
 - e31e5954d 11-23 00:48 `Merge branch 'main' into qdmatrix` (-)
-- 79a238cc7 11-23 00:43 `Merge agent/toolstrade7: Merge branch 'main' into toolstrade7` (toolstrade7)
-- 8c5784f1a 11-23 00:41 `Merge branch 'main' into toolstrade7` (-)
 <!-- statusgen:end -->

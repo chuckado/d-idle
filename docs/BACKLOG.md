@@ -1253,6 +1253,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - questdrill: live drill for the quest-giving UNSURE items (TASK-198, merged 2026-11-23, acceptance 0 of 1) <!--sg:agent/questdrill-->
 - uialerts: alert feed for the new pages plays the stored Alerts settings (TASK-859, merged 2026-11-23, acceptance 1 of 1): alerts-feed.js polls /api/alerts only while sound is on or notifications are granted; toast + cue + hidden-tab notification; node tests pass; not live-checked in a browser; skipped where the old page (#alertspane) runs. <!--sg:agent/uialerts-->
 - uiframe: Return, Policy and Hall on the shared frame, no app.css or old .btn (TASK-860, merged 2026-11-23, acceptance 2 of 2): Return and Policy pages moved to the shared vocabulary (d-btn/d-card/d-hint/d-badge/d-empty, --d-* tokens), app.css no longer linked by them (it can go with E11 once nothing else links it: check gate.go); Hall already clean. ... <!--sg:agent/uiframe-->
+- toolstrade8: GoTo opens the door to a spot behind it (the Smith''s room) (TASK-862, merged 2026-11-23, acceptance 1 of 1): GoTo opens a door between the hero and an unreachable spot (up to 4 doors); unit-tested; lab run with the Smith pending. <!--sg:agent/toolstrade8-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
