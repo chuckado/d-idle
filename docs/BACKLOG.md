@@ -1294,6 +1294,8 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - toolstrade21: lab notes round 20, the Smith''s doors in the lab (TASK-893, merged 2026-11-23, acceptance 1 of 1): Lab notes only; verified in the lab (job 3c8a), not live. <!--sg:agent/toolstrade21-->
 - toolstrade22: tools basic scenario with Light potions; merc level request (TASK-894, merged 2026-11-23, acceptance 1 of 1): Scenario data and notes only; the lab merc stays level 1 (fork verb request written); lab verdict pending. <!--sg:agent/toolstrade22-->
 - agent/questdrill10: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/questdrill10-->
+- toolstrade23: lab notes round 22, the Smith is engaged in the lab (TASK-895, merged 2026-11-23, acceptance 1 of 1): Lab notes only; verified in the lab (job 4c3e), not live. <!--sg:agent/toolstrade23-->
+- toolstrade24: trips of the resource policy buy the route kit; shop stock in the log (TASK-896, merged 2026-11-23, acceptance 2 of 2): Trips of the resource policy now carry the route kit like fullChores and the task chores; the vendor stock is logged; unit-tested, live effect not seen; the Smith fight is not touched. <!--sg:agent/toolstrade24-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

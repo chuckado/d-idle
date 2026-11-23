@@ -939,6 +939,17 @@ func (r *Runner) fullChores(reason string) ChorePlan {
 	return p
 }
 
+// withRouteKit adds the route guard kit to a plan that buys potions and names none: the trips the resource policy starts
+// (a potion trip, a heal trip) build their own plan, and a visit without the kit left a hero one potion under the
+// guard's floor with 1160 gold in the pack (V live, sandbox 2026-11-23 12:41Z: `potion plan wantHP 0`, five portal scrolls
+// bought, the guard blocked again).
+func (r *Runner) withRouteKit(p ChorePlan) ChorePlan {
+	if p.Potions && p.KitHealing == 0 {
+		p.KitHealing, p.KitMana = r.routeKit()
+	}
+	return p
+}
+
 // routeKit is the healing and mana count every town visit buys up to (belt plus pack) while the route guard is on: the
 // guard counts belt and pack and sends the hero home below the floor, so a visit that only fills the belt plan (three
 // healing columns of a four box belt) leaves it one short, buys Town Portal scrolls with the purse and the hero walks home
