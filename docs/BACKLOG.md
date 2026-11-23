@@ -1277,6 +1277,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - toolstrade15: GoTo plans through closed doors (live Barracks capture fixture) (TASK-881, merged 2026-11-23, acceptance 1 of 1): doorOnPath: plan on a copy of the grid with every unused door open, open the first closed door on that path; unit-tested on the live Barracks grid; live effect not yet seen. <!--sg:agent/toolstrade15-->
 - stage1doc: stage 1 GREEN result and the hand-in after a town trip finding (TASK-882, merged 2026-11-23, acceptance 1 of 1): Docs only: necro.act1-stage1 GREEN (job 20261123-041955-81fd) after the stage1fix fixes and a mana potion in the fixture belt; the town-trip-before-hand-in interaction named as a finding. Not ready to play. <!--sg:agent/stage1doc-->
 - uifit4: builds fixture keeps Choose; plan-handoff page separate (TASK-883, merged 2026-11-23, acceptance 1 of 1): Full fit on the worker host: 14 red of 2751 (10 are R5 needs-you at 360x640, 4 were builds-choose pages broken by my locked fixture, fixed here and re-measured: all builds-* pass at both sizes). <!--sg:agent/uifit4-->
+- agent/questdrill5: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/questdrill5-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

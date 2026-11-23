@@ -1267,12 +1267,14 @@ internal/d2dsrc/cpuprobe_test.go  credit-runner  botcpu
 internal/d2dsrc/gearstats.go  credit-runner  survB
 internal/d2dsrc/gearstats_test.go  credit-runner  survB
 internal/d2dsrc/items.go  credit-runner  cain45
+internal/d2dsrc/items.go  credit-runner  qdmatrix
 internal/d2dsrc/player.go  credit-runner  survB
 internal/d2dsrc/points_sheet_test.go  credit-runner  agencyp0
 internal/d2dsrc/source_test.go  credit-runner  botcpu
 internal/d2dsrc/source_test.go  credit-runner  cain45
 internal/d2dsrc/source_test.go  credit-runner  survB
 internal/d2dsrc/srv_test.go  credit-runner  botcpu
+internal/d2dsrc/srv_test.go  credit-runner  qdmatrix
 internal/d2dtown/adapter.go  credit-runner  verbs2
 internal/d2dworld  credit-runner  countess3
 internal/d2dworld  live-agent  k1layout
@@ -1476,11 +1478,13 @@ internal/nav/exitsread_test.go  credit-runner  exitsread
 internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
 internal/nav/fullgrid_test.go  credit-runner  knownedge
+internal/nav/gatedoor.go  credit-runner  qdmatrix
 internal/nav/gatedoor.go  credit-runner  toolstrade
 internal/nav/gatedoor.go  credit-runner  toolstrade10
 internal/nav/gatedoor.go  credit-runner  toolstrade13
 internal/nav/gatedoor.go  credit-runner  toolstrade15
 internal/nav/gatedoor.go  credit-runner  toolstrade8
+internal/nav/gatedoor_test.go  credit-runner  qdmatrix
 internal/nav/gatedoor_test.go  credit-runner  toolstrade
 internal/nav/gatedoor_test.go  credit-runner  toolstrade10
 internal/nav/gatedoor_test.go  credit-runner  toolstrade15
@@ -1494,6 +1498,7 @@ internal/nav/nav.go  credit-runner  countess3b
 internal/nav/nav.go  credit-runner  knownedge
 internal/nav/nav.go  credit-runner  maphistoryC
 internal/nav/nav.go  credit-runner  pursuers
+internal/nav/nav.go  credit-runner  qdmatrix
 internal/nav/nav.go  credit-runner  toolstrade2
 internal/nav/nav.go  credit-runner  toolstrade8
 internal/nav/objectiveview_test.go  credit-runner  fogtrail
@@ -1672,7 +1677,9 @@ internal/task/act1.go  credit-runner  cainchain
 internal/task/act1.go  credit-runner  equipswap
 internal/task/act1.go  credit-runner  quests7b
 internal/task/act2.go  credit-runner  equipswap
+internal/task/act2.go  credit-runner  qdmatrix
 internal/task/act2.go  credit-runner  quests7b
+internal/task/act2_test.go  credit-runner  qdmatrix
 internal/task/act3.go  credit-runner  equipswap
 internal/task/act3.go  credit-runner  quests7b
 internal/task/act4.go  credit-runner  equipswap

@@ -193,18 +193,21 @@ func TestTravelTakesTheWaypointWhenNoWalkReaches(t *testing.T) {
 	}
 }
 
-// ...and a target the reader knows to be inactive stays unreachable (no blind waypoint panel trip).
-func TestTravelDoesNotTryAnInactiveWaypointWhenNoWalkReaches(t *testing.T) {
+// ...and a waypoint trip that fails is not repeated, and then the walk error stands.
+func TestFailedWaypointFallbackIsNotRepeated(t *testing.T) {
 	q := &fakeQuests{}
 	q.v.WPs = map[int]bool{4: true}
 	g := campaignRig(t, q, 12)
 	g.mover.routeFn = func(from, to int) ([]int, error) { return nil, errors.New("no exit to that level") }
+	g.mover.wpErr = errors.New("level 6 not reached")
 	g.w.set(func(w *world) { w.area = 4 })
 	g.r.poll()
-	if err := g.r.travelTo(context.Background(), 6); err == nil {
-		t.Fatal("travelled with no route and no active waypoint")
+	for i := 0; i < 2; i++ {
+		if err := g.r.travelTo(context.Background(), 6); err == nil {
+			t.Fatal("travelled with no route and a failing waypoint")
+		}
 	}
-	if n := g.w.count("wp "); n != 0 {
-		t.Fatalf("waypoint tried %d times", n)
+	if n := g.w.count("wp 6"); n != 1 {
+		t.Fatalf("wp 6 tried %d times: %v", n, g.w.log())
 	}
 }

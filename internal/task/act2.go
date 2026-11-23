@@ -373,9 +373,22 @@ func durielNodes() []Node {
 	}
 	door := StepInteract(id(q, "door"), "Enter Duriel's Lair", "duriel-door", a2or(killed, a2in(DurielsLair)), staffPlaced)
 	door.Ready = ready
+	// The board splits the Staff quest from the Seven Tombs: the Staff quest word is done at the hand-in to Cain, with the
+	// Staff still in the pack, so staffPlaced (which counts that word) is true before the tomb search. The chunk's own
+	// steps are the canyon, the tomb and the orifice (V drill.act2.duriel: "object class 100 not found" in town).
+	onward := func(w World) bool {
+		return killed(w) || a2in(DurielsLair)(w) || w.Items[ItemStaffPlaced] > 0 || w.Items[ItemStaff] == 0
+	}
+	wpCanyon := StepWaypoint(id(q, "wp-canyon"), CanyonOfMagi, onward)
+	toCanyon := withReady(StepTravelA2(id(q, "to-canyon"), "Go to the Canyon of the Magi", CanyonOfMagi, onward), a2gate(20, "the Canyon needs clvl 20"))
+	place := StepInteract(id(q, "place"), "Place the Staff in the orifice", "tal-orifice", onward, func(w World) bool { return w.Items[ItemStaff] > 0 && w.Area == CanyonOfMagi })
+	place.Budget = 10 * time.Minute // the tomb scan walks up to seven tomb levels
 	tyrael := StepTalk(id(q, "tyrael"), "Talk to Tyrael", NPCTyrael, "reward", not(a2Is(q, StageCleared)), a2in(DurielsLair))
 	tyrael.Ready = nil // Tyrael stands in the lair, not in town
 	return []Node{
+		{Step: wpCanyon},
+		{Step: toCanyon},
+		req(Node{Step: place}, id(q, "to-canyon")),
 		{Step: door},
 		req(Node{Step: StepKill(id(q, "kill"), BossDuriel, DurielsLair, killed, 15*time.Minute)}, id(q, "door")),
 		{Step: tyrael},
