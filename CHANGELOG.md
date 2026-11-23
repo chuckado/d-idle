@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- toolstrade28: board floor of the Barracks in the same data as the Summoner's, one test <!--sg:agent/toolstrade28-->
 - Merge branch 'main' into qdmatrix <!--sg:agent/qd13-->
 - toolstrade27: town portal crossings are no map edges, Barracks numbers <!--sg:agent/toolstrade27-->
 - routes3: delete unused GET /api/bestiary, /api/atlas, /api/unlocks (user approved 2026-11-23); engine kept, guard test added <!--sg:agent/routes3-->
