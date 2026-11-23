@@ -16,4 +16,5 @@ MADR-style, one file per decision the user made or the project depends on; `docs
 - [0026](0026-combat-engine-capability-table-and-grammar.md): accepted 2026-11-21 (user popups: one capability table, generated tiers, delivery grammar, reads a player can see; builds on 0020 to 0022)
 - [0027](0027-proving-ground-gate-and-night-window.md): accepted 2026-11-21 (user popups: assertion-digest gate, tiers, quotas, ledger, quarantine, standing night window on the second worker host 23:00-07:00 EST; builds on 0020)
 - [0028](0028-one-supply-need-town-planner.md): accepted 2026-11-21 (user popups: One supply need, town plan, staged knob town.plan; builds on 0020)
-- [0029](0029-vault-gold-payment.md): accepted 2026-11-21 (user popup: the vault gold Reveal pays from the stash gold at once through a ledgered, bounded, idempotent write; amends 0014 for one purpose, never in measured runs)
+- [0029](0029-vault-gold-payment.md): accepted 2026-11-21 (user popup: the vault gold Reveal pays from the stash gold at once through a ledgered, bounded, idempotent write; amends 0014 for one purpose, never in measured runs) Amended 2026-11-23: vault sales credit the stash gold.
+- [0030](0030-operator-quest-control.md): accepted 2026-11-23 (user: operator quest control over a local socket, quest verbs only, off by default, audited, rate limited)
