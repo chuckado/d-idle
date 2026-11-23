@@ -4575,7 +4575,12 @@
     "knobs": {
      "quests.board": 1,
      "resource.pointsDecisions": 1,
-     "town.bankFirst": 0
+     "town.bankFirst": 0,
+     "quests.layoutRead": 1,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1
     },
     "driver": "board-taps",
     "tap_chunks": [
