@@ -766,6 +766,7 @@ docs/ui-design-system.md  credit-runner  uinav
 docs/ui-design-system.md  credit-runner  uireason
 docs/ui-design-system.md  credit-runner  uitoast
 docs/ui-overlays.md  credit-runner  menufit2
+docs/ui-regression-plan.md  credit-runner  fitfix
 docs/ui/friend-feedback-2026-11-15.md  credit-runner  friendfb
 docs/ui/map-phone  credit-runner  mapphone
 docs/ui/nav-links  credit-runner  uinav
@@ -2382,12 +2383,14 @@ tools/uilint/  credit-runner  uis1
 tools/uilint/lint.go  credit-runner  uis6
 tools/uilint/lint.go  credit-runner  uitoast
 tools/uilint/uilint_test.go  credit-runner  uitoast
+tools/uishots  credit-runner  fitfix
 tools/uishots  credit-runner  gearsets
 tools/uishots  credit-runner  identifyall
 tools/uishots  credit-runner  lootwire3
 tools/uishots  credit-runner  sellall
 tools/uishots  credit-runner  videoctl
 tools/uishots  credit-runner  videofeed4
+tools/uishots.sh  credit-runner  fitfix
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
 tools/uishots.sh  credit-runner  heavyguard
