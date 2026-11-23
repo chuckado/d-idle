@@ -33,3 +33,27 @@ The ledger refusal ("missing bot_commit") is a launch detail: `run.sh` reads `gi
 - `quest board: log why a chunk is not startable at the hero's level` (blocker 3, also act1more finding 3).
 - `scenario: necro stage runs with the SME build and the Necromancer matrix on act1.*` (blocker 5).
 - Test character: none created by this drill (the builder runner creates and deletes its own heroes; the provenance is the scenario's `provenance` text). A hidden-instance Necromancer in docs/probes/test-characters.md waits for the 23:00-07:00 EST window.
+
+## 5. Follow-up runs: the exit refusal, the knobs, and why the Necromancer runs are cut (2026-11-22, evening)
+
+### 5.1 Is the Cold Plains exit refusal fixed by `nav.warpRead` and `nav.fullGrid`? (V for the counts, U for the conclusion)
+| run | scenario, seed | knobs | verdict | `unwanted exit` lines, `mouth gate` lines |
+|---|---|---|---|---|
+| 20261122-190413-c261 | `act1.burial.blood_raven`, Paladin 11 and 3 | warpRead 1, fullGrid 1 | GREEN | 0, 0 |
+| 20261122-190413-c261 | same, Necromancer 11 and 3 | warpRead 1, fullGrid 1 | BLOCKED (cut, section 5.2) | 0, 0 |
+| 20261122-195405-6208 | same, Necromancer 11 | OFF (defaults) | BLOCKED (cut, section 5.2) | 0, 0 |
+| 20261122-195405-6208 | `act1.den.clear`, Necromancer 11 | warpRead 1, fullGrid 1 | RED, record 1 0x0014 as before | 0, 0 |
+
+The refusal does not appear in these scenarios with the knobs OFF either, so they cannot show that the knobs remove it. The 37 refusals of run b149 came from a fresh hero whose board step walked from the Blood Moor to Cold Plains after hours of play, knobs OFF; no staged scenario reproduces that walk. Evidence for a default flip of `nav.warpRead` and `nav.fullGrid`: none from this card (mapverify #1108, 55 to 0 mouth-gate refusals on the Countess, remains the only measurement). A direct test needs a stage that starts the hero in the Blood Moor and sends it to Cold Plains with the knobs OFF first (to reproduce) and ON second.
+
+### 5.2 Why the Necromancer `act1.burial.blood_raven` runs are cut (V, bot log of 20261122-190434 seed 11)
+The hero is not slow, it is stuck from the first minute. clvl 16 fixture, 8000 gold, 6 mana potions in the pack and none in the belt:
+1. the town bank chore deposits 6000 of 8000 gold (`byChore stash -6000`, `town.bankFirst` default; the act1more scenarios set it to 0, the Necromancer run used the same file and was cut anyway);
+2. the kit gate asks for mana potions 0/3 and the shop plan says `wantMP 0` because the pack holds 6 (`packMP 6, beltMP 0`);
+3. the quest step then refuses with `not ready: 0 mana potions < 2 (caster)` (internal/task/gate.go:59, World.ManaPotions = `in.Belt.MP`, internal/bot/task.go:357, belt only), forever: `needs_attention` from 19:04:47 to the stop at 19:33:40, 16 kills in 29 wall minutes.
+The guard counts belt plus pack for mana only at `town.plan` stage 2 or `quests.boardSM` 1 (internal/bot/routeguard.go:368, 395), both default 0 and absent from the scenario knobs, while healing potions already count the pack (task.go:356). A Paladin never meets it (no mana need). So the cut is a bot defect, not the 60-minute job limit and not a Necromancer pace problem: the same family as act1more finding 2 (belt against pack).
+
+### 5.3 Cards
+- `quest gate: count pack mana potions like healing ones` (owner task/bot): fix `World.ManaPotions` at stage 0 and 1, or make `quests.boardSM` the default; must-fail test on Necromancer and Sorceress with mana in the pack and none in the belt. Then rerun `act1.burial.blood_raven` for the Necromancer.
+- `scenario stage: Blood Moor to Cold Plains walk, knobs OFF then ON` to settle the default flip.
+- `act1.den.clear` for the Necromancer stays RED with and without the knobs (record 1 0x0014 against 0x0001); the Den log of run 6208 (V, read): 409 kills, 4 boss kills, 0 deaths, 33 potions in 45 virtual minutes, but the hero went back to town again and again for `low on mana potions` and `mp belt columns below 50%` (Cave, area 9, then area 13 and Cold Plains), so mana potion supply, not survival, set the pace and the Den bit was not set in time.
