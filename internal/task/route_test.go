@@ -203,3 +203,29 @@ func TestRouteLeaveWhyToleratesAThinnedKit(t *testing.T) {
 		}
 	}
 }
+
+// The next step on the road is ready for a hero already standing in a guarded area with a thinned kit (3 healing of 4):
+// it used to insert a chores trip, the hero walked home through the crowd and the chunk restarted (V live, sandbox
+// 2026-11-23: the Outer Cloister, "route guard (3 healing potions < 4)"). From town the gate still asks for 4. Must fail
+// without the RouteLeaveWhy exception in fieldReady.
+func TestFieldReadyOnTheRoadToleratesAThinnedKit(t *testing.T) {
+	for _, caster := range []bool{false, true} {
+		w := routeWorld(19, func(w *task.World) { w.HasMerc, w.Caster, w.Potions, w.ManaPotions = true, caster, 3, 1 })
+		w.RouteBlocked, w.TowerBlocked = task.RouteWhy(w), task.TowerWhy(w)
+		ready := func() *task.Fault {
+			return task.StepTravel("t", "travel", 28, func(task.World) bool { return false }).Ready(w)
+		}
+		w.Area = task.RogueEncampment
+		if ready() == nil {
+			t.Errorf("caster=%v: from town the thin kit must still ask for chores", caster)
+		}
+		w.Area = 27
+		if f := ready(); f != nil {
+			t.Errorf("caster=%v: on the road: %+v", caster, f)
+		}
+		w.Potions = 1
+		if ready() == nil {
+			t.Errorf("caster=%v: one potion left must still turn the hero round", caster)
+		}
+	}
+}
