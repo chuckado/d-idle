@@ -274,6 +274,7 @@ func (t *Town) buyPotions(ctx context.Context, npc d2.Unit, floor int, rep *Chor
 		want[belt.MP] = max(min(want[belt.MP], left), 0)
 	}
 	t.ensureHealing(s, band, bs, want)
+	t.e.Log.Info("shop: potion stock", "healing", t.stockNames(stock, belt.HP), "mana", t.stockNames(stock, belt.MP), "maxHPTier", band.MaxTier(belt.HP))
 	t.e.Log.Info("shop: potion plan", "wantHP", want[belt.HP], "wantMP", want[belt.MP], "wantRV", want[belt.RV], "beltHP", bs.Count[belt.HP],
 		"beltMP", bs.Count[belt.MP], "packHP", belt.PackCount(t.e.Data, s.Inventory, belt.HP), "packMP", belt.PackCount(t.e.Data, s.Inventory, belt.MP), "beltOther", bs.Other, "slots", bs.Slots, "gold", s.Player.Gold)
 	// A caster buys its first mana potions before the healing fill: the fill alone ate the whole purse for hours (seed 11
@@ -1188,4 +1189,15 @@ func (t *Town) sellByVerb(ctx context.Context, u d2.Unit, sold func(*d2.Snapshot
 	t.e.Planner.Count(input.PathVerb)
 	after, ok, err = t.h.Wait(ctx, t.uiTimeout(), sold)
 	return after, true, ok, err
+}
+
+// stockNames lists the potions of kind k the vendor holds as "name/price", for the log (what the shop could buy).
+func (t *Town) stockNames(stock []d2.Unit, k belt.Kind) []string {
+	var out []string
+	for _, u := range stock {
+		if b := t.base(u); belt.PotionKind(b) == k {
+			out = append(out, fmt.Sprintf("%s/%d", t.nameOf(u), b.Cost))
+		}
+	}
+	return out
 }
