@@ -640,6 +640,7 @@ docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
 docs/process/combat-reads.md  credit-runner  dlv-reads
 docs/process/druid-support.md  credit-runner  druid1
 docs/process/fork-rebase.md  credit-runner  forkrebase2
+docs/process/fork-sync-cadence.md  credit-runner  forksync
 docs/process/hammerdin-support.md  credit-runner  hammer1
 docs/process/input-verbs2.md  credit-runner  verbs2
 docs/process/layout-read.md  credit-runner  countess3

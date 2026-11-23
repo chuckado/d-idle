@@ -907,6 +907,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [feed-after-events.md](process/feed-after-events.md): Feed after events (status: current rule (card feeds, 2026-11-01). The helper is `tools/discord/feed.py`; details in...)
 - [flaky-tests.md](process/flaky-tests.md): Flaky tests: the waiting pattern (status: current. Load-sensitive tests cost 45-minute gate re-runs; this is the rule that keeps new ones out.)
 - [fork-rebase.md](process/fork-rebase.md): Fork rebase routine (status: current (task forkrebase, user decision 2026-11-19: rebase the private d2d fork onto upstream main...)
+- [fork-sync-cadence.md](process/fork-sync-cadence.md): Fork sync cadence (status: current (card forksync, 2026-11-23). Keeps the private d2d fork close to upstream so a rebase stays small....)
 - [friends-gamedata-2026-11-15.md](process/friends-gamedata-2026-11-15.md): Friends game-data bundle (2026-11-15)
 - [gamecode-guard.md](process/gamecode-guard.md): Game-code guard, labpath class, path scrubber
 - [grill-agent.md](process/grill-agent.md): The grill agent: one command to be interviewed
