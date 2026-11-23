@@ -21,7 +21,7 @@ owns:
   - "docs/ui-design-system.md"
 exclusive: []
 contracts: []
-result: "Found and fixed: the shared sheet focus trap skipped links (the Loot rules link in Settings). TestKeyboardWalk (stub DOM) walks Settings, More and the bottom bar; TestNoPositiveTabindex; ts200 pages now also judge vertical clipping, must-fail page tsdefect-vcut fails as it must, the four ts200 pages pass on the worker host. Not a real-browser keyboard walk."
+result: "Found and fixed: the shared sheet focus trap skipped links (the Loot rules link in Settings). TestKeyboardWalk (stub DOM) walks Settings, More and the bottom bar; TestNoPositiveTabindex; ts200 pages now also judge vertical clipping, must-fail page tsdefect-vcut fails as it must, the four ts200 pages pass on the worker host. Map: the Area map with a trail and an objective (variant walked) already passes the --map check with drawn pixels (390x844, 1366x768); new fit page zone-act-objective expects the Act map to draw its target (data-target) and passes at every size. Not a real-browser keyboard walk."
 ---
 
 ## Description

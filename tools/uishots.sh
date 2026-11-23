@@ -562,6 +562,7 @@ zone-menu-town watch?layout=cockpit&theme=dark&zone=camp
 zone-menu-hard watch?layout=cockpit&theme=dark&zone=ftw
 zone-menu-here watch?layout=cockpit&theme=dark&zone=bm
 zone-menu-orders watch?layout=cockpit-orders&theme=dark&zone=cp
+zone-act-objective watch?first=0&theme=dark&needs=0&tab=Map expect=[data-target]
 demo-tab-orders watch?layout=cockpit-demo&theme=dark&tab=Orders
 demo-tab-map watch?layout=cockpit-demo&theme=dark&tab=Map
 demo-tab-progress watch?layout=cockpit-demo&theme=dark&tab=Progress
