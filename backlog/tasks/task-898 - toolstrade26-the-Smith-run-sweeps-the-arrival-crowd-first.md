@@ -1,10 +1,11 @@
 ---
 id: TASK-898
 title: 'toolstrade26: the Smith run sweeps the arrival crowd first'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T13:18:00Z'
+updated_date: '2026-11-23T13:39:00Z'
 labels:
   - bot
   - bot-fix

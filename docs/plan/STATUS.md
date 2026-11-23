@@ -462,7 +462,6 @@
 | toolstrade20 | proposed | - | `internal/combat/fight.go`<br>`internal/combat/sim_test.go`<br>`internal/combat/reach_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade22 | proposed | - | `tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade25 | proposed | - | `internal/task/kind.go`<br>`internal/task/executor.go`<br>`internal/task/executor_unpark_test.go`<br>`internal/bot/task.go`<br>`internal/bot/task_test.go`<br>`internal/bot/zz_cover_task_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
-| toolstrade26 | proposed | - | `internal/boss/act1.go`<br>`internal/boss/boss_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
