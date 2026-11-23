@@ -1039,46 +1039,46 @@ var returnTmpl = template.Must(template.New("return").Funcs(template.FuncMap{"du
 }}).Parse(`<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><title>d.idle - while you were away</title>
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
-<link rel="icon" href="data:,"><link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/app.css"><link rel="stylesheet" href="/watch/return.css"><link rel="stylesheet" href="/watch/components.css"><link rel="stylesheet" href="/watch/nav.css">
+<link rel="icon" href="data:,"><link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/reset.css"><link rel="stylesheet" href="/watch/return.css"><link rel="stylesheet" href="/watch/components.css"><link rel="stylesheet" href="/watch/nav.css">
 </head><body>
 <main class="ret" id="return">
-<section class="card" aria-labelledby="r-head"><h2 id="r-head">While you were away</h2><p class="headline">{{.Headline}}</p><p><a class="btn primary" href="/watch?live=1">Go to the live screen</a></p>{{if .Rules}}<p class="hint">{{range $i, $r := .Rules}}{{if $i}}; {{end}}{{$r}}{{end}}</p>{{end}}</section>
-{{if .Moments}}<section class="card" aria-labelledby="r-moments"><h2 id="r-moments">The moments</h2><ul class="moments">
+<section class="d-card" aria-labelledby="r-head"><h2 id="r-head">While you were away</h2><p class="headline">{{.Headline}}</p><p><a class="d-btn" data-variant="primary" href="/watch?live=1">Go to the live screen</a></p>{{if .Rules}}<p class="d-hint">{{range $i, $r := .Rules}}{{if $i}}; {{end}}{{$r}}{{end}}</p>{{end}}</section>
+{{if .Moments}}<section class="d-card" aria-labelledby="r-moments"><h2 id="r-moments">The moments</h2><ul class="moments">
 {{range .Moments}}<li class="moment {{.Kind}}"><b>{{.Title}}</b> <span>{{.Text}}</span></li>{{end}}</ul></section>{{end}}
-{{if .Deaths}}<section class="card" aria-labelledby="r-deaths"><h2 id="r-deaths">Deaths</h2><ul>{{range .Deaths}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
-{{if .Drops}}<section class="card" aria-labelledby="r-drops"><h2 id="r-drops">Drops worth noting</h2><ul>{{range .Drops}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
-{{if .Areas}}<section class="card" aria-labelledby="r-areas"><h2 id="r-areas">Areas entered</h2><p>{{range $i, $a := .Areas}}{{if $i}}, {{end}}{{$a}}{{end}}</p>
-<p class="hint">Waypoints lit: not reported yet (no event).</p></section>{{end}}
-<section class="card" aria-labelledby="r-trips"><h2 id="r-trips">Expeditions</h2>
+{{if .Deaths}}<section class="d-card" aria-labelledby="r-deaths"><h2 id="r-deaths">Deaths</h2><ul>{{range .Deaths}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
+{{if .Drops}}<section class="d-card" aria-labelledby="r-drops"><h2 id="r-drops">Drops worth noting</h2><ul>{{range .Drops}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
+{{if .Areas}}<section class="d-card" aria-labelledby="r-areas"><h2 id="r-areas">Areas entered</h2><p>{{range $i, $a := .Areas}}{{if $i}}, {{end}}{{$a}}{{end}}</p>
+<p class="d-hint">Waypoints lit: not reported yet (no event).</p></section>{{end}}
+<section class="d-card" aria-labelledby="r-trips"><h2 id="r-trips">Expeditions</h2>
 {{if .Trips}}<div class="trips">{{range .Trips}}<article class="trip" aria-label="Expedition {{.N}}">
-<h3>#{{.N}} {{.Headline}}{{if .Open}} <span class="badge">still out</span>{{end}}{{if .Unsure}} <span class="badge">start not seen</span>{{end}}</h3>
-<p class="hint">{{clock .Start}} to {{clock .End}}</p>
+<h3>#{{.N}} {{.Headline}}{{if .Open}} <span class="d-badge">still out</span>{{end}}{{if .Unsure}} <span class="d-badge">start not seen</span>{{end}}</h3>
+<p class="d-hint">{{clock .Start}} to {{clock .End}}</p>
 <dl><dt>Kills</dt><dd>{{.Kills}}</dd><dt>XP</dt><dd>{{.XP}}</dd><dt>Gold</dt><dd>{{if .Gold}}{{.Gold}}{{else}}not reported{{end}}</dd>
 <dt>Potions drunk</dt><dd>{{.Potions}}</dd><dt>Supplies cost</dt><dd>not reported</dd></dl>
 {{if .Bosses}}<p>Bosses: {{range $i, $b := .Bosses}}{{if $i}}, {{end}}{{$b}}{{end}}</p>{{end}}
 {{if .Drops}}<p>Kept: {{range $i, $b := .Drops}}{{if $i}}, {{end}}{{$b}}{{end}}</p>{{end}}
 {{range .Deaths}}<p class="bad">Died: {{.}}</p>{{end}}
-</article>{{end}}</div>{{else}}<p class="empty">No expedition in this window.</p>{{end}}</section>
+</article>{{end}}</div>{{else}}<p class="d-empty">No expedition in this window.</p>{{end}}</section>
 {{range .Sections}}{{if not .After}}{{template "sec" .}}{{end}}{{end}}
-<section class="card" aria-labelledby="r-missed"><h2 id="r-missed">Questions I missed</h2>
-{{if .Missed}}{{range .Missed}}<article class="missed" data-point="{{.Point}}"><h3>{{.Question}} <span class="badge">{{.Count}}x</span></h3>
-{{range .Contexts}}<p class="hint">{{.}}</p>{{end}}
-{{if .OpenAsk}}<p>Answer once for all {{.OpenAsk}} still open:</p><div class="row">{{$p := .Point}}{{range .Choices}}<button type="button" class="btn small" data-act="answer" data-point="{{$p}}" data-answer="{{.ID}}">{{.Label}}</button>{{end}}</div>
-{{else}}<p class="hint">Faded questions cannot be answered afterwards. I will ask again and carry on with my default until then.</p>{{end}}
-{{if .OpenRule}}<p>Make this a rule ({{.OpenRule}} waiting):</p><div class="row"><button type="button" class="btn small primary" data-act="rule" data-point="{{.Point}}" data-yes="1">Yes, make it a rule</button><button type="button" class="btn small" data-act="rule" data-point="{{.Point}}" data-yes="0">No</button></div>{{end}}
-</article>{{end}}{{else}}<p class="empty">Nothing was missed.</p>{{end}}</section>
+<section class="d-card" aria-labelledby="r-missed"><h2 id="r-missed">Questions I missed</h2>
+{{if .Missed}}{{range .Missed}}<article class="missed" data-point="{{.Point}}"><h3>{{.Question}} <span class="d-badge">{{.Count}}x</span></h3>
+{{range .Contexts}}<p class="d-hint">{{.}}</p>{{end}}
+{{if .OpenAsk}}<p>Answer once for all {{.OpenAsk}} still open:</p><div class="row">{{$p := .Point}}{{range .Choices}}<button type="button" class="d-btn" data-size="sm" data-variant="ghost" data-act="answer" data-point="{{$p}}" data-answer="{{.ID}}">{{.Label}}</button>{{end}}</div>
+{{else}}<p class="d-hint">Faded questions cannot be answered afterwards. I will ask again and carry on with my default until then.</p>{{end}}
+{{if .OpenRule}}<p>Make this a rule ({{.OpenRule}} waiting):</p><div class="row"><button type="button" class="d-btn" data-size="sm" data-variant="primary" data-act="rule" data-point="{{.Point}}" data-yes="1">Yes, make it a rule</button><button type="button" class="d-btn" data-size="sm" data-variant="ghost" data-act="rule" data-point="{{.Point}}" data-yes="0">No</button></div>{{end}}
+</article>{{end}}{{else}}<p class="d-empty">Nothing was missed.</p>{{end}}</section>
 {{range .Sections}}{{if .After}}{{template "sec" .}}{{end}}{{end}}
-<section class="card" aria-labelledby="r-notes"><h2 id="r-notes">Three sentences about this session</h2>
+<section class="d-card" aria-labelledby="r-notes"><h2 id="r-notes">Three sentences about this session</h2>
 <textarea id="notes" rows="4" maxlength="900" aria-label="Three sentences about this session"></textarea>
-<div class="row"><button type="button" class="btn small" id="notes-save" data-act="notes" {{if not .Notes}}disabled{{end}}>Save</button><span class="hint" id="notes-state">{{if not .Notes}}No session record is connected yet.{{end}}</span></div></section>
-{{if .Gaps}}<section class="card" aria-labelledby="r-gaps"><h2 id="r-gaps">What this page cannot see yet</h2><ul class="hint">{{range .Gaps}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
+<div class="row"><button type="button" class="d-btn" data-size="sm" data-variant="ghost" id="notes-save" data-act="notes" {{if not .Notes}}disabled{{end}}>Save</button><span class="d-hint" id="notes-state">{{if not .Notes}}No session record is connected yet.{{end}}</span></div></section>
+{{if .Gaps}}<section class="d-card" aria-labelledby="r-gaps"><h2 id="r-gaps">What this page cannot see yet</h2><ul class="d-hint">{{range .Gaps}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
 </main>
-<p id="msg" class="hint" role="status"></p>
+<p id="msg" class="d-hint" role="status"></p>
 <script src="/watch/return.js"></script>
 <script src="/watch/nav.js"></script>
 </body></html>
-{{define "sec"}}<section class="card" data-section="{{.ID}}" aria-label="{{.Title}}"><h2>{{.Title}}</h2>
-{{if .Lines}}<ul>{{range .Lines}}<li>{{.}}</li>{{end}}</ul>{{else}}<p class="empty">{{.Placeholder}}</p>{{end}}{{if .Buttons}}<div class="row">{{range .Buttons}}<button type="button" class="btn small" data-act="{{if .Act}}{{.Act}}{{else}}policy{{end}}" data-row="{{.Row}}" data-option="{{.Option}}">{{.Label}}</button>{{end}}</div>{{end}}</section>{{end}}`))
+{{define "sec"}}<section class="d-card" data-section="{{.ID}}" aria-label="{{.Title}}"><h2>{{.Title}}</h2>
+{{if .Lines}}<ul>{{range .Lines}}<li>{{.}}</li>{{end}}</ul>{{else}}<p class="d-empty">{{.Placeholder}}</p>{{end}}{{if .Buttons}}<div class="row">{{range .Buttons}}<button type="button" class="d-btn" data-size="sm" data-variant="ghost" data-act="{{if .Act}}{{.Act}}{{else}}policy{{end}}" data-row="{{.Row}}" data-option="{{.Option}}">{{.Label}}</button>{{end}}</div>{{end}}</section>{{end}}`))
 
 type returnPage struct {
 	ReturnData
@@ -1094,12 +1094,13 @@ func RenderReturn(d ReturnData, notes bool) []byte {
 	return []byte(b.String())
 }
 
-// main.ret must reset the global main grid (12 columns from 900 px up in app.css), or every card becomes a narrow column.
-const returnCSS = `main.ret{display:block;grid-template-columns:none;max-width:46rem;margin:0 auto;padding:12px}.ret .card{min-width:0;overflow-wrap:anywhere}.ret .card{margin-bottom:12px;padding:12px 14px}
-.headline{font-size:1.1rem;margin:0}.moments{list-style:none;margin:0;padding:0}.moment{padding:6px 0;border-bottom:1px solid var(--line)}
-.trip,.missed{border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-bottom:8px}.trip h3,.missed h3{margin:0;font-size:.95rem}
-.trip dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:6px 0}.trip dt{color:var(--muted)}.trip dd{margin:0}
-.bad{color:var(--bad)}.row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:8px}`
+// The Return and Policy pages share the one frame (reset.css, tokens.css, components.css, nav.css); this is the page's own layout on the tokens.
+const returnCSS = `body{background:var(--d-bg);color:var(--d-text)}h2{font:600 var(--d-fs-3)/var(--d-lh-tight) var(--d-font-display);margin:0 0 var(--d-sp-2)}:focus-visible{outline:2px solid var(--d-focus);outline-offset:2px}small{color:var(--d-text-2)}
+main.ret{display:block;max-width:46rem;margin:0 auto;padding:12px}.ret .d-card{min-width:0;overflow-wrap:anywhere;margin-bottom:12px;padding:12px 14px}
+.headline{font-size:1.1rem;margin:0}.moments{list-style:none;margin:0;padding:0}.moment{padding:6px 0;border-bottom:1px solid var(--d-line)}
+.trip,.missed{border:1px solid var(--d-line);border-radius:8px;padding:8px 12px;margin-bottom:8px}.trip h3,.missed h3{margin:0;font-size:.95rem}
+.trip dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:6px 0}.trip dt{color:var(--d-text-2)}.trip dd{margin:0}
+.bad{color:var(--d-bad)}.row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}textarea{width:100%;background:var(--d-surface-1);color:inherit;border:1px solid var(--d-line);border-radius:7px;padding:8px}`
 
 // returnJS posts the three kinds of write to the answer route (another port, like app.js). All text via textContent.
 const returnJS = `(function(){'use strict';

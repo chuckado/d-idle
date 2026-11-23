@@ -813,23 +813,23 @@ func (p *PolicySheet) PolicyAnswerHandler(o AnswerOptions) http.Handler {
 var policyTmpl = template.Must(template.New("policy").Parse(`<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><title>d.idle - policy sheet</title>
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
-<link rel="icon" href="data:,"><link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/app.css"><link rel="stylesheet" href="/watch/return.css"><link rel="stylesheet" href="/watch/components.css"><link rel="stylesheet" href="/watch/nav.css">
+<link rel="icon" href="data:,"><link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/reset.css"><link rel="stylesheet" href="/watch/return.css"><link rel="stylesheet" href="/watch/components.css"><link rel="stylesheet" href="/watch/nav.css">
 </head><body>
 <main class="ret" id="policy">
-<section class="card" aria-labelledby="p-head"><h2 id="p-head">Policy sheet ({{.Class}})</h2>
+<section class="d-card" aria-labelledby="p-head"><h2 id="p-head">Policy sheet ({{.Class}})</h2>
 <p>How the hero handles its chores. Set it once, change it any time. Poor choices are allowed: try them and read what they cost.</p>
-<p class="hint">{{.Legend}}</p></section>
-{{range .Rows}}<section class="card" data-row="{{.ID}}" aria-labelledby="row-{{.ID}}"><h2 id="row-{{.ID}}">{{.Label}}</h2><p>{{.Help}}</p>
+<p class="d-hint">{{.Legend}}</p></section>
+{{range .Rows}}<section class="d-card" data-row="{{.ID}}" aria-labelledby="row-{{.ID}}"><h2 id="row-{{.ID}}">{{.Label}}</h2><p>{{.Help}}</p>
 <div class="opts">{{$row := .ID}}{{range .Options}}<div class="opt{{if .Current}} cur{{end}}">
-{{if .Locked}}<button type="button" class="btn small" disabled aria-disabled="true">{{.Label}}</button> <span class="badge">locked</span> <span class="hint">{{.Teaser}}{{if .Price}} Costs {{.Price}} tally.{{end}}</span> <button type="button" class="btn small" data-act="buy" data-unlock="{{.Unlock}}">Unlock{{if .Price}} ({{.Price}} tally){{end}}</button>{{else}}<button type="button" class="btn small{{if .Current}} primary{{end}}" data-act="policy" data-row="{{$row}}" data-option="{{.ID}}" {{if .Current}}aria-pressed="true"{{else}}aria-pressed="false"{{end}}>{{.Label}}</button>{{end}}
-{{if .Says}}<span class="hint">{{.Says}}</span>{{end}}{{if .Default}}<span class="badge">default</span>{{end}}{{if .Suboptimal}}<span class="badge">your call</span> <span class="hint">{{.Risk}}</span>{{end}}
-{{if .Applies}}<span class="badge">{{if eq .Applies "record"}}not wired yet{{else}}partly wired{{end}}</span> <span class="hint">{{.Note}}</span>{{end}}
+{{if .Locked}}<button type="button" class="d-btn" data-size="sm" data-variant="ghost" disabled aria-disabled="true">{{.Label}}</button> <span class="d-badge">locked</span> <span class="d-hint">{{.Teaser}}{{if .Price}} Costs {{.Price}} tally.{{end}}</span> <button type="button" class="d-btn" data-size="sm" data-variant="ghost" data-act="buy" data-unlock="{{.Unlock}}">Unlock{{if .Price}} ({{.Price}} tally){{end}}</button>{{else}}<button type="button" class="btn small{{if .Current}} primary{{end}}" data-act="policy" data-row="{{$row}}" data-option="{{.ID}}" {{if .Current}}aria-pressed="true"{{else}}aria-pressed="false"{{end}}>{{.Label}}</button>{{end}}
+{{if .Says}}<span class="d-hint">{{.Says}}</span>{{end}}{{if .Default}}<span class="d-badge">default</span>{{end}}{{if .Suboptimal}}<span class="d-badge">your call</span> <span class="d-hint">{{.Risk}}</span>{{end}}
+{{if .Applies}}<span class="d-badge">{{if eq .Applies "record"}}not wired yet{{else}}partly wired{{end}}</span> <span class="d-hint">{{.Note}}</span>{{end}}
 </div>{{end}}</div>
 <div class="preview" data-preview="{{.ID}}" hidden></div>
-{{if .Effect}}<p class="effect">{{.Effect.Text}}</p>{{else}}<p class="hint">{{.EffectNote}}</p>{{end}}
+{{if .Effect}}<p class="effect">{{.Effect.Text}}</p>{{else}}<p class="d-hint">{{.EffectNote}}</p>{{end}}
 </section>{{end}}
 </main>
-<p id="msg" class="hint" role="status"></p>
+<p id="msg" class="d-hint" role="status"></p>
 <script src="/watch/policy.js"></script>
 <script src="/watch/nav.js"></script>
 </body></html>`))
@@ -858,19 +858,19 @@ function save(row,option){post('/api/policy',{row:row,option:option}).then(funct
  .catch(function(){say('the answer route is not reachable');});}
 function render(row,option,label,j){var b=box(row);b.textContent='';b.hidden=false;
  b.appendChild(el('h3','','Preview: '+label));
- if(!j||j.error){b.appendChild(el('p','hint',(j&&j.error)||'The preview is not available.'));}
- else if(!j.supported){b.appendChild(el('p','hint',j.reason));}
+ if(!j||j.error){b.appendChild(el('p','d-hint',(j&&j.error)||'The preview is not available.'));}
+ else if(!j.supported){b.appendChild(el('p','d-hint',j.reason));}
  else{
-  if(j.reason)b.appendChild(el('p','hint',j.reason));
+  if(j.reason)b.appendChild(el('p','d-hint',j.reason));
   (j.lines||[]).forEach(function(l){var p=el('p','effect',l.text);
-   p.appendChild(el('span','hint',' ('+l.basis+'; confidence '+l.confidence+')'));b.appendChild(p);});
-  if(j.filteredTotal>0){b.appendChild(el('p','hint','Filtered out ('+j.filteredTotal+'), shown here and not lost:'));
+   p.appendChild(el('span','d-hint',' ('+l.basis+'; confidence '+l.confidence+')'));b.appendChild(p);});
+  if(j.filteredTotal>0){b.appendChild(el('p','d-hint','Filtered out ('+j.filteredTotal+'), shown here and not lost:'));
    var ul=el('ul','');(j.filtered||[]).forEach(function(f){ul.appendChild(el('li','',f.item+' ('+f.quality+'): '+f.why));});
    if(j.filteredTotal>(j.filtered||[]).length)ul.appendChild(el('li','','and '+(j.filteredTotal-j.filtered.length)+' more'));b.appendChild(ul);}
-  (j.notes||[]).forEach(function(n){b.appendChild(el('p','hint',n));});
+  (j.notes||[]).forEach(function(n){b.appendChild(el('p','d-hint',n));});
  }
- var sv=el('button','btn small primary','Save');sv.type='button';sv.onclick=function(){save(row,option);};
- var cn=el('button','btn small','Cancel');cn.type='button';cn.onclick=function(){close(row);say('');};
+ var sv=el('button','d-btn','Save');sv.type='button';sv.dataset.size='sm';sv.dataset.variant='primary';sv.onclick=function(){save(row,option);};
+ var cn=el('button','d-btn','Cancel');cn.type='button';cn.dataset.size='sm';cn.dataset.variant='ghost';cn.onclick=function(){close(row);say('');};
  b.appendChild(sv);b.appendChild(cn);}
 document.addEventListener('click',function(e){var u=e.target.closest('button[data-act="buy"]');
  if(u&&!u.disabled){u.disabled=true;post('/api/unlocks/buy',{id:u.dataset.unlock}).then(function(j){

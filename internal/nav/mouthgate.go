@@ -249,6 +249,12 @@ func (n *Navigator) gateClick(ctl input.Controller, p input.Point) (input.Point,
 		return p, nil
 	}
 	if n.gateRewrites >= gateMaxRewrites {
+		if n.goalSet && n.coreOK(from, p, exits) {
+			// The rewrites shuttled the walk (Sewers Level 2, V radament drill: 'rewrite cap' held a click 13.6 from the
+			// arrival stairs while the goal lay 150 subtiles beyond): outside the core a fired trigger is only a level change.
+			n.log.Info("nav mouth gate: click sent after the rewrite cap, goal beyond", "from", from, "to", p, "goal", n.goal)
+			return p, nil
+		}
 		return n.hold(lm, from, p, exits, "rewrite cap")
 	}
 	q, how := n.gateRewrite(lm, from, p, exits)
