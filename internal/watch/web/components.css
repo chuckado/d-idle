@@ -278,5 +278,4 @@
   .d-sheet-opt { display: flex; gap: var(--d-sp-1); align-items: center; min-block-size: 44px; }
   .d-sheet-row { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); justify-content: flex-end; }
   .d-sheet-cancel, .d-sheet-ok { min-block-size: 44px; }
-  @media (max-width: 699.98px) { .d-sheet-back { place-items: end stretch; padding: 0; } .d-sheet { inline-size: auto; border-radius: var(--d-r-1) var(--d-r-1) 0 0; } }
 }

@@ -22,6 +22,7 @@ owns:
   - "internal/watch/web/watch.html"
   - "internal/watch/web/components.css"
   - "internal/watch/web/points.css"
+  - "internal/watch/web/shell.css"
   - "internal/watch/pointsui.go"
   - "internal/watch/skillsui.go"
   - "internal/watch/update.go"
