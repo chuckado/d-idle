@@ -105,7 +105,7 @@ f.addEventListener('load', async () => {
       m.clicked = steps.join(' then ');
       for (const raw of steps) {
         const opt = raw[0] === '?', sel = opt ? raw.slice(1) : raw, b = f.contentDocument.querySelector(sel);
-        if (b) { b.click(); await wait(500); await settle(f.contentWindow); } else if (!opt) { m.missing = sel; break; }
+        if (b) { b.click(); await wait(500); await settle(f.contentWindow); (m.trace = m.trace || []).push(sel + ' -> selecting ' + !!f.contentDocument.querySelector('[data-key=select-done]:not([hidden])') + ' sheet ' + !!f.contentDocument.querySelector('.vt-sheet:not([hidden])') + ' cells ' + f.contentDocument.querySelectorAll('.vt-cell').length + ' dp ' + !!f.contentDocument.querySelector('.vt-dcard') + ' sel ' + ((f.contentDocument.querySelector('.vt-ab-sel') || {}).textContent || '').slice(0, 30) + ' disc ' + (() => { const b = f.contentDocument.querySelector('[data-key=discard]'); return b ? (b.disabled ? 'disabled' : 'on') + (b.closest('[hidden]') ? '-hidden' : '') : 'none'; })()); } else if (!opt) { m.missing = sel; break; }
       }
     }
     m.ov = overlayState(f.contentWindow);
