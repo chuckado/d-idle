@@ -614,6 +614,186 @@
      "kind": "no_writes"
     }
    ]
+  },
+  {
+   "id": "necro.den-l14",
+   "title": "Den of Evil at clvl 14 for the Necromancer (hand-in study, SME build)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "den_of_evil",
+    "chunk": "clear_den"
+   },
+   "step": {
+    "action": "clear",
+    "target": "Den of Evil",
+    "nodes": [
+     "talk-akara",
+     "to-den",
+     "clear",
+     "home",
+     "reward"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "data/questspec/"
+   ],
+   "covers": [
+    "quest.den_of_evil.clear_den",
+    "combat.fight",
+    "travel.area-transition"
+   ],
+   "pre": {
+    "level": 14,
+    "gold": 8000,
+    "items": [
+     {
+      "code": "hp1",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 4
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "mp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "clear_den"
+    ],
+    "build": "necromancer_summoner_sme"
+   },
+   "budget": {
+    "virtual_min": 45
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "provenance": "CHEATED: level 10, 8000 gold (2000 left the purse empty after the bank chore: the purse recovery then held the chunk, run 20261120-133340-b8dd) and potions by SETUP verbs (a played hero reaches the Den at about level 3 to 8). Town start, nothing written after the start. Mechanics only.",
+   "notes": "Study of the stage 1 hand-in refusal (run 20261123-025322-bafd): the same Den chunk alone at clvl 14 (fixture 8000 gold, bankFirst 0). Compare with act1.den.clear (clvl 10).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 1,
+     "set": 1,
+     "why": "V docs/cheats.md: bit 0 = completed; the real reward word is 0x8001/0x9001"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "necro.den-l16",
+   "title": "Den of Evil at clvl 16 for the Necromancer (hand-in study, SME build)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "den_of_evil",
+    "chunk": "clear_den"
+   },
+   "step": {
+    "action": "clear",
+    "target": "Den of Evil",
+    "nodes": [
+     "talk-akara",
+     "to-den",
+     "clear",
+     "home",
+     "reward"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "data/questspec/"
+   ],
+   "covers": [
+    "quest.den_of_evil.clear_den",
+    "combat.fight",
+    "travel.area-transition"
+   ],
+   "pre": {
+    "level": 16,
+    "gold": 8000,
+    "items": [
+     {
+      "code": "hp1",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 4
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "mp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "clear_den"
+    ],
+    "build": "necromancer_summoner_sme"
+   },
+   "budget": {
+    "virtual_min": 45
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "provenance": "CHEATED: level 10, 8000 gold (2000 left the purse empty after the bank chore: the purse recovery then held the chunk, run 20261120-133340-b8dd) and potions by SETUP verbs (a played hero reaches the Den at about level 3 to 8). Town start, nothing written after the start. Mechanics only.",
+   "notes": "Study of the stage 1 hand-in refusal (run 20261123-025322-bafd): the same Den chunk alone at clvl 16 (fixture 8000 gold, bankFirst 0). Compare with act1.den.clear (clvl 10).",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 1,
+     "set": 1,
+     "why": "V docs/cheats.md: bit 0 = completed; the real reward word is 0x8001/0x9001"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
   }
  ]
 }
