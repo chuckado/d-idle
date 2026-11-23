@@ -22,6 +22,7 @@ type fake struct {
 	mons      []*fmon
 	dangers   []Danger
 	presets   []Preset
+	gotoErr   error // GoTo fails with it (and does not move)
 	log       []string
 	loots     []LootSpec
 	lootN     int
@@ -122,6 +123,9 @@ func (f *fake) ExitTo(ctx context.Context, area int) error {
 
 func (f *fake) GoTo(ctx context.Context, p Pt) error {
 	f.logf("goto %d,%d", p.X, p.Y)
+	if f.gotoErr != nil {
+		return f.gotoErr
+	}
 	f.pos = p
 	return nil
 }
