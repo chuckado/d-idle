@@ -494,6 +494,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 129194737 11-23 15:57 `Merge agent/qd13: Merge branch 'main' into qdmatrix` (qd13)
+- 3c6e0f8c8 11-23 15:56 `Merge branch 'main' into qdmatrix` (-)
 - 6c2360b29 11-23 15:49 `Merge agent/toolstrade27: toolstrade27: town portal crossings are no map edges, Barracks numbers` (toolstrade27)
 - fd1bcdfbc 11-23 12:07 `Merge agent/routes3: routes3: delete unused GET /api/bestiary, /api/atlas, /api/unlocks (user approved 2026-11-23); engine kept, guard test added` (routes3)
 - 6cbe0947f 11-23 11:54 `Merge agent/e11a2: E11a2: needs-you list grows, alerts badge opens Settings Alerts, real page-scroll must-fail fixture, guards for stream layout and senses_units.js` (e11a2)
@@ -502,6 +504,4 @@
 - 5edb915f2 11-23 10:09 `Merge agent/adrs: ADR 0030 operator quest control; ADR 0029 amended for vault sell credit` (adrs)
 - b3d332cd2 11-23 08:25 `Merge agent/toolstrade26: Merge branch 'main' into toolstrade26` (toolstrade26)
 - 12b103845 11-23 08:24 `Merge branch 'main' into toolstrade26` (-)
-- fc7fbcef9 11-23 08:17 `Merge agent/questdrill12: Merge branch 'main' into qdmatrix` (questdrill12)
-- 251d7b715 11-23 08:16 `Merge branch 'main' into qdmatrix` (-)
 <!-- statusgen:end -->
