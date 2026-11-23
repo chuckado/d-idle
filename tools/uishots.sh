@@ -89,7 +89,9 @@ navdefect-wide watch/skills?theme=dark&defect=nav-wide"
 # The Build tab (card buildcards; web/buildcards.js): name, query, click, hit. --fit judges them (builds-NAME: one column on a phone, a grid
 # above, no scroll box, 44 px buttons, a text equivalent on every star row) and --builds draws them.
 buildspages="builds-list watch/points?theme=dark&tab=build
-builds-detail watch/points?theme=dark&tab=build .bc-details .bc-choose"
+builds-detail watch/points?theme=dark&tab=build .bc-details .bc-choose
+builds-choose watch/points?theme=dark&tab=build .bc-details|.bc-choose .d-sheet-ok,.d-sheet-adv-btn
+builds-choose-adv watch/points?theme=dark&tab=build .bc-details|.bc-choose|.d-sheet-adv-btn .d-sheet-ok,.d-sheet-opt"
 if [ "$cockpit" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/ck-*
 	sizes="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620 390x844"
