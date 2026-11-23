@@ -23,8 +23,11 @@ import (
 type Spec struct {
 	Schema string `json:"schema"`
 	// Kit is the setup every generated scenario starts from (a scenario `pre` and `trigger`, as the scenario format has them).
-	Kit   map[string]any `json:"kit"`
-	Steps []StepSpec     `json:"steps"`
+	Kit map[string]any `json:"kit"`
+	// Kits are named overrides of Kit (a stronger stand-in hero, prerequisite quest words): keys of `pre` replace the kit's,
+	// keys of `trigger.knobs` are added. A gen row names one with `kit`.
+	Kits  map[string]map[string]any `json:"kits,omitempty"`
+	Steps []StepSpec                `json:"steps"`
 }
 
 // StepSpec says how one board step is proven: exactly one of Scenario (a hand-written scenario id), Chunk (only chunk-level
@@ -51,7 +54,7 @@ type Gen struct {
 	Kill    string           `json:"kill,omitempty"`   // monster name the bot must log "combat kill" for
 	Kills   int              `json:"kills,omitempty"`  // at least this many "combat kill" lines of any monster
 	Picked  string           `json:"picked,omitempty"` // item display name the bot must click ("loot: clicked")
-	Merc    bool             `json:"merc,omitempty"`
+	Kit     string           `json:"kit,omitempty"`
 	Budget  int              `json:"budget,omitempty"`
 	Pending string           `json:"pending,omitempty"` // non-empty: status pending with this reason
 }
