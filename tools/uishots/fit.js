@@ -479,7 +479,7 @@ export function charsNow(win) {
 function vaultPage(win, d, vis, cs) {
   const vw = win.innerWidth, vh = win.innerHeight;
   const o = { clipped: [], small: [], covered: [], outside: [], under: '', sheet: '', unnamed: [], holes: [], cells: 0, state: '', open: false, meter: false, mode: '' };
-  const nm = (n) => n.tagName.toLowerCase() + (typeof n.className === 'string' && n.className ? '.' + n.className.trim().split(/\s+/)[0] : '') + ' "' + (n.textContent || '').trim().slice(0, 16) + '"';
+  const nm = (n) => n.tagName.toLowerCase() + (typeof n.className === 'string' && n.className ? '.' + n.className.trim().split(/\s+/)[0] : '') + (n.dataset && n.dataset.key ? '[' + n.dataset.key + ']' : '') + ' "' + (n.textContent || '').trim().slice(0, 16) + '"';
   const root = d.getElementById('vt-root'), main = d.getElementById('vt-main'), head = root && root.querySelector('.vt-head');
   if (!root || !main || !head) { o.clipped.push('the page has no header or list'); return o; }
   const live = (n) => vis(n) && !n.closest('[hidden]');

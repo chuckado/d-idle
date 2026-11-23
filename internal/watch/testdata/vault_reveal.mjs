@@ -131,5 +131,11 @@ act = { reveal: rev(bar([], '', 0), { on: true, order: { id: 'g-1', state: 'part
 await page.reload(false);
 ok(find('reveal-bar-cancel').hidden && has('short of gold') && has('Done in part'), 'finished order');
 
+// every visible button has an accessible name, also when nothing can be paid (the Reveal button was empty then: the 2026-11-22 fit finding)
+const unnamed = () => { const bad = []; const walk = (n) => { if (n.hidden) return; if (n.tag === 'button' && !(n.attrs['aria-label'] || bt(n).trim())) bad.push(n.dataset.key || n.className); (n.children || []).forEach(walk); }; walk(root); return bad; };
+act = { reveal: rev(bar([o('free', { ok: false, count: 0, ids: [], why: 'no scroll' }), o('gold', { ok: false, count: 0, ids: [], why: 'no gold' })], '', 4), { on: true }), sell };
+await page.reload(false);
+ok(find('reveal-bar-go') && !find('reveal-bar-go').hidden, 'nothing payable: the Reveal button stays visible');
+ok(unnamed().length === 0, 'nothing payable: unnamed buttons ' + unnamed().join(','));
 for (const w of dWhy.unexplained(all(root))) fails.push('why: ' + w);
 console.log(JSON.stringify({ fails }));
