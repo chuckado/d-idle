@@ -16,7 +16,7 @@ owns:
   - "tools/provingground/scenarios/act1.json"
 exclusive: []
 contracts: []
-result: "Cause: the bank chore deposited 6000 of 8000 gold, the hero was short in purse and kit and left the Den after 36 s to farm gold (Necromancer 11, run 20261122-205700). The assertion (record 1 bit 0 = completed) was right; 0x0014 = Akara talked (0x4) and 0x10 (U). Fix in the scenario only (town.bankFirst 0, as the act1more scenarios); the bot-side defect remains: withdraw stash gold when chores are short (act1more finding 1). Rerun GREEN Necromancer seed 11 (job 20261122-212018-1980)."
+result: "Cause: the bank chore deposited 6000 of 8000 gold, the hero was short in purse and kit and left the Den after 36 s to farm gold (Necromancer 11, run 20261122-205700). The assertion (record 1 bit 0 = completed) was right; 0x0014 = Akara talked (0x4) and 0x10 (U). Fix in the scenario only (town.bankFirst 0, as the act1more scenarios); the bot-side defect remains: withdraw stash gold when chores are short (act1more finding 1). Rerun GREEN Necromancer and Paladin seed 11 (job 20261122-212018-1980)."
 ---
 
 ## Description
