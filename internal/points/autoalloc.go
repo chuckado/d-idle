@@ -116,7 +116,11 @@ type BuildView struct {
 	Unspent UnspentView `json:"unspent"`
 	Spent   int         `json:"spent"`
 	Waiting string      `json:"waiting,omitempty"`
-	Respec  RespecView  `json:"respec"`
+	// Plan says which plan the hero follows and what happens at the end of the table (plan.go); NoPlan is set, with the
+	// reason, when the build has no supported plan at all.
+	Plan   string     `json:"plan,omitempty"`
+	NoPlan string     `json:"noPlan,omitempty"`
+	Respec RespecView `json:"respec"`
 }
 
 // UnspentView is the hero's unspent points as the game shows them.
@@ -190,7 +194,15 @@ func (d *Desk) BuildView() BuildView {
 		v.Unspent = UnspentView{Stat: p.StatPoints, Skill: p.SkillPoints}
 	}
 	if p != nil && s.Locked && d.c.OffBuild != nil {
-		v.OffBuild = d.c.OffBuild(s.Build, p)
+		v.OffBuild = d.c.OffBuild(followed(s), p)
+	}
+	if p != nil {
+		v.Plan = planLine(s, level, v.Builds)
+		if cb := catalogBuild(s.Build); cb != nil && s.Locked {
+			if ok, why := PlanStatus(cb, v.Builds); !ok {
+				v.NoPlan = "No supported plan: " + why + "."
+			}
+		}
 	}
 	return v
 }
@@ -274,7 +286,8 @@ func (d *Desk) AutoAllocOnce(ctx context.Context) (did string) {
 		return ""
 	}
 	d.setWaiting("")
-	steps, err := d.c.Next(s.Build, p)
+	table := d.handoff(&s, p)
+	steps, err := d.c.Next(table, p)
 	if err != nil {
 		d.setHeld([]Held{{Clvl: p.Level, Reason: "the build cannot be read: " + err.Error()}})
 		return ""
@@ -334,4 +347,30 @@ func (d *Desk) countSpent() {
 	d.auto.mu.Lock()
 	d.auto.spent++
 	d.auto.mu.Unlock()
+}
+
+// handoff returns the table to follow now; when the build's next supported table is due it switches to it, stores the
+// choice and logs it (once: the stored plan makes the next call a no-op).
+func (d *Desk) handoff(s *Settings, p *d2.Player) string {
+	cur := followed(*s)
+	cb := catalogBuild(s.Build)
+	if cb == nil {
+		return cur
+	}
+	have := d.buildsOf(p.Class.String())
+	exhausted := false
+	if steps, err := d.c.Next(cur, p); err == nil && len(steps) == 0 {
+		exhausted = true
+	}
+	next := nextPlan(cb, cur, p.Level, have, exhausted)
+	if next == "" {
+		return cur
+	}
+	if err := d.store.SetPlan(next, p.Level, d.c.Now()); err != nil {
+		d.logf("auto-alloc: handoff not saved: "+err.Error(), "build", s.Build)
+		return cur
+	}
+	s.Plan = next
+	d.logf("auto-alloc: handoff "+shortTable(cb, cur)+" -> "+shortTable(cb, next)+" at clvl "+fmt.Sprint(p.Level), "build", s.Build)
+	return next
 }

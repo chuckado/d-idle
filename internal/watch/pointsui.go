@@ -44,6 +44,7 @@ const pointsPage = `<!DOCTYPE html>
   <div class="d-card-head"><h2 id="t-build" tabindex="-1">Build</h2><span class="meta" id="bmeta"></span></div>
   <p class="d-hint" id="bstate"></p>
   <p class="d-note" data-sev="info" id="boffnote" hidden></p>
+  <p class="d-hint" id="bplan" hidden></p>
   <p class="d-hint" id="bact" hidden></p>
   <p class="d-hint" id="bheld" hidden></p>
   <p class="d-hint" id="boff" hidden></p>

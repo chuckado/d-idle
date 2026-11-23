@@ -156,3 +156,29 @@ func TestSkillsFirstTwoClasses(t *testing.T) {
 		}
 	}
 }
+
+// Every catalogue build either has a plan the allocator can follow or says why not (never a silent gap).
+func TestEveryCatalogueBuildHasAPlanOrAReason(t *testing.T) {
+	w := testAllocWire(t)
+	have := w.builds()
+	cat, err := plandata.Catalog()
+	if err != nil {
+		t.Fatal(err)
+	}
+	noPlan := 0
+	for _, cb := range cat.Builds {
+		ok, why := points.PlanStatus(&cb, have)
+		switch {
+		case ok && why != "":
+			t.Errorf("%s: supported with a reason %q", cb.ID, why)
+		case !ok && why == "":
+			t.Errorf("%s: no supported plan and no reason", cb.ID)
+		case !ok:
+			noPlan++
+			t.Logf("%s: no supported plan: %s", cb.ID, why)
+		}
+	}
+	if noPlan == 0 || noPlan == len(cat.Builds) {
+		t.Errorf("%d of %d builds without a plan: the capability table changed, check the list", noPlan, len(cat.Builds))
+	}
+}
