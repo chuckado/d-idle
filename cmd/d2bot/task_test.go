@@ -95,3 +95,17 @@ func TestQuestReaderPrefersMemoryOverTheSave(t *testing.T) {
 		t.Errorf("memory-only read %v %v", v, ok)
 	}
 }
+
+// The live waypoint bits are read although no save lists any waypoint (card qdmatrix: the Arcane waypoint read inactive
+// in a character without a save). Fails with the loop over the save's own list.
+func TestQuestReaderReadsLiveWaypointsWithoutASave(t *testing.T) {
+	r := newSaveQuestReader(func() string { return "" }, func() string { return "" })
+	r.mem = fakeMem{words: map[string]uint16{}, wps: map[int]bool{74: true, 46: true, 43: false}}
+	v, ok := r.Read(0)
+	if !ok {
+		t.Fatal("no view")
+	}
+	if !v.WPs[74] || !v.WPs[46] || v.WPs[43] {
+		t.Errorf("waypoints %v", v.WPs)
+	}
+}

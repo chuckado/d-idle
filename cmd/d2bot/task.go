@@ -227,15 +227,22 @@ func (r *saveQuestReader) Read(diff int) (bot.QuestView, bool) {
 		}
 		v.Quests[tid] = st
 	}
+	// Every waypoint, not only the ones a save lists: with no save yet (a new character, the lab) the loop over the save's
+	// own list was empty and the live bits of the game were never read, so a waypoint the hero had activated read as
+	// inactive until the first Save and Exit (V drill.act2.summoner: `known true, active false` for the Arcane waypoint).
+	saveOn := map[int]bool{}
 	for _, wp := range prog.Difficulty[diff].Waypoints {
-		on := wp.Active
+		saveOn[wp.Level] = wp.Active
+	}
+	for _, level := range saves.WaypointLevels() {
+		on := saveOn[level]
 		if r.mem != nil {
-			if a, known := r.mem.Waypoint(diff, wp.Level); known {
+			if a, known := r.mem.Waypoint(diff, level); known {
 				on = a
 			}
 		}
 		if on {
-			v.WPs[wp.Level] = true
+			v.WPs[level] = true
 		}
 	}
 	return v, true
