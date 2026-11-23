@@ -6,8 +6,8 @@
 
 | size | red before | red after |
 |---|---|---|
-| 390x844 | 128 | 3 (→ 0 with the F6 change below, not re-measured) |
-| 360x640 | 80 | 11 |
+| 390x844 | 128 | 0 |
+| 360x640 | 80 | 11 (10 after R8 below) |
 | 412x780 | 90 | 0 |
 | 393x700, 412x890 | 8 each | 0 |
 | 870x520 | 7 | 0 |
@@ -20,7 +20,7 @@
 | 1536x730 | 23 | 1 |
 | 1904x1000 | 23 | 1 |
 | 1920x1080 | 23 | 2 |
-| total | 500 | 19 |
+| total | 500 | 16 (15 after R8) |
 
 The "143 at 390x844" quoted earlier came from `--fit --sizes 390x844`, which forces every page to that size (including desk-only fixtures that cannot fail there). The default run has 128 red at 390x844.
 
@@ -39,15 +39,14 @@ The "143 at 390x844" quoted earlier came from `--fit --sizes 390x844`, which for
 | F6 | `overflow-fixture`, `overflow-nested`, `overflow-fakescroll`, `tall-frame` must fail, run at 390x844 | 3 (+ the same at the forced size) | FIXTURE ARTIFACT: desk-frame defects that cannot occur on the scrolling phone | those pages run at desk sizes only; test `TestDeskFixturesRunAtDeskSizes` | `fit-overflow-fakescroll-390x844` |
 | R4 | quest tile text cut (`Handing in ...`, 5 px) | 6 | REAL | line-height 1.25 on the two lines (`panels/quest-strip/panel.css`): fixed at 1280x620 to 1920x1080 except two sizes, see open | `fit-quest-handing-1366x768` |
 
-## Open after this card (19 runs, none silenced)
+## Open (16 runs in the full re-measure after cards uifit1; none silenced)
 
 | id | what | runs | verdict | next step |
 |---|---|---|---|---|
-| F6b | the three desk fixtures at 390x844 | 3 | fixed by the F6 change after the last measurement; confirm in the next full run | rerun `--fit` |
 | R5 | `needs-you .n-list` 40 px box with 2+ rows at 360x640 (overflows by 32 to 82 px) | 10 | DESIGN question: the list is a small scroll box (`overflow-y: auto`) in a compact phone strip; the fit rule wants a declared scroller. Brief rule: no inner scroll box on a phone | decision for the user: page-grow the list on a phone, or declare `data-scroll` |
 | R4b | quest tile at 1536x730 (13 px) and 1904x1000 (12 px) in the "handing" state | 2 | REAL | the tile needs about 108 px and gets 96; compact the state or give the strip cell more |
 | R6 | `health .h-btn` 7 px high at 1280x620 (`strip-unknown`) | 1 | REAL, small | health tile at a short window |
 | R7 | `char-store` 136 px empty square at 1920x1080 (`character-iddoing`) | 2 | REAL layout hole | character screen with a pending identify |
-| R8 | orders sheet leaves the free area at 360x640 (`chars-more-entry`) | 1 | REAL | sheet height on the shortest phone |
+| R8 | orders sheet past the window at 360x640 (`chars-more-entry`) | 1 | STALE (F1 family): the sheet sits in a tile below the fold of the scrolling phone page | closed in card uifit2: `sheetOnlyBelow` (a sheet that starts under the header and only ends past the window, on a scrolling phone page); a sheet under the header or on a wide window still fails. Checked with the single page on the worker host |
 
 Not touched: `gate.go` (the sign-in page) uses the setup wizard's own `/login.css` (class `.btn` there), not `app.css`, so it does not block removing `app.css`; moving it to the watch components would need those stylesheets served before sign-in (not done).
