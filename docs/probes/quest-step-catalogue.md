@@ -4,7 +4,7 @@
 
 Steps total 134: step scenario 34 (generated or hand-written), only a chunk-level scenario 59, MISSING 41.
 
-Verdicts: GREEN 22, RED 44, BLOCKED 47 (every MISSING step counts as BLOCKED), PENDING 21 (a scenario that was never run).
+Verdicts: GREEN 26, RED 40, BLOCKED 47 (every MISSING step counts as BLOCKED), PENDING 21 (a scenario that was never run).
 
 MISSING by cause: F1 2; F2 8; F3 15; bot 16; (F<n> is a fork verb request, docs/probes/stepgrounds-fork-request.md; bot is a bot or scenario-format gap; data is missing data.)
 
@@ -51,24 +51,24 @@ MISSING by cause: F1 2; F2 8; F3 15; bot 16; (F<n> is a fork verb request, docs/
 | 2 | `tainted_sun/amulet/travel_lost_city` | chunk: drill.act2.amulet | GREEN |  |
 | 2 | `tainted_sun/amulet/travel_claw_viper` | chunk: drill.act2.amulet | GREEN |  |
 | 2 | `tainted_sun/amulet/kill_fangskin` | MISSING | BLOCKED | F1: `debug spawn fangskin` answers "no such monster" (Fangskin is a level-placed superunique with its own drop) |
-| 2 | `tainted_sun/amulet/take_amulet` | drill.act2.amulet | GREEN |  [V run 20261123-063211-a223] matrix note 23 |
+| 2 | `tainted_sun/amulet/take_amulet` | drill.act2.amulet | GREEN |  [V run 20261123-175925]  |
 | 2 | `horadric_staff/cube/travel_halls_of_the_dead` | chunk: drill.act2.cube | GREEN |  |
 | 2 | `horadric_staff/cube/take_cube` | drill.act2.cube | GREEN |  [V run 20261123-052834] matrix table |
 | 2 | `horadric_staff/shaft/travel_far_oasis` | step.act2.horadric_staff.shaft.travel_far_oasis | RED |  [V run 20261123-181503] the board parks the chunk: locked until Radament's Lair (needs the prerequisite quest word in the kit) |
 | 2 | `horadric_staff/shaft/travel_maggot_lair` | step.act2.horadric_staff.shaft.travel_maggot_lair | RED |  [V run 20261123-181503] same prerequisite lock as travel_far_oasis (U, not read) |
-| 2 | `horadric_staff/shaft/take_shaft` | drill.act2.shaft | RED |  [V run 20261123-014519] Maggot Lair 1 arrival nook, seed 7 needed for the chest (matrix notes 9, 34) |
-| 2 | `horadric_staff/assemble/open_cube` | drill.act2.assemble | BLOCKED |  [V run 20261123-034952] GREEN to Cain's menu; the done bit after the talk is U (matrix) |
-| 2 | `horadric_staff/assemble/transmute` | drill.act2.assemble | BLOCKED |  [V run 20261123-034952] GREEN to Cain's menu; the done bit after the talk is U (matrix) |
-| 2 | `horadric_staff/assemble/talk_cain` | drill.act2.assemble | BLOCKED |  [V run 20261123-034952] GREEN to Cain's menu; the done bit after the talk is U (matrix) |
+| 2 | `horadric_staff/shaft/take_shaft` | drill.act2.shaft | GREEN |  [V run 20261123-174023] Paladin 7, clvl 30 stand-in, merc 20; chest exists on seed 7 only |
+| 2 | `horadric_staff/assemble/open_cube` | drill.act2.assemble | GREEN |  [V run 20261123-175925] cube, shaft, amulet given; staff made |
+| 2 | `horadric_staff/assemble/transmute` | drill.act2.assemble | GREEN |  [V run 20261123-175925] cube, shaft, amulet given; staff made |
+| 2 | `horadric_staff/assemble/talk_cain` | drill.act2.assemble | GREEN |  [V run 20261123-175925] cube, shaft, amulet given; staff made |
 | 2 | `arcane_sanctuary/portal/talk_jerhyn` | MISSING | BLOCKED | bot: no talk-step assertion (the scenario format reads quest words, not a dialog); Jerhyn is not drilled |
 | 2 | `arcane_sanctuary/portal/travel_palace_cellar` | step.act2.arcane_sanctuary.portal.travel_palace_cellar | RED |  [V run 20261123-181503] no Entered line in 8 min (cause not read, U) |
 | 2 | `arcane_sanctuary/portal/enter_arcane` | chunk: drill.act2.summoner | RED |  |
 | 2 | `summoner/kill_summoner/travel_arcane` | chunk: drill.act2.summoner | RED |  |
 | 2 | `summoner/kill_summoner/find_summoner` | chunk: drill.act2.summoner | RED |  |
 | 2 | `summoner/kill_summoner/kill_summoner` | step.act2.summoner.kill_summoner.kill_summoner | PENDING | debug spawn summoner works (V probe). |
-| 2 | `seven_tombs/duriel/travel_canyon` | chunk: drill.act2.duriel | RED |  |
-| 2 | `seven_tombs/duriel/find_tomb` | chunk: drill.act2.duriel | RED |  |
-| 2 | `seven_tombs/duriel/place_staff` | chunk: drill.act2.duriel | RED |  |
+| 2 | `seven_tombs/duriel/travel_canyon` | chunk: drill.act2.duriel | BLOCKED |  |
+| 2 | `seven_tombs/duriel/find_tomb` | chunk: drill.act2.duriel | BLOCKED |  |
+| 2 | `seven_tombs/duriel/place_staff` | chunk: drill.act2.duriel | BLOCKED |  |
 | 2 | `seven_tombs/duriel/kill_duriel` | step.act2.seven_tombs.duriel.kill_duriel | PENDING | debug spawn duriel works (V probe). |
 | 2 | `act2_done/sail_east/travel_harbor` | MISSING | BLOCKED | bot: the Act 2 to 3 hop is not drilled (matrix: act2_done not run; needs Duriel done) |
 | 2 | `act2_done/sail_east/talk_meshif` | MISSING | BLOCKED | bot: the Act 2 to 3 hop is not drilled (matrix: act2_done not run; needs Duriel done) |
