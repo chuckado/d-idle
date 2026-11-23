@@ -80,7 +80,7 @@ Verdict: still NOT ready to play. Data and engine gaps of section 1 are closed o
 - Still U: curse durations, Revive count and duration, Poison Nova numbers (SME tagged them UNVERIFIED; read skills.txt), `debug skillstate` skill names as `hero_casts_at_least` keys, whether the web builds picker lists the two builds (section 6.4).
 
 ### 6.3 Earned Act 1 drill
-Not run at the time of this update; see the drill record in docs/probes/ when it exists.
+Run, BLOCKED (docs/probes/necromancer-act1-drill-2026-11-22.md): a fresh hero with zero setup writes reached clvl 14 in 400 virtual minutes with 0 deaths, completed the Den only, and never started Blood Raven. Top blockers: the Rogue Encampment to Cold Plains exit click refused as an unwanted trigger (nav), no driver that taps a whole campaign, slow leveling under the board's training loop. NOT ready to play.
 
 ### 6.4 Viewer class and build picker
 The Go side of the picker was already generic: `allocWire.builds()` lists every leveler table by class, so a Necromancer hero is offered `necromancer_summoner_sme`, `necromancer_poison_nova_sme` and the older tables, a Paladin or Sorceress never sees them (V offline, test `TestAllocBuildListTwoClasses` with three classes). New: each entry carries the build catalogue's name and identity as `Note` (`internal/plandata/build-catalog.json` owns the tables). `agency.autoAlloc` and the respec knobs stay default off; the web cards (E6) are the UI agent's. Not verified in a browser (U).
