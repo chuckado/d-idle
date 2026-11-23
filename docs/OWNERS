@@ -803,6 +803,7 @@ docs/ui/redesign-2026-11-14/reviews/c2c3-review.md  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/c2c3/  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/s1b-review.md  credit-runner  uis1breview
 docs/ui/redesign-2026-11-14/stash-anywhere.md  credit-runner  stashany
+docs/ui/settings/  credit-runner  uiloot
 docs/ui/settings/  credit-runner  uisettings
 docs/ui/uireason  credit-runner  uireason
 docs/ui/uitoast  credit-runner  uitoast
@@ -1869,6 +1870,7 @@ internal/watch/pauseapi.go  credit-runner  pausefix
 internal/watch/pauseapi.go  credit-runner  uib1
 internal/watch/pauseapi_test.go  credit-runner  uib1
 internal/watch/pausefix_test.go  credit-runner  pausefix
+internal/watch/planwording_test.go  credit-runner  uiloot
 internal/watch/pointsapi.go  credit-runner  agencyp0
 internal/watch/pointsapi_test.go  credit-runner  agencyp0
 internal/watch/pointsui.go  credit-runner  agencyp0
@@ -1918,6 +1920,7 @@ internal/watch/serve.go  credit-runner  botcpu2
 internal/watch/serve.go  credit-runner  uis6
 internal/watch/serve.go  credit-runner  videofeed2
 internal/watch/settingsjs_test.go  credit-runner  uialerts
+internal/watch/settingsjs_test.go  credit-runner  uiloot
 internal/watch/settingsjs_test.go  credit-runner  uisettings
 internal/watch/skillsapi.go  credit-runner  agencyp0
 internal/watch/skillsapi.go  credit-runner  skilltrees
@@ -2002,6 +2005,7 @@ internal/watch/testdata/senses-failures.json  credit-runner  maphistoryC
 internal/watch/testdata/senses-trail.json  credit-runner  maphistory
 internal/watch/testdata/senses-trail.json  credit-runner  maphistoryA
 internal/watch/testdata/senses-trail.json  credit-runner  maptrail
+internal/watch/testdata/settings_test.cjs  credit-runner  uiloot
 internal/watch/testdata/skills_paladin.json  credit-runner  skilltrees
 internal/watch/testdata/skills_paladin.json  credit-runner  skilltrees2
 internal/watch/testdata/skills_sorceress.json  credit-runner  skilltrees
@@ -2255,6 +2259,7 @@ internal/watch/web/points.js  credit-runner  allochandoff
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
+internal/watch/web/settings.js  credit-runner  uiloot
 internal/watch/web/settings.js  credit-runner  uisettings
 internal/watch/web/sheet.js  credit-runner  uisettings
 internal/watch/web/shell.css  credit-runner  lootwire3
@@ -2271,6 +2276,7 @@ internal/watch/web/shell.js  credit-runner  labels
 internal/watch/web/shell.js  credit-runner  minimapfix
 internal/watch/web/shell.js  credit-runner  resetinstant
 internal/watch/web/shell.js  credit-runner  uifix1
+internal/watch/web/shell.js  credit-runner  uiloot
 internal/watch/web/shell.js  credit-runner  uis1
 internal/watch/web/shell.js  credit-runner  uis6
 internal/watch/web/shell.js  credit-runner  uis7
@@ -2526,6 +2532,7 @@ tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3
 tools/uishots.sh  credit-runner  uifit1
 tools/uishots.sh  credit-runner  uifix1
+tools/uishots.sh  credit-runner  uiloot
 tools/uishots.sh  credit-runner  uiphone
 tools/uishots.sh  credit-runner  uis3
 tools/uishots.sh  credit-runner  uis6
@@ -2565,6 +2572,7 @@ tools/uishots/fit_phone_test.go  credit-runner  uifit2
 tools/uishots/fixtures.go  credit-runner  mapphone
 tools/uishots/fixtures.go  credit-runner  uic2
 tools/uishots/fixtures.go  credit-runner  vaultv4
+tools/uishots/fixtures_builds.go  credit-runner  uiloot
 tools/uishots/fixtures_chars.go  credit-runner  charui
 tools/uishots/fixtures_chars.go  credit-runner  uichars
 tools/uishots/fixtures_commands.go  credit-runner  labels
