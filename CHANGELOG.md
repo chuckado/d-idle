@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- toolstrade27: town portal crossings are no map edges, Barracks numbers <!--sg:agent/toolstrade27-->
 - routes3: delete unused GET /api/bestiary, /api/atlas, /api/unlocks (user approved 2026-11-23); engine kept, guard test added <!--sg:agent/routes3-->
 - E11a2: needs-you list grows, alerts badge opens Settings Alerts, real page-scroll must-fail fixture, guards for stream layout and senses_units.js <!--sg:agent/e11a2-->
 - Merge branch 'main' into e11a <!--sg:agent/e11a-->
