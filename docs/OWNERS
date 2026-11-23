@@ -778,6 +778,7 @@ docs/tidy.md  credit-runner  tidy
 docs/town.md  credit-runner  town11
 docs/towntests.md  credit-runner  towntests
 docs/ui-design-system.md  credit-runner  nopins
+docs/ui-design-system.md  credit-runner  uialerts
 docs/ui-design-system.md  credit-runner  uic3
 docs/ui-design-system.md  credit-runner  uinav
 docs/ui-design-system.md  credit-runner  uireason
@@ -1767,6 +1768,7 @@ internal/watch/hero.go  credit-runner  vaultv7b
 internal/watch/heroexplored_test.go  credit-runner  exploredpct
 internal/watch/herosheet_test.go  credit-runner  uic3
 internal/watch/http_answer.go  credit-runner  uib4
+internal/watch/http_view.go  credit-runner  uialerts
 internal/watch/http_view.go  credit-runner  uitoast
 internal/watch/http_view.go  credit-runner  videofeed2
 internal/watch/http_view.go  credit-runner  videofeed4
@@ -1875,6 +1877,7 @@ internal/watch/senses_test.go  credit-runner  maptrail2
 internal/watch/serve.go  credit-runner  botcpu2
 internal/watch/serve.go  credit-runner  uis6
 internal/watch/serve.go  credit-runner  videofeed2
+internal/watch/settingsjs_test.go  credit-runner  uialerts
 internal/watch/settingsjs_test.go  credit-runner  uisettings
 internal/watch/skillsapi.go  credit-runner  agencyp0
 internal/watch/skillsapi.go  credit-runner  skilltrees
@@ -1889,6 +1892,7 @@ internal/watch/tallystrip.go  credit-runner  botcpu2
 internal/watch/tallystrip_test.go  credit-runner  botcpu2
 internal/watch/testdata  credit-runner  nocards
 internal/watch/testdata/  credit-runner  uifix1
+internal/watch/testdata/alertsfeed_test.cjs  credit-runner  uialerts
 internal/watch/testdata/areamap  credit-runner  mapphone
 internal/watch/testdata/areamap/  credit-runner  uis6
 internal/watch/testdata/campaign  pro-runner  levelplan3
@@ -2057,6 +2061,7 @@ internal/watch/views.go  credit-runner  videofeed4
 internal/watch/watchlayout_test.go  credit-runner  labels
 internal/watch/watchlayout_test.go  credit-runner  videofeed2
 internal/watch/web  credit-runner  nocards
+internal/watch/web/alerts-feed.js  credit-runner  uialerts
 internal/watch/web/alerts.js  credit-runner  uitoast
 internal/watch/web/app.css  credit-runner  toastfix
 internal/watch/web/app.css  credit-runner  uitoast
@@ -2124,6 +2129,7 @@ internal/watch/web/layouts/cockpit.json  credit-runner  uis6
 internal/watch/web/lootrulesui.js  credit-runner  lootwire3
 internal/watch/web/mjpeg.js  credit-runner  viewerfps
 internal/watch/web/nav.css  credit-runner  uisettings
+internal/watch/web/nav.js  credit-runner  uialerts
 internal/watch/web/nav.js  credit-runner  uisettings
 internal/watch/web/nav.json  credit-runner  uisettings
 internal/watch/web/onboarding.css  credit-runner  onboardtour

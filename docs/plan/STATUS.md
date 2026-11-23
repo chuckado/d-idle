@@ -434,6 +434,7 @@
 | uisettings | proposed | - | `internal/watch/web/settings.js`<br>`internal/watch/web/nav.js`<br>`internal/watch/web/nav.json`<br>`internal/watch/web/nav.css`<br>`internal/watch/web/sheet.js`<br>`internal/watch/settingsjs_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/settings/`<br>`docs/ui-design-system.md` | - |
 | qdmatrix | proposed | - | `docs/probes/quest-drill-matrix-2026-11-23.md`<br>`tools/provingground/scenarios/questdrill.json`<br>`internal/power/archetype.go`<br>`internal/power/skilldamage_test.go`<br>`internal/questboard/state.go`<br>`internal/questboard/state_test.go`<br>`internal/talk/talk.go`<br>`internal/talk/talk_test.go` | - |
 | uisettings2 | proposed | - | `docs/design/fable-review-2026-11-22/e11-deletion-plan.md` | - |
+| uialerts | proposed | - | `internal/watch/web/alerts-feed.js`<br>`internal/watch/testdata/alertsfeed_test.cjs`<br>`internal/watch/settingsjs_test.go`<br>`internal/watch/web/nav.js`<br>`internal/watch/http_view.go`<br>`docs/ui-design-system.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -467,6 +468,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 852945d18 11-23 00:58 `Merge agent/uialerts: Merge branch 'main' into uialerts` (uialerts)
+- 6b577a712 11-23 00:56 `Merge branch 'main' into uialerts` (-)
 - b00d2bef0 11-23 00:50 `Merge agent/questdrill: Merge branch 'main' into qdmatrix` (questdrill)
 - e31e5954d 11-23 00:48 `Merge branch 'main' into qdmatrix` (-)
 - 79a238cc7 11-23 00:43 `Merge agent/toolstrade7: Merge branch 'main' into toolstrade7` (toolstrade7)
@@ -475,6 +478,4 @@
 - f83d567d0 11-23 00:38 `Merge branch 'main' into uisettings2` (-)
 - 7b0e338ac 11-23 00:31 `Merge agent/opsquest: Merge branch 'main' into opsquest` (opsquest)
 - ab0a6d7e1 11-23 00:29 `Merge branch 'main' into opsquest` (-)
-- ebc42d7d2 11-23 00:22 `Merge agent/uisettings: Merge branch 'main' into uisettings` (uisettings)
-- b27369fe4 11-23 00:21 `Merge branch 'main' into uisettings` (-)
 <!-- statusgen:end -->
