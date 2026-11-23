@@ -283,12 +283,13 @@ func TestTakeWaypointWalksToKnownPositionWhenNotStreamed(t *testing.T) {
 	}
 }
 
-func TestAct2RouteReachesCanyonByHint(t *testing.T) {
+// The Canyon of the Magi has no walk from the desert (V lab 2026-11-23): the route finder says so instead of sending the
+// hero to the Valley of Snakes (the old hint 45-46 was a guess). The Canyon is reached by its waypoint or the red portal.
+func TestAct2NoWalkToTheCanyon(t *testing.T) {
 	n := &Navigator{}
 	n.defaults()
-	got, err := n.Route(43, 46)
-	if err != nil || len(got) == 0 || got[len(got)-1] != 46 {
-		t.Fatalf("route %v err %v", got, err)
+	if got, err := n.Route(43, 46); err == nil {
+		t.Fatalf("route %v to the Canyon", got)
 	}
 }
 
