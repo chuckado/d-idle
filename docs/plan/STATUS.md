@@ -419,6 +419,7 @@
 | forksync | in-progress | - | `docs/process/fork-sync-cadence.md` | - |
 | toolstrade2 | proposed | - | `internal/nav/nav.go`<br>`internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | navexit2 | proposed | - | `tools/provingground/scenarios/navexit.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
+| toolstrade3 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/nav.go`<br>`internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -453,6 +454,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ee6596339 11-22 21:48 `Merge agent/toolstrade3: Merge branch 'main' into toolstrade3` (toolstrade3)
+- 6a097352f 11-22 21:47 `Merge branch 'main' into toolstrade3` (-)
 - 452220018 11-22 21:41 `Merge agent/navexit2: navexit2: scenario, drill doc stage results` (navexit2)
 - d7b0b74cc 11-22 21:37 `Merge remote-tracking branch 'origin/main' into agent/navexit2` (-)
 - b617db299 11-22 21:35 `Merge agent/denfix: Merge branch 'main' into denfix` (denfix)
@@ -461,6 +464,4 @@
 - 8d9c46bc3 11-22 21:14 `Merge agent/toolstrade: Merge branch 'main' into toolstrade` (toolstrade)
 - a5f66000a 11-22 21:12 `Merge branch 'main' into toolstrade` (-)
 - db89486db 11-22 21:10 `Merge agent/forksync: Merge branch 'main' into forksync` (forksync)
-- cface0d6d 11-22 21:10 `Merge agent/skelspeed: Merge branch 'main' into skelspeed` (skelspeed)
-- 43e24fef5 11-22 21:08 `Merge branch 'main' into forksync` (-)
 <!-- statusgen:end -->
