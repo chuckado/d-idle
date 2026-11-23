@@ -11,6 +11,7 @@ import (
 	"sync"
 	"testing"
 
+	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/d2dctl/fake"
 )
@@ -114,4 +115,21 @@ func (fakeTables) ItemRow(code string) (int, bool) {
 func (fakeTables) MonsterClass(name string) (int, bool) {
 	n, ok := map[string]int{"fallen1": 2, "fallens1": 3, "Kashya": 150}[name]
 	return n, ok
+}
+
+// Cain's class follows the act of the player (card qdmatrix): one display name, one monstats row per act. Fails without
+// cainClassIn: a name lookup gives the same class in every act and the Act 2 hand-in to Cain never finds him.
+func TestCainClassFollowsTheAct(t *testing.T) {
+	for act, want := range map[int]int{0: 245, 1: 244, 2: 245, 3: 246, 4: 520} {
+		got, ok := cainClassIn("Deckard Cain", &d2.Player{Act: act})
+		if !ok || got != want {
+			t.Errorf("act %d: class %d %v, want %d", act, got, ok, want)
+		}
+	}
+	if _, ok := cainClassIn("Atma", &d2.Player{Act: 1}); ok {
+		t.Error("another NPC was given a Cain class")
+	}
+	if _, ok := cainClassIn("Deckard Cain", nil); ok {
+		t.Error("a class without a player")
+	}
 }

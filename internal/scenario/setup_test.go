@@ -59,3 +59,21 @@ func TestRawStatsFollowTheLevel(t *testing.T) {
 		}
 	}
 }
+
+// pre.waypoints -1 means every waypoint (`debug wp all`); a bit stays `debug wp <bit>`.
+func TestWaypointAllAndBit(t *testing.T) {
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		s := Scenario{ID: "x.wp", Kind: KindBehaviour, Pre: Pre{Waypoints: []int{-1, 3}}}
+		su, err := BuildSetup(s, class, 3)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var lines []string
+		for _, v := range su.Verbs {
+			lines = append(lines, v.Line)
+		}
+		if !slices.Contains(lines, "debug wp all") || !slices.Contains(lines, "debug wp 3") {
+			t.Errorf("%s: verbs %v", class, lines)
+		}
+	}
+}

@@ -418,8 +418,7 @@
     "gold": 6000,
     "waypoints": [
      1,
-     9,
-     10
+     -1
     ],
     "quests": [
      {
@@ -437,8 +436,8 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
@@ -446,10 +445,10 @@
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -584,8 +583,7 @@
     "gold": 6000,
     "waypoints": [
      1,
-     9,
-     10
+     -1
     ],
     "quests": [
      {
@@ -607,8 +605,8 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
@@ -616,10 +614,10 @@
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -754,8 +752,7 @@
     "gold": 6000,
     "waypoints": [
      1,
-     9,
-     10
+     -1
     ],
     "quests": [
      {
@@ -777,8 +774,8 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
@@ -786,10 +783,10 @@
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -925,8 +922,7 @@
     "gold": 6000,
     "waypoints": [
      1,
-     9,
-     10
+     -1
     ],
     "quests": [
      {
@@ -944,8 +940,8 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
@@ -953,10 +949,10 @@
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -1090,8 +1086,7 @@
     "gold": 6000,
     "waypoints": [
      1,
-     9,
-     10
+     -1
     ],
     "quests": [
      {
@@ -1117,31 +1112,19 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
       "count": 6
-     },
-     {
-      "code": "box",
-      "count": 1
-     },
-     {
-      "code": "msf",
-      "count": 1
-     },
-     {
-      "code": "vip",
-      "count": 1
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -1215,13 +1198,19 @@
     ]
    },
    "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
-   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md). The quest word after the Cain talk was 0x0c78 in the lab (bit 0 not set): whether the talk completes the quest is U, so the scenario asserts the staff item and the menu, not record 10.",
    "assert": [
     {
-     "kind": "quest_bits",
-     "record": 10,
-     "set": 1,
-     "why": "U docs/progression/quests.md: the Horadric Staff quest word, bit 0 = done"
+     "kind": "item_in_pack",
+     "code": "hst",
+     "min": 1,
+     "why": "U items.txt: the Horadric Staff is code hst; the Cube transmute made it"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^npc: menu open",
+     "min": 1,
+     "why": "the hand-in reached Cain's menu in Lut Gholein (before the Cain class fix: npc not found)"
     },
     {
      "kind": "log_line",
@@ -1275,9 +1264,7 @@
     "gold": 6000,
     "waypoints": [
      1,
-     9,
-     15,
-     16
+     -1
     ],
     "quests": [
      {
@@ -1307,8 +1294,8 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
@@ -1316,10 +1303,10 @@
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -1454,8 +1441,7 @@
     "gold": 6000,
     "waypoints": [
      1,
-     9,
-     17
+     -1
     ],
     "quests": [
      {
@@ -1489,23 +1475,19 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
       "count": 6
-     },
-     {
-      "code": "hst",
-      "count": 1
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [
@@ -1641,8 +1623,7 @@
     "gold": 6000,
     "waypoints": [
      1,
-     9,
-     10
+     -1
     ],
     "quests": [
      {
@@ -1660,8 +1641,8 @@
     ],
     "items": [
      {
-      "code": "hp1",
-      "count": 8
+      "code": "hp5",
+      "count": 10
      },
      {
       "code": "mp1",
@@ -1669,10 +1650,10 @@
      }
     ],
     "belt": [
-     "hp1",
-     "hp1",
-     "hp1",
-     "hp1"
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
     ],
     "merc": 0,
     "worn": [

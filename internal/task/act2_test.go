@@ -377,3 +377,26 @@ func TestAct2StaffAssemblyNeedsCubeInPack(t *testing.T) {
 type fixed struct{ p task.Plan }
 
 func (f fixed) Plan(task.World, task.Session) task.Plan { return f.p }
+
+// The Seven Tombs chunk of the board starts with the Staff in the pack: the Staff quest word is done at the hand-in to Cain,
+// but the Staff is not placed. The first needed step is the canyon, not the lair door (card qdmatrix; lab drill.act2.duriel:
+// "object class 100 not found" in Lut Gholein). Both classes read the same world; the plan has no class.
+func TestDurielChunkGoesToTheCanyonBeforeTheDoor(t *testing.T) {
+	for _, caster := range []bool{false, true} {
+		g := newAct2(true, 28)
+		g.W.Caster = caster
+		w, _ := g.World(context.Background())
+		w.Items[task.ItemStaff] = 1
+		w.Quests = map[string]task.QuestState{task.QStaff: {Stage: task.StageDone, Ev: task.EvMemory}}
+		var first string
+		for _, n := range task.Handler(task.QDuriel) {
+			if need, _ := n.Step.Need(w); need {
+				first = n.Step.ID
+				break
+			}
+		}
+		if !strings.Contains(first, "canyon") {
+			t.Errorf("caster %v: the first needed step is %q, want the canyon walk", caster, first)
+		}
+	}
+}

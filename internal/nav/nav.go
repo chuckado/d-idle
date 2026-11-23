@@ -581,7 +581,28 @@ func (n *Navigator) GoToUnitOf(ctx context.Context, typ int, unitID uint32) erro
 		missingSince = time.Time{}
 		return input.Point{X: u.X, Y: u.Y}, unitTolerance, nil
 	}
-	return n.walk(ctx, tgt, walkOpts{ignoreUnit: unitID, escape: true})
+	n.doorTried, n.doorApproach = nil, nil
+	var err error
+	for try := 0; ; try++ {
+		err = n.walk(ctx, tgt, walkOpts{ignoreUnit: unitID, escape: true})
+		// The unit stands behind a closed door (V drill.act2.cube: the Horadric Cube chest, "{203 198} is unreachable from
+		// {202 178}"): open the door between and walk again, as GoTo does for a spot.
+		if !errors.Is(err, ErrNoPath) || errors.Is(err, ErrAlreadyThere) || try >= goDoorTries {
+			return err
+		}
+		o, oerr := n.observeWait(ctx)
+		if oerr != nil {
+			return err
+		}
+		u := findUnit(o.snap, typ, unitID)
+		if u == nil {
+			return err
+		}
+		at := input.Point{X: u.X, Y: u.Y}
+		if !n.openDoorToward(ctx, o, []gate{{at: at, push: at}}, -o.level, false) {
+			return err
+		}
+	}
 }
 
 // exitAvoidR and exitAvoidPeak shape the penalty around a level-exit tile that is not the destination. V live (D2DLOOP,
