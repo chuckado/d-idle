@@ -53,9 +53,9 @@ Red per size: 360x640 10 (all R5, the needs-you list), 390x844 2 and 1366x768 2 
 
 ## Open
 
-### R5: the needs-you list on a 360x640 phone (10 runs; DECIDED 2026-11-23: scroll inside the list, option A)
+### R5: the needs-you list on a 360x640 phone (10 runs; DECIDED 2026-11-23: let it grow, option B)
 
-Decision (user, 2026-11-23): the list scrolls inside its 40 px box and the fit rule accepts it as a declared scroller. Done in card e11a: `.n-list` already carried `data-scroll` and the panel declares `scroll: true`, but the 40 px rule did not set `overflow-y`, so a later phone rule (`overflow: visible`) made it an undeclared overflow; the 40 px rule now sets `overflow-y: auto` (`web/utilities.css`). `tools/uishots/fit.js` needed no change: its existing rule already accepts a `data-scroll` list inside a panel that declares `scroll`.
+Decision (user, 2026-11-23, corrected the same day: the first reading was scroll inside the box, which card e11a shipped and card e11a2 reverted): the phone strip has no height limit on the list. Every need is visible and tappable, there is no inner scroll box, the page grows. Done in card e11a2: the `max-block-size: 40px` rule of the phone needs-you list is removed (`web/utilities.css`). The fit rule is unchanged: it already wants no undeclared scroller, and a list that grows has none.
 
 In the compact phone strip the needs-you list is a 40 px box when two or more things need you; the rest is reached by scrolling inside the box. The fit rule calls that an overflow because the box is not a declared scroller, and your rule for phones is "no inner scroll box". Two options:
 

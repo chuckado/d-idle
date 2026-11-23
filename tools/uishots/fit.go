@@ -691,7 +691,7 @@ var mustFail = map[string]string{
 	"fit-overflow-fixture-":    "overflows its box",
 	"fit-overflow-nested-":     "overflows its box",
 	"fit-overflow-fakescroll-": "overflows its box",
-	"fit-overflow-classic-":    "the page scrolls",
+	"fit-overflow-pagescroll-": "the page scrolls",
 	"fit-blank-rail-":          "holds no visible panel",
 	"fit-tall-frame-":          "ends outside the window",
 	// the overlay policy (card overlayfix): the real page with one defect put back (fixtures_overlay.go)

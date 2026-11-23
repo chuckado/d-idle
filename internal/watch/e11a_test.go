@@ -47,3 +47,60 @@ func TestE11aNoReferenceToDeleted(t *testing.T) {
 		}
 	}
 }
+
+// E11a2: the alerts badge opens the Alerts section of the Settings sheet; nothing links to the deleted #alertspane.
+func TestAlertsBadgeOpensSettingsAlerts(t *testing.T) {
+	b, _ := webFS.ReadFile("web/panels/alerts-count/panel.js")
+	if strings.Contains(string(b), "#alertspane") || !strings.Contains(string(b), "settings=alerts'") {
+		t.Error("the alerts badge must link to ?settings=alerts")
+	}
+	nav, _ := webFS.ReadFile("web/nav.js")
+	set, _ := webFS.ReadFile("web/settings.js")
+	if !strings.Contains(string(nav), "get('settings')") || !strings.Contains(string(set), "env.section === 'alerts'") {
+		t.Error("?settings=alerts no longer opens the Alerts section")
+	}
+}
+
+// The stream layout serves the OBS overlay and the startup fallback (shell.js names it for both): it must exist, parse, and cover an overlay breakpoint or the grid.
+func TestStreamLayoutServesOverlayAndFallback(t *testing.T) {
+	sh, _ := webFS.ReadFile("web/shell.js")
+	for _, want := range []string{"html.dataset.mode === 'overlay' ? 'stream' : 'cockpit'", "presetFile('stream')"} {
+		if !strings.Contains(string(sh), want) {
+			t.Errorf("shell.js lost %q", want)
+		}
+	}
+	b, err := webFS.ReadFile("web/layouts/stream.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	l, err := ParseLayout(b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, bp := range []string{"phone", "tablet", "laptop", "wide"} {
+		if len(l.Breakpoints[bp].Panels) == 0 {
+			t.Errorf("stream.json has no panels at %s (the overlay and the fallback use them)", bp)
+		}
+	}
+	r := newRig(t, "sorceress")
+	if w := r.get("/watch/layouts/stream.json", nil); w.Code != 200 {
+		t.Errorf("stream.json is not served: %d", w.Code)
+	}
+}
+
+// senses_units.js is not an orphan: the area-map panel draws units through window.sensesUnitsDraw, watch.html loads it and senses.go serves it.
+func TestSensesUnitsScriptIsReferenced(t *testing.T) {
+	am, _ := webFS.ReadFile("web/panels/area-map/panel.js")
+	pg, _ := webFS.ReadFile("web/watch.html")
+	if !strings.Contains(string(am), "sensesUnitsDraw") || !strings.Contains(string(pg), "senses_units.js") {
+		t.Error("senses_units.js lost its caller: delete the file and its route together, not one of them")
+	}
+}
+
+// The phone needs-you list grows (user decision 2026-11-23): no height cap, so no inner scroll box on the strip.
+func TestNeedsYouListHasNoPhoneHeightCap(t *testing.T) {
+	b, _ := webFS.ReadFile("web/utilities.css")
+	if regexp.MustCompile(`needs-you"\][^{]*\.n-list[^{]*\{[^}]*max-block-size`).Match(b) {
+		t.Error("the phone needs-you list is capped again: it must grow")
+	}
+}

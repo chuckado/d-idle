@@ -168,7 +168,7 @@ func TestFitJudgeAndDir(t *testing.T) {
 	// the overflow fixture: failing is the expected result, passing is the failure
 	dir := t.TempDir()
 	bad := strings.Replace(okJSON, `"overflow":[]`, `"overflow":[{"el":"panel fx-overflow","dh":800,"dw":0}]`, 1)
-	for n, j := range map[string]string{"fit-overflow-fixture-1440x900": bad, "fit-overflow-classic-1440x900": strings.Replace(okJSON, `"scrollH":900`, `"scrollH":2600`, 1)} {
+	for n, j := range map[string]string{"fit-overflow-fixture-1440x900": bad, "fit-overflow-pagescroll-1440x900": strings.Replace(okJSON, `"scrollH":900`, `"scrollH":2600`, 1)} {
 		n, body := fitDump(n, j)
 		os.WriteFile(filepath.Join(dir, n+".html"), []byte(body), 0o644)
 	}
