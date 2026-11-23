@@ -92,6 +92,10 @@ navdefect-wide watch/skills?theme=dark&defect=nav-wide"
 # The Build tab (card buildcards; web/buildcards.js): name, query, click, hit. --fit judges them (builds-NAME: one column on a phone, a grid
 # above, no scroll box, 44 px buttons, a text equivalent on every star row) and --builds draws them.
 buildspages="builds-list watch/points?theme=dark&tab=build
+ts200-vault watch/vault?theme=dark&vault=pop
+ts200-quests watch?first=0&theme=dark&needs=0&quests=offer&tab=Quests
+ts200-build watch/points?theme=dark&tab=build
+ts200-settings watch/skills?theme=dark&settings=rules
 builds-plan watch/points?theme=dark&tab=build&plan=1
 builds-detail watch/points?theme=dark&tab=build .bc-details .bc-choose
 builds-choose watch/points?theme=dark&tab=build .bc-details|.bc-choose .d-sheet-ok,.d-sheet-adv-btn
@@ -758,6 +762,7 @@ $buildspages"
 		overflow-fixture | overflow-nested | overflow-fakescroll | tall-frame) szs="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620" ;;
 		navdefect-*) szs="390x844" ;;
 		nav-* | settings-*) szs="390x844 1366x768" ;;
+		ts200-*) szs="320x640" ;; # the reader's text size at 200 percent on the narrowest phone (card uia11y)
 		builds-*) szs="390x844 1366x768" ;;
 		vault-*) szs="$sizes 412x780 360x640" ;;
 		questdefect-words) szs="1366x768" ;;
@@ -785,6 +790,7 @@ $buildspages"
 			?*) ck="&click=$(enc "$pclick")" ;;
 			esac
 			case $pname in nav-* | navdefect-* | builds-* | settings-*) ck="$ck&flow=1" ;; esac
+			case $pname in ts200-*) ck="$ck&ts=1&flow=1" ;; esac
 			[ -n "$phit" ] && ck="$ck&hit=$(enc "$phit" | sed 's/%7C/|/g')"
 			if [ -n "$only" ]; then case $pname in $only) ;; *) continue ;; esac; fi
 			prof=$(mktemp -d)

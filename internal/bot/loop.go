@@ -933,8 +933,28 @@ func (r *Runner) handleSafety(ctx context.Context, a SafetyAction) {
 }
 
 func (r *Runner) fullChores(reason string) ChorePlan {
-	return ChorePlan{Reason: reason, Heal: true, Potions: true, Repair: true, Identify: true, Sell: true, Stash: true, GoldFloor: r.e.Tune.Bot.GoldFloor,
+	p := ChorePlan{Reason: reason, Heal: true, Potions: true, Repair: true, Identify: true, Sell: true, Stash: true, GoldFloor: r.e.Tune.Bot.GoldFloor,
 		Antidotes: r.antidotesWanted()}
+	p.KitHealing, p.KitMana = r.routeKit()
+	return p
+}
+
+// routeKit is the healing and mana count every town visit buys up to (belt plus pack) while the route guard is on: the
+// guard counts belt and pack and sends the hero home below the floor, so a visit that only fills the belt plan (three
+// healing columns of a four box belt) leaves it one short, buys Town Portal scrolls with the purse and the hero walks home
+// again (V live, sandbox 2026-11-23: `potion plan wantHP 0` with 2 healing carried, gold 140 to 311). Zero when the
+// guard is off, outside Normal or below the kit gate level. The task chores use the same numbers.
+func (r *Runner) routeKit() (healing, mana int) {
+	s := r.latest()
+	t := r.e.Tune
+	if s == nil || s.Player == nil || t.Route.MonasteryMinLevel <= 0 || s.Player.Difficulty != d2.Normal || s.Player.Level < t.Resource.KitGateLevel {
+		return 0, 0
+	}
+	healing = t.Resource.KitMinHP + kitHealingBuffer
+	if k := r.kitPlanOf(s); k != nil {
+		healing, mana = k.Healing+kitHealingBuffer, k.Mana
+	}
+	return healing, mana
 }
 
 // antidotesWanted is the antidote stock a town visit buys: the Andariel kit once the character is within two levels of

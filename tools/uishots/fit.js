@@ -621,3 +621,27 @@ export function navNow(win) {
   const vis = (n) => { const r = n.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null; };
   return navPage(win, win.document, vis, (n) => win.getComputedStyle(n));
 }
+
+// textScale (the ts200-NAME pages): with the root font at 200 percent, does the page scroll sideways, does a visible control reach past the
+// window, is a control's own text cut? An ellipsis is by design (the full text is the name); a box that clips with overflow and no
+// ellipsis is a cut.
+export function textScale(win) {
+  // a box inside an ancestor that clips sideways at or inside the window is cut by it, not a cause of the page's sideways scroll
+  const clippedWithin = (n) => { for (let p = n.parentElement; p && p !== win.document.body; p = p.parentElement) { const c = win.getComputedStyle(p), r = p.getBoundingClientRect(); if (/^(hidden|clip)$/.test(c.overflowX) && r.right <= win.innerWidth + 1) return true; } return false; };
+  const d = win.document, vw = win.innerWidth, se = d.scrollingElement, out = [], cut = [];
+  const nm = (n) => n.tagName.toLowerCase() + (n.dataset && n.dataset.key ? '[' + n.dataset.key + ']' : n.className && typeof n.className === 'string' ? '.' + n.className.trim().split(/\s+/)[0] : '') + ' "' + (n.textContent || n.getAttribute('aria-label') || '').trim().slice(0, 24) + '"';
+  for (const n of d.querySelectorAll('button, a[href], input, select, textarea, [role=button]')) {
+    const r = n.getBoundingClientRect(), c = win.getComputedStyle(n);
+    if (!r.width || !r.height || c.visibility === 'hidden' || n.closest('[hidden]')) continue;
+    if (r.right > vw + 1 && !n.closest('[data-hscroll], [data-vscroll]')) out.push(nm(n));
+    const clips = /^(hidden|clip)$/.test(c.overflowX) && c.textOverflow !== 'ellipsis';
+    if (clips && n.scrollWidth > n.clientWidth + 1) cut.push(nm(n) + ' [' + n.scrollWidth + '/' + n.clientWidth + ']');
+  }
+  // when the page scrolls sideways name the widest boxes that cause it (a wide non-control box is the usual cause)
+  if (se.scrollWidth > vw) {
+    const wide = [...d.body.querySelectorAll('*')].filter((n) => { const r = n.getBoundingClientRect(); return r.width && r.right > vw + 1 && !n.closest('[data-hscroll], [data-vscroll], .d-nav, .d-menu-pop') && !clippedWithin(n); })
+      .sort((a, b) => b.getBoundingClientRect().right - a.getBoundingClientRect().right).slice(0, 4);
+    for (const n of wide.reverse()) out.unshift('box ' + nm(n) + ' ends at ' + Math.round(n.getBoundingClientRect().right));
+  }
+  return { scrollW: se.scrollWidth, vw: vw, outside: out.slice(0, 8), clipped: cut.slice(0, 6) };
+}

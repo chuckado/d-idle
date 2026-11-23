@@ -1280,6 +1280,9 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/questdrill5: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/questdrill5-->
 - toolstrade16: no home loop for a thinned kit anywhere out of town (TASK-885, merged 2026-11-23, acceptance 2 of 2): The mid-route kit tolerance applies in every area outside town (it was only in guarded areas); unit-tested; live effect not seen; the TP scroll spend on a thin purse is an open finding. <!--sg:agent/toolstrade16-->
 - agent/questdrill6: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/questdrill6-->
+- toolstrade17: every town visit buys up to the route guard kit, stash gold pays (TASK-886, merged 2026-11-23, acceptance 2 of 2): The loop town visits now ask the shop for the guard kit (belt plus pack), so shopCost includes it and the default withdraw-for-the-shop takes it from the stash; unit-tested, lab run queued, live effect not seen. <!--sg:agent/toolstrade17-->
+- toolstrade18: lab notes round 17, the door chain works in the Barracks (TASK-887, merged 2026-11-23, acceptance 1 of 1): Lab notes only; verified in the lab (job d4b9), not live. <!--sg:agent/toolstrade18-->
+- uia11y: accessibility and text-scale pass (contrast, names, landmarks, reduced motion, 200% text) (TASK-884, merged 2026-11-23, acceptance 3 of 3): Tokens: control border token (3:1) and light good/warn darkened to pass AA; Return and Policy got an h1; the inventory pulse honours reduced motion ... <!--sg:agent/uia11y-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

@@ -657,6 +657,8 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade11
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade13
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade15
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade16
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade17
+docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade18
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade2
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
@@ -793,6 +795,7 @@ docs/tidy.md  credit-runner  tidy
 docs/town.md  credit-runner  town11
 docs/towntests.md  credit-runner  towntests
 docs/ui-design-system.md  credit-runner  nopins
+docs/ui-design-system.md  credit-runner  uia11y
 docs/ui-design-system.md  credit-runner  uialerts
 docs/ui-design-system.md  credit-runner  uic3
 docs/ui-design-system.md  credit-runner  uinav
@@ -936,6 +939,7 @@ internal/bot/areaskip_test.go  credit-runner  passagebounce
 internal/bot/areaskip_test.go  credit-runner  staletarget
 internal/bot/areaskip_test.go  pro-runner  bounce3
 internal/bot/beltfill_test.go  credit-runner  toolstrade11
+internal/bot/beltfill_test.go  credit-runner  toolstrade17
 internal/bot/broke.go  credit-runner  survrecover
 internal/bot/broke.go  credit-runner  town5
 internal/bot/catalog.go  credit-runner  botcpu2
@@ -1001,6 +1005,7 @@ internal/bot/loop.go  credit-runner  resetinstant
 internal/bot/loop.go  credit-runner  staletarget
 internal/bot/loop.go  credit-runner  survreask
 internal/bot/loop.go  credit-runner  survrecover
+internal/bot/loop.go  credit-runner  toolstrade17
 internal/bot/loop.go  pro-runner  bounce3
 internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  arrivalsettle
@@ -1786,6 +1791,8 @@ internal/watch  credit-runner  cainfix
 internal/watch  credit-runner  identifyall
 internal/watch  credit-runner  sellall
 internal/watch  credit-runner  town9
+internal/watch/a11ycontrast_test.go  credit-runner  uia11y
+internal/watch/a11ypages_test.go  credit-runner  uia11y
 internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/artembed_test.go  credit-runner  itemcolour2
 internal/watch/artembed_test.go  credit-runner  jewelcolor
@@ -1903,6 +1910,7 @@ internal/watch/pointsui.go  credit-runner  allocfix
 internal/watch/pointsui.go  credit-runner  allochandoff
 internal/watch/pointsui.go  credit-runner  uinav
 internal/watch/pointsui.go  credit-runner  uitoast
+internal/watch/policysheet.go  credit-runner  uia11y
 internal/watch/policysheet.go  credit-runner  uiframe
 internal/watch/pprofapi.go  credit-runner  botcpu2
 internal/watch/questsapi.go  credit-runner  quests4
@@ -1921,6 +1929,7 @@ internal/watch/resetapi_test.go  credit-runner  resetinstant
 internal/watch/resetui_test.go  credit-runner  botreset
 internal/watch/resetui_test.go  credit-runner  resetinstant
 internal/watch/returnscreen.go  credit-runner  q4runes
+internal/watch/returnscreen.go  credit-runner  uia11y
 internal/watch/returnscreen.go  credit-runner  uiframe
 internal/watch/returnscreen_test.go  credit-runner  q4runes
 internal/watch/returnscreen_test.go  credit-runner  uiframe
@@ -2146,6 +2155,7 @@ internal/watch/web/characters.json  credit-runner  charui
 internal/watch/web/characters.json  credit-runner  uichars
 internal/watch/web/components.css  credit-runner  jewelcolor
 internal/watch/web/components.css  credit-runner  jewelicons
+internal/watch/web/components.css  credit-runner  uia11y
 internal/watch/web/components.css  credit-runner  uireason
 internal/watch/web/components.css  credit-runner  uis6
 internal/watch/web/components.css  credit-runner  uis7
@@ -2217,6 +2227,7 @@ internal/watch/web/panels/area-map/panel.json  credit-runner  uifix1
 internal/watch/web/panels/gear  credit-runner  repairtrip
 internal/watch/web/panels/health/  credit-runner  uifix1
 internal/watch/web/panels/health/  credit-runner  uis3
+internal/watch/web/panels/hero-status/panel.css  credit-runner  uia11y
 internal/watch/web/panels/hero-vitals/panel.js  credit-runner  vaultv7b
 internal/watch/web/panels/journey-strip/  credit-runner  uifix1
 internal/watch/web/panels/journey-strip/  credit-runner  uis3
@@ -2291,6 +2302,7 @@ internal/watch/web/shell.css  credit-runner  lootwire3
 internal/watch/web/shell.css  credit-runner  menufit2
 internal/watch/web/shell.css  credit-runner  pausemenufit
 internal/watch/web/shell.css  credit-runner  resetinstant
+internal/watch/web/shell.css  credit-runner  uia11y
 internal/watch/web/shell.css  credit-runner  uifit1
 internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
@@ -2317,6 +2329,7 @@ internal/watch/web/skills.js  credit-runner  skilltrees
 internal/watch/web/skills.js  credit-runner  skilltrees2
 internal/watch/web/streamstats.js  credit-runner  videofeed4
 internal/watch/web/toast.js  credit-runner  uitoast
+internal/watch/web/tokens.css  credit-runner  uia11y
 internal/watch/web/tokens.css  credit-runner  uis1
 internal/watch/web/tokens.css  credit-runner  uis7
 internal/watch/web/update.js  credit-runner  uis7
@@ -2350,6 +2363,7 @@ internal/watch/web/vault.html  credit-runner  vaultclean
 internal/watch/web/vault.html  credit-runner  vaultv4
 internal/watch/web/vault.js  credit-runner  bulkid
 internal/watch/web/vault.js  credit-runner  fitfix2
+internal/watch/web/vault.js  credit-runner  uia11y
 internal/watch/web/vault.js  credit-runner  uinav
 internal/watch/web/vault.js  credit-runner  uireason
 internal/watch/web/vault.js  credit-runner  uitoast
@@ -2485,6 +2499,7 @@ tools/provingground/scenarios/act1more.json  credit-runner  act1more
 tools/provingground/scenarios/act1more.json  credit-runner  andariel1
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade10
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade16
+tools/provingground/scenarios/act1more.json  credit-runner  toolstrade17
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade2
 tools/provingground/scenarios/act1more.json  credit-runner  toolstrade5
 tools/provingground/scenarios/autoalloc.json  credit-runner  allocfix
@@ -2554,6 +2569,7 @@ tools/uishots.sh  credit-runner  quests10
 tools/uishots.sh  credit-runner  quests8
 tools/uishots.sh  credit-runner  resetinstant
 tools/uishots.sh  credit-runner  sellall
+tools/uishots.sh  credit-runner  uia11y
 tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3
 tools/uishots.sh  credit-runner  uifit1
@@ -2573,6 +2589,7 @@ tools/uishots.sh  credit-runner  vaultv6
 tools/uishots.sh  credit-runner  vaultv7b
 tools/uishots.sh  credit-runner  videoctl
 tools/uishots.sh  credit-runner  videofeed4
+tools/uishots/  credit-runner  uia11y
 tools/uishots/  credit-runner  uic3
 tools/uishots/  credit-runner  uifit1
 tools/uishots/  credit-runner  uifix1
