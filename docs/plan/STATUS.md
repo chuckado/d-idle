@@ -418,6 +418,7 @@
 | manapack | proposed | - | `internal/bot/routeguard.go`<br>`internal/bot/kitplan_test.go` | - |
 | forksync | in-progress | - | `docs/process/fork-sync-cadence.md` | - |
 | toolstrade2 | proposed | - | `internal/nav/nav.go`<br>`internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| denfix | proposed | - | `tools/provingground/scenarios/act1.json` | - |
 | fid-missile-monster | deferred | - | `docs/probes/fid/fid-missile-monster.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
 | fid-sorc-upstream | deferred | - | `docs/probes/fid/fid-sorc-upstream.md` | - |
@@ -452,6 +453,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b617db299 11-22 21:35 `Merge agent/denfix: Merge branch 'main' into denfix` (denfix)
+- b21deb7a2 11-22 21:33 `Merge branch 'main' into denfix` (-)
 - d5b81876e 11-22 21:26 `Merge agent/toolstrade2: toolstrade2: card and probe notes` (toolstrade2)
 - 8d9c46bc3 11-22 21:14 `Merge agent/toolstrade: Merge branch 'main' into toolstrade` (toolstrade)
 - a5f66000a 11-22 21:12 `Merge branch 'main' into toolstrade` (-)
@@ -460,6 +463,4 @@
 - 43e24fef5 11-22 21:08 `Merge branch 'main' into forksync` (-)
 - 6503e3d29 11-22 21:08 `Merge branch 'main' into skelspeed` (-)
 - 5376d1ad3 11-22 20:57 `Merge agent/uireason: Merge branch 'main' into uireason` (uireason)
-- f0b708e8b 11-22 20:56 `Merge branch 'main' into uireason` (-)
-- 5cb82cacf 11-22 20:48 `Merge agent/manapack: Merge branch 'main' into manapack` (manapack)
 <!-- statusgen:end -->
