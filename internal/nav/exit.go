@@ -106,6 +106,17 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 				continue
 			}
 		}
+		if !ok && approached > 0 {
+			// The strip was walked to and d2d still cannot read across it (the neighbour is linked, pending stays 1: Barracks
+			// back to the Outer Cloister, Proving Ground nav.barracks-return 2026-11-23, both classes). The border is crossed by
+			// walking over it, so the unproven strip cells are the gate: the push beyond them changes the level.
+			us := n.gatesFromCells(o.lm, levelNo, o.lm.UnprovenCells(levelNo), o.lm.Unproven)
+			if len(us) > 0 {
+				sort.Slice(us, func(i, j int) bool { return dist(o.pos, us[i].at) < dist(o.pos, us[j].at) })
+				g, ok = us[0], true
+				n.log.Info("nav: crossing an unproven border strip", "to", levelNo, "strip", g.at, "push", g.push)
+			}
+		}
 		if !ok {
 			// The facts behind "no gate": what the map shows toward levelNo and why none is usable (card andariel1).
 			n.log.Info("nav no usable gate", "from", o.level, "to", levelNo, "exits", len(o.lm.Exits), "adjacent", len(o.lm.Adjacent),
@@ -351,14 +362,19 @@ func (n *Navigator) gateCands(o *obs, levelNo int) []gate {
 
 // borderGates groups the border cells toward levelNo into gaps and returns the middle of each.
 func (n *Navigator) borderGates(lm *d2map.LevelMap, levelNo int) []gate {
-	cells := lm.BorderCells(levelNo)
+	return n.gatesFromCells(lm, levelNo, lm.BorderCells(levelNo), lm.Adjacent)
+}
+
+// gatesFromCells is borderGates for any set of strip cells; adjacent says where the neighbour lies (the proven list, or the
+// unproven one when d2d cannot read across the edge from here).
+func (n *Navigator) gatesFromCells(lm *d2map.LevelMap, levelNo int, cells []d2map.Point, adjacent []d2map.Adjacent) []gate {
 	if len(cells) == 0 {
 		return nil
 	}
 	var adj *d2map.Adjacent
-	for i := range lm.Adjacent {
-		if lm.Adjacent[i].LevelNo == levelNo {
-			adj = &lm.Adjacent[i]
+	for i := range adjacent {
+		if adjacent[i].LevelNo == levelNo {
+			adj = &adjacent[i]
 		}
 	}
 	vertical := adj == nil || adj.Contact.W <= adj.Contact.H // strip is thin in x: the neighbour lies east or west

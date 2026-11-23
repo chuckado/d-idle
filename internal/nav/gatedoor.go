@@ -58,8 +58,10 @@ func (n *Navigator) openDoorToward(ctx context.Context, o *obs, cands []gate, le
 		}
 	}
 	at, found := n.doorBetween(o, cands, doors)
-	if !found && !approach { // a spot behind several doors: the nearest door on the way is the next step
-		at, found = n.doorOnTheWay(o, cands[0].at, doors)
+	if !found && !approach { // a spot behind several doors: the first closed door on the way is the next step
+		if at, found = n.doorOnPath(o, cands[0].at, doors); !found {
+			at, found = n.doorOnTheWay(o, cands[0].at, doors)
+		}
 	}
 	if !found {
 		if approach && n.approachGate(ctx, o, levelNo, cands[0]) {
@@ -346,4 +348,51 @@ func nearestObjects(ps []d2map.Preset, p input.Point, n int) []string {
 		out = append(out, rows[i].s)
 	}
 	return out
+}
+
+// doorBox is the half width (cells) of the box around a door preset that counts as the door when planning through it.
+const doorBox = 2
+
+// doorOnPath plans from the character to goal on a copy of the grid in which every unused door is open (the cells
+// around its preset), and returns the door the path meets first on cells that are blocked in the real grid: the next
+// door to open, wherever it stands (V live, sandbox 2026-11-23: the doors of the Barracks stood 22 subtiles from the
+// dead end, outside the 14 of gateDoorReach). False when there is no such path or it crosses no door.
+func (n *Navigator) doorOnPath(o *obs, goal input.Point, doors []input.Point) (input.Point, bool) {
+	if len(doors) == 0 || o.lm == nil || o.lm.Grid == nil {
+		return input.Point{}, false
+	}
+	g := o.lm.Grid.Clone()
+	for _, d := range doors {
+		box := d2map.Rect{X: d.X - doorBox, Y: d.Y - doorBox, W: 2*doorBox + 1, H: 2*doorBox + 1}
+		g.SetBlock(box, make([]uint16, box.W*box.H))
+	}
+	t := n.tune()
+	n.planMu.Lock()
+	defer n.planMu.Unlock()
+	f := buildField(g, o.lm.Rect, t.WallClearance, t.WallWeight)
+	sx, sy, ok := f.nearestWalkable(o.pos.X, o.pos.Y, 8)
+	if !ok {
+		return input.Point{}, false
+	}
+	gx, gy, ok := f.nearestWalkable(goal.X, goal.Y, 6)
+	if !ok {
+		return input.Point{}, false
+	}
+	cells, partial := n.pl.Plan(f, sx, sy, gx, gy, 2, 1)
+	if partial || len(cells) == 0 {
+		return input.Point{}, false
+	}
+	for _, c := range cells {
+		x, y := f.pt(c)
+		if o.lm.Grid.Known(x, y) && !o.lm.Grid.Walkable(x, y) {
+			best, bestD := input.Point{}, math.MaxFloat64
+			for _, d := range doors {
+				if dd := dist(d, input.Point{X: x, Y: y}); dd < bestD {
+					best, bestD = d, dd
+				}
+			}
+			return best, bestD <= float64(doorBox)*2
+		}
+	}
+	return input.Point{}, false
 }

@@ -44,6 +44,9 @@ type boardRT struct {
 	hero  string // the hero the store belongs to ("" when built by NewQuestBoard)
 	reqs  chan boardHandInReq
 
+	// yieldKey is the chunk a goal travel already yielded to once (boardYield).
+	yieldKey string
+
 	mu       sync.Mutex
 	snap     *d2.Snapshot // the snapshot the cached world was built from
 	w        task.World
@@ -1026,6 +1029,33 @@ func (r *Runner) QuestQueued() string {
 // the board only ran under a campaign goal, so the accept was recorded and nothing started (live 2026-11-17, goal
 // farm_area on Dark Wood, 13 minutes). A fight in the clear radius delays only the start of a chunk, never a hand-in; the
 // reason is shown as "queued". The Farm gold order and a recovery that has to refill the purse still come first.
+// boardYield tells a goal travel (the level plan walking to its area) to stop at the next hop because a chunk the player
+// started is runnable: a long walk is one blocking action, so the start gate only saw the chunk after the hero had crossed
+// several areas (Proving Ground necro.act1-stage1 2026-11-23: Blood Raven accepted in the Stony Field, started 30 s later in
+// the Barracks, after the plan had walked the hero along the Monastery road). Once per chunk, so a chunk that cannot start
+// (recovery, gates) never starves the travel.
+func (r *Runner) boardYield() bool {
+	if !r.questBoardOn() {
+		return false
+	}
+	rt := r.boardRTFor()
+	if rt == nil {
+		return false
+	}
+	d, err := rt.exec.Next()
+	if err != nil || d.Kind != questboard.DecRun {
+		return false
+	}
+	k := questboard.ChunkKey(d.Quest, d.Chunk)
+	rt.mu.Lock()
+	defer rt.mu.Unlock()
+	if rt.startedKey == k || rt.yieldKey == k {
+		return false
+	}
+	rt.yieldKey = k
+	return true
+}
+
 func (r *Runner) boardPreempts(snap *d2.Snapshot, c control) bool {
 	ok, why := r.boardPreemptsWhy(snap, c)
 	if why != "" {

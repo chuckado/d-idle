@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"math"
+	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -300,6 +302,72 @@ func TestGoToOpensTwoDoorsInARow(t *testing.T) {
 			}
 			if opened != 2 || dist(s.pos(), input.Point{X: 3230, Y: 3057}) > 6 {
 				t.Fatalf("doors used %d, at %v", opened, s.pos())
+			}
+		})
+	}
+}
+
+// barracksDoors are the door presets (class, x, y in subtiles) of the live Barracks capture of 2026-11-23
+// (testdata/barracks28.grid, 200 by 350 subtiles, read-only `debug grid 5`; each door is a one cell gap in a wall).
+var barracksDoors = [][3]int{{16, 125, 185}, {15, 100, 175}, {16, 125, 165}, {16, 120, 130}, {15, 100, 105}, {16, 120, 80},
+	{16, 75, 130}, {15, 50, 105}, {16, 75, 80}, {15, 100, 35}, {16, 65, 20}, {15, 30, 90}, {16, 125, 255}, {15, 100, 245},
+	{16, 125, 220}, {15, 80, 230}, {15, 165, 245}, {15, 150, 245}, {16, 175, 290}, {14, 175, 180}}
+
+// The Smith's spawn point lay behind a chain of closed doors, the nearest of them 22 subtiles from where the walk
+// ended ("reached the closest reachable point {152 267} to {73 267}", sandbox 2026-11-23): the door within 14 subtiles
+// did not exist. GoTo plans through the doors, opens the first closed one on that path, and walks on. Must fail without
+// doorOnPath (the old reach found no door). Both classes: the geometry knows none.
+func TestGoToOpensTheDoorsOfTheLiveBarracks(t *testing.T) {
+	data, err := os.ReadFile("testdata/barracks28.grid")
+	if err != nil {
+		t.Fatal(err)
+	}
+	rows := strings.Split(strings.TrimSpace(string(data)), "\n")
+	const ox, oy = 1000, 1000
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			g := d2map.NewGrid()
+			cells := make([]uint16, len(rows[0])*len(rows))
+			for y, r := range rows {
+				for x, c := range r {
+					if c == '#' {
+						cells[y*len(rows[0])+x] = 1
+					}
+				}
+			}
+			g.SetBlock(d2map.Rect{X: ox, Y: oy, W: len(rows[0]), H: len(rows)}, cells)
+			var presets []d2map.Preset
+			closed := map[int]bool{}
+			for i, d := range barracksDoors { // every door shut: its gap becomes wall
+				g.SetBlock(d2map.Rect{X: ox + d[1] - 1, Y: oy + d[2], W: 3, H: 1}, []uint16{1, 1, 1})
+				presets = append(presets, d2map.Preset{Kind: d2map.PresetObject, ID: d[0], Pos: d2map.Point{X: ox + d[1], Y: oy + d[2]}})
+				closed[i] = true
+			}
+			l1 := &simLevel{no: 28, rect: d2map.Rect{X: ox, Y: oy, W: len(rows[0]), H: len(rows)}}
+			s := newSim(g, input.Point{X: ox + 152, Y: oy + 267}, l1)
+			s.reveal = 400
+			s.revealRooms()
+			s.levels[0].lm.Presets = presets
+			opened := 0
+			s.onInteract = func(s *sim, tg input.Target) error {
+				for i, d := range barracksDoors {
+					if closed[i] && dist(tg.Pos, input.Point{X: ox + d[1], Y: oy + d[2]}) < 8 {
+						closed[i] = false
+						opened++
+						openDoor(s, d2map.Rect{X: ox + d[1] - 1, Y: oy + d[2], W: 3, H: 1})
+						return nil
+					}
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class >= 14 && class <= 16 }
+			goal := input.Point{X: ox + 73, Y: oy + 267}
+			if err := n.GoTo(ctxT(t), goal); err != nil {
+				t.Fatalf("goto: %v (doors opened %d, at %v)", err, opened, s.pos())
+			}
+			if opened == 0 || dist(s.pos(), goal) > 8 {
+				t.Fatalf("doors opened %d, at %v", opened, s.pos())
 			}
 		})
 	}

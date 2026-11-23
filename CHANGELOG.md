@@ -8,6 +8,10 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into stage1doc <!--sg:agent/stage1doc-->
+- Merge branch 'main' into toolstrade15 <!--sg:agent/toolstrade15-->
+- Merge branch 'main' into stage1fix <!--sg:agent/barrret-->
+- Merge branch 'main' into uifit3 <!--sg:agent/uifit3-->
 - Merge branch 'main' into qdmatrix <!--sg:agent/questdrill4-->
 - Merge branch 'main' into uiloot <!--sg:agent/uiloot-->
 - Merge branch 'main' into toolstrade14 <!--sg:agent/toolstrade14-->
