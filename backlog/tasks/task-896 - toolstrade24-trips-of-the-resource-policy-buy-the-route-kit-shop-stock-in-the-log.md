@@ -1,10 +1,13 @@
 ---
 id: TASK-896
-title: 'toolstrade24: trips of the resource policy buy the route kit; shop stock in the log'
-status: Proposed
+title: >-
+  toolstrade24: trips of the resource policy buy the route kit; shop stock in
+  the log
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T12:45:00Z'
+updated_date: '2026-11-23T13:05:00Z'
 labels:
   - bot
   - bot-fix
