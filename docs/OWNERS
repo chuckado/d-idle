@@ -801,6 +801,7 @@ docs/ui-design-system.md  credit-runner  nopins
 docs/ui-design-system.md  credit-runner  uia11y
 docs/ui-design-system.md  credit-runner  uialerts
 docs/ui-design-system.md  credit-runner  uic3
+docs/ui-design-system.md  credit-runner  uikeys
 docs/ui-design-system.md  credit-runner  uinav
 docs/ui-design-system.md  credit-runner  uireason
 docs/ui-design-system.md  credit-runner  uisettings
@@ -1964,6 +1965,7 @@ internal/watch/serve.go  credit-runner  botcpu2
 internal/watch/serve.go  credit-runner  uis6
 internal/watch/serve.go  credit-runner  videofeed2
 internal/watch/settingsjs_test.go  credit-runner  uialerts
+internal/watch/settingsjs_test.go  credit-runner  uikeys
 internal/watch/settingsjs_test.go  credit-runner  uiloot
 internal/watch/settingsjs_test.go  credit-runner  uisettings
 internal/watch/skillsapi.go  credit-runner  agencyp0
@@ -2005,6 +2007,7 @@ internal/watch/testdata/itemactions  credit-runner  gearsets
 internal/watch/testdata/itemactions/act_dom.js  credit-runner  nopins
 internal/watch/testdata/itemtip/tip_dom.js  credit-runner  nopins
 internal/watch/testdata/itemusable/  credit-runner  charreq
+internal/watch/testdata/keywalk_test.cjs  credit-runner  uikeys
 internal/watch/testdata/layout_cells.golden  credit-runner  uis7
 internal/watch/testdata/layout_default.js  credit-runner  uis7
 internal/watch/testdata/logpanel  credit-runner  friendfb
@@ -2307,6 +2310,7 @@ internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
 internal/watch/web/settings.js  credit-runner  uiloot
 internal/watch/web/settings.js  credit-runner  uisettings
+internal/watch/web/sheet.js  credit-runner  uikeys
 internal/watch/web/sheet.js  credit-runner  uisettings
 internal/watch/web/shell.css  credit-runner  lootwire3
 internal/watch/web/shell.css  credit-runner  menufit2
@@ -2587,6 +2591,7 @@ tools/uishots.sh  credit-runner  uic3
 tools/uishots.sh  credit-runner  uifit1
 tools/uishots.sh  credit-runner  uifit4
 tools/uishots.sh  credit-runner  uifix1
+tools/uishots.sh  credit-runner  uikeys
 tools/uishots.sh  credit-runner  uiloot
 tools/uishots.sh  credit-runner  uiphone
 tools/uishots.sh  credit-runner  uis3
@@ -2605,6 +2610,7 @@ tools/uishots/  credit-runner  uia11y
 tools/uishots/  credit-runner  uic3
 tools/uishots/  credit-runner  uifit1
 tools/uishots/  credit-runner  uifix1
+tools/uishots/  credit-runner  uikeys
 tools/uishots/  credit-runner  uiphone
 tools/uishots/  credit-runner  uis3
 tools/uishots/  credit-runner  uis6
