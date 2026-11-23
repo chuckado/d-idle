@@ -95,7 +95,7 @@ f.addEventListener('load', async () => {
       m.clicked = steps.join(' then ');
       for (const raw of steps) {
         const opt = raw[0] === '?', sel = opt ? raw.slice(1) : raw, b = f.contentDocument.querySelector(sel);
-        if (b) { b.click(); await wait(500); } else if (!opt) { m.missing = sel; break; }
+        if (b) { b.click(); await wait(f.contentDocument.body.hasAttribute('data-vault') ? 900 : 500); } else if (!opt) { m.missing = sel; break; }
       }
     }
     m.ov = overlayState(f.contentWindow);

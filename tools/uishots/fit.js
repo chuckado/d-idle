@@ -518,7 +518,7 @@ function vaultPage(win, d, vis, cs) {
     const fp = n.closest('.vt-fpanel');
     if (fp) { const pr = fp.getBoundingClientRect(); if (cy < pr.top || cy > pr.bottom) continue; } // inside the folded panel's own scroll
     const at = d.elementFromPoint(cx, cy);
-    if (inMain && at && at.closest('.d-navhost, [class*="d-nav"]')) continue; // the page scrolls under the fixed bar or band: the nav lane judges the bar
+    if (at && at.closest('.d-navhost, [class*="d-nav"], .vt-detail')) continue; // the page scrolls under the fixed bar, band or detail card: the nav lane judges the bar, the sheet lane the card
     if (!at || !(at === n || n.contains(at) || at.contains(n) || (n.labels && [...n.labels].some((l) => l.contains(at))))) o.covered.push(nm(n) + (at ? ' under ' + nm(at) : ' at ' + Math.round(cx) + ',' + Math.round(cy) + ' of ' + vw + 'x' + vh));
   }
   for (const n of root.querySelectorAll('.vt-head, .vt-tools, .vt-filters, .vt-actionbar, .vt-body, .vt-main, .vt-grid, .vt-sheet-card, .vt-banner')) {
