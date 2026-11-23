@@ -98,3 +98,51 @@ func TestBuildViewCarriesCards(t *testing.T) {
 		t.Errorf("cards %d err %q class %q", len(v.Cards), v.CardsErr, v.Class)
 	}
 }
+
+// buildchoose: every card with variants has exactly one pre-selected plan, labels are plain words, and the level horizon
+// moves the recommendation from the 30-level plan to the full plan.
+func TestVariantsPlainAndOneDefault(t *testing.T) {
+	for _, c := range []struct {
+		class  d2.Class
+		tables []string
+		level  int
+		want   string // the Default of the first card
+	}{
+		{d2.Paladin, []string{"paladin-normal30", "paladin-normal30-v2", "paladin_hammerdin_guide", "paladin_hammerdin_endgame90"}, 12, "paladin-normal30-v2"},
+		{d2.Paladin, []string{"paladin-normal30", "paladin-normal30-v2", "paladin_hammerdin_guide", "paladin_hammerdin_endgame90"}, 40, "paladin_hammerdin_endgame90"},
+		{d2.Sorceress, []string{"sorceress_normal30", "sorceress_blizzard_endgame90"}, 12, "sorceress_normal30"},
+		{d2.Necromancer, []string{"necromancer_summoner_normal30", "necromancer_summoner_endgame90", "necromancer_summoner_guide", "necromancer_summoner_sme"}, 12, "necromancer_summoner_normal30"},
+	} {
+		d := cardDesk(t, c.class, c.tables...)
+		pl := c.level
+		d.c.Player = func() *d2.Player { return &d2.Player{Class: c.class, Level: pl} }
+		cards, err := d.Cards(c.class.String())
+		if err != nil {
+			t.Fatal(err)
+		}
+		for i, k := range cards {
+			n := 0
+			for _, v := range k.Variants {
+				if v.Default {
+					n++
+				}
+				if v.Label == "" || v.Why == "" || strings.Contains(v.Label+v.Why, v.Name) || strings.Contains(v.Label, "_") {
+					t.Errorf("%s %s: variant text %q / %q", c.class, v.Name, v.Label, v.Why)
+				}
+				if v.Recommended && (!v.Default || v.Tier != BuildSupported) {
+					t.Errorf("%s %s: recommended but not a supported default", c.class, v.Name)
+				}
+			}
+			if len(k.Variants) > 0 && n != 1 {
+				t.Errorf("%s %s: %d defaults", c.class, k.ID, n)
+			}
+			if i == 0 {
+				for _, v := range k.Variants {
+					if v.Default != (v.Name == c.want) {
+						t.Errorf("%s level %d: variant %s default=%v, want default %s", c.class, c.level, v.Name, v.Default, c.want)
+					}
+				}
+			}
+		}
+	}
+}

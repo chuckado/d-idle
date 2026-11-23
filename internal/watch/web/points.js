@@ -136,13 +136,9 @@
     }).catch(function () { open[card.id] = false; say('could not read the build details'); });
   }
   function choose(det, btn) {
-    var price = bview && bview.respec ? bview.respec.price : '?';
     var vs = det.variants || [];
     var exp = function (n) { return vs.filter(function (v) { return v.name === n && v.tier === 'experimental'; }).length > 0; };
-    var lines = ['You can change later, but it costs gold to respec. A respec now would cost ' + price + ' gold and refunds every skill and stat point.',
-      'Every new point then follows this build.'];
-    if (vs.some(function (v) { return v.tier === 'experimental'; })) lines.push('Some variants are experimental: skills the fighter has not proven yet are held for you, not spent.');
-    sheet = BC.openSheet(document, { title: 'Choose ' + det.name + '?', lines: lines, variants: vs, confirmText: 'Choose and lock', opener: btn,
+    sheet = BC.chooseSheet(document, det, bview && bview.respec ? bview.respec.price : undefined, { opener: btn, onCancel: function () { sheet = null; },
       onConfirm: function (name) { sheet = null; pickBuild(name, exp(name)); } });
   }
   function pickBuild(name, confirmed) {

@@ -1,0 +1,41 @@
+== choose sheet, collapsed ==
+div.d-sheet [aria-describedby=d-sheet-5-d aria-labelledby=d-sheet-5-t aria-modal=true role=dialog]
+  h2.d-sheet-title [tabindex=-1 id=d-sheet-5-t] "Choose Paladin Hammerdin?"
+  p.d-sheet-line [id=d-sheet-5-d] "Your hero will spend every new skill and stat point following this build. You can change it later for gold: a respec now costs 1234 gold and refunds every point."
+  div.d-sheet-adv
+    button.d-sheet-adv-btn [aria-controls=d-sheet-5-adv aria-expanded=false type=button] "Advanced: pick a different plan"
+  div.d-sheet-row
+    button.d-btn.d-sheet-cancel [type=button] "Cancel"
+    button.d-btn.d-sheet-ok [data-variant=primary type=button] "Choose and lock"
+== choose sheet, advanced open ==
+div.d-sheet [aria-describedby=d-sheet-5-d aria-labelledby=d-sheet-5-t aria-modal=true role=dialog]
+  h2.d-sheet-title [tabindex=-1 id=d-sheet-5-t] "Choose Paladin Hammerdin?"
+  p.d-sheet-line [id=d-sheet-5-d] "Your hero will spend every new skill and stat point following this build. You can change it later for gold: a respec now costs 1234 gold and refunds every point."
+  div.d-sheet-adv
+    button.d-sheet-adv-btn [aria-controls=d-sheet-5-adv aria-expanded=true type=button] "Advanced: pick a different plan"
+    div.d-sheet-pick [aria-label=Plan role=radiogroup id=d-sheet-5-adv]
+      label.d-sheet-opt [data-plan=paladin-normal30]
+        input [type=radio name=d-sheet-5-plan value=paladin-normal30]
+        span.d-sheet-opt-text
+          span.d-sheet-opt-name "Leveling to level 30, earlier version"
+          span.d-sheet-opt-why "The first plan we wrote for levels one to thirty."
+      label.d-sheet-opt [data-plan=paladin-normal30-v2]
+        input [type=radio name=d-sheet-5-plan value=paladin-normal30-v2 checked]
+        span.d-sheet-opt-text
+          span.d-sheet-opt-name "Leveling to level 30 (recommended)"
+          span.d-sheet-opt-why "The plan for the first thirty levels, the one new heroes follow."
+      label.d-sheet-opt [data-plan=paladin_hammerdin_endgame90]
+        input [type=radio name=d-sheet-5-plan value=paladin_hammerdin_endgame90]
+        span.d-sheet-opt-text
+          span.d-sheet-opt-name "Full plan to level 90"
+          span.d-sheet-opt-why "The whole plan from level 30 up to level 90."
+          span.d-sheet-opt-warn "Newer plan, less tested: skills it has not proven yet are saved for you to spend by hand."
+      label.d-sheet-opt [data-plan=necromancer_summoner_sme]
+        input [type=radio name=d-sheet-5-plan value=necromancer_summoner_sme]
+        span.d-sheet-opt-text
+          span.d-sheet-opt-name "Veteran's path (newer)"
+          span.d-sheet-opt-why "A plan from a Diablo II veteran; newer and less proven."
+          span.d-sheet-opt-warn "Newer plan, less tested: skills it has not proven yet are saved for you to spend by hand."
+  div.d-sheet-row
+    button.d-btn.d-sheet-cancel [type=button] "Cancel"
+    button.d-btn.d-sheet-ok [data-variant=primary type=button] "Choose and lock"

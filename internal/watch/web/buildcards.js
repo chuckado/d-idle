@@ -66,13 +66,16 @@
     return li;
   }
 
+  // Plain words for the plan a variant is; the table id stays in data-table for support and never shows as text.
+  const NEWER = 'Newer plan, less tested: skills it has not proven yet are saved for you to spend by hand.';
   function variantNode(doc, v) {
     const li = mk(doc, 'li', 'bc-var');
     li.dataset.table = v.name;
     li.dataset.tier = v.tier;
-    const h = mk(doc, 'p', 'bc-vn', v.label + ' ');
-    h.append(mk(doc, 'span', 'bc-tier', '(' + v.tier + ')'));
+    const h = mk(doc, 'p', 'bc-vn', v.label + (v.recommended ? ' (recommended)' : ''));
     li.append(h);
+    if (v.why) li.append(mk(doc, 'p', 'bc-vwhy', v.why));
+    if (v.tier === 'experimental') li.append(mk(doc, 'p', 'bc-warn', NEWER));
     const bad = (v.needs || []).filter((n) => n.tier === 'unsupported');
     const rest = (v.needs || []).length - bad.length;
     if (bad.length) li.append(mk(doc, 'p', 'bc-warn', 'The hero cannot use these yet and will hold the point for you: ' + bad.map((n) => n.skill).join(', ') + '.'));
@@ -136,12 +139,23 @@
   }
 
   // The build confirm: the shared sheet (web/sheet.js) with the variant picker. Kept as openSheet for points.js and the test.
+  // The choose confirm: one plain paragraph, then the buttons; the plans sit behind a collapsed Advanced button.
+  function chooseSheet(doc, det, price, o) {
+    const vs = det.variants || [];
+    const gold = price === undefined || price === null || price === '?' ? 'gold (the price shows once the hero is in a game)' : price + ' gold';
+    const lines = ['Your hero will spend every new skill and stat point following this build. You can change it later for gold: a respec now costs ' + gold + ' and refunds every point.'];
+    const def = vs.find((v) => v.default) || vs[0];
+    if (def && def.tier === 'experimental') lines.push(NEWER);
+    const adv = vs.length > 1 ? { summary: 'Advanced: pick a different plan', variants: vs.map((v) => ({ name: v.name, label: v.label, why: v.why, recommended: v.recommended, warn: v.tier === 'experimental' ? NEWER : '' })) } : null;
+    return openSheet(doc, Object.assign({ title: 'Choose ' + det.name + '?', lines, advanced: adv, pick: def && def.name, confirmText: 'Choose and lock' }, o));
+  }
+
   function openSheet(doc, o) {
     const S = typeof module !== 'undefined' && module.exports ? require('./sheet.cjs') : g.dSheet;
     return S.open(doc, Object.assign({ confirmText: 'Choose and lock' }, o));
   }
 
-  const api = { stars, ratingRow, sourceWord, cardNode, detailNode, variantNode, openSheet };
+  const api = { chooseSheet, stars, ratingRow, sourceWord, cardNode, detailNode, variantNode, openSheet };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else g.dBuildCards = api;
 })(typeof window !== 'undefined' ? window : globalThis);

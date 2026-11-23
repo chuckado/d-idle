@@ -25,6 +25,7 @@ func TestBuildCardsDOM(t *testing.T) {
 		Builds: func() []points.BuildInfo {
 			return []points.BuildInfo{
 				{Name: "paladin-normal30", Label: "paladin normal30", Class: "paladin", Tier: points.BuildSupported, Preview: []points.PreviewRow{{Clvl: 2, Skills: []points.PreviewSkill{{Skill: "Might", Points: 1}}}, {Clvl: 6, Skills: []points.PreviewSkill{{Skill: "Blessed Hammer", Points: 2, Tier: "unsupported"}}, Stats: map[string]int{"str": 5}}}},
+				{Name: "paladin-normal30-v2", Label: "paladin normal30 v2", Class: "paladin", Tier: points.BuildSupported},
 				{Name: "paladin_hammerdin_endgame90", Label: "paladin hammerdin endgame90", Class: "paladin", Tier: points.BuildExperimental, Needs: []points.Need{{Skill: "Concentration", Tier: "unsupported", Reason: "no rule"}, {Skill: "Vigor", Tier: "unproven"}}},
 			}
 		},
@@ -48,9 +49,9 @@ func TestBuildCardsDOM(t *testing.T) {
 	os.WriteFile(filepath.Join(dir, "buildcards.cjs"), js, 0o600)
 	sj, _ := webFS.ReadFile("web/sheet.js")
 	os.WriteFile(filepath.Join(dir, "sheet.cjs"), sj, 0o600)
-	for _, f := range []string{"nav_dom.cjs", "buildcards_test.cjs", "buildcards_dom.txt"} {
+	for _, f := range []string{"nav_dom.cjs", "buildcards_test.cjs", "buildcards_dom.txt", "choosesheet_dom.txt"} {
 		src, err := os.ReadFile(filepath.Join("testdata", f))
-		if err != nil && f != "buildcards_dom.txt" {
+		if err != nil && f != "buildcards_dom.txt" && f != "choosesheet_dom.txt" {
 			t.Fatal(err)
 		}
 		os.WriteFile(filepath.Join(dir, f), src, 0o600)
