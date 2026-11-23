@@ -458,6 +458,7 @@
 | toolstrade17 | proposed | - | `internal/bot/loop.go`<br>`internal/bot/beltfill_test.go`<br>`tools/provingground/scenarios/act1more.json`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | toolstrade18 | proposed | - | `docs/probes/tools-trade-2026-11-22.md` | - |
 | stage23 | proposed | - | `internal/nav/gatedoor_test.go`<br>`tools/provingground/scenarios/necro.json`<br>`tools/provingground/scenarios/navexit.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
+| toolstrade20 | proposed | - | `internal/combat/fight.go`<br>`internal/combat/sim_test.go`<br>`internal/combat/reach_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | m1-liveproof | deferred | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
@@ -489,6 +490,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 83b7ed53c 11-23 06:58 `Merge agent/toolstrade20: Merge branch 'main' into toolstrade20` (toolstrade20)
+- 79bc8e204 11-23 06:57 `Merge branch 'main' into toolstrade20` (-)
 - a443aec6e 11-23 06:50 `Merge agent/questdrill8: Merge branch 'main' into qdmatrix` (questdrill8)
 - 86136b2a7 11-23 06:49 `Merge branch 'main' into qdmatrix` (-)
 - 1e454e546 11-23 06:40 `Merge agent/uibudget: Merge branch 'main' into uibudget` (uibudget)
@@ -497,6 +500,4 @@
 - 5589b063f 11-23 06:30 `Merge branch 'main' into stage23` (-)
 - 798a702dc 11-23 06:28 `Merge remote-tracking branch 'origin/main' into agent/stage23` (-)
 - 752efedd3 11-23 06:19 `Merge agent/toolstrade19: Merge branch 'main' into toolstrade19` (toolstrade19)
-- 136e77149 11-23 06:17 `Merge branch 'main' into toolstrade19` (-)
-- 83acd8c62 11-23 06:11 `Merge agent/questdrill7: Merge branch 'main' into qdmatrix` (questdrill7)
 <!-- statusgen:end -->
