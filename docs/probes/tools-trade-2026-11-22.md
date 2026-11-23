@@ -101,3 +101,13 @@ First attempt now opens the door (141,2) from (142,4) and `Entered Outer Cloiste
 - Coordinates (S): the preset position is in subtiles of the level, like the grid (`mergeMonsterPresets` converts the engine's cells through the level origin); lab 754@23,57 and live 754@73,267 are different layouts (the Barracks DS1 is chosen per game), not an off-by-room error; U until the capture shows the Smith's room.
 - Fix here (message only): `boss: boss not found in the arena: its spawn point {x y} could not be reached (...)` when the walk to the anchor failed (`TestBossNotFoundSaysTheAnchorIsUnreachable`, Smith and Countess).
 - Capture, read only (ADR 0014): `python3 tools/probes/capture.py SOCK OUTDIR 28` waits up to an hour for area 28, then writes `level, levelmap, levelmonsters, levelobjects, presets, objects, warps, warptriggers, nearby, layout, grid_5, blocked, state, info` replies and `capture.json`. The allow-list is checked before every send (`capture_test.py`).
+
+## Capture in the container (card toolstrade14)
+
+The sandbox container has perl and no python. `tools/probes/capture.pl` is the port: the script is piped on stdin, everything goes to STDOUT as one JSON line per read verb (`{"verb","reply","refused"}`), nothing is written inside the container:
+
+```
+docker exec -i d2play-20261108 perl - /run/d2d/d2d.sock.ctl 28 2700 6 < tools/probes/capture.pl > barracks-capture.jsonl
+```
+
+Arguments: socket, area (28), wait in seconds (2700), grace in seconds (6). Exit 2 when the area did not show. Test: `cd tools/probes && python3 -m unittest capture_pl_test` (fake socket: reads every verb once; a write verb passed through `CAPTURE_EXTRA` is refused and never sent; a wrong area times out).
