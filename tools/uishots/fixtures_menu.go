@@ -11,5 +11,7 @@ func init() {
 	defectCSS["mn-primary"] = tall + ` .d-menu-primary { position: relative !important; inset-block-start: 4000px !important; }`
 	// the Orders More list squeezed to nothing again (card morefit): the shape of the 2026-11-17 screenshot
 	defectCSS["mf-clip"] = `[data-panel="orders"] .o-items { flex: 1 1 0 !important; min-block-size: 0 !important; max-block-size: 30px !important; overflow-y: hidden !important; }`
+	// the phone sheet cannot scroll again (data-scroll once beat .d-tilesheet in the phone rule of utilities.css)
+	defectCSS["mf-phone"] = `.d-tilesheet { overflow: visible !important; max-block-size: none !important; } .d-tilesheet > * { flex: none !important; } .d-tilesheet { min-block-size: 0; padding-block-end: 80px !important; }`
 	defectCSS["mn-hint"] = tall + ` .d-menu-body::after { content: none !important; }`
 }

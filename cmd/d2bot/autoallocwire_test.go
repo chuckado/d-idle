@@ -1,11 +1,13 @@
 package main
 
 import (
+	"d2lod-bot/internal/leveler"
 	"strings"
 	"testing"
 
 	"d2lod-bot/internal/agency"
 	"d2lod-bot/internal/data"
+	"d2lod-bot/internal/plandata"
 	"d2lod-bot/internal/points"
 	"d2lod-bot/internal/power"
 )
@@ -72,6 +74,84 @@ func TestAllocPickerNecromancerNotes(t *testing.T) {
 		case "sorceress_normal30":
 			if !strings.EqualFold(b.Class, "sorceress") {
 				t.Errorf("%s: class %q", b.Name, b.Class)
+			}
+		}
+	}
+}
+
+// buildchoose: a card never pre-selects an experimental plan while it has a supported one, at any level.
+func TestCatalogDefaultVariantIsSupported(t *testing.T) {
+	w := testAllocWire(t)
+	tier := map[string]string{}
+	for _, b := range w.builds() {
+		tier[b.Name] = b.Tier
+	}
+	cat, err := plandata.Catalog()
+	if err != nil {
+		t.Fatal(err)
+	}
+	ok := func(tb string) bool { return tier[tb] == points.BuildSupported }
+	for _, b := range cat.Builds {
+		anySupported := false
+		for _, v := range b.Variants {
+			anySupported = anySupported || ok(v.Table)
+		}
+		if !anySupported {
+			t.Logf("%s: no supported plan yet; the sheet warns inline", b.ID)
+			continue
+		}
+		for _, lvl := range []int{1, 30, 60, 90} {
+			got := b.RecommendedVariant(lvl, ok)
+			if !ok(got) {
+				got = "" // the desk falls back to the first supported variant
+				for _, v := range b.Variants {
+					if got == "" && ok(v.Table) {
+						got = v.Table
+					}
+				}
+			}
+			if !ok(got) {
+				t.Errorf("%s: level %d has no supported default", b.ID, lvl)
+			}
+		}
+	}
+}
+
+// The summoner opens with Vitality, 3 Energy at clvl 2 only (SME answers 2026-11-22); the table once put 10 Energy first
+// and the hero sat at clvl 4 with its mana pool grown and no Vitality (user report 2026-11-23).
+func TestSummonerTableStatsAreVitalityFirst(t *testing.T) {
+	b, err := leveler.LoadBuild("necromancer_summoner_normal30", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	ene, vit := 0, 0
+	for _, r := range b.Rows {
+		if r.Clvl > 10 {
+			break
+		}
+		ene += r.Attr[3]
+		vit += r.Attr[2]
+	}
+	if ene != 3 || vit != 5*9-3 {
+		t.Errorf("clvl 2-10: energy %d vitality %d", ene, vit)
+	}
+}
+
+func TestSkillsFirstTwoClasses(t *testing.T) {
+	for _, in := range [][]points.Step{
+		{{Kind: "stat", Stat: "ene"}, {Kind: "stat", Stat: "vit"}, {Kind: "skill", Name: "Raise Skeleton"}, {Kind: "skill", Name: "Skeleton Mastery"}},
+		{{Kind: "stat", Stat: "vit"}, {Kind: "skill", Name: "Fire Bolt"}, {Kind: "stat", Stat: "ene"}},
+	} {
+		out := skillsFirst(in)
+		if len(out) != len(in) || out[0].Kind != "skill" {
+			t.Fatalf("got %+v", out)
+		}
+		seenStat := false
+		for _, st := range out {
+			if st.Kind == "stat" {
+				seenStat = true
+			} else if seenStat {
+				t.Fatalf("a skill after a stat: %+v", out)
 			}
 		}
 	}

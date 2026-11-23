@@ -89,7 +89,9 @@ navdefect-wide watch/skills?theme=dark&defect=nav-wide"
 # The Build tab (card buildcards; web/buildcards.js): name, query, click, hit. --fit judges them (builds-NAME: one column on a phone, a grid
 # above, no scroll box, 44 px buttons, a text equivalent on every star row) and --builds draws them.
 buildspages="builds-list watch/points?theme=dark&tab=build
-builds-detail watch/points?theme=dark&tab=build .bc-details .bc-choose"
+builds-detail watch/points?theme=dark&tab=build .bc-details .bc-choose
+builds-choose watch/points?theme=dark&tab=build .bc-details|.bc-choose .d-sheet-ok,.d-sheet-adv-btn
+builds-choose-adv watch/points?theme=dark&tab=build .bc-details|.bc-choose|.d-sheet-adv-btn .d-sheet-ok,.d-sheet-opt"
 if [ "$cockpit" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/ck-*
 	sizes="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620 390x844"
@@ -611,6 +613,7 @@ more-three watch?first=0&theme=dark&needs=0&cmd=eight [data-key=verb-more] .o-fi
 more-needs-cockpit watch?layout=cockpit&theme=dark&needs=2 [data-key=verb-more] .o-filter,.o-item
 more-three-cockpit watch?layout=cockpit&theme=dark&needs=0&cmd=eight [data-key=verb-more] .o-filter,.o-item
 moredefect-clip watch?first=0&theme=dark&needs=2&defect=mf-clip [data-key=verb-more] .o-filter,.o-item
+moredefect-phone watch?first=0&theme=dark&needs=2&defect=mf-phone [data-key=verb-more] .o-filter,.o-item
 menu-tall watch?first=0&theme=dark&defect=mn-tall #btn-more
 menu-tall-light watch?first=0&theme=light&defect=mn-tall #btn-more
 menu-tall-cockpit watch?layout=cockpit&theme=dark&defect=mn-tall #btn-more
@@ -710,12 +713,12 @@ vault-keep-dead watch/vault?theme=dark&vault=keepdead [data-key=select-toggle]|.
 vault-revealing watch/vault?theme=dark&vault=revealing
 vault-revealing-light watch/vault?theme=light&vault=revealing
 vault-revealing-list watch/vault?theme=dark&vault=revealing [data-key=view-toggle] .vt-cell,[data-key=view-toggle]
-vault-reveal-press watch/vault?theme=dark&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-done]
-vault-reveal-none watch/vault?theme=dark&vault=revealnone [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-done]
-vault-reveal-cain watch/vault?theme=dark&vault=revealcain [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-done]
-vault-reveal-multi watch/vault?theme=dark&vault=revealcain [data-key=filters-toggle]|[data-key=unid]|[data-key=select-toggle]|.vt-cell:nth-child(1)|.vt-cell:nth-child(2)|.vt-cell:nth-child(3) [data-key=select-done],.vt-costline
-vault-reveal-multi-light watch/vault?theme=light&vault=revealcain [data-key=filters-toggle]|[data-key=unid]|[data-key=select-toggle]|.vt-cell:nth-child(1)|.vt-cell:nth-child(2)|.vt-cell:nth-child(3) [data-key=select-done],.vt-costline
-vault-reveal-dead watch/vault?theme=dark&vault=revealdead [data-key=select-toggle]|.vt-cell|[data-key=reveal] [data-key=select-done]
+vault-reveal-press watch/vault?theme=dark&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=reveal] .vt-head
+vault-reveal-none watch/vault?theme=dark&vault=revealnone [data-key=select-toggle]|.vt-cell|[data-key=reveal] .vt-head
+vault-reveal-cain watch/vault?theme=dark&vault=revealcain [data-key=select-toggle]|.vt-cell|[data-key=reveal] .vt-head
+vault-reveal-multi watch/vault?theme=dark&vault=revealcain [data-key=filters-toggle]|[data-key=unid]|[data-key=select-toggle]|.vt-cell:nth-child(1)|.vt-cell:nth-child(2)|.vt-cell:nth-child(3) .vt-head,.vt-costline
+vault-reveal-multi-light watch/vault?theme=light&vault=revealcain [data-key=filters-toggle]|[data-key=unid]|[data-key=select-toggle]|.vt-cell:nth-child(1)|.vt-cell:nth-child(2)|.vt-cell:nth-child(3) .vt-head,.vt-costline
+vault-reveal-dead watch/vault?theme=dark&vault=revealdead [data-key=select-toggle]|.vt-cell|[data-key=reveal] .vt-head
 vault-sell-sheet watch/vault?theme=dark&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=sell] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-sell-sheet-light watch/vault?theme=light&vault=revealpress [data-key=select-toggle]|.vt-cell|[data-key=sell] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-more-entry watch?first=0&theme=dark&needs=0 [data-key=verb-more] [data-key=more-vault]
@@ -757,6 +760,7 @@ $buildspages"
 		quest-sheet-*) szs="$sizes 412x780 360x640" ;;
 		quest-*) szs="$sizes 412x780 360x640" ;; # the 360x640 phone too (the Needs you row of a waiting hand-in no longer pushes Orders over, slice S8)
 		short-base*) szs="870x520 1000x560 1100x600 1280x480 1280x620" ;;
+		moredefect-phone) szs="390x844 360x640" ;;
 		more-* | moredefect-*) szs="870x520 1000x560 1100x600 1280x480 1280x620" ;;
 		menudefect-*) szs="1280x620 412x780" ;;
 		menu-tall* | menu-groups*) szs="1280x620 1366x768 900x700 412x780 360x640" ;;

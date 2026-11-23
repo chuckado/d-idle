@@ -69,7 +69,7 @@ export function measure(win, opts) {
     slots.push({ slot: n.dataset.cockpitSlot, x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) });
     if (n.dataset.cockpitSlot === 'band' || n.dataset.cockpitSlot === 'stage') mark(r);
   }
-  for (const n of d.querySelectorAll('[data-cockpit-panel], .d-tabbar, .update-banner')) { const r = vis(n); if (r) mark(r); } // the update banner takes its strip off the frame (--d-banner-h): covered, not dead
+  for (const n of d.querySelectorAll('[data-cockpit-panel], .d-tabbar, .d-nav, .update-banner')) { const r = vis(n); if (r) mark(r); } // the update banner takes its strip off the frame (--d-banner-h): covered, not dead; the shared navigation bar (card uinav2) takes the phone's bottom strip
   let covered = 0;
   for (let i = 0; i < cov.length; i++) covered += cov[i];
   let best = 0, bx = 0, by = 0, prev = new Int16Array(cols + 1), cur = new Int16Array(cols + 1);
@@ -479,7 +479,7 @@ export function charsNow(win) {
 function vaultPage(win, d, vis, cs) {
   const vw = win.innerWidth, vh = win.innerHeight;
   const o = { clipped: [], small: [], covered: [], outside: [], under: '', sheet: '', unnamed: [], holes: [], cells: 0, state: '', open: false, meter: false, mode: '' };
-  const nm = (n) => n.tagName.toLowerCase() + (typeof n.className === 'string' && n.className ? '.' + n.className.trim().split(/\s+/)[0] : '') + ' "' + (n.textContent || '').trim().slice(0, 16) + '"';
+  const nm = (n) => n.tagName.toLowerCase() + (typeof n.className === 'string' && n.className ? '.' + n.className.trim().split(/\s+/)[0] : '') + (n.dataset && n.dataset.key ? '[' + n.dataset.key + ']' : '') + ' "' + (n.textContent || '').trim().slice(0, 16) + '"';
   const root = d.getElementById('vt-root'), main = d.getElementById('vt-main'), head = root && root.querySelector('.vt-head');
   if (!root || !main || !head) { o.clipped.push('the page has no header or list'); return o; }
   const live = (n) => vis(n) && !n.closest('[hidden]');

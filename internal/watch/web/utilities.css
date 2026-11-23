@@ -33,7 +33,7 @@
   .d-main[data-cmode="phone"] .d-slottabs { overflow: visible; }
   .d-main[data-cmode="phone"] .d-slottabs > .d-panel { overflow: visible; max-block-size: none; flex: 0 0 auto; }
   .d-main[data-cmode="phone"] .d-slottabs > .d-panel > .d-slotbody { block-size: auto; overflow: visible; }
-  .d-main[data-cmode="phone"] .d-slottabs :is(.qb-box, .qb-list, .o-list, .o-items, .rows, .zm-list, .zc-scroll, .n-list, .d-slotbody[data-scroll], [data-scroll]) {
+  .d-main[data-cmode="phone"] .d-slottabs :is(.qb-box, .qb-list, .o-list, .o-items, .rows, .zm-list, .zc-scroll, .n-list, .d-slotbody[data-scroll], [data-scroll]:not(.d-tilesheet)) {
     flex: 0 0 auto; max-block-size: none; overflow: visible; overscroll-behavior: auto; scrollbar-gutter: auto; }
   .d-main[data-cmode="phone"] .d-slottabs .o-items { min-block-size: 0; }
   /* a phone is a scrolling page and its panels take their content's height (utilities.css), so the map has a box of its own: the

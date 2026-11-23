@@ -412,7 +412,7 @@ export function mountVault(d) {
     }));
     rbOpts.hidden = !m.total || m.options.length < 2; // one payment (gold only) needs no picker
     const ask = RB.confirming && m.confirm && m.sel === 'gold';
-    rbGo.hidden = !m.total || ask; setBtn(rbGo, m.goLabel || m.go, m.goSub); rbGo.disabled = ro || m.goOff;
+    rbGo.hidden = !m.total || ask; setBtn(rbGo, m.goLabel || m.go || T.reveal, m.goSub); rbGo.disabled = ro || m.goOff;
     why(rbGo, ro ? T.offWhy : m.goOff ? m.why : '', gReveal);
     rbAsk.hidden = rbYes.hidden = rbNo.hidden = !ask; rbAsk.textContent = ask ? m.confirmAsk : '';
     rbWhy.textContent = m.total && m.goOff ? m.why : ''; rbWhy.hidden = !rbWhy.textContent;
