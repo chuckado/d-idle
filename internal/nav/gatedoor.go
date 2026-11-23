@@ -108,7 +108,7 @@ func (n *Navigator) approachGate(ctx context.Context, o *obs, levelNo int, g gat
 	if n.doorApproach[key] >= 2 {
 		return false
 	}
-	cell, ok := n.nearestReachableTo(o, g.at)
+	cell, ok := n.nearestReachableTo(o, g.at, levelNo)
 	if !ok || dist(cell, g.at) > dist(o.pos, g.at)-10 { // no reachable point nearer to the gate: nothing to approach
 		return false
 	}
@@ -176,7 +176,7 @@ func (n *Navigator) doorBetween(o *obs, cands []gate, doors []input.Point) (inpu
 
 // nearestReachableTo is the cell the character can walk to on the known grid that is nearest to target and has some
 // clearance from walls (a plan to the target itself fails, it is cut off, and a failed plan leaves no waypoints).
-func (n *Navigator) nearestReachableTo(o *obs, target input.Point) (input.Point, bool) {
+func (n *Navigator) nearestReachableTo(o *obs, target input.Point, wanted int) (input.Point, bool) {
 	n.planMu.Lock()
 	defer n.planMu.Unlock()
 	f := n.fieldFor(o.lm)
@@ -186,13 +186,14 @@ func (n *Navigator) nearestReachableTo(o *obs, target input.Point) (input.Point,
 		return input.Point{}, false
 	}
 	hops := floodHops(f, sx, sy)
+	strip := otherStrips(o.lm, wanted)
 	best, bestD, found := input.Point{}, math.MaxFloat64, false
 	for i, h := range hops {
 		if h < 0 {
 			continue
 		}
 		x, y := f.pt(int32(i))
-		if f.Clearance(x, y) < 1.5 {
+		if f.Clearance(x, y) < 1.5 || strip.near(x, y) {
 			continue
 		}
 		if d := dist(input.Point{X: x, Y: y}, target); d < bestD {
