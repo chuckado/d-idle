@@ -10,7 +10,7 @@ Every step of the quest board (`data/questboard/act1..5.json`, 134 steps) has an
 
 1. Add or edit its row in `data/stepgrounds/steps.json`: `gen` (start area by name, quest words, ground or pack items, spawns, expected `enter` / `kill` / `kills` / `picked`), or `scenario` (a hand-written id), or `chunk`, or `missing`.
 2. `go run ./cmd/stepcat gen` (writes `tools/provingground/scenarios/stepgrounds_gen.json`), `go run ./cmd/stepcat catalogue`.
-3. Run it on the builder (long lane, one job at a time, a private `PG_DIR`): `labrun tower --lane long --detach --pull provingground-out -- env PG_DIR=/data/d2d-lab/pg-stepgrounds PG_D2D_BIN=/data/d2d-lab/qdbin/d2d-devp23-labverbs tools/provingground/run.sh -id <ids> -class Paladin -seed 11 -parallel 1`.
+3. Run it on the builder (long lane, one job at a time, a private `PG_DIR`): `labrun BUILDER --lane long --detach --pull provingground-out -- env PG_DIR=/data/d2d-lab/pg-stepgrounds PG_D2D_BIN=/data/d2d-lab/qdbin/d2d-devp23-labverbs tools/provingground/run.sh -id <ids> -class Paladin -seed 11 -parallel 1`.
 4. Write the result into `data/stepgrounds/verdicts.json` (GREEN needs a run id and tag V; the check enforces it) and regenerate the catalogue.
 
 Hand-written scenarios of this card live in `tools/provingground/scenarios/stepgrounds.json` (the Smith scenarios). Generated ones are never edited by hand.

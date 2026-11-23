@@ -160,5 +160,101 @@
   "run": "20261123-171725",
   "tag": "V",
   "note": "fight GREEN, the done bit RED (matrix note 38)"
+ },
+ "step.act1.den_of_evil.clear_den.walk_blood_moor": {
+  "verdict": "GREEN",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "Paladin 11, clvl 24 kit"
+ },
+ "step.act1.forgotten_tower.countess.descend_to_cellar": {
+  "verdict": "GREEN",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "Paladin 11, clvl 24 kit"
+ },
+ "step.act1.forgotten_tower.countess.travel_black_marsh": {
+  "verdict": "GREEN",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "Paladin 11, clvl 24 kit"
+ },
+ "step.act1.search_for_cain.scroll.take_scroll": {
+  "verdict": "GREEN",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "Paladin 11, clvl 24 kit"
+ },
+ "step.act1.search_for_cain.scroll.travel_dark_wood": {
+  "verdict": "GREEN",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "Paladin 11, clvl 24 kit"
+ },
+ "step.act1.search_for_cain.stones.travel_stony_field": {
+  "verdict": "GREEN",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "Paladin 11, clvl 24 kit"
+ },
+ "step.act1.sisters_burial_grounds.blood_raven.enter_burial_grounds": {
+  "verdict": "GREEN",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "Paladin 11, clvl 24 kit"
+ },
+ "step.act1.sisters_burial_grounds.blood_raven.kill_blood_raven": {
+  "verdict": "GREEN",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "Paladin 11, clvl 24 kit"
+ },
+ "step.act1.sisters_burial_grounds.blood_raven.travel_cold_plains": {
+  "verdict": "GREEN",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "Paladin 11, clvl 24 kit"
+ },
+ "step.act1.tools_of_the_trade.malus.travel_barracks": {
+  "verdict": "GREEN",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "Paladin 11, clvl 24 kit"
+ },
+ "step.act2.radament.radament.kill_radament": {
+  "verdict": "GREEN",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "Paladin 11, clvl 24 kit"
+ },
+ "step.act2.radament.radament.travel_sewers": {
+  "verdict": "GREEN",
+  "run": "20261123-182327",
+  "tag": "V",
+  "note": "Paladin 11, budget 15 virtual min"
+ },
+ "step.act2.arcane_sanctuary.portal.travel_palace_cellar": {
+  "verdict": "RED",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "no Entered line in 8 min (cause not read, U)"
+ },
+ "step.act2.horadric_staff.shaft.travel_far_oasis": {
+  "verdict": "RED",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "the board parks the chunk: locked until Radament's Lair (needs the prerequisite quest word in the kit)"
+ },
+ "step.act2.horadric_staff.shaft.travel_maggot_lair": {
+  "verdict": "RED",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "same prerequisite lock as travel_far_oasis (U, not read)"
+ },
+ "step.act1.sisters_to_the_slaughter.andariel.travel_catacombs": {
+  "verdict": "RED",
+  "run": "20261123-181503",
+  "tag": "V",
+  "note": "no Entered Catacombs 4 in 12 min from Catacombs 3 (cause not read, U)"
  }
 }

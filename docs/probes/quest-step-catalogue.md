@@ -4,26 +4,26 @@
 
 Steps total 134: step scenario 34 (generated or hand-written), only a chunk-level scenario 59, MISSING 41.
 
-Verdicts: GREEN 10, RED 40, BLOCKED 47 (every MISSING step counts as BLOCKED), PENDING 37 (a scenario that was never run).
+Verdicts: GREEN 22, RED 44, BLOCKED 47 (every MISSING step counts as BLOCKED), PENDING 21 (a scenario that was never run).
 
 MISSING by cause: F1 2; F2 8; F3 15; bot 16; (F<n> is a fork verb request, docs/probes/stepgrounds-fork-request.md; bot is a bot or scenario-format gap; data is missing data.)
 
 | act | step (quest/chunk/step) | scenario | verdict | note |
 |---|---|---|---|---|
 | 1 | `den_of_evil/clear_den/talk_akara` | chunk: act1.den.clear | PENDING |  |
-| 1 | `den_of_evil/clear_den/walk_blood_moor` | step.act1.den_of_evil.clear_den.walk_blood_moor | PENDING |  |
+| 1 | `den_of_evil/clear_den/walk_blood_moor` | step.act1.den_of_evil.clear_den.walk_blood_moor | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit |
 | 1 | `den_of_evil/clear_den/clear_den` | step.act1.den_of_evil.clear_den.clear_den | PENDING |  |
 | 1 | `den_of_evil/clear_den/return_akara` | chunk: act1.den.clear | PENDING |  |
 | 1 | `sisters_burial_grounds/blood_raven/accept_kashya` | chunk: act1.burial.blood_raven | PENDING |  |
-| 1 | `sisters_burial_grounds/blood_raven/travel_cold_plains` | step.act1.sisters_burial_grounds.blood_raven.travel_cold_plains | PENDING |  |
-| 1 | `sisters_burial_grounds/blood_raven/enter_burial_grounds` | step.act1.sisters_burial_grounds.blood_raven.enter_burial_grounds | PENDING |  |
-| 1 | `sisters_burial_grounds/blood_raven/kill_blood_raven` | step.act1.sisters_burial_grounds.blood_raven.kill_blood_raven | PENDING | debug spawn bloodraven works (V probe spawnids.py, hp 113); the quest word after a real kill is not asserted (spawn is a plain unit). |
+| 1 | `sisters_burial_grounds/blood_raven/travel_cold_plains` | step.act1.sisters_burial_grounds.blood_raven.travel_cold_plains | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit |
+| 1 | `sisters_burial_grounds/blood_raven/enter_burial_grounds` | step.act1.sisters_burial_grounds.blood_raven.enter_burial_grounds | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit |
+| 1 | `sisters_burial_grounds/blood_raven/kill_blood_raven` | step.act1.sisters_burial_grounds.blood_raven.kill_blood_raven | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit debug spawn bloodraven works (V probe spawnids.py, hp 113); the quest word after a real kill is not asserted (spawn is a plain unit). |
 | 1 | `sisters_burial_grounds/blood_raven/return_kashya` | chunk: act1.burial.blood_raven | PENDING |  |
-| 1 | `search_for_cain/scroll/travel_dark_wood` | step.act1.search_for_cain.scroll.travel_dark_wood | PENDING |  |
-| 1 | `search_for_cain/scroll/take_scroll` | step.act1.search_for_cain.scroll.take_scroll | PENDING | Pickup half only: the tree that gives the scroll is a level object (F2). |
+| 1 | `search_for_cain/scroll/travel_dark_wood` | step.act1.search_for_cain.scroll.travel_dark_wood | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit |
+| 1 | `search_for_cain/scroll/take_scroll` | step.act1.search_for_cain.scroll.take_scroll | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit Pickup half only: the tree that gives the scroll is a level object (F2). |
 | 1 | `search_for_cain/read/return_town` | chunk: cain.read | PENDING |  |
 | 1 | `search_for_cain/read/talk_akara` | chunk: cain.read | PENDING |  |
-| 1 | `search_for_cain/stones/travel_stony_field` | step.act1.search_for_cain.stones.travel_stony_field | PENDING |  |
+| 1 | `search_for_cain/stones/travel_stony_field` | step.act1.search_for_cain.stones.travel_stony_field | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit |
 | 1 | `search_for_cain/stones/touch_stones` | chunk: cain.stones | PENDING |  |
 | 1 | `search_for_cain/stones/enter_tristram` | chunk: cain.stones | PENDING |  |
 | 1 | `search_for_cain/free_cain/clear_cage_guards` | cain.cage | PENDING |  |
@@ -31,21 +31,21 @@ MISSING by cause: F1 2; F2 8; F3 15; bot 16; (F<n> is a fork verb request, docs/
 | 1 | `search_for_cain/free_cain/return_camp` | chunk: cain.cage | PENDING |  |
 | 1 | `search_for_cain/report/return_town` | chunk: cain.report | PENDING |  |
 | 1 | `search_for_cain/report/talk_akara` | chunk: cain.report | PENDING |  |
-| 1 | `forgotten_tower/countess/travel_black_marsh` | step.act1.forgotten_tower.countess.travel_black_marsh | PENDING |  |
-| 1 | `forgotten_tower/countess/descend_to_cellar` | step.act1.forgotten_tower.countess.descend_to_cellar | PENDING |  |
+| 1 | `forgotten_tower/countess/travel_black_marsh` | step.act1.forgotten_tower.countess.travel_black_marsh | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit |
+| 1 | `forgotten_tower/countess/descend_to_cellar` | step.act1.forgotten_tower.countess.descend_to_cellar | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit |
 | 1 | `forgotten_tower/countess/kill_countess` | MISSING | BLOCKED | F1: `debug spawn countess` answers "no such monster"; the Countess is a level-placed superunique with its own rune treasure class (spawn by superunique name or index, with its drops) |
 | 1 | `tools_of_the_trade/malus/accept_charsi` | chunk: act1.tools.malus.basic | PENDING |  |
-| 1 | `tools_of_the_trade/malus/travel_barracks` | step.act1.tools_of_the_trade.malus.travel_barracks | PENDING |  |
+| 1 | `tools_of_the_trade/malus/travel_barracks` | step.act1.tools_of_the_trade.malus.travel_barracks | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit |
 | 1 | `tools_of_the_trade/malus/kill_smith` | step.act1.smith.stand_click_pickup | BLOCKED |  [V run probe stepdrop.py] the d2d drops the Malus only from the stand (object 108): waits for the bot's stand click (toolstrade a7b2ec8e) also step.act1.smith.malus_pickup GREEN; also step.act1.smith.malus_pickup.sorc GREEN; also step.act1.smith.stand_click_pickup.control GREEN; |
 | 1 | `tools_of_the_trade/malus/return_charsi` | chunk: act1.tools.malus.basic | PENDING |  |
 | 1 | `tools_of_the_trade/malus/pick_imbue` | chunk: act1.tools.malus.basic | PENDING |  |
-| 1 | `sisters_to_the_slaughter/andariel/travel_catacombs` | step.act1.sisters_to_the_slaughter.andariel.travel_catacombs | PENDING |  |
+| 1 | `sisters_to_the_slaughter/andariel/travel_catacombs` | step.act1.sisters_to_the_slaughter.andariel.travel_catacombs | RED |  [V run 20261123-181503] no Entered Catacombs 4 in 12 min from Catacombs 3 (cause not read, U) |
 | 1 | `sisters_to_the_slaughter/andariel/kill_andariel` | drill.andariel.stand | GREEN |  [V run 20261123-165901] clvl 30 stand-in, matrix note 35 |
 | 1 | `act1_done/sail_east/travel_town` | drill.act1.sail | GREEN |  [V run 20261123-002950-167e] Paladin and Sorceress, matrix table |
 | 1 | `act1_done/sail_east/talk_warriv` | drill.act1.sail | GREEN |  [V run 20261123-002950-167e] Paladin and Sorceress, matrix table |
 | 2 | `radament/radament/talk_atma` | chunk: drill.act2.radament | GREEN |  |
-| 2 | `radament/radament/travel_sewers` | step.act2.radament.radament.travel_sewers | PENDING |  |
-| 2 | `radament/radament/kill_radament` | step.act2.radament.radament.kill_radament | PENDING | debug spawn radament works (V probe, hp 278); whether the Book of Skill drops from a spawned Radament is U (the Smith case showed quest drops can be object-driven). |
+| 2 | `radament/radament/travel_sewers` | step.act2.radament.radament.travel_sewers | GREEN |  [V run 20261123-182327] Paladin 11, budget 15 virtual min |
+| 2 | `radament/radament/kill_radament` | step.act2.radament.radament.kill_radament | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit debug spawn radament works (V probe, hp 278); whether the Book of Skill drops from a spawned Radament is U (the Smith case showed quest drops can be object-driven). |
 | 2 | `radament/radament/use_book` | MISSING | BLOCKED | bot: no assertion kind reads the unspent skill point count (scenario format); the book drop itself is U |
 | 2 | `radament/radament/return_atma` | drill.act2.radament.handin | GREEN |  [V run matrix-2026-11-23] matrix table row |
 | 2 | `tainted_sun/amulet/travel_lost_city` | chunk: drill.act2.amulet | GREEN |  |
@@ -54,14 +54,14 @@ MISSING by cause: F1 2; F2 8; F3 15; bot 16; (F<n> is a fork verb request, docs/
 | 2 | `tainted_sun/amulet/take_amulet` | drill.act2.amulet | GREEN |  [V run 20261123-063211-a223] matrix note 23 |
 | 2 | `horadric_staff/cube/travel_halls_of_the_dead` | chunk: drill.act2.cube | GREEN |  |
 | 2 | `horadric_staff/cube/take_cube` | drill.act2.cube | GREEN |  [V run 20261123-052834] matrix table |
-| 2 | `horadric_staff/shaft/travel_far_oasis` | step.act2.horadric_staff.shaft.travel_far_oasis | PENDING |  |
-| 2 | `horadric_staff/shaft/travel_maggot_lair` | step.act2.horadric_staff.shaft.travel_maggot_lair | PENDING |  |
+| 2 | `horadric_staff/shaft/travel_far_oasis` | step.act2.horadric_staff.shaft.travel_far_oasis | RED |  [V run 20261123-181503] the board parks the chunk: locked until Radament's Lair (needs the prerequisite quest word in the kit) |
+| 2 | `horadric_staff/shaft/travel_maggot_lair` | step.act2.horadric_staff.shaft.travel_maggot_lair | RED |  [V run 20261123-181503] same prerequisite lock as travel_far_oasis (U, not read) |
 | 2 | `horadric_staff/shaft/take_shaft` | drill.act2.shaft | RED |  [V run 20261123-014519] Maggot Lair 1 arrival nook, seed 7 needed for the chest (matrix notes 9, 34) |
 | 2 | `horadric_staff/assemble/open_cube` | drill.act2.assemble | BLOCKED |  [V run 20261123-034952] GREEN to Cain's menu; the done bit after the talk is U (matrix) |
 | 2 | `horadric_staff/assemble/transmute` | drill.act2.assemble | BLOCKED |  [V run 20261123-034952] GREEN to Cain's menu; the done bit after the talk is U (matrix) |
 | 2 | `horadric_staff/assemble/talk_cain` | drill.act2.assemble | BLOCKED |  [V run 20261123-034952] GREEN to Cain's menu; the done bit after the talk is U (matrix) |
 | 2 | `arcane_sanctuary/portal/talk_jerhyn` | MISSING | BLOCKED | bot: no talk-step assertion (the scenario format reads quest words, not a dialog); Jerhyn is not drilled |
-| 2 | `arcane_sanctuary/portal/travel_palace_cellar` | step.act2.arcane_sanctuary.portal.travel_palace_cellar | PENDING |  |
+| 2 | `arcane_sanctuary/portal/travel_palace_cellar` | step.act2.arcane_sanctuary.portal.travel_palace_cellar | RED |  [V run 20261123-181503] no Entered line in 8 min (cause not read, U) |
 | 2 | `arcane_sanctuary/portal/enter_arcane` | chunk: drill.act2.summoner | RED |  |
 | 2 | `summoner/kill_summoner/travel_arcane` | chunk: drill.act2.summoner | RED |  |
 | 2 | `summoner/kill_summoner/find_summoner` | chunk: drill.act2.summoner | RED |  |
