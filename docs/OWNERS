@@ -2449,8 +2449,10 @@ tools/dev-update-host.sh  credit-runner  buildhosts3
 tools/dev-update.sh  credit-runner  buildhosts3
 tools/emu  credit-runner  emurebuild
 tools/emu/am_batch.sh  credit-runner  areamon
+tools/emu/am_batch.sh  credit-runner  qdmatrix
 tools/emu/am_env.sh  credit-runner  areamon
 tools/emu/am_model.py  credit-runner  areamon
+tools/emu/am_model.py  credit-runner  qdmatrix
 tools/emu/bs_model.py  credit-runner  boss1
 tools/emu/bs_spawn.sh  credit-runner  boss1
 tools/emu/d35_  credit-runner  decomp35

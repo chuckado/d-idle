@@ -432,7 +432,7 @@
 | allochandoff | proposed | - | `internal/points`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`docs/autoalloc.md`<br>`tools/provingground/scenarios/autoalloc.json` | - |
 | opsquest | proposed | - | `cmd/d2bot/ops*.go`<br>`cmd/d2bot/main.go`<br>`cmd/d2bot/questwire.go`<br>`internal/ops/**`<br>`internal/questboard/audit.go`<br>`docs/operator.md`<br>`tools/questloop.sh`<br>`tools/questloop_test.sh` | - |
 | uisettings | proposed | - | `internal/watch/web/settings.js`<br>`internal/watch/web/nav.js`<br>`internal/watch/web/nav.json`<br>`internal/watch/web/nav.css`<br>`internal/watch/web/sheet.js`<br>`internal/watch/settingsjs_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`docs/ui/settings/`<br>`docs/ui-design-system.md` | - |
-| qdmatrix | proposed | - | `docs/probes/quest-drill-matrix-2026-11-23.md`<br>`tools/provingground/scenarios/questdrill.json`<br>`internal/power/archetype.go`<br>`internal/power/skilldamage_test.go`<br>`internal/questboard/state.go`<br>`internal/questboard/state_test.go`<br>`internal/d2dsrc/items.go`<br>`internal/d2dsrc/srv_test.go`<br>`internal/nav/nav.go`<br>`internal/task/act2.go`<br>`internal/task/act2_test.go`<br>`data/questboard/act2.json`<br>`internal/nav/act2hints.go`<br>`internal/nav/act2hints_test.go`<br>`internal/nav/exit_test.go`<br>`internal/task/act4.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_s7b_test.go`<br>`tools/probes/presets.py`<br>`internal/saves/progress.go`<br>`tools/probes/objectlist.py`<br>`cmd/d2bot/task_test.go`<br>`internal/nav/exit.go`<br>`internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`internal/nav/exitgoal_test.go`<br>`internal/nav/mouthgate.go`<br>`internal/bot/goal.go`<br>`internal/bot/goal_acts_test.go`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/setup_test.go`<br>`cmd/d2bot/task.go`<br>`cmd/d2bot/acts_test.go`<br>`internal/talk/talk.go`<br>`internal/talk/talk_test.go` | - |
+| qdmatrix | proposed | - | `docs/probes/quest-drill-matrix-2026-11-23.md`<br>`tools/provingground/scenarios/questdrill.json`<br>`internal/power/archetype.go`<br>`internal/power/skilldamage_test.go`<br>`internal/questboard/state.go`<br>`internal/questboard/state_test.go`<br>`internal/d2dsrc/items.go`<br>`internal/d2dsrc/srv_test.go`<br>`internal/nav/nav.go`<br>`internal/task/act2.go`<br>`internal/task/act2_test.go`<br>`data/questboard/act2.json`<br>`internal/nav/act2hints.go`<br>`internal/nav/act2hints_test.go`<br>`internal/nav/exit_test.go`<br>`internal/task/act4.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_s7b_test.go`<br>`tools/probes/presets.py`<br>`tools/emu/am_batch.sh`<br>`tools/emu/am_model.py`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/setup_test.go`<br>`internal/saves/progress.go`<br>`tools/probes/objectlist.py`<br>`cmd/d2bot/task_test.go`<br>`internal/nav/exit.go`<br>`internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go`<br>`internal/nav/exitgoal_test.go`<br>`internal/nav/mouthgate.go`<br>`internal/bot/goal.go`<br>`internal/bot/goal_acts_test.go`<br>`cmd/d2bot/task.go`<br>`cmd/d2bot/acts_test.go`<br>`internal/talk/talk.go`<br>`internal/talk/talk_test.go` | - |
 | uisettings2 | proposed | - | `docs/design/fable-review-2026-11-22/e11-deletion-plan.md` | - |
 | uialerts | proposed | - | `internal/watch/web/alerts-feed.js`<br>`internal/watch/testdata/alertsfeed_test.cjs`<br>`internal/watch/settingsjs_test.go`<br>`internal/watch/web/nav.js`<br>`internal/watch/http_view.go`<br>`docs/ui-design-system.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -495,14 +495,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- c685b3211 11-23 17:05 `Merge agent/qd14: questdrill: the Smith drill with layoutRead and the sandbox knobs` (qd14)
+- a70080796 11-23 16:58 `Merge origin/main into qd14` (-)
 - 0c06ee62d 11-23 16:50 `Merge agent/qd15: d2bot: live waypoint bits are read without a save; objectlist probe` (qd15)
+- b2f3fc973 11-23 16:48 `Merge remote-tracking branch 'origin/main' into agent/qd14` (-)
 - 9ee8e56e5 11-23 16:21 `Merge agent/handin: Merge branch 'main' into handin` (handin)
 - 888cea997 11-23 16:19 `Merge branch 'main' into handin` (-)
 - caa1d8621 11-23 16:09 `Merge agent/toolstrade28: toolstrade28: board floor of the Barracks in the same data as the Summoner's, one test` (toolstrade28)
 - 23ef66a46 11-23 16:04 `Merge remote-tracking branch 'origin/main' into agent/toolstrade28` (-)
 - 129194737 11-23 15:57 `Merge agent/qd13: Merge branch 'main' into qdmatrix` (qd13)
 - 3c6e0f8c8 11-23 15:56 `Merge branch 'main' into qdmatrix` (-)
-- 6c2360b29 11-23 15:49 `Merge agent/toolstrade27: toolstrade27: town portal crossings are no map edges, Barracks numbers` (toolstrade27)
-- fd1bcdfbc 11-23 12:07 `Merge agent/routes3: routes3: delete unused GET /api/bestiary, /api/atlas, /api/unlocks (user approved 2026-11-23); engine kept, guard test added` (routes3)
-- 6cbe0947f 11-23 11:54 `Merge agent/e11a2: E11a2: needs-you list grows, alerts badge opens Settings Alerts, real page-scroll must-fail fixture, guards for stream layout and senses_units.js` (e11a2)
 <!-- statusgen:end -->
