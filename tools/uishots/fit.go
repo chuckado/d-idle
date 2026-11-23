@@ -289,6 +289,19 @@ func (r fitResult) phoneScroll() bool {
 	return false
 }
 
+var underRe = regexp.MustCompile(`top (-?\d+) bottom (-?\d+) \(header ends (-?\d+), window (\d+)\)`)
+
+// sheetOnlyBelow reports a "leaves the free area" entry whose sheet starts at or below the header and only ends past the window.
+func sheetOnlyBelow(x string) bool {
+	m := underRe.FindStringSubmatch(x)
+	if m == nil {
+		return false
+	}
+	top, _ := strconv.Atoi(m[1])
+	hdr, _ := strconv.Atoi(m[3])
+	return top >= hdr
+}
+
 // judge returns what is wrong with a measured page; an empty list is a fit.
 func (r fitResult) judge() []string {
 	if r.Flow { // the navigation pages (nav-NAME): a document that scrolls on purpose; the page's own fit lane judges its content, this one the navigation
@@ -426,6 +439,9 @@ func (r fitResult) judge() []string {
 			bad = append(bad, "sheet text is cut, not wrapped: "+x)
 		}
 		for _, x := range o.Under {
+			if r.phoneScroll() && sheetOnlyBelow(x) {
+				continue // a sheet inside a tile below the fold of the scrolling phone page: reached by scrolling, not under the header
+			}
 			bad = append(bad, "a sheet leaves the free area (under the header or past the window): "+x)
 		}
 		for _, x := range o.Charter {

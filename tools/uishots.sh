@@ -585,6 +585,8 @@ chars-switching watch/characters?theme=dark&chars=switching
 chars-switching-light watch/characters?theme=light&chars=creating
 chars-measured watch/characters?theme=dark&chars=measured
 chars-empty watch/characters?theme=dark&chars=empty
+chars-unsaved watch/characters?theme=dark&chars=unsaved
+chars-unsaved-light watch/characters?theme=light&chars=unsaved
 chars-off watch/characters?theme=dark&chars=off
 chars-off-light watch/characters?theme=light&chars=off
 chars-nosave watch/characters?theme=dark&chars=nosave

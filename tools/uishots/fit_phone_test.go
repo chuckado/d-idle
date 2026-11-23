@@ -52,6 +52,25 @@ func TestFitPhoneCockpitScrolls(t *testing.T) {
 			t.Errorf("%s %s: ok=%v %v, want %q", c.name, c.hits, ok, lines, c.want)
 		}
 	}
+	// a sheet inside a tile below the fold of the scrolling phone page is reached by scrolling; one under the header, or on a wide window, is not
+	for _, c := range []struct{ name, w, h, under, want string }{
+		{"fit-chars-more-entry-360x640", "360", "640", "orders top 413 bottom 664 (header ends 104, window 640)", ""},
+		{"fit-chars-more-entry-360x640", "360", "640", "orders top 60 bottom 400 (header ends 104, window 640)", "leaves the free area"},
+		{"fit-chars-more-entry-1366x768", "1366", "768", "orders top 413 bottom 900 (header ends 60, window 768)", "leaves the free area"},
+	} {
+		sh := "1200"
+		if c.w == "1366" {
+			sh = "768"
+		}
+		j := `{"vw":` + c.w + `,"vh":` + c.h + `,"scrollH":` + sh + `,"scrollW":` + c.w + `,"overflow":[],"slots":[{"slot":"band"},{"slot":"phoneTabs"}],"covered":96,"hole":8,"holeAt":[0,0],"ov":{"open":["sheet:orders"],"under":["` + c.under + `"]}}`
+		dir := t.TempDir()
+		n, body := fitDump(c.name, j)
+		os.WriteFile(filepath.Join(dir, n+".html"), []byte(body), 0o644)
+		lines, ok, _ := fitDir(dir)
+		if c.want == "" && !ok || c.want != "" && (ok || !strings.Contains(strings.Join(lines, "\n"), c.want)) {
+			t.Errorf("%s %s: ok=%v %v, want %q", c.name, c.under, ok, lines, c.want)
+		}
+	}
 	// a wide page that scrolls is still red
 	dir := t.TempDir()
 	wide := `{"vw":1366,"vh":768,"scrollH":1500,"scrollW":1366,"overflow":[],"slots":[{"slot":"band"},{"slot":"phoneTabs"}],"covered":96,"hole":8,"holeAt":[0,0]}`
