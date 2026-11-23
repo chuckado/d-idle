@@ -2,6 +2,7 @@ package bot
 
 import (
 	"context"
+	"d2lod-bot/internal/boss"
 	"errors"
 	"strings"
 	"sync"
@@ -516,5 +517,27 @@ func TestBossRunRestartsAtOnceAfterADrink(t *testing.T) {
 	}
 	if gap := starts[1].Sub(starts[0]); gap >= bossRestartGap {
 		t.Fatalf("the second start waited %v after a drink", gap)
+	}
+}
+
+// A boss that is only found by his layout preset says so when quests.layoutRead is 0 (the sandbox saw a mystery "boss not
+// found in the arena"). Must fail without the hint in KillBoss. Blood Raven (no named preset) never gets it.
+func TestBossNotFoundNamesTheLayoutKnob(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		knob int
+		want bool
+	}{{boss.NameSmith, 0, true}, {boss.NameCountess, 0, true}, {boss.NameSmith, 1, false}, {boss.NameBloodRaven, 0, false}} {
+		g := newRig(t)
+		g.r.e.Tune.Quests.LayoutRead = tc.knob
+		g.r.loop.brWorldFn = func(context.Context) (task.World, error) { return brWorld(30), nil }
+		g.r.d.Task = &TaskDeps{Boss: func(ctx context.Context, name string) error { return boss.ErrBossNotFound }}
+		err := taskActs{r: g.r}.KillBoss(context.Background(), tc.name)
+		if err == nil {
+			t.Fatalf("%s: no error", tc.name)
+		}
+		if got := strings.Contains(err.Error(), "needs quests.layoutRead"); got != tc.want {
+			t.Errorf("%s knob %d: hint %v, want %v: %v", tc.name, tc.knob, got, tc.want, err)
+		}
 	}
 }

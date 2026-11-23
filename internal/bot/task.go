@@ -710,6 +710,9 @@ func (a taskActs) KillBoss(ctx context.Context, name string) (ret error) {
 		err := td.Boss(ctx, name)
 		r.bossRun.Store(false)
 		if err != nil {
+			if errors.Is(err, boss.ErrBossNotFound) && r.e.Tune.Quests.LayoutRead == 0 && boss.NeedsLayoutRead(name) {
+				err = fmt.Errorf("%w: needs quests.layoutRead 1 (his spawn point is read from the level layout; without it the hero can only explore for him)", err)
+			}
 			if ctx.Err() != nil {
 				r.e.Log.Info("boss run cancelled from outside", "boss", name, "cause", context.Cause(ctx), "ran", r.e.Clock.Now().Sub(r.bossStart[name]).Round(time.Second).String())
 				// A drink is no abort: the loop drinks and the run goes on at once. The restart gap is for runs that end
