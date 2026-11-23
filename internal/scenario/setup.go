@@ -151,6 +151,10 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 	}
 	if p.Merc != nil {
 		add("hired merc", fmt.Sprintf("debug merc hire %d", *p.Merc))
+		if p.MercLevel > 0 {
+			add("merc level", fmt.Sprintf("debug merc level %d", p.MercLevel))
+			add("merc life", "debug merc heal")
+		}
 		tags["merc"] = true
 	}
 	if p.LifePct > 0 && p.LifePct < 100 {

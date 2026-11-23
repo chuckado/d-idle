@@ -77,3 +77,29 @@ func TestWaypointAllAndBit(t *testing.T) {
 		}
 	}
 }
+
+// pre.merc_level raises the lab merc to a realistic level and heals it after the hire (devp23 labverbs).
+func TestMercLevelFollowsTheHire(t *testing.T) {
+	zero := 0
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		s := Scenario{ID: "x.merc", Kind: KindBehaviour, Pre: Pre{Merc: &zero, MercLevel: 17}}
+		su, err := BuildSetup(s, class, 3)
+		if err != nil {
+			t.Fatal(err)
+		}
+		hire, lvl, heal := -1, -1, -1
+		for i, v := range su.Verbs {
+			switch v.Line {
+			case "debug merc hire 0":
+				hire = i
+			case "debug merc level 17":
+				lvl = i
+			case "debug merc heal":
+				heal = i
+			}
+		}
+		if hire < 0 || lvl < hire || heal < lvl {
+			t.Errorf("%s: hire %d level %d heal %d", class, hire, lvl, heal)
+		}
+	}
+}
