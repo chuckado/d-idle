@@ -2,6 +2,9 @@ package watch
 
 import (
 	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
 	"testing"
 )
 
@@ -51,5 +54,25 @@ func TestTokenContrastAA(t *testing.T) {
 	// the checker itself: two close greys fail, black on white passes
 	if contrast("#777777", "#808080") >= 4.5 || contrast("#000000", "#ffffff") < 20 {
 		t.Error("the contrast function is wrong")
+	}
+}
+
+// Every stylesheet that moves something with a literal duration (an animation or a transition that does not take its time from the
+// --d-dur-* tokens, which are 0 ms under prefers-reduced-motion) says what happens when the reader asks for no motion (card uia11y).
+func TestMotionHonoursReducedMotion(t *testing.T) {
+	files, _ := filepath.Glob("web/*.css")
+	more, _ := filepath.Glob("web/panels/*/*.css")
+	moving := regexp.MustCompile(`(?m)^[^/\n]*\b(animation|transition):[^;}]*`)
+	for _, f := range append(files, more...) {
+		b, _ := os.ReadFile(f)
+		s := string(b)
+		for _, m := range moving.FindAllString(s, -1) {
+			if strings.Contains(m, "var(--d-dur") || strings.Contains(m, "transition: none") || strings.Contains(m, "animation: none") {
+				continue
+			}
+			if !strings.Contains(s, "prefers-reduced-motion") {
+				t.Errorf("%s moves with a literal duration and has no prefers-reduced-motion rule: %s", f, strings.TrimSpace(m))
+			}
+		}
 	}
 }
