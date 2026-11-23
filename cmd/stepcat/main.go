@@ -49,6 +49,8 @@ type Gen struct {
 	Ground  []string         `json:"ground,omitempty"` // item codes given at the hero's feet (debug give <code> 2)
 	Pack    []string         `json:"pack,omitempty"`
 	Spawn   []map[string]any `json:"spawn,omitempty"`
+	Objects []map[string]any `json:"objects,omitempty"` // {"class": objects.txt id, "x","y"}: debug object add (devp25)
+	Assert  []map[string]any `json:"assert,omitempty"`  // extra raw assertions of the scenario format
 	Goals   string           `json:"goals,omitempty"`
 	Enter   string           `json:"enter,omitempty"`  // regexp of the area name the bot must log "Entered ..." for
 	Kill    string           `json:"kill,omitempty"`   // monster name the bot must log "combat kill" for

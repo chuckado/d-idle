@@ -121,6 +121,8 @@ type Pre struct {
 	Vault *VaultSeed `json:"vault_records,omitempty"`
 	// Spawn puts monsters beside the hero after the field warp (`debug spawn`, SETUP; field start only, the run is CHEATED).
 	Spawn []Spawn `json:"spawn,omitempty"`
+	// Objects puts level objects down after the field warp (`debug object add`, devp25 stepverbs; SETUP, field start only).
+	Objects []ObjectAdd `json:"objects,omitempty"`
 	// Stats are raw `debug stat <id> <value>` writes after the level (stat ids of stats.txt, values as the game stores them:
 	// life and mana are fixed point, value x 256). SETUP only: a hero that stands for a geared one in a mechanics drill
 	// (card qdmatrix), the run is CHEATED.
@@ -131,9 +133,18 @@ type Pre struct {
 
 // Spawn is one `debug spawn` of Pre.Spawn: a monsters.txt id, how many, and "" (normal), "champion" or "unique".
 type Spawn struct {
-	Monster string `json:"monster"`
+	// Super names a SuperUniques.txt row (`debug spawn super <name>`, devp25 stepverbs); Monster, N and Mod stay empty then.
+	Super   string `json:"super,omitempty"`
+	Monster string `json:"monster,omitempty"`
 	N       int    `json:"n,omitempty"`
 	Mod     string `json:"mod,omitempty"`
+}
+
+// ObjectAdd is one `debug object add <class> [x y]`: an objects.txt id, at the hero (X and Y 0) or at that cell.
+type ObjectAdd struct {
+	Class int `json:"class"`
+	X     int `json:"x,omitempty"`
+	Y     int `json:"y,omitempty"`
 }
 
 // QWord is one quest record (fork layout: act 1 records 0..6, docs/forkcheats.md) and its 16-bit word.

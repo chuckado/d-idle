@@ -125,6 +125,9 @@ func gen(root string) error {
 		if len(g.Spawn) > 0 {
 			pre["spawn"] = g.Spawn
 		}
+		if len(g.Objects) > 0 {
+			pre["objects"] = g.Objects
+		}
 		if g.Goals != "" {
 			trig["goals"] = g.Goals
 		} else {
@@ -142,6 +145,9 @@ func gen(root string) error {
 		}
 		if g.Picked != "" {
 			asserts = append(asserts, map[string]any{"kind": "log_line", "pattern": "^loot: clicked .*item=" + g.Picked, "min": 1, "why": "the bot clicked the item on the ground (S)"})
+		}
+		for _, a := range g.Assert {
+			asserts = append(asserts, a)
 		}
 		budget := g.Budget
 		if budget == 0 {
