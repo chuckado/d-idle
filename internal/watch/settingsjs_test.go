@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -118,5 +119,48 @@ func TestSettingsLinksLootRules(t *testing.T) {
 	}
 	if !strings.Contains(string(mustReadFS(t, "web/settings.js")), "/watch?live=1&lootrules=1") {
 		t.Error("settings.js has no link to the Loot rules sheet")
+	}
+}
+
+// The keyboard walk (card uikeys): Tab order, wrap, Shift+Tab, native controls, Escape and focus back on the Settings and More sheets;
+// and no positive tabindex anywhere in the viewer's pages and scripts (the order is the document order).
+func TestKeyboardWalk(t *testing.T) {
+	node, err := exec.LookPath("node")
+	if err != nil {
+		t.Skip("no node")
+	}
+	dir := t.TempDir()
+	for src, dst := range map[string]string{"web/sheet.js": "sheet.cjs", "web/toast.js": "toast.cjs", "web/settings.js": "settings.cjs", "web/nav.js": "nav.cjs", "web/nav.json": "nav.json"} {
+		os.WriteFile(filepath.Join(dir, dst), mustReadFS(t, src), 0o600)
+	}
+	for _, f := range []string{"nav_dom.cjs", "keywalk_test.cjs"} {
+		os.WriteFile(filepath.Join(dir, f), mustRead(t, "testdata/"+f), 0o600)
+	}
+	out, err := exec.Command(node, filepath.Join(dir, "keywalk_test.cjs"), dir).CombinedOutput()
+	if err != nil {
+		t.Fatalf("node: %v\n%s", err, out)
+	}
+	var res struct{ Fails []string }
+	if err := json.Unmarshal(out[strings.Index(string(out), "{"):], &res); err != nil {
+		t.Fatalf("%v\n%s", err, out)
+	}
+	for _, f := range res.Fails {
+		t.Error(f)
+	}
+}
+
+func TestNoPositiveTabindex(t *testing.T) {
+	bad := regexp.MustCompile(`tabindex="[1-9]|tabIndex\s*=\s*[1-9]|tabindex', '[1-9]`)
+	for _, dirGlob := range []string{"web/*.js", "web/panels/*/*.js", "web/*.html", "*.go"} {
+		files, _ := filepath.Glob(dirGlob)
+		for _, f := range files {
+			if strings.HasSuffix(f, "_test.go") {
+				continue
+			}
+			b, _ := os.ReadFile(f)
+			if m := bad.Find(b); m != nil {
+				t.Errorf("%s sets a positive tabindex (%s): the tab order is the document order", f, m)
+			}
+		}
 	}
 }
