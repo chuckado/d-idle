@@ -448,3 +448,18 @@ func TestSevenTombsWaitForTheSummoner(t *testing.T) {
 		t.Fatalf("seven_tombs requires %v", q.Requires)
 	}
 }
+
+// The Summoner is walked without Teleport: every class family needs clvl 28 or more first (SME 2026-11-23, EXP).
+func TestSummonerFloorIsTwentyEight(t *testing.T) {
+	b := mustBoard(t)
+	q, err := b.Quest("summoner")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		floor, ok, err := b.Floor(q, class)
+		if err != nil || !ok || floor < 28 {
+			t.Errorf("%s: floor %d ok %v err %v", class, floor, ok, err)
+		}
+	}
+}
