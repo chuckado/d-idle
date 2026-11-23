@@ -1050,6 +1050,7 @@ internal/bot/questboard.go  credit-runner  bsm7
 internal/bot/questboard.go  credit-runner  cainchain
 internal/bot/questboard.go  credit-runner  equipswap
 internal/bot/questboard.go  credit-runner  failspend
+internal/bot/questboard.go  credit-runner  qdmatrix
 internal/bot/questboard.go  credit-runner  questrun
 internal/bot/questboard.go  credit-runner  quests10
 internal/bot/questboard.go  credit-runner  quests3
@@ -1062,6 +1063,7 @@ internal/bot/questboard_goal_test.go  credit-runner  cainchain
 internal/bot/questboard_goal_test.go  credit-runner  questrun
 internal/bot/questboard_s7b_test.go  credit-runner  cain5b
 internal/bot/questboard_s7b_test.go  credit-runner  equipswap
+internal/bot/questboard_s7b_test.go  credit-runner  qdmatrix
 internal/bot/questboard_s7b_test.go  credit-runner  quests7b
 internal/bot/questboard_test.go  credit-runner  failspend
 internal/bot/questboard_test.go  credit-runner  quests4
@@ -1701,6 +1703,7 @@ internal/task/act2_test.go  credit-runner  qdmatrix
 internal/task/act3.go  credit-runner  equipswap
 internal/task/act3.go  credit-runner  quests7b
 internal/task/act4.go  credit-runner  equipswap
+internal/task/act4.go  credit-runner  qdmatrix
 internal/task/banote_test.go  credit-runner  cainfix3
 internal/task/cainreenter_test.go  credit-runner  cainchain
 internal/task/cainstones_test.go  credit-runner  cain45
