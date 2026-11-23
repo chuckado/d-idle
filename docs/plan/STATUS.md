@@ -425,6 +425,7 @@
 | fitfix2 | proposed | - | `tools/uishots`<br>`tools/uishots.sh`<br>`internal/watch/web/utilities.css`<br>`internal/watch/web/vault.js`<br>`internal/watch/testdata/vault_reveal.mjs` | - |
 | fitfix3 | proposed | - | `tools/uishots`<br>`tools/uishots.sh`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/testdata/vault_logic.mjs` | - |
 | allocfix | proposed | - | `cmd/d2bot/autoallocwire.go`<br>`cmd/d2bot/autoallocwire_test.go`<br>`internal/points`<br>`internal/plandata/build-necromancer_summoner_normal30.json`<br>`docs/plan/data/build-necromancer_summoner_normal30.json`<br>`internal/watch/pointsui.go`<br>`internal/watch/web/points.js`<br>`docs/autoalloc.md`<br>`tools/provingground/scenarios/autoalloc.json` | - |
+| charselectdoc | proposed | - | `docs/charselect.md` | - |
 | allocprobe | proposed | - | `docs/probes/autoalloc-necro-summoner-default-2026-11-23.md` | - |
 | toolstrade5 | proposed | - | `internal/task/route.go`<br>`internal/task/route_test.go`<br>`internal/bot/routeguard.go`<br>`tools/provingground/scenarios/act1more.json`<br>`tools/probes/strips.py`<br>`tools/probes/strips_test.py`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-boss-skills | deferred | - | `docs/probes/fid/fid-boss-skills.md` | - |
@@ -460,6 +461,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ddf370c43 11-22 23:29 `Merge agent/charselectdoc: Merge branch 'main' into charselectdoc` (charselectdoc)
+- 43239ea24 11-22 23:26 `Merge branch 'main' into charselectdoc` (-)
 - 712b80886 11-22 23:18 `Merge agent/toolstrade5: Merge branch 'main' into toolstrade5` (toolstrade5)
 - 8bb64c665 11-22 23:16 `Merge branch 'main' into toolstrade5` (-)
 - 18d4de4c4 11-22 23:06 `Merge agent/buildchoose: Merge branch 'main' into TASK-845` (buildchoose)
@@ -468,6 +471,4 @@
 - b9e53b381 11-22 23:00 `Merge origin/main into buildchoose` (-)
 - 756c9a7a7 11-22 22:50 `Merge agent/allocfix: Merge branch 'main' into allocfix` (allocfix)
 - 58f127ca6 11-22 22:49 `Merge branch 'main' into allocfix` (-)
-- e6b5d3a48 11-22 22:37 `Merge agent/fitfix3: Merge branch 'main' into fitfix3` (fitfix3)
-- c559fd26f 11-22 22:36 `Merge branch 'main' into fitfix3` (-)
 <!-- statusgen:end -->
