@@ -80,3 +80,33 @@ func mustRead(t *testing.T, p string) []byte {
 	}
 	return b
 }
+
+// web/alerts-feed.js in node (skipped without it; card uialerts): off means no request; the sound or granted notifications turn the feed on.
+func TestAlertsFeedJS(t *testing.T) {
+	node, err := exec.LookPath("node")
+	if err != nil {
+		t.Skip("no node")
+	}
+	dir := t.TempDir()
+	os.WriteFile(filepath.Join(dir, "alertsfeed.cjs"), mustReadFS(t, "web/alerts-feed.js"), 0o600)
+	os.WriteFile(filepath.Join(dir, "alertsfeed_test.cjs"), mustRead(t, "testdata/alertsfeed_test.cjs"), 0o600)
+	out, err := exec.Command(node, filepath.Join(dir, "alertsfeed_test.cjs"), dir).CombinedOutput()
+	if err != nil {
+		t.Fatalf("node: %v\n%s", err, out)
+	}
+	var res struct{ Fails []string }
+	if err := json.Unmarshal(out[strings.Index(string(out), "{"):], &res); err != nil {
+		t.Fatalf("%v\n%s", err, out)
+	}
+	for _, f := range res.Fails {
+		t.Error(f)
+	}
+}
+
+func mustReadFS(t *testing.T, p string) []byte {
+	b, err := webFS.ReadFile(p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return b
+}
