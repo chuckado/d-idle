@@ -79,9 +79,9 @@
  },
  "drill.act2.summoner": {
   "verdict": "RED",
-  "run": "20261123-175925",
+  "run": "20261123-204518",
   "tag": "V",
-  "note": "Arcane platforms: no path without Teleport or the pads"
+  "note": "pad hop built; lab grid of level 74 is a hairline, no pad reachable"
  },
  "drill.act2.duriel": {
   "verdict": "BLOCKED",
@@ -325,20 +325,20 @@
  },
  "drill.act3s.lam_esen": {
   "verdict": "RED",
-  "run": "20261123-182232",
+  "run": "20261123-185925",
   "tag": "V",
-  "note": "no exit to Ruined Temple (level 94 from 80)"
+  "note": "Ruined Temple tile does not fire for the walking hero; cancel-marks-gate-bad fixed"
  },
  "drill.act3s.blade": {
   "verdict": "BLOCKED",
-  "run": "20261123-182530",
+  "run": "20261123-195316",
   "tag": "V",
-  "note": "Flayer Jungle search for class 251 exceeds the budget"
+  "note": "run cut before its virtual budget; layoutRead knob added"
  },
  "drill.act3s.golden_bird": {
   "verdict": "RED",
-  "run": "20261123-184433",
+  "run": "20261123-201219",
   "tag": "V",
-  "note": "no chunk starts: no eligible area"
+  "note": "not startable: Jade Figurine not in the pack (lab give of j34 unverified)"
  }
 }
