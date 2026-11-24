@@ -83,7 +83,30 @@ func smParkText(q Quest, r Run) string {
 	if r.Code == "died_too_often" {
 		n = r.Deaths
 	}
+	if r.Code == "hold_timeout" {
+		return holdTimeoutText(r.Hold, r.HoldWhy, r.HoldMin)
+	}
 	return Sentence(r.Code, map[string]string{"quest": q.Title, "n": fmt.Sprint(n), "why": "the step kept failing"})
+}
+
+// holdBudget is the minutes the hold's code may wait (its row of the reason table).
+func holdBudget(code string) int {
+	info, _ := ReasonOf(code)
+	return info.BudgetMin
+}
+
+// holdTimeoutText is the sentence of a hold_timeout park: the minutes it waited and the hold's own words with the producer's
+// reason filled in (V live 2026-11-24, tools_of_the_trade/malus: "Still waiting after 0 minutes: {hold}", the counters and
+// the hold of the run were not carried into the stored park). A park stored before the hold was kept says so without a gap.
+func holdTimeoutText(hold, why string, minutes int) string {
+	if hold == "" {
+		return "Held too long without getting ready. Retry to train again."
+	}
+	h := Sentence(hold, map[string]string{"why": why})
+	if strings.Contains(h, "{") && why != "" {
+		h = why // a hold whose sentence needs other arguments: the producer's words say it
+	}
+	return Sentence("hold_timeout", map[string]string{"n": fmt.Sprint(minutes), "hold": h})
 }
 
 // smFlush writes the latches and regressions derive found in one save.
@@ -222,6 +245,9 @@ func (e *Exec) smPark(quest, chunk, code string, rs *runState) {
 		if r := m.find(quest, chunk, d); r != nil {
 			r.Failures, r.Deaths = rs.failures, rs.deaths
 			r.Release = e.o.Release
+			if code == "hold_timeout" {
+				r.Hold, r.HoldWhy, r.HoldMin = rs.hold, rs.holdWhy, holdBudget(rs.hold)
+			}
 		}
 		return nil
 	})
@@ -340,7 +366,7 @@ func (e *Exec) holdLocked(d Decision, rs *runState, res StepResult) {
 	rs.holdWhy = res.Why
 	rs.started = true
 	if info.BudgetMin > 0 && now.Sub(rs.holdFrom) >= time.Duration(info.BudgetMin)*time.Minute {
-		rs.blocked = Sentence("hold_timeout", map[string]string{"n": fmt.Sprint(info.BudgetMin), "hold": Sentence(res.Code, nil)})
+		rs.blocked = holdTimeoutText(res.Code, res.Why, info.BudgetMin)
 		e.o.Log("quest board: parked "+ChunkKey(d.Quest, d.Chunk), "chunk", ChunkKey(d.Quest, d.Chunk), "why", rs.blocked, "hold", res.Code)
 		e.smPark(d.Quest, d.Chunk, "hold_timeout", rs)
 	}
