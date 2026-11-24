@@ -81,6 +81,9 @@ func TestWarpReadExactCellBecomesTheClickPoint(t *testing.T) {
 		t.Fatal(err)
 	}
 	e := w.Current().Exits[0]
+	if !e.HasExact || e.Exact != [2]float64{13.5, 4.5} {
+		t.Fatalf("exact %+v has %v", e.Exact, e.HasExact)
+	}
 	if !e.HasClick || e.Click.X != 67 || e.Click.Y != 22 {
 		t.Fatalf("click %+v has %v (%s)", e.Click, e.HasClick, w.LastTriggerNote)
 	}
