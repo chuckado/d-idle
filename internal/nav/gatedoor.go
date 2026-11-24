@@ -139,8 +139,18 @@ func (n *Navigator) useDoorAt(ctx context.Context, o *obs, at input.Point, level
 				mode = int(u.Mode)
 			}
 		}
-		fl, _ := after.lm.Grid.Flags(at.X, at.Y)
+		fl, known := after.lm.Grid.Flags(at.X, at.Y)
 		n.log.Info("nav: door used", "door", at, "target", tg.ID, "mode", mode, "cellFlags", fl, "pos", after.pos)
+		if known && fl&d2map.BlockWalk == 0 {
+			// the door is open: what was out of reach before may be reachable now, so the tries other doors spent on a walk
+			// that could not reach them are forgiven (V live 2026-11-24, Catacombs Level 2: the door (190,220) behind the opened
+			// door (200,210) had used both its tries on unreachable walks and was never tried again)
+			for k := range n.doorTried {
+				if k != (d2map.Point{X: at.X, Y: at.Y}) {
+					delete(n.doorTried, k)
+				}
+			}
+		}
 	}
 	return true
 }
