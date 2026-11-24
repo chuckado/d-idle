@@ -32,8 +32,13 @@ func (f *fakeDesk) call(s string) questboard.Reply {
 	}
 	return r
 }
-func (f *fakeDesk) View() questboard.View               { f.mu.Lock(); defer f.mu.Unlock(); return f.view }
-func (f *fakeDesk) Start(q, c string) questboard.Reply  { return f.call("start " + q + " " + c) }
+func (f *fakeDesk) View() questboard.View              { f.mu.Lock(); defer f.mu.Unlock(); return f.view }
+func (f *fakeDesk) Start(q, c string) questboard.Reply { return f.call("start " + q + " " + c) }
+func (f *fakeDesk) StartAnyway(q, c string) questboard.Reply {
+	r := f.call("try " + q + " " + c)
+	r.Override = "too hard for now"
+	return r
+}
 func (f *fakeDesk) HandIn(q, c string) questboard.Reply { return f.call("handin " + q + " " + c) }
 func (f *fakeDesk) Cancel(q, c string) questboard.Reply { return f.call("cancel " + q + " " + c) }
 func (f *fakeDesk) Retry(q, c string) questboard.Reply  { return f.call("retry " + q + " " + c) }
@@ -372,4 +377,41 @@ func TestRetryOnlyWhenParked(t *testing.T) {
 		t.Fatalf("a done chunk named: %+v", r)
 	}
 	// the refusal books nothing: six real retries still pass later
+}
+
+// The owner's try anyway through the socket: its own audit path with the stated reason and the skipped refusal, the same
+// rate limits as every start (6 per quest per hour), never on another verb, never in a measured run. Two quests stand in
+// for two builds: the verb is quest and class generic.
+func TestTryAnywayIsAuditedAndRateLimited(t *testing.T) {
+	for _, quest := range []string{"a", "b"} {
+		d := &fakeDesk{rep: questboard.Reply{OK: true, Reason: "started anyway"}}
+		s, now := newSrv(d, nil)
+		r := s.Handle(Request{Verb: "start", Quest: quest, Why: "owner wants to see", TryAnyway: true})
+		if !r.OK || len(d.calls) != 1 || !strings.HasPrefix(d.calls[0], "try "+quest) {
+			t.Fatalf("%s: %+v calls %v", quest, r, d.calls)
+		}
+		if len(d.rec) != 1 || d.rec[0].Path != "operator/try-anyway" || !strings.Contains(d.rec[0].Why, "override: try anyway: owner wants to see") ||
+			!strings.Contains(d.rec[0].Why, "refused: too hard for now") {
+			t.Fatalf("%s audit: %+v", quest, d.rec)
+		}
+		if r := s.Handle(Request{Verb: "retry", Quest: quest, Why: "x", TryAnyway: true}); r.Code != "body" {
+			t.Errorf("try_anyway on retry: %+v", r)
+		}
+		// six tries within the hour pass the per-quest limit, the seventh is refused; a minute between them for the cooldown
+		for i := 0; i < PerQuestHour-1; i++ {
+			*now = now.Add(2 * time.Minute)
+			if r := s.Handle(Request{Verb: "start", Quest: quest, Why: "again", TryAnyway: true}); !r.OK {
+				t.Fatalf("%s try %d: %+v", quest, i+2, r)
+			}
+		}
+		*now = now.Add(2 * time.Minute)
+		if r := s.Handle(Request{Verb: "start", Quest: quest, Why: "again", TryAnyway: true}); r.Code != "rate_limited" {
+			t.Errorf("%s seventh try: %+v", quest, r)
+		}
+	}
+	d := &fakeDesk{}
+	s, _ := newSrv(d, map[string]string{"D2BOT_RUN": "g2"})
+	if r := s.Handle(Request{Verb: "start", Quest: "a", Why: "x", TryAnyway: true}); r.Code != "measured_run" || len(d.calls) != 0 {
+		t.Errorf("measured run: %+v", r)
+	}
 }

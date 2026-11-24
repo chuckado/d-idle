@@ -503,14 +503,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 8634a7c62 11-24 11:32 `Merge agent/vaultcompare: vaultcompare: no !important (uilint)` (vaultcompare)
+- e8aad594d 11-24 11:27 `Merge main into agent/vaultcompare` (-)
+- 2b865551d 11-24 11:02 `Merge agent/pipelineaudit: pipeline audit 2026-11-24 (docs only)` (pipelineaudit)
+- c4e2d292b 11-24 11:01 `Merge branch 'main' into pipelineaudit` (-)
+- 1ac82ed9c 11-24 10:56 `Merge main into agent/vaultcompare` (-)
+- 9dd0d270f 11-24 10:45 `Merge agent/noconflict: stepcat verdicts split into per-group files; merge-conflict guidance` (noconflict)
+- a4f4b304b 11-24 10:44 `Merge branch 'main' into noconflict` (-)
+- ce6ccea3b 11-24 10:35 `Merge agent/toolstrade44: toolstrade44: the vault poll timing ceiling is skipped under -race (the gate failure was this, not a data race)` (toolstrade44)
+- bc349eac7 11-24 10:07 `Merge remote-tracking branch 'origin/main' into agent/toolstrade44` (-)
 - 343e273de 11-24 09:50 `Merge agent/fidbatch2: Merge branch 'main' into fidbatch` (fidbatch2)
-- ee9aead3d 11-24 09:48 `Merge branch 'main' into fidbatch` (-)
-- a20981c60 11-24 09:34 `Merge agent/qd21: qdmatrix: notes 59 to 62 (Golden Bird GREEN, Harrogath gate, Duriel staff verbs and tomb scan), verdicts, deploy list` (qd21)
-- 627f0398a 11-24 09:26 `Merge origin/main` (-)
-- 782567e37 11-24 08:54 `Merge agent/toolstrade43: Merge branch 'main' into toolstrade43` (toolstrade43)
-- 0de3d58bb 11-24 08:52 `Merge branch 'main' into toolstrade43` (-)
-- 339a10d86 11-24 08:41 `Merge agent/toolstrade42: toolstrade42: Andariel gate carries the Barracks floor, card` (toolstrade42)
-- 58da490a4 11-24 01:09 `Merge agent/qd20: qdmatrix: notes 55 to 58 (Blade, Acts 4 and 5, devp27 smoke), verdicts, deploy list` (qd20)
-- 163f40a77 11-24 00:55 `Merge origin/main` (-)
-- 9f333ea8c 11-23 23:53 `Merge agent/toolstrade41: Merge branch 'main' into toolstrade41` (toolstrade41)
 <!-- statusgen:end -->

@@ -935,6 +935,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [pg-ops-mgcache.md](process/pg-ops-mgcache.md): Cached whole-repo gate: measurement, and the nightly uncached race run (card mgcache, TASK-747) (status: current, 2026-11-21. Design: `docs/design/fable-review-2026-11-21/proving-ground-gate.md` sections 4.2 and...)
 - [pg-ops-mglanes.md](process/pg-ops-mglanes.md): Lane policy on the builder: quotas, merge priority, two long slots (card mglanes, TASK-749) (status: current, rolled out 2026-11-21 (warn-only for one day, then enforced). Design:...)
 - [pg-ops-mgwatchdog.md](process/pg-ops-mgwatchdog.md): Merge queue watchdog (card mgwatchdog, TASK-752) (status: current, rolled out 2026-11-21. Design: `docs/design/fable-review-2026-11-21/proving-ground-gate.md`...)
+- [pipeline-audit-2026-11-24.md](process/pipeline-audit-2026-11-24.md): Pipeline audit, 2026-11-24 (status: current (card pipelineaudit, Opus reviewer, docs only). Scope: the engineering pipeline as it ran...)
 - [plugin-pin.md](process/plugin-pin.md): Matt Pocock skills plugin: pin
 - [points-verbs-devp14.md](process/points-verbs-devp14.md): Fork additions wanted for stat and skill points (devp14), and what the bot does without them (status: proposal for the fork-rebase routine (card agencyp0, 2026-11-19). Tags: V verified in the source of the...)
 - [proving-ground.md](process/proving-ground.md): The Proving Ground: scenarios that play the real bot and read the game (status: current (card provingground, 2026-11-19). Source: the design review `docs/design/fable-review-2026-11-19/`...)
@@ -1171,6 +1172,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [treefix3-2026-11-19.md](probes/treefix3-2026-11-19.md): treefix3: why the Inifuss tree was not found for 17 hours (2026-11-19)
 - [vault-equip-2026-11-23.md](probes/vault-equip-2026-11-23.md): Vault equip: why it took many taps and left gear in the backpack (2026-11-23, card vaultequip)
 - [vault-perf-2026-11-23.md](probes/vault-perf-2026-11-23.md): Vault page load time, 2026-11-23 (status: findings + fixes (branch agent/vaultperf). Sandbox read-only: file sizes and logs only; no credentials, no...)
+- [vault-rings-2026-11-24.md](probes/vault-rings-2026-11-24.md): Why the Vault never holds a ring (2026-11-24)
 - [vault-spike-2026-11-16.md](probes/vault-spike-2026-11-16.md): Ethereal Vault V0 spike: capture and create on the d2d fork (result) (status: RESULT, 2026-11-16 (task TASK-578). Design: `docs/design/loot-vault-2026-11-16.md` section 1.7. Tags: V =...)
 - [video-feed-2026-11-15.md](probes/video-feed-2026-11-15.md): Probe: lossless delta feed on real d2d frames (card videofeed, 2026-11-15)
 - [viewer-brightness-2026-11-17.md](probes/viewer-brightness-2026-11-17.md): Probe: why the watch viewer looks "a bit too bright" (card brightness, 2026-11-17)

@@ -5,7 +5,7 @@
 // Reveal and Sell (slice V6) also only queue: the price is shown before the click (revealPlan) and the states come from the GET. The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
 // fed the rows as an inventory view); every text comes from /watch/vault.json or the API and goes in through textContent.
 // Every press is read back: the list is fetched again and what it says is what the page shows.
-import { PAGE, equipPlan, equipOneTap, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, identifyAllPlan, revealBarModel, revealMethods, revealPlan, sellAllChip, sellAllConfirm, sellAllPlan, sellLabel, sellPlan, sellWhy, mergeQuotes, toQuery, toTipView, when } from '/watch/vault-logic.js';
+import { PAGE, clearDelta, comparePlan, nextCompare, validCompare, equipPlan, equipOneTap, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, identifyAllPlan, revealBarModel, revealMethods, revealPlan, sellAllChip, sellAllConfirm, sellAllPlan, sellLabel, sellPlan, sellWhy, mergeQuotes, toQuery, toTipView, when } from '/watch/vault-logic.js';
 
 export const ROUTE = '/api/vault';
 const POLL_MS = 6000;
@@ -44,7 +44,8 @@ export function mountVault(d) {
     b.removeAttribute('title');
   }
   const S = { sv: {}, eth: null, f: d.filters || defaultFilters(), items: [], total: 0, view: null, facets: { kinds: T.kinds || [], types: [] }, err: false, loading: true, sel: createSelection(),
-    detail: null, detailId: '', mode: 'grid', fopen: false, sheet: null, msg: '', msgLevel: '', sig: '', lastLoaded: 0, tip: null };
+    detail: null, detailId: '', mode: 'grid', fopen: false, sheet: null, msg: '', msgLevel: '', sig: '', lastLoaded: 0, tip: null, cmp: 'off', cmpData: null, cmpBusy: false, follow: 0 };
+  try { S.cmp = validCompare(win && win.localStorage && win.localStorage.getItem('vt-compare')); } catch (e) { /* storage blocked: compare starts off */ }
   const root = d.root || doc.body;
 
   // ---- header: title, capacity meter, the placeholder Upgrade ----
@@ -702,6 +703,7 @@ export function mountVault(d) {
     return out;
   }
   function drawDetail() {
+    const fk = doc.activeElement && aside.contains && aside.contains(doc.activeElement) && doc.activeElement.dataset ? doc.activeElement.dataset.key : ''; // a redraw must not drop the focus (the Compare press loads data and draws again)
     aside.replaceChildren();
     const it = S.items.find((x) => x.id === S.detailId);
     aside.hidden = !it; body.dataset.detail = it ? '1' : ''; // docked (wide) or a bottom sheet (phone) only while an item is open; the grid has the width otherwise
@@ -719,6 +721,9 @@ export function mountVault(d) {
     const ul = el('ul', 'vt-dlines');
     lines(it, det).forEach((l) => ul.appendChild(el('li', '', l)));
     card.appendChild(ul);
+    const tipLines = tooltipLines(it); // what the floating tooltip says, here on a phone where that tooltip would sit under this sheet
+    if (tipLines.length) { const tl = el('ul', 'vt-dlines vt-dtip'); tl.dataset.key = 'd-tip'; tipLines.forEach((l) => tl.appendChild(el('li', '', l))); card.insertBefore(tl, ul); }
+    card.appendChild(compareBlock(it));
     const inst = !!(S.view && S.view.act && S.view.act.sell && S.view.act.sell.instant);
     if (inst && (it.state === 'recorded' || it.sell === 'queued') && !it.pin) { // the engine's price for this item, asked once (a sale pays exactly this)
       const g = S.sv[it.id] > 0 ? S.sv[it.id] : 0;
@@ -752,6 +757,84 @@ export function mountVault(d) {
     card.appendChild(row);
     card.appendChild(dWhys);
     aside.appendChild(card);
+    if (S.cmp !== 'off' && !S.cmpBusy && (!S.cmpData || S.cmpData.id !== it.id || now() - S.cmpData.at > 20000)) loadCompare(it);
+    keepInView(it.id);
+    if (fk) { const again = aside.querySelector ? aside.querySelector('[data-key="' + fk + '"]') : null; if (again && again.focus) again.focus({ preventScroll: true }); }
+  }
+
+  // The base and requirement lines of the inventory tooltip (inventory-tip.js build), once each: the property lines are the list below them.
+  function tooltipLines(it) {
+    const api = win && win.d2InvTip;
+    if (!api || typeof api.lines !== 'function') return [];
+    const row = toTipView([it]).view.backpack[0];
+    return (api.lines(row) || []).filter((l) => l.k === 'type' || l.k === 'base' || l.k === 'req').map((l) => l.t);
+  }
+
+  // ---- Compare: one button, off -> hero -> merc -> off, the choice kept on this device ----
+  function saveCmp() { try { if (win && win.localStorage) win.localStorage.setItem('vt-compare', S.cmp); } catch (e) { /* storage blocked */ } }
+  async function loadCompare(it) {
+    S.cmpBusy = true;
+    const id = it.id;
+    S.cmpData = { id, at: now(), sh: undefined, inv: undefined };
+    const [sh, inv] = await Promise.all([d.get('/api/vault/equip/' + encodeURIComponent(id)), d.get('/api/inventory')]);
+    S.cmpBusy = false;
+    S.cmpData = { id, at: now(), sh: sh && sh.slots ? sh : false, inv: inv && inv.equipment ? inv : false };
+    if (S.detailId === id) { S.follow = 3; drawDetail(); }
+  }
+  function compareBlock(it) {
+    const box = el('div', 'vt-cmp'); box.dataset.key = 'd-cmp';
+    const b = btn(fmt(T.cmpBtn, { mode: T.cmpModes[S.cmp] }), { key: 'd-compare', variant: 'ghost' });
+    b.setAttribute('aria-label', T.cmpAria[S.cmp]);
+    b.addEventListener('click', () => {
+      S.cmp = nextCompare(S.cmp); saveCmp(); S.follow = 3;
+      drawDetail();
+      const nb = aside.querySelector('[data-key="d-compare"]'); if (nb && nb.focus) nb.focus({ preventScroll: true });
+    });
+    box.appendChild(b);
+    const live = el('div', 'vt-cmp-body'); live.setAttribute('aria-live', 'polite'); box.appendChild(live);
+    const dta = S.cmpData && S.cmpData.id === it.id ? S.cmpData : null;
+    const cand = toTipView([it]).view.backpack[0];
+    const cmp = (n, o) => (win && win.d2InvTip && win.d2InvTip.compare ? win.d2InvTip.compare(n, o) : []);
+    const p = comparePlan(S.cmp, dta ? dta.sh : undefined, dta ? dta.inv : undefined, cand, cmp, T);
+    if (p.state === 'off') return box;
+    if (p.state === 'loading') { live.appendChild(el('p', 'vt-cmp-note', T.cmpLoading)); return box; }
+    if (p.state === 'refused') { const r = el('p', 'vt-cmp-note', p.why); r.dataset.state = p.mercNo ? 'merc-no' : 'refused'; live.appendChild(r); return box; }
+    if (!it.identified) live.appendChild(el('p', 'vt-cmp-note', T.cmpUnid));
+    p.blocks.forEach((bl) => {
+      const sec = el('section', 'vt-cmp-slot'); sec.dataset.slot = bl.slot;
+      sec.appendChild(el('h3', '', fmt(T.cmpHead, { who: T.cmpWho[p.who], slot: bl.label })));
+      sec.appendChild(el('p', 'vt-cmp-worn', bl.empty ? T.cmpEmpty : T.cmpWorn + ': ' + bl.worn)).dataset.empty = bl.empty ? '1' : '';
+      if (bl.note) sec.appendChild(el('p', 'vt-cmp-note', bl.note));
+      if (bl.rows.length) {
+        const ul = el('ul', 'vt-cmp-rows');
+        bl.rows.forEach((r) => {
+          const word = r.tone === 'up' ? T.cmpBetter : r.tone === 'dn' ? T.cmpWorse : T.cmpSame;
+          const li = el('li', '', r.label + ': ' + r.old + ' > ' + r.now + ' ');
+          li.dataset.tone = r.tone;
+          const dl = el('span', 'vt-cmp-d', r.delta); const w = el('span', 'd-sr-only', ' ' + word); li.append(dl, w);
+          ul.appendChild(li);
+        });
+        sec.appendChild(ul);
+      }
+      live.appendChild(sec);
+    });
+    return box;
+  }
+
+  // On a phone the open item's sheet covers the lower part of the screen: scroll the page so the selected cell stays above it
+  // (the cell is never hidden by the sheet, wherever it sits in the grid). visualViewport is read so a zoomed or keyboard-shrunk
+  // view counts; the scroll is instant (no motion to reduce).
+  function keepInView(id) {
+    if (!(S.follow > 0) || !win || !id || aside.hidden || !aside.getBoundingClientRect) return;
+    S.follow--;
+    const cs = win.getComputedStyle ? win.getComputedStyle(aside) : null;
+    if (!cs || cs.position !== 'fixed') return; // docked beside the grid on a wide window
+    const c = grid.querySelector('[data-vid="' + (win.CSS && win.CSS.escape ? win.CSS.escape(id) : id) + '"]');
+    if (!c) return;
+    const vv = win.visualViewport, top = vv ? vv.offsetTop : 0;
+    const edge = Math.min(aside.getBoundingClientRect().top, vv ? vv.offsetTop + vv.height : Infinity);
+    const dy = clearDelta(c.getBoundingClientRect(), edge, 0, top);
+    if (dy && win.scrollBy) win.scrollBy(0, dy);
   }
   function draw() {
     syncFilters(); drawHead(); drawBar(); drawState(); drawList(); drawMore(); drawDetail();
@@ -794,7 +877,7 @@ export function mountVault(d) {
 
   // ---- selection and the card ----
   function openDetail(id) {
-    S.detailId = id; S.detail = null;
+    S.detailId = id; S.detail = null; S.follow = 3;
     drawList(); drawDetail();
     d.get('/api/vault/item/' + encodeURIComponent(id)).then((j) => { if (j && j.item && S.detailId === id) { S.detail = j; drawDetail(); } });
   }

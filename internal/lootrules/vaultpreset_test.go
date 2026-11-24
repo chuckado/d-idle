@@ -57,3 +57,32 @@ func TestStarterHasNoVaultAndPackVaultIsRefused(t *testing.T) {
 		t.Error("a vault rule in the pack scope must be refused")
 	}
 }
+
+// Rings, amulets and magic or rare charms reach the vault while unidentified (they are always unidentified on the
+// ground); the Starter picked them up to identify them and none was ever recorded (docs/probes/vault-rings-2026-11-24.md).
+func TestVaultPresetUnidentifiedJewelry(t *testing.T) {
+	for _, cls := range []string{"Sorceress", "Paladin"} {
+		for _, all := range []bool{false, true} {
+			c, err := Compile(VaultPreset(all), cls, "")
+			if err != nil {
+				t.Fatal(err)
+			}
+			cx := &Ctx{Class: cls, CLvl: 20, Gold: 5000, Needs: func(string, *Item) bool { return false }}
+			for _, tc := range []struct {
+				label string
+				it    Item
+			}{
+				{"magic ring", Item{Code: "rin", Types: []string{"ring"}, Quality: "magic"}},
+				{"rare amulet", Item{Code: "amu", Types: []string{"amul"}, Quality: "rare"}},
+				{"magic small charm", Item{Code: "cm1", Types: []string{"scha"}, Quality: "magic"}},
+				{"magic grand charm", Item{Code: "cm3", Types: []string{"lcha"}, Quality: "magic"}},
+				{"identified good ring", Item{Code: "rin", Types: []string{"ring"}, Quality: "magic", Hidden: HIdentified | HStats}},
+			} {
+				tc.it.Place = PlaceGround
+				if d := c.Decide(&tc.it, cx); d.Action != Vault {
+					t.Errorf("%s all=%v %s: %+v", cls, all, tc.label, d)
+				}
+			}
+		}
+	}
+}

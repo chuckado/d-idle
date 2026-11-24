@@ -28,7 +28,7 @@ func BarracksBeyond(a Area) bool { return a >= Barracks && a <= routeLastArea }
 // BarracksWhy says why the Barracks and the areas past it are closed to w ("" = open or no rule): the class level floor,
 // then the max life floor while the life is readable (route.barracks*, Normal only).
 func BarracksWhy(w World) string {
-	if !normalDiff(w) {
+	if !normalDiff(w) || TryActive() {
 		return ""
 	}
 	if w.BarracksMinLevel > 0 && w.Level < w.BarracksMinLevel {
@@ -64,7 +64,7 @@ func AreaGuarded(a Area) bool { return RouteGuarded(a) || TowerGuarded(a) }
 // towerFloor is the clvl the tower needs: 0 when the guard is off or the difficulty is not Normal. A living merc opens
 // it at any level with TowerNeedsMerc (the old rule), else lowers the floor to TowerMinLevelMerc (0 = no lowering).
 func towerFloor(w World) int {
-	if w.TowerMinLevel <= 0 || !normalDiff(w) {
+	if w.TowerMinLevel <= 0 || !normalDiff(w) || TryActive() {
 		return 0
 	}
 	if routeMercOK(w) {
@@ -90,6 +90,9 @@ func towerLifeUnreadable(w World) bool {
 // TowerLevelWhy says why the tower is closed on level grounds ("" = open): clvl below towerFloor, or without a merc
 // max life below TowerMinLife (`no merc, life 149 < 150`). A fallback floor says so (`max life unreadable`).
 func TowerLevelWhy(w World) string {
+	if TryActive() {
+		return ""
+	}
 	f := towerFloor(w)
 	if f == 0 {
 		return ""
@@ -202,7 +205,7 @@ func routeMercOK(w World) bool { return w.HasMerc || (w.MercKnown && w.MercAlive
 // routeFloor is the clvl the road needs: 0 when the guard is off or the difficulty is not Normal; with a living merc
 // RouteMinLevelMerc (0 = any level, the old rule), else RouteMinLevel.
 func routeFloor(w World) int {
-	if w.RouteMinLevel <= 0 || !normalDiff(w) {
+	if w.RouteMinLevel <= 0 || !normalDiff(w) || TryActive() {
 		return 0
 	}
 	if routeMercOK(w) {

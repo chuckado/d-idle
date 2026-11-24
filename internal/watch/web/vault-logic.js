@@ -435,3 +435,54 @@ export function equipOneTap(sh) {
   return (sh.slots || []).filter((x) => x.can).every((x) => !x.worn && !x.note); // a note is the two-hander pushing a shield off
 }
 export function equipTaps(sh) { return equipOneTap(sh) ? 1 : 2; }
+
+// ---- the item sheet on a phone: keep the selected cell in view, and compare with what is worn ----
+
+// clearDelta is how far the page must scroll (positive: down) so the cell sits fully in the band between the top bar
+// (top px) and the bottom sheet (sheetH px high, in a viewport vh px high), margin m px from both. The cell is at rect
+// {top, bottom}. When the band is shorter than the cell the cell's top wins. 0 when it is in the band already.
+export function clearDelta(rect, vh, sheetH, top, m = 8) {
+  const lo = (top || 0) + m, hi = vh - (sheetH || 0) - m;
+  if (rect.top < lo) return rect.top - lo;
+  if (rect.bottom > hi) return Math.min(rect.bottom - hi, rect.top - lo);
+  return 0;
+}
+
+export const COMPARE_MODES = ['off', 'hero', 'merc'];
+// nextCompare is the one button: off, then the hero, then the merc, then off. An unknown stored value is off.
+export function nextCompare(mode) { const i = COMPARE_MODES.indexOf(mode); return COMPARE_MODES[(i + 1) % COMPARE_MODES.length] || 'off'; }
+export function validCompare(mode) { return COMPARE_MODES.includes(mode) ? mode : 'off'; }
+
+// comparePlan says what the compare block of an open item draws. mode: off|hero|merc. sh: GET /api/vault/equip/<id> (false or
+// null when the bot has no such route): sh.slots are the hero's slots for the item (both ring slots for a ring), sh.merc the
+// merc side. inv: GET /api/inventory (equipment, merc.equipment). cand: the item as the tooltip sees it (toTipView row).
+// cmp(cand, worn) is the inventory tooltip's own comparison (inventory-tip.js compare: rows {label, old, now, delta, tone}); the
+// numbers are never worked out here. Result: {state: off|loading|refused|ok, who, why, blocks: [{slot, label, worn, empty, note, rows}]}.
+export function comparePlan(mode, sh, inv, cand, cmp, T) {
+  mode = validCompare(mode);
+  if (mode === 'off') return { state: 'off', blocks: [] };
+  if (sh === undefined || inv === undefined) return { state: 'loading', who: mode, blocks: [] };
+  if (!sh || !inv) return { state: 'refused', who: mode, why: T.cmpNoData, blocks: [] };
+  if (!sh.wearable) return { state: 'refused', who: mode, why: sh.why || T.cmpNotWorn, blocks: [] };
+  const block = (slot, label, worn, note) => {
+    const b = { slot, label, note: note || '', worn: worn ? (worn.name || worn.code || '') : '', empty: !worn, rows: [] };
+    if (worn) b.rows = cmp(cand, worn) || [];
+    return b;
+  };
+  if (mode === 'merc') {
+    const m = sh.merc;
+    if (!m || !m.owned) return { state: 'refused', who: mode, why: (m && m.why) || T.cmpNoMerc, blocks: [] };
+    if (!m.can) { const known = !!m.kind; return { state: 'refused', who: mode, why: known ? f2(T.cmpMercNo, { kind: m.kind }) : (m.why || T.cmpMercNo), mercNo: known, blocks: [] }; } // no kind: he is out of view, the server's sentence says so
+    const worn = inv.merc && inv.merc.equipment && inv.merc.equipment[m.slot] || null;
+    return { state: 'ok', who: mode, blocks: [block(m.slot, T.cmpSlots[m.slot] || m.slot, worn, '')] };
+  }
+  const eq = inv.equipment || {};
+  const blocks = (sh.slots || []).map((x) => {
+    let note = x.note || '';
+    if (x.note && x.slot === 'rhand' && eq.lhand) note = f2(T.cmpTakesOff, { name: eq.lhand.name || eq.lhand.code || '' }); // a two-hander pushes the shield off
+    else if (!x.can && x.why) note = x.why;
+    return block(x.slot, x.label || x.slot, eq[x.slot] || null, note);
+  });
+  if (!blocks.length) return { state: 'refused', who: mode, why: T.cmpNotWorn, blocks: [] };
+  return { state: 'ok', who: mode, blocks };
+}

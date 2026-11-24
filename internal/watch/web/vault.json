@@ -509,5 +509,39 @@
   "goldCost": "Reveal {n} items for {cost} gold (stash {stash})",
   "goldPartial": "; the stash pays for {k}",
   "goldShort": "Not enough gold in the stash ({price} each, you have {stash})",
-  "goldArm": "Pay {cost} gold? Press again"
+  "goldArm": "Pay {cost} gold? Press again",
+  "cmpBtn": "Compare: {mode}",
+  "cmpModes": {
+    "off": "off",
+    "hero": "hero",
+    "merc": "merc"
+  },
+  "cmpAria": {
+    "off": "Compare with equipped gear: off. Press to compare with your hero.",
+    "hero": "Compare with equipped gear: hero. Press to compare with your merc.",
+    "merc": "Compare with equipped gear: merc. Press to turn compare off."
+  },
+  "cmpLoading": "Reading what is worn...",
+  "cmpNoData": "Could not read what is worn right now.",
+  "cmpNotWorn": "This item is not worn, so there is nothing to compare.",
+  "cmpNoMerc": "No mercenary is hired.",
+  "cmpMercNo": "Merc cannot wear this (a {kind} cannot use that, or no merc slot takes it).",
+  "cmpTakesOff": "Takes off {name} (a two-hander uses both hands)",
+  "cmpEmpty": "Nothing equipped",
+  "cmpWorn": "Equipped",
+  "cmpUnid": "Unidentified: only the base stats are compared.",
+  "cmpBetter": "better",
+  "cmpWorse": "worse",
+  "cmpSame": "same",
+  "cmpHead": "{who}: {slot}",
+  "cmpWho": {
+    "hero": "Hero",
+    "merc": "Merc"
+  },
+  "cmpSlots": {
+    "mhead": "helm",
+    "mtorso": "armour",
+    "mrhand": "weapon",
+    "mlhand": "shield"
+  }
 }

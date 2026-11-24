@@ -23,6 +23,8 @@ type Opts struct {
 	AndarielMinLevel int
 	// MaxRetreats overrides Script.MaxRetreats when above 0 (Tuning.Boss.BRMaxRetreats).
 	MaxRetreats int
+	// FloorOff, if set and true, skips the clvl floor of the script: the owner's one-shot try anyway (ADR 0030 amended 2026-11-24).
+	FloorOff func() bool
 }
 
 func (o Opts) canTeleport() bool {
@@ -113,7 +115,7 @@ func (r *runner) run(ctx context.Context) error {
 	if v.Dead {
 		return ErrDead
 	}
-	if f := r.floor(v.Difficulty); f > 0 && v.Level < f {
+	if f := r.floor(v.Difficulty); f > 0 && v.Level < f && !(r.o.FloorOff != nil && r.o.FloorOff()) {
 		return fmt.Errorf("%w: %s needs clvl %d, have %d", ErrTooWeak, r.s.Name, f, v.Level)
 	}
 	if err := r.approach(ctx, v); err != nil {
