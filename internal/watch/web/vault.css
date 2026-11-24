@@ -144,6 +144,19 @@
   .vt-dname.q-magic { --q: var(--d-q-magic); } .vt-dname.q-rare { --q: var(--d-q-rare); } .vt-dname.q-set { --q: var(--d-q-set); }
   .vt-dname.q-unique { --q: var(--d-q-unique); } .vt-dname.q-crafted { --q: var(--d-q-crafted); } .vt-dname.q-low { --q: var(--d-q-low); }
   .vt-dstate, .vt-dfound { margin: 0; color: var(--d-text-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  /* a phone: the floating tooltip is placed beside the cell and the bottom item sheet (z-index banner) covers it for every cell
+     in the lower part of the screen, so below the docked layout the sheet carries the tooltip lines and the tip stays hidden */
+  @media (max-width: 899px) { .inv-tip { display: none !important; } }
+  .vt-cmp { display: grid; gap: var(--d-sp-2); }
+  .vt-cmp .d-btn { justify-self: start; min-block-size: 2.75rem; }
+  .vt-cmp-body { display: grid; gap: var(--d-sp-2); }
+  .vt-cmp-slot { display: grid; gap: var(--d-sp-1); padding: var(--d-sp-2) var(--d-sp-3); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-2); background: var(--d-surface-2); }
+  .vt-cmp-slot h3 { margin: 0; font: 600 var(--d-fs-1)/var(--d-lh-tight) var(--d-font-body); }
+  .vt-cmp-worn, .vt-cmp-note { margin: 0; font-size: var(--d-fs-1); color: var(--d-text-2); overflow-wrap: anywhere; }
+  .vt-cmp-worn[data-empty="1"] { font-style: italic; }
+  .vt-cmp-rows { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  .vt-cmp-rows li[data-tone="up"] .vt-cmp-d { color: var(--d-good); } .vt-cmp-rows li[data-tone="dn"] .vt-cmp-d { color: var(--d-bad); } .vt-cmp-rows li[data-tone="eq"] .vt-cmp-d { color: var(--d-text-3); }
+  .vt-cmp-d { font-weight: 700; font-variant-numeric: tabular-nums; }
   .vt-dlines { margin: 0; padding-inline-start: 1.1em; font-size: var(--d-fs-1); overflow-wrap: anywhere; }
   .vt-drow { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
   .vt-drow .d-btn { align-items: center; flex: 1 1 6rem; }
