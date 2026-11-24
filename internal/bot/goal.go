@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sort"
 	"strings"
 	"time"
 
@@ -1097,6 +1098,7 @@ func (r *Runner) target0(s *d2.Snapshot, c control) (int, bool) {
 			l.run = &run
 			r.e.Log.Info("planner", "level", p.Level, "difficulty", diff, "area", step.Area, "name", step.Name, "run", run.Key, "kind", run.Kind, "why", step.Purpose)
 			r.zoneShadow(s, step.Area, diff)
+			r.e.Log.Info("farm picker", "level", p.Level, "chose", step.Area, "excluded", sortedAreas(ex), "cleared", sortedAreas(cleared), "candidates", r.d.Plan.candidateLine(diff, planClass(p.Class), p.Level, t.LevelMargin))
 		}
 		r.e.Log.Info(levelPlanLine(p.Level, step, t.LevelMargin, t.LeaveSlack))
 		l.stepArea, l.stepLevel = step.Area, p.Level
@@ -1910,6 +1912,18 @@ func (r *Runner) gateField(s *d2.Snapshot, t *trip) bool {
 		r.e.Log.Info("field gate: restock attempts used, going anyway", "reason", v.Reason)
 	}
 	return false
+}
+
+// sortedAreas lists the keys of an area set in order, for the picker's log line.
+func sortedAreas(m map[int]bool) []int {
+	out := make([]int, 0, len(m))
+	for a, v := range m {
+		if v {
+			out = append(out, a)
+		}
+	}
+	sort.Ints(out)
+	return out
 }
 
 // levelPlanLine is the "level plan" log line: the area the picker chose for the level and why (window, past the last
