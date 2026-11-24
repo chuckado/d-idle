@@ -1323,6 +1323,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - toolstrade38: Malus pick-up counts only the Malus in the pack (TASK-911, merged 2026-11-23, acceptance 2 of 2): Root cause: the Malus step trusted the loot pick-up count (three other items taken), so the stand was never clicked; PickUp of a quest item now needs the item in the pack. ... <!--sg:agent/toolstrade38-->
 - agent/vaultperf: Merge branch 'main' into vaultperf (merged 2026-11-23) <!--sg:agent/vaultperf-->
 - agent/qd18: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/qd18-->
+- toolstrade39: bold dial pools k for unvisited zones (TASK-912, merged 2026-11-23, acceptance 2 of 2): Cellar rows are rejected by margin: the hero k sits at its clamp 3 and every zone without kills carries it whole, visited fields have k 1.5; xp never enters eligibility. Bold dial now pools the k of visited zones for unvisited ones (poolUnvisitedK). ... <!--sg:agent/toolstrade39-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

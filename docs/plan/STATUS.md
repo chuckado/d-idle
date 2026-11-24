@@ -470,6 +470,7 @@
 | toolstrade30 | proposed | - | `internal/env/tuning_route.go`<br>`internal/task/route.go`<br>`internal/task/world.go`<br>`internal/task/route_test.go`<br>`internal/bot/routeguard.go`<br>`docs/knobs.md`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | malus2 | proposed | - | `tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | toolstrade34 | proposed | - | `internal/task/act1.go`<br>`internal/bot/campsim_objects_test.go`<br>`internal/task/steps.go`<br>`internal/task/sim/sim.go`<br>`internal/task/gear_gate_test.go`<br>`internal/quest/dialog.go`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_layout_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| toolstrade39 | proposed | - | `internal/survival/controller.go`<br>`internal/survival/params.go`<br>`internal/survival/params.json`<br>`internal/survival/pooledk_test.go`<br>`docs/probes/zone-pooledk.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
@@ -499,6 +500,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 38891eb5d 11-23 21:52 `Merge agent/toolstrade39: toolstrade39: bold dial pools k of visited zones for unvisited ones (Tower Cellars were rejected by the hero k clamp)` (toolstrade39)
 - 13bf2282b 11-23 21:18 `Merge agent/qd18: Merge branch 'main' into qdmatrix` (qd18)
 - 46ffbd0bc 11-23 21:17 `Merge branch 'main' into qdmatrix` (-)
 - 460aa7bb0 11-23 21:09 `Merge origin/main` (-)
@@ -508,5 +510,4 @@
 - 3908c98be 11-23 20:20 `Merge branch 'main' into vaultperf` (-)
 - ff78e4c88 11-23 20:10 `Merge agent/toolstrade38: Merge branch 'main' into toolstrade38` (toolstrade38)
 - 205898b73 11-23 20:08 `Merge branch 'main' into toolstrade38` (-)
-- 8325122ba 11-23 19:49 `Merge agent/stepgrounds: Merge branch 'main' into stepgrounds` (stepgrounds)
 <!-- statusgen:end -->

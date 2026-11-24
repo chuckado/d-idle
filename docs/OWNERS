@@ -685,6 +685,7 @@ docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed2
 docs/probes/viewer-brightness-2026-11-17.md  credit-runner  brightness
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/probes/warptrigger-2026-11-22.md  credit-runner  warptrigger
+docs/probes/zone-pooledk.md  credit-runner  toolstrade39
 docs/process/barbarian-support.md  credit-runner  barb1
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
@@ -1710,7 +1711,11 @@ internal/survival  credit-runner  survsd
 internal/survival  credit-runner  survtune
 internal/survival/  credit-runner  survC
 internal/survival/controller.go  credit-runner  survreask
+internal/survival/controller.go  credit-runner  toolstrade39
 internal/survival/ledger.go  credit-runner  intake
+internal/survival/params.go  credit-runner  toolstrade39
+internal/survival/params.json  credit-runner  toolstrade39
+internal/survival/pooledk_test.go  credit-runner  toolstrade39
 internal/survival/survival_test.go  credit-runner  survfix
 internal/talk/tables.go  credit-runner  quests7b
 internal/talk/talk.go  credit-runner  qdmatrix

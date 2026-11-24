@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- toolstrade39: bold dial pools k of visited zones for unvisited ones (Tower Cellars were rejected by the hero k clamp) <!--sg:agent/toolstrade39-->
 - Merge branch 'main' into qdmatrix <!--sg:agent/qd18-->
 - Merge branch 'main' into vaultperf <!--sg:agent/vaultperf-->
 - Merge branch 'main' into toolstrade38 <!--sg:agent/toolstrade38-->
