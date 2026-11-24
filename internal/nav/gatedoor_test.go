@@ -723,3 +723,51 @@ func TestExitToOpensTheDoorThatShutsAnUnprovenBorderGate(t *testing.T) {
 		})
 	}
 }
+
+// V live 2026-11-24 (Catacombs Level 2, attempt 4): the door at (200,210) was used twice in a row (cellFlags 0, then 1): once it
+// was open the planner still found the gate cut off by a barrier the map did not list as a door, picked the same door again and
+// shut it. A door whose own cell already reads walkable is not used. Two layouts (the open door at the first or the second wall of
+// two), both classes in the name only (the nav does not read the class). Must fail while an open door is a candidate.
+func TestExitToDoesNotUseADoorThatIsAlreadyOpen(t *testing.T) {
+	for _, lay := range []struct {
+		name    string
+		doorX   int
+		solidX  int
+		hero    input.Point
+		classes []string
+	}{
+		{"open door beyond the solid wall", 3040, 3060, input.Point{X: 3100, Y: 3090}, []string{"Paladin", "Necromancer"}},
+		{"open door before the solid wall", 3070, 3040, input.Point{X: 3100, Y: 3090}, []string{"Paladin", "Necromancer"}},
+	} {
+		for _, cls := range lay.classes {
+			t.Run(lay.name+"/"+cls, func(t *testing.T) {
+				g := openField(2800, 3000, 400, 120)
+				blockRect(g, d2map.Rect{X: 2999, Y: 3000, W: 2, H: 50})
+				blockRect(g, d2map.Rect{X: 2999, Y: 3065, W: 2, H: 55})
+				blockRect(g, d2map.Rect{X: lay.solidX, Y: 3000, W: 2, H: 120}) // a barrier the map does not list as a door
+				blockRect(g, d2map.Rect{X: lay.doorX, Y: 3000, W: 2, H: 50})
+				blockRect(g, d2map.Rect{X: lay.doorX, Y: 3065, W: 2, H: 55}) // the open door's wall: its cells (rows 3050..3064) are open
+				l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 200, H: 120}}
+				l2 := &simLevel{no: 2, rect: d2map.Rect{X: 2800, Y: 3000, W: 200, H: 120}}
+				s := newSim(g, lay.hero, l1, l2)
+				s.reveal = 300
+				l1.lm.Presets = []d2map.Preset{{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: lay.doorX, Y: 3057}}}
+				s.objects = []d2.Unit{d2Unit(77, 24, lay.doorX, 3057)}
+				used := 0
+				s.onInteract = func(s *sim, tg input.Target) error {
+					if tg.ID == 77 {
+						used++
+					}
+					return nil
+				}
+				n := s.navigator()
+				n.doorFn = func(class int) bool { return class == 24 }
+				n.exploreFn = func(_ context.Context, _ func() bool, _ *input.Point) error { return ErrExplored }
+				_ = n.ExitTo(ctxT(t), 2) // the barrier has no door: the exit fails, whatever the error is
+				if used != 0 {
+					t.Fatalf("the open door was used %d times (it would have been shut again)", used)
+				}
+			})
+		}
+	}
+}
