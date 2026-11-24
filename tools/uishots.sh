@@ -700,6 +700,15 @@ vault-tip watch/vault?theme=dark&vault=pop hover=.vt-cell:nth-child(3)
 vault-tip-unid watch/vault?theme=dark&vault=pop hover=.vt-cell:has([data-tag=unid])
 vault-tip-light watch/vault?theme=light&vault=pop hover=.vt-cell:nth-child(2)
 vault-tip-last watch/vault?theme=dark&vault=pop hover=.vt-cell:last-child
+vault-tip-phone-last watch/vault?theme=dark&vault=cmp .vt-cell:nth-child(16) [data-key=d-tip],[data-key=d-compare]
+vault-compare-off watch/vault?theme=dark&vault=cmp .vt-cell:nth-child(10) [data-key=d-compare],[data-key=d-tip]
+vault-compare-hero watch/vault?theme=dark&vault=cmp .vt-cell:nth-child(10)|[data-key=d-compare] [data-key=d-compare],[data-key=d-cmp]
+vault-compare-hero-light watch/vault?theme=light&vault=cmp .vt-cell:nth-child(10)|[data-key=d-compare] [data-key=d-compare],[data-key=d-cmp]
+vault-compare-merc watch/vault?theme=dark&vault=cmp .vt-cell:nth-child(10)|[data-key=d-compare]|[data-key=d-compare] [data-key=d-compare],[data-key=d-cmp]
+vault-compare-merc-no watch/vault?theme=dark&vault=cmp .vt-cell:nth-child(3)|[data-key=d-compare]|[data-key=d-compare] [data-key=d-compare],[data-key=d-cmp]
+vault-compare-rings watch/vault?theme=dark&vault=cmp .vt-cell:nth-child(16)|[data-key=d-compare] [data-key=d-compare],[data-key=d-cmp]
+vault-compare-empty watch/vault?theme=dark&vault=cmp .vt-cell:nth-child(5)|[data-key=d-compare] [data-key=d-compare],[data-key=d-cmp]
+vault-compare-nomerc watch/vault?theme=dark&vault=cmp&fx=nomerc .vt-cell:nth-child(10)|[data-key=d-compare]|[data-key=d-compare] [data-key=d-compare],[data-key=d-cmp]
 vault-big-deep watch/vault?theme=dark&vault=big scroll=0.55
 vault-big-end watch/vault?theme=dark&vault=big scroll=1
 vault-big-deep-light watch/vault?theme=light&vault=big scroll=0.3
