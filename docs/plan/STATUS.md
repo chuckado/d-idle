@@ -470,7 +470,6 @@
 | toolstrade30 | proposed | - | `internal/env/tuning_route.go`<br>`internal/task/route.go`<br>`internal/task/world.go`<br>`internal/task/route_test.go`<br>`internal/bot/routeguard.go`<br>`docs/knobs.md`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | malus2 | proposed | - | `tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | toolstrade34 | proposed | - | `internal/task/act1.go`<br>`internal/bot/campsim_objects_test.go`<br>`internal/task/steps.go`<br>`internal/task/sim/sim.go`<br>`internal/task/gear_gate_test.go`<br>`internal/quest/dialog.go`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_layout_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
-| toolstrade39 | proposed | - | `internal/survival/controller.go`<br>`internal/survival/params.go`<br>`internal/survival/params.json`<br>`internal/survival/pooledk_test.go`<br>`docs/probes/zone-pooledk.md` | - |
 | stage2c | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |

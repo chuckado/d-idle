@@ -1,10 +1,11 @@
 ---
 id: TASK-912
 title: 'toolstrade39: bold dial pools k for unvisited zones'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T02:45:00Z'
+updated_date: '2026-11-24T03:06:00Z'
 labels:
   - bot
   - bot-fix
