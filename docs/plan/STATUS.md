@@ -475,6 +475,7 @@
 | redsteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/necro_test.go` | - |
 | toolstrade42 | proposed | - | `internal/questboard/sm.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/task/gate.go`<br>`internal/task/route_test.go` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
+| toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
@@ -503,6 +504,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 782567e37 11-24 08:54 `Merge agent/toolstrade43: Merge branch 'main' into toolstrade43` (toolstrade43)
+- 0de3d58bb 11-24 08:52 `Merge branch 'main' into toolstrade43` (-)
 - 339a10d86 11-24 08:41 `Merge agent/toolstrade42: toolstrade42: Andariel gate carries the Barracks floor, card` (toolstrade42)
 - 58da490a4 11-24 01:09 `Merge agent/qd20: qdmatrix: notes 55 to 58 (Blade, Acts 4 and 5, devp27 smoke), verdicts, deploy list` (qd20)
 - 163f40a77 11-24 00:55 `Merge origin/main` (-)
@@ -511,6 +514,4 @@
 - a80a6438b 11-23 23:50 `Merge agent/fidbatch: Merge branch 'main' into fidbatch` (fidbatch)
 - 7acef16bf 11-23 23:49 `Merge branch 'main' into fidbatch` (-)
 - 0b014f71e 11-23 23:39 `Merge agent/qd19: Merge origin/main` (qd19)
-- b6c5c7f66 11-23 23:33 `Merge origin/main` (-)
-- 32fe20846 11-23 23:11 `Merge agent/flip: flip: verdicts after toolstrade40` (flip)
 <!-- statusgen:end -->
