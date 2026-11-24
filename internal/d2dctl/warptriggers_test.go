@@ -54,3 +54,12 @@ func TestWarpTriggersMissingVerbIsAnError(t *testing.T) {
 		t.Fatal("stock d2d answers err: want an error")
 	}
 }
+
+// The devp26 reply carries exact as cell floats: a float must not break the whole reply (must fail with an int field).
+func TestParseWarpTriggersExactIsCellFloats(t *testing.T) {
+	r := &Reply{Lines: []string{`{"level":80,"unit":"subtile","scan":40,"reach_rule":5,"warps":[{"index":3,"to":94,"unit":[70,60],"select":[-10,-10,0,0],"click":[],"reach":[],"exact":[70.5,60.5],"truncated":false}]}`}}
+	w, err := ParseWarpTriggers(r)
+	if err != nil || w.Warps[0].Exact == nil || w.Warps[0].Exact[0] != 70.5 {
+		t.Fatalf("%v %+v", err, w)
+	}
+}

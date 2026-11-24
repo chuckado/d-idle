@@ -121,15 +121,32 @@ func (fakeTables) MonsterClass(name string) (int, bool) {
 // cainClassIn: a name lookup gives the same class in every act and the Act 2 hand-in to Cain never finds him.
 func TestCainClassFollowsTheAct(t *testing.T) {
 	for act, want := range map[int]int{0: 245, 1: 244, 2: 245, 3: 246, 4: 520} {
-		got, ok := cainClassIn("Deckard Cain", &d2.Player{Act: act})
+		got, ok := actClassIn("Deckard Cain", &d2.Player{Act: act})
 		if !ok || got != want {
 			t.Errorf("act %d: class %d %v, want %d", act, got, ok, want)
 		}
 	}
-	if _, ok := cainClassIn("Atma", &d2.Player{Act: 1}); ok {
+	if _, ok := actClassIn("Atma", &d2.Player{Act: 1}); ok {
 		t.Error("another NPC was given a Cain class")
 	}
-	if _, ok := cainClassIn("Deckard Cain", nil); ok {
+	if _, ok := actClassIn("Deckard Cain", nil); ok {
 		t.Error("a class without a player")
+	}
+}
+
+// Meshif and Warriv follow the act too (drill.act3s.golden_bird: the Act 3 Meshif is class 264, a name lookup gives 210).
+func TestActClassFollowsTheActForMeshifAndWarriv(t *testing.T) {
+	for act, want := range map[int]int{1: 210, 2: 264} {
+		if got, ok := actClassIn("Meshif", &d2.Player{Act: act}); !ok || got != want {
+			t.Errorf("Meshif act %d: %d %v, want %d", act, got, ok, want)
+		}
+	}
+	for act, want := range map[int]int{0: 155, 1: 175} {
+		if got, ok := actClassIn("Warriv", &d2.Player{Act: act}); !ok || got != want {
+			t.Errorf("Warriv act %d: %d %v, want %d", act, got, ok, want)
+		}
+	}
+	if _, ok := actClassIn("Meshif", &d2.Player{Act: 0}); ok {
+		t.Error("Meshif has no Act 1 row")
 	}
 }

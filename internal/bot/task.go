@@ -489,7 +489,12 @@ var questItemNames = []string{task.ItemMalus, task.ItemBark, task.ItemCainSc,
 
 // questItemCodes maps the base codes of the Cain chain items to the name the steps ask for. The code wins over the
 // display name: names differ by locale and by table build (V code internal/quest/act1.go ItemInifussScroll, ItemCairnKey).
-var questItemCodes = map[string]string{"bks": task.ItemBark, "bkd": task.ItemCainSc}
+//
+// The Act 3 side quests (S misc.txt codes of internal/loot QuestItemCodes; j34 and g34 are V in docs/act3.md): the Jade Figurine
+// read as absent in drill.act3s.golden_bird although `debug give j34 pack` had put it in the pack, because the display name
+// of the lab's items table is not the one the steps ask for.
+var questItemCodes = map[string]string{"bks": task.ItemBark, "bkd": task.ItemCainSc,
+	"j34": task.ItemJade, "g34": task.ItemGolden, "bbb": task.ItemLamTome, "d33": task.ItemGidbinnRaw}
 
 func (r *Runner) scanQuestItems(s *d2.Snapshot, out map[string]int) {
 	if r.d.Catalog == nil || s.Inventory == nil {

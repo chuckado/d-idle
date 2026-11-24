@@ -20,6 +20,7 @@ const timeoutProgress = 30.0
 type gate struct {
 	at, push input.Point
 	border   bool
+	exact    *[2]float64 // the point (d2d cells) a one-pixel Select box warp is taken from; see pushThrough
 }
 
 // exitWalkOpts: the gate is the goal of the walk toward it, so the unwanted-exit gate lets a click that stays outside the core through
@@ -355,6 +356,10 @@ func (n *Navigator) gateCands(o *obs, levelNo int) []gate {
 			if e.HasClick { // the push click must land in the warp's Select box (d2dctl.Warp)
 				g.push = input.Point{X: e.Click.X, Y: e.Click.Y}
 			}
+			if e.HasExact {
+				ex := e.Exact
+				g.exact = &ex
+			}
 			cands = append(cands, g)
 		}
 	}
@@ -479,11 +484,18 @@ func (n *Navigator) gateClicks(ctx context.Context, levelNo int) bool {
 }
 
 // pushThrough keeps walking toward g.push until the player's area is levelNo (or a few seconds pass).
+// cellMover is the part of a controller that moves to a fractional d2d cell (d2dinput).
+type cellMover interface{ MoveCell(x, y float64) error }
+
 func (n *Navigator) pushThrough(ctx context.Context, g gate, levelNo int) bool {
 	t := n.tune()
 	end := n.clk.Now().Add(6 * time.Second)
 	for n.clk.Now().Before(end) && ctx.Err() == nil {
-		_ = n.in.ClickWorld(g.push)
+		if n.cm != nil && g.exact != nil {
+			_ = n.cm.MoveCell(g.exact[0], g.exact[1])
+		} else {
+			_ = n.in.ClickWorld(g.push)
+		}
 		n.clk.Sleep(5 * t.Poll())
 		snap, err := n.st.Snapshot()
 		if err == nil && snap.State == d2.StateInGame && snap.Player != nil && snap.Player.Area == levelNo {

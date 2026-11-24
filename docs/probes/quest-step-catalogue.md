@@ -4,7 +4,7 @@
 
 Steps total 134: step scenario 50 (generated or hand-written), only a chunk-level scenario 59, MISSING 25.
 
-Verdicts: GREEN 29, RED 49, BLOCKED 30 (every MISSING step counts as BLOCKED), PENDING 26 (a scenario that was never run).
+Verdicts: GREEN 32, RED 46, BLOCKED 30 (every MISSING step counts as BLOCKED), PENDING 26 (a scenario that was never run).
 
 MISSING by cause: F2 1; F3 15; bot 9; (F<n> is a fork verb request, docs/probes/stepgrounds-fork-request.md; bot is a bot or scenario-format gap; data is missing data.)
 
@@ -62,9 +62,9 @@ MISSING by cause: F2 1; F3 15; bot 9; (F<n> is a fork verb request, docs/probes/
 | 2 | `horadric_staff/assemble/talk_cain` | drill.act2.assemble | GREEN |  [V run 20261123-175925] cube, shaft, amulet given; staff made |
 | 2 | `arcane_sanctuary/portal/talk_jerhyn` | MISSING | BLOCKED | bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half) [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec] |
 | 2 | `arcane_sanctuary/portal/travel_palace_cellar` | step.act2.arcane_sanctuary.portal.travel_palace_cellar | RED |  [V run 20261123-183646] the hero died on the way (a fight, matrix notes 24 to 26); a travel verdict needs the fights solved first The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100). |
-| 2 | `arcane_sanctuary/portal/enter_arcane` | chunk: drill.act2.summoner | RED |  |
-| 2 | `summoner/kill_summoner/travel_arcane` | chunk: drill.act2.summoner | RED |  |
-| 2 | `summoner/kill_summoner/find_summoner` | chunk: drill.act2.summoner | RED |  |
+| 2 | `arcane_sanctuary/portal/enter_arcane` | chunk: drill.act2.summoner | GREEN |  |
+| 2 | `summoner/kill_summoner/travel_arcane` | chunk: drill.act2.summoner | GREEN |  |
+| 2 | `summoner/kill_summoner/find_summoner` | chunk: drill.act2.summoner | GREEN |  |
 | 2 | `summoner/kill_summoner/kill_summoner` | step.act2.summoner.kill_summoner.kill_summoner | PENDING | debug spawn summoner works (V probe). |
 | 2 | `seven_tombs/duriel/travel_canyon` | chunk: drill.act2.duriel | BLOCKED |  |
 | 2 | `seven_tombs/duriel/find_tomb` | chunk: drill.act2.duriel | BLOCKED |  |

@@ -4,11 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
+	"log/slog"
 	"math"
 	"testing"
 	"time"
 
 	"d2lod-bot/internal/d2map"
+	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/input"
 )
 
@@ -528,5 +531,43 @@ func TestExitToCancelledOnTheTileKeepsTheGate(t *testing.T) {
 	}
 	if len(n.badGates) != 0 {
 		t.Fatalf("the gate was marked bad after a cancel: %v", n.badGates)
+	}
+}
+
+// A warp whose Select box is one pixel wide is taken only by a move to its exact cell (V devp26, Kurast Bazaar to Ruined
+// Temple); the subtile centre click never takes it. Must fail without the cellMover branch of pushThrough.
+type cellSim struct {
+	input.Controller
+	s *sim
+	// cells records the moves in cells
+	cells [][2]float64
+}
+
+func (c *cellSim) MoveCell(x, y float64) error {
+	c.cells = append(c.cells, [2]float64{x, y})
+	c.s.px, c.s.py = 1300.5, 1030.5 // the level changes
+	return nil
+}
+
+func TestExitToMovesToTheExactCellOfAOnePixelWarp(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Sorceress"} {
+		t.Run(cls, func(t *testing.T) {
+			g := openField(1000, 1000, 400, 60)
+			l1 := &simLevel{no: 1, rect: d2map.Rect{X: 1000, Y: 1000, W: 200, H: 60}}
+			l2 := &simLevel{no: 2, rect: d2map.Rect{X: 1200, Y: 1000, W: 200, H: 60}}
+			s := newSim(g, input.Point{X: 1010, Y: 1030}, l1, l2)
+			exitOnLine(s, 2)
+			s.levels[0].lm.Exits[0].Exact, s.levels[0].lm.Exits[0].HasExact = [2]float64{215.9, 205.9}, true
+			cs := &cellSim{Controller: s, s: s}
+			tune := env.DefaultTuning()
+			n := New(&env.Env{ID: "test", Log: slog.New(slog.NewTextHandler(io.Discard, nil)), In: cs, Clock: s, Tune: &tune}) // the gate wrapper hides MoveCell
+			n.w, n.st = s, s
+			if err := n.ExitTo(ctxT(t), 2); err != nil {
+				t.Fatal(err)
+			}
+			if len(cs.cells) == 0 || cs.cells[0] != [2]float64{215.9, 205.9} {
+				t.Fatalf("moves %v", cs.cells)
+			}
+		})
 	}
 }

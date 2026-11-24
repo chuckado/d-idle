@@ -35,6 +35,9 @@ var dirs = [8][2]int{{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {-1, 1}, {1, -1},
 
 const sqrt2 = 1.4142135
 
+// seamCost multiplies the step over a diagonal seam.
+const seamCost = 3
+
 // maxExpandAbs caps the expansions of any single search (a full flood of a maxFieldCells window).
 var maxExpandAbs = maxFieldCells // a var so tests can lower it
 
@@ -158,10 +161,16 @@ func (p *Planner) search(f *Field, sx, sy, gx, gy int, reach float32, hw float32
 			}
 			step := float32(1)
 			if d >= 4 {
-				if f.flags[cy*W+nx]&f.passMask == 0 || f.flags[ny*W+cx]&f.passMask == 0 {
-					continue
-				}
 				step = sqrt2
+				if f.flags[cy*W+nx]&f.passMask == 0 || f.flags[ny*W+cx]&f.passMask == 0 {
+					// A seam: two floors that meet at a corner (the stand-grid of the lab shows the Arcane Sanctuary as such
+					// seams, V docs/probes/quest-drill-matrix-2026-11-23.md note 49). Only the retry of a plan that found no
+					// way crosses one, and dearly, so a way around always wins.
+					if !f.seams {
+						continue
+					}
+					step = sqrt2 * seamCost
+				}
 			}
 			ng := gcur + step*(1+float32(f.wall[ni]+f.dyn[ni])/costUnit)
 			if p.stamp[ni] == p.gen && p.g[ni] <= ng {
