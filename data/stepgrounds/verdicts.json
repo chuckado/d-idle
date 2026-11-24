@@ -31,9 +31,9 @@
  },
  "drill.act1.sail": {
   "verdict": "GREEN",
-  "run": "20261123-002950-167e",
+  "run": "20261124-005430",
   "tag": "V",
-  "note": "Paladin and Sorceress, matrix table"
+  "note": "devp27 rebase smoke"
  },
  "drill.andariel.stand": {
   "verdict": "GREEN",
@@ -67,9 +67,9 @@
  },
  "drill.act2.assemble": {
   "verdict": "GREEN",
-  "run": "20261123-175925",
+  "run": "20261124-005430",
   "tag": "V",
-  "note": "cube, shaft, amulet given; staff made"
+  "note": "devp27 rebase smoke"
  },
  "drill.act2.shaft": {
   "verdict": "GREEN",
@@ -115,39 +115,39 @@
  },
  "drill.act4.izual": {
   "verdict": "RED",
-  "run": "20261123-070440",
+  "run": "20261124-003408",
   "tag": "V",
-  "note": "stops at a named nav cause (matrix notes 6, 26)"
+  "note": "word 0x000c, reward bit not set"
  },
  "drill.act4.hellforge": {
   "verdict": "RED",
-  "run": "20261123-070440",
+  "run": "20261124-003408",
   "tag": "V",
-  "note": "matrix notes 6, 26"
+  "note": "Soulstone given; no travel or Hammer step ran"
  },
  "drill.act5.siege": {
   "verdict": "RED",
-  "run": "20261123-071114",
+  "run": "20261123-234349",
   "tag": "V",
-  "note": "matrix notes 6, 26"
+  "note": "Harrogath gate to Bloody Foothills not reachable"
  },
  "drill.act5.prison": {
   "verdict": "RED",
-  "run": "20261123-071114",
+  "run": "20261124-004546",
   "tag": "V",
-  "note": "matrix notes 6, 26"
+  "note": "travel green; word 0x0008, reward bit not set"
  },
  "drill.act5.betrayal": {
   "verdict": "RED",
-  "run": "20261123-071114",
+  "run": "20261124-004654",
   "tag": "V",
-  "note": "Nihlathak portal object not found (matrix note 6)"
+  "note": "Halls of Vaught entered; fight open"
  },
  "drill.act5.ancients": {
-  "verdict": "RED",
-  "run": "20261123-071114",
+  "verdict": "BLOCKED",
+  "run": "20261124-005014",
   "tag": "V",
-  "note": "matrix notes 6, 26"
+  "note": "statues in view, fight never starts"
  },
  "drill.act5.baal": {
   "verdict": "RED",
@@ -330,10 +330,10 @@
   "note": "exact-cell move onto the 0x0 warp (devp26)"
  },
  "drill.act3s.blade": {
-  "verdict": "BLOCKED",
-  "run": "20261123-230132",
+  "verdict": "RED",
+  "run": "20261124-003408",
   "tag": "V",
-  "note": "run cut at 25 virtual min"
+  "note": "altar class fixed (252); quest word 0x0008, hand-in open"
  },
  "drill.act3s.golden_bird": {
   "verdict": "RED",
@@ -379,8 +379,8 @@
  },
  "drill.act3s.lam_esen.bazaar": {
   "verdict": "GREEN",
-  "run": "20261123-224713",
+  "run": "20261124-005430",
   "tag": "V",
-  "note": "from the Bazaar"
+  "note": "devp27 rebase smoke"
  }
 }
