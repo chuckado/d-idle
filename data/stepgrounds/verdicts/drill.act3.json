@@ -1,0 +1,26 @@
+{
+ "drill.act3.blade": {
+  "note": "matrix note 25",
+  "run": "20261123-062233",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "drill.act3.council": {
+  "note": "matrix note 25",
+  "run": "20261123-062233",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "drill.act3.golden_bird": {
+  "note": "board parks it (matrix note 25)",
+  "run": "20261123-062233",
+  "tag": "V",
+  "verdict": "BLOCKED"
+ },
+ "drill.act3.lam_esen": {
+  "note": "Great Marsh packs (matrix notes 24, 25)",
+  "run": "20261123-062233",
+  "tag": "V",
+  "verdict": "RED"
+ }
+}
