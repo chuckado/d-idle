@@ -1,6 +1,6 @@
-# Draft (local, NOT posted): "fight: a monster tries a player's newest summon first and its merc last (FUN_005dd7f0)"
+# Draft v2 (local, NOT posted): "fight: a monster tries a player's pets newest first, the merc by when it was hired or revived (FUN_005dd7f0)"
 
-> status: draft 2026-11-23, agent fidbatch (bundle brief: turn the open fidelity cards into proven upstream candidates). One claim. Nothing is pushed to GitHub or posted; the private fork holds the branches. Source trace: [pets-merc-trace.md](pets-merc-trace.md) (D1, 2026-11-01); this doc re-proves it on upstream main `ff6d47a66` and builds the fix.
+> status: draft v2 2026-11-24 (v1 was verified NOT READY: [pr-fidbatch-pet-order-verifier.md](pr-fidbatch-pet-order-verifier.md); v2 answers its two blockers with an insertion counter). Agent fidbatch (bundle brief: turn the open fidelity cards into proven upstream candidates). One claim. Nothing is pushed to GitHub or posted; the private fork holds the branches. Source trace: [pets-merc-trace.md](pets-merc-trace.md) (D1, 2026-11-01); this doc re-proves it on upstream main `ff6d47a66` and builds the fix.
 
 ## What the open cards turned out to be (checked 2026-11-23 against upstream main and `gh`)
 
@@ -19,51 +19,55 @@ Open PR #708 (merc RogueMissile) is not touched.
 
 ## Title and body (PR template)
 
-Title: `fight: a monster tries a player's newest summon first and its merc last (FUN_005dd7f0)`
+Title: `fight: a monster tries a player's pets newest first, the merc by when it was hired or revived (FUN_005dd7f0)`
 
-> **What changes.** A hostile monster's target search (FUN_005dd7f0) walks the player's list in order and takes a candidate only when it is strictly nearer than the best so far, so on a tie the first one tried wins. game.exe builds that list with FUN_005b1900, which inserts each pet right after its player (0x5b1966..0x5b1979): the newest summon is tried first and the merc, hired before any summon, last. d2d tried player, merc, summons oldest first. `rules::search_order` now gives the order and `search_target` uses it.
-> **Evidence.** `tools/emu/pets_merc.py` builds the list with game.exe's own FUN_005b1880 / FUN_005b1900 and runs FUN_005dd7f0 natively on 100,000 cases (seeds 21 to 24, one player, the merc 85 % of cases, 0 to 3 summons, distances biased to the ties and to the 0x37 / aidist / 6 / 0x13 / 0x31 edges); `pets_merc_harness.cpp` runs d2d's real `rules::search_order` and `rules::search_pick` on the same cases: 1,254 of 100,000 differ with the old order, 0 with the new. `tests/game/test_pet_search_order.cpp` drives the real `Fight::world`: it fails on the parent (3 of 5 checks) and passes with the change.
+> **What changes.** A hostile monster's target search (FUN_005dd7f0) walks the player's list in order and takes a candidate only when it is strictly nearer than the best so far (0x5dd960), so on a tie the first one tried wins. game.exe builds that list with FUN_005b1900, which inserts each pet right after the player's list head (0x5b1966..0x5b1979): the pet that entered last is tried first. A summon enters where it is made; the merc enters when it is hired or joins and again when it is revived (FUN_00579aa0 at 0x579b43). d2d tried the player, the merc, then the summons oldest first. Each pet now carries when it entered the list (`Pet::listed`, `Hero::merc_listed`, set where summons are made and in `World::spawn_merc`, the one place a merc is hired, joined or revived) and `rules::search_order` gives game.exe's order.
+> **Evidence.** `tools/emu/pets_merc.py` builds the list with game.exe's own FUN_005b1880 / FUN_005b1900 and runs FUN_005dd7f0 natively (100,000 cases per run: one player, the merc in 85 %, 0 to 3 summons, distances biased to the ties and the 0x37 / aidist / 6 / 0x13 / 0x31 edges); in a share of the cases (`REVIVE_SHARE`) the merc's insert comes after the summons, as a revive or a later hire does. `pets_merc_harness.cpp` runs d2d's real `rules::search_order` and `rules::search_pick` on the same cases: old order differs in 1,212 / 1,006 / 527 cases (revive share 0 / 0.3 / 1.0), new order in 0 of each. `tests/game/test_pet_search_order.cpp` drives the real `Fight::world`: it fails on the parent and passes with the change.
 
 Claims table (one commit):
 
 | Claim | Evidence | Check |
 |---|---|---|
-| FUN_005b1900 inserts a pet right after its player, so the list runs newest summon .. oldest summon, merc (hired first) | oracle builds the list by calling FUN_005b1880 then FUN_005b1900 per pet (V run) | `pets_merc.py`, README row |
-| FUN_005dd7f0 takes a candidate only when strictly nearer (first tried wins a tie) | same oracle; the breakdown of the 1,254 (all equal-distance ties between pets, 780 where d2d picked the merc and game.exe a newer summon, none involving the player) is from the 2026-11-01 run on the same case file (identical md5), not re-tabulated today (I) | `./pm_h before` vs `./pm_h after` |
-| d2d now does the same | `search_order` + `test_pet_search_order` | `test_pet_search_order` (needs the game data) |
+| FUN_005b1900 inserts a pet right after the player's list head, so the list runs newest .. oldest | verifier read 0x5b1956..0x5b197c; oracle builds the list by calling FUN_005b1880 then FUN_005b1900 (V run) | `pets_merc.py`, README row |
+| FUN_005dd7f0 takes a candidate only when strictly nearer: the first tried wins a tie | same oracle (V run); verifier read 0x5dd960 | `./pm_h before` against `./pm_h after` |
+| a revived or later-hired merc is inserted again, at the head | verifier read: FUN_00579c00 -> FUN_00579aa0 -> FUN_005b1900 at 0x579b43 (V read); oracle with the merc's call last (the removal FUN_005b1a90 is not run, I) | revive share 0.3 and 1.0 |
+| d2d now orders its pets the same way | `search_order` + `test_pet_search_order` (merc first, summon first, revive, nearer-wins cases) | `test_pet_search_order` (needs the game data) |
 
-Limits (to be in the PR body):
-- One player. With two players in the foes vector (co-op) only the entries after the last player are reordered (d2d already lists every pet after the last player, a separate quirk); not exercised.
-- The merc is treated as the oldest pet. game.exe re-inserts it when it is hired, loaded or revived, so after a merc revive (or a hire after a summon) it is the newest in game.exe; d2d keeps no insertion order for the merc. U: not decoded further, outside the claim.
-- A converted monster (Conversion) is a list pet in game.exe too (newest first by its conversion time); d2d keeps it where it was. Outside the claim.
-- The harness restates `search_target`'s input mapping per case line (as `search.py` does); the in-game test covers the real call site only for the cases it builds (ties between summons, merc against a summon, a nearer merc, a nearer older summon).
-- Dead pets are not generated (game.exe removes a dying monster from its list, FUN_005a6520 -> FUN_005b1a90).
-- Only the monster's search is changed; the merc's own target search (FUN_005ddc30, 0 of 100,000 differ) and the pets' thinks are not.
-- Hooked in the oracle (not the claim): the room, outdoors, town, sight, in-melee, alignment, size, area, FUN_005dd510's pathfinder, the pool allocator (list in the oracle docstring).
+Limits (for the PR body):
+- One player. With more than one player entry in the foes `search_order` returns d2d's order unchanged (co-op was not modelled: d2d lists every pet after the last player, a separate quirk).
+- A converted monster (Conversion, FUN_005d0350 at 0x5d0501) is the caster's newest pet in game.exe; d2d keeps it after the pets, as before. A later claim could give it a serial.
+- The revive oracle puts the merc's insert after the summons; the removal on death (FUN_005a6520 -> FUN_005b1a90) is read, not run.
+- The harness tags slot 0 player and the rest pet and takes the serials from the case line; ai.cpp's own tagging (`foe.monster`, `foe.pet`) is covered only by the in-game test for the cases it builds.
+- Dead pets are not generated (game.exe takes a dying monster out of its list).
+- Only the monster's search changes; the merc's own search (FUN_005ddc30: 0 of 100,000 differ) and the pets' thinks do not.
+- `tools/emu/test_structs.py` fails on upstream main too (a `structs.tsv` row cites `ai.hpp:509`, the file has 371 lines); not touched here.
+- Hooked in the oracle (not the claim): the room, outdoors, town, sight, in-melee, alignment, size, area, FUN_005dd510's pathfinder, the pool allocator.
 
 ## Reproduce
 
-The worker's builder, upstream checkout with this commit (fork branch `didle/fidbatch-pet-search-order-up` on the private remote, commit `21df4aa6`, one commit on upstream main `ff6d47a66`), game.exe as `$D2_MPQ_DIR/bin/game.exe`:
+Fork branch `didle/fidbatch-pet-search-order-up-v2` on the private remote, commit `02368c52`, one commit on upstream main `ff6d47a66`; game.exe as `$D2_MPQ_DIR/bin/game.exe`; the library built from the commit (`build/components/rules/librules.a`):
 
 ```sh
 cd tools/emu
-for s in 21 22 23 24; do uv run python pets_merc.py 25000 $s c$s.txt > g$s.txt; done
-cat c2?.txt > c.txt; cat g2?.txt > g.txt
-g++ -O2 -std=c++23 -I../../components $(find ../../components -name '*.hpp' -printf '-I%h\n' | sort -u) \
-    pets_merc_harness.cpp ../../build/components/rules/librules.a -o pm_h
-./pm_h before < c.txt | diff g.txt - | grep -c '^>'    # 1254
-./pm_h after  < c.txt | diff g.txt -                   # nothing
-# md5 prefixes: cases b4a2be90, game 168c5cf7
-build/tests/test_pet_search_order                       # parent: 3 FAIL lines; this commit: OK
+for rs in 0 0.3 1.0; do
+  for s in 21 22 23 24; do REVIVE_SHARE=$rs uv run python pets_merc.py 25000 $s c$s.txt > g$s.txt; done
+  cat c2?.txt > c.txt; cat g2?.txt > g.txt
+  ./pm_h before < c.txt | diff g.txt - | grep -c '^>'    # 1212 / 1006 / 527
+  ./pm_h after  < c.txt | diff g.txt -                   # nothing
+done
+# md5 of g.txt / c.txt: share 0 d24291ff / 250eb5c1, 0.3 b9566f9d / 36a3277d, 1.0 782e4567 / 95f579f4
+build/tests/test_pet_search_order                       # parent (test file only): FAIL lines; this commit: OK
 ```
+(`pm_h`: build as the header of `pets_merc_harness.cpp` says.)
 
-## Checks run (V run unless said)
+## Checks run (V run unless said; builder long lane, GCC Release, game data of the lab image)
 
-- Oracle: 200,000 case lines (S and M, seeds 21..24): `before` 1,254 differ, `after` 0. md5 of the cases and the game side equal those of 2026-11-01 (b4a2be90, 168c5cf7): the game side is stable.
-- `test_pet_search_order`: parent (upstream main + the test file only) prints three FAIL lines (took foe 2 / 2 / 1, game.exe's order takes 3 / 4 / 2); the commit prints OK.
-- `python3 tools/pr_guard.py upstream/main HEAD`: 0 FAIL, 0 WARN. `python3 tools/presubmit.py --quick --base upstream/main`: the only FAILs left are `tools/emu/test_structs.py` (a `structs.tsv` row cites `ai.hpp:509`, the file has 371 lines; the diff does not touch ai.hpp; pre-existing on main, V read) and a short-name hit fixed before the commit. WARN: siblings (co-op partner: not exercised, stated in Limits), doc-claims on the README row (the row says "no output", not "every").
-- Tests of the one-commit tree (upstream main + the claim, GCC Release, game data): `test_pet_search_order`, `test_combat`, `test_monster_ai`, `test_rules`, `test_monsters`, `test_game_rules`, `test_game` all rc 0 (V run). Not run: the other test binaries (the whole set is 1,250 targets, about two hours on the builder lane), `ctest`, `-Wshadow -Werror`, clang-tidy, the det state hashes (tools/d2ddet) for the claimed change: the pick only differs with two or more summons or merc plus summon at equal distance, so the det scenes without a Necromancer or Druid should be identical (I, not run).
+- Oracle: above. The verifier's v1 numbers (1,254 before, 766 worse-than-main in the revive state) were reproduced by it; v2 is 0 in all three shares.
+- `test_pet_search_order` (revive, merc-vs-summon, summon-vs-summon, nearer-wins cases), `test_combat`, `test_monster_ai`, `test_rules`, `test_monsters`, `test_game_rules`, `test_game`: rc 0.
+- `-Wshadow -Wconversion -Werror -fsyntax-only` on ai.cpp, monsters.cpp, the test: rc 0. clang-tidy-19 (the repo's `.clang-tidy`, the compile database of the build) on the test, monsters.cpp, ai.cpp, tick.cpp, pets.cpp, summons.cpp, setup.cpp: no warning or error (the v1 include-cleaner failure is fixed: `d2s_items.hpp` and `<utility>`).
+- `pr_guard.py upstream/main HEAD`: 0 FAIL, 0 WARN.
+- ctest and det hashes: see the result block at the end of this file.
 
-## Not verified / independent verification
+## Independent verification
 
-An independent verifier (d2-reviewer, own harness, own case generator) has NOT looked at it. Checklist for the verifier: (1) decode FUN_005b1900 (0x5b1966..0x5b1979) and FUN_005b1880 yourself and confirm insert-after-head; (2) confirm FUN_005dd7f0's compare is strict `<` (first tried wins); (3) run your own S cases with a merc re-inserted after the summons (the revive case) and say how d2d would need to track it; (4) look for another reader of the foes order (`foes[side.at + 1]` is the merc: unchanged; only `picks` is reordered); (5) co-op with two players.
+v1: verifier verdict NOT READY (two blockers, both answered above). v2 has NOT been verified independently; the author does not certify it. Requested: a second verifier, with the revive oracle of the first verifier (its own `pets_merc_revive.py`), the co-op case (two players), and a check that no other path puts a merc or summon into `actor->pets` / `actor->merc` without a serial (grep found one push site, summons.cpp, and one merc site, `spawn_merc`; a pet created by another route would get serial 0 and sort last).
