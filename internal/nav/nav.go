@@ -106,6 +106,8 @@ type Navigator struct {
 	doorFn       func(class int) bool // test hook: is this object class a door (default: objects.txt IsDoor)
 	doorLogged   map[[2]int]bool
 	doorApproach map[[2]int]int
+	padsUsed     map[padKey]bool     // teleport pads taken in this game (pads.go)
+	padHops      int                 // pad hops of the walk in progress
 	doorTried    map[d2map.Point]int // gate doors the current ExitTo already opened, by map position (gatedoor.go)
 	mouthLast    mouthKey
 	mouthLastOK  bool
@@ -513,17 +515,20 @@ func emptyPathErr() error {
 // GoTo walks to p on the current level.
 func (n *Navigator) GoTo(ctx context.Context, p input.Point) error {
 	t := n.tune()
-	n.doorTried, n.doorApproach = nil, nil
+	n.doorTried, n.doorApproach, n.padHops = nil, nil, 0
 	var err error
 	for try := 0; ; try++ {
 		err = n.walk(ctx, func(*obs) (input.Point, float64, error) { return p, t.ArriveTolerance, nil }, walkOpts{escape: true, fastPoll: true, goal: &p})
 		// The spot lies behind a closed door (V live, scenario act1.tools.malus: the Smith's room in the Barracks, "reached
 		// the closest reachable point"): open the door between and walk again.
-		if !errors.Is(err, ErrNoPath) || errors.Is(err, ErrAlreadyThere) || try >= goDoorTries {
+		if !errors.Is(err, ErrNoPath) || errors.Is(err, ErrAlreadyThere) || try >= goDoorTries+padMaxHops {
 			return err
 		}
 		o, oerr := n.observeWait(ctx)
-		if oerr != nil || !n.openDoorToward(ctx, o, []gate{{at: p, push: p}}, -o.level, false) {
+		if oerr != nil {
+			return err
+		}
+		if !n.openDoorToward(ctx, o, []gate{{at: p, push: p}}, -o.level, false) && !n.hopPad(ctx, o, p) {
 			return err
 		}
 	}
@@ -581,13 +586,13 @@ func (n *Navigator) GoToUnitOf(ctx context.Context, typ int, unitID uint32) erro
 		missingSince = time.Time{}
 		return input.Point{X: u.X, Y: u.Y}, unitTolerance, nil
 	}
-	n.doorTried, n.doorApproach = nil, nil
+	n.doorTried, n.doorApproach, n.padHops = nil, nil, 0
 	var err error
 	for try := 0; ; try++ {
 		err = n.walk(ctx, tgt, walkOpts{ignoreUnit: unitID, escape: true})
 		// The unit stands behind a closed door (V drill.act2.cube: the Horadric Cube chest, "{203 198} is unreachable from
 		// {202 178}"): open the door between and walk again, as GoTo does for a spot.
-		if !errors.Is(err, ErrNoPath) || errors.Is(err, ErrAlreadyThere) || try >= goDoorTries {
+		if !errors.Is(err, ErrNoPath) || errors.Is(err, ErrAlreadyThere) || try >= goDoorTries+padMaxHops {
 			return err
 		}
 		o, oerr := n.observeWait(ctx)
@@ -599,7 +604,7 @@ func (n *Navigator) GoToUnitOf(ctx context.Context, typ int, unitID uint32) erro
 			return err
 		}
 		at := input.Point{X: u.X, Y: u.Y}
-		if !n.openDoorToward(ctx, o, []gate{{at: at, push: at}}, -o.level, false) {
+		if !n.openDoorToward(ctx, o, []gate{{at: at, push: at}}, -o.level, false) && !n.hopPad(ctx, o, at) {
 			return err
 		}
 	}

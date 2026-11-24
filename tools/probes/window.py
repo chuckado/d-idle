@@ -9,10 +9,8 @@ from gridwhole import session, grid
 d2d, data, level, seed, cx, cy, r = sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7])
 p, cmd = session(d2d, data, seed)
 try:
-    print(cmd("debug goto %d" % level).strip()[:60])
+    print(cmd("debug goto %d" % level).strip()[:60])  # the grid is level-wide and level-local; no warp needed
     time.sleep(3)
-    cmd("debug warp %d %d" % (cx, cy))
-    time.sleep(1)
     rows = grid(cmd)
     for y in range(max(0, cy - r), min(len(rows), cy + r + 1)):
         line = "".join("X" if (x, y) == (cx, cy) else rows[y][x] for x in range(max(0, cx - r), min(len(rows[0]), cx + r + 1)))
