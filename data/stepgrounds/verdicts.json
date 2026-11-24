@@ -341,6 +341,42 @@
   "tag": "V",
   "note": "chunk starts; Meshif absent from the lab Act 3 town npcs"
  },
+ "step.act1.smith.stand_click_afar.necro": {
+  "verdict": "RED",
+  "run": "20261123-225912",
+  "tag": "V",
+  "note": "after toolstrade40 (#1249), devp26: Necromancer kills the Smith (1m48s) and the stand step still ends 'never changed after 8 clicks' (outcome skipped, no retry now); the loop guard works: 'to-barracks ran 12 times with nothing after it' parks the chunk after 12 repeats (about 30 s, was 28 minutes). It was GREEN on devp25 before (retry carried the Malus); U flake or a regression of the stand step. The stand's cell (95,212) is a guess (U)"
+ },
+ "step.act1.smith.stand_click_pickup.necro": {
+  "verdict": "RED",
+  "run": "20261123-225912",
+  "tag": "V",
+  "note": "after toolstrade40: still no Malus click (same plan/loop shape; the plan hold-off did not flip it)"
+ },
+ "step.act1.caster_belt.restock.necro": {
+  "verdict": "GREEN",
+  "run": "20261123-221628",
+  "tag": "V",
+  "note": "Necromancer 11 from a town start: 12 virtual minutes without the town-trip loop: the loop of run 210945-459f needs the Barracks arrival crowd; this step does not reproduce it (U which part is missing)"
+ },
+ "step.act1.smith.room_stand.necro": {
+  "verdict": "RED",
+  "run": "20261123-225912",
+  "tag": "V",
+  "note": "after toolstrade40: still parks at 23:02:34 on 'left level 26 for 27 but ended in 7' 25 s after the start: the plan walks the hero out before the chunk exists, so 'the plan holds off while a fresh chunk is queued behind a fight' does not apply (no chunk yet)"
+ },
+ "step.act1.caster_loop.barracks.necro": {
+  "verdict": "GREEN",
+  "run": "20261123-223600",
+  "tag": "V",
+  "note": "Necromancer 11 devp26, warped to the arrival cell (26,83): at most 24 area changes in 20 virtual minutes: the town loop of run 210945-459f is NOT reproduced here (U which condition is missing: the loop needed the Smith dead and the stand step skipped)"
+ },
+ "step.act1.plan_overlap.necro": {
+  "verdict": "GREEN",
+  "run": "20261123-223600",
+  "tag": "V",
+  "note": "Necromancer 11 devp26, start in the Outer Cloister with the chunk accepted: Entered Barracks, no 'ended in 26': the overlap needs the hero to start inside the Barracks (see room_stand)"
+ },
  "drill.act3s.lam_esen.bazaar": {
   "verdict": "GREEN",
   "run": "20261123-224713",

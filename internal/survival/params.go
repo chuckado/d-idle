@@ -30,6 +30,12 @@ type StepDown struct {
 	// RiskMaxK closes the route when the zone's correction k reached it (card survhold3): a k near the clamp means the model
 	// has been wrong about this zone for a while, and its margin (which divides by k) says little either way. 0 = no condition.
 	RiskMaxK float64 `json:"riskMaxK"`
+	// PoolUnvisitedK (card toolstrade39): a zone the ledger has no kills in is judged with the kill-weighted mean k of the
+	// zones that have them instead of the hero-wide k alone, when that is lower. The hero k is a kill-time ratio and sits at
+	// its clamp for a weak weapon, while the damage actually taken per prediction in the visited zones is far lower; without
+	// this every unvisited zone carries the full clamp and a visited one does not (live 2026-11-24: Tower Cellar rows k 3.00,
+	// Dark Wood 1.50). The trial is self-limiting: once visited, the zone's own chickens and deaths raise its k.
+	PoolUnvisitedK bool `json:"poolUnvisitedK"`
 }
 
 // ArchTune overrides the yield and starvation constants for one archetype (profile id); 0 keeps the global value. Data,
