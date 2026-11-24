@@ -553,6 +553,11 @@ var _ boss.ObjectOps = objectAdapter{}
 // hover, so the click point is found first (scan for the object being hovered), then the item is taken and that point
 // clicked.
 func (o objectAdapter) placeItem(ctx context.Context, class int, code string) error {
+	if class == quest.ObjOrifice {
+		if err := o.toTrueTomb(ctx); err != nil {
+			return task.Wrap(task.KindNotFound, err)
+		}
+	}
 	err := o.placeItemOnce(ctx, class, code)
 	// Never leave the quest item on the cursor: the next walk click would drop it on the floor (review M6). CloseAll
 	// returns a held item to the pack; on success it only confirms the cursor is empty.
@@ -702,4 +707,39 @@ func findHover(g *input.Game, o *d2.Unit, clk input.Clock) (int, int, bool) {
 		return 0, 0, false
 	}
 	return mx / n, my / n, true
+}
+
+// toTrueTomb brings the hero from the Canyon of the Magi into the tomb that has the orifice (tombscan.go). Outside the
+// Canyon and the tombs it does nothing: the object search then reports what it finds.
+func (o objectAdapter) toTrueTomb(ctx context.Context) error {
+	if o.nv == nil {
+		return nil
+	}
+	area := func() int {
+		if s, err := o.e.Snapshot(); err == nil && s.Player != nil {
+			return s.Player.Area
+		}
+		return 0
+	}
+	if a := area(); a != canyonOfMagi && (a < tombAreas[0] || a > tombAreas[len(tombAreas)-1]) {
+		return nil
+	}
+	has := func() bool {
+		if lm := o.levelMap(); lm != nil {
+			for _, p := range lm.Presets {
+				if p.Kind == d2map.PresetObject && p.ID == quest.ObjOrifice {
+					return true
+				}
+			}
+		}
+		if s, err := o.e.Snapshot(); err == nil {
+			for i := range s.Objects {
+				if s.Objects[i].Class == quest.ObjOrifice {
+					return true
+				}
+			}
+		}
+		return false
+	}
+	return findTrueTomb(ctx, area, o.nv.ExitTo, has)
 }
