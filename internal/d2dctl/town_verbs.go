@@ -247,6 +247,13 @@ func (c *Client) ApproachNPC(ctx context.Context, index int, timeout time.Durati
 			npc = &l.Items[i]
 		}
 	}
+	return c.approach(ctx, index, npc, l.Items, timeout, c.opened)
+}
+
+// approach is ApproachNPC for any target of "cmd interact <index>": npc is where it stands (nil: unknown), others are the
+// units to walk round, done says the interaction took (an NPC's panel opened, the level changed through a portal).
+func (c *Client) approach(ctx context.Context, index int, npc *NPC, others []NPC, timeout time.Duration, done func(context.Context) (bool, error)) error {
+	l := List[NPC]{Items: others}
 	prev, perr := c.Level(ctx) // no "debug level" (stock d2d?): walk by repeating the verb only
 	if npc == nil {            // not listed (yet): still try the verb, side steps then have no direction
 		npc = &NPC{Index: index, Name: "?", CellX: prev.X, CellY: prev.Y}
@@ -275,7 +282,7 @@ func (c *Client) ApproachNPC(ctx context.Context, index int, timeout time.Durati
 			if err := Pause(ctx, 300*time.Millisecond); err != nil {
 				return err
 			}
-			if ok, err := c.opened(ctx); err != nil || ok {
+			if ok, err := done(ctx); err != nil || ok {
 				return err
 			}
 			if i >= 1 && perr == nil {
@@ -768,22 +775,23 @@ func (c *Client) EnterPortal(ctx context.Context) error {
 	if p == nil {
 		return fmt.Errorf("d2dctl: no portal in level %d", here.ID)
 	}
-	for try := 0; try < 3; try++ {
-		if err := c.TakePortal(ctx, p.Which); err != nil {
-			return err
-		}
-		for i := 0; i < 10; i++ {
-			if err := Pause(ctx, 400*time.Millisecond); err != nil {
-				return err
-			}
-			if l, err := c.Level(ctx); err != nil {
-				return err
-			} else if l.ID != here.ID {
-				return nil
-			}
-		}
+	// "cmd interact" walks straight and stands still for good at the first object, as it does for NPCs (ApproachNPC): from a
+	// camp corner the portal 14 cells away was never reached and the level never changed (V lab tools/probes/portalfar.py:
+	// from 20 cells the hero stopped at (25.9,21.3) with the goal at the portal). So the portal is approached like an NPC:
+	// interact, watch for a stall, route round it over the collision grid, interact again.
+	npc := &NPC{Index: PortalNPC(p.Which), Name: "portal", CellX: p.X, CellY: p.Y}
+	var others []NPC
+	if l, err := c.NPCs(ctx); err == nil {
+		others = l.Items
 	}
-	return fmt.Errorf("d2dctl: portal click did not change the level (still %d)", here.ID)
+	took := func(ctx context.Context) (bool, error) {
+		l, err := c.Level(ctx)
+		return err == nil && l.ID != here.ID, err
+	}
+	if err := c.approach(ctx, npc.Index, npc, others, 15*time.Second, took); err != nil {
+		return fmt.Errorf("d2dctl: portal click did not change the level (still %d): %w", here.ID, err)
+	}
+	return nil
 }
 
 // OpenWaypoint walks to the town waypoint ("npcs" row "Waypoint") until its panel is up. V: panel flag true,

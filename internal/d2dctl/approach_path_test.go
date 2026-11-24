@@ -154,3 +154,36 @@ func TestPlanAroundRealCampStallCells(t *testing.T) {
 		t.Error("arrival cell lost its clearance-1 route")
 	}
 }
+
+// EnterPortal: a portal behind a wall is reached by the grid route when the interact verb stalls at the wall (V lab
+// tools/probes/portalfar.py: from 20 cells the hero stood still at an object, the level never changed). Must fail with the old
+// loop of three plain interacts: no cmd move is ever sent and the error is "portal click did not change the level".
+func TestEnterPortalRoutesAroundTheWall(t *testing.T) {
+	oldPause, oldNow := Pause, Now
+	t.Cleanup(func() { Pause, Now = oldPause, oldNow })
+	virt := time.Unix(0, 0)
+	Pause = func(ctx context.Context, d time.Duration) error { virt = virt.Add(d); return ctx.Err() }
+	Now = func() time.Time { return virt }
+	x, y := 6.0, 6.0
+	level := 1
+	moves := 0
+	grid := strings.Join(wallGrid(), "\n") + "\nok\n"
+	_, c := startStub(t, map[string]string{"debug portals": "0 2 27.7 48.1\n1 1 14.0 6.0\nok\n", "npcs": "ok\n", "debug grid 5": grid}, func(line string, s *stub) {
+		if strings.HasPrefix(line, "cmd move") {
+			moves++
+			f := strings.Fields(line)
+			x, _ = strconv.ParseFloat(f[2], 64)
+			y, _ = strconv.ParseFloat(f[3], 64)
+		}
+		if x > 12 && line == "cmd interact -2001" {
+			level = 2
+		}
+		s.rep["debug level"] = "ok " + strconv.Itoa(level) + " " + strconv.FormatFloat(x, 'f', 2, 64) + " " + strconv.FormatFloat(y, 'f', 2, 64) + " 20 12 0 0\n"
+	})
+	if err := c.EnterPortal(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	if moves < 2 || level != 2 {
+		t.Fatalf("moves %d level %d", moves, level)
+	}
+}
