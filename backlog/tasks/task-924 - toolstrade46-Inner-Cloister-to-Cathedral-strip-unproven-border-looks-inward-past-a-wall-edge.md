@@ -1,10 +1,13 @@
 ---
 id: TASK-924
-title: 'toolstrade46: Inner Cloister to Cathedral strip (unproven border looks inward past a wall edge)'
-status: Proposed
+title: >-
+  toolstrade46: Inner Cloister to Cathedral strip (unproven border looks inward
+  past a wall edge)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T17:53:00Z'
+updated_date: '2026-11-24T18:12:00Z'
 labels:
   - bot
   - bot-fix
