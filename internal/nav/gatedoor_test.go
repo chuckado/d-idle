@@ -909,3 +909,66 @@ func TestGoToThePastDoorInTheLairBesideTheStairs(t *testing.T) {
 		})
 	}
 }
+
+// V live 2026-11-24 22:27Z (attempt 7): the fighter walks to a far boss in slices of 3 s. Every slice began with the walk to the closest
+// point of the unreachable goal (the north end of the corridor, y 113) and then walked 20 tiles back south to the door (80,135); the
+// door was never reached in four minutes. The walk after a cut-off door walk goes to that door first. Same lair grid; slices are
+// cut after sliceSteps sim steps. Both classes (the geometry knows none). Must fail while every slice starts with the closest-point walk.
+func TestSlicedGoToReachesTheDoorPastTheClosestPoint(t *testing.T) {
+	data, err := os.ReadFile("testdata/lair37.grid")
+	if err != nil {
+		t.Fatal(err)
+	}
+	rows := strings.Split(strings.TrimSpace(string(data)), "\n")
+	const ox, oy, cx, cy = 1000, 1000, 30, 100
+	at := func(x, y int) input.Point { return input.Point{X: ox + x - cx, Y: oy + y - cy} }
+	for _, cls := range []string{"Paladin", "Necromancer"} {
+		t.Run(cls, func(t *testing.T) {
+			g := d2map.NewGrid()
+			cells := make([]uint16, len(rows[0])*len(rows))
+			for y, r := range rows {
+				for x, c := range r {
+					if c == '#' || c == 'D' {
+						cells[y*len(rows[0])+x] = 1
+					}
+				}
+			}
+			g.SetBlock(d2map.Rect{X: ox, Y: oy, W: len(rows[0]), H: len(rows)}, cells)
+			l37 := &simLevel{no: 37, rect: d2map.Rect{X: ox, Y: oy, W: len(rows[0]), H: len(rows)}}
+			s := newSim(g, at(82, 113), l37)
+			s.reveal = 400
+			s.revealRooms()
+			door := at(80, 135)
+			l37.lm.Presets = []d2map.Preset{{Kind: d2map.PresetObject, ID: 64, Pos: d2map.Point{X: door.X, Y: door.Y}}}
+			l37.lm.Exits = []d2map.Exit{{Dest: 36, Pos: d2map.Point{X: at(95, 111).X, Y: at(95, 111).Y}}}
+			opened := false
+			s.onInteract = func(s *sim, tg input.Target) error {
+				if !opened && dist(tg.Pos, door) < 8 {
+					opened = true
+					openDoor(s, d2map.Rect{X: door.X - 1, Y: door.Y - 1, W: 3, H: 3})
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class == 64 }
+			n.exploreFn = func(context.Context, func() bool, *input.Point) error { return ErrExplored }
+			n.stayLevel = 37
+			goal := at(45, 120)
+			const sliceSteps = 30
+			for slice := 0; slice < 30 && !opened; slice++ {
+				ctx, cancel := context.WithCancel(ctxT(t))
+				steps := 0
+				s.onStep = func(*sim) {
+					if steps++; steps >= sliceSteps {
+						cancel()
+					}
+				}
+				_ = n.GoTo(ctx, goal)
+				cancel()
+			}
+			if !opened {
+				t.Fatalf("%s: 30 slices and the door was never used (at %v)", cls, s.pos())
+			}
+		})
+	}
+}
