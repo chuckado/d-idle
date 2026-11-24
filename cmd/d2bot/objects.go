@@ -741,5 +741,14 @@ func (o objectAdapter) toTrueTomb(ctx context.Context) error {
 		}
 		return false
 	}
-	return findTrueTomb(ctx, area, o.nv.ExitTo, has)
+	explore := func(ctx context.Context, stop func() bool) error {
+		ectx, cancel := context.WithTimeout(ctx, 4*time.Minute)
+		defer cancel()
+		err := o.nv.Explore(ectx, stop)
+		if errors.Is(err, nav.ErrExplored) || errors.Is(err, context.DeadlineExceeded) {
+			return nil
+		}
+		return err
+	}
+	return findTrueTomb(ctx, area, o.nv.ExitTo, has, explore)
 }

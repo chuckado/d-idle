@@ -13,9 +13,9 @@ var tombAreas = []int{66, 67, 68, 69, 70, 71, 72}
 const canyonOfMagi = 46
 
 // findTrueTomb walks the tombs from the Canyon, one after the other, and stops in the one that has the orifice. area reads
-// the current level, exitTo takes an adjacent level, hasOrifice looks for the object in the current level's map. Standing in
+// the current level, exitTo takes an adjacent level, hasOrifice looks for the object in the current level's map, explore builds the level for a while (stopping when hasOrifice turns true). Standing in
 // the true tomb or a tomb that has it already is the end at once; any other level is an error (the scan starts in the Canyon).
-func findTrueTomb(ctx context.Context, area func() int, exitTo func(context.Context, int) error, hasOrifice func() bool) error {
+func findTrueTomb(ctx context.Context, area func() int, exitTo func(context.Context, int) error, hasOrifice func() bool, explore func(context.Context, func() bool) error) error {
 	if a := area(); a >= tombAreas[0] && a <= tombAreas[len(tombAreas)-1] && hasOrifice() {
 		return nil
 	}
@@ -33,6 +33,16 @@ func findTrueTomb(ctx context.Context, area func() int, exitTo func(context.Cont
 		}
 		if hasOrifice() {
 			return nil
+		}
+		// The chamber's room is not in the level map until it is built (V lab: tombs 71 and 72 listed 38 objects and no orifice):
+		// look around for a while, the true tomb shows it.
+		if explore != nil {
+			if err := explore(ctx, hasOrifice); err != nil && ctx.Err() != nil {
+				return ctx.Err()
+			}
+			if hasOrifice() {
+				return nil
+			}
 		}
 	}
 	return fmt.Errorf("none of the seven tombs has the orifice")
