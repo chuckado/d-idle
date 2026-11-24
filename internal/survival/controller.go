@@ -125,6 +125,13 @@ func (l *Ledger) judge(in Input, c Candidate, lam float64, disc float64) verdict
 	l.Refresh(c.Key, in.Power)
 	v := verdict{c: c}
 	v.k = l.KZoneFor(c.Key, in.Now, in.OffenceUnread) * l.KHeroFor(in.OffenceUnread)
+	if row, err := l.P.stepDown(in.Dial.ID); err == nil && row.PoolUnvisitedK {
+		if s := l.peek(c.Key); s == nil || s.Kills <= 0 {
+			if pk, ok := l.pooledK(in); ok && pk < v.k {
+				v.k = pk
+			}
+		}
+	}
 	v.best, v.low = c.ZM.Bad.Best/v.k, c.ZM.Bad.Low/v.k
 	enter, stay := in.Dial.Enter, in.Dial.Stay
 	cur := c.Key == in.Current
@@ -199,6 +206,23 @@ func (l *Ledger) judge(in Input, c Candidate, lam float64, disc float64) verdict
 		v.value *= l.P.starveMul(in.Archetype) // the hero cannot cast here for want of mana: the model's kill speed is a fiction
 	}
 	return v
+}
+
+// pooledK is the kill-weighted mean of k (zone x hero) over the candidate zones with kills in the ledger; false when none.
+func (l *Ledger) pooledK(in Input) (float64, bool) {
+	var num, den float64
+	for _, c := range in.Cands {
+		s := l.peek(c.Key)
+		if s == nil || s.Kills <= 0 {
+			continue
+		}
+		num += s.Kills * l.KZoneFor(c.Key, in.Now, in.OffenceUnread) * l.KHeroFor(in.OffenceUnread)
+		den += s.Kills
+	}
+	if den <= 0 {
+		return 0, false
+	}
+	return num / den, true
 }
 
 // Choose decides the zone (design 5.3). It marks the zone it leaves for cost in the ledger. Pure otherwise.
