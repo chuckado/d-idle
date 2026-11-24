@@ -20,9 +20,11 @@ owns:
   - "internal/resource/beltspec.go"
   - "internal/bot/goal.go"
   - "internal/bot/healcap_test.go"
+  - "internal/bot/questboard.go"
+  - "internal/bot/questboard_goal_test.go"
 exclusive: []
 contracts: []
-result: "Offline only, not verified live: stand click needs reach (3 walks, then danger, no clicks wasted); town healing floor capped by HealingCapacity of the belt plan; executor MaxRepeats (12) parks a group with no progress: <step>."
+result: "Offline only, not verified live: stand click needs reach (3 walks, then danger, no clicks wasted); town healing floor capped by HealingCapacity of the belt plan; executor MaxRepeats (12) parks a group with no progress: <step>; a chunk queued behind a fight holds the level goal in its area (boardHoldsArea)."
 ---
 
 ## Description
