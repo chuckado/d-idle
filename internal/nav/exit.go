@@ -234,6 +234,12 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 			n.clk.Sleep(500 * time.Millisecond)
 			return nil
 		}
+		if ctx.Err() != nil {
+			// The caller took the hero away (the point spender, a pause) while it stood on the tile: that says nothing about
+			// the gap (V drill.act3s.lam_esen.bazaar: the Ruined Temple stairs were marked bad at the tile, the next three
+			// tries found no gate and the chunk parked).
+			return ctx.Err()
+		}
 		n.markBadGate(o.level, levelNo, g.at) // this gap does not lead out (a wall cell the neighbour's grid did not show yet): try the next
 	}
 	return fmt.Errorf("%w: walking out to level %d did not change the level", ErrNoExit, levelNo)

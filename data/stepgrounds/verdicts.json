@@ -61,33 +61,33 @@
  },
  "drill.act2.amulet": {
   "verdict": "GREEN",
-  "run": "20261123-063211-a223",
+  "run": "20261123-175925",
   "tag": "V",
-  "note": "matrix note 23"
+  "note": ""
  },
  "drill.act2.assemble": {
-  "verdict": "BLOCKED",
-  "run": "20261123-034952",
+  "verdict": "GREEN",
+  "run": "20261123-175925",
   "tag": "V",
-  "note": "GREEN to Cain's menu; the done bit after the talk is U (matrix)"
+  "note": "cube, shaft, amulet given; staff made"
  },
  "drill.act2.shaft": {
-  "verdict": "RED",
-  "run": "20261123-014519",
+  "verdict": "GREEN",
+  "run": "20261123-174023",
   "tag": "V",
-  "note": "Maggot Lair 1 arrival nook, seed 7 needed for the chest (matrix notes 9, 34)"
+  "note": "Paladin 7, clvl 30 stand-in, merc 20; chest exists on seed 7 only"
  },
  "drill.act2.summoner": {
   "verdict": "RED",
-  "run": "20261123-045154",
+  "run": "20261123-204518",
   "tag": "V",
-  "note": "travel GREEN, the maze kills the hero (matrix note 22)"
+  "note": "pad hop built; lab grid of level 74 is a hairline, no pad reachable"
  },
  "drill.act2.duriel": {
-  "verdict": "RED",
-  "run": "20261123-045350",
+  "verdict": "BLOCKED",
+  "run": "20261123-182059",
   "tag": "V",
-  "note": "no exit found Valley of Snakes to Canyon (matrix note 20)"
+  "note": "Canyon reached; staff placement needs a hover-scan verb"
  },
  "drill.act3.lam_esen": {
   "verdict": "RED",
@@ -322,5 +322,23 @@
   "run": "20261123-185443",
   "tag": "V",
   "note": "the super spawn works (devp25) and the bot engages; the stand-in hero dies to the Infector (kit too weak, matrix notes 24 to 26)"
+ },
+ "drill.act3s.lam_esen": {
+  "verdict": "RED",
+  "run": "20261123-185925",
+  "tag": "V",
+  "note": "Ruined Temple tile does not fire for the walking hero; cancel-marks-gate-bad fixed"
+ },
+ "drill.act3s.blade": {
+  "verdict": "BLOCKED",
+  "run": "20261123-195316",
+  "tag": "V",
+  "note": "run cut before its virtual budget; layoutRead knob added"
+ },
+ "drill.act3s.golden_bird": {
+  "verdict": "RED",
+  "run": "20261123-201219",
+  "tag": "V",
+  "note": "not startable: Jade Figurine not in the pack (lab give of j34 unverified)"
  }
 }

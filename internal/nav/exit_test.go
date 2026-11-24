@@ -511,3 +511,22 @@ func TestExitToCrossesAnUnprovenStripThatNeverProves(t *testing.T) {
 		})
 	}
 }
+
+// A cancelled context while the hero stands on the exit tile is not a verdict on the gate (drill.act3s.lam_esen.bazaar).
+func TestExitToCancelledOnTheTileKeepsTheGate(t *testing.T) {
+	g := openField(1000, 1000, 400, 60)
+	l1 := &simLevel{no: 1, rect: d2map.Rect{X: 1000, Y: 1000, W: 200, H: 60}}
+	l2 := &simLevel{no: 2, rect: d2map.Rect{X: 1200, Y: 1000, W: 200, H: 60}}
+	s := newSim(g, input.Point{X: 1010, Y: 1030}, l1, l2)
+	exitOnLine(s, 2)
+	ctx, cancel := context.WithCancel(ctxT(t))
+	defer cancel()
+	s.onClick = func(s *sim, x, y int) { cancel() }
+	n := s.navigator()
+	if err := n.ExitTo(ctx, 2); err == nil {
+		t.Fatal("a cancelled walk reported success")
+	}
+	if len(n.badGates) != 0 {
+		t.Fatalf("the gate was marked bad after a cancel: %v", n.badGates)
+	}
+}
