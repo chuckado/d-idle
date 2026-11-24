@@ -178,7 +178,7 @@ func (o objectAdapter) Interact(ctx context.Context, name string) error {
 					try-- // the approach failed: the click was never made, so it does not count
 					continue
 				}
-				return task.Wrap(task.KindDanger, fmt.Errorf("%s: %w after %d walks (hostiles or a closed way): clear the way and retry", name, err, farWalks))
+				return task.Wrap(task.KindNotFound, fmt.Errorf("%s: %w after %d walks (hostiles or a closed way): the step retries", name, err, farWalks))
 			}
 			return err
 		}
@@ -205,7 +205,7 @@ func (o objectAdapter) Interact(ctx context.Context, name string) error {
 	if spec.kind == objSmash {
 		return nil
 	}
-	return task.Errorf(task.KindTimeout, "%s: the object never changed after %d clicks", name, tries)
+	return task.Errorf(task.KindNotFound, "%s: the object never changed after %d clicks", name, tries)
 }
 
 // objectExploreBudget bounds one search walk of find (one slice: the Step budget of an Interact node is 3 minutes).

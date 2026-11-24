@@ -59,6 +59,10 @@ func (r *Runner) kitRead(s *d2.Snapshot) (k kit, known bool) {
 			k.minMP = rt.KitMinMP
 		}
 	}
+	// the belt plan's mana columns bound what can be carried: a minimum above them is never met
+	if c := resource.ManaCapacity(in, resource.FromEnv(*r.e.Tune)); c > 0 && k.minMP > c {
+		k.minMP = c
+	}
 	return k, true
 }
 
