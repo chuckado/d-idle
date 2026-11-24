@@ -1332,6 +1332,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/qd19: Merge origin/main (merged 2026-11-23) <!--sg:agent/qd19-->
 - agent/fidbatch: Merge branch 'main' into fidbatch (merged 2026-11-23) <!--sg:agent/fidbatch-->
 - toolstrade41: kit mana minimum vs belt plan, stand click retryable (TASK-918, merged 2026-11-23, acceptance 2 of 2): Cause of room_stand RED: not the plan but the kit gate: kitMinMP 3 mana potions in the belt against a plan that holds 1 (Necromancer clvl 31+) or 2, and the scenario belt had none, so the hero went to town at once; kit minimum now capped by ManaCapacity. ... <!--sg:agent/toolstrade41-->
+- agent/qd20: qdmatrix: notes 55 to 58 (Blade, Acts 4 and 5, devp27 smoke), verdicts, deploy list (merged 2026-11-24) <!--sg:agent/qd20-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

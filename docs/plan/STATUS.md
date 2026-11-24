@@ -502,6 +502,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 58da490a4 11-24 01:09 `Merge agent/qd20: qdmatrix: notes 55 to 58 (Blade, Acts 4 and 5, devp27 smoke), verdicts, deploy list` (qd20)
+- 163f40a77 11-24 00:55 `Merge origin/main` (-)
 - 9f333ea8c 11-23 23:53 `Merge agent/toolstrade41: Merge branch 'main' into toolstrade41` (toolstrade41)
 - f074ef688 11-23 23:52 `Merge branch 'main' into toolstrade41` (-)
 - a80a6438b 11-23 23:50 `Merge agent/fidbatch: Merge branch 'main' into fidbatch` (fidbatch)
@@ -510,6 +512,4 @@
 - b6c5c7f66 11-23 23:33 `Merge origin/main` (-)
 - 32fe20846 11-23 23:11 `Merge agent/flip: flip: verdicts after toolstrade40` (flip)
 - e7a0bf000 11-23 22:50 `Merge agent/redsteps: Merge branch 'main' into redsteps` (redsteps)
-- 65d837152 11-23 22:49 `Merge branch 'main' into redsteps` (-)
-- 3f7df71f6 11-23 22:38 `Merge agent/toolstrade40: toolstrade40: a chunk queued behind a fight holds the level goal in its area` (toolstrade40)
 <!-- statusgen:end -->

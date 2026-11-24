@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- qdmatrix: notes 55 to 58 (Blade, Acts 4 and 5, devp27 smoke), verdicts, deploy list <!--sg:agent/qd20-->
 - Merge branch 'main' into toolstrade41 <!--sg:agent/toolstrade41-->
 - Merge branch 'main' into fidbatch <!--sg:agent/fidbatch-->
 - Merge origin/main <!--sg:agent/qd19-->
