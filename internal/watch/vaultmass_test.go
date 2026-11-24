@@ -11,7 +11,7 @@ import (
 	"d2lod-bot/internal/vault"
 )
 
-func massAPI(t *testing.T, s *vault.Store, a *stubActor, withFilter bool) *VaultAPI {
+func massAPI(t testing.TB, s *vault.Store, a *stubActor, withFilter bool) *VaultAPI {
 	t.Helper()
 	tiers, _ := vault.DefaultTiers()
 	d := VaultDesk{On: func() bool { return true }, Store: func() *vault.Store { return s }, Tiers: tiers, Act: a, Quality: func(q int) string {
