@@ -65,8 +65,19 @@ type SlotView struct {
 	Gain    float64 `json:"gain,omitempty"`
 }
 
+// MercSide is the mercenary's side of the compare toggle: whether he is employed, and whether his kind may wear this item
+// (the merc gear rule, never the requirements) in which of his slots (mhead, mtorso, mrhand, mlhand).
+type MercSide struct {
+	Owned bool   `json:"owned"`
+	Kind  string `json:"kind,omitempty"`
+	Can   bool   `json:"can"`
+	Slot  string `json:"slot,omitempty"`
+	Why   string `json:"why,omitempty"`
+}
+
 // Preview is the answer for the item detail sheet.
 type Preview struct {
+	Merc     *MercSide  `json:"merc,omitempty"`
 	Wearable bool       `json:"wearable"`
 	Why      string     `json:"why,omitempty"` // not wearable (a charm, a potion), or unidentified: Reveal first
 	Reveal   bool       `json:"reveal,omitempty"`

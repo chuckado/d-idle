@@ -4,9 +4,14 @@ package lootrules
 const PresetVault = "vault"
 
 // vaultKeepsOwnRule lists Starter ground rules that stay pickups under the Vault preset: gems keep their own rules
-// (the cube upgrade needs them in the pack), and so does everything the kit needs (potions, scrolls, keys, tomes, gold,
-// the charms and jewelry that still have to be identified).
+// (the cube upgrade needs them in the pack), and so does everything the kit needs (potions, scrolls, keys, tomes, gold).
+// Unidentified magic and rare jewelry and charms are NOT in that list: they go to the vault
+// unidentified like any other magic item (the gold reveal opens them there); keeping them as pickups sent every ring
+// and amulet through the pack to the sell or stash chore and none ever reached the vault (docs/probes/vault-rings-2026-11-24.md).
 var vaultKeepsOwnRule = map[string]bool{"g-top-gems": true, "g-mid-gems": true, "g-cube-gems": true}
+
+// vaultUnidJewelry are the Starter's ground `keep` rules for unidentified jewelry and charms.
+var vaultUnidJewelry = map[string]bool{"g-jewelry-id": true, "g-small-charm-id": true, "g-big-charm-id": true}
 
 // VaultPreset is the Starter with the ground-stage stash rules turned into `vault` (peek and record, no pickup):
 // runes, charms, jewels, jewelry, uniques, sets, runeword bases and the magic, rare and crafted gear that the Starter
@@ -23,7 +28,7 @@ func VaultPreset(recordAll bool) *RuleSet {
 		if len(r.Scope) == 1 && r.Scope[0] == PlaceGround {
 			switch {
 			case vaultKeepsOwnRule[r.ID] || r.ID == "g-poor-gear":
-			case r.ID == "g-magic-rare" || r.Action == Stash:
+			case r.ID == "g-magic-rare" || r.Action == Stash || vaultUnidJewelry[r.ID]:
 				r.Action, r.Pickup = Vault, nil
 				r.Reason = "recorded in the vault: " + r.Reason
 			case r.ID == "g-low-gems" || r.ID == "g-junk":

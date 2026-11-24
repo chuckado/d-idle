@@ -42,6 +42,7 @@ type vaultSet struct {
 	act            string // "": no Reveal or Sell; ok (3 charges), none (no scroll), cain (free), dead (the gate refuses)
 	stash          int    // act "gold": the stash gold of the Identify all button (the price of one reveal is 80)
 	actPreset      bool   // reveal and sell rows in every state, and the "short on gold" prompt
+	compare        bool   // the Equip preview that the Compare button reads
 }
 
 var vaultModes = map[string]vaultSet{
@@ -69,6 +70,8 @@ var vaultModes = map[string]vaultSet{
 	"eth": {n: 140, on: true, eth: true, balance: 35}, "eth-short": {n: 140, on: true, eth: true, balance: 5},
 	"eth-owned": {n: 140, on: true, eth: true, balance: 15, owned: 1}, "eth-nofit": {n: 450, on: true, eth: true, balance: 15, owned: 1},
 	"eth-max": {n: 140, on: true, eth: true, balance: 12, owned: 6},
+	// the item sheet's Compare button (card vaultcompare): the Equip preview of the fixture hero (a Sorceress with the gear of /api/inventory) and a Desert Guard
+	"cmp": {n: 140, capacity: 400, on: true, compare: true},
 }
 
 // vaultEthers holds the wallet of each wallet state, keyed like vaultAPIs; they answer /api/ether and the two POST routes.
@@ -209,9 +212,48 @@ func newVaultFor(mode string, dir string) *watch.VaultAPI {
 			}
 		}
 	}
+	if set.compare {
+		desk.Equip = fixtureEquip{st: s}
+	}
 	desk.Store = func() *vault.Store { return s }
 	api.Bind(desk)
 	return api
+}
+
+// fixtureEquip answers GET /api/vault/equip/<id> the way cmd/d2bot does, by the item's code: the slots it takes, what the
+// fixture hero wears there (names of the /api/inventory fixture) and the merc side for a Desert Guard (helm, armour, spear or
+// polearm). The store is not read: the page asks for the id it shows.
+type fixtureEquip struct{ st *vault.Store }
+
+func (fixtureEquip) Gate(context.Context) (bool, string, string) {
+	return false, "off", "Equip is off in this fixture"
+}
+func (fixtureEquip) Enqueue(context.Context, string, string, bool) watch.VaultKeepResult {
+	return watch.VaultKeepResult{}
+}
+func (fixtureEquip) EnqueueSet(context.Context, []string, bool) []watch.VaultKeepResult { return nil }
+func (fixtureEquip) Cancel(string) watch.VaultKeepResult                                { return watch.VaultKeepResult{} }
+func (f fixtureEquip) Preview(id string) (any, bool) {
+	type slot = map[string]any
+	rings := []slot{{"slot": "lring", "label": "left ring", "side": "left", "can": true}, {"slot": "rring", "label": "right ring", "side": "right", "can": true}}
+	bySlot := map[string][]slot{"cap": {{"slot": "head", "label": "helm", "can": true}}, "wsp": {{"slot": "rhand", "label": "right hand", "can": true}},
+		"lrg": {{"slot": "lhand", "label": "left hand", "can": true}}, "lgl": {{"slot": "gloves", "label": "gloves", "can": true}}, "rin": rings,
+		"amu": {{"slot": "neck", "label": "amulet", "can": true}}, "bow": {{"slot": "rhand", "label": "right hand", "can": true}}, "hax": {{"slot": "rhand", "label": "right hand", "can": true}},
+		"vbt": {{"slot": "feet", "label": "boots", "can": true}}}
+	merc := map[string]any{"owned": true, "kind": "desert", "can": false, "why": "a desert cannot use that"}
+	rec, found := f.st.Get(id)
+	if !found {
+		return nil, false
+	}
+	code := rec.Code
+	if code == "cap" {
+		merc = map[string]any{"owned": true, "kind": "desert", "can": true, "slot": "mhead"}
+	}
+	sl, ok := bySlot[code]
+	if !ok {
+		return map[string]any{"enabled": false, "wearable": false, "why": "this item is not worn", "slots": []slot{}}, true
+	}
+	return map[string]any{"enabled": false, "offWhy": "Equip is off in this fixture", "wearable": true, "slots": sl, "merc": merc}, true
 }
 
 var (

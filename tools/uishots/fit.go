@@ -453,6 +453,8 @@ func (r fitResult) judge() []string {
 	}
 	if r.Pop != nil {
 		switch {
+		case !r.Pop.Open && r.Pop.Sel == "#inv-tip" && r.VW < 900 && strings.Contains(r.Page, "/watch/vault"):
+			// the Vault hides the floating tooltip below the docked layout: its item sheet carries the lines (docs/vault.md, vaultcompare)
 		case !r.Pop.Open:
 			bad = append(bad, r.Pop.Sel+" did not open")
 		case !r.Pop.Inside:
