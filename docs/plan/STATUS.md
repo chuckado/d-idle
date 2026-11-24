@@ -503,6 +503,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2b865551d 11-24 11:02 `Merge agent/pipelineaudit: pipeline audit 2026-11-24 (docs only)` (pipelineaudit)
+- c4e2d292b 11-24 11:01 `Merge branch 'main' into pipelineaudit` (-)
 - 9dd0d270f 11-24 10:45 `Merge agent/noconflict: stepcat verdicts split into per-group files; merge-conflict guidance` (noconflict)
 - a4f4b304b 11-24 10:44 `Merge branch 'main' into noconflict` (-)
 - ce6ccea3b 11-24 10:35 `Merge agent/toolstrade44: toolstrade44: the vault poll timing ceiling is skipped under -race (the gate failure was this, not a data race)` (toolstrade44)
@@ -511,6 +513,4 @@
 - ee9aead3d 11-24 09:48 `Merge branch 'main' into fidbatch` (-)
 - a20981c60 11-24 09:34 `Merge agent/qd21: qdmatrix: notes 59 to 62 (Golden Bird GREEN, Harrogath gate, Duriel staff verbs and tomb scan), verdicts, deploy list` (qd21)
 - 627f0398a 11-24 09:26 `Merge origin/main` (-)
-- ea76972fb 11-24 09:12 `Merge branch 'main' into toolstrade44` (-)
-- 782567e37 11-24 08:54 `Merge agent/toolstrade43: Merge branch 'main' into toolstrade43` (toolstrade43)
 <!-- statusgen:end -->
