@@ -476,7 +476,6 @@
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
 | toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
-| toolstrade48 | proposed | - | `docs/probes/andariel-gate-recalibration-2026-11-24.md`<br>`docs/probes/andariel-decisions-2026-11-24.json`<br>`internal/power/floors_report_test.go` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |

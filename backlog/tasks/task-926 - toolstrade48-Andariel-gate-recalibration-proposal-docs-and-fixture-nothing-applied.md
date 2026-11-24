@@ -1,10 +1,13 @@
 ---
 id: TASK-926
-title: 'toolstrade48: Andariel gate recalibration proposal (docs and fixture, nothing applied)'
-status: Proposed
+title: >-
+  toolstrade48: Andariel gate recalibration proposal (docs and fixture, nothing
+  applied)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T18:20:00Z'
+updated_date: '2026-11-24T18:37:00Z'
 labels:
   - docs
   - probe
