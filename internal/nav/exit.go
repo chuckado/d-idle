@@ -270,6 +270,9 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 			}
 			return err
 		}
+		if g.unproven && n.openDoorAtGate(ctx, o, g, levelNo) {
+			continue // a door shuts this gate: it is open now (or was tried); plan again with the new grid
+		}
 		if n.pushThrough(ctx, g, levelNo) || g.unproven && n.lingerAtBorder(ctx, g, levelNo) {
 			n.learn(o.level, levelNo)
 			n.clk.Sleep(500 * time.Millisecond) // let the new level's rooms load before anything acts

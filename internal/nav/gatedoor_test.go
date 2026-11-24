@@ -681,3 +681,45 @@ func TestGatesFromAFrontierPushFromTheNeighboursEdge(t *testing.T) {
 		}
 	})
 }
+
+// V lab devp27 (`debug objectlist`) and live 2026-11-24: the way from the Inner Cloister to the Cathedral is a closed door in
+// the notch of the north wall, and d2d does not link the neighbour (pending, an unproven strip) until it is open. The unproven
+// gate is pushed at for ever without it; the nav opens the door that shuts the gate first. Both classes (the nav does not read
+// the class). Must fail without openDoorAtGate: the door is never used and the exit fails.
+func TestExitToOpensTheDoorThatShutsAnUnprovenBorderGate(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Necromancer"} {
+		t.Run(cls, func(t *testing.T) {
+			g := openField(2800, 3000, 400, 120)
+			blockRect(g, d2map.Rect{X: 2999, Y: 3000, W: 2, H: 50})
+			blockRect(g, d2map.Rect{X: 2999, Y: 3065, W: 2, H: 55})
+			door := d2map.Rect{X: 2999, Y: 3050, W: 2, H: 15}
+			blockRect(g, door) // the doorway is shut
+			l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 200, H: 120}}
+			l2 := &simLevel{no: 2, rect: d2map.Rect{X: 2800, Y: 3000, W: 200, H: 120}}
+			s := newSim(g, input.Point{X: 3100, Y: 3090}, l1, l2)
+			s.reveal = 300
+			l1.lm.Presets = []d2map.Preset{{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: 3000, Y: 3057}}}
+			s.objects = []d2.Unit{d2Unit(77, 24, 3000, 3057)}
+			contact := d2map.Rect{X: 3002, Y: 3050, W: 1, H: 15} // the first walkable column behind the shut doorway
+			l1.lm.Adjacent, l1.lm.Pending = nil, 1
+			l1.lm.Unproven = []d2map.Adjacent{{LevelNo: 2, Rect: d2map.Rect{X: 2800, Y: 3000, W: 200, H: 120}, Contact: contact}}
+			opened := 0
+			s.onInteract = func(s *sim, tg input.Target) error {
+				if tg.ID == 77 {
+					opened++
+					openDoor(s, door)
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class == 24 }
+			n.exploreFn = func(_ context.Context, _ func() bool, _ *input.Point) error { return ErrExplored }
+			if err := n.ExitTo(ctxT(t), 2); err != nil {
+				t.Fatalf("%s: exit: %v (door used %d times)", cls, err, opened)
+			}
+			if opened != 1 || s.cur().no != 2 {
+				t.Fatalf("%s: door used %d times, level %d at %v", cls, opened, s.cur().no, s.pos())
+			}
+		})
+	}
+}
