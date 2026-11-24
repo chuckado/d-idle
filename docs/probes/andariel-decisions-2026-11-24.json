@@ -1,0 +1,2566 @@
+{
+ "schema": "andariel-decisions/1",
+ "note": "board word for Andariel (Normal): margin/k against the dial lines; U: Paladin-model hero inputs, as-played = defence 30 block 15, plan-class = defence 140 block 30 resist 25, life 279 at clvl 20 minus 11 per level, merc alive; k = the ledger hero correction",
+ "rows": [
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.59,
+   "low": 0.59,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.59,
+   "low": 0.59,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.64,
+   "low": 0.64,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.64,
+   "low": 0.64,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.72,
+   "low": 0.72,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.72,
+   "low": 0.72,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.82,
+   "low": 0.82,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.82,
+   "low": 0.82,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.94,
+   "low": 0.94,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.94,
+   "low": 0.94,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 1.22,
+   "low": 1.22,
+   "word": "risky"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 1.22,
+   "low": 1.22,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 1.74,
+   "low": 1.74,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 1.74,
+   "low": 1.74,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 2.36,
+   "low": 2.36,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 2.36,
+   "low": 2.36,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.39,
+   "low": 0.39,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.39,
+   "low": 0.39,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.43,
+   "low": 0.43,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.43,
+   "low": 0.43,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.48,
+   "low": 0.48,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.48,
+   "low": 0.48,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.55,
+   "low": 0.55,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.55,
+   "low": 0.55,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.63,
+   "low": 0.63,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.63,
+   "low": 0.63,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.81,
+   "low": 0.81,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.81,
+   "low": 0.81,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 1.16,
+   "low": 1.16,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 1.16,
+   "low": 1.16,
+   "word": "risky"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 1.57,
+   "low": 1.57,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 1.57,
+   "low": 1.57,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.3,
+   "low": 0.3,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.3,
+   "low": 0.3,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.32,
+   "low": 0.32,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.32,
+   "low": 0.32,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.36,
+   "low": 0.36,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.36,
+   "low": 0.36,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.41,
+   "low": 0.41,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.41,
+   "low": 0.41,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.47,
+   "low": 0.47,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.47,
+   "low": 0.47,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.61,
+   "low": 0.61,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.61,
+   "low": 0.61,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.87,
+   "low": 0.87,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.87,
+   "low": 0.87,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 1.18,
+   "low": 1.18,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 1.18,
+   "low": 1.18,
+   "word": "risky"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.2,
+   "low": 0.2,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.2,
+   "low": 0.2,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.21,
+   "low": 0.21,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.21,
+   "low": 0.21,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.24,
+   "low": 0.24,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.24,
+   "low": 0.24,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.27,
+   "low": 0.27,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.27,
+   "low": 0.27,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.31,
+   "low": 0.31,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.31,
+   "low": 0.31,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.41,
+   "low": 0.41,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.41,
+   "low": 0.41,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.58,
+   "low": 0.58,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.58,
+   "low": 0.58,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.79,
+   "low": 0.79,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.79,
+   "low": 0.79,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 1.04,
+   "low": 1.04,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 1.04,
+   "low": 1.04,
+   "word": "risky"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 1.19,
+   "low": 1.19,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 1.19,
+   "low": 1.19,
+   "word": "risky"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 1.36,
+   "low": 1.36,
+   "word": "risky"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 1.36,
+   "low": 1.36,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 1.55,
+   "low": 1.55,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 1.55,
+   "low": 1.55,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 1.77,
+   "low": 1.77,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 1.77,
+   "low": 1.77,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 2.29,
+   "low": 2.29,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 2.29,
+   "low": 2.29,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 3.28,
+   "low": 3.28,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 3.28,
+   "low": 3.28,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 4.45,
+   "low": 4.45,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 4.45,
+   "low": 4.45,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.69,
+   "low": 0.69,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.69,
+   "low": 0.69,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.79,
+   "low": 0.79,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.79,
+   "low": 0.79,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.91,
+   "low": 0.91,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.91,
+   "low": 0.91,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 1.04,
+   "low": 1.04,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 1.04,
+   "low": 1.04,
+   "word": "risky"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 1.18,
+   "low": 1.18,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 1.18,
+   "low": 1.18,
+   "word": "risky"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 1.53,
+   "low": 1.53,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 1.53,
+   "low": 1.53,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 2.19,
+   "low": 2.19,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 2.19,
+   "low": 2.19,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 2.96,
+   "low": 2.96,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 2.96,
+   "low": 2.96,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.52,
+   "low": 0.52,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.52,
+   "low": 0.52,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.59,
+   "low": 0.59,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.59,
+   "low": 0.59,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.68,
+   "low": 0.68,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.68,
+   "low": 0.68,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.78,
+   "low": 0.78,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.78,
+   "low": 0.78,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.89,
+   "low": 0.89,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.89,
+   "low": 0.89,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 1.15,
+   "low": 1.15,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 1.15,
+   "low": 1.15,
+   "word": "risky"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 1.64,
+   "low": 1.64,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 1.64,
+   "low": 1.64,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 2.22,
+   "low": 2.22,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 2.22,
+   "low": 2.22,
+   "word": "safe"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.35,
+   "low": 0.35,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.35,
+   "low": 0.35,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.4,
+   "low": 0.4,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.4,
+   "low": 0.4,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.45,
+   "low": 0.45,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.45,
+   "low": 0.45,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.52,
+   "low": 0.52,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.52,
+   "low": 0.52,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.59,
+   "low": 0.59,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.59,
+   "low": 0.59,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.76,
+   "low": 0.76,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.76,
+   "low": 0.76,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 1.09,
+   "low": 1.09,
+   "word": "too_hard"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 1.09,
+   "low": 1.09,
+   "word": "risky"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 1.48,
+   "low": 1.48,
+   "word": "risky"
+  },
+  {
+   "class": "Paladin",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 1.48,
+   "low": 1.48,
+   "word": "safe"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.54,
+   "low": 0.54,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.54,
+   "low": 0.54,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.59,
+   "low": 0.59,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.59,
+   "low": 0.59,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.34,
+   "low": 0.34,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.34,
+   "low": 0.34,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.43,
+   "low": 0.43,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.43,
+   "low": 0.43,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.52,
+   "low": 0.52,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.52,
+   "low": 0.52,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.7,
+   "low": 0.7,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.7,
+   "low": 0.7,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 1.29,
+   "low": 1.29,
+   "word": "risky"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 1.29,
+   "low": 1.29,
+   "word": "safe"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 2.15,
+   "low": 2.15,
+   "word": "safe"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 2.15,
+   "low": 2.15,
+   "word": "safe"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.36,
+   "low": 0.36,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.36,
+   "low": 0.36,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.39,
+   "low": 0.39,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.39,
+   "low": 0.39,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.22,
+   "low": 0.22,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.22,
+   "low": 0.22,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.28,
+   "low": 0.28,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.28,
+   "low": 0.28,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.35,
+   "low": 0.35,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.35,
+   "low": 0.35,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.47,
+   "low": 0.47,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.47,
+   "low": 0.47,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.86,
+   "low": 0.86,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.86,
+   "low": 0.86,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 1.43,
+   "low": 1.43,
+   "word": "risky"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 1.43,
+   "low": 1.43,
+   "word": "safe"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.27,
+   "low": 0.27,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.27,
+   "low": 0.27,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.3,
+   "low": 0.3,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.3,
+   "low": 0.3,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.17,
+   "low": 0.17,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.17,
+   "low": 0.17,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.21,
+   "low": 0.21,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.21,
+   "low": 0.21,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.26,
+   "low": 0.26,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.26,
+   "low": 0.26,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.35,
+   "low": 0.35,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.35,
+   "low": 0.35,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.64,
+   "low": 0.64,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.64,
+   "low": 0.64,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 1.08,
+   "low": 1.08,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 1.08,
+   "low": 1.08,
+   "word": "risky"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.18,
+   "low": 0.18,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.18,
+   "low": 0.18,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.2,
+   "low": 0.2,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.2,
+   "low": 0.2,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.11,
+   "low": 0.11,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.11,
+   "low": 0.11,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.14,
+   "low": 0.14,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.14,
+   "low": 0.14,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.17,
+   "low": 0.17,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.17,
+   "low": 0.17,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.23,
+   "low": 0.23,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.23,
+   "low": 0.23,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.43,
+   "low": 0.43,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.43,
+   "low": 0.43,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.72,
+   "low": 0.72,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "as-played",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.72,
+   "low": 0.72,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.54,
+   "low": 0.54,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.54,
+   "low": 0.54,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.59,
+   "low": 0.59,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.59,
+   "low": 0.59,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.34,
+   "low": 0.34,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.34,
+   "low": 0.34,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.43,
+   "low": 0.43,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.43,
+   "low": 0.43,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.52,
+   "low": 0.52,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.52,
+   "low": 0.52,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 0.7,
+   "low": 0.7,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 0.7,
+   "low": 0.7,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 1.29,
+   "low": 1.29,
+   "word": "risky"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 1.29,
+   "low": 1.29,
+   "word": "safe"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "balanced",
+   "best": 2.15,
+   "low": 2.15,
+   "word": "safe"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 1.0,
+   "dial": "bold",
+   "best": 2.15,
+   "low": 2.15,
+   "word": "safe"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.36,
+   "low": 0.36,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.36,
+   "low": 0.36,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.39,
+   "low": 0.39,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.39,
+   "low": 0.39,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.22,
+   "low": 0.22,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.22,
+   "low": 0.22,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.28,
+   "low": 0.28,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.28,
+   "low": 0.28,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.35,
+   "low": 0.35,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.35,
+   "low": 0.35,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.47,
+   "low": 0.47,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.47,
+   "low": 0.47,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 0.86,
+   "low": 0.86,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 0.86,
+   "low": 0.86,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "balanced",
+   "best": 1.43,
+   "low": 1.43,
+   "word": "risky"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 1.5,
+   "dial": "bold",
+   "best": 1.43,
+   "low": 1.43,
+   "word": "safe"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.27,
+   "low": 0.27,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.27,
+   "low": 0.27,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.3,
+   "low": 0.3,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.3,
+   "low": 0.3,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.17,
+   "low": 0.17,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.17,
+   "low": 0.17,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.21,
+   "low": 0.21,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.21,
+   "low": 0.21,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.26,
+   "low": 0.26,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.26,
+   "low": 0.26,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.35,
+   "low": 0.35,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.35,
+   "low": 0.35,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 0.64,
+   "low": 0.64,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 0.64,
+   "low": 0.64,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "balanced",
+   "best": 1.08,
+   "low": 1.08,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 2.0,
+   "dial": "bold",
+   "best": 1.08,
+   "low": 1.08,
+   "word": "risky"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.18,
+   "low": 0.18,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 8,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.18,
+   "low": 0.18,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.2,
+   "low": 0.2,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 9,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.2,
+   "low": 0.2,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.11,
+   "low": 0.11,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 10,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.11,
+   "low": 0.11,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.14,
+   "low": 0.14,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 11,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.14,
+   "low": 0.14,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.17,
+   "low": 0.17,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 12,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.17,
+   "low": 0.17,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.23,
+   "low": 0.23,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 14,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.23,
+   "low": 0.23,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.43,
+   "low": 0.43,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 17,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.43,
+   "low": 0.43,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "balanced",
+   "best": 0.72,
+   "low": 0.72,
+   "word": "too_hard"
+  },
+  {
+   "class": "Necromancer",
+   "clvl": 20,
+   "gear": "plan-class",
+   "k": 3.0,
+   "dial": "bold",
+   "best": 0.72,
+   "low": 0.72,
+   "word": "too_hard"
+  }
+ ]
+}

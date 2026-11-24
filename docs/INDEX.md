@@ -1014,6 +1014,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `probes/`
 
+- [andariel-gate-recalibration-2026-11-24.md](probes/andariel-gate-recalibration-2026-11-24.md): Andariel gate recalibration: a proposal, nothing applied (2026-11-24)
 - [autoalloc-necro-summoner-default-2026-11-23.md](probes/autoalloc-necro-summoner-default-2026-11-23.md): Necromancer Summoner auto-alloc: what the table says, which default (2026-11-23) (status: recommendation, no data defaults changed here (the build-choice card owns `defaultVariant`).)
 
 `probes/baseline-runs/20261102/`

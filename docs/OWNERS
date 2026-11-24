@@ -604,6 +604,8 @@ docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/points.md  credit-runner  agencyp0
+docs/probes/andariel-decisions-2026-11-24.json  credit-runner  toolstrade48
+docs/probes/andariel-gate-recalibration-2026-11-24.md  credit-runner  toolstrade48
 docs/probes/autoalloc-necro-summoner-default-2026-11-23.md  credit-runner  allocprobe
 docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm7
 docs/probes/bot-cpu-2026-11-16.md  credit-runner  botcpu
@@ -1603,6 +1605,7 @@ internal/power/  credit-runner  powerwire
 internal/power/  credit-runner  survB
 internal/power/archetype.go  credit-runner  qdmatrix
 internal/power/floors_report_test.go  credit-runner  toolstrade43
+internal/power/floors_report_test.go  credit-runner  toolstrade48
 internal/power/margin.go  credit-runner  resistorder
 internal/power/profiles.json  credit-runner  agencyp0
 internal/power/skilldamage_test.go  credit-runner  agencyp0
