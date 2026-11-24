@@ -119,7 +119,7 @@ func AndarielWarn(w World) string {
 // andarielHeld reports the unattended hold: the campaign may not enter Andariel while the knob is on, the fight has not
 // been won once (ADR 0011 gate 3) and she is not dead.
 func andarielHeld(w World) bool {
-	return w.AndarielHold && normalDiff(w) && !w.Killed[BossAndy] && !QuestDone(w, QAndariel)
+	return !TryActive() && w.AndarielHold && normalDiff(w) && !w.Killed[BossAndy] && !QuestDone(w, QAndariel)
 }
 
 const andarielHeldWhy = "unattended hold: the throwaway fight has not won yet (boss.andarielHold)"
@@ -128,6 +128,9 @@ const andarielHeldWhy = "unattended hold: the throwaway fight has not won yet (b
 func normalDiff(w World) bool { return w.Difficulty == "" || w.Difficulty == "normal" }
 
 func (g BossGate) floor(w World) int {
+	if TryActive() {
+		return 0 // the owner's try anyway: the level floor is a readiness word
+	}
 	f := g.baseFloor(w)
 	if g.Route {
 		f = max(f, routeFloor(w))

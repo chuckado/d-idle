@@ -1,0 +1,32 @@
+{
+ "step.act4.terrors_end.diablo.travel_chaos_sanctuary": {
+  "note": "the hero died on the way (a fight, matrix notes 24 to 26); a travel verdict needs the fights solved first",
+  "run": "20261123-183646",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "step.act4.terrors_end.diablo.travel_river_of_flame": {
+  "note": "the hero died on the way (a fight, matrix notes 24 to 26); a travel verdict needs the fights solved first",
+  "run": "20261123-183646",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "step.act4.terrors_end.seals.kill_de_seis": {
+  "note": "the super spawn works (devp25) and the bot engages; the stand-in hero dies to Lord De Seis (kit too weak, matrix notes 24 to 26)",
+  "run": "20261123-185443",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "step.act4.terrors_end.seals.kill_infector": {
+  "note": "the super spawn works (devp25) and the bot engages; the stand-in hero dies to the Infector (kit too weak, matrix notes 24 to 26)",
+  "run": "20261123-185443",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "step.act4.terrors_end.seals.kill_vizier": {
+  "note": "the super spawn works (devp25) and the bot engages; the stand-in hero dies to the Grand Vizier (kit too weak, matrix notes 24 to 26)",
+  "run": "20261123-185443",
+  "tag": "V",
+  "verdict": "RED"
+ }
+}

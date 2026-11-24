@@ -708,6 +708,7 @@ func (r *Runner) boardStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 		r.boardNote("auto start "+act.Quest+"/"+act.Chunk, fmt.Sprintf("quest board: %s/%s started by itself", act.Quest, act.Chunk))
 	}
 	d, err := rt.exec.Next()
+	r.syncTry(rt)
 	if err != nil {
 		r.boardNote("next", "quest board: "+err.Error())
 		return r.boardBetween(ctx, snap, c)
@@ -1074,6 +1075,16 @@ func (r *Runner) boardYield() bool {
 	return true
 }
 
+// syncTry follows the executor's try-anyway state into the task layer (task.SetTry): on while the owner's one-shot override
+// runs its chunk, off the moment the executor ends it (park, death, finish, stop). Called right after every Next.
+func (r *Runner) syncTry(rt *boardRT) {
+	on := rt.exec.TryKey() != ""
+	if on != task.TryActive() {
+		r.e.Log.Info("override: try anyway", "active", on)
+	}
+	task.SetTry(on)
+}
+
 // boardHoldsArea says an accepted chunk waits for the fight the hero is in: the level goal must not walk the hero out of
 // the chunk's area meanwhile (V lab 2026-11-23, necro step scenario: the plan walked the hero out of the Barracks while the
 // army fought, then the first step of the chunk parked "ended in 26").
@@ -1117,6 +1128,7 @@ func (r *Runner) boardPreemptsWhy(snap *d2.Snapshot, c control) (bool, string) {
 	rt.holdFight = false
 	rt.mu.Unlock()
 	d, err := rt.exec.Next()
+	r.syncTry(rt)
 	if err != nil {
 		return false, ""
 	}

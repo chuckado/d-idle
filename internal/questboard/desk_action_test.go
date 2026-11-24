@@ -19,7 +19,6 @@ func TestChunkActionEveryState(t *testing.T) {
 		off0   bool
 	}{
 		{name: "locked", st: Locked},
-		{name: "available", st: Available},
 		{name: "ready", st: Ready, off: startable, verb: "start"},
 		{name: "ready not startable", st: Ready, off: &OfferView{}},
 		{name: "accepted", st: Accepted, run: &Run{Status: RunRunning}, verb: "cancel"},
@@ -30,6 +29,8 @@ func TestChunkActionEveryState(t *testing.T) {
 		{name: "awaiting handin_ready paused", st: Awaiting, reason: hand, paused: true, verb: "start", off0: true},
 		{name: "handing in", st: Awaiting, run: &Run{Status: RunHandingIn}, verb: "handin", off0: true},
 		{name: "blocked", st: Blocked, verb: "retry"},
+		{name: "available (readiness refusal)", st: Available, verb: "try"},
+		{name: "available paused", st: Available, paused: true},
 		{name: "done", st: Done},
 		{name: "skipped", st: Skipped},
 	} {

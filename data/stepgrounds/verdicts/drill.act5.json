@@ -1,0 +1,32 @@
+{
+ "drill.act5.ancients": {
+  "note": "statues in view, fight never starts",
+  "run": "20261124-005014",
+  "tag": "V",
+  "verdict": "BLOCKED"
+ },
+ "drill.act5.baal": {
+  "note": "matrix notes 6, 26",
+  "run": "20261123-071114",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "drill.act5.betrayal": {
+  "note": "Halls of Vaught entered; fight open",
+  "run": "20261124-004654",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "drill.act5.prison": {
+  "note": "travel green; word 0x0008, reward bit not set",
+  "run": "20261124-004546",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "drill.act5.siege": {
+  "note": "leaves Harrogath through the gate; word 0x0008, reward bit not set",
+  "run": "20261124-083449",
+  "tag": "V",
+  "verdict": "RED"
+ }
+}

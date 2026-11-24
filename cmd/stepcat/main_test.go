@@ -35,7 +35,10 @@ func TestCheckFailsOnGaps(t *testing.T) {
 	for a := '1'; a <= '5'; a++ {
 		copyTree("data/questboard/act" + string(a) + ".json")
 	}
-	copyTree("data/stepgrounds/verdicts.json")
+	vfiles, _ := filepath.Glob("../../data/stepgrounds/verdicts/*.json")
+	for _, f := range vfiles {
+		copyTree("data/stepgrounds/verdicts/" + filepath.Base(f))
+	}
 	copyTree("tools/provingground/scenarios/stepgrounds.json")
 	spec := `{"schema":"stepgrounds/1","steps":[
  {"id":"den_of_evil/clear_den/talk_akara","scenario":"no.such.scenario"},
@@ -53,5 +56,32 @@ func TestCheckFailsOnGaps(t *testing.T) {
 		if !strings.Contains(all, want) {
 			t.Errorf("want a problem containing %q, got:\n%s", want, all)
 		}
+	}
+}
+
+// The split verdict files merge into the same catalogue the single file gave.
+func TestVerdictsSplitMatchesGolden(t *testing.T) {
+	got, err := loadVerdicts("../..")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(got) != 64 || got["step.act1.smith.malus_pickup"].Verdict != "GREEN" {
+		t.Fatalf("merged verdicts look wrong: %d entries", len(got))
+	}
+}
+
+// Must-fail control: the same id in two files is refused.
+func TestVerdictsDuplicateRefused(t *testing.T) {
+	root := t.TempDir()
+	dir := filepath.Join(root, "data/stepgrounds/verdicts")
+	_ = os.MkdirAll(dir, 0o755)
+	body := `{"step.x.y":{"verdict":"GREEN","run":"r","tag":"V"}}`
+	for _, n := range []string{"a.json", "b.json"} {
+		if err := os.WriteFile(filepath.Join(dir, n), []byte(body), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if _, err := loadVerdicts(root); err == nil || !strings.Contains(err.Error(), "step.x.y") {
+		t.Fatalf("want duplicate error, got %v", err)
 	}
 }

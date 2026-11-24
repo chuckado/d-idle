@@ -1,0 +1,140 @@
+{
+ "step.act1.caster_belt.restock.necro": {
+  "note": "Necromancer 11 from a town start: 12 virtual minutes without the town-trip loop: the loop of run 210945-459f needs the Barracks arrival crowd; this step does not reproduce it (U which part is missing)",
+  "run": "20261123-221628",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.caster_loop.barracks.necro": {
+  "note": "Necromancer 11 devp26, warped to the arrival cell (26,83): at most 24 area changes in 20 virtual minutes: the town loop of run 210945-459f is NOT reproduced here (U which condition is missing: the loop needed the Smith dead and the stand step skipped)",
+  "run": "20261123-223600",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.den_of_evil.clear_den.walk_blood_moor": {
+  "note": "Paladin 11, clvl 24 kit",
+  "run": "20261123-181503",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.forgotten_tower.countess.descend_to_cellar": {
+  "note": "Paladin 11, clvl 24 kit",
+  "run": "20261123-181503",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.forgotten_tower.countess.kill_countess": {
+  "note": "devp25 binary: spawn super countess, the bot kills 'The Countess' (the spawn is the unit with her mods and treasure class, not her room)",
+  "run": "20261123-185443",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.forgotten_tower.countess.travel_black_marsh": {
+  "note": "Paladin 11, clvl 24 kit",
+  "run": "20261123-181503",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.plan_overlap.necro": {
+  "note": "Necromancer 11 devp26, start in the Outer Cloister with the chunk accepted: Entered Barracks, no 'ended in 26': the overlap needs the hero to start inside the Barracks (see room_stand)",
+  "run": "20261123-223600",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.search_for_cain.scroll.take_scroll": {
+  "note": "Paladin 11, clvl 24 kit",
+  "run": "20261123-181503",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.search_for_cain.scroll.travel_dark_wood": {
+  "note": "Paladin 11, clvl 24 kit",
+  "run": "20261123-181503",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.search_for_cain.stones.travel_stony_field": {
+  "note": "Paladin 11, clvl 24 kit",
+  "run": "20261123-181503",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.sisters_burial_grounds.blood_raven.enter_burial_grounds": {
+  "note": "Paladin 11, clvl 24 kit",
+  "run": "20261123-181503",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.sisters_burial_grounds.blood_raven.kill_blood_raven": {
+  "note": "Paladin 11, clvl 24 kit",
+  "run": "20261123-181503",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.sisters_burial_grounds.blood_raven.travel_cold_plains": {
+  "note": "Paladin 11, clvl 24 kit",
+  "run": "20261123-181503",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.sisters_to_the_slaughter.andariel.travel_catacombs": {
+  "note": "farm goal from Catacombs 3: the hero went to town on a pack-full chore and did not re-enter Catacombs 4 in 12 virtual min (cause U)",
+  "run": "20261123-183646",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "step.act1.smith.malus_pickup": {
+  "note": "Paladin 11; the Malus on the ground is clicked and carried",
+  "run": "20261123-175946",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.smith.malus_pickup.sorc": {
+  "note": "Sorceress 3",
+  "run": "20261123-180122",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.smith.room_stand.necro": {
+  "note": "after toolstrade40: still parks at 23:02:34 on 'left level 26 for 27 but ended in 7' 25 s after the start: the plan walks the hero out before the chunk exists, so 'the plan holds off while a fresh chunk is queued behind a fight' does not apply (no chunk yet)",
+  "run": "20261123-225912",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "step.act1.smith.stand_click_afar.necro": {
+  "note": "after toolstrade40 (#1249), devp26: Necromancer kills the Smith (1m48s) and the stand step still ends 'never changed after 8 clicks' (outcome skipped, no retry now); the loop guard works: 'to-barracks ran 12 times with nothing after it' parks the chunk after 12 repeats (about 30 s, was 28 minutes). It was GREEN on devp25 before (retry carried the Malus); U flake or a regression of the stand step. The stand's cell (95,212) is a guess (U)",
+  "run": "20261123-225912",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "step.act1.smith.stand_click_pickup": {
+  "note": "with the merged stand step: the board reaches 'Pick up Horadric Malus from the Malus stand' (also in the reruns 190741 and 192710, the latter BLOCKED by a host cut), then 'task step skipped: ran but is still needed' and no hdm in the pack. Cause not isolated: the stand added by debug object add 108 beside the hero may not be the object the step looks up (U); needs the step's log lines at debug level",
+  "run": "20261123-190635",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "step.act1.smith.stand_click_pickup.control": {
+  "note": "control: no hdm",
+  "run": "20261123-185041",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.smith.stand_click_pickup.control.sorc": {
+  "note": "",
+  "run": "20261123-180122",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "step.act1.smith.stand_click_pickup.necro": {
+  "note": "after toolstrade40: still no Malus click (same plan/loop shape; the plan hold-off did not flip it)",
+  "run": "20261123-225912",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "step.act1.tools_of_the_trade.malus.travel_barracks": {
+  "note": "Paladin 11, clvl 24 kit",
+  "run": "20261123-181503",
+  "tag": "V",
+  "verdict": "GREEN"
+ }
+}
