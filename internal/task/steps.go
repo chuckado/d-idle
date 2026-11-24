@@ -76,6 +76,11 @@ func StepStandPickUp(id, stand, item string, done, ready Pred) Step {
 	return Step{ID: id, Title: "Pick up " + item + " from the " + stand, Phase: "fight", Budget: 3 * time.Minute, Est: 40 * time.Second,
 		Need: needIf(func(w World) bool { return done(w) || w.Items[item] > 0 }, ready),
 		Do: func(ctx context.Context, x Actions) error {
+			// the item may already lie on the floor (an earlier click, an earlier game): take it first, click the stand only when
+			// nothing is there
+			if err := x.PickUp(ctx, item); err == nil || Classify(err) != KindNotFound {
+				return err
+			}
 			if err := x.Interact(ctx, stand); err != nil {
 				return err
 			}

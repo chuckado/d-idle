@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into toolstrade35 <!--sg:agent/toolstrade35-->
 - Merge branch 'main' into toolstrade34 <!--sg:agent/toolstrade34-->
 - Merge branch 'main' into stepgrounds <!--sg:agent/stepgrounds-->
 - Merge branch 'main' into toolstrade33 <!--sg:agent/toolstrade33-->

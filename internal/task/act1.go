@@ -289,7 +289,7 @@ func toolsNodes() []Node {
 		// 2026-11-23: a kill by the hero or a golem gives ordinary loot only). One step clicks the stand and picks the Malus up;
 		// it stays optional as before (without a quest word reader nothing tells "handed in" after the hand-in empties the pack, and a
 		// required step would click the stand for ever); Charsi's imbue talk needs hdm in the pack anyway.
-		{Step: optional(StepStandPickUp(id(q, "malus"), "Malus stand", ItemMalus, stageAtLeast(q, StageDone), func(w World) bool { return w.Killed[BossSmith] }))},
+		{Step: optional(StepStandPickUp(id(q, "malus"), "Malus stand", ItemMalus, stageAtLeast(q, StageDone), func(w World) bool { return w.Killed[BossSmith] || w.Area == Barracks }))},
 		{Step: StepTravel(id(q, "home"), "Return to camp", RogueEncampment, not(turnIn(q)))},
 		{Step: StepTalk(id(q, "reward"), "Give the Malus to Charsi", NPCCharsi, "imbue:best", not(turnIn(q)), nil)},
 	}

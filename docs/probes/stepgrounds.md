@@ -24,3 +24,18 @@ Hand-written scenarios of this card live in `tools/provingground/scenarios/stepg
 ## Probes added
 
 `tools/probes/stepdrop.py` (spawn then kill then read the ground), `stepdrop_real.py` (find the level-placed superunique by a warp lattice; did NOT find the Barracks Smith, U), `giveground.py`, `spawnids.py`. Fork verbs missing: `docs/probes/stepgrounds-fork-request.md`.
+
+## Round 2 (2026-11-23, same card)
+
+- The 4 RED generated scenarios of round 1: the shaft pair was a prerequisite lock (the board parks the chunk "locked until Radament's Lair"); with the Act 2 words in the kit (`kits.act2` of steps.json, records 4, 6, 7, 9, 11) both are GREEN (run 20261123-183100). Andariel (Catacombs 4) and Palace Cellar stay RED: a pack-full town chore (cause U) and a death.
+- MISSING (bot): the talk steps need a data row NPC to quest record and word (U) plus the observer; the observer half is done: `cmd/d2scenario/questwords.go` merges `debug quest words` (all 48 words of the active difficulty, devp23) into the state for records `debug quest list` did not print, so assertions on records 16 to 47 are observed on a lab d2d that has the verb (must-fail tests in questwords_test.go). U live: not yet run against a quest assertion on records 16 to 47.
+- Eight travel steps of Acts 1 to 5 got generated scenarios with the named kits `stand30` and `stand60`; all RED on the builder (deaths in Acts 3 to 5, and the stand60 words read Mephisto, Izual and Terror's End done). Verdict rows say so; the scenarios are a starting point, not a result.
+- Ledger noise: runs on a labrun-synced tree (no .git) printed "ledger line refused, missing bot_commit"; tools/provingground/run.sh now stamps `tree-<hash of the Go sources>` when git gives nothing (V: the runs of round 2 print no ledger line).
+- Open for the toolstrade owner: with the board chunk running, a Malus lying on the Barracks floor is not picked up (runs 20261123-175729 and -175828, RED) but is under a plain farm goal (run 20261123-175946 GREEN). The message to the owner could not be delivered (agent not reachable); the coordinator passes it on.
+
+## Round 3 (devp25 stepverbs: `debug spawn super`, `debug object add`)
+
+- Scenario format: `pre.spawn[].super` (a SuperUniques.txt name) and `pre.objects[]` (`class`, optional `x`,`y`), both after the field warp; unit tests with a must-fail control in internal/scenario/stepverbs_test.go. Runs need `PG_D2D_BIN=/data/d2d-lab/qdbin/d2d-devp25-stepverbs`.
+- F1 steps: Countess GREEN (V run 20261123-185443: spawned, killed by the bot). Fangskin, Grand Vizier, De Seis, Infector: the spawn works and the bot engages, the clvl 30/60 stand-in dies (RED, kit).
+- F2 steps: the seals, the anvil and Anya's objects are added and the bot runs without a death, but no effect assertion is known yet (object mode after the operate, quest word), so those three rows are PENDING by declaration, not GREEN. Barricade door: class id U.
+- Smith stand click (toolstrade34 merged): `step.act1.smith.stand_click_pickup` RED (V run 20261123-185041): the stand click step is gated on `w.Killed[BossSmith]` (internal/task/act1.go:292), and the spawned Smith dies before the board chunk starts (the chunk waits for the fight to end), so the boss script never records the kill. A scenario needs the Smith alive when the chunk starts (a pre-start delay or a spawn after the first board step; neither exists in the format) or the bot to count a Smith kill seen outside the script. Control GREEN.

@@ -23,8 +23,11 @@ import (
 type Spec struct {
 	Schema string `json:"schema"`
 	// Kit is the setup every generated scenario starts from (a scenario `pre` and `trigger`, as the scenario format has them).
-	Kit   map[string]any `json:"kit"`
-	Steps []StepSpec     `json:"steps"`
+	Kit map[string]any `json:"kit"`
+	// Kits are named overrides of Kit (a stronger stand-in hero, prerequisite quest words): keys of `pre` replace the kit's,
+	// keys of `trigger.knobs` are added. A gen row names one with `kit`.
+	Kits  map[string]map[string]any `json:"kits,omitempty"`
+	Steps []StepSpec                `json:"steps"`
 }
 
 // StepSpec says how one board step is proven: exactly one of Scenario (a hand-written scenario id), Chunk (only chunk-level
@@ -46,12 +49,14 @@ type Gen struct {
 	Ground  []string         `json:"ground,omitempty"` // item codes given at the hero's feet (debug give <code> 2)
 	Pack    []string         `json:"pack,omitempty"`
 	Spawn   []map[string]any `json:"spawn,omitempty"`
+	Objects []map[string]any `json:"objects,omitempty"` // {"class": objects.txt id, "x","y"}: debug object add (devp25)
+	Assert  []map[string]any `json:"assert,omitempty"`  // extra raw assertions of the scenario format
 	Goals   string           `json:"goals,omitempty"`
 	Enter   string           `json:"enter,omitempty"`  // regexp of the area name the bot must log "Entered ..." for
 	Kill    string           `json:"kill,omitempty"`   // monster name the bot must log "combat kill" for
 	Kills   int              `json:"kills,omitempty"`  // at least this many "combat kill" lines of any monster
 	Picked  string           `json:"picked,omitempty"` // item display name the bot must click ("loot: clicked")
-	Merc    bool             `json:"merc,omitempty"`
+	Kit     string           `json:"kit,omitempty"`
 	Budget  int              `json:"budget,omitempty"`
 	Pending string           `json:"pending,omitempty"` // non-empty: status pending with this reason
 }

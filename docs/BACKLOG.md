@@ -1318,6 +1318,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - toolstrade33: where the hours go: the xp rate gap is per kill, not overhead (TASK-907, merged 2026-11-23, acceptance 1 of 1): Analysis of the live minute lines; no code change; the cellars row of the plan is the lever and is not yet deployed. <!--sg:agent/toolstrade33-->
 - agent/stepgrounds: Merge branch 'main' into stepgrounds (merged 2026-11-23) <!--sg:agent/stepgrounds-->
 - toolstrade34: the Malus comes from the Malus stand (TASK-908, merged 2026-11-23, acceptance 1 of 1): The malus step is StepStandPickUp (click the stand object 108, then pick up); the sim gives hdm only from the stand; unit-tested; the lab hand-in run is not done; whether the real game drops the Malus on the Smith death is unverified. <!--sg:agent/toolstrade34-->
+- toolstrade35: a pick-up that took nothing is not found; the stand step works from the floor (TASK-909, merged 2026-11-23, acceptance 1 of 1): PickUp reports nothing taken as not found; the Malus step picks up first, clicks the stand when nothing lies there, and is ready in the Barracks; unit-tested; the stepgrounds scenarios are not run from here. <!--sg:agent/toolstrade35-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

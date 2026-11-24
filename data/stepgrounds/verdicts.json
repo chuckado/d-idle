@@ -13,9 +13,9 @@
  },
  "step.act1.smith.stand_click_pickup.control": {
   "verdict": "GREEN",
-  "run": "20261123-175946",
+  "run": "20261123-185041",
   "tag": "V",
-  "note": "control: no Malus without a Smith"
+  "note": "control: no hdm"
  },
  "step.act1.smith.stand_click_pickup.control.sorc": {
   "verdict": "GREEN",
@@ -24,10 +24,10 @@
   "note": ""
  },
  "step.act1.smith.stand_click_pickup": {
-  "verdict": "BLOCKED",
-  "run": "probe stepdrop.py",
+  "verdict": "RED",
+  "run": "20261123-185041",
   "tag": "V",
-  "note": "the d2d drops the Malus only from the stand (object 108): waits for the bot's stand click (toolstrade a7b2ec8e)"
+  "note": "the spawned Smith died before the board chunk started, so the boss script never saw the kill (w.Killed[BossSmith] gates the stand click, internal/task/act1.go:292) and hdm never came; scenario needs the Smith alive at the chunk start"
  },
  "drill.act1.sail": {
   "verdict": "GREEN",
@@ -235,26 +235,92 @@
  },
  "step.act2.arcane_sanctuary.portal.travel_palace_cellar": {
   "verdict": "RED",
-  "run": "20261123-181503",
+  "run": "20261123-183646",
   "tag": "V",
-  "note": "no Entered line in 8 min (cause not read, U)"
+  "note": "the hero died on the way (a fight, matrix notes 24 to 26); a travel verdict needs the fights solved first"
  },
  "step.act2.horadric_staff.shaft.travel_far_oasis": {
-  "verdict": "RED",
-  "run": "20261123-181503",
+  "verdict": "GREEN",
+  "run": "20261123-183100",
   "tag": "V",
-  "note": "the board parks the chunk: locked until Radament's Lair (needs the prerequisite quest word in the kit)"
+  "note": "RED before the prerequisite words were in the kit (locked until Radament's Lair); GREEN with records 4,6,7,9,11"
  },
  "step.act2.horadric_staff.shaft.travel_maggot_lair": {
-  "verdict": "RED",
-  "run": "20261123-181503",
+  "verdict": "GREEN",
+  "run": "20261123-183100",
   "tag": "V",
-  "note": "same prerequisite lock as travel_far_oasis (U, not read)"
+  "note": "RED before the prerequisite words were in the kit (locked until Radament's Lair); GREEN with records 4,6,7,9,11"
  },
  "step.act1.sisters_to_the_slaughter.andariel.travel_catacombs": {
   "verdict": "RED",
-  "run": "20261123-181503",
+  "run": "20261123-183646",
   "tag": "V",
-  "note": "no Entered Catacombs 4 in 12 min from Catacombs 3 (cause not read, U)"
+  "note": "farm goal from Catacombs 3: the hero went to town on a pack-full chore and did not re-enter Catacombs 4 in 12 virtual min (cause U)"
+ },
+ "step.act3.guardian.mephisto.travel_durance3": {
+  "verdict": "RED",
+  "run": "20261123-183646",
+  "tag": "V",
+  "note": "the hero died on the way (a fight, matrix notes 24 to 26); a travel verdict needs the fights solved first"
+ },
+ "step.act4.terrors_end.diablo.travel_chaos_sanctuary": {
+  "verdict": "RED",
+  "run": "20261123-183646",
+  "tag": "V",
+  "note": "the hero died on the way (a fight, matrix notes 24 to 26); a travel verdict needs the fights solved first"
+ },
+ "step.act4.terrors_end.diablo.travel_river_of_flame": {
+  "verdict": "RED",
+  "run": "20261123-183646",
+  "tag": "V",
+  "note": "the hero died on the way (a fight, matrix notes 24 to 26); a travel verdict needs the fights solved first"
+ },
+ "step.act3.guardian.mephisto.travel_durance2": {
+  "verdict": "RED",
+  "run": "20261123-183646",
+  "tag": "V",
+  "note": "no Entered line in 12 virtual min; the stand60 kit words read Mephisto, Izual and Terror's End done (bot log 'Quest done: ...'), cause of the stall not isolated (U)"
+ },
+ "step.act5.prison_of_ice.thaw.travel_frozen_river": {
+  "verdict": "RED",
+  "run": "20261123-183646",
+  "tag": "V",
+  "note": "no Entered line in 12 virtual min; the stand60 kit words read Mephisto, Izual and Terror's End done (bot log 'Quest done: ...'), cause of the stall not isolated (U)"
+ },
+ "step.act5.rescue_arreat.doors.travel_frigid_highlands": {
+  "verdict": "RED",
+  "run": "20261123-183646",
+  "tag": "V",
+  "note": "no Entered line in 12 virtual min; the stand60 kit words read Mephisto, Izual and Terror's End done (bot log 'Quest done: ...'), cause of the stall not isolated (U)"
+ },
+ "step.act1.forgotten_tower.countess.kill_countess": {
+  "verdict": "GREEN",
+  "run": "20261123-185443",
+  "tag": "V",
+  "note": "devp25 binary: spawn super countess, the bot kills 'The Countess' (the spawn is the unit with her mods and treasure class, not her room)"
+ },
+ "step.act2.tainted_sun.amulet.kill_fangskin": {
+  "verdict": "RED",
+  "run": "20261123-185443",
+  "tag": "V",
+  "note": "the super spawn works (devp25) and the bot engages; the stand-in hero dies to Fangskin (kit too weak, matrix notes 24 to 26)"
+ },
+ "step.act4.terrors_end.seals.kill_vizier": {
+  "verdict": "RED",
+  "run": "20261123-185443",
+  "tag": "V",
+  "note": "the super spawn works (devp25) and the bot engages; the stand-in hero dies to the Grand Vizier (kit too weak, matrix notes 24 to 26)"
+ },
+ "step.act4.terrors_end.seals.kill_de_seis": {
+  "verdict": "RED",
+  "run": "20261123-185443",
+  "tag": "V",
+  "note": "the super spawn works (devp25) and the bot engages; the stand-in hero dies to Lord De Seis (kit too weak, matrix notes 24 to 26)"
+ },
+ "step.act4.terrors_end.seals.kill_infector": {
+  "verdict": "RED",
+  "run": "20261123-185443",
+  "tag": "V",
+  "note": "the super spawn works (devp25) and the bot engages; the stand-in hero dies to the Infector (kit too weak, matrix notes 24 to 26)"
  }
 }
