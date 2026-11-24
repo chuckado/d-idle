@@ -2835,7 +2835,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -2883,7 +2883,8 @@
       "stat": 5,
       "value": 0
      }
-    ]
+    ],
+    "merc_level": 40
    },
    "trigger": {
     "goals": "reach:90",
@@ -2903,7 +2904,7 @@
     ]
    },
    "budget": {
-    "virtual_min": 30
+    "virtual_min": 120
    },
    "matrix": {
     "classes": [
@@ -2915,7 +2916,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets. Budget 120 virtual minutes and a level 40 desert merc so the Flayer Jungle fights finish.",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
