@@ -491,8 +491,8 @@ func (n *Navigator) pushThrough(ctx context.Context, g gate, levelNo int) bool {
 	t := n.tune()
 	end := n.clk.Now().Add(6 * time.Second)
 	for n.clk.Now().Before(end) && ctx.Err() == nil {
-		if cm, ok := n.in.(cellMover); ok && g.exact != nil {
-			_ = cm.MoveCell(g.exact[0], g.exact[1])
+		if n.cm != nil && g.exact != nil {
+			_ = n.cm.MoveCell(g.exact[0], g.exact[1])
 		} else {
 			_ = n.in.ClickWorld(g.push)
 		}

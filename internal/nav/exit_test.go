@@ -4,11 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
+	"log/slog"
 	"math"
 	"testing"
 	"time"
 
 	"d2lod-bot/internal/d2map"
+	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/input"
 )
 
@@ -555,9 +558,10 @@ func TestExitToMovesToTheExactCellOfAOnePixelWarp(t *testing.T) {
 			s := newSim(g, input.Point{X: 1010, Y: 1030}, l1, l2)
 			exitOnLine(s, 2)
 			s.levels[0].lm.Exits[0].Exact, s.levels[0].lm.Exits[0].HasExact = [2]float64{215.9, 205.9}, true
-			n := s.navigator()
-			cs := &cellSim{Controller: n.in, s: s}
-			n.in = cs
+			cs := &cellSim{Controller: s, s: s}
+			tune := env.DefaultTuning()
+			n := New(&env.Env{ID: "test", Log: slog.New(slog.NewTextHandler(io.Discard, nil)), In: cs, Clock: s, Tune: &tune}) // the gate wrapper hides MoveCell
+			n.w, n.st = s, s
 			if err := n.ExitTo(ctxT(t), 2); err != nil {
 				t.Fatal(err)
 			}

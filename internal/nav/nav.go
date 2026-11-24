@@ -106,6 +106,7 @@ type Navigator struct {
 	doorFn       func(class int) bool // test hook: is this object class a door (default: objects.txt IsDoor)
 	doorLogged   map[[2]int]bool
 	doorApproach map[[2]int]int
+	cm           cellMover           // the controller's fractional move, when it has one (exit.go pushThrough)
 	padsUsed     map[padKey]bool     // teleport pads taken in this game (pads.go)
 	seamsOnce    bool                // the plan in progress may cross diagonal seams (nav.plan)
 	padHops      int                 // pad hops of the walk in progress
@@ -192,6 +193,9 @@ func New(e *env.Env) *Navigator {
 			return env.DefaultNavTuning()
 		}
 		return e.Tune.Nav
+	}
+	if cm, ok := n.in.(cellMover); ok {
+		n.cm = cm // the gate wrapper below hides MoveCell
 	}
 	if n.in != nil {
 		n.in = mouthGate{Controller: n.in, n: n} // FIXMOUTH4: every world click passes the cave-mouth gate (mouthgate.go)
