@@ -111,7 +111,10 @@ type Pre struct {
 	Merc      *int       `json:"merc,omitempty"` // hireling.txt Id, nil: none
 	// MercLevel is the level of the hired merc (`debug merc level`, devp23 labverbs; 0 keeps the verb's level 1 merc), then healed.
 	MercLevel int `json:"merc_level,omitempty"`
-	LifePct   int `json:"life_pct,omitempty"`
+	// RoomsUp brings every room of the level into play after the goto (`debug rooms up`, devp28): a town's NPCs (Ormus, Meshif,
+	// Alkor) and a level's objects exist only once their room is up. Needs start field.
+	RoomsUp bool `json:"rooms_up,omitempty"`
+	LifePct int  `json:"life_pct,omitempty"`
 	// Pack is the pack seed: items given to the backpack (the same as Items with where pack, for scenarios that read
 	// better with the two lists apart).
 	Pack []Item `json:"pack,omitempty"`

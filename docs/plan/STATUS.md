@@ -503,14 +503,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 343e273de 11-24 09:50 `Merge agent/fidbatch2: Merge branch 'main' into fidbatch` (fidbatch2)
+- ee9aead3d 11-24 09:48 `Merge branch 'main' into fidbatch` (-)
+- a20981c60 11-24 09:34 `Merge agent/qd21: qdmatrix: notes 59 to 62 (Golden Bird GREEN, Harrogath gate, Duriel staff verbs and tomb scan), verdicts, deploy list` (qd21)
+- 627f0398a 11-24 09:26 `Merge origin/main` (-)
 - 782567e37 11-24 08:54 `Merge agent/toolstrade43: Merge branch 'main' into toolstrade43` (toolstrade43)
 - 0de3d58bb 11-24 08:52 `Merge branch 'main' into toolstrade43` (-)
 - 339a10d86 11-24 08:41 `Merge agent/toolstrade42: toolstrade42: Andariel gate carries the Barracks floor, card` (toolstrade42)
 - 58da490a4 11-24 01:09 `Merge agent/qd20: qdmatrix: notes 55 to 58 (Blade, Acts 4 and 5, devp27 smoke), verdicts, deploy list` (qd20)
 - 163f40a77 11-24 00:55 `Merge origin/main` (-)
 - 9f333ea8c 11-23 23:53 `Merge agent/toolstrade41: Merge branch 'main' into toolstrade41` (toolstrade41)
-- f074ef688 11-23 23:52 `Merge branch 'main' into toolstrade41` (-)
-- a80a6438b 11-23 23:50 `Merge agent/fidbatch: Merge branch 'main' into fidbatch` (fidbatch)
-- 7acef16bf 11-23 23:49 `Merge branch 'main' into fidbatch` (-)
-- 0b014f71e 11-23 23:39 `Merge agent/qd19: Merge origin/main` (qd19)
 <!-- statusgen:end -->
