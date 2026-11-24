@@ -1340,6 +1340,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - toolstrade44: owner try-anyway start (one shot readiness override) (TASK-921, merged 2026-11-24, acceptance 3 of 3): Built offline, not verified live: operator `d2bot ops quest start <quest> --try-anyway --why ...` and the viewer button Try anyway (risk) (POST /api/quests/<id>/try with confirm) start one Available chunk past its readiness refusal ... <!--sg:agent/toolstrade44-->
 - agent/noconflict: stepcat verdicts split into per-group files; merge-conflict guidance (merged 2026-11-24) <!--sg:agent/noconflict-->
 - agent/pipelineaudit: pipeline audit 2026-11-24 (docs only) (merged 2026-11-24) <!--sg:agent/pipelineaudit-->
+- agent/vaultcompare: vaultcompare: no !important (uilint) (merged 2026-11-24) <!--sg:agent/vaultcompare-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
