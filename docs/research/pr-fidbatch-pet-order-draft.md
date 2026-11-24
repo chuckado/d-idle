@@ -62,12 +62,8 @@ build/tests/test_pet_search_order                       # parent: 3 FAIL lines; 
 - Oracle: 200,000 case lines (S and M, seeds 21..24): `before` 1,254 differ, `after` 0. md5 of the cases and the game side equal those of 2026-11-01 (b4a2be90, 168c5cf7): the game side is stable.
 - `test_pet_search_order`: parent (upstream main + the test file only) prints three FAIL lines (took foe 2 / 2 / 1, game.exe's order takes 3 / 4 / 2); the commit prints OK.
 - `python3 tools/pr_guard.py upstream/main HEAD`: 0 FAIL, 0 WARN. `python3 tools/presubmit.py --quick --base upstream/main`: the only FAILs left are `tools/emu/test_structs.py` (a `structs.tsv` row cites `ai.hpp:509`, the file has 371 lines; the diff does not touch ai.hpp; pre-existing on main, V read) and a short-name hit fixed before the commit. WARN: siblings (co-op partner: not exercised, stated in Limits), doc-claims on the README row (the row says "no output", not "every").
-- Full test run of the changed tree: see the section "Test run" below (filled when the build finishes).
+- Tests of the one-commit tree (upstream main + the claim, GCC Release, game data): `test_pet_search_order`, `test_combat`, `test_monster_ai`, `test_rules`, `test_monsters`, `test_game_rules`, `test_game` all rc 0 (V run). Not run: the other test binaries (the whole set is 1,250 targets, about two hours on the builder lane), `ctest`, `-Wshadow -Werror`, clang-tidy, the det state hashes (tools/d2ddet) for the claimed change: the pick only differs with two or more summons or merc plus summon at equal distance, so the det scenes without a Necromancer or Druid should be identical (I, not run).
 
 ## Not verified / independent verification
 
 An independent verifier (d2-reviewer, own harness, own case generator) has NOT looked at it. Checklist for the verifier: (1) decode FUN_005b1900 (0x5b1966..0x5b1979) and FUN_005b1880 yourself and confirm insert-after-head; (2) confirm FUN_005dd7f0's compare is strict `<` (first tried wins); (3) run your own S cases with a merc re-inserted after the summons (the revive case) and say how d2d would need to track it; (4) look for another reader of the foes order (`foes[side.at + 1]` is the merc: unchanged; only `picks` is reordered); (5) co-op with two players.
-
-## Test run
-
-(see the report of the build `po20` in the trace section below)
