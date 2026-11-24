@@ -1,10 +1,13 @@
 ---
 id: TASK-928
-title: 'toolstrade50: unproven border strip is a frontier, rotates and lingers (Inner Cloister to Cathedral live failure)'
-status: Proposed
+title: >-
+  toolstrade50: unproven border strip is a frontier, rotates and lingers (Inner
+  Cloister to Cathedral live failure)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T19:21:00Z'
+updated_date: '2026-11-24T19:51:00Z'
 labels:
   - bot
   - bot-fix

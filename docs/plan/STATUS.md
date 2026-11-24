@@ -476,7 +476,6 @@
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
 | toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
-| toolstrade50 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go`<br>`internal/d2dworld/border.go`<br>`internal/d2dworld/world.go`<br>`internal/d2dworld/world_test.go`<br>`internal/d2map/tracker.go`<br>`tools/provingground/scenarios/navexit.json`<br>`internal/nav/gatedoor.go`<br>`tools/probes/linkprobe.py`<br>`tools/probes/crossprobe.py`<br>`tools/probes/edgeprobe.py`<br>`tools/probes/crossmove.py`<br>`tools/probes/nearobj.py` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
