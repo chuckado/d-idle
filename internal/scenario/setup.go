@@ -165,6 +165,12 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		su.Field = true
 		tags["position"] = true
 	}
+	if p.RoomsUp {
+		if p.Start != StartField {
+			return Setup{}, fmt.Errorf("scenario %s: pre.rooms_up needs start field", s.ID)
+		}
+		add("every room of the level up (the NPCs of a town exist only then)", "debug rooms up")
+	}
 	if p.Warp != nil {
 		if p.Start != StartField {
 			return Setup{}, fmt.Errorf("scenario %s: pre.warp needs start field", s.ID)

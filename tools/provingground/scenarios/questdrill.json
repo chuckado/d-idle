@@ -3057,7 +3057,8 @@
       "stat": 5,
       "value": 0
      }
-    ]
+    ],
+    "rooms_up": true
    },
    "trigger": {
     "goals": "reach:90",
@@ -3088,7 +3089,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets. The Jade Figurine (a random drop) is given by a SETUP verb.",
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets. The Jade Figurine (a random drop) is given by a SETUP verb. `debug rooms up` brings the town's NPCs up (Meshif, Alkor).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
