@@ -471,7 +471,6 @@
 | malus2 | proposed | - | `tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | toolstrade34 | proposed | - | `internal/task/act1.go`<br>`internal/bot/campsim_objects_test.go`<br>`internal/task/steps.go`<br>`internal/task/sim/sim.go`<br>`internal/task/gear_gate_test.go`<br>`internal/quest/dialog.go`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_layout_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | stage2c | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
-| toolstrade40 | proposed | - | `cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_reach_test.go`<br>`internal/task/executor.go`<br>`internal/task/noprogress_test.go`<br>`internal/resource/beltspec.go`<br>`internal/bot/goal.go`<br>`internal/bot/healcap_test.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_goal_test.go` | - |
 | necrosteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`tools/provingground/scenarios/stepgrounds_gen.json` | - |
 | redsteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/necro_test.go` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |

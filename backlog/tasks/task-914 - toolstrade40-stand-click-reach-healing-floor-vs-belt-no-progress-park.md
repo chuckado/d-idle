@@ -1,10 +1,11 @@
 ---
 id: TASK-914
 title: 'toolstrade40: stand click reach, healing floor vs belt, no-progress park'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T03:17:00Z'
+updated_date: '2026-11-24T03:57:00Z'
 labels:
   - bot
   - bot-fix
