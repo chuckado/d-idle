@@ -1321,6 +1321,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - toolstrade35: a pick-up that took nothing is not found; the stand step works from the floor (TASK-909, merged 2026-11-23, acceptance 1 of 1): PickUp reports nothing taken as not found; the Malus step picks up first, clicks the stand when nothing lies there, and is ready in the Barracks; unit-tested; the stepgrounds scenarios are not run from here. <!--sg:agent/toolstrade35-->
 - toolstrade37: why the Tower Cellars are not farmed: the zone model, and a farm picker log line (TASK-910, merged 2026-11-23, acceptance 1 of 1): Cause found from the live zone choice line (survival margin model rejects the cellars); a farm picker log line added; no default changed. <!--sg:agent/toolstrade37-->
 - toolstrade38: Malus pick-up counts only the Malus in the pack (TASK-911, merged 2026-11-23, acceptance 2 of 2): Root cause: the Malus step trusted the loot pick-up count (three other items taken), so the stand was never clicked; PickUp of a quest item now needs the item in the pack. ... <!--sg:agent/toolstrade38-->
+- agent/vaultperf: Merge branch 'main' into vaultperf (merged 2026-11-23) <!--sg:agent/vaultperf-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
