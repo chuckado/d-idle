@@ -20,6 +20,8 @@ const timeoutProgress = 30.0
 type gate struct {
 	at, push input.Point
 	border   bool
+	depth    int         // cells between the gate and the shared edge (0 on a proven strip): the shallowest frontier cell is tried first
+	unproven bool        // an unproven strip: d2d has not linked the neighbour yet, so standing here is what links it
 	exact    *[2]float64 // the point (d2d cells) a one-pixel Select box warp is taken from; see pushThrough
 }
 
@@ -31,6 +33,36 @@ func exitWalkOpts(g gate) walkOpts { return goalOpts(g.at, true) }
 // one, or the unwanted-exit gate holds a corridor that passes the arrival stairs for good (Halls of the Dead Level 1 and
 // Sewers Level 2, V drill.act2.* runs: the door walk was refused 100 times 13 subtiles from the stairs).
 func goalOpts(p input.Point, pursuit bool) walkOpts { return walkOpts{pursuit: pursuit, goal: &p} }
+
+// borderLinger is how long the character keeps pushing at an unproven border gate before the next one is tried: d2d links
+// the neighbour while the character stands near its edge (lab devp27: after about 15 s of virtual time; live 2026-11-24: not
+// within 40 s), and rotating to another strip at once walked the character away from the edge for good (lab seeds 3, 7, 11).
+const borderLinger = 75 * time.Second
+
+// lingerAtBorder pushes at g again and again, reading the level afresh each round, until the level changes, the border
+// becomes readable (the caller then plans with the proven gate) or borderLinger passes. Each round logs what d2d shows.
+func (n *Navigator) lingerAtBorder(ctx context.Context, g gate, levelNo int) bool {
+	end := n.clk.Now().Add(borderLinger)
+	for round := 1; n.clk.Now().Before(end) && ctx.Err() == nil; round++ {
+		if r, ok := n.w.(interface{ Refetch() }); ok {
+			r.Refetch()
+		}
+		if _, err := n.observeWait(ctx); err != nil {
+			return false
+		}
+		if lm := n.w.Current(); lm != nil && round%3 == 1 {
+			n.log.Info("nav: lingering at an unproven border", "to", levelNo, "at", g.at, "round", round, "pending", lm.Pending,
+				"unproven", len(lm.Unproven), "adjacent", len(lm.Adjacent), "borderCells", len(lm.BorderCells(levelNo)))
+		}
+		if n.gateShown(levelNo) {
+			return false
+		}
+		if n.pushThrough(ctx, g, levelNo) {
+			return true
+		}
+	}
+	return false
+}
 
 // exitMaxDoors bounds the doors one ExitTo call opens without counting them as attempts.
 const exitMaxDoors = 24
@@ -126,11 +158,24 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 			// The strip was walked to and d2d still cannot read across it (the neighbour is linked, pending stays 1: Barracks
 			// back to the Outer Cloister, Proving Ground nav.barracks-return 2026-11-23, both classes). The border is crossed by
 			// walking over it, so the unproven strip cells are the gate: the push beyond them changes the level.
-			us := n.gatesFromCells(o.lm, levelNo, o.lm.UnprovenCells(levelNo), o.lm.Unproven)
+			all := n.gatesFromCells(o.lm, levelNo, o.lm.UnprovenCells(levelNo), o.lm.Unproven)
+			us := all[:0:0]
+			for _, c := range all {
+				if !n.gateIsBad(o.level, levelNo, c.at) { // a strip that did not lead out is not tried again at once: rotate along the border
+					us = append(us, c)
+				}
+			}
 			if len(us) > 0 {
-				sort.Slice(us, func(i, j int) bool { return dist(o.pos, us[i].at) < dist(o.pos, us[j].at) })
+				// the shallowest frontier first (a notch in the wall is where the way out is), then the nearest
+				sort.Slice(us, func(i, j int) bool {
+					if us[i].depth != us[j].depth {
+						return us[i].depth < us[j].depth
+					}
+					return dist(o.pos, us[i].at) < dist(o.pos, us[j].at)
+				})
 				g, ok = us[0], true
-				n.log.Info("nav: crossing an unproven border strip", "to", levelNo, "strip", g.at, "push", g.push)
+				g.unproven = true
+				n.log.Info("nav: crossing an unproven border strip", "to", levelNo, "strip", g.at, "push", g.push, "gates", len(us), "tried", len(all)-len(us), "scan", o.lm.BorderNote)
 			}
 		}
 		if !ok {
@@ -225,7 +270,10 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 			}
 			return err
 		}
-		if n.pushThrough(ctx, g, levelNo) {
+		if g.unproven && n.openDoorAtGate(ctx, o, g, levelNo) {
+			continue // a door shuts this gate: it is open now (or was tried); plan again with the new grid
+		}
+		if n.pushThrough(ctx, g, levelNo) || g.unproven && n.lingerAtBorder(ctx, g, levelNo) {
 			n.learn(o.level, levelNo)
 			n.clk.Sleep(500 * time.Millisecond) // let the new level's rooms load before anything acts
 			return nil
@@ -255,6 +303,9 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 			// the gap (V drill.act3s.lam_esen.bazaar: the Ruined Temple stairs were marked bad at the tile, the next three
 			// tries found no gate and the chunk parked).
 			return ctx.Err()
+		}
+		if g.border && n.pendingGate(ctx, n.w.Current(), levelNo) {
+			continue // the neighbour was still being linked: its border shows now, no gate is condemned for it
 		}
 		n.markBadGate(o.level, levelNo, g.at) // this gap does not lead out (a wall cell the neighbour's grid did not show yet): try the next
 	}
@@ -415,6 +466,14 @@ func (n *Navigator) gatesFromCells(lm *d2map.LevelMap, levelNo int, cells []d2ma
 		}
 	}
 	vertical := adj == nil || adj.Contact.W <= adj.Contact.H // strip is thin in x: the neighbour lies east or west
+	if len(cells) > 1 {
+		// the cells decide, not the last contact rectangle: a frontier of cells at several depths is wide along the edge
+		minX, maxX, minY, maxY := cells[0].X, cells[0].X, cells[0].Y, cells[0].Y
+		for _, c := range cells {
+			minX, maxX, minY, maxY = min(minX, c.X), max(maxX, c.X), min(minY, c.Y), max(maxY, c.Y)
+		}
+		vertical = maxX-minX <= maxY-minY
+	}
 	push := n.tune().ExitPush
 	var dx, dy float64
 	if adj != nil {
@@ -443,6 +502,23 @@ func (n *Navigator) gatesFromCells(lm *d2map.LevelMap, levelNo int, cells []d2ma
 		}
 		cells = kept
 	}
+	// depthOf is how far a frontier cell lies inside the level from the shared edge (0 on a proven strip)
+	depthOf := func(c d2map.Point) int {
+		if adj == nil {
+			return 0
+		}
+		switch {
+		case dy < 0:
+			return max(c.Y-adj.Rect.Bottom(), 0)
+		case dy > 0:
+			return max(adj.Rect.Y-1-c.Y, 0)
+		case dx < 0:
+			return max(c.X-adj.Rect.Right(), 0)
+		case dx > 0:
+			return max(adj.Rect.X-1-c.X, 0)
+		}
+		return 0
+	}
 	// order along the strip, split where cells are not contiguous
 	sort.Slice(cells, func(i, j int) bool {
 		if vertical {
@@ -457,8 +533,22 @@ func (n *Navigator) gatesFromCells(lm *d2map.LevelMap, levelNo int, cells []d2ma
 			return
 		}
 		m := run[len(run)/2]
-		gates = append(gates, gate{at: input.Point{X: m.X, Y: m.Y},
-			push: input.Point{X: m.X + int(dx*push), Y: m.Y + int(dy*push)}, border: true})
+		px, py := m.X+int(dx*push), m.Y+int(dy*push)
+		if adj != nil {
+			// a cell deeper inside than the edge row (the frontier of an unproven strip) pushes from the neighbour's edge, so the
+			// push lands inside the neighbour, not on the wall between
+			switch {
+			case dy < 0 && m.Y > adj.Rect.Bottom():
+				py = adj.Rect.Bottom() - int(push)
+			case dy > 0 && m.Y < adj.Rect.Y-1:
+				py = adj.Rect.Y + int(push)
+			case dx < 0 && m.X > adj.Rect.Right():
+				px = adj.Rect.Right() - int(push)
+			case dx > 0 && m.X < adj.Rect.X-1:
+				px = adj.Rect.X + int(push)
+			}
+		}
+		gates = append(gates, gate{at: input.Point{X: m.X, Y: m.Y}, push: input.Point{X: px, Y: py}, border: true, depth: depthOf(m)})
 		run = nil
 	}
 	for i, c := range cells {
@@ -468,7 +558,7 @@ func (n *Navigator) gatesFromCells(lm *d2map.LevelMap, levelNo int, cells []d2ma
 			if vertical {
 				gap = c.Y - p.Y
 			}
-			if gap > 2 || gap < 0 {
+			if gap > 2 || gap < 0 || depthOf(c) != depthOf(p) { // a notch in the wall (a shallower run) is a gate of its own
 				flush()
 			}
 		}

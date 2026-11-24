@@ -193,14 +193,15 @@
     ],
     "seeds": [
      11,
-     3
+     3,
+     7
     ]
    },
    "needs": [
     "lab-verbs-attach"
    ],
    "provenance": "SETUP: level 24, field start in the Inner Cloister (area 32) by debug goto 32 (CHEATED position). Mechanics only.",
-   "notes": "V live 2026-11-24 (Andariel try-anyway, deploy 62): Inner Cloister to Cathedral, `nav no usable gate from 32 to 33`, exits 1 (the warp to Jail 3 only), adjacent 0, pending 1, three times. The lab warps list of level 32 has one warp too (tools/probes/warptrig.py, devp27); the Cathedral is 34 tiles north and linked only near the edge (strips.py: side N, verdict open). Fix: an unlinked neighbour keeps its strip as unproven (internal/d2dworld/border.go).",
+   "notes": "V live 2026-11-24 (Andariel try-anyway, deploy 62): Inner Cloister to Cathedral, `nav no usable gate from 32 to 33`, exits 1 (the warp to Jail 3 only), adjacent 0, pending 1, three times. The lab warps list of level 32 has one warp too (tools/probes/warptrig.py, devp27); the Cathedral is 34 tiles north and linked only near the edge (strips.py: side N, verdict open). Fix: an unlinked neighbour keeps its strip as unproven (internal/d2dworld/border.go). Live attempt 3 (2026-11-24 13:31 EST, deploy 63) failed here although seed 11 passed: the same strip (51,2) was pushed five times without crossing. The fix rotates along the border, scans a frontier of 12 rows and logs the scan (nav: crossing an unproven border strip ... scan=).",
    "assert": [
     {
      "kind": "log_line",

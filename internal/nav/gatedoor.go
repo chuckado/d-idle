@@ -72,6 +72,12 @@ func (n *Navigator) openDoorToward(ctx context.Context, o *obs, cands []gate, le
 		n.logNoDoor(o, levelNo, cands)
 		return false
 	}
+	return n.useDoorAt(ctx, o, at, levelNo)
+}
+
+// useDoorAt walks next to the door at at, uses it once and lets the planner re-read the grid (the second half of openDoorToward).
+// It always reports true: the attempt is booked in doorTried, which bounds the retries.
+func (n *Navigator) useDoorAt(ctx context.Context, o *obs, at input.Point, levelNo int) bool {
 	if n.doorTried == nil {
 		n.doorTried = map[d2map.Point]int{}
 	}
@@ -404,3 +410,41 @@ func (n *Navigator) doorOnPath(o *obs, goal input.Point, doors []input.Point) (i
 	}
 	return input.Point{}, false
 }
+
+// openDoorAtGate opens a closed door that stands in the way of an unproven border gate: the notch of the Inner Cloister's north
+// wall is a door two rows deep (V lab devp27 `debug objectlist`: "Closed Door" at the notch, live 2026-11-24 the hero pushed at it
+// for 40 s), and the border cannot be crossed until it is open. It looks for the nearest door object within gateDoorNear of the
+// gate that has not been tried enough, and reports whether it acted.
+func (n *Navigator) openDoorAtGate(ctx context.Context, o *obs, g gate, levelNo int) bool {
+	var best input.Point
+	bestD, found := gateDoorNear+1, false
+	consider := func(x, y, class int) {
+		p := d2map.Point{X: x, Y: y}
+		if !n.isDoorClass(class) || n.doorTried[p] >= maxDoorTries {
+			return
+		}
+		if d := dist(input.Point{X: x, Y: y}, g.at); d < bestD {
+			best, bestD, found = input.Point{X: x, Y: y}, d, true
+		}
+	}
+	for _, p := range o.lm.Presets {
+		if p.Kind == d2map.PresetObject {
+			consider(p.Pos.X, p.Pos.Y, p.ID)
+		}
+	}
+	for i := range o.snap.Objects {
+		consider(o.snap.Objects[i].X, o.snap.Objects[i].Y, o.snap.Objects[i].Class)
+	}
+	if !found {
+		return false
+	}
+	if n.doorTried == nil {
+		n.doorTried = map[d2map.Point]int{}
+	}
+	n.doorTried[d2map.Point{X: best.X, Y: best.Y}]++
+	n.log.Info("nav: a door shuts the unproven border gate, opening it", "to", levelNo, "door", best, "gate", g.at, "from", o.pos)
+	return n.useDoorAt(ctx, o, best, levelNo)
+}
+
+// gateDoorNear is how close (subtiles) a door must be to an unproven border gate to count as shutting it.
+const gateDoorNear = 8.0

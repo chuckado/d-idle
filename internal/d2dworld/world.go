@@ -393,7 +393,8 @@ func (w *World) borders(ctx context.Context, l *lvl) {
 	}
 	places = placeLinked(own, places, near)
 	lr := d2map.Rect{X: l.m.Rect.X, Y: l.m.Rect.Y, W: 5 * own.W, H: 5 * own.H}
-	adj, unproven, pending, unlinked := adjacent(own, lr, places, linked, l.m.Grid, across)
+	adj, unproven, pending, unlinked, notes := adjacent(own, lr, places, linked, l.m.Grid, across)
+	l.m.BorderNote = strings.Join(notes, "; ")
 	l.m.Adjacent, l.pending, l.unlinked = keepBorders(l.m.Adjacent, adj), pending, unlinked
 	l.m.Pending, l.m.Unproven = pending, unproven
 	if l.pending == 0 {
