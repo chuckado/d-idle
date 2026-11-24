@@ -25,9 +25,9 @@
  },
  "step.act1.smith.stand_click_pickup": {
   "verdict": "RED",
-  "run": "20261123-185041",
+  "run": "20261123-190635",
   "tag": "V",
-  "note": "the spawned Smith died before the board chunk started, so the boss script never saw the kill (w.Killed[BossSmith] gates the stand click, internal/task/act1.go:292) and hdm never came; scenario needs the Smith alive at the chunk start"
+  "note": "with the merged stand step: the board reaches 'Pick up Horadric Malus from the Malus stand' (also in the reruns 190741 and 192710, the latter BLOCKED by a host cut), then 'task step skipped: ran but is still needed' and no hdm in the pack. Cause not isolated: the stand added by debug object add 108 beside the hero may not be the object the step looks up (U); needs the step's log lines at debug level"
  },
  "drill.act1.sail": {
   "verdict": "GREEN",

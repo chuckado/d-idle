@@ -1284,17 +1284,22 @@ async function boot() {
   if (/^(dark|light|auto)$/.test(qs.get('theme') || '')) theme = qs.get('theme');
   doc.documentElement.dataset.theme = /^(light|auto)$/.test(theme) ? theme : 'dark';
   const json = (r) => r.json().catch(() => null);
-  const get = (p) => fetch(p, { cache: 'no-store' }).then(json).catch(() => null);
-  let cfg = {};
-  try { cfg = (await get('/api/config')) || {}; } catch (e) { /* the post says so */ }
+  // First paint waits on four things that do not depend on each other (config, texts, the overlay module, the first page of the list),
+  // so they start together instead of one round trip each. The first page is kept by its URL and used once, only when the page asks
+  // for exactly that URL (same filters, same slot), so a different start state just fetches as before.
+  const early = {};
+  const get = (p) => { if (early[p]) { const e = early[p]; delete early[p]; return e; } return fetch(p, { cache: 'no-store' }).then(json).catch(() => null); };
+  const f = fromQuery(location.search);
+  try { if (!f.type) f.type = localStorage.getItem('vt-slot') || ''; } catch (e) { /* storage blocked */ }
+  const firstUrl = ROUTE + toQuery(f, { offset: 0, limit: Math.min(PAGE, 200), facets: true });
+  early[firstUrl] = fetch(firstUrl, { cache: 'no-store' }).then(json).catch(() => null);
+  const [cfg0, texts, ov] = await Promise.all([get('/api/config'), get('/watch/vault.json'), import('/watch/overlay.js').then((m) => m.overlays, () => null)]);
+  const cfg = cfg0 || {};
   const base = cfg.answerBase || (cfg.answerPort ? location.protocol + '//' + location.hostname + ':' + cfg.answerPort : '');
   const post = (p, b) => fetch(base + p, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b || {}) }).then(json).catch(() => null);
-  const texts = await get('/watch/vault.json');
   const root = doc.getElementById('vt-root');
   if (!texts || !root) { if (root) root.textContent = 'The Ethereal Vault page could not load its texts.'; return; }
-  const f = fromQuery(location.search);
-  let overlays = null;
-  try { overlays = (await import('/watch/overlay.js')).overlays; } catch (e) { /* the sheet closes itself on Escape */ }
+  const overlays = ov;
   const vt = mountVault({ doc, root, overlays, win: window, get, post, texts, now: Date.now, filters: f, IntersectionObserver: window.IntersectionObserver, ResizeObserver: window.ResizeObserver,
     later: (fn, ms) => setTimeout(fn, ms), clear: (t) => clearTimeout(t) });
   vt.loadTip();

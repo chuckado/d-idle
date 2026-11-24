@@ -54,11 +54,11 @@ func (h *Hub) ViewHandler() http.Handler {
 				http.NotFound(w, r)
 				return
 			}
-			w.Header().Set("Content-Type", ctype)
-			w.Header().Set("X-Content-Type-Options", "nosniff")
-			w.Header().Set("Content-Security-Policy", pageCSP)
-			w.Header().Set("Cache-Control", "no-store")
-			w.Write(b)
+			serveAsset(w, r, name, b, func(w http.ResponseWriter) {
+				w.Header().Set("Content-Type", ctype)
+				w.Header().Set("X-Content-Type-Options", "nosniff")
+				w.Header().Set("Content-Security-Policy", pageCSP)
+			})
 		}
 	}
 	page := asset("watch.html", "text/html; charset=utf-8")
