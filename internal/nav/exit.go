@@ -500,7 +500,12 @@ func (n *Navigator) gatesFromCells(lm *d2map.LevelMap, levelNo int, cells []d2ma
 			}
 			kept = append(kept, c)
 		}
-		cells = kept
+		if len(kept) > 0 {
+			cells = kept
+		}
+		// else: every cell looks blocked across the edge in the remembered grid of the neighbour. That grid was read from another side or
+		// with a door shut, or lies a few cells off, so it is not allowed to refuse the only gates there are (V live 2026-11-24 20:35Z, the
+		// second crossing of the Inner Cloister to the Cathedral: borderCells 3, cands 0, "no exit to that level" three times)
 	}
 	// depthOf is how far a frontier cell lies inside the level from the shared edge (0 on a proven strip)
 	depthOf := func(c d2map.Point) int {
