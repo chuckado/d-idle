@@ -554,3 +554,24 @@ func TestTagChickenIsItsOwnKind(t *testing.T) {
 		t.Errorf("portal: kind %v", k)
 	}
 }
+
+type pickStub struct{ rep PickReport }
+
+func (p pickStub) PickUp(context.Context, PickOpts) (PickReport, error) { return p.rep, nil }
+func (p pickStub) Evaluate(d2.Item) Verdict                             { return VerdictKeep }
+
+// A pick-up that took nothing is "not on the ground" (KindNotFound), not success: the Malus step needs that answer to click
+// the stand instead of being "ran but still needed" (V lab 2026-11-23, stepgrounds runs 175729 and 175828). Must fail while
+// PickUp discards the report.
+func TestPickUpThatTookNothingIsNotFound(t *testing.T) {
+	g := newRig(t)
+	acts := taskActs{r: g.r}
+	g.r.d.Loot = pickStub{}
+	if k := task.Classify(acts.PickUp(context.Background(), task.ItemMalus)); k != task.KindNotFound {
+		t.Errorf("nothing taken: kind %v", k)
+	}
+	g.r.d.Loot = pickStub{PickReport{Picked: 1}}
+	if err := acts.PickUp(context.Background(), task.ItemMalus); err != nil {
+		t.Errorf("taken: %v", err)
+	}
+}
