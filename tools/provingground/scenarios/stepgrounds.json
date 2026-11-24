@@ -121,7 +121,7 @@
     }
    },
    "budget": {
-    "virtual_min": 12
+    "virtual_min": 30
    },
    "matrix": {
     "classes": [
