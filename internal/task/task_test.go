@@ -64,13 +64,14 @@ func TestFullAct1Campaign(t *testing.T) {
 		t.Fatalf("not in act 2: act %d, log %v", g.W.Act, tail(g.Log))
 	}
 	w, _ := g.World(context.Background())
-	for _, q := range []string{task.QDen, task.QBurial, task.QTools, task.QTower, task.QAndariel} {
+	// the optional Countess is left behind: Andariel's floor (11, user 2026-11-24) is below hers (14), so the hero moves on
+	for _, q := range []string{task.QDen, task.QBurial, task.QTools, task.QAndariel} {
 		if !task.QuestDone(w, q) {
 			t.Errorf("quest %s not done: %+v", q, w.Quest(q))
 		}
 	}
-	// order: Den before Blood Raven before Smith before Countess before Andariel
-	order := []string{"kill:" + task.BossBR, "kill:" + task.BossSmith, "kill:" + task.BossCount, "kill:" + task.BossAndy}
+	// order: Den before Blood Raven before Smith before Andariel
+	order := []string{"kill:" + task.BossBR, "kill:" + task.BossSmith, "kill:" + task.BossAndy}
 	last := idx(g.Log, "talk:Akara:reward")
 	if last < 0 {
 		t.Fatal("no Den reward")
@@ -82,8 +83,8 @@ func TestFullAct1Campaign(t *testing.T) {
 		}
 		last = i
 	}
-	if n := g.Count("kill:"); n != 4 {
-		t.Errorf("kills = %d, want 4 (no repeats): %v", n, g.Log)
+	if n := g.Count("kill:"); n != 3 {
+		t.Errorf("kills = %d, want 3 (no repeats, no Countess): %v", n, g.Log)
 	}
 	if res[len(res)-1].Outcome != task.OutDone {
 		t.Errorf("last outcome %v", res[len(res)-1].Outcome)
@@ -194,13 +195,14 @@ func TestThreeDeathsBlockTheQuestAndPlannerMovesOn(t *testing.T) {
 	if _, b := ex.Blocked(task.QBurial); !b {
 		t.Error("burial group should be blocked")
 	}
-	if g.Count("kill:"+task.BossCount) == 0 {
-		t.Error("planner should have moved on to the Countess")
+	if g.Count("kill:"+task.BossAndy) == 0 {
+		t.Error("planner should have moved on to Andariel (the optional Countess, floor 14, is behind her floor 11)")
 	}
 }
 
 func TestNotFoundOptionalSkippedRequiredBlocks(t *testing.T) {
 	g := sim.New(true)
+	g.SetLevel(20) // above the Countess's floor 14 and Andariel's 11: the tower is tried first (entry order)
 	nf := task.Errorf(task.KindNotFound, "countess not found")
 	g.Fail["kill:"+task.BossCount] = []error{nf, nf, nf, nf}
 	c := task.NormalAct1(task.Act1Options{SkipTools: true})
@@ -386,7 +388,7 @@ func TestBossTravelGatesLevelAndPotions(t *testing.T) {
 
 func TestProgressReport(t *testing.T) {
 	g := sim.New(true)
-	c := task.NormalAct1(task.Act1Options{})
+	c := task.NormalAct1(task.Act1Options{SkipTower: true}) // the optional Forgotten Tower is left behind at Andariel's floor 11
 	ex := task.NewExecutor(g, g)
 	for i := 0; i < 6; i++ {
 		ex.Tick(context.Background(), c)

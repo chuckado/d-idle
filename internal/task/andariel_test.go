@@ -1,6 +1,7 @@
 package task_test
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"testing"
@@ -107,14 +108,14 @@ func TestAndarielMercHook(t *testing.T) {
 
 func TestAndarielLines(t *testing.T) {
 	d := env.DefaultAndarielMinLevel
-	if got := task.AndarielLine(andyWorld(d-3, nil)); got != "boss: held for andariel (clvl 14 < floor 17)" {
+	if got := task.AndarielLine(andyWorld(d-3, nil)); got != fmt.Sprintf("boss: held for andariel (clvl %d < floor %d)", d-3, d) {
 		t.Errorf("held line %q", got)
 	}
-	if got := task.AndarielLine(andyWorld(d, nil)); got != "boss: andariel gate pass clvl=17 kit=ok" {
+	if got := task.AndarielLine(andyWorld(d, nil)); got != fmt.Sprintf("boss: andariel gate pass clvl=%d kit=ok", d) {
 		t.Errorf("pass line %q", got)
 	}
 	got := task.AndarielLine(andyWorld(d+1, func(w *task.World) { w.HasTP = false }))
-	if !strings.HasPrefix(got, "boss: andariel gate pass clvl=18 kit=short(") || !strings.Contains(got, "no town portal") {
+	if !strings.HasPrefix(got, fmt.Sprintf("boss: andariel gate pass clvl=%d kit=short(", d+1)) || !strings.Contains(got, "no town portal") {
 		t.Errorf("short line %q", got)
 	}
 }

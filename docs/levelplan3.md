@@ -65,7 +65,7 @@ Proposal, not done: Sacrifice +15 percent ED a point beats Might's +10 (pal-skil
 |---|---|---|---|
 | 60 | 20,376 | 6 | 12,858 (clvl 5) |
 | 120 | 63,772 | 10 | 27,680 (clvl 7) |
-| 240 | 170,551 | 14 | |
+| 240 | 119,933 | 13 | (2026-11-24: 170,551 and 14 before Andariel's floor fell to 11) |
 
 Route of the model: Blood Moor to clvl 3 (minute 15), Cold Plains (29, clvl 5), Den (42), Stony Field (57, clvl 6), Cave 1 (75, clvl 7), Black Marsh (90, clvl 8), Dark Wood (104, clvl 9), Blood Raven (111), Tamoe (125, clvl 10), Jail 1 (150), Catacombs 2 and 3 (180-192, clvl 13). Against the first-hour tiers (docs/first-hour.md): 60 minutes at clvl 6 is above the floor (5), under the target (7 needs 22,680). The measured hour validates the model when clvl@60 is 6 and XP is 20,400 within 15 percent; Cold Plains kills per minute are the weakest assumption (the model 14.6, hour 4 9.7, V).
 

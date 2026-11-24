@@ -32,3 +32,6 @@ Also a judge note carried over from docs/research/gate2-analysis-20261102.md: th
 - If (a): the judge matches `boss:` / `route guard: andariel` lines, not `planner` text.
 - Merc kept alive or revived: `merc: revived` without `revive skipped (gold)` runs at clvl 14+.
 - Not verified live; no game was used.
+
+## 5. Update 2026-11-24: floors recalibrated (user)
+The 17 and 15 above were the ADR 0011 interim numbers. On 2026-11-24 the user approved new defaults after the live attempts reached the Inner Cloister and the game data showed the monsters at level 9 to 12 (docs/probes/andariel-gate-recalibration-2026-11-24.md): `env.DefaultAndarielMinLevel` 11 (no merc) and `DefaultAndarielMinLevelMerc` 10, the class rows of `internal/plandata/boss_levels.go` floor 11 / 10 and recommended 14 / 13 for every class, `runs.json` Andariel `min_clvl` n 11, `route.monasteryMinLevel` and `...Merc` 10, `route.barracksMinLevel` and `...Caster` 11 with both life floors 0, the quest board `legacyFloor` of Andariel and of Tools of the Trade 11. `boss.andarielHold` stays 1 in code (the sandbox sets it to 0 by its own tuning). The Forgotten Tower (optional, clvl 14 to 16) is now left behind once the hero is in Act 2.

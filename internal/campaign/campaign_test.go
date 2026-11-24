@@ -85,14 +85,14 @@ func TestBands(t *testing.T) {
 		merc  bool
 		want  campaign.Band
 	}{
-		{"paladin", 16, false, campaign.TooEarly}, // floor 17 without a merc (ADR 0011)
-		{"paladin", 17, false, campaign.Ready},
-		{"paladin", 20, false, campaign.Comfortable}, // recommended 20 alone, 18 with the Rogue (boss1-trace, I)
-		{"paladin", 15, true, campaign.Ready},
-		{"paladin", 18, true, campaign.Comfortable},
-		{"sorceress", 16, false, campaign.TooEarly},
-		{"sorceress", 17, false, campaign.Ready},
-		{"sorceress", 16, true, campaign.Comfortable},
+		{"paladin", 10, false, campaign.TooEarly}, // floor 11 without a merc (user, 2026-11-24)
+		{"paladin", 11, false, campaign.Ready},
+		{"paladin", 14, false, campaign.Comfortable}, // recommended 14 alone, 13 with the Rogue
+		{"paladin", 10, true, campaign.Ready},
+		{"paladin", 13, true, campaign.Comfortable},
+		{"sorceress", 10, false, campaign.TooEarly},
+		{"sorceress", 11, false, campaign.Ready},
+		{"sorceress", 13, true, campaign.Comfortable},
 	}
 	for _, c := range cases {
 		r, err := campaign.Rate(andy, campaign.Hero{Class: c.class, Level: c.lvl, Merc: c.merc}, nil)
