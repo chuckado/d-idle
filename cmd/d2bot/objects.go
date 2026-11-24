@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"strings"
 	"sync"
 	"time"
@@ -37,7 +38,20 @@ type objectAdapter struct {
 	// Test seams: the level map and the walk (nil: the navigator's).
 	lmFn func() *d2map.LevelMap
 	goTo func(context.Context, input.Point) error
+	// goUnit walks to a unit (the navigator's GoToUnitOf unless a test replaced it).
+	goUnit func(ctx context.Context, typ int, id uint32) error
 }
+
+// objReach is how close, in subtiles, the character must stand for a click on an object to count; objReachTries is the
+// walks an Interact spends getting there before it gives up (a walk that ends far away, stuck at a door with hostiles
+// around, must not use up the clicks of the object). V lab 2026-11-23 (necro.act1-tools): eight clicks from 20 subtiles
+// ended in about a second with "the object never changed".
+const (
+	objReach      = 8
+	objReachTries = 3
+)
+
+var errOutOfReach = errors.New("not within reach of the object")
 
 // walk goes to p (the navigator's GoTo unless a test replaced it).
 func (o objectAdapter) walk(ctx context.Context, p input.Point) error {
@@ -135,6 +149,7 @@ func (o objectAdapter) Interact(ctx context.Context, name string) error {
 	case objSmash:
 		tries = 4
 	}
+	farWalks := 0
 	for try := 0; try < tries; try++ {
 		var u *d2.Unit
 		var err error
@@ -156,6 +171,13 @@ func (o objectAdapter) Interact(ctx context.Context, name string) error {
 			}
 		}
 		if err := o.click(ctx, u); err != nil {
+			if errors.Is(err, errOutOfReach) {
+				if farWalks++; farWalks < objReachTries {
+					try-- // the approach failed: the click was never made, so it does not count
+					continue
+				}
+				return task.Wrap(task.KindDanger, fmt.Errorf("%s: %w after %d walks (hostiles or a closed way): clear the way and retry", name, err, farWalks))
+			}
 			return err
 		}
 		if spec.kind == objOnce {
@@ -405,8 +427,20 @@ func (o objectAdapter) findNearSkip(ctx context.Context, class int, at *input.Po
 // click walks next to the object and clicks it. The hover check of Interact fails for some objects (V act2 S1, W3);
 // then a plain click on its world position is the fallback.
 func (o objectAdapter) click(ctx context.Context, u *d2.Unit) error {
-	if err := o.nv.GoToUnitOf(ctx, d2.TypeObject, u.ID); err != nil {
+	walk := o.goUnit
+	if walk == nil {
+		walk = o.nv.GoToUnitOf
+	}
+	if err := walk(ctx, d2.TypeObject, u.ID); err != nil {
 		return task.Wrap(task.KindNotFound, err)
+	}
+	// objects with an approach cell stand behind an obstacle: the click itself finishes the walk there (V lab drill L2)
+	if _, special := objApproach[u.Class]; !special {
+		if s, err := o.e.Snapshot(); err == nil && s.Player != nil {
+			if d := math.Hypot(float64(s.Player.X-u.X), float64(s.Player.Y-u.Y)); d > objReach {
+				return fmt.Errorf("%w (%.0f subtiles from the object)", errOutOfReach, d)
+			}
+		}
 	}
 	_ = o.e.In.CloseAll()
 	t := input.Target{Type: town.TypeObject, ID: u.ID, Pos: input.Point{X: u.X, Y: u.Y}}

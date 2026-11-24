@@ -53,6 +53,11 @@ type Policy struct {
 	MaxDeaths   int // deaths in one step before the group is blocked (default 3)
 	MaxInsert   int // splice depth (default 2)
 	MaxChickens int // chicken exits of one quest within strikeWindow before the group is blocked (default 8)
+	// MaxRepeats is how often one planned step may report "ran" while no other planned step of the group ran in between
+	// before the group is parked as "no progress" (default 12). A step that is done each time and undone by the next trip
+	// (V lab 2026-11-23: 125 times "to-barracks ran" in 28 minutes, the hero sent home each time) never fails, so no
+	// failure counter sees it.
+	MaxRepeats int
 }
 
 func (p Policy) norm() Policy {
@@ -70,6 +75,9 @@ func (p Policy) norm() Policy {
 	}
 	if p.MaxChickens <= 0 {
 		p.MaxChickens = 8
+	}
+	if p.MaxRepeats <= 0 {
+		p.MaxRepeats = 12
 	}
 	return p
 }
@@ -99,7 +107,8 @@ type Executor struct {
 
 	fails    map[string]int
 	timeouts map[string]int
-	startPct int // exploration percent when the running step started, -1 unknown
+	rans     map[string]int // "ran" results per planned step since another planned step of the group last ran (MaxRepeats)
+	startPct int            // exploration percent when the running step started, -1 unknown
 	deaths   map[string]int
 	assumed  map[string]bool // steps whose Do succeeded but Need stays true on EvProxy/EvNone only
 	skipped  map[string]bool
@@ -392,6 +401,21 @@ func (e *Executor) Tick(ctx context.Context, p Planner) (Result, error) {
 		if res.Outcome == OutRan || res.Outcome == OutSkipped {
 			e.sticky = ""
 		}
+		if res.Outcome == OutRan && !n.Step.Repeat && !e.isInserted(n.Step.ID) {
+			if e.rans == nil {
+				e.rans = map[string]int{}
+			}
+			for id := range e.rans {
+				if id != n.Step.ID {
+					delete(e.rans, id) // another planned step ran: the group moved
+				}
+			}
+			e.rans[n.Step.ID]++
+			if c := e.rans[n.Step.ID]; c >= e.Policy.norm().MaxRepeats {
+				e.rans = nil
+				return e.end(n.Step, e.block(plan, n.Step, res, fmt.Sprintf("no progress: %s ran %d times with nothing after it", n.Step.ID, c))), nil
+			}
+		}
 		res.Via, res.ViaWhy = via, viaWhy
 		return res, nil
 	}
@@ -527,6 +551,15 @@ func (e *Executor) dropInserted(id string) {
 		}
 	}
 	e.inserted = keep
+}
+
+func (e *Executor) isInserted(id string) bool {
+	for _, n := range e.inserted {
+		if n.Step.ID == id {
+			return true
+		}
+	}
+	return false
 }
 
 // kitFault is the Why of a supply shortage from gateReady (a level shortage says "clvl" and is never released here).
