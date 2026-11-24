@@ -782,6 +782,9 @@ func (w *World) mergeTriggers(ctx context.Context, l *lvl) {
 	}
 	for i, t := range doc.Warps {
 		l.m.Exits[i].Trigger = &d2map.Trigger{Click: runs(t.Click), Reach: runs(t.Reach), Truncated: t.Truncated}
+		if t.Exact != nil { // the click point of a 0 x 0 Select box: the push and the mouth gate use it like a backend click cell
+			l.m.Exits[i].Click, l.m.Exits[i].HasClick = d2map.Point{X: l.ox + t.Exact[0], Y: l.oy + t.Exact[1]}, true
+		}
 	}
 	w.LastTriggerNote = fmt.Sprintf("warptriggers: %d areas", len(doc.Warps))
 }

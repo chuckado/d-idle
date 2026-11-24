@@ -69,3 +69,19 @@ func TestWarpReadOffAbsentOrMismatchedChangesNothing(t *testing.T) {
 		}
 	}
 }
+
+// A warp whose Select box has no area carries its exact cell (devp26 `exact`): the exit's click point becomes it. Must fail
+// without the merge: the push then clicks the tile centre, which never takes the Kurast Bazaar to Ruined Temple stairs.
+func TestWarpReadExactCellBecomesTheClickPoint(t *testing.T) {
+	s := newStub()
+	s.wt = stubTriggers()
+	s.wt.Warps[0].Exact = &[2]int{13, 4}
+	w := New(s, Options{WarpRead: func() bool { return true }})
+	if _, err := w.Update(); err != nil {
+		t.Fatal(err)
+	}
+	e := w.Current().Exits[0]
+	if !e.HasClick || e.Click.X != 13 || e.Click.Y != 4 {
+		t.Fatalf("click %+v has %v (%s)", e.Click, e.HasClick, w.LastTriggerNote)
+	}
+}
