@@ -38,6 +38,17 @@ func (n *Navigator) openGateDoor(ctx context.Context, o *obs, levelNo int) bool 
 	return n.openDoorToward(ctx, o, n.gateCands(o, levelNo), levelNo, true)
 }
 
+// doorAlreadyOpen: the door's own cell reads walkable, so using it again would shut it (V live 2026-11-24, Catacombs Level 2: the door
+// at (200,210) was used twice in a row, "cellFlags 0" then "cellFlags 1", and the way it had opened was closed again while the gate
+// stayed cut off by a door the map did not list). A door whose cell is not known stays a candidate.
+func doorAlreadyOpen(lm *d2map.LevelMap, x, y int) bool {
+	if lm == nil || lm.Grid == nil {
+		return false
+	}
+	f, ok := lm.Grid.Flags(x, y)
+	return ok && f&d2map.BlockWalk == 0
+}
+
 // openDoorToward is openGateDoor for any goals: cands are the points the character wants to reach (gates, or one spot
 // a walk could not reach), key names the attempt in the logs and the approach budget; approach false never walks
 // toward the cands when no door is in sight.
@@ -49,13 +60,13 @@ func (n *Navigator) openDoorToward(ctx context.Context, o *obs, cands []gate, le
 	// objects near the character.
 	var doors []input.Point
 	for _, p := range o.lm.Presets {
-		if p.Kind == d2map.PresetObject && n.isDoorClass(p.ID) && n.doorTried[p.Pos] < maxDoorTries {
+		if p.Kind == d2map.PresetObject && n.isDoorClass(p.ID) && n.doorTried[p.Pos] < maxDoorTries && !doorAlreadyOpen(o.lm, p.Pos.X, p.Pos.Y) {
 			doors = append(doors, input.Point{X: p.Pos.X, Y: p.Pos.Y})
 		}
 	}
 	for i := range o.snap.Objects {
 		u := &o.snap.Objects[i]
-		if n.isDoorClass(u.Class) && n.doorTried[d2map.Point{X: u.X, Y: u.Y}] < maxDoorTries {
+		if n.isDoorClass(u.Class) && n.doorTried[d2map.Point{X: u.X, Y: u.Y}] < maxDoorTries && !doorAlreadyOpen(o.lm, u.X, u.Y) {
 			doors = append(doors, input.Point{X: u.X, Y: u.Y})
 		}
 	}
@@ -128,8 +139,18 @@ func (n *Navigator) useDoorAt(ctx context.Context, o *obs, at input.Point, level
 				mode = int(u.Mode)
 			}
 		}
-		fl, _ := after.lm.Grid.Flags(at.X, at.Y)
+		fl, known := after.lm.Grid.Flags(at.X, at.Y)
 		n.log.Info("nav: door used", "door", at, "target", tg.ID, "mode", mode, "cellFlags", fl, "pos", after.pos)
+		if known && fl&d2map.BlockWalk == 0 {
+			// the door is open: what was out of reach before may be reachable now, so the tries other doors spent on a walk
+			// that could not reach them are forgiven (V live 2026-11-24, Catacombs Level 2: the door (190,220) behind the opened
+			// door (200,210) had used both its tries on unreachable walks and was never tried again)
+			for k := range n.doorTried {
+				if k != (d2map.Point{X: at.X, Y: at.Y}) {
+					delete(n.doorTried, k)
+				}
+			}
+		}
 	}
 	return true
 }
@@ -420,7 +441,7 @@ func (n *Navigator) openDoorAtGate(ctx context.Context, o *obs, g gate, levelNo 
 	bestD, found := gateDoorNear+1, false
 	consider := func(x, y, class int) {
 		p := d2map.Point{X: x, Y: y}
-		if !n.isDoorClass(class) || n.doorTried[p] >= maxDoorTries {
+		if !n.isDoorClass(class) || n.doorTried[p] >= maxDoorTries || doorAlreadyOpen(o.lm, x, y) {
 			return
 		}
 		if d := dist(input.Point{X: x, Y: y}, g.at); d < bestD {

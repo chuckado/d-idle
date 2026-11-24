@@ -723,3 +723,135 @@ func TestExitToOpensTheDoorThatShutsAnUnprovenBorderGate(t *testing.T) {
 		})
 	}
 }
+
+// V live 2026-11-24 (Catacombs Level 2, attempt 4): the door at (200,210) was used twice in a row (cellFlags 0, then 1): once it
+// was open the planner still found the gate cut off by a barrier the map did not list as a door, picked the same door again and
+// shut it. A door whose own cell already reads walkable is not used. Two layouts (the open door at the first or the second wall of
+// two), both classes in the name only (the nav does not read the class). Must fail while an open door is a candidate.
+func TestExitToDoesNotUseADoorThatIsAlreadyOpen(t *testing.T) {
+	for _, lay := range []struct {
+		name    string
+		doorX   int
+		solidX  int
+		hero    input.Point
+		classes []string
+	}{
+		{"open door beyond the solid wall", 3040, 3060, input.Point{X: 3100, Y: 3090}, []string{"Paladin", "Necromancer"}},
+		{"open door before the solid wall", 3070, 3040, input.Point{X: 3100, Y: 3090}, []string{"Paladin", "Necromancer"}},
+	} {
+		for _, cls := range lay.classes {
+			t.Run(lay.name+"/"+cls, func(t *testing.T) {
+				g := openField(2800, 3000, 400, 120)
+				blockRect(g, d2map.Rect{X: 2999, Y: 3000, W: 2, H: 50})
+				blockRect(g, d2map.Rect{X: 2999, Y: 3065, W: 2, H: 55})
+				blockRect(g, d2map.Rect{X: lay.solidX, Y: 3000, W: 2, H: 120}) // a barrier the map does not list as a door
+				blockRect(g, d2map.Rect{X: lay.doorX, Y: 3000, W: 2, H: 50})
+				blockRect(g, d2map.Rect{X: lay.doorX, Y: 3065, W: 2, H: 55}) // the open door's wall: its cells (rows 3050..3064) are open
+				l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 200, H: 120}}
+				l2 := &simLevel{no: 2, rect: d2map.Rect{X: 2800, Y: 3000, W: 200, H: 120}}
+				s := newSim(g, lay.hero, l1, l2)
+				s.reveal = 300
+				l1.lm.Presets = []d2map.Preset{{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: lay.doorX, Y: 3057}}}
+				s.objects = []d2.Unit{d2Unit(77, 24, lay.doorX, 3057)}
+				used := 0
+				s.onInteract = func(s *sim, tg input.Target) error {
+					if tg.ID == 77 {
+						used++
+					}
+					return nil
+				}
+				n := s.navigator()
+				n.doorFn = func(class int) bool { return class == 24 }
+				n.exploreFn = func(_ context.Context, _ func() bool, _ *input.Point) error { return ErrExplored }
+				_ = n.ExitTo(ctxT(t), 2) // the barrier has no door: the exit fails, whatever the error is
+				if used != 0 {
+					t.Fatalf("the open door was used %d times (it would have been shut again)", used)
+				}
+			})
+		}
+	}
+}
+
+// The real Catacombs Level 2 (live capture 2026-11-24, internal/nav/testdata/catacombs35.grid, a crop of the level's `debug grid 5`
+// with every door shut as a 3 by 3 block of wall): the hero arrives at (210,197) and the stairs to Catacombs Level 3 are at
+// (149,278). The way is two doors in a row: the corridor door (200,210) into the room below, then the door (190,220) west
+// out of it; the live run used the first door twice (it shut again) and gave up, "gate on the map but not reachable, cut off".
+// Both classes: the geometry knows none. Must fail while the nav uses a door that already reads open.
+func TestExitToCrossesTheLiveCatacombsTwo(t *testing.T) {
+	data, err := os.ReadFile("testdata/catacombs35.grid")
+	if err != nil {
+		t.Fatal(err)
+	}
+	rows := strings.Split(strings.TrimSpace(string(data)), "\n")
+	const ox, oy, cx, cy = 1000, 1000, 100, 180 // sim origin, crop origin in the level
+	at := func(x, y int) input.Point { return input.Point{X: ox + x - cx, Y: oy + y - cy} }
+	doors := [][3]int{{64, 230, 220}, {64, 190, 220}, {16, 200, 210}, {16, 255, 210}, {64, 130, 220}, {16, 160, 210}, {16, 140, 210}, {64, 110, 220}, {16, 100, 210}, {16, 100, 190}}
+	for _, cls := range []string{"Paladin", "Necromancer"} {
+		t.Run(cls, func(t *testing.T) {
+			g := d2map.NewGrid()
+			cells := make([]uint16, len(rows[0])*len(rows))
+			for y, r := range rows {
+				for x, c := range r {
+					if c == '#' {
+						cells[y*len(rows[0])+x] = 1
+					}
+				}
+			}
+			g.SetBlock(d2map.Rect{X: ox, Y: oy, W: len(rows[0]), H: len(rows)}, cells)
+			gate := at(149, 278)
+			l36 := &simLevel{no: 36, rect: d2map.Rect{X: gate.X - 3, Y: gate.Y - 2, W: 7, H: 14}}
+			l35 := &simLevel{no: 35, rect: d2map.Rect{X: ox, Y: oy, W: len(rows[0]), H: len(rows)}}
+			s := newSim(g, at(210, 197), l36, l35)
+			s.reveal = 400
+			s.revealRooms()
+			var presets []d2map.Preset
+			closed := map[int]bool{}
+			for i, d := range doors {
+				p := at(d[1], d[2])
+				presets = append(presets, d2map.Preset{Kind: d2map.PresetObject, ID: d[0], Pos: d2map.Point{X: p.X, Y: p.Y}})
+				closed[i] = true
+			}
+			l35.lm.Presets = presets
+			l35.lm.Exits = []d2map.Exit{{Dest: 36, Pos: d2map.Point{X: gate.X, Y: gate.Y}}}
+			toggles := map[int]int{}
+			s.onInteract = func(s *sim, tg input.Target) error {
+				for i, d := range doors {
+					p := at(d[1], d[2])
+					if dist(tg.Pos, p) < 8 {
+						toggles[i]++
+						r := d2map.Rect{X: p.X - 1, Y: p.Y - 1, W: 3, H: 3}
+						if closed[i] {
+							openDoor(s, r)
+						} else {
+							shut := make([]uint16, 9)
+							for k := range shut {
+								shut[k] = 1
+							}
+							s.truth.SetBlock(r, shut)
+							for _, l := range s.levels {
+								if _, ok := l.known.Flags(r.X, r.Y); ok {
+									l.known.SetBlock(r, shut)
+								}
+							}
+						}
+						closed[i] = !closed[i]
+						return nil
+					}
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class == 16 || class == 64 }
+			n.exploreFn = func(context.Context, func() bool, *input.Point) error { return ErrExplored }
+			err := n.ExitTo(ctxT(t), 36)
+			if err != nil || s.cur().no != 36 {
+				t.Fatalf("%s: exit %v, level %d at %v, door uses %v", cls, err, s.cur().no, s.pos(), toggles)
+			}
+			for i, c := range toggles {
+				if c > 1 {
+					t.Errorf("%s: door %v used %d times (the second use shuts it)", cls, doors[i], c)
+				}
+			}
+		})
+	}
+}
