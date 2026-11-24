@@ -475,6 +475,7 @@
 | redsteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/necro_test.go` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
+| toolstrade44 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/desk.go`<br>`internal/questboard/desk_action.go`<br>`internal/questboard/try.go`<br>`internal/questboard/try_test.go`<br>`internal/ops/ops.go`<br>`internal/ops/ops_test.go`<br>`internal/watch/questsapi.go`<br>`internal/watch/questsapi_test.go`<br>`internal/watch/web/panels/quest-board/panel.js`<br>`internal/task/try.go`<br>`internal/task/route.go`<br>`internal/task/gate.go`<br>`internal/task/act1.go`<br>`internal/task/act2.go`<br>`internal/task/route_test.go`<br>`internal/boss/run.go`<br>`internal/bot/questboard.go`<br>`internal/bot/healcap_test.go`<br>`cmd/d2bot/opscmd.go`<br>`cmd/d2bot/opscmd_test.go`<br>`cmd/d2bot/boss.go`<br>`docs/operator.md`<br>`docs/questboard.md`<br>`docs/adr/0030-operator-quest-control.md`<br>`docs/decisions.md`<br>`internal/questboard/desk_action_test.go`<br>`internal/watch/testdata/quests/`<br>`internal/watch/vaultperf_test.go`<br>`internal/watch/race_on_test.go`<br>`internal/watch/race_off_test.go` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
@@ -503,14 +504,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ce6ccea3b 11-24 10:35 `Merge agent/toolstrade44: toolstrade44: the vault poll timing ceiling is skipped under -race (the gate failure was this, not a data race)` (toolstrade44)
+- bc349eac7 11-24 10:07 `Merge remote-tracking branch 'origin/main' into agent/toolstrade44` (-)
 - 343e273de 11-24 09:50 `Merge agent/fidbatch2: Merge branch 'main' into fidbatch` (fidbatch2)
 - ee9aead3d 11-24 09:48 `Merge branch 'main' into fidbatch` (-)
 - a20981c60 11-24 09:34 `Merge agent/qd21: qdmatrix: notes 59 to 62 (Golden Bird GREEN, Harrogath gate, Duriel staff verbs and tomb scan), verdicts, deploy list` (qd21)
 - 627f0398a 11-24 09:26 `Merge origin/main` (-)
+- ea76972fb 11-24 09:12 `Merge branch 'main' into toolstrade44` (-)
 - 782567e37 11-24 08:54 `Merge agent/toolstrade43: Merge branch 'main' into toolstrade43` (toolstrade43)
 - 0de3d58bb 11-24 08:52 `Merge branch 'main' into toolstrade43` (-)
 - 339a10d86 11-24 08:41 `Merge agent/toolstrade42: toolstrade42: Andariel gate carries the Barracks floor, card` (toolstrade42)
-- 58da490a4 11-24 01:09 `Merge agent/qd20: qdmatrix: notes 55 to 58 (Blade, Acts 4 and 5, devp27 smoke), verdicts, deploy list` (qd20)
-- 163f40a77 11-24 00:55 `Merge origin/main` (-)
-- 9f333ea8c 11-23 23:53 `Merge agent/toolstrade41: Merge branch 'main' into toolstrade41` (toolstrade41)
 <!-- statusgen:end -->

@@ -14,6 +14,7 @@ import (
 
 const opsUsage = `usage: d2bot ops quest status [--json]
        d2bot ops quest <start|retry|cancel|handin> <quest> [--chunk ID] --why "reason"
+       d2bot ops quest start <quest> [--chunk ID] --try-anyway --why "reason"   (owner override of a readiness refusal, one attempt)
        d2bot ops quest auto <quest> --on|--off --why "reason"
        d2bot ops quest wait <quest> [--chunk ID] [--timeout 600]
 flags: --sock PATH (default $D2BOT_OPERATOR_SOCK, else the sandbox container's state directory)`
@@ -33,6 +34,7 @@ func opsMain(args []string, out io.Writer) (int, error) {
 	chunk := fs.String("chunk", "", "chunk id")
 	why := fs.String("why", "", "reason (required for every verb that changes something)")
 	sock := fs.String("sock", os.Getenv("D2BOT_OPERATOR_SOCK"), "socket path")
+	tryAnyway := fs.Bool("try-anyway", false, "start: one attempt past a readiness refusal (owner override, audited, one shot)")
 	on := fs.Bool("on", false, "auto on")
 	off := fs.Bool("off", false, "auto off")
 	asJSON := fs.Bool("json", false, "status: raw rows as JSON lines")
@@ -72,7 +74,7 @@ func opsMain(args []string, out io.Writer) (int, error) {
 		printBoard(out, r.Board, *asJSON)
 		return 0, nil
 	case "start", "retry", "cancel", "handin", "auto":
-		rq := ops.Request{Verb: verb, Quest: quest, Chunk: *chunk, Why: *why}
+		rq := ops.Request{Verb: verb, Quest: quest, Chunk: *chunk, Why: *why, TryAnyway: *tryAnyway}
 		if verb == "auto" {
 			if *on == *off {
 				return 2, errors.New("auto needs exactly one of --on and --off")

@@ -218,7 +218,7 @@ export async function act(ctx, verb, quest, chunk, local = shared, redraw = null
   const path = mode ? '/api/quests/mode' : verb === 'dismiss' ? '/api/quests/away/dismiss' : '/api/quests/' + encodeURIComponent(quest) + '/' + verb;
   // the auto switch (slice S8, POST /api/quests/<id>/auto) sends {on: bool} in the place of a chunk
   const body = mode ? { mode: chunk } : verb === 'auto' ? { on: !!chunk } : chunk ? { chunk } : {};
-  if (confirmed && verb === 'cancel') body.confirm = true; // the second tap of a Stop; the server only records it
+  if (confirmed && (verb === 'cancel' || verb === 'try')) body.confirm = true; // the second tap of a Stop (only recorded) or of Try anyway (required)
   if (verb === 'handin') { local.handing = { quest, chunk, at: Date.now() }; local.error = null; if (redraw) redraw(); }
   const j = await ctx.post(path, body);
   if (j && j.ok === false) {
@@ -369,9 +369,10 @@ export function mountBoard(root, ctx, tab) {
     const onNow = !tab && m.now && m.now.quest === row.id && m.now.chunk === c.id;
     if (a && !onNow) {
       const armed = a.confirm && stopArm === a.verb + row.id + c.id;
-      const b = btn(armed ? 'Stop it?' : a.label, 'qb-btn qb-p', a.verb + '-' + row.id + '-' + c.id, (x) => press(a.verb, row.id, c.id, a.confirm, x), a.label + ' ' + row.title + (multi ? ', part ' + (idx + 1) : ''));
+      const b = btn(armed ? (a.confirmLabel || 'Stop it?') : a.label, a.verb === 'try' ? 'qb-btn' : 'qb-btn qb-p', a.verb + '-' + row.id + '-' + c.id, (x) => press(a.verb, row.id, c.id, a.confirm, x), a.label + ' ' + row.title + (multi ? ', part ' + (idx + 1) : ''));
       if (armed) b.dataset.armed = '1';
       li.append(b);
+      if (armed && a.risk) li.append(whyLine(b, a.risk)); // the confirm states the risk in words, next to the button
       if (a.disabled || (a.verb === 'start' && m.paused)) { b.disabled = true; li.append(whyLine(b, a.why || 'Paused: resume the bot first')); }
     } else if (!a && c.state === 'ready' && c.why) li.append(ctx.el('span', 'qb-r', c.why));
     return li;

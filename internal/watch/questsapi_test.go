@@ -280,3 +280,39 @@ func TestQuestsAutoRoute(t *testing.T) {
 		}
 	}
 }
+
+// The viewer's try anyway (ADR 0030 amended 2026-11-24): the same auth as Start (token, origin), the second tap with the
+// confirm flag, the plain start still refused, the audit line carries the skipped refusal, and a measured run refuses it.
+// Two builds. Must fail while the route does not exist.
+func TestQuestsTryAnywayRoute(t *testing.T) {
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		t.Run(class, func(t *testing.T) {
+			r := newQuestRig(t, class, 1)
+			path := "/api/quests/sisters_burial_grounds/"
+			if w := r.do(path+"start", `{}`); w.Code != 409 || !strings.Contains(w.Body.String(), `"code":"not_ready"`) {
+				t.Skipf("the hero is not refused for readiness here: %d %s", w.Code, w.Body)
+			}
+			if w := invPost(r.post, path+"try", `{"confirm":true}`, nil); w.Code != 401 {
+				t.Errorf("no token: %d", w.Code)
+			}
+			if w := r.do(path+"try", `{}`); w.Code != 400 || !strings.Contains(w.Body.String(), `"code":"confirm"`) {
+				t.Errorf("no confirm: %d %s", w.Code, w.Body)
+			}
+			t.Setenv("D2BOT_RUN", "g2")
+			if w := r.do(path+"try", `{"confirm":true}`); w.Code != 409 || !strings.Contains(w.Body.String(), "measured_run") {
+				t.Errorf("measured run: %d %s", w.Code, w.Body)
+			}
+			t.Setenv("D2BOT_RUN", "")
+			w := r.do(path+"try", `{"confirm":true}`)
+			if w.Code != 200 || !strings.Contains(w.Body.String(), `"ok":true`) || !strings.Contains(w.Body.String(), `"override"`) {
+				t.Fatalf("try anyway: %d %s", w.Code, w.Body)
+			}
+			if r.x.TryKey() == "" {
+				t.Error("the executor holds no override after a try")
+			}
+			if again := r.do(path+"try", `{"confirm":true}`); again.Code == 200 && !strings.Contains(again.Body.String(), `"already"`) {
+				t.Errorf("a second try on a running chunk: %d %s", again.Code, again.Body)
+			}
+		})
+	}
+}

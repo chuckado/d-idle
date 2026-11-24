@@ -149,7 +149,7 @@ func (e *Exec) smAccept(vs []QuestView, diff int, quest, chunk string, ev *AutoE
 			case r.Chunk != chunk && (cv.State == Ready || cv.State == Locked && strings.HasPrefix(cv.Why, "after ")):
 				return nil
 			}
-			return CanStart(vs, r.Quest, r.Chunk)
+			return e.canStart(vs, r.Quest, r.Chunk)
 		}
 		var serr error
 		changed, already, serr = m.Start(e.b, d, quest, chunk, startBy(ev), e.o.Now(), startable)

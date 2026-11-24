@@ -23,6 +23,16 @@ The container operator may press the quest board verbs without the viewer passco
 6. Audited: every verb the desk ran is a line in the hero's quest audit ring with `remote:"operator"`; a required reason (`--why`, 1 to 200 characters) is recorded.
 7. Rate limited in the bot: 6 mutating verbs per quest per hour, 30 per hour for the whole board, and a 60 s cooldown after a `retry` for `retry` and `start` of that quest (`cancel` still works).
 
+## Amended 2026-11-24: owner try-anyway start
+
+Source: user decision 2026-11-24 (popup): the owner may start ONE not-ready quest chunk deliberately, and the board does not keep the hero from it.
+
+- Owner only: the operator verb `start --try-anyway` (the socket, with `--why`) or the viewer's `Try anyway (risk)` button (same passcode and origin rules as Start, and a second tap that states the risk, `confirm`). No other verb, no auto-start, no chain.
+- Audited: the audit line has its own path (`operator/try-anyway`, or the viewer's `/api/quests/<id>/try`), the stated reason and the readiness refusal it skipped (`override: try anyway ... (refused: ...)`); the bot logs `override: try anyway`.
+- One shot: it covers one chunk run. A park, a death, a finish, a stop or a restart ends it; the chunk returns to the hold it had. It counts against the same rate limits (6 per quest per hour).
+- Readiness words only: it skips the board word `too hard for now`, the level and life floors (Barracks, road, tower, Andariel and the other boss gates, the boss script floor) and the unattended Andariel hold. It never skips the kit gates (potions, portal, mana, antidotes), the death-spiral guards, or any combat reaction: drink, retreat, chicken, town portal and the death handling run as always.
+- Never in a measured run (`D2BOT_RUN` set refuses it, as every write). A death in a try is counted as a death only; the readiness ledger is not struck further.
+
 ## Consequences
 
 - No new power: anyone with `docker exec` on the host already owns the container, its state and its save.

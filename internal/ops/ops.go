@@ -31,6 +31,7 @@ func allowed(v string) bool { return mutating[v] || v == "status" }
 type Desk interface {
 	View() questboard.View
 	Start(quest, chunk string) questboard.Reply
+	StartAnyway(quest, chunk string) questboard.Reply
 	HandIn(quest, chunk string) questboard.Reply
 	Cancel(quest, chunk string) questboard.Reply
 	Retry(quest, chunk string) questboard.Reply
@@ -45,6 +46,8 @@ type Request struct {
 	Chunk string `json:"chunk,omitempty"`
 	On    *bool  `json:"on,omitempty"`
 	Why   string `json:"why,omitempty"`
+	// TryAnyway turns start into the owner's try-anyway start: one attempt past a readiness refusal (docs/operator.md).
+	TryAnyway bool `json:"try_anyway,omitempty"`
 }
 
 // Response is the one line answered. Reply is the desk's own answer of a mutating verb; Board answers status.
@@ -245,6 +248,9 @@ func (s *Server) handle(rq Request) Response {
 	if !ok {
 		return no("why", "every mutating verb needs a reason: one line, 1 to 200 characters")
 	}
+	if rq.TryAnyway && rq.Verb != "start" {
+		return no("body", "try_anyway belongs to the start verb only")
+	}
 	if rq.Verb == "auto" && rq.On == nil {
 		return no("body", "auto needs on or off")
 	}
@@ -259,7 +265,11 @@ func (s *Server) handle(rq Request) Response {
 	var rep questboard.Reply
 	switch rq.Verb {
 	case "start":
-		rep = d.Start(rq.Quest, rq.Chunk)
+		if rq.TryAnyway {
+			rep = d.StartAnyway(rq.Quest, rq.Chunk)
+		} else {
+			rep = d.Start(rq.Quest, rq.Chunk)
+		}
 	case "handin":
 		rep = d.HandIn(rq.Quest, rq.Chunk)
 	case "cancel":
@@ -273,8 +283,17 @@ func (s *Server) handle(rq Request) Response {
 	if st == 0 {
 		st = 200
 	}
-	d.Record(questboard.AuditEvent{Action: rq.Verb, Quest: rq.Quest, Chunk: rq.Chunk, Path: "operator/" + rq.Verb,
-		Remote: "operator", Agent: "ops-cli", Why: why, OK: rep.OK, Already: rep.Already, Status: st, Code: rep.Code, Reason: rep.Reason})
+	path, auditWhy := "operator/"+rq.Verb, why
+	if rq.TryAnyway {
+		// the override is its own audit path and carries the refusal it skipped
+		path, auditWhy = "operator/try-anyway", "override: try anyway: "+why
+		if rep.Override != "" {
+			auditWhy += " (refused: " + rep.Override + ")"
+		}
+		s.cfg.Logf("override: try anyway", "quest", rq.Quest, "chunk", rq.Chunk, "ok", rep.OK, "code", rep.Code, "refused", rep.Override, "why", why)
+	}
+	d.Record(questboard.AuditEvent{Action: rq.Verb, Quest: rq.Quest, Chunk: rq.Chunk, Path: path,
+		Remote: "operator", Agent: "ops-cli", Why: auditWhy, OK: rep.OK, Already: rep.Already, Status: st, Code: rep.Code, Reason: rep.Reason})
 	s.cfg.Logf("operator verb", "verb", rq.Verb, "quest", rq.Quest, "chunk", rq.Chunk, "ok", rep.OK, "code", rep.Code)
 	return Response{OK: rep.OK, Code: rep.Code, Reason: rep.Reason, Reply: &rep}
 }
