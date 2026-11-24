@@ -1,6 +1,6 @@
 # Fork request card: verbs the step proving grounds are missing (card stepgrounds, 2026-11-23)
 
-> status: draft for the coordinator. Private fork only (never an upstream PR). Not touched by this card: another agent owns the fork. Tags: V verified by the named probe on the devp23 labverbs binary (`/data/d2d-lab/qdbin/d2d-devp23-labverbs`, builder), U unverified. The catalogue column "MISSING F<n>" in `docs/probes/quest-step-catalogue.md` counts the steps each request unblocks.
+> status: F1 and F2 DONE in devp25 stepverbs (2026-11-23, V proofs in the devp25 doc and docs/probes/stepgrounds.md round 3); F3 observer half done in the bot. Original draft follows. Private fork only (never an upstream PR). Not touched by this card: another agent owns the fork. Tags: V verified by the named probe on the devp23 labverbs binary (`/data/d2d-lab/qdbin/d2d-devp23-labverbs`, builder), U unverified. The catalogue column "MISSING F<n>" in `docs/probes/quest-step-catalogue.md` counts the steps each request unblocks.
 
 ## Present and used (V)
 
