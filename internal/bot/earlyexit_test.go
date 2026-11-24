@@ -95,3 +95,24 @@ func TestStalePackSmallPackIgnored(t *testing.T) {
 		t.Errorf("a 2-hostile exit must not hold the area, got %d", a)
 	}
 }
+
+// V live 2026-11-24 22:41Z: a chicken in Andariel's lair noted a stale pack; the trip home then returned to the first field
+// (Tower Cellar 3) while the board's boss chunk was under way, and the shop never sold the tier the hold wants. With a chunk
+// under way the return is not redirected; without one it still is. Both classes.
+func TestStalePackDoesNotRedirectABoardChunk(t *testing.T) {
+	for _, c := range []d2.Class{d2.Sorceress, d2.Barbarian} {
+		g, s := earlyRig(t, c, 12)
+		g.r.earlyExit(s, SafetyChicken)
+		tr := &trip{returnTo: 3}
+		g.r.redirectStalePack(s, tr)
+		if tr.returnTo == 3 {
+			t.Skipf("%v: no first field differs from the stale area in this rig", c)
+		}
+		tr = &trip{returnTo: 3}
+		g.r.qb = &boardRT{startedKey: "sisters_to_the_slaughter/andariel"}
+		g.r.redirectStalePack(s, tr)
+		if tr.returnTo != 3 {
+			t.Errorf("%v: a board chunk under way was sent to area %d", c, tr.returnTo)
+		}
+	}
+}

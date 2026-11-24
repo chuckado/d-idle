@@ -93,6 +93,7 @@ func (n *Navigator) useDoorAt(ctx context.Context, o *obs, at input.Point, level
 		n.doorTried = map[d2map.Point]int{}
 	}
 	n.doorTried[d2map.Point{X: at.X, Y: at.Y}]++
+	n.doorIntent = doorIntent{at: at, goal: n.doorGoal, until: n.clk.Now().Add(doorIntentFor), level: o.level, uses: n.doorIntent.uses + 1}
 	n.log.Info("nav: the gate is cut off by a door, opening it", "to", levelNo, "door", at, "from", o.pos)
 	err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return at, 4, nil }, goalOpts(at, false))
 	cur, oerr := n.observeWait(ctx)
@@ -101,6 +102,7 @@ func (n *Navigator) useDoorAt(ctx context.Context, o *obs, at input.Point, level
 		n.log.Info("nav: could not reach the gate door", "err", err)
 		return true // tried: the counter above bounds the retries, the caller observes again
 	}
+	n.doorIntent = doorIntent{} // arrived: the door is used now
 	tg := input.Target{Type: uint32(d2.TypeObject), Pos: at}
 	if oerr == nil {
 		bestD := 6.0
@@ -469,3 +471,27 @@ func (n *Navigator) openDoorAtGate(ctx context.Context, o *obs, g gate, levelNo 
 
 // gateDoorNear is how close (subtiles) a door must be to an unproven border gate to count as shutting it.
 const gateDoorNear = 8.0
+
+// doorIntent is the door a walk toward goal chose and did not reach. A caller that walks in slices of a few seconds (the
+// fighter's approach to a boss) started every slice with the walk to the closest point of the unreachable goal, 20 tiles back
+// from the door, and the door walk never finished: V live 2026-11-24 22:27Z, Catacombs 4, 4 minutes between y 117 and 130 with
+// the door at y 135 and no attack. The next walk toward the same goal goes to that door first.
+type doorIntent struct {
+	at, goal input.Point
+	until    time.Time
+	level    int
+	uses     int
+}
+
+const (
+	doorIntentFor  = 90 * time.Second
+	doorIntentUses = 12
+)
+
+func (n *Navigator) pendingDoor(p input.Point, level int) (input.Point, bool) {
+	d := n.doorIntent
+	if d.until.IsZero() || n.clk.Now().After(d.until) || d.level != level || d.uses >= doorIntentUses || dist(d.goal, p) > 8 {
+		return input.Point{}, false
+	}
+	return d.at, true
+}

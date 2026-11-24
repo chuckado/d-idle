@@ -85,11 +85,25 @@ func (r *Runner) stalePackArea(s *d2.Snapshot) int {
 // redirectStalePack sends a town trip that would return into the stale pack to the first field instead.
 func (r *Runner) redirectStalePack(s *d2.Snapshot, t *trip) {
 	a := r.stalePackArea(s)
-	if a == 0 || t.returnTo != a {
+	if a == 0 || t.returnTo != a || r.boardOwnsHero() {
 		return
 	}
 	if first, ok := r.starveStep(s, difficultyName(s.Player.Difficulty)); ok && first != a {
 		r.e.Log.Info("field gate: stale pack, first field instead", "area", a, "first", first)
 		t.returnTo = first
 	}
+}
+
+// boardOwnsHero: a quest board chunk is under way (a boss run, a quest fight). Its own readiness and kit gates decide whether
+// the hero goes back to the fight; the stale-pack hold sent it 10 minutes to the first field after every chicken in Andariel's
+// lair, a walk of five levels each way (V live 2026-11-24 22:41Z, Tower Cellar 3), and never lifted: the shop sells only
+// Minor Healing, the hold wants tier 2.
+func (r *Runner) boardOwnsHero() bool {
+	rt := r.qbRT()
+	if rt == nil {
+		return false
+	}
+	rt.mu.Lock()
+	defer rt.mu.Unlock()
+	return rt.startedKey != ""
 }
