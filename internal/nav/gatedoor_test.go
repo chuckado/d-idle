@@ -855,3 +855,57 @@ func TestExitToCrossesTheLiveCatacombsTwo(t *testing.T) {
 		})
 	}
 }
+
+// V live 2026-11-24 16:32 EST (attempt 6): in Catacombs 4 the hero stood at (82,112), 13 subtiles from the stairs up (95,111), and
+// the way on to Andariel is the door (80,135) in the wall x 79..81. The walk to the door sent its first click east to (91,113),
+// the mouth gate clipped and then held it ("inside a read trigger area", holds 19) and the hero stood there for ten minutes.
+// testdata/lair37.grid is the live debug grid 5 of the level, crop x 30..109, y 100..149. Both classes (the geometry knows none).
+func TestGoToThePastDoorInTheLairBesideTheStairs(t *testing.T) {
+	data, err := os.ReadFile("testdata/lair37.grid")
+	if err != nil {
+		t.Fatal(err)
+	}
+	rows := strings.Split(strings.TrimSpace(string(data)), "\n")
+	const ox, oy, cx, cy = 1000, 1000, 30, 100
+	at := func(x, y int) input.Point { return input.Point{X: ox + x - cx, Y: oy + y - cy} }
+	for _, cls := range []string{"Paladin", "Necromancer"} {
+		t.Run(cls, func(t *testing.T) {
+			g := d2map.NewGrid()
+			cells := make([]uint16, len(rows[0])*len(rows))
+			for y, r := range rows {
+				for x, c := range r {
+					if c == '#' || c == 'D' {
+						cells[y*len(rows[0])+x] = 1
+					}
+				}
+			}
+			g.SetBlock(d2map.Rect{X: ox, Y: oy, W: len(rows[0]), H: len(rows)}, cells)
+			l37 := &simLevel{no: 37, rect: d2map.Rect{X: ox, Y: oy, W: len(rows[0]), H: len(rows)}}
+			s := newSim(g, at(82, 112), l37)
+			s.reveal = 400
+			s.revealRooms()
+			door := at(80, 135)
+			l37.lm.Presets = []d2map.Preset{{Kind: d2map.PresetObject, ID: 64, Pos: d2map.Point{X: door.X, Y: door.Y}}}
+			l37.lm.Exits = []d2map.Exit{{Dest: 36, Pos: d2map.Point{X: at(95, 111).X, Y: at(95, 111).Y}}}
+			opened := false
+			s.onInteract = func(s *sim, tg input.Target) error {
+				if !opened && dist(tg.Pos, door) < 8 {
+					opened = true
+					openDoor(s, d2map.Rect{X: door.X - 1, Y: door.Y - 1, W: 3, H: 3})
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class == 64 }
+			n.exploreFn = func(context.Context, func() bool, *input.Point) error { return ErrExplored }
+			n.stayLevel, n.arrival = 37, true
+			// the stalls of the earlier walks blacklisted the 2-wide corridor south of the hero (hardBlock, 3 min)
+			_ = 0
+			goal := at(45, 120)
+			err := n.GoTo(ctxT(t), goal)
+			if err != nil || dist(s.pos(), goal) > 6 {
+				t.Fatalf("%s: GoTo %v, at %v (door opened %v)", cls, err, s.pos(), opened)
+			}
+		})
+	}
+}

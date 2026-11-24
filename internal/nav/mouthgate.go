@@ -456,6 +456,12 @@ func (n *Navigator) hold(lm *d2map.LevelMap, from, p input.Point, exits []input.
 		return q, nil
 	}
 	n.log.Info("nav mouth gate: click held", "from", from, "to", p, "why", why, "holds", h.count, "exits", exits, "goal", n.goal, "goalSet", n.goalSet)
+	if h.count >= 2 && !n.hardNear(p, 4) {
+		// The plan keeps choosing a way past the exit that the gate will never click (V live 2026-11-24 16:32 EST, Catacombs 4,
+		// an exit with a read trigger area has no gated point, so the escalation above never ran: 215 rounds of the same refused click toward the stairs while the corridor south was open). A planning block on the
+		// refused spot sends the next plan another way; when there is none the planner retries without hard blocks.
+		n.hardBlock(p, 6)
+	}
 	return input.Point{}, n.refuse()
 }
 
@@ -503,4 +509,15 @@ func (n *Navigator) pocketClick(lm *d2map.LevelMap, from, p input.Point, exits [
 		return best, "away-sideways"
 	}
 	return p, "through"
+}
+
+// hardNear reports a live hard block within r of p.
+func (n *Navigator) hardNear(p input.Point, r float64) bool {
+	now := n.clk.Now()
+	for _, b := range n.hard {
+		if b.expires.After(now) && dist(input.Point{X: b.at.x, Y: b.at.y}, p) <= r {
+			return true
+		}
+	}
+	return false
 }
