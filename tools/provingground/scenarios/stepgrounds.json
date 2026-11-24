@@ -135,9 +135,10 @@
    "notes": "Smith spawned (plain), the stand added beside the hero by `debug object add 108` (devp25 stepverbs), quest 3 = 0x000c (the stand refuses a hero without the quest). The bot's stand click is toolstrade34 (merged). Control: .control (no Smith, no stand, no click: no hdm). Needs the devp25 binary (PG_D2D_BIN).",
    "assert": [
     {
-     "kind": "item_in_pack",
-     "code": "hdm",
-     "why": "the bot clicked the Malus stand (object 108) and carries the Malus (the d2d drops it only from the stand, devp24 doc)"
+     "kind": "log_line",
+   "pattern": "^loot: clicked .*item=Horadric Malus",
+   "min": 1,
+   "why": "the bot clicked the Malus stand (object 108) and then the Malus it dropped; the pack is not asserted because the chunk hands the Malus to Charsi inside the budget (V run 20261123-195923)"
     },
     {
      "kind": "log_line",

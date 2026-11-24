@@ -964,7 +964,29 @@ func (a taskActs) PickUp(ctx context.Context, item string) error {
 		}
 		return task.Errorf(task.KindNotFound, "no %s: %s", item, why)
 	}
+	if err == nil && isQuestItemName(item) {
+		// the report counts every item taken (gold, a javelin): only the named quest item in the pack counts (V lab 2026-11-23,
+		// stepgrounds stand_click_pickup: the pick-up took three other items, returned nil and the step was "still needed")
+		a.r.poll()
+		if s := a.r.latest(); s != nil && a.r.d.Catalog != nil {
+			got := map[string]int{}
+			a.r.scanQuestItems(s, got)
+			if got[item] == 0 {
+				return task.Errorf(task.KindNotFound, "no %s in the pack after the pick-up (%d other items taken)", item, rep.Picked)
+			}
+		}
+	}
 	return a.tag(err)
+}
+
+// isQuestItemName: the item is one scanQuestItems counts (a named quest item), so the pack can confirm it.
+func isQuestItemName(name string) bool {
+	for _, n := range questItemNames {
+		if n == name {
+			return true
+		}
+	}
+	return false
 }
 
 func (a taskActs) ActivateWaypoint(ctx context.Context, ar task.Area) error {
