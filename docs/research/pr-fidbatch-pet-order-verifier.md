@@ -4,7 +4,12 @@
 
 ## Verdict
 
-PENDING (filled below once the builder jobs finish).
+**NOT READY** as committed (`21df4aa6`). Two blockers, both fixable in the same branch:
+
+1. BLOCKER (V): the merc is put LAST unconditionally, but game.exe re-inserts it at the front of the player's list on a revive (FUN_00579c00 -> FUN_00579aa0 -> FUN_005b1900 at 0x579b43) and on a hire. With summons alive from before the revive, the commit moves d2d AWAY from game.exe: in the verifier's revive cases it differs on 766 picks where upstream main differs on 515 (section 2). The PR standard asks that the change push towards 1:1; this one trades one deviation for another on a path a Necromancer or Druid player hits every time the merc dies and is revived in town with summons following.
+2. BLOCKER (V): CI's "Names and includes" clang-tidy job fails on the new test (`misc-include-cleaner`: `d2d::d2s::kLevel`, `std::pair`, `std::move` without their headers; section 3). Fix: include the d2s stats header that declares `kLevel` and `<utility>`.
+
+READY AFTER EDITS once (1) is fixed one of two ways (section 6) and (2) is fixed, the oracle (both case sets) rerun to 0, and the high findings below answered.
 
 ## 1. The claim re-derived from game.exe (V: disassembly read with capstone on the builder's game.exe, `dis.py` / `xref.py` of the lab)
 
@@ -58,3 +63,36 @@ The harness itself: its `after` labels slot 1 `merc` and the rest `summon` by po
 ## 4. The presubmit FAIL is pre-existing (V)
 
 `python3 -m unittest test_structs.py` on a clean export of upstream main `ff6d47a66`: FAILED (failures=1), `509 not less than or equal to 371 : unit 0x90 ptr events ... components/game/ai.hpp:509`. `git diff --stat ff6d47a66 21df4aa6 -- docs components/game/ai.hpp` is empty: the commit touches neither `structs.tsv` nor `ai.hpp`. Not this PR's to fix; one line in the body is enough.
+
+## 5. ctest and det state hashes
+
+PENDING.
+
+## 6. Findings, ranked, with the fix
+
+| # | Rank | Finding | Evidence | Recommendation |
+|---|---|---|---|---|
+| 1 | blocker | Merc always last; game.exe puts it first after a revive or a later hire. The commit is worse than upstream main in that state | V: disassembly (section 1), revive oracle 766 vs 515 | Preferred: model game.exe's list order. A per-hero insertion counter: each `Pet` gets `listed = ++actor->list_serial` where summons.cpp pushes it; the merc gets one where it is spawned on hire / join (world/setup.cpp:500) and on `cmd::ResurrectMerc` (world/commands.cpp:249); `search_order` sorts the pets after the player by serial, newest first. Then the oracle and the revive variant must both give 0 (the verifier's `pets_merc_revive.py` with REVIVE_SHARE 0.5 is a ready test). Fallback with no state: reverse only the summons and leave the merc where d2d has it (first): measured with the same harness (slot 1 kept in place) it differs in 706 of the author's cases (old 1,254), 766 of the verifier's plain cases (old 1,281) and 0 of the revive cases (old 515): never worse than upstream main, but no longer "0 after", and the claim narrows to summons |
+| 2 | blocker | clang-tidy include-cleaner FAIL in `tests/game/test_pet_search_order.cpp:48,61,68` | V: CI's selector + clang-tidy-19 on the builder | Add the missing includes; rerun tidy on the test TU |
+| 3 | high | README row command does not paste: it runs `pets_merc.py` from tools/emu but `-Icomponents`, `find components` and `build/components/rules/librules.a` from the repo root | V read (tools/emu/README.md:294) | Write it as the draft's Reproduce block does (`../../components`, `../../build/...`), all from tools/emu |
+| 4 | high | The harness's `after` assigns kinds by slot (1 = merc, rest summons), not by ai.cpp's real mapping (`foe.id < 0`); so the 0 proves `search_order`, not the call site | V read | Say so in the PR body (the in-game test is the call-site proof), or have the harness read the kind from the case line |
+| 5 | medium | Co-op: d2d's foes are `p1, m1, p2, m2, pets...`; `search_order` keeps `p1, m1, p2` and moves `m2` behind both players' summons, which game.exe never does (each player has its own list) | V read (fight/tick.cpp:487..502, monsters.cpp search_order) | Limit already listed; add that the co-op order changes and is unproven, or make `search_order` work per side (`Side::at`/`pets`) |
+| 6 | medium | monsters.hpp comment says anything not a merc or summon "keeps its place"; `other` entries after the last player are moved to the end | V read | Reword: "monsters (lists 8/9, a converted one) go after the pets, as in d2d's foes" |
+| 7 | low | Harness header: stale line refs (`ai.cpp:546..563 at 72132b99`, `merc.cpp:302..330`, `ai.cpp:558/559`), `-std=c++20` vs README c++23 | V read | Refresh to the branch's lines |
+| 8 | low | Converted monster: game.exe inserts it with FUN_005b1900 (Conversion, 0x5d0501), so it is the newest pet; d2d keeps it after every pet. Unchanged by the commit | V xref | Keep as a limit; with the serial fix it can take a serial too (a later claim) |
+| 9 | low | Draft calls the 1,254 breakdown I | re-tabulated here: 780 merc vs summon, 474 summon vs summon, all same distance | Tag it V |
+
+## 7. Claim wording, title and body
+
+If finding 1 is fixed by the insertion counter (recommended):
+
+- Title: `fight: a monster tries a player's pets newest first, the merc by when it was hired or revived (FUN_005b1900)`
+- Claim: "FUN_005b1900 inserts each pet of a player right after the player's list head (0x5b1966..0x5b1979), and FUN_005dd7f0 walks the list from the head taking only a strictly nearer candidate (0x5dd960), so on a tie the newest pet wins. The merc is inserted when hired and again when revived (FUN_00579aa0 at 0x579b43). d2d tried the merc first and the summons oldest first; it now tries the pets newest first by when each entered the list."
+- Body: keep the Evidence paragraph, add the revive oracle (`REVIVE_SHARE`) numbers, the tidy and `-Wshadow` lines, the pre-existing `test_structs.py` FAIL ("pre-existing on main: structs.tsv cites ai.hpp:509, the file has 371 lines; not touched here"), and the Limits: one player; a converted monster stays after the pets; hooked functions as listed.
+
+If the fallback is taken (summons only):
+
+- Title: `fight: a monster tries a player's summons newest first (FUN_005b1900)`
+- Claim: "...so of two summons at the same distance the newer is chosen. The merc keeps its place (first): game.exe's merc position depends on when it was last hired or revived, which d2d does not track (Limits)." Numbers: before / after per case set as in finding 1; the "0 after" line goes, replaced by "every remaining difference is a merc-vs-summon tie where the merc is older than the summon".
+
+Do not keep the current title: "its merc last" is false after any revive (V).
