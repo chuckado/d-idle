@@ -388,7 +388,7 @@ func TestBossTravelGatesLevelAndPotions(t *testing.T) {
 
 func TestProgressReport(t *testing.T) {
 	g := sim.New(true)
-	c := task.NormalAct1(task.Act1Options{SkipTower: true}) // the optional tower is left behind at Andariel's floor 11
+	c := task.NormalAct1(task.Act1Options{SkipTower: true}) // the optional Forgotten Tower is left behind at Andariel's floor 11
 	ex := task.NewExecutor(g, g)
 	for i := 0; i < 6; i++ {
 		ex.Tick(context.Background(), c)
