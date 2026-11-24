@@ -2580,7 +2580,6 @@ tools/provingground/scenarios/manage.json  credit-runner  equipswap
 tools/provingground/scenarios/navexit.json  credit-runner  navexit2
 tools/provingground/scenarios/navexit.json  credit-runner  stage1fix
 tools/provingground/scenarios/navexit.json  credit-runner  stage23
-tools/provingground/scenarios/navexit.json  credit-runner  toolstrade47
 tools/provingground/scenarios/necro.json  credit-runner  handin
 tools/provingground/scenarios/necro.json  credit-runner  malus
 tools/provingground/scenarios/necro.json  credit-runner  malus2

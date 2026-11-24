@@ -1,10 +1,13 @@
 ---
 id: TASK-925
-title: 'toolstrade47: Andariel route hop scenarios (Cathedral to Catacombs 4), pre-check'
-status: Proposed
+title: >-
+  toolstrade47: Andariel route hop scenarios (Cathedral to Catacombs 4),
+  pre-check
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T18:12:00Z'
+updated_date: '2026-11-24T18:23:00Z'
 labels:
   - bot
   - probe
