@@ -67,6 +67,7 @@ type boardRT struct {
 	queued   string               // why an accepted chunk is not running yet ("" when it runs or none is accepted)
 	// queuedSince is when the chunk first met a fight in the clear radius (zero when it is not waiting): past
 	// boardQueueGrace the chunk starts anyway, see boardPreemptsWhy.
+	holdFight   bool // the chunk is queued behind a fight in the clear radius: the level goal stays and fights here
 	queuedSince time.Time
 	// startedKey is the chunk the board has already started this run of decisions: a fight gates only a fresh start, never
 	// the next step of a chunk under way (cainfix3: after "Go to Stony Field" the level plan took the hero away again).
@@ -1073,6 +1074,19 @@ func (r *Runner) boardYield() bool {
 	return true
 }
 
+// boardHoldsArea says an accepted chunk waits for the fight the hero is in: the level goal must not walk the hero out of
+// the chunk's area meanwhile (V lab 2026-11-23, necro step scenario: the plan walked the hero out of the Barracks while the
+// army fought, then the first step of the chunk parked "ended in 26").
+func (r *Runner) boardHoldsArea() bool {
+	rt := r.boardRTFor()
+	if rt == nil {
+		return false
+	}
+	rt.mu.Lock()
+	defer rt.mu.Unlock()
+	return rt.holdFight
+}
+
 func (r *Runner) boardPreempts(snap *d2.Snapshot, c control) bool {
 	ok, why := r.boardPreemptsWhy(snap, c)
 	if why != "" {
@@ -1099,6 +1113,9 @@ func (r *Runner) boardPreemptsWhy(snap *d2.Snapshot, c control) (bool, string) {
 		return false, ""
 	}
 	rt.worldLoop()
+	rt.mu.Lock()
+	rt.holdFight = false
+	rt.mu.Unlock()
 	d, err := rt.exec.Next()
 	if err != nil {
 		return false, ""
@@ -1126,6 +1143,7 @@ func (r *Runner) boardPreemptsWhy(snap *d2.Snapshot, c control) (bool, string) {
 				rt.queuedSince = now
 			}
 			late := now.Sub(rt.queuedSince) >= boardQueueGrace
+			rt.holdFight = !late
 			rt.mu.Unlock()
 			if !late {
 				rt.setQueued("Starts when the fight is over.")

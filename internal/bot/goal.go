@@ -123,6 +123,9 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 	if r.boardPreempts(snap, c) {
 		return r.boardStep(ctx, snap, c) // the player's Start tap beats a farm or level goal (docs/questboard.md, "Which goals"), not a Farm gold order
 	}
+	if !p.InTown() && c.spec.camp == nil && r.boardHoldsArea() {
+		return r.sweep(ctx, snap, c, p.Area) // fight where we stand until the chunk may start
+	}
 	if c.spec.camp != nil {
 		if r.goldFarmOn() {
 			return r.goldFarmStep(ctx, snap, c) // the player's order: farm gold until told to stop (docs/goldfarm.md)
@@ -473,6 +476,11 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 		threshold := t.ResupplyPotions
 		if p.InTown() {
 			threshold = t.ResupplyPotions * 2
+			// the doubled town floor is capped by what the belt can hold (never below the field floor): a floor the belt cannot
+			// hold is never met, the shop buys nothing, and the next arrival asks again
+			if c := resource.HealingCapacity(r.resInput(s), resource.FromEnv(*r.e.Tune)); c > 0 && threshold > c {
+				threshold = max(c, t.ResupplyPotions)
+			}
 		}
 		// Recovery suppresses potion trips from the field (an empty purse buys nothing), not the visit already under way:
 		// in town with no healing potion and gold for one the shop opens (potionFloor caps it, the kit gold stays).
