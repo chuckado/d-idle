@@ -5,6 +5,7 @@ import (
 	"d2lod-bot/internal/env"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -454,5 +455,32 @@ func TestPickBelowTheBarracksFloorUsesTheTowerCellars(t *testing.T) {
 				t.Errorf("%s clvl %d: picked area %d (%v), want a Tower Cellar 21 to 24", class, level, s.Area, ok)
 			}
 		}
+	}
+}
+
+// The picker's log line lists the plan rows the character's level has reached before any exclusion: for the Paladin at
+// clvl 20 the Forgotten Tower Cellars are among them, so a live log that does not choose them shows the exclusion, not a
+// missing row. The Sorceress (no active v3 plan) lists the progression rows. Must fail without candidateLine.
+func TestCandidateLineListsTheRowsBeforeExclusion(t *testing.T) {
+	p, _ := LoadPlan("")
+	has := func(lines []string, area string) bool {
+		for _, l := range lines {
+			if strings.HasPrefix(l, area+":") {
+				return true
+			}
+		}
+		return false
+	}
+	pal := p.candidateLine("normal", "paladin", 20, 0)
+	for _, a := range []string{"21", "22", "23", "24", "5", "6"} {
+		if !has(pal, a) {
+			t.Errorf("paladin clvl 20 candidates lack area %s: %v", a, pal)
+		}
+	}
+	if sor := p.candidateLine("normal", "sorceress", 20, 0); len(sor) == 0 {
+		t.Error("sorceress candidates empty")
+	}
+	if low := p.candidateLine("normal", "paladin", 3, 0); has(low, "21") {
+		t.Errorf("clvl 3 lists the cellars: %v", low)
 	}
 }

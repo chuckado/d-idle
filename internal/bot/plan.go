@@ -356,6 +356,19 @@ func (p *Plan) parseLevelPlan(diff string, b []byte) error {
 	return nil
 }
 
+// candidateLine lists the plan rows of the class whose entry level (with the margin) the character has reached, as
+// "area:name[enter-leave]" in plan order, for the picker's log line: which rows existed before any exclusion.
+func (p *Plan) candidateLine(diff, class string, level, margin int) []string {
+	var out []string
+	for _, s := range p.stepsFor(diff, class) {
+		if s.EnterLvl+margin > level {
+			continue
+		}
+		out = append(out, fmt.Sprintf("%d:%s[%d-%d]", s.Area, s.Name, s.EnterLvl, s.LeaveLvl))
+	}
+	return out
+}
+
 // stepsFor are the steps Pick walks: the class's v3 steps when the class has an active plan for diff, else the
 // progression rows (a class without a v3 plan keeps them; it is never given another class's plan).
 func (p *Plan) stepsFor(diff, class string) []Step {
