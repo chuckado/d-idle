@@ -33,6 +33,14 @@ Source: user decision 2026-11-24 (popup): the owner may start ONE not-ready ques
 - Readiness words only: it skips the board word `too hard for now`, the level and life floors (Barracks, road, tower, Andariel and the other boss gates, the boss script floor) and the unattended Andariel hold. It never skips the kit gates (potions, portal, mana, antidotes), the death-spiral guards, or any combat reaction: drink, retreat, chicken, town portal and the death handling run as always.
 - Never in a measured run (`D2BOT_RUN` set refuses it, as every write). A death in a try is counted as a death only; the readiness ledger is not struck further.
 
+## Amended 2026-11-24 (user decision): agents may use the owner try-anyway start in the sandbox
+
+Source: user decision 2026-11-24, on the pipeline audit row 16 ([pipeline-audit-2026-11-24.md](../process/pipeline-audit-2026-11-24.md)); amends the "Owner only" line of the amendment above.
+
+- An agent running the sandbox hero may press `start --try-anyway` (with `--why`) through the operator socket. The viewer's button stays the owner's.
+- Nothing else changes: audited with its own path and the skipped readiness refusal, one shot (ends at a park, death, finish, stop or restart), readiness words and floors only (never the kit gates, the death-spiral guards or combat reactions), rate limits unchanged (6 per quest per hour, 30 per board per hour), never in a measured run.
+- The agent states in its report which quest it tried and why; no chain of try-anyway starts and no use outside the sandbox container.
+
 ## Consequences
 
 - No new power: anyone with `docker exec` on the host already owns the container, its state and its save.

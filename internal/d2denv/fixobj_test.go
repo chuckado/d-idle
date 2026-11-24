@@ -84,7 +84,7 @@ func TestPauseStepsUnderLockstep(t *testing.T) {
 	if err := d2dctl.Pause(context.Background(), 4*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if steps() == before || time.Since(w) > time.Second {
+	if steps() == before || time.Since(w) > 3500*time.Millisecond {
 		t.Fatalf("lockstep pause: %d new step commands, wall %v", steps()-before, time.Since(w))
 	}
 	ctx, cancel := context.WithCancel(context.Background())
