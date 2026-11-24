@@ -1338,6 +1338,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/qd21: qdmatrix: notes 59 to 62 (Golden Bird GREEN, Harrogath gate, Duriel staff verbs and tomb scan), verdicts, deploy list (merged 2026-11-24) <!--sg:agent/qd21-->
 - agent/fidbatch2: Merge branch 'main' into fidbatch (merged 2026-11-24) <!--sg:agent/fidbatch2-->
 - toolstrade44: owner try-anyway start (one shot readiness override) (TASK-921, merged 2026-11-24, acceptance 3 of 3): Built offline, not verified live: operator `d2bot ops quest start <quest> --try-anyway --why ...` and the viewer button Try anyway (risk) (POST /api/quests/<id>/try with confirm) start one Available chunk past its readiness refusal ... <!--sg:agent/toolstrade44-->
+- agent/noconflict: stepcat verdicts split into per-group files; merge-conflict guidance (merged 2026-11-24) <!--sg:agent/noconflict-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

@@ -504,6 +504,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 9dd0d270f 11-24 10:45 `Merge agent/noconflict: stepcat verdicts split into per-group files; merge-conflict guidance` (noconflict)
+- a4f4b304b 11-24 10:44 `Merge branch 'main' into noconflict` (-)
 - ce6ccea3b 11-24 10:35 `Merge agent/toolstrade44: toolstrade44: the vault poll timing ceiling is skipped under -race (the gate failure was this, not a data race)` (toolstrade44)
 - bc349eac7 11-24 10:07 `Merge remote-tracking branch 'origin/main' into agent/toolstrade44` (-)
 - 343e273de 11-24 09:50 `Merge agent/fidbatch2: Merge branch 'main' into fidbatch` (fidbatch2)
@@ -512,6 +514,4 @@
 - 627f0398a 11-24 09:26 `Merge origin/main` (-)
 - ea76972fb 11-24 09:12 `Merge branch 'main' into toolstrade44` (-)
 - 782567e37 11-24 08:54 `Merge agent/toolstrade43: Merge branch 'main' into toolstrade43` (toolstrade43)
-- 0de3d58bb 11-24 08:52 `Merge branch 'main' into toolstrade43` (-)
-- 339a10d86 11-24 08:41 `Merge agent/toolstrade42: toolstrade42: Andariel gate carries the Barracks floor, card` (toolstrade42)
 <!-- statusgen:end -->
