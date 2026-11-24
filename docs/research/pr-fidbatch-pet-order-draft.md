@@ -71,3 +71,9 @@ build/tests/test_pet_search_order                       # parent (test file only
 ## Independent verification
 
 v1: verifier verdict NOT READY (two blockers, both answered above). v2 has NOT been verified independently; the author does not certify it. Requested: a second verifier, with the revive oracle of the first verifier (its own `pets_merc_revive.py`), the co-op case (two players), and a check that no other path puts a merc or summon into `actor->pets` / `actor->merc` without a serial (grep found one push site, summons.cpp, and one merc site, `spawn_merc`; a pet created by another route would get serial 0 and sort last).
+
+## Result block (v2, 2026-11-24)
+
+- ctest on the whole tree of `02368c52` (GCC Release, `D2D_WERROR=OFF`, `-j4`, build 1,457 s): 506 tests, 0 failed, 13 skipped (they want data the lab image lacks; the same 13 as the verifier's v1 run). V run.
+- Det state hashes: NOT re-run for v2. The verifier's v1 run (14 scenarios, `mon` and `state` identical with and without the claim) did not exercise the claim (no scene has two pets or a merc and a summon at one distance from a monster's think), and its driver edits for this fork were not committed. v2 adds only list serials, which change no state a scenario hashes unless a pick differs. U for v2; to redo: base `didle/rebase-20261124` (`0fcd512a`) against `didle/fidbatch-20261124b` (`42cfeaad`).
+- Branches (private remote, pushed): upstream-ready `didle/fidbatch-pet-search-order-up-v2` @ `02368c52` (one commit on upstream main `ff6d47a66`; v1 `didle/fidbatch-pet-search-order-up` @ `21df4aa6` stays, superseded); integration `didle/fidbatch-20261124b` @ `42cfeaad` (two commits on `didle/rebase-20261124`; the earlier `didle/fidbatch-20261124` is superseded). The integration branch was not rebuilt after the cherry-pick (clean pick, no conflict); the upstream-ready tree was.
