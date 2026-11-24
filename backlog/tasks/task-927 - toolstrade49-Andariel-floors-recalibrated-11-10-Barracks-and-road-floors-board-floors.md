@@ -1,10 +1,13 @@
 ---
 id: TASK-927
-title: 'toolstrade49: Andariel floors recalibrated (11 / 10, Barracks and road floors, board floors)'
-status: Proposed
+title: >-
+  toolstrade49: Andariel floors recalibrated (11 / 10, Barracks and road floors,
+  board floors)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T18:36:00Z'
+updated_date: '2026-11-24T19:06:00Z'
 labels:
   - bot
   - bot-fix

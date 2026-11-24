@@ -410,7 +410,6 @@ data/questboard/act1.json  credit-runner  cain45
 data/questboard/act1.json  credit-runner  cain5b
 data/questboard/act1.json  credit-runner  cainfix
 data/questboard/act1.json  credit-runner  cainfix3
-data/questboard/act1.json  credit-runner  toolstrade49
 data/questboard/act2.json  credit-runner  qdmatrix
 data/questspec  credit-runner  questspec
 data/stepgrounds/steps.json  credit-runner  necrosteps
@@ -442,7 +441,6 @@ docs/agency.md  credit-runner  druid1
 docs/agency.md  credit-runner  hammer1
 docs/agency.md  credit-runner  necro1
 docs/aggression.md  credit-runner  wiring2
-docs/andarielgate.md  credit-runner  toolstrade49
 docs/archive  credit-runner  dietarchive
 docs/autoalloc.md  credit-runner  allocfix
 docs/autoalloc.md  credit-runner  allochandoff
@@ -549,7 +547,6 @@ docs/knobs.md  credit-runner  survfix2
 docs/knobs.md  credit-runner  survsd
 docs/knobs.md  credit-runner  tidy
 docs/knobs.md  credit-runner  toolstrade30
-docs/knobs.md  credit-runner  toolstrade49
 docs/knobs.md  credit-runner  town3
 docs/knobs.md  credit-runner  town4
 docs/knobs.md  credit-runner  vaultfull
@@ -565,7 +562,6 @@ docs/knobs.md  credit-runner  wiring2
 docs/knobs.md  live-agent  k1layout
 docs/knobs.md  live-agent  recoverypace
 docs/levelplan.md  pro-runner  levelplan3
-docs/levelplan3.md  credit-runner  toolstrade49
 docs/levelplan3.md  pro-runner  levelplan3
 docs/levelsim.md  credit-runner  levelsim
 docs/live-checks.md  credit-runner  repairtrip
@@ -606,10 +602,8 @@ docs/plan/data/dropmodel-normal.json  credit-runner  decomp31
 docs/plan/data/levelplan-normal.json  credit-runner  toolstrade29
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
-docs/plan/data/runs.json  credit-runner  toolstrade49
 docs/play-session.md  credit-runner  playsession
 docs/points.md  credit-runner  agencyp0
-docs/probes/andariel-gate-recalibration-2026-11-24.md  credit-runner  toolstrade49
 docs/probes/autoalloc-necro-summoner-default-2026-11-23.md  credit-runner  allocprobe
 docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm7
 docs/probes/bot-cpu-2026-11-16.md  credit-runner  botcpu
@@ -971,7 +965,6 @@ internal/bot/areaskip_test.go  pro-runner  bounce3
 internal/bot/beltfill_test.go  credit-runner  toolstrade11
 internal/bot/beltfill_test.go  credit-runner  toolstrade17
 internal/bot/beltfill_test.go  credit-runner  toolstrade29
-internal/bot/beltfill_test.go  credit-runner  toolstrade49
 internal/bot/broke.go  credit-runner  survrecover
 internal/bot/broke.go  credit-runner  town5
 internal/bot/campsim_objects_test.go  credit-runner  toolstrade34
@@ -1111,7 +1104,6 @@ internal/bot/routeguard.go  credit-runner  questrun
 internal/bot/routeguard.go  credit-runner  toolstrade29
 internal/bot/routeguard.go  credit-runner  toolstrade30
 internal/bot/routeguard.go  credit-runner  toolstrade5
-internal/bot/routeguard_test.go  credit-runner  toolstrade49
 internal/bot/runner.go  credit-runner  agencyp0
 internal/bot/runner.go  credit-runner  botinstant
 internal/bot/runner.go  credit-runner  cainchain
@@ -1193,7 +1185,6 @@ internal/bulkid  credit-runner  identifyall
 internal/bulkid  credit-runner  vaultpay
 internal/bulkid  credit-runner  vaultreveal
 internal/campaign/  credit-runner  campaign1
-internal/campaign/campaign_test.go  credit-runner  toolstrade49
 internal/campaign/campaign_test.go  pro-runner  levelplan3
 internal/charsel  credit-runner  charselect
 internal/charsel  credit-runner  charsup
@@ -1369,7 +1360,6 @@ internal/env/tuning.go  credit-runner  bulkid
 internal/env/tuning.go  credit-runner  q4runes
 internal/env/tuning.go  credit-runner  quests3
 internal/env/tuning.go  credit-runner  videofeed2
-internal/env/tuning_boss.go  credit-runner  toolstrade49
 internal/env/tuning_bot.go  credit-runner  botstuck
 internal/env/tuning_bot.go  credit-runner  exploredpct
 internal/env/tuning_bot.go  credit-runner  freshstart
@@ -1405,7 +1395,6 @@ internal/env/tuning_resource.go  credit-runner  agencyp0
 internal/env/tuning_resource.go  credit-runner  freshstart
 internal/env/tuning_resource.go  live-agent  recoverypace
 internal/env/tuning_route.go  credit-runner  toolstrade30
-internal/env/tuning_route.go  credit-runner  toolstrade49
 internal/env/tuning_town.go  credit-runner  tidy
 internal/env/tuning_town.go  credit-runner  town3
 internal/env/tuning_watch.go  credit-runner  videofeed2
@@ -1469,7 +1458,6 @@ internal/leveler/score.go  credit-runner  charreq
 internal/leveler/sorcfire_test.go  credit-runner  sorc2
 internal/leveler/verbs_test.go  credit-runner  agencyp0
 internal/levelplan  pro-runner  levelplan3
-internal/levelplan/levelplan_test.go  credit-runner  toolstrade49
 internal/loot  credit-runner  goldprio
 internal/loot  credit-runner  town6
 internal/loot/fixpickup_test.go  credit-runner  beltfix
@@ -1585,9 +1573,7 @@ internal/nav/wpverb_test.go  credit-runner  verbs2
 internal/ops/**  credit-runner  opsquest
 internal/ops/**  credit-runner  opsquest4
 internal/plandata  credit-runner  agencyp0
-internal/plandata/boss_levels.go  credit-runner  toolstrade49
 internal/plandata/boss_levels.go  pro-runner  levelplan3
-internal/plandata/boss_levels_test.go  credit-runner  toolstrade49
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
 internal/plandata/build-barbarian_frenzy_guide.json  credit-runner  barb1
 internal/plandata/build-druid_fire_guide.json  credit-runner  druid1
@@ -1607,7 +1593,6 @@ internal/plandata/levelplan-normal.json  credit-runner  toolstrade29
 internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
-internal/plandata/runs.json  credit-runner  toolstrade49
 internal/points  credit-runner  agencyp0
 internal/points  credit-runner  allocfix
 internal/points  credit-runner  allochandoff
@@ -1760,14 +1745,10 @@ internal/task/act3.go  credit-runner  equipswap
 internal/task/act3.go  credit-runner  quests7b
 internal/task/act4.go  credit-runner  equipswap
 internal/task/act4.go  credit-runner  qdmatrix
-internal/task/andariel_test.go  credit-runner  toolstrade49
 internal/task/banote_test.go  credit-runner  cainfix3
 internal/task/cainreenter_test.go  credit-runner  cainchain
 internal/task/cainstones_test.go  credit-runner  cain45
 internal/task/campaign.go  credit-runner  campaign1
-internal/task/campaign.go  credit-runner  toolstrade49
-internal/task/campsim_floors_test.go  credit-runner  toolstrade49
-internal/task/campsim_test.go  credit-runner  toolstrade49
 internal/task/executor.go  credit-runner  botstuck
 internal/task/executor.go  credit-runner  bsm7
 internal/task/executor.go  credit-runner  staletarget
@@ -1775,7 +1756,6 @@ internal/task/executor.go  credit-runner  toolstrade25
 internal/task/executor.go  credit-runner  wpstep
 internal/task/executor_unpark_test.go  credit-runner  staletarget
 internal/task/executor_unpark_test.go  credit-runner  toolstrade25
-internal/task/floors_test.go  credit-runner  toolstrade49
 internal/task/gate.go  credit-runner  cainfix3
 internal/task/gate.go  credit-runner  chores2
 internal/task/gate.go  credit-runner  toolstrade16
@@ -1796,7 +1776,6 @@ internal/task/route_test.go  credit-runner  toolstrade5
 internal/task/s7b_test.go  credit-runner  quests7b
 internal/task/sim/sim.go  credit-runner  toolstrade34
 internal/task/steps.go  credit-runner  toolstrade34
-internal/task/task_test.go  credit-runner  toolstrade49
 internal/task/testdata  credit-runner  quests7b
 internal/task/testdata/plans/act1.txt  credit-runner  cain5b
 internal/task/timeoutpolicy_test.go  credit-runner  wpstep

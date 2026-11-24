@@ -476,7 +476,6 @@
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
 | toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
-| toolstrade49 | proposed | - | `internal/env/tuning_boss.go`<br>`internal/env/tuning_route.go`<br>`internal/plandata/boss_levels.go`<br>`internal/plandata/boss_levels_test.go`<br>`internal/plandata/runs.json`<br>`docs/plan/data/runs.json`<br>`data/questboard/act1.json`<br>`internal/task/campaign.go`<br>`internal/task/campsim_floors_test.go`<br>`internal/task/campsim_test.go`<br>`internal/task/floors_test.go`<br>`internal/task/task_test.go`<br>`internal/task/andariel_test.go`<br>`internal/bot/beltfill_test.go`<br>`internal/bot/routeguard_test.go`<br>`internal/campaign/campaign_test.go`<br>`internal/levelplan/levelplan_test.go`<br>`docs/knobs.md`<br>`docs/andarielgate.md`<br>`docs/levelplan3.md`<br>`docs/probes/andariel-gate-recalibration-2026-11-24.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
