@@ -654,6 +654,9 @@ func TestGatesFromAFrontierPushFromTheNeighboursEdge(t *testing.T) {
 		if len(gates) != 2 {
 			t.Fatalf("%d gates, want a corridor gate and a deep gate: %+v", len(gates), gates)
 		}
+		if d := map[int]bool{gates[0].depth: true, gates[1].depth: true}; !d[0] || !d[8] {
+			t.Errorf("gate depths %d and %d, want a notch at the edge (0) and the far side (8)", gates[0].depth, gates[1].depth)
+		}
 		for _, gt := range gates {
 			if gt.push.Y > nb.Bottom()-1 {
 				t.Errorf("gate %v pushes to %v: not inside the neighbour (its bottom row is %d)", gt.at, gt.push, nb.Bottom())

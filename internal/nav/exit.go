@@ -20,6 +20,7 @@ const timeoutProgress = 30.0
 type gate struct {
 	at, push input.Point
 	border   bool
+	depth    int         // cells between the gate and the shared edge (0 on a proven strip): the shallowest frontier cell is tried first
 	unproven bool        // an unproven strip: d2d has not linked the neighbour yet, so standing here is what links it
 	exact    *[2]float64 // the point (d2d cells) a one-pixel Select box warp is taken from; see pushThrough
 }
@@ -165,7 +166,13 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 				}
 			}
 			if len(us) > 0 {
-				sort.Slice(us, func(i, j int) bool { return dist(o.pos, us[i].at) < dist(o.pos, us[j].at) })
+				// the shallowest frontier first (a notch in the wall is where the way out is), then the nearest
+				sort.Slice(us, func(i, j int) bool {
+					if us[i].depth != us[j].depth {
+						return us[i].depth < us[j].depth
+					}
+					return dist(o.pos, us[i].at) < dist(o.pos, us[j].at)
+				})
 				g, ok = us[0], true
 				g.unproven = true
 				n.log.Info("nav: crossing an unproven border strip", "to", levelNo, "strip", g.at, "push", g.push, "gates", len(us), "tried", len(all)-len(us), "scan", o.lm.BorderNote)
@@ -492,6 +499,23 @@ func (n *Navigator) gatesFromCells(lm *d2map.LevelMap, levelNo int, cells []d2ma
 		}
 		cells = kept
 	}
+	// depthOf is how far a frontier cell lies inside the level from the shared edge (0 on a proven strip)
+	depthOf := func(c d2map.Point) int {
+		if adj == nil {
+			return 0
+		}
+		switch {
+		case dy < 0:
+			return max(c.Y-adj.Rect.Bottom(), 0)
+		case dy > 0:
+			return max(adj.Rect.Y-1-c.Y, 0)
+		case dx < 0:
+			return max(c.X-adj.Rect.Right(), 0)
+		case dx > 0:
+			return max(adj.Rect.X-1-c.X, 0)
+		}
+		return 0
+	}
 	// order along the strip, split where cells are not contiguous
 	sort.Slice(cells, func(i, j int) bool {
 		if vertical {
@@ -521,7 +545,7 @@ func (n *Navigator) gatesFromCells(lm *d2map.LevelMap, levelNo int, cells []d2ma
 				px = adj.Rect.X + int(push)
 			}
 		}
-		gates = append(gates, gate{at: input.Point{X: m.X, Y: m.Y}, push: input.Point{X: px, Y: py}, border: true})
+		gates = append(gates, gate{at: input.Point{X: m.X, Y: m.Y}, push: input.Point{X: px, Y: py}, border: true, depth: depthOf(m)})
 		run = nil
 	}
 	for i, c := range cells {
@@ -531,7 +555,7 @@ func (n *Navigator) gatesFromCells(lm *d2map.LevelMap, levelNo int, cells []d2ma
 			if vertical {
 				gap = c.Y - p.Y
 			}
-			if gap > 2 || gap < 0 {
+			if gap > 2 || gap < 0 || depthOf(c) != depthOf(p) { // a notch in the wall (a shallower run) is a gate of its own
 				flush()
 			}
 		}
