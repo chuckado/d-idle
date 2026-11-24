@@ -5,6 +5,7 @@ import (
 	"sort"
 	"time"
 
+	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/input"
 )
 
@@ -43,12 +44,26 @@ func (n *Navigator) hopPad(ctx context.Context, o *obs, goal input.Point) bool {
 	if n.padHops >= padMaxHops {
 		return false
 	}
+	// The snapshot lists only objects near the hero; the level map's presets list the whole level (V: d2dworld levelmap
+	// level 74 carries the pads), so the search reaches pads on platforms far from here.
+	seen := map[input.Point]bool{}
 	var pads []input.Point
-	for i := range o.snap.Objects {
-		u := &o.snap.Objects[i]
-		p := input.Point{X: u.X, Y: u.Y}
-		if u.Class == teleportPadClass && !n.padsUsed[padKey{o.level, p.X, p.Y}] && n.reachable(o, p) {
+	add := func(p input.Point) {
+		if !seen[p] && !n.padsUsed[padKey{o.level, p.X, p.Y}] && n.reachable(o, p) {
 			pads = append(pads, p)
+		}
+		seen[p] = true
+	}
+	for i := range o.snap.Objects {
+		if u := &o.snap.Objects[i]; u.Class == teleportPadClass {
+			add(input.Point{X: u.X, Y: u.Y})
+		}
+	}
+	if o.lm != nil {
+		for _, pr := range o.lm.Presets {
+			if pr.Kind == d2map.PresetObject && pr.ID == teleportPadClass {
+				add(input.Point{X: pr.Pos.X, Y: pr.Pos.Y})
+			}
 		}
 	}
 	if len(pads) == 0 {

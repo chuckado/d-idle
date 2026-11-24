@@ -12,7 +12,7 @@ import (
 // on A leads to B, B has the pad it landed on (P1b, back to A) and P2 (to C); the goal is on C. Must fail without hopPad:
 // GoTo ends in ErrNoPath on A. Two builds walk it (the hop is class-free).
 func TestGoToHopsTeleportPadsToAnIslandGoal(t *testing.T) {
-	for _, cls := range []string{"Paladin", "Sorceress"} {
+	for _, cls := range []string{"Paladin", "Sorceress", "presets-only"} {
 		t.Run(cls, func(t *testing.T) {
 			g := openField(1000, 1000, 600, 60)
 			blockRect(g, d2map.Rect{X: 1100, Y: 1000, W: 100, H: 60}) // the void between A and B
@@ -22,6 +22,10 @@ func TestGoToHopsTeleportPadsToAnIslandGoal(t *testing.T) {
 			s.reveal = 400
 			p1, p1b, p2 := input.Point{X: 1060, Y: 1052}, input.Point{X: 1220, Y: 1052}, input.Point{X: 1280, Y: 1052}
 			for i, p := range []input.Point{p1, p1b, p2} {
+				if cls == "presets-only" { // far pads are known from the level map only
+					l1.lm.Presets = append(l1.lm.Presets, d2map.Preset{Kind: d2map.PresetObject, ID: teleportPadClass, Pos: d2map.Point{X: p.X, Y: p.Y}})
+					continue
+				}
 				s.objects = append(s.objects, d2Unit(uint32(40+i), teleportPadClass, p.X, p.Y))
 			}
 			dest := map[input.Point]input.Point{p1: {X: 1220, Y: 1049}, p1b: {X: 1060, Y: 1049}, p2: {X: 1450, Y: 1030}}
