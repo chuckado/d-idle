@@ -504,6 +504,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 32d1e42ab 11-24 12:20 `Merge agent/qd23: Merge origin/main` (qd23)
+- c105ff564 11-24 12:17 `Merge origin/main` (-)
+- dc87e85ef 11-24 12:12 `Merge origin/main` (-)
 - f430a8993 11-24 12:07 `Merge agent/toolstrade45: Merge branch 'main' into toolstrade45` (toolstrade45)
 - 85b0e4921 11-24 12:06 `Merge branch 'main' into toolstrade45` (-)
 - db0144d14 11-24 11:58 `Merge agent/pipefix2: Merge branch 'main' into pipefix2` (pipefix2)
@@ -511,7 +514,4 @@
 - d6c58e8e9 11-24 11:52 `Merge agent/pipefix1: Merge branch 'main' into pipefix1` (pipefix1)
 - 8fa8b4ccb 11-24 11:50 `Merge branch 'main' into pipefix1` (-)
 - 4a385bdb8 11-24 11:48 `Merge agent/fidbatch4: fidbatch: PR body edits from the second verifier, test_two_hands_blow issue draft` (fidbatch4)
-- efb89d318 11-24 11:40 `Merge agent/fidbatch3: Merge branch 'main' into fidbatch` (fidbatch3)
-- 90f3a1cb0 11-24 11:39 `Merge branch 'main' into fidbatch` (-)
-- 8634a7c62 11-24 11:32 `Merge agent/vaultcompare: vaultcompare: no !important (uilint)` (vaultcompare)
 <!-- statusgen:end -->
