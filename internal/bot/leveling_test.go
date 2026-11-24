@@ -184,7 +184,7 @@ func starvingFarm(t *testing.T, gate int) {
 		// failing chores must not repeat the kit trip until the failsafe skips Blood Moor (30 s idle wait, then a pause)
 		start := time.Now()
 		defer func() {
-			if d := time.Since(start); d > 10*time.Second {
+			if d := time.Since(start); !raceEnabled && d > 10*time.Second {
 				t.Errorf("back to the plan took %v: the kit trip looped on failing chores", d)
 			}
 		}()

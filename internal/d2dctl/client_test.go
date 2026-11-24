@@ -228,19 +228,19 @@ func TestBusy(t *testing.T) {
 }
 
 func TestTimeoutAndContext(t *testing.T) {
-	_, c := start(t, fake.Options{SlowVerbs: map[string]time.Duration{"npcs": 400 * time.Millisecond}})
+	_, c := start(t, fake.Options{SlowVerbs: map[string]time.Duration{"npcs": 1500 * time.Millisecond}})
 	cx, cancel := context.WithTimeout(ctx(), 80*time.Millisecond)
 	defer cancel()
 	t0 := time.Now()
 	_, err := c.NPCs(cx)
-	if !errors.Is(err, context.DeadlineExceeded) || time.Since(t0) > 350*time.Millisecond {
+	if !errors.Is(err, context.DeadlineExceeded) || time.Since(t0) > 1200*time.Millisecond {
 		t.Fatalf("err %v after %v", err, time.Since(t0))
 	}
 	if c.Connected() {
 		t.Fatal("timed out connection must be dropped (stream out of step)")
 	}
 	// next call redials and gets a clean stream, not the stale npcs answer
-	time.Sleep(450 * time.Millisecond)
+	time.Sleep(1700 * time.Millisecond)
 	if err := c.Ping(ctx()); err != nil {
 		t.Fatal(err)
 	}

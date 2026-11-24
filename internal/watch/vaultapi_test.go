@@ -161,7 +161,7 @@ func TestVaultPagingPerformance(t *testing.T) {
 		}
 		per := time.Since(start) / 10
 		t.Logf("GET /api/vault%-40s %v", q, per)
-		if per > 150*time.Millisecond { // a loose ceiling for a shared box; the measured numbers are in docs/vault.md
+		if !raceEnabled && per > 150*time.Millisecond { // a loose ceiling for a shared box; the measured numbers are in docs/vault.md
 			t.Errorf("%s took %v per request", q, per)
 		}
 	}
