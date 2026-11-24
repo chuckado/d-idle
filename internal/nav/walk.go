@@ -860,6 +860,9 @@ func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 		key := mouthKey{o.level, e.Pos.X, e.Pos.Y}
 		k := n.mouthBounces(key)
 		n.mouthLast, n.mouthLastOK = key, true
+		if k == 0 && n.mouthLoop(key) {
+			continue // the walk keeps coming back past this exit: the click gate guards it, the 20-tile retreats only loop
+		}
 		f := n.fieldFor(o.lm)
 		base := mouthTurns[k%len(mouthTurns)] * math.Pi / 180
 		// FIXMOUTH3: the turned direction, then its opposite when the straight path would cross the trigger.
@@ -869,12 +872,14 @@ func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 			tx, ty := o.pos.X+int(math.Round(ux*mouthAway)), o.pos.Y+int(math.Round(uy*mouthAway))
 			x, y, ok := f.nearestWalkable(tx, ty, 6)
 			if ok && leavesExit(o.pos, input.Point{X: x, Y: y}, e.Pos, d) && (k > 0 || math.Hypot(float64(x-e.Pos.X), float64(y-e.Pos.Y)) >= d+8) {
+				n.noteMouthStep(key)
 				return input.Point{X: x, Y: y}, true
 			}
 		}
 		// Walls in the straight line (cave corridors): the nearest reachable cell that is at least 8 subtiles
 		// farther from the warp. Without it the walk went on toward the warp and the cave shuttle began (KILLFIX).
 		if p, found := n.mouthStepFlood(f, o.pos, e.Pos.X, e.Pos.Y, d); found {
+			n.noteMouthStep(key)
 			return p, true
 		}
 		n.log.Info("nav: next to a cave mouth, no way away found", "pos", o.pos, "exit", e.Pos, "dest", e.Dest, "dist", int(d))
@@ -989,3 +994,33 @@ func (n *Navigator) noteMouthBounce() {
 	}
 	n.mouthFails[n.mouthLast] = mouthFail{n.mouthBounces(n.mouthLast) + 1, n.clk.Now()}
 }
+
+// mouthLoopMax step-aways from one exit inside mouthLoopWindow end the step-aways from it for the window. V live
+// 2026-11-24 20:28Z (Catacombs 4, the way to Andariel runs 13 to 15 subtiles past the stairs up): every 3 s fight slice
+// began a walk inside the stay radius, stepped 20 tiles away, walked back and stepped away again for three minutes
+// (about 30 step-aways, no attack). The click gate still refuses clicks into the trigger area.
+const (
+	mouthLoopMax    = 2
+	mouthLoopWindow = 90 * time.Second
+)
+
+func (n *Navigator) noteMouthStep(k mouthKey) {
+	if n.mouthSteps == nil {
+		n.mouthSteps = map[mouthKey][]time.Time{}
+	}
+	n.mouthSteps[k] = append(n.recentMouthSteps(k), n.clk.Now())
+}
+
+func (n *Navigator) recentMouthSteps(k mouthKey) []time.Time {
+	cut := n.clk.Now().Add(-mouthLoopWindow)
+	var keep []time.Time
+	for _, t := range n.mouthSteps[k] {
+		if t.After(cut) {
+			keep = append(keep, t)
+		}
+	}
+	return keep
+}
+
+// mouthLoop reports that the exit has had its step-aways for now.
+func (n *Navigator) mouthLoop(k mouthKey) bool { return len(n.recentMouthSteps(k)) >= mouthLoopMax }
