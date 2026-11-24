@@ -67,6 +67,9 @@ func (n *Navigator) hopPad(ctx context.Context, o *obs, goal input.Point) bool {
 		}
 	}
 	if len(pads) == 0 {
+		if len(seen) > 0 {
+			n.log.Info("nav teleport pad: none usable", "level", o.level, "known", len(seen), "used", len(n.padsUsed), "goal", goal)
+		}
 		return false
 	}
 	sort.Slice(pads, func(i, j int) bool { return dist(o.pos, pads[i]) < dist(o.pos, pads[j]) })

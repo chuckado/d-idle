@@ -528,7 +528,7 @@ func (n *Navigator) GoTo(ctx context.Context, p input.Point) error {
 		if oerr != nil {
 			return err
 		}
-		if !n.openDoorToward(ctx, o, []gate{{at: p, push: p}}, -o.level, false) && !n.hopPad(ctx, o, p) {
+		if !n.hopPad(ctx, o, p) && !n.openDoorToward(ctx, o, []gate{{at: p, push: p}}, -o.level, false) {
 			return err
 		}
 	}
@@ -604,7 +604,7 @@ func (n *Navigator) GoToUnitOf(ctx context.Context, typ int, unitID uint32) erro
 			return err
 		}
 		at := input.Point{X: u.X, Y: u.Y}
-		if !n.openDoorToward(ctx, o, []gate{{at: at, push: at}}, -o.level, false) && !n.hopPad(ctx, o, at) {
+		if !n.hopPad(ctx, o, at) && !n.openDoorToward(ctx, o, []gate{{at: at, push: at}}, -o.level, false) {
 			return err
 		}
 	}
