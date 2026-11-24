@@ -583,7 +583,9 @@ func TestBordersSurviveAnEmptyProbeRound(t *testing.T) {
 }
 
 // The strip toward a linked neighbour with nothing readable across is kept as unproven, so nav can walk there
-// (andariel1); a level that is simply not linked has none.
+// (andariel1); so is the strip toward a neighbour d2d has not linked yet (V live 2026-11-24, Inner Cloister to the
+// Cathedral: linked only when the hero is near its edge, so without the strip ExitTo found nothing to walk to). Both stay
+// pending. Must fail while an unlinked neighbour drops its strip.
 func TestLinkedButClosedKeepsAnUnprovenStrip(t *testing.T) {
 	b := newBorderStub()
 	b.openRow = func(float64) bool { return false }
@@ -596,12 +598,42 @@ func TestLinkedButClosedKeepsAnUnprovenStrip(t *testing.T) {
 	if cells := lm.UnprovenCells(2); len(cells) == 0 {
 		t.Fatalf("no unproven strip toward linked level 2: %+v", lm.Unproven)
 	}
-	if lm.UnprovenCells(3) != nil {
-		t.Fatal("an unlinked level has no strip")
+	if cells := lm.UnprovenCells(3); len(cells) == 0 || lm.Pending != 2 {
+		t.Fatalf("an unlinked level keeps its strip as unproven and stays pending: %d cells, pending %d", len(cells), lm.Pending)
 	}
 	b.openRow = func(cy float64) bool { return cy >= 1.0 } // d2d built it
 	w.borders(context.Background(), w.cur)
 	if len(w.Current().BorderCells(2)) != 5 || len(w.Current().UnprovenCells(2)) != 0 {
 		t.Fatalf("after: adj %+v unproven %+v", w.Current().Adjacent, w.Current().Unproven)
+	}
+}
+
+// V live 2026-11-24 and lab devp27 (Inner Cloister to the Cathedral): the layout's own edge rows toward the neighbour are
+// wall and the walkable cells start a few rows inside, so a strip read on the edge row alone has none and nav finds nothing to
+// walk to. The unproven strip is taken from the first row within four of the edge that has walkable cells, for a linked
+// neighbour with nothing open across and for one d2d has not linked. Both stay pending. Must fail with the edge row only.
+func TestUnprovenStripLooksInwardPastAWallEdge(t *testing.T) {
+	own := Placement{Level: 32, X: 0, Y: 34, W: 18, H: 20}
+	nb := Placement{Level: 33, X: -4, Y: 0, W: 28, H: 34} // north of the level, like the Cathedral
+	all := []Placement{own, nb}
+	self := d2map.Rect{X: 1000, Y: 2000, W: 5 * own.W, H: 5 * own.H}
+	for _, linked := range []map[int]bool{{33: true}, {}} {
+		g := d2map.NewGrid()
+		open := make([]uint16, self.W*self.H)
+		g.SetBlock(self, open) // everything walkable ...
+		wall := d2map.Rect{X: self.X, Y: self.Y, W: self.W, H: 2}
+		blocked := make([]uint16, wall.W*wall.H)
+		for i := range blocked {
+			blocked[i] = 1 // ... except the two top rows
+		}
+		g.SetBlock(wall, blocked)
+		across := func(side, sx, sy int) bool { return false } // nothing readable across
+		_, unproven, pending, _ := adjacent(own, self, all, linked, g, across)
+		if pending != 1 || len(unproven) == 0 {
+			t.Fatalf("linked %v: pending %d, unproven %+v", linked, pending, unproven)
+		}
+		if y := unproven[0].Contact.Y; y < self.Y+2 || y > self.Y+4 {
+			t.Errorf("linked %v: the strip is on row %d, want the first open row (%d..%d)", linked, y-self.Y, 2, 4)
+		}
 	}
 }

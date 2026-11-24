@@ -138,6 +138,81 @@
    ],
    "status": "pending",
    "pending_reason": "a field start by debug goto puts the hero at (65,212), far from the arrival strip, and the planner finds no plan to the unproven strip from there (RED for Paladin and Necromancer, run 20261123-033306, with and without the fix); the real shape (arrival from the Outer Cloister, the strip reached, d2d still cannot read across) is covered by TestExitToCrossesAnUnprovenStripThatNeverProves. Needs a start that arrives by walking from the Outer Cloister. The real arrival shape is now a unit test on the live Barracks capture (TestExitToCrossesTheLiveBarracksSouthStrip, level 28 grid of 2026-11-23, hero at (191,324), strip x 179..182 of row 349); a scenario from a walked arrival stays open."
+  },
+  {
+   "id": "nav.inner-cloister-cathedral",
+   "title": "Standing in the Inner Cloister: walk north to the Cathedral (the Cathedral is a border link d2d links only near its edge)",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "travel.area-transition"
+   ],
+   "touches": [
+    "internal/nav/"
+   ],
+   "pre": {
+    "level": 30,
+    "gold": 3000,
+    "start": "field",
+    "area": 32,
+    "items": [
+     {
+      "code": "hp2",
+      "count": 8
+     },
+     {
+      "code": "mp2",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp2",
+     "hp2",
+     "hp2",
+     "mp2"
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Cathedral",
+    "knobs": {
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "route.barracksMinLevel": 0,
+     "route.barracksMinLevelCaster": 0,
+     "route.barracksMinLife": 0,
+     "route.barracksMinLifeCaster": 0
+    }
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Necromancer"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "provenance": "SETUP: level 24, field start in the Inner Cloister (area 32) by debug goto 32 (CHEATED position). Mechanics only.",
+   "notes": "V live 2026-11-24 (Andariel try-anyway, deploy 62): Inner Cloister to Cathedral, `nav no usable gate from 32 to 33`, exits 1 (the warp to Jail 3 only), adjacent 0, pending 1, three times. The lab warps list of level 32 has one warp too (tools/probes/warptrig.py, devp27); the Cathedral is 34 tiles north and linked only near the edge (strips.py: side N, verdict open). Fix: an unlinked neighbour keeps its strip as unproven (internal/d2dworld/border.go).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Cathedral",
+     "min": 1,
+     "why": "the hero walked north out of the Inner Cloister into the Cathedral"
+    },
+    {
+     "kind": "area_changes_le",
+     "max": 30
+    }
+   ]
   }
  ]
 }
