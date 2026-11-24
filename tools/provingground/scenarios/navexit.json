@@ -213,6 +213,345 @@
      "max": 30
     }
    ]
+  },
+  {
+   "id": "nav.catacombs-hop-33-34",
+   "title": "Standing in area 33: take the stairs down to Catacombs Level 1 (a hop of the Andariel route)",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "travel.area-transition"
+   ],
+   "touches": [
+    "internal/nav/"
+   ],
+   "pre": {
+    "level": 30,
+    "gold": 3000,
+    "start": "field",
+    "area": 33,
+    "items": [
+     {
+      "code": "hp2",
+      "count": 8
+     },
+     {
+      "code": "mp2",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp2",
+     "hp2",
+     "hp2",
+     "mp2"
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 384000
+     },
+     {
+      "stat": 6,
+      "value": 384000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Catacombs Level 1",
+    "knobs": {
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "route.barracksMinLevel": 0,
+     "route.barracksMinLevelCaster": 0,
+     "route.barracksMinLife": 0,
+     "route.barracksMinLifeCaster": 0
+    }
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Necromancer"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "provenance": "SETUP: level 30, field start in area 33 by debug goto (CHEATED position). Mechanics only. Life raised to 1500 by stat write (CHEATED): the crowd of Catacombs 2 and 3 kills a clvl 30 hero with 300 life before the hop, which says nothing about the exit.",
+   "notes": "Pre-check of the Andariel route (2026-11-24): lab warps list of level 33 has the stairs to 34 (tools/probes/exitsread.py, devp27, seed 11). Real ExitTo through the exit.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Catacombs Level 1",
+     "min": 1,
+     "why": "the hero took the stairs down"
+    },
+    {
+     "kind": "area_changes_le",
+     "max": 30
+    }
+   ]
+  },
+  {
+   "id": "nav.catacombs-hop-34-35",
+   "title": "Standing in area 34: take the stairs down to Catacombs Level 2 (a hop of the Andariel route)",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "travel.area-transition"
+   ],
+   "touches": [
+    "internal/nav/"
+   ],
+   "pre": {
+    "level": 30,
+    "gold": 3000,
+    "start": "field",
+    "area": 34,
+    "items": [
+     {
+      "code": "hp2",
+      "count": 8
+     },
+     {
+      "code": "mp2",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp2",
+     "hp2",
+     "hp2",
+     "mp2"
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 384000
+     },
+     {
+      "stat": 6,
+      "value": 384000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Catacombs Level 2",
+    "knobs": {
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "route.barracksMinLevel": 0,
+     "route.barracksMinLevelCaster": 0,
+     "route.barracksMinLife": 0,
+     "route.barracksMinLifeCaster": 0
+    }
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Necromancer"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "provenance": "SETUP: level 30, field start in area 34 by debug goto (CHEATED position). Mechanics only. Life raised to 1500 by stat write (CHEATED): the crowd of Catacombs 2 and 3 kills a clvl 30 hero with 300 life before the hop, which says nothing about the exit.",
+   "notes": "Pre-check of the Andariel route (2026-11-24): lab warps list of level 34 has the stairs to 35 (tools/probes/exitsread.py, devp27, seed 11). Real ExitTo through the exit.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Catacombs Level 2",
+     "min": 1,
+     "why": "the hero took the stairs down"
+    },
+    {
+     "kind": "area_changes_le",
+     "max": 30
+    }
+   ]
+  },
+  {
+   "id": "nav.catacombs-hop-35-36",
+   "title": "Standing in area 35: take the stairs down to Catacombs Level 3 (a hop of the Andariel route)",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "travel.area-transition"
+   ],
+   "touches": [
+    "internal/nav/"
+   ],
+   "pre": {
+    "level": 30,
+    "gold": 3000,
+    "start": "field",
+    "area": 35,
+    "items": [
+     {
+      "code": "hp2",
+      "count": 8
+     },
+     {
+      "code": "mp2",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp2",
+     "hp2",
+     "hp2",
+     "mp2"
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 384000
+     },
+     {
+      "stat": 6,
+      "value": 384000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Catacombs Level 3",
+    "knobs": {
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "route.barracksMinLevel": 0,
+     "route.barracksMinLevelCaster": 0,
+     "route.barracksMinLife": 0,
+     "route.barracksMinLifeCaster": 0
+    }
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "provenance": "SETUP: level 30, field start in area 35 by debug goto (CHEATED position). Mechanics only. Life raised to 1500 by stat write (CHEATED): the crowd of Catacombs 2 and 3 kills a clvl 30 hero with 300 life before the hop, which says nothing about the exit.",
+   "notes": "Pre-check of the Andariel route (2026-11-24): lab warps list of level 35 has the stairs to 36 (tools/probes/exitsread.py, devp27, seed 11). Real ExitTo through the exit. V lab devp27 seed 11: Paladin GREEN with 15 doors in a row; the Necromancer died in the crowd of Catacombs 2 (21 hostiles near, first door at (195,150)) in three runs, a combat finding and no exit failure, so the matrix is Paladin only.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Catacombs Level 3",
+     "min": 1,
+     "why": "the hero took the stairs down"
+    },
+    {
+     "kind": "area_changes_le",
+     "max": 30
+    }
+   ]
+  },
+  {
+   "id": "nav.catacombs-hop-36-37",
+   "title": "Standing in area 36: take the stairs down to Catacombs Level 4 (a hop of the Andariel route)",
+   "kind": "behaviour",
+   "tier": "full",
+   "covers": [
+    "travel.area-transition"
+   ],
+   "touches": [
+    "internal/nav/"
+   ],
+   "pre": {
+    "level": 30,
+    "gold": 3000,
+    "start": "field",
+    "area": 36,
+    "items": [
+     {
+      "code": "hp2",
+      "count": 8
+     },
+     {
+      "code": "mp2",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp2",
+     "hp2",
+     "hp2",
+     "mp2"
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 384000
+     },
+     {
+      "stat": 6,
+      "value": 384000
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Catacombs Level 4",
+    "knobs": {
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "route.barracksMinLevel": 0,
+     "route.barracksMinLevelCaster": 0,
+     "route.barracksMinLife": 0,
+     "route.barracksMinLifeCaster": 0
+    }
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Necromancer"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "lab-verbs-attach"
+   ],
+   "provenance": "SETUP: level 30, field start in area 36 by debug goto (CHEATED position). Mechanics only. Life raised to 1500 by stat write (CHEATED): the crowd of Catacombs 2 and 3 kills a clvl 30 hero with 300 life before the hop, which says nothing about the exit.",
+   "notes": "Pre-check of the Andariel route (2026-11-24): lab warps list of level 36 has the stairs to 37 (tools/probes/exitsread.py, devp27, seed 11). Real ExitTo through the exit.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^Entered Catacombs Level 4",
+     "min": 1,
+     "why": "the hero took the stairs down"
+    },
+    {
+     "kind": "area_changes_le",
+     "max": 30
+    }
+   ]
   }
  ]
 }
