@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- toolstrade56: the route guard reads the boss kit: a test that 7 healing holds the Andariel road and 8 opens it <!--sg:agent/toolstrade58-->
 - Merge branch 'main' into toolstrade56 <!--sg:agent/toolstrade56-->
 - toolstrade55: a stale-pack hold does not send a board chunk's trip home to the first field <!--sg:agent/toolstrade55-->
 - toolstrade54: a click the mouth gate keeps holding blocks that spot for planning (Catacombs 4: 215 rounds toward the stairs); lair grid fixture <!--sg:agent/toolstrade54-->
