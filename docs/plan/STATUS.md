@@ -503,6 +503,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d6c58e8e9 11-24 11:52 `Merge agent/pipefix1: Merge branch 'main' into pipefix1` (pipefix1)
+- 8fa8b4ccb 11-24 11:50 `Merge branch 'main' into pipefix1` (-)
 - 4a385bdb8 11-24 11:48 `Merge agent/fidbatch4: fidbatch: PR body edits from the second verifier, test_two_hands_blow issue draft` (fidbatch4)
 - efb89d318 11-24 11:40 `Merge agent/fidbatch3: Merge branch 'main' into fidbatch` (fidbatch3)
 - 90f3a1cb0 11-24 11:39 `Merge branch 'main' into fidbatch` (-)
@@ -511,6 +513,4 @@
 - 2b865551d 11-24 11:02 `Merge agent/pipelineaudit: pipeline audit 2026-11-24 (docs only)` (pipelineaudit)
 - c4e2d292b 11-24 11:01 `Merge branch 'main' into pipelineaudit` (-)
 - 1ac82ed9c 11-24 10:56 `Merge main into agent/vaultcompare` (-)
-- 9dd0d270f 11-24 10:45 `Merge agent/noconflict: stepcat verdicts split into per-group files; merge-conflict guidance` (noconflict)
-- a4f4b304b 11-24 10:44 `Merge branch 'main' into noconflict` (-)
 <!-- statusgen:end -->
