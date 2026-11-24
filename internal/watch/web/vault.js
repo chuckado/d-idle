@@ -5,7 +5,7 @@
 // Reveal and Sell (slice V6) also only queue: the price is shown before the click (revealPlan) and the states come from the GET. The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
 // fed the rows as an inventory view); every text comes from /watch/vault.json or the API and goes in through textContent.
 // Every press is read back: the list is fetched again and what it says is what the page shows.
-import { PAGE, equipPlan, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, identifyAllPlan, revealBarModel, revealMethods, revealPlan, sellAllChip, sellAllConfirm, sellAllPlan, sellLabel, sellPlan, sellWhy, mergeQuotes, toQuery, toTipView, when } from '/watch/vault-logic.js';
+import { PAGE, equipPlan, equipOneTap, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, identifyAllPlan, revealBarModel, revealMethods, revealPlan, sellAllChip, sellAllConfirm, sellAllPlan, sellLabel, sellPlan, sellWhy, mergeQuotes, toQuery, toTipView, when } from '/watch/vault-logic.js';
 
 export const ROUTE = '/api/vault';
 const POLL_MS = 6000;
@@ -731,8 +731,13 @@ export function mountVault(d) {
     row.append(it.pin ? mk(T.unpin, 'unpin', act.unpin, () => act1('/api/vault/unpin', [it.id])) : mk(T.pin, 'pin', act.pin, () => act1('/api/vault/pin', [it.id])),
       mk(T.discard, 'discard', act.discard, () => openDiscard([it.id], row.lastChild), 'danger'));
     row.appendChild(mk(T.keep, 'keep', act.keep, () => keepAct([it.id], false)));
-    const eqv = S.view && S.view.equip; // one-tap Equip: only when the bot offers it (loot.vaultEquip)
-    if (eqv && eqv.enabled && it.state === 'recorded') { const eb = btn(T.equip, { key: 'd-equip' }); eb.addEventListener('click', () => openEquip(it, eb)); row.appendChild(eb); }
+    const eqv = S.view && S.view.equip; // one-tap Equip: offered when the bot has it; when it is off the button stays and says why
+    if (eqv && it.state === 'recorded') {
+      const eb = btn(T.equip, { key: 'd-equip' });
+      if (eqv.enabled) eb.addEventListener('click', () => { it._eqAuto = false; openEquip(it, eb); });
+      else { eb.setAttribute('aria-disabled', 'true'); why(eb, eqv.why || T.equipNone, dWhys, T.equip); eb.addEventListener('click', () => setMsg('bad', eqv.why || T.equipNone)); }
+      row.appendChild(eb);
+    }
     const ra = S.view && S.view.act && S.view.act.reveal, via = revealMethods(ra);
     const gd = ra && ra.gold || {};
     if (via.has('gold') && !via.has('free') && gd.on && !it.identified) row.appendChild(mk(fmt(T.revealGoldOne, { cost: grp(gd.scrollGold || 0) }), 'reveal-gold', { ok: gd.scrollGold > 0 && gd.stash >= gd.scrollGold && !gd.why, reason: gd.why || fmt(T.goldShort, { price: grp(gd.scrollGold || 0), stash: grp(gd.stash || 0) }) }, () => goldOrder([it.id], gd.scrollGold, (gd.confirmAt || 0) > 0 && gd.scrollGold >= gd.confirmAt)));
@@ -1093,6 +1098,8 @@ export function mountVault(d) {
     recallView = await d.get('/api/recall');
     const sh = await d.get('/api/vault/equip/' + encodeURIComponent(it.id));
     if (!S.sheet || S.sheet.equip !== it.id) return; // closed or another sheet meanwhile
+    // One tap: an empty slot needs no confirm (nothing is swapped out); a swap or a ring shows the sheet as the one confirm.
+    if (sh && !it._eqAuto && equipOneTap(sh)) { it._eqAuto = true; await equipPress(it, 'auto', true); return; }
     equipDraw(it, sh || false);
     const p = sh ? equipPlan(sh) : null;
     if (eqTimer && d.clear) d.clear(eqTimer);
@@ -1137,7 +1144,7 @@ export function mountVault(d) {
       if (x.note) box.appendChild(el('p', 'vt-eq-note', x.note));
       sheetCard.appendChild(box);
     });
-    const recall = el('label', 'vt-label'); const cb = el('input'); cb.type = 'checkbox'; cb.dataset.key = 'equip-recall'; recall.append(cb, doc.createTextNode(' ' + T.equipRecall));
+    const recall = el('label', 'vt-label'); const cb = el('input'); cb.type = 'checkbox'; cb.checked = true; cb.dataset.key = 'equip-recall'; recall.append(cb, doc.createTextNode(' ' + T.equipRecall));
     const row = el('div', 'vt-row'); row.dataset.key = 'equip-row';
     const eqWhys = el('div', 'vt-whys');
     if (pl.state === 'ready') {
