@@ -942,7 +942,7 @@ func detailOf(r *vault.Rec, tip VaultTipFunc, readOnly bool, keep, reveal, sell 
 // Handler serves the page, its files and the two GET routes.
 func (a *VaultAPI) Handler() http.Handler {
 	m := http.NewServeMux()
-	m.HandleFunc(VaultRoute, func(w http.ResponseWriter, r *http.Request) {
+	m.Handle(VaultRoute, gzipJSON(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		d := a.desk()
 		if d == nil {
 			writeJSON(w, http.StatusServiceUnavailable, policyReply{Code: "off", Error: "the vault is not available on this bot"})
@@ -955,7 +955,7 @@ func (a *VaultAPI) Handler() http.Handler {
 			return
 		}
 		writeJSON(w, 200, d.view(r.Context(), q, td))
-	})
+	})))
 	m.HandleFunc(VaultItemRoute, func(w http.ResponseWriter, r *http.Request) {
 		d := a.desk()
 		var st *vault.Store
@@ -994,8 +994,7 @@ func (a *VaultAPI) Handler() http.Handler {
 				http.NotFound(w, r)
 				return
 			}
-			pactHdr(w, ctype)
-			w.Write(b)
+			serveAsset(w, r, file, b, func(w http.ResponseWriter) { pactHdr(w, ctype) })
 		})
 	}
 	static("/watch/vault", "vault.html", "text/html; charset=utf-8")

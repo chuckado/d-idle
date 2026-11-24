@@ -189,8 +189,7 @@ func (a *InvAPI) Handler() http.Handler {
 				http.NotFound(w, r)
 				return
 			}
-			pactHdr(w, ctype)
-			w.Write(b)
+			serveAsset(w, r, file, b, func(w http.ResponseWriter) { pactHdr(w, ctype) })
 		})
 	}
 	static("inventory.js", "text/javascript; charset=utf-8")
