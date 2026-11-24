@@ -103,6 +103,8 @@ type Navigator struct {
 	wpMu         sync.Mutex
 	wpNew        []int
 	mouthFails   map[mouthKey]mouthFail
+	doorIntent   doorIntent               // the door of the last cut-short door walk (gatedoor.go)
+	doorGoal     input.Point              // the goal of the GoTo in progress, for doorIntent
 	mouthSteps   map[mouthKey][]time.Time // recent step-aways per exit (mouthLoopMax)
 	doorFn       func(class int) bool     // test hook: is this object class a door (default: objects.txt IsDoor)
 	doorLogged   map[[2]int]bool
@@ -532,7 +534,13 @@ func emptyPathErr() error {
 func (n *Navigator) GoTo(ctx context.Context, p input.Point) error {
 	t := n.tune()
 	n.doorTried, n.doorApproach, n.padHops = nil, nil, 0
+	n.doorGoal = p
 	var err error
+	if o, oerr := n.observeWait(ctx); oerr == nil {
+		if at, ok := n.pendingDoor(p, o.level); ok && !doorAlreadyOpen(o.lm, at.X, at.Y) {
+			n.useDoorAt(ctx, o, at, -o.level) // the last slice was cut off on the way to this door: go on
+		}
+	}
 	for try := 0; ; try++ {
 		err = n.walk(ctx, func(*obs) (input.Point, float64, error) { return p, t.ArriveTolerance, nil }, walkOpts{escape: true, fastPoll: true, goal: &p})
 		// The spot lies behind a closed door (V live, scenario act1.tools.malus: the Smith's room in the Barracks, "reached

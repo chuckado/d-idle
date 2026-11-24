@@ -504,6 +504,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a6496575a 11-24 18:20 `Merge agent/toolstrade55: toolstrade55: a stale-pack hold does not send a board chunk's trip home to the first field` (toolstrade55)
 - a950f288c 11-24 16:42 `Merge agent/toolstrade54: toolstrade54: a click the mouth gate keeps holding blocks that spot for planning (Catacombs 4: 215 rounds toward the stairs); lair grid fixture` (toolstrade54)
 - 48120464e 11-24 16:01 `Merge agent/toolstrade53: Merge branch 'main' into toolstrade53` (toolstrade53)
 - 12b5d7791 11-24 15:59 `Merge branch 'main' into toolstrade53` (-)
@@ -513,5 +514,4 @@
 - 9b3c1cc83 11-24 13:49 `Merge agent/toolstrade49: Merge branch 'main' into toolstrade49` (toolstrade49)
 - a2dfb14b3 11-24 13:48 `Merge branch 'main' into toolstrade49` (-)
 - 8ba89828a 11-24 13:36 `Merge remote-tracking branch 'origin/main' into agent/toolstrade49` (-)
-- fdd3c7f2a 11-24 13:24 `Merge agent/toolstrade48: Merge branch 'main' into toolstrade48` (toolstrade48)
 <!-- statusgen:end -->
