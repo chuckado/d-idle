@@ -1,10 +1,13 @@
 ---
 id: TASK-919
-title: 'toolstrade42: hold_timeout keeps the readiness reason, Andariel gate carries the Barracks floor'
-status: Proposed
+title: >-
+  toolstrade42: hold_timeout keeps the readiness reason, Andariel gate carries
+  the Barracks floor
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T13:34:00Z'
+updated_date: '2026-11-24T14:02:00Z'
 labels:
   - bot
   - bot-fix
