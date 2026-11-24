@@ -503,6 +503,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 4a385bdb8 11-24 11:48 `Merge agent/fidbatch4: fidbatch: PR body edits from the second verifier, test_two_hands_blow issue draft` (fidbatch4)
 - efb89d318 11-24 11:40 `Merge agent/fidbatch3: Merge branch 'main' into fidbatch` (fidbatch3)
 - 90f3a1cb0 11-24 11:39 `Merge branch 'main' into fidbatch` (-)
 - 8634a7c62 11-24 11:32 `Merge agent/vaultcompare: vaultcompare: no !important (uilint)` (vaultcompare)
@@ -512,5 +513,4 @@
 - 1ac82ed9c 11-24 10:56 `Merge main into agent/vaultcompare` (-)
 - 9dd0d270f 11-24 10:45 `Merge agent/noconflict: stepcat verdicts split into per-group files; merge-conflict guidance` (noconflict)
 - a4f4b304b 11-24 10:44 `Merge branch 'main' into noconflict` (-)
-- ce6ccea3b 11-24 10:35 `Merge agent/toolstrade44: toolstrade44: the vault poll timing ceiling is skipped under -race (the gate failure was this, not a data race)` (toolstrade44)
 <!-- statusgen:end -->
