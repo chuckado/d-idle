@@ -471,12 +471,13 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		{"ammo", plan.Ammo, t.ammoTodo, func() error { return t.buyAmmo(ctx, a, &rep) }},
 		// the repair vendor's chores run back to back so his window opens once per trip. The belt purchase keeps its own
 		// gold reserve for the potion kit (beltBuyReserve), so it may come before the shop.
+		{"bosspurse", plan.Gold && plan.BossPurse > 0, func(s *d2.Snapshot) bool { return t.needBossPurse(s, plan) }, func() error { return t.bossPurse(ctx, a, plan) }},
 		{"beltbuy", plan.Potions, t.needBelt, func() error { return t.buyBelt(ctx, a, &rep) }},
 		{"repair", plan.Repair, t.needRepair, func() error { return t.repair(ctx, a, &rep) }},
 		// before shop: potions already in the pack go to the belt first, so the shop buys only the shortfall
 		{"belt", plan.Potions, t.NeedsBeltFill, func() error { _, err := t.FillBelt(ctx); return err }},
 		// before shop: the surplus is banked first, so the shop cannot spend it (BASICSFIX bankFirst)
-		{"bank", plan.Gold, func(s *d2.Snapshot) bool { return t.needBank(s, plan) }, func() error { return t.bank(ctx, a) }},
+		{"bank", plan.Gold, func(s *d2.Snapshot) bool { return t.needBank(s, plan) }, func() error { return t.bank(ctx, a, plan) }},
 		// BELTFIX5: the bank is not out of reach when the belt is empty and the purse is thin (Gate 1 20261103-0338)
 		{"withdraw", plan.Gold && (plan.Potions || plan.Scrolls), func(s *d2.Snapshot) bool {
 			return plan.Potions && t.needWithdraw(s) || t.needShopWithdraw(s, plan)

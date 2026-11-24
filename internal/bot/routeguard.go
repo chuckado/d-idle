@@ -418,12 +418,16 @@ func (r *Runner) kitPlanOf(s *d2.Snapshot) *task.KitPlan {
 	if !ok {
 		return nil
 	}
-	pl, err := sp.SupplyPlan(s, kitProfile, 0)
+	profile := kitProfile
+	if r.andarielKitOn(s) {
+		profile = "andariel" // the boss kit: more healing than the road asks for, and the boss purse (supply/profiles.json)
+	}
+	pl, err := sp.SupplyPlan(s, profile, 0)
 	if err != nil {
 		r.planWarn.Do(func() { r.e.Log.Warn("town plan: " + err.Error()) })
 		return nil
 	}
-	return &task.KitPlan{Healing: pl.MinOf(supply.Healing), Mana: pl.MinOf(supply.Mana), Portals: pl.MinOf(supply.Portal), Short: pl.Why()}
+	return &task.KitPlan{Healing: pl.MinOf(supply.Healing), Mana: pl.MinOf(supply.Mana), Portals: pl.MinOf(supply.Portal), GoldCarry: pl.MinOf(supply.GoldCarry), Short: pl.Why()}
 }
 
 // fillKit counts the kit by the one counter and, at stage 2, attaches the plan.
@@ -438,4 +442,22 @@ func (r *Runner) fillKit(w *task.World, s *d2.Snapshot) {
 		return
 	}
 	w.KitPlan = r.kitPlanOf(s)
+}
+
+// andarielKitOn: the hero is close enough to Andariel's floor in Normal and has not killed her, so the town visits buy the boss
+// kit (the antidote rule of antidotesWanted).
+func (r *Runner) andarielKitOn(s *d2.Snapshot) bool {
+	return s != nil && s.Player != nil && s.Player.Difficulty == d2.Normal && s.Player.Level >= r.andarielLow(s.Player.Class)-2 && !r.killedBoss(task.BossAndy)
+}
+
+// bossPurse is the gold a town visit leaves with when the stash has it: the boss profile's gold_carry, 0 outside the boss kit.
+func (r *Runner) bossPurse() int {
+	s := r.latest()
+	if s == nil || !r.andarielKitOn(s) {
+		return 0
+	}
+	if k := r.kitPlanOf(s); k != nil {
+		return k.GoldCarry
+	}
+	return 0
 }

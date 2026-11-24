@@ -97,10 +97,33 @@ func (t *Town) bankKeep(level int) int { return t.goldKeep(level) }
 // needBank is the bankFirst knob: the surplus above the keep line goes to the stash before the shop, so the shop
 // (tome, spare scrolls, extra potions) cannot spend it (audit row 11: 40 of 1500 gold banked at clvl 5).
 func (t *Town) needBank(s *d2.Snapshot, plan ChorePlan) bool {
-	return plan.Gold && (t.tune().BankFirst != 0 || t.PlanStage() >= 3) && s.Player.Gold > t.bankKeep(s.Player.Level)
+	return plan.Gold && (t.tune().BankFirst != 0 || t.PlanStage() >= 3) && s.Player.Gold > max(t.bankKeep(s.Player.Level), plan.BossPurse)
 }
 
-func (t *Town) bank(ctx context.Context, a *Act) error {
+// needBossPurse: a boss trip leaves with the boss purse when the stash has it. The kit withdrawal only covers the shopping list
+// (a purse of 859 paid it, "withdraw not needed"), and the purse fell to 188 over five trips of Andariel's lair while the
+// stash held 1.1 million (V live 2026-11-24): potions, a belt and the repair want gold between the trips too.
+func (t *Town) needBossPurse(s *d2.Snapshot, plan ChorePlan) bool {
+	if plan.BossPurse <= 0 || !plan.Gold || s.Player.Gold >= plan.BossPurse || s.Player.StashGold <= 0 {
+		return false
+	}
+	_, can := t.e.In.(goldMover)
+	return can
+}
+
+func (t *Town) bossPurse(ctx context.Context, a *Act, plan ChorePlan) error {
+	s, err := t.current()
+	if err != nil {
+		return err
+	}
+	amount := min(plan.BossPurse-s.Player.Gold, s.Player.StashGold)
+	if amount <= 0 {
+		return nil
+	}
+	return t.withdrawAmount(ctx, a, s, amount, "for the boss kit")
+}
+
+func (t *Town) bank(ctx context.Context, a *Act, plan ChorePlan) error {
 	s, err := t.current()
 	if err != nil {
 		return err
@@ -109,7 +132,7 @@ func (t *Town) bank(ctx context.Context, a *Act) error {
 		return err
 	}
 	var first error
-	if keep := t.bankKeep(s.Player.Level); s.Player.Gold > keep {
+	if keep := max(t.bankKeep(s.Player.Level), plan.BossPurse); s.Player.Gold > keep {
 		first = t.depositCapped(ctx, s, s.Player.Gold-keep)
 	}
 	if err := t.h.CloseAll(ctx); err != nil && first == nil {

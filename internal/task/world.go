@@ -85,6 +85,7 @@ type QuestState struct {
 // guards compare against, already clamped to what the hero can carry, and the line the plan cannot close.
 type KitPlan struct {
 	Healing, Mana, Portals int
+	GoldCarry              int    // the purse the excursion wants when the stash has it (profile gold_carry; the boss profiles)
 	Short                  string // "" = the plan closes every min with the gold owned; else "short of gold: needs N more for healing"
 }
 

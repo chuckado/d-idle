@@ -65,3 +65,31 @@ func TestShopWithdrawTopsUpToTheCarryLine(t *testing.T) {
 		}
 	}
 }
+
+// V live 2026-11-24: a purse of 859 paid the shopping list, so "withdraw: not needed", and the purse fell to 188 over five
+// trips with 1.1 million in the stash. A boss trip (BossPurse) withdraws up to the boss purse; a plan without it does not.
+// Two classes. Must fail without the bosspurse chore.
+func TestBossPurseIsWithdrawn(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		r, c := withdrawRig(t, 859, 1100000, 20, true)
+		r.W.Player.Class = class
+		if _, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true, Scrolls: true, Gold: true, BossPurse: 3000}); err != nil {
+			t.Fatalf("%v: %v", class, err)
+		}
+		if len(c.moves) == 0 || c.moves[0] >= 0 || -c.moves[0] != 3000-859 {
+			t.Fatalf("%v: moves %v, want a withdrawal of %d first", class, c.moves, 3000-859)
+		}
+	}
+}
+
+func TestNoBossPurseWithoutBossTrip(t *testing.T) {
+	r, c := withdrawRig(t, 859, 1100000, 20, true)
+	if _, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true, Scrolls: true, Gold: true}); err != nil {
+		t.Fatal(err)
+	}
+	for _, m := range c.moves {
+		if m < 0 && -m > 1000 {
+			t.Fatalf("moves %v: a plain trip took the boss purse", c.moves)
+		}
+	}
+}
