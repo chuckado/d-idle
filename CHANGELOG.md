@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into fidbatch <!--sg:agent/fidbatch3-->
 - vaultcompare: no !important (uilint) <!--sg:agent/vaultcompare-->
 - pipeline audit 2026-11-24 (docs only) <!--sg:agent/pipelineaudit-->
 - stepcat verdicts split into per-group files; merge-conflict guidance <!--sg:agent/noconflict-->

@@ -1341,6 +1341,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/noconflict: stepcat verdicts split into per-group files; merge-conflict guidance (merged 2026-11-24) <!--sg:agent/noconflict-->
 - agent/pipelineaudit: pipeline audit 2026-11-24 (docs only) (merged 2026-11-24) <!--sg:agent/pipelineaudit-->
 - agent/vaultcompare: vaultcompare: no !important (uilint) (merged 2026-11-24) <!--sg:agent/vaultcompare-->
+- agent/fidbatch3: Merge branch 'main' into fidbatch (merged 2026-11-24) <!--sg:agent/fidbatch3-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
