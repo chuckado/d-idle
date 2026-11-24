@@ -1335,6 +1335,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/qd20: qdmatrix: notes 55 to 58 (Blade, Acts 4 and 5, devp27 smoke), verdicts, deploy list (merged 2026-11-24) <!--sg:agent/qd20-->
 - toolstrade42: hold_timeout keeps the readiness reason, Andariel gate carries the Barracks floor (TASK-919, merged 2026-11-24, acceptance 2 of 2): Cause of the live text: the stored hold_timeout park was rendered from the bare code with the run counters (n = failures = 0) and an unformatted {hold} ... <!--sg:agent/toolstrade42-->
 - toolstrade43: readiness floors from game data (research, nothing applied) (TASK-920, merged 2026-11-24, acceptance 2 of 2): Our area levels match the third-party chart (Barracks 9, Catacombs 11, 11, 12, 12, Andariel 12). The Barracks hurts by crowd size (13.9 hits per minute against 4 in the fields), not per hit (6.3 life, as the table says). ... <!--sg:agent/toolstrade43-->
+- agent/qd21: qdmatrix: notes 59 to 62 (Golden Bird GREEN, Harrogath gate, Duriel staff verbs and tomb scan), verdicts, deploy list (merged 2026-11-24) <!--sg:agent/qd21-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
