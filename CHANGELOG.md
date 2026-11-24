@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into toolstrade45 <!--sg:agent/toolstrade45-->
 - Merge branch 'main' into pipefix2 <!--sg:agent/pipefix2-->
 - Merge branch 'main' into pipefix1 <!--sg:agent/pipefix1-->
 - fidbatch: PR body edits from the second verifier, test_two_hands_blow issue draft <!--sg:agent/fidbatch4-->

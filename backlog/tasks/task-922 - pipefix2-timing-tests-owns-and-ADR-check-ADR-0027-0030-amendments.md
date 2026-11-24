@@ -1,10 +1,11 @@
 ---
 id: TASK-922
 title: 'pipefix2: timing tests, owns and ADR check, ADR 0027/0030 amendments'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T16:51:00Z'
+updated_date: '2026-11-24T17:14:00Z'
 labels:
   - ops
   - chore

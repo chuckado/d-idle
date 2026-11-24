@@ -475,7 +475,7 @@
 | redsteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/necro_test.go` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
-| pipefix2 | proposed | - | `internal/bot/`<br>`internal/loot/`<br>`internal/nav/`<br>`internal/watch/`<br>`internal/d2dctl/`<br>`internal/d2denv/`<br>`internal/d2dtown/`<br>`cmd/d2dview/`<br>`tools/ci/`<br>`docs/process/`<br>`docs/adr/`<br>`docs/decisions.md`<br>`docs/backlog-howto.md`<br>`AGENTS.md` | - |
+| toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
@@ -504,6 +504,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f430a8993 11-24 12:07 `Merge agent/toolstrade45: Merge branch 'main' into toolstrade45` (toolstrade45)
+- 85b0e4921 11-24 12:06 `Merge branch 'main' into toolstrade45` (-)
 - db0144d14 11-24 11:58 `Merge agent/pipefix2: Merge branch 'main' into pipefix2` (pipefix2)
 - be96418b2 11-24 11:56 `Merge branch 'main' into pipefix2` (-)
 - d6c58e8e9 11-24 11:52 `Merge agent/pipefix1: Merge branch 'main' into pipefix1` (pipefix1)
@@ -512,6 +514,4 @@
 - efb89d318 11-24 11:40 `Merge agent/fidbatch3: Merge branch 'main' into fidbatch` (fidbatch3)
 - 90f3a1cb0 11-24 11:39 `Merge branch 'main' into fidbatch` (-)
 - 8634a7c62 11-24 11:32 `Merge agent/vaultcompare: vaultcompare: no !important (uilint)` (vaultcompare)
-- e8aad594d 11-24 11:27 `Merge main into agent/vaultcompare` (-)
-- 2b865551d 11-24 11:02 `Merge agent/pipelineaudit: pipeline audit 2026-11-24 (docs only)` (pipelineaudit)
 <!-- statusgen:end -->

@@ -32,6 +32,9 @@ func exitWalkOpts(g gate) walkOpts { return goalOpts(g.at, true) }
 // Sewers Level 2, V drill.act2.* runs: the door walk was refused 100 times 13 subtiles from the stairs).
 func goalOpts(p input.Point, pursuit bool) walkOpts { return walkOpts{pursuit: pursuit, goal: &p} }
 
+// exitMaxDoors bounds the doors one ExitTo call opens without counting them as attempts.
+const exitMaxDoors = 24
+
 // ExitTo leaves the current level for the neighbouring level levelNo. Outdoor links are borders: the cells of
 // this level that touch the neighbour (d2map LevelMap.BorderCells; the Rogue Encampment's 15-cell gap to the
 // Blood Moor at x=5960, y=4945..4959 is VERIFIED LIVE by MAP). Tile exits (LevelMap.Exits: caves, stairs) are
@@ -50,7 +53,13 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 	if n.recentNoExit(start, levelNo) && !n.gateShown(levelNo) {
 		return fmt.Errorf("%w: level %d from %d (nothing new since the last search)", ErrNoExit, levelNo, start)
 	}
-	fruitless, approached := 0, 0
+	fruitless, approached, doors := 0, 0, 0
+	// A door opened is progress, not a failed attempt: a maze level (Jail Level 1, V live 2026-11-24) shuts the stairs behind
+	// eight doors in a row. The doors are bounded on their own (exitMaxDoors) and by the call's deadline.
+	doorOpened := func() bool {
+		doors++
+		return doors <= exitMaxDoors
+	}
 	for attempt := 0; attempt < 8; attempt++ {
 		if n.clk.Now().After(deadline) {
 			return fmt.Errorf("%w: leaving for level %d", ErrTimeout, levelNo)
@@ -74,6 +83,9 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 		}
 		g, ok := n.findGate(o, levelNo)
 		if !ok && n.openGateDoor(ctx, o, levelNo) {
+			if doorOpened() {
+				attempt--
+			}
 			continue
 		}
 		if !ok && n.badTTL() > 0 && n.fullyKnown() {
@@ -198,6 +210,9 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 				}
 			}
 			if errors.Is(err, ErrNoPath) && n.doorAfterShortWalk(ctx, levelNo) {
+				if doorOpened() {
+					attempt--
+				}
 				continue
 			}
 			// A long outdoor leg with fights on the way outlasts one walk (V drill.act3s.lam_esen: 513 subtiles of path, 330 net in

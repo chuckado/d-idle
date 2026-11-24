@@ -1345,6 +1345,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/fidbatch4: fidbatch: PR body edits from the second verifier, test_two_hands_blow issue draft (merged 2026-11-24) <!--sg:agent/fidbatch4-->
 - agent/pipefix1: Merge branch 'main' into pipefix1 (merged 2026-11-24) <!--sg:agent/pipefix1-->
 - pipefix2: timing tests, owns and ADR check, ADR 0027/0030 amendments (TASK-922, merged 2026-11-24, acceptance 3 of 3): audit fixes 3, 5, 6, 7: timing tests fixed or guarded (docs/process/timing-tests.md), tools/ci/ownscheck.py with tests wired in check.sh and the merge preflight, ADR 0027 and 0030 amended ... <!--sg:agent/pipefix2-->
+- toolstrade45: ExitTo door openings are not attempts (Jail Level 1 maze) (TASK-923, merged 2026-11-24, acceptance 1 of 1): Cause (V live log 2026-11-24, 16:46 to 16:47Z): Jail Level 1 shuts the stairs to Jail Level 2 behind eight doors in a row ((210,205), (175,220), (145,210), (140,175) twice, (130,200), (105,190), (90,150)) ... <!--sg:agent/toolstrade45-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
