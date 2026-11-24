@@ -93,11 +93,13 @@
   .vt-main:focus-visible { outline-offset: -2px; }
   .vt-detail[hidden] { display: none; }
   .vt-detail { position: fixed; inset-inline: 0; inset-block-end: var(--d-nav-h, 0px); z-index: var(--d-z-banner); max-block-size: calc(60dvh - var(--d-nav-h, 0px)); overflow-y: auto; padding: var(--d-sp-3) var(--d-sp-4); border-block-start: var(--d-bw) solid var(--d-line-strong); background: var(--d-surface-3); box-shadow: var(--d-shadow-2); } /* a phone: a bottom sheet while an item is open */
+  .vt-dhead { position: sticky; inset-block-start: calc(-1 * var(--d-sp-3)); z-index: 1; padding-block: var(--d-sp-3) var(--d-sp-1); margin-block-start: calc(-1 * var(--d-sp-3)); background: var(--d-surface-3); } /* the name and Close stay in view while a tall sheet scrolls */
   .vt-dhead { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--d-sp-2); }
   .vt-dhead .d-btn { align-items: center; flex: none; }
   @media (min-width: 900px) {
     .vt-body[data-detail="1"] { grid-template-columns: minmax(0, 1fr) 20rem; } /* the grid takes the full width until an item is open */
     .vt-detail { position: sticky; inset-block-start: 0; inset-inline: auto; z-index: auto; align-self: start; max-block-size: 100dvh; box-shadow: none; border-block-start: 0; border-inline-start: var(--d-bw) solid var(--d-line); background: var(--d-surface-0); }
+    .vt-dhead { background: var(--d-surface-0); }
     .vt-upgrade-why, .vt-down-why { display: none; }
   }
 
