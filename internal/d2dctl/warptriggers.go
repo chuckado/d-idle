@@ -25,7 +25,7 @@ type WarpTrigger struct {
 	Truncated bool   `json:"truncated"`
 	// Exact is the one subtile cell a move command takes a 0 x 0 Select box warp from (the Kurast Bazaar to Ruined Temple stairs:
 	// a click never lands on a box of no area, V lab devp26 doc); absent for ordinary boxes and on older forks.
-	Exact *[2]int `json:"exact,omitempty"`
+	Exact *[2]float64 `json:"exact,omitempty"` // cell floats at the middle of the box
 }
 
 // WarpTriggers is the reply of "debug warptriggers" for the CURRENT level; index i is warp i of "debug warps".

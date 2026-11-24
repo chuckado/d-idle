@@ -75,7 +75,7 @@ func TestWarpReadOffAbsentOrMismatchedChangesNothing(t *testing.T) {
 func TestWarpReadExactCellBecomesTheClickPoint(t *testing.T) {
 	s := newStub()
 	s.wt = stubTriggers()
-	s.wt.Warps[0].Exact = &[2]int{13, 4}
+	s.wt.Warps[0].Exact = &[2]float64{13.5, 4.5} // cell floats
 	w := New(s, Options{WarpRead: func() bool { return true }})
 	if _, err := w.Update(); err != nil {
 		t.Fatal(err)
