@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"d2lod-bot/internal/d2dsrc"
 	"errors"
 	"fmt"
 	"math"
@@ -563,7 +564,50 @@ func (o objectAdapter) placeItem(ctx context.Context, class int, code string) er
 	return err
 }
 
+// itemPlacer is the d2d controller's way to put a pack item into a field object without a hover scan.
+type itemPlacer interface {
+	PlaceItem(index int, item uint32) error
+}
+
+// placeItemD2D is placeItemOnce on the d2d backend: walk beside the object, then interact, hand and place by the d2d's own
+// verbs (V devp28 doc card B; before it the step failed "needs the real game input (hover scan)").
+func (o objectAdapter) placeItemD2D(ctx context.Context, p itemPlacer, class int, code string) error {
+	u, err := o.find(ctx, class)
+	if err != nil {
+		return task.Wrap(task.KindNotFound, err)
+	}
+	walk := o.goUnit
+	if walk == nil {
+		walk = o.nv.GoToUnitOf
+	}
+	if err := walk(ctx, d2.TypeObject, u.ID); err != nil {
+		return task.Wrap(task.KindNotFound, err)
+	}
+	s, err := o.e.Snapshot()
+	if err != nil || s.Inventory == nil {
+		return task.Errorf(task.KindPrereq, "no inventory to take the %s from", code)
+	}
+	var item uint32
+	for _, it := range s.Inventory.Container(d2.ContInventory) {
+		if b := hand.New(o.e).Base(it); b != nil && b.Code == code {
+			item = it.ID
+			break
+		}
+	}
+	if item == 0 {
+		return task.Errorf(task.KindPrereq, "no %s in the pack", code)
+	}
+	if err := p.PlaceItem(int(u.ID)-d2dsrc.NPCIDBase, item); err != nil {
+		return task.Wrap(task.KindUI, err)
+	}
+	o.e.Clock.Sleep(time.Second)
+	return nil
+}
+
 func (o objectAdapter) placeItemOnce(ctx context.Context, class int, code string) error {
+	if p, ok := o.e.In.(itemPlacer); ok {
+		return o.placeItemD2D(ctx, p, class, code)
+	}
 	g, ok := o.e.In.(*input.Game)
 	if !ok {
 		return task.Errorf(task.KindPrereq, "placing an item on an object needs the real game input (hover scan)")
