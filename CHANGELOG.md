@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- flip: verdicts after toolstrade40 <!--sg:agent/flip-->
 - Merge branch 'main' into redsteps <!--sg:agent/redsteps-->
 - toolstrade40: a chunk queued behind a fight holds the level goal in its area <!--sg:agent/toolstrade40-->
 - necrosteps: verdicts and catalogue <!--sg:agent/necrosteps-->
