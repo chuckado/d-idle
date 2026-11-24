@@ -473,7 +473,6 @@
 | stage2c | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | necrosteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`tools/provingground/scenarios/stepgrounds_gen.json` | - |
 | redsteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/necro_test.go` | - |
-| toolstrade41 | proposed | - | `cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_reach_test.go`<br>`internal/resource/beltspec.go`<br>`internal/bot/kitgate.go`<br>`internal/bot/kitmana_test.go`<br>`internal/bot/fakes_test.go`<br>`tools/provingground/scenarios/stepgrounds.json` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |

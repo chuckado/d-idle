@@ -1,10 +1,11 @@
 ---
 id: TASK-918
 title: 'toolstrade41: kit mana minimum vs belt plan, stand click retryable'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T04:36:00Z'
+updated_date: '2026-11-24T05:10:00Z'
 labels:
   - bot
   - bot-fix
