@@ -99,3 +99,30 @@ func (l *Leveler) judgeMerc(b *data.ItemBase, it itemreq.Item, m itemreq.Merc, a
 	}
 	return rs
 }
+
+// MercSlot names the merc slot key of the inventory page (mhead, mtorso, mrhand, mlhand) the base item would go to and
+// whether a mercenary of that class may wear it there (merc.Allowed, the rule Judge and the merc policy use). The key is
+// "" for an item no merc slot takes (rings, amulets, belts, gloves, boots, charms): the answer is then false.
+func MercSlot(db *data.DB, class int, b *data.ItemBase) (key string, ok bool) {
+	if db == nil || b == nil {
+		return "", false
+	}
+	kind, slot := mercKind(db, b)
+	switch {
+	case db.IsA(b.Type, "ring"), db.IsA(b.Type, "amul"), db.IsA(b.Type, "belt"), db.IsA(b.Type, "glov"), db.IsA(b.Type, "boot"), db.IsA(b.Type, "char"):
+		return "", false
+	case b.Kind != data.KindWeapon && b.Kind != data.KindArmor:
+		return "", false
+	}
+	switch slot {
+	case merc.SlotHelm:
+		key = "mhead"
+	case merc.SlotArmor:
+		key = "mtorso"
+	case merc.SlotShield:
+		key = "mlhand"
+	default:
+		key = "mrhand"
+	}
+	return key, merc.Allowed(class, slot, merc.Item{Name: b.Name, Base: b.Code, Kind: kind})
+}

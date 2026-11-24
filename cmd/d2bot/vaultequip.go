@@ -13,6 +13,7 @@ import (
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/invdesk"
 	"d2lod-bot/internal/leveler"
+	"d2lod-bot/internal/merc"
 	"d2lod-bot/internal/vault"
 	"d2lod-bot/internal/vaultkeep"
 	"d2lod-bot/internal/watch"
@@ -158,7 +159,7 @@ func (h equipHand) Preview(rec vault.Rec) vaultkeep.Preview {
 		}
 		return vaultkeep.Preview{Why: why}
 	}
-	p := vaultkeep.Preview{Wearable: true}
+	p := vaultkeep.Preview{Wearable: true, Merc: h.mercSide(s, b)}
 	if c.Req.Lvl > 0 {
 		p.Req = append(p.Req, fmt.Sprintf("level %d", c.Req.Lvl))
 	}
@@ -219,6 +220,30 @@ func (h equipHand) Preview(rec vault.Rec) vaultkeep.Preview {
 	}
 	sort.SliceStable(p.Slots, func(i, j int) bool { return p.Slots[i].Slot < p.Slots[j].Slot })
 	return p
+}
+
+// mercSide answers the compare toggle's merc question with the merc gear rule (leveler.MercSlot). The kind comes from the
+// merc unit in the snapshot, as the Inventory page's merc doll does (U: it is unknown while he is out of view).
+func (h equipHand) mercSide(s *d2.Snapshot, b *data.ItemBase) *vaultkeep.MercSide {
+	if s == nil || s.Merc == nil || !s.Merc.Hired {
+		return &vaultkeep.MercSide{Why: "no mercenary is hired"}
+	}
+	fm := d2.FindMerc(s)
+	m := &vaultkeep.MercSide{Owned: true, Kind: merc.KindName(fm.Class)}
+	if m.Kind == "" {
+		m.Why = "your mercenary is out of view, so his kind is not known yet"
+		return m
+	}
+	key, ok := leveler.MercSlot(h.e.Data, fm.Class, b)
+	switch {
+	case ok:
+		m.Can, m.Slot = true, key
+	case key == "":
+		m.Why = "a mercenary cannot wear this"
+	default:
+		m.Why = "a " + m.Kind + " cannot use that"
+	}
+	return m
 }
 
 func (h equipHand) twoHanded(s *d2.Snapshot, u d2.Unit) bool {
