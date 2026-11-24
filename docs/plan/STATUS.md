@@ -473,6 +473,7 @@
 | stage2c | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | toolstrade40 | proposed | - | `cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_reach_test.go`<br>`internal/task/executor.go`<br>`internal/task/noprogress_test.go`<br>`internal/resource/beltspec.go`<br>`internal/bot/goal.go`<br>`internal/bot/healcap_test.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_goal_test.go` | - |
 | necrosteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`tools/provingground/scenarios/stepgrounds_gen.json` | - |
+| redsteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/necro_test.go` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
@@ -502,6 +503,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- e7a0bf000 11-23 22:50 `Merge agent/redsteps: Merge branch 'main' into redsteps` (redsteps)
+- 65d837152 11-23 22:49 `Merge branch 'main' into redsteps` (-)
 - 3f7df71f6 11-23 22:38 `Merge agent/toolstrade40: toolstrade40: a chunk queued behind a fight holds the level goal in its area` (toolstrade40)
 - 1bc7b6f87 11-23 22:34 `Merge remote-tracking branch 'origin/main' into agent/toolstrade40` (-)
 - 84f6181a0 11-23 22:30 `Merge agent/necrosteps: necrosteps: verdicts and catalogue` (necrosteps)
@@ -510,6 +513,4 @@
 - 13bf2282b 11-23 21:18 `Merge agent/qd18: Merge branch 'main' into qdmatrix` (qd18)
 - 46ffbd0bc 11-23 21:17 `Merge branch 'main' into qdmatrix` (-)
 - 460aa7bb0 11-23 21:09 `Merge origin/main` (-)
-- 10e810e5d 11-23 21:08 `Merge agent/vaultequip: Merge branch 'main' into vaultequip2` (vaultequip)
-- 467885a00 11-23 21:07 `Merge branch 'main' into vaultequip2` (-)
 <!-- statusgen:end -->

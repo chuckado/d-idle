@@ -415,7 +415,9 @@ data/questboard/act1.json  credit-runner  cainfix3
 data/questboard/act2.json  credit-runner  qdmatrix
 data/questspec  credit-runner  questspec
 data/stepgrounds/steps.json  credit-runner  necrosteps
+data/stepgrounds/steps.json  credit-runner  redsteps
 data/stepgrounds/verdicts.json  credit-runner  necrosteps
+data/stepgrounds/verdicts.json  credit-runner  redsteps
 data/unlocks  credit-runner  nocards
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
@@ -644,6 +646,7 @@ docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess3b
 docs/probes/provingground-run-2026-11-19.md  credit-runner  pgexpand
 docs/probes/quest-drill-matrix-2026-11-23.md  credit-runner  qdmatrix
 docs/probes/quest-step-catalogue.md  credit-runner  necrosteps
+docs/probes/quest-step-catalogue.md  credit-runner  redsteps
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/search-for-cain-2026-11-17.md  credit-runner  cainfix
@@ -1676,6 +1679,7 @@ internal/scenario/hero  credit-runner  pghero
 internal/scenario/hero/selfcheck.go  credit-runner  pgselfcheck
 internal/scenario/ledger.go  credit-runner  pgledger
 internal/scenario/ledger_test.go  credit-runner  pgledger
+internal/scenario/necro_test.go  credit-runner  redsteps
 internal/scenario/newkinds_test.go  credit-runner  town1
 internal/scenario/prov.go  credit-runner  pgprov
 internal/scenario/result.go  credit-runner  pgdigest
@@ -1683,11 +1687,13 @@ internal/scenario/result.go  credit-runner  pgprov
 internal/scenario/result.go  credit-runner  pgtaps
 internal/scenario/scenario.go  credit-runner  barb1
 internal/scenario/scenario.go  credit-runner  qdmatrix
+internal/scenario/scenario.go  credit-runner  redsteps
 internal/scenario/scenario.go  credit-runner  tapall
 internal/scenario/scenario_test.go  credit-runner  agencyp0
 internal/scenario/scenario_test.go  credit-runner  barb1
 internal/scenario/scenario_test.go  credit-runner  druid1
 internal/scenario/setup.go  credit-runner  qdmatrix
+internal/scenario/setup.go  credit-runner  redsteps
 internal/scenario/setup_test.go  credit-runner  qdmatrix
 internal/scenario/stability.go  credit-runner  pgstability
 internal/scenario/state.go  credit-runner  agencyp0
@@ -2592,6 +2598,7 @@ tools/provingground/scenarios/points.json  credit-runner  necro1
 tools/provingground/scenarios/points.json  credit-runner  sorc2
 tools/provingground/scenarios/questdrill.json  credit-runner  qdmatrix
 tools/provingground/scenarios/stepgrounds.json  credit-runner  necrosteps
+tools/provingground/scenarios/stepgrounds.json  credit-runner  redsteps
 tools/provingground/scenarios/stepgrounds_gen.json  credit-runner  necrosteps
 tools/provingground/scenarios/tiers.json  credit-runner  pgstability
 tools/provingground/scenarios/townplan.json  credit-runner  town1
