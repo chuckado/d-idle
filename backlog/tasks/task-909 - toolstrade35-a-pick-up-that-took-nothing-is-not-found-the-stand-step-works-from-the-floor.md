@@ -1,10 +1,13 @@
 ---
 id: TASK-909
-title: 'toolstrade35: a pick-up that took nothing is not found; the stand step works from the floor'
-status: Proposed
+title: >-
+  toolstrade35: a pick-up that took nothing is not found; the stand step works
+  from the floor
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T23:50:00Z'
+updated_date: '2026-11-24T00:12:00Z'
 labels:
   - bot
   - bot-fix
