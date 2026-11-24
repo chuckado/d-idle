@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- pipeline audit 2026-11-24 (docs only) <!--sg:agent/pipelineaudit-->
+- stepcat verdicts split into per-group files; merge-conflict guidance <!--sg:agent/noconflict-->
 - toolstrade44: the vault poll timing ceiling is skipped under -race (the gate failure was this, not a data race) <!--sg:agent/toolstrade44-->
 - Merge branch 'main' into fidbatch <!--sg:agent/fidbatch2-->
 - qdmatrix: notes 59 to 62 (Golden Bird GREEN, Harrogath gate, Duriel staff verbs and tomb scan), verdicts, deploy list <!--sg:agent/qd21-->

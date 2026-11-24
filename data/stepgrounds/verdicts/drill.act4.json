@@ -1,0 +1,14 @@
+{
+ "drill.act4.hellforge": {
+  "note": "Soulstone given; no travel or Hammer step ran",
+  "run": "20261124-003408",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "drill.act4.izual": {
+  "note": "word 0x000c, reward bit not set",
+  "run": "20261124-003408",
+  "tag": "V",
+  "verdict": "RED"
+ }
+}

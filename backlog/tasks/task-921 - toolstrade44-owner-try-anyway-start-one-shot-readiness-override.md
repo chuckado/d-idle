@@ -1,10 +1,11 @@
 ---
 id: TASK-921
 title: 'toolstrade44: owner try-anyway start (one shot readiness override)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T14:00:00Z'
+updated_date: '2026-11-24T16:01:00Z'
 labels:
   - bot
   - bot-fix
