@@ -22,7 +22,9 @@ func (r *reachIn) CloseAll() error { return nil }
 func (r *reachIn) Interact(input.Target) error {
 	r.clicks++
 	if r.flipsOn {
-		(*r.snap).Objects[0].Mode = 1
+		o := (*r.snap).Objects[0]
+		o.Mode = 1
+		(*r.snap).Objects = []d2.Unit{o} // a new slice: the unit the adapter holds keeps its old mode
 	}
 	return nil
 }
