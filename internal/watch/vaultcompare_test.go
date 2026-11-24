@@ -58,7 +58,7 @@ func TestVaultPhoneTipCannotHideUnderSheet(t *testing.T) {
 	if !strings.Contains(string(tipCSS), "--d-z-sheet") || !strings.Contains(string(css), "z-index: var(--d-z-banner)") {
 		t.Skip("the stacking order changed: re-derive the defect")
 	}
-	if !strings.Contains(string(css), "@media (max-width: 899px) { .inv-tip { display: none !important; } }") {
+	if !strings.Contains(string(css), "@media (max-width: 899px) { [data-vault] .inv-tip { display: none; } }") {
 		t.Error("below 900px the floating tooltip must be hidden: the bottom item sheet (z-index above it) covers it for a cell in the lower half")
 	}
 	js, _ := webFS.ReadFile("web/vault.js")
