@@ -107,6 +107,7 @@ type Navigator struct {
 	doorLogged   map[[2]int]bool
 	doorApproach map[[2]int]int
 	padsUsed     map[padKey]bool     // teleport pads taken in this game (pads.go)
+	seamsOnce    bool                // the plan in progress may cross diagonal seams (nav.plan)
 	padHops      int                 // pad hops of the walk in progress
 	doorTried    map[d2map.Point]int // gate doors the current ExitTo already opened, by map position (gatedoor.go)
 	mouthLast    mouthKey
@@ -366,6 +367,15 @@ type planResult struct {
 // penalties (the unit being walked to).
 func (n *Navigator) plan(lm *d2map.LevelMap, start, goal input.Point, tol float64, units []d2.Unit, ignore uint32) (planResult, error) {
 	res, err := n.planHard(lm, start, goal, tol, units, ignore, true)
+	if res.partial && gridWhole(lm) && n.tune().FullGrid {
+		// A whole grid says the goal is cut off: before giving up try the diagonal seams (narrow floors that meet at corners).
+		n.seamsOnce = true
+		r2, e2 := n.planHard(lm, start, goal, tol, units, ignore, true)
+		n.seamsOnce = false
+		if e2 == nil && !r2.partial {
+			return r2, nil
+		}
+	}
 	if (err != nil || res.partial) && len(n.hard) > 0 {
 		// the hard blocks may have cut the only way: better to try the old way again than to give up
 		if r2, e2 := n.planHard(lm, start, goal, tol, units, ignore, false); e2 == nil && !r2.partial {
@@ -385,6 +395,7 @@ func (n *Navigator) planHard(lm *d2map.LevelMap, start, goal input.Point, tol fl
 		return res, ErrNoPath
 	}
 	f.ClearDyn()
+	f.seams = n.seamsOnce
 	if t.MonsterRadius > 0 && t.MonsterPenalty > 0 {
 		for i := range units {
 			u := &units[i]
