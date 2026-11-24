@@ -571,3 +571,32 @@ func TestExitToMovesToTheExactCellOfAOnePixelWarp(t *testing.T) {
 		})
 	}
 }
+
+// V live 2026-11-24 20:35Z (Inner Cloister to Cathedral, the second crossing after a death): the neighbour is known from the first
+// visit, its remembered grid reads the cells across the gap as wall (read from the other side, or with the door shut), and the
+// across test dropped every gate cell: "borderCells 3, cands 0, no exit to that level" three times, although the way is open.
+// The remembered grid may refuse some cells, never all of them. Both classes. Must fail while every cell is dropped.
+func TestExitToIgnoresARememberedNeighbourThatRefusesEveryCell(t *testing.T) {
+	for _, cls := range []string{"Paladin", "Necromancer"} {
+		t.Run(cls, func(t *testing.T) {
+			s, _ := gateWorld()
+			n := s.navigator()
+			l2 := s.levels[1]
+			if l2.known == nil {
+				t.Skip("the sim has no remembered grid for level 2")
+			}
+			wall := d2map.Rect{X: 2990, Y: 3040, W: 12, H: 34}
+			blocked := make([]uint16, wall.W*wall.H)
+			for i := range blocked {
+				blocked[i] = 1
+			}
+			l2.known.SetBlock(wall, blocked) // remembered as wall: the truth stays open
+			if err := n.ExitTo(ctxT(t), 2); err != nil {
+				t.Fatalf("%s: %v", cls, err)
+			}
+			if s.cur().no != 2 {
+				t.Fatalf("%s: still in level %d at %v", cls, s.cur().no, s.pos())
+			}
+		})
+	}
+}
