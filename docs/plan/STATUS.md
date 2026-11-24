@@ -500,6 +500,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 13bf2282b 11-23 21:18 `Merge agent/qd18: Merge branch 'main' into qdmatrix` (qd18)
+- 46ffbd0bc 11-23 21:17 `Merge branch 'main' into qdmatrix` (-)
+- 460aa7bb0 11-23 21:09 `Merge origin/main` (-)
 - 10e810e5d 11-23 21:08 `Merge agent/vaultequip: Merge branch 'main' into vaultequip2` (vaultequip)
 - 467885a00 11-23 21:07 `Merge branch 'main' into vaultequip2` (-)
 - 8827939af 11-23 20:22 `Merge agent/vaultperf: Merge branch 'main' into vaultperf` (vaultperf)
@@ -507,7 +510,4 @@
 - ff78e4c88 11-23 20:10 `Merge agent/toolstrade38: Merge branch 'main' into toolstrade38` (toolstrade38)
 - 205898b73 11-23 20:08 `Merge branch 'main' into toolstrade38` (-)
 - 8325122ba 11-23 19:49 `Merge agent/stepgrounds: Merge branch 'main' into stepgrounds` (stepgrounds)
-- e3dcdd617 11-23 19:47 `Merge branch 'main' into stepgrounds` (-)
-- aec58de72 11-23 19:16 `Merge agent/toolstrade37: Merge branch 'main' into toolstrade37` (toolstrade37)
-- d56ea0772 11-23 19:15 `Merge branch 'main' into toolstrade37` (-)
 <!-- statusgen:end -->
