@@ -75,13 +75,13 @@ func TestWarpReadOffAbsentOrMismatchedChangesNothing(t *testing.T) {
 func TestWarpReadExactCellBecomesTheClickPoint(t *testing.T) {
 	s := newStub()
 	s.wt = stubTriggers()
-	s.wt.Warps[0].Exact = &[2]float64{13.5, 4.5} // cell floats
+	s.wt.Warps[0].Exact = &[2]float64{13.5, 4.5} // cells (tiles), 5 subtiles each: 67, 22
 	w := New(s, Options{WarpRead: func() bool { return true }})
 	if _, err := w.Update(); err != nil {
 		t.Fatal(err)
 	}
 	e := w.Current().Exits[0]
-	if !e.HasClick || e.Click.X != 13 || e.Click.Y != 4 {
+	if !e.HasClick || e.Click.X != 67 || e.Click.Y != 22 {
 		t.Fatalf("click %+v has %v (%s)", e.Click, e.HasClick, w.LastTriggerNote)
 	}
 }
