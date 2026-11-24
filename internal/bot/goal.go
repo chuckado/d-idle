@@ -473,10 +473,11 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 		threshold := t.ResupplyPotions
 		if p.InTown() {
 			threshold = t.ResupplyPotions * 2
-		}
-		// a floor the belt cannot hold is never met (the shop buys nothing, the next arrival asks again): cap it
-		if c := resource.HealingCapacity(r.resInput(s), resource.FromEnv(*r.e.Tune)); c > 0 && threshold > c {
-			threshold = c
+			// the doubled town floor is capped by what the belt can hold (never below the field floor): a floor the belt cannot
+			// hold is never met, the shop buys nothing, and the next arrival asks again
+			if c := resource.HealingCapacity(r.resInput(s), resource.FromEnv(*r.e.Tune)); c > 0 && threshold > c {
+				threshold = max(c, t.ResupplyPotions)
+			}
 		}
 		// Recovery suppresses potion trips from the field (an empty purse buys nothing), not the visit already under way:
 		// in town with no healing potion and gold for one the shop opens (potionFloor caps it, the kit gold stays).
