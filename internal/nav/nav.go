@@ -106,6 +106,10 @@ type Navigator struct {
 	doorFn       func(class int) bool // test hook: is this object class a door (default: objects.txt IsDoor)
 	doorLogged   map[[2]int]bool
 	doorApproach map[[2]int]int
+	cm           cellMover           // the controller's fractional move, when it has one (exit.go pushThrough)
+	padsUsed     map[padKey]bool     // teleport pads taken in this game (pads.go)
+	seamsOnce    bool                // the plan in progress may cross diagonal seams (nav.plan)
+	padHops      int                 // pad hops of the walk in progress
 	doorTried    map[d2map.Point]int // gate doors the current ExitTo already opened, by map position (gatedoor.go)
 	mouthLast    mouthKey
 	mouthLastOK  bool
@@ -189,6 +193,9 @@ func New(e *env.Env) *Navigator {
 			return env.DefaultNavTuning()
 		}
 		return e.Tune.Nav
+	}
+	if cm, ok := n.in.(cellMover); ok {
+		n.cm = cm // the gate wrapper below hides MoveCell
 	}
 	if n.in != nil {
 		n.in = mouthGate{Controller: n.in, n: n} // FIXMOUTH4: every world click passes the cave-mouth gate (mouthgate.go)
@@ -364,6 +371,15 @@ type planResult struct {
 // penalties (the unit being walked to).
 func (n *Navigator) plan(lm *d2map.LevelMap, start, goal input.Point, tol float64, units []d2.Unit, ignore uint32) (planResult, error) {
 	res, err := n.planHard(lm, start, goal, tol, units, ignore, true)
+	if res.partial && gridWhole(lm) && n.tune().FullGrid {
+		// A whole grid says the goal is cut off: before giving up try the diagonal seams (narrow floors that meet at corners).
+		n.seamsOnce = true
+		r2, e2 := n.planHard(lm, start, goal, tol, units, ignore, true)
+		n.seamsOnce = false
+		if e2 == nil && !r2.partial {
+			return r2, nil
+		}
+	}
 	if (err != nil || res.partial) && len(n.hard) > 0 {
 		// the hard blocks may have cut the only way: better to try the old way again than to give up
 		if r2, e2 := n.planHard(lm, start, goal, tol, units, ignore, false); e2 == nil && !r2.partial {
@@ -383,6 +399,7 @@ func (n *Navigator) planHard(lm *d2map.LevelMap, start, goal input.Point, tol fl
 		return res, ErrNoPath
 	}
 	f.ClearDyn()
+	f.seams = n.seamsOnce
 	if t.MonsterRadius > 0 && t.MonsterPenalty > 0 {
 		for i := range units {
 			u := &units[i]
@@ -513,17 +530,20 @@ func emptyPathErr() error {
 // GoTo walks to p on the current level.
 func (n *Navigator) GoTo(ctx context.Context, p input.Point) error {
 	t := n.tune()
-	n.doorTried, n.doorApproach = nil, nil
+	n.doorTried, n.doorApproach, n.padHops = nil, nil, 0
 	var err error
 	for try := 0; ; try++ {
 		err = n.walk(ctx, func(*obs) (input.Point, float64, error) { return p, t.ArriveTolerance, nil }, walkOpts{escape: true, fastPoll: true, goal: &p})
 		// The spot lies behind a closed door (V live, scenario act1.tools.malus: the Smith's room in the Barracks, "reached
 		// the closest reachable point"): open the door between and walk again.
-		if !errors.Is(err, ErrNoPath) || errors.Is(err, ErrAlreadyThere) || try >= goDoorTries {
+		if !errors.Is(err, ErrNoPath) || errors.Is(err, ErrAlreadyThere) || try >= goDoorTries+padMaxHops {
 			return err
 		}
 		o, oerr := n.observeWait(ctx)
-		if oerr != nil || !n.openDoorToward(ctx, o, []gate{{at: p, push: p}}, -o.level, false) {
+		if oerr != nil {
+			return err
+		}
+		if !n.hopPad(ctx, o, p) && !n.openDoorToward(ctx, o, []gate{{at: p, push: p}}, -o.level, false) {
 			return err
 		}
 	}
@@ -581,13 +601,13 @@ func (n *Navigator) GoToUnitOf(ctx context.Context, typ int, unitID uint32) erro
 		missingSince = time.Time{}
 		return input.Point{X: u.X, Y: u.Y}, unitTolerance, nil
 	}
-	n.doorTried, n.doorApproach = nil, nil
+	n.doorTried, n.doorApproach, n.padHops = nil, nil, 0
 	var err error
 	for try := 0; ; try++ {
 		err = n.walk(ctx, tgt, walkOpts{ignoreUnit: unitID, escape: true})
 		// The unit stands behind a closed door (V drill.act2.cube: the Horadric Cube chest, "{203 198} is unreachable from
 		// {202 178}"): open the door between and walk again, as GoTo does for a spot.
-		if !errors.Is(err, ErrNoPath) || errors.Is(err, ErrAlreadyThere) || try >= goDoorTries {
+		if !errors.Is(err, ErrNoPath) || errors.Is(err, ErrAlreadyThere) || try >= goDoorTries+padMaxHops {
 			return err
 		}
 		o, oerr := n.observeWait(ctx)
@@ -599,7 +619,7 @@ func (n *Navigator) GoToUnitOf(ctx context.Context, typ int, unitID uint32) erro
 			return err
 		}
 		at := input.Point{X: u.X, Y: u.Y}
-		if !n.openDoorToward(ctx, o, []gate{{at: at, push: at}}, -o.level, false) {
+		if !n.hopPad(ctx, o, at) && !n.openDoorToward(ctx, o, []gate{{at: at, push: at}}, -o.level, false) {
 			return err
 		}
 	}

@@ -123,6 +123,9 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 	if r.boardPreempts(snap, c) {
 		return r.boardStep(ctx, snap, c) // the player's Start tap beats a farm or level goal (docs/questboard.md, "Which goals"), not a Farm gold order
 	}
+	if !p.InTown() && c.spec.camp == nil && r.boardHoldsArea() {
+		return r.sweep(ctx, snap, c, p.Area) // fight where we stand until the chunk may start
+	}
 	if c.spec.camp != nil {
 		if r.goldFarmOn() {
 			return r.goldFarmStep(ctx, snap, c) // the player's order: farm gold until told to stop (docs/goldfarm.md)
@@ -200,6 +203,7 @@ type trip struct {
 	repair     bool // the player's Repair now trip (repairtrip.go): phases, guards and the log of durability before and after
 	begun      bool // the request's trip was started (repairBegin)
 	repairTry  int  // chore rounds at the smith in this trip
+	vaultDone  bool // the vault keep and equip orders ran in this visit (stage 2)
 }
 
 // antidotes counts antidote potions in belt and pack (0 without a catalog).
@@ -472,6 +476,11 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 		threshold := t.ResupplyPotions
 		if p.InTown() {
 			threshold = t.ResupplyPotions * 2
+			// the doubled town floor is capped by what the belt can hold (never below the field floor): a floor the belt cannot
+			// hold is never met, the shop buys nothing, and the next arrival asks again
+			if c := resource.HealingCapacity(r.resInput(s), resource.FromEnv(*r.e.Tune)); c > 0 && threshold > c {
+				threshold = max(c, t.ResupplyPotions)
+			}
 		}
 		// Recovery suppresses potion trips from the field (an empty purse buys nothing), not the visit already under way:
 		// in town with no healing potion and gold for one the shop opens (potionFloor caps it, the kit gold stays).
@@ -648,6 +657,19 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 		}
 		return true
 	case 2:
+		// The player's kept and equipped vault items run here: the hero is home and the chores are done. Outside a trip
+		// the town is only ever left again at once, so an order waiting for "a quiet town" never ran (vault-equip probe).
+		if !t.vaultDone && snap != nil && snap.Player != nil && snap.Player.InTown() && r.d.VaultKeep != nil && r.d.VaultKeep.Pending() > 0 {
+			t.vaultDone = true
+			r.setWhy(WhyPlayerItems, "what", "vault keep")
+			r.do(ctx, c, StateResupplying, "Keeping vault items", sec(r.cfg.TownTimeoutSec), "vault keep", func(ctx context.Context) error {
+				for _, line := range r.d.VaultKeep.Run(ctx) {
+					r.e.Log.Info(line)
+				}
+				return ctx.Err()
+			})
+			return true
+		}
 		r.setState(StateResupplying, "Settling in town")
 		r.pause(ctx, time.Duration(r.e.Tune.Bot.PortalSettleMs)*time.Millisecond)
 		if t.returnTo != 0 {

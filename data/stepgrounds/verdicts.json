@@ -61,33 +61,33 @@
  },
  "drill.act2.amulet": {
   "verdict": "GREEN",
-  "run": "20261123-063211-a223",
+  "run": "20261123-175925",
   "tag": "V",
-  "note": "matrix note 23"
+  "note": ""
  },
  "drill.act2.assemble": {
-  "verdict": "BLOCKED",
-  "run": "20261123-034952",
+  "verdict": "GREEN",
+  "run": "20261123-175925",
   "tag": "V",
-  "note": "GREEN to Cain's menu; the done bit after the talk is U (matrix)"
+  "note": "cube, shaft, amulet given; staff made"
  },
  "drill.act2.shaft": {
-  "verdict": "RED",
-  "run": "20261123-014519",
+  "verdict": "GREEN",
+  "run": "20261123-174023",
   "tag": "V",
-  "note": "Maggot Lair 1 arrival nook, seed 7 needed for the chest (matrix notes 9, 34)"
+  "note": "Paladin 7, clvl 30 stand-in, merc 20; chest exists on seed 7 only"
  },
  "drill.act2.summoner": {
-  "verdict": "RED",
-  "run": "20261123-045154",
+  "verdict": "GREEN",
+  "run": "20261123-224713",
   "tag": "V",
-  "note": "travel GREEN, the maze kills the hero (matrix note 22)"
+  "note": "devp26; seams and class-only match"
  },
  "drill.act2.duriel": {
-  "verdict": "RED",
-  "run": "20261123-045350",
+  "verdict": "BLOCKED",
+  "run": "20261123-182059",
   "tag": "V",
-  "note": "no exit found Valley of Snakes to Canyon (matrix note 20)"
+  "note": "Canyon reached; staff placement needs a hover-scan verb"
  },
  "drill.act3.lam_esen": {
   "verdict": "RED",
@@ -322,5 +322,65 @@
   "run": "20261123-185443",
   "tag": "V",
   "note": "the super spawn works (devp25) and the bot engages; the stand-in hero dies to the Infector (kit too weak, matrix notes 24 to 26)"
+ },
+ "drill.act3s.lam_esen": {
+  "verdict": "GREEN",
+  "run": "20261123-230132",
+  "tag": "V",
+  "note": "exact-cell move onto the 0x0 warp (devp26)"
+ },
+ "drill.act3s.blade": {
+  "verdict": "BLOCKED",
+  "run": "20261123-230132",
+  "tag": "V",
+  "note": "run cut at 25 virtual min"
+ },
+ "drill.act3s.golden_bird": {
+  "verdict": "RED",
+  "run": "20261123-224713",
+  "tag": "V",
+  "note": "chunk starts; Meshif absent from the lab Act 3 town npcs"
+ },
+ "step.act1.smith.stand_click_afar.necro": {
+  "verdict": "RED",
+  "run": "20261123-225912",
+  "tag": "V",
+  "note": "after toolstrade40 (#1249), devp26: Necromancer kills the Smith (1m48s) and the stand step still ends 'never changed after 8 clicks' (outcome skipped, no retry now); the loop guard works: 'to-barracks ran 12 times with nothing after it' parks the chunk after 12 repeats (about 30 s, was 28 minutes). It was GREEN on devp25 before (retry carried the Malus); U flake or a regression of the stand step. The stand's cell (95,212) is a guess (U)"
+ },
+ "step.act1.smith.stand_click_pickup.necro": {
+  "verdict": "RED",
+  "run": "20261123-225912",
+  "tag": "V",
+  "note": "after toolstrade40: still no Malus click (same plan/loop shape; the plan hold-off did not flip it)"
+ },
+ "step.act1.caster_belt.restock.necro": {
+  "verdict": "GREEN",
+  "run": "20261123-221628",
+  "tag": "V",
+  "note": "Necromancer 11 from a town start: 12 virtual minutes without the town-trip loop: the loop of run 210945-459f needs the Barracks arrival crowd; this step does not reproduce it (U which part is missing)"
+ },
+ "step.act1.smith.room_stand.necro": {
+  "verdict": "RED",
+  "run": "20261123-225912",
+  "tag": "V",
+  "note": "after toolstrade40: still parks at 23:02:34 on 'left level 26 for 27 but ended in 7' 25 s after the start: the plan walks the hero out before the chunk exists, so 'the plan holds off while a fresh chunk is queued behind a fight' does not apply (no chunk yet)"
+ },
+ "step.act1.caster_loop.barracks.necro": {
+  "verdict": "GREEN",
+  "run": "20261123-223600",
+  "tag": "V",
+  "note": "Necromancer 11 devp26, warped to the arrival cell (26,83): at most 24 area changes in 20 virtual minutes: the town loop of run 210945-459f is NOT reproduced here (U which condition is missing: the loop needed the Smith dead and the stand step skipped)"
+ },
+ "step.act1.plan_overlap.necro": {
+  "verdict": "GREEN",
+  "run": "20261123-223600",
+  "tag": "V",
+  "note": "Necromancer 11 devp26, start in the Outer Cloister with the chunk accepted: Entered Barracks, no 'ended in 26': the overlap needs the hero to start inside the Barracks (see room_stand)"
+ },
+ "drill.act3s.lam_esen.bazaar": {
+  "verdict": "GREEN",
+  "run": "20261123-224713",
+  "tag": "V",
+  "note": "from the Bazaar"
  }
 }

@@ -39,6 +39,13 @@ func (f *fakeEquip) Enqueue(_ context.Context, id, slot string, _ bool) VaultKee
 	f.orders[id] = slot
 	return VaultKeepResult{ID: id, OK: true}
 }
+func (f *fakeEquip) EnqueueSet(ctx context.Context, ids []string, now bool) []VaultKeepResult {
+	var out []VaultKeepResult
+	for _, id := range ids {
+		out = append(out, f.Enqueue(ctx, id, "auto", now))
+	}
+	return out
+}
 func (f *fakeEquip) Cancel(id string) VaultKeepResult {
 	delete(f.orders, id)
 	return VaultKeepResult{ID: id, OK: true}
@@ -75,8 +82,16 @@ func TestVaultEquipRoutes(t *testing.T) {
 	if code, _, pr = postVault(t, a, VaultEquipRoute, map[string]any{"ids": []string{id}, "slot": "up"}); code != 400 || pr.Code != "slot" {
 		t.Fatalf("bad slot: %d %+v", code, pr)
 	}
-	if code, _, pr = postVault(t, a, VaultEquipRoute, map[string]any{"ids": []string{id, "x"}}); code != 400 {
-		t.Fatalf("two ids: %d %+v", code, pr)
+	// Wear set: several ids are one request with a result per piece; more than a body's worth, and cancel with many, are refused.
+	if code, rep, _ = postVault(t, a, VaultEquipRoute, map[string]any{"ids": []string{id, "x"}}); code != 200 || len(rep.Done) < 1 {
+		t.Fatalf("a set: %d %+v", code, rep)
+	}
+	many := make([]string, 13)
+	if code, _, pr = postVault(t, a, VaultEquipRoute, map[string]any{"ids": many}); code != 400 || pr.Code != "ids" {
+		t.Fatalf("13 ids: %d %+v", code, pr)
+	}
+	if code, _, pr = postVault(t, a, VaultEquipCancel, map[string]any{"ids": []string{id, "x"}}); code != 400 {
+		t.Fatalf("cancel of two: %d %+v", code, pr)
 	}
 	if code, rep, _ = postVault(t, a, VaultEquipCancel, map[string]any{"ids": []string{id}}); code != 200 || fe.orders[id] != "" {
 		t.Fatalf("cancel: %d %+v", code, rep)

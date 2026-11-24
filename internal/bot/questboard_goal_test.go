@@ -302,3 +302,39 @@ func TestQuestBoardCrowdLineFollowsTheChunk(t *testing.T) {
 		})
 	}
 }
+
+// V lab 2026-11-23 (necro step scenario stand_click_pickup): the chunk is queued behind the fight (the army fights on), the
+// level goal's own area choice then walks the hero out of the chunk's area and the first step parks "ended in 26". While a
+// fresh chunk waits for the fight the board says so (boardHoldsArea) and runGoal fights in place; once the chunk starts or
+// the field is calm the hold is gone. Two classes. Must fail while nothing holds the area.
+func TestQuestBoardHoldsTheAreaWhileQueuedBehindAFight(t *testing.T) {
+	for _, class := range []d2.Class{d2.Necromancer, d2.Paladin} {
+		t.Run(class.String(), func(t *testing.T) {
+			g, x := boardRig(t, true)
+			g.w.set(func(w *world) { w.class = class; w.area = 2 })
+			snap, _ := g.w.snapshot()
+			g.r.obMu.Lock()
+			g.r.ob.lastSnap = snap
+			g.r.obMu.Unlock()
+			if err := x.Accept("den_of_evil", "clear_den"); err != nil {
+				t.Fatal(err)
+			}
+			farmCtl := control{spec: goalSpec{kind: goals.FarmArea}}
+			g.w.addMonster(500, 1, 3, 3)
+			snap, _ = g.w.snapshot()
+			g.r.obMu.Lock()
+			g.r.ob.lastSnap = snap
+			g.r.obMu.Unlock()
+			if g.r.hostileNear(snap, g.r.e.Tune.Bot.ClearRadius) == 0 {
+				t.Skip("the fake monster is not hostile here")
+			}
+			if g.r.boardPreempts(snap, farmCtl) || !g.r.boardHoldsArea() {
+				t.Fatal("a fresh chunk queued behind a fight must hold the area")
+			}
+			g.r.qbRT().queuedSince = g.r.e.Clock.Now().Add(-2 * boardQueueGrace)
+			if !g.r.boardPreempts(snap, farmCtl) || g.r.boardHoldsArea() {
+				t.Fatal("after the grace the chunk starts and the hold is gone")
+			}
+		})
+	}
+}

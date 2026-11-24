@@ -30,6 +30,7 @@ type Field struct {
 	version      uint64
 	clearCap     int
 	wallW        float64
+	seams        bool  // diagonal steps between two blocked cells are allowed (astar.go)
 	passMask     uint8 // cells with any of these bits are passable (fWalk, plus fOpt when planning optimistically)
 }
 

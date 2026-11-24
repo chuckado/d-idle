@@ -380,7 +380,6 @@
 | countess3b | proposed | - | `cmd/d2bot/boss.go`<br>`cmd/d2bot/boss_levelmonsters_test.go`<br>`internal/nav/nav.go`<br>`docs/probes/provingground-countess-2026-11-20.md` | - |
 | bsm4 | proposed | - | `internal/questboard/exec.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_quests.go`<br>`docs/knobs.md` | - |
 | mouthgate | proposed | - | `internal/nav` | - |
-| vaultequip | proposed | - | `internal/vaultkeep/equip.go`<br>`internal/vaultkeep/equip_test.go`<br>`internal/invdesk/equipnow.go`<br>`cmd/d2bot/vaultequip.go`<br>`internal/watch/vaultequip_test.go`<br>`tools/provingground/scenarios/vaultequip.json`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/vaultapi.go`<br>`internal/vaultkeep/keep.go`<br>`internal/vaultkeep/keep_test.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`internal/watch/testdata/vault_logic.mjs`<br>`tools/provingground/scenarios/behaviours.json` | - |
 | pgledgeron | in-progress | - | `docs/process/pg-ledger-ops.md`<br>`tools/provingground/run.sh`<br>`tools/provingground/pgenv.sh`<br>`tools/provingground/pgenv_test.sh` | - |
 | vaultreveal | proposed | - | `internal/vaultkeep`<br>`internal/bulkid`<br>`internal/watch/vaultapi_gold.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.css`<br>`internal/watch/web/vault.json`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultapi_gold_test.go`<br>`internal/watch/vaultreveal_ui_test.go`<br>`internal/watch/testdata/vault_reveal.mjs`<br>`internal/watch/testdata/vault_logic.mjs`<br>`internal/env/tuning_loot.go`<br>`internal/town/playerid.go`<br>`docs/knobs.md`<br>`cmd/d2bot/vaultkeep.go`<br>`docs/vault.md`<br>`tools/provingground/scenarios/vaultreveal.json` | - |
 | heavyguard | proposed | - | `tools/lib/heavy-guard.sh`<br>`tools/lib/heavy-guard-test.sh`<br>`tools/uishots.sh`<br>`docs/process/worker-capacity.md` | - |
@@ -471,6 +470,9 @@
 | toolstrade30 | proposed | - | `internal/env/tuning_route.go`<br>`internal/task/route.go`<br>`internal/task/world.go`<br>`internal/task/route_test.go`<br>`internal/bot/routeguard.go`<br>`docs/knobs.md`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | malus2 | proposed | - | `tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | toolstrade34 | proposed | - | `internal/task/act1.go`<br>`internal/bot/campsim_objects_test.go`<br>`internal/task/steps.go`<br>`internal/task/sim/sim.go`<br>`internal/task/gear_gate_test.go`<br>`internal/quest/dialog.go`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_layout_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
+| stage2c | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
+| necrosteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`tools/provingground/scenarios/stepgrounds_gen.json` | - |
+| redsteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/necro_test.go` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
@@ -500,14 +502,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 8827939af 11-23 20:22 `Merge agent/vaultperf: Merge branch 'main' into vaultperf` (vaultperf)
-- 3908c98be 11-23 20:20 `Merge branch 'main' into vaultperf` (-)
-- ff78e4c88 11-23 20:10 `Merge agent/toolstrade38: Merge branch 'main' into toolstrade38` (toolstrade38)
-- 205898b73 11-23 20:08 `Merge branch 'main' into toolstrade38` (-)
-- 8325122ba 11-23 19:49 `Merge agent/stepgrounds: Merge branch 'main' into stepgrounds` (stepgrounds)
-- e3dcdd617 11-23 19:47 `Merge branch 'main' into stepgrounds` (-)
-- aec58de72 11-23 19:16 `Merge agent/toolstrade37: Merge branch 'main' into toolstrade37` (toolstrade37)
-- d56ea0772 11-23 19:15 `Merge branch 'main' into toolstrade37` (-)
-- 0d5c40596 11-23 19:06 `Merge agent/stepgrounds: Merge branch 'main' into stepgrounds` (stepgrounds)
-- c8b6ab0e2 11-23 19:05 `Merge branch 'main' into stepgrounds` (-)
+- 0b014f71e 11-23 23:39 `Merge agent/qd19: Merge origin/main` (qd19)
+- b6c5c7f66 11-23 23:33 `Merge origin/main` (-)
+- 32fe20846 11-23 23:11 `Merge agent/flip: flip: verdicts after toolstrade40` (flip)
+- e7a0bf000 11-23 22:50 `Merge agent/redsteps: Merge branch 'main' into redsteps` (redsteps)
+- 65d837152 11-23 22:49 `Merge branch 'main' into redsteps` (-)
+- 3f7df71f6 11-23 22:38 `Merge agent/toolstrade40: toolstrade40: a chunk queued behind a fight holds the level goal in its area` (toolstrade40)
+- 1bc7b6f87 11-23 22:34 `Merge remote-tracking branch 'origin/main' into agent/toolstrade40` (-)
+- 84f6181a0 11-23 22:30 `Merge agent/necrosteps: necrosteps: verdicts and catalogue` (necrosteps)
+- 4dbd9c419 11-23 22:04 `Merge agent/stage2c: stage2c: stage 2b and 3 reruns, drill doc section 17` (stage2c)
+- 38891eb5d 11-23 21:52 `Merge agent/toolstrade39: toolstrade39: bold dial pools k of visited zones for unvisited ones (Tower Cellars were rejected by the hero k clamp)` (toolstrade39)
 <!-- statusgen:end -->

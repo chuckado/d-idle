@@ -1168,6 +1168,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [town-plan-stage2-2026-11-21.md](probes/town-plan-stage2-2026-11-21.md): Town planner, stages 1 and 2 (2026-11-21) (status: current. Design: docs/design/fable-review-2026-11-21/town-planner.md and appendix B. Nothing here was run...)
 - [town-plan-stage3-2026-11-22.md](probes/town-plan-stage3-2026-11-22.md): Town planner, stage 3 (purse), 2026-11-22 (status: current. Design: docs/design/fable-review-2026-11-21/town-planner-b-model.md (card tp-purse, TASK-757)....)
 - [treefix3-2026-11-19.md](probes/treefix3-2026-11-19.md): treefix3: why the Inifuss tree was not found for 17 hours (2026-11-19)
+- [vault-equip-2026-11-23.md](probes/vault-equip-2026-11-23.md): Vault equip: why it took many taps and left gear in the backpack (2026-11-23, card vaultequip)
 - [vault-perf-2026-11-23.md](probes/vault-perf-2026-11-23.md): Vault page load time, 2026-11-23 (status: findings + fixes (branch agent/vaultperf). Sandbox read-only: file sizes and logs only; no credentials, no...)
 - [vault-spike-2026-11-16.md](probes/vault-spike-2026-11-16.md): Ethereal Vault V0 spike: capture and create on the d2d fork (result) (status: RESULT, 2026-11-16 (task TASK-578). Design: `docs/design/loot-vault-2026-11-16.md` section 1.7. Tags: V =...)
 - [video-feed-2026-11-15.md](probes/video-feed-2026-11-15.md): Probe: lossless delta feed on real d2d frames (card videofeed, 2026-11-15)
@@ -1177,6 +1178,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [warp-sandbox-2026-11-12.md](probes/warp-sandbox-2026-11-12.md): Warp-arrival fix on the play sandbox (devp4), 2026-11-12
 - [warpclick-2026-11-14.md](probes/warpclick-2026-11-14.md): Warps on the rebased d2d need a Select-box click (TASK-412, 2026-11-14) (status: result record. Tags: V = run and seen on the worker host (headless throwaway heroes, seed 7 unless said);...)
 - [warptrigger-2026-11-22.md](probes/warptrigger-2026-11-22.md): warptrigger: the trigger areas of warps, read from the engine (card warptrigger, 2026-11-22) (status: current. Card `warptrigger` (first slice of `docs/design/fable-review-2026-11-22/map-knowledge.md`, user...)
+- [zone-pooledk.md](probes/zone-pooledk.md): Why the zone model never picks the Tower Cellars (toolstrade39, 2026-11-24)
 - [sentinel.md](sentinel.md): Sentinel: layer 2 failsafes (agent SENTINEL)
 - [soak-analysis.md](soak-analysis.md): Soaky soak analysis (SOAKANALYSIS, 2026-10-29) (status: SUPERSEDED in part: pre-fix baseline; the approved death rule is plan-v2 section 10.2 and...)
 - [soak-hosts.md](soak-hosts.md): Soak hosts (status: moved to the private ops repo (d2lod-ops, `docs/soak-hosts.md`). Not part of the public tree.)

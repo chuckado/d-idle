@@ -405,6 +405,21 @@ func (f equipFace) Enqueue(ctx context.Context, id, slot string, now bool) watch
 	return watch.VaultKeepResult{ID: r.ID, OK: r.OK, Already: r.Already, Code: r.Code, Why: r.Why}
 }
 
+func (f equipFace) EnqueueSet(ctx context.Context, ids []string, now bool) []watch.VaultKeepResult {
+	k := f.k()
+	out := make([]watch.VaultKeepResult, 0, len(ids))
+	if k == nil {
+		for _, id := range ids {
+			out = append(out, watch.VaultKeepResult{ID: id, Code: "off", Why: vaultkeep.ReasonEqNone})
+		}
+		return out
+	}
+	for _, r := range k.EquipSet(ctx, ids, now) {
+		out = append(out, watch.VaultKeepResult{ID: r.ID, OK: r.OK, Already: r.Already, Code: r.Code, Why: r.Why})
+	}
+	return out
+}
+
 func (f equipFace) Cancel(id string) watch.VaultKeepResult {
 	k := f.k()
 	if k == nil {
