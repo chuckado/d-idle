@@ -46,3 +46,31 @@
 ## 4. Claim wording
 
 The title and claim are now accurate (V): `fight: a monster tries a player's pets newest first, the merc by when it was hired or revived (FUN_005dd7f0)`. The title is 109 characters; the last 30 upstream subjects are at most 84. Suggested shorter form: `fight: a monster tries a player's newest pet first, the merc by its last hire or revive`. Limits to keep in the body: one player (several players keep d2d's order); a converted monster keeps its place after the pets (game.exe: the caster's newest pet); findings 2 and 4 above; the hooked functions; `test_structs.py` already fails on main.
+
+## Addendum 2026-11-24: final confirmation of v5 (short, against the edit list above)
+
+Subject: `didle/fidbatch-pet-search-order-up-v5` @ `87d9d7428` (one commit on upstream main `dadda9b98`), body `docs/research/pr-fidbatch-pet-order-body.md` @ `0b9a29736`. Builder long lane, one job, own trees `/data/src/v5f-*`. V unless said.
+
+**Verdict: READY AFTER EDITS.** The code, test and oracle are ready as committed. Only the PR body needs edits, and they are short (below).
+
+| Edit-list item | v5 |
+|---|---|
+| Test must build on the parent and fail there for the right reason | It builds on `dadda9b98` + the test file only. 3 of 9 checks fail (took 2 / 2 / 1, game.exe's order 3 / 4 / 2: two summon-vs-summon ties and the merc-vs-summon tie). The 4 revive / hire-later checks pass on the parent too, because the old "merc first" order is right when the merc is the newest. On `87d9d7428`: OK |
+| No hand-set serials | Done: summons come through `Fight::summon_one`, the merc through `World::spawn_merc` (a revive = `merc.reset()` then `spawn_merc`, which is what `cmd::ResurrectMerc` calls) |
+| Oracle on the final tree | `pets_merc.py` at REVIVE_SHARE 0 / 0.3 / 1.0: 1,212 / 1,006 / 527 differ before, 0 / 0 / 0 after (md5 as before). My timeline oracle (native FUN_005b1a90): 664 before, 0 after |
+| ctest on the final tree | 506 tests: 505 passed, 1 failed, 13 skipped (the same 13, game data missing). The failure is `test_two_hands_blow` (Subprocess aborted: `test_two_hands_blow.cpp:58` `phys_hi == 100`), and it fails the same way on upstream main `dadda9b98` (built and run on the parent tree) |
+| `-Werror -Wshadow -Wconversion` on the 7 changed .cpp | rc 0 on all 7 |
+| clang-tidy-19 on the 7 changed .cpp | rc 0, no finding |
+| `pr_guard.py upstream/main HEAD` | 0 FAIL, 0 WARN |
+| `presubmit.py --quick` against `dadda9b98` | **0 FAIL**, 4 WARN (siblings: co-op partner; net roles; build skipped; no compile_commands). The `test_structs.py` failure is gone on this upstream main |
+| Det hashes, 14 scenes: lab `0fcd512a5` (sha `8c4fb56e554e`) against `didle/fidbatch-20261124c` @ `8195a62f` (`fcb597451a80`, the same components change as v5, checked line by line) | all 14 identical. No scene holds a tie |
+| Wording and limits | Title (86 characters) and claim match the evidence. FUN_005394a0 / FUN_0056aa50 are named, and the act-change path is tagged U. One player only, converted monster, lab-only restamp: all stated |
+| Author and disclosure | Author and committer `shatteredeagle <26069301+...@users.noreply.github.com>` (numeric noreply), no Claude identity or trailer in the commit; commit body is 2 lines. `Agent: Claude Code` is in the body, as upstream AGENTS.md section 6 asks |
+
+Body edits before posting:
+1. Remove the stale `test_structs.py` text: the checklist line "fails on main too: `tools/emu/test_structs.py`" and the result block's "presubmit: 2 FAIL". On `dadda9b98` presubmit has 0 FAIL.
+2. Result block: replace the pre-amend ctest caveat with this run (final tree, 505 / 1 / 13). Drop "Not done: independent verification of this exact commit; det hashes for v5": both are done above.
+3. Upstream AGENTS.md section 4 step 5: a test that also fails on main is "named there, and fixed in its own commit or reported in an issue". `test_two_hands_blow` is named, but the body must also say it will be reported in an issue (filing it needs the user's go) or fixed in its own commit.
+4. The template says to delete the sections that don't apply: remove "Claims (a batch only)" for this one-claim PR.
+
+Labels `trace` and `port`: the body correctly leaves them for the user's go.
