@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"d2lod-bot/internal/d2dsrc"
 	"errors"
 	"fmt"
 	"math"
@@ -92,10 +93,12 @@ var objSpecs = map[string]objSpec{
 	"Khalim's Heart chest":    {quest.ObjRelicChestA, objClick, ""},
 	"Khalim's Brain chest":    {quest.ObjRelicChestB, objClick, ""},
 	"Khalim's Eye chest":      {quest.ObjRelicChestC, objClick, ""},
-	"gidbinn altar":           {quest.ObjGidbinnAltar, objClick, ""},
-	"Lam Esen altar":          {quest.ObjLamTomeAltar, objClick, ""},
-	"red portal":              {quest.ObjRedPortalA3, objLeave, ""},
-	"Compelling Orb":          {quest.ObjCompellingOrb, objOrb, ""},
+	// V lab (objectlist level 78, devp26): the altar in the Flayer Jungle is class 252 "Gidbinn"; 251 is not in the level and the
+	// search ended "object class 251 not found (the whole level was walked)".
+	"gidbinn altar":  {quest.ObjGidbinn, objClick, ""},
+	"Lam Esen altar": {quest.ObjLamTomeAltar, objClick, ""},
+	"red portal":     {quest.ObjRedPortalA3, objLeave, ""},
+	"Compelling Orb": {quest.ObjCompellingOrb, objOrb, ""},
 	// Acts 4 and 5. Classes V (objects.txt, docs/act4.md and act5.md), roles S (Kolbot), every click U live.
 	ForgePlaceObject: {quest.ObjHellforge, objPlace, quest.ItemSoulstone},
 	ForgeSmashObject: {quest.ObjHellforge, objSmash, ""},
@@ -550,6 +553,11 @@ var _ boss.ObjectOps = objectAdapter{}
 // hover, so the click point is found first (scan for the object being hovered), then the item is taken and that point
 // clicked.
 func (o objectAdapter) placeItem(ctx context.Context, class int, code string) error {
+	if class == quest.ObjOrifice {
+		if err := o.toTrueTomb(ctx); err != nil {
+			return task.Wrap(task.KindNotFound, err)
+		}
+	}
 	err := o.placeItemOnce(ctx, class, code)
 	// Never leave the quest item on the cursor: the next walk click would drop it on the floor (review M6). CloseAll
 	// returns a held item to the pack; on success it only confirms the cursor is empty.
@@ -561,7 +569,50 @@ func (o objectAdapter) placeItem(ctx context.Context, class int, code string) er
 	return err
 }
 
+// itemPlacer is the d2d controller's way to put a pack item into a field object without a hover scan.
+type itemPlacer interface {
+	PlaceItem(index int, item uint32) error
+}
+
+// placeItemD2D is placeItemOnce on the d2d backend: walk beside the object, then interact, hand and place by the d2d's own
+// verbs (V devp28 doc card B; before it the step failed "needs the real game input (hover scan)").
+func (o objectAdapter) placeItemD2D(ctx context.Context, p itemPlacer, class int, code string) error {
+	u, err := o.find(ctx, class)
+	if err != nil {
+		return task.Wrap(task.KindNotFound, err)
+	}
+	walk := o.goUnit
+	if walk == nil {
+		walk = o.nv.GoToUnitOf
+	}
+	if err := walk(ctx, d2.TypeObject, u.ID); err != nil {
+		return task.Wrap(task.KindNotFound, err)
+	}
+	s, err := o.e.Snapshot()
+	if err != nil || s.Inventory == nil {
+		return task.Errorf(task.KindPrereq, "no inventory to take the %s from", code)
+	}
+	var item uint32
+	for _, it := range s.Inventory.Container(d2.ContInventory) {
+		if b := hand.New(o.e).Base(it); b != nil && b.Code == code {
+			item = it.ID
+			break
+		}
+	}
+	if item == 0 {
+		return task.Errorf(task.KindPrereq, "no %s in the pack", code)
+	}
+	if err := p.PlaceItem(int(u.ID)-d2dsrc.NPCIDBase, item); err != nil {
+		return task.Wrap(task.KindUI, err)
+	}
+	o.e.Clock.Sleep(time.Second)
+	return nil
+}
+
 func (o objectAdapter) placeItemOnce(ctx context.Context, class int, code string) error {
+	if p, ok := o.e.In.(itemPlacer); ok {
+		return o.placeItemD2D(ctx, p, class, code)
+	}
 	g, ok := o.e.In.(*input.Game)
 	if !ok {
 		return task.Errorf(task.KindPrereq, "placing an item on an object needs the real game input (hover scan)")
@@ -656,4 +707,48 @@ func findHover(g *input.Game, o *d2.Unit, clk input.Clock) (int, int, bool) {
 		return 0, 0, false
 	}
 	return mx / n, my / n, true
+}
+
+// toTrueTomb brings the hero from the Canyon of the Magi into the tomb that has the orifice (tombscan.go). Outside the
+// Canyon and the tombs it does nothing: the object search then reports what it finds.
+func (o objectAdapter) toTrueTomb(ctx context.Context) error {
+	if o.nv == nil {
+		return nil
+	}
+	area := func() int {
+		if s, err := o.e.Snapshot(); err == nil && s.Player != nil {
+			return s.Player.Area
+		}
+		return 0
+	}
+	if a := area(); a != canyonOfMagi && (a < tombAreas[0] || a > tombAreas[len(tombAreas)-1]) {
+		return nil
+	}
+	has := func() bool {
+		if lm := o.levelMap(); lm != nil {
+			for _, p := range lm.Presets {
+				if p.Kind == d2map.PresetObject && p.ID == quest.ObjOrifice {
+					return true
+				}
+			}
+		}
+		if s, err := o.e.Snapshot(); err == nil {
+			for i := range s.Objects {
+				if s.Objects[i].Class == quest.ObjOrifice {
+					return true
+				}
+			}
+		}
+		return false
+	}
+	explore := func(ctx context.Context, stop func() bool) error {
+		ectx, cancel := context.WithTimeout(ctx, 4*time.Minute)
+		defer cancel()
+		err := o.nv.Explore(ectx, stop)
+		if errors.Is(err, nav.ErrExplored) || errors.Is(err, context.DeadlineExceeded) {
+			return nil
+		}
+		return err
+	}
+	return findTrueTomb(ctx, area, o.nv.ExitTo, has, explore)
 }

@@ -1593,7 +1593,7 @@
     ]
    },
    "budget": {
-    "virtual_min": 90
+    "virtual_min": 120
    },
    "matrix": {
     "classes": [
@@ -2835,7 +2835,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -2883,7 +2883,8 @@
       "stat": 5,
       "value": 0
      }
-    ]
+    ],
+    "merc_level": 40
    },
    "trigger": {
     "goals": "reach:90",
@@ -2903,7 +2904,7 @@
     ]
    },
    "budget": {
-    "virtual_min": 30
+    "virtual_min": 120
    },
    "matrix": {
     "classes": [
@@ -2915,7 +2916,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets. Budget 120 virtual minutes and a level 40 desert merc so the Flayer Jungle fights finish.",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -3056,7 +3057,8 @@
       "stat": 5,
       "value": 0
      }
-    ]
+    ],
+    "rooms_up": true
    },
    "trigger": {
     "goals": "reach:90",
@@ -3087,7 +3089,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets. The Jade Figurine (a random drop) is given by a SETUP verb.",
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets. The Jade Figurine (a random drop) is given by a SETUP verb. `debug rooms up` brings the town's NPCs up (Meshif, Alkor).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -3184,7 +3186,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -3232,7 +3234,8 @@
       "stat": 5,
       "value": 0
      }
-    ]
+    ],
+    "merc_level": 40
    },
    "trigger": {
     "goals": "reach:90",
@@ -3251,7 +3254,7 @@
     ]
    },
    "budget": {
-    "virtual_min": 30
+    "virtual_min": 90
    },
    "matrix": {
     "classes": [
@@ -3263,7 +3266,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets. Budget 90 virtual minutes and a level 40 desert merc (fights finish).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -3356,6 +3359,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "mss",
+      "count": 1
      }
     ],
     "belt": [
@@ -3364,7 +3371,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -3412,7 +3419,8 @@
       "stat": 5,
       "value": 0
      }
-    ]
+    ],
+    "merc_level": 40
    },
    "trigger": {
     "goals": "reach:90",
@@ -3431,7 +3439,7 @@
     ]
    },
    "budget": {
-    "virtual_min": 30
+    "virtual_min": 90
    },
    "matrix": {
     "classes": [
@@ -3443,7 +3451,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets. Budget 90 virtual minutes and a level 40 desert merc (fights finish). The Soulstone is given by a SETUP verb (the chunk has nothing to do without it).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -3744,7 +3752,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -3792,7 +3800,8 @@
       "stat": 5,
       "value": 0
      }
-    ]
+    ],
+    "merc_level": 40
    },
    "trigger": {
     "goals": "reach:90",
@@ -3811,7 +3820,7 @@
     ]
    },
    "budget": {
-    "virtual_min": 30
+    "virtual_min": 90
    },
    "matrix": {
     "classes": [
@@ -3823,7 +3832,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets. Budget 90 virtual minutes and a level 40 desert merc (fights finish).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -3940,7 +3949,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -3988,7 +3997,8 @@
       "stat": 5,
       "value": 0
      }
-    ]
+    ],
+    "merc_level": 40
    },
    "trigger": {
     "goals": "reach:90",
@@ -4007,7 +4017,7 @@
     ]
    },
    "budget": {
-    "virtual_min": 30
+    "virtual_min": 90
    },
    "matrix": {
     "classes": [
@@ -4019,7 +4029,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets. Budget 90 virtual minutes and a level 40 desert merc (fights finish).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -4140,7 +4150,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -4188,7 +4198,8 @@
       "stat": 5,
       "value": 0
      }
-    ]
+    ],
+    "merc_level": 40
    },
    "trigger": {
     "goals": "reach:90",
@@ -4199,7 +4210,8 @@
      "nav.warpRead": 1,
      "nav.fullGrid": 1,
      "quests.boardSM": 1,
-     "town.plan": 1
+     "town.plan": 1,
+     "quests.layoutRead": 1
     },
     "driver": "board-taps",
     "tap_chunks": [
@@ -4207,7 +4219,7 @@
     ]
    },
    "budget": {
-    "virtual_min": 30
+    "virtual_min": 90
    },
    "matrix": {
     "classes": [
@@ -4219,7 +4231,7 @@
      3
     ]
    },
-   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets.",
+   "provenance": "CHEATED: clvl 60 stand-in (strength 150, dexterity 100, max life 3000, a rare broad sword), gold, waypoints, quest words of the earlier acts and the start area by SETUP verbs. Mechanics only: the evidence is whether the board offers and starts the row and how far it gets. Budget 90 virtual minutes and a level 40 desert merc (fights finish).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {

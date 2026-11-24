@@ -103,3 +103,29 @@ func TestMercLevelFollowsTheHire(t *testing.T) {
 		}
 	}
 }
+
+// pre.rooms_up sends `debug rooms up` after the goto, before any warp (devp28); without start field it is an error.
+func TestRoomsUpFollowsTheGoto(t *testing.T) {
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		s := Scenario{ID: "x.rooms", Kind: KindBehaviour, Pre: Pre{Start: StartField, Area: 75, RoomsUp: true}}
+		su, err := BuildSetup(s, class, 3)
+		if err != nil {
+			t.Fatal(err)
+		}
+		g, r := -1, -1
+		for i, v := range su.Verbs {
+			switch v.Line {
+			case "debug goto 75":
+				g = i
+			case "debug rooms up":
+				r = i
+			}
+		}
+		if g < 0 || r <= g {
+			t.Fatalf("%s: goto %d rooms up %d", class, g, r)
+		}
+		if _, err := BuildSetup(Scenario{ID: "x.rooms2", Kind: KindBehaviour, Pre: Pre{RoomsUp: true}}, class, 3); err == nil {
+			t.Fatal("rooms_up without start field was accepted")
+		}
+	}
+}
