@@ -650,7 +650,6 @@ docs/probes/search-for-cain-5b-2026-11-18.md  credit-runner  cain5b
 docs/probes/search-for-cain-l0-2026-11-18.md  credit-runner  cainl0
 docs/probes/search-for-cain-l2-2026-11-18.md  credit-runner  cainl2
 docs/probes/search-for-cain-l3-2026-11-19.md  live-agent  cainl3
-docs/probes/stepgrounds-stand.md  credit-runner  toolstrade38
 docs/probes/survival-ab-8seed-2026-11-16.md  credit-runner  survab8
 docs/probes/survival-ab-8seed-rerun-2026-11-16.md  credit-runner  survtune
 docs/probes/survival-ab-reask-2026-11-17.md  credit-runner  survreask
@@ -974,7 +973,6 @@ internal/bot/drought.go  credit-runner  freshstart
 internal/bot/exploredpct.go  credit-runner  exploredpct
 internal/bot/exploredpct_test.go  credit-runner  exploredpct
 internal/bot/failsafe_test.go  credit-runner  flakefix
-internal/bot/fakes_test.go  credit-runner  toolstrade38
 internal/bot/farm.go  credit-runner  pgclock
 internal/bot/farmclock_test.go  credit-runner  pgclock
 internal/bot/farmreset.go  credit-runner  farmloop
@@ -1139,11 +1137,9 @@ internal/bot/task.go  credit-runner  quests3
 internal/bot/task.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  staletarget
 internal/bot/task.go  credit-runner  toolstrade25
-internal/bot/task.go  credit-runner  toolstrade38
 internal/bot/task.go  credit-runner  wpstep
 internal/bot/task_acts_test.go  credit-runner  cain5b
 internal/bot/task_test.go  credit-runner  toolstrade25
-internal/bot/task_test.go  credit-runner  toolstrade38
 internal/bot/vaultkeep.go  credit-runner  vaultv5
 internal/bot/waypoints.go  credit-runner  boardmoderace
 internal/bot/whyline.go  credit-runner  repairtrip

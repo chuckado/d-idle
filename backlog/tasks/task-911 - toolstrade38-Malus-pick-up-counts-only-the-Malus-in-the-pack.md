@@ -1,10 +1,11 @@
 ---
 id: TASK-911
 title: 'toolstrade38: Malus pick-up counts only the Malus in the pack'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T00:59:00Z'
+updated_date: '2026-11-24T01:29:00Z'
 labels:
   - bot
   - bot-fix
