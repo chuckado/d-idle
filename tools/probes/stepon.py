@@ -13,8 +13,15 @@ try:
     print("origin", ox, oy)
     print("lockstep", cmd("lockstep on").strip()[:40])
     print("warp", cmd("debug warp %d %d" % (x + ox - 6, y + oy + 2)).strip()[:40]); time.sleep(1)
-    print("move", cmd("cmd move %d %d" % (x + ox, y + oy)).strip()[:60])
-    for i in range(8):
-        print(" step", cmd("step 25").strip()[:40], "|", cmd("state").replace("\n"," ")[:260], cmd("debug level").split()[1])
+    import re
+    def cam():
+        m = re.search(r"cam=([0-9.]+),([0-9.]+)", cmd("state"))
+        return (float(m.group(1)) - ox, float(m.group(2)) - oy) if m else None
+    print("start", cam())
+    for tx, ty in [(x - 8, y + 2), (x - 3, y + 2), (x, y + 2), (x, y), (x, y - 3)]:
+        print("move", tx, ty, cmd("cmd move %d %d" % (tx + ox, ty + oy)).strip()[:30])
+        for i in range(6):
+            cmd("step 25")
+        print("  cam", cam(), "level", cmd("debug level").split()[1])
 finally:
     p.kill()

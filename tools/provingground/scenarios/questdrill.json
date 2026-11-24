@@ -619,7 +619,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -659,7 +659,8 @@
       "stat": 6,
       "value": 307200
      }
-    ]
+    ],
+    "merc_level": 20
    },
    "trigger": {
     "goals": "reach:30",
@@ -670,7 +671,8 @@
      "nav.warpRead": 1,
      "nav.fullGrid": 1,
      "quests.boardSM": 1,
-     "town.plan": 1
+     "town.plan": 1,
+     "quests.layoutRead": 1
     },
     "driver": "board-taps",
     "tap_chunks": [
@@ -686,8 +688,9 @@
      "Sorceress"
     ],
     "seeds": [
-     11,
-     3
+     3,
+     7,
+     11
     ]
    },
    "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
@@ -748,7 +751,7 @@
    "pre": {
     "start": "field",
     "area": 40,
-    "level": 22,
+    "level": 30,
     "gold": 6000,
     "waypoints": [
      1,
@@ -788,7 +791,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -828,10 +831,11 @@
       "stat": 6,
       "value": 307200
      }
-    ]
+    ],
+    "merc_level": 20
    },
    "trigger": {
-    "goals": "reach:30",
+    "goals": "reach:45",
     "knobs": {
      "quests.board": 1,
      "resource.pointsDecisions": 1,
@@ -839,7 +843,8 @@
      "nav.warpRead": 1,
      "nav.fullGrid": 1,
      "quests.boardSM": 1,
-     "town.plan": 1
+     "town.plan": 1,
+     "quests.layoutRead": 1
     },
     "driver": "board-taps",
     "tap_chunks": [
@@ -855,8 +860,9 @@
      "Sorceress"
     ],
     "seeds": [
-     11,
-     3
+     3,
+     7,
+     11
     ]
    },
    "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
@@ -954,7 +960,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -994,7 +1000,8 @@
       "stat": 6,
       "value": 307200
      }
-    ]
+    ],
+    "merc_level": 20
    },
    "trigger": {
     "goals": "reach:30",
@@ -1005,7 +1012,8 @@
      "nav.warpRead": 1,
      "nav.fullGrid": 1,
      "quests.boardSM": 1,
-     "town.plan": 1
+     "town.plan": 1,
+     "quests.layoutRead": 1
     },
     "driver": "board-taps",
     "tap_chunks": [
@@ -1021,8 +1029,9 @@
      "Sorceress"
     ],
     "seeds": [
-     11,
-     3
+     3,
+     7,
+     11
     ]
    },
    "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
@@ -1108,6 +1117,10 @@
      {
       "record": 4,
       "word": 8209
+     },
+     {
+      "record": 9,
+      "word": 1
      }
     ],
     "items": [
@@ -1118,6 +1131,18 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "box",
+      "count": 1
+     },
+     {
+      "code": "msf",
+      "count": 1
+     },
+     {
+      "code": "vip",
+      "count": 1
      }
     ],
     "belt": [
@@ -1126,7 +1151,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -1166,7 +1191,8 @@
       "stat": 6,
       "value": 307200
      }
-    ]
+    ],
+    "merc_level": 20
    },
    "trigger": {
     "goals": "reach:30",
@@ -1177,7 +1203,8 @@
      "nav.warpRead": 1,
      "nav.fullGrid": 1,
      "quests.boardSM": 1,
-     "town.plan": 1
+     "town.plan": 1,
+     "quests.layoutRead": 1
     },
     "driver": "board-taps",
     "tap_chunks": [
@@ -1193,11 +1220,12 @@
      "Sorceress"
     ],
     "seeds": [
-     11,
-     3
+     3,
+     7,
+     11
     ]
    },
-   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero). The cube, the shaft and the amulet are given by SETUP verbs (the drill covers the assembly, not the finds).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md). The quest word after the Cain talk was 0x0c78 in the lab (bit 0 not set): whether the talk completes the quest is U, so the scenario asserts the staff item and the menu, not record 10.",
    "assert": [
     {
@@ -1260,7 +1288,7 @@
    "pre": {
     "start": "field",
     "area": 40,
-    "level": 26,
+    "level": 30,
     "gold": 6000,
     "waypoints": [
      1,
@@ -1308,7 +1336,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -1334,24 +1362,29 @@
     "stats": [
      {
       "stat": 0,
-      "value": 90
+      "value": 120
      },
      {
       "stat": 2,
-      "value": 60
+      "value": 80
      },
      {
       "stat": 7,
-      "value": 307200
+      "value": 512000
      },
      {
       "stat": 6,
-      "value": 307200
+      "value": 512000
+     },
+     {
+      "stat": 4,
+      "value": 0
      }
-    ]
+    ],
+    "merc_level": 20
    },
    "trigger": {
-    "goals": "reach:30",
+    "goals": "reach:45",
     "knobs": {
      "quests.board": 1,
      "resource.pointsDecisions": 1,
@@ -1359,7 +1392,8 @@
      "nav.warpRead": 1,
      "nav.fullGrid": 1,
      "quests.boardSM": 1,
-     "town.plan": 1
+     "town.plan": 1,
+     "quests.layoutRead": 1
     },
     "driver": "board-taps",
     "tap_chunks": [
@@ -1375,11 +1409,12 @@
      "Sorceress"
     ],
     "seeds": [
-     11,
-     3
+     3,
+     7,
+     11
     ]
    },
-   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero). Unused stat points are set to 0 (the raw stats stand for a spent hero; unspent points made the bot cancel its boss run for the point spender).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
@@ -1437,7 +1472,7 @@
    "pre": {
     "start": "field",
     "area": 40,
-    "level": 28,
+    "level": 30,
     "gold": 6000,
     "waypoints": [
      1,
@@ -1481,6 +1516,10 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "hst",
+      "count": 1
      }
     ],
     "belt": [
@@ -1489,7 +1528,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 0,
+    "merc": 12,
     "worn": [
      {
       "code": "cap",
@@ -1515,24 +1554,29 @@
     "stats": [
      {
       "stat": 0,
-      "value": 90
+      "value": 120
      },
      {
       "stat": 2,
-      "value": 60
+      "value": 80
      },
      {
       "stat": 7,
-      "value": 307200
+      "value": 512000
      },
      {
       "stat": 6,
-      "value": 307200
+      "value": 512000
+     },
+     {
+      "stat": 4,
+      "value": 0
      }
-    ]
+    ],
+    "merc_level": 20
    },
    "trigger": {
-    "goals": "reach:30",
+    "goals": "reach:45",
     "knobs": {
      "quests.board": 1,
      "resource.pointsDecisions": 1,
@@ -1540,7 +1584,8 @@
      "nav.warpRead": 1,
      "nav.fullGrid": 1,
      "quests.boardSM": 1,
-     "town.plan": 1
+     "town.plan": 1,
+     "quests.layoutRead": 1
     },
     "driver": "board-taps",
     "tap_chunks": [
@@ -1556,11 +1601,12 @@
      "Sorceress"
     ],
     "seeds": [
-     11,
-     3
+     3,
+     7,
+     11
     ]
    },
-   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero).",
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero). Unused stat points are set to 0 (the raw stats stand for a spent hero; unspent points made the bot cancel its boss run for the point spender). The assembled Horadric Staff is given by a SETUP verb (the assemble row covers the Cube).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
