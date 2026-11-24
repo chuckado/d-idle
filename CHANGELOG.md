@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- toolstrade54: a click the mouth gate keeps holding blocks that spot for planning (Catacombs 4: 215 rounds toward the stairs); lair grid fixture <!--sg:agent/toolstrade54-->
 - Merge branch 'main' into toolstrade53 <!--sg:agent/toolstrade53-->
 - toolstrade52: a trip the field gate redirected walks back instead of taking the portal into the lair; a wrong-level portal landing ends the wait at once <!--sg:agent/toolstrade52-->
 - toolstrade51: tries of unreachable doors are forgiven once a door opens (Catacombs 2: two doors in a row), live-grid fixture <!--sg:agent/toolstrade51-->

@@ -504,6 +504,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a950f288c 11-24 16:42 `Merge agent/toolstrade54: toolstrade54: a click the mouth gate keeps holding blocks that spot for planning (Catacombs 4: 215 rounds toward the stairs); lair grid fixture` (toolstrade54)
 - 48120464e 11-24 16:01 `Merge agent/toolstrade53: Merge branch 'main' into toolstrade53` (toolstrade53)
 - 12b5d7791 11-24 15:59 `Merge branch 'main' into toolstrade53` (-)
 - 927b2ba4a 11-24 15:51 `Merge agent/toolstrade52: toolstrade52: a trip the field gate redirected walks back instead of taking the portal into the lair; a wrong-level portal landing ends the wait at once` (toolstrade52)
@@ -513,5 +514,4 @@
 - a2dfb14b3 11-24 13:48 `Merge branch 'main' into toolstrade49` (-)
 - 8ba89828a 11-24 13:36 `Merge remote-tracking branch 'origin/main' into agent/toolstrade49` (-)
 - fdd3c7f2a 11-24 13:24 `Merge agent/toolstrade48: Merge branch 'main' into toolstrade48` (toolstrade48)
-- a8444f3ed 11-24 13:23 `Merge branch 'main' into toolstrade48` (-)
 <!-- statusgen:end -->

@@ -1355,6 +1355,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - toolstrade51: a door that already reads open is not used again (Catacombs 2 door flicker) (TASK-929, merged 2026-11-24, acceptance 1 of 1): Cause (V live capture catacombs2-1456 and nav lines 19:54Z, reproduced on the real grid in the sim): the way from the stairs of Catacombs Level 2 to the gate at (149,278) is two doors in a row, (200,210) in the corridor wall and then (190,220) west of the ... <!--sg:agent/toolstrade51-->
 - agent/toolstrade52: toolstrade52: a trip the field gate redirected walks back instead of taking the portal into the lair; a wrong-level portal landing ends the wait at once (merged 2026-11-24) <!--sg:agent/toolstrade52-->
 - agent/toolstrade53: Merge branch 'main' into toolstrade53 (merged 2026-11-24) <!--sg:agent/toolstrade53-->
+- agent/toolstrade54: toolstrade54: a click the mouth gate keeps holding blocks that spot for planning (Catacombs 4: 215 rounds toward the stairs); lair grid fixture (merged 2026-11-24) <!--sg:agent/toolstrade54-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
