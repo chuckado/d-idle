@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- toolstrade40: a chunk queued behind a fight holds the level goal in its area <!--sg:agent/toolstrade40-->
 - necrosteps: verdicts and catalogue <!--sg:agent/necrosteps-->
 - stage2c: stage 2b and 3 reruns, drill doc section 17 <!--sg:agent/stage2c-->
 - toolstrade39: bold dial pools k of visited zones for unvisited ones (Tower Cellars were rejected by the hero k clamp) <!--sg:agent/toolstrade39-->

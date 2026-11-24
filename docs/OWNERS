@@ -279,9 +279,11 @@ cmd/d2bot/objects.go  credit-runner  botstuck
 cmd/d2bot/objects.go  credit-runner  cain5b
 cmd/d2bot/objects.go  credit-runner  cainfix
 cmd/d2bot/objects.go  credit-runner  toolstrade34
+cmd/d2bot/objects.go  credit-runner  toolstrade40
 cmd/d2bot/objects.go  live-agent  k1layout
 cmd/d2bot/objects_layout_test.go  credit-runner  toolstrade34
 cmd/d2bot/objects_layout_test.go  live-agent  k1layout
+cmd/d2bot/objects_reach_test.go  credit-runner  toolstrade40
 cmd/d2bot/objects_test.go  credit-runner  cainfix
 cmd/d2bot/ops*.go  credit-runner  opsquest
 cmd/d2bot/ops*.go  credit-runner  opsquest4
@@ -993,6 +995,7 @@ internal/bot/goal.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  survB
 internal/bot/goal.go  credit-runner  survhold2
 internal/bot/goal.go  credit-runner  survrecover
+internal/bot/goal.go  credit-runner  toolstrade40
 internal/bot/goal.go  credit-runner  uib1
 internal/bot/goal.go  credit-runner  vaultv5
 internal/bot/goal.go  pro-runner  levelplan3
@@ -1002,6 +1005,7 @@ internal/bot/goldprio.go  credit-runner  goldprio
 internal/bot/goldprio_test.go  credit-runner  goldprio
 internal/bot/guided.go  credit-runner  campaign1
 internal/bot/guided_test.go  credit-runner  campaign1
+internal/bot/healcap_test.go  credit-runner  toolstrade40
 internal/bot/heroattrs.go  credit-runner  uic3
 internal/bot/heroattrs_test.go  credit-runner  uic3
 internal/bot/hpfields.go  credit-runner  intake
@@ -1078,8 +1082,10 @@ internal/bot/questboard.go  credit-runner  quests7
 internal/bot/questboard.go  credit-runner  quests7b
 internal/bot/questboard.go  credit-runner  quests8
 internal/bot/questboard.go  credit-runner  stage1fix
+internal/bot/questboard.go  credit-runner  toolstrade40
 internal/bot/questboard_goal_test.go  credit-runner  cainchain
 internal/bot/questboard_goal_test.go  credit-runner  questrun
+internal/bot/questboard_goal_test.go  credit-runner  toolstrade40
 internal/bot/questboard_s7b_test.go  credit-runner  cain5b
 internal/bot/questboard_s7b_test.go  credit-runner  equipswap
 internal/bot/questboard_s7b_test.go  credit-runner  qdmatrix
@@ -1646,6 +1652,7 @@ internal/readiness/model.go  credit-runner  resistorder
 internal/repair  credit-runner  repairtrip
 internal/resource  credit-runner  town5
 internal/resource  credit-runner  town7
+internal/resource/beltspec.go  credit-runner  toolstrade40
 internal/resource/recovery.go  live-agent  recoverypace
 internal/resource/recovery_test.go  live-agent  recoverypace
 internal/resource/sim.go  credit-runner  swingmodel
@@ -1743,6 +1750,7 @@ internal/task/executor.go  credit-runner  botstuck
 internal/task/executor.go  credit-runner  bsm7
 internal/task/executor.go  credit-runner  staletarget
 internal/task/executor.go  credit-runner  toolstrade25
+internal/task/executor.go  credit-runner  toolstrade40
 internal/task/executor.go  credit-runner  wpstep
 internal/task/executor_unpark_test.go  credit-runner  staletarget
 internal/task/executor_unpark_test.go  credit-runner  toolstrade25
@@ -1756,6 +1764,7 @@ internal/task/guided.go  credit-runner  campaign1
 internal/task/guided_test.go  credit-runner  campaign1
 internal/task/guided_test.go  pro-runner  levelplan3
 internal/task/kind.go  credit-runner  toolstrade25
+internal/task/noprogress_test.go  credit-runner  toolstrade40
 internal/task/route.go  credit-runner  toolstrade29
 internal/task/route.go  credit-runner  toolstrade30
 internal/task/route.go  credit-runner  toolstrade5
