@@ -2,7 +2,7 @@
 // data (data/questboard/act1..5.json) and data/stepgrounds/steps.json and
 //
 //	gen        writes tools/provingground/scenarios/stepgrounds_gen.json (step scenarios made from the spec's `gen` blocks)
-//	catalogue  writes docs/probes/quest-step-catalogue.md (counts, one row per step, verdict from verdicts.json)
+//	catalogue  writes docs/probes/quest-step-catalogue.md (counts, one row per step, verdict from verdicts/*.json)
 //	check      fails when a board step has neither a scenario nor an explicit MISSING reason, or the spec drifts from the data
 //
 // Adding a step scenario is a data edit in steps.json. Standard library only.
@@ -61,7 +61,8 @@ type Gen struct {
 	Pending string           `json:"pending,omitempty"` // non-empty: status pending with this reason
 }
 
-// Verdicts is data/stepgrounds/verdicts.json: scenario id to its last recorded result.
+// Verdicts is the merge of data/stepgrounds/verdicts/*.json (one file per
+// owner or group, so parallel branches rarely touch the same file): scenario id to its last recorded result.
 type Verdicts map[string]struct {
 	Verdict string `json:"verdict"` // GREEN RED BLOCKED
 	Run     string `json:"run"`
@@ -75,6 +76,35 @@ type step struct {
 }
 
 func (s step) key() string { return s.Quest + "/" + s.Chunk + "/" + s.Step }
+
+// loadVerdicts merges every data/stepgrounds/verdicts/*.json. A scenario id in
+// two files is an error (it would make the winner depend on file order).
+func loadVerdicts(root string) (Verdicts, error) {
+	files, err := filepath.Glob(filepath.Join(root, "data/stepgrounds/verdicts/*.json"))
+	if err != nil {
+		return nil, err
+	}
+	if len(files) == 0 {
+		return nil, fmt.Errorf("no verdict files in %s", filepath.Join(root, "data/stepgrounds/verdicts"))
+	}
+	sort.Strings(files)
+	all := Verdicts{}
+	from := map[string]string{}
+	for _, f := range files {
+		var part Verdicts
+		if err := readJSON(f, &part); err != nil {
+			return nil, err
+		}
+		for id, v := range part {
+			if prev, dup := from[id]; dup {
+				return nil, fmt.Errorf("verdict %s is in both %s and %s", id, filepath.Base(prev), filepath.Base(f))
+			}
+			from[id] = f
+			all[id] = v
+		}
+	}
+	return all, nil
+}
 
 func readJSON(path string, v any) error {
 	b, err := os.ReadFile(path)
@@ -149,8 +179,8 @@ func problems(root string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	var ver Verdicts
-	if err := readJSON(filepath.Join(root, "data/stepgrounds/verdicts.json"), &ver); err != nil {
+	ver, err := loadVerdicts(root)
+	if err != nil {
 		return nil, err
 	}
 	bySpec := map[string]StepSpec{}

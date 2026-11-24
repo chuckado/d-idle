@@ -1,0 +1,50 @@
+{
+ "drill.act2.amulet": {
+  "note": "",
+  "run": "20261123-175925",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "drill.act2.assemble": {
+  "note": "devp27 rebase smoke",
+  "run": "20261124-005430",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "drill.act2.cube": {
+  "note": "matrix table",
+  "run": "20261123-052834",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "drill.act2.duriel": {
+  "note": "tomb scan runs; died in tomb 66; orifice unit not found",
+  "run": "20261124-091152",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "drill.act2.radament": {
+  "note": "stand-in stats, matrix note 8",
+  "run": "20261123-014151",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "drill.act2.radament.handin": {
+  "note": "matrix table row",
+  "run": "matrix-2026-11-23",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "drill.act2.shaft": {
+  "note": "Paladin 7, clvl 30 stand-in, merc 20; chest exists on seed 7 only",
+  "run": "20261123-174023",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "drill.act2.summoner": {
+  "note": "devp26; seams and class-only match",
+  "run": "20261123-224713",
+  "tag": "V",
+  "verdict": "GREEN"
+ }
+}

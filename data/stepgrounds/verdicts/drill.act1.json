@@ -1,0 +1,8 @@
+{
+ "drill.act1.sail": {
+  "note": "devp27 rebase smoke",
+  "run": "20261124-005430",
+  "tag": "V",
+  "verdict": "GREEN"
+ }
+}

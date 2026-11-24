@@ -1,0 +1,26 @@
+{
+ "drill.act3s.blade": {
+  "note": "altar class fixed (252); quest word 0x0008, hand-in open",
+  "run": "20261124-003408",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "drill.act3s.golden_bird": {
+  "note": "devp28, pre.rooms_up brings Meshif and Alkor up",
+  "run": "20261124-083449",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "drill.act3s.lam_esen": {
+  "note": "exact-cell move onto the 0x0 warp (devp26)",
+  "run": "20261123-230132",
+  "tag": "V",
+  "verdict": "GREEN"
+ },
+ "drill.act3s.lam_esen.bazaar": {
+  "note": "devp27 rebase smoke",
+  "run": "20261124-005430",
+  "tag": "V",
+  "verdict": "GREEN"
+ }
+}

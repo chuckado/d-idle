@@ -1,0 +1,14 @@
+{
+ "step.act5.prison_of_ice.thaw.travel_frozen_river": {
+  "note": "no Entered line in 12 virtual min; the stand60 kit words read Mephisto, Izual and Terror's End done (bot log 'Quest done: ...'), cause of the stall not isolated (U)",
+  "run": "20261123-183646",
+  "tag": "V",
+  "verdict": "RED"
+ },
+ "step.act5.rescue_arreat.doors.travel_frigid_highlands": {
+  "note": "no Entered line in 12 virtual min; the stand60 kit words read Mephisto, Izual and Terror's End done (bot log 'Quest done: ...'), cause of the stall not isolated (U)",
+  "run": "20261123-183646",
+  "tag": "V",
+  "verdict": "RED"
+ }
+}
