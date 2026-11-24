@@ -21,10 +21,11 @@ func (c *cliDesk) rep(s string) questboard.Reply {
 	c.calls = append(c.calls, s)
 	return questboard.Reply{OK: true, State: "accepted"}
 }
-func (c *cliDesk) Start(q, ch string) questboard.Reply  { return c.rep("start " + q) }
-func (c *cliDesk) HandIn(q, ch string) questboard.Reply { return c.rep("handin " + q) }
-func (c *cliDesk) Cancel(q, ch string) questboard.Reply { return c.rep("cancel " + q) }
-func (c *cliDesk) Retry(q, ch string) questboard.Reply  { return c.rep("retry " + q) }
+func (c *cliDesk) Start(q, ch string) questboard.Reply       { return c.rep("start " + q) }
+func (c *cliDesk) StartAnyway(q, ch string) questboard.Reply { return c.rep("try " + q) }
+func (c *cliDesk) HandIn(q, ch string) questboard.Reply      { return c.rep("handin " + q) }
+func (c *cliDesk) Cancel(q, ch string) questboard.Reply      { return c.rep("cancel " + q) }
+func (c *cliDesk) Retry(q, ch string) questboard.Reply       { return c.rep("retry " + q) }
 func (c *cliDesk) SetAuto(q string, on bool) questboard.Reply {
 	return c.rep("auto " + q)
 }

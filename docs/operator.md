@@ -17,6 +17,7 @@ A way for the person (or agent) who runs the container to press the quest board 
 ```
 docker exec <container> <d2bot> ops quest status [--json]
 docker exec <container> <d2bot> ops quest start|retry|cancel|handin <quest> [--chunk ID] --why "reason"
+docker exec <container> <d2bot> ops quest start <quest> [--chunk ID] --try-anyway --why "reason"
 docker exec <container> <d2bot> ops quest auto <quest> --on|--off --why "reason"
 docker exec <container> <d2bot> ops quest wait <quest> [--chunk ID] [--timeout 600]
 ```
@@ -25,6 +26,9 @@ docker exec <container> <d2bot> ops quest wait <quest> [--chunk ID] [--timeout 6
 `wait` polls `status` every 5 s until the chunk is done (`finished`), parked (`blocked`), back to ready after running (`stopped`), was not running at all (`idle`) or the timeout passes (`timeout`). It prints one line `RESULT outcome=... quest=... chunk=... state=... step=... code=... text="..."` with the last step and the park reason.
 
 Finding the binary in the container: `/data/didle/current/bin/d2bot` when the `current` link exists (a self-updated release), else `ls -d /data/didle/releases/*/bin/d2bot | sort | tail -1`, else `d2bot` on the PATH. `tools/questloop.sh` does this lookup itself (`--bin` or `D2BOT_BIN` overrides).
+
+## Try anyway (owner override, ADR 0030 amended 2026-11-24)
+`start <quest> --try-anyway --why "..."` starts ONE chunk that the board refuses for READINESS (`not_ready`: "too hard for now", a level or life floor, the Andariel unattended hold, the Barracks or road floor) for one attempt. It skips only those words: the kit gates (potions, portal, mana, antidotes), the death-spiral guards and every combat reaction (drink, retreat, chicken, town portal) stay. It is one shot: a park, a death, a finish, a stop or a restart ends it and the chunk returns to its previous hold. A locked, done, parked or running part is refused (`not_overridable`). It counts against the limits below (6 per quest per hour), is refused in a measured run (`measured_run`), and writes the audit line `path:"operator/try-anyway"`, `why:"override: try anyway: <reason> (refused: <the skipped refusal>)"`; the bot logs `override: try anyway`. The viewer has the same thing: the `Try anyway (risk)` button on a part that waits for readiness, with the same passcode and a second tap that states the risk. The death of a try is counted as a death only.
 
 ## Audit
 Every verb the desk ran adds a line to the hero's quest audit ring (`<Hero>.audit.jsonl`, the same file the viewer writes) with `remote:"operator"`, `agent:"ops-cli"`, `path:"operator/<verb>"`, the desk's code and reason, and `why` (the caller's reason; the field is new and empty for viewer lines). A refusal before the desk (bad verb, missing reason, rate limit) is logged, not written to the ring, so a runaway loop cannot push real events out of it.

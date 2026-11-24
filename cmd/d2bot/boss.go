@@ -326,7 +326,7 @@ func newBossRunner(g *bossGame) *actRunner {
 		}
 	}
 	return &actRunner{FarmRunner: boss.FarmRunner{Act45Runner: boss.Act45Runner{
-		Runner: boss.Runner{W: g, A: bossActs{g}, Scripts: sc, Opts: boss.Opts{CanTeleportFn: func() bool { return g.nv != nil && g.nv.HasTeleport() }, AndarielMinLevel: andarielFloor(g.e), MaxRetreats: brMaxRetreats(g.e), Hooks: boss.Hooks{
+		Runner: boss.Runner{W: g, A: bossActs{g}, Scripts: sc, Opts: boss.Opts{CanTeleportFn: func() bool { return g.nv != nil && g.nv.HasTeleport() }, AndarielMinLevel: andarielFloor(g.e), FloorOff: task.TryActive, MaxRetreats: brMaxRetreats(g.e), Hooks: boss.Hooks{
 			BeforeAttack: func(ctx context.Context, _ boss.View, _ boss.Mon) error { return g.f.Buff(ctx) },
 		}}},
 		Ops: objectAdapter{e: g.e, nv: g.nv},

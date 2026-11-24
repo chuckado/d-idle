@@ -7,7 +7,13 @@ type ActionView struct {
 	Disabled bool   `json:"disabled,omitempty"`
 	Confirm  bool   `json:"confirm,omitempty"` // a stop asks once
 	Why      string `json:"why,omitempty"`     // why the button is disabled
+	// ConfirmLabel is the second-tap text of a confirm button ("" = the Stop wording); Risk is the line the confirm states.
+	ConfirmLabel string `json:"confirmLabel,omitempty"`
+	Risk         string `json:"risk,omitempty"`
 }
+
+// TryRisk is what the confirm of the try-anyway button says (ADR 0030, amended 2026-11-24).
+const TryRisk = "The hero is not ready for this: it may die or lose gold and gear. Only the readiness checks are skipped; potions, retreat and town portals still work. One attempt."
 
 // chunkAction is the single source of what a row offers. The hand-in case that bit the player (2026-11-21): a chunk that
 // reads awaiting_handin with no accepted record (the game counts the field work done, case C5) has no `awaiting` object in the view, so
@@ -24,6 +30,11 @@ func chunkAction(st State, off *OfferView, run *Run, reason *ReasonView, paused 
 		return &ActionView{Verb: "cancel", Label: "Stop", Confirm: true}
 	case Blocked:
 		return &ActionView{Verb: "retry", Label: "Try again"}
+	case Available:
+		if paused {
+			return nil
+		}
+		return &ActionView{Verb: "try", Label: "Try anyway (risk)", Confirm: true, ConfirmLabel: "Really try?", Risk: TryRisk}
 	case Awaiting:
 		switch {
 		case reason != nil && reason.Code == CodeHandInReady:
