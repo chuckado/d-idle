@@ -249,6 +249,7 @@ type VaultEquipper interface {
 	Gate(ctx context.Context) (ok bool, code, why string)
 	Preview(id string) (view any, found bool)
 	Enqueue(ctx context.Context, id, slot string, now bool) VaultKeepResult
+	EnqueueSet(ctx context.Context, ids []string, now bool) []VaultKeepResult // "Wear set": many ids, one confirm
 	Cancel(id string) VaultKeepResult
 }
 
@@ -1368,8 +1369,12 @@ func (a *VaultAPI) equip(w http.ResponseWriter, r *http.Request, d *VaultDesk, r
 		writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "this bot cannot equip from the vault"})
 		return
 	}
-	if len(b.IDs) != 1 {
-		writeJSON(w, http.StatusBadRequest, policyReply{Code: "ids", Error: "send exactly one id"})
+	if len(b.IDs) == 0 || len(b.IDs) > 1 && route == VaultEquipCancel || len(b.IDs) > maxEquipSet {
+		writeJSON(w, http.StatusBadRequest, policyReply{Code: "ids", Error: "send one id, or up to 12 for a set"})
+		return
+	}
+	if len(b.IDs) > 1 {
+		a.equipSet(w, r, d, b)
 		return
 	}
 	var res VaultKeepResult
@@ -1395,6 +1400,36 @@ func (a *VaultAPI) equip(w http.ResponseWriter, r *http.Request, d *VaultDesk, r
 		rep.Done = append(rep.Done, res.ID)
 	default:
 		rep.Failed = append(rep.Failed, vaultFail{ID: res.ID, Code: res.Code, Error: res.Why})
+	}
+	rep.OK = len(rep.Failed) == 0
+	code := 200
+	if len(rep.Done) == 0 {
+		code = http.StatusConflict
+	}
+	writeJSON(w, code, rep)
+}
+
+// maxEquipSet is the most pieces one Wear set takes (a full body: ten slots, two spare weapons).
+const maxEquipSet = 12
+
+// equipSet is "Wear set": every id is ordered in one request; the reply lists each piece as done or failed with its own
+// reason, so the page can say which pieces will be worn and which stay in the vault.
+func (a *VaultAPI) equipSet(w http.ResponseWriter, r *http.Request, d *VaultDesk, b *vaultBody) {
+	if ok, code, why := d.Equip.Gate(r.Context()); !ok {
+		writeJSON(w, http.StatusConflict, policyReply{Code: code, Error: why})
+		return
+	}
+	rep := vaultReply{Done: []string{}}
+	for _, res := range d.Equip.EnqueueSet(r.Context(), b.IDs, b.Now) {
+		switch {
+		case res.OK && res.Already:
+			rep.Already = append(rep.Already, res.ID)
+			rep.Done = append(rep.Done, res.ID)
+		case res.OK:
+			rep.Done = append(rep.Done, res.ID)
+		default:
+			rep.Failed = append(rep.Failed, vaultFail{ID: res.ID, Code: res.Code, Error: res.Why})
+		}
 	}
 	rep.OK = len(rep.Failed) == 0
 	code := 200

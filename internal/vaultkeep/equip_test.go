@@ -547,3 +547,67 @@ func TestEquipOverCapacityWithStashRoomIsAccepted(t *testing.T) {
 		t.Fatalf("%+v", res)
 	}
 }
+
+// Wear set: ten pieces, one confirm. The first piece per slot wins, the rest are refused with a reason and never leave the
+// vault; the rings take both fingers; nothing piles up unworn in the backpack. MUST FAIL if a loser is withdrawn.
+func TestEquipSetTenPieces(t *testing.T) {
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			r, h := equipRig(t, class)
+			codes := []string{"cap", "cap", "cap", "wsp", "wsp", "rin", "rin", "rin", "cha", "cha"}
+			var ids []string
+			for i, c := range codes {
+				ids = append(ids, r.addID(i+1, c))
+			}
+			res := r.k.EquipSet(context.Background(), ids, false)
+			ok := 0
+			for i, x := range res {
+				if x.OK {
+					ok++
+				} else if x.Why == "" || x.Code == "" {
+					t.Fatalf("piece %d refused without a reason: %+v", i, x)
+				}
+			}
+			if ok != 4 { // one helm, one weapon, two rings
+				t.Fatalf("%d pieces ordered, want 4: %+v", ok, res)
+			}
+			r.run()
+			for _, slot := range []string{"head", "rhand", "rring", "lring"} {
+				if h.wornIn(slot) == 0 {
+					t.Fatalf("%s empty after the set", slot)
+				}
+			}
+			if r.carried(d2dctl.FakePack) != 0 {
+				t.Fatalf("%d items piled up in the backpack", r.carried(d2dctl.FakePack))
+			}
+			left := 0
+			for _, id := range ids {
+				if r.state(id).State == vault.Recorded {
+					left++
+				}
+			}
+			if left != 6 {
+				t.Fatalf("%d records still in the vault, want the 6 refused pieces", left)
+			}
+		})
+	}
+}
+
+// A piece the hero cannot wear after the take-out goes back into the vault, not into the backpack.
+func TestEquipRefusedPieceGoesBackToTheVault(t *testing.T) {
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			r, h := equipRig(t, class)
+			id := r.addID(1, "cap")
+			r.order(id, "")
+			h.failWear = errors.New("needs 61 strength (you have 30)")
+			lines := r.run()
+			if o := r.k.EquipOrderOf(id); o.State != EqFailed {
+				t.Fatalf("%+v", o)
+			}
+			if r.carried(d2dctl.FakePack) != 0 {
+				t.Fatalf("the refused item stays in the backpack: %v", lines)
+			}
+		})
+	}
+}

@@ -101,6 +101,10 @@
   "equipUnid": "Unidentified: it can be worn as it is (the affixes apply unseen); wearing does not reveal it.",
   "equipIdFirst": "Identify first ({cost} gold)",
   "equipWaitField": "The hero is in the field: it wears this in town. Tap Do it now to go home at the next safe moment.",
+  "wearSet": "Wear set",
+  "wearSetSel": "Wear set ({n})",
+  "wearSetMax": "A set is two to twelve pieces. The first piece for a slot is worn; the others stay in the vault and the reply says why.",
+  "okEquipSet": "Wearing {n} pieces in this town stop. Pieces for a slot that is taken stay in the vault.",
   "equipNote": "Only in town, one town visit. The item you replace goes back into the vault, the slot stays yours until you change it. Charms and belt or backpack items are not equipped here.",
   "equipSent": "Equip queued",
   "equipStates": {

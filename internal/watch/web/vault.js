@@ -113,10 +113,12 @@ export function mountVault(d) {
   const selAll = btn(T.selectAll, { key: 'select-all', variant: 'ghost' });
   const pinB = btn(T.pin, { key: 'pin' }), unpinB = btn(T.unpin, { key: 'unpin' }), discB = btn(T.discard, { key: 'discard', variant: 'danger' });
   const keepB = btn(T.keep, { key: 'keep' });
+  const wearB = btn(T.wearSet, { key: 'wear-set' }); // Wear set: every selected piece, one confirm
+
   const revealB = btn(T.reveal, { key: 'reveal' }), sellB = btn(T.sell, { key: 'sell' });
   const etherB = btn(T.revealEther, { key: 'reveal-ether' }); etherB.hidden = true;
   const goldB = btn('', { key: 'reveal-gold' }); goldB.hidden = true; // the one reveal button while only Gold is offered
-  const acts = el('div', 'vt-acts'); acts.append(keepB, revealB, etherB, goldB, sellB, pinB, unpinB, discB);
+  const acts = el('div', 'vt-acts'); acts.append(keepB, wearB, revealB, etherB, goldB, sellB, pinB, unpinB, discB);
   // a button with a muted second line (the cost): the label stays the button's name
   const setBtn = (b, label, sub) => { b.replaceChildren(el('span', 'vt-b-label', label), ...(sub ? [el('small', 'vt-sub', sub)] : [])); };
   const actWhys = el('div', 'vt-whys');
@@ -361,6 +363,8 @@ export function mountVault(d) {
     acts.hidden = !n;
     for (const b of [pinB, unpinB, discB]) { b.disabled = ro; }
     const k = S.view && S.view.keep;
+    const eq = S.view && S.view.equip;
+    wearB.hidden = !(eq && eq.enabled) || n < 2; wearB.textContent = fmt(T.wearSetSel, { n });
     keepB.textContent = fmt(T.keepSel, { n });
     keepB.disabled = ro || !k;
     why(keepB, ro ? T.offWhy : !k ? T.keepNote : (!k.enabled && k.why ? k.why : ''), actWhys, T.keep);
@@ -836,7 +840,7 @@ export function mountVault(d) {
   selAll.addEventListener('click', () => { S.sel.all(order()); drawBar(); drawList(); });
 
   // ---- presses ----
-  const REAL = /\/(keep|reveal|sell|cancel)$/;
+  const REAL = /\/(keep|reveal|sell|cancel|equip)$/;
   const CHUNK = 150; // the answer body is capped at 4 KiB: the server takes this many ids at a time
   async function act(route, ids, confirm, opts) {
     let j = null;
@@ -859,7 +863,7 @@ export function mountVault(d) {
     if (!j) { setMsg('bad', T.noAnswer); await reload(true); return false; }
     const isKeep = REAL.test(route); // the queue routes name the real cause (the server's sentence)
     const now = opts && opts.now;
-    const word = route.endsWith('/pin') ? T.okPin : route.endsWith('/unpin') ? T.okUnpin : route.endsWith('/keep') ? (now ? T.okKeepNow : T.okKeep)
+    const word = route.endsWith('/pin') ? T.okPin : route.endsWith('/unpin') ? T.okUnpin : route.endsWith('/equip') ? T.okEquipSet : route.endsWith('/keep') ? (now ? T.okKeepNow : T.okKeep)
       : route.endsWith('/reveal') ? (opts && opts.ether ? T.okRevealEther : now ? T.okRevealNow : T.okReveal) : route.endsWith('/sell') ? (now ? T.okSellNow : T.okSell) : route.endsWith('/cancel') ? T.okCancel : T.okDiscard;
     if (sales.length) { // the instant sale: what was paid and what stayed, in the server's words
       const gold = sales.reduce((a, x) => a + (x.state === 'done' ? x.gold : 0), 0), last = sales[sales.length - 1];
@@ -992,6 +996,7 @@ export function mountVault(d) {
   pinB.addEventListener('click', () => { if (S.sel.size) act1('/api/vault/pin', S.sel.ids()); });
   unpinB.addEventListener('click', () => { if (S.sel.size) act1('/api/vault/unpin', S.sel.ids()); });
   discB.addEventListener('click', () => { if (S.sel.size) openDiscard(S.sel.ids(), discB); });
+  wearB.addEventListener('click', () => { if (S.sel.size > 1 && S.sel.size <= 12) act('/api/vault/equip', S.sel.ids(), false, { now: true }); else setMsg('bad', T.wearSetMax); });
   keepB.addEventListener('click', () => { if (S.sel.size && !keepB.disabled) keepAct(S.sel.ids(), false); });
   revealB.addEventListener('click', () => {
     if (!S.sel.size || revealB.disabled) return;
