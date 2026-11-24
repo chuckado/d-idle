@@ -473,7 +473,6 @@
 | stage2c | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | necrosteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`tools/provingground/scenarios/stepgrounds_gen.json` | - |
 | redsteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/necro_test.go` | - |
-| toolstrade42 | proposed | - | `internal/questboard/sm.go`<br>`internal/questboard/exec_sm.go`<br>`internal/questboard/exec_sm_test.go`<br>`internal/task/gate.go`<br>`internal/task/route_test.go` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
