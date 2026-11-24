@@ -476,6 +476,7 @@
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
 | toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
+| toolstrade49 | proposed | - | `internal/env/tuning_boss.go`<br>`internal/env/tuning_route.go`<br>`internal/plandata/boss_levels.go`<br>`internal/plandata/boss_levels_test.go`<br>`internal/plandata/runs.json`<br>`docs/plan/data/runs.json`<br>`data/questboard/act1.json`<br>`internal/task/campaign.go`<br>`internal/task/campsim_floors_test.go`<br>`internal/task/campsim_test.go`<br>`internal/task/floors_test.go`<br>`internal/task/task_test.go`<br>`internal/task/andariel_test.go`<br>`internal/bot/beltfill_test.go`<br>`internal/bot/routeguard_test.go`<br>`internal/campaign/campaign_test.go`<br>`internal/levelplan/levelplan_test.go`<br>`docs/knobs.md`<br>`docs/andarielgate.md`<br>`docs/levelplan3.md`<br>`docs/probes/andariel-gate-recalibration-2026-11-24.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
@@ -504,6 +505,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 9b3c1cc83 11-24 13:49 `Merge agent/toolstrade49: Merge branch 'main' into toolstrade49` (toolstrade49)
+- a2dfb14b3 11-24 13:48 `Merge branch 'main' into toolstrade49` (-)
+- 8ba89828a 11-24 13:36 `Merge remote-tracking branch 'origin/main' into agent/toolstrade49` (-)
 - fdd3c7f2a 11-24 13:24 `Merge agent/toolstrade48: Merge branch 'main' into toolstrade48` (toolstrade48)
 - a8444f3ed 11-24 13:23 `Merge branch 'main' into toolstrade48` (-)
 - 6bd3f047e 11-24 13:13 `Merge agent/toolstrade47: toolstrade47: lab hop scenarios for the Andariel route (Cathedral to Catacombs 4)` (toolstrade47)
@@ -511,7 +515,4 @@
 - 32d1e42ab 11-24 12:20 `Merge agent/qd23: Merge origin/main` (qd23)
 - c105ff564 11-24 12:17 `Merge origin/main` (-)
 - dc87e85ef 11-24 12:12 `Merge origin/main` (-)
-- f430a8993 11-24 12:07 `Merge agent/toolstrade45: Merge branch 'main' into toolstrade45` (toolstrade45)
-- 85b0e4921 11-24 12:06 `Merge branch 'main' into toolstrade45` (-)
-- db0144d14 11-24 11:58 `Merge agent/pipefix2: Merge branch 'main' into pipefix2` (pipefix2)
 <!-- statusgen:end -->
