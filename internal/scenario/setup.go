@@ -165,6 +165,13 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		su.Field = true
 		tags["position"] = true
 	}
+	if p.Warp != nil {
+		if p.Start != StartField {
+			return Setup{}, fmt.Errorf("scenario %s: pre.warp needs start field", s.ID)
+		}
+		add(fmt.Sprintf("hero position: cell %d,%d", p.Warp.X, p.Warp.Y), fmt.Sprintf("debug warp %d %d", p.Warp.X, p.Warp.Y))
+		tags["position"] = true
+	}
 	for _, sp := range p.Spawn {
 		if p.Start != StartField {
 			return Setup{}, fmt.Errorf("scenario %s: pre.spawn needs start field", s.ID)

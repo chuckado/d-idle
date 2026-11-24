@@ -262,7 +262,9 @@
     "enter": "Barracks"
    },
    "also": [
-    "step.act1.caster_belt.restock.necro"
+    "step.act1.caster_belt.restock.necro",
+    "step.act1.caster_loop.barracks.necro",
+    "step.act1.plan_overlap.necro"
    ]
   },
   {
@@ -273,7 +275,8 @@
     "step.act1.smith.malus_pickup.sorc",
     "step.act1.smith.stand_click_pickup.control",
     "step.act1.smith.stand_click_pickup.necro",
-    "step.act1.smith.stand_click_afar.necro"
+    "step.act1.smith.stand_click_afar.necro",
+    "step.act1.smith.room_stand.necro"
    ]
   },
   {
