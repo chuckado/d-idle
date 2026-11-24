@@ -121,6 +121,10 @@ type Pre struct {
 	Vault *VaultSeed `json:"vault_records,omitempty"`
 	// Spawn puts monsters beside the hero after the field warp (`debug spawn`, SETUP; field start only, the run is CHEATED).
 	Spawn []Spawn `json:"spawn,omitempty"`
+	// Warp moves the hero to a cell of the level right after the field warp, before spawns and objects (`debug warp x y`, tile
+	// cells of 5 subtiles; SETUP, field start only, the run is CHEATED). The second hero start of a level: the arrival point of a
+	// walked-in hero is not the point `debug goto` puts it at.
+	Warp *Cell `json:"warp,omitempty"`
 	// Objects puts level objects down after the field warp (`debug object add`, devp25 stepverbs; SETUP, field start only).
 	Objects []ObjectAdd `json:"objects,omitempty"`
 	// Stats are raw `debug stat <id> <value>` writes after the level (stat ids of stats.txt, values as the game stores them:
@@ -141,6 +145,12 @@ type Spawn struct {
 }
 
 // ObjectAdd is one `debug object add <class> [x y]`: an objects.txt id, at the hero (X and Y 0) or at that cell.
+// Cell is a position in tile cells (5 subtiles).
+type Cell struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+}
+
 type ObjectAdd struct {
 	Class int `json:"class"`
 	X     int `json:"x,omitempty"`

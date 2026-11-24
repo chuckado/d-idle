@@ -358,5 +358,23 @@
   "run": "20261123-221628",
   "tag": "V",
   "note": "Necromancer 11 from a town start: 12 virtual minutes without the town-trip loop: the loop of run 210945-459f needs the Barracks arrival crowd; this step does not reproduce it (U which part is missing)"
+ },
+ "step.act1.smith.room_stand.necro": {
+  "verdict": "RED",
+  "run": "20261123-223600",
+  "tag": "V",
+  "note": "Necromancer 11 devp26, field start in the Barracks warped to cell (6,11): the chunk starts 24 s late, the level plan walks the hero out (Barracks, Outer Cloister, Monastery Gate) and `to-barracks` parks on 'left level 26 for 27 but ended in 7': the plan overlap, before any stand click (toolstrade40 'plan holds off' should flip it)"
+ },
+ "step.act1.caster_loop.barracks.necro": {
+  "verdict": "GREEN",
+  "run": "20261123-223600",
+  "tag": "V",
+  "note": "Necromancer 11 devp26, warped to the arrival cell (26,83): at most 24 area changes in 20 virtual minutes: the town loop of run 210945-459f is NOT reproduced here (U which condition is missing: the loop needed the Smith dead and the stand step skipped)"
+ },
+ "step.act1.plan_overlap.necro": {
+  "verdict": "GREEN",
+  "run": "20261123-223600",
+  "tag": "V",
+  "note": "Necromancer 11 devp26, start in the Outer Cloister with the chunk accepted: Entered Barracks, no 'ended in 26': the overlap needs the hero to start inside the Barracks (see room_stand)"
  }
 }

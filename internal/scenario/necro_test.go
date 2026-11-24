@@ -54,3 +54,23 @@ func TestMinionAndCastAssertions(t *testing.T) {
 		t.Error("hero_casts_at_least needs a skill name")
 	}
 }
+
+func TestWarpComesBeforeSpawnAndObjects(t *testing.T) {
+	s := Scenario{ID: "x", Pre: Pre{Level: 20, Start: StartField, Area: 28, Warp: &Cell{X: 6, Y: 11}, Spawn: []Spawn{{Monster: "fallen1", N: 2}}, Objects: []ObjectAdd{{Class: 108}}}}
+	su, err := BuildSetup(s, "Necromancer", 11)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var lines []string
+	for _, v := range su.Verbs {
+		lines = append(lines, v.Line)
+	}
+	all := strings.Join(lines, "|")
+	if !strings.Contains(all, "debug goto 28|debug warp 6 11|debug spawn fallen1 2|debug object add 108") {
+		t.Fatalf("warp after the goto, before spawns and objects: %s", all)
+	}
+	s.Pre.Start = ""
+	if _, err := BuildSetup(s, "Paladin", 11); err == nil {
+		t.Fatal("pre.warp without a field start must be an error")
+	}
+}
