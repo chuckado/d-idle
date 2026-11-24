@@ -2215,7 +2215,8 @@
      "nav.warpRead": 1,
      "nav.fullGrid": 1,
      "quests.boardSM": 1,
-     "town.plan": 1
+     "town.plan": 1,
+     "quests.layoutRead": 1
     },
     "driver": "board-taps",
     "tap_chunks": [
@@ -2893,7 +2894,8 @@
      "nav.warpRead": 1,
      "nav.fullGrid": 1,
      "quests.boardSM": 1,
-     "town.plan": 1
+     "town.plan": 1,
+     "quests.layoutRead": 1
     },
     "driver": "board-taps",
     "tap_chunks": [
