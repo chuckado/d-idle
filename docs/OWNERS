@@ -126,6 +126,7 @@ docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-minutes.jsonl.gz  gaterun  gat
 docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-extras.jsonl.gz  gaterun  gate2multi-20261107-1811-g2h
 
 # BEGIN GENERATED OWNERS (tools/sharedgen/sharedgen.py from the owns: keys of open tasks; do not edit between the markers)
+AGENTS.md  credit-runner  pipefix2
 GLOSSARY.md  credit-runner  fabledecisions2
 backlog/merge-lines/decomp34.txt  credit-runner  decomp34
 cmd/bossrun/adapter.go  pro-runner  levelplan3
@@ -359,6 +360,7 @@ cmd/d2bot/vaultwire.go  credit-runner  vaultv4
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2dview  credit-runner  videofeed2
 cmd/d2dview  credit-runner  videofeed4
+cmd/d2dview/  credit-runner  pipefix2
 cmd/d2firsthour/  live-agent  firsthour
 cmd/d2scenario  credit-runner  boardorder
 cmd/d2scenario  credit-runner  bsm1
@@ -430,6 +432,7 @@ deploy/nas/imgbuild.sh  credit-runner  buildhosts3
 docs/OWNERS  credit-runner  uitoast
 docs/actbot.md  credit-runner  cain45
 docs/adr/  credit-runner  fabledecisions2
+docs/adr/  credit-runner  pipefix2
 docs/adr/0014-memory-writes-allowed-no-crutch.md  credit-runner  vaultpay
 docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md  credit-runner  adrfable
 docs/adr/0020-proving-ground-and-stat-skill-agency.md  credit-runner  adrfable
@@ -446,6 +449,7 @@ docs/autoalloc.md  credit-runner  allocfix
 docs/autoalloc.md  credit-runner  allochandoff
 docs/away-drill.md  live-agent  awaydrill
 docs/backlog-howto.md  credit-runner  dietrule
+docs/backlog-howto.md  credit-runner  pipefix2
 docs/beltfix.md  credit-runner  beltfix
 docs/bounce3.md  pro-runner  bounce3
 docs/campaign.md  credit-runner  campaign1
@@ -462,6 +466,7 @@ docs/d2d-determinism.md  credit-runner  pgclock
 docs/d2d-loot.md  credit-runner  groundquality
 docs/decisions.md  credit-runner  adrfable
 docs/decisions.md  credit-runner  fabledecisions2
+docs/decisions.md  credit-runner  pipefix2
 docs/decisions.md  credit-runner  vaultpay
 docs/design/bulk-identify-2026-11-18.md  credit-runner  bulkid-design
 docs/design/fable-review-2026-11-19  user  fablereview
@@ -693,6 +698,7 @@ docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed2
 docs/probes/viewer-brightness-2026-11-17.md  credit-runner  brightness
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/probes/warptrigger-2026-11-22.md  credit-runner  warptrigger
+docs/process/  credit-runner  pipefix2
 docs/process/barbarian-support.md  credit-runner  barb1
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
@@ -958,6 +964,7 @@ internal/bot  credit-runner  survsd
 internal/bot  credit-runner  town4
 internal/bot  credit-runner  wiring2
 internal/bot/  credit-runner  cainfix3
+internal/bot/  credit-runner  pipefix2
 internal/bot/areametrics.go  credit-runner  intake
 internal/bot/areaskip_test.go  credit-runner  passagebounce
 internal/bot/areaskip_test.go  credit-runner  staletarget
@@ -1271,6 +1278,7 @@ internal/d2dcombat/rig.go  credit-runner  verbs2
 internal/d2dctl  credit-runner  countess3
 internal/d2dctl  live-agent  k1layout
 internal/d2dctl/  credit-runner  dlv-reads
+internal/d2dctl/  credit-runner  pipefix2
 internal/d2dctl/fake/fake.go  credit-runner  verbs2
 internal/d2dctl/fake/fake.go  credit-runner  warptrigger
 internal/d2dctl/item_verbs.go  credit-runner  itemverbs2
@@ -1294,6 +1302,7 @@ internal/d2dctl/warptriggers_test.go  credit-runner  warptrigger
 internal/d2dctl/world_verbs.go  credit-runner  verbs2
 internal/d2dctl/world_verbs_test.go  credit-runner  verbs2
 internal/d2denv  live-agent  k1layout
+internal/d2denv/  credit-runner  pipefix2
 internal/d2denv/env.go  credit-runner  pgclock
 internal/d2denv/env.go  credit-runner  warptrigger
 internal/d2denv/reader.go  credit-runner  pgclock
@@ -1321,6 +1330,7 @@ internal/d2dsrc/source_test.go  credit-runner  cain45
 internal/d2dsrc/source_test.go  credit-runner  survB
 internal/d2dsrc/srv_test.go  credit-runner  botcpu
 internal/d2dsrc/srv_test.go  credit-runner  qdmatrix
+internal/d2dtown/  credit-runner  pipefix2
 internal/d2dtown/adapter.go  credit-runner  verbs2
 internal/d2dworld  credit-runner  countess3
 internal/d2dworld  live-agent  k1layout
@@ -1460,6 +1470,7 @@ internal/leveler/verbs_test.go  credit-runner  agencyp0
 internal/levelplan  pro-runner  levelplan3
 internal/loot  credit-runner  goldprio
 internal/loot  credit-runner  town6
+internal/loot/  credit-runner  pipefix2
 internal/loot/fixpickup_test.go  credit-runner  beltfix
 internal/loot/ignore_test.go  credit-runner  tidy
 internal/loot/loot.go  credit-runner  lootwireL4
@@ -1507,6 +1518,7 @@ internal/merc/wear.json  credit-runner  lootwireL2
 internal/merc/wear_test.go  credit-runner  lootwireL2
 internal/nav  credit-runner  mouthgate
 internal/nav/  credit-runner  dlv-move-tele
+internal/nav/  credit-runner  pipefix2
 internal/nav/act2hints.go  credit-runner  qdmatrix
 internal/nav/act2hints_test.go  credit-runner  qdmatrix
 internal/nav/covview.go  credit-runner  maptrail
@@ -1852,6 +1864,7 @@ internal/watch  credit-runner  cainfix
 internal/watch  credit-runner  identifyall
 internal/watch  credit-runner  sellall
 internal/watch  credit-runner  town9
+internal/watch/  credit-runner  pipefix2
 internal/watch/a11ycontrast_test.go  credit-runner  uia11y
 internal/watch/a11ypages_test.go  credit-runner  uia11y
 internal/watch/areamap_test.go  credit-runner  uis6
@@ -2466,6 +2479,7 @@ tools/ab/prep  credit-runner  survtune
 tools/bounce3  pro-runner  bounce3
 tools/capgen/  credit-runner  dlv-data
 tools/ci/  credit-runner  dlv-cleanup
+tools/ci/  credit-runner  pipefix2
 tools/connprobe  credit-runner  viewerconns
 tools/desktopscroll/vault.mjs  credit-runner  vaultclean
 tools/dev-update-host.sh  credit-runner  buildhosts3
