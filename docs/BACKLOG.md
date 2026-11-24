@@ -1324,6 +1324,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/vaultperf: Merge branch 'main' into vaultperf (merged 2026-11-23) <!--sg:agent/vaultperf-->
 - agent/qd18: Merge branch 'main' into qdmatrix (merged 2026-11-23) <!--sg:agent/qd18-->
 - toolstrade39: bold dial pools k for unvisited zones (TASK-912, merged 2026-11-23, acceptance 2 of 2): Cellar rows are rejected by margin: the hero k sits at its clamp 3 and every zone without kills carries it whole, visited fields have k 1.5; xp never enters eligibility. Bold dial now pools the k of visited zones for unvisited ones (poolUnvisitedK). ... <!--sg:agent/toolstrade39-->
+- stage2c: stage 2b and 3 reruns with the Malus stand click, drill doc section 17 (TASK-913, merged 2026-11-23, acceptance 2 of 2): Docs only. Stage 2b (devp25, job 210945-459f): army kills the Smith, the stand click ends in 1 s (object never changed after 8 clicks), then a Barracks-town trip loop for 28 min (in-town healing threshold 4 against a caster belt that holds 2 to 3) until the ... <!--sg:agent/stage2c-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
