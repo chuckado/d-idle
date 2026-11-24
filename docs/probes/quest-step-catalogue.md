@@ -4,7 +4,7 @@
 
 Steps total 134: step scenario 50 (generated or hand-written), only a chunk-level scenario 59, MISSING 25.
 
-Verdicts: GREEN 32, RED 43, BLOCKED 33 (every MISSING step counts as BLOCKED), PENDING 26 (a scenario that was never run).
+Verdicts: GREEN 32, RED 46, BLOCKED 30 (every MISSING step counts as BLOCKED), PENDING 26 (a scenario that was never run).
 
 MISSING by cause: F2 1; F3 15; bot 9; (F<n> is a fork verb request, docs/probes/stepgrounds-fork-request.md; bot is a bot or scenario-format gap; data is missing data.)
 
@@ -66,9 +66,9 @@ MISSING by cause: F2 1; F3 15; bot 9; (F<n> is a fork verb request, docs/probes/
 | 2 | `summoner/kill_summoner/travel_arcane` | chunk: drill.act2.summoner | GREEN |  |
 | 2 | `summoner/kill_summoner/find_summoner` | chunk: drill.act2.summoner | GREEN |  |
 | 2 | `summoner/kill_summoner/kill_summoner` | step.act2.summoner.kill_summoner.kill_summoner | PENDING | debug spawn summoner works (V probe). |
-| 2 | `seven_tombs/duriel/travel_canyon` | chunk: drill.act2.duriel | BLOCKED |  |
-| 2 | `seven_tombs/duriel/find_tomb` | chunk: drill.act2.duriel | BLOCKED |  |
-| 2 | `seven_tombs/duriel/place_staff` | chunk: drill.act2.duriel | BLOCKED |  |
+| 2 | `seven_tombs/duriel/travel_canyon` | chunk: drill.act2.duriel | RED |  |
+| 2 | `seven_tombs/duriel/find_tomb` | chunk: drill.act2.duriel | RED |  |
+| 2 | `seven_tombs/duriel/place_staff` | chunk: drill.act2.duriel | RED |  |
 | 2 | `seven_tombs/duriel/kill_duriel` | step.act2.seven_tombs.duriel.kill_duriel | PENDING | debug spawn duriel works (V probe). |
 | 2 | `act2_done/sail_east/travel_harbor` | MISSING | BLOCKED | bot: the Act 2 to 3 hop needs Duriel done (matrix): a gen row with the act2 kit and the Seven Tombs word is possible once the Duriel word is known (U) [code area: data only, this file] |
 | 2 | `act2_done/sail_east/talk_meshif` | MISSING | BLOCKED | bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half) [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec] |

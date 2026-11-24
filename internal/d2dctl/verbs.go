@@ -149,6 +149,18 @@ func (c *Client) CmdInteract(ctx context.Context, index int) error {
 	return c.ok(ctx, "cmd interact %d", index)
 }
 
+// CmdHand puts a pack item on the cursor ("cmd hand <item id>", V devp28 doc card B: the d2d takes the Staff to the cursor
+// without a hover scan).
+func (c *Client) CmdHand(ctx context.Context, item uint32) error {
+	return c.ok(ctx, "cmd hand %d", item)
+}
+
+// CmdPlace puts the item on the cursor into the object with the preset index of "cmd interact" ("cmd place <index> <item
+// id>", V devp28: the Horadric Staff into the orifice, quest record 10 reads 0x2001).
+func (c *Client) CmdPlace(ctx context.Context, index int, item uint32) error {
+	return c.ok(ctx, "cmd place %d %d", index, item)
+}
+
 // PortalNPC is the Interact id d2d's client sends for a left click on town portal which (the first column of "debug
 // portals"): -2000 - which (V-d2d: apps/d2d/town/input.cpp sends Interact{hovered} for a hovered portal; the world's
 // Interact walks to it and use_portal moves the player to the twin once within 2 cells, world/travel.cpp).

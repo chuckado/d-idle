@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"d2lod-bot/internal/d2dsrc"
+	"d2lod-bot/internal/data"
 	"testing"
 	"time"
 
@@ -83,6 +85,43 @@ func TestStandThatNeverChangesIsRetryable(t *testing.T) {
 			err := o.Interact(context.Background(), "Malus stand")
 			if task.Classify(err) != task.KindNotFound || in.clicks != 8 {
 				t.Fatalf("err %v kind %v clicks %d", err, task.Classify(err), in.clicks)
+			}
+		})
+	}
+}
+
+// placerIn is a controller with the d2d's own placement verbs.
+type placerIn struct {
+	input.Controller
+	index int
+	item  uint32
+	calls int
+}
+
+func (p *placerIn) PlaceItem(index int, item uint32) error {
+	p.index, p.item = index, item
+	p.calls++
+	return nil
+}
+
+// On the d2d backend the Staff goes into the orifice through the controller's PlaceItem (V devp28: interact, hand, place), with
+// the object's preset index and the pack item's id: no hover scan, no real game input. Must fail with "needs the real game
+// input (hover scan)" without the branch. Two builds.
+func TestPlaceItemUsesTheD2DVerbs(t *testing.T) {
+	for _, cl := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		t.Run(cl.String(), func(t *testing.T) {
+			snap := &d2.Snapshot{Player: &d2.Player{Class: cl, Area: 66, X: 100, Y: 100},
+				Objects:   []d2.Unit{{Type: d2.TypeObject, Class: 152, ID: uint32(d2dsrc.NPCIDBase + 131), X: 100, Y: 100}},
+				Inventory: &d2.Inventory{Items: []d2.Unit{{Class: 1, ID: 77, Item: &d2.Item{Where: d2.ContInventory}}}}}
+			db := &data.DB{Items: []*data.ItemBase{{Code: "xxx"}, {Code: "hst"}}}
+			in := &placerIn{}
+			o := objectAdapter{e: &env.Env{Read: cainReader{snap: &snap}, Clock: cainClock{}, In: in, Data: db},
+				goUnit: func(context.Context, int, uint32) error { return nil }}
+			if err := o.placeItemOnce(context.Background(), 152, "hst"); err != nil {
+				t.Fatal(err)
+			}
+			if in.calls != 1 || in.index != 131 || in.item != 77 {
+				t.Fatalf("calls %d index %d item %d", in.calls, in.index, in.item)
 			}
 		})
 	}

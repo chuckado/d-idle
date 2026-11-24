@@ -84,10 +84,10 @@
   "note": "devp26; seams and class-only match"
  },
  "drill.act2.duriel": {
-  "verdict": "BLOCKED",
-  "run": "20261123-182059",
+  "verdict": "RED",
+  "run": "20261124-091152",
   "tag": "V",
-  "note": "Canyon reached; staff placement needs a hover-scan verb"
+  "note": "tomb scan runs; died in tomb 66; orifice unit not found"
  },
  "drill.act3.lam_esen": {
   "verdict": "RED",
@@ -127,9 +127,9 @@
  },
  "drill.act5.siege": {
   "verdict": "RED",
-  "run": "20261123-234349",
+  "run": "20261124-083449",
   "tag": "V",
-  "note": "Harrogath gate to Bloody Foothills not reachable"
+  "note": "leaves Harrogath through the gate; word 0x0008, reward bit not set"
  },
  "drill.act5.prison": {
   "verdict": "RED",
@@ -336,10 +336,10 @@
   "note": "altar class fixed (252); quest word 0x0008, hand-in open"
  },
  "drill.act3s.golden_bird": {
-  "verdict": "RED",
-  "run": "20261123-224713",
+  "verdict": "GREEN",
+  "run": "20261124-083449",
   "tag": "V",
-  "note": "chunk starts; Meshif absent from the lab Act 3 town npcs"
+  "note": "devp28, pre.rooms_up brings Meshif and Alkor up"
  },
  "step.act1.smith.stand_click_afar.necro": {
   "verdict": "RED",

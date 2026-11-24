@@ -495,6 +495,18 @@ func (c *Controller) Interact(t input.Target) error {
 	return unsupported(fmt.Sprintf("interact with unit type %d (a field object listed by d2dsrc has an id in the NPC range)", t.Type))
 }
 
+// PlaceItem puts the pack item on the field object with the preset index: open its panel, take the item, place it (the d2d
+// verbs need no hover scan; V devp28 doc card B on the Horadric Staff and the orifice).
+func (c *Controller) PlaceItem(index int, item uint32) error {
+	if err := c.InteractNPC(index); err != nil {
+		return err
+	}
+	if err := c.C.CmdHand(c.ctx(), item); err != nil {
+		return err
+	}
+	return c.C.CmdPlace(c.ctx(), index, item)
+}
+
 func (c *Controller) InteractNPC(index int) error {
 	if err := c.prime(); err != nil {
 		return err
