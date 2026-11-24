@@ -342,16 +342,16 @@
   "note": "not startable: Jade Figurine not in the pack (lab give of j34 unverified)"
  },
  "step.act1.smith.stand_click_afar.necro": {
-  "verdict": "GREEN",
-  "run": "20261123-220824",
+  "verdict": "RED",
+  "run": "20261123-225912",
   "tag": "V",
-  "note": "Necromancer 11 devp25: the stand 30 subtiles away with two Fallen in between: the first click run ends 'never changed after 8 clicks', the executor retry clicks the stand and the Malus is carried; the failure of the full chunk run (210945-459f) is not reproduced by this setup"
+  "note": "after toolstrade40 (#1249), devp26: Necromancer kills the Smith (1m48s) and the stand step still ends 'never changed after 8 clicks' (outcome skipped, no retry now); the loop guard works: 'to-barracks ran 12 times with nothing after it' parks the chunk after 12 repeats (about 30 s, was 28 minutes). It was GREEN on devp25 before (retry carried the Malus); U flake or a regression of the stand step. The stand's cell (95,212) is a guess (U)"
  },
  "step.act1.smith.stand_click_pickup.necro": {
   "verdict": "RED",
-  "run": "20261123-221628",
+  "run": "20261123-225912",
   "tag": "V",
-  "note": "Necromancer 11: the chunk starts late (start gate behind the army's fights), the level plan walks the hero out of the Barracks and `to-barracks` parks on 'left level 27 for 28 but ended in 26'; the stand is never reached (plan against queued chunk, stage1fix family)"
+  "note": "after toolstrade40: still no Malus click (same plan/loop shape; the plan hold-off did not flip it)"
  },
  "step.act1.caster_belt.restock.necro": {
   "verdict": "GREEN",
@@ -361,9 +361,9 @@
  },
  "step.act1.smith.room_stand.necro": {
   "verdict": "RED",
-  "run": "20261123-223600",
+  "run": "20261123-225912",
   "tag": "V",
-  "note": "Necromancer 11 devp26, field start in the Barracks warped to cell (6,11): the chunk starts 24 s late, the level plan walks the hero out (Barracks, Outer Cloister, Monastery Gate) and `to-barracks` parks on 'left level 26 for 27 but ended in 7': the plan overlap, before any stand click (toolstrade40 'plan holds off' should flip it)"
+  "note": "after toolstrade40: still parks at 23:02:34 on 'left level 26 for 27 but ended in 7' 25 s after the start: the plan walks the hero out before the chunk exists, so 'the plan holds off while a fresh chunk is queued behind a fight' does not apply (no chunk yet)"
  },
  "step.act1.caster_loop.barracks.necro": {
   "verdict": "GREEN",
