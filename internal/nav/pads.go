@@ -33,11 +33,19 @@ func (n *Navigator) usePad(level int, p input.Point) {
 	n.padsUsed[padKey{level, p.X, p.Y}] = true
 }
 
-// reachable reports whether the planner brings the hero to within padReach of p: a pad stands on cells the collision grid
-// may mark solid (V lab, level 74: one pad cell reads blocked), so the nearest walkable end of the path counts.
-func (n *Navigator) reachable(o *obs, p input.Point) bool {
-	res, err := n.plan(o.lm, o.pos, p, n.tune().ArriveTolerance, nil, 0)
-	return err == nil && len(res.wps) > 0 && dist(res.wps[len(res.wps)-1], p) <= padReach
+// padApproach is a point the planner reaches in full and that lies within padReach of the pad: the pad itself, else a cell
+// of the ring around it (V lab, level 74: a pad cell reads blocked, its neighbours belong to the platform).
+func (n *Navigator) padApproach(o *obs, p input.Point) (input.Point, bool) {
+	cands := []input.Point{p}
+	for _, d := range [][2]int{{4, 0}, {-4, 0}, {0, 4}, {0, -4}, {3, 3}, {-3, 3}, {3, -3}, {-3, -3}, {7, 0}, {-7, 0}, {0, 7}, {0, -7}} {
+		cands = append(cands, input.Point{X: p.X + d[0], Y: p.Y + d[1]})
+	}
+	for _, c := range cands {
+		if res, err := n.plan(o.lm, o.pos, c, n.tune().ArriveTolerance, nil, 0); err == nil && !res.partial && len(res.wps) > 0 && dist(res.wps[len(res.wps)-1], p) <= padReach {
+			return c, true
+		}
+	}
+	return input.Point{}, false
 }
 
 // hopPad walks to the nearest unused pad that can be walked to and stands on it until the hero jumps. It returns true after
@@ -50,9 +58,13 @@ func (n *Navigator) hopPad(ctx context.Context, o *obs, goal input.Point) bool {
 	// level 74 carries the pads), so the search reaches pads on platforms far from here.
 	seen := map[input.Point]bool{}
 	var pads []input.Point
+	near := map[input.Point]input.Point{} // pad to the point the walk goes to
 	add := func(p input.Point) {
-		if !seen[p] && !n.padsUsed[padKey{o.level, p.X, p.Y}] && n.reachable(o, p) {
-			pads = append(pads, p)
+		if !seen[p] && !n.padsUsed[padKey{o.level, p.X, p.Y}] {
+			if at, ok := n.padApproach(o, p); ok {
+				pads = append(pads, p)
+				near[p] = at
+			}
 		}
 		seen[p] = true
 	}
@@ -78,8 +90,9 @@ func (n *Navigator) hopPad(ctx context.Context, o *obs, goal input.Point) bool {
 	pad := pads[0]
 	n.usePad(o.level, pad)
 	n.padHops++
+	at := near[pad]
 	n.log.Info("nav teleport pad", "level", o.level, "pad", pad, "goal", goal, "hop", n.padHops, "others", len(pads)-1)
-	if err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return pad, 1.5, nil }, walkOpts{goal: &pad}); err != nil && dist(n.posNow(), pad) > padReach {
+	if err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return at, 1.5, nil }, walkOpts{goal: &at}); err != nil && dist(n.posNow(), pad) > padReach {
 		return false
 	}
 	end := n.clk.Now().Add(padWait)
