@@ -200,6 +200,7 @@ type trip struct {
 	repair     bool // the player's Repair now trip (repairtrip.go): phases, guards and the log of durability before and after
 	begun      bool // the request's trip was started (repairBegin)
 	repairTry  int  // chore rounds at the smith in this trip
+	vaultDone  bool // the vault keep and equip orders ran in this visit (stage 2)
 }
 
 // antidotes counts antidote potions in belt and pack (0 without a catalog).
@@ -648,6 +649,19 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 		}
 		return true
 	case 2:
+		// The player's kept and equipped vault items run here: the hero is home and the chores are done. Outside a trip
+		// the town is only ever left again at once, so an order waiting for "a quiet town" never ran (vault-equip probe).
+		if !t.vaultDone && snap != nil && snap.Player != nil && snap.Player.InTown() && r.d.VaultKeep != nil && r.d.VaultKeep.Pending() > 0 {
+			t.vaultDone = true
+			r.setWhy(WhyPlayerItems, "what", "vault keep")
+			r.do(ctx, c, StateResupplying, "Keeping vault items", sec(r.cfg.TownTimeoutSec), "vault keep", func(ctx context.Context) error {
+				for _, line := range r.d.VaultKeep.Run(ctx) {
+					r.e.Log.Info(line)
+				}
+				return ctx.Err()
+			})
+			return true
+		}
 		r.setState(StateResupplying, "Settling in town")
 		r.pause(ctx, time.Duration(r.e.Tune.Bot.PortalSettleMs)*time.Millisecond)
 		if t.returnTo != 0 {

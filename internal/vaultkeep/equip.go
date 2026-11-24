@@ -568,7 +568,7 @@ func (k *Keeper) equipOne(ctx context.Context, st *vault.Store, id string) strin
 	slot, err := k.Hand.Pick(unit, o.Slot)
 	if err != nil {
 		k.failOrder(id, "requirements", err.Error())
-		return fmt.Sprintf("equip: %s not worn: %v (it stays in your backpack)", o.Name, err)
+		return fmt.Sprintf("equip: %s not worn: %v (%s)", o.Name, err, k.sendBack(ctx, st, unit, o.Name))
 	}
 	off, err := k.Hand.Wear(ctx, unit, slot)
 	if err != nil {
@@ -576,7 +576,7 @@ func (k *Keeper) equipOne(ctx context.Context, st *vault.Store, id string) strin
 			return "" // try again next visit; the order stays
 		}
 		k.failOrder(id, "equip", err.Error())
-		return fmt.Sprintf("equip: %s not worn: %v (it stays in your backpack)", o.Name, err)
+		return fmt.Sprintf("equip: %s not worn: %v (%s)", o.Name, err, k.sendBack(ctx, st, unit, o.Name))
 	}
 	if k.Hand.WornUnit(slot) != unit { // read the equipment, do not trust the verb
 		k.failOrder(id, "verify", "the game did not show it worn after the equip")
@@ -668,4 +668,76 @@ func (k *Keeper) vaultBack(ctx context.Context, st *vault.Store, w Worn) string 
 		return "backpack"
 	}
 	return "vault"
+}
+
+// sendBack puts an item the order took out but could not wear back into the vault (a new live record, like a displaced
+// item), so a refused piece never piles up unworn in the backpack. When the vault cannot take it, it stays under the keep
+// mark. It returns the words for the order line.
+func (k *Keeper) sendBack(ctx context.Context, st *vault.Store, unit uint32, name string) string {
+	switch k.vaultBack(ctx, st, Worn{Unit: unit, Name: name}) {
+	case "vault":
+		return "back in the vault"
+	case "stash":
+		return "it went to the stash"
+	}
+	return "it stays in your backpack"
+}
+
+// slotRank orders the pieces of a set so that conflicts resolve the way a player dresses: armour and trinkets first, then
+// the shield, then the weapon (a two-hander that pushes the shield off is refused against a shield ordered with it), then
+// the rings.
+func slotRank(pv Preview) int {
+	rank := 1
+	for _, s := range pv.Slots {
+		if !s.Can {
+			continue
+		}
+		switch s.Slot {
+		case "rring", "lring":
+			return 4
+		case "rhand":
+			rank = 3
+		case "lhand":
+			if rank < 3 {
+				rank = 2
+			}
+		}
+	}
+	return rank
+}
+
+// EquipSet takes a whole set with one confirm: the pieces are ordered in slotRank order, each one through EquipEnqueue, so
+// every rule of the single order applies (one order per slot, requirements, a home for what comes off). A piece that loses
+// its slot to an earlier piece is refused with the reason and never leaves the vault; every id gets its own Result.
+func (k *Keeper) EquipSet(ctx context.Context, ids []string, wantNow bool) []Result {
+	st := k.store()
+	type piece struct {
+		id   string
+		rank int
+		pos  int
+	}
+	var ps []piece
+	for i, id := range ids {
+		rk := 1
+		if st != nil && k.Hand != nil {
+			if rec, ok := st.Get(id); ok {
+				rk = slotRank(k.Hand.Preview(rec))
+			}
+		}
+		ps = append(ps, piece{id, rk, i})
+	}
+	sort.SliceStable(ps, func(a, b int) bool { return ps[a].rank < ps[b].rank })
+	out := make([]Result, len(ids))
+	rings := 0
+	for _, p := range ps {
+		slot := SlotAuto
+		if p.rank == 4 { // the first ring takes the left finger, the second the right, a third has no place
+			if rings < 2 {
+				slot = []string{SlotLeft, SlotRight}[rings]
+			}
+			rings++
+		}
+		out[p.pos] = k.EquipEnqueue(ctx, p.id, slot, wantNow)
+	}
+	return out
 }

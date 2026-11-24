@@ -232,3 +232,18 @@ ok('equipPlan: ring gets left, right and auto; other items one button; states', 
 });
 
 console.log('vault logic: ' + n + ' groups ok');
+
+ok('equipOneTap: empty slot fires at once (1 tap), a swap, a ring, a refusal and an active order keep the confirm (2 taps)', () => {
+  const empty = { enabled: true, wearable: true, slots: [{ slot: 'head', can: true, worn: null }] };
+  assert.equal(L.equipOneTap(empty), true); assert.equal(L.equipTaps(empty), 1);
+  const swap = { enabled: true, wearable: true, slots: [{ slot: 'head', can: true, worn: { name: 'Cap' } }] };
+  assert.equal(L.equipOneTap(swap), false); assert.equal(L.equipTaps(swap), 2);
+  const ring = { enabled: true, wearable: true, slots: [{ slot: 'lring', side: 'left', can: true, worn: null }, { slot: 'rring', side: 'right', can: true, worn: null }] };
+  assert.equal(L.equipOneTap(ring), false);
+  const twohand = { enabled: true, wearable: true, slots: [{ slot: 'rhand', can: true, worn: null, note: 'shield comes off' }, { slot: 'lhand', can: false, why: 'x' }] };
+  assert.equal(L.equipOneTap(twohand), false); // the shield comes off: confirm
+  assert.equal(L.equipOneTap({ enabled: true, wearable: true, slots: [{ slot: 'head', can: false, why: 'needs level 30' }] }), false);
+  assert.equal(L.equipOneTap({ enabled: true, wearable: false, why: 'charm', slots: [] }), false);
+  assert.equal(L.equipOneTap(Object.assign({ order: { state: 'queued' } }, empty)), false);
+  assert.equal(L.equipOneTap(null), false);
+});

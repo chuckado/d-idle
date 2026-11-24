@@ -423,3 +423,15 @@ export function equipUpgradeWord(sv) {
   if (sv.upgrade === false) return 'worse';
   return '';
 }
+
+// equipOneTap says whether the Equip tap on an item may fire the order at once (no confirm sheet): the item is wearable,
+// the choice is not a ring side, and every slot it could take is empty, so nothing is swapped out. A swap or a ring keeps
+// the sheet as the one confirm. equipTaps counts the taps after the item is open: 1 (Equip) or 2 (Equip, confirm).
+export function equipOneTap(sh) {
+  const p = equipPlan(sh);
+  if (p.state !== 'ready' || p.ring) return false;
+  const auto = p.buttons.find((b) => b.slot === 'auto');
+  if (!auto || !auto.can) return false;
+  return (sh.slots || []).filter((x) => x.can).every((x) => !x.worn && !x.note); // a note is the two-hander pushing a shield off
+}
+export function equipTaps(sh) { return equipOneTap(sh) ? 1 : 2; }

@@ -353,3 +353,28 @@ func TestVaultKeepRunsInTownAndKeepNowWalksHome(t *testing.T) {
 		g.finish()
 	}
 }
+
+// A queued vault equip order runs inside the town trip (stage 2): outside a trip the hero never stands in town without
+// one, so the order waited for ever (the user's sandbox, 2026-11-24). Red before the stage-2 hook; Sorceress and Paladin.
+func TestVaultKeepRunsInsideTheTownTrip(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		g := newRig(t)
+		g.w.set(func(w *world) { w.class, w.area = class, 1 })
+		g.r.poll()
+		vk := &fakeVaultKeep{w: g.w, per: 2}
+		vk.n.Store(1)
+		g.r.d.VaultKeep = vk
+		g.r.loop.trip = &trip{plan: ChorePlan{Reason: "pack 85% full"}, returnTo: 2, stage: 2}
+		g.r.advanceTrip(context.Background(), g.r.latest(), control{})
+		if vk.runs.Load() != 1 {
+			t.Fatalf("%v: the vault order did not run in the trip's settle stage (runs %d)", class, vk.runs.Load())
+		}
+		if g.r.loop.trip == nil || g.r.loop.trip.stage != 2 {
+			t.Fatalf("%v: the trip moved on before settling", class)
+		}
+		g.r.advanceTrip(context.Background(), g.r.latest(), control{}) // second pass settles; the order does not run twice
+		if vk.runs.Load() != 1 {
+			t.Fatalf("%v: ran twice", class)
+		}
+	}
+}
