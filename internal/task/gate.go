@@ -194,7 +194,7 @@ var bossGates = map[string]BossGate{
 	// gate (U: the counts are judgment), not a level floor.
 	QTools:    {MinLevel: 8, Potions: 4, NeedTP: true, ManaPots: 2, Route: true, Barracks: true},
 	QTower:    {MinLevel: 14, Potions: 4, NeedTP: true, ManaPots: 2},
-	QAndariel: {MinLevel: env.DefaultAndarielMinLevel, Potions: minPotions, NeedTP: true, ManaPots: 3, Antidotes: 2, Andy: true, Route: true},
+	QAndariel: {MinLevel: env.DefaultAndarielMinLevel, Potions: minPotions, NeedTP: true, ManaPots: 3, Antidotes: 2, Andy: true, Route: true, Barracks: true},
 }
 
 // NotReady says why w may not start the boss quest q ("" = ready or no gate for q).

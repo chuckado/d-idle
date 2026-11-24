@@ -288,3 +288,34 @@ func TestSMReleaseKeepsOtherParks(t *testing.T) {
 		})
 	}
 }
+
+// V live 2026-11-24 (tools_of_the_trade/malus held at the Barracks gate): the stored hold_timeout park read "Still waiting
+// after 0 minutes: {hold}", the counters and the hold of the run were not carried. The park keeps the hold's code, the
+// readiness reason and the budget, in memory and over a restart. Must fail while the text is built from the bare code.
+func TestSMHoldTimeoutKeepsTheReadinessReason(t *testing.T) {
+	const why = "level 24 needed for the Barracks (clvl 20)"
+	for _, class := range smClasses {
+		t.Run(class, func(t *testing.T) {
+			r := newRigSM(t, class, 6, true)
+			now := smT0
+			r.x.o.Now = func() time.Time { return now }
+			if err := r.x.Accept(den, clr); err != nil {
+				t.Fatal(err)
+			}
+			d := r.next()
+			held := StepResult{StepHeld, why, "too_weak"}
+			r.x.Report(d, held)
+			now = now.Add(61 * time.Minute) // the training budget is 60 minutes
+			r.x.Report(d, held)
+			check := func(when string) {
+				dd := r.next()
+				if dd.Kind != DecBlocked || !strings.Contains(dd.Why, why) || strings.Contains(dd.Why, "{") || !strings.Contains(dd.Why, "60 minutes") {
+					t.Fatalf("%s: %+v", when, dd)
+				}
+			}
+			check("parked")
+			r.restart()
+			check("after a restart")
+		})
+	}
+}

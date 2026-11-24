@@ -645,6 +645,7 @@ docs/probes/provingground-run-2026-11-19.md  credit-runner  pgexpand
 docs/probes/quest-drill-matrix-2026-11-23.md  credit-runner  qdmatrix
 docs/probes/quest-step-catalogue.md  credit-runner  necrosteps
 docs/probes/quest-step-catalogue.md  credit-runner  redsteps
+docs/probes/readiness-floors-2026-11-24.md  credit-runner  toolstrade43
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/search-for-cain-2026-11-17.md  credit-runner  cainfix
@@ -1599,6 +1600,7 @@ internal/power/  credit-runner  dlv-cleanup
 internal/power/  credit-runner  powerwire
 internal/power/  credit-runner  survB
 internal/power/archetype.go  credit-runner  qdmatrix
+internal/power/floors_report_test.go  credit-runner  toolstrade43
 internal/power/margin.go  credit-runner  resistorder
 internal/power/profiles.json  credit-runner  agencyp0
 internal/power/skilldamage_test.go  credit-runner  agencyp0

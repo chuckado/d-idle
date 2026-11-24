@@ -69,6 +69,12 @@ type Run struct {
 	// release gets (additive in plan file v1: old files read both as zero).
 	Release             string `json:"release,omitempty"`
 	RetriesAfterRelease int    `json:"retries_after_release,omitempty"`
+	// Hold, HoldWhy and HoldMin keep what a hold_timeout park waited for: the hold's code, the producer's words (the
+	// readiness reason, "level 24 needed for the Barracks (clvl 20)") and the minutes it waited (additive: old files read
+	// them empty).
+	Hold    string `json:"hold,omitempty"`
+	HoldWhy string `json:"hold_why,omitempty"`
+	HoldMin int    `json:"hold_min,omitempty"`
 }
 
 // Latch marks a chunk as seen done (3.6). Tier only rises.
