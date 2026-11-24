@@ -471,7 +471,6 @@
 | toolstrade30 | proposed | - | `internal/env/tuning_route.go`<br>`internal/task/route.go`<br>`internal/task/world.go`<br>`internal/task/route_test.go`<br>`internal/bot/routeguard.go`<br>`docs/knobs.md`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | malus2 | proposed | - | `tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | toolstrade34 | proposed | - | `internal/task/act1.go`<br>`internal/bot/campsim_objects_test.go`<br>`internal/task/steps.go`<br>`internal/task/sim/sim.go`<br>`internal/task/gear_gate_test.go`<br>`internal/quest/dialog.go`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_layout_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
-| toolstrade35 | proposed | - | `internal/bot/task.go`<br>`internal/bot/task_test.go`<br>`internal/task/act1.go`<br>`internal/task/steps.go`<br>`internal/task/gear_gate_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
@@ -501,14 +500,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- aec58de72 11-23 19:16 `Merge agent/toolstrade37: Merge branch 'main' into toolstrade37` (toolstrade37)
+- d56ea0772 11-23 19:15 `Merge branch 'main' into toolstrade37` (-)
+- 0d5c40596 11-23 19:06 `Merge agent/stepgrounds: Merge branch 'main' into stepgrounds` (stepgrounds)
+- c8b6ab0e2 11-23 19:05 `Merge branch 'main' into stepgrounds` (-)
 - 851eb7237 11-23 18:56 `Merge agent/toolstrade35: Merge branch 'main' into toolstrade35` (toolstrade35)
 - 334329171 11-23 18:55 `Merge branch 'main' into toolstrade35` (-)
 - f21c9796f 11-23 18:50 `Merge agent/stepgrounds: Merge branch 'main' into stepgrounds` (stepgrounds)
 - af4f02e9d 11-23 18:48 `Merge branch 'main' into stepgrounds` (-)
 - dfa228ff2 11-23 18:37 `Merge agent/toolstrade34: Merge branch 'main' into toolstrade34` (toolstrade34)
 - 1b7fce688 11-23 18:36 `Merge branch 'main' into toolstrade34` (-)
-- 0877d4fb5 11-23 18:30 `Merge agent/stepgrounds: Merge branch 'main' into stepgrounds` (stepgrounds)
-- b8dc8f848 11-23 18:29 `Merge branch 'main' into stepgrounds` (-)
-- 2f43f54a7 11-23 18:04 `Merge agent/toolstrade33: Merge branch 'main' into toolstrade33` (toolstrade33)
-- fcc885326 11-23 18:02 `Merge branch 'main' into toolstrade33` (-)
 <!-- statusgen:end -->

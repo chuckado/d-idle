@@ -678,7 +678,6 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade27
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade29
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade30
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade34
-docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade35
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
 docs/probes/town-plan-scenarios.md  credit-runner  town1
@@ -1138,11 +1137,9 @@ internal/bot/task.go  credit-runner  quests3
 internal/bot/task.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  staletarget
 internal/bot/task.go  credit-runner  toolstrade25
-internal/bot/task.go  credit-runner  toolstrade35
 internal/bot/task.go  credit-runner  wpstep
 internal/bot/task_acts_test.go  credit-runner  cain5b
 internal/bot/task_test.go  credit-runner  toolstrade25
-internal/bot/task_test.go  credit-runner  toolstrade35
 internal/bot/vaultkeep.go  credit-runner  vaultv5
 internal/bot/waypoints.go  credit-runner  boardmoderace
 internal/bot/whyline.go  credit-runner  repairtrip
@@ -1733,7 +1730,6 @@ internal/task/act1.go  credit-runner  cainchain
 internal/task/act1.go  credit-runner  equipswap
 internal/task/act1.go  credit-runner  quests7b
 internal/task/act1.go  credit-runner  toolstrade34
-internal/task/act1.go  credit-runner  toolstrade35
 internal/task/act2.go  credit-runner  equipswap
 internal/task/act2.go  credit-runner  qdmatrix
 internal/task/act2.go  credit-runner  quests7b
@@ -1759,7 +1755,6 @@ internal/task/gate.go  credit-runner  toolstrade16
 internal/task/gate.go  credit-runner  toolstrade29
 internal/task/gate_hold_test.go  credit-runner  bsm7
 internal/task/gear_gate_test.go  credit-runner  toolstrade34
-internal/task/gear_gate_test.go  credit-runner  toolstrade35
 internal/task/guided.go  credit-runner  campaign1
 internal/task/guided_test.go  credit-runner  campaign1
 internal/task/guided_test.go  pro-runner  levelplan3
@@ -1774,7 +1769,6 @@ internal/task/route_test.go  credit-runner  toolstrade5
 internal/task/s7b_test.go  credit-runner  quests7b
 internal/task/sim/sim.go  credit-runner  toolstrade34
 internal/task/steps.go  credit-runner  toolstrade34
-internal/task/steps.go  credit-runner  toolstrade35
 internal/task/testdata  credit-runner  quests7b
 internal/task/testdata/plans/act1.txt  credit-runner  cain5b
 internal/task/timeoutpolicy_test.go  credit-runner  wpstep
