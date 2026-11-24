@@ -1593,7 +1593,7 @@
     ]
    },
    "budget": {
-    "virtual_min": 90
+    "virtual_min": 120
    },
    "matrix": {
     "classes": [
