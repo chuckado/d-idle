@@ -40,6 +40,8 @@ owns:
   - "docs/questboard.md"
   - "docs/adr/0030-operator-quest-control.md"
   - "docs/decisions.md"
+  - "internal/questboard/desk_action_test.go"
+  - "internal/watch/testdata/quests/"
 exclusive: []
 contracts: []
 result: "Built offline, not verified live: operator `d2bot ops quest start <quest> --try-anyway --why ...` and the viewer button Try anyway (risk) (POST /api/quests/<id>/try with confirm) start one Available chunk past its readiness refusal; Exec.AcceptTry keeps the override in memory (ends on park, death, finish, stop, restart); task.SetTry skips only the readiness words and floors (boss gates, Barracks, road, tower, Andariel hold, boss script floor); kit gates, guards and combat reactions untouched; audit path operator/try-anyway with the skipped refusal; same rate limits; refused in a measured run. ADR 0030 amended, decisions.md line."
