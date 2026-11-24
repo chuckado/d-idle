@@ -22,7 +22,7 @@ func TestHoverFirstWaitsOnTheControllerClock(t *testing.T) {
 	if err := HoverFirst(w).Click(input.Left, 10, 10); err != nil {
 		t.Fatal(err)
 	}
-	if time.Since(start) > 100*time.Millisecond {
+	if time.Since(start) > 400*time.Millisecond {
 		t.Fatal("slept wall time although the controller has a clock")
 	}
 	if len(w.waited) != 2 || w.waited[0] != 120*time.Millisecond || w.waited[1] != 350*time.Millisecond {

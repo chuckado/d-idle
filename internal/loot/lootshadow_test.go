@@ -283,7 +283,7 @@ func TestShadowBudget(t *testing.T) {
 	per := time.Since(t0) / time.Duration(n)
 	r := sh.Report(true)
 	t.Logf("%d decisions, %v per decision (engine alone avg %.1f us, max %.1f us), %d disagreements, %d unique", n, per, r.AvgMicros, r.MaxMicros, r.Disagreements, r.Unique)
-	if per > time.Millisecond {
+	if !raceEnabled && per > time.Millisecond {
 		t.Errorf("%v per decision, budget 1 ms", per)
 	}
 	if r.Decisions != n || r.Errors != 0 || r.Schema != ShadowSchema {

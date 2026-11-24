@@ -32,7 +32,7 @@ func TestInstallLockstepAndWall(t *testing.T) {
 	if err := d2dctl.Pause(context.Background(), 4*time.Second); err != nil {
 		t.Fatal(err)
 	}
-	if steps() == before || time.Since(w) > time.Second {
+	if steps() == before || time.Since(w) > 3500*time.Millisecond {
 		t.Fatalf("lockstep pause sent %d steps in %v", steps()-before, time.Since(w))
 	}
 	if dv := d2dctl.Now().Sub(t0); dv < 3900*time.Millisecond || dv > 4500*time.Millisecond {

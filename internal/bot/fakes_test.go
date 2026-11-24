@@ -21,16 +21,20 @@ import (
 
 // vclock is a virtual clock: Sleep advances time and yields briefly so goroutines interleave.
 type vclock struct {
-	mu  sync.Mutex
-	now time.Time
+	mu     sync.Mutex
+	now    time.Time
+	frozen bool // Sleep returns without advancing: a test proves "no waiting for time to pass" without a time bound
 }
 
 func newClock() *vclock { return &vclock{now: time.Date(2026, 10, 28, 12, 0, 0, 0, time.UTC)} }
 
 func (c *vclock) Now() time.Time { c.mu.Lock(); defer c.mu.Unlock(); return c.now }
+func (c *vclock) freeze()        { c.mu.Lock(); c.frozen = true; c.mu.Unlock() }
 func (c *vclock) Sleep(d time.Duration) {
 	c.mu.Lock()
-	c.now = c.now.Add(d)
+	if !c.frozen {
+		c.now = c.now.Add(d)
+	}
 	c.mu.Unlock()
 	time.Sleep(50 * time.Microsecond)
 }

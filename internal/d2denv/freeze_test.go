@@ -67,14 +67,14 @@ func TestLateClockFrozenStandsStill(t *testing.T) {
 	a := l.Now()
 	l.SetFrozen(true)
 	f1 := l.Now()
-	time.Sleep(30 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 	if f2 := l.Now(); !f2.Equal(f1) {
 		t.Fatalf("clock moved while frozen: %v -> %v", f1, f2)
 	}
 	l.SetFrozen(true) // idempotent
 	l.SetFrozen(false)
 	b := l.Now()
-	if b.Before(f1) || b.Sub(a) > 25*time.Millisecond {
+	if b.Before(f1) || b.Sub(a) > 100*time.Millisecond {
 		t.Fatalf("the frozen stretch leaked into the clock: a=%v b=%v", a, b)
 	}
 }

@@ -1,6 +1,6 @@
 # The second worker host for survival waves and Proving Ground
 
-> status: current (2026-11-20). The user allows the second worker for heavy d.idle work until 9 am EST on 2026-11-20 only; after that stop and clean up (section 6). It is also the user's desktop and runs the sandbox container `d2play-20261108` (hero, ports 8891 and 8892): never stop, restart or modify that container, its image, overlays, ports or data, never take screenshots of the desktop, never search from `/` or `/mnt`.
+> status: partly superseded 2026-11-24 ([ADR 0027](../adr/0027-proving-ground-gate-and-night-window.md) amended: per-package Go tests and builds at nice 19 are allowed on the second worker at any hour; this page's heavy-run rules stay the night window 23:00 to 07:00 EST). (2026-11-20). The user allows the second worker for heavy d.idle work until 9 am EST on 2026-11-20 only; after that stop and clean up (section 6). It is also the user's desktop and runs the sandbox container `d2play-20261108` (hero, ports 8891 and 8892): never stop, restart or modify that container, its image, overlays, ports or data, never take screenshots of the desktop, never search from `/` or `/mnt`.
 
 `W2` below is the ssh name of the second worker host (the user's desktop machine, the one `labrun hosts` lists with 16 cores and a GPU); `W2NAME` is its labrun name. Set both in your shell first.
 

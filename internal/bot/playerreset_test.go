@@ -142,24 +142,24 @@ func TestPlayerResetPatienceIsBounded(t *testing.T) {
 	}
 }
 
-// The press never waits: a running action is cancelled and the new game starts within a second of the (fake) clock, even
-// with a hostile in reach.
+// The press never waits: a running action is cancelled and the new game starts even with a hostile in reach. The fake clock
+// is frozen at the press, so the start provably did not wait for any time (the patience) to pass; no wall-clock bound.
 func TestPlayerResetStartsOnTheNextTick(t *testing.T) {
 	g := resetRig(t, d2.Sorceress, 2, true)
 	g.run()
 	g.r.Start(reach(10))
 	g.waitFor("exploring", func() bool { return g.w.count("explore") > 0 })
 	g.w.addMonster(7, 100, 2, 0)
+	g.clock.freeze()
 	pressed := g.clock.Now()
 	v := g.r.PlayerReset(false)
 	if v.State != ResetResetting || v.Reason != "leaving the game" {
 		t.Fatalf("press: %+v", v)
 	}
 	g.waitFor("new game", func() bool { return g.w.count("newgame normal") > 0 })
-	if d := g.clock.Now().Sub(pressed); d > time.Second {
-		t.Fatalf("the reset started %v after the press", d)
+	if d := g.clock.Now().Sub(pressed); d != 0 {
+		t.Fatalf("the clock moved %v", d)
 	}
-	t.Logf("start latency on the fake clock: %v", g.clock.Now().Sub(pressed))
 	g.finish()
 }
 

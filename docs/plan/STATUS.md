@@ -475,6 +475,7 @@
 | redsteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/necro_test.go` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
+| pipefix2 | proposed | - | `internal/bot/`<br>`internal/loot/`<br>`internal/nav/`<br>`internal/watch/`<br>`internal/d2dctl/`<br>`internal/d2denv/`<br>`internal/d2dtown/`<br>`cmd/d2dview/`<br>`tools/ci/`<br>`docs/process/`<br>`docs/adr/`<br>`docs/decisions.md`<br>`docs/backlog-howto.md`<br>`AGENTS.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
@@ -503,6 +504,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- db0144d14 11-24 11:58 `Merge agent/pipefix2: Merge branch 'main' into pipefix2` (pipefix2)
+- be96418b2 11-24 11:56 `Merge branch 'main' into pipefix2` (-)
 - d6c58e8e9 11-24 11:52 `Merge agent/pipefix1: Merge branch 'main' into pipefix1` (pipefix1)
 - 8fa8b4ccb 11-24 11:50 `Merge branch 'main' into pipefix1` (-)
 - 4a385bdb8 11-24 11:48 `Merge agent/fidbatch4: fidbatch: PR body edits from the second verifier, test_two_hands_blow issue draft` (fidbatch4)
@@ -511,6 +514,4 @@
 - 8634a7c62 11-24 11:32 `Merge agent/vaultcompare: vaultcompare: no !important (uilint)` (vaultcompare)
 - e8aad594d 11-24 11:27 `Merge main into agent/vaultcompare` (-)
 - 2b865551d 11-24 11:02 `Merge agent/pipelineaudit: pipeline audit 2026-11-24 (docs only)` (pipelineaudit)
-- c4e2d292b 11-24 11:01 `Merge branch 'main' into pipelineaudit` (-)
-- 1ac82ed9c 11-24 10:56 `Merge main into agent/vaultcompare` (-)
 <!-- statusgen:end -->
