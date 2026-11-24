@@ -192,3 +192,14 @@ func HealingCapacity(in Input, t Tuning) int {
 	}
 	return plan.capacity(PotionLife, in.Belt.Rows) + plan.capacity(PotionRejuv, in.Belt.Rows)
 }
+
+// ManaCapacity is how many mana potions the belt plan can hold (columns of that kind times the rows); 0 when the plan has
+// none or cannot be built. A kit minimum above it can never be met (V lab 2026-11-23: a Necromancer from clvl 31 has one
+// mana column, kitMinMP is 3, "mana potions 1/3" sent it home on every arrival).
+func ManaCapacity(in Input, t Tuning) int {
+	plan, err := SpecOf(t).PlanFor(in)
+	if err != nil {
+		return 0
+	}
+	return plan.capacity(PotionMana, in.Belt.Rows)
+}
