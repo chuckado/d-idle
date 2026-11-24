@@ -636,3 +636,45 @@ func TestExitToCrossesTenDoorsInARow(t *testing.T) {
 		})
 	}
 }
+
+// The gates of an unproven strip at several depths (a frontier): each segment is a gate of its own, the orientation comes
+// from the cells (wide along the edge), and a cell deeper than the edge pushes from the neighbour's edge so the push lands
+// inside the neighbour (live 2026-11-24, Inner Cloister to Cathedral: a push of 8 from a cell 2 rows inside ended on the wall).
+// Two neighbours, north and west, so neither axis is hard coded. Must fail with the push taken from the cell.
+func TestGatesFromAFrontierPushFromTheNeighboursEdge(t *testing.T) {
+	g := openField(3000, 3000, 200, 200)
+	l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: 200, H: 200}}
+	s := newSim(g, input.Point{X: 3100, Y: 3150}, l1)
+	n := s.navigator()
+	t.Run("north", func(t *testing.T) {
+		nb := d2map.Rect{X: 3000, Y: 2800, W: 200, H: 200} // the neighbour above: its bottom row is our top
+		adj := []d2map.Adjacent{{LevelNo: 2, Rect: nb, Contact: d2map.Rect{X: 3140, Y: 3000, W: 4, H: 1}}}
+		cells := []d2map.Point{{X: 3140, Y: 3000}, {X: 3141, Y: 3000}, {X: 3142, Y: 3000}, {X: 3050, Y: 3008}, {X: 3051, Y: 3008}, {X: 3052, Y: 3008}}
+		gates := n.gatesFromCells(s.levels[0].lm, 2, cells, adj)
+		if len(gates) != 2 {
+			t.Fatalf("%d gates, want a corridor gate and a deep gate: %+v", len(gates), gates)
+		}
+		for _, gt := range gates {
+			if gt.push.Y > nb.Bottom()-1 {
+				t.Errorf("gate %v pushes to %v: not inside the neighbour (its bottom row is %d)", gt.at, gt.push, nb.Bottom())
+			}
+			if gt.push.X != gt.at.X {
+				t.Errorf("gate %v pushes sideways to %v", gt.at, gt.push)
+			}
+		}
+	})
+	t.Run("west", func(t *testing.T) {
+		nb := d2map.Rect{X: 2800, Y: 3000, W: 200, H: 200} // the neighbour to the left: its right column is our left
+		adj := []d2map.Adjacent{{LevelNo: 3, Rect: nb, Contact: d2map.Rect{X: 3000, Y: 3100, W: 1, H: 4}}}
+		cells := []d2map.Point{{X: 3000, Y: 3100}, {X: 3000, Y: 3101}, {X: 3000, Y: 3102}, {X: 3008, Y: 3050}, {X: 3008, Y: 3051}, {X: 3008, Y: 3052}}
+		gates := n.gatesFromCells(s.levels[0].lm, 3, cells, adj)
+		if len(gates) != 2 {
+			t.Fatalf("%d gates: %+v", len(gates), gates)
+		}
+		for _, gt := range gates {
+			if gt.push.X > nb.Right()-1 || gt.push.Y != gt.at.Y {
+				t.Errorf("gate %v pushes to %v: not inside the western neighbour (its right column is %d)", gt.at, gt.push, nb.Right())
+			}
+		}
+	})
+}

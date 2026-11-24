@@ -628,12 +628,43 @@ func TestUnprovenStripLooksInwardPastAWallEdge(t *testing.T) {
 		}
 		g.SetBlock(wall, blocked)
 		across := func(side, sx, sy int) bool { return false } // nothing readable across
-		_, unproven, pending, _ := adjacent(own, self, all, linked, g, across)
+		_, unproven, pending, _, _ := adjacent(own, self, all, linked, g, across)
 		if pending != 1 || len(unproven) == 0 {
 			t.Fatalf("linked %v: pending %d, unproven %+v", linked, pending, unproven)
 		}
 		if y := unproven[0].Contact.Y; y < self.Y+2 || y > self.Y+4 {
 			t.Errorf("linked %v: the strip is on row %d, want the first open row (%d..%d)", linked, y-self.Y, 2, 4)
+		}
+	}
+}
+
+// A layout whose walkable cells start eight rows inside the edge and whose only gap in the wall is a narrow corridor (live
+// 2026-11-24 asked for a frontier, not one row): the strip is a list of segments, one per depth, so nav can try the corridor
+// and the far side separately. Must fail with the first row that has cells only (one segment).
+func TestUnprovenFrontierKeepsEveryDepth(t *testing.T) {
+	own := Placement{Level: 32, X: 0, Y: 34, W: 18, H: 20}
+	nb := Placement{Level: 33, X: -4, Y: 0, W: 28, H: 34}
+	all := []Placement{own, nb}
+	self := d2map.Rect{X: 1000, Y: 2000, W: 5 * own.W, H: 5 * own.H}
+	g := d2map.NewGrid()
+	g.SetBlock(self, make([]uint16, self.W*self.H))
+	wall := d2map.Rect{X: self.X, Y: self.Y, W: self.W, H: 8}
+	blocked := make([]uint16, wall.W*wall.H)
+	for i := range blocked {
+		blocked[i] = 1
+	}
+	g.SetBlock(wall, blocked)
+	corridor := d2map.Rect{X: self.X + 40, Y: self.Y, W: 4, H: 8} // a gap through the eight wall rows
+	g.SetBlock(corridor, make([]uint16, corridor.W*corridor.H))
+	across := func(side, sx, sy int) bool { return false }
+	for _, linked := range []map[int]bool{{33: true}, {}} {
+		_, unproven, pending, _, notes := adjacent(own, self, all, linked, g, across)
+		depths := map[int]int{}
+		for _, a := range unproven {
+			depths[a.Contact.Y-self.Y] += a.Contact.W
+		}
+		if pending != 1 || depths[0] != 4 || depths[8] != self.W-4 || len(notes) == 0 {
+			t.Errorf("linked %v: pending %d depths %v (want 4 cells at depth 0 and %d at depth 8) notes %v", linked, pending, depths, self.W-4, notes)
 		}
 	}
 }

@@ -144,7 +144,7 @@ func placeLinked(own Placement, places []Placement, near []Near) []Placement {
 // already linked (their collision answers "debug blocked" past the edge); pending counts abutting levels that are
 // not linked yet. isOpen decides per subtile position inside the level at the shared edge whether the cell across
 // can be walked (nil: trust the inside cell only).
-func adjacent(own Placement, self d2map.Rect, all []Placement, linked map[int]bool, grid *d2map.Grid, across func(side, sx, sy int) bool) (adj, unproven []d2map.Adjacent, pending, unlinked int) {
+func adjacent(own Placement, self d2map.Rect, all []Placement, linked map[int]bool, grid *d2map.Grid, across func(side, sx, sy int) bool) (adj, unproven []d2map.Adjacent, pending, unlinked int, notes []string) {
 	for _, a := range abut(own, all) {
 		unlinkedNb := linked != nil && !linked[a.p.Level]
 		nb := d2map.Rect{X: self.X + 5*(a.p.X-own.X), Y: self.Y + 5*(a.p.Y-own.Y), W: 5 * a.p.W, H: 5 * a.p.H}
@@ -165,6 +165,12 @@ func adjacent(own Placement, self d2map.Rect, all []Placement, linked map[int]bo
 		if !horizontal {
 			n = strip.H
 		}
+		at := func(i int) (int, int) {
+			if horizontal {
+				return strip.X + i, strip.Y
+			}
+			return strip.X, strip.Y + i
+		}
 		// scan appends the open runs of the strip to dst; with crossed false it trusts the inside cell only.
 		scan := func(dst *[]d2map.Adjacent, crossed bool) {
 			runStart := -1
@@ -182,12 +188,6 @@ func adjacent(own Placement, self d2map.Rect, all []Placement, linked map[int]bo
 				runStart = -1
 			}
 			const step = 5 // the probe grain: one tile; a gate is at least that wide
-			at := func(i int) (int, int) {
-				if horizontal {
-					return strip.X + i, strip.Y
-				}
-				return strip.X, strip.Y + i
-			}
 			tiles := map[int]bool{}
 			tileOpen := func(i int) bool {
 				if !crossed || across == nil {
@@ -214,27 +214,73 @@ func adjacent(own Placement, self d2map.Rect, all []Placement, linked map[int]bo
 			}
 			flush(n)
 		}
-		// scanInward keeps the walkable cells of the first row, within four rows of the edge, that has any: the level's own edge
-		// row can be wall (the Inner Cloister's north rows are, V lab devp27 2026-11-24).
+		// scanInward keeps the frontier of the strip: for every column (row) along the shared edge the walkable cell nearest to the
+		// edge within borderDepth cells, grouped into segments of equal depth. The level's own edge rows can be wall, and where
+		// the way out lies is not known before the neighbour is linked (the Inner Cloister's north rows are wall, V lab devp27 and
+		// live 2026-11-24: the first row with cells led to a dead end for 40 seconds). note says what was scanned.
 		scanInward := func(dst *[]d2map.Adjacent) {
-			orig := strip
-			defer func() { strip = orig }()
-			for d := 0; d < 5; d++ {
-				switch a.side {
-				case 0:
-					strip.Y = orig.Y - d
-				case 2:
-					strip.Y = orig.Y + d
-				case 1:
-					strip.X = orig.X + d
-				default:
-					strip.X = orig.X - d
+			depthOf := func(i int) int {
+				for d := 0; d < borderDepth; d++ {
+					sx, sy := at(i)
+					switch a.side {
+					case 0:
+						sy -= d
+					case 2:
+						sy += d
+					case 1:
+						sx += d
+					default:
+						sx -= d
+					}
+					if grid.Walkable(sx, sy) {
+						return d
+					}
 				}
-				before := len(*dst)
-				if scan(dst, false); len(*dst) > before {
+				return -1
+			}
+			segs, cols, minD, maxD := 0, 0, borderDepth, -1
+			start, startDepth := -1, -1
+			flush := func(end int) {
+				if start < 0 || segs >= maxBorderSegments {
+					start = -1
 					return
 				}
+				sx, sy := at(start)
+				c := d2map.Rect{X: sx, Y: sy, W: 1, H: 1}
+				switch a.side {
+				case 0:
+					c.Y -= startDepth
+				case 2:
+					c.Y += startDepth
+				case 1:
+					c.X += startDepth
+				default:
+					c.X -= startDepth
+				}
+				if horizontal {
+					c.W = end - start
+				} else {
+					c.H = end - start
+				}
+				*dst = append(*dst, d2map.Adjacent{LevelNo: a.p.Level, Rect: nb, Contact: c})
+				segs++
+				start = -1
 			}
+			for i := 0; i < n; i++ {
+				d := depthOf(i)
+				if d >= 0 {
+					cols++
+					minD, maxD = min(minD, d), max(maxD, d)
+				}
+				if d != startDepth || d < 0 {
+					flush(i)
+				}
+				if d >= 0 && start < 0 {
+					start, startDepth = i, d
+				}
+			}
+			flush(n)
+			notes = append(notes, fmt.Sprintf("level %d side %d: %d of %d columns walkable within %d rows (depth %d..%d), %d segments", a.p.Level, a.side, cols, n, borderDepth, max(minD, 0), maxD, segs))
 		}
 		if unlinkedNb {
 			// d2d links a neighbour only when the character is near its edge (V live 2026-11-24: Inner Cloister to the Cathedral,
@@ -257,5 +303,11 @@ func adjacent(own Placement, self d2map.Rect, all []Placement, linked map[int]bo
 			scanInward(&unproven)
 		}
 	}
-	return adj, unproven, pending, unlinked
+	return adj, unproven, pending, unlinked, notes
 }
+
+// borderDepth is how far inside the level the unproven strip looks for the way to a neighbour (cells), maxBorderSegments bounds the list.
+const (
+	borderDepth       = 12
+	maxBorderSegments = 40
+)

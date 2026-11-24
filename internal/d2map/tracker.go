@@ -28,8 +28,10 @@ type LevelMap struct {
 	// Unproven are the strips toward linked neighbours whose collision is not readable across yet: the inside cells are
 	// walkable, nothing proves the way through. Route and BorderCells ignore them; ExitTo walks there to make the border readable.
 	Unproven []Adjacent
-	Warps    []Point // Level.WarpX/Y, UNVERIFIED semantics
-	Rooms    []Room2 // static Room2 list
+	// BorderNote says what the unproven-strip scan saw (columns walkable within the depth, segments), for the log line of the crossing.
+	BorderNote string
+	Warps      []Point // Level.WarpX/Y, UNVERIFIED semantics
+	Rooms      []Room2 // static Room2 list
 	// RoomRows are the d2d level-generator rooms with a type (the "room" rows of debug presets): Pos is the room
 	// origin plus half a cell. Empty on Game.exe and on d2d builds that do not print them.
 	RoomRows []RoomRow
