@@ -146,11 +146,7 @@ func placeLinked(own Placement, places []Placement, near []Near) []Placement {
 // can be walked (nil: trust the inside cell only).
 func adjacent(own Placement, self d2map.Rect, all []Placement, linked map[int]bool, grid *d2map.Grid, across func(side, sx, sy int) bool) (adj, unproven []d2map.Adjacent, pending, unlinked int) {
 	for _, a := range abut(own, all) {
-		if linked != nil && !linked[a.p.Level] {
-			pending++
-			unlinked++
-			continue
-		}
+		unlinkedNb := linked != nil && !linked[a.p.Level]
 		nb := d2map.Rect{X: self.X + 5*(a.p.X-own.X), Y: self.Y + 5*(a.p.Y-own.Y), W: 5 * a.p.W, H: 5 * a.p.H}
 		// the strip of this level one subtile wide along the shared edge, over the overlap
 		var strip d2map.Rect
@@ -218,6 +214,37 @@ func adjacent(own Placement, self d2map.Rect, all []Placement, linked map[int]bo
 			}
 			flush(n)
 		}
+		// scanInward keeps the walkable cells of the first row, within four rows of the edge, that has any: the level's own edge
+		// row can be wall (the Inner Cloister's north rows are, V lab devp27 2026-11-24).
+		scanInward := func(dst *[]d2map.Adjacent) {
+			orig := strip
+			defer func() { strip = orig }()
+			for d := 0; d < 5; d++ {
+				switch a.side {
+				case 0:
+					strip.Y = orig.Y - d
+				case 2:
+					strip.Y = orig.Y + d
+				case 1:
+					strip.X = orig.X + d
+				default:
+					strip.X = orig.X - d
+				}
+				before := len(*dst)
+				if scan(dst, false); len(*dst) > before {
+					return
+				}
+			}
+		}
+		if unlinkedNb {
+			// d2d links a neighbour only when the character is near its edge (V live 2026-11-24: Inner Cloister to the Cathedral,
+			// 34 tiles north of the arrival, the nearby list stayed empty, "no exit to that level" three times). The strip's
+			// walkable cells are kept as unproven so the exit walks there and the link appears on the way.
+			pending++
+			unlinked++
+			scanInward(&unproven)
+			continue
+		}
 		before := len(adj)
 		scan(&adj, true)
 		if linked != nil && across != nil && len(adj) == before {
@@ -227,7 +254,7 @@ func adjacent(own Placement, self d2map.Rect, all []Placement, linked map[int]bo
 			// player, so walking there is how the border becomes readable (andariel1: Monastery Gate to Outer Cloister,
 			// log 20261120-230516-0e0d: linked, nothing open across from the arrival point).
 			pending++
-			scan(&unproven, false)
+			scanInward(&unproven)
 		}
 	}
 	return adj, unproven, pending, unlinked
