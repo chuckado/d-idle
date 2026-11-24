@@ -19,6 +19,7 @@ const (
 	padJump     = 12.0 // subtiles: a move of the hero this far in one poll is the pad's jump
 	padWait     = 4 * time.Second
 	padMaxHops  = 12
+	padReach    = 8.0 // subtiles: the walk ends this near a pad and the clicks do the rest
 	padFreeZone = 4.0 // pads this close to where the hero landed are the pair of the pad it took
 )
 
@@ -32,10 +33,11 @@ func (n *Navigator) usePad(level int, p input.Point) {
 	n.padsUsed[padKey{level, p.X, p.Y}] = true
 }
 
-// reachable reports whether the planner finds a whole path to p from the observation's position.
+// reachable reports whether the planner brings the hero to within padReach of p: a pad stands on cells the collision grid
+// may mark solid (V lab, level 74: one pad cell reads blocked), so the nearest walkable end of the path counts.
 func (n *Navigator) reachable(o *obs, p input.Point) bool {
 	res, err := n.plan(o.lm, o.pos, p, n.tune().ArriveTolerance, nil, 0)
-	return err == nil && !res.partial
+	return err == nil && len(res.wps) > 0 && dist(res.wps[len(res.wps)-1], p) <= padReach
 }
 
 // hopPad walks to the nearest unused pad that can be walked to and stands on it until the hero jumps. It returns true after
@@ -77,7 +79,7 @@ func (n *Navigator) hopPad(ctx context.Context, o *obs, goal input.Point) bool {
 	n.usePad(o.level, pad)
 	n.padHops++
 	n.log.Info("nav teleport pad", "level", o.level, "pad", pad, "goal", goal, "hop", n.padHops, "others", len(pads)-1)
-	if err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return pad, 1.5, nil }, walkOpts{goal: &pad}); err != nil && dist(n.posNow(), pad) > 3 {
+	if err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return pad, 1.5, nil }, walkOpts{goal: &pad}); err != nil && dist(n.posNow(), pad) > padReach {
 		return false
 	}
 	end := n.clk.Now().Add(padWait)
