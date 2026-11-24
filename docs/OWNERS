@@ -678,7 +678,6 @@ docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade27
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade29
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade30
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade34
-docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade37
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade5
 docs/probes/tools-trade-2026-11-22.md  credit-runner  toolstrade8
 docs/probes/town-plan-scenarios.md  credit-runner  town1
@@ -995,7 +994,6 @@ internal/bot/goal.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  survB
 internal/bot/goal.go  credit-runner  survhold2
 internal/bot/goal.go  credit-runner  survrecover
-internal/bot/goal.go  credit-runner  toolstrade37
 internal/bot/goal.go  credit-runner  uib1
 internal/bot/goal.go  credit-runner  vaultv5
 internal/bot/goal.go  pro-runner  levelplan3
@@ -1047,10 +1045,8 @@ internal/bot/observe.go  credit-runner  town3
 internal/bot/observe.go  pro-runner  bounce3
 internal/bot/ordersguard.go  credit-runner  staletarget
 internal/bot/parkstep_test.go  credit-runner  botstuck
-internal/bot/plan.go  credit-runner  toolstrade37
 internal/bot/plan.go  pro-runner  levelplan3
 internal/bot/plan_test.go  credit-runner  toolstrade29
-internal/bot/plan_test.go  credit-runner  toolstrade37
 internal/bot/playeraction.go  credit-runner  idfast
 internal/bot/playeraction.go  credit-runner  uib1
 internal/bot/playeraction_test.go  credit-runner  botinstant

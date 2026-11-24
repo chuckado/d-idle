@@ -1,10 +1,13 @@
 ---
 id: TASK-910
-title: 'toolstrade37: why the Tower Cellars are not farmed: the zone model, and a farm picker log line'
-status: Proposed
+title: >-
+  toolstrade37: why the Tower Cellars are not farmed: the zone model, and a farm
+  picker log line
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T00:12:00Z'
+updated_date: '2026-11-24T00:31:00Z'
 labels:
   - bot
   - bot-fix
