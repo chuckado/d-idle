@@ -180,3 +180,15 @@ func (p BeltPlan) HasMana() bool {
 	}
 	return false
 }
+
+// HealingCapacity is how many healing and rejuvenation potions the belt plan can hold at all (columns of those kinds
+// times the belt's rows); 0 when the plan has none or cannot be built. A floor above it can never be met from the belt
+// (V lab 2026-11-23: a Necromancer's belt holds two or three healing potions beside the mana column, the town floor was
+// four, every arrival at the Barracks sent the hero home again).
+func HealingCapacity(in Input, t Tuning) int {
+	plan, err := SpecOf(t).PlanFor(in)
+	if err != nil {
+		return 0
+	}
+	return plan.capacity(PotionLife, in.Belt.Rows) + plan.capacity(PotionRejuv, in.Belt.Rows)
+}

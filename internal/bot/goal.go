@@ -474,6 +474,10 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 		if p.InTown() {
 			threshold = t.ResupplyPotions * 2
 		}
+		// a floor the belt cannot hold is never met (the shop buys nothing, the next arrival asks again): cap it
+		if c := resource.HealingCapacity(r.resInput(s), resource.FromEnv(*r.e.Tune)); c > 0 && threshold > c {
+			threshold = c
+		}
 		// Recovery suppresses potion trips from the field (an empty purse buys nothing), not the visit already under way:
 		// in town with no healing potion and gold for one the shop opens (potionFloor caps it, the kit gold stays).
 		// Gate 1 20261103: left Rogue Encampment with 185 gold and 0 potions, 3 virtual minutes outside town unhealed.
