@@ -305,3 +305,37 @@ func TestBarracksLifeFloorIsWaivedAfterFourLevels(t *testing.T) {
 		}
 	}
 }
+
+// Andariel's way to the Catacombs runs through the Barracks, and the route guard refuses that walk below the class floor
+// (V live 2026-11-24: the board listed Andariel "available" at clvl 20 while the walk to her was closed, so a start would
+// have ended in a hold on the road, not in the board's reason). The gate now carries the same Barracks floor as Tools of the
+// Trade, so the board says "level N needed" before the start. Paladin and Necromancer numbers. Must fail without Barracks
+// on the QAndariel gate.
+func TestAndarielGateCarriesTheBarracksFloor(t *testing.T) {
+	g, _ := task.GateFor(task.QAndariel)
+	for _, tc := range []struct {
+		name        string
+		caster      bool
+		minL, minLf int
+		life        int
+		want        string
+	}{
+		{"paladin", false, 24, 400, 450, "level 24 needed"},
+		{"necromancer", true, 22, 300, 350, "level 22 needed"},
+	} {
+		mk := func(level int) task.World {
+			return routeWorld(level, func(w *task.World) {
+				w.HasMerc, w.Caster, w.BoardSM = true, tc.caster, true
+				w.BarracksMinLevel, w.BarracksMinLife, w.MaxLife = tc.minL, tc.minLf, tc.life
+				w.RouteMinLevel, w.RouteMinLevelMerc = 14, 14
+				w.AndarielMinLevel, w.AndarielMinLevelMerc = 17, 15
+			})
+		}
+		if why := g.NotReady(mk(20)); !strings.Contains(why, tc.want) {
+			t.Errorf("%s clvl 20: NotReady %q, want %q", tc.name, why, tc.want)
+		}
+		if why := g.NotReady(mk(tc.minL)); why != "" {
+			t.Errorf("%s at the floor: NotReady %q", tc.name, why)
+		}
+	}
+}
