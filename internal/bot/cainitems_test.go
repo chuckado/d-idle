@@ -17,7 +17,7 @@ func (cainCatalog) Item(class int) (ItemMeta, bool) {
 	case 902:
 		return ItemMeta{Name: "Cle des cairns", Code: "bkd"}, true
 	case 903:
-		return ItemMeta{Name: "Figurine de jade", Code: "j34"}, true
+		return ItemMeta{Name: "Figurine verte", Code: "j34"}, true
 	case 904:
 		return ItemMeta{Name: "Oiseau dore", Code: "g34"}, true
 	}
