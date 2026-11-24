@@ -154,3 +154,21 @@ func TestBloodRavenNotRetriedFromAct2(t *testing.T) {
 		t.Errorf("act 1 with gold and kit: plan %q, want Blood Raven", p.ID)
 	}
 }
+
+// The boss kit (supply profile "andariel", V live 2026-11-24: the hero re-entered the lair with 3 belt potions): the route guard
+// that holds the Andariel chunk ("route guard (3 healing potions < 4)", kit-only so a chores trip restocks) reads the plan's 8
+// healing: it stays closed below 8 in belt and pack and opens at 8. Two classes (caster and melee).
+func TestRouteKitHoldsBelowTheBossKit(t *testing.T) {
+	for _, caster := range []bool{true, false} {
+		w := task.World{Level: 22, RouteMinLevel: 10, HasTP: true, Caster: caster, ManaPotions: 3,
+			KitPlan: &task.KitPlan{Healing: 8, Mana: 3, Portals: 1}}
+		w.Potions = 7
+		if why := task.RouteKitWhy(w); why == "" {
+			t.Errorf("caster=%v: 7 healing potions opened the road", caster)
+		}
+		w.Potions = 8
+		if why := task.RouteKitWhy(w); why != "" {
+			t.Errorf("caster=%v: 8 healing potions held the road: %q", caster, why)
+		}
+	}
+}
