@@ -363,7 +363,7 @@ func durielNodes() []Node {
 	q := QDuriel
 	killed := a2At(q, StageCleared)
 	ready := func(w World) *Fault {
-		if w.Level < 24 {
+		if w.Level < 24 && !TryActive() {
 			return &Fault{Kind: KindDanger, Why: "Duriel needs clvl 24"}
 		}
 		if w.Potions < minPotions {

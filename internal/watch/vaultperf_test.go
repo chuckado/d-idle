@@ -102,6 +102,9 @@ func TestVaultPollCost(t *testing.T) {
 		}
 	})
 	t.Logf("poll at 2400 records: %d ns/op", res.NsPerOp())
+	if raceEnabled {
+		t.Skip("the 10 ms ceiling is a plain-build number; the race detector makes a poll 5 to 10 times slower (12 to 14 ms on the builder, 2026-11-24)")
+	}
 	if res.NsPerOp() > 10_000_000 {
 		t.Errorf("a poll costs %d ns at 2400 records (ceiling 10 ms)", res.NsPerOp())
 	}

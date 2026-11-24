@@ -118,7 +118,7 @@ func gatePotions(minLvl int, why string, minPots int, q string) func(World) *Fau
 
 func gate(min int, why string) func(World) *Fault {
 	return func(w World) *Fault {
-		if w.Level < min {
+		if w.Level < min && !TryActive() {
 			return &Fault{Kind: KindDanger, Why: why}
 		}
 		return nil

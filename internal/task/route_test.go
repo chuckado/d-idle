@@ -339,3 +339,49 @@ func TestAndarielGateCarriesTheBarracksFloor(t *testing.T) {
 		}
 	}
 }
+
+// The owner's try anyway (ADR 0030 amended 2026-11-24) skips the READINESS words of the gates for one attempt: the Barracks
+// and road floors, the level floor and the Andariel hold. The kit (potions, portal, mana for a caster) is not a readiness
+// word and still refuses. Paladin and Necromancer numbers; the override is off again after SetTry(false). Must fail while the
+// gates ignore TryActive.
+func TestTryAnywaySkipsReadinessNotTheKit(t *testing.T) {
+	for _, q := range []string{task.QAndariel, task.QTools} {
+		g, _ := task.GateFor(q)
+		for _, tc := range []struct {
+			name         string
+			caster       bool
+			minL, minLif int
+		}{{"paladin", false, 24, 400}, {"necromancer", true, 22, 300}} {
+			mk := func(mut func(*task.World)) task.World {
+				return routeWorld(12, func(w *task.World) {
+					w.HasMerc, w.Caster, w.BoardSM, w.AndarielHold = true, tc.caster, true, true
+					w.BarracksMinLevel, w.BarracksMinLife, w.MaxLife = tc.minL, tc.minLif, 150
+					w.RouteMinLevel, w.RouteMinLevelMerc = 14, 14
+					w.AndarielMinLevel, w.AndarielMinLevelMerc = 17, 15
+					if mut != nil {
+						mut(w)
+					}
+				})
+			}
+			if why := g.NotReady(mk(nil)); why == "" {
+				t.Fatalf("%s %s: the plain gate must refuse a clvl 12 hero", q, tc.name)
+			}
+			task.SetTry(true)
+			func() {
+				defer task.SetTry(false)
+				if why := g.NotReady(mk(nil)); why != "" {
+					t.Errorf("%s %s with try anyway: readiness must pass, got %q", q, tc.name, why)
+				}
+				if why := g.NotReady(mk(func(w *task.World) { w.Potions = 0 })); !strings.Contains(why, "healing potions") {
+					t.Errorf("%s %s with try anyway and no potions: the kit must still refuse, got %q", q, tc.name, why)
+				}
+				if why := g.NotReady(mk(func(w *task.World) { w.HasTP = false })); why == "" {
+					t.Errorf("%s %s with try anyway and no portal: the kit must still refuse", q, tc.name)
+				}
+			}()
+			if task.TryActive() || g.NotReady(mk(nil)) == "" {
+				t.Errorf("%s %s: the override stayed on", q, tc.name)
+			}
+		}
+	}
+}
