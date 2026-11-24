@@ -1325,10 +1325,12 @@ internal/d2dtown/adapter.go  credit-runner  verbs2
 internal/d2dworld  credit-runner  countess3
 internal/d2dworld  live-agent  k1layout
 internal/d2dworld/  credit-runner  wpstep
+internal/d2dworld/border.go  credit-runner  toolstrade46
 internal/d2dworld/triggers_test.go  credit-runner  warptrigger
 internal/d2dworld/world.go  credit-runner  andariel1
 internal/d2dworld/world.go  credit-runner  knownedge
 internal/d2dworld/world_test.go  credit-runner  andariel1
+internal/d2dworld/world_test.go  credit-runner  toolstrade46
 internal/d2map  credit-runner  countess3
 internal/d2map/static.go  credit-runner  warptrigger
 internal/d2map/static.go  credit-runner  wpstep
@@ -2580,6 +2582,7 @@ tools/provingground/scenarios/manage.json  credit-runner  equipswap
 tools/provingground/scenarios/navexit.json  credit-runner  navexit2
 tools/provingground/scenarios/navexit.json  credit-runner  stage1fix
 tools/provingground/scenarios/navexit.json  credit-runner  stage23
+tools/provingground/scenarios/navexit.json  credit-runner  toolstrade46
 tools/provingground/scenarios/necro.json  credit-runner  handin
 tools/provingground/scenarios/necro.json  credit-runner  malus
 tools/provingground/scenarios/necro.json  credit-runner  malus2
