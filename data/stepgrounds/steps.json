@@ -260,7 +260,10 @@
    "gen": {
     "start": "Outer Cloister",
     "enter": "Barracks"
-   }
+   },
+   "also": [
+    "step.act1.caster_belt.restock.necro"
+   ]
   },
   {
    "id": "tools_of_the_trade/malus/kill_smith",
@@ -268,7 +271,9 @@
    "also": [
     "step.act1.smith.malus_pickup",
     "step.act1.smith.malus_pickup.sorc",
-    "step.act1.smith.stand_click_pickup.control"
+    "step.act1.smith.stand_click_pickup.control",
+    "step.act1.smith.stand_click_pickup.necro",
+    "step.act1.smith.stand_click_afar.necro"
    ]
   },
   {
