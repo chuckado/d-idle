@@ -78,10 +78,10 @@
   "note": "Paladin 7, clvl 30 stand-in, merc 20; chest exists on seed 7 only"
  },
  "drill.act2.summoner": {
-  "verdict": "RED",
-  "run": "20261123-204518",
+  "verdict": "GREEN",
+  "run": "20261123-224713",
   "tag": "V",
-  "note": "pad hop built; lab grid of level 74 is a hairline, no pad reachable"
+  "note": "devp26; seams and class-only match"
  },
  "drill.act2.duriel": {
   "verdict": "BLOCKED",
@@ -324,22 +324,22 @@
   "note": "the super spawn works (devp25) and the bot engages; the stand-in hero dies to the Infector (kit too weak, matrix notes 24 to 26)"
  },
  "drill.act3s.lam_esen": {
-  "verdict": "RED",
-  "run": "20261123-185925",
+  "verdict": "GREEN",
+  "run": "20261123-230132",
   "tag": "V",
-  "note": "Ruined Temple tile does not fire for the walking hero; cancel-marks-gate-bad fixed"
+  "note": "exact-cell move onto the 0x0 warp (devp26)"
  },
  "drill.act3s.blade": {
   "verdict": "BLOCKED",
-  "run": "20261123-195316",
+  "run": "20261123-230132",
   "tag": "V",
-  "note": "run cut before its virtual budget; layoutRead knob added"
+  "note": "run cut at 25 virtual min"
  },
  "drill.act3s.golden_bird": {
   "verdict": "RED",
-  "run": "20261123-201219",
+  "run": "20261123-224713",
   "tag": "V",
-  "note": "not startable: Jade Figurine not in the pack (lab give of j34 unverified)"
+  "note": "chunk starts; Meshif absent from the lab Act 3 town npcs"
  },
  "step.act1.smith.stand_click_afar.necro": {
   "verdict": "RED",
@@ -376,5 +376,11 @@
   "run": "20261123-223600",
   "tag": "V",
   "note": "Necromancer 11 devp26, start in the Outer Cloister with the chunk accepted: Entered Barracks, no 'ended in 26': the overlap needs the hero to start inside the Barracks (see room_stand)"
+ },
+ "drill.act3s.lam_esen.bazaar": {
+  "verdict": "GREEN",
+  "run": "20261123-224713",
+  "tag": "V",
+  "note": "from the Bazaar"
  }
 }

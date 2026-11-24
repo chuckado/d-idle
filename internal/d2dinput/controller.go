@@ -359,6 +359,10 @@ func (c *Controller) Move(w input.Point) error {
 	return err
 }
 
+// MoveCell sends "cmd move" to a point given in d2d cells with its fraction (a warp whose Select box is one pixel wide is
+// taken only from its exact point, V devp26: the subtile centre of Move does not take it).
+func (c *Controller) MoveCell(x, y float64) error { return c.C.CmdMove(c.ctx(), x, y) }
+
 // MoveTo re-issues "cmd move" until the player is within Tolerance of w (a long path stops short, V). A
 // stalled first attempt gets one extra Kick (the move-ignored quirk).
 func (c *Controller) MoveTo(w input.Point, o input.MoveOpts) error {

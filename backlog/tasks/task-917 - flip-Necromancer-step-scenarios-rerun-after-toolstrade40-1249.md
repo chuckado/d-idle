@@ -1,10 +1,11 @@
 ---
 id: TASK-917
 title: 'flip: Necromancer step scenarios rerun after toolstrade40 (#1249)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T04:07:00Z'
+updated_date: '2026-11-24T04:19:00Z'
 labels:
   - bot
   - drill

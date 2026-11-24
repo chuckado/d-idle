@@ -473,7 +473,6 @@
 | stage2c | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | necrosteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`tools/provingground/scenarios/stepgrounds_gen.json` | - |
 | redsteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/necro_test.go` | - |
-| flip | proposed | - | `data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
@@ -503,14 +502,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a80a6438b 11-23 23:50 `Merge agent/fidbatch: Merge branch 'main' into fidbatch` (fidbatch)
+- 7acef16bf 11-23 23:49 `Merge branch 'main' into fidbatch` (-)
+- 0b014f71e 11-23 23:39 `Merge agent/qd19: Merge origin/main` (qd19)
+- b6c5c7f66 11-23 23:33 `Merge origin/main` (-)
 - 32fe20846 11-23 23:11 `Merge agent/flip: flip: verdicts after toolstrade40` (flip)
 - e7a0bf000 11-23 22:50 `Merge agent/redsteps: Merge branch 'main' into redsteps` (redsteps)
 - 65d837152 11-23 22:49 `Merge branch 'main' into redsteps` (-)
 - 3f7df71f6 11-23 22:38 `Merge agent/toolstrade40: toolstrade40: a chunk queued behind a fight holds the level goal in its area` (toolstrade40)
 - 1bc7b6f87 11-23 22:34 `Merge remote-tracking branch 'origin/main' into agent/toolstrade40` (-)
 - 84f6181a0 11-23 22:30 `Merge agent/necrosteps: necrosteps: verdicts and catalogue` (necrosteps)
-- 4dbd9c419 11-23 22:04 `Merge agent/stage2c: stage2c: stage 2b and 3 reruns, drill doc section 17` (stage2c)
-- 38891eb5d 11-23 21:52 `Merge agent/toolstrade39: toolstrade39: bold dial pools k of visited zones for unvisited ones (Tower Cellars were rejected by the hero k clamp)` (toolstrade39)
-- 13bf2282b 11-23 21:18 `Merge agent/qd18: Merge branch 'main' into qdmatrix` (qd18)
-- 46ffbd0bc 11-23 21:17 `Merge branch 'main' into qdmatrix` (-)
 <!-- statusgen:end -->

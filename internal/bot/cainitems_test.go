@@ -16,6 +16,10 @@ func (cainCatalog) Item(class int) (ItemMeta, bool) {
 		return ItemMeta{Name: "Parchemin d'Inifuss", Code: "bks"}, true
 	case 902:
 		return ItemMeta{Name: "Cle des cairns", Code: "bkd"}, true
+	case 903:
+		return ItemMeta{Name: "Figurine verte", Code: "j34"}, true
+	case 904:
+		return ItemMeta{Name: "Oiseau dore", Code: "g34"}, true
 	}
 	return fakeCatalog{}.Item(class)
 }
@@ -41,6 +45,21 @@ func TestScanQuestItemsByCode(t *testing.T) {
 		r.scanQuestItems(pack(902, 2), out)
 		if out[task.ItemCainSc] != 1 || out[task.ItemBark] != 0 {
 			t.Fatalf("%s: bkd must read as the key: %v", class, out)
+		}
+	}
+}
+
+// The Act 3 Golden Bird items are read by code too: a localised or differently named Jade Figurine must not read as absent
+// (drill.act3s.golden_bird "not startable: no Jade Figurine in the pack" with the figurine in the pack). Two builds.
+func TestScanQuestItemsReadsTheGoldenBirdByCode(t *testing.T) {
+	r := &Runner{d: Deps{Catalog: cainCatalog{}}}
+	for _, class := range []string{"Paladin", "Sorceress"} {
+		snap := &d2.Snapshot{Inventory: &d2.Inventory{Items: []d2.Unit{
+			{Class: 903, Item: &d2.Item{Where: d2.ContInventory}}, {Class: 904, Item: &d2.Item{Where: d2.ContInventory}}}}}
+		out := map[string]int{}
+		r.scanQuestItems(snap, out)
+		if out[task.ItemJade] != 1 || out[task.ItemGolden] != 1 {
+			t.Fatalf("%s: %v", class, out)
 		}
 	}
 }

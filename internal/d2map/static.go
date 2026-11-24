@@ -36,6 +36,10 @@ type Exit struct {
 	// d2dctl.Warp); without HasClick the tile position is clicked, as before.
 	Click    Point
 	HasClick bool
+	// Exact is the one point (d2d cells, 5 subtiles each, fractions kept) a move command takes a 0 x 0 Select box warp from;
+	// whole subtiles are too coarse for a box of one pixel (V devp26 doc). HasExact false: no such point.
+	Exact    [2]float64
+	HasExact bool
 	// Trigger is the exit's trigger area as the engine reports it (d2d fork "debug warptriggers"), nil when the
 	// backend does not say: the nav mouth gate then keeps its guessed bound.
 	Trigger *Trigger

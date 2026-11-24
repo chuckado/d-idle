@@ -1329,6 +1329,8 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - toolstrade40: stand click reach, healing floor vs belt, no-progress park (TASK-914, merged 2026-11-23, acceptance 3 of 3): Offline only, not verified live: stand click needs reach (3 walks, then danger, no clicks wasted); town healing floor capped by HealingCapacity of the belt plan; executor MaxRepeats (12) parks a group with no progress: <step> ... <!--sg:agent/toolstrade40-->
 - redsteps: Necromancer step scenarios built to go RED (room start, caster belt loop, plan overlap) and pre.warp (TASK-916, merged 2026-11-23, acceptance 2 of 2): pre.warp (debug warp x y, tile cells) with a unit test; three scenarios on devp26: room_stand RED (plan walks the hero out of the Barracks 24 s before the chunk starts), caster_loop and plan_overlap GREEN (conditions not reproduced). ... <!--sg:agent/redsteps-->
 - flip: Necromancer step scenarios rerun after toolstrade40 (#1249) (TASK-917, merged 2026-11-23, acceptance 1 of 1): Rerun on b74549d93 (devp26, job 20261123-225912-cdf0): nothing flipped RED to GREEN. Loop guard works (parks after 12 repeats). room_stand and pickup stay RED (plan walks the hero out before a chunk exists) ... <!--sg:agent/flip-->
+- agent/qd19: Merge origin/main (merged 2026-11-23) <!--sg:agent/qd19-->
+- agent/fidbatch: Merge branch 'main' into fidbatch (merged 2026-11-23) <!--sg:agent/fidbatch-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

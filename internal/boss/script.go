@@ -13,11 +13,14 @@ type Match struct {
 	Class    int
 	UniqueNo int // -1 = unset
 	Name     string
+	// ClassOnly: the class belongs to this boss alone (monstats), so a monster of it without a name is the boss. V lab
+	// drill.act2.summoner: the d2d lists the Summoner (class 250) with an empty name and the run never found him.
+	ClassOnly bool
 }
 
 // Is reports whether m is the boss.
 func (x Match) Is(m Mon) bool {
-	if x.Class > 0 && m.Class == x.Class && (m.Name != "" || x.Name == "") {
+	if x.Class > 0 && m.Class == x.Class && (m.Name != "" || x.Name == "" || x.ClassOnly) {
 		return true
 	}
 	if x.UniqueNo >= 0 && m.UniqueNo == x.UniqueNo && m.UniqueNo >= 0 {

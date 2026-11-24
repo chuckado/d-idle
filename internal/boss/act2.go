@@ -80,7 +80,7 @@ func radament() *Script {
 func summoner() *Script {
 	return &Script{
 		Name: NameSummoner, Act: 2, WP: AreaArcane, Arena: AreaArcane,
-		Match: Match{Class: ClassSummoner, UniqueNo: -1, Name: NameSummoner},
+		Match: Match{Class: ClassSummoner, UniqueNo: -1, Name: NameSummoner, ClassOnly: true},
 		Anchor: Anchor{
 			Preset:   &PresetRef{Kind: PresetObject, ID: presetJournal, Off: Pt{-3, -3}},
 			Teleport: true, // islands over a void: nav.TeleportTo plans the hops (Teleporter), GoTo is the fallback
