@@ -504,6 +504,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 48120464e 11-24 16:01 `Merge agent/toolstrade53: Merge branch 'main' into toolstrade53` (toolstrade53)
+- 12b5d7791 11-24 15:59 `Merge branch 'main' into toolstrade53` (-)
 - 927b2ba4a 11-24 15:51 `Merge agent/toolstrade52: toolstrade52: a trip the field gate redirected walks back instead of taking the portal into the lair; a wrong-level portal landing ends the wait at once` (toolstrade52)
 - 2cf81f3b3 11-24 15:12 `Merge agent/toolstrade51: toolstrade51: tries of unreachable doors are forgiven once a door opens (Catacombs 2: two doors in a row), live-grid fixture` (toolstrade51)
 - 718489c96 11-24 14:38 `Merge agent/toolstrade50: toolstrade50: card, probes` (toolstrade50)
@@ -512,6 +514,4 @@
 - 8ba89828a 11-24 13:36 `Merge remote-tracking branch 'origin/main' into agent/toolstrade49` (-)
 - fdd3c7f2a 11-24 13:24 `Merge agent/toolstrade48: Merge branch 'main' into toolstrade48` (toolstrade48)
 - a8444f3ed 11-24 13:23 `Merge branch 'main' into toolstrade48` (-)
-- 6bd3f047e 11-24 13:13 `Merge agent/toolstrade47: toolstrade47: lab hop scenarios for the Andariel route (Cathedral to Catacombs 4)` (toolstrade47)
-- bbcc02871 11-24 13:00 `Merge agent/toolstrade46: toolstrade46: the unproven strip toward a neighbour looks inward past a wall edge (Inner Cloister to Cathedral), lab scenario` (toolstrade46)
 <!-- statusgen:end -->
