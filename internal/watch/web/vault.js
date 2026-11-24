@@ -1178,6 +1178,17 @@ export function mountVault(d) {
         row.appendChild(rb);
       }
     }
+    if (rv && rv.enabled && pl.state === 'active' && !rv.in_town) { const fw = el('p', 'vt-eq-state', T.equipWaitField); fw.dataset.key = 'equip-wait-field'; sheetCard.appendChild(fw); }
+    if (!it.identified && (pl.state === 'ready' || pl.state === 'active')) {
+      const ub = el('p', 'vt-eq-unid', T.equipUnid); ub.dataset.key = 'equip-unid'; sheetCard.appendChild(ub);
+      const ra = S.view && S.view.act && S.view.act.reveal, gd = ra && ra.gold || {};
+      if (revealMethods(ra).has('gold') && gd.on && pl.state === 'ready') {
+        const ib = btn(fmt(T.equipIdFirst, { cost: grp(gd.scrollGold || 0) }), { key: 'equip-idfirst', variant: 'ghost' });
+        if (!(gd.scrollGold > 0 && gd.stash >= gd.scrollGold && !gd.why)) { ib.setAttribute('aria-disabled', 'true'); why(ib, gd.why || fmt(T.goldShort, { price: grp(gd.scrollGold || 0), stash: grp(gd.stash || 0) }), eqWhys, T.equipIdFirst); }
+        ib.addEventListener('click', () => { if (!ib.hasAttribute('aria-disabled')) { closeSheet(true); goldOrder([it.id], gd.scrollGold, (gd.confirmAt || 0) > 0 && gd.scrollGold >= gd.confirmAt); } });
+        row.appendChild(ib);
+      }
+    }
     const take = btn(T.equipTakeOut, { key: 'equip-takeout', variant: 'ghost' });
     take.addEventListener('click', () => { closeSheet(true); keepAct([it.id], false); });
     if (pl.state !== 'active' && pl.state !== 'done') row.appendChild(take);

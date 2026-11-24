@@ -98,6 +98,9 @@
     "failed": "Could not get home yet: {why}"
   },
   "recallSent": "The hero is told to go to town now.",
+  "equipUnid": "Unidentified: it can be worn as it is (the affixes apply unseen); wearing does not reveal it.",
+  "equipIdFirst": "Identify first ({cost} gold)",
+  "equipWaitField": "The hero is in the field: it wears this in town. Tap Do it now to go home at the next safe moment.",
   "equipNote": "Only in town, one town visit. The item you replace goes back into the vault, the slot stays yours until you change it. Charms and belt or backpack items are not equipped here.",
   "equipSent": "Equip queued",
   "equipStates": {

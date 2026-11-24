@@ -20,3 +20,7 @@ Open vault, tap the item (detail), Equip (opens the sheet), tick "Recall now" (o
 
 ## Not verified live (U)
 Real hero equip with the new default, toast wording on a real phone, whether the sandbox bot had the knob at 0.
+
+## Update 2026-11-24: the real cause for a hero with loot.vaultEquip 1 (V read only)
+The sandbox already has the knob on, so cause 1 above does not apply to the owner. The order file shows orders created by the Equip tap (state `queued`, keepq lines in the vault log, `where: inv`) that never ran: an order without Recall-now runs only "in town at a safe moment", and the hero is in town only inside a town trip, which `safeMoment` refuses. Four trips in 12 minutes did not run them. Older failures say "unidentified" (code requirements): the pre-2026-11-21 binary. Fix: run the orders in the trip's settle stage (`internal/bot/goal.go`), and the page now says when the hero is in the field. Default of `loot.vaultEquip` stays 0 (separate revert commit; the earlier default flip was not approved).
+Time between town trips live: 01:14, 01:18, 01:22 (pack 82 to 85 percent full): about 4 minutes.
