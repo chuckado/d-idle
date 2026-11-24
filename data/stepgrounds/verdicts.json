@@ -340,5 +340,23 @@
   "run": "20261123-201219",
   "tag": "V",
   "note": "not startable: Jade Figurine not in the pack (lab give of j34 unverified)"
+ },
+ "step.act1.smith.stand_click_afar.necro": {
+  "verdict": "GREEN",
+  "run": "20261123-220824",
+  "tag": "V",
+  "note": "Necromancer 11 devp25: the stand 30 subtiles away with two Fallen in between: the first click run ends 'never changed after 8 clicks', the executor retry clicks the stand and the Malus is carried; the failure of the full chunk run (210945-459f) is not reproduced by this setup"
+ },
+ "step.act1.smith.stand_click_pickup.necro": {
+  "verdict": "RED",
+  "run": "20261123-221628",
+  "tag": "V",
+  "note": "Necromancer 11: the chunk starts late (start gate behind the army's fights), the level plan walks the hero out of the Barracks and `to-barracks` parks on 'left level 27 for 28 but ended in 26'; the stand is never reached (plan against queued chunk, stage1fix family)"
+ },
+ "step.act1.caster_belt.restock.necro": {
+  "verdict": "GREEN",
+  "run": "20261123-221628",
+  "tag": "V",
+  "note": "Necromancer 11 from a town start: 12 virtual minutes without the town-trip loop: the loop of run 210945-459f needs the Barracks arrival crowd; this step does not reproduce it (U which part is missing)"
  }
 }

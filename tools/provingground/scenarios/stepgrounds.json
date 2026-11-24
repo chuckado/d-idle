@@ -136,9 +136,9 @@
    "assert": [
     {
      "kind": "log_line",
-   "pattern": "^loot: clicked .*item=Horadric Malus",
-   "min": 1,
-   "why": "the bot clicked the Malus stand (object 108) and then the Malus it dropped; the pack is not asserted because the chunk hands the Malus to Charsi inside the budget (V run 20261123-195923)"
+     "pattern": "^loot: clicked .*item=Horadric Malus",
+     "min": 1,
+     "why": "the bot clicked the Malus stand (object 108) and then the Malus it dropped; the pack is not asserted because the chunk hands the Malus to Charsi inside the budget (V run 20261123-195923)"
     },
     {
      "kind": "log_line",
@@ -691,6 +691,383 @@
      "pattern": "^loot: clicked .*item=Horadric Malus",
      "max": 0,
      "why": "no Malus pickup without a Smith"
+    }
+   ],
+   "needs": [
+    "lab-verbs-attach"
+   ]
+  },
+  {
+   "id": "step.act1.smith.stand_click_pickup.necro",
+   "title": "Step ground (Necromancer): the army kills the Smith in the room, the bot clicks the stand and carries the Malus",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "tools_of_the_trade",
+    "chunk": "malus"
+   },
+   "step": {
+    "action": "kill",
+    "target": "The Smith",
+    "nodes": [
+     "kill",
+     "malus"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "data/questspec/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.tools_of_the_trade.malus",
+    "combat.fight",
+    "travel.waypoint",
+    "travel.area-transition"
+   ],
+   "pre": {
+    "level": 40,
+    "gold": 200,
+    "stash": 500000,
+    "waypoints": [
+     -1
+    ],
+    "items": [
+     {
+      "code": "hp2",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp2",
+     "hp2",
+     "hp2",
+     "hp2"
+    ],
+    "merc": 0,
+    "quests": [
+     {
+      "record": 3,
+      "word": 12
+     }
+    ],
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head"
+     },
+     {
+      "code": "qui",
+      "slot": "torso"
+     },
+     {
+      "code": "wnd",
+      "slot": "rhand"
+     }
+    ],
+    "merc_level": 17,
+    "start": "field",
+    "area": 28,
+    "board": {
+     "quest": "tools_of_the_trade",
+     "chunk": "malus"
+    },
+    "spawn": [
+     {
+      "monster": "smith",
+      "n": 1
+     }
+    ],
+    "objects": [
+     {
+      "class": 108
+     }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 153600
+     },
+     {
+      "stat": 6,
+      "value": 153600
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:50",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "quests.layoutRead": 1,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "combat.minionRead": 1
+    },
+    "build": "necromancer_summoner_sme"
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero. Necromancer variant (wand, light armor, 600 life and mana as raw stats).",
+   "notes": "Smith spawned (plain), the stand added beside the hero by `debug object add 108` (devp25 stepverbs), quest 3 = 0x000c (the stand refuses a hero without the quest). The bot's stand click is toolstrade34 (merged). Control: .control (no Smith, no stand, no click: no hdm). Needs the devp25 binary (PG_D2D_BIN). Necromancer variant: SME summoner at clvl 40, army kills (the hero has no attack skill), stand beside the hero. Proves the army kill and the stand click for the class; the Paladin step is the control.",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^loot: clicked .*item=Horadric Malus",
+     "min": 1,
+     "why": "the bot clicked the Malus stand (object 108) and then the Malus it dropped; the pack is not asserted because the chunk hands the Malus to Charsi inside the budget (V run 20261123-195923)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death"
+    }
+   ],
+   "needs": [
+    "lab-verbs-attach",
+    "read.minions"
+   ]
+  },
+  {
+   "id": "step.act1.smith.stand_click_afar.necro",
+   "title": "Step ground (Necromancer): the stand is 30 subtiles away with two hostiles in between (the failure of run 20261123-210945-459f)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "tools_of_the_trade",
+    "chunk": "malus"
+   },
+   "step": {
+    "action": "kill",
+    "target": "The Smith",
+    "nodes": [
+     "kill",
+     "malus"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "data/questspec/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.tools_of_the_trade.malus",
+    "combat.fight",
+    "travel.waypoint",
+    "travel.area-transition"
+   ],
+   "pre": {
+    "level": 40,
+    "gold": 200,
+    "stash": 500000,
+    "waypoints": [
+     -1
+    ],
+    "items": [
+     {
+      "code": "hp2",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp2",
+     "hp2",
+     "hp2",
+     "hp2"
+    ],
+    "merc": 0,
+    "quests": [
+     {
+      "record": 3,
+      "word": 12
+     }
+    ],
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head"
+     },
+     {
+      "code": "qui",
+      "slot": "torso"
+     },
+     {
+      "code": "wnd",
+      "slot": "rhand"
+     }
+    ],
+    "merc_level": 17,
+    "start": "field",
+    "area": 28,
+    "board": {
+     "quest": "tools_of_the_trade",
+     "chunk": "malus"
+    },
+    "spawn": [
+     {
+      "monster": "smith",
+      "n": 1
+     },
+     {
+      "monster": "fallen1",
+      "n": 2
+     }
+    ],
+    "objects": [
+     {
+      "class": 108,
+      "x": 95,
+      "y": 212
+     }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 153600
+     },
+     {
+      "stat": 6,
+      "value": 153600
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:50",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "quests.layoutRead": 1,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "combat.minionRead": 1
+    },
+    "build": "necromancer_summoner_sme"
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero.",
+   "notes": "Smith spawned (plain), the stand added beside the hero by `debug object add 108` (devp25 stepverbs), quest 3 = 0x000c (the stand refuses a hero without the quest). The bot's stand click is toolstrade34 (merged). Control: .control (no Smith, no stand, no click: no hdm). Needs the devp25 binary (PG_D2D_BIN). The stand at cell (95,212), 30 subtiles east of the arrival at (65,212) of `debug goto 28` (U: the frame of `debug object add x y` is the level cell frame; if the verb refuses the cell the run is BLOCKED, read the setup ledger). Two Fallen spawned beside the hero stand between hero and stand in the failing run. Expected RED until the stand click from afar is fixed (toolstrade).",
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "^loot: clicked .*item=Horadric Malus",
+     "min": 1,
+     "why": "the bot clicked the Malus stand (object 108) and then the Malus it dropped; the pack is not asserted because the chunk hands the Malus to Charsi inside the budget (V run 20261123-195923)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0,
+     "why": "no death"
+    }
+   ],
+   "needs": [
+    "lab-verbs-attach",
+    "read.minions"
+   ]
+  },
+  {
+   "id": "step.act1.caster_belt.restock.necro",
+   "title": "Step ground (Necromancer): four-slot belt with a mana potion: the shop must not send the hero home for healing it cannot fit",
+   "kind": "behaviour",
+   "tier": "full",
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "data/questspec/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "town.resupply",
+    "hook.town-trip"
+   ],
+   "pre": {
+    "level": 30,
+    "gold": 2000,
+    "items": [
+     {
+      "code": "hp1",
+      "count": 4
+     },
+     {
+      "code": "mp1",
+      "count": 4
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "mp1"
+    ]
+   },
+   "trigger": {
+    "goals": "farm:Blood Moor",
+    "build": "necromancer_summoner_sme",
+    "knobs": {
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0
+    }
+   },
+   "budget": {
+    "virtual_min": 12
+   },
+   "matrix": {
+    "classes": [
+     "Necromancer"
+    ],
+    "seeds": [
+     11
+    ]
+   },
+   "provenance": "CHEATED: level 30, gold and potions by SETUP verbs, field start in the Blood Moor. Mechanics only.",
+   "notes": "Town start, belt with two healing potions and one mana potion (one slot free), four healing potions in the pack, goal farm:Blood Moor. In town the trip threshold doubles (ResupplyPotions 2 times 2) and the shop buys nothing because the pack holds the potions. The field start of the first version (run 20261123-220824-3897) made no town trip at all, so the loop is measured by area changes from a town start. Expected RED until the threshold respects what the belt can hold (toolstrade).",
+   "assert": [
+    {
+     "kind": "area_changes_le",
+     "max": 16,
+     "why": "the loop of run 20261123-210945-459f sent the hero Barracks, town, Outer Cloister about 125 times in 28 minutes; ten virtual minutes of a healthy hero need far fewer area changes"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^character died ",
+     "max": 0
     }
    ],
    "needs": [
