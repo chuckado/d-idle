@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- toolstrade50: card, probes <!--sg:agent/toolstrade50-->
 - Merge branch 'main' into toolstrade49 <!--sg:agent/toolstrade49-->
 - Merge branch 'main' into toolstrade48 <!--sg:agent/toolstrade48-->
 - toolstrade47: lab hop scenarios for the Andariel route (Cathedral to Catacombs 4) <!--sg:agent/toolstrade47-->

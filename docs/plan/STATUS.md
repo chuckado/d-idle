@@ -476,6 +476,7 @@
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
 | toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
+| toolstrade50 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go`<br>`internal/d2dworld/border.go`<br>`internal/d2dworld/world.go`<br>`internal/d2dworld/world_test.go`<br>`internal/d2map/tracker.go`<br>`tools/provingground/scenarios/navexit.json`<br>`internal/nav/gatedoor.go`<br>`tools/probes/linkprobe.py`<br>`tools/probes/crossprobe.py`<br>`tools/probes/edgeprobe.py`<br>`tools/probes/crossmove.py`<br>`tools/probes/nearobj.py` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
@@ -504,6 +505,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 718489c96 11-24 14:38 `Merge agent/toolstrade50: toolstrade50: card, probes` (toolstrade50)
 - 9b3c1cc83 11-24 13:49 `Merge agent/toolstrade49: Merge branch 'main' into toolstrade49` (toolstrade49)
 - a2dfb14b3 11-24 13:48 `Merge branch 'main' into toolstrade49` (-)
 - 8ba89828a 11-24 13:36 `Merge remote-tracking branch 'origin/main' into agent/toolstrade49` (-)
@@ -513,5 +515,4 @@
 - bbcc02871 11-24 13:00 `Merge agent/toolstrade46: toolstrade46: the unproven strip toward a neighbour looks inward past a wall edge (Inner Cloister to Cathedral), lab scenario` (toolstrade46)
 - 32d1e42ab 11-24 12:20 `Merge agent/qd23: Merge origin/main` (qd23)
 - c105ff564 11-24 12:17 `Merge origin/main` (-)
-- dc87e85ef 11-24 12:12 `Merge origin/main` (-)
 <!-- statusgen:end -->
