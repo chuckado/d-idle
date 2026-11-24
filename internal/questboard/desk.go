@@ -2,6 +2,7 @@ package questboard
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -18,20 +19,22 @@ const (
 	SchemaQuests = "watch.quests/1"
 
 	// Refusal codes of Reply.Code.
-	CodeOff       = "off"
-	CodeNoHero    = "no_hero"
-	CodePaused    = "paused"
-	CodeBusy      = "busy"
-	CodeNotReady  = "not_ready"
-	CodeNotAwait  = "not_awaiting"
-	CodeUnknown   = "unknown"
-	CodeDone      = "done"
-	CodeBadMode   = "bad_mode"
-	CodeAutoNever = "auto_never"
-	CodeInternal  = "internal"
-	viewCacheTTL  = time.Second
-	handInTimeout = 5 * time.Minute
-	historyMax    = 20
+	CodeOff      = "off"
+	CodeNoHero   = "no_hero"
+	CodePaused   = "paused"
+	CodeBusy     = "busy"
+	CodeNotReady = "not_ready"
+	// CodeNotOverridable refuses a try anyway for a part whose refusal is not a readiness one (locked, done, parked, running).
+	CodeNotOverridable = "not_overridable"
+	CodeNotAwait       = "not_awaiting"
+	CodeUnknown        = "unknown"
+	CodeDone           = "done"
+	CodeBadMode        = "bad_mode"
+	CodeAutoNever      = "auto_never"
+	CodeInternal       = "internal"
+	viewCacheTTL       = time.Second
+	handInTimeout      = 5 * time.Minute
+	historyMax         = 20
 )
 
 // DeskConfig is what the desk needs from the bot side. Every field but Exec may be nil.
@@ -96,7 +99,9 @@ type Reply struct {
 	Awarded []Pay  `json:"awarded,omitempty"` // a hand-in that finished at once (already done) booked this now
 	// Changed lists every run the verb touched (the chunk and its chain or dependants) with state and reason after it.
 	Changed []ChangedRow `json:"changed,omitempty"`
-	Status  int          `json:"-"` // HTTP status the route uses
+	// Override says the start was a try anyway and carries the readiness refusal it skipped (for the audit line).
+	Override string `json:"override,omitempty"`
+	Status   int    `json:"-"` // HTTP status the route uses
 }
 
 func refuse(status int, code, format string, a ...any) Reply {
@@ -850,6 +855,77 @@ func (d *Desk) Start(quest, chunk string) Reply {
 	}
 	base.Changed = d.changedRows(refs)
 	return base
+}
+
+// StartAnyway is the owner's try-anyway start (ADR 0030, amended 2026-11-24): the same as Start, but a chunk that reads
+// Available because of a READINESS refusal (the board word, a level or life floor, the Andariel hold) is accepted for this
+// one attempt. The caller has already checked the owner's auth and the confirm; the caller audits it with Reply.Override.
+// Nothing but the readiness words is skipped: the kit gates and the combat reactions stay.
+func (d *Desk) StartAnyway(quest, chunk string) Reply {
+	x, _, bad := d.gate()
+	if bad != nil {
+		return *bad
+	}
+	if chunk == "" { // the quest's first chunk that reads Available
+		if st, err := x.State(); err == nil {
+			for _, v := range st.Views {
+				if v.ID != quest {
+					continue
+				}
+				for _, c := range v.Chunks {
+					if c.State == Available {
+						chunk = c.ID
+						break
+					}
+				}
+			}
+		}
+	}
+	if _, err := d.b.Quest(quest); err != nil {
+		return refuse(http.StatusNotFound, CodeUnknown, "There is no quest %q.", quest)
+	}
+	if chunk == "" {
+		return refuse(http.StatusConflict, CodeNotOverridable, "%s has no part that waits for readiness; there is nothing to try anyway.", d.title(quest))
+	}
+	if _, err := d.b.Chunk(quest, chunk); err != nil {
+		return refuse(http.StatusNotFound, CodeUnknown, "Quest %s has no part %q.", quest, chunk)
+	}
+	base := Reply{Quest: quest, Chunk: chunk}
+	if d.paused() {
+		return withBase(base, refuse(http.StatusConflict, CodePaused, "The bot is paused; resume it before starting %s.", d.title(quest)))
+	}
+	refs, refused, err := d.tryAccept(x, quest, chunk)
+	if err != nil {
+		code, status := CodeNotReady, http.StatusConflict
+		var no ErrNotOverridable
+		switch s := err.Error(); {
+		case errors.As(err, &no):
+			code = CodeNotOverridable
+		case strings.Contains(s, "already accepted"):
+			code = CodeBusy
+		}
+		return withBase(base, refuse(status, code, "%s", cleanErr(err)))
+	}
+	d.invalidate()
+	base.OK, base.State, base.Status = true, string(Accepted), http.StatusOK
+	base.Override = refused
+	base.Reason = d.title(quest) + " started anyway: " + refused + ". One attempt; the hero still drinks, flees and goes home."
+	base.Changed = d.changedRows(refs)
+	return base
+}
+
+func (d *Desk) tryAccept(x *Exec, quest, chunk string) ([]Ref, string, error) {
+	refused, err := x.AcceptTry(quest, chunk)
+	if err != nil {
+		return nil, refused, err
+	}
+	x.mu.Lock()
+	refs := x.lastChanged
+	if !x.o.SM {
+		refs = []Ref{{quest, chunk}}
+	}
+	x.mu.Unlock()
+	return refs, refused, nil
 }
 
 // Cancel stops an accepted chunk and puts it back to ready. Nothing to stop is an `already` no-op.

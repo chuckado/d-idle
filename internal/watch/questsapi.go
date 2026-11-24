@@ -2,6 +2,7 @@ package watch
 
 import (
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 
@@ -33,6 +34,7 @@ const (
 type QuestsDesk interface {
 	View() questboard.View
 	Start(quest, chunk string) questboard.Reply
+	StartAnyway(quest, chunk string) questboard.Reply
 	HandIn(quest, chunk string) questboard.Reply
 	Cancel(quest, chunk string) questboard.Reply
 	Retry(quest, chunk string) questboard.Reply
@@ -115,7 +117,7 @@ func (a *QuestsAPI) PostHandler(o AnswerOptions) http.Handler {
 		}
 		if !isMode && !isAway {
 			switch parts[1] {
-			case "start", "handin", "cancel", "retry", "auto":
+			case "start", "try", "handin", "cancel", "retry", "auto":
 			default:
 				writeJSON(w, http.StatusNotFound, policyReply{Code: "route", Error: "no such quest action"})
 				return
@@ -152,6 +154,22 @@ func (a *QuestsAPI) PostHandler(o AnswerOptions) http.Handler {
 			rep = d.SetAuto(parts[0], *b.On)
 		case parts[1] == "start":
 			rep = d.Start(parts[0], b.Chunk)
+		case parts[1] == "try":
+			// the owner's try-anyway start (ADR 0030, amended 2026-11-24): same auth as Start (policyGate above), never in a
+			// measured run, and only with the second tap that stated the risk
+			ev.Action = "start"
+			switch {
+			case os.Getenv("D2BOT_RUN") != "":
+				rep = questboard.Reply{Code: "measured_run", Reason: "A measured run never takes an override.", Status: http.StatusConflict}
+			case !b.Confirm:
+				rep = questboard.Reply{Code: "confirm", Reason: "Try anyway needs the second tap. " + questboard.TryRisk, Status: http.StatusBadRequest}
+			default:
+				rep = d.StartAnyway(parts[0], b.Chunk)
+				ev.Why = "override: try anyway"
+				if rep.Override != "" {
+					ev.Why += " (refused: " + rep.Override + ")"
+				}
+			}
 		case parts[1] == "handin":
 			rep = d.HandIn(parts[0], b.Chunk)
 		case parts[1] == "cancel":

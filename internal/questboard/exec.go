@@ -123,6 +123,11 @@ type Exec struct {
 	// lastChanged is the runs the last machine verb touched, read by the same caller under e.mu (AcceptRuns and kin).
 	lastChanged []Ref
 	ax          autoState
+	// try is the chunk key of the owner's one-shot "try anyway" start (docs/questboard.md, ADR 0030 amendment 2026-11-24);
+	// tryNow is true only while AcceptTry accepts it, so CanStart skips the readiness word for that one chunk. Memory only:
+	// a restart ends it, and the gates then hold the chunk again.
+	try    string
+	tryNow bool
 }
 
 // NewExec builds the executor of one hero. env and act are the bot adapter (or the Fake in tests).
@@ -388,7 +393,7 @@ func (e *Exec) acceptLocked(vs []QuestView, plan Plan, diff int, quest, chunk st
 	if o := e.open(vs, plan, diff); len(o) > 0 {
 		return fmt.Errorf("questboard: %s is already accepted; finish or stop it first (one chunk at a time)", o[0])
 	}
-	if err := CanStart(vs, quest, chunk); err != nil {
+	if err := e.canStart(vs, quest, chunk); err != nil {
 		return err
 	}
 	finished := func(r Record) bool {
@@ -701,6 +706,12 @@ type Decision struct {
 
 // Next says what to do now. It reads evidence and the plan records only; calling it twice changes nothing.
 func (e *Exec) Next() (Decision, error) {
+	d, err := e.next()
+	e.tryCheck(d, err)
+	return d, err
+}
+
+func (e *Exec) next() (Decision, error) {
 	e.mu.Lock()
 	defer e.mu.Unlock()
 	if !e.o.Enabled {
@@ -767,6 +778,10 @@ func (e *Exec) Report(d Decision, res StepResult) {
 			e.smPark(d.Quest, d.Chunk, "gave_up", rs)
 		}
 	case StepDied:
+		if e.try == k {
+			e.try = "" // a death ends the try: the gates hold the chunk again (the death is counted like any other)
+			e.o.Log("override: try anyway ended: the hero died", "chunk", k)
+		}
 		rs.started = true
 		rs.deaths++
 		rs.lastWhy = nonEmpty(res.Why, "died")
