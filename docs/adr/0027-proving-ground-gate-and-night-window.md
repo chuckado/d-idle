@@ -30,3 +30,11 @@ Two runs of one seed differ for reasons that are ours (wall-clock tapper against
 - A scenario gates only when `stable`; setup tags EARNED, SETUP, CHEATED, IMPOSSIBLE are stored per run.
 - Night runs use no more than 3 runs and must leave the sandbox container alone.
 - Any other use of that host needs a fresh user go.
+
+## Amended 2026-11-24 (user decision): per-package Go work may run on the second worker host at any hour
+
+Source: user decision 2026-11-24, on the pipeline audit row 7 ([pipeline-audit-2026-11-24.md](../process/pipeline-audit-2026-11-24.md)): item 4 said the night window is the ONLY time the second worker host may be used and also that heavy work runs there; the agent boilerplate sent whole-repo Go there at any hour. The scope is now explicit.
+
+- Per-package Go tests, vet and builds (`go test`, `go vet`, `go build` of named packages, niced at 19) may run on the second worker host at any time of day.
+- Heavy lab runs (Proving Ground T3/T4, survival waves, the nightly uncached race run, whole-repo `-race`), every game instance, and anything that touches the user's desktop stay inside the 23:00 to 07:00 EST window, with the limits of item 4 (at most 3 runs, hidden instances, sandbox container untouched).
+- Never stop, restart or modify the sandbox container, and never take desktop screenshots, at any hour. The builder stays the default for whole-repo Go.

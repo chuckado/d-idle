@@ -105,7 +105,7 @@ func TestStreamSendsEachFrameWhenPublished(t *testing.T) {
 			hdr.WriteString(l)
 		}
 		rd.Discard(len("jpegdata") + 2)
-		if d := time.Since(t0); d > 15*time.Millisecond {
+		if d := time.Since(t0); !raceOn && d > 15*time.Millisecond {
 			t.Errorf("part %d took %v after publish (the old loop slept up to 20 ms)", i, d)
 		}
 		if want := "X-Frame-Game-Ms: " + itoa64(int64(100*i)); !strings.Contains(hdr.String(), want) {

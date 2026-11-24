@@ -243,7 +243,7 @@ func TestPlanLargeLevelSpeed(t *testing.T) {
 			t.Fatal(err)
 		}
 		t.Logf("1500x1500 plan #%d: %v, partial=%v coarse=%v expanded=%d cells=%d wps=%d", i, el, res.partial, n.pl.Coarse, n.pl.Expanded, res.cells, len(res.wps))
-		if el > 10*time.Second {
+		if !raceEnabled && el > 10*time.Second {
 			t.Fatalf("too slow: %v", el)
 		}
 	}

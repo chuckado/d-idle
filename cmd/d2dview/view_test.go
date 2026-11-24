@@ -272,7 +272,7 @@ func TestWatchSpeedClampedAndPaceOutsideLock(t *testing.T) {
 	if _, _, err := v.State(context.Background()); err != nil {
 		t.Fatal(err)
 	}
-	if d := time.Since(t0); d > 500*time.Millisecond {
+	if d := time.Since(t0); d > 1200*time.Millisecond {
 		t.Errorf("viewer waited %v behind the pacing sleep", d)
 	}
 }

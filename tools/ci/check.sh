@@ -45,6 +45,11 @@ python3 -I tools/shims/test_check.py >/dev/null 2>&1 || bad "tools/shims/test_ch
 python3 -I tools/contracts/check.py || fail=1
 python3 -I tools/contracts/test_check.py >/dev/null 2>&1 || bad "tools/contracts/test_check.py"
 
+# --- branch ownership: changed files inside the card's owns:, ADR/decisions/GLOSSARY only with allow-adr (tools/ci/ownscheck.py) ---
+# Owns findings are warnings until 2026-12-01 (rollout); the ADR guard fails now. main and non-agent branches are skipped.
+python3 -I tools/ci/ownscheck.py --warn-owns-until 2026-12-01 || fail=1
+python3 -I tools/ci/test_ownscheck.py >/dev/null 2>&1 || bad "tools/ci/test_ownscheck.py"
+
 # --- no decompiled game code or game data tables (docs/process/gamecode-guard.md) ---
 tools/ci/gamecode_guard.sh || fail=1
 
