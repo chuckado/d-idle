@@ -1,10 +1,11 @@
 ---
 id: TASK-775
 title: 'vaultequip: one-tap Equip from the Ethereal Vault'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T14:18:00Z'
+updated_date: '2026-11-24T02:25:00Z'
 labels:
   - watch
   - feature
