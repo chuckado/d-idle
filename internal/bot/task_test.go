@@ -571,7 +571,33 @@ func TestPickUpThatTookNothingIsNotFound(t *testing.T) {
 		t.Errorf("nothing taken: kind %v", k)
 	}
 	g.r.d.Loot = pickStub{PickReport{Picked: 1}}
+	g.w.mu.Lock()
+	g.w.items = append(g.w.items, d2.Unit{ID: 901, Type: d2.TypeItem, Class: 7, Item: &d2.Item{Where: d2.ContInventory}})
+	g.w.mu.Unlock()
+	g.r.poll()
 	if err := acts.PickUp(context.Background(), task.ItemMalus); err != nil {
 		t.Errorf("taken: %v", err)
+	}
+}
+
+// The report counts every item taken: a pick-up that took three other items but not the named quest item is "not found",
+// and the same call with the item in the pack is success (V lab 2026-11-23, stepgrounds stand_click_pickup: three other items
+// taken, nil returned, the step "ran but is still needed", no Malus). Must fail while PickUp trusts the count alone.
+func TestPickUpOfAQuestItemChecksThePack(t *testing.T) {
+	g := newRig(t)
+	acts := taskActs{r: g.r}
+	g.r.d.Loot = pickStub{PickReport{Picked: 3}}
+	g.r.poll()
+	if k := task.Classify(acts.PickUp(context.Background(), task.ItemMalus)); k != task.KindNotFound {
+		t.Errorf("three other items, no Malus: kind %v", k)
+	}
+	g.w.mu.Lock()
+	g.w.items = append(g.w.items, d2.Unit{ID: 900, Type: d2.TypeItem, Class: 7, Item: &d2.Item{Where: d2.ContInventory}})
+	g.w.mu.Unlock()
+	if err := acts.PickUp(context.Background(), task.ItemMalus); err != nil {
+		t.Errorf("the Malus in the pack: %v", err)
+	}
+	if err := acts.PickUp(context.Background(), "Amulet of Nothing"); err != nil {
+		t.Errorf("an item the pack scan does not name keeps the count rule: %v", err)
 	}
 }

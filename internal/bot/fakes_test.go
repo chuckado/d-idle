@@ -156,6 +156,8 @@ func (fakeCatalog) Item(class int) (ItemMeta, bool) {
 	switch class {
 	case 1:
 		return ItemMeta{Name: "Healing Potion", GoalType: "potion", W: 1, H: 1, Potion: PotionHealing, Tier: 2}, true
+	case 7:
+		return ItemMeta{Name: "Horadric Malus", GoalType: "quest", W: 1, H: 2}, true
 	case 2:
 		return ItemMeta{Name: "El Rune", GoalType: "rune", W: 1, H: 1}, true
 	case 3:
