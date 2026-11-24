@@ -195,7 +195,8 @@ func (r *Runner) forgetGame() {
 type trip struct {
 	plan       ChorePlan
 	returnTo   int
-	stage      int // 0 go home, 1 chores, 2 settle, 3 back to the field
+	redirected bool // the field gate changed returnTo: the standing town portal leads somewhere the hero is sent away from
+	stage      int  // 0 go home, 1 chores, 2 settle, 3 back to the field
 	emergency  bool
 	startGold  int  // gold when the trip was first advanced (in the field for most trips), for the trip log line
 	startBasis int  // the policy's gold (stash included while no healing potion) at that moment, for the in-town latch
@@ -691,7 +692,7 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 			r.setWhy(WhyBackToField)
 		}
 		ok := r.do(ctx, c, StateResupplying, "Returning to the field", sec(r.cfg.TravelTimeoutSec), "back to field", func(ctx context.Context) error {
-			err := r.returnToField(ctx, t.returnTo)
+			err := r.returnToField(ctx, t.returnTo, t.redirected)
 			if err == nil {
 				r.waitForMerc(ctx, "portal")
 			}
@@ -1907,6 +1908,8 @@ func (r *Runner) askReturn(s *d2.Snapshot, in resource.Input, v resource.FieldVe
 // Restock runs the chores once more (bounded), BloodMoor redirects a poor character to its first field, where the walk
 // home works. A poor character is never sent shopping, so the two cannot loop.
 func (r *Runner) gateField(s *d2.Snapshot, t *trip) bool {
+	was := t.returnTo
+	defer func() { t.redirected = t.redirected || t.returnTo != was }()
 	r.redirectStalePack(s, t)
 	if g := r.gearVerdict(s); g.Gated {
 		if a := r.safeFarmArea(s); a != 0 && t.returnTo != a {

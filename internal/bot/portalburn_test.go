@@ -17,7 +17,7 @@ func TestReturnToFieldWalksPastBurnedPortal(t *testing.T) {
 			g.w.set(func(w *world) { w.area = 1 })
 			g.r.poll() // 9 -> town alive: the portal now leads to 9
 			g.r.zoneCostAt("chicken", 9)
-			if err := g.r.returnToField(context.Background(), 6); err != nil {
+			if err := g.r.returnToField(context.Background(), 6, false); err != nil {
 				t.Fatal(err)
 			}
 			if g.w.count("back 6") != 0 {
@@ -39,11 +39,31 @@ func TestReturnToFieldPortalWhenLandingIsClean(t *testing.T) {
 			g.r.poll()
 			g.w.set(func(w *world) { w.area = 1 })
 			g.r.poll()
-			if err := g.r.returnToField(context.Background(), 6); err != nil {
+			if err := g.r.returnToField(context.Background(), 6, false); err != nil {
 				t.Fatal(err)
 			}
 			if g.w.count("back 6") != 1 {
 				t.Fatalf("calls: %v", g.w.log())
+			}
+		})
+	}
+}
+
+// V live 2026-11-24 20:32Z: the field gate sent a trip from Catacombs 4 (Andariel's lair) to the first field; the portal still
+// leads to the lair, 18 hostiles waited at it and the hero was dead in 11 s. A redirected trip walks. Both classes.
+func TestReturnToFieldWalksWhenTheGateRedirected(t *testing.T) {
+	for _, cl := range reaskClasses {
+		t.Run(cl.String(), func(t *testing.T) {
+			g, _ := reaskRig(t, cl, nil)
+			g.w.set(func(w *world) { w.level = 12; w.area = 9 })
+			g.r.poll()
+			g.w.set(func(w *world) { w.area = 1 })
+			g.r.poll()
+			if err := g.r.returnToField(context.Background(), 6, true); err != nil {
+				t.Fatal(err)
+			}
+			if g.w.count("back 6") != 0 {
+				t.Fatalf("took the portal to the zone the gate sent it away from: %v", g.w.log())
 			}
 		})
 	}
