@@ -153,7 +153,6 @@ cmd/d2bot/beltfill_adapter.go  credit-runner  beltfix
 cmd/d2bot/boss.go  credit-runner  countess3
 cmd/d2bot/boss.go  credit-runner  countess3b
 cmd/d2bot/boss.go  credit-runner  malus
-cmd/d2bot/boss.go  credit-runner  toolstrade44
 cmd/d2bot/boss.go  pro-runner  levelplan3
 cmd/d2bot/boss_levelmonsters_test.go  credit-runner  countess3b
 cmd/d2bot/cain.go  credit-runner  cain45
@@ -286,8 +285,6 @@ cmd/d2bot/objects_layout_test.go  live-agent  k1layout
 cmd/d2bot/objects_test.go  credit-runner  cainfix
 cmd/d2bot/ops*.go  credit-runner  opsquest
 cmd/d2bot/ops*.go  credit-runner  opsquest4
-cmd/d2bot/opscmd.go  credit-runner  toolstrade44
-cmd/d2bot/opscmd_test.go  credit-runner  toolstrade44
 cmd/d2bot/pausewire.go  credit-runner  uib1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
 cmd/d2bot/pointswire.go  credit-runner  agencyp0
@@ -437,7 +434,6 @@ docs/adr/0014-memory-writes-allowed-no-crutch.md  credit-runner  vaultpay
 docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md  credit-runner  adrfable
 docs/adr/0020-proving-ground-and-stat-skill-agency.md  credit-runner  adrfable
 docs/adr/0029-vault-gold-payment.md  credit-runner  vaultpay
-docs/adr/0030-operator-quest-control.md  credit-runner  toolstrade44
 docs/adr/README.md  credit-runner  adrfable
 docs/adr/README.md  credit-runner  vaultpay
 docs/agency.md  credit-runner  barb1
@@ -466,7 +462,6 @@ docs/d2d-determinism.md  credit-runner  pgclock
 docs/d2d-loot.md  credit-runner  groundquality
 docs/decisions.md  credit-runner  adrfable
 docs/decisions.md  credit-runner  fabledecisions2
-docs/decisions.md  credit-runner  toolstrade44
 docs/decisions.md  credit-runner  vaultpay
 docs/design/bulk-identify-2026-11-18.md  credit-runner  bulkid-design
 docs/design/fable-review-2026-11-19  user  fablereview
@@ -585,7 +580,6 @@ docs/onboarding.md  credit-runner  firstminutes
 docs/onboarding.md  credit-runner  reconnectux
 docs/operator.md  credit-runner  opsquest
 docs/operator.md  credit-runner  opsquest4
-docs/operator.md  credit-runner  toolstrade44
 docs/palprofile.md  credit-runner  palprofile2
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
@@ -745,7 +739,6 @@ docs/questboard.md  credit-runner  quests7
 docs/questboard.md  credit-runner  quests7b
 docs/questboard.md  credit-runner  quests8
 docs/questboard.md  credit-runner  staleaccept
-docs/questboard.md  credit-runner  toolstrade44
 docs/questspec.md  credit-runner  questspec
 docs/releases/0.1.0.md  credit-runner  cut010b
 docs/releases/0.1.0.md  credit-runner  cut010d
@@ -956,7 +949,6 @@ internal/boss/fake_test.go  pro-runner  levelplan3
 internal/boss/run.go  credit-runner  countess
 internal/boss/run.go  credit-runner  malus
 internal/boss/run.go  credit-runner  toolstrade13
-internal/boss/run.go  credit-runner  toolstrade44
 internal/boss/run.go  pro-runner  levelplan3
 internal/boss/script.go  credit-runner  countess
 internal/boss/types.go  pro-runner  levelplan3
@@ -1014,7 +1006,6 @@ internal/bot/goldprio.go  credit-runner  goldprio
 internal/bot/goldprio_test.go  credit-runner  goldprio
 internal/bot/guided.go  credit-runner  campaign1
 internal/bot/guided_test.go  credit-runner  campaign1
-internal/bot/healcap_test.go  credit-runner  toolstrade44
 internal/bot/heroattrs.go  credit-runner  uic3
 internal/bot/heroattrs_test.go  credit-runner  uic3
 internal/bot/hpfields.go  credit-runner  intake
@@ -1091,7 +1082,6 @@ internal/bot/questboard.go  credit-runner  quests7
 internal/bot/questboard.go  credit-runner  quests7b
 internal/bot/questboard.go  credit-runner  quests8
 internal/bot/questboard.go  credit-runner  stage1fix
-internal/bot/questboard.go  credit-runner  toolstrade44
 internal/bot/questboard_goal_test.go  credit-runner  cainchain
 internal/bot/questboard_goal_test.go  credit-runner  questrun
 internal/bot/questboard_s7b_test.go  credit-runner  cain5b
@@ -1580,8 +1570,6 @@ internal/nav/waypoint.go  credit-runner  verbs2
 internal/nav/wpverb_test.go  credit-runner  verbs2
 internal/ops/**  credit-runner  opsquest
 internal/ops/**  credit-runner  opsquest4
-internal/ops/ops.go  credit-runner  toolstrade44
-internal/ops/ops_test.go  credit-runner  toolstrade44
 internal/plandata  credit-runner  agencyp0
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
@@ -1638,21 +1626,16 @@ internal/questboard/desk.go  credit-runner  andariel1
 internal/questboard/desk.go  credit-runner  bsm8
 internal/questboard/desk.go  credit-runner  handinbtn
 internal/questboard/desk.go  credit-runner  questrun
-internal/questboard/desk.go  credit-runner  toolstrade44
 internal/questboard/desk_action.go  credit-runner  handinbtn
-internal/questboard/desk_action.go  credit-runner  toolstrade44
 internal/questboard/desk_action_test.go  credit-runner  handinbtn
-internal/questboard/desk_action_test.go  credit-runner  toolstrade44
 internal/questboard/desk_reason_test.go  credit-runner  bsm8
 internal/questboard/desk_test.go  credit-runner  andariel1
 internal/questboard/desk_test.go  credit-runner  questrun
 internal/questboard/exec.go  credit-runner  bsm4
 internal/questboard/exec.go  credit-runner  questrun
 internal/questboard/exec.go  credit-runner  staleaccept
-internal/questboard/exec.go  credit-runner  toolstrade44
 internal/questboard/exec_sm.go  credit-runner  bsm4
 internal/questboard/exec_sm.go  credit-runner  staleaccept
-internal/questboard/exec_sm.go  credit-runner  toolstrade44
 internal/questboard/exec_sm_test.go  credit-runner  bsm4
 internal/questboard/exec_stale_test.go  credit-runner  staleaccept
 internal/questboard/sm.go  credit-runner  bsm2
@@ -1662,8 +1645,6 @@ internal/questboard/state.go  credit-runner  qdmatrix
 internal/questboard/state_test.go  credit-runner  cain45
 internal/questboard/state_test.go  credit-runner  qdmatrix
 internal/questboard/state_test.go  credit-runner  quests7b
-internal/questboard/try.go  credit-runner  toolstrade44
-internal/questboard/try_test.go  credit-runner  toolstrade44
 internal/questspec  credit-runner  questspec
 internal/questspec/act1boss_test.go  credit-runner  act1more
 internal/readiness/model.go  credit-runner  resistorder
@@ -1754,11 +1735,9 @@ internal/task/act1.go  credit-runner  cainchain
 internal/task/act1.go  credit-runner  equipswap
 internal/task/act1.go  credit-runner  quests7b
 internal/task/act1.go  credit-runner  toolstrade34
-internal/task/act1.go  credit-runner  toolstrade44
 internal/task/act2.go  credit-runner  equipswap
 internal/task/act2.go  credit-runner  qdmatrix
 internal/task/act2.go  credit-runner  quests7b
-internal/task/act2.go  credit-runner  toolstrade44
 internal/task/act2_test.go  credit-runner  qdmatrix
 internal/task/act3.go  credit-runner  equipswap
 internal/task/act3.go  credit-runner  quests7b
@@ -1779,7 +1758,6 @@ internal/task/gate.go  credit-runner  cainfix3
 internal/task/gate.go  credit-runner  chores2
 internal/task/gate.go  credit-runner  toolstrade16
 internal/task/gate.go  credit-runner  toolstrade29
-internal/task/gate.go  credit-runner  toolstrade44
 internal/task/gate_hold_test.go  credit-runner  bsm7
 internal/task/gear_gate_test.go  credit-runner  toolstrade34
 internal/task/guided.go  credit-runner  campaign1
@@ -1788,12 +1766,10 @@ internal/task/guided_test.go  pro-runner  levelplan3
 internal/task/kind.go  credit-runner  toolstrade25
 internal/task/route.go  credit-runner  toolstrade29
 internal/task/route.go  credit-runner  toolstrade30
-internal/task/route.go  credit-runner  toolstrade44
 internal/task/route.go  credit-runner  toolstrade5
 internal/task/route_test.go  credit-runner  chores2
 internal/task/route_test.go  credit-runner  toolstrade16
 internal/task/route_test.go  credit-runner  toolstrade30
-internal/task/route_test.go  credit-runner  toolstrade44
 internal/task/route_test.go  credit-runner  toolstrade5
 internal/task/s7b_test.go  credit-runner  quests7b
 internal/task/sim/sim.go  credit-runner  toolstrade34
@@ -1801,7 +1777,6 @@ internal/task/steps.go  credit-runner  toolstrade34
 internal/task/testdata  credit-runner  quests7b
 internal/task/testdata/plans/act1.txt  credit-runner  cain5b
 internal/task/timeoutpolicy_test.go  credit-runner  wpstep
-internal/task/try.go  credit-runner  toolstrade44
 internal/task/world.go  credit-runner  cainfix
 internal/task/world.go  credit-runner  cainfix3
 internal/task/world.go  credit-runner  quests7b
@@ -2001,14 +1976,10 @@ internal/watch/policysheet.go  credit-runner  uiframe
 internal/watch/pprofapi.go  credit-runner  botcpu2
 internal/watch/questsapi.go  credit-runner  quests4
 internal/watch/questsapi.go  credit-runner  quests8
-internal/watch/questsapi.go  credit-runner  toolstrade44
 internal/watch/questsapi_test.go  credit-runner  quests10
 internal/watch/questsapi_test.go  credit-runner  quests4
 internal/watch/questsapi_test.go  credit-runner  quests8
-internal/watch/questsapi_test.go  credit-runner  toolstrade44
 internal/watch/questui_test.go  credit-runner  quests8
-internal/watch/race_off_test.go  credit-runner  toolstrade44
-internal/watch/race_on_test.go  credit-runner  toolstrade44
 internal/watch/reasonlines_test.go  credit-runner  uireason
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
@@ -2117,7 +2088,6 @@ internal/watch/testdata/quests  credit-runner  quests4
 internal/watch/testdata/quests  credit-runner  quests7
 internal/watch/testdata/quests  credit-runner  quests8
 internal/watch/testdata/quests/  credit-runner  handinbtn
-internal/watch/testdata/quests/  credit-runner  toolstrade44
 internal/watch/testdata/questui  credit-runner  quests10
 internal/watch/testdata/questui  credit-runner  quests8
 internal/watch/testdata/questui/quest_ui.mjs  credit-runner  bsm8
@@ -2209,7 +2179,6 @@ internal/watch/vaultether_test.go  credit-runner  vaultv7b
 internal/watch/vaultidentall_test.go  credit-runner  uireason
 internal/watch/vaultidentall_test.go  credit-runner  uitoast
 internal/watch/vaultmass_test.go  credit-runner  bulkid
-internal/watch/vaultperf_test.go  credit-runner  toolstrade44
 internal/watch/vaultreveal_ui_test.go  credit-runner  uireason
 internal/watch/vaultreveal_ui_test.go  credit-runner  uitoast
 internal/watch/vaultreveal_ui_test.go  credit-runner  vaultreveal
@@ -2358,7 +2327,6 @@ internal/watch/web/panels/quest-board  credit-runner  quests10
 internal/watch/web/panels/quest-board  credit-runner  quests8
 internal/watch/web/panels/quest-board/panel.js  credit-runner  bsm8
 internal/watch/web/panels/quest-board/panel.js  credit-runner  handinbtn
-internal/watch/web/panels/quest-board/panel.js  credit-runner  toolstrade44
 internal/watch/web/panels/quest-board/panel.js  credit-runner  uireason
 internal/watch/web/panels/quest-list  credit-runner  quests8
 internal/watch/web/panels/quest-strip  credit-runner  quests8
