@@ -589,3 +589,50 @@ func TestLearnIgnoresATownPortalCrossing(t *testing.T) {
 		})
 	}
 }
+
+// V live 2026-11-24 (Andariel try-anyway, Jail Level 1): the way to the stairs to Jail Level 2 crosses eight doors one
+// after the other; every door opened used one of ExitTo's eight attempts, so the walk ended "walking out to level 30 did
+// not change the level" at the eighth door. Ten doors in a row must still be crossed in one call (both classes: the nav does
+// not read the class). Must fail while a door opened costs an attempt.
+func TestExitToCrossesTenDoorsInARow(t *testing.T) {
+	const doors = 10
+	for _, cls := range []string{"Paladin", "Necromancer"} {
+		t.Run(cls, func(t *testing.T) {
+			w := 40*doors + 160
+			g := openField(3000, 3000, w+140, 100)
+			var cells []d2map.Rect
+			var objs []d2.Unit
+			var pre []d2map.Preset
+			for i := 0; i < doors; i++ {
+				x := 3080 + 40*i
+				blockRect(g, d2map.Rect{X: x, Y: 3000, W: 2, H: 100})
+				cells = append(cells, d2map.Rect{X: x, Y: 3048, W: 2, H: 18})
+				objs = append(objs, d2Unit(uint32(100+i), 24, x+1, 3057))
+				pre = append(pre, d2map.Preset{Kind: d2map.PresetObject, ID: 24, Pos: d2map.Point{X: x + 1, Y: 3057}})
+			}
+			l1 := &simLevel{no: 1, rect: d2map.Rect{X: 3000, Y: 3000, W: w, H: 100}}
+			l2 := &simLevel{no: 2, rect: d2map.Rect{X: 3000 + w, Y: 3000, W: 100, H: 100}}
+			s := newSim(g, input.Point{X: 3010, Y: 3057}, l1, l2)
+			s.reveal = 600
+			s.levels[0].lm.Presets = pre
+			s.objects = objs
+			opened := 0
+			s.onInteract = func(s *sim, tg input.Target) error {
+				if i := int(tg.ID) - 100; i >= 0 && i < doors {
+					opened++
+					openDoor(s, cells[i])
+				}
+				return nil
+			}
+			n := s.navigator()
+			n.doorFn = func(class int) bool { return class == 24 }
+			n.exploreFn = func(_ context.Context, _ func() bool, _ *input.Point) error { return ErrExplored }
+			if err := n.ExitTo(ctxT(t), 2); err != nil {
+				t.Fatalf("%s: exit after %d doors: %v", cls, opened, err)
+			}
+			if opened != doors || s.cur().no != 2 {
+				t.Fatalf("%s: doors used %d of %d, level %d at %v", cls, opened, doors, s.cur().no, s.pos())
+			}
+		})
+	}
+}
