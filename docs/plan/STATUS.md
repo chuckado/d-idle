@@ -475,7 +475,6 @@
 | redsteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`internal/scenario/scenario.go`<br>`internal/scenario/setup.go`<br>`internal/scenario/necro_test.go` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
-| pipefix2 | proposed | - | `internal/bot/`<br>`internal/loot/`<br>`internal/nav/`<br>`internal/watch/`<br>`internal/d2dctl/`<br>`internal/d2denv/`<br>`internal/d2dtown/`<br>`cmd/d2dview/`<br>`tools/ci/`<br>`docs/process/`<br>`docs/adr/`<br>`docs/decisions.md`<br>`docs/backlog-howto.md`<br>`AGENTS.md` | - |
 | toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
