@@ -289,9 +289,14 @@ func TestBackToFieldPortalToOtherLevel(t *testing.T) {
 	}
 	w.PortalLevel = 3
 	r.Mv.Calls = nil
+	start := r.Env.Clock.Now()
 	err := r.T.BackToField(ctx, 26)
 	if !errors.Is(err, town.ErrWrongLevel) || w.Player.Area != 3 {
 		t.Fatalf("got %v area %d", err, w.Player.Area)
+	}
+	// V live 2026-11-24 20:33Z: the wait for the wanted level ran its 15 s next to a crowd; standing elsewhere ends it at once
+	if d := r.Env.Clock.Now().Sub(start); d > 10*time.Second {
+		t.Fatalf("waited %v in the wrong level", d)
 	}
 	for _, c := range r.Mv.Calls {
 		if strings.HasPrefix(c, "exitto") {

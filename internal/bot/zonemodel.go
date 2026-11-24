@@ -424,21 +424,24 @@ func (r *Runner) zoneRecoverReturn(s *d2.Snapshot, want int) int {
 // portalLandsBurned: the town portal leads to where the last scroll was read, not to the zone the trip returns to. When
 // the two differ and the landing zone just cost the hero (chicken, death, burn) or is not allowed, the portal would drop
 // it into the zone it is leaving ("wanted 6, in 9", holdout seeds 149 and 163).
-func (r *Runner) portalLandsBurned(level int) bool {
+func (r *Runner) portalLandsBurned(level int, redirected bool) bool {
 	r.obMu.Lock()
 	from := r.ob.portalFrom
 	r.obMu.Unlock()
 	if level == 0 || from == 0 || from == level || r.d.Plan.IsTown(from) {
 		return false
 	}
-	return r.zoneBurned(from) != "" || (r.latest() != nil && r.areaAllowed(r.latest(), from) != "")
+	// redirected: the field gate sent the trip to another zone than the one it left (stale pack, kit, gear); the portal
+	// drops the hero where it left, next to the pack that made it leave (V live 2026-11-24 20:32Z: Andariel's lair, 18
+	// hostiles, dead in 11 s with the gate's "first field" 23 as the target)
+	return redirected || r.zoneBurned(from) != "" || (r.latest() != nil && r.areaAllowed(r.latest(), from) != "")
 }
 
 // returnToField is the trip's way back: BackToField, except that a portal that lands in a burned or barred zone is not
 // taken; the hero walks from town to the wanted zone (waypoints and exits, like the corpse run) and only falls back to the
 // portal when that walk fails.
-func (r *Runner) returnToField(ctx context.Context, level int) error {
-	if r.portalLandsBurned(level) {
+func (r *Runner) returnToField(ctx context.Context, level int, redirected bool) error {
+	if r.portalLandsBurned(level, redirected) {
 		r.e.Log.Info("back to field: portal lands in a burned zone, walking instead", "area", level, "name", r.areaName(level))
 		err := r.travelTo(ctx, level)
 		if err == nil || ctx.Err() != nil {

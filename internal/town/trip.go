@@ -15,6 +15,12 @@ import (
 // waitArea waits until the player stands in level (any level when level < 0 and the area is a town).
 // Loading screens read as "not in game" and are simply waited through.
 func (t *Town) waitArea(ctx context.Context, level int, timeout time.Duration) (*d2.Snapshot, error) {
+	return t.waitAreaFrom(ctx, level, timeout, false)
+}
+
+// waitAreaFrom is waitArea; fromTown says the wait starts in town, so standing in any other field level means the way led
+// elsewhere and the wait ends with ErrWrongLevel.
+func (t *Town) waitAreaFrom(ctx context.Context, level int, timeout time.Duration, wantsFromTown bool) (*d2.Snapshot, error) {
 	deadline := t.e.Clock.Now().Add(timeout)
 	for {
 		s, err := t.h.Snap()
@@ -24,6 +30,11 @@ func (t *Town) waitArea(ctx context.Context, level int, timeout time.Duration) (
 		if s.State == d2.StateInGame && s.Player != nil {
 			if level >= 0 && s.Player.Area == level || level < 0 && data.IsTown(s.Player.Area) {
 				return s, nil
+			}
+			// Left town for another field level than wanted (a portal leads where it was read): waiting out the timeout there
+			// cost a hero its life in a crowd (V live 2026-11-24 20:33Z, 11 s in Catacombs 4).
+			if level >= 0 && wantsFromTown && !data.IsTown(s.Player.Area) {
+				return s, fmt.Errorf("%w: wanted %d, in %d", ErrWrongLevel, level, s.Player.Area)
 			}
 		}
 		if !t.e.Clock.Now().Before(deadline) {
@@ -376,8 +387,10 @@ func (t *Town) BackToField(ctx context.Context, levelNo int) error {
 				return err
 			}
 			failed = true
-		} else if _, err := t.waitArea(ctx, levelNo, 15*time.Second); err == nil {
+		} else if _, err := t.waitAreaFrom(ctx, levelNo, 15*time.Second, true); err == nil {
 			return nil
+		} else if errors.Is(err, ErrWrongLevel) {
+			return err // standing in another field level: the caller decides at once, not after 15 s next to its pack
 		} else {
 			t.e.Log.Warn("back to field: portal did not lead to the level", "err", err)
 			if err := t.wrongLevel(levelNo); err != nil {
