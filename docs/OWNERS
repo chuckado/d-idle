@@ -412,6 +412,8 @@ data/questboard/act1.json  credit-runner  cainfix
 data/questboard/act1.json  credit-runner  cainfix3
 data/questboard/act2.json  credit-runner  qdmatrix
 data/questspec  credit-runner  questspec
+data/stepgrounds/steps.json  credit-runner  necrosteps
+data/stepgrounds/verdicts.json  credit-runner  necrosteps
 data/unlocks  credit-runner  nocards
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
@@ -639,6 +641,7 @@ docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess3
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess3b
 docs/probes/provingground-run-2026-11-19.md  credit-runner  pgexpand
 docs/probes/quest-drill-matrix-2026-11-23.md  credit-runner  qdmatrix
+docs/probes/quest-step-catalogue.md  credit-runner  necrosteps
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/search-for-cain-2026-11-17.md  credit-runner  cainfix
@@ -2579,6 +2582,8 @@ tools/provingground/scenarios/points.json  credit-runner  hammer1
 tools/provingground/scenarios/points.json  credit-runner  necro1
 tools/provingground/scenarios/points.json  credit-runner  sorc2
 tools/provingground/scenarios/questdrill.json  credit-runner  qdmatrix
+tools/provingground/scenarios/stepgrounds.json  credit-runner  necrosteps
+tools/provingground/scenarios/stepgrounds_gen.json  credit-runner  necrosteps
 tools/provingground/scenarios/tiers.json  credit-runner  pgstability
 tools/provingground/scenarios/townplan.json  credit-runner  town1
 tools/provingground/scenarios/townplan.json  credit-runner  town5

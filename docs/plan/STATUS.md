@@ -471,6 +471,7 @@
 | malus2 | proposed | - | `tools/provingground/scenarios/necro.json`<br>`docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
 | toolstrade34 | proposed | - | `internal/task/act1.go`<br>`internal/bot/campsim_objects_test.go`<br>`internal/task/steps.go`<br>`internal/task/sim/sim.go`<br>`internal/task/gear_gate_test.go`<br>`internal/quest/dialog.go`<br>`cmd/d2bot/objects.go`<br>`cmd/d2bot/objects_layout_test.go`<br>`docs/probes/tools-trade-2026-11-22.md` | - |
 | stage2c | proposed | - | `docs/probes/necromancer-act1-drill-2026-11-22.md` | - |
+| necrosteps | proposed | - | `tools/provingground/scenarios/stepgrounds.json`<br>`data/stepgrounds/steps.json`<br>`data/stepgrounds/verdicts.json`<br>`docs/probes/quest-step-catalogue.md`<br>`tools/provingground/scenarios/stepgrounds_gen.json` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
@@ -500,6 +501,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 84f6181a0 11-23 22:30 `Merge agent/necrosteps: necrosteps: verdicts and catalogue` (necrosteps)
 - 4dbd9c419 11-23 22:04 `Merge agent/stage2c: stage2c: stage 2b and 3 reruns, drill doc section 17` (stage2c)
 - 38891eb5d 11-23 21:52 `Merge agent/toolstrade39: toolstrade39: bold dial pools k of visited zones for unvisited ones (Tower Cellars were rejected by the hero k clamp)` (toolstrade39)
 - 13bf2282b 11-23 21:18 `Merge agent/qd18: Merge branch 'main' into qdmatrix` (qd18)
@@ -509,5 +511,4 @@
 - 467885a00 11-23 21:07 `Merge branch 'main' into vaultequip2` (-)
 - 8827939af 11-23 20:22 `Merge agent/vaultperf: Merge branch 'main' into vaultperf` (vaultperf)
 - 3908c98be 11-23 20:20 `Merge branch 'main' into vaultperf` (-)
-- ff78e4c88 11-23 20:10 `Merge agent/toolstrade38: Merge branch 'main' into toolstrade38` (toolstrade38)
 <!-- statusgen:end -->
