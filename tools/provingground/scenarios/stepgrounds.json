@@ -1035,9 +1035,7 @@
      "hp1",
      "hp1",
      "mp1"
-    ],
-    "start": "field",
-    "area": 2
+    ]
    },
    "trigger": {
     "goals": "farm:Blood Moor",
@@ -1059,13 +1057,12 @@
     ]
    },
    "provenance": "CHEATED: level 30, gold and potions by SETUP verbs, field start in the Blood Moor. Mechanics only.",
-   "notes": "Belt with two healing potions and one mana potion (one slot free), four healing potions in the pack, a Necromancer in the field. In town the trip threshold doubles (ResupplyPotions 2 times 2) and the shop buys nothing because the pack holds the potions; expected RED until the threshold respects what the belt can hold (toolstrade).",
+   "notes": "Town start, belt with two healing potions and one mana potion (one slot free), four healing potions in the pack, goal farm:Blood Moor. In town the trip threshold doubles (ResupplyPotions 2 times 2) and the shop buys nothing because the pack holds the potions. The field start of the first version (run 20261123-220824-3897) made no town trip at all, so the loop is measured by area changes from a town start. Expected RED until the threshold respects what the belt can hold (toolstrade).",
    "assert": [
     {
-     "kind": "log_line",
-     "pattern": "^town trip .*healing potions heal",
-     "max": 2,
-     "why": "the loop of run 20261123-210945-459f: seven trips `[2 healing potions heal]` in ten virtual minutes with four healing potions in the pack"
+     "kind": "area_changes_le",
+     "max": 16,
+     "why": "the loop of run 20261123-210945-459f sent the hero Barracks, town, Outer Cloister about 125 times in 28 minutes; ten virtual minutes of a healthy hero need far fewer area changes"
     },
     {
      "kind": "log_line",
