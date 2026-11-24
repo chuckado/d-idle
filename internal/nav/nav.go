@@ -103,7 +103,8 @@ type Navigator struct {
 	wpMu         sync.Mutex
 	wpNew        []int
 	mouthFails   map[mouthKey]mouthFail
-	doorFn       func(class int) bool // test hook: is this object class a door (default: objects.txt IsDoor)
+	mouthSteps   map[mouthKey][]time.Time // recent step-aways per exit (mouthLoopMax)
+	doorFn       func(class int) bool     // test hook: is this object class a door (default: objects.txt IsDoor)
 	doorLogged   map[[2]int]bool
 	doorApproach map[[2]int]int
 	cm           cellMover           // the controller's fractional move, when it has one (exit.go pushThrough)
