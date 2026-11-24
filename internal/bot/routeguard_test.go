@@ -14,10 +14,10 @@ import (
 )
 
 func TestRouteGuardBlocksTheMonasteryRoad(t *testing.T) {
-	g := campaignRig(t, &fakeQuests{}, 12)
+	g := campaignRig(t, &fakeQuests{}, 8)
 	g.r.poll()
 	s := g.r.latest()
-	if why := g.r.routeGuardWhy(s); !strings.Contains(why, "no merc, clvl 12 < 14") {
+	if why := g.r.routeGuardWhy(s); !strings.Contains(why, "no merc, clvl 8 < 10") {
 		t.Fatalf("guard verdict %q", why)
 	}
 	for _, a := range []int{7, 26, 27, 28, 29, 30, 33, 37} {
@@ -71,7 +71,7 @@ func TestLevelPickerNeverEmptyWhileTheRoadIsClosed(t *testing.T) {
 }
 
 func TestFillRouteLogsOncePerChange(t *testing.T) {
-	g := campaignRig(t, &fakeQuests{}, 12)
+	g := campaignRig(t, &fakeQuests{}, 8)
 	buf := &bytes.Buffer{}
 	g.r.e.Log = slog.New(slog.NewTextHandler(buf, nil))
 	g.r.poll()
@@ -80,11 +80,11 @@ func TestFillRouteLogsOncePerChange(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if !strings.HasPrefix(w.RouteBlocked, "no merc, clvl 12 < 14") || w.RouteMinLevel != 14 || w.ImbueMinLevel != 20 || !w.ImbueNeedsMerc {
+		if !strings.HasPrefix(w.RouteBlocked, "no merc, clvl 8 < 10") || w.RouteMinLevel != 10 || w.ImbueMinLevel != 20 || !w.ImbueNeedsMerc {
 			t.Fatalf("world %+v", w)
 		}
 	}
-	if n := strings.Count(buf.String(), "route guard: blocked monastery (no merc, clvl 12 < 14)"); n != 1 {
+	if n := strings.Count(buf.String(), "route guard: blocked monastery (no merc, clvl 8 < 10)"); n != 1 {
 		t.Fatalf("%d log lines:\n%s", n, buf.String())
 	}
 }
@@ -147,7 +147,7 @@ func TestDenFloorPerClassAndPickerExclusion(t *testing.T) {
 }
 
 func TestEffectiveFloorLinesLoggedOncePerChange(t *testing.T) {
-	g := campaignRig(t, &fakeQuests{}, 12)
+	g := campaignRig(t, &fakeQuests{}, 8)
 	buf := &bytes.Buffer{}
 	g.r.e.Log = slog.New(slog.NewTextHandler(buf, nil))
 	g.r.poll()
@@ -157,7 +157,7 @@ func TestEffectiveFloorLinesLoggedOncePerChange(t *testing.T) {
 		}
 	}
 	out := buf.String()
-	for _, want := range []string{"route guard: monastery floor=14 (merc=none)", "route guard: forgotten tower floor=15 (merc=none)", "route guard: andariel floor=17 (merc=none)"} {
+	for _, want := range []string{"route guard: monastery floor=10 (merc=none)", "route guard: forgotten tower floor=15 (merc=none)", "route guard: andariel floor=11 (merc=none)"} {
 		if n := strings.Count(out, want); n != 1 {
 			t.Errorf("%q logged %d times:\n%s", want, n, out)
 		}

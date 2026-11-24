@@ -310,6 +310,9 @@ func (c *chain) wipeGame() {
 	// act45Game gates the Throne on Killed[Ancients]; in the game it is the quest, which a restart keeps.
 	w.Killed = map[string]bool{task.BossAncients: w.Killed[task.BossAncients]}
 	w.Cleared = map[task.Area]bool{}
+	// a new game starts in town, where the bot's start chores restock the belt (the sim's fights cost a potion each: with Andariel
+	// at clvl 11 a restart after the Smith skips the one chores visit of the old order and Act 4 then finds 4 potions against 5)
+	w.Potions = max(w.Potions, 10)
 	for _, it := range []string{task.ItemStaffPlaced, task.ItemBookRead, task.ItemOrbSmashed, task.ItemPortal, task.ItemScrollRead,
 		task.ItemAnyaTouched, task.ItemAnyaThawed, task.ItemForgeUsed} {
 		delete(w.Items, it)

@@ -15,12 +15,11 @@ func TestBossLevelsRows(t *testing.T) {
 			t.Errorf("%s: inconsistent row %+v", c, r)
 		}
 	}
-	// Paladin: the boss1-trace model as recommended (20 / 18), the ADR 0011 interim floors (17 / 15, user) as floors.
-	if r, _ := BossLevels(GateAndariel, "paladin"); r != (BossLevel{20, 18, 17, 15}) {
-		t.Errorf("paladin row %+v, want 20 / 18, floors 17 / 15", r)
-	}
-	if r, _ := BossLevels(GateAndariel, "sorceress"); r.Recommended < 18 {
-		t.Errorf("sorceress row %+v", r)
+	// the user's recalibration of 2026-11-24 (a human kills her at clvl 9 to 10): floors 11 / 10, recommended 14 / 13, every class
+	for _, c := range []string{"paladin", "sorceress", "necromancer"} {
+		if r, _ := BossLevels(GateAndariel, c); r != (BossLevel{14, 13, 11, 10}) {
+			t.Errorf("%s row %+v, want 14 / 13, floors 11 / 10", c, r)
+		}
 	}
 }
 
@@ -31,7 +30,7 @@ func TestBossLevelsUnknownNamesIt(t *testing.T) {
 	if _, err := BossLevels("mephisto", "paladin"); err == nil || !strings.Contains(err.Error(), "mephisto") {
 		t.Errorf("unknown gate: %v", err)
 	}
-	if LowestFloor(GateAndariel) != 13 {
+	if LowestFloor(GateAndariel) != 10 {
 		t.Errorf("lowest floor %d", LowestFloor(GateAndariel))
 	}
 }

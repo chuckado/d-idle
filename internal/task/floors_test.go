@@ -29,7 +29,9 @@ func floorWorld(lvl int, merc string, mut func(*task.World)) task.World {
 	return w
 }
 
-// TestGuardFloorTable: gate x merc state x clvl at the boundaries 13/14, 15/16, 14/15 and 16/17 (ADR 0011).
+// TestGuardFloorTable: gate x merc state x clvl at the boundaries of the floors: the road 10, the tower 16 (14 with a merc) and
+// Andariel 11 (10 with a merc), recalibrated by the user on 2026-11-24 (a human kills her at clvl 9 to 10); the rows at 8, 9, 10 and 11
+// are the start-or-hold rows of docs/probes/andariel-decisions-2026-11-24.json.
 func TestGuardFloorTable(t *testing.T) {
 	andyGate, _ := task.GateFor(task.QAndariel)
 	cases := []struct {
@@ -37,10 +39,10 @@ func TestGuardFloorTable(t *testing.T) {
 		lvl           int
 		road, tw, ady bool // open?
 	}{
-		{"none", 13, false, false, false}, {"none", 14, true, false, false}, {"none", 15, true, false, false},
-		{"none", 16, true, true, false}, {"none", 17, true, true, true},
-		{"dead", 13, false, false, false}, {"dead", 14, true, false, false}, {"dead", 16, true, true, false}, {"dead", 17, true, true, true},
-		{"alive", 13, false, false, false}, {"alive", 14, true, true, false}, {"alive", 15, true, true, true}, {"alive", 16, true, true, true},
+		{"none", 8, false, false, false}, {"none", 9, false, false, false}, {"none", 10, true, false, false}, {"none", 11, true, false, true},
+		{"none", 15, true, false, true}, {"none", 16, true, true, true},
+		{"dead", 9, false, false, false}, {"dead", 10, true, false, false}, {"dead", 11, true, false, true}, {"dead", 16, true, true, true},
+		{"alive", 8, false, false, false}, {"alive", 9, false, false, false}, {"alive", 10, true, false, true}, {"alive", 13, true, false, true}, {"alive", 14, true, true, true},
 	}
 	for _, c := range cases {
 		w := floorWorld(c.lvl, c.merc, nil)
@@ -129,15 +131,15 @@ func TestEffectiveFloorLine(t *testing.T) {
 		merc, want string
 		w          task.World
 	}{
-		{"none", "route guard: monastery floor=14 (merc=none)", floorWorld(10, "none", nil)},
-		{"alive", "route guard: monastery floor=14 (merc=alive)", floorWorld(10, "alive", nil)},
-		{"dead", "route guard: monastery floor=14 (merc=dead)", floorWorld(10, "dead", nil)},
+		{"none", "route guard: monastery floor=10 (merc=none)", floorWorld(10, "none", nil)},
+		{"alive", "route guard: monastery floor=10 (merc=alive)", floorWorld(10, "alive", nil)},
+		{"dead", "route guard: monastery floor=10 (merc=dead)", floorWorld(10, "dead", nil)},
 	} {
 		if got := task.FloorLine("monastery", task.MonasteryFloor(c.w), c.w); got != c.want {
 			t.Errorf("%s: %q want %q", c.merc, got, c.want)
 		}
 	}
-	if got := task.FloorLine("andariel", task.AndarielFloor(floorWorld(10, "alive", nil)), floorWorld(10, "alive", nil)); got != "route guard: andariel floor=15 (merc=alive)" {
+	if got := task.FloorLine("andariel", task.AndarielFloor(floorWorld(10, "alive", nil)), floorWorld(10, "alive", nil)); got != "route guard: andariel floor=10 (merc=alive)" {
 		t.Errorf("andariel %q", got)
 	}
 	if got := task.FloorLine("forgotten tower", task.TowerFloor(floorWorld(10, "none", nil)), floorWorld(10, "none", nil)); got != "route guard: forgotten tower floor=16 (merc=none)" {

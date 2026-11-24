@@ -187,7 +187,7 @@ func TestPaladinPrediction(t *testing.T) {
 		t.Fatal(err)
 	}
 	old, _ := Simulate(oldPlanRows(), tab, SimOpts{Minutes: 240, Rule: RuleFirst})
-	want := map[float64][2]int{60: {20376, 6}, 120: {63772, 10}, 240: {170551, 14}}
+	want := map[float64][2]int{60: {20376, 6}, 120: {63772, 10}, 240: {119933, 13}} // 240 min was 170551 / clvl 14 before Andariel's floor fell to 11 (2026-11-24): the spine reaches her earlier and leaves the farm
 	for m, w := range want {
 		xp, clvl := r.At(m)
 		if int(xp+0.5) < w[0]-200 || int(xp+0.5) > w[0]+200 || clvl != w[1] {

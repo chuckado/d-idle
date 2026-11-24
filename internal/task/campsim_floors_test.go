@@ -27,7 +27,9 @@ func TestCampaignFloorsMonotoneAndGated(t *testing.T) {
 				t.Errorf("%s %s: act %d after act %d", d.tmpl, e.Quest, e.Act, act)
 			}
 			act = e.Act
-			top[act] = max(top[act], e.MinLevel)
+			if !e.Optional { // the optional Countess (14) is left behind once Andariel's lower floor (11, user 2026-11-24) sends the hero on
+				top[act] = max(top[act], e.MinLevel)
+			}
 			if g := combat.EntryGate(d.diff, e.Act, 0, 0, false); e.MinLevel < g.Floor {
 				t.Errorf("%s %s floor %d below the act %d entry gate %d", d.tmpl, e.Quest, e.MinLevel, e.Act, g.Floor)
 			}

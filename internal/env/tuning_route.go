@@ -39,9 +39,9 @@ func DefaultCampaignTuning() CampaignTuning {
 		JourneyAskWaitMin: 10, JourneyFarmBudgetMin: 30}
 }
 func DefaultRouteTuning() RouteTuning {
-	return RouteTuning{MonasteryMinLevel: 14, MonasteryMinLevelMerc: 14, TowerMinLevel: 15, TowerMinLevelMerc: 14, TowerNeedsMerc: 0,
+	return RouteTuning{MonasteryMinLevel: 10, MonasteryMinLevelMerc: 10, TowerMinLevel: 15, TowerMinLevelMerc: 14, TowerNeedsMerc: 0,
 		TowerMinLife: 150, TowerMinLevelNoLife: 16, TowerKitMana: 3,
-		BarracksMinLevel: 24, BarracksMinLevelCaster: 22, BarracksMinLife: 400, BarracksMinLifeCaster: 300, BarracksLifeWaiver: 4,
+		BarracksMinLevel: 11, BarracksMinLevelCaster: 11, BarracksMinLife: 0, BarracksMinLifeCaster: 0, BarracksLifeWaiver: 4,
 		FreshGapSec: 600, FreshMaxNoGain: 3, FreshMinXP: 200, FreshBlockedSec: 1800}
 }
 
@@ -61,10 +61,10 @@ func routeKnobs() []Knob {
 			Desc: "RETIRED, no effect (the Journey was removed with the quest board, docs/questboard.md S9; the key stays so saved overrides still load). After this many minutes in a level step for a chapter that is ready at its floor (but under its recommended level) the hero asks whether to go at the floor; 0 = never asks. U: judgment, one level step budget."},
 		{Key: "campaign.journeyGoAtFloor", Label: "Journey: go at the floor by default", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
 			Desc: "RETIRED, no effect (the Journey was removed with the quest board, docs/questboard.md S9; the key stays so saved overrides still load). 0: Auto chapters go at the recommended level (comfortable); 1: at the floor (ready). The default for a hero that never set the policy row on the Journey panel; the hero's own choice wins."},
-		{Key: "route.monasteryMinLevel", Label: "Monastery road level floor (no merc)", Unit: "levels", Default: 14, Min: 10, Max: 40, HigherIsBetter: true, NoHandicap: true,
+		{Key: "route.monasteryMinLevel", Label: "Monastery road level floor (no merc)", Unit: "levels", Default: 10, Min: 10, Max: 40, HigherIsBetter: true, NoHandicap: true,
 			Desc: "The Monastery road (Tamoe Highland, Monastery Gate, Cloisters, Barracks, Jail, Cathedral, Catacombs, so Andariel too) is entered without a living merc only from this clvl, and always with the supply kit (4 healing, 2 portals, mana for casters). Otherwise the bot levels in Cold Plains to Black Marsh and the caves. Interim (ADR 0011, grill 0003; merc decision 2026-11-02): 14 with a full kit, was 16 and 20, so a dead or missing merc does not block the road (the living-merc floors rate a 140-HP Rogue too high). If road deaths fail the death rule at 14 in the act1run soak raise it to 16 or 18 and re-grill. 20 restores the old number."},
-		{Key: "route.monasteryMinLevelMerc", Label: "Monastery road level floor (living merc)", Unit: "levels", Default: 14, Min: 0, Max: 40, HigherIsBetter: true, NoHandicap: true,
-			Desc: "The same floor with a living merc (unknown counts as none). Interim (ADR 0011): 14. 0 restores the old rule: a living merc opens the road at any level."},
+		{Key: "route.monasteryMinLevelMerc", Label: "Monastery road level floor (living merc)", Unit: "levels", Default: 10, Min: 0, Max: 40, HigherIsBetter: true, NoHandicap: true,
+			Desc: "The same floor with a living merc (unknown counts as none). Was 14 (ADR 0011 interim); 10 since the user's recalibration of 2026-11-24 (docs/probes/andariel-gate-recalibration-2026-11-24.md). 0 restores the old rule: a living merc opens the road at any level."},
 		{Key: "route.towerMinLevel", Label: "Forgotten Tower level floor (no merc)", Unit: "levels", Default: 15, Min: 0, Max: 40, HigherIsBetter: true, NoHandicap: true,
 			Desc: "The Forgotten Tower and Tower Cellar 1 to 5 (areas 20-25, the Countess, a no-reward quest in Normal) are entered without a living merc only from this clvl AND with route.towerMinLife max life, and with the supply kit (4 healing, a portal with charges, route.towerKitMana mana potions for a class that uses mana). Below it the quest is skipped as optional (log: route guard: blocked tower (no merc, clvl N < 15) or (no merc, life N < 150)), corpses there are abandoned and a character standing there walks out first. G1 attempt 17: a clvl 14 caster died twice in the cellars. SME 2026-11-04 (user-approved, numbers U): 15 plus life 150, was 16 (ADR 0011 interim) and 20. 0 turns the tower guard off."},
 		{Key: "route.towerMinLevelMerc", Label: "Forgotten Tower level floor (living merc)", Unit: "levels", Default: 14, Min: 0, Max: 40, HigherIsBetter: true, NoHandicap: true,
@@ -77,13 +77,13 @@ func routeKnobs() []Knob {
 			Desc: "Mana potions the Forgotten Tower kit wants for a class that uses mana every attack (Sorceress, Necromancer, Druid; resource.ManaNeed 2). A melee build such as the Barbarian is not asked. U: SME number."},
 		{Key: "route.towerNeedsMerc", Label: "Tower: a merc opens it at any level", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
 			Desc: "0: a living mercenary only lowers the Forgotten Tower floor to route.towerMinLevelMerc (an unknown merc counts as none). 1: a living merc opens the tower at any level (the old rule)."},
-		{Key: "route.barracksMinLevel", Label: "Barracks level floor (melee)", Unit: "levels", Default: 24, Min: 0, Max: 60, HigherIsBetter: true, NoHandicap: true,
+		{Key: "route.barracksMinLevel", Label: "Barracks level floor (melee)", Unit: "levels", Default: 11, Min: 0, Max: 60, HigherIsBetter: true, NoHandicap: true,
 			Desc: "The Tools of the Trade chunk (the Smith in the Barracks) is not started below this clvl for a melee class; the board shows 'level N needed' and the hero levels instead. Live and lab 2026-11-23: a clvl 20 Paladin with 279 life lost 150 to 250 life in the first seconds of the arrival (Plague Fester, Ice Fang, Sin Kill, four Champion Black Rogues, 19 to 35 more) and never reached the Smith. d2-sme ballpark (EXP, not looked up): clvl 24 to 26 with 400 life. 0 = no floor."},
-		{Key: "route.barracksMinLevelCaster", Label: "Barracks level floor (caster)", Unit: "levels", Default: 22, Min: 0, Max: 60, HigherIsBetter: true, NoHandicap: true,
-			Desc: "The same floor for a caster class (Sorceress, Necromancer, Druid): d2-sme ballpark clvl 22 to 24 with 300 life and a crowd answer (summons or Poison Nova), EXP. 0 = no floor."},
-		{Key: "route.barracksMinLife", Label: "Barracks max life floor (melee)", Unit: "life", Default: 400, Min: 0, Max: 3000, HigherIsBetter: true, NoHandicap: true,
+		{Key: "route.barracksMinLevelCaster", Label: "Barracks level floor (caster)", Unit: "levels", Default: 11, Min: 0, Max: 60, HigherIsBetter: true, NoHandicap: true,
+			Desc: "The same floor for a caster class (Sorceress, Necromancer, Druid): was 22 (d2-sme ballpark, EXP); 11 since the user's recalibration of 2026-11-24 (Barracks monsters are level 9). 0 = no floor."},
+		{Key: "route.barracksMinLife", Label: "Barracks max life floor (melee)", Unit: "life", Default: 0, Min: 0, Max: 3000, HigherIsBetter: true, NoHandicap: true,
 			Desc: "Max life a melee class needs besides the level (unspent stat points do not count: the allocator or the player must spend them). While max life is unreadable (0) only the level counts. 0 = no life rule."},
-		{Key: "route.barracksMinLifeCaster", Label: "Barracks max life floor (caster)", Unit: "life", Default: 300, Min: 0, Max: 3000, HigherIsBetter: true, NoHandicap: true,
+		{Key: "route.barracksMinLifeCaster", Label: "Barracks max life floor (caster)", Unit: "life", Default: 0, Min: 0, Max: 3000, HigherIsBetter: true, NoHandicap: true,
 			Desc: "The same max life floor for a caster class. 0 = no life rule."},
 		{Key: "route.barracksLifeWaiver", Label: "Barracks life floor waived after N levels", Unit: "levels", Default: 4, Min: 0, Max: 40, HigherIsBetter: false, NoHandicap: true,
 			Desc: "The max life floor of the Barracks stops applying once the character is this many levels above the level floor (the log says 'life floor waived'), so a build whose life grows slowly (a Paladin with its points mostly in strength, a caster with little vitality) cannot train forever. 0 = never waived."},

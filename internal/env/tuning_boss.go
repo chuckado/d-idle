@@ -4,10 +4,10 @@ package env
 // source of truth: internal/task, internal/boss and plandata runs.json read it or are tested against it).
 // U: a judgment from docs/sme/pace-tables.md s5.2 (humans kill her at clvl 14 to 18) and docs/plan/code-reality.md
 // s3.2 (Normal Act 1 monsters top out near level 12, so XP decays from about clvl 17); the fight itself was never run live.
-const DefaultAndarielMinLevel = 17
+const DefaultAndarielMinLevel = 11
 
-// DefaultAndarielMinLevelMerc is the same floor with a living merc (ADR 0011, grill 0003: 17 without, 15 with).
-const DefaultAndarielMinLevelMerc = 15
+// DefaultAndarielMinLevelMerc is the same floor with a living merc (user, 2026-11-24: human median clvl 9 to 10, so 11 without a merc and 10 with one; ADR 0011 had 17 and 15).
+const DefaultAndarielMinLevelMerc = 10
 
 // BossTuning holds the boss-gate knobs. Owner: the planner.
 type BossTuning struct {

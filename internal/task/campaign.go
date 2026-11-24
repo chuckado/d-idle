@@ -100,7 +100,7 @@ type Act1Options struct {
 	SkipTower bool
 }
 
-// NormalAct1 is the Normal Act 1 campaign: Den, Blood Raven, Smith (clvl 8), Countess (clvl 14), Andariel (Tuning.Boss.AndarielMinLevel, default 17 without a merc, 15 with),
+// NormalAct1 is the Normal Act 1 campaign: Den, Blood Raven, Smith (clvl 8), Countess (clvl 14), Andariel (Tuning.Boss.AndarielMinLevel, default 11 without a merc, 10 with),
 // Warriv hop. Floors are from catalog.md / runs.json (U for 6 and 14).
 func NormalAct1(o Act1Options) *Campaign {
 	c := &Campaign{Name: "normal_act1"}
@@ -161,6 +161,11 @@ func (c *Campaign) Plan(w World, s Session) Plan {
 		}
 		if w.Act > 0 && e.Act > w.Act {
 			continue // a later act: its predecessor's hop entry is still pending, so the campaign is not done
+		}
+		if e.Optional && w.Act > e.Act && normalDiff(w) {
+			// An optional quest of an act the hero has left stays behind (Andariel from clvl 11 sends the hero to Act 2 before the
+			// Countess's floor of 14 is met; walking back for a no-reward quest is not worth it).
+			continue
 		}
 		if s != nil {
 			if why, b := s.Blocked(e.Quest); b {

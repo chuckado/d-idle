@@ -125,8 +125,8 @@ func TestBarracksFloorKeepsTheFarmWalkOut(t *testing.T) {
 		level, life int
 		closed      bool
 	}{
-		{d2.Paladin, 20, 279, true}, {d2.Paladin, 24, 420, false}, {d2.Paladin, 24, 300, true},
-		{d2.Sorceress, 21, 300, true}, {d2.Sorceress, 22, 300, false},
+		{d2.Paladin, 10, 120, true}, {d2.Paladin, 11, 150, false}, {d2.Paladin, 20, 279, false},
+		{d2.Sorceress, 10, 100, true}, {d2.Sorceress, 11, 100, false},
 	} {
 		rg := newRig(t)
 		s := &d2.Snapshot{State: d2.StateInGame, Player: &d2.Player{Area: 5, Level: tc.level, Class: tc.class, Difficulty: d2.Normal, Life: tc.life, MaxLife: tc.life}}
