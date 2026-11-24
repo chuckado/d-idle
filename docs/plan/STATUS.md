@@ -476,6 +476,7 @@
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
 | toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
+| toolstrade51 | proposed | - | `internal/nav/gatedoor.go`<br>`internal/nav/gatedoor_test.go` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
@@ -504,6 +505,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2cf81f3b3 11-24 15:12 `Merge agent/toolstrade51: toolstrade51: tries of unreachable doors are forgiven once a door opens (Catacombs 2: two doors in a row), live-grid fixture` (toolstrade51)
 - 718489c96 11-24 14:38 `Merge agent/toolstrade50: toolstrade50: card, probes` (toolstrade50)
 - 9b3c1cc83 11-24 13:49 `Merge agent/toolstrade49: Merge branch 'main' into toolstrade49` (toolstrade49)
 - a2dfb14b3 11-24 13:48 `Merge branch 'main' into toolstrade49` (-)
@@ -513,5 +515,4 @@
 - 6bd3f047e 11-24 13:13 `Merge agent/toolstrade47: toolstrade47: lab hop scenarios for the Andariel route (Cathedral to Catacombs 4)` (toolstrade47)
 - bbcc02871 11-24 13:00 `Merge agent/toolstrade46: toolstrade46: the unproven strip toward a neighbour looks inward past a wall edge (Inner Cloister to Cathedral), lab scenario` (toolstrade46)
 - 32d1e42ab 11-24 12:20 `Merge agent/qd23: Merge origin/main` (qd23)
-- c105ff564 11-24 12:17 `Merge origin/main` (-)
 <!-- statusgen:end -->

@@ -1532,6 +1532,7 @@ internal/nav/gatedoor.go  credit-runner  toolstrade
 internal/nav/gatedoor.go  credit-runner  toolstrade10
 internal/nav/gatedoor.go  credit-runner  toolstrade13
 internal/nav/gatedoor.go  credit-runner  toolstrade15
+internal/nav/gatedoor.go  credit-runner  toolstrade51
 internal/nav/gatedoor.go  credit-runner  toolstrade8
 internal/nav/gatedoor_test.go  credit-runner  qdmatrix
 internal/nav/gatedoor_test.go  credit-runner  stage23
@@ -1541,6 +1542,7 @@ internal/nav/gatedoor_test.go  credit-runner  toolstrade15
 internal/nav/gatedoor_test.go  credit-runner  toolstrade2
 internal/nav/gatedoor_test.go  credit-runner  toolstrade27
 internal/nav/gatedoor_test.go  credit-runner  toolstrade45
+internal/nav/gatedoor_test.go  credit-runner  toolstrade51
 internal/nav/gatedoor_test.go  credit-runner  toolstrade8
 internal/nav/hints_export.go  credit-runner  exitsread
 internal/nav/mouthgate.go  credit-runner  botstuck
