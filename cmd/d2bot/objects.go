@@ -92,10 +92,12 @@ var objSpecs = map[string]objSpec{
 	"Khalim's Heart chest":    {quest.ObjRelicChestA, objClick, ""},
 	"Khalim's Brain chest":    {quest.ObjRelicChestB, objClick, ""},
 	"Khalim's Eye chest":      {quest.ObjRelicChestC, objClick, ""},
-	"gidbinn altar":           {quest.ObjGidbinnAltar, objClick, ""},
-	"Lam Esen altar":          {quest.ObjLamTomeAltar, objClick, ""},
-	"red portal":              {quest.ObjRedPortalA3, objLeave, ""},
-	"Compelling Orb":          {quest.ObjCompellingOrb, objOrb, ""},
+	// V lab (objectlist level 78, devp26): the altar in the Flayer Jungle is class 252 "Gidbinn"; 251 is not in the level and the
+	// search ended "object class 251 not found (the whole level was walked)".
+	"gidbinn altar":  {quest.ObjGidbinn, objClick, ""},
+	"Lam Esen altar": {quest.ObjLamTomeAltar, objClick, ""},
+	"red portal":     {quest.ObjRedPortalA3, objLeave, ""},
+	"Compelling Orb": {quest.ObjCompellingOrb, objOrb, ""},
 	// Acts 4 and 5. Classes V (objects.txt, docs/act4.md and act5.md), roles S (Kolbot), every click U live.
 	ForgePlaceObject: {quest.ObjHellforge, objPlace, quest.ItemSoulstone},
 	ForgeSmashObject: {quest.ObjHellforge, objSmash, ""},

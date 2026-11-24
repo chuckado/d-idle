@@ -4,7 +4,7 @@
 
 Steps total 134: step scenario 50 (generated or hand-written), only a chunk-level scenario 59, MISSING 25.
 
-Verdicts: GREEN 32, RED 46, BLOCKED 30 (every MISSING step counts as BLOCKED), PENDING 26 (a scenario that was never run).
+Verdicts: GREEN 32, RED 43, BLOCKED 33 (every MISSING step counts as BLOCKED), PENDING 26 (a scenario that was never run).
 
 MISSING by cause: F2 1; F3 15; bot 9; (F<n> is a fork verb request, docs/probes/stepgrounds-fork-request.md; bot is a bot or scenario-format gap; data is missing data.)
 
@@ -41,8 +41,8 @@ MISSING by cause: F2 1; F3 15; bot 9; (F<n> is a fork verb request, docs/probes/
 | 1 | `tools_of_the_trade/malus/pick_imbue` | chunk: act1.tools.malus.basic | PENDING |  |
 | 1 | `sisters_to_the_slaughter/andariel/travel_catacombs` | step.act1.sisters_to_the_slaughter.andariel.travel_catacombs | RED |  [V run 20261123-183646] farm goal from Catacombs 3: the hero went to town on a pack-full chore and did not re-enter Catacombs 4 in 12 virtual min (cause U) The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100). |
 | 1 | `sisters_to_the_slaughter/andariel/kill_andariel` | drill.andariel.stand | GREEN |  [V run 20261123-165901] clvl 30 stand-in, matrix note 35 |
-| 1 | `act1_done/sail_east/travel_town` | drill.act1.sail | GREEN |  [V run 20261123-002950-167e] Paladin and Sorceress, matrix table |
-| 1 | `act1_done/sail_east/talk_warriv` | drill.act1.sail | GREEN |  [V run 20261123-002950-167e] Paladin and Sorceress, matrix table |
+| 1 | `act1_done/sail_east/travel_town` | drill.act1.sail | GREEN |  [V run 20261124-005430] devp27 rebase smoke |
+| 1 | `act1_done/sail_east/talk_warriv` | drill.act1.sail | GREEN |  [V run 20261124-005430] devp27 rebase smoke |
 | 2 | `radament/radament/talk_atma` | chunk: drill.act2.radament | GREEN |  |
 | 2 | `radament/radament/travel_sewers` | step.act2.radament.radament.travel_sewers | GREEN |  [V run 20261123-182327] Paladin 11, budget 15 virtual min |
 | 2 | `radament/radament/kill_radament` | step.act2.radament.radament.kill_radament | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit debug spawn radament works (V probe, hp 278); whether the Book of Skill drops from a spawned Radament is U (the Smith case showed quest drops can be object-driven). |
@@ -57,9 +57,9 @@ MISSING by cause: F2 1; F3 15; bot 9; (F<n> is a fork verb request, docs/probes/
 | 2 | `horadric_staff/shaft/travel_far_oasis` | step.act2.horadric_staff.shaft.travel_far_oasis | GREEN |  [V run 20261123-183100] RED before the prerequisite words were in the kit (locked until Radament's Lair); GREEN with records 4,6,7,9,11 |
 | 2 | `horadric_staff/shaft/travel_maggot_lair` | step.act2.horadric_staff.shaft.travel_maggot_lair | GREEN |  [V run 20261123-183100] RED before the prerequisite words were in the kit (locked until Radament's Lair); GREEN with records 4,6,7,9,11 |
 | 2 | `horadric_staff/shaft/take_shaft` | drill.act2.shaft | GREEN |  [V run 20261123-174023] Paladin 7, clvl 30 stand-in, merc 20; chest exists on seed 7 only |
-| 2 | `horadric_staff/assemble/open_cube` | drill.act2.assemble | GREEN |  [V run 20261123-175925] cube, shaft, amulet given; staff made |
-| 2 | `horadric_staff/assemble/transmute` | drill.act2.assemble | GREEN |  [V run 20261123-175925] cube, shaft, amulet given; staff made |
-| 2 | `horadric_staff/assemble/talk_cain` | drill.act2.assemble | GREEN |  [V run 20261123-175925] cube, shaft, amulet given; staff made |
+| 2 | `horadric_staff/assemble/open_cube` | drill.act2.assemble | GREEN |  [V run 20261124-005430] devp27 rebase smoke |
+| 2 | `horadric_staff/assemble/transmute` | drill.act2.assemble | GREEN |  [V run 20261124-005430] devp27 rebase smoke |
+| 2 | `horadric_staff/assemble/talk_cain` | drill.act2.assemble | GREEN |  [V run 20261124-005430] devp27 rebase smoke |
 | 2 | `arcane_sanctuary/portal/talk_jerhyn` | MISSING | BLOCKED | bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half) [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec] |
 | 2 | `arcane_sanctuary/portal/travel_palace_cellar` | step.act2.arcane_sanctuary.portal.travel_palace_cellar | RED |  [V run 20261123-183646] the hero died on the way (a fight, matrix notes 24 to 26); a travel verdict needs the fights solved first The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100). |
 | 2 | `arcane_sanctuary/portal/enter_arcane` | chunk: drill.act2.summoner | GREEN |  |
@@ -138,9 +138,9 @@ MISSING by cause: F2 1; F3 15; bot 9; (F<n> is a fork verb request, docs/probes/
 | 5 | `betrayal_harrogath/nihlathak/travel_halls_of_pain` | chunk: drill.act5.betrayal | RED |  |
 | 5 | `betrayal_harrogath/nihlathak/kill_nihlathak` | chunk: drill.act5.betrayal | RED |  |
 | 5 | `betrayal_harrogath/nihlathak/talk_anya` | chunk: drill.act5.betrayal | RED |  |
-| 5 | `rite_of_passage/ancients/travel_arreat_summit` | chunk: drill.act5.ancients | RED |  |
-| 5 | `rite_of_passage/ancients/kill_ancients` | chunk: drill.act5.ancients | RED |  |
-| 5 | `rite_of_passage/ancients/talk_qual_kehk` | chunk: drill.act5.ancients | RED |  |
+| 5 | `rite_of_passage/ancients/travel_arreat_summit` | chunk: drill.act5.ancients | BLOCKED |  |
+| 5 | `rite_of_passage/ancients/kill_ancients` | chunk: drill.act5.ancients | BLOCKED |  |
+| 5 | `rite_of_passage/ancients/talk_qual_kehk` | chunk: drill.act5.ancients | BLOCKED |  |
 | 5 | `eve_of_destruction/baal/travel_worldstone_keep` | chunk: drill.act5.baal | RED |  |
 | 5 | `eve_of_destruction/baal/clear_throne` | chunk: drill.act5.baal | RED |  |
 | 5 | `eve_of_destruction/baal/kill_baal` | chunk: drill.act5.baal | RED |  |

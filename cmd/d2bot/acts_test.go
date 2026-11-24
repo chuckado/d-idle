@@ -196,3 +196,11 @@ func TestEveryBoardQuestWithAWordReadsIt(t *testing.T) {
 		t.Fatalf("the quest word of these board quests is never read: %v", bad)
 	}
 }
+
+// The Gidbinn altar of the Flayer Jungle is object class 252 (V lab objectlist level 78); 251 is absent from the level.
+// Must fail with the old class.
+func TestGidbinnAltarIsClass252(t *testing.T) {
+	if got := objSpecs["gidbinn altar"].class; got != 252 {
+		t.Fatalf("gidbinn altar class %d, want 252", got)
+	}
+}
