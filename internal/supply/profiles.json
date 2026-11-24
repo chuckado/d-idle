@@ -7,7 +7,7 @@
     "blood_raven":        {"healing": {"min": 4}, "portal": {"min": 2}, "mana": {"min": 2, "manaNeedAtLeast": 2}, "gold_carry": {"min": 250}},
     "tools_of_the_trade": {"healing": {"min": 4}, "portal": {"min": 1}, "mana": {"min": 2, "manaNeedAtLeast": 2}},
     "countess":           {"healing": {"min": 4}, "portal": {"min": 1}, "mana": {"min": 2, "manaNeedAtLeast": 2}},
-    "andariel":           {"healing": {"min": 4}, "portal": {"min": 1}, "mana": {"min": 3, "manaNeedAtLeast": 2}},
+    "andariel":           {"healing": {"min": 8}, "portal": {"min": 1}, "mana": {"min": 3, "manaNeedAtLeast": 2}, "gold_carry": {"min": 3000}},
     "den":                {"healing": {"min": 2}},
     "recovery_farm":      {"healing": {"min": 2}, "portal": {"min": 1}, "mana": {"min": 2, "manaNeedAtLeast": 2}}
   }

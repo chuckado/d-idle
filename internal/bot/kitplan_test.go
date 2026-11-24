@@ -89,3 +89,39 @@ func TestTaskWorldCountsPackMana(t *testing.T) {
 		}
 	}
 }
+
+type profilePlanner struct {
+	Townsman
+	got *string
+}
+
+func (f profilePlanner) SupplyPlan(_ *d2.Snapshot, profile string, _ int) (supply.Plan, error) {
+	*f.got = profile
+	return supply.Plan{Lines: []supply.PlanLine{{Line: supply.Healing, Min: 8}, {Line: supply.GoldCarry, Min: 3000}}}, nil
+}
+
+// V live 2026-11-24: the boss chunk kept the road's kit (4 healing) and the purse fell to 188. Within two levels of Andariel's floor
+// in Normal, before she is killed, the guards and the town read the "andariel" profile (8 healing, the boss purse); an earlier
+// hero keeps the road's. Two classes.
+func TestKitPlanUsesTheBossProfileNearAndariel(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Necromancer} {
+		for _, tc := range []struct {
+			level int
+			want  string
+		}{{20, "andariel"}, {5, kitProfile}} {
+			g := newRig(t)
+			g.r.e.Tune.Quests.BoardSM = 1
+			var got string
+			g.r.d.Town = profilePlanner{Townsman: g.r.d.Town, got: &got}
+			g.w.set(func(w *world) { w.class = class; w.level = tc.level })
+			g.r.poll()
+			k := g.r.kitPlanOf(g.r.latest())
+			if got != tc.want {
+				t.Errorf("%v level %d: profile %q, want %q", class, tc.level, got, tc.want)
+			}
+			if tc.want == "andariel" && (k == nil || k.GoldCarry != 3000 || g.r.bossPurse() != 3000) {
+				t.Errorf("%v: boss purse not handed on: %+v", class, k)
+			}
+		}
+	}
+}

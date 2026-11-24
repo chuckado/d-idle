@@ -100,3 +100,23 @@ func TestSolveDeterministic(t *testing.T) {
 		}
 	}
 }
+
+// The Andariel profile is the boss kit (V live 2026-11-24: 3 healing potions at 120/279 life, no belt healing at the chicken): 8
+// healing, clamped to what the build carries, and the boss purse as gold_carry. Two builds: the 4-slot belt clamps the line, a
+// bigger belt keeps it. Must fail with the old profile (4 healing, no gold line).
+func TestAndarielProfileIsTheBossKit(t *testing.T) {
+	for name, tc := range map[string]struct{ capHP, wantMax int }{"pal-sash": {6, 6}, "sorc-belt": {10, 10}} {
+		in := builds["sorc"]
+		in.Capacity = map[Line]int{Healing: tc.capHP, Mana: 4}
+		n, err := NeedFor("quest", "andariel", in)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if q := n.Lines[Healing]; q.Min != 8 && q.Min != tc.capHP || q.Max != tc.wantMax {
+			t.Errorf("%s: healing %+v, want min 8 (or the capacity %d when that is lower) and max %d", name, q, tc.capHP, tc.wantMax)
+		}
+		if got := n.Lines[GoldCarry].Min; got != 3000 {
+			t.Errorf("%s: boss purse %d, want 3000", name, got)
+		}
+	}
+}

@@ -129,6 +129,8 @@ type ChorePlan struct {
 	KitHealing int
 	// KitMana > 0: the same for mana potions (town.plan >= 2: the planner's mana minimum for the guard kit).
 	KitMana int
+	// BossPurse > 0: the gold the visit leaves with when the stash has it (the boss kit, supply profile gold_carry).
+	BossPurse int
 }
 
 // ChoreReport is what the visit achieved. Done lists chore names that completed.

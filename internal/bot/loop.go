@@ -936,6 +936,7 @@ func (r *Runner) fullChores(reason string) ChorePlan {
 	p := ChorePlan{Reason: reason, Heal: true, Potions: true, Repair: true, Identify: true, Sell: true, Stash: true, GoldFloor: r.e.Tune.Bot.GoldFloor,
 		Antidotes: r.antidotesWanted()}
 	p.KitHealing, p.KitMana = r.routeKit()
+	p.BossPurse = r.bossPurse()
 	return p
 }
 
@@ -946,6 +947,9 @@ func (r *Runner) fullChores(reason string) ChorePlan {
 func (r *Runner) withRouteKit(p ChorePlan) ChorePlan {
 	if p.Potions && p.KitHealing == 0 {
 		p.KitHealing, p.KitMana = r.routeKit()
+	}
+	if p.Potions && p.BossPurse == 0 {
+		p.BossPurse = r.bossPurse()
 	}
 	return p
 }
