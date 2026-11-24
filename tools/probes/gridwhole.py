@@ -47,6 +47,7 @@ def session(d2d, data, seed):
             break
         time.sleep(0.2)
     time.sleep(1.0)
+    cmd.sock = sock
     return p, cmd
 
 def grid(cmd):
