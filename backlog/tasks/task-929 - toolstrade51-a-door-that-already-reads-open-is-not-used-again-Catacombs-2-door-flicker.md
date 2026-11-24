@@ -1,10 +1,13 @@
 ---
 id: TASK-929
-title: 'toolstrade51: a door that already reads open is not used again (Catacombs 2 door flicker)'
-status: Proposed
+title: >-
+  toolstrade51: a door that already reads open is not used again (Catacombs 2
+  door flicker)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T19:59:00Z'
+updated_date: '2026-11-24T20:24:00Z'
 labels:
   - bot
   - bot-fix
