@@ -102,6 +102,11 @@
       "monster": "smith",
       "n": 1
      }
+    ],
+    "objects": [
+     {
+      "class": 108
+     }
     ]
    },
    "trigger": {
@@ -127,18 +132,12 @@
     ]
    },
    "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero.",
-   "notes": "Step kill_smith and the pickup: a spawned Smith is killed by the hero (V run 20261123-175218: killed in 2 s), then the bot must walk to the stand and click it; end state hdm in the pack. Control: .control (no Smith, no click: no hdm). U: whether a debug-spawned Smith in the arrival nook leaves the stand reachable; the stand lies in the real Smith room, so the scenario may need a warp to the stand (a pre.warp hook, bot or format gap).",
+   "notes": "Smith spawned (plain), the stand added beside the hero by `debug object add 108` (devp25 stepverbs), quest 3 = 0x000c (the stand refuses a hero without the quest). The bot's stand click is toolstrade34 (merged). Control: .control (no Smith, no stand, no click: no hdm). Needs the devp25 binary (PG_D2D_BIN).",
    "assert": [
-    {
-     "kind": "log_line",
-     "pattern": "^loot: clicked .*item=Horadric Malus|^quest board: .*stand",
-     "min": 1,
-     "why": "the bot clicked the stand or the dropped Malus (S, log; the exact stand log line is the toolstrade card's)"
-    },
     {
      "kind": "item_in_pack",
      "code": "hdm",
-     "why": "the Malus is carried at the end (V design: a quest item is not sold or dropped by this chunk before Charsi)"
+     "why": "the bot clicked the Malus stand (object 108) and carries the Malus (the d2d drops it only from the stand, devp24 doc)"
     },
     {
      "kind": "log_line",
@@ -149,9 +148,7 @@
    ],
    "needs": [
     "lab-verbs-attach"
-   ],
-   "status": "pending",
-   "pending_reason": "Waits for the bot's Malus stand click (card toolstrade a7b2ec8e). The d2d drops the Malus only when a player operates the stand (object 108), never from the Smith's corpse (V fork agent, devp24 doc; my probes stepdrop.py agree: a spawned and killed Smith leaves no hdm). Run it after the bot card merges."
+   ]
   },
   {
    "id": "step.act1.smith.malus_pickup",

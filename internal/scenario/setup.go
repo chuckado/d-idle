@@ -169,6 +169,17 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		if p.Start != StartField {
 			return Setup{}, fmt.Errorf("scenario %s: pre.spawn needs start field", s.ID)
 		}
+		if sp.Super != "" {
+			if sp.Monster != "" || sp.N > 1 || sp.Mod != "" {
+				return Setup{}, fmt.Errorf("scenario %s: a super spawn takes only the name", s.ID)
+			}
+			add("spawn superunique "+sp.Super, "debug spawn super "+sp.Super)
+			tags["spawn"] = true
+			continue
+		}
+		if sp.Monster == "" {
+			return Setup{}, fmt.Errorf("scenario %s: spawn needs monster or super", s.ID)
+		}
 		switch sp.Mod {
 		case "", "champion", "unique":
 		default:
@@ -181,6 +192,20 @@ func BuildSetup(s Scenario, class string, seed int64) (Setup, error) {
 		}
 		add(fmt.Sprintf("spawn %d %s %s", n, sp.Monster, sp.Mod), line)
 		tags["spawn"] = true
+	}
+	for _, o := range p.Objects {
+		if p.Start != StartField {
+			return Setup{}, fmt.Errorf("scenario %s: pre.objects needs start field", s.ID)
+		}
+		if o.Class <= 0 {
+			return Setup{}, fmt.Errorf("scenario %s: object class %d", s.ID, o.Class)
+		}
+		line := fmt.Sprintf("debug object add %d", o.Class)
+		if o.X != 0 || o.Y != 0 {
+			line += fmt.Sprintf(" %d %d", o.X, o.Y)
+		}
+		add(fmt.Sprintf("object class %d", o.Class), line)
+		tags["object"] = true
 	}
 	for _, w := range p.Worn {
 		su.Seeds = append(su.Seeds, Seed{Kind: SeedWorn, Code: w.Code, Slot: BodySlot[w.Slot], SlotName: w.Slot,
