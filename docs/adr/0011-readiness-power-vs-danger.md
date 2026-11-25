@@ -77,3 +77,8 @@ Merc rules:
 ## Sources
 
 docs/grills/0003-merc-and-act2/prebrief.md, verified-claims.md, sme-grill.md, outcome.md; ADR 0005, ADR 0006; docs/contracts/merc-policy.md; plan-v2 11.2; docs/roadmap.md sections 6 and 8 (D6); docs/knobs.md
+
+## Amended 2026-11-25 (user decision)
+
+Floor-only chunks wall: a quest chunk that has no boss margin and is judged by its legacy level floor alone reads too hard, and is not startable, when the hero is more than `quests.legacyWall` levels under that floor (default 2). Within the two levels the word stays risky (a warning). The owner's try anyway overrides it, and `quests.legacyWall` 0 restores warn-only ("warn, never wall"). Why: a clvl 4 Paladin started the Cain scroll (floor 9) on the Questy bed, walked through the Underground Passage and died. Boss chunks are unchanged: their margin and gate decide.
+

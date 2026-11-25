@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"os"
 	"path/filepath"
 	"strings"
 	"sync/atomic"
@@ -115,7 +116,7 @@ func questEv(id string, stage int, seq uint64) goals.Event {
 func TestRiskMeterWiredToTheBotFacts(t *testing.T) {
 	for _, class := range []string{"Sorceress", "Paladin"} {
 		t.Run(class, func(t *testing.T) {
-			w := newWireRig(t, class, t.TempDir(), nil)
+			w := newWireRig(t, class, wireTempDir(t), nil)
 			if code := httpDo(t, "GET", w.view+"/api/risk", nil, nil); code != 401 {
 				t.Errorf("risk without a token: %d", code)
 			}
@@ -156,7 +157,7 @@ func TestRiskMeterWiredToTheBotFacts(t *testing.T) {
 func TestOrderQueueWiredThroughTheOrdersPath(t *testing.T) {
 	for _, class := range []string{"Sorceress", "Paladin"} {
 		t.Run(class, func(t *testing.T) {
-			w := newWireRig(t, class, t.TempDir(), nil)
+			w := newWireRig(t, class, wireTempDir(t), nil)
 			var qv watch.OrderQueueView
 			if code := httpDo(t, "GET", w.view+"/api/orderqueue", nil, nil); code != 401 {
 				t.Errorf("queue without a token: %d", code)
@@ -253,7 +254,7 @@ func TestBestiaryWiredWithTableAndRestart(t *testing.T) {
 
 // With no monster table the cards carry the flavour only and the bot still starts.
 func TestBestiaryWithoutTablesIsFlavourOnly(t *testing.T) {
-	w := newWireRig(t, "Sorceress", t.TempDir(), nil)
+	w := newWireRig(t, "Sorceress", wireTempDir(t), nil)
 	for i := 0; i < 10; i++ {
 		w.m.Handle(goals.Event{Type: goals.EvKill, Monster: "Fallen", XP: 1})
 	}
@@ -271,4 +272,23 @@ func cardOf(v watch.BestiaryView, id string) watch.BestiaryCard {
 		}
 	}
 	return watch.BestiaryCard{}
+}
+
+// wireTempDir is t.TempDir for a rig whose background writers (the bestiary and atlas stores of the fun hub) may still add a file
+// while the test ends: the plain TempDir cleanup failed CI with "unlinkat ...: directory not empty" (main CI 2026-11-25 15:12Z,
+// TestOrderQueueWiredThroughTheOrdersPath/Sorceress). The cleanup retries for a few seconds.
+func wireTempDir(t *testing.T) string {
+	t.Helper()
+	dir, err := os.MkdirTemp("", "d2wire")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		for end := time.Now().Add(5 * time.Second); ; time.Sleep(100 * time.Millisecond) {
+			if os.RemoveAll(dir) == nil || time.Now().After(end) {
+				return
+			}
+		}
+	})
+	return dir
 }
