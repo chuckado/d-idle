@@ -14,6 +14,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -474,7 +475,10 @@ func (k *Keeper) runKeep(ctx context.Context) []string {
 	k.info.Full = false // set again below when the stash refuses
 	k.mu.Unlock()
 	made := 0
-	for _, r := range st.KeepQueued() {
+	queue := st.KeepQueued()
+	// Backpack creates (the Equip orders) go first: a full stash halts the stash creates, and must not hold a set back.
+	sort.SliceStable(queue, func(a, b int) bool { return queue[a].Where == vault.WhereInv && queue[b].Where != vault.WhereInv })
+	for _, r := range queue {
 		if stop || ctx.Err() != nil {
 			break
 		}
