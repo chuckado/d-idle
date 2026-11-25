@@ -504,6 +504,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 8e4803dab 11-24 19:58 `Merge agent/toolstrade60: Merge branch 'main' into toolstrade60` (toolstrade60)
+- 0a4cceb6c 11-24 19:57 `Merge branch 'main' into toolstrade60` (-)
 - 6f6f69a12 11-24 19:40 `Merge agent/toolstrade59: Merge branch 'main' into toolstrade59` (toolstrade59)
 - b6f2ccab8 11-24 19:38 `Merge branch 'main' into toolstrade59` (-)
 - a090a88ad 11-24 19:32 `Merge agent/vaultequip3: vaultequip3: identify the unit before the wear (the real check refuses unidentified items); backpack creates run before a full stash halts the queue` (vaultequip3)
@@ -512,6 +514,4 @@
 - e3b0f9872 11-24 18:30 `Merge branch 'main' into toolstrade56` (-)
 - a6496575a 11-24 18:20 `Merge agent/toolstrade55: toolstrade55: a stale-pack hold does not send a board chunk's trip home to the first field` (toolstrade55)
 - a950f288c 11-24 16:42 `Merge agent/toolstrade54: toolstrade54: a click the mouth gate keeps holding blocks that spot for planning (Catacombs 4: 215 rounds toward the stairs); lair grid fixture` (toolstrade54)
-- 48120464e 11-24 16:01 `Merge agent/toolstrade53: Merge branch 'main' into toolstrade53` (toolstrade53)
-- 12b5d7791 11-24 15:59 `Merge branch 'main' into toolstrade53` (-)
 <!-- statusgen:end -->
