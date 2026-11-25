@@ -504,6 +504,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 5da9a5b64 11-25 09:28 `Merge agent/toolstrade63: toolstrade63: two repairs that leave an item as it was before it stops counting; the sum is read before the click` (toolstrade63)
 - 38065f610 11-25 06:31 `Merge agent/devp30doc: devp30 sandbox note: fork rebase round 20261125 (docs only)` (devp30doc)
 - 01b948117 11-25 00:18 `Merge agent/toolstrade62: Merge branch 'main' into toolstrade62` (toolstrade62)
 - 326777f2e 11-25 00:17 `Merge branch 'main' into toolstrade62` (-)
@@ -513,5 +514,4 @@
 - 3fd90da24 11-24 20:18 `Merge agent/vaultequip5: Merge branch 'main' into vaultequip5` (vaultequip5)
 - 643859e63 11-24 20:16 `Merge branch 'main' into vaultequip5` (-)
 - a9726d490 11-24 20:14 `Merge main into vaultequip5` (-)
-- 0d6684bd5 11-24 20:05 `Merge agent/vaultequip4: Merge branch 'main' into vaultequip4` (vaultequip4)
 <!-- statusgen:end -->

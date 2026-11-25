@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- toolstrade63: two repairs that leave an item as it was before it stops counting; the sum is read before the click <!--sg:agent/toolstrade63-->
 - devp30 sandbox note: fork rebase round 20261125 (docs only) <!--sg:agent/devp30doc-->
 - Merge branch 'main' into toolstrade62 <!--sg:agent/toolstrade62-->
 - equipv2: task card (allow-adr), result line <!--sg:agent/equipv2-->
