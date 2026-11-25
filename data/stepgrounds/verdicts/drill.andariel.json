@@ -4,5 +4,35 @@
   "run": "20261123-165901",
   "tag": "V",
   "verdict": "GREEN"
+ },
+ "drill.andariel.live21": {
+  "verdict": "RED",
+  "run": "20261125-131522",
+  "tag": "V",
+  "note": "clvl 21, life 280, merc 17, 4 hp2: the board refuses the start (readiness too_hard)"
+ },
+ "drill.andariel.live21.kit": {
+  "verdict": "RED",
+  "run": "20261125-132009",
+  "tag": "V",
+  "note": "tier 3 potions: still too_hard"
+ },
+ "drill.andariel.live21.life": {
+  "verdict": "GREEN",
+  "run": "20261125-132405",
+  "tag": "V",
+  "note": "life 600: the board starts and the hero kills Andariel"
+ },
+ "drill.andariel.live21.bold": {
+  "verdict": "GREEN",
+  "run": "20261125-135927",
+  "tag": "V",
+  "note": "life 280 with the bold dial: killed on the 15th boss attempt, 0 deaths, merc died 3 times"
+ },
+ "drill.andariel.live21.kit.bold": {
+  "verdict": "GREEN",
+  "run": "20261125-140427",
+  "tag": "V",
+  "note": "tier 3 kit with the bold dial: killed"
  }
 }

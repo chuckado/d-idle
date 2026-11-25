@@ -704,7 +704,7 @@
     },
     {
      "kind": "log_line",
-     "pattern": "^Entered Kurast Docktown",
+     "pattern": "^Entered Lut Gholein",
      "min": 1,
      "why": "the hero stands in the Act 2 town"
     },
@@ -4942,6 +4942,788 @@
      "pattern": "^quest board: starting chunk",
      "min": 1,
      "why": "board offered and started the chunk (board evidence)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.andariel.live21",
+   "title": "Andariel with the live stand-in: clvl 21, life 280, merc 17, 4 belt potions of tier 2",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "sisters_to_the_slaughter",
+    "chunk": "andariel"
+   },
+   "step": {
+    "action": "kill",
+    "target": "Andariel",
+    "nodes": [
+     "wp-cold-plains",
+     "to-catacombs",
+     "kill",
+     "home"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.sisters_to_the_slaughter.andariel"
+   ],
+   "pre": {
+    "start": "town",
+    "level": 21,
+    "gold": 6000,
+    "waypoints": [
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 1,
+      "word": 1
+     },
+     {
+      "record": 2,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp2",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     },
+     {
+      "code": "yps",
+      "count": 4
+     }
+    ],
+    "belt": [
+     "hp2",
+     "hp2",
+     "hp2",
+     "hp2"
+    ],
+    "merc": 12,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 3
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 3
+     },
+     {
+      "code": "ssd",
+      "slot": "rhand",
+      "quality": 3
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 3
+     }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 71680
+     },
+     {
+      "stat": 6,
+      "value": 71680
+     }
+    ],
+    "merc_level": 17
+   },
+   "trigger": {
+    "goals": "reach:45",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1,
+     "boss.andarielHold": 0,
+     "quests.layoutRead": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "andariel"
+    ]
+   },
+   "budget": {
+    "virtual_min": 60
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: a realistic live stand-in for the Andariel fight (clvl 21, max life 280, a level 17 merc, hp2, 4 antidotes, plain gear), the hold knob off so the fight happens. The row answers how far the lab fight gets. Mechanics and numbers of the lab fight only; the live hero's best was 51 percent.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md). boss.andarielHold 0: the unattended hold (a deliberate gate of card m3-andariel) would keep the board from starting her; the drill tests the kill mechanics, not the gate.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 6,
+     "set": 2,
+     "why": "V docs/d2d-probes.md: record 6 bit 1 = Andariel killed (reward pending)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "the board offered and started Andariel"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.andariel.live21.kit",
+   "title": "Andariel, live stand-in with a tier 3 potion kit",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "sisters_to_the_slaughter",
+    "chunk": "andariel"
+   },
+   "step": {
+    "action": "kill",
+    "target": "Andariel",
+    "nodes": [
+     "wp-cold-plains",
+     "to-catacombs",
+     "kill",
+     "home"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.sisters_to_the_slaughter.andariel"
+   ],
+   "pre": {
+    "start": "town",
+    "level": 21,
+    "gold": 6000,
+    "waypoints": [
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 1,
+      "word": 1
+     },
+     {
+      "record": 2,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp3",
+      "count": 12
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     },
+     {
+      "code": "yps",
+      "count": 4
+     }
+    ],
+    "belt": [
+     "hp3",
+     "hp3",
+     "hp3",
+     "hp3"
+    ],
+    "merc": 12,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 3
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 3
+     },
+     {
+      "code": "ssd",
+      "slot": "rhand",
+      "quality": 3
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 3
+     }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 71680
+     },
+     {
+      "stat": 6,
+      "value": 71680
+     }
+    ],
+    "merc_level": 17
+   },
+   "trigger": {
+    "goals": "reach:45",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1,
+     "boss.andarielHold": 0,
+     "quests.layoutRead": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "andariel"
+    ]
+   },
+   "budget": {
+    "virtual_min": 60
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: a realistic live stand-in for the Andariel fight (clvl 21, max life 280, a level 17 merc, hp3, 4 antidotes, plain gear), the hold knob off so the fight happens. The potion kit is the variable. Mechanics and numbers of the lab fight only; the live hero's best was 51 percent.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md). boss.andarielHold 0: the unattended hold (a deliberate gate of card m3-andariel) would keep the board from starting her; the drill tests the kill mechanics, not the gate.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 6,
+     "set": 2,
+     "why": "V docs/d2d-probes.md: record 6 bit 1 = Andariel killed (reward pending)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "the board offered and started Andariel"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.andariel.live21.life",
+   "title": "Andariel, live stand-in with max life 600",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "sisters_to_the_slaughter",
+    "chunk": "andariel"
+   },
+   "step": {
+    "action": "kill",
+    "target": "Andariel",
+    "nodes": [
+     "wp-cold-plains",
+     "to-catacombs",
+     "kill",
+     "home"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.sisters_to_the_slaughter.andariel"
+   ],
+   "pre": {
+    "start": "town",
+    "level": 21,
+    "gold": 6000,
+    "waypoints": [
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 1,
+      "word": 1
+     },
+     {
+      "record": 2,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp2",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     },
+     {
+      "code": "yps",
+      "count": 4
+     }
+    ],
+    "belt": [
+     "hp2",
+     "hp2",
+     "hp2",
+     "hp2"
+    ],
+    "merc": 12,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 3
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 3
+     },
+     {
+      "code": "ssd",
+      "slot": "rhand",
+      "quality": 3
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 3
+     }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 153600
+     },
+     {
+      "stat": 6,
+      "value": 153600
+     }
+    ],
+    "merc_level": 17
+   },
+   "trigger": {
+    "goals": "reach:45",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1,
+     "boss.andarielHold": 0,
+     "quests.layoutRead": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "andariel"
+    ]
+   },
+   "budget": {
+    "virtual_min": 60
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: a realistic live stand-in for the Andariel fight (clvl 21, max life 600, a level 17 merc, hp2, 4 antidotes, plain gear), the hold knob off so the fight happens. The life pool is the variable. Mechanics and numbers of the lab fight only; the live hero's best was 51 percent.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md). boss.andarielHold 0: the unattended hold (a deliberate gate of card m3-andariel) would keep the board from starting her; the drill tests the kill mechanics, not the gate.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 6,
+     "set": 2,
+     "why": "V docs/d2d-probes.md: record 6 bit 1 = Andariel killed (reward pending)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "the board offered and started Andariel"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.andariel.live21.bold",
+   "title": "Andariel with the live stand-in: clvl 21, life 280, merc 17, 4 belt potions of tier 2 (bold dial: the board starts the fight it judges too hard)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "sisters_to_the_slaughter",
+    "chunk": "andariel"
+   },
+   "step": {
+    "action": "kill",
+    "target": "Andariel",
+    "nodes": [
+     "wp-cold-plains",
+     "to-catacombs",
+     "kill",
+     "home"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.sisters_to_the_slaughter.andariel"
+   ],
+   "pre": {
+    "start": "town",
+    "level": 21,
+    "gold": 6000,
+    "waypoints": [
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 1,
+      "word": 1
+     },
+     {
+      "record": 2,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp2",
+      "count": 8
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     },
+     {
+      "code": "yps",
+      "count": 4
+     }
+    ],
+    "belt": [
+     "hp2",
+     "hp2",
+     "hp2",
+     "hp2"
+    ],
+    "merc": 12,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 3
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 3
+     },
+     {
+      "code": "ssd",
+      "slot": "rhand",
+      "quality": 3
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 3
+     }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 71680
+     },
+     {
+      "stat": 6,
+      "value": 71680
+     }
+    ],
+    "merc_level": 17
+   },
+   "trigger": {
+    "goals": "reach:45",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1,
+     "boss.andarielHold": 0,
+     "quests.layoutRead": 1,
+     "bot.zoneDial": 2
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "andariel"
+    ]
+   },
+   "budget": {
+    "virtual_min": 60
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: a realistic live stand-in for the Andariel fight (clvl 21, max life 280, a level 17 merc, hp2, 4 antidotes, plain gear), the hold knob off so the fight happens. The row answers how far the lab fight gets. Mechanics and numbers of the lab fight only; the live hero's best was 51 percent. bot.zoneDial 2 (bold): the readiness model said 'too hard' and the board refused the start (V taps.log, run 20261125-131522); the bold dial lets the lab measure the fight.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md). boss.andarielHold 0: the unattended hold (a deliberate gate of card m3-andariel) would keep the board from starting her; the drill tests the kill mechanics, not the gate.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 6,
+     "set": 2,
+     "why": "V docs/d2d-probes.md: record 6 bit 1 = Andariel killed (reward pending)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "the board offered and started Andariel"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
+  },
+  {
+   "id": "drill.andariel.live21.kit.bold",
+   "title": "Andariel, live stand-in with a tier 3 potion kit (bold dial: the board starts the fight it judges too hard)",
+   "kind": "step",
+   "tier": "full",
+   "quest": {
+    "quest": "sisters_to_the_slaughter",
+    "chunk": "andariel"
+   },
+   "step": {
+    "action": "kill",
+    "target": "Andariel",
+    "nodes": [
+     "wp-cold-plains",
+     "to-catacombs",
+     "kill",
+     "home"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "data/questboard/",
+    "internal/boss/"
+   ],
+   "covers": [
+    "quest.sisters_to_the_slaughter.andariel"
+   ],
+   "pre": {
+    "start": "town",
+    "level": 21,
+    "gold": 6000,
+    "waypoints": [
+     -1
+    ],
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 1,
+      "word": 1
+     },
+     {
+      "record": 2,
+      "word": 1
+     }
+    ],
+    "items": [
+     {
+      "code": "hp3",
+      "count": 12
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     },
+     {
+      "code": "yps",
+      "count": 4
+     }
+    ],
+    "belt": [
+     "hp3",
+     "hp3",
+     "hp3",
+     "hp3"
+    ],
+    "merc": 12,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 3
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 3
+     },
+     {
+      "code": "ssd",
+      "slot": "rhand",
+      "quality": 3
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 3
+     }
+    ],
+    "stats": [
+     {
+      "stat": 7,
+      "value": 71680
+     },
+     {
+      "stat": 6,
+      "value": 71680
+     }
+    ],
+    "merc_level": 17
+   },
+   "trigger": {
+    "goals": "reach:45",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "town.bankFirst": 0,
+     "nav.warpRead": 1,
+     "nav.fullGrid": 1,
+     "quests.boardSM": 1,
+     "town.plan": 1,
+     "boss.andarielHold": 0,
+     "quests.layoutRead": 1,
+     "bot.zoneDial": 2
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "andariel"
+    ]
+   },
+   "budget": {
+    "virtual_min": 60
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: a realistic live stand-in for the Andariel fight (clvl 21, max life 280, a level 17 merc, hp3, 4 antidotes, plain gear), the hold knob off so the fight happens. The potion kit is the variable. Mechanics and numbers of the lab fight only; the live hero's best was 51 percent. bot.zoneDial 2 (bold): the readiness model said 'too hard' and the board refused the start (V taps.log, run 20261125-131522); the bold dial lets the lab measure the fight.",
+   "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md). boss.andarielHold 0: the unattended hold (a deliberate gate of card m3-andariel) would keep the board from starting her; the drill tests the kill mechanics, not the gate.",
+   "assert": [
+    {
+     "kind": "quest_bits",
+     "record": 6,
+     "set": 2,
+     "why": "V docs/d2d-probes.md: record 6 bit 1 = Andariel killed (reward pending)"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "^quest board: starting chunk",
+     "min": 1,
+     "why": "the board offered and started Andariel"
     },
     {
      "kind": "no_writes"

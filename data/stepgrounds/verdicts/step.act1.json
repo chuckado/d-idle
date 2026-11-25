@@ -36,10 +36,10 @@
   "verdict": "GREEN"
  },
  "step.act1.plan_overlap.necro": {
-  "note": "Necromancer 11 devp26, start in the Outer Cloister with the chunk accepted: Entered Barracks, no 'ended in 26': the overlap needs the hero to start inside the Barracks (see room_stand)",
-  "run": "20261123-223600",
+  "verdict": "GREEN",
+  "run": "20261125-141635",
   "tag": "V",
-  "verdict": "GREEN"
+  "note": "Necromancer 11, devp30 (run as Paladin the row is RED: the row needs its class)"
  },
  "step.act1.search_for_cain.scroll.take_scroll": {
   "note": "Paladin 11, clvl 24 kit",
@@ -78,10 +78,10 @@
   "verdict": "GREEN"
  },
  "step.act1.sisters_to_the_slaughter.andariel.travel_catacombs": {
-  "note": "farm goal from Catacombs 3: the hero went to town on a pack-full chore and did not re-enter Catacombs 4 in 12 virtual min (cause U)",
-  "run": "20261123-183646",
+  "verdict": "GREEN",
+  "run": "20261125-131359",
   "tag": "V",
-  "verdict": "RED"
+  "note": "devp30"
  },
  "step.act1.smith.malus_pickup": {
   "note": "Paladin 11; the Malus on the ground is clicked and carried",
@@ -96,16 +96,16 @@
   "verdict": "GREEN"
  },
  "step.act1.smith.room_stand.necro": {
-  "note": "after toolstrade40: still parks at 23:02:34 on 'left level 26 for 27 but ended in 7' 25 s after the start: the plan walks the hero out before the chunk exists, so 'the plan holds off while a fresh chunk is queued behind a fight' does not apply (no chunk yet)",
-  "run": "20261123-225912",
+  "verdict": "GREEN",
+  "run": "20261125-141635",
   "tag": "V",
-  "verdict": "RED"
+  "note": "Necromancer 11, devp30 (run as Paladin the row is RED: the row needs its class)"
  },
  "step.act1.smith.stand_click_afar.necro": {
-  "note": "after toolstrade40 (#1249), devp26: Necromancer kills the Smith (1m48s) and the stand step still ends 'never changed after 8 clicks' (outcome skipped, no retry now); the loop guard works: 'to-barracks ran 12 times with nothing after it' parks the chunk after 12 repeats (about 30 s, was 28 minutes). It was GREEN on devp25 before (retry carried the Malus); U flake or a regression of the stand step. The stand's cell (95,212) is a guess (U)",
-  "run": "20261123-225912",
+  "verdict": "GREEN",
+  "run": "20261125-141635",
   "tag": "V",
-  "verdict": "RED"
+  "note": "Necromancer 11, devp30 (run as Paladin the row is RED: the row needs its class)"
  },
  "step.act1.smith.stand_click_pickup": {
   "note": "with the merged stand step: the board reaches 'Pick up Horadric Malus from the Malus stand' (also in the reruns 190741 and 192710, the latter BLOCKED by a host cut), then 'task step skipped: ran but is still needed' and no hdm in the pack. Cause not isolated: the stand added by debug object add 108 beside the hero may not be the object the step looks up (U); needs the step's log lines at debug level",
@@ -126,10 +126,10 @@
   "verdict": "GREEN"
  },
  "step.act1.smith.stand_click_pickup.necro": {
-  "note": "after toolstrade40: still no Malus click (same plan/loop shape; the plan hold-off did not flip it)",
-  "run": "20261123-225912",
+  "verdict": "GREEN",
+  "run": "20261125-141635",
   "tag": "V",
-  "verdict": "RED"
+  "note": "Necromancer 11, devp30 (run as Paladin the row is RED: the row needs its class)"
  },
  "step.act1.tools_of_the_trade.malus.travel_barracks": {
   "note": "Paladin 11, clvl 24 kit",

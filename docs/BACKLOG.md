@@ -1371,6 +1371,12 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/toolstrade63: toolstrade63: two repairs that leave an item as it was before it stops counting; the sum is read before the click (merged 2026-11-25) <!--sg:agent/toolstrade63-->
 - equipv2b: createHex flips only the identified bit (durability check) (TASK-931, merged 2026-11-25, acceptance 2 of 2): createHex is clean: V live devp30 probe, durability and props kept, exactly one bit differs. The 0 percent and 105 percent readings come from elsewhere (U); needs the sandbox unit read. <!--sg:agent/equipv2b-->
 - agent/toolstrade64: Merge branch 'main' into toolstrade64 (merged 2026-11-25) <!--sg:agent/toolstrade64-->
+- dangerproto: danger protocol and checkpoint portals design (TASK-932, merged 2026-11-25, acceptance 2 of 2): design doc written from code and the SME answer; not verified live (latency measurement left as a checklist) <!--sg:agent/dangerproto-->
+- toolstrade68: ADR 0011 amended, floor-only chunks wall at quests.legacyWall (TASK-934, merged 2026-11-25, acceptance 0 of 1) <!--sg:agent/toolstrade68-->
+- checkpoint1: checkpoint portals phase 1 (cast, retreat, return after death) (TASK-933, merged 2026-11-25, acceptance 3 of 3): phase 1 built behind bot.checkpointEnable (default off): record, proactive cast, retreat, death route, arrival check; offline tests on two classes pass; not verified live <!--sg:agent/checkpoint1-->
+- agent/toolstrade-ci: Merge branch 'main' into toolstrade-ci (merged 2026-11-25) <!--sg:agent/toolstrade-ci-->
+- agent/toolstrade66: Merge branch 'main' into toolstrade66 (merged 2026-11-25) <!--sg:agent/toolstrade66-->
+- agent/qd24: Merge branch 'main' into qdmatrix (merged 2026-11-25) <!--sg:agent/qd24-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

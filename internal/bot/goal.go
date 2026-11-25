@@ -39,6 +39,9 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 	if r.pointsStep(ctx, snap, c) {
 		return true
 	}
+	if r.checkpointStep(ctx, snap, c) {
+		return true
+	}
 	if r.playerPauseStep(ctx, snap, c) {
 		return true
 	}
@@ -180,6 +183,7 @@ func (r *Runner) forgetGame() {
 	l.stepArea = 0
 	l.waitNote = false
 	l.farm.forgetVisit()
+	r.cpReset("new game")
 	if fc, ok := r.d.Mover.(interface{ ForgetCoverage() }); ok {
 		fc.ForgetCoverage() // a new game is a new zone: no visited point of the old one counts
 	}
