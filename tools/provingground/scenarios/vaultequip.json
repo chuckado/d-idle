@@ -543,7 +543,9 @@
         "knobs": {
           "loot.vault": 1,
           "loot.vaultKeep": 1,
-          "loot.vaultEquip": 1
+          "loot.vaultEquip": 1,
+          "invdesk.verbs": 1,
+          "invdesk.instant": 1
         },
         "api": [
           {
