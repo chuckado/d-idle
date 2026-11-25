@@ -872,6 +872,9 @@ func (r *Runner) updateCharacter(s *d2.Snapshot) {
 }
 
 // qualityValue multiplies a base price into a rough market value. A crude estimate: UNVERIFIED, tune against real prices.
+// wornPieceFloor is the least gold value one worn piece adds to the corpse estimate (U: judgment).
+const wornPieceFloor = 100
+
 var qualityValue = map[int]int{1: 0, 2: 1, 3: 2, 4: 4, 5: 12, 6: 10, 7: 20, 8: 10}
 
 // trackAlive remembers what a death record will need: life curve, nearest hostile, gold, equipped gear and its value.
@@ -907,6 +910,11 @@ func (r *Runner) trackAlive(s *d2.Snapshot, now time.Time) {
 				}
 			}
 		}
+	}
+	// a worn piece is worth something even when the catalog prices it at nothing or the quality is unread (V live 2026-11-24 20:52 EST:
+	// five pieces on the corpse, record value 0, so the corpse policy saw an empty body)
+	if floor := a.equip * wornPieceFloor; a.equipValue < floor {
+		a.equipValue = floor
 	}
 	best := 1 << 30
 	for i := range s.Monsters {
