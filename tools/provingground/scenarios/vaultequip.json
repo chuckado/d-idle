@@ -464,6 +464,161 @@
           "kind": "no_writes"
         }
       ]
+    },
+    {
+      "id": "vault.equip-set-unid",
+      "title": "Wear set of ten UNIDENTIFIED pieces (magic, rare, unique) with the hero idle in town: all worn as they are, fast, nothing left in the backpack",
+      "kind": "behaviour",
+      "tier": "fast",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 30,
+        "gold": 500,
+        "vault_records": {
+          "items": [
+            {
+              "code": "cap",
+              "quality": 4,
+              "unid": true
+            },
+            {
+              "code": "amu",
+              "quality": 6,
+              "unid": true
+            },
+            {
+              "code": "rin",
+              "quality": 6,
+              "unid": true
+            },
+            {
+              "code": "rin",
+              "quality": 4,
+              "unid": true
+            },
+            {
+              "code": "lbl",
+              "quality": 4,
+              "unid": true
+            },
+            {
+              "code": "lbt",
+              "quality": 6,
+              "unid": true
+            },
+            {
+              "code": "lgl",
+              "quality": 4,
+              "unid": true
+            },
+            {
+              "code": "qui",
+              "quality": 4,
+              "unid": true
+            },
+            {
+              "code": "buc",
+              "quality": 7,
+              "unid": true
+            },
+            {
+              "code": "wnd",
+              "quality": 7,
+              "unid": true
+            }
+          ]
+        }
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.0.id}}",
+                "{{vault.1.id}}",
+                "{{vault.2.id}}",
+                "{{vault.3.id}}",
+                "{{vault.4.id}}",
+                "{{vault.5.id}}",
+                "{{vault.6.id}}",
+                "{{vault.7.id}}",
+                "{{vault.8.id}}",
+                "{{vault.9.id}}"
+              ],
+              "now": true
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 8
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "notes": "Lab check of the 2026-11-25 decision: Equip wears an unidentified item as it is. Reads the engine reply per piece from the bot log. The timer is the log window below (coarse, linear map, U).",
+      "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "why": "the set was accepted"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in",
+          "min": 1,
+          "to_min": 3,
+          "why": "the first pieces are worn within the first virtual minutes"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* not worn",
+          "max": 0,
+          "why": "no piece is refused (the engine wears unidentified items)"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "pack",
+          "max": 0,
+          "why": "nothing is left in the backpack"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
     }
   ]
 }
