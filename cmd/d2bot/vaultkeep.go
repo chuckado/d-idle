@@ -132,6 +132,15 @@ func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir, curren
 	}
 	k.Hand = equipHand{ref: ref, e: e, snap: snap}
 	k.EquipOn = equipOn(e)
+	// Equip v2: the fork's direct verbs (ledgered, player-ordered only, never in a measured run). The knob also needs the Vault itself.
+	k.Direct = &d2dctl.DirectEquip{C: c, Ledger: cheat.NewLedger(cheat.DefaultLedgerPath()), Actor: "bot:vault", Instance: os.Getenv("D2BOT_INSTANCE"),
+		Character: hero(), Measured: measuredRun}
+	k.DirectOn = func() bool { return e.Tune.Loot.Vault != 0 && e.Tune.Loot.VaultDirectEquip != 0 }
+	k.Pinner = func(slot string, unit uint32, name string) {
+		if d := ref.inv; d != nil {
+			_ = d.PinSlot(slot, unit, name)
+		}
+	}
 	k.EquipPath = filepath.Join(dataDir, "vaults", hero(), "vault", "equip.json")
 	if e.Data != nil {
 		k.Chain = func(code string) []string {

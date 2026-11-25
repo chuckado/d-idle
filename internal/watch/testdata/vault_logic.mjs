@@ -247,3 +247,26 @@ ok('equipOneTap: empty slot fires at once (1 tap), a swap, a ring, a refusal and
   assert.equal(L.equipOneTap(Object.assign({ order: { state: 'queued' } }, empty)), false);
   assert.equal(L.equipOneTap(null), false);
 });
+
+ok('Equip v2: with the direct verbs a swap, a two-hander and a plain item are ONE tap; a ring, a refusal and an unrevealed item are not', () => {
+  const swap = { enabled: true, direct: true, wearable: true, slots: [{ slot: 'head', can: true, worn: { name: 'Cap' } }] };
+  assert.equal(L.equipOneTap(swap), true); assert.equal(L.equipTaps(swap), 1);
+  const twohand = { enabled: true, direct: true, wearable: true, slots: [{ slot: 'rhand', can: true, worn: null, note: 'shield comes off' }] };
+  assert.equal(L.equipOneTap(twohand), true);
+  const ring = { enabled: true, direct: true, wearable: true, slots: [{ slot: 'lring', side: 'left', can: true }, { slot: 'rring', side: 'right', can: true }] };
+  assert.equal(L.equipOneTap(ring), false);
+  assert.equal(L.equipOneTap({ enabled: true, direct: true, wearable: true, slots: [{ slot: 'head', can: false, why: 'needs level 30' }] }), false);
+  assert.equal(L.equipPlan({ enabled: true, direct: true, wearable: false, reveal: true, slots: [] }).state, 'reveal');
+});
+ok('Equip v2 toast: worn pieces, what went to the vault, each refused piece with its own reason', () => {
+  const TT = { okWornOne: 'Worn in {slot}.', okWornSet: 'Wearing {n} pieces.', okWornOff: '{old} went to the {where}.', okWornMore: '{k} more refused.' };
+  const names = { a: 'Cap', b: 'Plate', c: 'Ring' };
+  const one = L.equipWornWords({ equipped: [{ id: 'a', slot: 'head', removed: ['Old Cap'], where: 'vault' }] }, names, TT);
+  assert.equal(one.kind, 'good'); assert.equal(one.text, 'Worn in head. Old Cap went to the Vault.');
+  const set = L.equipWornWords({ equipped: [{ id: 'a', slot: 'head' }, { id: 'b', slot: 'torso' }], failed: [{ id: 'c', error: 'needs level 61' }] }, names, TT);
+  assert.equal(set.kind, 'info'); assert.equal(set.text, 'Wearing 2 pieces. Ring: needs level 61');
+  const none = L.equipWornWords({ failed: [{ id: 'c', error: 'Reveal it first' }] }, names, TT);
+  assert.equal(none.kind, 'bad'); assert.equal(none.text, 'Ring: Reveal it first');
+  const four = L.equipWornWords({ failed: [1, 2, 3, 4].map((i) => ({ id: 'a', error: 'x' + i })) }, names, TT);
+  assert.ok(four.text.endsWith('1 more refused.'));
+});

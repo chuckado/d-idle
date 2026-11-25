@@ -35,6 +35,9 @@ func (k *Keeper) directWanted() bool {
 
 // directReady is true when the knob is on, no measured run, the build has the verbs (probed `caps`, cached) and `item decode`
 // is there to turn what came off into records. Anything else leaves the order flow.
+// DirectReady says the one-tap Equip wears at once through the direct verbs (the page then skips the order flow).
+func (k *Keeper) DirectReady(ctx context.Context) bool { return k.directReady(ctx) }
+
 func (k *Keeper) directReady(ctx context.Context) bool {
 	if k.Hand == nil || !k.directWanted() || !k.enabledDirect() {
 		return false

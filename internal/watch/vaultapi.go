@@ -257,6 +257,12 @@ type VaultEquipper interface {
 type VaultEquipFlag struct {
 	Enabled bool   `json:"enabled"`
 	Why     string `json:"why,omitempty"`
+	Direct  bool   `json:"direct,omitempty"` // Equip v2: one tap wears at once (no order, no town trip)
+}
+
+// VaultDirectEquipper is the optional part of a VaultEquipper that knows the direct path is on (probed verbs, knob).
+type VaultDirectEquipper interface {
+	Direct(ctx context.Context) bool
 }
 
 // VaultKeepResult is the outcome of queueing one id.
@@ -266,6 +272,12 @@ type VaultKeepResult struct {
 	Already bool
 	Code    string
 	Why     string
+
+	// Equip v2: the piece was worn at once (the direct verbs); Slot is where, Removed what came off and Where what became of it.
+	Direct  bool
+	Slot    string
+	Removed []string
+	Where   string
 }
 
 // VaultKeepView is the queue's state in GET /api/vault: counts, the progress sentence, and why nothing moves.
@@ -798,6 +810,9 @@ func (d *VaultDesk) view(ctx context.Context, q vaultQuery, kinds vaultTexts) Va
 			ok, why = false, "the vault is read only while loot.vault is 0"
 		}
 		v.Equip = &VaultEquipFlag{Enabled: ok, Why: why}
+		if de, is := d.Equip.(VaultDirectEquipper); is {
+			v.Equip.Direct = de.Direct(ctx)
+		}
 	}
 	if d.Act != nil {
 		av := d.Act.Act(ctx)
@@ -1032,6 +1047,21 @@ type vaultReply struct {
 	Already []string    `json:"already,omitempty"` // keep: pressed before, nothing changed
 	Failed  []vaultFail `json:"failed,omitempty"`
 	Sale    *VaultSale  `json:"sale,omitempty"` // sell: the instant sale that ran (gold added to the stash, stash after)
+	// Equipped lists, per piece, what an Equip or Wear set did at once (Equip v2): the slot, what came off, where it went.
+	Equipped []vaultWorn `json:"equipped,omitempty"`
+}
+
+type vaultWorn struct {
+	ID      string   `json:"id"`
+	Slot    string   `json:"slot"`
+	Removed []string `json:"removed,omitempty"`
+	Where   string   `json:"where,omitempty"`
+}
+
+func (r *vaultReply) worn(res VaultKeepResult) {
+	if res.OK && res.Direct {
+		r.Equipped = append(r.Equipped, vaultWorn{ID: res.ID, Slot: res.Slot, Removed: res.Removed, Where: res.Where})
+	}
 }
 
 func vaultCode(err error) string {
@@ -1397,6 +1427,7 @@ func (a *VaultAPI) equip(w http.ResponseWriter, r *http.Request, d *VaultDesk, r
 		rep.Done = append(rep.Done, res.ID)
 	case res.OK:
 		rep.Done = append(rep.Done, res.ID)
+		rep.worn(res)
 	default:
 		rep.Failed = append(rep.Failed, vaultFail{ID: res.ID, Code: res.Code, Error: res.Why})
 	}
@@ -1426,6 +1457,7 @@ func (a *VaultAPI) equipSet(w http.ResponseWriter, r *http.Request, d *VaultDesk
 			rep.Done = append(rep.Done, res.ID)
 		case res.OK:
 			rep.Done = append(rep.Done, res.ID)
+			rep.worn(res)
 		default:
 			rep.Failed = append(rep.Failed, vaultFail{ID: res.ID, Code: res.Code, Error: res.Why})
 		}

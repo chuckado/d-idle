@@ -131,3 +131,36 @@ func TestVaultWithoutEquipHasNoFlag(t *testing.T) {
 		t.Fatalf("%d %+v", code, pr)
 	}
 }
+
+type directEquip struct{ fakeEquip }
+
+func (*directEquip) Enqueue(_ context.Context, id, _ string, _ bool) VaultKeepResult {
+	return VaultKeepResult{ID: id, OK: true, Direct: true, Slot: "head", Removed: []string{"Old Cap"}, Where: "vault"}
+}
+func (*directEquip) EnqueueSet(ctx context.Context, ids []string, _ bool) []VaultKeepResult {
+	out := []VaultKeepResult{{ID: ids[0], OK: true, Direct: true, Slot: "torso", Where: "vault"}}
+	for _, id := range ids[1:] {
+		out = append(out, VaultKeepResult{ID: id, Code: "requirements", Why: "needs level 61"})
+	}
+	return out
+}
+func (*directEquip) Direct(context.Context) bool { return true }
+
+func TestVaultEquipV2RepliesPerPiece(t *testing.T) {
+	s := testVault(t, 10, 100)
+	a := vaultAPI(s, true)
+	a.desk().Equip = &directEquip{fakeEquip{on: true}}
+	_, v := getVault(t, a, "/api/vault?limit=3")
+	if v.Equip == nil || !v.Equip.Direct {
+		t.Fatalf("flag %+v", v.Equip)
+	}
+	id := v.Items[0].ID
+	code, rep, _ := postVault(t, a, VaultEquipRoute, map[string]any{"ids": []string{id}})
+	if code != 200 || len(rep.Equipped) != 1 || rep.Equipped[0].Slot != "head" || rep.Equipped[0].Removed[0] != "Old Cap" {
+		t.Fatalf("%d %+v", code, rep)
+	}
+	code, rep, _ = postVault(t, a, VaultEquipRoute, map[string]any{"ids": []string{v.Items[0].ID, v.Items[1].ID}})
+	if code != 200 || len(rep.Equipped) != 1 || len(rep.Failed) != 1 || rep.Failed[0].Error != "needs level 61" || rep.OK {
+		t.Fatalf("set: %d %+v", code, rep)
+	}
+}
