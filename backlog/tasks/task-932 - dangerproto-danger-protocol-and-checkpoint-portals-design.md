@@ -16,6 +16,7 @@ owns:
   - "docs/design/danger-protocol-2026-11-25.md"
 exclusive: []
 contracts: []
+result: "design doc written from code and the SME answer; not verified live (latency measurement left as a checklist)"
 ---
 
 ## Description
