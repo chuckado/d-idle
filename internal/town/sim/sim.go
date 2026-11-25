@@ -90,6 +90,7 @@ type World struct {
 	Menu        MenuGeom
 	TradeIndex  map[int]int
 	RepairBtn   panel.Pt
+	NoRepair    map[uint32]bool // worn units the smith's Repair All leaves alone (V live 2026-11-25: a Hand Axe stayed at 0%)
 	GoldBtn     panel.Pt
 	PortalLevel int // area the portal object leads to
 	// Services: NPC class -> dialog line (0 = top) -> "imbue" or "socket". The class then has len(Lines[class]) dialog

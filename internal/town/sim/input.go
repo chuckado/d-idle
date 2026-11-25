@@ -298,7 +298,7 @@ func (c *Input) left(p panel.Pt) error {
 	}
 	if w.UI[d2.UIShop] != 0 && p == w.RepairBtn {
 		for _, u := range w.Items {
-			if u.Item.Where == d2.ContEquipment {
+			if u.Item.Where == d2.ContEquipment && !w.NoRepair[u.ID] {
 				if st, ok := w.Stats[u.Addr]; ok {
 					st[72] = st[73]
 				}

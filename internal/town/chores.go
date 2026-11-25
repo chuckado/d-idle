@@ -133,6 +133,12 @@ func (t *Town) lowestDurability(s *d2.Snapshot) (int, bool) {
 	low, any := 101, false
 	for _, u := range s.Inventory.Container(d2.ContEquipment) {
 		if pct, ok := t.durabilityPct(u); ok {
+			if was, bad := t.unrepairable[u.ID]; bad {
+				if was == pct {
+					continue // the smith left it at this level once: it is not what the repair trips are for
+				}
+				delete(t.unrepairable, u.ID)
+			}
 			any = true
 			if pct < low {
 				low = pct
@@ -819,13 +825,14 @@ func (t *Town) repair(ctx context.Context, a *Act, rep *ChoreReport) error {
 		_ = t.h.CloseAll(ctx)
 		return err
 	}
+	sum0 := t.durabilitySum(s0)
 	s1, ok, err := t.h.Wait(ctx, t.uiTimeout(), func(s *d2.Snapshot) bool {
-		low, _ := t.lowestDurability(s)
-		return low > low0
+		return t.durabilitySum(s) > sum0 // any worn item rose: one that cannot be repaired must not hide the others
 	})
 	if err != nil {
 		return err
 	}
+	t.markUnrepairable(s0, s1)
 	if !ok {
 		t.logDurability("repair: not confirmed", s1, g0)
 		t.repairFail = repairLatch{set: true, gold: s1.Player.Gold, low: low0}
@@ -959,4 +966,42 @@ func (t *Town) skipWhy(name string, s *d2.Snapshot) string {
 		return "nothing to identify"
 	}
 	return "no scroll or tome and none to buy"
+}
+
+// durabilitySum is the sum of the worn items' durability percents (every one that has durability, clamped to 100).
+func (t *Town) durabilitySum(s *d2.Snapshot) int {
+	n := 0
+	for _, u := range s.Inventory.Container(d2.ContEquipment) {
+		if pct, ok := t.durabilityPct(u); ok {
+			n += min(pct, 100)
+		}
+	}
+	return n
+}
+
+// markUnrepairable remembers the worn items the repair left below 100 where they were: the smith's Repair All does not take
+// them (V live 2026-11-25 08:17 to 09:14 EST: a Hand Axe at 0% brought ten repair trips in an hour, "repair not confirmed",
+// 160 to 570 gold each for the other pieces). They stop counting until their durability changes.
+func (t *Town) markUnrepairable(before, after *d2.Snapshot) {
+	if before == nil || after == nil {
+		return
+	}
+	was := map[uint32]int{}
+	for _, u := range before.Inventory.Container(d2.ContEquipment) {
+		if pct, ok := t.durabilityPct(u); ok {
+			was[u.ID] = pct
+		}
+	}
+	for _, u := range after.Inventory.Container(d2.ContEquipment) {
+		pct, ok := t.durabilityPct(u)
+		p0, had := was[u.ID]
+		if !ok || !had || pct >= 100 || pct > p0 {
+			continue
+		}
+		if t.unrepairable == nil {
+			t.unrepairable = map[uint32]int{}
+		}
+		t.unrepairable[u.ID] = pct
+		t.e.Log.Info("repair: the smith left an item as it was, it no longer counts", "item", t.nameOf(u), "durability", pct)
+	}
 }

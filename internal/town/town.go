@@ -89,6 +89,7 @@ type Town struct {
 	skipLogged       map[string]bool                          // equip skips already logged, by item/level/reason
 	planFn           func(class d2.Class, clvl int) belt.Band // belt plan override (SetPlan)
 	beltBuyGold      int                                      // gold at the last belt purchase attempt that bought nothing; 0 = none
+	unrepairable     map[uint32]int                           // worn units a repair left at this durability percent: not counted until it changes
 	repairFail       repairLatch                              // BASICSFIX: last failed repair
 	castCancelled    atomic.Bool                              // set by ToTown when the portal cast was cancelled before the click
 	portalFrom       int                                      // field area the last portal trip to town started in: where the standing town portal leads (0 unknown)
