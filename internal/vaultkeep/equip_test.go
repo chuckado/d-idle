@@ -665,3 +665,30 @@ func TestEquipSetInChunksWhenThePackIsShort(t *testing.T) {
 		})
 	}
 }
+
+// The user's case: the record was revealed in the vault (Identified, Unlocked, Raw still the dropped bytes). The unit made
+// from it is created with the identified flag set (bit 4 of the first flag byte), so the game wears it with no scroll and
+// no Cain. MUST FAIL if the bytes are sent as they are. The fake's bytes are text, so the bit itself is asserted here and
+// the engine side by the Proving Ground scenario vault.equip-revealed.
+func TestCreateHexSetsTheIdentifiedBitOfARevealedRecord(t *testing.T) {
+	raw := "4a4d" + "00008000" + "6500" + "1292"
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			un := vault.Rec{Item: vault.Item{Raw: raw}}
+			if got := createHex(un); got != raw {
+				t.Fatalf("an unrevealed record changed: %s", got)
+			}
+			rv := un
+			rv.Identified, rv.Unlocked = true, true
+			got := createHex(rv)
+			if got[4:6] != "10" || got[6:] != raw[6:] {
+				t.Fatalf("revealed record: %s, want bit 4 set in byte 2 and nothing else changed (%s)", got, raw)
+			}
+			idOnly := un
+			idOnly.Identified = true // identified at pickup: Raw is already the identified bytes
+			if createHex(idOnly) != raw {
+				t.Fatal("an identified record must keep its own bytes")
+			}
+		})
+	}
+}

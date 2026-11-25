@@ -36,7 +36,7 @@ const (
 	ReasonEqOff  = "one-tap Equip is switched off (loot.vaultEquip 0, loot.vault 0 or a measured run)"
 	ReasonEqNone = "this bot cannot equip from the vault"
 	// ReasonEqNeedsID: the game will not wear an unidentified item; the player decides what may be spent.
-	ReasonEqNeedsID = "the game will not wear an unidentified item: Cain is not here and identify.policy does not allow scrolls"
+	ReasonEqNeedsID = "reveal it first: the game will not wear an unidentified item (Reveal it in the Vault; Cain is not here and identify.policy does not allow scrolls)"
 )
 
 // Slot words of an order. Left and right are the game's left and right ring (the Inventory page's words); auto lets the bot
@@ -643,7 +643,7 @@ func (k *Keeper) unitFor(ctx context.Context, rec vault.Rec) int {
 	}
 	best := 0
 	for _, h := range have {
-		if strings.EqualFold(h.Norm, rec.Raw) && h.UnitID > best {
+		if strings.EqualFold(h.Norm, createHex(rec)) && h.UnitID > best {
 			best = h.UnitID
 		}
 	}
