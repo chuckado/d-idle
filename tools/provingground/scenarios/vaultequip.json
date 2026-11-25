@@ -586,7 +586,8 @@
         "item.create",
         "item.full",
         "item.vault",
-        "item.equip"
+        "item.equip",
+        "flag.item-verbs"
       ],
       "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
       "notes": "Lab check of the 2026-11-25 decision: Equip wears an unidentified item as it is. Reads the engine reply per piece from the bot log. The timer is the log window below (coarse, linear map, U).",
