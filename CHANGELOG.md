@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge origin/main into toolstrade69 (knobs.md regenerated) <!--sg:agent/toolstrade69-->
 - Merge origin/main into toolstrade67 (knobs.md regenerated) <!--sg:agent/toolstrade67-->
 - Merge branch 'main' into qdmatrix <!--sg:agent/qd24-->
 - Merge branch 'main' into toolstrade66 <!--sg:agent/toolstrade66-->
