@@ -504,6 +504,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 240ce87c4 11-24 22:16 `Merge agent/toolstrade61: toolstrade61: the corpse test reads its click counter atomically (a data race under -race)` (toolstrade61)
 - 3fd90da24 11-24 20:18 `Merge agent/vaultequip5: Merge branch 'main' into vaultequip5` (vaultequip5)
 - 643859e63 11-24 20:16 `Merge branch 'main' into vaultequip5` (-)
 - a9726d490 11-24 20:14 `Merge main into vaultequip5` (-)
@@ -513,5 +514,4 @@
 - 0a4cceb6c 11-24 19:57 `Merge branch 'main' into toolstrade60` (-)
 - 6f6f69a12 11-24 19:40 `Merge agent/toolstrade59: Merge branch 'main' into toolstrade59` (toolstrade59)
 - b6f2ccab8 11-24 19:38 `Merge branch 'main' into toolstrade59` (-)
-- a090a88ad 11-24 19:32 `Merge agent/vaultequip3: vaultequip3: identify the unit before the wear (the real check refuses unidentified items); backpack creates run before a full stash halts the queue` (vaultequip3)
 <!-- statusgen:end -->
