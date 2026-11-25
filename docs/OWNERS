@@ -430,6 +430,7 @@ deploy/nas/imgbuild.sh  credit-runner  buildhosts3
 docs/OWNERS  credit-runner  uitoast
 docs/actbot.md  credit-runner  cain45
 docs/adr/  credit-runner  fabledecisions2
+docs/adr/0011-readiness-power-vs-danger.md  credit-runner  toolstrade68
 docs/adr/0014-memory-writes-allowed-no-crutch.md  credit-runner  vaultpay
 docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md  credit-runner  adrfable
 docs/adr/0020-proving-ground-and-stat-skill-agency.md  credit-runner  adrfable
@@ -462,8 +463,10 @@ docs/d2d-determinism.md  credit-runner  pgclock
 docs/d2d-loot.md  credit-runner  groundquality
 docs/decisions.md  credit-runner  adrfable
 docs/decisions.md  credit-runner  fabledecisions2
+docs/decisions.md  credit-runner  toolstrade68
 docs/decisions.md  credit-runner  vaultpay
 docs/design/bulk-identify-2026-11-18.md  credit-runner  bulkid-design
+docs/design/danger-protocol-2026-11-25.md  credit-runner  dangerproto
 docs/design/fable-review-2026-11-19  user  fablereview
 docs/design/fable-review-2026-11-21/combat-engine*  pro-runner  fablecombat
 docs/design/fable-review-2026-11-21/proving-ground-gate-catalog.md  user  fablepg
