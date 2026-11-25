@@ -1,9 +1,9 @@
 {
  "drill.act2.amulet": {
-  "note": "",
-  "run": "20261123-175925",
+  "verdict": "RED",
+  "run": "20261125-123508",
   "tag": "V",
-  "verdict": "GREEN"
+  "note": "devp30 and current bot: died in Claw Viper Temple 1 (Bone Warrior); the bot of 2026-11-24 00:00 is GREEN on devp28: a thin fight margin, flaky (U)"
  },
  "drill.act2.assemble": {
   "note": "devp27 rebase smoke",
@@ -12,10 +12,10 @@
   "verdict": "GREEN"
  },
  "drill.act2.cube": {
-  "note": "matrix table",
-  "run": "20261123-052834",
+  "verdict": "GREEN",
+  "run": "20261125-141010",
   "tag": "V",
-  "verdict": "GREEN"
+  "note": "the row asserted the wrong town (fixed); devp30"
  },
  "drill.act2.duriel": {
   "note": "tomb scan runs; died in tomb 66; orifice unit not found",
@@ -46,5 +46,11 @@
   "run": "20261123-224713",
   "tag": "V",
   "verdict": "GREEN"
+ },
+ "drill.act2.radament.l30": {
+  "verdict": "RED",
+  "run": "20261125-123508",
+  "tag": "V",
+  "note": "flaky: the same commit gave GREEN and RED on devp28, RED on devp30 (the hero dies or chickens in the Radament fight)"
  }
 }
