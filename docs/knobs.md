@@ -550,6 +550,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | quests.autoHoldMin | 15 | 0..240 | min | 15 | 1 | No quest starts by itself this many minutes after the player paused or reset the bot. |
 | quests.autoGapMin | 30 | 0..600 | min | 30 | 1 | At least this long between two auto-started chunks (a bug can then not chain starts). |
 | quests.autoDayCap | 6 | 0..100 | count | 6 | 1 | At most this many auto-started chunks in 24 hours; 0 turns auto-start off. |
+| quests.legacyWall | 2 | 0..10 | levels | 2 | 1 | A chunk judged only by the old level guide (no boss margin) reads too hard, and is not startable, when the hero is more than this many levels under its floor: the board said risky for a clvl 4 Paladin and the Cain scroll walk through the Underground Passage killed it (Questy bed 2026-11-25, floor 9). 0: warn only, as ADR 0011 had it (the owner's Start anyway still starts it). |
 | quests.layoutRead | 0 | 0..1 | bool | 0 | 2 | 1: ask the private d2d fork for the current level's room layout and quest-object positions (read-only verb `debug levelmap`, ADR 0022: a read never makes a run CHEATED) and walk straight to the Tree of Inifuss, the cairn stones or Cain's cage instead of exploring for them; a second read (`debug levelmonsters`) gives a superunique's spawn point (the Countess in Tower Cellar 5) from the level's build; stock d2d or an error falls back to exploring. 0 (default): explore as before. |
 
 ### identify.*
