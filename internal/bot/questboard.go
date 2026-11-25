@@ -294,7 +294,7 @@ func (rt *boardRT) assess(s *d2.Snapshot) {
 			if boss == "" {
 				boss = q.Boss
 			}
-			in := questboard.AssessInput{Dial: rt.r.zoneDial(), Diff: int(s.Player.Difficulty), Hero: hero, Floor: floor, HasFloor: hasFloor}
+			in := questboard.AssessInput{Dial: rt.r.zoneDial(), Diff: int(s.Player.Difficulty), Hero: hero, Floor: floor, HasFloor: hasFloor, LegacyWall: rt.r.e.Tune.Quests.LegacyWall}
 			if boss != "" {
 				enc, seen := bosses[boss]
 				if !seen {

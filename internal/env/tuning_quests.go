@@ -16,10 +16,14 @@ type QuestsTuning struct {
 
 	// LayoutRead 1: the d2d backend reads the fork's read-only `debug levelmap` and walks straight to known quest objects (ADR 0022); 0 (default): explore as before. PREREQUISITE of the Smith (and Countess) step: their spawn is a superunique preset read by name, so with 0 the run only explores for them and ends "needs quests.layoutRead 1".
 	LayoutRead int
+
+	// LegacyWall: levels under a quest's legacy level floor at which a chunk judged by that floor alone reads too hard and is not
+	// offered; 0 = warn only (ADR 0011, "warn, never wall"). Default 2: a hero more than two levels under the floor waits.
+	LegacyWall int
 }
 
 func DefaultQuestsTuning() QuestsTuning {
-	return QuestsTuning{Board: 1, BoardSM: 0, AutoDelaySec: 20, AwayMin: 10, AutoHoldMin: 15, AutoGapMin: 30, AutoDayCap: 6, LayoutRead: 0}
+	return QuestsTuning{Board: 1, BoardSM: 0, AutoDelaySec: 20, AwayMin: 10, AutoHoldMin: 15, AutoGapMin: 30, AutoDayCap: 6, LayoutRead: 0, LegacyWall: 2}
 }
 
 func questsKnobs() []Knob {
@@ -38,6 +42,8 @@ func questsKnobs() []Knob {
 			Desc: "At least this long between two auto-started chunks (a bug can then not chain starts)."},
 		{Key: "quests.autoDayCap", Label: "Auto-starts per day", Unit: "count", Default: 6, Min: 0, Max: 100, NoHandicap: true,
 			Desc: "At most this many auto-started chunks in 24 hours; 0 turns auto-start off."},
+		{Key: "quests.legacyWall", Label: "Level wall for floor-only quests", Unit: "levels", Default: 2, Min: 0, Max: 10, NoHandicap: true,
+			Desc: "A chunk judged only by the old level guide (no boss margin) reads too hard, and is not startable, when the hero is more than this many levels under its floor: the board said risky for a clvl 4 Paladin and the Cain scroll walk through the Underground Passage killed it (Questy bed 2026-11-25, floor 9). 0: warn only, as ADR 0011 had it (the owner's Start anyway still starts it)."},
 		{Key: "quests.layoutRead", Label: "Read the level layout", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
 			Desc: "1: ask the private d2d fork for the current level's room layout and quest-object positions (read-only verb `debug levelmap`, ADR 0022: a read never makes a run CHEATED) and walk straight to the Tree of Inifuss, the cairn stones or Cain's cage instead of exploring for them; a second read (`debug levelmonsters`) gives a superunique's spawn point (the Countess in Tower Cellar 5) from the level's build; stock d2d or an error falls back to exploring. 0 (default): explore as before."},
 	}
