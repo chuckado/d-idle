@@ -2,6 +2,7 @@ package bot
 
 import (
 	"context"
+	"errors"
 	"strings"
 	"testing"
 
@@ -197,5 +198,22 @@ func TestEarlyRouteClosesBelowTheLevelAndTheKit(t *testing.T) {
 	}
 	if (&Runner{}).earlyRouteWhy(nil, 10) != "" {
 		t.Error("no snapshot must not close the road")
+	}
+}
+
+// The walk itself is refused: a quest travel from Stony Field through the Underground Passage to the Dark Wood returns the gate
+// error for a clvl 4 hero (the board shows the reason and the hero levels), and a walk to town is still fine. Two classes.
+func TestEarlyRoadRefusesTheQuestWalk(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
+		g.w.set(func(w *world) { w.class, w.level, w.area = class, 4, 4 })
+		g.r.poll()
+		s := g.r.latest()
+		if err := g.r.routeAllowed(s, 4, 5, []int{10, 5}); !errors.Is(err, errAreaGated) {
+			t.Errorf("%v: walk to the Dark Wood: %v, want the gate error", class, err)
+		}
+		if err := g.r.routeAllowed(s, 4, 1, []int{3, 2, 1}); err != nil {
+			t.Errorf("%v: the walk home was refused: %v", class, err)
+		}
 	}
 }
