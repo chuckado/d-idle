@@ -1,10 +1,11 @@
 ---
 id: TASK-930
 title: 'equipv2: instant vault equip through direct item verbs'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-25T05:03:00Z'
+updated_date: '2026-11-25T05:27:00Z'
 labels:
   - watch
   - feature

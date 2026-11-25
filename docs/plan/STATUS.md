@@ -477,7 +477,6 @@
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
 | toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
-| equipv2 | proposed | - | `cmd/d2bot/vaultequip.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2scenario/run.go`<br>`docs/adr/0029-vault-gold-payment.md`<br>`docs/decisions.md`<br>`docs/vault.md`<br>`internal/d2dctl/`<br>`internal/env/tuning_loot.go`<br>`internal/invdesk/pinslot.go`<br>`internal/vaultkeep/`<br>`internal/watch/`<br>`tools/provingground/scenarios/vaultequipv2.json` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
