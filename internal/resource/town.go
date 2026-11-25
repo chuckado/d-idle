@@ -26,7 +26,10 @@ var walkableHome = map[int]bool{2: true, 8: true, 3: true}
 // kept out by the codefix F1 test) (seed 11 stood
 // in area 11, Hole Level 1, with no scroll and no walk home). U: the walk from each of them was never run live.
 var chainHome = map[int]bool{4: true, 5: true, 6: true, 9: true, 10: true, 17: true,
-	11: true, 13: true, 14: true, 15: true, 18: true, 19: true, 20: true}
+	11: true, 13: true, 14: true, 15: true, 18: true, 19: true, 20: true,
+	// the Forgotten Tower cellars, the Monastery road and the Catacombs down to level 3: the hero stood in cellar 2 of the Forgotten Tower with no scroll for
+	// 20 minutes ("no town portal available", V live 2026-11-25 02:40Z); the nav route graph walks them (V live: Andariel route)
+	21: true, 22: true, 23: true, 24: true, 25: true, 26: true, 27: true, 28: true, 29: true, 30: true, 31: true, 32: true, 33: true, 34: true, 35: true, 36: true}
 
 // NearTownArea reports whether a character without a scroll can still walk home from area (Input.NearTown).
 func NearTownArea(area int) bool { return walkableHome[area] }

@@ -179,3 +179,21 @@ func TestOrderGuardWhy(t *testing.T) {
 		t.Errorf("guard off: %q", why)
 	}
 }
+
+// V live 2026-11-25 02:40Z: cellar 2 of the Forgotten Tower, no portal scroll, the guard closed (4 healing < 5). The exit read "no town portal
+// available" 204 times in 20 minutes: ToTown's walk home knows only the short list of fields. The guard's exit walks home itself
+// when the portal fails. Two classes. Must fail while the exit gives up at the failed portal.
+func TestGuardedExitWalksHomeWithoutAPortal(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		g := campaignRig(t, &fakeQuests{}, 14)
+		g.w.set(func(w *world) { w.area = 22; w.class = class })
+		g.town.toTownErr = errors.New("town: no town portal available")
+		g.mover.routeFn = func(from, to int) ([]int, error) { return []int{21, 3, 1}, nil }
+		g.r.poll()
+		c := control{goal: &goals.Goal{}}
+		g.r.guardedExit(context.Background(), g.r.latest(), c)
+		if g.w.count("exit 21") == 0 {
+			t.Fatalf("%v: no walk home: %s", class, g.w.log())
+		}
+	}
+}

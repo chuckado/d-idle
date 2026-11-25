@@ -111,6 +111,7 @@ func TestKitPlanUsesTheBossProfileNearAndariel(t *testing.T) {
 		}{{20, "andariel"}, {5, kitProfile}} {
 			g := newRig(t)
 			g.r.e.Tune.Quests.BoardSM = 1
+			g.r.e.Tune.Boss.AndarielHold = 0
 			var got string
 			g.r.d.Town = profilePlanner{Townsman: g.r.d.Town, got: &got}
 			g.w.set(func(w *world) { w.class = class; w.level = tc.level })
@@ -126,6 +127,27 @@ func TestKitPlanUsesTheBossProfileNearAndariel(t *testing.T) {
 			if h, _ := g.r.routeKit(); tc.want == "andariel" && h != 8 {
 				t.Errorf("%v: the trip buys up to %d healing, want the plan's 8 without a buffer", class, h)
 			}
+		}
+	}
+}
+
+// While boss.andarielHold holds Andariel back (and no owner try is on), the boss kit floor is not asked of a hero that only levels
+// (V live 2026-11-25: 815 refusals "route guard (4 healing potions < 5)"). Two classes.
+func TestBossKitIsNotAskedWhileAndarielIsHeld(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Necromancer} {
+		g := newRig(t)
+		g.r.e.Tune.Quests.BoardSM = 1
+		g.r.e.Tune.Boss.AndarielHold = 1
+		var got string
+		g.r.d.Town = profilePlanner{Townsman: g.r.d.Town, got: &got}
+		g.w.set(func(w *world) { w.class = class; w.level = 20 })
+		g.r.poll()
+		g.r.kitPlanOf(g.r.latest())
+		if got != kitProfile {
+			t.Errorf("%v: profile %q while Andariel is held, want %q", class, got, kitProfile)
+		}
+		if g.r.bossPurse() != 0 {
+			t.Errorf("%v: boss purse while held", class)
 		}
 	}
 }

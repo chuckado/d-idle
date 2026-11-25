@@ -71,7 +71,7 @@ func TestBackToFieldRetriesPortalOnce(t *testing.T) {
 
 // codefix F4: the chain walk is for the quest-route fields only; Catacombs 4 or Andariel's Lair keep ErrNoPortal at once.
 func TestToTownNoChainWalkOutsideTheRoute(t *testing.T) {
-	for _, area := range []int{7, 37, 29, 35} {
+	for _, area := range []int{7, 37} {
 		r := newRig(t)
 		cm := &chainMover{Mover: r.Mv}
 		r.T = town.New(r.Env, cm)
@@ -82,6 +82,22 @@ func TestToTownNoChainWalkOutsideTheRoute(t *testing.T) {
 		}
 		if len(cm.toArea) != 0 {
 			t.Errorf("area %d: walked the chain %v", area, cm.toArea)
+		}
+	}
+}
+
+// V live 2026-11-25: the Monastery road and the cellars of the Forgotten Tower walk home through the level chain too (the hero sat
+// 20 minutes in cellar 2 with no scroll). Two areas of the route.
+func TestToTownChainWalkFromTheCellarsAndTheCatacombs(t *testing.T) {
+	for _, area := range []int{22, 35} {
+		r := newRig(t)
+		cm := &chainMover{Mover: r.Mv}
+		r.T = town.New(r.Env, cm)
+		r.T.UseSource(town.Source{Snapshot: r.W.Snapshot, Items: r.W.AllItems, Owner: r.W.Owner, Stats: r.W.UnitStats})
+		r.W.Player.Area = area
+		_ = r.T.ToTown(context.Background())
+		if len(cm.toArea) == 0 {
+			t.Errorf("area %d: did not walk the chain home", area)
 		}
 	}
 }

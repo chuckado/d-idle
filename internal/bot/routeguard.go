@@ -295,7 +295,18 @@ func (r *Runner) guardedExit(ctx context.Context, snap *d2.Snapshot, c control) 
 				return err
 			}
 		}
-		return r.d.Town.ToTown(ctx)
+		err := r.d.Town.ToTown(ctx)
+		if err == nil || ctx.Err() != nil {
+			return err
+		}
+		// No portal scroll: walk home through the level chain. The area gate lets a walk to town through every guarded level (it is
+		// the way out); ToTown's own walk knows only the short list of fields. V live 2026-11-25 02:40Z to 03:00Z: cellar 2 of the Forgotten Tower
+		// with no scroll, 204 "no town portal available" and 20 minutes without a kill.
+		r.e.Log.Info("guard: no way home by portal, walking", "err", err, "area", p.Area)
+		if werr := r.travelTo(ctx, int(task.RogueEncampment)); werr != nil {
+			return fmt.Errorf("%w (walk home: %v)", err, werr)
+		}
+		return nil
 	})
 }
 
@@ -447,7 +458,10 @@ func (r *Runner) fillKit(w *task.World, s *d2.Snapshot) {
 // andarielKitOn: the hero is close enough to Andariel's floor in Normal and has not killed her, so the town visits buy the boss
 // kit (the antidote rule of antidotesWanted).
 func (r *Runner) andarielKitOn(s *d2.Snapshot) bool {
-	return s != nil && s.Player != nil && s.Player.Difficulty == d2.Normal && s.Player.Level >= r.andarielLow(s.Player.Class)-2 && !r.killedBoss(task.BossAndy)
+	// While the campaign holds Andariel back (boss.andarielHold, no owner try) the hero levels: the boss floor of 8 closed the Forgotten Tower
+	// Cellars and the road and shuttled it between town and the field (V live 2026-11-25).
+	held := r.e.Tune.Boss.AndarielHold != 0 && !task.TryActive()
+	return s != nil && s.Player != nil && !held && s.Player.Difficulty == d2.Normal && s.Player.Level >= r.andarielLow(s.Player.Class)-2 && !r.killedBoss(task.BossAndy)
 }
 
 // bossPurse is the gold a town visit leaves with when the stash has it: the boss profile's gold_carry, 0 outside the boss kit.
