@@ -543,3 +543,29 @@ func TestSmithClearsTheArrivalCrowdFirst(t *testing.T) {
 		t.Fatalf("outer clear not first: %v %v", f.log, res.Phases)
 	}
 }
+
+// V live attempts 7 to 9: 16 Dark Ones stood at the lair door. Andariel's run sweeps a crowd of five or more within 30 of the
+// arrival, at 70 percent life or better, before the boss is looked for; a thin crowd or a hurt hero goes on at once. Both ends.
+func TestAndarielClearsTheDoorCrowdOnlyWhenThereIsOne(t *testing.T) {
+	for _, tc := range []struct {
+		name  string
+		mobs  int
+		life  int
+		clear bool
+	}{{"crowd", 8, 100, true}, {"two only", 2, 100, false}, {"hurt", 8, 50, false}} {
+		f := newFake()
+		f.area = AreaCatacombs4
+		f.level = 24
+		f.pos = Pt{181, 342}
+		f.life = tc.life
+		b := f.addBoss(Mon{Class: ClassAndariel, Name: "Andariel", Pos: Pt{65, 270}, UniqueNo: -1}, AreaCatacombs4, 100)
+		b.approach = 20
+		for i := 0; i < tc.mobs; i++ {
+			f.addBoss(Mon{Class: 60, Pos: Pt{175 + i, 340}, UniqueNo: -1}, AreaCatacombs4, 5)
+		}
+		res, _ := run(t, NameAndariel, f, Opts{})
+		if got := has(res, "outer-clear"); got != tc.clear {
+			t.Errorf("%s: outer-clear %v, want %v (%v %v)", tc.name, got, tc.clear, f.log, res.Phases)
+		}
+	}
+}

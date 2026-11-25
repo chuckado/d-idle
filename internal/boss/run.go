@@ -154,6 +154,26 @@ func (r *runner) clearOuter(ctx context.Context) error {
 	if budget <= 0 {
 		budget = 40 * time.Second
 	}
+	if oc.MinHostiles > 0 || oc.MinLifePct > 0 {
+		v, err := r.w.View(ctx)
+		if err != nil {
+			return err
+		}
+		if oc.MinLifePct > 0 && v.LifePct() < oc.MinLifePct {
+			r.note("outer clear skipped: life %d%% < %d%%", v.LifePct(), oc.MinLifePct)
+			return nil
+		}
+		n := 0
+		for _, m := range v.Monsters {
+			if m.Alive() && m.Hostile && !m.Minion && m.Pos.Dist(r.st.Arrival) <= oc.Radius {
+				n++
+			}
+		}
+		if oc.MinHostiles > 0 && n < oc.MinHostiles {
+			return nil
+		}
+		r.note("outer clear: %d hostiles within %d of the arrival", n, oc.Radius)
+	}
 	r.phase("outer-clear")
 	if err := r.a.ClearAround(ctx, r.st.Arrival, oc.Radius, budget); err != nil {
 		if ctx.Err() != nil {
