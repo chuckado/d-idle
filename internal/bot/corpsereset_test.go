@@ -14,7 +14,7 @@ import (
 type fakeTaker struct {
 	g      *rig
 	always bool         // the corpse lies in town from the start (a death the bot never tracked); else only after a fresh game
-	taken  atomic.Bool // the corpse is gone once clicked
+	taken  atomic.Bool  // the corpse is gone once clicked
 	calls  atomic.Int32 // read by the test goroutine while the bot goroutine clicks
 }
 
