@@ -301,7 +301,7 @@ func TestDeathDrillDieRespawnRetrieve(t *testing.T) {
 // Default retrieval: VERIFIED LIVE that walking onto the corpse returns the gear and walking onto the dropped gold pile
 // returns the gold; no clicks.
 func TestCorpseDefaultWalksOverCorpseAndGold(t *testing.T) {
-	g := newRig(t)
+	g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Bot.CorpseRetries = 1 })
 	g.mover.exploreFn = blockExplore
 	g.w.set(func(w *world) {
 		w.level = 3
@@ -330,7 +330,7 @@ func TestCorpseDefaultWalksOverCorpseAndGold(t *testing.T) {
 }
 
 func TestCorpseBelowValueIsAbandonedWithPovertyChores(t *testing.T) {
-	g := newRig(t)
+	g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Bot.CorpseRetries = 0 })
 	g.mover.exploreFn = blockExplore
 	cheap := gearUnit()
 	cheap.Class, cheap.Item.Quality = 3, 2 // plate mail with zero cost in the fake catalog
@@ -347,7 +347,7 @@ func TestCorpseBelowValueIsAbandonedWithPovertyChores(t *testing.T) {
 	if g.w.count("goto") != 0 {
 		t.Fatal("walked to a worthless corpse")
 	}
-	if r0 := g.r.DeathReport().Records[0]; !r0.Abandoned || !(strings.Contains(r0.Why, "threshold") || strings.Contains(r0.Why, "skipped")) {
+	if r0 := g.r.DeathReport().Records[0]; !r0.Abandoned || !strings.Contains(r0.Why, "no retrieval attempts left") {
 		t.Fatalf("record %+v", r0)
 	}
 }

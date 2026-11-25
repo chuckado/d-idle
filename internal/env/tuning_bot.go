@@ -14,7 +14,7 @@ type BotTuning struct {
 	InvFullPct      int // go to town when this share of inventory cells is occupied
 	LevelMargin     int // character levels above a step's enter level required before the planner enters it
 	LeaveSlack      int // character levels past a step's leave level the planner stays before moving on
-	CorpseRetries   int // corpse retrievals attempted per death (softcore); 0 abandons the corpse
+	CorpseRetries   int // corpse retrievals attempted per death (softcore); 0 abandons the corpse; after the last failed try the game is reset so the corpse moves to town
 	PortalSettleMs  int // wait in town after chores before returning to the field
 	ClearRadius     int // radius of one clear sweep
 	ExploredPct     int // percent of a level's roam coverage points that must be visited before a clear run counts the area as explored (100 = all, docs/exploredpct.md)
@@ -151,7 +151,7 @@ type BotTuning struct {
 func DefaultBotTuning() BotTuning {
 	return BotTuning{
 		TickMs: 100, WatchMs: 50, ReactionMs: 0, ResupplyPotions: 2, InvFullPct: 85,
-		LevelMargin: 0, LeaveSlack: 0, CorpseRetries: 1, PortalSettleMs: 600, ClearRadius: 30, ExploredPct: 100, FarmReset: 0, FarmResetPct: 85, FarmResetCooldownMin: 5, LootShadow: 1,
+		LevelMargin: 0, LeaveSlack: 0, CorpseRetries: 3, PortalSettleMs: 600, ClearRadius: 30, ExploredPct: 100, FarmReset: 0, FarmResetPct: 85, FarmResetCooldownMin: 5, LootShadow: 1,
 		CorpseValueMin: 1000, SpiralDeaths: 4, SpiralMinutes: 15, DangerBanMin: 20, StarterBanMin: 3, QuestBlockedFarmMin: 10, ParkAfter: 2, ParkMinutes: 15, RepeatSiteBanMin: 30, RepeatSiteEscalate: 1, RepeatSiteWindowMin: 30, RepeatSiteGapSec: 180, CorpseMinValue: 50, NavSkipSec: 150, AreaIdleSec: 60, StallWarnMin: 30, StallExitMin: 30, PauseDeathsPerHour: 8, PauseCapMin: 60, StalePackHostiles: 4, StalePackMinutes: 10, StalePackMinHP: 5, StalePackMinTier: 2, PotionBurstN: 5, PotionBurstSec: 20, PotionBurstHostiles: 3, PovertyTier: 0, GoldFloor: 2000,
 		PointsRetrySec: 30, GearCheckSec: 60, GearMinGold: 150, GearBudgetPct: 70, GearReserve: 100,
 		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600, FlailMoves: 6, FlailWindowMin: 10, FlailHoldMin: 5,
@@ -192,8 +192,8 @@ func botKnobs() []Knob {
 			Desc: "Levels above a step's enter level the planner requires. Higher is safer but slower."},
 		{Key: "bot.leaveSlack", Label: "Overstay", Unit: "levels", Default: 0, Min: 0, Max: 6,
 			Desc: "Levels past a step's leave level before moving to the next area. Higher wastes time in easy areas."},
-		{Key: "bot.corpseRetries", Label: "Corpse retrievals", Unit: "count", Default: 1, Min: 0, Max: 1, HigherIsBetter: true,
-			Desc: "Max attempts to recover the corpse after a softcore death. 0 abandons the gear."},
+		{Key: "bot.corpseRetries", Label: "Corpse retrievals", Unit: "count", Default: 3, Min: 0, Max: 3, HigherIsBetter: true,
+			Desc: "Attempts to recover the corpse in the field after a softcore death, whatever it is worth. After the last failed try the game is reset: the corpse moves to town and is taken there. 0 abandons the gear."},
 		{Key: "bot.portalSettleMs", Label: "Town settle time", Unit: "ms", Default: 600, Min: 600, Max: 4500,
 			Desc: "Pause in town after chores before going back out."},
 		{Key: "bot.clearRadius", Label: "Clear radius", Unit: "subtiles", Default: 30, Min: 12, Max: 45, HigherIsBetter: true,

@@ -35,11 +35,13 @@ type Deps struct {
 	Loot    Looter // nil: no pickup, no verdicts
 	Catalog Catalog
 	Plan    *Plan
-	Health  Health  // nil: game loss is inferred from unreadable memory
-	Cycler  Cycler  // nil: no fresh games, no re-entry after a chicken exit
-	Corpse  Corpse  // nil: click-the-spot default
-	Leveler Leveler // nil: points are not spent
-	Gear    Gear    // nil: no equip, no gear shopping
+	Health  Health // nil: game loss is inferred from unreadable memory
+	Cycler  Cycler // nil: no fresh games, no re-entry after a chicken exit
+	Corpse  Corpse // nil: click-the-spot default
+	// CorpseTake clicks the player's corpse (optional; nil: the walk onto the spot is all the bot does).
+	CorpseTake CorpseTaker
+	Leveler    Leveler // nil: points are not spent
+	Gear       Gear    // nil: no equip, no gear shopping
 	// PlayerGear runs the player's queued equips at the gear step (in town); nil: none.
 	PlayerGear PlayerGear
 	// VaultKeep creates the vault items the player kept (vaultkeep.go); nil: none.
@@ -216,6 +218,7 @@ type Runner struct {
 	frz            freezeState          // the frozen Pause (freeze.go), guarded by mu
 	wall           func() time.Time     // wall clock of the pause cap and its display; nil: time.Now (tests set it)
 	freshBusy      atomic.Bool          // startFreshGame is running (task.go)
+	corpseTown     corpseTownState      // a corpse waits in town after a fresh game (corpsereset.go)
 	freshEnd       atomic.Int64         // clock nanos when the last startFreshGame ended
 	rst            playerReset          // the player's Reset command (playerreset.go), guarded by mu
 	lastSelfPause  time.Time            // for the self pause backoff, guarded by mu

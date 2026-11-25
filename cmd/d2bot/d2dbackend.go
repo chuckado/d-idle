@@ -294,7 +294,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 		savedExp = d2dSavedExp(filepath.Join(ip.Dir(), "d2d"), func() string { return charName })
 	}
 	ref.aw = wireAgency(db, e, func() string { return charName }, be.Clock.Now, log)
-	deps := bot.Deps{SavedExp: savedExp, Mover: moverAdapter{nv}, Cycler: be.Cycler, Catalog: cat, Health: d2dHealth(be.Proc, be.Beat, func() bool { return be.Clock.Lockstep() || ref.frozen() }, be.Clock.LastStep, log),
+	deps := bot.Deps{SavedExp: savedExp, Mover: moverAdapter{nv}, Cycler: be.Cycler, CorpseTake: d2dCorpse{be.Client}, Catalog: cat, Health: d2dHealth(be.Proc, be.Beat, func() bool { return be.Clock.Lockstep() || ref.frozen() }, be.Clock.LastStep, log),
 		OnSnapshot: chainSnap(disp.OnSnapshot, ref.aw.OnSnapshot), Bus: bus, Restart: func(ctx context.Context) error { return be.Cycler.NewGame(ctx, "") }}
 	if os.Getenv("D2BOT_RUN") == "" { // a measured run is never paused (docs/pause.md)
 		deps.Freezer = d2denv.NewFreezer(be.Client, be.Clock)
