@@ -601,8 +601,8 @@
         {
           "kind": "log_line",
           "pattern": "equip: .* worn in",
-          "min": 10,
-          "why": "all ten pieces are worn in one town stop (V live devp28 Paladin 11: ten lines within 0.1 s of wall time, inside the trip)"
+          "min": 8,
+          "why": "at least eight of the ten pieces are worn in one town stop (V live devp28: Paladin 11 ten, Sorceress 3 eight, the armour and the shield need strength she lacks)"
         },
         {
           "kind": "item_in_pack",
