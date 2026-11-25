@@ -1369,6 +1369,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/toolstrade62: Merge branch 'main' into toolstrade62 (merged 2026-11-25) <!--sg:agent/toolstrade62-->
 - agent/devp30doc: devp30 sandbox note: fork rebase round 20261125 (docs only) (merged 2026-11-25) <!--sg:agent/devp30doc-->
 - agent/toolstrade63: toolstrade63: two repairs that leave an item as it was before it stops counting; the sum is read before the click (merged 2026-11-25) <!--sg:agent/toolstrade63-->
+- equipv2b: createHex flips only the identified bit (durability check) (TASK-931, merged 2026-11-25, acceptance 2 of 2): createHex is clean: V live devp30 probe, durability and props kept, exactly one bit differs. The 0 percent and 105 percent readings come from elsewhere (U); needs the sandbox unit read. <!--sg:agent/equipv2b-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
