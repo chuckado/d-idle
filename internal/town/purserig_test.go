@@ -93,3 +93,23 @@ func TestNoBossPurseWithoutBossTrip(t *testing.T) {
 		}
 	}
 }
+
+// V live 2026-11-24 00:16Z: the boss purse withdrawn at the start of the visit went back to the stash in the same visit (the
+// stash chore kept only the carry line: "stash -1556", left 1300). With BossPurse the purse stays. Two classes. Needs game tables.
+func TestBossPurseStaysInThePack(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		r, c := withdrawRig(t, 859, 1100000, 20, true)
+		r.W.Player.Class = class
+		if _, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true, Scrolls: true, Gold: true, Stash: true, BossPurse: 3000}); err != nil {
+			t.Fatalf("%v: %v", class, err)
+		}
+		for _, m := range c.moves[1:] {
+			if m > 0 {
+				t.Fatalf("%v: moves %v: gold went back to the stash during the boss trip", class, c.moves)
+			}
+		}
+		if r.W.Player.Gold < 2000 {
+			t.Errorf("%v: purse %d at the end of the visit", class, r.W.Player.Gold)
+		}
+	}
+}
