@@ -277,3 +277,33 @@ func TestReadinessJSONIsStrict(t *testing.T) {
 		t.Error("enter below stay must be an error")
 	}
 }
+
+// Questy bed 2026-11-25: a clvl 4 Paladin started the Cain scroll (floor 9) because a floor-only chunk could say risky and never
+// too hard. With LegacyWall 2 a hero more than two levels under the floor reads too hard; at 0 the old warn-only rule stands.
+// Two classes (melee floor 9, caster floor 11).
+func TestLegacyWallHoldsAChunkFarUnderItsFloor(t *testing.T) {
+	th := thresholds(t)
+	b, err := Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	q, _ := b.Quest("search_for_cain")
+	for _, c := range []struct {
+		class string
+		lvl   int
+		wall  int
+		want  Word
+	}{
+		{"paladin", 4, 2, ReadyTooHard}, {"paladin", 7, 2, ReadyRisky}, {"paladin", 9, 2, ReadySafe}, {"paladin", 4, 0, ReadyRisky},
+		{"sorceress", 5, 2, ReadyTooHard}, {"sorceress", 9, 2, ReadyRisky}, {"sorceress", 11, 2, ReadySafe},
+	} {
+		floor, ok, err := b.Floor(q, c.class)
+		if err != nil || !ok {
+			t.Fatal(c.class, err)
+		}
+		r, err := th.Assess(AssessInput{Hero: Hero{Class: c.class, Level: c.lvl}, Floor: floor, HasFloor: ok, LegacyWall: c.wall})
+		if err != nil || r.Word != c.want {
+			t.Errorf("%s clvl %d wall %d (floor %d): word %v, want %v (%v)", c.class, c.lvl, c.wall, floor, r.Word, c.want, err)
+		}
+	}
+}

@@ -4,7 +4,7 @@
 
 Steps total 134: step scenario 50 (generated or hand-written), only a chunk-level scenario 59, MISSING 25.
 
-Verdicts: GREEN 32, RED 46, BLOCKED 30 (every MISSING step counts as BLOCKED), PENDING 26 (a scenario that was never run).
+Verdicts: GREEN 28, RED 50, BLOCKED 30 (every MISSING step counts as BLOCKED), PENDING 26 (a scenario that was never run).
 
 MISSING by cause: F2 1; F3 15; bot 9; (F<n> is a fork verb request, docs/probes/stepgrounds-fork-request.md; bot is a bot or scenario-format gap; data is missing data.)
 
@@ -36,24 +36,24 @@ MISSING by cause: F2 1; F3 15; bot 9; (F<n> is a fork verb request, docs/probes/
 | 1 | `forgotten_tower/countess/kill_countess` | step.act1.forgotten_tower.countess.kill_countess | GREEN |  [V run 20261123-185443] devp25 binary: spawn super countess, the bot kills 'The Countess' (the spawn is the unit with her mods and treasure class, not her room) devp25 `debug spawn super countess` (V fork proof: her own treasure class drops). The spawn is the unit, not her level-placed room. |
 | 1 | `tools_of_the_trade/malus/accept_charsi` | chunk: act1.tools.malus.basic | PENDING |  |
 | 1 | `tools_of_the_trade/malus/travel_barracks` | step.act1.tools_of_the_trade.malus.travel_barracks | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit also step.act1.caster_belt.restock.necro GREEN; also step.act1.caster_loop.barracks.necro GREEN; also step.act1.plan_overlap.necro GREEN; |
-| 1 | `tools_of_the_trade/malus/kill_smith` | step.act1.smith.stand_click_pickup | RED |  [V run 20261123-190635] with the merged stand step: the board reaches 'Pick up Horadric Malus from the Malus stand' (also in the reruns 190741 and 192710, the latter BLOCKED by a host cut), then 'task step skipped: ran but is still needed' and no hdm in the pack. Cause not isolated: the stand added by debug object add 108 beside the hero may not be the object the step looks up (U); needs the step's log lines at debug level also step.act1.smith.malus_pickup GREEN; also step.act1.smith.malus_pickup.sorc GREEN; also step.act1.smith.stand_click_pickup.control GREEN; also step.act1.smith.stand_click_pickup.necro RED; also step.act1.smith.stand_click_afar.necro RED; also step.act1.smith.room_stand.necro RED; |
+| 1 | `tools_of_the_trade/malus/kill_smith` | step.act1.smith.stand_click_pickup | RED |  [V run 20261123-190635] with the merged stand step: the board reaches 'Pick up Horadric Malus from the Malus stand' (also in the reruns 190741 and 192710, the latter BLOCKED by a host cut), then 'task step skipped: ran but is still needed' and no hdm in the pack. Cause not isolated: the stand added by debug object add 108 beside the hero may not be the object the step looks up (U); needs the step's log lines at debug level also step.act1.smith.malus_pickup GREEN; also step.act1.smith.malus_pickup.sorc GREEN; also step.act1.smith.stand_click_pickup.control GREEN; also step.act1.smith.stand_click_pickup.necro GREEN; also step.act1.smith.stand_click_afar.necro GREEN; also step.act1.smith.room_stand.necro GREEN; |
 | 1 | `tools_of_the_trade/malus/return_charsi` | chunk: act1.tools.malus.basic | PENDING |  |
 | 1 | `tools_of_the_trade/malus/pick_imbue` | chunk: act1.tools.malus.basic | PENDING |  |
-| 1 | `sisters_to_the_slaughter/andariel/travel_catacombs` | step.act1.sisters_to_the_slaughter.andariel.travel_catacombs | RED |  [V run 20261123-183646] farm goal from Catacombs 3: the hero went to town on a pack-full chore and did not re-enter Catacombs 4 in 12 virtual min (cause U) The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100). |
+| 1 | `sisters_to_the_slaughter/andariel/travel_catacombs` | step.act1.sisters_to_the_slaughter.andariel.travel_catacombs | GREEN |  [V run 20261125-131359] devp30 The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100). |
 | 1 | `sisters_to_the_slaughter/andariel/kill_andariel` | drill.andariel.stand | GREEN |  [V run 20261123-165901] clvl 30 stand-in, matrix note 35 |
 | 1 | `act1_done/sail_east/travel_town` | drill.act1.sail | GREEN |  [V run 20261124-005430] devp27 rebase smoke |
 | 1 | `act1_done/sail_east/talk_warriv` | drill.act1.sail | GREEN |  [V run 20261124-005430] devp27 rebase smoke |
 | 2 | `radament/radament/talk_atma` | chunk: drill.act2.radament | GREEN |  |
-| 2 | `radament/radament/travel_sewers` | step.act2.radament.radament.travel_sewers | GREEN |  [V run 20261123-182327] Paladin 11, budget 15 virtual min |
-| 2 | `radament/radament/kill_radament` | step.act2.radament.radament.kill_radament | GREEN |  [V run 20261123-181503] Paladin 11, clvl 24 kit debug spawn radament works (V probe, hp 278); whether the Book of Skill drops from a spawned Radament is U (the Smith case showed quest drops can be object-driven). |
+| 2 | `radament/radament/travel_sewers` | step.act2.radament.radament.travel_sewers | RED |  [V run 20261125-131359] devp30: character died in Sewers 1 (Horror), max life 610 |
+| 2 | `radament/radament/kill_radament` | step.act2.radament.radament.kill_radament | RED |  [V run 20261125-131359] devp30: the stand-in does not kill Radament in 8 virtual minutes debug spawn radament works (V probe, hp 278); whether the Book of Skill drops from a spawned Radament is U (the Smith case showed quest drops can be object-driven). |
 | 2 | `radament/radament/use_book` | MISSING | BLOCKED | bot: no assertion kind for unspent skill or stat points: the observer already reads them (cmd/d2scenario state.Stats skillpts) but internal/scenario has no `stat_value` kind; the book's code is U [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec] |
 | 2 | `radament/radament/return_atma` | drill.act2.radament.handin | GREEN |  [V run matrix-2026-11-23] matrix table row |
-| 2 | `tainted_sun/amulet/travel_lost_city` | chunk: drill.act2.amulet | GREEN |  |
-| 2 | `tainted_sun/amulet/travel_claw_viper` | chunk: drill.act2.amulet | GREEN |  |
-| 2 | `tainted_sun/amulet/kill_fangskin` | step.act2.tainted_sun.amulet.kill_fangskin | RED |  [V run 20261123-185443] the super spawn works (devp25) and the bot engages; the stand-in hero dies to Fangskin (kit too weak, matrix notes 24 to 26) |
-| 2 | `tainted_sun/amulet/take_amulet` | drill.act2.amulet | GREEN |  [V run 20261123-175925]  |
+| 2 | `tainted_sun/amulet/travel_lost_city` | chunk: drill.act2.amulet | RED |  |
+| 2 | `tainted_sun/amulet/travel_claw_viper` | chunk: drill.act2.amulet | RED |  |
+| 2 | `tainted_sun/amulet/kill_fangskin` | step.act2.tainted_sun.amulet.kill_fangskin | RED |  [V run 20261125-131359] devp30: character died in Claw Viper Temple 1 (Salamander) |
+| 2 | `tainted_sun/amulet/take_amulet` | drill.act2.amulet | RED |  [V run 20261125-123508] devp30 and current bot: died in Claw Viper Temple 1 (Bone Warrior); the bot of 2026-11-24 00:00 is GREEN on devp28: a thin fight margin, flaky (U) |
 | 2 | `horadric_staff/cube/travel_halls_of_the_dead` | chunk: drill.act2.cube | GREEN |  |
-| 2 | `horadric_staff/cube/take_cube` | drill.act2.cube | GREEN |  [V run 20261123-052834] matrix table |
+| 2 | `horadric_staff/cube/take_cube` | drill.act2.cube | GREEN |  [V run 20261125-141010] the row asserted the wrong town (fixed); devp30 |
 | 2 | `horadric_staff/shaft/travel_far_oasis` | step.act2.horadric_staff.shaft.travel_far_oasis | GREEN |  [V run 20261123-183100] RED before the prerequisite words were in the kit (locked until Radament's Lair); GREEN with records 4,6,7,9,11 |
 | 2 | `horadric_staff/shaft/travel_maggot_lair` | step.act2.horadric_staff.shaft.travel_maggot_lair | GREEN |  [V run 20261123-183100] RED before the prerequisite words were in the kit (locked until Radament's Lair); GREEN with records 4,6,7,9,11 |
 | 2 | `horadric_staff/shaft/take_shaft` | drill.act2.shaft | GREEN |  [V run 20261123-174023] Paladin 7, clvl 30 stand-in, merc 20; chest exists on seed 7 only |
@@ -61,7 +61,7 @@ MISSING by cause: F2 1; F3 15; bot 9; (F<n> is a fork verb request, docs/probes/
 | 2 | `horadric_staff/assemble/transmute` | drill.act2.assemble | GREEN |  [V run 20261124-005430] devp27 rebase smoke |
 | 2 | `horadric_staff/assemble/talk_cain` | drill.act2.assemble | GREEN |  [V run 20261124-005430] devp27 rebase smoke |
 | 2 | `arcane_sanctuary/portal/talk_jerhyn` | MISSING | BLOCKED | bot: no talk-step assertion: a talk is observable only through the quest word it moves, and which word and value each of these NPCs sets is U (internal/questspec names them; the lab observer now reads records 16 to 47, F3 observer half) [code area: internal/scenario evalOne and the observer in cmd/d2scenario/run.go; a talk step needs a data row mapping NPC to quest record and word, internal/questspec] |
-| 2 | `arcane_sanctuary/portal/travel_palace_cellar` | step.act2.arcane_sanctuary.portal.travel_palace_cellar | RED |  [V run 20261123-183646] the hero died on the way (a fight, matrix notes 24 to 26); a travel verdict needs the fights solved first The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100). |
+| 2 | `arcane_sanctuary/portal/travel_palace_cellar` | step.act2.arcane_sanctuary.portal.travel_palace_cellar | RED |  [V run 20261125-131359] devp30: character died in the Palace Cellar (Blunderbore) The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100). |
 | 2 | `arcane_sanctuary/portal/enter_arcane` | chunk: drill.act2.summoner | GREEN |  |
 | 2 | `summoner/kill_summoner/travel_arcane` | chunk: drill.act2.summoner | GREEN |  |
 | 2 | `summoner/kill_summoner/find_summoner` | chunk: drill.act2.summoner | GREEN |  |

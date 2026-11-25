@@ -334,6 +334,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [autoalloc-and-currencies-2026-11-21.md](design/autoalloc-and-currencies-2026-11-21.md): Automatic Allocate Skills, the gold respec and the currency consolidation (design, 2026-11-21) (status: DESIGN plus a built first slice (agent autoalloc). Tags: **V** verified (how said), **S** secondary, **U**...)
 - [bulk-identify-2026-11-18.md](design/bulk-identify-2026-11-18.md): Bulk identify: Cain-free, lazy reveal, filter (design, 2026-11-18) (status: BUILT offline (B1-B5 and the town adapters, scroll path and Ether tap payer of slice B6, task bulkid2),...)
+- [danger-protocol-2026-11-25.md](design/danger-protocol-2026-11-25.md): Danger protocol and checkpoint portals (2026-11-25) (status: design proposal, no code. Part 1 reads the code (tags: V = verified in code or a cited live record, S =...)
 
 `design/fable-review-2026-11-19/`
 

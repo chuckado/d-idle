@@ -151,6 +151,8 @@ type AssessInput struct {
 	Encounters []Encounter
 	Floor      int // legacy floor for the hero's class family
 	HasFloor   bool
+	// LegacyWall: levels under the floor at which a floor-only judgment reads too hard (0: warn only, never too hard).
+	LegacyWall int
 }
 
 // Assess is a pure function: it never changes zone choice, writes nothing and reads no game.
@@ -188,11 +190,15 @@ func (t *Thresholds) Assess(in AssessInput) (Readiness, error) {
 		r.Word = wordOf(worst.Best, worst.Low, line)
 		r.Debug = &Debug{Encounter: worst.Name, Best: worst.Best, Low: worst.Low, Enter: line.Enter, Stay: line.Stay}
 	case in.HasFloor:
-		// Warn, never wall: the old floor can say risky, never too hard, and its safe is not trusted for auto-start.
+		// Warn, never wall (ADR 0011): the old floor says risky under it, and its safe is not trusted for auto-start. With LegacyWall a
+		// hero further under the floor than that reads too hard (a clvl 4 Paladin started the Cain scroll at floor 9 and died).
 		r.FromLegacy = true
 		r.Word = ReadySafe
 		if in.Hero.Level < in.Floor {
 			r.Word = ReadyRisky
+			if in.LegacyWall > 0 && in.Hero.Level < in.Floor-in.LegacyWall {
+				r.Word = ReadyTooHard
+			}
 		}
 	default:
 		r.Unknown = true
