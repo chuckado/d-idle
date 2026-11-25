@@ -85,6 +85,9 @@ func (h *fakeHand) Pick(unit uint32, slot string) (string, error) {
 		if uint32(c.Rec.UnitID) != unit {
 			continue
 		}
+		if !c.Rec.Identified && c.Rec.Quality == 4 { // (the fake gives rare records no flag) the bot's own check (V live: leveler itemreasons)
+			return "", errors.New(c.Rec.Code + ": unidentified")
+		}
 		sl := slotsOf(c.Rec.Code)
 		for _, s := range sl {
 			if h.wornIn(s) == 0 {
@@ -441,21 +444,25 @@ func TestEquipOffAndRestartResumes(t *testing.T) {
 func TestEquipUnrevealedRecord(t *testing.T) {
 	for _, class := range classes {
 		t.Run(class, func(t *testing.T) {
+			// With an identify tool the item is identified in the pack and worn; without one it goes back to the vault
+			// with the reason (V live: the real wear check refuses an unidentified item, 12 owner orders failed so).
 			r, h := equipRig(t, class)
-			rec := d2dctl.FakeRecord(1, "cap", 4, 31, "unrevealed")
-			it, err := r.st.Add(vault.Item{Raw: rec.Norm, Code: "cap", Name: "Unidentified cap", Quality: 4, Ilvl: 31})
-			if err != nil {
-				t.Fatal(err)
-			}
-			if res := r.order(it.ID, ""); !res.OK || res.Code == "reveal" {
-				t.Fatalf("an unrevealed record is refused: %+v", res)
+			r.withTools(3)
+			id := r.addUnid(1, "cap")
+			if res := r.order(id, ""); !res.OK {
+				t.Fatalf("order: %+v", res)
 			}
 			r.run()
-			if o := r.k.EquipOrderOf(it.ID); o == nil || o.State != EqDone || h.wornIn("head") == 0 {
-				t.Fatalf("order %+v worn %d", o, h.wornIn("head"))
+			if o := r.k.EquipOrderOf(id); o == nil || o.State != EqDone || h.wornIn("head") == 0 || r.tools.used != 1 {
+				t.Fatalf("order %+v worn %d scrolls used %d", o, h.wornIn("head"), r.tools.used)
 			}
-			if got := r.state(it.ID); got.Identified {
-				t.Fatalf("wearing does not reveal it: %+v", got)
+			r2, h2 := equipRig(t, class)
+			r2.withTools(0)
+			id2 := r2.addUnid(1, "cap")
+			r2.order(id2, "")
+			r2.run()
+			if o := r2.k.EquipOrderOf(id2); o.State != EqFailed || o.Code != "identify" || h2.wornIn("head") != 0 || r2.carried(d2dctl.FakePack) != 0 {
+				t.Fatalf("no scroll: %+v pack %d", o, r2.carried(d2dctl.FakePack))
 			}
 		})
 	}
@@ -607,6 +614,27 @@ func TestEquipRefusedPieceGoesBackToTheVault(t *testing.T) {
 			}
 			if r.carried(d2dctl.FakePack) != 0 {
 				t.Fatalf("the refused item stays in the backpack: %v", lines)
+			}
+		})
+	}
+}
+
+// A plain Keep that finds the stash full must not hold the Equip orders back (owner log 2026-11-25: "rare Leather Armor
+// waits: the stash is full" and nothing else ran). MUST FAIL when the stash create runs first and halts the queue.
+func TestFullStashDoesNotBlockEquipOrders(t *testing.T) {
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			r, h := equipRig(t, class)
+			r.api.StashCols, r.api.StashRows = 1, 1
+			r.enq(r.addID(1, "rin"), r.addID(2, "rin")) // the second plain keep cannot find a cell
+			r.enq(r.addID(3, "rin"))
+			id := r.addID(4, "cap")
+			if res := r.order(id, ""); !res.OK {
+				t.Fatalf("%+v", res)
+			}
+			r.run()
+			if o := r.k.EquipOrderOf(id); o == nil || o.State != EqDone || h.wornIn("head") == 0 {
+				t.Fatalf("the equip order waited behind a full stash: %+v", o)
 			}
 		})
 	}

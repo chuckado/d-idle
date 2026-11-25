@@ -576,6 +576,14 @@ func (k *Keeper) equipOne(ctx context.Context, st *vault.Store, id string) strin
 	}
 	k.setOrder(id, func(o *EquipOrder) { o.Unit = int(unit) })
 	k.Hand.Protect(unit) // the chores must not sell it between the withdraw and the equip
+	// The bot's own wear check refuses an unidentified magic or better item (V live: the owner's orders, 12 failures
+	// "unidentified"; docs/leveler.md). The item is identified in the pack first, the same step as Keep and Reveal.
+	if !rec.Identified && k.Tools != nil {
+		if _, why, _ := k.identifyUnit(ctx, rec, int(unit), k.free()); why != "" {
+			k.failOrder(id, "identify", why)
+			return fmt.Sprintf("equip: %s not worn: it needs identifying first: %s (%s)", o.Name, why, k.sendBack(ctx, st, unit, o.Name))
+		}
+	}
 	slot, err := k.Hand.Pick(unit, o.Slot)
 	if err != nil {
 		k.failOrder(id, "requirements", err.Error())
