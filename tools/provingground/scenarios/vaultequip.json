@@ -601,9 +601,8 @@
         {
           "kind": "log_line",
           "pattern": "equip: .* worn in",
-          "min": 8,
-          "to_min": 3,
-          "why": "at least eight pieces are worn within the first virtual minutes (two rings or the hands may refuse)"
+          "min": 10,
+          "why": "all ten pieces are worn in one town stop (V live devp28 Paladin 11: ten lines within 0.1 s of wall time, inside the trip)"
         },
         {
           "kind": "item_in_pack",
