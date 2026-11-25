@@ -196,6 +196,13 @@ type Corpse interface {
 	Retrieve(ctx context.Context, area int, at input.Point) error
 }
 
+// CorpseTaker takes the player's own corpse when one lies in the current game: under the hero in the field, or in town
+// after a fresh game (the game moves a corpse left behind to the town of the next game, V d2d docs/d2d-spike.md). found is
+// false when no corpse is listed; the items return to the body, which the caller checks by counting what is worn.
+type CorpseTaker interface {
+	TakeCorpse(ctx context.Context) (found bool, err error)
+}
+
 // Leveler spends stat and skill points. Optional (the leveling executor, not part of the bot core yet).
 type Leveler interface {
 	Spend(ctx context.Context, snap *d2.Snapshot) error

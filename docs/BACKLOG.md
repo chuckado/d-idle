@@ -1364,6 +1364,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/toolstrade60: Merge branch 'main' into toolstrade60 (merged 2026-11-24) <!--sg:agent/toolstrade60-->
 - agent/vaultequip4: Merge branch 'main' into vaultequip4 (merged 2026-11-24) <!--sg:agent/vaultequip4-->
 - agent/vaultequip5: Merge branch 'main' into vaultequip5 (merged 2026-11-24) <!--sg:agent/vaultequip5-->
+- agent/toolstrade61: toolstrade61: the corpse test reads its click counter atomically (a data race under -race) (merged 2026-11-24) <!--sg:agent/toolstrade61-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

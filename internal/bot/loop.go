@@ -103,6 +103,9 @@ func (r *Runner) step(ctx context.Context) bool {
 	if r.loop.rec != nil {
 		return r.finishRecovery(ctx, snap, c)
 	}
+	if r.corpseTownStep(ctx, snap) {
+		return true
+	}
 	if r.resetStep(ctx, snap, c) {
 		return true
 	}
@@ -1216,6 +1219,11 @@ func (r *Runner) retrieveCorpse(ctx context.Context, area int, at input.Point) e
 	}
 	if err := r.d.Mover.GoTo(ctx, at); err != nil {
 		return fmt.Errorf("walk to corpse: %w", err)
+	}
+	if r.d.CorpseTake != nil { // d2d: standing on the spot is not enough, the corpse is clicked
+		if _, err := r.d.CorpseTake.TakeCorpse(ctx); err != nil {
+			r.e.Log.Info("corpse: the click failed", "err", err)
+		}
 	}
 	s := r.poll()
 	if s == nil {
