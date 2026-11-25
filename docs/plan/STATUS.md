@@ -505,14 +505,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 01b948117 11-25 00:18 `Merge agent/toolstrade62: Merge branch 'main' into toolstrade62` (toolstrade62)
+- 326777f2e 11-25 00:17 `Merge branch 'main' into toolstrade62` (-)
 - 3ec77eaa9 11-25 00:06 `Merge agent/equipv2: equipv2: task card (allow-adr), result line` (equipv2)
+- 09e42db26 11-24 22:24 `Merge branch 'main' into toolstrade62` (-)
 - 240ce87c4 11-24 22:16 `Merge agent/toolstrade61: toolstrade61: the corpse test reads its click counter atomically (a data race under -race)` (toolstrade61)
 - 3fd90da24 11-24 20:18 `Merge agent/vaultequip5: Merge branch 'main' into vaultequip5` (vaultequip5)
 - 643859e63 11-24 20:16 `Merge branch 'main' into vaultequip5` (-)
 - a9726d490 11-24 20:14 `Merge main into vaultequip5` (-)
 - 0d6684bd5 11-24 20:05 `Merge agent/vaultequip4: Merge branch 'main' into vaultequip4` (vaultequip4)
 - e28679dcd 11-24 20:04 `Merge branch 'main' into vaultequip4` (-)
-- 8e4803dab 11-24 19:58 `Merge agent/toolstrade60: Merge branch 'main' into toolstrade60` (toolstrade60)
-- 0a4cceb6c 11-24 19:57 `Merge branch 'main' into toolstrade60` (-)
-- 6f6f69a12 11-24 19:40 `Merge agent/toolstrade59: Merge branch 'main' into toolstrade59` (toolstrade59)
 <!-- statusgen:end -->
