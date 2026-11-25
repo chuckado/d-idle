@@ -477,6 +477,7 @@
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
 | toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
+| equipv2 | proposed | - | `cmd/d2bot/vaultequip.go`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2scenario/run.go`<br>`docs/adr/0029-vault-gold-payment.md`<br>`docs/decisions.md`<br>`docs/vault.md`<br>`internal/d2dctl/`<br>`internal/env/tuning_loot.go`<br>`internal/invdesk/pinslot.go`<br>`internal/vaultkeep/`<br>`internal/watch/`<br>`tools/provingground/scenarios/vaultequipv2.json` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
@@ -504,6 +505,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 3ec77eaa9 11-25 00:06 `Merge agent/equipv2: equipv2: task card (allow-adr), result line` (equipv2)
 - 240ce87c4 11-24 22:16 `Merge agent/toolstrade61: toolstrade61: the corpse test reads its click counter atomically (a data race under -race)` (toolstrade61)
 - 3fd90da24 11-24 20:18 `Merge agent/vaultequip5: Merge branch 'main' into vaultequip5` (vaultequip5)
 - 643859e63 11-24 20:16 `Merge branch 'main' into vaultequip5` (-)
@@ -513,5 +515,4 @@
 - 8e4803dab 11-24 19:58 `Merge agent/toolstrade60: Merge branch 'main' into toolstrade60` (toolstrade60)
 - 0a4cceb6c 11-24 19:57 `Merge branch 'main' into toolstrade60` (-)
 - 6f6f69a12 11-24 19:40 `Merge agent/toolstrade59: Merge branch 'main' into toolstrade59` (toolstrade59)
-- b6f2ccab8 11-24 19:38 `Merge branch 'main' into toolstrade59` (-)
 <!-- statusgen:end -->
