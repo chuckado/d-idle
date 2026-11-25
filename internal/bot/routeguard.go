@@ -458,7 +458,10 @@ func (r *Runner) fillKit(w *task.World, s *d2.Snapshot) {
 // andarielKitOn: the hero is close enough to Andariel's floor in Normal and has not killed her, so the town visits buy the boss
 // kit (the antidote rule of antidotesWanted).
 func (r *Runner) andarielKitOn(s *d2.Snapshot) bool {
-	return s != nil && s.Player != nil && s.Player.Difficulty == d2.Normal && s.Player.Level >= r.andarielLow(s.Player.Class)-2 && !r.killedBoss(task.BossAndy)
+	// While the campaign holds Andariel back (boss.andarielHold, no owner try) the hero levels: the boss floor of 8 closed the Tower
+	// Cellars and the road and shuttled it between town and the field (V live 2026-11-25).
+	held := r.e.Tune.Boss.AndarielHold != 0 && !task.TryActive()
+	return s != nil && s.Player != nil && !held && s.Player.Difficulty == d2.Normal && s.Player.Level >= r.andarielLow(s.Player.Class)-2 && !r.killedBoss(task.BossAndy)
 }
 
 // bossPurse is the gold a town visit leaves with when the stash has it: the boss profile's gold_carry, 0 outside the boss kit.
