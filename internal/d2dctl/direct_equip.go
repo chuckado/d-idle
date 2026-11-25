@@ -2,7 +2,6 @@ package d2dctl
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -17,13 +16,15 @@ import (
 // lab fork (devp29, spec in the ops repo, docs/private/devp29-directequip.md). Only the vault API with the answer
 // listener's auth reaches them; the bot's own play never does, and a measured run refuses them (here and in the fork).
 //
-//	item equipdirect <hex> <slot>      {"ok":true,"slot":"head","unit":N,"removed":["<hex>",...]}
-//	item unequipdirect <slot>          {"ok":true,"slot":"head","removed":["<hex>"]}
-//	item wearset <slot>=<hex> ...      {"ok":true,"results":[{one result as above, or "ok":false,"code","why"}...]}   up to 12
+//	item equipdirect <hex> <slot> [identified=1]   ok equipped <n> id=<unit> removed=<raw>[,<raw>] removed_norm=<norm>[,<norm>]
+//	item unequipdirect <slot>                      ok unequipped <n> id=<unit> hex=<raw> norm=<norm>
+//	item wearset <slot>=<hex> ... [identified=1]   piece <i> slot=<n> ok id=<unit> removed=<raw>,...  |  piece <i> slot=<n> err <reason> <text>
+//	                                               ok wearset applied=<m>/<n> removed=<every removed raw>
 //
-// U: the wire shapes above are the bot side's reading of the brief, written before the spec landed; every field name lives
-// in parseDirect, so the spec's own shapes change that one function. The slot words are the desk's slot keys (head, torso,
-// rhand ...). Nothing here ran against a fork yet.
+// Fork spec: ops repo docs/private/devp29-directequip.md (branch didle/directequip-20261125; the code was not built when this
+// was written, so every shape here is the SPEC, not a run: U). Slots go as numbers (head 1 ... gloves 10, see DirectSlotNum),
+// reasons are parse, version, state, slot, class, identified, level, str, dex, requirements, hands, dup, item, empty. Removed
+// items come back as raw hex; the keeper decodes them (`item decode`) for the vault record.
 
 // Capability names a devp29 fork lists in `caps`.
 const (
@@ -99,7 +100,7 @@ func (d *DirectEquip) DirectCaps(ctx context.Context) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	return HasCap(caps, CapItemEquipDirect) && HasCap(caps, CapItemWearSet), nil
+	return HasCap(caps, CapItemEquipDirect) && HasCap(caps, CapItemWearSet) && HasCap(caps, CapItemUnequipDirect), nil
 }
 
 // run writes the ledger line BEFORE the verb (an unwritable ledger stops it), then completes it with the reply.
@@ -152,14 +153,26 @@ func (d *DirectEquip) EquipDirect(ctx context.Context, hex, slot, order string) 
 	if err := ValidHex(hex); err != nil {
 		return DirectResult{}, err
 	}
-	return one(d.run(ctx, "item equipdirect", order, map[string]any{"slot": slot}, "item equipdirect "+hex+" "+slot, parseDirect))
+	n, err := slotNum(slot)
+	if err != nil {
+		return DirectResult{}, err
+	}
+	res, err := one(d.run(ctx, "item equipdirect", order, map[string]any{"slot": slot}, fmt.Sprintf("item equipdirect %s %d identified=1", hex, n), parseDirect))
+	res.Slot = slot
+	return res, err
 }
 
 func (d *DirectEquip) UnequipDirect(ctx context.Context, slot, order string) (DirectResult, error) {
 	if err := d.ready(order); err != nil {
 		return DirectResult{}, err
 	}
-	return one(d.run(ctx, "item unequipdirect", order, map[string]any{"slot": slot}, "item unequipdirect "+slot, parseDirect))
+	n, err := slotNum(slot)
+	if err != nil {
+		return DirectResult{}, err
+	}
+	res, err := one(d.run(ctx, "item unequipdirect", order, map[string]any{"slot": slot}, fmt.Sprintf("item unequipdirect %d", n), parseDirect))
+	res.Slot = slot
+	return res, err
 }
 
 func (d *DirectEquip) WearSet(ctx context.Context, pieces []DirectPiece, order string) ([]DirectResult, error) {
@@ -175,35 +188,97 @@ func (d *DirectEquip) WearSet(ctx context.Context, pieces []DirectPiece, order s
 		if err := ValidHex(p.Hex); err != nil {
 			return nil, err
 		}
-		line += " " + p.Slot + "=" + p.Hex
+		n, err := slotNum(p.Slot)
+		if err != nil {
+			return nil, err
+		}
+		line += fmt.Sprintf(" %d=%s", n, p.Hex)
 		slots = append(slots, p.Slot)
 	}
+	line += " identified=1" // the keeper only sends records revealed in the vault
 	res, err := d.run(ctx, "item wearset", order, map[string]any{"slots": slots}, line, parseDirect)
 	if err == nil && len(res) != len(pieces) {
 		err = fmt.Errorf("d2dctl: wearset answered %d results for %d pieces", len(res), len(pieces))
 	}
+	for i := range res {
+		if i < len(pieces) {
+			res[i].Slot = pieces[i].Slot
+		}
+	}
 	return res, err
 }
 
-// parseDirect reads the verbs' JSON answer: one result, or {"results":[...]}.
+// DirectSlotNum is the fork's body slot number of a desk slot key.
+var DirectSlotNum = map[string]int{"head": 1, "neck": 2, "torso": 3, "rhand": 4, "lhand": 5, "rring": 6, "lring": 7, "belt": 8, "feet": 9, "gloves": 10}
+
+func slotNum(slot string) (int, error) {
+	n, ok := DirectSlotNum[slot]
+	if !ok {
+		return 0, &DirectRefused{Code: "slot", Why: "unknown slot " + slot}
+	}
+	return n, nil
+}
+
+func splitHexes(v string) []string {
+	var out []string
+	for _, h := range strings.Split(v, ",") {
+		if h != "" {
+			out = append(out, h)
+		}
+	}
+	return out
+}
+
+// parseDirect reads equipdirect and unequipdirect (the status rest) and wearset (piece lines, then the status rest).
 func parseDirect(r *Reply) ([]DirectResult, error) {
+	var out []DirectResult
 	for _, l := range r.Lines {
-		if !strings.HasPrefix(strings.TrimSpace(l), "{") {
+		rest, ok := strings.CutPrefix(strings.TrimSpace(l), "piece ")
+		if !ok {
 			continue
 		}
-		var out struct {
-			DirectResult
-			Results []DirectResult `json:"results"`
+		_, rest, _ = strings.Cut(rest, " ") // the piece index: results stay in argument order
+		kv := ParseKV(rest)
+		res := DirectResult{Removed: []string{}}
+		res.Slot, _ = kv.Get("slot")
+		switch {
+		case hasWord(kv, "err"):
+			_, after, _ := strings.Cut(rest, " err ")
+			res.Code, res.Why, _ = strings.Cut(after, " ")
+		case hasWord(kv, "ok"):
+			res.OK = true
+			res.Unit, _ = kv.Int("id")
+			res.Removed = splitHexes(kv.M["removed"])
+		default:
+			return nil, fmt.Errorf("d2dctl: wearset piece line %q", l)
 		}
-		if err := json.Unmarshal([]byte(l), &out); err != nil {
-			return nil, fmt.Errorf("d2dctl: direct equip reply: %w", err)
-		}
-		if out.Results != nil {
-			return out.Results, nil
-		}
-		return []DirectResult{out.DirectResult}, nil
+		out = append(out, res)
 	}
-	return nil, errors.New("d2dctl: direct equip reply holds no answer")
+	if len(out) > 0 {
+		return out, nil
+	}
+	f := strings.Fields(r.Rest)
+	if len(f) < 2 || f[0] != "equipped" && f[0] != "unequipped" {
+		return nil, fmt.Errorf("d2dctl: direct equip reply %q holds no answer", r.Rest)
+	}
+	kv := ParseKV(strings.Join(f[2:], " "))
+	res := DirectResult{OK: true, Slot: f[1]}
+	res.Unit, _ = kv.Int("id")
+	if h, ok := kv.Get("hex"); ok { // unequipdirect
+		res.Removed = []string{h}
+	} else {
+		res.Removed = splitHexes(kv.M["removed"])
+	}
+	return []DirectResult{res}, nil
+}
+
+func hasWord(kv KV, w string) bool {
+	for _, x := range kv.Loose {
+		if x == w {
+			return true
+		}
+	}
+	return false
 }
 
 // mapDirectErr turns the fork's `err ...` lines into the kinds above.
@@ -216,7 +291,7 @@ func mapDirectErr(err error) error {
 	switch {
 	case strings.HasPrefix(msg, "measured run"):
 		return fmt.Errorf("%w: %s", ErrDirectMeasured, msg)
-	case strings.HasPrefix(msg, "unknown") || strings.HasPrefix(msg, "lab verbs off") || strings.HasPrefix(msg, "vault verbs off"):
+	case strings.HasPrefix(msg, "unknown") || strings.HasPrefix(msg, "lab verbs off"):
 		return fmt.Errorf("%w: %s", ErrDirectOff, msg)
 	}
 	code, why, _ := strings.Cut(msg, " ")
