@@ -381,6 +381,12 @@ func (f equipFace) k() *vaultkeep.Keeper {
 	return f.h.keep
 }
 
+// Direct says the one-tap Equip wears at once (the verbs are in this build and the knob is on).
+func (f equipFace) Direct(ctx context.Context) bool {
+	k := f.k()
+	return k != nil && k.DirectReady(ctx)
+}
+
 func (f equipFace) Gate(ctx context.Context) (bool, string, string) {
 	k := f.k()
 	if k == nil {
@@ -392,6 +398,7 @@ func (f equipFace) Gate(ctx context.Context) (bool, string, string) {
 // equipSheet is the reply of GET /api/vault/equip/<id>.
 type equipSheet struct {
 	Enabled bool   `json:"enabled"`
+	Direct  bool   `json:"direct,omitempty"` // one tap wears at once (Equip v2)
 	Off     string `json:"offWhy,omitempty"` // why Equip cannot be pressed now (knob off, dead hero ...)
 	vaultkeep.Preview
 	Order *vaultkeep.EquipOrder `json:"order,omitempty"`
@@ -409,6 +416,7 @@ func (f equipFace) Preview(id string) (any, bool) {
 	}
 	v := equipSheet{Preview: p, Order: o}
 	v.Enabled = true
+	v.Direct = k.DirectReady(context.Background())
 	if g, _, why := k.EquipGate(context.Background()); !g {
 		v.Enabled, v.Off = false, why
 	}
@@ -427,7 +435,7 @@ func (f equipFace) Enqueue(ctx context.Context, id, slot string, now bool) watch
 		return watch.VaultKeepResult{ID: id, Code: "off", Why: vaultkeep.ReasonEqNone}
 	}
 	r := k.EquipEnqueue(ctx, id, slot, now)
-	return watch.VaultKeepResult{ID: r.ID, OK: r.OK, Already: r.Already, Code: r.Code, Why: r.Why}
+	return keepResult(r)
 }
 
 func (f equipFace) EnqueueSet(ctx context.Context, ids []string, now bool) []watch.VaultKeepResult {
@@ -440,7 +448,7 @@ func (f equipFace) EnqueueSet(ctx context.Context, ids []string, now bool) []wat
 		return out
 	}
 	for _, r := range k.EquipSet(ctx, ids, now) {
-		out = append(out, watch.VaultKeepResult{ID: r.ID, OK: r.OK, Already: r.Already, Code: r.Code, Why: r.Why})
+		out = append(out, keepResult(r))
 	}
 	return out
 }
@@ -451,5 +459,9 @@ func (f equipFace) Cancel(id string) watch.VaultKeepResult {
 		return watch.VaultKeepResult{ID: id, Code: "off", Why: vaultkeep.ReasonEqNone}
 	}
 	r := k.EquipCancel(id)
-	return watch.VaultKeepResult{ID: r.ID, OK: r.OK, Already: r.Already, Code: r.Code, Why: r.Why}
+	return keepResult(r)
+}
+
+func keepResult(r vaultkeep.Result) watch.VaultKeepResult {
+	return watch.VaultKeepResult{ID: r.ID, OK: r.OK, Already: r.Already, Code: r.Code, Why: r.Why, Direct: r.Direct, Slot: r.Slot, Removed: r.Removed, Where: r.Where}
 }

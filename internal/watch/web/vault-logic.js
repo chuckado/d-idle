@@ -432,6 +432,7 @@ export function equipOneTap(sh) {
   if (p.state !== 'ready' || p.ring) return false;
   const auto = p.buttons.find((b) => b.slot === 'auto');
   if (!auto || !auto.can) return false;
+  if (sh.direct) return true; // Equip v2: the swap is instant and the old piece goes to the Vault, so no confirm
   return (sh.slots || []).filter((x) => x.can).every((x) => !x.worn && !x.note); // a note is the two-hander pushing a shield off
 }
 export function equipTaps(sh) { return equipOneTap(sh) ? 1 : 2; }
@@ -485,4 +486,21 @@ export function comparePlan(mode, sh, inv, cand, cmp, T) {
   });
   if (!blocks.length) return { state: 'refused', who: mode, why: T.cmpNotWorn, blocks: [] };
   return { state: 'ok', who: mode, blocks };
+}
+
+// equipWornWords turns the Equip v2 reply (`equipped`: per piece slot, removed, where; `failed`: id, error) into the toast: what
+// was worn, what went to the Vault, and each refused piece with its own reason. names maps id -> item name.
+export function equipWornWords(rep, names, T) {
+  const worn = (rep && rep.equipped) || [], failed = (rep && rep.failed) || [];
+  const nm = (id) => (names && names[id]) || id;
+  const parts = [];
+  if (worn.length) {
+    const off = worn.reduce((a, x) => a.concat(x.removed || []), []);
+    const where = (worn.find((x) => x.where && x.where !== 'vault') || {}).where;
+    parts.push((worn.length === 1 ? T.okWornOne.replace('{slot}', worn[0].slot) : T.okWornSet.replace('{n}', String(worn.length)))
+      + (off.length ? ' ' + T.okWornOff.replace('{old}', off.join(', ')).replace('{where}', where || 'Vault') : ''));
+  }
+  failed.slice(0, 3).forEach((x) => parts.push(nm(x.id) + ': ' + (x.error || x.code)));
+  if (failed.length > 3) parts.push(T.okWornMore.replace('{k}', String(failed.length - 3)));
+  return { text: parts.join(' '), kind: worn.length ? (failed.length ? 'info' : 'good') : 'bad' };
 }

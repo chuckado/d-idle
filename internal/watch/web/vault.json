@@ -105,6 +105,11 @@
   "wearSetSel": "Wear set ({n})",
   "wearSetMax": "A set is two to twelve pieces. The first piece for a slot is worn; the others stay in the vault and the reply says why.",
   "okEquipSet": "Wearing {n} pieces in this town stop. Pieces for a slot that is taken stay in the vault.",
+  "equipNoteDirect": "Worn at once, in town or in the field. The item you replace goes into the vault as a record, the slot stays yours until you change it. Charms and belt or backpack items are not equipped here.",
+  "okWornOne": "Worn in {slot}.",
+  "okWornSet": "Wearing {n} pieces.",
+  "okWornOff": "{old} went to the {where}.",
+  "okWornMore": "{k} more refused.",
   "equipNote": "Only in town, one town visit. The item you replace goes back into the vault, the slot stays yours until you change it. Charms and belt or backpack items are not equipped here.",
   "equipSent": "Equip queued",
   "equipStates": {
