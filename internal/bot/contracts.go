@@ -200,7 +200,8 @@ type Corpse interface {
 // after a fresh game (the game moves a corpse left behind to the town of the next game, V d2d docs/d2d-spike.md). found is
 // false when no corpse is listed; the items return to the body, which the caller checks by counting what is worn.
 type CorpseTaker interface {
-	TakeCorpse(ctx context.Context) (found bool, err error)
+	// TakeCorpse clicks a corpse that carries items and lies in area (0: any); found is false when none is listed.
+	TakeCorpse(ctx context.Context, area int) (found bool, err error)
 }
 
 // Leveler spends stat and skill points. Optional (the leveling executor, not part of the bot core yet).

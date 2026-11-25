@@ -1221,7 +1221,7 @@ func (r *Runner) retrieveCorpse(ctx context.Context, area int, at input.Point) e
 		return fmt.Errorf("walk to corpse: %w", err)
 	}
 	if r.d.CorpseTake != nil { // d2d: standing on the spot is not enough, the corpse is clicked
-		if _, err := r.d.CorpseTake.TakeCorpse(ctx); err != nil {
+		if _, err := r.d.CorpseTake.TakeCorpse(ctx, r.curArea()); err != nil {
 			r.e.Log.Info("corpse: the click failed", "err", err)
 		}
 	}

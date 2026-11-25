@@ -11,14 +11,14 @@ import (
 // next game (V d2d, docs/d2d-spike.md), where the bot takes it first thing.
 type d2dCorpse struct{ c *d2dctl.Client }
 
-// TakeCorpse clicks the first corpse that carries items; found is false when none is listed.
-func (a d2dCorpse) TakeCorpse(ctx context.Context) (bool, error) {
+// TakeCorpse clicks the first corpse that carries items and lies in area (0: any level); found is false when none is listed.
+func (a d2dCorpse) TakeCorpse(ctx context.Context, area int) (bool, error) {
 	l, err := a.c.Corpses(ctx)
 	if err != nil {
 		return false, err
 	}
 	for i, c := range l.Items {
-		if c.Items > 0 {
+		if c.Items > 0 && (area <= 0 || c.Level == area) {
 			return true, a.c.CorpseInteract(ctx, i)
 		}
 	}
