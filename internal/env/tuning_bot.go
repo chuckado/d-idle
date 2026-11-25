@@ -105,7 +105,11 @@ type BotTuning struct {
 	// PortalRetryWaitSec: a town portal cast cancelled before the click by a drink or a retreat (nothing spent) is retried
 	// ONCE after this many virtual seconds, as a town trip; 0 = off (the next planning tick decides, the old behaviour).
 	PortalRetryWaitSec int
-	DroughtStage2Min   int
+	// Checkpoint portals (docs/design/danger-protocol-2026-11-25.md): a portal cast on purpose at a danger area while
+	// healthy, used as the retreat and the way back after a death. CheckpointEnable 0 = the whole feature is off.
+	CheckpointEnable, CheckpointMinLifePct, CheckpointRetreatPct, CheckpointGapSec, CheckpointMinScrolls int
+	CheckpointSafeRadius, CheckpointEntryDist, CheckpointReach, CheckpointArrivalHostiles                int
+	DroughtStage2Min                                                                                     int
 	// Slow field (TASK-138): fewer than DroughtSlowKills kills in DroughtSlowMin minutes, after that long in the same
 	// field area, below clvl DroughtSlowMaxLevel, starts a fresh game (a depleted early field refills only in a new
 	// game; stragglers kept the kill drought quiet). 0 for DroughtSlowMin or DroughtSlowMaxLevel = off.
@@ -156,7 +160,7 @@ func DefaultBotTuning() BotTuning {
 		PointsRetrySec: 30, GearCheckSec: 60, GearMinGold: 150, GearBudgetPct: 70, GearReserve: 100,
 		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600, FlailMoves: 6, FlailWindowMin: 10, FlailHoldMin: 5,
 		ArbiterShadow: 0, ArbiterDwellSec: 120, ArbiterTravelSec: 600, ArbiterLogGapSec: 60,
-		Rung3WindowMax: 3, Rung3WindowMin: 20, DroughtMin: 8, EmptyFieldSec: 150, ClearIdleMin: 3, NoPortalWaitSec: 20, PortalRetryWaitSec: 3, DroughtStage2Min: 2, DroughtSlowMin: 10, DroughtSlowKills: 3, DroughtSlowMaxLevel: 10, FreshAfterRecoverySec: 180, RecoveryDryMin: 5, RecoveryDryKills: 5, RecoveryDrySkipMin: 15,
+		Rung3WindowMax: 3, Rung3WindowMin: 20, DroughtMin: 8, EmptyFieldSec: 150, ClearIdleMin: 3, NoPortalWaitSec: 20, PortalRetryWaitSec: 3, CheckpointEnable: 0, CheckpointMinLifePct: 80, CheckpointRetreatPct: 40, CheckpointGapSec: 60, CheckpointMinScrolls: 2, CheckpointSafeRadius: 30, CheckpointEntryDist: 40, CheckpointReach: 60, CheckpointArrivalHostiles: 4, DroughtStage2Min: 2, DroughtSlowMin: 10, DroughtSlowKills: 3, DroughtSlowMaxLevel: 10, FreshAfterRecoverySec: 180, RecoveryDryMin: 5, RecoveryDryKills: 5, RecoveryDrySkipMin: 15,
 		ZoneModel: 0, ZoneDial: 1, PortalGuard: 0, PortalCastMs: 3000, PortalWalkMs: 3000, PortalHitMs: 700, PortalLifePct: 50,
 		MercRetryMin: 10, MercHireMinGold: 400, MercReviveLoopN: 3, MercReviveLoopMin: 10, CubeMaxJobs: 6, CubeRuneCap: 10, CubeGemCap: 2,
 	}
@@ -308,6 +312,24 @@ func botKnobs() []Knob {
 			Desc: "Low life, no potion and the way to town fails because there is no town portal (and no walk back for this area): seconds after the first such failure before the hero leaves the game, which restarts it in town. 240 keeps the old two minute waits."},
 		{Key: "bot.portalRetryWaitSec", Label: "Cancelled portal: retry after", Unit: "s", Default: 3, Min: 0, Max: 30, NoHandicap: true,
 			Desc: "A town portal cast cancelled before the click (a drink or a retreat cut it, nothing spent) is retried once as a town trip after this many seconds. 0 is off: the next planning tick decides."},
+		{Key: "bot.checkpointEnable", Label: "Checkpoint portals", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
+			Desc: "1 casts a town portal on purpose at a danger area while the hero is healthy and nothing is near, retreats to it at low life and returns through it after a death. 0 is off (docs/design/danger-protocol-2026-11-25.md)."},
+		{Key: "bot.checkpointMinLifePct", Label: "Checkpoint cast: life at least", Unit: "%", Default: 80, Min: 50, Max: 100, NoHandicap: true,
+			Desc: "A checkpoint portal is cast only at or above this life percent."},
+		{Key: "bot.checkpointRetreatPct", Label: "Checkpoint retreat: life at most", Unit: "%", Default: 40, Min: 10, Max: 70, NoHandicap: true,
+			Desc: "At or below this life percent a live checkpoint within reach is walked to and taken (potions and the crowd rule act first)."},
+		{Key: "bot.checkpointGapSec", Label: "Checkpoint cast gap", Unit: "s", Default: 60, Min: 10, Max: 600, NoHandicap: true,
+			Desc: "At least this many seconds between two checkpoint casts."},
+		{Key: "bot.checkpointMinScrolls", Label: "Checkpoint scroll reserve", Unit: "count", Default: 2, Min: 0, Max: 10, NoHandicap: true,
+			Desc: "A checkpoint is cast only with more portal casts than this in the pack, so the last ones stay for escapes."},
+		{Key: "bot.checkpointSafeRadius", Label: "Checkpoint cast: nothing hostile within", Unit: "subtiles", Default: 30, Min: 10, Max: 60, NoHandicap: true,
+			Desc: "The checkpoint spot must have no hostile this close."},
+		{Key: "bot.checkpointEntryDist", Label: "Checkpoint cast: near the entry", Unit: "subtiles", Default: 40, Min: 5, Max: 120, NoHandicap: true,
+			Desc: "The cast happens at most this far from where the hero entered the area (the entrance of a cleared stretch)."},
+		{Key: "bot.checkpointReach", Label: "Checkpoint retreat reach", Unit: "subtiles", Default: 60, Min: 10, Max: 200, NoHandicap: true,
+			Desc: "A retreat to the checkpoint is tried only when the portal is at most this far away."},
+		{Key: "bot.checkpointArrivalHostiles", Label: "Checkpoint return: crowd at the exit", Unit: "count", Default: 4, Min: 1, Max: 20, NoHandicap: true,
+			Desc: "After a death, arriving through the checkpoint portal into this many hostiles near the exit sends the hero straight back to town."},
 		{Key: "bot.freshAfterRecoverySec", Label: "Quiet after recovery", Unit: "s", Default: 180, Min: 0, Max: 900, NoHandicap: true,
 			Desc: "No unplanned fresh game (no target left, drought) this long after a lost-game recovery, unless life is below the resume line. A second restart right after the recovery fails the Gate 2 fault criterion. 0 is off."},
 		{Key: "bot.emptyFieldSec", Label: "Empty quest field", Unit: "s", Default: 150, Min: 0, Max: 900, NoHandicap: true,
