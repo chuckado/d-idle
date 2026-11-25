@@ -204,9 +204,15 @@ func TestJudgeHeroCases(t *testing.T) {
 	if has(jr.Hero, itemreq.Identified, "") == nil {
 		t.Errorf("10: %v", codes(jr.Hero))
 	}
-	if _, err := g.lv.CheckPlayerEquip(s, u.ID, d2.BodyRRing); err == nil {
-		t.Error("10: the equip path takes an unidentified ring")
+	// The player's equip wears it as it is (user rule 2026-11-21); the judge still reports it, the planner still skips it.
+	if _, err := g.lv.CheckPlayerEquip(s, u.ID, d2.BodyRRing); err != nil {
+		t.Errorf("10: the player's equip refuses an unidentified ring: %v", err)
 	}
+	g.hero(d2.Paladin, 7, 38, 20)
+	if _, err := g.lv.CheckPlayerEquip(s, u.ID, d2.BodyRRing); err != nil {
+		t.Errorf("10: paladin: %v", err)
+	}
+	g.hero(d2.Sorceress, 7, 38, 20)
 
 	g.hero(d2.Sorceress, 7, 38, 30)
 	// 12: a two-hander while a shield is worn: the item is fine, the hands rule refuses, with its own code

@@ -576,20 +576,19 @@ func (k *Keeper) equipOne(ctx context.Context, st *vault.Store, id string) strin
 	}
 	k.setOrder(id, func(o *EquipOrder) { o.Unit = int(unit) })
 	k.Hand.Protect(unit) // the chores must not sell it between the withdraw and the equip
-	// The bot's own wear check refuses an unidentified magic or better item (V live: the owner's orders, 12 failures
-	// "unidentified"; docs/leveler.md). The item is identified in the pack first, the same step as Keep and Reveal.
-	if !rec.Identified && k.Tools != nil {
-		if _, why, _ := k.identifyUnit(ctx, rec, int(unit), k.free()); why != "" {
-			k.failOrder(id, "identify", why)
-			return fmt.Sprintf("equip: %s not worn: it needs identifying first: %s (%s)", o.Name, why, k.sendBack(ctx, st, unit, o.Name))
-		}
-	}
 	slot, err := k.Hand.Pick(unit, o.Slot)
 	if err != nil {
 		k.failOrder(id, "requirements", err.Error())
 		return fmt.Sprintf("equip: %s not worn: %v (%s)", o.Name, err, k.sendBack(ctx, st, unit, o.Name))
 	}
 	off, err := k.Hand.Wear(ctx, unit, slot)
+	if err != nil && ctx.Err() == nil && !rec.Identified && k.Tools != nil && k.free() {
+		// Equip does not reveal (user rule 2026-11-21): the unit is worn as it is. Only when the game refuses it and Cain
+		// stands here, the one free identify is made and the wear tried once more; never a scroll or a charge.
+		if _, why, _ := k.identifyUnit(ctx, rec, int(unit), true); why == "" {
+			off, err = k.Hand.Wear(ctx, unit, slot)
+		}
+	}
 	if err != nil {
 		if ctx.Err() != nil || errors.Is(err, context.Canceled) {
 			return "" // try again next visit; the order stays

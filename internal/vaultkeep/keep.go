@@ -380,7 +380,15 @@ func (k *Keeper) Run(ctx context.Context) []string {
 	lines = append(lines, k.resumeGold(ctx)...) // an order a restart or a lost reply left unsettled
 	lines = append(lines, k.resumeSale(ctx)...)
 	lines = append(lines, k.flushQueued(ctx)...)
-	lines = append(lines, k.runEquip(ctx)...)
+	eq := k.runEquip(ctx)
+	lines = append(lines, eq...)
+	// A set bigger than the free pack cells goes in chunks: the pieces made so far are worn (or sent back to the vault),
+	// which frees their cells, then the next ones are taken out, until nothing moves any more.
+	for round := 0; round < maxSetRounds && len(eq) > 0 && ctx.Err() == nil && k.packWaiting(); round++ {
+		lines = append(lines, k.runKeep(ctx)...)
+		eq = k.runEquip(ctx)
+		lines = append(lines, eq...)
+	}
 	lines = append(lines, k.runReveal(ctx)...)
 	return append(lines, k.runSell(ctx)...)
 }
@@ -816,4 +824,21 @@ func (k *Keeper) OfferedMethods() []string {
 		return []string{"free", "ether", "gold"}
 	}
 	return k.Methods()
+}
+
+// maxSetRounds bounds the take-out and wear rounds of one visit (a full body is ten pieces).
+const maxSetRounds = 12
+
+// packWaiting reports that a backpack create (an Equip order's) is queued and was held back because the pack had no room.
+func (k *Keeper) packWaiting() bool {
+	st := k.store()
+	if st == nil {
+		return false
+	}
+	for _, r := range st.KeepQueued() {
+		if r.Where == vault.WhereInv && !r.InFlight && Reason(r.Reason) == ReasonPackFull {
+			return true
+		}
+	}
+	return false
 }

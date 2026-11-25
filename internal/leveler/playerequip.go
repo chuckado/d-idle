@@ -46,6 +46,11 @@ func (l *Leveler) CheckPlayerEquip(s *d2.Snapshot, id uint32, body int) (name st
 	if c.Why == "low quality" {
 		c.Why, c.Usable = "", true
 	}
+	if !c.Usable && onlyUnidentified(c.Reasons) {
+		// The player's own equip: an unidentified item is worn as it is, its hidden affixes apply (user rule 2026-11-21).
+		// The planner (ChooseGear, the town chore) still skips it. U live: that d2d accepts the click or the verb.
+		c.Why, c.Usable = "", true
+	}
 	if !c.Usable {
 		return name, &itemreq.Error{Err: fmt.Errorf("%s: %s", name, c.Why), Reasons: c.Reasons}
 	}
@@ -110,4 +115,18 @@ func (l *Leveler) PlayerEquip(ctx context.Context, id uint32, body int) error {
 		l.logf("player equip", "swap", sw.String())
 	}
 	return err
+}
+
+// onlyUnidentified says that "unidentified" is the sole reason an item is refused (class, level, strength and dexterity
+// reasons still stop a player's equip).
+func onlyUnidentified(rs []itemreq.Reason) bool {
+	if len(rs) == 0 {
+		return false
+	}
+	for _, r := range rs {
+		if r.Code != itemreq.Identified {
+			return false
+		}
+	}
+	return true
 }
