@@ -478,7 +478,6 @@
 | toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | equipv2b | proposed | - | `internal/vaultkeep/equipdirect_test.go`<br>`docs/vault.md` | - |
-| dangerproto | proposed | - | `docs/design/danger-protocol-2026-11-25.md` | - |
 | checkpoint1 | proposed | - | `internal/bot/checkpoint.go`<br>`internal/bot/checkpoint_test.go`<br>`internal/plandata/checkpoint_areas.go`<br>`internal/env/tuning_bot.go`<br>`docs/knobs.md`<br>`docs/design/danger-protocol-2026-11-25.md`<br>`internal/bot/loop.go`<br>`internal/bot/goal.go`<br>`internal/bot/observe.go`<br>`internal/bot/runner.go`<br>`internal/bot/state.go` | - |
 | toolstrade68 | proposed | - | `docs/adr/0011-readiness-power-vs-danger.md`<br>`docs/decisions.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
