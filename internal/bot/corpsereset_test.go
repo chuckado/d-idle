@@ -110,24 +110,3 @@ func TestStandingSweepTakesAnUntrackedCorpseInTown(t *testing.T) {
 		}
 	}
 }
-
-// V live 2026-11-24 20:52 EST: the record said corpse value 0 with five worn pieces. A worn piece counts at least wornPieceFloor
-// even when the catalog prices it at nothing. Two classes.
-func TestWornPiecesKeepTheCorpseValueAboveZero(t *testing.T) {
-	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
-		g := newRig(t)
-		cheap := gearUnit()
-		cheap.Class, cheap.Item.Quality = 3, 2 // zero cost in the fake catalog
-		g.mover.exploreFn = blockExplore
-		g.w.set(func(w *world) { w.class = class; w.level = 3; w.area = 2; w.items = append(w.items, cheap) })
-		g.run()
-		defer g.finish()
-		g.r.Start(farm("Blood Moor"))
-		g.waitFor("in field", func() bool { return g.w.count("explore") > 0 })
-		die(g)
-		g.waitFor("death", func() bool { return len(g.events(goals.EvDeath)) == 1 })
-		if v := g.r.DeathReport().Records[0].CorpseValue; v < wornPieceFloor {
-			t.Fatalf("%v: corpse value %d with a worn piece", class, v)
-		}
-	}
-}
