@@ -97,7 +97,7 @@ func DefaultResourceTuning() ResourceTuning {
 		FleeLifePct:  50, KitTPGold: 100, KitPotionGold: 30, PovertyMargin: 60, PovertyLevels: 4,
 		RetreatBelt: 0, RetreatCountPack: 1, ManaPaysCasts: 3, MinFieldBeltPct: 0,
 		PointsApi: 1, GearGateMode: 1, GearRiskMedium: 3, GearRiskHigh: 6, GearDeathsHigh: 4, EarlyGearMax: 15,
-		TripBudget: 3, TripWindowMin: 10, TripGoldFloor: 300, PointsDecisions: 1,
+		TripBudget: 3, TripWindowMin: 10, TripGoldFloor: 300,
 		RecoveryOn: 1, RecoveryKitGold: 500, RecoveryTargetGold: 900, RecoveryMaxMin: 45, RecoveryCooldownMin: 15, RecoveryStallMin: 20, RecoveryStallGold: 100, RecoveryStallHoldMin: 60, RecoveryPotionFloor: 2, RecoveryManaFloor: 2, RecoveryXPPick: 1, RecoveryKitGate: 1, KitGateLevel: 8, KitMinHP: 4, KitMinMP: 3, KitTripCap: 2, RecoveryMaxAreaAbove: 1, BRAttempts: 3, BRLevelGap: 2,
 	}
 }
@@ -128,8 +128,6 @@ func registeredKnobs() []Knob {
 // gear.decisions = bot. The default is the player (docs/gear-policy.md).
 func (r ResourceTuning) BotDecidesGear() bool { return r.GearDecisions != 0 }
 
-// BotSpendsPoints says whether the bot may spend stat and skill points by itself (resource.pointsDecisions = 1). The default is 1
-// since 2026-11-25: a hero with no locked build spends from its plan table, so points never idle (a clvl 8 Paladin on the Questy bed
-// had 69 max life, all stat points unspent); a locked build still owns its points (the gate in cmd/d2bot/pointswire.go), 0 banks them
-// for the player again (docs/points.md).
+// BotSpendsPoints says whether the bot may spend stat and skill points by itself (resource.pointsDecisions = 1). The default is
+// the player: points are banked and shown (docs/points.md); a hero's autopilot switch can still turn spending on.
 func (r ResourceTuning) BotSpendsPoints() bool { return r.PointsDecisions != 0 }
