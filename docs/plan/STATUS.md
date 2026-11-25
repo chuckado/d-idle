@@ -477,6 +477,7 @@
 | toolstrade43 | proposed | - | `docs/probes/readiness-floors-2026-11-24.md`<br>`internal/power/floors_report_test.go` | - |
 | toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
+| equipv2b | proposed | - | `internal/vaultkeep/equipdirect_test.go`<br>`docs/vault.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
@@ -504,6 +505,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 31f2589e7 11-25 09:38 `Merge agent/equipv2b: Merge branch 'main' into equipv2b` (equipv2b)
+- 4882e2d2b 11-25 09:36 `Merge branch 'main' into equipv2b` (-)
 - 5da9a5b64 11-25 09:28 `Merge agent/toolstrade63: toolstrade63: two repairs that leave an item as it was before it stops counting; the sum is read before the click` (toolstrade63)
 - 38065f610 11-25 06:31 `Merge agent/devp30doc: devp30 sandbox note: fork rebase round 20261125 (docs only)` (devp30doc)
 - 01b948117 11-25 00:18 `Merge agent/toolstrade62: Merge branch 'main' into toolstrade62` (toolstrade62)
@@ -512,6 +515,4 @@
 - 09e42db26 11-24 22:24 `Merge branch 'main' into toolstrade62` (-)
 - 240ce87c4 11-24 22:16 `Merge agent/toolstrade61: toolstrade61: the corpse test reads its click counter atomically (a data race under -race)` (toolstrade61)
 - 3fd90da24 11-24 20:18 `Merge agent/vaultequip5: Merge branch 'main' into vaultequip5` (vaultequip5)
-- 643859e63 11-24 20:16 `Merge branch 'main' into vaultequip5` (-)
-- a9726d490 11-24 20:14 `Merge main into vaultequip5` (-)
 <!-- statusgen:end -->
