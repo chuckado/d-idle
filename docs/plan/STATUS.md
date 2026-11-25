@@ -507,6 +507,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 4a2282b5b 11-25 15:23 `Merge agent/toolstrade66: Merge branch 'main' into toolstrade66` (toolstrade66)
+- ac739fc55 11-25 15:21 `Merge branch 'main' into toolstrade66` (-)
 - a19ef41ab 11-25 15:15 `Merge agent/toolstrade-ci: Merge branch 'main' into toolstrade-ci` (toolstrade-ci)
 - 36fed7e02 11-25 15:14 `Merge branch 'main' into toolstrade-ci` (-)
 - a2d25eefc 11-25 15:05 `Merge agent/checkpoint1: Merge branch 'main' into checkpoint1` (checkpoint1)
@@ -515,6 +517,4 @@
 - 094173185 11-25 15:01 `Merge agent/dangerproto: dangerproto: task result` (dangerproto)
 - 23b9e4eb4 11-25 10:00 `Merge agent/toolstrade64: toolstrade64: the death record keeps the two-minute high mark of worn pieces (a death record read Equipped 0 with five pieces on the corpse)` (toolstrade64)
 - a6e420c22 11-25 09:49 `Merge agent/toolstrade64: Merge branch 'main' into toolstrade64` (toolstrade64)
-- 27df43c11 11-25 09:48 `Merge branch 'main' into toolstrade64` (-)
-- 31f2589e7 11-25 09:38 `Merge agent/equipv2b: Merge branch 'main' into equipv2b` (equipv2b)
 <!-- statusgen:end -->
