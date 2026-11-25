@@ -504,6 +504,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 3fd90da24 11-24 20:18 `Merge agent/vaultequip5: Merge branch 'main' into vaultequip5` (vaultequip5)
+- 643859e63 11-24 20:16 `Merge branch 'main' into vaultequip5` (-)
+- a9726d490 11-24 20:14 `Merge main into vaultequip5` (-)
 - 0d6684bd5 11-24 20:05 `Merge agent/vaultequip4: Merge branch 'main' into vaultequip4` (vaultequip4)
 - e28679dcd 11-24 20:04 `Merge branch 'main' into vaultequip4` (-)
 - 8e4803dab 11-24 19:58 `Merge agent/toolstrade60: Merge branch 'main' into toolstrade60` (toolstrade60)
@@ -511,7 +514,4 @@
 - 6f6f69a12 11-24 19:40 `Merge agent/toolstrade59: Merge branch 'main' into toolstrade59` (toolstrade59)
 - b6f2ccab8 11-24 19:38 `Merge branch 'main' into toolstrade59` (-)
 - a090a88ad 11-24 19:32 `Merge agent/vaultequip3: vaultequip3: identify the unit before the wear (the real check refuses unidentified items); backpack creates run before a full stash halts the queue` (vaultequip3)
-- 54010f1db 11-24 18:45 `Merge agent/toolstrade58: toolstrade56: the route guard reads the boss kit: a test that 7 healing holds the Andariel road and 8 opens it` (toolstrade58)
-- 529ec6210 11-24 18:31 `Merge agent/toolstrade56: Merge branch 'main' into toolstrade56` (toolstrade56)
-- e3b0f9872 11-24 18:30 `Merge branch 'main' into toolstrade56` (-)
 <!-- statusgen:end -->
