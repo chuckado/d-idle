@@ -290,20 +290,41 @@ func TestLegacyWallHoldsAChunkFarUnderItsFloor(t *testing.T) {
 	q, _ := b.Quest("search_for_cain")
 	for _, c := range []struct {
 		class string
-		lvl   int
+		under int // levels under the class's floor
 		wall  int
 		want  Word
 	}{
-		{"paladin", 4, 2, ReadyTooHard}, {"paladin", 7, 2, ReadyRisky}, {"paladin", 9, 2, ReadySafe}, {"paladin", 4, 0, ReadyRisky},
-		{"sorceress", 5, 2, ReadyTooHard}, {"sorceress", 9, 2, ReadyRisky}, {"sorceress", 11, 2, ReadySafe},
+		{"paladin", 5, 2, ReadyTooHard}, {"paladin", 3, 2, ReadyTooHard}, {"paladin", 2, 2, ReadyRisky}, {"paladin", 0, 2, ReadySafe}, {"paladin", 5, 0, ReadyRisky},
+		{"sorceress", 5, 2, ReadyTooHard}, {"sorceress", 2, 2, ReadyRisky}, {"sorceress", 0, 2, ReadySafe},
 	} {
 		floor, ok, err := b.Floor(q, c.class)
 		if err != nil || !ok {
 			t.Fatal(c.class, err)
 		}
-		r, err := th.Assess(AssessInput{Hero: Hero{Class: c.class, Level: c.lvl}, Floor: floor, HasFloor: ok, LegacyWall: c.wall})
+		r, err := th.Assess(AssessInput{Hero: Hero{Class: c.class, Level: floor - c.under}, Floor: floor, HasFloor: ok, LegacyWall: c.wall})
 		if err != nil || r.Word != c.want {
-			t.Errorf("%s clvl %d wall %d (floor %d): word %v, want %v (%v)", c.class, c.lvl, c.wall, floor, r.Word, c.want, err)
+			t.Errorf("%s %d under floor %d, wall %d: word %v, want %v (%v)", c.class, c.under, floor, c.wall, r.Word, c.want, err)
+		}
+	}
+}
+
+// Questy bed 2026-11-25: a clvl 8 Paladin read the Cain scroll as risky (floor 9) and died twice to Treehead WoodFist's pack in the
+// Dark Wood. The floor is 11 for melee now (SME ballpark, U): clvl 8 is too hard with the wall. Two classes.
+func TestCainScrollFloorHoldsAClvl8Hero(t *testing.T) {
+	th := thresholds(t)
+	b, err := Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	q, _ := b.Quest("search_for_cain")
+	for _, class := range []string{"paladin", "sorceress"} {
+		floor, ok, err := b.Floor(q, class)
+		if err != nil || !ok {
+			t.Fatal(class, err)
+		}
+		r, err := th.Assess(AssessInput{Hero: Hero{Class: class, Level: 8}, Floor: floor, HasFloor: ok, LegacyWall: 2})
+		if err != nil || r.Word != ReadyTooHard {
+			t.Errorf("%s clvl 8 floor %d: %v, want too hard (%v)", class, floor, r.Word, err)
 		}
 	}
 }
