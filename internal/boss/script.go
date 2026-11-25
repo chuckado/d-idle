@@ -76,6 +76,10 @@ type StandPoint struct {
 type OuterClear struct {
 	Radius int
 	Budget time.Duration
+	// MinHostiles > 0: sweep only when at least this many hostile monsters stand within Radius of the arrival point; fewer is no
+	// crowd and the boss is looked for at once. MinLifePct > 0: sweep only at or above this life percent (a hurt hero walks on to
+	// the retreat rules instead of starting a 90 s fight at the door).
+	MinHostiles, MinLifePct int
 }
 
 // Lure pulls the boss towards the position the fight started from before attacking.

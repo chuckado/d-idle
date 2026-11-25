@@ -1,10 +1,11 @@
 ---
 id: TASK-932
 title: 'dangerproto: danger protocol and checkpoint portals design'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-25T16:50:00Z'
+updated_date: '2026-11-25T20:14:00Z'
 labels:
   - docs
   - research

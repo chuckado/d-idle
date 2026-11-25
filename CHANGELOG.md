@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into toolstrade66 <!--sg:agent/toolstrade66-->
+- Merge branch 'main' into toolstrade-ci <!--sg:agent/toolstrade-ci-->
+- Merge branch 'main' into checkpoint1 <!--sg:agent/checkpoint1-->
 - toolstrade68: ADR 0011 amended (user decision 2026-11-25): floor-only chunks wall at quests.legacyWall <!--sg:agent/toolstrade68-->
 - dangerproto: task result <!--sg:agent/dangerproto-->
 - Merge branch 'main' into toolstrade64 <!--sg:agent/toolstrade64-->
