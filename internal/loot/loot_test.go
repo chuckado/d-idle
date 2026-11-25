@@ -876,3 +876,32 @@ func TestPickUpDoesNotTakeOffAWornItemThatSharesTheGroundId(t *testing.T) {
 		}
 	}
 }
+
+// V live 2026-11-24/25: after the hero died and lay naked, the game put every picked Club, Spear, Scimitar and leather armor on
+// the empty hand and torso slots, and the bot left it there ("loot: item worn by a pickup" six times in 30 h). A pickup never
+// changes what the hero wears: what the game wore goes back into the pack. Two classes, a weapon and a body armor.
+func TestPickUpNeverLeavesTheItemWorn(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, code := range []string{"clb", "lea"} {
+			l, r := newLooter(t)
+			w := r.W
+			w.AutoWearWeapon = true
+			w.Player.Class = class
+			it := w.AddGround(code, 2, 6021, 4931)
+			if _, err := l.PickUp(context.Background(), loot.PickOpts{}); err != nil {
+				t.Fatalf("%v %s: %v", class, code, err)
+			}
+			s, _ := w.Snapshot()
+			u, ok := findID(s, it.ID)
+			if !ok {
+				continue // not picked: the junk rule may leave it on the ground, which changes nothing worn
+			}
+			if u.Item.Where == d2.ContEquipment {
+				t.Errorf("%v %s: left worn by the pickup (body %d)", class, code, u.Item.Body)
+			}
+			if w.Cursor != nil {
+				t.Errorf("%v %s: item on the cursor", class, code)
+			}
+		}
+	}
+}

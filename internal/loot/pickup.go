@@ -273,7 +273,7 @@ func init() {
 // already worn before the pickup; else a worn cap with the same number was taken off (card recallsorc).
 func (l *Looter) unwear(ctx context.Context, u d2.Unit, before *d2.Snapshot) error {
 	b := l.base(u.Class)
-	if b == nil || !noWear[b.Code] && !(b.Kind == data.KindWeapon && casterNoLauncher(l.e.Data, b)) {
+	if b == nil || !noWear[b.Code] && b.Kind != data.KindWeapon && b.Kind != data.KindArmor {
 		return nil
 	}
 	s, err := l.hand.Fresh()
@@ -289,9 +289,11 @@ func (l *Looter) unwear(ctx context.Context, u d2.Unit, before *d2.Snapshot) err
 			return nil // worn before the pickup: another item that carries the same number
 		}
 	}
-	if !noWear[b.Code] && !LauncherUnwanted(l.e.Data, b, s.Player.Class) {
-		return nil
-	}
+	// A pickup never changes what the hero wears: the game puts a picked weapon or armor on an empty slot, and junk worn that
+	// way is not the player's choice (V live 2026-11-24/25: a Club, a Spear, a Scimitar and three leather armors worn by
+	// pickups after the deaths left the slots empty; the vault rules say "yours to equip"). What to wear is decided by the
+	// equip chores, from the pack.
+	l.e.Log.Info("loot: taking off an item the pickup wore", "item", l.itemName(u), "body", w.Item.Body)
 	if err := l.hand.Unequip(ctx, u.ID); err != nil {
 		if errors.Is(err, hand.ErrNoSpace) {
 			// Unequip left the item on the cursor and the pack has no cell for it. Held, it blocks every later pickup
@@ -308,7 +310,7 @@ func (l *Looter) unwear(ctx context.Context, u d2.Unit, before *d2.Snapshot) err
 // takenOffAgain reports whether picking the item up wears it and unwear then has to take it off into the pack, so a
 // pack cell of its size must exist before the pickup (a worn item with no cell to take it back ends on the cursor).
 func (l *Looter) takenOffAgain(b *data.ItemBase, c d2.Class) bool {
-	return b != nil && (noWear[b.Code] || LauncherUnwanted(l.e.Data, b, c))
+	return b != nil && (noWear[b.Code] || b.Kind == data.KindWeapon || b.Kind == data.KindArmor)
 }
 
 // casterNoLauncher is the class-free half of LauncherUnwanted: a bow, crossbow or throwing weapon.
