@@ -110,3 +110,34 @@ func TestStandingSweepTakesAnUntrackedCorpseInTown(t *testing.T) {
 		}
 	}
 }
+
+// V live 2026-11-24 20:52 EST: the death record said Equipped 0 and corpse value 0 with five pieces on the corpse. One snapshot
+// that reads no worn gear must not zero the record: the high mark of the last two minutes stands in. Two classes.
+func TestOneEmptyWornReadDoesNotZeroTheDeathRecord(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		g := newRig(t)
+		g.w.set(func(w *world) {
+			w.class = class
+			w.level = 3
+			w.area = 2
+			w.items = append(w.items, gearUnit(), gearUnit())
+		})
+		g.r.poll()
+		g.w.set(func(w *world) {
+			var keep []d2.Unit
+			for _, u := range w.items {
+				if u.Item.Where != d2.ContEquipment {
+					keep = append(keep, u)
+				}
+			}
+			w.items = keep
+		})
+		g.r.poll()
+		g.r.obMu.Lock()
+		a := g.r.ob.alive
+		g.r.obMu.Unlock()
+		if a.equip < 2 || a.kit.Equipped < 2 || a.equipValue <= 0 {
+			t.Fatalf("%v: record reads equip %d kit %d value %d after one empty read", class, a.equip, a.kit.Equipped, a.equipValue)
+		}
+	}
+}

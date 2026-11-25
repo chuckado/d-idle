@@ -143,11 +143,15 @@ type observer struct {
 	recycles     int       // unplanned games the bot started itself (newGameRun, Recycle): counted even when no menu poll sees them (d2d)
 	lostRestarts int       // games the bot restarted after losing the process (gameLost), counted at success; a d2d kill shows no menus
 	alive        aliveInfo
-	curve        []lifeStamp
-	trail        []trailStamp // one sample per second for the last minute (autopsy.go)
-	activity     string
-	goalID       string
-	lastSnap     *d2.Snapshot
+	wornHigh     struct {
+		n, value int
+		at       time.Time
+	} // the most worn pieces of the last wornHoldFor: a death record must not read an empty body from one odd snapshot
+	curve    []lifeStamp
+	trail    []trailStamp // one sample per second for the last minute (autopsy.go)
+	activity string
+	goalID   string
+	lastSnap *d2.Snapshot
 
 	lastSafety   SafetyAction
 	lastSafetyAt time.Time
@@ -954,8 +958,19 @@ func (r *Runner) trackAlive(s *d2.Snapshot, now time.Time) {
 		k := *a.killer
 		a.killer = &k
 	}
+	if a.equip >= o.wornHigh.n || now.Sub(o.wornHigh.at) >= wornHoldFor {
+		o.wornHigh.n, o.wornHigh.value, o.wornHigh.at = a.equip, a.equipValue, now
+	} else {
+		// V live 2026-11-24 20:52 EST: five pieces on the corpse, the record said Equipped 0 and value 0 (the last living snapshot
+		// read no worn gear). Keep the recent high mark for the record.
+		a.equip, a.equipValue = o.wornHigh.n, o.wornHigh.value
+		a.kit.Equipped = max(a.kit.Equipped, o.wornHigh.n)
+	}
 	o.alive = a
 }
+
+// wornHoldFor is how long the high mark of worn pieces stands in for a snapshot that reads fewer.
+const wornHoldFor = 2 * time.Minute
 
 // recordDeath builds the death record from the last living snapshot, logs it, persists it and emits the Death event.
 func (r *Runner) recordDeath(p *d2.Player, now time.Time) {
