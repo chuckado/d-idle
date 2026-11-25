@@ -466,6 +466,7 @@ docs/decisions.md  credit-runner  fabledecisions2
 docs/decisions.md  credit-runner  toolstrade68
 docs/decisions.md  credit-runner  vaultpay
 docs/design/bulk-identify-2026-11-18.md  credit-runner  bulkid-design
+docs/design/danger-protocol-2026-11-25.md  credit-runner  checkpoint1
 docs/design/danger-protocol-2026-11-25.md  credit-runner  dangerproto
 docs/design/fable-review-2026-11-19  user  fablereview
 docs/design/fable-review-2026-11-21/combat-engine*  pro-runner  fablecombat
@@ -530,6 +531,7 @@ docs/knobs.md  credit-runner  botstuck
 docs/knobs.md  credit-runner  bsm4
 docs/knobs.md  credit-runner  bulkid
 docs/knobs.md  credit-runner  cainfix3
+docs/knobs.md  credit-runner  checkpoint1
 docs/knobs.md  credit-runner  countess3
 docs/knobs.md  credit-runner  dlv-expect
 docs/knobs.md  credit-runner  exploredpct
@@ -973,6 +975,8 @@ internal/bot/broke.go  credit-runner  survrecover
 internal/bot/broke.go  credit-runner  town5
 internal/bot/campsim_objects_test.go  credit-runner  toolstrade34
 internal/bot/catalog.go  credit-runner  botcpu2
+internal/bot/checkpoint.go  credit-runner  checkpoint1
+internal/bot/checkpoint_test.go  credit-runner  checkpoint1
 internal/bot/contracts.go  credit-runner  chores2
 internal/bot/contracts.go  credit-runner  goldprio
 internal/bot/contracts.go  credit-runner  vaultv5
@@ -986,6 +990,7 @@ internal/bot/farmreset.go  credit-runner  farmloop
 internal/bot/farmreset_test.go  credit-runner  farmloop
 internal/bot/geargate.go  credit-runner  classtraits
 internal/bot/geargate.go  credit-runner  staletarget
+internal/bot/goal.go  credit-runner  checkpoint1
 internal/bot/goal.go  credit-runner  exploredpct
 internal/bot/goal.go  credit-runner  goldprio
 internal/bot/goal.go  credit-runner  handin
@@ -1030,6 +1035,7 @@ internal/bot/lifelog.go  credit-runner  passagebounce
 internal/bot/lockguard_test.go  credit-runner  lockscan
 internal/bot/lockorder_test.go  credit-runner  lockscan
 internal/bot/loop.go  credit-runner  botinstant
+internal/bot/loop.go  credit-runner  checkpoint1
 internal/bot/loop.go  credit-runner  hourfix
 internal/bot/loop.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  resetinstant
@@ -1040,6 +1046,7 @@ internal/bot/loop.go  credit-runner  toolstrade17
 internal/bot/loop.go  pro-runner  bounce3
 internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  arrivalsettle
+internal/bot/observe.go  credit-runner  checkpoint1
 internal/bot/observe.go  credit-runner  exploredpct
 internal/bot/observe.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  intake
@@ -1112,6 +1119,7 @@ internal/bot/runner.go  credit-runner  agencyp0
 internal/bot/runner.go  credit-runner  botinstant
 internal/bot/runner.go  credit-runner  cainchain
 internal/bot/runner.go  credit-runner  campaign1
+internal/bot/runner.go  credit-runner  checkpoint1
 internal/bot/runner.go  credit-runner  goldprio
 internal/bot/runner.go  credit-runner  handin
 internal/bot/runner.go  credit-runner  hourfix
@@ -1131,6 +1139,7 @@ internal/bot/staletarget.go  credit-runner  botstuck
 internal/bot/staletarget.go  credit-runner  cainchain
 internal/bot/staletarget.go  credit-runner  staletarget
 internal/bot/staletarget_test.go  credit-runner  staletarget
+internal/bot/state.go  credit-runner  checkpoint1
 internal/bot/state.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  boardmoderace
 internal/bot/task.go  credit-runner  botstuck
@@ -1365,6 +1374,7 @@ internal/env/tuning.go  credit-runner  q4runes
 internal/env/tuning.go  credit-runner  quests3
 internal/env/tuning.go  credit-runner  videofeed2
 internal/env/tuning_bot.go  credit-runner  botstuck
+internal/env/tuning_bot.go  credit-runner  checkpoint1
 internal/env/tuning_bot.go  credit-runner  exploredpct
 internal/env/tuning_bot.go  credit-runner  freshstart
 internal/env/tuning_bot.go  credit-runner  hourfix
@@ -1590,6 +1600,7 @@ internal/plandata/build-necromancer_summoner_sme.json  credit-runner  necro3
 internal/plandata/build-paladin_hammerdin_guide.json  credit-runner  hammer1
 internal/plandata/build-primary-blizzard.json  credit-runner  sorc2
 internal/plandata/build-sorceress_fire_normal30.json  credit-runner  sorc2
+internal/plandata/checkpoint_areas.go  credit-runner  checkpoint1
 internal/plandata/dropmodel-normal.json  credit-runner  decomp31
 internal/plandata/ladder_runewords.go  credit-runner  q4runes
 internal/plandata/ladder_runewords_test.go  credit-runner  q4runes
