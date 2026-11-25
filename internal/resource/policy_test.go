@@ -586,3 +586,16 @@ func TestMeleeClassSwingsInBigPackWithoutMana(t *testing.T) {
 		t.Errorf("low life: %v, want retreat", d)
 	}
 }
+
+// V live 2026-11-25: Tower Cellar 2 without a scroll was no walk home; the dungeon levels of the quest route are chain home now
+// (never near town). The lair (37) stays out.
+func TestChainHomeIncludesTheTowerAndTheMonasteryRoute(t *testing.T) {
+	for area := 21; area <= 36; area++ {
+		if NearTownArea(area) || !ChainHomeArea(area) {
+			t.Errorf("area %d: near %v chain %v, want false/true", area, NearTownArea(area), ChainHomeArea(area))
+		}
+	}
+	if ChainHomeArea(37) {
+		t.Error("the lair is no chain home")
+	}
+}

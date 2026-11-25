@@ -295,7 +295,18 @@ func (r *Runner) guardedExit(ctx context.Context, snap *d2.Snapshot, c control) 
 				return err
 			}
 		}
-		return r.d.Town.ToTown(ctx)
+		err := r.d.Town.ToTown(ctx)
+		if err == nil || ctx.Err() != nil {
+			return err
+		}
+		// No portal scroll: walk home through the level chain. The area gate lets a walk to town through every guarded level (it is
+		// the way out); ToTown's own walk knows only the short list of fields. V live 2026-11-25 02:40Z to 03:00Z: Tower Cellar 2
+		// with no scroll, 204 "no town portal available" and 20 minutes without a kill.
+		r.e.Log.Info("guard: no way home by portal, walking", "err", err, "area", p.Area)
+		if werr := r.travelTo(ctx, int(task.RogueEncampment)); werr != nil {
+			return fmt.Errorf("%w (walk home: %v)", err, werr)
+		}
+		return nil
 	})
 }
 

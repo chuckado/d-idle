@@ -948,7 +948,7 @@ func (r *Runner) withRouteKit(p ChorePlan) ChorePlan {
 	if p.Potions && p.KitHealing == 0 {
 		p.KitHealing, p.KitMana = r.routeKit()
 	}
-	if p.Potions && p.BossPurse == 0 {
+	if p.BossPurse == 0 { // heal and repair trips too: they banked the boss purse back to the carry line (V live 2026-11-25: spent 1439 on a heal trip)
 		p.BossPurse = r.bossPurse()
 	}
 	return p
