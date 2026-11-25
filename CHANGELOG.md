@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- devp30 sandbox note: fork rebase round 20261125 (docs only) <!--sg:agent/devp30doc-->
 - Merge branch 'main' into toolstrade62 <!--sg:agent/toolstrade62-->
 - equipv2: task card (allow-adr), result line <!--sg:agent/equipv2-->
 - toolstrade61: the corpse test reads its click counter atomically (a data race under -race) <!--sg:agent/toolstrade61-->
