@@ -2,16 +2,15 @@ package env
 
 import "testing"
 
-// Questy bed 2026-11-25: a fresh clvl 8 Paladin with no locked build had 69 max life and every stat point unspent, because the
-// default banked the points for a player who was not there. The default is the bot spending from its plan table; a locked
-// build's desk still owns them (cmd/d2bot/pointswire.go) and 0 banks them again.
-func TestPointsAreSpentByDefault(t *testing.T) {
-	if !DefaultResourceTuning().BotSpendsPoints() {
-		t.Fatal("the default leaves points to a player who is not asked")
+// User decision 2026-11-25: a fresh hero's points are the player's to place (docs/points.md); the default stays 0 and the
+// Needs-you row tells how to hand them to the bot (a locked build or resource.pointsDecisions 1).
+func TestPointsStayWithThePlayerByDefault(t *testing.T) {
+	if DefaultResourceTuning().BotSpendsPoints() {
+		t.Fatal("the bot spends points by default")
 	}
 	r := DefaultResourceTuning()
-	r.PointsDecisions = 0
-	if r.BotSpendsPoints() {
-		t.Fatal("0 must bank the points for the player")
+	r.PointsDecisions = 1
+	if !r.BotSpendsPoints() {
+		t.Fatal("1 must let the bot spend")
 	}
 }
