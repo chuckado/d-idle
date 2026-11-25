@@ -321,6 +321,7 @@ func (r *Runner) carryOut(ctx context.Context, a SafetyAction) error {
 	r.safetyBusy.Add(1)
 	defer r.safetyBusy.Add(-1)
 	a = r.earlyExit(r.latest(), a)
+	defer r.cpNewCast(a)
 	if a == SafetyChicken {
 		if s := r.latest(); s != nil && s.Player != nil {
 			r.zoneObserve(ZoneEvent{Kind: ZoneEvChicken, Area: s.Player.Area, Diff: difficultyName(s.Player.Difficulty), At: r.e.Clock.Now()})
@@ -426,7 +427,7 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 		r.setLastTrip(r.e.Clock.Now())
 	case errors.Is(err, ErrLeftGame):
 		// the menus are handled by the next step
-	case errors.Is(cause, errNewGoal), errors.Is(cause, errStop), errors.Is(cause, errPause), errors.Is(cause, errTripDue), errors.Is(cause, errPoints), errors.Is(cause, errPlayer), errors.Is(cause, errReset), errors.Is(cause, errReplan), errors.Is(cause, errDied), errors.Is(cause, errLeftGame):
+	case errors.Is(cause, errNewGoal), errors.Is(cause, errStop), errors.Is(cause, errPause), errors.Is(cause, errTripDue), errors.Is(cause, errPoints), errors.Is(cause, errCheckpoint), errors.Is(cause, errPlayer), errors.Is(cause, errReset), errors.Is(cause, errReplan), errors.Is(cause, errDied), errors.Is(cause, errLeftGame):
 		// the next step re-reads control and the snapshot
 	case errors.Is(cause, errStuck):
 		if !l.inLadder {
@@ -1094,6 +1095,10 @@ func (r *Runner) guardOnce(ctx context.Context, cancel context.CancelCauseFunc, 
 			cancel(errPlayer)
 			return true
 		}
+		if (st == StateClearing || st == StateTraveling) && !snap.Player.InTown() && r.checkpointDue(snap, now) != cpNothing {
+			cancel(errCheckpoint) // a healthy calm moment at a danger area (cast), or low life near the portal (retreat)
+			return true
+		}
 		if (st == StateClearing || st == StateTraveling) && r.pointsDue(snap, now) {
 			cancel(errPoints) // a calm moment with points to spend: the loop spends them, then carries on
 			return true
@@ -1217,6 +1222,9 @@ func (r *Runner) retrieveCorpse(ctx context.Context, area int, at input.Point) e
 	if err := r.gotoDeathArea(ctx, area); err != nil {
 		return err
 	}
+	if err := r.cpArrival(ctx); err != nil {
+		return err
+	}
 	if err := r.d.Mover.GoTo(ctx, at); err != nil {
 		return fmt.Errorf("walk to corpse: %w", err)
 	}
@@ -1254,6 +1262,7 @@ func (r *Runner) gotoDeathArea(ctx context.Context, area int) error {
 			return fmt.Errorf("%w: %s (%d): route guard (%s)", errAreaGated, r.areaName(area), area, why)
 		}
 	}
+	r.cpRoute(r.latest(), area) // checkpoint first when its record is usable, else the waypoint (checkpoint.go)
 	if r.preferWaypointRun(area) {
 		r.e.Log.Info("corpse: waypoint and walk instead of the town portal", "area", area)
 		var terr error

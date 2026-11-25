@@ -555,8 +555,10 @@ func (r *Runner) observe(s *d2.Snapshot, now time.Time) {
 		o.dead = true
 		o.noteHP(p, 1)
 		r.recordDeath(p, now)
+		r.cpDied()
 	}
 	if !dead {
+		r.cpNote(s)
 		o.dead = false
 		r.noteBackInField(p, now)
 		o.lastGood.area, o.lastGood.pos = p.Area, input.Point{X: p.X, Y: p.Y}
