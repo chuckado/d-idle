@@ -134,10 +134,11 @@ func (t *Town) lowestDurability(s *d2.Snapshot) (int, bool) {
 	for _, u := range s.Inventory.Container(d2.ContEquipment) {
 		if pct, ok := t.durabilityPct(u); ok {
 			if was, bad := t.unrepairable[u.ID]; bad {
-				if was == pct {
-					continue // the smith left it at this level once: it is not what the repair trips are for
+				if was[0] != pct {
+					delete(t.unrepairable, u.ID)
+				} else if was[1] >= unrepairableAfter {
+					continue // the smith left it at this level twice: it is not what the repair trips are for
 				}
-				delete(t.unrepairable, u.ID)
 			}
 			any = true
 			if pct < low {
@@ -818,6 +819,7 @@ func (t *Town) repair(ctx context.Context, a *Act, rep *ChoreReport) error {
 	}
 	g0 := s0.Player.Gold
 	low0, _ := t.lowestDurability(s0)
+	sum0 := t.durabilitySum(s0) // before the click: the stats are read live
 	if _, err := t.openShop(ctx, a.Repair, t.npcPreset(a.Repair...)); err != nil {
 		return err
 	}
@@ -825,7 +827,6 @@ func (t *Town) repair(ctx context.Context, a *Act, rep *ChoreReport) error {
 		_ = t.h.CloseAll(ctx)
 		return err
 	}
-	sum0 := t.durabilitySum(s0)
 	s1, ok, err := t.h.Wait(ctx, t.uiTimeout(), func(s *d2.Snapshot) bool {
 		return t.durabilitySum(s) > sum0 // any worn item rose: one that cannot be repaired must not hide the others
 	})
@@ -968,6 +969,9 @@ func (t *Town) skipWhy(name string, s *d2.Snapshot) string {
 	return "no scroll or tome and none to buy"
 }
 
+// unrepairableAfter: repairs that left a worn item at the same percent before it stops counting (one may only lack gold).
+const unrepairableAfter = 2
+
 // durabilitySum is the sum of the worn items' durability percents (every one that has durability, clamped to 100).
 func (t *Town) durabilitySum(s *d2.Snapshot) int {
 	n := 0
@@ -999,9 +1003,13 @@ func (t *Town) markUnrepairable(before, after *d2.Snapshot) {
 			continue
 		}
 		if t.unrepairable == nil {
-			t.unrepairable = map[uint32]int{}
+			t.unrepairable = map[uint32][2]int{}
 		}
-		t.unrepairable[u.ID] = pct
-		t.e.Log.Info("repair: the smith left an item as it was, it no longer counts", "item", t.nameOf(u), "durability", pct)
+		n := 1
+		if prev, ok := t.unrepairable[u.ID]; ok && prev[0] == pct {
+			n = prev[1] + 1
+		}
+		t.unrepairable[u.ID] = [2]int{pct, n}
+		t.e.Log.Info("repair: the smith left an item as it was", "item", t.nameOf(u), "durability", pct, "times", n)
 	}
 }

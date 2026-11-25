@@ -37,8 +37,10 @@ func TestUnrepairableItemDoesNotBringRepairTripsForever(t *testing.T) {
 			t.Fatalf("%v: the rig does not raise the repair trip to begin with: %q", class, why)
 		}
 		plan := town.ChorePlan{Repair: true, Force: true}
-		if _, err := r.T.Chores(context.Background(), plan); err != nil {
-			t.Fatalf("%v: %v", class, err)
+		for visit := 0; visit < 2; visit++ { // the smith leaves it twice
+			if _, err := r.T.Chores(context.Background(), plan); err != nil {
+				t.Fatalf("%v: visit %d: %v", class, visit, err)
+			}
 		}
 		r.W.Player.Gold += 5000          // and the purse grew since, as it did between the live trips
 		r.Env.Clock.Sleep(2 * time.Hour) // the futile-reason quiet time is over, as it was between the live trips
