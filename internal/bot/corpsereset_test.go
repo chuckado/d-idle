@@ -2,6 +2,7 @@ package bot
 
 import (
 	"context"
+	"sync/atomic"
 	"testing"
 
 	"d2lod-bot/internal/d2"
@@ -12,7 +13,7 @@ import (
 // fakeTaker is the corpse click of the d2d adapter: in town after a fresh game it puts the gear back on the body.
 type fakeTaker struct {
 	g     *rig
-	calls int
+	calls atomic.Int32 // read by the test goroutine while the bot goroutine clicks
 }
 
 func (f *fakeTaker) TakeCorpse(ctx context.Context) (bool, error) {
@@ -21,7 +22,7 @@ func (f *fakeTaker) TakeCorpse(ctx context.Context) (bool, error) {
 	if !inTown {
 		return false, nil // in the field the corpse is gone with the game's ground: nothing to click
 	}
-	f.calls++
+	f.calls.Add(1)
 	f.g.w.call("takecorpse")
 	f.g.w.set(func(w *world) { w.items = append(w.items, gearUnit()) })
 	return true, nil
@@ -56,7 +57,7 @@ func TestCorpseResetAfterFailedTriesAndTakenInTown(t *testing.T) {
 			g.w.set(func(w *world) { w.x, w.y = 300, 310 })
 			g.waitFor("three tries", func() bool { return g.w.count("back 2") >= 3 })
 			g.waitFor("fresh game", func() bool { return g.w.count("newgame") > 0 })
-			g.waitFor("corpse taken in town", func() bool { return tk.calls > 0 })
+			g.waitFor("corpse taken in town", func() bool { return tk.calls.Load() > 0 })
 			if g.w.count("back 2") != 3 {
 				t.Fatalf("%d field tries, want 3: %s", g.w.count("back 2"), g.w.log())
 			}
