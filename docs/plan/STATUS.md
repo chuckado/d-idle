@@ -478,6 +478,8 @@
 | toolstrade45 | proposed | - | `internal/nav/exit.go`<br>`internal/nav/gatedoor_test.go` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | equipv2b | proposed | - | `internal/vaultkeep/equipdirect_test.go`<br>`docs/vault.md` | - |
+| checkpoint1 | proposed | - | `internal/bot/checkpoint.go`<br>`internal/bot/checkpoint_test.go`<br>`internal/plandata/checkpoint_areas.go`<br>`internal/env/tuning_bot.go`<br>`docs/knobs.md`<br>`docs/design/danger-protocol-2026-11-25.md`<br>`internal/bot/loop.go`<br>`internal/bot/goal.go`<br>`internal/bot/observe.go`<br>`internal/bot/runner.go`<br>`internal/bot/state.go` | - |
+| toolstrade68 | proposed | - | `docs/adr/0011-readiness-power-vs-danger.md`<br>`docs/decisions.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
@@ -505,14 +507,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a2d25eefc 11-25 15:05 `Merge agent/checkpoint1: Merge branch 'main' into checkpoint1` (checkpoint1)
+- 5e7de2cfc 11-25 15:03 `Merge branch 'main' into checkpoint1` (-)
+- deaa60067 11-25 15:01 `Merge agent/toolstrade68: toolstrade68: ADR 0011 amended (user decision 2026-11-25): floor-only chunks wall at quests.legacyWall` (toolstrade68)
+- 094173185 11-25 15:01 `Merge agent/dangerproto: dangerproto: task result` (dangerproto)
 - 23b9e4eb4 11-25 10:00 `Merge agent/toolstrade64: toolstrade64: the death record keeps the two-minute high mark of worn pieces (a death record read Equipped 0 with five pieces on the corpse)` (toolstrade64)
 - a6e420c22 11-25 09:49 `Merge agent/toolstrade64: Merge branch 'main' into toolstrade64` (toolstrade64)
 - 27df43c11 11-25 09:48 `Merge branch 'main' into toolstrade64` (-)
 - 31f2589e7 11-25 09:38 `Merge agent/equipv2b: Merge branch 'main' into equipv2b` (equipv2b)
 - 4882e2d2b 11-25 09:36 `Merge branch 'main' into equipv2b` (-)
 - 5da9a5b64 11-25 09:28 `Merge agent/toolstrade63: toolstrade63: two repairs that leave an item as it was before it stops counting; the sum is read before the click` (toolstrade63)
-- 38065f610 11-25 06:31 `Merge agent/devp30doc: devp30 sandbox note: fork rebase round 20261125 (docs only)` (devp30doc)
-- 01b948117 11-25 00:18 `Merge agent/toolstrade62: Merge branch 'main' into toolstrade62` (toolstrade62)
-- 326777f2e 11-25 00:17 `Merge branch 'main' into toolstrade62` (-)
-- 3ec77eaa9 11-25 00:06 `Merge agent/equipv2: equipv2: task card (allow-adr), result line` (equipv2)
 <!-- statusgen:end -->
