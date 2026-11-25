@@ -163,12 +163,14 @@ func (t *Town) bankAmount(s *d2.Snapshot, want int) int {
 // stashGold deposits the inventory gold above goldKeep (all of it when that is 0). The stash must
 // be open. The dialog opens with the full amount; a smaller amount is typed: backspaces clear the field, digits
 // go in as WM_CHAR, Enter confirms.
-func (t *Town) stashGold(ctx context.Context, rep *ChoreReport) error {
+func (t *Town) stashGold(ctx context.Context, rep *ChoreReport, plan ChorePlan) error {
 	s, err := t.current()
 	if err != nil {
 		return err
 	}
-	keep := t.goldKeep(s.Player.Level)
+	// the boss purse withdrawn at the start of the visit stays in the pack (V live 2026-11-24: 1700 of it went back to the stash
+	// in the same visit, and the next trip withdrew it again)
+	keep := max(t.goldKeep(s.Player.Level), plan.BossPurse)
 	if s.Player.Gold <= keep || s.Player.Gold == 0 {
 		return nil
 	}
@@ -272,7 +274,7 @@ func (t *Town) doStash(ctx context.Context, a *Act, plan ChorePlan, rep *ChoreRe
 		}
 	}
 	if plan.Gold {
-		if err := t.stashGold(ctx, rep); err != nil && first == nil {
+		if err := t.stashGold(ctx, rep, plan); err != nil && first == nil {
 			first = err
 		}
 	}

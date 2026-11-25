@@ -225,6 +225,11 @@ func (c *Input) Interact(t input.Target) error {
 				w.Items = append(w.Items, g)
 				return nil
 			}
+			if w.AutoWearWeapon && w.base(g).Type == "tors" && w.noneWorn(d2.BodyTorso) { // V live 2026-11-24: leather armors worn by pickups
+				g.Item.Where, g.Item.Body, g.Mode = d2.ContEquipment, d2.BodyTorso, d2.ItemModeEquipped
+				w.Items = append(w.Items, g)
+				return nil
+			}
 			if w.PickupToCursor {
 				w.Cursor = &g
 				return nil

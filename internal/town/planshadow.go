@@ -30,6 +30,11 @@ func (t *Town) planOf(s *d2.Snapshot, plan ChorePlan) (supply.Plan, error) {
 	return solveShadow(p.Class, t.plan(p), belt.Slots(t.e.Data, s.Inventory), c, plan, &t.e.Tune.Loot, &t.e.Tune.Resource)
 }
 
+// kitPackReserve is the healing potions a kit minimum counts in the pack beyond the belt: pack potions are not drinkable in a fight,
+// so a floor above belt plus this only means a longer shop visit (V live 2026-11-24: a 4-slot belt, a floor of 9, three failed buys
+// and the Andariel chunk parked on a kit it could not carry).
+const kitPackReserve = 2
+
 // solveShadow is planOf without the snapshot reads, so it runs on any class and band without the game tables.
 func solveShadow(class d2.Class, band belt.Band, slots int, c supply.Count, plan ChorePlan, lt *env.LootTuning, r *env.ResourceTuning) (supply.Plan, error) {
 	capHP, capMP := band.Capacity(belt.HP, slots), band.Capacity(belt.MP, slots)
@@ -39,7 +44,7 @@ func solveShadow(class d2.Class, band belt.Band, slots int, c supply.Count, plan
 	}
 	in := supply.Inputs{
 		ManaNeed:   need,
-		Capacity:   map[supply.Line]int{supply.Healing: capHP + lt.PotionBuffer, supply.Mana: capMP + lt.PotionBufferMana},
+		Capacity:   map[supply.Line]int{supply.Healing: capHP + min(lt.PotionBuffer, kitPackReserve), supply.Mana: capMP + lt.PotionBufferMana},
 		BaseTarget: map[supply.Line]int{supply.Healing: capHP + lt.PotionBuffer, supply.Mana: capMP + lt.PotionBufferMana},
 	}
 	profile := plan.Profile

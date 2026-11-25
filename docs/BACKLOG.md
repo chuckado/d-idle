@@ -1359,6 +1359,9 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/toolstrade55: toolstrade55: a stale-pack hold does not send a board chunk's trip home to the first field (merged 2026-11-24) <!--sg:agent/toolstrade55-->
 - agent/toolstrade56: Merge branch 'main' into toolstrade56 (merged 2026-11-24) <!--sg:agent/toolstrade56-->
 - agent/toolstrade58: toolstrade56: the route guard reads the boss kit: a test that 7 healing holds the Andariel road and 8 opens it (merged 2026-11-24) <!--sg:agent/toolstrade58-->
+- agent/vaultequip3: vaultequip3: identify the unit before the wear (the real check refuses unidentified items); backpack creates run before a full stash halts the queue (merged 2026-11-24) <!--sg:agent/vaultequip3-->
+- agent/toolstrade59: Merge branch 'main' into toolstrade59 (merged 2026-11-24) <!--sg:agent/toolstrade59-->
+- agent/toolstrade60: Merge branch 'main' into toolstrade60 (merged 2026-11-24) <!--sg:agent/toolstrade60-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
