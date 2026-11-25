@@ -507,6 +507,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2e8be0c99 11-25 15:55 `Merge agent/toolstrade67: Merge origin/main into toolstrade67 (knobs.md regenerated)` (toolstrade67)
+- 5220d7e4b 11-25 15:52 `Merge origin/main into toolstrade67 (knobs.md regenerated)` (-)
 - e7bb66d3e 11-25 15:38 `Merge agent/qd24: Merge branch 'main' into qdmatrix` (qd24)
 - 1c8123e99 11-25 15:36 `Merge branch 'main' into qdmatrix` (-)
 - 4a2282b5b 11-25 15:23 `Merge agent/toolstrade66: Merge branch 'main' into toolstrade66` (toolstrade66)
@@ -515,6 +517,4 @@
 - 36fed7e02 11-25 15:14 `Merge branch 'main' into toolstrade-ci` (-)
 - 36858351c 11-25 15:08 `Merge origin/main` (-)
 - a2d25eefc 11-25 15:05 `Merge agent/checkpoint1: Merge branch 'main' into checkpoint1` (checkpoint1)
-- 5e7de2cfc 11-25 15:03 `Merge branch 'main' into checkpoint1` (-)
-- deaa60067 11-25 15:01 `Merge agent/toolstrade68: toolstrade68: ADR 0011 amended (user decision 2026-11-25): floor-only chunks wall at quests.legacyWall` (toolstrade68)
 <!-- statusgen:end -->
