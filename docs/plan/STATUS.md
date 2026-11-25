@@ -505,6 +505,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 23b9e4eb4 11-25 10:00 `Merge agent/toolstrade64: toolstrade64: the death record keeps the two-minute high mark of worn pieces (a death record read Equipped 0 with five pieces on the corpse)` (toolstrade64)
 - a6e420c22 11-25 09:49 `Merge agent/toolstrade64: Merge branch 'main' into toolstrade64` (toolstrade64)
 - 27df43c11 11-25 09:48 `Merge branch 'main' into toolstrade64` (-)
 - 31f2589e7 11-25 09:38 `Merge agent/equipv2b: Merge branch 'main' into equipv2b` (equipv2b)
@@ -514,5 +515,4 @@
 - 01b948117 11-25 00:18 `Merge agent/toolstrade62: Merge branch 'main' into toolstrade62` (toolstrade62)
 - 326777f2e 11-25 00:17 `Merge branch 'main' into toolstrade62` (-)
 - 3ec77eaa9 11-25 00:06 `Merge agent/equipv2: equipv2: task card (allow-adr), result line` (equipv2)
-- 09e42db26 11-24 22:24 `Merge branch 'main' into toolstrade62` (-)
 <!-- statusgen:end -->
