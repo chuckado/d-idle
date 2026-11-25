@@ -206,6 +206,10 @@ func bindPoints(f *watch.Fun, d *points.Desk) {
 	}
 }
 
+// pointsHint is the second line of the points row: what lets the hero spend them (Questy bed 2026-11-25: a clvl 8 Paladin with
+// 69 max life, every stat point banked, nobody had locked a build or set the knob).
+const pointsHint = "Spend them on the Points tile, lock a build there (the hero then spends from it), turn autopilot on for this hero, or set resource.pointsDecisions to 1 to let the bot spend them from its plan table."
+
 // pointsNeeds is the Needs-you row of banked points: one row while any stat or skill point waits.
 func pointsNeeds(d *points.Desk) []watch.GlanceNeed {
 	if d == nil {
@@ -215,7 +219,7 @@ func pointsNeeds(d *points.Desk) []watch.GlanceNeed {
 	if !ok || d.Autopilot() {
 		return nil
 	}
-	sub := "Spend them on the Points tile, or turn autopilot on for this hero."
+	sub := pointsHint
 	return []watch.GlanceNeed{{ID: "points", Kind: "points", Sev: "info", Text: text, Sub: sub, Actions: []watch.GlanceVerb{}}}
 }
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"strings"
 	"testing"
 
 	"d2lod-bot/internal/bot"
@@ -81,5 +82,17 @@ func TestPointsNeedsRow(t *testing.T) {
 	p.StatPoints, p.SkillPoints = 0, 0
 	if pointsNeeds(d) != nil {
 		t.Error("nothing banked, no row")
+	}
+}
+
+// The row says how the points get spent, for both classes of the bed (a Paladin and a Sorceress): lock a build or set the knob.
+func TestPointsNeedsRowSaysHowToSpend(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		p := &d2.Player{Class: class, Level: 8, StatPoints: 35, SkillPoints: 7}
+		d := points.NewDesk(points.Config{Player: func() *d2.Player { return p }})
+		rows := pointsNeeds(d)
+		if len(rows) != 1 || !strings.Contains(rows[0].Sub, "lock a build") || !strings.Contains(rows[0].Sub, "resource.pointsDecisions") {
+			t.Errorf("%v: %+v", class, rows)
+		}
 	}
 }
