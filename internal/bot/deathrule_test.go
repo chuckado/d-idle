@@ -131,12 +131,17 @@ func TestLowValueCorpseSkipped(t *testing.T) {
 	g.r.e.Tune.Bot.CorpseValueMin = 1 // only the new floor decides
 	g.w.set(func(w *world) { w.level, w.area = 8, 2 })
 	s, _ := g.w.snapshot()
-	rec := &recovery{rec: DeathRecord{Time: g.clock.Now(), Area: 2, AreaName: "Blood Moor", CorpseValue: 20}, area: 2}
+	rec := &recovery{rec: DeathRecord{Time: g.clock.Now(), Area: 2, AreaName: "Blood Moor", CorpseValue: 0}, area: 2}
 	ok, why := g.r.retrievalDecision(rec, s)
-	if ok || !strings.Contains(why, "skipped") || !strings.Contains(buf.String(), "corpse: skipped (value 20 < 50)") {
+	if ok || !strings.Contains(why, "skipped") || !strings.Contains(buf.String(), "corpse: skipped (nothing on it)") {
 		t.Fatalf("ok=%v why=%q log=%s", ok, why, buf.String())
 	}
 	buf.Reset()
+	// the corpse is chased whatever it is worth (user 2026-11-25): a body with 20 gold of gear is retrieved too
+	rec.rec.CorpseValue = 20
+	if ok, why := g.r.retrievalDecision(rec, s); !ok || strings.Contains(why, "skipped") {
+		t.Fatalf("a low-value corpse was skipped: ok=%v %s", ok, why)
+	}
 	rec.rec.CorpseValue = 500
 	if _, why := g.r.retrievalDecision(rec, s); strings.Contains(why, "skipped") {
 		t.Fatalf("valuable corpse skipped: %s", why)

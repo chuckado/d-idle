@@ -136,13 +136,13 @@ func TestCarriedGoldFeedsCorpseValue(t *testing.T) {
 	g.w.set(func(w *world) { w.level, w.area = 10, 1 })
 	s, _ := g.w.snapshot()
 	mk := func(carried int) *recovery {
-		d := DeathRecord{Time: g.clock.Now(), Area: 2, AreaName: "Blood Moor", Level: 10, CorpseValue: 100, Autopsy: &Autopsy{GoldCarried: carried}}
+		d := DeathRecord{Time: g.clock.Now(), Area: 2, AreaName: "Blood Moor", Level: 10, CorpseValue: 0, Autopsy: &Autopsy{GoldCarried: carried}}
 		return &recovery{rec: d, area: 2}
 	}
 	if ok, why := g.r.retrievalDecision(mk(0), s); ok {
-		t.Fatalf("cheap gear, empty purse must not run: %s", why)
+		t.Fatalf("an empty body must not run: %s", why)
 	}
-	if ok, why := g.r.retrievalDecision(mk(5000), s); !ok || !strings.Contains(why, "4600") {
+	if ok, why := g.r.retrievalDecision(mk(5000), s); !ok || !strings.Contains(why, "4500") {
 		t.Fatalf("ok=%v why=%s", ok, why)
 	}
 }

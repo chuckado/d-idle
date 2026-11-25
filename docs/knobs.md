@@ -21,7 +21,6 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 
 <!-- knobdump:begin -->
-
 ### nav.*
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
@@ -29,7 +28,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | nav.pathQuality | 1 | 0.1..1 | 0..1 | 0.1 | 1 | 1 = shortest, smoothed paths. Lower values make paths longer and wobblier (inflated A* heuristic, no smoothing below 0.5, sideways waypoint jitter) but still reach the goal. |
 | nav.sloppiness | 8 | 0..14 | subtiles | 14 | 1 | Largest sideways displacement of a waypoint at path quality 0; scaled by (1 - quality). |
 | nav.waypointSpacing | 8 | 4..24 | subtiles | 4 | 5 | Distance between walking clicks. Smaller spacing follows the path more exactly but clicks more often. |
-| nav.arriveTolerance | 2 | 1.5..6 | subtiles | 6 | 3 | A walk ends within this distance of the goal. |
+| nav.arriveTolerance | 2 | 1.5..6 | subtiles | 6 | 4 | A walk ends within this distance of the goal. |
 | nav.pollMs | 100 | 50..400 | ms | 400 | accessor | Observation period while walking; larger values react later to stops and monsters. |
 | nav.replanMs | 1500 | 500..8000 | ms | 8000 | accessor | Earliest time a changed map or monster layout triggers a new plan. |
 | nav.stuckMs | 1200 | 600..4000 | ms | 4000 | accessor | No progress for this long starts the recovery ladder. |
@@ -49,7 +48,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | nav.wpMinDistance | 2 | 2..8 | levels | 2 | 4 | A waypoint trip is taken only when it skips at least this many level hops; shorter routes walk. 2 is the shortest trip that saves a level. |
 | nav.wpCooldownSec | 0 | 0..20 | s | 0 | 2 | Deprecated, default 0 (no wait): game.exe has no arrival cooldown in single player (docs/research/waypoint-trace.md) and d2d dropped its own in #153. A value above 0 makes the bot wait this long (plus 1 s) after arriving before clicking a row, for an old d2d binary. |
 | nav.badEdgeTTLSec | 300 | 0..3600 | s | 300 | 2 | A level link or gate that a walk failed on is routed around for this long (game time), and forgotten at once when the game is re-entered; a link the level map itself shows is never marked. 0 restores the old behaviour: marks last for the rest of the run, and a character cut off from a gate it can see is not walked out of its pocket (townwedge). |
-| nav.fullGrid | 0 | 0..1 | bool | 0 | 2 | 1: a level whose grid is measured whole (every cell of its rectangle known, as d2d's debug grid is on arrival) is planned on that grid alone and treated as fully known only then; a goal outside it is refused (no path) instead of walked toward as a 'known edge'. A partial grid keeps the optimistic walk and the explore-to-reveal path. 0: the old behaviour (d2d always fully known, optimistic fallback). Default 0 until the Countess scenarios are green (docs/design/fable-review-2026-11-22/map-knowledge.md card 2). |
+| nav.fullGrid | 0 | 0..1 | bool | 0 | 3 | 1: a level whose grid is measured whole (every cell of its rectangle known, as d2d's debug grid is on arrival) is planned on that grid alone and treated as fully known only then; a goal outside it is refused (no path) instead of walked toward as a 'known edge'. A partial grid keeps the optimistic walk and the explore-to-reveal path. 0: the old behaviour (d2d always fully known, optimistic fallback). Default 0 until the Countess scenarios are green (docs/design/fable-review-2026-11-22/map-knowledge.md card 2). |
 | nav.warpRead | 0 | 0..1 | bool | 0 | 2 | 1: the d2d backend reads each warp's trigger area from the fork's read-only debug warptriggers (the cells whose click takes the warp, and the cells from which that click is taken at once) and the mouth gate refuses exactly the clicks that land on it (plus a margin of 2 subtiles) instead of every click within the guessed 15 subtile bound; an exit without a read area keeps the guess. Needs a fork with the verb (stock d2d answers err and the guess stays). 0 (default): the guessed bounds, until the Countess scenario is green with it (docs/design/fable-review-2026-11-22/map-knowledge.md card 3). |
 | nav.cautionRadius | 20 | 8..40 | subtiles | 8 | 1 | A corpse run stops and reports when a living monster comes this close; its paths avoid monsters at twice the usual radius. |
 | nav.roamSpacing | 16 | 5..30 | subtiles | 16 | 1 | Distance between the coverage points a fully known level is roamed by (d2d). Fewer, farther points mean shorter clears; the bot fights whatever comes within its clear radius on the way. Read when a level is first roamed. docs/roamspacing.md. |
@@ -261,19 +260,19 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.tickMs | 100 | 100..1000 | ms | 1000 | 4 | How often the bot re-plans between actions. Slower means more idle gaps. |
 | bot.watchMs | 50 | 50..300 | ms | 300 | 5 | How often events, hazards and death are checked while an action runs. Above 300 the bot dies on Hell packs. |
 | bot.reactionMs | 0 | 0..300 | ms | 300 | 1 | Extra delay before reacting to low life or a chicken condition. |
-| bot.resupplyPotions | 2 | 2..4 | potions | 4 | 3 | Healing potions left in the belt that trigger a town trip. Higher means more trips. |
+| bot.resupplyPotions | 2 | 2..4 | potions | 4 | 4 | Healing potions left in the belt that trigger a town trip. Higher means more trips. |
 | bot.invFullPct | 85 | 40..85 | % | 40 | 2 | Share of occupied inventory cells that triggers a town trip. Lower means more trips. |
-| bot.levelMargin | 0 | 0..8 | levels | 8 | 11 | Levels above a step's enter level the planner requires. Higher is safer but slower. |
+| bot.levelMargin | 0 | 0..8 | levels | 8 | 12 | Levels above a step's enter level the planner requires. Higher is safer but slower. |
 | bot.leaveSlack | 0 | 0..6 | levels | 6 | 9 | Levels past a step's leave level before moving to the next area. Higher wastes time in easy areas. |
-| bot.corpseRetries | 1 | 0..1 | count | 0 | 1 | Max attempts to recover the corpse after a softcore death. 0 abandons the gear. |
+| bot.corpseRetries | 3 | 0..3 | count | 0 | 3 | Attempts to recover the corpse in the field after a softcore death, whatever it is worth. After the last failed try the game is reset: the corpse moves to town and is taken there. 0 abandons the gear. |
 | bot.portalSettleMs | 600 | 600..4500 | ms | 4500 | 1 | Pause in town after chores before going back out. |
-| bot.clearRadius | 30 | 12..45 | subtiles | 12 | 32 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
+| bot.clearRadius | 30 | 12..45 | subtiles | 12 | 33 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
 | bot.exploredPct | 100 | 30..100 | % | 100 | 2 | Share of a zone's roam coverage points the hero must have visited before a clear run calls the zone explored and moves on (the planner then takes the next area or a fresh game). 100 visits every point (the old behaviour). Quest and boss runs always explore everything. Needs a roaming (fully known map) backend; others ignore it. docs/exploredpct.md. |
 | bot.farmReset | 0 | 0..1 | bool | 0 | 3 | 1: in a leveling zone, once its coverage reaches bot.farmResetPct and a fresh game pays (the zone's current XP per minute is below what a reset yields after the 15 s restart and the walk back, measured in this run), the hero goes home, takes a fresh game (monsters respawn) and returns to the same zone. Never during a fight, a quest step, a boss run, a named run, a recovery or within 180 s of one. docs/farmloop.md. |
 | bot.farmResetPct | 85 | 50..100 | % | 85 | 2 | Share of a zone's roam coverage points that must be visited before the farm loop may reset it (bot.farmReset). Keep it at or above bot.exploredPct, which would end the clear first. A zone below this share is never reset. |
 | bot.farmResetCooldownMin | 5 | 1..60 | min | 5 | 2 | Least minutes between two farm resets: a reset that did not pay cannot repeat at once. |
 | bot.lootShadow | 1 | 0..1 | bool | 1 | 1 | 1: the loot rules engine (docs/lootrules.md) judges every ground pickup, tidy and sell decision next to today's code and logs the differences as `loot shadow: ...` lines (read-only report at /api/lootrules/shadow). Log only: it never changes what the bot does. 0 turns it off. |
-| bot.corpseValueMin | 1000 | 1..2e+04 | gold | 2e+04 | 4 | Estimated value of the gear on the corpse below which it is abandoned. Higher abandons more. |
+| bot.corpseValueMin | 1000 | 1..2e+04 | gold | 2e+04 | 1 | Only the older-body search reads it now: a body worth less than this does not count as the one holding the gear. The corpse run itself no longer depends on value (bot.corpseRetries tries, then a fresh game moves the corpse to town). |
 | bot.spiralDeaths | 4 | 3..8 | deaths | 8 | 4 | Deaths in one area within the spiral window that make the bot avoid that area (one fewer when the area is clearly too high for the level or the character died with no potions and no gold). Dying is normal: the default allows three deaths on the same goal. Higher tolerates more. |
 | bot.dangerBanMin | 20 | 5..120 | min | 120 | 1 | How long the spiral breaker keeps the character out of an area. Longer stalls the goal more. |
 | bot.starterBanMin | 3 | 1..30 | min | 30 | 1 | A ban of the first field of an act is cut to this once the character stands in town because of it (it is the only way out). |
@@ -281,7 +280,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.repeatSiteEscalate | 1 | 0..1 | bool | 1 | 1 | 1: the second repeat-site ban of the same area within 12 hours lasts 4 times the ban length, the third and later 12 times (capped at 6 hours). It stops a bot from walking back into the same death spot every half hour. 0 keeps every ban at the base length. |
 | bot.repeatSiteWindowMin | 30 | 5..120 | min | 120 | 2 | Two deaths in one area within this many minutes make it a repeat site. |
 | bot.repeatSiteGapSec | 180 | 30..600 | s | 600 | 1 | A death within this many seconds of the previous death (any area) makes the area a repeat site. |
-| bot.corpseMinValue | 50 | 0..5000 | gold | 5000 | 3 | Below this estimated gold value the in-field corpse run is skipped entirely (the stricter bot.corpseValueMin still applies above it). |
+| bot.corpseMinValue | 50 | 0..5000 | gold | 5000 | 0 | No longer read: a corpse with anything on it is chased (user 2026-11-25); one worth 0 is skipped. |
 | bot.navSkipSec | 150 | 30..900 | s | 900 | 1 | How long a navigation fault (stuck, no exit to the area) keeps the planner out of an area. Short on purpose: it is a bot fault, not danger. |
 | bot.areaIdleSec | 60 | 15..600 | s | 600 | 1 | When every candidate area is skipped or banned, the bot waits this long in town at most, then farms the least bad area anyway (a death streak waits at least the starter ban cap). |
 | bot.questBlockedFarmMin | 10 | 1..120 | min | 120 | 1 | A quest step the guards refuse is waited out this long; then the hero farms the best leveling area of the level plan and retries the step after this wait, doubling each time (cap x64). Shown as journeyBlocked in the status. |
@@ -586,7 +585,6 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | respec.firstFree | 0 | 0..10 | count | 0 | 0 | How many of a hero's first respecs cost nothing (they do not count for the escalation). 0 = every respec is paid. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
 | respec.minGold | 1000 | 0..1e+06 | gold | 1000 | 0 | The price before the escalation is at least this. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
 | respec.maxGold | 1e+05 | 0..1e+07 | gold | 1e+05 | 0 | The price before the escalation is at most this (0 = no cap). PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
-
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)

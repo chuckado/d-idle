@@ -257,7 +257,7 @@ func (r *Runner) retrievalDecision(rec *recovery, snap *d2.Snapshot) (bool, stri
 	now := r.e.Clock.Now()
 	src := rec.rec
 	worth := corpseWorth(src) // worn items plus the expected gold pile at the death spot
-	if worth < t.CorpseValueMin && r.gearVerdict(snap).Naked {
+	if worth <= 0 && r.gearVerdict(snap).Naked {
 		// This body holds nothing (the character was already naked): the gear lies on an older one. Retrieve that first.
 		r.obMu.Lock()
 		g := r.dlog.gearCorpse(t.CorpseValueMin, now.Add(-gearCorpseAge), rec.rec.Time)
@@ -271,9 +271,9 @@ func (r *Runner) retrievalDecision(rec *recovery, snap *d2.Snapshot) (bool, stri
 			r.e.Log.Info("corpse: the gear is on an older body", "area", g.Area, "x", g.Pos.X, "y", g.Pos.Y, "value", g.CorpseValue, "ageMin", int(now.Sub(g.Time).Minutes()))
 		}
 	}
-	if !r.cfg.Hardcore && rec.why == "" && rec.area != 0 && !r.d.Plan.IsTown(rec.area) && worth < t.CorpseMinValue {
-		r.e.Log.Info(fmt.Sprintf("corpse: skipped (value %d < %d)", worth, t.CorpseMinValue), "area", rec.area)
-		return false, fmt.Sprintf("corpse skipped (value %d < %d)", worth, t.CorpseMinValue)
+	if !r.cfg.Hardcore && rec.why == "" && rec.area != 0 && !r.d.Plan.IsTown(rec.area) && worth <= 0 {
+		r.e.Log.Info("corpse: skipped (nothing on it)", "area", rec.area)
+		return false, "corpse skipped (nothing on it)"
 	}
 	switch {
 	case r.cfg.Hardcore:
@@ -284,8 +284,8 @@ func (r *Runner) retrievalDecision(rec *recovery, snap *d2.Snapshot) (bool, stri
 		return false, "no retrieval attempts left"
 	case rec.area == 0 || r.d.Plan.IsTown(rec.area):
 		return false, "no corpse in the field"
-	case worth < t.CorpseValueMin:
-		return false, fmt.Sprintf("corpse worth about %d gold, threshold %d", worth, t.CorpseValueMin)
+	case worth <= 0:
+		return false, "corpse holds nothing"
 	case src.KillerBoss:
 		return false, "killed by a boss"
 	case r.banned(rec.area):
@@ -349,23 +349,29 @@ func (r *Runner) finishRecovery(ctx context.Context, snap *d2.Snapshot, c contro
 	}
 	retrieved := false
 	if rec.retrieve {
-		rec.tries++
-		rec.attempting = true
+		tries := max(r.e.Tune.Bot.CorpseRetries, 1)
 		before := equipCount(snap)
-		r.setWhy(WhyDeathCorpse)
-		ok := r.do(ctx, c, StateRecovering, "Retrieving the corpse", sec(r.cfg.TravelTimeoutSec), "corpse", func(ctx context.Context) error {
-			return r.retrieveCorpse(ctx, rec.area, rec.pos)
-		})
-		if s := r.poll(); s != nil && isDead(s.Player) {
-			return true // died on the way: the new recovery sees attempting and never retries
-		}
-		rec.attempting = false
-		if s := r.latest(); s != nil {
-			retrieved = equipCount(s) > before
-			r.e.Log.Info("corpse attempt", "ok", ok, "equipBefore", before, "equipAfter", equipCount(s))
+		for try := 1; try <= tries && !retrieved; try++ {
+			rec.tries++
+			rec.attempting = true
+			r.e.Log.Info("corpse: retrieving", "try", try, "of", tries, "area", rec.area)
+			r.setWhy(WhyDeathCorpse)
+			ok := r.do(ctx, c, StateRecovering, "Retrieving the corpse", sec(r.cfg.TravelTimeoutSec), "corpse", func(ctx context.Context) error {
+				return r.retrieveCorpse(ctx, rec.area, rec.pos)
+			})
+			if s := r.poll(); s != nil && isDead(s.Player) {
+				return true // died on the way: the new recovery sees attempting and never retries
+			}
+			rec.attempting = false
+			if s := r.latest(); s != nil {
+				retrieved = equipCount(s) > before
+				r.e.Log.Info("corpse attempt", "ok", ok, "equipBefore", before, "equipAfter", equipCount(s), "try", try)
+			}
+			if ctx.Err() != nil {
+				break
+			}
 		}
 		if !retrieved {
-			// one attempt only: the gear stays where it fell and the rebuild starts
 			rec.why = whyRetrievalFailed
 			if s := r.latest(); s != nil && equipCount(s) < rec.equipBefore {
 				plan := r.fullChores("poverty rebuild after failed retrieval")
@@ -376,6 +382,9 @@ func (r *Runner) finishRecovery(ctx context.Context, snap *d2.Snapshot, c contro
 		}
 	}
 	r.sweepDeathGold(ctx, c, rec)
+	if !retrieved && rec.target.IsZero() && r.corpseWorthChasing(rec) {
+		r.resetForCorpse(ctx, r.latest(), rec.why)
+	}
 	now := r.e.Clock.Now()
 	r.obMu.Lock()
 	var gold, equip int
@@ -451,4 +460,10 @@ func (r *Runner) sweepDeathGold(ctx context.Context, c control, rec *recovery) {
 			r.setLastTrip(r.e.Clock.Now())
 		}
 	}
+}
+
+// corpseWorthChasing: the body holds something and the game can move it (softcore, a death in the field).
+func (r *Runner) corpseWorthChasing(rec *recovery) bool {
+	return !r.cfg.Hardcore && rec.area != 0 && !r.d.Plan.IsTown(rec.area) && corpseWorth(rec.rec) > 0 && rec.why != "corpse holds nothing" &&
+		r.e.Tune.Bot.CorpseRetries > 0
 }
