@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into toolstrade59 <!--sg:agent/toolstrade59-->
 - vaultequip3: identify the unit before the wear (the real check refuses unidentified items); backpack creates run before a full stash halts the queue <!--sg:agent/vaultequip3-->
 - toolstrade56: the route guard reads the boss kit: a test that 7 healing holds the Andariel road and 8 opens it <!--sg:agent/toolstrade58-->
 - Merge branch 'main' into toolstrade56 <!--sg:agent/toolstrade56-->
