@@ -479,6 +479,7 @@
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | equipv2b | proposed | - | `internal/vaultkeep/equipdirect_test.go`<br>`docs/vault.md` | - |
 | dangerproto | proposed | - | `docs/design/danger-protocol-2026-11-25.md` | - |
+| toolstrade68 | proposed | - | `docs/adr/0011-readiness-power-vs-danger.md`<br>`docs/decisions.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
@@ -506,6 +507,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- deaa60067 11-25 15:01 `Merge agent/toolstrade68: toolstrade68: ADR 0011 amended (user decision 2026-11-25): floor-only chunks wall at quests.legacyWall` (toolstrade68)
 - 094173185 11-25 15:01 `Merge agent/dangerproto: dangerproto: task result` (dangerproto)
 - 23b9e4eb4 11-25 10:00 `Merge agent/toolstrade64: toolstrade64: the death record keeps the two-minute high mark of worn pieces (a death record read Equipped 0 with five pieces on the corpse)` (toolstrade64)
 - a6e420c22 11-25 09:49 `Merge agent/toolstrade64: Merge branch 'main' into toolstrade64` (toolstrade64)
@@ -515,5 +517,4 @@
 - 5da9a5b64 11-25 09:28 `Merge agent/toolstrade63: toolstrade63: two repairs that leave an item as it was before it stops counting; the sum is read before the click` (toolstrade63)
 - 38065f610 11-25 06:31 `Merge agent/devp30doc: devp30 sandbox note: fork rebase round 20261125 (docs only)` (devp30doc)
 - 01b948117 11-25 00:18 `Merge agent/toolstrade62: Merge branch 'main' into toolstrade62` (toolstrade62)
-- 326777f2e 11-25 00:17 `Merge branch 'main' into toolstrade62` (-)
 <!-- statusgen:end -->
