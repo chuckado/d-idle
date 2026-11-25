@@ -180,7 +180,7 @@ func TestOrderGuardWhy(t *testing.T) {
 	}
 }
 
-// V live 2026-11-25 02:40Z: Tower Cellar 2, no portal scroll, the guard closed (4 healing < 5). The exit read "no town portal
+// V live 2026-11-25 02:40Z: cellar 2 of the Forgotten Tower, no portal scroll, the guard closed (4 healing < 5). The exit read "no town portal
 // available" 204 times in 20 minutes: ToTown's walk home knows only the short list of fields. The guard's exit walks home itself
 // when the portal fails. Two classes. Must fail while the exit gives up at the failed portal.
 func TestGuardedExitWalksHomeWithoutAPortal(t *testing.T) {

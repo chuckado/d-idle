@@ -587,7 +587,7 @@ func TestMeleeClassSwingsInBigPackWithoutMana(t *testing.T) {
 	}
 }
 
-// V live 2026-11-25: Tower Cellar 2 without a scroll was no walk home; the dungeon levels of the quest route are chain home now
+// V live 2026-11-25: cellar 2 of the Forgotten Tower without a scroll was no walk home; the dungeon levels of the quest route are chain home now
 // (never near town). The lair (37) stays out.
 func TestChainHomeIncludesTheTowerAndTheMonasteryRoute(t *testing.T) {
 	for area := 21; area <= 36; area++ {
