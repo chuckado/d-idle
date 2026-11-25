@@ -504,6 +504,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0d6684bd5 11-24 20:05 `Merge agent/vaultequip4: Merge branch 'main' into vaultequip4` (vaultequip4)
+- e28679dcd 11-24 20:04 `Merge branch 'main' into vaultequip4` (-)
 - 8e4803dab 11-24 19:58 `Merge agent/toolstrade60: Merge branch 'main' into toolstrade60` (toolstrade60)
 - 0a4cceb6c 11-24 19:57 `Merge branch 'main' into toolstrade60` (-)
 - 6f6f69a12 11-24 19:40 `Merge agent/toolstrade59: Merge branch 'main' into toolstrade59` (toolstrade59)
@@ -512,6 +514,4 @@
 - 54010f1db 11-24 18:45 `Merge agent/toolstrade58: toolstrade56: the route guard reads the boss kit: a test that 7 healing holds the Andariel road and 8 opens it` (toolstrade58)
 - 529ec6210 11-24 18:31 `Merge agent/toolstrade56: Merge branch 'main' into toolstrade56` (toolstrade56)
 - e3b0f9872 11-24 18:30 `Merge branch 'main' into toolstrade56` (-)
-- a6496575a 11-24 18:20 `Merge agent/toolstrade55: toolstrade55: a stale-pack hold does not send a board chunk's trip home to the first field` (toolstrade55)
-- a950f288c 11-24 16:42 `Merge agent/toolstrade54: toolstrade54: a click the mouth gate keeps holding blocks that spot for planning (Catacombs 4: 215 rounds toward the stairs); lair grid fixture` (toolstrade54)
 <!-- statusgen:end -->
