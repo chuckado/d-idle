@@ -565,7 +565,7 @@ func (t *Town) needSell(s *d2.Snapshot) bool {
 }
 
 func (t *Town) needStash(s *d2.Snapshot, plan ChorePlan) bool {
-	if plan.Gold && s.Player.Gold > t.goldKeep(s.Player.Level) && s.Player.Gold > 0 {
+	if plan.Gold && s.Player.Gold > max(t.goldKeep(s.Player.Level), plan.BossPurse) && s.Player.Gold > 0 {
 		return true
 	}
 	if !plan.Stash {

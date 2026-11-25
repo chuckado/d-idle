@@ -43,3 +43,24 @@ func TestSolveShadowUnknownProfile(t *testing.T) {
 		t.Fatalf("got %v", err)
 	}
 }
+
+// V live 2026-11-24 19:24: a 4-slot belt holds 3 healing, the boss floor asked for 8 plus a buffer (9), the shop wanted 3 more into
+// the pack three times, the buy failed and the Andariel chunk parked on a kit it could not carry. The floor is clamped to what
+// belt plus a 2-potion pack reserve carry (pack potions are not drinkable in a fight). Two builds, no game tables.
+func TestBossKitIsClampedToBeltPlusPackReserve(t *testing.T) {
+	lt, rs := env.DefaultLootTuning(), env.DefaultResourceTuning()
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		band := belt.PlanForClass(class, 20)
+		capHP := band.Capacity(belt.HP, belt.Columns)
+		pl, err := solveShadow(class, band, belt.Columns, supply.Count{Purse: 3000, StashKnown: true, PortalCharges: 2, HasTome: true}, ChorePlan{Profile: "andariel"}, &lt, &rs)
+		if err != nil {
+			t.Fatalf("%v: %v", class, err)
+		}
+		if got, want := pl.MinOf(supply.Healing), capHP+2; got != want {
+			t.Errorf("%v: boss healing floor %d, want belt %d + 2", class, got, capHP)
+		}
+		if got := pl.MinOf(supply.GoldCarry); got != 3000 {
+			t.Errorf("%v: boss purse %d", class, got)
+		}
+	}
+}

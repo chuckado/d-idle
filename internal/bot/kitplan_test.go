@@ -122,6 +122,10 @@ func TestKitPlanUsesTheBossProfileNearAndariel(t *testing.T) {
 			if tc.want == "andariel" && (k == nil || k.GoldCarry != 3000 || g.r.bossPurse() != 3000) {
 				t.Errorf("%v: boss purse not handed on: %+v", class, k)
 			}
+			// the boss floor is what belt and pack carry: no buffer above it, the shop could never close it (V live 2026-11-24)
+			if h, _ := g.r.routeKit(); tc.want == "andariel" && h != 8 {
+				t.Errorf("%v: the trip buys up to %d healing, want the plan's 8 without a buffer", class, h)
+			}
 		}
 	}
 }

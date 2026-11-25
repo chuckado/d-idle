@@ -495,7 +495,7 @@ func (t *Town) StashRoundTripForTest(ctx context.Context) error {
 // StashGoldForTest runs the gold deposit on the open stash (the threshold knob decides).
 func (t *Town) StashGoldForTest(ctx context.Context) error {
 	var rep ChoreReport
-	return t.stashGold(ctx, &rep)
+	return t.stashGold(ctx, &rep, ChorePlan{})
 }
 
 // StripForTest sells every equipped item to the open vendor (it must buy that type): the equipment slot is
