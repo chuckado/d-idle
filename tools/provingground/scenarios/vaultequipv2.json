@@ -1,0 +1,276 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "vault.equip-v2-swap",
+   "title": "Equip v2: one tap on a Vault helm while another is worn: worn within seconds in the field or town, the old helm is a Vault record, nothing dropped",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": [
+    "hook.vault-keep",
+    "town.vault-equip"
+   ],
+   "touches": [
+    "internal/vaultkeep/equipdirect.go",
+    "internal/d2dctl/direct_equip.go",
+    "cmd/d2bot/vaultequip.go",
+    "internal/watch/vaultapi.go"
+   ],
+   "pre": {
+    "level": 30,
+    "gold": 500,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head"
+     }
+    ],
+    "vault_records": {
+     "items": [
+      {
+       "code": "cap",
+       "quality": 4
+      }
+     ]
+    }
+   },
+   "trigger": {
+    "goals": "campaign",
+    "knobs": {
+     "loot.vault": 1,
+     "loot.vaultKeep": 1,
+     "loot.vaultEquip": 0,
+     "loot.vaultDirectEquip": 1
+    },
+    "api": [
+     {
+      "after_s": 10,
+      "path": "/api/vault/equip",
+      "body": {
+       "ids": [
+        "{{vault.0.id}}"
+       ],
+       "slot": "auto",
+       "now": true
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 3
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "item.create",
+    "item.full",
+    "item.vault",
+    "item.decode",
+    "item.equipdirect",
+    "item.unequipdirect",
+    "item.wearset",
+    "flag.item-verbs"
+   ],
+   "provenance": "SETUP (CHEATED, mechanics only) as vault.equip-set10, plus the PLAYER-ORDERED direct equip writes of ADR 0029 (amended 2026-11-25): an unmeasured real-time run (the fork refuses the verbs under --lockstep), so `writes after start` is the number of equip orders, not 0. Not evidence about balance or parity.",
+   "notes": "Equip v2 (card equipv2). RED on the old flow: loot.vaultEquip is 0 here, so the order flow refuses (409 off) and nothing is worn; GREEN needs the devp29 binary (PG_D2D_BIN=/data/d2d-lab/qdbin/d2d-devp29-directequip). The timer is the log window (coarse: the virtual minute is a linear map of wall time, U).",
+   "assert": [
+    {
+     "kind": "api_reply",
+     "index": 0,
+     "status": 200,
+     "ok": true,
+     "why": "the equip answered at once"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "equip: .* worn in head, .* went to the vault",
+     "to_min": 0.5,
+     "why": "worn and the old helm vaulted inside the first half virtual minute (the old flow waits for a town stop)"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "cap",
+     "where": "body",
+     "why": "a helm is worn"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "cap",
+     "where": "pack",
+     "max": 0,
+     "why": "no helm in the backpack"
+    },
+    {
+     "kind": "vault_log",
+     "pattern": "^recorded cap",
+     "why": "the old helm is a vault record"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "(drop|trash|sold|sell).*(cap|rin)",
+     "max": 0,
+     "why": "nothing was dropped or sold"
+    }
+   ]
+  },
+  {
+   "id": "vault.equip-v2-set10",
+   "title": "Equip v2: Wear set of ten pieces in ONE call: all worn within seconds, nothing in the backpack",
+   "kind": "behaviour",
+   "tier": "fast",
+   "covers": [
+    "hook.vault-keep",
+    "town.vault-equip"
+   ],
+   "touches": [
+    "internal/vaultkeep/equipdirect.go",
+    "internal/d2dctl/direct_equip.go",
+    "cmd/d2bot/vaultequip.go",
+    "internal/watch/vaultapi.go"
+   ],
+   "pre": {
+    "level": 30,
+    "gold": 500,
+    "vault_records": {
+     "items": [
+      {
+       "code": "cap",
+       "quality": 4,
+       "unid": false
+      },
+      {
+       "code": "amu",
+       "quality": 6,
+       "unid": false
+      },
+      {
+       "code": "rin",
+       "quality": 6,
+       "unid": false
+      },
+      {
+       "code": "rin",
+       "quality": 4,
+       "unid": false
+      },
+      {
+       "code": "lbl",
+       "quality": 4,
+       "unid": false
+      },
+      {
+       "code": "lbt",
+       "quality": 6,
+       "unid": false
+      },
+      {
+       "code": "lgl",
+       "quality": 4,
+       "unid": false
+      },
+      {
+       "code": "qui",
+       "quality": 4,
+       "unid": false
+      },
+      {
+       "code": "buc",
+       "quality": 7,
+       "unid": false
+      },
+      {
+       "code": "wnd",
+       "quality": 7,
+       "unid": false
+      }
+     ]
+    }
+   },
+   "trigger": {
+    "goals": "campaign",
+    "knobs": {
+     "loot.vault": 1,
+     "loot.vaultKeep": 1,
+     "loot.vaultEquip": 0,
+     "loot.vaultDirectEquip": 1
+    },
+    "api": [
+     {
+      "after_s": 10,
+      "path": "/api/vault/equip",
+      "body": {
+       "ids": [
+        "{{vault.0.id}}",
+        "{{vault.1.id}}",
+        "{{vault.2.id}}",
+        "{{vault.3.id}}",
+        "{{vault.4.id}}",
+        "{{vault.5.id}}",
+        "{{vault.6.id}}",
+        "{{vault.7.id}}",
+        "{{vault.8.id}}",
+        "{{vault.9.id}}"
+       ],
+       "now": true
+      }
+     }
+    ]
+   },
+   "budget": {
+    "virtual_min": 3
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "needs": [
+    "item.create",
+    "item.full",
+    "item.vault",
+    "item.decode",
+    "item.equipdirect",
+    "item.unequipdirect",
+    "item.wearset",
+    "flag.item-verbs"
+   ],
+   "provenance": "SETUP (CHEATED, mechanics only) as vault.equip-set10, plus the PLAYER-ORDERED direct equip writes of ADR 0029 (amended 2026-11-25): an unmeasured real-time run (the fork refuses the verbs under --lockstep), so `writes after start` is the number of equip orders, not 0. Not evidence about balance or parity.",
+   "notes": "Equip v2 (card equipv2). RED on the old flow: loot.vaultEquip is 0 here, so the order flow refuses (409 off) and nothing is worn; GREEN needs the devp29 binary (PG_D2D_BIN=/data/d2d-lab/qdbin/d2d-devp29-directequip). The timer is the log window (coarse: the virtual minute is a linear map of wall time, U).",
+   "assert": [
+    {
+     "kind": "api_reply",
+     "index": 0,
+     "status": 200,
+     "why": "the set was answered at once"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "equip: .* worn in",
+     "min": 8,
+     "to_min": 0.5,
+     "why": "at least eight of the ten pieces worn inside the first half virtual minute (Sorceress 3 lacks strength for two)"
+    },
+    {
+     "kind": "item_in_pack",
+     "code": "cap",
+     "where": "pack",
+     "max": 0,
+     "why": "nothing is left in the backpack"
+    }
+   ]
+  }
+ ]
+}

@@ -265,6 +265,13 @@ func (k *Keeper) finishDirect(ctx context.Context, st *vault.Store, c chosen, dr
 	k.info.Done++
 	k.mu.Unlock()
 	res.OK, res.Slot, res.Removed, res.Where = true, c.slot, names, where
+	line := fmt.Sprintf("equip: %s worn in %s", c.rec.Name, c.slot)
+	if len(names) > 0 {
+		line += fmt.Sprintf(", %s went to the %s", strings.Join(names, ", "), where)
+	}
+	if k.Notice != nil {
+		k.Notice(line) // the bot log line the Proving Ground scenarios read
+	}
 }
 
 // recordRemoved turns the bytes the engine returned into a vault record. When the vault cannot take it the item is created
