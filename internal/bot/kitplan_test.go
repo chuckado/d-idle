@@ -163,17 +163,20 @@ func TestEarlyRouteClosesBelowTheLevelAndTheKit(t *testing.T) {
 		class   d2.Class
 		level   int
 		potions int
+		maxLife int
 		want    string // "" open, else a part of the reason
 	}{
-		{d2.Paladin, 4, 3, "level 7 needed"},
-		{d2.Paladin, 7, 0, "healing potions"},
-		{d2.Paladin, 7, 2, ""},
-		{d2.Sorceress, 7, 3, "level 8 needed"},
-		{d2.Sorceress, 8, 2, ""},
+		{d2.Paladin, 4, 3, 150, "level 7 needed"},
+		{d2.Paladin, 7, 0, 150, "healing potions"},
+		{d2.Paladin, 7, 2, 150, ""},
+		{d2.Paladin, 8, 3, 69, "life 110 needed"}, // the Questy hero: clvl 8, nothing in vitality
+		{d2.Sorceress, 7, 3, 90, "level 8 needed"},
+		{d2.Sorceress, 8, 2, 90, ""},
+		{d2.Sorceress, 8, 3, 50, "life 70 needed"},
 	} {
 		g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
 		g.w.set(func(w *world) {
-			w.class, w.level, w.area = tc.class, tc.level, 3
+			w.class, w.level, w.area, w.maxL, w.life = tc.class, tc.level, 3, tc.maxLife, tc.maxLife
 			var keep []d2.Unit
 			for _, u := range w.items {
 				if u.Class != 1 && u.Class != 5 { // the rig's own potions and scrolls go: the case sets them
