@@ -109,6 +109,15 @@ type Keeper struct {
 	EquipOn   func() bool                // loot.vaultEquip; nil counts as on
 	Chain     func(code string) []string // base type chain of an item code, for the record of a displaced item
 
+	// Direct equip (equipdirect.go; ADR 0029 amended 2026-11-25): the player's Equip writes the item into its body slot and
+	// the displaced items come back as vault records. nil Direct or DirectOn false: the order flow stays.
+	Direct   d2dctl.DirectEquipper
+	DirectOn func() bool // loot.vaultDirectEquip
+	Pinner   func(slot string, unit uint32, name string)
+	dcapsAt  time.Time
+	dcapsOK  bool
+	dcaps    bool
+
 	eq         equipBook
 	mu         sync.Mutex
 	promptMute time.Time
@@ -253,6 +262,12 @@ type Result struct {
 	Already bool   // it was queued or kept already: a double press changes nothing
 	Code    string // missing, state, target
 	Why     string
+
+	// Direct equip (equipdirect.go): what the one-tap path did, so the page can say it per piece.
+	Direct  bool     // the swap was done by the direct verbs, at once
+	Slot    string   // the body slot it went to
+	Removed []string // names of the items that came off (they are vault records now)
+	Where   string   // vault, stash or backpack (where the removed items are)
 }
 
 // Enqueue queues records for creation (target stash or inv; "" is the stash). It is idempotent: a record that is queued or
