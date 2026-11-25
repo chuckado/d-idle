@@ -1,6 +1,6 @@
 {
-  "_comment": "Early dangerous legs of the Act 1 quest routes (user request 2026-11-25, Questy bed: a clvl 4 Paladin walked Stony Field -> Underground Passage level 1 -> Dark Wood with no potions and died to Vile Hunters). A route closes to a hero under minLevel (by class family) or short of the kit. Areas: 10 Underground Passage level 1, 5 Dark Wood (its only way in). Numbers: SME ballpark, U (monster levels there are 6 to 7 in Normal). Owner try anyway overrides.",
+  "_comment": "Early dangerous legs of the Act 1 quest routes (user request 2026-11-25, Questy bed: a clvl 4 Paladin walked Stony Field -> Underground Passage level 1 -> Dark Wood with no potions and died to Vile Hunters). A route closes to a hero under minLevel (by class family) or short of the kit. Areas: 10 Underground Passage level 1, 5 Dark Wood (its only way in). Numbers: SME ballpark, U (monster levels there are 6 to 7 in Normal). minLife is max life by class family (a clvl 8 Paladin with 69 life died twice to Treehead WoodFist's pack, Questy 2026-11-25; SME: under 110 is not fit, U). Owner try anyway overrides.",
   "routes": [
-    {"name": "underground_passage", "areas": [10, 5], "minLevel": {"melee": 7, "caster": 8}, "kit": {"healing": 2, "portal": 1}}
+    {"name": "underground_passage", "areas": [10, 5], "minLevel": {"melee": 7, "caster": 8}, "minLife": {"melee": 110, "caster": 70}, "kit": {"healing": 2, "portal": 1}}
   ]
 }

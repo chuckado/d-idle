@@ -19,6 +19,7 @@ type earlyRoute struct {
 	Name     string         `json:"name"`
 	Areas    []int          `json:"areas"`
 	MinLevel map[string]int `json:"minLevel"`
+	MinLife  map[string]int `json:"minLife"` // max life by class family; 0 = no rule
 	Kit      struct {
 		Healing int `json:"healing"`
 		Portal  int `json:"portal"`
@@ -73,6 +74,9 @@ func (r *Runner) earlyRouteWhy(s *d2.Snapshot, a int) string {
 	}
 	if min := rt.MinLevel[family]; min > 0 && s.Player.Level < min {
 		return fmt.Sprintf("level %d needed for the %s road (clvl %d)", min, rt.Name, s.Player.Level)
+	}
+	if min := rt.MinLife[family]; min > 0 && s.Player.MaxLife > 0 && s.Player.MaxLife < min {
+		return fmt.Sprintf("life %d needed for the %s road (max life %d)", min, rt.Name, s.Player.MaxLife)
 	}
 	in := r.resInput(s)
 	if n := healingOf(in); n < rt.Kit.Healing {
