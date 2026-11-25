@@ -507,6 +507,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 684f9ad45 11-25 17:43 `Merge agent/toolstrade70: Merge branch 'main' into toolstrade70` (toolstrade70)
+- c9bc2becf 11-25 17:41 `Merge branch 'main' into toolstrade70` (-)
 - ae003cc4a 11-25 17:32 `Merge agent/toolstrade69: Merge origin/main into toolstrade69 (knobs.md regenerated)` (toolstrade69)
 - a477a3ec6 11-25 17:29 `Merge origin/main into toolstrade69 (knobs.md regenerated)` (-)
 - 2e8be0c99 11-25 15:55 `Merge agent/toolstrade67: Merge origin/main into toolstrade67 (knobs.md regenerated)` (toolstrade67)
@@ -515,6 +517,4 @@
 - 1c8123e99 11-25 15:36 `Merge branch 'main' into qdmatrix` (-)
 - 4a2282b5b 11-25 15:23 `Merge agent/toolstrade66: Merge branch 'main' into toolstrade66` (toolstrade66)
 - ac739fc55 11-25 15:21 `Merge branch 'main' into toolstrade66` (-)
-- a19ef41ab 11-25 15:15 `Merge agent/toolstrade-ci: Merge branch 'main' into toolstrade-ci` (toolstrade-ci)
-- 36fed7e02 11-25 15:14 `Merge branch 'main' into toolstrade-ci` (-)
 <!-- statusgen:end -->

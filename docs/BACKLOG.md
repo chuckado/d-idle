@@ -1379,6 +1379,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/qd24: Merge branch 'main' into qdmatrix (merged 2026-11-25) <!--sg:agent/qd24-->
 - agent/toolstrade67: Merge origin/main into toolstrade67 (knobs.md regenerated) (merged 2026-11-25) <!--sg:agent/toolstrade67-->
 - agent/toolstrade69: Merge origin/main into toolstrade69 (knobs.md regenerated) (merged 2026-11-25) <!--sg:agent/toolstrade69-->
+- agent/toolstrade70: Merge branch 'main' into toolstrade70 (merged 2026-11-25) <!--sg:agent/toolstrade70-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
