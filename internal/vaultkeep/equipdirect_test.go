@@ -2,7 +2,9 @@ package vaultkeep
 
 import (
 	"context"
+	"encoding/hex"
 	"fmt"
+	"math/bits"
 	"strings"
 	"testing"
 
@@ -320,5 +322,30 @@ func TestDirectRepairFinishesAnAppliedOrder(t *testing.T) {
 	d.k.repairDirect(context.Background())
 	if o := d.k.EquipOrderOf("x"); o.State != EqFailed || o.Code != "interrupted" {
 		t.Fatalf("%+v", o)
+	}
+}
+
+// createHex flips ONLY the identified bit (bit 4 of the third byte: the item flags' identified bit, V live devp30 probe 2026-11-25:
+// created units kept durability, defence and properties for hax, skp, lea, rin, cm1, lbl at normal, magic and rare quality) and
+// leaves everything else, durability fields included, byte for byte.
+func TestCreateHexFlipsOnlyTheIdentifiedBit(t *testing.T) {
+	for n, raw := range []string{"4a4d00a0e000000000", "4a4d0080000000", "4a4d00800000ffffffffffff00ff", "4a4d00000000", "4a4d00a0e0000000001122334455667788"} {
+		b, _ := hex.DecodeString(raw)
+		rec := vault.Rec{Item: vault.Item{Raw: raw, Identified: true, Unlocked: true}}
+		got, _ := hex.DecodeString(createHex(rec))
+		if len(got) != len(b) {
+			t.Fatalf("%d: length changed", n)
+		}
+		diff := 0
+		for i := range b {
+			diff += bits.OnesCount8(b[i] ^ got[i])
+		}
+		already := b[2]&0x10 != 0
+		if want := map[bool]int{true: 0, false: 1}[already]; diff != want || got[2]&0x10 == 0 {
+			t.Fatalf("%d: %d bits differ, want %d", n, diff, want)
+		}
+		if h := createHex(vault.Rec{Item: vault.Item{Raw: raw, Identified: true}}); h != raw {
+			t.Fatalf("%d: a record whose bytes are not unlocked must stay as dropped", n)
+		}
 	}
 }
