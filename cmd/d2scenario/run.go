@@ -272,7 +272,7 @@ func execOne(s scenario.Scenario, r scenario.Run, out, bot string) scenario.Resu
 	// 1. SETUP on a lab d2d (lab verbs on), every verb ledgered with its reason before it is sent.
 	bin, gamedata := os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA")
 	prep := &d2dinput.Process{Bin: bin, Data: gamedata, Sock: sock, ConfigDir: filepath.Join(home, "config"), DataDir: filepath.Join(home, "data"),
-		Nice: 10, ExtraArgs: withPay(withVault([]string{"--lockstep", "--lab-verbs", "--toggle", "autoloot=off,autoparty=off"}, su.VaultVerbs), s.Needs)}
+		Nice: 10, ExtraArgs: withItemVerbs(withPay(withVault([]string{"--lockstep", "--lab-verbs", "--toggle", "autoloot=off,autoparty=off"}, su.VaultVerbs), s.Needs), s.Needs)}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(s.Budget.WallMin+15)*time.Minute)
 	defer cancel()
 	if err := prep.Start(ctx, d2dinput.Spec{Name: hero, Class: cidx, Seed: r.Seed}); err != nil {
@@ -928,7 +928,16 @@ func botD2dArgs(needs []string, vaultVerbs bool) []string {
 	if needsPay(needs) {
 		return append(withVault(nil, true), "--vault-pay")
 	}
-	return withRead(withVault([]string{"--lockstep"}, vaultVerbs), needs)
+	return withItemVerbs(withRead(withVault([]string{"--lockstep"}, vaultVerbs), needs), needs)
+}
+
+// withItemVerbs adds --item-verbs (the fork's `item equip` and the other player item verbs) when the scenario lists the
+// marker need "flag.item-verbs" (not a capability name: missingCaps ignores it). The sandbox runs with the flag.
+func withItemVerbs(args, needs []string) []string {
+	if slices.Contains(needs, "flag.item-verbs") {
+		return append(args, "--item-verbs")
+	}
+	return args
 }
 
 // withRead adds the fork's combat read verbs (`debug minions`, skillstate, combatlog: reads, never writes, ADR 0022) when the

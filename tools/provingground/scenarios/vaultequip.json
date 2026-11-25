@@ -464,6 +464,377 @@
           "kind": "no_writes"
         }
       ]
+    },
+    {
+      "id": "vault.equip-set10",
+      "title": "Wear set of ten identified pieces with the hero idle in town: all worn in the first virtual minutes, nothing left in the backpack",
+      "kind": "behaviour",
+      "tier": "fast",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 30,
+        "gold": 500,
+        "vault_records": {
+          "items": [
+            {
+              "code": "cap",
+              "quality": 4,
+              "unid": false
+            },
+            {
+              "code": "amu",
+              "quality": 6,
+              "unid": false
+            },
+            {
+              "code": "rin",
+              "quality": 6,
+              "unid": false
+            },
+            {
+              "code": "rin",
+              "quality": 4,
+              "unid": false
+            },
+            {
+              "code": "lbl",
+              "quality": 4,
+              "unid": false
+            },
+            {
+              "code": "lbt",
+              "quality": 6,
+              "unid": false
+            },
+            {
+              "code": "lgl",
+              "quality": 4,
+              "unid": false
+            },
+            {
+              "code": "qui",
+              "quality": 4,
+              "unid": false
+            },
+            {
+              "code": "buc",
+              "quality": 7,
+              "unid": false
+            },
+            {
+              "code": "wnd",
+              "quality": 7,
+              "unid": false
+            }
+          ]
+        }
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1,
+          "invdesk.verbs": 1,
+          "invdesk.instant": 1
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.0.id}}",
+                "{{vault.1.id}}",
+                "{{vault.2.id}}",
+                "{{vault.3.id}}",
+                "{{vault.4.id}}",
+                "{{vault.5.id}}",
+                "{{vault.6.id}}",
+                "{{vault.7.id}}",
+                "{{vault.8.id}}",
+                "{{vault.9.id}}"
+              ],
+              "now": true
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 8
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip",
+        "flag.item-verbs"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "notes": "Timer check (2026-11-25): the log window is the bound (coarse, U). V live devp28 before: the same set unidentified is refused by the game.",
+      "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "why": "the set was accepted"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in",
+          "min": 8,
+          "why": "at least eight of the ten pieces are worn in one town stop (V live devp28: Paladin 11 ten, Sorceress 3 eight, the armour and the shield need strength she lacks)"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "pack",
+          "max": 0,
+          "why": "nothing is left in the backpack"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    },
+    {
+      "id": "vault.equip-unid-one",
+      "title": "One tap on an UNIDENTIFIED vault helm, identify.policy 2: identified with the starter scroll, then worn",
+      "kind": "behaviour",
+      "tier": "fast",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 30,
+        "gold": 500,
+        "vault_records": {
+          "items": [
+            {
+              "code": "cap",
+              "quality": 4,
+              "unid": true
+            }
+          ]
+        }
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1,
+          "invdesk.verbs": 1,
+          "invdesk.instant": 1,
+          "identify.policy": 2
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.0.id}}"
+              ],
+              "slot": "auto",
+              "now": true
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 8
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip",
+        "flag.item-verbs"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "notes": "V live devp28 before the change: \"identify it first\" (verbs) or \"did not reach slot\" (clicks) for all ten unidentified pieces.",
+      "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the order was accepted"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in head",
+          "why": "worn after the identify"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "body",
+          "why": "the helm is worn"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    },
+    {
+      "id": "vault.equip-revealed",
+      "title": "A record revealed with gold in the Vault, then one tap Equip: the unit is created identified and worn with no scroll and no Cain",
+      "kind": "behaviour",
+      "tier": "fast",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 30,
+        "gold": 500,
+        "vault_records": {
+          "items": [
+            {
+              "code": "cap",
+              "quality": 4,
+              "unid": true,
+              "bare": true
+            }
+          ]
+        },
+        "stash": 7200
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1,
+          "invdesk.verbs": 1,
+          "invdesk.instant": 1,
+          "loot.vaultRevealGold": 1,
+          "identify.policy": 1
+        },
+        "api": [
+          {
+            "after_s": 10,
+            "path": "/api/vault/revealgold",
+            "body": {
+              "ids": [
+                "{{vault.0.id}}"
+              ],
+              "maxGold": 0
+            }
+          },
+          {
+            "after_s": 40,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.0.id}}"
+              ],
+              "slot": "auto",
+              "now": true
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 8
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip",
+        "vault.paygold",
+        "item.decode",
+        "flag.item-verbs"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "notes": "V live devp28 before the change: a revealed record created the unit unidentified and the game answered \"identify it first\" (the owner: 12 of 13 orders failed unidentified). Real time run (the gold reveal is not lockstep).",
+      "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "why": "the gold reveal was accepted"
+        },
+        {
+          "kind": "api_reply",
+          "index": 1,
+          "status": 200,
+          "ok": true,
+          "why": "the equip was accepted"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in head",
+          "why": "worn: the unit made from the revealed record is identified"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* not worn",
+          "max": 0,
+          "why": "no refusal"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "body",
+          "why": "the helm is worn"
+        }
+      ]
     }
   ]
 }

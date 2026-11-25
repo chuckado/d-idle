@@ -2,6 +2,7 @@ package vaultkeep
 
 import (
 	"context"
+	"d2lod-bot/internal/env"
 	"errors"
 	"fmt"
 	"strings"
@@ -84,9 +85,6 @@ func (h *fakeHand) Pick(unit uint32, slot string) (string, error) {
 	for _, c := range h.api.Carried {
 		if uint32(c.Rec.UnitID) != unit {
 			continue
-		}
-		if !c.Rec.Identified && c.Rec.Quality == 4 { // (the fake gives rare records no flag) the bot's own check (V live: leveler itemreasons)
-			return "", errors.New(c.Rec.Code + ": unidentified")
 		}
 		sl := slotsOf(c.Rec.Code)
 		for _, s := range sl {
@@ -444,25 +442,34 @@ func TestEquipOffAndRestartResumes(t *testing.T) {
 func TestEquipUnrevealedRecord(t *testing.T) {
 	for _, class := range classes {
 		t.Run(class, func(t *testing.T) {
-			// With an identify tool the item is identified in the pack and worn; without one it goes back to the vault
-			// with the reason (V live: the real wear check refuses an unidentified item, 12 owner orders failed so).
+			// The game will not wear an unidentified piece (V live, lab d2d devp28). Cain here: identified free, worn.
 			r, h := equipRig(t, class)
 			r.withTools(3)
+			r.tools.cain = true
 			id := r.addUnid(1, "cap")
-			if res := r.order(id, ""); !res.OK {
-				t.Fatalf("order: %+v", res)
-			}
+			r.order(id, "")
 			r.run()
-			if o := r.k.EquipOrderOf(id); o == nil || o.State != EqDone || h.wornIn("head") == 0 || r.tools.used != 1 {
-				t.Fatalf("order %+v worn %d scrolls used %d", o, h.wornIn("head"), r.tools.used)
+			if o := r.k.EquipOrderOf(id); o.State != EqDone || h.wornIn("head") == 0 || r.tools.used != 0 {
+				t.Fatalf("cain: %+v worn %d scrolls %d", o, h.wornIn("head"), r.tools.used)
 			}
+			// identify.policy allows scrolls: one charge, then worn.
 			r2, h2 := equipRig(t, class)
-			r2.withTools(0)
+			r2.withTools(3)
+			r2.k.IdentifyPolicy = func() int { return env.IdentifyScrolls }
 			id2 := r2.addUnid(1, "cap")
 			r2.order(id2, "")
 			r2.run()
-			if o := r2.k.EquipOrderOf(id2); o.State != EqFailed || o.Code != "identify" || h2.wornIn("head") != 0 || r2.carried(d2dctl.FakePack) != 0 {
-				t.Fatalf("no scroll: %+v pack %d", o, r2.carried(d2dctl.FakePack))
+			if o := r2.k.EquipOrderOf(id2); o.State != EqDone || h2.wornIn("head") == 0 || r2.tools.used != 1 {
+				t.Fatalf("scroll policy: %+v scrolls %d", o, r2.tools.used)
+			}
+			// neither: the order fails with the reason, the piece is back in the vault, no scroll is spent.
+			r3, h3 := equipRig(t, class)
+			r3.withTools(3)
+			id3 := r3.addUnid(1, "cap")
+			r3.order(id3, "")
+			r3.run()
+			if o := r3.k.EquipOrderOf(id3); o.State != EqFailed || o.Code != "identify" || o.Reason != ReasonEqNeedsID || h3.wornIn("head") != 0 || r3.carried(d2dctl.FakePack) != 0 || r3.tools.used != 0 {
+				t.Fatalf("no cain: %+v pack %d scrolls %d", o, r3.carried(d2dctl.FakePack), r3.tools.used)
 			}
 		})
 	}
@@ -635,6 +642,52 @@ func TestFullStashDoesNotBlockEquipOrders(t *testing.T) {
 			r.run()
 			if o := r.k.EquipOrderOf(id); o == nil || o.State != EqDone || h.wornIn("head") == 0 {
 				t.Fatalf("the equip order waited behind a full stash: %+v", o)
+			}
+		})
+	}
+}
+
+// A set bigger than the free pack cells completes in chunks in one visit. MUST FAIL when the keep runs once per visit.
+func TestEquipSetInChunksWhenThePackIsShort(t *testing.T) {
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			r, h := equipRig(t, class)
+			r.api.PackCols, r.api.PackRows = 1, 1 // one free cell
+			a, b := r.addID(1, "cap"), r.addID(2, "wsp")
+			res := r.k.EquipSet(context.Background(), []string{a, b}, false)
+			if !res[0].OK || !res[1].OK {
+				t.Fatalf("%+v", res)
+			}
+			r.run()
+			if h.wornIn("head") == 0 || h.wornIn("rhand") == 0 {
+				t.Fatalf("head %d rhand %d: the second piece waited for a free cell", h.wornIn("head"), h.wornIn("rhand"))
+			}
+		})
+	}
+}
+
+// The user's case: the record was revealed in the vault (Identified, Unlocked, Raw still the dropped bytes). The unit made
+// from it is created with the identified flag set (bit 4 of the first flag byte), so the game wears it with no scroll and
+// no Cain. MUST FAIL if the bytes are sent as they are. The fake's bytes are text, so the bit itself is asserted here and
+// the engine side by the Proving Ground scenario vault.equip-revealed.
+func TestCreateHexSetsTheIdentifiedBitOfARevealedRecord(t *testing.T) {
+	raw := "4a4d" + "00008000" + "6500" + "1292"
+	for _, class := range classes {
+		t.Run(class, func(t *testing.T) {
+			un := vault.Rec{Item: vault.Item{Raw: raw}}
+			if got := createHex(un); got != raw {
+				t.Fatalf("an unrevealed record changed: %s", got)
+			}
+			rv := un
+			rv.Identified, rv.Unlocked = true, true
+			got := createHex(rv)
+			if got[4:6] != "10" || got[6:] != raw[6:] {
+				t.Fatalf("revealed record: %s, want bit 4 set in byte 2 and nothing else changed (%s)", got, raw)
+			}
+			idOnly := un
+			idOnly.Identified = true // identified at pickup: Raw is already the identified bytes
+			if createHex(idOnly) != raw {
+				t.Fatal("an identified record must keep its own bytes")
 			}
 		})
 	}

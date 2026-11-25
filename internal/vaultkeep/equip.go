@@ -2,6 +2,7 @@ package vaultkeep
 
 import (
 	"context"
+	"d2lod-bot/internal/env"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -34,6 +35,8 @@ const (
 	EqCancelled  = "cancelled"
 	ReasonEqOff  = "one-tap Equip is switched off (loot.vaultEquip 0, loot.vault 0 or a measured run)"
 	ReasonEqNone = "this bot cannot equip from the vault"
+	// ReasonEqNeedsID: the game will not wear an unidentified item; the player decides what may be spent.
+	ReasonEqNeedsID = "reveal it first: the game will not wear an unidentified item (Reveal it in the Vault; Cain is not here and identify.policy does not allow scrolls)"
 )
 
 // Slot words of an order. Left and right are the game's left and right ring (the Inventory page's words); auto lets the bot
@@ -576,12 +579,19 @@ func (k *Keeper) equipOne(ctx context.Context, st *vault.Store, id string) strin
 	}
 	k.setOrder(id, func(o *EquipOrder) { o.Unit = int(unit) })
 	k.Hand.Protect(unit) // the chores must not sell it between the withdraw and the equip
-	// The bot's own wear check refuses an unidentified magic or better item (V live: the owner's orders, 12 failures
-	// "unidentified"; docs/leveler.md). The item is identified in the pack first, the same step as Keep and Reveal.
+	// V live (lab d2d devp28, scenario vault.equip-set-unid, 10 pieces): the game refuses to wear an unidentified piece
+	// ("identify it first"; the click path "did not reach slot"). The unit is identified in the pack first: free with Cain
+	// here, else one scroll or tome charge only when identify.policy allows scrolls. Never the gold reveal (it leaves the
+	// created unit unidentified). Otherwise the order fails with the real reason and the piece goes back to the vault.
 	if !rec.Identified && k.Tools != nil {
-		if _, why, _ := k.identifyUnit(ctx, rec, int(unit), k.free()); why != "" {
+		free := k.free()
+		if !free && !k.scrollsAllowed() {
+			k.failOrder(id, "identify", ReasonEqNeedsID)
+			return fmt.Sprintf("equip: %s not worn: %s (%s)", o.Name, ReasonEqNeedsID, k.sendBack(ctx, st, unit, o.Name))
+		}
+		if _, why, _ := k.identifyUnit(ctx, rec, int(unit), free); why != "" {
 			k.failOrder(id, "identify", why)
-			return fmt.Sprintf("equip: %s not worn: it needs identifying first: %s (%s)", o.Name, why, k.sendBack(ctx, st, unit, o.Name))
+			return fmt.Sprintf("equip: %s not worn: identifying it failed: %s (%s)", o.Name, why, k.sendBack(ctx, st, unit, o.Name))
 		}
 	}
 	slot, err := k.Hand.Pick(unit, o.Slot)
@@ -633,7 +643,7 @@ func (k *Keeper) unitFor(ctx context.Context, rec vault.Rec) int {
 	}
 	best := 0
 	for _, h := range have {
-		if strings.EqualFold(h.Norm, rec.Raw) && h.UnitID > best {
+		if strings.EqualFold(h.Norm, createHex(rec)) && h.UnitID > best {
 			best = h.UnitID
 		}
 	}
@@ -759,4 +769,9 @@ func (k *Keeper) EquipSet(ctx context.Context, ids []string, wantNow bool) []Res
 		out[p.pos] = k.EquipEnqueue(ctx, p.id, slot, wantNow)
 	}
 	return out
+}
+
+// scrollsAllowed says that identify.policy lets the bot spend a scroll or tome charge on an Equip.
+func (k *Keeper) scrollsAllowed() bool {
+	return k.IdentifyPolicy != nil && k.IdentifyPolicy() == env.IdentifyScrolls
 }

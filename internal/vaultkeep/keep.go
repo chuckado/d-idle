@@ -12,6 +12,7 @@ package vaultkeep
 
 import (
 	"context"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"sort"
@@ -380,7 +381,15 @@ func (k *Keeper) Run(ctx context.Context) []string {
 	lines = append(lines, k.resumeGold(ctx)...) // an order a restart or a lost reply left unsettled
 	lines = append(lines, k.resumeSale(ctx)...)
 	lines = append(lines, k.flushQueued(ctx)...)
-	lines = append(lines, k.runEquip(ctx)...)
+	eq := k.runEquip(ctx)
+	lines = append(lines, eq...)
+	// A set bigger than the free pack cells goes in chunks: the pieces made so far are worn (or sent back to the vault),
+	// which frees their cells, then the next ones are taken out, until nothing moves any more.
+	for round := 0; round < maxSetRounds && len(eq) > 0 && ctx.Err() == nil && k.packWaiting(); round++ {
+		lines = append(lines, k.runKeep(ctx)...)
+		eq = k.runEquip(ctx)
+		lines = append(lines, eq...)
+	}
 	lines = append(lines, k.runReveal(ctx)...)
 	return append(lines, k.runSell(ctx)...)
 }
@@ -558,7 +567,7 @@ func placeOf(r vault.Rec) string {
 func (k *Keeper) presentIn(st *vault.Store, r vault.Rec, have []d2dctl.VaultRecord) bool {
 	n := 0
 	for _, h := range have {
-		if strings.EqualFold(h.Norm, r.Raw) {
+		if strings.EqualFold(h.Norm, createHex(r)) {
 			n++
 		}
 	}
@@ -616,7 +625,7 @@ func (k *Keeper) createOne(ctx context.Context, st *vault.Store, r vault.Rec) (*
 	}
 	// Identify works on backpack items, so a Keep that also asks for Reveal lands in the backpack (the stash chore files it).
 	o := d2dctl.CreateOpts{Pack: r.Where == vault.WhereInv || r.RevQ && !r.Identified && k.Tools != nil, Key: keyPrefix + r.ID}
-	res, err := k.API.ItemCreate(ctx, r.Raw, o)
+	res, err := k.API.ItemCreate(ctx, createHex(r), o)
 	if err != nil {
 		switch {
 		case errors.Is(err, d2dctl.ErrStashFull):
@@ -661,7 +670,7 @@ func (k *Keeper) createOne(ctx context.Context, st *vault.Store, r vault.Rec) (*
 	if err != nil || len(back) == 0 {
 		return nil, fmt.Sprintf("keep: %s created (unit %d) but the read-back failed, left in flight", r.Name, res.ID), true
 	}
-	if !strings.EqualFold(back[0].Norm, r.Raw) {
+	if !strings.EqualFold(back[0].Norm, createHex(r)) {
 		why := ReasonReadback
 		if _, uerr := k.API.ItemVault(ctx, res.ID); uerr != nil {
 			why += "; it could not be removed again, check the stash"
@@ -816,4 +825,38 @@ func (k *Keeper) OfferedMethods() []string {
 		return []string{"free", "ether", "gold"}
 	}
 	return k.Methods()
+}
+
+// maxSetRounds bounds the take-out and wear rounds of one visit (a full body is ten pieces).
+const maxSetRounds = 12
+
+// packWaiting reports that a backpack create (an Equip order's) is queued and was held back because the pack had no room.
+func (k *Keeper) packWaiting() bool {
+	st := k.store()
+	if st == nil {
+		return false
+	}
+	for _, r := range st.KeepQueued() {
+		if r.Where == vault.WhereInv && !r.InFlight && Reason(r.Reason) == ReasonPackFull {
+			return true
+		}
+	}
+	return false
+}
+
+// createHex is the item bytes the game is given for a record. A record that was revealed in the vault (gold, Ether:
+// Identified and Unlocked) keeps the bytes the game dropped, which carry the affixes but the identified flag clear; the
+// game refuses to wear such a unit ("identify it first", V live lab d2d devp28). Setting bit 4 of the first flag byte (the
+// identified flag of the item header, S: the save format; U live until the lab run) creates the unit identified, so a
+// revealed record comes out of the vault revealed, with no scroll and no Cain.
+func createHex(r vault.Rec) string {
+	if !r.Identified || !r.Unlocked {
+		return r.Raw
+	}
+	b, err := hex.DecodeString(r.Raw)
+	if err != nil || len(b) < 4 {
+		return r.Raw
+	}
+	b[2] |= 0x10
+	return hex.EncodeToString(b)
 }
