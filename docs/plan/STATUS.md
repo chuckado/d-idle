@@ -505,6 +505,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a6e420c22 11-25 09:49 `Merge agent/toolstrade64: Merge branch 'main' into toolstrade64` (toolstrade64)
+- 27df43c11 11-25 09:48 `Merge branch 'main' into toolstrade64` (-)
 - 31f2589e7 11-25 09:38 `Merge agent/equipv2b: Merge branch 'main' into equipv2b` (equipv2b)
 - 4882e2d2b 11-25 09:36 `Merge branch 'main' into equipv2b` (-)
 - 5da9a5b64 11-25 09:28 `Merge agent/toolstrade63: toolstrade63: two repairs that leave an item as it was before it stops counting; the sum is read before the click` (toolstrade63)
@@ -513,6 +515,4 @@
 - 326777f2e 11-25 00:17 `Merge branch 'main' into toolstrade62` (-)
 - 3ec77eaa9 11-25 00:06 `Merge agent/equipv2: equipv2: task card (allow-adr), result line` (equipv2)
 - 09e42db26 11-24 22:24 `Merge branch 'main' into toolstrade62` (-)
-- 240ce87c4 11-24 22:16 `Merge agent/toolstrade61: toolstrade61: the corpse test reads its click counter atomically (a data race under -race)` (toolstrade61)
-- 3fd90da24 11-24 20:18 `Merge agent/vaultequip5: Merge branch 'main' into vaultequip5` (vaultequip5)
 <!-- statusgen:end -->
