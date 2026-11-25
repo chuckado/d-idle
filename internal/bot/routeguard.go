@@ -183,7 +183,7 @@ func (r *Runner) areaGuardWhy(s *d2.Snapshot, a int) string {
 	case task.TowerGuarded(task.Area(a)):
 		return r.towerGuardWhy(s)
 	}
-	return ""
+	return r.earlyRouteWhy(s, a)
 }
 
 // areaLeaveWhy is areaGuardWhy for a hero that already stands in area a: the road guard uses its mid-route verdict.
@@ -195,6 +195,9 @@ func (r *Runner) areaLeaveWhy(s *d2.Snapshot, a int) string {
 			}
 		}
 		return r.barracksGuardWhy(s, a)
+	}
+	if _, early := earlyRouteAt(a); early {
+		return "" // a hero already in the Underground Passage or the Dark Wood walks on or home: the guard is about entering
 	}
 	return r.areaGuardWhy(s, a)
 }
@@ -249,6 +252,11 @@ func (r *Runner) guardedAreas(s *d2.Snapshot, ex map[int]bool) {
 func (r *Runner) guardedAreasNoFarm(s *d2.Snapshot, ex map[int]bool) {
 	if a := r.stalePackArea(s); a != 0 {
 		ex[a] = true // the pack we fled from is still there: level elsewhere until the kit is rebuilt
+	}
+	for _, a := range []int{10, 5} { // the early road (earlyroutes.json): the level picker never offers it while it is closed
+		if r.earlyRouteWhy(s, a) != "" {
+			ex[a] = true
+		}
 	}
 	if r.denGated(s) {
 		ex[areaDenOfEvil] = true // the Den waits for its class floor (campaign.denMinLevel*): level in Blood Moor

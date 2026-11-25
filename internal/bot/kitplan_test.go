@@ -2,9 +2,11 @@ package bot
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/supply"
 )
 
@@ -149,5 +151,51 @@ func TestBossKitIsNotAskedWhileAndarielIsHeld(t *testing.T) {
 		if g.r.bossPurse() != 0 {
 			t.Errorf("%v: boss purse while held", class)
 		}
+	}
+}
+
+// Questy bed 2026-11-25: a clvl 4 Paladin with no potions walked Stony Field, the Underground Passage and toward the Dark Wood and
+// died. The early road (earlyroutes.json) is closed below the class family's level and short of 2 healing potions and a portal
+// scroll; the owner's try anyway opens it. Two classes (melee 7, caster 8).
+func TestEarlyRouteClosesBelowTheLevelAndTheKit(t *testing.T) {
+	for _, tc := range []struct {
+		class   d2.Class
+		level   int
+		potions int
+		want    string // "" open, else a part of the reason
+	}{
+		{d2.Paladin, 4, 3, "level 7 needed"},
+		{d2.Paladin, 7, 0, "healing potions"},
+		{d2.Paladin, 7, 2, ""},
+		{d2.Sorceress, 7, 3, "level 8 needed"},
+		{d2.Sorceress, 8, 2, ""},
+	} {
+		g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
+		g.w.set(func(w *world) {
+			w.class, w.level, w.area = tc.class, tc.level, 3
+			var keep []d2.Unit
+			for _, u := range w.items {
+				if u.Class != 1 && u.Class != 5 { // the rig's own potions and scrolls go: the case sets them
+					keep = append(keep, u)
+				}
+			}
+			w.items = keep
+		})
+		for i := 0; i < tc.potions; i++ {
+			g.w.set(func(w *world) {
+				w.items = append(w.items, d2.Unit{ID: uint32(700 + i), Type: d2.TypeItem, Class: 1, Item: &d2.Item{Where: d2.ContBelt}})
+			})
+		}
+		g.w.set(func(w *world) {
+			w.items = append(w.items, d2.Unit{ID: 799, Type: d2.TypeItem, Class: 5, Item: &d2.Item{Where: d2.ContInventory}}) // a portal scroll
+		})
+		g.r.poll()
+		got := g.r.earlyRouteWhy(g.r.latest(), 10)
+		if tc.want == "" && got != "" || tc.want != "" && !strings.Contains(got, tc.want) {
+			t.Errorf("%v clvl %d potions %d: %q, want %q", tc.class, tc.level, tc.potions, got, tc.want)
+		}
+	}
+	if (&Runner{}).earlyRouteWhy(nil, 10) != "" {
+		t.Error("no snapshot must not close the road")
 	}
 }
