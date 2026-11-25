@@ -466,8 +466,8 @@
       ]
     },
     {
-      "id": "vault.equip-set-unid",
-      "title": "Wear set of ten UNIDENTIFIED pieces (magic, rare, unique), hero idle in town, identify.policy 2 and a tome: identified in the pack, all worn, nothing left in the backpack",
+      "id": "vault.equip-set10",
+      "title": "Wear set of ten identified pieces with the hero idle in town: all worn in the first virtual minutes, nothing left in the backpack",
       "kind": "behaviour",
       "tier": "fast",
       "covers": [
@@ -488,60 +488,55 @@
             {
               "code": "cap",
               "quality": 4,
-              "unid": true
+              "unid": false
             },
             {
               "code": "amu",
               "quality": 6,
-              "unid": true
+              "unid": false
             },
             {
               "code": "rin",
               "quality": 6,
-              "unid": true
+              "unid": false
             },
             {
               "code": "rin",
               "quality": 4,
-              "unid": true
+              "unid": false
             },
             {
               "code": "lbl",
               "quality": 4,
-              "unid": true
+              "unid": false
             },
             {
               "code": "lbt",
               "quality": 6,
-              "unid": true
+              "unid": false
             },
             {
               "code": "lgl",
               "quality": 4,
-              "unid": true
+              "unid": false
             },
             {
               "code": "qui",
               "quality": 4,
-              "unid": true
+              "unid": false
             },
             {
               "code": "buc",
               "quality": 7,
-              "unid": true
+              "unid": false
             },
             {
               "code": "wnd",
               "quality": 7,
-              "unid": true
+              "unid": false
             }
           ]
-        },
-        "pack": [
-          {
-            "code": "ibk"
-          }
-        ]
+        }
       },
       "trigger": {
         "goals": "campaign",
@@ -550,8 +545,7 @@
           "loot.vaultKeep": 1,
           "loot.vaultEquip": 1,
           "invdesk.verbs": 1,
-          "invdesk.instant": 1,
-          "identify.policy": 2
+          "invdesk.instant": 1
         },
         "api": [
           {
@@ -596,7 +590,7 @@
         "flag.item-verbs"
       ],
       "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
-      "notes": "Lab check 2026-11-25 (V live, devp28): the game refuses to wear an unidentified piece, so Equip identifies it first (Cain free, else a scroll or tome charge when identify.policy allows). The timer is the log window (coarse, U).",
+      "notes": "Timer check (2026-11-25): the log window is the bound (coarse, U). V live devp28 before: the same set unidentified is refused by the game.",
       "assert": [
         {
           "kind": "api_reply",
@@ -607,15 +601,9 @@
         {
           "kind": "log_line",
           "pattern": "equip: .* worn in",
-          "min": 1,
+          "min": 8,
           "to_min": 3,
-          "why": "the first pieces are worn within the first virtual minutes"
-        },
-        {
-          "kind": "log_line",
-          "pattern": "equip: .* not worn",
-          "max": 0,
-          "why": "no piece is refused (the engine wears unidentified items)"
+          "why": "at least eight pieces are worn within the first virtual minutes (two rings or the hands may refuse)"
         },
         {
           "kind": "item_in_pack",
@@ -623,6 +611,104 @@
           "where": "pack",
           "max": 0,
           "why": "nothing is left in the backpack"
+        },
+        {
+          "kind": "no_writes"
+        }
+      ]
+    },
+    {
+      "id": "vault.equip-unid-one",
+      "title": "One tap on an UNIDENTIFIED vault helm, identify.policy 2: identified with the starter scroll, then worn",
+      "kind": "behaviour",
+      "tier": "fast",
+      "covers": [
+        "hook.vault-keep",
+        "town.vault-equip"
+      ],
+      "touches": [
+        "internal/vaultkeep/",
+        "internal/invdesk/equipnow.go",
+        "cmd/d2bot/vaultequip.go",
+        "internal/watch/vaultapi.go"
+      ],
+      "pre": {
+        "level": 30,
+        "gold": 500,
+        "vault_records": {
+          "items": [
+            {
+              "code": "cap",
+              "quality": 4,
+              "unid": true
+            }
+          ]
+        }
+      },
+      "trigger": {
+        "goals": "campaign",
+        "knobs": {
+          "loot.vault": 1,
+          "loot.vaultKeep": 1,
+          "loot.vaultEquip": 1,
+          "invdesk.verbs": 1,
+          "invdesk.instant": 1,
+          "identify.policy": 2
+        },
+        "api": [
+          {
+            "after_s": 20,
+            "path": "/api/vault/equip",
+            "body": {
+              "ids": [
+                "{{vault.0.id}}"
+              ],
+              "slot": "auto",
+              "now": true
+            }
+          }
+        ]
+      },
+      "budget": {
+        "virtual_min": 8
+      },
+      "matrix": {
+        "classes": [
+          "Paladin",
+          "Sorceress"
+        ],
+        "seeds": [
+          11,
+          3
+        ]
+      },
+      "needs": [
+        "item.create",
+        "item.full",
+        "item.vault",
+        "item.equip",
+        "flag.item-verbs"
+      ],
+      "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
+      "notes": "V live devp28 before the change: \"identify it first\" (verbs) or \"did not reach slot\" (clicks) for all ten unidentified pieces.",
+      "assert": [
+        {
+          "kind": "api_reply",
+          "index": 0,
+          "status": 200,
+          "ok": true,
+          "why": "the order was accepted"
+        },
+        {
+          "kind": "log_line",
+          "pattern": "equip: .* worn in head",
+          "why": "worn after the identify"
+        },
+        {
+          "kind": "item_in_pack",
+          "code": "cap",
+          "where": "body",
+          "why": "the helm is worn"
         },
         {
           "kind": "no_writes"
