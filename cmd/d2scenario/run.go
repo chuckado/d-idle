@@ -908,8 +908,10 @@ func withVault(args []string, on bool) []string {
 
 // needsPay is true for a scenario that needs a stash write of the fork: the gold reveal's paygold or the instant sale's creditgold
 // (both behind --vault-pay, both refused under --lockstep).
+// The direct equip verbs (item.equipdirect, ADR 0029 amended 2026-11-25) are the same kind of player-ordered write and are refused
+// under --lockstep too, so they run unmeasured with --vault-verbs (which gates them); --vault-pay is harmless there.
 func needsPay(needs []string) bool {
-	return slices.Contains(needs, "vault.paygold") || slices.Contains(needs, "vault.creditgold")
+	return slices.Contains(needs, "vault.paygold") || slices.Contains(needs, "vault.creditgold") || slices.Contains(needs, "item.equipdirect")
 }
 
 // withPay adds --vault-pay when the scenario needs the capability vault.paygold, so the SETUP d2d lists it in `caps` (it pays nothing: the

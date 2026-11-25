@@ -5,7 +5,7 @@
 // Reveal and Sell (slice V6) also only queue: the price is shown before the click (revealPlan) and the states come from the GET. The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
 // fed the rows as an inventory view); every text comes from /watch/vault.json or the API and goes in through textContent.
 // Every press is read back: the list is fetched again and what it says is what the page shows.
-import { PAGE, clearDelta, comparePlan, nextCompare, validCompare, equipPlan, equipOneTap, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, identifyAllPlan, revealBarModel, revealMethods, revealPlan, sellAllChip, sellAllConfirm, sellAllPlan, sellLabel, sellPlan, sellWhy, mergeQuotes, toQuery, toTipView, when } from '/watch/vault-logic.js';
+import { PAGE, clearDelta, comparePlan, nextCompare, validCompare, equipPlan, equipOneTap, equipWornWords, equipUpgradeWord, artKey, windowRange, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, identifyAllPlan, revealBarModel, revealMethods, revealPlan, sellAllChip, sellAllConfirm, sellAllPlan, sellLabel, sellPlan, sellWhy, mergeQuotes, toQuery, toTipView, when } from '/watch/vault-logic.js';
 
 export const ROUTE = '/api/vault';
 const POLL_MS = 6000;
@@ -927,7 +927,7 @@ export function mountVault(d) {
   const CHUNK = 150; // the answer body is capped at 4 KiB: the server takes this many ids at a time
   async function act(route, ids, confirm, opts) {
     let j = null;
-    const failed = [], done = [], already = [], sales = [];
+    const failed = [], done = [], already = [], sales = [], equipped = [];
     for (let i = 0; i < ids.length; i += CHUNK) {
       const body = { ids: ids.slice(i, i + CHUNK) };
       if (confirm) body.confirm = true;
@@ -941,6 +941,7 @@ export function mountVault(d) {
       (r.failed || []).forEach((x) => failed.push(x));
       (r.already || []).forEach((x) => already.push(x));
       if (r.sale) sales.push(r.sale);
+      (r.equipped || []).forEach((x) => equipped.push(x));
       if (!r.done && !r.failed) { if (r.error && REAL.test(route)) failed.push(r); break; } // a refusal of the whole request (read only, bad body)
     }
     if (!j) { setMsg('bad', T.noAnswer); await reload(true); return false; }
@@ -948,7 +949,11 @@ export function mountVault(d) {
     const now = opts && opts.now;
     const word = route.endsWith('/pin') ? T.okPin : route.endsWith('/unpin') ? T.okUnpin : route.endsWith('/equip') ? T.okEquipSet : route.endsWith('/keep') ? (now ? T.okKeepNow : T.okKeep)
       : route.endsWith('/reveal') ? (opts && opts.ether ? T.okRevealEther : now ? T.okRevealNow : T.okReveal) : route.endsWith('/sell') ? (now ? T.okSellNow : T.okSell) : route.endsWith('/cancel') ? T.okCancel : T.okDiscard;
-    if (sales.length) { // the instant sale: what was paid and what stayed, in the server's words
+    if (equipped.length || (route.endsWith('/equip') && failed.length && !done.length)) { // Equip v2: worn at once, per piece
+      const names = {}; S.items.forEach((i) => { names[i.id] = i.name; });
+      const w = equipWornWords({ equipped, failed }, names, T);
+      setMsg(w.kind, w.text || T.noAnswer);
+    } else if (sales.length) { // the instant sale: what was paid and what stayed, in the server's words
       const gold = sales.reduce((a, x) => a + (x.state === 'done' ? x.gold : 0), 0), last = sales[sales.length - 1];
       const left = sellWhy(groupFails(failed), T.sellWhyWords);
       const text = done.length ? fmt(T.okSold, { n: done.length, gold: grp(gold), stash: grp(last.stashAfter || 0) }) + (failed.length ? fmt(T.okSoldLeft, { k: failed.length, why: left }) : '') : (failed[0] && failed[0].error) || last.line || T.noAnswer;
@@ -1196,6 +1201,13 @@ export function mountVault(d) {
   }
   async function equipPress(it, slot, now) {
     const r = await d.post('/api/vault/equip', { ids: [it.id], slot, now: !!now });
+    if (r && r.equipped && r.equipped.length) { // Equip v2: worn already, the answer is the result
+      const w = equipWornWords(r, { [it.id]: it.name }, T);
+      setMsg(w.kind, w.text);
+      closeSheet(true);
+      await reload(true);
+      return;
+    }
     if (r && r.ok) setMsg('good', T.equipSent);
     else setMsg('bad', (r && r.failed && r.failed[0] && r.failed[0].error) || (r && r.error) || T.noAnswer);
     await reload(true);
@@ -1240,10 +1252,10 @@ export function mountVault(d) {
         const label = b.slot === 'auto' ? (pl.ring ? T.equipGoAuto : T.equipGo) : b.slot === 'left' ? T.equipGoLeft : T.equipGoRight;
         const bb = btn(label, { key: 'equip-' + b.slot, variant: b.slot === 'auto' ? undefined : 'ghost' });
         if (!b.can) { bb.setAttribute('aria-disabled', 'true'); why(bb, b.why, eqWhys, label); }
-        bb.addEventListener('click', () => { if (b.can) equipPress(it, b.slot, cb.checked); });
+        bb.addEventListener('click', () => { if (b.can) equipPress(it, b.slot, sh.direct ? true : cb.checked); });
         row.appendChild(bb);
       });
-      sheetCard.appendChild(recall);
+      if (!sh.direct) sheetCard.appendChild(recall); // Equip v2 has no waiting for a safe moment: no "Do it now"
     } else if (pl.state === 'reveal') {
       const rb = btn(T.equipRevealGo, { key: 'equip-reveal' });
       rb.addEventListener('click', () => { closeSheet(true); revealAct([it.id], false); });
@@ -1254,7 +1266,7 @@ export function mountVault(d) {
       row.appendChild(cx);
     }
     // Do it now: only when the command exists (knob on), the hero is in the field and an order is waiting for town.
-    const rv = recallView;
+    const rv = sh.direct ? null : recallView;
     if (rv && rv.enabled && pl.state === 'active') {
       if (rv.state && rv.state !== 'idle') {
         const rs = el('p', 'vt-eq-state', fmt((T.recallStates || {})[rv.state] || rv.state, { why: rv.reason || '' })); rs.setAttribute('role', 'status'); rs.dataset.key = 'recall-state';
@@ -1267,7 +1279,7 @@ export function mountVault(d) {
       }
     }
     if (rv && rv.enabled && pl.state === 'active' && !rv.in_town) { const fw = el('p', 'vt-eq-state', T.equipWaitField); fw.dataset.key = 'equip-wait-field'; sheetCard.appendChild(fw); }
-    if (!it.identified && (pl.state === 'ready' || pl.state === 'active')) {
+    if (!sh.direct && !it.identified && (pl.state === 'ready' || pl.state === 'active')) {
       const ub = el('p', 'vt-eq-unid', T.equipUnid); ub.dataset.key = 'equip-unid'; sheetCard.appendChild(ub);
       const ra = S.view && S.view.act && S.view.act.reveal, gd = ra && ra.gold || {};
       if (revealMethods(ra).has('gold') && gd.on && pl.state === 'ready') {
@@ -1283,7 +1295,7 @@ export function mountVault(d) {
     row.appendChild(close);
     sheetCard.appendChild(row);
     sheetCard.appendChild(eqWhys);
-    sheetCard.appendChild(el('p', 'vt-eq-help', T.equipNote));
+    sheetCard.appendChild(el('p', 'vt-eq-help', sh.direct ? T.equipNoteDirect : T.equipNote));
     if (S.sheet) S.sheet.first = close;
   }
   function closeSheet(noFocus) {

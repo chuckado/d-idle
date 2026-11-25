@@ -334,9 +334,11 @@ cmd/d2bot/task_test.go  credit-runner  qdmatrix
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/vaultact_test.go  credit-runner  vaultv6
 cmd/d2bot/vaultequip.go  credit-runner  equipswap
+cmd/d2bot/vaultequip.go  credit-runner  equipv2
 cmd/d2bot/vaultequip.go  credit-runner  vaultwire
 cmd/d2bot/vaultequip_test.go  credit-runner  vaultwire
 cmd/d2bot/vaultkeep.go  credit-runner  bulkid
+cmd/d2bot/vaultkeep.go  credit-runner  equipv2
 cmd/d2bot/vaultkeep.go  credit-runner  identifyall
 cmd/d2bot/vaultkeep.go  credit-runner  sellall
 cmd/d2bot/vaultkeep.go  credit-runner  vaultfull
@@ -374,6 +376,7 @@ cmd/d2scenario/main.go  credit-runner  pgledger
 cmd/d2scenario/main_test.go  credit-runner  agencyp0
 cmd/d2scenario/prov.go  credit-runner  pgprov
 cmd/d2scenario/run.go  credit-runner  agencyp0
+cmd/d2scenario/run.go  credit-runner  equipv2
 cmd/d2scenario/run.go  credit-runner  pgledger
 cmd/d2scenario/run.go  credit-runner  pgprov
 cmd/d2scenario/run.go  credit-runner  pgtaps
@@ -433,6 +436,7 @@ docs/adr/  credit-runner  fabledecisions2
 docs/adr/0014-memory-writes-allowed-no-crutch.md  credit-runner  vaultpay
 docs/adr/0018-fun-loop-expedition-ledger-2026-11-07.md  credit-runner  adrfable
 docs/adr/0020-proving-ground-and-stat-skill-agency.md  credit-runner  adrfable
+docs/adr/0029-vault-gold-payment.md  credit-runner  equipv2
 docs/adr/0029-vault-gold-payment.md  credit-runner  vaultpay
 docs/adr/README.md  credit-runner  adrfable
 docs/adr/README.md  credit-runner  vaultpay
@@ -461,6 +465,7 @@ docs/contracts/merc-policy.md  credit-runner  mercrevive2
 docs/d2d-determinism.md  credit-runner  pgclock
 docs/d2d-loot.md  credit-runner  groundquality
 docs/decisions.md  credit-runner  adrfable
+docs/decisions.md  credit-runner  equipv2
 docs/decisions.md  credit-runner  fabledecisions2
 docs/decisions.md  credit-runner  vaultpay
 docs/design/bulk-identify-2026-11-18.md  credit-runner  bulkid-design
@@ -895,6 +900,7 @@ docs/upstream/verifier-p17-2026-11-15.md  credit-runner  verifyp17
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
 docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
 docs/vault.md  credit-runner  equipswap
+docs/vault.md  credit-runner  equipv2
 docs/vault.md  credit-runner  identifyall
 docs/vault.md  credit-runner  nocards
 docs/vault.md  credit-runner  sellall
@@ -1271,6 +1277,7 @@ internal/d2dcombat/rig.go  credit-runner  verbs2
 internal/d2dctl  credit-runner  countess3
 internal/d2dctl  live-agent  k1layout
 internal/d2dctl/  credit-runner  dlv-reads
+internal/d2dctl/  credit-runner  equipv2
 internal/d2dctl/fake/fake.go  credit-runner  verbs2
 internal/d2dctl/fake/fake.go  credit-runner  warptrigger
 internal/d2dctl/item_verbs.go  credit-runner  itemverbs2
@@ -1375,6 +1382,7 @@ internal/env/tuning_input.go  credit-runner  verbs2
 internal/env/tuning_invdesk.go  credit-runner  botinstant
 internal/env/tuning_invdesk.go  credit-runner  gearsets
 internal/env/tuning_items.go  credit-runner  q4runes
+internal/env/tuning_loot.go  credit-runner  equipv2
 internal/env/tuning_loot.go  credit-runner  goldprio
 internal/env/tuning_loot.go  credit-runner  hourfix
 internal/env/tuning_loot.go  credit-runner  lootwire3
@@ -1426,6 +1434,7 @@ internal/invdesk/mercverbs_test.go  credit-runner  uib9
 internal/invdesk/mover.go  credit-runner  itemverbs2
 internal/invdesk/mover.go  credit-runner  q13input
 internal/invdesk/mover_test.go  credit-runner  itemverbs2
+internal/invdesk/pinslot.go  credit-runner  equipv2
 internal/invdesk/sellnow.go  credit-runner  botsell
 internal/invdesk/sellnow_test.go  credit-runner  botsell
 internal/invdesk/sets.go  credit-runner  charreq
@@ -1843,6 +1852,7 @@ internal/vaultkeep  credit-runner  vaultpay
 internal/vaultkeep  credit-runner  vaultreveal
 internal/vaultkeep  credit-runner  vaultv5
 internal/vaultkeep  credit-runner  vaultv6
+internal/vaultkeep/  credit-runner  equipv2
 internal/vaultkeep/  credit-runner  vaultfull
 internal/vaultkeep/equip.go  credit-runner  equipswap
 internal/vaultkeep/equip_test.go  credit-runner  equipswap
@@ -1854,6 +1864,7 @@ internal/watch  credit-runner  cainfix
 internal/watch  credit-runner  identifyall
 internal/watch  credit-runner  sellall
 internal/watch  credit-runner  town9
+internal/watch/  credit-runner  equipv2
 internal/watch/a11ycontrast_test.go  credit-runner  uia11y
 internal/watch/a11ypages_test.go  credit-runner  uia11y
 internal/watch/areamap_test.go  credit-runner  uis6
@@ -2598,6 +2609,7 @@ tools/provingground/scenarios/stepgrounds_gen.json  credit-runner  necrosteps
 tools/provingground/scenarios/tiers.json  credit-runner  pgstability
 tools/provingground/scenarios/townplan.json  credit-runner  town1
 tools/provingground/scenarios/townplan.json  credit-runner  town5
+tools/provingground/scenarios/vaultequipv2.json  credit-runner  equipv2
 tools/provingground/scenarios/vaultfull.json  credit-runner  vaultfull
 tools/provingground/scenarios/vaultreveal.json  credit-runner  identifyall
 tools/provingground/scenarios/vaultreveal.json  credit-runner  vaultpay

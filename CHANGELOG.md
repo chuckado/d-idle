@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- equipv2: task card (allow-adr), result line <!--sg:agent/equipv2-->
 - toolstrade61: the corpse test reads its click counter atomically (a data race under -race) <!--sg:agent/toolstrade61-->
 - Merge branch 'main' into vaultequip5 <!--sg:agent/vaultequip5-->
 - Merge branch 'main' into vaultequip4 <!--sg:agent/vaultequip4-->

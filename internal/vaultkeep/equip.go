@@ -128,6 +128,9 @@ type EquipOrder struct {
 	Worn      string    `json:"worn,omitempty"`      // desk slot it went to
 	Displaced []string  `json:"displaced,omitempty"` // names of the items that came off
 	Where     string    `json:"where,omitempty"`     // "vault", or "backpack" when the vault had no room
+	Direct    bool      `json:"direct,omitempty"`    // done by the direct verbs (equipdirect.go)
+	Applied   bool      `json:"applied,omitempty"`   // direct: the engine did the swap; Removed still has to become vault records
+	Removed   []string  `json:"removed,omitempty"`   // direct: raw hex of what came off, kept until it is a record
 	At        time.Time `json:"at"`
 	Updated   time.Time `json:"updated"`
 }
@@ -200,7 +203,7 @@ func (k *Keeper) saveBookLocked() {
 
 // EquipEnabled is the gate of the feature: knob and hand present on top of the Keep gate.
 func (k *Keeper) equipEnabled() bool {
-	return k.Hand != nil && (k.EquipOn == nil || k.EquipOn())
+	return k.Hand != nil && (k.EquipOn == nil || k.EquipOn() || k.directWanted())
 }
 
 // EquipGate says whether an order may be taken now (the Keep gate plus the Equip knob).
@@ -208,7 +211,10 @@ func (k *Keeper) EquipGate(ctx context.Context) (ok bool, code, why string) {
 	if k.Hand == nil {
 		return false, "off", ReasonEqNone
 	}
-	if !k.equipEnabled() || !k.enabled() {
+	if k.directReady(ctx) {
+		return k.directGate()
+	}
+	if !k.equipEnabled() || k.EquipOn != nil && !k.EquipOn() || !k.enabled() {
 		return false, "off", ReasonEqOff
 	}
 	if g, w := k.Gate(ctx); !g {
@@ -237,6 +243,9 @@ func (k *Keeper) EquipPreview(id string) (Preview, *EquipOrder, bool) {
 		return Preview{}, nil, false
 	}
 	p := k.Hand.Preview(rec)
+	if !rec.Identified && k.directReady(context.Background()) {
+		p.Wearable, p.Reveal, p.Why = false, true, ReasonEqReveal
+	}
 	k.mu.Lock()
 	o := k.bookLocked().orders[id]
 	var cp *EquipOrder
@@ -269,6 +278,9 @@ func (k *Keeper) EquipEnqueue(ctx context.Context, id, slot string, wantNow bool
 	if slot != SlotAuto && slot != SlotLeft && slot != SlotRight {
 		res.Code, res.Why = "slot", "slot is auto, left or right"
 		return res
+	}
+	if r, ok := k.directOne(ctx, id, slot); ok {
+		return r
 	}
 	st := k.store()
 	if st == nil || k.Hand == nil {
@@ -495,6 +507,7 @@ func orderWord(o EquipOrder) string {
 
 // runEquip finishes the orders whose item is now in the backpack. It runs after runKeep in the same visit.
 func (k *Keeper) runEquip(ctx context.Context) []string {
+	k.repairDirect(ctx)
 	if k.Hand == nil || !k.equipEnabled() || k.equipPending() == 0 && !k.anyActive() {
 		return nil
 	}
@@ -739,6 +752,9 @@ func slotRank(pv Preview) int {
 // every rule of the single order applies (one order per slot, requirements, a home for what comes off). A piece that loses
 // its slot to an earlier piece is refused with the reason and never leaves the vault; every id gets its own Result.
 func (k *Keeper) EquipSet(ctx context.Context, ids []string, wantNow bool) []Result {
+	if out, ok := k.directSet(ctx, ids); ok {
+		return out
+	}
 	st := k.store()
 	type piece struct {
 		id   string
