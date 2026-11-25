@@ -289,6 +289,9 @@ func (l *Looter) unwear(ctx context.Context, u d2.Unit, before *d2.Snapshot) err
 			return nil // worn before the pickup: another item that carries the same number
 		}
 	}
+	if b.Kind == data.KindWeapon && casterNoLauncher(l.e.Data, b) && !LauncherUnwanted(l.e.Data, b, s.Player.Class) {
+		return nil // an Amazon's bow or javelin: her build, worn as before (the ammo chores expect it)
+	}
 	// A pickup never changes what the hero wears: the game puts a picked weapon or armor on an empty slot, and junk worn that
 	// way is not the player's choice (V live 2026-11-24/25: a Club, a Spear, a Scimitar and three leather armors worn by
 	// pickups after the deaths left the slots empty; the vault rules say "yours to equip"). What to wear is decided by the
@@ -310,6 +313,9 @@ func (l *Looter) unwear(ctx context.Context, u d2.Unit, before *d2.Snapshot) err
 // takenOffAgain reports whether picking the item up wears it and unwear then has to take it off into the pack, so a
 // pack cell of its size must exist before the pickup (a worn item with no cell to take it back ends on the cursor).
 func (l *Looter) takenOffAgain(b *data.ItemBase, c d2.Class) bool {
+	if b != nil && b.Kind == data.KindWeapon && casterNoLauncher(l.e.Data, b) && !LauncherUnwanted(l.e.Data, b, c) {
+		return false
+	}
 	return b != nil && (noWear[b.Code] || b.Kind == data.KindWeapon || b.Kind == data.KindArmor)
 }
 
