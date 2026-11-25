@@ -32,6 +32,7 @@ type RouteTuning struct {
 	FreshMaxNoGain         int // fresh-game restarts in a row without FreshMinXP gained before the blocked state; 0 = bound off
 	FreshMinXP             int // experience a cycle must gain to count as progress and reset the no-gain count
 	FreshBlockedSec        int // seconds between restart probes once FreshMaxNoGain was reached (the blocked state waits in town)
+	EarlyRoute             int // 1: the early road (Underground Passage level 1 and the Dark Wood, plandata/earlyroutes.json) is closed below its class level or short of its kit; 0 = off
 }
 
 func DefaultCampaignTuning() CampaignTuning {
@@ -42,7 +43,7 @@ func DefaultRouteTuning() RouteTuning {
 	return RouteTuning{MonasteryMinLevel: 10, MonasteryMinLevelMerc: 10, TowerMinLevel: 15, TowerMinLevelMerc: 14, TowerNeedsMerc: 0,
 		TowerMinLife: 150, TowerMinLevelNoLife: 16, TowerKitMana: 3,
 		BarracksMinLevel: 11, BarracksMinLevelCaster: 11, BarracksMinLife: 0, BarracksMinLifeCaster: 0, BarracksLifeWaiver: 4,
-		FreshGapSec: 600, FreshMaxNoGain: 3, FreshMinXP: 200, FreshBlockedSec: 1800}
+		FreshGapSec: 600, FreshMaxNoGain: 3, FreshMinXP: 200, FreshBlockedSec: 1800, EarlyRoute: 1}
 }
 
 func routeKnobs() []Knob {
@@ -95,5 +96,7 @@ func routeKnobs() []Knob {
 			Desc: "Experience gained between two fresh-game restarts that resets the no-gain count (log field xpGained). U: a starting number, tune from the Gate logs."},
 		{Key: "route.freshBlockedSec", Label: "Fresh game: probe interval when blocked", Unit: "s", Default: 1800, Min: 0, Max: 14400, HigherIsBetter: true, NoHandicap: true,
 			Desc: "Once the no-gain bound is reached the bot waits this long in town between restart probes, so the loop never spins; bans expire and the picker is asked again after each wait."},
+		{Key: "route.earlyRoute", Label: "Early road guard", Unit: "bool", Default: 1, Min: 0, Max: 1, NoHandicap: true,
+			Desc: "1 (default): the Underground Passage level 1 and the Dark Wood, the only way to the Tree of Inifuss, stay closed to a hero under the class level in plandata/earlyroutes.json (melee 7, caster 8, U) or short of 2 healing potions and a town portal source; the board says 'level N needed' and the hero levels in the first fields instead. The owner's try anyway opens it. 0: no guard (a clvl 4 Paladin with no potions died there, Questy bed 2026-11-25)."},
 	}
 }
