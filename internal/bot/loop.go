@@ -968,6 +968,9 @@ func (r *Runner) routeKit() (healing, mana int) {
 	healing = t.Resource.KitMinHP + kitHealingBuffer
 	if k := r.kitPlanOf(s); k != nil {
 		healing, mana = k.Healing+kitHealingBuffer, k.Mana
+		if r.andarielKitOn(s) {
+			healing = k.Healing // the boss floor is already what belt and pack carry: no buffer above it, the shop could never close it
+		}
 	}
 	return healing, mana
 }
