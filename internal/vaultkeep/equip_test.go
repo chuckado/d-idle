@@ -2,6 +2,7 @@ package vaultkeep
 
 import (
 	"context"
+	"d2lod-bot/internal/env"
 	"errors"
 	"fmt"
 	"strings"
@@ -13,15 +14,14 @@ import (
 
 // fakeHand is a hero's body over the VaultFake: worn items live in api.Carried with Where worn and a body slot name.
 type fakeHand struct {
-	api        *d2dctl.VaultFake
-	body       map[int]string // unit -> slot
-	names      map[int]string
-	protected  map[uint32]bool
-	failWear   error
-	noWear     bool  // Wear returns ok but nothing is worn (verify must catch it)
-	noStash    error // the stash has no room (nil: it has)
-	refuseUnid bool
-	class      string
+	api       *d2dctl.VaultFake
+	body      map[int]string // unit -> slot
+	names     map[int]string
+	protected map[uint32]bool
+	failWear  error
+	noWear    bool  // Wear returns ok but nothing is worn (verify must catch it)
+	noStash   error // the stash has no room (nil: it has)
+	class     string
 }
 
 func newHand(api *d2dctl.VaultFake, class string) *fakeHand {
@@ -100,13 +100,6 @@ func (h *fakeHand) Pick(unit uint32, slot string) (string, error) {
 func (h *fakeHand) Wear(_ context.Context, unit uint32, slot string) ([]Worn, error) {
 	if h.failWear != nil {
 		return nil, h.failWear
-	}
-	if h.refuseUnid { // an engine that will not wear an unidentified magic item
-		for _, c := range h.api.Carried {
-			if uint32(c.Rec.UnitID) == unit && !c.Rec.Identified && c.Rec.Quality == 4 {
-				return nil, errors.New(c.Rec.Code + ": unidentified")
-			}
-		}
 	}
 	var off []Worn
 	if u := h.wornIn(slot); u != 0 {
@@ -449,33 +442,33 @@ func TestEquipOffAndRestartResumes(t *testing.T) {
 func TestEquipUnrevealedRecord(t *testing.T) {
 	for _, class := range classes {
 		t.Run(class, func(t *testing.T) {
-			// Equip does not reveal: an unidentified magic item is worn as it is and no scroll is spent.
+			// The game will not wear an unidentified piece (V live, lab d2d devp28). Cain here: identified free, worn.
 			r, h := equipRig(t, class)
 			r.withTools(3)
+			r.tools.cain = true
 			id := r.addUnid(1, "cap")
 			r.order(id, "")
 			r.run()
 			if o := r.k.EquipOrderOf(id); o.State != EqDone || h.wornIn("head") == 0 || r.tools.used != 0 {
-				t.Fatalf("%+v worn %d scrolls %d", o, h.wornIn("head"), r.tools.used)
+				t.Fatalf("cain: %+v worn %d scrolls %d", o, h.wornIn("head"), r.tools.used)
 			}
-			// An engine that refuses it: Cain free identifies once and the wear is retried; no Cain: back in the vault.
+			// identify.policy allows scrolls: one charge, then worn.
 			r2, h2 := equipRig(t, class)
-			h2.refuseUnid = true
 			r2.withTools(3)
-			r2.tools.cain = true
+			r2.k.IdentifyPolicy = func() int { return env.IdentifyScrolls }
 			id2 := r2.addUnid(1, "cap")
 			r2.order(id2, "")
 			r2.run()
-			if o := r2.k.EquipOrderOf(id2); o.State != EqDone || h2.wornIn("head") == 0 {
-				t.Fatalf("cain: %+v", o)
+			if o := r2.k.EquipOrderOf(id2); o.State != EqDone || h2.wornIn("head") == 0 || r2.tools.used != 1 {
+				t.Fatalf("scroll policy: %+v scrolls %d", o, r2.tools.used)
 			}
+			// neither: the order fails with the reason, the piece is back in the vault, no scroll is spent.
 			r3, h3 := equipRig(t, class)
-			h3.refuseUnid = true
 			r3.withTools(3)
 			id3 := r3.addUnid(1, "cap")
 			r3.order(id3, "")
 			r3.run()
-			if o := r3.k.EquipOrderOf(id3); o.State != EqFailed || h3.wornIn("head") != 0 || r3.carried(d2dctl.FakePack) != 0 || r3.tools.used != 0 {
+			if o := r3.k.EquipOrderOf(id3); o.State != EqFailed || o.Code != "identify" || o.Reason != ReasonEqNeedsID || h3.wornIn("head") != 0 || r3.carried(d2dctl.FakePack) != 0 || r3.tools.used != 0 {
 				t.Fatalf("no cain: %+v pack %d scrolls %d", o, r3.carried(d2dctl.FakePack), r3.tools.used)
 			}
 		})

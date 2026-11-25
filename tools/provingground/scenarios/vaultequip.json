@@ -467,7 +467,7 @@
     },
     {
       "id": "vault.equip-set-unid",
-      "title": "Wear set of ten UNIDENTIFIED pieces (magic, rare, unique) with the hero idle in town: all worn as they are, fast, nothing left in the backpack",
+      "title": "Wear set of ten UNIDENTIFIED pieces (magic, rare, unique), hero idle in town, identify.policy 2 and a tome: identified in the pack, all worn, nothing left in the backpack",
       "kind": "behaviour",
       "tier": "fast",
       "covers": [
@@ -536,7 +536,12 @@
               "unid": true
             }
           ]
-        }
+        },
+        "pack": [
+          {
+            "code": "ibk"
+          }
+        ]
       },
       "trigger": {
         "goals": "campaign",
@@ -545,7 +550,8 @@
           "loot.vaultKeep": 1,
           "loot.vaultEquip": 1,
           "invdesk.verbs": 1,
-          "invdesk.instant": 1
+          "invdesk.instant": 1,
+          "identify.policy": 2
         },
         "api": [
           {
@@ -590,7 +596,7 @@
         "flag.item-verbs"
       ],
       "provenance": "SETUP (CHEATED, mechanics only): level 30 (the equip refuses a magic item above the hero level, V live: ilvl 30 given), the worn items and the vault record come from the debug give verb, the fork's item verbs and the record seeding of the runner (pre.vault_records, pre.worn). Not evidence about balance or parity.",
-      "notes": "Lab check of the 2026-11-25 decision: Equip wears an unidentified item as it is. Reads the engine reply per piece from the bot log. The timer is the log window below (coarse, linear map, U).",
+      "notes": "Lab check 2026-11-25 (V live, devp28): the game refuses to wear an unidentified piece, so Equip identifies it first (Cain free, else a scroll or tome charge when identify.policy allows). The timer is the log window (coarse, U).",
       "assert": [
         {
           "kind": "api_reply",
