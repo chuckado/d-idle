@@ -17,6 +17,8 @@ owns:
   - "internal/arbiter"
   - "internal/bot/arbiter_control.go"
   - "internal/bot/arbiter_control_test.go"
+  - "internal/bot/shadow.go"
+  - "internal/bot/goal.go"
   - "tools/provingground/arbiter-outcomes"
   - "docs/arbiter.md"
   - "data/darklaunch.json"
@@ -35,7 +37,7 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 chores and claim family hooks defer to the arbiter
+- [x] #1 chores and claim family hooks defer to the arbiter
 - [ ] #2 goldfarm and recovery family hooks defer
 - [ ] #3 quest family defers
 - [ ] #4 level family defers

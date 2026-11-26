@@ -95,6 +95,7 @@ func TestArbiterControlClaim(t *testing.T) {
 		for _, mask := range []int{3 | 1<<3, 3} {
 			g := fieldRig(t, class, 1, mask)
 			g.w.belt(101, 102, 103, 104)
+			g.r.poll()
 			g.r.d.Quester = fakeQuester{w: g.w}
 			g.r.loop.questPending = map[string]bool{"den_of_evil": true}
 			g.r.runGoalShadowed(context.Background(), g.r.latest(), levelGoalControl())
@@ -102,7 +103,9 @@ func TestArbiterControlClaim(t *testing.T) {
 			if mask&(1<<3) != 0 {
 				want = 1
 			}
+			d, _ := g.r.Arbiter()
 			if n := g.r.arb.ctl.Load(); n != want {
+				t.Logf("decision %+v", d.Chosen)
 				t.Fatalf("class %d mask %d: controlled ticks %d, want %d", class, mask, n, want)
 			}
 		}
