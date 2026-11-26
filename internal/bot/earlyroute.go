@@ -64,26 +64,32 @@ func earlyRouteAt(a int) (earlyRoute, bool) {
 
 // earlyRouteWhy says why area a is closed to the hero now ("" = open). Normal difficulty only.
 func (r *Runner) earlyRouteWhy(s *d2.Snapshot, a int) string {
+	why, _ := r.earlyRouteCheck(s, a)
+	return why
+}
+
+// earlyRouteCheck is earlyRouteWhy that also says whether only the kit is missing (a chores trip fixes it).
+func (r *Runner) earlyRouteCheck(s *d2.Snapshot, a int) (why string, kitOnly bool) {
 	rt, ok := earlyRouteAt(a)
 	if !ok || s == nil || s.Player == nil || r.e.Tune.Route.EarlyRoute == 0 || s.Player.Difficulty != d2.Normal || task.TryActive() {
-		return ""
+		return "", false
 	}
 	family := "melee"
 	if s.Player.Class.Caster() {
 		family = "caster"
 	}
 	if min := rt.MinLevel[family]; min > 0 && s.Player.Level < min {
-		return fmt.Sprintf("level %d needed for the %s road (clvl %d)", min, rt.Name, s.Player.Level)
+		return fmt.Sprintf("level %d needed for the %s road (clvl %d)", min, rt.Name, s.Player.Level), false
 	}
 	if min := rt.MinLife[family]; min > 0 && s.Player.MaxLife > 0 && s.Player.MaxLife < min {
-		return fmt.Sprintf("life %d needed for the %s road (max life %d)", min, rt.Name, s.Player.MaxLife)
+		return fmt.Sprintf("life %d needed for the %s road (max life %d)", min, rt.Name, s.Player.MaxLife), false
 	}
 	in := r.resInput(s)
 	if n := healingOf(in); n < rt.Kit.Healing {
-		return fmt.Sprintf("%d healing potions < %d for the %s road", n, rt.Kit.Healing, rt.Name)
+		return fmt.Sprintf("%d healing potions < %d for the %s road", n, rt.Kit.Healing, rt.Name), true
 	}
 	if rt.Kit.Portal > 0 && !in.HasTP {
-		return "no town portal for the " + rt.Name + " road"
+		return "no town portal for the " + rt.Name + " road", true
 	}
-	return ""
+	return "", false
 }

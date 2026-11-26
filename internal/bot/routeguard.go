@@ -43,6 +43,7 @@ func (r *Runner) fillRoute(w *task.World, class d2.Class, p *d2.Player) {
 	if changed {
 		r.e.Log.Info(line)
 	}
+	r.fillEarly(w)
 	r.fillAndariel(w, class)
 	r.noteFloors(*w)
 }
@@ -482,4 +483,22 @@ func (r *Runner) bossPurse() int {
 		return k.GoldCarry
 	}
 	return 0
+}
+
+// fillEarly hands the early road guard to the task layer, so a quest step into the Dark Wood waits as a hold (a chores trip for a
+// missing kit) instead of failing at the hop and counting as "too weak".
+func (r *Runner) fillEarly(w *task.World) {
+	s := r.latest()
+	rs, _ := loadEarlyRoutes()
+	w.EarlyBlocked = nil
+	for _, rt := range rs {
+		for _, a := range rt.Areas {
+			if why, kit := r.earlyRouteCheck(s, a); why != "" {
+				if w.EarlyBlocked == nil {
+					w.EarlyBlocked = map[task.Area]task.EarlyBlock{}
+				}
+				w.EarlyBlocked[task.Area(a)] = task.EarlyBlock{Why: why, KitOnly: kit}
+			}
+		}
+	}
 }
