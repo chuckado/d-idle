@@ -207,3 +207,28 @@ func TestQuestSourceReadsTheTypedRefusal(t *testing.T) {
 		t.Fatal("a level change is a wake")
 	}
 }
+
+// Level under control (bit 128): a standing typed refusal silences the quest source, the arbiter chooses the filler and
+// the quest step is replaced by a leveling slice. Two classes; bit not set and knob off must not act.
+func TestArbiterControlLevel(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		for _, tc := range []struct {
+			name      string
+			ctl, mask int
+			want      int64
+		}{{"bit set", 1, 3 | 128, 1}, {"bit not set", 1, 3, 0}, {"knob off", 0, 3 | 128, 0}} {
+			g, _ := farmRig(t, 6, class)
+			g.w.set(func(w *world) { w.gold0 = 900 })
+			g.w.belt(101, 102, 103, 104)
+			g.r.e.Tune.Bot.ArbiterShadow, g.r.e.Tune.Bot.ArbiterControl, g.r.e.Tune.Bot.ArbiterFamilies = 1, tc.ctl, tc.mask
+			g.r.poll()
+			g.r.arbRefused("not_ready", "any of level, kit, gold or area changes")
+			g.clock.Sleep(time.Second)
+			g.r.runGoalShadowed(context.Background(), g.r.latest(), campControl())
+			if n := g.r.arb.ctl.Load(); n != tc.want {
+				d, _ := g.r.Arbiter()
+				t.Fatalf("%v %s: level ticks %d, want %d (chose %+v)", class, tc.name, n, tc.want, d.Chosen)
+			}
+		}
+	}
+}

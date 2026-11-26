@@ -114,19 +114,25 @@ func (r *Runner) arbCompare(sh *arbiter.Shadow, d arbiter.Decision, now float64,
 	}
 }
 
-// arbHoldsQuest is the quest family's hook under control: the quest step defers to the arbiter's decision. When the arbiter
-// chose another family (a refill it wants, a recovery farm, a player order) and that family's own hook found nothing to
-// do this tick, the quest step does not start; the hero levels in a safe area meanwhile (the incident of the quest walk
-// with an empty belt). False when the knobs are off, the bit is not set, the arbiter chose the quest step or nothing.
+// arbHoldsQuest is the quest and level families' hook under control: the quest step defers to the arbiter's decision.
+// When the arbiter chose another family (a refill it wants, a recovery farm, a player order) and that family's own hook
+// found nothing to do this tick (quest bit), or chose the filler because the quest source stayed quiet behind a standing
+// refusal (level bit), the quest step does not start; the hero runs a leveling slice in a safe area instead (the quest
+// walk with an empty belt, the refusal storm). False when the knobs are off, the bit is not set, or the arbiter chose
+// the quest step or nothing.
 func (r *Runner) arbHoldsQuest() bool {
 	t := r.e.Tune.Bot
-	if t.ArbiterShadow == 0 || t.ArbiterControl == 0 || !arbiter.Controlled(t.ArbiterFamilies, arbiter.SrcQuest) {
+	if t.ArbiterShadow == 0 || t.ArbiterControl == 0 {
 		return false
 	}
 	r.arb.mu.Lock()
 	fam := r.arb.chose
 	r.arb.mu.Unlock()
-	if fam == "" || fam == arbiter.SrcQuest || fam == arbiter.SrcLevel {
+	bit := arbiter.SrcQuest
+	if fam == arbiter.SrcLevel {
+		bit = arbiter.SrcLevel
+	}
+	if fam == "" || fam == arbiter.SrcQuest || !arbiter.Controlled(t.ArbiterFamilies, bit) {
 		return false
 	}
 	r.arb.ctl.Add(1)

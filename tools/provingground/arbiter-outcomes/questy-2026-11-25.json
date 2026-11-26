@@ -74,6 +74,19 @@
     "quest_refused>=1"
    ],
    "why": "the quest step is asked again while its typed refusal stands and nothing it waits on changed: the refusal storm (soft row; Questy had 296 refusals among 321 failed actions, review 2026-11-25 section 3.4; model of the monitor, U)"
+  },
+  {
+   "name": "refused-step-no-xp",
+   "hit": "xp-frozen",
+   "families": [
+    "quest"
+   ],
+   "when": [
+    "in_town==0",
+    "quest_refused>=1",
+    "xp_idle_min>=10"
+   ],
+   "why": "the refused quest step is asked again for ten minutes or more and the hero gains no XP: the silent stretch of the Questy log (hard row xp-frozen; model of the monitor, U)"
   }
  ],
  "cases": [
@@ -303,6 +316,26 @@
     "survive_below": 50
    },
    "provenance": "Variant of the 0319 quest walk with a purse that can pay the refill (pack 400, price 150): the chain walks the quest step with an empty belt, the arbiter refills first. Facts U."
+  },
+  {
+   "id": "arb.questy-level-while-refused",
+   "family": "level",
+   "area": "stony_field",
+   "chain": "quest",
+   "objectiveArea": "stony_field",
+   "facts": {
+    "in_town": 0,
+    "life_pct": 100,
+    "hostile": 0,
+    "potions": 4,
+    "potions_min": 4,
+    "pack_gold": 300,
+    "objective": 1,
+    "quest_refused": 1,
+    "xp_idle_min": 12,
+    "survive_below": 50
+   },
+   "provenance": "MODEL of the quiet stretch (the chain asks a refused step every tick and the hero stands idle between refusals; the 14 s silences of the quest sandbox are the pauses of handleRefused, needTable PauseSec). The arbiter takes the filler and levels. xp_idle_min 12 is assumed (U); the log never says how long the hero went without XP in one stretch."
   }
  ]
 }

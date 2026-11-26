@@ -40,6 +40,6 @@ Why: TODO. Done when: TODO.
 - [x] #1 chores and claim family hooks defer to the arbiter
 - [x] #2 goldfarm and recovery family hooks defer
 - [x] #3 quest family defers
-- [ ] #4 level family defers
+- [x] #4 level family defers
 - [ ] #5 outcome rows and verdicts per family, dark-launch rows
 <!-- AC:END -->

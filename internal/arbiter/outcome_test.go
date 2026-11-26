@@ -4,7 +4,7 @@ import "testing"
 
 const questyOutcomes = "../../tools/provingground/arbiter-outcomes/questy-2026-11-25.json"
 
-func hardOnly(n string) bool { return n == "potion-not-drunk" }
+func hardOnly(n string) bool { return n == "potion-not-drunk" || n == "xp-frozen" } // the hard rows the cases use (cmd/d2scenario/invariants.json)
 
 func TestQuestyOutcomes(t *testing.T) {
 	f, err := LoadOutcomes(questyOutcomes)
@@ -189,5 +189,38 @@ func TestQuestOutcomes(t *testing.T) {
 	}
 	if s := f.Score(byID["arb.questy-quest-walk-affordable-refill"], DefaultConfig()); s.Arbiter != "chores" || len(s.ChainHits) != 1 || len(s.ArbiterHits) != 0 {
 		t.Fatalf("%+v", s)
+	}
+}
+
+// Entry 4 (level): behind a standing refusal the filler is the choice and it scores no hard hit where the chain asking
+// again scores one. Two builds (refill line). MUST-FAIL: without the refusal fact the arbiter keeps the quest step and the
+// verdict fails; a quest objective that is not refused must never be replaced by the filler.
+func TestLevelOutcomes(t *testing.T) {
+	f, err := LoadOutcomes(questyOutcomes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var base OutcomeCase
+	for _, c := range f.Cases {
+		if c.ID == "arb.questy-level-while-refused" {
+			base = c
+		}
+	}
+	for _, min := range []int{2, 6} {
+		c := base
+		c.Facts = map[string]int{}
+		for k, v := range base.Facts {
+			c.Facts[k] = v
+		}
+		c.Facts[FactPotionsMin], c.Facts[FactPotions] = min, min
+		s := f.Score(c, DefaultConfig())
+		v := Judge([]CaseScore{s}, hardOnly)[0]
+		if s.Arbiter != "level" || !v.Pass || v.ChainHard != 1 || v.ArbHard != 0 {
+			t.Fatalf("min %d: %+v %+v", min, s, v)
+		}
+		c.Facts[FactQuestRefused] = 0
+		if s := f.Score(c, DefaultConfig()); s.Arbiter == "level" || Judge([]CaseScore{s}, hardOnly)[0].Pass {
+			t.Fatalf("an objective that is not refused must stay the choice: %+v", s)
+		}
 	}
 }
