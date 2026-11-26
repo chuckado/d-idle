@@ -17,6 +17,7 @@ owns:
   - "docs/probes/necrokeys-2026-11-26.md"
 exclusive: []
 contracts: []
+result: "Closed with evidence: on d2d every learned skill gets a pseudo key sk<id> (Rig.BindSkills) and casts through cmd skill, so the F8 limit does not apply; only the game.exe path has it. No profile change. Not seen in a live Necromancer log (U)."
 ---
 
 ## Description
@@ -29,5 +30,5 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 see docs/probes/necro-readiness-2026-11-26.md cards table
+- [x] #1 see docs/probes/necro-readiness-2026-11-26.md cards table
 <!-- AC:END -->
