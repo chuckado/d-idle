@@ -17,7 +17,7 @@ type arrivalState struct {
 	bounce atomic.Bool // the last Safety verdict was the arrival crowd rule (crowdAct skips the retreat walk)
 }
 
-// arrivalCrowd is the crowd-on-arrival rule (card act2temple, data: admission.json "arrival"): within the row's window after
+// arrivalCrowd is the crowd-on-arrival rule (card act2temple, data: admission.json "arrival"): within the row's window (the walk to the first gate) after
 // an area change into a listed area, CrowdN hostiles within Radius subtiles and life at or below LifePct. The quest crowd
 // override fights up to 40 hostiles, which killed the Claw Viper Temple stand-in 1 s after arrival (V lab runs, CHEATED setup,
 // mechanics only). Normal only, like every admission row. U: whether the live game gives that density.

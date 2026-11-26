@@ -56,7 +56,7 @@ func TestArrivalCrowdRule(t *testing.T) {
 	if f.arrivalCrowd(pl(cvt, d2.Nightmare), crowdAt(25, 2)) {
 		t.Fatal("rows apply in Normal only")
 	}
-	clk.Sleep(10 * time.Second)
+	clk.Sleep(70 * time.Second)
 	if f.arrivalCrowd(pl(cvt, d2.Normal), crowdAt(25, 2)) {
 		t.Fatal("fired outside the arrival window")
 	}
