@@ -1,10 +1,13 @@
 ---
 id: TASK-977
-title: 'thrgov: P10 threshold governance: evidence rows, margin model or seed set, knob'
-status: Proposed
+title: >-
+  thrgov: P10 threshold governance: evidence rows, margin model or seed set,
+  knob
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:55:00Z'
+updated_date: '2026-11-26T15:22:00Z'
 labels:
   - docs
   - chore

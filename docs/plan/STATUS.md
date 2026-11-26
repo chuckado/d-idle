@@ -282,7 +282,6 @@
 | admit1 | proposed | - | `docs/design/admission-p4.md`<br>`internal/admit/`<br>`internal/plandata/admission.json`<br>`internal/plandata/earlyroutes.json`<br>`internal/plandata/povertyfarm.json`<br>`docs/plan/data/admission.json`<br>`docs/plan/data/earlyroutes.json`<br>`docs/plan/data/povertyfarm.json`<br>`internal/bot/earlyroute.go`<br>`internal/bot/povertyfarm.go`<br>`internal/bot/admit_need_test.go` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
 | arbmig | proposed | - | `docs/design/arbiter-migration-p6.md`<br>`docs/arbiter.md`<br>`internal/arbiter/`<br>`cmd/d2scenario/`<br>`tools/provingground/arbiter-outcomes/`<br>`internal/bot/arbiter_control.go`<br>`internal/bot/arbiter_control_test.go`<br>`internal/bot/shadow.go`<br>`internal/bot/loop.go`<br>`internal/env/tuning_bot.go`<br>`data/darklaunch.json`<br>`docs/knobs.md` | - |
-| thrgov | proposed | - | `docs/process/threshold-governance.md`<br>`tools/ci/knobbudget.py`<br>`tools/ci/test_knobbudget.py`<br>`tools/ci/knobbudget-baseline.json`<br>`tools/ci/check.sh`<br>`docs/backlog-howto.md`<br>`internal/plandata/admission.json`<br>`docs/plan/data/admission.json`<br>`docs/plan/data/povertyfarm.json`<br>`internal/plandata/povertyfarm.json` | - |
 | faultsoak | proposed | - | `docs/design/faultsoak-p12.md` | - |
 | fid-adapter-rows | deferred | - | `docs/probes/fid/fid-adapter-rows.md` | - |
 | proptest1 | proposed | - | `docs/design/proptest-t3.md` | - |
