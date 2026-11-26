@@ -322,6 +322,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 23dcfb8ed 11-26 03:08 `Merge agent/toolstrade81: Merge branch 'main' into toolstrade81` (toolstrade81)
+- b7cea267a 11-26 03:07 `Merge branch 'main' into toolstrade81` (-)
 - 263895530 11-26 02:54 `Merge agent/qd27: d2scenario: hard invariant hits turn a run red (data list); faultsoak design notes; matrix 78-79` (qd27)
 - 49350b8ad 11-26 02:53 `Merge branch 'main' into qd27` (-)
 - 186424f59 11-26 02:43 `Merge agent/toolstrade80: Merge branch 'main' into toolstrade80` (toolstrade80)
@@ -330,6 +332,4 @@
 - 609e43fde 11-26 02:31 `Merge origin/main` (-)
 - a1e40426a 11-26 02:29 `Merge origin/main` (-)
 - 0d94e2ad6 11-26 02:28 `Merge branch 'main' into autorevert1` (-)
-- 98c2bdfb3 11-26 02:18 `Merge agent/incident1: Merge branch 'main' into incident1` (incident1)
-- 965b0c649 11-26 02:16 `Merge branch 'main' into incident1` (-)
 <!-- statusgen:end -->

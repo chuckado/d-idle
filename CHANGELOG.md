@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into toolstrade81 <!--sg:agent/toolstrade81-->
 - d2scenario: hard invariant hits turn a run red (data list); faultsoak design notes; matrix 78-79 <!--sg:agent/qd27-->
 - Merge branch 'main' into toolstrade80 <!--sg:agent/toolstrade80-->
 - Merge branch 'main' into autorevert1 <!--sg:agent/autorevert1-->
