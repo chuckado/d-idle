@@ -188,22 +188,26 @@ func TestEnterPortalRoutesAroundTheWall(t *testing.T) {
 	}
 }
 
-// A portal two cells away is taken by the plain interact: no "cmd move" side step even though the hero stands still beside it
-// (the stall watch of the approach read that as a stall; V amulet bisect). Must fail with the approach for every distance.
+// The plain interact goes first: a portal that takes it within the first round is entered with no "cmd move" side step even though
+// the hero stands still beside it (the stall watch of the approach read that as a stall; V amulet bisect). Must fail with the
+// approach for every portal.
 func TestEnterPortalNearIsPlain(t *testing.T) {
 	oldPause, oldNow := Pause, Now
 	t.Cleanup(func() { Pause, Now = oldPause, oldNow })
 	virt := time.Unix(0, 0)
 	Pause = func(ctx context.Context, d time.Duration) error { virt = virt.Add(d); return ctx.Err() }
 	Now = func() time.Time { return virt }
-	level, moves, interacts := 1, 0, 0
+	level, moves, interacts, polls := 1, 0, 0, 0
 	_, c := startStub(t, map[string]string{"debug portals": "0 2 27.7 48.1\n1 1 8.0 6.0\nok\n", "npcs": "ok\n", "debug grid 5": strings.Join(wallGrid(), "\n") + "\nok\n"}, func(line string, s *stub) {
 		if strings.HasPrefix(line, "cmd move") {
 			moves++
 		}
 		if line == "cmd interact -2001" {
 			interacts++
-			if interacts >= 2 { // the first interact is slow: two polls pass before the level changes
+		}
+		if line == "debug level" && interacts > 0 {
+			polls++
+			if polls >= 3 { // slow: the level changes at the third poll of the first round
 				level = 2
 			}
 		}
