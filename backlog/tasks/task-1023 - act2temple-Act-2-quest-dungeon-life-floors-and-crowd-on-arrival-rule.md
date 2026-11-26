@@ -24,6 +24,7 @@ owns:
   - "internal/combat/crowd.go"
 exclusive: []
 contracts: []
+result: "see report"
 ---
 
 ## Description
@@ -36,7 +37,7 @@ Claw Viper Temple stand-in dies 1 s after arriving among 22 to 39 hostiles (matr
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Road rows of the Act 2 quest dungeons carry level and life floors
-- [ ] #2 Arrival crowd rule as data, unit tested
+- [x] #1 Road rows of the Act 2 quest dungeons carry level and life floors
+- [x] #2 Arrival crowd rule as data, unit tested
 - [ ] #3 drill.act2.amulet repeat 3 on the worker host
 <!-- AC:END -->
