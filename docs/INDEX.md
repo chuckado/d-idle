@@ -394,6 +394,25 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [drillsfix.md](drillsfix.md): drillsfix: stash (DS) and tome (TM) drill repairs
 - [earlygame.md](earlygame.md): Early game: a fresh character, clvl 1 to 12 (agent EARLYGAME, 2026-10-30)
 - [emu-image.md](emu-image.md): The game.exe emulator image (status: current (2026-11-14, TASK-406). Rebuilt after the worker-host cleanup of 2026-11-13 removed the volatile...)
+
+`epics/`
+
+- [epic-act1.md](epics/epic-act1.md): epic-act1: Act I complete in Normal (status: OPEN epic, written 2026-11-25. Tags: V verified (named run or file), S secondary, U unverified. Lab setups...)
+- [epic-act2.md](epics/epic-act2.md): epic-act2: Act II complete in Normal (status: OPEN epic, written 2026-11-25. Tags: V verified (named run or file), S secondary, U unverified. Lab setups...)
+- [epic-act3.md](epics/epic-act3.md): epic-act3: Act III complete in Normal (status: OPEN epic, written 2026-11-25. Tags: V verified (named run or file), S secondary, U unverified. Lab setups...)
+- [epic-act4.md](epics/epic-act4.md): epic-act4: Act IV complete in Normal (status: OPEN epic, written 2026-11-25. Tags: V verified (named run or file), S secondary, U unverified. Lab setups...)
+- [epic-act5.md](epics/epic-act5.md): epic-act5: Act V complete in Normal (status: OPEN epic, written 2026-11-25. Tags: V verified (named run or file), S secondary, U unverified. Lab setups...)
+- [epic-class-amazon.md](epics/epic-class-amazon.md): epic-class-amazon: Amazon playable through Normal (status: OPEN epic, written 2026-11-25. Tags V/S/U as in AGENTS.md. Lab setups are CHEATED (stand-in level, gear):...)
+- [epic-class-assassin.md](epics/epic-class-assassin.md): epic-class-assassin: Assassin playable through Normal (status: OPEN epic, written 2026-11-25. Tags V/S/U as in AGENTS.md. Lab setups are CHEATED (stand-in level, gear):...)
+- [epic-class-barbarian.md](epics/epic-class-barbarian.md): epic-class-barbarian: Barbarian playable through Normal (status: OPEN epic, written 2026-11-25. Tags V/S/U as in AGENTS.md. Lab setups are CHEATED (stand-in level, gear):...)
+- [epic-class-druid.md](epics/epic-class-druid.md): epic-class-druid: Druid playable through Normal (status: OPEN epic, written 2026-11-25. Tags V/S/U as in AGENTS.md. Lab setups are CHEATED (stand-in level, gear):...)
+- [epic-class-necromancer.md](epics/epic-class-necromancer.md): epic-class-necromancer: Necromancer playable through Normal (status: OPEN epic, written 2026-11-25. Tags V/S/U as in AGENTS.md. Lab setups are CHEATED (stand-in level, gear):...)
+- [epic-class-paladin.md](epics/epic-class-paladin.md): epic-class-paladin: Paladin playable through Normal (status: OPEN epic, written 2026-11-25. Tags V/S/U as in AGENTS.md. Lab setups are CHEATED (stand-in level, gear):...)
+- [epic-class-sorceress.md](epics/epic-class-sorceress.md): epic-class-sorceress: Sorceress playable through Normal (status: OPEN epic, written 2026-11-25. Tags V/S/U as in AGENTS.md. Lab setups are CHEATED (stand-in level, gear):...)
+- [epic-hell.md](epics/epic-hell.md): epic-hell (status: OPEN epic, 2026-11-25, blocked on epic-nightmare. All U.)
+- [epic-merc.md](epics/epic-merc.md): epic-merc (status: OPEN epic, 2026-11-25.)
+- [epic-nightmare.md](epics/epic-nightmare.md): epic-nightmare (status: OPEN epic, 2026-11-25, blocked on epic-normal. docs/nightmare-campaign.md is U (offline only, 400+ commits...)
+- [epic-normal.md](epics/epic-normal.md): epic-normal: Normal complete (status: OPEN epic, 2026-11-25. Roll-up page; per-act status is in epic-act1..5.md. Nothing is proven live end to...)
 - [ether.md](ether.md): ETHER: the account meta wallet of the Ethereal Vault (status: built offline 2026-11-17 (agents vaultv7 and vaultv7b, slices V7 and V7b of...)
 - [exploredpct.md](exploredpct.md): Explored share: when a zone counts as explored (bot.exploredPct) (status: CURRENT. Tags: V = read from the code in this worktree and covered by a unit test, U = not run in a live game.)
 - [farm.md](farm.md): Farm runs (FARMRUNS, 2026-10-29)

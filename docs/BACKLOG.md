@@ -1388,6 +1388,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - cardcatchup: mark Done the cards whose branch is merged and boxes are ticked (TASK-935, merged 2026-11-25, acceptance 1 of 1): 224 merged cards with all boxes ticked set Done (catchup_done.py --apply) <!--sg:agent/cardcatchup-->
 - agent/toolstrade76: toolstrade76: the poverty advice asks the town for what its sell chore sells (advice counted 4, the chore sold 0) (merged 2026-11-25) <!--sg:agent/toolstrade76-->
 - agent/qd25: Merge origin/main (merged 2026-11-25) <!--sg:agent/qd25-->
+- epiccards: epic cards for the five acts, seven classes, difficulties and merc (TASK-952, merged 2026-11-25, acceptance 1 of 1): 16 epic cards (5 acts, 7 classes, normal, nightmare, hell, merc) with docs/epics pages; docs only, not verified live <!--sg:agent/epiccards-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
