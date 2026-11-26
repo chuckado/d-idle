@@ -43,6 +43,7 @@
 |---|---|---|---|---|
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
+| smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
@@ -297,6 +298,9 @@
 | advisor1 | proposed | - | `docs/design/advisor-r14.md` | - |
 | autorevert1 | in-progress | - | `docs/design/autorevert.md`<br>`tools/flip/*`<br>`tools/darklaunch/*`<br>`data/darklaunch.json`<br>`docs/process/dark-launch.md`<br>`docs/invariants.md`<br>`docs/operator.md`<br>`internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`internal/bot/explain.go` | - |
 | reflex1d | proposed | - | `internal/bot/safetylat.go`<br>`internal/bot/loop.go`<br>`internal/bot/reflexdrink_test.go` | - |
+| arbfam | proposed | - | `internal/arbiter`<br>`internal/bot/arbiter_control.go`<br>`internal/bot/arbiter_control_test.go`<br>`internal/bot/shadow.go`<br>`internal/bot/goal.go`<br>`tools/provingground/arbiter-outcomes`<br>`docs/arbiter.md`<br>`data/darklaunch.json`<br>`docs/knobs.md` | - |
+| flipwave2 | proposed | - | `docs/probes/flipwave2.md` | - |
+| classorder1 | proposed | - | `docs/probes/classorder1.md` | - |
 
 ### Gates
 - contract [act1-campaign](../contracts/act1-campaign.md): 9 requirements
@@ -319,14 +323,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- b89f8cde8 11-26 10:34 `Merge agent/faultsoak: Merge branch 'main' into faultsoak` (faultsoak)
-- 363a0d3cf 11-26 10:34 `Merge agent/outcomes2g: Merge branch 'main' into outcome-explain-ring` (outcomes2g)
-- 3ada2011e 11-26 10:32 `Merge branch 'main' into faultsoak` (-)
-- 064875015 11-26 10:32 `Merge branch 'main' into outcome-explain-ring` (-)
-- e1febf215 11-26 10:30 `Merge origin/main into faultsoak` (faultsoak)
-- e4f4b63d8 11-26 10:27 `Merge agent/outcomes2f: Merge branch 'main' into outcome-hub-wording` (outcomes2f)
-- bb8eafa4e 11-26 10:25 `Merge branch 'main' into outcome-hub-wording` (-)
-- 4cf936afd 11-26 10:15 `Merge agent/outcomes2e: Merge branch 'main' into outcome-kit-gate` (outcomes2e)
-- 03aef679b 11-26 10:13 `Merge branch 'main' into outcome-kit-gate` (-)
-- 9ac8f343b 11-26 10:06 `Merge agent/thrgov: Merge branch 'main' into thrgov` (thrgov)
+- 3be781e1d 11-26 13:24 `Merge agent/auralive: Merge branch 'main' into auralive` (auralive)
+- fad6b3f14 11-26 13:24 `Merge agent/act345map: Merge branch 'main' into act345map` (act345map)
+- 9028d8300 11-26 13:24 `Merge agent/act2plan: Merge branch 'main' into act2plan` (act2plan)
+- a14a0c7e3 11-26 13:19 `Merge branch 'main' into auralive` (-)
+- 95b5ed8a9 11-26 13:19 `Merge branch 'main' into act345map` (-)
+- a71504654 11-26 13:19 `Merge branch 'main' into act2plan` (-)
+- 23a4fb6ba 11-26 13:17 `Merge agent/classorder: Merge branch 'main' into classorder` (classorder)
+- 0fe3487dd 11-26 13:17 `Merge agent/auraaudit: Merge branch 'main' into auraaudit` (auraaudit)
+- 5dced27a9 11-26 13:15 `Merge branch 'main' into classorder` (-)
+- aaf9c18cd 11-26 13:15 `Merge branch 'main' into auraaudit` (-)
 <!-- statusgen:end -->

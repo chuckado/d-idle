@@ -102,7 +102,7 @@ func (r *Runner) shadowView(snap *d2.Snapshot, c control) (v arbiter.View, ok bo
 		arbiter.FactPlayerOrder:  b(pg != nil && pg.Pending() > 0),
 		arbiter.FactTrip:         b(l.trip != nil),
 		arbiter.FactTripEmerg:    b(l.trip != nil && l.trip.emergency),
-		arbiter.FactClaim:        b(!inTown && c.spec.camp == nil && len(l.questPending) > 0 && r.d.Quester != nil),
+		arbiter.FactClaim:        b(!inTown && c.spec.camp == nil && len(l.questPending) > 0 && r.d.Quester != nil && !r.e.Clock.Now().Before(l.claimSkipUntil)),
 		arbiter.FactPotions:      kit.BeltHP,
 		arbiter.FactPotionsMin:   t.ResupplyPotions,
 		arbiter.FactPackGold:     p.Gold,

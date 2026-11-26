@@ -145,6 +145,7 @@ func TestGearPassDoesNotShopBelowEarlyGearMax(t *testing.T) {
 	g.r.d.Gear = gr
 	g.mover.exploreFn = blockExplore
 	g.w.gold(1000)
+	g.w.belt() // no potions: the kit is not met
 	g.w.set(func(w *world) { w.level = 9 })
 	g.run()
 	defer g.finish()
@@ -153,6 +154,47 @@ func TestGearPassDoesNotShopBelowEarlyGearMax(t *testing.T) {
 	time.Sleep(300 * time.Millisecond)
 	if n := gr.shopped.Load(); n != 0 {
 		t.Fatalf("shopped %d times at clvl 9", n)
+	}
+}
+
+// Questy 2026-11-26: clvl 12, kit met, 497 gold, a 2-7 Short Sword: the early policy kept every coin for potions. With the kit met
+// (potions at the kitFloor, a scroll) the gear pass may spend earlyShop.surplusPct (60) of the gold above the gear reserve, so the
+// weapon upgrade can be bought; without the kit it still shops nothing. Two classes.
+func TestEarlyGearPassShopsOnceTheKitIsMet(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, kit := range []bool{true, false} {
+			g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Resource.EarlyGearMax = 15 })
+			gr := &fakeGear{w: g.w}
+			g.r.d.Gear = gr
+			g.mover.exploreFn = blockExplore
+			g.w.gold(1000)
+			g.w.set(func(w *world) { w.level, w.class = 12, class })
+			if !kit {
+				g.w.belt()
+			} else {
+				g.w.set(func(w *world) {
+					for i := 0; i < 5; i++ {
+						w.items = append(w.items, d2.Unit{ID: uint32(700 + i), Type: d2.TypeItem, Class: 1, Item: &d2.Item{Where: d2.ContBelt}})
+					}
+					w.items = append(w.items, d2.Unit{ID: 799, Type: d2.TypeItem, Class: 5, Item: &d2.Item{Where: d2.ContInventory}})
+				})
+			}
+			g.run()
+			g.r.Start(reach(14))
+			if kit {
+				g.waitFor("shop", func() bool { return gr.shopped.Load() > 0 })
+				// (1000 - reserve 100) * 60 % = 540
+				if b := gr.budget.Load(); b != 540 {
+					t.Errorf("%v: budget %d, want 540", class, b)
+				}
+			} else {
+				time.Sleep(300 * time.Millisecond)
+				if n := gr.shopped.Load(); n != 0 {
+					t.Errorf("%v: shopped %d times without the kit", class, n)
+				}
+			}
+			g.finish()
+		}
 	}
 }
 
