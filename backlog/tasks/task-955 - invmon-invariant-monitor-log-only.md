@@ -23,6 +23,7 @@ owns:
   - "internal/env/tuning_bot.go"
 exclusive: []
 contracts: []
+result: "invmon 2026-11-25, offline only (not verified live): 13 invariant rows, one rate-limited WARN line each, counts in the minute line (inv=), knob bot.invariants 1 (log only), Deps.OnInvariant oracle hook; go test (bot, env, tools) and go vet green on the worker host; thresholds untuned (U)."
 ---
 
 ## Description
