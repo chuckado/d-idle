@@ -170,13 +170,27 @@ func (r *Runner) forceIfLate(now time.Time) bool {
 		r.obMu.Unlock()
 		return false
 	}
+	r.obMu.Unlock()
+	r.forceNow()
+	return true
+}
+
+// forceNow carries the armed hard action out from the guard (the deadline has passed).
+func (r *Runner) forceNow() {
+	r.obMu.Lock()
+	l := &r.ob.sl
+	a, at := l.hardA, l.hardAt
+	if a == SafetyNone {
+		r.obMu.Unlock()
+		return
+	}
 	l.hardA, l.forced = SafetyNone, a
 	r.obMu.Unlock()
+	now := r.e.Clock.Now()
 	r.e.Log.Warn("reflex: the cancelled action did not return in time, the guard carries out the safety action itself", "action", a.String(), "waitedMs", now.Sub(at).Milliseconds())
 	if err := r.carryOut(context.Background(), a); err != nil {
 		r.e.Log.Warn("reflex: forced safety action failed", "action", a.String(), "err", err)
 	}
-	return true
 }
 
 // takeForced reports (once) that the guard already carried out the safety action.
@@ -189,18 +203,21 @@ func (r *Runner) takeForced() bool {
 }
 
 // holdForHard keeps the guard alive after a hard cancel until the action returns or the deadline passes (game.exe path;
-// the lockstep watch calls forceIfLate itself).
-func (r *Runner) holdForHard(done <-chan struct{}, every time.Duration) {
-	step := max(every/5, 5*time.Millisecond) // fine steps: the action usually returns at once and the wait must not stretch the clock
-	for {
-		if r.forceIfLate(r.e.Clock.Now()) {
-			return
-		}
-		r.e.Clock.Sleep(step)
-		select {
-		case <-done:
-			return
-		default:
-		}
+// the lockstep watch calls forceIfLate itself). It waits on a timer, not on Clock.Sleep: a sleep on a virtual clock
+// advances it, and the wait of a guard that is about to be released must not move the time the rest of the bot sees
+// (TestReactionTimeDelaysInterrupt was flaky under -race for exactly that).
+func (r *Runner) holdForHard(done <-chan struct{}) {
+	r.obMu.Lock()
+	armed := r.ob.sl.hardA != SafetyNone
+	r.obMu.Unlock()
+	if !armed {
+		return
+	}
+	hctx, cancel := gclock.WithTimeout(context.Background(), time.Duration(r.e.Tune.Bot.ReflexDeadlineMs)*time.Millisecond)
+	defer cancel()
+	select {
+	case <-done:
+	case <-hctx.Done():
+		r.forceNow()
 	}
 }
