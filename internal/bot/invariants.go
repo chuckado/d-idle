@@ -32,6 +32,7 @@ const invDefaultGapSec = 60
 var invRows = []invRow{
 	{Name: "potion-not-drunk", Hard: true, Secs: 8, Why: "in the field under the drink line with a healing potion in the belt and none drunk for Secs"},
 	{Name: "portal-not-cast", Secs: 6, Why: "in the field at or under the chicken line with hostiles near and a town portal scroll, still in the same area after Secs"},
+	{Name: "guard-stall", Secs: 10, Count: 2, GapSec: 300, Why: "no log line for Secs while Count or more hostiles are near (stall.go logs the goroutine stack once per five minutes)"},
 	{Name: "stuck-in-pack", Secs: 8, Count: 5, Pct: 60, Why: "in the field with Count or more hostiles near and life under Pct for Secs (a crowd fight that neither kills nor leaves)"},
 	{Name: "field-entry-hurt", Pct: 50, Why: "left town with life under Pct of max"},
 	{Name: "field-entry-no-kit", Why: "left town while the kit (portal, healing, mana minimum) is incomplete"},
@@ -130,6 +131,7 @@ type invMon struct {
 	started     time.Time            // first tick: the start of every counter's window
 	minute      map[string]int       // hits since the last minute line
 	pending     []invHit             // hits noted outside the tick (refusal counted as a failure)
+	incidents   incidentGate         // rate limit of the pre-state files a hit writes (incident.go)
 
 	seen, prevTown        bool
 	lowSince              time.Time
@@ -176,6 +178,13 @@ func (m *invMon) noteRefusal() {
 func (m *invMon) noteRefusalFailure(what string, err error) {
 	m.mu.Lock()
 	m.pending = append(m.pending, invHit{"refusal-as-failure", fmt.Sprintf("what=%q err=%q", what, err)})
+	m.mu.Unlock()
+}
+
+// noteStall records a stall of the guard's look (soft row guard-stall); the incident file and the minute count follow from the hit.
+func (m *invMon) noteStall(what string) {
+	m.mu.Lock()
+	m.pending = append(m.pending, invHit{"guard-stall", what})
 	m.mu.Unlock()
 }
 
@@ -426,6 +435,7 @@ func (r *Runner) invTick(snap *d2.Snapshot, c control) {
 		if r.d.OnInvariant != nil {
 			r.d.OnInvariant(h.Name, h.Detail)
 		}
+		r.noteMonitorIncident(snap, h)
 	}
 }
 

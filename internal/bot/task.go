@@ -785,6 +785,12 @@ func (a taskActs) Talk(ctx context.Context, npc, pick string) error {
 	if td == nil || td.Dialog == nil {
 		return task.Errorf(task.KindUI, "no dialog capability: cannot talk to %s", npc)
 	}
+	// Knob quests.stepExec: a talk step the data gives an exec row (the bark reading) runs on the generic executor.
+	if a.r.e.Tune.Quests.StepExec == 1 {
+		if chain, step, ok := execTalkStep(npc, pick); ok {
+			return a.runExecStep(ctx, chain, step)
+		}
+	}
 	return a.tag(td.Dialog.Talk(ctx, npc, pick))
 }
 

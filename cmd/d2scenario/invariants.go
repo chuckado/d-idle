@@ -15,9 +15,10 @@ import (
 var invariantsJSON []byte
 
 type invariantPolicy struct {
-	Hard       []string `json:"hard"`
-	Soft       []string `json:"soft"`
-	ReportOnly []string `json:"report_only"`
+	Hard       []string            `json:"hard"`
+	Soft       []string            `json:"soft"`
+	ReportOnly []string            `json:"report_only"`
+	SoftIn     map[string][]string `json:"soft_in"`
 }
 
 func loadInvariantPolicy() invariantPolicy {
@@ -64,7 +65,7 @@ func (p invariantPolicy) invariantAsserts(id string, hits map[string]int) []scen
 	sort.Strings(names)
 	var out []scenario.AssertResult
 	for _, n := range names {
-		if !hard[n] {
+		if !hard[n] || p.softFor(n, id) {
 			continue
 		}
 		r := scenario.AssertResult{Kind: "invariant " + n, OK: reportOnly, Want: "0 hits", Got: fmt.Sprintf("%d hits", hits[n])}
@@ -74,4 +75,14 @@ func (p invariantPolicy) invariantAsserts(id string, hits map[string]int) []scen
 		out = append(out, r)
 	}
 	return out
+}
+
+// softFor says a hard row is only logged for this scenario id (invariants.json soft_in).
+func (p invariantPolicy) softFor(name, id string) bool {
+	for _, pre := range p.SoftIn[name] {
+		if strings.HasPrefix(id, pre) {
+			return true
+		}
+	}
+	return false
 }

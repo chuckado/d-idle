@@ -186,16 +186,18 @@ type mercWire struct {
 	cat   bot.Catalog
 	now   func() time.Time // the env clock (virtual under lockstep), wall time when the env has none
 
-	mu       sync.Mutex
-	cur      merc.MercState
-	curErr   error
-	curAt    time.Time
-	seen     bool // a merc was owned at some read
-	wasAlive bool
-	deaths   []time.Time
-	revives  []time.Time
-	lastLine time.Time
-	lastDec  string
+	mu         sync.Mutex
+	hiredClass int // the class and aura window text of the last merc this process hired; memory cannot read a merc's aura (U on d2d) (mu)
+	hiredAura  string
+	cur        merc.MercState
+	curErr     error
+	curAt      time.Time
+	seen       bool // a merc was owned at some read
+	wasAlive   bool
+	deaths     []time.Time
+	revives    []time.Time
+	lastLine   time.Time
+	lastDec    string
 
 	gearRefused  map[lutKey]bool          // a replacing hire was refused for worn merc gear; quiet until he is bare (mu)
 	lutDone      map[lutKey]bool          // the swap decision of the first Lut Gholein visit is final (hired, or declined for good)
@@ -261,6 +263,9 @@ func (w *mercWire) State() (merc.MercState, error) {
 		return w.cur, w.curErr
 	}
 	st, err := w.rd.State()
+	if err == nil && st.Owned && st.Aura == "" && w.hiredAura != "" && (st.Class == 0 || st.Class == w.hiredClass) {
+		st.Aura = w.hiredAura
+	}
 	w.cur, w.curErr, w.curAt = st, err, w.now()
 	if err == nil && st.Known {
 		w.observe(st)
@@ -312,7 +317,7 @@ func (w *mercWire) Status() map[string]any {
 	now := w.now()
 	w.deaths, w.revives = within(w.deaths, now), within(w.revives, now)
 	out := map[string]any{"enabled": true, "known": st.Known, "owned": st.Owned, "alive": st.Alive, "class": st.Class,
-		"lifePct": st.LifePct, "level": st.Level, "deathsLastHour": len(w.deaths), "revivesLastHour": len(w.revives),
+		"lifePct": st.LifePct, "level": st.Level, "aura": st.Aura, "deathsLastHour": len(w.deaths), "revivesLastHour": len(w.revives),
 		"lastDecision": w.lastDec}
 	if err != nil {
 		out["error"] = err.Error()
@@ -664,6 +669,7 @@ func (w *mercWire) HireStep(ctx context.Context, s *d2.Snapshot) string {
 	}
 	w.lutMark(name, c.Difficulty)
 	w.mu.Lock()
+	w.hiredClass, w.hiredAura = o.Class, o.Aura
 	w.curAt = time.Time{}
 	w.mu.Unlock()
 	w.log.Info(merc.LogHired(o.Class, o.Aura, paid, c.Gold, c.Gold-paid))

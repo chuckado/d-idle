@@ -17,7 +17,7 @@ func (p *Profile) Rotation(clvl int, known func(string) bool) delivery.Rotation 
 	}
 	for _, a := range p.AuraLadder(clvl, known) {
 		r.Slots = append(r.Slots, delivery.Slot{Skill: a.Name, Role: delivery.RoleAura,
-			When: delivery.When{HeroLifeBelowPct: a.RestLifePct, CrowdKnob: a.NeedsCrowd, TargetNotImmuneTo: a.Elem}})
+			When: delivery.When{HeroLifeBelowPct: a.RestLifePct, FightHeroLifeBelowPct: a.FightLifePct, FightMaxPotions: a.MaxPotions, CrowdKnob: a.NeedsCrowd, TargetNotImmuneTo: a.Elem}})
 	}
 	return r
 }
@@ -26,7 +26,7 @@ func (p *Profile) Rotation(clvl int, known func(string) bool) delivery.Rotation 
 func auraPrefs(r delivery.Rotation) []AuraPref {
 	var out []AuraPref
 	for _, s := range r.Of(delivery.RoleAura) {
-		out = append(out, AuraPref{Name: s.Skill, Elem: s.When.TargetNotImmuneTo, RestLifePct: s.When.HeroLifeBelowPct, NeedsCrowd: s.When.CrowdKnob})
+		out = append(out, AuraPref{Name: s.Skill, Elem: s.When.TargetNotImmuneTo, RestLifePct: s.When.HeroLifeBelowPct, FightLifePct: s.When.FightHeroLifeBelowPct, MaxPotions: s.When.FightMaxPotions, NeedsCrowd: s.When.CrowdKnob})
 	}
 	return out
 }
