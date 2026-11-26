@@ -17,6 +17,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Runbook docs/process/second-worker.md; the second worker ran one survival smoke wave (legacy:107, writes after start 0) and one Proving Ground scenario (heal.town GREEN), verified live on the second worker"
+lane: next
 ---
 
 ## Description

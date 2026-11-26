@@ -41,6 +41,7 @@ owns:
   - "cmd/d2bot/goldfarmwire_test.go"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

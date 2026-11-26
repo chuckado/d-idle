@@ -24,6 +24,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Farm loop built, shipped OFF (calibrated model +2.5 percent, prior +8, steep +16, never a loss with the value rule); /api/zoneclear and the opt-in zoneclear panel added; offline tests only, not verified live, fit-check fixtures not run (needs Chromium)"
+lane: next
 ---
 
 ## Description

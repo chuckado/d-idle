@@ -8,6 +8,13 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into fableroadmap <!--sg:agent/fableroadmap-->
+- Merge branch 'main' into backlogplan <!--sg:agent/backlogplan-->
+- reflex1a: safety latency measure (minute line, autopsy) and T6 cancel test <!--sg:agent/reflex1-->
+- Merge branch 'main' into toolstrade77 <!--sg:agent/toolstrade77-->
+- Merge branch 'main' into outcome1 <!--sg:agent/outcome1-->
+- Merge branch 'main' into invmon <!--sg:agent/invariants-->
+- herorecord: record the live Paladin hero in the epic pages <!--sg:agent/herorecord-->
 - Merge branch 'main' into darklaunch <!--sg:agent/darklaunch-->
 - combat: a living hero at life 0 drinks (live Questy death 2026-11-26), Smith row kit, matrix 76-77 <!--sg:agent/qd26-->
 - Merge branch 'main' into epiccards <!--sg:agent/epiccards-->

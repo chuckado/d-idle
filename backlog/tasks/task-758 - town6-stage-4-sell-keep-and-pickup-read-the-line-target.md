@@ -18,6 +18,7 @@ owns:
   - "internal/loot"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

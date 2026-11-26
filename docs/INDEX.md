@@ -80,6 +80,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `plan/`
 
+- [QUEUE.md](plan/QUEUE.md): Queue (generated: do not edit)
 - [STATUS.md](plan/STATUS.md): Where we are (hand-written part last edited 2026-11-03 by APPLYREVIEW; the generated block at the bottom... (status: the older 2026-10-30 text (Game.exe soak history, container cards, merged-today lists) is in git history....)
 - [bot-requirements.md](plan/bot-requirements.md): Bot requirements implied by docs/plan/leveling.md
 - [code-reality.md](plan/code-reality.md): Code reality map for 8 h / 24 h unattended soaks (CODEREALITY, 2026-10-30)
@@ -489,6 +490,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [hourfix.md](hourfix.md): hourfix: first-hour time sinks (TASK-368)
 - [hourfix2.md](hourfix2.md): hourfix2: the Den-mouth shuttle of the second fresh hour (2026-11-12 17:35)
 - [input.md](input.md): Input: helper, client, transform (agent INPUT)
+- [invariants.md](invariants.md): Invariant monitor (knob `bot.invariants`) (status: current (card invmon, 2026-11-25). Logging only. Source: P1 of...)
 - [items.md](items.md): Items, economy and runewords for the offline bot (agent ITEMRESEARCH)
 - [killcredit.md](killcredit.md): Kill credit and hits per cast (change killcredit)
 - [killfix.md](killfix.md): KILLFIX: removing the two top kill-gap causes on d2d (2026-10-30) (status: current. Tags: V = measured on hidden d2d (fresh uncheated Sorceress, 2 virtual hours per run, parallel...)
@@ -531,6 +533,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [onboarding-slice-a.md](onboarding-slice-a.md): Onboarding slice A: setup stepper, go-ahead and access (status: BUILT offline (task TASK-44, card onboardA, 2026-11-06). Design and mock:...)
 - [onboarding.md](onboarding.md): Onboarding on /watch: welcome card, first 30 minutes, reconnect banners (status: BUILT offline (TASK-247 firstminutes, TASK-249 reconnectux, 2026-11-11). Node DOM goldens and Go tests...)
 - [operator.md](operator.md): Operator quest control (status: current (card opsquest). Code: `internal/ops`, `cmd/d2bot/ops*.go`, `tools/questloop.sh`.)
+- [outcomes.md](outcomes.md): Typed step outcome (knob `bot.typedOutcome`) (status: current, stage 1 (card outcome1, 2026-11-25). Source: P2 of...)
 - [overlay.md](overlay.md): Table overlay (d.idle mode): file format and rules (status: implemented, 2026-11-06, TASK-59. Fork side `--overlay-dir` on branch `d2d.lab4-overlay` of the private...)
 - [pact-away.md](pact-away.md): Pact away safety (TASK-169) (status: built and tested offline with fakes and httptest; NOT run against a live bot or a browser. Design:...)
 - [pact-botside.md](pact-botside.md): Bot-side Pacts (TASK-167) (status: built and tested offline with fakes; NOT run against a live bot. Design: `docs/research/pact-system.md` (a...)
@@ -599,9 +602,11 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `reviews/`
 
 - [support-bundle-security-2026-11-15.md](reviews/support-bundle-security-2026-11-15.md): Security review: support bundle upload (branch agent/support, tip 88eecae7b) (status: review of task 542 / card `support` before merge (mergeq #811). Reviewer: Opus, single, offline. Nothing...)
+- [roadmap-fable.md](roadmap-fable.md): Fable roadmap: every recommendation, its state, and what flips it (status: current (card fableroadmap, 2026-11-26; written on user approval of the same day). A living tracker: the...)
 - [roamleg.md](roamleg.md): ROAMLEG: a mouth-gate hold is not a failed roam target (status: offline fix, tests pass, verified live in DRILLS23 (docs/probes/drills/README.md): 0 failed legs (was 50),...)
 - [roamspacing.md](roamspacing.md): Roam coverage spacing (TASK-301) (status: CURRENT. Tags: V = measured (log read-only, or the simulator run in this worktree on the worker host), S =...)
 - [running.md](running.md): How to run d.idle (status: current as of 2026-11-01 (card readmedocs; Teleport and `--build` note added by card capdocs). Every...)
+- [safety-latency.md](safety-latency.md): Safety latency and cancellation latency (status: current (card reflex1a, 2026-11-26). Source: docs/research/fable-logic-review-2026-11-25.md sections 3.1...)
 - [scenarios.md](scenarios.md): Scenario corpus
 - [self-update-client.md](self-update-client.md): Self-update client (Tier 2, part 2) (status: CURRENT for the code; nothing here has run against real GitHub or in a real container. Design:...)
 - [self-update-drill.md](self-update-drill.md): Self-update boot shim and drills (Tier 2, part 3) (status: CURRENT for the code; the container drills below are a CHECKLIST that has NOT been run (no image was...)

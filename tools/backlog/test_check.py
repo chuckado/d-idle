@@ -37,6 +37,22 @@ class T(unittest.TestCase):
         self.assertEqual(len(w), 1)
         self.assertIn("task-2", w[0])
 
+    def test_lane_due_epic(self):
+        ok = task(1, "a", extra="lane: next\ndue: 2026-12-01\nepic: epic-act1\n")
+        self.assertEqual(self.run_dir([ok]), [])
+        self.assertTrue(any("has lane 'soon'" in x for x in self.run_dir([task(1, "a", extra="lane: soon\n")])))
+        for bad in ("2026-13-01", "2026-1-5", "tomorrow"):
+            self.assertTrue(any("needs a real YYYY-MM-DD" in x for x in self.run_dir([task(1, "a", extra=f"due: {bad}\n")])), bad)
+        self.assertTrue(any("empty epic" in x for x in self.run_dir([task(1, "a", extra="epic: \n")])))
+
+    def test_parked_needs_note_and_to_do_is_a_status(self):
+        self.assertTrue(any("lane_note" in x for x in self.run_dir([task(1, "a", extra="lane: parked\n")])))
+        self.assertTrue(any("lane_note" in x for x in self.run_dir([task(1, "a", extra="lane: waiting-owner\n")])))
+        self.assertEqual(self.run_dir([task(1, "a", extra="lane: parked\nlane_note: why\n")]), [])
+        self.assertEqual(self.run_dir([task(1, "a", "Done", extra="lane: parked\n")]), [])
+        self.assertEqual(self.run_dir([task(1, "a", "To Do")]), [])
+        self.assertTrue(any("no assignee" in x for x in self.run_dir([task(1, "a", "To Do", asg="")])))
+
     def test_duplicate_task_id(self):
         out = self.run_dir([task(5, "a"), task(5, "b")])
         self.assertEqual(len(out), 1)

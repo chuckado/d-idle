@@ -19,6 +19,7 @@ owns:
   - "docs/research/design-brief-v1.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

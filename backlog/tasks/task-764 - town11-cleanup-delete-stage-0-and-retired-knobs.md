@@ -20,6 +20,7 @@ owns:
 exclusive: []
 contracts:
   - "town-basics"
+lane: next
 ---
 
 ## Description

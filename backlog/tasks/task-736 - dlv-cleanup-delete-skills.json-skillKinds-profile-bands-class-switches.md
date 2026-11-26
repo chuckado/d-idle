@@ -18,6 +18,7 @@ owns:
   - "tools/ci/"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

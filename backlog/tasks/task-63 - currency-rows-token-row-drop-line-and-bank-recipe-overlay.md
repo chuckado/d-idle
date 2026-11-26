@@ -31,6 +31,8 @@ owns:
 exclusive: []
 contracts: []
 result: "paused by direction review D1/D4/D5, 2026-11-07 (docs/research/direction-review.md section 6); Offline proven 2026-11-06 (not yet verified live): fragments in data/overlay/didle-v1, go test -run Didle ./internal/overlay against the real tables (code free, Blood Raven class, one in 37.0 per kill, no earlier recipe takes mrk), pickit keep rule with a two-build test. Live drop count, d2d acceptance of the code and the bank recipe: docs/probes/currency1.md (ready-to-run drill, see its blocker)."
+lane: parked
+lane_note: "status Deferred (paused by direction review D1/D4/D5, 2026-11-07 (docs/resear)"
 ---
 
 ## Description
