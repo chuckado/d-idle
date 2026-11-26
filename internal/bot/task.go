@@ -805,6 +805,9 @@ func (a taskActs) Interact(ctx context.Context, object string) error {
 	if object == CageObject {
 		return a.freeCain(ctx, td)
 	}
+	if object == TreeObject && a.r.e.Tune.Quests.StepExec == 1 {
+		return a.treeViaExecutor(ctx)
+	}
 	if err := a.tag(td.Objects.Interact(ctx, object)); err != nil {
 		return err
 	}
