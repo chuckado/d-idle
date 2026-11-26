@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/data"
 )
 
 // The invariant monitor (docs/invariants.md, knob bot.invariants, review fable-logic-review-2026-11-25 P1). A table of
@@ -46,6 +47,7 @@ var invRows = []invRow{
 	{Name: "town-thrash", Count: 17, Secs: 3600, Why: "Count or more field entries within Secs"},
 	{Name: "arbiter-starved", GapSec: 600, Why: "an arbiter intent was outranked for 600 s or more (docs/arbiter.md); only with the arbiter knobs on"},
 	{Name: "aura-off", Secs: 10, Why: "in the field with an aura skill learned and the state line reading no active aura (aura=0) for Secs; only where the backend reports the aura (d2d)"},
+	{Name: "summon-missing", Secs: 10, Why: "in the field with hostiles near, a summon skill learned and its mana in hand, and the state line reading no own minion (pets=0) for Secs; only where the backend reports the count (d2d); soft: the count rule is unverified live"},
 	{Name: "economy-stall", Secs: 7200, Count: 100, Why: "gold in purse and stash under Count for Secs while kills continue"},
 }
 
@@ -119,6 +121,8 @@ type invFacts struct {
 	corpseSince            time.Time
 	auraWatch              bool // an aura skill is learned and the backend reports the active aura
 	aura                   int  // the active aura id (0 none), meaningful with auraWatch
+	summonWatch            bool // a summon skill is learned and affordable and the backend reports the minion count
+	minions                int  // the own minion count, meaningful with summonWatch
 }
 
 type invHit struct{ Name, Detail string }
@@ -141,6 +145,7 @@ type invMon struct {
 	packSince             time.Time
 	resupSince, zeroSince time.Time
 	auraOffSince          time.Time
+	summonSince           time.Time
 	xpAt                  time.Time
 	lastXP                uint32
 	modeKey               string
@@ -208,7 +213,7 @@ func (m *invMon) tick(f invFacts) []invHit {
 	m.pending = nil
 	if f.dead {
 		// a dead hero breaks no field invariant; keep the stopwatches clean
-		m.lowSince, m.tpSince, m.resupSince, m.zeroSince, m.packSince, m.auraOffSince = time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}
+		m.lowSince, m.tpSince, m.resupSince, m.zeroSince, m.packSince, m.auraOffSince, m.summonSince = time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}
 		m.seen, m.prevTown = false, false
 		return m.limit(raw, f.now)
 	}
@@ -256,6 +261,11 @@ func (m *invMon) tick(f invFacts) []invHit {
 	r = invRowOf("aura-off")
 	if d := invSince(&m.auraOffSince, field && f.auraWatch && f.aura == 0, f.now); d >= r.dur() {
 		hit(r.Name, "no active aura for=%ds area=%d step=%q hostiles=%d", int(d.Seconds()), f.area, f.step, f.hostiles)
+	}
+
+	r = invRowOf("summon-missing")
+	if d := invSince(&m.summonSince, field && f.summonWatch && f.minions == 0 && f.hostiles > 0, f.now); d >= r.dur() {
+		hit(r.Name, "no own minion for=%ds area=%d step=%q hostiles=%d", int(d.Seconds()), f.area, f.step, f.hostiles)
 	}
 
 	r = invRowOf("resupply-in-field")
@@ -418,6 +428,7 @@ func (r *Runner) invTick(snap *d2.Snapshot, c control) {
 	f.corpsePending, f.corpseSince = r.corpseTown.pending, r.corpseTown.since
 	r.corpseTown.mu.Unlock()
 	f.auraWatch, f.aura = r.auraFacts(p)
+	f.summonWatch, f.minions = r.summonFacts(p)
 	if !f.inTown && !f.dead {
 		f.hostiles = r.hostileNear(snap, t.Combat.FightRadius)
 		if f.lifePct < f.drinkPct || f.lifePct <= f.chickenPct {
@@ -489,4 +500,33 @@ func (r *Runner) auraFacts(p *d2.Player) (watch bool, id int) {
 		}
 	}
 	return false, p.Aura
+}
+
+// summonFacts reports whether the summon-missing row applies: the backend gives the minion count (d2d state line) and the hero
+// has learned a summon skill (skills.txt `summon` column, data: no class check) whose mana cost it can pay now.
+func (r *Runner) summonFacts(p *d2.Player) (watch bool, minions int) {
+	if r.e.Data == nil {
+		return false, 0
+	}
+	return summonWatch(p, r.e.Data.SkillByID)
+}
+
+func summonWatch(p *d2.Player, byID func(int) *data.Skill) (bool, int) {
+	if !p.PetsKnown {
+		return false, 0
+	}
+	for _, sk := range p.Skills {
+		if d := byID(sk.ID); sk.Level > 0 && d != nil && d.Summon != "" && !d.Passive && float64(p.Mana) >= d.ManaCost(sk.Level) {
+			return true, p.Pets
+		}
+	}
+	return false, p.Pets
+}
+
+// petsKV is the own minion count for the minute line, only where the backend reports it (d2d state line).
+func petsKV(p *d2.Player) []any {
+	if p.PetsKnown {
+		return []any{"minions", p.Pets}
+	}
+	return nil
 }
