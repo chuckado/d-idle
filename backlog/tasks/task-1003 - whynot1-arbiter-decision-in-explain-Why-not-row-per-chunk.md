@@ -1,10 +1,11 @@
 ---
 id: TASK-1003
 title: 'whynot1: arbiter decision in explain, Why-not row per chunk'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T17:44:00Z'
+updated_date: '2026-11-26T18:33:00Z'
 labels:
   - bot
   - feature

@@ -180,9 +180,7 @@ cmd/d2bot/objects.go  credit-runner  botstuck
 cmd/d2bot/objects.go  credit-runner  cain5b
 cmd/d2bot/objects.go  live-agent  k1layout
 cmd/d2bot/objects_layout_test.go  live-agent  k1layout
-cmd/d2bot/opscmd.go  credit-runner  whynot1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
-cmd/d2bot/questwire.go  credit-runner  whynot1
 cmd/d2bot/repairwire.go  credit-runner  repairtrip
 cmd/d2bot/resetwire.go  credit-runner  resetinstant
 cmd/d2bot/resetwire_test.go  credit-runner  resetinstant
@@ -344,7 +342,6 @@ docs/onboarding-tour.md  credit-runner  onboardtour
 docs/onboarding.md  credit-runner  firstminutes
 docs/onboarding.md  credit-runner  reconnectux
 docs/operator.md  credit-runner  autorevert1
-docs/operator.md  credit-runner  whynot1
 docs/outcomes.md  credit-runner  outcome-kit-gate
 docs/outcomes.md  credit-runner  outcome-park-step
 docs/outcomes.md  credit-runner  outcome-route-guard
@@ -482,8 +479,6 @@ internal/arbiter  credit-runner  arbfam
 internal/arbiter  credit-runner  town10
 internal/arbiter/  credit-runner  arbmig
 internal/arbiter/  credit-runner  dlv-stance-army
-internal/arbiter/explained.go  credit-runner  whynot1
-internal/arbiter/explained_test.go  credit-runner  whynot1
 internal/boss  credit-runner  countess3
 internal/boss/act1.go  credit-runner  countess
 internal/boss/boss_test.go  credit-runner  countess
@@ -508,8 +503,6 @@ internal/bot/contracts.go  credit-runner  chores2
 internal/bot/drought.go  credit-runner  freshstart
 internal/bot/earlyroute.go  credit-runner  admit1
 internal/bot/explain.go  credit-runner  autorevert1
-internal/bot/explain.go  credit-runner  whynot1
-internal/bot/explain_test.go  credit-runner  whynot1
 internal/bot/failsafe_test.go  credit-runner  flakefix
 internal/bot/farm.go  credit-runner  pgclock
 internal/bot/farmclock_test.go  credit-runner  pgclock
@@ -769,7 +762,6 @@ internal/nav/route.go  credit-runner  exitsread
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
-internal/ops  credit-runner  whynot1
 internal/plandata/act2plan.go  credit-runner  act2plan
 internal/plandata/act2plan.json  credit-runner  act2plan
 internal/plandata/act2plan_test.go  credit-runner  act2plan
@@ -789,7 +781,6 @@ internal/power/archetype.go  credit-runner  qdmatrix
 internal/power/skilldamage_test.go  credit-runner  qdmatrix
 internal/quest/dialog.go  credit-runner  cain5b
 internal/questboard  credit-runner  boardprereq
-internal/questboard  credit-runner  whynot1
 internal/questboard/chunks_test.go  credit-runner  cain45
 internal/questboard/chunks_test.go  credit-runner  cain5b
 internal/questboard/def.go  credit-runner  cainfix3
@@ -927,7 +918,6 @@ internal/watch/onboarding_test.go  credit-runner  firstminutes
 internal/watch/palfeed/luma_test.go  credit-runner  brightness
 internal/watch/panels.go  credit-runner  uis6
 internal/watch/pointsui.go  credit-runner  allocfix
-internal/watch/questui_test.go  credit-runner  whynot1
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
 internal/watch/resetapi.go  credit-runner  resetinstant
@@ -976,7 +966,6 @@ internal/watch/testdata/map_panel.js  credit-runner  maptrail2
 internal/watch/testdata/onboarding_dom.js  credit-runner  firstminutes
 internal/watch/testdata/quests  credit-runner  cain45
 internal/watch/testdata/quests  credit-runner  cain5b
-internal/watch/testdata/quests  credit-runner  whynot1
 internal/watch/testdata/quests/  credit-runner  handinbtn
 internal/watch/testdata/questui/quest_ui.mjs  credit-runner  handinbtn
 internal/watch/testdata/reset  credit-runner  resetinstant
@@ -1044,7 +1033,6 @@ internal/watch/web/panels/map/  credit-runner  uis6
 internal/watch/web/panels/onboarding  credit-runner  firstminutes
 internal/watch/web/panels/onboarding  credit-runner  reconnectux
 internal/watch/web/panels/orders/panel.css  credit-runner  morefit
-internal/watch/web/panels/quest-board  credit-runner  whynot1
 internal/watch/web/panels/quest-board/panel.js  credit-runner  handinbtn
 internal/watch/web/panels/quest-strip/panel.css  credit-runner  uifit1
 internal/watch/web/panels/statusline/panel.css  credit-runner  uifit1
