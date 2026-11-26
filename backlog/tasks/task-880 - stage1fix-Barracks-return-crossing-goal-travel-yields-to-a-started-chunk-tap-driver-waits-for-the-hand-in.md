@@ -26,6 +26,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Three fixes with offline must-fail tests (nav strip crossing, goal travel yields to a started chunk, tap driver waits for the hand-in); stage 1 still RED at the Den hand-in in the stage-1 setup (Den alone GREEN at clvl 10, 14, 16): cause open; nav.barracks-return scenario pending (hero start cannot reproduce the arrival). Not ready to play."
+lane: next
 ---
 
 ## Description

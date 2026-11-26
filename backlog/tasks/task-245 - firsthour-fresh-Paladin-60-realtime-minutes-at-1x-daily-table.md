@@ -21,6 +21,7 @@ owns:
 exclusive: []
 contracts: []
 result: "tooling built and fixture-tested (cmd/d2firsthour, tools/firsthour.sh); NOT run live, no daily rows yet; AC1 stays open"
+lane: next
 ---
 
 ## Description

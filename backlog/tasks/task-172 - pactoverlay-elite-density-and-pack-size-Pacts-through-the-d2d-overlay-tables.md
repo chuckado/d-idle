@@ -20,6 +20,8 @@ owns:
   - "docs/research/pact-overlay.md"
 exclusive: []
 contracts: []
+lane: parked
+lane_note: "status Deferred (no result line)"
 ---
 
 ## Description

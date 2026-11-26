@@ -20,6 +20,7 @@ exclusive:
   - "upstream-pr:swing-start"
 contracts: []
 result: "Posted 2026-11-14: https://github.com/psi29a/d2decomped/pull/530 (fid/swing-start-r3; upstream main unchanged). CodeRabbit: one valid comment fixed in 16198be6 and answered. Nothing run on the worker host."
+lane: next
 ---
 
 ## Description

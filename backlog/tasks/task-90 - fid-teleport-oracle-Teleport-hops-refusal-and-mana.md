@@ -24,6 +24,8 @@ owns:
 exclusive: []
 contracts: []
 result: "AC2 proven (destination rule 0 differ, 2 x 20000 cases on real build, V run). AC1 not proven (refused-hop mana V read both sides, differential not built); AC3 live not done. Doc docs/probes/fid/fid-teleport.md. Not verified live."
+lane: parked
+lane_note: "status Deferred (AC2 proven (destination rule 0 differ, 2 x 20000 cases on re)"
 ---
 
 ## Description

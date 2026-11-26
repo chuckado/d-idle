@@ -18,6 +18,7 @@ exclusive:
   - "upstream-pr:seq-ias-followup"
 contracts: []
 result: "Only 310ff43d substance was missing from merged #565; branch fid/seq-ias-followup (67d2262f) pushed to fork remotes, builder run: 36 cells ok, compare 7600 same, test_game/test_combat rc 0, tidy clean, pr_guard 0, presubmit --quick 0 FAIL; body drafted, not posted. Verified on the builder container, not live."
+lane: next
 ---
 
 ## Description

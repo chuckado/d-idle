@@ -33,6 +33,7 @@ exclusive:
   - "fork-branch:fork-only/itemverbs"
 contracts: []
 result: "Fork branch fork-only/itemverbs commit 59ae7810 (private forge): item move/identify/drop and gold deposit/withdraw verbs, stash only at the chest; headless differential verb vs manual command sequence matched 3 of 3 runs. Bot: VerbMover/VerbTrasher wired on the d2d backend behind knob invdesk.verbs (default OFF), how=verb|click on every settled request; live click-vs-verb differential prepared (docs/design/item-verbs.md 9a, tools/itemverbs), NOT run live. 0x27 field order settled by disassembly: item first, scroll second."
+lane: next
 ---
 
 ## Description

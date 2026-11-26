@@ -19,6 +19,7 @@ owns:
 exclusive: []
 contracts: []
 result: "r1 FAIL (stale base 83 commits; 4 mutants pass its pins, 2 of them in Monster::target pass its oracle too; writer scan wording overclaims: a second setter FUN_004ac810, 0x5a4599 is a re-make from a saved record), r2 PASS WITH CHANGES: fid/crush-d5-r2 oracle 3d51e67e + claim 5824a42f on upstream d5de50ca, pushed to the private fork; parent 5,632 of 29,360 differ (all unique), claim 0; 17/17 non-equivalent mutants abort r2's pins; ctest 407/408 + 13 skip, smoke_d2d fails identically on upstream d5de50ca; tidy 0 findings (control caught); pr_guard 0/0; presubmit 0 FAIL 4 WARN; body changes C1-C8; offline, not verified live"
+lane: next
 ---
 
 ## Description

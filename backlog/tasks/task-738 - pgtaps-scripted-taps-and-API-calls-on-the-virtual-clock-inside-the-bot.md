@@ -22,6 +22,7 @@ owns:
 exclusive: []
 contracts: []
 result: "STEP 1 of 2 done (group 1): the board tapper polls on a grid of the bot VIRTUAL clock (GET /api/thoughts now; 30 virtual s grid, 250 ms wall poll, wall fallback after 90 s without a reading, logged) instead of 20 wall s plus 5 wall s; Result.taps_at records each tap virtual second. Default behaviour of every board-taps scenario changes: the Start tap now lands on the first grid point after the offer. API calls (trigger.api After) stay wall-clock (H2 open). Scripted taps inside the bot (steps 2) NOT done. Offline: fake board tests, -race -count=20. U live: that /api/thoughts now advances under the lab d2d; the journal pair card (pgjournal) measures it."
+lane: now
 ---
 
 ## Description

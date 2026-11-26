@@ -19,6 +19,7 @@ owns:
 exclusive: []
 result: "dlv-rotation done, NOT verified live. internal/delivery/rotation.go: Rotation, Slot (role attack, upkeep with Group, aura) and When (the three predicates profiles carry today: hero life below pct, crowd knob, target not immune to element), Names/Groups/Of and a role-by-role Diff. combat.Profile.Rotation(clvl, known) is the FromProfile adapter; Fighter.attackSkills, buffPass and wantAura read slots now (decisions unchanged: TestRotationEqualsTheProfileLists compares attack names, buff groups and aura ladder of EVERY profile at clvl 1..99 for a hero that knows everything and one that knows nothing; TestRotationParityFailsOnAReorder proves it can fail, Sorceress and Paladin). agency.Plan.Rotation lays the plan out as a Rotation; agency.ShadowDiff compares plan and profile heads slot by slot (a pure function: wiring it into the shadow log line is a follow-up in cmd/d2bot, not owned here). Verified offline: go test -race -count=20 on internal/combat, agency, delivery; go test of internal/bot and cmd/d2bot green. Build-specific: none added; data in classdata profiles. Special rules (static opener, nova, aura crowd, life price) still live in Go: they move into slots in later cards."
 contracts: []
+lane: next
 ---
 
 ## Description

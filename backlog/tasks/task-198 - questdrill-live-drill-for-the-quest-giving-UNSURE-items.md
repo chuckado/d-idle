@@ -17,6 +17,7 @@ owns:
   - "docs/quest-hints.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

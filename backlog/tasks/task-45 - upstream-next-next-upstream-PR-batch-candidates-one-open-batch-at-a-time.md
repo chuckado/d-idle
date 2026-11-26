@@ -16,6 +16,7 @@ owns:
   - "docs/research/upstream-next.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

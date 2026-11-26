@@ -33,6 +33,8 @@ merge_hash: ""
 overlap: ""
 source: "openspec-final:openspec/changes/m2-roam"
 contracts: ["proposed/m2-roam"]
+lane: parked
+lane_note: "status Deferred (no result line)"
 ---
 
 ## Description

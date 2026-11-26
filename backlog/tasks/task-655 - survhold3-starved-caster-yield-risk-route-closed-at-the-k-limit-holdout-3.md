@@ -18,6 +18,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Risk route closed at the k limit (riskMaxK) and caster yieldMinMinutes/starveValueMul as data, must-fail tests on two builds; Sorceress seeds 101/103 re-run on the builder (103 recovered: margin 22.9k against legacy 16.9k; 101 12.0k against 16.1k; writes after start 0): INCONCLUSIVE with 2 pairs; seed 107 and the Paladin waves not run (builder yielded to merge gates); no default changed"
+lane: next
 ---
 
 ## Description

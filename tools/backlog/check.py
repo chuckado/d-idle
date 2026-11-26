@@ -9,15 +9,18 @@ Rules, for every card in backlog/tasks (archived cards live elsewhere):
   - Proposed and In Progress cards: an assignee from the runner set, and `Size: S|M|L` as the first line of the description (Deferred and Done are exempt)
   - `milestone`, when set, names a file in backlog/milestones; every dependency is an existing task id
   - each task has an `owns` frontmatter key
+  - optional planning keys (all cards, keys may be absent): `lane` one of now next later blocked waiting-owner parked; `due` a real YYYY-MM-DD date;
+    `epic` a non-empty card id; a parked or waiting-owner card (not Done) carries a `lane_note` reason line
   - card ids (the part of the title before the first colon) are unique; task ids (TASK-N) are unique
 Exit 0 when clean, 1 when there are findings. Standard library only.
 """
 import re
 import sys
+from datetime import date
 from pathlib import Path
 
-OPEN = {"Proposed", "Deferred", "In Progress"}
-ACTIVE = {"Proposed", "In Progress"}
+OPEN = {"Proposed", "To Do", "Deferred", "In Progress"}
+ACTIVE = {"Proposed", "To Do", "In Progress"}
 COMPONENTS = {"bot", "d2d", "container", "watch", "ops", "docs"}
 KINDS = {"feature", "bug", "probe", "oracle", "drill", "research", "chore", "readonly", "d2d-measure", "model-check", "upstream-pr", "bot-fix"}
 D2D_AREAS = {"d2d-" + x for x in ("combat skills monsters items loot town vendor movement pathing levels network time data ui".split())}
@@ -27,6 +30,7 @@ GATES = {f"G-{c}" for c in "ABCDEFG"}
 MODIFIERS = {"soak", "parked"}
 KNOWN = COMPONENTS | KINDS | D2D_AREAS | TRACKS | TIERS | GATES | MODIFIERS
 PRIORITIES = {"high", "medium", "low"}
+LANES = {"now", "next", "later", "blocked", "waiting-owner", "parked"}  # planning lanes, docs/backlog-howto.md "Planning lanes"
 ASSIGNEES = {"pro-runner", "credit-runner", "live-agent", "user"}
 
 
@@ -66,6 +70,26 @@ def parse(path):
 def first_desc_line(path):
     m = re.search(r"<!-- SECTION:DESCRIPTION:BEGIN -->\n(.*?)\n", Path(path).read_text(), re.S)
     return m.group(1).strip() if m else ""
+
+
+def lane_findings(fname, card, fm):
+    out = []
+    lane = fm.get("lane")
+    if "lane" in fm and lane not in LANES:
+        out.append(f"{fname}: {card} has lane {lane!r}, allowed: {' '.join(sorted(LANES))}")
+    due = fm.get("due")
+    if "due" in fm:
+        try:
+            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", due or ""):
+                raise ValueError
+            date.fromisoformat(due)
+        except ValueError:
+            out.append(f"{fname}: {card} has due {due!r}, needs a real YYYY-MM-DD date")
+    if "epic" in fm and not fm["epic"].strip():
+        out.append(f"{fname}: {card} has an empty epic key")
+    if lane in ("parked", "waiting-owner") and fm.get("status") != "Done" and not fm.get("lane_note", "").strip():
+        out.append(f"{fname}: {card} is in lane {lane} and needs a lane_note reason line")
+    return out
 
 
 def check(tasks_dir):
@@ -115,6 +139,7 @@ def check(tasks_dir):
                 findings.append(f"{f.name}: {card} ({fm.get('status')}) has no assignee")
             if not re.fullmatch(r"Size: [SML]\b.*", first_desc_line(f)):
                 findings.append(f"{f.name}: {card} ({fm.get('status')}) needs 'Size: S|M|L' as the first line of the description")
+        findings += lane_findings(f.name, card, fm)
         ms = fm.get("milestone")
         if ms and milestones is not None and ms not in milestones:
             findings.append(f"{f.name}: {card} milestone {ms!r} has no file in backlog/milestones")

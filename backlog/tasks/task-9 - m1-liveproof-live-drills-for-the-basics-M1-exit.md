@@ -32,6 +32,8 @@ merge_hash: ""
 overlap: ""
 source: "openspec-final:openspec/changes/m1-liveproof"
 contracts: ["proposed/m1-liveproof"]
+lane: parked
+lane_note: "status Deferred (D0+D1 live 2026-10-31 (docs/probes/drills): P7a PASS (engine)"
 ---
 
 ## Description
