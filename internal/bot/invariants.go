@@ -130,6 +130,7 @@ type invMon struct {
 	started     time.Time            // first tick: the start of every counter's window
 	minute      map[string]int       // hits since the last minute line
 	pending     []invHit             // hits noted outside the tick (refusal counted as a failure)
+	incidents   incidentGate         // rate limit of the pre-state files a hit writes (incident.go)
 
 	seen, prevTown        bool
 	lowSince              time.Time
@@ -426,6 +427,7 @@ func (r *Runner) invTick(snap *d2.Snapshot, c control) {
 		if r.d.OnInvariant != nil {
 			r.d.OnInvariant(h.Name, h.Detail)
 		}
+		r.noteMonitorIncident(snap, h)
 	}
 }
 
