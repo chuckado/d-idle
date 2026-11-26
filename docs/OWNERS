@@ -205,6 +205,7 @@ cmd/d2bot/vaultkeep.go  credit-runner  vaultreveal
 cmd/d2bot/vaultpage.go  credit-runner  bulkid
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2firsthour/  live-agent  firsthour
+cmd/d2scenario/  credit-runner  arbmig
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/detrun.go  credit-runner  pgjournal
 cmd/d2scenario/detrun_test.go  credit-runner  pgjournal
@@ -231,6 +232,7 @@ data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
 data/capabilities/  credit-runner  dlv-data
 data/capabilities/  credit-runner  dlv-stance-pack
+data/darklaunch.json  credit-runner  arbmig
 data/darklaunch.json  credit-runner  autorevert1
 data/input/caps/  credit-runner  dlv-cast-verbs
 data/onboarding  credit-runner  firstminutes
@@ -243,6 +245,7 @@ docs/actbot.md  credit-runner  cain45
 docs/adr/0014-memory-writes-allowed-no-crutch.md  credit-runner  vaultpay
 docs/adr/0029-vault-gold-payment.md  credit-runner  vaultpay
 docs/adr/README.md  credit-runner  vaultpay
+docs/arbiter.md  credit-runner  arbmig
 docs/archive  credit-runner  dietarchive
 docs/autoalloc.md  credit-runner  allocfix
 docs/away-drill.md  live-agent  awaydrill
@@ -272,7 +275,6 @@ docs/design/input-i5-i7.md  credit-runner  inputl5
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vault
 docs/design/proptest-t3.md  credit-runner  proptest1
-docs/design/stepexec-p9.md  credit-runner  stepexec1
 docs/design/ticklog-t4.md  credit-runner  ticklog
 docs/design/townflip-p5.md  credit-runner  townflip
 docs/epics/epic-act1.md  live-agent  epic-act1
@@ -303,6 +305,7 @@ docs/invariants.md  credit-runner  autorevert1
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-ui.md  credit-runner  jewelicons
 docs/inventory-ui.md  credit-runner  nopins
+docs/knobs.md  credit-runner  arbmig
 docs/knobs.md  credit-runner  botstuck
 docs/knobs.md  credit-runner  bulkid
 docs/knobs.md  credit-runner  cainfix3
@@ -335,8 +338,11 @@ docs/outcomes.md  credit-runner  outcome-travel-gate
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
 docs/plan/STATUS.md  credit-runner  statusrefresh
+docs/plan/data/admission.json  credit-runner  admit1
 docs/plan/data/build-necromancer_summoner_normal30.json  credit-runner  allocfix
+docs/plan/data/earlyroutes.json  credit-runner  admit1
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
+docs/plan/data/povertyfarm.json  credit-runner  admit1
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm7
@@ -448,8 +454,10 @@ docs/vault.md  credit-runner  sellall
 docs/vault.md  credit-runner  vaultclean
 docs/vault.md  credit-runner  vaultpay
 docs/vault.md  credit-runner  vaultreveal
+internal/admit/  credit-runner  admit1
 internal/agency/  credit-runner  dlv-rotation
 internal/arbiter  credit-runner  town10
+internal/arbiter/  credit-runner  arbmig
 internal/arbiter/  credit-runner  dlv-stance-army
 internal/boss  credit-runner  countess3
 internal/boss/act1.go  credit-runner  countess
@@ -461,6 +469,9 @@ internal/boss/run.go  pro-runner  levelplan3
 internal/boss/script.go  credit-runner  countess
 internal/boss/types.go  pro-runner  levelplan3
 internal/bot/  credit-runner  cainfix3
+internal/bot/admit_need_test.go  credit-runner  admit1
+internal/bot/arbiter_control.go  credit-runner  arbmig
+internal/bot/arbiter_control_test.go  credit-runner  arbmig
 internal/bot/areametrics.go  credit-runner  intake
 internal/bot/areaskip_test.go  credit-runner  passagebounce
 internal/bot/areaskip_test.go  pro-runner  bounce3
@@ -468,6 +479,7 @@ internal/bot/broke.go  credit-runner  survrecover
 internal/bot/broke.go  credit-runner  town5
 internal/bot/contracts.go  credit-runner  chores2
 internal/bot/drought.go  credit-runner  freshstart
+internal/bot/earlyroute.go  credit-runner  admit1
 internal/bot/explain.go  credit-runner  autorevert1
 internal/bot/failsafe_test.go  credit-runner  flakefix
 internal/bot/farm.go  credit-runner  pgclock
@@ -495,6 +507,7 @@ internal/bot/levelplan3_test.go  pro-runner  levelplan3
 internal/bot/lifelog.go  credit-runner  arrivalsettle
 internal/bot/lifelog.go  credit-runner  hourfix
 internal/bot/lifelog.go  credit-runner  passagebounce
+internal/bot/loop.go  credit-runner  arbmig
 internal/bot/loop.go  credit-runner  hourfix
 internal/bot/loop.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  reflex1d
@@ -512,6 +525,7 @@ internal/bot/parkstep_test.go  credit-runner  botstuck
 internal/bot/plan.go  pro-runner  levelplan3
 internal/bot/playerreset.go  credit-runner  resetinstant
 internal/bot/playerreset_test.go  credit-runner  resetinstant
+internal/bot/povertyfarm.go  credit-runner  admit1
 internal/bot/questboard.go  credit-runner  bsm7
 internal/bot/questboard.go  credit-runner  equipswap
 internal/bot/questboard.go  credit-runner  failspend
@@ -534,6 +548,7 @@ internal/bot/runner.go  credit-runner  passagebounce
 internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  resetinstant
 internal/bot/safetylat.go  credit-runner  reflex1d
+internal/bot/shadow.go  credit-runner  arbmig
 internal/bot/staletarget.go  credit-runner  botstuck
 internal/bot/state.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  boardmoderace
@@ -637,6 +652,7 @@ internal/decide/variants_test.go  credit-runner  qdensity
 internal/delivery/  credit-runner  dlv-data
 internal/delivery/  credit-runner  dlv-rotation
 internal/env/tuning.go  credit-runner  bulkid
+internal/env/tuning_bot.go  credit-runner  arbmig
 internal/env/tuning_bot.go  credit-runner  botstuck
 internal/env/tuning_bot.go  credit-runner  freshstart
 internal/env/tuning_bot.go  credit-runner  hourfix
@@ -722,11 +738,14 @@ internal/nav/route.go  credit-runner  exitsread
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
+internal/plandata/admission.json  credit-runner  admit1
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
 internal/plandata/build-necromancer_summoner_normal30.json  credit-runner  allocfix
+internal/plandata/earlyroutes.json  credit-runner  admit1
 internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
+internal/plandata/povertyfarm.json  credit-runner  admit1
 internal/plandata/progression-normal.json  credit-runner  hourfix
 internal/points  credit-runner  allocfix
 internal/power/  credit-runner  dlv-cleanup
@@ -1075,6 +1094,7 @@ tools/probes/gridwhole.py  credit-runner  gridwhole
 tools/probes/objectlist.py  credit-runner  qdmatrix
 tools/probes/presets.py  credit-runner  qdmatrix
 tools/provingground/  credit-runner  dlv-reads
+tools/provingground/arbiter-outcomes/  credit-runner  arbmig
 tools/provingground/countess-check.sh  credit-runner  countess2
 tools/provingground/earned  credit-runner  pgearned
 tools/provingground/nightly.sh  credit-runner  pgnightly

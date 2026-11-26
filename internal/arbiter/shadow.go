@@ -118,3 +118,16 @@ func (s *Shadow) Report(in Intent, now float64, ok bool) {
 	defer s.mu.Unlock()
 	s.arb.Report(in, now, ok)
 }
+
+// Refused posts the temporary intent a typed refusal asks for (see Arbiter.Refused); false when none applies.
+func (s *Shadow) Refused(need, wake string, now float64) (posted bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	defer func() {
+		if recover() != nil {
+			s.panics++
+			posted = false
+		}
+	}()
+	return s.arb.Refused(need, wake, now)
+}

@@ -15,6 +15,17 @@ ordinal: 461000
 card: "arbmig"
 owns:
   - "docs/design/arbiter-migration-p6.md"
+  - "docs/arbiter.md"
+  - "internal/arbiter/"
+  - "cmd/d2scenario/"
+  - "tools/provingground/arbiter-outcomes/"
+  - "internal/bot/arbiter_control.go"
+  - "internal/bot/arbiter_control_test.go"
+  - "internal/bot/shadow.go"
+  - "internal/bot/loop.go"
+  - "internal/env/tuning_bot.go"
+  - "data/darklaunch.json"
+  - "docs/knobs.md"
 exclusive: []
 contracts: []
 ---

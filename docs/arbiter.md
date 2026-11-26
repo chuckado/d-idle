@@ -15,6 +15,12 @@
 - `Shadow` (internal/arbiter/shadow.go) wraps it for a live loop: recovers any panic (counted), one short mutex, no I/O, compares the arbiter's hook family with the family the chain acted for.
 - `StdSources` (sources.go) are the first nine sources (survive, player, trip, claim, resupply, recovery, goldfarm, quest, level). Build data (belt line, flee line, gold need) arrives as facts, so no class, skill or build literal lives in the package.
 
+## Temporary intents and the lost-control hook
+
+- `Intent.TTL` (virtual seconds) and `Intent.Until` (a condition over the facts in outcome-rule syntax, `potions>=potions_min`) make an intent TEMPORARY. `Arbiter.Post` adds one; it is proposed beside the sources' own until the TTL ends, `Until` holds, or the executor reports it done (`Report(..., true)`). V: `TestRefusalBecomesTemporaryIntent`, `TestTemporaryIntentEndsOnReportDone`.
+- A refusal with a wake fact becomes one: `Arbiter.Refused(need, wake, now)` looks the need up in `RefusalIntents` (data: `needs_potions` becomes an upkeep refill, `needs_gold_farm` a recovery farm, `too_weak` a filler level-up; `route_closed`, `area_banned` and `not_ready` stay a pause only). The bot calls it from `handleRefused` (internal/bot/outcome.go, typed `Refused{Need, Wake}`), so a source reads the refusal and does not re-derive the facts (V `TestRefusalBecomesArbiterTempIntent`, two needs). Only with `bot.arbiterShadow` 1.
+- `LostControl` (optional interface on a Source): `Lost(in, by, why, starved)` is called once when the intent the source proposed loses to another, and once more when it has been outranked for `StarveSec` (600 s). The same event is `Decision.Starved` and, in the bot, the soft invariant `arbiter-starved` (docs/invariants.md). V `TestLostControlAndStarvation`: a source that stopped asking is not starved.
+
 ## Shadow knobs (docs/knobs.md)
 
 | knob | default | meaning |
@@ -66,16 +72,22 @@ Agreement with the old chain is NOT the bar: the live divergences are mostly cas
 
 The "divergence under N percent" figures in the table are kept as a reading aid, no longer as the exit condition.
 
+## Outcome harness (offline, report-only)
+
+`go run ./cmd/d2scenario arbiter-replay [-strict] tools/provingground/arbiter-outcomes/*.json` decides each case with the standard sources and scores BOTH the recorded chain family and the arbiter's family with the same data rules (a rule says: this family, under these facts, hits that invariant row). Hard rows decide, soft rows break ties; a hit the chain did not have is a new kind and fails the family. The rules are a model of the monitor (U until a lockstep run confirms a row); the three Questy incident cases (V, `TestQuestyOutcomes`, two drink lines in `TestSurviveOutcomeTwoBuildsAndMustFail`): survive, chain 1 hard hit (potion-not-drunk) vs arbiter 0; chores, chain 2 soft hits (field-entry-no-kit) vs arbiter 0; the ping-pong first tick scores no hit for either. Limit: one decision point per case, not a whole session; whole sessions go through `d2arbiter -follow`.
+
 ## Migration plan per family
 
 Order is by risk. Each family moves from the chain to the arbiter behind its own knob only when its exit rule is met; until then the chain's hook stays. The flail guard, ping-pong and border-loop breakers stay until the shadow log shows they never fire for 14 days after the last family moved. Under the project freeze only shadow and scenario-backed work merges.
 
-| order | family | exit rule (all of; see the outcome rule above, percents are a reading aid) | earliest |
+| order | family | exit rule by outcome (all of) | earliest |
 |---|---|---|---|
-| 1 | survive, player | divergence under 2 % of ticks over 3 sandbox days, every remaining line explained | 2026-11-26 |
-| 2 | chores, claim | under 5 % over 3 days; the replay of every flail log line since 2026-11-18 shows no new area change the chain did not make | 2026-12-03 |
-| 3 | goldfarm, recovery | under 5 % over 3 days; the stash-gold case has a shadow line or a scenario | 2026-12-10 |
-| 4 | quest (board and task) | `ObjectiveArea` wired; under 5 % over 7 days | 2026-12-17 |
-| 5 | level (filler) | last: everything else moved and a 7-day sandbox run with the arbiter acting shows no flail guard hit | 2026-12-24 |
+| 1 | survive, player | `d2scenario arbiter-replay` verdict `survive` passes (fewer hard hits, no new kind) on the incident case of 0251 and on every recorded survive divergence added since; `d2arbiter -follow` on recorded sessions shows no new hit kind; one sandbox, 24 h watch | 2026-11-26 |
+| 2 | chores, claim | verdict `chores` passes on the 0319 and 0056 cases and the ping-pong replay (`TestReplayPingPong`) shows no area change the chain did not make; one sandbox, 24 h watch | 2026-12-03 |
+| 3 | goldfarm, recovery | a case for the stash-gold broke hero exists and passes; verdict `goldfarm` passes; one sandbox, 24 h watch | 2026-12-10 |
+| 4 | quest (board and task) | `ObjectiveArea` wired and the quest source reads typed `Refused{need, wake}`; verdict `quest` passes; no `refusal-storm` in a 7-day sandbox run | 2026-12-17 |
+| 5 | level (filler) | last: everything else moved; a 7-day sandbox run with the arbiter acting shows no flail guard hit | 2026-12-24 |
+
+Each row also needs the scenario rows of its incident (docs/probes/incident-scenarios.md) green on a lockstep run (U: none run yet) and the owner's go. The cases are data (`tools/provingground/arbiter-outcomes`); a verdict needs at least one case, a family with none has no verdict and does not move.
 
 If a date passes without the rule met, the family stays on the chain and the reason goes into this table; the dates are earliest, not promises.
