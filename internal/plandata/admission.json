@@ -1,0 +1,24 @@
+{
+  "_comment": "The admission rows (card admit1, review fable-logic-review-2026-11-25 P4): ONE home for the floors that decide whether a hero may enter an area or leave town. internal/admit reads this file; the old judges (earlyRouteCheck, questWalkCheck, povertyAreaWhy, kitFloorWhy, leanEntryWhy, denFloor) are providers that read their numbers from here, so a number lives once. Numbers moved unchanged from earlyroutes.json and povertyfarm.json (evidence there: Questy bed 2026-11-25 and 2026-11-26, SME ballpark, U). A floor changes only with the margin model or a seed set, never one death (P10). All rows apply in Normal only and never to a corpse run or the owner's try anyway. Archetype is the class family the caller resolves: melee or caster.",
+  "roads": [
+    {
+      "id": "underground_passage",
+      "evidence": 1, "evidence_ref": "single incident: needs seed set",
+      "areas": [10, 5],
+      "minLevel": {"melee": 7, "caster": 8},
+      "minMaxLife": {"melee": 180, "caster": 100},
+      "kit": {"healing": 2, "portal": 1}
+    }
+  ],
+  "knobFloors": [
+    {
+      "id": "den_of_evil",
+      "areas": [8],
+      "levelKnob": {"melee": "campaign.denMinLevelMelee", "caster": "campaign.denMinLevelCaster"}
+    }
+  ],
+  "questWalk": {"evidence": 1, "evidence_ref": "single incident: needs seed set", "fromLevel": 5, "belowLevel": 15, "healing": 2, "portal": 1},
+  "poverty": {"evidence": 1, "evidence_ref": "single incident: needs seed set", "noPotionGap": 3, "fromLevel": 8},
+  "kitFloor": {"evidence": 1, "evidence_ref": "single incident: needs seed set", "potionsBelow": 4, "fromLevel": 8},
+  "lean": {"evidence": 1, "evidence_ref": "single incident: needs seed set", "potionsBelow": 4, "entryLifePct": 60}
+}

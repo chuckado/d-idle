@@ -109,7 +109,26 @@ func classify(res task.Result) StepOutcome {
 type Refused struct{ StepOutcome }
 
 func (e *Refused) Error() string { return fmt.Sprintf("refused (%s): %s", e.Need, e.Why) }
-func (e *Refused) Unwrap() error { return errors.New(e.Why) }
+func (e *Refused) Unwrap() error {
+	if e.Err != nil {
+		return e.Err // a gate refusal keeps its sentinel (errAreaGated) for errors.Is
+	}
+	return errors.New(e.Why)
+}
+
+// refuse turns a legacy refusal error into the typed one when the knob is on (docs/outcomes.md); the legacy error stays
+// reachable through Unwrap, so errors.Is(err, errAreaGated) and the wording tests keep working. Off: the error itself.
+func (r *Runner) refuse(legacy error) error {
+	if legacy == nil || r.e.Tune.Bot.TypedOutcome == 0 {
+		return legacy
+	}
+	var ref *Refused
+	if errors.As(legacy, &ref) {
+		return legacy
+	}
+	need := needOf("", legacy.Error())
+	return &Refused{StepOutcome{Kind: OutRefusedKind, Need: need, Wake: needTable[need].Wake, Why: legacy.Error(), Err: legacy}}
+}
 
 // asError is the adapter for code that still returns errors: nil for Done and Progress, *Refused for a refusal.
 func (o StepOutcome) asError() error {

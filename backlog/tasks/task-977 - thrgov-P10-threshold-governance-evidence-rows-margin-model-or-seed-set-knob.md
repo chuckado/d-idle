@@ -19,11 +19,11 @@ owns:
   - "tools/ci/knobbudget-baseline.json"
   - "tools/ci/check.sh"
   - "docs/backlog-howto.md"
-  - "internal/plandata/earlyroutes.json"
+  - "internal/plandata/admission.json"
   - "internal/plandata/povertyfarm.json"
 exclusive: []
 contracts: []
-result: "Rule doc, tools/ci/knobbudget.py (knob net budget and evidence rows, report-only in check.sh), earlyroutes and povertyfarm rows seeded n=1. Offline tests only; not live."
+result: "Rule doc, tools/ci/knobbudget.py (knob net budget and evidence rows, report-only in check.sh), admission and povertyfarm rows seeded n=1. Offline tests only; not live."
 ---
 
 ## Description

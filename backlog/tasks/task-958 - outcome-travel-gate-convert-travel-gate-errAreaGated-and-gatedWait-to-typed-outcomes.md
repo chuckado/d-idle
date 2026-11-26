@@ -1,7 +1,7 @@
 ---
 id: TASK-958
 title: 'outcome-travel-gate: convert travel gate errAreaGated and gatedWait to typed outcomes'
-status: Proposed
+status: In Progress
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:41:00Z'
@@ -16,6 +16,7 @@ owns:
   - "docs/outcomes.md"
 exclusive: []
 contracts: []
+result: "Travel gate refusals are typed: no failure count, one line per change, pause by need; the no-scroll walk home is no longer cancelled by portal verdicts. Tests offline (two classes), not verified live."
 ---
 
 ## Description
@@ -28,5 +29,5 @@ Size: S. Follow-up of outcome1 (docs/outcomes.md, not yet converted list). Needs
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 path converted behind bot.typedOutcome, row added to docs/outcomes.md, must-fail test on two builds
+- [x] #1 path converted behind bot.typedOutcome, row added to docs/outcomes.md, must-fail test on two builds
 <!-- AC:END -->

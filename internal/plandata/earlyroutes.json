@@ -1,7 +1,3 @@
 {
-  "_comment": "Early dangerous legs of the Act 1 quest routes (user request 2026-11-25, Questy bed: a clvl 4 Paladin walked Stony Field -> Underground Passage level 1 -> Dark Wood with no potions and died to Vile Hunters). A route closes to a hero under minLevel (by class family) or short of the kit. Areas: 10 Underground Passage level 1, 5 Dark Wood (its only way in). Numbers: SME ballpark, U (monster levels there are 6 to 7 in Normal). minLife is max life by class family (a clvl 8 Paladin with 69 life died twice to Treehead WoodFist's pack, Questy 2026-11-25; SME: under 110 is not fit, U). questWalk: every quest walk into a field from fromLevel up to belowLevel needs this kit (Questy bed 2026-11-26: a clvl 12 Paladin walked Stony Field with 0 potions and died); without gold for it the hero farms first. Owner try anyway overrides.",
-  "questWalk": {"evidence": 1, "evidence_ref": "single incident: needs seed set", "fromLevel": 5, "belowLevel": 15, "healing": 2, "portal": 1},
-  "routes": [
-    {"name": "underground_passage", "evidence": 1, "evidence_ref": "single incident: needs seed set", "areas": [10, 5], "minLevel": {"melee": 7, "caster": 8}, "minLife": {"melee": 180, "caster": 100}, "kit": {"healing": 2, "portal": 1}}
-  ]
+ "_comment": "MOVED (card admit1): the early road rows and the quest walk kit are in admission.json, read by internal/admit; this file is kept empty of numbers so a floor lives once. History of the numbers: git log of this file and the comment in admission.json."
 }
