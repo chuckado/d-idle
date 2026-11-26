@@ -20,6 +20,7 @@ owns:
   - "internal/combat/lifeprice_test.go"
   - "internal/agency/derive.go"
   - "internal/agency/testdata/agreement.json"
+  - "internal/leveler/early_test.go"
 exclusive: []
 result: "Unit-tested only, not live. Default and hammerdin Paladin profiles: Sacrifice dropped from the bands and from the life-price list, listed in avoid; early bands now Attack, Zeal from clvl 12 once learned. Smite and Holy Bolt (undead only) stay unranked per the SME note. The planner agreement fixture moved to 44 of 60."
 contracts: []
