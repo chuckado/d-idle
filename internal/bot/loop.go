@@ -306,7 +306,7 @@ func (r *Runner) pausedFight(ctx context.Context, snap *d2.Snapshot) {
 
 // hazard lets the fighter drink or leave while the bot holds still (paused, error wait).
 func (r *Runner) hazard(ctx context.Context, snap *d2.Snapshot) {
-	if snap == nil || snap.Player == nil || snap.Player.InTown() {
+	if snap == nil || snap.Player == nil || snap.Player.InTown() && !combat.ZeroLife(snap.Player) {
 		return
 	}
 	if a := r.d.Fighter.Safety(snap); a != SafetyNone {
@@ -1075,7 +1075,7 @@ func (r *Runner) guardOnce(ctx context.Context, cancel context.CancelCauseFunc, 
 			cancel(errPause)
 			return true
 		}
-		if !snap.Player.InTown() {
+		if !snap.Player.InTown() || combat.ZeroLife(snap.Player) { // a living hero with no life drinks in town too (live Questy 2026-11-26)
 			a := r.d.Fighter.Safety(snap)
 			if (a == SafetyTownPortal || a == SafetyCrowdAbandon) && r.noTP.Load() {
 				a = SafetyNone // Ancients: a portal would reset the fight (Constraints.NoTownPortal)
