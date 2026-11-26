@@ -296,6 +296,8 @@ func fieldReady(a Area) func(World) *Fault {
 			return guardFault(w, "route guard", "route", w.RouteBlocked, RouteLevelWhy(w) == "")
 		case w.TowerBlocked != "" && TowerGuarded(a):
 			return guardFault(w, "tower guard", "ftower", w.TowerBlocked, TowerLevelWhy(w) == "")
+		case w.WalkBlocked.Why != "" && !isTown(a):
+			return guardFault(w, "quest walk", "walk", w.WalkBlocked.Why, w.WalkBlocked.KitOnly)
 		case w.EarlyBlocked[a].Why != "":
 			// the early road (Underground Passage level 1, Dark Wood): a hold, never a strike (Questy bed 2026-11-25: the quest walk was
 			// refused at the hop, counted as "too weak" three times and parked for 1h30m)
