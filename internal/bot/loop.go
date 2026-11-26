@@ -375,6 +375,7 @@ func (r *Runner) runAction(parent context.Context, gen uint64, st State, activit
 	}
 	r.setLocked(st, activity)
 	r.mu.Unlock()
+	r.actionAt.Store(r.e.Clock.Now().UnixNano())
 	r.armWatchdog(watchedState(st))
 	if st == StateTraveling {
 		r.setWalking(true)
@@ -1132,6 +1133,7 @@ func (r *Runner) guardOnce(ctx context.Context, cancel context.CancelCauseFunc, 
 		if snap == nil {
 			return false
 		}
+		r.stallCheck(snap, now) // diagnostic only (stallguard.go)
 		if isDead(snap.Player) {
 			cancel(errDied)
 			return true
