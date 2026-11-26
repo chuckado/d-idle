@@ -7,6 +7,8 @@ import (
 
 	"d2lod-bot/internal/arbiter"
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/goals"
+	"d2lod-bot/internal/task"
 )
 
 func controlRig(t *testing.T, class d2.Class, ctl, mask int) *rig {
@@ -107,6 +109,125 @@ func TestArbiterControlClaim(t *testing.T) {
 			if n := g.r.arb.ctl.Load(); n != want {
 				t.Logf("decision %+v", d.Chosen)
 				t.Fatalf("class %d mask %d: controlled ticks %d, want %d", class, mask, n, want)
+			}
+		}
+	}
+}
+
+func campControl() control {
+	return control{goal: &goals.Goal{}, spec: goalSpec{kind: goals.Campaign, camp: &task.Campaign{}}}
+}
+
+// Goldfarm and recovery under control (bits 16 and 32): the player's farm order and the purse recovery are the chosen
+// family and their hooks run; the order beats recovery when both are on, as in the chain. Two classes; the bit not set is
+// the must-fail half. U: the fake world only proves the hook is reached, not the farm itself.
+func TestArbiterControlGoldFarmAndRecovery(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		for _, tc := range []struct {
+			name        string
+			mask        int
+			farm, broke bool
+			want        string
+			ctl         int64
+		}{
+			{"order", 3 | 16, true, false, "goldfarm", 1},
+			{"order bit not set", 3, true, false, "goldfarm", 0},
+			{"recovery", 3 | 32, false, true, "recovery", 1},
+			{"recovery bit not set", 3, false, true, "recovery", 0},
+			{"order beats recovery", 3 | 16 | 32, true, true, "goldfarm", 1},
+		} {
+			g, gf := farmRig(t, 10, class)
+			g.w.belt(101, 102, 103, 104)
+			g.r.e.Tune.Bot.ArbiterShadow, g.r.e.Tune.Bot.ArbiterControl, g.r.e.Tune.Bot.ArbiterFamilies = 1, 1, tc.mask
+			if tc.farm {
+				gf.Start()
+			}
+			if tc.broke {
+				g.w.belt()
+				g.r.loop.broke.on = true
+			}
+			g.r.poll()
+			g.clock.Sleep(time.Second)
+			g.r.runGoalShadowed(context.Background(), g.r.latest(), campControl())
+			d, ok := g.r.Arbiter()
+			if !ok || d.Chosen == nil || arbiter.Family(d.Chosen.Source) != tc.want {
+				t.Fatalf("%v %s: chose %+v, want %s", class, tc.name, d.Chosen, tc.want)
+			}
+			if n := g.r.arb.ctl.Load(); n != tc.ctl {
+				t.Fatalf("%v %s: controlled ticks %d, want %d", class, tc.name, n, tc.ctl)
+			}
+		}
+	}
+}
+
+// Quest under control (bit 64): the arbiter wants a refill, the chores hook is not under control and the trip cooldown
+// holds the chain's own chores back, so the chain would walk the quest step with an empty belt (incident 0319). With the
+// bit the quest step does not start and the hero levels meanwhile; without it (or with the knob off) the chain is
+// untouched. Two classes. U: the fake world only proves the quest step is held, not what the leveling does.
+func TestArbiterControlQuestHeldWhileRefillIsWanted(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		for _, tc := range []struct {
+			name      string
+			ctl, mask int
+			want      int64
+		}{{"bit set", 1, 3 | 64, 1}, {"bit not set", 1, 3, 0}, {"knob off", 0, 3 | 64, 0}} {
+			g, _ := farmRig(t, 6, class)
+			g.w.set(func(w *world) { w.gold0 = 900 })
+			g.w.belt()
+			g.r.e.Tune.Bot.ArbiterShadow, g.r.e.Tune.Bot.ArbiterControl, g.r.e.Tune.Bot.ArbiterFamilies = 1, tc.ctl, tc.mask
+			g.r.setLastTrip(g.clock.Now())
+			g.r.poll()
+			g.clock.Sleep(time.Second)
+			g.r.runGoalShadowed(context.Background(), g.r.latest(), campControl())
+			if n := g.r.arb.ctl.Load(); n != tc.want {
+				d, _ := g.r.Arbiter()
+				t.Logf("chosen %+v why %s", d.Chosen, g.r.currentWhy())
+				t.Fatalf("%v %s: held %d, want %d", class, tc.name, n, tc.want)
+			}
+		}
+	}
+}
+
+// A standing typed refusal silences the quest source until a wake fact changes (arbRefused records the facts).
+func TestQuestSourceReadsTheTypedRefusal(t *testing.T) {
+	g, _ := farmRig(t, 6, d2.Sorceress)
+	g.r.e.Tune.Bot.ArbiterShadow = 1
+	g.r.poll()
+	s := g.r.latest()
+	if g.r.questRefusalStands(s) {
+		t.Fatal("no refusal yet")
+	}
+	g.r.arbRefused("not_ready", "any of level, kit, gold or area changes")
+	if !g.r.questRefusalStands(s) {
+		t.Fatal("the refusal must stand while the wake facts are unchanged")
+	}
+	g.w.set(func(w *world) { w.level = 7 })
+	g.r.poll()
+	if g.r.questRefusalStands(g.r.latest()) {
+		t.Fatal("a level change is a wake")
+	}
+}
+
+// Level under control (bit 128): a standing typed refusal silences the quest source, the arbiter chooses the filler and
+// the quest step is replaced by a leveling slice. Two classes; bit not set and knob off must not act.
+func TestArbiterControlLevel(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		for _, tc := range []struct {
+			name      string
+			ctl, mask int
+			want      int64
+		}{{"bit set", 1, 3 | 128, 1}, {"bit not set", 1, 3, 0}, {"knob off", 0, 3 | 128, 0}} {
+			g, _ := farmRig(t, 6, class)
+			g.w.set(func(w *world) { w.gold0 = 900 })
+			g.w.belt(101, 102, 103, 104)
+			g.r.e.Tune.Bot.ArbiterShadow, g.r.e.Tune.Bot.ArbiterControl, g.r.e.Tune.Bot.ArbiterFamilies = 1, tc.ctl, tc.mask
+			g.r.poll()
+			g.r.arbRefused("not_ready", "any of level, kit, gold or area changes")
+			g.clock.Sleep(time.Second)
+			g.r.runGoalShadowed(context.Background(), g.r.latest(), campControl())
+			if n := g.r.arb.ctl.Load(); n != tc.want {
+				d, _ := g.r.Arbiter()
+				t.Fatalf("%v %s: level ticks %d, want %d (chose %+v)", class, tc.name, n, tc.want, d.Chosen)
 			}
 		}
 	}

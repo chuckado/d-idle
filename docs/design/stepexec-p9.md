@@ -29,6 +29,15 @@ whose adapter does not).
 Cain scroll `search_for_cain/take_scroll` (Tree of Inifuss click and pick-up). Scenario `cain.scroll.stepexec` (Paladin and
 Sorceress, same assertions as `cain.scroll`). Not run live or on the lab yet (U).
 
+Card stepexec2: the TALK and USE adapters (`execBackend.Act`). TALK says the step's `exec.pick` to the NPC named from the class id
+(the inverse of `talk.ByAct`, so no name is written in Go) through `TaskDeps.Dialog`; `taskActs.Talk` takes the executor path when
+`quests.stepExec` is 1 and the data has a talk step with an `exec` row for that NPC class and pick (`execTalkStep`, data-driven).
+USE right-clicks the named pack item through the object adapter (`UseItem`); no chunk uses it yet. The second migrated chunk is
+Akara reading the bark: `search_for_cain/read_scroll` (pick `bark`, post `has_item(bkd)`, read from the pack), scenario
+`cain.read.stepexec` (Paladin and Sorceress, same assertions as `cain.read`). V: unit tests `internal/bot/stepexec_test.go` (two
+classes, must-fail when the dialog says yes and the pack keeps the scroll). U: not run on the lab. `Backend.Act` gained the `pick`
+argument.
+
 ## Rule (acceptance criterion 2)
 No new quest chunk may add a hand-written click-wait-pick-up handler: a new step of these four verbs is a questspec row with
 an `exec` block, run by `RunStep`. Old handlers move over one at a time, each behind its scenario and a knob; the old code is

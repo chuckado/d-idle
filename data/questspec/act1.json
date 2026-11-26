@@ -465,7 +465,18 @@
      ],
      "verbs": [
       "dump items"
-     ]
+     ],
+     "exec": {
+      "verb": "talk",
+      "pick": "bark",
+      "wait_polls": 4,
+      "wait_ms": 1000,
+      "backoff_ms": 500,
+      "backoff_cap_ms": 4000,
+      "wake": [
+       "pack changes"
+      ]
+     }
     },
     {
      "id": "to_stony_field",
