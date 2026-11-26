@@ -152,7 +152,7 @@ func (r *Runner) routeAllowed(s *d2.Snapshot, cur, target int, hops []int) error
 			why = r.areaRulesWhy(s, h)
 		}
 		if why != "" {
-			return fmt.Errorf("%w: %s (%d): %s", errAreaGated, r.areaName(h), h, why)
+			return r.refuse(fmt.Errorf("%w: %s (%d): %s", errAreaGated, r.areaName(h), h, why))
 		}
 	}
 	return nil
