@@ -1,0 +1,168 @@
+package admit
+
+import "testing"
+
+const (
+	bloodMoor  = 2
+	stonyField = 4
+	darkWood   = 5
+	den        = 8
+	caveL1     = 9
+	rogueCamp  = 1
+)
+
+// hero is a Normal clvl 12 hero standing in the camp with a full kit; tests change one thing at a time.
+func hero(arch string) View {
+	return View{
+		Archetype: arch, Normal: true, Level: 12, Life: 176, MaxLife: 176, Healing: 6, HasTP: true, Gold: 500,
+		InTown: true, Area: rogueCamp, FirstField: bloodMoor, PotionGold: 50, TPGold: 100,
+		IsTown: func(a int) bool { return a == rogueCamp },
+		MLvl:   func(a int) int { return map[int]int{bloodMoor: 2, stonyField: 6, darkWood: 7, den: 3, caveL1: 3}[a] },
+		Knobs:  map[string]int{"campaign.denMinLevelMelee": 3, "campaign.denMinLevelCaster": 5},
+	}
+}
+
+func mustRows(t *testing.T) Rows {
+	t.Helper()
+	r, err := Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	return r
+}
+
+func TestMayEnterTable(t *testing.T) {
+	r := mustRows(t)
+	cases := []struct {
+		name   string
+		arch   string
+		tweak  func(*View)
+		area   int
+		p      Purpose
+		refuse bool
+		need   string
+		row    string
+	}{
+		{"full kit melee field", "melee", nil, stonyField, Level, false, "", ""},
+		{"full kit caster field", "caster", nil, stonyField, Level, false, "", ""},
+		// Questy 2026-11-26: lean hero (no scroll, potions 0 of 4) entering Stony Field
+		{"questy lean no potions melee", "melee", func(v *View) { v.HasTP, v.Healing, v.InTown, v.Area = false, 0, false, bloodMoor }, stonyField, Level, true, NeedPotions, "kit-floor"},
+		{"questy lean no potions caster", "caster", func(v *View) { v.HasTP, v.Healing, v.InTown, v.Area = false, 0, false, bloodMoor }, stonyField, Level, true, NeedPotions, "kit-floor"},
+		{"poverty monster level", "melee", func(v *View) { v.Healing, v.Level, v.FirstField = 0, 8, stonyField }, stonyField, Level, true, NeedPotions, "poverty"},
+		// potions 0/4 with a scroll: the kit floor holds the first field only
+		{"potions 0 with scroll melee", "melee", func(v *View) { v.Healing, v.Level = 0, 8 }, stonyField, Farm, true, NeedPotions, "poverty"},
+		{"potions 3 level 11 kit floor not poverty", "melee", func(v *View) { v.Healing, v.Level = 3, 11 }, stonyField, Farm, true, NeedPotions, "kit-floor"},
+		{"potions 2 with scroll caster first field ok", "caster", func(v *View) { v.Healing, v.Level = 2, 9 }, bloodMoor, Farm, false, "", ""},
+		{"potions 2 with scroll caster stony", "caster", func(v *View) { v.Healing, v.Level = 2, 9 }, stonyField, Farm, true, NeedPotions, "kit-floor"},
+		// 90/176 life, no portal, 3 potions entering a field from a field
+		{"life 90 of 176 lean melee", "melee", func(v *View) { v.HasTP, v.Healing, v.Life, v.InTown, v.Area = false, 3, 90, false, stonyField }, bloodMoor, Level, true, NeedNotReady, "lean"},
+		{"life 90 of 176 with portal", "melee", func(v *View) { v.Life, v.InTown, v.Area = 90, false, bloodMoor }, stonyField, Level, false, "", ""},
+		{"life 120 of 176 lean ok", "caster", func(v *View) { v.HasTP, v.Healing, v.Life, v.InTown, v.Area = false, 3, 120, false, stonyField }, bloodMoor, Level, false, "", ""},
+		// Dark Wood life floor 180 (melee), 100 (caster)
+		{"dark wood melee life 176", "melee", nil, darkWood, QuestWalk, true, NeedTooWeak, "underground_passage"},
+		{"dark wood melee life 185", "melee", func(v *View) { v.MaxLife = 185 }, darkWood, QuestWalk, false, "", ""},
+		{"dark wood caster life 176", "caster", nil, darkWood, QuestWalk, false, "", ""},
+		{"dark wood caster life 90", "caster", func(v *View) { v.MaxLife = 90 }, darkWood, QuestWalk, true, NeedTooWeak, "underground_passage"},
+		{"dark wood melee level 6", "melee", func(v *View) { v.Level, v.MaxLife = 6, 300 }, darkWood, QuestWalk, true, NeedTooWeak, "underground_passage"},
+		{"dark wood caster level 7", "caster", func(v *View) { v.Level = 7 }, 10, QuestWalk, true, NeedTooWeak, "underground_passage"},
+		{"dark wood one potion", "caster", func(v *View) { v.Healing = 1 }, darkWood, QuestWalk, true, NeedPotions, "underground_passage"},
+		{"dark wood no scroll", "caster", func(v *View) { v.HasTP = false }, darkWood, QuestWalk, true, NeedPotions, "underground_passage"},
+		// corpse run, owner try anyway, other difficulty, trip home: exempt
+		{"corpse run exempt", "melee", func(v *View) { v.Healing, v.HasTP = 0, false }, darkWood, CorpseRun, false, "", ""},
+		{"try anyway", "caster", func(v *View) { v.Healing, v.HasTP, v.Try = 0, false, true }, darkWood, QuestWalk, false, "", ""},
+		{"nightmare unruled", "melee", func(v *View) { v.Normal, v.Healing = false, 0 }, darkWood, Level, false, "", ""},
+		{"trip home", "melee", func(v *View) { v.Healing = 0 }, rogueCamp, Trip, false, "", ""},
+		{"town target", "melee", func(v *View) { v.Healing = 0 }, rogueCamp, Level, false, "", ""},
+		// knob floor: the Den
+		{"den melee 3", "melee", func(v *View) { v.Level = 2 }, den, QuestWalk, true, NeedTooWeak, "den_of_evil"},
+		{"den caster clvl 4", "caster", func(v *View) { v.Level = 4 }, den, QuestWalk, true, NeedTooWeak, "den_of_evil"},
+		{"den caster clvl 5", "caster", func(v *View) { v.Level = 5 }, den, QuestWalk, false, "", ""},
+		{"den without knob value", "caster", func(v *View) { v.Level, v.Knobs = 1, nil }, den, QuestWalk, false, "", ""},
+		// legacy provider
+		{"legacy judge refuses", "melee", func(v *View) { v.Legacy = func(a int) string { return "level 20 needed for the Barracks" } }, 28, Level, true, NeedRoute, "legacy"},
+		{"legacy judge open", "melee", func(v *View) { v.Legacy = func(int) string { return "" } }, 28, Level, false, "", ""},
+		{"standing in the area not asked", "melee", func(v *View) { v.Healing, v.Area, v.InTown = 0, stonyField, false; v.Level = 7 }, stonyField, Farm, false, "", ""},
+	}
+	for _, c := range cases {
+		v := hero(c.arch)
+		if c.tweak != nil {
+			c.tweak(&v)
+		}
+		got := r.MayEnter(v, c.area, c.p)
+		if got.Refused != c.refuse || got.Need != c.need || got.Row != c.row {
+			t.Errorf("%s: got %+v, want refused=%v need=%q row=%q", c.name, got, c.refuse, c.need, c.row)
+		}
+		if got.Refused && (got.Wake == "" || got.Why == "") {
+			t.Errorf("%s: a refusal names its wake and why: %+v", c.name, got)
+		}
+	}
+}
+
+func TestMayLeaveTownTable(t *testing.T) {
+	r := mustRows(t)
+	cases := []struct {
+		name   string
+		arch   string
+		tweak  func(*View)
+		p      Purpose
+		refuse bool
+		need   string
+		kit    bool
+	}{
+		{"full kit quest walk", "melee", nil, QuestWalk, false, "", false},
+		{"zero potions rich purse", "caster", func(v *View) { v.Healing = 0 }, QuestWalk, true, NeedPotions, true},
+		{"zero potions poor purse", "melee", func(v *View) { v.Healing, v.Gold = 0, 7 }, QuestWalk, true, NeedGoldFarm, false},
+		{"no scroll rich", "caster", func(v *View) { v.HasTP = false }, QuestWalk, true, NeedPotions, true},
+		{"no scroll poor", "melee", func(v *View) { v.HasTP, v.Gold = false, 10 }, QuestWalk, true, NeedGoldFarm, false},
+		{"above the quest walk band", "melee", func(v *View) { v.Level, v.Healing = 15, 0 }, QuestWalk, false, "", false},
+		{"below the quest walk band", "caster", func(v *View) { v.Level, v.Healing = 4, 0 }, QuestWalk, false, "", false},
+		{"farm needs no quest kit", "melee", func(v *View) { v.Healing = 0 }, Farm, false, "", false},
+		{"lean hurt leaves", "melee", func(v *View) { v.HasTP, v.Healing, v.Life = false, 3, 90 }, Level, true, NeedNotReady, false},
+		{"lean healthy leaves", "caster", func(v *View) { v.HasTP, v.Healing, v.Life = false, 3, 150 }, Level, false, "", false},
+		{"hurt with portal leaves", "melee", func(v *View) { v.Life = 90 }, Level, false, "", false},
+		{"corpse run hurt lean", "melee", func(v *View) { v.HasTP, v.Healing, v.Life = false, 0, 20 }, CorpseRun, false, "", false},
+		{"try anyway", "caster", func(v *View) { v.Healing, v.Try = 0, true }, QuestWalk, false, "", false},
+	}
+	for _, c := range cases {
+		v := hero(c.arch)
+		if c.tweak != nil {
+			c.tweak(&v)
+		}
+		got := r.MayLeaveTown(v, c.p)
+		if got.Refused != c.refuse || got.Need != c.need || got.KitOnly != c.kit {
+			t.Errorf("%s: got %+v, want refused=%v need=%q kitOnly=%v", c.name, got, c.refuse, c.need, c.kit)
+		}
+	}
+}
+
+// The package-level functions read the embedded rows and agree with them.
+func TestEmbeddedWrappers(t *testing.T) {
+	v := hero("melee")
+	v.Healing = 0
+	if got, err := MayLeaveTown(v, QuestWalk); err != nil || !got.Refused {
+		t.Fatalf("MayLeaveTown: %+v %v", got, err)
+	}
+	if got, err := MayEnter(hero("caster"), stonyField, Level); err != nil || got.Refused {
+		t.Fatalf("MayEnter: %+v %v", got, err)
+	}
+}
+
+// Every need the package emits has a wake, and the rows are sane (a row without an area never matches).
+func TestRowsSane(t *testing.T) {
+	r := mustRows(t)
+	for _, n := range []string{NeedPotions, NeedGoldFarm, NeedTooWeak, NeedRoute, NeedNotReady} {
+		if Wake[n] == "" {
+			t.Errorf("need %s has no wake", n)
+		}
+	}
+	for _, rd := range r.Roads {
+		if len(rd.Areas) == 0 || rd.ID == "" {
+			t.Errorf("road %+v needs id and areas", rd)
+		}
+		for _, arch := range []string{"melee", "caster"} {
+			if rd.MinLevel[arch] == 0 {
+				t.Errorf("road %s has no level floor for %s", rd.ID, arch)
+			}
+		}
+	}
+}
