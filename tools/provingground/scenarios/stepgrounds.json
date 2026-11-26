@@ -33,8 +33,8 @@
     "travel.area-transition"
    ],
    "pre": {
-    "level": 24,
-    "gold": 200,
+    "level": 40,
+    "gold": 1000,
     "stash": 500000,
     "waypoints": [
      -1
@@ -47,13 +47,16 @@
      {
       "code": "mp1",
       "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
      }
     ],
     "belt": [
      "hp2",
      "hp2",
-     "hp2",
-     "hp2"
+     "mp1"
     ],
     "merc": 0,
     "quests": [
@@ -84,11 +87,19 @@
     "stats": [
      {
       "stat": 7,
-      "value": 102400
+      "value": 153600
      },
      {
       "stat": 6,
-      "value": 102400
+      "value": 153600
+     },
+     {
+      "stat": 4,
+      "value": 0
+     },
+     {
+      "stat": 5,
+      "value": 0
      }
     ],
     "start": "field",
@@ -131,7 +142,7 @@
      11
     ]
    },
-   "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero. qd25: the numbers of the Necromancer row that is GREEN (clvl 40, life 600, merc 17) with the Paladin gear, no unused points (they cancelled the boss run); a first try with clvl 30, life 700 and tier 3 potions went home at once (no portal scroll: `Returning to town`, V run 20261125-192550) and never fought. qd26: 3 town portal scrolls and 1000 gold added (a kit without a scroll sends the hero home).",
    "notes": "Smith spawned (plain), the stand added beside the hero by `debug object add 108` (devp25 stepverbs), quest 3 = 0x000c (the stand refuses a hero without the quest). The bot's stand click is toolstrade34 (merged). Control: .control (no Smith, no stand, no click: no hdm). Needs the devp25 binary (PG_D2D_BIN).",
    "assert": [
     {
@@ -746,10 +757,10 @@
      }
     ],
     "belt": [
-    "hp2",
-    "hp2",
-    "mp1"
-   ],
+     "hp2",
+     "hp2",
+     "mp1"
+    ],
     "merc": 0,
     "quests": [
      {
@@ -894,10 +905,10 @@
      }
     ],
     "belt": [
-    "hp2",
-    "hp2",
-    "mp1"
-   ],
+     "hp2",
+     "hp2",
+     "mp1"
+    ],
     "merc": 0,
     "quests": [
      {
@@ -1121,10 +1132,10 @@
      }
     ],
     "belt": [
-    "hp2",
-    "hp2",
-    "mp1"
-   ],
+     "hp2",
+     "hp2",
+     "mp1"
+    ],
     "merc": 0,
     "quests": [
      {

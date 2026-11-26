@@ -247,6 +247,19 @@ func (f *Fighter) Safety(snap *d2.Snapshot) SafetyAction {
 		at, ok := f.lastDrink[k]
 		return !ok || now.Sub(at) >= ms(gap)
 	}
+	if ZeroLife(p) {
+		// A living character with no life (V live 2026-10-28: a save written dead loads so; V live 2026-11-26, Questy: after a chicken
+		// the reload read life 0/176 for minutes, the hero walked out of town and was killed in Cold Plains with three healing
+		// potions in the belt, `BUG: none drunk`): decideBase returns nothing for Life <= 0, so no rule ever asked for a drink.
+		// It needs a potion at once, in town too (the healer is not asked for here, the belt is).
+		belt := BeltOf(snap.Inventory, f.cat)
+		switch {
+		case belt.Count(PotionRejuv) > 0 && ready(PotionRejuv, t.RejuvGapMs):
+			return DrinkRejuv
+		case belt.Count(PotionHealing) > 0 && ready(PotionHealing, t.PotionGapMs):
+			return DrinkLife
+		}
+	}
 	in := SafetyInput{
 		InTown: p.InTown(), Life: p.Life, Max: p.MaxLife, Mana: p.Mana, MMax: p.MaxMana, Diff: p.Difficulty,
 		Belt:       BeltOf(snap.Inventory, f.cat),
