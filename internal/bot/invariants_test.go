@@ -249,3 +249,36 @@ func TestInvariantCountersHardAndSince(t *testing.T) {
 		}
 	}
 }
+
+// Questy 2026-11-26: 37 minutes of healthy levelling in one step ("Quest: fighting (Level up to 13)", xp +6300) fired mode-no-exit
+// 19 times. A mode whose progress signals move never fires; one that is stuck does; a chore state has a ten minute cap.
+func TestModeNoExitNeedsNoProgress(t *testing.T) {
+	for _, h := range invHeroes {
+		for _, c := range []struct {
+			name  string
+			n     int
+			state string
+			edit  func(f *invFacts, i int)
+			fires bool
+		}{
+			{"levelling, xp rising", 2400, string(StateClearing), func(f *invFacts, i int) {
+				f.xp += uint32(i / 7)
+				f.kills += i / 30
+				f.step = "Quest: fighting (Level up to 13)"
+			}, false},
+			{"levelling, only gold moving", 2400, string(StateClearing), func(f *invFacts, i int) { f.xp, f.gold = 1000, 5000+i/50; f.step = "farm" }, false},
+			{"stuck, nothing moves", 1500, string(StateClearing), func(f *invFacts, i int) { f.xp = 1000; f.step = "Quest: fighting (Level up to 13)" }, true},
+			{"chore state past ten minutes", 700, string(StateResupplying), func(f *invFacts, i int) { f.xp += uint32(i); f.step = "chores" }, true},
+			{"chore state under ten minutes", 500, string(StateResupplying), func(f *invFacts, i int) { f.xp += uint32(i); f.step = "chores" }, false},
+		} {
+			m := &invMon{}
+			f := h.facts(t0)
+			f.state = c.state
+			f.inTown = c.state == string(StateResupplying)
+			got := runInv(m, f, c.n, c.edit)
+			if (got["mode-no-exit"] > 0) != c.fires {
+				t.Errorf("%s/%s: mode-no-exit fired %d, want fires=%v", h.name, c.name, got["mode-no-exit"], c.fires)
+			}
+		}
+	}
+}

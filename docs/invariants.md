@@ -20,8 +20,8 @@
 | `refusal-as-failure` | a refusal (`not ready`, `errAreaGated`) reached `fail` |
 | `refusal-storm` | 10 refusals (`noteStepRefused`) with no kill, xp or area change |
 | `life-zero-alive` | alive (not dying) with life 0 for 3 s |
-| `xp-frozen` | in the field, not paused, no xp change for 30 min |
-| `mode-no-exit` | the same state and step for 20 min, not paused, parked or idle |
+| `xp-frozen` | in the field, not paused or parked, no xp change for 30 min |
+| `mode-no-exit` | the same state and step for 20 min with none of xp, kills, gold or area moving (a levelling or farming mode with rising xp never fires; a town chore run, state resupplying, is capped at 10 min), not paused, parked or idle. Per-state rules: `invModes` in `internal/bot/invariants.go` |
 | `corpse-unresolved` | `corpseTown` pending for 15 min |
 | `town-thrash` | 17 field entries within an hour |
 | `economy-stall` | purse and stash gold under 100 for 2 h while kills continue |
@@ -37,3 +37,10 @@ Rows with `Hard: true` (potion-not-drunk, life-zero-alive, refusal-storm, xp-fro
 ## Tags
 - V: unit tests `go test -run 'Invariant|InvTick' ./internal/bot` (two heroes with different maxLife, drink and chicken lines, kit lists).
 - U: threshold values are the review's first numbers (section 7.1) and have not been tuned on live logs; `resupply-in-field` may fire on the portal-back leg of a trip (state is resupplying until the portal is taken). Read the counts for a few days before trusting a row.
+
+False-positive review of the hard rows (2026-11-26, S: from reading the code, no live run):
+- `potion-not-drunk`: a drink is counted from the potion events. While an earlier healing potion still works, the fighter holds a same or lower tier drink above the emergency line (`combat.potionEmergencyPct`, `healAllowed`), so a legitimate skip can last up to the effect time and the row needs 8 s. Risk is small; raise `Secs` or read `healNow` into the facts if it shows up.
+- `life-zero-alive`: dead is read from the player flags; a hero at life 0 for 3 s before the flag flips would hit. Not seen.
+- `refusal-storm`: a hero parked or paused no longer counts refusals (fixed here); idle in town on a hold without being marked parked still counts one per loop and fires after ten. Mark every deliberate hold as parked.
+- `xp-frozen`: parked no longer counts (fixed here). Town holds (Andariel hold) are outside the field and reset the stopwatch.
+- `corpse-unresolved`: fires after 15 min when the corpse run is queued behind a closed guard or a gold wait (recovery farm). That is a real stall of the corpse, but it can be a deliberate wait.
