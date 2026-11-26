@@ -1,10 +1,11 @@
 ---
 id: TASK-965
 title: 'explain1: decision ring, /api/explain, operator why hold home go park'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:49:00Z'
+updated_date: '2026-11-26T06:06:00Z'
 labels:
   - bot
   - feature

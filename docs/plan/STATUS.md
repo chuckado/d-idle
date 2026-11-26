@@ -278,7 +278,6 @@
 | outcome-park-step | proposed | - | `docs/outcomes.md` | - |
 | outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
 | outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
-| explain1 | proposed | - | `internal/bot/explain.go`<br>`internal/bot/explain_test.go`<br>`internal/watch/explainapi.go`<br>`internal/watch/explainapi_test.go`<br>`internal/ops/`<br>`cmd/d2bot/opscmd.go`<br>`cmd/d2bot/opscmd_test.go`<br>`cmd/d2bot/opswire.go`<br>`docs/operator.md`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/questwire.go`<br>`internal/bot/loop.go`<br>`internal/bot/runner.go`<br>`internal/bot/shadow.go`<br>`internal/watch/http_view.go`<br>`internal/watch/hub.go` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | admit1 | proposed | - | `docs/design/admission-p4.md` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
@@ -300,6 +299,7 @@
 | ckptlive | proposed | - | `docs/probes/checkpoint-live-drill.md` | - |
 | advisor1 | proposed | - | `docs/design/advisor-r14.md` | - |
 | autorevert1 | proposed | - | `docs/design/autorevert.md` | - |
+| reflex1d | proposed | - | `internal/bot/safetylat.go`<br>`internal/bot/loop.go`<br>`internal/bot/reflexdrink_test.go` | - |
 
 ### Gates
 - contract [act1-campaign](../contracts/act1-campaign.md): 9 requirements
@@ -322,14 +322,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 3ba6ada48 11-26 01:18 `Merge agent/toolstrade78: Merge branch 'main' into toolstrade78` (toolstrade78)
+- 0211d2ee1 11-26 01:16 `Merge branch 'main' into toolstrade78` (-)
+- 2c0ff5269 11-26 01:07 `Merge agent/reflex1d: reflex1d: hard-cancel wait uses a timer, not Clock.Sleep (flaky reaction test)` (reflex1d)
+- 051b16371 11-26 01:06 `Merge branch 'main' into reflex1d` (-)
 - 80c9b2ea1 11-26 00:49 `Merge agent/explain1: Merge branch 'main' into explain1` (explain1)
+- 9540cfd21 11-26 00:48 `Merge origin/main into toolstrade78` (-)
 - fc5ecb6ef 11-26 00:48 `Merge branch 'main' into explain1` (-)
 - 2fa717c3f 11-26 00:46 `Merge agent/cardclose2: cardclose2: close 7 merged cards (954, 966 by catch-up; 953, 955, 959, 962, 934 by hand)` (cardclose2)
-- b853e0638 11-26 00:27 `Merge branch 'main' into explain1` (-)
-- 85a8f09db 11-26 00:17 `Merge agent/reflex1c: reflex1c: reflex drink without cancelling the action, hard-cancel deadline` (reflex1c)
-- 0873ce5d4 11-26 00:14 `Merge origin/main into reflex1c` (-)
-- 9bc2e4e58 11-26 00:13 `Merge branch 'main' into explain1` (-)
-- ca15a2e33 11-26 00:07 `merge origin/main into explain1` (-)
-- 61cc4f451 11-26 00:05 `Merge origin/main into reflex1c` (-)
-- 9c3e3ed58 11-25 23:56 `Merge agent/reflex1b: reflex1b: town chores verify in town before each step; guard aborts chores outside town` (reflex1b)
+- 0c4860d45 11-26 00:36 `Merge branch 'main' into toolstrade78` (-)
+- dfaac2b06 11-26 00:32 `Merge origin/main into toolstrade78; regenerate knobs.md` (-)
 <!-- statusgen:end -->

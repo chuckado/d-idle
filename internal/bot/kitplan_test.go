@@ -259,6 +259,77 @@ func TestFillEarlyHandsTheRoadToTheTaskLayer(t *testing.T) {
 	}
 }
 
+// Questy bed 2026-11-26: clvl 12, 0 potions, gold 7: the poverty farm took it to Stony Field (Dark Rangers) and it died. With no healing
+// potion the hero farms the best measured gold per minute of povertyfarm.json that is open: Cave level 1 first, then Stony Field,
+// Cold Plains; with a potion in the belt the rule does not apply. Two classes.
+func TestPovertyFarmPicksTheBestMeasuredArea(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, tc := range []struct {
+			potions int
+			cleared []int
+			want    int
+		}{{0, nil, 9}, {0, []int{9}, 4}, {0, []int{9, 4}, 8}, {2, nil, 0}} {
+			g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
+			g.w.set(func(w *world) {
+				w.class, w.level, w.area = class, 12, 1
+				var keep []d2.Unit
+				for _, u := range w.items {
+					if u.Class != 1 {
+						keep = append(keep, u)
+					}
+				}
+				w.items = append(keep, d2.Unit{ID: 799, Type: d2.TypeItem, Class: 5, Item: &d2.Item{Where: d2.ContInventory}})
+				for i := 0; i < tc.potions; i++ {
+					w.items = append(w.items, d2.Unit{ID: uint32(700 + i), Type: d2.TypeItem, Class: 1, Item: &d2.Item{Where: d2.ContBelt}})
+				}
+			})
+			g.r.poll()
+			for _, a := range tc.cleared {
+				g.r.loop.cleared[a] = true
+			}
+			got, ok := g.r.povertyFarmArea(g.r.latest())
+			if tc.potions == 0 && len(tc.cleared) == 0 {
+				if a, _ := g.r.starveArea(g.r.latest()); a != tc.want {
+					t.Errorf("%v: starveArea %d, want the measured best %d", class, a, tc.want)
+				}
+			}
+			if got != tc.want || ok != (tc.want != 0) {
+				t.Errorf("%v potions %d cleared %v: area %d ok %v, want %d", class, tc.potions, tc.cleared, got, ok, tc.want)
+			}
+		}
+	}
+}
+
+// A hero with no healing potion does not walk into an area whose monsters are above clvl minus the gap (3): clvl 8, Dark Wood
+// (monster level 8) is closed, Stony Field (5) is open; with a potion both are; the owner's try anyway is not asked here. Two classes.
+func TestNoPotionsKeepsTheHeroOutOfTooHighAreas(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, potions := range []int{0, 2} {
+			g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
+			g.r.mlvlFn = func(a int, _ d2.Difficulty) int { return map[int]int{5: 8, 4: 5}[a] }
+			g.w.set(func(w *world) {
+				w.class, w.level, w.area = class, 8, 1
+				var keep []d2.Unit
+				for _, u := range w.items {
+					if u.Class != 1 {
+						keep = append(keep, u)
+					}
+				}
+				w.items = keep
+				for i := 0; i < potions; i++ {
+					w.items = append(w.items, d2.Unit{ID: uint32(700 + i), Type: d2.TypeItem, Class: 1, Item: &d2.Item{Where: d2.ContBelt}})
+				}
+			})
+			g.r.poll()
+			s := g.r.latest()
+			high, low := g.r.povertyAreaWhy(s, 5), g.r.povertyAreaWhy(s, 4)
+			if (potions == 0) != (high != "") || low != "" {
+				t.Errorf("%v potions %d: Dark Wood %q, Stony Field %q", class, potions, high, low)
+			}
+		}
+	}
+}
+
 // The quest-walk kit (earlyroutes.json questWalk): from clvl 5 to 14 in Normal a hero with no healing potions does not walk a
 // quest: a chores trip when 60 gold pays them, a gold farm when it does not; at clvl 15 and over, or with the kit, nothing.
 // Two classes.

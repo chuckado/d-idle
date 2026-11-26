@@ -87,7 +87,7 @@ func TestReflexDrinkDoesNotCancelTheAction(t *testing.T) {
 // the guard carries the safety action out itself, once, and the loop does not repeat it.
 func TestHardCancelIsCarriedOutByTheGuardAfterTheDeadline(t *testing.T) {
 	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
-		for _, deadline := range []int{1000, 0} {
+		for _, deadline := range []int{200, 0} {
 			t.Run(fmt.Sprintf("%v/deadline %d", class, deadline), func(t *testing.T) {
 				g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Bot.ReflexDeadlineMs, tu.Bot.ReactionMs = deadline, 0 })
 				g.w.set(func(w *world) { w.state = d2.StateInGame; w.area = 2; w.life, w.maxL = 10, 100; w.class = class })

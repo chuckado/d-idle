@@ -217,6 +217,9 @@ func (r *Runner) inPoverty() bool {
 // false when nothing is open (cleared in this game or avoided).
 func (r *Runner) starveArea(s *d2.Snapshot) (int, bool) {
 	diff := difficultyName(s.Player.Difficulty)
+	if a, ok := r.povertyFarmArea(s); ok && r.resInput(s).HasTP {
+		return a, true // no potions, no gold: the best measured gold per minute the hero can survive (povertyfarm.json)
+	}
 	if r.resInput(s).HasTP {
 		ex := map[int]bool{}
 		for a := range r.loop.cleared {
