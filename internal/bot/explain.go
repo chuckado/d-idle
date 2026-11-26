@@ -6,7 +6,9 @@ import (
 	"sync"
 	"time"
 
+	"d2lod-bot/internal/arbiter"
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/questboard"
 )
 
 // The decision ring (Fable logic review 2026-11-25, P7): the last explainRing decisions the chain made (chosen hook
@@ -46,7 +48,9 @@ type ExplainView struct {
 	Decisions []ExplainDecision `json:"decisions"` // oldest first, at most 200
 	Refusals  []ExplainRefusal  `json:"refusals"`
 	Arbiter   string            `json:"arbiter,omitempty"` // the shadow's last choice, when the shadow runs
-	Journey   string            `json:"journey,omitempty"` // why the quest journey is blocked now
+	// ArbiterDecision is the same choice as a record: intent, family, reason and what it displaced.
+	ArbiterDecision *arbiter.Explained `json:"arbiterDecision,omitempty"`
+	Journey         string             `json:"journey,omitempty"` // why the quest journey is blocked now
 	// Invariants are the monitor counters with a since time; the Hard ones are what the flip watcher reverts on.
 	Invariants []InvCounter `json:"invariants"`
 }
@@ -176,6 +180,28 @@ func (r *Runner) Explain() ExplainView {
 	r.mu.Unlock()
 	if d, ok := r.Arbiter(); ok && d.Chosen != nil {
 		v.Arbiter = d.Chosen.Key() + " (" + d.Chosen.Reason + ")"
+		if e, ok := d.Explained(); ok {
+			v.ArbiterDecision = &e
+		}
 	}
 	return v
+}
+
+// QuestRefusal is the freshest standing typed refusal as the quest board's "Why not?" facts (questboard.DeskConfig.Refusal):
+// the need code, the fact that ends it and the guard words. False when nothing is standing.
+func (r *Runner) QuestRefusal() (questboard.RefusalFacts, bool) {
+	x := &r.explain
+	now := r.e.Clock.Now()
+	x.mu.Lock()
+	defer x.mu.Unlock()
+	var best *ExplainRefusal
+	for _, e := range x.refs {
+		if e.Code != "" && now.Sub(e.Seen) <= explainRefLife && (best == nil || e.Seen.After(best.Seen)) {
+			best = e
+		}
+	}
+	if best == nil {
+		return questboard.RefusalFacts{}, false
+	}
+	return questboard.RefusalFacts{Need: best.Code, Wake: best.Wake, Admission: best.Need, Seen: best.Seen}, true
 }
