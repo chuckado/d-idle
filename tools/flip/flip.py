@@ -8,7 +8,10 @@
 Stdlib only. Never prints tokens. No host is hard-coded: the transport is a command prefix from the environment or
 local.env (via tools/env.sh):
   D2_FLIP_RUN      shell prefix that runs a command on the sandbox host (default: labrun $D2_LABRUN_HOST --)
-  D2_FLIP_TUNING   tuning file inside the container, {instance} is replaced (default /data/instances/{instance}/state/tuning.json)
+  D2_FLIP_TUNING   tuning file inside the container (default /data/instances/main/state/tuning.json; {instance} is replaced)
+  D2_FLIP_RESTART  container (default: docker restart of the whole container, always works) or bot (TERM to the bot
+                   launcher only, the shim starts it again; U: not drilled on a sandbox, try it with a dry knob first)
+  D2_FLIP_VERIFY_S seconds to wait for the flipped value to show in `ops status --why` (default 240)
   D2_FLIP_BIN      the bot binary inside the container (default /data/didle/current/bin/d2bot)
   D2_FLIP_STATE    where open windows are kept (default ~/.cache/d2flip)
 The container is named like the instance. Refuses while D2BOT_RUN is set (never in a measured run) and when the
@@ -77,8 +80,11 @@ class Sandbox:
                 raise FlipError("set D2_FLIP_RUN or D2_LABRUN_HOST in local.env")
             run = f"labrun {host} --"
         self.run = shlex.split(run)
-        self.path = env.get("D2_FLIP_TUNING", "/data/instances/{instance}/state/tuning.json").format(instance=instance)
+        self.path = env.get("D2_FLIP_TUNING", "/data/instances/main/state/tuning.json").format(instance=instance)
         self.bin = env.get("D2_FLIP_BIN", "/data/didle/current/bin/d2bot")
+        self.mode = env.get("D2_FLIP_RESTART", "container")
+        if self.mode not in ("container", "bot"):
+            raise FlipError("D2_FLIP_RESTART must be container or bot")
 
     def _x(self, args, stdin=None, timeout=120):
         r = subprocess.run(self.run + args, input=stdin, capture_output=True, text=True, timeout=timeout)
@@ -100,7 +106,12 @@ class Sandbox:
         self._x(["docker", "exec", self.instance, "rm", "-f", self.path])
 
     def restart(self):
-        self._x(["docker", "restart", self.instance], timeout=300)
+        if self.mode == "container":
+            self._x(["docker", "restart", self.instance], timeout=300)
+            return
+        # Only the bot: TERM to the launcher (cmdline starts with "d2bot --backend"); the shim restarts it.
+        self._x(["docker", "exec", self.instance, "sh", "-c",
+                 'n=0; for p in /proc/[0-9]*; do tr "\\0" " " < $p/cmdline 2>/dev/null | grep -q "^d2bot --backend" && kill -TERM ${p#/proc/} && n=$((n+1)); done; [ $n -gt 0 ]'])
 
     def status(self):
         """The decision-ring view (`ops status --why`); its `invariants` list has the counters."""
@@ -117,6 +128,23 @@ def hard_counts(view):
     if not hard:
         raise FlipError("no hard counters yet (bot not ticking)")
     return since, hard
+
+
+def set_override(text, knob, value):
+    """The tuning file is the store envelope {"version": N, "data": {"profile", "overrides"}} (internal/store/file.go,
+    internal/bot/tuner.go): the knob goes into data.overrides; every other key and the version stay as they were.
+    Returns (new text, old value or None). A top-level "overrides" is never written: the bot would ignore it."""
+    if text is None or not text.strip():
+        env = {"version": 1, "data": {}}
+    else:
+        env = json.loads(text)
+        if not isinstance(env, dict) or "version" not in env or not isinstance(env.get("data"), dict):
+            raise FlipError("tuning file is not a store envelope {version, data}")
+    data = env["data"]
+    ov = data.setdefault("overrides", {})
+    old = ov.get(knob)
+    ov[knob] = value
+    return json.dumps(env, indent=2) + "\n", old
 
 
 class Store:
@@ -184,9 +212,32 @@ class Ledger:
 
 
 class Flipper:
-    def __init__(self, make_sandbox, store, ledger, clock=now_utc, sleep=time.sleep, out=print, env=None):
+    def __init__(self, make_sandbox, store, ledger, clock=now_utc, sleep=time.sleep, out=print, env=None, dry_run=False):
         self.make, self.store, self.ledger, self.clock, self.sleep, self.out = make_sandbox, store, ledger, clock, sleep, out
         self.env = os.environ if env is None else env
+        self.dry = dry_run
+        self.verify_s = int(self.env.get("D2_FLIP_VERIFY_S", 240))
+
+    def verify(self, sb, knob, value):
+        """Wait for `ops status --why` to show the flipped value among the live knobs (the new child read the file).
+        Returns the hard counters (since, counts) of the new child; FlipError when the value never shows."""
+        waited, last = 0, "no answer"
+        while True:
+            try:
+                view = sb.status()
+                got = (view.get("knobs") or {}).get(knob)
+                if got is None:
+                    last = f"{knob} not in the live knobs"
+                elif abs(got - value) > 1e-9:
+                    last = f"{knob} is {got}, expected {value}"
+                else:
+                    return hard_counts(view)
+            except Exception as e:
+                last = str(e)
+            if waited >= self.verify_s:
+                raise FlipError(f"verify failed: {last}")
+            self.sleep(5)
+            waited += 5
 
     # --- flip ---------------------------------------------------------------------------------------------
     def flip(self, instance, knob, value, why, window_s):
@@ -201,23 +252,24 @@ class Flipper:
             raise FlipError(f"{knob}: needs a dark row in data/darklaunch.json")
         sb = self.make(instance)
         before = sb.read_tuning()
-        state = json.loads(before) if before else {}
-        if not isinstance(state, dict):
-            raise FlipError("tuning file is not an object")
+        new_text, old = set_override(before, knob, value)
         # Baseline: the counters of the running child before the flip. A flip during a breach is refused.
         since0, base0 = hard_counts(sb.status())
         ts = self.clock()
         tag = "bak-flip-" + ts.strftime("%Y%m%dT%H%M%SZ")
-        old = (state.get("overrides") or {}).get(knob)
-        state.setdefault("overrides", {})[knob] = value
-        new_text = json.dumps(state, indent=1)
         w = {"instance": instance, "knob": knob, "old": old, "new": value, "why": why, "start": iso(ts), "window_s": window_s,
              "end": iso(ts + timedelta(seconds=window_s)), "tag": tag, "backup": before, "pending": "", "misses": 0,
              "baseline": base0, "since": since0}
+        if self.dry:
+            self.out(f"DRY-RUN {instance}: baseline {since0 or '-'} {sorted(base0.items())}")
+            self.out(f"DRY-RUN save backup {tag} ({'no file' if before is None else str(len(before)) + ' bytes'}), set data.overrides[{knob}]={value} (was {old}), restart ({getattr(sb, 'mode', '?')}), verify the live knob, ledger {knob} -> trial, window {window_s}s")
+            self.out("DRY-RUN nothing written")
+            return w
         self.store.put(instance, w)  # the backup is on disk before the knob moves
         try:
             sb.write_tuning(new_text)
             sb.restart()
+            w["since"], w["baseline"] = self.verify(sb, knob, value)  # the restart reset the counters: new baseline
         except Exception as e:
             self.out(f"FLIP FAILED {instance} {knob}: {e}; restoring the backup")
             self._restore(sb, w)  # best effort; on failure the window stays 'pending' and watch retries
@@ -226,10 +278,6 @@ class Flipper:
                 raise FlipError(f"flip failed and the restore is pending ({w['pending']}): run flip.py watch --once") from e
             self.store.drop(instance)
             raise FlipError(f"flip failed, tuning restored: {e}") from e
-        try:  # the restart reset the counters: take the baseline of the new child
-            w["since"], w["baseline"] = hard_counts(sb.status())
-        except Exception:
-            w["since"], w["baseline"] = "", {}
         self.store.put(instance, w)
         self.ledger.update(knob, status="trial", trial_started=iso(ts), trial_instance=instance, trial_value=value,
                            trial_window=f"{window_s}s", trial_why=why)
@@ -319,10 +367,11 @@ def main(argv=None):
     ap.add_argument("--window", default="24h")
     ap.add_argument("--interval", type=int, default=60)
     ap.add_argument("--once", action="store_true")
+    ap.add_argument("--dry-run", action="store_true", help="print every step, write and restart nothing")
     a = ap.parse_args(argv)
     env = load_env()
     store = Store(env.get("D2_FLIP_STATE") or os.path.expanduser("~/.cache/d2flip"))
-    f = Flipper(lambda inst: Sandbox(inst, env), store, Ledger(), env=env)
+    f = Flipper(lambda inst: Sandbox(inst, env), store, Ledger(), env=env, dry_run=a.dry_run)
     try:
         if a.args[0] == "watch":
             f.watch(a.interval, a.once)
