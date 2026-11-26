@@ -41,6 +41,15 @@ Source: user decision 2026-11-24, on the pipeline audit row 16 ([pipeline-audit-
 - Nothing else changes: audited with its own path and the skipped readiness refusal, one shot (ends at a park, death, finish, stop or restart), readiness words and floors only (never the kit gates, the death-spiral guards or combat reactions), rate limits unchanged (6 per quest per hour, 30 per board per hour), never in a measured run.
 - The agent states in its report which quest it tried and why; no chain of try-anyway starts and no use outside the sandbox container.
 
+## Amended 2026-11-25 (user decision): a read verb `why` and the order verbs hold, home, go, park
+
+Source: user decision 2026-11-25 (popup) on the Fable logic review, [section 4 and proposals P7 and P11](../research/fable-logic-review-2026-11-25.md). Amends guard rail 4 ("quest verbs only") and nothing else.
+
+- The allowlist gains one READ verb, `why` (the operator spelling is `status --why`): it returns the decision ring and the standing refusals of the explain endpoint. It changes nothing and needs no reason.
+- The allowlist gains four ORDER verbs: `hold` (stand still where safe), `home` (come home), `go <area>` (go to an area) and `park <quest> <hours>` (set a quest aside for N hours, a wake time). They are mapped onto the orders and the board's park that exist today (`go`, `fight`, `home`); they add no new power the viewer's orders do not already give.
+- Same guard rails as the quest verbs: off by default (`D2BOT_OPERATOR=1`), never in a measured run, the 0600 unix socket only, the allowlist in code and tested, every mutating verb needs `--why` and is an audited line with `remote:"operator"`, and the same rate limits (6 per quest per hour, 30 per hour for the board; orders count against the 30).
+- Agents still never POST to the live hero. They may use these verbs on the operator socket of the sandbox only when the brief says so.
+
 ## Consequences
 
 - No new power: anyone with `docker exec` on the host already owns the container, its state and its save.
