@@ -45,6 +45,7 @@
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
 | incident2 | proposed | - | `internal/bot/incident.go`<br>`internal/bot/incident_test.go`<br>`internal/bot/invariants.go`<br>`internal/scenario/incident.go`<br>`internal/scenario/incident_test.go`<br>`cmd/d2scenario/incident.go`<br>`cmd/d2scenario/incident_test.go`<br>`docs/probes/incident-scenarios.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
+| stepexec2 | proposed | - | `internal/questspec/exec.go`<br>`internal/questspec/exec_test.go`<br>`internal/bot/stepexec.go`<br>`internal/bot/stepexec_test.go`<br>`internal/bot/task.go`<br>`data/questspec/act1.json`<br>`tools/provingground/scenarios/cain.json`<br>`data/darklaunch.json`<br>`docs/design/stepexec-p9.md` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
@@ -324,6 +325,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 9565fe882 11-26 13:58 `Merge agent/stepexec2: Merge branch 'main' into stepexec2` (stepexec2)
+- 66f862a20 11-26 13:56 `Merge branch 'main' into stepexec2` (-)
 - 744eff15f 11-26 13:48 `Merge agent/incident2: Merge branch 'main' into incident2` (incident2)
 - fedf2159c 11-26 13:48 `Merge agent/arbfam4: Merge branch 'main' into arbfam` (arbfam4)
 - 7e6289850 11-26 13:46 `Merge branch 'main' into incident2` (-)
@@ -332,6 +335,4 @@
 - d5978f6ed 11-26 13:34 `Merge branch 'main' into aura2a` (-)
 - 3be781e1d 11-26 13:24 `Merge agent/auralive: Merge branch 'main' into auralive` (auralive)
 - fad6b3f14 11-26 13:24 `Merge agent/act345map: Merge branch 'main' into act345map` (act345map)
-- 9028d8300 11-26 13:24 `Merge agent/act2plan: Merge branch 'main' into act2plan` (act2plan)
-- a14a0c7e3 11-26 13:19 `Merge branch 'main' into auralive` (-)
 <!-- statusgen:end -->
