@@ -73,7 +73,7 @@ def build(repo, today, days=14, ref="origin/main", lane=None, epic=None):
         if eff in ("now", "next") and t["open_deps"]:
             eff = "blocked"
         t["eff"] = eff
-        t["age"] = (today - date.fromisoformat(t["updated"])).days if t["updated"] else None
+        t["age"] = max(0, (today - date.fromisoformat(t["updated"])).days) if t["updated"] else None
     sec = {k: [] for k in ("now", "next", "waiting-owner", "blocked", "later", "parked", "overdue", "stale")}
     for t in sorted(tasks, key=key):
         sec[t["eff"]].append(t)
