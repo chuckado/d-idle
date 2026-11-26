@@ -108,10 +108,10 @@
   "note": "Necromancer 11, devp30 (run as Paladin the row is RED: the row needs its class)"
  },
  "step.act1.smith.stand_click_pickup": {
-  "note": "with the merged stand step: the board reaches 'Pick up Horadric Malus from the Malus stand' (also in the reruns 190741 and 192710, the latter BLOCKED by a host cut), then 'task step skipped: ran but is still needed' and no hdm in the pack. Cause not isolated: the stand added by debug object add 108 beside the hero may not be the object the step looks up (U); needs the step's log lines at debug level",
-  "run": "20261123-190635",
+  "verdict": "RED",
+  "run": "20261125-205741",
   "tag": "V",
-  "verdict": "RED"
+  "note": "Paladin row, 3 stand-in variants tried; the necro row is GREEN"
  },
  "step.act1.smith.stand_click_pickup.control": {
   "note": "control: no hdm",

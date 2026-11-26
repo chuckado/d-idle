@@ -256,7 +256,23 @@
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
 | toolstrade68 | proposed | - | `docs/adr/0011-readiness-power-vs-danger.md`<br>`docs/decisions.md` | - |
+| epic-act1 | proposed | - | `docs/epics/epic-act1.md` | - |
+| epic-act2 | proposed | - | `docs/epics/epic-act2.md` | - |
+| epic-act3 | proposed | - | `docs/epics/epic-act3.md` | - |
+| epic-act4 | proposed | - | `docs/epics/epic-act4.md` | - |
 | fid-quest-andariel | deferred | - | `docs/probes/fid/fid-quest-andariel.md` | - |
+| epic-act5 | proposed | - | `docs/epics/epic-act5.md` | - |
+| epic-class-amazon | proposed | - | `docs/epics/epic-class-amazon.md` | - |
+| epic-class-necromancer | proposed | - | `docs/epics/epic-class-necromancer.md` | - |
+| epic-class-barbarian | proposed | - | `docs/epics/epic-class-barbarian.md` | - |
+| epic-class-sorceress | proposed | - | `docs/epics/epic-class-sorceress.md` | - |
+| epic-class-paladin | proposed | - | `docs/epics/epic-class-paladin.md` | - |
+| epic-class-druid | proposed | - | `docs/epics/epic-class-druid.md` | - |
+| epic-class-assassin | proposed | - | `docs/epics/epic-class-assassin.md` | - |
+| epic-normal | proposed | - | `docs/epics/epic-normal.md` | - |
+| epic-nightmare | proposed | - | `docs/epics/epic-nightmare.md` | - |
+| epic-hell | proposed | - | `docs/epics/epic-hell.md` | - |
+| epic-merc | proposed | - | `docs/epics/epic-merc.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | fid-adapter-rows | deferred | - | `docs/probes/fid/fid-adapter-rows.md` | - |
@@ -283,14 +299,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2f018a0f2 11-25 22:13 `Merge agent/epiccards: Merge branch 'main' into epiccards` (epiccards)
+- 670049ed3 11-25 22:11 `Merge branch 'main' into epiccards` (-)
+- 12884d316 11-25 22:04 `Merge agent/qd25: Merge origin/main` (qd25)
+- 7903a7ada 11-25 21:56 `Merge origin/main` (-)
 - 0f5327fb9 11-25 21:15 `Merge agent/toolstrade76: toolstrade76: the poverty advice asks the town for what its sell chore sells (advice counted 4, the chore sold 0)` (toolstrade76)
+- f78028b8f 11-25 20:57 `Merge origin/main` (-)
 - 87ea713ef 11-25 20:51 `Merge agent/cardcatchup: cardcatchup: mark 224 merged cards Done` (cardcatchup)
 - 6e3958642 11-25 20:10 `Merge agent/toolstrade75: toolstrade75: a portal that drops into a stale pack is not taken, the corpse run is exempt from the early road, the Dark Wood wants 180 life (melee) / 100 (caster)` (toolstrade75)
 - 18d4a4e9e 11-25 19:11 `Merge agent/toolstrade74: toolstrade74: the early road is a Ready hold of the step into the Dark Wood (a chores trip for the kit), not a strike at the hop (Cain scroll parked as too weak)` (toolstrade74)
 - e12ee23ba 11-25 18:12 `Merge agent/toolstrade73: Merge branch 'main' into toolstrade73` (toolstrade73)
-- ce8c37537 11-25 18:10 `Merge branch 'main' into toolstrade73` (-)
-- f4f3dacfc 11-25 18:02 `Merge agent/toolstrade72: Merge branch 'main' into toolstrade72` (toolstrade72)
-- c636d9c54 11-25 18:01 `Merge origin/main into toolstrade73` (-)
-- 96bb8ebc3 11-25 18:00 `Merge branch 'main' into toolstrade72` (-)
-- 3f54cc00c 11-25 17:54 `Merge agent/toolstrade71: Merge branch 'main' into toolstrade71` (toolstrade71)
 <!-- statusgen:end -->
