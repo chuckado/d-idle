@@ -4,6 +4,8 @@
 package ops
 
 import (
+	"fmt"
+	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -25,7 +27,24 @@ const (
 // operator does not get them: they change what the player sees or how the bot plays, not a quest.
 var mutating = map[string]bool{"start": true, "retry": true, "cancel": true, "handin": true, "auto": true}
 
-func allowed(v string) bool { return mutating[v] || v == "status" }
+// orderVerbs are the ADR 0030 amendment of 2026-11-25: they place the orders the viewer already has (go, fight, home)
+// or park a quest; they never touch the hero directly. why is the read verb of the decision ring.
+var orderVerbs = map[string]bool{"hold": true, "home": true, "go": true, "park": true}
+
+func allowed(v string) bool { return mutating[v] || orderVerbs[v] || v == "status" || v == "why" }
+
+// Park limits: a quest is set aside for 1 to MaxParkHours hours (the operator's own wake time, kept in process memory).
+const (
+	MaxParkHours  = 24
+	DefaultGoMins = 60
+	ordersBucket  = "_orders" // the rate-limit bucket of the order verbs (they also count against the 30 per hour)
+)
+
+// Orders places the T0 orders (go, fight, home) the way the viewer's order box does: the hero's own guards still decide
+// when the walk starts. Kind is "go", "fight" or "home"; replace cancels every open order first.
+type Orders interface {
+	Give(kind, area string, minutes int, replace bool) (text string, err error)
+}
 
 // Desk is what the operator verbs need from the board (questboard.Desk; the same calls the HTTP handlers make).
 type Desk interface {
@@ -45,7 +64,11 @@ type Request struct {
 	Quest string `json:"quest,omitempty"`
 	Chunk string `json:"chunk,omitempty"`
 	On    *bool  `json:"on,omitempty"`
-	Why   string `json:"why,omitempty"`
+	// Area and Minutes belong to go; Hours to park.
+	Area    string `json:"area,omitempty"`
+	Minutes int    `json:"minutes,omitempty"`
+	Hours   int    `json:"hours,omitempty"`
+	Why     string `json:"why,omitempty"`
 	// TryAnyway turns start into the owner's try-anyway start: one attempt past a readiness refusal (docs/operator.md).
 	TryAnyway bool `json:"try_anyway,omitempty"`
 }
@@ -57,6 +80,8 @@ type Response struct {
 	Reason string            `json:"reason,omitempty"`
 	Reply  *questboard.Reply `json:"reply,omitempty"`
 	Board  *Board            `json:"board,omitempty"`
+	// Explain answers why: the bot's decision ring and standing refusals (bot.ExplainView), read only.
+	Explain any `json:"explain,omitempty"`
 }
 
 // Board is the status view: one row per chunk of the difficulty.
@@ -65,6 +90,14 @@ type Board struct {
 	Difficulty string `json:"difficulty,omitempty"`
 	Why        string `json:"why,omitempty"`
 	Rows       []Row  `json:"rows"`
+	// Parked lists the quests the operator set aside, with the wake time (RFC 3339).
+	Parked []Parked `json:"parked,omitempty"`
+}
+
+// Parked is one quest set aside by the park verb.
+type Parked struct {
+	Quest string `json:"quest"`
+	Until string `json:"until"`
 }
 
 // Row is a chunk with its state, its park reason (Code and Text) and its step while it runs.
@@ -119,10 +152,12 @@ func Enabled(getenv func(string) string) (bool, string) {
 
 // Config wires a Server. Getenv and Now default to the process; Logf may be nil.
 type Config struct {
-	Desk   func() Desk
-	Getenv func(string) string
-	Now    func() time.Time
-	Logf   func(msg string, kv ...any)
+	Desk    func() Desk
+	Orders  func() Orders // nil: the order verbs answer "off"
+	Explain func() any    // nil: why answers "off"
+	Getenv  func(string) string
+	Now     func() time.Time
+	Logf    func(msg string, kv ...any)
 }
 
 // Server dispatches requests. Safe for concurrent use.
@@ -133,6 +168,7 @@ type Server struct {
 	per  map[string][]time.Time
 	last map[string]time.Time // last retry per quest
 	prog map[string]*progress
+	park map[string]time.Time // quest -> wake time of the park verb
 }
 
 func New(c Config) *Server {
@@ -145,7 +181,7 @@ func New(c Config) *Server {
 	if c.Logf == nil {
 		c.Logf = func(string, ...any) {}
 	}
-	return &Server{cfg: c, per: map[string][]time.Time{}, last: map[string]time.Time{}, prog: map[string]*progress{}}
+	return &Server{cfg: c, per: map[string][]time.Time{}, last: map[string]time.Time{}, prog: map[string]*progress{}, park: map[string]time.Time{}}
 }
 
 func no(code, reason string) Response { return Response{Code: code, Reason: reason} }
@@ -221,7 +257,13 @@ func (s *Server) Handle(rq Request) Response {
 
 func (s *Server) handle(rq Request) Response {
 	if !allowed(rq.Verb) {
-		return no("verb", "only start, retry, cancel, handin, auto and status are served here")
+		return no("verb", "only start, retry, cancel, handin, auto, hold, home, go, park, status and why are served here")
+	}
+	if rq.Verb == "why" {
+		if s.cfg.Explain == nil {
+			return no("off", "the decision ring is not available yet")
+		}
+		return Response{OK: true, Explain: s.cfg.Explain()}
 	}
 	var d Desk
 	if s.cfg.Desk != nil {
@@ -233,10 +275,14 @@ func (s *Server) handle(rq Request) Response {
 	if rq.Verb == "status" {
 		b := boardOf(d.View())
 		s.track(b)
+		b.Parked = s.parkedList()
 		return Response{OK: true, Board: b}
 	}
 	if s.cfg.Getenv("D2BOT_RUN") != "" {
 		return no("measured_run", "a measured run never takes operator verbs (D2BOT_RUN is set)")
+	}
+	if orderVerbs[rq.Verb] {
+		return s.order(d, rq)
 	}
 	if !safeID(rq.Quest) {
 		return no("quest", "send a quest id (a-z, 0-9, _ and -, at most 64)")
@@ -253,6 +299,9 @@ func (s *Server) handle(rq Request) Response {
 	}
 	if rq.Verb == "auto" && rq.On == nil {
 		return no("body", "auto needs on or off")
+	}
+	if (rq.Verb == "start" || rq.Verb == "retry") && s.parkedNow(rq.Quest) != "" {
+		return no("parked", rq.Quest+" is parked by the operator until "+s.parkedNow(rq.Quest))
 	}
 	if rq.Verb == "retry" {
 		if r := notParked(d.View(), rq.Quest, rq.Chunk); r != nil {
@@ -347,4 +396,93 @@ func notParked(v questboard.View, quest, chunk string) *Response {
 	}
 	r := no("not_parked", "retry only clears a park; "+quest+" is "+state+", not blocked")
 	return &r
+}
+
+func (s *Server) parkedNow(quest string) string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	t, ok := s.park[quest]
+	if !ok || !s.cfg.Now().Before(t) {
+		delete(s.park, quest)
+		return ""
+	}
+	return t.UTC().Format(time.RFC3339)
+}
+
+func (s *Server) parkedList() []Parked {
+	var out []Parked
+	s.mu.Lock()
+	qs := make([]string, 0, len(s.park))
+	for q := range s.park {
+		qs = append(qs, q)
+	}
+	s.mu.Unlock()
+	sort.Strings(qs)
+	for _, q := range qs {
+		if u := s.parkedNow(q); u != "" {
+			out = append(out, Parked{Quest: q, Until: u})
+		}
+	}
+	return out
+}
+
+// order serves hold, home, go and park. hold stops what the hero does and sends it to rest in town (a home order that
+// replaces the open orders); home queues the same order behind them; go places a go order for Minutes (default 60);
+// park stops the quest's running chunk and refuses start and retry of it until the wake time. Each needs a reason, is
+// rate limited with the board's budget and is an audit line with remote "operator".
+func (s *Server) order(d Desk, rq Request) Response {
+	why, ok := cleanWhy(rq.Why)
+	if !ok {
+		return no("why", "every mutating verb needs a reason: one line, 1 to 200 characters")
+	}
+	bucket := ordersBucket
+	if rq.Verb == "park" {
+		if !safeID(rq.Quest) {
+			return no("quest", "send a quest id (a-z, 0-9, _ and -, at most 64)")
+		}
+		if rq.Hours < 1 || rq.Hours > MaxParkHours {
+			return no("hours", "park takes 1 to 24 hours")
+		}
+		bucket = rq.Quest
+	} else if s.cfg.Orders == nil || s.cfg.Orders() == nil {
+		return no("off", "orders are not available yet")
+	}
+	if r := s.admit(rq.Verb, bucket); r != nil {
+		return *r
+	}
+	var rep questboard.Reply
+	auditWhy := why
+	switch rq.Verb {
+	case "park":
+		rep = d.Cancel(rq.Quest, "")
+		until := s.cfg.Now().Add(time.Duration(rq.Hours) * time.Hour)
+		s.mu.Lock()
+		s.park[rq.Quest] = until
+		s.mu.Unlock()
+		rep.OK = true
+		rep.Reason = rq.Quest + " parked until " + until.UTC().Format(time.RFC3339) + ". " + rep.Reason
+		auditWhy = fmt.Sprintf("park %dh: %s", rq.Hours, why)
+	default:
+		kind, area, mins, replace := "home", "", 0, rq.Verb == "hold"
+		if rq.Verb == "go" {
+			kind, area, mins = "go", rq.Area, rq.Minutes
+			if mins == 0 {
+				mins = DefaultGoMins
+			}
+		}
+		text, err := s.cfg.Orders().Give(kind, area, mins, replace)
+		rep.OK, rep.Reason = err == nil, text
+		if err != nil {
+			rep.Code, rep.Reason = "order_refused", err.Error()
+		}
+		auditWhy = rq.Verb + ": " + why
+	}
+	st := 200
+	if !rep.OK {
+		st = 409
+	}
+	d.Record(questboard.AuditEvent{Action: rq.Verb, Quest: rq.Quest, Path: "operator/" + rq.Verb, Remote: "operator",
+		Agent: "ops-cli", Why: auditWhy, OK: rep.OK, Status: st, Code: rep.Code, Reason: rep.Reason})
+	s.cfg.Logf("operator verb", "verb", rq.Verb, "quest", rq.Quest, "area", rq.Area, "ok", rep.OK, "code", rep.Code)
+	return Response{OK: rep.OK, Code: rep.Code, Reason: rep.Reason, Reply: &rep}
 }
