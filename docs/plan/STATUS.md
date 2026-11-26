@@ -332,6 +332,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- c04df4f8a 11-26 17:40 `Merge agent/autorevert4: autorevert4: flip writes via base64 argument, checks size and sha, reads back before any restart` (autorevert4)
 - 478e9fd56 11-26 17:25 `Merge agent/toolstrade90: Merge branch 'main' into toolstrade90` (toolstrade90)
 - eb221b5b5 11-26 17:25 `Merge agent/autorevert3: Merge branch 'main' into autorevert1` (autorevert3)
 - 4e6d516a9 11-26 17:23 `Merge branch 'main' into toolstrade90` (-)
@@ -341,5 +342,4 @@
 - 1fce0d4de 11-26 17:13 `Merge agent/toolstrade89: Merge origin/main` (toolstrade89)
 - ebc1836e0 11-26 17:11 `Merge origin/main` (-)
 - 148111592 11-26 17:02 `Merge origin/main` (-)
-- 600b7776a 11-26 16:53 `Merge agent/autorevert2: autorevert2: card result` (autorevert2)
 <!-- statusgen:end -->
