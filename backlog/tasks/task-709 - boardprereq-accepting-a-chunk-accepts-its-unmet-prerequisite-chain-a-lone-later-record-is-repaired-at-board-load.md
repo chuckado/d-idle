@@ -18,6 +18,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Offline fix: Accept of a chunk locked only by After steps accepts the chain in questspec order; Next repairs a lone later record (log: quest board: stones waits for scroll (auto-started)); Stop withdraws dependants with a toast. Unit tests Paladin+Sorceress green, -race x20 green. Scenarios board.prereq-not-accepted and board.prereq-start-tap queued on the builder long lane, NOT run when this card was written. Not verified live."
+lane: next
 ---
 
 ## Description

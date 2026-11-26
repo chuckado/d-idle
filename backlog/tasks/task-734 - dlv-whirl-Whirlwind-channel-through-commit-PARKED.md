@@ -17,6 +17,7 @@ owns:
   - "internal/combat/"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

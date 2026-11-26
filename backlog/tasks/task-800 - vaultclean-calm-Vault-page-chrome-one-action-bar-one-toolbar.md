@@ -29,6 +29,7 @@ owns:
 exclusive: []
 contracts: []
 result: 'built and tested offline (go test ./internal/watch ./tools/uishots, node harnesses with fake timers, tools/desktopscroll/run.sh green on the builder, fixture-viewer pictures at 1366x768, 1920x1080, 390x844 in docs/ui/vault-cleanup/); not seen on the live page (no deploy by this card). Build-specific: none. Not touched: the API, the bot.'
+lane: next
 ---
 
 ## Description

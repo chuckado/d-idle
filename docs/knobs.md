@@ -65,11 +65,11 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
-| combat.drinkLifePct | 55 | 35..80 | % | 35 | 5 | Life percent that triggers a healing potion. |
+| combat.drinkLifePct | 55 | 35..80 | % | 35 | 6 | Life percent that triggers a healing potion. |
 | combat.drinkRejuvPct | 35 | 20..60 | % | 20 | 5 | Life percent that triggers a rejuvenation potion. |
 | combat.drinkRejuvBossPct | 50 | 0..70 | % | 0 | 0 | Life percent that triggers a rejuvenation potion in a fight against champions, uniques or bosses (danger 1+); 0 = off. SME advice, EXP. |
 | combat.championEarlyPct | 10 | 0..25 | pp | 0 | 0 | Percentage points added to the healing potion line and the rejuvenation (boss) line while champions (not bosses) are in range, in Normal below character level 15. Champions have about 3x life and +50% damage. 0 = off. SME rule of thumb, EXP. |
-| combat.chickenPct | 25 | 15..45 | % | 15 | 2 | Life percent at or below which the bot leaves the game (Normal, Nightmare). |
+| combat.chickenPct | 25 | 15..45 | % | 15 | 3 | Life percent at or below which the bot leaves the game (Normal, Nightmare). |
 | combat.chickenHellPct | 30 | 20..50 | % | 20 | 2 | Same as chicken, in Hell. |
 | combat.drinkManaPct | 25 | 5..60 | % | 5 | 2 | Mana percent that triggers a mana potion. |
 | combat.townPotionMin | 2 | 0..4 | count | 0 | 2 | Healing potions left in the belt at which the bot wants a town trip. |
@@ -87,7 +87,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | combat.targetQuality | 100 | 20..100 | % | 20 | 3 | 100 picks the best target; lower picks the nearest more often and loses ticks. |
 | combat.rangeMargin | 3 | 0..8 | subtiles | 0 | 1 | Distance kept inside a skill's maximum range. |
 | combat.clearRadius | 40 | 15..80 | subtiles | 15 | 1 | Radius around the start point cleared when the caller gives none. |
-| combat.fightRadius | 22 | 10..40 | subtiles | 10 | 17 | A hostile monster this close counts as a fight. |
+| combat.fightRadius | 22 | 10..40 | subtiles | 10 | 18 | A hostile monster this close counts as a fight. |
 | combat.maxTargetSec | 45 | 20..90 | s | 90 | 1 | Give up on one target after this long. |
 | combat.noProgressSec | 12 | 5..30 | s | 30 | 1 | Give up on a target whose life did not drop for this long. |
 | combat.clearMaxSec | 180 | 30..600 | s | 30 | 2 | Upper bound of one Clear call. |
@@ -341,6 +341,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.flailMoves | 6 | 0..100 | moves | 6 | 1 | This many area changes inside the flail window without a kill or XP count as a loop (any cause: the quest board, area done and waypoint fallbacks undoing each other). The bot then holds in place. 0 is off. |
 | bot.flailWindowMin | 10 | 1..120 | min | 10 | 1 | Length of the window in which the area changes of the flail guard are counted. |
 | bot.flailHoldMin | 5 | 1..120 | min | 5 | 2 | How long the bot stays in the current area (fights in the field, rests in town) after a flail was found. Doubles for each repeat within an hour, at most eight times. |
+| bot.invariants | 1 | 0..1 | bool | 1 | 1 | 1 checks about twelve named invariants once per tick (a potion not drunk under the drink line, a field entry without the kit, a refusal counted as a failure, ...) and logs one rate-limited `invariant` line per hit plus per-name counts in the minute line. Logging only, nothing changes for the hero. 0 is off (docs/invariants.md). |
+| bot.typedOutcome | 1 | 0..1 | bool | 1 | 1 | 1 makes a refusal of the quest board step (early road, route guard, gate: not ready) a typed Refused outcome with a need and a wake fact: it is handled in one place, never counted as a failure, and logged once per change as `step refused`. 0 is the legacy path (the refusal goes through the failure counter). Other paths are not converted yet (docs/outcomes.md). |
 | bot.arbiterShadow | 0 | 0..1 | bool | 0 | 1 | 1 runs the intent arbiter beside the goal chain and logs one line per divergence (chain chose A, arbiter would choose B because ...) plus per-family counters in the minute line. It never acts: nothing changes for the hero. 0 is off (docs/arbiter.md). |
 | bot.arbiterDwellSec | 120 | 10..1800 | s | 120 | 1 | Arbiter shadow: how long a chosen intent holds its lease; only a higher priority class preempts it inside this time. |
 | bot.arbiterTravelSec | 600 | 30..7200 | s | 600 | 1 | Arbiter shadow: an area change that would undo the previous one inside this window is refused unless a kill, XP, gold or belt change happened in between. |

@@ -31,6 +31,8 @@ overlap: "New package internal/decide; no overlap with open cards. The call site
 source: "grill 0005 outcome (docs/grills/0005-automation-ladder/outcome.md), ADR 0016 item 24"
 contracts: ["bot-loop"]
 next: "tier order: after T4/Gate A cards per ADR 0016"
+lane: parked
+lane_note: "status Deferred (dpgaps (offline tested, not live): store behaviours (banked)"
 ---
 
 ## Description

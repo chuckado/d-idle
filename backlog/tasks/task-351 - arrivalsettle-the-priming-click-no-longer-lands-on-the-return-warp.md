@@ -23,6 +23,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Cause (S from code, matches the V log pattern): d2dctl Kick clicked (400,300), the player feet, which on arrival is the return warp unit. Now clicks 110 px toward the move target (primeToward/KickAt). Offline, not verified live; measure bounces/arrivals from the arrival log line."
+lane: next
 ---
 
 ## Description

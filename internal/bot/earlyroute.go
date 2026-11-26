@@ -26,7 +26,15 @@ type earlyRoute struct {
 	} `json:"kit"`
 }
 
+type questWalkRule struct {
+	FromLevel  int `json:"fromLevel"`
+	BelowLevel int `json:"belowLevel"`
+	Healing    int `json:"healing"`
+	Portal     int `json:"portal"`
+}
+
 var (
+	earlyWalk   questWalkRule
 	earlyOnce   sync.Once
 	earlyRoutes []earlyRoute
 	earlyErr    error
@@ -40,10 +48,11 @@ func loadEarlyRoutes() ([]earlyRoute, error) {
 			return
 		}
 		var doc struct {
-			Routes []earlyRoute `json:"routes"`
+			Routes    []earlyRoute  `json:"routes"`
+			QuestWalk questWalkRule `json:"questWalk"`
 		}
 		if earlyErr = json.Unmarshal(b, &doc); earlyErr == nil {
-			earlyRoutes = doc.Routes
+			earlyRoutes, earlyWalk = doc.Routes, doc.QuestWalk
 		}
 	})
 	return earlyRoutes, earlyErr
@@ -93,6 +102,36 @@ func (r *Runner) earlyRouteCheck(s *d2.Snapshot, a int) (why string, kitOnly boo
 	}
 	if rt.Kit.Portal > 0 && !in.HasTP {
 		return "no town portal for the " + rt.Name + " road", true
+	}
+	return "", false
+}
+
+// questWalkCheck is the kit rule of every quest walk into a field (earlyroutes.json questWalk): from fromLevel to below belowLevel in
+// Normal the hero needs the healing potions and a portal source before it leaves town for a quest. kitOnly says the purse can pay
+// the missing potions (a chores trip fixes it); otherwise the hero farms gold first (a hold, nothing counted).
+func (r *Runner) questWalkCheck(s *d2.Snapshot) (why string, kitOnly bool) {
+	if s == nil || s.Player == nil || r.e.Tune.Route.EarlyRoute == 0 || s.Player.Difficulty != d2.Normal || task.TryActive() || r.corpseRun.Load() {
+		return "", false
+	}
+	_, _ = loadEarlyRoutes()
+	w := earlyWalk
+	if w.BelowLevel == 0 || s.Player.Level < w.FromLevel || s.Player.Level >= w.BelowLevel {
+		return "", false
+	}
+	in := r.resInput(s)
+	n := healingOf(in)
+	switch {
+	case n < w.Healing:
+		need := (w.Healing - n) * r.e.Tune.Resource.KitPotionGold
+		if s.Player.Gold < need {
+			return fmt.Sprintf("%d healing potions < %d for a quest walk, %d gold needed: farm gold first", n, w.Healing, need), false
+		}
+		return fmt.Sprintf("%d healing potions < %d for a quest walk", n, w.Healing), true
+	case w.Portal > 0 && !in.HasTP:
+		if s.Player.Gold < r.e.Tune.Resource.KitTPGold {
+			return "no town portal for a quest walk, " + fmt.Sprint(r.e.Tune.Resource.KitTPGold) + " gold needed: farm gold first", false
+		}
+		return "no town portal for a quest walk", true
 	}
 	return "", false
 }

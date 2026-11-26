@@ -24,6 +24,7 @@ owns:
   - "docs/questboard.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

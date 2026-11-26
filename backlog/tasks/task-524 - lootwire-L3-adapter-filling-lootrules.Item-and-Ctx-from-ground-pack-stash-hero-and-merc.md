@@ -20,6 +20,7 @@ owns:
 exclusive: []
 contracts: []
 result: "loot.RulesAdapter: Item, ActorsOf, Ctx fill lootrules inputs from ground (d2d label flags), pack and stash units, hero and merc, needs and owned counts; unreadable fields stay hidden. Tested on a synthetic item table (no game files), two classes, two hirelings. Not verified live; stat ids for mana, frw, ias, gf, ed and durability are U."
+lane: next
 ---
 
 ## Description

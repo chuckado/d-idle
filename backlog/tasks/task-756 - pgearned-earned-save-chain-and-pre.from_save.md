@@ -17,6 +17,7 @@ owns:
   - "tools/provingground/earned"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

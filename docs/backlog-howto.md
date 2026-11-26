@@ -17,7 +17,7 @@
 
 ## What is where
 
-- `backlog/config.yml`: project `d.idle`, statuses Proposed, Deferred, In Progress, Done; labels: see "Labels and fields" below; `auto_commit: false`. V
+- `backlog/config.yml`: project `d.idle`, statuses Proposed, To Do, Deferred, In Progress, Done (To Do = accepted and scheduled; Proposed = an idea not yet accepted; a To Do card needs an assignee and the Size line like Proposed); labels: see "Labels and fields" below; `auto_commit: false`. V
 - `backlog/tasks/task-N - <slug>.md`: one file per card, markdown with YAML frontmatter. V
 - `tools/backlog/openspec_to_backlog.py`: the one-shot copier (dry run by default, `--apply`, `--force`; idempotent, keeps a card's TASK number). Re-running without `--force` skips cards that already have a file, so CLI edits are not overwritten.
 - `tools/backlog/check.py` (+ `test_check.py`, run `python3 -I tools/backlog/test_check.py`): read-only checker. It checks the closed label scheme and fields (section "Labels and fields"), an `owns` key on every task, unique card and task ids, no folded `title: >-` block. V
@@ -209,3 +209,21 @@ MCP does nothing the CLI cannot do (same code, same file edits, same churn) and 
 - It APPENDS a `<!-- BACKLOG.MD GUIDELINES START -->` block (about 24 lines) to the existing `AGENTS.md` and `CLAUDE.md` and creates `GEMINI.md` and `.github/copilot-instructions.md` (the same short block, 1.2 KB). It leaves `backlog/config.yml` untouched in an existing project. `cursor` writes AGENTS.md. `--integration-mode mcp` cannot be combined with `--agent-instructions` (init refuses) and writes nothing in that case.
 - The block tells agents to run `backlog instructions overview` at the start and to "not edit task markdown files directly, use the CLI". That clashes with us: our custom keys (`card`, `owns`, ...) can only be set by hand, and CLAUDE.md here is the one line `@AGENTS.md`, so the generated copy in CLAUDE.md would be duplicated text. Decision: do NOT run `init` with instruction files here (keep `--agent-instructions none`, as the config requirements say) and use the one block in AGENTS.md ("Backlog.md for agents") instead.
 - The ops repo `claude/agents/*.md`: d2-worker, d2-live, d2-general and d2-decomp carry the line "your job is the Backlog.md task the brief names, `backlog/tasks/<id>.md` (keys `owns:` ..)" (d2-decomp in "Conventions" and in the boilerplate); d2-merger checks the tasks; spec-sme and grill only mention tasks. None tells agents HOW to edit tasks beyond that line, so the update is one added sentence at the end of that line in the four agents: "Task how-to: the 'Backlog.md for agents' block in AGENTS.md." (not edited in this job).
+
+## Planning lanes
+
+Statuses say where a card is in its life; lanes say when it is worked. Optional frontmatter keys (checked by `tools/backlog/check.py`, all cards, absent = default):
+
+| Key | Values | Meaning |
+|---|---|---|
+| `lane` | `now` `next` `later` `blocked` `waiting-owner` `parked` | when it is worked. Default when absent: In Progress = now, Deferred = parked, everything else open = next |
+| `lane_note` | one line | REQUIRED for `parked` and `waiting-owner`: why parked, or what the owner must decide |
+| `due` | `YYYY-MM-DD` | optional date; past due shows under OVERDUE |
+| `epic` | card id | optional parent (an `epic-*` card from docs/epics/, or a roadmap card); `plan.py --epic <card>` filters |
+| `dependencies` | task ids (native key) | a now/next card whose dependencies are not Done is shown BLOCKED |
+
+Rules: a card created without a lane is `next` (`new_task.py --lane/--due/--epic/--depends`, lane default next); every open card has an owner (assignee) or a lane note; Done cards leave the view; `parked` needs a reason line.
+
+Cadence: the coordinator runs `python3 -I tools/backlog/plan.py` at the start and the end of every session (one screen: NOW with age and owner, NEXT ordered by priority then due then id, WAITING ON OWNER, BLOCKED, OVERDUE, STALE = In Progress or To Do with no commit on its `owns:` for 14 days, DARK-LAUNCH from `tools/darklaunch/report.py`), and decides lane changes weekly (edit the `lane:` line by hand; the CLI keeps it). Flags: `--lane X` (full list of one lane, also `overdue`, `stale`), `--epic CARD`, `--json`, `--days N`. `plan.py --write docs/plan/QUEUE.md` writes the same view as a generated page (do not edit it by hand; not wired into CI, regenerate when asked). `waiting-owner` cards are the same asks as the owner list: when you set that lane also run `tools/needs-you.sh add` if the item is not there yet (not automatic). Built-but-dark features live in `data/darklaunch.json` (docs/process/dark-launch.md); the plan view only shows them.
+
+Migration of 2026-11-25 (explicit `lane:` written to every open card, no status changed): R1 In Progress with a commit on its owns in the last 14 days = `now` (18); R2 In Progress with none = `parked` with a lane_note (1); R3 Deferred = `parked`, lane_note quotes its result line (52); R4 epic-* cards = `later` (16); R5 assignee `user` = `waiting-owner` (2); R6 everything else = `next` (149). The fable roadmap cards get `lane: next` and `epic:` when the roadmap doc lands.

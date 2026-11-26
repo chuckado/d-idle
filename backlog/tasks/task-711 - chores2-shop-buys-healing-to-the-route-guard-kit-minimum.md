@@ -25,6 +25,7 @@ owns:
 exclusive: []
 result: "Restock and stash withdraw now satisfy the route guard kit (belt+pack, KitHealing), kit-only guard block inserts chores; unit tests Paladin+Sorceress green on the builder; live on the builder the guard restocks, but act1.tools.malus Paladin 11 stays BLOCKED (cheated hero drains potions on the road); not verified GREEN"
 contracts: []
+lane: next
 ---
 
 ## Description

@@ -22,6 +22,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Offline only (not verified live): FullyKnown is measured from the grid (known cells equal the level rectangle) behind knob nav.fullGrid (default 0, behaviour unchanged); with it a whole grid refuses a goal outside it (no walk to a known edge) and a partial grid keeps the optimistic walk. Must-fail tests on the Paladin and Sorceress Tower Cellar 5 walks (internal/nav/fullgrid_test.go), -race -count=20 clean. The gridwhole probe (merged) showed d2d grids are whole at arrival, so the knob turns a measured fact into the rule; the mouthgoal_test comment on a known grid edge is corrected. Scenarios act1.forgotten.countess not run with the knob (U). Build-specific: none, the rule is generic."
+lane: next
 ---
 
 ## Description

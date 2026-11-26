@@ -174,6 +174,8 @@ type World struct {
 	// EarlyBlocked is the early road guard by area (earlyroutes.json, filled by the bot): a step into one of these areas waits with the
 	// reason; KitOnly means a chores trip fixes it (the others are level or life, the hero levels first).
 	EarlyBlocked map[Area]EarlyBlock
+	// WalkBlocked is the kit rule of every quest walk into a field (earlyroutes.json questWalk, filled by the bot).
+	WalkBlocked EarlyBlock
 	// TowerMinLevel (0 = tower guard off) and TowerNeedsMerc are the Forgotten Tower knobs (route.go); TowerBlocked is
 	// TowerWhy(w) filled by the bot, kept out of areas 20-25 by fieldReady.
 	TowerMinLevel     int

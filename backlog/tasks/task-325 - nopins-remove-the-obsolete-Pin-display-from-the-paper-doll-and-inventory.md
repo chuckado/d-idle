@@ -28,6 +28,7 @@ owns:
 exclusive: []
 contracts: []
 result: "PIN badge, legend chip, Unpin button/menu entry and tooltip badge removed; pins and /api/inventory/unpin kept as deprecated; new .nopin goldens added; not verified live."
+lane: next
 ---
 
 ## Description

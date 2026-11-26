@@ -17,6 +17,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Docs only: docs/research/fable-logic-review-2026-11-25.md (architecture map, 178 fix cards classified, invariants against two sandbox logs read read-only, controllability, testability, prior art, 12 ranked proposals, next 5 PRs). No Go change, nothing run live, not verified live; the log evidence is quoted as read on 2026-11-25. Nothing build-specific."
+lane: now
 ---
 
 ## Description

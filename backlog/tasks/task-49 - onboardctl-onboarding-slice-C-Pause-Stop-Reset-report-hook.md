@@ -23,6 +23,8 @@ owns:
 exclusive: []
 contracts: []
 result: "Superseded by TASK-27 (2026-11-10 true-up). Pause, Stop and Reset not carried. Not verified live."
+lane: parked
+lane_note: "status Deferred (Superseded by TASK-27 (2026-11-10 true-up). Pause, Stop and)"
 ---
 
 ## Description

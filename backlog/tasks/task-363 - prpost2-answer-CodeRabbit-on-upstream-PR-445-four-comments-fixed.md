@@ -22,6 +22,7 @@ exclusive:
   - "upstream-pr:cold-enchanted-length"
 contracts: []
 result: "CodeRabbit round on psi29a/d2decomped#445 (2026-11-12): all four comments valid and fixed as new commits on the PR branch (036c6e86, 3005a7a4, 0433ce71, normal push on top of the maintainer's merge 0ab98c3e), each answered in its own thread; cold differential unchanged; #444 merged meanwhile. Not verified live (no game)."
+lane: next
 ---
 
 ## Description

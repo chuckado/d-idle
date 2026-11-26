@@ -126,6 +126,9 @@ docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-minutes.jsonl.gz  gaterun  gat
 docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-extras.jsonl.gz  gaterun  gate2multi-20261107-1811-g2h
 
 # BEGIN GENERATED OWNERS (tools/sharedgen/sharedgen.py from the owns: keys of open tasks; do not edit between the markers)
+AGENTS.md  credit-runner  decisions1
+backlog/tasks/task-96[6-9] - *  credit-runner  fableroadmap
+backlog/tasks/task-9[7-9][0-9] - *  credit-runner  fableroadmap
 cmd/bossrun/adapter.go  pro-runner  levelplan3
 cmd/d2bot/acts_test.go  credit-runner  qdmatrix
 cmd/d2bot/adapters.go  credit-runner  cainfix3
@@ -232,6 +235,7 @@ data/campaign/normal.json  pro-runner  levelplan3
 data/capabilities/  credit-runner  dlv-data
 data/capabilities/  credit-runner  dlv-stance-pack
 data/darklaunch.json  credit-runner  darklaunch
+data/darklaunch.json  credit-runner  fableroadmap
 data/input/caps/  credit-runner  dlv-cast-verbs
 data/onboarding  credit-runner  firstminutes
 data/questboard/act1.json  credit-runner  cain45
@@ -242,8 +246,11 @@ deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 docs/actbot.md  credit-runner  cain45
 docs/adr/0011-readiness-power-vs-danger.md  credit-runner  toolstrade68
 docs/adr/0014-memory-writes-allowed-no-crutch.md  credit-runner  vaultpay
+docs/adr/0020-proving-ground-and-stat-skill-agency.md  credit-runner  decisions1
 docs/adr/0029-vault-gold-payment.md  credit-runner  vaultpay
+docs/adr/0030-operator-quest-control.md  credit-runner  decisions1
 docs/adr/README.md  credit-runner  vaultpay
+docs/arbiter.md  credit-runner  decisions1
 docs/archive  credit-runner  dietarchive
 docs/autoalloc.md  credit-runner  allocfix
 docs/away-drill.md  live-agent  awaydrill
@@ -255,12 +262,29 @@ docs/cheats.md  credit-runner  vaultpay
 docs/combat.md  credit-runner  cainfix3
 docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/d2d-determinism.md  credit-runner  pgclock
+docs/decisions.md  credit-runner  decisions1
 docs/decisions.md  credit-runner  toolstrade68
 docs/decisions.md  credit-runner  vaultpay
+docs/design/admission-p4.md  credit-runner  admit1
+docs/design/advisor-r14.md  credit-runner  advisor1
+docs/design/agency-p1b.md  credit-runner  agencyp1b
+docs/design/agency-p3.md  credit-runner  agencyp3
+docs/design/arbiter-migration-p6.md  credit-runner  arbmig
+docs/design/autorevert.md  credit-runner  autorevert1
+docs/design/boardsm-checker.md  credit-runner  bsmchk
+docs/design/boardsm-flip.md  credit-runner  bsmdef
 docs/design/fable-review-2026-11-21/town-planner-b-model.md  credit-runner  town5
 docs/design/fable-review-2026-11-21/town-profiles-sme.md  credit-runner  town12
+docs/design/faultsoak-p12.md  live-agent  faultsoak
+docs/design/input-i3.md  credit-runner  inputl3
+docs/design/input-i4.md  credit-runner  inputl4
+docs/design/input-i5-i7.md  credit-runner  inputl5
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vault
+docs/design/proptest-t3.md  credit-runner  proptest1
+docs/design/stepexec-p9.md  credit-runner  stepexec1
+docs/design/ticklog-t4.md  credit-runner  ticklog
+docs/design/townflip-p5.md  credit-runner  townflip
 docs/epics/epic-act1.md  live-agent  epic-act1
 docs/epics/epic-act2.md  live-agent  epic-act2
 docs/epics/epic-act3.md  live-agent  epic-act3
@@ -285,6 +309,7 @@ docs/friend-checklist-0.1.2.md  credit-runner  cut012
 docs/friend-guide.md  credit-runner  cut012
 docs/gear-policy.md  credit-runner  nopins
 docs/hourfix.md  credit-runner  hourfix
+docs/invariants.md  credit-runner  invmon
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-ui.md  credit-runner  jewelicons
 docs/inventory-ui.md  credit-runner  nopins
@@ -311,6 +336,11 @@ docs/mapfog.md  credit-runner  fogtrail
 docs/onboarding-tour.md  credit-runner  onboardtour
 docs/onboarding.md  credit-runner  firstminutes
 docs/onboarding.md  credit-runner  reconnectux
+docs/outcomes.md  credit-runner  outcome-kit-gate
+docs/outcomes.md  credit-runner  outcome-park-step
+docs/outcomes.md  credit-runner  outcome-route-guard
+docs/outcomes.md  credit-runner  outcome-task-step
+docs/outcomes.md  credit-runner  outcome-travel-gate
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
 docs/plan/STATUS.md  credit-runner  statusrefresh
@@ -320,6 +350,7 @@ docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm7
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
+docs/probes/checkpoint-live-drill.md  live-agent  ckptlive
 docs/probes/chores2-2026-11-21.md  credit-runner  chores2
 docs/probes/exitsread-2026-11-22.md  credit-runner  exitsread
 docs/probes/firsthour.md  live-agent  firsthour
@@ -351,6 +382,7 @@ docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/probes/warptrigger-2026-11-22.md  credit-runner  warptrigger
 docs/process/combat-reads.md  credit-runner  dlv-reads
 docs/process/dark-launch.md  credit-runner  darklaunch
+docs/process/dark-launch.md  credit-runner  fableroadmap
 docs/process/fork-rebase.md  credit-runner  forkrebase2
 docs/process/layout-read.md  credit-runner  countess3
 docs/process/layout-read.md  live-agent  k1layout
@@ -364,6 +396,7 @@ docs/process/queuespeed.md  credit-runner  queuespeed
 docs/process/sandbox-devp12.md  credit-runner  devp12
 docs/process/sandbox-devp13.md  credit-runner  forkrebase2
 docs/process/second-worker.md  credit-runner  w2worker
+docs/process/threshold-governance.md  credit-runner  thrgov
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
 docs/quest-hints.md  live-agent  questdrill
@@ -389,6 +422,9 @@ docs/research/pal-zeal-trace.md  credit-runner  palskill-matrix
 docs/research/return-screen.md  credit-runner  returnmock
 docs/research/upstream-next.md  credit-runner  upstream-next
 docs/reset.md  credit-runner  resetinstant
+docs/roadmap-fable.md  credit-runner  fableroadmap
+docs/safety-latency.md  credit-runner  reflex1a
+docs/safety-latency.md  credit-runner  reflex1b
 docs/senses-map.md  credit-runner  maphistory
 docs/senses-map.md  credit-runner  maphistoryA
 docs/senses-map.md  credit-runner  maphistoryB
@@ -442,6 +478,7 @@ internal/bot/  credit-runner  cainfix3
 internal/bot/areametrics.go  credit-runner  intake
 internal/bot/areaskip_test.go  credit-runner  passagebounce
 internal/bot/areaskip_test.go  pro-runner  bounce3
+internal/bot/autopsy.go  credit-runner  reflex1a
 internal/bot/broke.go  credit-runner  survrecover
 internal/bot/broke.go  credit-runner  town5
 internal/bot/contracts.go  credit-runner  chores2
@@ -454,6 +491,7 @@ internal/bot/farmreset_test.go  credit-runner  farmloop
 internal/bot/goal.go  credit-runner  hourfix
 internal/bot/goal.go  credit-runner  maphistoryA
 internal/bot/goal.go  credit-runner  qdmatrix
+internal/bot/goal.go  credit-runner  reflex1b
 internal/bot/goal.go  credit-runner  repairtrip
 internal/bot/goal.go  credit-runner  stage1fix
 internal/bot/goal.go  credit-runner  survrecover
@@ -463,6 +501,8 @@ internal/bot/goldfarm.go  credit-runner  repairtrip
 internal/bot/guided.go  credit-runner  campaign1
 internal/bot/guided_test.go  credit-runner  campaign1
 internal/bot/hpfields.go  credit-runner  intake
+internal/bot/invariants.go  credit-runner  invmon
+internal/bot/invariants_test.go  credit-runner  invmon
 internal/bot/kitplan_test.go  credit-runner  bsm7
 internal/bot/leveling.go  credit-runner  hourfix
 internal/bot/leveling.go  credit-runner  town5
@@ -471,7 +511,10 @@ internal/bot/lifelog.go  credit-runner  arrivalsettle
 internal/bot/lifelog.go  credit-runner  hourfix
 internal/bot/lifelog.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  hourfix
+internal/bot/loop.go  credit-runner  invmon
 internal/bot/loop.go  credit-runner  passagebounce
+internal/bot/loop.go  credit-runner  reflex1a
+internal/bot/loop.go  credit-runner  reflex1b
 internal/bot/loop.go  credit-runner  resetinstant
 internal/bot/loop.go  credit-runner  survrecover
 internal/bot/loop.go  pro-runner  bounce3
@@ -479,7 +522,9 @@ internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  arrivalsettle
 internal/bot/observe.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  intake
+internal/bot/observe.go  credit-runner  invmon
 internal/bot/observe.go  credit-runner  passagebounce
+internal/bot/observe.go  credit-runner  reflex1a
 internal/bot/observe.go  credit-runner  survrecover
 internal/bot/observe.go  pro-runner  bounce3
 internal/bot/parkstep_test.go  credit-runner  botstuck
@@ -502,20 +547,28 @@ internal/bot/resource.go  pro-runner  levelplan3
 internal/bot/routeguard.go  credit-runner  bsm7
 internal/bot/runner.go  credit-runner  campaign1
 internal/bot/runner.go  credit-runner  hourfix
+internal/bot/runner.go  credit-runner  invmon
 internal/bot/runner.go  credit-runner  maphistoryA
 internal/bot/runner.go  credit-runner  passagebounce
+internal/bot/runner.go  credit-runner  reflex1b
 internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  resetinstant
+internal/bot/safetylat.go  credit-runner  reflex1a
+internal/bot/safetylat_test.go  credit-runner  reflex1a
 internal/bot/staletarget.go  credit-runner  botstuck
+internal/bot/state.go  credit-runner  reflex1b
 internal/bot/state.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  boardmoderace
 internal/bot/task.go  credit-runner  botstuck
 internal/bot/task.go  credit-runner  cain5b
 internal/bot/task.go  credit-runner  chores2
 internal/bot/task.go  credit-runner  hourfix
+internal/bot/task.go  credit-runner  invmon
 internal/bot/task.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  wpstep
 internal/bot/task_acts_test.go  credit-runner  cain5b
+internal/bot/townguard.go  credit-runner  reflex1b
+internal/bot/townguard_test.go  credit-runner  reflex1b
 internal/bot/waypoints.go  credit-runner  boardmoderace
 internal/bot/whyline.go  credit-runner  repairtrip
 internal/bot/zonemodel.go  credit-runner  survrecover
@@ -542,6 +595,7 @@ internal/combat/  credit-runner  dlv-stance-pack
 internal/combat/  credit-runner  dlv-upkeep-minions
 internal/combat/  credit-runner  dlv-upkeep-state
 internal/combat/  credit-runner  dlv-whirl
+internal/combat/cancellat_test.go  credit-runner  reflex1a
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/fight.go  credit-runner  maphistory
 internal/combat/fight.go  credit-runner  maphistoryC
@@ -612,6 +666,7 @@ internal/env/tuning.go  credit-runner  bulkid
 internal/env/tuning_bot.go  credit-runner  botstuck
 internal/env/tuning_bot.go  credit-runner  freshstart
 internal/env/tuning_bot.go  credit-runner  hourfix
+internal/env/tuning_bot.go  credit-runner  invmon
 internal/env/tuning_bot.go  credit-runner  lootwireL4
 internal/env/tuning_combat.go  credit-runner  cainfix3
 internal/env/tuning_combat.go  credit-runner  dlv-expect
@@ -798,8 +853,11 @@ internal/town/beltfix6_test.go  credit-runner  beltfix
 internal/town/beltfix_test.go  credit-runner  beltfix
 internal/town/beltrepair.go  credit-runner  beltfix
 internal/town/chores.go  credit-runner  chores2
+internal/town/chores.go  credit-runner  reflex1b
 internal/town/chores.go  credit-runner  repairtrip
+internal/town/intown_test.go  credit-runner  reflex1b
 internal/town/kithealing_test.go  credit-runner  chores2
+internal/town/npc.go  credit-runner  reflex1b
 internal/town/playerid.go  credit-runner  itemverbs2
 internal/town/playerid.go  credit-runner  vaultpay
 internal/town/playerid.go  credit-runner  vaultreveal

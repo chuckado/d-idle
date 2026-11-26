@@ -22,6 +22,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Root cause (V, 3 h sandbox log): d2d fires the return exit of the Underground Passage and the Crypt about 0.2 s after the first move order whatever its direction (arrival bounce, 160 of 166 Passage arrivals); the old breaker only counted clearing-state crossings, travel walks never reached it. Fix: per-area bounce counter in observe (noteArrival/noteBounceLocked) trips the escalating border-loop skip, which bans routes through the area; arrival and bounce lines logged. Offline only, not verified live; why the game bounces stays U."
+lane: next
 ---
 
 ## Description

@@ -29,6 +29,7 @@ owns:
   - "cmd/d2bot/resource_test.go"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

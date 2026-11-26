@@ -17,6 +17,7 @@ owns:
   - "internal/bot/waypoints.go"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

@@ -21,6 +21,7 @@ exclusive:
   - "upstream-pr:warp-arrival"
 contracts: []
 result: "Posted 2026-11-12 after the second verifier pass and the user yes: https://github.com/psi29a/d2decomped/pull/490 (fid/warp-arrival-r2 24e8ac4f, upstream main unchanged). CodeRabbit read once: one naming comment declined with the repo clang-tidy ignore list as evidence. No other posts."
+lane: next
 ---
 
 ## Description
