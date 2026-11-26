@@ -333,6 +333,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `design/`
 
+- [admission-p4.md](design/admission-p4.md): Admission function (P4, card admit1, TASK-970) (status: step 1 built (package, data, tests); step 2 (wiring) waits for the outcomes2 cards TASK-958 and TASK-961.)
 - [autoalloc-and-currencies-2026-11-21.md](design/autoalloc-and-currencies-2026-11-21.md): Automatic Allocate Skills, the gold respec and the currency consolidation (design, 2026-11-21) (status: DESIGN plus a built first slice (agent autoalloc). Tags: **V** verified (how said), **S** secondary, **U**...)
 - [bulk-identify-2026-11-18.md](design/bulk-identify-2026-11-18.md): Bulk identify: Cain-free, lazy reveal, filter (design, 2026-11-18) (status: BUILT offline (B1-B5 and the town adapters, scroll path and Ether tap payer of slice B6, task bulkid2),...)
 - [danger-protocol-2026-11-25.md](design/danger-protocol-2026-11-25.md): Danger protocol and checkpoint portals (2026-11-25) (status: design proposal, no code. Part 1 reads the code (tags: V = verified in code or a cited live record, S =...)
@@ -377,6 +378,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [loot-vault-2026-11-16.md](design/loot-vault-2026-11-16.md): Ethereal Vault: a database of every drop, created in the game only on Keep (design and feasibility) (status: DESIGN, 2026-11-16. Nothing here was built or run; the fork was read, not changed. "Ethereal Vault" is the...)
 - [necromancer-sme-answers-2026-11-22.md](design/necromancer-sme-answers-2026-11-22.md): Necromancer build answers for the unattended bot (SME, 2026-11-22) (status: current. Answers the five questions of `docs/probes/necromancer-readiness-2026-11-22.md` section 4 (card...)
 - [quest-board-2026-11-16.md](design/quest-board-2026-11-16.md): Quest board: quests as events the player takes part in (status: design proposal (2026-11-16, card questdesign, TASK-575), not built; waits for the user's answers (section...)
+- [stepexec-p9.md](design/stepexec-p9.md): P9: the generic step executor (card stepexec1, TASK-976) (status: current (2026-11-26). Source: docs/research/fable-logic-review-2026-11-25.md 2.4 (classes F, H), 7.1 P9;...)
 - [ui-build-ratings-sme-2026-11-22.md](design/ui-build-ratings-sme-2026-11-22.md): Build catalogue: ballpark star thresholds and first-draft ratings (SME, 2026-11-22) (status: current. Answers `docs/design/fable-review-2026-11-22/ui-unification.md` sections D3 and D5 (user decision...)
 - [desktop-app.md](desktop-app.md): Desktop app: d2idle-watch (status: the Go launcher is the FALLBACK; the main desktop app is now `apps/desktop-electron`...)
 - [desktop-electron.md](desktop-electron.md): Desktop app on Electron: d2idle-watch (status: built, not yet run on real desktops (TASK-289 skeleton, TASK-290 tray, autostart, hide-to-tray, update...)

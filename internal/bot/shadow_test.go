@@ -46,3 +46,30 @@ func TestChainFamily(t *testing.T) {
 		}
 	}
 }
+
+func TestRefusalBecomesArbiterTempIntent(t *testing.T) {
+	for _, tc := range []struct{ need, want string }{{"needs_potions", "resupply/refill"}, {"too_weak", "level/level_up"}} {
+		g := newRig(t)
+		g.w.set(func(w *world) { w.area = 5 })
+		g.r.poll()
+		g.r.arbRefused(tc.need, "w") // knob off: nothing happens
+		if _, ok := g.r.Arbiter(); ok {
+			t.Fatal("the arbiter ran with the knob off")
+		}
+		g.r.e.Tune.Bot.ArbiterShadow, g.r.e.Tune.Bot.ResupplyPotions = 1, 100
+		g.r.arbRefused(tc.need, "w")
+		g.clock.Sleep(time.Second)
+		g.r.runGoalShadowed(context.Background(), g.r.latest(), levelGoalControl())
+		d, ok := g.r.Arbiter()
+		if !ok || d.Chosen == nil && len(d.Rejected) == 0 {
+			t.Fatalf("%s: no decision", tc.need)
+		}
+		found := d.Chosen != nil && d.Chosen.Key() == tc.want
+		for _, r := range d.Rejected {
+			found = found || r.Intent.Key() == tc.want
+		}
+		if !found {
+			t.Fatalf("%s: temporary intent %s not proposed: %s", tc.need, tc.want, d)
+		}
+	}
+}
