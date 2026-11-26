@@ -208,12 +208,9 @@ cmd/d2firsthour/  live-agent  firsthour
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/detrun.go  credit-runner  pgjournal
 cmd/d2scenario/detrun_test.go  credit-runner  pgjournal
-cmd/d2scenario/incident.go  credit-runner  incident1
-cmd/d2scenario/incident_test.go  credit-runner  incident1
 cmd/d2scenario/journal.go  credit-runner  pgjournal
 cmd/d2scenario/ledger.go  credit-runner  pgledger
 cmd/d2scenario/ledger_test.go  credit-runner  pgledger
-cmd/d2scenario/main.go  credit-runner  incident1
 cmd/d2scenario/main.go  credit-runner  pgledger
 cmd/d2scenario/prov.go  credit-runner  pgprov
 cmd/d2scenario/run.go  credit-runner  pgledger
@@ -234,6 +231,7 @@ data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
 data/capabilities/  credit-runner  dlv-data
 data/capabilities/  credit-runner  dlv-stance-pack
+data/darklaunch.json  credit-runner  autorevert1
 data/input/caps/  credit-runner  dlv-cast-verbs
 data/onboarding  credit-runner  firstminutes
 data/questboard/act1.json  credit-runner  cain45
@@ -301,6 +299,7 @@ docs/friend-checklist-0.1.2.md  credit-runner  cut012
 docs/friend-guide.md  credit-runner  cut012
 docs/gear-policy.md  credit-runner  nopins
 docs/hourfix.md  credit-runner  hourfix
+docs/invariants.md  credit-runner  autorevert1
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-ui.md  credit-runner  jewelicons
 docs/inventory-ui.md  credit-runner  nopins
@@ -327,6 +326,7 @@ docs/mapfog.md  credit-runner  fogtrail
 docs/onboarding-tour.md  credit-runner  onboardtour
 docs/onboarding.md  credit-runner  firstminutes
 docs/onboarding.md  credit-runner  reconnectux
+docs/operator.md  credit-runner  autorevert1
 docs/outcomes.md  credit-runner  outcome-kit-gate
 docs/outcomes.md  credit-runner  outcome-park-step
 docs/outcomes.md  credit-runner  outcome-route-guard
@@ -348,7 +348,6 @@ docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
-docs/probes/incident-scenarios.md  credit-runner  incident1
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1fix
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
 docs/probes/pg-gate-group1-2026-11-21.md  credit-runner  pgjournal
@@ -373,6 +372,7 @@ docs/probes/viewer-brightness-2026-11-17.md  credit-runner  brightness
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/probes/warptrigger-2026-11-22.md  credit-runner  warptrigger
 docs/process/combat-reads.md  credit-runner  dlv-reads
+docs/process/dark-launch.md  credit-runner  autorevert1
 docs/process/fork-rebase.md  credit-runner  forkrebase2
 docs/process/layout-read.md  credit-runner  countess3
 docs/process/layout-read.md  live-agent  k1layout
@@ -468,6 +468,7 @@ internal/bot/broke.go  credit-runner  survrecover
 internal/bot/broke.go  credit-runner  town5
 internal/bot/contracts.go  credit-runner  chores2
 internal/bot/drought.go  credit-runner  freshstart
+internal/bot/explain.go  credit-runner  autorevert1
 internal/bot/failsafe_test.go  credit-runner  flakefix
 internal/bot/farm.go  credit-runner  pgclock
 internal/bot/farmclock_test.go  credit-runner  pgclock
@@ -485,8 +486,8 @@ internal/bot/goldfarm.go  credit-runner  repairtrip
 internal/bot/guided.go  credit-runner  campaign1
 internal/bot/guided_test.go  credit-runner  campaign1
 internal/bot/hpfields.go  credit-runner  intake
-internal/bot/incident.go  credit-runner  incident1
-internal/bot/incident_test.go  credit-runner  incident1
+internal/bot/invariants.go  credit-runner  autorevert1
+internal/bot/invariants_test.go  credit-runner  autorevert1
 internal/bot/kitplan_test.go  credit-runner  bsm7
 internal/bot/leveling.go  credit-runner  hourfix
 internal/bot/leveling.go  credit-runner  town5
@@ -503,7 +504,6 @@ internal/bot/loop.go  pro-runner  bounce3
 internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  arrivalsettle
 internal/bot/observe.go  credit-runner  freshstart
-internal/bot/observe.go  credit-runner  incident1
 internal/bot/observe.go  credit-runner  intake
 internal/bot/observe.go  credit-runner  passagebounce
 internal/bot/observe.go  credit-runner  survrecover
@@ -760,8 +760,6 @@ internal/scenario/determinism.go  credit-runner  pgdigest
 internal/scenario/earned.go  credit-runner  pgearned
 internal/scenario/hero  credit-runner  pghero
 internal/scenario/hero/selfcheck.go  credit-runner  pgselfcheck
-internal/scenario/incident.go  credit-runner  incident1
-internal/scenario/incident_test.go  credit-runner  incident1
 internal/scenario/ledger.go  credit-runner  pgledger
 internal/scenario/ledger_test.go  credit-runner  pgledger
 internal/scenario/prov.go  credit-runner  pgprov
@@ -1037,6 +1035,7 @@ tools/ab/prep  credit-runner  pghero
 tools/bounce3  pro-runner  bounce3
 tools/capgen/  credit-runner  dlv-data
 tools/ci/  credit-runner  dlv-cleanup
+tools/darklaunch/*  credit-runner  autorevert1
 tools/desktopscroll/vault.mjs  credit-runner  vaultclean
 tools/emu/am_batch.sh  credit-runner  qdmatrix
 tools/emu/am_model.py  credit-runner  qdmatrix
@@ -1057,6 +1056,7 @@ tools/emu/pp_*  credit-runner  prprep
 tools/emu/zd_*  credit-runner  palskill-matrix
 tools/emu/zd_*  credit-runner  zealdiff
 tools/firsthour.sh  live-agent  firsthour
+tools/flip/*  credit-runner  autorevert1
 tools/fork-rebase.sh  credit-runner  forkrebase2
 tools/friendpack/README.txt  credit-runner  cut012
 tools/friendpack/checklist.sh  credit-runner  cutfix
@@ -1077,7 +1077,6 @@ tools/probes/presets.py  credit-runner  qdmatrix
 tools/provingground/  credit-runner  dlv-reads
 tools/provingground/countess-check.sh  credit-runner  countess2
 tools/provingground/earned  credit-runner  pgearned
-tools/provingground/incidents/  credit-runner  incident1
 tools/provingground/nightly.sh  credit-runner  pgnightly
 tools/provingground/pgenv.sh  credit-runner  pgledgeron
 tools/provingground/pgenv_test.sh  credit-runner  pgledgeron

@@ -23,6 +23,12 @@ type CombatTuning struct {
 	// CrowdAbandonQuestN replaces CrowdAbandonN while a player-started quest chunk runs and its readiness is not "too hard"
 	// (0 = no override). Proving Ground L3: 21 to 30 hostiles stand at the arrival of the Dark Wood and Underground Passage.
 	CrowdAbandonQuestN int
+	// Far crowd (Questy death 11, Cave Level 1: seven hostiles, four of them archers 8 to 10 subtiles out, only two inside the 8 of
+	// CrowdN, life 49 percent to 0 with no survival action): this many hostiles within CrowdFarRadius subtiles and life at or below
+	// CrowdFarPct leave by portal, else drink (0 = off).
+	CrowdFarN      int
+	CrowdFarPct    int
+	CrowdFarRadius int
 
 	// Potion timing.
 	PotionGapMs        int // minimum gap between healing/mana potions (a potion heals over 5 to 10 s, see PotionEmergencyPct)
@@ -104,7 +110,7 @@ func (t CombatTuning) AbandonN(quest bool) int {
 func DefaultCombatTuning() CombatTuning {
 	return CombatTuning{
 		DrinkLifePct: 55, DrinkRejuvPct: 35, DrinkRejuvBossPct: 50, ChampionEarlyPct: 10, ChickenPct: 25, ChickenHellPct: 30, DrinkManaPct: 25, TownPotionMin: 2,
-		CrowdN: 8, CrowdAdjacent: 8, CrowdPortalPct: 70, CrowdDrinkPct: 65, CrowdAbandonN: 15, CrowdAbandonQuestN: 40,
+		CrowdN: 8, CrowdAdjacent: 8, CrowdPortalPct: 70, CrowdDrinkPct: 65, CrowdAbandonN: 15, CrowdAbandonQuestN: 40, CrowdFarN: 5, CrowdFarPct: 55, CrowdFarRadius: 14,
 		PotionGapMs: 1000, PotionEmergencyPct: 30, RejuvGapMs: 300, ReactionMs: 120, PollMs: 60,
 		TargetQuality: 100, RangeMargin: 3, ClearRadius: 40, FightRadius: 22, MaxTargetSec: 45, NoProgressSec: 12, ClearMaxSec: 180,
 		CastGapMs: 650, CastPerSkill: 1, CastMarginMs: 90, CastFCR: 0, LowManaWaitMs: 700, StaticCasts: 4, StaticCastsBR: 0, StaticFloorNorm: 25, StaticFloorNM: 33, StaticFloorHell: 50, NovaManaFloor: 25,
@@ -133,6 +139,9 @@ func combatKnobs() []Knob {
 		k("crowdDrinkPct", "Crowd drink below life", "%", "In a crowd, drink a healing potion below this life percent (the portal cannot be cast when surrounded); the normal rule drinks at 55.", float64(d.CrowdDrinkPct), 40, 85, true),
 		k("crowdAdjacent", "Melee reach for adjacent", "subtiles", "A hostile within this distance (centre to centre) is in melee reach and counts as adjacent: three or more make a town portal cast a non-escape (potion, else leave the game) and a crowd 'surrounded'. Default 8 from the live zombie reads (drills11), UNVERIFIED for other monsters.", float64(d.CrowdAdjacent), 3, 12, false),
 		k("crowdAbandonN", "Crowd abandon size", "count", "Hostiles within 8 subtiles on a travel or quest walk that make the bot abandon the walk at once, retreat 20+ subtiles and open a portal. 0 turns it off.", float64(d.CrowdAbandonN), 0, 30, false),
+		k("crowdFarN", "Far crowd size", "count", "Hostiles within crowdFarRadius subtiles (archers and casters stand outside the 8 of crowdN) that make a far crowd: with life at or below crowdFarPct the hero opens a town portal, else drinks. 0 turns the far crowd rule off.", float64(d.CrowdFarN), 0, 20, false),
+		k("crowdFarPct", "Far crowd portal at life", "%", "In a far crowd, leave by portal (else drink a healing potion) at or below this life percent.", float64(d.CrowdFarPct), 30, 90, true),
+		k("crowdFarRadius", "Far crowd radius", "subtiles", "Radius that counts hostiles for the far crowd rule (crowdN counts within 8).", float64(d.CrowdFarRadius), 8, 30, false),
 		k("crowdAbandonQuestN", "Crowd abandon size (started quest)", "count", "Like crowdAbandonN, but while a quest chunk the player started runs and the hero's readiness for it is not too hard: the hero fights the crowd instead of leaving. 0 = use crowdAbandonN. The drink, portal and chicken lines still apply.", float64(d.CrowdAbandonQuestN), 0, 60, false),
 		k("potionGapMs", "Potion gap", "ms", "Minimum time between healing or mana potions.", float64(d.PotionGapMs), 900, 3000, false),
 		k("potionEmergencyPct", "Potion emergency line", "%", "Below this life percent a healing potion is drunk even while an earlier one is still working. Above it the bot drinks again only for a higher tier: the game adds a same-tier drink to the running effect (longer, not faster; fid-potions.md Q5).", float64(d.PotionEmergencyPct), 10, 50, true),

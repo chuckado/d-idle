@@ -280,7 +280,6 @@
 | outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | admit1 | proposed | - | `docs/design/admission-p4.md` | - |
-| incident1 | proposed | - | `internal/bot/incident.go`<br>`internal/bot/incident_test.go`<br>`internal/bot/observe.go`<br>`internal/scenario/incident.go`<br>`internal/scenario/incident_test.go`<br>`cmd/d2scenario/incident.go`<br>`cmd/d2scenario/incident_test.go`<br>`cmd/d2scenario/main.go`<br>`tools/provingground/incidents/`<br>`docs/probes/incident-scenarios.md` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
 | arbmig | proposed | - | `docs/design/arbiter-migration-p6.md` | - |
 | stepexec1 | proposed | - | `docs/design/stepexec-p9.md` | - |
@@ -299,7 +298,7 @@
 | fid-lowvalue | deferred | - | `docs/probes/fid/fid-lowvalue.md` | - |
 | ckptlive | proposed | - | `docs/probes/checkpoint-live-drill.md` | - |
 | advisor1 | proposed | - | `docs/design/advisor-r14.md` | - |
-| autorevert1 | proposed | - | `docs/design/autorevert.md` | - |
+| autorevert1 | in-progress | - | `docs/design/autorevert.md`<br>`tools/flip/*`<br>`tools/darklaunch/*`<br>`data/darklaunch.json`<br>`docs/process/dark-launch.md`<br>`docs/invariants.md`<br>`docs/operator.md`<br>`internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`internal/bot/explain.go` | - |
 | reflex1d | proposed | - | `internal/bot/safetylat.go`<br>`internal/bot/loop.go`<br>`internal/bot/reflexdrink_test.go` | - |
 
 ### Gates
@@ -323,14 +322,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 263895530 11-26 02:54 `Merge agent/qd27: d2scenario: hard invariant hits turn a run red (data list); faultsoak design notes; matrix 78-79` (qd27)
+- 49350b8ad 11-26 02:53 `Merge branch 'main' into qd27` (-)
+- 186424f59 11-26 02:43 `Merge agent/toolstrade80: Merge branch 'main' into toolstrade80` (toolstrade80)
+- e04e3527e 11-26 02:41 `Merge branch 'main' into toolstrade80` (-)
+- db6b83314 11-26 02:31 `Merge agent/autorevert1: Merge branch 'main' into autorevert1` (autorevert1)
+- 609e43fde 11-26 02:31 `Merge origin/main` (-)
+- a1e40426a 11-26 02:29 `Merge origin/main` (-)
+- 0d94e2ad6 11-26 02:28 `Merge branch 'main' into autorevert1` (-)
 - 98c2bdfb3 11-26 02:18 `Merge agent/incident1: Merge branch 'main' into incident1` (incident1)
 - 965b0c649 11-26 02:16 `Merge branch 'main' into incident1` (-)
-- 7e75c068a 11-26 01:49 `Merge agent/toolstrade79: Merge origin/main into toolstrade79` (toolstrade79)
-- 4c80517a7 11-26 01:42 `Merge origin/main into toolstrade79` (-)
-- 34afb5aa0 11-26 01:27 `Merge branch 'main' into incident1` (-)
-- 3ba6ada48 11-26 01:18 `Merge agent/toolstrade78: Merge branch 'main' into toolstrade78` (toolstrade78)
-- 0211d2ee1 11-26 01:16 `Merge branch 'main' into toolstrade78` (-)
-- 2c0ff5269 11-26 01:07 `Merge agent/reflex1d: reflex1d: hard-cancel wait uses a timer, not Clock.Sleep (flaky reaction test)` (reflex1d)
-- 051b16371 11-26 01:06 `Merge branch 'main' into reflex1d` (-)
-- 03723e329 11-26 00:58 `Merge branch 'main' into incident1` (-)
 <!-- statusgen:end -->

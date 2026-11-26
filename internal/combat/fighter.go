@@ -281,6 +281,7 @@ func (f *Fighter) Safety(snap *d2.Snapshot) SafetyAction {
 	in.Walking = f.walking.Load()
 	in.Quest = f.questCrowd.Load()
 	in.Crowd, in.Adjacent = Crowd(p, hs, float64(t.CrowdAdjacent))
+	in.CrowdFar = CrowdWithin(hs, float64(t.CrowdFarRadius))
 	in.CastGuard = castGuard(f.e.Tune.Bot, t, p, hs)
 	if t.CrowdN > 0 {
 		if in.Crowd >= t.CrowdN {

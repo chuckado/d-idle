@@ -55,6 +55,8 @@ type State struct {
 	// LogLines are the lines of the bot's log that match a log_line assertion of the scenario (never the whole log), each
 	// with its place in the run as virtual minutes (LogLine.T). They come from the bot's log, not from the game: S.
 	LogLines []LogLine `json:"log_lines,omitempty"`
+	// Invariants counts the invariant monitor's hits by row name in the bot log (docs/invariants.md); the runner turns the hard ones into asserts.
+	Invariants map[string]int `json:"invariants,omitempty"`
 	// Board are samples of GET /api/quests during the run and APIReplies the recorded answers of trigger.api (board.go).
 	Board      []BoardSample `json:"board,omitempty"`
 	APIReplies []APIReply    `json:"api_replies,omitempty"`

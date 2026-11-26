@@ -12,6 +12,7 @@
 | name | fires when |
 |---|---|
 | `potion-not-drunk` | in the field under the drink line, healing potion in the belt, none drunk for 8 s |
+| `stuck-in-pack` | in the field with 5 or more hostiles near and life under 60% for 8 s (a crowd fight that neither kills nor leaves) |
 | `portal-not-cast` | in the field at or under the chicken line, hostiles near, a town portal scroll, same area after 6 s |
 | `field-entry-hurt` | first tick outside town with life under 50 percent |
 | `field-entry-no-kit` | first tick outside town while `kit.missing()` (portal, healing, mana minimum) is not empty |
@@ -26,6 +27,9 @@
 | `economy-stall` | purse and stash gold under 100 for 2 h while kills continue |
 
 Not yet rows (need the reflex lane, P3): safety latency (verdict to potion) and cancellation latency.
+
+## Hard counters (card autorevert1)
+Rows with `Hard: true` (potion-not-drunk, life-zero-alive, refusal-storm, xp-frozen, mode-no-exit, corpse-unresolved) are what the flip watcher reverts on. `GET /api/explain` and `d2bot ops status --why` carry `invariants`: per row `name`, `hard`, `count` (lifetime of the process), `since` (first tick of this process, so a restart shows as a new since), `first`, `last`. V: `go test -run InvariantCounters ./internal/bot`. Tool and rule: docs/process/dark-launch.md.
 
 ## Oracle use
 `Deps.OnInvariant(name, detail)` is called for every logged hit. A lockstep or Proving Ground runner sets it (or reads `InvariantHits()` at the end) and fails the run when anything fired. The hook point is in place; wiring it into `cmd/d2scenario` is a follow-up in the ops-side runner (U: not run).

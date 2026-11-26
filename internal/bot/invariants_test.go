@@ -79,6 +79,9 @@ func TestInvariantMustFail(t *testing.T) {
 		{"chicken line, scrolls, hostiles", 20, func(h invHero) func(*invFacts, int) {
 			return func(f *invFacts, _ int) { f.lifePct, f.hostiles, f.life = h.chicken-1, 3, 1 }
 		}, "portal-not-cast"},
+		{"stuck in a pack at half life", 20, func(h invHero) func(*invFacts, int) {
+			return func(f *invFacts, _ int) { f.lifePct, f.life, f.hostiles = 50, h.maxLife/2, 7 }
+		}, "stuck-in-pack"},
 		{"resupplying in a field", 30, func(h invHero) func(*invFacts, int) {
 			return func(f *invFacts, _ int) { f.state, f.step = string(StateResupplying), "chores" }
 		}, "resupply-in-field"},
@@ -208,6 +211,41 @@ func TestInvTickLogsAndCallsOracle(t *testing.T) {
 		}
 		if knob == 0 && (strings.Contains(out, "invariant") || len(hits) != 0) {
 			t.Fatalf("knob 0 logged: %v %q", hits, out)
+		}
+	}
+}
+
+func TestInvariantCountersHardAndSince(t *testing.T) {
+	var m invMon
+	if len(m.Counters()) != 0 {
+		t.Fatal("counters before the first tick")
+	}
+	for _, h := range invHeroes {
+		var mm invMon
+		f := h.facts(t0)
+		f.life, f.lifePct, f.beltHP = 1, 1, 4
+		runInv(&mm, f, 20, nil) // potion-not-drunk fires for every hero
+		hard := map[string]bool{}
+		var got *InvCounter
+		cs := mm.Counters()
+		for i := range cs {
+			if cs[i].Hard {
+				hard[cs[i].Name] = true
+			}
+			if cs[i].Name == "potion-not-drunk" {
+				got = &cs[i]
+			}
+		}
+		for _, n := range []string{"potion-not-drunk", "life-zero-alive", "refusal-storm", "xp-frozen", "mode-no-exit", "corpse-unresolved"} {
+			if !hard[n] {
+				t.Errorf("%s: %s is not hard", h.name, n)
+			}
+		}
+		if hard["town-thrash"] || len(hard) != 6 {
+			t.Errorf("%s: hard set %v", h.name, hard)
+		}
+		if got == nil || got.Count == 0 || got.Since.IsZero() || got.First.IsZero() || got.Last.Before(got.First) {
+			t.Errorf("%s: potion-not-drunk counter %+v", h.name, got)
 		}
 	}
 }
