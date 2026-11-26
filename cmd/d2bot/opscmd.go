@@ -1,11 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -16,6 +18,10 @@ const opsUsage = `usage: d2bot ops quest status [--json]
        d2bot ops quest <start|retry|cancel|handin> <quest> [--chunk ID] --why "reason"
        d2bot ops quest start <quest> [--chunk ID] --try-anyway --why "reason"   (owner override of a readiness refusal, one attempt)
        d2bot ops quest auto <quest> --on|--off --why "reason"
+       d2bot ops status --why                                 (the decision ring and standing refusals, read only)
+       d2bot ops hold|home --why "reason"                    (hold: stop and rest in town; home: queue a rest in town)
+       d2bot ops go <area> [--minutes N] --why "reason"      (a go order, default 60 minutes)
+       d2bot ops park <quest> <hours 1..24> --why "reason"   (stop the quest's chunk, refuse start and retry until then)
        d2bot ops quest wait <quest> [--chunk ID] [--timeout 600]
 flags: --sock PATH (default $D2BOT_OPERATOR_SOCK, else the sandbox container's state directory)`
 
@@ -25,6 +31,9 @@ const defaultOpsSock = "/data/instances/main/state/" + ops.SockName
 // opsMain is `d2bot ops ...`: the client of the operator socket. It returns the process exit code: 0 done, 1 refused
 // or not finished, 2 usage or timeout of a wait.
 func opsMain(args []string, out io.Writer) (int, error) {
+	if len(args) > 0 && args[0] != "quest" {
+		return opsHero(args, out)
+	}
 	if len(args) < 2 || args[0] != "quest" {
 		return 2, errors.New(opsUsage)
 	}
@@ -128,4 +137,80 @@ func printBoard(out io.Writer, b *ops.Board, asJSON bool) {
 		}
 		fmt.Fprintf(out, "%s/%s\t%s\tstep=%s\tcode=%s\t%s\n", r.Quest, r.Chunk, r.State, r.Step, r.Code, strings.ReplaceAll(r.Text, "\n", " "))
 	}
+}
+
+// opsHero serves the verbs outside the quest board: status --why, hold, home, go and park (ADR 0030 amended 2026-11-25).
+func opsHero(args []string, out io.Writer) (int, error) {
+	verb, rest := args[0], args[1:]
+	fs := flag.NewFlagSet("ops "+verb, flag.ContinueOnError)
+	fs.SetOutput(io.Discard)
+	sock := fs.String("sock", os.Getenv("D2BOT_OPERATOR_SOCK"), "socket path")
+	if verb == "status" { // here --why is a switch (read the decision ring), not a reason
+		ring := fs.Bool("why", false, "")
+		if err := fs.Parse(rest); err != nil || !*ring || fs.NArg() != 0 {
+			return 2, errors.New(opsUsage)
+		}
+		if *sock == "" {
+			*sock = defaultOpsSock
+		}
+		return opsExplain(*sock, out)
+	}
+	why := fs.String("why", "", "reason (required for every verb that changes something)")
+	minutes := fs.Int("minutes", 0, "go: minutes (default 60)")
+	var pos []string
+	for len(rest) > 0 {
+		if err := fs.Parse(rest); err != nil {
+			return 2, fmt.Errorf("%w\n%s", err, opsUsage)
+		}
+		if fs.NArg() == 0 {
+			break
+		}
+		pos, rest = append(pos, fs.Arg(0)), fs.Args()[1:]
+	}
+	if *sock == "" {
+		*sock = defaultOpsSock
+	}
+	rq := ops.Request{Verb: verb, Why: *why}
+	switch verb {
+	case "hold", "home":
+		if len(pos) != 0 {
+			return 2, errors.New(opsUsage)
+		}
+	case "go":
+		if len(pos) < 1 {
+			return 2, errors.New(opsUsage)
+		}
+		rq.Area, rq.Minutes = strings.Join(pos, " "), *minutes
+	case "park":
+		h, err := strconv.Atoi(strings.Join(pos[min(1, len(pos)):], ""))
+		if len(pos) != 2 || err != nil {
+			return 2, errors.New(opsUsage)
+		}
+		rq.Quest, rq.Hours = pos[0], h
+	default:
+		return 2, errors.New(opsUsage)
+	}
+	r, err := ops.Call(*sock, rq)
+	if err != nil {
+		return 1, err
+	}
+	fmt.Fprintf(out, "ok=%t code=%s reason=%q\n", r.OK, r.Code, r.Reason)
+	if r.OK {
+		return 0, nil
+	}
+	return 1, nil
+}
+
+func opsExplain(sock string, out io.Writer) (int, error) {
+	r, err := ops.Call(sock, ops.Request{Verb: "why"})
+	if err != nil {
+		return 1, err
+	}
+	if !r.OK {
+		fmt.Fprintf(out, "ok=false code=%s reason=%q\n", r.Code, r.Reason)
+		return 1, nil
+	}
+	b, _ := json.MarshalIndent(r.Explain, "", " ")
+	fmt.Fprintf(out, "%s\n", b)
+	return 0, nil
 }

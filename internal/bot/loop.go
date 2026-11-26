@@ -478,6 +478,7 @@ func (r *Runner) gatedWait(ctx context.Context, err error) {
 		}
 	}
 	r.e.Log.Info("area gate refused the walk", "err", err)
+	r.noteStanding("walk", err.Error())
 	r.skipTarget(whyGate) // the planner must not insist on a target the gate refuses (the gated safe area is exempt)
 	r.setState(StateInTown, msg)
 	r.pause(ctx, 5*time.Second)
@@ -492,6 +493,7 @@ func (r *Runner) fail(ctx context.Context, c control, what string, err error) {
 		r.inv.noteRefusalFailure(what, err)
 	}
 	r.e.Log.Warn("action failed", "what", what, "err", err, "consecutive", l.failures)
+	r.noteStanding(what, err.Error())
 	if l.failures >= r.cfg.MaxStepFailures {
 		r.escalate(ctx, c, what, err)
 		return
