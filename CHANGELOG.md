@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into aura2b <!--sg:agent/aura2b-->
 - Merge branch 'main' into toolstrade87 <!--sg:agent/toolstrade87-->
 - d2scenario invariants soft in drills; act2strong kit; matrix note 80 <!--sg:agent/qd28-->
 - Merge branch 'main' into toolstrade86 <!--sg:agent/toolstrade86-->

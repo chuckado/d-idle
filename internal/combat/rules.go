@@ -234,7 +234,7 @@ var classOptions = map[d2.Class]map[data.DamageType][]string{
 		data.Physical: {"Corpse Explosion"}, data.Fire: {"Corpse Explosion"},
 	},
 	d2.Paladin: {
-		data.Physical: {"Zeal", "Smite", "Sacrifice"}, data.Fire: {"Holy Fire", "Fist of the Heavens"},
+		data.Physical: {"Zeal", "Smite"}, data.Fire: {"Holy Fire", "Fist of the Heavens"},
 		data.Cold: {"Holy Freeze"}, data.Lightning: {"Holy Shock", "Charged Strike"}, data.Magic: {"Vengeance"},
 	},
 	d2.Barbarian: {

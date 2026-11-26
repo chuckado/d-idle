@@ -281,6 +281,9 @@ func (d *deriver) run() Plan {
 		}
 		switch c.Role {
 		case RoleAttack:
+			if d.prof != nil && slices.Contains(d.prof.Avoid, n) { // a prerequisite-only skill (Sacrifice) is never a candidate
+				continue
+			}
 			attacks = append(attacks, n)
 		case RoleBuff, RoleCurse:
 			buffs = append(buffs, n)

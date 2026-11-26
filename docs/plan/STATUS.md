@@ -331,14 +331,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 7744b713a 11-26 15:04 `Merge agent/aura2b: Merge branch 'main' into aura2b` (aura2b)
+- 1d619dd94 11-26 15:02 `Merge branch 'main' into aura2b` (-)
 - 95ea96e27 11-26 14:54 `Merge agent/necro1: Merge branch 'main' into necroaudit` (necro1)
 - 642b5e3e9 11-26 14:54 `Merge agent/toolstrade87: Merge branch 'main' into toolstrade87` (toolstrade87)
 - 5b062d8d5 11-26 14:52 `Merge branch 'main' into necroaudit` (-)
 - 80ab94fe1 11-26 14:52 `Merge branch 'main' into toolstrade87` (-)
+- 69431a16d 11-26 14:50 `Merge origin/main into aura2b` (-)
 - 2c3c4f4d1 11-26 14:45 `Merge agent/qd28: d2scenario invariants soft in drills; act2strong kit; matrix note 80` (qd28)
 - af0a7cd47 11-26 14:40 `Merge origin/main` (-)
 - ac20543fb 11-26 14:40 `Merge origin/main` (-)
-- 3ec8de3af 11-26 14:29 `Merge agent/toolstrade86: Merge branch 'main' into toolstrade86` (toolstrade86)
-- 0590318f2 11-26 14:29 `Merge agent/aura2c: Merge branch 'main' into aura2c` (aura2c)
-- 717d3c0c2 11-26 14:27 `Merge branch 'main' into toolstrade86` (-)
 <!-- statusgen:end -->
