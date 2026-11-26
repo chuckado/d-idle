@@ -278,7 +278,6 @@
 | outcome-park-step | proposed | - | `docs/outcomes.md` | - |
 | outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
 | outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
-| explain1 | proposed | - | `internal/bot/explain.go`<br>`internal/bot/explain_test.go`<br>`internal/watch/explainapi.go`<br>`internal/watch/explainapi_test.go`<br>`internal/ops/`<br>`cmd/d2bot/opscmd.go`<br>`cmd/d2bot/opscmd_test.go`<br>`cmd/d2bot/opswire.go`<br>`docs/operator.md`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/questwire.go`<br>`internal/bot/loop.go`<br>`internal/bot/runner.go`<br>`internal/bot/shadow.go`<br>`internal/watch/http_view.go`<br>`internal/watch/hub.go` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | admit1 | proposed | - | `docs/design/admission-p4.md` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
