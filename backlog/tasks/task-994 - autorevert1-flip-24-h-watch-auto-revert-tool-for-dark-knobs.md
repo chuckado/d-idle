@@ -15,8 +15,8 @@ ordinal: 479000
 card: "autorevert1"
 owns:
   - "docs/design/autorevert.md"
-  - "tools/flip"
-  - "tools/darklaunch"
+  - "tools/flip/*"
+  - "tools/darklaunch/*"
   - "data/darklaunch.json"
   - "docs/process/dark-launch.md"
   - "docs/invariants.md"
