@@ -1,10 +1,11 @@
 ---
 id: TASK-979
 title: 'faultsoak: P12 fault-injection soak on lockstep (T5)'
-status: Proposed
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-26T03:56:00Z'
+updated_date: '2026-11-26T16:05:00Z'
 labels:
   - bot
   - drill
