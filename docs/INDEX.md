@@ -82,6 +82,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [QUEUE.md](plan/QUEUE.md): Queue (generated: do not edit)
 - [STATUS.md](plan/STATUS.md): Where we are (hand-written part last edited 2026-11-03 by APPLYREVIEW; the generated block at the bottom... (status: the older 2026-10-30 text (Game.exe soak history, container cards, merged-today lists) is in git history....)
+- [act2-level-plan.md](plan/act2-level-plan.md): Act 2 level plan (Normal): where the hero farms between the Lut Gholein quests (status: DATA ONLY (card act2plan, 2026-11-26). Nothing here ran live. Tags: V verified (named file or test), S...)
 - [bot-requirements.md](plan/bot-requirements.md): Bot requirements implied by docs/plan/leveling.md
 - [code-reality.md](plan/code-reality.md): Code reality map for 8 h / 24 h unattended soaks (CODEREALITY, 2026-10-30)
 - [death-data.md](plan/death-data.md): Death metrics computed from the real G1 soak logs (attempts 6-14)

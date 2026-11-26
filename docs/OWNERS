@@ -283,6 +283,7 @@ docs/design/proptest-t3.md  credit-runner  proptest1
 docs/design/ticklog-t4.md  credit-runner  ticklog
 docs/design/townflip-p5.md  credit-runner  townflip
 docs/epics/epic-act1.md  live-agent  epic-act1
+docs/epics/epic-act2.md  credit-runner  act2plan
 docs/epics/epic-act2.md  live-agent  epic-act2
 docs/epics/epic-act3.md  live-agent  epic-act3
 docs/epics/epic-act4.md  live-agent  epic-act4
@@ -351,6 +352,9 @@ docs/outcomes.md  credit-runner  outcome-travel-gate
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
 docs/plan/STATUS.md  credit-runner  statusrefresh
+docs/plan/act2-level-plan.md  credit-runner  act2plan
+docs/plan/data/act2plan.json  credit-runner  act2plan
+docs/plan/data/admission.json  credit-runner  act2plan
 docs/plan/data/admission.json  credit-runner  admit1
 docs/plan/data/build-necromancer_summoner_normal30.json  credit-runner  allocfix
 docs/plan/data/earlyroutes.json  credit-runner  admit1
@@ -766,6 +770,10 @@ internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
 internal/ops  credit-runner  whynot1
+internal/plandata/act2plan.go  credit-runner  act2plan
+internal/plandata/act2plan.json  credit-runner  act2plan
+internal/plandata/act2plan_test.go  credit-runner  act2plan
+internal/plandata/admission.json  credit-runner  act2plan
 internal/plandata/admission.json  credit-runner  admit1
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
