@@ -301,6 +301,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f75d92016 11-25 22:47 `Merge agent/herorecord: herorecord: record the live Paladin hero in the epic pages` (herorecord)
 - cc290be05 11-25 22:37 `Merge agent/darklaunch: Merge branch 'main' into darklaunch` (darklaunch)
 - 871b9bdc9 11-25 22:35 `Merge branch 'main' into darklaunch` (-)
 - e090a5fa2 11-25 22:33 `Merge agent/fablereview: fablereview2: end-to-end logic review of the bot (docs only): cause classes, invariants, prior art, 12 proposals` (fablereview)
@@ -310,5 +311,4 @@
 - 2f018a0f2 11-25 22:13 `Merge agent/epiccards: Merge branch 'main' into epiccards` (epiccards)
 - 670049ed3 11-25 22:11 `Merge branch 'main' into epiccards` (-)
 - 12884d316 11-25 22:04 `Merge agent/qd25: Merge origin/main` (qd25)
-- 7903a7ada 11-25 21:56 `Merge origin/main` (-)
 <!-- statusgen:end -->
