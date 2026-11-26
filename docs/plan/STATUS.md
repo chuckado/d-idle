@@ -319,14 +319,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 284d0806e 11-26 12:09 `Merge agent/toolstrade85: Merge origin/main` (toolstrade85)
+- 49f2bed0b 11-26 11:50 `Merge origin/main` (-)
 - 027112601 11-26 11:12 `Merge agent/toolstrade84: Merge branch 'main' into toolstrade84` (toolstrade84)
 - fe8df9ae4 11-26 11:11 `Merge branch 'main' into toolstrade84` (-)
+- e905aade9 11-26 11:05 `Merge branch 'main' into toolstrade85` (-)
 - 5081aabe9 11-26 10:41 `Merge branch 'main' into toolstrade84` (-)
+- a75e83212 11-26 10:41 `Merge branch 'main' into toolstrade85` (-)
 - 4c8c48c87 11-26 10:34 `Merge origin/main` (-)
 - b89f8cde8 11-26 10:34 `Merge agent/faultsoak: Merge branch 'main' into faultsoak` (faultsoak)
 - 363a0d3cf 11-26 10:34 `Merge agent/outcomes2g: Merge branch 'main' into outcome-explain-ring` (outcomes2g)
-- 3ada2011e 11-26 10:32 `Merge branch 'main' into faultsoak` (-)
-- 064875015 11-26 10:32 `Merge branch 'main' into outcome-explain-ring` (-)
-- a21137d36 11-26 10:30 `Merge origin/main into toolstrade84: earlyShop row kept in povertyfarm.json with evidence fields` (-)
-- e1febf215 11-26 10:30 `Merge origin/main into faultsoak` (faultsoak)
 <!-- statusgen:end -->
