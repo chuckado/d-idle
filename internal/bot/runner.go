@@ -146,10 +146,12 @@ type Runner struct {
 
 	lastStep atomic.Int64 // wall-clock unix nanos of the last finished loop iteration (heartbeat for the d2bot watchdog)
 
-	lastLogAt   atomic.Int64 // clock nanos of the last log record (stallguard.go)
-	lastStallAt atomic.Int64 // clock nanos of the last stall line
-	stalls      atomic.Int32 // stall lines since the process started (minute line key stalls)
-	actionAt    atomic.Int64 // clock nanos when the running action began (runAction)
+	lastLogAt   atomic.Int64  // clock nanos of the last log record (stallguard.go)
+	lastStallAt atomic.Int64  // clock nanos of the last stall line
+	stalls      atomic.Int32  // stall lines since the process started (minute line key stalls)
+	actionAt    atomic.Int64  // clock nanos when the running action began (runAction)
+	fightProg   fightProgress // the guard's progress memory of a Fighting action (stallguard.go)
+	fightTarget atomic.Uint32 // the target the guard blamed for a broken fight, taken by do()
 
 	mu          sync.Mutex // control and status
 	goal        *goals.Goal
