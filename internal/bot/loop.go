@@ -501,7 +501,9 @@ func (r *Runner) gatedWait(ctx context.Context, err error) {
 
 // gateStanding is what a gate refusal changes besides the pause: the standing line, the skipped target, the state.
 func (r *Runner) gateStanding(err error, msg string) {
-	r.noteStanding("walk", err.Error())
+	if _, typed := err.(*Refused); !typed {
+		r.noteStanding("walk", err.Error()) // a typed refusal is recorded by handleRefused with its need and wake
+	}
 	r.skipTarget(whyGate) // the planner must not insist on a target the gate refuses (the gated safe area is exempt)
 	r.setState(StateInTown, msg)
 }

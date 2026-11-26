@@ -1,6 +1,6 @@
 # faultsoak (TASK-979, P12) design notes, from the quest drill agent
 
-> status: design only (2026-11-26). Proposed text for `docs/design/faultsoak-p12.md`; nothing here was run. Tags: V verified in code or a run, U unverified.
+> status: runner side built (2026-11-26, card faultsoak); fork verbs are a proposal for the owner; nothing here was run live. Tags: V verified in code or a run, U unverified.
 
 Oracle: the invariant monitor (`docs/invariants.md`) through `cmd/d2scenario` (`cmd/d2scenario/invariants.json`: hard rows turn a run RED, soft rows are logged). Every injection is a lab verb or a runner-side wrapper, goes through the ledger (ADR 0014 DIAGNOSIS), happens only in a soak row (never a measured run) and is time-stamped in the result so a hit can be tied to its fault.
 
@@ -17,3 +17,26 @@ Oracle: the invariant monitor (`docs/invariants.md`) through `cmd/d2scenario` (`
 | dropped packets | none | not a lab verb in the fork (U); skip, the proxy covers what the bot sees |
 
 Rows: one scenario per fault, `soak.fault.<name>`, class Paladin and Sorceress, report-only until a night run shows no flakes (`-repeat 3`); each hit becomes an incident scenario (`tools/provingground/incidents/`). Order: zero-life reload first (a hook and a fix exist), then belt, NPC, proxy faults.
+
+## Built runner-side (2026-11-26, card faultsoak, TASK-979)
+
+All of it needs no fork work. Offline tests only (fake game socket, fake clock); not run against a live d2d (U).
+
+- `internal/faultproxy`: a line proxy for the d2d control socket. One command, one reply ended by the `ok`/`err` status line (V from `internal/d2dctl/client.go` readReply). Faults (`Spec`): `delay_reply_every` + `delay_reply_ms` (a timeout for the bot's client), `drop_reply_every` (command reaches the game, reply is swallowed), `delay_input_ms` for the verbs in `input_verbs`, `cancel_every_ms` + `cancel_line` (cancel storm; the line is sent between commands and its reply swallowed). Every injection is a time-stamped `Event`.
+- `cmd/d2scenario/faults.json`: the named sets (`socket-timeouts`, `socket-drops`, `slow-input`, `cancel-storm`, `mixed`). `cancel_line` is `cmd stop`: U, the game's real cancel verb was not checked; change the data when a lab run shows another.
+- Scenario data: `faults: "<set>"` on a row (field start only; `d2scenario validate` checks the name). Rows: `tools/provingground/scenarios/faultsoak.json`, ids `soak.fault.*`, tier nightly, Paladin and Sorceress, in `invariants.json` `report_only` so hard hits are listed, never red.
+- Runner: in attach (field) runs `runField` starts the proxy in front of the game socket and gives the bot the proxy path; the observer after the run reads the game directly. The result carries `faults` (set, counts by kind, path of the JSON-lines event log). Env `D2SCEN_FAULTS` overrides the row's set.
+- Soak driver: `d2scenario soak -id soak.fault. [-faults SET] -duration 1h [-class C] [-seed N] [-dry-run] [-strict]`. Runs the rows in turn through the slot wrapper, again with the next seed after each pass, until the duration is used (the run in progress is finished). Writes `soak.json` and prints invariant hits (hard and soft by `invariants.json`), injections by kind and survival (not BLOCKED, life above zero at the end, no `life-zero-alive`). Report-only; `-strict` exits 3 on a hard hit.
+- Oracle: P1 monitor lines (`invariant <name>`) through `invariantCounts`; injections are never an assertion. Each hard hit becomes an incident scenario by hand (`tools/provingground/incidents/`).
+- Writes: the proxy writes no game state. The row setup is the usual SETUP (CHEATED) writes; a faulty channel is never a gate, baseline or measured run (ADR 0014).
+- Limits (U): a managed (non-attach) run starts its own d2d at the socket path, so faults cover field-start rows only. The d2d allows one control client, so the cancel storm goes through the proxy's own upstream connection and is serialised with the bot's commands, not concurrent with a command in flight.
+
+## Fork verbs still needed: a proposal for the owner
+
+Each is a new lab verb of the private fork (needs the owner's go, ADR 0014 DIAGNOSIS: lab only, ledgered, never in a measured run).
+
+1. `debug unit remove <class|id>`: take an NPC out of the unit table (not a kill). Tests "the NPC the quest needs is gone" (the bot must not loop on it). Today `debug kill` on an NPC is the nearest stand-in (U: whether the unit leaves the table).
+2. `debug portal expire [n]` (or `close`): expire or remove an open town portal while the hero is in the field. Stand-in today: take the portal away by `debug goto`.
+3. `debug belt clear`: empty the belt in the middle of a run (today only SETUP can place belt items). Could be `debug item remove <id>` generalised.
+4. Optional: `debug purse set <gold>` mid-run; `debug stat` gold already does it, so only a doc line.
+Dropped packets are not a fork verb; the proxy covers what the bot sees.
