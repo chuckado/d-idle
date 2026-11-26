@@ -286,7 +286,6 @@
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | fid-adapter-rows | deferred | - | `docs/probes/fid/fid-adapter-rows.md` | - |
 | fid-lowvalue | deferred | - | `docs/probes/fid/fid-lowvalue.md` | - |
-| backlogplan | in-progress | - | `tools/backlog`<br>`backlog/tasks`<br>`backlog/config.yml`<br>`docs/backlog-howto.md`<br>`docs/plan/QUEUE.md` | - |
 
 ### Gates
 - contract [act1-campaign](../contracts/act1-campaign.md): 9 requirements

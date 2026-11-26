@@ -1,10 +1,11 @@
 ---
 id: TASK-992
 title: 'backlogplan: To Do status, planning lanes, plan.py view, lane migration'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T04:02:00Z'
+updated_date: '2026-11-26T04:48:00Z'
 labels:
   - ops
   - feature
