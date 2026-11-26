@@ -322,6 +322,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 6a8a51e43 11-26 09:47 `Merge agent/arbmig2: Merge branch 'main' into arbmig` (arbmig2)
+- ca448e31a 11-26 09:45 `Merge branch 'main' into arbmig` (-)
 - 1bde406cb 11-26 09:38 `Merge agent/stepexec1: stepexec1: gofmt` (stepexec1)
 - b71406ea9 11-26 09:38 `Merge agent/outcomes2a: outcome-travel-gate: gate refusals typed, no-scroll walk home not cancelled by portal verdicts` (outcomes2a)
 - f32da7a4f 11-26 09:38 `Merge agent/admit1: admit1: old judges read floors from admission.json, design doc, card` (admit1)
@@ -330,6 +332,4 @@
 - 23dcfb8ed 11-26 03:08 `Merge agent/toolstrade81: Merge branch 'main' into toolstrade81` (toolstrade81)
 - b7cea267a 11-26 03:07 `Merge branch 'main' into toolstrade81` (-)
 - 263895530 11-26 02:54 `Merge agent/qd27: d2scenario: hard invariant hits turn a run red (data list); faultsoak design notes; matrix 78-79` (qd27)
-- 49350b8ad 11-26 02:53 `Merge branch 'main' into qd27` (-)
-- 186424f59 11-26 02:43 `Merge agent/toolstrade80: Merge branch 'main' into toolstrade80` (toolstrade80)
 <!-- statusgen:end -->
