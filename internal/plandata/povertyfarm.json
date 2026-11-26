@@ -33,5 +33,10 @@
    "goldPerMin": 1.4
   }
  ],
- "noPotionFromLevel": 8
+ "noPotionFromLevel": 8,
+ "noPortalLean": {
+  "_comment": "A hero with no town portal and fewer healing potions than this walks home from the first field only (Questy 2026-11-26: Stony Field, three areas out, burned three potions in a crowd of 24 on the way home). Below the entry life line it also does not pick a new field.",
+  "potionsBelow": 4,
+  "entryLifePct": 60
+ }
 }

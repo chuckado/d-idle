@@ -22,6 +22,10 @@ type povertyFarmData struct {
 		Name       string  `json:"name"`
 		GoldPerMin float64 `json:"goldPerMin"`
 	} `json:"farm"`
+	Lean struct {
+		PotionsBelow int `json:"potionsBelow"`
+		EntryLifePct int `json:"entryLifePct"`
+	} `json:"noPortalLean"`
 }
 
 var (
@@ -79,4 +83,28 @@ func (r *Runner) povertyFarmArea(s *d2.Snapshot) (int, bool) {
 		best, bestG = f.Area, f.GoldPerMin
 	}
 	return best, best != 0
+}
+
+// leanHero: no town portal and fewer healing potions than noPortalLean.potionsBelow in Normal: the walk home is its only way out
+// of a field, so it stays within the first field.
+func (r *Runner) leanHero(s *d2.Snapshot) bool {
+	d := loadPovertyFarm()
+	if d.Lean.PotionsBelow <= 0 || s == nil || s.Player == nil || s.Player.Difficulty != d2.Normal || r.e.Tune.Route.EarlyRoute == 0 {
+		return false
+	}
+	in := r.resInput(s)
+	return !in.HasTP && healingOf(in) < d.Lean.PotionsBelow
+}
+
+// leanEntryWhy is the entry hold of a lean hero: it does not move on into another field below noPortalLean.entryLifePct of its life
+// (Questy entered Stony Field at 90/176 with no portal). "" = fine. A hero in town is held by the heal chore, not here.
+func (r *Runner) leanEntryWhy(s *d2.Snapshot, a int) string {
+	d := loadPovertyFarm()
+	if !r.leanHero(s) || a == 0 || a == s.Player.Area || s.Player.InTown() || r.d.Plan.IsTown(a) || r.corpseRun.Load() || s.Player.MaxLife <= 0 {
+		return ""
+	}
+	if pct := s.Player.LifePct(); pct < d.Lean.EntryLifePct {
+		return fmt.Sprintf("no portal and %d%% life: not entering another field below %d%%", pct, d.Lean.EntryLifePct)
+	}
+	return ""
 }

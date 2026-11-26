@@ -372,3 +372,47 @@ func TestQuestWalkNeedsTheKit(t *testing.T) {
 		}
 	}
 }
+
+// Questy 2026-11-26: no town portal and 1 potion, it entered Stony Field at 90/176 life and walked home through 24 hostiles. A
+// lean hero (no portal, fewer than noPortalLean.potionsBelow potions) counts the first field only for the walk home and does not
+// enter another field below the entry life line; a portal, four potions or a healthy hero change that. Two classes.
+func TestLeanHeroStaysNearHomeAndHealthy(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, tc := range []struct {
+			tp      bool
+			potions int
+			life    int
+			lean    bool
+			blocked bool
+		}{{false, 1, 90, true, true}, {false, 1, 170, true, false}, {true, 1, 90, false, false}, {false, 4, 90, false, false}, {false, 0, 90, true, true}} {
+			g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
+			g.w.set(func(w *world) {
+				w.class, w.level, w.area, w.life, w.maxL = class, 12, 2, tc.life, 176
+				var keep []d2.Unit
+				for _, u := range w.items {
+					if u.Class != 1 && u.Class != 5 {
+						keep = append(keep, u)
+					}
+				}
+				w.items = keep
+				if tc.tp {
+					w.items = append(w.items, d2.Unit{ID: 799, Type: d2.TypeItem, Class: 5, Item: &d2.Item{Where: d2.ContInventory}})
+				}
+				for i := 0; i < tc.potions; i++ {
+					w.items = append(w.items, d2.Unit{ID: uint32(700 + i), Type: d2.TypeItem, Class: 1, Item: &d2.Item{Where: d2.ContBelt}})
+				}
+			})
+			g.r.poll()
+			s := g.r.latest()
+			if got := g.r.leanHero(s); got != tc.lean {
+				t.Errorf("%v tp %v potions %d: lean %v, want %v", class, tc.tp, tc.potions, got, tc.lean)
+			}
+			if why := g.r.leanEntryWhy(s, 4); (why != "") != tc.blocked {
+				t.Errorf("%v tp %v potions %d life %d: entry %q, blocked want %v", class, tc.tp, tc.potions, tc.life, why, tc.blocked)
+			}
+			if why := g.r.leanEntryWhy(s, 2); why != "" {
+				t.Errorf("%v: the current area is never an entry: %q", class, why)
+			}
+		}
+	}
+}
