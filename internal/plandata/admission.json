@@ -15,6 +15,7 @@
     {"id": "act2_maggot_lair", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 and quest legacyFloor (U): needs seed set", "areas": [62, 63, 64], "minLevel": {"melee": 20, "caster": 22}, "kit": {"healing": 2, "portal": 1}},
     {"id": "act2_palace_cellar", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 and quest legacyFloor (U): needs seed set", "areas": [52, 53, 54], "minLevel": {"melee": 20, "caster": 22}, "kit": {"healing": 2, "portal": 1}},
     {"id": "act2_arcane_sanctuary", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 and quest legacyFloor (U): needs seed set", "areas": [74], "minLevel": {"melee": 20, "caster": 22}, "kit": {"healing": 2, "portal": 1}, "minMaxLife": {"melee": 220, "caster": 150}},
+    {"id": "act2_ancient_tunnels", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 (U): needs seed set", "areas": [65], "minLevel": {"melee": 19, "caster": 21}, "kit": {"healing": 2, "portal": 1}},
     {"id": "act2_tombs", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 and quest legacyFloor (U): needs seed set", "areas": [66, 67, 68, 69, 70, 71, 72, 73], "minLevel": {"melee": 24, "caster": 26}, "kit": {"healing": 2, "portal": 1}, "minMaxLife": {"melee": 220, "caster": 150}}
   ],
   "knobFloors": [
