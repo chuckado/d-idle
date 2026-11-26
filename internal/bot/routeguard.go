@@ -2,6 +2,7 @@ package bot
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -322,7 +323,7 @@ func (r *Runner) guardedExit(ctx context.Context, snap *d2.Snapshot, c control) 
 		// with no scroll, 204 "no town portal available" and 20 minutes without a kill.
 		r.e.Log.Info("guard: no way home by portal, walking", "err", err, "area", p.Area)
 		if werr := r.travelTo(ctx, int(task.RogueEncampment)); werr != nil {
-			return fmt.Errorf("%w (walk home: %v)", err, werr)
+			return homeWalkErr(err, werr)
 		}
 		return nil
 	})
@@ -334,9 +335,20 @@ func (r *Runner) routeGuardHop(s *d2.Snapshot, h int) error {
 		return nil
 	}
 	if why := r.areaGuardWhy(s, h); why != "" {
-		return fmt.Errorf("%w: %s (%d): route guard (%s)", errAreaGated, r.areaName(h), h, why)
+		return r.refuse(fmt.Errorf("%w: %s (%d): route guard (%s)", errAreaGated, r.areaName(h), h, why))
 	}
 	return nil
+}
+
+// homeWalkErr is the error of a guard exit whose portal failed (err) and whose walk home failed too (werr). A typed
+// refusal of the walk stays what it is, so do handles it as a refusal and not as a fault; any other fault is joined
+// with the portal error as before.
+func homeWalkErr(err, werr error) error {
+	var ref *Refused
+	if errors.As(werr, &ref) {
+		return werr
+	}
+	return fmt.Errorf("%w (walk home: %v)", err, werr)
 }
 
 // fillRouteFacts adds the ROUTEGUARD autopsy fields. Called with obMu held from buildAutopsy.
