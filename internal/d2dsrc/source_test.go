@@ -813,3 +813,26 @@ func TestAuraFromStateLine(t *testing.T) {
 		}
 	}
 }
+
+// The state line's pets= is the hero's summon count (S: docs/d2d-backend.md; U live): known with 0, unknown when absent.
+func TestPetsFromStateLine(t *testing.T) {
+	r := sampleReplies()
+	base := strings.TrimSuffix(r["state"], "ok\n")
+	for _, n := range []int{0, 5} {
+		r["state"] = strings.TrimRight(base, "\n") + fmt.Sprintf(" pets=%d\nok\n", n)
+		_, c := startScript(t, r)
+		res, err := New(c, Options{Tables: fakeTables{}, Logf: quiet}).Read(context.Background())
+		if err != nil {
+			t.Fatal(err)
+		}
+		if p := res.Snap.Player; p == nil || !p.PetsKnown || p.Pets != n {
+			t.Errorf("pets=%d: %+v", n, p)
+		}
+	}
+	r["state"] = strings.TrimRight(base, "\n") + "\nok\n"
+	_, c := startScript(t, r)
+	res, _ := New(c, Options{Tables: fakeTables{}, Logf: quiet}).Read(context.Background())
+	if res.Snap.Player.PetsKnown {
+		t.Error("no pets key must stay unknown")
+	}
+}
