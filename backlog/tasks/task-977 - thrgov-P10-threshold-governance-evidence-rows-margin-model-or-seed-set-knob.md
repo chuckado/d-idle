@@ -1,10 +1,13 @@
 ---
 id: TASK-977
-title: 'thrgov: P10 threshold governance: evidence rows, margin model or seed set, knob'
-status: Proposed
+title: >-
+  thrgov: P10 threshold governance: evidence rows, margin model or seed set,
+  knob
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:55:00Z'
+updated_date: '2026-11-26T15:22:00Z'
 labels:
   - docs
   - chore
@@ -14,8 +17,18 @@ ordinal: 465000
 card: "thrgov"
 owns:
   - "docs/process/threshold-governance.md"
+  - "tools/ci/knobbudget.py"
+  - "tools/ci/test_knobbudget.py"
+  - "tools/ci/knobbudget-baseline.json"
+  - "tools/ci/check.sh"
+  - "docs/backlog-howto.md"
+  - "internal/plandata/admission.json"
+  - "docs/plan/data/admission.json"
+  - "docs/plan/data/povertyfarm.json"
+  - "internal/plandata/povertyfarm.json"
 exclusive: []
 contracts: []
+result: "Rule doc, tools/ci/knobbudget.py (knob net budget and evidence rows, report-only in check.sh), admission and povertyfarm rows seeded n=1. Offline tests only; not live."
 ---
 
 ## Description
@@ -28,6 +41,6 @@ Cause class killed: G (thresholds moved by one incident, 20) and the knob count 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Rule doc with the evidence-row schema and the knob budget rule
-- [ ] #2 CI check (report-only first) for knob adds without a removal or owner word
+- [x] #1 Rule doc with the evidence-row schema and the knob budget rule
+- [x] #2 CI check (report-only first) for knob adds without a removal or owner word
 <!-- AC:END -->

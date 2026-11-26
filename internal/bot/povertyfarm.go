@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sync"
 
+	"d2lod-bot/internal/admit"
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/plandata"
 	"d2lod-bot/internal/task"
@@ -44,6 +45,10 @@ func loadPovertyFarm() povertyFarmData {
 	povOnce.Do(func() {
 		if b, err := plandata.FS.ReadFile("povertyfarm.json"); err == nil {
 			_ = json.Unmarshal(b, &povData)
+		}
+		if rows, err := admit.Load(); err == nil { // the floors live in admission.json (card admit1)
+			povData.NoPotionGap, povData.FromLevel = rows.Poverty.NoPotionGap, rows.Poverty.FromLevel
+			povData.KitFloor, povData.Lean = rows.KitFloor, rows.Lean
 		}
 	})
 	return povData

@@ -24,6 +24,7 @@
 | `mode-no-exit` | the same state and step for 20 min with none of xp, kills, gold or area moving (a levelling or farming mode with rising xp never fires; a town chore run, state resupplying, is capped at 10 min), not paused, parked or idle. Per-state rules: `invModes` in `internal/bot/invariants.go` |
 | `corpse-unresolved` | `corpseTown` pending for 15 min |
 | `town-thrash` | 17 field entries within an hour |
+| `arbiter-starved` | an arbiter intent outranked for 600 s or more (soft; only with the arbiter knobs on) |
 | `economy-stall` | purse and stash gold under 100 for 2 h while kills continue |
 
 Not yet rows (need the reflex lane, P3): safety latency (verdict to potion) and cancellation latency.

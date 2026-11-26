@@ -5,6 +5,9 @@ type QuestsTuning struct {
 	// BoardSM 1: the board runs on the run state machine (runs and latches in the plan file, docs/design/fable-review-2026-11-21); 0 (default): the old derive-every-tick paths.
 	BoardSM int
 
+	// StepExec 1: the generic step executor (internal/questspec/exec.go) runs the Cain scroll step (click the tree, take the scroll, wait for it in the pack); 0 (default): the old handler.
+	StepExec int
+
 	Board int // 1 (default): the quest board drives quests (player taps Start and Hand in); 0: the old floor planner drives them (measured runs)
 
 	// Opt-in auto-start (slice S8); nothing here acts while Board is 0 or while no quest is marked auto.
@@ -32,6 +35,8 @@ func questsKnobs() []Knob {
 			Desc: "1 (default since the Journey was retired, docs/questboard.md S9): a quest runs only after the player accepts its current chunk (Start); the bot does that chunk, walks to the NPC and stops, and the player taps Hand in. Nothing else starts quests: between chunks the hero acts on the player's mode (Train levels toward the next quest, Idle parks in town, Farm farms loot and gold). Quests the bot cannot do yet show 'not supported yet' and the hero trains instead. 0: the old floor planner plays the quests as before (used by measured runs and gates, no Journey); a hero on 0 has no Start button."},
 		{Key: "quests.boardSM", Label: "Quest board state machine", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
 			Desc: "1: the quest board stores each accepted chunk as a run with a status and latches completion in the hero's plan file (a park survives a restart, accept implies the earlier parts, Stop implies the parts that wait for it, a chunk seen done stays done), design docs/design/fable-review-2026-11-21/quest-board.md. 0 (default): the board derives its state from the evidence every tick, as before. The plan file keeps its old accepted records either way."},
+		{Key: "quests.stepExec", Label: "Generic step executor", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
+			Desc: "[dark-launch] 1: the Cain scroll step (Tree of Inifuss click, pick up the scroll) runs on the generic step executor of internal/questspec (data row take_scroll: approach, act, wait for the scroll in the pack, bounded retries with backoff, a typed outcome); 0 (default): the old handler. Card stepexec1, ledger row in data/darklaunch.json."},
 		{Key: "quests.autoDelaySec", Label: "Auto-start countdown", Unit: "s", Default: 20, Min: 0, Max: 300, NoHandicap: true,
 			Desc: "Seconds an opted-in quest counts down (shown on the page, with Cancel) before it starts by itself; 0 starts at once. Only a SAFE offer ever auto-starts."},
 		{Key: "quests.awayMin", Label: "Away after", Unit: "min", Default: 10, Min: 1, Max: 240, NoHandicap: true,

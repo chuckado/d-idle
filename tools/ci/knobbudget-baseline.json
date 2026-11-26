@@ -1,0 +1,7 @@
+{
+  "_comment": "Files under threshold governance (docs/process/threshold-governance.md). A row in these files whose numbers change needs `evidence` and `evidence_ref`. Add a file here only after its rows carry evidence (seed with n=1 and 'single incident: needs seed set').",
+  "governed_files": [
+    "internal/plandata/admission.json",
+    "internal/plandata/povertyfarm.json"
+  ]
+}
