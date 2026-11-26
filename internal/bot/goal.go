@@ -611,6 +611,7 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 			rep, err := r.d.Town.Chores(ctx, r.withRouteKit(t.plan))
 			if err == nil {
 				r.e.Log.Info("chores done", "done", rep.Done, "skipped", rep.Skipped)
+				r.choreHolds(rep)
 				if s := r.latest(); s != nil && len(rep.Blocked) > 0 {
 					r.noteBlocked(s.Player, rep.Blocked)
 					if n, ok := r.d.Leveler.(StatNeeder); ok && (rep.NeedStr > 0 || rep.NeedDex > 0) {

@@ -193,3 +193,43 @@ func (r *Runner) handleRefused(ctx context.Context, ref *Refused) {
 	}
 	r.pause(ctx, pause)
 }
+
+// holdRefused records a refusal that is a decision and not a step error (the kit gate holding a trip back, a town chore
+// that bought nothing): one INFO line per change of need, words or wake facts, the standing refusal for explain, no pause
+// and no failure count. Knob bot.typedOutcome 0: nothing (the legacy lines stay as they are).
+func (r *Runner) holdRefused(ref *Refused) {
+	if r.e.Tune.Bot.TypedOutcome == 0 {
+		return
+	}
+	l := &r.loop
+	facts := r.wakeFacts(r.latest())
+	key := ref.Need + "|" + ref.Why
+	if l.holds == nil {
+		l.holds = map[string]string{}
+	}
+	r.noteStanding("hold:"+ref.Need, ref.Why)
+	if f, ok := l.holds[key]; ok && f == facts {
+		return
+	}
+	if len(l.holds) > 32 {
+		clear(l.holds)
+	}
+	l.holds[key] = facts
+	r.e.Log.Info("step refused", "need", ref.Need, "wake", ref.Wake, "why", ref.Why, "hold", true)
+}
+
+// holdNeed builds the refusal of a hold from its need code.
+func holdNeed(need, why string) *Refused {
+	return &Refused{StepOutcome{Kind: OutRefusedKind, Need: need, Wake: needTable[need].Wake, Why: why}}
+}
+
+// choreHolds turns what a finished town visit refused (a chore it skipped, slots the purse could buy but the hero cannot
+// wear yet) into typed holds: the need says what to wait for, the wake what ends it.
+func (r *Runner) choreHolds(rep ChoreReport) {
+	for _, sk := range rep.Skipped {
+		r.holdRefused(refusalOf(sk))
+	}
+	if len(rep.Blocked) > 0 {
+		r.holdRefused(holdNeed("too_weak", "gear the hero cannot wear yet: "+strings.Join(rep.Blocked, ", ")))
+	}
+}
