@@ -1,10 +1,11 @@
 ---
 id: TASK-987
 title: 'reflex1b: town chores verify in town before each NPC step'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:58:00Z'
+updated_date: '2026-11-26T05:13:00Z'
 labels:
   - bot
   - bug
