@@ -346,6 +346,7 @@ docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
 docs/plan/STATUS.md  credit-runner  statusrefresh
 docs/plan/data/admission.json  credit-runner  admit1
+docs/plan/data/admission.json  credit-runner  necrofloors
 docs/plan/data/build-necromancer_summoner_normal30.json  credit-runner  allocfix
 docs/plan/data/build-necromancer_summoner_normal30.json  credit-runner  necroaudit
 docs/plan/data/earlyroutes.json  credit-runner  admit1
@@ -472,6 +473,7 @@ docs/vault.md  credit-runner  vaultclean
 docs/vault.md  credit-runner  vaultpay
 docs/vault.md  credit-runner  vaultreveal
 internal/admit/  credit-runner  admit1
+internal/admit/admit_test.go  credit-runner  necrofloors
 internal/agency/  credit-runner  dlv-rotation
 internal/arbiter  credit-runner  arbfam
 internal/arbiter  credit-runner  town10
@@ -769,6 +771,7 @@ internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
 internal/plandata/admission.json  credit-runner  admit1
+internal/plandata/admission.json  credit-runner  necrofloors
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
 internal/plandata/build-necromancer_summoner_normal30.json  credit-runner  allocfix

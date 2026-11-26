@@ -46,7 +46,7 @@
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
 | necrosummoninv | proposed | - | `internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`internal/bot/observe.go`<br>`internal/d2/player.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`cmd/d2scenario/invariants.json`<br>`docs/invariants.md` | - |
 | necrocorpse | proposed | - | `docs/probes/necrocorpse-2026-11-26.md` | - |
-| necrofloors | proposed | - | `docs/probes/necrofloors-2026-11-26.md` | - |
+| necrofloors | proposed | - | `docs/probes/necrofloors-2026-11-26.md`<br>`internal/plandata/admission.json`<br>`docs/plan/data/admission.json`<br>`internal/admit/admit_test.go` | - |
 | necromercrogue | proposed | - | `docs/probes/necromercrogue-2026-11-26.md` | - |
 | necrocaps | proposed | - | `docs/probes/necrocaps-2026-11-26.md` | - |
 | necrokeys | proposed | - | `docs/probes/necrokeys-2026-11-26.md` | - |
@@ -331,7 +331,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 4b5bc299a 11-26 15:32 `Merge agent/necro2c: Merge branch 'main' into necrofloors` (necro2c)
 - a282fe496 11-26 15:32 `Merge agent/necro2b: Merge branch 'main' into hotkeydrift` (necro2b)
+- eb7e319fc 11-26 15:28 `Merge branch 'main' into necrofloors` (-)
 - 218552d7a 11-26 15:28 `Merge branch 'main' into hotkeydrift` (-)
 - 2f3e38296 11-26 15:20 `Merge agent/necro2a: Merge branch 'main' into necrosummoninv` (necro2a)
 - de5ab0f80 11-26 15:18 `Merge branch 'main' into necrosummoninv` (-)
@@ -339,6 +341,4 @@
 - 1d619dd94 11-26 15:02 `Merge branch 'main' into aura2b` (-)
 - 95ea96e27 11-26 14:54 `Merge agent/necro1: Merge branch 'main' into necroaudit` (necro1)
 - 642b5e3e9 11-26 14:54 `Merge agent/toolstrade87: Merge branch 'main' into toolstrade87` (toolstrade87)
-- 5b062d8d5 11-26 14:52 `Merge branch 'main' into necroaudit` (-)
-- 80ab94fe1 11-26 14:52 `Merge branch 'main' into toolstrade87` (-)
 <!-- statusgen:end -->

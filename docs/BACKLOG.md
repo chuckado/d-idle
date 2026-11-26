@@ -1449,6 +1449,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - aura2b: Paladin never attacks with Sacrifice (prerequisite only) (TASK-1012, merged 2026-11-26, acceptance 2 of 2): Paladin profiles no longer attack with Sacrifice, which only stays as the Zeal prerequisite; early levels use the weapon and Zeal from level 12 <!--sg:agent/aura2b-->
 - agent/necro2a: Merge branch 'main' into necrosummoninv (merged 2026-11-26): Soft invariant summon-missing: a summoner with a summon skill learned, mana for it and hostiles near that reads no own minion for 10 s; minute line carries minions; tests on two heroes <!--sg:agent/necro2a-->
 - agent/necro2b: Merge branch 'main' into hotkeydrift (merged 2026-11-26): Necromancer keys beyond F8 closed with evidence: on d2d every learned skill gets a pseudo key and casts by skill id; a ratchet test keeps plan table hotkeys from drifting further from the profile layout <!--sg:agent/necro2b-->
+- agent/necro2c: Merge branch 'main' into necrofloors (merged 2026-11-26): Caster life floors as admission data: sewers 130 and a new Duriel lair row 220 from the Necromancer SME numbers; Andariel row deliberately not added <!--sg:agent/necro2c-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
