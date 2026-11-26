@@ -332,6 +332,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 600b7776a 11-26 16:53 `Merge agent/autorevert2: autorevert2: card result` (autorevert2)
+- 644bf8d5f 11-26 16:36 `Merge agent/toolstrade88: no-earn soft invariant (5 min without xp, kills or gold, area changes do not count); the quest-walk kit rule never closes the first field` (toolstrade88)
 - a2b81607f 11-26 15:47 `Merge agent/act2temple: Merge origin/main into act2temple (admission rows reconciled)` (act2temple)
 - 106926944 11-26 15:41 `Merge origin/main into act2temple (admission rows reconciled)` (-)
 - a7cc5189c 11-26 15:32 `Merge agent/necro2e: Merge branch 'main' into necrocaps` (necro2e)
@@ -340,6 +342,4 @@
 - a282fe496 11-26 15:32 `Merge agent/necro2b: Merge branch 'main' into hotkeydrift` (necro2b)
 - d95f823ca 11-26 15:28 `Merge branch 'main' into necrocaps` (-)
 - a42822b9e 11-26 15:28 `Merge branch 'main' into necromercrogue` (-)
-- eb7e319fc 11-26 15:28 `Merge branch 'main' into necrofloors` (-)
-- 218552d7a 11-26 15:28 `Merge branch 'main' into hotkeydrift` (-)
 <!-- statusgen:end -->
