@@ -1237,3 +1237,29 @@ func TestEmptyBeltShopsBeforeTheRevive(t *testing.T) {
 		}
 	}
 }
+
+// The hire window text is the only place a merc's aura is known (memory cannot read it): the wire keeps what it hired and
+// fills MercState.Aura (the minute `merc: seen` line and the status mount) for that class only.
+func TestHiredAuraIsKept(t *testing.T) {
+	rd := &fakeReader{st: merc.MercState{Known: true}}
+	w, _, _ := testWire(t, rd, nil)
+	h := &fakeHirer{rows: desertRows, paid: 400}
+	w.hirer = h
+	if got := w.HireStep(context.Background(), lutSnap(5000)); got != "merc hired" || len(h.hired) != 1 {
+		t.Fatalf("%q %v", got, h.hired)
+	}
+	want := desertRows[h.hired[0]].Aura
+	rd.set(merc.MercState{Known: true, Owned: true, Alive: true, Class: merc.ClassDesert, Level: 9})
+	w.curAt = time.Time{}
+	if st, _ := w.State(); st.Aura != want || want == "" {
+		t.Errorf("aura %q, hired %q", st.Aura, want)
+	}
+	if got := w.Status()["aura"]; got != want {
+		t.Errorf("status aura %v", got)
+	}
+	rd.set(merc.MercState{Known: true, Owned: true, Alive: true, Class: merc.ClassRogue, Level: 9}) // another merc: not ours
+	w.curAt = time.Time{}
+	if st, _ := w.State(); st.Aura != "" {
+		t.Errorf("a different merc class got the aura %q", st.Aura)
+	}
+}
