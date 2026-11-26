@@ -3,7 +3,7 @@ import json
 import re
 from datetime import date
 
-STATUSES = ("dark", "trial", "default-on", "retired")
+STATUSES = ("dark", "trial", "enabled", "default-on", "retired")
 OPEN = ("dark", "trial")
 MARKER = "[dark-launch]"
 FIELDS = ("name", "built_by", "dark_since", "why_off", "enable_criteria", "owner", "review_by", "status", "criteria_met")

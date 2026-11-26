@@ -17,3 +17,12 @@ The coordinator runs `python3 -I tools/darklaunch/report.py` weekly (name, age d
 
 ## Standard enable rule (user decision 2026-11-26)
 Flip on the sandboxes once the scenario, drill or replay passes, watch 24 h with the invariant monitor, and revert automatically on a hard breach (a death, a stall, a potion not drunk, a refusal-as-failure storm); otherwise the knob stays on and the row closes. No criterion longer than 24 h of live observation; longer evidence comes from scenarios and replays. The owner of each flip is the coordinator, due next session.
+
+## How to flip (tool `tools/flip/flip.py`, card autorevert1)
+1. Precondition: the knob has a `dark` row in `data/darklaunch.json` and its scenario, drill or replay passed. Never in a measured run (`D2BOT_RUN` set refuses); sandbox containers only; one open window per sandbox.
+2. Hosts come from `local.env` through `tools/env.sh`: `D2_FLIP_RUN` (command prefix on the sandbox host, default `labrun $D2_LABRUN_HOST --`), optional `D2_FLIP_TUNING`, `D2_FLIP_BIN`, `D2_FLIP_STATE`. The container is named like the instance.
+3. Flip: `python3 tools/flip/flip.py <instance> <knob>=<value> --why "scenario X green" --window 24h`. It reads the hard counters, keeps the tuning file as backup tag `bak-flip-<ts>`, writes the knob into the sandbox `tuning.json` (atomic rename), restarts the child, and sets the row `trial` with `trial_started`. A failed restart restores the backup at once and says so.
+4. Watch (one watcher for all windows, under the process registry): `tools/agentrun.sh <agent> --ttl 90000 -- python3 tools/flip/flip.py watch`. It reads `GET /api/explain` data through `d2bot ops status --why` (`invariants`, Hard rows: potion-not-drunk, life-zero-alive, refusal-storm, xp-frozen, mode-no-exit, corpse-unresolved) every 60 s.
+5. A hard counter above its baseline (taken right after the restart; a child restart inside the window rebaselines at zero) reverts: backup restored, child restarted, row `dark` with `revert_reason` and `reverted_at`, one line `REVERT ...`. Ten unreadable polls in a row count as a breach. A failed restore or restart prints `REVERT FAILED` and is retried every poll; the file is never left half set.
+6. No breach to the end of the window: row `enabled` (on in the sandbox, `enabled_at`), backup removed, line `CLOSE ...`. The coordinator then flips the code default and sets `default-on`.
+7. `python3 tools/flip/flip.py status` lists open windows. Tests (fake sandbox and clock): `python3 -I tools/flip/test_flip.py`. U: not yet run against a real container.
