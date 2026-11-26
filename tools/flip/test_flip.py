@@ -232,7 +232,6 @@ class FlipTest(unittest.TestCase):
 
     def test_no_backup_file_restores_by_removal(self):
         self.sb.tuning = None
-        self.sb.read_tuning = lambda: None
         self.flip()
         self.sb.counts["xp-frozen"] = 1
         self.f.poll("sb1")
@@ -338,11 +337,70 @@ class FlipTest(unittest.TestCase):
         self.assertEqual(self.f.poll("sb1"), "closed")
         self.assertEqual(self.rows("enabled"), set(BUNDLE7))
 
+    def test_empty_write_aborts_before_restart(self):
+        orig_write = self.sb.write_tuning
+        calls = []
+        self.sb.write_tuning = lambda text: orig_write("" if not calls and not calls.append(1) else text)  # the first write is dropped
+        r0 = self.sb.restarts
+        with self.assertRaises(F.FlipError) as c:
+            self.flip()
+        self.assertIn("no restart", str(c.exception))
+        self.assertEqual(self.sb.restarts, r0)
+        self.assertEqual(self.sb.tuning, ENVELOPE)  # put back
+        self.assertEqual(self.row()["status"], "dark")
+        self.assertIsNone(self.f.store.get("sb1"))
+
     def test_parse_window(self):
         self.assertEqual(F.parse_window("24h"), 86400)
         self.assertEqual(F.parse_window("90s"), 90)
         with self.assertRaises(F.FlipError):
             F.parse_window("soon")
+
+
+FAKE_DOCKER = """#!/bin/sh
+# fake `docker exec <c> CMD...`: runs CMD locally with NO stdin (like labrun); FAKE_DROP=1 also empties the payload
+[ "$1" = exec ] || exit 2
+shift; shift
+exec </dev/null
+if [ "$FAKE_DROP" = 1 ] && [ "$1" = sh ]; then set -- sh -c "$(printf %s "$3" | sed 's/printf %s [^ ]* |/printf %s "" |/')"; fi
+exec "$@"
+"""
+
+
+class TransportTest(unittest.TestCase):
+    """The real Sandbox class through a prefix that has no stdin (what labrun does)."""
+
+    def setUp(self):
+        self.d = tempfile.TemporaryDirectory()
+        self.addCleanup(self.d.cleanup)
+        bindir = os.path.join(self.d.name, "bin")
+        os.mkdir(bindir)
+        with open(os.path.join(bindir, "docker"), "w") as f:
+            f.write(FAKE_DOCKER)
+        os.chmod(os.path.join(bindir, "docker"), 0o755)
+        self.path = os.path.join(self.d.name, "tuning.json")
+        self.env = {"D2_FLIP_RUN": f"env PATH={bindir}:{os.environ['PATH']}", "D2_FLIP_TUNING": self.path}
+
+    def test_write_survives_a_transport_without_stdin(self):
+        sb = F.Sandbox("c1", self.env)
+        sb.write_tuning(ENVELOPE)
+        self.assertEqual(open(self.path).read(), ENVELOPE)
+        self.assertEqual(sb.read_tuning(), ENVELOPE)
+
+    def test_dropped_payload_never_replaces_the_file(self):
+        open(self.path, "w").write(ENVELOPE)
+        os.environ["FAKE_DROP"] = "1"
+        self.addCleanup(os.environ.pop, "FAKE_DROP", None)
+        sb = F.Sandbox("c1", self.env)
+        with self.assertRaises(F.FlipError):
+            sb.write_tuning(ENVELOPE.replace("22", "23"))
+        self.assertEqual(open(self.path).read(), ENVELOPE)  # untouched, and no stray temp file
+        self.assertFalse(os.path.exists(self.path + ".new"))
+
+    def test_oversize_refused(self):
+        sb = F.Sandbox("c1", self.env)
+        with self.assertRaises(F.FlipError):
+            sb.write_tuning("x" * 200000)
 
 
 if __name__ == "__main__":
