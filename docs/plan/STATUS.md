@@ -308,14 +308,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ea4cbfe13 11-25 23:21 `Merge agent/toolstrade77: Merge branch 'main' into toolstrade77` (toolstrade77)
+- dc0350b1d 11-25 23:20 `Merge branch 'main' into toolstrade77` (-)
 - 6c281403d 11-25 23:09 `Merge agent/outcome1: Merge branch 'main' into outcome1` (outcome1)
 - db497fc10 11-25 23:07 `Merge branch 'main' into outcome1` (-)
 - e201e0878 11-25 22:55 `Merge agent/invariants: Merge branch 'main' into invmon` (invariants)
 - 6f4022933 11-25 22:51 `Merge branch 'main' into invmon` (-)
 - f75d92016 11-25 22:47 `Merge agent/herorecord: herorecord: record the live Paladin hero in the epic pages` (herorecord)
+- b1bcce7a8 11-25 22:44 `m` (-)
 - cc290be05 11-25 22:37 `Merge agent/darklaunch: Merge branch 'main' into darklaunch` (darklaunch)
 - 871b9bdc9 11-25 22:35 `Merge branch 'main' into darklaunch` (-)
-- e090a5fa2 11-25 22:33 `Merge agent/fablereview: fablereview2: end-to-end logic review of the bot (docs only): cause classes, invariants, prior art, 12 proposals` (fablereview)
-- 41c40f6b3 11-25 22:31 `Merge branch 'main' into fablereview2` (-)
-- 1fbcb45ba 11-25 22:22 `Merge agent/qd26: combat: a living hero at life 0 drinks (live Questy death 2026-11-26), Smith row kit, matrix 76-77` (qd26)
 <!-- statusgen:end -->
