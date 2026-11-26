@@ -19,6 +19,7 @@ owns:
   - "internal/plandata/build-necromancer_summoner_normal30.json"
   - "internal/gear/builds/necromancer_summoner_normal30.json"
   - "cmd/d2bot/class_test.go"
+  - "docs/plan/data/build-necromancer_summoner_normal30.json"
 exclusive: []
 contracts: []
 ---
