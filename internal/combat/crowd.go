@@ -181,6 +181,17 @@ func (f *Fighter) crowdAct(ctx context.Context, a SafetyAction) error {
 	return f.openPortal(ctx)
 }
 
+// portalFlightMax bounds PortalInFlight: a cast that has not ended after this long is not protected from a cancel.
+const portalFlightMax = 8 * time.Second
+
+// PortalInFlight reports that a TownPortal action is under way now (its cast started less than portalFlightMax ago). The bot's guard
+// reads it so that its own verdict does not cancel the very cast the fight loop began: Questy death 15 lost the first cast
+// "before the click" to the guard and the second cast came too late.
+func (f *Fighter) PortalInFlight() bool {
+	at := f.portalActAt.Load()
+	return at != 0 && f.now().Sub(time.Unix(0, at)) < portalFlightMax
+}
+
 // PortalCast is the last Town Portal cast the fighter made: when it started, how long it took and whether it opened.
 type PortalCast struct {
 	Started bool

@@ -86,11 +86,12 @@ type Fighter struct {
 	diagMu        sync.Mutex // guards portalCast and casts (read from the bot's autopsy)
 	portalCast    PortalCast
 	casts         []castRec
-	walking       atomic.Bool // the bot is on a travel or quest walk (SetWalking)
-	questCrowd    atomic.Bool // a player-started quest chunk runs (SetQuestCrowd)
-	pinned        int         // consecutive evasive moves that went nowhere (evade)
-	noEvadeUntil  time.Time   // pinned: no kite or dodge before this
-	mouthEvades   int         // evasive moves started inside a cave mouth (evade, FIXMOUTH2)
+	walking       atomic.Bool  // the bot is on a travel or quest walk (SetWalking)
+	portalActAt   atomic.Int64 // clock nanos when a TownPortal action began and has not ended (PortalInFlight), 0: none
+	questCrowd    atomic.Bool  // a player-started quest chunk runs (SetQuestCrowd)
+	pinned        int          // consecutive evasive moves that went nowhere (evade)
+	noEvadeUntil  time.Time    // pinned: no kite or dodge before this
+	mouthEvades   int          // evasive moves started inside a cave mouth (evade, FIXMOUTH2)
 	mouthEvadeAt  time.Time
 	mouthHold     mouthHoldState // back-off after nav.ErrMouthGate (FIXMOUTHLOOP)
 	resCache      map[uint32]resEntry
@@ -341,7 +342,11 @@ func (f *Fighter) Act(ctx context.Context, a SafetyAction) error {
 	case DrinkLife, DrinkMana, DrinkRejuv:
 		return f.drink(ctx, a)
 	case TownPortal:
+		f.portalActAt.Store(f.now().UnixNano())
+		defer f.portalActAt.Store(0)
 		if f.Portal != nil {
+			// the portal override has no drink of its own: openPortalTries drinks before the cast, this path must too (Questy death 15)
+			f.drinkIfDue(ctx)
 			return f.Portal(ctx)
 		}
 		return f.openPortal(ctx)

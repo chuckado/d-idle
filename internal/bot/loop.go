@@ -1105,6 +1105,12 @@ func (r *Runner) guard(ctx context.Context, cancel context.CancelCauseFunc, done
 	}
 }
 
+// portalInFlight asks the fighter whether a town portal cast it began is still under way.
+func (r *Runner) portalInFlight() bool {
+	pf, ok := r.d.Fighter.(interface{ PortalInFlight() bool })
+	return ok && pf.PortalInFlight()
+}
+
 // guardOnce is one look of the guard; true when it cancelled the action (the guard is then finished).
 func (r *Runner) guardOnce(ctx context.Context, cancel context.CancelCauseFunc, st State) bool {
 	{
@@ -1139,6 +1145,9 @@ func (r *Runner) guardOnce(ctx context.Context, cancel context.CancelCauseFunc, 
 			}
 			if r.walkHomeNoScroll(st, a, snap) {
 				a = SafetyNone // stranded walk home: a portal cannot open, the walk itself is the run (cancel storm 2026-11-26)
+			}
+			if a == SafetyTownPortal && r.portalInFlight() {
+				return false // the fight loop is casting it: cancelling the action would cancel the cast before the click
 			}
 			if a != SafetyNone && (st != StateClearing || a == SafetyTownPortal || a == SafetyChicken || a == SafetyCrowdAbandon || a == SafetyDrinkLife || a == SafetyDrinkRejuv) && r.safetyDue(a, now) {
 				r.noteVerdict(now)
