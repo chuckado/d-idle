@@ -199,6 +199,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [mercenary.md](sme/mercenary.md): Mercenaries in classic LoD 1.14d: SME reference for the hire/keep-alive bot (MERCRESEARCH, 2026-10-30)
 - [pace-and-formulas.md](sme/pace-and-formulas.md): D2 LoD 1.14d pace and formula lookup (Normal Act 1 to Act 2 gate; Paladin and Sorceress)
 - [pace-tables.md](sme/pace-tables.md): Pace tables: human and speedrun reference for soak milestones (classic LoD 1.14d, offline single player)
+- [paladin-auras-2026-11-26.md](sme/paladin-auras-2026-11-26.md): Paladin auras: how they work and what the bot does (2026-11-26) (status: current SME answer to the owner question of 2026-11-26. Tags: V verified (repo doc or code, path given), S...)
 - [play-act-route.md](sme/play-act-route.md): Play patterns 1: a human route through all five acts
 - [play-bot-pitfalls.md](sme/play-bot-pitfalls.md): Play patterns 4: what automation gets wrong in Diablo II, and where our bot differs from a human
 - [play-economy.md](sme/play-economy.md): Play patterns 2: gold, shopping, inventory and town chores

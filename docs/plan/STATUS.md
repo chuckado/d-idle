@@ -44,6 +44,7 @@
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
 | whynot1 | proposed | - | `internal/questboard`<br>`internal/arbiter/explained.go`<br>`internal/arbiter/explained_test.go`<br>`internal/bot/explain.go`<br>`internal/bot/explain_test.go`<br>`internal/ops`<br>`cmd/d2bot/opscmd.go`<br>`cmd/d2bot/questwire.go`<br>`internal/watch/web/panels/quest-board`<br>`internal/watch/questui_test.go`<br>`internal/watch/testdata/quests`<br>`docs/operator.md` | - |
+| smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
@@ -321,7 +322,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 01380d700 11-26 13:05 `Merge agent/smeaura: Merge branch 'main' into smeaura` (smeaura)
 - c06121264 11-26 13:05 `Merge agent/whynot1: Merge branch 'main' into whynot1` (whynot1)
+- 8b4655f6b 11-26 12:59 `Merge branch 'main' into smeaura` (-)
 - 9e02bbedf 11-26 12:59 `Merge branch 'main' into whynot1` (-)
 - 06e3c750c 11-26 12:51 `Merge agent/arbfam1: arbfam entry 1: chores and claim outcome cases, docs, card` (arbfam1)
 - 284d0806e 11-26 12:09 `Merge agent/toolstrade85: Merge origin/main` (toolstrade85)
@@ -329,6 +332,4 @@
 - 027112601 11-26 11:12 `Merge agent/toolstrade84: Merge branch 'main' into toolstrade84` (toolstrade84)
 - fe8df9ae4 11-26 11:11 `Merge branch 'main' into toolstrade84` (-)
 - e905aade9 11-26 11:05 `Merge branch 'main' into toolstrade85` (-)
-- 5081aabe9 11-26 10:41 `Merge branch 'main' into toolstrade84` (-)
-- a75e83212 11-26 10:41 `Merge branch 'main' into toolstrade85` (-)
 <!-- statusgen:end -->
