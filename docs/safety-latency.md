@@ -27,3 +27,9 @@ Numbers: none yet from a live run [U]. The offline test pins the arithmetic (a 4
 | loot `PickUp` | no | U |
 
 A blocking input call (a real socket write to the helper) is not modelled: the bound is for the loop's own checks of the context.
+
+## In-town check (entry reflex1b)
+The 2026-11-26 02:51 death: a trip in its chores stage, the hero in Cold Plains with 12 hostiles, the shop chore walking 21 s toward a town NPC.
+- `town.Chores` verifies "in town" before every chore step and `openNPC` before every NPC walk; outside a town they return `town.ErrNotInTown` and the rest of the chores are skipped.
+- The guard aborts a running chore after 2 s outside a town (`choreGrace`, cause `errLeftTown`); it is not a failure, the next step restarts the trip from the way home (`advanceTrip`, stage 0).
+- Tests: `TestChoresOutsideTownAreAbortedAndTheTripGoesHome` (bot, fakes, Sorceress and Paladin; fails by hanging when the guard rule is removed [V mutation]); `TestChoresAbortWhenTheHeroIsOutsideTown` (town sim rig, needs the game tables and skips without them [U: never run here]).
