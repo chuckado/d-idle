@@ -163,3 +163,13 @@ func TestPaladinProfilesNeverAttackWithSacrifice(t *testing.T) {
 		}
 	}
 }
+
+// Profiles that avoid a skill list it in Avoid, and the Paladin ones avoid Sacrifice (the planner reads the same field).
+func TestPaladinProfilesAvoidSacrifice(t *testing.T) {
+	for _, build := range []Build{"", "hammerdin"} {
+		pr, err := LookupProfile(d2.Paladin, build)
+		if err != nil || !slices.Contains(pr.Avoid, "Sacrifice") {
+			t.Errorf("%q: Sacrifice not avoided (err %v)", build, err)
+		}
+	}
+}

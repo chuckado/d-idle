@@ -221,6 +221,9 @@
      ]
     }
    ],
+   "avoid": [
+    "Sacrifice"
+   ],
    "aura": [
     {
      "name": "Prayer",
@@ -300,6 +303,9 @@
       "Attack"
      ]
     }
+   ],
+   "avoid": [
+    "Sacrifice"
    ],
    "aura": [
     {
