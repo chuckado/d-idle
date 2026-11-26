@@ -46,6 +46,7 @@
 | act2plan | proposed | - | `internal/plandata/act2plan.json`<br>`internal/plandata/act2plan.go`<br>`internal/plandata/act2plan_test.go`<br>`internal/plandata/admission.json`<br>`docs/plan/data/act2plan.json`<br>`docs/plan/data/admission.json`<br>`docs/plan/act2-level-plan.md`<br>`docs/epics/epic-act2.md` | - |
 | roadmap2 | in-progress | - | `docs/roadmap-fable.md`<br>`backlog/tasks/task-998 - flipwave2*`<br>`backlog/tasks/task-999 - classorder1*` | - |
 | whynot1 | proposed | - | `internal/questboard`<br>`internal/arbiter/explained.go`<br>`internal/arbiter/explained_test.go`<br>`internal/bot/explain.go`<br>`internal/bot/explain_test.go`<br>`internal/ops`<br>`cmd/d2bot/opscmd.go`<br>`cmd/d2bot/questwire.go`<br>`internal/watch/web/panels/quest-board`<br>`internal/watch/questui_test.go`<br>`internal/watch/testdata/quests`<br>`docs/operator.md` | - |
+| act345map | proposed | - | `data/questboard/act3.json`<br>`data/questboard/act4.json`<br>`data/questboard/act5.json`<br>`docs/epics/epic-act3.md`<br>`docs/epics/epic-act4.md`<br>`docs/epics/epic-act5.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
 | auraaudit | proposed | - | `docs/probes/paladin-aura-audit-2026-11-26.md` | - |
 | classorder | proposed | - | `docs/roadmap-fable.md`<br>`docs/epics/epic-class-necromancer.md`<br>`docs/epics/epic-class-druid.md`<br>`docs/epics/epic-class-sorceress.md`<br>`docs/epics/epic-class-barbarian.md`<br>`docs/epics/epic-class-amazon.md`<br>`docs/epics/epic-class-assassin.md` | - |
@@ -328,7 +329,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- fad6b3f14 11-26 13:24 `Merge agent/act345map: Merge branch 'main' into act345map` (act345map)
 - 9028d8300 11-26 13:24 `Merge agent/act2plan: Merge branch 'main' into act2plan` (act2plan)
+- 95b5ed8a9 11-26 13:19 `Merge branch 'main' into act345map` (-)
 - a71504654 11-26 13:19 `Merge branch 'main' into act2plan` (-)
 - 23a4fb6ba 11-26 13:17 `Merge agent/classorder: Merge branch 'main' into classorder` (classorder)
 - 0fe3487dd 11-26 13:17 `Merge agent/auraaudit: Merge branch 'main' into auraaudit` (auraaudit)
@@ -336,6 +339,4 @@
 - aaf9c18cd 11-26 13:15 `Merge branch 'main' into auraaudit` (-)
 - 57fca96d9 11-26 13:05 `Merge agent/roadmap2: Merge branch 'main' into roadmap2` (roadmap2)
 - 01380d700 11-26 13:05 `Merge agent/smeaura: Merge branch 'main' into smeaura` (smeaura)
-- c06121264 11-26 13:05 `Merge agent/whynot1: Merge branch 'main' into whynot1` (whynot1)
-- df7c783bf 11-26 12:59 `Merge branch 'main' into roadmap2` (-)
 <!-- statusgen:end -->

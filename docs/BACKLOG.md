@@ -1435,6 +1435,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - auraaudit: Paladin aura repo and log audit (TASK-1007, merged 2026-11-26, acceptance 1 of 1): Paladin aura audit: the d2d bot confirms an aura only by the selected right skill, never the aura state; ranked defects and a read-only probe <!--sg:agent/auraaudit-->
 - classorder: class order of care after the live Paladin (TASK-1009, merged 2026-11-26, acceptance 2 of 2): Class order of care set 2026-11-26: necromancer first, druid or sorceress next, then barbarian, amazon and assassin by effort; dated priority lines in the roadmap and six class epics; docs only <!--sg:agent/classorder-->
 - act2plan: Act 2 level plan data (slices, gates, merc rows, admission floors) (TASK-1000, merged 2026-11-26, acceptance 3 of 3): Act 2 level plan data for two classes, eight dungeon entry floor rows and the expert answer recorded; not verified live <!--sg:agent/act2plan-->
+- act345map: Acts 3 to 5 quest definitions, givers, rewards, items and gap lists (TASK-1005, merged 2026-11-26, acceptance 2 of 2): Acts 3 and 5 quest givers, rewards and items added as data plus per quest gap lists in the epic pages; not verified live <!--sg:agent/act345map-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
