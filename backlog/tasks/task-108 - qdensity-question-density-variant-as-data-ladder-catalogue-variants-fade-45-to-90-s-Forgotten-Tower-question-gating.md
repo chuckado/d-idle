@@ -25,6 +25,7 @@ owns:
   - "docs/t0-variants.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

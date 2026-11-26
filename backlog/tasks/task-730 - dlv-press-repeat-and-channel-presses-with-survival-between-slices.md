@@ -17,6 +17,7 @@ owns:
   - "internal/d2dcombat/"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

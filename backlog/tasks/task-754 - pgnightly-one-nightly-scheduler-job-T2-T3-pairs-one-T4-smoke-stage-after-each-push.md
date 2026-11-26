@@ -17,6 +17,7 @@ owns:
   - "tools/provingground/nightly.sh"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

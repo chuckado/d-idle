@@ -22,6 +22,8 @@ owns:
   - "internal/watch/unlockhall_test.go"
 exclusive: []
 contracts: []
+lane: parked
+lane_note: "status Deferred (no result line)"
 ---
 
 ## Description

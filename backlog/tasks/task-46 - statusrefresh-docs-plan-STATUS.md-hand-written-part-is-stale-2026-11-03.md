@@ -16,6 +16,7 @@ owns:
   - "docs/plan/STATUS.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

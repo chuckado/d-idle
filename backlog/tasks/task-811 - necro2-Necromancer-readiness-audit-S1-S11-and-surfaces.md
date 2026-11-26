@@ -17,6 +17,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Offline audit written (docs/probes/necromancer-readiness-2026-11-22.md); verdict not ready; not verified live."
+lane: next
 ---
 
 ## Description

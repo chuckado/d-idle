@@ -83,6 +83,7 @@ func (r *Runner) step(ctx context.Context) bool {
 	if snap == nil {
 		return r.notInGame(ctx, c)
 	}
+	r.invTick(snap, c)
 	p := snap.Player
 	r.obMu.Lock()
 	pending := r.ob.deathPending
@@ -338,7 +339,14 @@ func (r *Runner) carryOut(ctx context.Context, a SafetyAction) error {
 	}
 	sctx, cancel := gclock.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
+	drink := a == SafetyDrinkLife || a == SafetyDrinkMana || a == SafetyDrinkRejuv
+	if !drink {
+		r.noteSent(a, r.e.Clock.Now(), false)
+	}
 	err := r.d.Fighter.Act(sctx, a)
+	if drink && err == nil {
+		r.noteSent(a, r.e.Clock.Now(), false)
+	}
 	if err != nil {
 		r.e.Log.Warn("safety action failed", "action", a, "err", err)
 	}
@@ -412,6 +420,7 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 	}
 	var gone gameGone
 	var si safetyInterrupt
+	var ref *Refused
 	switch {
 	case errors.As(cause, &gone):
 		r.gameLost(ctx, c, gone.Event)
@@ -425,6 +434,10 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 		}
 		l.trip = &trip{plan: r.fullChores("emergency town portal"), returnTo: fieldArea0(area), emergency: true}
 		r.setLastTrip(r.e.Clock.Now())
+	case errors.Is(cause, errLeftTown):
+		// The chores left the town (a portal, an exit walked by mistake): not a failure. The trip is out of town, so the next
+		// step starts it again from the way home (advanceTrip).
+		r.e.Log.Warn("town chores aborted: the hero is outside town", "activity", r.activity)
 	case errors.Is(err, ErrLeftGame):
 		// the menus are handled by the next step
 	case errors.Is(cause, errNewGoal), errors.Is(cause, errStop), errors.Is(cause, errPause), errors.Is(cause, errTripDue), errors.Is(cause, errPoints), errors.Is(cause, errCheckpoint), errors.Is(cause, errPlayer), errors.Is(cause, errReset), errors.Is(cause, errReplan), errors.Is(cause, errDied), errors.Is(cause, errLeftGame):
@@ -433,6 +446,8 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 		if !l.inLadder {
 			r.escalate(ctx, c, what, errStuck)
 		}
+	case errors.As(err, &ref):
+		r.handleRefused(ctx, ref)
 	case errors.Is(err, errAreaGated):
 		// A deliberate refusal, not a fault: no failure count, no ladder, no restart. The planner skips the target.
 		l.failures = 0
@@ -472,6 +487,9 @@ func fieldArea0(a int) int { return a }
 func (r *Runner) fail(ctx context.Context, c control, what string, err error) {
 	l := &r.loop
 	l.failures++
+	if isRefusal(err) {
+		r.inv.noteRefusalFailure(what, err)
+	}
 	r.e.Log.Warn("action failed", "what", what, "err", err, "consecutive", l.failures)
 	if l.failures >= r.cfg.MaxStepFailures {
 		r.escalate(ctx, c, what, err)
@@ -1074,12 +1092,17 @@ func (r *Runner) guardOnce(ctx context.Context, cancel context.CancelCauseFunc, 
 				a = SafetyNone // Ancients: a portal would reset the fight (Constraints.NoTownPortal)
 			}
 			if a != SafetyNone && (st != StateClearing || a == SafetyTownPortal || a == SafetyChicken || a == SafetyCrowdAbandon || a == SafetyDrinkLife || a == SafetyDrinkRejuv) && r.safetyDue(a, now) {
+				r.noteVerdict(now)
 				if rt := r.e.Tune.Bot.ReactionMs; rt > 0 {
 					r.e.Clock.Sleep(time.Duration(rt) * time.Millisecond)
 				}
 				cancel(safetyInterrupt{a})
 				return true
 			}
+		}
+		if st == StateResupplying && r.chores.outside(snap, now) {
+			cancel(errLeftTown) // the 02:51 death: the shop chore walked in Cold Plains with 12 hostiles around
+			return true
 		}
 		if r.droughtStage(snap, now) > 0 {
 			cancel(errReplan) // the Run goroutine acts on it (droughtCheck) as soon as the action ends

@@ -24,6 +24,8 @@ live: ""
 merge_hash: ""
 overlap: ""
 source: "openspec-final:openspec/changes/gameexe-retire-soak"
+lane: parked
+lane_note: "status Deferred (no result line)"
 ---
 
 ## Description

@@ -30,6 +30,8 @@ owns:
 exclusive: []
 contracts: []
 result: "Fork branch d2d.lab4-overlay (private remote) built on the worker host (D2D_WERROR=OFF: GCC 16 trips -Werror in untouched ui.cpp/command code); ctest test_overlay (merge, malformed, hash pin) and overlay_d2d (start off/on/malformed against real MPQs) pass, verified live-free. AC 1 stays open: vanilla table-hash equality not measured (only by code path); full ctest suite not run. Go side: internal/overlay, internal/data, d2bot flag tested on the worker host. Not pinned in gates."
+lane: parked
+lane_note: "status Deferred (Fork branch d2d.lab4-overlay (private remote) built on the w)"
 ---
 
 ## Description

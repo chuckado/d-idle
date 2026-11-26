@@ -23,6 +23,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Full fit on the worker host: 500 red runs before, 19 after (390x844 128 to 3, 360x640 80 to 11, 412x780 90 to 0, desk sizes 23 to 0-2). Triage in docs/ui/fit-triage-2026-11-23.md. Stale rules relaxed with unit rows, real defects fixed (hero-meters at 360, zone map under the bar, statusline, quest tile); 19 runs stay red and are listed (needs-you list design question, quest tile handing at two sizes, health, char-store hole, orders sheet at 360). Not seen on a real phone."
+lane: next
 ---
 
 ## Description

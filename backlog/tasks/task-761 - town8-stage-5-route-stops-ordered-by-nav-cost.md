@@ -18,6 +18,7 @@ owns:
   - "internal/town"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

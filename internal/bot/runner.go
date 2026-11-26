@@ -67,6 +67,9 @@ type Deps struct {
 	// OnSnapshot, if set, is called after every successful in-game poll (display and telemetry feeds). It must be quick and
 	// must not call back into the Runner.
 	OnSnapshot func(*d2.Snapshot)
+	// OnInvariant, if set, is called for every invariant line the monitor logs (invariants.go). Lab oracles (lockstep,
+	// Proving Ground) set it to turn a run red. It must be quick.
+	OnInvariant func(name, detail string)
 	// Bus, if set, receives every event the bot emits (internal/event/MIGRATION.md steps 1 and 2). The Runner then
 	// feeds Events() from its own bus subscription through event.ToGoals, so the goal manager keeps working unchanged.
 	Bus *event.Bus
@@ -173,6 +176,7 @@ type Runner struct {
 	tpBuyMin       int        // scrolls bought this minute, set by tpDiag under obMu for failsafeKV
 	ob             observer
 	cp             checkpointState         // checkpoint portals (checkpoint.go)
+	inv            invMon                  // invariant monitor (invariants.go)
 	arb            arbShadow               // intent arbiter in shadow mode (shadow.go); idle unless bot.arbiterShadow is 1
 	zst            zoneState               // the last zone model verdict (zonemodel.go)
 	zmerc          zoneMerc                // merc alive/dead edge detection for ZoneObserve (zoneshadow.go)
@@ -210,6 +214,7 @@ type Runner struct {
 	inTown         atomic.Bool          // the hero stands in a town area (observe.go): the roam coverage is not read there
 	farmOff        string               // why the farm loop is off for this session (mu)
 	bossRun        atomic.Bool          // a boss script is running (Deps.Task.Boss): routine town trips wait, the guard's re-plan cancels are off
+	chores         choreWatch           // a town chore is running (townguard.go)
 	safetyBusy     atomic.Int32         // safety actions in flight (carryOut); the item fast lane stays closed meanwhile (SafetyBusy)
 	bossStart      map[string]time.Time // start of the last unfinished boss run by name (taskActs.KillBoss, loop goroutine only)
 	levelerPaused  bool                 // selfStop came from the leveler (LevelerPause), guarded by mu
@@ -308,15 +313,16 @@ type loopState struct {
 	beltFillNext    time.Time      // no belt fill attempt before this
 	diffBan         map[string]time.Time
 	forceTrip       bool
-	rewardSince     time.Time   // when a restock trip first waited for a pending quest reward (holdTripForReward)
-	healFails       int         // failed heal attempts while below the resume line; reset when life is back above it
-	portalRetried   bool        // the cancelled-cast retry was used since the last arrival in town (portalretry.go)
-	noPortalSince   time.Time   // first heal-trip failure for lack of a town portal in this stretch (noPortalLeave)
-	recoveredAt     time.Time   // end of the last lost-game recovery (freshHold)
-	lowLifeUntil    time.Time   // end of the current low-life wait (lowLifeWait); zero when not waiting
-	reentries       []time.Time // recent re-entries after a chicken (notInGame), pruned to reentryWindow
-	flail           flailGuard  // anti-flail guard (flail.go)
-	areaDoneAt      time.Time   // last "area done" trip home from the field (noTarget rate limit)
+	refusal         refusalState // the last typed refusal (outcome.go)
+	rewardSince     time.Time    // when a restock trip first waited for a pending quest reward (holdTripForReward)
+	healFails       int          // failed heal attempts while below the resume line; reset when life is back above it
+	portalRetried   bool         // the cancelled-cast retry was used since the last arrival in town (portalretry.go)
+	noPortalSince   time.Time    // first heal-trip failure for lack of a town portal in this stretch (noPortalLeave)
+	recoveredAt     time.Time    // end of the last lost-game recovery (freshHold)
+	lowLifeUntil    time.Time    // end of the current low-life wait (lowLifeWait); zero when not waiting
+	reentries       []time.Time  // recent re-entries after a chicken (notInGame), pruned to reentryWindow
+	flail           flailGuard   // anti-flail guard (flail.go)
+	areaDoneAt      time.Time    // last "area done" trip home from the field (noTarget rate limit)
 	futile          bool
 	futilePos       input.Point
 	futileUntil     time.Time

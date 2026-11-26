@@ -23,6 +23,7 @@ owns:
   - "internal/bot/zoneshadow.go"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

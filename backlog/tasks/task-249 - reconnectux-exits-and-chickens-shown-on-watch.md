@@ -20,6 +20,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Reconnect/restart/away/stream banners BUILT offline 2026-11-11 in the onboarding panel (docs/onboarding.md). Exit and chicken counts not built: no counter exists on the watch side. Not verified live."
+lane: next
 ---
 
 ## Description

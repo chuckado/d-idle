@@ -23,6 +23,7 @@ owns:
   - "docs/contracts/decision-queue.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

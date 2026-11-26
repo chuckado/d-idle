@@ -21,6 +21,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Assertion digest D1 (internal/scenario/assertdigest.go: run key plus per-assertion kind and bucket, discrete kinds by value) is written by exec-one; determinism gates on verdict + D1 (hard) and reports the whole-state digest as drift only (Q1). Old results are compared by recomputing D1 from their stored asserts. Verdict changes: none for any scenario; determinism of a pair now also fails on a changed D1. Offline evidence on the 2026-11-19 run records: cain.stones, cain.cage, cain.scroll(Sor) pairs deterministic with state-digest drift only; chicken.recovery pair fails hard on D1 (same RED verdict, different facts). Tests -race -count=20; not run live."
+lane: now
 ---
 
 ## Description

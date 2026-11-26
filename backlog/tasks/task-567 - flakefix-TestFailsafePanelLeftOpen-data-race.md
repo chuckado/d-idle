@@ -17,6 +17,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Root cause: the test assigned g.r.d.Loot after g.run() started the runner goroutine, which reads d (data race under -race, not timing). Moved the assignment before run. Not live (offline test)."
+lane: next
 ---
 
 ## Description

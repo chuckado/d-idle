@@ -17,6 +17,7 @@ owns:
 exclusive: []
 contracts: []
 result: "d2dbot:devp12 (id a064b241ba61, fork build tip caea2368) built on the builder, item_pic/item_colour/vault_verbs tests ok there, loaded on the sandbox host, not deployed; doc docs/process/sandbox-devp12.md. Not verified in a running game."
+lane: next
 ---
 
 ## Description

@@ -20,6 +20,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Builder runs export PG_EVENT, PG_BRANCH (from the worktree name) and PG_JOB and read PG_LEDGER_CMD from a host env file (pgenv.sh, sourced by run.sh; offline test pgenv_test.sh). Ledger lines reach the board host by a 10-minute PULL of the builders spools (no builder credential exists for a push), idempotent, ops test passes. NOT live-verified: no scenario has run since the wiring and the builder was unreachable; the status page is not regenerated (no lines). First-run checklist in docs/process/pg-ledger-ops.md."
+lane: now
 ---
 
 ## Description
