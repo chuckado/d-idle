@@ -432,6 +432,10 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 		}
 		l.trip = &trip{plan: r.fullChores("emergency town portal"), returnTo: fieldArea0(area), emergency: true}
 		r.setLastTrip(r.e.Clock.Now())
+	case errors.Is(cause, errLeftTown):
+		// The chores left the town (a portal, an exit walked by mistake): not a failure. The trip is out of town, so the next
+		// step starts it again from the way home (advanceTrip).
+		r.e.Log.Warn("town chores aborted: the hero is outside town", "activity", r.activity)
 	case errors.Is(err, ErrLeftGame):
 		// the menus are handled by the next step
 	case errors.Is(cause, errNewGoal), errors.Is(cause, errStop), errors.Is(cause, errPause), errors.Is(cause, errTripDue), errors.Is(cause, errPoints), errors.Is(cause, errCheckpoint), errors.Is(cause, errPlayer), errors.Is(cause, errReset), errors.Is(cause, errReplan), errors.Is(cause, errDied), errors.Is(cause, errLeftGame):
@@ -1088,6 +1092,10 @@ func (r *Runner) guardOnce(ctx context.Context, cancel context.CancelCauseFunc, 
 				cancel(safetyInterrupt{a})
 				return true
 			}
+		}
+		if st == StateResupplying && r.chores.outside(snap, now) {
+			cancel(errLeftTown) // the 02:51 death: the shop chore walked in Cold Plains with 12 hostiles around
+			return true
 		}
 		if r.droughtStage(snap, now) > 0 {
 			cancel(errReplan) // the Run goroutine acts on it (droughtCheck) as soon as the action ends
