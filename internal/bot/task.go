@@ -1334,6 +1334,10 @@ func (r *Runner) planningBlock(ctx context.Context, res task.Result) error {
 		return nil
 	}
 	if r.parkStep(res) {
+		if r.e.Tune.Bot.TypedOutcome != 0 {
+			// the park is the refusal: the group is held back for parkMinutes, the planner farms meanwhile
+			return &Refused{StepOutcome{Kind: OutRefusedKind, Need: "parked", Wake: needTable["parked"].Wake, Why: "quest step parked after repeated planning blocks"}}
+		}
 		return nil
 	}
 	l.task.blocks++
