@@ -44,7 +44,6 @@
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
-| aura2b | proposed | - | `internal/combat/classdata/profiles.json`<br>`internal/combat/rules.go`<br>`internal/combat/class_test.go`<br>`internal/combat/lifeprice_test.go`<br>`internal/agency/derive.go`<br>`internal/agency/testdata/agreement.json`<br>`internal/leveler/early_test.go` | - |
 | necrosummoninv | proposed | - | `internal/d2dsoakstat/necro_inv.go` | - |
 | necrocorpse | proposed | - | `docs/probes/necrocorpse-2026-11-26.md` | - |
 | necrofloors | proposed | - | `docs/probes/necrofloors-2026-11-26.md` | - |
