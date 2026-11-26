@@ -39,6 +39,7 @@ func cmdRun(args []string, w io.Writer) error {
 	dry := fs.Bool("dry-run", false, "print what would run, start nothing")
 	slot := fs.String("slot", "tools/d2dslot.sh", "slot wrapper")
 	bot := fs.String("bot", os.Getenv("D2BOT_BIN"), "d2bot binary (env D2BOT_BIN)")
+	repeat := fs.Int("repeat", 1, "runs per scenario; GREEN needs two thirds of them (3 runs: 2 green), see repeat.go")
 	journal := fs.Bool("journal", false, "write the d2dctl command journal of each bot run next to its trace (determinism finder, cmd/d2ddet)")
 	if _, err := parseArgs(fs, args); err != nil {
 		return err
@@ -89,9 +90,9 @@ func cmdRun(args []string, w io.Writer) error {
 		}
 		todo = append(todo, r)
 	}
-	cmdFor := func(r scenario.Run) []string {
+	cmdFor := func(r scenario.Run, outDir string) []string {
 		a := []string{*slot, "run", "-w", "3000", "-t", strconv.Itoa(by[r.ID].Budget.WallMin*60 + 600), "--", self, "exec-one",
-			"-dir", *dir, "-id", r.ID, "-class", r.Class, "-seed", strconv.FormatInt(r.Seed, 10), "-out", *out, "-bot", *bot}
+			"-dir", *dir, "-id", r.ID, "-class", r.Class, "-seed", strconv.FormatInt(r.Seed, 10), "-out", outDir, "-bot", *bot}
 		if *journal {
 			a = append(a, "-journal")
 		}
@@ -100,7 +101,7 @@ func cmdRun(args []string, w io.Writer) error {
 	if *dry {
 		fmt.Fprintf(w, "DRY RUN: %d runs would start, %d slots at once, nothing started\n", len(todo), *parallel)
 		for _, r := range todo {
-			fmt.Fprintln(w, "  "+strings.Join(cmdFor(r), " "))
+			fmt.Fprintln(w, "  "+strings.Join(cmdFor(r, *out), " "))
 		}
 		for _, r := range results {
 			fmt.Fprintf(w, "  not run: %-30s %s %s\n", r.ID+"/"+r.Class, r.Status, r.Reason)
@@ -119,13 +120,27 @@ func cmdRun(args []string, w io.Writer) error {
 		go func(r scenario.Run) {
 			defer wg.Done()
 			defer func() { <-sem }()
-			a := cmdFor(r)
-			c := exec.Command(a[0], a[1:]...)
-			c.Stdout, c.Stderr = os.Stderr, os.Stderr
-			err := c.Run()
-			res, rerr := readResult(filepath.Join(*out, resultName(r)))
-			if rerr != nil { // the run wrapper died before writing a result: that is a blocked run, never a pass
-				res = scenario.Result{Version: scenario.ResultVersion, Run: r, Status: scenario.Blocked, Reason: fmt.Sprintf("no result written (slot or runner failed: %v)", err), BudgetMin: by[r.ID].Budget.VirtualMin}
+			n := max(1, *repeat)
+			var reps []scenario.Result
+			for k := 0; k < n; k++ {
+				o := *out
+				if n > 1 {
+					o = filepath.Join(*out, fmt.Sprintf("rep%d", k+1))
+					_ = os.MkdirAll(o, 0o755)
+				}
+				a := cmdFor(r, o)
+				c := exec.Command(a[0], a[1:]...)
+				c.Stdout, c.Stderr = os.Stderr, os.Stderr
+				err := c.Run()
+				res, rerr := readResult(filepath.Join(o, resultName(r)))
+				if rerr != nil { // the run wrapper died before writing a result: that is a blocked run, never a pass
+					res = scenario.Result{Version: scenario.ResultVersion, Run: r, Status: scenario.Blocked, Reason: fmt.Sprintf("no result written (slot or runner failed: %v)", err), BudgetMin: by[r.ID].Budget.VirtualMin}
+				}
+				reps = append(reps, res)
+			}
+			res := reps[0]
+			if n > 1 {
+				res = aggregateRepeats(reps, repeatNeed(n))
 			}
 			mu.Lock()
 			results = append(results, res)
