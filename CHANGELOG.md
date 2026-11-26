@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- combat: a living hero at life 0 drinks (live Questy death 2026-11-26), Smith row kit, matrix 76-77 <!--sg:agent/qd26-->
 - Merge branch 'main' into epiccards <!--sg:agent/epiccards-->
 - Merge origin/main <!--sg:agent/qd25-->
 - toolstrade76: the poverty advice asks the town for what its sell chore sells (advice counted 4, the chore sold 0) <!--sg:agent/toolstrade76-->
