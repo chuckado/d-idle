@@ -286,6 +286,7 @@
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | fid-adapter-rows | deferred | - | `docs/probes/fid/fid-adapter-rows.md` | - |
 | fid-lowvalue | deferred | - | `docs/probes/fid/fid-lowvalue.md` | - |
+| backlogplan | in-progress | - | `tools/backlog`<br>`backlog/tasks`<br>`backlog/config.yml`<br>`docs/backlog-howto.md`<br>`docs/plan/QUEUE.md` | - |
 
 ### Gates
 - contract [act1-campaign](../contracts/act1-campaign.md): 9 requirements
@@ -308,6 +309,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 3ef245d71 11-25 23:43 `Merge agent/backlogplan: Merge branch 'main' into backlogplan` (backlogplan)
+- 63b4c93fd 11-25 23:41 `Merge branch 'main' into backlogplan` (-)
 - 59106de23 11-25 23:32 `Merge agent/reflex1: reflex1a: safety latency measure (minute line, autopsy) and T6 cancel test` (reflex1)
 - ea4cbfe13 11-25 23:21 `Merge agent/toolstrade77: Merge branch 'main' into toolstrade77` (toolstrade77)
 - dc0350b1d 11-25 23:20 `Merge branch 'main' into toolstrade77` (-)
@@ -316,6 +319,4 @@
 - e201e0878 11-25 22:55 `Merge agent/invariants: Merge branch 'main' into invmon` (invariants)
 - 6f4022933 11-25 22:51 `Merge branch 'main' into invmon` (-)
 - f75d92016 11-25 22:47 `Merge agent/herorecord: herorecord: record the live Paladin hero in the epic pages` (herorecord)
-- b1bcce7a8 11-25 22:44 `m` (-)
-- cc290be05 11-25 22:37 `Merge agent/darklaunch: Merge branch 'main' into darklaunch` (darklaunch)
 <!-- statusgen:end -->
