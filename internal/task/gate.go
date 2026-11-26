@@ -296,6 +296,10 @@ func fieldReady(a Area) func(World) *Fault {
 			return guardFault(w, "route guard", "route", w.RouteBlocked, RouteLevelWhy(w) == "")
 		case w.TowerBlocked != "" && TowerGuarded(a):
 			return guardFault(w, "tower guard", "ftower", w.TowerBlocked, TowerLevelWhy(w) == "")
+		case w.EarlyBlocked[a].Why != "":
+			// the early road (Underground Passage level 1, Dark Wood): a hold, never a strike (Questy bed 2026-11-25: the quest walk was
+			// refused at the hop, counted as "too weak" three times and parked for 1h30m)
+			return guardFault(w, "early road", "early", w.EarlyBlocked[a].Why, w.EarlyBlocked[a].KitOnly)
 		case w.Gated && a != w.SafeArea:
 			if w.BoardSM && w.GatedFix == "potions" {
 				// bug 4: a missing potion kit is fixed by a town visit, so the hero goes now and nothing is counted
