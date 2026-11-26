@@ -8,6 +8,10 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- stepexec1: gofmt <!--sg:agent/stepexec1-->
+- outcome-travel-gate: gate refusals typed, no-scroll walk home not cancelled by portal verdicts <!--sg:agent/outcomes2a-->
+- admit1: old judges read floors from admission.json, design doc, card <!--sg:agent/admit1-->
+- arbmig: task card owns for the P6 stages <!--sg:agent/arbmig1-->
 - mode-no-exit fires on no progress (xp, kills, gold, area), not on elapsed time; parked heroes do not count for xp-frozen and refusal-storm <!--sg:agent/toolstrade82-->
 - Merge branch 'main' into toolstrade81 <!--sg:agent/toolstrade81-->
 - d2scenario: hard invariant hits turn a run red (data list); faultsoak design notes; matrix 78-79 <!--sg:agent/qd27-->

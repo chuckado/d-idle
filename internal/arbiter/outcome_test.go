@@ -1,0 +1,74 @@
+package arbiter
+
+import "testing"
+
+const questyOutcomes = "../../tools/provingground/arbiter-outcomes/questy-2026-11-25.json"
+
+func hardOnly(n string) bool { return n == "potion-not-drunk" }
+
+func TestQuestyOutcomes(t *testing.T) {
+	f, err := LoadOutcomes(questyOutcomes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var scores []CaseScore
+	for _, c := range f.Cases {
+		scores = append(scores, f.Score(c, DefaultConfig()))
+	}
+	got := map[string]Verdict{}
+	for _, v := range Judge(scores, hardOnly) {
+		got[v.Family] = v
+	}
+	if v := got["survive"]; !v.Pass || v.ChainHard != 1 || v.ArbHard != 0 {
+		t.Fatalf("survive verdict %+v", v)
+	}
+	if v := got["chores"]; !v.Pass || v.ChainSoft != 2 || v.ArbSoft != 0 {
+		t.Fatalf("chores verdict %+v", v)
+	}
+}
+
+// Two builds: a different drink line (a Paladin drinks later or earlier than a Sorceress) is data in the facts, so the
+// verdict must not depend on one class's number. MUST-FAIL half: when the arbiter has no survive source reading the line
+// (survive_below 0 = no flee line) it picks the same family as the chain and the case scores no better.
+func TestSurviveOutcomeTwoBuildsAndMustFail(t *testing.T) {
+	f, err := LoadOutcomes(questyOutcomes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	base := f.Cases[0]
+	for _, line := range []int{50, 70} {
+		c := base
+		c.Facts = map[string]int{}
+		for k, v := range base.Facts {
+			c.Facts[k] = v
+		}
+		c.Facts[FactSurviveBelow] = line
+		if s := f.Score(c, DefaultConfig()); s.Arbiter != "survive" || len(s.ArbiterHits) != 0 || len(s.ChainHits) != 1 {
+			t.Fatalf("line %d: %+v", line, s)
+		}
+	}
+	c := base
+	c.Facts = map[string]int{"in_town": 0, "life_pct": 30, "hostile": 12, "potions": 3, "trip": 1} // no drink line known
+	s := f.Score(c, DefaultConfig())
+	if s.Arbiter == "survive" {
+		t.Fatalf("without a drink line the arbiter must not claim a reflex: %+v", s)
+	}
+	for _, v := range Judge([]CaseScore{s}, hardOnly) {
+		if v.Pass {
+			t.Fatalf("a case with no improvement must not pass: %+v", v)
+		}
+	}
+}
+
+func TestJudgeRejectsNewKind(t *testing.T) {
+	s := CaseScore{Family: "x", ChainHits: []string{"xp-frozen"}, ArbiterHits: []string{"corpse-unresolved"}, NewKinds: []string{"corpse-unresolved"}}
+	if v := Judge([]CaseScore{s}, func(string) bool { return true })[0]; v.Pass {
+		t.Fatalf("a new kind of hit must fail: %+v", v)
+	}
+}
+
+func TestLoadOutcomesRejectsBadCondition(t *testing.T) {
+	if _, _, _, err := parseCond("hostile"); err == nil {
+		t.Fatal("no operator must be an error")
+	}
+}

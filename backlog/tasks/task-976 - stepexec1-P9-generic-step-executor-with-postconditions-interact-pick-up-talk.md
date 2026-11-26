@@ -14,8 +14,18 @@ ordinal: 464000
 card: "stepexec1"
 owns:
   - "docs/design/stepexec-p9.md"
+  - "internal/questspec/"
+  - "data/questspec/"
+  - "internal/bot/stepexec.go"
+  - "internal/bot/stepexec_test.go"
+  - "internal/bot/task.go"
+  - "internal/env/tuning_quests.go"
+  - "tools/provingground/scenarios/cain.json"
+  - "data/darklaunch.json"
+  - "docs/knobs.md"
 exclusive: []
 contracts: []
+result: "Engine questspec.RunStep plus exec rows as data; Cain scroll take_scroll runs on it behind quests.stepExec (default 0, dark-launch row, scenario cain.scroll.stepexec). Unit tests only (two hero classes, fakes); NOT verified live or on the lab."
 ---
 
 ## Description
@@ -28,6 +38,6 @@ Cause classes killed: H (per-quest special case, 45) and F (a fact the backend d
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Executor skeleton plus the Cain scroll chunk ported behind a knob with a ledger row
-- [ ] #2 Rule in the card doc: no new chunk without the executor
+- [x] #1 Executor skeleton plus the Cain scroll chunk ported behind a knob with a ledger row
+- [x] #2 Rule in the card doc: no new chunk without the executor
 <!-- AC:END -->

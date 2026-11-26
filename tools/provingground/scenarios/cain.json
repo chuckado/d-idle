@@ -1468,6 +1468,88 @@
      "kind": "no_writes"
     }
    ]
+  },
+  {
+   "id": "cain.scroll.stepexec",
+   "title": "Search for Cain: the scroll chunk on the generic step executor (quests.stepExec=1)",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "scroll"
+   },
+   "step": {
+    "action": "interact",
+    "target": "Tree of Inifuss",
+    "nodes": [
+     "wp-dark-wood",
+     "to-wood",
+     "tree"
+    ]
+   },
+   "covers": [
+    "travel.waypoint",
+    "travel.area-transition"
+   ],
+   "touches": [
+    "cmd/d2bot/objects.go",
+    "internal/task/",
+    "internal/d2dsrc/",
+    "internal/nav/",
+    "internal/questboard/",
+    "internal/bot/questboard.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "waypoints": [
+     1,
+     2,
+     3
+    ],
+    "board": {
+     "quest": "search_for_cain",
+     "chunk": "scroll"
+    }
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "quests.stepExec": 1
+    }
+   },
+   "budget": {
+    "virtual_min": 30
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3,
+     5,
+     7
+    ]
+   },
+   "provenance": "Hero created fresh, clvl 17 by stat verbs (points as a played level gives), purse 5000 (a played clvl 17 carries more than the kit; at 500 the bot buys a Tome, drops under the kit price and its recovery defers the chunk, see docs/probes/cainstart-2026-11-19.md), waypoints Cold Plains to Dark Wood, board chunk accepted in the plan store. CHEATED: waypoints are set by debug wp and the level by stat verbs (SETUP) (mechanics evidence only, never balance).",
+   "notes": "Card stepexec1: same as cain.scroll with the executor on; the assertion is the same pack check (the executor waits for the post itself). Green 2 of 3 runs is the enable criterion (data/darklaunch.json). NOT run yet (no lab here).",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "bks",
+     "or": [
+      "bkd"
+     ],
+     "why": "the tree gave the bark scroll (bks); the pack holds bkd instead once Akara has read it (V provingground rerun 2026-11-19: the bot reads on its next town visit)"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
   }
  ]
 }
