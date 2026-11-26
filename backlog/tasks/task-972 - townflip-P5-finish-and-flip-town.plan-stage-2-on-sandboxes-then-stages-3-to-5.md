@@ -9,7 +9,7 @@ labels:
   - bot
   - chore
 dependencies:
-  - TASK-967
+  - TASK-955
 priority: high
 ordinal: 460000
 card: "townflip"

@@ -51,23 +51,23 @@ Ledger rows to ADD or ADJUST: `data/darklaunch.json` is on main (mergeq #1323), 
 
 | id | recommendation | review | card | STATE | knob (default) | evidence | blocker | next action | owner | enable criteria |
 |---|---|---|---|---|---|---|---|---|---|---|
-| P1 | invariant monitor, log only (T1) | 11-25 | invmon | not started | none | V no invariant package in `internal/` at origin/main | none | build; first row set per review 7.1 | coordinator | counts on both sandboxes 3 days |
-| P2 | typed step outcome, Refused{need,wake} | 11-25 | outcome1 | not started | planned, default 0 | V no outcome type in `internal/bot`; four partial exemptions listed in review 3.1 | none | build first slice (boardSlice, taskStep) | coordinator | refusal-storm monitor row 0 for 3 sandbox days |
-| P3 | reflex lane: latency, cancellation test, in-town check, drink by the safety check | 11-25 | reflex1 | not started | none for a, b, d | V review 3.1 rows 3 and 4 | owner word on the `docs/bot.md` "guard only watches" rule before step c | steps a, b, d | coordinator, owner for c | safety latency under 2 s for 3 days; no bug:true death in 7 days |
+| P1 | invariant monitor, log only (T1) | 11-25 | invmon (TASK-955, agent/invariants) | enabled | none (log only) | V `Merge agent/invariants` (e201e0878) on main; U whether both sandboxes run it and the row set is complete | none | read counts for 3 days | coordinator | counts on both sandboxes 3 days |
+| P2 | typed step outcome, Refused{need,wake} | 11-25 | outcome1 (TASK-956 to 961, agent/outcome1) | in flight | planned, default 0 | V branch agent/outcome1 with six task cards, queued (mergeq #1326); four partial exemptions listed in review 3.1 | merge | merge, then read counts | coordinator | refusal-storm monitor row 0 for 3 sandbox days |
+| P3 | reflex lane: latency, cancellation test, in-town check, drink by the safety check | 11-25 | reflex1 (TASK-962 is step a and b, agent/reflex1) | in flight | none for a, b, d | V branch agent/reflex1, queued (mergeq #1328); review 3.1 rows 3 and 4 | none: the owner approved the safe drink by the safety check (`docs/bot.md` rule change) on 2026-11-26 | steps a, b, d, then c | coordinator | safety latency under 2 s for 3 days; no bug:true death in 7 days |
 | P4 | admission function MayEnter / MayLeaveTown | 11-25 | admit1 | not started | per provider, default 0 | V eleven judges named in review 1.2 | P2 | design doc, first provider in shadow | coordinator | per provider: shadow equals old judge or is right in a reviewed sample over 3 days |
 | P5 | finish and flip town.plan, delete old counters | 11-25 | townflip, town5 to town8, town11 | in flight | `town.plan` 0 | V stages 1, 2, 3 merged (`git log --grep '^town[345]'`); knob default 0 in `docs/knobs.md`; V town6 to town12 have no merged commit | P1 counts before the flip | set stage 2 on both sandboxes, read counts | coordinator | see Built but dark row 2 |
-| P6 | arbiter migration with the outcome exit rule, TEMPORARY intents, lost-control hook | 11-25 | arbmig | not started | `bot.arbiterShadow` 0; acting knobs per family planned | V `internal/arbiter` last commit 2026-11-19 (`a8751bd8d`); `docs/arbiter.md` migration table still has the agreement rule (to be rewritten by arbmig) | P2, ticklog; owner approved the rule change 2026-11-26 | rewrite the table, build TEMPORARY | owner for each family go | Built but dark row 4 |
-| P7 | explain: decision ring, /api/explain, operator status --why | 11-25 | explain1 | not started | none | V `Runner.Arbiter()` has no caller outside the package (review 4.2) | P2; owner decision on the ADR 0030 allowlist read verb | ring and endpoint first | owner (ADR 0030) | endpoint answers on both sandboxes |
-| P8 | incident to scenario (T2) plus report-only scenario tier (T7) | 11-25 | incident1 | not started | none | V pipeline audit row 6: the merge worker runs no scenario tier | ops half (the report-only tier) is in the ops repo | pre writer; first three Questy deaths | coordinator | report-only tier 7 clean days, then owner decides (ADR 0027 item 2) |
+| P6 | arbiter migration with the outcome exit rule, TEMPORARY intents, lost-control hook | 11-25 | arbmig | not started | `bot.arbiterShadow` 0; acting knobs per family planned | V `internal/arbiter` last commit 2026-11-19 (`a8751bd8d`); `docs/arbiter.md` migration table still has the agreement rule (to be rewritten by arbmig) | P2, ticklog; owner approved the rule change 2026-11-26 (ADR text: agent/decisions1) | rewrite the table, build TEMPORARY | owner for each family go | Built but dark row 4 |
+| P7 | explain: decision ring, /api/explain, operator status --why | 11-25 | explain1 (TASK-965, agent/explain1) | in flight | none | V branch agent/explain1 (ring, /api/explain, operator why); the ADR 0030 allowlist read verb was approved by the owner 2026-11-26 (ADR text: agent/decisions1) | P2 for the refusal records | finish | coordinator | endpoint answers on both sandboxes |
+| P8 | incident to scenario (T2) plus report-only scenario tier (T7) | 11-25 | incident1 (TASK-971, agent/incident1) | in flight | none | V branch agent/incident1; pipeline audit row 6: the merge worker runs no scenario tier; report-only tier approved by the owner 2026-11-26 (ADR 0020 item 1 practice) | ops half (the report-only tier) is in the ops repo | finish; first three Questy deaths | coordinator | report-only tier 7 clean days, then owner decides (ADR 0027 item 2) |
 | P9 | generic step executor with postconditions | 11-25 | stepexec1 | not started | per chunk, default 0 | V `internal/questspec` holds the declaration side only (review 2.4) | P2 | skeleton plus Cain scroll chunk | coordinator | chunk scenario green 2 of 3 runs with it on |
 | P10 | threshold governance | 11-25 | thrgov | not started | none | V knob table 560 rows (review 1.3) | none | rule doc plus report-only CI check | coordinator | check on in CI report-only 7 days, then failing |
-| P11 | operator verbs hold, home, go, park | 11-25 | opverbs1 | not started | none | V ADR 0030 allowlist is quest verbs only | owner decision on the ADR 0030 allowlist | wait for the owner | owner | owner yes |
+| P11 | operator verbs hold, home, go, park | 11-25 | explain1 (TASK-965; hold, home, go, park verbs in the same branch) | in flight | none | V branch agent/explain1 subject lists "why hold home go park"; allowlist amendment approved by the owner 2026-11-26 | none | finish | coordinator | audited and rate-limited verbs on a sandbox |
 | P12 | fault-injection soak (T5) | 11-25 | faultsoak | not started | none | V review 5.3 | invmon, outcome1; night window ADR 0027 | injection list | coordinator | nightly report-only; each hit becomes an incident scenario |
 | T3 | property tests on the pure deciders | 11-25 | proptest1 | not started | none | U | none | combat, supply, arbiter first | coordinator | tests in CI |
 | T4 | recorded sessions, tick line, `d2arbiter -follow` | 11-25 | ticklog | not started | planned, default 0 | V arbiter fixture facts are assumed, not logged (`docs/arbiter.md`) | none | tick line behind a knob | coordinator | one real night replayed |
 | T6 | cancellation-latency test | 11-25 | reflex1 (step b) | not started | none | U | none | with P3 | coordinator | in CI |
 | DL | no structural work parked at 0 without a flip date and a measure (7.4) | 11-25 | darklaunch, this tracker | enabled | ledger check in `tools/ci/check.sh` | V `tools/darklaunch/check.py` on main (merge of agent/darklaunch) | none | weekly `report.py` decisions | coordinator | every row past due gets a decision |
-| DEC | four proposed decision changes (7.5): ADR 0030 allowlist; `docs/bot.md` guard rule; arbiter exit rule; ADR 0020 item 1 scenario tier | 11-25 | explain1, opverbs1, reflex1, arbmig, incident1 | in flight | n/a | V arbiter exit rule approved by the owner 2026-11-26 (coordinator brief); the other three are still open | owner words | ask the owner when each card reaches that step | owner | owner decision |
+| DEC | four decision changes (7.5): ADR 0030 allowlist (why, hold, home, go, park); `docs/bot.md` safe drink by the safety check; arbiter exit rule by outcome; ADR 0020 incident-to-scenario report-only tier | 11-25 | explain1, reflex1, arbmig, incident1 | in flight | n/a | V all four APPROVED by the owner (popup 2026-11-26); the ADR and doc text is written by agent/decisions1 (cite `docs/decisions.md` once it lands) | none | decisions1 lands | coordinator | n/a |
 
 ## Design review of 2026-11-19 (card fablereview, ADRs 0020 to 0024)
 
@@ -117,7 +117,7 @@ Ledger rows to ADD or ADJUST: `data/darklaunch.json` is on main (mergeq #1323), 
 | PG14 | mgwatchdog | 11-21 | mgwatchdog | enabled | none | V card Done, `Merge agent/pgc2` | none | none | coordinator | n/a |
 | PG15 | pgnightly: one nightly job (T2, T3, T4) | 11-21 | pgnightly | not started | none | V card Proposed | night window ADR 0027 item 4 | build | coordinator | one night run, at most 3 runs |
 | PG16 | pgearned: earned save chain, `pre.from_save` | 11-21 | pgearned | not started | none | V card Proposed | save portability U | last | coordinator | one earned act run |
-| PGT | tiers T0 to T4; T0 and T1 block every merge, T2 report-only then blocking after 7 clean days | 11-21, ADR 0027 | incident1 (report-only tier), mgonejob | in flight | none | V review 2.5: no scenario tier in the merge worker | PG11 | wire T0 and T1; T2 report-only | owner (after 7 clean days) | 7 clean days, user decides |
+| PGT | tiers T0 to T4; T0 and T1 block every merge, T2 report-only then blocking after 7 clean days | 11-21, ADR 0027 | incident1 (TASK-971, report-only tier), mgonejob | in flight | none | V review 2.5: no scenario tier in the merge worker | PG11 | wire T0 and T1; T2 report-only | owner (after 7 clean days) | 7 clean days, user decides |
 
 ### Combat engine (card fablecombat, ADR 0026; 16 cards plus one parked)
 
@@ -174,7 +174,7 @@ These are in `data/darklaunch.json` and owned by the ledger, not by this tracker
 
 ## Order of work (the coordinator's reading)
 
-1. `invmon` (P1) and `ticklog` (T4): no behaviour, they give every later flip its measure.
+1. `invmon` (P1, merged: read its counts) and `ticklog` (T4): no behaviour, they give every later flip its measure.
 2. `ckptlive` (live drill, small) and `townflip` stage 2 on the sandboxes: both are already built.
 3. `outcome1` (P2): the ground for P4, P6, P7, P9, P12.
 4. `bsmdef` (boardSM flip) once P1 counts exist.
@@ -190,21 +190,15 @@ These are in `data/darklaunch.json` and owned by the ledger, not by this tracker
 
 ## Cards created by this branch
 
-All status Proposed, size and order in each card; none ticks a box. Task ids are assigned on this branch and can shift at merge (the card id in the first column is the stable name).
+Cards for work that has no other card. The pieces already carded by other agents are NOT recreated: P1 invmon is TASK-955, P2 is TASK-956 to 961, P3 is TASK-962 (agent/reflex1), P7 and P11 are TASK-965 (agent/explain1), P8 is TASK-971 (agent/incident1), the ledger is TASK-954. All status Proposed, size and order in each card; none ticks a box. Task ids are assigned on this branch and can shift at merge (the card id in the first column is the stable name).
 
 | card | task | tracker row |
 |---|---|---|
-| invmon | TASK-967 | P1 |
-| outcome1 | TASK-968 | P2 |
-| reflex1 | TASK-969 | P3 |
 | admit1 | TASK-970 | P4 |
 | townflip | TASK-972 | P5 |
 | arbmig | TASK-973 | P6 (also BSMa, TOWN10 as sources) |
-| explain1 | TASK-974 | P7 |
-| incident1 | TASK-975 | P8, T2, T7 |
 | stepexec1 | TASK-976 | P9 |
 | thrgov | TASK-977 | P10 |
-| opverbs1 | TASK-978 | P11 |
 | faultsoak | TASK-979 | P12, T5 |
 | proptest1 | TASK-980 | T3 |
 | ticklog | TASK-981 | T4 |

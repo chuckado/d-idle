@@ -9,7 +9,6 @@ labels:
   - bot
   - feature
 dependencies:
-  - TASK-968
   - TASK-981
 priority: high
 ordinal: 461000

@@ -9,8 +9,7 @@ labels:
   - bot
   - drill
 dependencies:
-  - TASK-967
-  - TASK-968
+  - TASK-955
 priority: medium
 ordinal: 467000
 card: "faultsoak"

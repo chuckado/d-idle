@@ -8,8 +8,7 @@ created_date: '2026-11-26T03:55:00Z'
 labels:
   - bot
   - feature
-dependencies:
-  - TASK-968
+dependencies: []
 priority: medium
 ordinal: 464000
 card: "stepexec1"
