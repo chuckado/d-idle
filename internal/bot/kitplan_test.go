@@ -258,3 +258,46 @@ func TestFillEarlyHandsTheRoadToTheTaskLayer(t *testing.T) {
 		}
 	}
 }
+
+// The quest-walk kit (earlyroutes.json questWalk): from clvl 5 to 14 in Normal a hero with no healing potions does not walk a
+// quest: a chores trip when 60 gold pays them, a gold farm when it does not; at clvl 15 and over, or with the kit, nothing.
+// Two classes.
+func TestQuestWalkNeedsTheKit(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, tc := range []struct {
+			level, gold int
+			potions     int
+			want        string
+			kitOnly     bool
+		}{
+			{12, 11, 0, "farm gold first", false},
+			{12, 500, 0, "healing potions < 2", true},
+			{12, 500, 3, "", false},
+			{3, 0, 0, "", false},
+			{15, 0, 0, "", false},
+		} {
+			g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
+			g.w.set(func(w *world) {
+				w.class, w.level, w.area, w.gold0 = class, tc.level, 1, tc.gold
+				var keep []d2.Unit
+				for _, u := range w.items {
+					if u.Class != 1 {
+						keep = append(keep, u)
+					}
+				}
+				w.items = keep
+				for i := 0; i < tc.potions; i++ {
+					w.items = append(w.items, d2.Unit{ID: uint32(700 + i), Type: d2.TypeItem, Class: 1, Item: &d2.Item{Where: d2.ContBelt}})
+				}
+				w.items = append(w.items, d2.Unit{ID: 799, Type: d2.TypeItem, Class: 5, Item: &d2.Item{Where: d2.ContInventory}})
+			})
+			g.r.poll()
+			s := g.r.latest()
+			s.Player.Gold = tc.gold
+			why, kit := g.r.questWalkCheck(s)
+			if tc.want == "" && why != "" || tc.want != "" && !strings.Contains(why, tc.want) || kit != tc.kitOnly {
+				t.Errorf("%v clvl %d gold %d potions %d: %q kit %v, want %q kit %v", class, tc.level, tc.gold, tc.potions, why, kit, tc.want, tc.kitOnly)
+			}
+		}
+	}
+}
