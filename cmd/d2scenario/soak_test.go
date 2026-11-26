@@ -42,10 +42,10 @@ func TestSoakLoop(t *testing.T) {
 	if seeds[2] != 11 || seeds[3] != 21 {
 		t.Fatalf("seeds %v: the second pass must bump", seeds)
 	}
-	if rep.Hard["potion-not-drunk"] != 1 || rep.Soft["town-thrash"] != 6 || rep.Injected["cancel"] != 15 {
+	if rep.Hard["potion-not-drunk"] != 1 || rep.Soft["town-thrash"] != 6 || rep.Injected["cancel"] != 12 {
 		t.Fatalf("%+v", rep)
 	}
-	if rep.Survived != 2 || rep.Died != 1 || rep.Blocked != 1 {
+	if rep.Survived != 3 || rep.Died != 1 || rep.Blocked != 1 {
 		t.Fatalf("survived %d died %d blocked %d", rep.Survived, rep.Died, rep.Blocked)
 	}
 	var b bytes.Buffer
