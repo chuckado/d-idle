@@ -1,10 +1,11 @@
 ---
 id: TASK-1001
 title: 'roadmap2: roadmap-fable tracker brought in line with main, rows triaged'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T17:41:00Z'
+updated_date: '2026-11-26T18:34:00Z'
 labels:
   - docs
   - chore

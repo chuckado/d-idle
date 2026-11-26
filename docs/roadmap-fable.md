@@ -100,6 +100,15 @@ Ledger rows added since the last version of this page: `quests.stepExec` (stepex
 | Q5 | engine facts as reads never make a run CHEATED; level layout read (ADR 0022) | 11-19 | k1layout, knownedge, warptrigger | built-dark | `quests.layoutRead` 0, `nav.fullGrid` 0, `nav.warpRead` 0 | V `docs/knobs.md:51-52, 555`; commits `Merge agent/k1layout`, knownedge, warptrigger on main | live drills (U) | drills per ledger rows | coordinator | quest layout drill: objects found by read in 3 areas; no stuck regressions on 5 areas; warp drill across 5 areas |
 | Q7 | fidelity acceptance per rule (ADR 0023) | 11-19 | fid-* | enabled | none | V ADR 0023 accepted; header amends 0015 | none | none | coordinator | n/a |
 
+Class order of care (user decision 2026-11-26, after the live Paladin). Dated lines, no boxes ticked:
+
+- 2026-11-26 R10 (necromancer): priority: 1 (necromancer first in the class order)
+- 2026-11-26 R11 (sorceress): priority: 2b (druid 2a and sorceress 2b are either; sorceress is the default build and already has five drill rows)
+- 2026-11-26 R12 (barbarian): priority: 3 (effort: 3 plan rows, 2 profiles, melee path, no blocker beyond drill rows)
+- 2026-11-26 R16 (druid): priority: 2a (either with sorceress 2b; 3 plan rows, 1 profile, no drill rows)
+- 2026-11-26 R16 (amazon): priority: 4 (effort: 3 plan rows, 1 profile, smoke only, 16 unlock lines)
+- 2026-11-26 R16 (assassin): priority: 5 (effort: 2 plan rows, 1 profile, needs a trap planner first, docs/classes/assassin.md)
+
 ## Reviews of 2026-11-21
 
 ### Proving Ground gate (card fablepg, ADR 0027; 16 cards)
