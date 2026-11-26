@@ -34,6 +34,11 @@
   }
  ],
  "noPotionFromLevel": 8,
+ "kitFloor": {
+  "_comment": "Below this many healing potions (a scroll or not) a hero from this level in Normal enters the first field of its act only: Questy walked into Blood Moor and Stony Field with 0 to 1 potions seven times (invariant field-entry-no-kit) and died in Cave Level 1. The farm and level picks skip every other area until gold buys the kit.",
+  "potionsBelow": 4,
+  "fromLevel": 8
+ },
  "noPortalLean": {
   "_comment": "A hero with no town portal and fewer healing potions than this walks home from the first field only (Questy 2026-11-26: Stony Field, three areas out, burned three potions in a crowd of 24 on the way home). Below the entry life line it also does not pick a new field.",
   "potionsBelow": 4,
