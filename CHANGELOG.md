@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into outcome-park-step <!--sg:agent/outcomes2d-->
 - Merge branch 'main' into arbmig <!--sg:agent/arbmig3-->
 - Merge branch 'main' into outcome-task-step <!--sg:agent/outcomes2c-->
 - Merge branch 'main' into outcome-route-guard <!--sg:agent/outcomes2b-->

@@ -275,7 +275,7 @@
 | outcome-task-step | in-progress | - | `docs/outcomes.md` | - |
 | outcome-travel-gate | in-progress | - | `docs/outcomes.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
-| outcome-park-step | proposed | - | `docs/outcomes.md` | - |
+| outcome-park-step | in-progress | - | `docs/outcomes.md` | - |
 | outcome-route-guard | in-progress | - | `docs/outcomes.md` | - |
 | outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
@@ -321,6 +321,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 51d1dcebf 11-26 10:06 `Merge agent/outcomes2d: Merge branch 'main' into outcome-park-step` (outcomes2d)
+- 30791b6ab 11-26 10:04 `Merge branch 'main' into outcome-park-step` (-)
 - 59c0781ed 11-26 09:57 `Merge agent/arbmig3: Merge branch 'main' into arbmig` (arbmig3)
 - 5c2d3919b 11-26 09:57 `Merge agent/outcomes2c: Merge branch 'main' into outcome-task-step` (outcomes2c)
 - c96f49244 11-26 09:54 `Merge branch 'main' into arbmig` (-)
@@ -329,6 +331,4 @@
 - 6a8a51e43 11-26 09:47 `Merge agent/arbmig2: Merge branch 'main' into arbmig` (arbmig2)
 - 35afcda5a 11-26 09:45 `Merge branch 'main' into outcome-route-guard` (-)
 - ca448e31a 11-26 09:45 `Merge branch 'main' into arbmig` (-)
-- 1bde406cb 11-26 09:38 `Merge agent/stepexec1: stepexec1: gofmt` (stepexec1)
-- b71406ea9 11-26 09:38 `Merge agent/outcomes2a: outcome-travel-gate: gate refusals typed, no-scroll walk home not cancelled by portal verdicts` (outcomes2a)
 <!-- statusgen:end -->

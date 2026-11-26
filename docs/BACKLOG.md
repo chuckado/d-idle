@@ -1420,6 +1420,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/outcomes2b: Merge branch 'main' into outcome-route-guard (merged 2026-11-26): The route guard hop and the guard exit walk home refuse as typed outcomes: no failure count, one log line per change. <!--sg:agent/outcomes2b-->
 - agent/outcomes2c: Merge branch 'main' into outcome-task-step (merged 2026-11-26): The quest runner planning block returns typed refusals for a quest that is not ready and for a ban wait, with a stable key so the log has one line per change. <!--sg:agent/outcomes2c-->
 - agent/arbmig3: Merge branch 'main' into arbmig (merged 2026-11-26): The arbiter control path is built but off: a knob bot.arbiterControl (default 0) with a family bit list lets the arbiter act for survive and player ahead of the goal chain, with the old chain as fallback, a ledger row and the knobs doc ... <!--sg:agent/arbmig3-->
+- agent/outcomes2d: Merge branch 'main' into outcome-park-step (merged 2026-11-26): The quest step park and the blocked journey holds are typed refusals handled once: one log line per change and a pause by need instead of the spin guard. <!--sg:agent/outcomes2d-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
