@@ -61,11 +61,17 @@ func (p *probe) read(label string) {
 	if berr == nil {
 		buffs = strings.TrimSpace(strings.Join(append(b.Lines, b.Rest), " "))
 	}
+	dmg := "?"
+	if d, derr := p.be.Client.Do(p.ctx, "dump stats"); derr == nil {
+		if m := regexp.MustCompile(`"dmgpct":(-?\d+)`).FindStringSubmatch(strings.Join(append(d.Lines, d.Rest), " ")); m != nil {
+			dmg = m[1]
+		}
+	}
 	area := -1
 	if s, e := p.be.Env.Snapshot(); e == nil && s.Player != nil {
 		area = s.Player.Area
 	}
-	p.say("READ %-34s aura=%s lskill=%s rskill=%s area=%d | %s", label, fields["aura"], fields["lskill"], fields["rskill"], area, buffs)
+	p.say("READ %-34s aura=%s lskill=%s rskill=%s area=%d dmgpct=%s | %s", label, fields["aura"], fields["lskill"], fields["rskill"], area, dmg, buffs)
 }
 
 func (p *probe) step(n int) {
