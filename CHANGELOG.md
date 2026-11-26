@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- autorevert2: card result <!--sg:agent/autorevert2-->
 - no-earn soft invariant (5 min without xp, kills or gold, area changes do not count); the quest-walk kit rule never closes the first field <!--sg:agent/toolstrade88-->
 - Merge origin/main into act2temple (admission rows reconciled) <!--sg:agent/act2temple-->
 - Merge branch 'main' into necrocaps <!--sg:agent/necro2e-->
