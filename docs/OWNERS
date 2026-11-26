@@ -231,6 +231,7 @@ data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
 data/capabilities/  credit-runner  dlv-data
 data/capabilities/  credit-runner  dlv-stance-pack
+data/darklaunch.json  credit-runner  darklaunch
 data/input/caps/  credit-runner  dlv-cast-verbs
 data/onboarding  credit-runner  firstminutes
 data/questboard/act1.json  credit-runner  cain45
@@ -349,6 +350,7 @@ docs/probes/viewer-brightness-2026-11-17.md  credit-runner  brightness
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/probes/warptrigger-2026-11-22.md  credit-runner  warptrigger
 docs/process/combat-reads.md  credit-runner  dlv-reads
+docs/process/dark-launch.md  credit-runner  darklaunch
 docs/process/fork-rebase.md  credit-runner  forkrebase2
 docs/process/layout-read.md  credit-runner  countess3
 docs/process/layout-read.md  live-agent  k1layout
@@ -1005,6 +1007,8 @@ tools/ab/prep  credit-runner  pghero
 tools/bounce3  pro-runner  bounce3
 tools/capgen/  credit-runner  dlv-data
 tools/ci/  credit-runner  dlv-cleanup
+tools/ci/check.sh  credit-runner  darklaunch
+tools/darklaunch  credit-runner  darklaunch
 tools/desktopscroll/vault.mjs  credit-runner  vaultclean
 tools/emu/am_batch.sh  credit-runner  qdmatrix
 tools/emu/am_model.py  credit-runner  qdmatrix

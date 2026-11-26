@@ -274,6 +274,7 @@
 | epic-hell | proposed | - | `docs/epics/epic-hell.md` | - |
 | epic-merc | proposed | - | `docs/epics/epic-merc.md` | - |
 | fablereview2 | in-progress | - | `docs/research/fable-logic-review-2026-11-25.md` | - |
+| darklaunch | proposed | - | `data/darklaunch.json`<br>`tools/darklaunch`<br>`docs/process/dark-launch.md`<br>`tools/ci/check.sh` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | fid-adapter-rows | deferred | - | `docs/probes/fid/fid-adapter-rows.md` | - |
@@ -300,6 +301,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- cc290be05 11-25 22:37 `Merge agent/darklaunch: Merge branch 'main' into darklaunch` (darklaunch)
+- 871b9bdc9 11-25 22:35 `Merge branch 'main' into darklaunch` (-)
 - e090a5fa2 11-25 22:33 `Merge agent/fablereview: fablereview2: end-to-end logic review of the bot (docs only): cause classes, invariants, prior art, 12 proposals` (fablereview)
 - 41c40f6b3 11-25 22:31 `Merge branch 'main' into fablereview2` (-)
 - 1fbcb45ba 11-25 22:22 `Merge agent/qd26: combat: a living hero at life 0 drinks (live Questy death 2026-11-26), Smith row kit, matrix 76-77` (qd26)
@@ -308,6 +311,4 @@
 - 670049ed3 11-25 22:11 `Merge branch 'main' into epiccards` (-)
 - 12884d316 11-25 22:04 `Merge agent/qd25: Merge origin/main` (qd25)
 - 7903a7ada 11-25 21:56 `Merge origin/main` (-)
-- 0f5327fb9 11-25 21:15 `Merge agent/toolstrade76: toolstrade76: the poverty advice asks the town for what its sell chore sells (advice counted 4, the chore sold 0)` (toolstrade76)
-- f78028b8f 11-25 20:57 `Merge origin/main` (-)
 <!-- statusgen:end -->

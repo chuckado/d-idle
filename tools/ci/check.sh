@@ -41,6 +41,10 @@ python3 -I tools/backlog/drift.py --summary || true
 python3 -I tools/shims/check.py || fail=1
 python3 -I tools/shims/test_check.py >/dev/null 2>&1 || bad "tools/shims/test_check.py"
 
+# --- dark-launch ledger: every [dark-launch] knob has a row, no open row past its review-by date (docs/process/dark-launch.md) ---
+python3 -I tools/darklaunch/check.py || fail=1
+python3 -I tools/darklaunch/test_check.py >/dev/null 2>&1 || bad "tools/darklaunch/test_check.py"
+
 # --- contracts: headers, requirements, knob citations (docs/process/contracts-after-openspec.md 3.8) ---
 python3 -I tools/contracts/check.py || fail=1
 python3 -I tools/contracts/test_check.py >/dev/null 2>&1 || bad "tools/contracts/test_check.py"
