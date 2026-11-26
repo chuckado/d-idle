@@ -31,6 +31,13 @@ var annotated = map[string]string{"nav.pollMs": "accessor", "nav.replanMs": "acc
 	"resource.waitMaxSec": "local var", "watch.paletteFeed": "env.PaletteFeedOn", "quests.board": "1", "campaign.denMinLevelCaster": "1", "campaign.denMinLevelMelee": "1"} // read in bot.denFloor through a local copy
 
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "-write" {
+		if err := writeDoc("docs/knobs.md"); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	missing := render(os.Stdout)
 	fmt.Println("\nFields without a knob entry:")
 	for _, m := range missing {
@@ -100,4 +107,21 @@ func render(w io.Writer) (missing []string) {
 		}
 	}
 	return missing
+}
+
+// writeDoc rewrites the block between the knobdump markers of the doc in place (sharedgen runs it at merge, so
+// agents never hand-merge the generated tables).
+func writeDoc(path string) error {
+	doc, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	s := string(doc)
+	i, j := strings.Index(s, beginMark), strings.Index(s, endMark)
+	if i < 0 || j < i {
+		return fmt.Errorf("%s lacks the %s ... %s section", path, beginMark, endMark)
+	}
+	var buf strings.Builder
+	render(&buf)
+	return os.WriteFile(path, []byte(s[:i+len(beginMark)]+buf.String()+s[j:]), 0o644)
 }
