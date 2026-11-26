@@ -142,6 +142,7 @@ cmd/d2bot/boss_levelmonsters_test.go  credit-runner  countess3b
 cmd/d2bot/cain.go  credit-runner  cain45
 cmd/d2bot/cain5b_test.go  credit-runner  cain5b
 cmd/d2bot/cain_test.go  credit-runner  cain45
+cmd/d2bot/class_test.go  credit-runner  necroaudit
 cmd/d2bot/d2dbackend.go  credit-runner  campaign1
 cmd/d2bot/d2dbackend.go  credit-runner  maphistory
 cmd/d2bot/d2dbackend.go  credit-runner  maphistoryA
@@ -287,6 +288,7 @@ docs/epics/epic-class-amazon.md  live-agent  epic-class-amazon
 docs/epics/epic-class-assassin.md  live-agent  epic-class-assassin
 docs/epics/epic-class-barbarian.md  live-agent  epic-class-barbarian
 docs/epics/epic-class-druid.md  live-agent  epic-class-druid
+docs/epics/epic-class-necromancer.md  credit-runner  necroaudit
 docs/epics/epic-class-necromancer.md  live-agent  epic-class-necromancer
 docs/epics/epic-class-paladin.md  live-agent  epic-class-paladin
 docs/epics/epic-class-sorceress.md  live-agent  epic-class-sorceress
@@ -342,6 +344,7 @@ docs/passagebounce.md  credit-runner  passagebounce
 docs/plan/STATUS.md  credit-runner  statusrefresh
 docs/plan/data/admission.json  credit-runner  admit1
 docs/plan/data/build-necromancer_summoner_normal30.json  credit-runner  allocfix
+docs/plan/data/build-necromancer_summoner_normal30.json  credit-runner  necroaudit
 docs/plan/data/earlyroutes.json  credit-runner  admit1
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/povertyfarm.json  credit-runner  admit1
@@ -358,8 +361,15 @@ docs/probes/flipwave2.md  live-agent  flipwave2
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
+docs/probes/hotkeydrift-2026-11-26.md  credit-runner  hotkeydrift
+docs/probes/necro-readiness-2026-11-26.md  credit-runner  necroaudit
+docs/probes/necrocaps-2026-11-26.md  credit-runner  necrocaps
+docs/probes/necrocorpse-2026-11-26.md  credit-runner  necrocorpse
+docs/probes/necrofloors-2026-11-26.md  credit-runner  necrofloors
+docs/probes/necrokeys-2026-11-26.md  credit-runner  necrokeys
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1fix
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
+docs/probes/necromercrogue-2026-11-26.md  credit-runner  necromercrogue
 docs/probes/pg-gate-group1-2026-11-21.md  credit-runner  pgjournal
 docs/probes/pg-journal-pair-2026-11-21.md  credit-runner  pgjournal
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess
@@ -635,6 +645,7 @@ internal/d2dinput/controller.go  credit-runner  arrivalsettle
 internal/d2dinput/controller_test.go  credit-runner  arrivalsettle
 internal/d2dinput/run_test.go  credit-runner  arrivalsettle
 internal/d2dsoakstat/minute.go  credit-runner  intake
+internal/d2dsoakstat/necro_inv.go  credit-runner  necrosummoninv
 internal/d2dsrc/items.go  credit-runner  cain45
 internal/d2dsrc/items.go  credit-runner  qdmatrix
 internal/d2dsrc/source_test.go  credit-runner  cain45
@@ -679,6 +690,7 @@ internal/env/tuning_quests.go  live-agent  k1layout
 internal/env/tuning_resource.go  credit-runner  freshstart
 internal/env/tuning_resource.go  live-agent  recoverypace
 internal/fidvendor  live-agent  fidprobe-vendor
+internal/gear/builds/necromancer_summoner_normal30.json  credit-runner  necroaudit
 internal/goals/clock_test.go  credit-runner  pgclock
 internal/goldfarm  credit-runner  repairtrip
 internal/input/  credit-runner  dlv-cast-verbs
@@ -692,6 +704,7 @@ internal/invdesk/sets.go  credit-runner  uib9
 internal/invdesk/stash.go  credit-runner  equipswap
 internal/invdesk/stash.go  credit-runner  itemverbs2
 internal/invdesk/stash_test.go  credit-runner  equipswap
+internal/leveler/necrosummoner_test.go  credit-runner  necroaudit
 internal/levelplan  pro-runner  levelplan3
 internal/loot  credit-runner  town6
 internal/loot/fixpickup_test.go  credit-runner  beltfix
@@ -751,6 +764,7 @@ internal/plandata/admission.json  credit-runner  admit1
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
 internal/plandata/build-necromancer_summoner_normal30.json  credit-runner  allocfix
+internal/plandata/build-necromancer_summoner_normal30.json  credit-runner  necroaudit
 internal/plandata/earlyroutes.json  credit-runner  admit1
 internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3

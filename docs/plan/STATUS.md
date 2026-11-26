@@ -44,6 +44,14 @@
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
+| necrosummoninv | proposed | - | `internal/d2dsoakstat/necro_inv.go` | - |
+| necrocorpse | proposed | - | `docs/probes/necrocorpse-2026-11-26.md` | - |
+| necrofloors | proposed | - | `docs/probes/necrofloors-2026-11-26.md` | - |
+| necromercrogue | proposed | - | `docs/probes/necromercrogue-2026-11-26.md` | - |
+| necrocaps | proposed | - | `docs/probes/necrocaps-2026-11-26.md` | - |
+| necrokeys | proposed | - | `docs/probes/necrokeys-2026-11-26.md` | - |
+| hotkeydrift | proposed | - | `docs/probes/hotkeydrift-2026-11-26.md` | - |
+| necroaudit | proposed | - | `docs/probes/necro-readiness-2026-11-26.md`<br>`docs/epics/epic-class-necromancer.md`<br>`internal/plandata/build-necromancer_summoner_normal30.json`<br>`internal/gear/builds/necromancer_summoner_normal30.json`<br>`cmd/d2bot/class_test.go`<br>`internal/leveler/necrosummoner_test.go`<br>`docs/plan/data/build-necromancer_summoner_normal30.json` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
@@ -323,7 +331,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 95ea96e27 11-26 14:54 `Merge agent/necro1: Merge branch 'main' into necroaudit` (necro1)
 - 642b5e3e9 11-26 14:54 `Merge agent/toolstrade87: Merge branch 'main' into toolstrade87` (toolstrade87)
+- 5b062d8d5 11-26 14:52 `Merge branch 'main' into necroaudit` (-)
 - 80ab94fe1 11-26 14:52 `Merge branch 'main' into toolstrade87` (-)
 - 2c3c4f4d1 11-26 14:45 `Merge agent/qd28: d2scenario invariants soft in drills; act2strong kit; matrix note 80` (qd28)
 - af0a7cd47 11-26 14:40 `Merge origin/main` (-)
@@ -331,6 +341,4 @@
 - 3ec8de3af 11-26 14:29 `Merge agent/toolstrade86: Merge branch 'main' into toolstrade86` (toolstrade86)
 - 0590318f2 11-26 14:29 `Merge agent/aura2c: Merge branch 'main' into aura2c` (aura2c)
 - 717d3c0c2 11-26 14:27 `Merge branch 'main' into toolstrade86` (-)
-- f397d77bb 11-26 14:27 `Merge branch 'main' into aura2c` (-)
-- 170c34af7 11-26 14:22 `Merge agent/aura2d: Merge branch 'main' into aura2d` (aura2d)
 <!-- statusgen:end -->
