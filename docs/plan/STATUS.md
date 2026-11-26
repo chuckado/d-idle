@@ -53,7 +53,6 @@
 | hotkeydrift | proposed | - | `docs/probes/hotkeydrift-2026-11-26.md`<br>`cmd/d2bot/hotkeydrift_test.go` | - |
 | necroaudit | proposed | - | `docs/probes/necro-readiness-2026-11-26.md`<br>`docs/epics/epic-class-necromancer.md`<br>`internal/plandata/build-necromancer_summoner_normal30.json`<br>`internal/gear/builds/necromancer_summoner_normal30.json`<br>`cmd/d2bot/class_test.go`<br>`internal/leveler/necrosummoner_test.go`<br>`docs/plan/data/build-necromancer_summoner_normal30.json` | - |
 | act2temple | proposed | - | `internal/plandata/admission.json`<br>`docs/plan/data/admission.json`<br>`internal/admit/`<br>`internal/combat/arrival.go`<br>`internal/combat/arrival_test.go`<br>`internal/combat/safety.go`<br>`internal/combat/fighter.go`<br>`internal/combat/crowd.go` | - |
-| speedreview | proposed | - | `docs/research/speed-review-2026-11-27.md` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
@@ -333,14 +332,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 478e9fd56 11-26 17:25 `Merge agent/toolstrade90: Merge branch 'main' into toolstrade90` (toolstrade90)
+- eb221b5b5 11-26 17:25 `Merge agent/autorevert3: Merge branch 'main' into autorevert1` (autorevert3)
+- 4e6d516a9 11-26 17:23 `Merge branch 'main' into toolstrade90` (-)
+- 778c064f7 11-26 17:23 `Merge branch 'main' into autorevert1` (-)
 - eca09d841 11-26 17:23 `Merge agent/speedreview: Merge branch 'main' into speedreview` (speedreview)
 - e307b94c4 11-26 17:22 `Merge branch 'main' into speedreview` (-)
 - 1fce0d4de 11-26 17:13 `Merge agent/toolstrade89: Merge origin/main` (toolstrade89)
+- ebc1836e0 11-26 17:11 `Merge origin/main` (-)
 - 148111592 11-26 17:02 `Merge origin/main` (-)
 - 600b7776a 11-26 16:53 `Merge agent/autorevert2: autorevert2: card result` (autorevert2)
-- 82d648a9e 11-26 16:43 `Merge branch 'main' into toolstrade89` (-)
-- 644bf8d5f 11-26 16:36 `Merge agent/toolstrade88: no-earn soft invariant (5 min without xp, kills or gold, area changes do not count); the quest-walk kit rule never closes the first field` (toolstrade88)
-- a2b81607f 11-26 15:47 `Merge agent/act2temple: Merge origin/main into act2temple (admission rows reconciled)` (act2temple)
-- 106926944 11-26 15:41 `Merge origin/main into act2temple (admission rows reconciled)` (-)
-- a7cc5189c 11-26 15:32 `Merge agent/necro2e: Merge branch 'main' into necrocaps` (necro2e)
 <!-- statusgen:end -->

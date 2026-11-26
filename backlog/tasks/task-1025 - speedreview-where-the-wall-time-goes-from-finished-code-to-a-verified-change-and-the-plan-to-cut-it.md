@@ -1,10 +1,13 @@
 ---
 id: TASK-1025
-title: 'speedreview: where the wall time goes from finished code to a verified change, and the plan to cut it'
-status: Proposed
+title: >-
+  speedreview: where the wall time goes from finished code to a verified change,
+  and the plan to cut it
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T22:05:00Z'
+updated_date: '2026-11-26T22:33:00Z'
 labels:
   - ops
   - research

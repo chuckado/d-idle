@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Flip a dark knob on a sandbox, watch 24 h, revert on a hard invariant breach (docs/process/dark-launch.md, card autorevert1).
 
-  flip.py <instance> <knob>=<value> --why TEXT [--window 24h] [--dry-run]   flip now, open the window
+  flip.py <instance> <knob>=<value> [<knob>=<value> ...] --why TEXT [--window 24h] [--dry-run]   flip a bundle, open ONE window
+  flip.py bisect <instance> --without KNOB                                  the last bundle of the instance minus one knob (a re-flip line)
   flip.py watch [--interval 60] [--once]                                    poll every open window; revert or close
   flip.py status                                                            list open windows
 
@@ -130,6 +131,14 @@ def hard_counts(view):
     return since, hard
 
 
+def set_overrides(text, knobs):
+    """All knobs of a bundle in ONE edit: (new text, {knob: old value or None})."""
+    olds = {}
+    for k, v in knobs.items():
+        text, olds[k] = set_override(text, k, v)
+    return text, olds
+
+
 def set_override(text, knob, value):
     """The tuning file is the store envelope {"version": N, "data": {"profile", "overrides"}} (internal/store/file.go,
     internal/bot/tuner.go): the knob goes into data.overrides; every other key and the version stay as they were.
@@ -169,6 +178,19 @@ class Store:
         with open(tmp, "w") as f:
             json.dump(w, f, indent=1)
         os.replace(tmp, self.path(instance))
+
+    def last(self, instance, w):
+        """Keep the finished window (backup text left out) so `bisect` can print its bundle after a revert."""
+        rec = {k: v for k, v in w.items() if k != "backup"}
+        with open(os.path.join(self.d, instance + ".last"), "w") as f:
+            json.dump(rec, f, indent=1)
+
+    def get_last(self, instance):
+        try:
+            with open(os.path.join(self.d, instance + ".last")) as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return None
 
     def drop(self, instance):
         try:
@@ -218,18 +240,17 @@ class Flipper:
         self.dry = dry_run
         self.verify_s = int(self.env.get("D2_FLIP_VERIFY_S", 240))
 
-    def verify(self, sb, knob, value):
+    def verify(self, sb, knobs):
         """Wait for `ops status --why` to show the flipped value among the live knobs (the new child read the file).
         Returns the hard counters (since, counts) of the new child; FlipError when the value never shows."""
         waited, last = 0, "no answer"
         while True:
             try:
                 view = sb.status()
-                got = (view.get("knobs") or {}).get(knob)
-                if got is None:
-                    last = f"{knob} not in the live knobs"
-                elif abs(got - value) > 1e-9:
-                    last = f"{knob} is {got}, expected {value}"
+                live = view.get("knobs") or {}
+                bad = [f"{k} is {live.get(k)}, expected {v}" for k, v in knobs.items() if live.get(k) is None or abs(live[k] - v) > 1e-9]
+                if bad:
+                    last = "; ".join(bad)
                 else:
                     return hard_counts(view)
             except Exception as e:
@@ -240,38 +261,43 @@ class Flipper:
             waited += 5
 
     # --- flip ---------------------------------------------------------------------------------------------
-    def flip(self, instance, knob, value, why, window_s):
+    def flip(self, instance, knobs, why, window_s):
+        """knobs: {name: value}. One backup, one atomic write of all of them, one restart, every knob verified."""
         if self.env.get("D2BOT_RUN"):
             raise FlipError("D2BOT_RUN is set: never flip in a measured run")
         if not why.strip():
             raise FlipError("--why is required")
+        if not knobs:
+            raise FlipError("no knob given")
         if self.store.get(instance):
             raise FlipError(f"{instance} already has an open flip window (one per sandbox)")
-        row = self.ledger.row(knob)
-        if row is None or row["status"] not in ("dark", "trial"):
-            raise FlipError(f"{knob}: needs a dark row in data/darklaunch.json")
+        for knob in knobs:
+            row = self.ledger.row(knob)
+            if row is None or row["status"] not in ("dark", "trial"):
+                raise FlipError(f"{knob}: needs a dark row in data/darklaunch.json")
         sb = self.make(instance)
         before = sb.read_tuning()
-        new_text, old = set_override(before, knob, value)
+        new_text, olds = set_overrides(before, knobs)
         # Baseline: the counters of the running child before the flip. A flip during a breach is refused.
         since0, base0 = hard_counts(sb.status())
         ts = self.clock()
         tag = "bak-flip-" + ts.strftime("%Y%m%dT%H%M%SZ")
-        w = {"instance": instance, "knob": knob, "old": old, "new": value, "why": why, "start": iso(ts), "window_s": window_s,
-             "end": iso(ts + timedelta(seconds=window_s)), "tag": tag, "backup": before, "pending": "", "misses": 0,
-             "baseline": base0, "since": since0}
+        names = ",".join(knobs)
+        w = {"instance": instance, "knobs": {k: {"old": olds[k], "new": v} for k, v in knobs.items()}, "why": why,
+             "start": iso(ts), "window_s": window_s, "end": iso(ts + timedelta(seconds=window_s)), "tag": tag, "backup": before,
+             "pending": "", "misses": 0, "baseline": base0, "since": since0}
         if self.dry:
             self.out(f"DRY-RUN {instance}: baseline {since0 or '-'} {sorted(base0.items())}")
-            self.out(f"DRY-RUN save backup {tag} ({'no file' if before is None else str(len(before)) + ' bytes'}), set data.overrides[{knob}]={value} (was {old}), restart ({getattr(sb, 'mode', '?')}), verify the live knob, ledger {knob} -> trial, window {window_s}s")
+            self.out(f"DRY-RUN save backup {tag} ({'no file' if before is None else str(len(before)) + ' bytes'}), ONE write of data.overrides {knobs} (were {olds}), restart ({getattr(sb, 'mode', '?')}), verify every live knob, ledger {names} -> trial, window {window_s}s")
             self.out("DRY-RUN nothing written")
             return w
-        self.store.put(instance, w)  # the backup is on disk before the knob moves
+        self.store.put(instance, w)  # the backup is on disk before any knob moves
         try:
             sb.write_tuning(new_text)
             sb.restart()
-            w["since"], w["baseline"] = self.verify(sb, knob, value)  # the restart reset the counters: new baseline
+            w["since"], w["baseline"] = self.verify(sb, knobs)  # the restart reset the counters: new baseline
         except Exception as e:
-            self.out(f"FLIP FAILED {instance} {knob}: {e}; restoring the backup")
+            self.out(f"FLIP FAILED {instance} {names}: {e}; restoring the backup")
             self._restore(sb, w)  # best effort; on failure the window stays 'pending' and watch retries
             if w["pending"]:
                 self.store.put(instance, w)
@@ -279,9 +305,10 @@ class Flipper:
             self.store.drop(instance)
             raise FlipError(f"flip failed, tuning restored: {e}") from e
         self.store.put(instance, w)
-        self.ledger.update(knob, status="trial", trial_started=iso(ts), trial_instance=instance, trial_value=value,
-                           trial_window=f"{window_s}s", trial_why=why)
-        self.out(f"FLIP {instance} {knob}={value} (was {old}) window {window_s}s until {w['end']} backup {tag}")
+        for k, v in knobs.items():
+            self.ledger.update(k, status="trial", trial_started=iso(ts), trial_instance=instance, trial_value=v,
+                               trial_window=f"{window_s}s", trial_why=why, trial_bundle=names)
+        self.out(f"FLIP {instance} {names} = {list(knobs.values())} (were {list(olds.values())}) window {window_s}s until {w['end']} backup {tag}")
         return w
 
     # --- restore / revert ---------------------------------------------------------------------------------
@@ -309,17 +336,23 @@ class Flipper:
         self._restore(sb, w)
         if w["pending"]:
             self.store.put(w["instance"], w)
-            self.out(f"REVERT FAILED {w['instance']} {w['knob']}: {w['pending']} (reason: {w['revert_reason']}); will retry")
+            self.out(f"REVERT FAILED {w['instance']} [{','.join(w['knobs'])}]: {w['pending']} (reason: {w['revert_reason']}); will retry")
             return False
-        self.ledger.update(w["knob"], status="dark", revert_reason=w["revert_reason"], reverted_at=iso(self.clock()))
+        names = ",".join(w["knobs"])
+        for k in w["knobs"]:
+            self.ledger.update(k, status="dark", revert_reason=w["revert_reason"], reverted_at=iso(self.clock()),
+                               revert_bundle=names, revert_breach=w.get("breach", ""))
+        self.store.last(w["instance"], w)
         self.store.drop(w["instance"])
-        self.out(f"REVERT {w['instance']} {w['knob']}: {w['revert_reason']}; tuning restored from {w['tag']}, child restarted, row dark")
+        self.out(f"REVERT {w['instance']} [{names}]: {w['revert_reason']}; tuning restored from {w['tag']}, child restarted, {len(w['knobs'])} row(s) dark")
         return True
 
     def close(self, w):
-        self.ledger.update(w["knob"], status="enabled", enabled_at=iso(self.clock()))
+        for k in w["knobs"]:
+            self.ledger.update(k, status="enabled", enabled_at=iso(self.clock()))
+        self.store.last(w["instance"], w)
         self.store.drop(w["instance"])  # the backup tag goes with the state file
-        self.out(f"CLOSE {w['instance']} {w['knob']}: no hard breach for {w['window_s']}s; row enabled, backup {w['tag']} removed")
+        self.out(f"CLOSE {w['instance']} [{','.join(w['knobs'])}]: no hard breach for {w['window_s']}s; rows enabled, backup {w['tag']} removed")
 
     # --- watch --------------------------------------------------------------------------------------------
     def poll(self, instance):
@@ -339,6 +372,7 @@ class Flipper:
             over = {n: c - w["baseline"].get(n, 0) for n, c in counts.items() if c > w["baseline"].get(n, 0)}
             if over:
                 breach = "hard invariant breach: " + ",".join(f"{n}+{d}" for n, d in sorted(over.items()))
+                w["breach"] = ",".join(sorted(over))
         except Exception as e:
             w["misses"] = w.get("misses", 0) + 1
             if w["misses"] >= HARD_MISS_LIMIT:
@@ -360,13 +394,24 @@ class Flipper:
             self.sleep(interval)
 
 
+def bisect_line(w, without, window):
+    """The re-flip command for the bundle of window w minus one knob (after a revert: which knob was it?)."""
+    if without not in w["knobs"]:
+        raise FlipError(f"{without} is not in the bundle {','.join(w['knobs'])}")
+    rest = " ".join(f"{k}={v['new']:g}" for k, v in w["knobs"].items() if k != without)
+    if not rest:
+        raise FlipError("the bundle has only that knob")
+    return f"python3 tools/flip/flip.py {w['instance']} {rest} --why {shlex.quote('bisect without ' + without + ': ' + w['why'])} --window {window}"
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("args", nargs="+", help="<instance> <knob>=<value> | watch | status")
     ap.add_argument("--why", default="")
-    ap.add_argument("--window", default="24h")
+    ap.add_argument("--window", default="24h", help="24h, 45m, 90s")
     ap.add_argument("--interval", type=int, default=60)
     ap.add_argument("--once", action="store_true")
+    ap.add_argument("--without", default="", help="bisect: the knob to leave out")
     ap.add_argument("--dry-run", action="store_true", help="print every step, write and restart nothing")
     a = ap.parse_args(argv)
     env = load_env()
@@ -378,16 +423,25 @@ def main(argv=None):
         elif a.args[0] == "status":
             for n in store.all():
                 w = store.get(n)
-                print(f"{n} {w['knob']}={w['new']} until {w['end']} pending={w['pending'] or '-'}")
+                print(f"{n} {' '.join(k + '=' + str(v['new']) for k, v in w['knobs'].items())} until {w['end']} pending={w['pending'] or '-'}")
+        elif a.args[0] == "bisect":
+            if len(a.args) != 2 or not a.without:
+                raise FlipError("usage: flip.py bisect <instance> --without KNOB")
+            w = store.get(a.args[1]) or store.get_last(a.args[1])
+            if w is None:
+                raise FlipError(f"{a.args[1]}: no open or finished window")
+            print(bisect_line(w, a.without, a.window))
         else:
-            if len(a.args) != 2 or "=" not in a.args[1]:
-                raise FlipError("usage: flip.py <instance> <knob>=<value> --why TEXT [--window 24h]")
-            knob, _, v = a.args[1].partition("=")
-            try:
-                val = float(v)
-            except ValueError:
-                raise FlipError(f"value {v!r} is not a number (tuning overrides are numbers)")
-            f.flip(a.args[0], knob, val, a.why, parse_window(a.window))
+            if len(a.args) < 2 or any("=" not in x for x in a.args[1:]):
+                raise FlipError("usage: flip.py <instance> <knob>=<value> [<knob>=<value> ...] --why TEXT [--window 24h]")
+            knobs = {}
+            for kv in a.args[1:]:
+                knob, _, v = kv.partition("=")
+                try:
+                    knobs[knob] = float(v)
+                except ValueError:
+                    raise FlipError(f"value {v!r} of {knob} is not a number (tuning overrides are numbers)")
+            f.flip(a.args[0], knobs, a.why, parse_window(a.window))
     except FlipError as e:
         print(f"flip: {e}", file=sys.stderr)
         return 1
