@@ -14,9 +14,10 @@ ordinal: 487000
 card: "necrocorpse"
 lane: next
 owns:
-  - "docs/probes/necrocorpse-2026-11-26.md"
+  - "docs/probes/necrocaps-2026-11-26.md"
 exclusive: []
 contracts: []
+result: "Corpse rule documented from the code (golems need none, summons take the nearest or strongest corpse, Corpse Explosion only when no summon wants it). The table change 5 points to 1 is NOT made: it needs a scenario pair first and the SME numbers are U. Card stays open."
 ---
 
 ## Description

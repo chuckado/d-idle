@@ -198,9 +198,9 @@ func (f *Fighter) planSummon(snap *d2.Snapshot, nd *NecroParams, allowWalk bool)
 		}
 	}
 	me := input.Point{X: p.X, Y: p.Y}
-	reach := float64(summonReach)
+	reach := nd.summonReach()
 	if allowWalk {
-		reach = corpseSearch
+		reach = nd.corpseSearch()
 	}
 	cs := Corpses(snap, f.cat, me, reach, f.necro.tried)
 	if len(cs) == 0 {
@@ -224,7 +224,7 @@ func (f *Fighter) planSummon(snap *d2.Snapshot, nd *NecroParams, allowWalk bool)
 		if r.Kind == "revive" {
 			u = bestRevivable(cs, f.cat)
 		}
-		return s, &u, dist(me.X, me.Y, u.X, u.Y) > summonReach, true
+		return s, &u, dist(me.X, me.Y, u.X, u.Y) > nd.summonReach(), true
 	}
 	return
 }
@@ -319,11 +319,13 @@ func (f *Fighter) castSummon(ctx context.Context, snap *d2.Snapshot, nd *NecroPa
 
 // pickCurseTarget chooses where to curse: a boss or elite first, else the hostile with the most others within
 // packRadius (at least one other), nearest on ties. Only targets within curseRange and above 25% life qualify.
-func pickCurseTarget(hs []Target) (Target, bool) {
+func pickCurseTarget(hs []Target) (Target, bool) { return pickCurseTargetIn(hs, curseRange) }
+
+func pickCurseTargetIn(hs []Target, rng float64) (Target, bool) {
 	var best Target
 	bestScore, found := -1, false
 	for _, t := range hs {
-		if t.Dist > curseRange || t.LifePct < 25 || t.Unit.Mode == d2.MonModeDead || t.Unit.Mode == d2.MonModeDeath {
+		if t.Dist > rng || t.LifePct < 25 || t.Unit.Mode == d2.MonModeDead || t.Unit.Mode == d2.MonModeDeath {
 			continue
 		}
 		n := 0
@@ -387,7 +389,7 @@ func (f *Fighter) curseUp(nd *NecroParams, u d2.Unit, sp SkillSpec) bool {
 	rec, seen := f.necro.curseAt[curseKey{u.ID, sp.ID}]
 	if !seen {
 		for k, r := range f.necro.curseAt {
-			if k.skill == sp.ID && r.tries < 3 && f.now().Sub(r.at) < curseLifeSec*time.Second && dist(u.X, u.Y, r.x, r.y) <= curseCover {
+			if k.skill == sp.ID && r.tries < 3 && f.now().Sub(r.at) < nd.curseLife() && dist(u.X, u.Y, r.x, r.y) <= nd.curseCover() {
 				return true
 			}
 		}
@@ -399,7 +401,7 @@ func (f *Fighter) curseUp(nd *NecroParams, u d2.Unit, sp SkillSpec) bool {
 	if st := nd.curseState(sp.Name); st != 0 && f.necro.learned[st] {
 		return f.now().Sub(rec.at) < 2*time.Second // cast just now: give the state time to show
 	}
-	return f.now().Sub(rec.at) < curseLifeSec*time.Second
+	return f.now().Sub(rec.at) < nd.curseLife()
 }
 
 // Curse casts the best curse at the best target of the pack, once, and re-reads the state to learn whether the state
@@ -410,13 +412,13 @@ func (f *Fighter) Curse(ctx context.Context, snap *d2.Snapshot, hs []Target) (bo
 		return false, nil
 	}
 	f.necro.init()
-	tg, ok := pickCurseTarget(hs)
-	if !ok {
-		return false, nil
-	}
 	nd, err := f.necroParams(p)
 	if err != nil {
 		return false, err
+	}
+	tg, ok := pickCurseTargetIn(hs, nd.curseRange())
+	if !ok {
+		return false, nil
 	}
 	known := KnownSkills(p, f.cat, f.keys)
 	sp, ok := curseFor(nd, known, p, tg)
