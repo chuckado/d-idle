@@ -250,6 +250,7 @@ docs/archive  credit-runner  dietarchive
 docs/autoalloc.md  credit-runner  allocfix
 docs/away-drill.md  live-agent  awaydrill
 docs/backlog-howto.md  credit-runner  dietrule
+docs/backlog-howto.md  credit-runner  thrgov
 docs/beltfix.md  credit-runner  beltfix
 docs/bounce3.md  pro-runner  bounce3
 docs/campaign.md  credit-runner  campaign1
@@ -339,10 +340,12 @@ docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
 docs/plan/STATUS.md  credit-runner  statusrefresh
 docs/plan/data/admission.json  credit-runner  admit1
+docs/plan/data/admission.json  credit-runner  thrgov
 docs/plan/data/build-necromancer_summoner_normal30.json  credit-runner  allocfix
 docs/plan/data/earlyroutes.json  credit-runner  admit1
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/povertyfarm.json  credit-runner  admit1
+docs/plan/data/povertyfarm.json  credit-runner  thrgov
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm7
@@ -739,6 +742,7 @@ internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
 internal/plandata/admission.json  credit-runner  admit1
+internal/plandata/admission.json  credit-runner  thrgov
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
 internal/plandata/build-necromancer_summoner_normal30.json  credit-runner  allocfix
@@ -746,6 +750,7 @@ internal/plandata/earlyroutes.json  credit-runner  admit1
 internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/povertyfarm.json  credit-runner  admit1
+internal/plandata/povertyfarm.json  credit-runner  thrgov
 internal/plandata/progression-normal.json  credit-runner  hourfix
 internal/points  credit-runner  allocfix
 internal/power/  credit-runner  dlv-cleanup
@@ -1054,6 +1059,10 @@ tools/ab/prep  credit-runner  pghero
 tools/bounce3  pro-runner  bounce3
 tools/capgen/  credit-runner  dlv-data
 tools/ci/  credit-runner  dlv-cleanup
+tools/ci/check.sh  credit-runner  thrgov
+tools/ci/knobbudget-baseline.json  credit-runner  thrgov
+tools/ci/knobbudget.py  credit-runner  thrgov
+tools/ci/test_knobbudget.py  credit-runner  thrgov
 tools/darklaunch/*  credit-runner  autorevert1
 tools/desktopscroll/vault.mjs  credit-runner  vaultclean
 tools/emu/am_batch.sh  credit-runner  qdmatrix

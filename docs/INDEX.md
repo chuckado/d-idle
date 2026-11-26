@@ -987,6 +987,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [spec-approach-evaluation.md](process/spec-approach-evaluation.md): Spec / documentation / alignment approach: evaluation for d2lod-bot (2026-10-30) (status: 2026-10-30 evaluation; its OpenSpec-shaped change-card adoption is superseded: OpenSpec is retired for new...)
 - [spec-ledger-20261104.md](process/spec-ledger-20261104.md): Spec ledger, 2026-11-04
 - [spec-ledger-resolutions-20261104.md](process/spec-ledger-resolutions-20261104.md): Spec ledger resolutions, 2026-11-04
+- [threshold-governance.md](process/threshold-governance.md): Threshold governance: a floor moves on a number, never on one death (status: current (card thrgov, TASK-977, 2026-11-26). Why: on 2026-11-25 the road to the Dark Wood got six rules in...)
 - [timing-tests.md](process/timing-tests.md): Timing tests: no wall-clock assertions in unit tests under `-race` (status: current (card pipefix2, 2026-11-24, user-approved audit fix 3). Source: pipeline audit row 3...)
 - [trial-notes.md](process/trial-notes.md): Trial notes: change cards, specs and the checker (SPECBUILD, 2026-10-30) (status: historical trial (2026-10-30); its "KEEP the wrapper" recommendation is superseded: OpenSpec is retired...)
 - [upstream-pr-standard.md](process/upstream-pr-standard.md): Upstream PR standard: what a d2decomped PR of ours must prove first (status: current (agent PRPROOF, 2026-10-30; bundling allowed 2026-10-31, card upstream-bundle). User rule...)
