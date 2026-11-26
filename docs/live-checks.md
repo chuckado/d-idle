@@ -108,3 +108,4 @@ Closing rule: a card closes when merged with offline acceptance proven; every op
 | TASK-658 bulkid2 | #3 | Live Cain drill (design sections 9 and 11) run | live drill on the sandbox, fresh hero, per the card result | open |
 | TASK-817 necro5 | #3 | Live drill with the fork flag --read-combat (lab night window) | live drill on the sandbox, fresh hero, per the card result | open |
 | TASK-930 equipv2 | #5 | Live check on the sandbox image (needs the devp29 image) | live drill on the sandbox, fresh hero, per the card result | open |
+| TASK-979 faultsoak | #2 | First soak run recorded with writes ledger (live check: d2scenario soak -id soak.fault. -duration 1h on the worker host in the night window) | live drill on the sandbox, fresh hero, per the card result | open |
