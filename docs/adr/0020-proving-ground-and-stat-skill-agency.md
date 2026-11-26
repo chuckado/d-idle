@@ -27,6 +27,15 @@ The project builds far faster than it proves: much merged "offline, NOT verified
 - Cards follow roadmap sections 2 and 3; agency P0 (stats to the player, per-level skill cap legality) is first.
 - Build files and the capability table become data, per the build-flexibility rule in AGENTS.md.
 
+## Amended 2026-11-25 (user decision): the incident-to-scenario tier is made real, report-only first
+
+Source: user decision 2026-11-25 (popup) on the Fable logic review, [section 5.3 T2/T7 and proposal P8](../research/fable-logic-review-2026-11-25.md); amends item 1 as practised (the merge worker still runs no scenario tier).
+
+- The bot writes the scenario `pre` of each death and monitor or autopsy hit (level, life, gold, belt, kit, area, quest bits). A recorded state like this is tagged SETUP under the test-character provenance rule, never evidence about game behaviour.
+- A tool (`d2scenario`) replays such a `pre` as a regression row. The first rows are the Questy deaths of 2026-11-25.
+- Tier status: REPORT-ONLY. Tools and the report only; it is NOT in the merge gate. Moving it into the gate needs a later owner decision once its rows have run green for a stretch.
+- Item 1's wording "bot changes stop merging without a green scenario" is unchanged as the aim; this amendment is the first real step toward it.
+
 ## Open (not decided; do not treat as settled)
 
 - Q4: ladder-only runewords (Spirit, Insight and more) in d.idle mode, or vanilla.

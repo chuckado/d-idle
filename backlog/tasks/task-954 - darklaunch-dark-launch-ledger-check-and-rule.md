@@ -20,6 +20,7 @@ owns:
 exclusive: []
 result: "Ledger of 33 dark features, check.py wired into tools/ci/check.sh, report.py, rule doc. Offline only; criteria_met is U for all rows (not verified live)."
 contracts: []
+lane: next
 ---
 
 ## Description

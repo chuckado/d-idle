@@ -22,6 +22,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Verified on the lab d2d (builder, devp18 binary, CHEATED setup, link facts only): 40 levels (cloister chain, acts 1 outdoors, caves, towers, act 2-5 arrival levels) compared against Levels.txt Vis and the hint tables: every engine exit is an edge in the data; Monastery Gate to Outer Cloister and Outer Cloister to Barracks are border links, not warps, so the stuck step is not a data hole (border strip readability, cause U, not read here). One wrong data edge fixed: Burial Grounds to Pandemonium Run 1 (Uber level, portal only), must-fail test TestVisLinkToPortalOnlyLevelIsNotAnEdge. Not done: the strip read at the Monastery Gate, acts 2-5 beyond arrival levels. Build-specific: none."
+lane: next
 ---
 
 ## Description

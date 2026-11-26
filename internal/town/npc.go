@@ -174,6 +174,9 @@ func (t *Town) openNPC(ctx context.Context, classes []int, approx input.Point) (
 		if err != nil {
 			return d2.Unit{}, err
 		}
+		if !s.Player.InTown() { // a chore outside a town walks toward an NPC that is not there (the 02:51 death)
+			return d2.Unit{}, ErrNotInTown
+		}
 		if hand.PanelOpen(s.UI) {
 			t.e.Log.Info("npc: panel open before interact, closing", "classes", classes, "try", try+1, "ui", fmt.Sprint(s.UI))
 			if err := t.h.CloseAll(ctx); err != nil {

@@ -24,6 +24,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Go half done and tested offline for two hirelings and each refusal; fork half NOT done (no fork checkout here); not verified live."
+lane: now
 ---
 
 ## Description

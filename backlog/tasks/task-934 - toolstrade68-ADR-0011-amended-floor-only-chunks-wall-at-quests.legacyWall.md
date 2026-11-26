@@ -18,6 +18,7 @@ owns:
   - "docs/decisions.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

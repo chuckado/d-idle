@@ -16,6 +16,7 @@ owns:
   - "docs/ui/redesign-2026-11-14/stash-anywhere.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

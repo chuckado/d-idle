@@ -23,6 +23,8 @@ owns:
 exclusive: []
 contracts: []
 result: "Partial: launch record 60,000 cases x 36 rows 0 differ on real build (V run); to-hit gate merged upstream; block gate still open on d2d (V read); 371-row count not closed. AC1 not ticked. Doc docs/probes/fid/fid-missile-monster.md. Not verified live."
+lane: parked
+lane_note: "status Deferred (Partial: launch record 60,000 cases x 36 rows 0 differ on re)"
 ---
 
 ## Description

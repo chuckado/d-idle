@@ -30,6 +30,8 @@ owns:
 exclusive: []
 contracts: []
 result: "paused by direction review D1/D4/D5, 2026-11-07; Gate A and Gate 3 runs wait for the design brief v1 (docs/research/direction-review.md section 6)"
+lane: parked
+lane_note: "status Deferred (paused by direction review D1/D4/D5, 2026-11-07; Gate A and)"
 ---
 
 ## Description

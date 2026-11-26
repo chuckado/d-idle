@@ -57,11 +57,20 @@ Fixture `internal/arbiter/testdata/darkwood_pingpong.jsonl`: the Dark Wood, camp
 - The chain's family is the whyline code and can lag one activity (U).
 - No executor: the arbiter chooses, it does not run or abort steps; `EstCost` is a tie-break and trace field.
 
+## Exit rule (amended 2026-11-25, user decision)
+
+Agreement with the old chain is NOT the bar: the live divergences are mostly cases where the arbiter is right and the chain is wrong (Fable logic review 2026-11-25, section 7.3), so the better the arbiter, the further it is from passing the percent rules below. A family moves behind its knob on ONE sandbox when, judged by outcome:
+
+- on recorded sessions replayed with `d2arbiter -follow` and on the incident scenarios (docs/probes, ADR 0020 amendment 2026-11-25), the arbiter-led run has fewer invariant-monitor hits than the chain-led run and no new kind of hit;
+- every remaining divergence line is explained (arbiter right, chain right, or fact missing), and the "earliest" dates below still hold.
+
+The "divergence under N percent" figures in the table are kept as a reading aid, no longer as the exit condition.
+
 ## Migration plan per family
 
 Order is by risk. Each family moves from the chain to the arbiter behind its own knob only when its exit rule is met; until then the chain's hook stays. The flail guard, ping-pong and border-loop breakers stay until the shadow log shows they never fire for 14 days after the last family moved. Under the project freeze only shadow and scenario-backed work merges.
 
-| order | family | exit rule (all of) | earliest |
+| order | family | exit rule (all of; see the outcome rule above, percents are a reading aid) | earliest |
 |---|---|---|---|
 | 1 | survive, player | divergence under 2 % of ticks over 3 sandbox days, every remaining line explained | 2026-11-26 |
 | 2 | chores, claim | under 5 % over 3 days; the replay of every flail log line since 2026-11-18 shows no new area change the chain did not make | 2026-12-03 |

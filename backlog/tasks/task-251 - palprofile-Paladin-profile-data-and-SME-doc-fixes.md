@@ -20,6 +20,8 @@ owns:
 exclusive: []
 contracts: []
 result: "Superseded by TASK-254 (card palprofile-data, merged as #502): the profile data change landed there. Not verified live."
+lane: parked
+lane_note: "status Deferred (Superseded by TASK-254 (card palprofile-data, merged as #502)"
 ---
 
 ## Description

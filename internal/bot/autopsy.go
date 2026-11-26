@@ -52,6 +52,7 @@ type Autopsy struct {
 	State         string       `json:"state"`        // what the bot was doing: traveling, clearing, ...
 	Activity      string       `json:"activity,omitempty"`
 	Goal          string       `json:"goal,omitempty"`
+	SafetyLatMs   *int         `json:"safetyLatMs,omitempty"` // ms from the last safety verdict to its input, when one was sent in the trail window (safetylat.go)
 	LastSafety    string       `json:"lastSafety,omitempty"`  // last survival action decided in the minute before (none = never)
 	PotionsDrunk  int          `json:"potionsDrunk"`          // in the trail window
 	DamagePer5s   []int        `json:"damagePer5s,omitempty"` // life percent lost per 5 s, oldest first
@@ -244,6 +245,9 @@ func (r *Runner) buildAutopsy(p *d2.Player, a aliveInfo, now time.Time) *Autopsy
 	} else {
 		au.LastSafety = "none"
 	}
+	if ms, _, ok := o.sl.lastWithin(now, trailWindow); ok {
+		au.SafetyLatMs = &ms
+	}
 	au.Summary = au.summarize(a.killerName, r.areaName(o.lastGood.area))
 	return au
 }
@@ -266,6 +270,9 @@ func (au *Autopsy) summarize(killer, area string) string {
 	parts = append(parts, fmt.Sprintf("belt %d hp %d mp, %d portal scrolls, %d potions drunk in the last minute", au.Kit.BeltHP, au.Kit.BeltMP, au.Kit.TownPortals, au.PotionsDrunk))
 	if au.Bug {
 		parts = append(parts, fmt.Sprintf("BUG: %d healing potions in the belt and none drunk in the last minute (%d s in the field, %d s under the drink line)", au.BeltHP, au.FieldSecs, au.LowLifeSecs))
+	}
+	if au.SafetyLatMs != nil {
+		parts = append(parts, fmt.Sprintf("last safety action left %d ms after its verdict", *au.SafetyLatMs))
 	}
 	if au.LastSafety == "none" {
 		parts = append(parts, "no survival action was taken")

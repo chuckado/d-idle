@@ -18,6 +18,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Paladin 8 seeds: abreport FAIL (XP ratio 0.823, interval wholly below zero) though chickens 10 vs 36 and deaths 1 vs 2; recommendation: not yet. Sorceress rescreen skipped (gate failed). Lockstep d2d only, writes after start 0 in 16 of 16, not verified in game.exe."
+lane: next
 ---
 
 ## Description

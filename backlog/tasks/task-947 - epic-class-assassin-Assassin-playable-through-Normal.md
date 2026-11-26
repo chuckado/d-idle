@@ -17,6 +17,7 @@ owns:
   - "docs/epics/epic-class-assassin.md"
 exclusive: []
 contracts: []
+lane: later
 ---
 
 ## Description

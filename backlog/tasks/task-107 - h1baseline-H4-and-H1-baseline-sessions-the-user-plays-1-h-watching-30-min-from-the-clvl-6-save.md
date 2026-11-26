@@ -20,6 +20,8 @@ owns:
   - "docs/probes/h1-baseline.md"
 exclusive: []
 contracts: []
+lane: waiting-owner
+lane_note: "assignee user: needs the owner decision"
 ---
 
 ## Description

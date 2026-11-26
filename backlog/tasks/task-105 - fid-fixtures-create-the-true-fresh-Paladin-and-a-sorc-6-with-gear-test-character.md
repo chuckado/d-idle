@@ -19,6 +19,7 @@ owns:
   - "docs/probes/test-characters.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

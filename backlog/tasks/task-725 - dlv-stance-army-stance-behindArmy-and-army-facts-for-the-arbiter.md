@@ -17,6 +17,7 @@ owns:
   - "internal/arbiter/"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

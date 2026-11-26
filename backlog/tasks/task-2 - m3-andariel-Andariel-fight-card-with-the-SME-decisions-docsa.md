@@ -30,6 +30,8 @@ merge_hash: ""
 overlap: ""
 source: "openspec-final:openspec/changes/m3-andariel"
 contracts: ["proposed/m3-andariel"]
+lane: parked
+lane_note: "status Deferred (research note only (agent andychain, no fight run): docs/res)"
 ---
 
 ## Description

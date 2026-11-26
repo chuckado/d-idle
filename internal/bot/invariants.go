@@ -1,0 +1,356 @@
+package bot
+
+import (
+	"errors"
+	"fmt"
+	"sort"
+	"strings"
+	"sync"
+	"time"
+
+	"d2lod-bot/internal/d2"
+)
+
+// The invariant monitor (docs/invariants.md, knob bot.invariants, review fable-logic-review-2026-11-25 P1). A table of
+// named checks runs once per tick on a plain facts struct. A hit logs ONE line `invariant <name> ...` (rate limited per
+// name) and counts for the minute line. It only watches: nothing here changes what the hero does.
+
+// invRow is one invariant and its thresholds. A row is data: a new class or build needs no new row, the facts carry the
+// per-hero numbers (drink line, chicken line, kit minimum).
+type invRow struct {
+	Name   string
+	Secs   int // the condition must hold this long (0: instant)
+	Count  int // count threshold, meaning per row
+	Pct    int // percent threshold, meaning per row
+	GapSec int // minimum seconds between two lines of this name
+	Why    string
+}
+
+const invDefaultGapSec = 60
+
+var invRows = []invRow{
+	{Name: "potion-not-drunk", Secs: 8, Why: "in the field under the drink line with a healing potion in the belt and none drunk for Secs"},
+	{Name: "portal-not-cast", Secs: 6, Why: "in the field at or under the chicken line with hostiles near and a town portal scroll, still in the same area after Secs"},
+	{Name: "field-entry-hurt", Pct: 50, Why: "left town with life under Pct of max"},
+	{Name: "field-entry-no-kit", Why: "left town while the kit (portal, healing, mana minimum) is incomplete"},
+	{Name: "resupply-in-field", Secs: 10, Why: "state resupplying outside town for Secs (a town chore running in a field)"},
+	{Name: "refusal-as-failure", GapSec: 30, Why: "a refusal (not ready, gated) went through the failure counter"},
+	{Name: "refusal-storm", Count: 10, Why: "Count refusals since the last kill, xp or area change"},
+	{Name: "life-zero-alive", Secs: 3, Why: "alive (not dying) with life 0 for Secs"},
+	{Name: "xp-frozen", Secs: 1800, Why: "in the field, not paused, no xp change for Secs"},
+	{Name: "mode-no-exit", Secs: 1200, Why: "the same state and step for Secs, not paused or parked"},
+	{Name: "corpse-unresolved", Secs: 900, Why: "a corpse waits in town for Secs, neither retrieved nor abandoned"},
+	{Name: "town-thrash", Count: 17, Secs: 3600, Why: "Count or more field entries within Secs"},
+	{Name: "economy-stall", Secs: 7200, Count: 100, Why: "gold in purse and stash under Count for Secs while kills continue"},
+}
+
+func invRowOf(name string) invRow {
+	for _, r := range invRows {
+		if r.Name == name {
+			return r
+		}
+	}
+	panic("invariant row missing: " + name) // a programming error caught by the table test
+}
+
+// invFacts is everything one tick needs; built from the snapshot and loop state by (*Runner).invTick.
+type invFacts struct {
+	now                    time.Time
+	inTown, dead           bool
+	paused, parked         bool
+	area                   int
+	life, maxLife, lifePct int
+	xp                     uint32
+	kills, gold            int
+	drank                  int64
+	hostiles               int
+	beltHP, tp             int
+	state, step            string
+	drinkPct, chickenPct   int
+	leaving                bool // this tick is the first one outside town
+	kitKnown               bool
+	kitMissing             []string
+	corpsePending          bool
+	corpseSince            time.Time
+}
+
+type invHit struct{ Name, Detail string }
+
+type invMon struct {
+	mu      sync.Mutex
+	lastLog map[string]time.Time
+	total   map[string]int // hits since the process started
+	minute  map[string]int // hits since the last minute line
+	pending []invHit       // hits noted outside the tick (refusal counted as a failure)
+
+	seen, prevTown        bool
+	lowSince              time.Time
+	lowDrank              int64
+	tpSince               time.Time
+	tpArea                int
+	resupSince, zeroSince time.Time
+	xpAt                  time.Time
+	lastXP                uint32
+	modeKey               string
+	modeSince             time.Time
+	trips                 []time.Time
+	poorSince             time.Time
+	poorKills             int
+	refusals, refusalBase int
+	progKey               string
+}
+
+// invSince starts or keeps a stopwatch while cond holds and returns how long it has run (0 when cond is false).
+func invSince(t *time.Time, cond bool, now time.Time) time.Duration {
+	if !cond {
+		*t = time.Time{}
+		return 0
+	}
+	if t.IsZero() {
+		*t = now
+	}
+	return now.Sub(*t)
+}
+
+func (r invRow) dur() time.Duration { return time.Duration(r.Secs) * time.Second }
+
+// noteRefusal counts a refused step (the quest step skipped, an area gate) for the refusal-storm row.
+func (m *invMon) noteRefusal() {
+	m.mu.Lock()
+	m.refusals++
+	m.mu.Unlock()
+}
+
+// noteRefusalFailure records that a refusal reached the failure counter; the hit is emitted by the next tick.
+func (m *invMon) noteRefusalFailure(what string, err error) {
+	m.mu.Lock()
+	m.pending = append(m.pending, invHit{"refusal-as-failure", fmt.Sprintf("what=%q err=%q", what, err)})
+	m.mu.Unlock()
+}
+
+// tick checks every row against f and returns the hits that pass the rate limit.
+func (m *invMon) tick(f invFacts) []invHit {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	var raw []invHit
+	hit := func(name, format string, a ...any) { raw = append(raw, invHit{name, fmt.Sprintf(format, a...)}) }
+	raw = append(raw, m.pending...)
+	m.pending = nil
+	if f.dead {
+		// a dead hero breaks no field invariant; keep the stopwatches clean
+		m.lowSince, m.tpSince, m.resupSince, m.zeroSince = time.Time{}, time.Time{}, time.Time{}, time.Time{}
+		m.seen, m.prevTown = false, false
+		return m.limit(raw, f.now)
+	}
+	field := !f.inTown
+
+	r := invRowOf("potion-not-drunk")
+	low := field && f.maxLife > 0 && f.lifePct < f.drinkPct && f.beltHP >= 1
+	if !low || f.drank != m.lowDrank {
+		m.lowSince, m.lowDrank = time.Time{}, f.drank
+	}
+	if d := invSince(&m.lowSince, low, f.now); d >= r.dur() {
+		hit(r.Name, "life=%d%% line=%d%% beltHP=%d drank=%d for=%ds hostiles=%d step=%q", f.lifePct, f.drinkPct, f.beltHP, f.drank, int(d.Seconds()), f.hostiles, f.step)
+	}
+
+	r = invRowOf("portal-not-cast")
+	tpLow := field && f.maxLife > 0 && f.lifePct <= f.chickenPct && f.hostiles > 0 && f.tp > 0
+	if !tpLow || f.area != m.tpArea {
+		m.tpSince = time.Time{}
+	}
+	m.tpArea = f.area
+	if d := invSince(&m.tpSince, tpLow, f.now); d >= r.dur() {
+		hit(r.Name, "life=%d%% chicken=%d%% scrolls=%d hostiles=%d area=%d for=%ds", f.lifePct, f.chickenPct, f.tp, f.hostiles, f.area, int(d.Seconds()))
+	}
+
+	if m.seen && m.prevTown && field {
+		f.leaving = true
+	}
+	m.seen, m.prevTown = true, f.inTown
+	if f.leaving {
+		m.trips = append(m.trips, f.now)
+		if r = invRowOf("field-entry-hurt"); f.maxLife > 0 && f.lifePct < r.Pct {
+			hit(r.Name, "life=%d%% min=%d%% area=%d", f.lifePct, r.Pct, f.area)
+		}
+		if f.kitKnown && len(f.kitMissing) > 0 {
+			hit("field-entry-no-kit", "missing=%s area=%d", strings.Join(f.kitMissing, ","), f.area)
+		}
+	}
+
+	r = invRowOf("resupply-in-field")
+	if d := invSince(&m.resupSince, field && f.state == string(StateResupplying), f.now); d >= r.dur() {
+		hit(r.Name, "state=%s step=%q area=%d for=%ds hostiles=%d", f.state, f.step, f.area, int(d.Seconds()), f.hostiles)
+	}
+
+	r = invRowOf("life-zero-alive")
+	if d := invSince(&m.zeroSince, f.maxLife > 0 && f.life <= 0, f.now); d >= r.dur() {
+		hit(r.Name, "life=0/%d inTown=%v area=%d for=%ds", f.maxLife, f.inTown, f.area, int(d.Seconds()))
+	}
+
+	r = invRowOf("xp-frozen")
+	if f.xp != m.lastXP || m.xpAt.IsZero() || !field || f.paused {
+		m.lastXP, m.xpAt = f.xp, f.now
+	}
+	if d := f.now.Sub(m.xpAt); d >= r.dur() {
+		hit(r.Name, "xp=%d for=%ds area=%d state=%s step=%q", f.xp, int(d.Seconds()), f.area, f.state, f.step)
+	}
+
+	r = invRowOf("mode-no-exit")
+	key := f.state + "|" + f.step
+	if key != m.modeKey || f.paused || f.parked || f.state == string(StateIdle) || f.state == string(StatePaused) {
+		m.modeKey, m.modeSince = key, f.now
+	}
+	if d := f.now.Sub(m.modeSince); d >= r.dur() {
+		hit(r.Name, "state=%s step=%q for=%ds", f.state, f.step, int(d.Seconds()))
+	}
+
+	r = invRowOf("corpse-unresolved")
+	if f.corpsePending && !f.corpseSince.IsZero() && f.now.Sub(f.corpseSince) >= r.dur() {
+		hit(r.Name, "waiting=%ds", int(f.now.Sub(f.corpseSince).Seconds()))
+	}
+
+	r = invRowOf("town-thrash")
+	for len(m.trips) > 0 && f.now.Sub(m.trips[0]) > r.dur() {
+		m.trips = m.trips[1:]
+	}
+	if len(m.trips) >= r.Count {
+		hit(r.Name, "entries=%d window=%ds", len(m.trips), r.Secs)
+	}
+
+	r = invRowOf("economy-stall")
+	if f.gold >= r.Count {
+		m.poorSince = time.Time{}
+	} else if m.poorSince.IsZero() {
+		m.poorSince, m.poorKills = f.now, f.kills
+	}
+	if !m.poorSince.IsZero() && f.now.Sub(m.poorSince) >= r.dur() && f.kills > m.poorKills {
+		hit(r.Name, "gold=%d min=%d for=%ds kills+=%d", f.gold, r.Count, int(f.now.Sub(m.poorSince).Seconds()), f.kills-m.poorKills)
+	}
+
+	r = invRowOf("refusal-storm")
+	if pk := fmt.Sprintf("%d|%d|%d", f.kills, f.xp, f.area); pk != m.progKey {
+		m.progKey, m.refusalBase = pk, m.refusals
+	}
+	if n := m.refusals - m.refusalBase; n >= r.Count {
+		hit(r.Name, "refusals=%d since the last kill, xp or area change", n)
+		m.refusalBase = m.refusals
+	}
+	return m.limit(raw, f.now)
+}
+
+// limit applies the per-name rate limit and counts the lines that go out. Caller holds mu.
+func (m *invMon) limit(raw []invHit, now time.Time) []invHit {
+	var out []invHit
+	for _, h := range raw {
+		gap := time.Duration(invDefaultGapSec) * time.Second
+		if g := invRowOf(h.Name).GapSec; g > 0 {
+			gap = time.Duration(g) * time.Second
+		}
+		if m.lastLog == nil {
+			m.lastLog, m.total, m.minute = map[string]time.Time{}, map[string]int{}, map[string]int{}
+		}
+		if t, ok := m.lastLog[h.Name]; ok && now.Sub(t) < gap {
+			continue
+		}
+		m.lastLog[h.Name] = now
+		m.total[h.Name]++
+		m.minute[h.Name]++
+		out = append(out, h)
+	}
+	return out
+}
+
+// drainMinute returns the per-name counts since the last minute line as "name=n,..." (empty when none).
+func (m *invMon) drainMinute() string {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if len(m.minute) == 0 {
+		return ""
+	}
+	names := make([]string, 0, len(m.minute))
+	for n := range m.minute {
+		names = append(names, n)
+	}
+	sort.Strings(names)
+	parts := make([]string, len(names))
+	for i, n := range names {
+		parts[i] = fmt.Sprintf("%s=%d", n, m.minute[n])
+	}
+	m.minute = map[string]int{}
+	return strings.Join(parts, ",")
+}
+
+// Totals are the lifetime hit counts per name (for ops status and the lab oracles).
+func (m *invMon) Totals() map[string]int {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	out := make(map[string]int, len(m.total))
+	for k, v := range m.total {
+		out[k] = v
+	}
+	return out
+}
+
+// minuteKV is the "inv" attribute of the minute line; nothing while no invariant fired, so the line is unchanged.
+func (m *invMon) minuteKV() []any {
+	if s := m.drainMinute(); s != "" {
+		return []any{"inv", s}
+	}
+	return nil
+}
+
+// InvariantHits returns the lifetime invariant hit counts by name. A lab run (lockstep, Proving Ground) reads it after
+// the run, or sets Deps.OnInvariant, and fails when anything fired.
+func (r *Runner) InvariantHits() map[string]int { return r.inv.Totals() }
+
+// invTick builds the facts for this tick and logs the hits. snap is a valid in-game snapshot.
+func (r *Runner) invTick(snap *d2.Snapshot, c control) {
+	if r.e.Tune.Bot.Invariants == 0 || snap == nil || snap.Player == nil {
+		return
+	}
+	p := snap.Player
+	now := r.e.Clock.Now()
+	t := r.e.Tune
+	f := invFacts{now: now, inTown: p.InTown(), dead: isDead(p), paused: c.paused, parked: r.parkedBoard.Load(),
+		area: p.Area, life: p.Life, maxLife: p.MaxLife, lifePct: p.LifePct(), xp: p.Exp, gold: p.Gold + p.StashGold,
+		drank: r.drank.Load(), drinkPct: t.Combat.DrinkLifePct, chickenPct: t.Combat.ChickenPct}
+	r.mu.Lock()
+	f.state, f.step = string(r.st), r.activity
+	r.mu.Unlock()
+	r.obMu.Lock()
+	f.kills = r.ob.kills
+	r.obMu.Unlock()
+	r.corpseTown.mu.Lock()
+	f.corpsePending, f.corpseSince = r.corpseTown.pending, r.corpseTown.since
+	r.corpseTown.mu.Unlock()
+	if !f.inTown && !f.dead {
+		f.hostiles = r.hostileNear(snap, t.Combat.FightRadius)
+		if f.lifePct < f.drinkPct || f.lifePct <= f.chickenPct {
+			k := r.kitOf(snap)
+			f.beltHP, f.tp = k.BeltHP, k.TownPortals
+		}
+		if r.inv.wasInTown() { // the kit is read once per departure, kitRead can log
+			if k, known := r.kitRead(snap); known {
+				f.kitKnown, f.kitMissing = true, k.missing()
+			}
+		}
+	}
+	for _, h := range r.inv.tick(f) {
+		r.e.Log.Warn("invariant "+h.Name, "detail", h.Detail)
+		if r.d.OnInvariant != nil {
+			r.d.OnInvariant(h.Name, h.Detail)
+		}
+	}
+}
+
+func (m *invMon) wasInTown() bool {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	return m.seen && m.prevTown
+}
+
+// isRefusal reports an error that is a refusal (a gate, a step that is not ready), not a fault. Until the typed
+// outcome lands (docs/outcomes.md) the wording is all there is; it matches the planningFault rule.
+func isRefusal(err error) bool {
+	return err != nil && (errors.Is(err, errAreaGated) || strings.Contains(err.Error(), "not ready"))
+}

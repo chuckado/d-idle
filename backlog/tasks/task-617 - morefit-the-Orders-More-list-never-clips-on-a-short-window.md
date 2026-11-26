@@ -18,6 +18,7 @@ owns:
 exclusive: []
 contracts: []
 result: "The More list is no longer flex-shrunk to zero (min five rows, the sheet scrolls); fit measures the visible rows and clipping; pages more-* at five short sizes plus a must-fail page. Fit and pictures: see the merge report."
+lane: next
 ---
 
 ## Description

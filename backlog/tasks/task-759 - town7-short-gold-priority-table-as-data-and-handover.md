@@ -19,6 +19,7 @@ owns:
   - "internal/resource"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description
