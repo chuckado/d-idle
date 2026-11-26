@@ -403,6 +403,7 @@ func (r *Runner) runAction(parent context.Context, gen uint64, st State, activit
 	r.cancelAct = nil
 	r.mu.Unlock()
 	r.armWatchdog(false)
+	r.disarmHard()
 	return err, context.Cause(tctx)
 }
 
@@ -924,7 +925,9 @@ func (r *Runner) handleSafety(ctx context.Context, a SafetyAction) {
 	if s := r.latest(); s != nil {
 		area = s.Player.Area
 	}
-	if err := r.carryOut(ctx, a); err != nil {
+	if r.takeForced() {
+		r.e.Log.Info("reflex: safety action already carried out by the guard", "action", a.String())
+	} else if err := r.carryOut(ctx, a); err != nil {
 		r.loop.failures++
 		return
 	}
@@ -1023,6 +1026,7 @@ func (r *Runner) guard(ctx context.Context, cancel context.CancelCauseFunc, done
 		var fired atomic.Bool
 		if stop := w.Watch(every, func() {
 			if fired.Load() || ctx.Err() != nil {
+				r.forceIfLate(r.e.Clock.Now()) // a hard cancel the action has not answered
 				return
 			}
 			if r.guardOnce(ctx, cancel, st) {
@@ -1047,6 +1051,7 @@ func (r *Runner) guard(ctx context.Context, cancel context.CancelCauseFunc, done
 		default:
 		}
 		if r.guardOnce(ctx, cancel, st) {
+			r.holdForHard(done, every)
 			return
 		}
 	}
@@ -1089,6 +1094,11 @@ func (r *Runner) guardOnce(ctx context.Context, cancel context.CancelCauseFunc, 
 				if rt := r.e.Tune.Bot.ReactionMs; rt > 0 {
 					r.e.Clock.Sleep(time.Duration(rt) * time.Millisecond)
 				}
+				a, handled := r.reflexDrink(snap, a)
+				if handled {
+					return false // the drink left without stopping the action; the guard keeps watching
+				}
+				r.armHard(a, now)
 				cancel(safetyInterrupt{a})
 				return true
 			}

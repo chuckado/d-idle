@@ -22,6 +22,8 @@ type BotTuning struct {
 	FarmReset            int // 1 = on
 	FarmResetPct         int // coverage percent from which a reset is considered
 	FarmResetCooldownMin int // least minutes between two farm resets
+	ReflexDrink          int // 1: the guard sends a belt drink itself without cancelling the running action (internal/bot/safetylat.go; Fable review P3 c)
+	ReflexDeadlineMs     int // ms after a portal, chicken or crowd cancel when the guard carries the action out itself if the cancelled action has not returned (0 = off)
 	LootShadow           int // 1: the loot rules engine also judges every item decision and logs where it differs from today's code (docs/lootrules.md); log only, never acts
 
 	// Death policy (PLAN.md "Death is normal"; docs/bot.md "Death").
@@ -155,7 +157,7 @@ type BotTuning struct {
 func DefaultBotTuning() BotTuning {
 	return BotTuning{
 		TickMs: 100, WatchMs: 50, ReactionMs: 0, ResupplyPotions: 2, InvFullPct: 85,
-		LevelMargin: 0, LeaveSlack: 0, CorpseRetries: 3, PortalSettleMs: 600, ClearRadius: 30, ExploredPct: 100, FarmReset: 0, FarmResetPct: 85, FarmResetCooldownMin: 5, LootShadow: 1,
+		LevelMargin: 0, LeaveSlack: 0, CorpseRetries: 3, PortalSettleMs: 600, ClearRadius: 30, ExploredPct: 100, FarmReset: 0, FarmResetPct: 85, FarmResetCooldownMin: 5, LootShadow: 1, ReflexDrink: 1, ReflexDeadlineMs: 1000,
 		CorpseValueMin: 1000, SpiralDeaths: 4, SpiralMinutes: 15, DangerBanMin: 20, StarterBanMin: 3, QuestBlockedFarmMin: 10, ParkAfter: 2, ParkMinutes: 15, RepeatSiteBanMin: 30, RepeatSiteEscalate: 1, RepeatSiteWindowMin: 30, RepeatSiteGapSec: 180, CorpseMinValue: 50, NavSkipSec: 150, AreaIdleSec: 60, StallWarnMin: 30, StallExitMin: 30, PauseDeathsPerHour: 8, PauseCapMin: 60, StalePackHostiles: 4, StalePackMinutes: 10, StalePackMinHP: 5, StalePackMinTier: 2, PotionBurstN: 5, PotionBurstSec: 20, PotionBurstHostiles: 3, PovertyTier: 0, GoldFloor: 2000,
 		PointsRetrySec: 30, GearCheckSec: 60, GearMinGold: 150, GearBudgetPct: 70, GearReserve: 100,
 		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600, FlailMoves: 6, FlailWindowMin: 10, FlailHoldMin: 5,
@@ -210,6 +212,10 @@ func botKnobs() []Knob {
 			Desc: "Share of a zone's roam coverage points that must be visited before the farm loop may reset it (bot.farmReset). Keep it at or above bot.exploredPct, which would end the clear first. A zone below this share is never reset."},
 		{Key: "bot.farmResetCooldownMin", Label: "Farm reset cooldown", Unit: "min", Default: 5, Min: 1, Max: 60, NoHandicap: true,
 			Desc: "Least minutes between two farm resets: a reset that did not pay cannot repeat at once."},
+		{Key: "bot.reflexDrink", Label: "Reflex drink", Unit: "bool", Default: 1, Min: 0, Max: 1, NoHandicap: true,
+			Desc: "1: when the safety check wants a life or rejuvenation potion from the belt, the guard sends the key itself through the input controller and does not cancel the running action (a drink needs no stop). 0: the old way, the guard cancels the action and the loop drinks after it returns. A drink that needs the pack, a portal, a chicken and a crowd retreat always cancel. Measured by safetyLatAvgMs, safetyLatMaxMs and reflexDrinks on the minute line."},
+		{Key: "bot.reflexDeadlineMs", Label: "Reflex deadline", Unit: "ms", Default: 1000, Min: 0, Max: 5000, NoHandicap: true,
+			Desc: "A portal, chicken or crowd cancel gives the running action this long to return; after that the guard carries the safety action out itself, so a stuck action cannot hold a flee back. 0 turns the deadline off."},
 		{Key: "bot.lootShadow", Label: "Loot rules shadow", Unit: "bool", Default: 1, Min: 0, Max: 1, HigherIsBetter: false, NoHandicap: true,
 			Desc: "1: the loot rules engine (docs/lootrules.md) judges every ground pickup, tidy and sell decision next to today's code and logs the differences as `loot shadow: ...` lines (read-only report at /api/lootrules/shadow). Log only: it never changes what the bot does. 0 turns it off."},
 		{Key: "bot.corpseValueMin", Label: "Corpse value threshold", Unit: "gold", Default: 1000, Min: 1, Max: 20000,
