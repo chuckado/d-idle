@@ -300,7 +300,6 @@
 | agencyp1b | proposed | - | `docs/design/agency-p1b.md` | - |
 | agencyp3 | proposed | - | `docs/design/agency-p3.md` | - |
 | inputl3 | proposed | - | `docs/design/input-i3.md` | - |
-| reflex1b | proposed | - | `internal/town/npc.go`<br>`internal/town/chores.go`<br>`internal/town/intown_test.go`<br>`internal/bot/townguard.go`<br>`internal/bot/townguard_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/loop.go`<br>`internal/bot/runner.go`<br>`internal/bot/state.go`<br>`docs/safety-latency.md` | - |
 | inputl4 | proposed | - | `docs/design/input-i4.md` | - |
 | inputl5 | proposed | - | `docs/design/input-i5-i7.md` | - |
 | fid-lowvalue | deferred | - | `docs/probes/fid/fid-lowvalue.md` | - |
