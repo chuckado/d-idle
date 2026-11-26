@@ -52,9 +52,10 @@ type View struct {
 	HasTP      bool // a town portal source in the pack
 	Gold       int
 	InTown     bool
-	Area       int  // where the hero stands
-	FirstField int  // the first non-town area of the hero's act
-	Try        bool // the owner's try anyway: nothing is refused
+	Area       int   // where the hero stands
+	FirstField int   // the first non-town area of the hero's act
+	Fields     []int // the act's fields in plan order (FirstField first); nil: only FirstField is known
+	Try        bool  // the owner's try anyway: nothing is refused
 
 	IsTown func(area int) bool // nil: no area is town
 	MLvl   func(area int) int  // monster level of an area; nil: the poverty row is skipped
@@ -88,6 +89,14 @@ func refuse(row, need, why string, kitOnly bool) Verdict {
 // exempt: a corpse run, a trip home, the owner's try anyway, a non-Normal difficulty.
 func (v View) exempt(p Purpose) bool {
 	return v.Try || !v.Normal || p == CorpseRun || p == Trip
+}
+
+// fields is Fields, or the first field alone.
+func (v View) fields() []int {
+	if len(v.Fields) > 0 {
+		return v.Fields
+	}
+	return []int{v.FirstField}
 }
 
 func (v View) town(a int) bool { return a == 0 || v.IsTown != nil && v.IsTown(a) }
@@ -149,7 +158,7 @@ func (r Rows) MayEnter(v View, area int, p Purpose) Verdict {
 		}
 	}
 	if area != v.Area {
-		if kf := r.KitFloor; kf.PotionsBelow > 0 && v.Level >= kf.FromLevel && v.Healing < kf.PotionsBelow && area != v.FirstField {
+		if kf := r.KitFloor; kf.PotionsBelow > 0 && v.Level >= kf.FromLevel && v.Healing < kf.PotionsBelow && !kf.Open(v.Healing, v.Level, area, v.fields(), v.MLvl) {
 			return refuse("kit-floor", NeedPotions, fmt.Sprintf("%d healing potions < %d: the first field only (area %d), not area %d", v.Healing, kf.PotionsBelow, v.FirstField, area), false)
 		}
 		if why := r.leanWhy(v); why != "" {
