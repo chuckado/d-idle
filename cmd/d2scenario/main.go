@@ -38,6 +38,8 @@ func main() {
 		err = cmdCoverage(args, os.Stdout)
 	case "provenance":
 		err = cmdProvenance(args, os.Stdout)
+	case "incident":
+		err = cmdIncident(args, os.Stdout)
 	case "report":
 		err = cmdReport(args, os.Stdout)
 	case "determinism":
@@ -88,6 +90,7 @@ func usage(w io.Writer) {
   coverage    [-dir D] [-board B] [-json]       behaviour to scenario map, UNCOVERED list
   provenance  [-dir D]                          rows for docs/probes/test-characters.md (every scenario's CHEATED/SETUP tags)
   report      results.json                      one-screen report
+  incident    [-class C] [-seed N] [-out DIR] FILE.json..   build replay rows from incident files the bot wrote at a death (report-only tier)
   determinism-run -n N -out DIR [run flags]      run the selection N times (journals on) and compare every run with the first
   ledger status-doc|check -in L.jsonl           the results ledger: generated status page, line check (lines are written by exec-one)
   determinism a.json b.json                     same seed twice: same verdict (and state digest)
