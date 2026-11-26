@@ -123,6 +123,7 @@ type SafetyInput struct {
 	ManaReady  bool
 	RejuvReady bool
 	CastGuard  resource.CastGuard // portal exposure test (resource/castguard.go); the zero value is the old count rule
+	Arrival    bool               // a crowd stood at the arrival in an area with an arrival row (arrival.go): leave at once
 	Quest      bool               // a player-started quest chunk runs: CrowdAbandonQuestN applies (SetQuestCrowd)
 	Tune       env.CombatTuning
 }
@@ -175,6 +176,14 @@ func meleeCastGuard(in SafetyInput, a SafetyAction) SafetyAction {
 func decideBase(in SafetyInput) SafetyAction {
 	if in.InTown || in.Max <= 0 || in.Life <= 0 {
 		return SafetyNone
+	}
+	if in.Arrival {
+		switch {
+		case in.HasPortal:
+			return CrowdAbandon
+		case in.CanRetreat:
+			return CrowdRetreat
+		}
 	}
 	t := in.Tune
 	lp, mp := pct(in.Life, in.Max), pct(in.Mana, in.MMax)
