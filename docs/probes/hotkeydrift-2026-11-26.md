@@ -20,6 +20,6 @@ V (test `TestBuildHotkeysDoNotDriftFromTheProfileLayout`, `cmd/d2bot/hotkeydrift
 
 ## Decision
 
-The lists stay (they document intent and the game.exe path). The profile layout is the single source of truth; the test is a RATCHET: a table may only lower its number (the test also fails when a number fell, so the baseline map is lowered), and a new table starts at zero. Deleting the keys was not done: 14 tables, no reader, and the player-facing docs quote them (U).
+The lists stay (they document intent and the game.exe path). The profile layout is the single source of truth; the test is a RATCHET: a table may only lower its number (the test also fails when a number fell, so the baseline map is lowered), and a new table starts at zero. Deleting the keys was not done: 15 tables, no reader, and the player-facing docs quote them (U).
 
 Fixing a table means editing its `hotkeys` rows to the profile keys, or giving the table a `combat` key that names the profile it was written for (the summoner endgame table has no `combat` key, so it resolves the class default profile; setting `"combat": "summoner"` changes which profile plays at endgame and needs a drill, so it is not done here).

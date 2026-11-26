@@ -18,7 +18,7 @@ owns:
   - "cmd/d2bot/hotkeydrift_test.go"
 exclusive: []
 contracts: []
-result: "Ratchet test over all plan tables (hotkey rows versus the combat profile layout, 14 tables with drift, 68 rows); a new table must start at zero; the lists stay as documentation. Offline only."
+result: "Ratchet test over all plan tables (hotkey rows versus the combat profile layout, 15 tables with drift, 69 rows); a new table must start at zero; the lists stay as documentation. Offline only."
 ---
 
 ## Description
