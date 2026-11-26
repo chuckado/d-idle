@@ -78,6 +78,8 @@ The "divergence under N percent" figures in the table are kept as a reading aid,
 
 ## Outcome harness (offline, report-only)
 
+Questy 2026-11-26 cases (`tools/provingground/arbiter-outcomes/questy-2026-11-26.json`, `TestQuesty1126Outcomes`): death 15 (chain quest step against a hard potion-not-drunk, the arbiter picks survive), the poverty sell (broke hero in the camp with `sellable` items: the resupply source now plans the sell first, family chores), the dry area (recovery with the `new_game` step when fact `area_dry` is set). New facts `sellable` and `area_dry`; soft rows `no-earn`, `guard-stall`, `fight-stall`, `stuck-in-pack` listed in `cmd/d2scenario/invariants.json`. MODEL cases, facts U.
+
 `go run ./cmd/d2scenario arbiter-replay [-strict] tools/provingground/arbiter-outcomes/*.json` decides each case with the standard sources and scores BOTH the recorded chain family and the arbiter's family with the same data rules (a rule says: this family, under these facts, hits that invariant row). Hard rows decide, soft rows break ties; a hit the chain did not have is a new kind and fails the family. The rules are a model of the monitor (U until a lockstep run confirms a row); the three Questy incident cases (V, `TestQuestyOutcomes`, two drink lines in `TestSurviveOutcomeTwoBuildsAndMustFail`): survive, chain 1 hard hit (potion-not-drunk) vs arbiter 0; chores, chain 2 soft hits (field-entry-no-kit) vs arbiter 0; the ping-pong first tick scores no hit for either. Limit: one decision point per case, not a whole session; whole sessions go through `d2arbiter -follow`.
 
 ## Migration plan per family
