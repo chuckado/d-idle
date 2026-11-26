@@ -48,6 +48,7 @@ Maintainers also read `AGENTS.private.md` if present (it is not in this repo; `t
 ## Doc rules
 - Do not hand-count things that change (commits, attempts, merged items): link to `git log`, `docs/g1-log.md` or the generated STATUS block. Do not copy a number that has an owner: knob defaults live in `docs/knobs.md` (generated from code), gates in the specs.
 - When a doc is superseded or only partly true, add a `> status:` banner under its title (one line, with the pointer to the current doc) instead of leaving it to mislead; archive with `git mv` into `docs/archive/` and leave a one-line stub. Never delete docs.
+- A feature that ships behind a default-0 knob puts `[dark-launch]` in the knob description and adds its row (enable criteria, owner, review-by date) to `data/darklaunch.json` in the same PR; `tools/ci/check.sh` enforces it (docs/process/dark-launch.md).
 - Before planning anything, read the "Current truth" block at the top of `docs/decisions.md`; where it disagrees with an older ADR or doc, it wins (older ADR headers name what amended them).
 - Decisions the user makes go into `docs/decisions.md` (one line index) with an ADR under `docs/adr/` when they matter; written by the coordinator or the user's grill session only (guard rule below).
 

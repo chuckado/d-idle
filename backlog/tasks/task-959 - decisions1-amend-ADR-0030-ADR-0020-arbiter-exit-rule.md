@@ -17,6 +17,7 @@ owns:
   - "docs/adr/0020-proving-ground-and-stat-skill-agency.md"
   - "docs/decisions.md"
   - "docs/arbiter.md"
+  - "AGENTS.md"
 exclusive: []
 contracts: []
 allow-adr: true
