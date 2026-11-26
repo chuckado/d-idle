@@ -512,6 +512,9 @@ func (r *Runner) fillEarly(w *task.World) {
 	s := r.latest()
 	rs, _ := loadEarlyRoutes()
 	w.EarlyBlocked, w.WalkBlocked = nil, task.EarlyBlock{}
+	if s != nil && s.Player != nil {
+		w.FirstField = task.Area(r.firstFieldArea(s))
+	}
 	if why, kit := r.questWalkCheck(s); why != "" {
 		w.WalkBlocked = task.EarlyBlock{Why: why, KitOnly: kit}
 	}
