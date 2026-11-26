@@ -146,6 +146,11 @@ type Runner struct {
 
 	lastStep atomic.Int64 // wall-clock unix nanos of the last finished loop iteration (heartbeat for the d2bot watchdog)
 
+	lastLogAt   atomic.Int64 // clock nanos of the last log record (stallguard.go)
+	lastStallAt atomic.Int64 // clock nanos of the last stall line
+	stalls      atomic.Int32 // stall lines since the process started (minute line key stalls)
+	actionAt    atomic.Int64 // clock nanos when the running action began (runAction)
+
 	mu          sync.Mutex // control and status
 	goal        *goals.Goal
 	spec        goalSpec
@@ -339,7 +344,7 @@ type loopState struct {
 	exploreFails map[int]exploreFail
 	pp           pingPong // area ping-pong guard (noteArea)
 	tpSeen       tpDebounce
-	stallStage   int       // campaign stall ladder (stall.go): 0 quiet, 1 warned and fresh game tried
+	stallStage   int       // campaign stall ladder (stallguard.go): 0 quiet, 1 warned and fresh game tried
 	stallAt      time.Time // when stage 1 was reached
 	emptyLast    time.Time // last call: a longer pause (town trip, new game) restarts the count
 	task         taskState
@@ -381,6 +386,7 @@ func New(e *env.Env, d Deps, cfg Config) (*Runner, error) {
 	}
 	r := &Runner{e: e, d: d, cfg: cfg.WithDefaults(), ch: make(chan goals.Event, 2048), st: StateIdle, activity: "Idle",
 		settings: goals.DefaultSettings()}
+	r.stampLog()
 	r.loop.cleared = map[int]bool{}
 	r.avoid = map[int]time.Time{}
 	r.avoidWhy = map[int]string{}
