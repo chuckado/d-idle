@@ -17,7 +17,7 @@ owns:
   - "internal/bot/explain_test.go"
   - "internal/watch/explainapi.go"
   - "internal/watch/explainapi_test.go"
-  - "internal/ops"
+  - "internal/ops/"
   - "cmd/d2bot/opscmd.go"
   - "cmd/d2bot/opscmd_test.go"
   - "cmd/d2bot/opswire.go"
