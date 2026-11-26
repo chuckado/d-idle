@@ -35,6 +35,8 @@ type ExplainDecision struct {
 type ExplainRefusal struct {
 	What  string    `json:"what"`
 	Need  string    `json:"need"`
+	Code  string    `json:"code,omitempty"` // typed refusals: the need code (needTable)
+	Wake  string    `json:"wake,omitempty"` // typed refusals: the fact that ends it
 	Seen  time.Time `json:"seen"`
 	Count int       `json:"count"`
 }
@@ -57,7 +59,15 @@ type explainState struct {
 }
 
 // noteStanding records a standing refusal (what the step was, what it needs). Same key again only bumps the counter.
-func (r *Runner) noteStanding(what, need string) {
+func (r *Runner) noteStanding(what, need string) { r.noteStandingRef(what, need, "", "") }
+
+// noteRefused is the typed entry of the ring: the refusal handler (handleRefused, holdRefused) records the need code and
+// the wake fact next to the words, so `status --why` shows what the hero waits for and what ends it.
+func (r *Runner) noteRefused(what string, ref *Refused) {
+	r.noteStandingRef(what, ref.Why, ref.Need, ref.Wake)
+}
+
+func (r *Runner) noteStandingRef(what, need, code, wake string) {
 	x := &r.explain
 	x.mu.Lock()
 	defer x.mu.Unlock()
@@ -65,14 +75,14 @@ func (r *Runner) noteStanding(what, need string) {
 		x.refs = map[string]*ExplainRefusal{}
 	}
 	now := r.e.Clock.Now()
-	if e := x.refs[what]; e != nil && e.Need == need {
+	if e := x.refs[what]; e != nil && e.Need == shorten(need, 200) && e.Code == code {
 		e.Seen, e.Count = now, e.Count+1
 		return
 	}
 	if len(x.refs) >= 4*explainRefMax {
 		x.pruneLocked(now)
 	}
-	x.refs[what] = &ExplainRefusal{What: what, Need: shorten(need, 200), Seen: now, Count: 1}
+	x.refs[what] = &ExplainRefusal{What: what, Need: shorten(need, 200), Code: code, Wake: wake, Seen: now, Count: 1}
 }
 
 func (x *explainState) pruneLocked(now time.Time) {

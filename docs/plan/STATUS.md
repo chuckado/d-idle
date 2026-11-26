@@ -282,7 +282,7 @@
 | admit1 | proposed | - | `docs/design/admission-p4.md`<br>`internal/admit/`<br>`internal/plandata/admission.json`<br>`internal/plandata/earlyroutes.json`<br>`internal/plandata/povertyfarm.json`<br>`docs/plan/data/admission.json`<br>`docs/plan/data/earlyroutes.json`<br>`docs/plan/data/povertyfarm.json`<br>`internal/bot/earlyroute.go`<br>`internal/bot/povertyfarm.go`<br>`internal/bot/admit_need_test.go` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
 | arbmig | proposed | - | `docs/design/arbiter-migration-p6.md`<br>`docs/arbiter.md`<br>`internal/arbiter/`<br>`cmd/d2scenario/`<br>`tools/provingground/arbiter-outcomes/`<br>`internal/bot/arbiter_control.go`<br>`internal/bot/arbiter_control_test.go`<br>`internal/bot/shadow.go`<br>`internal/bot/loop.go`<br>`internal/env/tuning_bot.go`<br>`data/darklaunch.json`<br>`docs/knobs.md` | - |
-| faultsoak | proposed | - | `docs/design/faultsoak-p12.md` | - |
+| faultsoak | proposed | - | `docs/design/faultsoak-p12.md`<br>`docs/probes/faultsoak-design-2026-11-26.md`<br>`internal/faultproxy/`<br>`cmd/d2scenario/`<br>`internal/scenario/`<br>`tools/provingground/scenarios/faultsoak.json` | - |
 | fid-adapter-rows | deferred | - | `docs/probes/fid/fid-adapter-rows.md` | - |
 | proptest1 | proposed | - | `docs/design/proptest-t3.md` | - |
 | ticklog | proposed | - | `docs/design/ticklog-t4.md` | - |
@@ -320,14 +320,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b89f8cde8 11-26 10:34 `Merge agent/faultsoak: Merge branch 'main' into faultsoak` (faultsoak)
+- 363a0d3cf 11-26 10:34 `Merge agent/outcomes2g: Merge branch 'main' into outcome-explain-ring` (outcomes2g)
+- 3ada2011e 11-26 10:32 `Merge branch 'main' into faultsoak` (-)
+- 064875015 11-26 10:32 `Merge branch 'main' into outcome-explain-ring` (-)
+- e1febf215 11-26 10:30 `Merge origin/main into faultsoak` (faultsoak)
+- e4f4b63d8 11-26 10:27 `Merge agent/outcomes2f: Merge branch 'main' into outcome-hub-wording` (outcomes2f)
+- bb8eafa4e 11-26 10:25 `Merge branch 'main' into outcome-hub-wording` (-)
 - 4cf936afd 11-26 10:15 `Merge agent/outcomes2e: Merge branch 'main' into outcome-kit-gate` (outcomes2e)
 - 03aef679b 11-26 10:13 `Merge branch 'main' into outcome-kit-gate` (-)
 - 9ac8f343b 11-26 10:06 `Merge agent/thrgov: Merge branch 'main' into thrgov` (thrgov)
-- 51d1dcebf 11-26 10:06 `Merge agent/outcomes2d: Merge branch 'main' into outcome-park-step` (outcomes2d)
-- 01d50bb52 11-26 10:04 `Merge branch 'main' into thrgov` (-)
-- 30791b6ab 11-26 10:04 `Merge branch 'main' into outcome-park-step` (-)
-- 59c0781ed 11-26 09:57 `Merge agent/arbmig3: Merge branch 'main' into arbmig` (arbmig3)
-- 5c2d3919b 11-26 09:57 `Merge agent/outcomes2c: Merge branch 'main' into outcome-task-step` (outcomes2c)
-- c96f49244 11-26 09:54 `Merge branch 'main' into arbmig` (-)
-- 00bcb5210 11-26 09:54 `Merge branch 'main' into outcome-task-step` (-)
 <!-- statusgen:end -->

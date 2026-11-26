@@ -63,6 +63,11 @@ func cmdValidate(args []string, w io.Writer) error {
 		return fmt.Errorf("%s", strings.Join(problems, "; "))
 	}
 	for _, s := range scs {
+		if s.Faults != "" {
+			if _, err := faultSet(s.Faults); err != nil {
+				return fmt.Errorf("scenario %s: faults: %w", s.ID, err)
+			}
+		}
 		if s.Quest != nil {
 			if !hasBehaviour(bs, "quest."+s.Quest.Quest+"."+s.Quest.Chunk) {
 				return fmt.Errorf("scenario %s: quest chunk %s/%s is not in %s", s.ID, s.Quest.Quest, s.Quest.Chunk, *board)
