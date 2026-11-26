@@ -242,9 +242,6 @@ data/questboard/act1.json  credit-runner  cain45
 data/questboard/act1.json  credit-runner  cain5b
 data/questboard/act1.json  credit-runner  cainfix3
 data/questboard/act2.json  credit-runner  qdmatrix
-data/questboard/act3.json  credit-runner  act345map
-data/questboard/act4.json  credit-runner  act345map
-data/questboard/act5.json  credit-runner  act345map
 deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 docs/actbot.md  credit-runner  cain45
 docs/adr/0014-memory-writes-allowed-no-crutch.md  credit-runner  vaultpay
@@ -284,11 +281,8 @@ docs/design/ticklog-t4.md  credit-runner  ticklog
 docs/design/townflip-p5.md  credit-runner  townflip
 docs/epics/epic-act1.md  live-agent  epic-act1
 docs/epics/epic-act2.md  live-agent  epic-act2
-docs/epics/epic-act3.md  credit-runner  act345map
 docs/epics/epic-act3.md  live-agent  epic-act3
-docs/epics/epic-act4.md  credit-runner  act345map
 docs/epics/epic-act4.md  live-agent  epic-act4
-docs/epics/epic-act5.md  credit-runner  act345map
 docs/epics/epic-act5.md  live-agent  epic-act5
 docs/epics/epic-class-amazon.md  live-agent  epic-class-amazon
 docs/epics/epic-class-assassin.md  live-agent  epic-class-assassin

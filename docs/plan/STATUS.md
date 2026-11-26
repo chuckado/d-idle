@@ -43,7 +43,6 @@
 |---|---|---|---|---|
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
-| act345map | proposed | - | `data/questboard/act3.json`<br>`data/questboard/act4.json`<br>`data/questboard/act5.json`<br>`docs/epics/epic-act3.md`<br>`docs/epics/epic-act4.md`<br>`docs/epics/epic-act5.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
 | auralive | proposed | - | `docs/probes/paladin-aura-live-2026-11-26.md`<br>`cmd/auraprobe` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |

@@ -1,10 +1,11 @@
 ---
 id: TASK-1005
 title: 'act345map: Acts 3 to 5 quest definitions, givers, rewards, items and gap lists'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T17:53:00Z'
+updated_date: '2026-11-26T18:34:00Z'
 labels:
   - docs
   - feature
