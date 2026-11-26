@@ -1445,6 +1445,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - aura2c: Prayer in combat when hurt and low on potions (TASK-1013, merged 2026-11-26, acceptance 2 of 2): A hurt Paladin low on healing potions now switches to Prayer in a fight, kept until life recovers <!--sg:agent/aura2c-->
 - agent/toolstrade86: Merge branch 'main' into toolstrade86 (merged 2026-11-26) <!--sg:agent/toolstrade86-->
 - agent/qd28: d2scenario invariants soft in drills; act2strong kit; matrix note 80 (merged 2026-11-26) <!--sg:agent/qd28-->
+- agent/toolstrade87: Merge branch 'main' into toolstrade87 (merged 2026-11-26) <!--sg:agent/toolstrade87-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
