@@ -31,7 +31,7 @@ owns:
   - "internal/watch/hub.go"
 exclusive: []
 contracts: []
-result: "decision ring, /api/explain and operator why/hold/home/go/park built and unit-tested offline; not verified live"
+result: "decision ring, /api/explain and operator why, hold, home, go and park built and unit-tested offline; not verified live"
 ---
 
 ## Description
