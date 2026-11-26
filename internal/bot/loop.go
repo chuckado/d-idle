@@ -1216,6 +1216,8 @@ func equipCount(s *d2.Snapshot) int {
 // of the body returns the gear, and the dropped gold lies as a ground item next to it; walking onto it takes it back.
 // No clicks are needed. A missing gold pile is not an error (nothing was carried, or it is already picked up).
 func (r *Runner) retrieveCorpse(ctx context.Context, area int, at input.Point) error {
+	r.corpseRun.Store(true)
+	defer r.corpseRun.Store(false)
 	if r.d.Corpse != nil {
 		return r.d.Corpse.Retrieve(ctx, area, at)
 	}
