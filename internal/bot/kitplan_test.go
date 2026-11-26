@@ -451,3 +451,32 @@ func TestKitFloorKeepsThePoorHeroInTheFirstField(t *testing.T) {
 		}
 	}
 }
+
+// portalFighter reports a fixed safety verdict and whether a portal cast is under way.
+type portalFighter struct {
+	Fighter
+	verdict  SafetyAction
+	inFlight bool
+}
+
+func (f portalFighter) Safety(*d2.Snapshot) SafetyAction { return f.verdict }
+func (f portalFighter) PortalInFlight() bool             { return f.inFlight }
+
+// Questy death 15: the guard cancelled the action (the fight loop was casting the town portal) with the very verdict the loop was
+// carrying out, so the cast died "before the click". With a cast in flight the guard keeps watching; without one it cancels as before.
+// Two classes.
+func TestGuardLeavesARunningPortalCastAlone(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, inFlight := range []bool{true, false} {
+			g := newRig(t)
+			g.w.set(func(w *world) { w.class, w.level, w.area, w.life = class, 12, 2, 50 })
+			g.r.poll()
+			g.r.d.Fighter = portalFighter{Fighter: g.r.d.Fighter, verdict: SafetyTownPortal, inFlight: inFlight}
+			cancelled := false
+			got := g.r.guardOnce(context.Background(), func(error) { cancelled = true }, StateClearing)
+			if got == inFlight || cancelled == inFlight {
+				t.Errorf("%v inFlight %v: guard returned %v cancelled %v", class, inFlight, got, cancelled)
+			}
+		}
+	}
+}

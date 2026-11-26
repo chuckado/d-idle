@@ -179,3 +179,33 @@ func TestFarCrowdLeavesBeforeTheDeath(t *testing.T) {
 		}
 	}
 }
+
+// Questy death 15: the guard cancelled the fight while the fight loop was casting the town portal ("cancelled before the click"),
+// and the second cast came too late. PortalInFlight is true for the whole TownPortal action and only then; with the portal override
+// set, the action drinks first when life is under the drink line and a hostile is in reach. Two builds (Sorceress and Paladin stats).
+func TestPortalActionIsInFlightAndDrinksFirst(t *testing.T) {
+	for _, maxLife := range []int{100, 520} {
+		h, g := newPortalHarness(t)
+		h.s.stock(itHP1, 0, 4)
+		h.s.life, h.s.maxL = float64(maxLife*33/100), float64(maxLife)
+		h.s.addMon(10, clsFallen, 104, 100, 500, 5, 6)
+		var during, drankBefore bool
+		h.f.Portal = func(ctx context.Context) error {
+			during = h.f.PortalInFlight()
+			drankBefore = len(g.keys) > 0
+			return nil
+		}
+		if h.f.PortalInFlight() {
+			t.Fatalf("%d: in flight before any cast", maxLife)
+		}
+		if err := h.f.Act(t.Context(), TownPortal); err != nil {
+			t.Fatalf("%d: %v", maxLife, err)
+		}
+		if !during || h.f.PortalInFlight() {
+			t.Errorf("%d: in flight during %v, after %v", maxLife, during, h.f.PortalInFlight())
+		}
+		if !drankBefore {
+			t.Errorf("%d: no healing potion before the cast (keys %v)", maxLife, g.keys)
+		}
+	}
+}
