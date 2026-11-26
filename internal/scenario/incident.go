@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -40,6 +41,8 @@ type Incident struct {
 		Killer       string `json:"killer"`
 		Summary      string `json:"summary"`
 		Bug          bool   `json:"bug"`
+		Invariant    string `json:"invariant"` // kind "monitor": the invariant row that fired
+		Hard         bool   `json:"hard"`
 	} `json:"facts"`
 }
 
@@ -64,7 +67,11 @@ func LoadIncident(path string) (Incident, error) {
 // the potion tier is not recorded, so the belt gets the lowest tier; the monsters that killed the hero are not recorded
 // as units, so the row proves the state of the hero, not the situation (add pre.spawn by hand to build it).
 func (in Incident) Scenario(class string, seed int64) (Scenario, error) {
-	if in.Pre.Area == 0 {
+	start := StartField
+	if in.Pre.Start == StartTown {
+		start = StartTown // a monitor hit in town replays from town
+	}
+	if in.Pre.Area == 0 && start == StartField {
 		return Scenario{}, fmt.Errorf("incident of %s: no area", in.AreaName)
 	}
 	if class == "" {
@@ -74,7 +81,7 @@ func (in Incident) Scenario(class string, seed int64) (Scenario, error) {
 	if diff == "" {
 		diff = "normal"
 	}
-	pre := Pre{Start: StartField, Area: in.Pre.Area, Level: in.Pre.Level, Gold: in.Pre.Gold, Stash: in.Pre.Stash, Difficulty: diff, LifePct: in.Pre.LifePct}
+	pre := Pre{Start: start, Area: in.Pre.Area, Level: in.Pre.Level, Gold: in.Pre.Gold, Stash: in.Pre.Stash, Difficulty: diff, LifePct: in.Pre.LifePct}
 	for i := 0; i < in.Facts.BeltHP; i++ {
 		pre.Belt = append(pre.Belt, "hp1")
 	}
@@ -86,9 +93,19 @@ func (in Incident) Scenario(class string, seed int64) (Scenario, error) {
 	if in.Facts.Bug {
 		assert = append(assert, Assert{Kind: ALogLine, Pattern: "BUG: .* healing potions in the belt", Max: &zero, Why: "no death with a belt of potions undrunk"})
 	}
+	label := in.Kind
+	idTail := ""
+	if in.Kind == "monitor" {
+		if in.Facts.Invariant == "" {
+			return Scenario{}, fmt.Errorf("incident of %s: kind monitor without an invariant name", in.AreaName)
+		}
+		// A monitor row is red when the same invariant fires again; the death assert stays (a monitor hit often precedes one).
+		assert = append(assert, Assert{Kind: ALogLine, Pattern: "invariant " + regexp.QuoteMeta(in.Facts.Invariant) + `\b`, Max: &zero, Why: "the invariant " + in.Facts.Invariant + " does not fire again from the recorded state"})
+		label, idTail = "monitor "+in.Facts.Invariant, "-"+in.Facts.Invariant
+	}
 	assert = append(assert, Assert{Kind: ANoWrites})
-	id := "incident." + strings.ToLower(strings.NewReplacer(" ", "-", "'", "").Replace(in.AreaName)) + "-" + fmt.Sprint(in.Time.Unix())
-	s := Scenario{ID: id, Title: "Incident replay: " + in.Kind + " in " + in.AreaName + " at level " + fmt.Sprint(in.Pre.Level),
+	id := "incident." + strings.ToLower(strings.NewReplacer(" ", "-", "'", "").Replace(in.AreaName)) + "-" + fmt.Sprint(in.Time.Unix()) + idTail
+	s := Scenario{ID: id, Title: "Incident replay (report-only): " + label + " in " + in.AreaName + " at level " + fmt.Sprint(in.Pre.Level),
 		Kind: KindBehaviour, Tier: TierNightly, Pre: pre, Trigger: Trigger{Goals: "campaign"}, Budget: Budget{VirtualMin: 15},
 		Assert: assert, Matrix: Matrix{Classes: []string{class}, Seeds: []int64{seed}},
 		Provenance: "SETUP from a recorded incident (" + in.Time.UTC().Format(time.RFC3339) + "): level, gold, belt counts and position are written by lab verbs; CHEATED position. Mechanics only, never evidence about game behaviour. " + in.Facts.Summary,

@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"d2lod-bot/internal/d2"
 )
 
 // Incident files (Fable logic review 2026-11-25, T2/P8, ADR 0020 amended 2026-11-25): at each death the bot writes the
@@ -21,6 +23,13 @@ const (
 	IncidentVersion = "didle.incident/1"
 	incidentDir     = "incidents"
 	incidentKeep    = 50
+
+	// Monitor incidents (review P8): a hit of the invariant monitor writes the pre-state too, at most one file per
+	// invariant name per incidentMonGapSec, at most incidentMonPerHour in any hour, and at most incidentMonKeep files
+	// of this kind are kept (so a storm cannot push the death files out). Tools only; nothing here acts.
+	incidentMonGapSec  = 600
+	incidentMonPerHour = 6
+	incidentMonKeep    = 20
 )
 
 // IncidentPre mirrors the fields of the scenario `pre` (internal/scenario.Pre) that a death records. The belt is kept as
@@ -48,6 +57,9 @@ type IncidentFacts struct {
 	LastSafety   string `json:"lastSafety,omitempty"`
 	Bug          bool   `json:"bug"`
 	Summary      string `json:"summary,omitempty"`
+	// Invariant is the monitor row that fired (kind "monitor"): the replay row is red when it fires again.
+	Invariant string `json:"invariant,omitempty"`
+	Hard      bool   `json:"hard,omitempty"`
 }
 
 // Incident is one file of the incidents directory.
@@ -110,8 +122,10 @@ func (r *Runner) writeIncident(rec DeathRecord) {
 	trimIncidents(dir, incidentKeep)
 }
 
-func trimIncidents(dir string, keep int) {
-	names, _ := filepath.Glob(filepath.Join(dir, "*.json"))
+func trimIncidents(dir string, keep int) { trimGlob(dir, "*.json", keep) }
+
+func trimGlob(dir, pattern string, keep int) {
+	names, _ := filepath.Glob(filepath.Join(dir, pattern))
 	if len(names) <= keep {
 		return
 	}
@@ -121,4 +135,91 @@ func trimIncidents(dir string, keep int) {
 			os.Remove(n)
 		}
 	}
+}
+
+// incidentGate is the rate limit of monitor incidents (guarded by the invMon mutex of its owner).
+type incidentGate struct {
+	last  map[string]time.Time
+	times []time.Time
+}
+
+func (g *incidentGate) allow(name string, now time.Time) bool {
+	if t, ok := g.last[name]; ok && now.Sub(t) < incidentMonGapSec*time.Second {
+		return false
+	}
+	keep := g.times[:0]
+	for _, t := range g.times {
+		if now.Sub(t) < time.Hour {
+			keep = append(keep, t)
+		}
+	}
+	g.times = keep
+	if len(g.times) >= incidentMonPerHour {
+		return false
+	}
+	if g.last == nil {
+		g.last = map[string]time.Time{}
+	}
+	g.last[name] = now
+	g.times = append(g.times, now)
+	return true
+}
+
+// monitorIncident builds the incident of an invariant hit from the live snapshot; nil without a player.
+func (r *Runner) monitorIncident(snap *d2.Snapshot, h invHit) *Incident {
+	if snap == nil || snap.Player == nil {
+		return nil
+	}
+	p := snap.Player
+	k := r.kitOf(snap)
+	start := "field"
+	if p.InTown() {
+		start = "town"
+	}
+	r.mu.Lock()
+	state, step := string(r.st), r.activity
+	r.mu.Unlock()
+	row := invRowOf(h.Name)
+	in := &Incident{Version: IncidentVersion, Kind: "monitor", Time: r.e.Clock.Now(), AreaName: r.areaName(p.Area), Class: p.Class.String(), Tags: []string{"SETUP"},
+		Pre: IncidentPre{Start: start, Area: p.Area, Level: p.Level, Gold: p.Gold, Stash: p.StashGold, Difficulty: difficultyName(p.Difficulty), LifePct: p.LifePct()},
+		Facts: IncidentFacts{BeltHP: k.BeltHP, BeltMP: k.BeltMP, PackHP: k.PackHP, TownPortals: k.TownPortals, State: state, Activity: step,
+			Invariant: h.Name, Hard: row.Hard, Summary: h.Name + ": " + h.Detail}}
+	if start == "field" {
+		in.Facts.HostilesNear = r.hostileNear(snap, r.e.Tune.Combat.FightRadius)
+	}
+	return in
+}
+
+// noteMonitorIncident writes the pre-state of an invariant hit (hard or soft), rate limited. Failures are only logged.
+func (r *Runner) noteMonitorIncident(snap *d2.Snapshot, h invHit) {
+	if r.cfg.DeathLogPath == "" {
+		return
+	}
+	now := r.e.Clock.Now()
+	r.inv.mu.Lock()
+	ok := r.inv.incidents.allow(h.Name, now)
+	r.inv.mu.Unlock()
+	if !ok {
+		return
+	}
+	in := r.monitorIncident(snap, h)
+	if in == nil {
+		return
+	}
+	dir := filepath.Join(filepath.Dir(r.cfg.DeathLogPath), incidentDir)
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		r.e.Log.Warn("incident not saved", "err", err)
+		return
+	}
+	b, err := json.MarshalIndent(in, "", " ")
+	if err != nil {
+		return
+	}
+	name := strconv.FormatInt(now.Unix(), 10) + "-inv-" + h.Name + ".json"
+	if err := os.WriteFile(filepath.Join(dir, name), append(b, '\n'), 0o644); err != nil {
+		r.e.Log.Warn("incident not saved", "err", err)
+		return
+	}
+	trimGlob(dir, "*-inv-*.json", incidentMonKeep)
+	trimIncidents(dir, incidentKeep)
 }

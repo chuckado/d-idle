@@ -2,10 +2,12 @@ package bot
 
 import (
 	"context"
+	"errors"
 	"strings"
 	"testing"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/questspec"
 	"d2lod-bot/internal/task"
 )
 
@@ -97,5 +99,113 @@ func TestStepExecOffKeepsTheOldHandler(t *testing.T) {
 	}
 	if l.calls != treeDropPolls {
 		t.Fatalf("polls %d, want the old bound %d", l.calls, treeDropPolls)
+	}
+}
+
+const deciphered = 901
+
+// bkdCatalog knows both the scroll (bks) and what Akara hands back after reading it (bkd).
+type bkdCatalog struct{ scrollCatalog }
+
+func (c bkdCatalog) Item(class int) (ItemMeta, bool) {
+	if class == deciphered {
+		return ItemMeta{Name: "Key to the Cairn Stones", Code: "bkd", W: 1, H: 2}, true
+	}
+	return c.scrollCatalog.Item(class)
+}
+
+// akaraReads swaps the scroll for the key in the pack on its n-th reading (never when n < 0); liar: says yes, changes nothing.
+type akaraReads struct {
+	g        *rig
+	n, calls int
+	picks    []string
+}
+
+func (d *akaraReads) Talk(_ context.Context, npc, pick string) error {
+	d.picks = append(d.picks, npc+"/"+pick)
+	d.calls++
+	if d.n >= 0 && d.calls == d.n {
+		d.g.w.set(func(w *world) {
+			for i := range w.items {
+				if w.items[i].Class == scrollClass {
+					w.items[i].Class = deciphered
+				}
+			}
+		})
+	}
+	return nil
+}
+
+func talkRig(t *testing.T, class d2.Class, readAt int) (taskActs, *akaraReads) {
+	g := newRig(t)
+	g.w.class = class
+	g.w.set(func(w *world) {
+		w.items = append(w.items, d2.Unit{ID: 77, Type: d2.TypeItem, Class: scrollClass, Item: &d2.Item{Where: d2.ContInventory}})
+	})
+	g.r.d.Catalog = bkdCatalog{}
+	g.r.e.Tune.Quests.StepExec = 1
+	d := &akaraReads{g: g, n: readAt}
+	g.r.d.Task = &TaskDeps{Dialog: d}
+	return taskActs{r: g.r}, d
+}
+
+// The bark reading is a talk step of the data (act1 chain read_scroll): the executor talks to Akara with the row's pick and
+// waits for the key (bkd) in the PACK; a second try happens when the first talk changed nothing. Two classes.
+func TestStepExecTalkReadsTheBark(t *testing.T) {
+	for _, cl := range execClasses {
+		a, d := talkRig(t, cl, 2)
+		if err := a.Talk(context.Background(), task.NPCAkara, "bark"); err != nil {
+			t.Fatalf("class %v: %v", cl, err)
+		}
+		if len(d.picks) != 2 || d.picks[0] != "Akara/bark" {
+			t.Fatalf("class %v: talks %v", cl, d.picks)
+		}
+	}
+}
+
+// Must fail: a dialog that says yes while the pack keeps the scroll is not Done (the post is the pack), and the row's three
+// tries are all used.
+func TestStepExecTalkWaitsForThePack(t *testing.T) {
+	for _, cl := range execClasses {
+		a, d := talkRig(t, cl, -1)
+		err := a.Talk(context.Background(), task.NPCAkara, "bark")
+		if err == nil || !strings.Contains(err.Error(), "not observed") || len(d.picks) != 3 {
+			t.Fatalf("class %v: err %v talks %v", cl, err, d.picks)
+		}
+	}
+}
+
+// Another NPC or another line, or the knob at 0, keeps the old path (the dialog is called once, as the task layer asks).
+func TestStepExecTalkOthersKeepTheOldPath(t *testing.T) {
+	for _, tc := range []struct {
+		npc, pick string
+		knob      int
+	}{{task.NPCAkara, "reward", 1}, {task.NPCKashya, "bark", 1}, {task.NPCAkara, "bark", 0}} {
+		a, d := talkRig(t, d2.Sorceress, -1)
+		a.r.e.Tune.Quests.StepExec = tc.knob
+		if err := a.Talk(context.Background(), tc.npc, tc.pick); err != nil || len(d.picks) != 1 {
+			t.Fatalf("%+v: err %v talks %v", tc, err, d.picks)
+		}
+	}
+}
+
+// The USE adapter right-clicks the named pack item through the object adapter; an unknown code is a fatal row error.
+func TestStepExecUseAdapter(t *testing.T) {
+	for _, cl := range execClasses {
+		a, _, objs := execRig(t, cl, -1)
+		be := &execBackend{a: a}
+		if err := be.Act(context.Background(), "use", questspec.Target{Kind: "item", Code: "bks"}, ""); err != nil {
+			t.Fatalf("class %v: %v", cl, err)
+		}
+		if len(objs.clicked) != 1 || objs.clicked[0] != "item:"+task.ItemBark {
+			t.Fatalf("class %v: clicked %v", cl, objs.clicked)
+		}
+		var fatal *questspec.FatalError
+		if err := be.Act(context.Background(), "use", questspec.Target{Kind: "item", Code: "zzz"}, ""); !errors.As(err, &fatal) {
+			t.Fatalf("class %v: unknown code: %v", cl, err)
+		}
+		if err := be.Act(context.Background(), "talk", questspec.Target{Kind: "npc", Class: 1}, ""); !errors.As(err, &fatal) {
+			t.Fatalf("class %v: unknown npc: %v", cl, err)
+		}
 	}
 }
