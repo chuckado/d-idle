@@ -21,7 +21,7 @@ owns:
   - "cmd/d2scenario/incident.go"
   - "cmd/d2scenario/incident_test.go"
   - "cmd/d2scenario/main.go"
-  - "tools/provingground/incidents"
+  - "tools/provingground/incidents/"
   - "docs/probes/incident-scenarios.md"
 exclusive: []
 contracts: []
