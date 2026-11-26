@@ -323,6 +323,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2c3c4f4d1 11-26 14:45 `Merge agent/qd28: d2scenario invariants soft in drills; act2strong kit; matrix note 80` (qd28)
+- ac20543fb 11-26 14:40 `Merge origin/main` (-)
 - 3ec8de3af 11-26 14:29 `Merge agent/toolstrade86: Merge branch 'main' into toolstrade86` (toolstrade86)
 - 0590318f2 11-26 14:29 `Merge agent/aura2c: Merge branch 'main' into aura2c` (aura2c)
 - 717d3c0c2 11-26 14:27 `Merge branch 'main' into toolstrade86` (-)
@@ -331,6 +333,4 @@
 - b3562c27a 11-26 14:20 `Merge branch 'main' into aura2d` (-)
 - 65dd4759c 11-26 14:17 `Merge origin/main` (-)
 - 884a0ebfe 11-26 14:05 `Merge branch 'main' into aura2d` (-)
-- 9565fe882 11-26 13:58 `Merge agent/stepexec2: Merge branch 'main' into stepexec2` (stepexec2)
-- 66f862a20 11-26 13:56 `Merge branch 'main' into stepexec2` (-)
 <!-- statusgen:end -->
