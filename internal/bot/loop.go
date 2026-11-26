@@ -413,6 +413,7 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 	}
 	var gone gameGone
 	var si safetyInterrupt
+	var ref *Refused
 	switch {
 	case errors.As(cause, &gone):
 		r.gameLost(ctx, c, gone.Event)
@@ -434,6 +435,8 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 		if !l.inLadder {
 			r.escalate(ctx, c, what, errStuck)
 		}
+	case errors.As(err, &ref):
+		r.handleRefused(ctx, ref)
 	case errors.Is(err, errAreaGated):
 		// A deliberate refusal, not a fault: no failure count, no ladder, no restart. The planner skips the target.
 		l.failures = 0
