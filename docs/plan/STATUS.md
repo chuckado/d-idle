@@ -323,14 +323,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 3be781e1d 11-26 13:24 `Merge agent/auralive: Merge branch 'main' into auralive` (auralive)
-- fad6b3f14 11-26 13:24 `Merge agent/act345map: Merge branch 'main' into act345map` (act345map)
-- 9028d8300 11-26 13:24 `Merge agent/act2plan: Merge branch 'main' into act2plan` (act2plan)
-- a14a0c7e3 11-26 13:19 `Merge branch 'main' into auralive` (-)
-- 95b5ed8a9 11-26 13:19 `Merge branch 'main' into act345map` (-)
-- a71504654 11-26 13:19 `Merge branch 'main' into act2plan` (-)
-- 23a4fb6ba 11-26 13:17 `Merge agent/classorder: Merge branch 'main' into classorder` (classorder)
-- 0fe3487dd 11-26 13:17 `Merge agent/auraaudit: Merge branch 'main' into auraaudit` (auraaudit)
-- 5dced27a9 11-26 13:15 `Merge branch 'main' into classorder` (-)
-- aaf9c18cd 11-26 13:15 `Merge branch 'main' into auraaudit` (-)
+- 3ec8de3af 11-26 14:29 `Merge agent/toolstrade86: Merge branch 'main' into toolstrade86` (toolstrade86)
+- 0590318f2 11-26 14:29 `Merge agent/aura2c: Merge branch 'main' into aura2c` (aura2c)
+- 717d3c0c2 11-26 14:27 `Merge branch 'main' into toolstrade86` (-)
+- f397d77bb 11-26 14:27 `Merge branch 'main' into aura2c` (-)
+- 170c34af7 11-26 14:22 `Merge agent/aura2d: Merge branch 'main' into aura2d` (aura2d)
+- b3562c27a 11-26 14:20 `Merge branch 'main' into aura2d` (-)
+- 65dd4759c 11-26 14:17 `Merge origin/main` (-)
+- 884a0ebfe 11-26 14:05 `Merge branch 'main' into aura2d` (-)
+- 9565fe882 11-26 13:58 `Merge agent/stepexec2: Merge branch 'main' into stepexec2` (stepexec2)
+- 66f862a20 11-26 13:56 `Merge branch 'main' into stepexec2` (-)
 <!-- statusgen:end -->

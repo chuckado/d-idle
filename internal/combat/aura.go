@@ -31,6 +31,9 @@ func (f *Fighter) ActiveAura(p *d2.Player) (id int, ok bool) {
 	if f.auraFn != nil {
 		return f.auraFn(p)
 	}
+	if p != nil && p.AuraKnown { // d2d: the state line's aura= (V live)
+		return p.Aura, true
+	}
 	if f.e.Mem == nil || p == nil || p.Addr == 0 {
 		return 0, false
 	}
@@ -95,6 +98,15 @@ func (f *Fighter) wantAura(p *d2.Player, pr *Profile, tg *Target, resting bool) 
 		if !ok {
 			continue
 		}
+		if a.FightLifePct > 0 && !resting && tg != nil && f.auraPotKnown && f.auraPotions <= a.MaxPotions {
+			line := a.FightLifePct
+			if f.auraActive(p, sp.ID) {
+				line += fightAuraHysteresis
+			}
+			if pct(p.Life, p.MaxLife) < line {
+				return sp, true
+			}
+		}
 		if a.RestLifePct > 0 {
 			if resting && pct(p.Life, p.MaxLife) < a.RestLifePct {
 				return sp, true
@@ -149,6 +161,11 @@ func (f *Fighter) keepAura(ctx context.Context, snap *d2.Snapshot, tg *Target, f
 		return false, nil
 	}
 	f.auraChecked = now
+	f.auraPotions, f.auraPotKnown = 0, snap.Inventory != nil // unknown potions never count as low
+	if f.auraPotKnown {
+		b := BeltOf(snap.Inventory, f.cat)
+		f.auraPotions = b.Count(PotionHealing) + b.Count(PotionRejuv)
+	}
 	want, ok := f.wantAura(p, pr, tg, resting)
 	if !ok {
 		return false, nil
@@ -170,6 +187,7 @@ func (f *Fighter) keepAura(ctx context.Context, snap *d2.Snapshot, tg *Target, f
 			return false, err
 		}
 		f.lastRight = s.Player.RightSkill
+		// Confirmed by the real aura state when the backend reports it; the selected right skill only without one.
 		if cur, ok := f.ActiveAura(s.Player); (ok && cur == want.ID) || (!ok && s.Player.RightSkill == want.ID) {
 			f.auraDirty = false
 			f.info("aura up", "skill", want.Name, "tries", try+1)
@@ -177,6 +195,11 @@ func (f *Fighter) keepAura(ctx context.Context, snap *d2.Snapshot, tg *Target, f
 		}
 	}
 	f.info("aura did not come up", "skill", want.Name, "id", want.ID, "right", f.lastRight)
+	if now.Sub(f.auraMissAt) >= time.Minute { // once a minute: a hero fighting without its aura must show in the log
+		f.auraMissAt = now
+		cur, _ := f.ActiveAura(snap.Player)
+		f.log().Warn("combat aura missing", "skill", want.Name, "id", want.ID, "active", cur, "right", f.lastRight)
+	}
 	f.auraRetryAt = now.Add(auraRetryBackoff) // do not hammer the key when something blocks it
 	return false, nil
 }
@@ -185,11 +208,24 @@ func (f *Fighter) keepAura(ctx context.Context, snap *d2.Snapshot, tg *Target, f
 // dirty flag made every combat tick press the key again, 140 lines in 22 minutes).
 const auraRetryBackoff = 10 * time.Second
 
+// fightAuraHysteresis is how far above AuraPref.FightLifePct life must climb before the fight aura is given up.
+const fightAuraHysteresis = 15
+
 // applyAura presses the aura's hotkey. On d2d there are no hotkeys: V live (palready, docs/palready.md) "cmd skill" casts
 // at the point and never changes the selected skill, and "cmd select" is accepted but leaves rskill unchanged even with
 // the picker open, so the aura is picked through the right skill popup (SetRight, read back from the state).
 func (f *Fighter) applyAura(ctx context.Context, snap *d2.Snapshot, want SkillSpec) error {
 	if f.D2D {
+		if p := snap.Player; p.RightSkill == want.ID {
+			// The state says the aura is off although the hand holds it (after a load, or a merc revive or any
+			// non-aura pick that was undone): SetRight would return at once, so go through another skill first.
+			if alt, ok := f.repickVia(p, want.ID); ok {
+				if err := f.SetRight(ctx, alt); err != nil && !errors.Is(err, ErrBindFailed) {
+					return err
+				}
+				f.info("aura re-pick", "via", alt, "skill", want.ID)
+			}
+		}
 		err := f.SetRight(ctx, want.ID)
 		if err != nil && !errors.Is(err, ErrBindFailed) {
 			return err
@@ -210,4 +246,16 @@ func hasBandAura(p *Profile) bool {
 		}
 	}
 	return false
+}
+
+// repickVia chooses the skill to select between two picks of the same aura: the first learned skill with a popup row
+// that is not id (lowest id first, so the choice is stable).
+func (f *Fighter) repickVia(p *d2.Player, id int) (int, bool) {
+	best, found := 0, false
+	for _, sk := range p.Skills {
+		if row, ok := f.listRows[sk.ID]; sk.ID != id && sk.Level > 0 && ok && row >= 0 && (!found || sk.ID < best) {
+			best, found = sk.ID, true
+		}
+	}
+	return best, found
 }

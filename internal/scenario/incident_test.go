@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 )
@@ -57,6 +58,41 @@ func TestQuestyIncidentRows(t *testing.T) {
 	for _, s := range scs {
 		if s.Tier != TierNightly {
 			t.Errorf("%s: tier %s", s.ID, s.Tier)
+		}
+	}
+}
+
+// A monitor incident (an invariant hit, not a death) becomes a report-only row that is red when the same invariant fires
+// again; a hit in town replays from town. Two classes.
+func TestMonitorIncidentScenario(t *testing.T) {
+	for _, class := range []string{"Sorceress", "Barbarian"} {
+		in := map[string]any{"version": IncidentVersion, "kind": "monitor", "time": time.Date(2026, 11, 26, 4, 0, 0, 0, time.UTC),
+			"areaName": "Rogue Encampment", "class": class, "tags": []string{"SETUP"},
+			"pre":   map[string]any{"start": "town", "level": 12, "gold": 90},
+			"facts": map[string]any{"beltHP": 2, "invariant": "field-entry-no-kit", "summary": "x"}}
+		b, _ := json.Marshal(in)
+		p := filepath.Join(t.TempDir(), "i.json")
+		os.WriteFile(p, b, 0o644)
+		inc, err := LoadIncident(p)
+		if err != nil {
+			t.Fatal(err)
+		}
+		s, err := inc.Scenario("", 3)
+		if err != nil {
+			t.Fatalf("%s: %v", class, err)
+		}
+		found := false
+		for _, a := range s.Assert {
+			if a.Kind == ALogLine && a.Pattern == `invariant field-entry-no-kit\b` && a.Max != nil && *a.Max == 0 {
+				found = true
+			}
+		}
+		if !found || s.Pre.Start != StartTown || s.Tier != TierNightly || !strings.Contains(s.ID, "field-entry-no-kit") {
+			t.Fatalf("%s: %+v", class, s)
+		}
+		inc.Facts.Invariant = ""
+		if _, err := inc.Scenario("", 3); err == nil {
+			t.Fatal("monitor incident without an invariant accepted")
 		}
 	}
 }

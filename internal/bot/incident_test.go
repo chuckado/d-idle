@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strconv"
 	"testing"
 	"time"
 
@@ -52,5 +53,54 @@ func TestTrimIncidentsKeepsTheNewest(t *testing.T) {
 	left, _ := filepath.Glob(filepath.Join(dir, "*.json"))
 	if len(left) != 2 || filepath.Base(left[0]) != "200-death.json" {
 		t.Fatalf("%v", left)
+	}
+}
+
+// An invariant hit (hard or soft) writes the pre-state with the invariant name, tagged SETUP; the same name inside the gap
+// and more than incidentMonPerHour per hour write nothing; the monitor files are trimmed to incidentMonKeep. Two classes.
+func TestMonitorHitWritesIncident(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Barbarian} {
+		g := newRig(t)
+		dir := t.TempDir()
+		g.r.cfg.DeathLogPath = filepath.Join(dir, "deaths.json")
+		g.w.set(func(w *world) { w.class = class })
+		s, _ := g.w.snapshot()
+		files := func() []string { n, _ := filepath.Glob(filepath.Join(dir, incidentDir, "*-inv-*.json")); return n }
+		g.r.noteMonitorIncident(s, invHit{"stuck-in-pack", "hostiles=6"})
+		if len(files()) != 1 {
+			t.Fatalf("%v: %d files after a hit", class, len(files()))
+		}
+		b, _ := os.ReadFile(files()[0])
+		var in Incident
+		if err := json.Unmarshal(b, &in); err != nil {
+			t.Fatal(err)
+		}
+		if in.Kind != "monitor" || in.Facts.Invariant != "stuck-in-pack" || in.Class != class.String() || len(in.Tags) != 1 || in.Tags[0] != "SETUP" || in.Facts.Hard {
+			t.Fatalf("%v: incident %+v", class, in)
+		}
+		g.r.noteMonitorIncident(s, invHit{"stuck-in-pack", "again"})
+		if len(files()) != 1 {
+			t.Fatalf("%v: the same name inside the gap wrote a second file", class)
+		}
+		for _, name := range []string{"potion-not-drunk", "life-zero-alive", "xp-frozen", "mode-no-exit", "refusal-storm", "corpse-unresolved", "town-thrash"} {
+			g.clock.Sleep(time.Second)
+			g.r.noteMonitorIncident(s, invHit{name, "x"})
+		}
+		if n := len(files()); n != incidentMonPerHour {
+			t.Fatalf("%v: %d files, want the hourly cap %d", class, n, incidentMonPerHour)
+		}
+	}
+}
+
+func TestTrimGlobKeepsDeathFiles(t *testing.T) {
+	dir := t.TempDir()
+	os.WriteFile(filepath.Join(dir, "1-death.json"), []byte("{}"), 0o644)
+	for i := 0; i < 25; i++ {
+		os.WriteFile(filepath.Join(dir, strconv.Itoa(100+i)+"-inv-x.json"), []byte("{}"), 0o644)
+	}
+	trimGlob(dir, "*-inv-*.json", incidentMonKeep)
+	all, _ := filepath.Glob(filepath.Join(dir, "*.json"))
+	if len(all) != incidentMonKeep+1 {
+		t.Fatalf("%d files left", len(all))
 	}
 }

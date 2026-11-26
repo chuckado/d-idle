@@ -100,18 +100,21 @@ type Fighter struct {
 	weights       DeathWeights
 	listRows      map[int]int // skill id -> skilldesc ListRow (popup rows)
 
-	leftCell    map[int]input.Screen // skill id -> left popup cell that selected it (bindleft.go)
-	leftFail    map[int]time.Time    // skill id -> do not try to select it as left skill before this time
-	auraFn      func(*d2.Player) (int, bool)
-	auraChecked time.Time
-	auraRetryAt time.Time // a failed apply waits until here
-	lastRight   int       // right skill read after the last apply try (diagnosis)
-	auraArea    int
-	auraDirty   bool           // death or area change: the aura must be applied again
-	auraCrowd   int            // hostiles close, set by the fight loop before KeepAura (AuraPref.NeedsCrowd)
-	lifePrice   lifePriceState // noteLifePrice, read by attackSkills
-	necro       necroState
-	trap        trapMem
+	leftCell     map[int]input.Screen // skill id -> left popup cell that selected it (bindleft.go)
+	leftFail     map[int]time.Time    // skill id -> do not try to select it as left skill before this time
+	auraFn       func(*d2.Player) (int, bool)
+	auraChecked  time.Time
+	auraRetryAt  time.Time // a failed apply waits until here
+	auraMissAt   time.Time // last `aura missing` warning
+	lastRight    int       // right skill read after the last apply try (diagnosis)
+	auraArea     int
+	auraDirty    bool           // death or area change: the aura must be applied again
+	auraPotions  int            // healing and rejuvenation potions in the belt, read by keepAura
+	auraPotKnown bool           // the snapshot had an inventory
+	auraCrowd    int            // hostiles close, set by the fight loop before KeepAura (AuraPref.NeedsCrowd)
+	lifePrice    lifePriceState // noteLifePrice, read by attackSkills
+	necro        necroState
+	trap         trapMem
 
 	eq               *gear.Equipped // last noted gear, nil when unknown
 	weaponProblem    string

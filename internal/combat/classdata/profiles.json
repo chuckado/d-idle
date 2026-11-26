@@ -193,7 +193,9 @@
      "aura": [
       {
        "name": "Prayer",
-       "restLifePct": 70
+       "restLifePct": 70,
+       "fightLifePct": 50,
+       "maxPotions": 2
       },
       {
        "name": "Concentration"
@@ -246,7 +248,9 @@
    "aura": [
     {
      "name": "Prayer",
-     "restLifePct": 70
+     "restLifePct": 70,
+     "fightLifePct": 50,
+     "maxPotions": 2
     },
     {
      "name": "Holy Fire",
@@ -299,7 +303,9 @@
      "aura": [
       {
        "name": "Prayer",
-       "restLifePct": 70
+       "restLifePct": 70,
+       "fightLifePct": 50,
+       "maxPotions": 2
       },
       {
        "name": "Concentration"
@@ -326,7 +332,9 @@
    "aura": [
     {
      "name": "Prayer",
-     "restLifePct": 70
+     "restLifePct": 70,
+     "fightLifePct": 50,
+     "maxPotions": 2
     },
     {
      "name": "Might"

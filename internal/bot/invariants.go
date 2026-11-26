@@ -32,6 +32,7 @@ const invDefaultGapSec = 60
 var invRows = []invRow{
 	{Name: "potion-not-drunk", Hard: true, Secs: 8, Why: "in the field under the drink line with a healing potion in the belt and none drunk for Secs"},
 	{Name: "portal-not-cast", Secs: 6, Why: "in the field at or under the chicken line with hostiles near and a town portal scroll, still in the same area after Secs"},
+	{Name: "guard-stall", Secs: 10, Count: 2, GapSec: 300, Why: "no log line for Secs while Count or more hostiles are near (stall.go logs the goroutine stack once per five minutes)"},
 	{Name: "stuck-in-pack", Secs: 8, Count: 5, Pct: 60, Why: "in the field with Count or more hostiles near and life under Pct for Secs (a crowd fight that neither kills nor leaves)"},
 	{Name: "field-entry-hurt", Pct: 50, Why: "left town with life under Pct of max"},
 	{Name: "field-entry-no-kit", Why: "left town while the kit (portal, healing, mana minimum) is incomplete"},
@@ -44,6 +45,7 @@ var invRows = []invRow{
 	{Name: "corpse-unresolved", Hard: true, Secs: 900, Why: "a corpse waits in town for Secs, neither retrieved nor abandoned"},
 	{Name: "town-thrash", Count: 17, Secs: 3600, Why: "Count or more field entries within Secs"},
 	{Name: "arbiter-starved", GapSec: 600, Why: "an arbiter intent was outranked for 600 s or more (docs/arbiter.md); only with the arbiter knobs on"},
+	{Name: "aura-off", Secs: 10, Why: "in the field with an aura skill learned and the state line reading no active aura (aura=0) for Secs; only where the backend reports the aura (d2d)"},
 	{Name: "economy-stall", Secs: 7200, Count: 100, Why: "gold in purse and stash under Count for Secs while kills continue"},
 }
 
@@ -115,6 +117,8 @@ type invFacts struct {
 	kitMissing             []string
 	corpsePending          bool
 	corpseSince            time.Time
+	auraWatch              bool // an aura skill is learned and the backend reports the active aura
+	aura                   int  // the active aura id (0 none), meaningful with auraWatch
 }
 
 type invHit struct{ Name, Detail string }
@@ -127,6 +131,7 @@ type invMon struct {
 	started     time.Time            // first tick: the start of every counter's window
 	minute      map[string]int       // hits since the last minute line
 	pending     []invHit             // hits noted outside the tick (refusal counted as a failure)
+	incidents   incidentGate         // rate limit of the pre-state files a hit writes (incident.go)
 
 	seen, prevTown        bool
 	lowSince              time.Time
@@ -135,6 +140,7 @@ type invMon struct {
 	tpArea                int
 	packSince             time.Time
 	resupSince, zeroSince time.Time
+	auraOffSince          time.Time
 	xpAt                  time.Time
 	lastXP                uint32
 	modeKey               string
@@ -175,6 +181,13 @@ func (m *invMon) noteRefusalFailure(what string, err error) {
 	m.mu.Unlock()
 }
 
+// noteStall records a stall of the guard's look (soft row guard-stall); the incident file and the minute count follow from the hit.
+func (m *invMon) noteStall(what string) {
+	m.mu.Lock()
+	m.pending = append(m.pending, invHit{"guard-stall", what})
+	m.mu.Unlock()
+}
+
 // noteStarved records that the arbiter left one source's proposal unserved for too long (soft row arbiter-starved).
 func (m *invMon) noteStarved(what string) {
 	m.mu.Lock()
@@ -195,7 +208,7 @@ func (m *invMon) tick(f invFacts) []invHit {
 	m.pending = nil
 	if f.dead {
 		// a dead hero breaks no field invariant; keep the stopwatches clean
-		m.lowSince, m.tpSince, m.resupSince, m.zeroSince, m.packSince = time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}
+		m.lowSince, m.tpSince, m.resupSince, m.zeroSince, m.packSince, m.auraOffSince = time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}
 		m.seen, m.prevTown = false, false
 		return m.limit(raw, f.now)
 	}
@@ -238,6 +251,11 @@ func (m *invMon) tick(f invFacts) []invHit {
 		if f.kitKnown && len(f.kitMissing) > 0 {
 			hit("field-entry-no-kit", "missing=%s area=%d", strings.Join(f.kitMissing, ","), f.area)
 		}
+	}
+
+	r = invRowOf("aura-off")
+	if d := invSince(&m.auraOffSince, field && f.auraWatch && f.aura == 0, f.now); d >= r.dur() {
+		hit(r.Name, "no active aura for=%ds area=%d step=%q hostiles=%d", int(d.Seconds()), f.area, f.step, f.hostiles)
 	}
 
 	r = invRowOf("resupply-in-field")
@@ -399,6 +417,7 @@ func (r *Runner) invTick(snap *d2.Snapshot, c control) {
 	r.corpseTown.mu.Lock()
 	f.corpsePending, f.corpseSince = r.corpseTown.pending, r.corpseTown.since
 	r.corpseTown.mu.Unlock()
+	f.auraWatch, f.aura = r.auraFacts(p)
 	if !f.inTown && !f.dead {
 		f.hostiles = r.hostileNear(snap, t.Combat.FightRadius)
 		if f.lifePct < f.drinkPct || f.lifePct <= f.chickenPct {
@@ -416,6 +435,7 @@ func (r *Runner) invTick(snap *d2.Snapshot, c control) {
 		if r.d.OnInvariant != nil {
 			r.d.OnInvariant(h.Name, h.Detail)
 		}
+		r.noteMonitorIncident(snap, h)
 	}
 }
 
@@ -455,4 +475,18 @@ func (m *invMon) Counters() []InvCounter {
 		out = append(out, InvCounter{Name: r.Name, Hard: r.Hard, Count: m.total[r.Name], Since: m.started, First: m.first[r.Name], Last: m.last[r.Name]})
 	}
 	return out
+}
+
+// auraFacts reports whether the aura-off row applies: the backend gives the active aura (d2d state line) and the hero has
+// learned a skill the data marks as an aura. No class check: a class without aura skills never qualifies.
+func (r *Runner) auraFacts(p *d2.Player) (watch bool, id int) {
+	if !p.AuraKnown || r.e.Data == nil {
+		return false, 0
+	}
+	for _, sk := range p.Skills {
+		if d := r.e.Data.SkillByID(sk.ID); sk.Level > 0 && d != nil && d.Aura {
+			return true, p.Aura
+		}
+	}
+	return false, p.Aura
 }

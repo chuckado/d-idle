@@ -12,6 +12,7 @@
 | name | fires when |
 |---|---|
 | `potion-not-drunk` | in the field under the drink line, healing potion in the belt, none drunk for 8 s |
+| `guard-stall` | no log line for 10 s while 2 or more hostiles are near (soft, diagnostic: `stallguard.go` logs one `stall: goroutine stack` per 5 min with the bot goroutines' stacks, the action name and its age; the minute line carries `stalls`) |
 | `stuck-in-pack` | in the field with 5 or more hostiles near and life under 60% for 8 s (a crowd fight that neither kills nor leaves) |
 | `portal-not-cast` | in the field at or under the chicken line, hostiles near, a town portal scroll, same area after 6 s |
 | `field-entry-hurt` | first tick outside town with life under 50 percent |
@@ -25,6 +26,7 @@
 | `corpse-unresolved` | `corpseTown` pending for 15 min |
 | `town-thrash` | 17 field entries within an hour |
 | `arbiter-starved` | an arbiter intent outranked for 600 s or more (soft; only with the arbiter knobs on) |
+| `aura-off` | soft: in the field with an aura skill learned and the d2d state line reading `aura=0` for 10 s (V live: a pick sets it at once, docs/probes/paladin-aura-live-2026-11-26.md) |
 | `economy-stall` | purse and stash gold under 100 for 2 h while kills continue |
 
 Not yet rows (need the reflex lane, P3): safety latency (verdict to potion) and cancellation latency.

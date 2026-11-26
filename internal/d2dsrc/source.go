@@ -302,6 +302,9 @@ func (s *Source) Read(ctx context.Context) (*Result, error) {
 		return res, nil
 	}
 	s.fillBuffStates(ctx, snap.Player)
+	if v, ok := st.Int("aura"); ok { // the player's active aura; both head paths lack it
+		snap.Player.Aura, snap.Player.AuraKnown = v, true
+	}
 	if b.lvl != nil && s.o.AddOrigin {
 		res.Extras.Level = b.lvl
 	}
