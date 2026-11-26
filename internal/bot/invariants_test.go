@@ -2,6 +2,7 @@ package bot
 
 import (
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/data"
 	"errors"
 	"fmt"
 	"log/slog"
@@ -299,6 +300,55 @@ func TestInvariantAuraOff(t *testing.T) {
 			if got := runInv(&invMon{}, h.facts(t0), 60, edit); got["aura-off"] != 0 {
 				t.Errorf("%s/%s: fired %v", h.name, name, got)
 			}
+		}
+	}
+}
+
+// summon-missing: a hero with a summon skill learned, mana for it and hostiles near whose minion count reads 0 for 10 s.
+// A minion standing, no summon skill, no mana, no hostiles and town fire nothing. Both heroes (the rows read facts).
+func TestInvariantSummonMissing(t *testing.T) {
+	for _, h := range invHeroes {
+		fight := func(f *invFacts, _ int) { f.summonWatch, f.minions, f.hostiles = true, 0, 3 }
+		if got := runInv(&invMon{}, h.facts(t0), 20, fight); got["summon-missing"] == 0 {
+			t.Errorf("%s: summon-missing did not fire: %v", h.name, got)
+		}
+		for name, edit := range map[string]func(*invFacts, int){
+			"minion up":   func(f *invFacts, _ int) { f.summonWatch, f.minions, f.hostiles = true, 2, 3 },
+			"no skill":    func(f *invFacts, _ int) { f.summonWatch, f.minions, f.hostiles = false, 0, 3 },
+			"no hostiles": func(f *invFacts, _ int) { f.summonWatch, f.minions, f.hostiles = true, 0, 0 },
+			"in town":     func(f *invFacts, _ int) { f.summonWatch, f.minions, f.hostiles, f.inTown = true, 0, 3, true },
+		} {
+			if got := runInv(&invMon{}, h.facts(t0), 60, edit); got["summon-missing"] != 0 {
+				t.Errorf("%s/%s: fired %v", h.name, name, got)
+			}
+		}
+	}
+}
+
+// summonWatch reads the learned skills through the data column, so a Necromancer (Raise Skeleton) and a Druid (Raven) qualify
+// alike and a Sorceress does not; mana below the cost and an unknown count switch the watch off.
+func TestSummonWatchIsData(t *testing.T) {
+	skills := map[int]*data.Skill{
+		70:  {ID: 70, Key: "Raise Skeleton", Summon: "skeleton", Mana: 6, ManaShift: 8},
+		221: {ID: 221, Key: "Raven", Summon: "raven", Mana: 20, ManaShift: 8},
+		36:  {ID: 36, Key: "Fire Bolt", Mana: 3},
+		99:  {ID: 99, Key: "Bone Mastery", Summon: "x", Passive: true},
+	}
+	by := func(id int) *data.Skill { return skills[id] }
+	for _, c := range []struct {
+		name  string
+		skill int
+		mana  int
+		known bool
+		want  bool
+	}{
+		{"necromancer", 70, 30, true, true}, {"druid", 221, 30, true, true},
+		{"sorceress", 36, 30, true, false}, {"passive", 99, 30, true, false},
+		{"no mana", 70, 1, true, false}, {"count unknown", 70, 30, false, false},
+	} {
+		p := &d2.Player{Mana: c.mana, PetsKnown: c.known, Pets: 0, Skills: []d2.Skill{{ID: c.skill, Level: 1}}}
+		if got, _ := summonWatch(p, by); got != c.want {
+			t.Errorf("%s: watch=%v want %v", c.name, got, c.want)
 		}
 	}
 }
