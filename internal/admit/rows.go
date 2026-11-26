@@ -17,15 +17,57 @@ type Rows struct {
 		NoPotionGap int `json:"noPotionGap"`
 		FromLevel   int `json:"fromLevel"`
 	} `json:"poverty"`
-	KitFloor struct {
-		PotionsBelow int `json:"potionsBelow"`
-		FromLevel    int `json:"fromLevel"`
-	} `json:"kitFloor"`
-	Arrival ArrivalRow `json:"arrival"`
-	Lean    struct {
+	KitFloor KitFloorRow `json:"kitFloor"`
+	Arrival  ArrivalRow  `json:"arrival"`
+	Lean     struct {
 		PotionsBelow int `json:"potionsBelow"`
 		EntryLifePct int `json:"entryLifePct"`
 	} `json:"lean"`
+}
+
+// KitFloorRow: below PotionsBelow healing potions from FromLevel a hero enters the first field only, unless a tier lifts that.
+type KitFloorRow struct {
+	PotionsBelow int       `json:"potionsBelow"`
+	FromLevel    int       `json:"fromLevel"`
+	Tiers        []KitTier `json:"tiers"`
+}
+
+// KitTier lifts the kit floor for a hero with at least PotionsAtLeast healing potions (the best matching tier counts): the first
+// Fields fields of the act are open, and so is any area whose monsters are FarBelow levels under the hero (from FarFromLevel up).
+// The poverty deadlock of Questy 2026-11-26 (3 potions, gold 14, only Blood Moor open at 1.4 gold per minute) is why.
+type KitTier struct {
+	PotionsAtLeast int `json:"potionsAtLeast"`
+	Fields         int `json:"fields"`
+	FarBelow       int `json:"farBelow"`
+	FarFromLevel   int `json:"farFromLevel"`
+}
+
+// Open says whether a hero with the given healing potions may enter area under the kit floor: the first field always, the first
+// Fields fields and the far areas by the best tier. fields lists the act's fields in plan order; mlvl may be nil (no far rule).
+func (k KitFloorRow) Open(healing, level, area int, fields []int, mlvl func(int) int) bool {
+	if len(fields) > 0 && area == fields[0] {
+		return true
+	}
+	var best *KitTier
+	for i := range k.Tiers {
+		if t := &k.Tiers[i]; healing >= t.PotionsAtLeast && (best == nil || t.PotionsAtLeast > best.PotionsAtLeast) {
+			best = t
+		}
+	}
+	if best == nil {
+		return false
+	}
+	for i, f := range fields {
+		if i < best.Fields && f == area {
+			return true
+		}
+	}
+	if best.FarBelow > 0 && level >= best.FarFromLevel && mlvl != nil {
+		if ml := mlvl(area); ml > 0 && ml <= level-best.FarBelow {
+			return true
+		}
+	}
+	return false
 }
 
 // Road is a dangerous leg: a level floor and a max life floor per archetype, and the kit. 0 = no rule.

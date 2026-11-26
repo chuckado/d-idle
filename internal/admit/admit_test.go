@@ -167,6 +167,67 @@ func TestRowsSane(t *testing.T) {
 	}
 }
 
+// The kit floor tiers (Questy 2026-11-26 poverty deadlock): two potions open the first two fields and areas far below the hero;
+// below two potions the first field only; the first field is always open.
+func TestKitFloorTiers(t *testing.T) {
+	rs, err := Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	k := rs.KitFloor
+	fields := []int{2, 3, 4}
+	ml := func(a int) int { return map[int]int{2: 1, 3: 3, 4: 5, 9: 3, 5: 8}[a] }
+	for _, c := range []struct {
+		healing, level, area int
+		want                 bool
+	}{
+		{0, 13, 2, true}, {1, 13, 3, false}, {2, 13, 3, true}, {2, 13, 4, true}, {2, 13, 9, true}, {2, 13, 5, false},
+		{2, 9, 9, false}, // below farFromLevel the far rule is off
+	} {
+		if got := k.Open(c.healing, c.level, c.area, fields, ml); got != c.want {
+			t.Errorf("potions %d clvl %d area %d: open %v, want %v", c.healing, c.level, c.area, got, c.want)
+		}
+	}
+}
+
+// Necromancer SME rows (card necrofloors, S): a caster needs 130 max life for the sewers and 220 for Duriel's lair. The rows
+// are archetype data: the caster values hold for any caster, and the melee archetype has no sewers life rule (its numbers are unchanged).
+func TestCasterLifeFloorsSewersAndDuriel(t *testing.T) {
+	r := mustRows(t)
+	const (
+		sewers = 47
+		duriel = 73
+	)
+	deep := func(arch string, level, maxLife int) View {
+		v := hero(arch)
+		v.Level, v.MaxLife, v.Life, v.InTown, v.Area = level, maxLife, maxLife, false, 40
+		return v
+	}
+	for _, c := range []struct {
+		name    string
+		arch    string
+		level   int
+		maxLife int
+		area    int
+		refuse  bool
+		row     string
+	}{
+		{"caster sewers 129 life", "caster", 16, 129, sewers, true, "act2_sewers"},
+		{"caster sewers 130 life", "caster", 16, 130, sewers, false, ""},
+		{"melee sewers 129 life has no life rule", "melee", 14, 129, sewers, false, ""},
+		{"caster duriel 219 life", "caster", 26, 219, duriel, true, "act2_duriel_lair"},
+		{"caster duriel 220 life", "caster", 26, 220, duriel, false, ""},
+		{"caster tomb 150 life stays open", "caster", 26, 150, 66, false, ""},
+		{"melee duriel 219 life", "melee", 24, 219, duriel, true, "act2_tombs"},
+		{"melee duriel 220 life", "melee", 24, 220, duriel, false, ""},
+	} {
+		got := r.MayEnter(deep(c.arch, c.level, c.maxLife), c.area, Level)
+		if got.Refused != c.refuse || got.Row != c.row {
+			t.Errorf("%s: refused=%v row=%q, want refused=%v row=%q (%s)", c.name, got.Refused, got.Row, c.refuse, c.row, got.Why)
+		}
+	}
+}
+
 // The Act 2 quest dungeons the walks enter all have a road row with a level and a life floor, and the arrival row lists them
 // (card act2temple). A hero below the floor is refused with a level need, not walked into the temple.
 func TestAct2QuestDungeonRoadsAndArrival(t *testing.T) {

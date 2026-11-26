@@ -173,31 +173,32 @@ func TestPaladinBands(t *testing.T) {
 			return false
 		}
 	}
-	// palprofile: Sacrifice (a life-price plain attack, x1.9 damage) leads from clvl 2 once learned, behind Zeal from
-	// clvl 15 (Zeal 4); Smite is never ranked (SME 2026-11-10: prerequisite only). Attack is always the last entry.
+	// Sacrifice is a prerequisite only (SME class-paladin, paladin-auras 2026-11-26: it costs life per swing): it is never
+	// an attack in any band, and nothing in the profile pays life. Zeal leads from clvl 12 once learned; below it the
+	// weapon. Smite and Holy Bolt (undead only) are not ranked either. Attack is always the last entry.
 	eq := func(got []string, want ...string) {
 		t.Helper()
 		if !slices.Equal(got, want) {
 			t.Fatalf("got %v, want %v", got, want)
 		}
 	}
+	all := has("Zeal", "Blessed Hammer", "Sacrifice", "Smite", "Holy Bolt")
 	eq(pr.AttackNames(1, has("Sacrifice")), "Attack")
-	eq(pr.AttackNames(2, has()), "Attack")
-	eq(pr.AttackNames(3, has("Sacrifice")), "Sacrifice", "Attack")
-	eq(pr.AttackNames(10, has("Zeal")), "Attack") // Zeal known without Sacrifice cannot happen; no band applies
-	eq(pr.AttackNames(13, has("Zeal", "Sacrifice")), "Sacrifice", "Zeal", "Attack")
-	eq(pr.AttackNames(15, has("Zeal", "Sacrifice")), "Zeal", "Sacrifice", "Attack")
-	eq(pr.AttackNames(30, has("Zeal", "Sacrifice", "Blessed Hammer")), "Blessed Hammer", "Zeal", "Sacrifice", "Attack")
+	eq(pr.AttackNames(3, has("Sacrifice")), "Attack")
+	eq(pr.AttackNames(10, has("Sacrifice", "Smite")), "Attack")
+	eq(pr.AttackNames(13, has("Zeal", "Sacrifice")), "Zeal", "Attack")
+	eq(pr.AttackNames(15, has("Zeal", "Sacrifice")), "Zeal", "Attack")
+	eq(pr.AttackNames(30, has("Zeal", "Sacrifice", "Blessed Hammer")), "Blessed Hammer", "Zeal", "Attack")
 	eq(pr.AttackNames(13, has()), "Attack")
-	for _, lv := range []int{1, 10, 13, 30} {
-		for _, n := range pr.AttackNames(lv, has("Zeal", "Blessed Hammer", "Sacrifice", "Smite")) {
-			if n == "Smite" {
-				t.Errorf("clvl %d: Smite ranked", lv)
+	for lv := 1; lv <= 40; lv++ {
+		for _, n := range pr.AttackNames(lv, all) {
+			if n == "Smite" || n == "Sacrifice" || n == "Holy Bolt" {
+				t.Errorf("clvl %d: %s ranked", lv, n)
 			}
 		}
 	}
-	if !slices.Contains(pr.LifePrice, "Sacrifice") {
-		t.Errorf("Sacrifice must be a life-price skill: %v", pr.LifePrice)
+	if len(pr.LifePrice) != 0 {
+		t.Errorf("the paladin profile must not pay life: %v", pr.LifePrice)
 	}
 	// the Sorceress is unchanged: Blizzard band first, Attack never ranked above a spell
 	sor := ProfileFor(d2.Sorceress, BuildBlizzard)
@@ -435,7 +436,7 @@ func TestWantAuraSkipsImmuneElement(t *testing.T) {
 
 func TestPaladinFightsWithLeftHand(t *testing.T) {
 	h, g := newHandGame(t)
-	g.p.Level = 15      // Zeal 4 band: Zeal leads (clvl 12 to 14 prefers Sacrifice, TestPaladinSacrificeBand)
+	g.p.Level = 15      // Zeal 4 band: Zeal leads
 	g.p.LeftSkill = 107 // Sacrifice selected after the char creation: Zeal must be picked by the profile
 	g.aura = 0
 	h.s.stock(itHP1, 0, 2)

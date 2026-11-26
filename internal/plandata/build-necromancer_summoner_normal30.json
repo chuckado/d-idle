@@ -1,5 +1,6 @@
 {
  "build": "necromancer_summoner_normal30",
+ "combat": "summoner",
  "class": "necromancer",
  "schema": "per-clvl allocation, same shape as build-paladin-normal30.json (leveler.ParseBuild). main_attack: extra, for combat: skill to use as main attack per clvl range, weapon says which equipped weapon type it needs ('any' = none). Quest points (Den, Radament, Izual) are folded into the row where the guide spends them; the planner pulls rows forward when more points are unspent than the level grants.",
  "tags": "Skills: U (own order for a bot with no weapon swap and no positioning micro: warriors first, Clay Golem at 6, mages from 12, Bone Armor 14 as Maxroll leveling, Corpse Explosion from 15; end state direction V from Maxroll Summoner Necromancer https://maxroll.gg/d2/guides/summoner-necromancer-guide fetched 2026-10-29: maxed Raise Skeleton, Skeleton Mastery, Corpse Explosion; 1-point Iron Golem, Summon Resist, Decrepify, Dim Vision, Lower Resist, Revive come after clvl 30 and are not in these rows). Quest points folded into rows 5, 15, 21. Stats: clvl 2 = 3 Energy + 2 Vit, then Vit (SME answers 2026-11-22 section 5: a summoner needs mana only to re-raise; before 2026-11-23 rows 2-3 put 10 Energy first, copied from the caster leveling table); Str 25 for gear, rest Vit (V Maxroll). Prerequisites and reqlevels checked against skills.txt (V Patch_D2.mpq). Teeth gets one point only (Corpse Explosion prerequisite and the wand attack).",
@@ -21,27 +22,27 @@
   },
   {
    "key": "F3",
-   "skill": "Clay Golem",
-   "hand": "right",
-   "from_clvl": 6
-  },
-  {
-   "key": "F4",
-   "skill": "Amplify Damage",
-   "hand": "right",
-   "from_clvl": 11
-  },
-  {
-   "key": "F5",
    "skill": "Raise Skeletal Mage",
    "hand": "right",
    "from_clvl": 12
   },
   {
-   "key": "F6",
+   "key": "F4",
+   "skill": "Clay Golem",
+   "hand": "right",
+   "from_clvl": 6
+  },
+  {
+   "key": "F5",
    "skill": "Bone Armor",
    "hand": "right",
    "from_clvl": 14
+  },
+  {
+   "key": "F6",
+   "skill": "Amplify Damage",
+   "hand": "right",
+   "from_clvl": 11
   },
   {
    "key": "F7",
@@ -54,9 +55,9 @@
   {
    "from_clvl": 1,
    "until_clvl": 14,
-   "skill": "Raise Skeleton",
+   "skill": "Teeth",
    "weapon": "any",
-   "note": "attack skill is Teeth (1 point) or the wand/melee; the army does the killing: recast Raise Skeleton to the cap"
+   "note": "Teeth (one point from clvl 5) or the plain swing before that; the army does the killing: recast Raise Skeleton to the cap from the summon rules"
   },
   {
    "from_clvl": 15,

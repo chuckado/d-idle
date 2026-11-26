@@ -26,11 +26,8 @@ type povertyFarmData struct {
 	EarlyShop struct {
 		SurplusPct int `json:"surplusPct"`
 	} `json:"earlyShop"`
-	KitFloor struct {
-		PotionsBelow int `json:"potionsBelow"`
-		FromLevel    int `json:"fromLevel"`
-	} `json:"kitFloor"`
-	Lean struct {
+	KitFloor admit.KitFloorRow `json:"kitFloor"`
+	Lean     struct {
 		PotionsBelow int `json:"potionsBelow"`
 		EntryLifePct int `json:"entryLifePct"`
 	} `json:"noPortalLean"`
@@ -76,8 +73,8 @@ func (r *Runner) povertyAreaWhy(s *d2.Snapshot, a int) string {
 // minute among the data's areas that its level allows and that are neither cleared, banned nor guarded.
 func (r *Runner) povertyFarmArea(s *d2.Snapshot) (int, bool) {
 	d := loadPovertyFarm()
-	if d.NoPotionGap <= 0 || !r.noPotions(s) || s.Player.Difficulty != d2.Normal || s.Player.Level < d.FromLevel {
-		return 0, false
+	if d.NoPotionGap <= 0 || s == nil || s.Player == nil || healingOf(r.resInput(s)) >= max(d.KitFloor.PotionsBelow, 1) || s.Player.Difficulty != d2.Normal || s.Player.Level < d.FromLevel {
+		return 0, false // the farm is for a hero short of the kit (no potion at all, or below the kit floor)
 	}
 	ex := map[int]bool{}
 	for a := range r.loop.cleared {
@@ -89,7 +86,7 @@ func (r *Runner) povertyFarmArea(s *d2.Snapshot) (int, bool) {
 	r.guardedAreas(s, ex)
 	best, bestG := 0, -1.0
 	for _, f := range d.Farm {
-		if ex[f.Area] || r.povertyAreaWhy(s, f.Area) != "" || f.GoldPerMin <= bestG {
+		if ex[f.Area] || r.povertyAreaWhy(s, f.Area) != "" || r.kitFloorWhy(s, f.Area) != "" || f.GoldPerMin <= bestG {
 			continue
 		}
 		best, bestG = f.Area, f.GoldPerMin
@@ -121,40 +118,60 @@ func (r *Runner) leanEntryWhy(s *d2.Snapshot, a int) string {
 	return ""
 }
 
-// firstFieldArea is the first non-town plan step of the hero's own act: the area next to the camp (Blood Moor in act 1).
-func (r *Runner) firstFieldArea(s *d2.Snapshot) int {
+// fieldsOfAct lists the non-town areas of the hero's own act in plan order (Blood Moor, Cold Plains, ... in act 1).
+func (r *Runner) fieldsOfAct(s *d2.Snapshot) []int {
 	diff := difficultyName(s.Player.Difficulty)
 	act := s.Player.Act + 1
-	first := 0
+	var out, other []int
+	seen := map[int]bool{}
 	for _, st := range r.d.Plan.Steps[diff] {
-		if r.d.Plan.IsTown(st.Area) {
+		if r.d.Plan.IsTown(st.Area) || seen[st.Area] {
 			continue
 		}
+		seen[st.Area] = true
 		if r.d.Plan.Act(st.Area) == act {
-			return st.Area
-		}
-		if first == 0 {
-			first = st.Area
+			out = append(out, st.Area)
+		} else {
+			other = append(other, st.Area)
 		}
 	}
-	return first
+	if len(out) == 0 {
+		return other
+	}
+	return out
+}
+
+// firstFieldArea is the first non-town plan step of the hero's own act: the area next to the camp (Blood Moor in act 1).
+func (r *Runner) firstFieldArea(s *d2.Snapshot) int {
+	if f := r.fieldsOfAct(s); len(f) > 0 {
+		return f[0]
+	}
+	return 0
 }
 
 // kitFloorWhy says why a hero below the kit floor may not pick area a ("" = fine): from kitFloor.fromLevel in Normal with fewer than
-// kitFloor.potionsBelow healing potions it enters the first field only, scroll or not. The area the hero stands in is not asked: the
-// kit trip rules decide when it leaves.
+// kitFloor.potionsBelow healing potions it enters the first field only, scroll or not; the tiers of the row open more (two potions:
+// the first two fields and the areas whose monsters are far below the hero). The area the hero stands in is not asked: the kit trip
+// rules decide when it leaves.
 func (r *Runner) kitFloorWhy(s *d2.Snapshot, a int) string {
 	d := loadPovertyFarm()
 	if d.KitFloor.PotionsBelow <= 0 || s == nil || s.Player == nil || r.e.Tune.Route.EarlyRoute == 0 || s.Player.Difficulty != d2.Normal ||
 		s.Player.Level < d.KitFloor.FromLevel || a == 0 || a == s.Player.Area || r.d.Plan.IsTown(a) || task.TryActive() || r.corpseRun.Load() {
 		return ""
 	}
-	if n := healingOf(r.resInput(s)); n < d.KitFloor.PotionsBelow {
-		if first := r.firstFieldArea(s); a != first {
-			return fmt.Sprintf("%d healing potions < %d: the first field only (area %d), not area %d", n, d.KitFloor.PotionsBelow, first, a)
-		}
+	n := healingOf(r.resInput(s))
+	if n >= d.KitFloor.PotionsBelow {
+		return ""
 	}
-	return ""
+	fields := r.fieldsOfAct(s)
+	if d.KitFloor.Open(n, s.Player.Level, a, fields, func(x int) int { return r.areaMLvl(x, s.Player.Difficulty) }) {
+		return ""
+	}
+	first := 0
+	if len(fields) > 0 {
+		first = fields[0]
+	}
+	return fmt.Sprintf("%d healing potions < %d: the first field only (area %d) unless a tier opens more, not area %d", n, d.KitFloor.PotionsBelow, first, a)
 }
 
 // earlyShopBudget is the gold the gear shop may spend below earlyGearMax: 0 unless the kit is met (potions at the kitFloor,

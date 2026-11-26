@@ -17,7 +17,8 @@
   "town-thrash",
   "arbiter-starved",
   "economy-stall",
-  "aura-off"
+  "aura-off",
+  "summon-missing"
  ],
  "report_only": [
   "incident.",

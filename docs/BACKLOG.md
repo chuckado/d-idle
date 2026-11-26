@@ -1445,6 +1445,13 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - aura2c: Prayer in combat when hurt and low on potions (TASK-1013, merged 2026-11-26, acceptance 2 of 2): A hurt Paladin low on healing potions now switches to Prayer in a fight, kept until life recovers <!--sg:agent/aura2c-->
 - agent/toolstrade86: Merge branch 'main' into toolstrade86 (merged 2026-11-26) <!--sg:agent/toolstrade86-->
 - agent/qd28: d2scenario invariants soft in drills; act2strong kit; matrix note 80 (merged 2026-11-26) <!--sg:agent/qd28-->
+- agent/toolstrade87: Merge branch 'main' into toolstrade87 (merged 2026-11-26) <!--sg:agent/toolstrade87-->
+- aura2b: Paladin never attacks with Sacrifice (prerequisite only) (TASK-1012, merged 2026-11-26, acceptance 2 of 2): Paladin profiles no longer attack with Sacrifice, which only stays as the Zeal prerequisite; early levels use the weapon and Zeal from level 12 <!--sg:agent/aura2b-->
+- agent/necro2a: Merge branch 'main' into necrosummoninv (merged 2026-11-26): Soft invariant summon-missing: a summoner with a summon skill learned, mana for it and hostiles near that reads no own minion for 10 s; minute line carries minions; tests on two heroes <!--sg:agent/necro2a-->
+- agent/necro2b: Merge branch 'main' into hotkeydrift (merged 2026-11-26): Necromancer keys beyond F8 closed with evidence: on d2d every learned skill gets a pseudo key and casts by skill id; a ratchet test keeps plan table hotkeys from drifting further from the profile layout <!--sg:agent/necro2b-->
+- agent/necro2c: Merge branch 'main' into necrofloors (merged 2026-11-26): Caster life floors as admission data: sewers 130 and a new Duriel lair row 220 from the Necromancer SME numbers; Andariel row deliberately not added <!--sg:agent/necro2c-->
+- agent/necro2d: Merge branch 'main' into necromercrogue (merged 2026-11-26): Class trait mercEarlyRogue lets the merc policy pay for the Act 1 Rogue before Blood Raven for a Necromancer; no Act 1 hire step is wired yet <!--sg:agent/necro2d-->
+- agent/necro2e: Merge branch 'main' into necrocaps (merged 2026-11-26): Necromancer minion caps need a source tag and the reach and curse memory numbers are profile data with today values as defaults; corpse rule documented <!--sg:agent/necro2e-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

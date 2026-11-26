@@ -42,6 +42,8 @@ type Ctx struct {
 	BowOrJavelin bool   // an Amazon built on bow or javelin
 	// BloodRavenSkipped: the bot has given up on Blood Raven for good (budget spent, brAttempts).
 	BloodRavenSkipped bool
+	// EarlyRogue: the class trait mercEarlyRogue (EarlyRogueFor): a paid Act 1 Rogue is allowed before Blood Raven.
+	EarlyRogue bool
 	// FirstLutVisit: this is the first Lut Gholein visit of the character in this difficulty.
 	FirstLutVisit bool
 	HaveTP        bool
@@ -149,7 +151,8 @@ func offerOK(o HireOffer, c Ctx) Decision {
 }
 
 // ShouldHire is the paid hire when no merc is employed. The Act 1 Rogue only as the fallback once Blood Raven is
-// skipped for good (a paid hire forfeits the free one); the Act 2 Desert Mercenary by class aura. Price must stay
+// skipped for good (a paid hire forfeits the free one), or at once for a class whose trait says EarlyRogue (U: the loss of the
+// free Rogue is the price of having a merc before Blood Raven); the Act 2 Desert Mercenary by class aura. Price must stay
 // within (gold - kit) / hireGoldMult.
 func ShouldHire(o HireOffer, s MercState, c Ctx) Decision {
 	if s.Known && s.Owned {
@@ -159,7 +162,7 @@ func ShouldHire(o HireOffer, s MercState, c Ctx) Decision {
 		if c.Knobs.FreeRogueOnly {
 			return no(ReasonFreeOnly)
 		}
-		if !c.BloodRavenSkipped {
+		if !c.BloodRavenSkipped && !c.EarlyRogue {
 			return no(ReasonFreePending)
 		}
 	}
@@ -299,4 +302,10 @@ func AliveHook(r Reader) func() (alive bool, known bool) {
 		}
 		return s.Alive, true
 	}
+}
+
+// EarlyRogueFor reads the class trait; an unknown class name is false (the callers pass d2 class names).
+func EarlyRogueFor(class string) bool {
+	t, _ := d2.TraitsByName(class)
+	return t.MercEarlyRogue
 }

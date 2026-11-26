@@ -44,6 +44,14 @@
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
+| necrosummoninv | proposed | - | `internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`internal/bot/observe.go`<br>`internal/d2/player.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`cmd/d2scenario/invariants.json`<br>`docs/invariants.md` | - |
+| necrocorpse | proposed | - | `docs/probes/necrocaps-2026-11-26.md` | - |
+| necrofloors | proposed | - | `docs/probes/necrofloors-2026-11-26.md`<br>`internal/plandata/admission.json`<br>`docs/plan/data/admission.json`<br>`internal/admit/admit_test.go` | - |
+| necromercrogue | proposed | - | `internal/d2/classtraits.go`<br>`internal/d2/classtraits.json`<br>`internal/merc/policy.go`<br>`internal/merc/policy_test.go`<br>`cmd/d2bot/mercwire.go` | - |
+| necrocaps | proposed | - | `docs/probes/necrocaps-2026-11-26.md`<br>`internal/combat/classdata.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/necro.go`<br>`internal/combat/necro_data_test.go` | - |
+| necrokeys | proposed | - | `docs/probes/necrokeys-2026-11-26.md` | - |
+| hotkeydrift | proposed | - | `docs/probes/hotkeydrift-2026-11-26.md`<br>`cmd/d2bot/hotkeydrift_test.go` | - |
+| necroaudit | proposed | - | `docs/probes/necro-readiness-2026-11-26.md`<br>`docs/epics/epic-class-necromancer.md`<br>`internal/plandata/build-necromancer_summoner_normal30.json`<br>`internal/gear/builds/necromancer_summoner_normal30.json`<br>`cmd/d2bot/class_test.go`<br>`internal/leveler/necrosummoner_test.go`<br>`docs/plan/data/build-necromancer_summoner_normal30.json` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
@@ -323,14 +331,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 2c3c4f4d1 11-26 14:45 `Merge agent/qd28: d2scenario invariants soft in drills; act2strong kit; matrix note 80` (qd28)
-- ac20543fb 11-26 14:40 `Merge origin/main` (-)
-- 3ec8de3af 11-26 14:29 `Merge agent/toolstrade86: Merge branch 'main' into toolstrade86` (toolstrade86)
-- 0590318f2 11-26 14:29 `Merge agent/aura2c: Merge branch 'main' into aura2c` (aura2c)
-- 717d3c0c2 11-26 14:27 `Merge branch 'main' into toolstrade86` (-)
-- f397d77bb 11-26 14:27 `Merge branch 'main' into aura2c` (-)
-- 170c34af7 11-26 14:22 `Merge agent/aura2d: Merge branch 'main' into aura2d` (aura2d)
-- b3562c27a 11-26 14:20 `Merge branch 'main' into aura2d` (-)
-- 65dd4759c 11-26 14:17 `Merge origin/main` (-)
-- 884a0ebfe 11-26 14:05 `Merge branch 'main' into aura2d` (-)
+- a7cc5189c 11-26 15:32 `Merge agent/necro2e: Merge branch 'main' into necrocaps` (necro2e)
+- 56861f3fc 11-26 15:32 `Merge agent/necro2d: Merge branch 'main' into necromercrogue` (necro2d)
+- 4b5bc299a 11-26 15:32 `Merge agent/necro2c: Merge branch 'main' into necrofloors` (necro2c)
+- a282fe496 11-26 15:32 `Merge agent/necro2b: Merge branch 'main' into hotkeydrift` (necro2b)
+- d95f823ca 11-26 15:28 `Merge branch 'main' into necrocaps` (-)
+- a42822b9e 11-26 15:28 `Merge branch 'main' into necromercrogue` (-)
+- eb7e319fc 11-26 15:28 `Merge branch 'main' into necrofloors` (-)
+- 218552d7a 11-26 15:28 `Merge branch 'main' into hotkeydrift` (-)
+- 2f3e38296 11-26 15:20 `Merge agent/necro2a: Merge branch 'main' into necrosummoninv` (necro2a)
+- de5ab0f80 11-26 15:18 `Merge branch 'main' into necrosummoninv` (-)
 <!-- statusgen:end -->

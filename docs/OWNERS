@@ -142,6 +142,7 @@ cmd/d2bot/boss_levelmonsters_test.go  credit-runner  countess3b
 cmd/d2bot/cain.go  credit-runner  cain45
 cmd/d2bot/cain5b_test.go  credit-runner  cain5b
 cmd/d2bot/cain_test.go  credit-runner  cain45
+cmd/d2bot/class_test.go  credit-runner  necroaudit
 cmd/d2bot/d2dbackend.go  credit-runner  campaign1
 cmd/d2bot/d2dbackend.go  credit-runner  maphistory
 cmd/d2bot/d2dbackend.go  credit-runner  maphistoryA
@@ -156,6 +157,7 @@ cmd/d2bot/funwire.go  credit-runner  maphistoryA
 cmd/d2bot/glancewire.go  credit-runner  intake
 cmd/d2bot/goalsclock_test.go  credit-runner  pgclock
 cmd/d2bot/goldfarmwire_test.go  credit-runner  repairtrip
+cmd/d2bot/hotkeydrift_test.go  credit-runner  hotkeydrift
 cmd/d2bot/invverbs.go  credit-runner  itemverbs2
 cmd/d2bot/invverbs.go  credit-runner  uib9
 cmd/d2bot/invverbs.go  credit-runner  vaultwire
@@ -173,6 +175,7 @@ cmd/d2bot/live.go  credit-runner  maphistoryA
 cmd/d2bot/live.go  credit-runner  maphistoryC
 cmd/d2bot/live.go  credit-runner  maptrail
 cmd/d2bot/lootshadowwire.go  credit-runner  lootwireL4
+cmd/d2bot/mercwire.go  credit-runner  necromercrogue
 cmd/d2bot/objects.go  credit-runner  botstuck
 cmd/d2bot/objects.go  credit-runner  cain5b
 cmd/d2bot/objects.go  live-agent  k1layout
@@ -209,6 +212,7 @@ cmd/d2scenario/  credit-runner  arbmig
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/detrun.go  credit-runner  pgjournal
 cmd/d2scenario/detrun_test.go  credit-runner  pgjournal
+cmd/d2scenario/invariants.json  credit-runner  necrosummoninv
 cmd/d2scenario/journal.go  credit-runner  pgjournal
 cmd/d2scenario/ledger.go  credit-runner  pgledger
 cmd/d2scenario/ledger_test.go  credit-runner  pgledger
@@ -287,6 +291,7 @@ docs/epics/epic-class-amazon.md  live-agent  epic-class-amazon
 docs/epics/epic-class-assassin.md  live-agent  epic-class-assassin
 docs/epics/epic-class-barbarian.md  live-agent  epic-class-barbarian
 docs/epics/epic-class-druid.md  live-agent  epic-class-druid
+docs/epics/epic-class-necromancer.md  credit-runner  necroaudit
 docs/epics/epic-class-necromancer.md  live-agent  epic-class-necromancer
 docs/epics/epic-class-paladin.md  live-agent  epic-class-paladin
 docs/epics/epic-class-sorceress.md  live-agent  epic-class-sorceress
@@ -303,6 +308,7 @@ docs/friend-guide.md  credit-runner  cut012
 docs/gear-policy.md  credit-runner  nopins
 docs/hourfix.md  credit-runner  hourfix
 docs/invariants.md  credit-runner  autorevert1
+docs/invariants.md  credit-runner  necrosummoninv
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-ui.md  credit-runner  jewelicons
 docs/inventory-ui.md  credit-runner  nopins
@@ -341,7 +347,9 @@ docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
 docs/plan/STATUS.md  credit-runner  statusrefresh
 docs/plan/data/admission.json  credit-runner  admit1
+docs/plan/data/admission.json  credit-runner  necrofloors
 docs/plan/data/build-necromancer_summoner_normal30.json  credit-runner  allocfix
+docs/plan/data/build-necromancer_summoner_normal30.json  credit-runner  necroaudit
 docs/plan/data/earlyroutes.json  credit-runner  admit1
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/povertyfarm.json  credit-runner  admit1
@@ -358,6 +366,12 @@ docs/probes/flipwave2.md  live-agent  flipwave2
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
+docs/probes/hotkeydrift-2026-11-26.md  credit-runner  hotkeydrift
+docs/probes/necro-readiness-2026-11-26.md  credit-runner  necroaudit
+docs/probes/necrocaps-2026-11-26.md  credit-runner  necrocaps
+docs/probes/necrocaps-2026-11-26.md  credit-runner  necrocorpse
+docs/probes/necrofloors-2026-11-26.md  credit-runner  necrofloors
+docs/probes/necrokeys-2026-11-26.md  credit-runner  necrokeys
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1fix
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
 docs/probes/pg-gate-group1-2026-11-21.md  credit-runner  pgjournal
@@ -459,6 +473,7 @@ docs/vault.md  credit-runner  vaultclean
 docs/vault.md  credit-runner  vaultpay
 docs/vault.md  credit-runner  vaultreveal
 internal/admit/  credit-runner  admit1
+internal/admit/admit_test.go  credit-runner  necrofloors
 internal/agency/  credit-runner  dlv-rotation
 internal/arbiter  credit-runner  arbfam
 internal/arbiter  credit-runner  town10
@@ -507,7 +522,9 @@ internal/bot/guided.go  credit-runner  campaign1
 internal/bot/guided_test.go  credit-runner  campaign1
 internal/bot/hpfields.go  credit-runner  intake
 internal/bot/invariants.go  credit-runner  autorevert1
+internal/bot/invariants.go  credit-runner  necrosummoninv
 internal/bot/invariants_test.go  credit-runner  autorevert1
+internal/bot/invariants_test.go  credit-runner  necrosummoninv
 internal/bot/kitplan_test.go  credit-runner  bsm7
 internal/bot/leveling.go  credit-runner  hourfix
 internal/bot/leveling.go  credit-runner  town5
@@ -526,6 +543,7 @@ internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  arrivalsettle
 internal/bot/observe.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  intake
+internal/bot/observe.go  credit-runner  necrosummoninv
 internal/bot/observe.go  credit-runner  passagebounce
 internal/bot/observe.go  credit-runner  survrecover
 internal/bot/observe.go  pro-runner  bounce3
@@ -595,6 +613,8 @@ internal/combat/  credit-runner  dlv-upkeep-minions
 internal/combat/  credit-runner  dlv-upkeep-state
 internal/combat/  credit-runner  dlv-whirl
 internal/combat/castfirst.go  credit-runner  maphistoryC
+internal/combat/classdata.go  credit-runner  necrocaps
+internal/combat/classdata/profiles.json  credit-runner  necrocaps
 internal/combat/fight.go  credit-runner  maphistory
 internal/combat/fight.go  credit-runner  maphistoryC
 internal/combat/fightend.go  credit-runner  maphistory
@@ -603,10 +623,15 @@ internal/combat/fighter.go  credit-runner  beltfix
 internal/combat/fighter.go  credit-runner  maphistory
 internal/combat/fighter.go  credit-runner  maphistoryC
 internal/combat/fighter.go  pro-runner  levelplan3
+internal/combat/necro.go  credit-runner  necrocaps
+internal/combat/necro_data_test.go  credit-runner  necrocaps
 internal/combat/packdrink.go  credit-runner  beltfix
 internal/combat/packdrink_test.go  credit-runner  beltfix
 internal/combat/reach.go  credit-runner  maphistoryC
 internal/combat/safety.go  credit-runner  beltfix
+internal/d2/classtraits.go  credit-runner  necromercrogue
+internal/d2/classtraits.json  credit-runner  necromercrogue
+internal/d2/player.go  credit-runner  necrosummoninv
 internal/d2dcombat/  credit-runner  dlv-cast-verbs
 internal/d2dcombat/  credit-runner  dlv-press
 internal/d2dctl  credit-runner  countess3
@@ -637,7 +662,9 @@ internal/d2dinput/run_test.go  credit-runner  arrivalsettle
 internal/d2dsoakstat/minute.go  credit-runner  intake
 internal/d2dsrc/items.go  credit-runner  cain45
 internal/d2dsrc/items.go  credit-runner  qdmatrix
+internal/d2dsrc/source.go  credit-runner  necrosummoninv
 internal/d2dsrc/source_test.go  credit-runner  cain45
+internal/d2dsrc/source_test.go  credit-runner  necrosummoninv
 internal/d2dsrc/srv_test.go  credit-runner  qdmatrix
 internal/d2dworld  credit-runner  countess3
 internal/d2dworld  live-agent  k1layout
@@ -679,6 +706,7 @@ internal/env/tuning_quests.go  live-agent  k1layout
 internal/env/tuning_resource.go  credit-runner  freshstart
 internal/env/tuning_resource.go  live-agent  recoverypace
 internal/fidvendor  live-agent  fidprobe-vendor
+internal/gear/builds/necromancer_summoner_normal30.json  credit-runner  necroaudit
 internal/goals/clock_test.go  credit-runner  pgclock
 internal/goldfarm  credit-runner  repairtrip
 internal/input/  credit-runner  dlv-cast-verbs
@@ -692,6 +720,7 @@ internal/invdesk/sets.go  credit-runner  uib9
 internal/invdesk/stash.go  credit-runner  equipswap
 internal/invdesk/stash.go  credit-runner  itemverbs2
 internal/invdesk/stash_test.go  credit-runner  equipswap
+internal/leveler/necrosummoner_test.go  credit-runner  necroaudit
 internal/levelplan  pro-runner  levelplan3
 internal/loot  credit-runner  town6
 internal/loot/fixpickup_test.go  credit-runner  beltfix
@@ -703,6 +732,8 @@ internal/loot/pickup.go  credit-runner  lootwireL4
 internal/loot/rulesadapt.go  credit-runner  lootwireL3
 internal/loot/rulesadapt_test.go  credit-runner  lootwireL3
 internal/loot/rulesfix_test.go  credit-runner  lootwireL3
+internal/merc/policy.go  credit-runner  necromercrogue
+internal/merc/policy_test.go  credit-runner  necromercrogue
 internal/merc/wear.go  credit-runner  lootwireL2
 internal/merc/wear.json  credit-runner  lootwireL2
 internal/merc/wear_test.go  credit-runner  lootwireL2
@@ -748,9 +779,11 @@ internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
 internal/plandata/admission.json  credit-runner  admit1
+internal/plandata/admission.json  credit-runner  necrofloors
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
 internal/plandata/build-necromancer_summoner_normal30.json  credit-runner  allocfix
+internal/plandata/build-necromancer_summoner_normal30.json  credit-runner  necroaudit
 internal/plandata/earlyroutes.json  credit-runner  admit1
 internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
