@@ -3,6 +3,7 @@
   "roads": [
     {
       "id": "underground_passage",
+      "evidence": 1, "evidence_ref": "single incident: needs seed set",
       "areas": [10, 5],
       "minLevel": {"melee": 7, "caster": 8},
       "minMaxLife": {"melee": 180, "caster": 100},
@@ -16,8 +17,8 @@
       "levelKnob": {"melee": "campaign.denMinLevelMelee", "caster": "campaign.denMinLevelCaster"}
     }
   ],
-  "questWalk": {"fromLevel": 5, "belowLevel": 15, "healing": 2, "portal": 1},
-  "poverty": {"noPotionGap": 3, "fromLevel": 8},
-  "kitFloor": {"potionsBelow": 4, "fromLevel": 8},
-  "lean": {"potionsBelow": 4, "entryLifePct": 60}
+  "questWalk": {"evidence": 1, "evidence_ref": "single incident: needs seed set", "fromLevel": 5, "belowLevel": 15, "healing": 2, "portal": 1},
+  "poverty": {"evidence": 1, "evidence_ref": "single incident: needs seed set", "noPotionGap": 3, "fromLevel": 8},
+  "kitFloor": {"evidence": 1, "evidence_ref": "single incident: needs seed set", "potionsBelow": 4, "fromLevel": 8},
+  "lean": {"evidence": 1, "evidence_ref": "single incident: needs seed set", "potionsBelow": 4, "entryLifePct": 60}
 }
