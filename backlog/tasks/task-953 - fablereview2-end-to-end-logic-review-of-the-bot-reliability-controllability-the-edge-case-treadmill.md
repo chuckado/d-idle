@@ -1,7 +1,7 @@
 ---
 id: TASK-953
 title: 'fablereview2: end-to-end logic review of the bot (reliability, controllability, the edge-case treadmill)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:17:00Z'
