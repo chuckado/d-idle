@@ -1411,6 +1411,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/toolstrade80: Merge branch 'main' into toolstrade80 (merged 2026-11-26) <!--sg:agent/toolstrade80-->
 - agent/qd27: d2scenario: hard invariant hits turn a run red (data list); faultsoak design notes; matrix 78-79 (merged 2026-11-26) <!--sg:agent/qd27-->
 - agent/toolstrade81: Merge branch 'main' into toolstrade81 (merged 2026-11-26) <!--sg:agent/toolstrade81-->
+- agent/toolstrade82: mode-no-exit fires on no progress (xp, kills, gold, area), not on elapsed time; parked heroes do not count for xp-frozen and refusal-storm (merged 2026-11-26) <!--sg:agent/toolstrade82-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
