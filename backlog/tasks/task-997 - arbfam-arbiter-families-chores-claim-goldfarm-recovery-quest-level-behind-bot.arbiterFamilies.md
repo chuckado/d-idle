@@ -38,8 +38,8 @@ Why: TODO. Done when: TODO.
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
 - [x] #1 chores and claim family hooks defer to the arbiter
-- [ ] #2 goldfarm and recovery family hooks defer
-- [ ] #3 quest family defers
-- [ ] #4 level family defers
-- [ ] #5 outcome rows and verdicts per family, dark-launch rows
+- [x] #2 goldfarm and recovery family hooks defer
+- [x] #3 quest family defers
+- [x] #4 level family defers
+- [x] #5 outcome rows and verdicts per family, dark-launch rows
 <!-- AC:END -->

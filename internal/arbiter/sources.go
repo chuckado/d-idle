@@ -19,6 +19,7 @@ const (
 	FactRecovery     = "recovery"
 	FactGoldFarm     = "gold_farm"
 	FactObjective    = "objective"
+	FactQuestRefused = "quest_refused" // 1 while a typed refusal of the quest step stands and its wake facts have not changed
 	FactSurviveBelow = "survive_below" // life percent under which a hostile makes the hero flee or drink
 )
 
@@ -99,6 +100,9 @@ func StdSources() []Source {
 			if f[FactPotionsMin] == 0 || f[FactPotions] >= f[FactPotionsMin] {
 				return nil
 			}
+			if f[FactRecovery] > 0 && f[FactNeedGold] == 0 {
+				return nil // recovery means the purse cannot pay; with the price unknown the refill is recovery's business
+			}
 			in := Intent{Kind: "refill", Class: Upkeep, Urgency: 0.5, NeedsArea: Town, EstCost: 60,
 				Reason: fmt.Sprintf("belt %d under %d", f[FactPotions], f[FactPotionsMin])}
 			need := f[FactNeedGold]
@@ -121,11 +125,11 @@ func StdSources() []Source {
 			if v.Facts[FactGoldFarm] == 0 {
 				return nil
 			}
-			return &Intent{Kind: "farm", Class: Objective, Urgency: 0.7, NeedsArea: Any, EstCost: 600, Reason: "player's gold farm order"}
+			return &Intent{Kind: "farm", Class: Objective, Urgency: 0.9, NeedsArea: Any, EstCost: 600, Reason: "player's gold farm order"}
 		}),
 		fn(SrcQuest, func(v View) *Intent {
-			if v.Facts[FactObjective] == 0 {
-				return nil
+			if v.Facts[FactObjective] == 0 || v.Facts[FactQuestRefused] > 0 {
+				return nil // a standing refusal says what the step waits for: asking again is the refusal storm
 			}
 			need := v.ObjectiveArea
 			if need == "" {
