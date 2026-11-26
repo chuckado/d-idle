@@ -339,8 +339,11 @@ docs/outcomes.md  credit-runner  outcome-travel-gate
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
 docs/plan/STATUS.md  credit-runner  statusrefresh
+docs/plan/data/admission.json  credit-runner  admit1
 docs/plan/data/build-necromancer_summoner_normal30.json  credit-runner  allocfix
+docs/plan/data/earlyroutes.json  credit-runner  admit1
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
+docs/plan/data/povertyfarm.json  credit-runner  admit1
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm7
@@ -452,6 +455,7 @@ docs/vault.md  credit-runner  sellall
 docs/vault.md  credit-runner  vaultclean
 docs/vault.md  credit-runner  vaultpay
 docs/vault.md  credit-runner  vaultreveal
+internal/admit/  credit-runner  admit1
 internal/agency/  credit-runner  dlv-rotation
 internal/arbiter  credit-runner  town10
 internal/arbiter/  credit-runner  arbmig
@@ -466,6 +470,7 @@ internal/boss/run.go  pro-runner  levelplan3
 internal/boss/script.go  credit-runner  countess
 internal/boss/types.go  pro-runner  levelplan3
 internal/bot/  credit-runner  cainfix3
+internal/bot/admit_need_test.go  credit-runner  admit1
 internal/bot/arbiter_control.go  credit-runner  arbmig
 internal/bot/arbiter_control_test.go  credit-runner  arbmig
 internal/bot/areametrics.go  credit-runner  intake
@@ -475,6 +480,7 @@ internal/bot/broke.go  credit-runner  survrecover
 internal/bot/broke.go  credit-runner  town5
 internal/bot/contracts.go  credit-runner  chores2
 internal/bot/drought.go  credit-runner  freshstart
+internal/bot/earlyroute.go  credit-runner  admit1
 internal/bot/explain.go  credit-runner  autorevert1
 internal/bot/failsafe_test.go  credit-runner  flakefix
 internal/bot/farm.go  credit-runner  pgclock
@@ -520,6 +526,7 @@ internal/bot/parkstep_test.go  credit-runner  botstuck
 internal/bot/plan.go  pro-runner  levelplan3
 internal/bot/playerreset.go  credit-runner  resetinstant
 internal/bot/playerreset_test.go  credit-runner  resetinstant
+internal/bot/povertyfarm.go  credit-runner  admit1
 internal/bot/questboard.go  credit-runner  bsm7
 internal/bot/questboard.go  credit-runner  equipswap
 internal/bot/questboard.go  credit-runner  failspend
@@ -732,11 +739,14 @@ internal/nav/route.go  credit-runner  exitsread
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
+internal/plandata/admission.json  credit-runner  admit1
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
 internal/plandata/build-necromancer_summoner_normal30.json  credit-runner  allocfix
+internal/plandata/earlyroutes.json  credit-runner  admit1
 internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
+internal/plandata/povertyfarm.json  credit-runner  admit1
 internal/plandata/progression-normal.json  credit-runner  hourfix
 internal/points  credit-runner  allocfix
 internal/power/  credit-runner  dlv-cleanup

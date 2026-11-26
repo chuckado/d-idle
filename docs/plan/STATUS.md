@@ -279,7 +279,7 @@
 | outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
 | outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
-| admit1 | proposed | - | `docs/design/admission-p4.md` | - |
+| admit1 | proposed | - | `docs/design/admission-p4.md`<br>`internal/admit/`<br>`internal/plandata/admission.json`<br>`internal/plandata/earlyroutes.json`<br>`internal/plandata/povertyfarm.json`<br>`docs/plan/data/admission.json`<br>`docs/plan/data/earlyroutes.json`<br>`docs/plan/data/povertyfarm.json`<br>`internal/bot/earlyroute.go`<br>`internal/bot/povertyfarm.go`<br>`internal/bot/admit_need_test.go` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
 | arbmig | proposed | - | `docs/design/arbiter-migration-p6.md`<br>`docs/arbiter.md`<br>`internal/arbiter/`<br>`cmd/d2scenario/`<br>`tools/provingground/arbiter-outcomes/`<br>`internal/bot/arbiter_control.go`<br>`internal/bot/arbiter_control_test.go`<br>`internal/bot/shadow.go`<br>`internal/bot/loop.go`<br>`internal/env/tuning_bot.go`<br>`data/darklaunch.json`<br>`docs/knobs.md` | - |
 | stepexec1 | proposed | - | `docs/design/stepexec-p9.md` | - |
@@ -322,6 +322,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f32da7a4f 11-26 09:38 `Merge agent/admit1: admit1: old judges read floors from admission.json, design doc, card` (admit1)
 - a14d7af8e 11-26 09:38 `Merge agent/arbmig1: arbmig: task card owns for the P6 stages` (arbmig1)
 - fa0dee197 11-26 08:53 `Merge agent/toolstrade82: mode-no-exit fires on no progress (xp, kills, gold, area), not on elapsed time; parked heroes do not count for xp-frozen and refusal-storm` (toolstrade82)
 - 23dcfb8ed 11-26 03:08 `Merge agent/toolstrade81: Merge branch 'main' into toolstrade81` (toolstrade81)
@@ -331,5 +332,4 @@
 - 186424f59 11-26 02:43 `Merge agent/toolstrade80: Merge branch 'main' into toolstrade80` (toolstrade80)
 - e04e3527e 11-26 02:41 `Merge branch 'main' into toolstrade80` (-)
 - db6b83314 11-26 02:31 `Merge agent/autorevert1: Merge branch 'main' into autorevert1` (autorevert1)
-- 609e43fde 11-26 02:31 `Merge origin/main` (-)
 <!-- statusgen:end -->
