@@ -332,14 +332,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 6902fa438 11-26 17:56 `Merge agent/toolstrade92: arbiter doc: Questy 2026-11-26 cases` (toolstrade92)
+- 986c43942 11-26 17:42 `Merge origin/main` (-)
 - c04df4f8a 11-26 17:40 `Merge agent/autorevert4: autorevert4: flip writes via base64 argument, checks size and sha, reads back before any restart` (autorevert4)
+- 35e320e7f 11-26 17:34 `Merge origin/main` (-)
 - 478e9fd56 11-26 17:25 `Merge agent/toolstrade90: Merge branch 'main' into toolstrade90` (toolstrade90)
 - eb221b5b5 11-26 17:25 `Merge agent/autorevert3: Merge branch 'main' into autorevert1` (autorevert3)
 - 4e6d516a9 11-26 17:23 `Merge branch 'main' into toolstrade90` (-)
 - 778c064f7 11-26 17:23 `Merge branch 'main' into autorevert1` (-)
 - eca09d841 11-26 17:23 `Merge agent/speedreview: Merge branch 'main' into speedreview` (speedreview)
 - e307b94c4 11-26 17:22 `Merge branch 'main' into speedreview` (-)
-- 1fce0d4de 11-26 17:13 `Merge agent/toolstrade89: Merge origin/main` (toolstrade89)
-- ebc1836e0 11-26 17:11 `Merge origin/main` (-)
-- 148111592 11-26 17:02 `Merge origin/main` (-)
 <!-- statusgen:end -->
