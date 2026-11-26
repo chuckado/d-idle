@@ -22,7 +22,7 @@ func TestQuestyOutcomes(t *testing.T) {
 	if v := got["survive"]; !v.Pass || v.ChainHard != 1 || v.ArbHard != 0 {
 		t.Fatalf("survive verdict %+v", v)
 	}
-	if v := got["chores"]; !v.Pass || v.ChainSoft != 2 || v.ArbSoft != 0 {
+	if v := got["chores"]; !v.Pass || v.ChainSoft != 3 || v.ArbSoft != 0 {
 		t.Fatalf("chores verdict %+v", v)
 	}
 }
@@ -70,5 +70,45 @@ func TestJudgeRejectsNewKind(t *testing.T) {
 func TestLoadOutcomesRejectsBadCondition(t *testing.T) {
 	if _, _, _, err := parseCond("hostile"); err == nil {
 		t.Fatal("no operator must be an error")
+	}
+}
+
+// Entry 1 (trip, chores, claim): the stranded-walk and the pending-claim cases pass for the arbiter. Two builds: the belt
+// refill line is data (2 or 6 potions), the verdict does not depend on one number. MUST-FAIL: with no trip and no claim in
+// the facts the arbiter has nothing to add, so the case scores no better and the verdict fails.
+func TestChoresClaimOutcomes(t *testing.T) {
+	f, err := LoadOutcomes(questyOutcomes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, id := range []string{"arb.questy-stranded-walk-home", "arb.questy-claim-pending-quiet-field"} {
+		var c OutcomeCase
+		for _, x := range f.Cases {
+			if x.ID == id {
+				c = x
+			}
+		}
+		for _, min := range []int{2, 6} {
+			cc := c
+			cc.Facts = map[string]int{}
+			for k, v := range c.Facts {
+				cc.Facts[k] = v
+			}
+			cc.Facts[FactPotionsMin] = min
+			s := f.Score(cc, DefaultConfig())
+			for _, v := range Judge([]CaseScore{s}, hardOnly) {
+				if !v.Pass || len(s.ChainHits) == 0 || len(s.ArbiterHits) != 0 {
+					t.Fatalf("%s min %d: %+v %+v", id, min, s, v)
+				}
+			}
+		}
+		bare := c
+		bare.Facts = map[string]int{"in_town": 0, "life_pct": 100, "potions": 4, "potions_min": 4, "survive_below": 50}
+		s := f.Score(bare, DefaultConfig())
+		for _, v := range Judge([]CaseScore{s}, hardOnly) {
+			if v.Pass {
+				t.Fatalf("%s: with nothing wanted the arbiter must not look better: %+v", id, s)
+			}
+		}
 	}
 }

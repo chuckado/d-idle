@@ -1,6 +1,6 @@
 # Fable roadmap: every recommendation, its state, and what flips it
 
-> status: current (card fableroadmap, 2026-11-26; written on user approval of the same day). A living tracker: the coordinator edits the STATE, evidence and next-action cells when a card merges or a knob flips; the dark-launch ledger (`data/darklaunch.json`, rule `docs/process/dark-launch.md`) is the machine-checked half for default-0 knobs. It holds no counts that change: tally by `grep -c '| built-dark |' docs/roadmap-fable.md` (and the other state words).
+> status: current (card fableroadmap, 2026-11-26; refreshed by card roadmap2 the same day against `git log origin/main`). A living tracker: the coordinator edits the STATE, evidence and next-action cells when a card merges or a knob flips; the dark-launch ledger (`data/darklaunch.json`, rule `docs/process/dark-launch.md`) is the machine-checked half for default-0 knobs. It holds no counts that change: tally by `grep -c '| built-dark |' docs/roadmap-fable.md` (and the other state words).
 >
 > Sources: the logic review of 2026-11-25 ([research/fable-logic-review-2026-11-25.md](research/fable-logic-review-2026-11-25.md), proposals P1 to P12, tests T1 to T7, cause classes A to K); the design review of 2026-11-19 ([design/fable-review-2026-11-19/](design/fable-review-2026-11-19/00-summary.md), roadmap R1 to R17, ADRs 0020 to 0024); the four reviews of 2026-11-21 (Proving Ground gate, combat engine, quest board, town planner; [design/fable-review-2026-11-21/](design/fable-review-2026-11-21/), ADRs 0025 to 0028); the map and UI reviews of 2026-11-22 ([design/fable-review-2026-11-22/](design/fable-review-2026-11-22/)).
 >
@@ -36,42 +36,43 @@ Before the coordinator approves a new patch card (a `bug` or `bot-fix` card for 
 
 ## Built but dark
 
-The ledger rows (`data/darklaunch.json`, V) with the proposed flip order. Dates are EST, from the ledger; `criteria_met` is U for every row until a card records evidence (V `python3 -I tools/darklaunch/report.py`).
+Updated 2026-11-26 (card roadmap2). The ledger rows (`data/darklaunch.json`, V `python3 -I tools/darklaunch/report.py`: 37 rows, all `dark`, 0 overdue, next review due 2026-12-09) with the proposed flip order. Dates are EST, from the ledger; `criteria_met` is U for every row except the two newest (`no`) until a card records evidence. Flip rule: scenario, drill or replay green, then `python3 tools/flip/flip.py <instance> <knob>=<value> --why ... --window 24h` (V merged: `Merge agent/autorevert1`, db6b83314), 24 h watch by `flip.py watch` on the hard invariant counters, automatic revert on a hard breach. U: the tool has not run against a real container yet, so the first flip is also its first live test. No longer dark since 2026-11-25: P1 (`bot.invariants` 1), P2 (`bot.typedOutcome` 1), P3 (`bot.reflexDrink` 1), see the review table.
 
 | order | feature | knob (default) | why this position | criteria (measurable) | blocker | cards |
 |---|---|---|---|---|---|---|
-| 0 | invariant monitor (not dark: log only) | none | it is the measuring stick for every flip below | none: it is the watcher (hard-breach counters, `inv=` in the minute line and ops status) | none | invmon |
-| 1 | `bot.checkpointEnable` | 0 | smallest scope, an independent safety add; the Dark Wood deaths are its target | live drill green (portal cast healthy, retreat at low life, return after death), then flip on the sandboxes, 24 h invariant-monitor watch, automatic revert on a hard breach (death, stall, potion not drunk, refusal-as-failure storm) | the live drill has not run (U) | ckptlive |
-| 2 | `town.plan` stage 2 | `town.plan` 0 (stages 1 to 3 merged) | largest cause class (C, 49 cards); stage code exists; needs only the flip and counts | stage 2 scenario set green, then flip on the sandboxes, 24 h invariant-monitor watch, automatic revert on a hard breach (death, stall, potion not drunk, refusal-as-failure storm); stages 3, 4, 5 the same, one at a time | P1 counts do not exist yet; owner looks before stages 3 to 5 (ADR 0028) | townflip, invmon, town5 to town8, town11 |
-| 3 | `quests.boardSM` | 0 | removes the per-quest patch treadmill for the board; the machine, store, exec, holds, API and panel are merged (bsm1 to bsm9) | restart drill green with boardSM 1 (a park survives), then flip on the sandboxes, 24 h invariant-monitor watch, automatic revert on a hard breach (death, stall, potion not drunk, refusal-as-failure storm) | P1 counts; bsm checker (rules 12 to 14) not built | bsmdef, bsmchk, invmon |
-| 4 | `bot.arbiterShadow` then the arbiter itself | 0 (shadow); acts: no knob yet | the core; do it after the counters (P1) and the outcome type (P2) exist | outcome rule on replays and incident scenarios (fewer monitor hits than the chain, no new ones), then the first family on one sandbox with a 24 h watch and automatic revert on a hard breach | P2, ticklog (T4), incident1 (P8) | arbmig, ticklog, outcome1, incident1 |
-| 5 | `bot.zoneModel` | 0 | one margin for zone choice; the early-road thresholds of 2026-11-25 are the same question answered by hand | A/B seed sets per class (offline), then flip on the sandboxes, 24 h invariant-monitor watch, automatic revert on a hard breach (death, stall, potion not drunk, refusal-as-failure storm) | A/B sets per class; P4 provides the entry point | admit1, thrgov |
-| 6 | `agency.planner` mode 2, `agency.autoAlloc` | 0 | the owner's central ask (path D); lower risk than 1 to 5 because the player decides by default | shadow lines replayed and reviewed with no wrong pick, owner go for mode 2, then flip on the sandboxes, 24 h invariant-monitor watch, automatic revert on a hard breach (death, stall, potion not drunk, refusal-as-failure storm) | dlv-data tier source (merged); review of shadow lines (U) | agencyp1b |
-| 7 | combat dodge and stand knobs (`combat.missileDodge`, `combat.threatDodge`, `combat.standOK`, `combat.deliveryExpect`) | 0 | each has a live drill in its ledger row; none is blocked by structure | per row in the ledger | live drills (U) | none new; ledger rows own them |
+| 0 | invariant monitor, now default on | `bot.invariants` 1 | it is the measuring stick for every flip below; its hard counters are the revert trigger | none: it is the watcher | none | invmon (Done) |
+| 1 | `bot.checkpointEnable` | 0 | smallest scope, an independent safety add; the Dark Wood deaths are its target | live drill green (portal cast healthy, retreat at low life, return after death), then flip on a sandbox, 24 h watch, auto-revert | the live drill has not run (U) | ckptlive (TASK-990) |
+| 2 | `town.plan` stage 2 | 0 (stages 1 to 3 merged) | largest cause class (C); code exists; the P1 counts it waited for now exist | stage 2 scenario set green, flip stage 2, 24 h watch; stages 3 to 5 the same, one at a time, owner looks first (ADR 0028) | scenario set not re-run since 2026-11-21 (U) | townflip (TASK-972), town5 |
+| 3 | `quests.boardSM` | 0 | removes the per-quest patch treadmill for the board | restart drill green with boardSM 1 (a park survives), flip, 24 h watch | restart drill (U); bsmchk (rules 12 to 14) is not a flip blocker | bsmdef (TASK-983), bsmchk |
+| 4 | `bot.arbiterControl` (families survive, player) with `bot.arbiterShadow` 1 | 0 and 0 | the core; P2 (typed outcomes) and P8 (incident scenarios) now exist and the outcome rule is the criterion | arbiter-replay verdict and incident rows green on lockstep, flip on ONE sandbox, 24 h watch; owner go per family | more families in flight (U); ticklog (T4) is no longer a blocker for stages 1 to 3 (U whether needed later) | arbmig (TASK-973), flipwave2 (TASK-998) |
+| 5 | `quests.stepExec` (Cain scroll chunk) | 0 | P9 first chunk; newest row, `criteria_met` no | scenario `cain.scroll.stepexec` green 2 of 3 runs, flip on one sandbox, 24 h watch | scenario not run since merge (U) | stepexec1 (merged), flipwave2 (TASK-998) |
+| 6 | `bot.zoneModel` | 0 | one margin for zone choice | A/B seed sets per class (offline), flip, 24 h watch | A/B sets per class; P4 step 3 (in flight) | admit1, thrgov (merged) |
+| 7 | `agency.planner` mode 2, `agency.autoAlloc` | 0 | the owner's central ask (path D); lower risk because the player decides by default | shadow lines replayed and reviewed, owner go for mode 2, flip, 24 h watch | review of shadow lines (U) | agencyp1b (TASK-984) |
+| 8 | combat dodge and stand knobs (`combat.missileDodge`, `combat.threatDodge`, `combat.standOK`, `combat.deliveryExpect`) | 0 | each has a live drill in its ledger row | per row in the ledger | live drills (U) | none new; ledger rows own them |
 
-Ledger rows to ADD or ADJUST: `data/darklaunch.json` is on main (mergeq #1323), so this branch adjusts the existing rows rather than listing them here: `bot.arbiterShadow` carries the outcome rule as its enable criterion (owner approved 2026-11-26); `town.plan` names stage 2 and the P1 dependency; `quests.boardSM` names the card that flips it. No new knob is added by this branch, so no new row is needed. Each card of the table below that adds a knob adds its ledger row in the same PR (rule 1 of `docs/process/dark-launch.md`): `outcome1`, `admit1` (one row per provider), `arbmig` (one row per family), `stepexec1` (per chunk), `ticklog`.
+Ledger rows added since the last version of this page: `quests.stepExec` (stepexec1), `bot.arbiterControl` (arbmig stage 3), `bot.checkpointEnable` (checkpoint1). Each card that adds a knob adds its ledger row in the same PR (rule 1 of `docs/process/dark-launch.md`); admit1 still owes one row per provider when a provider gets a knob.
 
 ## Review of 2026-11-25 (logic review, card fablereview2)
 
 | id | recommendation | review | card | STATE | knob (default) | evidence | blocker | next action | owner | enable criteria |
 |---|---|---|---|---|---|---|---|---|---|---|
-| P1 | invariant monitor, log only (T1) | 11-25 | invmon (TASK-955, agent/invariants) | enabled | none (log only) | V `Merge agent/invariants` (e201e0878) on main; U whether both sandboxes run it and the row set is complete | none | read the `inv=` counts (24 h watch rule) | coordinator | n/a (it is the watcher) |
-| P2 | typed step outcome, Refused{need,wake} | 11-25 | outcome1 (TASK-956 to 961, agent/outcome1) | in flight | planned, default 0 | V branch agent/outcome1 with six task cards, queued (mergeq #1326); four partial exemptions listed in review 3.1 | merge | merge, then read counts | coordinator | scenario green, flip, 24 h monitor, auto-revert on a hard breach |
-| P3 | reflex lane: latency, cancellation test, in-town check, drink by the safety check | 11-25 | reflex1 (TASK-962 is step a and b, agent/reflex1) | in flight | none for a, b, d | V branch agent/reflex1, queued (mergeq #1328); review 3.1 rows 3 and 4 | none: the owner approved the safe drink by the safety check (`docs/bot.md` rule change) on 2026-11-26 | steps a, b, d, then c | coordinator | scenario green, flip, 24 h monitor, auto-revert on a hard breach (safety latency over 2 s counts as one) |
-| P4 | admission function MayEnter / MayLeaveTown | 11-25 | admit1 | not started | per provider, default 0 | V eleven judges named in review 1.2 | P2 | design doc, first provider in shadow | coordinator | per provider: shadow replay equals the old judge or is right in a reviewed sample, then flip, 24 h monitor, auto-revert on a hard breach |
-| P5 | finish and flip town.plan, delete old counters | 11-25 | townflip, town5 to town8, town11 | in flight | `town.plan` 0 | V stages 1, 2, 3 merged (`git log --grep '^town[345]'`); knob default 0 in `docs/knobs.md`; V town6 to town12 have no merged commit | P1 counts before the flip | set stage 2 on both sandboxes, read counts | coordinator | scenario set green, flip, 24 h monitor, auto-revert; see Built but dark row 2 |
-| P6 | arbiter migration with the outcome exit rule, TEMPORARY intents, lost-control hook | 11-25 | arbmig | not started | `bot.arbiterShadow` 0; acting knobs per family planned | V `internal/arbiter` last commit 2026-11-19 (`a8751bd8d`); `docs/arbiter.md` migration table still has the agreement rule (to be rewritten by arbmig) | P2, ticklog; owner approved the rule change 2026-11-26 (ADR text: agent/decisions1) | rewrite the table, build TEMPORARY | owner for each family go | Built but dark row 4 |
-| P7 | explain: decision ring, /api/explain, operator status --why | 11-25 | explain1 (TASK-965, agent/explain1) | in flight | none | V branch agent/explain1 (ring, /api/explain, operator why); the ADR 0030 allowlist read verb was approved by the owner 2026-11-26 (ADR text: agent/decisions1) | P2 for the refusal records | finish | coordinator | endpoint answers on both sandboxes |
-| P8 | incident to scenario (T2) plus report-only scenario tier (T7) | 11-25 | incident1 (TASK-971, agent/incident1) | in flight | none | V branch agent/incident1; pipeline audit row 6: the merge worker runs no scenario tier; report-only tier approved by the owner 2026-11-26 (ADR 0020 item 1 practice) | ops half (the report-only tier) is in the ops repo | finish; first three Questy deaths | coordinator | report-only tier 7 clean days, then owner decides (ADR 0027 item 2) |
-| P9 | generic step executor with postconditions | 11-25 | stepexec1 | not started | per chunk, default 0 | V `internal/questspec` holds the declaration side only (review 2.4) | P2 | skeleton plus Cain scroll chunk | coordinator | chunk scenario green 2 of 3 runs with it on |
-| P10 | threshold governance | 11-25 | thrgov | not started | none | V knob table 560 rows (review 1.3) | none | rule doc plus report-only CI check | coordinator | check in CI report-only for one session, then failing (the 24 h rule: evidence from scenarios, not weeks) |
-| P11 | operator verbs hold, home, go, park | 11-25 | explain1 (TASK-965; hold, home, go, park verbs in the same branch) | in flight | none | V branch agent/explain1 subject lists "why hold home go park"; allowlist amendment approved by the owner 2026-11-26 | none | finish | coordinator | audited and rate-limited verbs on a sandbox |
-| P12 | fault-injection soak (T5) | 11-25 | faultsoak | not started | none | V review 5.3 | invmon, outcome1; night window ADR 0027 | injection list | coordinator | nightly report-only; each hit becomes an incident scenario |
+| P1 | invariant monitor, log only (T1) | 11-25 | invmon (TASK-955, agent/invariants) | enabled | `bot.invariants` 1 | V `Merge agent/invariants` (e201e0878); `docs/knobs.md:348` default 1; `fa0dee197` (mode-no-exit fires on no progress); `263895530` (d2scenario: hard hits turn a run red). U whether both sandboxes carry the counts | none | read the `inv=` counts as the 24 h watch | coordinator | n/a (it is the watcher) |
+| P2 | typed step outcome, Refused{need,wake} | 11-25 | outcome1 (TASK-956 to 961, agent/outcome1) | enabled | `bot.typedOutcome` 1 | V `docs/knobs.md:349` default 1; `git log origin/main --grep "^outcome"`: outcome1 stage 1 (`7b1b5e5af`) and the conversions outcomes2a to 2g (`b71406ea9`, `caa9c27ce`, `5c2d3919b`, `51d1dcebf`, `4cf936afd`, `e4f4b63d8`, `363a0d3cf`). U: the four partial exemptions of review 3.1 | none | read refusal counts; the exemptions need one card if they still matter | coordinator | scenario green, flip, 24 h monitor, auto-revert on a hard breach |
+| P3 | reflex lane: latency, cancellation test, in-town check, drink by the safety check | 11-25 | reflex1 (TASK-962 is step a and b, agent/reflex1) | enabled | `bot.reflexDrink` 1, `bot.reflexDeadlineMs` 1000 | V `docs/knobs.md:279-280`; `git log origin/main --grep "^reflex1"`: 1a latency and T6 (`75b982d7e`), 1b in-town check (`31d35189e`), 1c reflex drink (`9ed05287c`), 1d timing fix (`333a3ae43`) | none | watch the safety-latency line; no drink-not-sent hits | coordinator | scenario green, flip, 24 h monitor, auto-revert on a hard breach (safety latency over 2 s counts as one) |
+| P4 | admission function MayEnter / MayLeaveTown | 11-25 | admit1 | in flight | floors in `data/admission.json`, per provider default 0 (no ledger row yet, U) | V `5dcf5c205` (internal/admit MayEnter, MayLeaveTown) and `6c4e529c6` (old judges read floors from admission.json, design doc), `Merge agent/admit1` (f32da7a4f); step 3 in flight (U); card TASK-970 still reads Proposed | step 3; a ledger row per provider that adds a knob | finish step 3, then one provider in shadow | coordinator | per provider: shadow replay equals the old judge or is right in a reviewed sample, then flip, 24 h monitor, auto-revert on a hard breach |
+| P5 | finish and flip town.plan, delete old counters | 11-25 | townflip, town5 to town8, town11 | in flight | `town.plan` 0 | V stages 1, 2, 3 merged (`git log origin/main --grep "^town[345]"`; town5 card still In Progress); `docs/knobs.md:148` default 0; ledger row `dark`; town6 to town12 have no merged commit | none: the P1 counts exist now | flip stage 2 with `tools/flip/flip.py` (card flipwave2 covers the other two knobs; townflip TASK-972 covers this one) | coordinator | scenario set green, flip, 24 h monitor, auto-revert; see Built but dark row 2 |
+| P6 | arbiter migration with the outcome exit rule, TEMPORARY intents, lost-control hook | 11-25 | arbmig | in flight | `bot.arbiterShadow` 0; `bot.arbiterControl` 0 (families in `bot.arbiterFamilies`) | V `5e70c6326` stage 1 (replay harness, outcome rules), `2d51ef663` stage 2 (temporary intents, lost-control hook, arbiter-starved invariant), `c14bea280` stage 3 (control path, survive and player families, ledger row); `Merge agent/arbmig1`..`arbmig3`; card TASK-973 still Proposed and lists a stale dependency on ticklog | owner go per family; more families in flight (U) | run the replay verdict, then flipwave2 for survive and player | owner for each family go | Built but dark row 4 |
+| P7 | explain: decision ring, /api/explain, operator status --why | 11-25 | explain1 (TASK-965, agent/explain1) | enabled | none | V `62159cb76` (decision ring, /api/explain, operator why hold home go park), `Merge agent/explain1` (80c9b2ea1); `outcomes2g` puts refusals in the ring; ADR 0030 amendment in `docs/decisions.md:15`. U: endpoint answers on both sandboxes | none | read /api/explain after the next death | coordinator | endpoint answers on both sandboxes |
+| P8 | incident to scenario (T2) plus report-only scenario tier (T7) | 11-25 | incident1 (TASK-971, agent/incident1) | in flight | none | V `55b752d86` (incident files at death, `d2scenario incident`, three Questy rows, report-only), `Merge agent/incident1` (98c2bdfb3); `docs/probes/incident-scenarios.md`. U: the report-only tier in the merge worker (ops repo) and its 7 clean days | ops half (the report-only tier) | count clean days; first three Questy rows already in | coordinator | report-only tier 7 clean days, then owner decides (ADR 0027 item 2) |
+| P9 | generic step executor with postconditions | 11-25 | stepexec1 | built-dark | `quests.stepExec` 0 | V `b1f391fff` (RunStep engine), `3404afe5f` (bot adapter, knob), `8a5b104e9` (ledger row, scenario cain.scroll.stepexec); `Merge agent/stepexec1`; `docs/knobs.md:559`; ledger row `dark`; only the Cain scroll chunk is ported | scenario green 2 of 3 runs (U) | flipwave2 for the first chunk; next chunks one card each (Duriel place_staff) | coordinator | chunk scenario green 2 of 3 runs with it on |
+| P10 | threshold governance | 11-25 | thrgov | enabled | none (report-only CI check) | V `443572a0a` (rule `docs/process/threshold-governance.md`, `tools/ci/knobbudget.py` report-only, seeded evidence rows), `Merge agent/thrgov` (9ac8f343b) | none | after one session of report-only, make the check failing | coordinator | check in CI report-only for one session, then failing (the 24 h rule: evidence from scenarios, not weeks) |
+| P11 | operator verbs hold, home, go, park | 11-25 | explain1 (TASK-965; hold, home, go, park verbs in the same branch) | enabled | none | V `62159cb76` and `Merge agent/explain1`; ADR 0030 amended (`docs/decisions.md:15`). U: audited and rate-limited verbs run on a sandbox | none | use the hold, home, go and park verbs once on a sandbox | coordinator | audited and rate-limited verbs on a sandbox |
+| P12 | fault-injection soak (T5) | 11-25 | faultsoak | in flight | none | V `73ee56c13` (fault proxy, fault sets, soak driver, soak.fault rows), `Merge agent/faultsoak` (b89f8cde8); `docs/probes/faultsoak-design-2026-11-26.md`; the fork verb is only proposed. U: the first nightly report-only run | night window ADR 0027 | run one night, turn each hit into an incident scenario | coordinator | nightly report-only; each hit becomes an incident scenario |
 | T3 | property tests on the pure deciders | 11-25 | proptest1 | not started | none | U | none | combat, supply, arbiter first | coordinator | tests in CI |
-| T4 | recorded sessions, tick line, `d2arbiter -follow` | 11-25 | ticklog | not started | planned, default 0 | V arbiter fixture facts are assumed, not logged (`docs/arbiter.md`) | none | tick line behind a knob | coordinator | one real night replayed |
-| T6 | cancellation-latency test | 11-25 | reflex1 (step b) | not started | none | U | none | with P3 | coordinator | in CI |
-| DL | no structural work parked at 0 without a flip date and a measure (7.4) | 11-25 | darklaunch, this tracker | enabled | ledger check in `tools/ci/check.sh` | V `tools/darklaunch/check.py` on main (merge of agent/darklaunch) | none | weekly `report.py` decisions | coordinator | every row past due gets a decision |
-| DEC | four decision changes (7.5): ADR 0030 allowlist (why, hold, home, go, park); `docs/bot.md` safe drink by the safety check; arbiter exit rule by outcome; ADR 0020 incident-to-scenario report-only tier | 11-25 | explain1, reflex1, arbmig, incident1 | in flight | n/a | V all four APPROVED by the owner (popup 2026-11-26); the ADR and doc text is written by agent/decisions1 (cite `docs/decisions.md` once it lands) | none | decisions1 lands | coordinator | n/a |
+| T4 | recorded sessions, tick line, `d2arbiter -follow` | 11-25 | ticklog | not started | planned, default 0 | V arbiter fixture facts are assumed, not logged (`docs/arbiter.md`) | none | tick line behind a knob; its card TASK-981 is also a stale dependency of arbmig TASK-973 (U whether still needed) | coordinator | one real night replayed |
+| T6 | cancellation-latency test | 11-25 | reflex1 (step b) | enabled | none | V `75b982d7e` "T6 cancel test for the fighter" (reflex1a), `Merge agent/reflex1` | none | none | coordinator | in CI |
+| DL | no structural work parked at 0 without a flip date and a measure (7.4) | 11-25 | darklaunch, this tracker | enabled | ledger check in `tools/ci/check.sh` | V `tools/darklaunch/check.py` on main; `report.py` run 2026-11-26 lists 37 rows, 0 overdue (see snapshot) | none | weekly `report.py` decisions | coordinator | every row past due gets a decision |
+| DEC | four decision changes (7.5): ADR 0030 allowlist (why, hold, home, go, park); `docs/bot.md` safe drink by the safety check; arbiter exit rule by outcome; ADR 0020 incident-to-scenario report-only tier | 11-25 | explain1, reflex1, arbmig, incident1 | enabled | n/a | V all four APPROVED by the owner 2026-11-26; text landed: `Merge agent/decisions1` (33f5b6247), `docs/decisions.md:15`, ADR 0030 amended | none | none | coordinator | n/a |
 
 ## Design review of 2026-11-19 (card fablereview, ADRs 0020 to 0024)
 
@@ -80,11 +81,11 @@ Ledger rows to ADD or ADJUST: `data/darklaunch.json` is on main (mergeq #1323), 
 | R1 | Proving Ground scenario runner as the merge gate | 11-19, ADR 0020 item 1 | provingground (done), pgexpand, pgcain | trial | none | V `internal/scenario`, `tools/provingground/scenarios`; review 2.5 says the merge worker runs no scenario tier | merge-gate wiring (mgonejob; incident1 for the report-only tier) | see PG rows below | coordinator | T0 and T1 block every merge; T2 report-only, owner decides when to block (ADR 0027) |
 | R2 | Search for Cain end to end as the first scenario set | 11-19 | pgcain, cainfix2, cainfix3, cainchain, cainscroll | enabled | none | V pgcain, cainfix2, cainchain, cainscroll Done in `backlog/tasks/`; cainfix3 Proposed | live verdict of a fresh hero (U) | none | coordinator | scenarios green 2 of 3 |
 | R3 | agency P0: points by verb, sheet, autopilot switch, legality | 11-19, ADR 0020 item 2 | agencyp0 | enabled | `resource.pointsDecisions` 0 by design (the player decides) | V agencyp0 Done; ledger row says stays 0 by design | none | none | owner (product) | owner go only |
-| R4 | intent arbiter | 11-19, ADR 0020 item 3 | arbitershadow (done), arbmig | built-dark | `bot.arbiterShadow` 0 | V `docs/knobs.md:342`; commits `a8751bd8d`, `f9aee01f9` (2026-11-19) | see P6 | see P6 | coordinator | Built but dark row 4 |
+| R4 | intent arbiter | 11-19, ADR 0020 item 3 | arbitershadow (done), arbmig | built-dark | `bot.arbiterShadow` 0 | V `docs/knobs.md:342`; `a8751bd8d`, `f9aee01f9`; P6 stages 1 to 3 merged, see P6; `bot.arbiterControl` is a second dark row | see P6 | see P6 | coordinator | Built but dark row 4 |
 | R5 | quest chains as checkable data (questspec) | 11-19 | questspec | enabled | none | V `internal/questspec`, `TestShippedChains`; questspec Done | rules 12 to 14 not built (bsmchk) | bsmchk | coordinator | rules in CI |
 | R6 | survival model as the one judge | 11-19 | survsd, survab8, admit1 | built-dark | `bot.zoneModel` 0 | V `docs/knobs.md:254`; ledger row | A/B sets per class; P4 | see Built but dark row 5 | coordinator | A/B per class, then default per archetype |
 | R7 | agency P1: capability table, planner in shadow, then driving, viability line | 11-19 | agencyp1a (done), agencyp1b | built-dark | `agency.planner` 0 (mode 1 shadow, 2 drives) | V `docs/knobs.md:582`; ledger row | shadow review; U | agencyp1b | coordinator, owner go | see Built but dark row 6 |
-| R8 | Act 2 through the quest board | 11-19 | epic-act2 | in flight | none | V `docs/epics/epic-act2.md`; blockers listed in the card (Duriel place_staff verb) | P9 (generic executor); Proving Ground rows for Act 2 | link the epic blockers to stepexec1 | coordinator | epic-act2 criteria |
+| R8 | Act 2 through the quest board | 11-19 | epic-act2 | not started | none | V epic-act2 TASK-937 Proposed, lane later, no commit; P9 chunk one (Cain scroll) merged, Duriel place_staff not | P9 (generic executor); Proving Ground rows for Act 2 | link blockers to stepexec1 chunks (no card yet) | coordinator | epic-act2 criteria |
 | R9 | difficulty transition (Nightmare, Hell) | 11-19 | epic-normal, epic-nightmare, epic-hell | not started | none | V cards Proposed (`backlog/tasks/`) | Acts 2 to 5 | none now | coordinator | epic cards |
 | R10 | Necromancer Summoner (upkeep, minions, curses) | 11-19 | epic-class-necromancer, dlv-upkeep-state, dlv-upkeep-minions, dlv-mark | not started | `combat.minionRead` 0 (ledger) | V the dlv cards are Proposed; no merged commit for them | dlv wave 0 done; live drill (U) | after dlv wave 1 | coordinator | class drill green on 3 seeds |
 | R11 | Hammerdin and second Sorceress build | 11-19 | epic-class-paladin, epic-class-sorceress, dlv-stance-pack | not started | none | V cards Proposed | dlv-aim-point, dlv-cast-verbs | after dlv wave 2 | coordinator | per the epic cards |
@@ -98,6 +99,15 @@ Ledger rows to ADD or ADJUST: `data/darklaunch.json` is on main (mergeq #1323), 
 | Q4 | ladder-only runewords enabled in d.idle mode (ADR 0024) | 11-19 | q4runes (merged) | built-dark | `items.ladderRunewords` 0 | V `docs/knobs.md:588`; `Merge agent/q4runes` on main | owner go to turn the rule on | owner go | owner | gates stay vanilla; flag shown to the player |
 | Q5 | engine facts as reads never make a run CHEATED; level layout read (ADR 0022) | 11-19 | k1layout, knownedge, warptrigger | built-dark | `quests.layoutRead` 0, `nav.fullGrid` 0, `nav.warpRead` 0 | V `docs/knobs.md:51-52, 555`; commits `Merge agent/k1layout`, knownedge, warptrigger on main | live drills (U) | drills per ledger rows | coordinator | quest layout drill: objects found by read in 3 areas; no stuck regressions on 5 areas; warp drill across 5 areas |
 | Q7 | fidelity acceptance per rule (ADR 0023) | 11-19 | fid-* | enabled | none | V ADR 0023 accepted; header amends 0015 | none | none | coordinator | n/a |
+
+Class order of care (user decision 2026-11-26, after the live Paladin). Dated lines, no boxes ticked:
+
+- 2026-11-26 R10 (necromancer): priority: 1 (necromancer first in the class order)
+- 2026-11-26 R11 (sorceress): priority: 2b (druid 2a and sorceress 2b are either; sorceress is the default build and already has five drill rows)
+- 2026-11-26 R12 (barbarian): priority: 3 (effort: 3 plan rows, 2 profiles, melee path, no blocker beyond drill rows)
+- 2026-11-26 R16 (druid): priority: 2a (either with sorceress 2b; 3 plan rows, 1 profile, no drill rows)
+- 2026-11-26 R16 (amazon): priority: 4 (effort: 3 plan rows, 1 profile, smoke only, 16 unlock lines)
+- 2026-11-26 R16 (assassin): priority: 5 (effort: 2 plan rows, 1 profile, needs a trap planner first, docs/classes/assassin.md)
 
 ## Reviews of 2026-11-21
 
@@ -140,10 +150,10 @@ Ledger rows to ADD or ADJUST: `data/darklaunch.json` is on main (mergeq #1323), 
 
 | id | recommendation | review | card | STATE | knob (default) | evidence | blocker | next action | owner | enable criteria |
 |---|---|---|---|---|---|---|---|---|---|---|
-| BSM | stored runs and latches in the plan file (cards 1 to 7 of the review) | 11-21 | bsm1 to bsm9 | built-dark | `quests.boardSM` 0 | V `docs/knobs.md:548`; `Merge agent/bsm1` to `bsm9` on main (bsm7 card still reads Proposed); `docs/probes/boardsm-progress-2026-11-21.md`; ledger row | P1 counts; restart drill (U) | bsmdef | coordinator | Built but dark row 3 |
+| BSM | stored runs and latches in the plan file (cards 1 to 7 of the review) | 11-21 | bsm1 to bsm9 | built-dark | `quests.boardSM` 0 | V `docs/knobs.md:548`; `Merge agent/bsm1` to `bsm9` on main (bsm7 card still reads Proposed); `docs/probes/boardsm-progress-2026-11-21.md`; ledger row | restart drill (U); the P1 counts exist now | bsmdef (TASK-983) | coordinator | Built but dark row 3 |
 | BSMc | questspec rules 12 to 14 in the merge gate | 11-21 | bsmchk | not started | none | V no such rules in `internal/questspec` | none | build | coordinator | rules in CI |
-| BSMa | the board as an arbiter intent source | 11-21 | arbmig (family quest) | not started | none | V no card existed; folded into P6 | P6 | with P6 | coordinator | see P6 |
-| BSMd | default 1 after the scenario set is green; later remove old paths and dual-write | 11-21, ADR 0025 item 11 | bsmdef | not started | `quests.boardSM` 0 | V ledger row | P1 counts | build | coordinator | Built but dark row 3 |
+| BSMa | the board as an arbiter intent source | 11-21 | arbmig (family quest) | retired | none | V no card of its own; it is one family of P6 (TASK-973), a separate row only duplicates it (2026-11-26) | none | tracked in P6 | coordinator | see P6 |
+| BSMd | default 1 after the scenario set is green; later remove old paths and dual-write | 11-21, ADR 0025 item 11 | bsmdef | not started | `quests.boardSM` 0 | V ledger row | restart drill (U) | build (TASK-983) | coordinator | Built but dark row 3 |
 
 ### Town planner (card fabletown, ADR 0028; 11 cards)
 
@@ -152,7 +162,7 @@ Ledger rows to ADD or ADJUST: `data/darklaunch.json` is on main (mergeq #1323), 
 | TOWN1 | planner scenarios | 11-21 | town1 | enabled | none | V Done, `Merge agent/town1` | none | none | coordinator | n/a |
 | TOWN2 | one counter (`supply.CountOf`) | 11-21 | town2 | enabled | none | V Done; `internal/supply/count.go`; at stage 0 it returns the old numbers | none | none | coordinator | n/a |
 | TOWN3 | NeedFor, Solve, profiles, stage 1 shadow trace | 11-21 | town3 | built-dark | `town.plan` 0 | V `docs/knobs.md:144`; `Merge agent/town3` | flip (townflip) | see P5 | coordinator | stage 1: shadow lines present |
-| TOWN4 | stage 2: guards, chunk preconditions and shop read the plan | 11-21 | town4 | built-dark | `town.plan` 0 | V `Merge agent/town4`; `docs/probes/town-plan-stage2-2026-11-21.md` | P1 counts | set stage 2 on sandboxes | coordinator | Built but dark row 2 |
+| TOWN4 | stage 2: guards, chunk preconditions and shop read the plan | 11-21 | town4 | built-dark | `town.plan` 0 | V `Merge agent/town4`; `docs/probes/town-plan-stage2-2026-11-21.md` | none: P1 counts exist | flip stage 2 (TASK-972) | coordinator | Built but dark row 2 |
 | TOWN5 | stage 3: purse settled once per visit, recovery reads wealth | 11-21 | town5 | built-dark | `town.plan` 0 | V `a559c72fe`, `Merge agent/townstage3`; `docs/probes/town-plan-stage3-2026-11-22.md` (CHEATED setups); card still In Progress | stage 2 first | after stage 2 | coordinator | stage drill green, flip, 24 h monitor, auto-revert on a hard breach |
 | TOWN6 | stage 4: sell, keep and pickup | 11-21 | town6 | not started | none | V card Proposed, no commit | stage 3 | build | coordinator | per stage look |
 | TOWN7 | short-gold priority table as data | 11-21 | town7 | not started | none | V card Proposed | none | build | coordinator | table reviewed |
@@ -176,15 +186,139 @@ Ledger rows to ADD or ADJUST: `data/darklaunch.json` is on main (mergeq #1323), 
 
 These are in `data/darklaunch.json` and owned by the ledger, not by this tracker: `resource.gearDecisions`, `resource.skillCapPerLevel`, `agency.autoAlloc`, `combat.missileDodge`, `combat.threatDodge`, `combat.standOK`, `combat.minionRead`, `quests.layoutRead`, `loot.vault`, `loot.rulesEngine`, `bot.portalGuard`, `bot.farmReset`, `bot.mercReviveUnverified`, `bot.cubeJobs`, `town.identifyTome`, `ladder.enabled`, `invdesk.verbs`, `invdesk.instant`, `ui.managementFast`, `watch.paletteFeed`, `input.planner`, `input.hotkeyMap`, `items.ladderRunewords`. The weekly `python3 -I tools/darklaunch/report.py` is their review; do not repeat them here.
 
-## Order of work (the coordinator's reading)
+## Order of work (the coordinator's reading, updated 2026-11-26)
 
-1. `invmon` (P1, merged: read its counts) and `ticklog` (T4): no behaviour, they give every later flip its measure.
-2. `ckptlive` (live drill, small) and `townflip` stage 2 on the sandboxes: both are already built.
-3. `outcome1` (P2): the ground for P4, P6, P7, P9, P12.
-4. `bsmdef` (boardSM flip) once P1 counts exist.
-5. `incident1` (P8), `reflex1` (P3), `thrgov` (P10) beside them.
-6. `arbmig` (P6) and `admit1` (P4) after P2; `stepexec1` (P9) chunk by chunk.
-7. Everything else (dlv waves, classes, acts, input I3 to I7) follows the epic cards; the blockers named in the rows map to the epics `epic-act2` (Duriel needs the generic executor), `epic-class-necromancer` (dlv wave 1) and `epic-class-paladin` (dlv wave 2).
+1. Done since 2026-11-25: P1 invariant monitor, P2 typed outcomes, P3 reflex lane, P7/P11 explain and verbs, P8 incident writer, P10 governance (report-only), P12 fault soak runner, the flip tool. They give every flip its measure and its revert.
+2. Flips, in the order of "Built but dark": `ckptlive` drill, `townflip` stage 2, `bsmdef`, then `flipwave2` (arbiter families, step executor).
+3. In flight to finish: admit1 step 3 (P4), arbmig further families (P6), PG1 to PG5, PG9 and PG12 (commits merged, cards still In Progress).
+4. Next builds: `ticklog` (T4), `proptest1` (T3), `bsmchk`, further `stepexec1` chunks one card each.
+5. Everything else (dlv waves, classes, acts, input I3 to I7) follows the epic cards; blockers map to `epic-act2` (Duriel needs the generic executor), `epic-class-necromancer` (dlv wave 1), `epic-class-paladin` (dlv wave 2); the class order itself is the owner's (classorder1).
+
+## Triage of the rows still `not started` (card roadmap2, 2026-11-26)
+
+V: 31 rows read `not started` after this pass (37 before; `grep -c '| not started |'`). Each row gets one decision: **card** (a card exists, linked), **new card** (created by this branch), **retired**, or **owner** (lane waiting-owner). No row needed a design decision from the coordinator; the card sizes are the Size line of each card (V `backlog/tasks/`).
+
+### Review of 2026-11-25 (2 rows)
+
+| row | size | decision |
+|---|---|---|
+| T3 proptest1 | S | card TASK-980 (lane next, low). Do after the first flips; property tests on combat.Decide, supply.Solve, the arbiter |
+| T4 ticklog | S | card TASK-981 (next). Pick: gives one real night to replay, and arbmig TASK-973 still lists it as a dependency (shows BLOCKED in plan.py although arbmig stages 1 to 3 merged; U whether the dependency is still true, the coordinator should drop or keep it) |
+
+### Overhaul review of 2026-11-19 (9 rows)
+
+| row | size | decision |
+|---|---|---|
+| R8 Act 2 | L | card epic-act2 TASK-937 (later); blocker is further P9 chunks (Duriel place_staff): no chunk card yet, to be cut when `stepexec1` chunk one is flipped |
+| R9 difficulty transition | L x3 | cards epic-normal, epic-nightmare, epic-hell (later); needs Acts 2 to 5 |
+| R10 Necromancer | L | cards epic-class-necromancer TASK-942 and dlv-upkeep-* (next); class order is the owner's: new card classorder1 (TASK-999, waiting-owner) |
+| R11 Hammerdin, 2nd Sorceress | L | cards epic-class-paladin, epic-class-sorceress, dlv-stance-pack; order via classorder1 |
+| R12 Barbarian | L | card epic-class-barbarian TASK-943 (later); order via classorder1 |
+| R13 Acts 3 to 5 | L x3 | cards epic-act3, epic-act4, epic-act5 (later) |
+| R14 runeword and cube advisor | M | card advisor1 TASK-991 (blocked by agencyp1b TASK-984, correct) |
+| R15 agency P3 share, import | M | card agencyp3 TASK-985 (blocked by TASK-984, correct) |
+| R16 ground-target classes | L x3 | cards epic-class-druid, assassin, amazon, dlv-aim-point, dlv-aim-corpse; order via classorder1 |
+
+### Reviews of 2026-11-21: Proving Ground gate, combat engine, quest board, town (20 rows)
+
+| row | size | decision |
+|---|---|---|
+| PG6 pgstability | M | card TASK-740 (next); needs PG2, PG3 merged first |
+| PG7 pghero | L | card TASK-741 (next) |
+| PG8 pgselfcheck | M | card TASK-742 (next), after PG7 |
+| PG10 pgpage | M | card TASK-744 (next), after PG9 |
+| PG11 mgonejob | M | card TASK-745 (next); ops repo work, the merge-worker half is live there (U) |
+| PG15 pgnightly | M | card TASK-754 (next); night window ADR 0027 |
+| PG16 pgearned | L | card TASK-756 (next); last, save portability U |
+| DLV1 | L, L, M, M | cards dlv-upkeep-state, dlv-upkeep-minions, dlv-mark, dlv-stance-army (next); wave 0 cards merged with results, live look U |
+| DLV2 | L, L, S, L | cards dlv-cast-verbs, dlv-aim-point, dlv-aim-corpse, dlv-stance-pack (next) |
+| DLV3 | M, L, M, M | cards dlv-press, dlv-move-tele, dlv-move-melee, dlv-whirl (whirl parked per ADR 0026) |
+| DLVc dlv-cleanup | M | card TASK-736 (next); last |
+| BSMc bsmchk | S | card TASK-982 (next); not a flip blocker |
+| BSMd bsmdef | M | card TASK-983 (next); the boardSM flip, Built but dark row 3 |
+| BSMa | none | RETIRED: one family of P6, tracked there |
+| TOWN6 stage 4 | M | card town6 TASK-758 (next); after stage 3 is on |
+| TOWN7 short-gold table | M | card town7 TASK-759 (next) |
+| TOWN8 stage 5 | M | card town8 TASK-761 (next) |
+| TOWN9 /api/townplan | M | card town9 TASK-762 (next) |
+| TOWN10 town as arbiter source | M | card town10 TASK-763 (next); also a family of P6 (TASK-973): decide there whether TASK-763 stays |
+| TOWN11 cleanup | M | card town11 TASK-764 (next); last |
+| TOWN12 SME review | S | card town12 TASK-765 (next); one SME run |
+
+New cards from this pass (no earlier card covered them): `flipwave2` (TASK-998, lane next, epic fableroadmap): the flips of `bot.arbiterControl` (survive, player families) and `quests.stepExec`, which have ledger rows but no card of their own; `classorder1` (TASK-999, lane waiting-owner): the owner's class order. Rows with U cannot be ticked from this tree.
+
+## First five picks across the tracker (2026-11-26)
+
+1. `ckptlive` (TASK-990, live drill): the smallest dark safety feature, aimed at the Dark Wood deaths; its green drill is also the first real run of `tools/flip/flip.py` (U), so one job proves the flip chain.
+2. `townflip` (TASK-972): town.plan stage 2 is built, probed (2026-11-21), and the P1 counts it waited for exist; cause class C is the largest.
+3. `flipwave2` (TASK-998): P6 stages 1 to 3 and P9 chunk one are merged dark with `criteria_met` no; the outcome rule and incident scenarios needed to judge them now exist.
+4. `bsmdef` (TASK-983): boardSM needs only a restart drill and a flip; every quest patch card meanwhile lands on the legacy path.
+5. `ticklog` (TASK-981): small (S), no behaviour, gives one real night to replay and clears the stale BLOCKED mark on arbmig.
+
+## Plan snapshot 2026-11-26 (`python3 -I tools/backlog/plan.py`, top of the output; roadmap2 card included)
+
+```
+PLAN 2026-11-26
+NOW (24)
+  TASK-337 campaign1              hig credit-runner In Progress  15d
+  TASK-378 bounce3                hig pro-runner    In Progress  14d
+  TASK-391 beltfix                hig credit-runner In Progress  14d
+  TASK-994 autorevert1            hig credit-runner In Progress  0d
+  TASK-183 recoverypace           med live-agent    In Progress  18d
+  TASK-414 levelplan3             med pro-runner    In Progress  12d
+  TASK-444 verifyp03p05           med credit-runner In Progress  12d
+  TASK-472 uib9                   med credit-runner In Progress  11d
+  TASK-657 forkrebase2            med credit-runner In Progress  7d
+  TASK-733 pgprov                 med credit-runner In Progress  5d
+  TASK-735 pgdigest               med credit-runner In Progress  5d
+  TASK-737 pgjournal              med credit-runner In Progress  5d
+  TASK-738 pgtaps                 med credit-runner In Progress  5d
+  TASK-739 pgclock                med credit-runner In Progress  5d
+  TASK-743 pgledger               med credit-runner In Progress  5d
+  TASK-747 mgcache                med credit-runner In Progress  5d
+  TASK-757 town5                  med credit-runner In Progress  5d
+  TASK-777 pgledgeron             med credit-runner In Progress  5d
+  TASK-1001roadmap2               med credit-runner Proposed    
+  TASK-957 outcome-task-step      low credit-runner In Progress  0d
+  TASK-958 outcome-travel-gate    low credit-runner In Progress  0d
+  TASK-960 outcome-park-step      low credit-runner In Progress  0d
+  TASK-961 outcome-route-guard    low credit-runner In Progress  0d
+  TASK-963 outcome-kit-gate       low credit-runner In Progress  0d
+NEXT (149)
+  TASK-27  testerreport           hig credit-runner Proposed    
+  TASK-39  earlydeath13           hig pro-runner    Proposed    
+  TASK-245 firsthour              hig live-agent    Proposed    
+  TASK-246 sessions               hig live-agent    Proposed    
+  TASK-303 repairtrip             hig credit-runner Proposed    
+  TASK-332 prprep                 hig credit-runner Proposed    
+  TASK-349 passagebounce          hig credit-runner Proposed    
+  TASK-351 arrivalsettle          hig credit-runner Proposed    
+  TASK-360 cutfix                 hig credit-runner Proposed    
+  TASK-501 uiphone                hig credit-runner Proposed    
+  TASK-609 survrecover            hig credit-runner Proposed    
+  TASK-661 verifycrushd5          hig credit-runner Proposed    
+  ... 137 more (plan.py --lane next)
+WAITING ON OWNER (3)
+  TASK-107 h1baseline             hig user          Proposed      assignee user: needs the owner decision
+  TASK-112 h3verdict              med user          Proposed      assignee user: needs the owner decision
+  TASK-999 classorder1            low user          Proposed      owner decides which class the epics follow first (R10 to R
+BLOCKED (14)
+  TASK-29  testerpack             hig credit-runner Proposed      waits for TASK-28
+  TASK-108 qdensity               hig credit-runner Proposed      waits for TASK-19
+  TASK-352 prpost                 hig credit-runner Proposed      waits for TASK-332
+  TASK-973 arbmig                 hig credit-runner Proposed      waits for TASK-981
+  TASK-114 designbrief            med credit-runner Proposed      waits for TASK-112
+  TASK-115 qqueue                 med credit-runner Proposed      waits for TASK-19
+  TASK-363 prpost2                med credit-runner Proposed      waits for TASK-352
+  TASK-524 lootwireL3             med credit-runner Proposed      waits for TASK-523
+  TASK-525 lootwireL4             med credit-runner Proposed      waits for TASK-524
+  TASK-988 inputl4                med credit-runner Proposed      waits for TASK-986
+  TASK-103 fid-poison-res-diag    low credit-runner Proposed      waits for TASK-72
+  TASK-985 agencyp3               low credit-runner Proposed      waits for TASK-984
+  TASK-989 inputl5                low credit-runner Proposed      waits for TASK-988
+  TASK-991 advisor1               low credit-runner Proposed      waits for TASK-984
+STALE (no commit on owns) (1)
+```
 
 ## How to keep this file true
 
@@ -192,7 +326,7 @@ These are in `data/darklaunch.json` and owned by the ledger, not by this tracker
 - A row moves to `trial` when the knob is set on a sandbox; to `enabled` only when the default changes and the ledger row says `default-on`.
 - A row with `built-dark` past its `review_by` appears in `report.py` as due; the decision is enable, extend (with a changed why) or retire.
 
-## Cards created by this branch
+## Cards created by the fableroadmap branch
 
 Cards for work that has no other card. The pieces already carded by other agents are NOT recreated: P1 invmon is TASK-955, P2 is TASK-956 to 961, P3 is TASK-962 (agent/reflex1), P7 and P11 are TASK-965 (agent/explain1), P8 is TASK-971 (agent/incident1), the ledger is TASK-954. All status Proposed, size and order in each card; none ticks a box. Task ids are assigned on this branch and can shift at merge (the card id in the first column is the stable name).
 
@@ -217,4 +351,4 @@ Cards for work that has no other card. The pieces already carded by other agents
 | autorevert1 | TASK-994 | standard enable rule (flip, 24 h watch, auto-revert) |
 | ckptlive | TASK-990 | checkpoint row of Built but dark |
 
-Existing cards that already cover a recommendation (dlv-*, pg*, mg*, town1 to town12, bsm1 to bsm9, epic-act*, epic-class*) are not recreated; only the epic blockers that map to a row are linked in the rows above.
+Cards created by roadmap2 (2026-11-26): flipwave2 (TASK-998), classorder1 (TASK-999). Existing cards that already cover a recommendation (dlv-*, pg*, mg*, town1 to town12, bsm1 to bsm9, epic-act*, epic-class*) are not recreated; only the epic blockers that map to a row are linked in the rows above.

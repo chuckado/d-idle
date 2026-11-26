@@ -84,6 +84,9 @@ type Player struct {
 	Skills     []Skill
 	LeftSkill  int // skill id on the left hand
 	RightSkill int // skill id on the right hand
+	// Aura is the active aura skill id (0 none) when AuraKnown; d2d state line `aura=` (V live, docs/probes/paladin-aura-live-2026-11-26.md).
+	Aura       int
+	AuraKnown  bool
 	Difficulty Difficulty
 }
 

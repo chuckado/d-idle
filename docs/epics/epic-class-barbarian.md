@@ -18,3 +18,7 @@
 ## Links
 
 - docs/classes/ranking.md (class order), ADR 0020 (class order and agency), docs/probes/quest-drill-matrix-2026-11-23.md
+
+## Priority (user decision 2026-11-26)
+
+- 2026-11-26 priority: 3, easiest by effort after the two above. Effort: 3 plan rows, 2 profiles (the most of the three), melee path, no blocker beyond drill rows. Source: user class order 2026-11-26. No criteria ticked by this line.

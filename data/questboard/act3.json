@@ -54,7 +54,8 @@
     "rewards": "S docs/goals/execution.md s3 (+5 stat points)",
     "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
     "minutes": "I",
-    "meta": "U placeholder"
+    "meta": "U placeholder",
+    "accept": "S d2 player knowledge, no source file in the repo; U live (card act345map 2026-11-26)"
    },
    "requires": [
     "act2_done"
@@ -80,6 +81,9 @@
     "melee": 24,
     "caster": 26,
     "summoner": 27
+   },
+   "accept": {
+    "npc": "Alkor"
    }
   },
   {
@@ -132,7 +136,8 @@
     "rewards": "S docs/goals/execution.md s3 (a rare ring)",
     "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
     "minutes": "I",
-    "meta": "U placeholder"
+    "meta": "U placeholder",
+    "accept": "S d2 player knowledge, no source file in the repo; U live (card act345map 2026-11-26)"
    },
    "requires": [
     "act2_done"
@@ -158,6 +163,9 @@
     "melee": 24,
     "caster": 26,
     "summoner": 27
+   },
+   "accept": {
+    "npc": "Hratli"
    }
   },
   {
@@ -212,7 +220,8 @@
     "rewards": "S docs/goals/execution.md s3 (+20 life)",
     "minutes": "I",
     "meta": "U placeholder",
-    "chunks": "S7b: group golden_bird_board (U: the figurine dropper; the chunk needs the figurine or the bird in the pack and says so otherwise)"
+    "chunks": "S7b: group golden_bird_board (U: the figurine dropper; the chunk needs the figurine or the bird in the pack and says so otherwise)",
+    "accept": "S d2 player knowledge, no source file in the repo; U live (card act345map 2026-11-26)"
    },
    "requires": [
     "act2_done"
@@ -233,6 +242,9 @@
     "normal": 3,
     "nm": 5,
     "hell": 8
+   },
+   "accept": {
+    "npc": "Meshif"
    }
   },
   {

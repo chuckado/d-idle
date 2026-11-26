@@ -705,3 +705,61 @@ func TestSetLeftAttackWhenDumpOmitsIt(t *testing.T) {
 		})
 	}
 }
+
+// d2dStateAura is a d2d channel whose aura state is its own field: a popup pick of an aura skill sets it, any other
+// skill clears it (V live, docs/probes/paladin-aura-live-2026-11-26.md), and a load can leave it at 0 with the hand
+// still on the aura.
+type d2dStateAura struct {
+	*d2dAura
+	isAura map[int]bool
+}
+
+func (g *d2dStateAura) Click(b input.Button, x, y int, m ...input.Mod) error {
+	if g.opened && b == input.Left {
+		g.opened = false
+		for _, sk := range g.p.Skills {
+			id := sk.ID
+			for _, c := range g.cells(id) {
+				if c.X == x && c.Y == y {
+					g.p.RightSkill = id
+					g.aura = 0
+					if g.isAura[id] {
+						g.aura = id
+					}
+				}
+			}
+		}
+		return nil
+	}
+	return g.d2dAura.Click(b, x, y, m...)
+}
+
+// After a load the hand reads the aura but the state is 0: KeepAura re-picks through another skill, logs `aura up`
+// only once the state confirms, and a Barbarian (no aura in its profile) is left alone.
+func TestStaleAuraStateIsRepicked(t *testing.T) {
+	for _, tc := range []struct{ level, want int }{{1, 98}, {13, 102}} {
+		h, g := newHandGame(t)
+		h.f.auraCrowd = 3
+		g.p.Level = tc.level
+		if tc.level < 13 {
+			g.p.Skills = []d2.Skill{{ID: 0, Level: 1}, {ID: 98, Level: 1}}
+		}
+		d := &d2dStateAura{d2dAura: &d2dAura{handGame: g, cells: func(id int) []input.Screen { return h.f.popupCells(g.p, id) }}, isAura: map[int]bool{98: true, 102: true}}
+		h.f.e.In, h.f.D2D = d, true
+		h.f.auraFn = func(*d2.Player) (int, bool) { return g.aura, true }
+		g.p.RightSkill, g.aura = tc.want, 0
+		s, _ := g.snap()
+		h.f.KeepAura(context.Background(), s, &Target{}, true)
+		if g.aura != tc.want || d.popups < 2 {
+			t.Fatalf("level %d: aura %d (want %d) after %d popup opens: the stale state was not repaired", tc.level, g.aura, tc.want, d.popups)
+		}
+	}
+	h, g := newHandGame(t)
+	g.p.Class, g.p.Skills = d2.Barbarian, []d2.Skill{{ID: 0, Level: 1}}
+	d := &d2dStateAura{d2dAura: &d2dAura{handGame: g, cells: func(id int) []input.Screen { return nil }}}
+	h.f.e.In, h.f.D2D = d, true
+	s, _ := g.snap()
+	if did, _ := h.f.KeepAura(context.Background(), s, &Target{}, true); did || d.popups != 0 {
+		t.Fatalf("a class without an aura profile clicked: %v %d", did, d.popups)
+	}
+}

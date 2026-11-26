@@ -44,6 +44,7 @@ var invRows = []invRow{
 	{Name: "corpse-unresolved", Hard: true, Secs: 900, Why: "a corpse waits in town for Secs, neither retrieved nor abandoned"},
 	{Name: "town-thrash", Count: 17, Secs: 3600, Why: "Count or more field entries within Secs"},
 	{Name: "arbiter-starved", GapSec: 600, Why: "an arbiter intent was outranked for 600 s or more (docs/arbiter.md); only with the arbiter knobs on"},
+	{Name: "aura-off", Secs: 10, Why: "in the field with an aura skill learned and the state line reading no active aura (aura=0) for Secs; only where the backend reports the aura (d2d)"},
 	{Name: "economy-stall", Secs: 7200, Count: 100, Why: "gold in purse and stash under Count for Secs while kills continue"},
 }
 
@@ -115,6 +116,8 @@ type invFacts struct {
 	kitMissing             []string
 	corpsePending          bool
 	corpseSince            time.Time
+	auraWatch              bool // an aura skill is learned and the backend reports the active aura
+	aura                   int  // the active aura id (0 none), meaningful with auraWatch
 }
 
 type invHit struct{ Name, Detail string }
@@ -136,6 +139,7 @@ type invMon struct {
 	tpArea                int
 	packSince             time.Time
 	resupSince, zeroSince time.Time
+	auraOffSince          time.Time
 	xpAt                  time.Time
 	lastXP                uint32
 	modeKey               string
@@ -196,7 +200,7 @@ func (m *invMon) tick(f invFacts) []invHit {
 	m.pending = nil
 	if f.dead {
 		// a dead hero breaks no field invariant; keep the stopwatches clean
-		m.lowSince, m.tpSince, m.resupSince, m.zeroSince, m.packSince = time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}
+		m.lowSince, m.tpSince, m.resupSince, m.zeroSince, m.packSince, m.auraOffSince = time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}
 		m.seen, m.prevTown = false, false
 		return m.limit(raw, f.now)
 	}
@@ -239,6 +243,11 @@ func (m *invMon) tick(f invFacts) []invHit {
 		if f.kitKnown && len(f.kitMissing) > 0 {
 			hit("field-entry-no-kit", "missing=%s area=%d", strings.Join(f.kitMissing, ","), f.area)
 		}
+	}
+
+	r = invRowOf("aura-off")
+	if d := invSince(&m.auraOffSince, field && f.auraWatch && f.aura == 0, f.now); d >= r.dur() {
+		hit(r.Name, "no active aura for=%ds area=%d step=%q hostiles=%d", int(d.Seconds()), f.area, f.step, f.hostiles)
 	}
 
 	r = invRowOf("resupply-in-field")
@@ -400,6 +409,7 @@ func (r *Runner) invTick(snap *d2.Snapshot, c control) {
 	r.corpseTown.mu.Lock()
 	f.corpsePending, f.corpseSince = r.corpseTown.pending, r.corpseTown.since
 	r.corpseTown.mu.Unlock()
+	f.auraWatch, f.aura = r.auraFacts(p)
 	if !f.inTown && !f.dead {
 		f.hostiles = r.hostileNear(snap, t.Combat.FightRadius)
 		if f.lifePct < f.drinkPct || f.lifePct <= f.chickenPct {
@@ -457,4 +467,18 @@ func (m *invMon) Counters() []InvCounter {
 		out = append(out, InvCounter{Name: r.Name, Hard: r.Hard, Count: m.total[r.Name], Since: m.started, First: m.first[r.Name], Last: m.last[r.Name]})
 	}
 	return out
+}
+
+// auraFacts reports whether the aura-off row applies: the backend gives the active aura (d2d state line) and the hero has
+// learned a skill the data marks as an aura. No class check: a class without aura skills never qualifies.
+func (r *Runner) auraFacts(p *d2.Player) (watch bool, id int) {
+	if !p.AuraKnown || r.e.Data == nil {
+		return false, 0
+	}
+	for _, sk := range p.Skills {
+		if d := r.e.Data.SkillByID(sk.ID); sk.Level > 0 && d != nil && d.Aura {
+			return true, p.Aura
+		}
+	}
+	return false, p.Aura
 }
