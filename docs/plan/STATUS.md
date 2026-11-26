@@ -277,7 +277,7 @@
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | outcome-park-step | in-progress | - | `docs/outcomes.md` | - |
 | outcome-route-guard | in-progress | - | `docs/outcomes.md` | - |
-| outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
+| outcome-kit-gate | in-progress | - | `docs/outcomes.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | admit1 | proposed | - | `docs/design/admission-p4.md`<br>`internal/admit/`<br>`internal/plandata/admission.json`<br>`internal/plandata/earlyroutes.json`<br>`internal/plandata/povertyfarm.json`<br>`docs/plan/data/admission.json`<br>`docs/plan/data/earlyroutes.json`<br>`docs/plan/data/povertyfarm.json`<br>`internal/bot/earlyroute.go`<br>`internal/bot/povertyfarm.go`<br>`internal/bot/admit_need_test.go` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
@@ -321,6 +321,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 4cf936afd 11-26 10:15 `Merge agent/outcomes2e: Merge branch 'main' into outcome-kit-gate` (outcomes2e)
+- 03aef679b 11-26 10:13 `Merge branch 'main' into outcome-kit-gate` (-)
 - 9ac8f343b 11-26 10:06 `Merge agent/thrgov: Merge branch 'main' into thrgov` (thrgov)
 - 51d1dcebf 11-26 10:06 `Merge agent/outcomes2d: Merge branch 'main' into outcome-park-step` (outcomes2d)
 - 01d50bb52 11-26 10:04 `Merge branch 'main' into thrgov` (-)
@@ -329,6 +331,4 @@
 - 5c2d3919b 11-26 09:57 `Merge agent/outcomes2c: Merge branch 'main' into outcome-task-step` (outcomes2c)
 - c96f49244 11-26 09:54 `Merge branch 'main' into arbmig` (-)
 - 00bcb5210 11-26 09:54 `Merge branch 'main' into outcome-task-step` (-)
-- ba803c7b2 11-26 09:49 `Merge origin/main into thrgov; seed evidence on admission.json and povertyfarm.json` (thrgov)
-- caa9c27ce 11-26 09:47 `Merge agent/outcomes2b: Merge branch 'main' into outcome-route-guard` (outcomes2b)
 <!-- statusgen:end -->
