@@ -50,6 +50,11 @@ type AuraPref struct {
 	// RestLifePct > 0 makes this a resting aura (Prayer): wanted only while resting with life below this percent and
 	// no monster adjacent; in a fight it is the last resort when no other aura is known.
 	RestLifePct int `json:"restLifePct"`
+	// FightLifePct > 0 also wants the aura IN a fight, once life is below this percent and the belt holds MaxPotions or
+	// fewer healing potions (Prayer heals and the merc heals under it): the potions that would carry the fight are gone.
+	// Once on it stays until life is fightAuraHysteresis points above, so the pick does not flip each tick.
+	FightLifePct int `json:"fightLifePct"`
+	MaxPotions   int `json:"maxPotions"`
 	// NeedsCrowd marks an area aura that only pays against a pack (Holy Fire, 1.75 dps per monster at level 4 against
 	// Might's +40 percent on every swing): wanted only with combat.holyFireMinMonsters hostiles close.
 	NeedsCrowd bool `json:"needsCrowd"`

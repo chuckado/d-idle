@@ -98,6 +98,15 @@ func (f *Fighter) wantAura(p *d2.Player, pr *Profile, tg *Target, resting bool) 
 		if !ok {
 			continue
 		}
+		if a.FightLifePct > 0 && !resting && tg != nil && f.auraPotKnown && f.auraPotions <= a.MaxPotions {
+			line := a.FightLifePct
+			if f.auraActive(p, sp.ID) {
+				line += fightAuraHysteresis
+			}
+			if pct(p.Life, p.MaxLife) < line {
+				return sp, true
+			}
+		}
 		if a.RestLifePct > 0 {
 			if resting && pct(p.Life, p.MaxLife) < a.RestLifePct {
 				return sp, true
@@ -152,6 +161,11 @@ func (f *Fighter) keepAura(ctx context.Context, snap *d2.Snapshot, tg *Target, f
 		return false, nil
 	}
 	f.auraChecked = now
+	f.auraPotions, f.auraPotKnown = 0, snap.Inventory != nil // unknown potions never count as low
+	if f.auraPotKnown {
+		b := BeltOf(snap.Inventory, f.cat)
+		f.auraPotions = b.Count(PotionHealing) + b.Count(PotionRejuv)
+	}
 	want, ok := f.wantAura(p, pr, tg, resting)
 	if !ok {
 		return false, nil
@@ -193,6 +207,9 @@ func (f *Fighter) keepAura(ctx context.Context, snap *d2.Snapshot, tg *Target, f
 // auraRetryBackoff is how long a failed aura apply waits before the next try (V live, palready: without it the
 // dirty flag made every combat tick press the key again, 140 lines in 22 minutes).
 const auraRetryBackoff = 10 * time.Second
+
+// fightAuraHysteresis is how far above AuraPref.FightLifePct life must climb before the fight aura is given up.
+const fightAuraHysteresis = 15
 
 // applyAura presses the aura's hotkey. On d2d there are no hotkeys: V live (palready, docs/palready.md) "cmd skill" casts
 // at the point and never changes the selected skill, and "cmd select" is accepted but leaves rskill unchanged even with
