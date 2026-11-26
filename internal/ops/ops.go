@@ -111,6 +111,8 @@ type Row struct {
 	Progress int    `json:"progress,omitempty"`
 	Code     string `json:"code,omitempty"`
 	Text     string `json:"text,omitempty"`
+	// WhyNot is the chunk's "Why not?" row (readiness word, floor, need, wake, last refusal); `status --why` prints it.
+	WhyNot *questboard.WhyNotView `json:"whyNot,omitempty"`
 }
 
 func boardOf(v questboard.View) *Board {
@@ -118,7 +120,7 @@ func boardOf(v questboard.View) *Board {
 	runs := []*questboard.RunView{v.Running, v.Awaiting, v.Blocked}
 	for _, q := range v.Quests {
 		for _, c := range q.Chunks {
-			r := Row{Quest: q.ID, Chunk: c.ID, State: string(c.State)}
+			r := Row{Quest: q.ID, Chunk: c.ID, State: string(c.State), WhyNot: c.WhyNot}
 			if c.Reason != nil {
 				r.Code, r.Text = c.Reason.Code, c.Reason.Text
 			}

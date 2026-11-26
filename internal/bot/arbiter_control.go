@@ -13,7 +13,7 @@ import (
 // chose nothing, panicked, or the controlled hook found nothing to do, the old chain runs unchanged: the fallback.
 // Wired so far: survive (a reflex: no chore, claim or quest step starts while the hero is under the drink line with
 // hostiles near; it fights where it stands and the guard's reflex drink does the drinking) and player (item actions from
-// the watch page run first). The other family bits are accepted and ignored. U: not run live.
+// the watch page run first), chores (a trip in progress or due) and claim (the claim trip). The other family bits are accepted and ignored. U: not run live.
 
 // runGoalControlled is runGoalArb for a hero under control. It returns what the chain or the controlled hook did.
 func (r *Runner) runGoalControlled(ctx context.Context, snap *d2.Snapshot, c control, v arbiter.View) bool {
@@ -56,6 +56,10 @@ func (r *Runner) arbAct(ctx context.Context, snap *d2.Snapshot, c control, d arb
 		acted = r.sweep(ctx, snap, c, p.Area)
 	case arbiter.SrcPlayer:
 		acted = r.playerActionStep(ctx, snap, c)
+	case "chores":
+		acted = r.arbChores(ctx, snap, c)
+	case "claim":
+		acted = r.claimTripStep(ctx, snap, c)
 	default:
 		return false, false
 	}
@@ -63,6 +67,16 @@ func (r *Runner) arbAct(ctx context.Context, snap *d2.Snapshot, c control, d arb
 		r.arb.ctl.Add(1)
 	}
 	return acted, acted
+}
+
+// arbChores runs the chores family: a trip in progress goes on, else one starts when the chores are due. Under
+// control the trip is not held back by the hooks the chain puts first (repair trip, belt fill, flail hold), which is the
+// point: the arbiter judged chores the right thing now. False when nothing is due: the chain runs.
+func (r *Runner) arbChores(ctx context.Context, snap *d2.Snapshot, c control) bool {
+	if r.loop.trip != nil {
+		return r.advanceTrip(ctx, snap, c)
+	}
+	return r.choresStep(ctx, snap, c)
 }
 
 // arbCompare is the second half of shadowTick for a decision taken before the chain acted.
