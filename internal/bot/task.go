@@ -1323,6 +1323,10 @@ func (r *Runner) planningBlock(ctx context.Context, res task.Result) error {
 			}
 		}
 		r.setState(StateInTown, w)
+		if r.e.Tune.Bot.TypedOutcome != 0 {
+			// the ban is the need, its end the wake; handleRefused pauses and logs once per change
+			return &Refused{StepOutcome{Kind: OutRefusedKind, Need: "area_banned", Wake: needTable["area_banned"].Wake, Why: "every way out is banned"}} // the minutes left change each look: they stay out of the key
+		}
 		r.pause(ctx, 5*time.Second)
 		return nil
 	}
@@ -1331,7 +1335,11 @@ func (r *Runner) planningBlock(ctx context.Context, res task.Result) error {
 	}
 	l.task.blocks++
 	if res.Kind != task.KindNotFound {
-		return nil // a quest that is not ready: the executor routes around it on the next tick, no waiting needed
+		// a quest that is not ready: the executor routes around it on the next tick, no waiting needed
+		if r.e.Tune.Bot.TypedOutcome != 0 && refusedResult(res) {
+			return classify(res).asError() // one refusal line per change, no failure count (handleRefused)
+		}
+		return nil
 	}
 	r.e.Log.Warn("planning blocked", "step", res.StepID, "kind", res.Kind.String(), "err", res.Err, "blocks", l.task.blocks)
 	s := r.latest()
