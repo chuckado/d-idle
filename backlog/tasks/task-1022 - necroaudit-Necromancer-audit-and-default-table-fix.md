@@ -23,6 +23,7 @@ owns:
   - "docs/plan/data/build-necromancer_summoner_normal30.json"
 exclusive: []
 contracts: []
+result: "Audit of the Necromancer written; the default summoner table now names its combat profile (the main attack Corpse Explosion had no key before); not verified live, lab drill rows not rerun in this branch (lab on the worker host was busy)."
 ---
 
 ## Description
@@ -30,11 +31,11 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: S
 
-Why: TODO. Done when: TODO.
+Why: owner priority 2026-11-26. Done when: audit doc and default table fix merged.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 audit doc written
-- [ ] #2 default summoner table names its combat profile
+- [x] #1 audit doc written
+- [x] #2 default summoner table names its combat profile
 <!-- AC:END -->

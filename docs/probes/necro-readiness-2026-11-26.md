@@ -31,13 +31,15 @@ Verdict: NOT ready for a fresh-hero Normal Act 1 run unattended. Everything exis
 6. Belt: 3 to 4 healing columns, 1 mana column, a few Rejuvenation for bosses.
 The point 1 and 5 numbers are proposals for the SME owner and the plan owner (a floor changes only with a seed set, admission.json comment); they are cards below.
 
-## Drill rows (lab, CHEATED setups, builder lane of Orion)
+## Drill rows (lab, CHEATED setups, worker host lane)
 
-See the section "Results" at the end (filled from the run).
+Not rerun in this branch: the one attempt on the lab of the worker host (devp29 binary; the devp30 binary is on the builder only, which did not answer) waited about 20 minutes behind another agent's drill and was cancelled for the unit tests, so nothing new. The last verdicts stand (V matrix note 70, run 20261125-141635 series, Necromancer 11): `necro.act1-andariel` GREEN, the Smith, caster belt and loop rows GREEN as Necromancer, `necro.act1-tools` RED at the reward word 0x204e (backend limit, the fork's Imbue line), `necro.tools-paladin-control` BLOCKED by its seeding. The matrix rows already carry `classes: [Necromancer]` (S scenarios JSON), so the "RED as Paladin" rows only occur when `-class` is overridden. Ready command: `labrun WORKER -- env PG_D2D_BIN=<devp30 d2d> tools/agentrun.sh necro1 --ttl 3000 -- tools/provingground/run.sh -id necro.act1-andariel,step.act1.plan_overlap.necro -class Necromancer -seed 11 -parallel 1`.
 
 ## Entries of this branch
 
-1. Default summoner table: `"combat": "summoner"` (both copies: internal/plandata and internal/gear/builds), hotkeys of the table follow the summoner layout (a doc-only list today: S, nothing reads `Hotkeys` outside the parser), main attack for clvl 1 to 14 is Teeth. Test: `TestDefaultTableMainAttackHasAKeyInItsProfile` (cmd/d2bot) runs for Necromancer and Druid; must-fail checked by taking the `combat` key out (see Results).
+1. Default summoner table: `"combat": "summoner"` (both copies: internal/plandata and internal/gear/builds), hotkeys of the table follow the summoner layout (a doc-only list today: S, nothing reads `Hotkeys` outside the parser), main attack for clvl 1 to 14 is Teeth. Test: `TestDefaultTableMainAttackHasAKeyInItsProfile` (cmd/d2bot) runs for Necromancer and Druid; must-fail checked (V: with the `combat` key removed it fails for the Necromancer: main attack "Corpse Explosion" has no key in profile necromancer; the Druid table passes either way). Side changes: the table copy in docs/plan/data and the leveler test that pinned the old empty combat line. Not seen in a live log (U): the default Necromancer now binds F1 to F7 as the summoner layout, not the default layout.
+
+Test character line for docs/probes/test-characters.md (not mine to edit): none created in this branch.
 
 ## Cards (not done here)
 
