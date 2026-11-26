@@ -1456,6 +1456,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/toolstrade88: no-earn soft invariant (5 min without xp, kills or gold, area changes do not count); the quest-walk kit rule never closes the first field (merged 2026-11-26) <!--sg:agent/toolstrade88-->
 - agent/autorevert2: autorevert2: card result (merged 2026-11-26): Flip tool fix: the knob goes into the data overrides of the store envelope, the live value is verified after restart, dry-run added, restart mode is a setting. Not yet run on a real sandbox. <!--sg:agent/autorevert2-->
 - agent/toolstrade89: Merge origin/main (merged 2026-11-26) <!--sg:agent/toolstrade89-->
+- speedreview: where the wall time goes from finished code to a verified change, and the plan to cut it (TASK-1025, merged 2026-11-26, acceptance 2 of 2): Speed review doc: 48 h of queue, CI, deploy and dark ledger measured, ranked plan with targets. Read-only, nothing switched, nothing verified live. <!--sg:agent/speedreview-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

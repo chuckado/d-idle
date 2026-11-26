@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into speedreview <!--sg:agent/speedreview-->
 - Merge origin/main <!--sg:agent/toolstrade89-->
 - autorevert2: card result <!--sg:agent/autorevert2-->
 - no-earn soft invariant (5 min without xp, kills or gold, area changes do not count); the quest-walk kit rule never closes the first field <!--sg:agent/toolstrade88-->
