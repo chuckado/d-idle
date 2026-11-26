@@ -83,6 +83,7 @@ func (r *Runner) step(ctx context.Context) bool {
 	if snap == nil {
 		return r.notInGame(ctx, c)
 	}
+	r.invTick(snap, c)
 	p := snap.Player
 	r.obMu.Lock()
 	pending := r.ob.deathPending
@@ -472,6 +473,9 @@ func fieldArea0(a int) int { return a }
 func (r *Runner) fail(ctx context.Context, c control, what string, err error) {
 	l := &r.loop
 	l.failures++
+	if isRefusal(err) {
+		r.inv.noteRefusalFailure(what, err)
+	}
 	r.e.Log.Warn("action failed", "what", what, "err", err, "consecutive", l.failures)
 	if l.failures >= r.cfg.MaxStepFailures {
 		r.escalate(ctx, c, what, err)

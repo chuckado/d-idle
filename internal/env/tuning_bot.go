@@ -84,6 +84,9 @@ type BotTuning struct {
 	// which an area change is not undone without progress, LogGapSec the rate limit of the divergence lines.
 	ArbiterShadow, ArbiterDwellSec, ArbiterTravelSec, ArbiterLogGapSec int
 	FailsafePauseMaxSec                                                int
+	// Invariant monitor (internal/bot/invariants.go, docs/invariants.md): 1 checks the invariant table once per tick and
+	// logs one rate-limited line per hit; it never acts. 0 is off.
+	Invariants int
 
 	// NOKILL fixes (docs/research/g2d-nokill-diagnosis.md). Rung3WindowMax rung-3 cycles within Rung3WindowMin virtual
 	// minutes end in a field reset whatever progress came between them (0 = off). DroughtMin: no kill and no XP for
@@ -159,7 +162,7 @@ func DefaultBotTuning() BotTuning {
 		CorpseValueMin: 1000, SpiralDeaths: 4, SpiralMinutes: 15, DangerBanMin: 20, StarterBanMin: 3, QuestBlockedFarmMin: 10, ParkAfter: 2, ParkMinutes: 15, RepeatSiteBanMin: 30, RepeatSiteEscalate: 1, RepeatSiteWindowMin: 30, RepeatSiteGapSec: 180, CorpseMinValue: 50, NavSkipSec: 150, AreaIdleSec: 60, StallWarnMin: 30, StallExitMin: 30, PauseDeathsPerHour: 8, PauseCapMin: 60, StalePackHostiles: 4, StalePackMinutes: 10, StalePackMinHP: 5, StalePackMinTier: 2, PotionBurstN: 5, PotionBurstSec: 20, PotionBurstHostiles: 3, PovertyTier: 0, GoldFloor: 2000,
 		PointsRetrySec: 30, GearCheckSec: 60, GearMinGold: 150, GearBudgetPct: 70, GearReserve: 100,
 		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600, FlailMoves: 6, FlailWindowMin: 10, FlailHoldMin: 5,
-		ArbiterShadow: 0, ArbiterDwellSec: 120, ArbiterTravelSec: 600, ArbiterLogGapSec: 60,
+		Invariants: 1, ArbiterShadow: 0, ArbiterDwellSec: 120, ArbiterTravelSec: 600, ArbiterLogGapSec: 60,
 		Rung3WindowMax: 3, Rung3WindowMin: 20, DroughtMin: 8, EmptyFieldSec: 150, ClearIdleMin: 3, NoPortalWaitSec: 20, PortalRetryWaitSec: 3, CheckpointEnable: 0, CheckpointMinLifePct: 80, CheckpointRetreatPct: 40, CheckpointGapSec: 60, CheckpointMinScrolls: 2, CheckpointSafeRadius: 30, CheckpointEntryDist: 40, CheckpointReach: 60, CheckpointArrivalHostiles: 4, DroughtStage2Min: 2, DroughtSlowMin: 10, DroughtSlowKills: 3, DroughtSlowMaxLevel: 10, FreshAfterRecoverySec: 180, RecoveryDryMin: 5, RecoveryDryKills: 5, RecoveryDrySkipMin: 15,
 		ZoneModel: 0, ZoneDial: 1, PortalGuard: 0, PortalCastMs: 3000, PortalWalkMs: 3000, PortalHitMs: 700, PortalLifePct: 50,
 		MercRetryMin: 10, MercHireMinGold: 400, MercReviveLoopN: 3, MercReviveLoopMin: 10, CubeMaxJobs: 6, CubeRuneCap: 10, CubeGemCap: 2,
@@ -344,6 +347,8 @@ func botKnobs() []Knob {
 			Desc: "Length of the window in which the area changes of the flail guard are counted."},
 		{Key: "bot.flailHoldMin", Label: "Flail: hold", Unit: "min", Default: 5, Min: 1, Max: 120, NoHandicap: true,
 			Desc: "How long the bot stays in the current area (fights in the field, rests in town) after a flail was found. Doubles for each repeat within an hour, at most eight times."},
+		{Key: "bot.invariants", Label: "Invariant monitor", Unit: "bool", Default: 1, Min: 0, Max: 1, NoHandicap: true,
+			Desc: "1 checks about twelve named invariants once per tick (a potion not drunk under the drink line, a field entry without the kit, a refusal counted as a failure, ...) and logs one rate-limited `invariant` line per hit plus per-name counts in the minute line. Logging only, nothing changes for the hero. 0 is off (docs/invariants.md)."},
 		{Key: "bot.arbiterShadow", Label: "Arbiter shadow", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
 			Desc: "1 runs the intent arbiter beside the goal chain and logs one line per divergence (chain chose A, arbiter would choose B because ...) plus per-family counters in the minute line. It never acts: nothing changes for the hero. 0 is off (docs/arbiter.md)."},
 		{Key: "bot.arbiterDwellSec", Label: "Arbiter lease", Unit: "s", Default: 120, Min: 10, Max: 1800, NoHandicap: true,

@@ -67,6 +67,9 @@ type Deps struct {
 	// OnSnapshot, if set, is called after every successful in-game poll (display and telemetry feeds). It must be quick and
 	// must not call back into the Runner.
 	OnSnapshot func(*d2.Snapshot)
+	// OnInvariant, if set, is called for every invariant line the monitor logs (invariants.go). Lab oracles (lockstep,
+	// Proving Ground) set it to turn a run red. It must be quick.
+	OnInvariant func(name, detail string)
 	// Bus, if set, receives every event the bot emits (internal/event/MIGRATION.md steps 1 and 2). The Runner then
 	// feeds Events() from its own bus subscription through event.ToGoals, so the goal manager keeps working unchanged.
 	Bus *event.Bus
@@ -173,6 +176,7 @@ type Runner struct {
 	tpBuyMin       int        // scrolls bought this minute, set by tpDiag under obMu for failsafeKV
 	ob             observer
 	cp             checkpointState         // checkpoint portals (checkpoint.go)
+	inv            invMon                  // invariant monitor (invariants.go)
 	arb            arbShadow               // intent arbiter in shadow mode (shadow.go); idle unless bot.arbiterShadow is 1
 	zst            zoneState               // the last zone model verdict (zonemodel.go)
 	zmerc          zoneMerc                // merc alive/dead edge detection for ZoneObserve (zoneshadow.go)
