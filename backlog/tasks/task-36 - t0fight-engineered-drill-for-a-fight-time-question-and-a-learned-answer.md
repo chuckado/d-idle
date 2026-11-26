@@ -23,6 +23,8 @@ owns:
   - "cmd/d2drill/t0fight_lab.go"
 exclusive: []
 contracts: []
+lane: parked
+lane_note: "status Deferred (no result line)"
 ---
 
 ## Description

@@ -26,6 +26,7 @@ exclusive:
   - "fork-branch:didle/warp-triggers-20261122"
 contracts: []
 result: "Fork verb debug warptriggers (read-only, on the allow-list) on private branch didle/warp-triggers-20261122 (code c2a9e006, tests to 98deb79e8, pushed to the private remote): V on the builder (tests/warptriggers_d2d.py, 3 levels, 4 warps): 0 differences against debug warps, 24 listed cells take the warp and 24 cells beside the set do not in real cmd move clicks, state unchanged after reads. Public side offline only: d2dctl client and fake, d2dworld exit areas and the mouth gate by read area behind nav.warpRead (default 0, unchanged behaviour), must-fail tests on the Paladin and Sorceress Tower Cellar 5 walks. Not verified: scenario act1.forgotten.countess with the new binary or the knob (live box left open). Finding: the engine takes a warp by a click inside its Select box, not by stepping on it, so the trigger is a screen-space rectangle (a parallelogram in cells). Build-specific: none."
+lane: next
 ---
 
 ## Description

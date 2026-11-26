@@ -26,6 +26,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Offline only (stub-DOM and Go tests, no live look, no screenshot: U): /api/senses gains an additive objective key (the goal of the walk in progress, not fogged, current area only); the Map draws a ring with a dot over the fog and its note says the ring is the goal (phone-friendly canvas, no inner scroll box); the walked-ground fog is forgotten per game (Publisher.NewGame through ForgetCoverage) because a new game lays the same area id out again. Decisions documented in docs/mapfog.md: walked ground is the visited-block set, one key per 4x4 subtiles (at most about 8400 per level), not persisted over a bot restart. Must-fail tests: internal/watch/testdata/map_panel.js, internal/senses/objective_test.go, internal/watch/senses_test.go, internal/nav/objectiveview_test.go. Not done: a label per objective kind. Build-specific: none."
+lane: next
 ---
 
 ## Description

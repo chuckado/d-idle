@@ -20,6 +20,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Result gains prov (bot commit and dirty flag from the binary VCS stamp or D2LOD_BOT_COMMIT, bot and d2d sha256, host ROLE from D2D_HOST_ROLE, load1, pace) and a bot run without the 'virtual run length reached' line is BLOCKED (both town-start and field paths). Verdict change: runs where the bot exits early without an error were GREEN/RED and are now BLOCKED. Offline tests only (-race -count=20 on both packages); not run live."
+lane: now
 ---
 
 ## Description

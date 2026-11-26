@@ -54,6 +54,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Quest drill matrix through Act 2 (docs/probes/quest-drill-matrix-2026-11-23.md). Lab verdicts (CHEATED setups, mechanics only, not verified on the live hero): Sail east GREEN (Paladin, Sorceress), Radament GREEN, Horadric Cube GREEN, Assemble GREEN to Cain, Andariel held by readiness (correct for the kit); Tainted Sun, Maggot Lair shaft, Summoner, Duriel RED with named nav causes. Bot fixes with must-fail tests: attack pick by paid points, act hop unlock and dialog row, proxy done never beats a lock (Duriel and Hellforge done on an Act 1 hero), exit and door walks carry a goal, door wait, GoToUnit door, Deckard Cain class by act, Tainted Sun word, earlier act not reachable, waypoint when no walk, Seven Tombs canyon steps, pre.stats and pre.waypoints -1."
+lane: next
 ---
 
 ## Description

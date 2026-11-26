@@ -31,6 +31,8 @@ merge_hash: ""
 overlap: ""
 source: "openspec-final:openspec/changes/m2-tripwp"
 contracts: ["proposed/m2-tripwp"]
+lane: parked
+lane_note: "status Deferred (no result line)"
 ---
 
 ## Description

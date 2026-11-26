@@ -19,6 +19,7 @@ owns:
 exclusive: []
 result: "docs/research/boss1-trace.md: Normal boss stats V run (game.exe room population, 4 seeds); the Smith is a superunique (404 life, x5 exp), Blood Raven 113, Andariel 1,024 (poison 80, fire -50); min safe clvl BR 8, Countess 10, Smith 16, Andariel 18-20 (I model); bot B1 class-blind kite, B2-B4 floors; no PR candidate; not verified live"
 contracts: []
+lane: next
 ---
 
 ## Description

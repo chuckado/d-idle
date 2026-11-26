@@ -40,6 +40,8 @@ overlap: "internal/bot/runner.go, task.go and internal/resource are owned by ope
 source: "grill 0005 outcome (docs/grills/0005-automation-ladder/outcome.md), ADR 0016 item 24"
 contracts: ["combat-loop","bot-loop"]
 next: "tier order: after T4/Gate A cards per ADR 0016"
+lane: parked
+lane_note: "status Deferred (Phase A (offline, branch agent/t0slice, flag ladder.enabled)"
 ---
 
 ## Description
