@@ -208,12 +208,9 @@ cmd/d2firsthour/  live-agent  firsthour
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/detrun.go  credit-runner  pgjournal
 cmd/d2scenario/detrun_test.go  credit-runner  pgjournal
-cmd/d2scenario/incident.go  credit-runner  incident1
-cmd/d2scenario/incident_test.go  credit-runner  incident1
 cmd/d2scenario/journal.go  credit-runner  pgjournal
 cmd/d2scenario/ledger.go  credit-runner  pgledger
 cmd/d2scenario/ledger_test.go  credit-runner  pgledger
-cmd/d2scenario/main.go  credit-runner  incident1
 cmd/d2scenario/main.go  credit-runner  pgledger
 cmd/d2scenario/prov.go  credit-runner  pgprov
 cmd/d2scenario/run.go  credit-runner  pgledger
@@ -351,7 +348,6 @@ docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
-docs/probes/incident-scenarios.md  credit-runner  incident1
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1fix
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
 docs/probes/pg-gate-group1-2026-11-21.md  credit-runner  pgjournal
@@ -490,8 +486,6 @@ internal/bot/goldfarm.go  credit-runner  repairtrip
 internal/bot/guided.go  credit-runner  campaign1
 internal/bot/guided_test.go  credit-runner  campaign1
 internal/bot/hpfields.go  credit-runner  intake
-internal/bot/incident.go  credit-runner  incident1
-internal/bot/incident_test.go  credit-runner  incident1
 internal/bot/invariants.go  credit-runner  autorevert1
 internal/bot/invariants_test.go  credit-runner  autorevert1
 internal/bot/kitplan_test.go  credit-runner  bsm7
@@ -510,7 +504,6 @@ internal/bot/loop.go  pro-runner  bounce3
 internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  arrivalsettle
 internal/bot/observe.go  credit-runner  freshstart
-internal/bot/observe.go  credit-runner  incident1
 internal/bot/observe.go  credit-runner  intake
 internal/bot/observe.go  credit-runner  passagebounce
 internal/bot/observe.go  credit-runner  survrecover
@@ -767,8 +760,6 @@ internal/scenario/determinism.go  credit-runner  pgdigest
 internal/scenario/earned.go  credit-runner  pgearned
 internal/scenario/hero  credit-runner  pghero
 internal/scenario/hero/selfcheck.go  credit-runner  pgselfcheck
-internal/scenario/incident.go  credit-runner  incident1
-internal/scenario/incident_test.go  credit-runner  incident1
 internal/scenario/ledger.go  credit-runner  pgledger
 internal/scenario/ledger_test.go  credit-runner  pgledger
 internal/scenario/prov.go  credit-runner  pgprov
@@ -1086,7 +1077,6 @@ tools/probes/presets.py  credit-runner  qdmatrix
 tools/provingground/  credit-runner  dlv-reads
 tools/provingground/countess-check.sh  credit-runner  countess2
 tools/provingground/earned  credit-runner  pgearned
-tools/provingground/incidents/  credit-runner  incident1
 tools/provingground/nightly.sh  credit-runner  pgnightly
 tools/provingground/pgenv.sh  credit-runner  pgledgeron
 tools/provingground/pgenv_test.sh  credit-runner  pgledgeron

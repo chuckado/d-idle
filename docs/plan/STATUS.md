@@ -280,7 +280,6 @@
 | outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | admit1 | proposed | - | `docs/design/admission-p4.md` | - |
-| incident1 | proposed | - | `internal/bot/incident.go`<br>`internal/bot/incident_test.go`<br>`internal/bot/observe.go`<br>`internal/scenario/incident.go`<br>`internal/scenario/incident_test.go`<br>`cmd/d2scenario/incident.go`<br>`cmd/d2scenario/incident_test.go`<br>`cmd/d2scenario/main.go`<br>`tools/provingground/incidents/`<br>`docs/probes/incident-scenarios.md` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
 | arbmig | proposed | - | `docs/design/arbiter-migration-p6.md` | - |
 | stepexec1 | proposed | - | `docs/design/stepexec-p9.md` | - |
