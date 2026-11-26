@@ -920,6 +920,11 @@ func (r *Runner) boardSlice(ctx context.Context, snap *d2.Snapshot, c control, p
 			}
 		}
 		r.noteStepRefused(res)
+		if r.e.Tune.Bot.TypedOutcome != 0 {
+			if o := classify(res); o.Kind == OutRefusedKind {
+				return o.asError() // handled in do (handleRefused): no strike, one line per change
+			}
+		}
 		if res.Outcome == task.OutRetry && res.Kind != task.KindExploring || res.Outcome == task.OutBlocked {
 			return res.Err
 		}
