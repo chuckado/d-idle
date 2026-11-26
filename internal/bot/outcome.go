@@ -184,6 +184,7 @@ func (r *Runner) handleRefused(ctx context.Context, ref *Refused) {
 		r.e.Log.Info("step refused", "need", ref.Need, "wake", ref.Wake, "why", ref.Why)
 	}
 	st.n++
+	r.noteRefused("step:"+ref.Need, ref)
 	r.inv.noteRefusal()
 	row := needTable[ref.Need]
 	pause := time.Duration(row.PauseSec) * time.Second
@@ -206,7 +207,7 @@ func (r *Runner) holdRefused(ref *Refused) {
 	if l.holds == nil {
 		l.holds = map[string]string{}
 	}
-	r.noteStanding("hold:"+ref.Need, ref.Why)
+	r.noteRefused("hold:"+ref.Need, ref)
 	if f, ok := l.holds[key]; ok && f == facts {
 		return
 	}
