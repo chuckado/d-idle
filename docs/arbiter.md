@@ -15,6 +15,12 @@
 - `Shadow` (internal/arbiter/shadow.go) wraps it for a live loop: recovers any panic (counted), one short mutex, no I/O, compares the arbiter's hook family with the family the chain acted for.
 - `StdSources` (sources.go) are the first nine sources (survive, player, trip, claim, resupply, recovery, goldfarm, quest, level). Build data (belt line, flee line, gold need) arrives as facts, so no class, skill or build literal lives in the package.
 
+## Temporary intents and the lost-control hook
+
+- `Intent.TTL` (virtual seconds) and `Intent.Until` (a condition over the facts in outcome-rule syntax, `potions>=potions_min`) make an intent TEMPORARY. `Arbiter.Post` adds one; it is proposed beside the sources' own until the TTL ends, `Until` holds, or the executor reports it done (`Report(..., true)`). V: `TestRefusalBecomesTemporaryIntent`, `TestTemporaryIntentEndsOnReportDone`.
+- A refusal with a wake fact becomes one: `Arbiter.Refused(need, wake, now)` looks the need up in `RefusalIntents` (data: `needs_potions` becomes an upkeep refill, `needs_gold_farm` a recovery farm, `too_weak` a filler level-up; `route_closed`, `area_banned` and `not_ready` stay a pause only). The bot calls it from `handleRefused` (internal/bot/outcome.go, typed `Refused{Need, Wake}`), so a source reads the refusal and does not re-derive the facts (V `TestRefusalBecomesArbiterTempIntent`, two needs). Only with `bot.arbiterShadow` 1.
+- `LostControl` (optional interface on a Source): `Lost(in, by, why, starved)` is called once when the intent the source proposed loses to another, and once more when it has been outranked for `StarveSec` (600 s). The same event is `Decision.Starved` and, in the bot, the soft invariant `arbiter-starved` (docs/invariants.md). V `TestLostControlAndStarvation`: a source that stopped asking is not starved.
+
 ## Shadow knobs (docs/knobs.md)
 
 | knob | default | meaning |

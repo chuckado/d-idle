@@ -134,6 +134,25 @@ func (r *Runner) shadowTick(v arbiter.View, acted bool) {
 	if line := sh.Tick(v, chain); line != "" {
 		r.e.Log.Info("arbiter shadow", "diverge", line)
 	}
+	if d, ok := sh.Last(); ok {
+		for _, in := range d.Starved {
+			r.inv.noteStarved(in.Key() + ": " + in.Reason)
+		}
+	}
+}
+
+// arbRefused hands a typed refusal to the arbiter: a need with a row in arbiter.RefusalIntents becomes a temporary
+// intent. Idle while the arbiter knobs are off.
+func (r *Runner) arbRefused(need, wake string) {
+	defer func() { _ = recover() }()
+	if r.e.Tune.Bot.ArbiterShadow == 0 {
+		return
+	}
+	now := r.shadowNow()
+	r.arb.mu.Lock()
+	sh := r.arb.sh
+	r.arb.mu.Unlock()
+	sh.Refused(need, wake, now)
 }
 
 func (r *Runner) currentWhy() string {
