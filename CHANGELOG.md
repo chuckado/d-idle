@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- autorevert4: flip writes via base64 argument, checks size and sha, reads back before any restart <!--sg:agent/autorevert4-->
 - Merge branch 'main' into toolstrade90 <!--sg:agent/toolstrade90-->
 - Merge branch 'main' into autorevert1 <!--sg:agent/autorevert3-->
 - Merge branch 'main' into speedreview <!--sg:agent/speedreview-->
