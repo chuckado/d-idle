@@ -295,18 +295,12 @@ docs/epics/epic-act4.md  credit-runner  act345map
 docs/epics/epic-act4.md  live-agent  epic-act4
 docs/epics/epic-act5.md  credit-runner  act345map
 docs/epics/epic-act5.md  live-agent  epic-act5
-docs/epics/epic-class-amazon.md  credit-runner  classorder
 docs/epics/epic-class-amazon.md  live-agent  epic-class-amazon
-docs/epics/epic-class-assassin.md  credit-runner  classorder
 docs/epics/epic-class-assassin.md  live-agent  epic-class-assassin
-docs/epics/epic-class-barbarian.md  credit-runner  classorder
 docs/epics/epic-class-barbarian.md  live-agent  epic-class-barbarian
-docs/epics/epic-class-druid.md  credit-runner  classorder
 docs/epics/epic-class-druid.md  live-agent  epic-class-druid
-docs/epics/epic-class-necromancer.md  credit-runner  classorder
 docs/epics/epic-class-necromancer.md  live-agent  epic-class-necromancer
 docs/epics/epic-class-paladin.md  live-agent  epic-class-paladin
-docs/epics/epic-class-sorceress.md  credit-runner  classorder
 docs/epics/epic-class-sorceress.md  live-agent  epic-class-sorceress
 docs/epics/epic-hell.md  live-agent  epic-hell
 docs/epics/epic-merc.md  live-agent  epic-merc
@@ -443,7 +437,6 @@ docs/research/pal-zeal-trace.md  credit-runner  palskill-matrix
 docs/research/return-screen.md  credit-runner  returnmock
 docs/research/upstream-next.md  credit-runner  upstream-next
 docs/reset.md  credit-runner  resetinstant
-docs/roadmap-fable.md  credit-runner  classorder
 docs/roadmap-fable.md  credit-runner  roadmap2
 docs/senses-map.md  credit-runner  maphistory
 docs/senses-map.md  credit-runner  maphistoryA

@@ -48,7 +48,6 @@
 | whynot1 | proposed | - | `internal/questboard`<br>`internal/arbiter/explained.go`<br>`internal/arbiter/explained_test.go`<br>`internal/bot/explain.go`<br>`internal/bot/explain_test.go`<br>`internal/ops`<br>`cmd/d2bot/opscmd.go`<br>`cmd/d2bot/questwire.go`<br>`internal/watch/web/panels/quest-board`<br>`internal/watch/questui_test.go`<br>`internal/watch/testdata/quests`<br>`docs/operator.md` | - |
 | act345map | proposed | - | `data/questboard/act3.json`<br>`data/questboard/act4.json`<br>`data/questboard/act5.json`<br>`docs/epics/epic-act3.md`<br>`docs/epics/epic-act4.md`<br>`docs/epics/epic-act5.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
-| classorder | proposed | - | `docs/roadmap-fable.md`<br>`docs/epics/epic-class-necromancer.md`<br>`docs/epics/epic-class-druid.md`<br>`docs/epics/epic-class-sorceress.md`<br>`docs/epics/epic-class-barbarian.md`<br>`docs/epics/epic-class-amazon.md`<br>`docs/epics/epic-class-assassin.md` | - |
 | auralive | proposed | - | `docs/probes/paladin-aura-live-2026-11-26.md`<br>`cmd/auraprobe` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
