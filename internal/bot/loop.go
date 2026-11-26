@@ -83,6 +83,7 @@ func (r *Runner) step(ctx context.Context) bool {
 	if snap == nil {
 		return r.notInGame(ctx, c)
 	}
+	r.invTick(snap, c)
 	p := snap.Player
 	r.obMu.Lock()
 	pending := r.ob.deathPending
@@ -419,6 +420,7 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 	}
 	var gone gameGone
 	var si safetyInterrupt
+	var ref *Refused
 	switch {
 	case errors.As(cause, &gone):
 		r.gameLost(ctx, c, gone.Event)
@@ -444,6 +446,8 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 		if !l.inLadder {
 			r.escalate(ctx, c, what, errStuck)
 		}
+	case errors.As(err, &ref):
+		r.handleRefused(ctx, ref)
 	case errors.Is(err, errAreaGated):
 		// A deliberate refusal, not a fault: no failure count, no ladder, no restart. The planner skips the target.
 		l.failures = 0
@@ -483,6 +487,9 @@ func fieldArea0(a int) int { return a }
 func (r *Runner) fail(ctx context.Context, c control, what string, err error) {
 	l := &r.loop
 	l.failures++
+	if isRefusal(err) {
+		r.inv.noteRefusalFailure(what, err)
+	}
 	r.e.Log.Warn("action failed", "what", what, "err", err, "consecutive", l.failures)
 	if l.failures >= r.cfg.MaxStepFailures {
 		r.escalate(ctx, c, what, err)
