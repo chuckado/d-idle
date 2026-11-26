@@ -13,6 +13,7 @@ priority: medium
 ordinal: 457000
 card: "reflex1c"
 owns:
+  - "cmd/d2bot/adapters.go"
   - "internal/bot/safetylat.go"
   - "internal/bot/reflexdrink_test.go"
   - "internal/bot/loop.go"
