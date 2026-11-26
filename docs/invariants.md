@@ -25,6 +25,7 @@
 | `corpse-unresolved` | `corpseTown` pending for 15 min |
 | `town-thrash` | 17 field entries within an hour |
 | `arbiter-starved` | an arbiter intent outranked for 600 s or more (soft; only with the arbiter knobs on) |
+| `aura-off` | soft: in the field with an aura skill learned and the d2d state line reading `aura=0` for 10 s (V live: a pick sets it at once, docs/probes/paladin-aura-live-2026-11-26.md) |
 | `economy-stall` | purse and stash gold under 100 for 2 h while kills continue |
 
 Not yet rows (need the reflex lane, P3): safety latency (verdict to potion) and cancellation latency.

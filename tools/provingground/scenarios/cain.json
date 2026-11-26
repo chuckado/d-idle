@@ -1550,6 +1550,79 @@
      "kind": "no_writes"
     }
    ]
+  },
+  {
+   "id": "cain.read.stepexec",
+   "title": "Search for Cain: Akara reads the scroll on the generic step executor (quests.stepExec=1)",
+   "kind": "step",
+   "tier": "fast",
+   "quest": {
+    "quest": "search_for_cain",
+    "chunk": "read"
+   },
+   "step": {
+    "action": "talk",
+    "target": "Akara",
+    "nodes": [
+     "read"
+    ]
+   },
+   "touches": [
+    "internal/task/",
+    "internal/bot/questboard.go",
+    "internal/questboard/",
+    "cmd/d2bot/cain.go"
+   ],
+   "pre": {
+    "level": 17,
+    "gold": 5000,
+    "items": [
+     {
+      "code": "bks"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "reach:30",
+    "knobs": {
+     "quests.board": 1,
+     "resource.pointsDecisions": 1,
+     "quests.stepExec": 1
+    },
+    "driver": "board-taps",
+    "tap_chunks": [
+     "read"
+    ]
+   },
+   "budget": {
+    "virtual_min": 10
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "provenance": "CHEATED: the Scroll of Inifuss is given to the pack by debug give (not obtained from the tree). Mechanics only.",
+   "notes": "Card stepexec2: same as cain.read with the executor on; the talk step read_scroll of data/questspec/act1.json (pick bark) runs on questspec.RunStep and waits for the key (bkd) in the pack itself. Same assertions as cain.read (the bkd and bks checks are the pack facts the executor reads). Green 2 of 3 runs is the enable criterion (data/darklaunch.json). NOT run yet (no lab here).",
+   "assert": [
+    {
+     "kind": "item_in_pack",
+     "code": "bkd",
+     "why": "Akara deciphers bks into the Key to the Cairn Stones (bkd)"
+    },
+    {
+     "kind": "item_absent",
+     "code": "bks"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ]
   }
  ]
 }
