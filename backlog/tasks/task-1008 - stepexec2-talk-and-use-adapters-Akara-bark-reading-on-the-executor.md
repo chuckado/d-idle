@@ -1,10 +1,11 @@
 ---
 id: TASK-1008
 title: 'stepexec2: talk and use adapters, Akara bark reading on the executor'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T17:56:00Z'
+updated_date: '2026-11-26T19:20:00Z'
 labels:
   - bot
   - feature

@@ -1,10 +1,11 @@
 ---
 id: TASK-1004
 title: 'incident2: incidents from invariant monitor hits'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T17:49:00Z'
+updated_date: '2026-11-26T19:20:00Z'
 labels:
   - bot
   - feature
