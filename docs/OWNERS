@@ -206,7 +206,6 @@ cmd/d2bot/vaultpage.go  credit-runner  bulkid
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2firsthour/  live-agent  firsthour
 cmd/d2scenario/  credit-runner  arbmig
-cmd/d2scenario/  live-agent  faultsoak
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/detrun.go  credit-runner  pgjournal
 cmd/d2scenario/detrun_test.go  credit-runner  pgjournal
@@ -269,7 +268,6 @@ docs/design/boardsm-checker.md  credit-runner  bsmchk
 docs/design/boardsm-flip.md  credit-runner  bsmdef
 docs/design/fable-review-2026-11-21/town-planner-b-model.md  credit-runner  town5
 docs/design/fable-review-2026-11-21/town-profiles-sme.md  credit-runner  town12
-docs/design/faultsoak-p12.md  live-agent  faultsoak
 docs/design/input-i3.md  credit-runner  inputl3
 docs/design/input-i4.md  credit-runner  inputl4
 docs/design/input-i5-i7.md  credit-runner  inputl5
@@ -351,7 +349,6 @@ docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
 docs/probes/checkpoint-live-drill.md  live-agent  ckptlive
 docs/probes/chores2-2026-11-21.md  credit-runner  chores2
 docs/probes/exitsread-2026-11-22.md  credit-runner  exitsread
-docs/probes/faultsoak-design-2026-11-26.md  live-agent  faultsoak
 docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
@@ -670,7 +667,6 @@ internal/env/tuning_quests.go  credit-runner  countess3
 internal/env/tuning_quests.go  live-agent  k1layout
 internal/env/tuning_resource.go  credit-runner  freshstart
 internal/env/tuning_resource.go  live-agent  recoverypace
-internal/faultproxy/  live-agent  faultsoak
 internal/fidvendor  live-agent  fidprobe-vendor
 internal/goals/clock_test.go  credit-runner  pgclock
 internal/goldfarm  credit-runner  repairtrip
@@ -775,7 +771,6 @@ internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
 internal/saves/progress.go  credit-runner  qdmatrix
 internal/scenario/  credit-runner  dlv-reads
-internal/scenario/  live-agent  faultsoak
 internal/scenario/assertdigest.go  credit-runner  pgdigest
 internal/scenario/assertdigest_test.go  credit-runner  pgdigest
 internal/scenario/determinism.go  credit-runner  pgdigest
@@ -1113,7 +1108,6 @@ tools/provingground/scenarios/board.json  credit-runner  bsm7
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
 tools/provingground/scenarios/cain.json  credit-runner  wpstep
-tools/provingground/scenarios/faultsoak.json  live-agent  faultsoak
 tools/provingground/scenarios/manage.json  credit-runner  equipswap
 tools/provingground/scenarios/navexit.json  credit-runner  stage1fix
 tools/provingground/scenarios/necro.json  credit-runner  stage1fix
