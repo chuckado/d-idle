@@ -133,6 +133,7 @@ cmd/bossrun/adapter.go  pro-runner  levelplan3
 cmd/d2bot/acts_test.go  credit-runner  qdmatrix
 cmd/d2bot/adapters.go  credit-runner  cainfix3
 cmd/d2bot/adapters.go  credit-runner  chores2
+cmd/d2bot/adapters.go  credit-runner  reflex1c
 cmd/d2bot/autoallocwire.go  credit-runner  allocfix
 cmd/d2bot/autoallocwire_test.go  credit-runner  allocfix
 cmd/d2bot/behaviors.go  credit-runner  campaign1
@@ -256,6 +257,7 @@ docs/autoalloc.md  credit-runner  allocfix
 docs/away-drill.md  live-agent  awaydrill
 docs/backlog-howto.md  credit-runner  dietrule
 docs/beltfix.md  credit-runner  beltfix
+docs/bot.md  credit-runner  reflex1c
 docs/bounce3.md  pro-runner  bounce3
 docs/campaign.md  credit-runner  campaign1
 docs/cheats.md  credit-runner  vaultpay
@@ -424,6 +426,7 @@ docs/research/upstream-next.md  credit-runner  upstream-next
 docs/reset.md  credit-runner  resetinstant
 docs/roadmap-fable.md  credit-runner  fableroadmap
 docs/safety-latency.md  credit-runner  reflex1a
+docs/safety-latency.md  credit-runner  reflex1c
 docs/senses-map.md  credit-runner  maphistory
 docs/senses-map.md  credit-runner  maphistoryA
 docs/senses-map.md  credit-runner  maphistoryB
@@ -512,6 +515,7 @@ internal/bot/loop.go  credit-runner  hourfix
 internal/bot/loop.go  credit-runner  invmon
 internal/bot/loop.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  reflex1a
+internal/bot/loop.go  credit-runner  reflex1c
 internal/bot/loop.go  credit-runner  resetinstant
 internal/bot/loop.go  credit-runner  survrecover
 internal/bot/loop.go  pro-runner  bounce3
@@ -538,6 +542,7 @@ internal/bot/questboard_s7b_test.go  credit-runner  equipswap
 internal/bot/questboard_s7b_test.go  credit-runner  qdmatrix
 internal/bot/questboard_test.go  credit-runner  failspend
 internal/bot/questboard_test.go  credit-runner  stage1fix
+internal/bot/reflexdrink_test.go  credit-runner  reflex1c
 internal/bot/repairtrip.go  credit-runner  repairtrip
 internal/bot/repairtrip_test.go  credit-runner  repairtrip
 internal/bot/resource.go  pro-runner  levelplan3
@@ -550,6 +555,7 @@ internal/bot/runner.go  credit-runner  passagebounce
 internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  resetinstant
 internal/bot/safetylat.go  credit-runner  reflex1a
+internal/bot/safetylat.go  credit-runner  reflex1c
 internal/bot/safetylat_test.go  credit-runner  reflex1a
 internal/bot/staletarget.go  credit-runner  botstuck
 internal/bot/state.go  credit-runner  resetinstant
@@ -597,10 +603,16 @@ internal/combat/fightend.go  credit-runner  maphistoryC
 internal/combat/fighter.go  credit-runner  beltfix
 internal/combat/fighter.go  credit-runner  maphistory
 internal/combat/fighter.go  credit-runner  maphistoryC
+internal/combat/fighter.go  credit-runner  reflex1c
 internal/combat/fighter.go  pro-runner  levelplan3
+internal/combat/hard.go  credit-runner  reflex1c
 internal/combat/packdrink.go  credit-runner  beltfix
+internal/combat/packdrink.go  credit-runner  reflex1c
 internal/combat/packdrink_test.go  credit-runner  beltfix
+internal/combat/potioneffect.go  credit-runner  reflex1c
 internal/combat/reach.go  credit-runner  maphistoryC
+internal/combat/reflex.go  credit-runner  reflex1c
+internal/combat/reflex_test.go  credit-runner  reflex1c
 internal/combat/safety.go  credit-runner  beltfix
 internal/d2dcombat/  credit-runner  dlv-cast-verbs
 internal/d2dcombat/  credit-runner  dlv-press
@@ -661,6 +673,7 @@ internal/env/tuning_bot.go  credit-runner  freshstart
 internal/env/tuning_bot.go  credit-runner  hourfix
 internal/env/tuning_bot.go  credit-runner  invmon
 internal/env/tuning_bot.go  credit-runner  lootwireL4
+internal/env/tuning_bot.go  credit-runner  reflex1c
 internal/env/tuning_combat.go  credit-runner  cainfix3
 internal/env/tuning_combat.go  credit-runner  dlv-expect
 internal/env/tuning_identify.go  credit-runner  bulkid
