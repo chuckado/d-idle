@@ -735,7 +735,7 @@ func (g *d2dStateAura) Click(b input.Button, x, y int, m ...input.Mod) error {
 }
 
 // After a load the hand reads the aura but the state is 0: KeepAura re-picks through another skill, logs `aura up`
-// only once the state confirms, and a Sorceress (no aura in her profile) is left alone.
+// only once the state confirms, and a Barbarian (no aura in its profile) is left alone.
 func TestStaleAuraStateIsRepicked(t *testing.T) {
 	for _, tc := range []struct{ level, want int }{{1, 98}, {13, 102}} {
 		h, g := newHandGame(t)
@@ -755,7 +755,7 @@ func TestStaleAuraStateIsRepicked(t *testing.T) {
 		}
 	}
 	h, g := newHandGame(t)
-	g.p.Class = d2.Sorceress
+	g.p.Class, g.p.Skills = d2.Barbarian, []d2.Skill{{ID: 0, Level: 1}}
 	d := &d2dStateAura{d2dAura: &d2dAura{handGame: g, cells: func(id int) []input.Screen { return nil }}}
 	h.f.e.In, h.f.D2D = d, true
 	s, _ := g.snap()
