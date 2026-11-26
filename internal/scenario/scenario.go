@@ -77,7 +77,10 @@ type Scenario struct {
 	Build string `json:"build,omitempty"`
 	// Provenance is the text for docs/probes/test-characters.md: what is CHEATED or IMPOSSIBLE about the setup.
 	Provenance string `json:"provenance,omitempty"`
-	Notes      string `json:"notes,omitempty"`
+	// Faults names a fault set of cmd/d2scenario/faults.json: the runner puts the fault proxy between the bot and the game
+	// (field start only; lab soak, never a gate row; docs/probes/faultsoak-design-2026-11-26.md). The soak driver may override it.
+	Faults string `json:"faults,omitempty"`
+	Notes  string `json:"notes,omitempty"`
 }
 
 // QuestRef names a chunk of data/questboard.
@@ -391,6 +394,9 @@ func (s Scenario) Validate() error {
 	}
 	if s.Pre.Start == StartField && s.Pre.Area == 0 {
 		return fmt.Errorf("%s: pre.start field needs pre.area", at)
+	}
+	if s.Faults != "" && s.Pre.Start != StartField {
+		return fmt.Errorf("%s: faults need pre.start field (the fault proxy sits in front of an attached d2d)", at)
 	}
 	if s.Build != "lab" && s.Build != "sandbox" {
 		return fmt.Errorf("%s: d2d %q", at, s.Build)
