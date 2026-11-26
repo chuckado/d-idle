@@ -29,12 +29,16 @@ type ServiceFlow struct {
 	Path []Line // dialog clicks that end in the item picker
 	// Confirm is a button to click after the item (screen px at 800x600); zero = the item click is the whole choice.
 	Confirm panel.Pt
+	// Entry names the dialog line of the service: when the backend lists its lines (Source.MenuEntry) and the line is absent the
+	// flow stops before any click.
+	Entry    Entry
+	HasEntry bool
 }
 
 // Flows. U: the Imbue line is assumed between Trade and Cancel (quest.Menus Charsi, itself U); Larzuk's reward is
 // assumed to come with the plain Talk line (the way Akara's Den reward does, V live) and to open the picker at once.
 var (
-	ImbueFlow  = ServiceFlow{Name: "imbue", Act: 1, NPC: 154, Path: []Line{{Idx: 2, N: 4}}}
+	ImbueFlow  = ServiceFlow{Name: "imbue", Act: 1, NPC: 154, Path: []Line{{Idx: 2, N: 4}}, Entry: EntryImbue, HasEntry: true}
 	SocketFlow = ServiceFlow{Name: "socket", Act: 5, NPC: 511, Path: []Line{{Idx: 0, N: 3}}}
 )
 
@@ -42,6 +46,9 @@ var (
 	ErrNoTarget       = errors.New("town: no suitable item to imbue or socket in the pack")
 	ErrServiceUnshown = errors.New("town: the item picker never appeared")
 	ErrNotApplied     = errors.New("town: the item did not change after the pick")
+	// ErrNoServiceLine: the NPC's dialog has no line for the service (a backend that lists its lines said so). Nothing is clicked:
+	// the fixed line index would hit Cancel or Trade (V drill.tools.merc17: the imbue click went to a three line dialog).
+	ErrNoServiceLine = errors.New("town: the dialog has no line for the service")
 )
 
 // ItemImbuer is Charsi's reward for the bot. Implemented by *Town.
@@ -232,6 +239,12 @@ func (t *Town) itemService(ctx context.Context, f ServiceFlow, choose func(*d2.S
 		return rep, err
 	}
 	rep.Steps = append(rep.Steps, "dialog open")
+	if f.HasEntry && t.menuEntry != nil {
+		if _, ok := t.menuEntry(f.Entry); !ok {
+			_ = t.h.CloseAll(ctx)
+			return rep, fmt.Errorf("%w: %s", ErrNoServiceLine, f.Name)
+		}
+	}
 	for _, l := range f.Path {
 		if err := t.PickLine(ctx, npc, l.Idx, l.N); err != nil {
 			_ = t.h.CloseAll(ctx)

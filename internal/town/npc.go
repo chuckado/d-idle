@@ -24,6 +24,7 @@ const (
 	EntryCancel
 	EntryResurrect // hireling NPC with a dead merc (U: never seen live)
 	EntryIdentify  // Deckard Cain's second line after the rescue (U: never seen live, playerid.go)
+	EntryImbue     // Charsi's reward line (V lab devp30: absent from the d2d dialog, which lists talk, trade/repair and cancel)
 )
 
 // NPCMenu places the dialog lines. The box floats above the NPC and is anchored at its bottom: the last line

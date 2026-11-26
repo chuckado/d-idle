@@ -216,7 +216,7 @@ func (a *Adapter) stats(addr uint32) (d2.Stats, error) {
 
 var entryText = map[town.Entry]string{
 	town.EntryTalk: "talk", town.EntryTrade: "trade", town.EntryGamble: "gamble",
-	town.EntryCancel: "cancel", town.EntryResurrect: "resurrect",
+	town.EntryCancel: "cancel", town.EntryResurrect: "resurrect", town.EntryImbue: "imbue",
 }
 
 func (a *Adapter) menu() []d2dctl.MenuLine {
