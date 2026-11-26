@@ -43,6 +43,7 @@
 |---|---|---|---|---|
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
+| incident2 | proposed | - | `internal/bot/incident.go`<br>`internal/bot/incident_test.go`<br>`internal/bot/invariants.go`<br>`internal/scenario/incident.go`<br>`internal/scenario/incident_test.go`<br>`cmd/d2scenario/incident.go`<br>`cmd/d2scenario/incident_test.go`<br>`docs/probes/incident-scenarios.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
 | aura2a | proposed | - | `internal/combat/aura.go`<br>`internal/combat/class_test.go`<br>`internal/combat/fighter.go`<br>`internal/d2/player.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`internal/bot/observe.go`<br>`cmd/d2scenario/invariants.json`<br>`docs/invariants.md` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
@@ -324,7 +325,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 744eff15f 11-26 13:48 `Merge agent/incident2: Merge branch 'main' into incident2` (incident2)
 - fedf2159c 11-26 13:48 `Merge agent/arbfam4: Merge branch 'main' into arbfam` (arbfam4)
+- 7e6289850 11-26 13:46 `Merge branch 'main' into incident2` (-)
 - 99748b137 11-26 13:46 `Merge branch 'main' into arbfam` (-)
 - ac089fde7 11-26 13:36 `Merge agent/aura2a: Merge branch 'main' into aura2a` (aura2a)
 - d5978f6ed 11-26 13:34 `Merge branch 'main' into aura2a` (-)
@@ -332,6 +335,4 @@
 - fad6b3f14 11-26 13:24 `Merge agent/act345map: Merge branch 'main' into act345map` (act345map)
 - 9028d8300 11-26 13:24 `Merge agent/act2plan: Merge branch 'main' into act2plan` (act2plan)
 - a14a0c7e3 11-26 13:19 `Merge branch 'main' into auralive` (-)
-- 95b5ed8a9 11-26 13:19 `Merge branch 'main' into act345map` (-)
-- a71504654 11-26 13:19 `Merge branch 'main' into act2plan` (-)
 <!-- statusgen:end -->

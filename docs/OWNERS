@@ -209,6 +209,8 @@ cmd/d2scenario/  credit-runner  arbmig
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/detrun.go  credit-runner  pgjournal
 cmd/d2scenario/detrun_test.go  credit-runner  pgjournal
+cmd/d2scenario/incident.go  credit-runner  incident2
+cmd/d2scenario/incident_test.go  credit-runner  incident2
 cmd/d2scenario/invariants.json  credit-runner  aura2a
 cmd/d2scenario/journal.go  credit-runner  pgjournal
 cmd/d2scenario/ledger.go  credit-runner  pgledger
@@ -360,6 +362,7 @@ docs/probes/flipwave2.md  live-agent  flipwave2
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
+docs/probes/incident-scenarios.md  credit-runner  incident2
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1fix
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
 docs/probes/pg-gate-group1-2026-11-21.md  credit-runner  pgjournal
@@ -508,8 +511,11 @@ internal/bot/goldfarm.go  credit-runner  repairtrip
 internal/bot/guided.go  credit-runner  campaign1
 internal/bot/guided_test.go  credit-runner  campaign1
 internal/bot/hpfields.go  credit-runner  intake
+internal/bot/incident.go  credit-runner  incident2
+internal/bot/incident_test.go  credit-runner  incident2
 internal/bot/invariants.go  credit-runner  aura2a
 internal/bot/invariants.go  credit-runner  autorevert1
+internal/bot/invariants.go  credit-runner  incident2
 internal/bot/invariants_test.go  credit-runner  aura2a
 internal/bot/invariants_test.go  credit-runner  autorevert1
 internal/bot/kitplan_test.go  credit-runner  bsm7
@@ -799,6 +805,8 @@ internal/scenario/determinism.go  credit-runner  pgdigest
 internal/scenario/earned.go  credit-runner  pgearned
 internal/scenario/hero  credit-runner  pghero
 internal/scenario/hero/selfcheck.go  credit-runner  pgselfcheck
+internal/scenario/incident.go  credit-runner  incident2
+internal/scenario/incident_test.go  credit-runner  incident2
 internal/scenario/ledger.go  credit-runner  pgledger
 internal/scenario/ledger_test.go  credit-runner  pgledger
 internal/scenario/prov.go  credit-runner  pgprov
