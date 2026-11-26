@@ -1,10 +1,11 @@
 ---
 id: TASK-486
 title: 'p02posted: P02 posted as upstream PR'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T09:26:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - docs
   - upstream-pr

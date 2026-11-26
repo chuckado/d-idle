@@ -1,10 +1,11 @@
 ---
 id: TASK-581
 title: 'palfeedflaky: make the palfeed guard tests deterministic'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T03:19:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - bug

@@ -1,10 +1,11 @@
 ---
 id: TASK-877
 title: 'uiloot: Loot rules reachable from Settings > Rules on every page'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T08:45:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - feature

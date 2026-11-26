@@ -1,10 +1,11 @@
 ---
 id: TASK-466
 title: 'uib4: Until-level for zone orders'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T04:16:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - watch
   - feature

@@ -1,10 +1,11 @@
 ---
 id: TASK-714
 title: 'fableboard: Fable design review of the quest board state machine'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T03:17:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - docs
   - research

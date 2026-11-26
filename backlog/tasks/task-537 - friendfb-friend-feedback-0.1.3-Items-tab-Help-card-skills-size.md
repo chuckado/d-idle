@@ -1,11 +1,11 @@
 ---
 id: TASK-537
 title: 'friendfb: friend feedback 0.1.3, Items tab, Help card, skills size'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T03:31:00Z'
-updated_date: '2026-11-16T04:50:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

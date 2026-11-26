@@ -1,10 +1,13 @@
 ---
 id: TASK-463
-title: 'uic3: The tooltip, the right-click menu, gestures, instant states and the hero sheet values'
-status: Proposed
+title: >-
+  uic3: The tooltip, the right-click menu, gestures, instant states and the hero
+  sheet values
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T04:08:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

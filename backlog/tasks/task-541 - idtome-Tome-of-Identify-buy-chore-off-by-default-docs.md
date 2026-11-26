@@ -1,10 +1,11 @@
 ---
 id: TASK-541
 title: 'idtome: Tome of Identify buy chore (off by default), docs'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T04:00:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

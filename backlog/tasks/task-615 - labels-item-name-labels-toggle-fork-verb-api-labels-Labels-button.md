@@ -1,10 +1,11 @@
 ---
 id: TASK-615
 title: 'labels: item name labels toggle (fork verb, /api/labels, Labels button)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T14:36:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

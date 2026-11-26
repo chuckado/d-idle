@@ -1,10 +1,11 @@
 ---
 id: TASK-362
 title: 'cut010d: 0.1.0 art-clean fork commit, re-cut and re-stage (not uploaded)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-12T15:04:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - container
   - chore

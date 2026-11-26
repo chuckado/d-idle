@@ -1,10 +1,11 @@
 ---
 id: TASK-660
 title: 'cainl3: Search for Cain L3 drill, the real bot chain on a lab slot'
-status: Proposed
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-19T14:48:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - d2d
   - drill

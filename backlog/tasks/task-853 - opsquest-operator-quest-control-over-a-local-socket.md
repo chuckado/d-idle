@@ -1,10 +1,11 @@
 ---
 id: TASK-853
 title: 'opsquest: operator quest control over a local socket'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T05:05:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

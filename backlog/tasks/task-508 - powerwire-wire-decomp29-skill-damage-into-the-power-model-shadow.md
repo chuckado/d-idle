@@ -1,10 +1,11 @@
 ---
 id: TASK-508
 title: 'powerwire: wire decomp29 skill damage into the power model (shadow)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T15:53:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

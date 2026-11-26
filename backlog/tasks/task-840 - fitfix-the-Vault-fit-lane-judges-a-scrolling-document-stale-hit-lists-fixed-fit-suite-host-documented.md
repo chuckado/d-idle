@@ -1,10 +1,13 @@
 ---
 id: TASK-840
-title: 'fitfix: the Vault fit lane judges a scrolling document, stale hit lists fixed, fit suite host documented'
-status: Proposed
+title: >-
+  fitfix: the Vault fit lane judges a scrolling document, stale hit lists fixed,
+  fit suite host documented
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T02:50:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - bug

@@ -1,10 +1,11 @@
 ---
 id: TASK-452
 title: 'survC: zone ledger, controller shadow, merc revive value (S-C)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T22:31:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - feature

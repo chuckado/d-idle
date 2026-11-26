@@ -1,10 +1,13 @@
 ---
 id: TASK-696
-title: 'decomp44: monster block r2 rebase, skip fix, body fixes and the pet block decomp'
-status: Proposed
+title: >-
+  decomp44: monster block r2 rebase, skip fix, body fixes and the pet block
+  decomp
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T18:47:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - d2d
   - research

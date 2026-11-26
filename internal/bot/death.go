@@ -253,6 +253,8 @@ func (r *Runner) crowdSpotAgain(src DeathRecord, at time.Time) bool {
 // retrievalDecision is the corpse policy: retrieve only when the gear is worth the trip and the area is judged
 // survivable, at most CorpseRetries attempts per death.
 func (r *Runner) retrievalDecision(rec *recovery, snap *d2.Snapshot) (bool, string) {
+	r.corpseRun.Store(true)
+	defer r.corpseRun.Store(false)
 	t := r.e.Tune.Bot
 	now := r.e.Clock.Now()
 	src := rec.rec

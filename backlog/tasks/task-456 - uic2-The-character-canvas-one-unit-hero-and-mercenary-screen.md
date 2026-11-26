@@ -1,10 +1,11 @@
 ---
 id: TASK-456
 title: 'uic2: The character canvas (one-unit hero and mercenary screen)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T22:53:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - watch
   - feature

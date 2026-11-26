@@ -1,10 +1,13 @@
 ---
 id: TASK-833
-title: 'manapack: quest gate and route guard count pack mana potions like the shop (all town.plan stages)'
-status: Proposed
+title: >-
+  manapack: quest gate and route guard count pack mana potions like the shop
+  (all town.plan stages)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T01:44:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bot-fix

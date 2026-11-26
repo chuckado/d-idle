@@ -1,10 +1,13 @@
 ---
 id: TASK-707
-title: 'druid1: Druid fire (capability rows, build, combat profile, planner shadow, Proving Ground scenario, ground-target note)'
-status: Proposed
+title: >-
+  druid1: Druid fire (capability rows, build, combat profile, planner shadow,
+  Proving Ground scenario, ground-target note)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T02:43:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

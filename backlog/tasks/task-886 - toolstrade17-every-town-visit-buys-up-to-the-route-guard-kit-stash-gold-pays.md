@@ -1,10 +1,11 @@
 ---
 id: TASK-886
 title: 'toolstrade17: every town visit buys up to the route guard kit, stash gold pays'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T10:39:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bot-fix

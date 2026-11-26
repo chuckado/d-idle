@@ -1,10 +1,13 @@
 ---
 id: TASK-826
-title: 'necrodrill: Necromancer earned Act 1 drill verdict (BLOCKED) and readiness doc 6.3'
-status: Proposed
+title: >-
+  necrodrill: Necromancer earned Act 1 drill verdict (BLOCKED) and readiness doc
+  6.3
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T23:57:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - probe

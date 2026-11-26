@@ -1,10 +1,11 @@
 ---
 id: TASK-357
 title: 'skilltrees2: Skills page layout from grid constants, no measuring'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-12T04:10:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - watch
   - bug

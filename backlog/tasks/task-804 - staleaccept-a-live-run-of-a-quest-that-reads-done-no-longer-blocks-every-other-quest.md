@@ -1,10 +1,13 @@
 ---
 id: TASK-804
-title: 'staleaccept: a live run of a quest that reads done no longer blocks every other quest'
-status: Proposed
+title: >-
+  staleaccept: a live run of a quest that reads done no longer blocks every
+  other quest
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T15:37:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bug

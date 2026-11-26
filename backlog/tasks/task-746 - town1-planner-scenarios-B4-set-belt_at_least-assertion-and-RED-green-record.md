@@ -1,10 +1,13 @@
 ---
 id: TASK-746
-title: 'town1: planner scenarios (B4 set, belt_at_least assertion) and RED/green record'
-status: In Progress
+title: >-
+  town1: planner scenarios (B4 set, belt_at_least assertion) and RED/green
+  record
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T04:49:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - drill

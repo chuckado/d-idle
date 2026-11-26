@@ -1,10 +1,11 @@
 ---
 id: TASK-631
 title: 'cainl0: Search for Cain read-only object listing drill'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T14:10:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - drill

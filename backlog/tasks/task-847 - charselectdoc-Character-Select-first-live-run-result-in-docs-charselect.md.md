@@ -1,10 +1,11 @@
 ---
 id: TASK-847
 title: 'charselectdoc: Character Select first live run result in docs/charselect.md'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T03:54:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - docs
   - chore

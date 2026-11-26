@@ -1,10 +1,11 @@
 ---
 id: TASK-488
 title: 'verifyp03d: second verifier pass P03b hit recovery, rebased r4'
-status: In Progress
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-15T09:51:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - research

@@ -1,10 +1,11 @@
 ---
 id: TASK-640
 title: 'cainl2: Search for Cain free-Cain and report drill'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T15:16:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - drill

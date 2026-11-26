@@ -1,10 +1,13 @@
 ---
 id: TASK-818
-title: 'classtraits: one class traits table (caster, manaNeed) replaces five copies of the caster triple'
-status: Proposed
+title: >-
+  classtraits: one class traits table (caster, manaNeed) replaces five copies of
+  the caster triple
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T19:53:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - chore

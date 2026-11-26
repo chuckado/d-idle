@@ -1,10 +1,11 @@
 ---
 id: TASK-505
 title: 'decomp31: Act 1 Normal drop model per area and boss (data + trace)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T15:32:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - docs
   - research

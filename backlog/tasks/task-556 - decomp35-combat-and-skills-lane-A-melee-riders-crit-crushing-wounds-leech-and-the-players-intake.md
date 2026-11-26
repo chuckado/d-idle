@@ -1,10 +1,13 @@
 ---
 id: TASK-556
-title: 'decomp35: combat and skills lane A, melee riders (crit, crushing, wounds, leech) and the player''s intake'
-status: Proposed
+title: >-
+  decomp35: combat and skills lane A, melee riders (crit, crushing, wounds,
+  leech) and the player's intake
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T18:35:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - research

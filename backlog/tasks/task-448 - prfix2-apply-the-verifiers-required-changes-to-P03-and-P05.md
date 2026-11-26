@@ -1,10 +1,11 @@
 ---
 id: TASK-448
 title: 'prfix2: apply the verifier''s required changes to P03 and P05'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T22:05:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - docs
   - upstream-pr

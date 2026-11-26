@@ -9,6 +9,7 @@ import (
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/supply"
+	"d2lod-bot/internal/task"
 )
 
 type manaCatalog struct{ fakeCatalog }
@@ -166,13 +167,13 @@ func TestEarlyRouteClosesBelowTheLevelAndTheKit(t *testing.T) {
 		maxLife int
 		want    string // "" open, else a part of the reason
 	}{
-		{d2.Paladin, 4, 3, 150, "level 7 needed"},
-		{d2.Paladin, 7, 0, 150, "healing potions"},
-		{d2.Paladin, 7, 2, 150, ""},
-		{d2.Paladin, 8, 3, 69, "life 110 needed"}, // the Questy hero: clvl 8, nothing in vitality
-		{d2.Sorceress, 7, 3, 90, "level 8 needed"},
-		{d2.Sorceress, 8, 2, 90, ""},
-		{d2.Sorceress, 8, 3, 50, "life 70 needed"},
+		{d2.Paladin, 4, 3, 200, "level 7 needed"},
+		{d2.Paladin, 7, 0, 200, "healing potions"},
+		{d2.Paladin, 7, 2, 200, ""},
+		{d2.Paladin, 8, 3, 69, "life 180 needed"}, // the Questy hero: clvl 8, nothing in vitality
+		{d2.Sorceress, 7, 3, 120, "level 8 needed"},
+		{d2.Sorceress, 8, 2, 120, ""},
+		{d2.Sorceress, 8, 3, 60, "life 100 needed"},
 	} {
 		g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
 		g.w.set(func(w *world) {
@@ -217,6 +218,43 @@ func TestEarlyRoadRefusesTheQuestWalk(t *testing.T) {
 		}
 		if err := g.r.routeAllowed(s, 4, 1, []int{3, 2, 1}); err != nil {
 			t.Errorf("%v: the walk home was refused: %v", class, err)
+		}
+	}
+}
+
+// fillEarly hands the closed early road to the task layer: the Dark Wood is blocked for a clvl 4 hero (level) and for a clvl 8 hero
+// without potions (kit only); an open hero blocks nothing. Two classes.
+func TestFillEarlyHandsTheRoadToTheTaskLayer(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, tc := range []struct {
+			level, life int
+			potions     bool
+			want        bool
+			kit         bool
+		}{{4, 200, true, true, false}, {8, 200, false, true, true}, {9, 200, true, false, false}} {
+			g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
+			g.w.set(func(w *world) {
+				w.class, w.level, w.area, w.maxL, w.life = class, tc.level, 3, tc.life, tc.life
+				var keep []d2.Unit
+				for _, u := range w.items {
+					if u.Class != 1 && u.Class != 5 {
+						keep = append(keep, u)
+					}
+				}
+				w.items = append(keep, d2.Unit{ID: 799, Type: d2.TypeItem, Class: 5, Item: &d2.Item{Where: d2.ContInventory}})
+				if tc.potions {
+					for i := 0; i < 3; i++ {
+						w.items = append(w.items, d2.Unit{ID: uint32(700 + i), Type: d2.TypeItem, Class: 1, Item: &d2.Item{Where: d2.ContBelt}})
+					}
+				}
+			})
+			g.r.poll()
+			var w task.World
+			g.r.fillEarly(&w)
+			b, got := w.EarlyBlocked[5]
+			if got != tc.want || got && b.KitOnly != tc.kit {
+				t.Errorf("%v clvl %d potions %v: blocked %v %+v, want %v kitOnly %v", class, tc.level, tc.potions, got, b, tc.want, tc.kit)
+			}
 		}
 	}
 }

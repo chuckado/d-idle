@@ -1,10 +1,11 @@
 ---
 id: TASK-619
 title: 'questrun: Start runs under a farm goal, queued reason, board log lines'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T14:59:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - bug

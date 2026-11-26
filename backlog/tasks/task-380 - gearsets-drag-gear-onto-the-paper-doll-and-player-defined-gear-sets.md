@@ -1,10 +1,11 @@
 ---
 id: TASK-380
 title: 'gearsets: drag gear onto the paper doll and player-defined gear sets'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-12T20:13:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - watch
   - feature

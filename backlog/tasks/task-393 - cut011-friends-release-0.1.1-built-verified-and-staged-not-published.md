@@ -1,7 +1,7 @@
 ---
 id: TASK-393
 title: 'cut011: friends release 0.1.1 built, verified and staged (not published)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-13T02:12:00Z'

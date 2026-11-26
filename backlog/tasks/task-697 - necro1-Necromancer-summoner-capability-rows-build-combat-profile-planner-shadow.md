@@ -1,10 +1,13 @@
 ---
 id: TASK-697
-title: 'necro1: Necromancer summoner (capability rows, build, combat profile, planner shadow)'
-status: Proposed
+title: >-
+  necro1: Necromancer summoner (capability rows, build, combat profile, planner
+  shadow)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T18:49:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

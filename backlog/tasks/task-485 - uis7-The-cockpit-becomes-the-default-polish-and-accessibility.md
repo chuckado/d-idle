@@ -1,10 +1,11 @@
 ---
 id: TASK-485
 title: 'uis7: The cockpit becomes the default; polish and accessibility'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T08:45:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

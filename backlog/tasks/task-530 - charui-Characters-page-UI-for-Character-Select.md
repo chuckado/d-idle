@@ -1,10 +1,11 @@
 ---
 id: TASK-530
 title: 'charui: Characters page (UI for Character Select)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T02:34:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

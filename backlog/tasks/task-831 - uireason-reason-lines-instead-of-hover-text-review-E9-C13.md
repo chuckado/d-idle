@@ -1,10 +1,11 @@
 ---
 id: TASK-831
 title: 'uireason: reason lines instead of hover text (review E9, C13)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T00:57:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - feature

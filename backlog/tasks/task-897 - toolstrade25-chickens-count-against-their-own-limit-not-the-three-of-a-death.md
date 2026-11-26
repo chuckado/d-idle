@@ -1,10 +1,11 @@
 ---
 id: TASK-897
 title: 'toolstrade25: chickens count against their own limit, not the three of a death'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T13:05:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - bot
   - bot-fix

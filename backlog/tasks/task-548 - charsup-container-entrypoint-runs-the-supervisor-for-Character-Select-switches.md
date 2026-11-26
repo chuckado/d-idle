@@ -1,10 +1,13 @@
 ---
 id: TASK-548
-title: 'charsup: container entrypoint runs the supervisor for Character Select switches'
-status: Proposed
+title: >-
+  charsup: container entrypoint runs the supervisor for Character Select
+  switches
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T16:08:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - container
   - feature

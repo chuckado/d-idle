@@ -1,10 +1,11 @@
 ---
 id: TASK-838
 title: 'navexit2: Blood Moor to Cold Plains scenario and drill doc stage results'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T02:37:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - drill

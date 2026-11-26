@@ -1,10 +1,11 @@
 ---
 id: TASK-374
 title: 'hourfix2: cached Den pick after the claim'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-12T18:27:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - bug

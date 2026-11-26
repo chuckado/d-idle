@@ -1,10 +1,13 @@
 ---
 id: TASK-843
-title: 'fitfix2: phone More sheet scrolls again and the Vault Reveal button always has a name'
-status: Proposed
+title: >-
+  fitfix2: phone More sheet scrolls again and the Vault Reveal button always has
+  a name
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T03:12:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - bug

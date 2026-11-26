@@ -1,10 +1,13 @@
 ---
 id: TASK-769
-title: 'mouthgate: nav mouth gate lets a GoTo reach a goal inside an unwanted exit''s bound'
-status: Proposed
+title: >-
+  mouthgate: nav mouth gate lets a GoTo reach a goal inside an unwanted exit's
+  bound
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T06:07:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bug

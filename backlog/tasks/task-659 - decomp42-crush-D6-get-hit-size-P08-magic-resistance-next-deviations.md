@@ -1,10 +1,11 @@
 ---
 id: TASK-659
 title: 'decomp42: crush D6 get-hit size, P08, magic resistance, next deviations'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T14:32:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - research

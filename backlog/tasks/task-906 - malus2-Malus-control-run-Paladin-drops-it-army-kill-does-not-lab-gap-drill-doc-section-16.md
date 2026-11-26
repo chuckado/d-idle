@@ -1,10 +1,13 @@
 ---
 id: TASK-906
-title: 'malus2: Malus control run (Paladin drops it, army kill does not): lab gap, drill doc section 16'
-status: Proposed
+title: >-
+  malus2: Malus control run (Paladin drops it, army kill does not): lab gap,
+  drill doc section 16
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T22:52:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - bot
   - drill

@@ -1,10 +1,11 @@
 ---
 id: TASK-490
 title: 'deploycockpit: deploy cockpit UI to the sandbox'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T10:55:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - docs
   - chore

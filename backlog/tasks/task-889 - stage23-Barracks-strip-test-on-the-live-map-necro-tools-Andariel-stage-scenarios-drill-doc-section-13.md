@@ -1,10 +1,13 @@
 ---
 id: TASK-889
-title: 'stage23: Barracks strip test on the live map, necro tools/Andariel stage scenarios, drill doc section 13'
-status: Proposed
+title: >-
+  stage23: Barracks strip test on the live map, necro tools/Andariel stage
+  scenarios, drill doc section 13
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T11:08:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - drill

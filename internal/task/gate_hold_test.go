@@ -142,3 +142,27 @@ func TestInsertedTripThatChangesNothingIsAHold(t *testing.T) {
 		})
 	}
 }
+
+// Questy bed 2026-11-25: the early road refusal came at the hop, counted as a strike and parked the Cain scroll for 1h30m as "too
+// weak". As a Ready fault of the step into the Dark Wood it is a hold (level or life) or a chores trip (kit): nothing is counted.
+func TestEarlyRoadIsAHoldOrAChoresTripNeverAStrike(t *testing.T) {
+	for name, base := range holdWorlds() {
+		t.Run(name, func(t *testing.T) {
+			w := base
+			w.Gated = false
+			w.EarlyBlocked = map[Area]EarlyBlock{5: {Why: "level 7 needed for the underground_passage road (clvl 4)"}}
+			if f := fieldReady(5)(w); f == nil || !f.Hold || f.Code != "route_closed" || len(f.Insert) != 0 {
+				t.Fatalf("level: want a hold route_closed, got %+v", f)
+			}
+			w.EarlyBlocked = map[Area]EarlyBlock{5: {Why: "0 healing potions < 2 for the underground_passage road", KitOnly: true}}
+			f := fieldReady(5)(w)
+			if f == nil || f.Kind != KindResource || len(f.Insert) != 1 || f.Code != "needs_potions" {
+				t.Fatalf("kit: want a chores insert, got %+v", f)
+			}
+			w.EarlyBlocked = nil
+			if f := fieldReady(5)(w); f != nil {
+				t.Fatalf("open road refused: %+v", f)
+			}
+		})
+	}
+}

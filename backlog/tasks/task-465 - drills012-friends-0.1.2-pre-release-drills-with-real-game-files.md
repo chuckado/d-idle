@@ -1,10 +1,11 @@
 ---
 id: TASK-465
 title: 'drills012: friends 0.1.2 pre-release drills with real game files'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T04:15:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - container
   - drill

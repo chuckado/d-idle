@@ -1,10 +1,11 @@
 ---
 id: TASK-844
 title: 'fitfix3: Vault fit flakes gone, a list refresh no longer ends Select mode'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T03:32:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - bug

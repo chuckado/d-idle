@@ -1,10 +1,11 @@
 ---
 id: TASK-849
 title: 'toolstrade5: mid-route kit floors, border strip probe'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T04:02:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bot-fix

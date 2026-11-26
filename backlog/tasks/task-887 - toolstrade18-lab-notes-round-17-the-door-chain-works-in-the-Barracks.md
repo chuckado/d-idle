@@ -1,10 +1,11 @@
 ---
 id: TASK-887
 title: 'toolstrade18: lab notes round 17, the door chain works in the Barracks'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T10:55:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - docs
   - probe

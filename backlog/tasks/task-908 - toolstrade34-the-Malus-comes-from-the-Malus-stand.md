@@ -1,10 +1,11 @@
 ---
 id: TASK-908
 title: 'toolstrade34: the Malus comes from the Malus stand'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T23:19:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - bot
   - bot-fix

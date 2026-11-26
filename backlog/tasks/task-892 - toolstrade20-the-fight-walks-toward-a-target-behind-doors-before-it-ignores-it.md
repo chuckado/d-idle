@@ -1,10 +1,13 @@
 ---
 id: TASK-892
-title: 'toolstrade20: the fight walks toward a target behind doors before it ignores it'
-status: Proposed
+title: >-
+  toolstrade20: the fight walks toward a target behind doors before it ignores
+  it
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T11:40:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bot-fix

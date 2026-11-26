@@ -1,10 +1,11 @@
 ---
 id: TASK-931
 title: 'equipv2b: createHex flips only the identified bit (durability check)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-25T14:35:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - watch
   - probe

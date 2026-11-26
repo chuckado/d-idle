@@ -1,10 +1,11 @@
 ---
 id: TASK-461
 title: 'toastfix: stack toast text unreadable in dark theme'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T01:25:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - watch
   - bug

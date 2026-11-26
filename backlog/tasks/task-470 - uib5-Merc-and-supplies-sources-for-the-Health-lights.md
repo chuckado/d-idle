@@ -1,10 +1,11 @@
 ---
 id: TASK-470
 title: 'uib5: Merc and supplies sources for the Health lights'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T04:51:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

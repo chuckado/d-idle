@@ -1,10 +1,11 @@
 ---
 id: TASK-605
 title: 'quests10: Ether hook in the quest board hand-in (S10)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T10:01:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

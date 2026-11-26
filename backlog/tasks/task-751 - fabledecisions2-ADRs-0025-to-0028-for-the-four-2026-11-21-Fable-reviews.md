@@ -1,10 +1,11 @@
 ---
 id: TASK-751
 title: 'fabledecisions2: ADRs 0025 to 0028 for the four 2026-11-21 Fable reviews'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T04:50:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - docs
   - chore

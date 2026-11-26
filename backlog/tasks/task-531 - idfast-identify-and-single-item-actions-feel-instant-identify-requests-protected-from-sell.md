@@ -1,10 +1,13 @@
 ---
 id: TASK-531
-title: 'idfast: identify and single-item actions feel instant, identify requests protected from sell'
-status: Proposed
+title: >-
+  idfast: identify and single-item actions feel instant, identify requests
+  protected from sell
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T02:51:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - bug

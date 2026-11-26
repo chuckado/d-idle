@@ -1,10 +1,11 @@
 ---
 id: TASK-868
 title: 'toolstrade10: GoTo opens doors in a row; tools scenario hero wears a belt'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T07:31:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bot-fix

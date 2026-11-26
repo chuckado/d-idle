@@ -1,10 +1,13 @@
 ---
 id: TASK-589
-title: 'vaultv3: Ethereal Vault V3, rules action vault, Vault preset, looter vault path'
-status: In Progress
+title: >-
+  vaultv3: Ethereal Vault V3, rules action vault, Vault preset, looter vault
+  path
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T04:29:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

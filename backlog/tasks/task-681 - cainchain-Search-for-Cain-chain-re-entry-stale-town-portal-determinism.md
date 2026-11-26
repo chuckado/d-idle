@@ -1,10 +1,11 @@
 ---
 id: TASK-681
 title: 'cainchain: Search for Cain chain re-entry, stale town portal, determinism'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T02:38:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bot-fix

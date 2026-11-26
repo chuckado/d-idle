@@ -1,10 +1,13 @@
 ---
 id: TASK-500
-title: 'verifyp04: independent verifier for upstream candidate P04 (hit interrupts, fid/hitrec-interrupt-r2)'
-status: In Progress
+title: >-
+  verifyp04: independent verifier for upstream candidate P04 (hit interrupts,
+  fid/hitrec-interrupt-r2)
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-15T14:57:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - research

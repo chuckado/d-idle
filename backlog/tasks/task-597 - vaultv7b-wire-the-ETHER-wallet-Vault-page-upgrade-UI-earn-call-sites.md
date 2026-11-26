@@ -1,7 +1,7 @@
 ---
 id: TASK-597
 title: 'vaultv7b: wire the ETHER wallet, Vault page upgrade UI, earn call sites'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T06:53:00Z'

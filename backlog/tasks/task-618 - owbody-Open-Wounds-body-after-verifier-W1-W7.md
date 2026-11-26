@@ -1,10 +1,11 @@
 ---
 id: TASK-618
 title: 'owbody: Open Wounds body after verifier W1-W7'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T14:54:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - upstream-pr
