@@ -297,6 +297,7 @@
 | advisor1 | proposed | - | `docs/design/advisor-r14.md` | - |
 | autorevert1 | in-progress | - | `docs/design/autorevert.md`<br>`tools/flip/*`<br>`tools/darklaunch/*`<br>`data/darklaunch.json`<br>`docs/process/dark-launch.md`<br>`docs/invariants.md`<br>`docs/operator.md`<br>`internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`internal/bot/explain.go` | - |
 | reflex1d | proposed | - | `internal/bot/safetylat.go`<br>`internal/bot/loop.go`<br>`internal/bot/reflexdrink_test.go` | - |
+| arbfam | proposed | - | `internal/arbiter`<br>`internal/bot/arbiter_control.go`<br>`internal/bot/arbiter_control_test.go`<br>`internal/bot/shadow.go`<br>`internal/bot/goal.go`<br>`tools/provingground/arbiter-outcomes`<br>`docs/arbiter.md`<br>`data/darklaunch.json`<br>`docs/knobs.md` | - |
 
 ### Gates
 - contract [act1-campaign](../contracts/act1-campaign.md): 9 requirements
@@ -319,6 +320,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 06e3c750c 11-26 12:51 `Merge agent/arbfam1: arbfam entry 1: chores and claim outcome cases, docs, card` (arbfam1)
 - 284d0806e 11-26 12:09 `Merge agent/toolstrade85: Merge origin/main` (toolstrade85)
 - 49f2bed0b 11-26 11:50 `Merge origin/main` (-)
 - 027112601 11-26 11:12 `Merge agent/toolstrade84: Merge branch 'main' into toolstrade84` (toolstrade84)
@@ -328,5 +330,4 @@
 - a75e83212 11-26 10:41 `Merge branch 'main' into toolstrade85` (-)
 - 4c8c48c87 11-26 10:34 `Merge origin/main` (-)
 - b89f8cde8 11-26 10:34 `Merge agent/faultsoak: Merge branch 'main' into faultsoak` (faultsoak)
-- 363a0d3cf 11-26 10:34 `Merge agent/outcomes2g: Merge branch 'main' into outcome-explain-ring` (outcomes2g)
 <!-- statusgen:end -->
