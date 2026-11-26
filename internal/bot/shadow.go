@@ -3,6 +3,7 @@ package bot
 import (
 	"context"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"d2lod-bot/internal/arbiter"
@@ -13,9 +14,10 @@ import (
 // it WOULD choose from the same world facts; the answer is only logged. runGoal and every hook in it are unchanged.
 
 type arbShadow struct {
-	mu sync.Mutex
-	sh *arbiter.Shadow
-	t0 time.Time
+	mu  sync.Mutex
+	sh  *arbiter.Shadow
+	t0  time.Time
+	ctl atomic.Int64 // ticks the arbiter acted for since the last minute line (arbiter_control.go)
 }
 
 // minuteKV is the "arb" attribute of the minute line: per hook family diverged/ticks since the last minute line.
@@ -26,7 +28,11 @@ func (a *arbShadow) minuteKV() []any {
 	if sh == nil {
 		return nil
 	}
-	return []any{"arb", sh.Drain()}
+	kv := []any{"arb", sh.Drain()}
+	if n := a.ctl.Swap(0); n > 0 {
+		kv = append(kv, "arbctl", n)
+	}
+	return kv
 }
 
 // Arbiter is the last shadow decision for the watch API and the debug page (read only; false while the knob is off).
@@ -54,6 +60,9 @@ func (r *Runner) runGoalArb(ctx context.Context, snap *d2.Snapshot, c control) b
 		return r.runGoal(ctx, snap, c)
 	}
 	v, ok := r.shadowView(snap, c)
+	if ok && t.ArbiterControl != 0 {
+		return r.runGoalControlled(ctx, snap, c, v)
+	}
 	acted := r.runGoal(ctx, snap, c)
 	if ok {
 		r.shadowTick(v, acted)

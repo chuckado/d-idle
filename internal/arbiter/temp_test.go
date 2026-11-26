@@ -110,3 +110,17 @@ func TestLostControlAndStarvation(t *testing.T) {
 		t.Fatalf("a source that stopped asking is not starved: %d", s2.star)
 	}
 }
+
+func TestControlledMask(t *testing.T) {
+	if !Controlled(3, SrcSurvive) || !Controlled(3, SrcPlayer) || Controlled(3, "chores") || Controlled(0, SrcSurvive) || Controlled(255, "nope") {
+		t.Fatal("bit order or unknown family")
+	}
+	sh := NewShadow(DefaultConfig(), ShadowConfig{LogGapSec: 1}, StdSources()...)
+	d, ok := sh.Decide(View{Area: "a", Facts: map[string]int{FactHostile: 3, FactLifePct: 20, FactSurviveBelow: 50}})
+	if !ok || d.Chosen == nil || d.Chosen.Source != SrcSurvive {
+		t.Fatalf("%v", d)
+	}
+	if line := sh.Compare(d, 0, "chores"); line == "" {
+		t.Fatal("a divergence must be reported by Compare")
+	}
+}
