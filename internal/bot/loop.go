@@ -338,7 +338,14 @@ func (r *Runner) carryOut(ctx context.Context, a SafetyAction) error {
 	}
 	sctx, cancel := gclock.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
+	drink := a == SafetyDrinkLife || a == SafetyDrinkMana || a == SafetyDrinkRejuv
+	if !drink {
+		r.noteSent(a, r.e.Clock.Now(), false)
+	}
 	err := r.d.Fighter.Act(sctx, a)
+	if drink && err == nil {
+		r.noteSent(a, r.e.Clock.Now(), false)
+	}
 	if err != nil {
 		r.e.Log.Warn("safety action failed", "action", a, "err", err)
 	}
@@ -1074,6 +1081,7 @@ func (r *Runner) guardOnce(ctx context.Context, cancel context.CancelCauseFunc, 
 				a = SafetyNone // Ancients: a portal would reset the fight (Constraints.NoTownPortal)
 			}
 			if a != SafetyNone && (st != StateClearing || a == SafetyTownPortal || a == SafetyChicken || a == SafetyCrowdAbandon || a == SafetyDrinkLife || a == SafetyDrinkRejuv) && r.safetyDue(a, now) {
+				r.noteVerdict(now)
 				if rt := r.e.Tune.Bot.ReactionMs; rt > 0 {
 					r.e.Clock.Sleep(time.Duration(rt) * time.Millisecond)
 				}

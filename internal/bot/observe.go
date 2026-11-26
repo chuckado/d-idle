@@ -155,6 +155,7 @@ type observer struct {
 
 	lastSafety   SafetyAction
 	lastSafetyAt time.Time
+	sl           safetyLat // verdict to input latency (safetylat.go)
 
 	drinkTimes []time.Time // life drinks inside the burst window (earlyexit.go)
 	stale      stalePack
@@ -1130,12 +1131,13 @@ func (r *Runner) planKV() []any {
 }
 
 // inputKV is the planner's path counters for the minute line, "input" = verb/key/click (docs/process/sandbox-devp14.md).
-// Nothing while the knob input.planner is off, so the default line is unchanged.
+// Also carries the safety latency of the minute (safetylat.go); nothing while no safety action was sent and the planner is off.
 func (r *Runner) inputKV() []any {
+	kv := r.ob.sl.minuteKV() // obMu is held by minuteLine
 	if r.e.Planner.On() {
-		return []any{"input", r.e.Planner.Summary()}
+		kv = append(kv, "input", r.e.Planner.Summary())
 	}
-	return nil
+	return kv
 }
 
 // bouncesPer100 is arrival bounces per 100 arrivals since start (docs/bounce3.md), one decimal; 0 before any arrival.
