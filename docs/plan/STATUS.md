@@ -507,6 +507,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 18d4a4e9e 11-25 19:11 `Merge agent/toolstrade74: toolstrade74: the early road is a Ready hold of the step into the Dark Wood (a chores trip for the kit), not a strike at the hop (Cain scroll parked as too weak)` (toolstrade74)
 - e12ee23ba 11-25 18:12 `Merge agent/toolstrade73: Merge branch 'main' into toolstrade73` (toolstrade73)
 - ce8c37537 11-25 18:10 `Merge branch 'main' into toolstrade73` (-)
 - f4f3dacfc 11-25 18:02 `Merge agent/toolstrade72: Merge branch 'main' into toolstrade72` (toolstrade72)
@@ -516,5 +517,4 @@
 - 2dc4fff06 11-25 17:52 `Merge branch 'main' into toolstrade71` (-)
 - 684f9ad45 11-25 17:43 `Merge agent/toolstrade70: Merge branch 'main' into toolstrade70` (toolstrade70)
 - 665aacd9c 11-25 17:42 `Merge origin/main into toolstrade71` (-)
-- c9bc2becf 11-25 17:41 `Merge branch 'main' into toolstrade70` (-)
 <!-- statusgen:end -->

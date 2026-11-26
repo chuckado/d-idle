@@ -1383,6 +1383,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/toolstrade71: Merge branch 'main' into toolstrade71 (merged 2026-11-25) <!--sg:agent/toolstrade71-->
 - agent/toolstrade72: Merge branch 'main' into toolstrade72 (merged 2026-11-25) <!--sg:agent/toolstrade72-->
 - agent/toolstrade73: Merge branch 'main' into toolstrade73 (merged 2026-11-25) <!--sg:agent/toolstrade73-->
+- agent/toolstrade74: toolstrade74: the early road is a Ready hold of the step into the Dark Wood (a chores trip for the kit), not a strike at the hop (Cain scroll parked as too weak) (merged 2026-11-25) <!--sg:agent/toolstrade74-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
