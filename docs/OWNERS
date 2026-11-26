@@ -237,14 +237,12 @@ data/capabilities/  credit-runner  dlv-stance-pack
 data/darklaunch.json  credit-runner  arbfam
 data/darklaunch.json  credit-runner  arbmig
 data/darklaunch.json  credit-runner  autorevert1
-data/darklaunch.json  credit-runner  stepexec2
 data/input/caps/  credit-runner  dlv-cast-verbs
 data/onboarding  credit-runner  firstminutes
 data/questboard/act1.json  credit-runner  cain45
 data/questboard/act1.json  credit-runner  cain5b
 data/questboard/act1.json  credit-runner  cainfix3
 data/questboard/act2.json  credit-runner  qdmatrix
-data/questspec/act1.json  credit-runner  stepexec2
 deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 docs/actbot.md  credit-runner  cain45
 docs/adr/0014-memory-writes-allowed-no-crutch.md  credit-runner  vaultpay
@@ -280,7 +278,6 @@ docs/design/input-i5-i7.md  credit-runner  inputl5
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vault
 docs/design/proptest-t3.md  credit-runner  proptest1
-docs/design/stepexec-p9.md  credit-runner  stepexec2
 docs/design/ticklog-t4.md  credit-runner  ticklog
 docs/design/townflip-p5.md  credit-runner  townflip
 docs/epics/epic-act1.md  live-agent  epic-act1
@@ -569,15 +566,12 @@ internal/bot/shadow.go  credit-runner  arbfam
 internal/bot/shadow.go  credit-runner  arbmig
 internal/bot/staletarget.go  credit-runner  botstuck
 internal/bot/state.go  credit-runner  resetinstant
-internal/bot/stepexec.go  credit-runner  stepexec2
-internal/bot/stepexec_test.go  credit-runner  stepexec2
 internal/bot/task.go  credit-runner  boardmoderace
 internal/bot/task.go  credit-runner  botstuck
 internal/bot/task.go  credit-runner  cain5b
 internal/bot/task.go  credit-runner  chores2
 internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  resetinstant
-internal/bot/task.go  credit-runner  stepexec2
 internal/bot/task.go  credit-runner  wpstep
 internal/bot/task_acts_test.go  credit-runner  cain5b
 internal/bot/waypoints.go  credit-runner  boardmoderace
@@ -785,8 +779,6 @@ internal/questboard/desk_test.go  credit-runner  andariel1
 internal/questboard/state.go  credit-runner  qdmatrix
 internal/questboard/state_test.go  credit-runner  cain45
 internal/questboard/state_test.go  credit-runner  qdmatrix
-internal/questspec/exec.go  credit-runner  stepexec2
-internal/questspec/exec_test.go  credit-runner  stepexec2
 internal/repair  credit-runner  repairtrip
 internal/resource  credit-runner  town5
 internal/resource  credit-runner  town7
@@ -1135,7 +1127,6 @@ tools/provingground/scenarios/autoalloc.json  credit-runner  allocfix
 tools/provingground/scenarios/board.json  credit-runner  bsm7
 tools/provingground/scenarios/cain.json  credit-runner  boardprereq
 tools/provingground/scenarios/cain.json  credit-runner  cainfix3
-tools/provingground/scenarios/cain.json  credit-runner  stepexec2
 tools/provingground/scenarios/cain.json  credit-runner  wpstep
 tools/provingground/scenarios/manage.json  credit-runner  equipswap
 tools/provingground/scenarios/navexit.json  credit-runner  stage1fix
