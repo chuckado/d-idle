@@ -281,7 +281,7 @@
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | admit1 | proposed | - | `docs/design/admission-p4.md` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
-| arbmig | proposed | - | `docs/design/arbiter-migration-p6.md` | - |
+| arbmig | proposed | - | `docs/design/arbiter-migration-p6.md`<br>`docs/arbiter.md`<br>`internal/arbiter/`<br>`cmd/d2scenario/`<br>`tools/provingground/arbiter-outcomes/`<br>`internal/bot/arbiter_control.go`<br>`internal/bot/arbiter_control_test.go`<br>`internal/bot/shadow.go`<br>`internal/bot/loop.go`<br>`internal/env/tuning_bot.go`<br>`data/darklaunch.json`<br>`docs/knobs.md` | - |
 | stepexec1 | proposed | - | `docs/design/stepexec-p9.md` | - |
 | thrgov | proposed | - | `docs/process/threshold-governance.md` | - |
 | faultsoak | proposed | - | `docs/design/faultsoak-p12.md` | - |
@@ -322,6 +322,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a14d7af8e 11-26 09:38 `Merge agent/arbmig1: arbmig: task card owns for the P6 stages` (arbmig1)
 - fa0dee197 11-26 08:53 `Merge agent/toolstrade82: mode-no-exit fires on no progress (xp, kills, gold, area), not on elapsed time; parked heroes do not count for xp-frozen and refusal-storm` (toolstrade82)
 - 23dcfb8ed 11-26 03:08 `Merge agent/toolstrade81: Merge branch 'main' into toolstrade81` (toolstrade81)
 - b7cea267a 11-26 03:07 `Merge branch 'main' into toolstrade81` (-)
@@ -331,5 +332,4 @@
 - e04e3527e 11-26 02:41 `Merge branch 'main' into toolstrade80` (-)
 - db6b83314 11-26 02:31 `Merge agent/autorevert1: Merge branch 'main' into autorevert1` (autorevert1)
 - 609e43fde 11-26 02:31 `Merge origin/main` (-)
-- a1e40426a 11-26 02:29 `Merge origin/main` (-)
 <!-- statusgen:end -->
