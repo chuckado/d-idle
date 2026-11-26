@@ -1,5 +1,5 @@
 {
-  "_comment": "The admission rows (card admit1, review fable-logic-review-2026-11-25 P4): ONE home for the floors that decide whether a hero may enter an area or leave town. internal/admit reads this file; the old judges (earlyRouteCheck, questWalkCheck, povertyAreaWhy, kitFloorWhy, leanEntryWhy, denFloor) are providers that read their numbers from here, so a number lives once. Numbers moved unchanged from earlyroutes.json and povertyfarm.json (evidence there: Questy bed 2026-11-25 and 2026-11-26, SME ballpark, U). A floor changes only with the margin model or a seed set, never one death (P10). All rows apply in Normal only and never to a corpse run or the owner's try anyway. Archetype is the class family the caller resolves: melee or caster.",
+  "_comment": "The admission rows (card admit1, review fable-logic-review-2026-11-25 P4): ONE home for the floors that decide whether a hero may enter an area or leave town. internal/admit reads this file; the old judges (earlyRouteCheck, questWalkCheck, povertyAreaWhy, kitFloorWhy, leanEntryWhy, denFloor) are providers that read their numbers from here, so a number lives once. Numbers moved unchanged from earlyroutes.json and povertyfarm.json (evidence there: Questy bed 2026-11-25 and 2026-11-26, SME ballpark, U). A floor changes only with the margin model or a seed set, never one death (P10). Act 2 road rows (card act2plan, 2026-11-26): dungeon areas only (the open fields are plan rows, docs/plan/act2-level-plan.md); minLevel is the questboard legacyFloor of the quest that walks there (V data/questboard/act2.json), life floors are SME (S, U). All rows apply in Normal only and never to a corpse run or the owner's try anyway. Archetype is the class family the caller resolves: melee or caster.",
   "roads": [
     {
       "id": "underground_passage",
@@ -8,7 +8,15 @@
       "minLevel": {"melee": 7, "caster": 8},
       "minMaxLife": {"melee": 180, "caster": 100},
       "kit": {"healing": 2, "portal": 1}
-    }
+    },
+    {"id": "act2_sewers", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 and quest legacyFloor (U): needs seed set", "areas": [47, 48, 49], "minLevel": {"melee": 14, "caster": 16}, "kit": {"healing": 2, "portal": 1}},
+    {"id": "act2_halls_of_the_dead", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 and quest legacyFloor (U): needs seed set", "areas": [56, 57, 60], "minLevel": {"melee": 20, "caster": 22}, "kit": {"healing": 2, "portal": 1}},
+    {"id": "act2_claw_viper_temple", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 and quest legacyFloor (U): needs seed set", "areas": [58, 61], "minLevel": {"melee": 18, "caster": 20}, "kit": {"healing": 2, "portal": 1}},
+    {"id": "act2_maggot_lair", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 and quest legacyFloor (U): needs seed set", "areas": [62, 63, 64], "minLevel": {"melee": 20, "caster": 22}, "kit": {"healing": 2, "portal": 1}},
+    {"id": "act2_palace_cellar", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 and quest legacyFloor (U): needs seed set", "areas": [52, 53, 54], "minLevel": {"melee": 20, "caster": 22}, "kit": {"healing": 2, "portal": 1}},
+    {"id": "act2_arcane_sanctuary", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 and quest legacyFloor (U): needs seed set", "areas": [74], "minLevel": {"melee": 20, "caster": 22}, "kit": {"healing": 2, "portal": 1}, "minMaxLife": {"melee": 220, "caster": 150}},
+    {"id": "act2_ancient_tunnels", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 (U): needs seed set", "areas": [65], "minLevel": {"melee": 19, "caster": 21}, "kit": {"healing": 2, "portal": 1}},
+    {"id": "act2_tombs", "evidence": 1, "evidence_ref": "SME ballpark 2026-11-26 and quest legacyFloor (U): needs seed set", "areas": [66, 67, 68, 69, 70, 71, 72, 73], "minLevel": {"melee": 24, "caster": 26}, "kit": {"healing": 2, "portal": 1}, "minMaxLife": {"melee": 220, "caster": 150}}
   ],
   "knobFloors": [
     {
