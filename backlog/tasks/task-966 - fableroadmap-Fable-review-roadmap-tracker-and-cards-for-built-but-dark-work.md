@@ -15,6 +15,7 @@ card: "fableroadmap"
 owns:
   - "docs/roadmap-fable.md"
   - "data/darklaunch.json"
+  - "docs/process/dark-launch.md"
   - "backlog/tasks/task-96[6-9] - *"
   - "backlog/tasks/task-9[7-9][0-9] - *"
 exclusive: []

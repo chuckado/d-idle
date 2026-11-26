@@ -23,7 +23,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: L
 
-Cause classes killed: H (per-quest special case, 45) and F (a fact the backend does not give). Roadmap row P9 (docs/research/fable-logic-review-2026-11-25.md 7.1; ADR 0021, 0022). One executor: approach, act, wait for the declared fact, bounded retries, progress is not failure; identity by id; new chunks may use ONLY it. Replaces cainNodes-style handlers one by one, each behind the scenario of its chunk. Declaration side exists in internal/questspec. Unblocks the Act II epic card (epic-act2: Duriel place_staff needs a verb path) and later act epics. Depends on P2. Risk: medium; one chunk per card. Enable criteria per chunk: its Proving Ground scenario green 2 of 3 runs with the executor on; old handler deleted after 7 days green.
+Cause classes killed: H (per-quest special case, 45) and F (a fact the backend does not give). Roadmap row P9 (docs/research/fable-logic-review-2026-11-25.md 7.1; ADR 0021, 0022). One executor: approach, act, wait for the declared fact, bounded retries, progress is not failure; identity by id; new chunks may use ONLY it. Replaces cainNodes-style handlers one by one, each behind the scenario of its chunk. Declaration side exists in internal/questspec. Unblocks the Act II epic card (epic-act2: Duriel place_staff needs a verb path) and later act epics. Depends on P2. Risk: medium; one chunk per card. Enable criteria per chunk: its Proving Ground scenario green 2 of 3 runs with the executor on; old handler deleted after a 24 h watch with auto-revert.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
