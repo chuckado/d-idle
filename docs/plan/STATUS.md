@@ -44,7 +44,6 @@
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
 | act2plan | proposed | - | `internal/plandata/act2plan.json`<br>`internal/plandata/act2plan.go`<br>`internal/plandata/act2plan_test.go`<br>`internal/plandata/admission.json`<br>`docs/plan/data/act2plan.json`<br>`docs/plan/data/admission.json`<br>`docs/plan/act2-level-plan.md`<br>`docs/epics/epic-act2.md` | - |
-| roadmap2 | in-progress | - | `docs/roadmap-fable.md`<br>`backlog/tasks/task-998 - flipwave2*`<br>`backlog/tasks/task-999 - classorder1*` | - |
 | act345map | proposed | - | `data/questboard/act3.json`<br>`data/questboard/act4.json`<br>`data/questboard/act5.json`<br>`docs/epics/epic-act3.md`<br>`docs/epics/epic-act4.md`<br>`docs/epics/epic-act5.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
 | auralive | proposed | - | `docs/probes/paladin-aura-live-2026-11-26.md`<br>`cmd/auraprobe` | - |
