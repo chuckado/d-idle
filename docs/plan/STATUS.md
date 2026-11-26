@@ -333,14 +333,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 478e9fd56 11-26 17:25 `Merge agent/toolstrade90: Merge branch 'main' into toolstrade90` (toolstrade90)
 - eb221b5b5 11-26 17:25 `Merge agent/autorevert3: Merge branch 'main' into autorevert1` (autorevert3)
+- 4e6d516a9 11-26 17:23 `Merge branch 'main' into toolstrade90` (-)
 - 778c064f7 11-26 17:23 `Merge branch 'main' into autorevert1` (-)
 - eca09d841 11-26 17:23 `Merge agent/speedreview: Merge branch 'main' into speedreview` (speedreview)
 - e307b94c4 11-26 17:22 `Merge branch 'main' into speedreview` (-)
 - 1fce0d4de 11-26 17:13 `Merge agent/toolstrade89: Merge origin/main` (toolstrade89)
+- ebc1836e0 11-26 17:11 `Merge origin/main` (-)
 - 148111592 11-26 17:02 `Merge origin/main` (-)
 - 600b7776a 11-26 16:53 `Merge agent/autorevert2: autorevert2: card result` (autorevert2)
-- 82d648a9e 11-26 16:43 `Merge branch 'main' into toolstrade89` (-)
-- 644bf8d5f 11-26 16:36 `Merge agent/toolstrade88: no-earn soft invariant (5 min without xp, kills or gold, area changes do not count); the quest-walk kit rule never closes the first field` (toolstrade88)
-- a2b81607f 11-26 15:47 `Merge agent/act2temple: Merge origin/main into act2temple (admission rows reconciled)` (act2temple)
 <!-- statusgen:end -->
