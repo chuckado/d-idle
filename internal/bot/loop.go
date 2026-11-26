@@ -1014,7 +1014,7 @@ func (r *Runner) antidotesWanted() int {
 
 // guard watches while an action runs, every Tuning.Bot.WatchMs: it keeps the observer fed (kills, drops, level ups
 // are emitted live), and cancels the action when the character died, the game is gone, a pause is due, the fighter
-// wants an emergency action, or the watchdog sees no progress. It never acts itself, so input stays single-threaded.
+// wants an emergency action, or the watchdog sees no progress. It acts itself only for the reflex drink and the hard-cancel deadline (safetylat.go).
 func (r *Runner) guard(ctx context.Context, cancel context.CancelCauseFunc, done <-chan struct{}, st State) {
 	every := time.Duration(r.e.Tune.Bot.WatchMs) * time.Millisecond
 	// A lockstep clock (d2d) runs the guard on the acting goroutine, after the step that crossed WatchMs of virtual
