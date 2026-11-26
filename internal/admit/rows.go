@@ -22,7 +22,7 @@ type Rows struct {
 		FromLevel    int `json:"fromLevel"`
 	} `json:"kitFloor"`
 	Arrival ArrivalRow `json:"arrival"`
-	Lean struct {
+	Lean    struct {
 		PotionsBelow int `json:"potionsBelow"`
 		EntryLifePct int `json:"entryLifePct"`
 	} `json:"lean"`
