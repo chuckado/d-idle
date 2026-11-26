@@ -1,0 +1,59 @@
+{
+ "version": "didle.arbiter-outcomes/1",
+ "rules": [
+  {
+   "name": "drink-skipped",
+   "hit": "potion-not-drunk",
+   "families": ["chores", "claim", "quest", "goldfarm", "recovery", "level"],
+   "when": ["in_town==0", "hostile>=1", "life_pct<survive_below", "potions>=1"],
+   "why": "life under the drink line with hostiles near and potions in the belt, and the choice is not the reflex (survive): the monitor row potion-not-drunk"
+  },
+  {
+   "name": "no-kit-stays-in-field",
+   "hit": "field-entry-no-kit",
+   "families": ["quest", "level"],
+   "when": ["in_town==0", "potions==0"],
+   "why": "the hero keeps a quest step or the level sweep going in the field with an empty belt (soft row; farming gold when broke is the way out and is not scored)"
+  }
+ ],
+ "cases": [
+  {
+   "id": "arb.questy-0251-cold-plains",
+   "incident": "incident.questy-0251-chores-cold-plains",
+   "family": "survive",
+   "area": "cold_plains",
+   "chain": "chores",
+   "facts": {"in_town": 0, "life_pct": 30, "hostile": 12, "survive_below": 50, "potions": 3, "potions_min": 4, "trip": 1},
+   "provenance": "RECORDED chain choice (chores stage of a town trip, lastSafety=chicken, bug=true: 3 potions undrunk, log lines of review section 3.1). U: life_pct 30 and the drink line 50 are assumed (the log fixes the death, not the life at the decision); need_gold is not a fact in the live adapter (0 = unknown)."
+  },
+  {
+   "id": "arb.questy-0319-stony-field",
+   "incident": "incident.questy-0319-stony-field-no-potions",
+   "family": "chores",
+   "area": "stony_field",
+   "chain": "quest",
+   "objectiveArea": "stony_field",
+   "facts": {"in_town": 0, "life_pct": 100, "hostile": 0, "potions": 0, "potions_min": 4, "pack_gold": 0, "objective": 1, "survive_below": 50},
+   "provenance": "RECORDED chain choice (quest walk with 0 potions). U: pack gold 0 and a quiet start are assumed. The live adapter does not fill need_gold, so the refill source fires; whether the town could pay is not modelled."
+  },
+  {
+   "id": "arb.questy-0056-dark-wood",
+   "incident": "incident.questy-0056-dark-wood-treehead",
+   "family": "chores",
+   "area": "dark_wood",
+   "chain": "quest",
+   "objectiveArea": "dark_wood",
+   "facts": {"in_town": 0, "life_pct": 100, "hostile": 6, "potions": 0, "potions_min": 4, "pack_gold": 20, "objective": 1, "survive_below": 50},
+   "provenance": "RECORDED chain choice (portal return into the Treehead pack, belt 0). U: hostile count 6 and full life at arrival are assumed; the pack members are not in the log."
+  },
+  {
+   "id": "arb.darkwood-pingpong-first-tick",
+   "family": "chores",
+   "area": "dark_wood",
+   "chain": "quest",
+   "objectiveArea": "dark_wood",
+   "facts": {"in_town": 0, "life_pct": 100, "hostile": 0, "potions": 1, "potions_min": 4, "pack_gold": 350, "need_gold": 300, "objective": 1, "survive_below": 50},
+   "provenance": "First tick of internal/arbiter/testdata/darkwood_pingpong.jsonl (V area and times from the sandbox log, U facts as that fixture says). Neither choice hits a scored row: a no-regression probe, not a win."
+  }
+ ]
+}
