@@ -650,15 +650,32 @@ func progressText(o Order) string {
 }
 
 // guardRefusal says whether a failed order's note is the hero's guard turning the walk down, and returns the reason.
-// U: matches the wording of bot.errAreaGated ("area not allowed now: AREA (ID): route guard (WHY)") as the runner
-// reports it in the goal's failure message; a different wording just reads "Order failed".
+// V (bot.Refused.Error): the typed refusal reads "refused (NEED): WHY", with the code of the need table in
+// internal/bot/outcome.go; the reason then ends with " (need: NEED)". The older wording of bot.errAreaGated ("area not
+// allowed now: AREA (ID): route guard (WHY)") is still read (knob bot.typedOutcome 0, and WHY inside the typed text);
+// a different wording just reads "Order failed".
 func guardRefusal(note string) (string, bool) {
 	const marker = "area not allowed now"
+	const typed = "refused ("
+	need := ""
+	if i := strings.Index(note, typed); i >= 0 {
+		rest := note[i+len(typed):]
+		if j := strings.Index(rest, "): "); j > 0 && !strings.ContainsAny(rest[:j], " :") {
+			need, note = rest[:j], rest[j+3:]
+		}
+	}
 	i := strings.Index(note, marker)
 	if i < 0 {
-		return "", false
+		if need == "" {
+			return "", false
+		}
+		return strings.TrimSpace(note) + " (need: " + need + ")", true
 	}
-	return strings.TrimSpace(strings.TrimPrefix(strings.TrimPrefix(note[i:], marker), ":")), true
+	reason := strings.TrimSpace(strings.TrimPrefix(strings.TrimPrefix(note[i:], marker), ":"))
+	if need != "" {
+		reason += " (need: " + need + ")"
+	}
+	return reason, true
 }
 
 // NoteKill counts a kill for the open order (the bot calls it on every kill event).
