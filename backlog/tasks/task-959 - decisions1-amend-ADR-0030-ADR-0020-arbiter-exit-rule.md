@@ -1,7 +1,7 @@
 ---
 id: TASK-959
 title: 'decisions1: amend ADR 0030, ADR 0020, arbiter exit rule'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:41:00Z'
@@ -34,8 +34,8 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 ADR 0030 amended (why, hold, home, go, park)
-- [ ] #2 ADR 0020 amended (scenario tier real, report-only first)
-- [ ] #3 docs/arbiter.md exit rule by outcome
-- [ ] #4 docs/decisions.md index lines
+- [x] #1 ADR 0030 amended (why, hold, home, go, park)
+- [x] #2 ADR 0020 amended (scenario tier real, report-only first)
+- [x] #3 docs/arbiter.md exit rule by outcome
+- [x] #4 docs/decisions.md index lines
 <!-- AC:END -->

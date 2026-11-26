@@ -1,7 +1,7 @@
 ---
 id: TASK-934
 title: 'toolstrade68: ADR 0011 amended, floor-only chunks wall at quests.legacyWall'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-25T19:36:00Z'
@@ -31,5 +31,5 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 ADR 0011 carries the 2026-11-25 amendment and decisions.md the index line
+- [x] #1 ADR 0011 carries the 2026-11-25 amendment and decisions.md the index line
 <!-- AC:END -->

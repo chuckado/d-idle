@@ -255,7 +255,6 @@
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
-| toolstrade68 | proposed | - | `docs/adr/0011-readiness-power-vs-danger.md`<br>`docs/decisions.md` | - |
 | epic-act1 | proposed | - | `docs/epics/epic-act1.md` | - |
 | epic-act2 | proposed | - | `docs/epics/epic-act2.md` | - |
 | epic-act3 | proposed | - | `docs/epics/epic-act3.md` | - |
@@ -273,18 +272,12 @@
 | epic-nightmare | proposed | - | `docs/epics/epic-nightmare.md` | - |
 | epic-hell | proposed | - | `docs/epics/epic-hell.md` | - |
 | epic-merc | proposed | - | `docs/epics/epic-merc.md` | - |
-| fablereview2 | in-progress | - | `docs/research/fable-logic-review-2026-11-25.md` | - |
-| darklaunch | proposed | - | `data/darklaunch.json`<br>`tools/darklaunch`<br>`docs/process/dark-launch.md`<br>`tools/ci/check.sh` | - |
-| invmon | proposed | - | `internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`docs/invariants.md`<br>`internal/bot/runner.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/task.go`<br>`internal/env/tuning_bot.go` | - |
 | outcome-task-step | proposed | - | `docs/outcomes.md` | - |
 | outcome-travel-gate | proposed | - | `docs/outcomes.md` | - |
-| decisions1 | proposed | - | `docs/adr/0030-operator-quest-control.md`<br>`docs/adr/0020-proving-ground-and-stat-skill-agency.md`<br>`docs/decisions.md`<br>`docs/arbiter.md`<br>`AGENTS.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | outcome-park-step | proposed | - | `docs/outcomes.md` | - |
 | outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
-| reflex1a | proposed | - | `internal/bot/safetylat.go`<br>`internal/bot/safetylat_test.go`<br>`internal/bot/autopsy.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/combat/cancellat_test.go`<br>`docs/safety-latency.md` | - |
 | outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
-| fableroadmap | proposed | - | `docs/roadmap-fable.md`<br>`data/darklaunch.json`<br>`docs/process/dark-launch.md`<br>`backlog/tasks/task-96[6-9] - *`<br>`backlog/tasks/task-9[7-9][0-9] - *` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | admit1 | proposed | - | `docs/design/admission-p4.md` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
@@ -305,7 +298,6 @@
 | fid-lowvalue | deferred | - | `docs/probes/fid/fid-lowvalue.md` | - |
 | ckptlive | proposed | - | `docs/probes/checkpoint-live-drill.md` | - |
 | advisor1 | proposed | - | `docs/design/advisor-r14.md` | - |
-| reflex1c | proposed | - | `cmd/d2bot/adapters.go`<br>`internal/bot/safetylat.go`<br>`internal/bot/reflexdrink_test.go`<br>`internal/bot/loop.go`<br>`internal/combat/reflex.go`<br>`internal/combat/reflex_test.go`<br>`internal/combat/fighter.go`<br>`internal/combat/hard.go`<br>`internal/combat/packdrink.go`<br>`internal/combat/potioneffect.go`<br>`internal/env/tuning_bot.go`<br>`docs/bot.md`<br>`docs/safety-latency.md` | - |
 | autorevert1 | proposed | - | `docs/design/autorevert.md` | - |
 
 ### Gates
@@ -329,6 +321,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2fa717c3f 11-26 00:46 `Merge agent/cardclose2: cardclose2: close 7 merged cards (954, 966 by catch-up; 953, 955, 959, 962, 934 by hand)` (cardclose2)
 - 85a8f09db 11-26 00:17 `Merge agent/reflex1c: reflex1c: reflex drink without cancelling the action, hard-cancel deadline` (reflex1c)
 - 0873ce5d4 11-26 00:14 `Merge origin/main into reflex1c` (-)
 - 61cc4f451 11-26 00:05 `Merge origin/main into reflex1c` (-)
@@ -338,5 +331,4 @@
 - ad995de59 11-25 23:51 `Merge branch 'main' into decisions1` (-)
 - 25f3ea0fc 11-25 23:49 `Merge agent/fableroadmap: Merge branch 'main' into fableroadmap` (fableroadmap)
 - 8bc8a81d6 11-25 23:48 `Merge branch 'main' into fableroadmap` (-)
-- 3ef245d71 11-25 23:43 `Merge agent/backlogplan: Merge branch 'main' into backlogplan` (backlogplan)
 <!-- statusgen:end -->
