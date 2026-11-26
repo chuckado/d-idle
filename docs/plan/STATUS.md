@@ -273,6 +273,7 @@
 | epic-nightmare | proposed | - | `docs/epics/epic-nightmare.md` | - |
 | epic-hell | proposed | - | `docs/epics/epic-hell.md` | - |
 | epic-merc | proposed | - | `docs/epics/epic-merc.md` | - |
+| fablereview2 | in-progress | - | `docs/research/fable-logic-review-2026-11-25.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | fid-adapter-rows | deferred | - | `docs/probes/fid/fid-adapter-rows.md` | - |
@@ -299,6 +300,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- e090a5fa2 11-25 22:33 `Merge agent/fablereview: fablereview2: end-to-end logic review of the bot (docs only): cause classes, invariants, prior art, 12 proposals` (fablereview)
+- 41c40f6b3 11-25 22:31 `Merge branch 'main' into fablereview2` (-)
 - 1fbcb45ba 11-25 22:22 `Merge agent/qd26: combat: a living hero at life 0 drinks (live Questy death 2026-11-26), Smith row kit, matrix 76-77` (qd26)
 - b8a0be02f 11-25 22:16 `Merge origin/main` (-)
 - 2f018a0f2 11-25 22:13 `Merge agent/epiccards: Merge branch 'main' into epiccards` (epiccards)
@@ -307,6 +310,4 @@
 - 7903a7ada 11-25 21:56 `Merge origin/main` (-)
 - 0f5327fb9 11-25 21:15 `Merge agent/toolstrade76: toolstrade76: the poverty advice asks the town for what its sell chore sells (advice counted 4, the chore sold 0)` (toolstrade76)
 - f78028b8f 11-25 20:57 `Merge origin/main` (-)
-- 87ea713ef 11-25 20:51 `Merge agent/cardcatchup: cardcatchup: mark 224 merged cards Done` (cardcatchup)
-- 6e3958642 11-25 20:10 `Merge agent/toolstrade75: toolstrade75: a portal that drops into a stale pack is not taken, the corpse run is exempt from the early road, the Dark Wood wants 180 life (melee) / 100 (caster)` (toolstrade75)
 <!-- statusgen:end -->
