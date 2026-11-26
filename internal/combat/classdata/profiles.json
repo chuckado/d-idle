@@ -187,7 +187,6 @@
      "attack": [
       "Blessed Hammer",
       "Zeal",
-      "Sacrifice",
       "Attack"
      ],
      "aura": [
@@ -209,28 +208,10 @@
      ]
     },
     {
-     "minLevel": 15,
-     "requires": "Zeal",
-     "attack": [
-      "Zeal",
-      "Sacrifice",
-      "Attack"
-     ]
-    },
-    {
      "minLevel": 12,
      "requires": "Zeal",
      "attack": [
-      "Sacrifice",
       "Zeal",
-      "Attack"
-     ]
-    },
-    {
-     "minLevel": 2,
-     "requires": "Sacrifice",
-     "attack": [
-      "Sacrifice",
       "Attack"
      ]
     },
@@ -239,9 +220,6 @@
       "Attack"
      ]
     }
-   ],
-   "lifePrice": [
-    "Sacrifice"
    ],
    "aura": [
     {
