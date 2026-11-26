@@ -22,3 +22,10 @@
 ## Priority (user decision 2026-11-26)
 
 - 2026-11-26 priority: 1, first in the class order (user decision). Source: user class order 2026-11-26. No criteria ticked by this line.
+
+## Audit of 2026-11-26 (card necroaudit; details docs/probes/necro-readiness-2026-11-26.md)
+
+- Still no criterion ticked: no earned (uncheated, walked) Act 1 run exists. Lab stage rows are GREEN as Necromancer except the Tools of the Trade reward (backend limit).
+- Fixed: the default table `necromancer_summoner_normal30` had no `combat` key, so it fought with the class default layout that has no Corpse Explosion key (S, code reading; not yet seen in a live log: U).
+- Blockers: Tools of the Trade reward word 0x204e (fork), no earned Act 1 run, no `summon-missing` invariant, minion caps and curse durations are guesses, Weaken/Decrepify/Lower Resist/Fire Golem have no key (F8 is the last).
+- Cards: necrosummoninv, necrocorpse, necrofloors, necromercrogue, necrocaps, necrokeys, hotkeydrift.
