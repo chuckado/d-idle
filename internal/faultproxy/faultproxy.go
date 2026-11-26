@@ -71,13 +71,15 @@ type Proxy struct {
 	Now   func() time.Time
 	Sleep func(time.Duration)
 
-	ln     net.Listener
-	mu     sync.Mutex // one exchange with the game at a time (a command and its reply, or a cancel)
-	evMu   sync.Mutex
-	events []Event
-	n      int
-	done   chan struct{}
-	wg     sync.WaitGroup
+	ln      net.Listener
+	mu      sync.Mutex // one exchange with the game at a time (a command and its reply, or a cancel)
+	evMu    sync.Mutex
+	events  []Event
+	n       int
+	done    chan struct{}
+	conns   map[net.Conn]bool // open bot connections, closed by Stop
+	wg      sync.WaitGroup
+	stopped bool
 }
 
 // Start listens and serves in the background.
@@ -96,7 +98,7 @@ func (p *Proxy) Start() error {
 	if err != nil {
 		return err
 	}
-	p.ln, p.done = ln, make(chan struct{})
+	p.ln, p.done, p.conns = ln, make(chan struct{}), map[net.Conn]bool{}
 	p.wg.Add(1)
 	go p.accept()
 	return nil
@@ -104,9 +106,15 @@ func (p *Proxy) Start() error {
 
 // Stop closes the listener, waits for the handlers and returns the injections.
 func (p *Proxy) Stop() []Event {
-	if p.ln != nil {
+	if p.ln != nil && !p.stopped {
+		p.stopped = true
 		close(p.done)
 		_ = p.ln.Close()
+		p.evMu.Lock()
+		for c := range p.conns {
+			_ = c.Close()
+		}
+		p.evMu.Unlock()
 		p.wg.Wait()
 		_ = os.Remove(p.Listen)
 	}
@@ -133,6 +141,9 @@ func (p *Proxy) accept() {
 		if err != nil {
 			return
 		}
+		p.evMu.Lock()
+		p.conns[c] = true
+		p.evMu.Unlock()
 		p.wg.Add(1)
 		go func() {
 			defer p.wg.Done()
