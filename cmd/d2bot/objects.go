@@ -750,5 +750,34 @@ func (o objectAdapter) toTrueTomb(ctx context.Context) error {
 		}
 		return err
 	}
-	return findTrueTomb(ctx, area, o.nv.ExitTo, has, explore)
+	if err := findTrueTomb(ctx, area, o.nv.ExitTo, has, explore); err != nil {
+		return err
+	}
+	// The orifice is a unit only once its room is up (V devp28 doc: `debug rooms up`; V run 20261125-192625: "object class 152
+	// not found (the whole level was walked)" with the preset in the level map): walk to the preset so the room comes up.
+	if lm := o.levelMap(); lm != nil {
+		if at, ok := orificePreset(lm); ok {
+			if s, err := o.e.Snapshot(); err == nil {
+				for i := range s.Objects {
+					if s.Objects[i].Class == quest.ObjOrifice {
+						return nil // already a unit
+					}
+				}
+			}
+			if err := o.nv.GoTo(ctx, at); err != nil && ctx.Err() != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// orificePreset is where the level map puts the orifice of the true tomb.
+func orificePreset(lm *d2map.LevelMap) (input.Point, bool) {
+	for _, p := range lm.Presets {
+		if p.Kind == d2map.PresetObject && p.ID == quest.ObjOrifice {
+			return input.Point{X: p.Pos.X, Y: p.Pos.Y}, true
+		}
+	}
+	return input.Point{}, false
 }

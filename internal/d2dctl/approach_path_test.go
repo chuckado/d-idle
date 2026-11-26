@@ -187,3 +187,36 @@ func TestEnterPortalRoutesAroundTheWall(t *testing.T) {
 		t.Fatalf("moves %d level %d", moves, level)
 	}
 }
+
+// The plain interact goes first: a portal that takes it within the first round is entered with no "cmd move" side step even though
+// the hero stands still beside it (the stall watch of the approach read that as a stall; V amulet bisect). Must fail with the
+// approach for every portal.
+func TestEnterPortalNearIsPlain(t *testing.T) {
+	oldPause, oldNow := Pause, Now
+	t.Cleanup(func() { Pause, Now = oldPause, oldNow })
+	virt := time.Unix(0, 0)
+	Pause = func(ctx context.Context, d time.Duration) error { virt = virt.Add(d); return ctx.Err() }
+	Now = func() time.Time { return virt }
+	level, moves, interacts, polls := 1, 0, 0, 0
+	_, c := startStub(t, map[string]string{"debug portals": "0 2 27.7 48.1\n1 1 8.0 6.0\nok\n", "npcs": "ok\n", "debug grid 5": strings.Join(wallGrid(), "\n") + "\nok\n"}, func(line string, s *stub) {
+		if strings.HasPrefix(line, "cmd move") {
+			moves++
+		}
+		if line == "cmd interact -2001" {
+			interacts++
+		}
+		if line == "debug level" && interacts > 0 {
+			polls++
+			if polls >= 3 { // slow: the level changes at the third poll of the first round
+				level = 2
+			}
+		}
+		s.rep["debug level"] = "ok " + strconv.Itoa(level) + " 6.00 6.00 20 12 0 0\n"
+	})
+	if err := c.EnterPortal(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	if moves != 0 || level != 2 {
+		t.Fatalf("moves %d level %d interacts %d", moves, level, interacts)
+	}
+}
