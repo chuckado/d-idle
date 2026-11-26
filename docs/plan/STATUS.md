@@ -255,7 +255,6 @@
 | fid-teleport | deferred | - | `docs/probes/fid/fid-teleport.md` | - |
 | fid-lab-rebase | deferred | - | `docs/probes/fid/fid-lab-rebase.md` | - |
 | fid-quest-den-raven | deferred | - | `docs/probes/fid/fid-quest-den-raven.md` | - |
-| toolstrade68 | proposed | - | `docs/adr/0011-readiness-power-vs-danger.md`<br>`docs/decisions.md` | - |
 | epic-act1 | proposed | - | `docs/epics/epic-act1.md` | - |
 | epic-act2 | proposed | - | `docs/epics/epic-act2.md` | - |
 | epic-act3 | proposed | - | `docs/epics/epic-act3.md` | - |
@@ -273,18 +272,13 @@
 | epic-nightmare | proposed | - | `docs/epics/epic-nightmare.md` | - |
 | epic-hell | proposed | - | `docs/epics/epic-hell.md` | - |
 | epic-merc | proposed | - | `docs/epics/epic-merc.md` | - |
-| fablereview2 | in-progress | - | `docs/research/fable-logic-review-2026-11-25.md` | - |
-| darklaunch | proposed | - | `data/darklaunch.json`<br>`tools/darklaunch`<br>`docs/process/dark-launch.md`<br>`tools/ci/check.sh` | - |
-| invmon | proposed | - | `internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`docs/invariants.md`<br>`internal/bot/runner.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/task.go`<br>`internal/env/tuning_bot.go` | - |
 | outcome-task-step | proposed | - | `docs/outcomes.md` | - |
 | outcome-travel-gate | proposed | - | `docs/outcomes.md` | - |
-| decisions1 | proposed | - | `docs/adr/0030-operator-quest-control.md`<br>`docs/adr/0020-proving-ground-and-stat-skill-agency.md`<br>`docs/decisions.md`<br>`docs/arbiter.md`<br>`AGENTS.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | outcome-park-step | proposed | - | `docs/outcomes.md` | - |
 | outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
-| reflex1a | proposed | - | `internal/bot/safetylat.go`<br>`internal/bot/safetylat_test.go`<br>`internal/bot/autopsy.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/combat/cancellat_test.go`<br>`docs/safety-latency.md` | - |
 | outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
-| fableroadmap | proposed | - | `docs/roadmap-fable.md`<br>`data/darklaunch.json`<br>`docs/process/dark-launch.md`<br>`backlog/tasks/task-96[6-9] - *`<br>`backlog/tasks/task-9[7-9][0-9] - *` | - |
+| explain1 | proposed | - | `internal/bot/explain.go`<br>`internal/bot/explain_test.go`<br>`internal/watch/explainapi.go`<br>`internal/watch/explainapi_test.go`<br>`internal/ops/`<br>`cmd/d2bot/opscmd.go`<br>`cmd/d2bot/opscmd_test.go`<br>`cmd/d2bot/opswire.go`<br>`docs/operator.md`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/questwire.go`<br>`internal/bot/loop.go`<br>`internal/bot/runner.go`<br>`internal/bot/shadow.go`<br>`internal/watch/http_view.go`<br>`internal/watch/hub.go` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | admit1 | proposed | - | `docs/design/admission-p4.md` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
@@ -328,14 +322,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 80c9b2ea1 11-26 00:49 `Merge agent/explain1: Merge branch 'main' into explain1` (explain1)
+- fc5ecb6ef 11-26 00:48 `Merge branch 'main' into explain1` (-)
+- 2fa717c3f 11-26 00:46 `Merge agent/cardclose2: cardclose2: close 7 merged cards (954, 966 by catch-up; 953, 955, 959, 962, 934 by hand)` (cardclose2)
+- b853e0638 11-26 00:27 `Merge branch 'main' into explain1` (-)
+- 85a8f09db 11-26 00:17 `Merge agent/reflex1c: reflex1c: reflex drink without cancelling the action, hard-cancel deadline` (reflex1c)
+- 0873ce5d4 11-26 00:14 `Merge origin/main into reflex1c` (-)
+- 9bc2e4e58 11-26 00:13 `Merge branch 'main' into explain1` (-)
+- ca15a2e33 11-26 00:07 `merge origin/main into explain1` (-)
+- 61cc4f451 11-26 00:05 `Merge origin/main into reflex1c` (-)
 - 9c3e3ed58 11-25 23:56 `Merge agent/reflex1b: reflex1b: town chores verify in town before each step; guard aborts chores outside town` (reflex1b)
-- b1727558e 11-25 23:55 `Merge branch 'main' into reflex1b` (-)
-- 33f5b6247 11-25 23:53 `Merge agent/decisions1: Merge branch 'main' into decisions1` (decisions1)
-- ad995de59 11-25 23:51 `Merge branch 'main' into decisions1` (-)
-- 25f3ea0fc 11-25 23:49 `Merge agent/fableroadmap: Merge branch 'main' into fableroadmap` (fableroadmap)
-- 8bc8a81d6 11-25 23:48 `Merge branch 'main' into fableroadmap` (-)
-- 3ef245d71 11-25 23:43 `Merge agent/backlogplan: Merge branch 'main' into backlogplan` (backlogplan)
-- cd138d0ef 11-25 23:41 `Merge origin/main into reflex1b` (-)
-- 63b4c93fd 11-25 23:41 `Merge branch 'main' into backlogplan` (-)
-- 59106de23 11-25 23:32 `Merge agent/reflex1: reflex1a: safety latency measure (minute line, autopsy) and T6 cancel test` (reflex1)
 <!-- statusgen:end -->

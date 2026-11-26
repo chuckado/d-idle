@@ -27,6 +27,20 @@ docker exec <container> <d2bot> ops quest wait <quest> [--chunk ID] [--timeout 6
 
 Finding the binary in the container: `/data/didle/current/bin/d2bot` when the `current` link exists (a self-updated release), else `ls -d /data/didle/releases/*/bin/d2bot | sort | tail -1`, else `d2bot` on the PATH. `tools/questloop.sh` does this lookup itself (`--bin` or `D2BOT_BIN` overrides).
 
+## Read the decision ring, hold, home, go, park (ADR 0030 amended 2026-11-25, card explain1)
+Same socket, same guard rails (off by default, never in a measured run for the order verbs, 0600 unix socket, audited with `remote:"operator"`, `--why` required, 30 per hour for the board). These verbs are class-agnostic; areas and quests are data.
+
+```
+d2bot ops status --why                              # read only: the last 200 decisions and the standing refusals
+d2bot ops hold --why "reason"                       # cancel the open orders and rest in town (a home order, replace)
+d2bot ops home --why "reason"                       # queue a rest in town behind the open orders
+d2bot ops go <area> [--minutes N] --why "reason"    # a go order, default 60 minutes; the hero's own guards still decide when it walks
+d2bot ops park <quest> <hours 1..24> --why "reason" # stop the quest's chunk and refuse start and retry of it until the wake time
+```
+- `status --why` and the viewer-side route `GET /api/explain` (same access as `/api/why`) return the same view: `decisions` (oldest first: tick time, hook family, whyline `code` and params, area, ticks held), `refusals` standing now (`what`, `need`, count, last seen; a step refusal ages out after 10 minutes), the arbiter's last shadow choice (empty while `bot.arbiterShadow` is 0) and the journey block reason. U: refusals come from the places that log `action failed` and `area gate refused the walk` only; typed step outcomes (review P2) will fill it fully.
+- The order verbs go through `Hub.Give`, the call the viewer's order box makes, so the area list, the 8 open orders limit and the guards are the viewer's. A refusal is `order_refused` with the reason.
+- `park` is the operator's own wake time, kept in process memory (reset at a bot restart, like the limits); it is shown in `ops quest status` data as `parked`. It is not a board state: the viewer still shows the chunk as stopped.
+
 ## Try anyway (owner override, ADR 0030 amended 2026-11-24)
 `start <quest> --try-anyway --why "..."` starts ONE chunk that the board refuses for READINESS (`not_ready`: "too hard for now", a level or life floor, the Andariel unattended hold, the Barracks or road floor) for one attempt. It skips only those words: the kit gates (potions, portal, mana, antidotes), the death-spiral guards and every combat reaction (drink, retreat, chicken, town portal) stay. It is one shot: a park, a death, a finish, a stop or a restart ends it and the chunk returns to its previous hold. A locked, done, parked or running part is refused (`not_overridable`). It counts against the limits below (6 per quest per hour), is refused in a measured run (`measured_run`), and writes the audit line `path:"operator/try-anyway"`, `why:"override: try anyway: <reason> (refused: <the skipped refusal>)"`; the bot logs `override: try anyway`. The viewer has the same thing: the `Try anyway (risk)` button on a part that waits for readiness, with the same passcode and a second tap that states the risk. The death of a try is counted as a death only.
 

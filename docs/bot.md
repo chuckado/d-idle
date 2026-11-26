@@ -8,7 +8,7 @@ Everything is per instance (docs/net/design-now.md): one `env.Env`, one `bot.Run
 ```
 cmd/d2bot  flags/env -> game (attach | managed) -> env.Env -> behaviors -> bot.Runner -> goals.Manager -> api + dashboard
                                                                    ^ Mover Fighter Townsman Looter (consumer-side contracts)
-bot.Runner:  Run goroutine (decide + one action per step)  +  guard goroutine per running action (watch, never acts)
+bot.Runner:  Run goroutine (decide + one action per step)  +  guard goroutine per running action (watches; sends only a belt drink by reflex, and carries out a portal or chicken itself after bot.reflexDeadlineMs)
 ```
 
 - `contracts.go` holds the agreed method sets (docs/archive/wave2.md) and the argument/result types. At integration each type becomes an alias
@@ -18,7 +18,11 @@ bot.Runner:  Run goroutine (decide + one action per step)  +  guard goroutine pe
 - **Guard** (`guard`, every `bot.watchMs`, only while an action runs): keeps the observer fed (kill/drop/level-up/area events are live), and cancels the action
   with a typed cause for: death, game gone (`launch.Monitor`), left the game (menus), pause due and safe, `Fighter.Safety` (drinks are left to the fighter while
   Clearing; TownPortal and Chicken always interrupt), town trip due, level changed (reach_level re-plan), watchdog (no progress for `stuckAfterSec`).
-  The main loop then reacts (e.g. `Fighter.Act`), so input stays single-threaded.
+  The main loop then reacts (e.g. `Fighter.Act`). Amended 2026-11-25 (owner decision, Fable review P3 c; before it the guard only watched):
+  a belt life or rejuvenation drink (`bot.reflexDrink`, default 1) is sent by the guard itself through the input controller (one key at a time under
+  its lock, `combat.Fighter.ReflexDrink`) without cancelling the action; a drink that needs the pack still cancels. Portal, chicken and crowd moves keep
+  cancelling, and when the cancelled action has not returned after `bot.reflexDeadlineMs` the guard carries the action out itself. Safety latency
+  (verdict to input) is on the minute line and in the autopsy: docs/safety-latency.md. On a lockstep clock the guard already runs on the acting goroutine.
 - **Watchdog**: progress = moved 3 subtiles, area change, kill, drop, potion, level up, hostile life falling. Ladder (prior-art 07 section 7):
   close panels, reset in town, then a visible non-fatal Error state with a retry timer. Failed actions back off and escalate after `maxStepFailures`.
 - **Events** are derived from snapshots (Kill with boss flag and XP split, Drop from new inventory/belt items in the field, Potion from items leaving the belt,
