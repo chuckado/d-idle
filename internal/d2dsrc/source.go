@@ -305,6 +305,9 @@ func (s *Source) Read(ctx context.Context) (*Result, error) {
 	if v, ok := st.Int("aura"); ok { // the player's active aura; both head paths lack it
 		snap.Player.Aura, snap.Player.AuraKnown = v, true
 	}
+	if v, ok := st.Int("pets"); ok { // the summon count (S: documented, not yet seen on a live line)
+		snap.Player.Pets, snap.Player.PetsKnown = v, true
+	}
 	if b.lvl != nil && s.o.AddOrigin {
 		res.Extras.Level = b.lvl
 	}

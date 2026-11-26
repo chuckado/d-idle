@@ -1,10 +1,11 @@
 ---
 id: TASK-1012
 title: 'aura2b: Paladin never attacks with Sacrifice (prerequisite only)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T18:29:00Z'
+updated_date: '2026-11-26T20:16:00Z'
 labels:
   - bot
   - bot-fix

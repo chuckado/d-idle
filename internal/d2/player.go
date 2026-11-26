@@ -85,8 +85,11 @@ type Player struct {
 	LeftSkill  int // skill id on the left hand
 	RightSkill int // skill id on the right hand
 	// Aura is the active aura skill id (0 none) when AuraKnown; d2d state line `aura=` (V live, docs/probes/paladin-aura-live-2026-11-26.md).
-	Aura       int
-	AuraKnown  bool
+	Aura      int
+	AuraKnown bool
+	// Pets is the count of the hero's own summons (minions, golems, pets) when PetsKnown; d2d state line `pets=` (S: docs/d2d-backend.md; the count rule, mercenary included or not, is U until a live Necromancer state line is read).
+	Pets       int
+	PetsKnown  bool
 	Difficulty Difficulty
 }
 
