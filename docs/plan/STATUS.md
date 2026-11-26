@@ -45,7 +45,6 @@
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
 | incident2 | proposed | - | `internal/bot/incident.go`<br>`internal/bot/incident_test.go`<br>`internal/bot/invariants.go`<br>`internal/scenario/incident.go`<br>`internal/scenario/incident_test.go`<br>`cmd/d2scenario/incident.go`<br>`cmd/d2scenario/incident_test.go`<br>`docs/probes/incident-scenarios.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
-| aura2a | proposed | - | `internal/combat/aura.go`<br>`internal/combat/class_test.go`<br>`internal/combat/fighter.go`<br>`internal/d2/player.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`internal/bot/observe.go`<br>`cmd/d2scenario/invariants.json`<br>`docs/invariants.md` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |

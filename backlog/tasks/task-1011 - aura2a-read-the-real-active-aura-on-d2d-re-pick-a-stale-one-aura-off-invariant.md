@@ -1,10 +1,13 @@
 ---
 id: TASK-1011
-title: 'aura2a: read the real active aura on d2d, re-pick a stale one, aura-off invariant'
-status: Proposed
+title: >-
+  aura2a: read the real active aura on d2d, re-pick a stale one, aura-off
+  invariant
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T18:22:00Z'
+updated_date: '2026-11-26T18:56:00Z'
 labels:
   - bot
   - bot-fix
