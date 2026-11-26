@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"testing"
 
 	"d2lod-bot/internal/combat"
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/gear"
 )
 
 func TestPlanForClassJoinsCombatAndLeveler(t *testing.T) {
@@ -75,5 +77,36 @@ func TestPlanForClassProfileFromTable(t *testing.T) {
 	// an unknown class is an error in the plan, not a Sorceress profile
 	if p := planForClass(d2.Class(42), "", 1, nil); p.Err == nil || p.Profile != "" {
 		t.Errorf("unknown class: %+v", p)
+	}
+}
+
+// A default table's main attack must have a key in the combat profile its class plan resolves: a skill without a layout
+// key is never bound and so never cast (the Necromancer default table named Corpse Explosion as its main attack from
+// clvl 15 but carried no "combat" key, so it fought with the layout that has no Corpse Explosion key; card necro1).
+func TestDefaultTableMainAttackHasAKeyInItsProfile(t *testing.T) {
+	for _, c := range []d2.Class{d2.Necromancer, d2.Druid} {
+		p := planForClass(c, "", 1, nil)
+		if p.Err != nil {
+			t.Fatalf("%s: %v", c, p.Err)
+		}
+		raw, err := gear.BuildJSON(p.LevelerBuild)
+		if err != nil {
+			t.Fatalf("%s: %v", p.LevelerBuild, err)
+		}
+		var tbl struct {
+			Main []gear.MainAttack `json:"main_attack"`
+		}
+		if err := json.Unmarshal(raw, &tbl); err != nil {
+			t.Fatal(err)
+		}
+		prof, err := combat.LookupProfile(c, p.CombatBuild)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, m := range tbl.Main {
+			if _, ok := prof.Layout[m.Skill]; !ok {
+				t.Errorf("%s table %s: main attack %q has no key in profile %s", c, p.LevelerBuild, m.Skill, prof.ProfileID())
+			}
+		}
 	}
 }
