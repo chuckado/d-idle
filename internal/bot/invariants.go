@@ -43,6 +43,7 @@ var invRows = []invRow{
 	{Name: "mode-no-exit", Hard: true, Secs: 1200, Why: "the same state and step for Secs with none of the mode's progress signals moving (invModes), not paused or parked"},
 	{Name: "corpse-unresolved", Hard: true, Secs: 900, Why: "a corpse waits in town for Secs, neither retrieved nor abandoned"},
 	{Name: "town-thrash", Count: 17, Secs: 3600, Why: "Count or more field entries within Secs"},
+	{Name: "arbiter-starved", GapSec: 600, Why: "an arbiter intent was outranked for 600 s or more (docs/arbiter.md); only with the arbiter knobs on"},
 	{Name: "economy-stall", Secs: 7200, Count: 100, Why: "gold in purse and stash under Count for Secs while kills continue"},
 }
 
@@ -171,6 +172,13 @@ func (m *invMon) noteRefusal() {
 func (m *invMon) noteRefusalFailure(what string, err error) {
 	m.mu.Lock()
 	m.pending = append(m.pending, invHit{"refusal-as-failure", fmt.Sprintf("what=%q err=%q", what, err)})
+	m.mu.Unlock()
+}
+
+// noteStarved records that the arbiter left one source's proposal unserved for too long (soft row arbiter-starved).
+func (m *invMon) noteStarved(what string) {
+	m.mu.Lock()
+	m.pending = append(m.pending, invHit{"arbiter-starved", what})
 	m.mu.Unlock()
 }
 

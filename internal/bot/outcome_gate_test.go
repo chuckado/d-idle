@@ -89,3 +89,8 @@ func TestWalkHomeNoScrollIsNotCancelledByPortalVerdict(t *testing.T) {
 		}
 	}
 }
+
+func isRefusedErr(err error) bool {
+	var ref *Refused
+	return errors.As(err, &ref)
+}

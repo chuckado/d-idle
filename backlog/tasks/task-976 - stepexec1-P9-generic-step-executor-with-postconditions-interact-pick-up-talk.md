@@ -1,10 +1,13 @@
 ---
 id: TASK-976
-title: 'stepexec1: P9 generic step executor with postconditions (interact, pick up, talk'
-status: Proposed
+title: >-
+  stepexec1: P9 generic step executor with postconditions (interact, pick up,
+  talk
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:55:00Z'
+updated_date: '2026-11-26T14:54:00Z'
 labels:
   - bot
   - feature
