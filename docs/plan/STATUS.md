@@ -281,6 +281,7 @@
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | outcome-park-step | proposed | - | `docs/outcomes.md` | - |
 | outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
+| reflex1a | proposed | - | `internal/bot/safetylat.go`<br>`internal/bot/safetylat_test.go`<br>`internal/bot/autopsy.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/combat/cancellat_test.go`<br>`docs/safety-latency.md` | - |
 | outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | fid-adapter-rows | deferred | - | `docs/probes/fid/fid-adapter-rows.md` | - |
@@ -307,6 +308,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 59106de23 11-25 23:32 `Merge agent/reflex1: reflex1a: safety latency measure (minute line, autopsy) and T6 cancel test` (reflex1)
 - ea4cbfe13 11-25 23:21 `Merge agent/toolstrade77: Merge branch 'main' into toolstrade77` (toolstrade77)
 - dc0350b1d 11-25 23:20 `Merge branch 'main' into toolstrade77` (-)
 - 6c281403d 11-25 23:09 `Merge agent/outcome1: Merge branch 'main' into outcome1` (outcome1)
@@ -316,5 +318,4 @@
 - f75d92016 11-25 22:47 `Merge agent/herorecord: herorecord: record the live Paladin hero in the epic pages` (herorecord)
 - b1bcce7a8 11-25 22:44 `m` (-)
 - cc290be05 11-25 22:37 `Merge agent/darklaunch: Merge branch 'main' into darklaunch` (darklaunch)
-- 871b9bdc9 11-25 22:35 `Merge branch 'main' into darklaunch` (-)
 <!-- statusgen:end -->

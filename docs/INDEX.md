@@ -604,6 +604,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [roamleg.md](roamleg.md): ROAMLEG: a mouth-gate hold is not a failed roam target (status: offline fix, tests pass, verified live in DRILLS23 (docs/probes/drills/README.md): 0 failed legs (was 50),...)
 - [roamspacing.md](roamspacing.md): Roam coverage spacing (TASK-301) (status: CURRENT. Tags: V = measured (log read-only, or the simulator run in this worktree on the worker host), S =...)
 - [running.md](running.md): How to run d.idle (status: current as of 2026-11-01 (card readmedocs; Teleport and `--build` note added by card capdocs). Every...)
+- [safety-latency.md](safety-latency.md): Safety latency and cancellation latency (status: current (card reflex1a, 2026-11-26). Source: docs/research/fable-logic-review-2026-11-25.md sections 3.1...)
 - [scenarios.md](scenarios.md): Scenario corpus
 - [self-update-client.md](self-update-client.md): Self-update client (Tier 2, part 2) (status: CURRENT for the code; nothing here has run against real GitHub or in a real container. Design:...)
 - [self-update-drill.md](self-update-drill.md): Self-update boot shim and drills (Tier 2, part 3) (status: CURRENT for the code; the container drills below are a CHECKLIST that has NOT been run (no image was...)
