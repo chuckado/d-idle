@@ -203,6 +203,9 @@ func (r *Runner) starveStep(s *d2.Snapshot, diff string) (int, bool) {
 // and every area whose waypoint is active (the bot takes it home, "no town portal: taking the waypoint to town").
 func (r *Runner) homeReach(s *d2.Snapshot, first int) map[int]bool {
 	reach := map[int]bool{first: true}
+	if r.leanHero(s) {
+		return reach // no portal, few potions: the waypoint walk home crosses crowds (povertyfarm.json noPortalLean)
+	}
 	if wps, _ := r.activeWaypoints(s); wps != nil {
 		for a := range wps {
 			reach[a] = true

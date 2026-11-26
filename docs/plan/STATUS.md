@@ -322,6 +322,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 7e75c068a 11-26 01:49 `Merge agent/toolstrade79: Merge origin/main into toolstrade79` (toolstrade79)
+- 4c80517a7 11-26 01:42 `Merge origin/main into toolstrade79` (-)
 - 3ba6ada48 11-26 01:18 `Merge agent/toolstrade78: Merge branch 'main' into toolstrade78` (toolstrade78)
 - 0211d2ee1 11-26 01:16 `Merge branch 'main' into toolstrade78` (-)
 - 2c0ff5269 11-26 01:07 `Merge agent/reflex1d: reflex1d: hard-cancel wait uses a timer, not Clock.Sleep (flaky reaction test)` (reflex1d)
@@ -330,6 +332,4 @@
 - 9540cfd21 11-26 00:48 `Merge origin/main into toolstrade78` (-)
 - fc5ecb6ef 11-26 00:48 `Merge branch 'main' into explain1` (-)
 - 2fa717c3f 11-26 00:46 `Merge agent/cardclose2: cardclose2: close 7 merged cards (954, 966 by catch-up; 953, 955, 959, 962, 934 by hand)` (cardclose2)
-- 0c4860d45 11-26 00:36 `Merge branch 'main' into toolstrade78` (-)
-- dfaac2b06 11-26 00:32 `Merge origin/main into toolstrade78; regenerate knobs.md` (-)
 <!-- statusgen:end -->
