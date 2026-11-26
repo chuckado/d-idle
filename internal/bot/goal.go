@@ -216,6 +216,7 @@ func (r *Runner) forgetGame() {
 	l.stepArea = 0
 	l.waitNote = false
 	l.farm.forgetVisit()
+	r.forgetDry()
 	r.cpReset("new game")
 	if fc, ok := r.d.Mover.(interface{ ForgetCoverage() }); ok {
 		fc.ForgetCoverage() // a new game is a new zone: no visited point of the old one counts
