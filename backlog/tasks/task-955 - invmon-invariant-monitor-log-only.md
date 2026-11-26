@@ -1,7 +1,7 @@
 ---
 id: TASK-955
 title: 'invmon: invariant monitor (log only)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:35:00Z'
