@@ -15,6 +15,8 @@ card: "fableroadmap"
 owns:
   - "docs/roadmap-fable.md"
   - "data/darklaunch.json"
+  - "backlog/tasks/task-96[6-9] - *"
+  - "backlog/tasks/task-9[7-9][0-9] - *"
 exclusive: []
 result: "Docs and cards only, no code run. docs/roadmap-fable.md: one row per recommendation of all Fable reviews with state from git log and the knob table (V), Built but dark flip order, Operating rule; data/darklaunch.json: four rows adjusted (arbiter outcome rule, town.plan, boardSM, checkpoint). 23 Proposed cards created (TASK-967 to TASK-991, ids can shift at merge). Not verified live."
 contracts: []
