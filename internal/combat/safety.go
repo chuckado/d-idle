@@ -115,6 +115,7 @@ type SafetyInput struct {
 	InFight    bool // a hostile monster is close enough to matter
 	HasPortal  bool // Town Portal scroll or tome in the inventory
 	Crowd      int  // hostiles within 8 subtiles (crowd.go)
+	CrowdFar   int  // hostiles within Tune.CrowdFarRadius subtiles (farCrowdDecide)
 	Adjacent   int  // hostiles within 3 subtiles
 	Walking    bool // the bot is on a travel or quest walk
 	CanRetreat bool // a step away from the crowd exists
@@ -193,6 +194,9 @@ func decideBase(in SafetyInput) SafetyAction {
 		return Chicken
 	}
 	if a, ok := crowdDecide(in, lp, heal, rejuv); ok {
+		return a
+	}
+	if a, ok := farCrowdDecide(in, lp, heal, rejuv); ok {
 		return a
 	}
 	if lp < t.DrinkRejuvPct && rejuv && in.RejuvReady {

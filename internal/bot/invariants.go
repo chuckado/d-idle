@@ -32,6 +32,7 @@ const invDefaultGapSec = 60
 var invRows = []invRow{
 	{Name: "potion-not-drunk", Hard: true, Secs: 8, Why: "in the field under the drink line with a healing potion in the belt and none drunk for Secs"},
 	{Name: "portal-not-cast", Secs: 6, Why: "in the field at or under the chicken line with hostiles near and a town portal scroll, still in the same area after Secs"},
+	{Name: "stuck-in-pack", Secs: 8, Count: 5, Pct: 60, Why: "in the field with Count or more hostiles near and life under Pct for Secs (a crowd fight that neither kills nor leaves)"},
 	{Name: "field-entry-hurt", Pct: 50, Why: "left town with life under Pct of max"},
 	{Name: "field-entry-no-kit", Why: "left town while the kit (portal, healing, mana minimum) is incomplete"},
 	{Name: "resupply-in-field", Secs: 10, Why: "state resupplying outside town for Secs (a town chore running in a field)"},
@@ -91,6 +92,7 @@ type invMon struct {
 	lowDrank              int64
 	tpSince               time.Time
 	tpArea                int
+	packSince             time.Time
 	resupSince, zeroSince time.Time
 	xpAt                  time.Time
 	lastXP                uint32
@@ -144,7 +146,7 @@ func (m *invMon) tick(f invFacts) []invHit {
 	m.pending = nil
 	if f.dead {
 		// a dead hero breaks no field invariant; keep the stopwatches clean
-		m.lowSince, m.tpSince, m.resupSince, m.zeroSince = time.Time{}, time.Time{}, time.Time{}, time.Time{}
+		m.lowSince, m.tpSince, m.resupSince, m.zeroSince, m.packSince = time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}
 		m.seen, m.prevTown = false, false
 		return m.limit(raw, f.now)
 	}
@@ -157,6 +159,12 @@ func (m *invMon) tick(f invFacts) []invHit {
 	}
 	if d := invSince(&m.lowSince, low, f.now); d >= r.dur() {
 		hit(r.Name, "life=%d%% line=%d%% beltHP=%d drank=%d for=%ds hostiles=%d step=%q", f.lifePct, f.drinkPct, f.beltHP, f.drank, int(d.Seconds()), f.hostiles, f.step)
+	}
+
+	r = invRowOf("stuck-in-pack")
+	packed := field && f.maxLife > 0 && f.lifePct < r.Pct && f.hostiles >= r.Count
+	if d := invSince(&m.packSince, packed, f.now); d >= r.dur() {
+		hit(r.Name, "life=%d%% hostiles=%d scrolls=%d beltHP=%d area=%d for=%ds step=%q", f.lifePct, f.hostiles, f.tp, f.beltHP, f.area, int(d.Seconds()), f.step)
 	}
 
 	r = invRowOf("portal-not-cast")
