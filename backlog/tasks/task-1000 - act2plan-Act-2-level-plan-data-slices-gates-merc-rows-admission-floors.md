@@ -1,10 +1,11 @@
 ---
 id: TASK-1000
 title: 'act2plan: Act 2 level plan data (slices, gates, merc rows, admission floors)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T17:41:00Z'
+updated_date: '2026-11-26T18:34:00Z'
 labels:
   - docs
   - feature
