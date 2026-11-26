@@ -9,7 +9,7 @@ import (
 // has none. Must fail while ChunkRow has no WhyNot. Two classes: the row is data, not per quest.
 func TestDeskWhyNotRow(t *testing.T) {
 	for _, class := range []string{"Sorceress", "Barbarian"} {
-		r := newRig(t, class, 5)
+		r := newRig(t, class, 1)
 		d := r.desk(nil)
 		now := time.Date(2026, 11, 26, 12, 0, 0, 0, time.UTC)
 		d.cfg.Now = func() time.Time { return now }

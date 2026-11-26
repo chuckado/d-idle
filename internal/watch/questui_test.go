@@ -67,3 +67,16 @@ func TestQuestListCSSIsTheBoardCSS(t *testing.T) {
 		t.Error("quest-list/panel.css differs from quest-board/panel.css: regenerate it with sed 's/data-panel=\"quest-board\"/data-panel=\"quest-list\"/'")
 	}
 }
+
+// The board sheet draws the server's whyNot row under a chunk that waits (P7). Must fail while the panel ignores it.
+func TestQuestBoardDrawsWhyNot(t *testing.T) {
+	b, err := webFS.ReadFile("web/panels/quest-board/panel.js")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{"c.whyNot", "wakes when", "last refused", "dataset.whyNot"} {
+		if !strings.Contains(string(b), want) {
+			t.Errorf("quest-board panel lacks %q", want)
+		}
+	}
+}
