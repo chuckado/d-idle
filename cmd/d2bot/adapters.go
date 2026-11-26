@@ -95,6 +95,12 @@ func (a fighterAdapter) Act(ctx context.Context, act bot.SafetyAction) error {
 	return mapCombatErr(a.f.Act(ctx, toCombat[act]))
 }
 
+// ReflexDrink is the bot's optional ReflexDrinker (bot.reflexDrink): a belt drink sent from the guard. The wiring test
+// fails when this adapter hides it.
+func (a fighterAdapter) ReflexDrink(ctx context.Context, act bot.SafetyAction) (bool, error) {
+	return a.f.ReflexDrink(ctx, toCombat[act])
+}
+
 // mapCombatErr turns combat's "I opened a portal / I left the game" results into the runner's sentinels.
 func mapCombatErr(err error) error {
 	switch {

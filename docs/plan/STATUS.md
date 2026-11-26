@@ -305,6 +305,7 @@
 | fid-lowvalue | deferred | - | `docs/probes/fid/fid-lowvalue.md` | - |
 | ckptlive | proposed | - | `docs/probes/checkpoint-live-drill.md` | - |
 | advisor1 | proposed | - | `docs/design/advisor-r14.md` | - |
+| reflex1c | proposed | - | `cmd/d2bot/adapters.go`<br>`internal/bot/safetylat.go`<br>`internal/bot/reflexdrink_test.go`<br>`internal/bot/loop.go`<br>`internal/combat/reflex.go`<br>`internal/combat/reflex_test.go`<br>`internal/combat/fighter.go`<br>`internal/combat/hard.go`<br>`internal/combat/packdrink.go`<br>`internal/combat/potioneffect.go`<br>`internal/env/tuning_bot.go`<br>`docs/bot.md`<br>`docs/safety-latency.md` | - |
 | autorevert1 | proposed | - | `docs/design/autorevert.md` | - |
 
 ### Gates
@@ -328,6 +329,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 85a8f09db 11-26 00:17 `Merge agent/reflex1c: reflex1c: reflex drink without cancelling the action, hard-cancel deadline` (reflex1c)
+- 0873ce5d4 11-26 00:14 `Merge origin/main into reflex1c` (-)
+- 61cc4f451 11-26 00:05 `Merge origin/main into reflex1c` (-)
 - 9c3e3ed58 11-25 23:56 `Merge agent/reflex1b: reflex1b: town chores verify in town before each step; guard aborts chores outside town` (reflex1b)
 - b1727558e 11-25 23:55 `Merge branch 'main' into reflex1b` (-)
 - 33f5b6247 11-25 23:53 `Merge agent/decisions1: Merge branch 'main' into decisions1` (decisions1)
@@ -335,7 +339,4 @@
 - 25f3ea0fc 11-25 23:49 `Merge agent/fableroadmap: Merge branch 'main' into fableroadmap` (fableroadmap)
 - 8bc8a81d6 11-25 23:48 `Merge branch 'main' into fableroadmap` (-)
 - 3ef245d71 11-25 23:43 `Merge agent/backlogplan: Merge branch 'main' into backlogplan` (backlogplan)
-- cd138d0ef 11-25 23:41 `Merge origin/main into reflex1b` (-)
-- 63b4c93fd 11-25 23:41 `Merge branch 'main' into backlogplan` (-)
-- 59106de23 11-25 23:32 `Merge agent/reflex1: reflex1a: safety latency measure (minute line, autopsy) and T6 cancel test` (reflex1)
 <!-- statusgen:end -->

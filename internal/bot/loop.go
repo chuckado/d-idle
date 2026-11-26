@@ -404,6 +404,7 @@ func (r *Runner) runAction(parent context.Context, gen uint64, st State, activit
 	r.cancelAct = nil
 	r.mu.Unlock()
 	r.armWatchdog(false)
+	r.disarmHard()
 	return err, context.Cause(tctx)
 }
 
@@ -933,7 +934,9 @@ func (r *Runner) handleSafety(ctx context.Context, a SafetyAction) {
 	if s := r.latest(); s != nil {
 		area = s.Player.Area
 	}
-	if err := r.carryOut(ctx, a); err != nil {
+	if r.takeForced() {
+		r.e.Log.Info("reflex: safety action already carried out by the guard", "action", a.String())
+	} else if err := r.carryOut(ctx, a); err != nil {
 		r.loop.failures++
 		return
 	}
@@ -1020,7 +1023,7 @@ func (r *Runner) antidotesWanted() int {
 
 // guard watches while an action runs, every Tuning.Bot.WatchMs: it keeps the observer fed (kills, drops, level ups
 // are emitted live), and cancels the action when the character died, the game is gone, a pause is due, the fighter
-// wants an emergency action, or the watchdog sees no progress. It never acts itself, so input stays single-threaded.
+// wants an emergency action, or the watchdog sees no progress. It acts itself only for the reflex drink and the hard-cancel deadline (safetylat.go).
 func (r *Runner) guard(ctx context.Context, cancel context.CancelCauseFunc, done <-chan struct{}, st State) {
 	every := time.Duration(r.e.Tune.Bot.WatchMs) * time.Millisecond
 	// A lockstep clock (d2d) runs the guard on the acting goroutine, after the step that crossed WatchMs of virtual
@@ -1032,6 +1035,7 @@ func (r *Runner) guard(ctx context.Context, cancel context.CancelCauseFunc, done
 		var fired atomic.Bool
 		if stop := w.Watch(every, func() {
 			if fired.Load() || ctx.Err() != nil {
+				r.forceIfLate(r.e.Clock.Now()) // a hard cancel the action has not answered
 				return
 			}
 			if r.guardOnce(ctx, cancel, st) {
@@ -1056,6 +1060,7 @@ func (r *Runner) guard(ctx context.Context, cancel context.CancelCauseFunc, done
 		default:
 		}
 		if r.guardOnce(ctx, cancel, st) {
+			r.holdForHard(done, every)
 			return
 		}
 	}
@@ -1098,6 +1103,11 @@ func (r *Runner) guardOnce(ctx context.Context, cancel context.CancelCauseFunc, 
 				if rt := r.e.Tune.Bot.ReactionMs; rt > 0 {
 					r.e.Clock.Sleep(time.Duration(rt) * time.Millisecond)
 				}
+				a, handled := r.reflexDrink(snap, a)
+				if handled {
+					return false // the drink left without stopping the action; the guard keeps watching
+				}
+				r.armHard(a, now)
 				cancel(safetyInterrupt{a})
 				return true
 			}

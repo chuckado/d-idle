@@ -75,7 +75,7 @@ const antidoteDuration = 30 * time.Second
 
 // antidoteReady is false while the last antidote drunk is still in effect.
 func (f *Fighter) antidoteReady() bool {
-	at, ok := f.lastDrink[PotionAntidote]
+	at, ok := f.drunkAt(PotionAntidote)
 	return !ok || f.now().Sub(at) >= antidoteDuration
 }
 
