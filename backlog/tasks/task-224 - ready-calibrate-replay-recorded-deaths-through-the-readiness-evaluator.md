@@ -20,6 +20,8 @@ owns:
   - "docs/probes/ready-calibrate.md"
 exclusive: []
 contracts: []
+lane: parked
+lane_note: "status Deferred (no result line)"
 ---
 
 ## Description

@@ -32,6 +32,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Shadow stage wired log-only: loot.Shadow/ShadowPass fed from Looter.candidates, town tidy and sell; bot.lootShadow knob (default 1), GET /api/lootrules/shadow (watch.lootshadow/1). Starter equals today on 5040 pack and 3360 ground decisions (strictness tier folded in), 250 of 840 sell decisions disagree (documented, docs/lootrules.md section 11); about 6-9 us per decision. Not verified live."
+lane: next
 ---
 
 ## Description

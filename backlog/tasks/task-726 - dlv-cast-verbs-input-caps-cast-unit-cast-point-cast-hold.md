@@ -20,6 +20,7 @@ owns:
 exclusive:
   - "fork-branch:didle/cast-verbs"
 contracts: []
+lane: next
 ---
 
 ## Description

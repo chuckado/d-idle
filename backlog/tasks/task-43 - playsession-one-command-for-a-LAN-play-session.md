@@ -21,6 +21,7 @@ owns:
   - "docs/play-session.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

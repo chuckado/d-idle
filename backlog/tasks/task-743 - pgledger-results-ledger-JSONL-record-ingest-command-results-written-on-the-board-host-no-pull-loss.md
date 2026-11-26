@@ -23,6 +23,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Ledger line (internal/scenario/ledger.go, design 5.1: run id, verdict, D1, D2, host role, bot commit, d2d hash, setup tag EARNED/SETUP/CHEATED/IMPOSSIBLE, event, branch) is written by exec-one into <out>/ledger.jsonl on the host that ran it and shipped through PG_LEDGER_CMD (ingest command on the board host, an ops-repo tool, described by role); a line without provenance or setup tag is refused. d2scenario ledger status-doc|check renders the generated status page. Nothing is EARNED yet (no earned-save card), runs BLOCKED before exec-one (setup not buildable) are not ledgered. Offline tests -race -count=20; ingest side verified offline only."
+lane: now
 ---
 
 ## Description

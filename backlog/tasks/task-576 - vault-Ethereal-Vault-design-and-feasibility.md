@@ -17,6 +17,7 @@ owns:
 exclusive: []
 result: "Design and feasibility doc for the Ethereal Vault; docs only, not verified live (spike plan in section 1.7)"
 contracts: []
+lane: next
 ---
 
 ## Description

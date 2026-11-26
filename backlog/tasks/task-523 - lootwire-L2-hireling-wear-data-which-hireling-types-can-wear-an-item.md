@@ -19,6 +19,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Hireling wear as data: merc.WearTypes/CanWear/TypeChain/WTypeGaps with wear.json (same rule as merc.Allowed, checked by test for 4 hirelings x 6 item kinds). Offline only; WTypeGaps not run against the real Hireling.txt."
+lane: next
 ---
 
 ## Description

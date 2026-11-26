@@ -26,6 +26,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Viewer is not brighter than d2d (lossless luma identical, JPEG -1.2 percent); d2d default gamma 155 is a 1.55x gain (game.exe DirectDraw look, GDI -w has none). Added a per-browser viewer Brightness button; sandbox gamma change left to the user. Not verified live; gamma-100 frame pair not recorded (builder queue)."
+lane: next
 ---
 
 ## Description

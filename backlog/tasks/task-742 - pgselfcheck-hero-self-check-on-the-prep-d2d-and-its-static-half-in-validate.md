@@ -17,6 +17,7 @@ owns:
   - "cmd/d2scenario/validate.go"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

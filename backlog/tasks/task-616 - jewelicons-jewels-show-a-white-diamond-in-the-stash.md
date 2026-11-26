@@ -26,6 +26,7 @@ owns:
 result: "Cause (S, no install on the build hosts): the icon was already picked by base class; the game jewel art is untinted grey-white, so all jewels looked alike. Fix: status.Item.kind, jewel cells tinted by quality, type-letter fallback for items with no icon, console debug log once per code, fixture, TestRealIconAudit (not run: no install). Pictures viewed on the worker host, not live."
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

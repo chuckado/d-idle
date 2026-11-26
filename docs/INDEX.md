@@ -80,6 +80,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `plan/`
 
+- [QUEUE.md](plan/QUEUE.md): Queue (generated: do not edit)
 - [STATUS.md](plan/STATUS.md): Where we are (hand-written part last edited 2026-11-03 by APPLYREVIEW; the generated block at the bottom... (status: the older 2026-10-30 text (Game.exe soak history, container cards, merged-today lists) is in git history....)
 - [bot-requirements.md](plan/bot-requirements.md): Bot requirements implied by docs/plan/leveling.md
 - [code-reality.md](plan/code-reality.md): Code reality map for 8 h / 24 h unattended soaks (CODEREALITY, 2026-10-30)
@@ -601,6 +602,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `reviews/`
 
 - [support-bundle-security-2026-11-15.md](reviews/support-bundle-security-2026-11-15.md): Security review: support bundle upload (branch agent/support, tip 88eecae7b) (status: review of task 542 / card `support` before merge (mergeq #811). Reviewer: Opus, single, offline. Nothing...)
+- [roadmap-fable.md](roadmap-fable.md): Fable roadmap: every recommendation, its state, and what flips it (status: current (card fableroadmap, 2026-11-26; written on user approval of the same day). A living tracker: the...)
 - [roamleg.md](roamleg.md): ROAMLEG: a mouth-gate hold is not a failed roam target (status: offline fix, tests pass, verified live in DRILLS23 (docs/probes/drills/README.md): 0 failed legs (was 50),...)
 - [roamspacing.md](roamspacing.md): Roam coverage spacing (TASK-301) (status: CURRENT. Tags: V = measured (log read-only, or the simulator run in this worktree on the worker host), S =...)
 - [running.md](running.md): How to run d.idle (status: current as of 2026-11-01 (card readmedocs; Teleport and `--build` note added by card capdocs). Every...)

@@ -17,6 +17,7 @@ owns:
   - "docs/design/fable-review-2026-11-21/town-profiles-sme.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

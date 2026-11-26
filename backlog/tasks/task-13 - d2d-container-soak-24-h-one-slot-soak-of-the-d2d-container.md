@@ -27,6 +27,8 @@ merge_hash: ""
 overlap: ""
 source: "openspec-final:openspec/changes/d2d-container-soak"
 contracts: ["proposed/d2d-container-soak"]
+lane: parked
+lane_note: "status Deferred (no result line)"
 ---
 
 ## Description

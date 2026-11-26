@@ -9,7 +9,7 @@ the new file, then runs check.py. Stdlib only; run from the repo root.
       --component bot --kind bug \
       [--owns more] [--exclusive instance:i2] [--contracts docs/contracts/x.md] \
       [-l T0|tester|d2d-skills|..] [-s Proposed] [--priority medium] [--assignee credit-runner] \
-      [--size M] [--milestone m-1] [--dep TASK-5] [--ac "step"]... [-d "why, then Done when"]
+      [--size M] [--milestone m-1] [--dep TASK-5] [--lane next] [--due 2026-12-01] [--epic epic-act1] [--ac "step"]... [-d "why, then Done when"]
 
 The closed label scheme (component, kind, d2d area, track, tier, modifier) is in
 docs/backlog-howto.md and enforced by check.py. --component and --kind are required;
@@ -28,8 +28,11 @@ import check as scheme  # noqa: E402
 HERE = Path(__file__).resolve().parent
 
 
-def render_keys(card, owns, exclusive, contracts):
+def render_keys(card, owns, exclusive, contracts, lane=None, due=None, epic=None):
     out = [f'card: "{card}"']
+    for k, v in (("lane", lane), ("due", due), ("epic", epic)):
+        if v:
+            out.append(f'{k}: {v}')
     for key, vals in (("owns", owns), ("exclusive", exclusive), ("contracts", contracts)):
         out.append(f"{key}: []" if not vals else f"{key}:\n" + "\n".join(f'  - "{v}"' for v in vals))
     return "\n".join(out)
@@ -77,7 +80,10 @@ def main(argv, run=subprocess.run):
     ap.add_argument("--assignee", default="credit-runner", choices=sorted(scheme.ASSIGNEES))
     ap.add_argument("--size", default="M", choices=["S", "M", "L"])
     ap.add_argument("--milestone")
-    ap.add_argument("--dep", action="append", default=[])
+    ap.add_argument("--dep", "--depends", action="append", default=[], help="native dependencies: task ids that must be Done first (plan.py marks the card blocked)")
+    ap.add_argument("--lane", default="next", choices=sorted(scheme.LANES), help="planning lane (default next)")
+    ap.add_argument("--due", help="YYYY-MM-DD")
+    ap.add_argument("--epic", help="parent epic card id")
     ap.add_argument("--ac", action="append", default=[])
     ap.add_argument("-d", "--description")
     a = ap.parse_args(argv)
@@ -86,6 +92,8 @@ def main(argv, run=subprocess.run):
         ap.error(f"unknown label(s) {extra}; the closed set is in docs/backlog-howto.md (component and kind have their own flags)")
     if set(a.label) & (scheme.COMPONENTS | scheme.KINDS):
         ap.error("component and kind go in --component and --kind, not -l")
+    if a.lane in ("parked", "waiting-owner"):
+        ap.error(f"lane {a.lane} needs a lane_note: create the card with lane next, then add the lane and lane_note lines by hand")
     cmd = ["backlog", "task", "create", a.title, "-s", a.status, "--plain", "-a", a.assignee]
     for x in [a.component, a.kind] + a.label:
         cmd += ["-l", x]
@@ -102,7 +110,7 @@ def main(argv, run=subprocess.run):
         sys.stderr.write(r.stdout + r.stderr)
         return 1
     path = created_path(r.stdout)
-    path.write_text(unfold_title(insert_keys(path.read_text(), render_keys(a.card, a.owns, a.exclusive, a.contracts))))
+    path.write_text(unfold_title(insert_keys(path.read_text(), render_keys(a.card, a.owns, a.exclusive, a.contracts, a.lane, a.due, a.epic))))
     print(path)
     return run([sys.executable, "-I", str(HERE / "check.py")]).returncode
 

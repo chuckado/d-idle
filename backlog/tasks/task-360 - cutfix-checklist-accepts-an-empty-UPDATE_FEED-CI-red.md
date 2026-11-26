@@ -17,6 +17,7 @@ owns:
   - "tools/friendpack/checklist.sh"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

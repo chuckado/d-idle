@@ -19,6 +19,7 @@ owns:
 exclusive: []
 contracts: []
 result: "tapper: trigger.tap_quest as a comma list or *, per-chunk why-not log; offline tests only. Resume from a previous stage save is NOT supported by the runner (every run creates its own hero named by scenario id), so stages start from declared level fixtures."
+lane: next
 ---
 
 ## Description
