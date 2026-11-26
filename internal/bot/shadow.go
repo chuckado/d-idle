@@ -115,6 +115,8 @@ func (r *Runner) shadowView(snap *d2.Snapshot, c control) (v arbiter.View, ok bo
 		arbiter.FactObjective:    b(c.spec.camp != nil),
 		arbiter.FactQuestRefused: b(r.questRefusalStands(snap)),
 		arbiter.FactSurviveBelow: r.e.Tune.Combat.DrinkLifePct,
+		arbiter.FactSellable:     r.resInput(snap).Sellable,
+		arbiter.FactAreaDry:      b(len(r.dryAreas()) > 0),
 	}
 	obj := ""
 	if l.stepArea > 0 && c.spec.camp != nil {
