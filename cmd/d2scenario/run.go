@@ -228,6 +228,7 @@ func cmdExecOne(args []string) error {
 			res = withVerdict(res, blocked("no state was observed"))
 		} else {
 			res.Asserts = scenario.Evaluate(s.Assert, *res.State)
+			res.Asserts = append(res.Asserts, loadInvariantPolicy().invariantAsserts(s.ID, res.State.Invariants)...)
 			res.Status, res.Reason = scenario.Verdict(res.Asserts)
 		}
 	}
@@ -667,6 +668,9 @@ func addRunFacts(st *scenario.State, s scenario.Scenario, r scenario.Run, trace 
 	b, err := os.ReadFile(trace)
 	if err != nil {
 		return
+	}
+	if h := invariantCounts(b); len(h) > 0 {
+		st.Invariants = h
 	}
 	if lines, ok := scenario.CollectLog(s.Assert, b, s.Budget.VirtualMin); ok {
 		st.Has = append(st.Has, "log")
