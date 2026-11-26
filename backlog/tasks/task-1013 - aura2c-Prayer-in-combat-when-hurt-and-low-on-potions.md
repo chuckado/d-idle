@@ -1,10 +1,11 @@
 ---
 id: TASK-1013
 title: 'aura2c: Prayer in combat when hurt and low on potions'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T18:34:00Z'
+updated_date: '2026-11-26T19:39:00Z'
 labels:
   - bot
   - bot-fix

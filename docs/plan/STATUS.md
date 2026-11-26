@@ -44,7 +44,6 @@
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
-| aura2c | proposed | - | `internal/combat/classdata/profiles.json`<br>`internal/combat/classdata.go`<br>`internal/combat/aura.go`<br>`internal/combat/fighter.go`<br>`internal/combat/fightprayer_test.go`<br>`internal/combat/rotation.go`<br>`internal/delivery/rotation.go` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
