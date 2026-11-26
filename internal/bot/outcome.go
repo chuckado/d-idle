@@ -185,6 +185,7 @@ func (r *Runner) handleRefused(ctx context.Context, ref *Refused) {
 	}
 	st.n++
 	r.inv.noteRefusal()
+	r.arbRefused(ref.Need, ref.Wake)
 	row := needTable[ref.Need]
 	pause := time.Duration(row.PauseSec) * time.Second
 	if st.n == 1 { // the first look after a change is cheap: the planner may already have another step
