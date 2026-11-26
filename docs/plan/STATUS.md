@@ -321,7 +321,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 59c0781ed 11-26 09:57 `Merge agent/arbmig3: Merge branch 'main' into arbmig` (arbmig3)
 - 5c2d3919b 11-26 09:57 `Merge agent/outcomes2c: Merge branch 'main' into outcome-task-step` (outcomes2c)
+- c96f49244 11-26 09:54 `Merge branch 'main' into arbmig` (-)
 - 00bcb5210 11-26 09:54 `Merge branch 'main' into outcome-task-step` (-)
 - caa9c27ce 11-26 09:47 `Merge agent/outcomes2b: Merge branch 'main' into outcome-route-guard` (outcomes2b)
 - 6a8a51e43 11-26 09:47 `Merge agent/arbmig2: Merge branch 'main' into arbmig` (arbmig2)
@@ -329,6 +331,4 @@
 - ca448e31a 11-26 09:45 `Merge branch 'main' into arbmig` (-)
 - 1bde406cb 11-26 09:38 `Merge agent/stepexec1: stepexec1: gofmt` (stepexec1)
 - b71406ea9 11-26 09:38 `Merge agent/outcomes2a: outcome-travel-gate: gate refusals typed, no-scroll walk home not cancelled by portal verdicts` (outcomes2a)
-- f32da7a4f 11-26 09:38 `Merge agent/admit1: admit1: old judges read floors from admission.json, design doc, card` (admit1)
-- a14d7af8e 11-26 09:38 `Merge agent/arbmig1: arbmig: task card owns for the P6 stages` (arbmig1)
 <!-- statusgen:end -->
