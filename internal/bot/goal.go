@@ -66,6 +66,71 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 	if r.flailHold(ctx, snap, c) {
 		return true
 	}
+	if r.choresStep(ctx, snap, c) {
+		return true
+	}
+	if r.lowLifeGate(ctx, snap, c) {
+		return true
+	}
+	if inTown && (r.gearStep(ctx, snap, c) || (c.spec.camp == nil && r.claimStep(ctx, snap, c))) {
+		return true
+	}
+	// After the town chores, not before: a save point that fired first re-entered the game with the purse unspent and the
+	// tome empty (Gate 2 seed 13, docs/gate2loop.md).
+	if inTown && r.savePointStep(ctx, snap, c) {
+		return true
+	}
+	if r.claimTripStep(ctx, snap, c) {
+		return true
+	}
+	if acted, hold := r.ensureDifficulty(ctx, snap, c); acted {
+		return true
+	} else if hold {
+		return false
+	}
+	if c.spec.kind == goals.Runs {
+		return r.farmStep(ctx, snap, c)
+	}
+	if r.boardPreempts(snap, c) {
+		return r.boardStep(ctx, snap, c) // the player's Start tap beats a farm or level goal (docs/questboard.md, "Which goals"), not a Farm gold order
+	}
+	if !p.InTown() && c.spec.camp == nil && r.boardHoldsArea() {
+		return r.sweep(ctx, snap, c, p.Area) // fight where we stand until the chunk may start
+	}
+	if c.spec.camp != nil {
+		if r.goldFarmOn() {
+			return r.goldFarmStep(ctx, snap, c) // the player's order: farm gold until told to stop (docs/goldfarm.md)
+		}
+		if r.recoveryDue(snap) {
+			return r.recoveryStep(ctx, snap, c) // the quest step waits until the purse is filled again
+		}
+		if r.arbHoldsQuest() {
+			return r.levelSlice(ctx, snap, c, "Leveling: the arbiter holds the quest step", "arbiter")
+		}
+		if r.questBoardOn() {
+			return r.boardStep(ctx, snap, c) // the player drives quests (docs/questboard.md); the planner only trains
+		}
+		return r.taskStep(ctx, snap, c)
+	}
+	target, ok := r.target(snap, c)
+	if !ok {
+		return r.noTarget(ctx, snap, c)
+	}
+	if r.d.Plan.IsTown(target) {
+		return r.rest(ctx, snap, c)
+	}
+	if p.Area != target {
+		return r.travel(ctx, snap, c, target)
+	}
+	return r.sweep(ctx, snap, c, target)
+}
+
+// choresStep starts a town trip when chores are due (cooldown aware) and runs it; false when none is due. The chores
+// family hook of the chain and of the arbiter's control path (arbiter_control.go).
+func (r *Runner) choresStep(ctx context.Context, snap *d2.Snapshot, c control) bool {
+	l := &r.loop
+	p := snap.Player
+	inTown := p.InTown()
 	if plan, emergency, ok := r.needChores(snap); ok {
 		now := r.e.Clock.Now()
 		gap := sec(r.cfg.ResupplyCooldownSec)
@@ -94,17 +159,15 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 			return r.advanceTrip(ctx, snap, c)
 		}
 	}
-	if r.lowLifeGate(ctx, snap, c) {
-		return true
-	}
-	if inTown && (r.gearStep(ctx, snap, c) || (c.spec.camp == nil && r.claimStep(ctx, snap, c))) {
-		return true
-	}
-	// After the town chores, not before: a save point that fired first re-entered the game with the purse unspent and the
-	// tome empty (Gate 2 seed 13, docs/gate2loop.md).
-	if inTown && r.savePointStep(ctx, snap, c) {
-		return true
-	}
+	return false
+}
+
+// claimTripStep leaves the field for town when a quest reward waits. The claim family hook of the chain and of the
+// arbiter's control path.
+func (r *Runner) claimTripStep(ctx context.Context, snap *d2.Snapshot, c control) bool {
+	l := &r.loop
+	p := snap.Player
+	inTown := p.InTown()
 	if !inTown && c.spec.camp == nil && len(l.questPending) > 0 && r.d.Quester != nil && !r.e.Clock.Now().Before(l.claimSkipUntil) && r.hostileNear(snap, r.e.Tune.Bot.ClearRadius) == 0 {
 		r.setWhy(WhyClaimTrip)
 		if ok := r.do(ctx, c, StateResupplying, "Going to town to claim a quest reward", sec(r.cfg.TownTimeoutSec), "claim trip", r.d.Town.ToTown); ok {
@@ -115,43 +178,13 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 		r.e.Log.Warn("claim trip failed; no new claim trip for a while", "minutes", int(claimBackoff/time.Minute))
 		return true
 	}
-	if acted, hold := r.ensureDifficulty(ctx, snap, c); acted {
-		return true
-	} else if hold {
-		return false
-	}
-	if c.spec.kind == goals.Runs {
-		return r.farmStep(ctx, snap, c)
-	}
-	if r.boardPreempts(snap, c) {
-		return r.boardStep(ctx, snap, c) // the player's Start tap beats a farm or level goal (docs/questboard.md, "Which goals"), not a Farm gold order
-	}
-	if !p.InTown() && c.spec.camp == nil && r.boardHoldsArea() {
-		return r.sweep(ctx, snap, c, p.Area) // fight where we stand until the chunk may start
-	}
-	if c.spec.camp != nil {
-		if r.goldFarmOn() {
-			return r.goldFarmStep(ctx, snap, c) // the player's order: farm gold until told to stop (docs/goldfarm.md)
-		}
-		if r.recoveryActive() && !r.gearVerdict(snap).Gated && !r.boardChunkNeedsNoGold() {
-			return r.recoveryStep(ctx, snap, c) // the quest step waits until the purse is filled again
-		}
-		if r.questBoardOn() {
-			return r.boardStep(ctx, snap, c) // the player drives quests (docs/questboard.md); the planner only trains
-		}
-		return r.taskStep(ctx, snap, c)
-	}
-	target, ok := r.target(snap, c)
-	if !ok {
-		return r.noTarget(ctx, snap, c)
-	}
-	if r.d.Plan.IsTown(target) {
-		return r.rest(ctx, snap, c)
-	}
-	if p.Area != target {
-		return r.travel(ctx, snap, c, target)
-	}
-	return r.sweep(ctx, snap, c, target)
+	return false
+}
+
+// recoveryDue says the purse recovery replaces the quest step now: it runs, the gear gate does not hold the hero and the
+// board chunk in hand costs gold. The recovery family hook of the chain and of the arbiter's control path.
+func (r *Runner) recoveryDue(snap *d2.Snapshot) bool {
+	return r.recoveryActive() && !r.gearVerdict(snap).Gated && !r.boardChunkNeedsNoGold()
 }
 
 func fieldArea(p *d2.Player) int {

@@ -43,6 +43,8 @@
 |---|---|---|---|---|
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
+| incident2 | proposed | - | `internal/bot/incident.go`<br>`internal/bot/incident_test.go`<br>`internal/bot/invariants.go`<br>`internal/scenario/incident.go`<br>`internal/scenario/incident_test.go`<br>`cmd/d2scenario/incident.go`<br>`cmd/d2scenario/incident_test.go`<br>`docs/probes/incident-scenarios.md` | - |
+| smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
@@ -297,6 +299,9 @@
 | advisor1 | proposed | - | `docs/design/advisor-r14.md` | - |
 | autorevert1 | in-progress | - | `docs/design/autorevert.md`<br>`tools/flip/*`<br>`tools/darklaunch/*`<br>`data/darklaunch.json`<br>`docs/process/dark-launch.md`<br>`docs/invariants.md`<br>`docs/operator.md`<br>`internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`internal/bot/explain.go` | - |
 | reflex1d | proposed | - | `internal/bot/safetylat.go`<br>`internal/bot/loop.go`<br>`internal/bot/reflexdrink_test.go` | - |
+| arbfam | proposed | - | `internal/arbiter`<br>`internal/bot/arbiter_control.go`<br>`internal/bot/arbiter_control_test.go`<br>`internal/bot/shadow.go`<br>`internal/bot/goal.go`<br>`tools/provingground/arbiter-outcomes`<br>`docs/arbiter.md`<br>`data/darklaunch.json`<br>`docs/knobs.md` | - |
+| flipwave2 | proposed | - | `docs/probes/flipwave2.md` | - |
+| classorder1 | proposed | - | `docs/probes/classorder1.md` | - |
 
 ### Gates
 - contract [act1-campaign](../contracts/act1-campaign.md): 9 requirements
@@ -319,14 +324,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 284d0806e 11-26 12:09 `Merge agent/toolstrade85: Merge origin/main` (toolstrade85)
-- 49f2bed0b 11-26 11:50 `Merge origin/main` (-)
-- 027112601 11-26 11:12 `Merge agent/toolstrade84: Merge branch 'main' into toolstrade84` (toolstrade84)
-- fe8df9ae4 11-26 11:11 `Merge branch 'main' into toolstrade84` (-)
-- e905aade9 11-26 11:05 `Merge branch 'main' into toolstrade85` (-)
-- 5081aabe9 11-26 10:41 `Merge branch 'main' into toolstrade84` (-)
-- a75e83212 11-26 10:41 `Merge branch 'main' into toolstrade85` (-)
-- 4c8c48c87 11-26 10:34 `Merge origin/main` (-)
-- b89f8cde8 11-26 10:34 `Merge agent/faultsoak: Merge branch 'main' into faultsoak` (faultsoak)
-- 363a0d3cf 11-26 10:34 `Merge agent/outcomes2g: Merge branch 'main' into outcome-explain-ring` (outcomes2g)
+- 744eff15f 11-26 13:48 `Merge agent/incident2: Merge branch 'main' into incident2` (incident2)
+- fedf2159c 11-26 13:48 `Merge agent/arbfam4: Merge branch 'main' into arbfam` (arbfam4)
+- 7e6289850 11-26 13:46 `Merge branch 'main' into incident2` (-)
+- 99748b137 11-26 13:46 `Merge branch 'main' into arbfam` (-)
+- ac089fde7 11-26 13:36 `Merge agent/aura2a: Merge branch 'main' into aura2a` (aura2a)
+- d5978f6ed 11-26 13:34 `Merge branch 'main' into aura2a` (-)
+- 3be781e1d 11-26 13:24 `Merge agent/auralive: Merge branch 'main' into auralive` (auralive)
+- fad6b3f14 11-26 13:24 `Merge agent/act345map: Merge branch 'main' into act345map` (act345map)
+- 9028d8300 11-26 13:24 `Merge agent/act2plan: Merge branch 'main' into act2plan` (act2plan)
+- a14a0c7e3 11-26 13:19 `Merge branch 'main' into auralive` (-)
 <!-- statusgen:end -->

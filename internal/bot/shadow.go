@@ -14,10 +14,13 @@ import (
 // it WOULD choose from the same world facts; the answer is only logged. runGoal and every hook in it are unchanged.
 
 type arbShadow struct {
-	mu  sync.Mutex
-	sh  *arbiter.Shadow
-	t0  time.Time
-	ctl atomic.Int64 // ticks the arbiter acted for since the last minute line (arbiter_control.go)
+	mu sync.Mutex
+	sh *arbiter.Shadow
+	t0 time.Time
+	// the standing typed refusal of a step (arbRefused): its need and the wake facts at that moment, and the family the
+	// arbiter chose this tick (set by runGoalControlled while the chain runs; the quest hook reads it)
+	refNeed, refFacts, chose string
+	ctl                      atomic.Int64 // ticks the arbiter acted for since the last minute line (arbiter_control.go)
 }
 
 // minuteKV is the "arb" attribute of the minute line: per hook family diverged/ticks since the last minute line.
@@ -102,7 +105,7 @@ func (r *Runner) shadowView(snap *d2.Snapshot, c control) (v arbiter.View, ok bo
 		arbiter.FactPlayerOrder:  b(pg != nil && pg.Pending() > 0),
 		arbiter.FactTrip:         b(l.trip != nil),
 		arbiter.FactTripEmerg:    b(l.trip != nil && l.trip.emergency),
-		arbiter.FactClaim:        b(!inTown && c.spec.camp == nil && len(l.questPending) > 0 && r.d.Quester != nil),
+		arbiter.FactClaim:        b(!inTown && c.spec.camp == nil && len(l.questPending) > 0 && r.d.Quester != nil && !r.e.Clock.Now().Before(l.claimSkipUntil)),
 		arbiter.FactPotions:      kit.BeltHP,
 		arbiter.FactPotionsMin:   t.ResupplyPotions,
 		arbiter.FactPackGold:     p.Gold,
@@ -110,9 +113,14 @@ func (r *Runner) shadowView(snap *d2.Snapshot, c control) (v arbiter.View, ok bo
 		arbiter.FactRecovery:     b(r.recoveryActive()),
 		arbiter.FactGoldFarm:     b(r.goldFarmOn()),
 		arbiter.FactObjective:    b(c.spec.camp != nil),
+		arbiter.FactQuestRefused: b(r.questRefusalStands(snap)),
 		arbiter.FactSurviveBelow: r.e.Tune.Combat.DrinkLifePct,
 	}
-	return arbiter.View{Now: r.shadowNow(), Area: area, Progress: real, Facts: f}, true
+	obj := ""
+	if l.stepArea > 0 && c.spec.camp != nil {
+		obj = r.areaName(l.stepArea) // U: the area of the quest step the planner picked last
+	}
+	return arbiter.View{Now: r.shadowNow(), Area: area, Progress: real, Facts: f, ObjectiveArea: obj}, true
 }
 
 func (r *Runner) shadowNow() float64 {
@@ -158,10 +166,21 @@ func (r *Runner) arbRefused(need, wake string) {
 		return
 	}
 	now := r.shadowNow()
+	facts := r.wakeFacts(r.latest())
 	r.arb.mu.Lock()
 	sh := r.arb.sh
+	r.arb.refNeed, r.arb.refFacts = need, facts
 	r.arb.mu.Unlock()
 	sh.Refused(need, wake, now)
+}
+
+// questRefusalStands reads the typed refusal arbRefused recorded: true while the wake facts (level, kit, gold, area) are
+// the ones the refusal was logged with. The quest source stays quiet meanwhile instead of asking again.
+func (r *Runner) questRefusalStands(snap *d2.Snapshot) bool {
+	r.arb.mu.Lock()
+	need, facts := r.arb.refNeed, r.arb.refFacts
+	r.arb.mu.Unlock()
+	return need != "" && r.wakeFacts(snap) == facts
 }
 
 func (r *Runner) currentWhy() string {

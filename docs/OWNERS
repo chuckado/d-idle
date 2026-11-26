@@ -209,6 +209,8 @@ cmd/d2scenario/  credit-runner  arbmig
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/detrun.go  credit-runner  pgjournal
 cmd/d2scenario/detrun_test.go  credit-runner  pgjournal
+cmd/d2scenario/incident.go  credit-runner  incident2
+cmd/d2scenario/incident_test.go  credit-runner  incident2
 cmd/d2scenario/journal.go  credit-runner  pgjournal
 cmd/d2scenario/ledger.go  credit-runner  pgledger
 cmd/d2scenario/ledger_test.go  credit-runner  pgledger
@@ -232,6 +234,7 @@ data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
 data/capabilities/  credit-runner  dlv-data
 data/capabilities/  credit-runner  dlv-stance-pack
+data/darklaunch.json  credit-runner  arbfam
 data/darklaunch.json  credit-runner  arbmig
 data/darklaunch.json  credit-runner  autorevert1
 data/input/caps/  credit-runner  dlv-cast-verbs
@@ -245,6 +248,7 @@ docs/actbot.md  credit-runner  cain45
 docs/adr/0014-memory-writes-allowed-no-crutch.md  credit-runner  vaultpay
 docs/adr/0029-vault-gold-payment.md  credit-runner  vaultpay
 docs/adr/README.md  credit-runner  vaultpay
+docs/arbiter.md  credit-runner  arbfam
 docs/arbiter.md  credit-runner  arbmig
 docs/archive  credit-runner  dietarchive
 docs/autoalloc.md  credit-runner  allocfix
@@ -304,6 +308,7 @@ docs/invariants.md  credit-runner  autorevert1
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-ui.md  credit-runner  jewelicons
 docs/inventory-ui.md  credit-runner  nopins
+docs/knobs.md  credit-runner  arbfam
 docs/knobs.md  credit-runner  arbmig
 docs/knobs.md  credit-runner  botstuck
 docs/knobs.md  credit-runner  bulkid
@@ -348,11 +353,14 @@ docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm7
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
 docs/probes/checkpoint-live-drill.md  live-agent  ckptlive
 docs/probes/chores2-2026-11-21.md  credit-runner  chores2
+docs/probes/classorder1.md  user  classorder1
 docs/probes/exitsread-2026-11-22.md  credit-runner  exitsread
 docs/probes/firsthour.md  live-agent  firsthour
+docs/probes/flipwave2.md  live-agent  flipwave2
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
+docs/probes/incident-scenarios.md  credit-runner  incident2
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1fix
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
 docs/probes/pg-gate-group1-2026-11-21.md  credit-runner  pgjournal
@@ -423,6 +431,7 @@ docs/senses-map.md  credit-runner  maphistoryD
 docs/senses-map.md  credit-runner  maptrail
 docs/senses-map.md  credit-runner  maptrail2
 docs/session-record.md  live-agent  sessions
+docs/sme/paladin-auras-2026-11-26.md  credit-runner  smeaura
 docs/soaks/recoverypace.md  live-agent  recoverypace
 docs/survival/ledger.md  credit-runner  intake
 docs/t0-variants.md  credit-runner  qdensity
@@ -454,6 +463,7 @@ docs/vault.md  credit-runner  vaultpay
 docs/vault.md  credit-runner  vaultreveal
 internal/admit/  credit-runner  admit1
 internal/agency/  credit-runner  dlv-rotation
+internal/arbiter  credit-runner  arbfam
 internal/arbiter  credit-runner  town10
 internal/arbiter/  credit-runner  arbmig
 internal/arbiter/  credit-runner  dlv-stance-army
@@ -468,7 +478,9 @@ internal/boss/script.go  credit-runner  countess
 internal/boss/types.go  pro-runner  levelplan3
 internal/bot/  credit-runner  cainfix3
 internal/bot/admit_need_test.go  credit-runner  admit1
+internal/bot/arbiter_control.go  credit-runner  arbfam
 internal/bot/arbiter_control.go  credit-runner  arbmig
+internal/bot/arbiter_control_test.go  credit-runner  arbfam
 internal/bot/arbiter_control_test.go  credit-runner  arbmig
 internal/bot/areametrics.go  credit-runner  intake
 internal/bot/areaskip_test.go  credit-runner  passagebounce
@@ -484,6 +496,7 @@ internal/bot/farm.go  credit-runner  pgclock
 internal/bot/farmclock_test.go  credit-runner  pgclock
 internal/bot/farmreset.go  credit-runner  farmloop
 internal/bot/farmreset_test.go  credit-runner  farmloop
+internal/bot/goal.go  credit-runner  arbfam
 internal/bot/goal.go  credit-runner  hourfix
 internal/bot/goal.go  credit-runner  maphistoryA
 internal/bot/goal.go  credit-runner  qdmatrix
@@ -496,7 +509,10 @@ internal/bot/goldfarm.go  credit-runner  repairtrip
 internal/bot/guided.go  credit-runner  campaign1
 internal/bot/guided_test.go  credit-runner  campaign1
 internal/bot/hpfields.go  credit-runner  intake
+internal/bot/incident.go  credit-runner  incident2
+internal/bot/incident_test.go  credit-runner  incident2
 internal/bot/invariants.go  credit-runner  autorevert1
+internal/bot/invariants.go  credit-runner  incident2
 internal/bot/invariants_test.go  credit-runner  autorevert1
 internal/bot/kitplan_test.go  credit-runner  bsm7
 internal/bot/leveling.go  credit-runner  hourfix
@@ -546,6 +562,7 @@ internal/bot/runner.go  credit-runner  passagebounce
 internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  resetinstant
 internal/bot/safetylat.go  credit-runner  reflex1d
+internal/bot/shadow.go  credit-runner  arbfam
 internal/bot/shadow.go  credit-runner  arbmig
 internal/bot/staletarget.go  credit-runner  botstuck
 internal/bot/state.go  credit-runner  resetinstant
@@ -777,6 +794,8 @@ internal/scenario/determinism.go  credit-runner  pgdigest
 internal/scenario/earned.go  credit-runner  pgearned
 internal/scenario/hero  credit-runner  pghero
 internal/scenario/hero/selfcheck.go  credit-runner  pgselfcheck
+internal/scenario/incident.go  credit-runner  incident2
+internal/scenario/incident_test.go  credit-runner  incident2
 internal/scenario/ledger.go  credit-runner  pgledger
 internal/scenario/ledger_test.go  credit-runner  pgledger
 internal/scenario/prov.go  credit-runner  pgprov
@@ -1092,6 +1111,7 @@ tools/probes/gridwhole.py  credit-runner  gridwhole
 tools/probes/objectlist.py  credit-runner  qdmatrix
 tools/probes/presets.py  credit-runner  qdmatrix
 tools/provingground/  credit-runner  dlv-reads
+tools/provingground/arbiter-outcomes  credit-runner  arbfam
 tools/provingground/arbiter-outcomes/  credit-runner  arbmig
 tools/provingground/countess-check.sh  credit-runner  countess2
 tools/provingground/earned  credit-runner  pgearned

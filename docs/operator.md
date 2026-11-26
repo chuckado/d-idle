@@ -15,7 +15,7 @@ A way for the person (or agent) who runs the container to press the quest board 
 `start`, `retry`, `cancel`, `handin`, `auto` (change the board) and `status` (read). Every other verb is refused (`verb`); there is no sell, vault, hero, character, tuning, respec, order, mode or dismiss verb.
 
 ```
-docker exec <container> <d2bot> ops quest status [--json]
+docker exec <container> <d2bot> ops quest status [--json] [--why]
 docker exec <container> <d2bot> ops quest start|retry|cancel|handin <quest> [--chunk ID] --why "reason"
 docker exec <container> <d2bot> ops quest start <quest> [--chunk ID] --try-anyway --why "reason"
 docker exec <container> <d2bot> ops quest auto <quest> --on|--off --why "reason"
@@ -37,7 +37,7 @@ d2bot ops home --why "reason"                       # queue a rest in town behin
 d2bot ops go <area> [--minutes N] --why "reason"    # a go order, default 60 minutes; the hero's own guards still decide when it walks
 d2bot ops park <quest> <hours 1..24> --why "reason" # stop the quest's chunk and refuse start and retry of it until the wake time
 ```
-- `status --why` and the viewer-side route `GET /api/explain` (same access as `/api/why`) return the same view: `decisions` (oldest first: tick time, hook family, whyline `code` and params, area, ticks held), `refusals` standing now (`what`, `need`, count, last seen; a step refusal ages out after 10 minutes), the arbiter's last shadow choice (empty while `bot.arbiterShadow` is 0) and the journey block reason. `invariants` lists every invariant counter with `hard`, `count` and `since` (docs/invariants.md); `tools/flip/flip.py watch` reads it. U: refusals come from the places that log `action failed` and `area gate refused the walk` only; typed step outcomes (review P2) will fill it fully.
+- `status --why` and the viewer-side route `GET /api/explain` (same access as `/api/why`) return the same view: `decisions` (oldest first: tick time, hook family, whyline `code` and params, area, ticks held), `refusals` standing now (`what`, `need`, count, last seen; a step refusal ages out after 10 minutes), the arbiter's last shadow choice (empty while `bot.arbiterShadow` is 0; `arbiterDecision` is the same choice as a record: intent, family, reason, what it displaced) and the journey block reason. `invariants` lists every invariant counter with `hard`, `count` and `since` (docs/invariants.md); `tools/flip/flip.py watch` reads it. U: refusals come from the places that log `action failed` and `area gate refused the walk` only; typed step outcomes (review P2) will fill it fully.
 - The order verbs go through `Hub.Give`, the call the viewer's order box makes, so the area list, the 8 open orders limit and the guards are the viewer's. A refusal is `order_refused` with the reason.
 - `park` is the operator's own wake time, kept in process memory (reset at a bot restart, like the limits); it is shown in `ops quest status` data as `parked`. It is not a board state: the viewer still shows the chunk as stopped.
 
@@ -74,3 +74,5 @@ A `retry` is also refused with `not_parked` (and books nothing) unless a matchin
 - A finished chunk moves on (the next chunk of the quest, then the next quest). `--all` walks the board in order, skips done and locked quests, repeats until nothing is startable, and exits 1 if any quest used up its budget or the deadline passed.
 - Hero deaths are not exposed by the board, so they are not a stop condition. The area is not exposed either; progress is the step and state counter.
 - Offline test: `bash tools/questloop_test.sh` (a fake `docker` shim and a fake clock).
+
+- `ops quest status --why` (here `--why` is a switch) adds one `why-not` line under every chunk that does not move: readiness word, floor, need code, wake fact, guard words and the last refusal time (`whyNot` in `GET /api/quests`, drawn as `Why not:` on the quest board sheet). The need and wake come from the hero's freshest typed refusal and only for live chunks; for a waiting chunk the need is its first readiness reason. V (unit tests, no live game).
