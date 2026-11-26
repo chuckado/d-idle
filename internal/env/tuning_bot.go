@@ -369,7 +369,7 @@ func botKnobs() []Knob {
 		{Key: "bot.arbiterControl", Label: "Arbiter control", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
 			Desc: "[dark-launch] 1 lets the intent arbiter act for the families in bot.arbiterFamilies: the goal chain's hooks of such a family defer to its decision, and the old chain is the fallback when the arbiter chooses nothing or fails. Needs bot.arbiterShadow 1. 0 is off: nothing changes (docs/arbiter.md, data/darklaunch.json)."},
 		{Key: "bot.arbiterFamilies", Label: "Arbiter control families", Unit: "mask", Default: 3, Min: 0, Max: 255, NoHandicap: true,
-			Desc: "Arbiter control: which families the arbiter controls, one bit each in the order survive 1, player 2, chores 4, claim 8, goldfarm 16, recovery 32, quest 64, level 128. 3 is survive and player, the first family. Only survive and player act so far; the other bits are accepted and ignored (docs/arbiter.md)."},
+			Desc: "Arbiter control: which families the arbiter controls, one bit each in the order survive 1, player 2, chores 4, claim 8, goldfarm 16, recovery 32, quest 64, level 128. 3 is survive and player, the first family. Every bit is wired (arbfam entries 1 to 4); with bot.arbiterControl 0 none acts (docs/arbiter.md)."},
 		{Key: "bot.arbiterDwellSec", Label: "Arbiter lease", Unit: "s", Default: 120, Min: 10, Max: 1800, NoHandicap: true,
 			Desc: "Arbiter shadow: how long a chosen intent holds its lease; only a higher priority class preempts it inside this time."},
 		{Key: "bot.arbiterTravelSec", Label: "Arbiter travel window", Unit: "s", Default: 600, Min: 30, Max: 7200, NoHandicap: true,

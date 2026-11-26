@@ -41,5 +41,5 @@ Why: TODO. Done when: TODO.
 - [x] #2 goldfarm and recovery family hooks defer
 - [x] #3 quest family defers
 - [x] #4 level family defers
-- [ ] #5 outcome rows and verdicts per family, dark-launch rows
+- [x] #5 outcome rows and verdicts per family, dark-launch rows
 <!-- AC:END -->
