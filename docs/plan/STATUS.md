@@ -324,6 +324,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- fedf2159c 11-26 13:48 `Merge agent/arbfam4: Merge branch 'main' into arbfam` (arbfam4)
+- 99748b137 11-26 13:46 `Merge branch 'main' into arbfam` (-)
 - ac089fde7 11-26 13:36 `Merge agent/aura2a: Merge branch 'main' into aura2a` (aura2a)
 - d5978f6ed 11-26 13:34 `Merge branch 'main' into aura2a` (-)
 - 3be781e1d 11-26 13:24 `Merge agent/auralive: Merge branch 'main' into auralive` (auralive)
@@ -332,6 +334,4 @@
 - a14a0c7e3 11-26 13:19 `Merge branch 'main' into auralive` (-)
 - 95b5ed8a9 11-26 13:19 `Merge branch 'main' into act345map` (-)
 - a71504654 11-26 13:19 `Merge branch 'main' into act2plan` (-)
-- 23a4fb6ba 11-26 13:17 `Merge agent/classorder: Merge branch 'main' into classorder` (classorder)
-- 0fe3487dd 11-26 13:17 `Merge agent/auraaudit: Merge branch 'main' into auraaudit` (auraaudit)
 <!-- statusgen:end -->
