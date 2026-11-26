@@ -232,6 +232,7 @@ data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
 data/capabilities/  credit-runner  dlv-data
 data/capabilities/  credit-runner  dlv-stance-pack
+data/darklaunch.json  credit-runner  arbfam
 data/darklaunch.json  credit-runner  arbmig
 data/darklaunch.json  credit-runner  autorevert1
 data/input/caps/  credit-runner  dlv-cast-verbs
@@ -245,6 +246,7 @@ docs/actbot.md  credit-runner  cain45
 docs/adr/0014-memory-writes-allowed-no-crutch.md  credit-runner  vaultpay
 docs/adr/0029-vault-gold-payment.md  credit-runner  vaultpay
 docs/adr/README.md  credit-runner  vaultpay
+docs/arbiter.md  credit-runner  arbfam
 docs/arbiter.md  credit-runner  arbmig
 docs/archive  credit-runner  dietarchive
 docs/autoalloc.md  credit-runner  allocfix
@@ -304,6 +306,7 @@ docs/invariants.md  credit-runner  autorevert1
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-ui.md  credit-runner  jewelicons
 docs/inventory-ui.md  credit-runner  nopins
+docs/knobs.md  credit-runner  arbfam
 docs/knobs.md  credit-runner  arbmig
 docs/knobs.md  credit-runner  botstuck
 docs/knobs.md  credit-runner  bulkid
@@ -454,6 +457,7 @@ docs/vault.md  credit-runner  vaultpay
 docs/vault.md  credit-runner  vaultreveal
 internal/admit/  credit-runner  admit1
 internal/agency/  credit-runner  dlv-rotation
+internal/arbiter  credit-runner  arbfam
 internal/arbiter  credit-runner  town10
 internal/arbiter/  credit-runner  arbmig
 internal/arbiter/  credit-runner  dlv-stance-army
@@ -468,7 +472,9 @@ internal/boss/script.go  credit-runner  countess
 internal/boss/types.go  pro-runner  levelplan3
 internal/bot/  credit-runner  cainfix3
 internal/bot/admit_need_test.go  credit-runner  admit1
+internal/bot/arbiter_control.go  credit-runner  arbfam
 internal/bot/arbiter_control.go  credit-runner  arbmig
+internal/bot/arbiter_control_test.go  credit-runner  arbfam
 internal/bot/arbiter_control_test.go  credit-runner  arbmig
 internal/bot/areametrics.go  credit-runner  intake
 internal/bot/areaskip_test.go  credit-runner  passagebounce
@@ -484,6 +490,7 @@ internal/bot/farm.go  credit-runner  pgclock
 internal/bot/farmclock_test.go  credit-runner  pgclock
 internal/bot/farmreset.go  credit-runner  farmloop
 internal/bot/farmreset_test.go  credit-runner  farmloop
+internal/bot/goal.go  credit-runner  arbfam
 internal/bot/goal.go  credit-runner  hourfix
 internal/bot/goal.go  credit-runner  maphistoryA
 internal/bot/goal.go  credit-runner  qdmatrix
@@ -546,6 +553,7 @@ internal/bot/runner.go  credit-runner  passagebounce
 internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  resetinstant
 internal/bot/safetylat.go  credit-runner  reflex1d
+internal/bot/shadow.go  credit-runner  arbfam
 internal/bot/shadow.go  credit-runner  arbmig
 internal/bot/staletarget.go  credit-runner  botstuck
 internal/bot/state.go  credit-runner  resetinstant
@@ -1092,6 +1100,7 @@ tools/probes/gridwhole.py  credit-runner  gridwhole
 tools/probes/objectlist.py  credit-runner  qdmatrix
 tools/probes/presets.py  credit-runner  qdmatrix
 tools/provingground/  credit-runner  dlv-reads
+tools/provingground/arbiter-outcomes  credit-runner  arbfam
 tools/provingground/arbiter-outcomes/  credit-runner  arbmig
 tools/provingground/countess-check.sh  credit-runner  countess2
 tools/provingground/earned  credit-runner  pgearned
