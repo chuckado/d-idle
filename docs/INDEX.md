@@ -489,6 +489,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [hourfix.md](hourfix.md): hourfix: first-hour time sinks (TASK-368)
 - [hourfix2.md](hourfix2.md): hourfix2: the Den-mouth shuttle of the second fresh hour (2026-11-12 17:35)
 - [input.md](input.md): Input: helper, client, transform (agent INPUT)
+- [invariants.md](invariants.md): Invariant monitor (knob `bot.invariants`) (status: current (card invmon, 2026-11-25). Logging only. Source: P1 of...)
 - [items.md](items.md): Items, economy and runewords for the offline bot (agent ITEMRESEARCH)
 - [killcredit.md](killcredit.md): Kill credit and hits per cast (change killcredit)
 - [killfix.md](killfix.md): KILLFIX: removing the two top kill-gap causes on d2d (2026-10-30) (status: current. Tags: V = measured on hidden d2d (fresh uncheated Sorceress, 2 virtual hours per run, parallel...)

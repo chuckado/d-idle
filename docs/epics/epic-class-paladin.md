@@ -12,7 +12,8 @@
 ## Gaps against the acceptance criteria
 
 - Criteria are all unticked: data existing is not the same as a drilled, uncheated, live-proven class. Tick a box only with a named run or test.
-- Real current level of the live hero and of any live run of this class: not recorded in this repo (U); the coordinator fills it from the live notes.
+- Live hero: Paladin (sandbox hero Doofer), clvl about 21, Normal difficulty, offline sandbox; as of 2026-11-26 (VERIFIED: bot status line); Andariel attempts paused by the owner until the potion kit holds; Questy test bed: fresh Paladin, clvl 12, the Cain scroll chunk blocked by the early road guard.
+- Live Paladin evidence: docs/probes/andariel-gate-recalibration-2026-11-24.md, docs/probes/andariel-decisions-2026-11-24.json; the Questy deaths in docs/research/fable-logic-review-2026-11-25.md section 3.4.
 - Blockers: Smith stand click RED, Tools reward word 0x204e (drill.tools.merc17), Andariel margin at clvl 21, Act 2 flaky fights, Duriel hover scan, Acts 3 to 5 RED
 
 ## Links
