@@ -210,6 +210,7 @@ cmd/d2scenario/  credit-runner  arbmig
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/detrun.go  credit-runner  pgjournal
 cmd/d2scenario/detrun_test.go  credit-runner  pgjournal
+cmd/d2scenario/invariants.json  credit-runner  necrosummoninv
 cmd/d2scenario/journal.go  credit-runner  pgjournal
 cmd/d2scenario/ledger.go  credit-runner  pgledger
 cmd/d2scenario/ledger_test.go  credit-runner  pgledger
@@ -305,6 +306,7 @@ docs/friend-guide.md  credit-runner  cut012
 docs/gear-policy.md  credit-runner  nopins
 docs/hourfix.md  credit-runner  hourfix
 docs/invariants.md  credit-runner  autorevert1
+docs/invariants.md  credit-runner  necrosummoninv
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-ui.md  credit-runner  jewelicons
 docs/inventory-ui.md  credit-runner  nopins
@@ -517,7 +519,9 @@ internal/bot/guided.go  credit-runner  campaign1
 internal/bot/guided_test.go  credit-runner  campaign1
 internal/bot/hpfields.go  credit-runner  intake
 internal/bot/invariants.go  credit-runner  autorevert1
+internal/bot/invariants.go  credit-runner  necrosummoninv
 internal/bot/invariants_test.go  credit-runner  autorevert1
+internal/bot/invariants_test.go  credit-runner  necrosummoninv
 internal/bot/kitplan_test.go  credit-runner  bsm7
 internal/bot/leveling.go  credit-runner  hourfix
 internal/bot/leveling.go  credit-runner  town5
@@ -536,6 +540,7 @@ internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  arrivalsettle
 internal/bot/observe.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  intake
+internal/bot/observe.go  credit-runner  necrosummoninv
 internal/bot/observe.go  credit-runner  passagebounce
 internal/bot/observe.go  credit-runner  survrecover
 internal/bot/observe.go  pro-runner  bounce3
@@ -617,6 +622,7 @@ internal/combat/packdrink.go  credit-runner  beltfix
 internal/combat/packdrink_test.go  credit-runner  beltfix
 internal/combat/reach.go  credit-runner  maphistoryC
 internal/combat/safety.go  credit-runner  beltfix
+internal/d2/player.go  credit-runner  necrosummoninv
 internal/d2dcombat/  credit-runner  dlv-cast-verbs
 internal/d2dcombat/  credit-runner  dlv-press
 internal/d2dctl  credit-runner  countess3
@@ -645,10 +651,11 @@ internal/d2dinput/controller.go  credit-runner  arrivalsettle
 internal/d2dinput/controller_test.go  credit-runner  arrivalsettle
 internal/d2dinput/run_test.go  credit-runner  arrivalsettle
 internal/d2dsoakstat/minute.go  credit-runner  intake
-internal/d2dsoakstat/necro_inv.go  credit-runner  necrosummoninv
 internal/d2dsrc/items.go  credit-runner  cain45
 internal/d2dsrc/items.go  credit-runner  qdmatrix
+internal/d2dsrc/source.go  credit-runner  necrosummoninv
 internal/d2dsrc/source_test.go  credit-runner  cain45
+internal/d2dsrc/source_test.go  credit-runner  necrosummoninv
 internal/d2dsrc/srv_test.go  credit-runner  qdmatrix
 internal/d2dworld  credit-runner  countess3
 internal/d2dworld  live-agent  k1layout
