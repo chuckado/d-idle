@@ -47,6 +47,21 @@
     "hostile==0"
    ],
    "why": "a quest reward waits and the field is quiet, and the hero keeps working in the field: the reward (skill point, stat, gold) idles (soft row economy-stall; model of the monitor, U)"
+  },
+  {
+   "name": "poverty-trip-spiral",
+   "hit": "economy-stall",
+   "families": [
+    "chores"
+   ],
+   "when": [
+    "in_town==0",
+    "recovery>=1",
+    "need_gold>0",
+    "pack_gold<need_gold",
+    "stash_gold<need_gold"
+   ],
+   "why": "town trips for a refill the purse cannot pay while recovery runs: the Questy poverty spiral (150 trips, median gold 35, 136 'no withdrawal for the shop'; soft row economy-stall, model of the monitor, U)"
   }
  ],
  "cases": [
@@ -159,6 +174,84 @@
     "survive_below": 50
    },
    "provenance": "MODEL: a quest reward is pending, the field is quiet and the chain keeps sweeping (the claim hook is only reached when no earlier hook acts). Facts U; the economy-stall row is a model rule."
+  },
+  {
+   "id": "arb.questy-poverty-spiral",
+   "family": "recovery",
+   "area": "cold_plains",
+   "chain": "chores",
+   "facts": {
+    "in_town": 0,
+    "life_pct": 100,
+    "hostile": 0,
+    "potions": 0,
+    "potions_min": 4,
+    "pack_gold": 20,
+    "stash_gold": 0,
+    "need_gold": 150,
+    "recovery": 1,
+    "survive_below": 50
+   },
+   "provenance": "MODEL of the poverty death spiral (review 2026-11-25 section 3.4 table: 16 'poverty mode: on', 150 trips, median gold 35). The chain choice is U: a trip for a refill the purse cannot pay. need_gold 150 is assumed (the live adapter does not fill it yet)."
+  },
+  {
+   "id": "arb.questy-poverty-quest-walk",
+   "family": "recovery",
+   "area": "stony_field",
+   "chain": "quest",
+   "facts": {
+    "in_town": 0,
+    "life_pct": 100,
+    "hostile": 0,
+    "potions": 0,
+    "potions_min": 4,
+    "pack_gold": 20,
+    "stash_gold": 0,
+    "recovery": 1,
+    "objective": 1,
+    "survive_below": 50
+   },
+   "objectiveArea": "stony_field",
+   "provenance": "RECORDED shape of the 0319 quest walk with 0 potions while recovery was on (the hero left the farm for the quest step). U: recovery on at that tick is assumed; price unknown (need_gold 0), so the refill source stays quiet (recovery means the purse cannot pay)."
+  },
+  {
+   "id": "arb.goldfarm-order-over-recovery",
+   "family": "goldfarm",
+   "area": "stony_field",
+   "chain": "goldfarm",
+   "facts": {
+    "in_town": 0,
+    "life_pct": 100,
+    "hostile": 0,
+    "potions": 4,
+    "potions_min": 4,
+    "pack_gold": 20,
+    "gold_farm": 1,
+    "recovery": 1,
+    "objective": 1,
+    "survive_below": 50
+   },
+   "provenance": "No-regression probe: the player's Farm gold order and recovery both on; the chain farms for the order (its hook comes first). Neither choice hits a scored row; the verdict stays no-better, by design (the goldfarm family has no win to show, it must not lose)."
+  },
+  {
+   "id": "arb.goldfarm-order-broke-trip",
+   "family": "goldfarm",
+   "area": "stony_field",
+   "chain": "chores",
+   "facts": {
+    "in_town": 0,
+    "life_pct": 100,
+    "hostile": 0,
+    "potions": 0,
+    "potions_min": 4,
+    "pack_gold": 20,
+    "stash_gold": 0,
+    "need_gold": 150,
+    "gold_farm": 1,
+    "recovery": 1,
+    "survive_below": 50
+   },
+   "provenance": "MODEL: the player's Farm gold order is on and the purse is empty (recovery stays on while the order runs, TestTarget0UsesTheOrder); the chain's chores hook sits before the farm hook and sends a trip for a refill it cannot pay. Chain choice U, facts U."
   }
  ]
 }

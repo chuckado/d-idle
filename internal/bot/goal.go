@@ -101,7 +101,7 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 		if r.goldFarmOn() {
 			return r.goldFarmStep(ctx, snap, c) // the player's order: farm gold until told to stop (docs/goldfarm.md)
 		}
-		if r.recoveryActive() && !r.gearVerdict(snap).Gated && !r.boardChunkNeedsNoGold() {
+		if r.recoveryDue(snap) {
 			return r.recoveryStep(ctx, snap, c) // the quest step waits until the purse is filled again
 		}
 		if r.questBoardOn() {
@@ -176,6 +176,12 @@ func (r *Runner) claimTripStep(ctx context.Context, snap *d2.Snapshot, c control
 		return true
 	}
 	return false
+}
+
+// recoveryDue says the purse recovery replaces the quest step now: it runs, the gear gate does not hold the hero and the
+// board chunk in hand costs gold. The recovery family hook of the chain and of the arbiter's control path.
+func (r *Runner) recoveryDue(snap *d2.Snapshot) bool {
+	return r.recoveryActive() && !r.gearVerdict(snap).Gated && !r.boardChunkNeedsNoGold()
 }
 
 func fieldArea(p *d2.Player) int {

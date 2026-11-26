@@ -112,3 +112,47 @@ func TestChoresClaimOutcomes(t *testing.T) {
 		}
 	}
 }
+
+// Entry 2 (goldfarm, recovery): the poverty spiral and the quest walk while broke score better for the arbiter; the
+// player's farm order stays above recovery (arbiter and chain agree, no hit either way). Two builds: the refill line is
+// data. MUST-FAIL: without the recovery fact the arbiter proposes the refill again and the spiral case does not pass.
+func TestGoldFarmRecoveryOutcomes(t *testing.T) {
+	f, err := LoadOutcomes(questyOutcomes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	byID := map[string]OutcomeCase{}
+	for _, c := range f.Cases {
+		byID[c.ID] = c
+	}
+	for _, id := range []string{"arb.questy-poverty-spiral", "arb.questy-poverty-quest-walk"} {
+		for _, min := range []int{2, 6} {
+			c := byID[id]
+			c.Facts = map[string]int{}
+			for k, v := range byID[id].Facts {
+				c.Facts[k] = v
+			}
+			c.Facts[FactPotionsMin] = min
+			s := f.Score(c, DefaultConfig())
+			if s.Arbiter != "recovery" || len(s.ChainHits) == 0 || len(s.ArbiterHits) != 0 {
+				t.Fatalf("%s min %d: %+v", id, min, s)
+			}
+		}
+		c := byID[id]
+		c.Facts = map[string]int{}
+		for k, v := range byID[id].Facts {
+			if k != FactRecovery {
+				c.Facts[k] = v
+			}
+		}
+		if s := f.Score(c, DefaultConfig()); s.Arbiter == "recovery" {
+			t.Fatalf("%s: without recovery the arbiter must not farm: %+v", id, s)
+		}
+	}
+	if s := f.Score(byID["arb.goldfarm-order-broke-trip"], DefaultConfig()); s.Arbiter != "goldfarm" || len(s.ArbiterHits) != 0 || len(s.ChainHits) == 0 {
+		t.Fatalf("the order must beat the unpayable trip: %+v", s)
+	}
+	if s := f.Score(byID["arb.goldfarm-order-over-recovery"], DefaultConfig()); s.Arbiter != "goldfarm" || len(s.NewKinds) != 0 {
+		t.Fatalf("the order must stay above recovery: %+v", s)
+	}
+}

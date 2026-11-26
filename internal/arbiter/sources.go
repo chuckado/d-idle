@@ -99,6 +99,9 @@ func StdSources() []Source {
 			if f[FactPotionsMin] == 0 || f[FactPotions] >= f[FactPotionsMin] {
 				return nil
 			}
+			if f[FactRecovery] > 0 && f[FactNeedGold] == 0 {
+				return nil // recovery means the purse cannot pay; with the price unknown the refill is recovery's business
+			}
 			in := Intent{Kind: "refill", Class: Upkeep, Urgency: 0.5, NeedsArea: Town, EstCost: 60,
 				Reason: fmt.Sprintf("belt %d under %d", f[FactPotions], f[FactPotionsMin])}
 			need := f[FactNeedGold]
@@ -121,7 +124,7 @@ func StdSources() []Source {
 			if v.Facts[FactGoldFarm] == 0 {
 				return nil
 			}
-			return &Intent{Kind: "farm", Class: Objective, Urgency: 0.7, NeedsArea: Any, EstCost: 600, Reason: "player's gold farm order"}
+			return &Intent{Kind: "farm", Class: Objective, Urgency: 0.9, NeedsArea: Any, EstCost: 600, Reason: "player's gold farm order"}
 		}),
 		fn(SrcQuest, func(v View) *Intent {
 			if v.Facts[FactObjective] == 0 {

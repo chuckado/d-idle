@@ -13,7 +13,7 @@ import (
 // chose nothing, panicked, or the controlled hook found nothing to do, the old chain runs unchanged: the fallback.
 // Wired so far: survive (a reflex: no chore, claim or quest step starts while the hero is under the drink line with
 // hostiles near; it fights where it stands and the guard's reflex drink does the drinking) and player (item actions from
-// the watch page run first), chores (a trip in progress or due) and claim (the claim trip). The other family bits are accepted and ignored. U: not run live.
+// the watch page run first), chores (a trip in progress or due) and claim (the claim trip), goldfarm (the player's gold farm order) and recovery (the purse recovery farm; a running gold farm order keeps its place, as in the chain). The other family bits are accepted and ignored. U: not run live.
 
 // runGoalControlled is runGoalArb for a hero under control. It returns what the chain or the controlled hook did.
 func (r *Runner) runGoalControlled(ctx context.Context, snap *d2.Snapshot, c control, v arbiter.View) bool {
@@ -60,6 +60,14 @@ func (r *Runner) arbAct(ctx context.Context, snap *d2.Snapshot, c control, d arb
 		acted = r.arbChores(ctx, snap, c)
 	case "claim":
 		acted = r.claimTripStep(ctx, snap, c)
+	case arbiter.SrcGoldFarm:
+		if c.spec.camp != nil && r.goldFarmOn() {
+			acted = r.goldFarmStep(ctx, snap, c)
+		}
+	case arbiter.SrcRecovery:
+		if c.spec.camp != nil && !r.goldFarmOn() && r.recoveryDue(snap) {
+			acted = r.recoveryStep(ctx, snap, c)
+		}
 	default:
 		return false, false
 	}

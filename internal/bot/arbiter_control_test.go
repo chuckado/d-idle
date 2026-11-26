@@ -7,6 +7,8 @@ import (
 
 	"d2lod-bot/internal/arbiter"
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/goals"
+	"d2lod-bot/internal/task"
 )
 
 func controlRig(t *testing.T, class d2.Class, ctl, mask int) *rig {
@@ -107,6 +109,52 @@ func TestArbiterControlClaim(t *testing.T) {
 			if n := g.r.arb.ctl.Load(); n != want {
 				t.Logf("decision %+v", d.Chosen)
 				t.Fatalf("class %d mask %d: controlled ticks %d, want %d", class, mask, n, want)
+			}
+		}
+	}
+}
+
+func campControl() control {
+	return control{goal: &goals.Goal{}, spec: goalSpec{kind: goals.Campaign, camp: &task.Campaign{}}}
+}
+
+// Goldfarm and recovery under control (bits 16 and 32): the player's farm order and the purse recovery are the chosen
+// family and their hooks run; the order beats recovery when both are on, as in the chain. Two classes; the bit not set is
+// the must-fail half. U: the fake world only proves the hook is reached, not the farm itself.
+func TestArbiterControlGoldFarmAndRecovery(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		for _, tc := range []struct {
+			name        string
+			mask        int
+			farm, broke bool
+			want        string
+			ctl         int64
+		}{
+			{"order", 3 | 16, true, false, "goldfarm", 1},
+			{"order bit not set", 3, true, false, "goldfarm", 0},
+			{"recovery", 3 | 32, false, true, "recovery", 1},
+			{"recovery bit not set", 3, false, true, "recovery", 0},
+			{"order beats recovery", 3 | 16 | 32, true, true, "goldfarm", 1},
+		} {
+			g, gf := farmRig(t, 10, class)
+			g.w.belt(101, 102, 103, 104)
+			g.r.e.Tune.Bot.ArbiterShadow, g.r.e.Tune.Bot.ArbiterControl, g.r.e.Tune.Bot.ArbiterFamilies = 1, 1, tc.mask
+			if tc.farm {
+				gf.Start()
+			}
+			if tc.broke {
+				g.w.belt()
+				g.r.loop.broke.on = true
+			}
+			g.r.poll()
+			g.clock.Sleep(time.Second)
+			g.r.runGoalShadowed(context.Background(), g.r.latest(), campControl())
+			d, ok := g.r.Arbiter()
+			if !ok || d.Chosen == nil || arbiter.Family(d.Chosen.Source) != tc.want {
+				t.Fatalf("%v %s: chose %+v, want %s", class, tc.name, d.Chosen, tc.want)
+			}
+			if n := g.r.arb.ctl.Load(); n != tc.ctl {
+				t.Fatalf("%v %s: controlled ticks %d, want %d", class, tc.name, n, tc.ctl)
 			}
 		}
 	}
