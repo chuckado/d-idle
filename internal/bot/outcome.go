@@ -54,6 +54,13 @@ var needTable = map[string]needRow{
 	"route_closed":    {"kit, level or gold change", 10},
 	"area_banned":     {"the ban ends or the level rises", 15},
 	"not_ready":       {"any of level, kit, gold or area changes", 5},
+	"parked":          {"the park ends or the level rises", 5},
+}
+
+// refusalOf is the typed refusal for a guard's words (need from the words), for holds that are not step errors.
+func refusalOf(why string) *Refused {
+	need := needOf("", why)
+	return &Refused{StepOutcome{Kind: OutRefusedKind, Need: need, Wake: needTable[need].Wake, Why: why}}
 }
 
 // needOf maps a refused result to a need code: the board's own code when it has one, else the words of the guard.
