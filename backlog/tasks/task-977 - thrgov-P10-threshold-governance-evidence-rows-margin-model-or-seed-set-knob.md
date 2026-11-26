@@ -20,6 +20,8 @@ owns:
   - "tools/ci/check.sh"
   - "docs/backlog-howto.md"
   - "internal/plandata/admission.json"
+  - "docs/plan/data/admission.json"
+  - "docs/plan/data/povertyfarm.json"
   - "internal/plandata/povertyfarm.json"
 exclusive: []
 contracts: []
