@@ -416,3 +416,38 @@ func TestLeanHeroStaysNearHomeAndHealthy(t *testing.T) {
 		}
 	}
 }
+
+// Questy 2026-11-26: it carried a portal scroll and 0 to 1 potions and walked into Blood Moor and Stony Field (invariant
+// field-entry-no-kit, seven hits) and died in Cave Level 1. Below povertyfarm.json kitFloor (4 potions, from clvl 8, Normal) a hero
+// picks the first field only, scroll or not; four potions, a lower level or the area it stands in change that. Two classes.
+func TestKitFloorKeepsThePoorHeroInTheFirstField(t *testing.T) {
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, tc := range []struct {
+			level, potions, area int
+			want4, want2         bool // area 4 / area 2 closed
+		}{{12, 1, 1, true, false}, {12, 0, 1, true, false}, {12, 4, 1, false, false}, {5, 0, 1, false, false}, {12, 1, 4, false, false}} {
+			g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
+			g.w.set(func(w *world) {
+				w.class, w.level, w.area = class, tc.level, tc.area
+				var keep []d2.Unit
+				for _, u := range w.items {
+					if u.Class != 1 {
+						keep = append(keep, u)
+					}
+				}
+				w.items = append(keep, d2.Unit{ID: 799, Type: d2.TypeItem, Class: 5, Item: &d2.Item{Where: d2.ContInventory}})
+				for i := 0; i < tc.potions; i++ {
+					w.items = append(w.items, d2.Unit{ID: uint32(700 + i), Type: d2.TypeItem, Class: 1, Item: &d2.Item{Where: d2.ContBelt}})
+				}
+			})
+			g.r.poll()
+			s := g.r.latest()
+			if got := g.r.kitFloorWhy(s, 4) != ""; got != tc.want4 {
+				t.Errorf("%v clvl %d potions %d in %d: area 4 closed %v, want %v", class, tc.level, tc.potions, tc.area, got, tc.want4)
+			}
+			if got := g.r.kitFloorWhy(s, 2) != ""; got != tc.want2 {
+				t.Errorf("%v clvl %d potions %d in %d: first field closed %v, want %v", class, tc.level, tc.potions, tc.area, got, tc.want2)
+			}
+		}
+	}
+}

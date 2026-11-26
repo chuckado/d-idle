@@ -22,6 +22,10 @@ type povertyFarmData struct {
 		Name       string  `json:"name"`
 		GoldPerMin float64 `json:"goldPerMin"`
 	} `json:"farm"`
+	KitFloor struct {
+		PotionsBelow int `json:"potionsBelow"`
+		FromLevel    int `json:"fromLevel"`
+	} `json:"kitFloor"`
 	Lean struct {
 		PotionsBelow int `json:"potionsBelow"`
 		EntryLifePct int `json:"entryLifePct"`
@@ -105,6 +109,42 @@ func (r *Runner) leanEntryWhy(s *d2.Snapshot, a int) string {
 	}
 	if pct := s.Player.LifePct(); pct < d.Lean.EntryLifePct {
 		return fmt.Sprintf("no portal and %d%% life: not entering another field below %d%%", pct, d.Lean.EntryLifePct)
+	}
+	return ""
+}
+
+// firstFieldArea is the first non-town plan step of the hero's own act: the area next to the camp (Blood Moor in act 1).
+func (r *Runner) firstFieldArea(s *d2.Snapshot) int {
+	diff := difficultyName(s.Player.Difficulty)
+	act := s.Player.Act + 1
+	first := 0
+	for _, st := range r.d.Plan.Steps[diff] {
+		if r.d.Plan.IsTown(st.Area) {
+			continue
+		}
+		if r.d.Plan.Act(st.Area) == act {
+			return st.Area
+		}
+		if first == 0 {
+			first = st.Area
+		}
+	}
+	return first
+}
+
+// kitFloorWhy says why a hero below the kit floor may not pick area a ("" = fine): from kitFloor.fromLevel in Normal with fewer than
+// kitFloor.potionsBelow healing potions it enters the first field only, scroll or not. The area the hero stands in is not asked: the
+// kit trip rules decide when it leaves.
+func (r *Runner) kitFloorWhy(s *d2.Snapshot, a int) string {
+	d := loadPovertyFarm()
+	if d.KitFloor.PotionsBelow <= 0 || s == nil || s.Player == nil || r.e.Tune.Route.EarlyRoute == 0 || s.Player.Difficulty != d2.Normal ||
+		s.Player.Level < d.KitFloor.FromLevel || a == 0 || a == s.Player.Area || r.d.Plan.IsTown(a) || task.TryActive() || r.corpseRun.Load() {
+		return ""
+	}
+	if n := healingOf(r.resInput(s)); n < d.KitFloor.PotionsBelow {
+		if first := r.firstFieldArea(s); a != first {
+			return fmt.Sprintf("%d healing potions < %d: the first field only (area %d), not area %d", n, d.KitFloor.PotionsBelow, first, a)
+		}
 	}
 	return ""
 }

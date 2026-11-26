@@ -190,6 +190,9 @@ func (r *Runner) areaGuardWhy(s *d2.Snapshot, a int) string {
 	if why := r.povertyAreaWhy(s, a); why != "" {
 		return why
 	}
+	if why := r.kitFloorWhy(s, a); why != "" {
+		return why
+	}
 	return r.leanEntryWhy(s, a)
 }
 
