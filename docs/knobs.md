@@ -430,7 +430,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | route.freshMaxNoGain | 3 | 0..50 | restarts | 3 | 0 | After this many fresh games in a row that each gained under route.freshMinXP, the bot logs 'leveling: blocked: needs input' and only probes one more restart every route.freshBlockedSec, waiting in town in between. A cycle with enough XP resets the count. 0 turns the bound off (the old endless restart loop). |
 | route.freshMinXP | 200 | 0..1e+05 | xp | 200 | 0 | Experience gained between two fresh-game restarts that resets the no-gain count (log field xpGained). U: a starting number, tune from the Gate logs. |
 | route.freshBlockedSec | 1800 | 0..1.44e+04 | s | 1800 | 0 | Once the no-gain bound is reached the bot waits this long in town between restart probes, so the loop never spins; bans expire and the picker is asked again after each wait. |
-| route.earlyRoute | 1 | 0..1 | bool | 1 | 1 | 1 (default): the Underground Passage level 1 and the Dark Wood, the only way to the Tree of Inifuss, stay closed to a hero under the class level in plandata/earlyroutes.json (melee 7, caster 8, U) or short of 2 healing potions and a town portal source; the board says 'level N needed' and the hero levels in the first fields instead. The owner's try anyway opens it. 0: no guard (a clvl 4 Paladin with no potions died there, Questy bed 2026-11-25). |
+| route.earlyRoute | 1 | 0..1 | bool | 1 | 2 | 1 (default): the Underground Passage level 1 and the Dark Wood, the only way to the Tree of Inifuss, stay closed to a hero under the class level in plandata/earlyroutes.json (melee 7, caster 8, U) or short of 2 healing potions and a town portal source; the board says 'level N needed' and the hero levels in the first fields instead. The owner's try anyway opens it. 0: no guard (a clvl 4 Paladin with no potions died there, Questy bed 2026-11-25). |
 
 ### resource.*
 
@@ -462,8 +462,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | resource.tripHealPct | 50 | 25..80 | % | 25 | 1 | Life percent below which a character that cannot regenerate goes to town for free healing. |
 | resource.mercDeadPack | 2 | 1..6 | count | 6 | 1 | Hostiles at which a fight is left once the merc is dead. |
 | resource.fleeLifePct | 50 | 30..80 | % | 30 | 1 | Life percent below which a character with no healing potion and no portal breaks away from hostiles instead of trading blows. |
-| resource.kitTPGold | 100 | 50..200 | gold | 50 | 11 | Price of one town portal scroll, for the minimal-kit cost. |
-| resource.kitPotionGold | 30 | 20..100 | gold | 20 | 15 | Price of the cheapest healing potion, for the minimal-kit cost. |
+| resource.kitTPGold | 100 | 50..200 | gold | 50 | 13 | Price of one town portal scroll, for the minimal-kit cost. |
+| resource.kitPotionGold | 30 | 20..100 | gold | 20 | 16 | Price of the cheapest healing potion, for the minimal-kit cost. |
 | resource.povertyMargin | 60 | 0..300 | gold | 0 | 1 | Gold above the minimal kit cost at which poverty mode ends. |
 | resource.retreatBelt | 0 | 0..3 | count | 0 | 2 | In a fight with life under the drink line and at most this many healing potions left, leave (portal, or walk home near town) instead of drinking. 0 = off. |
 | resource.retreatCountPack | 1 | 0..1 | 0/1 | 0 | 1 | 1 = spare healing/rejuvenation potions in the backpack (up to the free belt slots) count towards retreatBelt, so a full pack does not trigger a retreat; 0 = belt only. |
