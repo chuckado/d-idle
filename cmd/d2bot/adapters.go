@@ -75,6 +75,9 @@ var toCombat = map[bot.SafetyAction]combat.SafetyAction{
 
 // LastPortalCast and RecentCasts feed the death autopsy (bot.fighterDiag).
 func (a fighterAdapter) LastPortalCast() combat.PortalCast              { return a.f.LastPortalCast() }
+
+// PortalInFlight tells the guard that the fight loop is casting a town portal (bot.portalInFlight).
+func (a fighterAdapter) PortalInFlight() bool { return a.f.PortalInFlight() }
 func (a fighterAdapter) RecentCasts(w time.Duration) (int, map[int]int) { return a.f.RecentCasts(w) }
 
 // SetPoverty hands the poverty verdict to combat's engage decision (bot.povertySetter); the wrapper hid it, so a
