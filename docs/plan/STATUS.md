@@ -44,6 +44,7 @@
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
+| aura2a | proposed | - | `internal/combat/aura.go`<br>`internal/combat/class_test.go`<br>`internal/combat/fighter.go`<br>`internal/d2/player.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`internal/bot/observe.go`<br>`cmd/d2scenario/invariants.json`<br>`docs/invariants.md` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
@@ -323,6 +324,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ac089fde7 11-26 13:36 `Merge agent/aura2a: Merge branch 'main' into aura2a` (aura2a)
+- d5978f6ed 11-26 13:34 `Merge branch 'main' into aura2a` (-)
 - 3be781e1d 11-26 13:24 `Merge agent/auralive: Merge branch 'main' into auralive` (auralive)
 - fad6b3f14 11-26 13:24 `Merge agent/act345map: Merge branch 'main' into act345map` (act345map)
 - 9028d8300 11-26 13:24 `Merge agent/act2plan: Merge branch 'main' into act2plan` (act2plan)
@@ -331,6 +334,4 @@
 - a71504654 11-26 13:19 `Merge branch 'main' into act2plan` (-)
 - 23a4fb6ba 11-26 13:17 `Merge agent/classorder: Merge branch 'main' into classorder` (classorder)
 - 0fe3487dd 11-26 13:17 `Merge agent/auraaudit: Merge branch 'main' into auraaudit` (auraaudit)
-- 5dced27a9 11-26 13:15 `Merge branch 'main' into classorder` (-)
-- aaf9c18cd 11-26 13:15 `Merge branch 'main' into auraaudit` (-)
 <!-- statusgen:end -->
