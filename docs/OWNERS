@@ -126,7 +126,6 @@ docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-minutes.jsonl.gz  gaterun  gat
 docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-extras.jsonl.gz  gaterun  gate2multi-20261107-1811-g2h
 
 # BEGIN GENERATED OWNERS (tools/sharedgen/sharedgen.py from the owns: keys of open tasks; do not edit between the markers)
-cmd/auraprobe  live-agent  auralive
 cmd/bossrun/adapter.go  pro-runner  levelplan3
 cmd/d2bot/acts_test.go  credit-runner  qdmatrix
 cmd/d2bot/adapters.go  credit-runner  cainfix3
@@ -361,7 +360,6 @@ docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1fix
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
-docs/probes/paladin-aura-live-2026-11-26.md  live-agent  auralive
 docs/probes/pg-gate-group1-2026-11-21.md  credit-runner  pgjournal
 docs/probes/pg-journal-pair-2026-11-21.md  credit-runner  pgjournal
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess

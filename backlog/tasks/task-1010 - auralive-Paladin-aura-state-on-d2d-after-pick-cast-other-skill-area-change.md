@@ -1,10 +1,11 @@
 ---
 id: TASK-1010
 title: 'auralive: Paladin aura state on d2d after pick, cast, other skill, area change'
-status: Proposed
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-26T18:05:00Z'
+updated_date: '2026-11-26T18:34:00Z'
 labels:
   - d2d
   - d2d-measure
