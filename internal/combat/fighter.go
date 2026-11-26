@@ -105,6 +105,7 @@ type Fighter struct {
 	auraFn      func(*d2.Player) (int, bool)
 	auraChecked time.Time
 	auraRetryAt time.Time // a failed apply waits until here
+	auraMissAt  time.Time // last `aura missing` warning
 	lastRight   int       // right skill read after the last apply try (diagnosis)
 	auraArea    int
 	auraDirty   bool           // death or area change: the aura must be applied again

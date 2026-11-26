@@ -26,7 +26,7 @@ Acceptance 1 (quests defined with steps): V for the rows above, the board carrie
 
 - Duriel: place_staff needs a hover-scan verb the backend lacks (`drill.act2.duriel` RED, matrix notes 40, 66)
 - Act 2 flaky fight rows (Radament l30, amulet/Fangskin, Palace Cellar/Blunderbore, Sewers 1 Horror): same commit GREEN and RED (matrix 0.)
-- Arcane Sanctuary teleport pads and Act 2 level plan (no areaxp rows; matrix notes 5, 39)
+- Arcane Sanctuary teleport pads (matrix notes 5, 39). Act 2 level plan: DATA landed 2026-11-26 (docs/plan/act2-level-plan.md, `internal/plandata/act2plan.json`, road rows `act2_*`; entries SME-ballpark U); still missing: areaxp rows for Act 2 (lab AREAMON run) and Act 2 chapters in the spine
 - Tomb doors and Maggot Lair 1 arrival nook (nav cards, matrix note 9)
 
 ## Evidence pages
