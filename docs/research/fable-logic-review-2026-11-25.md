@@ -49,7 +49,7 @@ Perception is one snapshot per tick plus an observer with its own mutex (`observ
 |---|---|---|
 | town trip (potions, pack, repair, heal) | `needChores` hook plus the guard's `tripDue`, plus `beltFillStep`, `repairTripStep`, `lowLifeGate`, emergency trips opened inside `do` and `handleSafety` | `trip`, `lastTrip`, `forceTrip`, `beltFillNext`, `repairRetryAt`, `healFails`, `noPortalSince`, `lowLifeUntil` |
 | quest step | `boardPreempts`, `boardHoldsArea`, `boardStep`, `taskStep` (four hooks at three places in the chain) | `task`, `questPending`, `questTries`, the board's runtime, the plan file |
-| may the hero enter this area | at least eleven judges: gear gate, kit gate, route guard, early road, Barracks and tower floors, Den floor, Andariel floor, readiness, quest floors (`quests.legacyWall`), area bans, the zone model in shadow | each its own notes, bans and data source |
+| may the hero enter this area | at least eleven judges: gear gate, kit gate, route guard, early road, Barracks and Forgotten Tower floors, Den floor, Andariel floor, readiness, quest floors (`quests.legacyWall`), area bans, the zone model in shadow | each its own notes, bans and data source |
 | danger | `combat.Decide`, crowd rules, cast guard, potion burst, stale pack, checkpoint | fighter drink times, `lastSafety`, `tpSeen` |
 | death and corpse | `openRecovery`, `finishRecovery`, `corpseTownStep`, `corpseSweep`, the death rule | `rec`, `corpseTry`, the corpse-in-town record |
 | poverty | recovery, gold farm, poverty mode, the kit gate, the shop withdrawal | `broke`, `starved`, `rebuyBar`, `shopGold` |
