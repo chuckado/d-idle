@@ -33,7 +33,7 @@
     "travel.area-transition"
    ],
    "pre": {
-    "level": 24,
+    "level": 30,
     "gold": 200,
     "stash": 500000,
     "waypoints": [
@@ -41,7 +41,7 @@
     ],
     "items": [
      {
-      "code": "hp2",
+      "code": "hp3",
       "count": 8
      },
      {
@@ -50,10 +50,10 @@
      }
     ],
     "belt": [
-     "hp2",
-     "hp2",
-     "hp2",
-     "hp2"
+     "hp3",
+     "hp3",
+     "hp3",
+     "hp3"
     ],
     "merc": 0,
     "quests": [
@@ -80,15 +80,23 @@
       "slot": "lhand"
      }
     ],
-    "merc_level": 17,
+    "merc_level": 30,
     "stats": [
      {
       "stat": 7,
-      "value": 102400
+      "value": 179200
      },
      {
       "stat": 6,
-      "value": 102400
+      "value": 179200
+     },
+     {
+      "stat": 4,
+      "value": 0
+     },
+     {
+      "stat": 5,
+      "value": 0
      }
     ],
     "start": "field",
@@ -131,7 +139,7 @@
      11
     ]
    },
-   "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero.",
+   "provenance": "CHEATED: warped into the Barracks (debug goto 28), the chunk accepted in the plan store, record 3 = 0x000c (started), clvl 24 stand-in with 400 life, merc level 17 (devp23 labverbs), monsters by debug spawn. Mechanics only, never evidence about balance or the live hero. qd25: the stand-in had 400 life and tier 2 potions and ran out of potions in the Smith fight (belt 0, chicken at 54 percent, V run 20261125-191410); now clvl 30, life 700, tier 3 potions, a level 30 merc and no unused points (they cancelled the boss run at calm moments).",
    "notes": "Smith spawned (plain), the stand added beside the hero by `debug object add 108` (devp25 stepverbs), quest 3 = 0x000c (the stand refuses a hero without the quest). The bot's stand click is toolstrade34 (merged). Control: .control (no Smith, no stand, no click: no hdm). Needs the devp25 binary (PG_D2D_BIN).",
    "assert": [
     {
