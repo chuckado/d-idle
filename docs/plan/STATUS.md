@@ -276,7 +276,7 @@
 | outcome-travel-gate | in-progress | - | `docs/outcomes.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | outcome-park-step | proposed | - | `docs/outcomes.md` | - |
-| outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
+| outcome-route-guard | in-progress | - | `docs/outcomes.md` | - |
 | outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | admit1 | proposed | - | `docs/design/admission-p4.md`<br>`internal/admit/`<br>`internal/plandata/admission.json`<br>`internal/plandata/earlyroutes.json`<br>`internal/plandata/povertyfarm.json`<br>`docs/plan/data/admission.json`<br>`docs/plan/data/earlyroutes.json`<br>`docs/plan/data/povertyfarm.json`<br>`internal/bot/earlyroute.go`<br>`internal/bot/povertyfarm.go`<br>`internal/bot/admit_need_test.go` | - |
@@ -322,7 +322,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- caa9c27ce 11-26 09:47 `Merge agent/outcomes2b: Merge branch 'main' into outcome-route-guard` (outcomes2b)
 - 6a8a51e43 11-26 09:47 `Merge agent/arbmig2: Merge branch 'main' into arbmig` (arbmig2)
+- 35afcda5a 11-26 09:45 `Merge branch 'main' into outcome-route-guard` (-)
 - ca448e31a 11-26 09:45 `Merge branch 'main' into arbmig` (-)
 - 1bde406cb 11-26 09:38 `Merge agent/stepexec1: stepexec1: gofmt` (stepexec1)
 - b71406ea9 11-26 09:38 `Merge agent/outcomes2a: outcome-travel-gate: gate refusals typed, no-scroll walk home not cancelled by portal verdicts` (outcomes2a)
@@ -330,6 +332,4 @@
 - a14d7af8e 11-26 09:38 `Merge agent/arbmig1: arbmig: task card owns for the P6 stages` (arbmig1)
 - fa0dee197 11-26 08:53 `Merge agent/toolstrade82: mode-no-exit fires on no progress (xp, kills, gold, area), not on elapsed time; parked heroes do not count for xp-frozen and refusal-storm` (toolstrade82)
 - 23dcfb8ed 11-26 03:08 `Merge agent/toolstrade81: Merge branch 'main' into toolstrade81` (toolstrade81)
-- b7cea267a 11-26 03:07 `Merge branch 'main' into toolstrade81` (-)
-- 263895530 11-26 02:54 `Merge agent/qd27: d2scenario: hard invariant hits turn a run red (data list); faultsoak design notes; matrix 78-79` (qd27)
 <!-- statusgen:end -->
