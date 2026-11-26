@@ -300,6 +300,7 @@
 | agencyp1b | proposed | - | `docs/design/agency-p1b.md` | - |
 | agencyp3 | proposed | - | `docs/design/agency-p3.md` | - |
 | inputl3 | proposed | - | `docs/design/input-i3.md` | - |
+| reflex1b | proposed | - | `internal/town/npc.go`<br>`internal/town/chores.go`<br>`internal/town/intown_test.go`<br>`internal/bot/townguard.go`<br>`internal/bot/townguard_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/loop.go`<br>`internal/bot/runner.go`<br>`internal/bot/state.go`<br>`docs/safety-latency.md` | - |
 | inputl4 | proposed | - | `docs/design/input-i4.md` | - |
 | inputl5 | proposed | - | `docs/design/input-i5-i7.md` | - |
 | fid-lowvalue | deferred | - | `docs/probes/fid/fid-lowvalue.md` | - |
@@ -328,14 +329,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 9c3e3ed58 11-25 23:56 `Merge agent/reflex1b: reflex1b: town chores verify in town before each step; guard aborts chores outside town` (reflex1b)
+- b1727558e 11-25 23:55 `Merge branch 'main' into reflex1b` (-)
 - 33f5b6247 11-25 23:53 `Merge agent/decisions1: Merge branch 'main' into decisions1` (decisions1)
 - ad995de59 11-25 23:51 `Merge branch 'main' into decisions1` (-)
 - 25f3ea0fc 11-25 23:49 `Merge agent/fableroadmap: Merge branch 'main' into fableroadmap` (fableroadmap)
 - 8bc8a81d6 11-25 23:48 `Merge branch 'main' into fableroadmap` (-)
 - 3ef245d71 11-25 23:43 `Merge agent/backlogplan: Merge branch 'main' into backlogplan` (backlogplan)
+- cd138d0ef 11-25 23:41 `Merge origin/main into reflex1b` (-)
 - 63b4c93fd 11-25 23:41 `Merge branch 'main' into backlogplan` (-)
 - 59106de23 11-25 23:32 `Merge agent/reflex1: reflex1a: safety latency measure (minute line, autopsy) and T6 cancel test` (reflex1)
-- ea4cbfe13 11-25 23:21 `Merge agent/toolstrade77: Merge branch 'main' into toolstrade77` (toolstrade77)
-- dc0350b1d 11-25 23:20 `Merge branch 'main' into toolstrade77` (-)
-- fcc0b9406 11-25 23:11 `Merge origin/main into fableroadmap` (-)
 <!-- statusgen:end -->

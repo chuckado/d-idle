@@ -1399,6 +1399,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - backlogplan: To Do status, planning lanes, plan.py view, lane migration (TASK-992, merged 2026-11-25, acceptance 3 of 3): To Do status, planning lanes (lane/lane_note/due/epic) in check.py, tools/backlog/plan.py plan view, 241 open cards laned (R1-R6), howto Planning lanes <!--sg:agent/backlogplan-->
 - fableroadmap: Fable review roadmap tracker and cards for built-but-dark work (TASK-966, merged 2026-11-25, acceptance 4 of 4): Fable roadmap tracker (docs/roadmap-fable.md), 23 Proposed cards (TASK-967 to 991), 4 darklaunch rows adjusted; docs and cards only <!--sg:agent/fableroadmap-->
 - decisions1: amend ADR 0030, ADR 0020, arbiter exit rule (TASK-959, merged 2026-11-25, acceptance 0 of 4): ADR 0030/0020 amendments, arbiter exit rule, decisions.md lines, AGENTS.md dark-launch line; docs only <!--sg:agent/decisions1-->
+- reflex1b: town chores verify in town before each NPC step (TASK-987, merged 2026-11-25, acceptance 2 of 2): chores check in town per step and NPC walk; guard aborts after 2 s outside town; 02:51 scenario regression on two classes; offline <!--sg:agent/reflex1b-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

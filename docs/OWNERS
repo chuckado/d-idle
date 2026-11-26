@@ -424,6 +424,7 @@ docs/research/upstream-next.md  credit-runner  upstream-next
 docs/reset.md  credit-runner  resetinstant
 docs/roadmap-fable.md  credit-runner  fableroadmap
 docs/safety-latency.md  credit-runner  reflex1a
+docs/safety-latency.md  credit-runner  reflex1b
 docs/senses-map.md  credit-runner  maphistory
 docs/senses-map.md  credit-runner  maphistoryA
 docs/senses-map.md  credit-runner  maphistoryB
@@ -490,6 +491,7 @@ internal/bot/farmreset_test.go  credit-runner  farmloop
 internal/bot/goal.go  credit-runner  hourfix
 internal/bot/goal.go  credit-runner  maphistoryA
 internal/bot/goal.go  credit-runner  qdmatrix
+internal/bot/goal.go  credit-runner  reflex1b
 internal/bot/goal.go  credit-runner  repairtrip
 internal/bot/goal.go  credit-runner  stage1fix
 internal/bot/goal.go  credit-runner  survrecover
@@ -512,6 +514,7 @@ internal/bot/loop.go  credit-runner  hourfix
 internal/bot/loop.go  credit-runner  invmon
 internal/bot/loop.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  reflex1a
+internal/bot/loop.go  credit-runner  reflex1b
 internal/bot/loop.go  credit-runner  resetinstant
 internal/bot/loop.go  credit-runner  survrecover
 internal/bot/loop.go  pro-runner  bounce3
@@ -547,11 +550,13 @@ internal/bot/runner.go  credit-runner  hourfix
 internal/bot/runner.go  credit-runner  invmon
 internal/bot/runner.go  credit-runner  maphistoryA
 internal/bot/runner.go  credit-runner  passagebounce
+internal/bot/runner.go  credit-runner  reflex1b
 internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  resetinstant
 internal/bot/safetylat.go  credit-runner  reflex1a
 internal/bot/safetylat_test.go  credit-runner  reflex1a
 internal/bot/staletarget.go  credit-runner  botstuck
+internal/bot/state.go  credit-runner  reflex1b
 internal/bot/state.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  boardmoderace
 internal/bot/task.go  credit-runner  botstuck
@@ -562,6 +567,8 @@ internal/bot/task.go  credit-runner  invmon
 internal/bot/task.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  wpstep
 internal/bot/task_acts_test.go  credit-runner  cain5b
+internal/bot/townguard.go  credit-runner  reflex1b
+internal/bot/townguard_test.go  credit-runner  reflex1b
 internal/bot/waypoints.go  credit-runner  boardmoderace
 internal/bot/whyline.go  credit-runner  repairtrip
 internal/bot/zonemodel.go  credit-runner  survrecover
@@ -846,8 +853,11 @@ internal/town/beltfix6_test.go  credit-runner  beltfix
 internal/town/beltfix_test.go  credit-runner  beltfix
 internal/town/beltrepair.go  credit-runner  beltfix
 internal/town/chores.go  credit-runner  chores2
+internal/town/chores.go  credit-runner  reflex1b
 internal/town/chores.go  credit-runner  repairtrip
+internal/town/intown_test.go  credit-runner  reflex1b
 internal/town/kithealing_test.go  credit-runner  chores2
+internal/town/npc.go  credit-runner  reflex1b
 internal/town/playerid.go  credit-runner  itemverbs2
 internal/town/playerid.go  credit-runner  vaultpay
 internal/town/playerid.go  credit-runner  vaultreveal
