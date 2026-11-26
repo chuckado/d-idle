@@ -104,6 +104,9 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 		if r.recoveryDue(snap) {
 			return r.recoveryStep(ctx, snap, c) // the quest step waits until the purse is filled again
 		}
+		if r.arbHoldsQuest() {
+			return r.levelSlice(ctx, snap, c, "Leveling: the arbiter holds the quest step", "arbiter")
+		}
 		if r.questBoardOn() {
 			return r.boardStep(ctx, snap, c) // the player drives quests (docs/questboard.md); the planner only trains
 		}

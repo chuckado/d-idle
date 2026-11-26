@@ -28,7 +28,16 @@ func (r *Runner) runGoalControlled(ctx context.Context, snap *d2.Snapshot, c con
 		acted, took = r.arbAct(ctx, snap, c, d, t.ArbiterFamilies)
 	}
 	if !took {
+		r.arb.mu.Lock()
+		r.arb.chose = ""
+		if ok && d.Chosen != nil {
+			r.arb.chose = arbiter.Family(d.Chosen.Source)
+		}
+		r.arb.mu.Unlock()
 		acted = r.runGoal(ctx, snap, c)
+		r.arb.mu.Lock()
+		r.arb.chose = ""
+		r.arb.mu.Unlock()
 	}
 	r.arbCompare(sh, d, v.Now, acted, took)
 	return acted
@@ -103,4 +112,23 @@ func (r *Runner) arbCompare(sh *arbiter.Shadow, d arbiter.Decision, now float64,
 	for _, in := range d.Starved {
 		r.inv.noteStarved(in.Key() + ": " + in.Reason)
 	}
+}
+
+// arbHoldsQuest is the quest family's hook under control: the quest step defers to the arbiter's decision. When the arbiter
+// chose another family (a refill it wants, a recovery farm, a player order) and that family's own hook found nothing to
+// do this tick, the quest step does not start; the hero levels in a safe area meanwhile (the incident of the quest walk
+// with an empty belt). False when the knobs are off, the bit is not set, the arbiter chose the quest step or nothing.
+func (r *Runner) arbHoldsQuest() bool {
+	t := r.e.Tune.Bot
+	if t.ArbiterShadow == 0 || t.ArbiterControl == 0 || !arbiter.Controlled(t.ArbiterFamilies, arbiter.SrcQuest) {
+		return false
+	}
+	r.arb.mu.Lock()
+	fam := r.arb.chose
+	r.arb.mu.Unlock()
+	if fam == "" || fam == arbiter.SrcQuest || fam == arbiter.SrcLevel {
+		return false
+	}
+	r.arb.ctl.Add(1)
+	return true
 }

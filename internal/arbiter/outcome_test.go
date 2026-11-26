@@ -156,3 +156,38 @@ func TestGoldFarmRecoveryOutcomes(t *testing.T) {
 		t.Fatalf("the order must stay above recovery: %+v", s)
 	}
 }
+
+// Entry 3 (quest): a standing typed refusal silences the quest source (the arbiter takes the filler instead of asking
+// again), and an affordable refill comes before the quest walk. Two builds (refill line 2 or 6). MUST-FAIL: without the
+// refusal fact the quest source asks again and the case scores no better.
+func TestQuestOutcomes(t *testing.T) {
+	f, err := LoadOutcomes(questyOutcomes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	byID := map[string]OutcomeCase{}
+	for _, c := range f.Cases {
+		byID[c.ID] = c
+	}
+	for _, min := range []int{2, 6} {
+		c := byID["arb.questy-quest-refusal-storm"]
+		c.Facts = map[string]int{}
+		for k, v := range byID["arb.questy-quest-refusal-storm"].Facts {
+			c.Facts[k] = v
+		}
+		c.Facts[FactPotionsMin] = min
+		c.Facts[FactPotions] = min
+		s := f.Score(c, DefaultConfig())
+		if s.Arbiter != "level" || len(s.ChainHits) != 1 || len(s.ArbiterHits) != 0 {
+			t.Fatalf("min %d: %+v", min, s)
+		}
+		c.Facts[FactQuestRefused] = 0
+		s = f.Score(c, DefaultConfig())
+		if s.Arbiter != "quest" || len(s.ChainHits) != 0 {
+			t.Fatalf("without the refusal the quest source asks again: %+v", s)
+		}
+	}
+	if s := f.Score(byID["arb.questy-quest-walk-affordable-refill"], DefaultConfig()); s.Arbiter != "chores" || len(s.ChainHits) != 1 || len(s.ArbiterHits) != 0 {
+		t.Fatalf("%+v", s)
+	}
+}

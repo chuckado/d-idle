@@ -19,6 +19,7 @@ const (
 	FactRecovery     = "recovery"
 	FactGoldFarm     = "gold_farm"
 	FactObjective    = "objective"
+	FactQuestRefused = "quest_refused" // 1 while a typed refusal of the quest step stands and its wake facts have not changed
 	FactSurviveBelow = "survive_below" // life percent under which a hostile makes the hero flee or drink
 )
 
@@ -127,8 +128,8 @@ func StdSources() []Source {
 			return &Intent{Kind: "farm", Class: Objective, Urgency: 0.9, NeedsArea: Any, EstCost: 600, Reason: "player's gold farm order"}
 		}),
 		fn(SrcQuest, func(v View) *Intent {
-			if v.Facts[FactObjective] == 0 {
-				return nil
+			if v.Facts[FactObjective] == 0 || v.Facts[FactQuestRefused] > 0 {
+				return nil // a standing refusal says what the step waits for: asking again is the refusal storm
 			}
 			need := v.ObjectiveArea
 			if need == "" {
