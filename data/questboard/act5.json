@@ -50,7 +50,7 @@
    "tags": {
     "requires": "V docs/goals/execution.md s3",
     "steps": "V internal/task/act5.go siegeNodes",
-    "rewards": "S docs/goals/execution.md s3 (Larzuk sockets)",
+    "rewards": "S d2 player knowledge, no source file in the repo; U live (card act345map 2026-11-26) (Larzuk: one socket in a chosen item; the kind name 'socket' is new data, U)",
     "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
     "minutes": "I",
     "meta": "U placeholder"
@@ -68,7 +68,13 @@
     "melee": 25,
     "caster": 27,
     "summoner": 28
-   }
+   },
+   "rewards": [
+    {
+     "kind": "socket",
+     "amount": 1
+    }
+   ]
   },
   {
    "id": "rescue_arreat",
@@ -119,7 +125,8 @@
     "failure": "V docs/goals/execution.md s3 (the game can fail it: create a new game)",
     "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
     "minutes": "I",
-    "meta": "U placeholder"
+    "meta": "U placeholder",
+    "accept": "S d2 player knowledge, no source file in the repo; U live (card act345map 2026-11-26)"
    },
    "requires": [
     "siege_harrogath"
@@ -133,6 +140,9 @@
     "melee": 25,
     "caster": 27,
     "summoner": 28
+   },
+   "accept": {
+    "npc": "Qual-Kehk"
    }
   },
   {
@@ -285,7 +295,9 @@
     "chunks": "I design 1.2 (each part is a town trip); steps V internal/task/act5.go prisonNodes",
     "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
     "minutes": "I",
-    "meta": "U placeholder"
+    "meta": "U placeholder",
+    "accept": "S d2 player knowledge, no source file in the repo; U live (card act345map 2026-11-26)",
+    "items": "S d2 player knowledge, no source file in the repo; U live (card act345map 2026-11-26)"
    },
    "requires": [
     "siege_harrogath"
@@ -305,7 +317,20 @@
     "melee": 25,
     "caster": 27,
     "summoner": 28
-   }
+   },
+   "accept": {
+    "npc": "Malah"
+   },
+   "items": [
+    {
+     "name": "Malah's Potion",
+     "from": "Malah"
+    },
+    {
+     "name": "Scroll of Resistance",
+     "from": "Anya"
+    }
+   ]
   },
   {
    "id": "betrayal_harrogath",
@@ -357,7 +382,8 @@
     "steps": "V internal/task/act5.go betrayalNodes",
     "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
     "minutes": "I",
-    "meta": "U placeholder"
+    "meta": "U placeholder",
+    "rewards": "S d2 player knowledge, no source file in the repo; U live (card act345map 2026-11-26) (Anya personalizes an item for free; kind name new, U)"
    },
    "requires": [
     "prison_of_ice"
@@ -372,7 +398,13 @@
     "melee": 30,
     "caster": 32,
     "summoner": 33
-   }
+   },
+   "rewards": [
+    {
+     "kind": "personalize",
+     "amount": 1
+    }
+   ]
   },
   {
    "id": "rite_of_passage",
