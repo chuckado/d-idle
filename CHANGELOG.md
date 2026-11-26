@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into decisions1 <!--sg:agent/decisions1-->
 - Merge branch 'main' into fableroadmap <!--sg:agent/fableroadmap-->
 - Merge branch 'main' into backlogplan <!--sg:agent/backlogplan-->
 - reflex1a: safety latency measure (minute line, autopsy) and T6 cancel test <!--sg:agent/reflex1-->

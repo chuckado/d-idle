@@ -126,6 +126,7 @@ docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-minutes.jsonl.gz  gaterun  gat
 docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-extras.jsonl.gz  gaterun  gate2multi-20261107-1811-g2h
 
 # BEGIN GENERATED OWNERS (tools/sharedgen/sharedgen.py from the owns: keys of open tasks; do not edit between the markers)
+AGENTS.md  credit-runner  decisions1
 backlog/tasks/task-96[6-9] - *  credit-runner  fableroadmap
 backlog/tasks/task-9[7-9][0-9] - *  credit-runner  fableroadmap
 cmd/bossrun/adapter.go  pro-runner  levelplan3
@@ -245,8 +246,11 @@ deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 docs/actbot.md  credit-runner  cain45
 docs/adr/0011-readiness-power-vs-danger.md  credit-runner  toolstrade68
 docs/adr/0014-memory-writes-allowed-no-crutch.md  credit-runner  vaultpay
+docs/adr/0020-proving-ground-and-stat-skill-agency.md  credit-runner  decisions1
 docs/adr/0029-vault-gold-payment.md  credit-runner  vaultpay
+docs/adr/0030-operator-quest-control.md  credit-runner  decisions1
 docs/adr/README.md  credit-runner  vaultpay
+docs/arbiter.md  credit-runner  decisions1
 docs/archive  credit-runner  dietarchive
 docs/autoalloc.md  credit-runner  allocfix
 docs/away-drill.md  live-agent  awaydrill
@@ -258,6 +262,7 @@ docs/cheats.md  credit-runner  vaultpay
 docs/combat.md  credit-runner  cainfix3
 docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/d2d-determinism.md  credit-runner  pgclock
+docs/decisions.md  credit-runner  decisions1
 docs/decisions.md  credit-runner  toolstrade68
 docs/decisions.md  credit-runner  vaultpay
 docs/design/admission-p4.md  credit-runner  admit1

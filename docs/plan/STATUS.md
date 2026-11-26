@@ -278,6 +278,7 @@
 | invmon | proposed | - | `internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`docs/invariants.md`<br>`internal/bot/runner.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/task.go`<br>`internal/env/tuning_bot.go` | - |
 | outcome-task-step | proposed | - | `docs/outcomes.md` | - |
 | outcome-travel-gate | proposed | - | `docs/outcomes.md` | - |
+| decisions1 | proposed | - | `docs/adr/0030-operator-quest-control.md`<br>`docs/adr/0020-proving-ground-and-stat-skill-agency.md`<br>`docs/decisions.md`<br>`docs/arbiter.md`<br>`AGENTS.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | outcome-park-step | proposed | - | `docs/outcomes.md` | - |
 | outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
@@ -327,6 +328,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 33f5b6247 11-25 23:53 `Merge agent/decisions1: Merge branch 'main' into decisions1` (decisions1)
+- ad995de59 11-25 23:51 `Merge branch 'main' into decisions1` (-)
 - 25f3ea0fc 11-25 23:49 `Merge agent/fableroadmap: Merge branch 'main' into fableroadmap` (fableroadmap)
 - 8bc8a81d6 11-25 23:48 `Merge branch 'main' into fableroadmap` (-)
 - 3ef245d71 11-25 23:43 `Merge agent/backlogplan: Merge branch 'main' into backlogplan` (backlogplan)
@@ -335,6 +338,4 @@
 - ea4cbfe13 11-25 23:21 `Merge agent/toolstrade77: Merge branch 'main' into toolstrade77` (toolstrade77)
 - dc0350b1d 11-25 23:20 `Merge branch 'main' into toolstrade77` (-)
 - fcc0b9406 11-25 23:11 `Merge origin/main into fableroadmap` (-)
-- 6c281403d 11-25 23:09 `Merge agent/outcome1: Merge branch 'main' into outcome1` (outcome1)
-- db497fc10 11-25 23:07 `Merge branch 'main' into outcome1` (-)
 <!-- statusgen:end -->

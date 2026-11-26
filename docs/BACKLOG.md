@@ -1398,6 +1398,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/reflex1: reflex1a: safety latency measure (minute line, autopsy) and T6 cancel test (merged 2026-11-25): safety latency on minute line and autopsy; T6 combat cancel test on two classes; offline, whole repo green on the worker host <!--sg:agent/reflex1-->
 - backlogplan: To Do status, planning lanes, plan.py view, lane migration (TASK-992, merged 2026-11-25, acceptance 3 of 3): To Do status, planning lanes (lane/lane_note/due/epic) in check.py, tools/backlog/plan.py plan view, 241 open cards laned (R1-R6), howto Planning lanes <!--sg:agent/backlogplan-->
 - fableroadmap: Fable review roadmap tracker and cards for built-but-dark work (TASK-966, merged 2026-11-25, acceptance 4 of 4): Fable roadmap tracker (docs/roadmap-fable.md), 23 Proposed cards (TASK-967 to 991), 4 darklaunch rows adjusted; docs and cards only <!--sg:agent/fableroadmap-->
+- decisions1: amend ADR 0030, ADR 0020, arbiter exit rule (TASK-959, merged 2026-11-25, acceptance 0 of 4): ADR 0030/0020 amendments, arbiter exit rule, decisions.md lines, AGENTS.md dark-launch line; docs only <!--sg:agent/decisions1-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
