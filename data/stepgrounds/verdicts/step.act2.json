@@ -31,8 +31,8 @@
  },
  "step.act2.tainted_sun.amulet.kill_fangskin": {
   "verdict": "RED",
-  "run": "20261125-131359",
+  "run": "20261125-212343",
   "tag": "V",
-  "note": "devp30: character died in Claw Viper Temple 1 (Salamander)"
+  "note": "0/3 green; character died in Claw Viper Temple 1"
  }
 }

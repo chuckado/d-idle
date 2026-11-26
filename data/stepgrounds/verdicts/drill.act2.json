@@ -1,9 +1,9 @@
 {
  "drill.act2.amulet": {
   "verdict": "RED",
-  "run": "20261125-123508",
+  "run": "20261125-212343",
   "tag": "V",
-  "note": "devp30 and current bot: died in Claw Viper Temple 1 (Bone Warrior); the bot of 2026-11-24 00:00 is GREEN on devp28: a thin fight margin, flaky (U)"
+  "note": "0/3 green on devp30; dies in Claw Viper Temple 1 with potions left; not the EnterPortal change (plain-first kept)"
  },
  "drill.act2.assemble": {
   "note": "devp27 rebase smoke",
@@ -18,10 +18,10 @@
   "note": "the row asserted the wrong town (fixed); devp30"
  },
  "drill.act2.duriel": {
-  "note": "tomb scan runs; died in tomb 66; orifice unit not found",
-  "run": "20261124-091152",
+  "verdict": "RED",
+  "run": "20261125-205741",
   "tag": "V",
-  "verdict": "RED"
+  "note": "walk to the orifice preset added; campaign stalled at 0 virtual minutes in the last run (not judged)"
  },
  "drill.act2.radament": {
   "note": "stand-in stats, matrix note 8",
@@ -48,9 +48,21 @@
   "verdict": "GREEN"
  },
  "drill.act2.radament.l30": {
-  "verdict": "RED",
-  "run": "20261125-123508",
+  "verdict": "GREEN",
+  "run": "20261125-193820",
   "tag": "V",
-  "note": "flaky: the same commit gave GREEN and RED on devp28, RED on devp30 (the hero dies or chickens in the Radament fight)"
+  "note": "3/3 green with -repeat 3 (devp30); the earlier flake was a thin margin"
+ },
+ "drill.act2.radament.l30.strong": {
+  "verdict": "GREEN",
+  "run": "20261125-194414",
+  "tag": "V",
+  "note": "strong stand-in"
+ },
+ "drill.act2.amulet.strong": {
+  "verdict": "RED",
+  "run": "20261125-214859",
+  "tag": "V",
+  "note": "max life 1500, merc 30: still killed by a Bone Warrior with 13 potions counted"
  }
 }

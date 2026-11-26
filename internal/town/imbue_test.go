@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/input"
 	"d2lod-bot/internal/plandata"
 	"d2lod-bot/internal/town"
 )
@@ -203,5 +204,24 @@ func TestSocketLadderRunewordsFollowTheSwitch(t *testing.T) {
 				t.Errorf("%s on=%v: why %q", class, on, rep.Why)
 			}
 		}
+	}
+}
+
+// A backend that lists the dialog lines and has no Imbue line (the d2d: talk, trade/repair, cancel): the flow stops before any
+// click, never hits Cancel or Trade by the fixed index. Must fail without the guard: the pick is clicked and the error is
+// "the item did not change". Two builds' worth of gear are not involved: the guard is class-free.
+func TestImbueStopsWhenTheDialogHasNoImbueLine(t *testing.T) {
+	geartest.Need(t)
+	r := charsiRig(t)
+	packItem(r, "qui", d2.QualityNormal, 2, 0)
+	r.T.UseSource(town.Source{MenuEntry: func(e town.Entry) (input.Point, bool) {
+		if e == town.EntryImbue {
+			return input.Point{}, false
+		}
+		return input.Point{X: 1, Y: 1}, true
+	}})
+	_, err := r.T.Imbue(context.Background(), town.ImbueWant{})
+	if !errors.Is(err, town.ErrNoServiceLine) {
+		t.Fatalf("err %v", err)
 	}
 }

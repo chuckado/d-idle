@@ -779,6 +779,23 @@ func (c *Client) EnterPortal(ctx context.Context) error {
 	// camp corner the portal 14 cells away was never reached and the level never changed (V lab tools/probes/portalfar.py:
 	// from 20 cells the hero stopped at (25.9,21.3) with the goal at the portal). So the portal is approached like an NPC:
 	// interact, watch for a stall, route round it over the collision grid, interact again.
+	// The plain interact first, as before: it takes the portal from open ground (the lab walked 13.5 cells) and a hero standing
+	// beside the portal would only be side-stepped away by the stall watch of the approach (V amulet bisect: the approach for every
+	// portal made the heal trips of the Claw Viper Temple slower and the hero died, drill.act2.amulet 0 of 3 green). Only a round
+	// that changed nothing goes on to the approach.
+	if err := c.TakePortal(ctx, p.Which); err != nil {
+		return err
+	}
+	for i := 0; i < 10; i++ {
+		if err := Pause(ctx, 400*time.Millisecond); err != nil {
+			return err
+		}
+		if l, err := c.Level(ctx); err != nil {
+			return err
+		} else if l.ID != here.ID {
+			return nil
+		}
+	}
 	npc := &NPC{Index: PortalNPC(p.Which), Name: "portal", CellX: p.X, CellY: p.Y}
 	var others []NPC
 	if l, err := c.NPCs(ctx); err == nil {
