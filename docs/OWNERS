@@ -317,7 +317,6 @@ docs/outcomes.md  credit-runner  outcome-park-step
 docs/outcomes.md  credit-runner  outcome-route-guard
 docs/outcomes.md  credit-runner  outcome-task-step
 docs/outcomes.md  credit-runner  outcome-travel-gate
-docs/outcomes.md  credit-runner  outcome1
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
 docs/plan/STATUS.md  credit-runner  statusrefresh
@@ -481,7 +480,6 @@ internal/bot/lifelog.go  credit-runner  hourfix
 internal/bot/lifelog.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  hourfix
 internal/bot/loop.go  credit-runner  invmon
-internal/bot/loop.go  credit-runner  outcome1
 internal/bot/loop.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  resetinstant
 internal/bot/loop.go  credit-runner  survrecover
@@ -494,8 +492,6 @@ internal/bot/observe.go  credit-runner  invmon
 internal/bot/observe.go  credit-runner  passagebounce
 internal/bot/observe.go  credit-runner  survrecover
 internal/bot/observe.go  pro-runner  bounce3
-internal/bot/outcome.go  credit-runner  outcome1
-internal/bot/outcome_test.go  credit-runner  outcome1
 internal/bot/parkstep_test.go  credit-runner  botstuck
 internal/bot/plan.go  pro-runner  levelplan3
 internal/bot/playerreset.go  credit-runner  resetinstant
@@ -503,7 +499,6 @@ internal/bot/playerreset_test.go  credit-runner  resetinstant
 internal/bot/questboard.go  credit-runner  bsm7
 internal/bot/questboard.go  credit-runner  equipswap
 internal/bot/questboard.go  credit-runner  failspend
-internal/bot/questboard.go  credit-runner  outcome1
 internal/bot/questboard.go  credit-runner  qdmatrix
 internal/bot/questboard.go  credit-runner  stage1fix
 internal/bot/questboard_s7b_test.go  credit-runner  cain5b
@@ -519,7 +514,6 @@ internal/bot/runner.go  credit-runner  campaign1
 internal/bot/runner.go  credit-runner  hourfix
 internal/bot/runner.go  credit-runner  invmon
 internal/bot/runner.go  credit-runner  maphistoryA
-internal/bot/runner.go  credit-runner  outcome1
 internal/bot/runner.go  credit-runner  passagebounce
 internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  resetinstant
@@ -632,7 +626,6 @@ internal/env/tuning_bot.go  credit-runner  freshstart
 internal/env/tuning_bot.go  credit-runner  hourfix
 internal/env/tuning_bot.go  credit-runner  invmon
 internal/env/tuning_bot.go  credit-runner  lootwireL4
-internal/env/tuning_bot.go  credit-runner  outcome1
 internal/env/tuning_combat.go  credit-runner  cainfix3
 internal/env/tuning_combat.go  credit-runner  dlv-expect
 internal/env/tuning_identify.go  credit-runner  bulkid

@@ -276,7 +276,6 @@
 | fablereview2 | in-progress | - | `docs/research/fable-logic-review-2026-11-25.md` | - |
 | darklaunch | proposed | - | `data/darklaunch.json`<br>`tools/darklaunch`<br>`docs/process/dark-launch.md`<br>`tools/ci/check.sh` | - |
 | invmon | proposed | - | `internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`docs/invariants.md`<br>`internal/bot/runner.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/task.go`<br>`internal/env/tuning_bot.go` | - |
-| outcome1 | proposed | - | `internal/bot/outcome.go`<br>`internal/bot/outcome_test.go`<br>`docs/outcomes.md`<br>`internal/bot/loop.go`<br>`internal/bot/runner.go`<br>`internal/bot/questboard.go`<br>`internal/env/tuning_bot.go` | - |
 | outcome-task-step | proposed | - | `docs/outcomes.md` | - |
 | outcome-travel-gate | proposed | - | `docs/outcomes.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |

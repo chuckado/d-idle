@@ -1,10 +1,11 @@
 ---
 id: TASK-956
 title: 'outcome1: typed step outcome, stage 1 (quest board refusal)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:41:00Z'
+updated_date: '2026-11-26T04:31:00Z'
 labels:
   - bot
   - feature
