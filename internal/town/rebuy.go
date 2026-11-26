@@ -282,6 +282,11 @@ func (t *Town) rebuyGear(ctx context.Context, a *Act, todo []gearSlot, floor int
 		t.e.Log.Info("rebuy: stock seen", "slot", g.name, "items", len(stock), "viable", len(c), "rejected", rejected,
 			"str", s.Player.Strength, "dex", s.Player.Dexterity, "clvl", s.Player.Level, "spendable", spendable, "cap", capCost)
 		sort.SliceStable(c, func(i, j int) bool { return t.base(c[i]).Cost < t.base(c[j]).Cost })
+		if g.slot == "rArm" {
+			// the weapon is the hero's whole damage (Questy 2026-11-26: clvl 12, 497 gold, the cheapest wearable weapon was a Short
+			// Sword, 2-7): the best damage it can wield within the price cap, the cheaper one on a tie
+			sort.SliceStable(c, func(i, j int) bool { return weaponDamage(t.base(c[i])) > weaponDamage(t.base(c[j])) })
+		}
 		done := false
 		for _, it := range c {
 			if _, err := t.buyUnit(ctx, lay, it); err != nil {
@@ -636,4 +641,15 @@ func (t *Town) needWeaponFound(s *d2.Snapshot) bool {
 	}
 	slots, _ := t.foundGear(s)
 	return slices.ContainsFunc(slots, func(g gearSlot) bool { return g.slot == "rArm" })
+}
+
+// weaponDamage is the average damage of a weapon base (the two-handed row for a two-hander), 0 for anything else.
+func weaponDamage(b *data.ItemBase) int {
+	if b == nil || b.Kind != data.KindWeapon {
+		return 0
+	}
+	if b.TwoHanded {
+		return (b.TwoMinDam + b.TwoMaxDam) / 2
+	}
+	return (b.MinDam + b.MaxDam) / 2
 }

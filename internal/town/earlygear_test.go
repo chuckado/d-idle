@@ -204,3 +204,39 @@ func TestEquipFoundRewearsStartWeaponNotBow(t *testing.T) {
 		t.Fatalf("worn %+v", u)
 	}
 }
+
+// Questy 2026-11-26: clvl 12 with 497 gold wore a 2-7 Short Sword because the rebuy took the cheapest wearable weapon. The weapon is
+// now the best damage the hero can wield within the price cap. Two classes; strength and dexterity are high so the stats filter
+// (nothing wearable: Sabre needs more dexterity) leaves every stock weapon open here.
+func TestRebuyBuysTheBestWeaponItCanWield(t *testing.T) {
+	for _, cls := range []d2.Class{d2.Paladin, d2.Barbarian} {
+		r := earlyRig(t, cls, 12)
+		r.W.Player.Strength, r.W.Player.Dexterity, r.W.Player.Gold = 90, 90, 6000
+		codes := []string{"ssd", "hax", "bsd", "scm", "mac"}
+		r.W.Stock(r.Charsi, codes...)
+		avg := func(class int) int {
+			b := r.W.DB.Items[class]
+			return (b.MinDam + b.MaxDam) / 2
+		}
+		best := 0
+		for _, c := range codes {
+			if i := codeClass(r, c); i >= 0 && avg(i) > best {
+				best = avg(i)
+			}
+		}
+		rep, err := r.T.Rebuy(context.Background(), 6000)
+		if err != nil {
+			t.Fatal(err)
+		}
+		s, _ := r.W.Snapshot()
+		w := s.Inventory.Equipped(d2.BodyRHand)
+		if w == nil || avg(w.Class) != best {
+			t.Fatalf("%v: weapon %+v (avg %d), want avg %d; %+v", cls, w, func() int {
+				if w == nil {
+					return 0
+				}
+				return avg(w.Class)
+			}(), best, rep)
+		}
+	}
+}
