@@ -1,10 +1,11 @@
 ---
 id: TASK-993
 title: 'reflex1c: drink by reflex from the guard, hard deadline for portal and chicken'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T04:07:00Z'
+updated_date: '2026-11-26T05:34:00Z'
 labels:
   - bot
   - feature

@@ -305,7 +305,6 @@
 | fid-lowvalue | deferred | - | `docs/probes/fid/fid-lowvalue.md` | - |
 | ckptlive | proposed | - | `docs/probes/checkpoint-live-drill.md` | - |
 | advisor1 | proposed | - | `docs/design/advisor-r14.md` | - |
-| reflex1c | proposed | - | `cmd/d2bot/adapters.go`<br>`internal/bot/safetylat.go`<br>`internal/bot/reflexdrink_test.go`<br>`internal/bot/loop.go`<br>`internal/combat/reflex.go`<br>`internal/combat/reflex_test.go`<br>`internal/combat/fighter.go`<br>`internal/combat/hard.go`<br>`internal/combat/packdrink.go`<br>`internal/combat/potioneffect.go`<br>`internal/env/tuning_bot.go`<br>`docs/bot.md`<br>`docs/safety-latency.md` | - |
 | autorevert1 | proposed | - | `docs/design/autorevert.md` | - |
 
 ### Gates
