@@ -21,6 +21,11 @@ def overrides(text):
     return json.loads(text)["data"]["overrides"]
 
 
+BUNDLE7 = {"town.plan": 2.0, "bot.portalGuard": 1.0, "combat.deliveryExpect": 1.0, "combat.threatDodge": 1.0,
+           "combat.standOK": 1.0, "combat.missileDodge": 1.0, "bot.checkpointEnable": 1.0}
+BUNDLE2 = {"bot.arbiterControl": 1.0, "bot.arbiterFamilies": 15.0}
+
+
 class Clock:
     def __init__(self):
         self.t = T0
@@ -82,10 +87,10 @@ class FlipTest(unittest.TestCase):
         self.d = tempfile.TemporaryDirectory()
         self.addCleanup(self.d.cleanup)
         self.lp = os.path.join(self.d.name, "darklaunch.json")
-        row = {"name": "town.plan", "built_by": "x", "dark_since": "2026-11-20", "why_off": "w", "enable_criteria": "c",
-               "owner": "coordinator", "review_by": "2026-12-09", "status": "dark", "criteria_met": "U"}
+        rows = [{"name": n, "built_by": "x", "dark_since": "2026-11-20", "why_off": "w", "enable_criteria": "c",
+                 "owner": "coordinator", "review_by": "2026-12-09", "status": "dark", "criteria_met": "U"} for n in BUNDLE7]
         with open(self.lp, "w") as f:
-            json.dump({"version": 1, "items": [row]}, f)
+            json.dump({"version": 1, "items": rows}, f)
         self.sb = FakeSandbox()
         self.clock = Clock()
         self.out = []
@@ -97,8 +102,11 @@ class FlipTest(unittest.TestCase):
     def row(self):
         return F.Ledger(self.lp).row("town.plan")
 
+    def rows(self, status):
+        return {i["name"] for i in json.load(open(self.lp))["items"] if i["status"] == status}
+
     def flip(self, window=3600):
-        return self.f.flip("sb1", "town.plan", 2.0, "scenario green", window)
+        return self.f.flip("sb1", {"town.plan": 2.0}, "scenario green", window)
 
     def test_flip_writes_backup_knob_and_ledger(self):
         w = self.flip()
@@ -207,9 +215,9 @@ class FlipTest(unittest.TestCase):
         f2 = F.Flipper(lambda i: self.sb, F.Store(os.path.join(self.d.name, "st2")), F.Ledger(self.lp), clock=self.clock,
                        out=self.out.append, env={"D2BOT_RUN": "r1"})
         with self.assertRaises(F.FlipError):
-            f2.flip("sb2", "town.plan", 1.0, "x", 60)
+            f2.flip("sb2", {"town.plan": 1.0}, "x", 60)
         with self.assertRaises(F.FlipError):
-            self.f.flip("sb3", "no.such", 1.0, "x", 60)
+            self.f.flip("sb3", {"no.such": 1.0}, "x", 60)
 
     def test_watch_once_and_loop(self):
         self.flip(window=120)
@@ -258,12 +266,77 @@ class FlipTest(unittest.TestCase):
     def test_dry_run_writes_nothing(self):
         f = F.Flipper(lambda i: self.sb, self.f.store, F.Ledger(self.lp), clock=self.clock, out=self.out.append, env={}, dry_run=True)
         before = open(self.lp).read()
-        f.flip("sb1", "town.plan", 2.0, "x", 60)
+        f.flip("sb1", {"town.plan": 2.0}, "x", 60)
         self.assertEqual(self.sb.tuning, ENVELOPE)
         self.assertEqual((self.sb.restarts, self.sb.log), (0, ["restart"]))  # only the setup restart
         self.assertEqual(open(self.lp).read(), before)
         self.assertIsNone(self.f.store.get("sb1"))
         self.assertTrue(any("DRY-RUN" in o for o in self.out))
+
+    def bundle(self, knobs, window=2700):
+        names = list(knobs)
+        for n in names:  # rows exist for every bundle knob; BUNDLE2 rows are added to the fake ledger
+            if self.f.ledger.row(n) is None:
+                d = json.load(open(self.lp))
+                d["items"].append({**d["items"][0], "name": n})
+                json.dump(d, open(self.lp, "w"))
+        return self.f.flip("sb1", knobs, "bundle green", window)
+
+    def test_two_knob_bundle_one_write_one_restart(self):
+        self.bundle(BUNDLE2)
+        self.assertEqual(self.sb.log[-2:], ["write", "restart"])
+        self.assertEqual(self.sb.log.count("write"), 1)
+        ov = overrides(self.sb.tuning)
+        self.assertEqual({k: ov[k] for k in BUNDLE2}, BUNDLE2)
+        self.assertEqual(self.rows("trial"), set(BUNDLE2))
+        self.assertEqual(json.load(open(self.lp))["items"][-1]["trial_bundle"], "bot.arbiterControl,bot.arbiterFamilies")
+
+    def test_seven_knob_bundle_breach_reverts_all(self):
+        self.bundle(BUNDLE7)
+        self.assertEqual(self.rows("trial"), set(BUNDLE7))
+        self.sb.counts["life-zero-alive"] = 1
+        self.assertEqual(self.f.poll("sb1"), "reverted")
+        self.assertEqual(self.sb.tuning, ENVELOPE)  # every knob gone with the one backup
+        self.assertEqual(self.sb.log.count("write"), 2)
+        self.assertEqual(self.rows("dark"), set(BUNDLE7))
+        items = {i["name"]: i for i in json.load(open(self.lp))["items"]}
+        for k in BUNDLE7:
+            self.assertEqual(items[k]["revert_breach"], "life-zero-alive")
+            self.assertEqual(items[k]["revert_bundle"], ",".join(BUNDLE7))
+        # bisect: the bundle minus one knob, from the finished window
+        w = self.f.store.get_last("sb1")
+        line = F.bisect_line(w, "combat.standOK", "45m")
+        self.assertIn("combat.threatDodge=1", line)
+        self.assertNotIn("combat.standOK=", line)
+        self.assertIn("--window 45m", line)
+        with self.assertRaises(F.FlipError):
+            F.bisect_line(w, "not.inBundle", "45m")
+
+    def test_partial_verify_failure_restores_backup(self):
+        real = self.sb.status
+
+        def partial():  # the child shows all knobs but one
+            v = real()
+            v["knobs"].pop("combat.standOK", None)
+            return v
+        self.sb.status = partial
+        with self.assertRaises(F.FlipError) as c:
+            self.bundle(BUNDLE7)
+        self.assertIn("combat.standOK", str(c.exception))
+        self.assertEqual(self.sb.tuning, ENVELOPE)
+        self.assertEqual(self.rows("trial"), set())
+        self.assertIsNone(self.f.store.get("sb1"))
+
+    def test_bundle_needs_every_row(self):
+        with self.assertRaises(F.FlipError):
+            self.f.flip("sb1", {"town.plan": 2.0, "bot.noRow": 1.0}, "x", 60)
+        self.assertEqual(self.sb.log.count("write"), 0)
+
+    def test_bundle_clean_window_closes_all(self):
+        self.bundle(BUNDLE7, window=600)
+        self.clock.t += timedelta(minutes=11)
+        self.assertEqual(self.f.poll("sb1"), "closed")
+        self.assertEqual(self.rows("enabled"), set(BUNDLE7))
 
     def test_parse_window(self):
         self.assertEqual(F.parse_window("24h"), 86400)
