@@ -325,7 +325,8 @@
    "gen": {
     "start": "Sewers 2",
     "enter": "Sewers( Level)? 3",
-    "budget": 15
+    "budget": 15,
+    "kit": "act2strong"
    }
   },
   {
@@ -338,7 +339,8 @@
       "n": 1
      }
     ],
-    "kill": "Radament"
+    "kill": "Radament",
+    "kit": "act2strong"
    },
    "note": "debug spawn radament works (V probe, hp 278); whether the Book of Skill drops from a spawned Radament is U (the Smith case showed quest drops can be object-driven)."
   },
@@ -432,7 +434,7 @@
    "gen": {
     "start": "Harem 2",
     "enter": "Palace Cellar( Level)? 1",
-    "kit": "act2",
+    "kit": "act2strong",
     "goals": "farm:Palace Cellar Level 1"
    },
    "note": "The scenario drives the bot with a farm goal on the target area (the walk, not the board step): started from the board the chunk begins at its first step (a talk in town) and 8 to 12 virtual minutes were not enough (V run 20261123-183100)."
@@ -1240,6 +1242,97 @@
      "town.bankFirst": 0
     }
    }
+  },
+  "act2strong": {
+   "pre": {
+    "quests": [
+     {
+      "record": 4,
+      "word": 8209
+     },
+     {
+      "record": 6,
+      "word": 1
+     },
+     {
+      "record": 7,
+      "word": 1
+     },
+     {
+      "record": 9,
+      "word": 1
+     },
+     {
+      "record": 11,
+      "word": 1
+     }
+    ],
+    "level": 30,
+    "gold": 6000,
+    "items": [
+     {
+      "code": "hp5",
+      "count": 10
+     },
+     {
+      "code": "mp1",
+      "count": 6
+     },
+     {
+      "code": "tsc",
+      "count": 3
+     }
+    ],
+    "belt": [
+     "hp5",
+     "hp5",
+     "hp5",
+     "hp5"
+    ],
+    "merc": 12,
+    "merc_level": 30,
+    "worn": [
+     {
+      "code": "cap",
+      "slot": "head",
+      "quality": 4
+     },
+     {
+      "code": "qui",
+      "slot": "torso",
+      "quality": 4
+     },
+     {
+      "code": "bsd",
+      "slot": "rhand",
+      "quality": 6
+     },
+     {
+      "code": "buc",
+      "slot": "lhand",
+      "quality": 4
+     }
+    ],
+    "stats": [
+     {
+      "stat": 0,
+      "value": 90
+     },
+     {
+      "stat": 2,
+      "value": 60
+     },
+     {
+      "stat": 7,
+      "value": 384000
+     },
+     {
+      "stat": 6,
+      "value": 384000
+     }
+    ]
+   },
+   "note": "qd28: the strong stand-in of the .strong rows of questdrill.json (clvl 30, life 1500, level 30 merc, tier 5 potions) with the act 2 prerequisite words"
   }
  }
 }
