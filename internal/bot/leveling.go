@@ -252,6 +252,13 @@ func (r *Runner) sellable(s *d2.Snapshot) int {
 	if r.d.Loot == nil || s.Inventory == nil {
 		return 0
 	}
+	// the town's own count first: the chore's predicate (starting items, scroll surplus, the rules engine) is the one that decides
+	// what is sold, so the advice must not count what the chore will skip
+	if c, ok := r.d.Town.(interface{ SellableCount(*d2.Snapshot) int }); ok {
+		if n := c.SellableCount(s); n >= 0 {
+			return n
+		}
+	}
 	n := 0
 	if rc, ok := r.d.Town.(interface{ ReconcileMarks(*d2.Snapshot) }); ok {
 		rc.ReconcileMarks(s)

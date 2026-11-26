@@ -642,6 +642,20 @@ func (t *Town) sellable(s *d2.Snapshot, lay *panel.Layout) []d2.Unit {
 	return t.sellableIf(s, full)
 }
 
+// SellableCount is how many pack items the sell chore would sell now: the one answer the bot's poverty advice and trip planner
+// use (Questy bed 2026-11-26: the bot counted 4 sellable, the chore skipped the starting items and the surplus rules and sold 0,
+// a sell trip every few minutes for nothing).
+func (t *Town) SellableCount(s *d2.Snapshot) int {
+	if s == nil || s.Inventory == nil {
+		return 0
+	}
+	full := false
+	if lay, err := t.layout(s); err == nil {
+		full = t.h.Occupancy(s.Inventory, d2.ContInventory, lay.Inventory).UsedPct() >= t.tune().TripPackUsedPct
+	}
+	return len(t.sellableIf(s, full))
+}
+
 // sellableIf is sellable with the "pack is full" decision made by the caller (MakeRoom forces it).
 func (t *Town) sellableIf(s *d2.Snapshot, full bool) (out []d2.Unit) {
 	defer func() { t.shadowSell(s, out, full) }()
