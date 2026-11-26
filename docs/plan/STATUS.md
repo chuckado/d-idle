@@ -283,14 +283,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 12884d316 11-25 22:04 `Merge agent/qd25: Merge origin/main` (qd25)
+- 7903a7ada 11-25 21:56 `Merge origin/main` (-)
 - 0f5327fb9 11-25 21:15 `Merge agent/toolstrade76: toolstrade76: the poverty advice asks the town for what its sell chore sells (advice counted 4, the chore sold 0)` (toolstrade76)
+- f78028b8f 11-25 20:57 `Merge origin/main` (-)
 - 87ea713ef 11-25 20:51 `Merge agent/cardcatchup: cardcatchup: mark 224 merged cards Done` (cardcatchup)
 - 6e3958642 11-25 20:10 `Merge agent/toolstrade75: toolstrade75: a portal that drops into a stale pack is not taken, the corpse run is exempt from the early road, the Dark Wood wants 180 life (melee) / 100 (caster)` (toolstrade75)
 - 18d4a4e9e 11-25 19:11 `Merge agent/toolstrade74: toolstrade74: the early road is a Ready hold of the step into the Dark Wood (a chores trip for the kit), not a strike at the hop (Cain scroll parked as too weak)` (toolstrade74)
 - e12ee23ba 11-25 18:12 `Merge agent/toolstrade73: Merge branch 'main' into toolstrade73` (toolstrade73)
 - ce8c37537 11-25 18:10 `Merge branch 'main' into toolstrade73` (-)
 - f4f3dacfc 11-25 18:02 `Merge agent/toolstrade72: Merge branch 'main' into toolstrade72` (toolstrade72)
-- c636d9c54 11-25 18:01 `Merge origin/main into toolstrade73` (-)
-- 96bb8ebc3 11-25 18:00 `Merge branch 'main' into toolstrade72` (-)
-- 3f54cc00c 11-25 17:54 `Merge agent/toolstrade71: Merge branch 'main' into toolstrade71` (toolstrade71)
 <!-- statusgen:end -->
