@@ -214,3 +214,38 @@ func TestInvTickLogsAndCallsOracle(t *testing.T) {
 		}
 	}
 }
+
+func TestInvariantCountersHardAndSince(t *testing.T) {
+	var m invMon
+	if len(m.Counters()) != 0 {
+		t.Fatal("counters before the first tick")
+	}
+	for _, h := range invHeroes {
+		var mm invMon
+		f := h.facts(t0)
+		f.life, f.lifePct, f.beltHP = 1, 1, 4
+		runInv(&mm, f, 20, nil) // potion-not-drunk fires for every hero
+		hard := map[string]bool{}
+		var got *InvCounter
+		cs := mm.Counters()
+		for i := range cs {
+			if cs[i].Hard {
+				hard[cs[i].Name] = true
+			}
+			if cs[i].Name == "potion-not-drunk" {
+				got = &cs[i]
+			}
+		}
+		for _, n := range []string{"potion-not-drunk", "life-zero-alive", "refusal-storm", "xp-frozen", "mode-no-exit", "corpse-unresolved"} {
+			if !hard[n] {
+				t.Errorf("%s: %s is not hard", h.name, n)
+			}
+		}
+		if hard["town-thrash"] || len(hard) != 6 {
+			t.Errorf("%s: hard set %v", h.name, hard)
+		}
+		if got == nil || got.Count == 0 || got.Since.IsZero() || got.First.IsZero() || got.Last.Before(got.First) {
+			t.Errorf("%s: potion-not-drunk counter %+v", h.name, got)
+		}
+	}
+}

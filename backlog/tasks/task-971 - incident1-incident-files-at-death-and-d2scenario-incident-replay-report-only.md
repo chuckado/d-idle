@@ -1,10 +1,13 @@
 ---
 id: TASK-971
-title: 'incident1: incident files at death and d2scenario incident replay (report-only)'
-status: Proposed
+title: >-
+  incident1: incident files at death and d2scenario incident replay
+  (report-only)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:53:00Z'
+updated_date: '2026-11-26T07:41:00Z'
 labels:
   - bot
   - feature
