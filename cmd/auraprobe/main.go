@@ -74,6 +74,18 @@ func (p *probe) read(label string) {
 	p.say("READ %-34s aura=%s lskill=%s rskill=%s area=%d dmgpct=%s | %s", label, fields["aura"], fields["lskill"], fields["rskill"], area, dmg, buffs)
 }
 
+func (p *probe) monsters(label string) {
+	r, err := p.be.Client.Do(p.ctx, "monsters")
+	out := ""
+	if r != nil {
+		out = strings.Join(append(r.Lines, r.Rest), " | ")
+	}
+	if i := strings.Index(out, "#1\t"); i > 0 { // keep only monster #1's row
+		out = out[max(0, strings.LastIndex(out[:i], "|")+1) : i+4]
+	}
+	p.say("MON  %-34s err=%v %s", label, err, out)
+}
+
 func (p *probe) step(n int) {
 	_, err := p.be.Client.Step(p.ctx, n)
 	if err != nil {
@@ -238,6 +250,28 @@ func run() int {
 		p.read("B after popup pick Might")
 		p.setRight(skSacrifice, "Sacrifice as right (non-aura)")
 		p.read("D after right skill Sacrifice")
+	case "holyfire": // effect check: a monster beside the hero loses life to the picked Holy Fire with no cast
+		p.cheat("debug goto 2", "auralive SETUP: field level for the monster, before any reading of this arm")
+		p.step(20)
+		p.cheat("debug points 102 20", "auralive SETUP: Holy Fire level 21 so a pulse is visible in a 400 life target and the radius is wide")
+		p.cheat("debug spawn zombie1 1 near", "auralive SETUP: one monster beside the hero to see aura damage")
+		p.cheat("debug mon set 1 life 400 maxlife 400 dmg 0 0", "auralive SETUP: a target that survives the whole window and does no damage")
+		p.cheat("debug warp 38 58", "auralive SETUP: the hero next to monster #1, before any reading of this arm")
+		p.step(5)
+		p.monsters("control, no aura")
+		p.step(100)
+		p.monsters("control +100 ticks, no aura")
+		p.setRight(skHolyFire, "Holy Fire")
+		p.read("B after popup pick Holy Fire")
+		p.step(100)
+		p.monsters("after pick +100 ticks, no cast")
+		p.step(100)
+		p.monsters("after pick +200 ticks, no cast")
+		p.setRight(skSacrifice, "Sacrifice as right (non-aura)")
+		p.read("D aura dropped by a non-aura right skill")
+		p.monsters("D start")
+		p.step(100)
+		p.monsters("D +100 ticks (aura off)")
 	default:
 		p.say("unknown arm")
 		return 2

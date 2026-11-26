@@ -17,6 +17,7 @@ owns:
   - "docs/probes/paladin-aura-live-2026-11-26.md"
   - "cmd/auraprobe"
 exclusive: []
+result: "Verified live on a d2d lab slot: a Paladin aura picked through the right skill popup is active at once with no cast (state aura field and a Holy Fire pulse that hurt a monster); it survives attack casts, aura switches and area changes, and a non-aura right skill turns it off. Not verified: character load. Doc docs/probes/paladin-aura-live-2026-11-26.md, probe cmd/auraprobe."
 contracts: []
 ---
 
@@ -30,5 +31,5 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Aura state measured on d2d for steps A to F and recorded with exact commands
+- [x] #1 Aura state measured on d2d for steps A to F and recorded with exact commands
 <!-- AC:END -->
