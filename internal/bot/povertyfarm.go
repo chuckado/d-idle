@@ -16,6 +16,7 @@ import (
 
 type povertyFarmData struct {
 	NoPotionGap int `json:"noPotionGap"`
+	FromLevel   int `json:"noPotionFromLevel"`
 	Farm        []struct {
 		Area       int     `json:"area"`
 		Name       string  `json:"name"`
@@ -45,7 +46,7 @@ func (r *Runner) noPotions(s *d2.Snapshot) bool {
 // povertyAreaWhy says why a hero with no potions may not enter area a ("" = fine): its monsters are above clvl minus the gap.
 func (r *Runner) povertyAreaWhy(s *d2.Snapshot, a int) string {
 	d := loadPovertyFarm()
-	if d.NoPotionGap <= 0 || r.e.Tune.Route.EarlyRoute == 0 || !r.noPotions(s) || s.Player.Difficulty != d2.Normal || task.TryActive() ||
+	if d.NoPotionGap <= 0 || r.e.Tune.Route.EarlyRoute == 0 || !r.noPotions(s) || s.Player.Level < d.FromLevel || s.Player.Difficulty != d2.Normal || task.TryActive() ||
 		r.corpseRun.Load() || a == 0 || r.d.Plan.IsTown(a) {
 		return ""
 	}
@@ -59,7 +60,7 @@ func (r *Runner) povertyAreaWhy(s *d2.Snapshot, a int) string {
 // minute among the data's areas that its level allows and that are neither cleared, banned nor guarded.
 func (r *Runner) povertyFarmArea(s *d2.Snapshot) (int, bool) {
 	d := loadPovertyFarm()
-	if d.NoPotionGap <= 0 || !r.noPotions(s) || s.Player.Difficulty != d2.Normal {
+	if d.NoPotionGap <= 0 || !r.noPotions(s) || s.Player.Difficulty != d2.Normal || s.Player.Level < d.FromLevel {
 		return 0, false
 	}
 	ex := map[int]bool{}
