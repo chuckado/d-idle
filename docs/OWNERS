@@ -173,8 +173,6 @@ cmd/d2bot/live.go  credit-runner  maphistoryA
 cmd/d2bot/live.go  credit-runner  maphistoryC
 cmd/d2bot/live.go  credit-runner  maptrail
 cmd/d2bot/lootshadowwire.go  credit-runner  lootwireL4
-cmd/d2bot/mercwire.go  credit-runner  aura2d
-cmd/d2bot/mercwire_test.go  credit-runner  aura2d
 cmd/d2bot/objects.go  credit-runner  botstuck
 cmd/d2bot/objects.go  credit-runner  cain5b
 cmd/d2bot/objects.go  live-agent  k1layout

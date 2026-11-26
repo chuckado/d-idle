@@ -44,7 +44,6 @@
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
-| aura2d | proposed | - | `cmd/d2bot/mercwire.go`<br>`cmd/d2bot/mercwire_test.go` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
@@ -324,14 +323,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 3ec8de3af 11-26 14:29 `Merge agent/toolstrade86: Merge branch 'main' into toolstrade86` (toolstrade86)
+- 0590318f2 11-26 14:29 `Merge agent/aura2c: Merge branch 'main' into aura2c` (aura2c)
+- 717d3c0c2 11-26 14:27 `Merge branch 'main' into toolstrade86` (-)
+- f397d77bb 11-26 14:27 `Merge branch 'main' into aura2c` (-)
 - 170c34af7 11-26 14:22 `Merge agent/aura2d: Merge branch 'main' into aura2d` (aura2d)
 - b3562c27a 11-26 14:20 `Merge branch 'main' into aura2d` (-)
+- 65dd4759c 11-26 14:17 `Merge origin/main` (-)
 - 884a0ebfe 11-26 14:05 `Merge branch 'main' into aura2d` (-)
 - 9565fe882 11-26 13:58 `Merge agent/stepexec2: Merge branch 'main' into stepexec2` (stepexec2)
 - 66f862a20 11-26 13:56 `Merge branch 'main' into stepexec2` (-)
-- 744eff15f 11-26 13:48 `Merge agent/incident2: Merge branch 'main' into incident2` (incident2)
-- fedf2159c 11-26 13:48 `Merge agent/arbfam4: Merge branch 'main' into arbfam` (arbfam4)
-- 7e6289850 11-26 13:46 `Merge branch 'main' into incident2` (-)
-- 99748b137 11-26 13:46 `Merge branch 'main' into arbfam` (-)
-- ac089fde7 11-26 13:36 `Merge agent/aura2a: Merge branch 'main' into aura2a` (aura2a)
 <!-- statusgen:end -->
