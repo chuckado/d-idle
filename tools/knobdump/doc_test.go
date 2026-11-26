@@ -7,11 +7,6 @@ import (
 	"testing"
 )
 
-const (
-	beginMark = "<!-- knobdump:begin -->"
-	endMark   = "<!-- knobdump:end -->"
-)
-
 // noReaders drops the readers column (a grep heuristic that moves with every unrelated edit) so the test only
 // fails on real drift: a knob added, removed or changed in the code but not in the doc.
 func noReaders(s string) string {

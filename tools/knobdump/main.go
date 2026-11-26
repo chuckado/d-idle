@@ -30,6 +30,11 @@ var annotated = map[string]string{"nav.pollMs": "accessor", "nav.replanMs": "acc
 	"bot.portalGuard": "1", "bot.portalCastMs": "1", "bot.portalWalkMs": "1", "bot.portalHitMs": "1", "bot.portalLifePct": "1", // read as env.BotTuning fields in internal/combat (castguard.go)
 	"resource.waitMaxSec": "local var", "watch.paletteFeed": "env.PaletteFeedOn", "quests.board": "1", "campaign.denMinLevelCaster": "1", "campaign.denMinLevelMelee": "1"} // read in bot.denFloor through a local copy
 
+const (
+	beginMark = "<!-- knobdump:begin -->"
+	endMark   = "<!-- knobdump:end -->"
+)
+
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == "-write" {
 		if err := writeDoc("docs/knobs.md"); err != nil {
@@ -123,5 +128,5 @@ func writeDoc(path string) error {
 	}
 	var buf strings.Builder
 	render(&buf)
-	return os.WriteFile(path, []byte(s[:i+len(beginMark)]+buf.String()+s[j:]), 0o644)
+	return os.WriteFile(path, []byte(s[:i+len(beginMark)]+"\n"+buf.String()+s[j:]), 0o644)
 }
