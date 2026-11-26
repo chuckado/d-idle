@@ -1154,6 +1154,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `probes/`
 
 - [necro-readiness-2026-11-26.md](probes/necro-readiness-2026-11-26.md): Necromancer readiness audit (card necro1, 2026-11-26) (status: current. Updates docs/probes/necromancer-readiness-2026-11-22.md (S1 to S11 table) with the state of...)
+- [necrocaps-2026-11-26.md](probes/necrocaps-2026-11-26.md): Necromancer caps, curse memory and the corpse rule (cards necrocaps and necrocorpse, 2026-11-26) (status: current. Tags: V verified (how said), S read in code or data, U unverified.)
 - [necrofloors-2026-11-26.md](probes/necrofloors-2026-11-26.md): Necromancer life floors (card necrofloors, 2026-11-26) (status: current. Source of every number: the d2-sme comparison in docs/probes/necro-readiness-2026-11-26.md (S,...)
 - [necrokeys-2026-11-26.md](probes/necrokeys-2026-11-26.md): Necromancer keys beyond F8 (card necrokeys, 2026-11-26) (status: current. Closes card necrokeys with evidence: on the d2d backend the F-key limit does not apply. Tags: V...)
 - [necromancer-act1-drill-2026-11-22.md](probes/necromancer-act1-drill-2026-11-22.md): Necromancer earned Act 1 drill (card necrodrill, 2026-11-22) (status: current. Verdict: BLOCKED, NOT ready to play. Tags: V verified in a named run, S read in a log, U...)

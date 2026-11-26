@@ -369,7 +369,7 @@ docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/hotkeydrift-2026-11-26.md  credit-runner  hotkeydrift
 docs/probes/necro-readiness-2026-11-26.md  credit-runner  necroaudit
 docs/probes/necrocaps-2026-11-26.md  credit-runner  necrocaps
-docs/probes/necrocorpse-2026-11-26.md  credit-runner  necrocorpse
+docs/probes/necrocaps-2026-11-26.md  credit-runner  necrocorpse
 docs/probes/necrofloors-2026-11-26.md  credit-runner  necrofloors
 docs/probes/necrokeys-2026-11-26.md  credit-runner  necrokeys
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1fix
@@ -613,6 +613,8 @@ internal/combat/  credit-runner  dlv-upkeep-minions
 internal/combat/  credit-runner  dlv-upkeep-state
 internal/combat/  credit-runner  dlv-whirl
 internal/combat/castfirst.go  credit-runner  maphistoryC
+internal/combat/classdata.go  credit-runner  necrocaps
+internal/combat/classdata/profiles.json  credit-runner  necrocaps
 internal/combat/fight.go  credit-runner  maphistory
 internal/combat/fight.go  credit-runner  maphistoryC
 internal/combat/fightend.go  credit-runner  maphistory
@@ -621,6 +623,8 @@ internal/combat/fighter.go  credit-runner  beltfix
 internal/combat/fighter.go  credit-runner  maphistory
 internal/combat/fighter.go  credit-runner  maphistoryC
 internal/combat/fighter.go  pro-runner  levelplan3
+internal/combat/necro.go  credit-runner  necrocaps
+internal/combat/necro_data_test.go  credit-runner  necrocaps
 internal/combat/packdrink.go  credit-runner  beltfix
 internal/combat/packdrink_test.go  credit-runner  beltfix
 internal/combat/reach.go  credit-runner  maphistoryC
