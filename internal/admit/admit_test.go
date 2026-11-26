@@ -166,3 +166,26 @@ func TestRowsSane(t *testing.T) {
 		}
 	}
 }
+
+// The kit floor tiers (Questy 2026-11-26 poverty deadlock): two potions open the first two fields and areas far below the hero;
+// below two potions the first field only; the first field is always open.
+func TestKitFloorTiers(t *testing.T) {
+	rs, err := Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	k := rs.KitFloor
+	fields := []int{2, 3, 4}
+	ml := func(a int) int { return map[int]int{2: 1, 3: 3, 4: 5, 9: 3, 5: 8}[a] }
+	for _, c := range []struct {
+		healing, level, area int
+		want                 bool
+	}{
+		{0, 13, 2, true}, {1, 13, 3, false}, {2, 13, 3, true}, {2, 13, 4, true}, {2, 13, 9, true}, {2, 13, 5, false},
+		{2, 9, 9, false}, // below farFromLevel the far rule is off
+	} {
+		if got := k.Open(c.healing, c.level, c.area, fields, ml); got != c.want {
+			t.Errorf("potions %d clvl %d area %d: open %v, want %v", c.healing, c.level, c.area, got, c.want)
+		}
+	}
+}
