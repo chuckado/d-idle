@@ -1,4 +1,6 @@
 {
+ "evidence": 1,
+ "evidence_ref": "single incident: needs seed set (Questy bed, one hero, one day)",
  "_comment": "Poverty farm (user request 2026-11-26, Questy bed: clvl 12, 0 potions, gold 7, six deaths). goldPerMin is the MEASURED pickup gold per minute by area on the Questy bed over 24 h (sum of 'loot: ... gold +N' over minutes in the area, V from docker logs; tiny: gold piles average 2.8). With no healing potion and gold under the kit price the hero farms the best of these whose monster level is at most clvl minus noPotionGap, and walks into no area above that level unless the owner's try anyway is on. Numbers are one hero's, one day (S). noPotionFromLevel: below it the plan's own entry levels rule (a clvl 1 hero with no potion still leaves the camp). MOVED (card admit1): noPotionGap, noPotionFromLevel, kitFloor and noPortalLean are rows of admission.json (poverty, kitFloor, lean); this file keeps the measured farm list.",
  "farm": [
   {
