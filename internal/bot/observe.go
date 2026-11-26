@@ -155,6 +155,7 @@ type observer struct {
 
 	lastSafety   SafetyAction
 	lastSafetyAt time.Time
+	sl           safetyLat // verdict to input latency (safetylat.go)
 
 	drinkTimes []time.Time // life drinks inside the burst window (earlyexit.go)
 	stale      stalePack
@@ -1115,7 +1116,7 @@ func (r *Runner) minuteLine(s *d2.Snapshot, p *d2.Player, now time.Time) {
 		"potions", kit.BeltHP, "mana", kit.BeltMP, "packHP", packHP, "packMP", packMP, "beltBoxes", beltBoxes, "potionsUsed", int(r.drank.Load()), "tp", tp,
 		"gold", p.Gold, "stashGold", p.StashGold, "restarts", restartCount(o.newGames, o.plannedGames, o.recycles, o.lostRestarts), "xpRisk", o.xpAtRiskLocked(r.d.SavedExp), "xpLost", o.xpLost, "rung", rung, "goal", goal, "step", step,
 		"state", group, "rstate", rstate, "life", p.Life, "maxLife", p.MaxLife, "mp", p.Mana, "maxMana", p.MaxMana, "table", r.buildName(p), "invPct", invPct, "dmgTaken", o.hp.dmg, "hpMinPct", o.takeHPMin(), "lifeLost", lifeLost, "hitsTaken", hitsTaken, "hpPolls", hpPolls, "armor", combat.ArmorState(p), "goldPickup", o.goldPickupMin,
-		"arrivals", o.arrivals, "bounces", o.bounces, "bouncesPer100", bouncesPer100(o.bounces, o.arrivals)}, append(r.failsafeKV(o), append(r.runKV(), append(r.inputKV(), append(r.planKV(), r.arb.minuteKV()...)...)...)...)...)...)
+		"arrivals", o.arrivals, "bounces", o.bounces, "bouncesPer100", bouncesPer100(o.bounces, o.arrivals)}, append(r.failsafeKV(o), append(r.runKV(), append(r.inputKV(), append(r.planKV(), append(r.arb.minuteKV(), r.inv.minuteKV()...)...)...)...)...)...)...)
 	o.goldPickupMin = 0
 	r.noteGoldNextMinute(p.Gold, now)
 }
@@ -1130,12 +1131,13 @@ func (r *Runner) planKV() []any {
 }
 
 // inputKV is the planner's path counters for the minute line, "input" = verb/key/click (docs/process/sandbox-devp14.md).
-// Nothing while the knob input.planner is off, so the default line is unchanged.
+// Also carries the safety latency of the minute (safetylat.go); nothing while no safety action was sent and the planner is off.
 func (r *Runner) inputKV() []any {
+	kv := r.ob.sl.minuteKV() // obMu is held by minuteLine
 	if r.e.Planner.On() {
-		return []any{"input", r.e.Planner.Summary()}
+		kv = append(kv, "input", r.e.Planner.Summary())
 	}
-	return nil
+	return kv
 }
 
 // bouncesPer100 is arrival bounces per 100 arrivals since start (docs/bounce3.md), one decimal; 0 before any arrival.

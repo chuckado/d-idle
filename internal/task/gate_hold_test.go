@@ -166,3 +166,27 @@ func TestEarlyRoadIsAHoldOrAChoresTripNeverAStrike(t *testing.T) {
 		})
 	}
 }
+
+// Questy bed 2026-11-26: a clvl 12 Paladin left town for the Dark Wood quest with 0 potions and died in Stony Field. Any step into a
+// field waits when the quest-walk kit is missing: a chores trip when the purse pays, a hold (the hero farms gold) when it does not;
+// town steps are never held. Two classes.
+func TestQuestWalkKitHoldsEveryFieldStep(t *testing.T) {
+	for name, base := range holdWorlds() {
+		t.Run(name, func(t *testing.T) {
+			w := base
+			w.Gated = false
+			w.WalkBlocked = EarlyBlock{Why: "0 healing potions < 2 for a quest walk", KitOnly: true}
+			f := fieldReady(4)(w)
+			if f == nil || f.Kind != KindResource || len(f.Insert) != 1 || f.Code != "needs_potions" {
+				t.Fatalf("kit with gold: want a chores insert, got %+v", f)
+			}
+			w.WalkBlocked = EarlyBlock{Why: "2 healing potions needed, 60 gold: farm gold first"}
+			if f := fieldReady(4)(w); f == nil || !f.Hold || len(f.Insert) != 0 {
+				t.Fatalf("no gold: want a hold, got %+v", f)
+			}
+			if f := fieldReady(1)(w); f != nil {
+				t.Fatalf("a town step was held: %+v", f)
+			}
+		})
+	}
+}
