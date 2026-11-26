@@ -24,39 +24,39 @@ func noteLife(t *testing.T, h *harness, g *handGame, lifePct, potions int) {
 	h.f.noteLifePrice(s)
 }
 
-// palprofile B1: a clvl 5 Paladin with Sacrifice attacks with it only while life, potions and the knob allow.
+// The life-price gate (floor, hysteresis) still guards any profile that lists a life-price skill, but the Paladin
+// profiles list none (Sacrifice is a prerequisite only, SME paladin-auras 2026-11-26): healthy or not, no Sacrifice attack.
 func TestSacrificeNeverUnderTheLifeFloor(t *testing.T) {
 	h, g := newHandGame(t)
 	g.p.Level = 5
 	g.p.Skills = skillsOf(107)
 	g.p.LeftSkill = 107
 	p := g.p
-	if got := attackNamesOf(h.f, p); slices.Contains(got, "Sacrifice") {
-		t.Fatalf("nothing noted yet: Sacrifice must wait: %v", got)
-	}
-	noteLife(t, h, g, 100, 2)
-	if got := attackNamesOf(h.f, p); !slices.Contains(got, "Sacrifice") {
-		t.Fatalf("healthy: %v", got)
-	}
 	floor := h.f.tune().SacrificeMinLifePct
-	noteLife(t, h, g, floor-1, 2)
-	if got := attackNamesOf(h.f, p); slices.Contains(got, "Sacrifice") {
-		t.Fatalf("under the floor: %v", got)
+	for _, lp := range []int{100, floor + 5, floor - 1, 1} {
+		noteLife(t, h, g, lp, 2)
+		if got := attackNamesOf(h.f, p); slices.Contains(got, "Sacrifice") {
+			t.Fatalf("life %d%%: Sacrifice is an attack: %v", lp, got)
+		}
 	}
-	noteLife(t, h, g, floor+5, 2) // back above the floor but inside the hysteresis band
-	if got := attackNamesOf(h.f, p); slices.Contains(got, "Sacrifice") {
-		t.Fatalf("inside hysteresis: %v", got)
+	// the gate itself: under the floor it stays off until the hysteresis is cleared, every life below the floor never offers it
+	noteLife(t, h, g, floor-1, 2)
+	if h.f.lifePriceOK() {
+		t.Fatal("under the floor")
+	}
+	noteLife(t, h, g, floor+5, 2)
+	if h.f.lifePriceOK() {
+		t.Fatal("inside hysteresis")
 	}
 	noteLife(t, h, g, floor+lifePriceHysteresis, 2)
-	if got := attackNamesOf(h.f, p); !slices.Contains(got, "Sacrifice") {
-		t.Fatalf("recovered: %v", got)
+	if !h.f.lifePriceOK() {
+		t.Fatal("recovered")
 	}
-	// every life value below the floor, from any previous state, never offers it
 	for lp := 1; lp < floor; lp++ {
 		noteLife(t, h, g, 100, 2)
 		noteLife(t, h, g, lp, 2)
 		if h.f.lifePriceOK() {
-			t.Fatalf("life %d%% offers Sacrifice", lp)
+			t.Fatalf("life %d%% offers a life-price skill", lp)
 		}
 	}
 }
@@ -142,5 +142,24 @@ func TestHolyFireCrowdCrossover(t *testing.T) {
 	g.aura, p.RightSkill = 98, 98
 	if got := pick(1, &Target{}); got != "Holy Fire" {
 		t.Errorf("knob 1: %s", got)
+	}
+}
+
+// Two Paladin profiles, every level 1 to 40, every skill learned: Sacrifice is never an attack and no life is paid.
+func TestPaladinProfilesNeverAttackWithSacrifice(t *testing.T) {
+	all := func(string) bool { return true }
+	for _, build := range []Build{"", "hammerdin"} {
+		pr, err := LookupProfile(d2.Paladin, build)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(pr.LifePrice) != 0 {
+			t.Errorf("%s: life price %v", pr.ProfileID(), pr.LifePrice)
+		}
+		for lv := 1; lv <= 40; lv++ {
+			if slices.Contains(pr.AttackNames(lv, all), "Sacrifice") {
+				t.Errorf("%s clvl %d: Sacrifice attacks", pr.ProfileID(), lv)
+			}
+		}
 	}
 }
