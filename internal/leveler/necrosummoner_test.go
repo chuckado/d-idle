@@ -12,7 +12,9 @@ func TestNecromancerSummonerBuildSelectableAndDefaultsUnchanged(t *testing.T) {
 	if lb.Class != "necromancer" || lb.Combat != "summoner" {
 		t.Fatalf("class %q combat %q", lb.Class, lb.Combat)
 	}
-	if TableCombat("necromancer_summoner_guide") != "summoner" || TableCombat("necromancer_summoner_normal30") != "" {
+	// card necroaudit: the default table now names the summoner profile (its main attack Corpse Explosion needs the
+	// summoner layout key; the default layout has none). Not yet seen in a live log (U).
+	if TableCombat("necromancer_summoner_guide") != "summoner" || TableCombat("necromancer_summoner_normal30") != "summoner" {
 		t.Errorf("combat lines: guide %q, normal30 %q", TableCombat("necromancer_summoner_guide"), TableCombat("necromancer_summoner_normal30"))
 	}
 	got := map[string]int{}
