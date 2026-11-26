@@ -346,6 +346,7 @@ docs/outcomes.md  credit-runner  outcome-travel-gate
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
 docs/plan/STATUS.md  credit-runner  statusrefresh
+docs/plan/data/admission.json  credit-runner  act2temple
 docs/plan/data/admission.json  credit-runner  admit1
 docs/plan/data/admission.json  credit-runner  necrofloors
 docs/plan/data/build-necromancer_summoner_normal30.json  credit-runner  allocfix
@@ -472,6 +473,7 @@ docs/vault.md  credit-runner  sellall
 docs/vault.md  credit-runner  vaultclean
 docs/vault.md  credit-runner  vaultpay
 docs/vault.md  credit-runner  vaultreveal
+internal/admit/  credit-runner  act2temple
 internal/admit/  credit-runner  admit1
 internal/admit/admit_test.go  credit-runner  necrofloors
 internal/agency/  credit-runner  dlv-rotation
@@ -612,13 +614,17 @@ internal/combat/  credit-runner  dlv-stance-pack
 internal/combat/  credit-runner  dlv-upkeep-minions
 internal/combat/  credit-runner  dlv-upkeep-state
 internal/combat/  credit-runner  dlv-whirl
+internal/combat/arrival.go  credit-runner  act2temple
+internal/combat/arrival_test.go  credit-runner  act2temple
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/classdata.go  credit-runner  necrocaps
 internal/combat/classdata/profiles.json  credit-runner  necrocaps
+internal/combat/crowd.go  credit-runner  act2temple
 internal/combat/fight.go  credit-runner  maphistory
 internal/combat/fight.go  credit-runner  maphistoryC
 internal/combat/fightend.go  credit-runner  maphistory
 internal/combat/fightend.go  credit-runner  maphistoryC
+internal/combat/fighter.go  credit-runner  act2temple
 internal/combat/fighter.go  credit-runner  beltfix
 internal/combat/fighter.go  credit-runner  maphistory
 internal/combat/fighter.go  credit-runner  maphistoryC
@@ -628,6 +634,7 @@ internal/combat/necro_data_test.go  credit-runner  necrocaps
 internal/combat/packdrink.go  credit-runner  beltfix
 internal/combat/packdrink_test.go  credit-runner  beltfix
 internal/combat/reach.go  credit-runner  maphistoryC
+internal/combat/safety.go  credit-runner  act2temple
 internal/combat/safety.go  credit-runner  beltfix
 internal/d2/classtraits.go  credit-runner  necromercrogue
 internal/d2/classtraits.json  credit-runner  necromercrogue
@@ -778,6 +785,7 @@ internal/nav/route.go  credit-runner  exitsread
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
+internal/plandata/admission.json  credit-runner  act2temple
 internal/plandata/admission.json  credit-runner  admit1
 internal/plandata/admission.json  credit-runner  necrofloors
 internal/plandata/boss_levels.go  pro-runner  levelplan3

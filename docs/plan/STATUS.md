@@ -52,6 +52,7 @@
 | necrokeys | proposed | - | `docs/probes/necrokeys-2026-11-26.md` | - |
 | hotkeydrift | proposed | - | `docs/probes/hotkeydrift-2026-11-26.md`<br>`cmd/d2bot/hotkeydrift_test.go` | - |
 | necroaudit | proposed | - | `docs/probes/necro-readiness-2026-11-26.md`<br>`docs/epics/epic-class-necromancer.md`<br>`internal/plandata/build-necromancer_summoner_normal30.json`<br>`internal/gear/builds/necromancer_summoner_normal30.json`<br>`cmd/d2bot/class_test.go`<br>`internal/leveler/necrosummoner_test.go`<br>`docs/plan/data/build-necromancer_summoner_normal30.json` | - |
+| act2temple | proposed | - | `internal/plandata/admission.json`<br>`docs/plan/data/admission.json`<br>`internal/admit/`<br>`internal/combat/arrival.go`<br>`internal/combat/arrival_test.go`<br>`internal/combat/safety.go`<br>`internal/combat/fighter.go`<br>`internal/combat/crowd.go` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
@@ -331,6 +332,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a2b81607f 11-26 15:47 `Merge agent/act2temple: Merge origin/main into act2temple (admission rows reconciled)` (act2temple)
+- 106926944 11-26 15:41 `Merge origin/main into act2temple (admission rows reconciled)` (-)
 - a7cc5189c 11-26 15:32 `Merge agent/necro2e: Merge branch 'main' into necrocaps` (necro2e)
 - 56861f3fc 11-26 15:32 `Merge agent/necro2d: Merge branch 'main' into necromercrogue` (necro2d)
 - 4b5bc299a 11-26 15:32 `Merge agent/necro2c: Merge branch 'main' into necrofloors` (necro2c)
@@ -339,6 +342,4 @@
 - a42822b9e 11-26 15:28 `Merge branch 'main' into necromercrogue` (-)
 - eb7e319fc 11-26 15:28 `Merge branch 'main' into necrofloors` (-)
 - 218552d7a 11-26 15:28 `Merge branch 'main' into hotkeydrift` (-)
-- 2f3e38296 11-26 15:20 `Merge agent/necro2a: Merge branch 'main' into necrosummoninv` (necro2a)
-- de5ab0f80 11-26 15:18 `Merge branch 'main' into necrosummoninv` (-)
 <!-- statusgen:end -->
