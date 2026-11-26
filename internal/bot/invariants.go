@@ -24,22 +24,24 @@ type invRow struct {
 	Pct    int // percent threshold, meaning per row
 	GapSec int // minimum seconds between two lines of this name
 	Why    string
+	Hard   bool // a hard breach: the flip watcher (tools/flip) reverts a knob on any hit since the flip
 }
 
 const invDefaultGapSec = 60
 
 var invRows = []invRow{
-	{Name: "potion-not-drunk", Secs: 8, Why: "in the field under the drink line with a healing potion in the belt and none drunk for Secs"},
+	{Name: "potion-not-drunk", Hard: true, Secs: 8, Why: "in the field under the drink line with a healing potion in the belt and none drunk for Secs"},
 	{Name: "portal-not-cast", Secs: 6, Why: "in the field at or under the chicken line with hostiles near and a town portal scroll, still in the same area after Secs"},
+	{Name: "stuck-in-pack", Secs: 8, Count: 5, Pct: 60, Why: "in the field with Count or more hostiles near and life under Pct for Secs (a crowd fight that neither kills nor leaves)"},
 	{Name: "field-entry-hurt", Pct: 50, Why: "left town with life under Pct of max"},
 	{Name: "field-entry-no-kit", Why: "left town while the kit (portal, healing, mana minimum) is incomplete"},
 	{Name: "resupply-in-field", Secs: 10, Why: "state resupplying outside town for Secs (a town chore running in a field)"},
 	{Name: "refusal-as-failure", GapSec: 30, Why: "a refusal (not ready, gated) went through the failure counter"},
-	{Name: "refusal-storm", Count: 10, Why: "Count refusals since the last kill, xp or area change"},
-	{Name: "life-zero-alive", Secs: 3, Why: "alive (not dying) with life 0 for Secs"},
-	{Name: "xp-frozen", Secs: 1800, Why: "in the field, not paused, no xp change for Secs"},
-	{Name: "mode-no-exit", Secs: 1200, Why: "the same state and step for Secs, not paused or parked"},
-	{Name: "corpse-unresolved", Secs: 900, Why: "a corpse waits in town for Secs, neither retrieved nor abandoned"},
+	{Name: "refusal-storm", Hard: true, Count: 10, Why: "Count refusals since the last kill, xp or area change"},
+	{Name: "life-zero-alive", Hard: true, Secs: 3, Why: "alive (not dying) with life 0 for Secs"},
+	{Name: "xp-frozen", Hard: true, Secs: 1800, Why: "in the field, not paused, no xp change for Secs"},
+	{Name: "mode-no-exit", Hard: true, Secs: 1200, Why: "the same state and step for Secs, not paused or parked"},
+	{Name: "corpse-unresolved", Hard: true, Secs: 900, Why: "a corpse waits in town for Secs, neither retrieved nor abandoned"},
 	{Name: "town-thrash", Count: 17, Secs: 3600, Why: "Count or more field entries within Secs"},
 	{Name: "economy-stall", Secs: 7200, Count: 100, Why: "gold in purse and stash under Count for Secs while kills continue"},
 }
@@ -77,17 +79,20 @@ type invFacts struct {
 type invHit struct{ Name, Detail string }
 
 type invMon struct {
-	mu      sync.Mutex
-	lastLog map[string]time.Time
-	total   map[string]int // hits since the process started
-	minute  map[string]int // hits since the last minute line
-	pending []invHit       // hits noted outside the tick (refusal counted as a failure)
+	mu          sync.Mutex
+	lastLog     map[string]time.Time
+	total       map[string]int       // hits since the process started
+	first, last map[string]time.Time // first and latest hit per name
+	started     time.Time            // first tick: the start of every counter's window
+	minute      map[string]int       // hits since the last minute line
+	pending     []invHit             // hits noted outside the tick (refusal counted as a failure)
 
 	seen, prevTown        bool
 	lowSince              time.Time
 	lowDrank              int64
 	tpSince               time.Time
 	tpArea                int
+	packSince             time.Time
 	resupSince, zeroSince time.Time
 	xpAt                  time.Time
 	lastXP                uint32
@@ -132,13 +137,16 @@ func (m *invMon) noteRefusalFailure(what string, err error) {
 func (m *invMon) tick(f invFacts) []invHit {
 	m.mu.Lock()
 	defer m.mu.Unlock()
+	if m.started.IsZero() {
+		m.started = f.now
+	}
 	var raw []invHit
 	hit := func(name, format string, a ...any) { raw = append(raw, invHit{name, fmt.Sprintf(format, a...)}) }
 	raw = append(raw, m.pending...)
 	m.pending = nil
 	if f.dead {
 		// a dead hero breaks no field invariant; keep the stopwatches clean
-		m.lowSince, m.tpSince, m.resupSince, m.zeroSince = time.Time{}, time.Time{}, time.Time{}, time.Time{}
+		m.lowSince, m.tpSince, m.resupSince, m.zeroSince, m.packSince = time.Time{}, time.Time{}, time.Time{}, time.Time{}, time.Time{}
 		m.seen, m.prevTown = false, false
 		return m.limit(raw, f.now)
 	}
@@ -151,6 +159,12 @@ func (m *invMon) tick(f invFacts) []invHit {
 	}
 	if d := invSince(&m.lowSince, low, f.now); d >= r.dur() {
 		hit(r.Name, "life=%d%% line=%d%% beltHP=%d drank=%d for=%ds hostiles=%d step=%q", f.lifePct, f.drinkPct, f.beltHP, f.drank, int(d.Seconds()), f.hostiles, f.step)
+	}
+
+	r = invRowOf("stuck-in-pack")
+	packed := field && f.maxLife > 0 && f.lifePct < r.Pct && f.hostiles >= r.Count
+	if d := invSince(&m.packSince, packed, f.now); d >= r.dur() {
+		hit(r.Name, "life=%d%% hostiles=%d scrolls=%d beltHP=%d area=%d for=%ds step=%q", f.lifePct, f.hostiles, f.tp, f.beltHP, f.area, int(d.Seconds()), f.step)
 	}
 
 	r = invRowOf("portal-not-cast")
@@ -254,6 +268,13 @@ func (m *invMon) limit(raw []invHit, now time.Time) []invHit {
 		}
 		m.lastLog[h.Name] = now
 		m.total[h.Name]++
+		if m.first == nil {
+			m.first, m.last = map[string]time.Time{}, map[string]time.Time{}
+		}
+		if _, ok := m.first[h.Name]; !ok {
+			m.first[h.Name] = now
+		}
+		m.last[h.Name] = now
 		m.minute[h.Name]++
 		out = append(out, h)
 	}
@@ -353,4 +374,30 @@ func (m *invMon) wasInTown() bool {
 // outcome lands (docs/outcomes.md) the wording is all there is; it matches the planningFault rule.
 func isRefusal(err error) bool {
 	return err != nil && (errors.Is(err, errAreaGated) || strings.Contains(err.Error(), "not ready"))
+}
+
+// InvCounter is one invariant counter of the read-only status surface (GET /api/explain and `ops status --why`): the
+// flip watcher (tools/flip, docs/process/dark-launch.md) reads the Hard ones. Since is when counting began (the first
+// tick of this process), so a restart shows as a new Since; First and Last are the first and latest hit.
+type InvCounter struct {
+	Name  string    `json:"name"`
+	Hard  bool      `json:"hard"`
+	Count int       `json:"count"`
+	Since time.Time `json:"since"`
+	First time.Time `json:"first,omitempty"`
+	Last  time.Time `json:"last,omitempty"`
+}
+
+// Counters lists every row, in table order, with its lifetime count. Empty until the first tick.
+func (m *invMon) Counters() []InvCounter {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if m.started.IsZero() {
+		return []InvCounter{}
+	}
+	out := make([]InvCounter, 0, len(invRows))
+	for _, r := range invRows {
+		out = append(out, InvCounter{Name: r.Name, Hard: r.Hard, Count: m.total[r.Name], Since: m.started, First: m.first[r.Name], Last: m.last[r.Name]})
+	}
+	return out
 }

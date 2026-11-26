@@ -1407,6 +1407,8 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/toolstrade78: Merge branch 'main' into toolstrade78 (merged 2026-11-26): poverty farm: no healing potion hero at clvl 8 or more farms the best open area by measured gold per minute within monster level clvl minus 3; owner try-anyway and corpse runs exempt; whole repo green on the worker host <!--sg:agent/toolstrade78-->
 - agent/toolstrade79: Merge origin/main into toolstrade79 (merged 2026-11-26) <!--sg:agent/toolstrade79-->
 - incident1: incident files at death and d2scenario incident replay (report-only) (TASK-971, merged 2026-11-26, acceptance 4 of 4): incident file at each death, d2scenario incident replay rows (3 Questy deaths), incident scenario doc; offline only <!--sg:agent/incident1-->
+- autorevert1: flip, 24 h watch, auto-revert tool for dark knobs (TASK-994, merged 2026-11-26, acceptance 1 of 2): Flip, watch 24 h, auto-revert tool for dark knobs: hard invariant counters with since on the status output and watch API, tools/flip/flip.py flip and watch with fake-sandbox tests, How to flip section. Not yet run against a real container. <!--sg:agent/autorevert1-->
+- agent/toolstrade80: Merge branch 'main' into toolstrade80 (merged 2026-11-26) <!--sg:agent/toolstrade80-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/env"
 )
 
@@ -143,6 +144,38 @@ func TestCrowdAbandonQuestOverride(t *testing.T) {
 	} {
 		if got := Decide(c.in); got != c.want {
 			t.Errorf("%s: got %v want %v", c.name, got, c.want)
+		}
+	}
+}
+
+// Questy death 11: two hostiles inside 8 subtiles, seven inside 14 (four archers), life 49%: the near crowd rule saw nothing and no
+// survival action ran. The far crowd rule leaves by portal at crowdFarPct, drinks without a scroll, and stays quiet for small packs,
+// healthy life, no fight or the rule off. Normal and Nightmare.
+func TestFarCrowdLeavesBeforeTheDeath(t *testing.T) {
+	for _, diff := range []d2.Difficulty{d2.Normal, d2.Nightmare} {
+		far := func(life, farN int, mut func(*SafetyInput)) SafetyInput {
+			return crowdIn(life, 2, 1, func(i *SafetyInput) {
+				i.Diff, i.CrowdFar = diff, farN
+				if mut != nil {
+					mut(i)
+				}
+			})
+		}
+		for _, c := range []struct {
+			name string
+			in   SafetyInput
+			want SafetyAction
+		}{
+			{"7 within 14 at 49%: portal", far(49, 7, nil), TownPortal},
+			{"7 within 14 at 56%: fight on", far(56, 7, nil), SafetyNone},
+			{"4 within 14 at 49%: not a far crowd", far(49, 4, nil), DrinkLife},
+			{"no scroll: drink", far(49, 7, func(i *SafetyInput) { i.HasPortal = false }), DrinkLife},
+			{"no scroll no potion: nothing to do", far(49, 7, func(i *SafetyInput) { i.HasPortal = false; i.Belt = Belt{} }), SafetyNone},
+			{"rule off: the normal drink line", far(54, 7, func(i *SafetyInput) { i.Tune.CrowdFarN = 0 }), DrinkLife},
+		} {
+			if got := Decide(c.in); got != c.want {
+				t.Errorf("%v %s: got %v want %v", diff, c.name, got, c.want)
+			}
 		}
 	}
 }

@@ -45,6 +45,8 @@ type ExplainView struct {
 	Refusals  []ExplainRefusal  `json:"refusals"`
 	Arbiter   string            `json:"arbiter,omitempty"` // the shadow's last choice, when the shadow runs
 	Journey   string            `json:"journey,omitempty"` // why the quest journey is blocked now
+	// Invariants are the monitor counters with a since time; the Hard ones are what the flip watcher reverts on.
+	Invariants []InvCounter `json:"invariants"`
 }
 
 type explainState struct {
@@ -158,6 +160,7 @@ func (r *Runner) Explain() ExplainView {
 	if len(v.Refusals) > explainRefMax {
 		v.Refusals = v.Refusals[:explainRefMax]
 	}
+	v.Invariants = r.inv.Counters()
 	r.mu.Lock()
 	v.Journey = r.journeyWhy
 	r.mu.Unlock()

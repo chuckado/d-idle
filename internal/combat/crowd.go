@@ -77,6 +77,36 @@ func crowdDecide(in SafetyInput, lp int, heal, rejuv bool) (SafetyAction, bool) 
 	return SafetyNone, false
 }
 
+// CrowdWithin counts the hostiles within radius subtiles of the player.
+func CrowdWithin(hs []Target, radius float64) int {
+	n := 0
+	for _, h := range hs {
+		if h.Dist <= radius {
+			n++
+		}
+	}
+	return n
+}
+
+// farCrowdDecide is the rule for packs that stand mostly outside crowdRadius (archers, casters): CrowdFarN hostiles within
+// CrowdFarRadius and life at or below CrowdFarPct leave by portal when the cast is not blocked, else drink.
+func farCrowdDecide(in SafetyInput, lp int, heal, rejuv bool) (SafetyAction, bool) {
+	t := in.Tune
+	if t.CrowdFarN <= 0 || in.CrowdFar < t.CrowdFarN || lp > t.CrowdFarPct || !in.InFight {
+		return SafetyNone, false
+	}
+	if blocked, _ := in.castBlocked(); in.HasPortal && !blocked {
+		return TownPortal, true
+	}
+	switch {
+	case heal && in.HealReady:
+		return DrinkLife, true
+	case rejuv && in.RejuvReady:
+		return DrinkRejuv, true
+	}
+	return SafetyNone, false
+}
+
 // SetQuestCrowd tells the fighter a player-started quest chunk runs (the quest crowd-abandon size applies). Safe from
 // any goroutine.
 func (f *Fighter) SetQuestCrowd(on bool) { f.questCrowd.Store(on) }
