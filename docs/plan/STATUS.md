@@ -299,6 +299,7 @@
 | ckptlive | proposed | - | `docs/probes/checkpoint-live-drill.md` | - |
 | advisor1 | proposed | - | `docs/design/advisor-r14.md` | - |
 | autorevert1 | proposed | - | `docs/design/autorevert.md` | - |
+| reflex1d | proposed | - | `internal/bot/safetylat.go`<br>`internal/bot/loop.go`<br>`internal/bot/reflexdrink_test.go` | - |
 
 ### Gates
 - contract [act1-campaign](../contracts/act1-campaign.md): 9 requirements
@@ -321,6 +322,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2c0ff5269 11-26 01:07 `Merge agent/reflex1d: reflex1d: hard-cancel wait uses a timer, not Clock.Sleep (flaky reaction test)` (reflex1d)
+- 051b16371 11-26 01:06 `Merge branch 'main' into reflex1d` (-)
 - 80c9b2ea1 11-26 00:49 `Merge agent/explain1: Merge branch 'main' into explain1` (explain1)
 - fc5ecb6ef 11-26 00:48 `Merge branch 'main' into explain1` (-)
 - 2fa717c3f 11-26 00:46 `Merge agent/cardclose2: cardclose2: close 7 merged cards (954, 966 by catch-up; 953, 955, 959, 962, 934 by hand)` (cardclose2)
@@ -329,6 +332,4 @@
 - 0873ce5d4 11-26 00:14 `Merge origin/main into reflex1c` (-)
 - 9bc2e4e58 11-26 00:13 `Merge branch 'main' into explain1` (-)
 - ca15a2e33 11-26 00:07 `merge origin/main into explain1` (-)
-- 61cc4f451 11-26 00:05 `Merge origin/main into reflex1c` (-)
-- 9c3e3ed58 11-25 23:56 `Merge agent/reflex1b: reflex1b: town chores verify in town before each step; guard aborts chores outside town` (reflex1b)
 <!-- statusgen:end -->
