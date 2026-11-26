@@ -1447,6 +1447,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/qd28: d2scenario invariants soft in drills; act2strong kit; matrix note 80 (merged 2026-11-26) <!--sg:agent/qd28-->
 - agent/toolstrade87: Merge branch 'main' into toolstrade87 (merged 2026-11-26) <!--sg:agent/toolstrade87-->
 - aura2b: Paladin never attacks with Sacrifice (prerequisite only) (TASK-1012, merged 2026-11-26, acceptance 2 of 2): Paladin profiles no longer attack with Sacrifice, which only stays as the Zeal prerequisite; early levels use the weapon and Zeal from level 12 <!--sg:agent/aura2b-->
+- agent/necro2a: Merge branch 'main' into necrosummoninv (merged 2026-11-26): Soft invariant summon-missing: a summoner with a summon skill learned, mana for it and hostiles near that reads no own minion for 10 s; minute line carries minions; tests on two heroes <!--sg:agent/necro2a-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
