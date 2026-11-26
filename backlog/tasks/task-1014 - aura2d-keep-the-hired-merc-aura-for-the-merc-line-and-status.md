@@ -1,10 +1,11 @@
 ---
 id: TASK-1014
 title: 'aura2d: keep the hired merc aura for the merc line and status'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T18:39:00Z'
+updated_date: '2026-11-26T19:36:00Z'
 labels:
   - bot
   - bot-fix
