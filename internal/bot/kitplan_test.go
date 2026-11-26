@@ -259,17 +259,19 @@ func TestFillEarlyHandsTheRoadToTheTaskLayer(t *testing.T) {
 	}
 }
 
-// Questy bed 2026-11-26: clvl 12, 0 potions, gold 7: the poverty farm took it to Stony Field (Dark Rangers) and it died. With no healing
-// potion the hero farms the best measured gold per minute of povertyfarm.json that is open: Cave level 1 first, then Stony Field,
-// Cold Plains; with a potion in the belt the rule does not apply. Two classes.
+// Questy bed 2026-11-26: clvl 12, 0 potions, gold 7: the poverty farm took it to Stony Field (Dark Rangers) and it died. A hero short of
+// the kit farms the best measured gold per minute of povertyfarm.json among the areas the kit floor leaves open: with two potions
+// (tier: monsters far below the hero) Cave level 1 first, then Stony Field, Den of Evil; with no potion the first field only (the kit
+// floor); with four potions the rule does not apply. Two classes.
 func TestPovertyFarmPicksTheBestMeasuredArea(t *testing.T) {
 	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
 		for _, tc := range []struct {
 			potions int
 			cleared []int
 			want    int
-		}{{0, nil, 9}, {0, []int{9}, 4}, {0, []int{9, 4}, 8}, {2, nil, 0}} {
+		}{{2, nil, 9}, {2, []int{9}, 4}, {2, []int{9, 4}, 8}, {0, nil, 2}, {1, nil, 2}, {4, nil, 0}} {
 			g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
+			g.r.mlvlFn = func(a int, _ d2.Difficulty) int { return 1 } // every monster is far below clvl 12
 			g.w.set(func(w *world) {
 				w.class, w.level, w.area = class, 12, 1
 				var keep []d2.Unit
@@ -288,7 +290,7 @@ func TestPovertyFarmPicksTheBestMeasuredArea(t *testing.T) {
 				g.r.loop.cleared[a] = true
 			}
 			got, ok := g.r.povertyFarmArea(g.r.latest())
-			if tc.potions == 0 && len(tc.cleared) == 0 {
+			if tc.potions == 2 && len(tc.cleared) == 0 {
 				if a, _ := g.r.starveArea(g.r.latest()); a != tc.want {
 					t.Errorf("%v: starveArea %d, want the measured best %d", class, a, tc.want)
 				}
@@ -476,6 +478,60 @@ func TestGuardLeavesARunningPortalCastAlone(t *testing.T) {
 			got := g.r.guardOnce(context.Background(), func(error) { cancelled = true }, StateClearing)
 			if got == inFlight || cancelled == inFlight {
 				t.Errorf("%v inFlight %v: guard returned %v cancelled %v", class, inFlight, got, cancelled)
+			}
+		}
+	}
+}
+
+// The poverty deadlock of Questy 2026-11-26: 3 potions and 14 gold at clvl 13 with only Blood Moor open (1.4 gold per minute, 106
+// refusals). The kitFloor tiers (admission.json): two potions open the first two fields and any area whose monsters are six levels
+// under the hero; below two potions the first field only; four potions anything. The poverty farm then picks the best measured
+// gold per minute among the open areas. Two classes.
+func TestKitFloorTiersEndThePovertyDeadlock(t *testing.T) {
+	mlvl := map[int]int{2: 1, 3: 3, 4: 5, 9: 3, 5: 8, 8: 4}
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		for _, tc := range []struct {
+			potions   int
+			farm      int          // the poverty farm pick (0: none)
+			open      map[int]bool // area -> open
+			mlvlTweak map[int]int
+		}{
+			{3, 9, map[int]bool{2: true, 3: true, 4: true, 9: true, 5: false}, nil},
+			{3, 4, map[int]bool{2: true, 3: true, 4: true, 9: false}, map[int]int{9: 9}},
+			{1, 2, map[int]bool{2: true, 3: false, 4: false, 9: false}, nil},
+			{4, 0, map[int]bool{2: true, 3: true, 4: true, 9: true, 5: true}, nil},
+		} {
+			g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
+			ml := map[int]int{}
+			for k, v := range mlvl {
+				ml[k] = v
+			}
+			for k, v := range tc.mlvlTweak {
+				ml[k] = v
+			}
+			g.r.mlvlFn = func(a int, _ d2.Difficulty) int { return ml[a] }
+			g.w.set(func(w *world) {
+				w.class, w.level, w.area, w.gold0 = class, 13, 1, 14
+				var keep []d2.Unit
+				for _, u := range w.items {
+					if u.Class != 1 {
+						keep = append(keep, u)
+					}
+				}
+				w.items = append(keep, d2.Unit{ID: 799, Type: d2.TypeItem, Class: 5, Item: &d2.Item{Where: d2.ContInventory}})
+				for i := 0; i < tc.potions; i++ {
+					w.items = append(w.items, d2.Unit{ID: uint32(700 + i), Type: d2.TypeItem, Class: 1, Item: &d2.Item{Where: d2.ContBelt}})
+				}
+			})
+			g.r.poll()
+			s := g.r.latest()
+			for a, want := range tc.open {
+				if got := g.r.kitFloorWhy(s, a) == ""; got != want {
+					t.Errorf("%v potions %d: area %d open %v, want %v (%s)", class, tc.potions, a, got, want, g.r.kitFloorWhy(s, a))
+				}
+			}
+			if a, ok := g.r.povertyFarmArea(s); a != tc.farm || ok != (tc.farm != 0) {
+				t.Errorf("%v potions %d: farm area %d ok %v, want %d", class, tc.potions, a, ok, tc.farm)
 			}
 		}
 	}
