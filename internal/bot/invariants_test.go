@@ -79,6 +79,9 @@ func TestInvariantMustFail(t *testing.T) {
 		{"chicken line, scrolls, hostiles", 20, func(h invHero) func(*invFacts, int) {
 			return func(f *invFacts, _ int) { f.lifePct, f.hostiles, f.life = h.chicken-1, 3, 1 }
 		}, "portal-not-cast"},
+		{"stuck in a pack at half life", 20, func(h invHero) func(*invFacts, int) {
+			return func(f *invFacts, _ int) { f.lifePct, f.life, f.hostiles = 50, h.maxLife/2, 7 }
+		}, "stuck-in-pack"},
 		{"resupplying in a field", 30, func(h invHero) func(*invFacts, int) {
 			return func(f *invFacts, _ int) { f.state, f.step = string(StateResupplying), "chores" }
 		}, "resupply-in-field"},

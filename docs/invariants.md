@@ -12,6 +12,7 @@
 | name | fires when |
 |---|---|
 | `potion-not-drunk` | in the field under the drink line, healing potion in the belt, none drunk for 8 s |
+| `stuck-in-pack` | in the field with 5 or more hostiles near and life under 60% for 8 s (a crowd fight that neither kills nor leaves) |
 | `portal-not-cast` | in the field at or under the chicken line, hostiles near, a town portal scroll, same area after 6 s |
 | `field-entry-hurt` | first tick outside town with life under 50 percent |
 | `field-entry-no-kit` | first tick outside town while `kit.missing()` (portal, healing, mana minimum) is not empty |
