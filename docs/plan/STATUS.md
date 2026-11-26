@@ -320,6 +320,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 363a0d3cf 11-26 10:34 `Merge agent/outcomes2g: Merge branch 'main' into outcome-explain-ring` (outcomes2g)
+- 064875015 11-26 10:32 `Merge branch 'main' into outcome-explain-ring` (-)
 - e4f4b63d8 11-26 10:27 `Merge agent/outcomes2f: Merge branch 'main' into outcome-hub-wording` (outcomes2f)
 - bb8eafa4e 11-26 10:25 `Merge branch 'main' into outcome-hub-wording` (-)
 - 4cf936afd 11-26 10:15 `Merge agent/outcomes2e: Merge branch 'main' into outcome-kit-gate` (outcomes2e)
@@ -328,6 +330,4 @@
 - 51d1dcebf 11-26 10:06 `Merge agent/outcomes2d: Merge branch 'main' into outcome-park-step` (outcomes2d)
 - 01d50bb52 11-26 10:04 `Merge branch 'main' into thrgov` (-)
 - 30791b6ab 11-26 10:04 `Merge branch 'main' into outcome-park-step` (-)
-- 59c0781ed 11-26 09:57 `Merge agent/arbmig3: Merge branch 'main' into arbmig` (arbmig3)
-- 5c2d3919b 11-26 09:57 `Merge agent/outcomes2c: Merge branch 'main' into outcome-task-step` (outcomes2c)
 <!-- statusgen:end -->

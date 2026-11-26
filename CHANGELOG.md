@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into outcome-explain-ring <!--sg:agent/outcomes2g-->
 - Merge branch 'main' into outcome-hub-wording <!--sg:agent/outcomes2f-->
 - Merge branch 'main' into outcome-kit-gate <!--sg:agent/outcomes2e-->
 - Merge branch 'main' into thrgov <!--sg:agent/thrgov-->
