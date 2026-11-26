@@ -71,7 +71,7 @@ func wireQuestBoard(stateDir string, ref *runnerRef, r *bot.Runner, logf func(ms
 		Queued:  r.QuestQueued,
 	})
 	ref.qd = d
-	startOperator(stateDir, d, logf)
+	startOperator(stateDir, d, r, logf)
 	return d
 }
 

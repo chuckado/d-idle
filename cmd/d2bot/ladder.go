@@ -295,6 +295,8 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		rig.Fun.Danger = l.danger
 		hub.SetHeroStatsSource(l.heroStats)
 		hub.SetSurvivalSource(survivalGlance)
+		opsHub.Store(hub)
+		hub.SetExplainSource(explainNow)
 		hub.SetExploredSource(l.explored)
 		hub.SetFarmResetSource(l.farmReset)
 		if l.knobs != nil && l.knobValue != nil {

@@ -43,6 +43,12 @@ func (r *Runner) Arbiter() (arbiter.Decision, bool) {
 // runGoalShadowed runs the chain and, with the knob on, asks the shadow. The shadow never blocks, never acts and its
 // panics are recovered inside; the chain's result is returned untouched.
 func (r *Runner) runGoalShadowed(ctx context.Context, snap *d2.Snapshot, c control) bool {
+	acted := r.runGoalArb(ctx, snap, c)
+	r.explainTick(snap, acted)
+	return acted
+}
+
+func (r *Runner) runGoalArb(ctx context.Context, snap *d2.Snapshot, c control) bool {
 	t := r.e.Tune.Bot
 	if t.ArbiterShadow == 0 {
 		return r.runGoal(ctx, snap, c)

@@ -78,8 +78,53 @@ func TestOpsCLI(t *testing.T) {
 func TestStartOperatorOffByDefault(t *testing.T) {
 	t.Setenv("D2BOT_OPERATOR", "")
 	dir := t.TempDir()
-	startOperator(dir, questboard.NewDesk(nil, questboard.DeskConfig{}), func(string, ...any) {})
+	startOperator(dir, questboard.NewDesk(nil, questboard.DeskConfig{}), nil, func(string, ...any) {})
 	if matches, _ := filepath.Glob(filepath.Join(dir, "operator.sock*")); len(matches) != 0 {
 		t.Fatalf("files without the env: %v", matches)
+	}
+}
+
+type cliOrders struct{ calls []string }
+
+func (o *cliOrders) Give(kind, area string, minutes int, replace bool) (string, error) {
+	o.calls = append(o.calls, kind+"|"+area)
+	return "ok", nil
+}
+
+func TestOpsCLIHeroVerbs(t *testing.T) {
+	dir := t.TempDir()
+	d, o := &cliDesk{}, &cliOrders{}
+	env := map[string]string{"D2BOT_OPERATOR": "1"}
+	stop, err := ops.Start(dir, func() ops.Desk { return d }, func(k string) string { return env[k] }, nil, func(c *ops.Config) {
+		c.Orders = func() ops.Orders { return o }
+		c.Explain = func() any { return map[string]string{"decisions": "ring"} }
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer stop()
+	sock := filepath.Join(dir, ops.SockName)
+	run := func(args ...string) (int, string) {
+		var b bytes.Buffer
+		code, err := opsMain(append(args, "--sock", sock), &b)
+		if err != nil {
+			b.WriteString(err.Error())
+		}
+		return code, b.String()
+	}
+	if c, out := run("status", "--why"); c != 0 || !strings.Contains(out, "ring") {
+		t.Fatalf("%d %s", c, out)
+	}
+	if c, out := run("hold", "--why", "stand down"); c != 0 || !strings.Contains(out, "ok=true") {
+		t.Fatalf("%d %s", c, out)
+	}
+	if c, out := run("go", "Cold", "Plains", "--minutes", "20", "--why", "farm"); c != 0 || o.calls[1] != "go|Cold Plains" {
+		t.Fatalf("%d %s %v", c, out, o.calls)
+	}
+	if c, out := run("park", "den", "3", "--why", "gold"); c != 0 || !strings.Contains(out, "parked until") {
+		t.Fatalf("%d %s", c, out)
+	}
+	if c, _ := run("park", "den"); c != 2 {
+		t.Fatalf("usage: %d", c)
 	}
 }
