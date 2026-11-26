@@ -444,17 +444,20 @@
      {
       "name": "Raise Skeleton",
       "kind": "skeleton",
-      "max": 12
+      "max": 12,
+      "source": "U guess: one skeleton per skill level in the game rules, skills.txt params not read; capSeen finds the real cap live"
      },
      {
       "name": "Raise Skeletal Mage",
       "kind": "mage",
-      "max": 4
+      "max": 4,
+      "source": "U guess: mages follow the skill level, skills.txt params not read; capSeen finds the real cap live"
      },
      {
       "name": "Revive",
       "kind": "revive",
-      "max": 8
+      "max": 8,
+      "source": "U guess: revive count is bounded by skill level and corpses, skills.txt params not read; capSeen finds the real cap live"
      }
     ],
     "curses": [
@@ -491,6 +494,14 @@
       "name": "Decrepify"
      }
     ],
+    "rules": {
+      "summonReach": 4,
+      "corpseSearch": 14,
+      "curseRange": 20,
+      "curseLifeSec": 30,
+      "curseCover": 5,
+      "source": "V summonReach 4 (docs/classes/smoke-necromancer.md finding 2, exact limit U); curseRange 20 is a U middle of V 11 landed and 28 missed (finding 4); curseLifeSec 30 U (Amplify Damage lasts 24 s at level 1); curseCover 5 U (V live 2026-10-29: one cast per unit burned mana); corpseSearch 14 U"
+    },
     "explosion": "Corpse Explosion"
    }
   },
@@ -530,17 +541,20 @@
      {
       "name": "Raise Skeleton",
       "kind": "skeleton",
-      "max": 12
+      "max": 12,
+      "source": "U guess: one skeleton per skill level in the game rules, skills.txt params not read; capSeen finds the real cap live"
      },
      {
       "name": "Raise Skeletal Mage",
       "kind": "mage",
-      "max": 4
+      "max": 4,
+      "source": "U guess: mages follow the skill level, skills.txt params not read; capSeen finds the real cap live"
      },
      {
       "name": "Revive",
       "kind": "revive",
-      "max": 8
+      "max": 8,
+      "source": "U guess: revive count is bounded by skill level and corpses, skills.txt params not read; capSeen finds the real cap live"
      }
     ],
     "curses": [
@@ -581,6 +595,14 @@
       "name": "Decrepify"
      }
     ],
+    "rules": {
+      "summonReach": 4,
+      "corpseSearch": 14,
+      "curseRange": 20,
+      "curseLifeSec": 30,
+      "curseCover": 5,
+      "source": "V summonReach 4 (docs/classes/smoke-necromancer.md finding 2, exact limit U); curseRange 20 is a U middle of V 11 landed and 28 missed (finding 4); curseLifeSec 30 U (Amplify Damage lasts 24 s at level 1); curseCover 5 U (V live 2026-10-29: one cast per unit burned mana); corpseSearch 14 U"
+    },
     "explosion": "Corpse Explosion"
    }
   },
@@ -839,17 +861,20 @@
      {
       "name": "Raise Skeleton",
       "kind": "skeleton",
-      "max": 12
+      "max": 12,
+      "source": "U guess: one skeleton per skill level in the game rules, skills.txt params not read; capSeen finds the real cap live"
      },
      {
       "name": "Raise Skeletal Mage",
       "kind": "mage",
-      "max": 4
+      "max": 4,
+      "source": "U guess: mages follow the skill level, skills.txt params not read; capSeen finds the real cap live"
      },
      {
       "name": "Revive",
       "kind": "revive",
-      "max": 8
+      "max": 8,
+      "source": "U guess: revive count is bounded by skill level and corpses, skills.txt params not read; capSeen finds the real cap live"
      }
     ],
     "curses": [
@@ -884,6 +909,14 @@
       "state": 19
      }
     ],
+    "rules": {
+      "summonReach": 4,
+      "corpseSearch": 14,
+      "curseRange": 20,
+      "curseLifeSec": 30,
+      "curseCover": 5,
+      "source": "V summonReach 4 (docs/classes/smoke-necromancer.md finding 2, exact limit U); curseRange 20 is a U middle of V 11 landed and 28 missed (finding 4); curseLifeSec 30 U (Amplify Damage lasts 24 s at level 1); curseCover 5 U (V live 2026-10-29: one cast per unit burned mana); corpseSearch 14 U"
+    },
     "explosion": ""
    }
   }

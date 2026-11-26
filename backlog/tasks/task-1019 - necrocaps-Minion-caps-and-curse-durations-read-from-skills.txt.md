@@ -15,8 +15,13 @@ card: "necrocaps"
 lane: next
 owns:
   - "docs/probes/necrocaps-2026-11-26.md"
+  - "internal/combat/classdata.go"
+  - "internal/combat/classdata/profiles.json"
+  - "internal/combat/necro.go"
+  - "internal/combat/necro_data_test.go"
 exclusive: []
 contracts: []
+result: "Minion caps carry a required source tag and the reach and curse-memory numbers are profile data (necro.rules) with today values as defaults; a cap without a tag is refused at load. Reading the caps from skills.txt is NOT done (calc columns not parsed, U); capSeen stays the evidence path. Offline only."
 ---
 
 ## Description
@@ -29,5 +34,5 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 see docs/probes/necro-readiness-2026-11-26.md cards table
+- [x] #1 see docs/probes/necro-readiness-2026-11-26.md cards table
 <!-- AC:END -->

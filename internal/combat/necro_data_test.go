@@ -214,3 +214,47 @@ func TestPoisonNovaAttackAndImmuneFallback(t *testing.T) {
 		}
 	}
 }
+
+// Every number of the necro block names its source (V, S or U): a guess without a tag is refused at load time, and the
+// reach numbers are read from the profile (two profiles with different numbers behave differently).
+func TestNecroNumbersCarryASource(t *testing.T) {
+	good := ProfileFor(d2.Necromancer, "").Necro
+	noSrc := *good
+	noSrc.Summons = []SummonRule{{Name: "Raise Skeleton", Kind: "skeleton", Max: 12}}
+	if err := validateNecro([]Profile{{Class: "necromancer", Build: "x", Necro: &noSrc}}); err == nil || !strings.Contains(err.Error(), "source tag") {
+		t.Errorf("a summon cap without a source must be refused: %v", err)
+	}
+	noRules := *good
+	noRules.Rules.Source = ""
+	if err := validateNecro([]Profile{{Class: "necromancer", Build: "x", Necro: &noRules}}); err == nil || !strings.Contains(err.Error(), "rules set without a source") {
+		t.Errorf("rules without a source must be refused: %v", err)
+	}
+	for _, p := range Profiles() {
+		if p.Necro == nil {
+			continue
+		}
+		for _, s := range p.Necro.Summons {
+			if !validSource(s.Source) {
+				t.Errorf("%s: %s cap %d has no source tag", p.ProfileID(), s.Name, s.Max)
+			}
+		}
+	}
+}
+
+func TestNecroRulesAreData(t *testing.T) {
+	def := ProfileFor(d2.Necromancer, "").Necro
+	if def.summonReach() != float64(summonReach) || def.curseRange() != float64(curseRange) || def.curseLife().Seconds() != float64(curseLifeSec) {
+		t.Errorf("profile numbers differ from the old constants: %v %v %v", def.summonReach(), def.curseRange(), def.curseLife())
+	}
+	wide := &NecroParams{Rules: NecroRules{SummonReach: 9, CurseRange: 30, CurseLifeSec: 12, CurseCover: 7, CorpseSearch: 20}}
+	if wide.summonReach() != 9 || wide.curseRange() != 30 || wide.curseLife().Seconds() != 12 || wide.curseCover() != 7 || wide.corpseSearch() != 20 {
+		t.Errorf("a profile that sets the rules must win: %+v", wide.Rules)
+	}
+	hs := []Target{{Unit: mon(2, 1, 100, 100), Name: "a", Dist: 25, LifePct: 100}, {Unit: mon(3, 1, 101, 100), Name: "b", Dist: 25, LifePct: 100}}
+	if _, ok := pickCurseTargetIn(hs, def.curseRange()); ok {
+		t.Error("25 subtiles is out of the default curse range")
+	}
+	if _, ok := pickCurseTargetIn(hs, wide.curseRange()); !ok {
+		t.Error("25 subtiles is inside the wide curse range")
+	}
+}

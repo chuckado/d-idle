@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strings"
 	"sync"
+	"time"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/data"
@@ -111,6 +112,37 @@ type NecroParams struct {
 	Curses []CurseRule `json:"curses"`
 	// Explosion names the corpse-detonating skill ("" = none). It runs only when no summon wants the corpse.
 	Explosion string `json:"explosion"`
+	// Rules are the reach and memory numbers of the upkeep (corpse and curse distances, curse cast memory). A zero field
+	// reads the package default, so a profile only lists what it changes; Source says where each number comes from
+	// (V live, S read, U guess), required whenever a field is set.
+	Rules NecroRules `json:"rules"`
+}
+
+// NecroRules are the numbers the upkeep used to carry as constants. Today's values are the defaults (necro.go).
+type NecroRules struct {
+	SummonReach  int    `json:"summonReach"`  // subtiles within which a raise needs no walk
+	CorpseSearch int    `json:"corpseSearch"` // KeepSummons walks to a corpse at most this far
+	CurseRange   int    `json:"curseRange"`   // farthest curse target
+	CurseLifeSec int    `json:"curseLifeSec"` // cast memory when the curse state is not readable
+	CurseCover   int    `json:"curseCover"`   // a unit this close to a recent cast counts as cursed
+	Source       string `json:"source"`
+}
+
+func rule(v, def int) int {
+	if v > 0 {
+		return v
+	}
+	return def
+}
+
+func (n *NecroParams) summonReach() float64 { return float64(rule(n.Rules.SummonReach, summonReach)) }
+func (n *NecroParams) corpseSearch() float64 {
+	return float64(rule(n.Rules.CorpseSearch, corpseSearch))
+}
+func (n *NecroParams) curseRange() float64 { return float64(rule(n.Rules.CurseRange, curseRange)) }
+func (n *NecroParams) curseCover() float64 { return float64(rule(n.Rules.CurseCover, curseCover)) }
+func (n *NecroParams) curseLife() time.Duration {
+	return time.Duration(rule(n.Rules.CurseLifeSec, curseLifeSec)) * time.Second
 }
 
 // SummonRule is one upkeep entry.
@@ -118,6 +150,8 @@ type SummonRule struct {
 	Name string `json:"name"`
 	Kind string `json:"kind"` // skeleton, mage or revive
 	Max  int    `json:"max"`
+	// Source says where Max comes from: V (read live), S (read in data or code) or U (a guess). Required.
+	Source string `json:"source"`
 }
 
 // CurseRule is one curse. State is the monster state number the curse sets (0: not known, the cast memory stands
@@ -148,6 +182,12 @@ func validateNecro(ps []Profile) error {
 			if s.Name == "" || s.Max < 1 || (s.Kind != "skeleton" && s.Kind != "mage" && s.Kind != "revive") {
 				return fmt.Errorf("profile %q: bad summon rule %+v", p.ProfileID(), s)
 			}
+			if !validSource(s.Source) {
+				return fmt.Errorf("profile %q: summon %q: max %d has no source tag (start with V, S or U)", p.ProfileID(), s.Name, s.Max)
+			}
+		}
+		if r := n.Rules; (r.SummonReach|r.CorpseSearch|r.CurseRange|r.CurseLifeSec|r.CurseCover) != 0 && !validSource(r.Source) {
+			return fmt.Errorf("profile %q: necro rules set without a source tag (start with V, S or U)", p.ProfileID())
 		}
 		for _, c := range n.Curses {
 			switch c.When {
@@ -161,6 +201,11 @@ func validateNecro(ps []Profile) error {
 		}
 	}
 	return nil
+}
+
+// validSource: a number of the necro block names how it is known, first word V, S or U.
+func validSource(s string) bool {
+	return strings.HasPrefix(s, "V ") || strings.HasPrefix(s, "S ") || strings.HasPrefix(s, "U ") || s == "V" || s == "S" || s == "U"
 }
 
 // necroParams is the necro block of the profile in use; an error names the class or profile that has none.
