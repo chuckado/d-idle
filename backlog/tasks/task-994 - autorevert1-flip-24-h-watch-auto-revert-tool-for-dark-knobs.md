@@ -1,7 +1,7 @@
 ---
 id: TASK-994
 title: 'autorevert1: flip, 24 h watch, auto-revert tool for dark knobs'
-status: Proposed
+status: In Progress
 assignee:
   - credit-runner
 created_date: '2026-11-26T04:15:00Z'
@@ -15,8 +15,18 @@ ordinal: 479000
 card: "autorevert1"
 owns:
   - "docs/design/autorevert.md"
+  - "tools/flip"
+  - "tools/darklaunch"
+  - "data/darklaunch.json"
+  - "docs/process/dark-launch.md"
+  - "docs/invariants.md"
+  - "docs/operator.md"
+  - "internal/bot/invariants.go"
+  - "internal/bot/invariants_test.go"
+  - "internal/bot/explain.go"
 exclusive: []
 contracts: []
+result: "Built, not verified live: bot counters (hard flag, since) on /api/explain and ops status --why; tools/flip/flip.py flip and watch with fake-sandbox tests. The AC 2 drill on a real sandbox is still open (see docs/process/dark-launch.md How to flip)."
 ---
 
 ## Description
@@ -29,6 +39,6 @@ Why: user decision 2026-11-26: 7-day soaks are not workable and get forgotten; t
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Design doc and the inv= hard-counter surface agreed with TASK-955
+- [x] #1 Design doc and the inv= hard-counter surface agreed with TASK-955
 - [ ] #2 Drill: a knob flipped and auto-reverted on a forced breach on a sandbox
 <!-- AC:END -->
