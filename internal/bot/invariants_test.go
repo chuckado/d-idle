@@ -329,8 +329,8 @@ func TestInvariantSummonMissing(t *testing.T) {
 // alike and a Sorceress does not; mana below the cost and an unknown count switch the watch off.
 func TestSummonWatchIsData(t *testing.T) {
 	skills := map[int]*data.Skill{
-		70:  {ID: 70, Key: "Raise Skeleton", Summon: "skeleton", Mana: 6},
-		221: {ID: 221, Key: "Raven", Summon: "raven", Mana: 20},
+		70:  {ID: 70, Key: "Raise Skeleton", Summon: "skeleton", Mana: 6, ManaShift: 8},
+		221: {ID: 221, Key: "Raven", Summon: "raven", Mana: 20, ManaShift: 8},
 		36:  {ID: 36, Key: "Fire Bolt", Mana: 3},
 		99:  {ID: 99, Key: "Bone Mastery", Summon: "x", Passive: true},
 	}
