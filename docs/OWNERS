@@ -470,6 +470,8 @@ docs/vault.md  credit-runner  vaultpay
 docs/vault.md  credit-runner  vaultreveal
 internal/admit/  credit-runner  admit1
 internal/agency/  credit-runner  dlv-rotation
+internal/agency/derive.go  credit-runner  aura2b
+internal/agency/testdata/agreement.json  credit-runner  aura2b
 internal/arbiter  credit-runner  arbfam
 internal/arbiter  credit-runner  town10
 internal/arbiter/  credit-runner  arbmig
@@ -605,6 +607,8 @@ internal/combat/  credit-runner  dlv-upkeep-minions
 internal/combat/  credit-runner  dlv-upkeep-state
 internal/combat/  credit-runner  dlv-whirl
 internal/combat/castfirst.go  credit-runner  maphistoryC
+internal/combat/class_test.go  credit-runner  aura2b
+internal/combat/classdata/profiles.json  credit-runner  aura2b
 internal/combat/fight.go  credit-runner  maphistory
 internal/combat/fight.go  credit-runner  maphistoryC
 internal/combat/fightend.go  credit-runner  maphistory
@@ -613,9 +617,11 @@ internal/combat/fighter.go  credit-runner  beltfix
 internal/combat/fighter.go  credit-runner  maphistory
 internal/combat/fighter.go  credit-runner  maphistoryC
 internal/combat/fighter.go  pro-runner  levelplan3
+internal/combat/lifeprice_test.go  credit-runner  aura2b
 internal/combat/packdrink.go  credit-runner  beltfix
 internal/combat/packdrink_test.go  credit-runner  beltfix
 internal/combat/reach.go  credit-runner  maphistoryC
+internal/combat/rules.go  credit-runner  aura2b
 internal/combat/safety.go  credit-runner  beltfix
 internal/d2dcombat/  credit-runner  dlv-cast-verbs
 internal/d2dcombat/  credit-runner  dlv-press
@@ -704,6 +710,7 @@ internal/invdesk/sets.go  credit-runner  uib9
 internal/invdesk/stash.go  credit-runner  equipswap
 internal/invdesk/stash.go  credit-runner  itemverbs2
 internal/invdesk/stash_test.go  credit-runner  equipswap
+internal/leveler/early_test.go  credit-runner  aura2b
 internal/leveler/necrosummoner_test.go  credit-runner  necroaudit
 internal/levelplan  pro-runner  levelplan3
 internal/loot  credit-runner  town6
