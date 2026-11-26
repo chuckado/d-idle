@@ -160,6 +160,9 @@ func (r *Runner) routeAllowed(s *d2.Snapshot, cur, target int, hops []int) error
 
 // areaMLvl is the monster level of area in the difficulty (levels.txt, V: data.Level.MonLvl), 0 when unknown.
 func (r *Runner) areaMLvl(area int, d d2.Difficulty) int {
+	if r.mlvlFn != nil { // tests: the rig has no game tables
+		return r.mlvlFn(area, d)
+	}
 	if r.e.Data == nil {
 		return 0
 	}
