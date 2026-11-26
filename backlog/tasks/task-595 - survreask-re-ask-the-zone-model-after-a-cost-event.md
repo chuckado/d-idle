@@ -1,11 +1,11 @@
 ---
 id: TASK-595
 title: 'survreask: re-ask the zone model after a cost event'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T06:29:00Z'
-updated_date: '2026-11-17T10:24:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

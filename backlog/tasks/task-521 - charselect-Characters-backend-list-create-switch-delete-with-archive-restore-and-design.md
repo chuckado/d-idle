@@ -1,10 +1,13 @@
 ---
 id: TASK-521
-title: 'charselect: Characters backend (list, create, switch, delete with archive, restore) and design'
-status: Proposed
+title: >-
+  charselect: Characters backend (list, create, switch, delete with archive,
+  restore) and design
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T02:04:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

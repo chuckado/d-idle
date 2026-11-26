@@ -1,10 +1,13 @@
 ---
 id: TASK-884
-title: 'uia11y: accessibility and text-scale pass (contrast, names, landmarks, reduced motion, 200% text)'
-status: Proposed
+title: >-
+  uia11y: accessibility and text-scale pass (contrast, names, landmarks, reduced
+  motion, 200% text)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T10:24:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - feature

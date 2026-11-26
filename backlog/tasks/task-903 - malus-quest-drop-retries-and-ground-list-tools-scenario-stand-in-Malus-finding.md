@@ -1,10 +1,13 @@
 ---
 id: TASK-903
-title: 'malus: quest drop retries and ground list, tools scenario stand-in, Malus finding'
-status: Proposed
+title: >-
+  malus: quest drop retries and ground list, tools scenario stand-in, Malus
+  finding
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T22:14:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - bot
   - bot-fix

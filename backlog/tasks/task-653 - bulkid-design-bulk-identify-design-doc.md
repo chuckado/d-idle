@@ -1,10 +1,11 @@
 ---
 id: TASK-653
 title: 'bulkid-design: bulk identify design doc'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T21:40:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - docs
   - research

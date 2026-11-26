@@ -1,10 +1,11 @@
 ---
 id: TASK-413
 title: 'levelsim: leveling strategy simulator and optimiser'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T11:56:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - feature

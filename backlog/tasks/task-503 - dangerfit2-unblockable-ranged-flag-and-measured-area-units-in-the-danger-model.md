@@ -1,10 +1,13 @@
 ---
 id: TASK-503
-title: 'dangerfit2: unblockable ranged flag and measured area units in the danger model'
-status: Proposed
+title: >-
+  dangerfit2: unblockable ranged flag and measured area units in the danger
+  model
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T15:16:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - bot-fix

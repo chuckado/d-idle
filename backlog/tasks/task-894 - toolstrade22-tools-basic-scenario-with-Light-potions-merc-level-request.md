@@ -1,10 +1,11 @@
 ---
 id: TASK-894
 title: 'toolstrade22: tools basic scenario with Light potions; merc level request'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T12:20:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - bot
   - probe

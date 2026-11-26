@@ -1,10 +1,11 @@
 ---
 id: TASK-467
 title: 'decomp22: no-restart oracle (P03b) and warp walk sweep (P02)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T04:25:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - d2d
   - upstream-pr

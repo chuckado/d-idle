@@ -1,10 +1,11 @@
 ---
 id: TASK-377
 title: 'goldprio: gold pickups right below survival'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-12T19:53:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - bug

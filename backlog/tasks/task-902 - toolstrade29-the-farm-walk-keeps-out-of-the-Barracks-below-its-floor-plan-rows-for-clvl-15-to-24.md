@@ -1,10 +1,13 @@
 ---
 id: TASK-902
-title: 'toolstrade29: the farm walk keeps out of the Barracks below its floor; plan rows for clvl 15 to 24'
-status: Proposed
+title: >-
+  toolstrade29: the farm walk keeps out of the Barracks below its floor; plan
+  rows for clvl 15 to 24
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T22:10:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - bot
   - bot-fix

@@ -1,10 +1,11 @@
 ---
 id: TASK-510
 title: 'botreset: Reset control (soft leave-and-rejoin, hard restart, cockpit button)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T16:59:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

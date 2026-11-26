@@ -1,10 +1,11 @@
 ---
 id: TASK-788
 title: 'verbs2: buy, sell, waypoint, portal and pickup input verbs (Q13, ADR 0021)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T19:24:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

@@ -1,10 +1,11 @@
 ---
 id: TASK-857
 title: 'uisettings2: E11 deletion plan for the pre-shell page (plan only)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T05:29:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - chore

@@ -1,10 +1,13 @@
 ---
 id: TASK-519
-title: 'verifyp17: independent verifier for upstream candidate P17 (sequence -30 attack rate, fid/seq-ias-r1)'
-status: Proposed
+title: >-
+  verifyp17: independent verifier for upstream candidate P17 (sequence -30
+  attack rate, fid/seq-ias-r1)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T01:31:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - research

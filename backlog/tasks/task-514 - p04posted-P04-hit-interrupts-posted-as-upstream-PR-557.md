@@ -1,10 +1,11 @@
 ---
 id: TASK-514
 title: 'p04posted: P04 hit interrupts posted as upstream PR 557'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T18:41:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - upstream-pr

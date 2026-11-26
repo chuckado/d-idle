@@ -1,10 +1,13 @@
 ---
 id: TASK-891
-title: 'uikeys: keyboard walk test, sheet focus trap includes links, vertical clipping at 200% text'
-status: Proposed
+title: >-
+  uikeys: keyboard walk test, sheet focus trap includes links, vertical clipping
+  at 200% text
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T11:14:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - watch
   - feature

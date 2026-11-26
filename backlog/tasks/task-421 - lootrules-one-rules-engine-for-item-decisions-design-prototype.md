@@ -1,10 +1,11 @@
 ---
 id: TASK-421
 title: 'lootrules: one rules engine for item decisions (design + prototype)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T15:20:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - research

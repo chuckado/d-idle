@@ -1,10 +1,13 @@
 ---
 id: TASK-573
-title: 'videofeed4: stream monitor overlay, stable presentation clock, lighter d2dview feed (cgroup-throttle hitching)'
-status: Proposed
+title: >-
+  videofeed4: stream monitor overlay, stable presentation clock, lighter d2dview
+  feed (cgroup-throttle hitching)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T01:58:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - bug

@@ -1,10 +1,11 @@
 ---
 id: TASK-359
 title: 'cut010b: re-cut friends release 0.1.0 after the lock-ordering fix'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-12T13:58:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - container
   - chore

@@ -1,10 +1,13 @@
 ---
 id: TASK-544
-title: 'videofeed2: mount the lossless picture feed behind watch.paletteFeed, player polish, bandwidth guard, honest walking measurement'
-status: Proposed
+title: >-
+  videofeed2: mount the lossless picture feed behind watch.paletteFeed, player
+  polish, bandwidth guard, honest walking measurement
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T05:24:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

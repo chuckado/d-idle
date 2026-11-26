@@ -1,10 +1,13 @@
 ---
 id: TASK-577
-title: 'quests1: Quest board S1, internal/questboard definitions, states, derive, plan records'
-status: In Progress
+title: >-
+  quests1: Quest board S1, internal/questboard definitions, states, derive, plan
+  records
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T02:30:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

@@ -1,10 +1,11 @@
 ---
 id: TASK-690
 title: 'sorc2: Sorceress second build (fire line) and the plan table validator'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T18:20:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

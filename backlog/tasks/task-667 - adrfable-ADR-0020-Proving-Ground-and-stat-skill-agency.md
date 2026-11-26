@@ -1,10 +1,11 @@
 ---
 id: TASK-667
 title: 'adrfable: ADR 0020 Proving Ground and stat/skill agency'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T16:22:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - docs
   - chore

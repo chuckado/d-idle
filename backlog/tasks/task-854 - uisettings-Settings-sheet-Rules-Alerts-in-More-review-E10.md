@@ -1,10 +1,11 @@
 ---
 id: TASK-854
 title: 'uisettings: Settings sheet (Rules, Alerts) in More, review E10'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T05:07:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - feature

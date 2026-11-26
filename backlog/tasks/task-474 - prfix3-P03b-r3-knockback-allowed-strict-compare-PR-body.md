@@ -1,10 +1,11 @@
 ---
 id: TASK-474
 title: 'prfix3: P03b r3, knockback allowed, strict compare, PR body'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T05:17:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - d2d
   - upstream-pr

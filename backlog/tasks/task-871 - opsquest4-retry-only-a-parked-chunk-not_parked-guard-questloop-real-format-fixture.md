@@ -1,10 +1,13 @@
 ---
 id: TASK-871
-title: 'opsquest4: retry only a parked chunk (not_parked guard), questloop real-format fixture'
-status: Proposed
+title: >-
+  opsquest4: retry only a parked chunk (not_parked guard), questloop real-format
+  fixture
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T07:57:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bot-fix

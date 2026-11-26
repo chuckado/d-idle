@@ -1,10 +1,11 @@
 ---
 id: TASK-713
 title: 'fablecombat: design review of the combat engine and skill delivery layer'
-status: In Progress
+status: Done
 assignee:
   - pro-runner
 created_date: '2026-11-21T03:15:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - docs
   - research

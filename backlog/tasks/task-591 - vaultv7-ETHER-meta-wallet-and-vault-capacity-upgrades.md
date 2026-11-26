@@ -1,10 +1,11 @@
 ---
 id: TASK-591
 title: 'vaultv7: ETHER meta wallet and vault capacity upgrades'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T05:14:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

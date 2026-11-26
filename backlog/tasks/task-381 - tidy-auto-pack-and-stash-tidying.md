@@ -1,10 +1,11 @@
 ---
 id: TASK-381
 title: 'tidy: auto pack and stash tidying'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-12T20:18:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - feature

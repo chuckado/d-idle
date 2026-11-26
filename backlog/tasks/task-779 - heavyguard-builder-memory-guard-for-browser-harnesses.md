@@ -1,10 +1,11 @@
 ---
 id: TASK-779
 title: 'heavyguard: builder memory guard for browser harnesses'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T15:27:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - ops
   - chore

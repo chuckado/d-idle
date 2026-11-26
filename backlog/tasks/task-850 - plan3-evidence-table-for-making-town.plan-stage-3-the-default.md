@@ -1,10 +1,11 @@
 ---
 id: TASK-850
 title: 'plan3: evidence table for making town.plan stage 3 the default'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T04:15:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - probe

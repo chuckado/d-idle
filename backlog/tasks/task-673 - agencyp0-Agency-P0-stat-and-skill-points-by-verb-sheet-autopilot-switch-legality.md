@@ -1,10 +1,13 @@
 ---
 id: TASK-673
-title: 'agencyp0: Agency P0 stat and skill points by verb, sheet, autopilot switch, legality'
-status: Proposed
+title: >-
+  agencyp0: Agency P0 stat and skill points by verb, sheet, autopilot switch,
+  legality
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T18:45:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

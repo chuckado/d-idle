@@ -1,10 +1,11 @@
 ---
 id: TASK-406
 title: 'emurebuild: persistent game.exe emulator image and D2_EMU_DIR'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T11:02:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - ops
   - chore

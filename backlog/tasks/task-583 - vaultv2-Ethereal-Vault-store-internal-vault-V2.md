@@ -1,10 +1,11 @@
 ---
 id: TASK-583
 title: 'vaultv2: Ethereal Vault store (internal/vault, V2)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T03:23:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

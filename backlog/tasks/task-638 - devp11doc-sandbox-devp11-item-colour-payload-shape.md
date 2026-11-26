@@ -1,11 +1,11 @@
 ---
 id: TASK-638
 title: 'devp11doc: sandbox devp11 item colour payload shape'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T14:46:00Z'
-updated_date: '2026-11-18T15:05:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - docs
   - chore

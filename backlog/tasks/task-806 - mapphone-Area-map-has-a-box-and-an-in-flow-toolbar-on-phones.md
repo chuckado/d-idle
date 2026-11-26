@@ -1,10 +1,11 @@
 ---
 id: TASK-806
 title: 'mapphone: Area map has a box and an in-flow toolbar on phones'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T15:39:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - bug

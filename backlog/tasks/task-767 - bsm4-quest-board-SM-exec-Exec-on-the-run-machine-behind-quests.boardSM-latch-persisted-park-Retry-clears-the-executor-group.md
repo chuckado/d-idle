@@ -1,10 +1,13 @@
 ---
 id: TASK-767
-title: 'bsm4: quest board SM exec (Exec on the run machine behind quests.boardSM, latch, persisted park, Retry clears the executor group)'
-status: Proposed
+title: >-
+  bsm4: quest board SM exec (Exec on the run machine behind quests.boardSM,
+  latch, persisted park, Retry clears the executor group)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T04:59:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

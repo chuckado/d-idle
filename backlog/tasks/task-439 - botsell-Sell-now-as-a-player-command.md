@@ -1,11 +1,11 @@
 ---
 id: TASK-439
 title: 'botsell: Sell now as a player command'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T20:54:00Z'
-updated_date: '2026-11-14T20:55:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - feature

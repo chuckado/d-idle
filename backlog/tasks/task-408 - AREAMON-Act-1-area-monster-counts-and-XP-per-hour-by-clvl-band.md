@@ -1,10 +1,11 @@
 ---
 id: TASK-408
 title: 'AREAMON: Act 1 area monster counts and XP per hour by clvl band'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T11:22:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - docs
   - research

@@ -1,10 +1,11 @@
 ---
 id: TASK-422
 title: 'prpipeline: upstream PR pipeline of every proven d2d deviation'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T15:39:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - d2d
   - research

@@ -1,10 +1,11 @@
 ---
 id: TASK-885
 title: 'toolstrade16: no home loop for a thinned kit anywhere out of town'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T10:25:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bot-fix

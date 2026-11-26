@@ -1,10 +1,13 @@
 ---
 id: TASK-701
-title: 'act1more: Blood Raven, Tools of the Trade and Andariel scenarios and questspec checks'
-status: Proposed
+title: >-
+  act1more: Blood Raven, Tools of the Trade and Andariel scenarios and questspec
+  checks
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T23:48:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bot-fix

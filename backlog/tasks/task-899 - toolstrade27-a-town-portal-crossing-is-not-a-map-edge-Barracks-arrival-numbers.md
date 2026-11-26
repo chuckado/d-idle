@@ -1,10 +1,13 @@
 ---
 id: TASK-899
-title: 'toolstrade27: a town portal crossing is not a map edge; Barracks arrival numbers'
-status: Proposed
+title: >-
+  toolstrade27: a town portal crossing is not a map edge; Barracks arrival
+  numbers
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T20:46:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - bot
   - bot-fix

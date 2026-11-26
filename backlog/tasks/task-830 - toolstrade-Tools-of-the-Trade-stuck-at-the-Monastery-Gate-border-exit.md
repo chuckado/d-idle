@@ -1,10 +1,11 @@
 ---
 id: TASK-830
 title: 'toolstrade: Tools of the Trade stuck at the Monastery Gate border exit'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T00:52:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bot-fix

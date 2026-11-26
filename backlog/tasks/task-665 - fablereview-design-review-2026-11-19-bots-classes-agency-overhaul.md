@@ -1,10 +1,11 @@
 ---
 id: TASK-665
 title: 'fablereview: design review 2026-11-19 (bots, classes, agency, overhaul)'
-status: Proposed
+status: Done
 assignee:
   - user
 created_date: '2026-11-19T15:49:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - docs
   - research

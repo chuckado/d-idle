@@ -1,10 +1,11 @@
 ---
 id: TASK-496
 title: 'verifyp06b: recheck of P06 fid/missile-block-r4'
-status: Proposed
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-15T14:10:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - research

@@ -1,10 +1,13 @@
 ---
 id: TASK-841
-title: 'bankdoc: town.plan stage 3 covers the bank-against-kit defect (evidence and default-flip proposal)'
-status: Proposed
+title: >-
+  bankdoc: town.plan stage 3 covers the bank-against-kit defect (evidence and
+  default-flip proposal)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T02:59:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - probe

@@ -1,10 +1,13 @@
 ---
 id: TASK-782
-title: 'bsm8: quest board SM panel (On hold row, reason sentences, Needs-you buttons by code)'
-status: Proposed
+title: >-
+  bsm8: quest board SM panel (On hold row, reason sentences, Needs-you buttons
+  by code)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T18:04:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - feature

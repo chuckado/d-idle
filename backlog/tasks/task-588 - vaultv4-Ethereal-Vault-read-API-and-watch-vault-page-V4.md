@@ -1,10 +1,11 @@
 ---
 id: TASK-588
 title: 'vaultv4: Ethereal Vault read API and /watch/vault page (V4)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T04:23:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

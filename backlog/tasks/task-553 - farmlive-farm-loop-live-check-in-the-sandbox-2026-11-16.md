@@ -1,10 +1,11 @@
 ---
 id: TASK-553
 title: 'farmlive: farm loop live check in the sandbox 2026-11-16'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T17:01:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - docs
   - probe

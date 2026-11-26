@@ -1,10 +1,13 @@
 ---
 id: TASK-717
-title: 'bsm1: quest board SM scenarios (board.json) and the board/api_reply assert kinds'
-status: Proposed
+title: >-
+  bsm1: quest board SM scenarios (board.json) and the board/api_reply assert
+  kinds
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T04:40:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

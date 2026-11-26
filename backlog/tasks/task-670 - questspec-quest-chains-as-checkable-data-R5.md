@@ -1,10 +1,11 @@
 ---
 id: TASK-670
 title: 'questspec: quest chains as checkable data (R5)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T17:17:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

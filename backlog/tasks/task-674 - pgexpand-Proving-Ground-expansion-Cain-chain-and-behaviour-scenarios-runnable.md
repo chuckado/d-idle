@@ -1,10 +1,13 @@
 ---
 id: TASK-674
-title: 'pgexpand: Proving Ground expansion, Cain chain and behaviour scenarios runnable'
-status: In Progress
+title: >-
+  pgexpand: Proving Ground expansion, Cain chain and behaviour scenarios
+  runnable
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T18:48:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - ops
   - feature

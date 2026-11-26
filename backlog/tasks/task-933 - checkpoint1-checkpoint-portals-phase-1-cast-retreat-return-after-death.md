@@ -1,10 +1,11 @@
 ---
 id: TASK-933
 title: 'checkpoint1: checkpoint portals phase 1 (cast, retreat, return after death)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-25T17:03:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - bot
   - feature

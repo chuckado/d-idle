@@ -1,10 +1,11 @@
 ---
 id: TASK-579
 title: 'botcpu: bot CPU hot spots in town walks, offline profile and first fixes'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T02:49:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - bot-fix

@@ -1,10 +1,11 @@
 ---
 id: TASK-587
 title: 'botcpu2: ledger incremental load, IsA memo, on-demand pprof'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T03:44:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - bot-fix
