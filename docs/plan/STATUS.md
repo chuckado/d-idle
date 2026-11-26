@@ -272,18 +272,16 @@
 | epic-nightmare | proposed | - | `docs/epics/epic-nightmare.md` | - |
 | epic-hell | proposed | - | `docs/epics/epic-hell.md` | - |
 | epic-merc | proposed | - | `docs/epics/epic-merc.md` | - |
-| outcome-task-step | proposed | - | `docs/outcomes.md` | - |
-| outcome-travel-gate | proposed | - | `docs/outcomes.md` | - |
+| outcome-task-step | in-progress | - | `docs/outcomes.md` | - |
+| outcome-travel-gate | in-progress | - | `docs/outcomes.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
-| outcome-park-step | proposed | - | `docs/outcomes.md` | - |
-| outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
-| outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
+| outcome-park-step | in-progress | - | `docs/outcomes.md` | - |
+| outcome-route-guard | in-progress | - | `docs/outcomes.md` | - |
+| outcome-kit-gate | in-progress | - | `docs/outcomes.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
-| admit1 | proposed | - | `docs/design/admission-p4.md` | - |
+| admit1 | proposed | - | `docs/design/admission-p4.md`<br>`internal/admit/`<br>`internal/plandata/admission.json`<br>`internal/plandata/earlyroutes.json`<br>`internal/plandata/povertyfarm.json`<br>`docs/plan/data/admission.json`<br>`docs/plan/data/earlyroutes.json`<br>`docs/plan/data/povertyfarm.json`<br>`internal/bot/earlyroute.go`<br>`internal/bot/povertyfarm.go`<br>`internal/bot/admit_need_test.go` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
-| arbmig | proposed | - | `docs/design/arbiter-migration-p6.md` | - |
-| stepexec1 | proposed | - | `docs/design/stepexec-p9.md` | - |
-| thrgov | proposed | - | `docs/process/threshold-governance.md` | - |
+| arbmig | proposed | - | `docs/design/arbiter-migration-p6.md`<br>`docs/arbiter.md`<br>`internal/arbiter/`<br>`cmd/d2scenario/`<br>`tools/provingground/arbiter-outcomes/`<br>`internal/bot/arbiter_control.go`<br>`internal/bot/arbiter_control_test.go`<br>`internal/bot/shadow.go`<br>`internal/bot/loop.go`<br>`internal/env/tuning_bot.go`<br>`data/darklaunch.json`<br>`docs/knobs.md` | - |
 | faultsoak | proposed | - | `docs/design/faultsoak-p12.md` | - |
 | fid-adapter-rows | deferred | - | `docs/probes/fid/fid-adapter-rows.md` | - |
 | proptest1 | proposed | - | `docs/design/proptest-t3.md` | - |
@@ -322,14 +320,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- fa0dee197 11-26 08:53 `Merge agent/toolstrade82: mode-no-exit fires on no progress (xp, kills, gold, area), not on elapsed time; parked heroes do not count for xp-frozen and refusal-storm` (toolstrade82)
-- 23dcfb8ed 11-26 03:08 `Merge agent/toolstrade81: Merge branch 'main' into toolstrade81` (toolstrade81)
-- b7cea267a 11-26 03:07 `Merge branch 'main' into toolstrade81` (-)
-- 263895530 11-26 02:54 `Merge agent/qd27: d2scenario: hard invariant hits turn a run red (data list); faultsoak design notes; matrix 78-79` (qd27)
-- 49350b8ad 11-26 02:53 `Merge branch 'main' into qd27` (-)
-- 186424f59 11-26 02:43 `Merge agent/toolstrade80: Merge branch 'main' into toolstrade80` (toolstrade80)
-- e04e3527e 11-26 02:41 `Merge branch 'main' into toolstrade80` (-)
-- db6b83314 11-26 02:31 `Merge agent/autorevert1: Merge branch 'main' into autorevert1` (autorevert1)
-- 609e43fde 11-26 02:31 `Merge origin/main` (-)
-- a1e40426a 11-26 02:29 `Merge origin/main` (-)
+- e4f4b63d8 11-26 10:27 `Merge agent/outcomes2f: Merge branch 'main' into outcome-hub-wording` (outcomes2f)
+- bb8eafa4e 11-26 10:25 `Merge branch 'main' into outcome-hub-wording` (-)
+- 4cf936afd 11-26 10:15 `Merge agent/outcomes2e: Merge branch 'main' into outcome-kit-gate` (outcomes2e)
+- 03aef679b 11-26 10:13 `Merge branch 'main' into outcome-kit-gate` (-)
+- 9ac8f343b 11-26 10:06 `Merge agent/thrgov: Merge branch 'main' into thrgov` (thrgov)
+- 51d1dcebf 11-26 10:06 `Merge agent/outcomes2d: Merge branch 'main' into outcome-park-step` (outcomes2d)
+- 01d50bb52 11-26 10:04 `Merge branch 'main' into thrgov` (-)
+- 30791b6ab 11-26 10:04 `Merge branch 'main' into outcome-park-step` (-)
+- 59c0781ed 11-26 09:57 `Merge agent/arbmig3: Merge branch 'main' into arbmig` (arbmig3)
+- 5c2d3919b 11-26 09:57 `Merge agent/outcomes2c: Merge branch 'main' into outcome-task-step` (outcomes2c)
 <!-- statusgen:end -->

@@ -1,18 +1,17 @@
 package bot
 
 import (
-	"encoding/json"
 	"fmt"
 	"sync"
 
+	"d2lod-bot/internal/admit"
 	"d2lod-bot/internal/d2"
-	"d2lod-bot/internal/plandata"
 	"d2lod-bot/internal/task"
 )
 
 // The early route guard (user request 2026-11-25): a quest walk through the Underground Passage to the Dark Wood killed a clvl 4
 // Paladin on the Questy bed (no potions, Vile Hunters at monster level 6 to 7). The legs and their floors are data
-// (internal/plandata/earlyroutes.json): below the level of its class family or short of the kit a hero does not enter them, and the
+// (internal/plandata/admission.json, roads): below the level of its class family or short of the kit a hero does not enter them, and the
 // level plan farms elsewhere meanwhile. The owner's try anyway overrides, like the other route guards.
 
 type earlyRoute struct {
@@ -42,18 +41,18 @@ var (
 
 func loadEarlyRoutes() ([]earlyRoute, error) {
 	earlyOnce.Do(func() {
-		b, err := plandata.FS.ReadFile("earlyroutes.json")
+		rows, err := admit.Load()
 		if err != nil {
 			earlyErr = err
 			return
 		}
-		var doc struct {
-			Routes    []earlyRoute  `json:"routes"`
-			QuestWalk questWalkRule `json:"questWalk"`
+		for _, rd := range rows.Roads {
+			er := earlyRoute{Name: rd.ID, Areas: rd.Areas, MinLevel: rd.MinLevel, MinLife: rd.MinMaxLife}
+			er.Kit.Healing, er.Kit.Portal = rd.Kit.Healing, rd.Kit.Portal
+			earlyRoutes = append(earlyRoutes, er)
 		}
-		if earlyErr = json.Unmarshal(b, &doc); earlyErr == nil {
-			earlyRoutes, earlyWalk = doc.Routes, doc.QuestWalk
-		}
+		w := rows.QuestWalk
+		earlyWalk = questWalkRule{FromLevel: w.FromLevel, BelowLevel: w.BelowLevel, Healing: w.Healing, Portal: w.Portal}
 	})
 	return earlyRoutes, earlyErr
 }

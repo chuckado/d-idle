@@ -15,8 +15,20 @@ ordinal: 461000
 card: "arbmig"
 owns:
   - "docs/design/arbiter-migration-p6.md"
+  - "docs/arbiter.md"
+  - "internal/arbiter/"
+  - "cmd/d2scenario/"
+  - "tools/provingground/arbiter-outcomes/"
+  - "internal/bot/arbiter_control.go"
+  - "internal/bot/arbiter_control_test.go"
+  - "internal/bot/shadow.go"
+  - "internal/bot/loop.go"
+  - "internal/env/tuning_bot.go"
+  - "data/darklaunch.json"
+  - "docs/knobs.md"
 exclusive: []
 contracts: []
+result: "Stages 1 to 3 built, NOT verified live. Outcome harness (d2scenario arbiter-replay) scores the three Questy cases: survive chain 1 hard hit vs arbiter 0, chores chain 2 soft hits vs arbiter 0. Temporary intents, lost-control hook, arbiter-starved row. Control path behind bot.arbiterControl (0), families survive and player only, ledger row in data/darklaunch.json; criterion 2 (one sandbox) waits for the flip."
 ---
 
 ## Description
@@ -29,6 +41,6 @@ Cause classes killed: A (deciders undo each other, 29) and E (stale state after 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 docs/arbiter.md migration table rewritten to the outcome rule
+- [x] #1 docs/arbiter.md migration table rewritten to the outcome rule
 - [ ] #2 First family (survive, player) acting on one sandbox behind its own knob with a ledger row
 <!-- AC:END -->
