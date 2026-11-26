@@ -19,6 +19,8 @@ owns:
   - "internal/combat/aura.go"
   - "internal/combat/fighter.go"
   - "internal/combat/fightprayer_test.go"
+  - "internal/combat/rotation.go"
+  - "internal/delivery/rotation.go"
 exclusive: []
 result: "Unit-tested only, not live. Prayer is wanted in a fight below 50 percent life with 2 or fewer healing potions in the belt (data row, both Paladin profiles), kept until 65 percent. Builds on aura2a."
 contracts: []

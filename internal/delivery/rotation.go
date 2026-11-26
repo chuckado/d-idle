@@ -17,6 +17,10 @@ const (
 type When struct {
 	// HeroLifeBelowPct > 0 makes the slot a resting one: wanted only while resting below this life percent (Prayer).
 	HeroLifeBelowPct int `json:"heroLifeBelowPct,omitempty"`
+	// FightHeroLifeBelowPct > 0 also wants the aura in a fight below this life percent while the belt holds FightMaxPotions
+	// healing potions or fewer (Prayer, AuraPref.FightLifePct).
+	FightHeroLifeBelowPct int `json:"fightHeroLifeBelowPct,omitempty"`
+	FightMaxPotions       int `json:"fightMaxPotions,omitempty"`
 	// CrowdKnob marks a slot that pays only against a pack; the count is a knob until crowdAtLeast carries it.
 	CrowdKnob bool `json:"crowdKnob,omitempty"`
 	// TargetNotImmuneTo is an element the target must not be immune to ("" none); today the aura's own element.
