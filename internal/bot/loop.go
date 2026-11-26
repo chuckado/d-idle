@@ -1058,7 +1058,7 @@ func (r *Runner) guard(ctx context.Context, cancel context.CancelCauseFunc, done
 		default:
 		}
 		if r.guardOnce(ctx, cancel, st) {
-			r.holdForHard(done, every)
+			r.holdForHard(done)
 			return
 		}
 	}
