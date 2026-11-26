@@ -278,6 +278,7 @@
 | outcome-park-step | proposed | - | `docs/outcomes.md` | - |
 | outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
 | outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
+| explain1 | proposed | - | `internal/bot/explain.go`<br>`internal/bot/explain_test.go`<br>`internal/watch/explainapi.go`<br>`internal/watch/explainapi_test.go`<br>`internal/ops/`<br>`cmd/d2bot/opscmd.go`<br>`cmd/d2bot/opscmd_test.go`<br>`cmd/d2bot/opswire.go`<br>`docs/operator.md`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/questwire.go`<br>`internal/bot/loop.go`<br>`internal/bot/runner.go`<br>`internal/bot/shadow.go`<br>`internal/watch/http_view.go`<br>`internal/watch/hub.go` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | admit1 | proposed | - | `docs/design/admission-p4.md` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
@@ -321,14 +322,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 80c9b2ea1 11-26 00:49 `Merge agent/explain1: Merge branch 'main' into explain1` (explain1)
+- fc5ecb6ef 11-26 00:48 `Merge branch 'main' into explain1` (-)
 - 2fa717c3f 11-26 00:46 `Merge agent/cardclose2: cardclose2: close 7 merged cards (954, 966 by catch-up; 953, 955, 959, 962, 934 by hand)` (cardclose2)
+- b853e0638 11-26 00:27 `Merge branch 'main' into explain1` (-)
 - 85a8f09db 11-26 00:17 `Merge agent/reflex1c: reflex1c: reflex drink without cancelling the action, hard-cancel deadline` (reflex1c)
 - 0873ce5d4 11-26 00:14 `Merge origin/main into reflex1c` (-)
+- 9bc2e4e58 11-26 00:13 `Merge branch 'main' into explain1` (-)
+- ca15a2e33 11-26 00:07 `merge origin/main into explain1` (-)
 - 61cc4f451 11-26 00:05 `Merge origin/main into reflex1c` (-)
 - 9c3e3ed58 11-25 23:56 `Merge agent/reflex1b: reflex1b: town chores verify in town before each step; guard aborts chores outside town` (reflex1b)
-- b1727558e 11-25 23:55 `Merge branch 'main' into reflex1b` (-)
-- 33f5b6247 11-25 23:53 `Merge agent/decisions1: Merge branch 'main' into decisions1` (decisions1)
-- ad995de59 11-25 23:51 `Merge branch 'main' into decisions1` (-)
-- 25f3ea0fc 11-25 23:49 `Merge agent/fableroadmap: Merge branch 'main' into fableroadmap` (fableroadmap)
-- 8bc8a81d6 11-25 23:48 `Merge branch 'main' into fableroadmap` (-)
 <!-- statusgen:end -->

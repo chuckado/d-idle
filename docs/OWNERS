@@ -164,6 +164,7 @@ cmd/d2bot/invverbs_test.go  credit-runner  vaultwire
 cmd/d2bot/invwire.go  credit-runner  vaultwire
 cmd/d2bot/itemart_test.go  credit-runner  jewelicons
 cmd/d2bot/journeywire.go  credit-runner  campaign1
+cmd/d2bot/ladder.go  credit-runner  explain1
 cmd/d2bot/ladder.go  credit-runner  lootwireL4
 cmd/d2bot/ladder.go  credit-runner  pgtaps
 cmd/d2bot/ladder.go  live-agent  recoverypace
@@ -177,7 +178,11 @@ cmd/d2bot/objects.go  credit-runner  botstuck
 cmd/d2bot/objects.go  credit-runner  cain5b
 cmd/d2bot/objects.go  live-agent  k1layout
 cmd/d2bot/objects_layout_test.go  live-agent  k1layout
+cmd/d2bot/opscmd.go  credit-runner  explain1
+cmd/d2bot/opscmd_test.go  credit-runner  explain1
+cmd/d2bot/opswire.go  credit-runner  explain1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
+cmd/d2bot/questwire.go  credit-runner  explain1
 cmd/d2bot/repairwire.go  credit-runner  repairtrip
 cmd/d2bot/resetwire.go  credit-runner  resetinstant
 cmd/d2bot/resetwire_test.go  credit-runner  resetinstant
@@ -324,6 +329,7 @@ docs/mapfog.md  credit-runner  fogtrail
 docs/onboarding-tour.md  credit-runner  onboardtour
 docs/onboarding.md  credit-runner  firstminutes
 docs/onboarding.md  credit-runner  reconnectux
+docs/operator.md  credit-runner  explain1
 docs/outcomes.md  credit-runner  outcome-kit-gate
 docs/outcomes.md  credit-runner  outcome-park-step
 docs/outcomes.md  credit-runner  outcome-route-guard
@@ -464,6 +470,8 @@ internal/bot/broke.go  credit-runner  survrecover
 internal/bot/broke.go  credit-runner  town5
 internal/bot/contracts.go  credit-runner  chores2
 internal/bot/drought.go  credit-runner  freshstart
+internal/bot/explain.go  credit-runner  explain1
+internal/bot/explain_test.go  credit-runner  explain1
 internal/bot/failsafe_test.go  credit-runner  flakefix
 internal/bot/farm.go  credit-runner  pgclock
 internal/bot/farmclock_test.go  credit-runner  pgclock
@@ -488,6 +496,7 @@ internal/bot/levelplan3_test.go  pro-runner  levelplan3
 internal/bot/lifelog.go  credit-runner  arrivalsettle
 internal/bot/lifelog.go  credit-runner  hourfix
 internal/bot/lifelog.go  credit-runner  passagebounce
+internal/bot/loop.go  credit-runner  explain1
 internal/bot/loop.go  credit-runner  hourfix
 internal/bot/loop.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  resetinstant
@@ -519,11 +528,13 @@ internal/bot/repairtrip_test.go  credit-runner  repairtrip
 internal/bot/resource.go  pro-runner  levelplan3
 internal/bot/routeguard.go  credit-runner  bsm7
 internal/bot/runner.go  credit-runner  campaign1
+internal/bot/runner.go  credit-runner  explain1
 internal/bot/runner.go  credit-runner  hourfix
 internal/bot/runner.go  credit-runner  maphistoryA
 internal/bot/runner.go  credit-runner  passagebounce
 internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  resetinstant
+internal/bot/shadow.go  credit-runner  explain1
 internal/bot/staletarget.go  credit-runner  botstuck
 internal/bot/state.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  boardmoderace
@@ -712,6 +723,7 @@ internal/nav/route.go  credit-runner  exitsread
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
+internal/ops/  credit-runner  explain1
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
 internal/plandata/build-necromancer_summoner_normal30.json  credit-runner  allocfix
@@ -841,9 +853,13 @@ internal/vaultkeep/reveal.go  credit-runner  bulkid
 internal/watch  credit-runner  sellall
 internal/watch  credit-runner  town9
 internal/watch/areamap_test.go  credit-runner  uis6
+internal/watch/explainapi.go  credit-runner  explain1
+internal/watch/explainapi_test.go  credit-runner  explain1
 internal/watch/funwire.go  credit-runner  lootwireL4
 internal/watch/glance.go  credit-runner  intake
 internal/watch/glance.go  credit-runner  viewerfps
+internal/watch/http_view.go  credit-runner  explain1
+internal/watch/hub.go  credit-runner  explain1
 internal/watch/invui.go  credit-runner  nopins
 internal/watch/invui.go  credit-runner  uiphone
 internal/watch/layout.go  credit-runner  uis1
