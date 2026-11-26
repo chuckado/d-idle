@@ -18,3 +18,7 @@
 ## Links
 
 - docs/classes/ranking.md (class order), ADR 0020 (class order and agency), docs/probes/quest-drill-matrix-2026-11-23.md
+
+## Priority (user decision 2026-11-26)
+
+- 2026-11-26 priority: 5, last by effort: 2 plan rows, 1 profile, and a trap planner must be built first (docs/classes/assassin.md). Source: user class order 2026-11-26. No criteria ticked by this line.

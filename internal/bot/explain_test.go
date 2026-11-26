@@ -50,3 +50,25 @@ func TestExplainRing(t *testing.T) {
 		}
 	}
 }
+
+// The quest board's Why-not facts come from the freshest typed refusal (need code, wake, guard words); an untyped one
+// is skipped. Two classes.
+func TestQuestRefusalFacts(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		g := newRig(t)
+		g.w.set(func(w *world) { w.class = class })
+		r := g.r
+		if _, ok := r.QuestRefusal(); ok {
+			t.Fatalf("%v: refusal with nothing standing", class)
+		}
+		r.noteStanding("walk", "untyped")
+		if _, ok := r.QuestRefusal(); ok {
+			t.Fatalf("%v: untyped refusal reported", class)
+		}
+		r.noteRefused("step:too_weak", refusalOf("clvl 5 under the floor 8"))
+		f, ok := r.QuestRefusal()
+		if !ok || f.Need != "too_weak" || f.Wake == "" || f.Admission != "clvl 5 under the floor 8" || f.Seen.IsZero() {
+			t.Fatalf("%v: facts %+v ok=%v", class, f, ok)
+		}
+	}
+}

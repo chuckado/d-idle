@@ -66,33 +66,8 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 	if r.flailHold(ctx, snap, c) {
 		return true
 	}
-	if plan, emergency, ok := r.needChores(snap); ok {
-		now := r.e.Clock.Now()
-		gap := sec(r.cfg.ResupplyCooldownSec)
-		if emergency {
-			gap /= 4
-			if inTown {
-				// A visit in town costs no scroll and lastTrip was stamped by the failed field attempt seconds ago: the
-				// full gap sent the character back out with no potion six times (Gate 1 20261102, BELT A). Only a
-				// short pause keeps a shop that cannot sell from being retried every tick.
-				gap = townShopGap
-			}
-		}
-		if now.Sub(r.getLastTrip()) >= gap {
-			l.trip = &trip{plan: plan, returnTo: fieldArea(p), emergency: emergency}
-			r.noteRebuyTrip(plan, p.Gold)
-			r.setLastTrip(now) // also bounds retries when the chores keep failing
-			r.e.Log.Info("town trip", "reason", plan.Reason, "emergency", emergency)
-			return r.advanceTrip(ctx, snap, c)
-		}
-		if inTown && plan.Heal && r.belowResume(p) {
-			// The cooldown paces the shopping trips, it must not keep a wounded character walking back out: the heal
-			// is free and takes seconds (found live 2026-10-29: Booti re-entered at 25% life, the cooldown from the
-			// failed field trip blocked the heal, she walked out and chickened again, about every 20 s).
-			l.trip = &trip{plan: ChorePlan{Heal: true, Reason: "heal below the resume line", GoldFloor: r.e.Tune.Bot.GoldFloor}}
-			r.e.Log.Info("town trip", "reason", l.trip.plan.Reason, "life", p.LifePct())
-			return r.advanceTrip(ctx, snap, c)
-		}
+	if r.choresStep(ctx, snap, c) {
+		return true
 	}
 	if r.lowLifeGate(ctx, snap, c) {
 		return true
@@ -105,14 +80,7 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 	if inTown && r.savePointStep(ctx, snap, c) {
 		return true
 	}
-	if !inTown && c.spec.camp == nil && len(l.questPending) > 0 && r.d.Quester != nil && !r.e.Clock.Now().Before(l.claimSkipUntil) && r.hostileNear(snap, r.e.Tune.Bot.ClearRadius) == 0 {
-		r.setWhy(WhyClaimTrip)
-		if ok := r.do(ctx, c, StateResupplying, "Going to town to claim a quest reward", sec(r.cfg.TownTimeoutSec), "claim trip", r.d.Town.ToTown); ok {
-			return true
-		}
-		// ToTown walks home when it has no scroll; a failure here means the way is blocked: stop retrying for a while
-		l.claimSkipUntil = r.e.Clock.Now().Add(claimBackoff)
-		r.e.Log.Warn("claim trip failed; no new claim trip for a while", "minutes", int(claimBackoff/time.Minute))
+	if r.claimTripStep(ctx, snap, c) {
 		return true
 	}
 	if acted, hold := r.ensureDifficulty(ctx, snap, c); acted {
@@ -152,6 +120,62 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 		return r.travel(ctx, snap, c, target)
 	}
 	return r.sweep(ctx, snap, c, target)
+}
+
+// choresStep starts a town trip when chores are due (cooldown aware) and runs it; false when none is due. The chores
+// family hook of the chain and of the arbiter's control path (arbiter_control.go).
+func (r *Runner) choresStep(ctx context.Context, snap *d2.Snapshot, c control) bool {
+	l := &r.loop
+	p := snap.Player
+	inTown := p.InTown()
+	if plan, emergency, ok := r.needChores(snap); ok {
+		now := r.e.Clock.Now()
+		gap := sec(r.cfg.ResupplyCooldownSec)
+		if emergency {
+			gap /= 4
+			if inTown {
+				// A visit in town costs no scroll and lastTrip was stamped by the failed field attempt seconds ago: the
+				// full gap sent the character back out with no potion six times (Gate 1 20261102, BELT A). Only a
+				// short pause keeps a shop that cannot sell from being retried every tick.
+				gap = townShopGap
+			}
+		}
+		if now.Sub(r.getLastTrip()) >= gap {
+			l.trip = &trip{plan: plan, returnTo: fieldArea(p), emergency: emergency}
+			r.noteRebuyTrip(plan, p.Gold)
+			r.setLastTrip(now) // also bounds retries when the chores keep failing
+			r.e.Log.Info("town trip", "reason", plan.Reason, "emergency", emergency)
+			return r.advanceTrip(ctx, snap, c)
+		}
+		if inTown && plan.Heal && r.belowResume(p) {
+			// The cooldown paces the shopping trips, it must not keep a wounded character walking back out: the heal
+			// is free and takes seconds (found live 2026-10-29: Booti re-entered at 25% life, the cooldown from the
+			// failed field trip blocked the heal, she walked out and chickened again, about every 20 s).
+			l.trip = &trip{plan: ChorePlan{Heal: true, Reason: "heal below the resume line", GoldFloor: r.e.Tune.Bot.GoldFloor}}
+			r.e.Log.Info("town trip", "reason", l.trip.plan.Reason, "life", p.LifePct())
+			return r.advanceTrip(ctx, snap, c)
+		}
+	}
+	return false
+}
+
+// claimTripStep leaves the field for town when a quest reward waits. The claim family hook of the chain and of the
+// arbiter's control path.
+func (r *Runner) claimTripStep(ctx context.Context, snap *d2.Snapshot, c control) bool {
+	l := &r.loop
+	p := snap.Player
+	inTown := p.InTown()
+	if !inTown && c.spec.camp == nil && len(l.questPending) > 0 && r.d.Quester != nil && !r.e.Clock.Now().Before(l.claimSkipUntil) && r.hostileNear(snap, r.e.Tune.Bot.ClearRadius) == 0 {
+		r.setWhy(WhyClaimTrip)
+		if ok := r.do(ctx, c, StateResupplying, "Going to town to claim a quest reward", sec(r.cfg.TownTimeoutSec), "claim trip", r.d.Town.ToTown); ok {
+			return true
+		}
+		// ToTown walks home when it has no scroll; a failure here means the way is blocked: stop retrying for a while
+		l.claimSkipUntil = r.e.Clock.Now().Add(claimBackoff)
+		r.e.Log.Warn("claim trip failed; no new claim trip for a while", "minutes", int(claimBackoff/time.Minute))
+		return true
+	}
+	return false
 }
 
 func fieldArea(p *d2.Player) int {

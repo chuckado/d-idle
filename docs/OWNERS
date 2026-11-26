@@ -126,6 +126,8 @@ docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-minutes.jsonl.gz  gaterun  gat
 docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-extras.jsonl.gz  gaterun  gate2multi-20261107-1811-g2h
 
 # BEGIN GENERATED OWNERS (tools/sharedgen/sharedgen.py from the owns: keys of open tasks; do not edit between the markers)
+backlog/tasks/task-998 - flipwave2*  credit-runner  roadmap2
+backlog/tasks/task-999 - classorder1*  credit-runner  roadmap2
 cmd/bossrun/adapter.go  pro-runner  levelplan3
 cmd/d2bot/acts_test.go  credit-runner  qdmatrix
 cmd/d2bot/adapters.go  credit-runner  cainfix3
@@ -177,7 +179,9 @@ cmd/d2bot/objects.go  credit-runner  botstuck
 cmd/d2bot/objects.go  credit-runner  cain5b
 cmd/d2bot/objects.go  live-agent  k1layout
 cmd/d2bot/objects_layout_test.go  live-agent  k1layout
+cmd/d2bot/opscmd.go  credit-runner  whynot1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
+cmd/d2bot/questwire.go  credit-runner  whynot1
 cmd/d2bot/repairwire.go  credit-runner  repairtrip
 cmd/d2bot/resetwire.go  credit-runner  resetinstant
 cmd/d2bot/resetwire_test.go  credit-runner  resetinstant
@@ -232,6 +236,7 @@ data/bulkid  credit-runner  bulkid
 data/campaign/normal.json  pro-runner  levelplan3
 data/capabilities/  credit-runner  dlv-data
 data/capabilities/  credit-runner  dlv-stance-pack
+data/darklaunch.json  credit-runner  arbfam
 data/darklaunch.json  credit-runner  arbmig
 data/darklaunch.json  credit-runner  autorevert1
 data/input/caps/  credit-runner  dlv-cast-verbs
@@ -245,6 +250,7 @@ docs/actbot.md  credit-runner  cain45
 docs/adr/0014-memory-writes-allowed-no-crutch.md  credit-runner  vaultpay
 docs/adr/0029-vault-gold-payment.md  credit-runner  vaultpay
 docs/adr/README.md  credit-runner  vaultpay
+docs/arbiter.md  credit-runner  arbfam
 docs/arbiter.md  credit-runner  arbmig
 docs/archive  credit-runner  dietarchive
 docs/autoalloc.md  credit-runner  allocfix
@@ -281,12 +287,18 @@ docs/epics/epic-act2.md  live-agent  epic-act2
 docs/epics/epic-act3.md  live-agent  epic-act3
 docs/epics/epic-act4.md  live-agent  epic-act4
 docs/epics/epic-act5.md  live-agent  epic-act5
+docs/epics/epic-class-amazon.md  credit-runner  classorder
 docs/epics/epic-class-amazon.md  live-agent  epic-class-amazon
+docs/epics/epic-class-assassin.md  credit-runner  classorder
 docs/epics/epic-class-assassin.md  live-agent  epic-class-assassin
+docs/epics/epic-class-barbarian.md  credit-runner  classorder
 docs/epics/epic-class-barbarian.md  live-agent  epic-class-barbarian
+docs/epics/epic-class-druid.md  credit-runner  classorder
 docs/epics/epic-class-druid.md  live-agent  epic-class-druid
+docs/epics/epic-class-necromancer.md  credit-runner  classorder
 docs/epics/epic-class-necromancer.md  live-agent  epic-class-necromancer
 docs/epics/epic-class-paladin.md  live-agent  epic-class-paladin
+docs/epics/epic-class-sorceress.md  credit-runner  classorder
 docs/epics/epic-class-sorceress.md  live-agent  epic-class-sorceress
 docs/epics/epic-hell.md  live-agent  epic-hell
 docs/epics/epic-merc.md  live-agent  epic-merc
@@ -304,6 +316,7 @@ docs/invariants.md  credit-runner  autorevert1
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-ui.md  credit-runner  jewelicons
 docs/inventory-ui.md  credit-runner  nopins
+docs/knobs.md  credit-runner  arbfam
 docs/knobs.md  credit-runner  arbmig
 docs/knobs.md  credit-runner  botstuck
 docs/knobs.md  credit-runner  bulkid
@@ -329,6 +342,7 @@ docs/onboarding-tour.md  credit-runner  onboardtour
 docs/onboarding.md  credit-runner  firstminutes
 docs/onboarding.md  credit-runner  reconnectux
 docs/operator.md  credit-runner  autorevert1
+docs/operator.md  credit-runner  whynot1
 docs/outcomes.md  credit-runner  outcome-kit-gate
 docs/outcomes.md  credit-runner  outcome-park-step
 docs/outcomes.md  credit-runner  outcome-route-guard
@@ -348,13 +362,16 @@ docs/probes/boardsm-progress-2026-11-21.md  credit-runner  bsm7
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
 docs/probes/checkpoint-live-drill.md  live-agent  ckptlive
 docs/probes/chores2-2026-11-21.md  credit-runner  chores2
+docs/probes/classorder1.md  user  classorder1
 docs/probes/exitsread-2026-11-22.md  credit-runner  exitsread
 docs/probes/firsthour.md  live-agent  firsthour
+docs/probes/flipwave2.md  live-agent  flipwave2
 docs/probes/gridwhole-2026-11-22.md  credit-runner  gridwhole
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/necromancer-act1-drill-2026-11-22.md  credit-runner  stage1fix
 docs/probes/necromancer-readiness-2026-11-22.md  credit-runner  necro2
+docs/probes/paladin-aura-audit-2026-11-26.md  credit-runner  auraaudit
 docs/probes/pg-gate-group1-2026-11-21.md  credit-runner  pgjournal
 docs/probes/pg-journal-pair-2026-11-21.md  credit-runner  pgjournal
 docs/probes/provingground-countess-2026-11-20.md  credit-runner  countess
@@ -415,6 +432,8 @@ docs/research/pal-zeal-trace.md  credit-runner  palskill-matrix
 docs/research/return-screen.md  credit-runner  returnmock
 docs/research/upstream-next.md  credit-runner  upstream-next
 docs/reset.md  credit-runner  resetinstant
+docs/roadmap-fable.md  credit-runner  classorder
+docs/roadmap-fable.md  credit-runner  roadmap2
 docs/senses-map.md  credit-runner  maphistory
 docs/senses-map.md  credit-runner  maphistoryA
 docs/senses-map.md  credit-runner  maphistoryB
@@ -423,6 +442,7 @@ docs/senses-map.md  credit-runner  maphistoryD
 docs/senses-map.md  credit-runner  maptrail
 docs/senses-map.md  credit-runner  maptrail2
 docs/session-record.md  live-agent  sessions
+docs/sme/paladin-auras-2026-11-26.md  credit-runner  smeaura
 docs/soaks/recoverypace.md  live-agent  recoverypace
 docs/survival/ledger.md  credit-runner  intake
 docs/t0-variants.md  credit-runner  qdensity
@@ -454,9 +474,12 @@ docs/vault.md  credit-runner  vaultpay
 docs/vault.md  credit-runner  vaultreveal
 internal/admit/  credit-runner  admit1
 internal/agency/  credit-runner  dlv-rotation
+internal/arbiter  credit-runner  arbfam
 internal/arbiter  credit-runner  town10
 internal/arbiter/  credit-runner  arbmig
 internal/arbiter/  credit-runner  dlv-stance-army
+internal/arbiter/explained.go  credit-runner  whynot1
+internal/arbiter/explained_test.go  credit-runner  whynot1
 internal/boss  credit-runner  countess3
 internal/boss/act1.go  credit-runner  countess
 internal/boss/boss_test.go  credit-runner  countess
@@ -468,7 +491,9 @@ internal/boss/script.go  credit-runner  countess
 internal/boss/types.go  pro-runner  levelplan3
 internal/bot/  credit-runner  cainfix3
 internal/bot/admit_need_test.go  credit-runner  admit1
+internal/bot/arbiter_control.go  credit-runner  arbfam
 internal/bot/arbiter_control.go  credit-runner  arbmig
+internal/bot/arbiter_control_test.go  credit-runner  arbfam
 internal/bot/arbiter_control_test.go  credit-runner  arbmig
 internal/bot/areametrics.go  credit-runner  intake
 internal/bot/areaskip_test.go  credit-runner  passagebounce
@@ -479,11 +504,14 @@ internal/bot/contracts.go  credit-runner  chores2
 internal/bot/drought.go  credit-runner  freshstart
 internal/bot/earlyroute.go  credit-runner  admit1
 internal/bot/explain.go  credit-runner  autorevert1
+internal/bot/explain.go  credit-runner  whynot1
+internal/bot/explain_test.go  credit-runner  whynot1
 internal/bot/failsafe_test.go  credit-runner  flakefix
 internal/bot/farm.go  credit-runner  pgclock
 internal/bot/farmclock_test.go  credit-runner  pgclock
 internal/bot/farmreset.go  credit-runner  farmloop
 internal/bot/farmreset_test.go  credit-runner  farmloop
+internal/bot/goal.go  credit-runner  arbfam
 internal/bot/goal.go  credit-runner  hourfix
 internal/bot/goal.go  credit-runner  maphistoryA
 internal/bot/goal.go  credit-runner  qdmatrix
@@ -546,6 +574,7 @@ internal/bot/runner.go  credit-runner  passagebounce
 internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  resetinstant
 internal/bot/safetylat.go  credit-runner  reflex1d
+internal/bot/shadow.go  credit-runner  arbfam
 internal/bot/shadow.go  credit-runner  arbmig
 internal/bot/staletarget.go  credit-runner  botstuck
 internal/bot/state.go  credit-runner  resetinstant
@@ -736,6 +765,7 @@ internal/nav/route.go  credit-runner  exitsread
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
+internal/ops  credit-runner  whynot1
 internal/plandata/admission.json  credit-runner  admit1
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
@@ -751,6 +781,7 @@ internal/power/archetype.go  credit-runner  qdmatrix
 internal/power/skilldamage_test.go  credit-runner  qdmatrix
 internal/quest/dialog.go  credit-runner  cain5b
 internal/questboard  credit-runner  boardprereq
+internal/questboard  credit-runner  whynot1
 internal/questboard/chunks_test.go  credit-runner  cain45
 internal/questboard/chunks_test.go  credit-runner  cain5b
 internal/questboard/def.go  credit-runner  cainfix3
@@ -888,6 +919,7 @@ internal/watch/onboarding_test.go  credit-runner  firstminutes
 internal/watch/palfeed/luma_test.go  credit-runner  brightness
 internal/watch/panels.go  credit-runner  uis6
 internal/watch/pointsui.go  credit-runner  allocfix
+internal/watch/questui_test.go  credit-runner  whynot1
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
 internal/watch/resetapi.go  credit-runner  resetinstant
@@ -936,6 +968,7 @@ internal/watch/testdata/map_panel.js  credit-runner  maptrail2
 internal/watch/testdata/onboarding_dom.js  credit-runner  firstminutes
 internal/watch/testdata/quests  credit-runner  cain45
 internal/watch/testdata/quests  credit-runner  cain5b
+internal/watch/testdata/quests  credit-runner  whynot1
 internal/watch/testdata/quests/  credit-runner  handinbtn
 internal/watch/testdata/questui/quest_ui.mjs  credit-runner  handinbtn
 internal/watch/testdata/reset  credit-runner  resetinstant
@@ -1003,6 +1036,7 @@ internal/watch/web/panels/map/  credit-runner  uis6
 internal/watch/web/panels/onboarding  credit-runner  firstminutes
 internal/watch/web/panels/onboarding  credit-runner  reconnectux
 internal/watch/web/panels/orders/panel.css  credit-runner  morefit
+internal/watch/web/panels/quest-board  credit-runner  whynot1
 internal/watch/web/panels/quest-board/panel.js  credit-runner  handinbtn
 internal/watch/web/panels/quest-strip/panel.css  credit-runner  uifit1
 internal/watch/web/panels/statusline/panel.css  credit-runner  uifit1
@@ -1092,6 +1126,7 @@ tools/probes/gridwhole.py  credit-runner  gridwhole
 tools/probes/objectlist.py  credit-runner  qdmatrix
 tools/probes/presets.py  credit-runner  qdmatrix
 tools/provingground/  credit-runner  dlv-reads
+tools/provingground/arbiter-outcomes  credit-runner  arbfam
 tools/provingground/arbiter-outcomes/  credit-runner  arbmig
 tools/provingground/countess-check.sh  credit-runner  countess2
 tools/provingground/earned  credit-runner  pgearned

@@ -199,6 +199,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [mercenary.md](sme/mercenary.md): Mercenaries in classic LoD 1.14d: SME reference for the hire/keep-alive bot (MERCRESEARCH, 2026-10-30)
 - [pace-and-formulas.md](sme/pace-and-formulas.md): D2 LoD 1.14d pace and formula lookup (Normal Act 1 to Act 2 gate; Paladin and Sorceress)
 - [pace-tables.md](sme/pace-tables.md): Pace tables: human and speedrun reference for soak milestones (classic LoD 1.14d, offline single player)
+- [paladin-auras-2026-11-26.md](sme/paladin-auras-2026-11-26.md): Paladin auras: how they work and what the bot does (2026-11-26) (status: current SME answer to the owner question of 2026-11-26. Tags: V verified (repo doc or code, path given), S...)
 - [play-act-route.md](sme/play-act-route.md): Play patterns 1: a human route through all five acts
 - [play-bot-pitfalls.md](sme/play-bot-pitfalls.md): Play patterns 4: what automation gets wrong in Diablo II, and where our bot differs from a human
 - [play-economy.md](sme/play-economy.md): Play patterns 2: gold, shopping, inventory and town chores
@@ -604,7 +605,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `reviews/`
 
 - [support-bundle-security-2026-11-15.md](reviews/support-bundle-security-2026-11-15.md): Security review: support bundle upload (branch agent/support, tip 88eecae7b) (status: review of task 542 / card `support` before merge (mergeq #811). Reviewer: Opus, single, offline. Nothing...)
-- [roadmap-fable.md](roadmap-fable.md): Fable roadmap: every recommendation, its state, and what flips it (status: current (card fableroadmap, 2026-11-26; written on user approval of the same day). A living tracker: the...)
+- [roadmap-fable.md](roadmap-fable.md): Fable roadmap: every recommendation, its state, and what flips it (status: current (card fableroadmap, 2026-11-26; refreshed by card roadmap2 the same day against `git log...)
 - [roamleg.md](roamleg.md): ROAMLEG: a mouth-gate hold is not a failed roam target (status: offline fix, tests pass, verified live in DRILLS23 (docs/probes/drills/README.md): 0 failed legs (was 50),...)
 - [roamspacing.md](roamspacing.md): Roam coverage spacing (TASK-301) (status: CURRENT. Tags: V = measured (log read-only, or the simulator run in this worktree on the worker host), S =...)
 - [running.md](running.md): How to run d.idle (status: current as of 2026-11-01 (card readmedocs; Teleport and `--build` note added by card capdocs). Every...)
@@ -1153,6 +1154,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [necromancer-act1-drill-2026-11-22.md](probes/necromancer-act1-drill-2026-11-22.md): Necromancer earned Act 1 drill (card necrodrill, 2026-11-22) (status: current. Verdict: BLOCKED, NOT ready to play. Tags: V verified in a named run, S read in a log, U...)
 - [necromancer-readiness-2026-11-22.md](probes/necromancer-readiness-2026-11-22.md): Necromancer readiness audit (card necro2, 2026-11-22) (status: current; section 6 (update after the merges of the same day) supersedes sections 1 to 3 where they differ....)
 - [pactnative.md](probes/pactnative.md): pactnative: do the native difficulty levers work offline on 1.14d? (TASK-170) (status: probe result of 2026-11-08 (overnight, one hidden instance). Facts for the Pact design note...)
+- [paladin-aura-audit-2026-11-26.md](probes/paladin-aura-audit-2026-11-26.md): Paladin aura audit (2026-11-26) (status: audit, read-only; no fix made. Question (owner): auras only work when selected on an active skill slot...)
 - [paladin-smoke.md](probes/paladin-smoke.md): Paladin smoke (pointer) (status: current. The results of TASK-142 are in `docs/paladinsmoke.md` (the card's owned file); the run scripts,...)
 - [panels-live.md](probes/panels-live.md): Live check of the watch panels against real lockstep runs (panelslive) (status: measured 2026-11-08 (EST). Tags: V verified live (how stated), S code reading, U unverified. Evidence is a...)
 - [park-retry-after-release-2026-11-21.md](probes/park-retry-after-release-2026-11-21.md): Park retry after a new release (2026-11-21)

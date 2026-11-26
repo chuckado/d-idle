@@ -241,6 +241,13 @@ const GROUP_OF = (s) => (NOW[s] ? 'now' : s === 'ready' || s === 'available' || 
 export function boardModel(v, local = shared, now = Date.now()) {
   if (!v) return { empty: 'The quest board did not answer. Trying again.' };
   if (!v.enabled) return { empty: offText(v), off: true };
+  // whyNotText is the "Why not?" row of a chunk that waits: the guard's words or the need, what wakes it, when it was last refused.
+  const whyNotText = (w) => {
+    if (!w) return '';
+    const parts = [w.admission || (w.need || '').replace(/_/g, ' '), w.wake ? 'wakes when ' + w.wake : ''].filter(Boolean);
+    if (w.lastRefused) { const d = new Date(w.lastRefused); if (!isNaN(d)) parts.push('last refused ' + d.toTimeString().slice(0, 5)); }
+    return parts.length ? 'Why not: ' + parts.join('; ') : '';
+  };
   const offerOf = (q, c) => (v.offers || []).find((o) => o.quest === q && o.chunk === c);
   const acts = new Map();
   for (const q of v.quests || []) {
@@ -249,7 +256,7 @@ export function boardModel(v, local = shared, now = Date.now()) {
       const w = wordOf(c.readiness || (o && o.readiness));
       const reason = (c.reason && c.reason.text) || (o && (o.sentence || ((o.reasons || [])[0] || {}).text)) || c.why || '';
       const lv = o && o.readiness !== 'safe' ? levelsText(o.levelsToGo) : '';
-      return { id: c.id, title: c.title, state: c.state, action: c.action || null, word: w, reason: lv || reason, minutes: o ? minutesText(o.minutes) : '', startable: !!(o && o.startable), why: o && !o.startable ? o.why : '', pays: o ? paysText(o.pays) : '' };
+      return { id: c.id, title: c.title, state: c.state, action: c.action || null, word: w, reason: lv || reason, minutes: o ? minutesText(o.minutes) : '', startable: !!(o && o.startable), why: o && !o.startable ? o.why : '', pays: o ? paysText(o.pays) : '', whyNot: whyNotText(c.whyNot) };
     });
     const g = GROUP_OF(q.state);
     if (!acts.has(q.act)) acts.set(q.act, []);
@@ -361,6 +368,7 @@ export function mountBoard(root, ctx, tab) {
     li.append(t);
     if (stateWord) { const w = ctx.el('span', 'qb-w', stateWord); w.dataset.w = c.word || c.state; li.append(w); }
     if (c.reason && c.state !== 'done') li.append(ctx.el('span', 'qb-r', c.reason));
+    if (c.whyNot && c.state !== 'done') { const wn = ctx.el('span', 'qb-r qb-wn', c.whyNot); wn.dataset.whyNot = '1'; li.append(wn); }
     const meta = [c.minutes, c.pays].filter(Boolean).join(', ');
     if (meta && c.state !== 'done') li.append(ctx.el('span', 'qb-m', meta));
     // The one button of the part comes from the server's `action` (the scenario tapper presses the same one). The Now tile of the

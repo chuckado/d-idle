@@ -56,6 +56,8 @@ type DeskConfig struct {
 	// Queued says why an accepted chunk is not running yet ("" when it runs); the strip and the running card show it.
 	Queued func() string
 	Now    func() time.Time
+	// Refusal is the hero's freshest typed refusal for the "Why not?" row; nil: the row carries the readiness facts only.
+	Refusal func() (RefusalFacts, bool)
 	// Ctx bounds the asynchronous hand-in goroutines (the process); default Background.
 	Ctx context.Context
 }
@@ -70,6 +72,8 @@ type Desk struct {
 	cached time.Time
 	hand   map[string]*handRun // by chunk key
 	last   *HandInView
+
+	refused map[string]time.Time // last refused start by chunk key (whynot.go)
 }
 
 type handRun struct{ started time.Time }
@@ -218,6 +222,8 @@ type ChunkRow struct {
 	// Action is the one button this part offers the player (the web row renders it, the scenario tapper presses it);
 	// nil: nothing to press, and Reason or Why says why.
 	Action *ActionView `json:"action,omitempty"`
+	// WhyNot is the "Why not?" row: readiness word, floor, need, wake, last refusal; nil for a part that moves.
+	WhyNot *WhyNotView `json:"whyNot,omitempty"`
 }
 
 // RunView is the accepted chunk: running, awaiting the tap or parked.
@@ -396,6 +402,12 @@ func (d *Desk) build() View {
 		handing[k] = true
 	}
 	d.mu.Unlock()
+	var rfacts *RefusalFacts
+	if d.cfg.Refusal != nil {
+		if f, ok := d.cfg.Refusal(); ok {
+			rfacts = &f
+		}
+	}
 	class := ""
 	if d.cfg.Class != nil {
 		class = d.cfg.Class()
@@ -449,6 +461,7 @@ func (d *Desk) build() View {
 				v.Offers = append(v.Offers, o)
 			}
 			cr.Action = chunkAction(cv.State, off, run, cr.Reason, v.Paused)
+			cr.WhyNot = d.whyNot(q, c, cv, cr, rfacts)
 			row.Chunks = append(row.Chunks, cr)
 			if cv.State == Done && plan.accepted(status.Diff, qv.ID, cv.ID) {
 				h := HistoryRow{Quest: qv.ID, Chunk: cv.ID, Title: c.Title, Accepted: acceptedAt(plan, status.Diff, qv.ID, cv.ID), Confirmed: cv.Confirmed}
@@ -815,6 +828,10 @@ func (d *Desk) title(quest string) string {
 
 // Start accepts the current chunk of a quest (the player's Start tap; it never covers the next part).
 func (d *Desk) Start(quest, chunk string) Reply {
+	return d.noteRefusal(quest, chunk, d.start(quest, chunk))
+}
+
+func (d *Desk) start(quest, chunk string) Reply {
 	x, st, bad := d.gate()
 	if bad != nil {
 		return *bad
@@ -862,6 +879,10 @@ func (d *Desk) Start(quest, chunk string) Reply {
 // one attempt. The caller has already checked the owner's auth and the confirm; the caller audits it with Reply.Override.
 // Nothing but the readiness words is skipped: the kit gates and the combat reactions stay.
 func (d *Desk) StartAnyway(quest, chunk string) Reply {
+	return d.noteRefusal(quest, chunk, d.startAnyway(quest, chunk))
+}
+
+func (d *Desk) startAnyway(quest, chunk string) Reply {
 	x, _, bad := d.gate()
 	if bad != nil {
 		return *bad

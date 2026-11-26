@@ -8,6 +8,12 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into classorder <!--sg:agent/classorder-->
+- Merge branch 'main' into auraaudit <!--sg:agent/auraaudit-->
+- Merge branch 'main' into roadmap2 <!--sg:agent/roadmap2-->
+- Merge branch 'main' into smeaura <!--sg:agent/smeaura-->
+- Merge branch 'main' into whynot1 <!--sg:agent/whynot1-->
+- arbfam entry 1: chores and claim outcome cases, docs, card <!--sg:agent/arbfam1-->
 - Merge origin/main <!--sg:agent/toolstrade85-->
 - Merge branch 'main' into toolstrade84 <!--sg:agent/toolstrade84-->
 - Merge branch 'main' into faultsoak <!--sg:agent/faultsoak-->
