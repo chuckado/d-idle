@@ -275,6 +275,7 @@
 | epic-merc | proposed | - | `docs/epics/epic-merc.md` | - |
 | fablereview2 | in-progress | - | `docs/research/fable-logic-review-2026-11-25.md` | - |
 | darklaunch | proposed | - | `data/darklaunch.json`<br>`tools/darklaunch`<br>`docs/process/dark-launch.md`<br>`tools/ci/check.sh` | - |
+| invmon | proposed | - | `internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`docs/invariants.md`<br>`internal/bot/runner.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/task.go`<br>`internal/env/tuning_bot.go` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | fid-adapter-rows | deferred | - | `docs/probes/fid/fid-adapter-rows.md` | - |
@@ -301,6 +302,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- e201e0878 11-25 22:55 `Merge agent/invariants: Merge branch 'main' into invmon` (invariants)
+- 6f4022933 11-25 22:51 `Merge branch 'main' into invmon` (-)
 - f75d92016 11-25 22:47 `Merge agent/herorecord: herorecord: record the live Paladin hero in the epic pages` (herorecord)
 - cc290be05 11-25 22:37 `Merge agent/darklaunch: Merge branch 'main' into darklaunch` (darklaunch)
 - 871b9bdc9 11-25 22:35 `Merge branch 'main' into darklaunch` (-)
@@ -309,6 +312,4 @@
 - 1fbcb45ba 11-25 22:22 `Merge agent/qd26: combat: a living hero at life 0 drinks (live Questy death 2026-11-26), Smith row kit, matrix 76-77` (qd26)
 - b8a0be02f 11-25 22:16 `Merge origin/main` (-)
 - 2f018a0f2 11-25 22:13 `Merge agent/epiccards: Merge branch 'main' into epiccards` (epiccards)
-- 670049ed3 11-25 22:11 `Merge branch 'main' into epiccards` (-)
-- 12884d316 11-25 22:04 `Merge agent/qd25: Merge origin/main` (qd25)
 <!-- statusgen:end -->

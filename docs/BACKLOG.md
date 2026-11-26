@@ -1392,6 +1392,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/qd26: combat: a living hero at life 0 drinks (live Questy death 2026-11-26), Smith row kit, matrix 76-77 (merged 2026-11-25) <!--sg:agent/qd26-->
 - darklaunch: dark-launch ledger, check and rule (TASK-954, merged 2026-11-25, acceptance 3 of 3): dark-launch ledger data/darklaunch.json (33 rows), tools/darklaunch check+report wired into tools/ci/check.sh, docs/process/dark-launch.md; check + 8 tests pass offline; ci/check.sh not run by the agent <!--sg:agent/darklaunch-->
 - herorecord: record the live Paladin hero in the epic pages (TASK-964, merged 2026-11-25, acceptance 1 of 1): live Paladin hero recorded in two epic pages; docs only <!--sg:agent/herorecord-->
+- agent/invariants: Merge branch 'main' into invmon (merged 2026-11-25): P1 invariant monitor: 13 named checks, log only, bot.invariants default 1, docs/invariants.md; vet + short tests green on the worker host; not verified live <!--sg:agent/invariants-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

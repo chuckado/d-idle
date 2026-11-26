@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into invmon <!--sg:agent/invariants-->
 - herorecord: record the live Paladin hero in the epic pages <!--sg:agent/herorecord-->
 - Merge branch 'main' into darklaunch <!--sg:agent/darklaunch-->
 - combat: a living hero at life 0 drinks (live Questy death 2026-11-26), Smith row kit, matrix 76-77 <!--sg:agent/qd26-->

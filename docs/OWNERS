@@ -285,6 +285,7 @@ docs/friend-checklist-0.1.2.md  credit-runner  cut012
 docs/friend-guide.md  credit-runner  cut012
 docs/gear-policy.md  credit-runner  nopins
 docs/hourfix.md  credit-runner  hourfix
+docs/invariants.md  credit-runner  invmon
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-ui.md  credit-runner  jewelicons
 docs/inventory-ui.md  credit-runner  nopins
@@ -463,6 +464,8 @@ internal/bot/goldfarm.go  credit-runner  repairtrip
 internal/bot/guided.go  credit-runner  campaign1
 internal/bot/guided_test.go  credit-runner  campaign1
 internal/bot/hpfields.go  credit-runner  intake
+internal/bot/invariants.go  credit-runner  invmon
+internal/bot/invariants_test.go  credit-runner  invmon
 internal/bot/kitplan_test.go  credit-runner  bsm7
 internal/bot/leveling.go  credit-runner  hourfix
 internal/bot/leveling.go  credit-runner  town5
@@ -471,6 +474,7 @@ internal/bot/lifelog.go  credit-runner  arrivalsettle
 internal/bot/lifelog.go  credit-runner  hourfix
 internal/bot/lifelog.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  hourfix
+internal/bot/loop.go  credit-runner  invmon
 internal/bot/loop.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  resetinstant
 internal/bot/loop.go  credit-runner  survrecover
@@ -479,6 +483,7 @@ internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  arrivalsettle
 internal/bot/observe.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  intake
+internal/bot/observe.go  credit-runner  invmon
 internal/bot/observe.go  credit-runner  passagebounce
 internal/bot/observe.go  credit-runner  survrecover
 internal/bot/observe.go  pro-runner  bounce3
@@ -502,6 +507,7 @@ internal/bot/resource.go  pro-runner  levelplan3
 internal/bot/routeguard.go  credit-runner  bsm7
 internal/bot/runner.go  credit-runner  campaign1
 internal/bot/runner.go  credit-runner  hourfix
+internal/bot/runner.go  credit-runner  invmon
 internal/bot/runner.go  credit-runner  maphistoryA
 internal/bot/runner.go  credit-runner  passagebounce
 internal/bot/runner.go  credit-runner  repairtrip
@@ -513,6 +519,7 @@ internal/bot/task.go  credit-runner  botstuck
 internal/bot/task.go  credit-runner  cain5b
 internal/bot/task.go  credit-runner  chores2
 internal/bot/task.go  credit-runner  hourfix
+internal/bot/task.go  credit-runner  invmon
 internal/bot/task.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  wpstep
 internal/bot/task_acts_test.go  credit-runner  cain5b
@@ -612,6 +619,7 @@ internal/env/tuning.go  credit-runner  bulkid
 internal/env/tuning_bot.go  credit-runner  botstuck
 internal/env/tuning_bot.go  credit-runner  freshstart
 internal/env/tuning_bot.go  credit-runner  hourfix
+internal/env/tuning_bot.go  credit-runner  invmon
 internal/env/tuning_bot.go  credit-runner  lootwireL4
 internal/env/tuning_combat.go  credit-runner  cainfix3
 internal/env/tuning_combat.go  credit-runner  dlv-expect
