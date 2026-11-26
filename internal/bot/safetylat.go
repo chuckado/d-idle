@@ -191,11 +191,12 @@ func (r *Runner) takeForced() bool {
 // holdForHard keeps the guard alive after a hard cancel until the action returns or the deadline passes (game.exe path;
 // the lockstep watch calls forceIfLate itself).
 func (r *Runner) holdForHard(done <-chan struct{}, every time.Duration) {
+	step := max(every/5, 5*time.Millisecond) // fine steps: the action usually returns at once and the wait must not stretch the clock
 	for {
 		if r.forceIfLate(r.e.Clock.Now()) {
 			return
 		}
-		r.e.Clock.Sleep(every)
+		r.e.Clock.Sleep(step)
 		select {
 		case <-done:
 			return
