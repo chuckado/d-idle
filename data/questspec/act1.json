@@ -395,7 +395,24 @@
      "tries": 3,
      "verbs": [
       "dump items"
-     ]
+     ],
+     "exec": {
+      "verb": "interact",
+      "on": {
+       "kind": "object",
+       "name": "tree_of_inifuss",
+       "class": 30
+      },
+      "then": "pickup",
+      "tolerance": 4,
+      "wait_polls": 6,
+      "wait_ms": 1000,
+      "backoff_ms": 500,
+      "backoff_cap_ms": 4000,
+      "wake": [
+       "area changes"
+      ]
+     }
     },
     {
      "id": "to_camp",

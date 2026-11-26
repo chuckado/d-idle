@@ -92,6 +92,8 @@ type Step struct {
 	BudgetS    int      `json:"budget_s"`
 	OnFail     string   `json:"on_fail"`
 	Explore    *Explore `json:"explore,omitempty"`
+	// Exec is how the generic step executor runs the step (exec.go); absent: not run by it.
+	Exec *Exec `json:"exec,omitempty"`
 }
 
 // Pred is one named fact with arguments, written name(a,b).
@@ -286,6 +288,9 @@ func (c *Chain) Validate() error {
 			}
 		default:
 			w("discover %q", d)
+		}
+		if s.Exec != nil {
+			s.Exec.validate(s, bad)
 		}
 		if e := s.Explore; e != nil && (e.BudgetS <= 0 || !nameRE.MatchString(e.Progress)) {
 			w("explore needs budget_s > 0 and a progress rule")

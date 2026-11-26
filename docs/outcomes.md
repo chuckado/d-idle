@@ -30,7 +30,7 @@ The quest board step (`boardSlice`, `questboard.go`): a result for which `refuse
 
 ## Not yet converted (follow-up cards, `convert <path> to typed outcomes`)
 1. `taskStep` (`task.go`, the non-board quest runner) and `planningFault` / `planningBlock`.
-2. The travel gate: `errAreaGated` in `do` and `gatedWait` (`geargate.go`, `broke.go` Blood Raven errors).
+2. DONE (card outcome-travel-gate): the travel gate. Every `errAreaGated` site (`geargate.go` routeAllowed, `loop.go` gotoDeathArea, `broke.go` levelSlice and the Blood Raven budget) goes through `r.refuse`, which wraps the legacy error in a `*Refused` (need from `needOf`, the sentinel still reachable through `Unwrap`). `do` runs `gateEffects` (ban wait, standing line, skipped target, state) and then `handleRefused` (one line per change, pause by need) instead of `gatedWait`; knob 0 keeps `gatedWait`. Cancel storm of 2026-11-26 (U cause, read from the code: the guard cancelled the no-scroll walk home with a portal or crowd verdict nothing could carry out, so `ToTown` restarted every ~10 s): with no portal source the guard ignores `SafetyTownPortal` and `SafetyCrowdAbandon` for a Resupplying step outside town (`walkHomeNoScroll`; drinks and the chicken exit still cancel). Tests: `go test -run 'GateRefusal|WalkHomeNoScroll' ./internal/bot` (two classes).
 3. `parkStep` and the stale-target holds (`staletarget.go`).
 4. `guardedExit` and `routeGuardHop` (`routeguard.go`).
 5. Kit gate holds (`kitgate.go`) and the town chores refusals (`town`).

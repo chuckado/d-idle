@@ -364,6 +364,17 @@
    "review_by": "2026-12-09",
    "status": "dark",
    "criteria_met": "U"
+  },
+  {
+   "name": "quests.stepExec",
+   "built_by": "stepexec1 (TASK-976, branch agent/stepexec1)",
+   "dark_since": "2026-11-26",
+   "why_off": "First chunk (the Cain scroll, Tree of Inifuss click and pick-up) ported to the generic step executor; the scenario cain.scroll.stepexec has not run on the lab yet.",
+   "enable_criteria": "Scenario cain.scroll.stepexec green 2 of 3 runs on the lab, then flip on one sandbox with a 24 h watch and auto-revert on a hard breach (docs/process/dark-launch.md); the old handler is deleted after the watch.",
+   "owner": "coordinator",
+   "review_by": "2026-12-03",
+   "status": "dark",
+   "criteria_met": "no"
   }
  ]
 }
