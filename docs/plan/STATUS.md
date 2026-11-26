@@ -507,6 +507,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 6e3958642 11-25 20:10 `Merge agent/toolstrade75: toolstrade75: a portal that drops into a stale pack is not taken, the corpse run is exempt from the early road, the Dark Wood wants 180 life (melee) / 100 (caster)` (toolstrade75)
 - 18d4a4e9e 11-25 19:11 `Merge agent/toolstrade74: toolstrade74: the early road is a Ready hold of the step into the Dark Wood (a chores trip for the kit), not a strike at the hop (Cain scroll parked as too weak)` (toolstrade74)
 - e12ee23ba 11-25 18:12 `Merge agent/toolstrade73: Merge branch 'main' into toolstrade73` (toolstrade73)
 - ce8c37537 11-25 18:10 `Merge branch 'main' into toolstrade73` (-)
@@ -516,5 +517,4 @@
 - 3f54cc00c 11-25 17:54 `Merge agent/toolstrade71: Merge branch 'main' into toolstrade71` (toolstrade71)
 - 2dc4fff06 11-25 17:52 `Merge branch 'main' into toolstrade71` (-)
 - 684f9ad45 11-25 17:43 `Merge agent/toolstrade70: Merge branch 'main' into toolstrade70` (toolstrade70)
-- 665aacd9c 11-25 17:42 `Merge origin/main into toolstrade71` (-)
 <!-- statusgen:end -->

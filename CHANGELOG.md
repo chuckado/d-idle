@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- toolstrade75: a portal that drops into a stale pack is not taken, the corpse run is exempt from the early road, the Dark Wood wants 180 life (melee) / 100 (caster) <!--sg:agent/toolstrade75-->
 - toolstrade74: the early road is a Ready hold of the step into the Dark Wood (a chores trip for the kit), not a strike at the hop (Cain scroll parked as too weak) <!--sg:agent/toolstrade74-->
 - Merge branch 'main' into toolstrade73 <!--sg:agent/toolstrade73-->
 - Merge branch 'main' into toolstrade72 <!--sg:agent/toolstrade72-->
