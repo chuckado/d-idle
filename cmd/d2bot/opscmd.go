@@ -12,9 +12,10 @@ import (
 	"time"
 
 	"d2lod-bot/internal/ops"
+	"d2lod-bot/internal/questboard"
 )
 
-const opsUsage = `usage: d2bot ops quest status [--json]
+const opsUsage = `usage: d2bot ops quest status [--json] [--why]
        d2bot ops quest <start|retry|cancel|handin> <quest> [--chunk ID] --why "reason"
        d2bot ops quest start <quest> [--chunk ID] --try-anyway --why "reason"   (owner override of a readiness refusal, one attempt)
        d2bot ops quest auto <quest> --on|--off --why "reason"
@@ -38,6 +39,18 @@ func opsMain(args []string, out io.Writer) (int, error) {
 		return 2, errors.New(opsUsage)
 	}
 	verb, rest := args[1], args[2:]
+	showWhy := false
+	if verb == "status" { // here --why is a switch (print the Why-not rows), not a reason
+		kept := rest[:0:0]
+		for _, a := range rest {
+			if a == "--why" || a == "-why" {
+				showWhy = true
+				continue
+			}
+			kept = append(kept, a)
+		}
+		rest = kept
+	}
 	fs := flag.NewFlagSet("ops quest "+verb, flag.ContinueOnError)
 	fs.SetOutput(io.Discard)
 	chunk := fs.String("chunk", "", "chunk id")
@@ -80,7 +93,7 @@ func opsMain(args []string, out io.Writer) (int, error) {
 			fmt.Fprintf(out, "ok=false code=%s reason=%q\n", r.Code, r.Reason)
 			return 1, nil
 		}
-		printBoard(out, r.Board, *asJSON)
+		printBoard(out, r.Board, *asJSON, showWhy)
 		return 0, nil
 	case "start", "retry", "cancel", "handin", "auto":
 		rq := ops.Request{Verb: verb, Quest: quest, Chunk: *chunk, Why: *why, TryAnyway: *tryAnyway}
@@ -128,7 +141,7 @@ func opsMain(args []string, out io.Writer) (int, error) {
 	return 2, errors.New(opsUsage)
 }
 
-func printBoard(out io.Writer, b *ops.Board, asJSON bool) {
+func printBoard(out io.Writer, b *ops.Board, asJSON, showWhy bool) {
 	fmt.Fprintf(out, "board enabled=%t difficulty=%s why=%q\n", b.Enabled, b.Difficulty, b.Why)
 	for _, r := range b.Rows {
 		if asJSON {
@@ -136,7 +149,17 @@ func printBoard(out io.Writer, b *ops.Board, asJSON bool) {
 			continue
 		}
 		fmt.Fprintf(out, "%s/%s\t%s\tstep=%s\tcode=%s\t%s\n", r.Quest, r.Chunk, r.State, r.Step, r.Code, strings.ReplaceAll(r.Text, "\n", " "))
+		if w := r.WhyNot; showWhy && w != nil {
+			fmt.Fprintf(out, "  why-not\tword=%s\tfloor=%d\tneed=%s\twake=%q\tadmission=%q\tlast-refused=%s\n", w.Word, w.Floor, w.Need, w.Wake, w.Admission, lastRefused(w))
+		}
 	}
+}
+
+func lastRefused(w *questboard.WhyNotView) string {
+	if w.LastRefused == nil {
+		return "never"
+	}
+	return w.LastRefused.UTC().Format(time.RFC3339)
 }
 
 // opsHero serves the verbs outside the quest board: status --why, hold, home, go and park (ADR 0030 amended 2026-11-25).
