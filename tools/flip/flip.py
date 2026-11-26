@@ -19,6 +19,8 @@ The container is named like the instance. Refuses while D2BOT_RUN is set (never 
 instance already has an open window.
 """
 import argparse
+import base64
+import hashlib
 import json
 import os
 import shlex
@@ -29,6 +31,7 @@ from datetime import datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LEDGER = os.path.join(ROOT, "data", "darklaunch.json")
+MAX_WRITE_B64 = 100000  # the text rides in a command line
 HARD_MISS_LIMIT = 10  # consecutive unreadable polls before the window counts as a breach
 
 
@@ -100,8 +103,17 @@ class Sandbox:
             return None  # no file yet: the profile applies
 
     def write_tuning(self, text):
-        """Atomic: a temp file and a rename, so the knob is never half set."""
-        self._x(["docker", "exec", "-i", self.instance, "sh", "-c", f'cat > "{self.path}.new" && mv "{self.path}.new" "{self.path}"'], stdin=text)
+        """Atomic and checked: the text travels as a base64 ARGUMENT (labrun does not forward stdin; an empty file once
+        reached a bot that way). It lands in a temp file, whose size and sha256 must match before the rename; any
+        mismatch removes the temp file and raises, so the real file is never touched by a bad write."""
+        raw = text.encode()
+        b64 = base64.b64encode(raw).decode()
+        if len(b64) > MAX_WRITE_B64:
+            raise FlipError(f"tuning text is {len(b64)} bytes of base64 (limit {MAX_WRITE_B64}): use an ssh form of D2_FLIP_RUN")
+        p, sha = self.path, hashlib.sha256(raw).hexdigest()
+        script = (f'printf %s {b64} | base64 -d > "{p}.new" && [ "$(wc -c < "{p}.new")" -eq {len(raw)} ] '
+                  f'&& [ "$(sha256sum < "{p}.new" | cut -d" " -f1)" = {sha} ] && mv "{p}.new" "{p}" || {{ rm -f "{p}.new"; exit 1; }}')
+        self._x(["docker", "exec", self.instance, "sh", "-c", script])
 
     def remove_tuning(self):
         self._x(["docker", "exec", self.instance, "rm", "-f", self.path])
@@ -294,6 +306,17 @@ class Flipper:
         self.store.put(instance, w)  # the backup is on disk before any knob moves
         try:
             sb.write_tuning(new_text)
+            if sb.read_tuning() != new_text:  # the file must be exactly what was meant BEFORE anything restarts
+                raise FlipError("written tuning differs from the intended text")
+        except Exception as e:
+            self.store.drop(instance)
+            try:
+                if sb.read_tuning() != before:
+                    sb.write_tuning(before) if before is not None else sb.remove_tuning()
+            except Exception:
+                pass
+            raise FlipError(f"write check failed, no restart, container untouched: {e}") from e
+        try:
             sb.restart()
             w["since"], w["baseline"] = self.verify(sb, knobs)  # the restart reset the counters: new baseline
         except Exception as e:

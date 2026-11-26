@@ -26,3 +26,9 @@ Flip on the sandboxes once the scenario, drill or replay passes, watch 24 h with
 5. A hard counter above its baseline (taken right after the restart; a child restart inside the window rebaselines at zero) reverts: backup restored, child restarted, row `dark` with `revert_reason` and `reverted_at`, one line `REVERT ...`. Ten unreadable polls in a row count as a breach. A failed restore or restart prints `REVERT FAILED` and is retried every poll; the file is never left half set.
 6. No breach to the end of the window: row `enabled` (on in the sandbox, `enabled_at`), backup removed, line `CLOSE ...`. The coordinator then flips the code default and sets `default-on`.
 7. `python3 tools/flip/flip.py status` lists open windows. Tests (fake sandbox and clock): `python3 -I tools/flip/test_flip.py`. U: not yet run against a real container.
+
+### D2_FLIP_RUN forms (card autorevert1, after the empty-write incident)
+- `labrun <machine> --`: the usual form. labrun does NOT forward stdin, so the tool never sends the tuning file on stdin: it rides as a base64 argument (limit 100000 characters), lands in `<tuning>.new`, and size and sha256 are checked before the rename; the tool then reads the file back through the transport and compares it with the intended text BEFORE the restart. Any mismatch aborts with the container untouched and no restart.
+- `ssh <host>`: works the same way (the command line is the only channel used).
+- A local wrapper script that runs the rest of the line in the container is fine; it must exit non-zero when the command fails.
+- Tests: `python3 -I tools/flip/test_flip.py` includes a transport that drops stdin and one that empties the payload.
