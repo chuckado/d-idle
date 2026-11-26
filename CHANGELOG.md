@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- toolstrade76: the poverty advice asks the town for what its sell chore sells (advice counted 4, the chore sold 0) <!--sg:agent/toolstrade76-->
 - cardcatchup: mark 224 merged cards Done <!--sg:agent/cardcatchup-->
 - toolstrade75: a portal that drops into a stale pack is not taken, the corpse run is exempt from the early road, the Dark Wood wants 180 life (melee) / 100 (caster) <!--sg:agent/toolstrade75-->
 - toolstrade74: the early road is a Ready hold of the step into the Dark Wood (a chores trip for the kit), not a strike at the hop (Cain scroll parked as too weak) <!--sg:agent/toolstrade74-->

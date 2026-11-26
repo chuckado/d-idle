@@ -27,6 +27,9 @@ func (a townAdapter) UseWeapon(ctx context.Context, item string, fn func(context
 func (a townAdapter) ReconcileMarks(s *d2.Snapshot) { a.t.ReconcileMarks(s) }
 func (a townAdapter) MarkOf(u d2.Unit) string       { return a.t.MarkOf(u) }
 
+// SellableCount is the town's own count of what its sell chore would sell (the bot's poverty advice reads it).
+func (a townAdapter) SellableCount(s *d2.Snapshot) int { return a.t.SellableCount(s) }
+
 // The merc wrapper forwards the same parts to the Townsman it wraps (absent on the inner one: the zero answer that
 // makes the runner skip the feature, as without the wrapper).
 
@@ -56,6 +59,13 @@ func (t *mercTown) ReconcileMarks(s *d2.Snapshot) {
 	if r, ok := t.Townsman.(interface{ ReconcileMarks(*d2.Snapshot) }); ok {
 		r.ReconcileMarks(s)
 	}
+}
+
+func (t *mercTown) SellableCount(s *d2.Snapshot) int {
+	if c, ok := t.Townsman.(interface{ SellableCount(*d2.Snapshot) int }); ok {
+		return c.SellableCount(s)
+	}
+	return -1
 }
 
 func (t *mercTown) MarkOf(u d2.Unit) string {
