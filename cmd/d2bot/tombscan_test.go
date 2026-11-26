@@ -3,6 +3,9 @@ package main
 import (
 	"context"
 	"testing"
+
+	"d2lod-bot/internal/d2map"
+	"d2lod-bot/internal/quest"
 )
 
 // The scan visits the tombs in order from the Canyon and stops in the one with the orifice; a hero already in a tomb with the
@@ -46,5 +49,19 @@ func TestFindTrueTombExploresEachTomb(t *testing.T) {
 	}
 	if explored != 3 {
 		t.Fatalf("explored %d tombs, want 3 (66, 67, 68)", explored)
+	}
+}
+
+// The orifice preset of the level map is the point the walk goes to (the unit exists only once the room is up).
+func TestOrificePresetIsTheWalkTarget(t *testing.T) {
+	lm := &d2map.LevelMap{Presets: []d2map.Preset{
+		{Kind: d2map.PresetObject, ID: 1, Pos: d2map.Point{X: 5, Y: 5}},
+		{Kind: d2map.PresetObject, ID: quest.ObjOrifice, Pos: d2map.Point{X: 58, Y: 218}},
+	}}
+	if at, ok := orificePreset(lm); !ok || at.X != 58 || at.Y != 218 {
+		t.Fatalf("%v %v", at, ok)
+	}
+	if _, ok := orificePreset(&d2map.LevelMap{}); ok {
+		t.Fatal("an orifice from nowhere")
 	}
 }

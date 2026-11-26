@@ -1528,7 +1528,7 @@
      "hp5",
      "hp5"
     ],
-    "merc": 12,
+    "merc": 0,
     "worn": [
      {
       "code": "cap",
@@ -1562,18 +1562,17 @@
      },
      {
       "stat": 7,
-      "value": 512000
+      "value": 1536000
      },
      {
       "stat": 6,
-      "value": 512000
+      "value": 1536000
      },
      {
       "stat": 4,
       "value": 0
      }
-    ],
-    "merc_level": 20
+    ]
    },
    "trigger": {
     "goals": "reach:45",
@@ -1606,7 +1605,7 @@
      11
     ]
    },
-   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero). Unused stat points are set to 0 (the raw stats stand for a spent hero; unspent points made the bot cancel its boss run for the point spender). The assembled Horadric Staff is given by a SETUP verb (the assemble row covers the Cube).",
+   "provenance": "CHEATED: Act 2 start in Lut Gholein by the goto verb, level 24, gold, waypoints, Andariel and act-complete words, a Rogue merc and basic gear by SETUP verbs. Mechanics only. Raw stats: strength 90, dexterity 60, max life 1200, a rare broad sword (stands for a geared hero). Unused stat points are set to 0 (the raw stats stand for a spent hero; unspent points made the bot cancel its boss run for the point spender). The assembled Horadric Staff is given by a SETUP verb (the assemble row covers the Cube). qd25: max life 6000 and no merc again (the 2000 life hero dies to the Burning Dead of tomb 66, V run 20261125-192625).",
    "notes": "Quest drill matrix (docs/probes/quest-drill-matrix-2026-11-23.md).",
    "assert": [
     {
