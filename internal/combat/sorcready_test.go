@@ -17,6 +17,12 @@ func TestAvoidListIsPerProfile(t *testing.T) {
 			}
 			continue
 		}
+		if p.Class == "paladin" { // Sacrifice is a prerequisite only (aura2b)
+			if len(p.Avoid) != 1 || p.Avoid[0] != "Sacrifice" {
+				t.Errorf("%s/%s avoids %v", p.Class, p.Build, p.Avoid)
+			}
+			continue
+		}
 		if len(p.Avoid) != 0 {
 			t.Errorf("%s/%s avoids %v", p.Class, p.Build, p.Avoid)
 		}

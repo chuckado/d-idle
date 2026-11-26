@@ -53,25 +53,25 @@ func TestAgencyWireShadowLineAndView(t *testing.T) {
 	e := &env.Env{Tune: &env.Tuning{}}
 	e.Tune.Agency.Planner = 1
 	now := time.Unix(5000, 0)
-	db := &data.DB{Skills: []*data.Skill{{Key: "Sacrifice"}}, Classes: []*data.CharClass{{}, {}, {}, {Int: 15}}}
+	db := &data.DB{Skills: []*data.Skill{{Key: "Zeal"}}, Classes: []*data.CharClass{{}, {}, {}, {Int: 15}}}
 	w := wireAgency(db, e, func() string { return "Testy" }, func() time.Time { return now }, log)
 	if w == nil {
 		t.Fatal("no wire")
 	}
-	w.owned = func(*d2.Player) map[string]int { return map[string]int{"Sacrifice": 5, "Might": 1} }
-	snap := &d2.Snapshot{Player: &d2.Player{Class: d2.Paladin, Level: 8, Energy: 20, MaxLife: 200, Area: 2}}
+	w.owned = func(*d2.Player) map[string]int { return map[string]int{"Zeal": 4, "Might": 1} }
+	snap := &d2.Snapshot{Player: &d2.Player{Class: d2.Paladin, Level: 15, Energy: 20, MaxLife: 200, Area: 2}}
 	w.OnSnapshot(snap)
 	w.OnSnapshot(snap) // inside the minute: no second line
 	if n := strings.Count(logs.String(), "planner shadow:"); n != 1 {
 		t.Fatalf("%d lines in the first minute:\n%s", n, logs.String())
 	}
-	for _, want := range []string{"class=paladin", "plan=Sacrifice/5", "profile=Sacrifice"} {
+	for _, want := range []string{"class=paladin", "plan=Zeal/4", "profile=Zeal"} {
 		if !strings.Contains(logs.String(), want) {
 			t.Errorf("line lacks %q:\n%s", want, logs.String())
 		}
 	}
 	v, ok := w.View().(agency.View)
-	if !ok || !v.Enabled || v.Mode != "shadow" || !v.ShadowOnly || len(v.Rotation) == 0 || v.Rotation[0].Skill != "Sacrifice" {
+	if !ok || !v.Enabled || v.Mode != "shadow" || !v.ShadowOnly || len(v.Rotation) == 0 || v.Rotation[0].Skill != "Zeal" {
 		t.Fatalf("view %+v", v)
 	}
 	now = now.Add(time.Minute)
