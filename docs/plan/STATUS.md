@@ -322,14 +322,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 263895530 11-26 02:54 `Merge agent/qd27: d2scenario: hard invariant hits turn a run red (data list); faultsoak design notes; matrix 78-79` (qd27)
+- 49350b8ad 11-26 02:53 `Merge branch 'main' into qd27` (-)
 - 186424f59 11-26 02:43 `Merge agent/toolstrade80: Merge branch 'main' into toolstrade80` (toolstrade80)
 - e04e3527e 11-26 02:41 `Merge branch 'main' into toolstrade80` (-)
 - db6b83314 11-26 02:31 `Merge agent/autorevert1: Merge branch 'main' into autorevert1` (autorevert1)
+- 609e43fde 11-26 02:31 `Merge origin/main` (-)
 - a1e40426a 11-26 02:29 `Merge origin/main` (-)
 - 0d94e2ad6 11-26 02:28 `Merge branch 'main' into autorevert1` (-)
 - 98c2bdfb3 11-26 02:18 `Merge agent/incident1: Merge branch 'main' into incident1` (incident1)
 - 965b0c649 11-26 02:16 `Merge branch 'main' into incident1` (-)
-- 7e75c068a 11-26 01:49 `Merge agent/toolstrade79: Merge origin/main into toolstrade79` (toolstrade79)
-- 4c80517a7 11-26 01:42 `Merge origin/main into toolstrade79` (-)
-- 34afb5aa0 11-26 01:27 `Merge branch 'main' into incident1` (-)
 <!-- statusgen:end -->
