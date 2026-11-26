@@ -40,10 +40,50 @@ var invRows = []invRow{
 	{Name: "refusal-storm", Hard: true, Count: 10, Why: "Count refusals since the last kill, xp or area change"},
 	{Name: "life-zero-alive", Hard: true, Secs: 3, Why: "alive (not dying) with life 0 for Secs"},
 	{Name: "xp-frozen", Hard: true, Secs: 1800, Why: "in the field, not paused, no xp change for Secs"},
-	{Name: "mode-no-exit", Hard: true, Secs: 1200, Why: "the same state and step for Secs, not paused or parked"},
+	{Name: "mode-no-exit", Hard: true, Secs: 1200, Why: "the same state and step for Secs with none of the mode's progress signals moving (invModes), not paused or parked"},
 	{Name: "corpse-unresolved", Hard: true, Secs: 900, Why: "a corpse waits in town for Secs, neither retrieved nor abandoned"},
 	{Name: "town-thrash", Count: 17, Secs: 3600, Why: "Count or more field entries within Secs"},
 	{Name: "economy-stall", Secs: 7200, Count: 100, Why: "gold in purse and stash under Count for Secs while kills continue"},
+}
+
+// invMode is the progress rule of one state for mode-no-exit: the facts whose change counts as progress, and how long the mode may
+// go without any. A state that is not listed uses invModeDefault. Levelling or farming in a state with rising xp never fires; a
+// state whose job has no progress signal of its own (a town chore run) gets a hard cap instead (Questy 2026-11-26: 19 false hits
+// in 37 minutes of healthy levelling, xp +6300).
+type invMode struct {
+	Signals []string // any of "xp", "kills", "gold", "area"; none: elapsed time alone counts
+	Secs    int      // 0: the row's Secs
+}
+
+var invModeDefault = invMode{Signals: []string{"xp", "kills", "gold", "area"}}
+
+var invModes = map[string]invMode{
+	string(StateResupplying): {Secs: 600}, // a town chore run has no progress signal; ten minutes is the cap
+}
+
+func invModeOf(state string) invMode {
+	if m, ok := invModes[state]; ok {
+		return m
+	}
+	return invModeDefault
+}
+
+// progress is the signature of the signals of the mode in f.
+func (m invMode) progress(f invFacts) string {
+	var b strings.Builder
+	for _, sg := range m.Signals {
+		switch sg {
+		case "xp":
+			fmt.Fprintf(&b, "x%d", f.xp)
+		case "kills":
+			fmt.Fprintf(&b, "k%d", f.kills)
+		case "gold":
+			fmt.Fprintf(&b, "g%d", f.gold)
+		case "area":
+			fmt.Fprintf(&b, "a%d", f.area)
+		}
+	}
+	return b.String()
 }
 
 func invRowOf(name string) invRow {
@@ -98,6 +138,7 @@ type invMon struct {
 	lastXP                uint32
 	modeKey               string
 	modeSince             time.Time
+	modeProg              string
 	trips                 []time.Time
 	poorSince             time.Time
 	poorKills             int
@@ -202,7 +243,7 @@ func (m *invMon) tick(f invFacts) []invHit {
 	}
 
 	r = invRowOf("xp-frozen")
-	if f.xp != m.lastXP || m.xpAt.IsZero() || !field || f.paused {
+	if f.xp != m.lastXP || m.xpAt.IsZero() || !field || f.paused || f.parked {
 		m.lastXP, m.xpAt = f.xp, f.now
 	}
 	if d := f.now.Sub(m.xpAt); d >= r.dur() {
@@ -211,11 +252,17 @@ func (m *invMon) tick(f invFacts) []invHit {
 
 	r = invRowOf("mode-no-exit")
 	key := f.state + "|" + f.step
-	if key != m.modeKey || f.paused || f.parked || f.state == string(StateIdle) || f.state == string(StatePaused) {
-		m.modeKey, m.modeSince = key, f.now
+	mode := invModeOf(f.state)
+	prog := mode.progress(f)
+	if key != m.modeKey || prog != m.modeProg || f.paused || f.parked || f.state == string(StateIdle) || f.state == string(StatePaused) {
+		m.modeKey, m.modeProg, m.modeSince = key, prog, f.now
 	}
-	if d := f.now.Sub(m.modeSince); d >= r.dur() {
-		hit(r.Name, "state=%s step=%q for=%ds", f.state, f.step, int(d.Seconds()))
+	limit := r.dur()
+	if mode.Secs > 0 {
+		limit = time.Duration(mode.Secs) * time.Second
+	}
+	if d := f.now.Sub(m.modeSince); d >= limit {
+		hit(r.Name, "state=%s step=%q for=%ds without progress", f.state, f.step, int(d.Seconds()))
 	}
 
 	r = invRowOf("corpse-unresolved")
@@ -242,7 +289,7 @@ func (m *invMon) tick(f invFacts) []invHit {
 	}
 
 	r = invRowOf("refusal-storm")
-	if pk := fmt.Sprintf("%d|%d|%d", f.kills, f.xp, f.area); pk != m.progKey {
+	if pk := fmt.Sprintf("%d|%d|%d", f.kills, f.xp, f.area); pk != m.progKey || f.parked || f.paused {
 		m.progKey, m.refusalBase = pk, m.refusals
 	}
 	if n := m.refusals - m.refusalBase; n >= r.Count {
