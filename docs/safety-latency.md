@@ -33,3 +33,11 @@ The 2026-11-26 02:51 death: a trip in its chores stage, the hero in Cold Plains 
 - `town.Chores` verifies "in town" before every chore step and `openNPC` before every NPC walk; outside a town they return `town.ErrNotInTown` and the rest of the chores are skipped.
 - The guard aborts a running chore after 2 s outside a town (`choreGrace`, cause `errLeftTown`); it is not a failure, the next step restarts the trip from the way home (`advanceTrip`, stage 0).
 - Tests: `TestChoresOutsideTownAreAbortedAndTheTripGoesHome` (bot, fakes, Sorceress and Paladin; fails by hanging when the guard rule is removed [V mutation]); `TestChoresAbortWhenTheHeroIsOutsideTown` (town sim rig, needs the game tables and skips without them [U: never run here]).
+
+## Reflex drink (entry reflex1c)
+Owner decision 2026-11-25: the safety check may send a drink without cancelling the running action.
+- `bot.reflexDrink` (default 1): the guard calls `combat.Fighter.ReflexDrink` for a life or rejuvenation drink; a belt column is pressed under the fighter's drink lock (`sendMu`, TryLock: a drink already in flight counts as handled), the action keeps running. No belt column (the pack path opens a panel) or an error: the guard cancels as before. The potion burst rule (`earlyExit`) still turns a burst into a portal and that cancels.
+- `bot.reflexDeadlineMs` (default 1000, 0 = off): after a portal, chicken or crowd cancel the action has this long to return; then the guard carries the action out itself, once (`sl.forced`), and the loop skips its own carry-out.
+- Shared drink state (`lastDrink`, working heal effect) is behind `Fighter.dmu`; before this the guard's `Safety` read the map while the action wrote it.
+- Not a dark launch (default 1); the minute line key `reflexDrinks` and `safetyLatMaxMs` are the check. Off switch: `bot.reflexDrink 0`.
+- Risk [U until run live]: a key sent while the action is mid-click or mid-cast; a hard-deadline act running while a stuck action still sends input.

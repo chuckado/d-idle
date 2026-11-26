@@ -70,10 +70,11 @@ func (e healEffect) drink(now time.Time, tier int, class d2.Class) healEffect {
 // healAllowed reports whether another healing potion may be drunk: nothing is working, or life is below the
 // emergency line, or the belt holds a higher tier than the one working (combat.potionEmergencyPct, docs/potions.md).
 func (f *Fighter) healAllowed(now time.Time, lifePct int, belt Belt) bool {
-	if !f.heal.active(now) || lifePct < f.tune().PotionEmergencyPct {
+	he := f.healNow()
+	if !he.active(now) || lifePct < f.tune().PotionEmergencyPct {
 		return true
 	}
-	_, ok := belt.ColumnAbove(PotionHealing, f.heal.Tier)
+	_, ok := belt.ColumnAbove(PotionHealing, he.Tier)
 	return ok
 }
 
