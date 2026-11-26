@@ -1,10 +1,11 @@
 ---
 id: TASK-966
 title: 'fableroadmap: Fable review roadmap tracker and cards for built-but-dark work'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:50:00Z'
+updated_date: '2026-11-26T05:37:00Z'
 labels:
   - docs
   - chore
