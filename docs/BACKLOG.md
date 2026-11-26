@@ -1428,6 +1428,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - faultsoak: P12 fault-injection soak on lockstep (T5) (TASK-979, merged 2026-11-26, acceptance 1 of 2): Fault-injection soak, runner side: a socket proxy that delays or drops replies, delays input and cancels in a storm, fault sets as data, a soak command that reports invariant hits and survival, five soak rows ... <!--sg:agent/faultsoak-->
 - agent/toolstrade84: Merge branch 'main' into toolstrade84 (merged 2026-11-26) <!--sg:agent/toolstrade84-->
 - agent/toolstrade85: Merge origin/main (merged 2026-11-26) <!--sg:agent/toolstrade85-->
+- agent/arbfam1: arbfam entry 1: chores and claim outcome cases, docs, card (merged 2026-11-26): Arbiter control path now covers the chores and claim families behind the dark launch knobs, with outcome cases and verdicts that pass offline; default stays off <!--sg:agent/arbfam1-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
