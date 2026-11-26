@@ -1453,6 +1453,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/necro2d: Merge branch 'main' into necromercrogue (merged 2026-11-26): Class trait mercEarlyRogue lets the merc policy pay for the Act 1 Rogue before Blood Raven for a Necromancer; no Act 1 hire step is wired yet <!--sg:agent/necro2d-->
 - agent/necro2e: Merge branch 'main' into necrocaps (merged 2026-11-26): Necromancer minion caps need a source tag and the reach and curse memory numbers are profile data with today values as defaults; corpse rule documented <!--sg:agent/necro2e-->
 - act2temple: Act 2 quest dungeon life floors and crowd-on-arrival rule (TASK-1023, merged 2026-11-26, acceptance 2 of 3): Act 2 quest dungeons get life floors on their road rows and a crowd on arrival row that opens a portal at once; unit tested, drill with the new rule not run <!--sg:agent/act2temple-->
+- agent/toolstrade88: no-earn soft invariant (5 min without xp, kills or gold, area changes do not count); the quest-walk kit rule never closes the first field (merged 2026-11-26) <!--sg:agent/toolstrade88-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
