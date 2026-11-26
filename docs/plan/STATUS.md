@@ -43,6 +43,9 @@
 |---|---|---|---|---|
 | m3-act1run | deferred | m3-act1run | `docs/act1-run.md`<br>`docs/probes/act1run/**` | `soak-slot:3` |
 | fid-matrix-refresh | deferred | - | `docs/probes/fid/fid-matrix-refresh.md` | - |
+| roadmap2 | in-progress | - | `docs/roadmap-fable.md`<br>`backlog/tasks/task-998 - flipwave2*`<br>`backlog/tasks/task-999 - classorder1*` | - |
+| whynot1 | proposed | - | `internal/questboard`<br>`internal/arbiter/explained.go`<br>`internal/arbiter/explained_test.go`<br>`internal/bot/explain.go`<br>`internal/bot/explain_test.go`<br>`internal/ops`<br>`cmd/d2bot/opscmd.go`<br>`cmd/d2bot/questwire.go`<br>`internal/watch/web/panels/quest-board`<br>`internal/watch/questui_test.go`<br>`internal/watch/testdata/quests`<br>`docs/operator.md` | - |
+| smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
@@ -297,6 +300,9 @@
 | advisor1 | proposed | - | `docs/design/advisor-r14.md` | - |
 | autorevert1 | in-progress | - | `docs/design/autorevert.md`<br>`tools/flip/*`<br>`tools/darklaunch/*`<br>`data/darklaunch.json`<br>`docs/process/dark-launch.md`<br>`docs/invariants.md`<br>`docs/operator.md`<br>`internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`internal/bot/explain.go` | - |
 | reflex1d | proposed | - | `internal/bot/safetylat.go`<br>`internal/bot/loop.go`<br>`internal/bot/reflexdrink_test.go` | - |
+| arbfam | proposed | - | `internal/arbiter`<br>`internal/bot/arbiter_control.go`<br>`internal/bot/arbiter_control_test.go`<br>`internal/bot/shadow.go`<br>`internal/bot/goal.go`<br>`tools/provingground/arbiter-outcomes`<br>`docs/arbiter.md`<br>`data/darklaunch.json`<br>`docs/knobs.md` | - |
+| flipwave2 | proposed | - | `docs/probes/flipwave2.md` | - |
+| classorder1 | proposed | - | `docs/probes/classorder1.md` | - |
 
 ### Gates
 - contract [act1-campaign](../contracts/act1-campaign.md): 9 requirements
@@ -319,14 +325,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 57fca96d9 11-26 13:05 `Merge agent/roadmap2: Merge branch 'main' into roadmap2` (roadmap2)
+- 01380d700 11-26 13:05 `Merge agent/smeaura: Merge branch 'main' into smeaura` (smeaura)
+- c06121264 11-26 13:05 `Merge agent/whynot1: Merge branch 'main' into whynot1` (whynot1)
+- df7c783bf 11-26 12:59 `Merge branch 'main' into roadmap2` (-)
+- 8b4655f6b 11-26 12:59 `Merge branch 'main' into smeaura` (-)
+- 9e02bbedf 11-26 12:59 `Merge branch 'main' into whynot1` (-)
+- 06e3c750c 11-26 12:51 `Merge agent/arbfam1: arbfam entry 1: chores and claim outcome cases, docs, card` (arbfam1)
 - 284d0806e 11-26 12:09 `Merge agent/toolstrade85: Merge origin/main` (toolstrade85)
 - 49f2bed0b 11-26 11:50 `Merge origin/main` (-)
 - 027112601 11-26 11:12 `Merge agent/toolstrade84: Merge branch 'main' into toolstrade84` (toolstrade84)
-- fe8df9ae4 11-26 11:11 `Merge branch 'main' into toolstrade84` (-)
-- e905aade9 11-26 11:05 `Merge branch 'main' into toolstrade85` (-)
-- 5081aabe9 11-26 10:41 `Merge branch 'main' into toolstrade84` (-)
-- a75e83212 11-26 10:41 `Merge branch 'main' into toolstrade85` (-)
-- 4c8c48c87 11-26 10:34 `Merge origin/main` (-)
-- b89f8cde8 11-26 10:34 `Merge agent/faultsoak: Merge branch 'main' into faultsoak` (faultsoak)
-- 363a0d3cf 11-26 10:34 `Merge agent/outcomes2g: Merge branch 'main' into outcome-explain-ring` (outcomes2g)
 <!-- statusgen:end -->

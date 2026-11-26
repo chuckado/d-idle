@@ -55,3 +55,59 @@ func TestArbiterControlOffByDefault(t *testing.T) {
 		t.Fatal("bot.arbiterControl must default to 0")
 	}
 }
+
+func fieldRig(t *testing.T, class d2.Class, ctl, mask int) *rig {
+	g := newRig(t)
+	g.w.set(func(w *world) { w.area, w.class, w.level = 5, class, 6 })
+	g.w.belt()
+	g.r.e.Tune.Bot.ArbiterShadow, g.r.e.Tune.Bot.ArbiterControl, g.r.e.Tune.Bot.ArbiterFamilies = 1, ctl, mask
+	g.r.poll()
+	g.clock.Sleep(time.Second)
+	return g
+}
+
+// Chores under control: an empty belt in a quiet field, the arbiter picks the refill and the chores hook starts the trip
+// (family bit 4 = chores). Two classes; knob off and bit not set are the must-fail half.
+func TestArbiterControlChores(t *testing.T) {
+	for _, class := range []d2.Class{0, 1} {
+		g := fieldRig(t, class, 1, 7)
+		g.r.runGoalShadowed(context.Background(), g.r.latest(), levelGoalControl())
+		d, ok := g.r.Arbiter()
+		if !ok || d.Chosen == nil || arbiter.Family(d.Chosen.Source) != "chores" {
+			t.Fatalf("class %d: the arbiter should choose chores: %v", class, d)
+		}
+		if n := g.r.arb.ctl.Load(); n != 1 || g.r.loop.trip == nil && g.w.count("totown") == 0 {
+			t.Fatalf("class %d: controlled ticks %d, no trip started", class, n)
+		}
+		for name, c := range map[string][2]int{"knob off": {0, 7}, "bit not set": {1, 3}} {
+			h := fieldRig(t, class, c[0], c[1])
+			h.r.runGoalShadowed(context.Background(), h.r.latest(), levelGoalControl())
+			if n := h.r.arb.ctl.Load(); n != 0 {
+				t.Fatalf("class %d, %s: the arbiter acted (%d)", class, name, n)
+			}
+		}
+	}
+}
+
+// Claim under control: a pending reward in the field, the arbiter picks the claim and the claim hook goes to town.
+func TestArbiterControlClaim(t *testing.T) {
+	for _, class := range []d2.Class{0, 1} {
+		for _, mask := range []int{3 | 1<<3, 3} {
+			g := fieldRig(t, class, 1, mask)
+			g.w.belt(101, 102, 103, 104)
+			g.r.poll()
+			g.r.d.Quester = fakeQuester{w: g.w}
+			g.r.loop.questPending = map[string]bool{"den_of_evil": true}
+			g.r.runGoalShadowed(context.Background(), g.r.latest(), levelGoalControl())
+			want := int64(0)
+			if mask&(1<<3) != 0 {
+				want = 1
+			}
+			d, _ := g.r.Arbiter()
+			if n := g.r.arb.ctl.Load(); n != want {
+				t.Logf("decision %+v", d.Chosen)
+				t.Fatalf("class %d mask %d: controlled ticks %d, want %d", class, mask, n, want)
+			}
+		}
+	}
+}
