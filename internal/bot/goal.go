@@ -547,9 +547,10 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 	// Without a town portal scroll the trip is a walk of about a minute each way: one junk item is not worth it (D2DLOOP r22,
 	// V live: a trip every 6 virtual minutes, about 40 % of the farming time, for 1 to 2 items and 2 to 30 gold).
 	sellMin := r.e.Tune.Resource.PovertySellMin // XPGAP knob, 0 = the built-in minimums
-	if sell, left := r.sellable(s), r.povertySellLeft(); !p.InTown() && r.inPoverty() && sell > left &&
+	if sell, left := r.sellable(s), r.povertySellLeft(); r.inPoverty() && sell > left &&
 		povertySellOK(sell, r.resInput(s).HasTP, sellMin) {
-		// poor: junk is the quickest gold, sell it before anything else (one item is enough, the pack need not be full)
+		// poor: junk is the quickest gold, sell it before anything else (one item is enough, the pack need not be full); also in town:
+		// Questy 2026-11-26 stood in the camp with 7 sellable items and 19 gold, and every visit skipped the sell chore
 		hard = true
 		plan.Sell, plan.Potions = true, p.Gold >= minPotionPrice
 		why = append(why, fmt.Sprintf("poverty: %d items to sell, %d gold", sell, p.Gold))
