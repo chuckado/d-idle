@@ -234,3 +234,28 @@ func TestMercAliveGate(t *testing.T) {
 		}
 	}
 }
+
+// The early Act 1 Rogue is a class trait: a Necromancer may pay for it before Blood Raven, a Paladin waits for the free one.
+func TestEarlyRogueIsAClassTrait(t *testing.T) {
+	rogue := HireOffer{Class: ClassRogue, Aura: "Cold Arrow", Level: 5, Price: 400}
+	none := MercState{Known: true}
+	for _, c := range []struct {
+		class string
+		do    bool
+		why   string
+	}{{"Necromancer", true, ReasonOK}, {"Paladin", false, ReasonFreePending}, {"Sorceress", false, ReasonFreePending}} {
+		cx := ctx()
+		cx.PlayerClass, cx.Act = c.class, 1
+		cx.EarlyRogue = EarlyRogueFor(c.class)
+		if d := ShouldHire(rogue, none, cx); d.Do != c.do || d.Reason != c.why {
+			t.Errorf("%s: %+v", c.class, d)
+		}
+		cx.Knobs.FreeRogueOnly = true // the owner's knob still wins
+		if d := ShouldHire(rogue, none, cx); d.Do {
+			t.Errorf("%s: free-only knob ignored: %+v", c.class, d)
+		}
+	}
+	if EarlyRogueFor("Warlock") {
+		t.Error("an unknown class must not read as early")
+	}
+}

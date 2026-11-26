@@ -426,6 +426,7 @@ func mercCtx(w *mercWire, s *d2.Snapshot) merc.Ctx {
 	c.Gold, c.Difficulty = s.Player.Gold+s.Player.StashGold, merc.Difficulty(s.Player.Difficulty)
 	c.Act = s.Player.Act + 1
 	c.PlayerClass = s.Player.Class.String()
+	c.EarlyRogue = merc.EarlyRogueFor(c.PlayerClass)
 	c.HaveTP, c.HavePotions = w.kit(s)
 	c.Kit = kitRefill(w.e)
 	c.KitFull = w.kitFull(s)

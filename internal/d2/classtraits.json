@@ -1,7 +1,7 @@
 {
  "Amazon":      {"caster": false, "manaNeed": 1},
  "Sorceress":   {"caster": true,  "manaNeed": 2},
- "Necromancer": {"caster": true,  "manaNeed": 2},
+ "Necromancer": {"caster": true,  "manaNeed": 2, "mercEarlyRogue": true},
  "Paladin":     {"caster": false, "manaNeed": 1},
  "Barbarian":   {"caster": false, "manaNeed": 0},
  "Druid":       {"caster": true,  "manaNeed": 2},

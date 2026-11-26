@@ -14,9 +14,14 @@ ordinal: 489000
 card: "necromercrogue"
 lane: next
 owns:
-  - "docs/probes/necromercrogue-2026-11-26.md"
+  - "internal/d2/classtraits.go"
+  - "internal/d2/classtraits.json"
+  - "internal/merc/policy.go"
+  - "internal/merc/policy_test.go"
+  - "cmd/d2bot/mercwire.go"
 exclusive: []
 contracts: []
+result: "Policy and data only: class trait mercEarlyRogue (Necromancer true) lets merc.ShouldHire pay for the Act 1 Rogue before Blood Raven; the Act 2 Desert merc after Andariel already exists (ReplaceAtAct2, first Lut Gholein visit). NOT wired: no Act 1 paid hire step exists (HireStep runs in Lut Gholein only), so nothing hires at Kashya yet; follow-up card needs a live read of the Kashya window. Tests on three classes, offline."
 ---
 
 ## Description
@@ -29,5 +34,5 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 see docs/probes/necro-readiness-2026-11-26.md cards table
+- [x] #1 see docs/probes/necro-readiness-2026-11-26.md cards table
 <!-- AC:END -->

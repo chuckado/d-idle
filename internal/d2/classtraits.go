@@ -12,6 +12,9 @@ import (
 type ClassTraits struct {
 	Caster   bool `json:"caster"`
 	ManaNeed int  `json:"manaNeed"`
+	// MercEarlyRogue: the class takes the Act 1 Rogue (cold arrow, slows) before Blood Raven is done, because its own damage
+	// comes late (summoners; Necromancer SME delta, docs/probes/necro-readiness-2026-11-26.md, S). Default false.
+	MercEarlyRogue bool `json:"mercEarlyRogue"`
 }
 
 //go:embed classtraits.json
