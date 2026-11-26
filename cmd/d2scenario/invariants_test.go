@@ -24,4 +24,10 @@ func TestInvariantCountsAndPolicy(t *testing.T) {
 	if len(p.invariantAsserts("drill.x", nil)) != 0 {
 		t.Fatal("no hits no asserts")
 	}
+	if a := p.invariantAsserts("drill.x", map[string]int{"mode-no-exit": 3}); len(a) != 0 {
+		t.Fatalf("mode-no-exit is soft in drills: %+v", a)
+	}
+	if a := p.invariantAsserts("town.x", map[string]int{"mode-no-exit": 3}); len(a) != 1 || a[0].OK {
+		t.Fatalf("mode-no-exit stays hard elsewhere: %+v", a)
+	}
 }
