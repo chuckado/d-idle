@@ -34,6 +34,10 @@
   }
  ],
  "noPotionFromLevel": 8,
+ "earlyShop": {
+  "_comment": "Early gear policy (docs/sme/early-gear-policy.md) keeps the gold for potions and the scroll below earlyGearMax. Once the kit is met (potions at the kitFloor, a portal scroll) a hero that has gold above the gear reserve may upgrade what it wears: the weapon and missing armor pieces, at most surplusPct of the gold above bot.gearReserve (Questy 2026-11-26: clvl 12, 497 gold, a 2-7 Short Sword, no shopping because of the early policy). Only with resource.gearDecisions 1.",
+  "surplusPct": 60
+ },
  "kitFloor": {
   "_comment": "Below this many healing potions (a scroll or not) a hero from this level in Normal enters the first field of its act only: Questy walked into Blood Moor and Stony Field with 0 to 1 potions seven times (invariant field-entry-no-kit) and died in Cave Level 1. The farm and level picks skip every other area until gold buys the kit.",
   "potionsBelow": 4,

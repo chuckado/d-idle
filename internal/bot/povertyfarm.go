@@ -22,6 +22,9 @@ type povertyFarmData struct {
 		Name       string  `json:"name"`
 		GoldPerMin float64 `json:"goldPerMin"`
 	} `json:"farm"`
+	EarlyShop struct {
+		SurplusPct int `json:"surplusPct"`
+	} `json:"earlyShop"`
 	KitFloor struct {
 		PotionsBelow int `json:"potionsBelow"`
 		FromLevel    int `json:"fromLevel"`
@@ -147,4 +150,20 @@ func (r *Runner) kitFloorWhy(s *d2.Snapshot, a int) string {
 		}
 	}
 	return ""
+}
+
+// earlyShopBudget is the gold the gear shop may spend below earlyGearMax: 0 unless the kit is met (potions at the kitFloor,
+// a portal scroll) and the hero has gold above the gear shop minimum; then earlyShop.surplusPct of the gold above bot.gearReserve.
+func (r *Runner) earlyShopBudget(s *d2.Snapshot) int {
+	d := loadPovertyFarm()
+	t := r.e.Tune.Bot
+	p := s.Player
+	if d.EarlyShop.SurplusPct <= 0 || d.KitFloor.PotionsBelow <= 0 || p.Gold < t.GearMinGold {
+		return 0
+	}
+	in := r.resInput(s)
+	if !in.HasTP || healingOf(in) < d.KitFloor.PotionsBelow {
+		return 0
+	}
+	return max(p.Gold-t.GearReserve, 0) * d.EarlyShop.SurplusPct / 100
 }
