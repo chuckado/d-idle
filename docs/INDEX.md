@@ -199,6 +199,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [mercenary.md](sme/mercenary.md): Mercenaries in classic LoD 1.14d: SME reference for the hire/keep-alive bot (MERCRESEARCH, 2026-10-30)
 - [pace-and-formulas.md](sme/pace-and-formulas.md): D2 LoD 1.14d pace and formula lookup (Normal Act 1 to Act 2 gate; Paladin and Sorceress)
 - [pace-tables.md](sme/pace-tables.md): Pace tables: human and speedrun reference for soak milestones (classic LoD 1.14d, offline single player)
+- [paladin-auras-2026-11-26.md](sme/paladin-auras-2026-11-26.md): Paladin auras: how they work and what the bot does (2026-11-26) (status: current SME answer to the owner question of 2026-11-26. Tags: V verified (repo doc or code, path given), S...)
 - [play-act-route.md](sme/play-act-route.md): Play patterns 1: a human route through all five acts
 - [play-bot-pitfalls.md](sme/play-bot-pitfalls.md): Play patterns 4: what automation gets wrong in Diablo II, and where our bot differs from a human
 - [play-economy.md](sme/play-economy.md): Play patterns 2: gold, shopping, inventory and town chores
@@ -604,7 +605,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `reviews/`
 
 - [support-bundle-security-2026-11-15.md](reviews/support-bundle-security-2026-11-15.md): Security review: support bundle upload (branch agent/support, tip 88eecae7b) (status: review of task 542 / card `support` before merge (mergeq #811). Reviewer: Opus, single, offline. Nothing...)
-- [roadmap-fable.md](roadmap-fable.md): Fable roadmap: every recommendation, its state, and what flips it (status: current (card fableroadmap, 2026-11-26; written on user approval of the same day). A living tracker: the...)
+- [roadmap-fable.md](roadmap-fable.md): Fable roadmap: every recommendation, its state, and what flips it (status: current (card fableroadmap, 2026-11-26; refreshed by card roadmap2 the same day against `git log...)
 - [roamleg.md](roamleg.md): ROAMLEG: a mouth-gate hold is not a failed roam target (status: offline fix, tests pass, verified live in DRILLS23 (docs/probes/drills/README.md): 0 failed legs (was 50),...)
 - [roamspacing.md](roamspacing.md): Roam coverage spacing (TASK-301) (status: CURRENT. Tags: V = measured (log read-only, or the simulator run in this worktree on the worker host), S =...)
 - [running.md](running.md): How to run d.idle (status: current as of 2026-11-01 (card readmedocs; Teleport and `--build` note added by card capdocs). Every...)
