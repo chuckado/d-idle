@@ -52,6 +52,8 @@ func main() {
 		err = cmdGateCheck(args, os.Stdout)
 	case "run":
 		err = cmdRun(args, os.Stdout)
+	case "soak":
+		err = cmdSoak(args, os.Stdout)
 	case "exec-one":
 		err = cmdExecOne(args)
 	case "-h", "--help", "help":
@@ -95,6 +97,7 @@ func usage(w io.Writer) {
   ledger status-doc|check -in L.jsonl           the results ledger: generated status page, line check (lines are written by exec-one)
   determinism a.json b.json                     same seed twice: same verdict (and state digest)
   gate-check  results.json                      exit 3 unless GREEN (no RED, no BLOCKED)
+  soak        -faults SET -duration D [-id ID,..] [-class C] [-seed N] [-dry-run] [-strict]   run rows under injected faults, report invariant hits and survival (lab only)
   run         [plan flags] [-out DIR] [-parallel N] [-dry-run]   run on the builder (long lane), see docs/process/proving-ground.md
 `)
 }

@@ -49,6 +49,15 @@ type Result struct {
 	Journal string `json:"journal,omitempty"`
 	// Prov records the binaries, host role, load and pace of the run (nil in results written before it existed).
 	Prov *Provenance `json:"prov,omitempty"`
+	// Faults says which fault set ran and what it injected (nil: no fault proxy).
+	Faults *FaultReport `json:"faults,omitempty"`
+}
+
+// FaultReport is the injections of one run: Counts by kind, Log the path of the time-stamped events (JSON lines).
+type FaultReport struct {
+	Set    string         `json:"set"`
+	Counts map[string]int `json:"counts,omitempty"`
+	Log    string         `json:"log,omitempty"`
 }
 
 // Verdict derives Status and Reason from the assertion results. A failed assertion makes the run RED even when others

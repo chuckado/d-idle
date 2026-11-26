@@ -1,0 +1,285 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "soak.fault.socket-timeouts",
+   "title": "Fault soak: control socket replies arrive late (the 14 timeouts of the quest log); the monitor is the oracle",
+   "kind": "behaviour",
+   "tier": "nightly",
+   "faults": "socket-timeouts",
+   "touches": [
+    "internal/d2dctl/",
+    "internal/faultproxy/",
+    "cmd/d2scenario/faults.json"
+   ],
+   "pre": {
+    "level": 12,
+    "gold": 500,
+    "start": "field",
+    "area": 2,
+    "items": [
+     {
+      "code": "hp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:13"
+   },
+   "budget": {
+    "virtual_min": 20,
+    "wall_min": 40
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "assert": [
+    {
+     "kind": "level_at_least",
+     "min": 12,
+     "why": "the hero is alive and at least at its start level; the verdict is the invariant monitor (hard rows turn the run RED), not progress"
+    }
+   ],
+   "provenance": "CHEATED: level 12, 500 gold, potions and the field start (Blood Moor) by SETUP verbs; the run goes through the fault proxy (cmd/d2scenario/faults.json), so it is never a gate or baseline row. Mechanics and recovery evidence only.",
+   "notes": "Lab soak (card faultsoak, docs/probes/faultsoak-design-2026-11-26.md). Report-only: ids under soak.fault. are in invariants.json report_only. Run: d2scenario soak -id soak.fault. -duration 1h. Each hit becomes an incident scenario by hand."
+  },
+  {
+   "id": "soak.fault.socket-drops",
+   "title": "Fault soak: control socket replies are swallowed; the monitor is the oracle",
+   "kind": "behaviour",
+   "tier": "nightly",
+   "faults": "socket-drops",
+   "touches": [
+    "internal/d2dctl/",
+    "internal/faultproxy/",
+    "cmd/d2scenario/faults.json"
+   ],
+   "pre": {
+    "level": 12,
+    "gold": 500,
+    "start": "field",
+    "area": 2,
+    "items": [
+     {
+      "code": "hp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:13"
+   },
+   "budget": {
+    "virtual_min": 20,
+    "wall_min": 40
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "assert": [
+    {
+     "kind": "level_at_least",
+     "min": 12,
+     "why": "the hero is alive and at least at its start level; the verdict is the invariant monitor (hard rows turn the run RED), not progress"
+    }
+   ],
+   "provenance": "CHEATED: level 12, 500 gold, potions and the field start (Blood Moor) by SETUP verbs; the run goes through the fault proxy (cmd/d2scenario/faults.json), so it is never a gate or baseline row. Mechanics and recovery evidence only.",
+   "notes": "Lab soak (card faultsoak, docs/probes/faultsoak-design-2026-11-26.md). Report-only: ids under soak.fault. are in invariants.json report_only. Run: d2scenario soak -id soak.fault. -duration 1h. Each hit becomes an incident scenario by hand."
+  },
+  {
+   "id": "soak.fault.cancel-storm",
+   "title": "Fault soak: the running action is cancelled every 1.5 s; the monitor is the oracle",
+   "kind": "behaviour",
+   "tier": "nightly",
+   "faults": "cancel-storm",
+   "touches": [
+    "internal/d2dctl/",
+    "internal/faultproxy/",
+    "cmd/d2scenario/faults.json"
+   ],
+   "pre": {
+    "level": 12,
+    "gold": 500,
+    "start": "field",
+    "area": 2,
+    "items": [
+     {
+      "code": "hp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:13"
+   },
+   "budget": {
+    "virtual_min": 20,
+    "wall_min": 40
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "assert": [
+    {
+     "kind": "level_at_least",
+     "min": 12,
+     "why": "the hero is alive and at least at its start level; the verdict is the invariant monitor (hard rows turn the run RED), not progress"
+    }
+   ],
+   "provenance": "CHEATED: level 12, 500 gold, potions and the field start (Blood Moor) by SETUP verbs; the run goes through the fault proxy (cmd/d2scenario/faults.json), so it is never a gate or baseline row. Mechanics and recovery evidence only.",
+   "notes": "Lab soak (card faultsoak, docs/probes/faultsoak-design-2026-11-26.md). Report-only: ids under soak.fault. are in invariants.json report_only. Run: d2scenario soak -id soak.fault. -duration 1h. Each hit becomes an incident scenario by hand."
+  },
+  {
+   "id": "soak.fault.slow-input",
+   "title": "Fault soak: key, click and move reach the game 400 ms late; the monitor is the oracle",
+   "kind": "behaviour",
+   "tier": "nightly",
+   "faults": "slow-input",
+   "touches": [
+    "internal/d2dctl/",
+    "internal/faultproxy/",
+    "cmd/d2scenario/faults.json"
+   ],
+   "pre": {
+    "level": 12,
+    "gold": 500,
+    "start": "field",
+    "area": 2,
+    "items": [
+     {
+      "code": "hp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:13"
+   },
+   "budget": {
+    "virtual_min": 20,
+    "wall_min": 40
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "assert": [
+    {
+     "kind": "level_at_least",
+     "min": 12,
+     "why": "the hero is alive and at least at its start level; the verdict is the invariant monitor (hard rows turn the run RED), not progress"
+    }
+   ],
+   "provenance": "CHEATED: level 12, 500 gold, potions and the field start (Blood Moor) by SETUP verbs; the run goes through the fault proxy (cmd/d2scenario/faults.json), so it is never a gate or baseline row. Mechanics and recovery evidence only.",
+   "notes": "Lab soak (card faultsoak, docs/probes/faultsoak-design-2026-11-26.md). Report-only: ids under soak.fault. are in invariants.json report_only. Run: d2scenario soak -id soak.fault. -duration 1h. Each hit becomes an incident scenario by hand."
+  },
+  {
+   "id": "soak.fault.mixed",
+   "title": "Fault soak: all socket faults at a lower rate; the monitor is the oracle",
+   "kind": "behaviour",
+   "tier": "nightly",
+   "faults": "mixed",
+   "touches": [
+    "internal/d2dctl/",
+    "internal/faultproxy/",
+    "cmd/d2scenario/faults.json"
+   ],
+   "pre": {
+    "level": 12,
+    "gold": 500,
+    "start": "field",
+    "area": 2,
+    "items": [
+     {
+      "code": "hp1",
+      "count": 6
+     }
+    ],
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1",
+     "hp1"
+    ]
+   },
+   "trigger": {
+    "goals": "reach:13"
+   },
+   "budget": {
+    "virtual_min": 20,
+    "wall_min": 40
+   },
+   "matrix": {
+    "classes": [
+     "Paladin",
+     "Sorceress"
+    ],
+    "seeds": [
+     11,
+     3
+    ]
+   },
+   "assert": [
+    {
+     "kind": "level_at_least",
+     "min": 12,
+     "why": "the hero is alive and at least at its start level; the verdict is the invariant monitor (hard rows turn the run RED), not progress"
+    }
+   ],
+   "provenance": "CHEATED: level 12, 500 gold, potions and the field start (Blood Moor) by SETUP verbs; the run goes through the fault proxy (cmd/d2scenario/faults.json), so it is never a gate or baseline row. Mechanics and recovery evidence only.",
+   "notes": "Lab soak (card faultsoak, docs/probes/faultsoak-design-2026-11-26.md). Report-only: ids under soak.fault. are in invariants.json report_only. Run: d2scenario soak -id soak.fault. -duration 1h. Each hit becomes an incident scenario by hand."
+  }
+ ]
+}
