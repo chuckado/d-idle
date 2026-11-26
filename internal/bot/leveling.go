@@ -114,8 +114,12 @@ func (r *Runner) gearStep(ctx context.Context, snap *d2.Snapshot, c control) boo
 	// Early-gear policy (docs/sme/early-gear-policy.md): below earlyGearMax gold goes to the scroll and potions (the chores
 	// and the weapon rebuy), never to vendor armor or magic items; wearing what dropped (swaps) stays free.
 	early := resource.Early(p.Level, r.e.Tune.Resource.EarlyGearMax)
-	if !early && p.Gold >= t.GearMinGold && (p.Level != l.shopLevel || p.Gold >= 2*l.shopGold+t.GearMinGold) {
-		budget = (p.Gold - t.GearReserve) * t.GearBudgetPct / 100
+	if p.Gold >= t.GearMinGold && (p.Level != l.shopLevel || p.Gold >= 2*l.shopGold+t.GearMinGold) {
+		if !early {
+			budget = (p.Gold - t.GearReserve) * t.GearBudgetPct / 100
+		} else {
+			budget = r.earlyShopBudget(snap) // the kit is met: the weapon and missing pieces may be upgraded (povertyfarm.json earlyShop)
+		}
 	}
 	if swaps == 0 && budget < 50 {
 		return false
