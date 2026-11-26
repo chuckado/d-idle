@@ -70,6 +70,9 @@ func (r *Runner) earlyRouteWhy(s *d2.Snapshot, a int) string {
 
 // earlyRouteCheck is earlyRouteWhy that also says whether only the kit is missing (a chores trip fixes it).
 func (r *Runner) earlyRouteCheck(s *d2.Snapshot, a int) (why string, kitOnly bool) {
+	if r.corpseRun.Load() {
+		return "", false // a corpse run is exempt: the corpse is worth more than the kit rule (Questy 2026-11-26: skipped for 1 potion, then lost)
+	}
 	rt, ok := earlyRouteAt(a)
 	if !ok || s == nil || s.Player == nil || r.e.Tune.Route.EarlyRoute == 0 || s.Player.Difficulty != d2.Normal || task.TryActive() {
 		return "", false

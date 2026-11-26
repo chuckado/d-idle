@@ -167,13 +167,13 @@ func TestEarlyRouteClosesBelowTheLevelAndTheKit(t *testing.T) {
 		maxLife int
 		want    string // "" open, else a part of the reason
 	}{
-		{d2.Paladin, 4, 3, 150, "level 7 needed"},
-		{d2.Paladin, 7, 0, 150, "healing potions"},
-		{d2.Paladin, 7, 2, 150, ""},
-		{d2.Paladin, 8, 3, 69, "life 110 needed"}, // the Questy hero: clvl 8, nothing in vitality
-		{d2.Sorceress, 7, 3, 90, "level 8 needed"},
-		{d2.Sorceress, 8, 2, 90, ""},
-		{d2.Sorceress, 8, 3, 50, "life 70 needed"},
+		{d2.Paladin, 4, 3, 200, "level 7 needed"},
+		{d2.Paladin, 7, 0, 200, "healing potions"},
+		{d2.Paladin, 7, 2, 200, ""},
+		{d2.Paladin, 8, 3, 69, "life 180 needed"}, // the Questy hero: clvl 8, nothing in vitality
+		{d2.Sorceress, 7, 3, 120, "level 8 needed"},
+		{d2.Sorceress, 8, 2, 120, ""},
+		{d2.Sorceress, 8, 3, 60, "life 100 needed"},
 	} {
 		g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
 		g.w.set(func(w *world) {
@@ -231,7 +231,7 @@ func TestFillEarlyHandsTheRoadToTheTaskLayer(t *testing.T) {
 			potions     bool
 			want        bool
 			kit         bool
-		}{{4, 150, true, true, false}, {8, 150, false, true, true}, {9, 150, true, false, false}} {
+		}{{4, 200, true, true, false}, {8, 200, false, true, true}, {9, 200, true, false, false}} {
 			g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) { tu.Route.EarlyRoute = 1 })
 			g.w.set(func(w *world) {
 				w.class, w.level, w.area, w.maxL, w.life = class, tc.level, 3, tc.life, tc.life

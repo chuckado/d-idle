@@ -428,6 +428,11 @@ func (r *Runner) portalLandsBurned(level int, redirected bool) bool {
 	r.obMu.Lock()
 	from := r.ob.portalFrom
 	r.obMu.Unlock()
+	if from != 0 && !r.d.Plan.IsTown(from) && r.stalePackArea(r.latest()) == from {
+		// the pack the hero fled from still stands where the portal drops it (Questy bed 2026-11-26: four deaths at one spot in the
+		// Dark Wood, each after a portal return to the Treehead pack): walk in from the other side
+		return true
+	}
 	if level == 0 || from == 0 || from == level || r.d.Plan.IsTown(from) {
 		return false
 	}

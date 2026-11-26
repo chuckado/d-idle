@@ -219,6 +219,7 @@ type Runner struct {
 	frz            freezeState          // the frozen Pause (freeze.go), guarded by mu
 	wall           func() time.Time     // wall clock of the pause cap and its display; nil: time.Now (tests set it)
 	freshBusy      atomic.Bool          // startFreshGame is running (task.go)
+	corpseRun      atomic.Bool          // a corpse decision or run is under way: the early road guard does not apply
 	corpseTown     corpseTownState      // a corpse waits in town after a fresh game (corpsereset.go)
 	freshEnd       atomic.Int64         // clock nanos when the last startFreshGame ended
 	rst            playerReset          // the player's Reset command (playerreset.go), guarded by mu
