@@ -282,3 +282,23 @@ func TestModeNoExitNeedsNoProgress(t *testing.T) {
 		}
 	}
 }
+
+// aura-off: a hero with an aura skill learned whose state reads 0 in the field for 10 s; an active aura, a hero without an
+// aura skill and a hero in town fire nothing. Both heroes (the rows read facts, not classes).
+func TestInvariantAuraOff(t *testing.T) {
+	for _, h := range invHeroes {
+		off := func(f *invFacts, _ int) { f.auraWatch, f.aura = true, 0 }
+		if got := runInv(&invMon{}, h.facts(t0), 20, off); got["aura-off"] == 0 {
+			t.Errorf("%s: aura-off did not fire: %v", h.name, got)
+		}
+		for name, edit := range map[string]func(*invFacts, int){
+			"aura up":       func(f *invFacts, _ int) { f.auraWatch, f.aura = true, 98 },
+			"no aura skill": func(f *invFacts, _ int) { f.auraWatch, f.aura = false, 0 },
+			"in town":       func(f *invFacts, _ int) { f.auraWatch, f.aura, f.inTown = true, 0, true },
+		} {
+			if got := runInv(&invMon{}, h.facts(t0), 60, edit); got["aura-off"] != 0 {
+				t.Errorf("%s/%s: fired %v", h.name, name, got)
+			}
+		}
+	}
+}

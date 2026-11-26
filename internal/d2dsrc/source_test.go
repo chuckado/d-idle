@@ -787,3 +787,29 @@ func TestNpcsListedObjectGetsItsPresetClass(t *testing.T) {
 		t.Errorf("a row at another spot took the preset class: %d", got[NPCIDBase+9])
 	}
 }
+
+// The state line's aura= is the active aura (V live, docs/probes/paladin-aura-live-2026-11-26.md): known, 0 included,
+// on both the dump and the stock path; absent key leaves it unknown.
+func TestAuraFromStateLine(t *testing.T) {
+	for name, mk := range map[string]func() map[string]string{"dump": func() map[string]string { return lateReplies(t) }, "stock": sampleReplies} {
+		r := mk()
+		base := strings.TrimSuffix(r["state"], "ok\n")
+		for _, aura := range []int{0, 98} {
+			r["state"] = strings.TrimRight(base, "\n") + fmt.Sprintf(" aura=%d\nok\n", aura)
+			_, c := startScript(t, r)
+			res, err := New(c, Options{Tables: fakeTables{}, Logf: quiet}).Read(context.Background())
+			if err != nil {
+				t.Fatal(err)
+			}
+			if p := res.Snap.Player; p == nil || !p.AuraKnown || p.Aura != aura {
+				t.Errorf("%s aura=%d: %+v", name, aura, p)
+			}
+		}
+		r["state"] = strings.TrimRight(base, "\n") + "\nok\n"
+		_, c := startScript(t, r)
+		res, _ := New(c, Options{Tables: fakeTables{}, Logf: quiet}).Read(context.Background())
+		if res.Snap.Player.AuraKnown {
+			t.Errorf("%s: no aura key must stay unknown", name)
+		}
+	}
+}
