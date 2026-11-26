@@ -54,6 +54,10 @@ python3 -I tools/contracts/test_check.py >/dev/null 2>&1 || bad "tools/contracts
 python3 -I tools/ci/ownscheck.py --warn-owns-until 2026-12-01 || fail=1
 python3 -I tools/ci/test_ownscheck.py >/dev/null 2>&1 || bad "tools/ci/test_ownscheck.py"
 
+# --- threshold governance (P10, docs/process/threshold-governance.md): knob net count and evidence rows; report-only until one session has passed ---
+python3 -I tools/ci/knobbudget.py --report || fail=1
+python3 -I tools/ci/test_knobbudget.py >/dev/null 2>&1 || bad "tools/ci/test_knobbudget.py"
+
 # --- no decompiled game code or game data tables (docs/process/gamecode-guard.md) ---
 tools/ci/gamecode_guard.sh || fail=1
 

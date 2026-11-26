@@ -85,7 +85,11 @@ type BotTuning struct {
 	// logs where it would choose differently; it never acts. Dwell is its commitment lease, TravelSec the window in
 	// which an area change is not undone without progress, LogGapSec the rate limit of the divergence lines.
 	ArbiterShadow, ArbiterDwellSec, ArbiterTravelSec, ArbiterLogGapSec int
-	FailsafePauseMaxSec                                                int
+	// ArbiterControl [dark-launch]: 1 lets the arbiter ACT for the families in the ArbiterFamilies bit list (bit order:
+	// arbiter.Families); the chain's hooks of such a family defer to its decision. 0 (default) changes nothing. Needs
+	// ArbiterShadow 1. Enable rule: data/darklaunch.json.
+	ArbiterControl, ArbiterFamilies int
+	FailsafePauseMaxSec             int
 	// Invariant monitor (internal/bot/invariants.go, docs/invariants.md): 1 checks the invariant table once per tick and
 	// logs one rate-limited line per hit; it never acts. 0 is off.
 	Invariants int
@@ -167,7 +171,7 @@ func DefaultBotTuning() BotTuning {
 		CorpseValueMin: 1000, SpiralDeaths: 4, SpiralMinutes: 15, DangerBanMin: 20, StarterBanMin: 3, QuestBlockedFarmMin: 10, ParkAfter: 2, ParkMinutes: 15, RepeatSiteBanMin: 30, RepeatSiteEscalate: 1, RepeatSiteWindowMin: 30, RepeatSiteGapSec: 180, CorpseMinValue: 50, NavSkipSec: 150, AreaIdleSec: 60, StallWarnMin: 30, StallExitMin: 30, PauseDeathsPerHour: 8, PauseCapMin: 60, StalePackHostiles: 4, StalePackMinutes: 10, StalePackMinHP: 5, StalePackMinTier: 2, PotionBurstN: 5, PotionBurstSec: 20, PotionBurstHostiles: 3, PovertyTier: 0, GoldFloor: 2000,
 		PointsRetrySec: 30, GearCheckSec: 60, GearMinGold: 150, GearBudgetPct: 70, GearReserve: 100,
 		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600, FlailMoves: 6, FlailWindowMin: 10, FlailHoldMin: 5,
-		Invariants: 1, TypedOutcome: 1, ArbiterShadow: 0, ArbiterDwellSec: 120, ArbiterTravelSec: 600, ArbiterLogGapSec: 60,
+		Invariants: 1, TypedOutcome: 1, ArbiterShadow: 0, ArbiterDwellSec: 120, ArbiterTravelSec: 600, ArbiterLogGapSec: 60, ArbiterControl: 0, ArbiterFamilies: 3,
 		Rung3WindowMax: 3, Rung3WindowMin: 20, DroughtMin: 8, EmptyFieldSec: 150, ClearIdleMin: 3, NoPortalWaitSec: 20, PortalRetryWaitSec: 3, CheckpointEnable: 0, CheckpointMinLifePct: 80, CheckpointRetreatPct: 40, CheckpointGapSec: 60, CheckpointMinScrolls: 2, CheckpointSafeRadius: 30, CheckpointEntryDist: 40, CheckpointReach: 60, CheckpointArrivalHostiles: 4, DroughtStage2Min: 2, DroughtSlowMin: 10, DroughtSlowKills: 3, DroughtSlowMaxLevel: 10, FreshAfterRecoverySec: 180, RecoveryDryMin: 5, RecoveryDryKills: 5, RecoveryDrySkipMin: 15,
 		ZoneModel: 0, ZoneDial: 1, PortalGuard: 0, PortalCastMs: 3000, PortalWalkMs: 3000, PortalHitMs: 700, PortalLifePct: 50,
 		MercRetryMin: 10, MercHireMinGold: 400, MercReviveLoopN: 3, MercReviveLoopMin: 10, CubeMaxJobs: 6, CubeRuneCap: 10, CubeGemCap: 2,
@@ -362,6 +366,10 @@ func botKnobs() []Knob {
 			Desc: "1 makes a refusal of the quest board step (early road, route guard, gate: not ready) a typed Refused outcome with a need and a wake fact: it is handled in one place, never counted as a failure, and logged once per change as `step refused`. 0 is the legacy path (the refusal goes through the failure counter). Other paths are not converted yet (docs/outcomes.md)."},
 		{Key: "bot.arbiterShadow", Label: "Arbiter shadow", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
 			Desc: "1 runs the intent arbiter beside the goal chain and logs one line per divergence (chain chose A, arbiter would choose B because ...) plus per-family counters in the minute line. It never acts: nothing changes for the hero. 0 is off (docs/arbiter.md)."},
+		{Key: "bot.arbiterControl", Label: "Arbiter control", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
+			Desc: "[dark-launch] 1 lets the intent arbiter act for the families in bot.arbiterFamilies: the goal chain's hooks of such a family defer to its decision, and the old chain is the fallback when the arbiter chooses nothing or fails. Needs bot.arbiterShadow 1. 0 is off: nothing changes (docs/arbiter.md, data/darklaunch.json)."},
+		{Key: "bot.arbiterFamilies", Label: "Arbiter control families", Unit: "mask", Default: 3, Min: 0, Max: 255, NoHandicap: true,
+			Desc: "Arbiter control: which families the arbiter controls, one bit each in the order survive 1, player 2, chores 4, claim 8, goldfarm 16, recovery 32, quest 64, level 128. 3 is survive and player, the first family. Only survive and player act so far; the other bits are accepted and ignored (docs/arbiter.md)."},
 		{Key: "bot.arbiterDwellSec", Label: "Arbiter lease", Unit: "s", Default: 120, Min: 10, Max: 1800, NoHandicap: true,
 			Desc: "Arbiter shadow: how long a chosen intent holds its lease; only a higher priority class preempts it inside this time."},
 		{Key: "bot.arbiterTravelSec", Label: "Arbiter travel window", Unit: "s", Default: 600, Min: 30, Max: 7200, NoHandicap: true,

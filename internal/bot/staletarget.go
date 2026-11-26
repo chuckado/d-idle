@@ -149,8 +149,12 @@ func (r *Runner) journeyBlocked(ctx context.Context, snap *d2.Snapshot, c contro
 	r.noteJourneyBlocked(why)
 	r.setWhy(WhyJourneyBlocked, "why", why)
 	if now.Sub(b.since) < r.blockedFarmAfter() {
-		r.spinGuard(ctx, why)
 		r.setState(StateInTown, "Journey blocked: "+why)
+		if r.e.Tune.Bot.TypedOutcome != 0 {
+			r.handleRefused(ctx, refusalOf(why)) // one line per change, pause by need, no spin guard needed
+			return true
+		}
+		r.spinGuard(ctx, why)
 		r.pause(ctx, time.Second)
 		return true
 	}
@@ -264,6 +268,10 @@ func (r *Runner) noteRefusal(ctx context.Context, res task.Result) {
 		b.since, b.why = r.e.Clock.Now(), res.Err.Error()
 		r.e.Log.Warn("journey blocked", "step", res.StepID, "reason", b.why, "farmAfterMin", int(r.blockedFarmAfter()/time.Minute))
 		r.noteJourneyBlocked(b.why)
+	}
+	if r.e.Tune.Bot.TypedOutcome != 0 {
+		r.handleRefused(ctx, refusalOf(res.Err.Error()))
+		return
 	}
 	r.spinGuard(ctx, key)
 }

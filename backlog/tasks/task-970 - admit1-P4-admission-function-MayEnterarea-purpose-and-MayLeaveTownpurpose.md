@@ -14,8 +14,19 @@ ordinal: 459000
 card: "admit1"
 owns:
   - "docs/design/admission-p4.md"
+  - "internal/admit/"
+  - "internal/plandata/admission.json"
+  - "internal/plandata/earlyroutes.json"
+  - "internal/plandata/povertyfarm.json"
+  - "docs/plan/data/admission.json"
+  - "docs/plan/data/earlyroutes.json"
+  - "docs/plan/data/povertyfarm.json"
+  - "internal/bot/earlyroute.go"
+  - "internal/bot/povertyfarm.go"
+  - "internal/bot/admit_need_test.go"
 exclusive: []
 contracts: []
+result: "Step 1: package internal/admit (MayEnter, MayLeaveTown, Refused with need and wake), floors as rows in admission.json, old judges read their numbers from it, table tests for two classes. Not verified live. Step 2 (wiring, knob bot.admission, ops status --why line) waits for TASK-958 and TASK-961."
 ---
 
 ## Description
@@ -28,6 +39,6 @@ Cause classes killed: G (thresholds by incident, 20) and C at the edges; the 'le
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Design doc: provider list, row schema keyed by archetype, shadow plan
+- [x] #1 Design doc: provider list, row schema keyed by archetype, shadow plan
 - [ ] #2 First provider (town exit) in shadow with a ledger row
 <!-- AC:END -->
