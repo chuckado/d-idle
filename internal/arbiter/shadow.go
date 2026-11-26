@@ -46,6 +46,33 @@ func (s *Shadow) Tick(v View, chain string) (line string) {
 	}()
 	d := s.arb.Decide(v)
 	s.last, s.has = d, true
+	return s.compare(d, v.Now, chain)
+}
+
+// Decide asks the arbiter without comparing (the control path needs the decision BEFORE the chain acts). ok is false
+// when a source panicked: the caller then takes the old path. Pair it with Compare after the chain acted.
+func (s *Shadow) Decide(v View) (d Decision, ok bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	defer func() {
+		if recover() != nil {
+			s.panics++
+			d, ok = Decision{}, false
+		}
+	}()
+	d = s.arb.Decide(v)
+	s.last, s.has = d, true
+	return d, true
+}
+
+// Compare is the second half of Tick for a decision taken with Decide.
+func (s *Shadow) Compare(d Decision, now float64, chain string) string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.compare(d, now, chain)
+}
+
+func (s *Shadow) compare(d Decision, now float64, chain string) string {
 	if chain == "" {
 		return ""
 	}
@@ -64,10 +91,10 @@ func (s *Shadow) Tick(v View, chain string) (line string) {
 	}
 	c.Diverged++
 	key := chain + ">" + mine
-	if t, ok := s.lastLog[key]; ok && v.Now-t < s.cfg.LogGapSec {
+	if t, ok := s.lastLog[key]; ok && now-t < s.cfg.LogGapSec {
 		return ""
 	}
-	s.lastLog[key] = v.Now
+	s.lastLog[key] = now
 	return fmt.Sprintf("chain chose %s, arbiter would choose %s", chain, d.Compact()) + because(d)
 }
 
@@ -117,4 +144,17 @@ func (s *Shadow) Report(in Intent, now float64, ok bool) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.arb.Report(in, now, ok)
+}
+
+// Refused posts the temporary intent a typed refusal asks for (see Arbiter.Refused); false when none applies.
+func (s *Shadow) Refused(need, wake string, now float64) (posted bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	defer func() {
+		if recover() != nil {
+			s.panics++
+			posted = false
+		}
+	}()
+	return s.arb.Refused(need, wake, now)
 }

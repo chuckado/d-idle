@@ -43,6 +43,20 @@ func Family(source string) string {
 	return source
 }
 
+// Families lists the hook families in the bit order of the knob bot.arbiterFamilies (bit i = Families[i]). Data: the order
+// of the migration table in docs/arbiter.md.
+var Families = []string{SrcSurvive, SrcPlayer, "chores", "claim", SrcGoldFarm, SrcRecovery, SrcQuest, SrcLevel}
+
+// Controlled reports whether the family is in the bit list.
+func Controlled(mask int, family string) bool {
+	for i, f := range Families {
+		if f == family {
+			return mask>>i&1 == 1
+		}
+	}
+	return false
+}
+
 func fn(name string, f func(View) *Intent) Source { return FuncSource{N: name, F: f} }
 
 // StdSources are the sources the shadow runs. Each reads only View (world facts), never another source. Build data
