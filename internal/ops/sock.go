@@ -12,7 +12,7 @@ import (
 
 // Start serves the operator socket in stateDir when Enabled says so, and returns a stop func (never nil). When the
 // operator control is off it creates nothing. A failure to listen is returned; the bot goes on without the socket.
-func Start(stateDir string, desk func() Desk, getenv func(string) string, logf func(string, ...any)) (func(), error) {
+func Start(stateDir string, desk func() Desk, getenv func(string) string, logf func(string, ...any), opts ...func(*Config)) (func(), error) {
 	if on, why := Enabled(getenv); !on {
 		if logf != nil && getenv("D2BOT_OPERATOR") != "" {
 			logf("operator control not started", "why", why)
@@ -24,7 +24,11 @@ func Start(stateDir string, desk func() Desk, getenv func(string) string, logf f
 	if err != nil {
 		return func() {}, err
 	}
-	s := New(Config{Desk: desk, Getenv: getenv, Logf: logf})
+	cfg := Config{Desk: desk, Getenv: getenv, Logf: logf}
+	for _, o := range opts {
+		o(&cfg)
+	}
+	s := New(cfg)
 	go s.Serve(ln)
 	if logf != nil {
 		logf("operator control on", "socket", SockName)

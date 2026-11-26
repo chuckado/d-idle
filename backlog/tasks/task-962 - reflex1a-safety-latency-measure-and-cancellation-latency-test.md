@@ -1,7 +1,7 @@
 ---
 id: TASK-962
 title: 'reflex1a: safety latency measure and cancellation-latency test'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:42:00Z'

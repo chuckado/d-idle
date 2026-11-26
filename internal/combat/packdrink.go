@@ -106,9 +106,10 @@ func (f *Fighter) drinkFromPack(ctx context.Context, snap *d2.Snapshot, kind Pot
 			continue
 		}
 		if !packHas(s, it.ID) {
-			f.lastDrink[kind] = f.now()
-			if kind == PotionHealing && snap.Player != nil {
-				f.heal = f.heal.drink(f.now(), f.cat.Item(it.Class).Tier, snap.Player.Class)
+			if snap.Player != nil {
+				f.noteDrunk(kind, f.cat.Item(it.Class).Tier, snap.Player.Class)
+			} else {
+				f.noteDrunk(kind, 0, 0)
 			}
 			f.info("potion: pack drink", "kind", kind.String(), "tier", f.cat.Item(it.Class).Tier, "life", snap.Player.Life, "max", snap.Player.MaxLife)
 			f.emit(goals.Event{Type: goals.EvPotion, Potion: kind.String(),

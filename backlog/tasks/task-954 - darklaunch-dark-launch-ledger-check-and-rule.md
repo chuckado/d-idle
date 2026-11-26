@@ -1,10 +1,11 @@
 ---
 id: TASK-954
 title: 'darklaunch: dark-launch ledger, check and rule'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:33:00Z'
+updated_date: '2026-11-26T05:37:00Z'
 labels:
   - ops
   - feature

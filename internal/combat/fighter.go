@@ -70,6 +70,8 @@ type Fighter struct {
 	rng     *rand.Rand
 
 	keys          map[int]string // skill id -> verified F-key
+	dmu           sync.Mutex     // guards lastDrink and heal: the guard goroutine reads them and a reflex drink writes them (reflex.go)
+	sendMu        sync.Mutex     // one potion key at a time: a reflex drink and the fighter's own drink never race to the same potion
 	lastDrink     map[PotionKind]time.Time
 	heal          healEffect // the healing potion still working (potioneffect.go)
 	manaChickenAt time.Time  // last chicken caused by the mana-burn watch (hard.go)
@@ -244,7 +246,7 @@ func (f *Fighter) Safety(snap *d2.Snapshot) SafetyAction {
 	p, t := snap.Player, f.tune()
 	now := f.now()
 	ready := func(k PotionKind, gap int) bool {
-		at, ok := f.lastDrink[k]
+		at, ok := f.drunkAt(k)
 		return !ok || now.Sub(at) >= ms(gap)
 	}
 	if ZeroLife(p) {
@@ -351,6 +353,20 @@ func (f *Fighter) Act(ctx context.Context, a SafetyAction) error {
 }
 
 func (f *Fighter) drink(ctx context.Context, a SafetyAction) error {
+	f.sendMu.Lock()
+	defer f.sendMu.Unlock()
+	return f.drinkMode(ctx, a, false)
+}
+
+// drinkBelt is drink without the pack fallback and without the lock: ReflexDrink holds sendMu.
+func (f *Fighter) drinkBelt(ctx context.Context, a SafetyAction) error {
+	return f.drinkMode(ctx, a, true)
+}
+
+// errNoBeltColumn: the belt has no potion of the kind and the reflex may not open the pack.
+var errNoBeltColumn = errors.New("combat: no belt column")
+
+func (f *Fighter) drinkMode(ctx context.Context, a SafetyAction, beltOnly bool) error {
 	snap, err := f.read(ctx)
 	if err != nil {
 		return err
@@ -361,14 +377,17 @@ func (f *Fighter) drink(ctx context.Context, a SafetyAction) error {
 	best := a == DrinkRejuv || pct(snap.Player.Life, snap.Player.MaxLife) < f.tune().DrinkRejuvPct
 	lp := pct(snap.Player.Life, snap.Player.MaxLife)
 	col, ok := belt.ColumnFor(kind, best)
-	if kind == PotionHealing && f.heal.active(f.now()) && lp >= f.tune().PotionEmergencyPct {
+	if he := f.healNow(); kind == PotionHealing && he.active(f.now()) && lp >= f.tune().PotionEmergencyPct {
 		// a potion is still working: only a higher tier is worth it, the lowest of those
-		if col, ok = belt.ColumnAbove(kind, f.heal.Tier); !ok {
-			f.log().Debug("combat potion: one is still working, waiting", "tier", f.heal.Tier)
+		if col, ok = belt.ColumnAbove(kind, he.Tier); !ok {
+			f.log().Debug("combat potion: one is still working, waiting", "tier", he.Tier)
 			return nil
 		}
 	}
 	if !ok {
+		if beltOnly {
+			return errNoBeltColumn
+		}
 		if kind == PotionHealing || kind == PotionRejuv {
 			if pct(snap.Player.Life, snap.Player.MaxLife) < f.tune().DrinkRejuvPct {
 				return f.drinkFromPack(ctx, snap, kind)
@@ -379,10 +398,7 @@ func (f *Fighter) drink(ctx context.Context, a SafetyAction) error {
 	if err := f.e.In.Key(strconv.Itoa(col + 1)); err != nil {
 		return err
 	}
-	f.lastDrink[kind] = f.now()
-	if kind == PotionHealing {
-		f.heal = f.heal.drink(f.now(), belt.Cols[col].Tier, snap.Player.Class)
-	}
+	f.noteDrunk(kind, belt.Cols[col].Tier, snap.Player.Class)
 	f.info("potion", "kind", kind.String(), "col", col+1, "life", snap.Player.Life, "mana", snap.Player.Mana)
 	f.emit(goals.Event{Type: goals.EvPotion, Potion: kind.String(),
 		Message: "Drank a " + kind.String() + " potion at " + strconv.Itoa(pct(snap.Player.Life, snap.Player.MaxLife)) + "% life"})
@@ -408,7 +424,7 @@ func (f *Fighter) Antidote(ctx context.Context) error {
 	if err := f.e.In.Key(strconv.Itoa(col + 1)); err != nil {
 		return err
 	}
-	f.lastDrink[PotionAntidote] = f.now()
+	f.noteDrunk(PotionAntidote, 0, 0)
 	f.info("potion", "kind", PotionAntidote.String(), "col", col+1, "poisoned", snap.Player.Poisoned())
 	f.emit(goals.Event{Type: goals.EvPotion, Potion: PotionAntidote.String(), Message: "Drank an antidote potion"})
 	return nil
@@ -505,7 +521,7 @@ func (f *Fighter) drinkIfDue(ctx context.Context) {
 		}
 		return
 	}
-	if at, ok := f.lastDrink[PotionHealing]; ok && f.now().Sub(at) < ms(t.PotionGapMs) {
+	if at, ok := f.drunkAt(PotionHealing); ok && f.now().Sub(at) < ms(t.PotionGapMs) {
 		return
 	}
 	if !f.healAllowed(f.now(), pct(p.Life, p.MaxLife), BeltOf(snap.Inventory, f.cat)) {

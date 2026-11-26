@@ -1,9 +1,12 @@
 package ops
 
 import (
+	"errors"
+	"fmt"
 	"net"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"sync"
 	"testing"
@@ -413,5 +416,122 @@ func TestTryAnywayIsAuditedAndRateLimited(t *testing.T) {
 	s, _ := newSrv(d, map[string]string{"D2BOT_RUN": "g2"})
 	if r := s.Handle(Request{Verb: "start", Quest: "a", Why: "x", TryAnyway: true}); r.Code != "measured_run" || len(d.calls) != 0 {
 		t.Errorf("measured run: %+v", r)
+	}
+}
+
+type fakeOrders struct {
+	calls []string
+	err   error
+}
+
+func (o *fakeOrders) Give(kind, area string, minutes int, replace bool) (string, error) {
+	o.calls = append(o.calls, fmt.Sprintf("%s|%s|%d|%t", kind, area, minutes, replace))
+	return "order " + kind, o.err
+}
+
+func newOrderSrv(d *fakeDesk, o *fakeOrders, env map[string]string) (*Server, *time.Time) {
+	s, now := newSrv(d, env)
+	s.cfg.Orders = func() Orders { return o }
+	s.cfg.Explain = func() any { return map[string]string{"decisions": "ring"} }
+	return s, now
+}
+
+func TestWhyIsReadOnlyAndNeedsNoReason(t *testing.T) {
+	d := &fakeDesk{}
+	s, _ := newOrderSrv(d, &fakeOrders{}, map[string]string{"D2BOT_RUN": "x"}) // a read even in a measured run
+	r := s.Handle(Request{Verb: "why"})
+	if !r.OK || r.Explain == nil || len(d.calls) != 0 || len(d.rec) != 0 {
+		t.Fatalf("%+v %v %v", r, d.calls, d.rec)
+	}
+	s.cfg.Explain = nil
+	if r := s.Handle(Request{Verb: "why"}); r.OK || r.Code != "off" {
+		t.Fatalf("%+v", r)
+	}
+}
+
+func TestOrderVerbsMapOntoOrdersAndAreAudited(t *testing.T) {
+	// two hero shapes: an act 1 area and an act 2 area (areas are data, the verbs know no class)
+	for _, area := range []string{"Cold Plains", "Lut Gholein"} {
+		d := &fakeDesk{}
+		o := &fakeOrders{}
+		s, _ := newOrderSrv(d, o, nil)
+		for _, rq := range []Request{
+			{Verb: "hold", Why: "stand down"},
+			{Verb: "home", Why: "rest"},
+			{Verb: "go", Area: area, Why: "farm"},
+			{Verb: "go", Area: area, Minutes: 15, Why: "short"},
+		} {
+			if r := s.Handle(rq); !r.OK {
+				t.Fatalf("%s %+v: %+v", area, rq, r)
+			}
+		}
+		want := []string{"home||0|true", "home||0|false", "go|" + area + "|60|false", "go|" + area + "|15|false"}
+		if !reflect.DeepEqual(o.calls, want) {
+			t.Fatalf("%s: calls %v, want %v", area, o.calls, want)
+		}
+		if len(d.rec) != 4 || d.rec[0].Remote != "operator" || d.rec[0].Path != "operator/hold" || !strings.Contains(d.rec[2].Why, "farm") {
+			t.Fatalf("%s: audit %+v", area, d.rec)
+		}
+		if r := s.Handle(Request{Verb: "hold"}); r.OK || r.Code != "why" {
+			t.Fatalf("no reason: %+v", r)
+		}
+		o.err = errors.New("area is not orderable")
+		if r := s.Handle(Request{Verb: "go", Area: "Nowhere", Why: "x"}); r.OK || r.Code != "order_refused" {
+			t.Fatalf("refused order: %+v", r)
+		}
+	}
+}
+
+func TestOrderVerbsRefusedInMeasuredRunAndWithoutOrders(t *testing.T) {
+	d := &fakeDesk{}
+	o := &fakeOrders{}
+	s, _ := newOrderSrv(d, o, map[string]string{"D2BOT_RUN": "g2"})
+	if r := s.Handle(Request{Verb: "hold", Why: "x"}); r.OK || r.Code != "measured_run" || len(o.calls) != 0 {
+		t.Fatalf("%+v %v", r, o.calls)
+	}
+	s, _ = newOrderSrv(d, o, nil)
+	s.cfg.Orders = nil
+	if r := s.Handle(Request{Verb: "home", Why: "x"}); r.OK || r.Code != "off" {
+		t.Fatalf("%+v", r)
+	}
+}
+
+func TestOrderVerbsRateLimited(t *testing.T) {
+	s, _ := newOrderSrv(&fakeDesk{}, &fakeOrders{}, nil)
+	for i := 0; i < PerQuestHour; i++ {
+		if r := s.Handle(Request{Verb: "home", Why: "x"}); !r.OK {
+			t.Fatalf("%d: %+v", i, r)
+		}
+	}
+	if r := s.Handle(Request{Verb: "home", Why: "x"}); r.OK || r.Code != "rate_limited" {
+		t.Fatalf("%+v", r)
+	}
+}
+
+func TestParkCancelsAndHoldsOffStartUntilWake(t *testing.T) {
+	for _, quest := range []string{"a", "b"} {
+		d := &fakeDesk{}
+		s, now := newOrderSrv(d, &fakeOrders{}, nil)
+		if r := s.Handle(Request{Verb: "park", Quest: quest, Hours: 25, Why: "x"}); r.Code != "hours" {
+			t.Fatalf("25h: %+v", r)
+		}
+		if r := s.Handle(Request{Verb: "park", Quest: quest, Hours: 2, Why: "wait for gold"}); !r.OK {
+			t.Fatalf("%+v", r)
+		}
+		if len(d.calls) != 1 || !strings.HasPrefix(d.calls[0], "cancel "+quest) {
+			t.Fatalf("calls %v", d.calls)
+		}
+		for _, v := range []string{"start", "retry"} {
+			if r := s.Handle(Request{Verb: v, Quest: quest, Why: "x"}); r.OK || r.Code != "parked" {
+				t.Fatalf("%s while parked: %+v", v, r)
+			}
+		}
+		if b := s.Handle(Request{Verb: "status"}).Board; len(b.Parked) != 1 || b.Parked[0].Quest != quest {
+			t.Fatalf("status parked: %+v", b.Parked)
+		}
+		*now = now.Add(3 * time.Hour)
+		if r := s.Handle(Request{Verb: "start", Quest: quest, Why: "x"}); r.Code == "parked" {
+			t.Fatalf("still parked after the wake time: %+v", r)
+		}
 	}
 }
