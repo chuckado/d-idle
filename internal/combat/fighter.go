@@ -88,6 +88,7 @@ type Fighter struct {
 	casts         []castRec
 	walking       atomic.Bool  // the bot is on a travel or quest walk (SetWalking)
 	portalActAt   atomic.Int64 // clock nanos when a TownPortal action began and has not ended (PortalInFlight), 0: none
+	arr           arrivalState // area change tracking for the arrival crowd rule (arrival.go)
 	questCrowd    atomic.Bool  // a player-started quest chunk runs (SetQuestCrowd)
 	pinned        int          // consecutive evasive moves that went nowhere (evade)
 	noEvadeUntil  time.Time    // pinned: no kite or dodge before this
@@ -285,6 +286,10 @@ func (f *Fighter) Safety(snap *d2.Snapshot) SafetyAction {
 	in.Walking = f.walking.Load()
 	in.Quest = f.questCrowd.Load()
 	in.Crowd, in.Adjacent = Crowd(p, hs, float64(t.CrowdAdjacent))
+	in.Arrival = f.arrivalCrowd(p, hs)
+	if in.Arrival {
+		in.CanRetreat = f.canRetreat(snap, hs)
+	}
 	in.CrowdFar = CrowdWithin(hs, float64(t.CrowdFarRadius))
 	in.CastGuard = castGuard(f.e.Tune.Bot, t, p, hs)
 	if t.CrowdN > 0 {

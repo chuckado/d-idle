@@ -18,6 +18,7 @@ type Rows struct {
 		FromLevel   int `json:"fromLevel"`
 	} `json:"poverty"`
 	KitFloor KitFloorRow `json:"kitFloor"`
+	Arrival  ArrivalRow  `json:"arrival"`
 	Lean     struct {
 		PotionsBelow int `json:"potionsBelow"`
 		EntryLifePct int `json:"entryLifePct"`
@@ -95,6 +96,28 @@ type QuestWalkRow struct {
 	BelowLevel int `json:"belowLevel"`
 	Healing    int `json:"healing"`
 	Portal     int `json:"portal"`
+}
+
+// ArrivalRow is the crowd-on-arrival rule (card act2temple): in one of Areas, within WithinSec of arriving, CrowdN hostiles within
+// Radius subtiles and life at or below LifePct leave at once (portal, no walk away from a crowd that stands at 1 to 2 subtiles).
+// CrowdN 0 = off. The quest crowd override (combat.crowdAbandonQuestN) fights up to 40, so the row is the exception for the
+// dungeons whose arrival nook is a known burst (Act 2 dungeons: the Claw Viper Temple stand-in died 1 s after arriving among
+// 22 to 39 hostiles, V runs 20261126-110921 series).
+type ArrivalRow struct {
+	Areas     []int `json:"areas"`
+	CrowdN    int   `json:"crowdN"`
+	Radius    int   `json:"radius"`
+	WithinSec int   `json:"withinSec"`
+	LifePct   int   `json:"lifePct"`
+}
+
+// ArrivalFor returns the arrival row when area has one.
+func (r Rows) ArrivalFor(area int) (ArrivalRow, bool) {
+	a := r.Arrival
+	if a.CrowdN <= 0 || !r.has(a.Areas, area) {
+		return ArrivalRow{}, false
+	}
+	return a, true
 }
 
 var (

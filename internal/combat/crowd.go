@@ -161,7 +161,7 @@ func (f *Fighter) crowdAct(ctx context.Context, a SafetyAction) error {
 	}
 	start := input.Point{X: snap.Player.X, Y: snap.Player.Y}
 	f.info("crowd: abandoning the walk", "crowd", len(crowdPoints(hs)), "life", pct(snap.Player.Life, snap.Player.MaxLife))
-	for i := 0; i < crowdMaxSteps && f.mv != nil; i++ {
+	for i := 0; i < crowdMaxSteps && f.mv != nil && !f.arr.bounce.Load(); i++ { // an arrival crowd stands at 1 to 2 subtiles: no walk, the portal at once
 		me := input.Point{X: snap.Player.X, Y: snap.Player.Y}
 		if pdist(start, me) >= crowdRetreatDist {
 			break

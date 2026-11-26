@@ -227,3 +227,37 @@ func TestCasterLifeFloorsSewersAndDuriel(t *testing.T) {
 		}
 	}
 }
+
+// The Act 2 quest dungeons the walks enter all have a road row with a level and a life floor, and the arrival row lists them
+// (card act2temple). A hero below the floor is refused with a level need, not walked into the temple.
+func TestAct2QuestDungeonRoadsAndArrival(t *testing.T) {
+	rs, err := Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, a := range []int{47, 56, 58, 61, 62, 52} {
+		for _, arch := range []string{"melee", "caster"} {
+			v := View{Archetype: arch, Normal: true, Level: 5, Healing: 4, HasTP: true, Life: 500, MaxLife: 500}
+			if got := rs.MayEnter(v, a, QuestWalk); !got.Refused || got.Need != NeedTooWeak {
+				t.Errorf("area %d %s clvl 5: %+v, want too_weak", a, arch, got)
+			}
+			v.Level = 30
+			v.MaxLife = 20
+			if got := rs.MayEnter(v, a, QuestWalk); !got.Refused || got.Need != NeedTooWeak {
+				t.Errorf("area %d %s life 20: %+v, want too_weak", a, arch, got)
+			}
+			v.MaxLife = 600
+			if got := rs.MayEnter(v, a, QuestWalk); got.Refused {
+				t.Errorf("area %d %s strong hero refused: %+v", a, arch, got)
+			}
+		}
+	}
+	for _, a := range []int{56, 57, 58, 60, 61, 62, 63, 64} {
+		if _, ok := rs.ArrivalFor(a); !ok {
+			t.Errorf("area %d has no arrival row", a)
+		}
+	}
+	if _, ok := rs.ArrivalFor(41); ok {
+		t.Error("an open field has an arrival row")
+	}
+}
