@@ -273,7 +273,7 @@
 | epic-hell | proposed | - | `docs/epics/epic-hell.md` | - |
 | epic-merc | proposed | - | `docs/epics/epic-merc.md` | - |
 | outcome-task-step | proposed | - | `docs/outcomes.md` | - |
-| outcome-travel-gate | proposed | - | `docs/outcomes.md` | - |
+| outcome-travel-gate | in-progress | - | `docs/outcomes.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
 | outcome-park-step | proposed | - | `docs/outcomes.md` | - |
 | outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
@@ -322,6 +322,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b71406ea9 11-26 09:38 `Merge agent/outcomes2a: outcome-travel-gate: gate refusals typed, no-scroll walk home not cancelled by portal verdicts` (outcomes2a)
 - f32da7a4f 11-26 09:38 `Merge agent/admit1: admit1: old judges read floors from admission.json, design doc, card` (admit1)
 - a14d7af8e 11-26 09:38 `Merge agent/arbmig1: arbmig: task card owns for the P6 stages` (arbmig1)
 - fa0dee197 11-26 08:53 `Merge agent/toolstrade82: mode-no-exit fires on no progress (xp, kills, gold, area), not on elapsed time; parked heroes do not count for xp-frozen and refusal-storm` (toolstrade82)
@@ -331,5 +332,4 @@
 - 49350b8ad 11-26 02:53 `Merge branch 'main' into qd27` (-)
 - 186424f59 11-26 02:43 `Merge agent/toolstrade80: Merge branch 'main' into toolstrade80` (toolstrade80)
 - e04e3527e 11-26 02:41 `Merge branch 'main' into toolstrade80` (-)
-- db6b83314 11-26 02:31 `Merge agent/autorevert1: Merge branch 'main' into autorevert1` (autorevert1)
 <!-- statusgen:end -->
