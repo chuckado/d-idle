@@ -54,6 +54,13 @@ var needTable = map[string]needRow{
 	"route_closed":    {"kit, level or gold change", 10},
 	"area_banned":     {"the ban ends or the level rises", 15},
 	"not_ready":       {"any of level, kit, gold or area changes", 5},
+	"parked":          {"the park ends or the level rises", 5},
+}
+
+// refusalOf is the typed refusal for a guard's words (need from the words), for holds that are not step errors.
+func refusalOf(why string) *Refused {
+	need := needOf("", why)
+	return &Refused{StepOutcome{Kind: OutRefusedKind, Need: need, Wake: needTable[need].Wake, Why: why}}
 }
 
 // needOf maps a refused result to a need code: the board's own code when it has one, else the words of the guard.
@@ -109,7 +116,26 @@ func classify(res task.Result) StepOutcome {
 type Refused struct{ StepOutcome }
 
 func (e *Refused) Error() string { return fmt.Sprintf("refused (%s): %s", e.Need, e.Why) }
-func (e *Refused) Unwrap() error { return errors.New(e.Why) }
+func (e *Refused) Unwrap() error {
+	if e.Err != nil {
+		return e.Err // a gate refusal keeps its sentinel (errAreaGated) for errors.Is
+	}
+	return errors.New(e.Why)
+}
+
+// refuse turns a legacy refusal error into the typed one when the knob is on (docs/outcomes.md); the legacy error stays
+// reachable through Unwrap, so errors.Is(err, errAreaGated) and the wording tests keep working. Off: the error itself.
+func (r *Runner) refuse(legacy error) error {
+	if legacy == nil || r.e.Tune.Bot.TypedOutcome == 0 {
+		return legacy
+	}
+	var ref *Refused
+	if errors.As(legacy, &ref) {
+		return legacy
+	}
+	need := needOf("", legacy.Error())
+	return &Refused{StepOutcome{Kind: OutRefusedKind, Need: need, Wake: needTable[need].Wake, Why: legacy.Error(), Err: legacy}}
+}
 
 // asError is the adapter for code that still returns errors: nil for Done and Progress, *Refused for a refusal.
 func (o StepOutcome) asError() error {
@@ -158,11 +184,53 @@ func (r *Runner) handleRefused(ctx context.Context, ref *Refused) {
 		r.e.Log.Info("step refused", "need", ref.Need, "wake", ref.Wake, "why", ref.Why)
 	}
 	st.n++
+	r.noteRefused("step:"+ref.Need, ref)
 	r.inv.noteRefusal()
+	r.arbRefused(ref.Need, ref.Wake)
 	row := needTable[ref.Need]
 	pause := time.Duration(row.PauseSec) * time.Second
 	if st.n == 1 { // the first look after a change is cheap: the planner may already have another step
 		pause = time.Second
 	}
 	r.pause(ctx, pause)
+}
+
+// holdRefused records a refusal that is a decision and not a step error (the kit gate holding a trip back, a town chore
+// that bought nothing): one INFO line per change of need, words or wake facts, the standing refusal for explain, no pause
+// and no failure count. Knob bot.typedOutcome 0: nothing (the legacy lines stay as they are).
+func (r *Runner) holdRefused(ref *Refused) {
+	if r.e.Tune.Bot.TypedOutcome == 0 {
+		return
+	}
+	l := &r.loop
+	facts := r.wakeFacts(r.latest())
+	key := ref.Need + "|" + ref.Why
+	if l.holds == nil {
+		l.holds = map[string]string{}
+	}
+	r.noteRefused("hold:"+ref.Need, ref)
+	if f, ok := l.holds[key]; ok && f == facts {
+		return
+	}
+	if len(l.holds) > 32 {
+		clear(l.holds)
+	}
+	l.holds[key] = facts
+	r.e.Log.Info("step refused", "need", ref.Need, "wake", ref.Wake, "why", ref.Why, "hold", true)
+}
+
+// holdNeed builds the refusal of a hold from its need code.
+func holdNeed(need, why string) *Refused {
+	return &Refused{StepOutcome{Kind: OutRefusedKind, Need: need, Wake: needTable[need].Wake, Why: why}}
+}
+
+// choreHolds turns what a finished town visit refused (a chore it skipped, slots the purse could buy but the hero cannot
+// wear yet) into typed holds: the need says what to wait for, the wake what ends it.
+func (r *Runner) choreHolds(rep ChoreReport) {
+	for _, sk := range rep.Skipped {
+		r.holdRefused(refusalOf(sk))
+	}
+	if len(rep.Blocked) > 0 {
+		r.holdRefused(holdNeed("too_weak", "gear the hero cannot wear yet: "+strings.Join(rep.Blocked, ", ")))
+	}
 }

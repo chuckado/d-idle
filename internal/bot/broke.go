@@ -220,7 +220,7 @@ func (r *Runner) levelSlice(ctx context.Context, snap *d2.Snapshot, c control, l
 					return terr
 				}
 			}
-			return fmt.Errorf("%w: %v", errAreaGated, err)
+			return r.refuse(fmt.Errorf("%w: %v", errAreaGated, err))
 		}
 		return err
 	})
@@ -260,11 +260,11 @@ func (r *Runner) brAttempt(w task.World) error {
 		r.e.Log.Info(line, "level", level, "gold", w.Gold)
 	}
 	if level < b.waitLvl {
-		return fmt.Errorf("blood raven: last attempt failed, wait for clvl %d: %w", b.waitLvl, errAreaGated)
+		return r.refuse(fmt.Errorf("blood raven: last attempt failed, wait for clvl %d: %w", b.waitLvl, errAreaGated))
 	}
 	if g, ok := task.GateFor(task.QBurial); ok {
 		if why := g.NotReady(w); why != "" {
-			return fmt.Errorf("blood raven: not ready (%s): %w", why, errAreaGated)
+			return r.refuse(fmt.Errorf("blood raven: not ready (%s): %w", why, errAreaGated))
 		}
 	}
 	if t.BRAttempts > 0 && b.attempts >= t.BRAttempts {
@@ -273,7 +273,7 @@ func (r *Runner) brAttempt(w task.World) error {
 				b.noted = true
 				r.e.Log.Info(fmt.Sprintf("blood raven: budget spent (%d/%d), waiting for clvl %d", b.attempts, t.BRAttempts, b.lastLvl+t.BRLevelGap), "level", level)
 			}
-			return fmt.Errorf("blood raven: %d attempts spent, wait for clvl %d: %w", b.attempts, b.lastLvl+t.BRLevelGap, errAreaGated)
+			return r.refuse(fmt.Errorf("blood raven: %d attempts spent, wait for clvl %d: %w", b.attempts, b.lastLvl+t.BRLevelGap, errAreaGated))
 		}
 		b.attempts, b.fails, b.noted = 0, 0, false
 		r.e.Log.Info("blood raven: budget renewed", "level", level)

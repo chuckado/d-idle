@@ -448,6 +448,9 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 			r.escalate(ctx, c, what, errStuck)
 		}
 	case errors.As(err, &ref):
+		if errors.Is(ref, errAreaGated) && r.gateEffects(ctx, ref) {
+			break // idle break: the next step reads control
+		}
 		r.handleRefused(ctx, ref)
 	case errors.Is(err, errAreaGated):
 		// A deliberate refusal, not a fault: no failure count, no ladder, no restart. The planner skips the target.
@@ -465,6 +468,20 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 	return false
 }
 
+// walkHomeNoScroll: the walk to town (a Resupplying step outside town) with no portal scroll and no tome must not be
+// cancelled by a portal or crowd-abandon verdict. Nothing can carry it out, so each cancel only restarted the walk
+// (ToTown, walkChainToTown, "context canceled" every ~10 s among 24 to 26 hostiles, 2026-11-26). Drinks and the chicken
+// exit still cancel. Knob bot.typedOutcome 0: as before.
+func (r *Runner) walkHomeNoScroll(st State, a SafetyAction, snap *d2.Snapshot) bool {
+	if r.e.Tune.Bot.TypedOutcome == 0 || st != StateResupplying || snap.Player.InTown() {
+		return false
+	}
+	if a != SafetyTownPortal && a != SafetyCrowdAbandon {
+		return false
+	}
+	return !r.hasPortalSource(snap)
+}
+
 // gatedWait is the answer to a gate refusal: show why, and wait a moment so the loop does not spin.
 func (r *Runner) gatedWait(ctx context.Context, err error) {
 	msg := err.Error()
@@ -478,10 +495,34 @@ func (r *Runner) gatedWait(ctx context.Context, err error) {
 		}
 	}
 	r.e.Log.Info("area gate refused the walk", "err", err)
-	r.noteStanding("walk", err.Error())
+	r.gateStanding(err, msg)
+	r.pause(ctx, 5*time.Second)
+}
+
+// gateStanding is what a gate refusal changes besides the pause: the standing line, the skipped target, the state.
+func (r *Runner) gateStanding(err error, msg string) {
+	if _, typed := err.(*Refused); !typed {
+		r.noteStanding("walk", err.Error()) // a typed refusal is recorded by handleRefused with its need and wake
+	}
 	r.skipTarget(whyGate) // the planner must not insist on a target the gate refuses (the gated safe area is exempt)
 	r.setState(StateInTown, msg)
-	r.pause(ctx, 5*time.Second)
+}
+
+// gateEffects is gatedWait for a typed gate refusal: same standing, ban wait and skipped target, but the log line and the
+// pause come from handleRefused (one line per change, pause by need). True when an idle break ended the wait.
+func (r *Runner) gateEffects(ctx context.Context, ref *Refused) bool {
+	msg := ref.Why
+	if strings.Contains(msg, noAreaMsg) {
+		msg = "Waiting: no eligible farm area, retrying shortly"
+	}
+	if w := r.banWait(); w != "" {
+		msg = w
+		if r.idleBreak(false) {
+			return true
+		}
+	}
+	r.gateStanding(ref, msg)
+	return false
 }
 
 func fieldArea0(a int) int { return a }
@@ -1098,6 +1139,9 @@ func (r *Runner) guardOnce(ctx context.Context, cancel context.CancelCauseFunc, 
 			if (a == SafetyTownPortal || a == SafetyCrowdAbandon) && r.noTP.Load() {
 				a = SafetyNone // Ancients: a portal would reset the fight (Constraints.NoTownPortal)
 			}
+			if r.walkHomeNoScroll(st, a, snap) {
+				a = SafetyNone // stranded walk home: a portal cannot open, the walk itself is the run (cancel storm 2026-11-26)
+			}
 			if a != SafetyNone && (st != StateClearing || a == SafetyTownPortal || a == SafetyChicken || a == SafetyCrowdAbandon || a == SafetyDrinkLife || a == SafetyDrinkRejuv) && r.safetyDue(a, now) {
 				r.noteVerdict(now)
 				if rt := r.e.Tune.Bot.ReactionMs; rt > 0 {
@@ -1296,7 +1340,7 @@ func (r *Runner) gotoDeathArea(ctx context.Context, area int) error {
 	// the waypoint-and-walk corpse run went to Tower Cellar 5).
 	if s := r.latest(); s != nil {
 		if why := r.areaGuardWhy(s, area); why != "" {
-			return fmt.Errorf("%w: %s (%d): route guard (%s)", errAreaGated, r.areaName(area), area, why)
+			return r.refuse(fmt.Errorf("%w: %s (%d): route guard (%s)", errAreaGated, r.areaName(area), area, why))
 		}
 	}
 	r.cpRoute(r.latest(), area) // checkpoint first when its record is usable, else the waypoint (checkpoint.go)
@@ -1321,7 +1365,7 @@ func (r *Runner) gotoDeathArea(ctx context.Context, area int) error {
 		// in Monastery Gate and walked straight back into the crowd that had just killed it).
 		if s := r.latest(); s != nil && r.areaAllowed(s, area) != "" {
 			why := r.areaAllowed(s, area)
-			return fmt.Errorf("%w: %s (%d): %s", errAreaGated, r.areaName(area), area, why)
+			return r.refuse(fmt.Errorf("%w: %s (%d): %s", errAreaGated, r.areaName(area), area, why))
 		}
 		r.e.Log.Info("back to field failed, travelling to the corpse area", "area", area, "err", err)
 		var terr error

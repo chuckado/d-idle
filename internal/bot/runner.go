@@ -315,16 +315,17 @@ type loopState struct {
 	beltFillNext    time.Time      // no belt fill attempt before this
 	diffBan         map[string]time.Time
 	forceTrip       bool
-	refusal         refusalState // the last typed refusal (outcome.go)
-	rewardSince     time.Time    // when a restock trip first waited for a pending quest reward (holdTripForReward)
-	healFails       int          // failed heal attempts while below the resume line; reset when life is back above it
-	portalRetried   bool         // the cancelled-cast retry was used since the last arrival in town (portalretry.go)
-	noPortalSince   time.Time    // first heal-trip failure for lack of a town portal in this stretch (noPortalLeave)
-	recoveredAt     time.Time    // end of the last lost-game recovery (freshHold)
-	lowLifeUntil    time.Time    // end of the current low-life wait (lowLifeWait); zero when not waiting
-	reentries       []time.Time  // recent re-entries after a chicken (notInGame), pruned to reentryWindow
-	flail           flailGuard   // anti-flail guard (flail.go)
-	areaDoneAt      time.Time    // last "area done" trip home from the field (noTarget rate limit)
+	refusal         refusalState      // the last typed refusal (outcome.go)
+	holds           map[string]string // refusal holds that are not steps (kit gate, town chores) -> wakeFacts at the last line
+	rewardSince     time.Time         // when a restock trip first waited for a pending quest reward (holdTripForReward)
+	healFails       int               // failed heal attempts while below the resume line; reset when life is back above it
+	portalRetried   bool              // the cancelled-cast retry was used since the last arrival in town (portalretry.go)
+	noPortalSince   time.Time         // first heal-trip failure for lack of a town portal in this stretch (noPortalLeave)
+	recoveredAt     time.Time         // end of the last lost-game recovery (freshHold)
+	lowLifeUntil    time.Time         // end of the current low-life wait (lowLifeWait); zero when not waiting
+	reentries       []time.Time       // recent re-entries after a chicken (notInGame), pruned to reentryWindow
+	flail           flailGuard        // anti-flail guard (flail.go)
+	areaDoneAt      time.Time         // last "area done" trip home from the field (noTarget rate limit)
 	futile          bool
 	futilePos       input.Point
 	futileUntil     time.Time

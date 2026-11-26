@@ -1,6 +1,6 @@
 {
  "_doc": "Invariant monitor lines (docs/invariants.md) in a run's bot log. hard: a hit turns the run RED (assert kind `invariant <name>`). soft: kept in the result, never red. Rows in neither list count as soft. report_only: scenario id prefixes whose hits are listed but never red (incident replays). Builds are data: a name here is a monitor row, not a skill or class.",
  "hard": ["potion-not-drunk", "life-zero-alive", "refusal-as-failure", "xp-frozen", "mode-no-exit", "corpse-unresolved"],
- "soft": ["portal-not-cast", "field-entry-hurt", "field-entry-no-kit", "resupply-in-field", "refusal-storm", "town-thrash", "economy-stall"],
- "report_only": ["incident."]
+ "soft": ["portal-not-cast", "field-entry-hurt", "field-entry-no-kit", "resupply-in-field", "refusal-storm", "town-thrash", "arbiter-starved", "economy-stall"],
+ "report_only": ["incident.", "soak.fault."]
 }

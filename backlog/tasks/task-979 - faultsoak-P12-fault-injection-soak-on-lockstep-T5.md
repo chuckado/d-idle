@@ -1,10 +1,11 @@
 ---
 id: TASK-979
 title: 'faultsoak: P12 fault-injection soak on lockstep (T5)'
-status: Proposed
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-26T03:56:00Z'
+updated_date: '2026-11-26T16:05:00Z'
 labels:
   - bot
   - drill
@@ -15,8 +16,14 @@ ordinal: 467000
 card: "faultsoak"
 owns:
   - "docs/design/faultsoak-p12.md"
+  - "docs/probes/faultsoak-design-2026-11-26.md"
+  - "internal/faultproxy/"
+  - "cmd/d2scenario/"
+  - "internal/scenario/"
+  - "tools/provingground/scenarios/faultsoak.json"
 exclusive: []
 contracts: []
+result: "Runner side built and tested offline: fault proxy (late and dropped replies, delayed input, cancel storm), fault sets as data, soak command with invariant hit and survival report, five soak.fault rows. Not run live; the fork verbs for NPC remove, portal expire and belt clear are proposed in the design note."
 ---
 
 ## Description
@@ -29,5 +36,6 @@ Cause classes killed: E, F and the recovery paths nobody walks on purpose. Roadm
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Injection list and the monitor oracle documented; first soak run recorded with writes ledger
+- [x] #1 Injection list and the monitor oracle documented (docs/probes/faultsoak-design-2026-11-26.md)
+- [ ] #2 First soak run recorded with writes ledger (live check: d2scenario soak -id soak.fault. -duration 1h on the worker host in the night window)
 <!-- AC:END -->

@@ -125,27 +125,36 @@ func (r *Runner) kitGateActive(s *d2.Snapshot) bool {
 // (otherwise the sell and poverty logic of the chores bring the gold first and the character goes on). After KitTripCap
 // kit trips with the kit still incomplete the bot proceeds anyway and logs kitgate-skip once.
 func (r *Runner) kitTrip(s *d2.Snapshot) (string, bool) {
+	why, ok, hold := r.kitTripWhy(s)
+	if hold != nil {
+		r.holdRefused(hold) // outside obMu: it reads the snapshot
+	}
+	return why, ok
+}
+
+// kitTripWhy is kitTrip plus the typed hold when the trip is refused for a missing means (nil when nothing is refused).
+func (r *Runner) kitTripWhy(s *d2.Snapshot) (string, bool, *Refused) {
 	rt := r.e.Tune.Resource
 	if !r.kitBandOpen(s) || s.Player.InTown() || difficultyName(s.Player.Difficulty) != "normal" || s.Player.Act != 0 {
-		return "", false
+		return "", false, nil
 	}
 	k, known := r.kitRead(s)
 	if !known {
-		return "", false
+		return "", false, nil
 	}
 	miss := k.missing()
 	r.obMu.Lock()
 	defer r.obMu.Unlock()
 	if len(miss) == 0 {
 		r.ob.kitTrips, r.ob.kitSkipped = 0, false
-		return "", false
+		return "", false, nil
 	}
 	if r.ob.kitTrips >= rt.KitTripCap {
 		if !r.ob.kitSkipped {
 			r.ob.kitSkipped = true
 			r.e.Log.Info("kitgate-skip", "trips", r.ob.kitTrips, "missing", strings.Join(miss, ", "), "gold", s.Player.Gold, "level", s.Player.Level)
 		}
-		return "", false
+		return "", false, holdNeed("needs_potions", "kit trip cap reached, missing "+strings.Join(miss, ", "))
 	}
 	// The cheapest thing the visit can buy: a missing portal scroll is bought first only when it is affordable
 	// (Town.buyFirstTP), so a character short of healing potions needs one potion's gold to make the walk home worth
@@ -155,10 +164,13 @@ func (r *Runner) kitTrip(s *d2.Snapshot) (string, bool) {
 	if !k.TP && k.HP >= k.minHP {
 		price = rt.KitTPGold
 	}
-	if s.Player.Gold < price || !(k.TP || resource.NearTownArea(s.Player.Area) || k.HP == 0 && resource.ChainHomeArea(s.Player.Area) || r.wpActive(s)) {
-		return "", false
+	if s.Player.Gold < price {
+		return "", false, holdNeed("needs_gold_farm", "kit trip held back: "+strings.Join(miss, ", ")+" missing, gold below the price")
 	}
-	return "kit: " + strings.Join(miss, ", "), true
+	if !(k.TP || resource.NearTownArea(s.Player.Area) || k.HP == 0 && resource.ChainHomeArea(s.Player.Area) || r.wpActive(s)) {
+		return "", false, holdNeed("needs_potions", "kit trip held back: "+strings.Join(miss, ", ")+" missing, no way home")
+	}
+	return "kit: " + strings.Join(miss, ", "), true, nil
 }
 
 // wpActive reports an activated waypoint in the current area: Town.ToTown without a scroll takes it to the town

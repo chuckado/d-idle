@@ -20,6 +20,7 @@ import (
 
 	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/d2dinput"
+	"d2lod-bot/internal/faultproxy"
 	"d2lod-bot/internal/questboard"
 	"d2lod-bot/internal/scenario"
 )
@@ -91,8 +92,7 @@ func cmdRun(args []string, w io.Writer) error {
 		todo = append(todo, r)
 	}
 	cmdFor := func(r scenario.Run, outDir string) []string {
-		a := []string{*slot, "run", "-w", "3000", "-t", strconv.Itoa(by[r.ID].Budget.WallMin*60 + 600), "--", self, "exec-one",
-			"-dir", *dir, "-id", r.ID, "-class", r.Class, "-seed", strconv.FormatInt(r.Seed, 10), "-out", outDir, "-bot", *bot}
+		a := execOneCmd(*slot, *dir, *bot, self, r, by[r.ID].Budget.WallMin, outDir, false)
 		if *journal {
 			a = append(a, "-journal")
 		}
@@ -701,7 +701,21 @@ func runField(ctx context.Context, s scenario.Scenario, r scenario.Run, res scen
 		jnl = strings.TrimSuffix(trace, ".bot.log") + ".jnl"
 		os.Setenv(journalEnv, jnl) // exec-one runs one scenario per process; runBot inherits it
 	}
-	_, taps, tapsAt, berr := runBot(ctx, s, r, bot, os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA"), data, "", sock, inst, hero, trace, true, seeded, vaultVerbs)
+	botSock := sock
+	var fp *faultproxy.Proxy
+	faultSet := faultsFor(s)
+	if faultSet != "" { // lab soak only: the bot talks to the fault proxy, the observer below to the game directly
+		var err error
+		if fp, err = startFaults(faultSet, sock, filepath.Join(filepath.Dir(sock), "fault-"+inst+".sock")); err != nil {
+			_ = prep.Stop()
+			return withVerdict(res, blocked("fault proxy: %v", err))
+		}
+		botSock = fp.Listen
+	}
+	_, taps, tapsAt, berr := runBot(ctx, s, r, bot, os.Getenv("D2D_BIN"), os.Getenv("D2D_DATA"), data, "", botSock, inst, hero, trace, true, seeded, vaultVerbs)
+	if fp != nil {
+		res.Faults = faultReport(faultSet, fp, strings.TrimSuffix(trace, ".bot.log")+".faults.jsonl")
+	}
 	res.Taps, res.TapsAt = taps, tapsAt
 	if why := botFailure(trace); why != "" {
 		_ = prep.Stop()

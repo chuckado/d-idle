@@ -1,0 +1,10 @@
+{
+ "_doc": "Fault sets of the fault-injection soak (docs/probes/faultsoak-design-2026-11-26.md). Used through scenario.faults or `d2scenario soak --faults SET`. Keys: internal/faultproxy.Spec. cancel_line is the game's own cancel verb: U, unverified until a lab run (the proxy only sends the line).",
+ "sets": {
+  "socket-timeouts": {"delay_reply_every": 25, "delay_reply_ms": 20000},
+  "socket-drops": {"drop_reply_every": 40},
+  "slow-input": {"delay_input_ms": 400, "input_verbs": ["key", "click", "move", "interact"]},
+  "cancel-storm": {"cancel_every_ms": 1500, "cancel_line": "cmd stop"},
+  "mixed": {"delay_reply_every": 40, "delay_reply_ms": 20000, "drop_reply_every": 90, "delay_input_ms": 200, "input_verbs": ["key", "click"], "cancel_every_ms": 5000, "cancel_line": "cmd stop"}
+ }
+}

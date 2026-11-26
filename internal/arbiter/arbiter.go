@@ -42,6 +42,10 @@ type Intent struct {
 	Reason    string   // why the source wants this, for the watch UI
 	Resumable bool     // if preempted by a higher class, continue it afterwards
 	Steps     []string // what the executor should do, in order
+	// TTL makes the intent TEMPORARY: posted with Post or Refused, it is proposed for TTL virtual seconds, or until the
+	// condition in Until holds (outcome-rule syntax over View.Facts, "potions>=potions_min"), whichever is first.
+	TTL   float64
+	Until string
 }
 
 func (i Intent) Key() string { return i.Source + "/" + i.Kind }
@@ -64,6 +68,13 @@ type View struct {
 type Source interface {
 	Name() string
 	Propose(View) *Intent
+}
+
+// LostControl is optional: asked when the intent a source proposed was NOT chosen. by is what won; starved is true once
+// the source has been outranked continuously for Config.StarveSec (called once per episode, plain overrides are called
+// once per change of the winner). The source may drop or re-shape its proposal; it must not call back into the arbiter.
+type LostControl interface {
+	Lost(in, by Intent, why string, starved bool)
 }
 
 // TownVisitor is optional: asked when an upkeep intent takes the hero to town,
@@ -93,6 +104,7 @@ type Config struct {
 	TravelWindow float64 // an area change is not undone inside this without progress
 	BackoffBase  float64 // first back-off after a failure
 	BackoffMax   float64
+	StarveSec    float64 // a proposal outranked this long continuously is starved (0 = 600)
 }
 
 func DefaultConfig() Config {
@@ -112,6 +124,7 @@ type Decision struct {
 	Resumed  bool // chosen again after a higher class preempted it
 	Batch    []Intent
 	Rejected []Rejected
+	Starved  []Intent // proposals outranked for Config.StarveSec, first seen this decision (the invariant arbiter-starved)
 }
 
 type lease struct {
@@ -139,10 +152,23 @@ type Arbiter struct {
 	fails     map[string]*backoff
 	suspended map[string]Intent
 	prev      *Decision
+	temps     []temp
+	outranked map[string]*outrank
+}
+
+type temp struct {
+	in    Intent
+	until float64
+}
+
+type outrank struct {
+	since   float64
+	by      string
+	starved bool
 }
 
 func New(cfg Config, sources ...Source) *Arbiter {
-	return &Arbiter{cfg: cfg, sources: sources, fails: map[string]*backoff{}, suspended: map[string]Intent{}}
+	return &Arbiter{cfg: cfg, sources: sources, fails: map[string]*backoff{}, suspended: map[string]Intent{}, outranked: map[string]*outrank{}}
 }
 
 // Report tells the arbiter how an intent ended. A failure backs the intent's
@@ -151,6 +177,12 @@ func (a *Arbiter) Report(in Intent, now float64, ok bool) {
 	k := in.Key()
 	if ok {
 		delete(a.fails, k)
+		for i, t := range a.temps { // a temporary intent that was done is not proposed again
+			if t.in.Key() == k {
+				a.temps = append(a.temps[:i], a.temps[i+1:]...)
+				break
+			}
+		}
 		return
 	}
 	b := a.fails[k]
@@ -182,12 +214,19 @@ func (a *Arbiter) Decide(v View) Decision {
 	a.lastArea = v.Area
 
 	var cands []Intent
+	props := make([]*Intent, 0, len(a.sources)+len(a.temps))
 	for _, s := range a.sources {
 		in := s.Propose(v)
+		if in != nil {
+			in.Source = s.Name()
+		}
+		props = append(props, in)
+	}
+	props = append(props, a.liveTemps(v)...)
+	for _, in := range props {
 		if in == nil {
 			continue
 		}
-		in.Source = s.Name()
 		if why := a.refuse(*in, v); why != "" {
 			d.Rejected = append(d.Rejected, Rejected{*in, why})
 			continue
@@ -217,6 +256,7 @@ func (a *Arbiter) Decide(v View) Decision {
 
 	if len(cands) == 0 {
 		a.cur = nil
+		a.lostControl(nil, cands, &d, v)
 		return d
 	}
 	pick := 0
@@ -250,6 +290,7 @@ func (a *Arbiter) Decide(v View) Decision {
 		a.cur.in = chosen
 	}
 	d.Chosen = &chosen
+	a.lostControl(&chosen, cands, &d, v)
 
 	if chosen.Class == Upkeep && chosen.NeedsArea == Town {
 		for _, s := range a.sources {
@@ -336,4 +377,124 @@ func (d Decision) Compact() string {
 		s += " [lease]"
 	}
 	return s
+}
+
+// Post adds a TEMPORARY intent (in.TTL > 0 or in.Until set): the arbiter proposes it next to the sources' own until it
+// expires, is chosen and reported done, or its Until condition holds. A second post with the same key replaces the first.
+func (a *Arbiter) Post(in Intent, now float64) {
+	if in.TTL <= 0 && in.Until == "" {
+		in.TTL = a.cfg.MinDwell
+	}
+	t := temp{in: in, until: now + in.TTL}
+	if in.TTL <= 0 {
+		t.until = now + 1800
+	}
+	for i := range a.temps {
+		if a.temps[i].in.Key() == in.Key() {
+			a.temps[i] = t
+			return
+		}
+	}
+	a.temps = append(a.temps, t)
+}
+
+// RefusalIntents maps a refusal need (internal/bot/outcome.go needTable codes) to the temporary intent it becomes. Data:
+// a new need is a row. An empty Source means the refusal only pauses the step (no intent). TTL is virtual seconds.
+var RefusalIntents = map[string]Intent{
+	"needs_potions":   {Source: SrcResupply, Kind: "refill", Class: Upkeep, Urgency: 0.6, NeedsArea: Town, EstCost: 60, TTL: 300, Until: "potions>=potions_min", Reason: "refused: needs potions"},
+	"needs_gold_farm": {Source: SrcRecovery, Kind: "farm_gold", Class: Objective, Urgency: 0.8, NeedsArea: Any, EstCost: 600, TTL: 900, Reason: "refused: needs gold"},
+	"too_weak":        {Source: SrcLevel, Kind: "level_up", Class: Filler, Urgency: 0.4, NeedsArea: Any, EstCost: 600, TTL: 900, Reason: "refused: too weak, level first"},
+}
+
+// Refused turns a typed refusal (need, wake) into a temporary intent when RefusalIntents has a row for it, and reports
+// whether one was posted. The wake text only goes into the reason: the arbiter does not parse it.
+func (a *Arbiter) Refused(need, wake string, now float64) bool {
+	in, ok := RefusalIntents[need]
+	if !ok || in.Source == "" {
+		return false
+	}
+	if wake != "" {
+		in.Reason += " (wakes on: " + wake + ")"
+	}
+	a.Post(in, now)
+	return true
+}
+
+func (a *Arbiter) liveTemps(v View) []*Intent {
+	var out []*Intent
+	kept := a.temps[:0]
+	for _, t := range a.temps {
+		if v.Now >= t.until || t.in.Until != "" && holds(t.in.Until, v.Facts) {
+			continue
+		}
+		kept = append(kept, t)
+		in := t.in
+		out = append(out, &in)
+	}
+	a.temps = kept
+	return out
+}
+
+// lostControl tells every source whose proposal was outranked who won, and flags starvation.
+func (a *Arbiter) lostControl(chosen *Intent, cands []Intent, d *Decision, v View) {
+	limit := a.cfg.StarveSec
+	if limit <= 0 {
+		limit = 600
+	}
+	seen := map[string]bool{}
+	win := ""
+	if chosen != nil {
+		win = chosen.Key()
+		delete(a.outranked, win)
+	}
+	for _, c := range cands {
+		k := c.Key()
+		if k == win {
+			continue
+		}
+		seen[k] = true
+		o := a.outranked[k]
+		if o == nil {
+			o = &outrank{since: v.Now}
+			a.outranked[k] = o
+		}
+		starve := !o.starved && v.Now-o.since >= limit
+		if win == o.by && !starve {
+			continue
+		}
+		o.by = win
+		if starve {
+			o.starved = true
+			d.Starved = append(d.Starved, c)
+		}
+		if chosen == nil {
+			continue
+		}
+		if lc, ok := a.sourceOf(c.Source).(LostControl); ok {
+			lc.Lost(c, *chosen, a.reasonFor(d, k), starve)
+		}
+	}
+	for k := range a.outranked {
+		if !seen[k] {
+			delete(a.outranked, k)
+		}
+	}
+}
+
+func (a *Arbiter) reasonFor(d *Decision, key string) string {
+	for _, r := range d.Rejected {
+		if r.Intent.Key() == key {
+			return r.Why
+		}
+	}
+	return ""
+}
+
+func (a *Arbiter) sourceOf(name string) Source {
+	for _, s := range a.sources {
+		if s.Name() == name {
+			return s
+		}
+	}
+	return nil
 }

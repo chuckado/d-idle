@@ -1,7 +1,7 @@
 ---
 id: TASK-961
 title: 'outcome-route-guard: convert guardedExit and routeGuardHop to typed outcomes'
-status: Proposed
+status: In Progress
 assignee:
   - credit-runner
 created_date: '2026-11-26T03:42:00Z'
@@ -16,6 +16,7 @@ owns:
   - "docs/outcomes.md"
 exclusive: []
 contracts: []
+result: "The route guard hop and the guard exit walk refuse as typed outcomes (no failure count, one line per change). Offline tests on two classes, not verified live."
 ---
 
 ## Description
@@ -28,5 +29,5 @@ Size: S. Follow-up of outcome1 (docs/outcomes.md, not yet converted list). Needs
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 path converted behind bot.typedOutcome, row added to docs/outcomes.md, must-fail test on two builds
+- [x] #1 path converted behind bot.typedOutcome, row added to docs/outcomes.md, must-fail test on two builds
 <!-- AC:END -->

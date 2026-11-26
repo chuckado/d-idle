@@ -90,7 +90,7 @@ func TestPlanningBlockWithBanWaitsWithoutPause(t *testing.T) {
 	res := task.Result{Outcome: task.OutBlocked, StepID: "level.8", Kind: task.KindNotFound,
 		Err: task.Errorf(task.KindNotFound, "no eligible reachable leveling area")}
 	for i := 0; i < planBlockMax+2; i++ {
-		if err := g.r.planningBlock(context.Background(), res); err != nil {
+		if err := g.r.planningBlock(context.Background(), res); err != nil && !isRefusedErr(err) {
 			t.Fatal(err)
 		}
 	}
