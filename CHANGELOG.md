@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- cardclose2: close 7 merged cards (954, 966 by catch-up; 953, 955, 959, 962, 934 by hand) <!--sg:agent/cardclose2-->
 - reflex1c: reflex drink without cancelling the action, hard-cancel deadline <!--sg:agent/reflex1c-->
 - reflex1b: town chores verify in town before each step; guard aborts chores outside town <!--sg:agent/reflex1b-->
 - Merge branch 'main' into decisions1 <!--sg:agent/decisions1-->
