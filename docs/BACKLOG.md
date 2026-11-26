@@ -1425,6 +1425,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/outcomes2e: Merge branch 'main' into outcome-kit-gate (merged 2026-11-26): Kit gate holds and town chore refusals are typed holds with a need and a wake fact: one log line per change, no pause, no failure count. <!--sg:agent/outcomes2e-->
 - agent/outcomes2f: Merge branch 'main' into outcome-hub-wording (merged 2026-11-26): The order journal reads the typed refusal text and shows the need code; the old wording still works. <!--sg:agent/outcomes2f-->
 - agent/outcomes2g: Merge branch 'main' into outcome-explain-ring (merged 2026-11-26): The explain ring records every typed refusal with its need code and wake fact, so ops status why shows what the hero waits for. <!--sg:agent/outcomes2g-->
+- faultsoak: P12 fault-injection soak on lockstep (T5) (TASK-979, merged 2026-11-26, acceptance 1 of 2): Fault-injection soak, runner side: a socket proxy that delays or drops replies, delays input and cancels in a storm, fault sets as data, a soak command that reports invariant hits and survival, five soak rows ... <!--sg:agent/faultsoak-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
