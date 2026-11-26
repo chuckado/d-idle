@@ -184,7 +184,13 @@ func (r *Runner) areaGuardWhy(s *d2.Snapshot, a int) string {
 	case task.TowerGuarded(task.Area(a)):
 		return r.towerGuardWhy(s)
 	}
-	return r.earlyRouteWhy(s, a)
+	if why := r.earlyRouteWhy(s, a); why != "" {
+		return why
+	}
+	if why := r.povertyAreaWhy(s, a); why != "" {
+		return why
+	}
+	return r.leanEntryWhy(s, a)
 }
 
 // areaLeaveWhy is areaGuardWhy for a hero that already stands in area a: the road guard uses its mid-route verdict.

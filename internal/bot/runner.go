@@ -197,39 +197,40 @@ type Runner struct {
 	hmu            sync.Mutex              // lastError and ladderStep
 	lastError      string
 	ladder         int
-	selfStop       bool                 // paused by the death-rate rule, guarded by mu
-	merc           mercState            // sticky merc knowledge and chore backoff (resource.go)
-	drank          atomic.Int64         // potions drunk, counted from every EvPotion event (combat emits them live; the observer's own diff is off there)
-	playerCancelNs atomic.Int64         // clock of the last guard interrupt for a player command (playerDue)
-	stepMu         sync.Mutex           // held for a whole loop step: the loop state is only touched under it or from the step itself (questboard.go world)
-	parkedBoard    atomic.Bool          // quest board Idle mode: standing in town on purpose, the stall watchdog stays quiet (boardmode.go)
-	noTP           atomic.Bool          // the running task step has Constraints.NoTownPortal: no safety portal, no trip
-	farmMu         sync.Mutex           // guards farm
-	farm           farmProgress         // runs goal progress across farmStep restarts (farm.go)
-	why            goals.Why            // reason of the current activity (whyline.go); guarded by mu
-	pendingWhy     goals.Why            // announced by setWhy, taken by the next setLocked; guarded by mu
-	journeyWhy     string               // why the quest journey is blocked now, guarded by mu (staletarget.go)
-	portalOnlyIdle atomic.Int32         // LevelTo slices spent waiting in a portal-only level (reset on leaving it)
-	banWaive       atomic.Bool          // a player-started board chunk runs with a readiness below "too hard": a death-spiral ban does not stop it (boardRun)
-	questTravel    atomic.Bool          // a quest step is walking: a border-loop ban does not stop it (staletarget.go)
-	inTown         atomic.Bool          // the hero stands in a town area (observe.go): the roam coverage is not read there
-	farmOff        string               // why the farm loop is off for this session (mu)
-	bossRun        atomic.Bool          // a boss script is running (Deps.Task.Boss): routine town trips wait, the guard's re-plan cancels are off
-	chores         choreWatch           // a town chore is running (townguard.go)
-	safetyBusy     atomic.Int32         // safety actions in flight (carryOut); the item fast lane stays closed meanwhile (SafetyBusy)
-	bossStart      map[string]time.Time // start of the last unfinished boss run by name (taskActs.KillBoss, loop goroutine only)
-	levelerPaused  bool                 // selfStop came from the leveler (LevelerPause), guarded by mu
-	autoResumeAt   time.Time            // a failsafe self pause ends by itself at this time (zero: waits for Resume), guarded by mu
-	plp            playerPause          // the player's Pause command (playerpause.go), guarded by mu
-	rcl            recallState          // the player's Recall now command (recall.go), guarded by mu
-	frz            freezeState          // the frozen Pause (freeze.go), guarded by mu
-	wall           func() time.Time     // wall clock of the pause cap and its display; nil: time.Now (tests set it)
-	freshBusy      atomic.Bool          // startFreshGame is running (task.go)
-	corpseRun      atomic.Bool          // a corpse decision or run is under way: the early road guard does not apply
-	corpseTown     corpseTownState      // a corpse waits in town after a fresh game (corpsereset.go)
-	freshEnd       atomic.Int64         // clock nanos when the last startFreshGame ended
-	rst            playerReset          // the player's Reset command (playerreset.go), guarded by mu
-	lastSelfPause  time.Time            // for the self pause backoff, guarded by mu
+	selfStop       bool                         // paused by the death-rate rule, guarded by mu
+	merc           mercState                    // sticky merc knowledge and chore backoff (resource.go)
+	drank          atomic.Int64                 // potions drunk, counted from every EvPotion event (combat emits them live; the observer's own diff is off there)
+	playerCancelNs atomic.Int64                 // clock of the last guard interrupt for a player command (playerDue)
+	stepMu         sync.Mutex                   // held for a whole loop step: the loop state is only touched under it or from the step itself (questboard.go world)
+	parkedBoard    atomic.Bool                  // quest board Idle mode: standing in town on purpose, the stall watchdog stays quiet (boardmode.go)
+	noTP           atomic.Bool                  // the running task step has Constraints.NoTownPortal: no safety portal, no trip
+	farmMu         sync.Mutex                   // guards farm
+	farm           farmProgress                 // runs goal progress across farmStep restarts (farm.go)
+	why            goals.Why                    // reason of the current activity (whyline.go); guarded by mu
+	pendingWhy     goals.Why                    // announced by setWhy, taken by the next setLocked; guarded by mu
+	journeyWhy     string                       // why the quest journey is blocked now, guarded by mu (staletarget.go)
+	portalOnlyIdle atomic.Int32                 // LevelTo slices spent waiting in a portal-only level (reset on leaving it)
+	banWaive       atomic.Bool                  // a player-started board chunk runs with a readiness below "too hard": a death-spiral ban does not stop it (boardRun)
+	questTravel    atomic.Bool                  // a quest step is walking: a border-loop ban does not stop it (staletarget.go)
+	inTown         atomic.Bool                  // the hero stands in a town area (observe.go): the roam coverage is not read there
+	farmOff        string                       // why the farm loop is off for this session (mu)
+	bossRun        atomic.Bool                  // a boss script is running (Deps.Task.Boss): routine town trips wait, the guard's re-plan cancels are off
+	chores         choreWatch                   // a town chore is running (townguard.go)
+	safetyBusy     atomic.Int32                 // safety actions in flight (carryOut); the item fast lane stays closed meanwhile (SafetyBusy)
+	bossStart      map[string]time.Time         // start of the last unfinished boss run by name (taskActs.KillBoss, loop goroutine only)
+	levelerPaused  bool                         // selfStop came from the leveler (LevelerPause), guarded by mu
+	autoResumeAt   time.Time                    // a failsafe self pause ends by itself at this time (zero: waits for Resume), guarded by mu
+	plp            playerPause                  // the player's Pause command (playerpause.go), guarded by mu
+	rcl            recallState                  // the player's Recall now command (recall.go), guarded by mu
+	frz            freezeState                  // the frozen Pause (freeze.go), guarded by mu
+	wall           func() time.Time             // wall clock of the pause cap and its display; nil: time.Now (tests set it)
+	freshBusy      atomic.Bool                  // startFreshGame is running (task.go)
+	mlvlFn         func(int, d2.Difficulty) int // test hook for areaMLvl
+	corpseRun      atomic.Bool                  // a corpse decision or run is under way: the early road guard does not apply
+	corpseTown     corpseTownState              // a corpse waits in town after a fresh game (corpsereset.go)
+	freshEnd       atomic.Int64                 // clock nanos when the last startFreshGame ended
+	rst            playerReset                  // the player's Reset command (playerreset.go), guarded by mu
+	lastSelfPause  time.Time                    // for the self pause backoff, guarded by mu
 	pauseStreak    int
 	panicTimes     []time.Time // recovered panics inside PanicWindow, guarded by mu
 	panics         int         // all recovered panics, guarded by mu

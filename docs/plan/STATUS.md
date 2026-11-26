@@ -280,6 +280,7 @@
 | outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | admit1 | proposed | - | `docs/design/admission-p4.md` | - |
+| incident1 | proposed | - | `internal/bot/incident.go`<br>`internal/bot/incident_test.go`<br>`internal/bot/observe.go`<br>`internal/scenario/incident.go`<br>`internal/scenario/incident_test.go`<br>`cmd/d2scenario/incident.go`<br>`cmd/d2scenario/incident_test.go`<br>`cmd/d2scenario/main.go`<br>`tools/provingground/incidents/`<br>`docs/probes/incident-scenarios.md` | - |
 | townflip | proposed | - | `docs/design/townflip-p5.md` | - |
 | arbmig | proposed | - | `docs/design/arbiter-migration-p6.md` | - |
 | stepexec1 | proposed | - | `docs/design/stepexec-p9.md` | - |
@@ -322,14 +323,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 98c2bdfb3 11-26 02:18 `Merge agent/incident1: Merge branch 'main' into incident1` (incident1)
+- 965b0c649 11-26 02:16 `Merge branch 'main' into incident1` (-)
+- 7e75c068a 11-26 01:49 `Merge agent/toolstrade79: Merge origin/main into toolstrade79` (toolstrade79)
+- 4c80517a7 11-26 01:42 `Merge origin/main into toolstrade79` (-)
+- 34afb5aa0 11-26 01:27 `Merge branch 'main' into incident1` (-)
+- 3ba6ada48 11-26 01:18 `Merge agent/toolstrade78: Merge branch 'main' into toolstrade78` (toolstrade78)
+- 0211d2ee1 11-26 01:16 `Merge branch 'main' into toolstrade78` (-)
 - 2c0ff5269 11-26 01:07 `Merge agent/reflex1d: reflex1d: hard-cancel wait uses a timer, not Clock.Sleep (flaky reaction test)` (reflex1d)
 - 051b16371 11-26 01:06 `Merge branch 'main' into reflex1d` (-)
-- 80c9b2ea1 11-26 00:49 `Merge agent/explain1: Merge branch 'main' into explain1` (explain1)
-- fc5ecb6ef 11-26 00:48 `Merge branch 'main' into explain1` (-)
-- 2fa717c3f 11-26 00:46 `Merge agent/cardclose2: cardclose2: close 7 merged cards (954, 966 by catch-up; 953, 955, 959, 962, 934 by hand)` (cardclose2)
-- b853e0638 11-26 00:27 `Merge branch 'main' into explain1` (-)
-- 85a8f09db 11-26 00:17 `Merge agent/reflex1c: reflex1c: reflex drink without cancelling the action, hard-cancel deadline` (reflex1c)
-- 0873ce5d4 11-26 00:14 `Merge origin/main into reflex1c` (-)
-- 9bc2e4e58 11-26 00:13 `Merge branch 'main' into explain1` (-)
-- ca15a2e33 11-26 00:07 `merge origin/main into explain1` (-)
+- 03723e329 11-26 00:58 `Merge branch 'main' into incident1` (-)
 <!-- statusgen:end -->

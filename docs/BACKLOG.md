@@ -1404,6 +1404,9 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - cardclose2: close merged cards whose boxes or status were stale (TASK-995, merged 2026-11-26, acceptance 2 of 2): Closes 7 merged cards (954, 966, 953, 955, 959, 962, 934) with status and boxes true to origin/main; docs and cards only, not verified live <!--sg:agent/cardclose2-->
 - explain1: decision ring, /api/explain, operator why hold home go park (TASK-965, merged 2026-11-26, acceptance 4 of 4): decision ring, GET explain route, and operator verbs why, hold, home, go and park; vet + short tests green on the worker host; not verified live <!--sg:agent/explain1-->
 - reflex1d: reflex deadline wait must not move the virtual clock (flaky TestReactionTimeDelaysInterrupt under -race) (TASK-996, merged 2026-11-26, acceptance 1 of 1): holdForHard waits on a gclock timer; -race -count=5 green on the worker host <!--sg:agent/reflex1d-->
+- agent/toolstrade78: Merge branch 'main' into toolstrade78 (merged 2026-11-26): poverty farm: no healing potion hero at clvl 8 or more farms the best open area by measured gold per minute within monster level clvl minus 3; owner try-anyway and corpse runs exempt; whole repo green on the worker host <!--sg:agent/toolstrade78-->
+- agent/toolstrade79: Merge origin/main into toolstrade79 (merged 2026-11-26) <!--sg:agent/toolstrade79-->
+- incident1: incident files at death and d2scenario incident replay (report-only) (TASK-971, merged 2026-11-26, acceptance 4 of 4): incident file at each death, d2scenario incident replay rows (3 Questy deaths), incident scenario doc; offline only <!--sg:agent/incident1-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
