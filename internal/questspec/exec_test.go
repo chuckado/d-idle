@@ -26,7 +26,10 @@ func (f *fakeBE) Approach(context.Context, Target, int) error {
 	f.approach = f.approach[1:]
 	return e
 }
-func (f *fakeBE) Act(_ context.Context, verb string, t Target) error {
+func (f *fakeBE) Act(_ context.Context, verb string, t Target, pick string) error {
+	if pick != "" {
+		verb += "[" + pick + "]"
+	}
 	f.acts = append(f.acts, verb+":"+t.Name+t.Code)
 	f.nAct++
 	if f.onAct != nil {
@@ -162,4 +165,43 @@ func TestExecRowIsValidated(t *testing.T) {
 	if err := c.Validate(); err == nil {
 		t.Fatal("a bad exec row passed")
 	}
+}
+
+// A talk step carries its dialogue option to the backend, on the act and on a Then act; a bad pick or a verb on the wrong
+// kind of target is a row error.
+func TestTalkStepPicksTheLine(t *testing.T) {
+	s := talkStep()
+	s.Exec.Pick = "bark"
+	f := &fakeBE{facts: map[string]bool{}}
+	f.onAct = func(string, int) { f.facts["quest_state(search_for_cain,reward_pending)"] = true }
+	if o := RunStep(context.Background(), s, f); o.Kind != Done || len(f.acts) != 1 || f.acts[0] != "talk[bark]:akara" {
+		t.Fatalf("%v acts %v", o, f.acts)
+	}
+	bad := func(mut func(*Step)) bool {
+		x := talkStep()
+		mut(&x)
+		return x.Exec != nil && validateExecForTest(x)
+	}
+	if !bad(func(x *Step) {
+		x.Exec.Pick = "reward"
+		x.Exec.Verb = "interact"
+		x.Exec.On = &Target{Kind: "object", Class: 30}
+	}) {
+		t.Error("pick on a non-talk verb accepted")
+	}
+	if !bad(func(x *Step) { x.Target = Target{Kind: "area", Name: "x"} }) {
+		t.Error("talk to an area accepted")
+	}
+	if !bad(func(x *Step) { x.Exec.Verb = "use" }) {
+		t.Error("use on an npc accepted")
+	}
+	if bad(func(x *Step) {}) {
+		t.Error("a good talk step rejected")
+	}
+}
+
+// validateExecForTest reports whether the step's exec row has a validation error.
+func validateExecForTest(s Step) (hasErr bool) {
+	s.Exec.validate(s, func(string, ...any) { hasErr = true })
+	return
 }

@@ -24,7 +24,10 @@ type Exec struct {
 	On *Target `json:"on,omitempty"`
 	// Then is a second verb run on the step's target on every wait poll (pickup after the click: the scroll lies on the
 	// ground, the post says it is in the pack).
-	Then         string `json:"then,omitempty"`
+	Then string `json:"then,omitempty"`
+	// Pick is the dialogue option a talk step picks ("bark", "reward"; the bot's dialog table names the lines). Empty: the
+	// NPC's default line.
+	Pick         string `json:"pick,omitempty"`
 	Tolerance    int    `json:"tolerance,omitempty"`  // approach: subtiles from the target that count as arrived
 	WaitPolls    int    `json:"wait_polls"`           // looks at the post after an act
 	WaitMS       int    `json:"wait_ms"`              // between two looks
@@ -53,6 +56,16 @@ func (e *Exec) validate(s Step, bad func(string, ...any)) {
 	if e.On != nil && e.On.Kind != "object" && e.On.Kind != "npc" && e.On.Kind != "item" {
 		bad("step %s: exec on kind %q", s.ID, e.On.Kind)
 	}
+	on := s.Target
+	if e.On != nil {
+		on = *e.On
+	}
+	if e.Verb == "talk" && on.Kind != "npc" || e.Verb == "use" && on.Kind != "item" {
+		bad("step %s: exec verb %s acts on a %s, not %q", s.ID, e.Verb, map[string]string{"talk": "npc", "use": "item"}[e.Verb], on.Kind)
+	}
+	if e.Pick != "" && e.Verb != "talk" {
+		bad("step %s: exec pick %q needs the verb talk", s.ID, e.Pick)
+	}
 }
 
 // Backend is what the executor needs of the game. Every fact comes from the snapshot, never from the executor's own
@@ -61,7 +74,8 @@ type Backend interface {
 	// Approach walks until the target is within tol subtiles. ErrProgress: moved, not there yet.
 	Approach(ctx context.Context, t Target, tol int) error
 	// Act performs the verb on the target (click, pick up, say a line, use an item).
-	Act(ctx context.Context, verb string, t Target) error
+	// pick is the step's dialogue option (talk only, else empty).
+	Act(ctx context.Context, verb string, t Target, pick string) error
 	// Holds reads one post clause from the current snapshot.
 	Holds(c Clause) bool
 	Sleep(d time.Duration)
@@ -148,7 +162,7 @@ func RunStep(ctx context.Context, s Step, be Backend) Outcome {
 			continue
 		}
 		out.Attempts++
-		if o, stop := classify(be.Act(ctx, e.Verb, on), out.Attempts, e); stop {
+		if o, stop := classify(be.Act(ctx, e.Verb, on, e.Pick), out.Attempts, e); stop {
 			return o
 		} else if o.Err != nil {
 			last = o.Err
@@ -159,7 +173,7 @@ func RunStep(ctx context.Context, s Step, be Backend) Outcome {
 				return out
 			}
 			if e.Then != "" {
-				if o, stop := classify(be.Act(ctx, e.Then, s.Target), out.Attempts, e); stop {
+				if o, stop := classify(be.Act(ctx, e.Then, s.Target, e.Pick), out.Attempts, e); stop {
 					return o
 				}
 				if holds() {
