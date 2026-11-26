@@ -17,6 +17,7 @@ owns:
   - "docs/research/speed-review-2026-11-27.md"
 exclusive: []
 contracts: []
+result: "Measured review of 48 h of the merge queue, CI, deploys and the dark ledger with a ranked plan. Read-only: no flag switched, no test run, nothing verified live; gains are estimates unless tagged V."
 ---
 
 ## Description
@@ -29,6 +30,6 @@ Consumer: the coordinator session and the owner (speed plan). Size: M
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Measured table of the last 48 h of the merge queue, CI, deploys and the dark ledger in docs/research/speed-review-2026-11-27.md
-- [ ] #2 Ranked plan with exact settings, targets and the metric commands
+- [x] #1 Measured table of the last 48 h of the merge queue, CI, deploys and the dark ledger in docs/research/speed-review-2026-11-27.md
+- [x] #2 Ranked plan with exact settings, targets and the metric commands
 <!-- AC:END -->
