@@ -21,6 +21,7 @@ owns:
   - "docs/senses-map.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

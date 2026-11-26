@@ -24,6 +24,8 @@ owns:
 exclusive: []
 contracts: []
 result: "Partial: boss_deaths ok and boss_level only the explained lifeless family (V run); boss skills have no differential (table side only). No AC ticked. Doc docs/probes/fid/fid-boss-skills.md. Not verified live."
+lane: parked
+lane_note: "status Deferred (Partial: boss_deaths ok and boss_level only the explained li)"
 ---
 
 ## Description

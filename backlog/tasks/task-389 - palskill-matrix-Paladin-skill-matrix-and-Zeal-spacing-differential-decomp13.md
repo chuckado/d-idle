@@ -20,6 +20,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Paladin matrix (docs/research/pal-skill-matrix.md) and Zeal trace: d2d strikes Zeal 15 ticks apart (V run through the real Fight), game.exe 7 (V run, rollback FUN_00553b10): a 5-strike cast 75 vs 43 ticks, 24 of 24 gaps differ; model (I): Sacrifice 1 is x1.9 dps over Attack from clvl 2 (bot never casts it), aura ladder puts Holy Fire before Might; no PR candidate (new harness, no fix built). Offline, not verified live (2026-11-12, agent decomp13)."
+lane: next
 ---
 
 ## Description

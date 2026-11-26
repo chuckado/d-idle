@@ -24,6 +24,7 @@ owns:
   - "docs/research/fidelity-vendor-probe.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

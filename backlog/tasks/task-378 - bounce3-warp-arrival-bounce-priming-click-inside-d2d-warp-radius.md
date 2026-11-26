@@ -22,6 +22,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Root cause V: the priming click after a level change landed within d2d's 2-cell warp-take radius of the return warp (walk_to/use_warp); kickSafe places it >= 3 cells from every warp; headless repro 6/12 bounces on main, 0/12 on the branch; breaker skips the deeper side; minute line bouncesPer100. Not yet verified live."
+lane: now
 ---
 
 ## Description

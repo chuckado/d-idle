@@ -312,6 +312,11 @@ docs/mapfog.md  credit-runner  fogtrail
 docs/onboarding-tour.md  credit-runner  onboardtour
 docs/onboarding.md  credit-runner  firstminutes
 docs/onboarding.md  credit-runner  reconnectux
+docs/outcomes.md  credit-runner  outcome-kit-gate
+docs/outcomes.md  credit-runner  outcome-park-step
+docs/outcomes.md  credit-runner  outcome-route-guard
+docs/outcomes.md  credit-runner  outcome-task-step
+docs/outcomes.md  credit-runner  outcome-travel-gate
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
 docs/plan/STATUS.md  credit-runner  statusrefresh
@@ -390,6 +395,7 @@ docs/research/pal-zeal-trace.md  credit-runner  palskill-matrix
 docs/research/return-screen.md  credit-runner  returnmock
 docs/research/upstream-next.md  credit-runner  upstream-next
 docs/reset.md  credit-runner  resetinstant
+docs/safety-latency.md  credit-runner  reflex1a
 docs/senses-map.md  credit-runner  maphistory
 docs/senses-map.md  credit-runner  maphistoryA
 docs/senses-map.md  credit-runner  maphistoryB
@@ -443,6 +449,7 @@ internal/bot/  credit-runner  cainfix3
 internal/bot/areametrics.go  credit-runner  intake
 internal/bot/areaskip_test.go  credit-runner  passagebounce
 internal/bot/areaskip_test.go  pro-runner  bounce3
+internal/bot/autopsy.go  credit-runner  reflex1a
 internal/bot/broke.go  credit-runner  survrecover
 internal/bot/broke.go  credit-runner  town5
 internal/bot/contracts.go  credit-runner  chores2
@@ -476,6 +483,7 @@ internal/bot/lifelog.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  hourfix
 internal/bot/loop.go  credit-runner  invmon
 internal/bot/loop.go  credit-runner  passagebounce
+internal/bot/loop.go  credit-runner  reflex1a
 internal/bot/loop.go  credit-runner  resetinstant
 internal/bot/loop.go  credit-runner  survrecover
 internal/bot/loop.go  pro-runner  bounce3
@@ -485,6 +493,7 @@ internal/bot/observe.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  intake
 internal/bot/observe.go  credit-runner  invmon
 internal/bot/observe.go  credit-runner  passagebounce
+internal/bot/observe.go  credit-runner  reflex1a
 internal/bot/observe.go  credit-runner  survrecover
 internal/bot/observe.go  pro-runner  bounce3
 internal/bot/parkstep_test.go  credit-runner  botstuck
@@ -512,6 +521,8 @@ internal/bot/runner.go  credit-runner  maphistoryA
 internal/bot/runner.go  credit-runner  passagebounce
 internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  resetinstant
+internal/bot/safetylat.go  credit-runner  reflex1a
+internal/bot/safetylat_test.go  credit-runner  reflex1a
 internal/bot/staletarget.go  credit-runner  botstuck
 internal/bot/state.go  credit-runner  resetinstant
 internal/bot/task.go  credit-runner  boardmoderace
@@ -549,6 +560,7 @@ internal/combat/  credit-runner  dlv-stance-pack
 internal/combat/  credit-runner  dlv-upkeep-minions
 internal/combat/  credit-runner  dlv-upkeep-state
 internal/combat/  credit-runner  dlv-whirl
+internal/combat/cancellat_test.go  credit-runner  reflex1a
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/fight.go  credit-runner  maphistory
 internal/combat/fight.go  credit-runner  maphistoryC

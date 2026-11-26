@@ -30,6 +30,8 @@ merge_hash: ""
 overlap: ""
 source: "openspec-final:openspec/changes/m3-merc"
 contracts: ["proposed/m3-merc"]
+lane: parked
+lane_note: "status Deferred (no result line)"
 ---
 
 ## Description

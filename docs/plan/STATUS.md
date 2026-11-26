@@ -276,7 +276,13 @@
 | fablereview2 | in-progress | - | `docs/research/fable-logic-review-2026-11-25.md` | - |
 | darklaunch | proposed | - | `data/darklaunch.json`<br>`tools/darklaunch`<br>`docs/process/dark-launch.md`<br>`tools/ci/check.sh` | - |
 | invmon | proposed | - | `internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`docs/invariants.md`<br>`internal/bot/runner.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/task.go`<br>`internal/env/tuning_bot.go` | - |
+| outcome-task-step | proposed | - | `docs/outcomes.md` | - |
+| outcome-travel-gate | proposed | - | `docs/outcomes.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
+| outcome-park-step | proposed | - | `docs/outcomes.md` | - |
+| outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
+| reflex1a | proposed | - | `internal/bot/safetylat.go`<br>`internal/bot/safetylat_test.go`<br>`internal/bot/autopsy.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/combat/cancellat_test.go`<br>`docs/safety-latency.md` | - |
+| outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
 | fid-adapter-rows | deferred | - | `docs/probes/fid/fid-adapter-rows.md` | - |
 | fid-lowvalue | deferred | - | `docs/probes/fid/fid-lowvalue.md` | - |
@@ -302,14 +308,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 3ef245d71 11-25 23:43 `Merge agent/backlogplan: Merge branch 'main' into backlogplan` (backlogplan)
+- 63b4c93fd 11-25 23:41 `Merge branch 'main' into backlogplan` (-)
+- 59106de23 11-25 23:32 `Merge agent/reflex1: reflex1a: safety latency measure (minute line, autopsy) and T6 cancel test` (reflex1)
+- ea4cbfe13 11-25 23:21 `Merge agent/toolstrade77: Merge branch 'main' into toolstrade77` (toolstrade77)
+- dc0350b1d 11-25 23:20 `Merge branch 'main' into toolstrade77` (-)
+- 6c281403d 11-25 23:09 `Merge agent/outcome1: Merge branch 'main' into outcome1` (outcome1)
+- db497fc10 11-25 23:07 `Merge branch 'main' into outcome1` (-)
 - e201e0878 11-25 22:55 `Merge agent/invariants: Merge branch 'main' into invmon` (invariants)
 - 6f4022933 11-25 22:51 `Merge branch 'main' into invmon` (-)
 - f75d92016 11-25 22:47 `Merge agent/herorecord: herorecord: record the live Paladin hero in the epic pages` (herorecord)
-- cc290be05 11-25 22:37 `Merge agent/darklaunch: Merge branch 'main' into darklaunch` (darklaunch)
-- 871b9bdc9 11-25 22:35 `Merge branch 'main' into darklaunch` (-)
-- e090a5fa2 11-25 22:33 `Merge agent/fablereview: fablereview2: end-to-end logic review of the bot (docs only): cause classes, invariants, prior art, 12 proposals` (fablereview)
-- 41c40f6b3 11-25 22:31 `Merge branch 'main' into fablereview2` (-)
-- 1fbcb45ba 11-25 22:22 `Merge agent/qd26: combat: a living hero at life 0 drinks (live Questy death 2026-11-26), Smith row kit, matrix 76-77` (qd26)
-- b8a0be02f 11-25 22:16 `Merge origin/main` (-)
-- 2f018a0f2 11-25 22:13 `Merge agent/epiccards: Merge branch 'main' into epiccards` (epiccards)
 <!-- statusgen:end -->

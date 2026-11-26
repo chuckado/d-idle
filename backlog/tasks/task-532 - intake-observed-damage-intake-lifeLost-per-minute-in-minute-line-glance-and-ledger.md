@@ -27,6 +27,7 @@ owns:
 exclusive: []
 contracts: []
 result: "minute line lifeLost/hitsTaken/hpPolls, glance intake, ledger intakeLife per zone, levelsim and d2dsoakstat readers; offline tests only, not verified live"
+lane: next
 ---
 
 ## Description

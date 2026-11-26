@@ -23,6 +23,7 @@ owns:
 exclusive: []
 contracts: []
 result: "BUILT offline 2026-11-11 (branch agent/onboarding): panel web/panels/onboarding, /api/onboarding, data/onboarding/en.json, docs/onboarding.md. Tests: Go state/endpoints, node DOM golden, pattern tests, uilint. Not verified live or in a browser."
+lane: next
 ---
 
 ## Description

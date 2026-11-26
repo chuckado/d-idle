@@ -24,6 +24,7 @@ owns:
   - "docs/friend-guide.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

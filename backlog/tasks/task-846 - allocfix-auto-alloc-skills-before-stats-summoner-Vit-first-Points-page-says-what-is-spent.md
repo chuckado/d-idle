@@ -25,6 +25,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Test bed read-only: the allocator was not dead, it spent stats first at calm moments only (10 Energy from the old rows, then Vit; first skill 2 min after the lock). Fixed: skills before stats, summoner rows Vit-first, Points page shows unspent/spent/waiting. Unit tests two classes, -race x20 ok. Scenario points.autoalloc-necro-clvl4 written, NOT run (builder long lane busy); not verified live."
+lane: next
 ---
 
 ## Description

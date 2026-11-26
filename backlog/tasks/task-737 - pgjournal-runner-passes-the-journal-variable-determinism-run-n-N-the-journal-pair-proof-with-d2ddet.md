@@ -22,6 +22,7 @@ owns:
 exclusive: []
 contracts: []
 result: "determinism-run -n N and run -journal added (runner passes D2DCTL_JOURNAL, results carry journal, d2ddet built by run.sh and run on each pair). Pair run on the builder long lane, job 20261121-002134-7785: town.resupply and act1.burial.blood_raven, Paladin 11, three repetitions each: verdict, assertion digest and state digest equal in every pair; journals identical for about 28.8k and 32.6k records, then a bot-side read-only probe choice differs at equal state (tick 2242 and 7838), cause not pinned (U). CHEATED/SETUP hero, mechanics only. Record docs/probes/pg-gate-group1-2026-11-21.md."
+lane: now
 ---
 
 ## Description
