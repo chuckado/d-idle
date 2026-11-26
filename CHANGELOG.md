@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into incident1 <!--sg:agent/incident1-->
 - Merge origin/main into toolstrade79 <!--sg:agent/toolstrade79-->
 - Merge branch 'main' into toolstrade78 <!--sg:agent/toolstrade78-->
 - reflex1d: hard-cancel wait uses a timer, not Clock.Sleep (flaky reaction test) <!--sg:agent/reflex1d-->

@@ -999,6 +999,7 @@ func (r *Runner) recordDeath(p *d2.Player, now time.Time) {
 	rec.Autopsy = r.buildAutopsy(p, a, now)
 	r.dlog.add(rec)
 	r.appendAutopsy(rec)
+	r.writeIncident(rec)
 	r.addFollow(now)
 	o.deathPending = true
 	o.deaths++

@@ -1,0 +1,150 @@
+{
+ "version": "didle.scenario/1",
+ "scenarios": [
+  {
+   "id": "incident.questy-0251-chores-cold-plains",
+   "title": "Incident 2026-11-25 02:51Z: Cold Plains, trip in its chores stage, 12 hostiles, 3 belt potions: the reflex drinks before the hero dies",
+   "kind": "behaviour",
+   "tier": "nightly",
+   "pre": {
+    "start": "field",
+    "area": 3,
+    "level": 8,
+    "gold": 40,
+    "life_pct": 100,
+    "belt": [
+     "hp1",
+     "hp1",
+     "hp1"
+    ],
+    "spawn": [
+     {
+      "monster": "fallen1",
+      "n": 12
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "campaign"
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "character died",
+     "max": 0,
+     "why": "the hero does not die again from the recorded state"
+    },
+    {
+     "kind": "log_line",
+     "pattern": "BUG: .* healing potions in the belt",
+     "max": 0,
+     "why": "no death with a belt of potions undrunk"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "matrix": {
+    "classes": [
+     "Sorceress",
+     "Paladin"
+    ],
+    "seeds": [
+     1
+    ]
+   },
+   "provenance": "SETUP from the recorded Questy death 02:51Z (Cold Plains, chores stage, 3 healing potions in the belt, lastSafety=chicken, bug=true): level, gold, belt and position are written by lab verbs (CHEATED position, mechanics only, never evidence about game behaviour). Level 8 and the gold are U: the log fixes only the area, the belt and the pack.",
+   "notes": "RED expected until the reflex lane (review P3 c): the death had 3 healing potions in the belt and none drunk. U: the real pack was not recorded as units (12 hostiles, types unknown; fallen1 stands in); the stage of the town trip (chores while in the field) cannot be declared, so this row proves the reflex in the field with a full-enough belt, not the trip."
+  },
+  {
+   "id": "incident.questy-0319-stony-field-no-potions",
+   "title": "Incident 2026-11-25 03:19Z: Stony Field quest walk with 0 potions: the hero does not walk the quest road empty-handed",
+   "kind": "behaviour",
+   "tier": "nightly",
+   "pre": {
+    "start": "field",
+    "area": 4,
+    "level": 8,
+    "gold": 0,
+    "life_pct": 100
+   },
+   "trigger": {
+    "goals": "campaign"
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "character died",
+     "max": 0,
+     "why": "the hero does not die again from the recorded state"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "matrix": {
+    "classes": [
+     "Sorceress",
+     "Paladin"
+    ],
+    "seeds": [
+     1
+    ]
+   },
+   "provenance": "SETUP from the recorded Questy death 03:19Z (Stony Field, quest walk, belt 0, no potions): level, gold, belt and position are written by lab verbs (CHEATED position, mechanics only, never evidence about game behaviour). Level 8 and the gold are U: the log fixes only the area, the belt and the pack.",
+   "notes": "Needs the early road / kit gate (review P4, ADR 0025): with no potions and no gold the quest step must be refused with a need, not walked. U: the quest word of that run is not in the log, so the campaign goal starts from the hero's fresh board."
+  },
+  {
+   "id": "incident.questy-0056-dark-wood-treehead",
+   "title": "Incident 2026-11-25 00:56Z: Dark Wood town-portal return beside the Treehead pack, belt 0",
+   "kind": "behaviour",
+   "tier": "nightly",
+   "pre": {
+    "start": "field",
+    "area": 5,
+    "level": 8,
+    "gold": 20,
+    "life_pct": 100,
+    "spawn": [
+     {
+      "super": "treehead"
+     }
+    ]
+   },
+   "trigger": {
+    "goals": "campaign"
+   },
+   "budget": {
+    "virtual_min": 15
+   },
+   "assert": [
+    {
+     "kind": "log_line",
+     "pattern": "character died",
+     "max": 0,
+     "why": "the hero does not die again from the recorded state"
+    },
+    {
+     "kind": "no_writes"
+    }
+   ],
+   "matrix": {
+    "classes": [
+     "Sorceress",
+     "Paladin"
+    ],
+    "seeds": [
+     1
+    ]
+   },
+   "provenance": "SETUP from the recorded Questy death 00:56Z (Dark Wood, portal return next to the Treehead WoodFist pack, belt 0): level, gold, belt and position are written by lab verbs (CHEATED position, mechanics only, never evidence about game behaviour). Level 8 and the gold are U: the log fixes only the area, the belt and the pack.",
+   "notes": "U: the pack's exact members and the portal arrival cell are not recorded (a super unique stands beside the hero; no pre.warp). Proves the hero's answer to a unique pack with an empty belt: leave, do not stand and fight."
+  }
+ ]
+}
