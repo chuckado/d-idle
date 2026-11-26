@@ -126,3 +126,32 @@ func TestSellMarksRunOnAnyTripAndSurviveRenumbering(t *testing.T) {
 		})
 	}
 }
+
+// SellableCount is the chore's own predicate (starting items are never sold): what it counts is what the chore sells, so the bot's
+// advice and the chore agree (Questy bed 2026-11-26: advice 4, chore 0). Two classes.
+func TestSellableCountIsWhatTheChoreSells(t *testing.T) {
+	geartest.Need(t)
+	for _, class := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		r := newRig(t)
+		r.W.Player.Class = class
+		dressed(r.W)
+		a := r.W.Add("hp1", d2.ContInventory, 0, 0)
+		b := r.W.Add("hp1", d2.ContInventory, 1, 0)
+		for i := range r.W.Items {
+			if r.W.Items[i].ID == b.ID {
+				r.W.Items[i].Item.Flags |= d2.FlagStartItem
+			}
+		}
+		r.T.SetItemMarks(fakeMarks{a.ID: "sell", b.ID: "sell"})
+		s, _ := r.W.Snapshot()
+		if n := r.T.SellableCount(s); n != 1 {
+			t.Fatalf("%v: counted %d, want 1 (the starting item is not sold)", class, n)
+		}
+		if _, err := r.T.Chores(context.Background(), town.ChorePlan{Sell: true}); err != nil {
+			t.Fatal(err)
+		}
+		if n := countCode(r, "hp1"); n != 1 {
+			t.Errorf("%v: %d left, the chore sold a different number than counted", class, n)
+		}
+	}
+}
