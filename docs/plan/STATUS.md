@@ -50,7 +50,7 @@
 | necromercrogue | proposed | - | `docs/probes/necromercrogue-2026-11-26.md` | - |
 | necrocaps | proposed | - | `docs/probes/necrocaps-2026-11-26.md` | - |
 | necrokeys | proposed | - | `docs/probes/necrokeys-2026-11-26.md` | - |
-| hotkeydrift | proposed | - | `docs/probes/hotkeydrift-2026-11-26.md` | - |
+| hotkeydrift | proposed | - | `docs/probes/hotkeydrift-2026-11-26.md`<br>`cmd/d2bot/hotkeydrift_test.go` | - |
 | necroaudit | proposed | - | `docs/probes/necro-readiness-2026-11-26.md`<br>`docs/epics/epic-class-necromancer.md`<br>`internal/plandata/build-necromancer_summoner_normal30.json`<br>`internal/gear/builds/necromancer_summoner_normal30.json`<br>`cmd/d2bot/class_test.go`<br>`internal/leveler/necrosummoner_test.go`<br>`docs/plan/data/build-necromancer_summoner_normal30.json` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
@@ -331,6 +331,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a282fe496 11-26 15:32 `Merge agent/necro2b: Merge branch 'main' into hotkeydrift` (necro2b)
+- 218552d7a 11-26 15:28 `Merge branch 'main' into hotkeydrift` (-)
 - 2f3e38296 11-26 15:20 `Merge agent/necro2a: Merge branch 'main' into necrosummoninv` (necro2a)
 - de5ab0f80 11-26 15:18 `Merge branch 'main' into necrosummoninv` (-)
 - 7744b713a 11-26 15:04 `Merge agent/aura2b: Merge branch 'main' into aura2b` (aura2b)
@@ -339,6 +341,4 @@
 - 642b5e3e9 11-26 14:54 `Merge agent/toolstrade87: Merge branch 'main' into toolstrade87` (toolstrade87)
 - 5b062d8d5 11-26 14:52 `Merge branch 'main' into necroaudit` (-)
 - 80ab94fe1 11-26 14:52 `Merge branch 'main' into toolstrade87` (-)
-- 69431a16d 11-26 14:50 `Merge origin/main into aura2b` (-)
-- 2c3c4f4d1 11-26 14:45 `Merge agent/qd28: d2scenario invariants soft in drills; act2strong kit; matrix note 80` (qd28)
 <!-- statusgen:end -->

@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into hotkeydrift <!--sg:agent/necro2b-->
 - Merge branch 'main' into necrosummoninv <!--sg:agent/necro2a-->
 - Merge branch 'main' into aura2b <!--sg:agent/aura2b-->
 - Merge branch 'main' into toolstrade87 <!--sg:agent/toolstrade87-->

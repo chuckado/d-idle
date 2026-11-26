@@ -157,6 +157,7 @@ cmd/d2bot/funwire.go  credit-runner  maphistoryA
 cmd/d2bot/glancewire.go  credit-runner  intake
 cmd/d2bot/goalsclock_test.go  credit-runner  pgclock
 cmd/d2bot/goldfarmwire_test.go  credit-runner  repairtrip
+cmd/d2bot/hotkeydrift_test.go  credit-runner  hotkeydrift
 cmd/d2bot/invverbs.go  credit-runner  itemverbs2
 cmd/d2bot/invverbs.go  credit-runner  uib9
 cmd/d2bot/invverbs.go  credit-runner  vaultwire

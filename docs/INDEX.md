@@ -1126,6 +1126,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [firsthour.md](probes/firsthour.md): First hour: fresh hero, 60 realtime minutes at 1x
 - [gridwhole-2026-11-22.md](probes/gridwhole-2026-11-22.md): gridwhole: is `debug grid 5` whole at arrival? (card gridwhole, 2026-11-22) (status: current. Card `gridwhole` (first slice of `docs/design/fable-review-2026-11-22/map-knowledge.md`, user...)
 - [hero14-analysis-2026-11-14.md](probes/hero14-analysis-2026-11-14.md): Hero Doofer (Paladin clvl 14 to 15): why it is poor and slow (2026-11-14) (status: analysis, docs only (task hero14). Tags: V verified (how is said), S secondary, U unverified. No code, no...)
+- [hotkeydrift-2026-11-26.md](probes/hotkeydrift-2026-11-26.md): Build hotkeys versus profile layout (card hotkeydrift, 2026-11-26) (status: current. Tags: V verified (how said), S read in code or data, U unverified.)
 - [hour1-analysis-2026-11-12.md](probes/hour1-analysis-2026-11-12.md): Fresh Paladin first hour: where the 60 minutes went (2026-11-12) (status: analysis, no code changed. Source: the sandbox bot log from the reset (build 0.0.261112021709), window...)
 - [hour4-analysis-2026-11-14.md](probes/hour4-analysis-2026-11-14.md): Fresh Paladin first hour 4: where the 60 minutes went (2026-11-14) (status: analysis, no code changed. Source: the sandbox bot log, build 0.0.261113174258 on d2d devp6 (rebased...)
 - [incident-scenarios.md](probes/incident-scenarios.md): Incident to scenario (report-only tier) (status: current (card incident1, Fable logic review 2026-11-25 T2 and P8; ADR 0020 amended 2026-11-25). TOOLS...)
@@ -1153,6 +1154,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `probes/`
 
 - [necro-readiness-2026-11-26.md](probes/necro-readiness-2026-11-26.md): Necromancer readiness audit (card necro1, 2026-11-26) (status: current. Updates docs/probes/necromancer-readiness-2026-11-22.md (S1 to S11 table) with the state of...)
+- [necrokeys-2026-11-26.md](probes/necrokeys-2026-11-26.md): Necromancer keys beyond F8 (card necrokeys, 2026-11-26) (status: current. Closes card necrokeys with evidence: on the d2d backend the F-key limit does not apply. Tags: V...)
 - [necromancer-act1-drill-2026-11-22.md](probes/necromancer-act1-drill-2026-11-22.md): Necromancer earned Act 1 drill (card necrodrill, 2026-11-22) (status: current. Verdict: BLOCKED, NOT ready to play. Tags: V verified in a named run, S read in a log, U...)
 - [necromancer-readiness-2026-11-22.md](probes/necromancer-readiness-2026-11-22.md): Necromancer readiness audit (card necro2, 2026-11-22) (status: current; section 6 (update after the merges of the same day) supersedes sections 1 to 3 where they differ....)
 - [pactnative.md](probes/pactnative.md): pactnative: do the native difficulty levers work offline on 1.14d? (TASK-170) (status: probe result of 2026-11-08 (overnight, one hidden instance). Facts for the Pact design note...)
