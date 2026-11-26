@@ -20,6 +20,7 @@ owns:
 exclusive: []
 result: "P05 PASS WITH CHANGES, P03 PASS WITH CHANGES (not postable: clang-tidy 3 errors, restart claim lacks an oracle, block_len.py game never run); d2d side V run on the NAS builder (17,195/34,314 -> 0, R 10 15 -> 10 10, 363/539 -> 0), game side S; not verified live, no emulator run (worker host off limits)"
 contracts: []
+lane: now
 ---
 
 ## Description

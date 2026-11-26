@@ -26,6 +26,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Offline only, NOT live verified: nav pursuit rule + 3 knobs, tests in internal/nav/pursuit_test.go. Root cause of the stand-still report (17:23-17:27 UTC) is U: no monster positions in the log (docs/pursuers.md)."
+lane: next
 ---
 
 ## Description

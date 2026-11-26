@@ -18,6 +18,7 @@ owns:
 exclusive: []
 contracts: []
 result: "scheduler hardened (fetch abort 8 s, safe catch, safe tick); root cause not reproduced offline (headless render dpr 1 and 2 updates fine); not verified live"
+lane: next
 ---
 
 ## Description

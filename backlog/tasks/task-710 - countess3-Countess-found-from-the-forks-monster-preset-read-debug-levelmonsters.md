@@ -25,6 +25,7 @@ owns:
 exclusive:
   - "fork-branch:didle/level-monsters-20261121"
 contracts: []
+lane: next
 ---
 
 ## Description

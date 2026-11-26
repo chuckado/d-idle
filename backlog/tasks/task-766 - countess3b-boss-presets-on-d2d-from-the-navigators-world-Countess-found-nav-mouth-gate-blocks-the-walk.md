@@ -19,6 +19,7 @@ owns:
   - "docs/probes/provingground-countess-2026-11-20.md"
 exclusive: []
 contracts: []
+lane: next
 ---
 
 ## Description

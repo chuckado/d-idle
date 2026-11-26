@@ -493,7 +493,10 @@ func (r *Runner) bossPurse() int {
 func (r *Runner) fillEarly(w *task.World) {
 	s := r.latest()
 	rs, _ := loadEarlyRoutes()
-	w.EarlyBlocked = nil
+	w.EarlyBlocked, w.WalkBlocked = nil, task.EarlyBlock{}
+	if why, kit := r.questWalkCheck(s); why != "" {
+		w.WalkBlocked = task.EarlyBlock{Why: why, KitOnly: kit}
+	}
 	for _, rt := range rs {
 		for _, a := range rt.Areas {
 			if why, kit := r.earlyRouteCheck(s, a); why != "" {

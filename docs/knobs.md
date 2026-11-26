@@ -21,6 +21,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 
 <!-- knobdump:begin -->
+
 ### nav.*
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
@@ -79,9 +80,9 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | combat.crowdAdjacent | 8 | 3..12 | subtiles | 12 | 7 | A hostile within this distance (centre to centre) is in melee reach and counts as adjacent: three or more make a town portal cast a non-escape (potion, else leave the game) and a crowd 'surrounded'. Default 8 from the live zombie reads (drills11), UNVERIFIED for other monsters. |
 | combat.crowdAbandonN | 15 | 0..30 | count | 30 | 1 | Hostiles within 8 subtiles on a travel or quest walk that make the bot abandon the walk at once, retreat 20+ subtiles and open a portal. 0 turns it off. |
 | combat.crowdAbandonQuestN | 40 | 0..60 | count | 60 | 0 | Like crowdAbandonN, but while a quest chunk the player started runs and the hero's readiness for it is not too hard: the hero fights the crowd instead of leaving. 0 = use crowdAbandonN. The drink, portal and chicken lines still apply. |
-| combat.potionGapMs | 1000 | 900..3000 | ms | 3000 | 4 | Minimum time between healing or mana potions. |
+| combat.potionGapMs | 1000 | 900..3000 | ms | 3000 | 5 | Minimum time between healing or mana potions. |
 | combat.potionEmergencyPct | 30 | 10..50 | % | 10 | 2 | Below this life percent a healing potion is drunk even while an earlier one is still working. Above it the bot drinks again only for a higher tier: the game adds a same-tier drink to the running effect (longer, not faster; fid-potions.md Q5). |
-| combat.rejuvGapMs | 300 | 250..1500 | ms | 1500 | 1 | Minimum time between rejuvenation potions. |
+| combat.rejuvGapMs | 300 | 250..1500 | ms | 1500 | 2 | Minimum time between rejuvenation potions. |
 | combat.reactionMs | 120 | 40..700 | ms | 700 | 1 | Delay before the bot acts on a survival event. |
 | combat.pollMs | 60 | 30..400 | ms | 400 | 13 | How often the fight loop looks at the game. |
 | combat.targetQuality | 100 | 20..100 | % | 20 | 3 | 100 picks the best target; lower picks the nearest more often and loses ticks. |
@@ -340,6 +341,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.flailWindowMin | 10 | 1..120 | min | 10 | 1 | Length of the window in which the area changes of the flail guard are counted. |
 | bot.flailHoldMin | 5 | 1..120 | min | 5 | 2 | How long the bot stays in the current area (fights in the field, rests in town) after a flail was found. Doubles for each repeat within an hour, at most eight times. |
 | bot.invariants | 1 | 0..1 | bool | 1 | 1 | 1 checks about twelve named invariants once per tick (a potion not drunk under the drink line, a field entry without the kit, a refusal counted as a failure, ...) and logs one rate-limited `invariant` line per hit plus per-name counts in the minute line. Logging only, nothing changes for the hero. 0 is off (docs/invariants.md). |
+| bot.typedOutcome | 1 | 0..1 | bool | 1 | 1 | 1 makes a refusal of the quest board step (early road, route guard, gate: not ready) a typed Refused outcome with a need and a wake fact: it is handled in one place, never counted as a failure, and logged once per change as `step refused`. 0 is the legacy path (the refusal goes through the failure counter). Other paths are not converted yet (docs/outcomes.md). |
 | bot.arbiterShadow | 0 | 0..1 | bool | 0 | 1 | 1 runs the intent arbiter beside the goal chain and logs one line per divergence (chain chose A, arbiter would choose B because ...) plus per-family counters in the minute line. It never acts: nothing changes for the hero. 0 is off (docs/arbiter.md). |
 | bot.arbiterDwellSec | 120 | 10..1800 | s | 120 | 1 | Arbiter shadow: how long a chosen intent holds its lease; only a higher priority class preempts it inside this time. |
 | bot.arbiterTravelSec | 600 | 30..7200 | s | 600 | 1 | Arbiter shadow: an area change that would undo the previous one inside this window is refused unless a kill, XP, gold or belt change happened in between. |
@@ -427,7 +429,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | route.freshMaxNoGain | 3 | 0..50 | restarts | 3 | 0 | After this many fresh games in a row that each gained under route.freshMinXP, the bot logs 'leveling: blocked: needs input' and only probes one more restart every route.freshBlockedSec, waiting in town in between. A cycle with enough XP resets the count. 0 turns the bound off (the old endless restart loop). |
 | route.freshMinXP | 200 | 0..1e+05 | xp | 200 | 0 | Experience gained between two fresh-game restarts that resets the no-gain count (log field xpGained). U: a starting number, tune from the Gate logs. |
 | route.freshBlockedSec | 1800 | 0..1.44e+04 | s | 1800 | 0 | Once the no-gain bound is reached the bot waits this long in town between restart probes, so the loop never spins; bans expire and the picker is asked again after each wait. |
-| route.earlyRoute | 1 | 0..1 | bool | 1 | 1 | 1 (default): the Underground Passage level 1 and the Dark Wood, the only way to the Tree of Inifuss, stay closed to a hero under the class level in plandata/earlyroutes.json (melee 7, caster 8, U) or short of 2 healing potions and a town portal source; the board says 'level N needed' and the hero levels in the first fields instead. The owner's try anyway opens it. 0: no guard (a clvl 4 Paladin with no potions died there, Questy bed 2026-11-25). |
+| route.earlyRoute | 1 | 0..1 | bool | 1 | 3 | 1 (default): the Underground Passage level 1 and the Dark Wood, the only way to the Tree of Inifuss, stay closed to a hero under the class level in plandata/earlyroutes.json (melee 7, caster 8, U) or short of 2 healing potions and a town portal source; the board says 'level N needed' and the hero levels in the first fields instead. The owner's try anyway opens it. 0: no guard (a clvl 4 Paladin with no potions died there, Questy bed 2026-11-25). |
 
 ### resource.*
 
@@ -459,8 +461,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | resource.tripHealPct | 50 | 25..80 | % | 25 | 1 | Life percent below which a character that cannot regenerate goes to town for free healing. |
 | resource.mercDeadPack | 2 | 1..6 | count | 6 | 1 | Hostiles at which a fight is left once the merc is dead. |
 | resource.fleeLifePct | 50 | 30..80 | % | 30 | 1 | Life percent below which a character with no healing potion and no portal breaks away from hostiles instead of trading blows. |
-| resource.kitTPGold | 100 | 50..200 | gold | 50 | 11 | Price of one town portal scroll, for the minimal-kit cost. |
-| resource.kitPotionGold | 30 | 20..100 | gold | 20 | 15 | Price of the cheapest healing potion, for the minimal-kit cost. |
+| resource.kitTPGold | 100 | 50..200 | gold | 50 | 13 | Price of one town portal scroll, for the minimal-kit cost. |
+| resource.kitPotionGold | 30 | 20..100 | gold | 20 | 16 | Price of the cheapest healing potion, for the minimal-kit cost. |
 | resource.povertyMargin | 60 | 0..300 | gold | 0 | 1 | Gold above the minimal kit cost at which poverty mode ends. |
 | resource.retreatBelt | 0 | 0..3 | count | 0 | 2 | In a fight with life under the drink line and at most this many healing potions left, leave (portal, or walk home near town) instead of drinking. 0 = off. |
 | resource.retreatCountPack | 1 | 0..1 | 0/1 | 0 | 1 | 1 = spare healing/rejuvenation potions in the backpack (up to the free belt slots) count towards retreatBelt, so a full pack does not trigger a retreat; 0 = belt only. |
@@ -598,6 +600,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | respec.firstFree | 0 | 0..10 | count | 0 | 0 | How many of a hero's first respecs cost nothing (they do not count for the escalation). 0 = every respec is paid. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
 | respec.minGold | 1000 | 0..1e+06 | gold | 1000 | 0 | The price before the escalation is at least this. PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
 | respec.maxGold | 1e+05 | 0..1e+07 | gold | 1e+05 | 0 | The price before the escalation is at most this (0 = no cap). PLACEHOLDER number: the model matters, the value is not decided (docs/autoalloc.md). |
+
+Fields without a knob entry:
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)

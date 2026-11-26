@@ -18,6 +18,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Pause moved into the Reset row of the menu; default-pause* fit pages green on Tower (all sizes incl. 1280x620). Full fit result in the merge report."
+lane: next
 ---
 
 ## Description

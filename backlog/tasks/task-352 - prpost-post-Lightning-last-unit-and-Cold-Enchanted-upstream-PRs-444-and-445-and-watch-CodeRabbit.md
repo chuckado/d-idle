@@ -24,6 +24,7 @@ exclusive:
   - "upstream-pr:cold-enchanted-length"
 contracts: []
 result: "Posted 2026-11-11 after the verifier second pass and the user go: https://github.com/psi29a/d2decomped/pull/444 (Lightning, fid/missile-last-unit-r4 60623b02) and https://github.com/psi29a/d2decomped/pull/445 (Cold Enchanted, fid/cold-enchanted-length-r5 efc5270a). CodeRabbit read once (see docs/upstream/pr-queue.md); no other posts."
+lane: next
 ---
 
 ## Description

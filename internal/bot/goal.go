@@ -606,6 +606,8 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 			r.setWhy(WhyTownChores, "why", t.plan.Reason)
 		}
 		ok := r.do(ctx, c, StateResupplying, "Chores in town ("+t.plan.Reason+")", town, "chores", func(ctx context.Context) error {
+			r.chores.begin()
+			defer r.chores.end()
 			rep, err := r.d.Town.Chores(ctx, r.withRouteKit(t.plan))
 			if err == nil {
 				r.e.Log.Info("chores done", "done", rep.Done, "skipped", rep.Skipped)

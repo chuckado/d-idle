@@ -18,6 +18,7 @@ owns:
 exclusive: []
 contracts: []
 result: "Starting a selection folds the Vault filter panel (vault.js), so the list and the Reveal cost line stay visible on phones; vault-reveal-multi pages run at all sizes again. Pictures viewed (menu at 1280x620 and 360x640 with the scroll body, Pause/Reset row, multi-select with the cost line at 1366x768 and phone sizes). Fit status in the merge report."
+lane: next
 ---
 
 ## Description

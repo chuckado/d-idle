@@ -3,6 +3,7 @@ package town
 import (
 	"context"
 	"d2lod-bot/internal/gclock"
+	"errors"
 	"fmt"
 	"slices"
 	"time"
@@ -426,6 +427,10 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		if err != nil {
 			return err
 		}
+		if !cur.Player.InTown() { // verified before every chore: a trip outside town ends here, the caller walks home
+			t.e.Log.Warn("town chores abort: not in town", "chore", name, "area", cur.Player.Area)
+			return fmt.Errorf("%w: before %s, area %d", ErrNotInTown, name, cur.Player.Area)
+		}
 		// the player's repair policy is not overridden by a Force plan
 		force := plan.Force && !(name == "repair" && t.repairGate != nil)
 		if !force && !need(cur) {
@@ -453,6 +458,9 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		if err != nil {
 			t.e.Log.Warn("town chore failed", "chore", name, "err", err)
 			_ = t.h.CloseAll(ctx)
+			if errors.Is(err, ErrNotInTown) {
+				return err // the rest of the chores would walk toward town NPCs from a field
+			}
 		}
 		return nil
 	}

@@ -276,10 +276,37 @@
 | fablereview2 | in-progress | - | `docs/research/fable-logic-review-2026-11-25.md` | - |
 | darklaunch | proposed | - | `data/darklaunch.json`<br>`tools/darklaunch`<br>`docs/process/dark-launch.md`<br>`tools/ci/check.sh` | - |
 | invmon | proposed | - | `internal/bot/invariants.go`<br>`internal/bot/invariants_test.go`<br>`docs/invariants.md`<br>`internal/bot/runner.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/task.go`<br>`internal/env/tuning_bot.go` | - |
+| outcome-task-step | proposed | - | `docs/outcomes.md` | - |
+| outcome-travel-gate | proposed | - | `docs/outcomes.md` | - |
+| decisions1 | proposed | - | `docs/adr/0030-operator-quest-control.md`<br>`docs/adr/0020-proving-ground-and-stat-skill-agency.md`<br>`docs/decisions.md`<br>`docs/arbiter.md`<br>`AGENTS.md` | - |
 | fid-death | deferred | - | `docs/probes/fid/fid-death.md` | - |
+| outcome-park-step | proposed | - | `docs/outcomes.md` | - |
+| outcome-route-guard | proposed | - | `docs/outcomes.md` | - |
+| reflex1a | proposed | - | `internal/bot/safetylat.go`<br>`internal/bot/safetylat_test.go`<br>`internal/bot/autopsy.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/combat/cancellat_test.go`<br>`docs/safety-latency.md` | - |
+| outcome-kit-gate | proposed | - | `docs/outcomes.md` | - |
+| fableroadmap | proposed | - | `docs/roadmap-fable.md`<br>`data/darklaunch.json`<br>`docs/process/dark-launch.md`<br>`backlog/tasks/task-96[6-9] - *`<br>`backlog/tasks/task-9[7-9][0-9] - *` | - |
 | fid-gatea-ab | deferred | - | `docs/probes/fid/fid-gatea-ab.md` | - |
+| admit1 | proposed | - | `docs/design/admission-p4.md` | - |
+| townflip | proposed | - | `docs/design/townflip-p5.md` | - |
+| arbmig | proposed | - | `docs/design/arbiter-migration-p6.md` | - |
+| stepexec1 | proposed | - | `docs/design/stepexec-p9.md` | - |
+| thrgov | proposed | - | `docs/process/threshold-governance.md` | - |
+| faultsoak | proposed | - | `docs/design/faultsoak-p12.md` | - |
 | fid-adapter-rows | deferred | - | `docs/probes/fid/fid-adapter-rows.md` | - |
+| proptest1 | proposed | - | `docs/design/proptest-t3.md` | - |
+| ticklog | proposed | - | `docs/design/ticklog-t4.md` | - |
+| bsmchk | proposed | - | `docs/design/boardsm-checker.md` | - |
+| bsmdef | proposed | - | `docs/design/boardsm-flip.md` | - |
+| agencyp1b | proposed | - | `docs/design/agency-p1b.md` | - |
+| agencyp3 | proposed | - | `docs/design/agency-p3.md` | - |
+| inputl3 | proposed | - | `docs/design/input-i3.md` | - |
+| reflex1b | proposed | - | `internal/town/npc.go`<br>`internal/town/chores.go`<br>`internal/town/intown_test.go`<br>`internal/bot/townguard.go`<br>`internal/bot/townguard_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/loop.go`<br>`internal/bot/runner.go`<br>`internal/bot/state.go`<br>`docs/safety-latency.md` | - |
+| inputl4 | proposed | - | `docs/design/input-i4.md` | - |
+| inputl5 | proposed | - | `docs/design/input-i5-i7.md` | - |
 | fid-lowvalue | deferred | - | `docs/probes/fid/fid-lowvalue.md` | - |
+| ckptlive | proposed | - | `docs/probes/checkpoint-live-drill.md` | - |
+| advisor1 | proposed | - | `docs/design/advisor-r14.md` | - |
+| autorevert1 | proposed | - | `docs/design/autorevert.md` | - |
 
 ### Gates
 - contract [act1-campaign](../contracts/act1-campaign.md): 9 requirements
@@ -302,14 +329,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- e201e0878 11-25 22:55 `Merge agent/invariants: Merge branch 'main' into invmon` (invariants)
-- 6f4022933 11-25 22:51 `Merge branch 'main' into invmon` (-)
-- f75d92016 11-25 22:47 `Merge agent/herorecord: herorecord: record the live Paladin hero in the epic pages` (herorecord)
-- cc290be05 11-25 22:37 `Merge agent/darklaunch: Merge branch 'main' into darklaunch` (darklaunch)
-- 871b9bdc9 11-25 22:35 `Merge branch 'main' into darklaunch` (-)
-- e090a5fa2 11-25 22:33 `Merge agent/fablereview: fablereview2: end-to-end logic review of the bot (docs only): cause classes, invariants, prior art, 12 proposals` (fablereview)
-- 41c40f6b3 11-25 22:31 `Merge branch 'main' into fablereview2` (-)
-- 1fbcb45ba 11-25 22:22 `Merge agent/qd26: combat: a living hero at life 0 drinks (live Questy death 2026-11-26), Smith row kit, matrix 76-77` (qd26)
-- b8a0be02f 11-25 22:16 `Merge origin/main` (-)
-- 2f018a0f2 11-25 22:13 `Merge agent/epiccards: Merge branch 'main' into epiccards` (epiccards)
+- 9c3e3ed58 11-25 23:56 `Merge agent/reflex1b: reflex1b: town chores verify in town before each step; guard aborts chores outside town` (reflex1b)
+- b1727558e 11-25 23:55 `Merge branch 'main' into reflex1b` (-)
+- 33f5b6247 11-25 23:53 `Merge agent/decisions1: Merge branch 'main' into decisions1` (decisions1)
+- ad995de59 11-25 23:51 `Merge branch 'main' into decisions1` (-)
+- 25f3ea0fc 11-25 23:49 `Merge agent/fableroadmap: Merge branch 'main' into fableroadmap` (fableroadmap)
+- 8bc8a81d6 11-25 23:48 `Merge branch 'main' into fableroadmap` (-)
+- 3ef245d71 11-25 23:43 `Merge agent/backlogplan: Merge branch 'main' into backlogplan` (backlogplan)
+- cd138d0ef 11-25 23:41 `Merge origin/main into reflex1b` (-)
+- 63b4c93fd 11-25 23:41 `Merge branch 'main' into backlogplan` (-)
+- 59106de23 11-25 23:32 `Merge agent/reflex1: reflex1a: safety latency measure (minute line, autopsy) and T6 cancel test` (reflex1)
 <!-- statusgen:end -->

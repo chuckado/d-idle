@@ -214,6 +214,7 @@ type Runner struct {
 	inTown         atomic.Bool                  // the hero stands in a town area (observe.go): the roam coverage is not read there
 	farmOff        string                       // why the farm loop is off for this session (mu)
 	bossRun        atomic.Bool                  // a boss script is running (Deps.Task.Boss): routine town trips wait, the guard's re-plan cancels are off
+	chores         choreWatch                   // a town chore is running (townguard.go)
 	safetyBusy     atomic.Int32                 // safety actions in flight (carryOut); the item fast lane stays closed meanwhile (SafetyBusy)
 	bossStart      map[string]time.Time         // start of the last unfinished boss run by name (taskActs.KillBoss, loop goroutine only)
 	levelerPaused  bool                         // selfStop came from the leveler (LevelerPause), guarded by mu
@@ -313,15 +314,16 @@ type loopState struct {
 	beltFillNext    time.Time      // no belt fill attempt before this
 	diffBan         map[string]time.Time
 	forceTrip       bool
-	rewardSince     time.Time   // when a restock trip first waited for a pending quest reward (holdTripForReward)
-	healFails       int         // failed heal attempts while below the resume line; reset when life is back above it
-	portalRetried   bool        // the cancelled-cast retry was used since the last arrival in town (portalretry.go)
-	noPortalSince   time.Time   // first heal-trip failure for lack of a town portal in this stretch (noPortalLeave)
-	recoveredAt     time.Time   // end of the last lost-game recovery (freshHold)
-	lowLifeUntil    time.Time   // end of the current low-life wait (lowLifeWait); zero when not waiting
-	reentries       []time.Time // recent re-entries after a chicken (notInGame), pruned to reentryWindow
-	flail           flailGuard  // anti-flail guard (flail.go)
-	areaDoneAt      time.Time   // last "area done" trip home from the field (noTarget rate limit)
+	refusal         refusalState // the last typed refusal (outcome.go)
+	rewardSince     time.Time    // when a restock trip first waited for a pending quest reward (holdTripForReward)
+	healFails       int          // failed heal attempts while below the resume line; reset when life is back above it
+	portalRetried   bool         // the cancelled-cast retry was used since the last arrival in town (portalretry.go)
+	noPortalSince   time.Time    // first heal-trip failure for lack of a town portal in this stretch (noPortalLeave)
+	recoveredAt     time.Time    // end of the last lost-game recovery (freshHold)
+	lowLifeUntil    time.Time    // end of the current low-life wait (lowLifeWait); zero when not waiting
+	reentries       []time.Time  // recent re-entries after a chicken (notInGame), pruned to reentryWindow
+	flail           flailGuard   // anti-flail guard (flail.go)
+	areaDoneAt      time.Time    // last "area done" trip home from the field (noTarget rate limit)
 	futile          bool
 	futilePos       input.Point
 	futileUntil     time.Time
