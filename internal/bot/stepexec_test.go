@@ -84,7 +84,9 @@ func TestStepExecWaitsForThePackNotForTheLooter(t *testing.T) {
 
 type liar struct{ fakeLoot }
 
-func (l liar) PickUp(context.Context, PickOpts) (PickReport, error) { return PickReport{Picked: 1}, nil }
+func (l liar) PickUp(context.Context, PickOpts) (PickReport, error) {
+	return PickReport{Picked: 1}, nil
+}
 
 // With the knob at 0 the old handler runs (its own pick-up loop of treeDropPolls looks), the executor is not used.
 func TestStepExecOffKeepsTheOldHandler(t *testing.T) {
