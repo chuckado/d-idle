@@ -1,10 +1,11 @@
 ---
 id: TASK-593
 title: 'vaultv5: Ethereal Vault Keep queue (V5)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T06:19:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

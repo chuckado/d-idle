@@ -1,10 +1,13 @@
 ---
 id: TASK-388
-title: 'wiring2: fix the wiring gaps of the audit (updater guards, kite knob, Hell rules, dead hooks)'
-status: Proposed
+title: >-
+  wiring2: fix the wiring gaps of the audit (updater guards, kite knob, Hell
+  rules, dead hooks)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-12T23:34:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - bug

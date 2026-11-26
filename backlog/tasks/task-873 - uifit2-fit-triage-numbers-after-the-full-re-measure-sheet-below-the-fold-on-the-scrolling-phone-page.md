@@ -1,10 +1,13 @@
 ---
 id: TASK-873
-title: 'uifit2: fit triage numbers after the full re-measure; sheet below the fold on the scrolling phone page'
-status: Proposed
+title: >-
+  uifit2: fit triage numbers after the full re-measure; sheet below the fold on
+  the scrolling phone page
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T08:14:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - bug

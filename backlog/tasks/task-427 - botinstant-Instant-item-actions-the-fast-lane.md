@@ -1,10 +1,11 @@
 ---
 id: TASK-427
 title: 'botinstant: Instant item actions: the fast lane'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T15:51:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - feature

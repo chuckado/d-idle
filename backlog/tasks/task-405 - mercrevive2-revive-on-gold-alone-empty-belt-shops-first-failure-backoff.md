@@ -1,10 +1,11 @@
 ---
 id: TASK-405
 title: 'mercrevive2: revive on gold alone, empty belt shops first, failure backoff'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T11:01:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - bug

@@ -1,10 +1,11 @@
 ---
 id: TASK-464
 title: 'uib1: Pause and resume as player commands'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T04:10:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - feature

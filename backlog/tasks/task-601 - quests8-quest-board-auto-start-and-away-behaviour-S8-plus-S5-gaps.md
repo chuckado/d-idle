@@ -1,10 +1,11 @@
 ---
 id: TASK-601
 title: 'quests8: quest board auto-start and away behaviour (S8) plus S5 gaps'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T08:08:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

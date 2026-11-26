@@ -1,10 +1,11 @@
 ---
 id: TASK-664
 title: 'botsurvey: inventory of public Diablo II bots and automation'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T15:22:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - docs
   - research

@@ -1,10 +1,13 @@
 ---
 id: TASK-611
-title: 'resistorder: resist penalty before cap, max-resist bonus and absorb in the bot''s resist model'
-status: Proposed
+title: >-
+  resistorder: resist penalty before cap, max-resist bonus and absorb in the
+  bot's resist model
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T11:06:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - bug

@@ -1,10 +1,11 @@
 ---
 id: TASK-592
 title: 'quests4: Quest board S4, API and stores'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T05:30:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

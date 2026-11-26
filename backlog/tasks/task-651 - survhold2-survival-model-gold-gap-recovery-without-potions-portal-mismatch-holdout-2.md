@@ -1,10 +1,13 @@
 ---
 id: TASK-651
-title: 'survhold2: survival model gold gap, recovery without potions, portal mismatch, holdout 2'
-status: Proposed
+title: >-
+  survhold2: survival model gold gap, recovery without potions, portal mismatch,
+  holdout 2
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T18:40:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - bug

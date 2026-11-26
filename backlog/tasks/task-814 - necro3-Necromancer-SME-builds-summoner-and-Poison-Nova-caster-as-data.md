@@ -1,10 +1,11 @@
 ---
 id: TASK-814
 title: 'necro3: Necromancer SME builds (summoner and Poison Nova caster) as data'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T19:35:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

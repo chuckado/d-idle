@@ -1,10 +1,13 @@
 ---
 id: TASK-446
-title: 'towerenv: builder builder environment (lock hygiene, light lane, gate, status, prune)'
-status: Proposed
+title: >-
+  towerenv: builder builder environment (lock hygiene, light lane, gate, status,
+  prune)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T21:46:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - ops
   - chore

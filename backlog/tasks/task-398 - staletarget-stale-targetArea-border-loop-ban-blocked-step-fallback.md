@@ -1,10 +1,11 @@
 ---
 id: TASK-398
 title: 'staletarget: stale targetArea, border-loop ban, blocked step fallback'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T10:09:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - bug

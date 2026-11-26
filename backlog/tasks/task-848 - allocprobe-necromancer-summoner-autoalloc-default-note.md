@@ -1,10 +1,11 @@
 ---
 id: TASK-848
 title: 'allocprobe: necromancer summoner autoalloc default note'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T03:58:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - docs
   - research

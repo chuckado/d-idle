@@ -1,10 +1,13 @@
 ---
 id: TASK-513
-title: 'verifyp03c2: independent verifier for upstream candidate P03c a knocking hit in a get-hit'
-status: In Progress
+title: >-
+  verifyp03c2: independent verifier for upstream candidate P03c a knocking hit
+  in a get-hit
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T18:22:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - docs
   - research

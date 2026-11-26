@@ -1,10 +1,11 @@
 ---
 id: TASK-663
 title: 'nocards: remove the unidentified item card feature completely'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-19T15:11:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - bug

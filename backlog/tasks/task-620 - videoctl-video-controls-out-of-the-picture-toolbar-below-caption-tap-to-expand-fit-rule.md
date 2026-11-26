@@ -1,10 +1,13 @@
 ---
 id: TASK-620
-title: 'videoctl: video controls out of the picture (toolbar below), caption tap to expand, fit rule'
-status: Proposed
+title: >-
+  videoctl: video controls out of the picture (toolbar below), caption tap to
+  expand, fit rule
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T15:01:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - bug

@@ -1,10 +1,11 @@
 ---
 id: TASK-715
 title: 'fabletown: town and chores planner design review (supply need, town plan)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T03:22:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - docs
   - research

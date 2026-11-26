@@ -1,10 +1,11 @@
 ---
 id: TASK-443
 title: 'survA: danger profiles (survival slice S-A)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T21:08:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - feature

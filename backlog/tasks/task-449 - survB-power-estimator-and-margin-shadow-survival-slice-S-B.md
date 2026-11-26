@@ -1,10 +1,11 @@
 ---
 id: TASK-449
 title: 'survB: power estimator and margin, shadow (survival slice S-B)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T22:08:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - feature

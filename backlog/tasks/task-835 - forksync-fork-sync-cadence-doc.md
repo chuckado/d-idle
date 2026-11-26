@@ -1,10 +1,11 @@
 ---
 id: TASK-835
 title: 'forksync: fork sync cadence doc'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T02:02:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - docs
   - chore

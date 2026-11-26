@@ -1,10 +1,11 @@
 ---
 id: TASK-585
 title: 'quests3: Quest board S3, executor hand-off (accept, run, stop at NPC, hand-in)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T03:28:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

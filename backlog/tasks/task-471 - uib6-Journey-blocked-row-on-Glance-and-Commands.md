@@ -1,10 +1,11 @@
 ---
 id: TASK-471
 title: 'uib6: Journey blocked row on Glance and Commands'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T04:53:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

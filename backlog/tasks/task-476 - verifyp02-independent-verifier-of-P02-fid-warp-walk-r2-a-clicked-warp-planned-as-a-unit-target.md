@@ -1,10 +1,13 @@
 ---
 id: TASK-476
-title: 'verifyp02: independent verifier of P02 fid/warp-walk-r2 (a clicked warp planned as a unit target)'
-status: Proposed
+title: >-
+  verifyp02: independent verifier of P02 fid/warp-walk-r2 (a clicked warp
+  planned as a unit target)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T05:48:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - docs
   - research

@@ -1,10 +1,11 @@
 ---
 id: TASK-859
 title: 'uialerts: alert feed for the new pages plays the stored Alerts settings'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T05:43:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - feature

@@ -1,10 +1,11 @@
 ---
 id: TASK-633
 title: 'groundquality: real ground item quality from ground full'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T14:28:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - bug

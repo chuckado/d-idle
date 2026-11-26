@@ -1,10 +1,11 @@
 ---
 id: TASK-829
 title: 'uitoast: one toast and one severity scale (review E8, C10)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T00:40:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - feature

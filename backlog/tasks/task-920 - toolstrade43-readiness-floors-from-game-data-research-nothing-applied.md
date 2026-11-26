@@ -1,10 +1,11 @@
 ---
 id: TASK-920
 title: 'toolstrade43: readiness floors from game data (research, nothing applied)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T13:49:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - docs
   - probe

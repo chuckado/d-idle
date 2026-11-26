@@ -1,10 +1,13 @@
 ---
 id: TASK-558
-title: 'decomp36: lane B items/town/monster: death penalty, gamble price and stock, unique mod eligibility'
-status: Proposed
+title: >-
+  decomp36: lane B items/town/monster: death penalty, gamble price and stock,
+  unique mod eligibility
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T18:42:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - research

@@ -1,10 +1,13 @@
 ---
 id: TASK-876
-title: 'uichars: Characters page shows a hero that is not saved yet (Creating row, orphan folder)'
-status: Proposed
+title: >-
+  uichars: Characters page shows a hero that is not saved yet (Creating row,
+  orphan folder)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T08:42:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - feature

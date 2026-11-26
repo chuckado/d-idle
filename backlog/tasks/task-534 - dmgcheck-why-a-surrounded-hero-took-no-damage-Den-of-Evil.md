@@ -1,10 +1,11 @@
 ---
 id: TASK-534
 title: 'dmgcheck: why a surrounded hero took no damage (Den of Evil)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T03:05:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - research

@@ -1,10 +1,13 @@
 ---
 id: TASK-401
-title: 'towntests: table-dependent town tests rotted (PlayerStash nil Env, tidy, jewelry)'
-status: Proposed
+title: >-
+  towntests: table-dependent town tests rotted (PlayerStash nil Env, tidy,
+  jewelry)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T10:39:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - bug

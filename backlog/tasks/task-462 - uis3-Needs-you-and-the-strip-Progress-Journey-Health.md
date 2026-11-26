@@ -1,10 +1,11 @@
 ---
 id: TASK-462
 title: 'uis3: Needs you and the strip: Progress, Journey, Health'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T04:08:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - feature

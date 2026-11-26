@@ -1,10 +1,13 @@
 ---
 id: TASK-447
-title: 'uis1breview: Fable design review of S1b (cockpit template and fit check) before merge'
-status: In Progress
+title: >-
+  uis1breview: Fable design review of S1b (cockpit template and fit check)
+  before merge
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T21:57:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - watch
   - research

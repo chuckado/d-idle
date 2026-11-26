@@ -1,10 +1,11 @@
 ---
 id: TASK-882
 title: 'stage1doc: stage 1 GREEN result and the hand-in after a town trip finding'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T09:42:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - probe

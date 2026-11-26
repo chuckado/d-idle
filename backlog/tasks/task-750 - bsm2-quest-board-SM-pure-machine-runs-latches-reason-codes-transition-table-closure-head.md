@@ -1,10 +1,13 @@
 ---
 id: TASK-750
-title: 'bsm2: quest board SM pure machine (runs, latches, reason codes, transition table, closure, head)'
-status: Proposed
+title: >-
+  bsm2: quest board SM pure machine (runs, latches, reason codes, transition
+  table, closure, head)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T04:50:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

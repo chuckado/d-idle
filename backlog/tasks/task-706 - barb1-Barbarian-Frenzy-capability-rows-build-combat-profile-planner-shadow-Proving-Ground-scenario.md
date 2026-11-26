@@ -1,10 +1,13 @@
 ---
 id: TASK-706
-title: 'barb1: Barbarian Frenzy (capability rows, build, combat profile, planner shadow, Proving Ground scenario)'
-status: Proposed
+title: >-
+  barb1: Barbarian Frenzy (capability rows, build, combat profile, planner
+  shadow, Proving Ground scenario)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T01:01:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

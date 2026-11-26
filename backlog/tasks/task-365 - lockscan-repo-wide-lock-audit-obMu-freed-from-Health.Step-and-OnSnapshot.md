@@ -1,10 +1,11 @@
 ---
 id: TASK-365
 title: 'lockscan: repo-wide lock audit, obMu freed from Health.Step and OnSnapshot'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-12T16:21:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - bug

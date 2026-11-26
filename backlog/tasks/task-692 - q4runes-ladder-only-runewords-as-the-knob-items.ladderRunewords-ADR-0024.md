@@ -1,10 +1,11 @@
 ---
 id: TASK-692
 title: 'q4runes: ladder-only runewords as the knob items.ladderRunewords (ADR 0024)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T18:27:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

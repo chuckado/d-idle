@@ -1,17 +1,18 @@
 ---
 id: TASK-820
 title: 'uinav: page links, stale texts, drop the old cards Inventory (review E1 to E3)'
-status: Proposed
-result: "Verified offline (Go and node tests, fixture-viewer pictures on the worker host), not live. Links added: Inventory to Points and Vault (band and phone list), Vault to Inventory and Skills, Skills to Points; Vault and Characters Back is /watch?live=1. Removed invPage and ?view=classic; Skills read-only text fixed; Vault name in the menu; duplicate layout-note branch; Inventory loot-rule and stash placeholders and the Respec stub removed. Not done: layout files mockup/live/command (need F2); Loot rules button on Inventory (rewire, follow-up)."
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T20:12:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - feature
 dependencies: []
 priority: medium
 ordinal: 374000
+result: "Verified offline (Go and node tests, fixture-viewer pictures on the worker host), not live. Links added: Inventory to Points and Vault (band and phone list), Vault to Inventory and Skills, Skills to Points; Vault and Characters Back is /watch?live=1. Removed invPage and ?view=classic; Skills read-only text fixed; Vault name in the menu; duplicate layout-note branch; Inventory loot-rule and stash placeholders and the Respec stub removed. Not done: layout files mockup/live/command (need F2); Loot rules button on Inventory (rewire, follow-up)."
 card: "uinav"
 owns:
   - "internal/watch/linkmatrix_test.go"

@@ -1,10 +1,13 @@
 ---
 id: TASK-836
-title: 'toolstrade2: walks keep off border strips of unwanted levels; tools scenario hero fits the level'
-status: Proposed
+title: >-
+  toolstrade2: walks keep off border strips of unwanted levels; tools scenario
+  hero fits the level
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T02:23:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bot-fix

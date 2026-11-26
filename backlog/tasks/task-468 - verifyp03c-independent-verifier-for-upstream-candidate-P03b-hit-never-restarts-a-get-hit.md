@@ -1,10 +1,13 @@
 ---
 id: TASK-468
-title: 'verifyp03c: independent verifier for upstream candidate P03b (hit never restarts a get-hit)'
-status: Proposed
+title: >-
+  verifyp03c: independent verifier for upstream candidate P03b (hit never
+  restarts a get-hit)
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-15T04:41:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - research

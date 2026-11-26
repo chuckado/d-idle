@@ -1,10 +1,11 @@
 ---
 id: TASK-499
 title: 'decomp28: portal-cast interrupt rule, bot findings B2-B4, danger units fit'
-status: Proposed
+status: Done
 assignee:
   - pro-runner
 created_date: '2026-11-15T14:55:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - docs
   - research

@@ -1,10 +1,11 @@
 ---
 id: TASK-805
 title: 'identifyall: Vault Identify all button, gold reveal scope all_unrevealed'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T15:38:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - feature

@@ -1,10 +1,13 @@
 ---
 id: TASK-404
-title: 'swingmodel: Sorceress melee swing 0.64 s from game.exe closed form, KK in cast bucket'
-status: Proposed
+title: >-
+  swingmodel: Sorceress melee swing 0.64 s from game.exe closed form, KK in cast
+  bucket
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T11:00:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - bug

@@ -1,10 +1,11 @@
 ---
 id: TASK-883
 title: 'uifit4: builds fixture keeps Choose; plan-handoff page separate'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T09:57:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - bug

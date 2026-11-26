@@ -1,10 +1,13 @@
 ---
 id: TASK-441
-title: 'buildhosts3: stage 3 of the build host plan, image builds on the NAS through a restricted key'
-status: Proposed
+title: >-
+  buildhosts3: stage 3 of the build host plan, image builds on the NAS through a
+  restricted key
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T21:02:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - ops
   - chore

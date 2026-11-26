@@ -1,10 +1,13 @@
 ---
 id: TASK-824
-title: 'necroready: readiness doc update and Necromancer build picker notes from the catalogue'
-status: Proposed
+title: >-
+  necroready: readiness doc update and Necromancer build picker notes from the
+  catalogue
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-22T22:18:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

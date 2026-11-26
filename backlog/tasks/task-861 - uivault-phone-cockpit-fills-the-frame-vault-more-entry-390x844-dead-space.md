@@ -1,10 +1,11 @@
 ---
 id: TASK-861
 title: 'uivault: phone cockpit fills the frame (vault-more-entry-390x844 dead space)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T05:54:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - bug

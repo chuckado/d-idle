@@ -1,10 +1,11 @@
 ---
 id: TASK-453
 title: 'uis4: Orders, read-only, as a slot panel'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T22:36:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - watch
   - feature

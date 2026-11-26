@@ -1,10 +1,13 @@
 ---
 id: TASK-354
-title: 'exploredpct: configurable explored share before the bot moves on, shown in the watch UI'
-status: Proposed
+title: >-
+  exploredpct: configurable explored share before the bot moves on, shown in the
+  watch UI
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-12T03:08:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - feature

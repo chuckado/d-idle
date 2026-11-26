@@ -1,10 +1,13 @@
 ---
 id: TASK-562
-title: 'survfix2: realized yield, mana floor, fresh guard, merc revive loop, Paladin weapon in the A/B hero'
-status: In Progress
+title: >-
+  survfix2: realized yield, mana floor, fresh guard, merc revive loop, Paladin
+  weapon in the A/B hero
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T19:38:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - bot-fix

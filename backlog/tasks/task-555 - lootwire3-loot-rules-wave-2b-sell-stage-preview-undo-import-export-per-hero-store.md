@@ -1,10 +1,13 @@
 ---
 id: TASK-555
-title: 'lootwire3: loot rules wave 2b (sell stage, preview, undo, import/export, per-hero store)'
-status: Proposed
+title: >-
+  lootwire3: loot rules wave 2b (sell stage, preview, undo, import/export,
+  per-hero store)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T17:53:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

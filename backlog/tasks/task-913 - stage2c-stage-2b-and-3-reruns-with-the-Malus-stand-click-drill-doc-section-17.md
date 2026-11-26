@@ -1,10 +1,13 @@
 ---
 id: TASK-913
-title: 'stage2c: stage 2b and 3 reruns with the Malus stand click, drill doc section 17'
-status: Proposed
+title: >-
+  stage2c: stage 2b and 3 reruns with the Malus stand click, drill doc section
+  17
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T03:00:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - bot
   - drill

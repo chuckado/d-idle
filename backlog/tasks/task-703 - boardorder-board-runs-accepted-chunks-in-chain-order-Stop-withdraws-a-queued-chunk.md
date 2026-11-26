@@ -1,10 +1,13 @@
 ---
 id: TASK-703
-title: 'boardorder: board runs accepted chunks in chain order, Stop withdraws a queued chunk'
-status: Proposed
+title: >-
+  boardorder: board runs accepted chunks in chain order, Stop withdraws a queued
+  chunk
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T00:25:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bug

@@ -1,10 +1,13 @@
 ---
 id: TASK-752
-title: 'mgwatchdog: merge queue service unit, heartbeat, three alarms, phase budgets, status exit code'
-status: In Progress
+title: >-
+  mgwatchdog: merge queue service unit, heartbeat, three alarms, phase budgets,
+  status exit code
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T04:50:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - ops
   - feature

@@ -1,10 +1,11 @@
 ---
 id: TASK-789
 title: 'pgvault: Proving Ground vault seeding, id templating, worn start, vault_log'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T19:33:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - ops
   - feature

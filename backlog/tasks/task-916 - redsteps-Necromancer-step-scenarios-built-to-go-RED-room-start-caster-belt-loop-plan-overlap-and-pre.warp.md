@@ -1,10 +1,13 @@
 ---
 id: TASK-916
-title: 'redsteps: Necromancer step scenarios built to go RED (room start, caster belt loop, plan overlap) and pre.warp'
-status: Proposed
+title: >-
+  redsteps: Necromancer step scenarios built to go RED (room start, caster belt
+  loop, plan overlap) and pre.warp
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-24T03:46:00Z'
+updated_date: '2026-11-26T01:45:00Z'
 labels:
   - bot
   - drill

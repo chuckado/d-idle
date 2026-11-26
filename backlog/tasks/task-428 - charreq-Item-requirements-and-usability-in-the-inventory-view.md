@@ -1,11 +1,11 @@
 ---
 id: TASK-428
 title: 'charreq: Item requirements and usability in the inventory view'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T15:53:00Z'
-updated_date: '2026-11-14T15:53:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - feature

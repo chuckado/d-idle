@@ -1,10 +1,11 @@
 ---
 id: TASK-390
 title: 'palprofile2: Paladin Sacrifice band and Holy Fire crowd rule'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-12T23:48:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - bot
   - feature

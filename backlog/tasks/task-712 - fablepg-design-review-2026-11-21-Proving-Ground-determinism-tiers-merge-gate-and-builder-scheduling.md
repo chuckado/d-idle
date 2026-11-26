@@ -1,10 +1,13 @@
 ---
 id: TASK-712
-title: 'fablepg: design review 2026-11-21, Proving Ground determinism, tiers, merge gate and builder scheduling'
-status: Proposed
+title: >-
+  fablepg: design review 2026-11-21, Proving Ground determinism, tiers, merge
+  gate and builder scheduling
+status: Done
 assignee:
   - user
 created_date: '2026-11-21T03:15:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - docs
   - research

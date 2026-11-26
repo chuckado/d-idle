@@ -1,10 +1,13 @@
 ---
 id: TASK-547
-title: 'decomp34: Fallen flee branch (blocked back-off, flee length) and a second upstream candidate'
-status: Proposed
+title: >-
+  decomp34: Fallen flee branch (blocked back-off, flee length) and a second
+  upstream candidate
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T16:07:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - d2d
   - upstream-pr

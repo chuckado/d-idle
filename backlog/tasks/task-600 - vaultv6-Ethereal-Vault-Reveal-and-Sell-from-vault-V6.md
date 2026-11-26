@@ -1,10 +1,11 @@
 ---
 id: TASK-600
 title: 'vaultv6: Ethereal Vault Reveal and Sell-from-vault (V6)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T08:05:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

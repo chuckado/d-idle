@@ -1,10 +1,11 @@
 ---
 id: TASK-860
 title: 'uiframe: Return, Policy and Hall on the shared frame, no app.css or old .btn'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T05:47:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - watch
   - feature

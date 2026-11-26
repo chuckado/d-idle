@@ -1,10 +1,13 @@
 ---
 id: TASK-851
-title: 'allochandoff: horizon handoff normal30 to the next supported table, plan lines on the Points page'
-status: Proposed
+title: >-
+  allochandoff: horizon handoff normal30 to the next supported table, plan lines
+  on the Points page
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T04:17:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

@@ -1,10 +1,11 @@
 ---
 id: TASK-506
 title: 'decomp30: mercenary AI, survival data and the life 4200% display guard'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T15:33:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - research

@@ -1,10 +1,11 @@
 ---
 id: TASK-425
 title: 'uib7: The Loop order and its unlock'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T15:47:00Z'
+updated_date: '2026-11-26T01:48:00Z'
 labels:
   - watch
   - feature

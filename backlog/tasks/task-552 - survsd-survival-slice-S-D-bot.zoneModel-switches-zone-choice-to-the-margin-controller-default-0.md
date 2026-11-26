@@ -1,10 +1,13 @@
 ---
 id: TASK-552
-title: 'survsd: survival slice S-D, bot.zoneModel switches zone choice to the margin controller (default 0)'
-status: Proposed
+title: >-
+  survsd: survival slice S-D, bot.zoneModel switches zone choice to the margin
+  controller (default 0)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T16:45:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - feature

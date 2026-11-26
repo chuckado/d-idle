@@ -1,10 +1,13 @@
 ---
 id: TASK-627
-title: 'cainfix: Search for Cain offline fixes (explore-to-find, item codes, pickup wait, board wording)'
-status: Proposed
+title: >-
+  cainfix: Search for Cain offline fixes (explore-to-find, item codes, pickup
+  wait, board wording)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-18T00:00:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - bot
   - bot-fix

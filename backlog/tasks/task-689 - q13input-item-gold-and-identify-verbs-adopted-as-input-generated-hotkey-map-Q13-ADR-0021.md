@@ -1,10 +1,13 @@
 ---
 id: TASK-689
-title: 'q13input: item, gold and identify verbs adopted as input; generated hotkey map (Q13, ADR 0021)'
-status: Proposed
+title: >-
+  q13input: item, gold and identify verbs adopted as input; generated hotkey map
+  (Q13, ADR 0021)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-20T16:19:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature

@@ -1,10 +1,11 @@
 ---
 id: TASK-881
 title: 'toolstrade15: GoTo plans through closed doors (live Barracks capture fixture)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-23T09:38:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - bot-fix

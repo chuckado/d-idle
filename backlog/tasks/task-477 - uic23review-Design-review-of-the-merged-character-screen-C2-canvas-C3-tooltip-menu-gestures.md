@@ -1,10 +1,13 @@
 ---
 id: TASK-477
-title: 'uic23review: Design review of the merged character screen (C2 canvas, C3 tooltip, menu, gestures)'
-status: In Progress
+title: >-
+  uic23review: Design review of the merged character screen (C2 canvas, C3
+  tooltip, menu, gestures)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T06:22:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - research

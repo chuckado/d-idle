@@ -1,10 +1,11 @@
 ---
 id: TASK-481
 title: 'uifix1: cockpit review fixes R1 to R13 and the missing fit fixtures'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T07:31:00Z'
+updated_date: '2026-11-26T01:47:00Z'
 labels:
   - watch
   - bug

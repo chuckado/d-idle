@@ -1,10 +1,11 @@
 ---
 id: TASK-755
 title: 'town4: stage 2 guards, chunk preconditions and shop read the supply counter'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-21T04:51:00Z'
+updated_date: '2026-11-26T01:46:00Z'
 labels:
   - bot
   - feature
