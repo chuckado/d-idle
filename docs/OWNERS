@@ -970,6 +970,7 @@ internal/watch/testdata/compat  credit-runner  repairtrip
 internal/watch/testdata/gear_farm_dom.txt  credit-runner  repairtrip
 internal/watch/testdata/gear_repairtrip_dom.js  credit-runner  repairtrip
 internal/watch/testdata/gear_repairtrip_dom.txt  credit-runner  repairtrip
+internal/watch/testdata/glance_dom.js  credit-runner  actpanel
 internal/watch/testdata/history-export.json  credit-runner  maphistoryD
 internal/watch/testdata/history-heat.json  credit-runner  maphistoryB
 internal/watch/testdata/history.json  credit-runner  maphistoryA
@@ -997,6 +998,7 @@ internal/watch/testdata/senses-failures.json  credit-runner  maphistoryC
 internal/watch/testdata/senses-trail.json  credit-runner  maphistory
 internal/watch/testdata/senses-trail.json  credit-runner  maphistoryA
 internal/watch/testdata/senses-trail.json  credit-runner  maptrail
+internal/watch/testdata/shell_sched.js  credit-runner  actpanel
 internal/watch/testdata/vault_clean.mjs  credit-runner  vaultclean
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultpay
 internal/watch/testdata/vault_logic.mjs  credit-runner  vaultreveal
@@ -1007,6 +1009,7 @@ internal/watch/testdata/video_labels_panel.js  credit-runner  brightness
 internal/watch/testdata/video_pal_panel.js  credit-runner  brightness
 internal/watch/testdata/video_panel.js  credit-runner  brightness
 internal/watch/testdata/video_panel.js  credit-runner  viewerfps
+internal/watch/testdata/zonemap  credit-runner  actpanel
 internal/watch/vaultapi.go  credit-runner  bulkid
 internal/watch/vaultapi.go  credit-runner  vaultreveal
 internal/watch/vaultapi_gold.go  credit-runner  vaultpay
@@ -1057,11 +1060,13 @@ internal/watch/web/panels/onboarding  credit-runner  reconnectux
 internal/watch/web/panels/orders/panel.css  credit-runner  morefit
 internal/watch/web/panels/quest-board/panel.js  credit-runner  handinbtn
 internal/watch/web/panels/quest-strip/panel.css  credit-runner  uifit1
+internal/watch/web/panels/statusline  credit-runner  actpanel
 internal/watch/web/panels/statusline/panel.css  credit-runner  uifit1
 internal/watch/web/panels/video  credit-runner  viewerfps
 internal/watch/web/panels/video/brightness.js  credit-runner  brightness
 internal/watch/web/panels/video/panel.css  credit-runner  brightness
 internal/watch/web/panels/video/panel.js  credit-runner  brightness
+internal/watch/web/panels/zone-map  credit-runner  actpanel
 internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/pauseui.js  credit-runner  pausemenufit
 internal/watch/web/points.js  credit-runner  allocfix
@@ -1073,6 +1078,7 @@ internal/watch/web/shell.css  credit-runner  resetinstant
 internal/watch/web/shell.css  credit-runner  uifit1
 internal/watch/web/shell.css  credit-runner  uis1
 internal/watch/web/shell.css  credit-runner  uis6
+internal/watch/web/shell.js  credit-runner  actpanel
 internal/watch/web/shell.js  credit-runner  minimapfix
 internal/watch/web/shell.js  credit-runner  resetinstant
 internal/watch/web/shell.js  credit-runner  uis1

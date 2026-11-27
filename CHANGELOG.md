@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into actpanel <!--sg:agent/actpanel-->
 - Merge branch 'main' into ledgerflips <!--sg:agent/ledgerflips-->
 - dedupdata: rule page, card, knobdump write fix <!--sg:agent/dedupdata-->
 - arbiter doc: Questy 2026-11-26 cases <!--sg:agent/toolstrade92-->
