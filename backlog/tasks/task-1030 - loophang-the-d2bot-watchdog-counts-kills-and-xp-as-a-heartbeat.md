@@ -1,10 +1,11 @@
 ---
 id: TASK-1030
 title: 'loophang: the d2bot watchdog counts kills and xp as a heartbeat'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-27T02:14:00Z'
+updated_date: '2026-11-27T03:34:00Z'
 labels:
   - bot
   - bot-fix

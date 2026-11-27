@@ -46,7 +46,6 @@
 | smeaura | proposed | - | `docs/sme/paladin-auras-2026-11-26.md` | - |
 | necrocorpse | proposed | - | `docs/probes/necrocaps-2026-11-26.md` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
-| loophang | proposed | - | `internal/bot/observe.go`<br>`internal/bot/runner.go`<br>`internal/bot/runner_test.go` | - |
 | savefix | proposed | - | `cmd/d2bot/d2dloadsave.go`<br>`cmd/d2bot/d2dloadsave_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`docs/probes/test-characters.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
