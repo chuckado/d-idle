@@ -1,14 +1,15 @@
 # Monster hits monster: 256ths life differential, game.exe 1.14d vs d2d (`TICKMVM`)
 
-> **Status:** current (2026-11-20, contributor work item [#26 (`TICKMVM`)](https://github.com/shatteredeagle/d-idle/issues/26), follows `docs/research/tickcpp-diff-monster-vs-monster.md`).
+> **Status:** current (2026-11-20, contributor work item [#26 (`TICKMVM`)](https://github.com/shatteredeagle/d-idle/issues/26), follows `docs/research/tickcpp-diff-monster-vs-monster.md`). Differential of real `game.exe` 1.14d (`V`) against a Python port of upstream `psi29a/d2decomped` `2b7ec10`; compiled C++ `d2d` probe is still unverified (`U`).
 > **Author:** Chuck (@chuckado) with Antigravity
+> **Environment:** `game.exe` 1.14d (`SHA256 631066c1649c4ea9ffe48bf97e24c00bca1f7a6759c21150f1a79982589adaaf`, image base `0x00400000`); upstream `psi29a/d2decomped` `tools/emu/emu.py` at commit `2b7ec10362ea74f8da3749c8888c49787af99455` (`2b7ec10`).
 > **Tags:**
-> - **V run (game)** — `game.exe` 1.14d's own `FUN_0057b420` and `FUN_0057c6c0` (invoking `FUN_0057c1e0` and stat 6 write via `FUN_00627260`) executed natively under Unicorn using upstream `d2decomped`'s `tools/emu/emu.py` (`tools/emu/tickcpp_mvm.py`, 100,000 cases × 2 seeds = 200,000 cases).
+> - **V** (`V run (game)`) — `game.exe` 1.14d's own `FUN_0057b420` and `FUN_0057c6c0` (invoking `FUN_0057c1e0` and stat 6 write via `FUN_00627260`) executed natively under Unicorn using upstream `d2decomped`'s `tools/emu/emu.py` (`2b7ec10`) (`tools/emu/tickcpp_mvm.py`, 100,000 cases × 2 seeds = 200,000 cases).
 > - **V read** — read in upstream `psi29a/d2decomped` commit `2b7ec10` (`file:line` cited) or `game.exe` 1.14d disassembly (`FUN_xxxxxxxx`).
-> - **Port (d2d)** — line-for-line Python port of `d2decomped` `2b7ec10` (`monster_blow` -> `Foe::take` -> `Fight::take_blows` -> `hurt`), **not** a compiled C++ `d2d` binary; see Limits.
+> - **Port (d2d)** — line-for-line Python port of `d2decomped` `2b7ec10` (`monster_blow` -> `Foe::take` -> `Fight::take_blows` -> `hurt`), **not** a compiled C++ `d2d` probe.
 > - **S** — secondary source (`docs/research/tickcpp-diff-monster-vs-monster.md`).
 > - **I** — inference.
-> - **U** — unverified (live game or compiled C++ `d2d` binary).
+> - **U** — unverified (compiled C++ `d2d` probe, live game, and stubbed absorb/elemental/poison paths).
 
 ---
 
@@ -18,7 +19,7 @@
    Running `FUN_0057b420` (monster attacker, `EDX = 1`) into `FUN_0057c6c0` (`flag = 1`, type-1 monster defender, calling `FUN_0057c1e0` natively) across 200,000 cases (`100,000` × 2 seeds) shows that `game.exe` subtracts the full 256ths reduced total (`rec + 0x4c`) directly from the monster defender's stat 6 and writes the fractional result back via `FUN_00627260` (zeroing stat 6 when the post-hit life falls below `0x100`). Across integer-start cases alone, `18,811` (seed `20261104`) and `18,891` (seed `20261105`) end with non-zero 256ths in stat 6.
 2. **Upstream `d2d` (`2b7ec10`) STILL drops the 256ths fraction for monster-vs-monster hits (`V read`, `D1`).**
    Since `tickcpp-diff-monster-vs-monster.md` (which cited `fight/tick.cpp:344-345`), the monster-vs-monster apply loop was refactored into `Fight::tick` (`components/game/fight/tick.cpp:485-499`) calling `Fight::take_blows` (`components/game/fight/strike.cpp:614-621`). While `d2d` now carries `frac` for pets (`tick.cpp:551`), mercs (`tick.cpp:745-752`), and player-vs-monster (`ai.cpp:3060`), **`Fight::take_blows` (`strike.cpp:616`) still passes `blow.damage << 8` to `soak(...)`, dropping `blow.frac`**.
-3. **Differential counts (`V run (game)` vs `Port (d2d)`):**
+3. **Differential counts (`V` on `game.exe` vs `Port (d2d)` of `2b7ec10`; compiled C++ `d2d` probe `U`):**
    - **Before (`2b7ec10` `strike.cpp:616`):** `48,924 / 100,000` cases differ in defender life on seed `20261104` (`1,445` differ in dead-vs-alive; mean `|err| = 0.2490 HP`), and `49,174 / 100,000` differ on seed `20261105` (`1,465` dead-vs-alive; mean `|err| = 0.2506 HP`). Attacker RNG seed differs in `0 / 200,000` cases.
    - **After (carrying `+ blow.frac` in `strike.cpp:616`):** **`0 / 100,000`** life mismatches, **`0`** dead-vs-alive mismatches, and **`0`** seed mismatches on both seeds (`0 / 200,000` total).
 
@@ -41,7 +42,7 @@
 
 ### 3.1 Reproduction Command
 
-Run from this repo root with upstream `psi29a/d2decomped` (`2b7ec10`) on `PYTHONPATH` and your 1.14d MPQ directory in `D2_MPQ_DIR`:
+Run from this repo root with upstream `psi29a/d2decomped` (`2b7ec10362ea74f8da3749c8888c49787af99455`, `tools/emu/emu.py`) on `PYTHONPATH` and your 1.14d MPQ directory in `D2_MPQ_DIR` (tested on `Game.exe` 1.14d `SHA256 631066c1649c4ea9ffe48bf97e24c00bca1f7a6759c21150f1a79982589adaaf`):
 
 ```sh
 PYTHONPATH=<d2decomped>/tools/emu D2_MPQ_DIR=<mpq_dir> \
@@ -51,7 +52,9 @@ PYTHONPATH=<d2decomped>/tools/emu D2_MPQ_DIR=<mpq_dir> \
     python tools/emu/tickcpp_mvm.py 100000 20261105 --exe <path/to/Game.exe>
 ```
 
-The harness executes `game.exe` 1.14d's `FUN_0057b420` (attacker type 1, `EDX = 1`, stats 21/22 from 8 Act 1 monster classes) and `FUN_0057c6c0` (defender type 1, `flag = 1`, invoking `FUN_0057c1e0` and writing stat 6 via `FUN_00627260`). Starting defender life mixes near-death (`0x100..(mx+2)*256`, 25%), fractional (`0x100..200*256`, 40%), and integer (`1..200 * 256`, 35%) values.
+- **Native calls & stubbed hooks:** The harness executes `game.exe` 1.14d's `FUN_0057b420` (attacker type 1, `EDX = 1`, stats `0x15`/`0x16` from 8 Act 1 monster classes) and `FUN_0057c6c0` (defender type 1, `flag = 1`, invoking `FUN_0057c1e0` and writing stat 6 via `FUN_00627260`). Starting defender life mixes near-death (`0x100..(mx+2)*256`, 25%), fractional (`0x100..200*256`, 40%), and integer (`1..200 * 256`, 35%) values. Hooks are stubbed: `FUN_00625480` / `FUN_00627260` serve only the minimal stat map (defender stats `6`, `7`, `0x22`, `0x24`; attacker stats `0x15`, `0x16`), `FUN_00625d10` (`GetMaxLife`) returns `max(init_life, 200 * 256)`, and `FUN_005c0c30` plus the elemental/poison/side-effect helpers are stubbed to `0`, so absorb, elemental, and poison paths are untested (`U`).
+- **`exact` / `exactred` row construction:** Both sets bypass `FUN_0057b420` (no RNG draw; `v = mn << 8` with `mn == mx`) to mirror fixed-record callers (`FUN_005c4d10` / `FUN_005cce80`); `exact` cycles `x = 0..5` for the first 60 rows then random `0..40` with `pct = flat = 0`, while `exactred` draws random `0..40` with non-zero `pct` and/or `flat`.
+- **Exit code:** Exits `0` when the `after` arm has `0` life and `0` seed mismatches against `game.exe`, and `1` if any `after` mismatch occurs.
 
 ### 3.2 Seed `20261104` (100,000 cases, `58.41s`, `V run (game)` vs `Port (d2d)`)
 
@@ -101,8 +104,8 @@ First differing case per class (seed `20261105`):
 
 | ID | Rule | `game.exe` 1.14d | `d2d` (`2b7ec10`) | Tag | Impact |
 |---|---|---|---|---|---|
-| **D1** | Monster-vs-monster 256ths life carry | `FUN_0057c6c0` subtracts the full 256ths total (`rec + 0x4c`) from defender stat 6 and kills when `< 0x100`. | `Fight::take_blows` (`components/game/fight/strike.cpp:616`) passes `blow.damage << 8` to `soak(...)`, dropping `blow.frac`. | V run (game), V read + Port (d2d) | ~49% of monster-vs-monster blows leave the defender with up to `255/256` extra HP (mean `~0.25 HP` overall, `~0.46 HP` on plain blows), and ~1.45% of near-death/mixed blows leave a monster alive when `game.exe` kills it. |
-| **D2** | Physical fraction into `soak` (`armor_pool`) | `FUN_0057c1e0` runs Bone Armor absorb (`FUN_005c6370`) on the 256ths physical field (`rec + 8`). | `Fight::take_blows` (`strike.cpp:616`) passes `blow.physical << 8` (truncated whole points) instead of `d2d::rules::physical_now(blow)` (`combat.cpp:210`). | V read (d2d), S (`w3_run.py`) | Only affects monsters with `armor_pool > 0` (Bone Armor); not exercised in this no-absorb run (`U`). |
+| **D1** | Monster-vs-monster 256ths life carry | `FUN_0057c6c0` subtracts the full 256ths total (`rec + 0x4c`) from defender stat 6 and kills when `< 0x100`. | `Fight::take_blows` (`components/game/fight/strike.cpp:616`) passes `blow.damage << 8` to `soak(...)`, dropping `blow.frac`. | V (game), V read + Port (d2d), U (compiled d2d) | ~49% of monster-vs-monster blows leave the defender with up to `255/256` extra HP (mean `~0.25 HP` overall, `~0.46 HP` on plain blows), and ~1.45% of near-death/mixed blows leave a monster alive when `game.exe` kills it. |
+| **D2** | Physical fraction into `soak` (`armor_pool`) | `FUN_0057c1e0` runs Bone Armor absorb (`FUN_005c6370`) on the 256ths physical field (`rec + 8`). | `Fight::take_blows` (`strike.cpp:616`) passes `blow.physical << 8` (truncated whole points) instead of `d2d::rules::physical_now(blow)` (`combat.cpp:210`). | V read (d2d), S (`w3_run.py`), U (proposal, not run) | Only affects monsters with `armor_pool > 0` (Bone Armor); stays a proposal until run against absorb (`U`). |
 
 ---
 
@@ -139,5 +142,5 @@ Unchanged from `docs/research/tickcpp-diff-monster-vs-monster.md` (`U`, maintain
 ## 8. Limits (`U`)
 
 1. **Compiled `d2d` binary not run (`U`):** The `d2d` comparison in `tools/emu/tickcpp_mvm.py` is a line-for-line Python port of `2b7ec10` (`combat.cpp`, `ai.hpp`, `strike.cpp`, `ai.cpp`), not a compiled C++ binary (no C++ compiler installed on this contributor host).
-2. **Absorb / elemental / poison / prime-evil pair scaling not exercised (`U`):** `FUN_005c0c30` (absorb events) is stubbed to 0 and only physical damage (`rec + 8`) is populated, so `D2` (`armor_pool > 0` with `physical_now`) and elemental/poison monster-vs-monster hits are outside this run.
+2. **Stubbed hooks — absorb / elemental / poison / prime-evil pair scaling untested (`U`):** Stat hooks (`FUN_00625480` / `FUN_00627260`) serve only `attacker` stats `0x15`/`0x16` and `defender` stats `6`/`7`/`0x22`/`0x24`, `FUN_00625d10` (`GetMaxLife`) returns `max(init_life, 200 * 256)`, and `FUN_005c0c30` (absorb events) plus elemental/poison helpers are stubbed to `0`. Only physical damage (`rec + 8`) is populated, so `D2` (`armor_pool > 0` with `physical_now`) and elemental/poison monster-vs-monster hits are untested (`U`).
 3. **Monster-vs-monster caller above `FUN_0057b420` (`U`):** `FUN_0057b420` is called directly with `EDX = 1` (monster attacker) as in `w3_run.py`, rather than from the full monster AI attack dispatch.
