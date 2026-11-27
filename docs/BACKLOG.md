@@ -1462,6 +1462,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/autorevert4: autorevert4: flip writes via base64 argument, checks size and sha, reads back before any restart (merged 2026-11-26): Flip tool write fix: the tuning text travels as a base64 argument instead of stdin, size and checksum are checked before the rename, the file is read back and compared before any restart, an empty or short write aborts with the container untouched. ... <!--sg:agent/autorevert4-->
 - agent/toolstrade92: arbiter doc: Questy 2026-11-26 cases (merged 2026-11-26) <!--sg:agent/toolstrade92-->
 - dedupdata: single-source plandata, generated mirror and knobs table, invariant fragments (TASK-1026, merged 2026-11-26, acceptance 4 of 4): Plan data has one source, the docs mirror and the knobs table are regenerated at merge, new invariant rows go in fragment files; rule page in docs process <!--sg:agent/dedupdata-->
+- ledgerflips: record the nine live flips of the sandbox in the dark-launch ledger (TASK-1027, merged 2026-11-26, acceptance 1 of 1): The nine knobs flipped on the sandbox are recorded as enabled in the dark-launch ledger <!--sg:agent/ledgerflips-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

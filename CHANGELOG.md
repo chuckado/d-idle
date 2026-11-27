@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into ledgerflips <!--sg:agent/ledgerflips-->
 - dedupdata: rule page, card, knobdump write fix <!--sg:agent/dedupdata-->
 - arbiter doc: Questy 2026-11-26 cases <!--sg:agent/toolstrade92-->
 - autorevert4: flip writes via base64 argument, checks size and sha, reads back before any restart <!--sg:agent/autorevert4-->
