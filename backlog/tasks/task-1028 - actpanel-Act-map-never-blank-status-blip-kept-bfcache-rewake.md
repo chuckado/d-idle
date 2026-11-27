@@ -1,10 +1,11 @@
 ---
 id: TASK-1028
 title: 'actpanel: Act map never blank, status blip kept, bfcache rewake'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-27T01:52:00Z'
+updated_date: '2026-11-27T02:03:00Z'
 labels:
   - watch
   - bug
