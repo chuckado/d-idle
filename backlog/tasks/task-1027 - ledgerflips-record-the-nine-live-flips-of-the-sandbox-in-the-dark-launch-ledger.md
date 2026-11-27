@@ -1,10 +1,13 @@
 ---
 id: TASK-1027
-title: 'ledgerflips: record the nine live flips of the sandbox in the dark-launch ledger'
-status: Proposed
+title: >-
+  ledgerflips: record the nine live flips of the sandbox in the dark-launch
+  ledger
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-27T01:31:00Z'
+updated_date: '2026-11-27T01:45:00Z'
 labels:
   - ops
   - chore
