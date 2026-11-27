@@ -1464,6 +1464,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - dedupdata: single-source plandata, generated mirror and knobs table, invariant fragments (TASK-1026, merged 2026-11-26, acceptance 4 of 4): Plan data has one source, the docs mirror and the knobs table are regenerated at merge, new invariant rows go in fragment files; rule page in docs process <!--sg:agent/dedupdata-->
 - ledgerflips: record the nine live flips of the sandbox in the dark-launch ledger (TASK-1027, merged 2026-11-26, acceptance 1 of 1): The nine knobs flipped on the sandbox are recorded as enabled in the dark-launch ledger <!--sg:agent/ledgerflips-->
 - actpanel: Act map never blank, status blip kept, bfcache rewake (TASK-1028, merged 2026-11-26, acceptance 3 of 3): The Act map shows a waiting sentence instead of a blank box when its first fetch fails or a draw fails, the status line keeps its sentence over one failed poll, and a page restored by Back re-polls at once. Not verified live ... <!--sg:agent/actpanel-->
+- cardsync: card statuses synced with git, stale cards closed (TASK-1029, merged 2026-11-26, acceptance 1 of 1): card statuses synced with git, stale cards closed <!--sg:agent/cardsync-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
