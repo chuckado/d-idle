@@ -208,7 +208,6 @@ cmd/d2bot/vaultkeep.go  credit-runner  vaultreveal
 cmd/d2bot/vaultpage.go  credit-runner  bulkid
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2firsthour/  live-agent  firsthour
-cmd/d2scenario  credit-runner  dedupdata
 cmd/d2scenario/  credit-runner  arbmig
 cmd/d2scenario/cmds.go  credit-runner  pgdigest
 cmd/d2scenario/detrun.go  credit-runner  pgjournal
@@ -401,7 +400,6 @@ docs/probes/warptrigger-2026-11-22.md  credit-runner  warptrigger
 docs/process/combat-reads.md  credit-runner  dlv-reads
 docs/process/dark-launch.md  credit-runner  autorevert1
 docs/process/fork-rebase.md  credit-runner  forkrebase2
-docs/process/generated-files.md  credit-runner  dedupdata
 docs/process/layout-read.md  credit-runner  countess3
 docs/process/layout-read.md  live-agent  k1layout
 docs/process/pg-ledger-ops.md  credit-runner  pgledger
@@ -788,7 +786,6 @@ internal/nav/route.go  credit-runner  exitsread
 internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/nav/warpread_test.go  credit-runner  warptrigger
-internal/plandata  credit-runner  dedupdata
 internal/plandata/admission.json  credit-runner  act2temple
 internal/plandata/admission.json  credit-runner  admit1
 internal/plandata/admission.json  credit-runner  necrofloors
@@ -1139,10 +1136,8 @@ tools/friendpack/install.sh  credit-runner  cut012
 tools/friendpack/pack_test.go  credit-runner  cut012
 tools/itemverbs/compare_items.py  credit-runner  itemverbs2
 tools/itemverbs/diff_d2d.py  credit-runner  itemverbs2
-tools/knobdump  credit-runner  dedupdata
 tools/levelsim/farmreset.go  credit-runner  farmloop
 tools/levelsim/shadow.go  credit-runner  intake
-tools/plandatasync  credit-runner  dedupdata
 tools/play-session.sh  credit-runner  playsession
 tools/probes/exitscmp  credit-runner  exitsread
 tools/probes/exitsread.py  credit-runner  exitsread
@@ -1177,7 +1172,6 @@ tools/provingground/scenarios/vaultreveal.json  credit-runner  vaultpay
 tools/provingground/scenarios/vaultreveal.json  credit-runner  vaultreveal
 tools/provingground/scenarios/vaultsellall.json  credit-runner  sellall
 tools/provingground/status_doc.sh  credit-runner  pgpage
-tools/sharedgen  credit-runner  dedupdata
 tools/survival  credit-runner  pghero
 tools/tester-pack.sh  credit-runner  testerpack
 tools/uilint/  credit-runner  uis1

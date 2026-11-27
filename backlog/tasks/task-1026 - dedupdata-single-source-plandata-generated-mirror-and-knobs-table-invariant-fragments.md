@@ -1,10 +1,13 @@
 ---
 id: TASK-1026
-title: 'dedupdata: single-source plandata, generated mirror and knobs table, invariant fragments'
-status: Proposed
+title: >-
+  dedupdata: single-source plandata, generated mirror and knobs table, invariant
+  fragments
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T23:33:00Z'
+updated_date: '2026-11-27T01:45:00Z'
 labels:
   - ops
   - chore

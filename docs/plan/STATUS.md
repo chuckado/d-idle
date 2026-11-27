@@ -53,7 +53,6 @@
 | hotkeydrift | proposed | - | `docs/probes/hotkeydrift-2026-11-26.md`<br>`cmd/d2bot/hotkeydrift_test.go` | - |
 | necroaudit | proposed | - | `docs/probes/necro-readiness-2026-11-26.md`<br>`docs/epics/epic-class-necromancer.md`<br>`internal/plandata/build-necromancer_summoner_normal30.json`<br>`internal/gear/builds/necromancer_summoner_normal30.json`<br>`cmd/d2bot/class_test.go`<br>`internal/leveler/necrosummoner_test.go`<br>`docs/plan/data/build-necromancer_summoner_normal30.json` | - |
 | act2temple | proposed | - | `internal/plandata/admission.json`<br>`docs/plan/data/admission.json`<br>`internal/admit/`<br>`internal/combat/arrival.go`<br>`internal/combat/arrival_test.go`<br>`internal/combat/safety.go`<br>`internal/combat/fighter.go`<br>`internal/combat/crowd.go` | - |
-| dedupdata | proposed | - | `internal/plandata`<br>`tools/plandatasync`<br>`tools/knobdump`<br>`tools/sharedgen`<br>`cmd/d2scenario`<br>`docs/process/generated-files.md` | - |
 | ledgerflips | proposed | - | `data/darklaunch.json` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
