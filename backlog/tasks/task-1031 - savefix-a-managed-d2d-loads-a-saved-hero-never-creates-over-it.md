@@ -1,10 +1,11 @@
 ---
 id: TASK-1031
 title: 'savefix: a managed d2d loads a saved hero, never creates over it'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-27T03:11:00Z'
+updated_date: '2026-11-27T03:34:00Z'
 labels:
   - bot
   - bot-fix
