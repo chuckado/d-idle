@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- loophang: the d2bot watchdog counts kills, xp and levels as a heartbeat (a long Den clear was restarted after 613 s) <!--sg:agent/loophang-->
 - cardsync: task card and stale In Progress cards back to Proposed <!--sg:agent/cardsync-->
 - Merge branch 'main' into actpanel <!--sg:agent/actpanel-->
 - Merge branch 'main' into ledgerflips <!--sg:agent/ledgerflips-->

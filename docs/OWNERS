@@ -340,6 +340,7 @@ internal/bot/loop.go  credit-runner  survrecover
 internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  intake
+internal/bot/observe.go  credit-runner  loophang
 internal/bot/observe.go  credit-runner  survrecover
 internal/bot/povertyfarm.go  credit-runner  admit1
 internal/bot/questboard.go  credit-runner  qdmatrix
@@ -349,8 +350,10 @@ internal/bot/questboard_test.go  credit-runner  stage1fix
 internal/bot/repairtrip.go  credit-runner  repairtrip
 internal/bot/repairtrip_test.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  campaign1
+internal/bot/runner.go  credit-runner  loophang
 internal/bot/runner.go  credit-runner  maphistoryA
 internal/bot/runner.go  credit-runner  repairtrip
+internal/bot/runner_test.go  credit-runner  loophang
 internal/bot/shadow.go  credit-runner  arbmig
 internal/bot/task.go  credit-runner  boardmoderace
 internal/bot/task.go  credit-runner  wpstep
