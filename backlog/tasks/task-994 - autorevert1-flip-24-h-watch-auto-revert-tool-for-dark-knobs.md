@@ -1,10 +1,11 @@
 ---
 id: TASK-994
 title: 'autorevert1: flip, 24 h watch, auto-revert tool for dark knobs'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-26T04:15:00Z'
+updated_date: '2026-11-27T02:03:00Z'
 labels:
   - ops
   - feature
