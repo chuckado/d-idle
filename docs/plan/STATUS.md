@@ -47,6 +47,7 @@
 | necrocorpse | proposed | - | `docs/probes/necrocaps-2026-11-26.md` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | loophang | proposed | - | `internal/bot/observe.go`<br>`internal/bot/runner.go`<br>`internal/bot/runner_test.go` | - |
+| savefix | proposed | - | `cmd/d2bot/d2dloadsave.go`<br>`cmd/d2bot/d2dloadsave_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`docs/probes/test-characters.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
 | qdensity | proposed | - | `internal/decide/variants.go`<br>`internal/decide/variants_test.go`<br>`docs/t0-variants.md` | - |
@@ -245,6 +246,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 42d5de6d3 11-26 22:23 `Merge agent/savefix: Merge branch 'main' into savefix` (savefix)
+- e98984c4e 11-26 22:21 `Merge branch 'main' into savefix` (-)
 - f12815dff 11-26 22:14 `Merge agent/loophang: loophang: the d2bot watchdog counts kills, xp and levels as a heartbeat (a long Den clear was restarted after 613 s)` (loophang)
 - 90e9e46c0 11-26 21:08 `Merge agent/cardsync: cardsync: task card and stale In Progress cards back to Proposed` (cardsync)
 - e51210959 11-26 20:56 `Merge agent/actpanel: Merge branch 'main' into actpanel` (actpanel)
@@ -253,6 +256,4 @@
 - 8e6c72af5 11-26 20:37 `Merge branch 'main' into ledgerflips` (-)
 - 9fce07038 11-26 20:33 `Merge agent/dedupdata: dedupdata: rule page, card, knobdump write fix` (dedupdata)
 - 6902fa438 11-26 17:56 `Merge agent/toolstrade92: arbiter doc: Questy 2026-11-26 cases` (toolstrade92)
-- 986c43942 11-26 17:42 `Merge origin/main` (-)
-- c04df4f8a 11-26 17:40 `Merge agent/autorevert4: autorevert4: flip writes via base64 argument, checks size and sha, reads back before any restart` (autorevert4)
 <!-- statusgen:end -->

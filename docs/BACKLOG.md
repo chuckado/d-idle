@@ -1466,6 +1466,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - actpanel: Act map never blank, status blip kept, bfcache rewake (TASK-1028, merged 2026-11-26, acceptance 3 of 3): The Act map shows a waiting sentence instead of a blank box when its first fetch fails or a draw fails, the status line keeps its sentence over one failed poll, and a page restored by Back re-polls at once. Not verified live ... <!--sg:agent/actpanel-->
 - cardsync: card statuses synced with git, stale cards closed (TASK-1029, merged 2026-11-26, acceptance 1 of 1): card statuses synced with git, stale cards closed <!--sg:agent/cardsync-->
 - loophang: the d2bot watchdog counts kills and xp as a heartbeat (TASK-1030, merged 2026-11-26, acceptance 2 of 2): The d2bot watchdog now counts a kill, an xp gain or a level up as a heartbeat, so a long Den of Evil clear no longer gets the bot restarted after ten minutes while it keeps killing; a hung step is still caught <!--sg:agent/loophang-->
+- savefix: a managed d2d loads a saved hero, never creates over it (TASK-1031, merged 2026-11-26, acceptance 2 of 2): a managed d2d loads an existing save instead of creating a new hero over it after a bot restart <!--sg:agent/savefix-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
