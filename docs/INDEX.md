@@ -944,6 +944,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [fork-sync-cadence.md](process/fork-sync-cadence.md): Fork sync cadence (status: current (card forksync, 2026-11-23). Keeps the private d2d fork close to upstream so a rebase stays small....)
 - [friends-gamedata-2026-11-15.md](process/friends-gamedata-2026-11-15.md): Friends game-data bundle (2026-11-15)
 - [gamecode-guard.md](process/gamecode-guard.md): Game-code guard, labpath class, path scrubber
+- [generated-files.md](process/generated-files.md): Generated and single-source files (dedupdata, 2026-11-27) (status: current. Reason: most merge conflicts of the speed review (docs/research/speed-review-2026-11-27.md) were...)
 - [grill-agent.md](process/grill-agent.md): The grill agent: one command to be interviewed
 - [grill-queue-2026-11-11.md](process/grill-queue-2026-11-11.md): Grill queue 2026-11-11: paste-ready decisions, ADR drafts and glossary text (status: input for the user's next grill session (TASK-342). Docs only. Nothing here is written to...)
 - [grill-workflow.md](process/grill-workflow.md): Grill workflow: deciding with the user in a dedicated session (status: the "create change cards with changecheck new" step is retired for new work (OpenSpec retired, user...)

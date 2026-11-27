@@ -53,6 +53,7 @@
 | hotkeydrift | proposed | - | `docs/probes/hotkeydrift-2026-11-26.md`<br>`cmd/d2bot/hotkeydrift_test.go` | - |
 | necroaudit | proposed | - | `docs/probes/necro-readiness-2026-11-26.md`<br>`docs/epics/epic-class-necromancer.md`<br>`internal/plandata/build-necromancer_summoner_normal30.json`<br>`internal/gear/builds/necromancer_summoner_normal30.json`<br>`cmd/d2bot/class_test.go`<br>`internal/leveler/necrosummoner_test.go`<br>`docs/plan/data/build-necromancer_summoner_normal30.json` | - |
 | act2temple | proposed | - | `internal/plandata/admission.json`<br>`docs/plan/data/admission.json`<br>`internal/admit/`<br>`internal/combat/arrival.go`<br>`internal/combat/arrival_test.go`<br>`internal/combat/safety.go`<br>`internal/combat/fighter.go`<br>`internal/combat/crowd.go` | - |
+| dedupdata | proposed | - | `internal/plandata`<br>`tools/plandatasync`<br>`tools/knobdump`<br>`tools/sharedgen`<br>`cmd/d2scenario`<br>`docs/process/generated-files.md` | - |
 | fid-poison-res-diag | proposed | - | `docs/research/fid-poisonres-trace.md` | - |
 | fid-fixtures | proposed | - | `docs/probes/test-characters.md` | - |
 | h1baseline | proposed | - | `docs/probes/h1-baseline.md` | - |
@@ -332,14 +333,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 9fce07038 11-26 20:33 `Merge agent/dedupdata: dedupdata: rule page, card, knobdump write fix` (dedupdata)
+- 6902fa438 11-26 17:56 `Merge agent/toolstrade92: arbiter doc: Questy 2026-11-26 cases` (toolstrade92)
+- 986c43942 11-26 17:42 `Merge origin/main` (-)
 - c04df4f8a 11-26 17:40 `Merge agent/autorevert4: autorevert4: flip writes via base64 argument, checks size and sha, reads back before any restart` (autorevert4)
+- 35e320e7f 11-26 17:34 `Merge origin/main` (-)
 - 478e9fd56 11-26 17:25 `Merge agent/toolstrade90: Merge branch 'main' into toolstrade90` (toolstrade90)
 - eb221b5b5 11-26 17:25 `Merge agent/autorevert3: Merge branch 'main' into autorevert1` (autorevert3)
 - 4e6d516a9 11-26 17:23 `Merge branch 'main' into toolstrade90` (-)
 - 778c064f7 11-26 17:23 `Merge branch 'main' into autorevert1` (-)
 - eca09d841 11-26 17:23 `Merge agent/speedreview: Merge branch 'main' into speedreview` (speedreview)
-- e307b94c4 11-26 17:22 `Merge branch 'main' into speedreview` (-)
-- 1fce0d4de 11-26 17:13 `Merge agent/toolstrade89: Merge origin/main` (toolstrade89)
-- ebc1836e0 11-26 17:11 `Merge origin/main` (-)
-- 148111592 11-26 17:02 `Merge origin/main` (-)
 <!-- statusgen:end -->
